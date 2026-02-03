@@ -133,9 +133,9 @@ private:
     dClothVobj03_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
         : dCloth_packet_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr) {
         if (posArr) {
-            field_0x108 = 1;
+            mIsStandItem = true;
         } else {
-            field_0x108 = 0;
+            mIsStandItem = false;
         }
     }
 
@@ -147,8 +147,8 @@ private:
 
 private:
     GXTlutObj mTlutObj;
-    u8 field_0x108;
-    u8 mIsIndoors;
+    bool mIsStandItem;
+    bool mIsIndoors;
 };
 dClothVobj03_c* dClothVobj03_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
@@ -163,9 +163,9 @@ private:
     dClothVobj04_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
         : dCloth_packet_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr) {
         if (posArr) {
-            field_0x108 = 1;
+            mIsStandItem = true;
         } else {
-            field_0x108 = 0;
+            mIsStandItem = false;
         }
     };
 
@@ -177,8 +177,8 @@ private:
 
 private:
     GXTlutObj mTlutObj;
-    u8 field_0x108;
-    u8 mIsIndoors;
+    bool mIsStandItem;
+    bool mIsIndoors;
 };
 dClothVobj04_c* dClothVobj04_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
@@ -193,9 +193,9 @@ private:
     dClothVobj05_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
         : dCloth_packet_c(i_toonimage, 5, 5, 50.0f, 120.0f, tevstr, posArr) {
         if (posArr) {
-            field_0x108 = 1;
+            mIsStandItem = true;
         } else {
-            field_0x108 = 0;
+            mIsStandItem = false;
         }
     }
 
@@ -207,8 +207,8 @@ private:
 
 private:
     GXTlutObj mTlutObj;
-    u8 field_0x108;
-    u8 mIsIndoors;
+    bool mIsStandItem;
+    bool mIsIndoors;
 };
 dClothVobj05_c* dClothVobj05_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
@@ -223,9 +223,9 @@ private:
     dClothVobj07_0_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
         : dCloth_packet_c(i_toonimage, 5, 5, 120.0f, 70.0f, tevstr, posArr) {
         if (posArr) {
-            field_0x108 = 1;
+            mIsStandItem = true;
         } else {
-            field_0x108 = 0;
+            mIsStandItem = false;
         }
     }
 
@@ -237,8 +237,8 @@ private:
 
 private:
     GXTlutObj mTlutObj;
-    u8 field_0x108;
-    u8 mIsIndoors;
+    bool mIsStandItem;
+    bool mIsIndoors;
 };
 dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 

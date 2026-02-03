@@ -538,6 +538,7 @@ void dClothVobj03_c::cloth_copy() {
 /* 80064F0C-80065020       .text init__14dClothVobj03_cFv */
 void dClothVobj03_c::init() {
     if (cloth_counter == (s32)g_Counter.mTimer) {
+        // Cloth sim has already run for this frame.
         memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
         memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
         memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
@@ -546,27 +547,34 @@ void dClothVobj03_c::init() {
     }
 
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
-        mIsIndoors = 1;
+        mIsIndoors = true;
     } else {
-        mIsIndoors = 0;
+        mIsIndoors = false;
     }
 }
 
 /* 80065020-8006515C       .text cloth_move__14dClothVobj03_cFv */
 void dClothVobj03_c::cloth_move() {
-    if (field_0x108) {
+    if (mIsStandItem) {
+        // Cloth sim only runs when the timer has changed, and only once for each type of flag.
         if (cloth_counter == (s32)g_Counter.mTimer) {
+            // Cloth sim has run already, so copy the geometry to this object and return.
             cloth_copy();
             return;
         }
+
+        // Make this the simulation object.
         cloth_counter = g_Counter.mTimer;
         top_pointer = this;
     }
 
-    f32 windSpeed = g_regHIO.mChild[10].mFloatRegs[5] + 7.0f;
-    f32 windSpeedWave = g_regHIO.mChild[10].mFloatRegs[6] + 2.0f;
+    // Set params for sim.
 
-    if (mIsIndoors != 0) {
+    f32 windSpeed = REG10_F(5) + 7.0f;
+    f32 windSpeedWave = REG10_F(6) + 2.0f;
+
+    if (mIsIndoors) {
+        // Indoor flags don't get blown much by the wind.
         windSpeed *= 0.05f;
         windSpeedWave = 0.0;
         setParam(0.4, -1.5, 0.7, 0.75, 0.6, 0, 0, 900, -800, 7.0, 6.0);
@@ -576,6 +584,7 @@ void dClothVobj03_c::cloth_move() {
 
     setWindPower(windSpeed, windSpeedWave);
 
+    // Simulate cloth.
     dCloth_packet_c::cloth_move();
 }
 
@@ -644,15 +653,15 @@ void dClothVobj04_c::init() {
     }
 
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
-        mIsIndoors = 1;
+        mIsIndoors = true;
     } else {
-        mIsIndoors = 0;
+        mIsIndoors = false;
     }
 }
 
 /* 800655CC-80065700       .text cloth_move__14dClothVobj04_cFv */
 void dClothVobj04_c::cloth_move() {
-    if (field_0x108) {
+    if (mIsStandItem) {
         if (cloth_counter == (s32)g_Counter.mTimer) {
             cloth_copy();
             return;
@@ -661,10 +670,10 @@ void dClothVobj04_c::cloth_move() {
         top_pointer = this;
     }
 
-    f32 windSpeed = g_regHIO.mChild[10].mFloatRegs[5] + 7.0f;
-    f32 windSpeedWave = g_regHIO.mChild[10].mFloatRegs[6] + 2.0f;
+    f32 windSpeed = REG10_F(5) + 7.0f;
+    f32 windSpeedWave = REG10_F(6) + 2.0f;
 
-    if (mIsIndoors != 0) {
+    if (mIsIndoors) {
         windSpeed *= 0.05f;
         windSpeedWave = 0.0;
         setParam(0.45, -1.5, 0.6, 0.8, 0.8, 0, 0, 900, -800, 7.0, 6.0);
@@ -742,15 +751,15 @@ void dClothVobj05_c::init() {
     }
 
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
-        mIsIndoors = 1;
+        mIsIndoors = true;
     } else {
-        mIsIndoors = 0;
+        mIsIndoors = false;
     }
 }
 
 /* 80065B70-80065CA0       .text cloth_move__14dClothVobj05_cFv */
 void dClothVobj05_c::cloth_move() {
-    if (field_0x108) {
+    if (mIsStandItem) {
         if (cloth_counter == (s32)g_Counter.mTimer) {
             cloth_copy();
             return;
@@ -759,10 +768,10 @@ void dClothVobj05_c::cloth_move() {
         top_pointer = this;
     }
 
-    f32 windSpeed = g_regHIO.mChild[10].mFloatRegs[5] + 7.0f;
-    f32 windSpeedWave = g_regHIO.mChild[10].mFloatRegs[6] + 2.0f;
+    f32 windSpeed = REG10_F(5) + 7.0f;
+    f32 windSpeedWave = REG10_F(6) + 2.0f;
 
-    if (mIsIndoors != 0) {
+    if (mIsIndoors) {
         windSpeed *= 0.05f;
         windSpeedWave = 0.0;
         setParam(0.45, -1.0, 0.7, 0.95, 0.95, 0, 0, 0, 0, 7.0, 6.0);
@@ -846,15 +855,15 @@ void dClothVobj07_0_c::init() {
     }
 
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
-        mIsIndoors = 1;
+        mIsIndoors = true;
     } else {
-        mIsIndoors = 0;
+        mIsIndoors = false;
     }
 }
 
 /* 80066128-8006625C       .text cloth_move__16dClothVobj07_0_cFv */
 void dClothVobj07_0_c::cloth_move() {
-    if (field_0x108) {
+    if (mIsStandItem) {
         if (cloth_counter == (s32)g_Counter.mTimer) {
             cloth_copy();
             return;
@@ -863,10 +872,10 @@ void dClothVobj07_0_c::cloth_move() {
         top_pointer = this;
     }
 
-    f32 windSpeed = g_regHIO.mChild[10].mFloatRegs[5] + 7.0f;
-    f32 windSpeedWave = g_regHIO.mChild[10].mFloatRegs[6] + 2.0f;
+    f32 windSpeed = REG10_F(5) + 7.0f;
+    f32 windSpeedWave = REG10_F(6) + 2.0f;
 
-    if (mIsIndoors != 0) {
+    if (mIsIndoors) {
         windSpeed *= 0.05f;
         windSpeedWave = 0.0;
         setParam(0.35, -1.0, 0.7, 1.1, 1.1, 0, 0, 900, -800, 7.0, 6.0);
