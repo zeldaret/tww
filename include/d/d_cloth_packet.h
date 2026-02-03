@@ -105,11 +105,7 @@ dCloth_packet_c* dCloth_packet_create(
 );
 
 class dCloth_packetXlu_c : public dCloth_packet_c {
-    virtual void init();
-    virtual void cloth_move();
     virtual void cloth_draw();
-    virtual void TexObjInit(ResTIMG*);
-    virtual void TexObjLoad();
     virtual void TevSetting();
 
 private:
@@ -129,10 +125,8 @@ dCloth_packetXlu_c* dCloth_packetXlu_create(
 class dClothVobj03_c : public dCloth_packet_c {
     virtual void init();
     virtual void cloth_move();
-    virtual void cloth_draw();
     virtual void TexObjInit(ResTIMG*);
     virtual void TexObjLoad();
-    virtual void TevSetting();
     void cloth_copy();
 
 private:
@@ -161,10 +155,8 @@ dClothVobj03_c* dClothVobj03_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, 
 class dClothVobj04_c : public dCloth_packet_c {
     virtual void init();
     virtual void cloth_move();
-    virtual void cloth_draw();
     virtual void TexObjInit(ResTIMG*);
     virtual void TexObjLoad();
-    virtual void TevSetting();
     void cloth_copy();
 
 private:
@@ -193,10 +185,8 @@ dClothVobj04_c* dClothVobj04_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, 
 class dClothVobj05_c : public dCloth_packet_c {
     virtual void init();
     virtual void cloth_move();
-    virtual void cloth_draw();
     virtual void TexObjInit(ResTIMG*);
     virtual void TexObjLoad();
-    virtual void TevSetting();
     void cloth_copy();
 
 private:
@@ -225,10 +215,8 @@ dClothVobj05_c* dClothVobj05_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, 
 class dClothVobj07_0_c : public dCloth_packet_c {
     virtual void init();
     virtual void cloth_move();
-    virtual void cloth_draw();
     virtual void TexObjInit(ResTIMG*);
     virtual void TexObjLoad();
-    virtual void TevSetting();
     void cloth_copy();
 
 private:
