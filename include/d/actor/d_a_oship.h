@@ -34,7 +34,7 @@ public:
     void modeProcInit(int i_newMode) { modeProc(PROC_INIT, i_newMode); }
 
     void _nodeControl(J3DNode*, J3DModel*);
-    int _pathMove(cXyz*, cXyz*, cXyz*);
+    BOOL _pathMove(cXyz*, cXyz*, cXyz*);
     void pathMove();
     bool plFireRepeat();
     bool lineCheck(cXyz*, cXyz*);
@@ -148,7 +148,7 @@ public:
     virtual ~daOship_HIO_c() {}
 public:
     /* 0x04 */ s8 field_0x04;
-    /* 0x05 */ s8 field_0x05;
+    /* 0x05 */ u8 field_0x05;
     /* 0x06 */ u8 field_0x06;
     /* 0x07 */ s8 field_0x07;
     /* 0x08 */ u8 field_0x08;

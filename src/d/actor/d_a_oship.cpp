@@ -6,6 +6,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_oship.h"
 #include "d/actor/d_a_bomb.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_salvage.h"
 #include "d/actor/d_a_ship.h"
 #include "d/res/res_oship.h"
 #include "d/d_procname.h"
@@ -137,8 +139,31 @@ int pathMove_CB(cXyz* param_1, cXyz* param_2, cXyz* param_3, void* i_this) {
 }
 
 /* 00000488-00000718       .text _pathMove__9daOship_cFP4cXyzP4cXyzP4cXyz */
-int daOship_c::_pathMove(cXyz*, cXyz*, cXyz*) {
-    /* Nonmatching */
+BOOL daOship_c::_pathMove(cXyz* p_pos, cXyz* p_p0, cXyz* p_p1) {
+    mPathP0.set(*p_p0);
+    mPathP0.y = current.pos.y;
+
+    mPathP1.set(*p_p1);
+    mPathP1.y = current.pos.y;
+
+    cXyz diff = mPathP1 - mPathP0;
+
+    if (!diff.normalizeRS()) {
+        return TRUE;
+    }
+
+    s16 target = cM_atan2s(diff.x, diff.z);
+    s16 speed_f_phase = cLib_addCalcAngleS(&current.angle.y, target, 8, 0x200, 8);
+    f32 final_speed_f = fopAcM_GetSpeedF(this) * std::fabsf(cM_scos(speed_f_phase));
+    cLib_chasePosXZ(p_pos, mPathP1, final_speed_f);
+
+
+    if ((*p_pos - mPathP1).absXZ() < final_speed_f * (REG12_F(5) + 1.0f) || 
+        (*p_pos - mPathP1).absXZ() == 0.0f) {
+        return TRUE;
+    } 
+
+    return FALSE;
 }
 
 /* 00000718-000007E4       .text pathMove__9daOship_cFv */
@@ -201,6 +226,37 @@ void daOship_c::changeModeByRange() {
 /* 00000990-00000C08       .text createWave__9daOship_cFv */
 void daOship_c::createWave() {
     /* Nonmatching */
+    static const JGeometry::TVec3<f32> wave_l_direction(0.5, 1.0f, -0.3f);
+    static const JGeometry::TVec3<f32> wave_r_direction(-0.5, 1.0f, -0.3f);
+
+    if (!mWaveCallback1.getEmitter()) {
+        dComIfGp_particle_set(0x37, &mWavePos, &mWaveRot, NULL, 0xFF, &mWaveCallback1);
+        if (mWaveCallback1.getEmitter()) {
+            mWaveCallback1.getEmitter()->setDirection(wave_l_direction);
+        }
+    }
+
+    if (!mWaveCallback2.getEmitter()) {
+        dComIfGp_particle_set(0x37, &mWavePos, &mWaveRot, NULL, 0xFF, &mWaveCallback2);
+        if (mWaveCallback2.getEmitter()) {
+            mWaveCallback2.getEmitter()->setDirection(wave_r_direction);
+        }
+    }
+
+    if (!mSplashCallback.getEmitter()) {
+        dComIfGp_particle_set(0x35, &mWavePos, &mWaveRot, NULL, 0xFF, &mSplashCallback);
+    }
+
+    if (!mTrackCallback.getEmitter()) {
+        dComIfGp_particle_setShipTail(0x36, &mTrackPos, &shape_angle, NULL, 0, &mTrackCallback);
+        JPABaseEmitter* emitter_p = mTrackCallback.getEmitter();
+        if (emitter_p) {
+            Vec vec_scale = { 3.0f, 3.0f, 3.0f };
+            JGeometry::TVec3<f32> scale = vec_scale;
+            emitter_p->setGlobalDynamicsScale(scale);
+            emitter_p->setGlobalParticleScale(scale);
+        }
+    }
 }
 
 /* 00000C08-00000E50       .text setWave__9daOship_cFv */
@@ -272,7 +328,69 @@ void daOship_c::setWave() {
 
 /* 00000E50-00001184       .text checkTgHit__9daOship_cFv */
 bool daOship_c::checkTgHit() {
-    /* Nonmatching */
+    mStts.Move();
+    if (l_HIO.field_0x05 != 0) {
+        health = 0;
+        modeProcInit(3);
+        return true;
+    }
+
+    if (cLib_calcTimer(&mHitTimer) == 0) {
+        cXyz hit_pos;
+        CcAtInfo at_info;
+        cCcD_Obj* hit_obj_p;
+        at_info.pParticlePos = NULL;
+
+        for (int i = 0; i < ARRAY_SSIZE(mCyl); i++) {
+            hit_obj_p = mCyl[i].GetTgHitObj();
+            hit_pos = *mCyl[i].GetTgHitPosP();
+            at_info.mpObj = mCyl[i].GetTgHitObj();
+            if (hit_obj_p) break;
+        }
+
+        if (!hit_obj_p) {
+            return false;
+        }
+
+        bool is_bomb_attack = true;
+        switch (hit_obj_p->GetAtType()) {
+            case AT_TYPE_BOMB:
+                health--;
+                break;
+            default:
+                is_bomb_attack = false;
+                break;
+        }
+
+        if (is_bomb_attack) {
+            if (mSmokePtclCount < 3 && !mSmokeFollowCallback[mSmokePtclCount].getEmitter()) {
+                s16 target_angle = cLib_targetAngleY(&current.pos, &hit_pos);
+                this->mSmokeRotY[mSmokePtclCount] = target_angle - shape_angle.y;
+                mSmokeRot[mSmokePtclCount] = shape_angle;
+                mSmokeRot[mSmokePtclCount].y += mSmokeRotY[mSmokePtclCount];
+                dComIfGp_particle_set(0x3E1, &mSmokePos, &mSmokeRot[mSmokePtclCount], &scale, 0xff, &mSmokeFollowCallback[mSmokePtclCount], fopAcM_GetRoomNo(this));
+                mSmokePtclCount++;
+            }
+
+            daPy_py_c* player_p = (daPy_py_c *) dComIfGp_getPlayer(0);
+            dComIfGp_particle_set(0x10, &hit_pos);
+            
+            cXyz particle_scale(2.0f, 2.0f, 2.0f);
+            dComIfGp_particle_set(0xF, &hit_pos, &player_p->shape_angle, &particle_scale);
+        
+            mHitTimer = 5;
+
+            if (health <= 0) {
+                fopAcM_seStart(this, 0x2828, 0);
+                modeProcInit(3);
+            } else {
+                mAimCounter = 6;
+                modeProcInit(2);
+            }
+            return true;
+        }
+    }
+    return false;
 }
 
 /* 00001184-000011F4       .text setAttention__9daOship_cFv */
@@ -596,7 +714,59 @@ void daOship_c::modeDeleteInit() {
 
 /* 00002104-00002414       .text modeDelete__9daOship_cFv */
 void daOship_c::modeDelete() {
-    /* Nonmatching */
+    bool temp = mModelType != 0xFF || REG12_S(0) != 0;
+
+    if (temp) {
+        if (eventInfo.checkCommandDemoAccrpt()) {
+            s16 temp = cLib_addCalcAngleS(&shape_angle.x, -15000, 0x14, 0x1000, 0x100);
+            f32 water_height = dLib_getWaterY(current.pos, mAcch);
+
+            f32 water_height2 = -1000.0f;
+            water_height2 += water_height;
+
+            f32 temp2 = cLib_addCalc(&current.pos.y, water_height2, 0.02f, 50.0f, 10.0f);
+            
+            if (s16(std::abs(temp)) <= 0x100 && std::fabsf(temp2 - water_height) < 500.0f && mSwitchA != 0xFF) {
+                dComIfGs_onSwitch(mSwitchA, fopAcM_GetRoomNo(this));
+                s16 salvage_proc_name = PROC_Salvage;
+                daSalvage_c* salvage_p = (daSalvage_c *) fopAcIt_Judge(fpcSch_JudgeForPName, &salvage_proc_name);
+                salvage_p->onSalvageForOship(this);
+                mDoAud_seStart(JA_SE_READ_RIDDLE_1);
+            }
+            
+            if (dComIfGp_evmng_endCheck("GOLD_SHIP_DELETE")) {
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3E80);
+                dComIfGp_event_onEventFlag(8);
+                fopAcM_delete(this);
+            }
+        } else {
+            fopAcM_orderOtherEvent2(this, "GOLD_SHIP_DELETE", dEvtFlag_NOPARTNER_e);
+        }        
+    } else {
+        s16 temp = cLib_addCalcAngleS(&shape_angle.x, -15000, 0x14, 0x1000, 0x100);
+        f32 water_height = dLib_getWaterY(current.pos, mAcch);
+
+        f32 water_height2 = -1000.0f;
+        water_height2 += water_height;
+
+        f32 temp2 = cLib_addCalc(&current.pos.y, water_height2, 0.02f, 50.0f, 10.0f);
+
+        if (s16(std::abs(temp)) <= 0x100 && std::fabsf(temp2 - water_height) < 500.0f) {
+            if (mSwitchA != 0xFF) {
+                dComIfGs_onSwitch(mSwitchA, fopAcM_GetRoomNo(this));
+                s16 salvage_proc_name = PROC_Salvage;
+                daSalvage_c* salvage_p = (daSalvage_c *) fopAcIt_Judge(fpcSch_JudgeForPName, &salvage_proc_name);
+                salvage_p->onSalvageForOship(this);
+            }
+
+            fpc_ProcID flag_pid = mFlagPcId;
+            fopAc_ac_c* flag_p = (fopAc_ac_c *) fopAcIt_Judge(fpcSch_JudgeByID, &flag_pid);
+            if (flag_p) {
+                fopAcM_delete(flag_p);
+            }
+            fopAcM_delete(this);
+        }
+    }
 }
 
 /* 00002414-0000263C       .text modeProc__9daOship_cFQ29daOship_c6Proc_ei */
