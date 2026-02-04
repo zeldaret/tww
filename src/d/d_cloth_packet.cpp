@@ -191,8 +191,18 @@ void dCloth_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+
+#if VERSION == VERSION_DEMO
+    {
+        cXyz* pos = getPosP();
+        GXSetArray(GX_VA_POS, pos, sizeof(cXyz));
+        cXyz* nrm = getNrmP();
+        GXSetArray(GX_VA_NRM, nrm, sizeof(cXyz));
+    }
+#else
     GXSetArray(GX_VA_POS, this->mpPosArr[this->mCurArr], sizeof(cXyz));
     GXSetArray(GX_VA_NRM, this->mpNrmArr[this->mCurArr], sizeof(cXyz));
+#endif
 
     TexObjLoad();
     GXLoadTexObj(&this->mToonTex, GX_TEXMAP1);
@@ -201,7 +211,14 @@ void dCloth_packet_c::draw() {
     mDoMtx_stack_c::copy(mMtx);
     mDoMtx_stack_c::scaleM(mScale);
     Mtx mtx;
+#if VERSION == VERSION_DEMO
+    {
+        MtxP calc_mtx = mDoMtx_stack_c::get();
+        MTXConcat(j3dSys.getViewMtx(), calc_mtx, mtx);
+    }
+#else
     MTXConcat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mtx);
+#endif
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXLoadNrmMtxImm(mtx, GX_PNMTX0);
 
@@ -211,7 +228,15 @@ void dCloth_packet_c::draw() {
 
     // Draw back
     GXSetCullMode(GX_CULL_FRONT);
+#if VERSION == VERSION_DEMO
+    {
+        cXyz* base_ptr = this->mpNrmArrBack[this->mCurArr];
+        GXSetArray(GX_VA_NRM, base_ptr, sizeof(cXyz));
+    }
+#else
     GXSetArray(GX_VA_NRM, this->mpNrmArrBack[this->mCurArr], sizeof(cXyz));
+#endif
+
     plot();
 
 #if VERSION > VERSION_JPN
