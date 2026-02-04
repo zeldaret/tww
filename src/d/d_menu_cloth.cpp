@@ -12,7 +12,106 @@ static daCLOTH_HIO_c l_HIO;
 
 /* 8019940C-8019966C       .text __ct__13daCLOTH_HIO_cFv */
 daCLOTH_HIO_c::daCLOTH_HIO_c() {
-    /* Nonmatching */
+    field_0x4 = -1;
+
+    {
+        mChildren[0].field_0x4 = 1.78f;
+        mChildren[0].field_0x8 = 1.78f;
+        mChildren[0].field_0xc = 1.0f;
+        mChildren[0].field_0x1c = 0;
+        mChildren[0].field_0x1e = 0;
+        mChildren[0].field_0x20 = 0;
+        mChildren[0].field_0x10 = 360.0f;
+        mChildren[0].field_0x14 = 40.0f;
+        mChildren[0].field_0x18 = -2400.0f;
+        mChildren[0].field_0x22 = 0x78;
+        mChildren[0].field_0x24 = 0xA5;
+        mChildren[0].field_0x26 = 0x37;
+        mChildren[0].field_0x28 = 0xDC;
+        mChildren[0].field_0x2a = 0x23;
+        mChildren[0].field_0x2c = 0x5f;
+        mChildren[0].field_0x2e = 0x19;
+        mChildren[0].field_0x30 = 0x20;
+        mChildren[0].field_0x32 = 0;
+        mChildren[0].field_0x34 = 7;
+        mChildren[0].field_0x36 = -1000;
+        mChildren[0].field_0x38 = 9000;
+        mChildren[0].field_0x3a = 0x800;
+        mChildren[0].field_0x3c = 5.0;
+        mChildren[0].field_0x40 = 5.0;
+        mChildren[0].field_0x44 = 250.0;
+        mChildren[0].field_0x4c = 1000.0;
+        mChildren[0].field_0x48 = 0;
+        mChildren[0].field_0x4a = 0;
+        mChildren[0].field_0x50 = 2;
+        mChildren[0].field_0x54 = 290.0f;
+    }
+
+    {
+        mChildren[1].field_0x4 = 1.27f;
+        mChildren[1].field_0x8 = 0.93f;
+        mChildren[1].field_0xc = 1.0f;
+        mChildren[1].field_0x1c = 0;
+        mChildren[1].field_0x1e = 0;
+        mChildren[1].field_0x20 = 0;
+        mChildren[1].field_0x10 = 350.0;
+        mChildren[1].field_0x14 = -15.0;
+        mChildren[1].field_0x18 = -2400.0;
+        mChildren[1].field_0x22 = 0xbe;
+        mChildren[1].field_0x24 = 0xb4;
+        mChildren[1].field_0x26 = 100;
+        mChildren[1].field_0x28 = 0xaa;
+        mChildren[1].field_0x2a = 0x8c;
+        mChildren[1].field_0x2c = 0x50;
+        mChildren[1].field_0x2e = 0x14;
+        mChildren[1].field_0x30 = 0x20;
+        mChildren[1].field_0x32 = 0;
+        mChildren[1].field_0x34 = 7;
+        mChildren[1].field_0x36 = -1000;
+        mChildren[1].field_0x38 = 9000;
+        mChildren[1].field_0x3a = 0x800;
+        mChildren[1].field_0x3c = 5.0;
+        mChildren[1].field_0x40 = 5.0;
+        mChildren[1].field_0x44 = 250.0;
+        mChildren[1].field_0x4c = 1000.0;
+        mChildren[1].field_0x48 = 0;
+        mChildren[1].field_0x4a = 0;
+        mChildren[1].field_0x50 = 2;
+        mChildren[1].field_0x54 = 290.0;
+    }
+
+    {
+        mChildren[2].field_0x4 = 1.7;
+        mChildren[2].field_0x8 = 1.7;
+        mChildren[2].field_0xc = 1.0;
+        mChildren[2].field_0x1c = 0;
+        mChildren[2].field_0x1e = 0;
+        mChildren[2].field_0x20 = 0x4000;
+        mChildren[2].field_0x10 = 360.0;
+        mChildren[2].field_0x14 = 40.0;
+        mChildren[2].field_0x18 = -2400.0;
+        mChildren[2].field_0x22 = 0xbe;
+        mChildren[2].field_0x24 = 0xb4;
+        mChildren[2].field_0x26 = 100;
+        mChildren[2].field_0x28 = 0xdc;
+        mChildren[2].field_0x2a = 0x8c;
+        mChildren[2].field_0x2c = 0x50;
+        mChildren[2].field_0x2e = 0x14;
+        mChildren[2].field_0x30 = 0x20;
+        mChildren[2].field_0x32 = 0;
+        mChildren[2].field_0x34 = 7;
+        mChildren[2].field_0x36 = -1000;
+        mChildren[2].field_0x38 = 9000;
+        mChildren[2].field_0x3a = 0x800;
+        mChildren[2].field_0x3c = 5.0;
+        mChildren[2].field_0x40 = 5.0;
+        mChildren[2].field_0x44 = 250.0;
+        mChildren[2].field_0x4c = 1000.0;
+        mChildren[2].field_0x48 = 0;
+        mChildren[2].field_0x4a = 0;
+        mChildren[2].field_0x50 = 2;
+        mChildren[2].field_0x54 = 290.0;
+    }
 }
 
 /* 8019966C-801996B4       .text __dt__18daCLOTH_ChildHIO_cFv */

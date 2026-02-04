@@ -60,7 +60,7 @@ public:
     daCLOTH_ChildHIO_c();
     virtual ~daCLOTH_ChildHIO_c();
 
-private:
+public:
     /* 0x0004 */ f32 field_0x4;
     /* 0x0008 */ f32 field_0x8;
     /* 0x000c */ f32 field_0xc;
@@ -80,7 +80,7 @@ private:
     /* 0x0030 */ u16 field_0x30;
     /* 0x0032 */ u16 field_0x32;
     /* 0x0034 */ u16 field_0x34;
-    /* 0x0036 */ u16 field_0x36;
+    /* 0x0036 */ s16 field_0x36;
     /* 0x0038 */ u16 field_0x38;
     /* 0x003a */ u16 field_0x3a;
     /* 0x003c */ f32 field_0x3c;
@@ -100,8 +100,8 @@ public:
     daCLOTH_HIO_c();
     virtual ~daCLOTH_HIO_c();
 
-private:
-    /* 0x0004 */ u8 field_0x4;
+public:
+    /* 0x0004 */ s8 field_0x4;
     /* 0x0005 */ u8 field_0x5;
     /* 0x0006 */ u8 field_0x6;
     /* 0x0007 */ u8 field_0x7;
