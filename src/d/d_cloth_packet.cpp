@@ -17,6 +17,10 @@ dCloth_packet_c::dCloth_packet_c(
 ) {
     JUT_ASSERT(43, i_toonimage != NULL);
 
+#if VERSION == VERSION_DEMO
+    GXBool mipmap = i_toonimage->mipmapCount > 1;
+#endif
+
     GXInitTexObj(
         getToonTexObjP(),
         (u8*)i_toonimage + i_toonimage->imageOffset,
@@ -25,7 +29,11 @@ dCloth_packet_c::dCloth_packet_c(
         (GXTexFmt)i_toonimage->format,
         (GXTexWrapMode)i_toonimage->wrapS,
         (GXTexWrapMode)i_toonimage->wrapT,
+#if VERSION == VERSION_DEMO
+        mipmap
+#else
         i_toonimage->mipmapCount > 1
+#endif
     );
     GXInitTexObjLOD(
         getTexObjP(),
@@ -46,7 +54,12 @@ dCloth_packet_c::dCloth_packet_c(
     mpTevstr = tevstr;
     mCurArr = 0;
 
+#if VERSION == VERSION_DEMO
+    const MtxP mtx = mDoMtx_getIdentity();
+    setMtx(mtx);
+#else
     setMtx(g_mDoMtx_identity);
+#endif
 
     if (posArr == NULL) {
         mpPosArr[0] = new cXyz[mFlyGridSize * mHoistGridSize];
