@@ -200,12 +200,12 @@ void dCloth_packet_c::draw() {
         GXSetArray(GX_VA_NRM, nrm, sizeof(cXyz));
     }
 #else
-    GXSetArray(GX_VA_POS, this->mpPosArr[this->mCurArr], sizeof(cXyz));
-    GXSetArray(GX_VA_NRM, this->mpNrmArr[this->mCurArr], sizeof(cXyz));
+    GXSetArray(GX_VA_POS, getPosP(), sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, getNrmP(), sizeof(cXyz));
 #endif
 
     TexObjLoad();
-    GXLoadTexObj(&this->mToonTex, GX_TEXMAP1);
+    GXLoadTexObj(getToonTexObjP(), GX_TEXMAP1);
     TevSetting();
 
     mDoMtx_stack_c::copy(mMtx);
@@ -230,11 +230,11 @@ void dCloth_packet_c::draw() {
     GXSetCullMode(GX_CULL_FRONT);
 #if VERSION == VERSION_DEMO
     {
-        cXyz* base_ptr = this->mpNrmArrBack[this->mCurArr];
-        GXSetArray(GX_VA_NRM, base_ptr, sizeof(cXyz));
+        cXyz* backNrm = getBackNrmP();
+        GXSetArray(GX_VA_NRM, backNrm, sizeof(cXyz));
     }
 #else
-    GXSetArray(GX_VA_NRM, this->mpNrmArrBack[this->mCurArr], sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, getBackNrmP(), sizeof(cXyz));
 #endif
 
     plot();
@@ -374,7 +374,7 @@ void dCloth_packet_c::setNrm() {
     }
 
     // Set all back normals to the negative front normals.
-    cXyz* pNrmBack = mpNrmArrBack[mCurArr];
+    cXyz* pNrmBack = getBackNrmP();
     for (int y = 0; y < mHoistGridSize; y++) {
         for (int x = 0; x < mFlyGridSize; x++) {
             pNrmBack->set(-pNrm->x, -pNrm->y, -pNrm->z);
@@ -562,7 +562,7 @@ void dCloth_packetXlu_c::TevSetting() {
 
 /* 80064C98-80064CF8       .text cloth_draw__18dCloth_packetXlu_cFv */
 void dCloth_packetXlu_c::cloth_draw() {
-    cXyz pos = mpPosArr[mCurArr][0];
+    cXyz pos = getPosP()[0];
     g_dComIfG_gameInfo.drawlist.entryZSortXluDrawList(g_dComIfG_gameInfo.drawlist.mpXluList, this, pos);
 }
 
