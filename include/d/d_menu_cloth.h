@@ -18,8 +18,8 @@ public:
     void getPos() {}
     void getShadowPos() {}
     void getTexObj() {}
-    void setArchive(JKRArchive* arc) { field_0x44 = arc; }
-    void setClothType(u8 type) { field_0x913d = type; } // ?
+    void setArchive(JKRArchive* arc) { mpArc = arc; }
+    void setClothType(u8 type) { mClothType = type; } // ?
 
     void lightSet1(cXyz);
     void cloth_init();
@@ -40,16 +40,18 @@ public:
     void cloth_move_simple();
     void cloth_move();
 
-    /* 0x0004 */ u8 field_0x4[0x44 - 0x04];
-    /* 0x0044 */ JKRArchive* field_0x44;
+    /* 0x0004 */ u16 field_0x4;
+    /* 0x0006 */ u8 field_0x6[0x44 - 0x06];
+    /* 0x0044 */ JKRArchive* mpArc;
     /* 0x0048 */ cXyz field_0x48[882];
     /* 0x29A0 */ cXyz field_0x29a0[882];
     /* 0x52F8 */ cXyz field_0x52f8[441];
     /* 0x67A4 */ cXyz field_0x67a4[441];
     /* 0x7C50 */ cXyz field_0x7c50[441];
-    /* 0x90FC */ GXTexObj field_0x90fc;
-    /* 0x911C */ u8 field_0x911c[0x913D - 0x911C];
-    /* 0x913D */ u8 field_0x913d;
+    /* 0x90FC */ GXTexObj mTexObj;
+    /* 0x911C */ u8 field_0x911c[0x913C - 0x911C];
+    /* 0x913C */ u8 field_0x913c;
+    /* 0x913D */ u8 mClothType;
     /* 0x913E */ u8 field_913e[0x9168 - 0x913E];
 };
 
