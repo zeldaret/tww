@@ -12,7 +12,7 @@ static daCLOTH_HIO_c l_HIO;
 
 /* 8019940C-8019966C       .text __ct__13daCLOTH_HIO_cFv */
 daCLOTH_HIO_c::daCLOTH_HIO_c() {
-    field_0x4 = -1;
+    mNo = -1;
 
     {
         mChildren[0].field_0x4 = 1.78f;
@@ -139,11 +139,12 @@ void dMCloth_c::init() {
 
 /* 80199E1C-80199F48       .text __ct__9dMCloth_cFv */
 dMCloth_c::dMCloth_c() {
-    /* Nonmatching */
     field_0x913c = 0;
-    field_0x4 = 4;
+    field_0x4 = 0;
     mClothType = 0;
-    mDoHIO_createChild("メニューの布", &l_HIO);
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("メニューの布", &l_HIO); // Menu cloth
+    }
 }
 
 /* 80199F48-8019A058       .text __dt__9dMCloth_cFv */

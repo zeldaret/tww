@@ -99,7 +99,7 @@ public:
     virtual ~daCLOTH_HIO_c();
 
 public:
-    /* 0x0004 */ s8 field_0x4;
+    /* 0x0004 */ s8 mNo;
     /* 0x0008 */ daCLOTH_ChildHIO_c mChildren[3];
 };
 
