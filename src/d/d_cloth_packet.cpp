@@ -396,6 +396,10 @@ void dCloth_packet_c::cloth_draw() {
 
 /* 80064330-8006441C       .text TexObjInit__15dCloth_packet_cFP7ResTIMG */
 void dCloth_packet_c::TexObjInit(ResTIMG* i_img) {
+#if VERSION == VERSION_DEMO
+    GXBool mipmap = i_img->mipmapCount > 1;
+#endif
+
     GXInitTexObj(
         getTexObjP(),
         (u8*)i_img + i_img->imageOffset,
@@ -404,7 +408,11 @@ void dCloth_packet_c::TexObjInit(ResTIMG* i_img) {
         GXTexFmt(i_img->format),
         GXTexWrapMode(i_img->wrapS),
         GXTexWrapMode(i_img->wrapT),
+#if VERSION == VERSION_DEMO
+        mipmap
+#else
         i_img->mipmapCount > 1
+#endif
     );
     GXInitTexObjLOD(
         getTexObjP(),
