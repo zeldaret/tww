@@ -53,7 +53,7 @@ public:
     /* 0x913E */ u8 field_913e[0x9168 - 0x913E];
 };
 
-class daCLOTH_HIO_c {
+class daCLOTH_HIO_c : public JORReflexible {
 public:
     daCLOTH_HIO_c();
 };

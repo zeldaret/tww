@@ -6,6 +6,8 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_cloth.h"
 
+static daCLOTH_HIO_c l_HIO;
+
 /* 8019940C-8019966C       .text __ct__13daCLOTH_HIO_cFv */
 daCLOTH_HIO_c::daCLOTH_HIO_c() {
     /* Nonmatching */
