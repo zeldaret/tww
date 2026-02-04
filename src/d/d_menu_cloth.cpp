@@ -227,7 +227,15 @@ void dMCloth_c::TevSettingFileSelect() {
 
 /* 8019AB64-8019ABB4       .text TevSetting__9dMCloth_cFv */
 void dMCloth_c::TevSetting() {
-    /* Nonmatching */
+    switch (mClothType) {
+    case 0:
+    case 2:
+        TevSettingMenu();
+        break;
+    case 1:
+        TevSettingFileSelect();
+        break;
+    }
 }
 
 /* 8019ABB4-8019AC8C       .text ShadowTevSettingMenu__9dMCloth_cFv */
