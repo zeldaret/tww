@@ -151,7 +151,11 @@ void dCloth_packet_c::cloth_move() {
 /* 80063728-800638E4       .text draw__15dCloth_packet_cFv */
 void dCloth_packet_c::draw() {
     j3dSys.reinitGX();
+
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
+#endif
+
     dKy_GxFog_tevstr_set(mpTevstr);
     dKy_setLight_mine(mpTevstr);
 
@@ -185,7 +189,9 @@ void dCloth_packet_c::draw() {
     GXSetArray(GX_VA_NRM, this->mpNrmArrBack[this->mCurArr], sizeof(cXyz));
     plot();
 
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 800638E4-80063A10       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzff */
