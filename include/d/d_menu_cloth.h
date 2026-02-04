@@ -58,9 +58,9 @@ public:
 class daCLOTH_HIO_c : public JORReflexible {
 public:
     daCLOTH_HIO_c();
+    virtual ~daCLOTH_HIO_c();
 
 private:
-    /* 0x0000 */ u32 field_0x0;
     /* 0x0004 */ u8 field_0x4;
     /* 0x0005 */ u8 field_0x5;
     /* 0x0006 */ u8 field_0x6;
