@@ -134,7 +134,33 @@ void dMCloth_c::cloth_init() {
 
 /* 80199CD0-80199E1C       .text init__9dMCloth_cFv */
 void dMCloth_c::init() {
-    /* Nonmatching */
+    cloth_init();
+
+    ResTIMG* image = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "cloth_piece01.bti", mpArc);
+    JUT_ASSERT(0x212, image != NULL);
+
+    GXInitTexObj(
+        &mTexObj,
+        (u8*)image + image->imageOffset,
+        image->width,
+        image->height,
+        GXTexFmt(image->format),
+        GXTexWrapMode(image->wrapS),
+        GXTexWrapMode(image->wrapT),
+        image->mipmapCount > 1
+    );
+
+    GXInitTexObjLOD(
+        &mTexObj,
+        GXTexFilter(image->minFilter),
+        GXTexFilter(image->magFilter),
+        image->minLOD * 0.125f,
+        image->maxLOD * 0.125f,
+        image->LODBias * 0.01f,
+        image->biasClamp,
+        image->doEdgeLOD,
+        GXAnisotropy(image->maxAnisotropy)
+    );
 }
 
 /* 80199E1C-80199F48       .text __ct__9dMCloth_cFv */
