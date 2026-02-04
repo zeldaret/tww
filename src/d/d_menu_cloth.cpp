@@ -165,7 +165,7 @@ void dMCloth_c::init() {
 
 /* 80199E1C-80199F48       .text __ct__9dMCloth_cFv */
 dMCloth_c::dMCloth_c() {
-    field_0x913c = 0;
+    mCurArr = 0;
     field_0x4 = 0;
     mClothType = 0;
     if (l_HIO.mNo < 0) {
@@ -185,7 +185,14 @@ dMCloth_c::~dMCloth_c() {
 
 /* 8019A058-8019A0AC       .text setBackNrm__9dMCloth_cFv */
 void dMCloth_c::setBackNrm() {
-    /* Nonmatching */
+    cXyz* pNrm = getNrm();
+    cXyz* pBackNrm = getBackNrm();
+
+    for (int i = 0; i < 441; i++) {
+        pBackNrm->set(-pNrm->x, -pNrm->y, -pNrm->z);
+        pNrm++;
+        pBackNrm++;
+    }
 }
 
 /* 8019A0AC-8019A480       .text setNrmVtx__9dMCloth_cFP4cXyzii */
