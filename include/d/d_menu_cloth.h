@@ -90,8 +90,6 @@ public:
     /* 0x004a */ u16 field_0x4a;
     /* 0x004c */ f32 field_0x4c;
     /* 0x0050 */ u16 field_0x50;
-    /* 0x0052 */ u8 field_0x52;
-    /* 0x0053 */ u8 field_0x53;
     /* 0x0054 */ f32 field_0x54;
 };
 
@@ -102,10 +100,6 @@ public:
 
 public:
     /* 0x0004 */ s8 field_0x4;
-    /* 0x0005 */ u8 field_0x5;
-    /* 0x0006 */ u8 field_0x6;
-    /* 0x0007 */ u8 field_0x7;
-
     /* 0x0008 */ daCLOTH_ChildHIO_c mChildren[3];
 };
 
