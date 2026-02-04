@@ -41,6 +41,10 @@ void dMCloth_c::init() {
 /* 80199E1C-80199F48       .text __ct__9dMCloth_cFv */
 dMCloth_c::dMCloth_c() {
     /* Nonmatching */
+    field_0x913c = 0;
+    field_0x4 = 4;
+    mClothType = 0;
+    mDoHIO_createChild("メニューの布", &l_HIO);
 }
 
 /* 80199F48-8019A058       .text __dt__9dMCloth_cFv */
