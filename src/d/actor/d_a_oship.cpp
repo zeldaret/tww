@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_oship.h"
 #include "d/actor/d_a_bomb.h"
+#include "d/actor/d_a_majuu_flag.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_salvage.h"
 #include "d/actor/d_a_ship.h"
@@ -13,7 +14,6 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
-#include "d/d_s_play.h"
 
 const s32 daOship_c::m_heapsize = 0x1280;
 
@@ -53,11 +53,11 @@ static daOship_HIO_c l_HIO;
 
 /* 000000EC-00000234       .text __ct__13daOship_HIO_cFv */
 daOship_HIO_c::daOship_HIO_c() {
-    field_0x04 = 0;
-    field_0x06 = 0;
-    field_0x05 = 0;
-    field_0x07 = 0;
-    field_0x08 = 0;
+    m04 = 0;
+    m06 = false;
+    m05 = false;
+    m07 = false;
+    m08 = false;
     mTrackOffsY = -0.04;
     mTrackScaleY = 4.0;
     mAttentionOffsY = 900.0;
@@ -154,7 +154,7 @@ BOOL daOship_c::_pathMove(cXyz* p_pos, cXyz* p_p0, cXyz* p_p1) {
 
     s16 target = cM_atan2s(diff.x, diff.z);
     s16 speed_f_phase = cLib_addCalcAngleS(&current.angle.y, target, 8, 0x200, 8);
-    f32 final_speed_f = fopAcM_GetSpeedF(this) * std::fabsf(cM_scos(speed_f_phase));
+    f32 final_speed_f = std::fabsf(cM_scos(speed_f_phase)) * speedF;
     cLib_chasePosXZ(p_pos, mPathP1, final_speed_f);
 
 
@@ -168,7 +168,6 @@ BOOL daOship_c::_pathMove(cXyz* p_pos, cXyz* p_p0, cXyz* p_p1) {
 
 /* 00000718-000007E4       .text pathMove__9daOship_cFv */
 void daOship_c::pathMove() {
-    /* Instruction match */
     cLib_addCalc2(&speedF, mVelocityFwdTarget, 0.1f, 2.0f);
     dLib_pathMove(&mOrigPos, &m2D4, mpPath, speedF, pathMove_CB, this);
     cLib_addCalcPosXZ2(&current.pos, mOrigPos, REG12_F(0) + 0.01f, speedF);
@@ -187,7 +186,7 @@ bool daOship_c::plFireRepeat() {
     }
 
     if (mPlFireTimer != -1 && cLib_calcTimer(&mPlFireTimer) == 0) {
-        modeProcInit(1);
+        modeProcInit(MODE_ATTACK);
         mPlFireTimer = -1;
         return true;
     }
@@ -206,16 +205,16 @@ bool daOship_c::lineCheck(cXyz* param_1, cXyz* param_2) {
 /* 000008F8-00000990       .text changeModeByRange__9daOship_cFv */
 void daOship_c::changeModeByRange() {
     f32 search_ac_dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
-    int proc_no;
+    Mode_e proc_no;
 
     if (search_ac_dist < l_HIO.mDistRangeA) {
-        proc_no = 4;
+        proc_no = MODE_RANGE_A;
     } else if (search_ac_dist < l_HIO.mDistRangeB) {
-        proc_no = 5;
+        proc_no = MODE_RANGE_B;
     } else if (search_ac_dist < l_HIO.mDistRangeC) {
-        proc_no = 6;
+        proc_no = MODE_RANGE_C;
     } else {
-        proc_no = 7;
+        proc_no = MODE_RANGE_D;
     }
 
     if (mCurrentProc != proc_no) {
@@ -225,30 +224,29 @@ void daOship_c::changeModeByRange() {
 
 /* 00000990-00000C08       .text createWave__9daOship_cFv */
 void daOship_c::createWave() {
-    /* Nonmatching */
     static const JGeometry::TVec3<f32> wave_l_direction(0.5, 1.0f, -0.3f);
     static const JGeometry::TVec3<f32> wave_r_direction(-0.5, 1.0f, -0.3f);
 
     if (!mWaveCallback1.getEmitter()) {
-        dComIfGp_particle_set(0x37, &mWavePos, &mWaveRot, NULL, 0xFF, &mWaveCallback1);
+        dComIfGp_particle_set(dPa_name::ID_COMMON_0037, &mWavePos, &mWaveRot, NULL, 0xFF, &mWaveCallback1);
         if (mWaveCallback1.getEmitter()) {
             mWaveCallback1.getEmitter()->setDirection(wave_l_direction);
         }
     }
 
     if (!mWaveCallback2.getEmitter()) {
-        dComIfGp_particle_set(0x37, &mWavePos, &mWaveRot, NULL, 0xFF, &mWaveCallback2);
+        dComIfGp_particle_set(dPa_name::ID_COMMON_0037, &mWavePos, &mWaveRot, NULL, 0xFF, &mWaveCallback2);
         if (mWaveCallback2.getEmitter()) {
             mWaveCallback2.getEmitter()->setDirection(wave_r_direction);
         }
     }
 
     if (!mSplashCallback.getEmitter()) {
-        dComIfGp_particle_set(0x35, &mWavePos, &mWaveRot, NULL, 0xFF, &mSplashCallback);
+        dComIfGp_particle_set(dPa_name::ID_COMMON_0035, &mWavePos, &mWaveRot, NULL, 0xFF, &mSplashCallback);
     }
 
     if (!mTrackCallback.getEmitter()) {
-        dComIfGp_particle_setShipTail(0x36, &mTrackPos, &shape_angle, NULL, 0, &mTrackCallback);
+        dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0036, &mTrackPos, &shape_angle, NULL, 0, &mTrackCallback);
         JPABaseEmitter* emitter_p = mTrackCallback.getEmitter();
         if (emitter_p) {
             Vec vec_scale = { 3.0f, 3.0f, 3.0f };
@@ -261,7 +259,6 @@ void daOship_c::createWave() {
 
 /* 00000C08-00000E50       .text setWave__9daOship_cFv */
 void daOship_c::setWave() {
-    /* Instruction match */
     f32 track_vel;
     f32 wave_vel_fade;
     f32 splash_scale_target;
@@ -329,9 +326,9 @@ void daOship_c::setWave() {
 /* 00000E50-00001184       .text checkTgHit__9daOship_cFv */
 bool daOship_c::checkTgHit() {
     mStts.Move();
-    if (l_HIO.field_0x05 != 0) {
+    if (l_HIO.m05) {
         health = 0;
-        modeProcInit(3);
+        modeProcInit(MODE_DELETE);
         return true;
     }
 
@@ -368,24 +365,29 @@ bool daOship_c::checkTgHit() {
                 this->mSmokeRotY[mSmokePtclCount] = target_angle - shape_angle.y;
                 mSmokeRot[mSmokePtclCount] = shape_angle;
                 mSmokeRot[mSmokePtclCount].y += mSmokeRotY[mSmokePtclCount];
-                dComIfGp_particle_set(0x3E1, &mSmokePos, &mSmokeRot[mSmokePtclCount], &scale, 0xff, &mSmokeFollowCallback[mSmokePtclCount], fopAcM_GetRoomNo(this));
+                dComIfGp_particle_set(
+                    dPa_name::ID_COMMON_03E1, 
+                    &mSmokePos, &mSmokeRot[mSmokePtclCount], 
+                    &scale, 0xff, &mSmokeFollowCallback[mSmokePtclCount], 
+                    fopAcM_GetRoomNo(this)
+                );
                 mSmokePtclCount++;
             }
 
             daPy_py_c* player_p = (daPy_py_c *) dComIfGp_getPlayer(0);
-            dComIfGp_particle_set(0x10, &hit_pos);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &hit_pos);
             
             cXyz particle_scale(2.0f, 2.0f, 2.0f);
-            dComIfGp_particle_set(0xF, &hit_pos, &player_p->shape_angle, &particle_scale);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, &hit_pos, &player_p->shape_angle, &particle_scale);
         
             mHitTimer = 5;
 
             if (health <= 0) {
-                fopAcM_seStart(this, 0x2828, 0);
-                modeProcInit(3);
+                fopAcM_seStart(this, JA_SE_LK_LAST_HIT, 0);
+                modeProcInit(MODE_DELETE);
             } else {
                 mAimCounter = 6;
-                modeProcInit(2);
+                modeProcInit(MODE_DAMAGE);
             }
             return true;
         }
@@ -397,7 +399,7 @@ bool daOship_c::checkTgHit() {
 void daOship_c::setAttention() {
     attention_info.position = current.pos;
     eyePos = current.pos;
-    if (dComIfGp_event_runCheck() == FALSE) {
+    if (!dComIfGp_event_runCheck()) {
         attention_info.position.y += l_HIO.mAttentionOffsY;
         eyePos.y += l_HIO.mEyeOffsY;
     }
@@ -405,7 +407,6 @@ void daOship_c::setAttention() {
 
 /* 000011F4-00001330       .text setCollision__9daOship_cFv */
 void daOship_c::setCollision() {
-    /* Instruction match */
     static f32 cyl_offset[5] = {
         50.0f, -50.0f, 0.0f,
         180.0f, -180.0f
@@ -440,16 +441,19 @@ void daOship_c::setCollision() {
 
 /* 00001330-000014D4       .text attackCannon__9daOship_cFi */
 void daOship_c::attackCannon(int i_index) {
-    /* Instruction match */
     csXyz rot = shape_angle;
     rot.x -= mAimRotX;
     rot.y += mAimRotY;
     
-    int prm = daBomb_c::prm_make(daBomb_c::STATE_4, true, true);
-    daBomb_c* bomb_p = (daBomb_c *) fopAcM_fastCreate(PROC_BOMB, prm, &mBombSpawnPos, tevStr.mRoomNo, &rot);
+    int bomb_prm = daBomb_c::prm_make(daBomb_c::STATE_4, true, true);
+    daBomb_c* bomb_p = (daBomb_c *) fopAcM_fastCreate(
+        PROC_BOMB, bomb_prm, 
+        &mBombSpawnPos, tevStr.mRoomNo, 
+        &rot
+    );
     
     mBombPcId[i_index] = fpcM_GetID(bomb_p);
-    mBombAlloc[i_index] = 1;
+    mBombAlloc[i_index] = true;
 
     bomb_p->setNoGravityTime(l_HIO.mBombNoGravityTime);
     fopAcM_SetSpeedF(bomb_p, l_HIO.mBombSpeed * cM_scos(rot.x));
@@ -464,8 +468,8 @@ void daOship_c::attackCannon(int i_index) {
 
 /* 000014D4-000017CC       .text setMtx__9daOship_cFv */
 void daOship_c::setMtx() {
-    /* Instruction match */
-    dLib_waveRot(&current.pos, f32(mAttackSwayAmount) * f32(REG12_S(3) + 1), &mWave);
+    f32 sway = f32(mAttackSwayAmount) * f32(REG12_S(3) + 1);
+    dLib_waveRot(&current.pos, sway, &mWave);
     
     s16 temp_r30 = f32(mAttackSwayAmount * (REG12_S(5) + 10)) * cM_ssin(mAttackSwayTimer);
     s16 temp_r0 = shape_angle.y + fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
@@ -522,13 +526,12 @@ void daOship_c::modeRangeA() {
         pathMove();
     }
 
-    fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
-    mTargetPos = player_p->current.pos;
+    mTargetPos = dComIfGp_getPlayer(0)->current.pos;
     current.pos.y = dLib_getWaterY(current.pos, mAcch);
 
     if (!checkTgHit() && !plFireRepeat()) {
         if (cLib_calcTimer(&mAttackTimer) == 0) {
-            modeProcInit(1);
+            modeProcInit(MODE_ATTACK);
         } else {
             changeModeByRange();
         }
@@ -537,7 +540,6 @@ void daOship_c::modeRangeA() {
 
 /* 00001900-00001934       .text modeRangeBInit__9daOship_cFv */
 void daOship_c::modeRangeBInit() {
-    /* Nonmatching */
     if (mSubMode == 0) {
         mAttackTimer = l_HIO.mAttackDelayA;
         return;
@@ -553,13 +555,12 @@ void daOship_c::modeRangeB() {
         pathMove();
     }
 
-    fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
-    mTargetPos = player_p->current.pos;
+    mTargetPos = dComIfGp_getPlayer(0)->current.pos;
     current.pos.y = dLib_getWaterY(current.pos, mAcch);
 
     if (!checkTgHit() && !plFireRepeat()) {
         if (cLib_calcTimer(&mAttackTimer) == 0) {
-            modeProcInit(1);
+            modeProcInit(MODE_ATTACK);
         } else {
             changeModeByRange();
         }
@@ -578,13 +579,12 @@ void daOship_c::modeRangeC() {
         pathMove();
     }
 
-    fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
-    mTargetPos = player_p->current.pos;
+    mTargetPos = dComIfGp_getPlayer(0)->current.pos;
     current.pos.y = dLib_getWaterY(current.pos, mAcch);
 
     if (!checkTgHit() && !plFireRepeat()) {
         if (cLib_calcTimer(&mAttackTimer) == 0) {
-            modeProcInit(1);
+            modeProcInit(MODE_ATTACK);
         } else {
             changeModeByRange();
         }
@@ -616,7 +616,6 @@ void daOship_c::modeDamageInit() {
 
 /* 00001B90-00001C98       .text modeDamage__9daOship_cFv */
 void daOship_c::modeDamage() {
-    /* Instruction match */
     mAttackSwayTimer += REG12_S(2) + 0x1830;
     cLib_addCalcAngleS2(&mAttackSwayAmount, 0, 10, 10);
 
@@ -631,38 +630,37 @@ void daOship_c::modeDamage() {
 
 /* 00001C98-00001EC8       .text modeAttackInit__9daOship_cFv */
 void daOship_c::modeAttackInit() {
-    /* Instruction match */
     mAttackTimer = -1;
     mTargetPos = dComIfGp_getPlayer(0)->current.pos;
 
     f32 target_to_curr_dist = (current.pos - mTargetPos).absXZ();
 
-    f32 fVar1 = 0.0f;
+    f32 target_dist = 0.0f;
     if (target_to_curr_dist > l_HIO.mBadAimAdjustDistanceStart) {
-        fVar1 = (target_to_curr_dist - l_HIO.mBadAimAdjustDistanceStart) * 0.5f;
+        target_dist = (target_to_curr_dist - l_HIO.mBadAimAdjustDistanceStart) * 0.5f;
     }
 
-    fVar1 += 300.0f;
+    target_dist += 300.0f;
 
     if (cM_rndF(100.0f) < 10.0f) {
-        fVar1 = 0.0f;
+        target_dist = 0.0f;
     }
 
-    if (dComIfGp_checkPlayerStatus0(0, 0x1100000)) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK1000000_e | daPyStts0_SWIM_e)) {
         mAimCounter = 0;
-        fVar1 += 3000.0f;
+        target_dist += 3000.0f;
     } else if (mAimCounter < 6) {
-        fVar1 += (6 - mAimCounter) * 500.0f;
+        target_dist += (6 - mAimCounter) * 500.0f;
     }
 
-    if (l_HIO.field_0x08 != 0) {
-        fVar1 = 0.0f;
+    if (l_HIO.m08) {
+        target_dist = 0.0f;
     }
 
     s16 angle = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
 
-    mTargetPos.x -= fVar1 * cM_ssin(angle);
-    mTargetPos.z -= fVar1 * cM_scos(angle);
+    mTargetPos.x -= target_dist * cM_ssin(angle);
+    mTargetPos.z -= target_dist * cM_scos(angle);
 }
 
 /* 00001EC8-00002044       .text modeAttack__9daOship_cFv */
@@ -678,13 +676,13 @@ void daOship_c::modeAttack() {
             cLib_distanceAngleS(mAimRotY, mAimRotYTarget);
             cLib_distanceAngleS(mAimRotX, mAimRotXTarget);
             mAttackTimer = -1;
-            if (l_HIO.field_0x06 != 0) {
+            if (l_HIO.m06) {
                 changeModeByRange();
             } else if (lineCheck(&mSmokePos, &mTargetPos)) {
                 changeModeByRange();
             } else {
                 for (int i = 0; i < ARRAY_SSIZE(mBombAlloc); i++) {
-                    if (mBombAlloc[i] == 0 && speedF <= 2.0f) {
+                    if (!mBombAlloc[i] && speedF <= 2.0f) {
                         attackCannon(i);
                         mAttackTimer = 15;
                         mAttackSwayAmount = 100;
@@ -714,9 +712,7 @@ void daOship_c::modeDeleteInit() {
 
 /* 00002104-00002414       .text modeDelete__9daOship_cFv */
 void daOship_c::modeDelete() {
-    bool temp = mModelType != 0xFF || REG12_S(0) != 0;
-
-    if (temp) {
+    if (isSpecial()) {
         if (eventInfo.checkCommandDemoAccrpt()) {
             s16 temp = cLib_addCalcAngleS(&shape_angle.x, -15000, 0x14, 0x1000, 0x100);
             f32 water_height = dLib_getWaterY(current.pos, mAcch);
@@ -728,14 +724,15 @@ void daOship_c::modeDelete() {
             
             if (s16(std::abs(temp)) <= 0x100 && std::fabsf(temp2 - water_height) < 500.0f && mSwitchA != 0xFF) {
                 dComIfGs_onSwitch(mSwitchA, fopAcM_GetRoomNo(this));
-                s16 salvage_proc_name = PROC_Salvage;
-                daSalvage_c* salvage_p = (daSalvage_c *) fopAcIt_Judge(fpcSch_JudgeForPName, &salvage_proc_name);
+                daSalvage_c* salvage_p = (daSalvage_c *) fopAcM_SearchByName(PROC_Salvage);
                 salvage_p->onSalvageForOship(this);
                 mDoAud_seStart(JA_SE_READ_RIDDLE_1);
             }
             
             if (dComIfGp_evmng_endCheck("GOLD_SHIP_DELETE")) {
+#if VERSION > VERSION_DEMO
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_3E80);
+#endif
                 dComIfGp_event_onEventFlag(8);
                 fopAcM_delete(this);
             }
@@ -754,13 +751,11 @@ void daOship_c::modeDelete() {
         if (s16(std::abs(temp)) <= 0x100 && std::fabsf(temp2 - water_height) < 500.0f) {
             if (mSwitchA != 0xFF) {
                 dComIfGs_onSwitch(mSwitchA, fopAcM_GetRoomNo(this));
-                s16 salvage_proc_name = PROC_Salvage;
-                daSalvage_c* salvage_p = (daSalvage_c *) fopAcIt_Judge(fpcSch_JudgeForPName, &salvage_proc_name);
+                daSalvage_c* salvage_p = (daSalvage_c *) fopAcM_SearchByName(PROC_Salvage);
                 salvage_p->onSalvageForOship(this);
             }
 
-            fpc_ProcID flag_pid = mFlagPcId;
-            fopAc_ac_c* flag_p = (fopAc_ac_c *) fopAcIt_Judge(fpcSch_JudgeByID, &flag_pid);
+            fopAc_ac_c* flag_p = (fopAc_ac_c *) fopAcM_SearchByID(mFlagPcId); 
             if (flag_p) {
                 fopAcM_delete(flag_p);
             }
@@ -771,8 +766,7 @@ void daOship_c::modeDelete() {
 
 /* 00002414-0000263C       .text modeProc__9daOship_cFQ29daOship_c6Proc_ei */
 void daOship_c::modeProc(daOship_c::Proc_e i_procType, int i_procNo) {
-    /* Instruction match */
-    static const ActorModeTable mode_tbl[8] = {
+    static const ModeEntry mode_tbl[8] = {
         { &daOship_c::modeWaitInit,   &daOship_c::modeWait,   "WAIT"    },
         { &daOship_c::modeAttackInit, &daOship_c::modeAttack, "ATTACK"  },
         { &daOship_c::modeDamageInit, &daOship_c::modeDamage, "DAMAGE"  },
@@ -795,7 +789,100 @@ void daOship_c::modeProc(daOship_c::Proc_e i_procType, int i_procNo) {
 
 /* 0000263C-00002AD4       .text _execute__9daOship_cFv */
 bool daOship_c::_execute() {
-    /* Nonmatching */
+    attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
+    attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 34;
+
+    for (int i = 0; i < ARRAY_SSIZE(mSmokeFollowCallback); i++) {
+        if (mSmokeFollowCallback[i].getEmitter()) {
+            mSmokeRot[i] = shape_angle;
+            mSmokeRot[i].y += mSmokeRotY[i];
+            
+            Vec vec_scale = { 3.0f, 3.0f, 3.0f };
+            JGeometry::TVec3<f32> scale = vec_scale;
+            
+            JPABaseEmitter* emitter_p = mSmokeFollowCallback[i].getEmitter();
+
+            emitter_p->setGlobalDynamicsScale(scale);
+            emitter_p->setGlobalParticleScale(scale);
+        }
+    }
+
+    for (int i = 0; i < ARRAY_SSIZE(mBombAlloc); i++) {
+        if (mBombAlloc[i]) {
+            fopAc_ac_c* bomb_p = (fopAc_ac_c *) fopAcM_SearchByID(mBombPcId[i]);
+
+            if (!bomb_p) {
+                mBombAlloc[i] = false;
+            } else if (l_HIO.m07 && bomb_p->speed.y <= REG12_F(1) + -20.0f) {
+                cLib_addCalc2(&bomb_p->speedF, REG12_F(3) + 10.0f, 0.1f, REG12_F(4) + 10.0f);
+                bomb_p->speed.y = REG12_F(2) + -20.0f;
+            }
+        }
+    }
+
+    mAimRotYTarget = cLib_targetAngleY(&current.pos, &mTargetPos) - shape_angle.y;
+
+    f32 target_to_curr_dist = (current.pos - mTargetPos).absXZ();
+
+    s32 distance_angle = 0;
+    if (target_to_curr_dist > l_HIO.mBadAimAdjustDistanceStart) {
+        distance_angle = cLib_distanceAngleS(target_to_curr_dist, l_HIO.mBadAimAdjustDistanceStart);
+        if (distance_angle > l_HIO.mBadAimMax) {
+            distance_angle = l_HIO.mBadAimMax;
+        }
+    }
+
+    mAimRotXTarget = cLib_targetAngleX(&current.pos, &mTargetPos);
+    mAimRotXTarget += distance_angle;
+
+    cLib_addCalcAngleS2(&mAimRotX, mAimRotXTarget, 6, 0x300);
+    cLib_addCalcAngleS2(&mAimRotY, mAimRotYTarget, 6, 0x300);
+
+    modeProc(PROC_EXEC, MODE_NULL);
+
+    mpModel->calc();
+
+    Vec bomb_offset = { 0.0f, 0.0f, 0.0f };
+    bomb_offset = l_HIO.mBombOffset;
+    cMtx_multVec(mpModel->getAnmMtx(2), &bomb_offset, &mBombSpawnPos);
+    
+    Vec smoke_offset = { 0.0f, 0.0f, 0.0f };
+    cMtx_multVec(mpModel->getAnmMtx(1), &smoke_offset, &mSmokePos);
+
+    setAttention();
+    setCollision();
+    setMtx();
+
+    s32 cull_box_check = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), -300.0f, -100.0f, -650.0f, 300.0f, 700.0f, 800.0f);
+
+    if (fopAcM_GetSpeedF(this) <= 2.0f || 
+        (cull_box_check & 0xFF) || 
+        fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0)) > 18000.0f) {
+        mWaveCallback2.remove();
+        mWaveCallback1.remove();
+        mSplashCallback.remove();
+        mTrackCallback.stop();        
+    } else {
+        setWave();
+    }
+
+    if (!isSpecial()) {
+        daMajuu_Flag_c* majuu_flag_p = (daMajuu_Flag_c *) fopAcM_SearchByID(mFlagPcId);
+        if (majuu_flag_p) {
+            majuu_flag_p->mpParentMtx = mFlagMtx;
+            majuu_flag_p->mpParentPos = &mFlagOffset;
+        }
+    }
+
+    return false;
+}
+
+static void dummy() {
+    static const GXColor dummy_c1 = { 0xFF, 0x00, 0x00, 0x80 };
+    static const GXColor dummy_c2 = { 0xFF, 0xFF, 0x00, 0x80 };
+    static const GXColor dummy_c3 = { 0xFF, 0x00, 0x00, 0x80 };
+    static const GXColor dummy_c4 = { 0xFF, 0x00, 0xFF, 0x80 };
+    static const GXColor dummy_c5 = { 0x00, 0xFF, 0x00, 0x80 };
 }
 
 /* 00002AD4-00002B54       .text _draw__9daOship_cFv */
@@ -809,9 +896,6 @@ bool daOship_c::_draw() {
 
 /* 00002B54-00002DFC       .text createInit__9daOship_cFv */
 void daOship_c::createInit() {
-    /* Instruction match */
-    bool no_majuu_flag;
-
     itemTableIdx = dComIfGp_CharTbl()->GetNameIndex("Oship", 0);
 
     mOrigPos = current.pos;
@@ -823,7 +907,7 @@ void daOship_c::createInit() {
     changeModeByRange();
 
     attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
-    attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 34;
+    attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = DEMO_SELECT(43, 34);
 
     mStts.Init(0xFF, 0, this);
     for (int i = 0; i < ARRAY_SSIZE(mCyl); i++) {
@@ -838,24 +922,37 @@ void daOship_c::createInit() {
     mpModel->calc();
     cullMtx = mpModel->getBaseTRMtx();
 
-    fopAcM_setCullSizeBox(this, -300.0f, -100.0f, -650.0f, 300.0f, 700.0f, 800.0f);
+    fopAcM_setCullSizeBox(
+        this, 
+        -300.0f, -100.0f, 
+        -650.0f, 300.0f, 
+        700.0f, 800.0f
+    );
     fopAcM_setCullSizeFar(this, 10.0f);
 
-    no_majuu_flag = mModelType != 0xFF || REG12_S(0) != 0;
-    if (!no_majuu_flag) {
-        mFlagPcId = fopAcM_create(PROC_MAJUU_FLAG, 4, &current.pos, tevStr.mRoomNo, &current.angle);
+    if (!isSpecial()) {
+        mFlagPcId = fopAcM_create(
+            PROC_MAJUU_FLAG, 4, 
+            &current.pos, tevStr.mRoomNo, 
+            &current.angle
+        );
         static cXyz flag_offset = cXyz(0.0f, 800.0f, 0.0f);
         mFlagOffset = flag_offset;
     }
 
     if (mPathId != 0xFF) {
-        mpPath = dPath_GetRoomPath(mPathId, fopAcM_GetRoomNo(this));
+        mpPath = dPath_GetRoomPath(mPathId, current.roomNo);
     }
 
     createWave();
 
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(
+        fopAcM_GetPosition_p(this), 
+        fopAcM_GetOldPosition_p(this), 
+        this, 1, &mAcchCir, 
+        fopAcM_GetSpeed_p(this)
+    );
 
     mAcch.SetWallNone();
     mAcch.SetRoofNone();
@@ -863,19 +960,15 @@ void daOship_c::createInit() {
 
 /* 00002DFC-00002F44       .text _createHeap__9daOship_cFv */
 BOOL daOship_c::_createHeap() {
-    /* Instruction match */
-    bool load_vbtst;
-    s32 file_index;
+    int file_index;
 
     file_index = OSHIP_BDL_VBTSP;
-    load_vbtst = mModelType != 0xFF || REG12_S(0) != 0;
-
-    if (load_vbtst) {
+    if (isSpecial()) {
         file_index = OSHIP_BDL_VBTST;
     }
 
     J3DModelData* modelData = (J3DModelData *) dComIfG_getObjectRes(m_arc_name, file_index);
-    JUT_ASSERT(0x625, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(1616, 1573), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x37441422);
 
@@ -908,7 +1001,7 @@ void daOship_c::getArg() {
     mPathId = (prms >> 16) & 0xFF;
     mSwitchA = (prms >> 24) & 0xFF;
 
-    s16 home_angle_x = home.angle.x; // they were storing non-angle data in this?
+    s16 home_angle_x = home.angle.x;
 
     mSwitchB = home_angle_x & 0xFF;
     mModelType = (home_angle_x >> 8) & 0xFF;
@@ -966,8 +1059,10 @@ bool daOship_c::_delete() {
     mWaveCallback1.remove();
     mSplashCallback.remove();
     mTrackCallback.remove();
+#if VERSION > VERSION_DEMO
     mDoAud_seDeleteObject(&mBombSpawnPos);
-    
+#endif 
+
     return true;
 }
 

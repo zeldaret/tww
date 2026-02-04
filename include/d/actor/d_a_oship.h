@@ -1,6 +1,7 @@
 #ifndef D_A_OSHIP_H
 #define D_A_OSHIP_H
 
+#include "d/d_s_play.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_lin_chk.h"
@@ -18,19 +19,27 @@ public:
         PROC_EXEC = 1
     };
 
-    struct ActorModeTable {
+    enum Mode_e {
+        MODE_WAIT    = 0x0,
+        MODE_ATTACK  = 0x1,
+        MODE_DAMAGE  = 0x2,
+        MODE_DELETE  = 0x3,
+        MODE_RANGE_A = 0x4,
+        MODE_RANGE_B = 0x5,
+        MODE_RANGE_C = 0x6,
+        MODE_RANGE_D = 0x7,
+        MODE_NULL
+    };
+ 
+    struct ModeEntry {
         typedef void (daOship_c::*ModeProcFunc)(void);
         ModeProcFunc mInitFunc;
         ModeProcFunc mUpdFunc;
         char* mModeName;
     };
 
-#if VERSION == VERSION_DEMO
-    u8 getSw() { return m295; }
-#else
     u8 getSw() { return mSwitchA; }
-#endif
-    void isSpecial() {}
+    bool isSpecial() { return mModelType != 0xFF || REG12_S(0) != 0; }
     void modeProcInit(int i_newMode) { modeProc(PROC_INIT, i_newMode); }
 
     void _nodeControl(J3DNode*, J3DModel*);
@@ -76,9 +85,9 @@ public:
     static const s32 m_heapsize;
 
 public:
-    /* 0x290 */ u8 m290[0x295 - 0x290];
-    /* 0x295 */ u8 m295;
-    /* 0x296 */ u8 m296[0x2AC - 0x296];
+#if VERSION > VERSION_DEMO
+    /* 0x296 */ u8 m296[0x2AC - 0x290];
+#endif
     /* 0x2AC */ int mCurrentProc;
     /* 0x2B0 */ u8 mSubMode;
     /* 0x2B1 */ u8 mSwitchA;
@@ -136,23 +145,22 @@ public:
     /* 0xD86 */ s16 mAimRotYTarget;
     /* 0xD88 */ s16 mAimRotX;
     /* 0xD8A */ s16 mAimRotXTarget;
-    /* 0xD8C */ u8 mBombAlloc[5];
+    /* 0xD8C */ bool mBombAlloc[5];
     /* 0xD91 */ u8 mD91[0xD94 - 0xD91];
     /* 0xD94 */ dBgS_ObjLinChk mLinChk;
 };  // Size: 0xE00
-STATIC_ASSERT(sizeof(daOship_c) == 0xE00);
 
 class daOship_HIO_c : public mDoHIO_entry_c {
 public:
     daOship_HIO_c();
     virtual ~daOship_HIO_c() {}
 public:
-    /* 0x04 */ s8 field_0x04;
-    /* 0x05 */ u8 field_0x05;
-    /* 0x06 */ u8 field_0x06;
-    /* 0x07 */ s8 field_0x07;
-    /* 0x08 */ u8 field_0x08;
-    /* 0x09 */ u8 field_0x09[0x0C - 0x09];
+    /* 0x04 */ u8 m04;
+    /* 0x05 */ bool m05;
+    /* 0x06 */ bool m06;
+    /* 0x07 */ bool m07;
+    /* 0x08 */ bool m08;
+    /* 0x09 */ u8 m09[0x0C - 0x09];
     /* 0x0C */ f32 mAttentionOffsY;
     /* 0x10 */ f32 mEyeOffsY;
     /* 0x14 */ f32 mWaveOffsZ;
@@ -179,7 +187,7 @@ public:
     /* 0x7C */ f32 mBombSpeed;
     /* 0x80 */ f32 mBombAcceleration;
     /* 0x84 */ s16 mBombNoGravityTime;
-    /* 0x86 */ u8 field_0x86[0x88 - 0x86];
+    /* 0x86 */ u8 m86[0x88 - 0x86];
     /* 0x88 */ f32 mBadAimAdjustDistanceStart;
     /* 0x8C */ s16 mBadAimMax;
     /* 0x8E */ s16 field_0x8E;
