@@ -131,11 +131,23 @@ void dCloth_packet_c::cloth_move() {
     cXyz wind = mGlobalWind;
     wind *= mWindSpeed + mWindSpeedWave * cM_ssin(mWave);
 
-    cXyz* pPosOld = mpPosArr[mCurArr];
-    cXyz* pNrmOld = mpNrmArr[mCurArr];
+#if VERSION == VERSION_DEMO
+    cXyz* pPosNew;
+    cXyz* pSpeed;
+    cXyz* pPosOld;
+    cXyz* pNrmOld;
+#else
+    cXyz* pPosOld;
+    cXyz* pNrmOld;
+    cXyz* pPosNew;
+    cXyz* pSpeed;
+#endif
+
+    pPosOld = mpPosArr[mCurArr];
+    pNrmOld = mpNrmArr[mCurArr];
     changeCurrentBuff();
-    cXyz* pPosNew = mpPosArr[mCurArr];
-    cXyz* pSpeed = mpSpeedArr;
+    pPosNew = mpPosArr[mCurArr];
+    pSpeed = mpSpeedArr;
 
     float distFly = mFlyLength / (f32)(mFlyGridSize - 1);
     float distHoist = mHoistLength / (f32)(mHoistGridSize - 1);
