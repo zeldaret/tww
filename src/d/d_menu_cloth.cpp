@@ -6,6 +6,8 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_cloth.h"
 
+#include "assets/l_matDL__d_menu_cloth.h"
+
 static daCLOTH_HIO_c l_HIO;
 
 /* 8019940C-8019966C       .text __ct__13daCLOTH_HIO_cFv */
@@ -110,6 +112,10 @@ void dMCloth_c::ShadowTevSetting() {
 /* 8019ADD4-8019B670       .text draw__9dMCloth_cFf8_GXColor8_GXColorUc */
 void dMCloth_c::draw(float, GXColor, GXColor, unsigned char) {
     /* Nonmatching */
+    // TODO
+    GXSetNumChans(1);
+    GXCallDisplayList(l_matDL, 0x20);
+    // TODO
 }
 
 /* 8019B670-8019B9C0       .text cloth_move_sin__9dMCloth_cFv */
