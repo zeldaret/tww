@@ -17,12 +17,10 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
 
 /* 8019966C-801996B4       .text __dt__18daCLOTH_ChildHIO_cFv */
 daCLOTH_ChildHIO_c::~daCLOTH_ChildHIO_c() {
-    /* Nonmatching */
 }
 
 /* 801996B4-801996C4       .text __ct__18daCLOTH_ChildHIO_cFv */
 daCLOTH_ChildHIO_c::daCLOTH_ChildHIO_c() {
-    /* Nonmatching */
 }
 
 /* 801996C4-8019977C       .text lightSet1__9dMCloth_cF4cXyz */
