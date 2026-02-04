@@ -40,14 +40,16 @@ public:
     void cloth_move_simple();
     void cloth_move();
 
+    static const int ARR_SIZE = 441;
+
     /* 0x0004 */ u16 field_0x4;
     /* 0x0006 */ u8 field_0x6[0x44 - 0x06];
     /* 0x0044 */ JKRArchive* mpArc;
-    /* 0x0048 */ cXyz field_0x48[2][441];
-    /* 0x29A0 */ cXyz field_0x29a0[2][441];
-    /* 0x52F8 */ cXyz field_0x52f8[441];
-    /* 0x67A4 */ cXyz field_0x67a4[441];
-    /* 0x7C50 */ cXyz field_0x7c50[441];
+    /* 0x0048 */ cXyz field_0x48[2][ARR_SIZE];
+    /* 0x29A0 */ cXyz field_0x29a0[2][ARR_SIZE];
+    /* 0x52F8 */ cXyz field_0x52f8[ARR_SIZE];
+    /* 0x67A4 */ cXyz field_0x67a4[ARR_SIZE];
+    /* 0x7C50 */ cXyz field_0x7c50[ARR_SIZE];
     /* 0x90FC */ GXTexObj mTexObj;
     /* 0x911C */ u8 field_0x911c[0x913C - 0x911C];
     /* 0x913C */ u8 mCurArr;

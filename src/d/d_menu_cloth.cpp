@@ -188,7 +188,7 @@ void dMCloth_c::setBackNrm() {
     cXyz* pNrm = getNrm();
     cXyz* pBackNrm = getBackNrm();
 
-    for (int i = 0; i < 441; i++) {
+    for (int i = 0; i < ARR_SIZE; i++) {
         pBackNrm->set(-pNrm->x, -pNrm->y, -pNrm->z);
         pNrm++;
         pBackNrm++;
