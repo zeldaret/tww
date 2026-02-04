@@ -175,7 +175,12 @@ dMCloth_c::dMCloth_c() {
 
 /* 80199F48-8019A058       .text __dt__9dMCloth_cFv */
 dMCloth_c::~dMCloth_c() {
-    /* Nonmatching */
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
+
+    mpArc->removeResourceAll();
 }
 
 /* 8019A058-8019A0AC       .text setBackNrm__9dMCloth_cFv */
