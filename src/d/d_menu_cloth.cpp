@@ -124,7 +124,16 @@ daCLOTH_ChildHIO_c::daCLOTH_ChildHIO_c() {
 
 /* 801996C4-8019977C       .text lightSet1__9dMCloth_cF4cXyz */
 void dMCloth_c::lightSet1(cXyz) {
-    /* Nonmatching */
+    GXLightObj light;
+    const f32 f0 = l_HIO.mChildren[mClothType].field_0x4c;
+    GXInitLightPos(
+        &light,
+        -f0 * cM_ssin(l_HIO.mChildren[mClothType].field_0x4a) * cM_scos(l_HIO.mChildren[mClothType].field_0x48),
+        -f0 * cM_ssin(l_HIO.mChildren[mClothType].field_0x48),
+        -f0 * cM_scos(l_HIO.mChildren[mClothType].field_0x4a) * cM_scos(l_HIO.mChildren[mClothType].field_0x48)
+    );
+    GXInitLightColor(&light, (GXColor){0xFF, 0xFF, 0xFF, 0x00});
+    GXLoadLightObjImm(&light, GX_LIGHT0);
 }
 
 /* 8019977C-80199CD0       .text cloth_init__9dMCloth_cFv */
