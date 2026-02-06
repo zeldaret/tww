@@ -25,7 +25,7 @@ public:
     void cloth_init();
     void init();
     void setBackNrm();
-    void setNrmVtx(cXyz*, int, int);
+    void setNrmVtx(cXyz* pDst, int x, int y);
     void plot(float, float, float, float);
     void plot_shadow(float, float, float, float);
     void alpha_out();

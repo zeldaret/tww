@@ -269,8 +269,57 @@ void dMCloth_c::setBackNrm() {
 }
 
 /* 8019A0AC-8019A480       .text setNrmVtx__9dMCloth_cFP4cXyzii */
-void dMCloth_c::setNrmVtx(cXyz*, int, int) {
-    /* Nonmatching */
+void dMCloth_c::setNrmVtx(cXyz* pDst, int x, int y) {
+    cXyz x_diff;
+    cXyz y_diff;
+    cXyz norm;
+    cXyz total;
+    cXyz pos;
+
+    cXyz* pPos = getPos();
+    pos = pPos[(x + y * INNER_SIZE)];
+    total.setall(0.0f);
+
+    if (x != 0) {
+        x_diff = pPos[x - 1 + y * INNER_SIZE] - pos;
+        if (y != 0) {
+            y_diff = pPos[x + (y - 1) * INNER_SIZE] - pos;
+            norm = x_diff.outprod(y_diff);
+            norm = norm.normZP();
+            total += norm;
+        }
+        if (y != INNER_SIZE - 1) {
+            y_diff = pPos[x + (y + 1) * INNER_SIZE] - pos;
+            norm = y_diff.outprod(x_diff);
+            norm = norm.normZP();
+            total += norm;
+        }
+    }
+    if (x != INNER_SIZE - 1) {
+        x_diff = pPos[x + 1 + y * INNER_SIZE] - pos;
+        if (y != 0) {
+            y_diff = pPos[x + (y - 1) * INNER_SIZE] - pos;
+            norm = y_diff.outprod(x_diff);
+            norm = norm.normZP();
+            total += norm;
+        }
+        if (y != INNER_SIZE - 1) {
+            y_diff = pPos[x + (y + 1) * INNER_SIZE] - pos;
+            norm = x_diff.outprod(y_diff);
+            norm = norm.normZP();
+            total += norm;
+        }
+    }
+
+    MtxPush();
+
+    mDoMtx_YrotM(*calc_mtx, cM_ssin(x * -800) * 900.0f);
+    MtxPosition(&total, pDst);
+    if (!pDst->normalizeRS()) {
+        pDst->set(0.0f, 0.0f, 1.0f);
+    }
+
+    MtxPull();
 }
 
 /* 8019A480-8019A65C       .text plot__9dMCloth_cFffff */
