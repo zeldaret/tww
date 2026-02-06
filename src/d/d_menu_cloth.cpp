@@ -493,7 +493,7 @@ menu_process_profile_definition g_profile_Menu_Cloth = {
     /* Size         */ 0x929C,
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Leaf SubMtd  */ &g_fopMsg_Method,
     /* Priority     */ PRIO_Menu_Cloth,
     /* Actor SubMtd */ &dMenu_ClothMethodTable,
 };
