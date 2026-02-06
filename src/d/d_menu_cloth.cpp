@@ -420,11 +420,101 @@ void dMCloth_c::draw(float, GXColor, GXColor, unsigned char) {
 /* 8019B670-8019B9C0       .text cloth_move_sin__9dMCloth_cFv */
 void dMCloth_c::cloth_move_sin() {
     /* Nonmatching */
+    field_0x8 += l_HIO.mChildren[mClothType].field_0x36;
+
+    for (int y = 0; y < INNER_SIZE; y++) {
+        for (int x = 0; x < INNER_SIZE; x++) {
+            f32 fx = (f32)x;
+            f32 fy = (f32)y;
+            if (x > INNER_SIZE / 2) {
+                fx = (INNER_SIZE - fx) - 1.0f;
+            }
+            if (y > INNER_SIZE / 2) {
+                fy = (INNER_SIZE - fy) - 1.0f;
+            }
+
+            if (fx + fy > 4.0f) {
+                fx = 1.0f;
+            } else {
+                fx = (fx + fy) * 0.2f;
+            }
+
+            cXyz pos;
+            pos.x = -1500.0f + 305.0f * x +
+                    l_HIO.mChildren[mClothType].field_0x3c * fx *
+                        cM_ssin(field_0x8 + x * l_HIO.mChildren[mClothType].field_0x38 + y * l_HIO.mChildren[mClothType].field_0x3a);
+            pos.y = -1500.0f + 300.0f * y +
+                    l_HIO.mChildren[mClothType].field_0x40 * fx *
+                        cM_scos(field_0x8 + x * l_HIO.mChildren[mClothType].field_0x38 + y * l_HIO.mChildren[mClothType].field_0x3a);
+            pos.x = -3400.0f + x + l_HIO.mChildren[mClothType].field_0x3c * fx * cM_ssin(field_0x8 + x * l_HIO.mChildren[mClothType].field_0x38);
+
+            cLib_addCalcPos2(&field_0x48[mCurArr][x + y * INNER_SIZE], pos, 0.5f, l_HIO.mChildren[mClothType].field_0x54);
+        }
+    }
+
+    cXyz* pNrm = getNrm();
+
+    for (int y = 0; y < INNER_SIZE; y++) {
+        for (int x = 0; x < INNER_SIZE; x++) {
+            setNrmVtx(pNrm, x, y);
+            pNrm++;
+        }
+    }
+
+    setBackNrm();
+
+    DCStoreRangeNoSync(getPos(), 0x5ac);
+    DCStoreRangeNoSync(getNrm(), 0x5ac);
+    DCStoreRangeNoSync(getBackNrm(), 0x5ac);
 }
 
 /* 8019B9C0-8019BCF4       .text cloth_move_simple__9dMCloth_cFv */
 void dMCloth_c::cloth_move_simple() {
     /* Nonmatching */
+    for (int y = 0; y < INNER_SIZE; y++) {
+        for (int x = 0; x < INNER_SIZE; x++) {
+            f32 fx = (f32)x;
+            f32 fy = (f32)y;
+            if (x > INNER_SIZE / 2) {
+                fx = (INNER_SIZE - fx) - 1.0f;
+            }
+            if (y > INNER_SIZE / 2) {
+                fy = (INNER_SIZE - fy) - 1.0f;
+            }
+
+            if (fx + fy > 4.0f) {
+                fx = 1.0f;
+            } else {
+                fx = (fx + fy) * 0.2f;
+            }
+
+            cXyz pos;
+            pos.x = -1500.0f + 305.0f * x +
+                    l_HIO.mChildren[mClothType].field_0x3c * fx *
+                        cM_ssin(field_0x8 + x * l_HIO.mChildren[mClothType].field_0x38 + y * l_HIO.mChildren[mClothType].field_0x3a);
+            pos.y = -1500.0f + 300.0f * y +
+                    l_HIO.mChildren[mClothType].field_0x40 * fx *
+                        cM_scos(field_0x8 + x * l_HIO.mChildren[mClothType].field_0x38 + y * l_HIO.mChildren[mClothType].field_0x3a);
+            pos.x = -3400.0f + x + l_HIO.mChildren[mClothType].field_0x3c * fx * cM_ssin(field_0x8 + y * l_HIO.mChildren[mClothType].field_0x3a);
+
+            cLib_addCalcPos2(&getPos()[x + y * INNER_SIZE], pos, 0.5f, l_HIO.mChildren[mClothType].field_0x54);
+        }
+    }
+
+    cXyz* pNrm = getNrm();
+
+    for (int y = 0; y < INNER_SIZE; y++) {
+        for (int x = 0; x < INNER_SIZE; x++) {
+            setNrmVtx(pNrm, x, y);
+            pNrm++;
+        }
+    }
+
+    setBackNrm();
+
+    DCStoreRangeNoSync(getPos(), 0x5ac);
+    DCStoreRangeNoSync(getNrm(), 0x5ac);
+    DCStoreRangeNoSync(getBackNrm(), 0x5ac);
 }
 
 /* 8019BCF4-8019BDB8       .text cloth_move__9dMCloth_cFv */
