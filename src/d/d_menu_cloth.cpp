@@ -454,3 +454,6 @@ static void dMenu_ClothDraw(void*) {
 static void dMenu_ClothIsDelete(void*) {
     /* Nonmatching */
 }
+
+daCLOTH_HIO_c::~daCLOTH_HIO_c() {
+}
