@@ -5,6 +5,8 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_cloth.h"
+#include "d/d_procname.h"
+#include "d/d_priority.h"
 
 #include "assets/l_matDL__d_menu_cloth.h"
 
@@ -431,29 +433,67 @@ void dMCloth_c::cloth_move() {
 }
 
 /* 8019BDB8-8019BDC0       .text dMenu_ClothCreate__FPv */
-static void dMenu_ClothCreate(void*) {
-    /* Nonmatching */
+static cPhs_State dMenu_ClothCreate(void*) {
+    return cPhs_COMPLEATE_e;
 }
 
 /* 8019BDC0-8019BDC8       .text dMenu_ClothDelete__FPv */
-static void dMenu_ClothDelete(void*) {
-    /* Nonmatching */
+static BOOL dMenu_ClothDelete(void*) {
+    return 1;
 }
 
 /* 8019BDC8-8019BDD0       .text dMenu_ClothExecute__FPv */
-static void dMenu_ClothExecute(void*) {
-    /* Nonmatching */
+static BOOL dMenu_ClothExecute(void*) {
+    return 0;
 }
 
 /* 8019BDD0-8019BDD8       .text dMenu_ClothDraw__FPv */
-static void dMenu_ClothDraw(void*) {
-    /* Nonmatching */
+static BOOL dMenu_ClothDraw(void*) {
+    return 1;
 }
 
 /* 8019BDD8-8019BDE0       .text dMenu_ClothIsDelete__FPv */
-static void dMenu_ClothIsDelete(void*) {
-    /* Nonmatching */
+static BOOL dMenu_ClothIsDelete(void*) {
+    return 1;
 }
 
 daCLOTH_HIO_c::~daCLOTH_HIO_c() {
 }
+
+// TODO
+
+class menu_cloth_class : public fopAc_ac_c {
+    dMCloth_c mCloth;
+};
+
+typedef struct menu_method_class {
+} menu_method_class;
+
+typedef struct menu_process_profile_definition {
+    leaf_process_profile_definition base;
+    actor_method_class* method_table;
+} menu_process_profile_definition;
+
+/* Nonmatching */
+static actor_method_class dMenu_ClothMethodTable = {
+    (process_method_func)dMenu_ClothCreate,
+    (process_method_func)dMenu_ClothDelete,
+    (process_method_func)dMenu_ClothDraw,
+    (process_method_func)dMenu_ClothExecute,
+    (process_method_func)dMenu_ClothIsDelete,
+};
+
+/* Nonmatching */
+menu_process_profile_definition g_profile_Menu_Cloth = {
+    /* LayerID      */ (uint)fpcLy_CURRENT_e,
+    /* ListID       */ 0x000C,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Menu_Cloth,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ 0x929C,
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ PRIO_Menu_Cloth,
+    /* Actor SubMtd */ &dMenu_ClothMethodTable,
+};
