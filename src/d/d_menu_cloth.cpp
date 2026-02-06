@@ -336,7 +336,7 @@ void dMCloth_c::plot_shadow(float, float, float, float) {
 
 /* 8019A838-8019A844       .text alpha_out__9dMCloth_cFv */
 void dMCloth_c::alpha_out() {
-    /* Nonmatching */
+    field_0xc = 1;
 }
 
 /* 8019A844-8019A9C4       .text TevSettingMenu__9dMCloth_cFv */
