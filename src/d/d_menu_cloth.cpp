@@ -10,17 +10,15 @@
 
 static daCLOTH_HIO_c l_HIO;
 
+s16 dMCloth_c::init_angle_z = 0;
+
 /* 8019940C-8019966C       .text __ct__13daCLOTH_HIO_cFv */
 daCLOTH_HIO_c::daCLOTH_HIO_c() {
     mNo = -1;
 
     {
-        mChildren[0].field_0x4 = 1.78f;
-        mChildren[0].field_0x8 = 1.78f;
-        mChildren[0].field_0xc = 1.0f;
-        mChildren[0].field_0x1c = 0;
-        mChildren[0].field_0x1e = 0;
-        mChildren[0].field_0x20 = 0;
+        mChildren[0].field_0x4.set(1.78f, 1.78f, 1.0f);
+        mChildren[0].field_0x1c.setall(0);
         mChildren[0].field_0x10 = 360.0f;
         mChildren[0].field_0x14 = 40.0f;
         mChildren[0].field_0x18 = -2400.0f;
@@ -48,12 +46,8 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
     }
 
     {
-        mChildren[1].field_0x4 = 1.27f;
-        mChildren[1].field_0x8 = 0.93f;
-        mChildren[1].field_0xc = 1.0f;
-        mChildren[1].field_0x1c = 0;
-        mChildren[1].field_0x1e = 0;
-        mChildren[1].field_0x20 = 0;
+        mChildren[1].field_0x4.set(1.27f, 0.93f, 1.0f);
+        mChildren[1].field_0x1c.setall(0);
         mChildren[1].field_0x10 = 350.0;
         mChildren[1].field_0x14 = -15.0;
         mChildren[1].field_0x18 = -2400.0;
@@ -81,12 +75,8 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
     }
 
     {
-        mChildren[2].field_0x4 = 1.7;
-        mChildren[2].field_0x8 = 1.7;
-        mChildren[2].field_0xc = 1.0;
-        mChildren[2].field_0x1c = 0;
-        mChildren[2].field_0x1e = 0;
-        mChildren[2].field_0x20 = 0x4000;
+        mChildren[2].field_0x4.set(1.7f, 1.7f, 1.0f);
+        mChildren[2].field_0x1c.set(0, 0, 0x4000);
         mChildren[2].field_0x10 = 360.0;
         mChildren[2].field_0x14 = 40.0;
         mChildren[2].field_0x18 = -2400.0;
@@ -139,6 +129,80 @@ void dMCloth_c::lightSet1(cXyz) {
 /* 8019977C-80199CD0       .text cloth_init__9dMCloth_cFv */
 void dMCloth_c::cloth_init() {
     /* Nonmatching */
+    cXyz* pNrm = getNrm();
+
+    for (int i = 0; i < INNER_SIZE; i++) {
+        s16 xAngle = -(i * 3500);
+        for (int j = 0; j < INNER_SIZE; j++) {
+            cXyz* pPos = getPos() + i * INNER_SIZE + j;
+            pPos->x = cM_ssin(j * 3276.8f) * 954.9299f + -1500.0f + j * 10.0f * cM_ssin(xAngle);
+            pPos->y = i * 300.0f + -1500.0f;
+            pPos->z = (1.0f - cM_scos(j * 3276.8f)) * 716.1974f - 3400.0f + j * -5.0f * cM_scos(xAngle);
+
+            pPos = field_0x29a0[mCurArr] + i * INNER_SIZE + j;
+            pPos->x = cM_scos(j * 3276.8f - 1000.0f) * -320.0f;
+            pPos->y = 0.0f;
+            pPos->z = cM_ssin(j * 3276.8f - 1000.0f) * -270.0f;
+        }
+    }
+
+    for (int i = 0; i < INNER_SIZE; i++) {
+        for (int j = 0; j < INNER_SIZE; j++) {
+            setNrmVtx(pNrm, j, i);
+            pNrm++;
+        }
+    }
+
+    setBackNrm();
+
+    field_0x8 = 0;
+    field_0xa = 0;
+
+    cloth_move();
+
+    field_0xc = 0;
+    field_0xd = l_HIO.mChildren[mClothType].field_0x28;
+    field_0x8 += l_HIO.mChildren[mClothType].field_0x36;
+
+    DCStoreRangeNoSync(field_0x48[mCurArr], INNER_SIZE * INNER_SIZE * sizeof(cXyz));
+    DCStoreRangeNoSync(field_0x29a0[mCurArr], 0x5AC);
+    DCStoreRangeNoSync(field_0x52f8, 0x5AC);
+
+    field_0x915e[0] = (s8)l_HIO.mChildren[mClothType].field_0x22;
+    field_0x915e[1] = (s8)l_HIO.mChildren[mClothType].field_0x24;
+    field_0x915e[2] = (s8)l_HIO.mChildren[mClothType].field_0x26;
+    field_0x915e[3] = (s8)l_HIO.mChildren[mClothType].field_0x28;
+    field_0x915e[4] = (s8)l_HIO.mChildren[mClothType].field_0x2a;
+    field_0x915e[5] = (s8)l_HIO.mChildren[mClothType].field_0x2c;
+    field_0x915e[6] = (s8)l_HIO.mChildren[mClothType].field_0x2e;
+    field_0x915e[7] = (s8)l_HIO.mChildren[mClothType].field_0x30;
+
+    switch (mClothType) {
+    case 0: {
+        const f32 r = cM_rndFX(45.0f);
+        init_angle_z += (s16)((r + 90.0f) * 182.04445f);
+        field_0x9140 = l_HIO.mChildren[mClothType].field_0x4;
+        field_0x9158.set(0, 0, init_angle_z);
+        s32 n = l_HIO.mChildren[mClothType].field_0x50;
+        while (n--) {
+            cloth_move_sin();
+        }
+    } break;
+    case 1: {
+        field_0x9140.set(1.27f, 0.93f, 1.0f);
+        field_0x9158.setall(0);
+    } break;
+    case 2: {
+        field_0x9140 = l_HIO.mChildren[mClothType].field_0x4;
+        const f32 r = cM_rndFX(20.0f);
+        field_0x9158 = l_HIO.mChildren[mClothType].field_0x1c;
+        field_0x9158.z += (s16)(r * 182.04445f);
+        s32 n = l_HIO.mChildren[mClothType].field_0x50;
+        while (n--) {
+            cloth_move_sin();
+        }
+    } break;
+    }
 }
 
 /* 80199CD0-80199E1C       .text init__9dMCloth_cFv */
