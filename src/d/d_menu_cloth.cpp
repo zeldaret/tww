@@ -429,7 +429,23 @@ void dMCloth_c::cloth_move_simple() {
 
 /* 8019BCF4-8019BDB8       .text cloth_move__9dMCloth_cFv */
 void dMCloth_c::cloth_move() {
-    /* Nonmatching */
+    switch (mClothType) {
+    case 0:
+    case 2: {
+        if (field_0xa < l_HIO.mChildren[mClothType].field_0x34) {
+            cloth_move_sin();
+            field_0xa++;
+        } else {
+            cloth_move_simple();
+        }
+    } break;
+    case 1: {
+        if (field_0xa < l_HIO.mChildren[mClothType].field_0x34) {
+            field_0xa++;
+        }
+        cloth_move_sin();
+    } break;
+    }
 }
 
 /* 8019BDB8-8019BDC0       .text dMenu_ClothCreate__FPv */
