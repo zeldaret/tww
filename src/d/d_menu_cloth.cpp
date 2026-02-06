@@ -405,7 +405,15 @@ void dMCloth_c::ShadowTevSettingFileSelect() {
 
 /* 8019AD84-8019ADD4       .text ShadowTevSetting__9dMCloth_cFv */
 void dMCloth_c::ShadowTevSetting() {
-    /* Nonmatching */
+    switch (mClothType) {
+    case 0:
+    case 2:
+        ShadowTevSettingMenu();
+        break;
+    case 1:
+        ShadowTevSettingFileSelect();
+        break;
+    }
 }
 
 /* 8019ADD4-8019B670       .text draw__9dMCloth_cFf8_GXColor8_GXColorUc */
