@@ -1667,7 +1667,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_rsh1"),
     ActorRel(NonMatching, "d_a_npc_sarace"),
     ActorRel(NonMatching, "d_a_npc_sv"),
-    ActorRel(NonMatching, "d_a_npc_tc"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_npc_tc"),
     ActorRel(NonMatching, "d_a_npc_tt"),
     ActorRel(NonMatching, "d_a_npc_uk"),
     ActorRel(NonMatching, "d_a_npc_ym1"),

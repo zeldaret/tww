@@ -34,8 +34,8 @@ namespace daObjSmplbg {
         inline const Attr_c& attr() const { return M_attr[mType]; }
 
         bool isStop() { return field_0x2D8 == 0; }
-        void offStop() {}
-        void onStop() {}
+        void offStop() { field_0x2D8 = 0; }
+        void onStop() { field_0x2D8 = 1; }
         int prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W , PRM_TYPE_S);}
         
         virtual BOOL CreateHeap();

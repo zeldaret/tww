@@ -1102,6 +1102,10 @@ inline BOOL dComIfGs_isCollectMapTriforce(int i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getMap().isTriforce(i_no - 1);
 }
 
+inline void dComIfGs_onCollectMapTriforce(int i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getMap().onTriforce(i_no -1);
+}
+
 inline void dComIfGs_offCollectMapTriforce(int i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getMap().offTriforce(i_no - 1);
 }
