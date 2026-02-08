@@ -21,9 +21,7 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
     {
         mChildren[0].field_0x4.set(1.78f, 1.78f, 1.0f);
         mChildren[0].field_0x1c.setall(0);
-        mChildren[0].field_0x10 = 360.0f;
-        mChildren[0].field_0x14 = 40.0f;
-        mChildren[0].field_0x18 = -2400.0f;
+        mChildren[0].field_0x10.set(360.0f, 40.0f, -2400.0f);
         mChildren[0].field_0x22.r = 0x78;
         mChildren[0].field_0x22.g = 0xA5;
         mChildren[0].field_0x22.b = 0x37;
@@ -50,9 +48,7 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
     {
         mChildren[1].field_0x4.set(1.27f, 0.93f, 1.0f);
         mChildren[1].field_0x1c.setall(0);
-        mChildren[1].field_0x10 = 350.0;
-        mChildren[1].field_0x14 = -15.0;
-        mChildren[1].field_0x18 = -2400.0;
+        mChildren[1].field_0x10.set(350.0f, -15.0f, -2400.0f);
         mChildren[1].field_0x22.r = 0xbe;
         mChildren[1].field_0x22.g = 0xb4;
         mChildren[1].field_0x22.b = 0x64;
@@ -79,9 +75,7 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
     {
         mChildren[2].field_0x4.set(1.7f, 1.7f, 1.0f);
         mChildren[2].field_0x1c.set(0, 0, 0x4000);
-        mChildren[2].field_0x10 = 360.0;
-        mChildren[2].field_0x14 = 40.0;
-        mChildren[2].field_0x18 = -2400.0;
+        mChildren[2].field_0x10.set(360.0f, 40.0f, -2400.0f);
         mChildren[2].field_0x22.r = 0xbe;
         mChildren[2].field_0x22.g = 0xb4;
         mChildren[2].field_0x22.b = 0x64;
@@ -480,12 +474,176 @@ void dMCloth_c::ShadowTevSetting() {
 }
 
 /* 8019ADD4-8019B670       .text draw__9dMCloth_cFf8_GXColor8_GXColorUc */
-void dMCloth_c::draw(float, GXColor, GXColor, unsigned char) {
-    /* Nonmatching */
-    // TODO
+void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
+    cXyz* pPos = getPos();
+    cXyz* pPos2 = field_0x7c50;
+    for (int y = 0; y < INNER_SIZE; y++) {
+        for (int x = 0; x < INNER_SIZE; x++) {
+            *pPos2 = *pPos;
+            pPos2->z = -3300.0f;
+            pPos2++;
+            pPos++;
+        }
+    }
+
+    DCStoreRangeNoSync(field_0x7c50, 0x5ac);
+
+    color1 = field_0x915e;
+    color2 = field_0x9162;
+
+    if (field_0xc == 1) {
+        color1.a = field_0xd;
+        if (field_0xd > 25) {
+            field_0xd -= 25;
+        } else {
+            field_0xd = 0;
+        }
+    } else {
+        f32 f = (f32)field_0xa / l_HIO.mChildren[mClothType].field_0x34;
+        {
+            s16 uv2 = l_HIO.mChildren[mClothType].field_0x22.a;
+            s16 uv6 = cLib_minMaxLimit<s16>(uv2, 0, 0xFF);
+            color1.a = uv6;
+            color1.a = color1.a * f + (1.0f - f) * l_HIO.mChildren[mClothType].field_0x32;
+        }
+        {
+            s16 uv2 = l_HIO.mChildren[mClothType].field_0x2a.a;
+            s16 uv6 = cLib_minMaxLimit<s16>(uv2, 0, 0xFF);
+            color2.a = uv6;
+            color2.a = color2.a * f + (1.0f - f) * l_HIO.mChildren[mClothType].field_0x32;
+        }
+    }
+
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+    cXyz lightPos;
+    lightPos.set(0.0f, 0.0f, 0.0f);
+
+    switch (mClothType) {
+    case 0:
+    case 2: {
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
+        GXSetVtxDesc(GX_VA_NRM, GX_INDEX16);
+        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+        GXSetChanAmbColor(GX_COLOR0, (GXColor){0x00, 0x00, 0x00, 0x00});
+        GXSetChanMatColor(GX_COLOR0, (GXColor){0xff, 0xff, 0xff, 0xff});
+    } break;
+    case 1: {
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
+        GXSetVtxDesc(GX_VA_NRM, GX_INDEX16);
+        GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+        GXSetChanAmbColor(GX_COLOR0, (GXColor){0x00, 0x00, 0x00, 0xff});
+        GXSetChanMatColor(GX_COLOR0, (GXColor){0xff, 0xff, 0xff, 0xff});
+    } break;
+    }
+
+    GXSetTevColor(GX_TEVREG0, color1);
+    GXSetTevColor(GX_TEVREG1, color2);
+
+    GXTexObj tex_obj;
+
+    ResTIMG* i_toonimage = dDlst_list_c::getToonImage();
+
+#if VERSION == VERSION_DEMO
+    GXBool mipmap = i_toonimage->mipmapCount > 1;
+#endif
+
+    GXInitTexObj(
+        &tex_obj,
+        (u8*)i_toonimage + i_toonimage->imageOffset,
+        i_toonimage->width,
+        i_toonimage->height,
+        (GXTexFmt)i_toonimage->format,
+        (GXTexWrapMode)i_toonimage->wrapS,
+        (GXTexWrapMode)i_toonimage->wrapT,
+#if VERSION == VERSION_DEMO
+        mipmap
+#else
+        i_toonimage->mipmapCount > 1
+#endif
+    );
+    GXInitTexObjLOD(
+        &tex_obj,
+        (GXTexFilter)i_toonimage->minFilter,
+        (GXTexFilter)i_toonimage->magFilter,
+        i_toonimage->minLOD * 0.125f,
+        i_toonimage->maxLOD * 0.125f,
+        i_toonimage->LODBias * 0.01f,
+        i_toonimage->biasClamp,
+        i_toonimage->doEdgeLOD,
+        (GXAnisotropy)i_toonimage->maxAnisotropy
+    );
+
+    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
+    GXLoadTexObj(&tex_obj, GX_TEXMAP1);
+
     GXSetNumChans(1);
     GXCallDisplayList(l_matDL, 0x20);
-    // TODO
+
+    lightSet1(lightPos);
+
+    switch (mClothType) {
+    case 1:
+    case 2: {
+        mDoMtx_stack_c::transS(
+            l_HIO.mChildren[mClothType].field_0x10.x + -275.0f,
+            l_HIO.mChildren[mClothType].field_0x10.y - 75.0f,
+            l_HIO.mChildren[mClothType].field_0x10.z + -3800.0f
+        );
+        mDoMtx_stack_c::XrotM(field_0x9158.x);
+        mDoMtx_stack_c::YrotM(field_0x9158.y);
+        mDoMtx_stack_c::ZrotM(field_0x9158.z);
+        mDoMtx_stack_c::scaleM(field_0x9140);
+        mDoMtx_stack_c::transM(0.0f, 0.0f, 3400.0f);
+        GXLoadPosMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
+        GXLoadNrmMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
+        GXSetCullMode(GX_CULL_FRONT);
+        GXSetCurrentMtx(GX_PNMTX0);
+        GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
+        GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+        ShadowTevSetting();
+        plot(0.0f, 0.0f, 10.0f, 10.0f);
+    } break;
+    }
+
+    mDoMtx_stack_c::transS(
+        l_HIO.mChildren[mClothType].field_0x10.x + -350.0f, l_HIO.mChildren[mClothType].field_0x10.y, l_HIO.mChildren[mClothType].field_0x10.z + -3800.0f
+    );
+    mDoMtx_stack_c::XrotM(field_0x9158.x);
+    mDoMtx_stack_c::YrotM(field_0x9158.y);
+    mDoMtx_stack_c::ZrotM(field_0x9158.z);
+    mDoMtx_stack_c::scaleM(field_0x9140);
+    mDoMtx_stack_c::transM(0.0f, 0.0f, 3400.0f);
+    GXLoadPosMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
+    GXLoadNrmMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
+    GXSetCullMode(GX_CULL_FRONT);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+    TevSetting();
+    plot(0.0f, 0.0f, 10.0f, 10.0f);
+
+    GXSetCullMode(GX_CULL_BACK);
+    ShadowTevSetting();
+    GXSetArray(GX_VA_POS, field_0x7c50, sizeof(cXyz));
+    plot_shadow(0.0f, 0.0f, 10.0f, 10.0f);
+
+    TevSetting();
+    GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, getBackNrm(), sizeof(cXyz));
+    plot(0.0f, 0.0f, 10.0f, 10.0f);
+
+    j3dSys.reinitGX();
 }
 
 /* 8019B670-8019B9C0       .text cloth_move_sin__9dMCloth_cFv */
