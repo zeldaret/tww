@@ -24,14 +24,14 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
         mChildren[0].field_0x10 = 360.0f;
         mChildren[0].field_0x14 = 40.0f;
         mChildren[0].field_0x18 = -2400.0f;
-        mChildren[0].field_0x22 = 0x78;
-        mChildren[0].field_0x24 = 0xA5;
-        mChildren[0].field_0x26 = 0x37;
-        mChildren[0].field_0x28 = 0xDC;
-        mChildren[0].field_0x2a = 0x23;
-        mChildren[0].field_0x2c = 0x5f;
-        mChildren[0].field_0x2e = 0x19;
-        mChildren[0].field_0x30 = 0x20;
+        mChildren[0].field_0x22.r = 0x78;
+        mChildren[0].field_0x22.g = 0xA5;
+        mChildren[0].field_0x22.b = 0x37;
+        mChildren[0].field_0x22.a = 0xDC;
+        mChildren[0].field_0x2a.r = 0x23;
+        mChildren[0].field_0x2a.g = 0x5f;
+        mChildren[0].field_0x2a.b = 0x19;
+        mChildren[0].field_0x2a.a = 0x20;
         mChildren[0].field_0x32 = 0;
         mChildren[0].field_0x34 = 7;
         mChildren[0].field_0x36 = -1000;
@@ -53,14 +53,14 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
         mChildren[1].field_0x10 = 350.0;
         mChildren[1].field_0x14 = -15.0;
         mChildren[1].field_0x18 = -2400.0;
-        mChildren[1].field_0x22 = 0xbe;
-        mChildren[1].field_0x24 = 0xb4;
-        mChildren[1].field_0x26 = 100;
-        mChildren[1].field_0x28 = 0xaa;
-        mChildren[1].field_0x2a = 0x8c;
-        mChildren[1].field_0x2c = 0x50;
-        mChildren[1].field_0x2e = 0x14;
-        mChildren[1].field_0x30 = 0x20;
+        mChildren[1].field_0x22.r = 0xbe;
+        mChildren[1].field_0x22.g = 0xb4;
+        mChildren[1].field_0x22.b = 0x64;
+        mChildren[1].field_0x22.a = 0xaa;
+        mChildren[1].field_0x2a.r = 0x8c;
+        mChildren[1].field_0x2a.g = 0x50;
+        mChildren[1].field_0x2a.b = 0x14;
+        mChildren[1].field_0x2a.a = 0x20;
         mChildren[1].field_0x32 = 0;
         mChildren[1].field_0x34 = 7;
         mChildren[1].field_0x36 = -1000;
@@ -82,14 +82,14 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
         mChildren[2].field_0x10 = 360.0;
         mChildren[2].field_0x14 = 40.0;
         mChildren[2].field_0x18 = -2400.0;
-        mChildren[2].field_0x22 = 0xbe;
-        mChildren[2].field_0x24 = 0xb4;
-        mChildren[2].field_0x26 = 100;
-        mChildren[2].field_0x28 = 0xdc;
-        mChildren[2].field_0x2a = 0x8c;
-        mChildren[2].field_0x2c = 0x50;
-        mChildren[2].field_0x2e = 0x14;
-        mChildren[2].field_0x30 = 0x20;
+        mChildren[2].field_0x22.r = 0xbe;
+        mChildren[2].field_0x22.g = 0xb4;
+        mChildren[2].field_0x22.b = 0x64;
+        mChildren[2].field_0x22.a = 0xdc;
+        mChildren[2].field_0x2a.r = 0x8c;
+        mChildren[2].field_0x2a.g = 0x50;
+        mChildren[2].field_0x2a.b = 0x14;
+        mChildren[2].field_0x2a.a = 0x20;
         mChildren[2].field_0x32 = 0;
         mChildren[2].field_0x34 = 7;
         mChildren[2].field_0x36 = -1000;
@@ -163,21 +163,21 @@ void dMCloth_c::cloth_init() {
     cloth_move();
 
     field_0xc = 0;
-    field_0xd = l_HIO.mChildren[mClothType].field_0x28;
+    field_0xd = l_HIO.mChildren[mClothType].field_0x22.a;
     field_0x8 += l_HIO.mChildren[mClothType].field_0x36;
 
     DCStoreRangeNoSync(field_0x48[mCurArr], INNER_SIZE * INNER_SIZE * sizeof(cXyz));
     DCStoreRangeNoSync(field_0x29a0[mCurArr], 0x5AC);
     DCStoreRangeNoSync(field_0x52f8, 0x5AC);
 
-    field_0x915e[0] = (s8)l_HIO.mChildren[mClothType].field_0x22;
-    field_0x915e[1] = (s8)l_HIO.mChildren[mClothType].field_0x24;
-    field_0x915e[2] = (s8)l_HIO.mChildren[mClothType].field_0x26;
-    field_0x915e[3] = (s8)l_HIO.mChildren[mClothType].field_0x28;
-    field_0x915e[4] = (s8)l_HIO.mChildren[mClothType].field_0x2a;
-    field_0x915e[5] = (s8)l_HIO.mChildren[mClothType].field_0x2c;
-    field_0x915e[6] = (s8)l_HIO.mChildren[mClothType].field_0x2e;
-    field_0x915e[7] = (s8)l_HIO.mChildren[mClothType].field_0x30;
+    field_0x915e.r = (u8)l_HIO.mChildren[mClothType].field_0x22.r;
+    field_0x915e.g = (u8)l_HIO.mChildren[mClothType].field_0x22.g;
+    field_0x915e.b = (u8)l_HIO.mChildren[mClothType].field_0x22.b;
+    field_0x915e.a = (u8)l_HIO.mChildren[mClothType].field_0x22.a;
+    field_0x9162.r = (u8)l_HIO.mChildren[mClothType].field_0x2a.r;
+    field_0x9162.g = (u8)l_HIO.mChildren[mClothType].field_0x2a.g;
+    field_0x9162.b = (u8)l_HIO.mChildren[mClothType].field_0x2a.b;
+    field_0x9162.a = (u8)l_HIO.mChildren[mClothType].field_0x2a.a;
 
     switch (mClothType) {
     case 0: {
@@ -357,12 +357,12 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
                 iv5 = iv3 > 0xFF ? 0xFF : iv3;
                 GXPosition1x16(x + y * INNER_SIZE);
                 GXPosition1x16(x + y * INNER_SIZE);
-                GXPosition3s8(field_0x915e[0], field_0x915e[1], field_0x915e[2]);
+                GXPosition3s8(field_0x915e.r, field_0x915e.g, field_0x915e.b);
                 GXPosition1x8(iv2);
                 GXPosition2f32(xPos, yPos);
                 GXPosition1x16(xNext + y * INNER_SIZE);
                 GXPosition1x16(xNext + y * INNER_SIZE);
-                GXPosition3s8(field_0x915e[0], field_0x915e[1], field_0x915e[2]);
+                GXPosition3s8(field_0x915e.r, field_0x915e.g, field_0x915e.b);
                 GXPosition1x8(iv5);
                 GXPosition2f32(xPos2, yPos);
             } break;
