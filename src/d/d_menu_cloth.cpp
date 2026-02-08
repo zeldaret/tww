@@ -842,21 +842,12 @@ daCLOTH_HIO_c::~daCLOTH_HIO_c() {
 }
 
 // TODO
-
 class menu_cloth_class : public fopAc_ac_c {
     dMCloth_c mCloth;
 };
 
-typedef struct menu_method_class {
-} menu_method_class;
-
-typedef struct menu_process_profile_definition {
-    leaf_process_profile_definition base;
-    actor_method_class* method_table;
-} menu_process_profile_definition;
-
 /* Nonmatching */
-static actor_method_class dMenu_ClothMethodTable = {
+static msg_method_class dMenu_ClothMethodTable = {
     (process_method_func)dMenu_ClothCreate,
     (process_method_func)dMenu_ClothDelete,
     (process_method_func)dMenu_ClothDraw,
@@ -865,13 +856,13 @@ static actor_method_class dMenu_ClothMethodTable = {
 };
 
 /* Nonmatching */
-menu_process_profile_definition g_profile_Menu_Cloth = {
+msg_process_profile_definition g_profile_Menu_Cloth = {
     /* LayerID      */ (uint)fpcLy_CURRENT_e,
     /* ListID       */ 0x000C,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Menu_Cloth,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ 0x929C,
+    /* Size         */ 0x929C, // TODO: sizeof(menu_cloth_class)
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
