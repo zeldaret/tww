@@ -370,8 +370,54 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
 }
 
 /* 8019A65C-8019A838       .text plot_shadow__9dMCloth_cFffff */
-void dMCloth_c::plot_shadow(float, float, float, float) {
+void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
     /* Nonmatching */
+
+    f32 xPos = 0.0f;
+    const f32 xStep = (xMax - xMin) * (1.0f / (f32)(INNER_SIZE - 1));
+    const f32 yStep = (yMax - yMin) * (1.0f / (f32)(INNER_SIZE - 1));
+
+    int x = 0, xNext = 1;
+    for (x = 0; x < INNER_SIZE - 1; x++, xNext++) {
+        GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, INNER_SIZE * 2);
+        f32 yPos = yMax;
+        for (int y = 0; y < INNER_SIZE - 1; y++) {
+            f32 xPos2 = xPos + xStep;
+            switch (mClothType) {
+            case 0:
+            case 2: {
+                GXPosition1x16(x + y * INNER_SIZE);
+                GXPosition1x16(x + y * INNER_SIZE);
+                GXPosition2f32(xPos, yPos);
+                GXPosition1x16(xNext + y * INNER_SIZE);
+                GXPosition1x16(xNext + y * INNER_SIZE);
+                GXPosition2f32(xPos2, yPos);
+            } break;
+
+            case 1: {
+                int iv2, iv3, iv5;
+                iv5 = (10 - x + y) * 25;
+                iv2 = iv5 > 0xFF ? 0xFF : iv5;
+                iv3 = (10 - xNext + y) * 25;
+                iv5 = iv3 > 0xFF ? 0xFF : iv3;
+                GXPosition1x16(x + y * INNER_SIZE);
+                GXPosition1x16(x + y * INNER_SIZE);
+                GXPosition3s8(field_0x9162.r, field_0x9162.g, field_0x9162.b);
+                GXPosition1x8(iv2);
+                GXPosition2f32(xPos, yPos);
+                GXPosition1x16(xNext + y * INNER_SIZE);
+                GXPosition1x16(xNext + y * INNER_SIZE);
+                GXPosition3s8(field_0x9162.r, field_0x9162.g, field_0x9162.b);
+                GXPosition1x8(iv5);
+                GXPosition2f32(xPos2, yPos);
+            } break;
+            }
+
+            yPos -= yStep;
+        }
+
+        xPos += xStep;
+    }
 }
 
 /* 8019A838-8019A844       .text alpha_out__9dMCloth_cFv */

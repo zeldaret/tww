@@ -26,8 +26,8 @@ public:
     void init();
     void setBackNrm();
     void setNrmVtx(cXyz* pDst, int x, int y);
-    void plot(float, float, float, float);
-    void plot_shadow(float, float, float, float);
+    void plot(float xMin, float yMin, float xMax, float yMax);
+    void plot_shadow(float xMin, float yMin, float xMax, float yMax);
     void alpha_out();
     void TevSettingMenu();
     void TevSettingFileSelect();
