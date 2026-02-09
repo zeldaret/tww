@@ -42,7 +42,6 @@ static dCcD_SrcCps l_at_cps_src = {
     }},
 };
 
-
 /* 800E0C08-800E0D44       .text initBlur__18daBoomerang_blur_cFPA4_fs */
 void daBoomerang_blur_c::initBlur(MtxP, s16) {
     /* Nonmatching */
@@ -172,9 +171,13 @@ void daBoomerang_c::createHeap() {
 static BOOL daBoomerang_createHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
 /* 800E2CE8-800E2EF0       .text create__13daBoomerang_cFv */
 cPhs_State daBoomerang_c::create() {
+    /* Nonmatching */
+}
+
+/* 800E2EF0-800E329C       .text __ct__13daBoomerang_cFv */
+daBoomerang_c::daBoomerang_c() {
     /* Nonmatching */
 }
 
