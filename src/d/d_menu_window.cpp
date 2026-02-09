@@ -9,6 +9,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "f_op/f_op_msg.h"
 #include "d/d_menu_cloth.h"
+#include "d/d_meter.h"
 #include "d/d_priority.h"
 #include "d/d_procname.h"
 
@@ -254,7 +255,8 @@ static BOOL dMs_Execute(sub_ms_screen_class*) {
 
 /* 801DF340-801DF368       .text dMs_IsDelete__FP19sub_ms_screen_class */
 static BOOL dMs_IsDelete(sub_ms_screen_class*) {
-    /* Nonmatching */
+    dMenu_flagSet(0);
+    return TRUE;
 }
 
 /* 801DF368-801DF4C4       .text dMs_Delete__FP19sub_ms_screen_class */
