@@ -10,6 +10,8 @@ public:
     u8 field_0x00[0xFC - 0x00];
     JKRHeap* parentHeap_0xfc;
     JKRHeap* childHeap;
+    u8 field_0x104[0x1B6 - 0x104];
+    u8 mButtonsPressed;
 };
 
 class dMw_HIO_c {

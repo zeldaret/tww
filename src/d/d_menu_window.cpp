@@ -204,18 +204,18 @@ void dMs_clothOnly_delete(sub_ms_screen_class*) {
 }
 
 /* 801DD308-801DD318       .text dMs_onButtonBit__FP19sub_ms_screen_classUc */
-void dMs_onButtonBit(sub_ms_screen_class*, unsigned char) {
-    /* Nonmatching */
+void dMs_onButtonBit(sub_ms_screen_class* i_Ms, u8 bit) {
+    i_Ms->mButtonsPressed |= bit;
 }
 
 /* 801DD318-801DD328       .text dMs_offButtonBit__FP19sub_ms_screen_classUc */
-void dMs_offButtonBit(sub_ms_screen_class*, unsigned char) {
-    /* Nonmatching */
+void dMs_offButtonBit(sub_ms_screen_class* i_Ms, u8 bit) {
+    i_Ms->mButtonsPressed &= ~bit;
 }
 
 /* 801DD328-801DD340       .text dMs_isButtonBit__FP19sub_ms_screen_classUc */
-void dMs_isButtonBit(sub_ms_screen_class*, unsigned char) {
-    /* Nonmatching */
+bool dMs_isButtonBit(sub_ms_screen_class* i_Ms, u8 bit) {
+    return (i_Ms->mButtonsPressed & bit) != 0;
 }
 
 /* 801DD340-801DD3A4       .text dMs_isPush_L_Button__FP19sub_ms_screen_class */
