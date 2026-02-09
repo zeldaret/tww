@@ -76,6 +76,11 @@ static dMCloth_c* cloth_c;
 static dDlst_MENU_CLOTH_c* dMs_cloth_c;
 static dDlst_MENU_CAPTURE_c* dMs_capture_c;
 
+static JUTFont* fonttype;
+static JUTFont* rfonttype;
+
+static u8 event_wait_frame;
+
 void dDlst_MENU_CAPTURE_c::draw() {
     if (mStatus == 1) {
         mStatus = 2;
@@ -376,8 +381,42 @@ static BOOL dMs_Delete(sub_ms_screen_class*) {
 }
 
 /* 801DF4C4-801DF684       .text dMs_Create__FP9msg_class */
-static cPhs_State dMs_Create(msg_class*) {
+static cPhs_State dMs_Create(msg_class* i_this) {
     /* Nonmatching */
+
+    sub_ms_screen_class* i_Ms = (sub_ms_screen_class*)i_this;
+
+    g_mwHIO.mNo = mDoHIO_createChild("アイテムビット", &g_mwHIO);     // Item Bit
+    g_mwDHIO.mNo = mDoHIO_createChild("ダンジョンビット", &g_mwDHIO); // Dungeon Bit
+
+    i_Ms->parentHeap_0xfc = g_dComIfG_gameInfo.play.getExpHeap2D();
+
+    fonttype = mDoExt_getMesgFont();
+    JUT_ASSERT(4097, fonttype != NULL);
+
+    rfonttype = mDoExt_getRubyFont();
+    JUT_ASSERT(4100, fonttype != NULL);
+
+    event_wait_frame = 0;
+
+    g_dComIfG_gameInfo.play.field_0x4952 = 0;
+
+    i_Ms->mButtonsPressed = 0;
+    i_Ms->field_0x108 = -1;
+    i_Ms->field_0x1B0 = 0;
+
+    g_dComIfG_gameInfo.play.offHeapLockFlag();
+
+    if (g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getTimer() != 0) {
+        g_dComIfG_gameInfo.play.mFwaterTimer = 1;
+    }
+
+    dMenu_setMenuStatus(1);
+    // TODO: FMap create
+
+    fopMsgM_setStageLayer(i_Ms);
+
+    return cPhs_COMPLEATE_e;
 }
 
 msg_method_class l_dMs_Method = {
