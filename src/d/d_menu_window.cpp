@@ -6,6 +6,12 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_window.h"
 #include "f_op/f_op_msg.h"
+#include "d/d_menu_cloth.h"
+
+class dDlst_MENU_CLOTH_c : public dDlst_base_c {};
+
+static dMCloth_c* cloth_c;
+static dDlst_MENU_CLOTH_c* dMs_cloth_c;
 
 /* 801DB384-801DB50C       .text __ct__9dMw_HIO_cFv */
 dMw_HIO_c::dMw_HIO_c() {
@@ -89,12 +95,30 @@ void dMs_cloth_delete(sub_ms_screen_class*) {
 
 /* 801DD154-801DD270       .text dMs_clothOnly_create__FP19sub_ms_screen_class */
 void dMs_clothOnly_create(sub_ms_screen_class*) {
-    /* Nonmatching */
+    JKRArchive* arc = g_dComIfG_gameInfo.play.getClothResArchive();
+
+    cloth_c = new dMCloth_c();
+    JUT_ASSERT(2744, cloth_c != NULL);
+
+    cloth_c->setArchive(arc);
+    cloth_c->setClothType(2);
+    cloth_c->init();
+
+    dMs_cloth_c = new dDlst_MENU_CLOTH_c();
+    JUT_ASSERT(2751, dMs_cloth_c != NULL);
 }
 
 /* 801DD270-801DD308       .text dMs_clothOnly_delete__FP19sub_ms_screen_class */
 void dMs_clothOnly_delete(sub_ms_screen_class*) {
-    /* Nonmatching */
+    if (dMs_cloth_c) {
+        delete dMs_cloth_c;
+        dMs_cloth_c = NULL;
+    }
+    if (cloth_c) {
+        g_dComIfG_gameInfo.play.getClothResArchive()->removeResourceAll();
+        delete cloth_c;
+        cloth_c = NULL;
+    }
 }
 
 /* 801DD308-801DD318       .text dMs_onButtonBit__FP19sub_ms_screen_classUc */
