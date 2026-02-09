@@ -9,6 +9,8 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "f_op/f_op_msg.h"
 #include "d/d_menu_cloth.h"
+#include "d/d_priority.h"
+#include "d/d_procname.h"
 
 // TODO: Remove me when all the JUT asserts and other strings are filled out.
 // This is temporary, just to make the strings match.
@@ -264,3 +266,25 @@ static BOOL dMs_Delete(sub_ms_screen_class*) {
 static cPhs_State dMs_Create(msg_class*) {
     /* Nonmatching */
 }
+
+msg_method_class l_dMs_Method = {
+    /* Create   */ (process_method_func)dMs_Create,
+    /* Delete   */ (process_method_func)dMs_Delete,
+    /* Execute  */ (process_method_func)dMs_Execute,
+    /* IsDelete */ (process_method_func)dMs_IsDelete,
+    /* Draw     */ (process_method_func)dMs_Draw,
+};
+
+msg_process_profile_definition g_profile_MENUWINDOW = {
+    /* LayerID      */ (uint)fpcLy_CURRENT_e,
+    /* ListID       */ 0x000C,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_MENUWINDOW,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ 0x1B8,
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopMsg_Method,
+    /* Priority     */ PRIO_MENUWINDOW,
+    /* Actor SubMtd */ &l_dMs_Method,
+};
