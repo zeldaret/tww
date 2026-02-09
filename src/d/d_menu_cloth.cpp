@@ -21,84 +21,84 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
     mNo = -1;
 
     {
-        mChildren[0].field_0x4.set(1.78f, 1.78f, 1.0f);
-        mChildren[0].field_0x1c.setall(0);
-        mChildren[0].field_0x10.set(360.0f, 40.0f, -2400.0f);
-        mChildren[0].field_0x22.r = 0x78;
-        mChildren[0].field_0x22.g = 0xA5;
-        mChildren[0].field_0x22.b = 0x37;
-        mChildren[0].field_0x22.a = 0xDC;
-        mChildren[0].field_0x2a.r = 0x23;
-        mChildren[0].field_0x2a.g = 0x5f;
-        mChildren[0].field_0x2a.b = 0x19;
-        mChildren[0].field_0x2a.a = 0x20;
-        mChildren[0].field_0x32 = 0;
-        mChildren[0].field_0x34 = 7;
-        mChildren[0].field_0x36 = -1000;
-        mChildren[0].field_0x38 = 9000;
-        mChildren[0].field_0x3a = 0x800;
-        mChildren[0].field_0x3c = 5.0;
-        mChildren[0].field_0x40 = 5.0;
-        mChildren[0].field_0x44 = 250.0;
-        mChildren[0].field_0x4c = 1000.0;
-        mChildren[0].field_0x48 = 0;
-        mChildren[0].field_0x4a = 0;
-        mChildren[0].field_0x50 = 2;
-        mChildren[0].field_0x54 = 290.0f;
+        mChildren[0].scale.set(1.78f, 1.78f, 1.0f);
+        mChildren[0].rot.setall(0);
+        mChildren[0].pos.set(360.0f, 40.0f, -2400.0f);
+        mChildren[0].color1.r = 0x78;
+        mChildren[0].color1.g = 0xA5;
+        mChildren[0].color1.b = 0x37;
+        mChildren[0].color1.a = 0xDC;
+        mChildren[0].color2.r = 0x23;
+        mChildren[0].color2.g = 0x5f;
+        mChildren[0].color2.b = 0x19;
+        mChildren[0].color2.a = 0x20;
+        mChildren[0].startAlpha = 0;
+        mChildren[0].fadeInLength = 7;
+        mChildren[0].waveProgressStep = -1000;
+        mChildren[0].waveFreqX = 9000;
+        mChildren[0].waveFreqY = 0x800;
+        mChildren[0].waveAmpX = 5.0;
+        mChildren[0].waveAmpY = 5.0;
+        mChildren[0].waveAmpZ = 250.0;
+        mChildren[0].lightDistance = 1000.0;
+        mChildren[0].lightPitch = 0;
+        mChildren[0].lightYaw = 0;
+        mChildren[0].wavePreSteps = 2;
+        mChildren[0].maxStep = 290.0f;
     }
 
     {
-        mChildren[1].field_0x4.set(1.27f, 0.93f, 1.0f);
-        mChildren[1].field_0x1c.setall(0);
-        mChildren[1].field_0x10.set(350.0f, -15.0f, -2400.0f);
-        mChildren[1].field_0x22.r = 0xbe;
-        mChildren[1].field_0x22.g = 0xb4;
-        mChildren[1].field_0x22.b = 0x64;
-        mChildren[1].field_0x22.a = 0xaa;
-        mChildren[1].field_0x2a.r = 0x8c;
-        mChildren[1].field_0x2a.g = 0x50;
-        mChildren[1].field_0x2a.b = 0x14;
-        mChildren[1].field_0x2a.a = 0x20;
-        mChildren[1].field_0x32 = 0;
-        mChildren[1].field_0x34 = 7;
-        mChildren[1].field_0x36 = -1000;
-        mChildren[1].field_0x38 = 9000;
-        mChildren[1].field_0x3a = 0x800;
-        mChildren[1].field_0x3c = 5.0;
-        mChildren[1].field_0x40 = 5.0;
-        mChildren[1].field_0x44 = 250.0;
-        mChildren[1].field_0x4c = 1000.0;
-        mChildren[1].field_0x48 = 0;
-        mChildren[1].field_0x4a = 0;
-        mChildren[1].field_0x50 = 2;
-        mChildren[1].field_0x54 = 290.0;
+        mChildren[1].scale.set(1.27f, 0.93f, 1.0f);
+        mChildren[1].rot.setall(0);
+        mChildren[1].pos.set(350.0f, -15.0f, -2400.0f);
+        mChildren[1].color1.r = 0xbe;
+        mChildren[1].color1.g = 0xb4;
+        mChildren[1].color1.b = 0x64;
+        mChildren[1].color1.a = 0xaa;
+        mChildren[1].color2.r = 0x8c;
+        mChildren[1].color2.g = 0x50;
+        mChildren[1].color2.b = 0x14;
+        mChildren[1].color2.a = 0x20;
+        mChildren[1].startAlpha = 0;
+        mChildren[1].fadeInLength = 7;
+        mChildren[1].waveProgressStep = -1000;
+        mChildren[1].waveFreqX = 9000;
+        mChildren[1].waveFreqY = 0x800;
+        mChildren[1].waveAmpX = 5.0;
+        mChildren[1].waveAmpY = 5.0;
+        mChildren[1].waveAmpZ = 250.0;
+        mChildren[1].lightDistance = 1000.0;
+        mChildren[1].lightPitch = 0;
+        mChildren[1].lightYaw = 0;
+        mChildren[1].wavePreSteps = 2;
+        mChildren[1].maxStep = 290.0;
     }
 
     {
-        mChildren[2].field_0x4.set(1.7f, 1.7f, 1.0f);
-        mChildren[2].field_0x1c.set(0, 0, 0x4000);
-        mChildren[2].field_0x10.set(360.0f, 40.0f, -2400.0f);
-        mChildren[2].field_0x22.r = 0xbe;
-        mChildren[2].field_0x22.g = 0xb4;
-        mChildren[2].field_0x22.b = 0x64;
-        mChildren[2].field_0x22.a = 0xdc;
-        mChildren[2].field_0x2a.r = 0x8c;
-        mChildren[2].field_0x2a.g = 0x50;
-        mChildren[2].field_0x2a.b = 0x14;
-        mChildren[2].field_0x2a.a = 0x20;
-        mChildren[2].field_0x32 = 0;
-        mChildren[2].field_0x34 = 7;
-        mChildren[2].field_0x36 = -1000;
-        mChildren[2].field_0x38 = 9000;
-        mChildren[2].field_0x3a = 0x800;
-        mChildren[2].field_0x3c = 5.0;
-        mChildren[2].field_0x40 = 5.0;
-        mChildren[2].field_0x44 = 250.0;
-        mChildren[2].field_0x4c = 1000.0;
-        mChildren[2].field_0x48 = 0;
-        mChildren[2].field_0x4a = 0;
-        mChildren[2].field_0x50 = 2;
-        mChildren[2].field_0x54 = 290.0;
+        mChildren[2].scale.set(1.7f, 1.7f, 1.0f);
+        mChildren[2].rot.set(0, 0, 0x4000);
+        mChildren[2].pos.set(360.0f, 40.0f, -2400.0f);
+        mChildren[2].color1.r = 0xbe;
+        mChildren[2].color1.g = 0xb4;
+        mChildren[2].color1.b = 0x64;
+        mChildren[2].color1.a = 0xdc;
+        mChildren[2].color2.r = 0x8c;
+        mChildren[2].color2.g = 0x50;
+        mChildren[2].color2.b = 0x14;
+        mChildren[2].color2.a = 0x20;
+        mChildren[2].startAlpha = 0;
+        mChildren[2].fadeInLength = 7;
+        mChildren[2].waveProgressStep = -1000;
+        mChildren[2].waveFreqX = 9000;
+        mChildren[2].waveFreqY = 0x800;
+        mChildren[2].waveAmpX = 5.0;
+        mChildren[2].waveAmpY = 5.0;
+        mChildren[2].waveAmpZ = 250.0;
+        mChildren[2].lightDistance = 1000.0;
+        mChildren[2].lightPitch = 0;
+        mChildren[2].lightYaw = 0;
+        mChildren[2].wavePreSteps = 2;
+        mChildren[2].maxStep = 290.0;
     }
 }
 
@@ -113,12 +113,12 @@ daCLOTH_ChildHIO_c::daCLOTH_ChildHIO_c() {
 /* 801996C4-8019977C       .text lightSet1__9dMCloth_cF4cXyz */
 void dMCloth_c::lightSet1(cXyz) {
     GXLightObj light;
-    const f32 f0 = HIO_CHILD.field_0x4c;
+    const f32 f0 = HIO_CHILD.lightDistance;
     GXInitLightPos(
         &light,
-        -f0 * cM_ssin(HIO_CHILD.field_0x4a) * cM_scos(HIO_CHILD.field_0x48),
-        -f0 * cM_ssin(HIO_CHILD.field_0x48),
-        -f0 * cM_scos(HIO_CHILD.field_0x4a) * cM_scos(HIO_CHILD.field_0x48)
+        -f0 * cM_ssin(HIO_CHILD.lightYaw) * cM_scos(HIO_CHILD.lightPitch),
+        -f0 * cM_ssin(HIO_CHILD.lightPitch),
+        -f0 * cM_scos(HIO_CHILD.lightYaw) * cM_scos(HIO_CHILD.lightPitch)
     );
     GXInitLightColor(&light, (GXColor){0xFF, 0xFF, 0xFF, 0x00});
     GXLoadLightObjImm(&light, GX_LIGHT0);
@@ -153,49 +153,49 @@ void dMCloth_c::cloth_init() {
 
     setBackNrm();
 
-    field_0x8 = 0;
-    field_0xa = 0;
+    mWaveProgress = 0;
+    mFadeInCounter = 0;
 
     cloth_move();
 
-    field_0xc = 0;
-    field_0xd = HIO_CHILD.field_0x22.a;
-    field_0x8 += HIO_CHILD.field_0x36;
+    mAlphaOut = 0;
+    mCurrentAlpha = HIO_CHILD.color1.a;
+    mWaveProgress += HIO_CHILD.waveProgressStep;
 
-    DCStoreRangeNoSync(field_0x48[mCurArr], INNER_SIZE * INNER_SIZE * sizeof(cXyz));
-    DCStoreRangeNoSync(field_0x29a0[mCurArr], 0x5AC);
-    DCStoreRangeNoSync(field_0x52f8, 0x5AC);
+    DCStoreRangeNoSync(mPosArr[mCurArr], INNER_SIZE * INNER_SIZE * sizeof(cXyz));
+    DCStoreRangeNoSync(mNrmArr[mCurArr], 0x5AC);
+    DCStoreRangeNoSync(mBackNrmArr, 0x5AC);
 
-    field_0x915e.r = (u8)HIO_CHILD.field_0x22.r;
-    field_0x915e.g = (u8)HIO_CHILD.field_0x22.g;
-    field_0x915e.b = (u8)HIO_CHILD.field_0x22.b;
-    field_0x915e.a = (u8)HIO_CHILD.field_0x22.a;
-    field_0x9162.r = (u8)HIO_CHILD.field_0x2a.r;
-    field_0x9162.g = (u8)HIO_CHILD.field_0x2a.g;
-    field_0x9162.b = (u8)HIO_CHILD.field_0x2a.b;
-    field_0x9162.a = (u8)HIO_CHILD.field_0x2a.a;
+    mColor1.r = (u8)HIO_CHILD.color1.r;
+    mColor1.g = (u8)HIO_CHILD.color1.g;
+    mColor1.b = (u8)HIO_CHILD.color1.b;
+    mColor1.a = (u8)HIO_CHILD.color1.a;
+    mColor2.r = (u8)HIO_CHILD.color2.r;
+    mColor2.g = (u8)HIO_CHILD.color2.g;
+    mColor2.b = (u8)HIO_CHILD.color2.b;
+    mColor2.a = (u8)HIO_CHILD.color2.a;
 
     switch (mClothType) {
     case 0: {
         const f32 r = cM_rndFX(45.0f);
         init_angle_z += (s16)((r + 90.0f) * 182.04445f);
-        field_0x9140 = HIO_CHILD.field_0x4;
-        field_0x9158.set(0, 0, init_angle_z);
-        s32 n = HIO_CHILD.field_0x50;
+        mScale = HIO_CHILD.scale;
+        mRot.set(0, 0, init_angle_z);
+        s32 n = HIO_CHILD.wavePreSteps;
         while (n--) {
             cloth_move_sin();
         }
     } break;
     case 1: {
-        field_0x9140.set(1.27f, 0.93f, 1.0f);
-        field_0x9158.setall(0);
+        mScale.set(1.27f, 0.93f, 1.0f);
+        mRot.setall(0);
     } break;
     case 2: {
-        field_0x9140 = HIO_CHILD.field_0x4;
+        mScale = HIO_CHILD.scale;
         const f32 r = cM_rndFX(20.0f);
-        field_0x9158 = HIO_CHILD.field_0x1c;
-        field_0x9158.z += (s16)(r * 182.04445f);
-        s32 n = HIO_CHILD.field_0x50;
+        mRot = HIO_CHILD.rot;
+        mRot.z += (s16)(r * 182.04445f);
+        s32 n = HIO_CHILD.wavePreSteps;
         while (n--) {
             cloth_move_sin();
         }
@@ -237,7 +237,7 @@ void dMCloth_c::init() {
 /* 80199E1C-80199F48       .text __ct__9dMCloth_cFv */
 dMCloth_c::dMCloth_c() {
     mCurArr = 0;
-    field_0x4 = 0;
+    unused_0x4 = 0;
     mClothType = 0;
     if (l_HIO.mNo < 0) {
         l_HIO.mNo = mDoHIO_createChild("メニューの布", &l_HIO); // Menu cloth
@@ -353,12 +353,12 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
                 iv5 = iv3 > 0xFF ? 0xFF : iv3;
                 GXPosition1x16(x + y * INNER_SIZE);
                 GXPosition1x16(x + y * INNER_SIZE);
-                GXPosition3s8(field_0x915e.r, field_0x915e.g, field_0x915e.b);
+                GXPosition3s8(mColor1.r, mColor1.g, mColor1.b);
                 GXPosition1x8(iv2);
                 GXPosition2f32(xPos, yPos);
                 GXPosition1x16(xNext + y * INNER_SIZE);
                 GXPosition1x16(xNext + y * INNER_SIZE);
-                GXPosition3s8(field_0x915e.r, field_0x915e.g, field_0x915e.b);
+                GXPosition3s8(mColor1.r, mColor1.g, mColor1.b);
                 GXPosition1x8(iv5);
                 GXPosition2f32(xPos2, yPos);
             } break;
@@ -404,12 +404,12 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
                 iv5 = iv3 > 0xFF ? 0xFF : iv3;
                 GXPosition1x16(x + y * INNER_SIZE);
                 GXPosition1x16(x + y * INNER_SIZE);
-                GXPosition3s8(field_0x9162.r, field_0x9162.g, field_0x9162.b);
+                GXPosition3s8(mColor2.r, mColor2.g, mColor2.b);
                 GXPosition1x8(iv2);
                 GXPosition2f32(xPos, yPos);
                 GXPosition1x16(xNext + y * INNER_SIZE);
                 GXPosition1x16(xNext + y * INNER_SIZE);
-                GXPosition3s8(field_0x9162.r, field_0x9162.g, field_0x9162.b);
+                GXPosition3s8(mColor2.r, mColor2.g, mColor2.b);
                 GXPosition1x8(iv5);
                 GXPosition2f32(xPos2, yPos);
             } break;
@@ -424,7 +424,7 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
 
 /* 8019A838-8019A844       .text alpha_out__9dMCloth_cFv */
 void dMCloth_c::alpha_out() {
-    field_0xc = 1;
+    mAlphaOut = 1;
 }
 
 /* 8019A844-8019A9C4       .text TevSettingMenu__9dMCloth_cFv */
@@ -524,7 +524,7 @@ void dMCloth_c::ShadowTevSetting() {
 /* 8019ADD4-8019B670       .text draw__9dMCloth_cFf8_GXColor8_GXColorUc */
 void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
     cXyz* pPos = getPos();
-    cXyz* pPos2 = field_0x7c50;
+    cXyz* pPos2 = mShadowPosArr;
     for (int y = 0; y < INNER_SIZE; y++) {
         for (int x = 0; x < INNER_SIZE; x++) {
             *pPos2 = *pPos;
@@ -534,31 +534,33 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
         }
     }
 
-    DCStoreRangeNoSync(field_0x7c50, 0x5ac);
+    DCStoreRangeNoSync(mShadowPosArr, 0x5ac);
 
-    color1 = field_0x915e;
-    color2 = field_0x9162;
+    color1 = mColor1;
+    color2 = mColor2;
 
-    if (field_0xc == 1) {
-        color1.a = field_0xd;
-        if (field_0xd > 25) {
-            field_0xd -= 25;
+    if (mAlphaOut == 1) {
+        // Fade out alpha.
+        color1.a = mCurrentAlpha;
+        if (mCurrentAlpha > 25) {
+            mCurrentAlpha -= 25;
         } else {
-            field_0xd = 0;
+            mCurrentAlpha = 0;
         }
     } else {
-        f32 f = (f32)field_0xa / HIO_CHILD.field_0x34;
+        // Interpolate from startAlpha to final alpha.
+        f32 f = (f32)mFadeInCounter / HIO_CHILD.fadeInLength;
         {
-            s16 uv2 = HIO_CHILD.field_0x22.a;
+            s16 uv2 = HIO_CHILD.color1.a;
             s16 uv6 = cLib_minMaxLimit<s16>(uv2, 0, 0xFF);
             color1.a = uv6;
-            color1.a = color1.a * f + (1.0f - f) * HIO_CHILD.field_0x32;
+            color1.a = color1.a * f + (1.0f - f) * HIO_CHILD.startAlpha;
         }
         {
-            s16 uv2 = HIO_CHILD.field_0x2a.a;
+            s16 uv2 = HIO_CHILD.color2.a;
             s16 uv6 = cLib_minMaxLimit<s16>(uv2, 0, 0xFF);
             color2.a = uv6;
-            color2.a = color2.a * f + (1.0f - f) * HIO_CHILD.field_0x32;
+            color2.a = color2.a * f + (1.0f - f) * HIO_CHILD.startAlpha;
         }
     }
 
@@ -643,11 +645,11 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
     switch (mClothType) {
     case 1:
     case 2: {
-        mDoMtx_stack_c::transS(HIO_CHILD.field_0x10.x + -275.0f, HIO_CHILD.field_0x10.y - 75.0f, HIO_CHILD.field_0x10.z + -3800.0f);
-        mDoMtx_stack_c::XrotM(field_0x9158.x);
-        mDoMtx_stack_c::YrotM(field_0x9158.y);
-        mDoMtx_stack_c::ZrotM(field_0x9158.z);
-        mDoMtx_stack_c::scaleM(field_0x9140);
+        mDoMtx_stack_c::transS(HIO_CHILD.pos.x + -275.0f, HIO_CHILD.pos.y - 75.0f, HIO_CHILD.pos.z + -3800.0f);
+        mDoMtx_stack_c::XrotM(mRot.x);
+        mDoMtx_stack_c::YrotM(mRot.y);
+        mDoMtx_stack_c::ZrotM(mRot.z);
+        mDoMtx_stack_c::scaleM(mScale);
         mDoMtx_stack_c::transM(0.0f, 0.0f, 3400.0f);
         GXLoadPosMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
         GXLoadNrmMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
@@ -660,11 +662,11 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
     } break;
     }
 
-    mDoMtx_stack_c::transS(HIO_CHILD.field_0x10.x + -350.0f, HIO_CHILD.field_0x10.y, HIO_CHILD.field_0x10.z + -3800.0f);
-    mDoMtx_stack_c::XrotM(field_0x9158.x);
-    mDoMtx_stack_c::YrotM(field_0x9158.y);
-    mDoMtx_stack_c::ZrotM(field_0x9158.z);
-    mDoMtx_stack_c::scaleM(field_0x9140);
+    mDoMtx_stack_c::transS(HIO_CHILD.pos.x + -350.0f, HIO_CHILD.pos.y, HIO_CHILD.pos.z + -3800.0f);
+    mDoMtx_stack_c::XrotM(mRot.x);
+    mDoMtx_stack_c::YrotM(mRot.y);
+    mDoMtx_stack_c::ZrotM(mRot.z);
+    mDoMtx_stack_c::scaleM(mScale);
     mDoMtx_stack_c::transM(0.0f, 0.0f, 3400.0f);
     GXLoadPosMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
     GXLoadNrmMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
@@ -677,7 +679,7 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
 
     GXSetCullMode(GX_CULL_BACK);
     ShadowTevSetting();
-    GXSetArray(GX_VA_POS, field_0x7c50, sizeof(cXyz));
+    GXSetArray(GX_VA_POS, mShadowPosArr, sizeof(cXyz));
     plot_shadow(0.0f, 0.0f, 10.0f, 10.0f);
 
     TevSetting();
@@ -691,7 +693,7 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
 /* 8019B670-8019B9C0       .text cloth_move_sin__9dMCloth_cFv */
 void dMCloth_c::cloth_move_sin() {
     /* Nonmatching */
-    field_0x8 += HIO_CHILD.field_0x36;
+    mWaveProgress += HIO_CHILD.waveProgressStep;
 
     for (int y = 0; y < INNER_SIZE; y++) {
         for (int x = 0; x < INNER_SIZE; x++) {
@@ -711,11 +713,11 @@ void dMCloth_c::cloth_move_sin() {
             }
 
             cXyz pos;
-            pos.x = -1500.0f + 305.0f * x + HIO_CHILD.field_0x3c * fx * cM_ssin(field_0x8 + x * HIO_CHILD.field_0x38 + y * HIO_CHILD.field_0x3a);
-            pos.y = -1500.0f + 300.0f * y + HIO_CHILD.field_0x40 * fx * cM_scos(field_0x8 + x * HIO_CHILD.field_0x38 + y * HIO_CHILD.field_0x3a);
-            pos.x = -3400.0f + x + HIO_CHILD.field_0x3c * fx * cM_ssin(field_0x8 + x * HIO_CHILD.field_0x38);
+            pos.x = -1500.0f + 305.0f * x + HIO_CHILD.waveAmpX * fx * cM_ssin(mWaveProgress + x * HIO_CHILD.waveFreqX + y * HIO_CHILD.waveFreqY);
+            pos.y = -1500.0f + 300.0f * y + HIO_CHILD.waveAmpY * fx * cM_scos(mWaveProgress + x * HIO_CHILD.waveFreqX + y * HIO_CHILD.waveFreqY);
+            pos.z = -3400.0f + x + HIO_CHILD.waveAmpZ * fx * cM_ssin(mWaveProgress + x * HIO_CHILD.waveFreqX);
 
-            cLib_addCalcPos2(&field_0x48[mCurArr][x + y * INNER_SIZE], pos, 0.5f, HIO_CHILD.field_0x54);
+            cLib_addCalcPos2(&mPosArr[mCurArr][x + y * INNER_SIZE], pos, 0.5f, HIO_CHILD.maxStep);
         }
     }
 
@@ -756,11 +758,11 @@ void dMCloth_c::cloth_move_simple() {
             }
 
             cXyz pos;
-            pos.x = -1500.0f + 305.0f * x + HIO_CHILD.field_0x3c * fx * cM_ssin(field_0x8 + x * HIO_CHILD.field_0x38 + y * HIO_CHILD.field_0x3a);
-            pos.y = -1500.0f + 300.0f * y + HIO_CHILD.field_0x40 * fx * cM_scos(field_0x8 + x * HIO_CHILD.field_0x38 + y * HIO_CHILD.field_0x3a);
-            pos.x = -3400.0f + x + HIO_CHILD.field_0x3c * fx * cM_ssin(field_0x8 + y * HIO_CHILD.field_0x3a);
+            pos.x = -1500.0f + 305.0f * x + HIO_CHILD.waveAmpX * fx * cM_ssin(mWaveProgress + x * HIO_CHILD.waveFreqX + y * HIO_CHILD.waveFreqY);
+            pos.y = -1500.0f + 300.0f * y + HIO_CHILD.waveAmpY * fx * cM_scos(mWaveProgress + x * HIO_CHILD.waveFreqX + y * HIO_CHILD.waveFreqY);
+            pos.x = -3400.0f + x + HIO_CHILD.waveAmpX * fx * cM_ssin(mWaveProgress + y * HIO_CHILD.waveFreqY);
 
-            cLib_addCalcPos2(&getPos()[x + y * INNER_SIZE], pos, 0.5f, HIO_CHILD.field_0x54);
+            cLib_addCalcPos2(&getPos()[x + y * INNER_SIZE], pos, 0.5f, HIO_CHILD.maxStep);
         }
     }
 
@@ -785,16 +787,16 @@ void dMCloth_c::cloth_move() {
     switch (mClothType) {
     case 0:
     case 2: {
-        if (field_0xa < HIO_CHILD.field_0x34) {
+        if (mFadeInCounter < HIO_CHILD.fadeInLength) {
             cloth_move_sin();
-            field_0xa++;
+            mFadeInCounter++;
         } else {
             cloth_move_simple();
         }
     } break;
     case 1: {
-        if (field_0xa < HIO_CHILD.field_0x34) {
-            field_0xa++;
+        if (mFadeInCounter < HIO_CHILD.fadeInLength) {
+            mFadeInCounter++;
         }
         cloth_move_sin();
     } break;
