@@ -14,6 +14,8 @@ static daCLOTH_HIO_c l_HIO;
 
 s16 dMCloth_c::init_angle_z = 0;
 
+#define HIO_CHILD (l_HIO.mChildren[mClothType])
+
 /* 8019940C-8019966C       .text __ct__13daCLOTH_HIO_cFv */
 daCLOTH_HIO_c::daCLOTH_HIO_c() {
     mNo = -1;
@@ -111,12 +113,12 @@ daCLOTH_ChildHIO_c::daCLOTH_ChildHIO_c() {
 /* 801996C4-8019977C       .text lightSet1__9dMCloth_cF4cXyz */
 void dMCloth_c::lightSet1(cXyz) {
     GXLightObj light;
-    const f32 f0 = l_HIO.mChildren[mClothType].field_0x4c;
+    const f32 f0 = HIO_CHILD.field_0x4c;
     GXInitLightPos(
         &light,
-        -f0 * cM_ssin(l_HIO.mChildren[mClothType].field_0x4a) * cM_scos(l_HIO.mChildren[mClothType].field_0x48),
-        -f0 * cM_ssin(l_HIO.mChildren[mClothType].field_0x48),
-        -f0 * cM_scos(l_HIO.mChildren[mClothType].field_0x4a) * cM_scos(l_HIO.mChildren[mClothType].field_0x48)
+        -f0 * cM_ssin(HIO_CHILD.field_0x4a) * cM_scos(HIO_CHILD.field_0x48),
+        -f0 * cM_ssin(HIO_CHILD.field_0x48),
+        -f0 * cM_scos(HIO_CHILD.field_0x4a) * cM_scos(HIO_CHILD.field_0x48)
     );
     GXInitLightColor(&light, (GXColor){0xFF, 0xFF, 0xFF, 0x00});
     GXLoadLightObjImm(&light, GX_LIGHT0);
@@ -157,29 +159,29 @@ void dMCloth_c::cloth_init() {
     cloth_move();
 
     field_0xc = 0;
-    field_0xd = l_HIO.mChildren[mClothType].field_0x22.a;
-    field_0x8 += l_HIO.mChildren[mClothType].field_0x36;
+    field_0xd = HIO_CHILD.field_0x22.a;
+    field_0x8 += HIO_CHILD.field_0x36;
 
     DCStoreRangeNoSync(field_0x48[mCurArr], INNER_SIZE * INNER_SIZE * sizeof(cXyz));
     DCStoreRangeNoSync(field_0x29a0[mCurArr], 0x5AC);
     DCStoreRangeNoSync(field_0x52f8, 0x5AC);
 
-    field_0x915e.r = (u8)l_HIO.mChildren[mClothType].field_0x22.r;
-    field_0x915e.g = (u8)l_HIO.mChildren[mClothType].field_0x22.g;
-    field_0x915e.b = (u8)l_HIO.mChildren[mClothType].field_0x22.b;
-    field_0x915e.a = (u8)l_HIO.mChildren[mClothType].field_0x22.a;
-    field_0x9162.r = (u8)l_HIO.mChildren[mClothType].field_0x2a.r;
-    field_0x9162.g = (u8)l_HIO.mChildren[mClothType].field_0x2a.g;
-    field_0x9162.b = (u8)l_HIO.mChildren[mClothType].field_0x2a.b;
-    field_0x9162.a = (u8)l_HIO.mChildren[mClothType].field_0x2a.a;
+    field_0x915e.r = (u8)HIO_CHILD.field_0x22.r;
+    field_0x915e.g = (u8)HIO_CHILD.field_0x22.g;
+    field_0x915e.b = (u8)HIO_CHILD.field_0x22.b;
+    field_0x915e.a = (u8)HIO_CHILD.field_0x22.a;
+    field_0x9162.r = (u8)HIO_CHILD.field_0x2a.r;
+    field_0x9162.g = (u8)HIO_CHILD.field_0x2a.g;
+    field_0x9162.b = (u8)HIO_CHILD.field_0x2a.b;
+    field_0x9162.a = (u8)HIO_CHILD.field_0x2a.a;
 
     switch (mClothType) {
     case 0: {
         const f32 r = cM_rndFX(45.0f);
         init_angle_z += (s16)((r + 90.0f) * 182.04445f);
-        field_0x9140 = l_HIO.mChildren[mClothType].field_0x4;
+        field_0x9140 = HIO_CHILD.field_0x4;
         field_0x9158.set(0, 0, init_angle_z);
-        s32 n = l_HIO.mChildren[mClothType].field_0x50;
+        s32 n = HIO_CHILD.field_0x50;
         while (n--) {
             cloth_move_sin();
         }
@@ -189,11 +191,11 @@ void dMCloth_c::cloth_init() {
         field_0x9158.setall(0);
     } break;
     case 2: {
-        field_0x9140 = l_HIO.mChildren[mClothType].field_0x4;
+        field_0x9140 = HIO_CHILD.field_0x4;
         const f32 r = cM_rndFX(20.0f);
-        field_0x9158 = l_HIO.mChildren[mClothType].field_0x1c;
+        field_0x9158 = HIO_CHILD.field_0x1c;
         field_0x9158.z += (s16)(r * 182.04445f);
-        s32 n = l_HIO.mChildren[mClothType].field_0x50;
+        s32 n = HIO_CHILD.field_0x50;
         while (n--) {
             cloth_move_sin();
         }
@@ -545,18 +547,18 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
             field_0xd = 0;
         }
     } else {
-        f32 f = (f32)field_0xa / l_HIO.mChildren[mClothType].field_0x34;
+        f32 f = (f32)field_0xa / HIO_CHILD.field_0x34;
         {
-            s16 uv2 = l_HIO.mChildren[mClothType].field_0x22.a;
+            s16 uv2 = HIO_CHILD.field_0x22.a;
             s16 uv6 = cLib_minMaxLimit<s16>(uv2, 0, 0xFF);
             color1.a = uv6;
-            color1.a = color1.a * f + (1.0f - f) * l_HIO.mChildren[mClothType].field_0x32;
+            color1.a = color1.a * f + (1.0f - f) * HIO_CHILD.field_0x32;
         }
         {
-            s16 uv2 = l_HIO.mChildren[mClothType].field_0x2a.a;
+            s16 uv2 = HIO_CHILD.field_0x2a.a;
             s16 uv6 = cLib_minMaxLimit<s16>(uv2, 0, 0xFF);
             color2.a = uv6;
-            color2.a = color2.a * f + (1.0f - f) * l_HIO.mChildren[mClothType].field_0x32;
+            color2.a = color2.a * f + (1.0f - f) * HIO_CHILD.field_0x32;
         }
     }
 
@@ -641,11 +643,7 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
     switch (mClothType) {
     case 1:
     case 2: {
-        mDoMtx_stack_c::transS(
-            l_HIO.mChildren[mClothType].field_0x10.x + -275.0f,
-            l_HIO.mChildren[mClothType].field_0x10.y - 75.0f,
-            l_HIO.mChildren[mClothType].field_0x10.z + -3800.0f
-        );
+        mDoMtx_stack_c::transS(HIO_CHILD.field_0x10.x + -275.0f, HIO_CHILD.field_0x10.y - 75.0f, HIO_CHILD.field_0x10.z + -3800.0f);
         mDoMtx_stack_c::XrotM(field_0x9158.x);
         mDoMtx_stack_c::YrotM(field_0x9158.y);
         mDoMtx_stack_c::ZrotM(field_0x9158.z);
@@ -662,9 +660,7 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
     } break;
     }
 
-    mDoMtx_stack_c::transS(
-        l_HIO.mChildren[mClothType].field_0x10.x + -350.0f, l_HIO.mChildren[mClothType].field_0x10.y, l_HIO.mChildren[mClothType].field_0x10.z + -3800.0f
-    );
+    mDoMtx_stack_c::transS(HIO_CHILD.field_0x10.x + -350.0f, HIO_CHILD.field_0x10.y, HIO_CHILD.field_0x10.z + -3800.0f);
     mDoMtx_stack_c::XrotM(field_0x9158.x);
     mDoMtx_stack_c::YrotM(field_0x9158.y);
     mDoMtx_stack_c::ZrotM(field_0x9158.z);
@@ -695,7 +691,7 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
 /* 8019B670-8019B9C0       .text cloth_move_sin__9dMCloth_cFv */
 void dMCloth_c::cloth_move_sin() {
     /* Nonmatching */
-    field_0x8 += l_HIO.mChildren[mClothType].field_0x36;
+    field_0x8 += HIO_CHILD.field_0x36;
 
     for (int y = 0; y < INNER_SIZE; y++) {
         for (int x = 0; x < INNER_SIZE; x++) {
@@ -715,15 +711,11 @@ void dMCloth_c::cloth_move_sin() {
             }
 
             cXyz pos;
-            pos.x = -1500.0f + 305.0f * x +
-                    l_HIO.mChildren[mClothType].field_0x3c * fx *
-                        cM_ssin(field_0x8 + x * l_HIO.mChildren[mClothType].field_0x38 + y * l_HIO.mChildren[mClothType].field_0x3a);
-            pos.y = -1500.0f + 300.0f * y +
-                    l_HIO.mChildren[mClothType].field_0x40 * fx *
-                        cM_scos(field_0x8 + x * l_HIO.mChildren[mClothType].field_0x38 + y * l_HIO.mChildren[mClothType].field_0x3a);
-            pos.x = -3400.0f + x + l_HIO.mChildren[mClothType].field_0x3c * fx * cM_ssin(field_0x8 + x * l_HIO.mChildren[mClothType].field_0x38);
+            pos.x = -1500.0f + 305.0f * x + HIO_CHILD.field_0x3c * fx * cM_ssin(field_0x8 + x * HIO_CHILD.field_0x38 + y * HIO_CHILD.field_0x3a);
+            pos.y = -1500.0f + 300.0f * y + HIO_CHILD.field_0x40 * fx * cM_scos(field_0x8 + x * HIO_CHILD.field_0x38 + y * HIO_CHILD.field_0x3a);
+            pos.x = -3400.0f + x + HIO_CHILD.field_0x3c * fx * cM_ssin(field_0x8 + x * HIO_CHILD.field_0x38);
 
-            cLib_addCalcPos2(&field_0x48[mCurArr][x + y * INNER_SIZE], pos, 0.5f, l_HIO.mChildren[mClothType].field_0x54);
+            cLib_addCalcPos2(&field_0x48[mCurArr][x + y * INNER_SIZE], pos, 0.5f, HIO_CHILD.field_0x54);
         }
     }
 
@@ -764,15 +756,11 @@ void dMCloth_c::cloth_move_simple() {
             }
 
             cXyz pos;
-            pos.x = -1500.0f + 305.0f * x +
-                    l_HIO.mChildren[mClothType].field_0x3c * fx *
-                        cM_ssin(field_0x8 + x * l_HIO.mChildren[mClothType].field_0x38 + y * l_HIO.mChildren[mClothType].field_0x3a);
-            pos.y = -1500.0f + 300.0f * y +
-                    l_HIO.mChildren[mClothType].field_0x40 * fx *
-                        cM_scos(field_0x8 + x * l_HIO.mChildren[mClothType].field_0x38 + y * l_HIO.mChildren[mClothType].field_0x3a);
-            pos.x = -3400.0f + x + l_HIO.mChildren[mClothType].field_0x3c * fx * cM_ssin(field_0x8 + y * l_HIO.mChildren[mClothType].field_0x3a);
+            pos.x = -1500.0f + 305.0f * x + HIO_CHILD.field_0x3c * fx * cM_ssin(field_0x8 + x * HIO_CHILD.field_0x38 + y * HIO_CHILD.field_0x3a);
+            pos.y = -1500.0f + 300.0f * y + HIO_CHILD.field_0x40 * fx * cM_scos(field_0x8 + x * HIO_CHILD.field_0x38 + y * HIO_CHILD.field_0x3a);
+            pos.x = -3400.0f + x + HIO_CHILD.field_0x3c * fx * cM_ssin(field_0x8 + y * HIO_CHILD.field_0x3a);
 
-            cLib_addCalcPos2(&getPos()[x + y * INNER_SIZE], pos, 0.5f, l_HIO.mChildren[mClothType].field_0x54);
+            cLib_addCalcPos2(&getPos()[x + y * INNER_SIZE], pos, 0.5f, HIO_CHILD.field_0x54);
         }
     }
 
@@ -797,7 +785,7 @@ void dMCloth_c::cloth_move() {
     switch (mClothType) {
     case 0:
     case 2: {
-        if (field_0xa < l_HIO.mChildren[mClothType].field_0x34) {
+        if (field_0xa < HIO_CHILD.field_0x34) {
             cloth_move_sin();
             field_0xa++;
         } else {
@@ -805,7 +793,7 @@ void dMCloth_c::cloth_move() {
         }
     } break;
     case 1: {
-        if (field_0xa < l_HIO.mChildren[mClothType].field_0x34) {
+        if (field_0xa < HIO_CHILD.field_0x34) {
             field_0xa++;
         }
         cloth_move_sin();
