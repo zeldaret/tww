@@ -142,7 +142,7 @@ void dMs_clothOnly_create(sub_ms_screen_class*) {
     JUT_ASSERT(2744, cloth_c != NULL);
 
     cloth_c->setArchive(arc);
-    cloth_c->setClothType(2);
+    cloth_c->setClothType(MENU_CLOTH_TYPE_2);
     cloth_c->init();
 
     dMs_cloth_c = new dDlst_MENU_CLOTH_c();
