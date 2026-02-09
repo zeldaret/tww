@@ -311,16 +311,16 @@ void dMs_offButtonBit(sub_ms_screen_class* i_Ms, u8 bit) {
 
 /* 801DD328-801DD340       .text dMs_isButtonBit__FP19sub_ms_screen_classUc */
 BOOL dMs_isButtonBit(sub_ms_screen_class* i_Ms, u8 bit) {
-    return (i_Ms->mButtonsPressed & bit) != 0;
+    return (i_Ms->mButtonsPressed & bit) ? TRUE : FALSE;
 }
 
 /* 801DD340-801DD3A4       .text dMs_isPush_L_Button__FP19sub_ms_screen_class */
 BOOL dMs_isPush_L_Button(sub_ms_screen_class* i_Ms) {
     if (g_mDoCPd_cpadInfo[0].mHoldLockL != 0 && !dMs_isButtonBit(i_Ms, 1)) {
         dMs_onButtonBit(i_Ms, 1);
-        return true;
+        return TRUE;
     } else {
-        return false;
+        return FALSE;
     }
 }
 
@@ -328,9 +328,9 @@ BOOL dMs_isPush_L_Button(sub_ms_screen_class* i_Ms) {
 BOOL dMs_isPush_R_Button(sub_ms_screen_class* i_Ms) {
     if (g_mDoCPd_cpadInfo[0].mHoldLockR != 0 && !dMs_isButtonBit(i_Ms, 2)) {
         dMs_onButtonBit(i_Ms, 2);
-        return true;
+        return TRUE;
     } else {
-        return false;
+        return FALSE;
     }
 }
 
