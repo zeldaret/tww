@@ -55,7 +55,9 @@ public:
     /* 0x0F64 */ dCcD_Stts mStts;
     /* 0x0FA0 */ u8 field_0xFA0[0xFC4 - 0xFA0];
     /* 0x0FC4 */ dCcD_Cps mCps;
-    /* 0x10FC */ u8 field_0x10FC[0x118C - 0x10FC];
+    /* 0x10FC */ u8 field_0x10FC[0x1118 - 0x10FC];
+    /* 0x1118 */ dBgS_BoomerangLinChk mLinChk;
+    /* 0x1184 */ u8 field_0x1184[0x118C - 0x1184];
 };
 
 STATIC_ASSERT(offsetof(daBoomerang_c, mSightPacket) == 0x294);
