@@ -40,12 +40,29 @@ public:
     void createHeap();
 
 public:
-    /* 0x290 */ u8 m290[0x294 - 0x290];
-    /* 0x294 */ daBoomerang_sightPacket_c mSightPacket;
-    /* 0x298 */ u8 field_0x298[0x3A0 - 0x298];
-    /* 0x3A0 */ daBoomerang_blur_c mBlur;
-    /* 0x23B0 */ u8 field_0x3B0[0xF34 - 0x3B0];
-    /* 0xF34 */ bool mCancelFlg;
+    /* 0x0290 */ u8 m290[0x294 - 0x290];
+    /* 0x0294 */ daBoomerang_sightPacket_c mSightPacket;
+    /* 0x0298 */ u8 field_0x298[0x3A0 - 0x298];
+    /* 0x03A0 */ daBoomerang_blur_c mBlur;
+    /* 0x03B0 */ u8 field_0x3B0[0x3C4 - 0x3B0];
+    /* 0x03C4 */ cXyz arr_0x3C4[60];
+    /* 0x0694 */ cXyz arr_0x694[60];
+    /* 0x0964 */ cXyz arr_0x964[60];
+    /* 0x0C34 */ cXyz arr_0xC34[60];
+    /* 0x0F04 */ u8 field_0xF04[0xF34 - 0xF04];
+    /* 0x0F34 */ bool mCancelFlg;
+    /* 0x0F35 */ u8 field_0xF35[0xF64 - 0xF35];
+    /* 0x0F64 */ dCcD_Stts mStts;
+    /* 0x0FA0 */ u8 field_0xFA0[0xFC4 - 0xFA0];
+    /* 0x0FC4 */ dCcD_Cps mCps;
+    /* 0x10FC */ u8 field_0x10FC[0x118C - 0x10FC];
 };
+
+STATIC_ASSERT(offsetof(daBoomerang_c, mSightPacket) == 0x294);
+STATIC_ASSERT(offsetof(daBoomerang_c, mBlur) == 0x3A0);
+STATIC_ASSERT(offsetof(daBoomerang_c, mCancelFlg) == 0xF34);
+STATIC_ASSERT(offsetof(daBoomerang_c, mStts) == 0xF64);
+STATIC_ASSERT(offsetof(daBoomerang_c, mCps) == 0xFC4);
+STATIC_ASSERT(sizeof(daBoomerang_c) == 0x118C);
 
 #endif /* D_A_BOOMERANG_H */
