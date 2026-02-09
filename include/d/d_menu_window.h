@@ -5,9 +5,8 @@
 
 class JKRExpHeap;
 
-class sub_ms_screen_class {
+class sub_ms_screen_class : public msg_class {
 public:
-    u8 field_0x00[0xFC - 0x00];
     JKRHeap* parentHeap_0xfc;
     JKRHeap* childHeap;
     u8 field_0x104[0x1B6 - 0x104];
