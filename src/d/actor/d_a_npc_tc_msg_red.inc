@@ -1,7 +1,10 @@
+// The original name of this file is unknown, but it must exist because d_a_npc_tc's "red's" functions
+// are in a separate .text section from the rest of its functions.
+
 /* 00005498-00005720       .text next_msgStatusRed__10daNpc_Tc_cFPUl */
 u16 daNpc_Tc_c::next_msgStatusRed(u32* pMsgNo) {
     u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
-    if ((mAnmPrmIdx == 0x11 || mAnmPrmIdx == 0x12) && !mpMorf->isStop()) {
+    if ((mAnmPrmIdx == ANM_PRM_IDX_DANCE01_TO_TALK01 || mAnmPrmIdx == ANM_PRM_IDX_DANCE02_TO_WAIT03) && !mpMorf->isStop()) {
         msgStatus = fopMsgStts_MSG_DISPLAYED_e;
     } else {
         switch(*pMsgNo) {
@@ -68,15 +71,14 @@ u16 daNpc_Tc_c::next_msgStatusRed(u32* pMsgNo) {
                 *pMsgNo = 0xDEF;
                 break;
             case 0xDEF:
-                field_0x6CF = 15;
+                mStatus = STATUS_GET_RUPEE;
                 msgStatus = fopMsgStts_MSG_ENDS_e;
                 break;
-
             case 0xDF1:
                 *pMsgNo = 0xDF2;
                 break;
             case 0xDF2:
-                field_0x6CF = 17;
+                mStatus = STATUS_MONUMENT_COMPLETE;
                 msgStatus = fopMsgStts_MSG_ENDS_e;
                 break;
             case 0xDF3:
@@ -102,14 +104,12 @@ u16 daNpc_Tc_c::next_msgStatusRed(u32* pMsgNo) {
         }
     }
     return msgStatus;
-    /* Nonmatching */
 }
 
 /* 00005720-00005730       .text setFinishMsg__10daNpc_Tc_cFv */
 u32 daNpc_Tc_c::setFinishMsg() {
     m_jnt.onHeadLock();
     return 0xDC7;
-    /* Nonmatching */
 }
 
 /* 00005730-00005944       .text getMsgRed__10daNpc_Tc_cFv */
@@ -172,7 +172,6 @@ u32 daNpc_Tc_c::getMsgRed() {
         return setFirstMsg(&field_0x811, 0xDB7U, 0xDE5);
     }
     return setFirstMsg(&field_0x811, 0xDE1U, 0xDE5);
-    /* Nonmatching */
 }
 
 /* 00005944-000059A8       .text checkMonumentFee__10daNpc_Tc_cFUsUs */
@@ -181,7 +180,6 @@ bool daNpc_Tc_c::checkMonumentFee(u16 i_stageNo, u16 i_eventId) {
         return dComIfGs_isEventBit(i_eventId);
     }
     return false;
-    /* Nonmatching */
 }
 
 /* 000059A8-00005A50       .text checkAllMonumentFee__10daNpc_Tc_cFv */
@@ -194,7 +192,6 @@ bool daNpc_Tc_c::checkAllMonumentFee() {
         return true;
     }
     return false;
-    /* Nonmatching */
 }
 
 #if VERSION == VERSION_DEMO
@@ -236,7 +233,6 @@ int daNpc_Tc_c::checkAllMonumentPay() {
         amountOfMonumentsPaid++;
     }
     return amountOfMonumentsPaid;
-    /* Nonmatching */
 }
 
 /* 00005B10-00005B98       .text checkMonumentPay__10daNpc_Tc_cFUsUs */
@@ -249,5 +245,4 @@ bool daNpc_Tc_c::checkMonumentPay(u16 i_stageNo, u16 i_eventId) {
         return true;
     }
     return false;
-    /* Nonmatching */
 }

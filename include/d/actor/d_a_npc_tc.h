@@ -8,10 +8,87 @@ namespace daObjSmplbg { class Act_c; };
 
 class daNpc_Tc_c : public fopNpc_npc_c {
 public:
+
+    enum Status {
+        STATUS_WAIT = 1,
+        STATUS_SIT = 2,
+        STATUS_TALK = 3,
+        STATUS_JUMP = 4,
+        STATUS_WALK_TO_JAIL = 5,
+        STATUS_TALK_NEAR_JAIL = 6,
+        STATUS_WAIT_NEAR_JAIL = 7,
+        STATUS_WALK_TO_STOOL = 8,
+        STATUS_SIT_TO_STOOL = 9,
+        STATUS_DEMO_JUMP = 10,
+        STATUS_DEMO_RESCUE = 11,
+        STATUS_DEMO_TALK = 12,
+        STATUS_PAY_RUPEE = 13,
+        STATUS_DEMO_PAY_RUPEE = 14,
+        STATUS_GET_RUPEE = 15,
+        STATUS_DEMO_GET_RUPEE = 16,
+        STATUS_MONUMENT_COMPLETE = 17,
+        STATUS_DEMO_MONUMENT_COMPLETE = 18,
+    };
+
     enum ActionStatus {
         ACTION_STARTING = 0,
         ACTION_ONGOING  = 1,
         ACTION_ENDING   = -1,
+    };
+
+    enum Type {
+        TYPE_NORMAL2 = 0,
+        TYPE_RED = 1,
+        TYPE_WHITE = 2,
+        TYPE_BLUE = 3,
+        TYPE_NORMAL = 4,
+    };
+
+    enum BckIdx {
+        BCK_IDX_WAIT01 = 0,
+        BCK_IDX_WAIT03 = 1,
+        BCK_IDX_WAIT02 = 2,
+        BCK_IDX_TALK01 = 3,
+        BCK_IDX_WALK01 = 4,
+        BCK_IDX_JAMP_A = 5,
+        BCK_IDX_JAMP_B = 6,
+        BCK_IDX_JAMP_C = 7,
+        BCK_IDX_GUARD = 8,
+        BCK_IDX_JTBT = 9,
+        BCK_IDX_HAPPY = 10,
+        BCK_IDX_DANCE01 = 11,
+        BCK_IDX_DANCE02 = 12,
+        BCK_IDX_GET = 13,
+        BCK_IDX_MAWASU = 14,
+        BCK_IDX_WAIT04 = 15,
+        BCK_IDX_TALK02 = 16,
+    };
+
+    enum AnmPrmIdx {
+        ANM_PRM_IDX_NONE = 0,
+        ANM_PRM_IDX_WAIT01 = 1,
+        ANM_PRM_IDX_WAIT03 = 2,
+        ANM_PRM_IDX_WAIT02 = 3,
+        ANM_PRM_IDX_TALK01 = 4,
+        ANM_PRM_IDX_WALK01 = 5,
+        ANM_PRM_IDX_JAMP_A = 6,
+        ANM_PRM_IDX_JAMP_B = 7,
+        ANM_PRM_IDX_JAMP_C1 = 8,
+        ANM_PRM_IDX_JAMP_C2 = 9,
+        ANM_PRM_IDX_GUARD = 10,
+        ANM_PRM_IDX_JTBT = 11,
+        ANM_PRM_IDX_HAPPY = 12,
+        ANM_PRM_IDX_DANCE01 = 13,
+        ANM_PRM_IDX_DANCE02 = 14,
+        ANM_PRM_IDX_GET = 15,
+        ANM_PRM_IDX_HAPPY2 = 16, // ANM_PRM_IDX_HAPPY gets set to this
+        ANM_PRM_IDX_DANCE01_TO_TALK01 = 17,
+        ANM_PRM_IDX_DANCE02_TO_WAIT03 = 18,
+        ANM_PRM_IDX_MAWASU = 19,
+        ANM_PRM_IDX_WAIT04 = 20,
+        ANM_PRM_IDX_TALK02 = 21,
+        ANM_PRM_IDX_TALK01_WAIT01 = 22,  // loops 3x then -> WAIT01
+        ANM_PRM_IDX_TALK01_TALK02 = 23,  // loops 5x then -> TALK02
     };
 
     typedef int (daNpc_Tc_c::*ActionFunc)(void*);
@@ -21,8 +98,8 @@ public:
     cXyz& getEyePos() { return mEyePos; }
 
     void incAttnSetCount() {
-        if (field_0x77C != 0xff) {
-            field_0x77C++;
+        if (mAttnSetCount != 0xff) {
+            mAttnSetCount++;
         }  
     }
 
@@ -137,15 +214,15 @@ public:
 public:
     /* 0x6C4 */ u8 field_0x6C4[0x6C8 - 0x6C4];
     /* 0x6C8 */ BOOL field_0x6C8;
-    /* 0x6CC */ u8 field_0x6CC;
-    /* 0x6CD */ u8 field_0x6CD;
-    /* 0x6CE */ u8 field_0x6CE;
-    /* 0x6CF */ s8 field_0x6CF;
+    /* 0x6CC */ u8 mJtbtTimer;
+    /* 0x6CD */ u8 mTalk01Wait01Timer;
+    /* 0x6CE */ u8 mTalk01Talk02Timer;
+    /* 0x6CF */ s8 mStatus;
     /* 0x6D0 */ ActionFunc mCurrActionFunc;
     /* 0x6DC */ s8 mActionStatus;
     /* 0x6DD */ u8 field_0x6DD[0x6E0 - 0x6DD];
-    /* 0x6E0 */ cXyz field_0x6E0;
-    /* 0x6EC */ csXyz field_0x6EC;
+    /* 0x6E0 */ cXyz mSmokePos;
+    /* 0x6EC */ csXyz mSmokeAngle;
     /* 0x6F2 */ u8 field_0x6F2[0x6F4 - 0x6F2];
     /* 0x6F4 */ dPa_smokeEcallBack mSmokeCallBack;
     /* 0x714 */ dPa_followEcallBack field_0x714;
@@ -157,15 +234,15 @@ public:
 #endif
     /* 0x748 */ J3DAnmTexPattern* m_head_tex_pattern;
     /* 0x74C */ mDoExt_btpAnm mBtpAnm;
-    /* 0x760 */ u8 field_0x760;
+    /* 0x760 */ u8 mBlinkFrame;
     /* 0x761 */ u8 field_0x761[0x762 - 0x761];
-    /* 0x762 */ s16 field_0x762;
+    /* 0x762 */ s16 mBlinkTimer;
     /* 0x764 */ cXyz mEyePos;
     /* 0x770 */ cXyz mAttPos;
-    /* 0x77C */ u8 field_0x77C;
+    /* 0x77C */ u8 mAttnSetCount;
     /* 0x77D */ u8 field_0x77D[0x780 - 0x77D];
     /* 0x780 */ cXyz mStoolLookPos;
-    /* 0x78C */ s16 field_0x78C;
+    /* 0x78C */ s16 mMaxHeadTurnVelocity;
     /* 0x78E */ u8 field_0x78E[0x790 - 0x78E];
     /* 0x790 */ csXyz field_0x790;
     /* 0x796 */ u8 field_0x796[0x798 - 0x796];
@@ -177,21 +254,21 @@ public:
     /* 0x7B8 */ cXyz mWalkToStoolPos;
     /* 0x7C4 */ cXyz mDeltaPos;
     /* 0x7D0 */ u8 field_0x7D0[0x7DC - 0x7D0];
-    /* 0x7DC */ cXyz field_0x7DC;
-    /* 0x7E8 */ bool field_0x7E8;
+    /* 0x7DC */ cXyz mParticlePos;
+    /* 0x7E8 */ bool mHasAttention;
     /* 0x7E9 */ bool mTalkingNearJail;
     /* 0x7EA */ u8 field_0x7EA[0x7F1 - 0x7EA];
-    /* 0x7F1 */ bool field_0x7F1;
+    /* 0x7F1 */ bool mHasTalkedNearJail;
     /* 0x7F2 */ bool mHasEnteredSitRadius;
     /* 0x7F3 */ s8 mJumpLandingTimer;
     /* 0x7F4 */ u8 field_0x7F4[0x7F6 - 0x7F4];
     /* 0x7F6 */ s8 mTexPatternNum;
-    /* 0x7F7 */ s8 field_0x7F7;
+    /* 0x7F7 */ s8 mTexPatternNumIdx;
     /* 0x7F8 */ s8 mBckIdx;
     /* 0x7F9 */ s8 mAnmPrmIdx;
     /* 0x7FA */ s8 mOldAnmPrmIdx;
-    /* 0x7FB */ s8 field_0x7FB;
-    /* 0x7FC */ u8 field_0x7FC;
+    /* 0x7FB */ s8 mEventIdx;
+    /* 0x7FC */ u8 mType;
     /* 0x7FD */ u8 field_0x7FD[0x804 - 0x7FD];
     /* 0x804 */ daObjSmplbg::Act_c* m_tower_actor;
     /* 0x808 */ bool field_0x808;
@@ -209,6 +286,4 @@ public:
     /* 0x814 */ bool field_0x814;
     /* 0x815 */ u8 field_0x815[0x81C - 0x815];
 };  // Size: 0x81C
-
-    // /* 0x804 */ daObjSmplbg::Act_c* m_tower_actor;
 #endif /* D_A_NPC_TC_H */

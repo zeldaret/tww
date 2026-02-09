@@ -1,11 +1,13 @@
+// The original name of this file is unknown, but it must exist because d_a_npc_tc's "normal2's" functions
+// are in a separate .text section from the rest of its functions.
+
 /* 00004BAC-00004E6C       .text next_msgStatusNormal2__10daNpc_Tc_cFPUl */
 u16 daNpc_Tc_c::next_msgStatusNormal2(u32* pMsgNo) {
     u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
-    if ((mAnmPrmIdx == 0x11 || mAnmPrmIdx == 0x12) && !mpMorf->isStop()) {
+    if ((mAnmPrmIdx == ANM_PRM_IDX_DANCE01_TO_TALK01 || mAnmPrmIdx == ANM_PRM_IDX_DANCE02_TO_WAIT03) && !mpMorf->isStop()) {
         msgStatus = fopMsgStts_MSG_DISPLAYED_e;
     } else {
         switch (*pMsgNo) {
-
 #if VERSION > VERSION_JPN
             case 0x38AA:
             case 0x38AB:
@@ -24,7 +26,6 @@ u16 daNpc_Tc_c::next_msgStatusNormal2(u32* pMsgNo) {
                 }
                 break;
 #endif
-
             case 0xDB2:
             case 0xDB3:
             case 0xDFB:
@@ -54,7 +55,7 @@ u16 daNpc_Tc_c::next_msgStatusNormal2(u32* pMsgNo) {
             case 0xDBE:
                 if (mpCurrMsg->mSelectNum == 0) {
                     if ((u16)dComIfGs_getRupee() >= 398) {
-                        field_0x6CF = 13;
+                        mStatus = STATUS_PAY_RUPEE;
                         field_0x80D = true;
                         field_0x80C = true;
                         msgStatus = fopMsgStts_MSG_ENDS_e;
@@ -81,7 +82,7 @@ u16 daNpc_Tc_c::next_msgStatusNormal2(u32* pMsgNo) {
             case 0xDC3:
                 if (mpCurrMsg->mSelectNum == 0) {
                     if ((u16)dComIfGs_getRupee() >= 398) {
-                        field_0x6CF = 13;
+                        mStatus = STATUS_PAY_RUPEE;
                         field_0x80D = true;
                         field_0x80C = true;
                         msgStatus = fopMsgStts_MSG_ENDS_e;
@@ -93,7 +94,6 @@ u16 daNpc_Tc_c::next_msgStatusNormal2(u32* pMsgNo) {
                     *pMsgNo = 0xDC4;
                 }
                 break;
-
             case 0xDC4:
                 field_0x80D = false;
                 field_0x80B = false;
@@ -104,7 +104,6 @@ u16 daNpc_Tc_c::next_msgStatusNormal2(u32* pMsgNo) {
         }
     }
     return msgStatus;
-    /* Nonmatching */
 }
 
 /* 00004E6C-00004F68       .text getMsgNormal2__10daNpc_Tc_cFv */
@@ -130,28 +129,25 @@ u32 daNpc_Tc_c::getMsgNormal2() {
         } else {
             msg = 0xDB2;
         }
-    } else {
-        if (existUnknownCollectMap()) {
-            if (!field_0x809) {
-                field_0x809 = true;
-                msg = 0xDBB;
-            } else {
-                msg = 0xDBE;
-            }
+    } else if (existUnknownCollectMap()) {
+        if (!field_0x809) {
+            field_0x809 = true;
+            msg = 0xDBB;
         } else {
-#if VERSION <= VERSION_JPN
-            if(existKnownCollectMap()) {
-                msg = 0xDBA;
-            } else {
-                msg = 0xDB5;
-            }
-#else
-            msg = setRupeeSizeMsg();
-#endif
+            msg = 0xDBE;
         }
+    } else {
+#if VERSION <= VERSION_JPN
+        if(existKnownCollectMap()) {
+            msg = 0xDBA;
+        } else {
+            msg = 0xDB5;
+        }
+#else
+        msg = setRupeeSizeMsg();
+#endif
     }
     return msg;
-    /* Nonmatching */
 }
 
 #if VERSION > VERSION_JPN
@@ -171,9 +167,9 @@ u32 daNpc_Tc_c::setRupeeSizeMsg() {
         }
     }
     return msgNo;
-    /* Nonmatching */
 }
 #endif
+
 /* 00004FD8-00005054       .text existUnknownCollectMap__10daNpc_Tc_cFv */
 bool daNpc_Tc_c::existUnknownCollectMap() {
     for(int i = 1; i <= 8; i++) {
@@ -182,20 +178,17 @@ bool daNpc_Tc_c::existUnknownCollectMap() {
         }
     }
     return false;
-    /* Nonmatching */
 }
 
 /* 00005054-000050DC       .text analysisCollectMap__10daNpc_Tc_cFv */
 int daNpc_Tc_c::analysisCollectMap() {
     for(int i = 1; i <= 8; i++) {
         if(!dComIfGs_isCollectMapTriforce(i) && dComIfGs_isGetCollectMap(i)) {
-            dComIfGs_onCollectMapTriforce(i); // check return type and if inline is even correct and stuff
+            dComIfGs_onCollectMapTriforce(i);
             return i;
         }
-
     }
     return 0;
-    /* Nonmatching */
 }
 
 /* 000050DC-00005158       .text existKnownCollectMap__10daNpc_Tc_cFv */
@@ -206,5 +199,4 @@ bool daNpc_Tc_c::existKnownCollectMap() {
         }
     }
     return false;
-    /* Nonmatching */
 }

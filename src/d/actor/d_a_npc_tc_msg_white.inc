@@ -1,8 +1,11 @@
+// The original name of this file is unknown, but it must exist because d_a_npc_tc's "white's" functions
+// are in a separate .text section from the rest of its functions.
+
 /* 00005158-000053D4       .text next_msgStatusWhite__10daNpc_Tc_cFPUl */
 u16 daNpc_Tc_c::next_msgStatusWhite(u32* pMsgNo) {
     m_jnt.offHeadLock();
     u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
-    if ((mAnmPrmIdx == 0x11 || mAnmPrmIdx == 0x12) && !mpMorf->isStop()) {
+    if ((mAnmPrmIdx == ANM_PRM_IDX_DANCE01_TO_TALK01 || mAnmPrmIdx == ANM_PRM_IDX_DANCE02_TO_WAIT03) && !mpMorf->isStop()) {
         msgStatus = fopMsgStts_MSG_DISPLAYED_e;
     } else {
         switch (*pMsgNo) {
@@ -98,7 +101,6 @@ u16 daNpc_Tc_c::next_msgStatusWhite(u32* pMsgNo) {
         }
     }
     return msgStatus;
-    /* Nonmatching */
 }
 
 /* 000053D4-00005498       .text getMsgWhite__10daNpc_Tc_cFv */
@@ -126,5 +128,4 @@ u32 daNpc_Tc_c::getMsgWhite() {
         }
     }
     return msg;
-    /* Nonmatching */
 }
