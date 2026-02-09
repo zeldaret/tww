@@ -12,11 +12,11 @@ public:
     dMCloth_c();
     virtual ~dMCloth_c();
 
-    cXyz* getBackNrm() { return field_0x52f8; }
-    cXyz* getNrm() { return field_0x29a0[mCurArr]; }
-    cXyz* getOffsetVec() {}
     cXyz* getPos() { return field_0x48[mCurArr]; }
-    cXyz* getShadowPos() {}
+    cXyz* getNrm() { return field_0x29a0[mCurArr]; }
+    cXyz* getBackNrm() { return field_0x52f8; }
+    cXyz* getOffsetVec() { return field_0x67a4; }
+    cXyz* getShadowPos() { return field_0x7c50; }
     GXTexObj* getTexObj() { return &mTexObj; }
     void setArchive(JKRArchive* arc) { mpArc = arc; }
     void setClothType(u8 type) { mClothType = type; } // ?

@@ -130,15 +130,15 @@ void dMCloth_c::cloth_init() {
     for (int i = 0; i < INNER_SIZE; i++) {
         s16 xAngle = -(i * 3500);
         for (int j = 0; j < INNER_SIZE; j++) {
-            cXyz* pPos = getPos() + i * INNER_SIZE + j;
+            cXyz* pPos = &getPos()[i * INNER_SIZE + j];
             pPos->x = cM_ssin(j * 3276.8f) * 954.9299f + -1500.0f + j * 10.0f * cM_ssin(xAngle);
             pPos->y = i * 300.0f + -1500.0f;
             pPos->z = (1.0f - cM_scos(j * 3276.8f)) * 716.1974f - 3400.0f + j * -5.0f * cM_scos(xAngle);
 
-            pPos = field_0x29a0[mCurArr] + i * INNER_SIZE + j;
-            pPos->x = cM_scos(j * 3276.8f - 1000.0f) * -320.0f;
-            pPos->y = 0.0f;
-            pPos->z = cM_ssin(j * 3276.8f - 1000.0f) * -270.0f;
+            cXyz* pOff = &getOffsetVec()[i * INNER_SIZE + j];
+            pOff->x = cM_scos(j * 3276.8f - 1000.0f) * -320.0f;
+            pOff->y = 0.0f;
+            pOff->z = cM_ssin(j * 3276.8f - 1000.0f) * -270.0f;
         }
     }
 
