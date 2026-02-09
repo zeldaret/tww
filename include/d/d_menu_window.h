@@ -13,14 +13,16 @@ public:
     u8 mButtonsPressed;
 };
 
-class dMw_HIO_c {
+class dMw_HIO_c : public JORReflexible {
 public:
     dMw_HIO_c();
+    virtual ~dMw_HIO_c() {}
 };
 
-class dMw_DHIO_c {
+class dMw_DHIO_c : public JORReflexible {
 public:
     dMw_DHIO_c();
+    virtual ~dMw_DHIO_c() {}
 };
 
 #endif /* D_MENU_WINDOW_H */
