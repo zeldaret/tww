@@ -240,8 +240,10 @@ BOOL dMs_isPush_R_Button(sub_ms_screen_class* i_Ms) {
 }
 
 /* 801DD408-801DD434       .text dMs_childHeap_freeAll__FP19sub_ms_screen_class */
-void dMs_childHeap_freeAll(sub_ms_screen_class*) {
-    /* Nonmatching */
+void dMs_childHeap_freeAll(sub_ms_screen_class* i_Ms) {
+    if (i_Ms->childHeap) {
+        i_Ms->childHeap->freeAll();
+    }
 }
 
 /* 801DD434-801DD5CC       .text dMs_telescopeMove__FP19sub_ms_screen_class */
