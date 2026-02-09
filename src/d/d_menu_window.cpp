@@ -69,6 +69,9 @@ public:
     /* 0x04 */ u8 mStatus;
 };
 
+dMw_HIO_c g_mwHIO;
+dMw_DHIO_c g_mwDHIO;
+
 static dMCloth_c* cloth_c;
 static dDlst_MENU_CLOTH_c* dMs_cloth_c;
 static dDlst_MENU_CAPTURE_c* dMs_capture_c;
