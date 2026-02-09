@@ -38,7 +38,7 @@ public:
     void draw();
 };
 
-class daBoomerang_sightPacket_c {
+class daBoomerang_sightPacket_c : public dDlst_base_c {
 public:
     void draw();
     void setSight(cXyz*, int);
