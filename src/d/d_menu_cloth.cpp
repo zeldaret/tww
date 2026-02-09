@@ -848,11 +848,11 @@ class menu_cloth_class : public fopAc_ac_c {
 
 /* Nonmatching */
 static msg_method_class dMenu_ClothMethodTable = {
-    (process_method_func)dMenu_ClothCreate,
-    (process_method_func)dMenu_ClothDelete,
-    (process_method_func)dMenu_ClothDraw,
-    (process_method_func)dMenu_ClothExecute,
-    (process_method_func)dMenu_ClothIsDelete,
+    /* Create   */ (process_method_func)dMenu_ClothCreate,
+    /* Delete   */ (process_method_func)dMenu_ClothDelete,
+    /* Execute  */ (process_method_func)dMenu_ClothDraw,
+    /* IsDelete */ (process_method_func)dMenu_ClothExecute,
+    /* Draw     */ (process_method_func)dMenu_ClothIsDelete,
 };
 
 /* Nonmatching */
