@@ -6,12 +6,14 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_window.h"
 
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "f_op/f_op_msg.h"
 #include "d/d_menu_cloth.h"
 #include "d/d_meter.h"
 #include "d/d_priority.h"
 #include "d/d_procname.h"
+#include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 
@@ -66,6 +68,10 @@ public:
 
     /* 0x04 */ u8 mStatus;
 };
+
+static dMCloth_c* cloth_c;
+static dDlst_MENU_CLOTH_c* dMs_cloth_c;
+static dDlst_MENU_CAPTURE_c* dMs_capture_c;
 
 void dDlst_MENU_CAPTURE_c::draw() {
     if (mStatus == 1) {
@@ -137,12 +143,22 @@ void dDlst_MENU_CAPTURE_c::draw() {
 }
 
 void dDlst_MENU_CLOTH_c::draw() {
+    /* Nonmatching */
     // TODO
-}
+    Mtx44 mtx;
+    f32 aspect = g_dComIfG_gameInfo.play.getCurrentViewport()->mWidth / g_dComIfG_gameInfo.play.getCurrentViewport()->mHeight * g_HIO.mAspectRatio;
+    C_MTXPerspective(mtx, 30.0f, aspect, 1.0f, 100000.0f);
 
-static dMCloth_c* cloth_c;
-static dDlst_MENU_CLOTH_c* dMs_cloth_c;
-static dDlst_MENU_CAPTURE_c* dMs_capture_c;
+    GXSetProjection(mtx, GX_PERSPECTIVE);
+
+    // TODO: Get colors from g_miHIO in d_menu_item.h
+    GXColor color1 = {};
+    GXColor color2 = {};
+
+    cloth_c->draw(0.0f, color1, color2, 1);
+
+    g_dComIfG_gameInfo.play.getCurrentGrafPort()->setPort();
+}
 
 /* 801DB384-801DB50C       .text __ct__9dMw_HIO_cFv */
 dMw_HIO_c::dMw_HIO_c() {
