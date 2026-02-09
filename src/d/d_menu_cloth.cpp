@@ -836,7 +836,8 @@ class menu_cloth_class : public fopAc_ac_c {
     dMCloth_c mCloth;
 };
 
-/* Nonmatching */
+// BUG: The functions in this table are out of order.
+// It doesn't really matter, because they're just empty functions.
 static msg_method_class dMenu_ClothMethodTable = {
     /* Create   */ (process_method_func)dMenu_ClothCreate,
     /* Delete   */ (process_method_func)dMenu_ClothDelete,
@@ -845,7 +846,6 @@ static msg_method_class dMenu_ClothMethodTable = {
     /* Draw     */ (process_method_func)dMenu_ClothIsDelete,
 };
 
-/* Nonmatching */
 msg_process_profile_definition g_profile_Menu_Cloth = {
     /* LayerID      */ (uint)fpcLy_CURRENT_e,
     /* ListID       */ 0x000C,
