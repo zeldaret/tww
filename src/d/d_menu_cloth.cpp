@@ -810,22 +810,22 @@ static cPhs_State dMenu_ClothCreate(void*) {
 
 /* 8019BDC0-8019BDC8       .text dMenu_ClothDelete__FPv */
 static BOOL dMenu_ClothDelete(void*) {
-    return 1;
+    return TRUE;
 }
 
 /* 8019BDC8-8019BDD0       .text dMenu_ClothExecute__FPv */
 static BOOL dMenu_ClothExecute(void*) {
-    return 0;
+    return FALSE;
 }
 
 /* 8019BDD0-8019BDD8       .text dMenu_ClothDraw__FPv */
 static BOOL dMenu_ClothDraw(void*) {
-    return 1;
+    return TRUE;
 }
 
 /* 8019BDD8-8019BDE0       .text dMenu_ClothIsDelete__FPv */
 static BOOL dMenu_ClothIsDelete(void*) {
-    return 1;
+    return TRUE;
 }
 
 daCLOTH_HIO_c::~daCLOTH_HIO_c() {
