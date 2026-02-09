@@ -7,6 +7,13 @@
 
 class JKRArchive;
 
+enum {
+    MENU_CLOTH_TYPE_0 = 0,
+    MENU_CLOTH_TYPE_1 = 1,
+    MENU_CLOTH_TYPE_2 = 2,
+};
+typedef u8 MenuClothType;
+
 class dMCloth_c {
 public:
     dMCloth_c();
@@ -19,7 +26,7 @@ public:
     cXyz* getShadowPos() { return mShadowPosArr; }
     GXTexObj* getTexObj() { return &mTexObj; }
     void setArchive(JKRArchive* arc) { mpArc = arc; }
-    void setClothType(u8 type) { mClothType = type; } // ?
+    void setClothType(MenuClothType type) { mClothType = type; } // ?
 
     void lightSet1(cXyz);
     void cloth_init();
@@ -63,7 +70,7 @@ public:
     /* 0x90FC */ GXTexObj mTexObj;
     /* 0x911C */ u8 field_0x911c[0x913C - 0x911C];
     /* 0x913C */ u8 mCurArr;
-    /* 0x913D */ u8 mClothType;
+    /* 0x913D */ MenuClothType mClothType;
     /* 0x913E */ u8 field_0x913e[0x9140 - 0x913E];
     /* 0x9140 */ cXyz mScale;
     /* 0x914C */ u8 field_0x914C[0x9158 - 0x914C];

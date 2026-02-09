@@ -176,7 +176,7 @@ void dMCloth_c::cloth_init() {
     mColor2.a = (u8)HIO_CHILD.color2.a;
 
     switch (mClothType) {
-    case 0: {
+    case MENU_CLOTH_TYPE_0: {
         const f32 r = cM_rndFX(45.0f);
         init_angle_z += (s16)((r + 90.0f) * 182.04445f);
         mScale = HIO_CHILD.scale;
@@ -186,11 +186,11 @@ void dMCloth_c::cloth_init() {
             cloth_move_sin();
         }
     } break;
-    case 1: {
+    case MENU_CLOTH_TYPE_1: {
         mScale.set(1.27f, 0.93f, 1.0f);
         mRot.setall(0);
     } break;
-    case 2: {
+    case MENU_CLOTH_TYPE_2: {
         mScale = HIO_CHILD.scale;
         const f32 r = cM_rndFX(20.0f);
         mRot = HIO_CHILD.rot;
@@ -238,7 +238,7 @@ void dMCloth_c::init() {
 dMCloth_c::dMCloth_c() {
     mCurArr = 0;
     unused_0x4 = 0;
-    mClothType = 0;
+    mClothType = MENU_CLOTH_TYPE_0;
     if (l_HIO.mNo < 0) {
         l_HIO.mNo = mDoHIO_createChild("メニューの布", &l_HIO); // Menu cloth
     }
@@ -335,8 +335,8 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
         for (int y = 0; y < INNER_SIZE - 1; y++) {
             f32 xPos2 = xPos + xStep;
             switch (mClothType) {
-            case 0:
-            case 2: {
+            case MENU_CLOTH_TYPE_0:
+            case MENU_CLOTH_TYPE_2: {
                 GXPosition1x16(x + y * INNER_SIZE);
                 GXPosition1x16(x + y * INNER_SIZE);
                 GXPosition2f32(xPos, yPos);
@@ -345,7 +345,7 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
                 GXPosition2f32(xPos2, yPos);
             } break;
 
-            case 1: {
+            case MENU_CLOTH_TYPE_1: {
                 int iv2, iv3, iv5;
                 iv5 = (10 - x + y) * 25;
                 iv2 = iv5 > 0xFF ? 0xFF : iv5;
@@ -386,8 +386,8 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
         for (int y = 0; y < INNER_SIZE - 1; y++) {
             f32 xPos2 = xPos + xStep;
             switch (mClothType) {
-            case 0:
-            case 2: {
+            case MENU_CLOTH_TYPE_0:
+            case MENU_CLOTH_TYPE_2: {
                 GXPosition1x16(x + y * INNER_SIZE);
                 GXPosition1x16(x + y * INNER_SIZE);
                 GXPosition2f32(xPos, yPos);
@@ -396,7 +396,7 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
                 GXPosition2f32(xPos2, yPos);
             } break;
 
-            case 1: {
+            case MENU_CLOTH_TYPE_1: {
                 int iv2, iv3, iv5;
                 iv5 = (10 - x + y) * 25;
                 iv2 = iv5 > 0xFF ? 0xFF : iv5;
@@ -471,11 +471,11 @@ void dMCloth_c::TevSettingFileSelect() {
 /* 8019AB64-8019ABB4       .text TevSetting__9dMCloth_cFv */
 void dMCloth_c::TevSetting() {
     switch (mClothType) {
-    case 0:
-    case 2:
+    case MENU_CLOTH_TYPE_0:
+    case MENU_CLOTH_TYPE_2:
         TevSettingMenu();
         break;
-    case 1:
+    case MENU_CLOTH_TYPE_1:
         TevSettingFileSelect();
         break;
     }
@@ -511,11 +511,11 @@ void dMCloth_c::ShadowTevSettingFileSelect() {
 /* 8019AD84-8019ADD4       .text ShadowTevSetting__9dMCloth_cFv */
 void dMCloth_c::ShadowTevSetting() {
     switch (mClothType) {
-    case 0:
-    case 2:
+    case MENU_CLOTH_TYPE_0:
+    case MENU_CLOTH_TYPE_2:
         ShadowTevSettingMenu();
         break;
-    case 1:
+    case MENU_CLOTH_TYPE_1:
         ShadowTevSettingFileSelect();
         break;
     }
@@ -570,8 +570,8 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
     lightPos.set(0.0f, 0.0f, 0.0f);
 
     switch (mClothType) {
-    case 0:
-    case 2: {
+    case MENU_CLOTH_TYPE_0:
+    case MENU_CLOTH_TYPE_2: {
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
         GXSetVtxDesc(GX_VA_NRM, GX_INDEX16);
@@ -582,7 +582,7 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
         GXSetChanAmbColor(GX_COLOR0, (GXColor){0x00, 0x00, 0x00, 0x00});
         GXSetChanMatColor(GX_COLOR0, (GXColor){0xff, 0xff, 0xff, 0xff});
     } break;
-    case 1: {
+    case MENU_CLOTH_TYPE_1: {
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
         GXSetVtxDesc(GX_VA_NRM, GX_INDEX16);
@@ -643,8 +643,8 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
     lightSet1(lightPos);
 
     switch (mClothType) {
-    case 1:
-    case 2: {
+    case MENU_CLOTH_TYPE_1:
+    case MENU_CLOTH_TYPE_2: {
         mDoMtx_stack_c::transS(HIO_CHILD.pos.x + -275.0f, HIO_CHILD.pos.y - 75.0f, HIO_CHILD.pos.z + -3800.0f);
         mDoMtx_stack_c::XrotM(mRot.x);
         mDoMtx_stack_c::YrotM(mRot.y);
@@ -785,8 +785,8 @@ void dMCloth_c::cloth_move_simple() {
 /* 8019BCF4-8019BDB8       .text cloth_move__9dMCloth_cFv */
 void dMCloth_c::cloth_move() {
     switch (mClothType) {
-    case 0:
-    case 2: {
+    case MENU_CLOTH_TYPE_0:
+    case MENU_CLOTH_TYPE_2: {
         if (mFadeInCounter < HIO_CHILD.fadeInLength) {
             cloth_move_sin();
             mFadeInCounter++;
@@ -794,7 +794,7 @@ void dMCloth_c::cloth_move() {
             cloth_move_simple();
         }
     } break;
-    case 1: {
+    case MENU_CLOTH_TYPE_1: {
         if (mFadeInCounter < HIO_CHILD.fadeInLength) {
             mFadeInCounter++;
         }
