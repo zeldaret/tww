@@ -12,6 +12,7 @@
 #include "d/d_meter.h"
 #include "d/d_priority.h"
 #include "d/d_procname.h"
+#include "m_Do/m_Do_controller_pad.h"
 
 // TODO: Remove me when all the JUT asserts and other strings are filled out.
 // This is temporary, just to make the strings match.
@@ -214,18 +215,28 @@ void dMs_offButtonBit(sub_ms_screen_class* i_Ms, u8 bit) {
 }
 
 /* 801DD328-801DD340       .text dMs_isButtonBit__FP19sub_ms_screen_classUc */
-bool dMs_isButtonBit(sub_ms_screen_class* i_Ms, u8 bit) {
+BOOL dMs_isButtonBit(sub_ms_screen_class* i_Ms, u8 bit) {
     return (i_Ms->mButtonsPressed & bit) != 0;
 }
 
 /* 801DD340-801DD3A4       .text dMs_isPush_L_Button__FP19sub_ms_screen_class */
-void dMs_isPush_L_Button(sub_ms_screen_class*) {
-    /* Nonmatching */
+BOOL dMs_isPush_L_Button(sub_ms_screen_class* i_Ms) {
+    if (g_mDoCPd_cpadInfo[0].mHoldLockL != 0 && !dMs_isButtonBit(i_Ms, 1)) {
+        dMs_onButtonBit(i_Ms, 1);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 801DD3A4-801DD408       .text dMs_isPush_R_Button__FP19sub_ms_screen_class */
-void dMs_isPush_R_Button(sub_ms_screen_class*) {
-    /* Nonmatching */
+BOOL dMs_isPush_R_Button(sub_ms_screen_class* i_Ms) {
+    if (g_mDoCPd_cpadInfo[0].mHoldLockR != 0 && !dMs_isButtonBit(i_Ms, 2)) {
+        dMs_onButtonBit(i_Ms, 2);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 801DD408-801DD434       .text dMs_childHeap_freeAll__FP19sub_ms_screen_class */
