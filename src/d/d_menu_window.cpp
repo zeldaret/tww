@@ -5,13 +5,22 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_window.h"
+
+#include "JSystem/JKernel/JKRExpHeap.h"
 #include "f_op/f_op_msg.h"
 #include "d/d_menu_cloth.h"
 
 class dDlst_MENU_CLOTH_c : public dDlst_base_c {};
+class dDlst_MENU_CAPTURE_c : public dDlst_base_c {
+public:
+    dDlst_MENU_CAPTURE_c() { mStatus = 0; }
+
+    u8 mStatus;
+};
 
 static dMCloth_c* cloth_c;
 static dDlst_MENU_CLOTH_c* dMs_cloth_c;
+static dDlst_MENU_CAPTURE_c* dMs_capture_c;
 
 /* 801DB384-801DB50C       .text __ct__9dMw_HIO_cFv */
 dMw_HIO_c::dMw_HIO_c() {
@@ -84,13 +93,45 @@ void dMs_save_delete(sub_ms_screen_class*) {
 }
 
 /* 801DCEA0-801DD090       .text dMs_cloth_create__FP19sub_ms_screen_class */
-void dMs_cloth_create(sub_ms_screen_class*) {
+void dMs_cloth_create(sub_ms_screen_class* i_Ms) {
     /* Nonmatching */
+    g_dComIfG_gameInfo.play.setHeapLockFlag(1);
+    JKRArchive* arc = g_dComIfG_gameInfo.play.getClothResArchive();
+
+    cloth_c = new dMCloth_c();
+    JUT_ASSERT(2674, cloth_c != NULL);
+
+    cloth_c->setArchive(arc);
+    cloth_c->init();
+
+    dMs_cloth_c = new dDlst_MENU_CLOTH_c();
+    JUT_ASSERT(2680, dMs_cloth_c != NULL);
+
+    dMs_capture_c = new dDlst_MENU_CAPTURE_c();
+    JUT_ASSERT(2683, dMs_capture_c != NULL);
+
+    i_Ms->childHeap = JKRExpHeap::create(0x506A1, i_Ms->parentHeap_0xfc, false);
+    JUT_ASSERT(2686, i_Ms->childHeap != NULL);
 }
 
 /* 801DD090-801DD154       .text dMs_cloth_delete__FP19sub_ms_screen_class */
-void dMs_cloth_delete(sub_ms_screen_class*) {
-    /* Nonmatching */
+void dMs_cloth_delete(sub_ms_screen_class* i_Ms) {
+    if (i_Ms->childHeap) {
+        i_Ms->childHeap->destroy();
+        i_Ms->childHeap = NULL;
+    }
+    if (dMs_cloth_c) {
+        delete dMs_cloth_c;
+        dMs_cloth_c = NULL;
+    }
+    if (cloth_c) {
+        delete cloth_c;
+        cloth_c = NULL;
+    }
+    if (dMs_capture_c) {
+        delete dMs_capture_c;
+        dMs_capture_c = NULL;
+    }
 }
 
 /* 801DD154-801DD270       .text dMs_clothOnly_create__FP19sub_ms_screen_class */
