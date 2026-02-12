@@ -217,6 +217,7 @@ void dMs_item_create(sub_ms_screen_class* i_Ms) {
         i_Ms->field_0x1B2++;
     }
 
+    dMi_c = new dMenu_Item_c();
     // TODO: init dMi_c
 }
 
