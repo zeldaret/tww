@@ -1,6 +1,7 @@
 #ifndef D_MENU_DMAP_H
 #define D_MENU_DMAP_H
 
+#include "d/d_menu_collect.h"
 #include "dolphin/types.h"
 
 class J2DPane;
@@ -8,10 +9,10 @@ struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
 
-class dMenu_Dmap_c {
+class dMenu_Dmap_c : public dMenu_base_c {
 public:
     void alphaChange(fopMsgM_pane_class*, float) {}
-    void draw() {}
+    virtual void draw() {}
     void setArchive(JKRArchive*) {}
     void setFont(JUTFont*, JUTFont*) {}
     void setItemTexBuffer(int, void*) {}
@@ -45,12 +46,12 @@ public:
     void linkAnime();
     void bossAnime();
     void bossEyeAnime();
-    void _create();
-    void _delete();
-    void _move();
-    void _draw();
-    void _open();
-    void _close();
+    virtual void _create();
+    virtual void _delete();
+    virtual void _move();
+    virtual void _draw();
+    virtual void _open();
+    virtual void _close();
 };
 
 class dMd_HIO_c {
