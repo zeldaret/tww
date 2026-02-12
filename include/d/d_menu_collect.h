@@ -11,11 +11,21 @@ struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
 
-class dMenu_Collect_c {
+class dMenu_base_c : public dDlst_base_c {
 public:
+    virtual void draw() {}
+    virtual void _create() {}
+    virtual void _delete() {}
+    virtual void _move() {}
+    virtual void _draw() {}
+    virtual void _open() = 0;
+    virtual void _close() = 0;
+};
 
+class dMenu_Collect_c : public dMenu_base_c {
+public:
     void alphaChange(fopMsgM_pane_class*, float) {}
-    void draw() {}
+    virtual void draw() {}
     void getCollectMode() {}
     void getNowItem() {}
     void setArchive(JKRArchive*) {}
@@ -72,12 +82,12 @@ public:
     void outFontMove();
     void outFontDraw();
     void collectItemGetCheck(unsigned char);
-    void _create();
+    virtual void _create();
     void _create3();
-    void _delete();
-    void _move();
+    virtual void _delete();
+    virtual void _move();
     void _move3();
-    void _draw();
+    virtual void _draw();
     void _open();
     void _open3();
     void _close();
@@ -89,7 +99,7 @@ public:
     void _open2();
     void _close2();
 
-    /* 0x000 */ u8 m000[0x004 - 0x000];
+    /* 0x000 */ // vtable
     /* 0x004 */ J2DScreen* m004;
     /* 0x008 */ fopMsgM_pane_class m008;
     /* 0x040 */ fopMsgM_pane_class m040;

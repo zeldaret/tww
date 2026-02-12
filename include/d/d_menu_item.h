@@ -1,6 +1,7 @@
 #ifndef D_MENU_ITEM_H
 #define D_MENU_ITEM_H
 
+#include "d/d_menu_collect.h"
 #include "dolphin/types.h"
 
 struct fopMsgM_pane_class;
@@ -8,10 +9,10 @@ class JKRArchive;
 class JUTFont;
 class J2DPane;
 
-class dMenu_Item_c {
+class dMenu_Item_c : public dMenu_base_c {
 public:
     void alphaChange(fopMsgM_pane_class*, float) {}
-    void draw() {}
+    virtual void draw() {}
     void getItemMode() {}
     void getNowItem() {}
     void setArchive(JKRArchive*) {}
@@ -65,12 +66,12 @@ public:
     void recollectBossCheck();
     void cornerMove();
     void equipBeastItem(int);
-    void _create();
-    void _delete();
-    void _move();
-    void _draw();
-    void _open();
-    void _close();
+    virtual void _create();
+    virtual void _delete();
+    virtual void _move();
+    virtual void _draw();
+    virtual void _open();
+    virtual void _close();
     void _open2();
     void _close2();
 };
@@ -79,6 +80,5 @@ class dMi_HIO_c {
 public:
     dMi_HIO_c();
 };
-
 
 #endif /* D_MENU_ITEM_H */
