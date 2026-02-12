@@ -179,8 +179,33 @@ dMw_DHIO_c::dMw_DHIO_c() {
 }
 
 /* 801DB568-801DB91C       .text dMs_item_create__FP19sub_ms_screen_class */
-void dMs_item_create(sub_ms_screen_class*) {
+void dMs_item_create(sub_ms_screen_class* i_Ms) {
     /* Nonmatching */
+    i_Ms->arc = g_dComIfG_gameInfo.play.getItemResArchive();
+
+    for (int i = 0; i < 2; i++) {
+        i_Ms->name[i] = (char*)i_Ms->childHeap->alloc(0x20, 4);
+        JUT_ASSERT(1936, i_Ms->name[i] != NULL);
+        strcpy(i_Ms->name[i], "");
+
+        i_Ms->note[i] = (char*)i_Ms->childHeap->alloc(0x200, 4);
+        JUT_ASSERT(1939, i_Ms->note[i] != NULL);
+        strcpy(i_Ms->note[i], "");
+
+        i_Ms->dummy[i] = (char*)i_Ms->childHeap->alloc(0x200, 4);
+        JUT_ASSERT(1942, i_Ms->dummy[i] != NULL);
+        strcpy(i_Ms->dummy[i], "");
+    }
+
+    i_Ms->field_0x1B2 = 0;
+
+    for (int i = 0; i < 33; i++) {
+        i_Ms->buffer_p[i] = i_Ms->childHeap->alloc(0xC00, 0x20);
+        JUT_ASSERT(1951, i_Ms->buffer_p[i] != NULL);
+        i_Ms->field_0x1B2++;
+    }
+
+    // TODO: init dMi_c
 }
 
 /* 801DB91C-801DBA58       .text dMs_item_delete__FP19sub_ms_screen_class */
