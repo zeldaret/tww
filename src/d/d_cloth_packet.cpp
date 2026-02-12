@@ -640,10 +640,10 @@ void dClothVobj03_c::cloth_move() {
     if (mIsIndoors) {
         // Indoor flags don't get blown much by the wind.
         windSpeed *= 0.05f;
-        windSpeedWave = 0.0;
-        setParam(0.4, -1.5, 0.7, 0.75, 0.6, 0, 0, 900, -800, 7.0, 6.0);
+        windSpeedWave = 0.0f;
+        setParam(0.4f, -1.5f, 0.7f, 0.75f, 0.6f, 0, 0, 900, -800, 7.0f, 6.0f);
     } else {
-        setParam(0.4, -1.5, 0.7, 0.75, 0.6, 0x400, 0, 900, -800, 7.0, 6.0);
+        setParam(0.4f, -1.5f, 0.7f, 0.75f, 0.6f, 0x400, 0, 900, -800, 7.0f, 6.0f);
     }
 
     setWindPower(windSpeed, windSpeedWave);
@@ -748,10 +748,10 @@ void dClothVobj04_c::cloth_move() {
 
     if (mIsIndoors) {
         windSpeed *= 0.05f;
-        windSpeedWave = 0.0;
-        setParam(0.45, -1.5, 0.6, 0.8, 0.8, 0, 0, 900, -800, 7.0, 6.0);
+        windSpeedWave = 0.0f;
+        setParam(0.45f, -1.5f, 0.6f, 0.8f, 0.8f, 0, 0, 900, -800, 7.0f, 6.0f);
     } else {
-        setParam(0.45, -1.5, 0.6, 0.8, 0.8, 0x400, 0, 900, -800, 7.0, 6.0);
+        setParam(0.45f, -1.5f, 0.6f, 0.8f, 0.8f, 0x400, 0, 900, -800, 7.0f, 6.0f);
     }
 
     setWindPower(windSpeed, windSpeedWave);
@@ -855,10 +855,10 @@ void dClothVobj05_c::cloth_move() {
 
     if (mIsIndoors) {
         windSpeed *= 0.05f;
-        windSpeedWave = 0.0;
-        setParam(0.45, -1.0, 0.7, 0.95, 0.95, 0, 0, 0, 0, 7.0, 6.0);
+        windSpeedWave = 0.0f;
+        setParam(0.45f, -1.0f, 0.7f, 0.95f, 0.95f, 0, 0, 0, 0, 7.0f, 6.0f);
     } else {
-        setParam(0.45, -1.0, 0.65, 0.9, 0.95, 0x200, 0, 900, -800, 7.0, 6.0);
+        setParam(0.45f, -1.0f, 0.65f, 0.9f, 0.95f, 0x200, 0, 900, -800, 7.0f, 6.0f);
     }
 
     setWindPower(windSpeed, windSpeedWave);
@@ -968,10 +968,10 @@ void dClothVobj07_0_c::cloth_move() {
 
     if (mIsIndoors) {
         windSpeed *= 0.05f;
-        windSpeedWave = 0.0;
-        setParam(0.35, -1.0, 0.7, 1.1, 1.1, 0, 0, 900, -800, 7.0, 6.0);
+        windSpeedWave = 0.0f;
+        setParam(0.35f, -1.0f, 0.7f, 1.1f, 1.1f, 0, 0, 900, -800, 7.0f, 6.0f);
     } else {
-        setParam(0.4, -0.5, 0.7, 1.1, 1.1, 0x100, 0, 900, -800, 7.0, 6.0);
+        setParam(0.4f, -0.5f, 0.7f, 1.1f, 1.1f, 0x100, 0, 900, -800, 7.0f, 6.0f);
     }
 
     setWindPower(windSpeed, windSpeedWave);
