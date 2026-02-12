@@ -1,11 +1,12 @@
 #ifndef D_A_NPC_BM1_H
 #define D_A_NPC_BM1_H
 
+#include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
 
 class J3DNode;
 
-class daNpc_Bm1_c : public fopAc_ac_c {
+class daNpc_Bm1_c : public fopNpc_npc_c {
 public:
     struct anm_prm_c {
         
@@ -67,7 +68,7 @@ public:
     void chk_talk();
     void chk_partsNotMove();
     void lookBack();
-    void next_msgStatus(unsigned long*);
+    u16 next_msgStatus(unsigned long*);
     void getBitMask();
     void getMsg_PST_1();
     void getMsg_PST_3();
@@ -81,7 +82,7 @@ public:
     void getMsg_BMC_3();
     void getMsg_BMD_0();
     void getMsg_BMD_1();
-    void getMsg();
+    u32 getMsg();
     void chkAttention();
     void setAttention(bool);
     void searchByID(fpc_ProcID);
@@ -194,9 +195,11 @@ public:
     /* 0x870 */ u8 m870[0x874 - 0x870];
     /* 0x874 */ s16 m874;
     /* 0x876 */ s16 m876;
-    /* 0x878 */ u8 m878[0x881 - 0x878];
+    /* 0x878 */ u8 m878[0x880 - 0x878];
+    /* 0x880 */ u8 m880;
     /* 0x881 */ u8 m881;
-    /* 0x882 */ u8 m882[0x884 - 0x882];
+    /* 0x882 */ u8 m882;
+    /* 0x883 */ u8 m883[0x884 - 0x883];
     /* 0x884 */ u8 m884;
     /* 0x885 */ u8 m885[0x887 - 0x885];
     /* 0x887 */ u8 m887;
@@ -212,7 +215,8 @@ public:
     /* 0x902 */ u8 mSpecificType;
     /* 0x903 */ u8 mSpawnCondition;
     /* 0x904 */ u8 m904[0x908 - 0x904];
-};
+}; 
+STATIC_ASSERT(sizeof(daNpc_Bm1_c) == 0x908);
 
 class daNpc_Bm1_childHIO_c {
 public:
