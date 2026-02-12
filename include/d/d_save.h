@@ -229,6 +229,9 @@ public:
     void onBait(u8);
     BOOL isBait(u8);
     void onReserve(u8);
+#if VERSION == VERSION_DEMO
+    void offReserve(u8);
+#endif
     BOOL isReserve(u8);
 
     /* 0x0 */ u32 mReserveFlags;
