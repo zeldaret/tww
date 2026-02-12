@@ -5,9 +5,15 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_daiocta.h"
+#include "d/actor/d_a_bomb.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+
+static daDaiocta_HIO_c l_HIO;
+
+const s32 daDaiocta_c::m_heapsize = 63296; 
+const char daDaiocta_c::m_arc_name[] = "daiocta";
 
 const dCcD_SrcSph daDaiocta_c::m_sph_src = {
     // dCcD_SrcGObjInf
@@ -72,36 +78,157 @@ const dCcD_SrcCps daDaiocta_c::m_cps_src = {
 
 /* 000000EC-000002B0       .text __ct__15daDaiocta_HIO_cFv */
 daDaiocta_HIO_c::daDaiocta_HIO_c() {
-    /* Nonmatching */
+    field_0x004 = 0;
+    field_0x008 = 0;
+    field_0x006 = 0;
+    field_0x005 = 0;
+    field_0x01C = 600.0;
+    field_0x020 = 500.0;
+    field_0x024 = 450.0;
+    field_0x028 = 350.0;
+    field_0x02C = 350.0;
+    field_0x030 = 300.0;
+    field_0x034 = 60.0;
+    field_0x038 = 60.0;
+    field_0x03C = 60.0;
+    field_0x040 = 60.0;
+    field_0x044 = 60.0;
+    field_0x048 = 60.0;
+    field_0x04C = 60.0;
+    field_0x050 = 60.0;
+    field_0x054 = 60.0;
+    field_0x058 = 60.0;
+    field_0x05C = 100.0;
+    field_0x060 = 100.0;
+    field_0x064 = 250.0;
+    field_0x068 = 100.0;
+    field_0x06C = 150.0;
+    field_0x070 = 100.0;
+    field_0x074 = 150.0;
+    field_0x00C = 0x1e;
+    field_0x00E = 0x3c;
+    field_0x078 = 5000.0;
+    field_0x07C = 4500.0;
+    field_0x080 = 30.0;
+    field_0x010 = 0x100;
+    field_0x084 = 1800.0;
+    field_0x012 = 0x1500;
+    field_0x088 = 40.0;
+    field_0x08C = 1.0;
+    field_0x090 = 0.02;
+    field_0x094 = 150.0;
+    field_0x014 = -0x800;
+    field_0x0FC = 0.0;
+    field_0x100 = 5.0;
+    field_0x104 = 700.0;
+    field_0x0C0 = 8.0;
+    field_0x0C4 = 8.0;
+    field_0x0C8 = 3.0;
+    field_0x0CC = 3.0;
+    field_0x0D0 = 3.0;
+    field_0x0D4 = 7.0;
+    field_0x0D8 = 9.0;
+    field_0x09C = 1.0;
+    field_0x0A0 = 0.5;
+    field_0x0A4 = 0.75;
+    field_0x0A8 = 0.625;
+    field_0x0AC = 0.625;
+    field_0x0B0 = 0.5;
+    field_0x0B4 = 1.0;
+    field_0x0B8 = 1.0;
+    field_0x0E0 = 20.0;
+    field_0x016 = 0x1e;
+    field_0x0E4 = 300.0;
+    field_0x0E8 = 1200.0;
+    field_0x0EC = 1.0;
+    field_0x0F0 = 2.0;
+    field_0x0F4 = 10.0;
+    field_0x0F8 = 30.0;
+    field_0x018 = 0x2d;
 }
 
 /* 00000334-00000358       .text coHit_CB__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-void coHit_CB(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*) {
-    /* Nonmatching */
+void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf* i_unused1P, fopAc_ac_c* i_actor, dCcD_GObjInf* i_unused2P) {
+    UNUSED(i_unused1P); UNUSED(i_unused2P);
+    ((daDaiocta_c*)i_this)->_coHit(i_actor);
 }
 
 /* 00000358-000003DC       .text _coHit__11daDaiocta_cFP10fopAc_ac_c */
-void daDaiocta_c::_coHit(fopAc_ac_c*) {
-    /* Nonmatching */
+void daDaiocta_c::_coHit(fopAc_ac_c* i_actor) {
+    if (i_actor != NULL && fpcM_GetName(i_actor) == PROC_BOMB) {
+        daBomb_c* bomb_p = (daBomb_c *) i_actor;
+        if ((field_0x056C == 2 || field_0x056C == 4 || field_0x056C == 1 || field_0x056C == 3) && 
+            bomb_p->chk_state(daBomb_c::STATE_4)) {
+            modeProc((Proc_e) 0, (Mode_e) 4);
+        }
+    }
 }
 
 /* 000003DC-00000470       .text nodeControl_CB__FP7J3DNodei */
-static BOOL nodeControl_CB(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeControl_CB(J3DNode* i_nodeP, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DModel* model_p = j3dSys.getModel();
+        daDaiocta_c* actor_p = (daDaiocta_c *) model_p->getUserArea();
+        JUT_ASSERT(0x1A4, actor_p != NULL);
+        actor_p->_nodeControl(i_nodeP, model_p);
+    }
+    return TRUE;
 }
 
 /* 00000470-0000066C       .text _nodeControl__11daDaiocta_cFP7J3DNodeP8J3DModel */
-void daDaiocta_c::_nodeControl(J3DNode*, J3DModel*) {
-    /* Nonmatching */
+void daDaiocta_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
+    J3DJoint* jnt_p = (J3DJoint *) i_nodeP;
+    s32 jnt_no = jnt_p->getJntNo();
+
+    mDoMtx_stack_c::copy(i_modelP->getAnmMtx(jnt_no));
+    mDoMtx_stack_c::multVecZero(&field_0x0290[jnt_no]);
+
+    cXyz base;
+    switch (jnt_no) {
+        case 30:
+            base.set(450.0f, 0.0f, 0.0f);
+            mDoMtx_stack_c::multVec(&base, &field_0x21A0);
+            break;
+        case 36:
+            base.set(450.0f, 0.0f, 0.0f);
+            mDoMtx_stack_c::multVec(&base, &field_0x21AC);
+            break;
+        case 20:
+            base.set(l_HIO.field_0x094, 0.0f, 0.0f);
+            mDoMtx_stack_c::multVec(&base, &field_0x2434);
+            break;
+        case 6:
+            base.set(450.0f, 0.0f, 0.0f);
+            mDoMtx_stack_c::multVec(&base, &field_0x21B8);
+            break;
+        case 9:
+            base.set(300.0f, -200.0f, 0.0f);
+            mDoMtx_stack_c::multVec(&base, &field_0x21C4);
+            break; 
+        case 7:
+            base.set(300.0f, 0.0f, 0.0f);
+            mDoMtx_stack_c::multVec(&base, &field_0x21D0);
+            break;
+        case 10:
+            base.set(300.0f, 200.0f, 0.0f);
+            mDoMtx_stack_c::multVec(&base, &field_0x21DC);
+            break;
+        case 8:
+            base.set(300.0f, 0.0f, 0.0f);
+            mDoMtx_stack_c::multVec(&base, &field_0x21E8);
+            break;
+    }
+    cMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
+    i_modelP->setAnmMtx(jnt_no, mDoMtx_stack_c::get());
 }
 
 /* 0000066C-0000068C       .text createHeap_CB__FP10fopAc_ac_c */
-static BOOL createHeap_CB(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL createHeap_CB(fopAc_ac_c* i_this) {
+    return ((daDaiocta_c *)i_this)->_createHeap();
 }
 
 /* 0000068C-00000708       .text _createHeap__11daDaiocta_cFv */
-void daDaiocta_c::_createHeap() {
+BOOL daDaiocta_c::_createHeap() {
     /* Nonmatching */
 }
 
@@ -317,7 +444,24 @@ void daDaiocta_c::createInit() {
 
 /* 00004660-00004918       .text _create__11daDaiocta_cFv */
 cPhs_State daDaiocta_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daDaiocta_c);
+    cPhs_State state = dComIfG_resLoad(&field_0x0580, m_arc_name);
+
+    if (state == cPhs_COMPLEATE_e) {
+        getArg();
+
+        if (mSwitchNo != 0xFF && dComIfGs_isSwitch(mSwitchNo, fopAcM_GetRoomNo(this))) {
+            return cPhs_ERROR_e;
+        }
+
+        if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
+            return cPhs_ERROR_e;
+        }
+
+        createInit();
+    }
+    
+    return state;
 }
 
 /* 00005098-0000513C       .text _delete__11daDaiocta_cFv */
