@@ -6,240 +6,1036 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_cloth_packet.h"
 
+#include "SSystem/SComponent/c_counter.h"
+#include "assets/l_matDL__d_cloth_packet.h"
+#include "assets/l_alpha_matDL__d_cloth_packet.h"
+#include "d/d_s_play.h"
+
 /* 80062D5C-800630B0       .text __ct__15dCloth_packet_cFP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
-dCloth_packet_c::dCloth_packet_c(ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**) {
-    /* Nonmatching */
+dCloth_packet_c::dCloth_packet_c(
+    ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr
+) {
+    JUT_ASSERT(43, i_toonimage != NULL);
+
+#if VERSION == VERSION_DEMO
+    GXBool mipmap = i_toonimage->mipmapCount > 1;
+#endif
+
+    GXInitTexObj(
+        getToonTexObjP(),
+        (u8*)i_toonimage + i_toonimage->imageOffset,
+        i_toonimage->width,
+        i_toonimage->height,
+        (GXTexFmt)i_toonimage->format,
+        (GXTexWrapMode)i_toonimage->wrapS,
+        (GXTexWrapMode)i_toonimage->wrapT,
+#if VERSION == VERSION_DEMO
+        mipmap
+#else
+        i_toonimage->mipmapCount > 1
+#endif
+    );
+    GXInitTexObjLOD(
+        getTexObjP(),
+        (GXTexFilter)i_toonimage->minFilter,
+        (GXTexFilter)i_toonimage->magFilter,
+        i_toonimage->minLOD * 0.125f,
+        i_toonimage->maxLOD * 0.125f,
+        i_toonimage->LODBias * 0.01f,
+        i_toonimage->biasClamp,
+        i_toonimage->doEdgeLOD,
+        (GXAnisotropy)i_toonimage->maxAnisotropy
+    );
+
+    mFlyGridSize = flyGridSize;
+    mHoistGridSize = hoistGridSize;
+    mFlyLength = flyLength;
+    mHoistLength = hoistLength;
+    mpTevstr = tevstr;
+    mCurArr = 0;
+
+#if VERSION == VERSION_DEMO
+    const MtxP mtx = mDoMtx_getIdentity();
+    setMtx(mtx);
+#else
+    setMtx(g_mDoMtx_identity);
+#endif
+
+    if (posArr == NULL) {
+        mpPosArr[0] = new cXyz[mFlyGridSize * mHoistGridSize];
+        mpPosArr[1] = new cXyz[mFlyGridSize * mHoistGridSize];
+    } else {
+        mpPosArr[0] = posArr[0];
+        mpPosArr[1] = posArr[1];
+    }
+    mpNrmArr[0] = new cXyz[mFlyGridSize * mHoistGridSize];
+    mpNrmArr[1] = new cXyz[mFlyGridSize * mHoistGridSize];
+    mpNrmArrBack[0] = new cXyz[mFlyGridSize * mHoistGridSize];
+    mpNrmArrBack[1] = new cXyz[mFlyGridSize * mHoistGridSize];
+    mpSpeedArr = new cXyz[mFlyGridSize * mHoistGridSize];
 }
 
 dCloth_packet_c::~dCloth_packet_c() {
 }
 
 /* 8006310C-8006313C       .text default_factor_checkCB__FP15dCloth_packet_cii */
-void default_factor_checkCB(dCloth_packet_c*, int, int) {
-    /* Nonmatching */
+int default_factor_checkCB(dCloth_packet_c* pPkt, int x, int y) {
+    if (x == 0 && (y == 0 || y == pPkt->mHoistGridSize - 1))
+        return 1;
+    return 0;
 }
 
 /* 8006313C-8006337C       .text init__15dCloth_packet_cFv */
 void dCloth_packet_c::init() {
-    /* Nonmatching */
+    cXyz* pPos0 = mpPosArr[0];
+    cXyz* pPos1 = mpPosArr[1];
+    cXyz* pSpeed = mpSpeedArr;
+    for (int y = 0; y < mHoistGridSize; y++) {
+        for (int x = 0; x < mFlyGridSize; x++) {
+            pPos0->set(0.0f, mHoistLength * ((f32)-y / (f32)(mHoistGridSize - 1)), mFlyLength * ((f32)x / (f32)(mFlyGridSize - 1)));
+            pPos1->set(0.0f, mHoistLength * ((f32)-y / (f32)(mHoistGridSize - 1)), mFlyLength * ((f32)x / (f32)(mFlyGridSize - 1)));
+            pSpeed->set(0.0f, 0.0f, 0.0f);
+
+            pPos0++;
+            pPos1++;
+            pSpeed++;
+        }
+    }
+
+    setNrm();
+
+    mScale = cXyz::BaseXYZ;
+    mGlobalWind = cXyz::BaseZ;
+
+    DCStoreRangeNoSync(mpPosArr[mCurArr], mFlyGridSize * mHoistGridSize * sizeof(cXyz));
+    DCStoreRangeNoSync(mpNrmArr[mCurArr], mFlyGridSize * mHoistGridSize * sizeof(cXyz));
+    DCStoreRangeNoSync(mpNrmArrBack[mCurArr], mFlyGridSize * mHoistGridSize * sizeof(cXyz));
+
+    setFactorCheckCB(default_factor_checkCB);
 }
 
 /* 8006337C-80063400       .text setGlobalWind__15dCloth_packet_cFP4cXyz */
-void dCloth_packet_c::setGlobalWind(cXyz*) {
-    /* Nonmatching */
+void dCloth_packet_c::setGlobalWind(cXyz* wind) {
+    Mtx mtx;
+    MTXCopy(mMtx, mtx);
+    mtx[2][3] = 0.0f;
+    mtx[1][3] = 0.0f;
+    mtx[0][3] = 0.0f;
+    mDoMtx_stack_c::copy(mtx);
+    mDoMtx_stack_c::inverse();
+    mDoMtx_stack_c::multVec(wind, &mGlobalWind);
 }
 
 /* 80063400-80063728       .text cloth_move__15dCloth_packet_cFv */
 void dCloth_packet_c::cloth_move() {
-    /* Nonmatching */
+    cXyz wind = mGlobalWind;
+    wind *= mWindSpeed + mWindSpeedWave * cM_ssin(mWave);
+
+#if VERSION == VERSION_DEMO
+    cXyz* pPosNew;
+    cXyz* pSpeed;
+    cXyz* pPosOld;
+    cXyz* pNrmOld;
+#else
+    cXyz* pPosOld;
+    cXyz* pNrmOld;
+    cXyz* pPosNew;
+    cXyz* pSpeed;
+#endif
+
+    pPosOld = mpPosArr[mCurArr];
+    pNrmOld = mpNrmArr[mCurArr];
+    changeCurrentBuff();
+    pPosNew = mpPosArr[mCurArr];
+    pSpeed = mpSpeedArr;
+
+    float distFly = mFlyLength / (f32)(mFlyGridSize - 1);
+    float distHoist = mHoistLength / (f32)(mHoistGridSize - 1);
+    distFly *= mFlyFlex;
+    distHoist *= mHoistFlex;
+    const float distBoth = std::sqrtf(distFly * distFly + distHoist * distHoist);
+
+    for (int y = 0; y < mHoistGridSize; y++) {
+        for (int x = 0; x < mFlyGridSize; x++) {
+            const cXyz factor = getFactor(pPosOld, pNrmOld, &wind, distFly, distHoist, distBoth, x, y);
+            pSpeed[x + y * mFlyGridSize] += factor;
+            pSpeed[x + y * mFlyGridSize] *= mDrag;
+
+            pPosNew[x + y * mFlyGridSize] = pPosOld[x + y * mFlyGridSize];
+            pPosNew[x + y * mFlyGridSize] += pSpeed[x + y * mFlyGridSize];
+        }
+    }
+
+    setNrm();
+
+    DCStoreRangeNoSync(mpPosArr[mCurArr], mFlyGridSize * mHoistGridSize * sizeof(cXyz));
+    DCStoreRangeNoSync(mpNrmArr[mCurArr], mFlyGridSize * mHoistGridSize * sizeof(cXyz));
+    DCStoreRangeNoSync(mpNrmArrBack[mCurArr], mFlyGridSize * mHoistGridSize * sizeof(cXyz));
 }
 
 /* 80063728-800638E4       .text draw__15dCloth_packet_cFv */
 void dCloth_packet_c::draw() {
-    /* Nonmatching */
+    j3dSys.reinitGX();
+
+#if VERSION > VERSION_JPN
+    GXSetNumIndStages(0);
+#endif
+
+    dKy_GxFog_tevstr_set(mpTevstr);
+    dKy_setLight_mine(mpTevstr);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+
+#if VERSION == VERSION_DEMO
+    {
+        cXyz* pos = getPosP();
+        GXSetArray(GX_VA_POS, pos, sizeof(cXyz));
+        cXyz* nrm = getNrmP();
+        GXSetArray(GX_VA_NRM, nrm, sizeof(cXyz));
+    }
+#else
+    GXSetArray(GX_VA_POS, getPosP(), sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, getNrmP(), sizeof(cXyz));
+#endif
+
+    TexObjLoad();
+    GXLoadTexObj(getToonTexObjP(), GX_TEXMAP1);
+    TevSetting();
+
+    mDoMtx_stack_c::copy(mMtx);
+    mDoMtx_stack_c::scaleM(mScale);
+    Mtx mtx;
+#if VERSION == VERSION_DEMO
+    {
+        MtxP calc_mtx = mDoMtx_stack_c::get();
+        MTXConcat(j3dSys.getViewMtx(), calc_mtx, mtx);
+    }
+#else
+    MTXConcat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mtx);
+#endif
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
+    GXLoadNrmMtxImm(mtx, GX_PNMTX0);
+
+    // Draw front
+    GXSetCullMode(GX_CULL_BACK);
+    plot();
+
+    // Draw back
+    GXSetCullMode(GX_CULL_FRONT);
+#if VERSION == VERSION_DEMO
+    {
+        cXyz* backNrm = getBackNrmP();
+        GXSetArray(GX_VA_NRM, backNrm, sizeof(cXyz));
+    }
+#else
+    GXSetArray(GX_VA_NRM, getBackNrmP(), sizeof(cXyz));
+#endif
+
+    plot();
+
+#if VERSION > VERSION_JPN
+    J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 800638E4-80063A10       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzff */
-void get_cloth_anim_sub_factor(cXyz*, cXyz*, cXyz*, float, float) {
-    /* Nonmatching */
+void get_cloth_anim_sub_factor(cXyz* pPos, cXyz* pOther, cXyz* pDst, float restDist, float springFactor) {
+    cXyz diff = *pOther - *pPos;
+    cXyz norm = diff.normZP();
+    f32 dist = diff.abs() - restDist;
+    dist *= springFactor;
+    norm *= dist;
+    *pDst += norm;
 }
 
 /* 80063A10-80063D84       .text getFactor__15dCloth_packet_cFP4cXyzP4cXyzP4cXyzfffii */
-void dCloth_packet_c::getFactor(cXyz*, cXyz*, cXyz*, float, float, float, int, int) {
-    /* Nonmatching */
+cXyz dCloth_packet_c::getFactor(cXyz* pPos, cXyz* pNrm, cXyz* pSpeed, float distFly, float distHoist, float distBoth, int x, int y) {
+    static const u8 left_bit = 1 << 0;
+    static const u8 right_bit = 1 << 1;
+    static const u8 up_bit = 1 << 2;
+    static const u8 down_bit = 1 << 3;
+
+    if (mpFactorCheckCB(this, x, y)) {
+        return cXyz::Zero;
+    }
+
+    u8 neighborMask = 0;
+
+    cXyz ret, pos;
+    pos = pPos[x + y * mFlyGridSize];
+    const float speedDotNrm = pSpeed->inprod(pNrm[x + y * mFlyGridSize]);
+    ret = pNrm[x + y * mFlyGridSize] * speedDotNrm;
+    ret.y += mGravity;
+
+    if (x != 0) {
+        neighborMask |= left_bit;
+    }
+    if (x != mFlyGridSize - 1) {
+        neighborMask |= right_bit;
+    }
+    if (y != 0) {
+        neighborMask |= up_bit;
+    }
+    if (y != mHoistGridSize - 1) {
+        neighborMask |= down_bit;
+    }
+
+    if (neighborMask & left_bit) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x - 1 + y * mFlyGridSize], &ret, distFly, mSpring);
+    }
+    if (neighborMask & right_bit) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x + 1 + y * mFlyGridSize], &ret, distFly, mSpring);
+    }
+    if (neighborMask & up_bit) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x + (y - 1) * mFlyGridSize], &ret, distHoist, mSpring);
+    }
+    if (neighborMask & down_bit) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x + (y + 1) * mFlyGridSize], &ret, distHoist, mSpring);
+    }
+    if ((neighborMask & left_bit) && (neighborMask & up_bit)) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x - 1 + (y - 1) * mFlyGridSize], &ret, distBoth, mSpring);
+    }
+    if ((neighborMask & left_bit) && (neighborMask & down_bit)) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x - 1 + (y + 1) * mFlyGridSize], &ret, distBoth, mSpring);
+    }
+    if ((neighborMask & right_bit) && (neighborMask & up_bit)) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x + 1 + (y - 1) * mFlyGridSize], &ret, distBoth, mSpring);
+    }
+    if ((neighborMask & right_bit) && (neighborMask & down_bit)) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x + 1 + (y + 1) * mFlyGridSize], &ret, distBoth, mSpring);
+    }
+
+    return ret;
 }
 
 /* 80063D84-800642D0       .text setNrm__15dCloth_packet_cFv */
 void dCloth_packet_c::setNrm() {
-    /* Nonmatching */
+    cXyz* pPos = getPosP();
+    cXyz* pNrm = getNrmP();
+
+    mWave += mWaveSpeed;
+
+    // It seems like field_0xF2 is always set to 0.
+    field_0xF0 += field_0xF2;
+
+    for (s32 y = 0; y < mHoistGridSize; y++) {
+        for (s32 x = 0; x < mFlyGridSize; x++) {
+            cXyz x_diff;
+            cXyz y_diff;
+            cXyz norm;
+            cXyz total;
+            cXyz pos;
+
+            pos = pPos[x + mFlyGridSize * y];
+            total = cXyz::Zero;
+            if (x != 0) {
+                x_diff = pPos[x - 1 + mFlyGridSize * y] - pos;
+                if (y != 0) {
+                    y_diff = pPos[x + mFlyGridSize * (y - 1)] - pos;
+                    norm = y_diff.outprod(x_diff);
+                    norm = norm.normZP();
+                    total += norm;
+                }
+                if (y != mHoistGridSize - 1) {
+                    y_diff = pPos[x + mFlyGridSize * (y + 1)] - pos;
+                    norm = x_diff.outprod(y_diff);
+                    norm = norm.normZP();
+                    total += norm;
+                }
+            }
+            if (x != mFlyGridSize - 1) {
+                x_diff = pPos[x + 1 + mFlyGridSize * y] - pos;
+                if (y != 0) {
+                    y_diff = pPos[x + mFlyGridSize * (y - 1)] - pos;
+                    norm = x_diff.outprod(y_diff);
+                    norm = norm.normZP();
+                    total += norm;
+                }
+                if (y != mHoistGridSize - 1) {
+                    y_diff = pPos[x + mFlyGridSize * (y + 1)] - pos;
+                    norm = y_diff.outprod(x_diff);
+                    norm = norm.normZP();
+                    total += norm;
+                }
+            }
+
+            total = total.normZP();
+
+            mDoMtx_stack_c::YrotS(mRotateY * cM_ssin(mWave + mRipple * (x + y)));
+            mDoMtx_stack_c::multVec(&total, &norm);
+            pNrm[x + mFlyGridSize * y] = norm.normZP();
+        }
+    }
+
+    // Set all back normals to the negative front normals.
+    cXyz* pNrmBack = getBackNrmP();
+    for (int y = 0; y < mHoistGridSize; y++) {
+        for (int x = 0; x < mFlyGridSize; x++) {
+            pNrmBack->set(-pNrm->x, -pNrm->y, -pNrm->z);
+            pNrm++;
+            pNrmBack++;
+        }
+    }
 }
 
 /* 800642D0-800642FC       .text setMtx__15dCloth_packet_cFPA4_f */
-void dCloth_packet_c::setMtx(Mtx) {
-    /* Nonmatching */
+void dCloth_packet_c::setMtx(Mtx mtx) {
+    MTXCopy(mtx, mMtx);
 }
 
 /* 800642FC-80064330       .text cloth_draw__15dCloth_packet_cFv */
 void dCloth_packet_c::cloth_draw() {
-    /* Nonmatching */
+    j3dSys.getDrawBuffer(OPA_BUFFER)->entryImm(this, 0);
 }
 
 /* 80064330-8006441C       .text TexObjInit__15dCloth_packet_cFP7ResTIMG */
-void dCloth_packet_c::TexObjInit(ResTIMG*) {
-    /* Nonmatching */
+void dCloth_packet_c::TexObjInit(ResTIMG* i_img) {
+#if VERSION == VERSION_DEMO
+    GXBool mipmap = i_img->mipmapCount > 1;
+#endif
+
+    GXInitTexObj(
+        getTexObjP(),
+        (u8*)i_img + i_img->imageOffset,
+        i_img->width,
+        i_img->height,
+        GXTexFmt(i_img->format),
+        GXTexWrapMode(i_img->wrapS),
+        GXTexWrapMode(i_img->wrapT),
+#if VERSION == VERSION_DEMO
+        mipmap
+#else
+        i_img->mipmapCount > 1
+#endif
+    );
+    GXInitTexObjLOD(
+        getTexObjP(),
+        GXTexFilter(i_img->minFilter),
+        GXTexFilter(i_img->magFilter),
+        i_img->minLOD * 0.125f,
+        i_img->maxLOD * 0.125f,
+        i_img->LODBias * 0.01f,
+        i_img->biasClamp,
+        i_img->doEdgeLOD,
+        GXAnisotropy(i_img->maxAnisotropy)
+    );
 }
 
 /* 8006441C-80064444       .text TexObjLoad__15dCloth_packet_cFv */
 void dCloth_packet_c::TexObjLoad() {
-    /* Nonmatching */
+    GXLoadTexObj(getTexObjP(), GX_TEXMAP0);
 }
 
 /* 80064444-80064718       .text TevSetting__15dCloth_packet_cFv */
 void dCloth_packet_c::TevSetting() {
-    /* Nonmatching */
+    GXSetNumChans(1);
+    u8 numStages;
+    u8 lightMask;
+    if (mpTevstr->mColorK1.a != 0) {
+        numStages = 3;
+        lightMask = GX_LIGHT0 | GX_LIGHT1;
+    } else {
+        numStages = 2;
+        lightMask = GX_LIGHT0;
+    }
+    GXSetChanCtrl(GX_COLOR0, GX_TRUE, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetNumTevStages(numStages);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    if (numStages == 3) {
+        GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP2);
+        GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_TEXC, GX_CC_CPREV);
+        GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    }
+
+    GXSetTevColorS10(GX_TEVREG0, mpTevstr->mColorC0);
+    GXSetTevColor(GX_TEVREG1, mpTevstr->mColorK0);
+    GXSetTevColor(GX_TEVREG2, mpTevstr->mColorK1);
+    GXCallDisplayList(l_matDL, 0x20);
 }
 
 /* 80064718-8006487C       .text plot__15dCloth_packet_cFv */
 void dCloth_packet_c::plot() {
-    /* Nonmatching */
+    float xPos = 0.0f;
+    const float xStep = 1.0f / (f32)(mFlyGridSize - 1);
+    const float yStep = 1.0f / (f32)(mHoistGridSize - 1);
+    int x, xNext = 1;
+    for (x = 0; x < mFlyGridSize - 1; x++, xNext++) {
+        GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, (u8)(mHoistGridSize * 2));
+
+        float yPos = 0.0f;
+        for (int y = 0; y < mHoistGridSize; y++) {
+            GXPosition1x8(x + y * mFlyGridSize);
+            GXPosition1x8(x + y * mFlyGridSize);
+            GXPosition2f32(xPos, yPos);
+            GXPosition1x8(xNext + y * mFlyGridSize);
+            GXPosition1x8(xNext + y * mFlyGridSize);
+            GXPosition2f32(xPos + xStep, yPos);
+
+            yPos += yStep;
+        }
+
+        xPos += xStep;
+    }
 }
 
 /* 8006487C-800649C4       .text dCloth_packet_create__FP7ResTIMGP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
-dCloth_packet_c* dCloth_packet_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**) {
-    /* Nonmatching */
+dCloth_packet_c* dCloth_packet_create(
+    ResTIMG* i_flagimage, ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr
+) {
+    dCloth_packet_c* pCloth = new dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr);
+    if (pCloth && !pCloth->chkCreateBuff()) {
+        pCloth = NULL;
+    } else if (pCloth && i_flagimage) {
+        pCloth->TexObjInit(i_flagimage);
+        pCloth->init();
+    }
+
+    return pCloth;
 }
 
 /* 800649C4-80064C98       .text TevSetting__18dCloth_packetXlu_cFv */
 void dCloth_packetXlu_c::TevSetting() {
-    /* Nonmatching */
+    GXSetNumChans(1);
+    u8 numStages;
+    u8 lightMask;
+    if (mpTevstr->mColorK1.a != 0) {
+        numStages = 3;
+        lightMask = GX_LIGHT0 | GX_LIGHT1;
+    } else {
+        numStages = 2;
+        lightMask = GX_LIGHT0;
+    }
+    GXSetChanCtrl(GX_COLOR0, GX_TRUE, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetNumTevStages(numStages);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO); // Differs from dCloth_packet_c::TevSetting() here.
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    if (numStages == 3) {
+        GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP2);
+        GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_TEXC, GX_CC_CPREV);
+        GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO); // Differs from dCloth_packet_c::TevSetting() here.
+        GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    }
+
+    GXSetTevColorS10(GX_TEVREG0, mpTevstr->mColorC0);
+    GXSetTevColor(GX_TEVREG1, mpTevstr->mColorK0);
+    GXSetTevColor(GX_TEVREG2, mpTevstr->mColorK1);
+    GXCallDisplayList(l_alpha_matDL, 0x20);
 }
 
 /* 80064C98-80064CF8       .text cloth_draw__18dCloth_packetXlu_cFv */
 void dCloth_packetXlu_c::cloth_draw() {
-    /* Nonmatching */
+    cXyz pos = getPosP()[0];
+    g_dComIfG_gameInfo.drawlist.entryZSortXluDrawList(g_dComIfG_gameInfo.drawlist.mpXluList, this, pos);
 }
 
 /* 80064CF8-80064E48       .text dCloth_packetXlu_create__FP7ResTIMGP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
-dCloth_packetXlu_c* dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**) {
-    /* Nonmatching */
+dCloth_packetXlu_c* dCloth_packetXlu_create(
+    ResTIMG* i_flagimage, ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr
+) {
+    dCloth_packetXlu_c* pCloth = new dCloth_packetXlu_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr);
+    if (pCloth && !pCloth->chkCreateBuff()) {
+        pCloth = NULL;
+    } else if (pCloth && i_flagimage) {
+        pCloth->TexObjInit(i_flagimage);
+        pCloth->init();
+    }
+
+    return pCloth;
 }
 
-void* dClothVobj03_c::top_pointer;
-void* dClothVobj04_c::top_pointer;
-void* dClothVobj05_c::top_pointer;
-void* dClothVobj07_0_c::top_pointer;
+dClothVobj03_c* dClothVobj03_c::top_pointer;
+dClothVobj04_c* dClothVobj04_c::top_pointer;
+dClothVobj05_c* dClothVobj05_c::top_pointer;
+dClothVobj07_0_c* dClothVobj07_0_c::top_pointer;
 
-const s32 dClothVobj03_c::cloth_counter = -1;
-const s32 dClothVobj04_c::cloth_counter = -1;
-const s32 dClothVobj05_c::cloth_counter = -1;
-const s32 dClothVobj07_0_c::cloth_counter = -1;
+s32 dClothVobj03_c::cloth_counter = -1;
+s32 dClothVobj04_c::cloth_counter = -1;
+s32 dClothVobj05_c::cloth_counter = -1;
+s32 dClothVobj07_0_c::cloth_counter = -1;
 
 /* 80064E48-80064F0C       .text cloth_copy__14dClothVobj03_cFv */
 void dClothVobj03_c::cloth_copy() {
-    /* Nonmatching */
+    changeCurrentBuff();
+    memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
 }
 
 /* 80064F0C-80065020       .text init__14dClothVobj03_cFv */
 void dClothVobj03_c::init() {
-    /* Nonmatching */
+    if (cloth_counter == (s32)g_Counter.mTimer) {
+        // Cloth sim has already run for this frame.
+        memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    } else {
+        dCloth_packet_c::init();
+    }
+
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
+        mIsIndoors = true;
+    } else {
+        mIsIndoors = false;
+    }
 }
 
 /* 80065020-8006515C       .text cloth_move__14dClothVobj03_cFv */
 void dClothVobj03_c::cloth_move() {
-    /* Nonmatching */
+    if (mIsStandItem) {
+        // Cloth sim only runs when the timer has changed, and only once for each type of flag.
+        if (cloth_counter == (s32)g_Counter.mTimer) {
+            // Cloth sim has run already, so copy the geometry to this object and return.
+            cloth_copy();
+            return;
+        }
+
+        // Make this the simulation object.
+        cloth_counter = g_Counter.mTimer;
+        top_pointer = this;
+    }
+
+    // Set params for sim.
+
+    f32 windSpeed = REG10_F(5) + 7.0f;
+    f32 windSpeedWave = REG10_F(6) + 2.0f;
+
+    if (mIsIndoors) {
+        // Indoor flags don't get blown much by the wind.
+        windSpeed *= 0.05f;
+        windSpeedWave = 0.0f;
+        setParam(0.4f, -1.5f, 0.7f, 0.75f, 0.6f, 0, 0, 900, -800, 7.0f, 6.0f);
+    } else {
+        setParam(0.4f, -1.5f, 0.7f, 0.75f, 0.6f, 0x400, 0, 900, -800, 7.0f, 6.0f);
+    }
+
+    setWindPower(windSpeed, windSpeedWave);
+
+    // Simulate cloth.
+    dCloth_packet_c::cloth_move();
 }
 
 /* 8006515C-80065268       .text TexObjInit__14dClothVobj03_cFP7ResTIMG */
-void dClothVobj03_c::TexObjInit(ResTIMG*) {
-    /* Nonmatching */
+void dClothVobj03_c::TexObjInit(ResTIMG* timg) {
+    GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
+#if VERSION == VERSION_DEMO
+    const GXBool mipmap = timg->mipmapCount > 1;
+#endif
+
+    GXInitTexObjCI(
+        getTexObjP(),
+        &timg->format + timg->imageOffset,
+        timg->width,
+        timg->height,
+        GXCITexFmt(timg->format),
+        GXTexWrapMode(timg->wrapS),
+        GXTexWrapMode(timg->wrapT),
+#if VERSION == VERSION_DEMO
+        mipmap,
+#else
+        timg->mipmapCount > 1,
+#endif
+        0
+    );
+
+    GXInitTexObjLOD(
+        getTexObjP(),
+        GXTexFilter(timg->minFilter),
+        GXTexFilter(timg->magFilter),
+        timg->minLOD * 0.125f,
+        timg->maxLOD * 0.125f,
+        timg->LODBias * 0.01f,
+        timg->biasClamp,
+        timg->doEdgeLOD,
+        GXAnisotropy(timg->maxAnisotropy)
+    );
 }
 
 /* 80065268-800652A8       .text TexObjLoad__14dClothVobj03_cFv */
 void dClothVobj03_c::TexObjLoad() {
-    /* Nonmatching */
+    GXLoadTlut(&mTlutObj, 0);
+    GXLoadTexObj(getTexObjP(), GX_TEXMAP0);
 }
 
 /* 800652A8-800653F4       .text dClothVobj03_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
-dClothVobj03_c* dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
-    /* Nonmatching */
+dClothVobj03_c* dClothVobj03_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
+    dClothVobj03_c* pCloth = new dClothVobj03_c(i_toonimage, tevstr, posArr);
+    if (pCloth && !pCloth->chkCreateBuff()) {
+        pCloth = NULL;
+    } else if (pCloth && i_flagimage) {
+        pCloth->TexObjInit(i_flagimage);
+        pCloth->init();
+    }
+
+    return pCloth;
 }
 
 /* 800653F4-800654B8       .text cloth_copy__14dClothVobj04_cFv */
 void dClothVobj04_c::cloth_copy() {
-    /* Nonmatching */
+    changeCurrentBuff();
+    memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
 }
 
 /* 800654B8-800655CC       .text init__14dClothVobj04_cFv */
 void dClothVobj04_c::init() {
-    /* Nonmatching */
+    if (cloth_counter == (s32)g_Counter.mTimer) {
+        memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    } else {
+        dCloth_packet_c::init();
+    }
+
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
+        mIsIndoors = true;
+    } else {
+        mIsIndoors = false;
+    }
 }
 
 /* 800655CC-80065700       .text cloth_move__14dClothVobj04_cFv */
 void dClothVobj04_c::cloth_move() {
-    /* Nonmatching */
+    if (mIsStandItem) {
+        if (cloth_counter == (s32)g_Counter.mTimer) {
+            cloth_copy();
+            return;
+        }
+        cloth_counter = g_Counter.mTimer;
+        top_pointer = this;
+    }
+
+    f32 windSpeed = REG10_F(5) + 7.0f;
+    f32 windSpeedWave = REG10_F(6) + 2.0f;
+
+    if (mIsIndoors) {
+        windSpeed *= 0.05f;
+        windSpeedWave = 0.0f;
+        setParam(0.45f, -1.5f, 0.6f, 0.8f, 0.8f, 0, 0, 900, -800, 7.0f, 6.0f);
+    } else {
+        setParam(0.45f, -1.5f, 0.6f, 0.8f, 0.8f, 0x400, 0, 900, -800, 7.0f, 6.0f);
+    }
+
+    setWindPower(windSpeed, windSpeedWave);
+
+    dCloth_packet_c::cloth_move();
 }
 
 /* 80065700-8006580C       .text TexObjInit__14dClothVobj04_cFP7ResTIMG */
-void dClothVobj04_c::TexObjInit(ResTIMG*) {
-    /* Nonmatching */
+void dClothVobj04_c::TexObjInit(ResTIMG* timg) {
+    GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
+#if VERSION == VERSION_DEMO
+    const GXBool mipmap = timg->mipmapCount > 1;
+#endif
+
+    GXInitTexObjCI(
+        getTexObjP(),
+        &timg->format + timg->imageOffset,
+        timg->width,
+        timg->height,
+        GXCITexFmt(timg->format),
+        GXTexWrapMode(timg->wrapS),
+        GXTexWrapMode(timg->wrapT),
+#if VERSION == VERSION_DEMO
+        mipmap,
+#else
+        timg->mipmapCount > 1,
+#endif
+        0
+    );
+
+    GXInitTexObjLOD(
+        getTexObjP(),
+        GXTexFilter(timg->minFilter),
+        GXTexFilter(timg->magFilter),
+        timg->minLOD * 0.125f,
+        timg->maxLOD * 0.125f,
+        timg->LODBias * 0.01f,
+        timg->biasClamp,
+        timg->doEdgeLOD,
+        GXAnisotropy(timg->maxAnisotropy)
+    );
 }
 
 /* 8006580C-8006584C       .text TexObjLoad__14dClothVobj04_cFv */
 void dClothVobj04_c::TexObjLoad() {
-    /* Nonmatching */
+    GXLoadTlut(&mTlutObj, 0);
+    GXLoadTexObj(getTexObjP(), GX_TEXMAP0);
 }
 
 /* 8006584C-80065998       .text dClothVobj04_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
-dClothVobj04_c* dClothVobj04_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
-    /* Nonmatching */
+dClothVobj04_c* dClothVobj04_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
+    dClothVobj04_c* pCloth = new dClothVobj04_c(i_toonimage, tevstr, posArr);
+    if (pCloth && !pCloth->chkCreateBuff()) {
+        pCloth = NULL;
+    } else if (pCloth && i_flagimage) {
+        pCloth->TexObjInit(i_flagimage);
+        pCloth->init();
+    }
+
+    return pCloth;
 }
 
 /* 80065998-80065A5C       .text cloth_copy__14dClothVobj05_cFv */
 void dClothVobj05_c::cloth_copy() {
-    /* Nonmatching */
+    changeCurrentBuff();
+    memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
 }
 
 /* 80065A5C-80065B70       .text init__14dClothVobj05_cFv */
 void dClothVobj05_c::init() {
-    /* Nonmatching */
+    if (cloth_counter == (s32)g_Counter.mTimer) {
+        memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    } else {
+        dCloth_packet_c::init();
+    }
+
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
+        mIsIndoors = true;
+    } else {
+        mIsIndoors = false;
+    }
 }
 
 /* 80065B70-80065CA0       .text cloth_move__14dClothVobj05_cFv */
 void dClothVobj05_c::cloth_move() {
-    /* Nonmatching */
+    if (mIsStandItem) {
+        if (cloth_counter == (s32)g_Counter.mTimer) {
+            cloth_copy();
+            return;
+        }
+        cloth_counter = g_Counter.mTimer;
+        top_pointer = this;
+    }
+
+    f32 windSpeed = REG10_F(5) + 7.0f;
+    f32 windSpeedWave = REG10_F(6) + 2.0f;
+
+    if (mIsIndoors) {
+        windSpeed *= 0.05f;
+        windSpeedWave = 0.0f;
+        setParam(0.45f, -1.0f, 0.7f, 0.95f, 0.95f, 0, 0, 0, 0, 7.0f, 6.0f);
+    } else {
+        setParam(0.45f, -1.0f, 0.65f, 0.9f, 0.95f, 0x200, 0, 900, -800, 7.0f, 6.0f);
+    }
+
+    setWindPower(windSpeed, windSpeedWave);
+
+    dCloth_packet_c::cloth_move();
 }
 
 /* 80065CA0-80065DAC       .text TexObjInit__14dClothVobj05_cFP7ResTIMG */
-void dClothVobj05_c::TexObjInit(ResTIMG*) {
-    /* Nonmatching */
+void dClothVobj05_c::TexObjInit(ResTIMG* timg) {
+    GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
+#if VERSION == VERSION_DEMO
+    const GXBool mipmap = timg->mipmapCount > 1;
+#endif
+
+    GXInitTexObjCI(
+        getTexObjP(),
+        &timg->format + timg->imageOffset,
+        timg->width,
+        timg->height,
+        GXCITexFmt(timg->format),
+        GXTexWrapMode(timg->wrapS),
+        GXTexWrapMode(timg->wrapT),
+#if VERSION == VERSION_DEMO
+        mipmap,
+#else
+        timg->mipmapCount > 1,
+#endif
+        0
+    );
+
+    GXInitTexObjLOD(
+        getTexObjP(),
+        GXTexFilter(timg->minFilter),
+        GXTexFilter(timg->magFilter),
+        timg->minLOD * 0.125f,
+        timg->maxLOD * 0.125f,
+        timg->LODBias * 0.01f,
+        timg->biasClamp,
+        timg->doEdgeLOD,
+        GXAnisotropy(timg->maxAnisotropy)
+    );
 }
 
 /* 80065DAC-80065DEC       .text TexObjLoad__14dClothVobj05_cFv */
 void dClothVobj05_c::TexObjLoad() {
-    /* Nonmatching */
+    GXLoadTlut(&mTlutObj, 0);
+    GXLoadTexObj(getTexObjP(), GX_TEXMAP0);
 }
 
 /* 80065DEC-80065DF8       .text dClothVobj05_VtxFactorCB__FP15dCloth_packet_cii */
-void dClothVobj05_VtxFactorCB(dCloth_packet_c*, int, int) {
-    /* Nonmatching */
+int dClothVobj05_VtxFactorCB(dCloth_packet_c* self, int x, int y) {
+    return x == 0 ? 1 : 0;
 }
 
 /* 80065DF8-80065F50       .text dClothVobj05_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
-dClothVobj05_c* dClothVobj05_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
-    /* Nonmatching */
+dClothVobj05_c* dClothVobj05_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
+    dClothVobj05_c* pCloth = new dClothVobj05_c(i_toonimage, tevstr, posArr);
+    if (pCloth && !pCloth->chkCreateBuff()) {
+        pCloth = NULL;
+    } else if (pCloth && i_flagimage) {
+        pCloth->TexObjInit(i_flagimage);
+        pCloth->init();
+        pCloth->setFactorCheckCB(dClothVobj05_VtxFactorCB);
+    }
+
+    return pCloth;
 }
 
 /* 80065F50-80066014       .text cloth_copy__16dClothVobj07_0_cFv */
 void dClothVobj07_0_c::cloth_copy() {
-    /* Nonmatching */
+    changeCurrentBuff();
+    memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
 }
 
 /* 80066014-80066128       .text init__16dClothVobj07_0_cFv */
 void dClothVobj07_0_c::init() {
-    /* Nonmatching */
+    if (cloth_counter == (s32)g_Counter.mTimer) {
+        memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    } else {
+        dCloth_packet_c::init();
+    }
+
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
+        mIsIndoors = true;
+    } else {
+        mIsIndoors = false;
+    }
 }
 
 /* 80066128-8006625C       .text cloth_move__16dClothVobj07_0_cFv */
 void dClothVobj07_0_c::cloth_move() {
-    /* Nonmatching */
+    if (mIsStandItem) {
+        if (cloth_counter == (s32)g_Counter.mTimer) {
+            cloth_copy();
+            return;
+        }
+        cloth_counter = g_Counter.mTimer;
+        top_pointer = this;
+    }
+
+    f32 windSpeed = REG10_F(5) + 7.0f;
+    f32 windSpeedWave = REG10_F(6) + 2.0f;
+
+    if (mIsIndoors) {
+        windSpeed *= 0.05f;
+        windSpeedWave = 0.0f;
+        setParam(0.35f, -1.0f, 0.7f, 1.1f, 1.1f, 0, 0, 900, -800, 7.0f, 6.0f);
+    } else {
+        setParam(0.4f, -0.5f, 0.7f, 1.1f, 1.1f, 0x100, 0, 900, -800, 7.0f, 6.0f);
+    }
+
+    setWindPower(windSpeed, windSpeedWave);
+
+    dCloth_packet_c::cloth_move();
 }
 
 /* 8006625C-80066368       .text TexObjInit__16dClothVobj07_0_cFP7ResTIMG */
-void dClothVobj07_0_c::TexObjInit(ResTIMG*) {
-    /* Nonmatching */
+void dClothVobj07_0_c::TexObjInit(ResTIMG* timg) {
+    GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
+#if VERSION == VERSION_DEMO
+    const GXBool mipmap = timg->mipmapCount > 1;
+#endif
+
+    GXInitTexObjCI(
+        getTexObjP(),
+        &timg->format + timg->imageOffset,
+        timg->width,
+        timg->height,
+        GXCITexFmt(timg->format),
+        GXTexWrapMode(timg->wrapS),
+        GXTexWrapMode(timg->wrapT),
+#if VERSION == VERSION_DEMO
+        mipmap,
+#else
+        timg->mipmapCount > 1,
+#endif
+        0
+    );
+
+    GXInitTexObjLOD(
+        getTexObjP(),
+        GXTexFilter(timg->minFilter),
+        GXTexFilter(timg->magFilter),
+        timg->minLOD * 0.125f,
+        timg->maxLOD * 0.125f,
+        timg->LODBias * 0.01f,
+        timg->biasClamp,
+        timg->doEdgeLOD,
+        GXAnisotropy(timg->maxAnisotropy)
+    );
 }
 
 /* 80066368-800663A8       .text TexObjLoad__16dClothVobj07_0_cFv */
 void dClothVobj07_0_c::TexObjLoad() {
-    /* Nonmatching */
+    GXLoadTlut(&mTlutObj, 0);
+    GXLoadTexObj(getTexObjP(), GX_TEXMAP0);
 }
 
 /* 800663A8-800663B4       .text dClothVobj07_0_VtxFactorCB__FP15dCloth_packet_cii */
-void dClothVobj07_0_VtxFactorCB(dCloth_packet_c*, int, int) {
-    /* Nonmatching */
+int dClothVobj07_0_VtxFactorCB(dCloth_packet_c* self, int x, int y) {
+    return x == 0 ? 1 : 0;
 }
 
 /* 800663B4-8006650C       .text dClothVobj07_0_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
-dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
-    /* Nonmatching */
+dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
+    dClothVobj07_0_c* pCloth = new dClothVobj07_0_c(i_toonimage, tevstr, posArr);
+    if (pCloth && !pCloth->chkCreateBuff()) {
+        pCloth = NULL;
+    } else if (pCloth && i_flagimage) {
+        pCloth->TexObjInit(i_flagimage);
+        pCloth->init();
+        pCloth->setFactorCheckCB(&dClothVobj07_0_VtxFactorCB);
+    }
+
+    return pCloth;
 }

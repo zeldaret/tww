@@ -13,18 +13,18 @@ public:
     typedef dCloth_packet_c* (*CreateFunc)(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
     typedef int (*FactorCheck)(dCloth_packet_c*, int, int);
 
-    dCloth_packet_c(ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
+    dCloth_packet_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr);
     ~dCloth_packet_c();
     virtual void init();
     virtual void cloth_move();
     virtual void cloth_draw();
-    virtual void TexObjInit(ResTIMG*);
+    virtual void TexObjInit(ResTIMG* i_img);
     virtual void TexObjLoad();
     virtual void TevSetting();
 
     void draw();
-    void setGlobalWind(cXyz*);
-    void getFactor(cXyz*, cXyz*, cXyz*, float, float, float, int, int);
+    void setGlobalWind(cXyz* wind);
+    cXyz getFactor(cXyz* pPos, cXyz* pNrm, cXyz* pSpeed, float distFly, float distHoist, float distBoth, int x, int y);
     void setNrm();
     void plot();
 
@@ -48,7 +48,27 @@ public:
         setWindPower(wind, windWave);
     }
 
-private:
+    void changeCurrentBuff() { mCurArr ^= 1; }
+
+    bool chkCreateBuff() {
+        if (mpPosArr[0] != NULL && mpPosArr[1] != NULL && mpNrmArr[0] != NULL && mpNrmArr[1] != NULL && mpNrmArrBack[0] != NULL && mpNrmArrBack[1] != NULL &&
+            mpSpeedArr != NULL)
+            return true;
+        return false;
+    }
+
+    cXyz* getPosP() const { return mpPosArr[mCurArr]; }
+    cXyz* getNrmP() const { return mpNrmArr[mCurArr]; }
+    cXyz* getBackNrmP() const { return mpNrmArrBack[mCurArr]; }
+    cXyz* getSpdP() const { return mpSpeedArr; }
+    u32 getVerticalNum() const { return mHoistGridSize; }
+    GXTexObj* getTexObjP() { return &mTexObj; }
+    GXTexObj* getToonTexObjP() { return &mToonTex; }
+
+    friend int default_factor_checkCB(dCloth_packet_c* pPkt, int x, int y);
+    friend dCloth_packet_c* dCloth_packet_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
+
+protected:
     /* 0x10 */ s32 mFlyGridSize;
     /* 0x14 */ s32 mHoistGridSize;
     /* 0x18 */ f32 mFlyLength;
@@ -80,76 +100,146 @@ private:
     /* 0xF6 */ s16 mRotateY;
     /* 0xF8 */ u8 mCurArr;
 }; // Size: 0xFC
-dCloth_packet_c* dCloth_packet_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
+dCloth_packet_c* dCloth_packet_create(
+    ResTIMG* i_flagimage, ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr
+);
 
 class dCloth_packetXlu_c : public dCloth_packet_c {
-    virtual void init();
-    virtual void cloth_move();
     virtual void cloth_draw();
-    virtual void TexObjInit(ResTIMG*);
-    virtual void TexObjLoad();
     virtual void TevSetting();
+
+private:
+    dCloth_packetXlu_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
+        : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {}
+
+    friend dCloth_packetXlu_c* dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
+
+private:
+    u32 field_0xFC;
 };
-dCloth_packetXlu_c* dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
+
+dCloth_packetXlu_c* dCloth_packetXlu_create(
+    ResTIMG* i_flagimage, ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr
+);
 
 class dClothVobj03_c : public dCloth_packet_c {
     virtual void init();
     virtual void cloth_move();
-    virtual void cloth_draw();
     virtual void TexObjInit(ResTIMG*);
     virtual void TexObjLoad();
-    virtual void TevSetting();
     void cloth_copy();
 
-public:
-    static void* top_pointer;
-    static const s32 cloth_counter;
+private:
+    dClothVobj03_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
+        : dCloth_packet_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr) {
+        if (posArr) {
+            mIsStandItem = true;
+        } else {
+            mIsStandItem = false;
+        }
+    }
+
+private:
+    static dClothVobj03_c* top_pointer;
+    static s32 cloth_counter;
+
+    friend dClothVobj03_c* dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+
+private:
+    GXTlutObj mTlutObj;
+    bool mIsStandItem;
+    bool mIsIndoors;
 };
-dClothVobj03_c* dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+dClothVobj03_c* dClothVobj03_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
 class dClothVobj04_c : public dCloth_packet_c {
     virtual void init();
     virtual void cloth_move();
-    virtual void cloth_draw();
     virtual void TexObjInit(ResTIMG*);
     virtual void TexObjLoad();
-    virtual void TevSetting();
     void cloth_copy();
 
-public:
-    static void* top_pointer;
-    static const s32 cloth_counter;
+private:
+    dClothVobj04_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
+        : dCloth_packet_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr) {
+        if (posArr) {
+            mIsStandItem = true;
+        } else {
+            mIsStandItem = false;
+        }
+    };
+
+private:
+    static dClothVobj04_c* top_pointer;
+    static s32 cloth_counter;
+
+    friend dClothVobj04_c* dClothVobj04_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+
+private:
+    GXTlutObj mTlutObj;
+    bool mIsStandItem;
+    bool mIsIndoors;
 };
-dClothVobj04_c* dClothVobj04_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+dClothVobj04_c* dClothVobj04_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
 class dClothVobj05_c : public dCloth_packet_c {
     virtual void init();
     virtual void cloth_move();
-    virtual void cloth_draw();
     virtual void TexObjInit(ResTIMG*);
     virtual void TexObjLoad();
-    virtual void TevSetting();
     void cloth_copy();
 
-public:
-    static void* top_pointer;
-    static const s32 cloth_counter;
+private:
+    dClothVobj05_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
+        : dCloth_packet_c(i_toonimage, 5, 5, 50.0f, 120.0f, tevstr, posArr) {
+        if (posArr) {
+            mIsStandItem = true;
+        } else {
+            mIsStandItem = false;
+        }
+    }
+
+private:
+    static dClothVobj05_c* top_pointer;
+    static s32 cloth_counter;
+
+    friend dClothVobj05_c* dClothVobj05_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+
+private:
+    GXTlutObj mTlutObj;
+    bool mIsStandItem;
+    bool mIsIndoors;
 };
-dClothVobj05_c* dClothVobj05_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+dClothVobj05_c* dClothVobj05_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
 class dClothVobj07_0_c : public dCloth_packet_c {
     virtual void init();
     virtual void cloth_move();
-    virtual void cloth_draw();
     virtual void TexObjInit(ResTIMG*);
     virtual void TexObjLoad();
-    virtual void TevSetting();
     void cloth_copy();
 
-public:
-    static void* top_pointer;
-    static const s32 cloth_counter;
+private:
+    dClothVobj07_0_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
+        : dCloth_packet_c(i_toonimage, 5, 5, 120.0f, 70.0f, tevstr, posArr) {
+        if (posArr) {
+            mIsStandItem = true;
+        } else {
+            mIsStandItem = false;
+        }
+    }
+
+private:
+    static dClothVobj07_0_c* top_pointer;
+    static s32 cloth_counter;
+
+    friend dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+
+private:
+    GXTlutObj mTlutObj;
+    bool mIsStandItem;
+    bool mIsIndoors;
 };
-dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
 #endif /* D_A_CLOTH_PACKET_H */

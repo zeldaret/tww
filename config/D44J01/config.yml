@@ -3246,3 +3246,10 @@ extract:
   binary: assets/l_DL__drawSpot__FP10view_class.bin
   header: assets/l_DL__drawSpot__FP10view_class.h
   rename: l_DL
+
+- symbol: l_matDL!.data:0x8036ADA0
+  binary: assets/l_matDL__d_cloth_packet.bin
+  header: assets/l_matDL__d_cloth_packet.h
+- symbol: l_alpha_matDL!.data:0x8036ADE0
+  binary: assets/l_alpha_matDL__d_cloth_packet.bin
+  header: assets/l_alpha_matDL__d_cloth_packet.h
