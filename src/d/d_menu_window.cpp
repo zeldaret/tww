@@ -78,17 +78,18 @@ dMw_HIO_c g_mwHIO;
 dMw_DHIO_c g_mwDHIO;
 
 static dMCloth_c* cloth_c;
-static dDlst_MENU_CLOTH_c* dMs_cloth_c;
+
+static JUTFont* fonttype;
+static JUTFont* rfonttype;
+
 static dDlst_MENU_CAPTURE_c* dMs_capture_c;
+static dDlst_MENU_CLOTH_c* dMs_cloth_c;
 static dMenu_Item_c* dMi_c;
 static dMenu_Collect_c* dMc_c;
 static dMenu_Dmap_c* dMd_c;
 static dMenu_Fmap_c* dMf_c;
 static dName_c* dNm_c;
 static dMenu_save_c* dMs_c;
-
-static JUTFont* fonttype;
-static JUTFont* rfonttype;
 
 static u8 event_wait_frame;
 
