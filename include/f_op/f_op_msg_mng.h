@@ -374,11 +374,15 @@ void fopMsgM_setNowAlpha(fopMsgM_pane_alpha_class*, f32);
 void fopMsgM_setAlpha(fopMsgM_pane_alpha_class*);
 
 u32 fopMsgM_searchMessageNumber(u32);
+bool fopMsgM_forceSendOn();
 void fopMsgM_messageSendOn();
 void fopMsgM_messageSendOff();
 bool fopMsgM_checkMessageSend();
 u32 fopMsgM_tactMessageSet();
 void fopMsgM_demoMsgFlagOn();
+
+bool fopMsgM_getScopeMode();
+bool fopMsgM_releaseScopeMode();
 
 void fopMsgM_demoMsgFlagOn();
 void fopMsgM_demoMsgFlagOff();
