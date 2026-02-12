@@ -522,6 +522,7 @@ public:
     void setLkDArc(JKRArchive * pArc) { mpLkDArc = pArc; }
     void setFmapArchive(JKRArchive * pArc) { mpFmapArchive = pArc; }
     void setItemResArchive(JKRArchive * pArc) { mpItemResArchive = pArc; }
+    JKRArchive* getItemResArchive() { return mpItemResArchive; }
     void setCollectResArchive(JKRArchive * pArc) { mpCollectResArchive = pArc; }
     void setFmapResArchive(JKRArchive * pArc) { mpFmapResArchive = pArc; }
     void setDmapResArchive(JKRArchive * pArc) { mpDmapResArchive = pArc; }
