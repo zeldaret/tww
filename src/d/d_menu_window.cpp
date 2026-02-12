@@ -10,8 +10,12 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "f_op/f_op_msg.h"
 #include "d/d_menu_cloth.h"
+#include "d/d_menu_dmap.h"
+#include "d/d_menu_fmap.h"
 #include "d/d_menu_item.h"
+#include "d/d_menu_save.h"
 #include "d/d_meter.h"
+#include "d/d_name.h"
 #include "d/d_priority.h"
 #include "d/d_procname.h"
 #include "f_ap/f_ap_game.h"
@@ -77,6 +81,11 @@ static dMCloth_c* cloth_c;
 static dDlst_MENU_CLOTH_c* dMs_cloth_c;
 static dDlst_MENU_CAPTURE_c* dMs_capture_c;
 static dMenu_Item_c* dMi_c;
+static dMenu_Collect_c* dMc_c;
+static dMenu_Dmap_c* dMd_c;
+static dMenu_Fmap_c* dMf_c;
+static dName_c* dNm_c;
+static dMenu_save_c* dMs_c;
 
 static JUTFont* fonttype;
 static JUTFont* rfonttype;
