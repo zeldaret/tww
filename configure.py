@@ -498,7 +498,7 @@ config.libs = [
             Object(Matching,    "d/d_shop.cpp"),
             Object(Matching,    "d/d_jnt_hit.cpp"),
             Object(Matching,    "d/d_chain.cpp"),
-            Object(NonMatching, "d/d_cloth_packet.cpp"),
+            Object(Matching,    "d/d_cloth_packet.cpp"),
             Object(NonMatching, "d/d_a_obj.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_a_obj_tribox_static.cpp"),
             Object(Matching,    "d/d_a_ship_static.cpp"),
