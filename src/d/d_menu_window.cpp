@@ -10,6 +10,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "f_op/f_op_msg.h"
 #include "d/d_menu_cloth.h"
+#include "d/d_menu_item.h"
 #include "d/d_meter.h"
 #include "d/d_priority.h"
 #include "d/d_procname.h"
@@ -75,6 +76,7 @@ dMw_DHIO_c g_mwDHIO;
 static dMCloth_c* cloth_c;
 static dDlst_MENU_CLOTH_c* dMs_cloth_c;
 static dDlst_MENU_CAPTURE_c* dMs_capture_c;
+static dMenu_Item_c* dMi_c;
 
 static JUTFont* fonttype;
 static JUTFont* rfonttype;
