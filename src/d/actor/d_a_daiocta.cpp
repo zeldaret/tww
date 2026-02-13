@@ -7,6 +7,8 @@
 #include "d/actor/d_a_daiocta.h"
 #include "d/actor/d_a_bomb.h"
 #include "d/d_cc_d.h"
+#include "d/d_jnt_hit.h"
+#include "d/d_lib.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
@@ -218,6 +220,7 @@ void daDaiocta_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
             mDoMtx_stack_c::multVec(&base, &field_0x21E8);
             break;
     }
+
     cMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
     i_modelP->setAnmMtx(jnt_no, mDoMtx_stack_c::get());
 }
@@ -230,26 +233,199 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 0000068C-00000708       .text _createHeap__11daDaiocta_cFv */
 BOOL daDaiocta_c::_createHeap() {
     /* Nonmatching */
+    if (!createBodyHeap()) {
+        return FALSE;
+    }
+
+    if (!createSuikomiHeap()) {
+        return FALSE;
+    }
+
+    if (!createAwaHeap()) {
+        return FALSE;
+    }
+
+    if (!createArrowHitHeap()) {
+        return FALSE;
+    }
+
+    return true;
 }
 
 /* 00000708-000009B8       .text createAwaHeap__11daDaiocta_cFv */
-void daDaiocta_c::createAwaHeap() {
+BOOL daDaiocta_c::createAwaHeap() {
     /* Nonmatching */
 }
 
 /* 000009B8-00000ABC       .text createSuikomiHeap__11daDaiocta_cFv */
-void daDaiocta_c::createSuikomiHeap() {
+BOOL daDaiocta_c::createSuikomiHeap() {
     /* Nonmatching */
+    J3DModelData* modelData = (J3DModelData * ) dComIfG_getObjectRes(m_arc_name, 0x13);
+    JUT_ASSERT(0x227, modelData != NULL);
+
+    field_0x26CC = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
+
+    if (!field_0x26CC) {
+        return FALSE;
+    }
+
+    if (!dLib_brkInit(modelData, &field_0x26D0, m_arc_name, 0x1D) || 
+        !dLib_btkInit(modelData, &field_0x26E8, m_arc_name, 0x26)) {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 00000ABC-00000C04       .text createBodyHeap__11daDaiocta_cFv */
-void daDaiocta_c::createBodyHeap() {
+BOOL daDaiocta_c::createBodyHeap() {
     /* Nonmatching */
 }
 
 /* 00000C04-00000C64       .text createArrowHitHeap__11daDaiocta_cFv */
-void daDaiocta_c::createArrowHitHeap() {
-    /* Nonmatching */
+BOOL daDaiocta_c::createArrowHitHeap() {
+    static Vec ude_cyl_offset[] = {
+        {   0.0f, 0.0f, 0.0f },
+        { 400.0f, 0.0f, 0.0f }
+    };
+
+    static Vec te_cyl_offset[] = {
+        {   0.0f, 10.0f, 0.0f },
+        { 450.0f, 10.0f, 0.0f }
+    };
+
+    static Vec body_cyl_offset[] = {
+        { -200.0f, 0.0f, 0.0f },
+        {  200.0f, 0.0f, 0.0f }
+    };
+
+    static Vec body_top_cyl_offset[] = {
+        { -200.0f, 0.0f, 0.0f },
+        {  400.0f, 0.0f, 0.0f }
+    };
+
+    static Vec hire_cyl_offset[] = {
+        { -200.0f, 0.0f, 0.0f },
+        {  250.0f, 0.0f, 0.0f }
+    };
+    
+    static __jnt_hit_data_c search_data[17] = { 
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 2,
+            /* mRadius     */ 550.0f,
+            /* mpOffsets   */ body_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 3,
+            /* mRadius     */ 450.0f,
+            /* mpOffsets   */ body_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 4,
+            /* mRadius     */ 400.0f,
+            /* mpOffsets   */ body_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 5,
+            /* mRadius     */ 300.0f,
+            /* mpOffsets   */ body_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 6,
+            /* mRadius     */ 200.0f,
+            /* mpOffsets   */ body_top_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 7,
+            /* mRadius     */ 150.0f,
+            /* mpOffsets   */ body_top_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 8,
+            /* mRadius     */ 150.0f,
+            /* mpOffsets   */ body_top_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 9,
+            /* mRadius     */ 100.0f,
+            /* mpOffsets   */ hire_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 10,
+            /* mRadius     */ 100.0f,
+            /* mpOffsets   */ hire_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 30,
+            /* mRadius     */ 40.0f,
+            /* mpOffsets   */ te_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 29,
+            /* mRadius     */ 40.0f,
+            /* mpOffsets   */ ude_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 28,
+            /* mRadius     */ 40.0f,
+            /* mpOffsets   */ ude_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 27,
+            /* mRadius     */ 40.0f,
+            /* mpOffsets   */ ude_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 36,
+            /* mRadius     */ 40.0f,
+            /* mpOffsets   */ te_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 35,
+            /* mRadius     */ 40.0f,
+            /* mpOffsets   */ te_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 34,
+            /* mRadius     */ 40.0f,
+            /* mpOffsets   */ ude_cyl_offset
+        },
+        {
+            /* mShapeType  */ 0,
+            /* mJointIndex */ 33,
+            /* mRadius     */ 40.0f,
+            /* mpOffsets   */ ude_cyl_offset
+        }
+    };
+
+    field_0x26C8 = JntHit_create(
+        mpMorf->getModel(), search_data, 
+        ARRAY_SSIZE(search_data)
+    );
+
+    if (!field_0x26C8) {
+        return FALSE;
+    }
+
+    jntHit = field_0x26C8;
+
+    return TRUE;
 }
 
 /* 00000C64-00000D94       .text setMtx__11daDaiocta_cFv */
@@ -440,6 +616,12 @@ void daDaiocta_c::getArg() {
 /* 00004364-00004660       .text createInit__11daDaiocta_cFv */
 void daDaiocta_c::createInit() {
     /* Nonmatching */
+    field_0x220C = current.pos;
+    initAwa();
+    modeProc(Proc_e(0), Mode_e(0));
+    initMtx();
+    attention_info.flags = 0;
+    shape_angle = current.angle;
 }
 
 /* 00004660-00004918       .text _create__11daDaiocta_cFv */
