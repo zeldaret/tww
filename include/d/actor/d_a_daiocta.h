@@ -22,6 +22,13 @@ public:
         
     };
 
+    struct ModeEntry {
+        typedef void (daDaiocta_c::*ModeProcFunc)(void);
+        ModeProcFunc mInitFunc;
+        ModeProcFunc mUpdFunc;
+        char* mModeName;
+    };
+
     u8 getSw() { return mSwitchNo; }
 
     void _coHit(fopAc_ac_c*);

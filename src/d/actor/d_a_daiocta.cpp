@@ -569,8 +569,24 @@ void daDaiocta_c::modeDelete() {
 }
 
 /* 000036A8-00003888       .text modeProc__11daDaiocta_cFQ211daDaiocta_c6Proc_eQ211daDaiocta_c6Mode_e */
-void daDaiocta_c::modeProc(daDaiocta_c::Proc_e, daDaiocta_c::Mode_e) {
-    /* Nonmatching */
+void daDaiocta_c::modeProc(daDaiocta_c::Proc_e param_1, daDaiocta_c::Mode_e param_2) {
+    /* Instruction match */
+    static ModeEntry mode_tbl[7] = {
+        { &daDaiocta_c::modeWaitInit,       &daDaiocta_c::modeWait,       "WAIT"        },
+        { &daDaiocta_c::modeHideInit,       &daDaiocta_c::modeHide,       "HIDE"        },
+        { &daDaiocta_c::modeAppearInit,     &daDaiocta_c::modeAppear,     "APPEAR"      },
+        { &daDaiocta_c::modeDamageInit,     &daDaiocta_c::modeDamage,     "DAMAGE"      },
+        { &daDaiocta_c::modeDamageBombInit, &daDaiocta_c::modeDamageBomb, "DAMAGE_BOMB" },
+        { &daDaiocta_c::modeDeleteInit,     &daDaiocta_c::modeDelete,     "DELETE"      },
+        { &daDaiocta_c::modeDemoInit,       &daDaiocta_c::modeDemo,       "DEMO"        }
+    };
+
+    if (param_1 == 0) {
+        field_0x056C = param_2;
+        (this->*mode_tbl[field_0x056C].mInitFunc)();
+    } else if (param_1 == 1) {
+        (this->*mode_tbl[field_0x056C].mUpdFunc)();
+    }
 }
 
 /* 00003888-00003AF4       .text setAnm__11daDaiocta_cFv */
