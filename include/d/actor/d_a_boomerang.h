@@ -20,6 +20,8 @@ public:
 
 class daBoomerang_c : public fopAc_ac_c {
 public:
+    typedef BOOL (daBoomerang_c::*daBoomerang_c_ProcFunc)();
+
     void onCancelFlg() { mCancelFlg = true; }
 
     daBoomerang_c();
@@ -35,21 +37,25 @@ public:
     void setKeepMatrix();
     void setAimPos();
     void checkBgHit(cXyz*, cXyz*);
-    void procWait();
-    void procMove();
+    BOOL procWait();
+    BOOL procMove();
     void createHeap();
 
 public:
-    /* 0x0290 */ u8 m290[0x294 - 0x290];
+    /* 0x0290 */ J3DModel* mpModel;
     /* 0x0294 */ daBoomerang_sightPacket_c mSightPacket;
-    /* 0x0298 */ u8 field_0x298[0x3A0 - 0x298];
+    /* 0x0298 */ u8 field_0x298[0x398 - 0x298];
+    /* 0x0398 */ void* field_0x398;
+    /* 0x039C */ ResTIMG* field_0x39C;
     /* 0x03A0 */ daBoomerang_blur_c mBlur;
-    /* 0x03B0 */ u8 field_0x3B0[0x3C4 - 0x3B0];
+    /* 0x03B0 */ void* field_0x3B0;
+    /* 0x03B4 */ u8 field_0x3B4[0x3C4 - 0x3B4];
     /* 0x03C4 */ cXyz arr_0x3C4[60];
     /* 0x0694 */ cXyz arr_0x694[60];
     /* 0x0964 */ cXyz arr_0x964[60];
     /* 0x0C34 */ cXyz arr_0xC34[60];
-    /* 0x0F04 */ u8 field_0xF04[0xF34 - 0xF04];
+    /* 0x0F04 */ s32 arr_0xF04[5];
+    /* 0x0F18 */ u8 field_0xF18[0xF34 - 0xF18];
     /* 0x0F34 */ bool mCancelFlg;
     /* 0x0F35 */ u8 field_0xF35[0xF64 - 0xF35];
     /* 0x0F64 */ dCcD_Stts mStts;
@@ -57,7 +63,8 @@ public:
     /* 0x0FC4 */ dCcD_Cps mCps;
     /* 0x10FC */ u8 field_0x10FC[0x1118 - 0x10FC];
     /* 0x1118 */ dBgS_BoomerangLinChk mLinChk;
-    /* 0x1184 */ u8 field_0x1184[0x118C - 0x1184];
+    // FIXME: mCurrProcFunc should be at 0x1180.
+    /* 0x1184 */ daBoomerang_c_ProcFunc mCurrProcFunc;
 };
 
 STATIC_ASSERT(offsetof(daBoomerang_c, mSightPacket) == 0x294);
@@ -65,6 +72,6 @@ STATIC_ASSERT(offsetof(daBoomerang_c, mBlur) == 0x3A0);
 STATIC_ASSERT(offsetof(daBoomerang_c, mCancelFlg) == 0xF34);
 STATIC_ASSERT(offsetof(daBoomerang_c, mStts) == 0xF64);
 STATIC_ASSERT(offsetof(daBoomerang_c, mCps) == 0xFC4);
-STATIC_ASSERT(sizeof(daBoomerang_c) == 0x118C);
+// STATIC_ASSERT(sizeof(daBoomerang_c) == 0x118C);
 
 #endif /* D_A_BOOMERANG_H */

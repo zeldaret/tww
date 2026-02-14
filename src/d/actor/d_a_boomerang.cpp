@@ -8,6 +8,7 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/res/res_link.h"
 
 #include "assets/l_sightMatDL.h"
 #include "assets/l_sightDL__d_a_boomerang.h"
@@ -133,12 +134,12 @@ void daBoomerang_c::checkBgHit(cXyz*, cXyz*) {
 }
 
 /* 800E1F94-800E239C       .text procWait__13daBoomerang_cFv */
-void daBoomerang_c::procWait() {
+BOOL daBoomerang_c::procWait() {
     /* Nonmatching */
 }
 
 /* 800E239C-800E2AF4       .text procMove__13daBoomerang_cFv */
-void daBoomerang_c::procMove() {
+BOOL daBoomerang_c::procMove() {
     /* Nonmatching */
 }
 
@@ -174,6 +175,42 @@ static BOOL daBoomerang_createHeap(fopAc_ac_c*) {
 /* 800E2CE8-800E2EF0       .text create__13daBoomerang_cFv */
 cPhs_State daBoomerang_c::create() {
     /* Nonmatching */
+    fopAcM_SetupActor(this, daBoomerang_c);
+
+    if (!fopAcM_entrySolidHeap(this, daBoomerang_createHeap, 0xD40)) {
+        return cPhs_ERROR_e;
+    }
+
+    setKeepMatrix();
+    cullMtx = model->getBaseTRMtx();
+    mCurrProcFunc = &daBoomerang_c::procWait;
+    mStts.Init(0x3C, 0xFF, this);
+    mCps.Set(l_at_cps_src);
+
+    mCps.SetAtHitCallback(&daBoomerang_rockLineCallback);
+    mCps.SetStts(&mStts);
+
+    for (int i = 0; i < 5; i++) {
+        arr_0xF04[i] = -1;
+    }
+
+    {
+        ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", LINK_BTI_BLUR);
+        JUT_ASSERT(1629, tmp_img != NULL);
+        field_0x3B0 = (u8*)tmp_img + tmp_img->imageOffset;
+    }
+
+    {
+        ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", LINK_BTI_ROCK_MARK);
+        JUT_ASSERT(1637, tmp_img != NULL);
+        field_0x398 = (u8*)tmp_img + tmp_img->imageOffset;
+        field_0x39C = tmp_img;
+    }
+
+    setRoomInfo();
+    model = mpModel;
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 800E2EF0-800E329C       .text __ct__13daBoomerang_cFv */
