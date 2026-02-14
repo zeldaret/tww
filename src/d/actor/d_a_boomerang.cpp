@@ -164,14 +164,21 @@ static BOOL daBoomerang_Delete(daBoomerang_c*) {
 }
 
 /* 800E2C00-800E2CC8       .text createHeap__13daBoomerang_cFv */
-void daBoomerang_c::createHeap() {
-    /* Nonmatching */
+BOOL daBoomerang_c::createHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Link", LINK_BDL_BOOMERANG);
+    JUT_ASSERT(1546, modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x37220202);
+    if (mpModel == NULL)
+        return FALSE;
+    return TRUE;
 }
 
 /* 800E2CC8-800E2CE8       .text daBoomerang_createHeap__FP10fopAc_ac_c */
-static BOOL daBoomerang_createHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL daBoomerang_createHeap(fopAc_ac_c* i_this) {
+    return static_cast<daBoomerang_c*>(i_this)->createHeap();
 }
+
 /* 800E2CE8-800E2EF0       .text create__13daBoomerang_cFv */
 cPhs_State daBoomerang_c::create() {
     /* Nonmatching */

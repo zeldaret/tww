@@ -39,7 +39,7 @@ public:
     void checkBgHit(cXyz*, cXyz*);
     BOOL procWait();
     BOOL procMove();
-    void createHeap();
+    BOOL createHeap();
 
 public:
     /* 0x0290 */ J3DModel* mpModel;
