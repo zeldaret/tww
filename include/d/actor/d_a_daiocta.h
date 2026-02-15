@@ -15,11 +15,19 @@ class dCcD_SrcCps;
 class daDaiocta_c : public fopAc_ac_c {
 public:
     enum Proc_e {
-        
+        PROC_INIT = 0,
+        PROC_EXEC = 1
     };
 
     enum Mode_e {
-        
+        MODE_WAIT        = 0,
+        MODE_HIDE        = 1,
+        MODE_APPEAR      = 2,
+        MODE_DAMAGE      = 3,
+        MODE_DAMAGE_BOMB = 4,
+        MODE_DELETE      = 5,
+        MODE_DEMO        = 6,
+        MODE_NULL
     };
 
     struct ModeEntry {
@@ -86,11 +94,20 @@ public:
 
 public:
     /* 0x0290 */ cXyz field_0x0290[37];
-    /* 0x044C */ u8 field_0x044C[0x056C - 0x044C];
+    /* 0x044C */ u8 field_0x044C[0x04E0 - 0x044C];
+    /* 0x04E0 */ u32 field_0x04E0[12];
+    /* 0x0510 */ u8 field_0x0510[0x056C - 0x0510];
     /* 0x056C */ s32 field_0x056C;
-    /* 0x0570 */ u8 field_0x0570[0x0574 - 0x0570];
+    /* 0x0570 */ u8 field_0x0570[0x0571 - 0x0570];
+    /* 0x0571 */ s8 field_0x0571;
+    /* 0x0572 */ u8 field_0x0572[0x0573 - 0x0572];
+    /* 0x0573 */ u8 field_0x0573;
     /* 0x0574 */ u8 mSwitchNo;
-    /* 0x0575 */ u8 field_0x0575[0x0580 - 0x0575];
+    /* 0x0575 */ u8 field_0x0575;
+    /* 0x0576 */ u8 field_0x0576[0x0578 - 0x0576];
+    /* 0x0578 */ f32 field_0x0578;
+    /* 0x057C */ u8 field_0x057C;
+    /* 0x057D */ u8 field_0x057D[0x0580 - 0x057D];
     /* 0x0580 */ request_of_phase_process_class field_0x0580;
     /* 0x0588 */ mDoExt_McaMorf* mpMorf;
     /* 0x058C */ mDoExt_brkAnm field_0x058C;
@@ -104,19 +121,25 @@ public:
     /* 0x21D0 */ cXyz field_0x21D0;
     /* 0x21DC */ cXyz field_0x21DC;
     /* 0x21E8 */ cXyz field_0x21E8;
-    /* 0x21F4 */ u8 field_0x21F4[0x220C - 0x21F4];
+    /* 0x21F4 */ cXyz field_0x21F4;
+    /* 0x2200 */ csXyz field_0x2200;
+    /* 0x2206 */ u8 field_0x2206[0x2208 - 0x2206];
+    /* 0x2208 */ f32 field_0x2208;
     /* 0x220C */ cXyz field_0x220C;
     /* 0x2218 */ dBgS_ObjAcch field_0x2218;
     /* 0x23DC */ dBgS_AcchCir field_0x23DC;
     /* 0x241C */ dPa_followEcallBack field_0x241C;
-    /* 0x2430 */ u8 field_0x2430[0x2434 - 0x2430];
+    /* 0x2430 */ f32 field_0x2430;
     /* 0x2434 */ cXyz field_0x2434;
-    /* 0x2440 */ u8 field_0x2440[0x26C8 - 0x2440];
-    /* 0x2440 */ JntHit_c* field_0x26C8;
+    /* 0x2440 */ fpc_ProcID field_0x2440[12];
+    /* 0x2470 */ u8 field_0x2470[12];
+    /* 0x247C */ u8 field_0x247C[0x26C4 - 0x247C];
+    /* 0x26C4 */ fpc_ProcID field_0x26C4;
+    /* 0x26C8 */ JntHit_c* field_0x26C8;
     /* 0x26CC */ J3DModel* field_0x26CC;
     /* 0x26D0 */ mDoExt_brkAnm field_0x26D0;
     /* 0x26E8 */ mDoExt_btkAnm field_0x26E8;
-    /* 0x26FC */ u8 field_0x26FC[0x2774 - 0x26FC];
+    /* 0x26FC */ J3DModel* field_0x26FC[30];
     /* 0x2774 */ mDoExt_bckAnm field_0x2774[30];
     /* 0x2954 */ mDoExt_btkAnm field_0x2954[30];
     /* 0x2BAC */ mDoExt_brkAnm field_0x2BAC[30];
