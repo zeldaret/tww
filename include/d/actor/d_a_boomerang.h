@@ -12,7 +12,8 @@ public:
 
 public:
     /* 0x010 */ void* imageData;
-    /* 0x014 */ u8 field_0x14[0x24 - 0x14];
+    /* 0x014 */ s32 field_0x14;
+    /* 0x018 */ cXyz pos;
     /* 0x024 */ cXyz arr_0x24[60];
     /* 0x2F4 */ cXyz arr_0x2F4[60];
     /* 0x5C4 */ cXyz arr_0x5C4[60];

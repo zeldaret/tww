@@ -47,8 +47,24 @@ static dCcD_SrcCps l_at_cps_src = {
 };
 
 /* 800E0C08-800E0D44       .text initBlur__18daBoomerang_blur_cFPA4_fs */
-void daBoomerang_blur_c::initBlur(MtxP, s16) {
-    /* Nonmatching */
+void daBoomerang_blur_c::initBlur(MtxP mtx, s16 axis) {
+    cMtx_multVec(mtx, &l_blur_top, &arr_0x24[0]);
+    cMtx_multVec(mtx, &l_blur_root, &arr_0x2F4[0]);
+    arr_0x24[1] = arr_0x24[0];
+    arr_0x2F4[1] = arr_0x2F4[0];
+
+    field_0x14 = 0;
+
+    pos.x = mtx[0][3];
+    pos.y = mtx[1][3];
+    pos.z = mtx[2][3];
+
+    mDoMtx_stack_c::copy(mtx);
+    mDoMtx_stack_c::YrotM(-(axis * 2));
+    mDoMtx_stack_c::multVec(&l_blur_top, &arr_0x5C4[0]);
+    mDoMtx_stack_c::multVec(&l_blur_root, &arr_0x894[0]);
+    arr_0x5C4[1] = arr_0x5C4[0];
+    arr_0x894[1] = arr_0x894[0];
 }
 
 /* 800E0D44-800E101C       .text copyBlur__18daBoomerang_blur_cFPA4_fs */
