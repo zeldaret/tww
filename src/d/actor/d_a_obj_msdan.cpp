@@ -5,22 +5,108 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_msdan.h"
-#include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_procname.h"
+
+const char daObjMsdan::Act_c::M_arcname[] = "Msdan";
+const char daObjMsdan::Act_c::M_evname[] = "Msdan";
 
 /* 00000078-000003D4       .text Mthd_Create__Q210daObjMsdan5Act_cFv */
 cPhs_State daObjMsdan::Act_c::Mthd_Create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjMsdan::Act_c);
+    cPhs_State state = dComIfG_resLoad(&this->mPhs, M_arcname);
+    if (state == cPhs_COMPLEATE_e) {
+        cXyz local_50 = this->current.pos;
+        csXyz local_58 = this->current.angle;
+        s32 tmp = (s32)local_58.y;
+        tmp += 0x10000;
+        tmp -= 0x8000;
+        local_58.y = tmp;
+
+        if (prm_get_size() != 0) {
+            local_50.y += 800.0f;
+            for (int i = 0; i < 31; i++) {
+                local_50.x += cM_ssin(current.angle.y) * 50.0f;
+                local_50.z += cM_scos(current.angle.y) * 50.0f;
+                fopAcM_create(PROC_Obj_MsdanSub, (i * 0x100) + prm_get_swSave() + prm_get_size() * 0x10000, &local_50, current.roomNo, &local_58, NULL, 0xff, NULL);
+            }
+        } else {
+            local_50.y += 400.0f;
+            for (int i = 16; i < 31; i++) {
+                local_50.x += cM_ssin(current.angle.y) * 50.0f;
+                local_50.z += cM_scos(current.angle.y) * 50.0f;
+                fopAcM_create(PROC_Obj_MsdanSub, (i * 0x100) + prm_get_swSave() + prm_get_size() * 0x10000, &local_50, current.roomNo, &local_58, NULL, 0xff, NULL);
+            }
+        }
+
+        if (prm_get_evId() == 0xff) {
+            mEventIdx = dComIfGp_evmng_getEventIdx("Msdan", 0xff);
+        } else {
+            mEventIdx = dComIfGp_evmng_getEventIdx(NULL, prm_get_evId());
+        }
+
+        if (fopAcM_isSwitch(this, prm_get_swSave())) {
+            mMode = 3;
+        } else {
+            mMode = 0;
+        }
+    }
+    return state;
 }
 
 /* 000003D4-000005C0       .text Mthd_Execute__Q210daObjMsdan5Act_cFv */
 BOOL daObjMsdan::Act_c::Mthd_Execute() {
-    /* Nonmatching */
+    s32 prm_swSave;
+    switch (this->mMode) {
+    case 0:
+        prm_swSave = prm_get_swSave();
+        if (!fopAcM_isSwitch(this, prm_swSave)) {
+            break;
+        }
+
+        if (prm_get_size() != 0) {
+            this->mMode = 3;
+            break;
+        }
+
+        if (prm_get_sound() != 0) {
+            this->mMode = 3;
+            break;
+        }
+
+        if (this->mEventIdx == -1) {
+            mDoAud_seStart(JA_SE_READ_RIDDLE_1);
+            this->mMode = 3;
+            break;
+        }
+
+        fopAcM_orderOtherEventId(this, mEventIdx, 0xff, 0xffff, 0, 1);
+        this->mMode = 1;
+        break;
+    case 1:
+        if (this->eventInfo.checkCommandDemoAccrpt()) {
+            this->mMode = 2;
+            mDoAud_seStart(JA_SE_READ_RIDDLE_1);
+        } else {
+            fopAcM_orderOtherEventId(this, mEventIdx, 0xff, 0xffff, 0, 1);
+        }
+        break;
+    case 2:
+        if (dComIfGp_evmng_endCheck(this->mEventIdx)) {
+            dComIfGp_event_reset();
+            this->mMode = 3;
+        }
+        break;
+    case 3:
+        break;
+    }
+    return true;
 }
 
 /* 000005C0-000005F0       .text Mthd_Delete__Q210daObjMsdan5Act_cFv */
 BOOL daObjMsdan::Act_c::Mthd_Delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&this->mPhs, M_arcname);
+    return true;
 }
 
 namespace daObjMsdan {
