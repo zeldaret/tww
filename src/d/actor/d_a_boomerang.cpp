@@ -145,7 +145,21 @@ BOOL daBoomerang_c::procMove() {
 
 /* 800E2AF4-800E2BD0       .text execute__13daBoomerang_cFv */
 BOOL daBoomerang_c::execute() {
-    /* Nonmatching */
+    for (int i = 0; i < field_0xF31; i++) {
+        arr_0xF18[i] = fopAcM_SearchByID(arr_0xF04[i]);
+    }
+
+    if (mCurrProcFunc) {
+        (this->*mCurrProcFunc)();
+    }
+
+    attention_info.position = current.pos;
+    eyePos = current.pos;
+
+    setRoomInfo();
+    mSightPacket.play(field_0xF31);
+
+    return TRUE;
 }
 
 /* 800E2BD0-800E2BF0       .text daBoomerang_Execute__FP13daBoomerang_c */
