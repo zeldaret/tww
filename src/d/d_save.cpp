@@ -960,8 +960,8 @@ void dSv_player_info_c::init() {
     mDeathCount = 0;
     mClearCount = 0;
 
-    for (int i = 0; i < ARRAY_SIZE(field_0x47); i++) {
-        field_0x47[i] = 0;
+    for (int i = 0; i < ARRAY_SIZE(mPuzzleData); i++) {
+        mPuzzleData[i] = 0;
     }
 
     mRandomSalvagePoint = cM_rndF(3.0f);

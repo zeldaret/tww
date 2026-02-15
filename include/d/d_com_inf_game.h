@@ -1839,6 +1839,18 @@ inline void dComIfGs_setRandomSalvagePoint(u8 point) {
     g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().setRandomSalvage(point);
 }
 
+inline void dComIfGs_setPuzzleData(int i_idx, u8 i_puzzlePieceData) {
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().setPuzzleData(i_idx, i_puzzlePieceData);
+}
+
+inline u8 dComIfGs_getPuzzleInfo() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().getPuzzleInfo();
+}
+
+inline void dComIfGs_setPuzzleInfo(int i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().setPuzzleInfo(i_idx);
+}
+
 inline u8 dComIfGs_getGbaRupeeCount() {
     return g_dComIfG_gameInfo.save.getDan().getGbaRupeeCount();
 }
