@@ -221,7 +221,7 @@ cPhs_State daBoomerang_c::create() {
     {
         ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", LINK_BTI_BLUR);
         JUT_ASSERT(1629, tmp_img != NULL);
-        field_0x3B0 = (u8*)tmp_img + tmp_img->imageOffset;
+        mBlur.imageData = (u8*)tmp_img + tmp_img->imageOffset;
     }
 
     {

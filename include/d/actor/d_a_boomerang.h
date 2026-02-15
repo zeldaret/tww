@@ -9,6 +9,14 @@ public:
     void initBlur(MtxP, s16);
     void copyBlur(MtxP, s16);
     virtual void draw();
+
+public:
+    /* 0x010 */ void* imageData;
+    /* 0x014 */ u8 field_0x14[0x24 - 0x14];
+    /* 0x024 */ cXyz arr_0x24[60];
+    /* 0x2F4 */ cXyz arr_0x2F4[60];
+    /* 0x5C4 */ cXyz arr_0x5C4[60];
+    /* 0x894 */ cXyz arr_0x894[60];
 };
 
 class daBoomerang_sightPacket_c : public dDlst_base_c {
@@ -48,12 +56,6 @@ public:
     /* 0x0398 */ void* field_0x398;
     /* 0x039C */ ResTIMG* field_0x39C;
     /* 0x03A0 */ daBoomerang_blur_c mBlur;
-    /* 0x03B0 */ void* field_0x3B0;
-    /* 0x03B4 */ u8 field_0x3B4[0x3C4 - 0x3B4];
-    /* 0x03C4 */ cXyz arr_0x3C4[60];
-    /* 0x0694 */ cXyz arr_0x694[60];
-    /* 0x0964 */ cXyz arr_0x964[60];
-    /* 0x0C34 */ cXyz arr_0xC34[60];
     /* 0x0F04 */ s32 arr_0xF04[5];
     /* 0x0F18 */ fopAc_ac_c* arr_0xF18[5];
     /* 0x0F2C */ u8 field_0xF2C[0xF30 - 0xF2C];
