@@ -28,8 +28,10 @@ public:
     bool _delete();
 
 public:
-    /* Place member variables here */
-};
+    /* 0x290 */ u8 field_0x290[0x294 - 0x290];
+    /* 0x294 */ u8 field_0x294;
+    /* 0x295 */ u8 field_0x295[0x4A0 - 0x295];
+};  // Size: 0x4A0
 
 class daDaiocta_Eye_HIO_c {
 public:

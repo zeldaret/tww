@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_daiocta.h"
 #include "d/actor/d_a_bomb.h"
+#include "d/actor/d_a_daiocta_eye.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_cc_d.h"
@@ -88,22 +89,25 @@ daDaiocta_HIO_c::daDaiocta_HIO_c() {
     field_0x008 = 0;
     field_0x006 = 0;
     field_0x005 = 0;
-    field_0x01C = 600.0;
-    field_0x020 = 500.0;
-    field_0x024 = 450.0;
-    field_0x028 = 350.0;
-    field_0x02C = 350.0;
-    field_0x030 = 300.0;
-    field_0x034 = 60.0;
-    field_0x038 = 60.0;
-    field_0x03C = 60.0;
-    field_0x040 = 60.0;
-    field_0x044 = 60.0;
-    field_0x048 = 60.0;
-    field_0x04C = 60.0;
-    field_0x050 = 60.0;
-    field_0x054 = 60.0;
-    field_0x058 = 60.0;
+
+    field_0x01C[0] = 600.0;
+    field_0x01C[1] = 500.0;
+    field_0x01C[2] = 450.0;
+    field_0x01C[3] = 350.0;
+    field_0x01C[4] = 350.0;
+    field_0x01C[5] = 300.0;
+
+    field_0x034[0] = 60.0;
+    field_0x034[1] = 60.0;
+    field_0x034[2] = 60.0;
+    field_0x034[3] = 60.0;
+    field_0x034[4] = 60.0;
+    field_0x034[5] = 60.0;
+    field_0x034[6] = 60.0;
+    field_0x034[7] = 60.0;
+    field_0x034[8] = 60.0;
+    field_0x034[9] = 60.0;
+
     field_0x05C = 100.0;
     field_0x060 = 100.0;
     field_0x064 = 250.0;
@@ -566,8 +570,23 @@ void daDaiocta_c::isLivingEye() {
 }
 
 /* 000015E8-00001684       .text isDead__11daDaiocta_cFv */
-void daDaiocta_c::isDead() {
+bool daDaiocta_c::isDead() {
     /* Nonmatching */
+    int count = 0;
+    for (int i = 0; i < ARRAY_SSIZE(field_0x2470); i++) {
+        if (field_0x2470[i] == 1) {
+            daDaiocta_Eye_c* ac_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(field_0x2440[i]);
+            if (ac_p && ac_p->field_0x294 == 0) {
+                count++;
+            }
+        }
+    }
+
+    if (count == 0) {
+        return true;
+    }
+
+    return false;
 }
 
 /* 00001684-0000171C       .text isDamageEye__11daDaiocta_cFv */
@@ -587,7 +606,111 @@ void daDaiocta_c::setRotEye() {
 
 /* 00001A7C-00001EA0       .text setCollision__11daDaiocta_cFv */
 void daDaiocta_c::setCollision() {
-    /* Nonmatching */
+    for (int i = 0; i < ARRAY_SSIZE(field_0x05A4); i++) {
+        int j;
+        switch (i) {
+            case 0:
+                j = 2;
+                break;
+            case 1:
+                j = 3;
+                break;
+            case 2:
+                j = 4;
+                break;
+            case 3:
+                j = 5;
+                break;
+            case 4:
+                j = 6;
+                break;
+            case 5:
+                j = 0x14;
+                break;
+        }
+
+        field_0x05A4[i].SetR(l_HIO.field_0x01C[i]);
+        field_0x05A4[i].SetC(field_0x0290[j]);
+        dComIfG_Ccsp()->Set(&field_0x05A4[i]);
+    }
+
+    for (int i = 0; i < 10; i++) {
+        int j, k;
+        switch (i) {
+            case 0:
+                j = 0x19;
+                k = 0x1A;
+                break;
+            case 1:
+                j = 0x1A;
+                k = 0x1B;
+                break;
+            case 2:
+                j = 0x1B;
+                k = 0x1C;
+                break;
+            case 3:
+                j = 0x1C;
+                k = 0x1D;
+                break;
+            case 4:
+                j = 0x1D;
+                k = 0x1E;
+                break;
+            case 5:
+                j = 0x1F;
+                k = 0x20;
+                break;
+            case 6:
+                j = 0x20;
+                k = 0x21;
+                break;
+            case 7:
+                j = 0x21;
+                k = 0x22;
+                break;
+            case 8:
+                j = 0x22;
+                k = 0x23;
+                break;
+            case 9:
+                j = 0x23;
+                k = 0x24;
+                break;
+        }
+
+        field_0x0CAC[i].set(field_0x0290[j], field_0x0290[k]);
+        field_0x0CAC[i].SetR(l_HIO.field_0x034[i]);
+        dComIfG_Ccsp()->Set(&field_0x0CAC[i]);
+    }
+
+    field_0x0CAC[10].set(field_0x0290[0x24], field_0x21AC);
+    field_0x0CAC[10].SetR(l_HIO.field_0x05C);
+    dComIfG_Ccsp()->Set(&field_0x0CAC[10]);
+
+    field_0x0CAC[11].set(field_0x0290[0x1E], field_0x21A0);
+    field_0x0CAC[11].SetR(l_HIO.field_0x060);
+    dComIfG_Ccsp()->Set(&field_0x0CAC[11]);
+
+    field_0x0CAC[12].set(field_0x0290[6], field_0x21B8);
+    field_0x0CAC[12].SetR(l_HIO.field_0x064);
+    dComIfG_Ccsp()->Set(&field_0x0CAC[12]);
+
+    field_0x0CAC[13].set(field_0x0290[10], field_0x21DC);
+    field_0x0CAC[13].SetR(l_HIO.field_0x068);
+    dComIfG_Ccsp()->Set(&field_0x0CAC[13]);
+
+    field_0x0CAC[14].set(field_0x0290[8], field_0x21E8);
+    field_0x0CAC[14].SetR(l_HIO.field_0x06C);
+    dComIfG_Ccsp()->Set(&field_0x0CAC[14]);
+
+    field_0x0CAC[15].set(field_0x0290[9], field_0x21C4);
+    field_0x0CAC[15].SetR(l_HIO.field_0x070);
+    dComIfG_Ccsp()->Set(&field_0x0CAC[15]);
+    
+    field_0x0CAC[16].set(field_0x0290[7], field_0x21D0);
+    field_0x0CAC[16].SetR(l_HIO.field_0x074);
+    dComIfG_Ccsp()->Set(&field_0x0CAC[16]);
 }
 
 /* 00001EA0-00001EB8       .text modeHideInit__11daDaiocta_cFv */
@@ -650,7 +773,7 @@ void daDaiocta_c::modeDemoInit() {
 void daDaiocta_c::modeDemo() {
     /* Instruction match */
     current.pos.y = field_0x2430;
-    fopAc_ac_c* ship_p_1 = fopAcM_SearchByName(PROC_SHIP);
+    daShip_c* ship_p_1 = (daShip_c *) fopAcM_SearchByName(PROC_SHIP);
     field_0x21F4 = ship_p_1->current.pos;
     field_0x2200 = ship_p_1->current.angle;
 
@@ -658,20 +781,28 @@ void daDaiocta_c::modeDemo() {
         int staff_id = dComIfGp_evmng_getMyStaffId("Daiocta");
         char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(staff_id);
 
-        cXyz pos = current.pos;
+        cXyz current_pos = current.pos;
         s16 o_angle;
-        dComIfGp_getMapTrans(fopAcM_GetRoomNo(this), &pos.x, &pos.z, &o_angle);
+        dComIfGp_getMapTrans(
+            fopAcM_GetRoomNo(this), 
+            &current_pos.x, 
+            &current_pos.z, 
+            &o_angle
+        );
 
-        s16 target = cLib_targetAngleY(&current.pos, &pos);
-        cLib_distanceAngleS(shape_angle.y, target);
+        s16 rot_y = cLib_targetAngleY(&current.pos, &current_pos);
+        cLib_distanceAngleS(shape_angle.y, rot_y);
 
         if (strcmp(cut_name, "SUIKOMI1") == 0) {
             field_0x0571 = 6;
             if (field_0x0571 == 6) {
-                mDoAud_seStart(JA_SE_CM_DO_SUCK_IN, &field_0x2434, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+                mDoAud_seStart(
+                    JA_SE_CM_DO_SUCK_IN, &field_0x2434, 0, 
+                    dComIfGp_getReverb(fopAcM_GetRoomNo(this))
+                );
             } 
-            f32 dist = (field_0x2434 - field_0x21F4).absXZ();
-            if (dist < 80.0f) {
+
+            if ((field_0x2434 - field_0x21F4).absXZ() < 80.0f) {
                 dComIfGp_evmng_cutEnd(staff_id);
             } else if (mpMorf->getFrame() == 50.0f) {
                 mpMorf->setFrame(40.0f);
@@ -704,6 +835,7 @@ void daDaiocta_c::modeDemo() {
             if (mpMorf->getFrame() == 65.0f) {
                 fopAcM_seStart(this, JA_SE_CM_DO_SUCK_IN_FIN, 0);
             }
+
             s16 target_angle_y = cLib_targetAngleY(&current.pos, &ship_p_1->current.pos); 
             cLib_distanceAngleS(shape_angle.y, target_angle_y);
             cLib_chasePosXZ(&field_0x21F4, current.pos, field_0x2208);
@@ -713,12 +845,11 @@ void daDaiocta_c::modeDemo() {
             daShip_c* ship_p_2 = (daShip_c *) fopAcM_SearchByName(PROC_SHIP);
             ship_p_2->initStartPos(&field_0x21F4, field_0x2200.y);
 
-            f32 dist = (current.pos - field_0x21F4).absXZ();
-            if (dist < 10.0f && (mpMorf->isStop() || field_0x0571 == 2)) {
-                shape_angle.y = target;
+            if ((current.pos - field_0x21F4).absXZ() < 10.0f && (mpMorf->isStop() || field_0x0571 == 2)) {
+                shape_angle.y = rot_y;
                 mpMorf->calc();
                 current.pos = field_0x220C;
-                ship_p_2->initStartPos(&current.pos, target);
+                ship_p_2->initStartPos(&current.pos, rot_y);
                 dComIfGp_evmng_cutEnd(staff_id);
             }
         }
@@ -728,14 +859,17 @@ void daDaiocta_c::modeDemo() {
             actor_p->current.pos = current.pos;
             actor_p->current.pos.y += 20.0f;
             if (s32(mpMorf->getFrame()) == 26) {
-                mDoAud_seStart(JA_SE_CV_DO_SPIT_SHIP, &field_0x2434, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+                mDoAud_seStart(
+                    JA_SE_CV_DO_SPIT_SHIP, &field_0x2434, 0, 
+                    dComIfGp_getReverb(fopAcM_GetRoomNo(this))
+                );
             }
 
             if (field_0x0571 == 8 && mpMorf->isStop()) {
                 dComIfGp_evmng_cutEnd(staff_id);
                 mDoAud_subBgmStop();
             } else if (mpMorf->getFrame() < 10.0f) {
-                ((daShip_c *)ship_p_1)->initStartPos(&field_0x2434, target);
+                ship_p_1->initStartPos(&field_0x2434, rot_y);
             }
             field_0x0571 = 8;
         }
@@ -748,7 +882,11 @@ void daDaiocta_c::modeDemo() {
             if (field_0x0575 == 0xFF) {
                 daPy_getPlayerLinkActorClass()->startRestartRoom(6, 0xC9, -1.0f, 1);
             } else {
-                dComIfGp_setNextStage(dComIfGp_getStartStageName(), field_0x0575, fopAcM_GetRoomNo(this), -1, 0.0f, 6);
+                dComIfGp_setNextStage(
+                    dComIfGp_getStartStageName(), field_0x0575, 
+                    fopAcM_GetRoomNo(this), -1, 0.0f, 
+                    6
+                );
             }
         }
     } else {
