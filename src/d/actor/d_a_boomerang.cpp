@@ -13,6 +13,9 @@
 #include "assets/l_sightMatDL.h"
 #include "assets/l_sightDL__d_a_boomerang.h"
 
+static cXyz l_blur_top(40.0f, 0.0f, 0.0f);
+static cXyz l_blur_root(-40.0f, 0.0f, 0.0f);
+
 static dCcD_SrcCps l_at_cps_src = {
     // dCcD_SrcGObjInf
     {
