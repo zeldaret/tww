@@ -186,9 +186,15 @@ public:
 
 class dNpc_PathRun_c {
 public:
+
     bool setInfDrct(dPath* pPath);
     bool setInf(u8 pathIdx, s8 roomNo, u8 forwards);
     dPath* nextPath(s8 roomNo);
+    bool isPath(){return mPath != NULL;};
+    dPath* getPath(){return mPath;};
+    u8 getIdx(){return mCurrPointIndex;}
+    void setIdx(u8 idx){mCurrPointIndex = idx;}
+    bool getDir(){return mbGoingForwards;}
     cXyz getPoint(u8 pointIdx);
     bool chkPointPass(cXyz, bool);
     bool incIdx();
@@ -263,7 +269,8 @@ public:
     /* 0x6A8 */ u32 mEndMsgNo;
     /* 0x6AC */ fpc_ProcID mCurrMsgBsPcId;
     /* 0x6B0 */ msg_class* mpCurrMsg;
-    /* 0x6B4 */ u8 field_0x6b4[6];
+    /* 0x6B4 */ u32 field_0x6b4;
+    /* 0x6B8 */ u16 field_0x6b8;
     /* 0x6BA */ u16 field_0x6ba;
     /* 0x6BC */ u8 field_0x6bc[4];
     /* 0x6C0 */ /* vtable */
