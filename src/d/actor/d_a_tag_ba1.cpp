@@ -8,54 +8,102 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+#include "d/d_com_inf_game.h"
+#include "d/d_item_data.h"
+
+static daTag_Ba1_HIO_c::hio_prm_c a_prm_tbl = { 0 };
+static const char* l_evn_tbl = "Use_Fairy";
+
+static daTag_Ba1_HIO_c l_HIO;
+
 /* 000000EC-00000144       .text __ct__15daTag_Ba1_HIO_cFv */
 daTag_Ba1_HIO_c::daTag_Ba1_HIO_c() {
-    /* Nonmatching */
+    memcpy(&field_0x0C, &a_prm_tbl, 1);
+    mNo = -1;
+    mRefCount = -1;
 }
 
 /* 00000144-00000164       .text daTag_Ba1_XyCheck_cB__FPvi */
-void daTag_Ba1_XyCheck_cB(void*, int) {
-    /* Nonmatching */
+s16 daTag_Ba1_XyCheck_cB(void* obj, int i_itemBtn) {
+    ((daTag_Ba1_c*)obj)->XyCheck_cB(i_itemBtn);
 }
 
 /* 00000164-00000184       .text XyCheck_cB__11daTag_Ba1_cFi */
-void daTag_Ba1_c::XyCheck_cB(int) {
-    /* Nonmatching */
+BOOL daTag_Ba1_c::XyCheck_cB(int i_itemBtn) {
+    return dComIfGp_getSelectItem(i_itemBtn) == dItem_FAIRY_BOTTLE_e;
 }
 
 /* 00000184-000001A4       .text daTag_Ba1_XyEvent_cB__FPvi */
-void daTag_Ba1_XyEvent_cB(void*, int) {
-    /* Nonmatching */
+s16 daTag_Ba1_XyEvent_cB(void* obj, int param) {
+    ((daTag_Ba1_c*)obj)->XyEvent_cB(param);
 }
 
 /* 000001A4-000001C0       .text XyEvent_cB__11daTag_Ba1_cFi */
-void daTag_Ba1_c::XyEvent_cB(int) {
-    /* Nonmatching */
+int daTag_Ba1_c::XyEvent_cB(int) {
+    field_0x292 = 0;
+    return (&field_0x290)[field_0x292];
 }
 
 /* 000001C0-00000288       .text createInit__11daTag_Ba1_cFv */
-void daTag_Ba1_c::createInit() {
-    /* Nonmatching */
+bool daTag_Ba1_c::createInit() {
+    bool r3 = dComIfGs_isEventBit(0x520);
+    if (!r3) {
+        return r3;
+    }
+
+    bool r30 = dComIfGs_isEventBit(0x2A20) == FALSE;
+    if (r30) {
+        attention_info.flags = fopAc_Attn_ACTION_SPEAK_e;
+        attention_info.distances[3] = 0x1A;
+        field_0x290 = dComIfGp_evmng_getEventIdx(l_evn_tbl, 0xFF);
+        eventInfo.mpCheckCB = daTag_Ba1_XyCheck_cB;
+        eventInfo.mpEventCB = daTag_Ba1_XyEvent_cB;
+    }
+
+    return r30;
 }
 
 /* 00000288-00000290       .text _draw__11daTag_Ba1_cFv */
 BOOL daTag_Ba1_c::_draw() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000290-00000340       .text _execute__11daTag_Ba1_cFv */
 BOOL daTag_Ba1_c::_execute() {
     /* Nonmatching */
+    int r3 = -1;
+    if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk())
+        r3 = dComIfGp_evmng_getMyStaffId("TagBa1", NULL, 0);
+
+    if (r3 >= 0 && dComIfGp_evmng_endCheck((&field_0x290)[field_0x292])) {
+        dComIfGp_event_reset();
+        fopAcM_delete(this);
+    }
+
+    return TRUE;
 }
 
 /* 00000340-00000394       .text _delete__11daTag_Ba1_cFv */
 BOOL daTag_Ba1_c::_delete() {
-    /* Nonmatching */
+    if (l_HIO.mRefCount >= 0 && (l_HIO.mRefCount = l_HIO.mRefCount - 1) < 0)
+        mDoHIO_deleteChild(l_HIO.mNo);
+
+    return TRUE;
 }
 
 /* 00000394-00000454       .text _create__11daTag_Ba1_cFv */
 cPhs_State daTag_Ba1_c::_create() {
-    /* Nonmatching */
+    if (l_HIO.mRefCount < 0) 
+        l_HIO.mNo = mDoHIO_createChild("おばあちゃんタグ", &l_HIO);
+    l_HIO.mRefCount++;
+
+    fopAcM_SetupActor(this, daTag_Ba1_c);
+
+    bool r3 = createInit();
+    if (r3 == FALSE)
+        return cPhs_ERROR_e;
+    else
+        return cPhs_COMPLEATE_e;
 }
 
 /* 00000454-00000474       .text daTag_Ba1_Create__FP10fopAc_ac_c */
