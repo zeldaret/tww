@@ -9,6 +9,7 @@
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/res/res_link.h"
+#include "dolphin/gf/GF.h"
 
 #include "assets/l_sightMatDL.h"
 #include "assets/l_sightDL__d_a_boomerang.h"
@@ -125,6 +126,123 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
 /* 800E101C-800E13A4       .text draw__18daBoomerang_blur_cFv */
 void daBoomerang_blur_c::draw() {
     /* Nonmatching */
+
+#include "assets/l_matDL__draw__18daBoomerang_blur_cFv.h"
+
+    static GXVtxDescList l_vtxDescList[] = {
+        {GX_VA_POS, GX_DIRECT},
+        {GX_VA_TEX0, GX_DIRECT},
+        {GX_VA_NULL, GX_NONE},
+    };
+
+    static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
+        {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
+        {GX_VA_TEX0, GX_TEX_ST, GX_S16, 0x08},
+        {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
+    };
+
+    static GXTexObj texObj;
+
+    j3dSys.reinitGX();
+
+    GXSetNumIndStages(0);
+    GXInitTexObj(&texObj, imageData, 16, 4, GX_TF_I4, GX_CLAMP, GX_CLAMP, FALSE);
+    GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, FALSE, FALSE, GX_ANISO_1);
+    GXLoadTexObj(&texObj, GX_TEXMAP0);
+
+    GXCallDisplayList(l_matDL, 0x80);
+
+    static GXColor color0 = {0xFF, 0xFF, 0x7B, 0x96};
+    GFSetTevColor(GX_TEVREG0, color0);
+
+    s16 alphaStep = 0xFF / (field_0x14 / 2 + 1);
+
+    GFSetVtxDescv(l_vtxDescList);
+    GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
+
+    GFLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
+
+    // Start quads.
+    GXFIFO.u8 = GX_QUADS | GX_VTXFMT0;
+    GXFIFO.u16 = field_0x14 * 4 + 4;
+
+    s16 alpha1;
+    s16 alphaNext;
+    s16 alpha0;
+
+    alphaNext = alphaStep;
+    alpha0 = 0;
+    if (field_0x14 >= 0) {
+        for (int i = field_0x14 + 1; i >= 0; i--) {
+            alpha1 = alphaNext;
+            {
+                // GXPositionXYZ(arr_0x24[0][i]);
+                GXPosition3f32(arr_0x24[0][i].x, arr_0x24[0][i].y, arr_0x24[0][i].z);
+                GXPosition1x16(alpha1);
+                GXPosition1x16(0x00);
+            }
+            {
+                // GXPositionXYZ(arr_0x2F4[0][i]);
+                GXPosition3f32(arr_0x2F4[0][i].x, arr_0x2F4[0][i].y, arr_0x2F4[0][i].z);
+                GXPosition1x16(alpha1);
+                GXPosition1x16(0xFF);
+            }
+            {
+                // GXPositionXYZ(arr_0x2F4[0][i + 1]);
+                GXPosition3f32(arr_0x2F4[0][i + 1].x, arr_0x2F4[0][i + 1].y, arr_0x2F4[0][i + 1].z);
+                GXPosition1x16(alpha0);
+                GXPosition1x16(0xFF);
+            }
+            {
+                // GXPositionXYZ(arr_0x24[0][i]);
+                GXPosition3f32(arr_0x24[0][i + 1].x, arr_0x24[0][i + 1].y, arr_0x24[0][i + 1].z);
+                GXPosition1x16(alpha0);
+                GXPosition1x16(0x00);
+            }
+
+            alphaNext = alpha1 + alphaStep;
+            alpha0 = alpha1;
+        }
+    }
+
+    // Start quads.
+    GXFIFO.u8 = GX_QUADS | GX_VTXFMT0;
+    GXFIFO.u16 = field_0x14 * 4 + 4;
+
+    alphaNext = alphaStep;
+    alpha0 = 0;
+    if (field_0x14 >= 0) {
+        for (int i = field_0x14 + 1; i >= 0; i--) {
+            alpha1 = alphaNext;
+            {
+                GXPosition3f32(arr_0x5C4[0][i].x, arr_0x5C4[0][i].y, arr_0x5C4[0][i].z);
+                GXPosition1x16(alpha1);
+                GXPosition1x16(0x00);
+            }
+            {
+                GXPosition3f32(arr_0x894[0][i].x, arr_0x894[0][i].y, arr_0x894[0][i].z);
+                GXPosition1x16(alpha1);
+                GXPosition1x16(0xFF);
+            }
+            {
+                GXPosition3f32(arr_0x894[0][i + 1].x, arr_0x894[0][i + 1].y, arr_0x894[0][i + 1].z);
+                GXPosition1x16(alpha0);
+                GXPosition1x16(0xFF);
+            }
+            {
+                GXPosition3f32(arr_0x5C4[0][i + 1].x, arr_0x5C4[0][i + 1].y, arr_0x5C4[0][i + 1].z);
+                GXPosition1x16(alpha0);
+                GXPosition1x16(0x00);
+            }
+
+            alphaNext = alpha1 + alphaStep;
+            alpha0 = alpha1;
+        }
+    }
+
+#if VERSION > VERSION_JPN
+    J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 800E13A4-800E14F0       .text draw__25daBoomerang_sightPacket_cFv */
