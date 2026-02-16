@@ -69,8 +69,6 @@ void daBoomerang_blur_c::initBlur(MtxP mtx, s16 yRot) {
 
 /* 800E0D44-800E101C       .text copyBlur__18daBoomerang_blur_cFPA4_fs */
 void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
-    /* Nonmatching */
-
     for (int i = 54; i >= 0; i--) {
         arr_0x24[1][i] = arr_0x24[0][i];
         arr_0x2F4[1][i] = arr_0x2F4[0][i];
@@ -91,7 +89,8 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
 
     mDoMtx_stack_c::push();
 
-    for (int i = 0; i < 5; i++) {
+    int i;
+    for (i = 0; i < 5; i++) {
         mDoMtx_stack_c::multVec(&l_blur_top, &arr_0x24[0][i]);
         mDoMtx_stack_c::multVec(&l_blur_root, &arr_0x2F4[0][i]);
         VECAdd(&arr_0x24[0][i], &(diff * t), &arr_0x24[0][i]);
@@ -106,7 +105,7 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
 
     mDoMtx_stack_c::YrotM(-(yRot * 2));
 
-    for (int i = 0; i < 5; i++) {
+    for (i = 0; i < 5; i++) {
         // FIXME: i is in the wrong register.
         mDoMtx_stack_c::multVec(&l_blur_top, &arr_0x5C4[0][i]);
         mDoMtx_stack_c::multVec(&l_blur_root, &arr_0x894[0][i]);
