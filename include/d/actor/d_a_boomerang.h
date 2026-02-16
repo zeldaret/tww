@@ -14,10 +14,10 @@ public:
     /* 0x010 */ void* imageData;
     /* 0x014 */ s32 field_0x14;
     /* 0x018 */ cXyz pos;
-    /* 0x024 */ cXyz arr_0x24[60];
-    /* 0x2F4 */ cXyz arr_0x2F4[60];
-    /* 0x5C4 */ cXyz arr_0x5C4[60];
-    /* 0x894 */ cXyz arr_0x894[60];
+    /* 0x024 */ cXyz arr_0x24[12][5];
+    /* 0x2F4 */ cXyz arr_0x2F4[12][5];
+    /* 0x5C4 */ cXyz arr_0x5C4[12][5];
+    /* 0x894 */ cXyz arr_0x894[12][5];
 };
 
 class daBoomerang_sightPacket_c : public dDlst_base_c {

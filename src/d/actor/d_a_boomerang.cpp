@@ -47,11 +47,11 @@ static dCcD_SrcCps l_at_cps_src = {
 };
 
 /* 800E0C08-800E0D44       .text initBlur__18daBoomerang_blur_cFPA4_fs */
-void daBoomerang_blur_c::initBlur(MtxP mtx, s16 axis) {
-    cMtx_multVec(mtx, &l_blur_top, &arr_0x24[0]);
-    cMtx_multVec(mtx, &l_blur_root, &arr_0x2F4[0]);
-    arr_0x24[1] = arr_0x24[0];
-    arr_0x2F4[1] = arr_0x2F4[0];
+void daBoomerang_blur_c::initBlur(MtxP mtx, s16 yRot) {
+    cMtx_multVec(mtx, &l_blur_top, &arr_0x24[0][0]);
+    cMtx_multVec(mtx, &l_blur_root, &arr_0x2F4[0][0]);
+    arr_0x24[0][1] = arr_0x24[0][0];
+    arr_0x2F4[0][1] = arr_0x2F4[0][0];
 
     field_0x14 = 0;
 
@@ -60,16 +60,67 @@ void daBoomerang_blur_c::initBlur(MtxP mtx, s16 axis) {
     pos.z = mtx[2][3];
 
     mDoMtx_stack_c::copy(mtx);
-    mDoMtx_stack_c::YrotM(-(axis * 2));
-    mDoMtx_stack_c::multVec(&l_blur_top, &arr_0x5C4[0]);
-    mDoMtx_stack_c::multVec(&l_blur_root, &arr_0x894[0]);
-    arr_0x5C4[1] = arr_0x5C4[0];
-    arr_0x894[1] = arr_0x894[0];
+    mDoMtx_stack_c::YrotM(-(yRot * 2));
+    mDoMtx_stack_c::multVec(&l_blur_top, &arr_0x5C4[0][0]);
+    mDoMtx_stack_c::multVec(&l_blur_root, &arr_0x894[0][0]);
+    arr_0x5C4[0][1] = arr_0x5C4[0][0];
+    arr_0x894[0][1] = arr_0x894[0][0];
 }
 
 /* 800E0D44-800E101C       .text copyBlur__18daBoomerang_blur_cFPA4_fs */
-void daBoomerang_blur_c::copyBlur(MtxP, s16) {
+void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
     /* Nonmatching */
+
+    for (int i = 54; i >= 0; i--) {
+        arr_0x24[1][i] = arr_0x24[0][i];
+        arr_0x2F4[1][i] = arr_0x2F4[0][i];
+        arr_0x5C4[1][i] = arr_0x5C4[0][i];
+        arr_0x894[1][i] = arr_0x894[0][i];
+    }
+
+    float t = 0.0f;
+
+    cXyz inPos;
+    inPos.x = mtx[0][3];
+    inPos.y = mtx[1][3];
+    inPos.z = mtx[2][3];
+
+    cXyz diff = pos - inPos;
+
+    pos = inPos;
+
+    mDoMtx_stack_c::push();
+
+    for (int i = 0; i < 5; i++) {
+        mDoMtx_stack_c::multVec(&l_blur_top, &arr_0x24[0][i]);
+        mDoMtx_stack_c::multVec(&l_blur_root, &arr_0x2F4[0][i]);
+        VECAdd(&arr_0x24[0][i], &(diff * t), &arr_0x24[0][i]);
+        VECAdd(&arr_0x2F4[0][i], &(diff * t), &arr_0x2F4[0][i]);
+        t += 0.2f;
+        mDoMtx_stack_c::YrotM(0x633);
+    }
+
+    t = 0.0f;
+
+    mDoMtx_stack_c::pop();
+
+    mDoMtx_stack_c::YrotM(-(yRot * 2));
+
+    for (int i = 0; i < 5; i++) {
+        // FIXME: i is in the wrong register.
+        mDoMtx_stack_c::multVec(&l_blur_top, &arr_0x5C4[0][i]);
+        mDoMtx_stack_c::multVec(&l_blur_root, &arr_0x894[0][i]);
+        VECAdd(&arr_0x5C4[0][i], &(diff * t), &arr_0x5C4[0][i]);
+        VECAdd(&arr_0x894[0][i], &(diff * t), &arr_0x894[0][i]);
+        t += 0.2f;
+        mDoMtx_stack_c::YrotM(-0x633);
+    }
+
+    field_0x14 += 5;
+
+    if (field_0x14 >= 59) {
+        field_0x14 = 58;
+    }
 }
 
 /* 800E101C-800E13A4       .text draw__18daBoomerang_blur_cFv */
