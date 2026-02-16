@@ -7,6 +7,7 @@
 #include "d/actor/d_a_daiocta.h"
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_daiocta_eye.h"
+#include "d/actor/d_a_obj_auzu.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_cc_d.h"
@@ -550,13 +551,33 @@ void daDaiocta_c::setEffect(u16) {
 }
 
 /* 0000116C-0000129C       .text setAwaRandom__11daDaiocta_cFi */
-void daDaiocta_c::setAwaRandom(int) {
-    /* Nonmatching */
+void daDaiocta_c::setAwaRandom(int param_1) {
+    f32 f31, f30, f29, f29_2;
+    f30 = l_HIO.field_0x0EC;
+    f31 = l_HIO.field_0x0E4;
+    f29 = l_HIO.field_0x0E8 - f31;
+    field_0x305C[param_1].setall(f30 + cM_rndF(l_HIO.field_0x0F0 - f30));
+
+    f29_2 = f31 + cM_rndF(f29);
+    s16 random_theta = cM_rndF(65536.0f);
+
+    field_0x2EF4[param_1].x = current.pos.x + f29_2 * cM_ssin(random_theta);
+    field_0x2EF4[param_1].y = field_0x2430;
+    field_0x2EF4[param_1].z = current.pos.z + f29_2 * cM_scos(random_theta);
 }
 
 /* 0000129C-000013D8       .text initAwa__11daDaiocta_cFv */
 void daDaiocta_c::initAwa() {
-    /* Nonmatching */
+    /* Instruction match */
+    for (int i = 0; i < l_HIO.field_0x016; i++) {
+        setAwaRandom(i);
+        f32 tmp = l_HIO.field_0x0F4;
+        f32 tmp2 = cM_rndF(l_HIO.field_0x0F8 - l_HIO.field_0x0F4);
+        field_0x2E7C[i] = tmp + tmp2;
+        field_0x2774[i].setFrame(field_0x2774[i].getEndFrame());
+        field_0x2954[i].setFrame(field_0x2954[i].getEndFrame());
+        field_0x2BAC[i].setFrame(field_0x2BAC[i].getEndFrame());
+    }
 }
 
 /* 000013D8-00001548       .text execAwa__11daDaiocta_cFv */
@@ -571,12 +592,11 @@ void daDaiocta_c::isLivingEye() {
 
 /* 000015E8-00001684       .text isDead__11daDaiocta_cFv */
 bool daDaiocta_c::isDead() {
-    /* Nonmatching */
     int count = 0;
     for (int i = 0; i < ARRAY_SSIZE(field_0x2470); i++) {
         if (field_0x2470[i] == 1) {
-            daDaiocta_Eye_c* ac_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(field_0x2440[i]);
-            if (ac_p && ac_p->field_0x294 == 0) {
+            daDaiocta_Eye_c* eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(field_0x2440[i]);
+            if (eye_p && eye_p->field_0x294 == 0) {
                 count++;
             }
         }
@@ -901,7 +921,62 @@ void daDaiocta_c::modeDeleteInit() {
 
 /* 00003284-000036A8       .text modeDelete__11daDaiocta_cFv */
 void daDaiocta_c::modeDelete() {
-    /* Nonmatching */
+    /* Instruction match */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        int staff_id = dComIfGp_evmng_getMyStaffId("Daiocta");
+        char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(staff_id);
+
+        if (strcmp(cut_name, "DEATH1") == 0) {
+            current.pos.y = field_0x2430;
+            field_0x0571 = 5;
+            if (field_0x0571 == 5 && mpMorf->isStop()) {
+                fopAcM_monsSeStart(this, 0x48CA, 0);
+                setEffect(0x8205);
+                daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(field_0x26C4);
+                auzu_p->field_0x2B8 = 0; // daObjAuzu::Act_c::to_disappear()?
+                dComIfGp_getVibration().StartQuake(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+                dComIfGp_evmng_cutEnd(staff_id);
+            }
+        }
+
+        if (strcmp(cut_name, "DEATH2") == 0) {
+            cXyz target_pos = current.pos;
+            target_pos.y = field_0x2430 - 3000.0f;
+            field_0x0571 = 7;
+            cLib_chasePos(&current.pos, target_pos, l_HIO.field_0x0E0);
+            
+            if (std::fabsf(current.pos.y - field_0x2430) > 600.0f && field_0x26C1 == 0) {
+                initAwa();
+                fopAcM_seStart(this, 0x58C6, 0);
+                field_0x26C1 = 1;
+                field_0x31C4 = 1;
+                mDoAud_subBgmStop();
+            }
+
+            f32 dist = (current.pos - target_pos).abs();
+            if (dist < l_HIO.field_0x0E0 * 3.0f) {
+                if (mSwitchNo != 0xFF) {
+                    field_0x31C4 = 0;
+                    dComIfGp_getVibration().StopQuake(-1);
+                    dComIfGs_onSwitch(mSwitchNo, fopAcM_GetRoomNo(this));
+                    if (field_0x057C != 1) {
+                        mDoAud_seStart(JA_SE_READ_RIDDLE_1);
+                    }
+                    fopAcM_ClearStatusMap(this);
+                }
+                dComIfGp_evmng_cutEnd(staff_id);
+            }
+        }
+
+        if (field_0x057C != 1 && dComIfGp_evmng_endCheck("DAIOCTA_DEAD")) {
+            dComIfGp_event_reset();
+            fopAcM_delete(this);
+        }
+    } else if (field_0x057C == 1) {
+        fopAcM_orderOtherEvent2(this, "DAIOCTA_DEAD_ELF", dEvtFlag_NOPARTNER_e);
+    } else {
+        fopAcM_orderOtherEvent2(this, "DAIOCTA_DEAD", dEvtFlag_NOPARTNER_e);
+    }
 }
 
 /* 000036A8-00003888       .text modeProc__11daDaiocta_cFQ211daDaiocta_c6Proc_eQ211daDaiocta_c6Mode_e */

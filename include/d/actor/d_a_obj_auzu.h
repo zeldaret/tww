@@ -33,8 +33,10 @@ namespace daObjAuzu {
         bool _draw();
     
     public:
-        /* Place member variables here */
-    };
+        /* 0x290 */ u8 field_0x290[0x2B8 - 0x290];
+        /* 0x2B8 */ u8 field_0x2B8;
+        /* 0x2B9 */ u8 field_0x2B9[0x2C0 - 0x2B9];
+    };  // Size: 0x2C0
 };
 
 #endif /* D_A_OBJ_AUZU_H */
