@@ -20,9 +20,9 @@ public:
     };
 
     enum Mode_e {
-        MODE_WAIT        = 0,
-        MODE_HIDE        = 1,
-        MODE_APPEAR      = 2,
+        MODE_HIDE        = 0,
+        MODE_APPEAR      = 1,
+        MODE_WAIT        = 2,
         MODE_DAMAGE      = 3,
         MODE_DAMAGE_BOMB = 4,
         MODE_DELETE      = 5,

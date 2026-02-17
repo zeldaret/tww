@@ -168,7 +168,8 @@ void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf* i_unused1P, fopAc_ac_c* i_actor,
 void daDaiocta_c::_coHit(fopAc_ac_c* i_actor) {
     if (i_actor != NULL && fpcM_GetName(i_actor) == PROC_BOMB) {
         daBomb_c* bomb_p = (daBomb_c *) i_actor;
-        if ((field_0x056C == 2 || field_0x056C == 4 || field_0x056C == 1 || field_0x056C == 3) && 
+        if ((field_0x056C == MODE_WAIT || field_0x056C == MODE_DAMAGE_BOMB || 
+            field_0x056C == MODE_APPEAR || field_0x056C == MODE_DAMAGE) && 
             bomb_p->chk_state(daBomb_c::STATE_4)) {
             modeProc(PROC_INIT, MODE_DAMAGE_BOMB);
         }
@@ -179,9 +180,9 @@ void daDaiocta_c::_coHit(fopAc_ac_c* i_actor) {
 static BOOL nodeControl_CB(J3DNode* i_nodeP, int i_calcTiming) {
     if (i_calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model_p = j3dSys.getModel();
-        daDaiocta_c* actor_p = (daDaiocta_c *) model_p->getUserArea();
-        JUT_ASSERT(0x1A4, actor_p != NULL);
-        actor_p->_nodeControl(i_nodeP, model_p);
+        daDaiocta_c* daiocta = (daDaiocta_c *) model_p->getUserArea();
+        JUT_ASSERT(0x1A4, daiocta != NULL);
+        daiocta->_nodeControl(i_nodeP, model_p);
     }
     return TRUE;
 }
@@ -903,9 +904,9 @@ void daDaiocta_c::modeDemo() {
                 daPy_getPlayerLinkActorClass()->startRestartRoom(6, 0xC9, -1.0f, 1);
             } else {
                 dComIfGp_setNextStage(
-                    dComIfGp_getStartStageName(), field_0x0575, 
-                    fopAcM_GetRoomNo(this), -1, 0.0f, 
-                    6
+                    dComIfGp_getStartStageName(), 
+                    field_0x0575, fopAcM_GetRoomNo(this), 
+                    -1, 0.0f, 6
                 );
             }
         }
@@ -917,6 +918,8 @@ void daDaiocta_c::modeDemo() {
 /* 00003150-00003284       .text modeDeleteInit__11daDaiocta_cFv */
 void daDaiocta_c::modeDeleteInit() {
     /* Nonmatching */
+    int dummy;
+    cLib_calcTimer(&dummy);
 }
 
 /* 00003284-000036A8       .text modeDelete__11daDaiocta_cFv */
@@ -983,9 +986,9 @@ void daDaiocta_c::modeDelete() {
 void daDaiocta_c::modeProc(daDaiocta_c::Proc_e i_procType, daDaiocta_c::Mode_e i_modeProc) {
     /* Instruction match */
     static ModeEntry mode_tbl[7] = {
-        { &daDaiocta_c::modeWaitInit,       &daDaiocta_c::modeWait,       "WAIT"        },
         { &daDaiocta_c::modeHideInit,       &daDaiocta_c::modeHide,       "HIDE"        },
         { &daDaiocta_c::modeAppearInit,     &daDaiocta_c::modeAppear,     "APPEAR"      },
+        { &daDaiocta_c::modeWaitInit,       &daDaiocta_c::modeWait,       "WAIT"        },
         { &daDaiocta_c::modeDamageInit,     &daDaiocta_c::modeDamage,     "DAMAGE"      },
         { &daDaiocta_c::modeDamageBombInit, &daDaiocta_c::modeDamageBomb, "DAMAGE_BOMB" },
         { &daDaiocta_c::modeDeleteInit,     &daDaiocta_c::modeDelete,     "DELETE"      },
@@ -1017,22 +1020,96 @@ void daDaiocta_c::setWater() {
 
 /* 00003B20-00003D20       .text _execute__11daDaiocta_cFv */
 bool daDaiocta_c::_execute() {
-    /* Nonmatching */
+    if (field_0x056C == MODE_DELETE) {
+        execAwa();
+    }
+
+    if (field_0x056C != MODE_HIDE && field_0x056C != MODE_APPEAR) {
+        f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+        s16 angle_y = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+        s32 dist_angle_s = cLib_distanceAngleS(shape_angle.y + l_HIO.field_0x014, angle_y);
+        if (dist < l_HIO.field_0x084 && 
+            field_0x056C != MODE_DEMO && 
+            field_0x056C != MODE_DELETE && 
+            dist_angle_s < l_HIO.field_0x012) {
+            modeProc(PROC_INIT, MODE_DEMO);
+        }
+    }
+
+    if (field_0x056C != MODE_HIDE) {
+        setWater();
+        field_0x26D0.play();
+        field_0x26E8.play();
+        attention_info.position = current.pos;
+        eyePos = current.pos;
+        isLivingEye();
+        field_0x058C.play();
+        mpMorf->play(NULL, 0, 0);
+        mpMorf->calc();
+        setRotEye();
+        field_0x2218.CrrPos(*dComIfG_Bgsp());
+        tevStr.mRoomNo = fopAcM_GetRoomNo(this);
+        tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(field_0x2218.m_gnd);
+    }
+
+    modeProc(PROC_EXEC, MODE_NULL);
+
+    if (field_0x056C != MODE_HIDE) {
+        setCollision();
+        setAnm();
+        setMtx();
+
+        // TODO: add these fields to the HIO class
+        if (l_HIO.field_0x007[0] != 0) {
+            field_0x0571 = *(s16*)&l_HIO.field_0x009[1];
+            setAnm();
+        }
+    }
+
+    return false;
 }
 
 /* 00003D20-00003E58       .text drawAwa__11daDaiocta_cFv */
 void daDaiocta_c::drawAwa() {
-    /* Nonmatching */
+    dComIfGd_setListBG();
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
+
+    for (int i = 0; i < l_HIO.field_0x016; i++) {
+        g_env_light.setLightTevColorType(field_0x26FC[i], &tevStr);
+        field_0x2774[i].entry(field_0x26FC[i]->getModelData());
+        field_0x2954[i].entry(field_0x26FC[i]->getModelData());
+        field_0x2BAC[i].entry(field_0x26FC[i]->getModelData());
+        mDoExt_modelUpdateDL(field_0x26FC[i]);
+    }
+
+    dComIfGd_setList();
 }
 
 /* 00003E58-00003F4C       .text drawSuikomi__11daDaiocta_cFv */
 void daDaiocta_c::drawSuikomi() {
-    /* Nonmatching */
+    dComIfGd_setListBG();
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(field_0x26CC, &tevStr);
+    field_0x26E8.entry(field_0x26CC->getModelData());
+    field_0x26D0.entry(field_0x26CC->getModelData());
+    mDoExt_modelUpdateDL(field_0x26CC);
+    field_0x26E8.remove(field_0x26CC->getModelData());
+    field_0x26D0.remove(field_0x26CC->getModelData());
+    dComIfGd_setList();
 }
 
 /* 00003F4C-0000412C       .text drawDebug__11daDaiocta_cFv */
 void daDaiocta_c::drawDebug() {
     /* Instruction match */
+    static const GXColor dummy_1 = { 0x00, 0xff, 0x00, 0x80 };
+    static const GXColor dummy_2 = { 0xff, 0xff, 0x00, 0x80 };
+    static const GXColor dummy_3 = { 0xff, 0xff, 0x00, 0x80 };
+    static const GXColor dummy_4 = { 0x00, 0xff, 0xff, 0x80 };
+    static const GXColor dummy_5 = { 0xff, 0x00, 0x00, 0x80 };
+    static const GXColor dummy_6 = { 0x00, 0xff, 0x00, 0x80 };
+    static const GXColor dummy_7 = { 0xff, 0x00, 0x00, 0x80 };
+    static const GXColor dummy_8 = { 0xff, 0x00, 0x00, 0x80 };
+    
     fopAc_ac_c* player_p;
     for (int i = 0; i < ARRAY_SSIZE(field_0x0290); i++) {
         player_p = dComIfGp_getPlayer(0);
@@ -1063,7 +1140,7 @@ bool daDaiocta_c::_draw() {
         drawDebug();
     }
 
-    if (field_0x056C == MODE_WAIT) {
+    if (field_0x056C == MODE_HIDE) {
         return true;
     } 
     
