@@ -4,6 +4,8 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 
+#define BOOM_TARGET_MAX 5
+
 class daBoomerang_blur_c : public J3DPacket {
 public:
     void initBlur(MtxP, s16);
@@ -35,9 +37,9 @@ public:
     static const s32 HALF_ANIM_LENGTH = ANIM_LENGTH / 2;
 
 public:
-    /* 0x004 */ Mtx mtxArr[5];
-    /* 0x0F4 */ u8 arr_0xF4[5];
-    /* 0x0F9 */ u8 arr_0xF9[5];
+    /* 0x004 */ Mtx mtxArr[BOOM_TARGET_MAX];
+    /* 0x0F4 */ u8 arr_0xF4[BOOM_TARGET_MAX];
+    /* 0x0F9 */ u8 arr_0xF9[BOOM_TARGET_MAX];
     /* 0x100 */ u32 targetFlags;
     /* 0x104 */ void* imageData;
     /* 0x108 */ ResTIMG* sightImage;
@@ -70,8 +72,8 @@ public:
     /* 0x0290 */ J3DModel* mpModel;
     /* 0x0294 */ daBoomerang_sightPacket_c mSightPacket;
     /* 0x03A0 */ daBoomerang_blur_c mBlur;
-    /* 0x0F04 */ s32 arr_0xF04[5];
-    /* 0x0F18 */ fopAc_ac_c* arr_0xF18[5];
+    /* 0x0F04 */ s32 arr_0xF04[BOOM_TARGET_MAX];
+    /* 0x0F18 */ fopAc_ac_c* arr_0xF18[BOOM_TARGET_MAX];
     /* 0x0F2C */ u8 field_0xF2C[0xF30 - 0xF2C];
     /* 0x0F30 */ u8 field_0xF30;
     /* 0x0F31 */ u8 field_0xF31;

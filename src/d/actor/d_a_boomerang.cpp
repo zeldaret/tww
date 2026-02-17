@@ -434,7 +434,7 @@ cPhs_State daBoomerang_c::create() {
     mCps.SetAtHitCallback(&daBoomerang_rockLineCallback);
     mCps.SetStts(&mStts);
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < BOOM_TARGET_MAX; i++) {
         arr_0xF04[i] = -1;
     }
 
