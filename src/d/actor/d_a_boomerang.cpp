@@ -254,7 +254,7 @@ void daBoomerang_sightPacket_c::draw() {
 /* 800E14F0-800E1718       .text setSight__25daBoomerang_sightPacket_cFP4cXyzi */
 void daBoomerang_sightPacket_c::setSight(cXyz* pPos, int n) {
     if (pPos != NULL) {
-        s32 animFrame = arr_0xF4[n];
+        s32 animFrame = mFrameArr[n];
         f32 pingPongAnim;
         f32 imageRot;
         if (animFrame < (u32)HALF_ANIM_LENGTH) {
@@ -264,11 +264,11 @@ void daBoomerang_sightPacket_c::setSight(cXyz* pPos, int n) {
             pingPongAnim = (animFrame - HALF_ANIM_LENGTH) / (f32)HALF_ANIM_LENGTH;
             imageRot = pingPongAnim;
         }
-        arr_0xF9[n] = pingPongAnim * 30.0f + 150.0f;
+        mScaleArr[n] = pingPongAnim * 30.0f + 150.0f;
 
         f32 scale = (pingPongAnim * 35.0f + 65.0f) * 0.01f;
-        f32 scaleX = scale * sightImage->width;
-        f32 scaleY = scale * sightImage->height;
+        f32 scaleX = scale * mImage->width;
+        f32 scaleY = scale * mImage->height;
 
         cXyz proj;
         mDoLib_project(pPos, &proj);
@@ -276,17 +276,17 @@ void daBoomerang_sightPacket_c::setSight(cXyz* pPos, int n) {
         mDoMtx_stack_c::scaleM(scaleX, scaleY, scale);
 
         mDoMtx_stack_c::ZrotM(cM_ssin(imageRot * 16384.0f) * 32768.0f);
-        MTXCopy(mDoMtx_stack_c::get(), mtxArr[n]);
+        MTXCopy(mDoMtx_stack_c::get(), mMtxArr[n]);
 
-        targetFlags |= 1 << n;
+        mSightOnFlg |= 1 << n;
     } else {
-        targetFlags &= ~(1 << n);
+        mSightOnFlg &= ~(1 << n);
     }
 }
 
 /* 800E1718-800E1754       .text play__25daBoomerang_sightPacket_cFi */
 void daBoomerang_sightPacket_c::play(int n) {
-    u8* p = &arr_0xF4[0];
+    u8* p = &mFrameArr[0];
     for (int i = 0; i < n; i++) {
         *p = *p + 1;
         if (*p == ANIM_LENGTH) {

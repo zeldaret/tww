@@ -28,21 +28,21 @@ public:
     void setSight(cXyz*, int);
     void play(int);
 
-    void initFrame(int n) { arr_0xF4[n] = 0; }
-    void resetSightOn() { targetFlags = 0; }
-    void setImage(ResTIMG* i_img) { sightImage = i_img; }
-    void setTex(void* data) { imageData = data; }
+    void initFrame(int n) { mFrameArr[n] = 0; }
+    void resetSightOn() { mSightOnFlg = 0; }
+    void setImage(ResTIMG* i_img) { mImage = i_img; }
+    void setTex(void* data) { mTex = data; }
 
     static const s32 ANIM_LENGTH = 26;
     static const s32 HALF_ANIM_LENGTH = ANIM_LENGTH / 2;
 
-public:
-    /* 0x004 */ Mtx mtxArr[BOOM_TARGET_MAX];
-    /* 0x0F4 */ u8 arr_0xF4[BOOM_TARGET_MAX];
-    /* 0x0F9 */ u8 arr_0xF9[BOOM_TARGET_MAX];
-    /* 0x100 */ u32 targetFlags;
-    /* 0x104 */ void* imageData;
-    /* 0x108 */ ResTIMG* sightImage;
+private:
+    /* 0x004 */ Mtx mMtxArr[BOOM_TARGET_MAX];
+    /* 0x0F4 */ u8 mFrameArr[BOOM_TARGET_MAX];
+    /* 0x0F9 */ u8 mScaleArr[BOOM_TARGET_MAX];
+    /* 0x100 */ u32 mSightOnFlg;
+    /* 0x104 */ void* mTex;
+    /* 0x108 */ ResTIMG* mImage;
 };
 
 class daBoomerang_c : public fopAc_ac_c {
