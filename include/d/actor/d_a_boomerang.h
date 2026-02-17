@@ -26,10 +26,14 @@ public:
     void setSight(cXyz*, int);
     void play(int);
 
+    static const s32 ANIM_LENGTH = 26;
+    static const s32 HALF_ANIM_LENGTH = ANIM_LENGTH / 2;
+
 public:
     /* 0x004 */ Mtx mtxArr[5];
-    /* 0x0F4 */ u8 field_0xF4[0x100 - 0xF4];
-    /* 0x100 */ u8 targetFlags;
+    /* 0x0F4 */ u8 arr_0xF4[5];
+    /* 0x0F9 */ u8 arr_0xF9[5];
+    /* 0x100 */ u32 targetFlags;
     /* 0x104 */ void* imageData;
     /* 0x108 */ ResTIMG* sightImage;
 };
