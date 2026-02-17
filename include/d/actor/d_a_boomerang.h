@@ -26,8 +26,8 @@ public:
     void setSight(cXyz*, int);
     void play(int);
 
-    void initFrame(int n) {}
-    void resetSightOn() {}
+    void initFrame(int n) { arr_0xF4[n] = 0; }
+    void resetSightOn() { targetFlags = 0; }
     void setImage(ResTIMG* i_img) { sightImage = i_img; }
     void setTex(void* data) { imageData = data; }
 
