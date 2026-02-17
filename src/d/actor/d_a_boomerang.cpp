@@ -256,8 +256,15 @@ void daBoomerang_sightPacket_c::setSight(cXyz*, int) {
 }
 
 /* 800E1718-800E1754       .text play__25daBoomerang_sightPacket_cFi */
-void daBoomerang_sightPacket_c::play(int) {
-    /* Nonmatching */
+void daBoomerang_sightPacket_c::play(int n) {
+    u8* p = &field_0xF4[0];
+    for (int i = 0; i < n; i++) {
+        *p = *p + 1;
+        if (*p == 26) {
+            *p = 0;
+        }
+        p++;
+    }
 }
 
 /* 800E1754-800E1998       .text draw__13daBoomerang_cFv */
