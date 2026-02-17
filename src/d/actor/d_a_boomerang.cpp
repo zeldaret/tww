@@ -447,8 +447,8 @@ cPhs_State daBoomerang_c::create() {
     {
         ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", LINK_BTI_ROCK_MARK);
         JUT_ASSERT(1637, tmp_img != NULL);
-        mSightPacket.imageData = (u8*)tmp_img + tmp_img->imageOffset;
-        mSightPacket.sightImage = tmp_img;
+        mSightPacket.setTex((u8*)tmp_img + tmp_img->imageOffset);
+        mSightPacket.setImage(tmp_img);
     }
 
     setRoomInfo();

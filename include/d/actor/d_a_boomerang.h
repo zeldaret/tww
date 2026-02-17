@@ -26,6 +26,11 @@ public:
     void setSight(cXyz*, int);
     void play(int);
 
+    void initFrame(int n) {}
+    void resetSightOn() {}
+    void setImage(ResTIMG* i_img) { sightImage = i_img; }
+    void setTex(void* data) { imageData = data; }
+
     static const s32 ANIM_LENGTH = 26;
     static const s32 HALF_ANIM_LENGTH = ANIM_LENGTH / 2;
 
