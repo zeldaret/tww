@@ -25,6 +25,13 @@ public:
     virtual void draw();
     void setSight(cXyz*, int);
     void play(int);
+
+public:
+    /* 0x004 */ Mtx mtxArr[5];
+    /* 0x0F4 */ u8 field_0xF4[0x100 - 0xF4];
+    /* 0x100 */ u8 targetFlags;
+    /* 0x104 */ void* imageData;
+    /* 0x108 */ ResTIMG* sightImage;
 };
 
 class daBoomerang_c : public fopAc_ac_c {
@@ -53,9 +60,6 @@ public:
 public:
     /* 0x0290 */ J3DModel* mpModel;
     /* 0x0294 */ daBoomerang_sightPacket_c mSightPacket;
-    /* 0x0298 */ u8 field_0x298[0x398 - 0x298];
-    /* 0x0398 */ void* field_0x398;
-    /* 0x039C */ ResTIMG* field_0x39C;
     /* 0x03A0 */ daBoomerang_blur_c mBlur;
     /* 0x0F04 */ s32 arr_0xF04[5];
     /* 0x0F18 */ fopAc_ac_c* arr_0xF18[5];
