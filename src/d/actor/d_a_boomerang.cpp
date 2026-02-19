@@ -10,9 +10,6 @@
 #include "d/d_cc_d.h"
 #include "d/res/res_link.h"
 #include "dolphin/gf/GF.h"
-
-#include "assets/l_sightMatDL.h"
-#include "assets/l_sightDL__d_a_boomerang.h"
 #include "m_Do/m_Do_lib.h"
 
 static cXyz l_blur_top(40.0f, 0.0f, 0.0f);
@@ -245,6 +242,9 @@ void daBoomerang_blur_c::draw() {
     J3DShape::resetVcdVatCache();
 #endif
 }
+
+#include "assets/l_sightMatDL.h"
+#include "assets/l_sightDL__d_a_boomerang.h"
 
 /* 800E13A4-800E14F0       .text draw__25daBoomerang_sightPacket_cFv */
 void daBoomerang_sightPacket_c::draw() {
