@@ -255,8 +255,8 @@ void daBoomerang_sightPacket_c::draw() {
     };
 
     static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
-        {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
-        {GX_VA_TEX0, GX_TEX_ST, GX_S16, 0x08},
+        {GX_VA_POS, GX_POS_XYZ, GX_S8, 0x00},
+        {GX_VA_TEX0, GX_TEX_ST, GX_U8, 0x00},
         {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
     };
 
