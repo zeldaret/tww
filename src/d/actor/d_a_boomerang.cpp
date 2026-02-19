@@ -248,7 +248,42 @@ void daBoomerang_blur_c::draw() {
 
 /* 800E13A4-800E14F0       .text draw__25daBoomerang_sightPacket_cFv */
 void daBoomerang_sightPacket_c::draw() {
-    /* Nonmatching */
+    static GXVtxDescList l_vtxDescList[] = {
+        {GX_VA_POS, GX_DIRECT},
+        {GX_VA_TEX0, GX_DIRECT},
+        {GX_VA_NULL, GX_NONE},
+    };
+
+    static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
+        {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
+        {GX_VA_TEX0, GX_TEX_ST, GX_S16, 0x08},
+        {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
+    };
+
+    GXTexObj texObj;
+
+    const GXBool mipmap = mImage->mipmapCount > 1 ? TRUE : FALSE;
+    GXInitTexObj(&texObj, mTex, mImage->width, mImage->height, GXTexFmt(mImage->format), GXTexWrapMode(mImage->wrapS), GXTexWrapMode(mImage->wrapT), mipmap);
+    GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, FALSE, FALSE, GX_ANISO_1);
+    GXLoadTexObj(&texObj, GX_TEXMAP0);
+
+    GXCallDisplayList(l_sightMatDL, 0x60);
+    GFSetVtxDescv(l_vtxDescList);
+    GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
+
+    GXColor color0 = {0xFF, 0xFF, 0x32, 0xFF};
+    GXColor color1 = {0xFF, 0xFF, 0x32, 0xFF};
+
+    for (int i = 0; i < BOOM_TARGET_MAX; i++) {
+        if (mSightOnFlg & (1 << i)) {
+            color0.a = mScaleArr[i];
+            color1.a = mScaleArr[i];
+            GFSetTevColor(GX_TEVREG0, color0);
+            GFSetTevColor(GX_TEVREG1, color1);
+            GFLoadPosMtxImm(mMtxArr[i], GX_PNMTX0);
+            GXCallDisplayList(l_sightDL, 0x20);
+        }
+    }
 }
 
 /* 800E14F0-800E1718       .text setSight__25daBoomerang_sightPacket_cFP4cXyzi */
