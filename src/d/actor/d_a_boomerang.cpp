@@ -8,6 +8,7 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/actor/d_a_player_main.h"
 #include "d/res/res_link.h"
 #include "dolphin/gf/GF.h"
 #include "m_Do/m_Do_lib.h"
@@ -407,12 +408,115 @@ BOOL daBoomerang_c::procWait() {
 /* 800E239C-800E2AF4       .text procMove__13daBoomerang_cFv */
 BOOL daBoomerang_c::procMove() {
     /* Nonmatching */
+    static cXyz at_offset(0.0f, 0.0f, 0.0f);
+
+    fopAc_ac_c* pPlayer = dComIfGp_getLinkPlayer();
+
+    if (field_0xF2F != 0) {
+        fopAcM_delete(this);
+        return TRUE;
+    }
+
+    if (dComIfGp_event_getMode() == 0) {
+        s16 s = field_0xF3A;
+        field_0xF3A -= 0x1F00;
+        if (s >= 0 && field_0xF3A < 0) {
+            const s8 reverb = dComIfGp_getReverb(current.roomNo);
+            mDoAud_seStart(JA_SE_LK_BOOM_FLY, &eyePos, 0, reverb);
+        }
+        setAimPos();
+
+        cXyz diff = field_0xF40 - current.pos;
+        f32 dist = diff.abs();
+        cXyz norm;
+        if (dist <= 0.1f) {
+            norm = diff;
+        } else {
+            norm = diff / dist;
+        }
+
+        s16 angle = cM_atan2s(norm.x, norm.z);
+        s16 currentAngle = current.angle.y;
+
+        if (field_0xF2E != 0) {
+            field_0xF2E = 0;
+            if (angle - currentAngle > 1) {
+                current.angle.y = angle - 0x3000;
+            } else {
+                current.angle.y = angle + 0x3000;
+            }
+            currentAngle = current.angle.y;
+        }
+
+        currentAngle = angle - currentAngle;
+
+        if (field_0xF2C != 0) {
+            if (dist < speedF * 2.0f) {
+                if (((daPy_lk_c*)pPlayer)->returnBoomerang() == 0) {
+                    field_0xF2F = 1;
+                } else {
+                    fpcM_SetParam(this, 0);
+                    field_0xF33 = 0;
+                    mCurrProcFunc = &daBoomerang_c::procWait;
+                }
+            }
+        } else {
+            if (dist < speedF || mCps.ChkAtHit() && mCps.GetTgHitAc() == mTargetPtrs[mCurTargetIdx]) {
+                // Boomerang hit its current target
+                field_0xF2E = 1;
+                mTargetPtrs[mCurTargetIdx] = NULL;
+                mTargetIds[mCurTargetIdx] = -1;
+                mCurTargetIdx++;
+                field_0xF36 = 0;
+            }
+        }
+
+        if (field_0xF2C == 0 && (mCancelFlg != false || ((field_0xF36 == 0 && mNumTargets <= mCurTargetIdx) || mCps.ChkTgSet()))) {
+            field_0xF2E = 1;
+            field_0xF2C = 1;
+            resetLockActor();
+            mCancelFlg = false;
+            field_0xF36 = 0;
+        }
+
+        if (field_0xF2E == 0) {
+            s16 newAngle;
+            if (field_0xF33 == 0) {
+                f32 a = 20.0f - dist * 2.0f / speedF;
+                f32 b = 0.0f;
+                if (a >= 0.0f) {
+                    b = a;
+                    if (a > 18.0f) {
+                        b = (18.0f - a) * 40.0f + 20.0f;
+                    }
+                }
+                newAngle = b * 256.0f + 1024.0f;
+            } else {
+                newAngle = 0x4000;
+            }
+            if (currentAngle <= newAngle) {
+                s16 negAngle = -newAngle;
+                newAngle = currentAngle;
+                if (currentAngle < negAngle) {
+                    newAngle = negAngle;
+                }
+            }
+            currentAngle = newAngle;
+            current.angle.y += currentAngle;
+        } else {
+            current.angle.y = angle;
+        }
+    }
+
+    // TODO
+
+    return TRUE;
 }
 
 /* 800E2AF4-800E2BD0       .text execute__13daBoomerang_cFv */
 BOOL daBoomerang_c::execute() {
-    for (int i = 0; i < field_0xF31; i++) {
-        arr_0xF18[i] = fopAcM_SearchByID(arr_0xF04[i]);
+    for (int i = 0; i < mNumTargets; i++) {
+        mTargetPtrs[i] = fopAcM_SearchByID(mTargetIds[i]);
     }
 
     if (mCurrProcFunc) {
@@ -423,7 +527,7 @@ BOOL daBoomerang_c::execute() {
     eyePos = current.pos;
 
     setRoomInfo();
-    mSightPacket.play(field_0xF31);
+    mSightPacket.play(mNumTargets);
 
     return TRUE;
 }
@@ -478,7 +582,7 @@ cPhs_State daBoomerang_c::create() {
     mCps.SetStts(&mStts);
 
     for (int i = 0; i < BOOM_TARGET_MAX; i++) {
-        arr_0xF04[i] = -1;
+        mTargetIds[i] = -1;
     }
 
     {
