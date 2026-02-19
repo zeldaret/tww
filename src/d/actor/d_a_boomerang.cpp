@@ -343,7 +343,15 @@ static BOOL daBoomerang_Draw(daBoomerang_c* i_this) {
 
 /* 800E19B8-800E1A14       .text getFlyMax__13daBoomerang_cFv */
 float daBoomerang_c::getFlyMax() {
-    /* Nonmatching */
+    if (dComIfGp_checkPlayerStatus0(0, 0x10000) != 0) {
+        return 5000.0f;
+    }
+
+    if (strcmp(dComIfGp_getStartStageName(), "GanonK") != 0) {
+        return 2500.0f;
+    }
+
+    return 5000.0f;
 }
 
 /* 800E1A14-800E1AAC       .text rockLineCallback__13daBoomerang_cFP10fopAc_ac_c */
