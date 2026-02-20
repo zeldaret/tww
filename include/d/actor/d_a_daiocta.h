@@ -54,10 +54,10 @@ public:
     void setAwaRandom(int);
     void initAwa();
     void execAwa();
-    void isLivingEye();
+    bool isLivingEye();
     bool isDead();
-    void isDamageEye();
-    void isDamageBombEye();
+    bool isDamageEye();
+    bool isDamageBombEye();
     void setRotEye();
     void setCollision();
     void modeHideInit();
@@ -133,7 +133,9 @@ public:
     /* 0x2434 */ cXyz field_0x2434;
     /* 0x2440 */ fpc_ProcID field_0x2440[12];
     /* 0x2470 */ u8 field_0x2470[12];
-    /* 0x247C */ u8 field_0x247C[0x26C1 - 0x247C];
+    /* 0x247C */ u8 field_0x247C[0x26BC - 0x247C];
+    /* 0x26BC */ int field_0x26BC;
+    /* 0x26C0 */ u8 field_0x26C0[0x26C1 - 0x26C0];
     /* 0x26C1 */ u8 field_0x26C1;
     /* 0x26C2 */ u8 field_0x26C2[0x26C4 - 0x26C2];
     /* 0x26C4 */ fpc_ProcID field_0x26C4;
@@ -145,7 +147,7 @@ public:
     /* 0x2774 */ mDoExt_bckAnm field_0x2774[30];
     /* 0x2954 */ mDoExt_btkAnm field_0x2954[30];
     /* 0x2BAC */ mDoExt_brkAnm field_0x2BAC[30];
-    /* 0x2E7C */ s32 field_0x2E7C[30];
+    /* 0x2E7C */ int field_0x2E7C[30];
     /* 0x2EF4 */ cXyz field_0x2EF4[30];
     /* 0x305C */ cXyz field_0x305C[30];
     /* 0x31C4 */ u8 field_0x31C4;

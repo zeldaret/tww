@@ -547,8 +547,53 @@ void daDaiocta_c::initMtx() {
 }
 
 /* 00000F70-0000116C       .text setEffect__11daDaiocta_cFUs */
-void daDaiocta_c::setEffect(u16) {
+void daDaiocta_c::setEffect(u16 effect_name) {
     /* Nonmatching */
+    GXColor sea_color_ambient;
+    GXColor sea_color_diffuse; // unused
+    cXyz particle_pos;
+
+    dKy_get_seacolor(&sea_color_ambient, &sea_color_diffuse);
+    s32 r = sea_color_ambient.r + l_HIO.field_0x018;
+    s32 g = sea_color_ambient.g + l_HIO.field_0x018;
+    s32 b = sea_color_ambient.b + l_HIO.field_0x018;
+
+    if (r >= 0xFF) r = 0xFF;
+    if (g >= 0xFF) g = 0xFF;
+    if (b >= 0xFF) b = 0xff; 
+
+    sea_color_ambient.r = r;
+    sea_color_ambient.g = g;
+    sea_color_ambient.b = b;
+
+    particle_pos = current.pos;
+    particle_pos.y = field_0x2430;
+    csXyz particle_angle(shape_angle);
+
+    switch (effect_name) {
+        case dPa_name::ID_SCENE_81FE:
+            if (!field_0x241C.getEmitter()) {
+                dComIfGp_particle_set(effect_name, &particle_pos, NULL, NULL, 0xFF, &field_0x241C, -1, &sea_color_ambient);
+            }
+            break;
+        case dPa_name::ID_SCENE_81FF:
+        case dPa_name::ID_SCENE_8200:
+        case dPa_name::ID_SCENE_8201:
+        case dPa_name::ID_SCENE_8202:
+        case dPa_name::ID_SCENE_8203:
+        case dPa_name::ID_SCENE_8204:
+        case dPa_name::ID_SCENE_8205:
+            dComIfGp_particle_set(effect_name, &particle_pos, NULL, NULL, 0xFF, NULL, -1, &sea_color_ambient);
+            break;
+        case dPa_name::ID_SCENE_8207:
+        case dPa_name::ID_SCENE_8208:
+        case dPa_name::ID_SCENE_8209:
+        case dPa_name::ID_SCENE_82CC:
+            dComIfGp_particle_set(effect_name, &particle_pos, &particle_angle, NULL, 0xFF, NULL, -1, &sea_color_ambient);
+            break;
+        default:
+            break;
+    }
 }
 
 /* 0000116C-0000129C       .text setAwaRandom__11daDaiocta_cFi */
@@ -584,11 +629,45 @@ void daDaiocta_c::initAwa() {
 /* 000013D8-00001548       .text execAwa__11daDaiocta_cFv */
 void daDaiocta_c::execAwa() {
     /* Nonmatching */
+    for (auto i = 0; i < l_HIO.field_0x016; i++) {
+        if (cLib_calcTimer<int>(&field_0x2E7C[i]) == 0) {
+            field_0x2774[i].play();
+            field_0x2954[i].play();
+            field_0x2BAC[i].play();
+            if (field_0x31C4 || l_HIO.field_0x008) {
+                if (field_0x2774[i].isStop()) {
+                    field_0x2774[i].setFrame(0.0f);
+                    field_0x2774[i].setPlaySpeed(1.0f);
+
+                    field_0x2954[i].setFrame(0.0f);
+                    field_0x2954[i].setPlaySpeed(1.0f);
+
+                    field_0x2BAC[i].setFrame(0.0f);
+                    field_0x2BAC[i].setPlaySpeed(1.0f);
+                    
+                    f32 fVar1 = l_HIO.field_0x0F4;
+                    field_0x2E7C[i] = fVar1 + cM_rndF(l_HIO.field_0x0F8 - fVar1);
+                    setAwaRandom(i);
+                }
+            }
+        }
+    }
 }
 
 /* 00001548-000015E8       .text isLivingEye__11daDaiocta_cFv */
-void daDaiocta_c::isLivingEye() {
-    /* Nonmatching */
+bool daDaiocta_c::isLivingEye() {
+    bool is_alive = false;
+    for (int i = 0; i < ARRAY_SSIZE(field_0x2440); i++) {
+        if (field_0x2470[i] == 1) {
+            daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(field_0x2440[i]);
+            if (!big_octo_eye_p) {
+                field_0x2470[i] = 0;
+            } else if (big_octo_eye_p->field_0x294 == 0) {
+                is_alive = true;
+            }
+        }
+    }
+    return is_alive;
 }
 
 /* 000015E8-00001684       .text isDead__11daDaiocta_cFv */
@@ -596,8 +675,8 @@ bool daDaiocta_c::isDead() {
     int count = 0;
     for (int i = 0; i < ARRAY_SSIZE(field_0x2470); i++) {
         if (field_0x2470[i] == 1) {
-            daDaiocta_Eye_c* eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(field_0x2440[i]);
-            if (eye_p && eye_p->field_0x294 == 0) {
+            daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(field_0x2440[i]);
+            if (big_octo_eye_p && big_octo_eye_p->field_0x294 == 0) {
                 count++;
             }
         }
@@ -611,18 +690,47 @@ bool daDaiocta_c::isDead() {
 }
 
 /* 00001684-0000171C       .text isDamageEye__11daDaiocta_cFv */
-void daDaiocta_c::isDamageEye() {
-    /* Nonmatching */
+bool daDaiocta_c::isDamageEye() {
+    bool is_damaged = false;
+    for (int i = 0; i < ARRAY_SSIZE(field_0x2440); i++) {
+        if (field_0x2470[i] == 1) {
+            daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(field_0x2440[i]);
+            if (big_octo_eye_p && big_octo_eye_p->field_0x296 != 0) {
+                is_damaged = true;
+            }
+        }
+    }
+    return is_damaged;
 }
 
 /* 0000171C-000017B4       .text isDamageBombEye__11daDaiocta_cFv */
-void daDaiocta_c::isDamageBombEye() {
-    /* Nonmatching */
+bool daDaiocta_c::isDamageBombEye() {
+    bool is_damaged = false;
+    for (int i = 0; i < ARRAY_SSIZE(field_0x2440); i++) {
+        if (field_0x2470[i] == 1) {
+            daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(field_0x2440[i]);
+            if (big_octo_eye_p && big_octo_eye_p->field_0x297 != 0) {
+                is_damaged = true;
+            }
+        }
+    }
+    return is_damaged;
 }
 
 /* 000017B4-00001A7C       .text setRotEye__11daDaiocta_cFv */
 void daDaiocta_c::setRotEye() {
-    /* Nonmatching */
+    if (cLib_calcTimer(&field_0x26BC) == 0) {
+        for (int i = 0; i < ARRAY_SSIZE(field_0x2440); i++) {
+            if (field_0x2470[i] == 1) {
+                daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(field_0x2440[i]);
+                if (big_octo_eye_p && big_octo_eye_p->field_0x294 == 0) {
+                    big_octo_eye_p->field_0x290 = i;
+                    big_octo_eye_p->rndRotEye();
+                }
+            }
+        }
+        field_0x26BC = l_HIO.field_0x00C + cM_rndF(l_HIO.field_0x00E);
+    }
 }
 
 /* 00001A7C-00001EA0       .text setCollision__11daDaiocta_cFv */
@@ -934,7 +1042,7 @@ void daDaiocta_c::modeDelete() {
             field_0x0571 = 5;
             if (field_0x0571 == 5 && mpMorf->isStop()) {
                 fopAcM_monsSeStart(this, 0x48CA, 0);
-                setEffect(0x8205);
+                setEffect(dPa_name::ID_SCENE_8205);
                 daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(field_0x26C4);
                 auzu_p->field_0x2B8 = 0; // daObjAuzu::Act_c::to_disappear()?
                 dComIfGp_getVibration().StartQuake(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
@@ -1101,14 +1209,14 @@ void daDaiocta_c::drawSuikomi() {
 /* 00003F4C-0000412C       .text drawDebug__11daDaiocta_cFv */
 void daDaiocta_c::drawDebug() {
     /* Instruction match */
-    static const GXColor dummy_1 = { 0x00, 0xff, 0x00, 0x80 };
-    static const GXColor dummy_2 = { 0xff, 0xff, 0x00, 0x80 };
-    static const GXColor dummy_3 = { 0xff, 0xff, 0x00, 0x80 };
-    static const GXColor dummy_4 = { 0x00, 0xff, 0xff, 0x80 };
-    static const GXColor dummy_5 = { 0xff, 0x00, 0x00, 0x80 };
-    static const GXColor dummy_6 = { 0x00, 0xff, 0x00, 0x80 };
-    static const GXColor dummy_7 = { 0xff, 0x00, 0x00, 0x80 };
-    static const GXColor dummy_8 = { 0xff, 0x00, 0x00, 0x80 };
+    GXColor dummy_1 = { 0x00, 0xff, 0x00, 0x80 };
+    GXColor dummy_2 = { 0xff, 0xff, 0x00, 0x80 };
+    GXColor dummy_3 = { 0xff, 0xff, 0x00, 0x80 };
+    GXColor dummy_4 = { 0x00, 0xff, 0xff, 0x80 };
+    GXColor dummy_5 = { 0xff, 0x00, 0x00, 0x80 };
+    GXColor dummy_6 = { 0x00, 0xff, 0x00, 0x80 };
+    GXColor dummy_7 = { 0xff, 0x00, 0x00, 0x80 };
+    GXColor dummy_8 = { 0xff, 0x00, 0x00, 0x80 };
     
     fopAc_ac_c* player_p;
     for (int i = 0; i < ARRAY_SSIZE(field_0x0290); i++) {
