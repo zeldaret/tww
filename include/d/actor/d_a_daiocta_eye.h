@@ -14,17 +14,17 @@ class daDaiocta_Eye_c : public fopAc_ac_c {
 public:
     void rndRotEye() {
         field_0x2E0 = cM_rndF(field_0x2F2);
-        if (std::fabsf(field_0x2E0 - field_0x2E6) < field_0x2EC) {
+        if (std::fabsf(field_0x2E0 - field_0x2E6.x) < field_0x2EC) {
             field_0x2E0 += field_0x2EC;
         }
         
         field_0x2E2 = cM_rndF(field_0x2F4);
-        if (std::fabsf(field_0x2E2 - field_0x2E8) < field_0x2EE) {
+        if (std::fabsf(field_0x2E2 - field_0x2E6.y) < field_0x2EE) {
             field_0x2E2 += field_0x2EE;
         }
         
         field_0x2E4 = cM_rndF(field_0x2F6);
-        if (std::fabsf(field_0x2E4 - field_0x2EA) < field_0x2F0) {
+        if (std::fabsf(field_0x2E4 - field_0x2E6.z) < field_0x2F0) {
             field_0x2E4 += field_0x2F0;
         }
     }
@@ -66,9 +66,7 @@ public:
     /* 0x2E0 */ s16 field_0x2E0;
     /* 0x2E2 */ s16 field_0x2E2;
     /* 0x2E4 */ s16 field_0x2E4;
-    /* 0x2E6 */ s16 field_0x2E6;
-    /* 0x2E8 */ s16 field_0x2E8;
-    /* 0x2EA */ s16 field_0x2EA;
+    /* 0x2E6 */ csXyz field_0x2E6;
     /* 0x2EC */ s16 field_0x2EC;
     /* 0x2EE */ s16 field_0x2EE;
     /* 0x2F0 */ s16 field_0x2F0;

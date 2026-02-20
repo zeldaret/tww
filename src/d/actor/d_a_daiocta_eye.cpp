@@ -47,13 +47,33 @@ daDaiocta_Eye_HIO_c::daDaiocta_Eye_HIO_c() {
 }
 
 /* 000001B0-000001FC       .text nodeControl_CB__FP7J3DNodei */
-static BOOL nodeControl_CB(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeControl_CB(J3DNode* i_nodeP, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DModel* model_p = j3dSys.getModel();
+        daDaiocta_Eye_c* this_p = (daDaiocta_Eye_c *) model_p->getUserArea();
+        if (this_p) {
+            this_p->_nodeControl(i_nodeP, model_p);
+        }
+    }
+    return TRUE;
 }
 
 /* 000001FC-000002B8       .text _nodeControl__15daDaiocta_Eye_cFP7J3DNodeP8J3DModel */
-void daDaiocta_Eye_c::_nodeControl(J3DNode*, J3DModel*) {
-    /* Nonmatching */
+void daDaiocta_Eye_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
+    /* Instruction match */
+    J3DJoint* jnt_p = (J3DJoint *) i_nodeP;
+    s32 jnt_no = jnt_p->getJntNo();
+    cXyz tmp0(0.0f, 0.0f, 0.0f);
+    mDoMtx_stack_c::copy(i_modelP->getAnmMtx(jnt_no));
+
+    if (jnt_no == 2) {
+        mDoMtx_stack_c::ZXYrotM(field_0x2E6);
+        mDoMtx_stack_c::scaleM(field_0x460);
+    }
+    
+    cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+    i_modelP->setAnmMtx(jnt_no, mDoMtx_stack_c::get());
+
 }
 
 /* 000002B8-000002D8       .text createHeap_CB__FP10fopAc_ac_c */
