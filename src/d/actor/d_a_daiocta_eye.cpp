@@ -9,6 +9,8 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+const char daDaiocta_Eye_c::m_arc_name[] = "daiocta";
+
 static dCcD_SrcSph l_sph_src = {
     // dCcD_SrcGObjInf
     {
@@ -131,12 +133,36 @@ bool daDaiocta_Eye_c::_draw() {
 
 /* 000011EC-000012D4       .text createInit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::createInit() {
-    /* Nonmatching */
+    /* Instruction match */
+    field_0x298 = 0;
+    cullMtx = field_0x2A8->getBaseTRMtx();
+    field_0x424.Init(0, 0, this);
+    field_0x2F8.Set(l_sph_src);
+    field_0x2F8.SetStts(&field_0x424);
+    field_0x2F8.SetCoHitCallback(coHit_CB);
+    max_health = 4;
+    health = max_health;
+    field_0x460.setall(1.0f);
+    if (parentActorID != -1) {
+        fopAc_ac_c* parent_p = fopAcM_SearchByID(parentActorID);
+        if (parent_p && fopAc_IsActor(parent_p) && fpcM_GetName(parent_p) == PROC_DAIOCTA) {
+            field_0x474 = (daDaiocta_c *) parent_p;
+        }
+    }
 }
 
 /* 000012D4-00001450       .text _create__15daDaiocta_Eye_cFv */
 cPhs_State daDaiocta_Eye_c::_create() {
     /* Nonmatching */
+    fopAcM_SetupActor(this, daDaiocta_Eye_c);
+    cPhs_State result = dComIfG_resLoad(&field_0x2A0, m_arc_name);
+    if (result == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, createHeap_CB, 0xB20)) {
+            return cPhs_ERROR_e;
+        }
+        createInit();
+    }
+    return result;
 }
 
 /* 00001764-000017B4       .text _delete__15daDaiocta_Eye_cFv */
