@@ -220,6 +220,6 @@ public:
     /* 0x100 */ f32 field_0x100;
     /* 0x104 */ f32 field_0x104;
 };  // Size: 0x108
-STATIC_ASSERT(sizeof(daDaiocta_HIO_c) == 0x108);
+STATIC_ASSERT(sizeof(daDaiocta_HIO_c) == DEMO_SELECT(0x10C, 0x108));
 
 #endif /* D_A_DAIOCTA_H */

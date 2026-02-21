@@ -7,13 +7,16 @@
 #include "d/actor/d_a_daiocta_eye.h"
 #include "d/actor/d_a_daiocta.h"
 #include "d/actor/d_a_bomb.h"
+#include "d/actor/d_a_player.h"
 #include "d/d_bg_s_func.h"
 #include "d/d_cc_d.h"
 #include "d/d_lib.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+const s32 daDaiocta_Eye_c::m_heapsize = 0xB20;
 const char daDaiocta_Eye_c::m_arc_name[] = "daiocta";
+const s32 daDaiocta_Eye_c::m_scale_damage_time = 8;
 
 static dCcD_SrcSph l_sph_src = {
     // dCcD_SrcGObjInf
@@ -212,6 +215,53 @@ void daDaiocta_Eye_c::setMtx() {
 /* 000006C0-00000A6C       .text checkTgHit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::checkTgHit() {
     /* Nonmatching */
+    field_0x424.Move();
+    cCcD_Obj* tg_hit_obj = field_0x2F8.GetTgHitObj();
+    if (tg_hit_obj) {
+        mDoAud_onEnemyDamage();
+        u8 damaged = 0;
+        
+        if (tg_hit_obj->ChkAtType(AT_TYPE_NORMAL_ARROW)) {
+            fopAcM_seStart(this, JA_SE_LK_MS_WEP_HIT, 32);
+            health -= 2;
+            damaged = 1;
+        } else if (tg_hit_obj->ChkAtType(AT_TYPE_ICE_ARROW)) {
+            fopAcM_seStart(this, JA_SE_LK_MS_WEP_HIT, 32);
+            health -= 2;
+            damaged = 1;
+        } else if (tg_hit_obj->ChkAtType(AT_TYPE_FIRE_ARROW)) {
+            fopAcM_seStart(this, JA_SE_LK_MS_WEP_HIT, 32);
+            health -= 2;
+            damaged = 1;
+        } else if (tg_hit_obj->ChkAtType(AT_TYPE_LIGHT_ARROW)) {
+            fopAcM_seStart(this, JA_SE_LK_MS_WEP_HIT, 32);
+            health -= 4;
+            damaged = 1;
+        } else if (tg_hit_obj->ChkAtType(AT_TYPE_HOOKSHOT)) {
+            fopAcM_seStart(this, JA_SE_LK_MS_WEP_HIT, 32);
+            health -= 2;
+            damaged = 1;
+        } else if (tg_hit_obj->ChkAtType(AT_TYPE_BOOMERANG)) {
+            fopAcM_seStart(this, JA_SE_LK_W_WEP_HIT, 32);
+            health--;
+            damaged = 1;
+        }
+
+        if (damaged == 1) {        
+            daPy_py_c* player_p = daPy_getPlayerActorClass();
+            cXyz sp1C = *field_0x2F8.GetTgHitPosP();
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &sp1C);
+            if (health <= 0) {
+                cXyz sp28(2.0f, 2.0f, 2.0f);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, &sp1C, &player_p->shape_angle, &sp28);
+                fopAcM_seStart(this, JA_SE_LK_LAST_HIT, 0);
+                health = 0;
+                modeDeathInit();
+            } else {
+                modeDamageInit();
+            }
+        }
+    }
 }
 
 /* 00000A6C-00000A78       .text modeWaitInit__15daDaiocta_Eye_cFv */
@@ -227,7 +277,7 @@ void daDaiocta_Eye_c::modeWait() {
 /* 00000A98-00000BD8       .text modeDamageInit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::modeDamageInit() {
     field_0x29C = MODE_DAMAGE;
-    field_0x46C = 8;
+    field_0x46C = m_scale_damage_time;
     field_0x296 = 1;
 
     J3DModelData* model_data_p = field_0x2A8->getModelData();
@@ -259,7 +309,7 @@ void daDaiocta_Eye_c::modeDamage() {
     if (field_0x2CC.isStop() && field_0x2B0.isStop() && field_0x46C == 0) {
         modeWaitInit();
     } else if (field_0x46C == 0) {
-        field_0x46C = 8;
+        field_0x46C = m_scale_damage_time;
     } 
 }
 
@@ -396,7 +446,7 @@ cPhs_State daDaiocta_Eye_c::_create() {
     fopAcM_SetupActor(this, daDaiocta_Eye_c);
     cPhs_State result = dComIfG_resLoad(&field_0x2A0, m_arc_name);
     if (result == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(this, createHeap_CB, 0xB20)) {
+        if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
             return cPhs_ERROR_e;
         }
         createInit();

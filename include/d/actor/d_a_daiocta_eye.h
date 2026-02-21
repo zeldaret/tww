@@ -57,8 +57,9 @@ public:
     cPhs_State _create();
     bool _delete();
 
+    static const s32 m_heapsize;
     static const char m_arc_name[];
-
+    static const s32 m_scale_damage_time;
 public:
     /* 0x290 */ s32 field_0x290;
     /* 0x294 */ u8 field_0x294;
