@@ -506,9 +506,55 @@ BOOL daBoomerang_c::procMove() {
         } else {
             current.angle.y = angle;
         }
+
+        cXyz diff_xz(norm.x, 0.0f, norm.z);
+
+        angle = cM_atan2s(-norm.y, diff_xz.abs());
+        current.angle.x = angle;
+        current.pos.x += speedF * cM_scos(current.angle.x) * cM_ssin(current.angle.y);
+        current.pos.y += speedF * cM_ssin(current.angle.x);
+        current.pos.z += speedF * cM_scos(current.angle.x) * cM_scos(current.angle.y);
+        shape_angle.y = current.angle.y;
+        shape_angle.x = current.angle.x;
+
+        if (field_0xF2C == 0) {
+            checkBgHit(&old.pos, &current.pos);
+        }
+
+        currentAngle = -(currentAngle * 2);
+
+        if (currentAngle > 0x100) {
+            currentAngle = 0x2000;
+        } else {
+            if (currentAngle < -0x100) {
+                currentAngle = -0x2000;
+            } else {
+                currentAngle = field_0xF38;
+            }
+        }
+
+        field_0xF38 = currentAngle;
+        cLib_addCalcAngleS(&shape_angle.z, currentAngle, 0x10, 0x1000, 0x10);
     }
 
-    // TODO
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+    mDoMtx_stack_c::YrotM(field_0xF3A);
+    mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
+    mCps.SetTgHitPos(old.pos);
+    mCps.SetAtHitPos(current.pos);
+    mCps.GetWorkAab().SetMinY(30.0f);
+    mCps.CalcAabBox();
+
+    if (dComIfGp_event_getMode() == 0) {
+        mBlur.copyBlur(mDoMtx_stack_c::get(), field_0xF3A);
+        dComIfG_Ccsp()->Set(&mCps);
+        dComIfG_Ccsp()->SetMass(&mCps, 1);
+    } else {
+        mBlur.copyBlur(mDoMtx_stack_c::get(), 0);
+        mCps.ResetAtHit();
+        mInWater = daPy_lk_c::setItemWaterEffect(this, mInWater, 1) != 0;
+    }
 
     return TRUE;
 }
