@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_daiocta_eye.h"
+#include "d/d_bg_s_func.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -40,10 +41,26 @@ static dCcD_SrcSph l_sph_src = {
     }},
 };
 
+static daDaiocta_Eye_HIO_c l_HIO;
 
 /* 000000EC-000001B0       .text __ct__19daDaiocta_Eye_HIO_cFv */
 daDaiocta_Eye_HIO_c::daDaiocta_Eye_HIO_c() {
-    /* Nonmatching */
+    /* Instruction match */
+    field_0x1C = 195.0f;
+    field_0x04 = 0xF;
+    field_0x08 = 5.0f;
+    field_0x0C = 8.0f;
+    field_0x10 = 0.0f;
+    field_0x14 = 0.0f;
+    field_0x18 = 30.0f;
+    field_0x20 = 0x1000;
+    field_0x22 = 0x4;
+    field_0x24 = 0x4000;
+    field_0x26 = 0x1000;
+    field_0x28 = 0x1000;
+    field_0x2A = 0x7FFF;
+    field_0x2C = 0x2000;
+    field_0x2E = 0x2000; 
 }
 
 /* 000001B0-000001FC       .text nodeControl_CB__FP7J3DNodei */
@@ -73,22 +90,86 @@ void daDaiocta_Eye_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
     
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
     i_modelP->setAnmMtx(jnt_no, mDoMtx_stack_c::get());
-
 }
 
 /* 000002B8-000002D8       .text createHeap_CB__FP10fopAc_ac_c */
-static BOOL createHeap_CB(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL createHeap_CB(fopAc_ac_c* i_this) {
+    return ((daDaiocta_Eye_c *)i_this)->_createHeap();
 }
 
 /* 000002D8-000004E4       .text _createHeap__15daDaiocta_Eye_cFv */
-void daDaiocta_Eye_c::_createHeap() {
-    /* Nonmatching */
+BOOL daDaiocta_Eye_c::_createHeap() {
+    /* Instruction match */
+    static Vec eye_sph_offset[] = {
+        { 0, 0,0 },
+    };
+
+    static __jnt_hit_data_c search_data[] = {
+        {
+            /* mShapeType  */ 1,
+            /* mJointIndex */ 2,
+            /* mRadius     */ 110.0f,
+            /* mpOffsets   */ eye_sph_offset
+        }
+    };
+
+    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(m_arc_name, 0x10));
+    JUT_ASSERT(0xE9, modelData != NULL);
+
+    field_0x2A8 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
+
+    if (!field_0x2A8) {
+        return FALSE;
+    }
+    
+    field_0x2A8->setUserArea((u32)this);
+
+    field_0x2AC = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, 0x18);
+
+    if (!field_0x2AC) {
+        return FALSE;
+    }
+
+    int init_res = init_res = field_0x2B0.init(modelData, field_0x2AC, TRUE, 0, 
+                                        1.0f, 0, -1, false, FALSE);
+    
+    if (init_res == 0) {
+        return FALSE;
+    }
+
+    field_0x2C8 = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, 0x23);
+    
+    if (!field_0x2C8) {
+        return FALSE;
+    }
+
+    init_res = field_0x2CC.init(modelData, field_0x2C8, TRUE, 0, 
+                                    1.0f, 0, -1, false, FALSE);
+    
+    if (init_res == 0) {
+        return FALSE;
+    }
+
+    for (int i = 0; i < 3; i++) {
+        if (i == 2) modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
+    }
+
+    field_0x470 = JntHit_create(field_0x2A8, search_data, ARRAY_SSIZE(search_data));
+
+    if (field_0x470) {   
+        jntHit = field_0x470;
+    } else {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 000004E4-00000510       .text coHit_CB__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-void coHit_CB(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*) {
-    /* Nonmatching */
+void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* i_actor, dCcD_GObjInf*) {
+    if(i_actor) {
+        ((daDaiocta_Eye_c *)i_this)->_coHit(i_actor);
+    }
 }
 
 /* 00000510-000005D0       .text _coHit__15daDaiocta_Eye_cFP10fopAc_ac_c */
@@ -98,7 +179,15 @@ void daDaiocta_Eye_c::_coHit(fopAc_ac_c*) {
 
 /* 000005D0-000006C0       .text setMtx__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::setMtx() {
-    /* Nonmatching */
+    field_0x2A8->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    field_0x2A8->setBaseTRMtx(mDoMtx_stack_c::get());
+    
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mDoMtx_stack_c::transM(l_HIO.field_0x10, l_HIO.field_0x14, l_HIO.field_0x18);
+    mDoMtx_stack_c::multVecZero(&field_0x48C);
 }
 
 /* 000006C0-00000A6C       .text checkTgHit__15daDaiocta_Eye_cFv */
@@ -108,12 +197,12 @@ void daDaiocta_Eye_c::checkTgHit() {
 
 /* 00000A6C-00000A78       .text modeWaitInit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::modeWaitInit() {
-    /* Nonmatching */
+    field_0x29C = 0;
 }
 
 /* 00000A78-00000A98       .text modeWait__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::modeWait() {
-    /* Nonmatching */
+    checkTgHit();
 }
 
 /* 00000A98-00000BD8       .text modeDamageInit__15daDaiocta_Eye_cFv */
@@ -133,22 +222,93 @@ void daDaiocta_Eye_c::modeDeathInit() {
 
 /* 00000E20-00000E2C       .text modeDeath__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::modeDeath() {
-    /* Nonmatching */
+    field_0x294 = 1;
 }
 
 /* 00000E2C-00000ED0       .text modeProcCall__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::modeProcCall() {
-    /* Nonmatching */
+    static ModeProcFunc mode_proc[] = {
+        &daDaiocta_Eye_c::modeWait,
+        &daDaiocta_Eye_c::modeDamage,
+        &daDaiocta_Eye_c::modeDeath,
+    };
+    (this->*mode_proc[field_0x29C])();
 }
 
 /* 00000ED0-00001120       .text _execute__15daDaiocta_Eye_cFv */
 bool daDaiocta_Eye_c::_execute() {
     /* Nonmatching */
+    if (!field_0x298) {
+        return false;
+    }
+
+    if (field_0x294 == 1) {
+        field_0x2F8.OffTgSPrmBit(0x1);
+    }
+
+    field_0x2EC = l_HIO.field_0x24;
+    field_0x2EE = l_HIO.field_0x26;
+    field_0x2F0 = l_HIO.field_0x28;
+    field_0x2F2 = l_HIO.field_0x2A;
+    field_0x2F4 = l_HIO.field_0x2C;
+    field_0x2F6 = l_HIO.field_0x2E;
+
+    field_0x2B0.play();
+    field_0x2CC.play();
+
+    field_0x296 = 0;
+    field_0x297 = 0;
+    modeProcCall();
+    setMtx();
+
+    attention_info.position = current.pos;
+
+    attention_info.position.y += 100.0f;
+    
+    eyePos = current.pos;
+
+    cLib_addCalcAngleS2(&field_0x2E6.x, field_0x2E0, l_HIO.field_0x22 + 1, l_HIO.field_0x20);
+    cLib_addCalcAngleS2(&field_0x2E6.y, field_0x2E2, l_HIO.field_0x22 + 1, l_HIO.field_0x20);
+    cLib_addCalcAngleS2(&field_0x2E6.z, field_0x2E4, l_HIO.field_0x22 + 1, l_HIO.field_0x20);
+    field_0x2F8.SetR(l_HIO.field_0x1C);
+    field_0x2F8.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&field_0x2F8);
+
+    field_0x498.set(0, shape_angle.y, 0);
+
+    cXyz sp08 = current.pos;
+    sp08.y += 1000.0f;
+    f32 water_height = dBgS_GetWaterHeight(sp08);
+
+    if (current.pos.y < water_height) {
+        if (field_0x478.getEmitter()) {
+            field_0x478.end();
+        }
+    } else if (field_0x29C != 2) {
+        attention_info.flags = 4;
+        attention_info.distances[2] = 0x22;
+    }
+    
+    if (field_0x29C == 2 || dComIfGp_event_runCheck()) {
+        attention_info.flags = 0;
+    }
+
+    return false;
 }
 
 /* 00001120-000011EC       .text _draw__15daDaiocta_Eye_cFv */
 bool daDaiocta_Eye_c::_draw() {
-    /* Nonmatching */
+    if (field_0x298 == 0) {
+        return false;
+    }
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(field_0x2A8, &tevStr);
+    field_0x2CC.entry(field_0x2A8->getModelData());
+    field_0x2B0.entry(field_0x2A8->getModelData());
+    mDoExt_modelUpdateDL(field_0x2A8);
+    field_0x2CC.remove(field_0x2A8->getModelData());
+    field_0x2B0.remove(field_0x2A8->getModelData());
+    return true;
 }
 
 /* 000011EC-000012D4       .text createInit__15daDaiocta_Eye_cFv */
@@ -187,7 +347,9 @@ cPhs_State daDaiocta_Eye_c::_create() {
 
 /* 00001764-000017B4       .text _delete__15daDaiocta_Eye_cFv */
 bool daDaiocta_Eye_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&field_0x2A0, m_arc_name);
+    field_0x478.remove();
+    return true;
 }
 
 /* 000017B4-000017D4       .text daDaiocta_EyeCreate__FPv */
