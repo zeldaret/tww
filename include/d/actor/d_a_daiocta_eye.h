@@ -14,6 +14,12 @@ class daDaiocta_c;
 
 class daDaiocta_Eye_c : public fopAc_ac_c {
 public:
+    enum Mode_e {
+        MODE_WAIT   = 0x0,
+        MODE_DAMAGE = 0x1,
+        MODE_DEATH  = 0x2
+    };
+
     typedef void (daDaiocta_Eye_c::*ModeProcFunc)(void);
 public:
     void rndRotEye() {
@@ -56,7 +62,7 @@ public:
 public:
     /* 0x290 */ s32 field_0x290;
     /* 0x294 */ u8 field_0x294;
-    /* 0x295 */ u8 field_0x295[0x296 - 0x295];
+    /* 0x295 */ u8 field_0x295;
     /* 0x296 */ u8 field_0x296;
     /* 0x297 */ u8 field_0x297;
     /* 0x298 */ u8 field_0x298;
@@ -81,7 +87,7 @@ public:
     /* 0x2F8 */ dCcD_Sph field_0x2F8;
     /* 0x424 */ dCcD_Stts field_0x424;
     /* 0x460 */ cXyz field_0x460;
-    /* 0x46C */ u8 field_0x46C[0x470 - 0x46C];
+    /* 0x46C */ int field_0x46C;
     /* 0x470 */ JntHit_c* field_0x470;
     /* 0x474 */ daDaiocta_c* field_0x474;
     /* 0x478 */ dPa_followEcallBack field_0x478;

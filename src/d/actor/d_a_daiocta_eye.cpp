@@ -5,8 +5,11 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_daiocta_eye.h"
+#include "d/actor/d_a_daiocta.h"
+#include "d/actor/d_a_bomb.h"
 #include "d/d_bg_s_func.h"
 #include "d/d_cc_d.h"
+#include "d/d_lib.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
@@ -173,8 +176,24 @@ void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* i_actor, dCcD_GObjI
 }
 
 /* 00000510-000005D0       .text _coHit__15daDaiocta_Eye_cFP10fopAc_ac_c */
-void daDaiocta_Eye_c::_coHit(fopAc_ac_c*) {
-    /* Nonmatching */
+void daDaiocta_Eye_c::_coHit(fopAc_ac_c* i_actor) {
+    if (fpcM_GetName(i_actor) == PROC_BOMB) {
+        daBomb_c* bomb_p = (daBomb_c *) i_actor;
+        if (bomb_p->chk_state(daBomb_c::STATE_4)) {
+            if (!field_0x294) {
+                health = 0;
+                field_0x294 = 1;
+                field_0x295 = 1;
+                dComIfGp_particle_set(
+                    dPa_name::ID_SCENE_8206, &field_0x48C, &shape_angle, 
+                    NULL, 0xFF, &field_0x478, fopAcM_GetRoomNo(this)
+                );
+                modeDeathInit();
+            } else {
+                field_0x297 = 1;
+            }
+        }
+    }
 }
 
 /* 000005D0-000006C0       .text setMtx__15daDaiocta_Eye_cFv */
@@ -197,7 +216,7 @@ void daDaiocta_Eye_c::checkTgHit() {
 
 /* 00000A6C-00000A78       .text modeWaitInit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::modeWaitInit() {
-    field_0x29C = 0;
+    field_0x29C = MODE_WAIT;
 }
 
 /* 00000A78-00000A98       .text modeWait__15daDaiocta_Eye_cFv */
@@ -207,17 +226,53 @@ void daDaiocta_Eye_c::modeWait() {
 
 /* 00000A98-00000BD8       .text modeDamageInit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::modeDamageInit() {
-    /* Nonmatching */
+    field_0x29C = MODE_DAMAGE;
+    field_0x46C = 8;
+    field_0x296 = 1;
+
+    J3DModelData* model_data_p = field_0x2A8->getModelData();
+    field_0x2AC = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, 0x18);
+    field_0x2B0.init(model_data_p, field_0x2AC, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
+    field_0x2C8 = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, 0x23);
+    field_0x2CC.init(model_data_p, field_0x2C8, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
+ 
+    fopAcM_monsSeStart(field_0x474, 0x48C8, 0);
 }
 
 /* 00000BD8-00000CD0       .text modeDamage__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::modeDamage() {
-    /* Nonmatching */
+    static float scale_table[] = {
+        1.0f, 0.975f, 
+        1.0f, 0.95f, 
+        1.0f, 0.9f,
+        1.0f, 0.85f
+    };
+
+    dLib_scaleAnime(
+        &field_0x460.x, scale_table, 
+        ARRAY_SSIZE(scale_table), &field_0x46C, 
+        0.2f, 10.0f, 0.025f
+    );
+    field_0x460.y = field_0x460.x;
+    field_0x460.z = field_0x460.x;
+
+    if (field_0x2CC.isStop() && field_0x2B0.isStop() && field_0x46C == 0) {
+        modeWaitInit();
+    } else if (field_0x46C == 0) {
+        field_0x46C = 8;
+    } 
 }
 
 /* 00000CD0-00000E20       .text modeDeathInit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::modeDeathInit() {
-    /* Nonmatching */
+    field_0x29C = MODE_DEATH;
+    field_0x296 = 1;
+    field_0x460.setall(1.0f);
+    field_0x2AC = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, 0x19);
+    field_0x2B0.init(field_0x2A8->getModelData(), field_0x2AC, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
+    field_0x2C8 = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, 0x24);
+    field_0x2CC.init(field_0x2A8->getModelData(), field_0x2C8, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
+    fopAcM_monsSeStart(field_0x474, 0x48CB, 0);
 }
 
 /* 00000E20-00000E2C       .text modeDeath__15daDaiocta_Eye_cFv */
@@ -237,13 +292,13 @@ void daDaiocta_Eye_c::modeProcCall() {
 
 /* 00000ED0-00001120       .text _execute__15daDaiocta_Eye_cFv */
 bool daDaiocta_Eye_c::_execute() {
-    /* Nonmatching */
+    /* Instruction match */
     if (!field_0x298) {
         return false;
     }
 
     if (field_0x294 == 1) {
-        field_0x2F8.OffTgSPrmBit(0x1);
+        field_0x2F8.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
     }
 
     field_0x2EC = l_HIO.field_0x24;
@@ -284,12 +339,12 @@ bool daDaiocta_Eye_c::_execute() {
         if (field_0x478.getEmitter()) {
             field_0x478.end();
         }
-    } else if (field_0x29C != 2) {
-        attention_info.flags = 4;
-        attention_info.distances[2] = 0x22;
+    } else if (field_0x29C != MODE_DEATH) {
+        attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
+        attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 34;
     }
     
-    if (field_0x29C == 2 || dComIfGp_event_runCheck()) {
+    if (field_0x29C == MODE_DEATH || dComIfGp_event_runCheck()) {
         attention_info.flags = 0;
     }
 
@@ -301,13 +356,18 @@ bool daDaiocta_Eye_c::_draw() {
     if (field_0x298 == 0) {
         return false;
     }
+
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(field_0x2A8, &tevStr);
+    
     field_0x2CC.entry(field_0x2A8->getModelData());
     field_0x2B0.entry(field_0x2A8->getModelData());
+
     mDoExt_modelUpdateDL(field_0x2A8);
+
     field_0x2CC.remove(field_0x2A8->getModelData());
     field_0x2B0.remove(field_0x2A8->getModelData());
+    
     return true;
 }
 
@@ -333,7 +393,6 @@ void daDaiocta_Eye_c::createInit() {
 
 /* 000012D4-00001450       .text _create__15daDaiocta_Eye_cFv */
 cPhs_State daDaiocta_Eye_c::_create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, daDaiocta_Eye_c);
     cPhs_State result = dComIfG_resLoad(&field_0x2A0, m_arc_name);
     if (result == cPhs_COMPLEATE_e) {
