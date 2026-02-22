@@ -1276,7 +1276,7 @@ public:
     void setDamageEmitter();
     void endFlameDamageEmitter();
     void endDamageEmitter();
-    static u32 setItemWaterEffect(fopAc_ac_c*, int, int);
+    static BOOL setItemWaterEffect(fopAc_ac_c* i_actor, BOOL inWater, BOOL triggerOnExit);
     fopAc_ac_c* getDemoLookActor();
     void setTinkleCeiverModel();
     void setTalismanModel();
