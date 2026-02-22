@@ -1608,7 +1608,7 @@ public:
     BOOL procRopeUpHang();
     BOOL checkBoomerangAnime() const;
     void throwBoomerang();
-    int returnBoomerang();
+    BOOL returnBoomerang();
     BOOL checkNextActionBoomerangReady();
     void checkNextActionBoomerangFly();
     BOOL checkNextBoomerangMode();

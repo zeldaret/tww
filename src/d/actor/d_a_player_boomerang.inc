@@ -47,7 +47,7 @@ void daPy_lk_c::throwBoomerang() {
 }
 
 /* 80149698-801497A4       .text returnBoomerang__9daPy_lk_cFv */
-int daPy_lk_c::returnBoomerang() {
+BOOL daPy_lk_c::returnBoomerang() {
     dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_WAIT_e);
 
     if (mEquipItem == daPyItem_NONE_e && !checkNoControll() && !dComIfGp_event_runCheck() && mDemo.getDemoType() == 0 &&
