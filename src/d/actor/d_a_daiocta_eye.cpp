@@ -51,7 +51,6 @@ static daDaiocta_Eye_HIO_c l_HIO;
 
 /* 000000EC-000001B0       .text __ct__19daDaiocta_Eye_HIO_cFv */
 daDaiocta_Eye_HIO_c::daDaiocta_Eye_HIO_c() {
-    /* Instruction match */
     field_0x1C = 195.0f;
     field_0x04 = 0xF;
     field_0x08 = 5.0f;
@@ -83,7 +82,6 @@ static BOOL nodeControl_CB(J3DNode* i_nodeP, int i_calcTiming) {
 
 /* 000001FC-000002B8       .text _nodeControl__15daDaiocta_Eye_cFP7J3DNodeP8J3DModel */
 void daDaiocta_Eye_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
-    /* Instruction match */
     J3DJoint* jnt_p = (J3DJoint *) i_nodeP;
     s32 jnt_no = jnt_p->getJntNo();
     cXyz tmp0(0.0f, 0.0f, 0.0f);
@@ -105,7 +103,6 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 000002D8-000004E4       .text _createHeap__15daDaiocta_Eye_cFv */
 BOOL daDaiocta_Eye_c::_createHeap() {
-    /* Instruction match */
     static Vec eye_sph_offset[] = {
         { 0, 0,0 },
     };
@@ -214,7 +211,6 @@ void daDaiocta_Eye_c::setMtx() {
 
 /* 000006C0-00000A6C       .text checkTgHit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::checkTgHit() {
-    /* Nonmatching */
     field_0x424.Move();
     cCcD_Obj* tg_hit_obj = field_0x2F8.GetTgHitObj();
     if (tg_hit_obj) {
@@ -342,7 +338,6 @@ void daDaiocta_Eye_c::modeProcCall() {
 
 /* 00000ED0-00001120       .text _execute__15daDaiocta_Eye_cFv */
 bool daDaiocta_Eye_c::_execute() {
-    /* Instruction match */
     if (!field_0x298) {
         return false;
     }
@@ -423,7 +418,6 @@ bool daDaiocta_Eye_c::_draw() {
 
 /* 000011EC-000012D4       .text createInit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::createInit() {
-    /* Instruction match */
     field_0x298 = 0;
     cullMtx = field_0x2A8->getBaseTRMtx();
     field_0x424.Init(0, 0, this);

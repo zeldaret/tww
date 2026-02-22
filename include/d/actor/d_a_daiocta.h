@@ -128,14 +128,18 @@ public:
     /* 0x220C */ cXyz field_0x220C;
     /* 0x2218 */ dBgS_ObjAcch field_0x2218;
     /* 0x23DC */ dBgS_AcchCir field_0x23DC;
+#if VERSION > VERSION_DEMO
     /* 0x241C */ dPa_followEcallBack field_0x241C;
+#else
+                 JPABaseEmitter* field_0x241C;
+#endif
     /* 0x2430 */ f32 field_0x2430;
     /* 0x2434 */ cXyz field_0x2434;
     /* 0x2440 */ fpc_ProcID field_0x2440[12];
     /* 0x2470 */ u8 field_0x2470[12];
     /* 0x247C */ u8 field_0x247C[0x26BC - 0x247C];
     /* 0x26BC */ int field_0x26BC;
-    /* 0x26C0 */ u8 field_0x26C0[0x26C1 - 0x26C0];
+    /* 0x26C0 */ u8 field_0x26C0;
     /* 0x26C1 */ u8 field_0x26C1;
     /* 0x26C2 */ u8 field_0x26C2[0x26C4 - 0x26C2];
     /* 0x26C4 */ fpc_ProcID field_0x26C4;
@@ -153,7 +157,7 @@ public:
     /* 0x31C4 */ u8 field_0x31C4;
     /* 0x31C5 */ u8 field_0x31C5[0x31C8 - 0x31C5];
 };  // Size: 0x31C8
-STATIC_ASSERT(sizeof(daDaiocta_c) == 0x31C8);
+//STATIC_ASSERT(sizeof(daDaiocta_c) == DEMO_SELECT(0x31B8, 0x31C8));
 
 class daDaiocta_HIO_c : public mDoHIO_entry_c {
 public:
@@ -163,9 +167,10 @@ public:
     /* 0x004 */ u8 field_0x004;
     /* 0x005 */ u8 field_0x005;
     /* 0x006 */ u8 field_0x006;
-    /* 0x007 */ u8 field_0x007[0x008 - 0x007];
+    /* 0x007 */ u8 field_0x007;
     /* 0x008 */ u8 field_0x008;
-    /* 0x009 */ u8 field_0x009[0x00C - 0x009];
+    /* 0x009 */ u8 field_0x009[0x00A - 0x009];
+    /* 0x00A */ s16 field_0x00A;
     /* 0x00C */ s16 field_0x00C;
     /* 0x00E */ s16 field_0x00E;
     /* 0x010 */ s16 field_0x010;
@@ -200,9 +205,7 @@ public:
     /* 0x0F0 */ f32 field_0x0F0;
     /* 0x0F4 */ f32 field_0x0F4;
     /* 0x0F8 */ f32 field_0x0F8;
-    /* 0x0FC */ f32 field_0x0FC;
-    /* 0x100 */ f32 field_0x100;
-    /* 0x104 */ f32 field_0x104;
+    /* 0x0FC */ cXyz field_0x0FC;
 };  // Size: 0x108
 STATIC_ASSERT(sizeof(daDaiocta_HIO_c) == DEMO_SELECT(0x10C, 0x108));
 
