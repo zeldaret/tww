@@ -410,14 +410,13 @@ BOOL daBoomerang_c::procMove() {
     /* Nonmatching */
     static cXyz at_offset(0.0f, 0.0f, 0.0f);
 
-    fopAc_ac_c* pPlayer = dComIfGp_getLinkPlayer();
-
     if (field_0xF2F != 0) {
         fopAcM_delete(this);
         return TRUE;
     }
 
     if (dComIfGp_event_getMode() == 0) {
+        fopAc_ac_c* pPlayer = dComIfGp_getLinkPlayer();
         s16 s = field_0xF3A;
         field_0xF3A -= 0x1F00;
         if (s >= 0 && field_0xF3A < 0) {
@@ -429,10 +428,10 @@ BOOL daBoomerang_c::procMove() {
         cXyz diff = field_0xF40 - current.pos;
         f32 dist = diff.abs();
         cXyz norm;
-        if (dist <= 0.1f) {
-            norm = diff;
-        } else {
+        if (dist > 0.1f) {
             norm = diff / dist;
+        } else {
+            norm = diff;
         }
 
         s16 angle = cM_atan2s(norm.x, norm.z);
@@ -452,12 +451,12 @@ BOOL daBoomerang_c::procMove() {
 
         if (field_0xF2C != 0) {
             if (dist < speedF * 2.0f) {
-                if (((daPy_lk_c*)pPlayer)->returnBoomerang() == 0) {
-                    field_0xF2F = 1;
-                } else {
+                if (((daPy_lk_c*)pPlayer)->returnBoomerang() != 0) {
                     fpcM_SetParam(this, 0);
                     field_0xF33 = 0;
                     mCurrProcFunc = &daBoomerang_c::procWait;
+                } else {
+                    field_0xF2F = 1;
                 }
             }
         } else {
@@ -543,7 +542,7 @@ BOOL daBoomerang_c::procMove() {
     mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
     mCps.SetTgHitPos(old.pos);
     mCps.SetAtHitPos(current.pos);
-    mCps.GetWorkAab().SetMinY(30.0f);
+    mCps.GetWorkAab().GetMinP()->y = 30.0f;
     mCps.CalcAabBox();
 
     if (dComIfGp_event_getMode() == 0) {
