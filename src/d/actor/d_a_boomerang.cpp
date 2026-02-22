@@ -552,7 +552,7 @@ BOOL daBoomerang_c::procMove() {
     } else {
         mBlur.copyBlur(mDoMtx_stack_c::get(), 0);
         mCps.ResetAtHit();
-        mInWater = daPy_lk_c::setItemWaterEffect(this, mInWater, 1) != 0;
+        mInWater = daPy_lk_c::setItemWaterEffect(this, mInWater, TRUE) != FALSE;
     }
 
     return TRUE;
