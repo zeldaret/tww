@@ -24,7 +24,7 @@ static BOOL daFgmahou_Draw(fgmahou_class* i_this) {
 }
 
 /* 000000E4-00000130       .text boss_s_sub__FPvPv */
-void* boss_s_sub(void* param_1, void*) {
+static void* boss_s_sub(void* param_1, void*) {
     if(fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_FGANON) {
         return param_1;
     }
@@ -33,7 +33,7 @@ void* boss_s_sub(void* param_1, void*) {
 }
 
 /* 00000130-00000C14       .text move__FP13fgmahou_class */
-void move(fgmahou_class* i_this) {
+static void move(fgmahou_class* i_this) {
     static float spdd[] = {
         0.65f,
         0.3f,
@@ -65,47 +65,47 @@ void move(fgmahou_class* i_this) {
 
     i_this->mStts.Move();
 
-    switch(i_this->field_0x2C6) {
+    switch(i_this->mState) {
         case 0:
-            i_this->field_0x2C6 = 1;
-            i_this->field_0x2D4 = i_this->field_0x2b4 * REG6_S(2) - REG6_S(3);
+            i_this->mState = 1;
+            i_this->field_0x2D4 = i_this->mOrbNumber * REG6_S(2) - REG6_S(3);
             i_this->field_0x2D6 = cM_rndF(65536.0f);
 
             i_this->speedF = REG0_F(0xD) + 50.0f;
-            i_this->speedF *= (0.2f + REG0_F(4)) * spdd[i_this->field_0x2b4] + 1.0f;
-            i_this->field_0x2C8 = pPlayer->eyePos;
+            i_this->speedF *= (0.2f + REG0_F(4)) * spdd[i_this->mOrbNumber] + 1.0f;
+            i_this->mTargetPos = pPlayer->eyePos;
 
-            diff2 = i_this->field_0x2C8 - i_this->current.pos;
-            i_this->home.angle.y = i_this->field_0x2b4 * (REG8_S(2) + 0x1400) - (REG8_S(3) + 0x4000) + cM_atan2s(diff2.x, diff2.z);
-            i_this->home.angle.x = angXd[i_this->field_0x2b4];
+            diff2 = i_this->mTargetPos - i_this->current.pos;
+            i_this->home.angle.y = i_this->mOrbNumber * (REG8_S(2) + 0x1400) - (REG8_S(3) + 0x4000) + cM_atan2s(diff2.x, diff2.z);
+            i_this->home.angle.x = angXd[i_this->mOrbNumber];
             i_this->shape_angle = i_this->home.angle;
-            i_this->field_0x2DA[0] = REG8_S(9) + 5;
-            i_this->field_0x2DA[1] = 0x14;
+            i_this->mTimers[0] = REG8_S(9) + 5;
+            i_this->mTimers[1] = 0x14;
 
             i_this->mpEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_821E, &i_this->current.pos);
 
-            i_this->mSph2.SetR(REG6_F(5) + 110.0f);
+            i_this->mTgSph.SetR(REG6_F(5) + 110.0f);
 
             temp2 = REG0_S(2) + 2;
         case 1:
         case 2:
-            diff3 = i_this->field_0x2C8 - i_this->current.pos;
+            diff3 = i_this->mTargetPos - i_this->current.pos;
             temp3 = diff3.abs();
-            if(i_this->field_0x2DA[0] != 0) {
+            if(i_this->mTimers[0] != 0) {
                 break;
             }
 
-            if(temp3 > REG0_F(0x11) + 500.0f && i_this->field_0x2C6 < 2) {
-                diff2 = i_this->field_0x2C8 - i_this->current.pos;
+            if(temp3 > REG0_F(0x11) + 500.0f && i_this->mState < 2) {
+                diff2 = i_this->mTargetPos - i_this->current.pos;
                 cLib_addCalcAngleS2(&i_this->home.angle.y, cM_atan2s(diff2.x, diff2.z), 2, REG8_S(4) + 0x500);
                 cLib_addCalcAngleS2(&i_this->home.angle.x, -cM_atan2s(diff2.y, std::sqrtf(diff2.x * diff2.x + diff2.z * diff2.z)), 2, REG8_S(4) + 0x500);
             }
             else {
-                i_this->field_0x2C6 = 2;
+                i_this->mState = 2;
             }
 
-            if(i_this->mSph.ChkAtHit()) {
-                i_this->mSph.GetAtHitObj();
+            if(i_this->mAtSph.ChkAtHit()) {
+                i_this->mAtSph.GetAtHitObj();
                 fganon_class* fganon = (fganon_class*)fpcEx_Search(boss_s_sub, i_this);
                 if(fganon != NULL) {
                     fganon->m68B = 1;
@@ -114,14 +114,14 @@ void move(fgmahou_class* i_this) {
                 }
             }
 
-            if(!i_this->mSph2.ChkTgHit()) {
+            if(!i_this->mTgSph.ChkTgHit()) {
                 break;
             }
 
             dComIfGp_particle_set(dPa_name::ID_SCENE_8244, &i_this->current.pos, &i_this->home.angle);
             fopAcM_seStartCurrent(i_this, JA_SE_LK_PG_BOMB_STRIKE, 0);
 
-            i_this->field_0x2C6 = 5;
+            i_this->mState = 5;
         case 5:
             fganon2 = (fganon_class*)fpcEx_Search(boss_s_sub, i_this);
             if(fganon2 == NULL) {
@@ -129,36 +129,36 @@ void move(fgmahou_class* i_this) {
                 break;
             }
 
-            i_this->field_0x2C8 = fganon2->eyePos;
-            i_this->field_0x2C8.y -= cM_rndFX(50.0f) + 50.0f;
+            i_this->mTargetPos = fganon2->eyePos;
+            i_this->mTargetPos.y -= cM_rndFX(50.0f) + 50.0f;
             i_this->home.angle.y -= 0x8000;
             i_this->home.angle.x *= -1;
-            i_this->field_0x2DA[0] = REG8_S(9) + 5;
+            i_this->mTimers[0] = REG8_S(9) + 5;
             i_this->field_0x2E0 = 1;
             i_this->field_0x2E2 = 0x8000;
             i_this->shape_angle = i_this->home.angle;
-            i_this->field_0x2C6 = 6;
-            i_this->mSph.SetR(60.0f);
+            i_this->mState = 6;
+            i_this->mAtSph.SetR(60.0f);
         case 6:
         case 7:
-            diff3 = i_this->field_0x2C8 - i_this->current.pos;
+            diff3 = i_this->mTargetPos - i_this->current.pos;
             temp3 = diff3.abs();
-            if(i_this->field_0x2DA[0] != 0) {
+            if(i_this->mTimers[0] != 0) {
                 break;
             }
 
-            if(temp3 > REG0_F(0x11) + 500.0f && i_this->field_0x2C6 < 7) {
-                diff2 = i_this->field_0x2C8 - i_this->current.pos;
+            if(temp3 > REG0_F(0x11) + 500.0f && i_this->mState < 7) {
+                diff2 = i_this->mTargetPos - i_this->current.pos;
                 cLib_addCalcAngleS2(&i_this->home.angle.y, cM_atan2s(diff2.x, diff2.z), 2, REG8_S(4) + 0x500);
                 cLib_addCalcAngleS2(&i_this->home.angle.x, -cM_atan2s(diff2.y, std::sqrtf(diff2.x * diff2.x + diff2.z * diff2.z)), 2, REG8_S(4) + 0x500);
             }
             else {
-                i_this->field_0x2C6 = 7;
+                i_this->mState = 7;
             }
 
             break;
         case 10:
-            if(i_this->field_0x2DA[0] == 0) {
+            if(i_this->mTimers[0] == 0) {
                 fopAcM_delete(i_this);
             }
 
@@ -201,14 +201,14 @@ void move(fgmahou_class* i_this) {
 
     cXyz temp6 = i_this->current.pos;
 
-    if(i_this->field_0x2DA[1] == 0) {
-        i_this->mSph2.SetC(temp6);
-        dComIfG_Ccsp()->Set(&i_this->mSph2);
-        i_this->mSph.SetC(temp6);
-        dComIfG_Ccsp()->Set(&i_this->mSph);
+    if(i_this->mTimers[1] == 0) {
+        i_this->mTgSph.SetC(temp6);
+        dComIfG_Ccsp()->Set(&i_this->mTgSph);
+        i_this->mAtSph.SetC(temp6);
+        dComIfG_Ccsp()->Set(&i_this->mAtSph);
         i_this->mAcch.CrrPos(*dComIfG_Bgsp());
 
-        if(fopAcM_searchPlayerDistance(i_this) > 5000.0f || i_this->mSph.ChkAtHit() || i_this->mAcch.ChkGroundHit() || i_this->mAcch.ChkWallHit() || i_this->mAcch.ChkRoofHit()) {
+        if(fopAcM_searchPlayerDistance(i_this) > 5000.0f || i_this->mAtSph.ChkAtHit() || i_this->mAcch.ChkGroundHit() || i_this->mAcch.ChkWallHit() || i_this->mAcch.ChkRoofHit()) {
             i_this->field_0x780 = 0x32;
             i_this->health = 1;
 
@@ -233,11 +233,11 @@ void move(fgmahou_class* i_this) {
 static BOOL daFgmahou_Execute(fgmahou_class* i_this) {
     cXyz temp(0.0f, 0.0f, 0.0f);
 
-    i_this->field_0x2C4++;
+    i_this->mAge++;
 
     for(int i = 0; i < 2; i++) {
-        if(i_this->field_0x2DA[i]) {
-            i_this->field_0x2DA[i]--;
+        if(i_this->mTimers[i]) {
+            i_this->mTimers[i]--;
         }
     }
 
@@ -402,21 +402,21 @@ static cPhs_State daFgmahou_Create(fopAc_ac_c* a_this) {
 
     cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhs, "Fganon");
     if(phase_state == cPhs_COMPLEATE_e) {
-        i_this->field_0x2b4 = fopAcM_GetParam(i_this) & 0xF;
+        i_this->mOrbNumber = fopAcM_GetParam(i_this) & 0xF;
 
         if(!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x19000)) {
             return cPhs_ERROR_e;
         }
-        i_this->mAcch.Set(&i_this->current.pos, &i_this->old.pos, i_this, 1, &i_this->mCir, &i_this->speed);
+        i_this->mAcch.Set(fopAcM_GetPosition_p(i_this), fopAcM_GetOldPosition_p(i_this), i_this, 1, &i_this->mCir, fopAcM_GetSpeed_p(i_this));
         i_this->mCir.SetWall(50.0f, 50.0f);
         i_this->mAcch.ClrRoofNone();
         i_this->mAcch.SetRoofCrrHeight(REG0_F(7) + 70.0f);
         i_this->mStts.Init(0xFA, 0xFF, i_this);
-        i_this->mSph2.Set(tg_sph_src);
-        i_this->mSph2.SetStts(&i_this->mStts);
-        i_this->mSph2.OnTgNoHitMark();
-        i_this->mSph.Set(at_sph_src);
-        i_this->mSph.SetStts(&i_this->mStts);
+        i_this->mTgSph.Set(tg_sph_src);
+        i_this->mTgSph.SetStts(&i_this->mStts);
+        i_this->mTgSph.OnTgNoHitMark();
+        i_this->mAtSph.Set(at_sph_src);
+        i_this->mAtSph.SetStts(&i_this->mStts);
     }
 
     return phase_state;
