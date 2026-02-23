@@ -8,45 +8,337 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/d_s_play.h"
+#include "d/d_particle_name.h"
+#include "d/actor/d_a_fganon.h"
+#include "d/res/res_fganon.h"
 
 /* 00000078-000000E4       .text daFgmahou_Draw__FP13fgmahou_class */
-static BOOL daFgmahou_Draw(fgmahou_class*) {
-    /* Nonmatching */
+static BOOL daFgmahou_Draw(fgmahou_class* i_this) {
+    J3DModel* pModel = i_this->mpMorf->getModel();
+    i_this->mpBrk->entry(pModel->getModelData());
+    i_this->mpBtk->entry(pModel->getModelData());
+    i_this->mpMorf->entryDL();
+
+    return TRUE;
 }
 
 /* 000000E4-00000130       .text boss_s_sub__FPvPv */
-void boss_s_sub(void*, void*) {
-    /* Nonmatching */
+void* boss_s_sub(void* param_1, void*) {
+    if(fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_FGANON) {
+        return param_1;
+    }
+
+    return NULL;
 }
 
 /* 00000130-00000C14       .text move__FP13fgmahou_class */
-void move(fgmahou_class*) {
-    /* Nonmatching */
+void move(fgmahou_class* i_this) {
+    static float spdd[] = {
+        0.65f,
+        0.3f,
+        0.1f,
+        0.0f,
+        0.0f,
+        0.1f,
+        0.3f,
+        0.65f,
+    };
+    static s16 angXd[] = {
+        0x0000,
+        0xF400,
+        0xE800,
+        0xE000,
+        0xE000,
+        0xE800,
+        0xF400,
+        0x0000
+    };
+
+    fopAc_ac_c* pPlayer = dComIfGp_getPlayer(0);
+
+    cXyz diff2;
+    cXyz diff3;
+    int temp2 = 1;
+    f32 temp3;
+    fganon_class* fganon2;
+
+    i_this->mStts.Move();
+
+    switch(i_this->field_0x2C6) {
+        case 0:
+            i_this->field_0x2C6 = 1;
+            i_this->field_0x2D4 = i_this->field_0x2b4 * REG6_S(2) - REG6_S(3);
+            i_this->field_0x2D6 = cM_rndF(65536.0f);
+
+            i_this->speedF = REG0_F(0xD) + 50.0f;
+            i_this->speedF *= (0.2f + REG0_F(4)) * spdd[i_this->field_0x2b4] + 1.0f;
+            i_this->field_0x2C8 = pPlayer->eyePos;
+
+            diff2 = i_this->field_0x2C8 - i_this->current.pos;
+            i_this->home.angle.y = i_this->field_0x2b4 * (REG8_S(2) + 0x1400) - (REG8_S(3) + 0x4000) + cM_atan2s(diff2.x, diff2.z);
+            i_this->home.angle.x = angXd[i_this->field_0x2b4];
+            i_this->shape_angle = i_this->home.angle;
+            i_this->field_0x2DA[0] = REG8_S(9) + 5;
+            i_this->field_0x2DA[1] = 0x14;
+
+            i_this->mpEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_821E, &i_this->current.pos);
+
+            i_this->mSph2.SetR(REG6_F(5) + 110.0f);
+
+            temp2 = REG0_S(2) + 2;
+        case 1:
+        case 2:
+            diff3 = i_this->field_0x2C8 - i_this->current.pos;
+            temp3 = diff3.abs();
+            if(i_this->field_0x2DA[0] != 0) {
+                break;
+            }
+
+            if(temp3 > REG0_F(0x11) + 500.0f && i_this->field_0x2C6 < 2) {
+                diff2 = i_this->field_0x2C8 - i_this->current.pos;
+                cLib_addCalcAngleS2(&i_this->home.angle.y, cM_atan2s(diff2.x, diff2.z), 2, REG8_S(4) + 0x500);
+                cLib_addCalcAngleS2(&i_this->home.angle.x, -cM_atan2s(diff2.y, std::sqrtf(diff2.x * diff2.x + diff2.z * diff2.z)), 2, REG8_S(4) + 0x500);
+            }
+            else {
+                i_this->field_0x2C6 = 2;
+            }
+
+            if(i_this->mSph.ChkAtHit()) {
+                i_this->mSph.GetAtHitObj();
+                fganon_class* fganon = (fganon_class*)fpcEx_Search(boss_s_sub, i_this);
+                if(fganon != NULL) {
+                    fganon->m68B = 1;
+
+                    break;
+                }
+            }
+
+            if(!i_this->mSph2.ChkTgHit()) {
+                break;
+            }
+
+            dComIfGp_particle_set(dPa_name::ID_SCENE_8244, &i_this->current.pos, &i_this->home.angle);
+            fopAcM_seStartCurrent(i_this, JA_SE_LK_PG_BOMB_STRIKE, 0);
+
+            i_this->field_0x2C6 = 5;
+        case 5:
+            fganon2 = (fganon_class*)fpcEx_Search(boss_s_sub, i_this);
+            if(fganon2 == NULL) {
+                i_this->field_0x780 = 0x32;
+                break;
+            }
+
+            i_this->field_0x2C8 = fganon2->eyePos;
+            i_this->field_0x2C8.y -= cM_rndFX(50.0f) + 50.0f;
+            i_this->home.angle.y -= 0x8000;
+            i_this->home.angle.x *= -1;
+            i_this->field_0x2DA[0] = REG8_S(9) + 5;
+            i_this->field_0x2E0 = 1;
+            i_this->field_0x2E2 = 0x8000;
+            i_this->shape_angle = i_this->home.angle;
+            i_this->field_0x2C6 = 6;
+            i_this->mSph.SetR(60.0f);
+        case 6:
+        case 7:
+            diff3 = i_this->field_0x2C8 - i_this->current.pos;
+            temp3 = diff3.abs();
+            if(i_this->field_0x2DA[0] != 0) {
+                break;
+            }
+
+            if(temp3 > REG0_F(0x11) + 500.0f && i_this->field_0x2C6 < 7) {
+                diff2 = i_this->field_0x2C8 - i_this->current.pos;
+                cLib_addCalcAngleS2(&i_this->home.angle.y, cM_atan2s(diff2.x, diff2.z), 2, REG8_S(4) + 0x500);
+                cLib_addCalcAngleS2(&i_this->home.angle.x, -cM_atan2s(diff2.y, std::sqrtf(diff2.x * diff2.x + diff2.z * diff2.z)), 2, REG8_S(4) + 0x500);
+            }
+            else {
+                i_this->field_0x2C6 = 7;
+            }
+
+            break;
+        case 10:
+            if(i_this->field_0x2DA[0] == 0) {
+                fopAcM_delete(i_this);
+            }
+
+            return;
+        case 3:
+        case 4:
+        case 8:
+        case 9:
+            break;
+    }
+
+    f32 temp4 = temp3 * (REG0_F(3) + 3.0f);
+    if(temp4 > REG0_F(8) + 8000.0f) {
+        temp4 = REG0_F(8) + 8000.0f;
+    }
+
+    i_this->field_0x2D4 += REG0_S(6) + 0xDAC;
+    i_this->field_0x2D6 += REG0_S(7) + 0xCE4;
+
+    f32 temp5 = cM_ssin(i_this->field_0x2D4);
+    f32 temp7 = cM_ssin(i_this->field_0x2D6);
+    i_this->shape_angle.y = i_this->home.angle.y + (s16)(temp4 * temp5);
+    i_this->shape_angle.x = i_this->home.angle.x + (s16)(temp4 * temp7 * 0.75f);
+
+    diff2.x = 0.0f;
+    diff2.y = 0.0f;
+    diff2.z = i_this->speedF;
+    mDoMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
+    mDoMtx_XrotM(*calc_mtx, i_this->shape_angle.x);
+    MtxPosition(&diff2, &i_this->speed);
+
+    if(temp2 <= 1) {
+        i_this->current.pos += i_this->speed;
+    }
+    else {
+        for(int i = 0; i < temp2; i++) {
+            i_this->current.pos += i_this->speed;
+        }
+    }
+
+    cXyz temp6 = i_this->current.pos;
+
+    if(i_this->field_0x2DA[1] == 0) {
+        i_this->mSph2.SetC(temp6);
+        dComIfG_Ccsp()->Set(&i_this->mSph2);
+        i_this->mSph.SetC(temp6);
+        dComIfG_Ccsp()->Set(&i_this->mSph);
+        i_this->mAcch.CrrPos(*dComIfG_Bgsp());
+
+        if(fopAcM_searchPlayerDistance(i_this) > 5000.0f || i_this->mSph.ChkAtHit() || i_this->mAcch.ChkGroundHit() || i_this->mAcch.ChkWallHit() || i_this->mAcch.ChkRoofHit()) {
+            i_this->field_0x780 = 0x32;
+            i_this->health = 1;
+
+            JPABaseEmitter* pEmtr = dComIfGp_particle_set(dPa_name::ID_SCENE_8245, &i_this->current.pos);
+            pEmtr->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(1));
+            JPABaseEmitter* pEmtr2 = dComIfGp_particle_set(dPa_name::ID_SCENE_8246, &i_this->current.pos);
+            pEmtr2->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(1));
+
+            fopAcM_seStartCurrent(i_this, JA_SE_OBJ_PG_EBALL_EXP_L, 0);
+        }
+    }
+
+    if(i_this->field_0x2E0 != 0) {
+        i_this->field_0x2E0++;
+        if(i_this->field_0x2E0 > 8) {
+            i_this->field_0x2E0 = 0;
+        }
+    }
 }
 
 /* 00000C14-00000DD8       .text daFgmahou_Execute__FP13fgmahou_class */
-static BOOL daFgmahou_Execute(fgmahou_class*) {
-    /* Nonmatching */
+static BOOL daFgmahou_Execute(fgmahou_class* i_this) {
+    cXyz temp(0.0f, 0.0f, 0.0f);
+
+    i_this->field_0x2C4++;
+
+    for(int i = 0; i < 2; i++) {
+        if(i_this->field_0x2DA[i]) {
+            i_this->field_0x2DA[i]--;
+        }
+    }
+
+    if(i_this->field_0x2DE) {
+        i_this->field_0x2DE--;
+    }
+
+    if(i_this->field_0x780 == 0) {
+        move(i_this);
+    }
+    else {
+        i_this->field_0x780--;
+        if(i_this->field_0x780 == 0) {
+            fopAcM_delete(i_this);
+
+            return TRUE;
+        }
+    }
+
+    i_this->mpBrk->play();
+    i_this->mpBtk->play();
+    J3DModel* pModel = i_this->mpMorf->getModel();
+    mDoMtx_stack_c::transS(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z);
+    mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
+    mDoMtx_stack_c::XrotM(i_this->shape_angle.x);
+    pModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    i_this->mpMorf->calc();
+
+    if(i_this->mpEmitter) {
+        i_this->mpEmitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(1));
+
+        if(i_this->field_0x780 != 0 && i_this->field_0x780 == 0x32) {
+            i_this->mpEmitter->becomeInvalidEmitter();
+            i_this->mpEmitter = NULL;
+            i_this->mpBrk->setPlaySpeed(-1.0f);
+        }
+    }
+
+    i_this->eyePos = i_this->current.pos;
+
+    return TRUE;
 }
 
 /* 00000DD8-00000DE0       .text daFgmahou_IsDelete__FP13fgmahou_class */
-static BOOL daFgmahou_IsDelete(fgmahou_class*) {
+static BOOL daFgmahou_IsDelete(fgmahou_class* i_this) {
     return TRUE;
 }
 
 /* 00000DE0-00000E3C       .text daFgmahou_Delete__FP13fgmahou_class */
-static BOOL daFgmahou_Delete(fgmahou_class*) {
-    /* Nonmatching */
+static BOOL daFgmahou_Delete(fgmahou_class* i_this) {
+    dComIfG_resDelete(&i_this->mPhs, "Fganon");
+
+    if(i_this->mpEmitter) {
+        i_this->mpEmitter->becomeInvalidEmitter();
+    }
+
+    return TRUE;
 }
 
 /* 00000E3C-0000109C       .text useHeapInit__FP10fopAc_ac_c */
-static BOOL useHeapInit(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL useHeapInit(fopAc_ac_c* a_this) {
+    fgmahou_class* i_this = static_cast<fgmahou_class*>(a_this);
+
+    i_this->mpMorf = new mDoExt_McaMorf(
+        (J3DModelData*)dComIfG_getObjectRes("Fganon", FGANON_BDL_YDKSP00),
+        NULL, NULL,
+        NULL,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
+        NULL,
+        0,
+        0x11020203
+    );
+
+    if(i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL) {
+        return FALSE;
+    }
+
+    J3DModelData* pModelData = i_this->mpMorf->getModel()->getModelData();
+
+    i_this->mpBtk = new mDoExt_btkAnm();
+    if(i_this->mpBtk == NULL) {
+        return FALSE;
+    }
+    if(!i_this->mpBtk->init(pModelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Fganon", FGANON_BTK_YDKSP00), true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+        return FALSE;
+    }
+
+    i_this->mpBrk = new mDoExt_brkAnm();
+    if(i_this->mpBrk == NULL) {
+        return FALSE;
+    }
+    if(!i_this->mpBrk->init(pModelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Fganon", FGANON_BRK_YDKSP00), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+        return FALSE;
+    }
+    i_this->mpBrk->setFrame(6.999f);
+
+    return TRUE;
 }
 
 /* 000010E4-0000135C       .text daFgmahou_Create__FP10fopAc_ac_c */
-static cPhs_State daFgmahou_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daFgmahou_Create(fopAc_ac_c* a_this) {
     static dCcD_SrcSph tg_sph_src = {
         // dCcD_SrcGObjInf
         {
@@ -103,6 +395,31 @@ static cPhs_State daFgmahou_Create(fopAc_ac_c*) {
             /* Radius */ 30.0f,
         }},
     };
+
+    fgmahou_class* i_this = static_cast<fgmahou_class*>(a_this);
+
+    fopAcM_SetupActor(i_this, fgmahou_class);
+
+    cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhs, "Fganon");
+    if(phase_state == cPhs_COMPLEATE_e) {
+        i_this->field_0x2b4 = fopAcM_GetParam(i_this) & 0xF;
+
+        if(!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x19000)) {
+            return cPhs_ERROR_e;
+        }
+        i_this->mAcch.Set(&i_this->current.pos, &i_this->old.pos, i_this, 1, &i_this->mCir, &i_this->speed);
+        i_this->mCir.SetWall(50.0f, 50.0f);
+        i_this->mAcch.ClrRoofNone();
+        i_this->mAcch.SetRoofCrrHeight(REG0_F(7) + 70.0f);
+        i_this->mStts.Init(0xFA, 0xFF, i_this);
+        i_this->mSph2.Set(tg_sph_src);
+        i_this->mSph2.SetStts(&i_this->mStts);
+        i_this->mSph2.OnTgNoHitMark();
+        i_this->mSph.Set(at_sph_src);
+        i_this->mSph.SetStts(&i_this->mStts);
+    }
+
+    return phase_state;
 }
 
 static actor_method_class l_daFgmahou_Method = {
