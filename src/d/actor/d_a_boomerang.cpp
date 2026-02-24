@@ -425,7 +425,13 @@ BOOL daBoomerang_c::setLockActor(fopAc_ac_c* i_actor, BOOL doSoundEffect) {
 
 /* 800E1C20-800E1C58       .text resetLockActor__13daBoomerang_cFv */
 void daBoomerang_c::resetLockActor() {
-    /* Nonmatching */
+    for (int i = 0; i < BOOM_TARGET_MAX; i++) {
+        mTargetIds[i] = fpcM_ERROR_PROCESS_ID_e;
+        mTargetPtrs[i] = NULL;
+    }
+
+    mNumTargets = 0;
+    mCurTargetIdx = 0;
 }
 
 /* 800E1C58-800E1CFC       .text setRoomInfo__13daBoomerang_cFv */
