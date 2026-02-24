@@ -358,13 +358,28 @@ float daBoomerang_c::getFlyMax() {
 }
 
 /* 800E1A14-800E1AAC       .text rockLineCallback__13daBoomerang_cFP10fopAc_ac_c */
-void daBoomerang_c::rockLineCallback(fopAc_ac_c*) {
-    /* Nonmatching */
+void daBoomerang_c::rockLineCallback(fopAc_ac_c* param_1) {
+    if (fpcM_GetParam(this) == 0) {
+        if (param_1) {
+            setLockActor(param_1, 1);
+        }
+    } else {
+        for (int i = 0; i < BOOM_TARGET_MAX; i++) {
+            if (mTargetPtrs[i] == param_1) {
+                mTargetIds[i] = -1;
+                mTargetPtrs[i] = NULL;
+                if (i == mCurTargetIdx) {
+                    field_0xF2E = 1;
+                    mCurTargetIdx++;
+                }
+            }
+        }
+    }
 }
 
 /* 800E1AAC-800E1AD0       .text daBoomerang_rockLineCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-void daBoomerang_rockLineCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*) {
-    /* Nonmatching */
+void daBoomerang_rockLineCallback(fopAc_ac_c* i_actor, dCcD_GObjInf*, fopAc_ac_c* i_hit, dCcD_GObjInf*) {
+    ((daBoomerang_c*)i_actor)->rockLineCallback(i_hit);
 }
 
 /* 800E1AD0-800E1B20       .text setAimActor__13daBoomerang_cFP10fopAc_ac_c */
