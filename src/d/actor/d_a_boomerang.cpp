@@ -358,14 +358,14 @@ float daBoomerang_c::getFlyMax() {
 }
 
 /* 800E1A14-800E1AAC       .text rockLineCallback__13daBoomerang_cFP10fopAc_ac_c */
-void daBoomerang_c::rockLineCallback(fopAc_ac_c* param_1) {
+void daBoomerang_c::rockLineCallback(fopAc_ac_c* pHitActor) {
     if (fpcM_GetParam(this) == 0) {
-        if (param_1) {
-            setLockActor(param_1, 1);
+        if (pHitActor) {
+            setLockActor(pHitActor, 1);
         }
     } else {
         for (int i = 0; i < BOOM_TARGET_MAX; i++) {
-            if (mTargetPtrs[i] == param_1) {
+            if (mTargetPtrs[i] == pHitActor) {
                 mTargetIds[i] = -1;
                 mTargetPtrs[i] = NULL;
                 if (i == mCurTargetIdx) {
