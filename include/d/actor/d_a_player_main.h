@@ -58,6 +58,8 @@ public:
         }
     }
 
+    cXyz getPos() { return mPos; }
+
 private:
     /* 0x04 */ bool mDrawFlag;
     /* 0x05 */ bool mLockFlag;
@@ -1847,7 +1849,7 @@ public:
     void exchangeGrabActor(fopAc_ac_c* actor) { mActorKeepGrab.setData(actor); }
     void getDekuLeafWindPos() const {}
     void getBoomerangCatchPos() const {}
-    void getLineTopPos() {}
+    cXyz getLineTopPos() { return mSightPacket.getPos(); }
     cXyz getHookshotRootPos() const { return mHookshotRootPos; }
     void getIceParticleBtk() {}
     void getIceWaterParticleBtk() {}

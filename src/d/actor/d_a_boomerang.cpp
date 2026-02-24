@@ -5,12 +5,14 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_boomerang.h"
+#include "d/d_camera.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/res/res_link.h"
 #include "dolphin/gf/GF.h"
+#include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_lib.h"
 
 static cXyz l_blur_top(40.0f, 0.0f, 0.0f);
@@ -403,6 +405,103 @@ void daBoomerang_c::checkBgHit(cXyz*, cXyz*) {
 /* 800E1F94-800E239C       .text procWait__13daBoomerang_cFv */
 BOOL daBoomerang_c::procWait() {
     /* Nonmatching */
+
+    daPy_lk_c* pPlayer = daPy_getPlayerLinkActorClass();
+    speedF = 0.0f;
+    setKeepMatrix();
+
+    if (mBlur.field_0x14 > 0) {
+        mBlur.field_0x14 -= 5;
+    }
+
+    if (fpcM_GetParam(this) == 1) {
+        speedF = 60.0f;
+        mCps.ResetAtHit();
+        field_0xF2C = 0;
+        field_0xF2D = 1;
+        field_0xF2E = 0;
+        mCurTargetIdx = 0;
+
+        setAimPos();
+
+        if (mCurTargetIdx == mNumTargets) {
+            resetLockActor();
+            s16 shapeY = shape_angle.y;
+            s16 bodyY = pPlayer->getBodyAngleY();
+            s16 bodyX = pPlayer->getBodyAngleX();
+            f32 flyMax = getFlyMax();
+
+            s16 angleY = shapeY + bodyY;
+            f32 cosY = cM_scos(angleY);
+
+            mTargetRayEnd.x = current.pos.x + cM_ssin(angleY) * cM_scos(bodyX) * flyMax;
+            mTargetRayEnd.y = current.pos.y - cM_ssin(bodyX) * flyMax;
+            mTargetRayEnd.z = current.pos.z + cM_scos(bodyX) * cosY * flyMax;
+        }
+
+        field_0xF3A = 0;
+
+        cXyz diff = mTargetRayEnd - current.pos;
+        cXyz diff_xz(diff.x, 0.0f, diff.z);
+        f32 dist = diff_xz.abs();
+
+        s16 angle = cM_atan2s(-diff.y, dist);
+        current.angle.x = angle;
+        if (mNumTargets == 0) {
+            current.angle.y = cM_atan2s(diff.x, diff.z) + 0x3000;
+            if (field_0xF33 == 0) {
+                field_0xF36 = 1;
+            } else {
+                field_0xF36 = 0;
+            }
+        } else {
+            current.angle.y = cM_atan2s(diff.x, diff.z);
+            field_0xF36 = 0;
+        }
+
+        shape_angle.x = current.angle.x;
+        shape_angle.y = current.angle.y;
+        shape_angle.z = 0x2000;
+        field_0xF38 = 0x2000;
+
+        mCurrProcFunc = &daBoomerang_c::procMove;
+
+        mCancelFlg = false;
+
+        mBlur.initBlur(mpModel->getBaseTRMtx(), field_0xF3A);
+
+        cXyz bgHitPos(current.pos.x, current.pos.y + 60.0f, current.pos.z);
+        checkBgHit(&bgHitPos, &current.pos);
+
+        procMove();
+    } else {
+        dCamera_c* bodyCam = dCam_getBody();
+        if (bodyCam->mCurMode != 0xB) {
+            resetLockActor();
+        } else {
+            bool b = false;
+            if ((pPlayer->mCurProc == daPy_lk_c::daPyProc_BOOMERANG_SUBJECT_e || pPlayer->mCurProc == daPy_lk_c::daPyProc_SHIP_BOOMERANG_e) &&
+                pPlayer->mSightPacket.getDrawFlg())
+            {
+                b = true;
+            }
+
+            if (b) {
+                camera_class* pCamera = g_dComIfG_gameInfo.play.getCamera(g_dComIfG_gameInfo.play.getPlayerCameraID(0));
+                cXyz eyePos = pCamera->mLookat.mEye;
+                cXyz topPos = pPlayer->getLineTopPos();
+                mCps.GetShapeAttr()->GetWorkAab().Set(&eyePos, &topPos);
+
+                // mCps.SetAtVec();
+                mCps.CalcAtVec();
+                mCps.SetAtHitCallback(&daBoomerang_rockLineCallback);
+
+                dComIfG_Ccsp()->Set(&mCps);
+            }
+        }
+    }
+
+    return TRUE;
 }
 
 /* 800E239C-800E2AF4       .text procMove__13daBoomerang_cFv */
@@ -425,7 +524,7 @@ BOOL daBoomerang_c::procMove() {
         }
         setAimPos();
 
-        cXyz diff = field_0xF40 - current.pos;
+        cXyz diff = mTargetRayEnd - current.pos;
         f32 dist = diff.abs();
         cXyz norm;
         if (dist > 0.1f) {
