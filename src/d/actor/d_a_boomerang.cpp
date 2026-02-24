@@ -361,7 +361,7 @@ float daBoomerang_c::getFlyMax() {
 void daBoomerang_c::rockLineCallback(fopAc_ac_c* pHitActor) {
     if (fpcM_GetParam(this) == 0) {
         if (pHitActor) {
-            setLockActor(pHitActor, 1);
+            setLockActor(pHitActor, TRUE);
         }
     } else {
         for (int i = 0; i < BOOM_TARGET_MAX; i++) {
@@ -386,12 +386,41 @@ void daBoomerang_rockLineCallback(fopAc_ac_c* i_actor, dCcD_GObjInf*, fopAc_ac_c
 void daBoomerang_c::setAimActor(fopAc_ac_c* param_1) {
     resetLockActor();
     field_0xF33 = 1;
-    setLockActor(param_1, 0);
+    setLockActor(param_1, FALSE);
 }
 
 /* 800E1B20-800E1C20       .text setLockActor__13daBoomerang_cFP10fopAc_ac_ci */
-void daBoomerang_c::setLockActor(fopAc_ac_c*, int) {
-    /* Nonmatching */
+BOOL daBoomerang_c::setLockActor(fopAc_ac_c* i_actor, BOOL doSoundEffect) {
+    if (mNumTargets >= BOOM_TARGET_MAX) {
+        return FALSE;
+    }
+
+    fpc_ProcID id = fopAcM_GetID(i_actor);
+
+    for (int i = 0; i < mNumTargets; i++) {
+        if (mTargetIds[i] == id) {
+            return FALSE;
+        }
+    }
+
+    mTargetIds[mNumTargets] = id;
+    mTargetPtrs[mNumTargets] = i_actor;
+    mSightPacket.initFrame(mNumTargets);
+
+    if (doSoundEffect) {
+        static u32 se_flg[BOOM_TARGET_MAX] = {
+            JA_SE_BOOM_LOCK_ON_1,
+            JA_SE_BOOM_LOCK_ON_2,
+            JA_SE_BOOM_LOCK_ON_3,
+            JA_SE_BOOM_LOCK_ON_4,
+            JA_SE_BOOM_LOCK_ON_5,
+        };
+
+        mDoAud_seStart(se_flg[mNumTargets]);
+    }
+
+    mNumTargets++;
+    return TRUE;
 }
 
 /* 800E1C20-800E1C58       .text resetLockActor__13daBoomerang_cFv */

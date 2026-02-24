@@ -58,7 +58,7 @@ public:
     float getFlyMax();
     void rockLineCallback(fopAc_ac_c*);
     void setAimActor(fopAc_ac_c*);
-    void setLockActor(fopAc_ac_c*, int);
+    BOOL setLockActor(fopAc_ac_c* i_actor, BOOL doSoundEffect);
     void resetLockActor();
     void setRoomInfo();
     void setKeepMatrix();
