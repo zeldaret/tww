@@ -774,7 +774,6 @@ static BOOL daBoomerang_createHeap(fopAc_ac_c* i_this) {
 
 /* 800E2CE8-800E2EF0       .text create__13daBoomerang_cFv */
 cPhs_State daBoomerang_c::create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, daBoomerang_c);
 
     if (!fopAcM_entrySolidHeap(this, daBoomerang_createHeap, 0xD40)) {
@@ -782,16 +781,18 @@ cPhs_State daBoomerang_c::create() {
     }
 
     setKeepMatrix();
-    cullMtx = model->getBaseTRMtx();
+    cullMtx = mpModel->getBaseTRMtx();
     mCurrProcFunc = &daBoomerang_c::procWait;
     mStts.Init(0x3C, 0xFF, this);
-    mCps.Set(l_at_cps_src);
 
-    mCps.SetAtHitCallback(&daBoomerang_rockLineCallback);
+    mCps.Set(l_at_cps_src);
     mCps.SetStts(&mStts);
+    mCps.SetAtHitCallback(&daBoomerang_rockLineCallback);
+
+    mLinChk.ClrSttsRoofOff();
 
     for (int i = 0; i < BOOM_TARGET_MAX; i++) {
-        mTargetIds[i] = -1;
+        mTargetIds[i] = fpcM_ERROR_PROCESS_ID_e;
     }
 
     {
