@@ -11650,7 +11650,7 @@ BOOL daPy_lk_c::execute() {
     checkRoofRestart();
     mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x08), &mLeftHandPos);
     mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x0C), &mRightHandPos);
-    cMtx_multVec(mpCLModel->getAnmMtx(0x00), &boomerang_catch, &m36F4);
+    cMtx_multVec(mpCLModel->getAnmMtx(0x00), &boomerang_catch, &mBoomerangCatchPos);
     cMtx_multVec(mpCLModel->getAnmMtx(0x08), &hookshot_root, &mHookshotRootPos);
     mpKatsuraModel->setBaseTRMtx(mpCLModel->getAnmMtx(0x0F));
     mpKatsuraModel->calc();

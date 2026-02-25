@@ -1848,7 +1848,7 @@ public:
     BOOL checkNoControll() const { return dComIfGp_getPlayer(0) != this; }
     void exchangeGrabActor(fopAc_ac_c* actor) { mActorKeepGrab.setData(actor); }
     void getDekuLeafWindPos() const {}
-    void getBoomerangCatchPos() const {}
+    cXyz getBoomerangCatchPos() const { return mBoomerangCatchPos; }
     cXyz getLineTopPos() { return mSightPacket.getPos(); }
     cXyz getHookshotRootPos() const { return mHookshotRootPos; }
     void getIceParticleBtk() {}
@@ -2296,7 +2296,7 @@ public:
     /* 0x36D0 */ cXyz m36D0;
     /* 0x36DC */ cXyz m36DC;
     /* 0x36E8 */ cXyz mHookshotRootPos;
-    /* 0x36F4 */ cXyz m36F4;
+    /* 0x36F4 */ cXyz mBoomerangCatchPos;
     /* 0x3700 */ cXyz m3700;
     /* 0x370C */ cXyz m370C;
     /* 0x3718 */ cXyz m3718;
