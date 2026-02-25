@@ -454,7 +454,13 @@ void daBoomerang_c::setRoomInfo() {
 
 /* 800E1CFC-800E1DA8       .text setKeepMatrix__13daBoomerang_cFv */
 void daBoomerang_c::setKeepMatrix() {
-    /* Nonmatching */
+    // Transform the boomerang to Link's hand.
+    mDoMtx_stack_c::copy(daPy_getPlayerActorClass()->getLeftHandMatrix());
+    mDoMtx_stack_c::transM(10.3f, 36.6f, 1.1f);
+    mDoMtx_stack_c::XYZrotM(-0x39f4, -0x357, -0x2af3);
+    MtxP mtx = mDoMtx_stack_c::get();
+    mpModel->setBaseTRMtx(mtx);
+    current.pos.set(mtx[0][3], mtx[1][3], mtx[2][3]);
 }
 
 /* 800E1DA8-800E1E6C       .text setAimPos__13daBoomerang_cFv */
