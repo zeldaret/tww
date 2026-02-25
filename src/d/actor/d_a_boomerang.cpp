@@ -479,8 +479,19 @@ void daBoomerang_c::setAimPos() {
 }
 
 /* 800E1E6C-800E1F94       .text checkBgHit__13daBoomerang_cFP4cXyzP4cXyz */
-void daBoomerang_c::checkBgHit(cXyz*, cXyz*) {
-    /* Nonmatching */
+void daBoomerang_c::checkBgHit(cXyz* pi_start, cXyz* pi_end) {
+    mLinChk.Set(pi_start, pi_end, this);
+    if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
+        current.pos.set(mLinChk.GetCross());
+        g_dComIfG_gameInfo.play.getParticle()->setNormalP1(0xC, &current.pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        field_0xF2C = 1;
+        current.angle.y += 0x8000;
+        shape_angle.y = current.angle.y;
+        resetLockActor();
+        u32 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mLinChk);
+        s8 reverb = dComIfGp_getReverb(current.roomNo);
+        mDoAud_seStart(JA_SE_LK_W_WEP_HIT, &eyePos, mtrlSndId, reverb);
+    }
 }
 
 /* 800E1F94-800E239C       .text procWait__13daBoomerang_cFv */
