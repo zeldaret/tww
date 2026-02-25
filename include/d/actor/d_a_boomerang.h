@@ -90,21 +90,18 @@ public:
     /* 0x0F3A */ s16 field_0xF3A;
     /* 0x0F35 */ u8 field_0xF3C[0xF40 - 0xF3C];
     /* 0x0F40 */ cXyz mTargetRayEnd;
-    /* 0x0F4C */ u8 field_0xF4C[0xF64 - 0xF4C];
-    /* 0x0F64 */ dCcD_Stts mStts;
-    /* 0x0FA0 */ u8 field_0xFA0[0xFC4 - 0xFA0];
-    /* 0x0FC4 */ dCcD_Cps mCps;
-    /* 0x10FC */ u8 field_0x10FC[0x1118 - 0x10FC];
-    /* 0x1118 */ dBgS_BoomerangLinChk mLinChk;
-    // FIXME: mCurrProcFunc should be at 0x1180.
-    /* 0x1184 */ daBoomerang_c_ProcFunc mCurrProcFunc;
+    /* 0x0F4C */ dCcD_Stts mStts;
+    /* 0x0F88 */ dCcD_Cps mCps;
+    /* 0x10C0 */ dBgS_BoomerangLinChk mLinChk;
+    /* 0x112C */ dBgS_ObjGndChk mGndChk;
+    /* 0x1180 */ daBoomerang_c_ProcFunc mCurrProcFunc;
 };
 
 STATIC_ASSERT(offsetof(daBoomerang_c, mSightPacket) == 0x294);
 STATIC_ASSERT(offsetof(daBoomerang_c, mBlur) == 0x3A0);
 STATIC_ASSERT(offsetof(daBoomerang_c, mCancelFlg) == 0xF34);
-STATIC_ASSERT(offsetof(daBoomerang_c, mStts) == 0xF64);
-STATIC_ASSERT(offsetof(daBoomerang_c, mCps) == 0xFC4);
-// STATIC_ASSERT(sizeof(daBoomerang_c) == 0x118C);
+STATIC_ASSERT(offsetof(daBoomerang_c, mStts) == 0xF4C);
+STATIC_ASSERT(offsetof(daBoomerang_c, mCps) == 0xF88);
+STATIC_ASSERT(sizeof(daBoomerang_c) == 0x118C);
 
 #endif /* D_A_BOOMERANG_H */
