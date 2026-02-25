@@ -465,7 +465,17 @@ void daBoomerang_c::setKeepMatrix() {
 
 /* 800E1DA8-800E1E6C       .text setAimPos__13daBoomerang_cFv */
 void daBoomerang_c::setAimPos() {
-    /* Nonmatching */
+    if (field_0xF2C) {
+        mTargetRayEnd = daPy_getPlayerLinkActorClass()->getBoomerangCatchPos();
+    } else {
+        for (int i = mCurTargetIdx; i < mNumTargets; i++) {
+            if (mTargetPtrs[i] != NULL) {
+                mTargetRayEnd = mTargetPtrs[i]->eyePos;
+                return;
+            }
+            mCurTargetIdx++;
+        }
+    }
 }
 
 /* 800E1E6C-800E1F94       .text checkBgHit__13daBoomerang_cFP4cXyzP4cXyz */
