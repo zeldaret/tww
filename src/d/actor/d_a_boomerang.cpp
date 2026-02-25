@@ -436,7 +436,20 @@ void daBoomerang_c::resetLockActor() {
 
 /* 800E1C58-800E1CFC       .text setRoomInfo__13daBoomerang_cFv */
 void daBoomerang_c::setRoomInfo() {
-    /* Nonmatching */
+    mGndChk.SetPos(&current.pos);
+
+    f32 groundY = dComIfG_Bgsp()->GroundCross(&mGndChk);
+    s32 roomNo;
+    if (groundY != -G_CM3D_F_INF) {
+        roomNo = dComIfG_Bgsp()->GetRoomId(mGndChk);
+        tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mGndChk);
+    } else {
+        roomNo = dComIfGp_roomControl_getStayNo();
+    }
+
+    tevStr.mRoomNo = roomNo;
+    mStts.SetRoomId(roomNo);
+    current.roomNo = roomNo;
 }
 
 /* 800E1CFC-800E1DA8       .text setKeepMatrix__13daBoomerang_cFv */
