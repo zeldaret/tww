@@ -576,11 +576,19 @@ void daDaiocta_c::setEffect(u16 effect_name) {
     switch (effect_name) {
         case dPa_name::ID_SCENE_81FE:
 #if VERSION > VERSION_DEMO
-            if (!mParticleCB.getEmitter()) {
-                dComIfGp_particle_set(effect_name, &particle_pos, NULL, NULL, 0xFF, &mParticleCB, -1, &sea_color_ambient);
+            if (!mParticleCallback.getEmitter()) {
+                dComIfGp_particle_set(
+                    effect_name, &particle_pos, 
+                    NULL, NULL, 0xFF, &mParticleCallback, 
+                    -1, &sea_color_ambient
+                );
             }
 #else
-            mpEmitter = dComIfGp_particle_set(effect_name, &particle_pos, NULL, NULL, 0xFF, NULL, -1, &sea_color_ambient);
+            mpEmitter = dComIfGp_particle_set(
+                effect_name, &particle_pos, 
+                NULL, NULL, 0xFF, NULL, -1, 
+                &sea_color_ambient
+            );
 #endif
             break;
         case dPa_name::ID_SCENE_81FF:
@@ -590,13 +598,19 @@ void daDaiocta_c::setEffect(u16 effect_name) {
         case dPa_name::ID_SCENE_8203:
         case dPa_name::ID_SCENE_8204:
         case dPa_name::ID_SCENE_8205:
-            dComIfGp_particle_set(effect_name, &particle_pos, NULL, NULL, 0xFF, NULL, -1, &sea_color_ambient);
+            dComIfGp_particle_set(
+                effect_name, &particle_pos, NULL, NULL, 
+                0xFF, NULL, -1, &sea_color_ambient
+            );
             break;
         case dPa_name::ID_SCENE_8207:
         case dPa_name::ID_SCENE_8208:
         case dPa_name::ID_SCENE_8209:
         case dPa_name::ID_SCENE_82CC:
-            dComIfGp_particle_set(effect_name, &particle_pos, &particle_angle, NULL, 0xFF, NULL, -1, &sea_color_ambient);
+            dComIfGp_particle_set(
+                effect_name, &particle_pos, &particle_angle, NULL, 
+                0xFF, NULL, -1, &sea_color_ambient
+            );
             break;
         default:
             break;
@@ -914,7 +928,7 @@ void daDaiocta_c::modeAppear() {
         modeProc(PROC_INIT, MODE_DAMAGE);
     }
 
-    if (DEMO_SELECT(mpEmitter, mParticleCB.getEmitter())) {
+    if (DEMO_SELECT(mpEmitter, mParticleCallback.getEmitter())) {
         GXColor sea_color_ambient;
         GXColor sea_color_diffuse;
         dKy_get_seacolor(&sea_color_ambient, &sea_color_diffuse);
@@ -931,7 +945,7 @@ void daDaiocta_c::modeAppear() {
         sea_color_ambient.g = g;
         sea_color_ambient.b = b;
 
-        DEMO_SELECT(mpEmitter, mParticleCB)
+        DEMO_SELECT(mpEmitter, mParticleCallback)
 #if VERSION > VERSION_DEMO
             .getEmitter()
 #endif
@@ -1621,8 +1635,10 @@ void daDaiocta_c::createInit() {
 
     mAcchCir.SetWall(30.0f, 30.0f);
     mAcch.Set(
-        fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), 
-        this, 1, &mAcchCir, fopAcM_GetSpeed_p(this)
+        fopAcM_GetPosition_p(this), 
+        fopAcM_GetOldPosition_p(this), 
+        this, 1, &mAcchCir, 
+        fopAcM_GetSpeed_p(this)
     );
     mAcch.SetWallNone();
     mAcch.SetRoofNone();
@@ -1700,7 +1716,7 @@ cPhs_State daDaiocta_c::_create() {
 bool daDaiocta_c::_delete() {
     dComIfG_resDelete(&mPhs, m_arc_name);
 #if VERSION > VERSION_DEMO 
-    mParticleCB.remove();
+    mParticleCallback.remove();
 #endif
     fopAc_ac_c* actor_p;
     for (int i = 0; i < ARRAY_SSIZE(mDaioctaEyePcId); i++) {

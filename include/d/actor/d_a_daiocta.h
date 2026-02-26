@@ -136,7 +136,7 @@ public:
     /* 0x2218 */ dBgS_ObjAcch mAcch;
     /* 0x23DC */ dBgS_AcchCir mAcchCir;
 #if VERSION > VERSION_DEMO
-    /* 0x241C */ dPa_followEcallBack mParticleCB;
+    /* 0x241C */ dPa_followEcallBack mParticleCallback;
 #else
                  JPABaseEmitter* mpEmitter;
 #endif

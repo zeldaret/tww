@@ -92,7 +92,7 @@ public:
     /* 0x46C */ int mScaleAnimeIdx;
     /* 0x470 */ JntHit_c* mpJntHit;
     /* 0x474 */ daDaiocta_c* mpParentActor;
-    /* 0x478 */ dPa_followEcallBack mParticleCB;
+    /* 0x478 */ dPa_followEcallBack mParticleCallback;
     /* 0x48C */ cXyz mParticlePos;
     /* 0x48C */ csXyz m498;
     /* 0x49E */ u8 m49E[0x4A0 - 0x49E];

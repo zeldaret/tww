@@ -193,7 +193,7 @@ void daDaiocta_Eye_c::_coHit(fopAc_ac_c* i_actor) {
                 m295 = true;
                 dComIfGp_particle_set(
                     dPa_name::ID_SCENE_8206, &mParticlePos, &shape_angle, 
-                    NULL, 0xFF, &mParticleCB, fopAcM_GetRoomNo(this)
+                    NULL, 0xFF, &mParticleCallback, fopAcM_GetRoomNo(this)
                 );
                 modeDeathInit();
             } else {
@@ -413,8 +413,8 @@ bool daDaiocta_Eye_c::_execute() {
     f32 water_height = dBgS_GetWaterHeight(current_pos);
 
     if (current.pos.y < water_height) {
-        if (mParticleCB.getEmitter()) {
-            mParticleCB.end();
+        if (mParticleCallback.getEmitter()) {
+            mParticleCallback.end();
         }
     } else if (mMode != MODE_DEATH) {
         attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
@@ -483,7 +483,7 @@ cPhs_State daDaiocta_Eye_c::_create() {
 /* 00001764-000017B4       .text _delete__15daDaiocta_Eye_cFv */
 bool daDaiocta_Eye_c::_delete() {
     dComIfG_resDelete(&mPhs, m_arc_name);
-    mParticleCB.remove();
+    mParticleCallback.remove();
     return true;
 }
 
