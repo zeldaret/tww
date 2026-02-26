@@ -183,7 +183,7 @@ static BOOL nodeControl_CB(J3DNode* i_nodeP, int i_calcTiming) {
     if (i_calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model_p = j3dSys.getModel();
         daDaiocta_c* daiocta = (daDaiocta_c *) model_p->getUserArea();
-        JUT_ASSERT(0x1A4, daiocta != NULL);
+        JUT_ASSERT(420, daiocta != NULL);
         daiocta->_nodeControl(i_nodeP, model_p);
     }
     return TRUE;
@@ -271,16 +271,16 @@ BOOL daDaiocta_c::createAwaHeap() {
     J3DAnmTevRegKey* brk;
 
     modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_GAWA00));
-    JUT_ASSERT(0x204, modelData != NULL);
+    JUT_ASSERT(516, modelData != NULL);
 
     bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BCK_GAWA00));
-    JUT_ASSERT(0x208, bck != NULL);
+    JUT_ASSERT(520, bck != NULL);
 
     btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_GAWA00));
-    JUT_ASSERT(0x20C, btk != NULL);
+    JUT_ASSERT(524, btk != NULL);
 
     brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_GAWA00));
-    JUT_ASSERT(0x210, brk != NULL);
+    JUT_ASSERT(528, brk != NULL);
 
 
     for (int i = 0; i < ARRAY_SSIZE(mpAwaModels); i++) {
@@ -312,7 +312,7 @@ BOOL daDaiocta_c::createAwaHeap() {
 /* 000009B8-00000ABC       .text createSuikomiHeap__11daDaiocta_cFv */
 BOOL daDaiocta_c::createSuikomiHeap() {
     J3DModelData* modelData = (J3DModelData * ) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_GDO_SUI00);
-    JUT_ASSERT(0x227, modelData != NULL);
+    JUT_ASSERT(551, modelData != NULL);
 
     // "suikomi" translates to suction
     mpSuikomiModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
@@ -332,7 +332,7 @@ BOOL daDaiocta_c::createSuikomiHeap() {
 /* 00000ABC-00000C04       .text createBodyHeap__11daDaiocta_cFv */
 BOOL daDaiocta_c::createBodyHeap() {
     J3DModelData* modelData = (J3DModelData *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_DO_MAIN1);
-    JUT_ASSERT(0x243, modelData != NULL);
+    JUT_ASSERT(579, modelData != NULL);
 
     if (!dLib_brkInit(modelData, &mBrkAnm1, m_arc_name, DAIOCTA_BRK_WAIT1)) {
         return FALSE;
@@ -563,7 +563,7 @@ void daDaiocta_c::setEffect(u16 effect_name) {
 
     if (r >= 0xFF) r = 0xFF;
     if (g >= 0xFF) g = 0xFF;
-    if (b >= 0xFF) b = 0xff; 
+    if (b >= 0xFF) b = 0xFF; 
 
     sea_color_ambient.r = r;
     sea_color_ambient.g = g;
@@ -785,44 +785,44 @@ void daDaiocta_c::setCollision() {
         int j, k;
         switch (i) {
             case 0:
-                j = 0x19;
-                k = 0x1A;
+                j = 25;
+                k = 26;
                 break;
             case 1:
-                j = 0x1A;
-                k = 0x1B;
+                j = 26;
+                k = 27;
                 break;
             case 2:
-                j = 0x1B;
-                k = 0x1C;
+                j = 27;
+                k = 28;
                 break;
             case 3:
-                j = 0x1C;
-                k = 0x1D;
+                j = 28;
+                k = 29;
                 break;
             case 4:
-                j = 0x1D;
-                k = 0x1E;
+                j = 29;
+                k = 30;
                 break;
             case 5:
-                j = 0x1F;
-                k = 0x20;
+                j = 31;
+                k = 32;
                 break;
             case 6:
-                j = 0x20;
-                k = 0x21;
+                j = 32;
+                k = 33;
                 break;
             case 7:
-                j = 0x21;
-                k = 0x22;
+                j = 33;
+                k = 34;
                 break;
             case 8:
-                j = 0x22;
-                k = 0x23;
+                j = 34;
+                k = 35;
                 break;
             case 9:
-                j = 0x23;
-                k = 0x24;
+                j = 35;
+                k = 36;
                 break;
         }
 
@@ -895,7 +895,7 @@ void daDaiocta_c::modeAppearInit() {
     }
 #else 
     int auzu_parameters = 0x1100FF;
-    mpAuzu = fopAcM_create(PROC_Obj_Auzu, auzu_parameters, &sp40, tevStr.mRoomNo);
+    mpAuzu = fopAcM_create(PROC_Obj_Auzu, auzu_parameters, &auzu_pos, tevStr.mRoomNo);
 #endif
 
     setEffect(dPa_name::ID_SCENE_81FE);
@@ -944,8 +944,8 @@ void daDaiocta_c::modeAppear() {
 
     daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(mpAuzu);
     if (auzu_p) {
-        auzu_p->field_0x2B8 = 1;
-        if (auzu_p->field_0x2B4 > 0.999f) {
+        auzu_p->to_appear();
+        if (auzu_p->is_appear()) {
             cXyz sp2C = current.pos;
             sp2C.y = mWaterY;
             cLib_addCalcPos2(&current.pos, sp2C, 0.1f, l_HIO.m080);
@@ -1063,10 +1063,10 @@ void daDaiocta_c::modeDemoInit() {
     J3DModelData* model_data_p = mpSuikomiModel->getModelData();
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_GDO_SUI00));
-    JUT_ASSERT(VERSION_SELECT(0x536, 0x53C, 0x546, 0x546), brk != NULL);
+    JUT_ASSERT(VERSION_SELECT(1334, 1340, 1350, 1350), brk != NULL);
     
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_GDO_SUI00));
-    JUT_ASSERT(VERSION_SELECT(0x539, 0x53F, 0x549, 0x549), btk != NULL);
+    JUT_ASSERT(VERSION_SELECT(1337, 1343, 1353, 1353), btk != NULL);
 
     mBrkAnm2.init(
         model_data_p, brk, true, 
@@ -1230,7 +1230,7 @@ void daDaiocta_c::modeDelete() {
                 fopAcM_monsSeStart(this, JA_SE_CV_DO_SINK, 0);
                 setEffect(dPa_name::ID_SCENE_8205);
                 daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(mpAuzu);
-                auzu_p->field_0x2B8 = 0; // daObjAuzu::Act_c::to_disappear()?
+                auzu_p->to_disappear();
                 dComIfGp_getVibration().StartQuake(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 dComIfGp_evmng_cutEnd(staff_id);
             }
@@ -1361,7 +1361,7 @@ void daDaiocta_c::setAnm() {
     if (mOldPrmIdx != mPrmIdx && idx != -1) {
         J3DAnmTevRegKey* brk = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, 
                                                     a_brk_anm_idx_tbl[a_brk_anm_prm_tbl[mPrmIdx]]);
-        JUT_ASSERT(VERSION_SELECT(0x6E0, 0x6EC, 0x6F6, 0x6F6), brk != NULL);
+        JUT_ASSERT(VERSION_SELECT(1760, 1772, 1782, 1782), brk != NULL);
         mBrkAnm1.init(
             morf_model_p->getModelData(), brk, 
             TRUE, J3DFrameCtrl::EMode_LOOP, 
@@ -1474,14 +1474,14 @@ void daDaiocta_c::drawSuikomi() {
 
 /* 00003F4C-0000412C       .text drawDebug__11daDaiocta_cFv */
 void daDaiocta_c::drawDebug() {
-    GXColor dummy_1 = { 0x00, 0xff, 0x00, 0x80 };
-    GXColor dummy_2 = { 0xff, 0xff, 0x00, 0x80 };
-    GXColor dummy_3 = { 0xff, 0xff, 0x00, 0x80 };
-    GXColor dummy_4 = { 0x00, 0xff, 0xff, 0x80 };
-    GXColor dummy_5 = { 0xff, 0x00, 0x00, 0x80 };
-    GXColor dummy_6 = { 0x00, 0xff, 0x00, 0x80 };
-    GXColor dummy_7 = { 0xff, 0x00, 0x00, 0x80 };
-    GXColor dummy_8 = { 0xff, 0x00, 0x00, 0x80 };
+    GXColor dummy_1 = { 0x00, 0xFF, 0x00, 0x80 };
+    GXColor dummy_2 = { 0xFF, 0xFF, 0x00, 0x80 };
+    GXColor dummy_3 = { 0xFF, 0xFF, 0x00, 0x80 };
+    GXColor dummy_4 = { 0x00, 0xFF, 0xFF, 0x80 };
+    GXColor dummy_5 = { 0xFF, 0x00, 0x00, 0x80 };
+    GXColor dummy_6 = { 0x00, 0xFF, 0x00, 0x80 };
+    GXColor dummy_7 = { 0xFF, 0x00, 0x00, 0x80 };
+    GXColor dummy_8 = { 0xFF, 0x00, 0x00, 0x80 };
     
     fopAc_ac_c* player_p;
     for (int i = 0; i < ARRAY_SSIZE(mSphCenters); i++) {
