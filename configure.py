@@ -1594,7 +1594,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_fallrock_tag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_fan"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_fganon"),
-    ActorRel(NonMatching, "d_a_fgmahou"),
+    ActorRel(MatchingFor("GZLE01"), "d_a_fgmahou"),
     ActorRel(Matching,    "d_a_fire"),
     ActorRel(NonMatching, "d_a_fm"),
     ActorRel(NonMatching, "d_a_gm"),
