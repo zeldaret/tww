@@ -92,23 +92,23 @@ daDaiocta_HIO_c::daDaiocta_HIO_c() {
     m006 = 0;
     m005 = 0;
 
-    m01C[0] = 600.0f;
-    m01C[1] = 500.0f;
-    m01C[2] = 450.0f;
-    m01C[3] = 350.0f;
-    m01C[4] = 350.0f;
-    m01C[5] = 300.0f;
+    mSphRadii[0] = 600.0f;
+    mSphRadii[1] = 500.0f;
+    mSphRadii[2] = 450.0f;
+    mSphRadii[3] = 350.0f;
+    mSphRadii[4] = 350.0f;
+    mSphRadii[5] = 300.0f;
 
-    m034[0] = 60.0f;
-    m034[1] = 60.0f;
-    m034[2] = 60.0f;
-    m034[3] = 60.0f;
-    m034[4] = 60.0f;
-    m034[5] = 60.0f;
-    m034[6] = 60.0f;
-    m034[7] = 60.0f;
-    m034[8] = 60.0f;
-    m034[9] = 60.0f;
+    mCpsRadii[0] = 60.0f;
+    mCpsRadii[1] = 60.0f;
+    mCpsRadii[2] = 60.0f;
+    mCpsRadii[3] = 60.0f;
+    mCpsRadii[4] = 60.0f;
+    mCpsRadii[5] = 60.0f;
+    mCpsRadii[6] = 60.0f;
+    mCpsRadii[7] = 60.0f;
+    mCpsRadii[8] = 60.0f;
+    mCpsRadii[9] = 60.0f;
 
     m05C = 100.0f;
     m060 = 100.0f;
@@ -117,10 +117,10 @@ daDaiocta_HIO_c::daDaiocta_HIO_c() {
     m06C = 150.0f;
     m070 = 100.0f;
     m074 = 150.0f;
-    m00C = 0x1E;
-    m00E = 0x3C;
-    m078 = 5000.0f;
-    m07C = 4500.0f;
+    mRotEyeTimerMin = 0x1E;
+    mRotEyeTimerAddMax = 0x3C;
+    mDefaultAppearRadius = 5000.0f;
+    mMinAppearRadius = 4500.0f;
     m080 = 30.0f;
     m010 = 0x100;
     m084 = 1800.0f;
@@ -162,8 +162,7 @@ daDaiocta_HIO_c::daDaiocta_HIO_c() {
 }
 
 /* 00000334-00000358       .text coHit_CB__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-static void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf* i_unused1P, fopAc_ac_c* i_actor, dCcD_GObjInf* i_unused2P) {
-    UNUSED(i_unused1P); UNUSED(i_unused2P);
+static void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* i_actor, dCcD_GObjInf*) {
     ((daDaiocta_c*)i_this)->_coHit(i_actor);
 }
 
@@ -171,8 +170,8 @@ static void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf* i_unused1P, fopAc_ac_c* i
 void daDaiocta_c::_coHit(fopAc_ac_c* i_actor) {
     if (i_actor != NULL && fpcM_GetName(i_actor) == PROC_BOMB) {
         daBomb_c* bomb_p = (daBomb_c *) i_actor;
-        if ((m056C == MODE_WAIT || m056C == MODE_DAMAGE_BOMB || 
-            m056C == MODE_APPEAR || m056C == MODE_DAMAGE) && 
+        if ((mMode == MODE_WAIT || mMode == MODE_DAMAGE_BOMB || 
+            mMode == MODE_APPEAR || mMode == MODE_DAMAGE) && 
             bomb_p->chk_state(daBomb_c::STATE_4)) {
             modeProc(PROC_INIT, MODE_DAMAGE_BOMB);
         }
@@ -196,7 +195,7 @@ void daDaiocta_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
     s32 jnt_no = jnt_p->getJntNo();
 
     mDoMtx_stack_c::copy(i_modelP->getAnmMtx(jnt_no));
-    mDoMtx_stack_c::multVecZero(&m0290[jnt_no]);
+    mDoMtx_stack_c::multVecZero(&mSphCenters[jnt_no]);
 
     cXyz base;
     switch (jnt_no) {
@@ -284,23 +283,24 @@ BOOL daDaiocta_c::createAwaHeap() {
     JUT_ASSERT(0x210, brk != NULL);
 
 
-    for (int i = 0; i < ARRAY_SSIZE(mBckAnms); i++) {
-        mpModels[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
-        if (mpModels[i] == NULL) {
+    for (int i = 0; i < ARRAY_SSIZE(mpAwaModels); i++) {
+        // "awa" translates to bubbles
+        mpAwaModels[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
+        if (mpAwaModels[i] == NULL) {
             return FALSE;
         }
 
-        if (!mBckAnms[i].init(modelData, bck, TRUE, 
+        if (!mAwaBckAnms[i].init(modelData, bck, TRUE, 
                                 J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
             return FALSE;
         }
 
-        if (!mBtkAnms[i].init(modelData, btk, TRUE, 
+        if (!mAwaBtkAnms[i].init(modelData, btk, TRUE, 
                                 J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
             return FALSE;
         }
 
-        if (!mBrkAnms[i].init(modelData, brk, TRUE, 
+        if (!mAwaBrkAnms[i].init(modelData, brk, TRUE, 
                                 J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
             return FALSE;
         }
@@ -314,9 +314,10 @@ BOOL daDaiocta_c::createSuikomiHeap() {
     J3DModelData* modelData = (J3DModelData * ) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_GDO_SUI00);
     JUT_ASSERT(0x227, modelData != NULL);
 
-    m26CC = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
+    // "suikomi" translates to suction
+    mpSuikomiModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
 
-    if (!m26CC) {
+    if (!mpSuikomiModel) {
         return FALSE;
     }
 
@@ -487,27 +488,27 @@ BOOL daDaiocta_c::createArrowHitHeap() {
         }
     };
 
-    m26C8 = JntHit_create(
+    mpJntHit = JntHit_create(
         mpMorf->getModel(), search_data, 
         ARRAY_SSIZE(search_data)
     );
 
-    if (!m26C8) {
+    if (!mpJntHit) {
         return FALSE;
     }
 
-    jntHit = m26C8;
+    jntHit = mpJntHit;
 
     return TRUE;
 }
 
 /* 00000C64-00000D94       .text setMtx__11daDaiocta_cFv */
 void daDaiocta_c::setMtx() {
-    for (int i = 0; i < ARRAY_SSIZE(m2470); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mEyeAlloc); i++) {
         fopAc_ac_c* actor_p;
-        if (m2470[i] != 0 && fopAcM_SearchByID(m2440[i], &actor_p)) {
+        if (mEyeAlloc[i] && fopAcM_SearchByID(mDaioctaEyePcId[i], &actor_p)) {
             Mtx mtx;
-            mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m04E0[i]));
+            mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(mAnmMtxIndices[i]));
             mDoMtx_stack_c::multVecZero(&actor_p->current.pos);
             cMtx_inverseTranspose(mDoMtx_stack_c::get(), mtx);
             mDoMtx_MtxToRot(mtx, &actor_p->shape_angle);
@@ -523,30 +524,30 @@ void daDaiocta_c::setMtx() {
 
 /* 00000D94-00000E2C       .text setSuikomiMtx__11daDaiocta_cFv */
 void daDaiocta_c::setSuikomiMtx() {
-    cXyz base = current.pos;
-    base.y = m2430;
-    mDoMtx_stack_c::transS(base);
-    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+    cXyz pos = current.pos;
+    pos.y = mWaterY;
+    mDoMtx_stack_c::transS(pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
     mDoMtx_stack_c::transM(l_HIO.m0FC);
-    m26CC->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpSuikomiModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000E2C-00000EDC       .text setAwaMtx__11daDaiocta_cFv */
 void daDaiocta_c::setAwaMtx() {
     for (int i = 0; i < l_HIO.m016; i++) {
-        mpModels[i]->setBaseScale(m305C[i]);
-        mDoMtx_stack_c::transS(m2EF4[i]);
-        mpModels[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+        mpAwaModels[i]->setBaseScale(mAwaScale[i]);
+        mDoMtx_stack_c::transS(mAwaTranslation[i]);
+        mpAwaModels[i]->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 }
 
 /* 00000EDC-00000F70       .text initMtx__11daDaiocta_cFv */
 void daDaiocta_c::initMtx() {
     mpMorf->getModel()->setBaseScale(scale);
-    m26CC->setBaseScale(scale);
+    mpSuikomiModel->setBaseScale(scale);
     setMtx();
     mpMorf->getModel()->calc();
-    m26CC->calc();
+    mpSuikomiModel->calc();
 }
 
 /* 00000F70-0000116C       .text setEffect__11daDaiocta_cFUs */
@@ -569,7 +570,7 @@ void daDaiocta_c::setEffect(u16 effect_name) {
     sea_color_ambient.b = b;
 
     particle_pos = current.pos;
-    particle_pos.y = m2430;
+    particle_pos.y = mWaterY;
     csXyz particle_angle(shape_angle);
 
     switch (effect_name) {
@@ -609,7 +610,7 @@ void daDaiocta_c::setAwaRandom(int i_awaIndex) {
     f30 = l_HIO.m0EC;
     f31 = l_HIO.m0E4;
     f29 = l_HIO.m0E8 - f31;
-    m305C[i_awaIndex].setall(f30 + cM_rndF(l_HIO.m0F0 - f30));
+    mAwaScale[i_awaIndex].setall(f30 + cM_rndF(l_HIO.m0F0 - f30));
 
     f29_2 = f31 + cM_rndF(f29);
 #else
@@ -619,16 +620,16 @@ void daDaiocta_c::setAwaRandom(int i_awaIndex) {
     
     f30 = l_HIO.m0E4;
     f29 = l_HIO.m0E8 - f30;
-    m305C[i_awaIndex].setall(f31 + cM_rndF(f1));
+    mAwaScale[i_awaIndex].setall(f31 + cM_rndF(f1));
 
     f29_2 = f30 + cM_rndF(f29);
 #endif
 
     s16 random_theta = cM_rndF(65536.0f);
 
-    m2EF4[i_awaIndex].x = current.pos.x + f29_2 * cM_ssin(random_theta);
-    m2EF4[i_awaIndex].y = m2430;
-    m2EF4[i_awaIndex].z = current.pos.z + f29_2 * cM_scos(random_theta);
+    mAwaTranslation[i_awaIndex].x = current.pos.x + f29_2 * cM_ssin(random_theta);
+    mAwaTranslation[i_awaIndex].y = mWaterY;
+    mAwaTranslation[i_awaIndex].z = current.pos.z + f29_2 * cM_scos(random_theta);
 }
 
 /* 0000129C-000013D8       .text initAwa__11daDaiocta_cFv */
@@ -637,33 +638,33 @@ void daDaiocta_c::initAwa() {
         setAwaRandom(i);
         f32 tmp = l_HIO.m0F4;
         f32 tmp2 = cM_rndF(l_HIO.m0F8 - l_HIO.m0F4);
-        m2E7C[i] = tmp + tmp2;
-        mBckAnms[i].setFrame(mBckAnms[i].getEndFrame());
-        mBtkAnms[i].setFrame(mBtkAnms[i].getEndFrame());
-        mBrkAnms[i].setFrame(mBrkAnms[i].getEndFrame());
+        mAwaTimers[i] = tmp + tmp2;
+        mAwaBckAnms[i].setFrame(mAwaBckAnms[i].getEndFrame());
+        mAwaBtkAnms[i].setFrame(mAwaBtkAnms[i].getEndFrame());
+        mAwaBrkAnms[i].setFrame(mAwaBrkAnms[i].getEndFrame());
     }
 }
 
 /* 000013D8-00001548       .text execAwa__11daDaiocta_cFv */
 void daDaiocta_c::execAwa() {
     for (int i = 0; i < l_HIO.m016; i++) {
-        if (cLib_calcTimer<int>(&m2E7C[i]) == 0) {
-            mBckAnms[i].play();
-            mBtkAnms[i].play();
-            mBrkAnms[i].play();
+        if (cLib_calcTimer<int>(&mAwaTimers[i]) == 0) {
+            mAwaBckAnms[i].play();
+            mAwaBtkAnms[i].play();
+            mAwaBrkAnms[i].play();
             if (m31C4 || l_HIO.m008) {
-                if (mBckAnms[i].isStop()) {
-                    mBckAnms[i].setFrame(0.0f);
-                    mBckAnms[i].setPlaySpeed(1.0f);
+                if (mAwaBckAnms[i].isStop()) {
+                    mAwaBckAnms[i].setFrame(0.0f);
+                    mAwaBckAnms[i].setPlaySpeed(1.0f);
 
-                    mBtkAnms[i].setFrame(0.0f);
-                    mBtkAnms[i].setPlaySpeed(1.0f);
+                    mAwaBtkAnms[i].setFrame(0.0f);
+                    mAwaBtkAnms[i].setPlaySpeed(1.0f);
 
-                    mBrkAnms[i].setFrame(0.0f);
-                    mBrkAnms[i].setPlaySpeed(1.0f);
+                    mAwaBrkAnms[i].setFrame(0.0f);
+                    mAwaBrkAnms[i].setPlaySpeed(1.0f);
                     
                     f32 fVar1 = l_HIO.m0F4;
-                    m2E7C[i] = fVar1 + cM_rndF(l_HIO.m0F8 - fVar1);
+                    mAwaTimers[i] = fVar1 + cM_rndF(l_HIO.m0F8 - fVar1);
                     setAwaRandom(i);
                 }
             }
@@ -674,12 +675,12 @@ void daDaiocta_c::execAwa() {
 /* 00001548-000015E8       .text isLivingEye__11daDaiocta_cFv */
 bool daDaiocta_c::isLivingEye() {
     bool is_alive = false;
-    for (int i = 0; i < ARRAY_SSIZE(m2440); i++) {
-        if (m2470[i] == 1) {
-            daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(m2440[i]);
+    for (int i = 0; i < ARRAY_SSIZE(mDaioctaEyePcId); i++) {
+        if (mEyeAlloc[i] == true) {
+            daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(mDaioctaEyePcId[i]);
             if (!big_octo_eye_p) {
-                m2470[i] = 0;
-            } else if (big_octo_eye_p->field_0x294 == 0) {
+                mEyeAlloc[i] = false;
+            } else if (big_octo_eye_p->mbIsDead == false) {
                 is_alive = true;
             }
         }
@@ -690,10 +691,10 @@ bool daDaiocta_c::isLivingEye() {
 /* 000015E8-00001684       .text isDead__11daDaiocta_cFv */
 bool daDaiocta_c::isDead() {
     int count = 0;
-    for (int i = 0; i < ARRAY_SSIZE(m2470); i++) {
-        if (m2470[i] == 1) {
-            daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(m2440[i]);
-            if (big_octo_eye_p && big_octo_eye_p->field_0x294 == 0) {
+    for (int i = 0; i < ARRAY_SSIZE(mEyeAlloc); i++) {
+        if (mEyeAlloc[i] == true) {
+            daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(mDaioctaEyePcId[i]);
+            if (big_octo_eye_p && big_octo_eye_p->mbIsDead == 0) {
                 count++;
             }
         }
@@ -709,10 +710,10 @@ bool daDaiocta_c::isDead() {
 /* 00001684-0000171C       .text isDamageEye__11daDaiocta_cFv */
 bool daDaiocta_c::isDamageEye() {
     bool is_damaged = false;
-    for (int i = 0; i < ARRAY_SSIZE(m2440); i++) {
-        if (m2470[i] == 1) {
-            daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(m2440[i]);
-            if (big_octo_eye_p && big_octo_eye_p->field_0x296 != 0) {
+    for (int i = 0; i < ARRAY_SSIZE(mDaioctaEyePcId); i++) {
+        if (mEyeAlloc[i] == true) {
+            daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(mDaioctaEyePcId[i]);
+            if (big_octo_eye_p && big_octo_eye_p->mbIsDamaged) {
                 is_damaged = true;
             }
         }
@@ -723,10 +724,10 @@ bool daDaiocta_c::isDamageEye() {
 /* 0000171C-000017B4       .text isDamageBombEye__11daDaiocta_cFv */
 bool daDaiocta_c::isDamageBombEye() {
     bool is_damaged = false;
-    for (int i = 0; i < ARRAY_SSIZE(m2440); i++) {
-        if (m2470[i] == 1) {
-            daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(m2440[i]);
-            if (big_octo_eye_p && big_octo_eye_p->field_0x297 != 0) {
+    for (int i = 0; i < ARRAY_SSIZE(mDaioctaEyePcId); i++) {
+        if (mEyeAlloc[i] == true) {
+            daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(mDaioctaEyePcId[i]);
+            if (big_octo_eye_p && big_octo_eye_p->mbIsDamagedBomb != 0) {
                 is_damaged = true;
             }
         }
@@ -736,17 +737,17 @@ bool daDaiocta_c::isDamageBombEye() {
 
 /* 000017B4-00001A7C       .text setRotEye__11daDaiocta_cFv */
 void daDaiocta_c::setRotEye() {
-    if (cLib_calcTimer(&m26BC) == 0) {
-        for (int i = 0; i < ARRAY_SSIZE(m2440); i++) {
-            if (m2470[i] == 1) {
-                daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(m2440[i]);
-                if (big_octo_eye_p && big_octo_eye_p->field_0x294 == 0) {
-                    big_octo_eye_p->field_0x290 = i;
+    if (cLib_calcTimer(&mRotEyeTimer) == 0) {
+        for (int i = 0; i < ARRAY_SSIZE(mDaioctaEyePcId); i++) {
+            if (mEyeAlloc[i] == true) {
+                daDaiocta_Eye_c* big_octo_eye_p = (daDaiocta_Eye_c *) fopAcM_SearchByID(mDaioctaEyePcId[i]);
+                if (big_octo_eye_p && big_octo_eye_p->mbIsDead == 0) {
+                    big_octo_eye_p->mEyeNo = i;
                     big_octo_eye_p->rndRotEye();
                 }
             }
         }
-        m26BC = l_HIO.m00C + cM_rndF(l_HIO.m00E);
+        mRotEyeTimer = l_HIO.mRotEyeTimerMin + cM_rndF(l_HIO.mRotEyeTimerAddMax);
     }
 }
 
@@ -771,12 +772,12 @@ void daDaiocta_c::setCollision() {
                 j = 6;
                 break;
             case 5:
-                j = 0x14;
+                j = 20;
                 break;
         }
 
-        mSph[i].SetR(l_HIO.m01C[i]);
-        mSph[i].SetC(m0290[j]);
+        mSph[i].SetR(l_HIO.mSphRadii[i]);
+        mSph[i].SetC(mSphCenters[j]);
         dComIfG_Ccsp()->Set(&mSph[i]);
     }
 
@@ -825,51 +826,50 @@ void daDaiocta_c::setCollision() {
                 break;
         }
 
-        mCps[i].set(m0290[j], m0290[k]);
-        mCps[i].SetR(l_HIO.m034[i]);
+        mCps[i].set(mSphCenters[j], mSphCenters[k]);
+        mCps[i].SetR(l_HIO.mCpsRadii[i]);
         dComIfG_Ccsp()->Set(&mCps[i]);
     }
 
-    mCps[10].set(m0290[0x24], m21AC);
+    mCps[10].set(mSphCenters[36], m21AC);
     mCps[10].SetR(l_HIO.m05C);
     dComIfG_Ccsp()->Set(&mCps[10]);
 
-    mCps[11].set(m0290[0x1E], m21A0);
+    mCps[11].set(mSphCenters[30], m21A0);
     mCps[11].SetR(l_HIO.m060);
     dComIfG_Ccsp()->Set(&mCps[11]);
 
-    mCps[12].set(m0290[6], m21B8);
+    mCps[12].set(mSphCenters[6], m21B8);
     mCps[12].SetR(l_HIO.m064);
     dComIfG_Ccsp()->Set(&mCps[12]);
 
-    mCps[13].set(m0290[10], m21DC);
+    mCps[13].set(mSphCenters[10], m21DC);
     mCps[13].SetR(l_HIO.m068);
     dComIfG_Ccsp()->Set(&mCps[13]);
 
-    mCps[14].set(m0290[8], m21E8);
+    mCps[14].set(mSphCenters[8], m21E8);
     mCps[14].SetR(l_HIO.m06C);
     dComIfG_Ccsp()->Set(&mCps[14]);
 
-    mCps[15].set(m0290[9], m21C4);
+    mCps[15].set(mSphCenters[9], m21C4);
     mCps[15].SetR(l_HIO.m070);
     dComIfG_Ccsp()->Set(&mCps[15]);
     
-    mCps[16].set(m0290[7], m21D0);
+    mCps[16].set(mSphCenters[7], m21D0);
     mCps[16].SetR(l_HIO.m074);
     dComIfG_Ccsp()->Set(&mCps[16]);
 }
 
 /* 00001EA0-00001EB8       .text modeHideInit__11daDaiocta_cFv */
 void daDaiocta_c::modeHideInit() {
-    current.pos.y = m2430 - 3000.0f;
+    current.pos.y = mWaterY - 3000.0f;
 }
 
 /* 00001EB8-00001F34       .text modeHide__11daDaiocta_cFv */
 void daDaiocta_c::modeHide() {
     f32 dist_xz = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
-    if (!(dist_xz < m0578 || dist_xz < l_HIO.m07C)) {
-        return;
-    } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
+    if ((dist_xz < mAppearRadius || dist_xz < l_HIO.mMinAppearRadius) && 
+        dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         modeProc(PROC_INIT, MODE_APPEAR);
     }    
 }
@@ -878,34 +878,32 @@ void daDaiocta_c::modeHide() {
 void daDaiocta_c::modeAppearInit() {
     fopAcM_SetStatusMap(this, 0);
     fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
-    cXyz sp28 = current.pos - player_p->current.pos;
-    cXyz sp34 = player_p->current.pos + (sp28.normZP() * l_HIO.m07C);
-    current.pos.x = sp34.x;
-    current.pos.z = sp34.z;
+    cXyz dir_to_actor = current.pos - player_p->current.pos;
+    cXyz new_pos = player_p->current.pos + (dir_to_actor.normZP() * l_HIO.mMinAppearRadius);
+    current.pos.x = new_pos.x;
+    current.pos.z = new_pos.z;
     attention_info.flags = 0;
     
-    cXyz sp40 = current.pos;
-    sp40.y = m2430 + 2.0f;
+    cXyz auzu_pos = current.pos;
+    auzu_pos.y = mWaterY + 2.0f;
 
 #if VERSION > VERSION_JPN
-    fopAc_ac_c* whirlpool_p;
-    BOOL search_result = fopAcM_SearchByID(m26C4, &whirlpool_p);
+    fopAc_ac_c* auzu_p;
 
-    if (search_result && whirlpool_p) {
-        whirlpool_p->current.pos = sp40;
+    if (fopAcM_SearchByID(mpAuzu, &auzu_p) && auzu_p) {
+        auzu_p->current.pos = auzu_pos;
     }
 #else 
-    int whirlpool_parameters = 0x1100FF;
-    m26C4 = fopAcM_create(PROC_Obj_Auzu, whirlpool_parameters, &sp40, tevStr.mRoomNo);
+    int auzu_parameters = 0x1100FF;
+    mpAuzu = fopAcM_create(PROC_Obj_Auzu, auzu_parameters, &sp40, tevStr.mRoomNo);
 #endif
 
     setEffect(dPa_name::ID_SCENE_81FE);
     mDoAud_bgmAllMute(90);
-    for (int i = 0; i < ARRAY_SSIZE(m2440); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mDaioctaEyePcId); i++) {
         daDaiocta_Eye_c* big_octo_eye_p;
-        BOOL search_result = fopAcM_SearchByID(m2440[i], (fopAc_ac_c**)&big_octo_eye_p);
-        if (search_result) {
-            big_octo_eye_p->field_0x298 = 1;
+        if (fopAcM_SearchByID(mDaioctaEyePcId[i], (fopAc_ac_c**)&big_octo_eye_p)) {
+            big_octo_eye_p->mbAppear = true;
         }
     }
 }
@@ -944,12 +942,12 @@ void daDaiocta_c::modeAppear() {
             );
     }
 
-    daObjAuzu::Act_c* whirlpool_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(m26C4);
-    if (whirlpool_p) {
-        whirlpool_p->field_0x2B8 = 1;
-        if (whirlpool_p->field_0x2B4 > 0.999f) {
+    daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(mpAuzu);
+    if (auzu_p) {
+        auzu_p->field_0x2B8 = 1;
+        if (auzu_p->field_0x2B4 > 0.999f) {
             cXyz sp2C = current.pos;
-            sp2C.y = m2430;
+            sp2C.y = mWaterY;
             cLib_addCalcPos2(&current.pos, sp2C, 0.1f, l_HIO.m080);
 
             f32 dist = (current.pos - sp2C).abs();
@@ -978,7 +976,7 @@ void daDaiocta_c::modeWaitInit() {
 
 /* 000023B0-00002458       .text modeWait__11daDaiocta_cFv */
 void daDaiocta_c::modeWait() {
-    current.pos.y = m2430;
+    current.pos.y = mWaterY;
     if (isDead() || l_HIO.m006 != 0) {
         modeProc(PROC_INIT, MODE_DELETE);
     } else if (isDamageEye()) {
@@ -993,9 +991,9 @@ void daDaiocta_c::modeDamageInit() {
     if (isDead()) {
         modeProc(PROC_INIT, MODE_DELETE);
     } else {
-        m0571 = 2;
+        mPrmIdx = 2;
         setAnm();
-        m0571 = 4;
+        mPrmIdx = 4;
 
         setEffect(dPa_name::ID_SCENE_8201);
         setEffect(dPa_name::ID_SCENE_8202);
@@ -1004,7 +1002,7 @@ void daDaiocta_c::modeDamageInit() {
 
 /* 000024D8-000025C4       .text modeDamage__11daDaiocta_cFv */
 void daDaiocta_c::modeDamage() {
-    current.pos.y = m2430;
+    current.pos.y = mWaterY;
     if (isDead()) {
         modeProc(PROC_INIT, MODE_DELETE);
     } else if (isDamageEye()) {
@@ -1013,8 +1011,8 @@ void daDaiocta_c::modeDamage() {
         modeProc(PROC_INIT, MODE_DAMAGE_BOMB);
     }
 
-    if (m0571 == 2) {
-        if (std::fabsf(current.pos.y - m2430) <= 0.1) {
+    if (mPrmIdx == 2) {
+        if (std::fabsf(current.pos.y - mWaterY) <= 0.1) {
             modeProc(PROC_INIT, MODE_WAIT);
         } else {
             modeProc(PROC_INIT, MODE_APPEAR);
@@ -1028,9 +1026,9 @@ void daDaiocta_c::modeDamageBombInit() {
         modeProc(PROC_INIT, MODE_DELETE);
     } else {
         fopAcM_seStart(this, JA_SE_LK_LAST_HIT, 0);
-        m0571 = 2;
+        mPrmIdx = 2;
         setAnm();
-        m0571 = 3;
+        mPrmIdx = 3;
         setEffect(dPa_name::ID_SCENE_81FF);
         setEffect(dPa_name::ID_SCENE_8200);
     }
@@ -1038,7 +1036,7 @@ void daDaiocta_c::modeDamageBombInit() {
 
 /* 0000268C-00002778       .text modeDamageBomb__11daDaiocta_cFv */
 void daDaiocta_c::modeDamageBomb() {
-    current.pos.y = m2430;
+    current.pos.y = mWaterY;
     if (isDead()) {
         modeProc(PROC_INIT, MODE_DELETE);
     } else if (isDamageEye()) {
@@ -1047,8 +1045,8 @@ void daDaiocta_c::modeDamageBomb() {
         modeProc(PROC_INIT, MODE_DAMAGE_BOMB);
     } 
     
-    if (m0571 == 2) {
-        if (std::fabsf(current.pos.y - m2430) <= 0.1) {
+    if (mPrmIdx == 2) {
+        if (std::fabsf(current.pos.y - mWaterY) <= 0.1) {
             modeProc(PROC_INIT, MODE_WAIT);
         } else {
             modeProc(PROC_INIT, MODE_APPEAR);
@@ -1062,7 +1060,7 @@ void daDaiocta_c::modeDemoInit() {
     setEffect(dPa_name::ID_SCENE_8207);
     setEffect(dPa_name::ID_SCENE_8208);
     setEffect(dPa_name::ID_SCENE_8209);
-    J3DModelData* model_data_p = m26CC->getModelData();
+    J3DModelData* model_data_p = mpSuikomiModel->getModelData();
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_GDO_SUI00));
     JUT_ASSERT(VERSION_SELECT(0x536, 0x53C, 0x546, 0x546), brk != NULL);
@@ -1084,7 +1082,7 @@ void daDaiocta_c::modeDemoInit() {
 
 /* 000028FC-00003150       .text modeDemo__11daDaiocta_cFv */
 void daDaiocta_c::modeDemo() {
-    current.pos.y = m2430;
+    current.pos.y = mWaterY;
     daShip_c* ship_p_1 = (daShip_c *) fopAcM_SearchByName(PROC_SHIP);
     m21F4 = ship_p_1->current.pos;
     m2200 = ship_p_1->current.angle;
@@ -1106,8 +1104,8 @@ void daDaiocta_c::modeDemo() {
         cLib_distanceAngleS(shape_angle.y, rot_y);
 
         if (strcmp(cut_name, "SUIKOMI1") == 0) {
-            m0571 = 6;
-            if (m0571 == 6) {
+            mPrmIdx = 6;
+            if (mPrmIdx == 6) {
                 mDoAud_seStart(
                     JA_SE_CM_DO_SUCK_IN, &m2434, 0, 
                     dComIfGp_getReverb(fopAcM_GetRoomNo(this))
@@ -1155,7 +1153,7 @@ void daDaiocta_c::modeDemo() {
             daShip_c* ship_p_2 = (daShip_c *) fopAcM_SearchByName(PROC_SHIP);
             ship_p_2->initStartPos(&m21F4, m2200.y);
 
-            if ((current.pos - m21F4).absXZ() < 10.0f && (mpMorf->isStop() || m0571 == 2)) {
+            if ((current.pos - m21F4).absXZ() < 10.0f && (mpMorf->isStop() || mPrmIdx == 2)) {
                 shape_angle.y = rot_y;
                 mpMorf->calc();
                 current.pos = m220C;
@@ -1165,7 +1163,7 @@ void daDaiocta_c::modeDemo() {
         }
 
         if (strcmp(cut_name, "HAKIDASU") == 0) {
-            fopAc_ac_c* actor_p = fopAcM_SearchByID(m26C4);
+            fopAc_ac_c* actor_p = fopAcM_SearchByID(mpAuzu);
             actor_p->current.pos = current.pos;
             actor_p->current.pos.y += 20.0f;
             if (s32(mpMorf->getFrame()) == 26) {
@@ -1175,7 +1173,7 @@ void daDaiocta_c::modeDemo() {
                 );
             }
 
-            if (m0571 == 8 && mpMorf->isStop()) {
+            if (mPrmIdx == 8 && mpMorf->isStop()) {
                 dComIfGp_evmng_cutEnd(staff_id);
 #if VERSION > VERSION_DEMO
                 mDoAud_subBgmStop();
@@ -1183,11 +1181,11 @@ void daDaiocta_c::modeDemo() {
             } else if (mpMorf->getFrame() < 10.0f) {
                 ship_p_1->initStartPos(&m2434, rot_y);
             }
-            m0571 = 8;
+            mPrmIdx = 8;
         }
 
         if (strcmp(cut_name, "WAIT") == 0) {
-            m0571 = 2;
+            mPrmIdx = 2;
         }
 
         if (dComIfGp_evmng_endCheck("DAIOCTA_SUIKOMI")) {
@@ -1226,12 +1224,12 @@ void daDaiocta_c::modeDelete() {
         char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(staff_id);
 
         if (strcmp(cut_name, "DEATH1") == 0) {
-            current.pos.y = m2430;
-            m0571 = 5;
-            if (m0571 == 5 && mpMorf->isStop()) {
+            current.pos.y = mWaterY;
+            mPrmIdx = 5;
+            if (mPrmIdx == 5 && mpMorf->isStop()) {
                 fopAcM_monsSeStart(this, JA_SE_CV_DO_SINK, 0);
                 setEffect(dPa_name::ID_SCENE_8205);
-                daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(m26C4);
+                daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(mpAuzu);
                 auzu_p->field_0x2B8 = 0; // daObjAuzu::Act_c::to_disappear()?
                 dComIfGp_getVibration().StartQuake(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 dComIfGp_evmng_cutEnd(staff_id);
@@ -1240,11 +1238,11 @@ void daDaiocta_c::modeDelete() {
 
         if (strcmp(cut_name, "DEATH2") == 0) {
             cXyz target_pos = current.pos;
-            target_pos.y = m2430 - 3000.0f;
-            m0571 = 7;
+            target_pos.y = mWaterY - 3000.0f;
+            mPrmIdx = 7;
             cLib_chasePos(&current.pos, target_pos, l_HIO.m0E0);
             
-            if (std::fabsf(current.pos.y - m2430) > 600.0f && m26C1 == 0) {
+            if (std::fabsf(current.pos.y - mWaterY) > 600.0f && m26C1 == 0) {
                 initAwa();
                 fopAcM_seStart(this, JA_SE_CM_DO_SINK_IN_SEA, 0);
                 m26C1 = 1;
@@ -1290,10 +1288,10 @@ void daDaiocta_c::modeProc(daDaiocta_c::Proc_e i_procType, daDaiocta_c::Mode_e i
     };
 
     if (i_procType == PROC_INIT) {
-        m056C = i_modeProc;
-        (this->*mode_tbl[m056C].mInitFunc)();
+        mMode = i_modeProc;
+        (this->*mode_tbl[mMode].mInitFunc)();
     } else if (i_procType == PROC_EXEC) {
-        (this->*mode_tbl[m056C].mUpdFunc)();
+        (this->*mode_tbl[mMode].mUpdFunc)();
     }
 }
 
@@ -1309,7 +1307,7 @@ void daDaiocta_c::setAnm() {
         { 0xB, -1 }
     };
 
-    dLib_anm_prm_c sp24[] = {
+    dLib_anm_prm_c anm_prms[] = {
         { 0, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_NONE },
         { 0, -1, 0, 8.0f, 2.0f, J3DFrameCtrl::EMode_LOOP },
         { 0, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP },
@@ -1322,19 +1320,19 @@ void daDaiocta_c::setAnm() {
     };
 
     for (int i = 1; i < 9; i++) {
-        sp24[i].mMorf = l_HIO.m0BC[i];
-        sp24[i].mPlaySpeed = l_HIO.m098[i];
+        anm_prms[i].mMorf = l_HIO.m0BC[i];
+        anm_prms[i].mPlaySpeed = l_HIO.m098[i];
     }
 
     J3DModel* morf_model_p = mpMorf->getModel();
-    if (m0570 == 3) { 
+    if (mAnmIdx == 3) { 
         f32 morf_frame = mpMorf->getFrame();
         if (morf_frame == 10.0f || morf_frame == 25.0f || morf_frame == 45.0f) {
             dComIfGp_getVibration().StartShock(6, -0x21, cXyz(0.0f, 1.0f, 0.0f));
         }
     }
 
-    if (m0570 == 6) {
+    if (mAnmIdx == 6) {
         if (mpMorf->getFrame() == 1.0f) {
             setEffect(dPa_name::ID_SCENE_82CC);
         }
@@ -1358,11 +1356,11 @@ void daDaiocta_c::setAnm() {
         3, 4, 5, 6
     };
 
-    s32 idx = a_brk_anm_prm_tbl[m0571];
+    s32 idx = a_brk_anm_prm_tbl[mPrmIdx];
 
-    if (m0572 != m0571 && idx != -1) {
+    if (mOldPrmIdx != mPrmIdx && idx != -1) {
         J3DAnmTevRegKey* brk = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, 
-                                                    a_brk_anm_idx_tbl[a_brk_anm_prm_tbl[m0571]]);
+                                                    a_brk_anm_idx_tbl[a_brk_anm_prm_tbl[mPrmIdx]]);
         JUT_ASSERT(VERSION_SELECT(0x6E0, 0x6EC, 0x6F6, 0x6F6), brk != NULL);
         mBrkAnm1.init(
             morf_model_p->getModelData(), brk, 
@@ -1370,26 +1368,26 @@ void daDaiocta_c::setAnm() {
             1.0f, 0, -1, true, FALSE
         ); 
     }
-    dLib_setAnm(m_arc_name, mpMorf, &m0570, &m0571, &m0572, a_anm_idx_tbl, sp24, false);
+    dLib_setAnm(m_arc_name, mpMorf, &mAnmIdx, &mPrmIdx, &mOldPrmIdx, a_anm_idx_tbl, anm_prms, false);
     mBrkAnm1.setFrame(mpMorf->getFrame());
 }
 
 /* 00003AF4-00003B20       .text setWater__11daDaiocta_cFv */
 void daDaiocta_c::setWater() {
     if (mAcch.GetSeaHeight() != -G_CM3D_F_INF) {
-        m2430 = mAcch.m_sea_height;
+        mWaterY = mAcch.GetSeaHeight();
     } else {
-        m2430 = 0.0f;
+        mWaterY = 0.0f;
     }
 }
 
 /* 00003B20-00003D20       .text _execute__11daDaiocta_cFv */
 bool daDaiocta_c::_execute() {
-    if (m056C == MODE_DELETE) {
+    if (mMode == MODE_DELETE) {
         execAwa();
     }
 
-    if (m056C != MODE_HIDE && DEMO_SELECT(true, m056C != MODE_APPEAR)) {
+    if (mMode != MODE_HIDE && DEMO_SELECT(true, mMode != MODE_APPEAR)) {
 #if VERSION == VERSION_DEMO
         setWater();
         mBrkAnm2.play();
@@ -1399,15 +1397,15 @@ bool daDaiocta_c::_execute() {
         s16 angle_y = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
         s32 dist_angle_s = cLib_distanceAngleS(shape_angle.y + l_HIO.m014, angle_y);
         if (dist < l_HIO.m084 && 
-            m056C != MODE_DEMO && 
-            m056C != MODE_DELETE && 
+            mMode != MODE_DEMO && 
+            mMode != MODE_DELETE && 
             dist_angle_s < l_HIO.m012) {
             modeProc(PROC_INIT, MODE_DEMO);
         }
 #if VERSION > VERSION_DEMO
     }
 
-    if (m056C != MODE_HIDE) {
+    if (mMode != MODE_HIDE) {
         setWater();
         mBrkAnm2.play();
         mBtkAnm.play();
@@ -1431,13 +1429,13 @@ bool daDaiocta_c::_execute() {
 
     modeProc(PROC_EXEC, MODE_NULL);
 
-    if (m056C != MODE_HIDE) {
+    if (mMode != MODE_HIDE) {
         setCollision();
         setAnm();
         setMtx();
 
         if (l_HIO.m007 != 0) {
-            m0571 = l_HIO.m00A;
+            mPrmIdx = l_HIO.m00A;
             setAnm();
         }
     }
@@ -1451,11 +1449,11 @@ void daDaiocta_c::drawAwa() {
     g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
 
     for (int i = 0; i < l_HIO.m016; i++) {
-        g_env_light.setLightTevColorType(mpModels[i], &tevStr);
-        mBckAnms[i].entry(mpModels[i]->getModelData());
-        mBtkAnms[i].entry(mpModels[i]->getModelData());
-        mBrkAnms[i].entry(mpModels[i]->getModelData());
-        mDoExt_modelUpdateDL(mpModels[i]);
+        g_env_light.setLightTevColorType(mpAwaModels[i], &tevStr);
+        mAwaBckAnms[i].entry(mpAwaModels[i]->getModelData());
+        mAwaBtkAnms[i].entry(mpAwaModels[i]->getModelData());
+        mAwaBrkAnms[i].entry(mpAwaModels[i]->getModelData());
+        mDoExt_modelUpdateDL(mpAwaModels[i]);
     }
 
     dComIfGd_setList();
@@ -1465,12 +1463,12 @@ void daDaiocta_c::drawAwa() {
 void daDaiocta_c::drawSuikomi() {
     dComIfGd_setListBG();
     g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
-    g_env_light.setLightTevColorType(m26CC, &tevStr);
-    mBtkAnm.entry(m26CC->getModelData());
-    mBrkAnm2.entry(m26CC->getModelData());
-    mDoExt_modelUpdateDL(m26CC);
-    mBtkAnm.remove(m26CC->getModelData());
-    mBrkAnm2.remove(m26CC->getModelData());
+    g_env_light.setLightTevColorType(mpSuikomiModel, &tevStr);
+    mBtkAnm.entry(mpSuikomiModel->getModelData());
+    mBrkAnm2.entry(mpSuikomiModel->getModelData());
+    mDoExt_modelUpdateDL(mpSuikomiModel);
+    mBtkAnm.remove(mpSuikomiModel->getModelData());
+    mBrkAnm2.remove(mpSuikomiModel->getModelData());
     dComIfGd_setList();
 }
 
@@ -1486,12 +1484,12 @@ void daDaiocta_c::drawDebug() {
     GXColor dummy_8 = { 0xff, 0x00, 0x00, 0x80 };
     
     fopAc_ac_c* player_p;
-    for (int i = 0; i < ARRAY_SSIZE(m0290); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mSphCenters); i++) {
         player_p = dComIfGp_getPlayer(0);
-        f32 fVar1 = (player_p->current.pos - m0290[i]).abs();
+        f32 fVar1 = (player_p->current.pos - mSphCenters[i]).abs();
     }
     cXyz sp30 = current.pos;
-    sp30.y = 50.0f + m2430;
+    sp30.y = 50.0f + mWaterY;
 
     u32 uVar1 = l_HIO.m012;
     if (uVar1 - 0x70000 != 0xFFFF || l_HIO.m012 != 0) {
@@ -1514,15 +1512,15 @@ bool daDaiocta_c::_draw() {
         drawDebug();
     }
 
-    if (m056C == MODE_HIDE) {
+    if (mMode == MODE_HIDE) {
         return true;
     } 
     
-    if (m056C == MODE_DEMO) {
+    if (mMode == MODE_DEMO) {
         drawSuikomi();
     }
     
-    if (m056C == MODE_DELETE) {
+    if (mMode == MODE_DELETE) {
         drawAwa();
     }
 
@@ -1544,48 +1542,48 @@ bool daDaiocta_c::_draw() {
 
 /* 00004244-00004364       .text getArg__11daDaiocta_cFv */
 void daDaiocta_c::getArg() {
-    u8 temp;
+    u8 appear_radius_multiplier;
     s16 prm2;
     u32 prm;
 
     prm = fopAcM_GetParam(this);
     prm2 = home.angle.z;
 
-    m0573 = prm;
-    temp = prm >> 0x8;
-    m575 = prm >> 0x10;
-    mSwitchNo = prm >> 0x18;
+    mOctoType = prm;
+    appear_radius_multiplier = prm >> 8;
+    m575 = prm >> 16;
+    mSwitchNo = prm >> 24;
     m057C = prm2;
 
     home.angle.z = 0;
     current.angle.z = 0;
     shape_angle.z = 0;
 
-    if (temp == 0xFF) {
-        m0578 = l_HIO.m078;
+    if (appear_radius_multiplier == 0xFF) {
+        mAppearRadius = l_HIO.mDefaultAppearRadius;
     } else {
-        m0578 = f32(temp) * 100.0f;
+        mAppearRadius = f32(appear_radius_multiplier) * 100.0f;
     }
 
-    if (m0573 > 3) {
-        m0573 = 0;
+    if (mOctoType > 3) {
+        mOctoType = 0;
     }
 
-    switch (m0573) {
-        case 0:
-            m2470[0] = 1;
-            m2470[1] = 1;
-            m2470[2] = 1;
-            m2470[5] = 1;
+    switch (mOctoType) {
+        case FOUR_EYED:
+            mEyeAlloc[0] = true;
+            mEyeAlloc[1] = true;
+            mEyeAlloc[2] = true;
+            mEyeAlloc[5] = true;
             break;
-        case 1:
+        case EIGHT_EYED:
             for (int i = 0; i < 8; i++) {
-                m2470[i] = 1;
+                mEyeAlloc[i] = true;
             }
             break;
-        case 2:
-            for (int i = 0; i < ARRAY_SSIZE(m2470); i++) {
-                m2470[i] = 1;
+        case TWELVE_EYED:
+            for (int i = 0; i < ARRAY_SSIZE(mEyeAlloc); i++) {
+                mEyeAlloc[i] = true;
             }
             break;
     }
@@ -1600,18 +1598,18 @@ void daDaiocta_c::createInit() {
     attention_info.flags = 0;
     shape_angle = current.angle;
 
-    m04E0[0] = 21;
-    m04E0[1] = 22;
-    m04E0[2] = 15;
-    m04E0[3] = 23;
-    m04E0[4] = 24;
-    m04E0[5] = 16;
-    m04E0[6] = 17;
-    m04E0[7] = 18;
-    m04E0[8] = 14;
-    m04E0[9] = 11;
-    m04E0[10] = 12;
-    m04E0[11] = 13;
+    mAnmMtxIndices[0] = 21;
+    mAnmMtxIndices[1] = 22;
+    mAnmMtxIndices[2] = 15;
+    mAnmMtxIndices[3] = 23;
+    mAnmMtxIndices[4] = 24;
+    mAnmMtxIndices[5] = 16;
+    mAnmMtxIndices[6] = 17;
+    mAnmMtxIndices[7] = 18;
+    mAnmMtxIndices[8] = 14;
+    mAnmMtxIndices[9] = 11;
+    mAnmMtxIndices[10] = 12;
+    mAnmMtxIndices[11] = 13;
 
     static const int NUM_JOINT_NODES = 37;
     for (int i = 0; i < NUM_JOINT_NODES; i++) {
@@ -1641,9 +1639,9 @@ void daDaiocta_c::createInit() {
 
     fopAcM_setCullSizeFar(this, 10.0f);
 
-    for (int i = 0; i < ARRAY_SSIZE(m2440); i++) {
-        if (m2470[i] == 1) {
-            m2440[i] = fopAcM_createChild(
+    for (int i = 0; i < ARRAY_SSIZE(mDaioctaEyePcId); i++) {
+        if (mEyeAlloc[i] == true) {
+            mDaioctaEyePcId[i] = fopAcM_createChild(
                 PROC_DAIOCTA_EYE, fpcM_GetID(this), 
                 -1, &current.pos, 
                 tevStr.mRoomNo, NULL
@@ -1652,7 +1650,7 @@ void daDaiocta_c::createInit() {
     }
 
 #if VERSION > VERSION_JPN
-    m26C4 = fopAcM_create(
+    mpAuzu = fopAcM_create(
         PROC_Obj_Auzu, 
         0x1100FF, 
         &current.pos, 
@@ -1673,13 +1671,13 @@ void daDaiocta_c::createInit() {
         mCps[i].SetCoHitCallback(coHit_CB);
     }
 
-    m0571 = 1;
+    mPrmIdx = 1;
 }
 
 /* 00004660-00004918       .text _create__11daDaiocta_cFv */
 cPhs_State daDaiocta_c::_create() {
     fopAcM_SetupActor(this, daDaiocta_c);
-    cPhs_State state = dComIfG_resLoad(&mPh, m_arc_name);
+    cPhs_State state = dComIfG_resLoad(&mPhs, m_arc_name);
 
     if (state == cPhs_COMPLEATE_e) {
         getArg();
@@ -1700,13 +1698,13 @@ cPhs_State daDaiocta_c::_create() {
 
 /* 00005098-0000513C       .text _delete__11daDaiocta_cFv */
 bool daDaiocta_c::_delete() {
-    dComIfG_resDelete(&mPh, m_arc_name);
+    dComIfG_resDelete(&mPhs, m_arc_name);
 #if VERSION > VERSION_DEMO 
     mParticleCB.remove();
 #endif
     fopAc_ac_c* actor_p;
-    for (int i = 0; i < ARRAY_SSIZE(m2440); i++) {
-        if (fopAcM_SearchByID(m2440[i], &actor_p)) {
+    for (int i = 0; i < ARRAY_SSIZE(mDaioctaEyePcId); i++) {
+        if (fopAcM_SearchByID(mDaioctaEyePcId[i], &actor_p)) {
             fopAcM_delete(actor_p);
         }
     }

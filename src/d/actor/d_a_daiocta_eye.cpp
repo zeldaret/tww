@@ -13,8 +13,9 @@
 #include "d/d_lib.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/res/res_daiocta.h"
 
-const s32 daDaiocta_Eye_c::m_heapsize = 0xB20;
+const s32 daDaiocta_Eye_c::m_heapsize = 2848;
 const char daDaiocta_Eye_c::m_arc_name[] = "daiocta";
 const s32 daDaiocta_Eye_c::m_scale_damage_time = 8;
 
@@ -51,21 +52,21 @@ static daDaiocta_Eye_HIO_c l_HIO;
 
 /* 000000EC-000001B0       .text __ct__19daDaiocta_Eye_HIO_cFv */
 daDaiocta_Eye_HIO_c::daDaiocta_Eye_HIO_c() {
-    field_0x1C = 195.0f;
-    field_0x04 = 0xF;
-    field_0x08 = 5.0f;
-    field_0x0C = 8.0f;
-    field_0x10 = 0.0f;
-    field_0x14 = 0.0f;
-    field_0x18 = 30.0f;
-    field_0x20 = 0x1000;
-    field_0x22 = 0x4;
-    field_0x24 = 0x4000;
-    field_0x26 = 0x1000;
-    field_0x28 = 0x1000;
-    field_0x2A = 0x7FFF;
-    field_0x2C = 0x2000;
-    field_0x2E = 0x2000; 
+    mSphRadius = 195.0f;
+    m04 = 0xF;  // unused
+    m08 = 5.0f; // unused
+    m0C = 8.0f; // unused
+    mParticleTranslationX = 0.0f;
+    mParticleTranslationY = 0.0f;
+    mParticleTranslationZ = 30.0f;
+    mEyeRotStep = 0x1000;
+    mEyeRotScale = 0x4;
+    m24 = 0x4000;
+    m26 = 0x1000;
+    m28 = 0x1000;
+    mEyeRndRotMaxX = 0x7FFF;
+    mEyeRndRotMaxY = 0x2000;
+    mEyeRndRotMaxZ = 0x2000; 
 }
 
 /* 000001B0-000001FC       .text nodeControl_CB__FP7J3DNodei */
@@ -84,12 +85,12 @@ static BOOL nodeControl_CB(J3DNode* i_nodeP, int i_calcTiming) {
 void daDaiocta_Eye_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
     J3DJoint* jnt_p = (J3DJoint *) i_nodeP;
     s32 jnt_no = jnt_p->getJntNo();
-    cXyz tmp0(0.0f, 0.0f, 0.0f);
+    cXyz dummy(0.0f, 0.0f, 0.0f);
     mDoMtx_stack_c::copy(i_modelP->getAnmMtx(jnt_no));
 
     if (jnt_no == 2) {
-        mDoMtx_stack_c::ZXYrotM(field_0x2E6);
-        mDoMtx_stack_c::scaleM(field_0x460);
+        mDoMtx_stack_c::ZXYrotM(mCurEyeRot);
+        mDoMtx_stack_c::scaleM(mEyeScale);
     }
     
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
@@ -104,7 +105,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 000002D8-000004E4       .text _createHeap__15daDaiocta_Eye_cFv */
 BOOL daDaiocta_Eye_c::_createHeap() {
     static Vec eye_sph_offset[] = {
-        { 0, 0,0 },
+        { 0.0f, 0.0f, 0.0f },
     };
 
     static __jnt_hit_data_c search_data[] = {
@@ -116,40 +117,46 @@ BOOL daDaiocta_Eye_c::_createHeap() {
         }
     };
 
-    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(m_arc_name, 0x10));
+    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_DO_EYE1));
     JUT_ASSERT(0xE9, modelData != NULL);
 
-    field_0x2A8 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
 
-    if (!field_0x2A8) {
+    if (!mpModel) {
         return FALSE;
     }
     
-    field_0x2A8->setUserArea((u32)this);
+    mpModel->setUserArea((u32)this);
 
-    field_0x2AC = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, 0x18);
+    mpBrk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_DAMAGE_EYE_A1));
 
-    if (!field_0x2AC) {
+    if (!mpBrk) {
         return FALSE;
     }
 
-    int init_res = init_res = field_0x2B0.init(modelData, field_0x2AC, TRUE, 0, 
-                                        1.0f, 0, -1, false, FALSE);
+    int init_result = init_result = mBrkAnm.init(
+        modelData, mpBrk, TRUE, 
+        J3DFrameCtrl::EMode_NONE, 1.0f, 
+        0, -1, false, FALSE
+    );
     
-    if (init_res == 0) {
+    if (init_result == 0) {
         return FALSE;
     }
 
-    field_0x2C8 = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, 0x23);
+    mpBtk = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_DAMAGE_EYE_A1));
     
-    if (!field_0x2C8) {
+    if (!mpBtk) {
         return FALSE;
     }
 
-    init_res = field_0x2CC.init(modelData, field_0x2C8, TRUE, 0, 
-                                    1.0f, 0, -1, false, FALSE);
+    init_result = mBtkAnm.init(
+        modelData, mpBtk, TRUE, 
+        J3DFrameCtrl::EMode_NONE, 1.0f, 
+        0, -1, false, FALSE
+    );
     
-    if (init_res == 0) {
+    if (init_result == 0) {
         return FALSE;
     }
 
@@ -157,10 +164,10 @@ BOOL daDaiocta_Eye_c::_createHeap() {
         if (i == 2) modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
     }
 
-    field_0x470 = JntHit_create(field_0x2A8, search_data, ARRAY_SSIZE(search_data));
+    mpJntHit = JntHit_create(mpModel, search_data, ARRAY_SSIZE(search_data));
 
-    if (field_0x470) {   
-        jntHit = field_0x470;
+    if (mpJntHit) {   
+        jntHit = mpJntHit;
     } else {
         return FALSE;
     }
@@ -180,17 +187,17 @@ void daDaiocta_Eye_c::_coHit(fopAc_ac_c* i_actor) {
     if (fpcM_GetName(i_actor) == PROC_BOMB) {
         daBomb_c* bomb_p = (daBomb_c *) i_actor;
         if (bomb_p->chk_state(daBomb_c::STATE_4)) {
-            if (!field_0x294) {
+            if (!mbIsDead) {
                 health = 0;
-                field_0x294 = 1;
-                field_0x295 = 1;
+                mbIsDead = true;
+                m295 = true;
                 dComIfGp_particle_set(
-                    dPa_name::ID_SCENE_8206, &field_0x48C, &shape_angle, 
-                    NULL, 0xFF, &field_0x478, fopAcM_GetRoomNo(this)
+                    dPa_name::ID_SCENE_8206, &mParticlePos, &shape_angle, 
+                    NULL, 0xFF, &mParticleCB, fopAcM_GetRoomNo(this)
                 );
                 modeDeathInit();
             } else {
-                field_0x297 = 1;
+                mbIsDamagedBomb = true;
             }
         }
     }
@@ -198,58 +205,67 @@ void daDaiocta_Eye_c::_coHit(fopAc_ac_c* i_actor) {
 
 /* 000005D0-000006C0       .text setMtx__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::setMtx() {
-    field_0x2A8->setBaseScale(scale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
-    field_0x2A8->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
-    mDoMtx_stack_c::transM(l_HIO.field_0x10, l_HIO.field_0x14, l_HIO.field_0x18);
-    mDoMtx_stack_c::multVecZero(&field_0x48C);
+    mDoMtx_stack_c::transM(
+        l_HIO.mParticleTranslationX, 
+        l_HIO.mParticleTranslationY, 
+        l_HIO.mParticleTranslationZ
+    );
+    mDoMtx_stack_c::multVecZero(&mParticlePos);
 }
 
 /* 000006C0-00000A6C       .text checkTgHit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::checkTgHit() {
-    field_0x424.Move();
-    cCcD_Obj* tg_hit_obj = field_0x2F8.GetTgHitObj();
-    if (tg_hit_obj) {
+    mStts.Move();
+    cCcD_Obj* tg_hit_obj_p = mSph.GetTgHitObj();
+    if (tg_hit_obj_p) {
         mDoAud_onEnemyDamage();
-        u8 damaged = 0;
+        bool damaged = false;
         
-        if (tg_hit_obj->ChkAtType(AT_TYPE_NORMAL_ARROW)) {
+        if (tg_hit_obj_p->ChkAtType(AT_TYPE_NORMAL_ARROW)) {
             fopAcM_seStart(this, JA_SE_LK_MS_WEP_HIT, 32);
             health -= 2;
-            damaged = 1;
-        } else if (tg_hit_obj->ChkAtType(AT_TYPE_ICE_ARROW)) {
+            damaged = true;
+        } else if (tg_hit_obj_p->ChkAtType(AT_TYPE_ICE_ARROW)) {
             fopAcM_seStart(this, JA_SE_LK_MS_WEP_HIT, 32);
             health -= 2;
-            damaged = 1;
-        } else if (tg_hit_obj->ChkAtType(AT_TYPE_FIRE_ARROW)) {
+            damaged = true;
+        } else if (tg_hit_obj_p->ChkAtType(AT_TYPE_FIRE_ARROW)) {
             fopAcM_seStart(this, JA_SE_LK_MS_WEP_HIT, 32);
             health -= 2;
-            damaged = 1;
-        } else if (tg_hit_obj->ChkAtType(AT_TYPE_LIGHT_ARROW)) {
+            damaged = true;
+        } else if (tg_hit_obj_p->ChkAtType(AT_TYPE_LIGHT_ARROW)) {
             fopAcM_seStart(this, JA_SE_LK_MS_WEP_HIT, 32);
             health -= 4;
-            damaged = 1;
-        } else if (tg_hit_obj->ChkAtType(AT_TYPE_HOOKSHOT)) {
+            damaged = true;
+        } else if (tg_hit_obj_p->ChkAtType(AT_TYPE_HOOKSHOT)) {
             fopAcM_seStart(this, JA_SE_LK_MS_WEP_HIT, 32);
             health -= 2;
-            damaged = 1;
-        } else if (tg_hit_obj->ChkAtType(AT_TYPE_BOOMERANG)) {
+            damaged = true;
+        } else if (tg_hit_obj_p->ChkAtType(AT_TYPE_BOOMERANG)) {
             fopAcM_seStart(this, JA_SE_LK_W_WEP_HIT, 32);
             health--;
-            damaged = 1;
+            damaged = true;
         }
 
-        if (damaged == 1) {        
+        if (damaged == true) {        
             daPy_py_c* player_p = daPy_getPlayerActorClass();
-            cXyz sp1C = *field_0x2F8.GetTgHitPosP();
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &sp1C);
+            cXyz tg_hit_pos = *mSph.GetTgHitPosP();
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &tg_hit_pos);
             if (health <= 0) {
-                cXyz sp28(2.0f, 2.0f, 2.0f);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, &sp1C, &player_p->shape_angle, &sp28);
+                cXyz hit_particle_scale(2.0f, 2.0f, 2.0f);
+                dComIfGp_particle_set(
+                    dPa_name::ID_COMMON_BIG_HIT, 
+                    &tg_hit_pos, 
+                    &player_p->shape_angle, 
+                    &hit_particle_scale
+                );
                 fopAcM_seStart(this, JA_SE_LK_LAST_HIT, 0);
                 health = 0;
                 modeDeathInit();
@@ -262,7 +278,7 @@ void daDaiocta_Eye_c::checkTgHit() {
 
 /* 00000A6C-00000A78       .text modeWaitInit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::modeWaitInit() {
-    field_0x29C = MODE_WAIT;
+    mMode = MODE_WAIT;
 }
 
 /* 00000A78-00000A98       .text modeWait__15daDaiocta_Eye_cFv */
@@ -272,17 +288,25 @@ void daDaiocta_Eye_c::modeWait() {
 
 /* 00000A98-00000BD8       .text modeDamageInit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::modeDamageInit() {
-    field_0x29C = MODE_DAMAGE;
-    field_0x46C = m_scale_damage_time;
-    field_0x296 = 1;
+    mMode = MODE_DAMAGE;
+    mScaleAnimeIdx = m_scale_damage_time;
+    mbIsDamaged = true;
 
-    J3DModelData* model_data_p = field_0x2A8->getModelData();
-    field_0x2AC = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, 0x18);
-    field_0x2B0.init(model_data_p, field_0x2AC, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    field_0x2C8 = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, 0x23);
-    field_0x2CC.init(model_data_p, field_0x2C8, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
+    J3DModelData* model_data_p = mpModel->getModelData();
+    mpBrk = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_DAMAGE_EYE_A1);
+    mBrkAnm.init(
+        model_data_p, mpBrk, TRUE, 
+        J3DFrameCtrl::EMode_NONE, 1.0f, 
+        0, -1, true, FALSE
+    );
+    mpBtk = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_DAMAGE_EYE_A1);
+    mBtkAnm.init(
+        model_data_p, mpBtk, TRUE, 
+        J3DFrameCtrl::EMode_NONE, 1.0f, 
+        0, -1, true, FALSE
+    );
  
-    fopAcM_monsSeStart(field_0x474, 0x48C8, 0);
+    fopAcM_monsSeStart(mpParentActor, JA_SE_CV_DO_DAMAGE, 0);
 }
 
 /* 00000BD8-00000CD0       .text modeDamage__15daDaiocta_Eye_cFv */
@@ -295,35 +319,43 @@ void daDaiocta_Eye_c::modeDamage() {
     };
 
     dLib_scaleAnime(
-        &field_0x460.x, scale_table, 
-        ARRAY_SSIZE(scale_table), &field_0x46C, 
+        &mEyeScale.x, scale_table, 
+        ARRAY_SSIZE(scale_table), &mScaleAnimeIdx, 
         0.2f, 10.0f, 0.025f
     );
-    field_0x460.y = field_0x460.x;
-    field_0x460.z = field_0x460.x;
+    mEyeScale.y = mEyeScale.x;
+    mEyeScale.z = mEyeScale.x;
 
-    if (field_0x2CC.isStop() && field_0x2B0.isStop() && field_0x46C == 0) {
+    if (mBtkAnm.isStop() && mBrkAnm.isStop() && mScaleAnimeIdx == 0) {
         modeWaitInit();
-    } else if (field_0x46C == 0) {
-        field_0x46C = m_scale_damage_time;
+    } else if (mScaleAnimeIdx == 0) {
+        mScaleAnimeIdx = m_scale_damage_time;
     } 
 }
 
 /* 00000CD0-00000E20       .text modeDeathInit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::modeDeathInit() {
-    field_0x29C = MODE_DEATH;
-    field_0x296 = 1;
-    field_0x460.setall(1.0f);
-    field_0x2AC = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, 0x19);
-    field_0x2B0.init(field_0x2A8->getModelData(), field_0x2AC, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    field_0x2C8 = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, 0x24);
-    field_0x2CC.init(field_0x2A8->getModelData(), field_0x2C8, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    fopAcM_monsSeStart(field_0x474, 0x48CB, 0);
+    mMode = MODE_DEATH;
+    mbIsDamaged = true;
+    mEyeScale.setall(1.0f);
+    mpBrk = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_DAMAGE_EYE_B1);
+    mBrkAnm.init(
+        mpModel->getModelData(), mpBrk, TRUE, 
+        J3DFrameCtrl::EMode_NONE, 1.0f, 
+        0, -1, true, FALSE
+    );
+    mpBtk = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_DAMAGE_EYE_B1);
+    mBtkAnm.init(
+        mpModel->getModelData(), mpBtk, TRUE, 
+        J3DFrameCtrl::EMode_NONE, 1.0f, 
+        0, -1, true, FALSE
+    );
+    fopAcM_monsSeStart(mpParentActor, 0x48CB, 0);
 }
 
 /* 00000E20-00000E2C       .text modeDeath__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::modeDeath() {
-    field_0x294 = 1;
+    mbIsDead = true;
 }
 
 /* 00000E2C-00000ED0       .text modeProcCall__15daDaiocta_Eye_cFv */
@@ -333,31 +365,31 @@ void daDaiocta_Eye_c::modeProcCall() {
         &daDaiocta_Eye_c::modeDamage,
         &daDaiocta_Eye_c::modeDeath,
     };
-    (this->*mode_proc[field_0x29C])();
+    (this->*mode_proc[mMode])();
 }
 
 /* 00000ED0-00001120       .text _execute__15daDaiocta_Eye_cFv */
 bool daDaiocta_Eye_c::_execute() {
-    if (!field_0x298) {
+    if (!mbAppear) {
         return false;
     }
 
-    if (field_0x294 == 1) {
-        field_0x2F8.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
+    if (mbIsDead == true) {
+        mSph.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
     }
 
-    field_0x2EC = l_HIO.field_0x24;
-    field_0x2EE = l_HIO.field_0x26;
-    field_0x2F0 = l_HIO.field_0x28;
-    field_0x2F2 = l_HIO.field_0x2A;
-    field_0x2F4 = l_HIO.field_0x2C;
-    field_0x2F6 = l_HIO.field_0x2E;
+    m2EC = l_HIO.m24;
+    m2EE = l_HIO.m26;
+    m2F0 = l_HIO.m28;
+    mEyeRndRotMaxX = l_HIO.mEyeRndRotMaxX;
+    mEyeRndRotMaxY = l_HIO.mEyeRndRotMaxY;
+    mEyeRndRotMaxZ = l_HIO.mEyeRndRotMaxZ;
 
-    field_0x2B0.play();
-    field_0x2CC.play();
+    mBrkAnm.play();
+    mBtkAnm.play();
 
-    field_0x296 = 0;
-    field_0x297 = 0;
+    mbIsDamaged = false;
+    mbIsDamagedBomb = false;
     modeProcCall();
     setMtx();
 
@@ -367,29 +399,29 @@ bool daDaiocta_Eye_c::_execute() {
     
     eyePos = current.pos;
 
-    cLib_addCalcAngleS2(&field_0x2E6.x, field_0x2E0, l_HIO.field_0x22 + 1, l_HIO.field_0x20);
-    cLib_addCalcAngleS2(&field_0x2E6.y, field_0x2E2, l_HIO.field_0x22 + 1, l_HIO.field_0x20);
-    cLib_addCalcAngleS2(&field_0x2E6.z, field_0x2E4, l_HIO.field_0x22 + 1, l_HIO.field_0x20);
-    field_0x2F8.SetR(l_HIO.field_0x1C);
-    field_0x2F8.SetC(current.pos);
-    dComIfG_Ccsp()->Set(&field_0x2F8);
+    cLib_addCalcAngleS2(&mCurEyeRot.x, mEyeRotTargetX, l_HIO.mEyeRotScale + 1, l_HIO.mEyeRotStep);
+    cLib_addCalcAngleS2(&mCurEyeRot.y, mEyeRotTargetY, l_HIO.mEyeRotScale + 1, l_HIO.mEyeRotStep);
+    cLib_addCalcAngleS2(&mCurEyeRot.z, mEyeRotTargetZ, l_HIO.mEyeRotScale + 1, l_HIO.mEyeRotStep);
+    mSph.SetR(l_HIO.mSphRadius);
+    mSph.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&mSph);
 
-    field_0x498.set(0, shape_angle.y, 0);
+    m498.set(0, shape_angle.y, 0);
 
-    cXyz sp08 = current.pos;
-    sp08.y += 1000.0f;
-    f32 water_height = dBgS_GetWaterHeight(sp08);
+    cXyz current_pos = current.pos;
+    current_pos.y += 1000.0f;
+    f32 water_height = dBgS_GetWaterHeight(current_pos);
 
     if (current.pos.y < water_height) {
-        if (field_0x478.getEmitter()) {
-            field_0x478.end();
+        if (mParticleCB.getEmitter()) {
+            mParticleCB.end();
         }
-    } else if (field_0x29C != MODE_DEATH) {
+    } else if (mMode != MODE_DEATH) {
         attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
         attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 34;
     }
     
-    if (field_0x29C == MODE_DEATH || dComIfGp_event_runCheck()) {
+    if (mMode == MODE_DEATH || dComIfGp_event_runCheck()) {
         attention_info.flags = 0;
     }
 
@@ -398,39 +430,39 @@ bool daDaiocta_Eye_c::_execute() {
 
 /* 00001120-000011EC       .text _draw__15daDaiocta_Eye_cFv */
 bool daDaiocta_Eye_c::_draw() {
-    if (field_0x298 == 0) {
+    if (!mbAppear) {
         return false;
     }
 
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
-    g_env_light.setLightTevColorType(field_0x2A8, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     
-    field_0x2CC.entry(field_0x2A8->getModelData());
-    field_0x2B0.entry(field_0x2A8->getModelData());
+    mBtkAnm.entry(mpModel->getModelData());
+    mBrkAnm.entry(mpModel->getModelData());
 
-    mDoExt_modelUpdateDL(field_0x2A8);
+    mDoExt_modelUpdateDL(mpModel);
 
-    field_0x2CC.remove(field_0x2A8->getModelData());
-    field_0x2B0.remove(field_0x2A8->getModelData());
+    mBtkAnm.remove(mpModel->getModelData());
+    mBrkAnm.remove(mpModel->getModelData());
     
     return true;
 }
 
 /* 000011EC-000012D4       .text createInit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::createInit() {
-    field_0x298 = 0;
-    cullMtx = field_0x2A8->getBaseTRMtx();
-    field_0x424.Init(0, 0, this);
-    field_0x2F8.Set(l_sph_src);
-    field_0x2F8.SetStts(&field_0x424);
-    field_0x2F8.SetCoHitCallback(coHit_CB);
+    mbAppear = false;
+    cullMtx = mpModel->getBaseTRMtx();
+    mStts.Init(0, 0, this);
+    mSph.Set(l_sph_src);
+    mSph.SetStts(&mStts);
+    mSph.SetCoHitCallback(coHit_CB);
     max_health = 4;
     health = max_health;
-    field_0x460.setall(1.0f);
+    mEyeScale.setall(1.0f);
     if (parentActorID != -1) {
         fopAc_ac_c* parent_p = fopAcM_SearchByID(parentActorID);
         if (parent_p && fopAc_IsActor(parent_p) && fpcM_GetName(parent_p) == PROC_DAIOCTA) {
-            field_0x474 = (daDaiocta_c *) parent_p;
+            mpParentActor = (daDaiocta_c *) parent_p;
         }
     }
 }
@@ -438,7 +470,7 @@ void daDaiocta_Eye_c::createInit() {
 /* 000012D4-00001450       .text _create__15daDaiocta_Eye_cFv */
 cPhs_State daDaiocta_Eye_c::_create() {
     fopAcM_SetupActor(this, daDaiocta_Eye_c);
-    cPhs_State result = dComIfG_resLoad(&field_0x2A0, m_arc_name);
+    cPhs_State result = dComIfG_resLoad(&mPhs, m_arc_name);
     if (result == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
             return cPhs_ERROR_e;
@@ -450,8 +482,8 @@ cPhs_State daDaiocta_Eye_c::_create() {
 
 /* 00001764-000017B4       .text _delete__15daDaiocta_Eye_cFv */
 bool daDaiocta_Eye_c::_delete() {
-    dComIfG_resDelete(&field_0x2A0, m_arc_name);
-    field_0x478.remove();
+    dComIfG_resDelete(&mPhs, m_arc_name);
+    mParticleCB.remove();
     return true;
 }
 
