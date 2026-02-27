@@ -509,6 +509,7 @@ BOOL daBoomerang_c::procWait() {
     if (fpcM_GetParam(this) == 1) {
         speedF = 60.0f;
         mCps.ResetAtHit();
+        mCps.OffAtNoTgHitInfSet();
         field_0xF2C = 0;
         field_0xF2D = 1;
         field_0xF2E = 0;
@@ -518,17 +519,17 @@ BOOL daBoomerang_c::procWait() {
 
         if (mCurTargetIdx == mNumTargets) {
             resetLockActor();
-            s16 shapeY = shape_angle.y;
-            s16 bodyY = pPlayer->getBodyAngleY();
-            s16 bodyX = pPlayer->getBodyAngleX();
+
+            s16 angleX = pPlayer->getBodyAngleX();
+            s16 angleY = shape_angle.y + pPlayer->getBodyAngleY();
+
             f32 flyMax = getFlyMax();
 
-            s16 angleY = shapeY + bodyY;
-            f32 cosY = cM_scos(angleY);
-
-            mTargetRayEnd.x = current.pos.x + cM_ssin(angleY) * cM_scos(bodyX) * flyMax;
-            mTargetRayEnd.y = current.pos.y - cM_ssin(bodyX) * flyMax;
-            mTargetRayEnd.z = current.pos.z + cM_scos(bodyX) * cosY * flyMax;
+            mTargetRayEnd.set(
+                current.pos.x + flyMax * cM_ssin(angleY) * cM_scos(angleX),
+                current.pos.y - flyMax * cM_ssin(angleX),
+                current.pos.z + flyMax * cM_scos(angleY) * cM_scos(angleX)
+            );
         }
 
         field_0xF3A = 0;
@@ -567,8 +568,7 @@ BOOL daBoomerang_c::procWait() {
 
         procMove();
     } else {
-        dCamera_c* bodyCam = dCam_getBody();
-        if (bodyCam->mCurMode != 0xB) {
+        if (dCam_getBody()->mCurMode != 0xB) {
             resetLockActor();
         } else {
             bool b = false;
