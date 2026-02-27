@@ -13,6 +13,7 @@
 #include "d/res/res_link.h"
 #include "dolphin/gf/GF.h"
 #include "f_op/f_op_camera.h"
+#include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_lib.h"
 
 static cXyz l_blur_top(40.0f, 0.0f, 0.0f);
@@ -496,8 +497,6 @@ void daBoomerang_c::checkBgHit(cXyz* pi_start, cXyz* pi_end) {
 
 /* 800E1F94-800E239C       .text procWait__13daBoomerang_cFv */
 BOOL daBoomerang_c::procWait() {
-    /* Nonmatching */
-
     daPy_lk_c* pPlayer = daPy_getPlayerLinkActorClass();
     speedF = 0.0f;
     setKeepMatrix();
@@ -520,8 +519,8 @@ BOOL daBoomerang_c::procWait() {
         if (mCurTargetIdx == mNumTargets) {
             resetLockActor();
 
+            s16 angleY = pPlayer->getBodyAngleY() + pPlayer->shape_angle.y;
             s16 angleX = pPlayer->getBodyAngleX();
-            s16 angleY = shape_angle.y + pPlayer->getBodyAngleY();
 
             f32 flyMax = getFlyMax();
 
@@ -561,7 +560,7 @@ BOOL daBoomerang_c::procWait() {
 
         mBlur.initBlur(mpModel->getBaseTRMtx(), mModelRotY);
 
-        cXyz bgHitPos(current.pos.x, current.pos.y + 60.0f, current.pos.z);
+        cXyz bgHitPos(pPlayer->current.pos.x, pPlayer->current.pos.y + 60.0f, pPlayer->current.pos.z);
         checkBgHit(&bgHitPos, &current.pos);
 
         procMove();
@@ -578,11 +577,11 @@ BOOL daBoomerang_c::procWait() {
 
             if (b) {
                 camera_class* pCamera = g_dComIfG_gameInfo.play.getCamera(g_dComIfG_gameInfo.play.getPlayerCameraID(0));
-                cXyz eyePos = pCamera->mLookat.mEye;
+                cXyz eyePos = *fopCamM_GetEye_p(pCamera);
                 cXyz topPos = pPlayer->getLineTopPos();
-                mCps.GetShapeAttr()->GetWorkAab().Set(&eyePos, &topPos);
+                mCps.OnAtNoTgHitInfSet();
+                mCps.cM3dGCps::Set(eyePos, topPos, 3.0f);
 
-                // mCps.SetAtVec();
                 mCps.CalcAtVec();
                 mCps.SetAtHitCallback(&daBoomerang_rockLineCallback);
 
