@@ -385,103 +385,103 @@ BOOL daDaiocta_c::createArrowHitHeap() {
     
     static __jnt_hit_data_c search_data[17] = { 
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 2,
             /* mRadius     */ 550.0f,
             /* mpOffsets   */ body_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 3,
             /* mRadius     */ 450.0f,
             /* mpOffsets   */ body_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 4,
             /* mRadius     */ 400.0f,
             /* mpOffsets   */ body_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 5,
             /* mRadius     */ 300.0f,
             /* mpOffsets   */ body_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 6,
             /* mRadius     */ 200.0f,
             /* mpOffsets   */ body_top_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 7,
             /* mRadius     */ 150.0f,
             /* mpOffsets   */ body_top_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 8,
             /* mRadius     */ 150.0f,
             /* mpOffsets   */ body_top_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 9,
             /* mRadius     */ 100.0f,
             /* mpOffsets   */ hire_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 10,
             /* mRadius     */ 100.0f,
             /* mpOffsets   */ hire_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 30,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ te_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 29,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 28,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 27,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 36,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ te_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 35,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ te_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 34,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
         },
         {
-            /* mShapeType  */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 33,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
