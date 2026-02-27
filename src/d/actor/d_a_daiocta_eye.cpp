@@ -110,7 +110,7 @@ BOOL daDaiocta_Eye_c::_createHeap() {
 
     static __jnt_hit_data_c search_data[] = {
         {
-            /* mShapeType  */ 1,
+            /* mShapeType  */ JntHitType_SPH_e,
             /* mJointIndex */ 2,
             /* mRadius     */ 110.0f,
             /* mpOffsets   */ eye_sph_offset
@@ -350,7 +350,7 @@ void daDaiocta_Eye_c::modeDeathInit() {
         J3DFrameCtrl::EMode_NONE, 1.0f, 
         0, -1, true, FALSE
     );
-    fopAcM_monsSeStart(mpParentActor, 0x48CB, 0);
+    fopAcM_monsSeStart(mpParentActor, JA_SE_CV_DO_EYE_LOSE, 0);
 }
 
 /* 00000E20-00000E2C       .text modeDeath__15daDaiocta_Eye_cFv */
@@ -459,7 +459,7 @@ void daDaiocta_Eye_c::createInit() {
     max_health = 4;
     health = max_health;
     mEyeScale.setall(1.0f);
-    if (parentActorID != -1) {
+    if (parentActorID != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* parent_p = fopAcM_SearchByID(parentActorID);
         if (parent_p && fopAc_IsActor(parent_p) && fpcM_GetName(parent_p) == PROC_DAIOCTA) {
             mpParentActor = (daDaiocta_c *) parent_p;

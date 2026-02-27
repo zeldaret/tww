@@ -945,11 +945,7 @@ void daDaiocta_c::modeAppear() {
         sea_color_ambient.g = g;
         sea_color_ambient.b = b;
 
-        DEMO_SELECT(mpEmitter, mParticleCallback)
-#if VERSION > VERSION_DEMO
-            .getEmitter()
-#endif
-            ->setGlobalPrmColor(
+        DEMO_SELECT(mpEmitter, mParticleCallback.getEmitter())->setGlobalPrmColor(
                 sea_color_ambient.r, 
                 sea_color_ambient.g, 
                 sea_color_ambient.b
