@@ -17,15 +17,33 @@ namespace daObjAuzu {
     
     class Act_c : public fopAc_ac_c {
     public:
+        enum Prm_e {
+            PRM_APPEAR_W = 0x1,
+            PRM_APPEAR_S = 0x10,
 
+            PRM_LINK_ID_W = 0x8,
+            PRM_LINK_ID_S = 0x8,
+            
+            PRM_SWSAVE_W = 0x8,
+            PRM_SWSAVE_S = 0x0,
+
+            PRM_TYPE_W = 0x4,
+            PRM_TYPE_S = 0x14
+        };
     public:
         const Attr_c& attr() const { return M_attr[field_0x2B0]; }
         bool is_appear() const { return field_0x2B4 > 0.999f; }
-        void prm_get_appear() const {}
-        void prm_get_linkID() const {}
-        s32 prm_get_swSave() const { return daObj::PrmAbstract(this, 0x08, 0x00); }
-        s32 prm_get_type() const { return daObj::PrmAbstract(this, 0x04, 0x14); }
-        void prm_make_squid() {}
+        s32 prm_get_appear() const { return daObj::PrmAbstract(this, PRM_APPEAR_W, PRM_APPEAR_S); }
+        s32 prm_get_linkID() const { return daObj::PrmAbstract(this, PRM_LINK_ID_W, PRM_LINK_ID_S); }
+        s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+        s32 prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
+        static s32 prm_make_squid() { 
+            return 
+             0x1 << 20 | // type
+             0x1 << 16 | // appear  
+            0x00 <<  8 | // linkID
+            0xFF <<  0;  // swSave 
+        }
         void to_appear() { field_0x2B8 = true; }
         void to_disappear() { field_0x2B8 = false; }
     
@@ -41,7 +59,7 @@ namespace daObjAuzu {
         bool _execute();
         bool _draw();
         static BOOL solidHeapCB(fopAc_ac_c*);            
-        static void set_material(J3DMaterial*, unsigned char);
+        static void set_material(J3DMaterial*, u8);
         static const char M_arcname[];
         static const Attr_c M_attr[2];
     public:
@@ -54,7 +72,7 @@ namespace daObjAuzu {
         /* 0x2B9 */ u8 field_0x2B9;
         /* 0x2BA */ u8 field_0x2BA;
         /* 0x2BB */ u8 field_0x2BB[0x2BC - 0x2BB];
-        /* 0x2BC */ s32 field_0x2BC;
+        /* 0x2BC */ fpc_ProcID field_0x2BC;
     };  // Size: 0x2C0
 };
 
