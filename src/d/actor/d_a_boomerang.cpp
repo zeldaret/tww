@@ -535,17 +535,15 @@ BOOL daBoomerang_c::procWait() {
         mModelRotY = 0;
 
         cXyz diff = mTargetRayEnd - current.pos;
-        cXyz diff_xz(diff.x, 0.0f, diff.z);
-        f32 dist = diff_xz.abs();
 
-        s16 angle = cM_atan2s(-diff.y, dist);
+        s16 angle = cM_atan2s(-diff.y, diff.absXZ());
         current.angle.x = angle;
         if (mNumTargets == 0) {
             current.angle.y = cM_atan2s(diff.x, diff.z) + 0x3000;
-            if (field_0xF33 == 0) {
-                field_0xF36 = 1;
-            } else {
+            if (field_0xF33) {
                 field_0xF36 = 0;
+            } else {
+                field_0xF36 = 1;
             }
         } else {
             current.angle.y = cM_atan2s(diff.x, diff.z);
