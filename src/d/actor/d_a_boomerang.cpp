@@ -598,13 +598,13 @@ BOOL daBoomerang_c::procMove() {
     /* Nonmatching */
     static cXyz at_offset(0.0f, 0.0f, 0.0f);
 
-    if (field_0xF2F != 0) {
+    if (field_0xF2F) {
         fopAcM_delete(this);
         return TRUE;
     }
 
     if (dComIfGp_event_getMode() == 0) {
-        fopAc_ac_c* pPlayer = dComIfGp_getLinkPlayer();
+        daPy_lk_c* pPlayer = daPy_getPlayerLinkActorClass();
         s16 s = mModelRotY;
         mModelRotY -= 0x1F00;
         if (s >= 0 && mModelRotY < 0) {
@@ -625,7 +625,7 @@ BOOL daBoomerang_c::procMove() {
         s16 angle = cM_atan2s(norm.x, norm.z);
         s16 currentAngle = current.angle.y;
 
-        if (field_0xF2E != 0) {
+        if (field_0xF2E) {
             field_0xF2E = 0;
             if (angle - currentAngle > 1) {
                 current.angle.y = angle - 0x3000;
@@ -637,12 +637,13 @@ BOOL daBoomerang_c::procMove() {
 
         currentAngle = angle - currentAngle;
 
-        if (field_0xF2C != 0) {
+        if (field_0xF2C) {
             if (dist < speedF * 2.0f) {
-                if (((daPy_lk_c*)pPlayer)->returnBoomerang() != 0) {
+                if (pPlayer->returnBoomerang()) {
                     fpcM_SetParam(this, 0);
                     field_0xF33 = 0;
                     mCurrProcFunc = &daBoomerang_c::procWait;
+                    mCps.SetAtHitCallback(NULL);
                 } else {
                     field_0xF2F = 1;
                 }
@@ -652,13 +653,13 @@ BOOL daBoomerang_c::procMove() {
                 // Boomerang hit its current target
                 field_0xF2E = 1;
                 mTargetPtrs[mCurTargetIdx] = NULL;
-                mTargetIds[mCurTargetIdx] = -1;
+                mTargetIds[mCurTargetIdx] = fpcM_ERROR_PROCESS_ID_e;
                 mCurTargetIdx++;
                 field_0xF36 = 0;
             }
         }
 
-        if (field_0xF2C == 0 && (mCancelFlg != false || ((field_0xF36 == 0 && mNumTargets <= mCurTargetIdx) || mCps.ChkTgSet()))) {
+        if (!field_0xF2C && (mCancelFlg != false || ((!field_0xF36 && mNumTargets <= mCurTargetIdx) || mCps.ChkAtShieldHit()))) {
             field_0xF2E = 1;
             field_0xF2C = 1;
             resetLockActor();
@@ -666,12 +667,16 @@ BOOL daBoomerang_c::procMove() {
             field_0xF36 = 0;
         }
 
-        if (field_0xF2E == 0) {
+        if (field_0xF2E) {
+            current.angle.y = angle;
+        } else {
             s16 newAngle;
-            if (field_0xF33 == 0) {
+            if (!field_0xF33) {
                 f32 a = 20.0f - dist * 2.0f / speedF;
-                f32 b = 0.0f;
-                if (a >= 0.0f) {
+                f32 b;
+                if (a < 0.0f) {
+                    b = 0.0f;
+                } else {
                     b = a;
                     if (a > 18.0f) {
                         b = (18.0f - a) * 40.0f + 20.0f;
@@ -681,6 +686,7 @@ BOOL daBoomerang_c::procMove() {
             } else {
                 newAngle = 0x4000;
             }
+
             if (currentAngle <= newAngle) {
                 s16 negAngle = -newAngle;
                 newAngle = currentAngle;
@@ -690,13 +696,9 @@ BOOL daBoomerang_c::procMove() {
             }
             currentAngle = newAngle;
             current.angle.y += currentAngle;
-        } else {
-            current.angle.y = angle;
         }
 
-        cXyz diff_xz(norm.x, 0.0f, norm.z);
-
-        angle = cM_atan2s(-norm.y, diff_xz.abs());
+        angle = cM_atan2s(-norm.y, norm.absXZ());
         current.angle.x = angle;
         current.pos.x += speedF * cM_scos(current.angle.x) * cM_ssin(current.angle.y);
         current.pos.y += speedF * cM_ssin(current.angle.x);
@@ -704,7 +706,7 @@ BOOL daBoomerang_c::procMove() {
         shape_angle.y = current.angle.y;
         shape_angle.x = current.angle.x;
 
-        if (field_0xF2C == 0) {
+        if (!field_0xF2C) {
             checkBgHit(&old.pos, &current.pos);
         }
 
@@ -712,12 +714,10 @@ BOOL daBoomerang_c::procMove() {
 
         if (currentAngle > 0x100) {
             currentAngle = 0x2000;
+        } else if (currentAngle < -0x100) {
+            currentAngle = -0x2000;
         } else {
-            if (currentAngle < -0x100) {
-                currentAngle = -0x2000;
-            } else {
-                currentAngle = field_0xF38;
-            }
+            currentAngle = field_0xF38;
         }
 
         field_0xF38 = currentAngle;
@@ -727,11 +727,9 @@ BOOL daBoomerang_c::procMove() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     mDoMtx_stack_c::YrotM(mModelRotY);
-    mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
-    mCps.SetTgHitPos(old.pos);
-    mCps.SetAtHitPos(current.pos);
-    mCps.GetWorkAab().GetMinP()->y = 30.0f;
-    mCps.CalcAabBox();
+    cMtx_copy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
+    mCps.cM3dGCps::Set(old.pos, current.pos, 30.0f);
+    mCps.CalcAtVec();
 
     if (dComIfGp_event_getMode() == 0) {
         mBlur.copyBlur(mDoMtx_stack_c::get(), mModelRotY);
