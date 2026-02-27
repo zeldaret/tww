@@ -532,7 +532,7 @@ BOOL daBoomerang_c::procWait() {
             );
         }
 
-        field_0xF3A = 0;
+        mModelRotY = 0;
 
         cXyz diff = mTargetRayEnd - current.pos;
         cXyz diff_xz(diff.x, 0.0f, diff.z);
@@ -561,7 +561,7 @@ BOOL daBoomerang_c::procWait() {
 
         mCancelFlg = false;
 
-        mBlur.initBlur(mpModel->getBaseTRMtx(), field_0xF3A);
+        mBlur.initBlur(mpModel->getBaseTRMtx(), mModelRotY);
 
         cXyz bgHitPos(current.pos.x, current.pos.y + 60.0f, current.pos.z);
         checkBgHit(&bgHitPos, &current.pos);
@@ -608,9 +608,9 @@ BOOL daBoomerang_c::procMove() {
 
     if (dComIfGp_event_getMode() == 0) {
         fopAc_ac_c* pPlayer = dComIfGp_getLinkPlayer();
-        s16 s = field_0xF3A;
-        field_0xF3A -= 0x1F00;
-        if (s >= 0 && field_0xF3A < 0) {
+        s16 s = mModelRotY;
+        mModelRotY -= 0x1F00;
+        if (s >= 0 && mModelRotY < 0) {
             const s8 reverb = dComIfGp_getReverb(current.roomNo);
             mDoAud_seStart(JA_SE_LK_BOOM_FLY, &eyePos, 0, reverb);
         }
@@ -729,7 +729,7 @@ BOOL daBoomerang_c::procMove() {
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
-    mDoMtx_stack_c::YrotM(field_0xF3A);
+    mDoMtx_stack_c::YrotM(mModelRotY);
     mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
     mCps.SetTgHitPos(old.pos);
     mCps.SetAtHitPos(current.pos);
@@ -737,7 +737,7 @@ BOOL daBoomerang_c::procMove() {
     mCps.CalcAabBox();
 
     if (dComIfGp_event_getMode() == 0) {
-        mBlur.copyBlur(mDoMtx_stack_c::get(), field_0xF3A);
+        mBlur.copyBlur(mDoMtx_stack_c::get(), mModelRotY);
         dComIfG_Ccsp()->Set(&mCps);
         dComIfG_Ccsp()->SetMass(&mCps, 1);
     } else {
