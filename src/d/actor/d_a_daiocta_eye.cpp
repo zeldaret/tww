@@ -451,7 +451,7 @@ bool daDaiocta_Eye_c::_draw() {
 /* 000011EC-000012D4       .text createInit__15daDaiocta_Eye_cFv */
 void daDaiocta_Eye_c::createInit() {
     mbAppear = false;
-    cullMtx = mpModel->getBaseTRMtx();
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     mStts.Init(0, 0, this);
     mSph.Set(l_sph_src);
     mSph.SetStts(&mStts);

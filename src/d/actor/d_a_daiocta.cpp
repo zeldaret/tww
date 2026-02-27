@@ -1641,7 +1641,7 @@ void daDaiocta_c::createInit() {
     mAcch.OnSeaCheckOn();
     mAcch.OnSeaWaterHeight();
 
-    cullMtx = mpMorf->getModel()->getBaseTRMtx();
+    fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
 
     fopAcM_setCullSizeBox(
         this, 
