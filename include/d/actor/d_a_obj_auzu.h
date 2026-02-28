@@ -9,10 +9,10 @@ class J3DMaterial;
 
 namespace daObjAuzu {
     struct Attr_c {
-        f32 m00;
-        f32 m04;
-        f32 m08;
-        f32 mAnmSpeed;
+        /* 0x00 */ f32 mRadiusMult;
+        /* 0x04 */ f32 mOuterActivationMult;
+        /* 0x08 */ f32 mInnerActivationMult;
+        /* 0x0C */ f32 mAnmSpeed;
     };
     
     class Act_c : public fopAc_ac_c {

@@ -19,8 +19,18 @@ f32 L_radius = 2500.0f;
 
 const char Act_c::M_arcname[] = "Auzu";
 const Attr_c Act_c::M_attr[2] = {
-    { 1.5f, 1.5f, 1.3f, 0.5f },
-    { 2.0f, 2.0f, 2.0f, 1.0f }
+    { 
+        /* mRadiusMult          */ 1.5f, 
+        /* mOuterActivationMult */ 1.5f, 
+        /* mInnerActivationMult */ 1.3f, 
+        /* mAnmSpeed            */ 0.5f 
+    },
+    { 
+        /* mRadiusMult          */ 2.0f, 
+        /* mOuterActivationMult */ 2.0f, 
+        /* mInnerActivationMult */ 2.0f, 
+        /* mAnmSpeed            */ 1.0f 
+    }
 };
 };
 
@@ -33,11 +43,11 @@ BOOL daObjAuzu::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjAuzu::Act_c::create_heap() {
     bool create_result = false;
     J3DModelData* mdl_data = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, AUZU_BDL_AUZU));
-    JUT_ASSERT(0xE2, mdl_data != NULL);
+    JUT_ASSERT(226, mdl_data != NULL);
     mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
 
     J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(M_arcname, AUZU_BTK_AUZU));
-    JUT_ASSERT(0xEC, btk_data != NULL);
+    JUT_ASSERT(236, btk_data != NULL);
 
     int init_result = mBtkAnm.init(
         mdl_data, btk_data, TRUE, 
@@ -65,12 +75,12 @@ cPhs_State daObjAuzu::Act_c::_create() {
             if (fopAcM_entrySolidHeap(this, solidHeapCB, 3456)) {
                 fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
                 init_mtx();
-                f32 cull_xz = attr().m00 * 3000.0f;
+                f32 cull_xz = attr().mRadiusMult * 3000.0f;
                 fopAcM_setCullSizeBox(this, 
                     -cull_xz, -30.0f, -cull_xz, 
                     cull_xz, 30.0f, cull_xz
                 );
-                mbToAppear = 0;
+                mbToAppear = false;
 
                 if (prm_get_appear() == 1) {
                     mScaleAnimFactor = 0.0f;
@@ -82,8 +92,8 @@ cPhs_State daObjAuzu::Act_c::_create() {
                     }
                 }
 
-                mbBgmStarted = 0;
-                mKytagPcId = -1;
+                mbBgmStarted = false;
+                mKytagPcId = fpcM_ERROR_PROCESS_ID_e;
                 set_state_map();
             } else {
                 state = cPhs_ERROR_e;
@@ -121,9 +131,9 @@ void daObjAuzu::Act_c::set_mtx() {
 void daObjAuzu::Act_c::init_mtx() {
     mpModel->setBaseScale(
         cXyz(
-            scale.x * attr().m00,
+            scale.x * attr().mRadiusMult,
             scale.y,
-            scale.z * attr().m00
+            scale.z * attr().mRadiusMult
         )
     );
     set_mtx();
@@ -146,16 +156,22 @@ void daObjAuzu::Act_c::ship_whirl() {
     if (ship_p && fopAcM_GetName(ship_p) == PROC_SHIP) {
         f32 sqr_mag_xz = fopAcM_searchActorDistanceXZ2(this, ship_p);
 #if VERSION > VERSION_DEMO
-        f32 fVar1 = (daObjAuzu::L_radius * attr().m08) * (daObjAuzu::L_radius * attr().m08);
-        f32 fVar2 = (daObjAuzu::L_radius * attr().m04) * (daObjAuzu::L_radius * attr().m04);
+        f32 inner_activation = (daObjAuzu::L_radius * attr().mInnerActivationMult) * 
+                               (daObjAuzu::L_radius * attr().mInnerActivationMult);
+
+        f32 outer_activation = (daObjAuzu::L_radius * attr().mOuterActivationMult) * 
+                               (daObjAuzu::L_radius * attr().mOuterActivationMult);
 #else
-        f32 fVar2 = (daObjAuzu::L_radius * attr().m04) * (daObjAuzu::L_radius * attr().m04);
-        f32 fVar1 = (daObjAuzu::L_radius * attr().m08) * (daObjAuzu::L_radius * attr().m08);
+        f32 outer_activation = (daObjAuzu::L_radius * attr().mOuterActivationMult) * 
+                               (daObjAuzu::L_radius * attr().mOuterActivationMult);
+
+        f32 inner_activation = (daObjAuzu::L_radius * attr().mInnerActivationMult) * 
+                               (daObjAuzu::L_radius * attr().mInnerActivationMult);
 #endif
-        if (sqr_mag_xz < fVar2) {
+        if (sqr_mag_xz < outer_activation) {
             if (mScaleAnimFactor > 0.01f) {
                 bgm_start();
-                if (sqr_mag_xz < fVar1) {
+                if (sqr_mag_xz < inner_activation) {
                     ship_p->onWhirlFlg(fopAcM_GetID(this), prm_get_linkID());
                 } else {
                     ship_p->onWhirlFlgDirect(fopAcM_GetID(this), prm_get_linkID());
@@ -187,7 +203,11 @@ bool daObjAuzu::Act_c::_execute() {
         if (DEMO_SELECT(true, mScaleAnimFactor > 0.01f)) {
             daPy_lk_c* link_p = daPy_getPlayerLinkActorClass();
             fopAcM_searchActorDistanceXZ2(this, daPy_getPlayerLinkActorClass());
-            if (fopAcM_searchActorDistanceXZ2(this, link_p) < (daObjAuzu::L_radius * attr().m04) * (daObjAuzu::L_radius * attr().m04)) {
+            if (
+                fopAcM_searchActorDistanceXZ2(this, link_p) < 
+                ((daObjAuzu::L_radius * attr().mOuterActivationMult) * 
+                 (daObjAuzu::L_radius * attr().mOuterActivationMult))
+            ) {
                 link_p->setWhirlId(fopAcM_GetID(this));
             }
         }
@@ -214,17 +234,18 @@ bool daObjAuzu::Act_c::_execute() {
     fopAcM_seStart(this, JA_SE_ATM_SWIRL, param);
 
     if (mScaleAnimFactor > 0.0f && fpcM_IsErrorID(mKytagPcId)) {
-        cXyz sp30;
-        sp30.x = (mScaleAnimFactor * (daObjAuzu::L_radius * attr().m00)) / 5000.0f;
-        sp30.z = (mScaleAnimFactor * ((daObjAuzu::L_radius + 500.0f) * attr().m00)) / 5000.0f;
+        cXyz scaleXZ;
+        scaleXZ.x = (mScaleAnimFactor * (daObjAuzu::L_radius * attr().mRadiusMult)) / 5000.0f;
+        scaleXZ.z = (mScaleAnimFactor * ((daObjAuzu::L_radius + 500.0f) * attr().mRadiusMult)) / 5000.0f;
         mKytagPcId = fopAcM_create(
             PROC_KYTAG01, -1, &current.pos, 
-            tevStr.mRoomNo, &current.angle, &sp30);
+            tevStr.mRoomNo, &current.angle, &scaleXZ
+        );
     } else if (mScaleAnimFactor > 0.0f && fpcM_IsErrorID(mKytagPcId) == FALSE) {
         kytag01_class* kytag01_p = (kytag01_class *) fopAcM_SearchByID(mKytagPcId);
         if (kytag01_p){
-            kytag01_p->mWaveInfo.mInnerRadius = mScaleAnimFactor * (daObjAuzu::L_radius * attr().m00);
-            kytag01_p->mWaveInfo.mOuterRadius = mScaleAnimFactor * ((daObjAuzu::L_radius + 500.0f) * attr().m00);
+            kytag01_p->mWaveInfo.mInnerRadius = mScaleAnimFactor * (daObjAuzu::L_radius * attr().mRadiusMult);
+            kytag01_p->mWaveInfo.mOuterRadius = mScaleAnimFactor * ((daObjAuzu::L_radius + 500.0f) * attr().mRadiusMult);
         } 
     } else if (mScaleAnimFactor == 0.0f && fpcM_IsErrorID(mKytagPcId) == FALSE) {
         kytag01_class* kytag01_p = (kytag01_class *) fopAcM_SearchByID(mKytagPcId);
@@ -262,7 +283,6 @@ bool daObjAuzu::Act_c::_draw() {
         alpha
     );
     mDoExt_modelUpdateDL(mpModel);
-
     return true;
 }
 
