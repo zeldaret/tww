@@ -9,6 +9,7 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/d_material.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/res/res_link.h"
 #include "dolphin/gf/GF.h"
@@ -337,7 +338,53 @@ void daBoomerang_sightPacket_c::play(int n) {
 
 /* 800E1754-800E1998       .text draw__13daBoomerang_cFv */
 BOOL daBoomerang_c::draw() {
-    /* Nonmatching */
+    g_dComIfG_gameInfo.drawlist.setOpaListP1();
+    g_dComIfG_gameInfo.drawlist.setXluListP1();
+
+    if (!field_0xF33 && mNumTargets != 0) {
+        mSightPacket.resetSightOn();
+        for (int i = mCurTargetIdx; i < mNumTargets; i++) {
+            fopAc_ac_c* pActor = mTargetPtrs[i];
+            if (pActor) {
+                mSightPacket.setSight(&pActor->eyePos, i);
+            } else {
+                mSightPacket.setSight(NULL, i);
+            }
+        }
+
+        dComIfGd_set2DXlu(&mSightPacket);
+    }
+
+    if (mBlur.field_0x14 > 0) {
+        dComIfGd_entryZSortXluList(&mBlur, current.pos);
+    }
+
+    if (daPy_getPlayerActorClass()->checkPlayerNoDraw() && fpcM_GetParam(this) == 0) {
+        g_dComIfG_gameInfo.drawlist.setOpaList();
+        g_dComIfG_gameInfo.drawlist.setXluList();
+        return TRUE;
+    }
+
+    dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    dKy_getEnvlight().setLightTevColorType(mpModel, &tevStr);
+
+    if (fpcM_GetParam(this) == 0 && daPy_getPlayerLinkActorClass()->checkFreezeState()) {
+        dMat_control_c::iceUpdateDL(mpModel, -1, NULL);
+    } else {
+        mDoExt_modelUpdateDL(mpModel);
+    }
+
+    g_dComIfG_gameInfo.drawlist.setOpaList();
+    g_dComIfG_gameInfo.drawlist.setXluList();
+
+    if (mGroundY != -G_CM3D_F_INF && fpcM_GetParam(this) == 1) {
+        cXyz* pFloorNrm = dComIfG_Bgsp()->GetTriPla(mGndChk)->GetNP();
+        if (pFloorNrm) {
+            dComIfGd_setSimpleShadow(&current.pos, mGroundY, 30.0f, pFloorNrm);
+        }
+    }
+
+    return TRUE;
 }
 
 /* 800E1998-800E19B8       .text daBoomerang_Draw__FP13daBoomerang_c */

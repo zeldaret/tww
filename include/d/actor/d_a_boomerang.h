@@ -88,7 +88,7 @@ public:
     /* 0x0F37 */ u8 field_0xF37;
     /* 0x0F38 */ s16 field_0xF38;
     /* 0x0F3A */ s16 mModelRotY;
-    /* 0x0F3C */ u8 field_0xF3C[0xF40 - 0xF3C];
+    /* 0x0F3C */ f32 mGroundY;
     /* 0x0F40 */ cXyz mTargetRayEnd;
     /* 0x0F4C */ dCcD_Stts mStts;
     /* 0x0F88 */ dCcD_Cps mCps;
