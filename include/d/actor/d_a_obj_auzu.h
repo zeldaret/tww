@@ -12,7 +12,7 @@ namespace daObjAuzu {
         f32 m00;
         f32 m04;
         f32 m08;
-        f32 m0C;
+        f32 mAnmSpeed;
     };
     
     class Act_c : public fopAc_ac_c {
@@ -31,8 +31,8 @@ namespace daObjAuzu {
             PRM_TYPE_S = 0x14
         };
     public:
-        const Attr_c& attr() const { return M_attr[field_0x2B0]; }
-        bool is_appear() const { return field_0x2B4 > 0.999f; }
+        const Attr_c& attr() const { return M_attr[mType]; }
+        bool is_appear() const { return mScaleAnimFactor > 0.999f; }
         s32 prm_get_appear() const { return daObj::PrmAbstract(this, PRM_APPEAR_W, PRM_APPEAR_S); }
         s32 prm_get_linkID() const { return daObj::PrmAbstract(this, PRM_LINK_ID_W, PRM_LINK_ID_S); }
         s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
@@ -44,8 +44,8 @@ namespace daObjAuzu {
             0x00 <<  8 | // linkID
             0xFF <<  0;  // swSave 
         }
-        void to_appear() { field_0x2B8 = true; }
-        void to_disappear() { field_0x2B8 = false; }
+        void to_appear() { mbToAppear = true; }
+        void to_disappear() { mbToAppear = false; }
     
         bool create_heap();
         cPhs_State _create();
@@ -63,16 +63,16 @@ namespace daObjAuzu {
         static const char M_arcname[];
         static const Attr_c M_attr[2];
     public:
-        /* 0x290 */ request_of_phase_process_class field_0x290;
-        /* 0x298 */ J3DModel* field_0x298;
-        /* 0x29C */ mDoExt_btkAnm field_0x29C;
-        /* 0x2B0 */ s32 field_0x2B0;
-        /* 0x2B4 */ f32 field_0x2B4;
-        /* 0x2B8 */ u8 field_0x2B8;
-        /* 0x2B9 */ u8 field_0x2B9;
-        /* 0x2BA */ u8 field_0x2BA;
-        /* 0x2BB */ u8 field_0x2BB[0x2BC - 0x2BB];
-        /* 0x2BC */ fpc_ProcID field_0x2BC;
+        /* 0x290 */ request_of_phase_process_class mPhs;
+        /* 0x298 */ J3DModel* mpModel;
+        /* 0x29C */ mDoExt_btkAnm mBtkAnm;
+        /* 0x2B0 */ s32 mType;
+        /* 0x2B4 */ f32 mScaleAnimFactor;
+        /* 0x2B8 */ bool mbToAppear;
+        /* 0x2B9 */ bool mbIsExist;
+        /* 0x2BA */ bool mbBgmStarted;
+        /* 0x2BB */ /* 1 byte of alignment padding */
+        /* 0x2BC */ fpc_ProcID mKytagPcId;
     };  // Size: 0x2C0
 };
 

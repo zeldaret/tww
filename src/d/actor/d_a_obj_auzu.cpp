@@ -34,18 +34,18 @@ bool daObjAuzu::Act_c::create_heap() {
     bool create_result = false;
     J3DModelData* mdl_data = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, AUZU_BDL_AUZU));
     JUT_ASSERT(0xE2, mdl_data != NULL);
-    field_0x298 = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
+    mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
 
     J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(M_arcname, AUZU_BTK_AUZU));
     JUT_ASSERT(0xEC, btk_data != NULL);
 
-    int init_result = field_0x29C.init(
+    int init_result = mBtkAnm.init(
         mdl_data, btk_data, TRUE, 
-        J3DFrameCtrl::EMode_LOOP, attr().m0C, 
+        J3DFrameCtrl::EMode_LOOP, attr().mAnmSpeed, 
         0, -1, false, FALSE
     );
 
-    if (field_0x298 && init_result != 0) {
+    if (mpModel && init_result != 0) {
         create_result = true;
     }
 
@@ -55,35 +55,35 @@ bool daObjAuzu::Act_c::create_heap() {
 /* 000001F8-000003B8       .text _create__Q29daObjAuzu5Act_cFv */
 cPhs_State daObjAuzu::Act_c::_create() {
     cPhs_State state = cPhs_ERROR_e;
-    field_0x2B0 = prm_get_type();
+    mType = prm_get_type();
     fopAcM_SetupActor(this, daObjAuzu::Act_c);
 
-    field_0x2B9 = is_exist();
-    if (field_0x2B9 != 0) {
-        state = dComIfG_resLoad(&field_0x290, M_arcname);
+    mbIsExist = is_exist();
+    if (mbIsExist != 0) {
+        state = dComIfG_resLoad(&mPhs, M_arcname);
         if (state == cPhs_COMPLEATE_e) {
             if (fopAcM_entrySolidHeap(this, solidHeapCB, 3456)) {
-                fopAcM_SetMtx(this, field_0x298->getBaseTRMtx());
+                fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
                 init_mtx();
                 f32 cull_xz = attr().m00 * 3000.0f;
                 fopAcM_setCullSizeBox(this, 
                     -cull_xz, -30.0f, -cull_xz, 
                     cull_xz, 30.0f, cull_xz
                 );
-                field_0x2B8 = 0;
+                mbToAppear = 0;
 
                 if (prm_get_appear() == 1) {
-                    field_0x2B4 = 0.0f;
+                    mScaleAnimFactor = 0.0f;
                 } else {
                     if (fopAcM_isSwitch(this, prm_get_swSave())) {
-                        field_0x2B4 = 0.0f;
+                        mScaleAnimFactor = 0.0f;
                     } else {
-                        field_0x2B4 = 1.0f;
+                        mScaleAnimFactor = 1.0f;
                     }
                 }
 
-                field_0x2BA = 0;
-                field_0x2BC = -1;
+                mbBgmStarted = 0;
+                mKytagPcId = -1;
                 set_state_map();
             } else {
                 state = cPhs_ERROR_e;
@@ -96,15 +96,15 @@ cPhs_State daObjAuzu::Act_c::_create() {
 
 /* 0000045C-00000498       .text _delete__Q29daObjAuzu5Act_cFv */
 bool daObjAuzu::Act_c::_delete() {
-    if (field_0x2B9 != 0) {
-        dComIfG_resDeleteDemo(&field_0x290, M_arcname);
+    if (mbIsExist != 0) {
+        dComIfG_resDeleteDemo(&mPhs, M_arcname);
     }
     return true;
 }
 
 /* 00000498-000004E8       .text is_exist__Q29daObjAuzu5Act_cCFv */
 bool daObjAuzu::Act_c::is_exist() const {
-    if (field_0x2B0 == 0) {
+    if (mType == 0) {
         return dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT);
     }
     return true;
@@ -114,12 +114,12 @@ bool daObjAuzu::Act_c::is_exist() const {
 void daObjAuzu::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
-    field_0x298->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000554-000005B8       .text init_mtx__Q29daObjAuzu5Act_cFv */
 void daObjAuzu::Act_c::init_mtx() {
-    field_0x298->setBaseScale(
+    mpModel->setBaseScale(
         cXyz(
             scale.x * attr().m00,
             scale.y,
@@ -153,7 +153,7 @@ void daObjAuzu::Act_c::ship_whirl() {
         f32 fVar1 = (daObjAuzu::L_radius * attr().m08) * (daObjAuzu::L_radius * attr().m08);
 #endif
         if (sqr_mag_xz < fVar2) {
-            if (field_0x2B4 > 0.01f) {
+            if (mScaleAnimFactor > 0.01f) {
                 bgm_start();
                 if (sqr_mag_xz < fVar1) {
                     ship_p->onWhirlFlg(fopAcM_GetID(this), prm_get_linkID());
@@ -169,22 +169,22 @@ void daObjAuzu::Act_c::ship_whirl() {
 
 /* 00000788-000007DC       .text bgm_start__Q29daObjAuzu5Act_cFv */
 void daObjAuzu::Act_c::bgm_start() {
-    if (field_0x2B0 == 0 && !field_0x2BA) {
-        field_0x2BA = 1;
+    if (mType == 0 && !mbBgmStarted) {
+        mbBgmStarted = true;
         mDoAud_subBgmStart(JA_BGM_DIOCTA_BATTLE);
     }
 }
 
 /* 000007DC-00000AF8       .text _execute__Q29daObjAuzu5Act_cFv */
 bool daObjAuzu::Act_c::_execute() {
-    f32 fVar2;
+    f32 scale_target;
 #if VERSION > VERSION_JPN
     set_mtx();
 #endif
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         ship_whirl();
     } else {
-        if (DEMO_SELECT(true, field_0x2B4 > 0.01f)) {
+        if (DEMO_SELECT(true, mScaleAnimFactor > 0.01f)) {
             daPy_lk_c* link_p = daPy_getPlayerLinkActorClass();
             fopAcM_searchActorDistanceXZ2(this, daPy_getPlayerLinkActorClass());
             if (fopAcM_searchActorDistanceXZ2(this, link_p) < (daObjAuzu::L_radius * attr().m04) * (daObjAuzu::L_radius * attr().m04)) {
@@ -193,39 +193,41 @@ bool daObjAuzu::Act_c::_execute() {
         }
     }
 
-    field_0x29C.play();
+    mBtkAnm.play();
 
     if (prm_get_appear() == 1) {
-        if (field_0x2B8) {
-            fVar2 = 1.0f;
+        if (mbToAppear) {
+            scale_target = 1.0f;
         } else {
-            fVar2 = 0.0f;
+            scale_target = 0.0f;
         }
     } else {
         if (fopAcM_isSwitch(this, prm_get_swSave())) {
-            fVar2 = 0.0f;
+            scale_target = 0.0f;
         } else {
-            fVar2 = 1.0f;
+            scale_target = 1.0f;
         }
     }
 
-    cLib_chaseF(&field_0x2B4, fVar2, 0.02f);
-    s8 param = s8(100.0f * field_0x2B4);
+    cLib_chaseF(&mScaleAnimFactor, scale_target, 0.02f);
+    s8 param = s8(100.0f * mScaleAnimFactor);
     fopAcM_seStart(this, JA_SE_ATM_SWIRL, param);
 
-    if (field_0x2B4 > 0.0f && fpcM_IsErrorID(field_0x2BC)) {
+    if (mScaleAnimFactor > 0.0f && fpcM_IsErrorID(mKytagPcId)) {
         cXyz sp30;
-        sp30.x = (field_0x2B4 * (daObjAuzu::L_radius * attr().m00)) / 5000.0f;
-        sp30.z = (field_0x2B4 * ((daObjAuzu::L_radius + 500.0f) * attr().m00)) / 5000.0f;
-        field_0x2BC = fopAcM_create(PROC_KYTAG01, -1, &current.pos, tevStr.mRoomNo, &current.angle, &sp30);
-    } else if (field_0x2B4 > 0.0f && fpcM_IsErrorID(field_0x2BC) == FALSE) {
-        kytag01_class* kytag01_p = (kytag01_class *) fopAcM_SearchByID(field_0x2BC);
+        sp30.x = (mScaleAnimFactor * (daObjAuzu::L_radius * attr().m00)) / 5000.0f;
+        sp30.z = (mScaleAnimFactor * ((daObjAuzu::L_radius + 500.0f) * attr().m00)) / 5000.0f;
+        mKytagPcId = fopAcM_create(
+            PROC_KYTAG01, -1, &current.pos, 
+            tevStr.mRoomNo, &current.angle, &sp30);
+    } else if (mScaleAnimFactor > 0.0f && fpcM_IsErrorID(mKytagPcId) == FALSE) {
+        kytag01_class* kytag01_p = (kytag01_class *) fopAcM_SearchByID(mKytagPcId);
         if (kytag01_p){
-            kytag01_p->mWaveInfo.mInnerRadius = field_0x2B4 * (daObjAuzu::L_radius * attr().m00);
-            kytag01_p->mWaveInfo.mOuterRadius = field_0x2B4 * ((daObjAuzu::L_radius + 500.0f) * attr().m00);
+            kytag01_p->mWaveInfo.mInnerRadius = mScaleAnimFactor * (daObjAuzu::L_radius * attr().m00);
+            kytag01_p->mWaveInfo.mOuterRadius = mScaleAnimFactor * ((daObjAuzu::L_radius + 500.0f) * attr().m00);
         } 
-    } else if (field_0x2B4 == 0.0f && fpcM_IsErrorID(field_0x2BC) == FALSE) {
-        kytag01_class* kytag01_p = (kytag01_class *) fopAcM_SearchByID(field_0x2BC);
+    } else if (mScaleAnimFactor == 0.0f && fpcM_IsErrorID(mKytagPcId) == FALSE) {
+        kytag01_class* kytag01_p = (kytag01_class *) fopAcM_SearchByID(mKytagPcId);
         if (kytag01_p){
             fopAcM_delete(kytag01_p);
         }
@@ -251,15 +253,15 @@ void daObjAuzu::Act_c::set_material(J3DMaterial* i_materialP, u8 i_alphaVal) {
 /* 00000B88-00000C38       .text _draw__Q29daObjAuzu5Act_cFv */
 bool daObjAuzu::Act_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
-    g_env_light.setLightTevColorType(field_0x298, &tevStr);
-    field_0x29C.entry(field_0x298->getModelData());
-    J3DModelData* model_data_p = field_0x298->getModelData();
-    u8 alpha = u8(field_0x2B4 * 255.5f) & 0xFF;
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mBtkAnm.entry(mpModel->getModelData());
+    J3DModelData* model_data_p = mpModel->getModelData();
+    u8 alpha = u8(mScaleAnimFactor * 255.5f) & 0xFF;
     set_material(
         model_data_p->getJointNodePointer(0)->getMesh(), 
         alpha
     );
-    mDoExt_modelUpdateDL(field_0x298);
+    mDoExt_modelUpdateDL(mpModel);
 
     return true;
 }
