@@ -57,7 +57,7 @@ void daBoomerang_blur_c::initBlur(MtxP mtx, s16 yRot) {
     arr_0x24[0][1] = arr_0x24[0][0];
     arr_0x2F4[0][1] = arr_0x2F4[0][0];
 
-    field_0x14 = 0;
+    numTrailSegments = 0;
 
     pos.x = mtx[0][3];
     pos.y = mtx[1][3];
@@ -119,10 +119,10 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
         mDoMtx_stack_c::YrotM(-0x633);
     }
 
-    field_0x14 += 5;
+    numTrailSegments += 5;
 
-    if (field_0x14 >= 59) {
-        field_0x14 = 58;
+    if (numTrailSegments >= 59) {
+        numTrailSegments = 58;
     }
 }
 
@@ -159,7 +159,7 @@ void daBoomerang_blur_c::draw() {
     static GXColor color0 = {0xFF, 0xFF, 0x7B, 0x96};
     GFSetTevColor(GX_TEVREG0, color0);
 
-    s16 alphaStep = 0xFF / (field_0x14 / 2 + 1);
+    s16 alphaStep = 0xFF / (numTrailSegments / 2 + 1);
 
     GFSetVtxDescv(l_vtxDescList);
     GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
@@ -168,7 +168,7 @@ void daBoomerang_blur_c::draw() {
 
     // Start quads. This is a bit like calling GXBegin().
     GXFIFO.u8 = GX_QUADS | GX_VTXFMT0; // type | fmt
-    GXFIFO.u16 = field_0x14 * 4 + 4;   // vert_num
+    GXFIFO.u16 = numTrailSegments * 4 + 4;   // vert_num
 
     s16 alpha1;
     s16 alphaNext;
@@ -176,8 +176,8 @@ void daBoomerang_blur_c::draw() {
 
     alphaNext = alphaStep;
     alpha0 = 0;
-    if (field_0x14 >= 0) {
-        for (int i = field_0x14 + 1; i >= 0; i--) {
+    if (numTrailSegments >= 0) {
+        for (int i = numTrailSegments + 1; i >= 0; i--) {
             alpha1 = alphaNext;
             {
                 // GXPositionXYZ(arr_0x24[0][i]);
@@ -211,12 +211,12 @@ void daBoomerang_blur_c::draw() {
 
     // Start quads. This is a bit like calling GXBegin().
     GXFIFO.u8 = GX_QUADS | GX_VTXFMT0; // type | fmt
-    GXFIFO.u16 = field_0x14 * 4 + 4;   // vert_num
+    GXFIFO.u16 = numTrailSegments * 4 + 4;   // vert_num
 
     alphaNext = alphaStep;
     alpha0 = 0;
-    if (field_0x14 >= 0) {
-        for (int i = field_0x14 + 1; i >= 0; i--) {
+    if (numTrailSegments >= 0) {
+        for (int i = numTrailSegments + 1; i >= 0; i--) {
             alpha1 = alphaNext;
             {
                 GXPosition3f32(arr_0x5C4[0][i].x, arr_0x5C4[0][i].y, arr_0x5C4[0][i].z);
@@ -356,7 +356,7 @@ BOOL daBoomerang_c::draw() {
         dComIfGd_set2DXlu(&mSightPacket);
     }
 
-    if (mBlur.field_0x14 > 0) {
+    if (mBlur.numTrailSegments > 0) {
         dComIfGd_entryZSortXluList(&mBlur, current.pos);
     }
 
@@ -549,8 +549,8 @@ BOOL daBoomerang_c::procWait() {
     speedF = 0.0f;
     setKeepMatrix();
 
-    if (mBlur.field_0x14 > 0) {
-        mBlur.field_0x14 -= 5;
+    if (mBlur.numTrailSegments > 0) {
+        mBlur.numTrailSegments -= 5;
     }
 
     if (fpcM_GetParam(this) == 1) {
