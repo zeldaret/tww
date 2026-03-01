@@ -83,7 +83,7 @@ public:
     /* 0x0F32 */ u8 mCurTargetIdx;
     /* 0x0F33 */ bool field_0xF33;
     /* 0x0F34 */ bool mCancelFlg;
-    /* 0x0F35 */ bool mInWater;
+    /* 0x0F35 */ u8 mInWater;
     /* 0x0F36 */ bool field_0xF36;
     /* 0x0F37 */ u8 field_0xF37;
     /* 0x0F38 */ s16 field_0xF38;

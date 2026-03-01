@@ -655,8 +655,7 @@ BOOL daBoomerang_c::procMove() {
         s16 s = mModelRotY;
         mModelRotY -= 0x1F00;
         if (s >= 0 && mModelRotY < 0) {
-            const s8 reverb = dComIfGp_getReverb(current.roomNo);
-            mDoAud_seStart(JA_SE_LK_BOOM_FLY, &eyePos, 0, reverb);
+            mDoAud_seStart(JA_SE_LK_BOOM_FLY, &eyePos, 0, dComIfGp_getReverb(current.roomNo));
         }
         setAimPos();
 
@@ -670,11 +669,11 @@ BOOL daBoomerang_c::procMove() {
         }
 
         s16 angle = cM_atan2s(norm.x, norm.z);
-        s16 currentAngle = current.angle.y;
+        s16 currentAngle = angle - current.angle.y;
 
         if (field_0xF2E) {
             field_0xF2E = false;
-            if (angle - currentAngle > 1) {
+            if (s16(angle - current.angle.y) > 0) {
                 current.angle.y = angle - 0x3000;
             } else {
                 current.angle.y = angle + 0x3000;
@@ -696,8 +695,8 @@ BOOL daBoomerang_c::procMove() {
                 }
             }
         } else {
-            if (dist < speedF || mCps.ChkAtHit() && mCps.GetTgHitAc() == mTargetPtrs[mCurTargetIdx]) {
-                // Boomerang hit its current target
+            if (dist < speedF || mCps.ChkAtHit() && mCps.GetAtHitAc() == mTargetPtrs[mCurTargetIdx]) {
+                // Boomerang hit its current target.
                 field_0xF2E = true;
                 mTargetPtrs[mCurTargetIdx] = NULL;
                 mTargetIds[mCurTargetIdx] = fpcM_ERROR_PROCESS_ID_e;
@@ -706,7 +705,7 @@ BOOL daBoomerang_c::procMove() {
             }
         }
 
-        if (!field_0xF2C && (mCancelFlg != false || ((!field_0xF36 && mNumTargets <= mCurTargetIdx) || mCps.ChkAtShieldHit()))) {
+        if (!field_0xF2C && (mCancelFlg || (!field_0xF36 && mNumTargets <= mCurTargetIdx) || mCps.ChkAtShieldHit())) {
             field_0xF2E = true;
             field_0xF2C = true;
             resetLockActor();
@@ -720,36 +719,31 @@ BOOL daBoomerang_c::procMove() {
             s16 newAngle;
             if (!field_0xF33) {
                 f32 a = 20.0f - dist * 2.0f / speedF;
-                f32 b;
                 if (a < 0.0f) {
-                    b = 0.0f;
-                } else {
-                    b = a;
-                    if (a > 18.0f) {
-                        b = (18.0f - a) * 40.0f + 20.0f;
-                    }
+                    a = 0.0f;
+                } else if (a > 18.0f) {
+                    a = 20.0f + 40.0f * (a - 18.0f);
                 }
-                newAngle = b * 256.0f + 1024.0f;
+                newAngle = a * 256.0f + 1024.0f;
             } else {
                 newAngle = 0x4000;
             }
 
-            if (currentAngle <= newAngle) {
-                s16 negAngle = -newAngle;
-                newAngle = currentAngle;
-                if (currentAngle < negAngle) {
-                    newAngle = negAngle;
-                }
+            if (currentAngle > newAngle) {
+                currentAngle = newAngle;
+            } else if (currentAngle < -newAngle) {
+                currentAngle = -newAngle;
             }
-            currentAngle = newAngle;
             current.angle.y += currentAngle;
         }
 
         angle = cM_atan2s(-norm.y, norm.absXZ());
         current.angle.x = angle;
+
         current.pos.x += speedF * cM_scos(current.angle.x) * cM_ssin(current.angle.y);
-        current.pos.y += speedF * cM_ssin(current.angle.x);
+        current.pos.y -= speedF * cM_ssin(current.angle.x);
         current.pos.z += speedF * cM_scos(current.angle.x) * cM_scos(current.angle.y);
+
         shape_angle.y = current.angle.y;
         shape_angle.x = current.angle.x;
 
@@ -785,8 +779,9 @@ BOOL daBoomerang_c::procMove() {
     } else {
         mBlur.copyBlur(mDoMtx_stack_c::get(), 0);
         mCps.ResetAtHit();
-        mInWater = daPy_lk_c::setItemWaterEffect(this, mInWater, TRUE) != FALSE;
     }
+
+    mInWater = daPy_lk_c::setItemWaterEffect(this, mInWater, TRUE);
 
     return TRUE;
 }
