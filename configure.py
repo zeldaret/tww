@@ -1684,7 +1684,7 @@ config.libs = [
     ActorRel(Matching, "d_a_obj_ajav"),
     ActorRel(NonMatching, "d_a_obj_apzl"),
     ActorRel(NonMatching, "d_a_obj_ashut"),
-    ActorRel(NonMatching, "d_a_obj_auzu"),
+    ActorRel(Matching, "d_a_obj_auzu"),
     ActorRel(NonMatching, "d_a_obj_buoyflag"),
     ActorRel(Matching, "d_a_obj_buoyrace"),
     ActorRel(Matching,    "d_a_obj_correct"),
