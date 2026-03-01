@@ -155,6 +155,7 @@ void daBoomerang_blur_c::draw() {
 
     GXCallDisplayList(l_matDL, 0x80);
 
+    // Light yellow color for the trail.
     static GXColor color0 = {0xFF, 0xFF, 0x7B, 0x96};
     GFSetTevColor(GX_TEVREG0, color0);
 
@@ -165,9 +166,9 @@ void daBoomerang_blur_c::draw() {
 
     GFLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
 
-    // Start quads.
-    GXFIFO.u8 = GX_QUADS | GX_VTXFMT0;
-    GXFIFO.u16 = field_0x14 * 4 + 4;
+    // Start quads. This is a bit like calling GXBegin().
+    GXFIFO.u8 = GX_QUADS | GX_VTXFMT0; // type | fmt
+    GXFIFO.u16 = field_0x14 * 4 + 4;   // vert_num
 
     s16 alpha1;
     s16 alphaNext;
@@ -208,9 +209,9 @@ void daBoomerang_blur_c::draw() {
         }
     }
 
-    // Start quads.
-    GXFIFO.u8 = GX_QUADS | GX_VTXFMT0;
-    GXFIFO.u16 = field_0x14 * 4 + 4;
+    // Start quads. This is a bit like calling GXBegin().
+    GXFIFO.u8 = GX_QUADS | GX_VTXFMT0; // type | fmt
+    GXFIFO.u16 = field_0x14 * 4 + 4;   // vert_num
 
     alphaNext = alphaStep;
     alpha0 = 0;
