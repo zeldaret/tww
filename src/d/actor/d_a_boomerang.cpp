@@ -642,8 +642,7 @@ BOOL daBoomerang_c::procWait() {
 
 /* 800E239C-800E2AF4       .text procMove__13daBoomerang_cFv */
 BOOL daBoomerang_c::procMove() {
-    /* Nonmatching */
-    static cXyz at_offset;
+    static cXyz at_offset; // Never used.
 
     if (field_0xF2F) {
         fopAcM_delete(this);
@@ -678,10 +677,8 @@ BOOL daBoomerang_c::procMove() {
             } else {
                 current.angle.y = angle + 0x3000;
             }
-            currentAngle = current.angle.y;
+            currentAngle = angle - current.angle.y;
         }
-
-        currentAngle = angle - currentAngle;
 
         if (field_0xF2C) {
             if (dist < speedF * 2.0f) {
@@ -768,7 +765,7 @@ BOOL daBoomerang_c::procMove() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     mDoMtx_stack_c::YrotM(mModelRotY);
-    cMtx_copy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mCps.cM3dGCps::Set(old.pos, current.pos, 30.0f);
     mCps.CalcAtVec();
 
