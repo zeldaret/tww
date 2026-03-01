@@ -166,81 +166,85 @@ void daBoomerang_blur_c::draw() {
 
     GFLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
 
-    // Start quads. This is a bit like calling GXBegin().
-    GXFIFO.u8 = GX_QUADS | GX_VTXFMT0; // type | fmt
-    GXFIFO.u16 = numTrailSegments * 4 + 4;   // vert_num
-
     s16 alpha1;
     s16 alphaNext;
     s16 alpha0;
 
-    alphaNext = alphaStep;
-    alpha0 = 0;
-    if (numTrailSegments >= 0) {
-        for (int i = numTrailSegments + 1; i >= 0; i--) {
-            alpha1 = alphaNext;
-            {
-                // GXPositionXYZ(arr_0x24[0][i]);
-                GXPosition3f32(arr_0x24[0][i].x, arr_0x24[0][i].y, arr_0x24[0][i].z);
-                GXPosition1x16(alpha1);
-                GXPosition1x16(0x00);
-            }
-            {
-                // GXPositionXYZ(arr_0x2F4[0][i]);
-                GXPosition3f32(arr_0x2F4[0][i].x, arr_0x2F4[0][i].y, arr_0x2F4[0][i].z);
-                GXPosition1x16(alpha1);
-                GXPosition1x16(0xFF);
-            }
-            {
-                // GXPositionXYZ(arr_0x2F4[0][i + 1]);
-                GXPosition3f32(arr_0x2F4[0][i + 1].x, arr_0x2F4[0][i + 1].y, arr_0x2F4[0][i + 1].z);
-                GXPosition1x16(alpha0);
-                GXPosition1x16(0xFF);
-            }
-            {
-                // GXPositionXYZ(arr_0x24[0][i]);
-                GXPosition3f32(arr_0x24[0][i + 1].x, arr_0x24[0][i + 1].y, arr_0x24[0][i + 1].z);
-                GXPosition1x16(alpha0);
-                GXPosition1x16(0x00);
-            }
+    {
+        // Start quads. This is a bit like calling GXBegin().
+        GXFIFO.u8 = GX_QUADS | GX_VTXFMT0;     // type | fmt
+        GXFIFO.u16 = numTrailSegments * 4 + 4; // vert_num
 
-            alphaNext = alpha1 + alphaStep;
-            alpha0 = alpha1;
+        alphaNext = alphaStep;
+        alpha0 = 0;
+        if (numTrailSegments >= 0) {
+            for (int i = numTrailSegments + 1; i >= 0; i--) {
+                alpha1 = alphaNext;
+                {
+                    // GXPositionXYZ(arr_0x24[0][i]);
+                    GXPosition3f32(arr_0x24[0][i].x, arr_0x24[0][i].y, arr_0x24[0][i].z);
+                    GXPosition1x16(alpha1);
+                    GXPosition1x16(0x00);
+                }
+                {
+                    // GXPositionXYZ(arr_0x2F4[0][i]);
+                    GXPosition3f32(arr_0x2F4[0][i].x, arr_0x2F4[0][i].y, arr_0x2F4[0][i].z);
+                    GXPosition1x16(alpha1);
+                    GXPosition1x16(0xFF);
+                }
+                {
+                    // GXPositionXYZ(arr_0x2F4[0][i + 1]);
+                    GXPosition3f32(arr_0x2F4[0][i + 1].x, arr_0x2F4[0][i + 1].y, arr_0x2F4[0][i + 1].z);
+                    GXPosition1x16(alpha0);
+                    GXPosition1x16(0xFF);
+                }
+                {
+                    // GXPositionXYZ(arr_0x24[0][i]);
+                    GXPosition3f32(arr_0x24[0][i + 1].x, arr_0x24[0][i + 1].y, arr_0x24[0][i + 1].z);
+                    GXPosition1x16(alpha0);
+                    GXPosition1x16(0x00);
+                }
+
+                alphaNext = alpha1 + alphaStep;
+                alpha0 = alpha1;
+            }
         }
     }
 
-    // Start quads. This is a bit like calling GXBegin().
-    GXFIFO.u8 = GX_QUADS | GX_VTXFMT0; // type | fmt
-    GXFIFO.u16 = numTrailSegments * 4 + 4;   // vert_num
+    {
+        // Start quads. This is a bit like calling GXBegin().
+        GXFIFO.u8 = GX_QUADS | GX_VTXFMT0;     // type | fmt
+        GXFIFO.u16 = numTrailSegments * 4 + 4; // vert_num
 
-    alphaNext = alphaStep;
-    alpha0 = 0;
-    if (numTrailSegments >= 0) {
-        for (int i = numTrailSegments + 1; i >= 0; i--) {
-            alpha1 = alphaNext;
-            {
-                GXPosition3f32(arr_0x5C4[0][i].x, arr_0x5C4[0][i].y, arr_0x5C4[0][i].z);
-                GXPosition1x16(alpha1);
-                GXPosition1x16(0x00);
-            }
-            {
-                GXPosition3f32(arr_0x894[0][i].x, arr_0x894[0][i].y, arr_0x894[0][i].z);
-                GXPosition1x16(alpha1);
-                GXPosition1x16(0xFF);
-            }
-            {
-                GXPosition3f32(arr_0x894[0][i + 1].x, arr_0x894[0][i + 1].y, arr_0x894[0][i + 1].z);
-                GXPosition1x16(alpha0);
-                GXPosition1x16(0xFF);
-            }
-            {
-                GXPosition3f32(arr_0x5C4[0][i + 1].x, arr_0x5C4[0][i + 1].y, arr_0x5C4[0][i + 1].z);
-                GXPosition1x16(alpha0);
-                GXPosition1x16(0x00);
-            }
+        alphaNext = alphaStep;
+        alpha0 = 0;
+        if (numTrailSegments >= 0) {
+            for (int i = numTrailSegments + 1; i >= 0; i--) {
+                alpha1 = alphaNext;
+                {
+                    GXPosition3f32(arr_0x5C4[0][i].x, arr_0x5C4[0][i].y, arr_0x5C4[0][i].z);
+                    GXPosition1x16(alpha1);
+                    GXPosition1x16(0x00);
+                }
+                {
+                    GXPosition3f32(arr_0x894[0][i].x, arr_0x894[0][i].y, arr_0x894[0][i].z);
+                    GXPosition1x16(alpha1);
+                    GXPosition1x16(0xFF);
+                }
+                {
+                    GXPosition3f32(arr_0x894[0][i + 1].x, arr_0x894[0][i + 1].y, arr_0x894[0][i + 1].z);
+                    GXPosition1x16(alpha0);
+                    GXPosition1x16(0xFF);
+                }
+                {
+                    GXPosition3f32(arr_0x5C4[0][i + 1].x, arr_0x5C4[0][i + 1].y, arr_0x5C4[0][i + 1].z);
+                    GXPosition1x16(alpha0);
+                    GXPosition1x16(0x00);
+                }
 
-            alphaNext = alpha1 + alphaStep;
-            alpha0 = alpha1;
+                alphaNext = alpha1 + alphaStep;
+                alpha0 = alpha1;
+            }
         }
     }
 
