@@ -643,7 +643,7 @@ BOOL daBoomerang_c::procWait() {
 /* 800E239C-800E2AF4       .text procMove__13daBoomerang_cFv */
 BOOL daBoomerang_c::procMove() {
     /* Nonmatching */
-    static cXyz at_offset(0.0f, 0.0f, 0.0f);
+    static cXyz at_offset;
 
     if (field_0xF2F) {
         fopAcM_delete(this);
