@@ -166,17 +166,15 @@ void daBoomerang_blur_c::draw() {
 
     GFLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
 
-    s16 alpha1;
-    s16 alphaNext;
-    s16 alpha0;
-
     {
         // Start quads. This is a bit like calling GXBegin().
         GXFIFO.u8 = GX_QUADS | GX_VTXFMT0;     // type | fmt
         GXFIFO.u16 = numTrailSegments * 4 + 4; // vert_num
 
-        alphaNext = alphaStep;
-        alpha0 = 0;
+        s16 alpha1;
+        s16 alphaNext = alphaStep;
+        s16 alpha0 = 0;
+
         if (numTrailSegments >= 0) {
             for (int i = numTrailSegments + 1; i >= 0; i--) {
                 alpha1 = alphaNext;
@@ -216,8 +214,10 @@ void daBoomerang_blur_c::draw() {
         GXFIFO.u8 = GX_QUADS | GX_VTXFMT0;     // type | fmt
         GXFIFO.u16 = numTrailSegments * 4 + 4; // vert_num
 
-        alphaNext = alphaStep;
-        alpha0 = 0;
+        s16 alpha1;
+        s16 alphaNext = alphaStep;
+        s16 alpha0 = 0;
+
         if (numTrailSegments >= 0) {
             for (int i = numTrailSegments + 1; i >= 0; i--) {
                 alpha1 = alphaNext;
