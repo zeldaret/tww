@@ -485,7 +485,7 @@ BOOL daBoomerang_c::procWait() {
     setKeepMatrix();
 
     if (mBlur.numTrailSegments > 0) {
-        mBlur.numTrailSegments -= 5;
+        mBlur.numTrailSegments -= daBoomerang_blur_c::SEGMENTS_PER_STEP;
     }
 
     if (fpcM_GetParam(this) == 1) {
