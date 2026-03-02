@@ -129,7 +129,8 @@ void daBoomerang_blur_c::draw() {
     static GXColor color0 = {0xFF, 0xFF, 0x7B, 0x96};
     GFSetTevColor(GX_TEVREG0, color0);
 
-    s16 uCoordStep = 0xFF / ((numTrailSegments >> 1) + 1);
+    const s32 uCoordStep = 0xFF / ((numTrailSegments >> 1) + 1);
+    s16 uCoord1 = uCoordStep;
     s16 uCoord0 = 0;
 
     GFSetVtxDescv(l_vtxDescList);
@@ -142,43 +143,35 @@ void daBoomerang_blur_c::draw() {
     GFTexCoord2s16((u), (v))
 
     {
-        s16 uCoordNext = uCoordStep;
-        s16 uCoord1;
-
         GFBegin(GX_QUADS, GX_VTXFMT0, numTrailSegments * 4 + 4);
 
         for (int i = numTrailSegments; i >= 0; i--) {
-            uCoord1 = uCoordNext;
-
             QUAD_VERT(trail0_vtxArr0[i], uCoord1, 0x00);
             QUAD_VERT(trail0_vtxArr1[i], uCoord1, 0xFF);
             QUAD_VERT(trail0_vtxArr1[i + 1], uCoord0, 0xFF);
             QUAD_VERT(trail0_vtxArr0[i + 1], uCoord0, 0x00);
 
             uCoord0 = uCoord1;
-            uCoordNext = uCoord1 + uCoordStep;
+            uCoord1 += uCoordStep;
         }
 
         GFEnd();
     }
 
     {
-        s16 uCoordNext = uCoordStep;
+        uCoord1 = uCoordStep;
         uCoord0 = 0;
-        s16 uCoord1;
 
         GFBegin(GX_QUADS, GX_VTXFMT0, numTrailSegments * 4 + 4);
 
         for (int i = numTrailSegments; i >= 0; i--) {
-            uCoord1 = uCoordNext;
-
             QUAD_VERT(trail1_vtxArr0[i], uCoord1, 0x00);
             QUAD_VERT(trail1_vtxArr1[i], uCoord1, 0xFF);
             QUAD_VERT(trail1_vtxArr1[i + 1], uCoord0, 0xFF);
             QUAD_VERT(trail1_vtxArr0[i + 1], uCoord0, 0x00);
 
             uCoord0 = uCoord1;
-            uCoordNext = uCoord1 + uCoordStep;
+            uCoord1 += uCoordStep;
         }
 
         GFEnd();
