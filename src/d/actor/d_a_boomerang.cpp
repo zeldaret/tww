@@ -294,7 +294,7 @@ BOOL daBoomerang_c::draw() {
         dComIfGd_entryZSortXluList(&mBlur, current.pos);
     }
 
-    if (daPy_getPlayerActorClass()->checkPlayerNoDraw() && fpcM_GetParam(this) == 0) {
+    if (daPy_getPlayerActorClass()->checkPlayerNoDraw() && fopAcM_GetParam(this) == 0) {
         g_dComIfG_gameInfo.drawlist.setOpaList();
         g_dComIfG_gameInfo.drawlist.setXluList();
         return TRUE;
@@ -303,7 +303,7 @@ BOOL daBoomerang_c::draw() {
     dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     dKy_getEnvlight().setLightTevColorType(mpModel, &tevStr);
 
-    if (fpcM_GetParam(this) == 0 && daPy_getPlayerLinkActorClass()->checkFreezeState()) {
+    if (fopAcM_GetParam(this) == 0 && daPy_getPlayerLinkActorClass()->checkFreezeState()) {
         dMat_control_c::iceUpdateDL(mpModel, -1, NULL);
     } else {
         mDoExt_modelUpdateDL(mpModel);
@@ -312,7 +312,7 @@ BOOL daBoomerang_c::draw() {
     g_dComIfG_gameInfo.drawlist.setOpaList();
     g_dComIfG_gameInfo.drawlist.setXluList();
 
-    if (mGroundY != -G_CM3D_F_INF && fpcM_GetParam(this) == 1) {
+    if (mGroundY != -G_CM3D_F_INF && fopAcM_GetParam(this) == 1) {
         cXyz* pFloorNrm = dComIfG_Bgsp()->GetTriPla(mGndChk)->GetNP();
         if (pFloorNrm) {
             dComIfGd_setSimpleShadow(&current.pos, mGroundY, 30.0f, pFloorNrm);
@@ -342,7 +342,7 @@ float daBoomerang_c::getFlyMax() {
 
 /* 800E1A14-800E1AAC       .text rockLineCallback__13daBoomerang_cFP10fopAc_ac_c */
 void daBoomerang_c::rockLineCallback(fopAc_ac_c* pHitActor) {
-    if (fpcM_GetParam(this) == 0) {
+    if (fopAcM_GetParam(this) == 0) {
         if (pHitActor) {
             setLockActor(pHitActor, TRUE);
         }
@@ -488,7 +488,7 @@ BOOL daBoomerang_c::procWait() {
         mBlur.numTrailSegments -= daBoomerang_blur_c::SEGMENTS_PER_STEP;
     }
 
-    if (fpcM_GetParam(this) == 1) {
+    if (fopAcM_GetParam(this) == 1) {
         speedF = 60.0f;
         mCps.ResetAtHit();
         mCps.OffAtNoTgHitInfSet();
