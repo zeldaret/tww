@@ -116,7 +116,7 @@ void daBoomerang_blur_c::draw() {
 
     static GXTexObj texObj;
 
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
 #endif
@@ -762,6 +762,8 @@ BOOL daBoomerang_c::createHeap() {
 
 #if VERSION == VERSION_DEMO
     JUT_ASSERT(1543, modelData != NULL);
+#elif VERSION == VERSION_JPN
+    JUT_ASSERT(1539, modelData != NULL);
 #else
     JUT_ASSERT(1546, modelData != NULL);
 #endif
@@ -835,6 +837,8 @@ cPhs_State daBoomerang_c::create() {
 
 #if VERSION == VERSION_DEMO
         JUT_ASSERT(1626, tmp_img != NULL);
+#elif VERSION == VERSION_JPN
+        JUT_ASSERT(1622, tmp_img != NULL);
 #else
         JUT_ASSERT(1629, tmp_img != NULL);
 #endif
@@ -847,6 +851,8 @@ cPhs_State daBoomerang_c::create() {
 
 #if VERSION == VERSION_DEMO
         JUT_ASSERT(1634, tmp_img != NULL);
+#elif VERSION == VERSION_JPN
+        JUT_ASSERT(1630, tmp_img != NULL);
 #else
         JUT_ASSERT(1637, tmp_img != NULL);
 #endif
