@@ -129,7 +129,8 @@ void daBoomerang_blur_c::draw() {
     static GXColor color0 = {0xFF, 0xFF, 0x7B, 0x96};
     GFSetTevColor(GX_TEVREG0, color0);
 
-    s16 uCoordStep = 0xFF / (numTrailSegments / 2 + 1);
+    s16 uCoordStep = 0xFF / ((numTrailSegments >> 1) + 1);
+    s16 uCoord0 = 0;
 
     GFSetVtxDescv(l_vtxDescList);
     GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
@@ -138,74 +139,72 @@ void daBoomerang_blur_c::draw() {
 
 #define QUAD_VERT(xyz, u, v)                                                                                                                                   \
     do {                                                                                                                                                       \
-        cXyz posXyz = (xyz);                                                                                                                                   \
-        f32 x = posXyz.x;                                                                                                                                      \
-        GX_WRITE_U32(*reinterpret_cast<u32*>(&x));                                                                                                             \
-        f32 y = posXyz.y;                                                                                                                                      \
-        GX_WRITE_U32(*reinterpret_cast<u32*>(&y));                                                                                                             \
+        cXyz posXyz;                                                                                                                                           \
+        posXyz.z = (xyz).z;                                                                                                                                    \
+        posXyz.y = (xyz).y;                                                                                                                                    \
+        posXyz.x = (xyz).x;                                                                                                                                    \
         f32 z = posXyz.z;                                                                                                                                      \
         GX_WRITE_U32(*reinterpret_cast<u32*>(&z));                                                                                                             \
+        f32 y = posXyz.y;                                                                                                                                      \
+        GX_WRITE_U32(*reinterpret_cast<u32*>(&y));                                                                                                             \
+        f32 x = posXyz.x;                                                                                                                                      \
+        GX_WRITE_U32(*reinterpret_cast<u32*>(&x));                                                                                                             \
         GXTexCoord2s16((u), (v));                                                                                                                              \
     } while (0)
 
     {
+        s16 uCoordNext = uCoordStep;
+        s16 uCoord1;
+
         // Start quads. This is a bit like calling GXBegin().
         const s32 numVerts = numTrailSegments * 4 + 4;
         GXFIFO.u8 = GX_QUADS | GX_VTXFMT0; // type | fmt
         GXFIFO.u16 = numVerts;             // vert_num
 
-        s16 uCoord1;
-        s16 uCoordNext = uCoordStep;
-        s16 uCoord0 = 0;
+        for (int i = numTrailSegments; i >= 0; i--) {
+            uCoord1 = uCoordNext;
 
-        if (numTrailSegments >= 0) {
-            for (int i = numTrailSegments + 1; i >= 0; i--) {
-                uCoord1 = uCoordNext;
-
-                {
-                    // TODO: Replace with QUAD_VERT.
-                    cXyz posXyz = trail0_vtxArr0[i];
-                    f32 x = posXyz.x;
-                    GX_WRITE_U32(*reinterpret_cast<u32*>(&x));
-                    f32 y = posXyz.y;
-                    GX_WRITE_U32(*reinterpret_cast<u32*>(&y));
-                    f32 z = posXyz.z;
-                    GX_WRITE_U32(*reinterpret_cast<u32*>(&z));
-                    GXTexCoord2s16(uCoord1, 0x00);
-                }
-
-                QUAD_VERT(trail0_vtxArr1[i], uCoord1, 0xFF);
-                QUAD_VERT(trail0_vtxArr1[i + 1], uCoord0, 0xFF);
-                QUAD_VERT(trail0_vtxArr0[i + 1], uCoord0, 0x00);
-
-                uCoordNext = uCoord1 + uCoordStep;
-                uCoord0 = uCoord1;
+            {
+                // TODO: Replace with QUAD_VERT.
+                cXyz posXyz = trail0_vtxArr0[i];
+                f32 z = posXyz.z;
+                GX_WRITE_U32(*reinterpret_cast<u32*>(&z));
+                f32 y = posXyz.y;
+                GX_WRITE_U32(*reinterpret_cast<u32*>(&y));
+                f32 x = posXyz.x;
+                GX_WRITE_U32(*reinterpret_cast<u32*>(&x));
+                GXTexCoord2s16(uCoord1, 0x00);
             }
+
+            QUAD_VERT(trail0_vtxArr1[i], uCoord1, 0xFF);
+            QUAD_VERT(trail0_vtxArr1[i + 1], uCoord0, 0xFF);
+            QUAD_VERT(trail0_vtxArr0[i + 1], uCoord0, 0x00);
+
+            uCoord0 = uCoord1;
+            uCoordNext = uCoord1 + uCoordStep;
         }
     }
 
     {
+        s16 uCoordNext = uCoordStep;
+        uCoord0 = 0;
+        s16 uCoord1;
+
         // Start quads. This is a bit like calling GXBegin().
         const s32 numVerts = numTrailSegments * 4 + 4;
         GXFIFO.u8 = GX_QUADS | GX_VTXFMT0; // type | fmt
         GXFIFO.u16 = numVerts;             // vert_num
 
-        s16 uCoord1;
-        s16 uCoordNext = uCoordStep;
-        s16 uCoord0 = 0;
+        for (int i = numTrailSegments; i >= 0; i--) {
+            uCoord1 = uCoordNext;
 
-        if (numTrailSegments >= 0) {
-            for (int i = numTrailSegments + 1; i >= 0; i--) {
-                uCoord1 = uCoordNext;
+            QUAD_VERT(trail1_vtxArr0[i], uCoord1, 0x00);
+            QUAD_VERT(trail1_vtxArr1[i], uCoord1, 0xFF);
+            QUAD_VERT(trail1_vtxArr1[i + 1], uCoord0, 0xFF);
+            QUAD_VERT(trail1_vtxArr0[i + 1], uCoord0, 0x00);
 
-                QUAD_VERT(trail1_vtxArr0[i], uCoord1, 0x00);
-                QUAD_VERT(trail1_vtxArr1[i], uCoord1, 0xFF);
-                QUAD_VERT(trail1_vtxArr1[i + 1], uCoord0, 0xFF);
-                QUAD_VERT(trail1_vtxArr0[i + 1], uCoord0, 0x00);
-
-                uCoordNext = uCoord1 + uCoordStep;
-                uCoord0 = uCoord1;
-            }
+            uCoord0 = uCoord1;
+            uCoordNext = uCoord1 + uCoordStep;
         }
     }
 
