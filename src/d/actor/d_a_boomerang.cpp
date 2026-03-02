@@ -759,7 +759,12 @@ static BOOL daBoomerang_Delete(daBoomerang_c*) {
 /* 800E2C00-800E2CC8       .text createHeap__13daBoomerang_cFv */
 BOOL daBoomerang_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Link", LINK_BDL_BOOMERANG);
+
+#if VERSION == VERSION_DEMO
+    JUT_ASSERT(1543, modelData != NULL);
+#else
     JUT_ASSERT(1546, modelData != NULL);
+#endif
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x37220202);
     if (mpModel == NULL)
@@ -827,13 +832,25 @@ cPhs_State daBoomerang_c::create() {
 
     {
         ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", LINK_BTI_BLUR);
+
+#if VERSION == VERSION_DEMO
+        JUT_ASSERT(1626, tmp_img != NULL);
+#else
         JUT_ASSERT(1629, tmp_img != NULL);
+#endif
+
         mBlur.imageData = (u8*)tmp_img + tmp_img->imageOffset;
     }
 
     {
         ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", LINK_BTI_ROCK_MARK);
+
+#if VERSION == VERSION_DEMO
+        JUT_ASSERT(1634, tmp_img != NULL);
+#else
         JUT_ASSERT(1637, tmp_img != NULL);
+#endif
+
         mSightPacket.setTex((u8*)tmp_img + tmp_img->imageOffset);
         mSightPacket.setImage(tmp_img);
     }
