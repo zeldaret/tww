@@ -166,10 +166,23 @@ void daBoomerang_blur_c::draw() {
 
     GFLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
 
+#define QUAD_VERT(xyz, u, v)                                                                                                                                   \
+    do {                                                                                                                                                       \
+        cXyz posXyz = (xyz);                                                                                                                                   \
+        f32 x = posXyz.x;                                                                                                                                      \
+        GX_WRITE_U32(*reinterpret_cast<u32*>(&x));                                                                                                             \
+        f32 y = posXyz.y;                                                                                                                                      \
+        GX_WRITE_U32(*reinterpret_cast<u32*>(&y));                                                                                                             \
+        f32 z = posXyz.z;                                                                                                                                      \
+        GX_WRITE_U32(*reinterpret_cast<u32*>(&z));                                                                                                             \
+        GXTexCoord2s16((u), (v));                                                                                                                              \
+    } while (0)
+
     {
         // Start quads. This is a bit like calling GXBegin().
-        GXFIFO.u8 = GX_QUADS | GX_VTXFMT0;     // type | fmt
-        GXFIFO.u16 = numTrailSegments * 4 + 4; // vert_num
+        const s32 numVerts = numTrailSegments * 4 + 4;
+        GXFIFO.u8 = GX_QUADS | GX_VTXFMT0; // type | fmt
+        GXFIFO.u16 = numVerts;             // vert_num
 
         s16 alpha1;
         s16 alphaNext = alphaStep;
@@ -178,30 +191,22 @@ void daBoomerang_blur_c::draw() {
         if (numTrailSegments >= 0) {
             for (int i = numTrailSegments + 1; i >= 0; i--) {
                 alpha1 = alphaNext;
+
                 {
-                    // GXPositionXYZ(arr_0x24[0][i]);
-                    GXPosition3f32(arr_0x24[0][i].x, arr_0x24[0][i].y, arr_0x24[0][i].z);
-                    GXPosition1x16(alpha1);
-                    GXPosition1x16(0x00);
+                    // TODO: Replace with QUAD_VERT.
+                    cXyz posXyz = arr_0x24[0][i];
+                    f32 x = posXyz.x;
+                    GX_WRITE_U32(*reinterpret_cast<u32*>(&x));
+                    f32 y = posXyz.y;
+                    GX_WRITE_U32(*reinterpret_cast<u32*>(&y));
+                    f32 z = posXyz.z;
+                    GX_WRITE_U32(*reinterpret_cast<u32*>(&z));
+                    GXTexCoord2s16(alpha1, 0x00);
                 }
-                {
-                    // GXPositionXYZ(arr_0x2F4[0][i]);
-                    GXPosition3f32(arr_0x2F4[0][i].x, arr_0x2F4[0][i].y, arr_0x2F4[0][i].z);
-                    GXPosition1x16(alpha1);
-                    GXPosition1x16(0xFF);
-                }
-                {
-                    // GXPositionXYZ(arr_0x2F4[0][i + 1]);
-                    GXPosition3f32(arr_0x2F4[0][i + 1].x, arr_0x2F4[0][i + 1].y, arr_0x2F4[0][i + 1].z);
-                    GXPosition1x16(alpha0);
-                    GXPosition1x16(0xFF);
-                }
-                {
-                    // GXPositionXYZ(arr_0x24[0][i]);
-                    GXPosition3f32(arr_0x24[0][i + 1].x, arr_0x24[0][i + 1].y, arr_0x24[0][i + 1].z);
-                    GXPosition1x16(alpha0);
-                    GXPosition1x16(0x00);
-                }
+
+                QUAD_VERT(arr_0x2F4[0][i], alpha1, 0xFF);
+                QUAD_VERT(arr_0x2F4[0][i + 1], alpha0, 0xFF);
+                QUAD_VERT(arr_0x24[0][i + 1], alpha0, 0x00);
 
                 alphaNext = alpha1 + alphaStep;
                 alpha0 = alpha1;
@@ -211,8 +216,9 @@ void daBoomerang_blur_c::draw() {
 
     {
         // Start quads. This is a bit like calling GXBegin().
+        const s32 numVerts = numTrailSegments * 4 + 4;
         GXFIFO.u8 = GX_QUADS | GX_VTXFMT0;     // type | fmt
-        GXFIFO.u16 = numTrailSegments * 4 + 4; // vert_num
+        GXFIFO.u16 = numVerts; // vert_num
 
         s16 alpha1;
         s16 alphaNext = alphaStep;
@@ -221,26 +227,11 @@ void daBoomerang_blur_c::draw() {
         if (numTrailSegments >= 0) {
             for (int i = numTrailSegments + 1; i >= 0; i--) {
                 alpha1 = alphaNext;
-                {
-                    GXPosition3f32(arr_0x5C4[0][i].x, arr_0x5C4[0][i].y, arr_0x5C4[0][i].z);
-                    GXPosition1x16(alpha1);
-                    GXPosition1x16(0x00);
-                }
-                {
-                    GXPosition3f32(arr_0x894[0][i].x, arr_0x894[0][i].y, arr_0x894[0][i].z);
-                    GXPosition1x16(alpha1);
-                    GXPosition1x16(0xFF);
-                }
-                {
-                    GXPosition3f32(arr_0x894[0][i + 1].x, arr_0x894[0][i + 1].y, arr_0x894[0][i + 1].z);
-                    GXPosition1x16(alpha0);
-                    GXPosition1x16(0xFF);
-                }
-                {
-                    GXPosition3f32(arr_0x5C4[0][i + 1].x, arr_0x5C4[0][i + 1].y, arr_0x5C4[0][i + 1].z);
-                    GXPosition1x16(alpha0);
-                    GXPosition1x16(0x00);
-                }
+
+                QUAD_VERT(arr_0x5C4[0][i], alpha1, 0x00);
+                QUAD_VERT(arr_0x894[0][i], alpha1, 0xFF);
+                QUAD_VERT(arr_0x894[0][i + 1], alpha0, 0xFF);
+                QUAD_VERT(arr_0x5C4[0][i + 1], alpha0, 0x00);
 
                 alphaNext = alpha1 + alphaStep;
                 alpha0 = alpha1;
