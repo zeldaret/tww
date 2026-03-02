@@ -98,17 +98,15 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
 
 /* 800E101C-800E13A4       .text draw__18daBoomerang_blur_cFv */
 void daBoomerang_blur_c::draw() {
-    /* Nonmatching */
-
 #include "assets/l_matDL__draw__18daBoomerang_blur_cFv.h"
 
-    static GXVtxDescList l_vtxDescList[] = {
+    static GXVtxDescList l_vtxDescList[] ALIGN_DECL(32) = {
         {GX_VA_POS, GX_DIRECT},
         {GX_VA_TEX0, GX_DIRECT},
         {GX_VA_NULL, GX_NONE},
     };
 
-    static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
+    static GXVtxAttrFmtList l_vtxAttrFmtList[] ALIGN_DECL(32) = {
         {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
         {GX_VA_TEX0, GX_TEX_ST, GX_S16, 0x08},
         {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
@@ -189,13 +187,13 @@ void daBoomerang_blur_c::draw() {
 
 /* 800E13A4-800E14F0       .text draw__25daBoomerang_sightPacket_cFv */
 void daBoomerang_sightPacket_c::draw() {
-    static GXVtxDescList l_vtxDescList[] = {
+    static GXVtxDescList l_vtxDescList[] ALIGN_DECL(32) = {
         {GX_VA_POS, GX_DIRECT},
         {GX_VA_TEX0, GX_DIRECT},
         {GX_VA_NULL, GX_NONE},
     };
 
-    static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
+    static GXVtxAttrFmtList l_vtxAttrFmtList[] ALIGN_DECL(32) = {
         {GX_VA_POS, GX_POS_XYZ, GX_S8, 0x00},
         {GX_VA_TEX0, GX_TEX_ST, GX_U8, 0x00},
         {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
