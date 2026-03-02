@@ -159,7 +159,7 @@ void daBoomerang_blur_c::draw() {
     static GXColor color0 = {0xFF, 0xFF, 0x7B, 0x96};
     GFSetTevColor(GX_TEVREG0, color0);
 
-    s16 alphaStep = 0xFF / (numTrailSegments / 2 + 1);
+    s16 uCoordStep = 0xFF / (numTrailSegments / 2 + 1);
 
     GFSetVtxDescv(l_vtxDescList);
     GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
@@ -184,13 +184,13 @@ void daBoomerang_blur_c::draw() {
         GXFIFO.u8 = GX_QUADS | GX_VTXFMT0; // type | fmt
         GXFIFO.u16 = numVerts;             // vert_num
 
-        s16 alpha1;
-        s16 alphaNext = alphaStep;
-        s16 alpha0 = 0;
+        s16 uCoord1;
+        s16 uCoordNext = uCoordStep;
+        s16 uCoord0 = 0;
 
         if (numTrailSegments >= 0) {
             for (int i = numTrailSegments + 1; i >= 0; i--) {
-                alpha1 = alphaNext;
+                uCoord1 = uCoordNext;
 
                 {
                     // TODO: Replace with QUAD_VERT.
@@ -201,15 +201,15 @@ void daBoomerang_blur_c::draw() {
                     GX_WRITE_U32(*reinterpret_cast<u32*>(&y));
                     f32 z = posXyz.z;
                     GX_WRITE_U32(*reinterpret_cast<u32*>(&z));
-                    GXTexCoord2s16(alpha1, 0x00);
+                    GXTexCoord2s16(uCoord1, 0x00);
                 }
 
-                QUAD_VERT(arr_0x2F4[0][i], alpha1, 0xFF);
-                QUAD_VERT(arr_0x2F4[0][i + 1], alpha0, 0xFF);
-                QUAD_VERT(arr_0x24[0][i + 1], alpha0, 0x00);
+                QUAD_VERT(arr_0x2F4[0][i], uCoord1, 0xFF);
+                QUAD_VERT(arr_0x2F4[0][i + 1], uCoord0, 0xFF);
+                QUAD_VERT(arr_0x24[0][i + 1], uCoord0, 0x00);
 
-                alphaNext = alpha1 + alphaStep;
-                alpha0 = alpha1;
+                uCoordNext = uCoord1 + uCoordStep;
+                uCoord0 = uCoord1;
             }
         }
     }
@@ -217,24 +217,24 @@ void daBoomerang_blur_c::draw() {
     {
         // Start quads. This is a bit like calling GXBegin().
         const s32 numVerts = numTrailSegments * 4 + 4;
-        GXFIFO.u8 = GX_QUADS | GX_VTXFMT0;     // type | fmt
-        GXFIFO.u16 = numVerts; // vert_num
+        GXFIFO.u8 = GX_QUADS | GX_VTXFMT0; // type | fmt
+        GXFIFO.u16 = numVerts;             // vert_num
 
-        s16 alpha1;
-        s16 alphaNext = alphaStep;
-        s16 alpha0 = 0;
+        s16 uCoord1;
+        s16 uCoordNext = uCoordStep;
+        s16 uCoord0 = 0;
 
         if (numTrailSegments >= 0) {
             for (int i = numTrailSegments + 1; i >= 0; i--) {
-                alpha1 = alphaNext;
+                uCoord1 = uCoordNext;
 
-                QUAD_VERT(arr_0x5C4[0][i], alpha1, 0x00);
-                QUAD_VERT(arr_0x894[0][i], alpha1, 0xFF);
-                QUAD_VERT(arr_0x894[0][i + 1], alpha0, 0xFF);
-                QUAD_VERT(arr_0x5C4[0][i + 1], alpha0, 0x00);
+                QUAD_VERT(arr_0x5C4[0][i], uCoord1, 0x00);
+                QUAD_VERT(arr_0x894[0][i], uCoord1, 0xFF);
+                QUAD_VERT(arr_0x894[0][i + 1], uCoord0, 0xFF);
+                QUAD_VERT(arr_0x5C4[0][i + 1], uCoord0, 0x00);
 
-                alphaNext = alpha1 + alphaStep;
-                alpha0 = alpha1;
+                uCoordNext = uCoord1 + uCoordStep;
+                uCoord0 = uCoord1;
             }
         }
     }
