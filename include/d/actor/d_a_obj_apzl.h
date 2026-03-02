@@ -6,6 +6,22 @@
 
 class daObjApzl_c : public fopAc_ac_c {
 public:
+
+    enum EventIdx {
+        EVENT_TALK,
+        EVENT_GAME,
+        EVENT_RUPEE,
+    };
+
+    enum States {
+        STATE_IDLE,
+        STATE_TALK,
+        STATE_START,
+        STATE_PLAYING,
+        STATE_END,
+        STATE_RUPEE,   
+    };
+
     inline cPhs_State _create();
     inline bool _delete();
     inline bool _draw();

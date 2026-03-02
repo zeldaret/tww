@@ -302,36 +302,6 @@ static const u32 daObjApzl_bmt_table[16][16] = {
     },
 };
 
-enum EventIdx {
-    EVENT_TALK,
-    EVENT_GAME,
-    EVENT_RUPEE,
-};
-
-enum States {
-    STATE_IDLE,
-    STATE_TALK,
-    STATE_START,
-    STATE_PLAYING,
-    STATE_END,
-    STATE_RUPEE,   
-};
-
-enum Directions {
-    UP,
-    LEFT,
-    DOWN,
-    RIGHT,
-};
-
-enum RupeeType {
-    GREEN_RUPEE,
-    BLUE_RUPEE,
-    YELLOW_RUPEE,
-    RED_RUPEE,
-    PURPLE_RUPEE,
-};
-
 /* 00000078-0000025C       .text move_piece__11daObjApzl_cFv */
 bool daObjApzl_c::move_piece() {
     stick->checkTrigger();
@@ -388,18 +358,18 @@ void daObjApzl_c::check_arrow_draw() {
         return;
     }
     if ((getblank() & 3) != 3) {
-        mDrawArrow[LEFT] = true;
+        mDrawArrow[1] = true; // left
     }
     if ((getblank() & 3) != 0) {
-        mDrawArrow[RIGHT] = true;
+        mDrawArrow[3] = true; // right
     }
     if ((getblank() & 0xc) != 0xc) {
-        mDrawArrow[UP] = true;
+        mDrawArrow[0] = true; // up
     }
     if ((getblank() & 0xc) == 0) {
         return;
     }
-    mDrawArrow[DOWN] = true;
+    mDrawArrow[2] = true; // down
 }
 
 /* 00000310-0000033C       .text search_piece__11daObjApzl_cFUc */
@@ -733,17 +703,13 @@ void daObjApzl_c::privateCut() {
 
                             if (mPuzzleNo == 15) {
                                 u8 rupeeType = daObjApzl_Rupee_Table[mGivenRupeeCount];
-                                
-                                if (rupeeType == GREEN_RUPEE) {
+                                if (rupeeType == 0) {
                                     itemNo = dItem_GREEN_RUPEE_e;
-                                }
-                                else if (rupeeType == BLUE_RUPEE) {
+                                } else if (rupeeType == 1) {
                                     itemNo = dItem_BLUE_RUPEE_e;
-                                }
-                                else if (rupeeType == YELLOW_RUPEE) {
+                                } else if (rupeeType == 2) {
                                     itemNo = dItem_YELLOW_RUPEE_e;
-                                }
-                                else if (rupeeType == RED_RUPEE) {
+                                } else if (rupeeType == 3) { 
                                     itemNo = dItem_RED_RUPEE_e;
                                 } else {
                                     itemNo = dItem_PURPLE_RUPEE_e;
@@ -936,17 +902,15 @@ void daObjApzl_c::set_mtx() {
             } else {
                 moveTimer = mMoveTimer;
             }
+
             u8 moveDirection = mMoveDirection;
-            if (moveDirection == UP) { 
+            if (moveDirection == 0) { // up
                 mDoMtx_stack_c::transM(0.0,-moveTimer,0.0);
-            }
-            else if (moveDirection == LEFT) {
+            } else if (moveDirection == 1) { // left
                 mDoMtx_stack_c::transM(moveTimer,0.0,0.0);
-            }
-            else if (moveDirection == DOWN) {
+            } else if (moveDirection == 2) { // down
                 mDoMtx_stack_c::transM(0.0,moveTimer,0.0);
-            }
-            else {
+            } else { //right
                 mDoMtx_stack_c::transM(-moveTimer,0.0,0.0);
             }
         }
