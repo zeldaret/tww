@@ -620,7 +620,7 @@ BOOL daBoomerang_c::procMove() {
         if (mIsReturning) {
             if (dist < speedF * 2.0f) {
                 if (pPlayer->returnBoomerang()) {
-                    fpcM_SetParam(this, 0);
+                    fopAcM_SetParam(this, Mode_0);
                     mThirdPerson = false;
                     mCurrProcFunc = &daBoomerang_c::procWait;
                     mCps.SetAtHitCallback(NULL);
