@@ -52,10 +52,10 @@ static dCcD_SrcCps l_at_cps_src = {
 
 /* 800E0C08-800E0D44       .text initBlur__18daBoomerang_blur_cFPA4_fs */
 void daBoomerang_blur_c::initBlur(MtxP mtx, s16 yRot) {
-    cMtx_multVec(mtx, &l_blur_top, &arr_0x24[0][0]);
-    cMtx_multVec(mtx, &l_blur_root, &arr_0x2F4[0][0]);
-    arr_0x24[0][1] = arr_0x24[0][0];
-    arr_0x2F4[0][1] = arr_0x2F4[0][0];
+    cMtx_multVec(mtx, &l_blur_top, &trail0_vtxArr0[0][0]);
+    cMtx_multVec(mtx, &l_blur_root, &trail0_vtxArr1[0][0]);
+    trail0_vtxArr0[0][1] = trail0_vtxArr0[0][0];
+    trail0_vtxArr1[0][1] = trail0_vtxArr1[0][0];
 
     numTrailSegments = 0;
 
@@ -65,19 +65,19 @@ void daBoomerang_blur_c::initBlur(MtxP mtx, s16 yRot) {
 
     mDoMtx_stack_c::copy(mtx);
     mDoMtx_stack_c::YrotM(-(yRot * 2));
-    mDoMtx_stack_c::multVec(&l_blur_top, &arr_0x5C4[0][0]);
-    mDoMtx_stack_c::multVec(&l_blur_root, &arr_0x894[0][0]);
-    arr_0x5C4[0][1] = arr_0x5C4[0][0];
-    arr_0x894[0][1] = arr_0x894[0][0];
+    mDoMtx_stack_c::multVec(&l_blur_top, &trail1_vtxArr0[0][0]);
+    mDoMtx_stack_c::multVec(&l_blur_root, &trail1_vtxArr1[0][0]);
+    trail1_vtxArr0[0][1] = trail1_vtxArr0[0][0];
+    trail1_vtxArr1[0][1] = trail1_vtxArr1[0][0];
 }
 
 /* 800E0D44-800E101C       .text copyBlur__18daBoomerang_blur_cFPA4_fs */
 void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
     for (int i = 54; i >= 0; i--) {
-        arr_0x24[1][i] = arr_0x24[0][i];
-        arr_0x2F4[1][i] = arr_0x2F4[0][i];
-        arr_0x5C4[1][i] = arr_0x5C4[0][i];
-        arr_0x894[1][i] = arr_0x894[0][i];
+        trail0_vtxArr0[1][i] = trail0_vtxArr0[0][i];
+        trail0_vtxArr1[1][i] = trail0_vtxArr1[0][i];
+        trail1_vtxArr0[1][i] = trail1_vtxArr0[0][i];
+        trail1_vtxArr1[1][i] = trail1_vtxArr1[0][i];
     }
 
     float t = 0.0f;
@@ -95,10 +95,10 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
 
     int i;
     for (i = 0; i < SEGMENTS_PER_STEP; i++) {
-        mDoMtx_stack_c::multVec(&l_blur_top, &arr_0x24[0][i]);
-        mDoMtx_stack_c::multVec(&l_blur_root, &arr_0x2F4[0][i]);
-        VECAdd(&arr_0x24[0][i], &(diff * t), &arr_0x24[0][i]);
-        VECAdd(&arr_0x2F4[0][i], &(diff * t), &arr_0x2F4[0][i]);
+        mDoMtx_stack_c::multVec(&l_blur_top, &trail0_vtxArr0[0][i]);
+        mDoMtx_stack_c::multVec(&l_blur_root, &trail0_vtxArr1[0][i]);
+        VECAdd(&trail0_vtxArr0[0][i], &(diff * t), &trail0_vtxArr0[0][i]);
+        VECAdd(&trail0_vtxArr1[0][i], &(diff * t), &trail0_vtxArr1[0][i]);
         t += 1.0f / SEGMENTS_PER_STEP;
         mDoMtx_stack_c::YrotM(0x633);
     }
@@ -111,10 +111,10 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
 
     for (i = 0; i < SEGMENTS_PER_STEP; i++) {
         // FIXME: i is in the wrong register.
-        mDoMtx_stack_c::multVec(&l_blur_top, &arr_0x5C4[0][i]);
-        mDoMtx_stack_c::multVec(&l_blur_root, &arr_0x894[0][i]);
-        VECAdd(&arr_0x5C4[0][i], &(diff * t), &arr_0x5C4[0][i]);
-        VECAdd(&arr_0x894[0][i], &(diff * t), &arr_0x894[0][i]);
+        mDoMtx_stack_c::multVec(&l_blur_top, &trail1_vtxArr0[0][i]);
+        mDoMtx_stack_c::multVec(&l_blur_root, &trail1_vtxArr1[0][i]);
+        VECAdd(&trail1_vtxArr0[0][i], &(diff * t), &trail1_vtxArr0[0][i]);
+        VECAdd(&trail1_vtxArr1[0][i], &(diff * t), &trail1_vtxArr1[0][i]);
         t += 1.0f / SEGMENTS_PER_STEP;
         mDoMtx_stack_c::YrotM(-0x633);
     }
@@ -194,7 +194,7 @@ void daBoomerang_blur_c::draw() {
 
                 {
                     // TODO: Replace with QUAD_VERT.
-                    cXyz posXyz = arr_0x24[0][i];
+                    cXyz posXyz = trail0_vtxArr0[0][i];
                     f32 x = posXyz.x;
                     GX_WRITE_U32(*reinterpret_cast<u32*>(&x));
                     f32 y = posXyz.y;
@@ -204,9 +204,9 @@ void daBoomerang_blur_c::draw() {
                     GXTexCoord2s16(uCoord1, 0x00);
                 }
 
-                QUAD_VERT(arr_0x2F4[0][i], uCoord1, 0xFF);
-                QUAD_VERT(arr_0x2F4[0][i + 1], uCoord0, 0xFF);
-                QUAD_VERT(arr_0x24[0][i + 1], uCoord0, 0x00);
+                QUAD_VERT(trail0_vtxArr1[0][i], uCoord1, 0xFF);
+                QUAD_VERT(trail0_vtxArr1[0][i + 1], uCoord0, 0xFF);
+                QUAD_VERT(trail0_vtxArr0[0][i + 1], uCoord0, 0x00);
 
                 uCoordNext = uCoord1 + uCoordStep;
                 uCoord0 = uCoord1;
@@ -228,10 +228,10 @@ void daBoomerang_blur_c::draw() {
             for (int i = numTrailSegments + 1; i >= 0; i--) {
                 uCoord1 = uCoordNext;
 
-                QUAD_VERT(arr_0x5C4[0][i], uCoord1, 0x00);
-                QUAD_VERT(arr_0x894[0][i], uCoord1, 0xFF);
-                QUAD_VERT(arr_0x894[0][i + 1], uCoord0, 0xFF);
-                QUAD_VERT(arr_0x5C4[0][i + 1], uCoord0, 0x00);
+                QUAD_VERT(trail1_vtxArr0[0][i], uCoord1, 0x00);
+                QUAD_VERT(trail1_vtxArr1[0][i], uCoord1, 0xFF);
+                QUAD_VERT(trail1_vtxArr1[0][i + 1], uCoord0, 0xFF);
+                QUAD_VERT(trail1_vtxArr0[0][i + 1], uCoord0, 0x00);
 
                 uCoordNext = uCoord1 + uCoordStep;
                 uCoord0 = uCoord1;

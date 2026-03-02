@@ -18,10 +18,10 @@ public:
     /* 0x010 */ void* imageData;
     /* 0x014 */ s32 numTrailSegments;
     /* 0x018 */ cXyz pos;
-    /* 0x024 */ cXyz arr_0x24[12][SEGMENTS_PER_STEP];
-    /* 0x2F4 */ cXyz arr_0x2F4[12][SEGMENTS_PER_STEP];
-    /* 0x5C4 */ cXyz arr_0x5C4[12][SEGMENTS_PER_STEP];
-    /* 0x894 */ cXyz arr_0x894[12][SEGMENTS_PER_STEP];
+    /* 0x024 */ cXyz trail0_vtxArr0[12][SEGMENTS_PER_STEP];
+    /* 0x2F4 */ cXyz trail0_vtxArr1[12][SEGMENTS_PER_STEP];
+    /* 0x5C4 */ cXyz trail1_vtxArr0[12][SEGMENTS_PER_STEP];
+    /* 0x894 */ cXyz trail1_vtxArr1[12][SEGMENTS_PER_STEP];
 };
 
 class daBoomerang_sightPacket_c : public dDlst_base_c {
