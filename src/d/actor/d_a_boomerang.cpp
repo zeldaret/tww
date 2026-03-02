@@ -473,7 +473,8 @@ void daBoomerang_c::checkBgHit(cXyz* pi_start, cXyz* pi_end) {
         shape_angle.y = current.angle.y;
         resetLockActor();
         u32 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mLinChk);
-        s8 reverb = dComIfGp_getReverb(current.roomNo);
+        s8 roomNo = current.roomNo;
+        s8 reverb = dComIfGp_getReverb(roomNo);
         mDoAud_seStart(JA_SE_LK_W_WEP_HIT, &eyePos, mtrlSndId, reverb);
     }
 }
@@ -590,7 +591,8 @@ BOOL daBoomerang_c::procMove() {
         s16 s = mModelRotY;
         mModelRotY -= 0x1F00;
         if (s >= 0 && mModelRotY < 0) {
-            mDoAud_seStart(JA_SE_LK_BOOM_FLY, &eyePos, 0, dComIfGp_getReverb(current.roomNo));
+            s8 roomNo = current.roomNo;
+            mDoAud_seStart(JA_SE_LK_BOOM_FLY, &eyePos, 0, dComIfGp_getReverb(roomNo));
         }
         setAimPos();
 
