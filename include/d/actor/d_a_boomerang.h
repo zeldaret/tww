@@ -53,6 +53,11 @@ class daBoomerang_c : public fopAc_ac_c {
 public:
     typedef BOOL (daBoomerang_c::*daBoomerang_c_ProcFunc)();
 
+    enum Mode {
+        Mode_0 = 0x0,
+        Mode_1 = 0x1,
+    };
+
     void onCancelFlg() { mCancelFlg = true; }
 
     daBoomerang_c();

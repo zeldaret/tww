@@ -24,7 +24,7 @@ BOOL daPy_lk_c::checkBoomerangAnime() const {
 void daPy_lk_c::throwBoomerang() {
     daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepEquip.getActor();
 
-    fopAcM_SetParam(boomerang, 1);
+    fopAcM_SetParam(boomerang, daBoomerang_c::Mode_1);
     if (mpAttnActorLockOn != NULL) {
         boomerang->setAimActor(mpAttnActorLockOn);
     }
