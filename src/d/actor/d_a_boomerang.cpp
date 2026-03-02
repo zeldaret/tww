@@ -94,12 +94,12 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
     mDoMtx_stack_c::push();
 
     int i;
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < SEGMENTS_PER_STEP; i++) {
         mDoMtx_stack_c::multVec(&l_blur_top, &arr_0x24[0][i]);
         mDoMtx_stack_c::multVec(&l_blur_root, &arr_0x2F4[0][i]);
         VECAdd(&arr_0x24[0][i], &(diff * t), &arr_0x24[0][i]);
         VECAdd(&arr_0x2F4[0][i], &(diff * t), &arr_0x2F4[0][i]);
-        t += 0.2f;
+        t += 1.0f / SEGMENTS_PER_STEP;
         mDoMtx_stack_c::YrotM(0x633);
     }
 
@@ -109,17 +109,17 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
 
     mDoMtx_stack_c::YrotM(-(yRot * 2));
 
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < SEGMENTS_PER_STEP; i++) {
         // FIXME: i is in the wrong register.
         mDoMtx_stack_c::multVec(&l_blur_top, &arr_0x5C4[0][i]);
         mDoMtx_stack_c::multVec(&l_blur_root, &arr_0x894[0][i]);
         VECAdd(&arr_0x5C4[0][i], &(diff * t), &arr_0x5C4[0][i]);
         VECAdd(&arr_0x894[0][i], &(diff * t), &arr_0x894[0][i]);
-        t += 0.2f;
+        t += 1.0f / SEGMENTS_PER_STEP;
         mDoMtx_stack_c::YrotM(-0x633);
     }
 
-    numTrailSegments += 5;
+    numTrailSegments += SEGMENTS_PER_STEP;
 
     if (numTrailSegments >= 59) {
         numTrailSegments = 58;
