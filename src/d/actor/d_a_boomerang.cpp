@@ -352,7 +352,7 @@ void daBoomerang_c::rockLineCallback(fopAc_ac_c* pHitActor) {
                 mTargetIds[i] = -1;
                 mTargetPtrs[i] = NULL;
                 if (i == mCurTargetIdx) {
-                    field_0xF2E = true;
+                    mJustHit = true;
                     mCurTargetIdx++;
                 }
             }
@@ -493,8 +493,8 @@ BOOL daBoomerang_c::procWait() {
         mCps.ResetAtHit();
         mCps.OffAtNoTgHitInfSet();
         mIsReturning = false;
-        field_0xF2D = true;
-        field_0xF2E = false;
+        unused_0xF2D = true;
+        mJustHit = false;
         mCurTargetIdx = 0;
 
         setAimPos();
@@ -607,8 +607,8 @@ BOOL daBoomerang_c::procMove() {
         s16 angle = cM_atan2s(norm.x, norm.z);
         s16 currentAngle = angle - current.angle.y;
 
-        if (field_0xF2E) {
-            field_0xF2E = false;
+        if (mJustHit) {
+            mJustHit = false;
             if (s16(angle - current.angle.y) > 0) {
                 current.angle.y = angle - 0x3000;
             } else {
@@ -631,7 +631,7 @@ BOOL daBoomerang_c::procMove() {
         } else {
             if (dist < speedF || mCps.ChkAtHit() && mCps.GetAtHitAc() == mTargetPtrs[mCurTargetIdx]) {
                 // Boomerang hit its current target.
-                field_0xF2E = true;
+                mJustHit = true;
                 mTargetPtrs[mCurTargetIdx] = NULL;
                 mTargetIds[mCurTargetIdx] = fpcM_ERROR_PROCESS_ID_e;
                 mCurTargetIdx++;
@@ -641,14 +641,14 @@ BOOL daBoomerang_c::procMove() {
 
         if (!mIsReturning && (mCancelFlg || (!mFreeFlyOut && mNumTargets <= mCurTargetIdx) || mCps.ChkAtShieldHit())) {
             // Boomerang should return. It either was canceled, hit its last target, or hit a shield.
-            field_0xF2E = true;
+            mJustHit = true;
             mIsReturning = true;
             resetLockActor();
             mCancelFlg = false;
             mFreeFlyOut = false;
         }
 
-        if (field_0xF2E) {
+        if (mJustHit) {
             current.angle.y = angle;
         } else {
             s16 newAngle;

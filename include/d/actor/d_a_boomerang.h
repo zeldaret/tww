@@ -79,8 +79,8 @@ public:
     /* 0x0F04 */ fpc_ProcID mTargetIds[BOOM_TARGET_MAX];
     /* 0x0F18 */ fopAc_ac_c* mTargetPtrs[BOOM_TARGET_MAX];
     /* 0x0F2C */ bool mIsReturning;
-    /* 0x0F2D */ bool field_0xF2D;
-    /* 0x0F2E */ bool field_0xF2E;
+    /* 0x0F2D */ bool unused_0xF2D;
+    /* 0x0F2E */ bool mJustHit;
     /* 0x0F2F */ bool mCatchAndDelete;
     /* 0x0F30 */ u8 unused_0xF30;
     /* 0x0F31 */ u8 mNumTargets;
