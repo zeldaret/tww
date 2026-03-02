@@ -585,7 +585,7 @@ BOOL daBoomerang_c::procMove() {
         return TRUE;
     }
 
-    if (dComIfGp_event_getMode() == 0) {
+    if (dComIfGp_event_getMode() == dEvtMode_NONE_e) {
         daPy_lk_c* pPlayer = daPy_getPlayerLinkActorClass();
         s16 s = mModelRotY;
         mModelRotY -= 0x1F00;
@@ -707,7 +707,7 @@ BOOL daBoomerang_c::procMove() {
     mCps.cM3dGCps::Set(old.pos, current.pos, 30.0f);
     mCps.CalcAtVec();
 
-    if (dComIfGp_event_getMode() == 0) {
+    if (dComIfGp_event_getMode() == dEvtMode_NONE_e) {
         mBlur.copyBlur(mDoMtx_stack_c::get(), mModelRotY);
         dComIfG_Ccsp()->Set(&mCps);
         dComIfG_Ccsp()->SetMass(&mCps, 1);
