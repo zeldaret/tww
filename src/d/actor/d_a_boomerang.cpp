@@ -452,7 +452,7 @@ BOOL daBoomerang_c::setLockActor(fopAc_ac_c* i_actor, BOOL doSoundEffect) {
     mSightPacket.initFrame(mNumTargets);
 
     if (doSoundEffect) {
-        static u32 se_flg[BOOM_TARGET_MAX] = {
+        static const u32 se_flg[BOOM_TARGET_MAX] = {
             JA_SE_BOOM_LOCK_ON_1,
             JA_SE_BOOM_LOCK_ON_2,
             JA_SE_BOOM_LOCK_ON_3,
