@@ -138,44 +138,19 @@ void daBoomerang_blur_c::draw() {
     GFLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
 
 #define QUAD_VERT(xyz, u, v)                                                                                                                                   \
-    do {                                                                                                                                                       \
-        cXyz posXyz;                                                                                                                                           \
-        posXyz.z = (xyz).z;                                                                                                                                    \
-        posXyz.y = (xyz).y;                                                                                                                                    \
-        posXyz.x = (xyz).x;                                                                                                                                    \
-        f32 z = posXyz.z;                                                                                                                                      \
-        GX_WRITE_U32(*reinterpret_cast<u32*>(&z));                                                                                                             \
-        f32 y = posXyz.y;                                                                                                                                      \
-        GX_WRITE_U32(*reinterpret_cast<u32*>(&y));                                                                                                             \
-        f32 x = posXyz.x;                                                                                                                                      \
-        GX_WRITE_U32(*reinterpret_cast<u32*>(&x));                                                                                                             \
-        GXTexCoord2s16((u), (v));                                                                                                                              \
-    } while (0)
+    GFPosition3f32((xyz).x, (xyz).y, (xyz).z);                                                                                                                 \
+    GFTexCoord2s16((u), (v))
 
     {
         s16 uCoordNext = uCoordStep;
         s16 uCoord1;
 
-        // Start quads. This is a bit like calling GXBegin().
-        const s32 numVerts = numTrailSegments * 4 + 4;
-        GXFIFO.u8 = GX_QUADS | GX_VTXFMT0; // type | fmt
-        GXFIFO.u16 = numVerts;             // vert_num
+        GFBegin(GX_QUADS, GX_VTXFMT0, numTrailSegments * 4 + 4);
 
         for (int i = numTrailSegments; i >= 0; i--) {
             uCoord1 = uCoordNext;
 
-            {
-                // TODO: Replace with QUAD_VERT.
-                cXyz posXyz = trail0_vtxArr0[i];
-                f32 z = posXyz.z;
-                GX_WRITE_U32(*reinterpret_cast<u32*>(&z));
-                f32 y = posXyz.y;
-                GX_WRITE_U32(*reinterpret_cast<u32*>(&y));
-                f32 x = posXyz.x;
-                GX_WRITE_U32(*reinterpret_cast<u32*>(&x));
-                GXTexCoord2s16(uCoord1, 0x00);
-            }
-
+            QUAD_VERT(trail0_vtxArr0[i], uCoord1, 0x00);
             QUAD_VERT(trail0_vtxArr1[i], uCoord1, 0xFF);
             QUAD_VERT(trail0_vtxArr1[i + 1], uCoord0, 0xFF);
             QUAD_VERT(trail0_vtxArr0[i + 1], uCoord0, 0x00);
@@ -183,6 +158,8 @@ void daBoomerang_blur_c::draw() {
             uCoord0 = uCoord1;
             uCoordNext = uCoord1 + uCoordStep;
         }
+
+        GFEnd();
     }
 
     {
@@ -190,10 +167,7 @@ void daBoomerang_blur_c::draw() {
         uCoord0 = 0;
         s16 uCoord1;
 
-        // Start quads. This is a bit like calling GXBegin().
-        const s32 numVerts = numTrailSegments * 4 + 4;
-        GXFIFO.u8 = GX_QUADS | GX_VTXFMT0; // type | fmt
-        GXFIFO.u16 = numVerts;             // vert_num
+        GFBegin(GX_QUADS, GX_VTXFMT0, numTrailSegments * 4 + 4);
 
         for (int i = numTrailSegments; i >= 0; i--) {
             uCoord1 = uCoordNext;
@@ -206,6 +180,8 @@ void daBoomerang_blur_c::draw() {
             uCoord0 = uCoord1;
             uCoordNext = uCoord1 + uCoordStep;
         }
+
+        GFEnd();
     }
 
 #if VERSION > VERSION_JPN
