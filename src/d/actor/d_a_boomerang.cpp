@@ -366,10 +366,10 @@ void daBoomerang_rockLineCallback(fopAc_ac_c* i_actor, dCcD_GObjInf*, fopAc_ac_c
 }
 
 /* 800E1AD0-800E1B20       .text setAimActor__13daBoomerang_cFP10fopAc_ac_c */
-void daBoomerang_c::setAimActor(fopAc_ac_c* param_1) {
+void daBoomerang_c::setAimActor(fopAc_ac_c* i_actor) {
     resetLockActor();
     mThirdPerson = true;
-    setLockActor(param_1, FALSE);
+    setLockActor(i_actor, FALSE);
 }
 
 /* 800E1B20-800E1C20       .text setLockActor__13daBoomerang_cFP10fopAc_ac_ci */
