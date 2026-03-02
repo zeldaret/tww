@@ -307,7 +307,7 @@ BOOL daBoomerang_c::draw() {
     g_dComIfG_gameInfo.drawlist.setOpaListP1();
     g_dComIfG_gameInfo.drawlist.setXluListP1();
 
-    if (!field_0xF33 && mNumTargets != 0) {
+    if (!mThirdPerson && mNumTargets != 0) {
         mSightPacket.resetSightOn();
         for (int i = mCurTargetIdx; i < mNumTargets; i++) {
             fopAc_ac_c* pActor = mTargetPtrs[i];
@@ -399,7 +399,7 @@ void daBoomerang_rockLineCallback(fopAc_ac_c* i_actor, dCcD_GObjInf*, fopAc_ac_c
 /* 800E1AD0-800E1B20       .text setAimActor__13daBoomerang_cFP10fopAc_ac_c */
 void daBoomerang_c::setAimActor(fopAc_ac_c* param_1) {
     resetLockActor();
-    field_0xF33 = true;
+    mThirdPerson = true;
     setLockActor(param_1, FALSE);
 }
 
@@ -479,12 +479,12 @@ void daBoomerang_c::setKeepMatrix() {
 
 /* 800E1DA8-800E1E6C       .text setAimPos__13daBoomerang_cFv */
 void daBoomerang_c::setAimPos() {
-    if (field_0xF2C) {
-        mTargetRayEnd = daPy_getPlayerLinkActorClass()->getBoomerangCatchPos();
+    if (mIsReturning) {
+        mTargetPos = daPy_getPlayerLinkActorClass()->getBoomerangCatchPos();
     } else {
         for (int i = mCurTargetIdx; i < mNumTargets; i++) {
             if (mTargetPtrs[i] != NULL) {
-                mTargetRayEnd = mTargetPtrs[i]->eyePos;
+                mTargetPos = mTargetPtrs[i]->eyePos;
                 return;
             }
             mCurTargetIdx++;
@@ -498,7 +498,7 @@ void daBoomerang_c::checkBgHit(cXyz* pi_start, cXyz* pi_end) {
     if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
         current.pos.set(mLinChk.GetCross());
         g_dComIfG_gameInfo.play.getParticle()->setNormalP1(0xC, &current.pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
-        field_0xF2C = true;
+        mIsReturning = true;
         current.angle.y += 0x8000;
         shape_angle.y = current.angle.y;
         resetLockActor();
@@ -522,7 +522,7 @@ BOOL daBoomerang_c::procWait() {
         speedF = 60.0f;
         mCps.ResetAtHit();
         mCps.OffAtNoTgHitInfSet();
-        field_0xF2C = false;
+        mIsReturning = false;
         field_0xF2D = true;
         field_0xF2E = false;
         mCurTargetIdx = 0;
@@ -537,7 +537,7 @@ BOOL daBoomerang_c::procWait() {
 
             f32 flyMax = getFlyMax();
 
-            mTargetRayEnd.set(
+            mTargetPos.set(
                 current.pos.x + flyMax * cM_ssin(angleY) * cM_scos(angleX),
                 current.pos.y - flyMax * cM_ssin(angleX),
                 current.pos.z + flyMax * cM_scos(angleY) * cM_scos(angleX)
@@ -546,26 +546,26 @@ BOOL daBoomerang_c::procWait() {
 
         mModelRotY = 0;
 
-        cXyz diff = mTargetRayEnd - current.pos;
+        cXyz diff = mTargetPos - current.pos;
 
         s16 angle = cM_atan2s(-diff.y, diff.absXZ());
         current.angle.x = angle;
         if (mNumTargets == 0) {
             current.angle.y = cM_atan2s(diff.x, diff.z) + 0x3000;
-            if (field_0xF33) {
-                field_0xF36 = false;
+            if (mThirdPerson) {
+                mFreeFlyOut = false;
             } else {
-                field_0xF36 = true;
+                mFreeFlyOut = true;
             }
         } else {
             current.angle.y = cM_atan2s(diff.x, diff.z);
-            field_0xF36 = false;
+            mFreeFlyOut = false;
         }
 
         shape_angle.x = current.angle.x;
         shape_angle.y = current.angle.y;
         shape_angle.z = 0x2000;
-        field_0xF38 = 0x2000;
+        mModelRotZ = 0x2000;
 
         mCurrProcFunc = &daBoomerang_c::procMove;
 
@@ -610,7 +610,7 @@ BOOL daBoomerang_c::procWait() {
 BOOL daBoomerang_c::procMove() {
     static cXyz at_offset; // Never used.
 
-    if (field_0xF2F) {
+    if (mCatchAndDelete) {
         fopAcM_delete(this);
         return TRUE;
     }
@@ -624,7 +624,7 @@ BOOL daBoomerang_c::procMove() {
         }
         setAimPos();
 
-        cXyz diff = mTargetRayEnd - current.pos;
+        cXyz diff = mTargetPos - current.pos;
         f32 dist = diff.abs();
         cXyz norm;
         if (dist > 0.1f) {
@@ -646,15 +646,15 @@ BOOL daBoomerang_c::procMove() {
             currentAngle = angle - current.angle.y;
         }
 
-        if (field_0xF2C) {
+        if (mIsReturning) {
             if (dist < speedF * 2.0f) {
                 if (pPlayer->returnBoomerang()) {
                     fpcM_SetParam(this, 0);
-                    field_0xF33 = false;
+                    mThirdPerson = false;
                     mCurrProcFunc = &daBoomerang_c::procWait;
                     mCps.SetAtHitCallback(NULL);
                 } else {
-                    field_0xF2F = true;
+                    mCatchAndDelete = true;
                 }
             }
         } else {
@@ -664,23 +664,24 @@ BOOL daBoomerang_c::procMove() {
                 mTargetPtrs[mCurTargetIdx] = NULL;
                 mTargetIds[mCurTargetIdx] = fpcM_ERROR_PROCESS_ID_e;
                 mCurTargetIdx++;
-                field_0xF36 = false;
+                mFreeFlyOut = false;
             }
         }
 
-        if (!field_0xF2C && (mCancelFlg || (!field_0xF36 && mNumTargets <= mCurTargetIdx) || mCps.ChkAtShieldHit())) {
+        if (!mIsReturning && (mCancelFlg || (!mFreeFlyOut && mNumTargets <= mCurTargetIdx) || mCps.ChkAtShieldHit())) {
+            // Boomerang should return. It either was canceled, hit its last target, or hit a shield.
             field_0xF2E = true;
-            field_0xF2C = true;
+            mIsReturning = true;
             resetLockActor();
             mCancelFlg = false;
-            field_0xF36 = false;
+            mFreeFlyOut = false;
         }
 
         if (field_0xF2E) {
             current.angle.y = angle;
         } else {
             s16 newAngle;
-            if (!field_0xF33) {
+            if (!mThirdPerson) {
                 f32 a = 20.0f - dist * 2.0f / speedF;
                 if (a < 0.0f) {
                     a = 0.0f;
@@ -710,7 +711,7 @@ BOOL daBoomerang_c::procMove() {
         shape_angle.y = current.angle.y;
         shape_angle.x = current.angle.x;
 
-        if (!field_0xF2C) {
+        if (!mIsReturning) {
             checkBgHit(&old.pos, &current.pos);
         }
 
@@ -721,10 +722,10 @@ BOOL daBoomerang_c::procMove() {
         } else if (currentAngle < -0x100) {
             currentAngle = -0x2000;
         } else {
-            currentAngle = field_0xF38;
+            currentAngle = mModelRotZ;
         }
 
-        field_0xF38 = currentAngle;
+        mModelRotZ = currentAngle;
         cLib_addCalcAngleS(&shape_angle.z, currentAngle, 0x10, 0x1000, 0x10);
     }
 
