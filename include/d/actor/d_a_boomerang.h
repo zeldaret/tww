@@ -8,6 +8,7 @@
 
 class daBoomerang_blur_c : public J3DPacket {
 public:
+    virtual ~daBoomerang_blur_c() {}
     void initBlur(MtxP, s16);
     void copyBlur(MtxP, s16);
     virtual void draw();
@@ -26,6 +27,7 @@ public:
 
 class daBoomerang_sightPacket_c : public dDlst_base_c {
 public:
+    virtual ~daBoomerang_sightPacket_c() {}
     virtual void draw();
     void setSight(cXyz*, int);
     void play(int);
