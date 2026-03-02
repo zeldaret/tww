@@ -116,9 +116,11 @@ void daBoomerang_blur_c::draw() {
 
     static GXTexObj texObj;
 
+#if VERSION > VERSION_DEMO
     j3dSys.reinitGX();
-
     GXSetNumIndStages(0);
+#endif
+
     GXInitTexObj(&texObj, imageData, 16, 4, GX_TF_I4, GX_CLAMP, GX_CLAMP, FALSE);
     GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, FALSE, FALSE, GX_ANISO_1);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
