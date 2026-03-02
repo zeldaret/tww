@@ -80,7 +80,6 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
     mDoMtx_stack_c::YrotM(-(yRot * 2));
 
     for (i = 0; i < SEGMENTS_PER_STEP; i++) {
-        // FIXME: i is in the wrong register.
         mDoMtx_stack_c::multVec(&l_blur_top, &trail1_vtxArr0[i]);
         mDoMtx_stack_c::multVec(&l_blur_root, &trail1_vtxArr1[i]);
         VECAdd(&trail1_vtxArr0[i], &(diff * t), &trail1_vtxArr0[i]);
