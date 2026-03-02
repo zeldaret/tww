@@ -63,6 +63,8 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
 
     mDoMtx_stack_c::push();
 
+    s16 yRotPerStep = 0x633;
+
     int i;
     for (i = 0; i < SEGMENTS_PER_STEP; i++) {
         mDoMtx_stack_c::multVec(&l_blur_top, &trail0_vtxArr0[i]);
@@ -70,7 +72,7 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
         VECAdd(&trail0_vtxArr0[i], &(diff * t), &trail0_vtxArr0[i]);
         VECAdd(&trail0_vtxArr1[i], &(diff * t), &trail0_vtxArr1[i]);
         t += 1.0f / SEGMENTS_PER_STEP;
-        mDoMtx_stack_c::YrotM(0x633);
+        mDoMtx_stack_c::YrotM(yRotPerStep);
     }
 
     t = 0.0f;
@@ -85,7 +87,7 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
         VECAdd(&trail1_vtxArr0[i], &(diff * t), &trail1_vtxArr0[i]);
         VECAdd(&trail1_vtxArr1[i], &(diff * t), &trail1_vtxArr1[i]);
         t += 1.0f / SEGMENTS_PER_STEP;
-        mDoMtx_stack_c::YrotM(-0x633);
+        mDoMtx_stack_c::YrotM(-yRotPerStep);
     }
 
     numTrailSegments += SEGMENTS_PER_STEP;
