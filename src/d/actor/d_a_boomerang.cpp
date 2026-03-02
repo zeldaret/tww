@@ -138,7 +138,7 @@ void daBoomerang_blur_c::draw() {
 
     GFLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
 
-#define QUAD_VERT(xyz, u, v)                                                                                                                                   \
+#define QUAD_VTX(xyz, u, v)                                                                                                                                    \
     GFPosition3f32((xyz).x, (xyz).y, (xyz).z);                                                                                                                 \
     GFTexCoord2s16((u), (v))
 
@@ -146,10 +146,10 @@ void daBoomerang_blur_c::draw() {
         GFBegin(GX_QUADS, GX_VTXFMT0, numTrailSegments * 4 + 4);
 
         for (int i = numTrailSegments; i >= 0; i--) {
-            QUAD_VERT(trail0_vtxArr0[i], uCoord1, 0x00);
-            QUAD_VERT(trail0_vtxArr1[i], uCoord1, 0xFF);
-            QUAD_VERT(trail0_vtxArr1[i + 1], uCoord0, 0xFF);
-            QUAD_VERT(trail0_vtxArr0[i + 1], uCoord0, 0x00);
+            QUAD_VTX(trail0_vtxArr0[i], uCoord1, 0x00);
+            QUAD_VTX(trail0_vtxArr1[i], uCoord1, 0xFF);
+            QUAD_VTX(trail0_vtxArr1[i + 1], uCoord0, 0xFF);
+            QUAD_VTX(trail0_vtxArr0[i + 1], uCoord0, 0x00);
 
             uCoord0 = uCoord1;
             uCoord1 += uCoordStep;
@@ -165,10 +165,10 @@ void daBoomerang_blur_c::draw() {
         GFBegin(GX_QUADS, GX_VTXFMT0, numTrailSegments * 4 + 4);
 
         for (int i = numTrailSegments; i >= 0; i--) {
-            QUAD_VERT(trail1_vtxArr0[i], uCoord1, 0x00);
-            QUAD_VERT(trail1_vtxArr1[i], uCoord1, 0xFF);
-            QUAD_VERT(trail1_vtxArr1[i + 1], uCoord0, 0xFF);
-            QUAD_VERT(trail1_vtxArr0[i + 1], uCoord0, 0x00);
+            QUAD_VTX(trail1_vtxArr0[i], uCoord1, 0x00);
+            QUAD_VTX(trail1_vtxArr1[i], uCoord1, 0xFF);
+            QUAD_VTX(trail1_vtxArr1[i + 1], uCoord0, 0xFF);
+            QUAD_VTX(trail1_vtxArr0[i + 1], uCoord0, 0x00);
 
             uCoord0 = uCoord1;
             uCoord1 += uCoordStep;
