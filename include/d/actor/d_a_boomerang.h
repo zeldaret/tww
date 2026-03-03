@@ -54,8 +54,8 @@ public:
     typedef BOOL (daBoomerang_c::*daBoomerang_c_ProcFunc)();
 
     enum Mode {
-        Mode_0 = 0x0,
-        Mode_1 = 0x1,
+        Mode_Wait = 0x0,
+        Mode_Throw = 0x1,
     };
 
     void onCancelFlg() { mCancelFlg = true; }
