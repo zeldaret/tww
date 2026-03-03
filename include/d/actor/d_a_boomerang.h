@@ -81,15 +81,15 @@ public:
     /* 0x0290 */ J3DModel* mpModel;
     /* 0x0294 */ daBoomerang_sightPacket_c mSightPacket;
     /* 0x03A0 */ daBoomerang_blur_c mBlur;
-    /* 0x0F04 */ fpc_ProcID mTargetIds[BOOMERANG_LOCK_MAX];
-    /* 0x0F18 */ fopAc_ac_c* mTargetPtrs[BOOMERANG_LOCK_MAX];
+    /* 0x0F04 */ fpc_ProcID mLockActorIDs[BOOMERANG_LOCK_MAX];
+    /* 0x0F18 */ fopAc_ac_c* mLockActors[BOOMERANG_LOCK_MAX];
     /* 0x0F2C */ bool mIsReturning;
     /* 0x0F2D */ bool unused_0xF2D;
     /* 0x0F2E */ bool mJustHit;
     /* 0x0F2F */ bool mCatchAndDelete;
     /* 0x0F30 */ u8 unused_0xF30;
-    /* 0x0F31 */ u8 mNumTargets;
-    /* 0x0F32 */ u8 mCurTargetIdx;
+    /* 0x0F31 */ u8 mLockCnt;
+    /* 0x0F32 */ u8 mCurLockIdx;
     /* 0x0F33 */ bool mThirdPerson;
     /* 0x0F34 */ bool mCancelFlg;
     /* 0x0F35 */ u8 mInWater;
@@ -102,7 +102,7 @@ public:
     /* 0x0F88 */ dCcD_Cps mCps;
     /* 0x10C0 */ dBgS_BoomerangLinChk mLinChk;
     /* 0x112C */ dBgS_ObjGndChk mGndChk;
-    /* 0x1180 */ daBoomerang_c_ProcFunc mCurrProcFunc;
+    /* 0x1180 */ daBoomerang_c_ProcFunc mProcFunc;
 };
 
 STATIC_ASSERT(offsetof(daBoomerang_c, mSightPacket) == 0x294);

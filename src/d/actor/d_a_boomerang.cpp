@@ -276,10 +276,10 @@ BOOL daBoomerang_c::draw() {
     g_dComIfG_gameInfo.drawlist.setOpaListP1();
     g_dComIfG_gameInfo.drawlist.setXluListP1();
 
-    if (!mThirdPerson && mNumTargets != 0) {
+    if (!mThirdPerson && mLockCnt != 0) {
         mSightPacket.resetSightOn();
-        for (int i = mCurTargetIdx; i < mNumTargets; i++) {
-            fopAc_ac_c* pActor = mTargetPtrs[i];
+        for (int i = mCurLockIdx; i < mLockCnt; i++) {
+            fopAc_ac_c* pActor = mLockActors[i];
             if (pActor) {
                 mSightPacket.setSight(&pActor->eyePos, i);
             } else {
@@ -348,12 +348,12 @@ void daBoomerang_c::rockLineCallback(fopAc_ac_c* pHitActor) {
         }
     } else {
         for (int i = 0; i < BOOMERANG_LOCK_MAX; i++) {
-            if (mTargetPtrs[i] == pHitActor) {
-                mTargetIds[i] = -1;
-                mTargetPtrs[i] = NULL;
-                if (i == mCurTargetIdx) {
+            if (mLockActors[i] == pHitActor) {
+                mLockActorIDs[i] = -1;
+                mLockActors[i] = NULL;
+                if (i == mCurLockIdx) {
                     mJustHit = true;
-                    mCurTargetIdx++;
+                    mCurLockIdx++;
                 }
             }
         }
@@ -374,21 +374,21 @@ void daBoomerang_c::setAimActor(fopAc_ac_c* i_actor) {
 
 /* 800E1B20-800E1C20       .text setLockActor__13daBoomerang_cFP10fopAc_ac_ci */
 BOOL daBoomerang_c::setLockActor(fopAc_ac_c* i_actor, BOOL doSoundEffect) {
-    if (mNumTargets >= BOOMERANG_LOCK_MAX) {
+    if (mLockCnt >= BOOMERANG_LOCK_MAX) {
         return FALSE;
     }
 
     fpc_ProcID id = fopAcM_GetID(i_actor);
 
-    for (int i = 0; i < mNumTargets; i++) {
-        if (mTargetIds[i] == id) {
+    for (int i = 0; i < mLockCnt; i++) {
+        if (mLockActorIDs[i] == id) {
             return FALSE;
         }
     }
 
-    mTargetIds[mNumTargets] = id;
-    mTargetPtrs[mNumTargets] = i_actor;
-    mSightPacket.initFrame(mNumTargets);
+    mLockActorIDs[mLockCnt] = id;
+    mLockActors[mLockCnt] = i_actor;
+    mSightPacket.initFrame(mLockCnt);
 
     if (doSoundEffect) {
         static const u32 se_flg[BOOMERANG_LOCK_MAX] = {
@@ -399,22 +399,22 @@ BOOL daBoomerang_c::setLockActor(fopAc_ac_c* i_actor, BOOL doSoundEffect) {
             JA_SE_BOOM_LOCK_ON_5,
         };
 
-        mDoAud_seStart(se_flg[mNumTargets]);
+        mDoAud_seStart(se_flg[mLockCnt]);
     }
 
-    mNumTargets++;
+    mLockCnt++;
     return TRUE;
 }
 
 /* 800E1C20-800E1C58       .text resetLockActor__13daBoomerang_cFv */
 void daBoomerang_c::resetLockActor() {
     for (int i = 0; i < BOOMERANG_LOCK_MAX; i++) {
-        mTargetIds[i] = fpcM_ERROR_PROCESS_ID_e;
-        mTargetPtrs[i] = NULL;
+        mLockActorIDs[i] = fpcM_ERROR_PROCESS_ID_e;
+        mLockActors[i] = NULL;
     }
 
-    mNumTargets = 0;
-    mCurTargetIdx = 0;
+    mLockCnt = 0;
+    mCurLockIdx = 0;
 }
 
 /* 800E1C58-800E1CFC       .text setRoomInfo__13daBoomerang_cFv */
@@ -451,12 +451,12 @@ void daBoomerang_c::setAimPos() {
     if (mIsReturning) {
         mTargetPos = daPy_getPlayerLinkActorClass()->getBoomerangCatchPos();
     } else {
-        for (int i = mCurTargetIdx; i < mNumTargets; i++) {
-            if (mTargetPtrs[i] != NULL) {
-                mTargetPos = mTargetPtrs[i]->eyePos;
+        for (int i = mCurLockIdx; i < mLockCnt; i++) {
+            if (mLockActors[i] != NULL) {
+                mTargetPos = mLockActors[i]->eyePos;
                 return;
             }
-            mCurTargetIdx++;
+            mCurLockIdx++;
         }
     }
 }
@@ -495,11 +495,11 @@ BOOL daBoomerang_c::procWait() {
         mIsReturning = false;
         unused_0xF2D = true;
         mJustHit = false;
-        mCurTargetIdx = 0;
+        mCurLockIdx = 0;
 
         setAimPos();
 
-        if (mCurTargetIdx == mNumTargets) {
+        if (mCurLockIdx == mLockCnt) {
             resetLockActor();
 
             s16 angleY = pPlayer->getBodyAngleY() + pPlayer->shape_angle.y;
@@ -520,7 +520,7 @@ BOOL daBoomerang_c::procWait() {
 
         s16 angle = cM_atan2s(-diff.y, diff.absXZ());
         current.angle.x = angle;
-        if (mNumTargets == 0) {
+        if (mLockCnt == 0) {
             current.angle.y = cM_atan2s(diff.x, diff.z) + 0x3000;
             if (mThirdPerson) {
                 mFreeFlyOut = false;
@@ -537,7 +537,7 @@ BOOL daBoomerang_c::procWait() {
         shape_angle.z = 0x2000;
         mModelRotZ = 0x2000;
 
-        mCurrProcFunc = &daBoomerang_c::procMove;
+        mProcFunc = &daBoomerang_c::procMove;
 
         mCancelFlg = false;
 
@@ -622,24 +622,24 @@ BOOL daBoomerang_c::procMove() {
                 if (pPlayer->returnBoomerang()) {
                     fopAcM_SetParam(this, Mode_0);
                     mThirdPerson = false;
-                    mCurrProcFunc = &daBoomerang_c::procWait;
+                    mProcFunc = &daBoomerang_c::procWait;
                     mCps.SetAtHitCallback(NULL);
                 } else {
                     mCatchAndDelete = true;
                 }
             }
         } else {
-            if (dist < speedF || mCps.ChkAtHit() && mCps.GetAtHitAc() == mTargetPtrs[mCurTargetIdx]) {
+            if (dist < speedF || mCps.ChkAtHit() && mCps.GetAtHitAc() == mLockActors[mCurLockIdx]) {
                 // Boomerang hit its current target.
                 mJustHit = true;
-                mTargetPtrs[mCurTargetIdx] = NULL;
-                mTargetIds[mCurTargetIdx] = fpcM_ERROR_PROCESS_ID_e;
-                mCurTargetIdx++;
+                mLockActors[mCurLockIdx] = NULL;
+                mLockActorIDs[mCurLockIdx] = fpcM_ERROR_PROCESS_ID_e;
+                mCurLockIdx++;
                 mFreeFlyOut = false;
             }
         }
 
-        if (!mIsReturning && (mCancelFlg || (!mFreeFlyOut && mNumTargets <= mCurTargetIdx) || mCps.ChkAtShieldHit())) {
+        if (!mIsReturning && (mCancelFlg || (!mFreeFlyOut && mLockCnt <= mCurLockIdx) || mCps.ChkAtShieldHit())) {
             // Boomerang should return. It either was canceled, hit its last target, or hit a shield.
             mJustHit = true;
             mIsReturning = true;
@@ -723,19 +723,19 @@ BOOL daBoomerang_c::procMove() {
 
 /* 800E2AF4-800E2BD0       .text execute__13daBoomerang_cFv */
 BOOL daBoomerang_c::execute() {
-    for (int i = 0; i < mNumTargets; i++) {
-        mTargetPtrs[i] = fopAcM_SearchByID(mTargetIds[i]);
+    for (int i = 0; i < mLockCnt; i++) {
+        mLockActors[i] = fopAcM_SearchByID(mLockActorIDs[i]);
     }
 
-    if (mCurrProcFunc) {
-        (this->*mCurrProcFunc)();
+    if (mProcFunc) {
+        (this->*mProcFunc)();
     }
 
     attention_info.position = current.pos;
     eyePos = current.pos;
 
     setRoomInfo();
-    mSightPacket.play(mNumTargets);
+    mSightPacket.play(mLockCnt);
 
     return TRUE;
 }
@@ -818,7 +818,7 @@ cPhs_State daBoomerang_c::create() {
 
     setKeepMatrix();
     cullMtx = mpModel->getBaseTRMtx();
-    mCurrProcFunc = &daBoomerang_c::procWait;
+    mProcFunc = &daBoomerang_c::procWait;
     mStts.Init(0x3C, 0xFF, this);
 
     mCps.Set(l_at_cps_src);
@@ -828,7 +828,7 @@ cPhs_State daBoomerang_c::create() {
     mLinChk.ClrSttsRoofOff();
 
     for (int i = 0; i < BOOMERANG_LOCK_MAX; i++) {
-        mTargetIds[i] = fpcM_ERROR_PROCESS_ID_e;
+        mLockActorIDs[i] = fpcM_ERROR_PROCESS_ID_e;
     }
 
     {
