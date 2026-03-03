@@ -324,7 +324,7 @@ BOOL daBoomerang_c::draw() {
 
 /* 800E1998-800E19B8       .text daBoomerang_Draw__FP13daBoomerang_c */
 static BOOL daBoomerang_Draw(daBoomerang_c* i_this) {
-    return ((daBoomerang_c*)i_this)->draw();
+    return i_this->draw();
 }
 
 /* 800E19B8-800E1A14       .text getFlyMax__13daBoomerang_cFv */
@@ -742,7 +742,7 @@ BOOL daBoomerang_c::execute() {
 
 /* 800E2BD0-800E2BF0       .text daBoomerang_Execute__FP13daBoomerang_c */
 static BOOL daBoomerang_Execute(daBoomerang_c* i_this) {
-    return ((daBoomerang_c*)i_this)->execute();
+    return i_this->execute();
 }
 
 /* 800E2BF0-800E2BF8       .text daBoomerang_IsDelete__FP13daBoomerang_c */
