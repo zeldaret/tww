@@ -4,7 +4,7 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 
-#define BOOM_TARGET_MAX 5
+#define BOOMERANG_LOCK_MAX 5
 
 class daBoomerang_blur_c : public J3DPacket {
 public:
@@ -41,9 +41,9 @@ public:
     static const s32 HALF_ANIM_LENGTH = ANIM_LENGTH / 2;
 
 private:
-    /* 0x004 */ Mtx mMtxArr[BOOM_TARGET_MAX];
-    /* 0x0F4 */ u8 mFrameArr[BOOM_TARGET_MAX];
-    /* 0x0F9 */ u8 mScaleArr[BOOM_TARGET_MAX];
+    /* 0x004 */ Mtx mMtxArr[BOOMERANG_LOCK_MAX];
+    /* 0x0F4 */ u8 mFrameArr[BOOMERANG_LOCK_MAX];
+    /* 0x0F9 */ u8 mScaleArr[BOOMERANG_LOCK_MAX];
     /* 0x100 */ u32 mSightOnFlg;
     /* 0x104 */ void* mTex;
     /* 0x108 */ ResTIMG* mImage;
@@ -81,8 +81,8 @@ public:
     /* 0x0290 */ J3DModel* mpModel;
     /* 0x0294 */ daBoomerang_sightPacket_c mSightPacket;
     /* 0x03A0 */ daBoomerang_blur_c mBlur;
-    /* 0x0F04 */ fpc_ProcID mTargetIds[BOOM_TARGET_MAX];
-    /* 0x0F18 */ fopAc_ac_c* mTargetPtrs[BOOM_TARGET_MAX];
+    /* 0x0F04 */ fpc_ProcID mTargetIds[BOOMERANG_LOCK_MAX];
+    /* 0x0F18 */ fopAc_ac_c* mTargetPtrs[BOOMERANG_LOCK_MAX];
     /* 0x0F2C */ bool mIsReturning;
     /* 0x0F2D */ bool unused_0xF2D;
     /* 0x0F2E */ bool mJustHit;

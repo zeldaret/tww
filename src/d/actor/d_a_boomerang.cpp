@@ -214,7 +214,7 @@ void daBoomerang_sightPacket_c::draw() {
     GXColor color0 = {0xFF, 0xFF, 0x32, 0xFF};
     GXColor color1 = {0xFF, 0xFF, 0x32, 0xFF};
 
-    for (int i = 0; i < BOOM_TARGET_MAX; i++) {
+    for (int i = 0; i < BOOMERANG_LOCK_MAX; i++) {
         if (mSightOnFlg & (1 << i)) {
             color0.a = mScaleArr[i];
             color1.a = mScaleArr[i];
@@ -347,7 +347,7 @@ void daBoomerang_c::rockLineCallback(fopAc_ac_c* pHitActor) {
             setLockActor(pHitActor, TRUE);
         }
     } else {
-        for (int i = 0; i < BOOM_TARGET_MAX; i++) {
+        for (int i = 0; i < BOOMERANG_LOCK_MAX; i++) {
             if (mTargetPtrs[i] == pHitActor) {
                 mTargetIds[i] = -1;
                 mTargetPtrs[i] = NULL;
@@ -374,7 +374,7 @@ void daBoomerang_c::setAimActor(fopAc_ac_c* i_actor) {
 
 /* 800E1B20-800E1C20       .text setLockActor__13daBoomerang_cFP10fopAc_ac_ci */
 BOOL daBoomerang_c::setLockActor(fopAc_ac_c* i_actor, BOOL doSoundEffect) {
-    if (mNumTargets >= BOOM_TARGET_MAX) {
+    if (mNumTargets >= BOOMERANG_LOCK_MAX) {
         return FALSE;
     }
 
@@ -391,7 +391,7 @@ BOOL daBoomerang_c::setLockActor(fopAc_ac_c* i_actor, BOOL doSoundEffect) {
     mSightPacket.initFrame(mNumTargets);
 
     if (doSoundEffect) {
-        static const u32 se_flg[BOOM_TARGET_MAX] = {
+        static const u32 se_flg[BOOMERANG_LOCK_MAX] = {
             JA_SE_BOOM_LOCK_ON_1,
             JA_SE_BOOM_LOCK_ON_2,
             JA_SE_BOOM_LOCK_ON_3,
@@ -408,7 +408,7 @@ BOOL daBoomerang_c::setLockActor(fopAc_ac_c* i_actor, BOOL doSoundEffect) {
 
 /* 800E1C20-800E1C58       .text resetLockActor__13daBoomerang_cFv */
 void daBoomerang_c::resetLockActor() {
-    for (int i = 0; i < BOOM_TARGET_MAX; i++) {
+    for (int i = 0; i < BOOMERANG_LOCK_MAX; i++) {
         mTargetIds[i] = fpcM_ERROR_PROCESS_ID_e;
         mTargetPtrs[i] = NULL;
     }
@@ -827,7 +827,7 @@ cPhs_State daBoomerang_c::create() {
 
     mLinChk.ClrSttsRoofOff();
 
-    for (int i = 0; i < BOOM_TARGET_MAX; i++) {
+    for (int i = 0; i < BOOMERANG_LOCK_MAX; i++) {
         mTargetIds[i] = fpcM_ERROR_PROCESS_ID_e;
     }
 
