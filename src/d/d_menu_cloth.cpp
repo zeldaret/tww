@@ -127,20 +127,21 @@ void dMCloth_c::lightSet1(cXyz) {
 /* 8019977C-80199CD0       .text cloth_init__9dMCloth_cFv */
 void dMCloth_c::cloth_init() {
     /* Nonmatching */
+    cXyz* pPosArr = getPos();
     cXyz* pNrm = getNrm();
+    cXyz* pOffArr = getOffsetVec();
 
     for (int y = 0; y < INNER_SIZE; y++) {
-        s16 yAngle = -(y * 3500);
-        for (int x = 0; x < INNER_SIZE; x++) {
-            cXyz* pPos = &getPos()[x + y * INNER_SIZE];
-            pPos->x = cM_ssin(x * 3276.8f) * 954.9299f + -1500.0f + x * 10.0f * cM_ssin(yAngle);
-            pPos->y = y * 300.0f + -1500.0f;
-            pPos->z = (1.0f - cM_scos(x * 3276.8f)) * 716.1974f + -3400.0f + x * -5.0f * cM_scos(yAngle);
+        int x = 0;
+        s16 yAngle = -y * 3500;
+        for (; x < INNER_SIZE; x++) {
+            pPosArr[x + y * INNER_SIZE].set(
+                cM_ssin(x * 3276.8f) * 954.9299f + -1500.0f + x * 10.0f * cM_ssin(yAngle),
+                y * 300.0f + -1500.0f,
+                (1.0f - cM_scos(x * 3276.8f)) * 716.1974f + -3400.0f + x * -5.0f * cM_scos(yAngle)
+            );
 
-            cXyz* pOff = &getOffsetVec()[x + y * INNER_SIZE];
-            pOff->x = cM_scos(x * 3276.8f - 1000.0f) * -320.0f;
-            pOff->y = 0.0f;
-            pOff->z = cM_ssin(x * 3276.8f - 1000.0f) * -270.0f;
+            pOffArr[x + y * INNER_SIZE].set(cM_scos(x * 3276.8f - 1000.0f) * -320.0f, 0.0f, cM_ssin(x * 3276.8f - 1000.0f) * -270.0f);
         }
     }
 
