@@ -8,66 +8,338 @@
 #include "dolphin/types.h"
 
 /* 800CB5CC-800CB778       .text aroundWalk__17daNpc_Mk_Static_cFP10fopAc_ac_cP10fopAc_ac_cUc */
-void daNpc_Mk_Static_c::aroundWalk(fopAc_ac_c*, fopAc_ac_c*, u8) {
-    /* Nonmatching */
+void daNpc_Mk_Static_c::aroundWalk(fopAc_ac_c* param_1, fopAc_ac_c* param_2, u8 param_3) {
+    s16 local_58;
+    dNpc_calc_DisXZ_AngY(param_1->current.pos, param_2->current.pos, NULL, &local_58);
+
+    if (param_3) {
+        local_58 += 0x3000;
+        cLib_addCalcAngleS(&param_1->current.angle.y, local_58, 2, 0x800, 0x400);
+    } else {
+        cXyz local_44 = param_1->current.pos - param_2->current.pos;
+        f32 fVar2 = local_44.absXZ();
+
+        if (fVar2 > 150.0f) {
+            local_58 += 0x3400;
+        } else if (fVar2 < 120.0f) {
+            local_58 += 0x4000;
+        } else {
+            local_58 += 0x3a00;
+        }
+
+        cLib_addCalcAngleS(&param_1->current.angle.y, local_58, 8, 0x800, 0x200);
+    }
 }
 
 /* 800CB778-800CB88C       .text turnPath__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_cUc */
-void daNpc_Mk_Static_c::turnPath(fopAc_ac_c*, dNpc_PathRun_c*, u8) {
-    /* Nonmatching */
+u32 daNpc_Mk_Static_c::turnPath(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, u8 param_3) {
+    cXyz local_2c = param_2->getPoint(param_2->mCurrPointIndex);
+
+    s16 local_48;
+    dNpc_calc_DisXZ_AngY(param_1->current.pos, local_2c, NULL, &local_48);
+
+    if (param_3 & 2) {
+        cLib_addCalcAngleS(&param_1->current.angle.y, local_48, 2, 0x2000, 0x400);
+    } else {
+        cLib_addCalcAngleS(&param_1->current.angle.y, local_48, 8, 0x800, 0x200);
+    }
+
+    f32 cosine = JMASCos(param_1->current.angle.y - local_48);
+    if (cosine < 0.0f) {
+        m4 = cosine + 1.0f;
+    }
+
+    return 0;
 }
 
 /* 800CB88C-800CB934       .text chkPath__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_cUc */
-void daNpc_Mk_Static_c::chkPath(fopAc_ac_c*, dNpc_PathRun_c*, u8) {
-    /* Nonmatching */
+BOOL daNpc_Mk_Static_c::chkPath(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, u8 param_3) {
+    bool bVar2 = param_2->chkPointPass(param_1->current.pos, (param_3 & 1) != 1);
+
+    if (bVar2) {
+        if (param_3 & 1 != 0) {
+            param_2->decIdxLoop();
+        } else {
+            param_2->incIdxLoop();
+        }
+
+        mPointIndex2 = mPointIndex1;
+        mPointIndex1 = param_2->mCurrPointIndex;
+
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 800CB934-800CB990       .text walkPath__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_cUc */
-void daNpc_Mk_Static_c::walkPath(fopAc_ac_c*, dNpc_PathRun_c*, u8) {
-    /* Nonmatching */
+BOOL daNpc_Mk_Static_c::walkPath(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, u8 param_3) {
+    BOOL result = chkPath(param_1, param_2, param_3);
+    turnPath(param_1, param_2, param_3);
+    return result;
 }
 
 /* 800CB990-800CBA18       .text getSpeedF__17daNpc_Mk_Static_cFff */
-void daNpc_Mk_Static_c::getSpeedF(f32, f32) {
-    /* Nonmatching */
+f32 daNpc_Mk_Static_c::getSpeedF(f32 param_1, f32 param_2) {
+    f32 fVar2;
+    if (!md) {
+        fVar2 = param_1;
+    } else if (m8 >= (ma >> 1)) {
+        fVar2 = param_2;
+    } else {
+        fVar2 = m8 * ((2.0f / ma) * (param_2 - param_1)) + param_1;
+    }
+
+    f32 result = fVar2 * m4;
+    m4 = 1.0f;
+    return result;
 }
 
 /* 800CBA18-800CBA3C       .text init__17daNpc_Mk_Static_cFUcUs */
-void daNpc_Mk_Static_c::init(u8, u16) {
-    /* Nonmatching */
+void daNpc_Mk_Static_c::init(u8 param_1, u16 param_2) {
+    m0 = 0;
+    me = param_1;
+    m8 = param_2;
+    ma = param_2;
+    md = false;
+    m4 = 1.0f;
 }
 
 /* 800CBA3C-800CBBC4       .text goFarLink_3__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_c */
-void daNpc_Mk_Static_c::goFarLink_3(fopAc_ac_c*, dNpc_PathRun_c*) {
-    /* Nonmatching */
+u8 daNpc_Mk_Static_c::goFarLink_3(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2) {
+    daPy_lk_c* link_actor = daPy_getPlayerLinkActorClass();
+    dNpc_PathRun_c dStack_74;
+    dStack_74.setInfDrct(param_2->mPath);
+
+    if (mPointIndex2 == mPointIndex1) {
+        return m0;
+    } else {
+        cXyz local_60 = dStack_74.getPoint(mPointIndex2);
+        cXyz local_6c = dStack_74.getPoint(mPointIndex1);
+        s16 sVar4 = cLib_targetAngleY(&param_1->current.pos, &link_actor->current.pos);
+        s16 sVar5 = cLib_targetAngleY(&local_60, &local_6c);
+
+        cM3dGLin unusedLine;
+
+        if (m0 == 1 || m0 == 2) {
+            if (abs(sVar5 - sVar4) < 0x1800) {
+                cXyz output1;
+                f32 output2;
+
+                if (cM3d_Len2dSqPntAndSegLine(fopAcM_GetPosition_p(link_actor)->x, fopAcM_GetPosition_p(link_actor)->z, local_60.x, local_60.z, local_6c.x, local_6c.z, &output1.x, &output1.z, &output2)) {
+                    if (output2 < 10000.0f) {
+                        if (m0 == 1) {
+                            return 2;
+                        } else {
+                            return 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        return m0;
+    }
 }
 
 /* 800CBBC4-800CBE7C       .text goFarLink_2__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_c */
-void daNpc_Mk_Static_c::goFarLink_2(fopAc_ac_c*, dNpc_PathRun_c*) {
-    /* Nonmatching */
+u8 daNpc_Mk_Static_c::goFarLink_2(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2) {
+    daPy_lk_c *link_actor = daPy_getPlayerLinkActorClass();
+
+    cXyz local_8c;
+    cXyz local_80;
+    cXyz local_74;
+    dNpc_PathRun_c dStack_94;
+    dStack_94.setInfDrct(param_2->mPath);
+    dStack_94.mCurrPointIndex = mPointIndex2;
+    local_8c = dStack_94.getPoint(dStack_94.mCurrPointIndex);
+    dStack_94.incIdxLoop();
+    local_80 = dStack_94.getPoint(dStack_94.mCurrPointIndex);
+    dStack_94.decIdxLoop();
+    dStack_94.decIdxLoop();
+    local_74 = dStack_94.getPoint(dStack_94.mCurrPointIndex);
+
+    s16 sVar5 = cLib_targetAngleY(&local_8c, &link_actor->current.pos);
+    s16 sVar6 = cLib_targetAngleY(&local_8c, &local_80);
+    s16 sVar7 = cLib_targetAngleY(&local_8c, &local_74);
+
+    cM3dGLin unusedLine;
+
+    cXyz output1;
+    float output2;
+
+    int iVar1 = sVar6 - sVar5;
+    if (abs(iVar1) < 0x1800) {
+        if (cM3d_Len2dSqPntAndSegLine(fopAcM_GetPosition_p(link_actor)->x, fopAcM_GetPosition_p(link_actor)->z, local_8c.x,local_8c.z, local_80.x, local_80.z, &output1.x, &output1.z, &output2)) {
+            if (output2 < 10000.0f) {
+                return 2;
+            }
+        }
+    }
+
+    int iVar2 = sVar7 - sVar5;
+    if (abs(iVar2) < 0x1800) {
+        if (cM3d_Len2dSqPntAndSegLine(fopAcM_GetPosition_p(link_actor)->x, fopAcM_GetPosition_p(link_actor)->z, local_8c.x, local_8c.z, local_74.x, local_74.z, &output1.x, &output1.z, &output2)) {
+            if (output2 < 10000.0f) {
+                return 1;
+            }
+        }
+    }
+
+    if (dStack_94.setNearPathIndxMk2(fopAcM_GetPosition_p(link_actor), mPointIndex2, 5)) {
+        int index_diff = dStack_94.mCurrPointIndex - mPointIndex2;
+        if ((index_diff > 0) == (abs(index_diff) <= 5)) {
+            return 2;
+        } else {
+            return 1;
+        }
+    } else if (abs(iVar1) >= abs(iVar2)) {
+        return 1;
+    } else {
+        return 2;
+    }
 }
 
 /* 800CBE7C-800CBEE0       .text runaway_com2__17daNpc_Mk_Static_cFP14dNpc_PathRun_cUc */
-void daNpc_Mk_Static_c::runaway_com2(dNpc_PathRun_c*, u8) {
-    /* Nonmatching */
+void daNpc_Mk_Static_c::runaway_com2(dNpc_PathRun_c* param_1, u8 param_2) {
+    param_1->mCurrPointIndex = mPointIndex2;
+
+    if (param_2 == 1) {
+        param_1->incIdxLoop();
+    } else {
+        param_1->decIdxLoop();
+    }
+
+    mPointIndex1 = param_1->mCurrPointIndex;
 }
 
 /* 800CBEE0-800CC374       .text runAwayProc__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_cP8dCcD_CylPs */
-void daNpc_Mk_Static_c::runAwayProc(fopAc_ac_c*, dNpc_PathRun_c*, dCcD_Cyl*, s16*) {
-    /* Nonmatching */
+u8 daNpc_Mk_Static_c::runAwayProc(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, dCcD_Cyl* param_3, s16* param_4) {
+    daPy_lk_c *link_actor = daPy_getPlayerLinkActorClass();
+    if (param_3->GetCoHitAc() == link_actor) {
+        *param_4 = cLib_targetAngleY(fopAcM_GetPosition_p(link_actor), fopAcM_GetPosition_p(param_1));
+        return 4;
+    }
+
+    if (me != 0) {
+        me --;
+    }
+
+    switch (m0) {
+        case 0:
+            f32 dVar8 = param_2->setNearPathIndxMk(fopAcM_GetPosition_p(param_1));
+            mPointIndex1 = param_2->mCurrPointIndex;
+            mPointIndex2 = mPointIndex1;
+
+            if (dVar8 >= 50.0f) {
+                return 5;
+            } else {
+                return 3;
+            }
+
+        case 5:
+            cXyz local_44 = param_2->getPoint(mPointIndex1);
+
+            if ((local_44 - param_1->current.pos).absXZ() < 20.0f) {
+                return 3;
+            }
+            turnPath(param_1, param_2, 2);
+            break;
+
+        case 3:
+            if ((link_actor->current.pos - param_1->current.pos).absXZ() < 800.0f) {
+                me = 10;
+                u8 uVar6 = goFarLink_2(param_1, param_2);
+                runaway_com2(param_2, uVar6);
+                return uVar6;
+            }
+
+            if (m8 + 3 < ma) {
+                m8 += 3;
+            }
+            break;
+
+        case 1:
+        case 2:
+            f32 fVar9 = (link_actor->current.pos - param_1->current.pos).absXZ();
+
+            if (walkPath(param_1, param_2, (m0 == 1) ? (u8)2 : (u8)3)) {
+                if (fVar9 > 900.0f) {
+                    return 3;
+                } else {
+                    u8 uVar6 = goFarLink_2(param_1, param_2);
+                    if (uVar6 != m0) {
+                        runaway_com2(param_2, uVar6);
+                    }
+                    return uVar6;
+                }
+            }
+
+            if (me == 0) {
+                me = 10;
+                u8 uVar6 = goFarLink_3(param_1, param_2);
+
+                if (uVar6 != m0) {
+                    mPointIndex2 = mPointIndex1;
+                    runaway_com2(param_2, uVar6);
+                }
+
+                return uVar6;
+            } else if (md) {
+                if (m8 >= 1) {
+                    m8 --;
+                }
+                if (fVar9 > 400.0f) {
+                    md = false;
+                }
+            } else {
+                if (fVar9 < 200.0f) {
+                    md = true;
+                }
+            }
+            break;
+    }
+
+    return m0;
 }
 
 /* 800CC374-800CC400       .text chkGameSet__17daNpc_Mk_Static_cFv */
-void daNpc_Mk_Static_c::chkGameSet() {
-    /* Nonmatching */
+bool daNpc_Mk_Static_c::chkGameSet() {
+    if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0020) && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0010) && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0008) && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0004)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 800CC400-800CC664       .text setRndPathPos__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_c */
-void daNpc_Mk_Static_c::setRndPathPos(fopAc_ac_c*, dNpc_PathRun_c*) {
-    /* Nonmatching */
+void daNpc_Mk_Static_c::setRndPathPos(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2) {
+    dBgS_GndChk local_90;
+    if (param_2->mPath != NULL) {
+        param_1->current.pos = param_2->getPoint((int) cM_rndF((int) param_2->maxPoint()));
+        local_90.mFlag &= 0xfffffffd;
+
+        f32 z = fopAcM_GetPosition_p(param_1)->z;
+        f32 y = fopAcM_GetPosition_p(param_1)->y + 200.0f;
+        f32 x = fopAcM_GetPosition_p(param_1)->x;
+        cXyz pos(x, y, z);
+
+        local_90.m_pos = pos;
+
+        param_1->current.pos.y = dComIfG_Bgsp()->GroundCross(&local_90);
+        param_1->old.pos = param_1->current.pos;
+    }
 }
 
 /* 800CC664-800CC734       .text chkPointPass__17daNpc_Mk_Static_cFP4cXyzP4cXyzP4cXyz */
-void daNpc_Mk_Static_c::chkPointPass(cXyz*, cXyz*, cXyz*) {
-    /* Nonmatching */
+bool daNpc_Mk_Static_c::chkPointPass(cXyz* param_1, cXyz* param_2, cXyz* param_3) {
+    if (param_1->x == param_2->x && param_1->z == param_2->z) {
+        return true;
+    } else if (param_3->x == param_2->x && param_3->z == param_2->z) {
+        return true;
+    } else if (JMASCos(cLib_targetAngleY(param_1, param_2) - cLib_targetAngleY(param_3, param_2)) < 0.0f) {
+        return true;
+    } else {
+        return false;
+    }
 }
