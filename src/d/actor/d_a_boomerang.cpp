@@ -463,7 +463,7 @@ void daBoomerang_c::checkBgHit(cXyz* pi_start, cXyz* pi_end) {
     mLinChk.Set(pi_start, pi_end, this);
     if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
         current.pos.set(mLinChk.GetCross());
-        g_dComIfG_gameInfo.play.getParticle()->setNormalP1(0xC, &current.pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        dComIfGp_particle_setP1(dPa_name::ID_COMMON_PURPLE_HIT, &current.pos);
         mIsReturning = true;
         current.angle.y += 0x8000;
         shape_angle.y = current.angle.y;
@@ -549,7 +549,7 @@ BOOL daBoomerang_c::procWait() {
             resetLockActor();
         } else {
             bool isAiming = (pPlayer->mCurProc == daPy_lk_c::daPyProc_BOOMERANG_SUBJECT_e || pPlayer->mCurProc == daPy_lk_c::daPyProc_SHIP_BOOMERANG_e) &&
-                     pPlayer->mSightPacket.getDrawFlg();
+                            pPlayer->mSightPacket.getDrawFlg();
 
             if (isAiming) {
                 camera_class* pCamera = g_dComIfG_gameInfo.play.getCamera(g_dComIfG_gameInfo.play.getPlayerCameraID(0));
