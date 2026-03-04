@@ -99,7 +99,7 @@ void daObjSmplbg::Act_c::init_mtx() {
 
 /* 00000594-0000061C       .text exec_qtkhd__Q211daObjSmplbg5Act_cFv */
 void daObjSmplbg::Act_c::exec_qtkhd() {
-    if(field_0x2D8 == 0){
+    if(!mIsStop) {
         shape_angle.y += 0x5b;
         fopAcM_seStart(this, JA_SE_OBJ_TC_TOWER_ROUND, 0);
     }

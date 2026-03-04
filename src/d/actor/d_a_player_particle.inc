@@ -1276,16 +1276,19 @@ void daPy_lk_c::endDamageEmitter() {
 }
 
 /* 8012CA44-8012CD60       .text setItemWaterEffect__9daPy_lk_cFP10fopAc_ac_cii */
-u32 daPy_lk_c::setItemWaterEffect(fopAc_ac_c* i_actor, int param_1, int param_2) {
+BOOL daPy_lk_c::setItemWaterEffect(fopAc_ac_c* i_actor, BOOL inWater, BOOL triggerOnExit) {
     static cXyz eff_scale0(0.5f, 0.5f, 0.5f);
     static cXyz eff_scale2(0.13f, 0.13f, 0.13f);
     static JGeometry::TVec3<f32> direction(0.0f, 1.0f, 0.0f);
 
     f32 waterY;
-    if (fopAcM_getWaterY(&i_actor->current.pos, &waterY) && ((param_1 != 0 && i_actor->current.pos.y > waterY) || (param_1 == 0 && waterY >= i_actor->current.pos.y))) {
-        param_1 ^= 1;
-        if (param_1 == 0 && param_2 == 0) {
-            return param_1;
+    if (fopAcM_getWaterY(&i_actor->current.pos, &waterY) &&
+        ((inWater && i_actor->current.pos.y > waterY) || (!inWater && waterY >= i_actor->current.pos.y)))
+    {
+        // Item entered or exited the water.
+        inWater ^= 1;
+        if (!inWater && !triggerOnExit) {
+            return inWater;
         }
 
         f32 deltaY = std::fabsf(i_actor->old.pos.y - i_actor->current.pos.y);
@@ -1321,5 +1324,5 @@ u32 daPy_lk_c::setItemWaterEffect(fopAc_ac_c* i_actor, int param_1, int param_2)
         }
     }
 
-    return param_1;
+    return inWater;
 }

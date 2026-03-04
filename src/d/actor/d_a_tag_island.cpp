@@ -154,7 +154,7 @@ void daTag_Island_c::talkInit() {
 
 /* 0000056C-000006AC       .text talk__14daTag_Island_cFv */
 u16 daTag_Island_c::talk() {
-    u16 ret = 0xFF;
+    u16 status = 0xFF;
     
     if (mTalkState == 0) {
         l_msgId = fpcM_ERROR_PROCESS_ID_e;
@@ -171,13 +171,13 @@ u16 daTag_Island_c::talk() {
                     mTalkState = 2;
                 break;
             case 2:
-                ret = l_msg->mStatus;
-                if (ret == fopMsgStts_MSG_DISPLAYED_e) {
+                status = l_msg->mStatus;
+                if (status == fopMsgStts_MSG_DISPLAYED_e) {
                     l_msg->mStatus = next_msgStatus(&mMsg);
                     if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
                         fopMsgM_messageSet(mMsg);
                     }
-                } else if (ret == fopMsgStts_BOX_CLOSED_e) {
+                } else if (status == fopMsgStts_BOX_CLOSED_e) {
                     l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
                     mTalkState = -1;
                 }
@@ -186,7 +186,7 @@ u16 daTag_Island_c::talk() {
         }
     }
 
-    return ret;
+    return status;
 }
 
 /* 000006AC-00000778       .text demoInitTact_Bf__14daTag_Island_cFv */

@@ -370,7 +370,7 @@ public:
     void changeAnm(J3DAnmTransform* bckAnm) { mpAnm = bckAnm; }
     J3DAnmTransform* getAnm() { return mpAnm; }
     f32 getMorfRatio() { return mCurMorf; }
-    BOOL isLoop() { return mFrameCtrl.checkState(J3DFrameCtrl::STATE_LOOP_E); }
+    bool isLoop() { return mFrameCtrl.checkState(J3DFrameCtrl::STATE_LOOP_E); }
     BOOL isMorf() { return mCurMorf < 1.0f; }
 
 private:
