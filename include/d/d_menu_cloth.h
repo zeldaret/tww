@@ -101,7 +101,7 @@ public:
     /* 0x0048 */ s16 lightPitch;
     /* 0x004a */ s16 lightYaw;
     /* 0x004c */ f32 lightDistance;
-    /* 0x0050 */ u16 wavePreSteps;
+    /* 0x0050 */ s16 wavePreSteps;
     /* 0x0054 */ f32 maxStep;
 };
 
