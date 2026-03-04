@@ -2391,3 +2391,10 @@ extract:
 - symbol: l_toonMat1DL
   binary: assets/l_toonMat1DL.bin
   header: assets/l_toonMat1DL.h
+
+- symbol: l_matDL!.data:0x8037DB00
+  binary: assets/l_matDL__d_cloth_packet.bin
+  header: assets/l_matDL__d_cloth_packet.h
+- symbol: l_alpha_matDL!.data:0x8037DB40
+  binary: assets/l_alpha_matDL__d_cloth_packet.bin
+  header: assets/l_alpha_matDL__d_cloth_packet.h
