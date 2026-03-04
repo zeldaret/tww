@@ -56,7 +56,7 @@ public:
 
     /* 0x0004 */ u16 unused_0x4;
     /* 0x0006 */ u8 field_0x6[0x08 - 0x06];
-    /* 0x0008 */ u16 mWaveProgress;
+    /* 0x0008 */ s16 mWaveProgress;
     /* 0x000A */ s16 mFadeInCounter;
     /* 0x000C */ u8 mAlphaOut;
     /* 0x000D */ u8 mCurrentAlpha;
