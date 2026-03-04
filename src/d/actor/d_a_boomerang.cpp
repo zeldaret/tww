@@ -273,8 +273,7 @@ void daBoomerang_sightPacket_c::play(int n) {
 
 /* 800E1754-800E1998       .text draw__13daBoomerang_cFv */
 BOOL daBoomerang_c::draw() {
-    g_dComIfG_gameInfo.drawlist.setOpaListP1();
-    g_dComIfG_gameInfo.drawlist.setXluListP1();
+    dComIfGd_setListP1();
 
     if (!mThirdPerson && mLockCnt != 0) {
         mSightPacket.resetSightOn();
@@ -295,8 +294,7 @@ BOOL daBoomerang_c::draw() {
     }
 
     if (daPy_getPlayerActorClass()->checkPlayerNoDraw() && fopAcM_GetParam(this) == Mode_Wait) {
-        g_dComIfG_gameInfo.drawlist.setOpaList();
-        g_dComIfG_gameInfo.drawlist.setXluList();
+        dComIfGd_setList();
         return TRUE;
     }
 
@@ -309,8 +307,7 @@ BOOL daBoomerang_c::draw() {
         mDoExt_modelUpdateDL(mpModel);
     }
 
-    g_dComIfG_gameInfo.drawlist.setOpaList();
-    g_dComIfG_gameInfo.drawlist.setXluList();
+    dComIfGd_setList();
 
     if (mGroundY != -G_CM3D_F_INF && fopAcM_GetParam(this) == Mode_Throw) {
         cXyz* pFloorNrm = dComIfG_Bgsp()->GetTriPla(mGndChk)->GetNP();
