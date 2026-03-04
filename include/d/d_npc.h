@@ -161,12 +161,24 @@ public:
         return mpEvtStaffName;
     }
 
+    int getNowCut() {
+        return mCurActIdx;
+    }
+
     bool getAttnFlag() {
         return mbAttention;
     }
 
     void setAttnFlag(bool flag) {
         mbAttention = flag;
+    }
+
+    void setAttnNoTurnFlag(bool flag) {
+        mbNoTurn = flag;
+    }
+
+    f32 getMoveSpeed() {
+        return mSpeed;
     }
 
     cXyz getAttnPos() {
