@@ -178,8 +178,7 @@ void dMCloth_c::cloth_init() {
 
     switch (mClothType) {
     case MENU_CLOTH_TYPE_0: {
-        const f32 r = cM_rndFX(45.0f);
-        init_angle_z += (s16)((r + 90.0f) * 182.04445f);
+        init_angle_z += cM_deg2s(cM_rndFX(45.0f) + 90.0f);
         mScale = HIO_CHILD.scale;
         mRot.set(0, 0, init_angle_z);
         s32 n = HIO_CHILD.wavePreSteps;
