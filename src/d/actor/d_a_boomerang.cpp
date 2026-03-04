@@ -752,13 +752,7 @@ static BOOL daBoomerang_Delete(daBoomerang_c*) {
 BOOL daBoomerang_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Link", LINK_BDL_BOOMERANG);
 
-#if VERSION == VERSION_DEMO
-    JUT_ASSERT(1543, modelData != NULL);
-#elif VERSION == VERSION_JPN
-    JUT_ASSERT(1539, modelData != NULL);
-#else
-    JUT_ASSERT(1546, modelData != NULL);
-#endif
+    JUT_ASSERT(VERSION_SELECT(1543, 1539, 1546, 1546), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x37220202);
     if (mpModel == NULL)
@@ -827,13 +821,7 @@ cPhs_State daBoomerang_c::create() {
     {
         ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", LINK_BTI_BLUR);
 
-#if VERSION == VERSION_DEMO
-        JUT_ASSERT(1626, tmp_img != NULL);
-#elif VERSION == VERSION_JPN
-        JUT_ASSERT(1622, tmp_img != NULL);
-#else
-        JUT_ASSERT(1629, tmp_img != NULL);
-#endif
+        JUT_ASSERT(VERSION_SELECT(1626, 1622, 1629, 1629), tmp_img != NULL);
 
         mBlur.imageData = (u8*)tmp_img + tmp_img->imageOffset;
     }
@@ -841,13 +829,7 @@ cPhs_State daBoomerang_c::create() {
     {
         ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", LINK_BTI_ROCK_MARK);
 
-#if VERSION == VERSION_DEMO
-        JUT_ASSERT(1634, tmp_img != NULL);
-#elif VERSION == VERSION_JPN
-        JUT_ASSERT(1630, tmp_img != NULL);
-#else
-        JUT_ASSERT(1637, tmp_img != NULL);
-#endif
+        JUT_ASSERT(VERSION_SELECT(1634, 1630, 1637, 1637), tmp_img != NULL);
 
         mSightPacket.setTex((u8*)tmp_img + tmp_img->imageOffset);
         mSightPacket.setImage(tmp_img);
