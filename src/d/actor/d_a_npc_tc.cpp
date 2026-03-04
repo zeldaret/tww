@@ -723,7 +723,7 @@ void daNpc_Tc_c::anmAtr(u16 i_msgStatus) {
     };
 
     switch (i_msgStatus) {
-        case fopMsgStts_MSG_TYPING_e:
+        case fopMsgStts_MSG_TYPING_e: {
             if(field_0x6C8) {
                 return;
             }
@@ -734,7 +734,7 @@ void daNpc_Tc_c::anmAtr(u16 i_msgStatus) {
             }
             mAnmPrmIdx = anm_atr[msgAnmAtr];
             break;
-
+        }
         case fopMsgStts_MSG_DISPLAYED_e:
             field_0x6C8 = FALSE;
             break;
@@ -1278,7 +1278,7 @@ void daNpc_Tc_c::statusWalkToJail() {
 void daNpc_Tc_c::statusTalkNearJail() {
     mTargetSpeed = 0.0f;
     speedF = 0.0f;
-    if (talk(1) == 0x12) {
+    if (talk(1) == fopMsgStts_BOX_CLOSED_e) {
         mStatus = STATUS_WAIT_NEAR_JAIL;
         dComIfGp_event_reset();
         mTalkingNearJail = false;
@@ -1391,7 +1391,7 @@ void daNpc_Tc_c::statusSitToStool() {
 
 /* 00002F94-00003028       .text statusTalk__10daNpc_Tc_cFv */
 void daNpc_Tc_c::statusTalk() {
-    if(talk(1) != 0x12) {
+    if(talk(1) != fopMsgStts_BOX_CLOSED_e) {
         return;
     }
     
@@ -1415,7 +1415,7 @@ void daNpc_Tc_c::statusTalk() {
 
 /* 00003028-00003088       .text statusPayRupee__10daNpc_Tc_cFv */
 void daNpc_Tc_c::statusPayRupee() {
-    if(talk(1) == 0x12) {
+    if(talk(1) == fopMsgStts_BOX_CLOSED_e) {
         dComIfGp_event_reset();
         mEventIdx = 9;
         mStatus = STATUS_DEMO_PAY_RUPEE;
@@ -1433,7 +1433,7 @@ void daNpc_Tc_c::statusDemoPayRupee() {
 
 /* 000030F8-00003158       .text statusGetRupee__10daNpc_Tc_cFv */
 void daNpc_Tc_c::statusGetRupee() {
-    if(talk(1) == 0x12) {
+    if(talk(1) == fopMsgStts_BOX_CLOSED_e) {
         dComIfGp_event_reset();
         mEventIdx = 8;
         mStatus = STATUS_DEMO_GET_RUPEE;
@@ -1452,7 +1452,7 @@ void daNpc_Tc_c::statusDemoGetRupee() {
 
 /* 000031CC-0000322C       .text statusMonumentComplete__10daNpc_Tc_cFv */
 void daNpc_Tc_c::statusMonumentComplete() {
-    if(talk(1) == 0x12) {
+    if(talk(1) == fopMsgStts_BOX_CLOSED_e) {
         dComIfGp_event_reset();
         mEventIdx = 8;
         mStatus = STATUS_DEMO_MONUMENT_COMPLETE;

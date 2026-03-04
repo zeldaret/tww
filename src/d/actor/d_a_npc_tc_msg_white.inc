@@ -1,6 +1,9 @@
 // The original name of this file is unknown, but it must exist because d_a_npc_tc's "white's" functions
 // are in a separate .text section from the rest of its functions.
 
+#include "d/actor/d_a_npc_tc.h"
+#include "d/d_com_inf_game.h"
+
 /* 00005158-000053D4       .text next_msgStatusWhite__10daNpc_Tc_cFPUl */
 u16 daNpc_Tc_c::next_msgStatusWhite(u32* pMsgNo) {
     m_jnt.offHeadLock();

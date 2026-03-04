@@ -3,6 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_npc.h"
+#include "d/d_particle.h"
 
 namespace daObjSmplbg { class Act_c; };
 

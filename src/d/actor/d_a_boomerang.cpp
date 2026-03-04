@@ -69,8 +69,8 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
     for (i = 0; i < SEGMENTS_PER_STEP; i++) {
         mDoMtx_stack_c::multVec(&l_blur_top, &trail0_vtxArr0[i]);
         mDoMtx_stack_c::multVec(&l_blur_root, &trail0_vtxArr1[i]);
-        VECAdd(&trail0_vtxArr0[i], &(diff * t), &trail0_vtxArr0[i]);
-        VECAdd(&trail0_vtxArr1[i], &(diff * t), &trail0_vtxArr1[i]);
+        trail0_vtxArr0[i] += diff * t;
+        trail0_vtxArr1[i] += diff * t;
         t += 1.0f / SEGMENTS_PER_STEP;
         mDoMtx_stack_c::YrotM(yRotPerStep);
     }
@@ -84,8 +84,8 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
     for (i = 0; i < SEGMENTS_PER_STEP; i++) {
         mDoMtx_stack_c::multVec(&l_blur_top, &trail1_vtxArr0[i]);
         mDoMtx_stack_c::multVec(&l_blur_root, &trail1_vtxArr1[i]);
-        VECAdd(&trail1_vtxArr0[i], &(diff * t), &trail1_vtxArr0[i]);
-        VECAdd(&trail1_vtxArr1[i], &(diff * t), &trail1_vtxArr1[i]);
+        trail1_vtxArr0[i] += diff * t;
+        trail1_vtxArr1[i] += diff * t;
         t += 1.0f / SEGMENTS_PER_STEP;
         mDoMtx_stack_c::YrotM(-yRotPerStep);
     }
@@ -622,7 +622,7 @@ BOOL daBoomerang_c::procMove() {
                 }
             }
         } else {
-            if (dist < speedF || mCps.ChkAtHit() && mCps.GetAtHitAc() == mLockActors[mCurLockIdx]) {
+            if (dist < speedF || (mCps.ChkAtHit() && mCps.GetAtHitAc() == mLockActors[mCurLockIdx])) {
                 // Boomerang hit its current target.
                 mJustHit = true;
                 mLockActors[mCurLockIdx] = NULL;

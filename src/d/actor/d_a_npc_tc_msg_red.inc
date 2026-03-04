@@ -1,6 +1,9 @@
 // The original name of this file is unknown, but it must exist because d_a_npc_tc's "red's" functions
 // are in a separate .text section from the rest of its functions.
 
+#include "d/actor/d_a_npc_tc.h"
+#include "d/d_com_inf_game.h"
+
 /* 00005498-00005720       .text next_msgStatusRed__10daNpc_Tc_cFPUl */
 u16 daNpc_Tc_c::next_msgStatusRed(u32* pMsgNo) {
     u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;

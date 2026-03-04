@@ -3,6 +3,10 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
+#include "JSystem/J3DGraphBase/J3DPacket.h"
+#include "d/d_bg_s_lin_chk.h"
+#include "d/d_bg_s_gnd_chk.h"
+#include "d/d_drawlist.h"
 
 #define BOOMERANG_LOCK_MAX 5
 
