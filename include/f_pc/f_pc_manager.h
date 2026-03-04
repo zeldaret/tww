@@ -18,6 +18,9 @@ typedef int (*fpcM_DrawIteraterFunc)(void*, void*);
 inline fpc_ProcID fpcM_GetID(void* pProc) {
     return pProc != NULL ? ((base_process_class*)pProc)->mBsPcId : fpcM_ERROR_PROCESS_ID_e;
 }
+inline BOOL fpcM_IsErrorID(fpc_ProcID id) {
+    return id == fpcM_ERROR_PROCESS_ID_e ? TRUE : FALSE;
+}
 inline s16 fpcM_GetName(void* pProc) {
     return ((base_process_class*)pProc)->mProcName;
 }
