@@ -804,7 +804,7 @@ cPhs_State daBoomerang_c::create() {
     }
 
     setKeepMatrix();
-    cullMtx = mpModel->getBaseTRMtx();
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     mProcFunc = &daBoomerang_c::procWait;
     mStts.Init(0x3C, 0xFF, this);
 
