@@ -552,7 +552,7 @@ BOOL daBoomerang_c::procWait() {
                             pPlayer->mSightPacket.getDrawFlg();
 
             if (isAiming) {
-                camera_class* pCamera = g_dComIfG_gameInfo.play.getCamera(g_dComIfG_gameInfo.play.getPlayerCameraID(0));
+                camera_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
                 cXyz eyePos = *fopCamM_GetEye_p(pCamera);
                 cXyz topPos = pPlayer->getLineTopPos();
                 mCps.OnAtNoTgHitInfSet();
