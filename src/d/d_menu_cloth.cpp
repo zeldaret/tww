@@ -193,9 +193,8 @@ void dMCloth_c::cloth_init() {
     } break;
     case MENU_CLOTH_TYPE_2: {
         mScale = HIO_CHILD.scale;
-        const f32 r = cM_rndFX(20.0f);
         mRot = HIO_CHILD.rot;
-        mRot.z += (s16)(r * 182.04445f);
+        mRot.z += cM_deg2s(cM_rndFX(20.0f));
         s32 n = HIO_CHILD.wavePreSteps;
         while (n--) {
             cloth_move_sin();
