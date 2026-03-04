@@ -58,6 +58,8 @@ public:
         }
     }
 
+    cXyz getPos() { return mPos; }
+
 private:
     /* 0x04 */ bool mDrawFlag;
     /* 0x05 */ bool mLockFlag;
@@ -1276,7 +1278,7 @@ public:
     void setDamageEmitter();
     void endFlameDamageEmitter();
     void endDamageEmitter();
-    static u32 setItemWaterEffect(fopAc_ac_c*, int, int);
+    static BOOL setItemWaterEffect(fopAc_ac_c* i_actor, BOOL inWater, BOOL triggerOnExit);
     fopAc_ac_c* getDemoLookActor();
     void setTinkleCeiverModel();
     void setTalismanModel();
@@ -1608,7 +1610,7 @@ public:
     BOOL procRopeUpHang();
     BOOL checkBoomerangAnime() const;
     void throwBoomerang();
-    int returnBoomerang();
+    BOOL returnBoomerang();
     BOOL checkNextActionBoomerangReady();
     void checkNextActionBoomerangFly();
     BOOL checkNextBoomerangMode();
@@ -1846,8 +1848,8 @@ public:
     BOOL checkNoControll() const { return dComIfGp_getPlayer(0) != this; }
     void exchangeGrabActor(fopAc_ac_c* actor) { mActorKeepGrab.setData(actor); }
     void getDekuLeafWindPos() const {}
-    void getBoomerangCatchPos() const {}
-    void getLineTopPos() {}
+    cXyz getBoomerangCatchPos() const { return mBoomerangCatchPos; }
+    cXyz getLineTopPos() { return mSightPacket.getPos(); }
     cXyz getHookshotRootPos() const { return mHookshotRootPos; }
     void getIceParticleBtk() {}
     void getIceWaterParticleBtk() {}
@@ -2294,7 +2296,7 @@ public:
     /* 0x36D0 */ cXyz m36D0;
     /* 0x36DC */ cXyz m36DC;
     /* 0x36E8 */ cXyz mHookshotRootPos;
-    /* 0x36F4 */ cXyz m36F4;
+    /* 0x36F4 */ cXyz mBoomerangCatchPos;
     /* 0x3700 */ cXyz m3700;
     /* 0x370C */ cXyz m370C;
     /* 0x3718 */ cXyz m3718;

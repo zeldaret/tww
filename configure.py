@@ -573,7 +573,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_bg.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d/actor/d_a_bomb.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_bomb2.cpp"),
-            Object(NonMatching, "d/actor/d_a_boomerang.cpp"),
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/actor/d_a_boomerang.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_dai_item.cpp"),
             Object(NonMatching, "d/actor/d_a_demo00.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_disappear.cpp"),

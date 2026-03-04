@@ -24,7 +24,7 @@ BOOL daPy_lk_c::checkBoomerangAnime() const {
 void daPy_lk_c::throwBoomerang() {
     daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepEquip.getActor();
 
-    fopAcM_SetParam(boomerang, 1);
+    fopAcM_SetParam(boomerang, daBoomerang_c::Mode_Throw);
     if (mpAttnActorLockOn != NULL) {
         boomerang->setAimActor(mpAttnActorLockOn);
     }
@@ -47,7 +47,7 @@ void daPy_lk_c::throwBoomerang() {
 }
 
 /* 80149698-801497A4       .text returnBoomerang__9daPy_lk_cFv */
-int daPy_lk_c::returnBoomerang() {
+BOOL daPy_lk_c::returnBoomerang() {
     dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_WAIT_e);
 
     if (mEquipItem == daPyItem_NONE_e && !checkNoControll() && !dComIfGp_event_runCheck() && mDemo.getDemoType() == 0 &&
