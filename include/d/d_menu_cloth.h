@@ -88,8 +88,8 @@ public:
     /* 0x0004 */ cXyz scale;
     /* 0x0010 */ cXyz pos;
     /* 0x001c */ csXyz rot;
-    /* 0x0022 */ GXColorS10 color1;
-    /* 0x002a */ GXColorS10 color2;
+    /* 0x0022 */ GXColorS10 clothColor;
+    /* 0x002a */ GXColorS10 shadowColor;
     /* 0x0032 */ s16 startAlpha;
     /* 0x0034 */ s16 fadeInLength;
     /* 0x0036 */ s16 waveProgressStep;

@@ -27,16 +27,16 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
         mChildren[MENU_CLOTH_TYPE_DEFAULT].pos.set(360.0f, 40.0f, -2400.0f);
 
         // Middle green
-        mChildren[MENU_CLOTH_TYPE_DEFAULT].color1.r = 0x78;
-        mChildren[MENU_CLOTH_TYPE_DEFAULT].color1.g = 0xA5;
-        mChildren[MENU_CLOTH_TYPE_DEFAULT].color1.b = 0x37;
-        mChildren[MENU_CLOTH_TYPE_DEFAULT].color1.a = 0xDC;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].clothColor.r = 0x78;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].clothColor.g = 0xA5;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].clothColor.b = 0x37;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].clothColor.a = 0xDC;
 
         // Dark green
-        mChildren[MENU_CLOTH_TYPE_DEFAULT].color2.r = 0x23;
-        mChildren[MENU_CLOTH_TYPE_DEFAULT].color2.g = 0x5f;
-        mChildren[MENU_CLOTH_TYPE_DEFAULT].color2.b = 0x19;
-        mChildren[MENU_CLOTH_TYPE_DEFAULT].color2.a = 0x20;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].shadowColor.r = 0x23;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].shadowColor.g = 0x5f;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].shadowColor.b = 0x19;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].shadowColor.a = 0x20;
 
         mChildren[MENU_CLOTH_TYPE_DEFAULT].startAlpha = 0;
         mChildren[MENU_CLOTH_TYPE_DEFAULT].fadeInLength = 7;
@@ -63,16 +63,16 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
         mChildren[MENU_CLOTH_TYPE_FILE_SELECT].pos.set(350.0f, -15.0f, -2400.0f);
 
         // Beige
-        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color1.r = 0xbe;
-        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color1.g = 0xb4;
-        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color1.b = 0x64;
-        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color1.a = 0xaa;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.r = 0xbe;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.g = 0xb4;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.b = 0x64;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.a = 0xaa;
 
         // Dark brown
-        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color2.r = 0x8c;
-        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color2.g = 0x50;
-        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color2.b = 0x14;
-        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color2.a = 0x20;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].shadowColor.r = 0x8c;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].shadowColor.g = 0x50;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].shadowColor.b = 0x14;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].shadowColor.a = 0x20;
 
         mChildren[MENU_CLOTH_TYPE_FILE_SELECT].startAlpha = 0;
         mChildren[MENU_CLOTH_TYPE_FILE_SELECT].fadeInLength = 7;
@@ -99,16 +99,16 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
         mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].pos.set(360.0f, 40.0f, -2400.0f);
 
         // Beige
-        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color1.r = 0xbe;
-        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color1.g = 0xb4;
-        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color1.b = 0x64;
-        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color1.a = 0xdc;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.r = 0xbe;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.g = 0xb4;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.b = 0x64;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.a = 0xdc;
 
         // Dark brown
-        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color2.r = 0x8c;
-        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color2.g = 0x50;
-        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color2.b = 0x14;
-        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color2.a = 0x20;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].shadowColor.r = 0x8c;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].shadowColor.g = 0x50;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].shadowColor.b = 0x14;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].shadowColor.a = 0x20;
 
         mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].startAlpha = 0;
         mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].fadeInLength = 7;
@@ -184,21 +184,22 @@ void dMCloth_c::cloth_init() {
     cloth_move();
 
     mAlphaOut = 0;
-    mCurrentAlpha = HIO_CHILD.color1.a;
+    mCurrentAlpha = HIO_CHILD.clothColor.a;
     mWaveProgress += HIO_CHILD.waveProgressStep;
 
     DCStoreRangeNoSync(mPosArr[mCurArr], INNER_SIZE * INNER_SIZE * sizeof(cXyz));
     DCStoreRangeNoSync(mNrmArr[mCurArr], 0x5AC);
     DCStoreRangeNoSync(mBackNrmArr, 0x5AC);
 
-    mColor1.r = (u8)HIO_CHILD.color1.r;
-    mColor1.g = (u8)HIO_CHILD.color1.g;
-    mColor1.b = (u8)HIO_CHILD.color1.b;
-    mColor1.a = (u8)HIO_CHILD.color1.a;
-    mColor2.r = (u8)HIO_CHILD.color2.r;
-    mColor2.g = (u8)HIO_CHILD.color2.g;
-    mColor2.b = (u8)HIO_CHILD.color2.b;
-    mColor2.a = (u8)HIO_CHILD.color2.a;
+    mColor1.r = (u8)HIO_CHILD.clothColor.r;
+    mColor1.g = (u8)HIO_CHILD.clothColor.g;
+    mColor1.b = (u8)HIO_CHILD.clothColor.b;
+    mColor1.a = (u8)HIO_CHILD.clothColor.a;
+
+    mColor2.r = (u8)HIO_CHILD.shadowColor.r;
+    mColor2.g = (u8)HIO_CHILD.shadowColor.g;
+    mColor2.b = (u8)HIO_CHILD.shadowColor.b;
+    mColor2.a = (u8)HIO_CHILD.shadowColor.a;
 
     switch (mClothType) {
     case MENU_CLOTH_TYPE_DEFAULT: {
@@ -614,13 +615,13 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
         // Interpolate from startAlpha to final alpha.
         f32 f = (f32)mFadeInCounter / HIO_CHILD.fadeInLength;
         {
-            s16 uv2 = HIO_CHILD.color1.a;
+            s16 uv2 = HIO_CHILD.clothColor.a;
             s16 uv6 = cLib_minMaxLimit<s16>(uv2, 0, 0xFF);
             color1.a = uv6;
             color1.a = color1.a * f + (1.0f - f) * HIO_CHILD.startAlpha;
         }
         {
-            s16 uv2 = HIO_CHILD.color2.a;
+            s16 uv2 = HIO_CHILD.shadowColor.a;
             s16 uv6 = cLib_minMaxLimit<s16>(uv2, 0, 0xFF);
             color2.a = uv6;
             color2.a = color2.a * f + (1.0f - f) * HIO_CHILD.startAlpha;
