@@ -573,9 +573,9 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
         GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
         GXSetVtxDesc(GX_VA_NRM, GX_INDEX16);
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
         GXSetChanAmbColor(GX_COLOR0, (GXColor){0x00, 0x00, 0x00, 0x00});
         GXSetChanMatColor(GX_COLOR0, (GXColor){0xff, 0xff, 0xff, 0xff});
     } break;
@@ -585,10 +585,10 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
         GXSetVtxDesc(GX_VA_NRM, GX_INDEX16);
         GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
         GXSetChanAmbColor(GX_COLOR0, (GXColor){0x00, 0x00, 0x00, 0xff});
         GXSetChanMatColor(GX_COLOR0, (GXColor){0xff, 0xff, 0xff, 0xff});
     } break;
