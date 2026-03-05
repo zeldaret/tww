@@ -191,15 +191,15 @@ void dMCloth_c::cloth_init() {
     DCStoreRangeNoSync(mNrmArr[mCurArr], 0x5AC);
     DCStoreRangeNoSync(mBackNrmArr, 0x5AC);
 
-    mColor1.r = (u8)HIO_CHILD.clothColor.r;
-    mColor1.g = (u8)HIO_CHILD.clothColor.g;
-    mColor1.b = (u8)HIO_CHILD.clothColor.b;
-    mColor1.a = (u8)HIO_CHILD.clothColor.a;
+    mClothColor.r = (u8)HIO_CHILD.clothColor.r;
+    mClothColor.g = (u8)HIO_CHILD.clothColor.g;
+    mClothColor.b = (u8)HIO_CHILD.clothColor.b;
+    mClothColor.a = (u8)HIO_CHILD.clothColor.a;
 
-    mColor2.r = (u8)HIO_CHILD.shadowColor.r;
-    mColor2.g = (u8)HIO_CHILD.shadowColor.g;
-    mColor2.b = (u8)HIO_CHILD.shadowColor.b;
-    mColor2.a = (u8)HIO_CHILD.shadowColor.a;
+    mShadowColor.r = (u8)HIO_CHILD.shadowColor.r;
+    mShadowColor.g = (u8)HIO_CHILD.shadowColor.g;
+    mShadowColor.b = (u8)HIO_CHILD.shadowColor.b;
+    mShadowColor.a = (u8)HIO_CHILD.shadowColor.a;
 
     switch (mClothType) {
     case MENU_CLOTH_TYPE_DEFAULT: {
@@ -393,7 +393,7 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
                     const s16 idx = x + y * INNER_SIZE;
                     GXPosition1x16(idx);
                     GXNormal1x16(idx);
-                    GXColor4x8(mColor1.r, mColor1.g, mColor1.b, alpha0);
+                    GXColor4x8(mClothColor.r, mClothColor.g, mClothColor.b, alpha0);
                     GXTexCoord2f32(xPos, yPos);
                 }
 
@@ -402,7 +402,7 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
                     const s16 idx = xNext + y * INNER_SIZE;
                     GXPosition1x16(idx);
                     GXNormal1x16(idx);
-                    GXColor4x8(mColor1.r, mColor1.g, mColor1.b, alpha1);
+                    GXColor4x8(mClothColor.r, mClothColor.g, mClothColor.b, alpha1);
                     GXTexCoord2f32(xPos + xStep, yPos);
                 }
             } break;
@@ -464,7 +464,7 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
                     const s16 idx = x + y * INNER_SIZE;
                     GXPosition1x16(idx);
                     GXNormal1x16(idx);
-                    GXColor4x8(mColor2.r, mColor2.g, mColor2.b, alpha0);
+                    GXColor4x8(mShadowColor.r, mShadowColor.g, mShadowColor.b, alpha0);
                     GXTexCoord2f32(xPos, yPos);
                 }
 
@@ -473,7 +473,7 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
                     const s16 idx = xNext + y * INNER_SIZE;
                     GXPosition1x16(idx);
                     GXNormal1x16(idx);
-                    GXColor4x8(mColor2.r, mColor2.g, mColor2.b, alpha1);
+                    GXColor4x8(mShadowColor.r, mShadowColor.g, mShadowColor.b, alpha1);
                     GXTexCoord2f32(xPos + xStep, yPos);
                 }
             } break;
@@ -586,7 +586,7 @@ void dMCloth_c::ShadowTevSetting() {
 }
 
 /* 8019ADD4-8019B670       .text draw__9dMCloth_cFf8_GXColor8_GXColorUc */
-void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
+void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned char) {
     cXyz* pPos = getPos();
     cXyz* pPos2 = mShadowPosArr;
     for (int y = 0; y < INNER_SIZE; y++) {
@@ -600,12 +600,12 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
 
     DCStoreRangeNoSync(mShadowPosArr, 0x5ac);
 
-    color1 = mColor1;
-    color2 = mColor2;
+    clothColor = mClothColor;
+    shadowColor = mShadowColor;
 
     if (mAlphaOut == 1) {
         // Fade out alpha.
-        color1.a = mCurrentAlpha;
+        clothColor.a = mCurrentAlpha;
         if (mCurrentAlpha > 25) {
             mCurrentAlpha -= 25;
         } else {
@@ -615,12 +615,12 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
         // Interpolate from startAlpha to final alpha.
         f32 f = (f32)mFadeInCounter / HIO_CHILD.fadeInLength;
         {
-            color1.a = cLib_minMaxLimit<s16>(HIO_CHILD.clothColor.a, 0, 0xFF);
-            color1.a = color1.a * f + (1.0f - f) * HIO_CHILD.startAlpha;
+            clothColor.a = cLib_minMaxLimit<s16>(HIO_CHILD.clothColor.a, 0, 0xFF);
+            clothColor.a = clothColor.a * f + (1.0f - f) * HIO_CHILD.startAlpha;
         }
         {
-            color2.a = cLib_minMaxLimit<s16>(HIO_CHILD.shadowColor.a, 0, 0xFF);
-            color2.a = color2.a * f + (1.0f - f) * HIO_CHILD.startAlpha;
+            shadowColor.a = cLib_minMaxLimit<s16>(HIO_CHILD.shadowColor.a, 0, 0xFF);
+            shadowColor.a = shadowColor.a * f + (1.0f - f) * HIO_CHILD.startAlpha;
         }
     }
 
@@ -657,8 +657,8 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
     } break;
     }
 
-    GXSetTevColor(GX_TEVREG0, color1);
-    GXSetTevColor(GX_TEVREG1, color2);
+    GXSetTevColor(GX_TEVREG0, clothColor);
+    GXSetTevColor(GX_TEVREG1, shadowColor);
 
     GXTexObj tex_obj;
 

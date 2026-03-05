@@ -75,8 +75,8 @@ public:
     /* 0x9140 */ cXyz mScale;
     /* 0x914C */ u8 field_0x914C[0x9158 - 0x914C];
     /* 0x9158 */ csXyz mRot;
-    /* 0x915E */ GXColor mColor1;
-    /* 0x9162 */ GXColor mColor2;
+    /* 0x915E */ GXColor mClothColor;
+    /* 0x9162 */ GXColor mShadowColor;
 };
 
 class daCLOTH_ChildHIO_c {
