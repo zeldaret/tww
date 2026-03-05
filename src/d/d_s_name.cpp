@@ -216,7 +216,7 @@ void dScnName_c::cloth2D_create() {
     cloth.cloth_c = new dMCloth_c();
     JUT_ASSERT(801, cloth.cloth_c != NULL);
     cloth.cloth_c->setArchive(clothRes);
-    cloth.cloth_c->setClothType(MENU_CLOTH_TYPE_1); // ?
+    cloth.cloth_c->setClothType(MENU_CLOTH_TYPE_FILE_SELECT); // ?
 }
 
 static void dummy() {

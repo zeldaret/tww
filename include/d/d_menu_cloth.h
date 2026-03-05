@@ -8,9 +8,9 @@
 class JKRArchive;
 
 enum {
-    MENU_CLOTH_TYPE_0 = 0,
-    MENU_CLOTH_TYPE_1 = 1,
-    MENU_CLOTH_TYPE_2 = 2,
+    MENU_CLOTH_TYPE_DEFAULT = 0,
+    MENU_CLOTH_TYPE_FILE_SELECT = 1,
+    MENU_CLOTH_TYPE_CLOTH_ONLY = 2,
 };
 typedef u8 MenuClothType;
 
