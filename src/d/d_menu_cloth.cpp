@@ -615,15 +615,11 @@ void dMCloth_c::draw(float, GXColor color1, GXColor color2, unsigned char) {
         // Interpolate from startAlpha to final alpha.
         f32 f = (f32)mFadeInCounter / HIO_CHILD.fadeInLength;
         {
-            s16 uv2 = HIO_CHILD.clothColor.a;
-            s16 uv6 = cLib_minMaxLimit<s16>(uv2, 0, 0xFF);
-            color1.a = uv6;
+            color1.a = cLib_minMaxLimit<s16>(HIO_CHILD.clothColor.a, 0, 0xFF);
             color1.a = color1.a * f + (1.0f - f) * HIO_CHILD.startAlpha;
         }
         {
-            s16 uv2 = HIO_CHILD.shadowColor.a;
-            s16 uv6 = cLib_minMaxLimit<s16>(uv2, 0, 0xFF);
-            color2.a = uv6;
+            color2.a = cLib_minMaxLimit<s16>(HIO_CHILD.shadowColor.a, 0, 0xFF);
             color2.a = color2.a * f + (1.0f - f) * HIO_CHILD.startAlpha;
         }
     }
