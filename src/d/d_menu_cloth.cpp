@@ -383,39 +383,48 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
     const f32 xStep = (xMax - xMin) * (1.0f / (f32)(INNER_SIZE - 1));
     const f32 yStep = (yMax - yMin) * (1.0f / (f32)(INNER_SIZE - 1));
 
-    int x = 0, xNext = 1;
-    for (x = 0; x < INNER_SIZE - 1; x++, xNext++) {
+    int xNext = 1;
+    for (int x = 0; x < INNER_SIZE - 1; x++, xNext++) {
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, INNER_SIZE * 2);
         f32 yPos = yMax;
-        for (int y = 0; y < INNER_SIZE - 1; y++) {
+        for (int y = 0; y < INNER_SIZE; y++) {
             f32 xPos2 = xPos + xStep;
             switch (mClothType) {
             case MENU_CLOTH_TYPE_0:
             case MENU_CLOTH_TYPE_2: {
                 GXPosition1x16(x + y * INNER_SIZE);
                 GXPosition1x16(x + y * INNER_SIZE);
-                GXPosition2f32(xPos, yPos);
+                GXTexCoord2f32(xPos, yPos);
+
                 GXPosition1x16(xNext + y * INNER_SIZE);
                 GXPosition1x16(xNext + y * INNER_SIZE);
-                GXPosition2f32(xPos2, yPos);
+                GXTexCoord2f32(xPos2, yPos);
             } break;
 
             case MENU_CLOTH_TYPE_1: {
-                int iv2, iv3, iv5;
-                iv5 = (10 - x + y) * 25;
-                iv2 = iv5 > 0xFF ? 0xFF : iv5;
-                iv3 = (10 - xNext + y) * 25;
-                iv5 = iv3 > 0xFF ? 0xFF : iv3;
-                GXPosition1x16(x + y * INNER_SIZE);
-                GXPosition1x16(x + y * INNER_SIZE);
-                GXPosition3s8(mColor2.r, mColor2.g, mColor2.b);
-                GXPosition1x8(iv2);
-                GXPosition2f32(xPos, yPos);
-                GXPosition1x16(xNext + y * INNER_SIZE);
-                GXPosition1x16(xNext + y * INNER_SIZE);
-                GXPosition3s8(mColor2.r, mColor2.g, mColor2.b);
-                GXPosition1x8(iv5);
-                GXPosition2f32(xPos2, yPos);
+                u8 alpha0, alpha1;
+                {
+                    const int fromEnd = 10 - x;
+                    const int fromEndNext = 10 - xNext;
+                    const int fromTopRight = fromEnd + y;
+                    const int fromTopRightNext = fromEndNext + y;
+                    alpha0 = cLib_maxLimit(fromTopRight * 25, 0xFF);
+                    alpha1 = cLib_maxLimit(fromTopRightNext * 25, 0xFF);
+                }
+
+                {
+                    const s16 idx = x + y * INNER_SIZE;
+                    GXPosition2u16(idx, idx);
+                    GXColor4x8(mColor2.r, mColor2.g, mColor2.b, alpha0);
+                    GXTexCoord2f32(xPos, yPos);
+                }
+
+                {
+                    const s16 idx = xNext + y * INNER_SIZE;
+                    GXPosition2u16(idx, idx);
+                    GXColor4x8(mColor2.r, mColor2.g, mColor2.b, alpha1);
+                    GXTexCoord2f32(xPos2, yPos);
+                }
             } break;
             }
 
