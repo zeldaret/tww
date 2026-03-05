@@ -10,6 +10,44 @@
 #include "f_op/f_op_msg.h"
 #include "d/d_menu_cloth.h"
 
+// TODO: Remove me when all the JUT asserts and other strings are filled out.
+// This is temporary, just to make the strings match.
+void dummy0() {
+    OSReport("cmap_tri.bti");
+    OSReport("cmap_treasure.bti");
+    OSReport("cmap_tingle.bti");
+    OSReport("cmap_phantomship.bti");
+    OSReport("cmap_hint.bti");
+    OSReport("f_item_tri.bti");
+    OSReport("f_get_rupy.bti");
+    OSReport("f_heart_up_02.bti");
+    OSReport("f_korog_kare.bti");
+    OSReport("f_korog_saki.bti");
+    OSReport("d_menu_window.cpp");
+    OSReport("i_Ms->name[i] != 0");
+    OSReport("Halt");
+    OSReport("");
+    OSReport("i_Ms->note[i] != 0");
+    OSReport("i_Ms->dummy[i] != 0");
+    OSReport("i_Ms->buffer_p[i] != 0");
+    OSReport("dMi_c != 0");
+    OSReport("dMc_c != 0");
+    OSReport("dMf_c != 0");
+    OSReport("dMs_capture_c != 0");
+    OSReport("dMd_c != 0");
+    OSReport("dNm_c != 0");
+    OSReport("dMs_c != 0");
+    OSReport("cloth_c != 0");
+    OSReport("dMs_cloth_c != 0");
+    OSReport("i_Ms->childHeap != 0");
+    OSReport("awake");
+    OSReport("majyuu_shinnyuu");
+    OSReport("アイテムビット");
+    OSReport("ダンジョンビット");
+    OSReport("fonttype != 0");
+    OSReport("rfonttype != 0");
+}
+
 class dDlst_MENU_CLOTH_c : public dDlst_base_c {};
 class dDlst_MENU_CAPTURE_c : public dDlst_base_c {
 public:
@@ -94,7 +132,6 @@ void dMs_save_delete(sub_ms_screen_class*) {
 
 /* 801DCEA0-801DD090       .text dMs_cloth_create__FP19sub_ms_screen_class */
 void dMs_cloth_create(sub_ms_screen_class* i_Ms) {
-    /* Nonmatching */
     g_dComIfG_gameInfo.play.setHeapLockFlag(1);
     JKRArchive* arc = g_dComIfG_gameInfo.play.getClothResArchive();
 
