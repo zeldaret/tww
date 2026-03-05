@@ -328,8 +328,9 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
     for (x = 0; x < INNER_SIZE - 1; x++, xNext++) {
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, INNER_SIZE * 2);
         f32 yPos = yMax;
-        for (int y = 0; y < INNER_SIZE - 1; y++) {
+        for (int y = 0; y < INNER_SIZE; y++) {
             f32 xPos2 = xPos + xStep;
+
             switch (mClothType) {
             case MENU_CLOTH_TYPE_0:
             case MENU_CLOTH_TYPE_2: {
