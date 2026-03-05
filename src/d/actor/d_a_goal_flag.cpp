@@ -570,7 +570,7 @@ cPhs_State daGoal_Flag_c::_create() {
     u8 arc_index;
     dPath* path_p;
 
-    fopAcM_SetupActor(this, daGoal_Flag_c);
+    fopAcM_ct(this, daGoal_Flag_c);
 
     u8 prm = fopAcM_GetParam(this) & 0xFF;
     cloth_resload_state = dComIfG_resLoad(&mClothPhs, "Cloth");

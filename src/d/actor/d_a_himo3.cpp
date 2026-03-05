@@ -736,7 +736,7 @@ static cPhs_State daHimo3_Create(fopAc_ac_c* a_this) {
 
     himo3_class* i_this = (himo3_class*)a_this;
 
-    fopAcM_SetupActor(a_this, himo3_class);
+    fopAcM_ct(a_this, himo3_class);
 
     cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Himo3");
     if (PVar1 == cPhs_COMPLEATE_e) {

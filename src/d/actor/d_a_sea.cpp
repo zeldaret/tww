@@ -1172,7 +1172,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 8015D924-8015D99C       .text daSea_Create__FP10fopAc_ac_c */
 static cPhs_State daSea_Create(fopAc_ac_c* i_this) {
-    fopAcM_SetupActor(i_this, sea_class);
+    fopAcM_ct(i_this, sea_class);
     if (!fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0xA000))
         return cPhs_ERROR_e;
     return cPhs_COMPLEATE_e;

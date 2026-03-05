@@ -36,7 +36,7 @@ cPhs_State daThrowstone_c::_create() {
     cPhs_State result = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (result == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daThrowstone_c);
+        fopAcM_ct(this, daThrowstone_c);
 
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x4C0)) {
             result = cPhs_ERROR_e;

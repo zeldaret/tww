@@ -33,7 +33,7 @@ void daTagKbItem_c::CreateInit() {
 
 /* 0000010C-000001BC       .text _create__13daTagKbItem_cFv */
 cPhs_State daTagKbItem_c::_create() {
-    fopAcM_SetupActor(this, daTagKbItem_c);
+    fopAcM_ct(this, daTagKbItem_c);
 
     CreateInit();
     if ((field_0x29c != 0x1f && dComIfGs_isItem(field_0x29c, fopAcM_GetHomeRoomNo(this))) ||

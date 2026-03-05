@@ -168,7 +168,7 @@ BOOL daObjSwhammer::Act_c::Create() {
 
 /* 0000070C-000007F8       .text _create__Q213daObjSwhammer5Act_cFv */
 cPhs_State daObjSwhammer::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {

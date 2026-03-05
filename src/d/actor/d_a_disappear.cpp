@@ -101,7 +101,7 @@ void set_disappear(disappear_class* i_this, float scale) {
 static cPhs_State daDisappear_Create(fopAc_ac_c* i_this) {
     disappear_class* dis = static_cast<disappear_class*>(i_this);
 
-    fopAcM_SetupActor(dis, disappear_class);
+    fopAcM_ct(dis, disappear_class);
 
     dis->health = fopAcM_GetParam(dis) & 0xFF; // Drop type param is stored in health
     f32 scaleMag = ((fopAcM_GetParam(dis) >> 8) & 0xFF) * 0.1f;

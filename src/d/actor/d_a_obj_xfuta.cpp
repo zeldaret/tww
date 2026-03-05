@@ -60,7 +60,7 @@ bool Act_c::create_heap() {
 
 /* 0000015C-00000214       .text _create__Q210daObjXfuta5Act_cFv */
 cPhs_State Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {

@@ -127,9 +127,9 @@ cPhs_State daObj_Otble::Act_c::_create() {
 
     cPhs_State ret = dComIfG_resLoad(&mPhase, "Okmono");
     if (ret == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daObj_Otble::Act_c);
+        fopAcM_ct(this, daObj_Otble::Act_c);
 #else
-    fopAcM_SetupActor(this, daObj_Otble::Act_c);
+    fopAcM_ct(this, daObj_Otble::Act_c);
     m294 = fopAcM_GetParam(this) & 0xFF;
     if (m294 > 1) {
         m294 = 1;

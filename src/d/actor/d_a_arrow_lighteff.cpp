@@ -190,7 +190,7 @@ void daArrow_Lighteff_c::set_mtx() {
 }
 
 cPhs_State daArrow_Lighteff_c::_create() {
-    fopAcM_SetupActor(this, daArrow_Lighteff_c);
+    fopAcM_ct(this, daArrow_Lighteff_c);
 
     field_0x2EA = 0;
     if(!fopAcM_entrySolidHeap(this, &CheckCreateHeap, 0x2660)) {

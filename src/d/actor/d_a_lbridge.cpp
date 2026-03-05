@@ -103,7 +103,7 @@ void daLbridge_c::CreateInit() {
 
 /* 00000544-0000063C       .text _create__11daLbridge_cFv */
 cPhs_State daLbridge_c::_create() {
-    fopAcM_SetupActor(this, daLbridge_c);
+    fopAcM_ct(this, daLbridge_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, m_arcname);
 

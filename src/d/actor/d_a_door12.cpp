@@ -894,7 +894,7 @@ static BOOL daDoor12_Delete(daDoor12_c* i_this) {
 
 /* 00001CC4-00001D3C       .text daDoor12_Create__FP10fopAc_ac_c */
 static cPhs_State daDoor12_Create(fopAc_ac_c* a_this) {
-    fopAcM_SetupActor(a_this, daDoor12_c);
+    fopAcM_ct(a_this, daDoor12_c);
 
     return ((daDoor12_c*)a_this)->create();
 }

@@ -1,7 +1,7 @@
 #ifndef F_OP_ACTOR_MNG_H_
 #define F_OP_ACTOR_MNG_H_
 
-#include "new.h" // IWYU pragma: export // Used by the fopAcM_SetupActor macro.
+#include "new.h" // IWYU pragma: export // Used by the fopAcM_ct macro.
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_iter.h"
 #include "f_pc/f_pc_manager.h"
@@ -11,7 +11,7 @@
 #include "d/d_save.h"
 #include "d/d_event.h"
 
-#define fopAcM_SetupActor(ptr,ClassName) \
+#define fopAcM_ct(ptr,ClassName) \
     if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) { \
         new (ptr) ClassName(); \
         fopAcM_OnCondition(ptr, fopAcCnd_INIT_e); \

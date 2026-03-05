@@ -131,7 +131,7 @@ void daWarpdm20_c::CreateInit() {
 
 /* 000005C8-000006A0       .text _create__12daWarpdm20_cFv */
 cPhs_State daWarpdm20_c::_create() {
-    fopAcM_SetupActor(this, daWarpdm20_c);
+    fopAcM_ct(this, daWarpdm20_c);
 
     m2D6 = daWarpdm20_prm::getType(this);
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, m_arcname);

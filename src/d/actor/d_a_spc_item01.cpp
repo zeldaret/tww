@@ -76,7 +76,7 @@ BOOL daSpcItem01_c::_delete() {
 
 /* 8015DBF4-8015DDD0       .text _create__13daSpcItem01_cFv */
 cPhs_State daSpcItem01_c::_create() {
-    fopAcM_SetupActor(this, daSpcItem01_c);
+    fopAcM_ct(this, daSpcItem01_c);
 
     m_itemNo = daSpcItem01_prm::getItemNo(this);
     if (m_itemNo == dItem_SHIELD_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E20)) {

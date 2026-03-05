@@ -100,7 +100,7 @@ BOOL daShutter_c::Create() {
 
 /* 000004B4-000005A0       .text _create__11daShutter_cFv */
 cPhs_State daShutter_c::_create() {
-    fopAcM_SetupActor(this, daShutter_c);
+    fopAcM_ct(this, daShutter_c);
     mType = daShutter_prm::getType(this);
     cPhs_State result = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (result == cPhs_COMPLEATE_e) {

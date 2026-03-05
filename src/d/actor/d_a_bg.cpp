@@ -341,7 +341,7 @@ static cPhs_State daBg_Create(fopAc_ac_c* i_ac) {
 
 /* 800D9094-800D9318       .text create__6daBg_cFv */
 cPhs_State daBg_c::create() {
-    fopAcM_SetupActor(this, daBg_c);
+    fopAcM_ct(this, daBg_c);
 
     s32 roomNo = fopAcM_GetParam(this);
     JKRExpHeap * roomHeap = dStage_roomControl_c::getMemoryBlock(roomNo);

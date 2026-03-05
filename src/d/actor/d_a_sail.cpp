@@ -806,7 +806,7 @@ static BOOL daSail_checkCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 00002254-000024E4       .text daSail_Create__FP10fopAc_ac_c */
 static cPhs_State daSail_Create(fopAc_ac_c* i_actor) {
-    fopAcM_SetupActor(i_actor, sail_class);
+    fopAcM_ct(i_actor, sail_class);
     sail_class* i_this = (sail_class*)i_actor;
     
     {

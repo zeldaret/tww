@@ -144,7 +144,7 @@ void daObjFerris::Act_c::ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c*
 
 /* 000004DC-00000898       .text _create__Q211daObjFerris5Act_cFv */
 cPhs_State daObjFerris::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
 

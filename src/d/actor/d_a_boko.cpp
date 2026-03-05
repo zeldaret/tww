@@ -937,7 +937,7 @@ cPhs_State daBoko_c::create() {
         }},
     };
 
-    fopAcM_SetupActor(this, daBoko_c);
+    fopAcM_ct(this, daBoko_c);
 
     u32 type = fopAcM_GetParam(this);
     if (type == Type_UNK_7_e) {

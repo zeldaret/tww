@@ -12,7 +12,7 @@
 #include "f_op/f_op_actor_mng.h"
 
 cPhs_State daObjWood::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     if (dComIfGp_createWood() != NULL)
         dComIfGp_getWood()->put_unit(current.pos, fopAcM_GetRoomNo(this));
     return cPhs_ERROR_e;

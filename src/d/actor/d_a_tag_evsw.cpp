@@ -11,7 +11,7 @@
 
 /* 00000078-000001F8       .text _create__Q29daTagEvsw5Act_cFv */
 cPhs_State daTagEvsw::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     
     if (dComIfGs_isEventBit(prm_get_eventbitID())) {
         fopAcM_onSwitch(this, prm_get_swSave());

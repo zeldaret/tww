@@ -60,7 +60,7 @@ void daSwAt_c::CreateInit() {
 
 /* 00000120-0000020C       .text _create__8daSwAt_cFv */
 cPhs_State daSwAt_c::_create() {
-    fopAcM_SetupActor(this, daSwAt_c);
+    fopAcM_ct(this, daSwAt_c);
     CreateInit();
     return cPhs_COMPLEATE_e;
 }

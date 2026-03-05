@@ -129,7 +129,7 @@ fpc_ProcID daAleaf_c::create_acorn_sub(bool arg1) {
 
 /* 0000049C-000005EC       .text _create__9daAleaf_cFv */
 cPhs_State daAleaf_c::_create() {
-    fopAcM_SetupActor(this, daAleaf_c);
+    fopAcM_ct(this, daAleaf_c);
 
     cPhs_State ret = dComIfG_resLoad(&unk_290, daAleaf_c::m_arcname);
     if (ret == cPhs_COMPLEATE_e) {

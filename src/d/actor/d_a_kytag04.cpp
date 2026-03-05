@@ -48,7 +48,7 @@ static BOOL daKytag04_Delete(kytag04_class*) {
 
 /* 00000168-00000208       .text daKytag04_Create__FP10fopAc_ac_c */
 static cPhs_State daKytag04_Create(fopAc_ac_c* i_this)  {
-    fopAcM_SetupActor(i_this, kytag04_class);
+    fopAcM_ct(i_this, kytag04_class);
     kytag04_class* a_this = (kytag04_class*)i_this;
     a_this->mState = 0;
     a_this->mOffColPat = fopAcM_GetParam(a_this) & 0xFF;

@@ -780,7 +780,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 static cPhs_State daDr2_Create(fopAc_ac_c* a_this) {
     dr2_class* i_this = (dr2_class*)a_this;
 
-    fopAcM_SetupActor(&i_this->actor, dr2_class);
+    fopAcM_ct(&i_this->actor, dr2_class);
 
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Dr2");
     if (ret == cPhs_COMPLEATE_e) {

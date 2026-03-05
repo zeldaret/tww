@@ -248,13 +248,13 @@ static cPhs_State daDr_Create(fopAc_ac_c* i_this) {
     dr_class* a_this = (dr_class*)i_this;
 
 #if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(a_this, dr_class);
+    fopAcM_ct(a_this, dr_class);
 #endif
 
     cPhs_State phase_state = dComIfG_resLoad(&a_this->mPhs, "Dr");
     if (phase_state == cPhs_COMPLEATE_e) {
 #if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(a_this, dr_class);
+        fopAcM_ct(a_this, dr_class);
 #endif
 
         if (!fopAcM_entrySolidHeap(a_this, createHeap, 0xF000)) {

@@ -250,7 +250,7 @@ void daObjMshokki_c::set_se() {
 
 /* 00000740-00000A1C       .text _create__14daObjMshokki_cFv */
 cPhs_State daObjMshokki_c::_create() {
-    fopAcM_SetupActor(this, daObjMshokki_c);
+    fopAcM_ct(this, daObjMshokki_c);
 
     if (fopAcM_IsFirstCreating(this)) {
         m60C = param_get_arg();

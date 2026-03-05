@@ -228,7 +228,7 @@ void daObjIce_c::tg_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf* arg1, fopAc_ac
 /* 000005F4-000008C0       .text _create__10daObjIce_cFv */
 cPhs_State daObjIce_c::_create() {
     cPhs_State ret = cPhs_ERROR_e;
-    fopAcM_SetupActor(this, daObjIce_c);
+    fopAcM_ct(this, daObjIce_c);
 
     if (fopAcM_IsFirstCreating(this)) {
         m448 = chk_appear();

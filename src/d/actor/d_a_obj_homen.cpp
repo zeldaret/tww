@@ -265,7 +265,7 @@ bool Act_c::create_heap() {
 
 /* 000002B4-000005B0       .text _create__Q210daObjHomen5Act_cFv */
 cPhs_State Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     
     if (param_get_sw() != 0xFF && is_switch() == true) {
         return cPhs_ERROR_e;

@@ -2573,7 +2573,7 @@ static BOOL daAgbsw0_Delete(daAgbsw0_c* i_this) {
 
 /* 00004E98-00004F80       .text daAgbsw0_Create__FP10fopAc_ac_c */
 static cPhs_State daAgbsw0_Create(fopAc_ac_c* i_this) {
-    fopAcM_SetupActor(i_this, daAgbsw0_c);
+    fopAcM_ct(i_this, daAgbsw0_c);
 
     return static_cast<daAgbsw0_c*>(i_this)->create();
 }

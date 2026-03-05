@@ -2530,7 +2530,7 @@ static cPhs_State daBwd_Create(fopAc_ac_c* a_this) {
     f32 fVar1;
     cPhs_State res;
 
-    fopAcM_SetupActor(a_this, bwd_class);
+    fopAcM_ct(a_this, bwd_class);
     bwd_class* i_this = (bwd_class*)a_this;
     fopAc_ac_c* actor = &i_this->actor;
     res = dComIfG_resLoad(&i_this->mPhaseBwd, "Bwd");

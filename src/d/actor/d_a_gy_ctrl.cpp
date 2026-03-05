@@ -531,7 +531,7 @@ bool daGy_Ctrl_c::checkGyCtrlExist() {
 
 /* 00001458-000016AC       .text _create__11daGy_Ctrl_cFv */
 cPhs_State daGy_Ctrl_c::_create() {
-    fopAcM_SetupActor(this, daGy_Ctrl_c);
+    fopAcM_ct(this, daGy_Ctrl_c);
 
     getArg();
 

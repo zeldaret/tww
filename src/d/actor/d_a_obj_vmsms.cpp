@@ -39,7 +39,7 @@ BOOL daObjVmsms_c::create_heap() {
 cPhs_State daObjVmsms_c::_create() {
     cPhs_State ret = cPhs_ERROR_e;
 
-    fopAcM_SetupActor(this, daObjVmsms_c);
+    fopAcM_ct(this, daObjVmsms_c);
 
     if (!check_demo()) {
         ret = dComIfG_resLoad(&mPhs, M_arcname);

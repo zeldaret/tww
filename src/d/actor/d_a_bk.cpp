@@ -4724,7 +4724,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
 
 /* 0000E310-0000EA2C       .text daBk_Create__FP10fopAc_ac_c */
 static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
-    fopAcM_SetupActor(i_actor, bk_class);
+    fopAcM_ct(i_actor, bk_class);
     bk_class* i_this = (bk_class*)i_actor;
     
     cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhase, "Bk");

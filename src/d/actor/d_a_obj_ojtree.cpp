@@ -39,7 +39,7 @@ BOOL daObjOjtree::Act_c::Create() {
 
 /* 000001EC-000002E4       .text Mthd_Create__Q211daObjOjtree5Act_cFv */
 cPhs_State daObjOjtree::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjOjtree::Act_c);
+    fopAcM_ct(this, daObjOjtree::Act_c);
        
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {

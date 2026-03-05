@@ -1375,7 +1375,7 @@ cPhs_State daBomb_c::create() {
         mType = 0;
     }
 
-    fopAcM_SetupActor(this, daBomb_c);
+    fopAcM_ct(this, daBomb_c);
 
     cPhs_State status = mType == 1 ? dComIfG_resLoad(&mPhase, attrType().resName) : cPhs_COMPLEATE_e;
 

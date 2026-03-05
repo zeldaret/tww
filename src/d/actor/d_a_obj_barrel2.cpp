@@ -214,7 +214,7 @@ bool daObjBarrel2::Act_c::create_heap() {
 
 /* 00000308-0000089C       .text _create__Q212daObjBarrel25Act_cFv */
 cPhs_State daObjBarrel2::Act_c::_create() {
-    fopAcM_SetupActor(this, daObjBarrel2::Act_c);
+    fopAcM_ct(this, daObjBarrel2::Act_c);
 
     m410 = prm_get_type();
 

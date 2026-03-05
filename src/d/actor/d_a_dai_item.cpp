@@ -373,7 +373,7 @@ void daStandItem_c::CreateInit() {
 
 /* 800E3E94-800E4048       .text _create__13daStandItem_cFv */
 cPhs_State daStandItem_c::_create() {
-    fopAcM_SetupActor(this, daStandItem_c);
+    fopAcM_ct(this, daStandItem_c);
 
     mItemNo = fopAcM_GetParam(this);
     mItemType = convItemNo(mItemNo);

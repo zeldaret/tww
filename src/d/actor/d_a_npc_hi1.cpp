@@ -896,7 +896,7 @@ cPhs_State daNpc_Hi1_c::_create() {
     };
 
     cPhs_State state;
-    fopAcM_SetupActor(this, daNpc_Hi1_c);
+    fopAcM_ct(this, daNpc_Hi1_c);
     if(!decideType(fopAcM_GetParam(this) & 0xFF)) {
         return cPhs_ERROR_e;
     }

@@ -118,7 +118,7 @@ void daAmiProp_c::CreateInit() {
 
 /* 00000318-00000444       .text _create__11daAmiProp_cFv */
 cPhs_State daAmiProp_c::_create() {
-    fopAcM_SetupActor(this, daAmiProp_c);
+    fopAcM_ct(this, daAmiProp_c);
     cPhs_State ret = dComIfG_resLoad(&mPhase, daAmiProp_c::m_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {

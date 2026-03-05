@@ -89,7 +89,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000000F0-00000140       .text phase_1__FP12daTagPhoto_c */
 static cPhs_State phase_1(daTagPhoto_c* i_this) {
-    fopAcM_SetupActor(i_this, daTagPhoto_c);
+    fopAcM_ct(i_this, daTagPhoto_c);
 
     return cPhs_NEXT_e;
 }

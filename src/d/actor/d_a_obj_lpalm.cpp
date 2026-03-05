@@ -84,9 +84,9 @@ cPhs_State daObjLpalm_c::_create() {
 #if VERSION == VERSION_DEMO
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     if (ret == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daObjLpalm_c);
+        fopAcM_ct(this, daObjLpalm_c);
 #else
-    fopAcM_SetupActor(this, daObjLpalm_c);
+    fopAcM_ct(this, daObjLpalm_c);
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     if (ret == cPhs_COMPLEATE_e) {
 #endif

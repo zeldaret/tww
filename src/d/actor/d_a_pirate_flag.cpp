@@ -530,7 +530,7 @@ static BOOL daPirate_Flag_Delete(pirate_flag_class* i_this) {
 /* 00001A90-00001C8C       .text daPirate_Flag_Create__FP10fopAc_ac_c */
 static cPhs_State daPirate_Flag_Create(fopAc_ac_c* i_this) {
     pirate_flag_class* a_this = static_cast<pirate_flag_class*>(i_this);
-    fopAcM_SetupActor(i_this, pirate_flag_class);
+    fopAcM_ct(i_this, pirate_flag_class);
 
     cPhs_State result = dComIfG_resLoad(&a_this->mPhs1, "Cloth");
     if (result != cPhs_COMPLEATE_e) {

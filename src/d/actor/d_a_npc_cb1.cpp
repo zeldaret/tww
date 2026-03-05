@@ -192,7 +192,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000004F8-00000814       .text create__11daNpc_Cb1_cFv */
 cPhs_State daNpc_Cb1_c::create() {
-    fopAcM_SetupActor(this, daNpc_Cb1_c);
+    fopAcM_ct(this, daNpc_Cb1_c);
 
     if(!isTypeBossDie()) {
 #if VERSION == VERSION_DEMO

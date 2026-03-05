@@ -898,7 +898,7 @@ static BOOL daMajuu_Flag_Delete(daMajuu_Flag_c* i_this) {
 static cPhs_State daMajuu_Flag_Create(fopAc_ac_c* a_this) {
     daMajuu_Flag_c* i_this = (daMajuu_Flag_c*)a_this;
 
-    fopAcM_SetupActor(a_this, daMajuu_Flag_c);
+    fopAcM_ct(a_this, daMajuu_Flag_c);
 
     u32 uVar3 = fopAcM_GetParam(a_this);
     u32 uVar2 = uVar3 & 0xFF;

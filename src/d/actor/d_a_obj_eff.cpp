@@ -284,7 +284,7 @@ cPhs_State daObjEff::Act_c::_create() {
     };
 
     mProcIndex = prm_get_type();
-    fopAcM_SetupActor(this, daObjEff::Act_c);
+    fopAcM_ct(this, daObjEff::Act_c);
     int phase = cPhs_COMPLEATE_e;
     if (fopAcM_entrySolidHeap(this, &solidHeapCB, heap_size[mProcIndex])) {
         if ((u8) eff_set() != 0) {

@@ -44,7 +44,7 @@ bool daObjRforce::Act_c::create_heap() {
 
 /* 00000220-000002F8       .text _create__Q211daObjRforce5Act_cFv */
 cPhs_State daObjRforce::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     

@@ -216,7 +216,7 @@ static cPhs_State daYougan_Create(fopAc_ac_c* i_this) {
 
 /* 000008C4-000009C8       .text _daYougan_create__10daYougan_cFv */
 cPhs_State daYougan_c::_daYougan_create() {
-    fopAcM_SetupActor(this, daYougan_c);
+    fopAcM_ct(this, daYougan_c);
 
     cPhs_State state = dComIfG_resLoad(&this->mPhase, m_arcname);
 

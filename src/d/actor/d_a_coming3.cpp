@@ -425,7 +425,7 @@ bool daComing3::Act_c::create_heap() {
 
 /* 000018CC-00001A24       .text _create__Q29daComing35Act_cFv */
 cPhs_State daComing3::Act_c::_create() {
-    fopAcM_SetupActor(this, daComing3::Act_c);
+    fopAcM_ct(this, daComing3::Act_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhase, M_arcname);
     if (ret == cPhs_COMPLEATE_e) {

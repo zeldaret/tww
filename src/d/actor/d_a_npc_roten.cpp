@@ -1613,7 +1613,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000008EC-00000974       .text phase_1__FP12daNpcRoten_c */
 static cPhs_State phase_1(daNpcRoten_c* i_this) {
-    fopAcM_SetupActor(i_this, daNpcRoten_c);
+    fopAcM_ct(i_this, daNpcRoten_c);
 
     i_this->setNpcNo(i_this->getPrmNpcNo());
 

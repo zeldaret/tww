@@ -258,7 +258,7 @@ BOOL daMbdoor_c::CreateInit() {
 cPhs_State daMbdoor_c::create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, getArcName());
     
-    fopAcM_SetupActor(this, daMbdoor_c);
+    fopAcM_ct(this, daMbdoor_c);
     
     if (phase_state != cPhs_COMPLEATE_e) {
         return phase_state;

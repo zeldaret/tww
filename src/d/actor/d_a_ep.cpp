@@ -641,9 +641,9 @@ static cPhs_State daEp_Create(fopAc_ac_c* a_this) {
 #if VERSION == VERSION_DEMO
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Ep");
     if (ret == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, ep_class);
+        fopAcM_ct(a_this, ep_class);
 #else
-    fopAcM_SetupActor(a_this, ep_class);
+    fopAcM_ct(a_this, ep_class);
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Ep");
     if (ret == cPhs_COMPLEATE_e) {
 #endif

@@ -19,7 +19,7 @@ public:
     };
 
     // objdiff says this is a weak function
-    // but defining it here with {} causes it to be inlined with fopAcM_SetupActor which breaks things
+    // but defining it here with {} causes it to be inlined with fopAcM_ct which breaks things
     daNpc_Nz_c();
 
     void modeProcInit(int newMode) { modeProc(PROC_INIT, newMode); }

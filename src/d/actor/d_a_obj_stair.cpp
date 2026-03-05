@@ -147,7 +147,7 @@ static cPhs_State daObj_StairCreate(void* i_this) {
 /* 000004D8-00000854       .text _create__13daObj_Stair_cFv */
 cPhs_State daObj_Stair_c::_create() {
     cPhs_State phase_state;
-    fopAcM_SetupActor(this, daObj_Stair_c);
+    fopAcM_ct(this, daObj_Stair_c);
     u32 switchIdx = fopAcM_GetParam(this) & 0xFF;
 
     if(switchIdx != 0xff && fopAcM_isSwitch(this, switchIdx)) {

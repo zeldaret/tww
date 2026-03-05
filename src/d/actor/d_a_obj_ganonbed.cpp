@@ -54,7 +54,7 @@ bool daObjGbed_c::create_heap() {
 
 /* 00000224-000002F8       .text _create__11daObjGbed_cFv */
 cPhs_State daObjGbed_c::_create() {
-    fopAcM_SetupActor(this, daObjGbed_c);
+    fopAcM_ct(this, daObjGbed_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, l_arcname);
 

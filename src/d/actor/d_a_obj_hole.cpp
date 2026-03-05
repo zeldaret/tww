@@ -256,7 +256,7 @@ cPhs_State daObj_Hole_c::_create() {
     if (result == cPhs_COMPLEATE_e)
 #endif
     {
-        fopAcM_SetupActor(this, daObj_Hole_c);
+        fopAcM_ct(this, daObj_Hole_c);
 
 #if VERSION > VERSION_DEMO
         result = dComIfG_resLoad(&mPhs, m_arc_name);

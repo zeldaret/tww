@@ -428,7 +428,7 @@ static BOOL daDemo00_Delete(daDemo00_c* i_this) {
 /* 800E78D0-800E7964       .text daDemo00_Create__FP10fopAc_ac_c */
 static cPhs_State daDemo00_Create(fopAc_ac_c* i_ac) {
     daDemo00_c* i_this = (daDemo00_c*)i_ac;
-    fopAcM_SetupActor(i_this, daDemo00_c);
+    fopAcM_ct(i_this, daDemo00_c);
     dKy_tevstr_init(&i_this->tevStr, dComIfGp_roomControl_getStayNo(), 0xFF);
     i_this->setAction(&daDemo00_c::actStandby);
     i_this->nextRes.reset();

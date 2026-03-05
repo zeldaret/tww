@@ -187,7 +187,7 @@ void daWindTag::daWindTag_c::set_wind_angle() {
 
 /* 000008D4-0000099C       .text _create__Q29daWindTag11daWindTag_cFv */
 cPhs_State daWindTag::daWindTag_c::_create() {
-    fopAcM_SetupActor(this, daWindTag_c);
+    fopAcM_ct(this, daWindTag_c);
     mType = (fopAcM_GetParam(this) >> 21) & 0x03;
     cPhs_State rt = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (rt == cPhs_COMPLEATE_e) {

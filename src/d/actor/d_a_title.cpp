@@ -476,7 +476,7 @@ daTitle_c::~daTitle_c() {
 }
 
 cPhs_State daTitle_c::create() {
-    fopAcM_SetupActor(this, daTitle_c);
+    fopAcM_ct(this, daTitle_c);
 
 #if VERSION == VERSION_PAL
     // Use sprintf to modify the supposedly read-only "TlogoE0" string literal.

@@ -162,7 +162,7 @@ BOOL daObjVgnfd_c::create_heap() {
 cPhs_State daObjVgnfd_c::_create() {
     cPhs_State ret = cPhs_ERROR_e;
 
-    fopAcM_SetupActor(this, daObjVgnfd_c);
+    fopAcM_ct(this, daObjVgnfd_c);
 
     if (!check_fin()) {
         ret = dComIfG_resLoad(&mPhs, M_arcname);

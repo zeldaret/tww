@@ -712,7 +712,7 @@ cPhs_State daNpc_Km1_c::_create() {
     };
 
 #if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_Km1_c);
+    fopAcM_ct(this, daNpc_Km1_c);
 #endif
 
     if (!decideType(fopAcM_GetParam(this) & 0xFF )) {
@@ -731,7 +731,7 @@ cPhs_State daNpc_Km1_c::_create() {
     l_HIO.field_0x8 += 1;
 
 #if VERSION == VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_Km1_c);
+    fopAcM_ct(this, daNpc_Km1_c);
 #endif
 
     if(fopAcM_entrySolidHeap(this,CheckCreateHeap,a_heap_size_tbl[field_0x7D3])){

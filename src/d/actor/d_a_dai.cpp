@@ -114,7 +114,7 @@ void daDai_c::CreateInit() {
 
 /* 000003A8-00000494       .text _create__7daDai_cFv */
 cPhs_State daDai_c::_create() {
-    fopAcM_SetupActor(this, daDai_c);
+    fopAcM_ct(this, daDai_c);
 
     if (!checkItemGet(dItem_DELIVERY_BAG_e, TRUE)) {
         return cPhs_ERROR_e;

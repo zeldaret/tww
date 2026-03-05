@@ -46,7 +46,7 @@ static dCcD_SrcCyl cyl_check_src = {
 namespace daTagRet {
     /* 00000078-000001D4       .text _create__Q28daTagRet5Act_cFv */
     cPhs_State Act_c::_create() {
-        fopAcM_SetupActor(this, daTagRet::Act_c);
+        fopAcM_ct(this, daTagRet::Act_c);
 
         #if VERSION > VERSION_DEMO
         if (checkItemGet(dItem_PEARL_FARORE_e, TRUE)) {
