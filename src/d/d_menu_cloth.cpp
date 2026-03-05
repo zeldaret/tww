@@ -126,7 +126,6 @@ void dMCloth_c::lightSet1(cXyz) {
 
 /* 8019977C-80199CD0       .text cloth_init__9dMCloth_cFv */
 void dMCloth_c::cloth_init() {
-    /* Nonmatching */
     cXyz* pPosArr = getPos();
     cXyz* pNrm = getNrm();
     cXyz* pOffArr = getOffsetVec();
@@ -135,11 +134,9 @@ void dMCloth_c::cloth_init() {
         int x = 0;
         s16 yAngle = -y * 3500;
         for (; x < INNER_SIZE; x++) {
-            pPosArr[x + y * INNER_SIZE].set(
-                cM_ssin(x * 3276.8f) * 954.9299f + -1500.0f + x * 10.0f * cM_ssin(yAngle),
-                y * 300.0f + -1500.0f,
-                (1.0f - cM_scos(x * 3276.8f)) * 716.1974f + -3400.0f + x * -5.0f * cM_scos(yAngle)
-            );
+            pPosArr[x + y * INNER_SIZE].x = cM_ssin(x * 3276.8f) * 954.9299f + -1500.0f + x * 10.0f * cM_ssin(yAngle);
+            pPosArr[x + y * INNER_SIZE].y = y * 300.0f + -1500.0f;
+            pPosArr[x + y * INNER_SIZE].z = (1.0f - cM_scos(x * 3276.8f)) * 716.1974f + -3400.0f + x * -5.0f * cM_scos(yAngle);
 
             pOffArr[x + y * INNER_SIZE].set(cM_scos(x * 3276.8f - 1000.0f) * -320.0f, 0.0f, cM_ssin(x * 3276.8f - 1000.0f) * -270.0f);
         }
