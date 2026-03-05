@@ -755,6 +755,8 @@ void dMCloth_c::cloth_move_sin() {
     /* Nonmatching */
     mWaveProgress += HIO_CHILD.waveProgressStep;
 
+    cXyz* pPosArr = getPos();
+
     for (int y = 0; y < INNER_SIZE; y++) {
         for (int x = 0; x < INNER_SIZE; x++) {
             f32 fx = (f32)x;
@@ -777,7 +779,7 @@ void dMCloth_c::cloth_move_sin() {
             pos.y = -1500.0f + 300.0f * y + HIO_CHILD.waveAmpY * fx * cM_scos(mWaveProgress + x * HIO_CHILD.waveFreqX + y * HIO_CHILD.waveFreqY);
             pos.z = -3400.0f + x + HIO_CHILD.waveAmpZ * fx * cM_ssin(mWaveProgress + x * HIO_CHILD.waveFreqX);
 
-            cLib_addCalcPos2(&mPosArr[mCurArr][x + y * INNER_SIZE], pos, 0.5f, HIO_CHILD.maxStep);
+            cLib_addCalcPos2(&pPosArr[x + y * INNER_SIZE], pos, 0.5f, HIO_CHILD.maxStep);
         }
     }
 
@@ -800,6 +802,8 @@ void dMCloth_c::cloth_move_sin() {
 /* 8019B9C0-8019BCF4       .text cloth_move_simple__9dMCloth_cFv */
 void dMCloth_c::cloth_move_simple() {
     /* Nonmatching */
+    cXyz* pPosArr = getPos();
+
     for (int y = 0; y < INNER_SIZE; y++) {
         for (int x = 0; x < INNER_SIZE; x++) {
             f32 fx = (f32)x;
@@ -822,7 +826,7 @@ void dMCloth_c::cloth_move_simple() {
             pos.y = -1500.0f + 300.0f * y + HIO_CHILD.waveAmpY * fx * cM_scos(mWaveProgress + x * HIO_CHILD.waveFreqX + y * HIO_CHILD.waveFreqY);
             pos.x = -3400.0f + x + HIO_CHILD.waveAmpX * fx * cM_ssin(mWaveProgress + y * HIO_CHILD.waveFreqY);
 
-            cLib_addCalcPos2(&getPos()[x + y * INNER_SIZE], pos, 0.5f, HIO_CHILD.maxStep);
+            cLib_addCalcPos2(&pPosArr[x + y * INNER_SIZE], pos, 0.5f, HIO_CHILD.maxStep);
         }
     }
 
