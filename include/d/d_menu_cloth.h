@@ -93,8 +93,8 @@ public:
     /* 0x0032 */ s16 startAlpha;
     /* 0x0034 */ s16 fadeInLength;
     /* 0x0036 */ s16 waveProgressStep;
-    /* 0x0038 */ u16 waveFreqX;
-    /* 0x003a */ u16 waveFreqY;
+    /* 0x0038 */ s16 waveFreqX;
+    /* 0x003a */ s16 waveFreqY;
     /* 0x003c */ f32 waveAmpX;
     /* 0x0040 */ f32 waveAmpY;
     /* 0x0044 */ f32 waveAmpZ;
