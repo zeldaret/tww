@@ -20,85 +20,112 @@ s16 dMCloth_c::init_angle_z = 0;
 daCLOTH_HIO_c::daCLOTH_HIO_c() {
     mNo = -1;
 
+    // Default
     {
-        mChildren[0].scale.set(1.78f, 1.78f, 1.0f);
-        mChildren[0].rot.setall(0);
-        mChildren[0].pos.set(360.0f, 40.0f, -2400.0f);
-        mChildren[0].color1.r = 0x78;
-        mChildren[0].color1.g = 0xA5;
-        mChildren[0].color1.b = 0x37;
-        mChildren[0].color1.a = 0xDC;
-        mChildren[0].color2.r = 0x23;
-        mChildren[0].color2.g = 0x5f;
-        mChildren[0].color2.b = 0x19;
-        mChildren[0].color2.a = 0x20;
-        mChildren[0].startAlpha = 0;
-        mChildren[0].fadeInLength = 7;
-        mChildren[0].waveProgressStep = -1000;
-        mChildren[0].waveFreqX = 9000;
-        mChildren[0].waveFreqY = 0x800;
-        mChildren[0].waveAmpX = 5.0;
-        mChildren[0].waveAmpY = 5.0;
-        mChildren[0].waveAmpZ = 250.0;
-        mChildren[0].lightDistance = 1000.0;
-        mChildren[0].lightPitch = 0;
-        mChildren[0].lightYaw = 0;
-        mChildren[0].wavePreSteps = 2;
-        mChildren[0].maxStep = 290.0f;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].scale.set(1.78f, 1.78f, 1.0f);
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].rot.setall(0);
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].pos.set(360.0f, 40.0f, -2400.0f);
+
+        // Middle green
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].color1.r = 0x78;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].color1.g = 0xA5;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].color1.b = 0x37;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].color1.a = 0xDC;
+
+        // Dark green
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].color2.r = 0x23;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].color2.g = 0x5f;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].color2.b = 0x19;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].color2.a = 0x20;
+
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].startAlpha = 0;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].fadeInLength = 7;
+
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].waveProgressStep = -1000;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].waveFreqX = 9000;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].waveFreqY = 0x800;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].waveAmpX = 5.0;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].waveAmpY = 5.0;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].waveAmpZ = 250.0;
+
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].lightDistance = 1000.0;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].lightPitch = 0;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].lightYaw = 0;
+
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].wavePreSteps = 2;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].maxStep = 290.0f;
     }
 
+    // File Select
     {
-        mChildren[1].scale.set(1.27f, 0.93f, 1.0f);
-        mChildren[1].rot.setall(0);
-        mChildren[1].pos.set(350.0f, -15.0f, -2400.0f);
-        mChildren[1].color1.r = 0xbe;
-        mChildren[1].color1.g = 0xb4;
-        mChildren[1].color1.b = 0x64;
-        mChildren[1].color1.a = 0xaa;
-        mChildren[1].color2.r = 0x8c;
-        mChildren[1].color2.g = 0x50;
-        mChildren[1].color2.b = 0x14;
-        mChildren[1].color2.a = 0x20;
-        mChildren[1].startAlpha = 0;
-        mChildren[1].fadeInLength = 7;
-        mChildren[1].waveProgressStep = -1000;
-        mChildren[1].waveFreqX = 9000;
-        mChildren[1].waveFreqY = 0x800;
-        mChildren[1].waveAmpX = 5.0;
-        mChildren[1].waveAmpY = 5.0;
-        mChildren[1].waveAmpZ = 250.0;
-        mChildren[1].lightDistance = 1000.0;
-        mChildren[1].lightPitch = 0;
-        mChildren[1].lightYaw = 0;
-        mChildren[1].wavePreSteps = 2;
-        mChildren[1].maxStep = 290.0;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].scale.set(1.27f, 0.93f, 1.0f);
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].rot.setall(0);
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].pos.set(350.0f, -15.0f, -2400.0f);
+
+        // Beige
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color1.r = 0xbe;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color1.g = 0xb4;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color1.b = 0x64;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color1.a = 0xaa;
+
+        // Dark brown
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color2.r = 0x8c;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color2.g = 0x50;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color2.b = 0x14;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].color2.a = 0x20;
+
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].startAlpha = 0;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].fadeInLength = 7;
+
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].waveProgressStep = -1000;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].waveFreqX = 9000;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].waveFreqY = 0x800;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].waveAmpX = 5.0;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].waveAmpY = 5.0;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].waveAmpZ = 250.0;
+
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].lightDistance = 1000.0;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].lightPitch = 0;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].lightYaw = 0;
+
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].wavePreSteps = 2;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].maxStep = 290.0;
     }
 
+    // Cloth Only
     {
-        mChildren[2].scale.set(1.7f, 1.7f, 1.0f);
-        mChildren[2].rot.set(0, 0, 0x4000);
-        mChildren[2].pos.set(360.0f, 40.0f, -2400.0f);
-        mChildren[2].color1.r = 0xbe;
-        mChildren[2].color1.g = 0xb4;
-        mChildren[2].color1.b = 0x64;
-        mChildren[2].color1.a = 0xdc;
-        mChildren[2].color2.r = 0x8c;
-        mChildren[2].color2.g = 0x50;
-        mChildren[2].color2.b = 0x14;
-        mChildren[2].color2.a = 0x20;
-        mChildren[2].startAlpha = 0;
-        mChildren[2].fadeInLength = 7;
-        mChildren[2].waveProgressStep = -1000;
-        mChildren[2].waveFreqX = 9000;
-        mChildren[2].waveFreqY = 0x800;
-        mChildren[2].waveAmpX = 5.0;
-        mChildren[2].waveAmpY = 5.0;
-        mChildren[2].waveAmpZ = 250.0;
-        mChildren[2].lightDistance = 1000.0;
-        mChildren[2].lightPitch = 0;
-        mChildren[2].lightYaw = 0;
-        mChildren[2].wavePreSteps = 2;
-        mChildren[2].maxStep = 290.0;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].scale.set(1.7f, 1.7f, 1.0f);
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].rot.set(0, 0, 0x4000);
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].pos.set(360.0f, 40.0f, -2400.0f);
+
+        // Beige
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color1.r = 0xbe;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color1.g = 0xb4;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color1.b = 0x64;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color1.a = 0xdc;
+
+        // Dark brown
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color2.r = 0x8c;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color2.g = 0x50;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color2.b = 0x14;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].color2.a = 0x20;
+
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].startAlpha = 0;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].fadeInLength = 7;
+
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].waveProgressStep = -1000;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].waveFreqX = 9000;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].waveFreqY = 0x800;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].waveAmpX = 5.0;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].waveAmpY = 5.0;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].waveAmpZ = 250.0;
+
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].lightDistance = 1000.0;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].lightPitch = 0;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].lightYaw = 0;
+
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].wavePreSteps = 2;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].maxStep = 290.0;
     }
 }
 
