@@ -672,10 +672,6 @@ void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned ch
 
     ResTIMG* i_toonimage = dDlst_list_c::getToonImage();
 
-#if VERSION == VERSION_DEMO
-    GXBool mipmap = i_toonimage->mipmapCount > 1;
-#endif
-
     GXInitTexObj(
         &tex_obj,
         (u8*)i_toonimage + i_toonimage->imageOffset,
@@ -684,12 +680,9 @@ void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned ch
         (GXTexFmt)i_toonimage->format,
         (GXTexWrapMode)i_toonimage->wrapS,
         (GXTexWrapMode)i_toonimage->wrapT,
-#if VERSION == VERSION_DEMO
-        mipmap
-#else
         i_toonimage->mipmapCount > 1
-#endif
     );
+
     GXInitTexObjLOD(
         &tex_obj,
         (GXTexFilter)i_toonimage->minFilter,
