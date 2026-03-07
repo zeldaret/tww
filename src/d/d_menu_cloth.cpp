@@ -387,12 +387,12 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
             case MENU_CLOTH_TYPE_FILE_SELECT: {
                 u8 alpha0, alpha1;
                 {
-                    const int fromEnd = 10 - x;
-                    const int fromEndNext = 10 - xNext;
-                    const int fromTopRight = fromEnd + y;
-                    const int fromTopRightNext = fromEndNext + y;
-                    alpha0 = cLib_maxLimit(fromTopRight * 25, 0xFF);
-                    alpha1 = cLib_maxLimit(fromTopRightNext * 25, 0xFF);
+                    const int fromRight = 10 - x;
+                    const int fromRightNext = 10 - xNext;
+                    const int fromBottomRight = fromRight + y;
+                    const int fromBottomRightNext = fromRightNext + y;
+                    alpha0 = cLib_maxLimit(fromBottomRight * 25, 0xFF);
+                    alpha1 = cLib_maxLimit(fromBottomRightNext * 25, 0xFF);
                 }
 
                 // Vertex 1
@@ -430,7 +430,6 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
     const f32 xStep = (xMax - xMin) * (1.0f / (f32)(INNER_SIZE - 1));
     const f32 yStep = (yMax - yMin) * (1.0f / (f32)(INNER_SIZE - 1));
 
-
     for (int xNext = 1, x = 0; x < INNER_SIZE - 1; x++, xNext++) {
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, INNER_SIZE * 2);
         f32 yPos = yMax;
@@ -458,12 +457,12 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
             case MENU_CLOTH_TYPE_FILE_SELECT: {
                 u8 alpha0, alpha1;
                 {
-                    const int fromEnd = 10 - x;
-                    const int fromEndNext = 10 - xNext;
-                    const int fromTopRight = fromEnd + y;
-                    const int fromTopRightNext = fromEndNext + y;
-                    alpha0 = cLib_maxLimit(fromTopRight * 25, 0xFF);
-                    alpha1 = cLib_maxLimit(fromTopRightNext * 25, 0xFF);
+                    const int fromRight = 10 - x;
+                    const int fromRightNext = 10 - xNext;
+                    const int fromBottomRight = fromRight + y;
+                    const int fromBottomRightNext = fromRightNext + y;
+                    alpha0 = cLib_maxLimit(fromBottomRight * 25, 0xFF);
+                    alpha1 = cLib_maxLimit(fromBottomRightNext * 25, 0xFF);
                 }
 
                 // Vertex 1
