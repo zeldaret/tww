@@ -232,7 +232,11 @@ void dMCloth_c::init() {
     cloth_init();
 
     ResTIMG* image = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "cloth_piece01.bti", mpArc);
-    JUT_ASSERT(0x212, image != NULL);
+    JUT_ASSERT(VERSION_SELECT(528, 530, 530, 530), image != NULL);
+
+#if VERSION == VERSION_DEMO
+    BOOL mipmap = image->mipmapCount > 1;
+#endif
 
     GXInitTexObj(
         &mTexObj,
@@ -242,7 +246,11 @@ void dMCloth_c::init() {
         GXTexFmt(image->format),
         GXTexWrapMode(image->wrapS),
         GXTexWrapMode(image->wrapT),
+#if VERSION == VERSION_DEMO
+        mipmap
+#else
         image->mipmapCount > 1
+#endif
     );
 
     GXInitTexObjLOD(
