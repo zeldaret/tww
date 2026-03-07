@@ -360,8 +360,7 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
     const f32 xStep = (xMax - xMin) * (1.0f / (f32)(INNER_SIZE - 1));
     const f32 yStep = (yMax - yMin) * (1.0f / (f32)(INNER_SIZE - 1));
 
-    int xNext = 1;
-    for (int x = 0; x < INNER_SIZE - 1; x++, xNext++) {
+    for (int xNext = 1, x = 0; x < INNER_SIZE - 1; x++, xNext++) {
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, INNER_SIZE * 2);
         f32 yPos = yMax;
         for (int y = 0; y < INNER_SIZE; y++) {
@@ -431,8 +430,8 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
     const f32 xStep = (xMax - xMin) * (1.0f / (f32)(INNER_SIZE - 1));
     const f32 yStep = (yMax - yMin) * (1.0f / (f32)(INNER_SIZE - 1));
 
-    int xNext = 1;
-    for (int x = 0; x < INNER_SIZE - 1; x++, xNext++) {
+
+    for (int xNext = 1, x = 0; x < INNER_SIZE - 1; x++, xNext++) {
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, INNER_SIZE * 2);
         f32 yPos = yMax;
         for (int y = 0; y < INNER_SIZE; y++) {
