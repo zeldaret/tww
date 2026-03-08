@@ -899,9 +899,6 @@ static BOOL dMenu_ClothIsDelete(void*) {
     return TRUE;
 }
 
-daCLOTH_HIO_c::~daCLOTH_HIO_c() {
-}
-
 // TODO
 class menu_cloth_class : public fopAc_ac_c {
     dMCloth_c mCloth;

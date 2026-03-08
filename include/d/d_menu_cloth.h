@@ -108,7 +108,7 @@ public:
 class daCLOTH_HIO_c : public JORReflexible {
 public:
     daCLOTH_HIO_c();
-    virtual ~daCLOTH_HIO_c();
+    virtual ~daCLOTH_HIO_c() {}
 
 public:
     /* 0x0004 */ s8 mNo;
