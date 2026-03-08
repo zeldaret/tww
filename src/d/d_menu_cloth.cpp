@@ -369,17 +369,15 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
             case MENU_CLOTH_TYPE_CLOTH_ONLY: {
                 // Vertex 1
                 {
-                    const s16 idx = x + y * INNER_SIZE;
-                    GXPosition1x16(idx);
-                    GXNormal1x16(idx);
+                    GXPosition1x16(x + y * INNER_SIZE);
+                    GXNormal1x16(x + y * INNER_SIZE);
                     GXTexCoord2f32(xPos, yPos);
                 }
 
                 // Vertex 2
                 {
-                    const s16 idx = xNext + y * INNER_SIZE;
-                    GXPosition1x16(idx);
-                    GXNormal1x16(idx);
+                    GXPosition1x16(xNext + y * INNER_SIZE);
+                    GXNormal1x16(xNext + y * INNER_SIZE);
                     GXTexCoord2f32(xPos + xStep, yPos);
                 }
             } break;
@@ -397,18 +395,16 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
 
                 // Vertex 1
                 {
-                    const s16 idx = x + y * INNER_SIZE;
-                    GXPosition1x16(idx);
-                    GXNormal1x16(idx);
+                    GXPosition1x16(x + y * INNER_SIZE);
+                    GXNormal1x16(x + y * INNER_SIZE);
                     GXColor4x8(mClothColor.r, mClothColor.g, mClothColor.b, alpha0);
                     GXTexCoord2f32(xPos, yPos);
                 }
 
                 // Vertex 2
                 {
-                    const s16 idx = xNext + y * INNER_SIZE;
-                    GXPosition1x16(idx);
-                    GXNormal1x16(idx);
+                    GXPosition1x16(xNext + y * INNER_SIZE);
+                    GXNormal1x16(xNext + y * INNER_SIZE);
                     GXColor4x8(mClothColor.r, mClothColor.g, mClothColor.b, alpha1);
                     GXTexCoord2f32(xPos + xStep, yPos);
                 }
@@ -439,17 +435,15 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
             case MENU_CLOTH_TYPE_CLOTH_ONLY: {
                 // Vertex 1
                 {
-                    const s16 idx = x + y * INNER_SIZE;
-                    GXPosition1x16(idx);
-                    GXNormal1x16(idx);
+                    GXPosition1x16(x + y * INNER_SIZE);
+                    GXNormal1x16(x + y * INNER_SIZE);
                     GXTexCoord2f32(xPos, yPos);
                 }
 
                 // Vertex 2
                 {
-                    const s16 idx = xNext + y * INNER_SIZE;
-                    GXPosition1x16(idx);
-                    GXNormal1x16(idx);
+                    GXPosition1x16(xNext + y * INNER_SIZE);
+                    GXNormal1x16(xNext + y * INNER_SIZE);
                     GXTexCoord2f32(xPos + xStep, yPos);
                 }
             } break;
@@ -467,18 +461,16 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
 
                 // Vertex 1
                 {
-                    const s16 idx = x + y * INNER_SIZE;
-                    GXPosition1x16(idx);
-                    GXNormal1x16(idx);
+                    GXPosition1x16(x + y * INNER_SIZE);
+                    GXNormal1x16(x + y * INNER_SIZE);
                     GXColor4x8(mShadowColor.r, mShadowColor.g, mShadowColor.b, alpha0);
                     GXTexCoord2f32(xPos, yPos);
                 }
 
                 // Vertex 2
                 {
-                    const s16 idx = xNext + y * INNER_SIZE;
-                    GXPosition1x16(idx);
-                    GXNormal1x16(idx);
+                    GXPosition1x16(xNext + y * INNER_SIZE);
+                    GXNormal1x16(xNext + y * INNER_SIZE);
                     GXColor4x8(mShadowColor.r, mShadowColor.g, mShadowColor.b, alpha1);
                     GXTexCoord2f32(xPos + xStep, yPos);
                 }
