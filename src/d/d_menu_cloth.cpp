@@ -140,12 +140,12 @@ daCLOTH_ChildHIO_c::daCLOTH_ChildHIO_c() {
 /* 801996C4-8019977C       .text lightSet1__9dMCloth_cF4cXyz */
 void dMCloth_c::lightSet1(cXyz) {
     GXLightObj light;
-    const f32 f0 = HIO_CHILD.lightDistance;
+    const f32 lightDistance = HIO_CHILD.lightDistance;
     GXInitLightPos(
         &light,
-        -f0 * cM_ssin(HIO_CHILD.lightYaw) * cM_scos(HIO_CHILD.lightPitch),
-        -f0 * cM_ssin(HIO_CHILD.lightPitch),
-        -f0 * cM_scos(HIO_CHILD.lightYaw) * cM_scos(HIO_CHILD.lightPitch)
+        -lightDistance * cM_ssin(HIO_CHILD.lightYaw) * cM_scos(HIO_CHILD.lightPitch),
+        -lightDistance * cM_ssin(HIO_CHILD.lightPitch),
+        -lightDistance * cM_scos(HIO_CHILD.lightYaw) * cM_scos(HIO_CHILD.lightPitch)
     );
     GXInitLightColor(&light, (GXColor){0xFF, 0xFF, 0xFF, 0x00});
     GXLoadLightObjImm(&light, GX_LIGHT0);
