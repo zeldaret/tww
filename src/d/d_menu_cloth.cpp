@@ -189,7 +189,9 @@ void dMCloth_c::cloth_init() {
 
     DCStoreRangeNoSync(mPosArr[mCurArr], INNER_SIZE * INNER_SIZE * sizeof(cXyz));
     DCStoreRangeNoSync(mNrmArr[mCurArr], 0x5AC);
+#if VERSION > VERSION_JPN
     DCStoreRangeNoSync(mBackNrmArr, 0x5AC);
+#endif
 
     mClothColor.r = (u8)HIO_CHILD.clothColor.r;
     mClothColor.g = (u8)HIO_CHILD.clothColor.g;
@@ -204,7 +206,13 @@ void dMCloth_c::cloth_init() {
     switch (mClothType) {
     case MENU_CLOTH_TYPE_DEFAULT: {
         init_angle_z += cM_deg2s(cM_rndFX(45.0f) + 90.0f);
+
+#if VERSION > VERSION_JPN
         mScale = HIO_CHILD.scale;
+#else
+        mScale.set(1.75f, 1.75f, 1.0f);
+#endif
+
         mRot.set(0, 0, init_angle_z);
         s32 n = HIO_CHILD.wavePreSteps;
         while (n--) {
