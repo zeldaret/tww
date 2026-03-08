@@ -395,9 +395,17 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
                 {
                     GXPosition1x16(x + y * INNER_SIZE);
                     GXNormal1x16(x + y * INNER_SIZE);
+
+#if VERSION == VERSION_DEMO
+                    const u8 b = mClothColor.b;
+                    const u8 g = mClothColor.g;
+                    const u8 r = mClothColor.r;
+#else
                     const u8 r = mClothColor.r;
                     const u8 b = mClothColor.b;
                     const u8 g = mClothColor.g;
+#endif
+
                     GXColor4x8(r, g, b, alpha0);
                     GXTexCoord2f32(xPos, yPos);
                 }
@@ -406,9 +414,17 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
                 {
                     GXPosition1x16(xNext + y * INNER_SIZE);
                     GXNormal1x16(xNext + y * INNER_SIZE);
+
+#if VERSION == VERSION_DEMO
+                    const u8 b = mClothColor.b;
+                    const u8 g = mClothColor.g;
+                    const u8 r = mClothColor.r;
+#else
                     const u8 r = mClothColor.r;
                     const u8 b = mClothColor.b;
                     const u8 g = mClothColor.g;
+#endif
+
                     GXColor4x8(r, g, b, alpha1);
                     GXTexCoord2f32(xPos + xStep, yPos);
                 }
@@ -465,9 +481,17 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
                 {
                     GXPosition1x16(x + y * INNER_SIZE);
                     GXNormal1x16(x + y * INNER_SIZE);
+
+#if VERSION == VERSION_DEMO
+                    const u8 b = mShadowColor.b;
+                    const u8 g = mShadowColor.g;
+                    const u8 r = mShadowColor.r;
+#else
                     const u8 r = mShadowColor.r;
                     const u8 b = mShadowColor.b;
                     const u8 g = mShadowColor.g;
+#endif
+
                     GXColor4x8(r, g, b, alpha0);
                     GXTexCoord2f32(xPos, yPos);
                 }
@@ -476,9 +500,17 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
                 {
                     GXPosition1x16(xNext + y * INNER_SIZE);
                     GXNormal1x16(xNext + y * INNER_SIZE);
+
+#if VERSION == VERSION_DEMO
+                    const u8 b = mShadowColor.b;
+                    const u8 g = mShadowColor.g;
+                    const u8 r = mShadowColor.r;
+#else
                     const u8 r = mShadowColor.r;
                     const u8 b = mShadowColor.b;
                     const u8 g = mShadowColor.g;
+#endif
+
                     GXColor4x8(r, g, b, alpha1);
                     GXTexCoord2f32(xPos + xStep, yPos);
                 }
