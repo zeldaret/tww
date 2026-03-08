@@ -943,7 +943,7 @@ static BOOL dMenu_ClothIsDelete(void*) {
     return TRUE;
 }
 
-// TODO
+// TODO: Find superclass that gives the correct size of 0x929C.
 class menu_cloth_class : public fopAc_ac_c {
     dMCloth_c mCloth;
 };
