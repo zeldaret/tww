@@ -5,7 +5,60 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_window.h"
+
+#include "JSystem/JKernel/JKRExpHeap.h"
 #include "f_op/f_op_msg.h"
+#include "d/d_menu_cloth.h"
+
+// TODO: Remove me when all the JUT asserts and other strings are filled out.
+// This is temporary, just to make the strings match.
+void dummy0() {
+    OSReport("cmap_tri.bti");
+    OSReport("cmap_treasure.bti");
+    OSReport("cmap_tingle.bti");
+    OSReport("cmap_phantomship.bti");
+    OSReport("cmap_hint.bti");
+    OSReport("f_item_tri.bti");
+    OSReport("f_get_rupy.bti");
+    OSReport("f_heart_up_02.bti");
+    OSReport("f_korog_kare.bti");
+    OSReport("f_korog_saki.bti");
+    OSReport("d_menu_window.cpp");
+    OSReport("i_Ms->name[i] != 0");
+    OSReport("Halt");
+    OSReport("");
+    OSReport("i_Ms->note[i] != 0");
+    OSReport("i_Ms->dummy[i] != 0");
+    OSReport("i_Ms->buffer_p[i] != 0");
+    OSReport("dMi_c != 0");
+    OSReport("dMc_c != 0");
+    OSReport("dMf_c != 0");
+    OSReport("dMs_capture_c != 0");
+    OSReport("dMd_c != 0");
+    OSReport("dNm_c != 0");
+    OSReport("dMs_c != 0");
+    OSReport("cloth_c != 0");
+    OSReport("dMs_cloth_c != 0");
+    OSReport("i_Ms->childHeap != 0");
+    OSReport("awake");
+    OSReport("majyuu_shinnyuu");
+    OSReport("アイテムビット");
+    OSReport("ダンジョンビット");
+    OSReport("fonttype != 0");
+    OSReport("rfonttype != 0");
+}
+
+class dDlst_MENU_CLOTH_c : public dDlst_base_c {};
+class dDlst_MENU_CAPTURE_c : public dDlst_base_c {
+public:
+    dDlst_MENU_CAPTURE_c() { mStatus = 0; }
+
+    u8 mStatus;
+};
+
+static dMCloth_c* cloth_c;
+static dDlst_MENU_CLOTH_c* dMs_cloth_c;
+static dDlst_MENU_CAPTURE_c* dMs_capture_c;
 
 /* 801DB384-801DB50C       .text __ct__9dMw_HIO_cFv */
 dMw_HIO_c::dMw_HIO_c() {
@@ -78,23 +131,72 @@ void dMs_save_delete(sub_ms_screen_class*) {
 }
 
 /* 801DCEA0-801DD090       .text dMs_cloth_create__FP19sub_ms_screen_class */
-void dMs_cloth_create(sub_ms_screen_class*) {
-    /* Nonmatching */
+void dMs_cloth_create(sub_ms_screen_class* i_Ms) {
+    g_dComIfG_gameInfo.play.setHeapLockFlag(1);
+    JKRArchive* arc = g_dComIfG_gameInfo.play.getClothResArchive();
+
+    cloth_c = new dMCloth_c();
+    JUT_ASSERT(2674, cloth_c != NULL);
+
+    cloth_c->setArchive(arc);
+    cloth_c->init();
+
+    dMs_cloth_c = new dDlst_MENU_CLOTH_c();
+    JUT_ASSERT(2680, dMs_cloth_c != NULL);
+
+    dMs_capture_c = new dDlst_MENU_CAPTURE_c();
+    JUT_ASSERT(2683, dMs_capture_c != NULL);
+
+    i_Ms->childHeap = JKRExpHeap::create(0x506A1, i_Ms->parentHeap_0xfc, false);
+    JUT_ASSERT(2686, i_Ms->childHeap != NULL);
 }
 
 /* 801DD090-801DD154       .text dMs_cloth_delete__FP19sub_ms_screen_class */
-void dMs_cloth_delete(sub_ms_screen_class*) {
-    /* Nonmatching */
+void dMs_cloth_delete(sub_ms_screen_class* i_Ms) {
+    if (i_Ms->childHeap) {
+        i_Ms->childHeap->destroy();
+        i_Ms->childHeap = NULL;
+    }
+    if (dMs_cloth_c) {
+        delete dMs_cloth_c;
+        dMs_cloth_c = NULL;
+    }
+    if (cloth_c) {
+        delete cloth_c;
+        cloth_c = NULL;
+    }
+    if (dMs_capture_c) {
+        delete dMs_capture_c;
+        dMs_capture_c = NULL;
+    }
 }
 
 /* 801DD154-801DD270       .text dMs_clothOnly_create__FP19sub_ms_screen_class */
 void dMs_clothOnly_create(sub_ms_screen_class*) {
-    /* Nonmatching */
+    JKRArchive* arc = g_dComIfG_gameInfo.play.getClothResArchive();
+
+    cloth_c = new dMCloth_c();
+    JUT_ASSERT(2744, cloth_c != NULL);
+
+    cloth_c->setArchive(arc);
+    cloth_c->setClothType(MENU_CLOTH_TYPE_CLOTH_ONLY);
+    cloth_c->init();
+
+    dMs_cloth_c = new dDlst_MENU_CLOTH_c();
+    JUT_ASSERT(2751, dMs_cloth_c != NULL);
 }
 
 /* 801DD270-801DD308       .text dMs_clothOnly_delete__FP19sub_ms_screen_class */
 void dMs_clothOnly_delete(sub_ms_screen_class*) {
-    /* Nonmatching */
+    if (dMs_cloth_c) {
+        delete dMs_cloth_c;
+        dMs_cloth_c = NULL;
+    }
+    if (cloth_c) {
+        g_dComIfG_gameInfo.play.getClothResArchive()->removeResourceAll();
+        delete cloth_c;
+        cloth_c = NULL;
+    }
 }
 
 /* 801DD308-801DD318       .text dMs_onButtonBit__FP19sub_ms_screen_classUc */

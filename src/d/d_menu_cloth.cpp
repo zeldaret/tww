@@ -5,143 +5,969 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_cloth.h"
+#include "d/d_procname.h"
+#include "d/d_priority.h"
+
+#include "assets/l_matDL__d_menu_cloth.h"
+
+static daCLOTH_HIO_c l_HIO;
+
+s16 dMCloth_c::init_angle_z = 0;
+
+#define HIO_CHILD (l_HIO.mChildren[mClothType])
 
 /* 8019940C-8019966C       .text __ct__13daCLOTH_HIO_cFv */
 daCLOTH_HIO_c::daCLOTH_HIO_c() {
-    /* Nonmatching */
+    mNo = -1;
+
+    // Default
+    {
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].scale.set(1.78f, 1.78f, 1.0f);
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].rot.setall(0);
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].pos.set(360.0f, 40.0f, -2400.0f);
+
+        // Middle green
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].clothColor.r = 0x78;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].clothColor.g = 0xA5;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].clothColor.b = 0x37;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].clothColor.a = 0xDC;
+
+        // Dark green
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].shadowColor.r = 0x23;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].shadowColor.g = 0x5f;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].shadowColor.b = 0x19;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].shadowColor.a = 0x20;
+
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].startAlpha = 0;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].fadeInLength = 7;
+
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].waveProgressStep = -1000;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].waveFreqX = 9000;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].waveFreqY = 0x800;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].waveAmpX = 5.0;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].waveAmpY = 5.0;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].waveAmpZ = 250.0;
+
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].lightDistance = 1000.0;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].lightPitch = 0;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].lightYaw = 0;
+
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].wavePreSteps = 2;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].maxStep = 290.0f;
+    }
+
+    // File Select
+    {
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].scale.set(1.27f, 0.93f, 1.0f);
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].rot.setall(0);
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].pos.set(350.0f, -15.0f, -2400.0f);
+
+        // Beige
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.r = 0xbe;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.g = 0xb4;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.b = 0x64;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.a = 0xaa;
+
+        // Dark brown
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].shadowColor.r = 0x8c;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].shadowColor.g = 0x50;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].shadowColor.b = 0x14;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].shadowColor.a = 0x20;
+
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].startAlpha = 0;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].fadeInLength = 7;
+
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].waveProgressStep = -1000;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].waveFreqX = 9000;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].waveFreqY = 0x800;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].waveAmpX = 5.0;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].waveAmpY = 5.0;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].waveAmpZ = 250.0;
+
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].lightDistance = 1000.0;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].lightPitch = 0;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].lightYaw = 0;
+
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].wavePreSteps = 2;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].maxStep = 290.0;
+    }
+
+    // Cloth Only
+    {
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].scale.set(1.7f, 1.7f, 1.0f);
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].rot.set(0, 0, 0x4000);
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].pos.set(360.0f, 40.0f, -2400.0f);
+
+        // Beige
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.r = 0xbe;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.g = 0xb4;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.b = 0x64;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.a = 0xdc;
+
+        // Dark brown
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].shadowColor.r = 0x8c;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].shadowColor.g = 0x50;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].shadowColor.b = 0x14;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].shadowColor.a = 0x20;
+
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].startAlpha = 0;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].fadeInLength = 7;
+
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].waveProgressStep = -1000;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].waveFreqX = 9000;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].waveFreqY = 0x800;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].waveAmpX = 5.0;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].waveAmpY = 5.0;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].waveAmpZ = 250.0;
+
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].lightDistance = 1000.0;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].lightPitch = 0;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].lightYaw = 0;
+
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].wavePreSteps = 2;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].maxStep = 290.0;
+    }
 }
 
 /* 8019966C-801996B4       .text __dt__18daCLOTH_ChildHIO_cFv */
 daCLOTH_ChildHIO_c::~daCLOTH_ChildHIO_c() {
-    /* Nonmatching */
 }
 
 /* 801996B4-801996C4       .text __ct__18daCLOTH_ChildHIO_cFv */
 daCLOTH_ChildHIO_c::daCLOTH_ChildHIO_c() {
-    /* Nonmatching */
 }
 
 /* 801996C4-8019977C       .text lightSet1__9dMCloth_cF4cXyz */
 void dMCloth_c::lightSet1(cXyz) {
-    /* Nonmatching */
+    GXLightObj light;
+    const f32 lightDistance = HIO_CHILD.lightDistance;
+    GXInitLightPos(
+        &light,
+        -lightDistance * cM_ssin(HIO_CHILD.lightYaw) * cM_scos(HIO_CHILD.lightPitch),
+        -lightDistance * cM_ssin(HIO_CHILD.lightPitch),
+        -lightDistance * cM_scos(HIO_CHILD.lightYaw) * cM_scos(HIO_CHILD.lightPitch)
+    );
+    GXInitLightColor(&light, (GXColor){0xFF, 0xFF, 0xFF, 0x00});
+    GXLoadLightObjImm(&light, GX_LIGHT0);
 }
 
 /* 8019977C-80199CD0       .text cloth_init__9dMCloth_cFv */
 void dMCloth_c::cloth_init() {
-    /* Nonmatching */
+    cXyz* pPosArr = getPos();
+    cXyz* pNrm = getNrm();
+    cXyz* pOffArr = getOffsetVec();
+
+    for (int y = 0; y < INNER_SIZE; y++) {
+        int x = 0;
+        s16 yAngle = -y * 3500;
+        for (; x < INNER_SIZE; x++) {
+            pPosArr[x + y * INNER_SIZE].x = cM_ssin(x * 3276.8f) * 954.9299f + -1500.0f + x * 10.0f * cM_ssin(yAngle);
+            pPosArr[x + y * INNER_SIZE].y = y * 300.0f + -1500.0f;
+            pPosArr[x + y * INNER_SIZE].z = (1.0f - cM_scos(x * 3276.8f)) * 716.1974f + -3400.0f + x * -5.0f * cM_scos(yAngle);
+
+            pOffArr[x + y * INNER_SIZE].set(cM_scos(x * 3276.8f - 1000.0f) * -320.0f, 0.0f, cM_ssin(x * 3276.8f - 1000.0f) * -270.0f);
+        }
+    }
+
+    for (int y = 0; y < INNER_SIZE; y++) {
+        for (int x = 0; x < INNER_SIZE; x++) {
+            setNrmVtx(pNrm, x, y);
+            pNrm++;
+        }
+    }
+
+    setBackNrm();
+
+    mWaveProgress = 0;
+    mFadeInCounter = 0;
+
+    cloth_move();
+
+    mAlphaOut = 0;
+    mCurrentAlpha = HIO_CHILD.clothColor.a;
+    mWaveProgress += HIO_CHILD.waveProgressStep;
+
+    DCStoreRangeNoSync(mPosArr[mCurArr], INNER_SIZE * INNER_SIZE * sizeof(cXyz));
+    DCStoreRangeNoSync(mNrmArr[mCurArr], 0x5AC);
+#if VERSION > VERSION_JPN
+    DCStoreRangeNoSync(mBackNrmArr, 0x5AC);
+#endif
+
+    mClothColor.r = (u8)HIO_CHILD.clothColor.r;
+    mClothColor.g = (u8)HIO_CHILD.clothColor.g;
+    mClothColor.b = (u8)HIO_CHILD.clothColor.b;
+    mClothColor.a = (u8)HIO_CHILD.clothColor.a;
+
+    mShadowColor.r = (u8)HIO_CHILD.shadowColor.r;
+    mShadowColor.g = (u8)HIO_CHILD.shadowColor.g;
+    mShadowColor.b = (u8)HIO_CHILD.shadowColor.b;
+    mShadowColor.a = (u8)HIO_CHILD.shadowColor.a;
+
+    switch (mClothType) {
+    case MENU_CLOTH_TYPE_DEFAULT: {
+        init_angle_z += cM_deg2s(cM_rndFX(45.0f) + 90.0f);
+
+#if VERSION > VERSION_JPN
+        mScale = HIO_CHILD.scale;
+#else
+        mScale.set(1.75f, 1.75f, 1.0f);
+#endif
+
+        mRot.set(0, 0, init_angle_z);
+        s32 n = HIO_CHILD.wavePreSteps;
+        while (n--) {
+            cloth_move_sin();
+        }
+    } break;
+    case MENU_CLOTH_TYPE_FILE_SELECT: {
+        mScale.set(1.27f, 0.93f, 1.0f);
+        mRot.setall(0);
+    } break;
+    case MENU_CLOTH_TYPE_CLOTH_ONLY: {
+        mScale = HIO_CHILD.scale;
+        mRot = HIO_CHILD.rot;
+        mRot.z += cM_deg2s(cM_rndFX(20.0f));
+        s32 n = HIO_CHILD.wavePreSteps;
+        while (n--) {
+            cloth_move_sin();
+        }
+    } break;
+    }
 }
 
 /* 80199CD0-80199E1C       .text init__9dMCloth_cFv */
 void dMCloth_c::init() {
-    /* Nonmatching */
+    cloth_init();
+
+    ResTIMG* image = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "cloth_piece01.bti", mpArc);
+    JUT_ASSERT(VERSION_SELECT(528, 526, 530, 530), image != NULL);
+
+#if VERSION == VERSION_DEMO
+    BOOL mipmap = image->mipmapCount > 1;
+#endif
+
+    GXInitTexObj(
+        &mTexObj,
+        (u8*)image + image->imageOffset,
+        image->width,
+        image->height,
+        GXTexFmt(image->format),
+        GXTexWrapMode(image->wrapS),
+        GXTexWrapMode(image->wrapT),
+#if VERSION == VERSION_DEMO
+        mipmap
+#else
+        image->mipmapCount > 1
+#endif
+    );
+
+    GXInitTexObjLOD(
+        &mTexObj,
+        GXTexFilter(image->minFilter),
+        GXTexFilter(image->magFilter),
+        image->minLOD * 0.125f,
+        image->maxLOD * 0.125f,
+        image->LODBias * 0.01f,
+        image->biasClamp,
+        image->doEdgeLOD,
+        GXAnisotropy(image->maxAnisotropy)
+    );
 }
 
 /* 80199E1C-80199F48       .text __ct__9dMCloth_cFv */
 dMCloth_c::dMCloth_c() {
-    /* Nonmatching */
+    mCurArr = 0;
+    unused_0x4 = 0;
+    mClothType = MENU_CLOTH_TYPE_DEFAULT;
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("メニューの布", &l_HIO); // Menu cloth
+    }
 }
 
 /* 80199F48-8019A058       .text __dt__9dMCloth_cFv */
 dMCloth_c::~dMCloth_c() {
-    /* Nonmatching */
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
+
+    mpArc->removeResourceAll();
 }
 
 /* 8019A058-8019A0AC       .text setBackNrm__9dMCloth_cFv */
 void dMCloth_c::setBackNrm() {
-    /* Nonmatching */
+    cXyz* pNrm = getNrm();
+    cXyz* pBackNrm = getBackNrm();
+
+    for (int i = 0; i < ARR_SIZE; i++) {
+        pBackNrm->set(-pNrm->x, -pNrm->y, -pNrm->z);
+        pNrm++;
+        pBackNrm++;
+    }
 }
 
 /* 8019A0AC-8019A480       .text setNrmVtx__9dMCloth_cFP4cXyzii */
-void dMCloth_c::setNrmVtx(cXyz*, int, int) {
-    /* Nonmatching */
+void dMCloth_c::setNrmVtx(cXyz* pDst, int x, int y) {
+    cXyz x_diff;
+    cXyz y_diff;
+    cXyz norm;
+    cXyz total;
+    cXyz pos;
+
+    cXyz* pPos = getPos();
+    pos = pPos[(x + y * INNER_SIZE)];
+    total.setall(0.0f);
+
+    if (x != 0) {
+        x_diff = pPos[x - 1 + y * INNER_SIZE] - pos;
+        if (y != 0) {
+            y_diff = pPos[x + (y - 1) * INNER_SIZE] - pos;
+            norm = x_diff.outprod(y_diff);
+            norm = norm.normZP();
+            total += norm;
+        }
+        if (y != INNER_SIZE - 1) {
+            y_diff = pPos[x + (y + 1) * INNER_SIZE] - pos;
+            norm = y_diff.outprod(x_diff);
+            norm = norm.normZP();
+            total += norm;
+        }
+    }
+    if (x != INNER_SIZE - 1) {
+        x_diff = pPos[x + 1 + y * INNER_SIZE] - pos;
+        if (y != 0) {
+            y_diff = pPos[x + (y - 1) * INNER_SIZE] - pos;
+            norm = y_diff.outprod(x_diff);
+            norm = norm.normZP();
+            total += norm;
+        }
+        if (y != INNER_SIZE - 1) {
+            y_diff = pPos[x + (y + 1) * INNER_SIZE] - pos;
+            norm = x_diff.outprod(y_diff);
+            norm = norm.normZP();
+            total += norm;
+        }
+    }
+
+    MtxPush();
+
+    mDoMtx_YrotM(*calc_mtx, cM_ssin(x * -800) * 900.0f);
+    MtxPosition(&total, pDst);
+    if (!pDst->normalizeRS()) {
+        pDst->set(0.0f, 0.0f, 1.0f);
+    }
+
+    MtxPull();
 }
 
 /* 8019A480-8019A65C       .text plot__9dMCloth_cFffff */
-void dMCloth_c::plot(float, float, float, float) {
-    /* Nonmatching */
+void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
+    f32 xPos = 0.0f;
+    const f32 xStep = (xMax - xMin) * (1.0f / (f32)(INNER_SIZE - 1));
+    const f32 yStep = (yMax - yMin) * (1.0f / (f32)(INNER_SIZE - 1));
+
+    for (int xNext = 1, x = 0; x < INNER_SIZE - 1; x++, xNext++) {
+        GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, INNER_SIZE * 2);
+        f32 yPos = yMax;
+        for (int y = 0; y < INNER_SIZE; y++) {
+            switch (mClothType) {
+            case MENU_CLOTH_TYPE_DEFAULT:
+            case MENU_CLOTH_TYPE_CLOTH_ONLY: {
+                // Vertex 1
+                {
+                    GXPosition1x16(x + y * INNER_SIZE);
+                    GXNormal1x16(x + y * INNER_SIZE);
+                    GXTexCoord2f32(xPos, yPos);
+                }
+
+                // Vertex 2
+                {
+                    GXPosition1x16(xNext + y * INNER_SIZE);
+                    GXNormal1x16(xNext + y * INNER_SIZE);
+                    GXTexCoord2f32(xPos + xStep, yPos);
+                }
+            } break;
+
+            case MENU_CLOTH_TYPE_FILE_SELECT: {
+                u8 alpha0, alpha1;
+                {
+                    const int fromRight = 10 - x;
+                    const int fromRightNext = 10 - xNext;
+                    const int fromBottomRight = fromRight + y;
+                    const int fromBottomRightNext = fromRightNext + y;
+                    alpha0 = cLib_maxLimit(fromBottomRight * 25, 0xFF);
+                    alpha1 = cLib_maxLimit(fromBottomRightNext * 25, 0xFF);
+                }
+
+                // Vertex 1
+                {
+                    GXPosition1x16(x + y * INNER_SIZE);
+                    GXNormal1x16(x + y * INNER_SIZE);
+
+#if VERSION == VERSION_DEMO
+                    const u8 b = mClothColor.b;
+                    const u8 g = mClothColor.g;
+                    const u8 r = mClothColor.r;
+#else
+                    const u8 r = mClothColor.r;
+                    const u8 b = mClothColor.b;
+                    const u8 g = mClothColor.g;
+#endif
+
+                    GXColor4x8(r, g, b, alpha0);
+                    GXTexCoord2f32(xPos, yPos);
+                }
+
+                // Vertex 2
+                {
+                    GXPosition1x16(xNext + y * INNER_SIZE);
+                    GXNormal1x16(xNext + y * INNER_SIZE);
+
+#if VERSION == VERSION_DEMO
+                    const u8 b = mClothColor.b;
+                    const u8 g = mClothColor.g;
+                    const u8 r = mClothColor.r;
+#else
+                    const u8 r = mClothColor.r;
+                    const u8 b = mClothColor.b;
+                    const u8 g = mClothColor.g;
+#endif
+
+                    GXColor4x8(r, g, b, alpha1);
+                    GXTexCoord2f32(xPos + xStep, yPos);
+                }
+            } break;
+            }
+
+            yPos -= yStep;
+        }
+
+        xPos += xStep;
+    }
 }
 
 /* 8019A65C-8019A838       .text plot_shadow__9dMCloth_cFffff */
-void dMCloth_c::plot_shadow(float, float, float, float) {
-    /* Nonmatching */
+void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
+    f32 xPos = 0.0f;
+    const f32 xStep = (xMax - xMin) * (1.0f / (f32)(INNER_SIZE - 1));
+    const f32 yStep = (yMax - yMin) * (1.0f / (f32)(INNER_SIZE - 1));
+
+    for (int xNext = 1, x = 0; x < INNER_SIZE - 1; x++, xNext++) {
+        GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, INNER_SIZE * 2);
+        f32 yPos = yMax;
+        for (int y = 0; y < INNER_SIZE; y++) {
+            switch (mClothType) {
+            case MENU_CLOTH_TYPE_DEFAULT:
+            case MENU_CLOTH_TYPE_CLOTH_ONLY: {
+                // Vertex 1
+                {
+                    GXPosition1x16(x + y * INNER_SIZE);
+                    GXNormal1x16(x + y * INNER_SIZE);
+                    GXTexCoord2f32(xPos, yPos);
+                }
+
+                // Vertex 2
+                {
+                    GXPosition1x16(xNext + y * INNER_SIZE);
+                    GXNormal1x16(xNext + y * INNER_SIZE);
+                    GXTexCoord2f32(xPos + xStep, yPos);
+                }
+            } break;
+
+            case MENU_CLOTH_TYPE_FILE_SELECT: {
+                u8 alpha0, alpha1;
+                {
+                    const int fromRight = 10 - x;
+                    const int fromRightNext = 10 - xNext;
+                    const int fromBottomRight = fromRight + y;
+                    const int fromBottomRightNext = fromRightNext + y;
+                    alpha0 = cLib_maxLimit(fromBottomRight * 25, 0xFF);
+                    alpha1 = cLib_maxLimit(fromBottomRightNext * 25, 0xFF);
+                }
+
+                // Vertex 1
+                {
+                    GXPosition1x16(x + y * INNER_SIZE);
+                    GXNormal1x16(x + y * INNER_SIZE);
+
+#if VERSION == VERSION_DEMO
+                    const u8 b = mShadowColor.b;
+                    const u8 g = mShadowColor.g;
+                    const u8 r = mShadowColor.r;
+#else
+                    const u8 r = mShadowColor.r;
+                    const u8 b = mShadowColor.b;
+                    const u8 g = mShadowColor.g;
+#endif
+
+                    GXColor4x8(r, g, b, alpha0);
+                    GXTexCoord2f32(xPos, yPos);
+                }
+
+                // Vertex 2
+                {
+                    GXPosition1x16(xNext + y * INNER_SIZE);
+                    GXNormal1x16(xNext + y * INNER_SIZE);
+
+#if VERSION == VERSION_DEMO
+                    const u8 b = mShadowColor.b;
+                    const u8 g = mShadowColor.g;
+                    const u8 r = mShadowColor.r;
+#else
+                    const u8 r = mShadowColor.r;
+                    const u8 b = mShadowColor.b;
+                    const u8 g = mShadowColor.g;
+#endif
+
+                    GXColor4x8(r, g, b, alpha1);
+                    GXTexCoord2f32(xPos + xStep, yPos);
+                }
+            } break;
+            }
+
+            yPos -= yStep;
+        }
+
+        xPos += xStep;
+    }
 }
 
 /* 8019A838-8019A844       .text alpha_out__9dMCloth_cFv */
 void dMCloth_c::alpha_out() {
-    /* Nonmatching */
+    mAlphaOut = 1;
 }
 
 /* 8019A844-8019A9C4       .text TevSettingMenu__9dMCloth_cFv */
 void dMCloth_c::TevSettingMenu() {
-    /* Nonmatching */
+    GXSetChanCtrl(GX_COLOR0, true, GX_SRC_REG, GX_SRC_REG, 1, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, false, GX_PTIDENTITY);
+    GXSetNumTevStages(2);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP1, GX_TEV_SWAP0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
 }
 
 /* 8019A9C4-8019AB64       .text TevSettingFileSelect__9dMCloth_cFv */
 void dMCloth_c::TevSettingFileSelect() {
-    /* Nonmatching */
+    GXSetChanCtrl(GX_COLOR0, true, GX_SRC_REG, GX_SRC_REG, 1, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetChanCtrl(GX_ALPHA0, false, GX_SRC_VTX, GX_SRC_VTX, 0, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, false, GX_PTIDENTITY);
+    GXSetNumTevStages(2);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP1, GX_TEV_SWAP0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_RASA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
 }
 
 /* 8019AB64-8019ABB4       .text TevSetting__9dMCloth_cFv */
 void dMCloth_c::TevSetting() {
-    /* Nonmatching */
+    switch (mClothType) {
+    case MENU_CLOTH_TYPE_DEFAULT:
+    case MENU_CLOTH_TYPE_CLOTH_ONLY:
+        TevSettingMenu();
+        break;
+    case MENU_CLOTH_TYPE_FILE_SELECT:
+        TevSettingFileSelect();
+        break;
+    }
 }
 
 /* 8019ABB4-8019AC8C       .text ShadowTevSettingMenu__9dMCloth_cFv */
 void dMCloth_c::ShadowTevSettingMenu() {
-    /* Nonmatching */
+    GXSetChanCtrl(GX_COLOR0, true, GX_SRC_REG, GX_SRC_REG, 1, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(1);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP1, GX_TEV_SWAP0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A1);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
 }
 
 /* 8019AC8C-8019AD84       .text ShadowTevSettingFileSelect__9dMCloth_cFv */
 void dMCloth_c::ShadowTevSettingFileSelect() {
-    /* Nonmatching */
+    GXSetChanCtrl(GX_COLOR0, true, GX_SRC_REG, GX_SRC_REG, 1, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetChanCtrl(GX_ALPHA0, false, GX_SRC_VTX, GX_SRC_VTX, 0, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(1);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP1, GX_TEV_SWAP0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A1, GX_CA_RASA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
 }
 
 /* 8019AD84-8019ADD4       .text ShadowTevSetting__9dMCloth_cFv */
 void dMCloth_c::ShadowTevSetting() {
-    /* Nonmatching */
+    switch (mClothType) {
+    case MENU_CLOTH_TYPE_DEFAULT:
+    case MENU_CLOTH_TYPE_CLOTH_ONLY:
+        ShadowTevSettingMenu();
+        break;
+    case MENU_CLOTH_TYPE_FILE_SELECT:
+        ShadowTevSettingFileSelect();
+        break;
+    }
 }
 
 /* 8019ADD4-8019B670       .text draw__9dMCloth_cFf8_GXColor8_GXColorUc */
-void dMCloth_c::draw(float, GXColor, GXColor, unsigned char) {
-    /* Nonmatching */
+void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned char) {
+    cXyz* pPos = getPos();
+    cXyz* pPos2 = mShadowPosArr;
+    for (int y = 0; y < INNER_SIZE; y++) {
+        for (int x = 0; x < INNER_SIZE; x++) {
+            *pPos2 = *pPos;
+            pPos2->z = -3300.0f;
+            pPos2++;
+            pPos++;
+        }
+    }
+
+    DCStoreRangeNoSync(mShadowPosArr, 0x5ac);
+
+    clothColor = mClothColor;
+    shadowColor = mShadowColor;
+
+    if (mAlphaOut == 1) {
+        // Fade out alpha.
+        clothColor.a = mCurrentAlpha;
+        if (mCurrentAlpha > 25) {
+            mCurrentAlpha -= 25;
+        } else {
+            mCurrentAlpha = 0;
+        }
+    } else {
+        // Interpolate from startAlpha to final alpha.
+        f32 f = (f32)mFadeInCounter / HIO_CHILD.fadeInLength;
+        {
+            clothColor.a = cLib_minMaxLimit<s16>(HIO_CHILD.clothColor.a, 0, 0xFF);
+            clothColor.a = clothColor.a * f + (1.0f - f) * HIO_CHILD.startAlpha;
+        }
+        {
+            shadowColor.a = cLib_minMaxLimit<s16>(HIO_CHILD.shadowColor.a, 0, 0xFF);
+            shadowColor.a = shadowColor.a * f + (1.0f - f) * HIO_CHILD.startAlpha;
+        }
+    }
+
+    j3dSys.reinitGX();
+
+#if VERSION > VERSION_JPN
+    GXSetNumIndStages(0);
+#endif
+
+    cXyz lightPos;
+    lightPos.set(0.0f, 0.0f, 0.0f);
+
+    switch (mClothType) {
+    case MENU_CLOTH_TYPE_DEFAULT:
+    case MENU_CLOTH_TYPE_CLOTH_ONLY: {
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
+        GXSetVtxDesc(GX_VA_NRM, GX_INDEX16);
+        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+        GXSetChanAmbColor(GX_COLOR0, (GXColor){0x00, 0x00, 0x00, 0x00});
+        GXSetChanMatColor(GX_COLOR0, (GXColor){0xff, 0xff, 0xff, 0xff});
+    } break;
+    case MENU_CLOTH_TYPE_FILE_SELECT: {
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
+        GXSetVtxDesc(GX_VA_NRM, GX_INDEX16);
+        GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+        GXSetChanAmbColor(GX_COLOR0, (GXColor){0x00, 0x00, 0x00, 0xff});
+        GXSetChanMatColor(GX_COLOR0, (GXColor){0xff, 0xff, 0xff, 0xff});
+    } break;
+    }
+
+    GXSetTevColor(GX_TEVREG0, clothColor);
+    GXSetTevColor(GX_TEVREG1, shadowColor);
+
+    GXTexObj tex_obj;
+
+    ResTIMG* i_toonimage = dDlst_list_c::getToonImage();
+
+    GXInitTexObj(
+        &tex_obj,
+        (u8*)i_toonimage + i_toonimage->imageOffset,
+        i_toonimage->width,
+        i_toonimage->height,
+        (GXTexFmt)i_toonimage->format,
+        (GXTexWrapMode)i_toonimage->wrapS,
+        (GXTexWrapMode)i_toonimage->wrapT,
+        i_toonimage->mipmapCount > 1
+    );
+
+    GXInitTexObjLOD(
+        &tex_obj,
+        (GXTexFilter)i_toonimage->minFilter,
+        (GXTexFilter)i_toonimage->magFilter,
+        i_toonimage->minLOD * 0.125f,
+        i_toonimage->maxLOD * 0.125f,
+        i_toonimage->LODBias * 0.01f,
+        i_toonimage->biasClamp,
+        i_toonimage->doEdgeLOD,
+        (GXAnisotropy)i_toonimage->maxAnisotropy
+    );
+
+    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
+    GXLoadTexObj(&tex_obj, GX_TEXMAP1);
+
+    GXSetNumChans(1);
+    GXCallDisplayList(l_matDL, 0x20);
+
+    lightSet1(lightPos);
+
+    switch (mClothType) {
+    case MENU_CLOTH_TYPE_FILE_SELECT:
+    case MENU_CLOTH_TYPE_CLOTH_ONLY: {
+        mDoMtx_stack_c::transS(HIO_CHILD.pos.x + -275.0f, HIO_CHILD.pos.y - 75.0f, HIO_CHILD.pos.z + -3800.0f);
+        mDoMtx_stack_c::XrotM(mRot.x);
+        mDoMtx_stack_c::YrotM(mRot.y);
+        mDoMtx_stack_c::ZrotM(mRot.z);
+        mDoMtx_stack_c::scaleM(mScale);
+        mDoMtx_stack_c::transM(0.0f, 0.0f, 3400.0f);
+        GXLoadPosMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
+        GXLoadNrmMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
+        GXSetCullMode(GX_CULL_FRONT);
+        GXSetCurrentMtx(GX_PNMTX0);
+        GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
+        GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+        ShadowTevSetting();
+        plot(0.0f, 0.0f, 10.0f, 10.0f);
+    } break;
+    }
+
+    mDoMtx_stack_c::transS(HIO_CHILD.pos.x + -350.0f, HIO_CHILD.pos.y, HIO_CHILD.pos.z + -3800.0f);
+    mDoMtx_stack_c::XrotM(mRot.x);
+    mDoMtx_stack_c::YrotM(mRot.y);
+    mDoMtx_stack_c::ZrotM(mRot.z);
+    mDoMtx_stack_c::scaleM(mScale);
+    mDoMtx_stack_c::transM(0.0f, 0.0f, 3400.0f);
+    GXLoadPosMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
+    GXLoadNrmMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
+    GXSetCullMode(GX_CULL_FRONT);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+    TevSetting();
+    plot(0.0f, 0.0f, 10.0f, 10.0f);
+
+    GXSetCullMode(GX_CULL_BACK);
+    ShadowTevSetting();
+    GXSetArray(GX_VA_POS, mShadowPosArr, sizeof(cXyz));
+    plot_shadow(0.0f, 0.0f, 10.0f, 10.0f);
+
+    TevSetting();
+    GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, getBackNrm(), sizeof(cXyz));
+    plot(0.0f, 0.0f, 10.0f, 10.0f);
+
+    j3dSys.reinitGX();
 }
 
 /* 8019B670-8019B9C0       .text cloth_move_sin__9dMCloth_cFv */
 void dMCloth_c::cloth_move_sin() {
-    /* Nonmatching */
+    mWaveProgress += HIO_CHILD.waveProgressStep;
+
+    cXyz* pPosArr = getPos();
+
+    for (int y = 0; y < INNER_SIZE; y++) {
+        for (int x = 0; x < INNER_SIZE; x++) {
+            f32 fx = (f32)x;
+            f32 fy = (f32)y;
+
+            if (x > INNER_SIZE / 2) {
+                fx = (INNER_SIZE - fx) - 1.0f;
+            }
+            if (y > INNER_SIZE / 2) {
+                fy = (INNER_SIZE - fy) - 1.0f;
+            }
+
+            if (fx + fy > 4.0f) {
+                fx = 1.0f;
+            } else {
+                fx = (fx + fy) * 0.2f;
+            }
+
+            cXyz pos;
+            pos.x = -1500.0f + 305.0f * (f32)x;
+            pos.y = -1500.0f + 300.0f * (f32)y;
+            pos.z = -3400.0f;
+
+            pos.x += HIO_CHILD.waveAmpX * fx * cM_ssin(mWaveProgress + x * HIO_CHILD.waveFreqX + y * HIO_CHILD.waveFreqY);
+            pos.y += HIO_CHILD.waveAmpY * fx * cM_scos(mWaveProgress + x * HIO_CHILD.waveFreqX + y * HIO_CHILD.waveFreqY);
+            pos.z += HIO_CHILD.waveAmpZ * fx * cM_ssin(mWaveProgress + x * HIO_CHILD.waveFreqX);
+
+            cLib_addCalcPos2(&pPosArr[x + y * INNER_SIZE], pos, 0.5f, HIO_CHILD.maxStep);
+        }
+    }
+
+    cXyz* pNrm = getNrm();
+
+    for (int y = 0; y < INNER_SIZE; y++) {
+        for (int x = 0; x < INNER_SIZE; x++) {
+            setNrmVtx(pNrm, x, y);
+            pNrm++;
+        }
+    }
+
+    setBackNrm();
+
+    DCStoreRangeNoSync(getPos(), 0x5ac);
+    DCStoreRangeNoSync(getNrm(), 0x5ac);
+    DCStoreRangeNoSync(getBackNrm(), 0x5ac);
 }
 
 /* 8019B9C0-8019BCF4       .text cloth_move_simple__9dMCloth_cFv */
 void dMCloth_c::cloth_move_simple() {
-    /* Nonmatching */
+    cXyz* pPosArr = getPos();
+
+    for (int y = 0; y < INNER_SIZE; y++) {
+        for (int x = 0; x < INNER_SIZE; x++) {
+            f32 fx = (f32)x;
+            f32 fy = (f32)y;
+
+            if (x > INNER_SIZE / 2) {
+                fx = (INNER_SIZE - fx) - 1.0f;
+            }
+            if (y > INNER_SIZE / 2) {
+                fy = (INNER_SIZE - fy) - 1.0f;
+            }
+
+            if (fx + fy > 4.0f) {
+                fx = 1.0f;
+            } else {
+                fx = (fx + fy) * 0.2f;
+            }
+
+            cXyz pos;
+            pos.x = -1500.0f + 305.0f * (f32)x;
+            pos.y = -1500.0f + 300.0f * (f32)y;
+            pos.z = -3400.0f;
+
+            pos.x += HIO_CHILD.waveAmpX * fx * cM_ssin(mWaveProgress + x * HIO_CHILD.waveFreqX + y * HIO_CHILD.waveFreqY);
+            pos.y += HIO_CHILD.waveAmpY * fx * cM_scos(mWaveProgress + x * HIO_CHILD.waveFreqX + y * HIO_CHILD.waveFreqY);
+            pos.z += HIO_CHILD.waveAmpZ * fx * cM_ssin(mWaveProgress + y * HIO_CHILD.waveFreqY);
+
+            cLib_addCalcPos2(&pPosArr[x + y * INNER_SIZE], pos, 0.5f, HIO_CHILD.maxStep);
+        }
+    }
+
+    cXyz* pNrm = getNrm();
+
+    for (int y = 0; y < INNER_SIZE; y++) {
+        for (int x = 0; x < INNER_SIZE; x++) {
+            setNrmVtx(pNrm, x, y);
+            pNrm++;
+        }
+    }
+
+    setBackNrm();
+
+    DCStoreRangeNoSync(getPos(), 0x5ac);
+    DCStoreRangeNoSync(getNrm(), 0x5ac);
+    DCStoreRangeNoSync(getBackNrm(), 0x5ac);
 }
 
 /* 8019BCF4-8019BDB8       .text cloth_move__9dMCloth_cFv */
 void dMCloth_c::cloth_move() {
-    /* Nonmatching */
+    switch (mClothType) {
+    case MENU_CLOTH_TYPE_DEFAULT:
+    case MENU_CLOTH_TYPE_CLOTH_ONLY: {
+        if (mFadeInCounter < HIO_CHILD.fadeInLength) {
+            cloth_move_sin();
+            mFadeInCounter++;
+        } else {
+            cloth_move_simple();
+        }
+    } break;
+    case MENU_CLOTH_TYPE_FILE_SELECT: {
+        if (mFadeInCounter < HIO_CHILD.fadeInLength) {
+            mFadeInCounter++;
+        }
+        cloth_move_sin();
+    } break;
+    }
 }
 
 /* 8019BDB8-8019BDC0       .text dMenu_ClothCreate__FPv */
-static void dMenu_ClothCreate(void*) {
-    /* Nonmatching */
+static cPhs_State dMenu_ClothCreate(void*) {
+    return cPhs_COMPLEATE_e;
 }
 
 /* 8019BDC0-8019BDC8       .text dMenu_ClothDelete__FPv */
-static void dMenu_ClothDelete(void*) {
-    /* Nonmatching */
+static BOOL dMenu_ClothDelete(void*) {
+    return TRUE;
 }
 
 /* 8019BDC8-8019BDD0       .text dMenu_ClothExecute__FPv */
-static void dMenu_ClothExecute(void*) {
-    /* Nonmatching */
+static BOOL dMenu_ClothExecute(void*) {
+    return FALSE;
 }
 
 /* 8019BDD0-8019BDD8       .text dMenu_ClothDraw__FPv */
-static void dMenu_ClothDraw(void*) {
-    /* Nonmatching */
+static BOOL dMenu_ClothDraw(void*) {
+    return TRUE;
 }
 
 /* 8019BDD8-8019BDE0       .text dMenu_ClothIsDelete__FPv */
-static void dMenu_ClothIsDelete(void*) {
-    /* Nonmatching */
+static BOOL dMenu_ClothIsDelete(void*) {
+    return TRUE;
 }
+
+// TODO: Find superclass that gives the correct size of 0x929C.
+class menu_cloth_class : public fopAc_ac_c {
+    dMCloth_c mCloth;
+};
+
+// BUG: The functions in this table are out of order.
+// It doesn't really matter, because they're just empty functions.
+static msg_method_class dMenu_ClothMethodTable = {
+    /* Create   */ (process_method_func)dMenu_ClothCreate,
+    /* Delete   */ (process_method_func)dMenu_ClothDelete,
+    /* Execute  */ (process_method_func)dMenu_ClothDraw,
+    /* IsDelete */ (process_method_func)dMenu_ClothExecute,
+    /* Draw     */ (process_method_func)dMenu_ClothIsDelete,
+};
+
+msg_process_profile_definition g_profile_Menu_Cloth = {
+    /* LayerID      */ (uint)fpcLy_CURRENT_e,
+    /* ListID       */ 0x000C,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Menu_Cloth,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ 0x929C, // TODO: sizeof(menu_cloth_class)
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopMsg_Method,
+    /* Priority     */ PRIO_Menu_Cloth,
+    /* Actor SubMtd */ &dMenu_ClothMethodTable,
+};

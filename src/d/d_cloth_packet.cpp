@@ -188,9 +188,9 @@ void dCloth_packet_c::draw() {
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
 
 #if VERSION == VERSION_DEMO
     {
@@ -488,11 +488,12 @@ void dCloth_packet_c::plot() {
         float yPos = 0.0f;
         for (int y = 0; y < mHoistGridSize; y++) {
             GXPosition1x8(x + y * mFlyGridSize);
-            GXPosition1x8(x + y * mFlyGridSize);
-            GXPosition2f32(xPos, yPos);
+            GXNormal1x8(x + y * mFlyGridSize);
+            GXTexCoord2f32(xPos, yPos);
+
             GXPosition1x8(xNext + y * mFlyGridSize);
-            GXPosition1x8(xNext + y * mFlyGridSize);
-            GXPosition2f32(xPos + xStep, yPos);
+            GXNormal1x8(xNext + y * mFlyGridSize);
+            GXTexCoord2f32(xPos + xStep, yPos);
 
             yPos += yStep;
         }
