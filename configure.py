@@ -607,7 +607,7 @@ config.libs = [
             Object(Matching,    "d/d_ky_thunder.cpp"),
             Object(Matching,    "d/d_letter.cpp"),
             Object(Matching,    "d/d_level_se.cpp"),
-            Object(NonMatching, "d/d_menu_cloth.cpp"),
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_menu_cloth.cpp"),
             Object(NonMatching, "d/d_menu_collect.cpp"),
             Object(NonMatching, "d/d_menu_dmap.cpp"),
             Object(NonMatching, "d/d_menu_fmap.cpp"),
