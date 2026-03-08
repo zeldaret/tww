@@ -240,7 +240,7 @@ void dMCloth_c::init() {
     cloth_init();
 
     ResTIMG* image = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "cloth_piece01.bti", mpArc);
-    JUT_ASSERT(VERSION_SELECT(528, 530, 530, 530), image != NULL);
+    JUT_ASSERT(VERSION_SELECT(528, 526, 530, 530), image != NULL);
 
 #if VERSION == VERSION_DEMO
     BOOL mipmap = image->mipmapCount > 1;
