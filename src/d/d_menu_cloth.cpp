@@ -783,7 +783,7 @@ void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned ch
     GXSetCullMode(GX_CULL_BACK);
     ShadowTevSetting();
     GXSetArray(GX_VA_POS, mShadowPosArr, sizeof(cXyz));
-    plot_shadow(0.0f, 0.0f, 10.0f, 10.0f);
+    plot_shadow(0.0f, 0.0f, 1.0f, 1.0f);
 
     TevSetting();
     GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
