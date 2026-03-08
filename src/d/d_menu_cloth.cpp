@@ -671,7 +671,11 @@ void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned ch
     }
 
     j3dSys.reinitGX();
+
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
+#endif
+
     cXyz lightPos;
     lightPos.set(0.0f, 0.0f, 0.0f);
 
