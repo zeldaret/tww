@@ -79,6 +79,8 @@ public:
     /* 0x9162 */ GXColor mShadowColor;
 };
 
+STATIC_ASSERT(sizeof(dMCloth_c) == 0x9168);
+
 class daCLOTH_ChildHIO_c {
 public:
     daCLOTH_ChildHIO_c();
@@ -105,6 +107,8 @@ public:
     /* 0x0054 */ f32 maxStep;
 };
 
+STATIC_ASSERT(sizeof(daCLOTH_ChildHIO_c) == 0x58);
+
 class daCLOTH_HIO_c : public JORReflexible {
 public:
     daCLOTH_HIO_c();
@@ -114,5 +118,7 @@ public:
     /* 0x0004 */ s8 mNo;
     /* 0x0008 */ daCLOTH_ChildHIO_c mChildren[3];
 };
+
+STATIC_ASSERT(sizeof(daCLOTH_HIO_c) == 0x110);
 
 #endif /* D_MENU_CLOTH_H */
