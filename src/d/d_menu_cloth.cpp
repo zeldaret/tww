@@ -35,7 +35,7 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
 
         // Dark green
         mChildren[MENU_CLOTH_TYPE_DEFAULT].shadowColor.r = 0x23;
-        mChildren[MENU_CLOTH_TYPE_DEFAULT].shadowColor.g = 0x5f;
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].shadowColor.g = 0x5F;
         mChildren[MENU_CLOTH_TYPE_DEFAULT].shadowColor.b = 0x19;
         mChildren[MENU_CLOTH_TYPE_DEFAULT].shadowColor.a = 0x20;
 
@@ -64,13 +64,13 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
         mChildren[MENU_CLOTH_TYPE_FILE_SELECT].pos.set(350.0f, -15.0f, -2400.0f);
 
         // Beige
-        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.r = 0xbe;
-        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.g = 0xb4;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.r = 0xBE;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.g = 0xB4;
         mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.b = 0x64;
-        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.a = 0xaa;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].clothColor.a = 0xAA;
 
         // Dark brown
-        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].shadowColor.r = 0x8c;
+        mChildren[MENU_CLOTH_TYPE_FILE_SELECT].shadowColor.r = 0x8C;
         mChildren[MENU_CLOTH_TYPE_FILE_SELECT].shadowColor.g = 0x50;
         mChildren[MENU_CLOTH_TYPE_FILE_SELECT].shadowColor.b = 0x14;
         mChildren[MENU_CLOTH_TYPE_FILE_SELECT].shadowColor.a = 0x20;
@@ -100,13 +100,13 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
         mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].pos.set(360.0f, 40.0f, -2400.0f);
 
         // Beige
-        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.r = 0xbe;
-        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.g = 0xb4;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.r = 0xBE;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.g = 0xB4;
         mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.b = 0x64;
-        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.a = 0xdc;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].clothColor.a = 0xDC;
 
         // Dark brown
-        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].shadowColor.r = 0x8c;
+        mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].shadowColor.r = 0x8C;
         mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].shadowColor.g = 0x50;
         mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].shadowColor.b = 0x14;
         mChildren[MENU_CLOTH_TYPE_CLOTH_ONLY].shadowColor.a = 0x20;
@@ -657,7 +657,7 @@ void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned ch
         }
     }
 
-    DCStoreRangeNoSync(mShadowPosArr, 0x5ac);
+    DCStoreRangeNoSync(mShadowPosArr, 0x5AC);
 
     clothColor = mClothColor;
     shadowColor = mShadowColor;
@@ -703,7 +703,7 @@ void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned ch
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
         GXSetChanAmbColor(GX_COLOR0, (GXColor){0x00, 0x00, 0x00, 0x00});
-        GXSetChanMatColor(GX_COLOR0, (GXColor){0xff, 0xff, 0xff, 0xff});
+        GXSetChanMatColor(GX_COLOR0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     } break;
     case MENU_CLOTH_TYPE_FILE_SELECT: {
         GXClearVtxDesc();
@@ -715,8 +715,8 @@ void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned ch
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-        GXSetChanAmbColor(GX_COLOR0, (GXColor){0x00, 0x00, 0x00, 0xff});
-        GXSetChanMatColor(GX_COLOR0, (GXColor){0xff, 0xff, 0xff, 0xff});
+        GXSetChanAmbColor(GX_COLOR0, (GXColor){0x00, 0x00, 0x00, 0xFF});
+        GXSetChanMatColor(GX_COLOR0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     } break;
     }
 
@@ -859,9 +859,9 @@ void dMCloth_c::cloth_move_sin() {
 
     setBackNrm();
 
-    DCStoreRangeNoSync(getPos(), 0x5ac);
-    DCStoreRangeNoSync(getNrm(), 0x5ac);
-    DCStoreRangeNoSync(getBackNrm(), 0x5ac);
+    DCStoreRangeNoSync(getPos(), 0x5AC);
+    DCStoreRangeNoSync(getNrm(), 0x5AC);
+    DCStoreRangeNoSync(getBackNrm(), 0x5AC);
 }
 
 /* 8019B9C0-8019BCF4       .text cloth_move_simple__9dMCloth_cFv */
@@ -910,9 +910,9 @@ void dMCloth_c::cloth_move_simple() {
 
     setBackNrm();
 
-    DCStoreRangeNoSync(getPos(), 0x5ac);
-    DCStoreRangeNoSync(getNrm(), 0x5ac);
-    DCStoreRangeNoSync(getBackNrm(), 0x5ac);
+    DCStoreRangeNoSync(getPos(), 0x5AC);
+    DCStoreRangeNoSync(getNrm(), 0x5AC);
+    DCStoreRangeNoSync(getBackNrm(), 0x5AC);
 }
 
 /* 8019BCF4-8019BDB8       .text cloth_move__9dMCloth_cFv */
