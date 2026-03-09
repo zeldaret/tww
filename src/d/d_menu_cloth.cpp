@@ -22,7 +22,8 @@ daCLOTH_HIO_c::daCLOTH_HIO_c() {
 
     // Default
     {
-        mChildren[MENU_CLOTH_TYPE_DEFAULT].scale.set(1.78f, 1.78f, 1.0f);
+        const f32 scale = VERSION_SELECT(1.75f, 1.75f, 1.78f, 1.78f);
+        mChildren[MENU_CLOTH_TYPE_DEFAULT].scale.set(scale, scale, 1.0f);
         mChildren[MENU_CLOTH_TYPE_DEFAULT].rot.setall(0);
         mChildren[MENU_CLOTH_TYPE_DEFAULT].pos.set(360.0f, 40.0f, -2400.0f);
 
