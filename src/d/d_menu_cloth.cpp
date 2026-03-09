@@ -151,6 +151,13 @@ void dMCloth_c::lightSet1(cXyz) {
     GXLoadLightObjImm(&light, GX_LIGHT0);
 }
 
+// This is to get the floats in the right order.
+void dummy0() {
+    vf32 a;
+    a = 0.0f;
+    a = 90.0f;
+}
+
 /* 8019977C-80199CD0       .text cloth_init__9dMCloth_cFv */
 void dMCloth_c::cloth_init() {
     cXyz* pPosArr = getPos();
@@ -233,6 +240,11 @@ void dMCloth_c::cloth_init() {
         }
     } break;
     }
+}
+
+// This is to get the floats in the right order.
+void dummy1() {
+    vf32 a = 305.0f;
 }
 
 /* 80199CD0-80199E1C       .text init__9dMCloth_cFv */
@@ -791,6 +803,11 @@ void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned ch
     plot(0.0f, 0.0f, 10.0f, 10.0f);
 
     j3dSys.reinitGX();
+}
+
+// This is to get the floats in the right order.
+void dummy2() {
+    vf32 a = 0.5f;
 }
 
 /* 8019B670-8019B9C0       .text cloth_move_sin__9dMCloth_cFv */
