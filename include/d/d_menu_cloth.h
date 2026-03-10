@@ -55,12 +55,12 @@ public:
     static const int INNER_SIZE = 11;
 
     /* 0x0004 */ u16 unused_0x4;
-    /* 0x0006 */ u8 field_0x6[0x08 - 0x06];
+    /* 0x0006 */ u8 padding_0x6[0x08 - 0x06];
     /* 0x0008 */ s16 mWaveProgress;
     /* 0x000A */ s16 mFadeInCounter;
     /* 0x000C */ u8 mAlphaOut;
     /* 0x000D */ u8 mCurrentAlpha;
-    /* 0x000E */ u8 field_0xe[0x44 - 0x0E];
+    /* 0x000E */ u8 padding_0xe[0x44 - 0x0E];
     /* 0x0044 */ JKRArchive* mpArc;
     /* 0x0048 */ cXyz mPosArr[2][ARR_SIZE];
     /* 0x29A0 */ cXyz mNrmArr[2][ARR_SIZE];
@@ -68,12 +68,12 @@ public:
     /* 0x67A4 */ cXyz mOffsetVecArr[ARR_SIZE];
     /* 0x7C50 */ cXyz mShadowPosArr[ARR_SIZE];
     /* 0x90FC */ GXTexObj mTexObj;
-    /* 0x911C */ u8 field_0x911c[0x913C - 0x911C];
+    /* 0x911C */ u8 padding_0x911c[0x913C - 0x911C];
     /* 0x913C */ u8 mCurArr;
     /* 0x913D */ MenuClothType mClothType;
-    /* 0x913E */ u8 field_0x913e[0x9140 - 0x913E];
+    /* 0x913E */ u8 padding_0x913e[0x9140 - 0x913E];
     /* 0x9140 */ cXyz mScale;
-    /* 0x914C */ u8 field_0x914C[0x9158 - 0x914C];
+    /* 0x914C */ u8 padding_0x914C[0x9158 - 0x914C];
     /* 0x9158 */ csXyz mRot;
     /* 0x915E */ GXColor mClothColor;
     /* 0x9162 */ GXColor mShadowColor;
