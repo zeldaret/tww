@@ -133,8 +133,8 @@ void dMs_save_delete(sub_ms_screen_class*) {
 
 /* 801DCEA0-801DD090       .text dMs_cloth_create__FP19sub_ms_screen_class */
 void dMs_cloth_create(sub_ms_screen_class* i_Ms) {
-    g_dComIfG_gameInfo.play.setHeapLockFlag(1);
-    JKRArchive* arc = g_dComIfG_gameInfo.play.getClothResArchive();
+    dComIfGp_setHeapLockFlag(1);
+    JKRArchive* arc = dComIfGp_getClothResArchive();
 
     cloth_c = new dMCloth_c();
     JUT_ASSERT(2674, cloth_c != NULL);
@@ -174,7 +174,7 @@ void dMs_cloth_delete(sub_ms_screen_class* i_Ms) {
 
 /* 801DD154-801DD270       .text dMs_clothOnly_create__FP19sub_ms_screen_class */
 void dMs_clothOnly_create(sub_ms_screen_class*) {
-    JKRArchive* arc = g_dComIfG_gameInfo.play.getClothResArchive();
+    JKRArchive* arc = dComIfGp_getClothResArchive();
 
     cloth_c = new dMCloth_c();
     JUT_ASSERT(2744, cloth_c != NULL);
@@ -194,7 +194,7 @@ void dMs_clothOnly_delete(sub_ms_screen_class*) {
         dMs_cloth_c = NULL;
     }
     if (cloth_c) {
-        g_dComIfG_gameInfo.play.getClothResArchive()->removeResourceAll();
+        dComIfGp_getClothResArchive()->removeResourceAll();
         delete cloth_c;
         cloth_c = NULL;
     }
