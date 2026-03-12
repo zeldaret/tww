@@ -49,11 +49,12 @@ void dummy0() {
 }
 
 class dDlst_MENU_CLOTH_c : public dDlst_base_c {};
+
 class dDlst_MENU_CAPTURE_c : public dDlst_base_c {
 public:
     dDlst_MENU_CAPTURE_c() { mStatus = 0; }
 
-    u8 mStatus;
+    /* 0x04 */ u8 mStatus;
 };
 
 static dMCloth_c* cloth_c;
