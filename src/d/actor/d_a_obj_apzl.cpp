@@ -354,9 +354,11 @@ void daObjApzl_c::check_arrow_draw() {
     if (mState != STATE_PLAYING) {
         return;
     }
+
     if (mMoveTimer != 0) {
         return;
     }
+
     if ((getblank() & 3) != 3) {
         mDrawArrow[1] = true; // left
     }
@@ -366,10 +368,9 @@ void daObjApzl_c::check_arrow_draw() {
     if ((getblank() & 0xc) != 0xc) {
         mDrawArrow[0] = true; // up
     }
-    if ((getblank() & 0xc) == 0) {
-        return;
+    if ((getblank() & 0xc) != 0) {
+        mDrawArrow[2] = true; // down
     }
-    mDrawArrow[2] = true; // down
 }
 
 /* 00000310-0000033C       .text search_piece__11daObjApzl_cFUc */
@@ -394,9 +395,9 @@ void daObjApzl_c::randamize_piece() {
         mPiecePos[i] = i;
     }
 
-    u8 i;
-    for (;;) {
-        i = 0;
+    u8 unscrambledCount;
+    while(true) {
+        unscrambledCount = 0;
         for(int j = 0; j < 10000; j++) {
             u8 temp = (int)cM_rndF(4.0f) & 3;
             if(temp == 1) {
@@ -419,11 +420,11 @@ void daObjApzl_c::randamize_piece() {
         
         for(int j = 0; j < 16; j++) {
             if((u32)mPiecePos[j] == (j & 0xff)) {
-                i++;
+                unscrambledCount++;
             }
         }
 
-        if(i < 3) {
+        if(unscrambledCount < 3) {
             break;
         }
     }
