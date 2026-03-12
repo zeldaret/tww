@@ -1,6 +1,9 @@
 // The original name of this file is unknown, but it must exist because d_a_npc_tc's "cut" functions
 // are in a separate .text section from the rest of its functions.
 
+#include "d/actor/d_a_npc_tc.h"
+#include "d/d_com_inf_game.h"
+
 /* 00005C58-00005E60       .text cutProc__10daNpc_Tc_cFv */
 void daNpc_Tc_c::cutProc() {
     static char* action_table[] = {

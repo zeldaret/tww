@@ -502,7 +502,7 @@ void daNpc_Tc_c::setAnm() {
         a_anm_prm_tbl[i].mMorf = l_HIO.field_0x94[i];
     }
 
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     if (mBckIdx == BCK_IDX_MAWASU && (int)mpMorf->getFrame() == 1) {
         if(mType == TYPE_RED) {
             fopAcM_monsSeStart(this, JA_SE_CV_TC_B_PUSH_BAR, 0);
@@ -981,7 +981,7 @@ void daNpc_Tc_c::getArg() {
 extern dCcD_SrcCyl dNpc_cyl_src;
 /* 00001C98-0000202C       .text createInit__10daNpc_Tc_cFv */
 void daNpc_Tc_c::createInit() {
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     if (mType == TYPE_NORMAL) {
         fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
     }
@@ -1026,7 +1026,7 @@ void daNpc_Tc_c::createInit() {
             }
             break;
     }
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), &current.angle, &shape_angle);
 #endif
     mOldAnmPrmIdx = 0;

@@ -291,7 +291,7 @@ BOOL daNpc_Zl1_c::set_startPos(int param_1) {
 bool daNpc_Zl1_c::init_ZL1_0() {
     if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
         set_action(&daNpc_Zl1_c::demo_action1, NULL);
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
         fopAcM_ClearStatusMap(this);
 #endif
         field_0x7D2 = true;
@@ -347,7 +347,7 @@ bool daNpc_Zl1_c::init_ZL1_5() {
     if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) {
         set_action(&daNpc_Zl1_c::optn_action1, NULL);
         fopAcM_OffStatus(this, fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e);
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
         if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3804)) {
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
             field_0x84A = 6;
@@ -362,7 +362,7 @@ bool daNpc_Zl1_c::init_ZL1_5() {
             if(!strcmp(dComIfGp_getStartStageName(), "Hyroom")) {
                 set_startPos(0);
             }
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
         }
 #endif
 
@@ -375,7 +375,7 @@ bool daNpc_Zl1_c::init_ZL1_5() {
 /* 00000CC0-00000D24       .text init_ZL1_6__11daNpc_Zl1_cFv */
 bool daNpc_Zl1_c::init_ZL1_6() {
     set_action(&daNpc_Zl1_c::demo_action1, NULL);
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     fopAcM_ClearStatusMap(this);
 #endif
     return true;
@@ -384,7 +384,7 @@ bool daNpc_Zl1_c::init_ZL1_6() {
 /* 00000D24-00000D88       .text init_ZL1_7__11daNpc_Zl1_cFv */
 bool daNpc_Zl1_c::init_ZL1_7() {
     set_action(&daNpc_Zl1_c::demo_action1, NULL);
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     fopAcM_ClearStatusMap(this);
 #endif
     return true;
@@ -532,7 +532,7 @@ void daNpc_Zl1_c::setMtx(bool param_1) {
     mpMorf->getModel()->setBaseScale(scale);
 
     if(field_0x7CE) {
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
         if(!fpcM_IsCreating(mProcId1)) {
             if(mProcId1 != 0xffffffff) {
                 if(fopAcM_SearchByID(mProcId1, (fopAc_ac_c **)&actor) == 1) {
@@ -733,7 +733,7 @@ void daNpc_Zl1_c::eye_ctrl() {
     f32 temp;
     f32 temp2;
     f32 temp3;
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     if(field_0x7D1) {
         temp = field_0x842 / (f32)(l_HIO.mPrmTbl.field_5E);
         temp2 = field_0x840 / (f32)(l_HIO.mPrmTbl.field_5E);
@@ -1082,11 +1082,11 @@ void daNpc_Zl1_c::checkOrder() {
                     break;
                 case 3:
                     daPy_getPlayerActorClass()->onPlayerNoDraw();
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
                     fopAcM_OffStatus(this, fopAcStts_UNK4000_e);
 #endif
                     field_0x7D8 = true;
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
                     field_0x79C = 1;
 #endif  
                     break;
@@ -1650,7 +1650,7 @@ void daNpc_Zl1_c::cut_init_OMAMORI_ONOFF(int i_staffIdx) {
     field_0x7C2 = 0;
     if(pOnOff != NULL) {
         if(*pOnOff == 0) {
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
             mDoAud_seStart(JA_SE_ITM_OMAMORI_TETLA);
 #endif
             field_0x7C2 = -1;
@@ -1686,7 +1686,6 @@ BOOL daNpc_Zl1_c::cut_move_SURPRISED() {
 
 /* 00003574-000037E0       .text privateCut__11daNpc_Zl1_cFi */
 void daNpc_Zl1_c::privateCut(int i_staffIdx) {
-
     static char* a_cut_tbl[] = {
         "LOK_PLYER",
         "LOK_PARTNER",
@@ -1701,60 +1700,75 @@ void daNpc_Zl1_c::privateCut(int i_staffIdx) {
         "PLYER_DRW_ONOFF",
         "JMP_OFF",
         "OMAMORI_ONOFF",
-#if VERSION != VERSION_DEMO
-        "SURPRISED"
+#if VERSION > VERSION_DEMO
+        "SURPRISED",
+#endif
+    };
+
+    enum {
+        ACT_LOK_PLYER,
+        ACT_LOK_PARTNER,
+        ACT_CHG_ANM_ATR,
+        ACT_PLYER_TRN_PARTNER,
+        ACT_PLYER_TRN_TETRA,
+        ACT_MAJYU_START,
+        ACT_MAJYU_END,
+        ACT_OKIRU,
+        ACT_OKIRU_2,
+        ACT_DRW_ONOFF,
+        ACT_PLYER_DRW_ONOFF,
+        ACT_JMP_OFF,
+        ACT_OMAMORI_ONOFF,
+#if VERSION > VERSION_DEMO
+        ACT_SURPRISED,
 #endif
     };
 
     if(i_staffIdx != -1) {
-#if VERSION != VERSION_DEMO
-        mActIdx = dComIfGp_evmng_getMyActIdx(i_staffIdx, a_cut_tbl, 0xE, TRUE, 0);
-#else
-        mActIdx = dComIfGp_evmng_getMyActIdx(i_staffIdx, a_cut_tbl, 0xD, TRUE, 0);
-#endif
+        mActIdx = dComIfGp_evmng_getMyActIdx(i_staffIdx, a_cut_tbl, ARRAY_SIZE(a_cut_tbl), TRUE, 0);
         if(mActIdx == -1) {
             dComIfGp_evmng_cutEnd(i_staffIdx);
         } else {
             if(dComIfGp_evmng_getIsAddvance(i_staffIdx)) {
                 switch(mActIdx) {
-                    case 0:
+                    case ACT_LOK_PLYER:
                         cut_init_LOK_PLYER(i_staffIdx);
                         break;
-                    case 1:
+                    case ACT_LOK_PARTNER:
                         cut_init_LOK_PARTNER(i_staffIdx);
                         break;
-                    case 2:
+                    case ACT_CHG_ANM_ATR:
                         cut_init_CHG_ANM_ATR(i_staffIdx);
                         break;
-                    case 3:
+                    case ACT_PLYER_TRN_PARTNER:
                         cut_init_PLYER_TRN_PARTNER(i_staffIdx);
                         break;
-                    case 4:
+                    case ACT_PLYER_TRN_TETRA:
                         cut_init_PLYER_TRN_TETRA(i_staffIdx);
                         break;
-                    case 5:
+                    case ACT_MAJYU_START:
                         cut_init_MAJYU_START(i_staffIdx);
                         break;
-                    case 7:
+                    case ACT_OKIRU:
                         cut_init_OKIRU(i_staffIdx);
                         break;
-                    case 8:
+                    case ACT_OKIRU_2:
                         cut_init_OKIRU_2(i_staffIdx);
                         break;
-                    case 9:
+                    case ACT_DRW_ONOFF:
                         cut_init_DRW_ONOFF(i_staffIdx);
                         break;
-                    case 10:
+                    case ACT_PLYER_DRW_ONOFF:
                         cut_init_PLYER_DRW_ONOFF(i_staffIdx);
                         break;
-                    case 0xb:
+                    case ACT_JMP_OFF:
                         cut_init_JMP_OFF(i_staffIdx);
                         break;
-                    case 0xc:
+                    case ACT_OMAMORI_ONOFF:
                         cut_init_OMAMORI_ONOFF(i_staffIdx);
                         break;
-#if VERSION != VERSION_DEMO
-                    case 0xd:
+#if VERSION > VERSION_DEMO
+                    case ACT_SURPRISED:
                         cut_init_SURPRISED(i_staffIdx);
                         break;
 #endif
@@ -1763,44 +1777,44 @@ void daNpc_Zl1_c::privateCut(int i_staffIdx) {
             }
             BOOL temp;
             switch(mActIdx) {
-                case 0:
+                case ACT_LOK_PLYER:
                     temp = cut_move_LOK_PLYER();
                     break;
-                case 1:
+                case ACT_LOK_PARTNER:
                     temp = cut_move_LOK_PARTNER();
                     break;
-                case 2:
+                case ACT_CHG_ANM_ATR:
                     temp = cut_move_CHG_ANM_ATR();
                     break;
-                case 3:
+                case ACT_PLYER_TRN_PARTNER:
                     temp = cut_move_PLYER_TRN_PARTNER();
                     break;
-                case 4:
+                case ACT_PLYER_TRN_TETRA:
                     temp = cut_move_PLYER_TRN_TETRA();
                     break;
-                case 5:
+                case ACT_MAJYU_START:
                     temp = cut_move_MAJYU_START();
                     break;
-                case 7:
+                case ACT_OKIRU:
                     temp = cut_move_OKIRU();
                     break;
-                case 8:
+                case ACT_OKIRU_2:
                     temp = cut_move_OKIRU_2();
                     break;
-                case 9:
+                case ACT_DRW_ONOFF:
                     temp = cut_move_DRW_ONOFF();
                     break;
-                case 10:
+                case ACT_PLYER_DRW_ONOFF:
                     temp = cut_move_PLYER_DRW_ONOFF();
                     break;
-                case 0xb:
+                case ACT_JMP_OFF:
                     temp = cut_move_JMP_OFF();
                     break;
-                case 0xc:
+                case ACT_OMAMORI_ONOFF:
                     temp = cut_move_OMAMORI_ONOFF();
                     break;
-#if VERSION != VERSION_DEMO
-                case 0xd:
+#if VERSION > VERSION_DEMO
+                case ACT_SURPRISED:
                     temp = cut_move_SURPRISED();
                     break;
 #endif
@@ -1966,14 +1980,14 @@ void daNpc_Zl1_c::setWaterSplash() {
 }
 
 /* 00003E74-00003F34       .text set_simpleLand__11daNpc_Zl1_cFb */
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
 void daNpc_Zl1_c::set_simpleLand(bool param_1) {
 #else
 void daNpc_Zl1_c::set_simpleLand() {
 #endif
     int temp;
     int temp2 = 6;
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     if(param_1) {
         temp2 = 7;
     }
@@ -2025,7 +2039,7 @@ void daNpc_Zl1_c::setEff() {
             
         }
         if(mObjAcch.ChkGroundHit() != false && (mpMorf->checkFrame(13.0f) || mpMorf->checkFrame(27.0f) || field_0x7C6)) {
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
             set_simpleLand(field_0x7C6);
 #endif
             field_0x7C6 = false;
@@ -2052,7 +2066,7 @@ BOOL daNpc_Zl1_c::setFrontWallType() {
     f32 tempY;
     f32 tempZ;
 
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     temp.set(current.pos.x, current.pos.y + mAcchCir.GetWallH(), current.pos.z);
 #else
     tempZ = current.pos.z;
@@ -2062,7 +2076,7 @@ BOOL daNpc_Zl1_c::setFrontWallType() {
 #endif
 
     f32 wallRadius = mAcchCir.GetWallR() + 25.0f;
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     tempX = temp.x;
     tempY = temp.y;
     tempZ = temp.z;
@@ -2098,7 +2112,7 @@ BOOL daNpc_Zl1_c::setFrontWallType() {
 
     temp.set(tempX3, tempY3, tempZ3);
 
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     f32 wallRadius2 = mAcchCir.GetWallR() + 25.0f;
 
     tempZ = temp.z + cos * wallRadius2;
@@ -2405,7 +2419,7 @@ BOOL daNpc_Zl1_c::optn_2() {
         return TRUE;
     }
 
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     if(!mObjAcch.ChkGroundHit() && mObjAcch.GetGroundH() - current.pos.y < -30.1f) {
         setAnm_NUM(10, 1);
         speed.y = l_HIO.mPrmTbl.field_54;
@@ -2687,7 +2701,7 @@ const u32 unused[] = {
     0x0000FF80,
     0xFFFF0080,
     0xFF000080,
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     0x00000000
 #endif
 };
@@ -2926,7 +2940,7 @@ cPhs_State daNpc_Zl1_c::_create() {
     };
 
     cPhs_State state;
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(this, daNpc_Zl1_c);
 #endif
     if(!decideType(fopAcM_GetParam(this) & 0xFF)) { // idk if this is supposed to be here

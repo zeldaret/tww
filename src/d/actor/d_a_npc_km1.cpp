@@ -472,7 +472,7 @@ void daNpc_Km1_c::privateCut() {
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("Km1",NULL,0);
     if(staffIdx != -1){
-        int uVar1 = dComIfGp_evmng_getMyActIdx(staffIdx,cut_name_tbl,1,1,0);
+        int uVar1 = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
         field_0x7C9 = uVar1;
         if(field_0x7C9 == -1){
             dComIfGp_evmng_cutEnd(staffIdx);

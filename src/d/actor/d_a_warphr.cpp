@@ -237,7 +237,7 @@ void daWarphr_c::demo_proc() {
 
     m304 = dComIfGp_evmng_getMyStaffId("Ghrwp");
     if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && m304 != -1) {
-        s32 iVar1 = dComIfGp_evmng_getMyActIdx(m304, action_table, ARRAY_SIZE(action_table), 0, 0);
+        s32 iVar1 = dComIfGp_evmng_getMyActIdx(m304, action_table, ARRAY_SIZE(action_table), FALSE, 0);
         if (iVar1 == -1) {
             dComIfGp_evmng_cutEnd(m304);
         } else {

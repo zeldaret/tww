@@ -1502,7 +1502,7 @@ void deku_come_demo(cc_class* i_this) {
 
     case 4:
         iVar2 = dComIfGp_evmng_getMyStaffId("CyuCyu");
-        actIdx = dComIfGp_evmng_getMyActIdx(iVar2, cut_name_tbl, ARRAY_SSIZE(cut_name_tbl), 1, 0);
+        actIdx = dComIfGp_evmng_getMyActIdx(iVar2, cut_name_tbl, ARRAY_SSIZE(cut_name_tbl), TRUE, 0);
         if (actIdx == 1) {
             dComIfGp_evmng_cutEnd(iVar2);
             i_this->m2FC++;
@@ -1564,7 +1564,7 @@ void deku_ret_demo(cc_class* i_this) {
 
     case 5:
         iVar2 = dComIfGp_evmng_getMyStaffId("CyuCyu");
-        actIdx = dComIfGp_evmng_getMyActIdx(iVar2, cut_name_tbl, ARRAY_SSIZE(cut_name_tbl), 1, 0);
+        actIdx = dComIfGp_evmng_getMyActIdx(iVar2, cut_name_tbl, ARRAY_SSIZE(cut_name_tbl), TRUE, 0);
         if (actIdx == 1) {
             dComIfGp_evmng_cutEnd(iVar2);
             i_this->m2FD++;

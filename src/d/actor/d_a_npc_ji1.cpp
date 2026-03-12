@@ -1974,7 +1974,7 @@ u32 daNpc_Ji1_c::privateCut() {
         ACT_CONTINUETALK,
         ACT_SETANGLE,
     };
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
     if(actIdx == -1) {
         dComIfGp_evmng_cutEnd(staffIdx);
     }

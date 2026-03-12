@@ -4051,7 +4051,7 @@ bool dCamera_c::eventCamera(s32) {
             m100 = 0;
             m11C = 0;
         }
-        lVar12 = dComIfGp_evmng_getMyActIdx(mEventData.mStaffIdx, ActionNames, ARRAY_SIZE(ActionNames), 0, 0);
+        lVar12 = dComIfGp_evmng_getMyActIdx(mEventData.mStaffIdx, ActionNames, ARRAY_SIZE(ActionNames), FALSE, 0);
     }
     else {
         mEventData.mStaffIdx = -1;

@@ -184,7 +184,7 @@ BOOL daYougan_c::useHeapInit() {
         field_0x298[i].field_0x00 = 0;
         J3DModel* p_model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         field_0x298[i].field_0x04 = p_model;
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
         if(field_0x298[i].field_0x04 == NULL) {
             return FALSE;
         }

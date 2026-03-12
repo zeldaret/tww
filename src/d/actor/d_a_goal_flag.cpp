@@ -831,7 +831,7 @@ int daGoal_Flag_c::getDemoAction(int param_1) {
         "03_dummy",
         "04_dummy" 
     };
-    return dComIfGp_evmng_getMyActIdx(param_1, ActionNames, 5, FALSE, 0);
+    return dComIfGp_evmng_getMyActIdx(param_1, ActionNames, ARRAY_SIZE(ActionNames), FALSE, 0);
 }
 
 /* 00001DB4-00001F60       .text RaceStart__13daGoal_Flag_cFv */

@@ -714,7 +714,7 @@ void daFm_c::iceProc() {
     setAttention();
     J3DModel* pModel = mpMorf->getModel();
 
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     pModel->setBaseTRMtx(mDoMtx_stack_c::get());
 #else
     pModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -3380,7 +3380,7 @@ void daFm_c::createInit() {
     holeSetMtx();
     mpMorf->calc();
 
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
 #endif
 
@@ -3477,7 +3477,7 @@ bool daFm_c::_delete() {
     cancelGrab();
     dComIfG_resDelete(&mPhs, m_arc_name);
     mpFollowEcallBack.remove();
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     if(heap != NULL) {
         mpMorf->stopZelAnime();
     }

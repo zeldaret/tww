@@ -567,7 +567,7 @@ void daNpc_Hi1_c::privateCut(int i_staffIdx) {
     };
 
     if(i_staffIdx != -1) {
-        mActIdx = dComIfGp_evmng_getMyActIdx(i_staffIdx, a_cut_tbl, 1, TRUE, 0);
+        mActIdx = dComIfGp_evmng_getMyActIdx(i_staffIdx, a_cut_tbl, ARRAY_SIZE(a_cut_tbl), TRUE, 0);
 
         if(mActIdx == -1) {
             dComIfGp_evmng_cutEnd(i_staffIdx);
