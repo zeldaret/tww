@@ -961,10 +961,12 @@ static BOOL dMenu_ClothIsDelete(void*) {
     return TRUE;
 }
 
-// TODO: Find superclass that gives the correct size of 0x929C.
-class menu_cloth_class : public fopAc_ac_c {
-    dMCloth_c mCloth;
+class menu_cloth_class : public msg_class {
+    /* 0x00FC */ dMCloth_c mCloth;
+    /* 0x9264 */ u8 padding[0x929C - 0x9264];
 };
+
+STATIC_ASSERT(sizeof(menu_cloth_class) == 0x929C);
 
 // BUG: The functions in this table are out of order.
 // It doesn't really matter, because they're just empty functions.
@@ -982,7 +984,7 @@ msg_process_profile_definition g_profile_Menu_Cloth = {
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Menu_Cloth,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ 0x929C, // TODO: sizeof(menu_cloth_class)
+    /* Size         */ sizeof(menu_cloth_class),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
