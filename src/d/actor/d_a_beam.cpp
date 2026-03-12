@@ -263,7 +263,7 @@ cPhs_State daBeam_c::CreateInit() {
     fopAcM_SetMtx(this, M_mdl->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -50.0f, -50.0f, 0.0f, 50.0f, 50.0f, 2000.0f);
 
-    if (parentActorID == -1) {
+    if (parentActorID == fpcM_ERROR_PROCESS_ID_e) {
         u8 params1 = fopAcM_GetParam(this) & 0xFF;
         s8 params2 = (fopAcM_GetParam(this) >> 8) & 0xFF;
         params1 = cLib_maxLimit<u8>(params1, 2);

@@ -1086,6 +1086,12 @@ inline void dComIfGs_onGetItemReserve(int i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().onReserve(i_no);
 }
 
+#if VERSION == VERSION_DEMO
+inline void dComIfGs_offGetItemReserve(u8 i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().offReserve(i_no);
+}
+#endif
+
 inline BOOL dComIfGs_isGetCollectMap(int i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getMap().isGetMap(i_no - 1);
 }
@@ -1100,6 +1106,10 @@ inline void dComIfGs_onGetCollectMap(int i_no) {
 
 inline BOOL dComIfGs_isCollectMapTriforce(int i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getMap().isTriforce(i_no - 1);
+}
+
+inline void dComIfGs_onCollectMapTriforce(int i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getMap().onTriforce(i_no -1);
 }
 
 inline void dComIfGs_offCollectMapTriforce(int i_no) {
