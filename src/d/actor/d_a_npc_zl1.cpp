@@ -946,7 +946,7 @@ void daNpc_Zl1_c::setAnm_ATR() {
 /* 00001E18-00001ED4       .text anmAtr__11daNpc_Zl1_cFUs */
 void daNpc_Zl1_c::anmAtr(u16 mesgNo) {
     switch(mesgNo) {
-        case 6:
+        case 6: {
             if(field_0x851 == 0) {
                 chngAnmAtr(dComIfGp_getMesgAnimeAttrInfo());
                 field_0x851++;
@@ -958,6 +958,7 @@ void daNpc_Zl1_c::anmAtr(u16 mesgNo) {
                 chngAnmTag();
             }
             break;
+        }
         case 0xe:
             field_0x851 = 0;
             break;
@@ -1100,7 +1101,6 @@ void daNpc_Zl1_c::checkOrder() {
         field_0x84A = 0;
         field_0x7D7 = true;
     }
-    /* Nonmatching */
 }
 
 /* 00002280-00002318       .text chk_talk__11daNpc_Zl1_cFv */
@@ -1241,7 +1241,7 @@ void daNpc_Zl1_c::lookBack() {
             targetY = field_0x7C0;
             field_0x7D0 = false;
             break;
-        case 4:
+        case 4: {
             fopAc_ac_c* actor = searchByID(mProcId2, &temp6);
             if(actor != NULL && temp6 == 0) {
                 field_0x758.set(actor->current.pos);
@@ -1251,7 +1251,7 @@ void daNpc_Zl1_c::lookBack() {
                 field_0x7D0 = true;
             }
             break;
-
+        }
         case 5:
             kyorokyoro();
             temp3.set(field_0x758);

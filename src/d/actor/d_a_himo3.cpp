@@ -295,7 +295,12 @@ static BOOL daHimo3_Draw(himo3_class* i_this) {
         fVar1 = DEMO_SELECT(REG0_F(0) + 3.75f, 3.75f);
     }
 
+#ifdef __MWERKS__
     i_this->mLineMat.update(i_this->m15C0, fVar1, (GXColor){200, 150, 50, 255}, 0, &i_this->tevStr);
+#else
+    GXColor color = (GXColor){200, 150, 50, 255};
+    i_this->mLineMat.update(i_this->m15C0, fVar1, color, 0, &i_this->tevStr);
+#endif
     dComIfGd_set3DlineMat(&i_this->mLineMat);
 
     if (i_this->m0298 != 0xf) {

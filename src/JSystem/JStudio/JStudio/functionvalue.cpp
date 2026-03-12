@@ -646,7 +646,7 @@ f64 TFunctionValue_list::update_INTERPOLATE_BSPLINE_dataMore3_(const TFunctionVa
             dVar8 = rThis._44[data._10 + 2];
         }
     }
-    functionvalue::interpolateValue_BSpline_uniform(data._0 - data._8, dVar9, dVar11, dVar10, dVar8);
+    return functionvalue::interpolateValue_BSpline_uniform(data._0 - data._8, dVar9, dVar11, dVar10, dVar8);
 }
 
 /* 80272728-80272794       .text __ct__Q27JStudio29TFunctionValue_list_parameterFv */
@@ -830,7 +830,7 @@ f64 TFunctionValue_list_parameter::update_INTERPOLATE_BSPLINE_dataMore3_(const T
         }
         break;
     }
-    functionvalue::interpolateValue_BSpline_nonuniform(d, (f64*)&local_68, (f64*)&local_48);
+    return functionvalue::interpolateValue_BSpline_nonuniform(d, (f64*)&local_68, (f64*)&local_48);
 }
 
 /* 80272CB8-80272D38       .text __ct__Q27JStudio22TFunctionValue_hermiteFv */

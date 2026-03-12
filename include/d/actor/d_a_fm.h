@@ -3,6 +3,8 @@
 
 #include "f_op/f_op_actor.h"
 #include "c/c_damagereaction.h"
+#include "d/d_path.h"
+#include "d/d_bg_s_lin_chk.h"
 
 class daFm_c : public fopEn_enemy_c {
 public:
@@ -22,7 +24,7 @@ public:
     bool jntHitCreateHeap();
     BOOL _pathMove(cXyz*, cXyz*, cXyz*);
     fopAc_ac_c* searchNearOtherActor(fopAc_ac_c*);
-    bool searchNearFm(fopAc_ac_c*);
+    void* searchNearFm(fopAc_ac_c*);
     void moveRndBack();
     void moveRndEscape();
     void spAttackVJump();

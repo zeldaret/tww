@@ -606,11 +606,11 @@ fopAc_ac_c* daFm_c::searchNearOtherActor(fopAc_ac_c* i_actor) {
 
 /* 00000F18-00000F44       .text searchNearFm_CB__FPvPv */
 static void* searchNearFm_CB(void* param_1, void* param_2) {
-    ((daFm_c*)param_2)->searchNearFm((fopAc_ac_c*)param_1);
+    return ((daFm_c*)param_2)->searchNearFm((fopAc_ac_c*)param_1);
 }
 
 /* 00000F44-00001150       .text searchNearFm__6daFm_cFP10fopAc_ac_c */
-bool daFm_c::searchNearFm(fopAc_ac_c* i_actor) {
+void* daFm_c::searchNearFm(fopAc_ac_c* i_actor) {
     f32 dist;
     if(fopAc_IsActor(i_actor) && fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_FM) { // redundant isactor check?
         f32 abs = (field_0x3E4 - current.pos).absXZ();
@@ -623,7 +623,7 @@ bool daFm_c::searchNearFm(fopAc_ac_c* i_actor) {
             }
         }
     }
-    return false;
+    return NULL;
 }
 
 /* 00001150-00001384       .text moveRndBack__6daFm_cFv */
@@ -2746,7 +2746,7 @@ void daFm_c::grabPlayer() {
     csXyz angle(0, 0, 0);
     switch (mAnmPrmIdx) {
         case 4:
-        case 6:
+        case 6: {
             daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
             cXyz offset2 = pLink->getHeadTopPos() - pLink->current.pos;
             temp.set(5.0f, 0.0f, 10.0f);
@@ -2759,7 +2759,7 @@ void daFm_c::grabPlayer() {
             mDoMtx_stack_c::transM(temp2);
             MTXCopy(mDoMtx_stack_c::get(), field_0x6BC);
             pLink->setPlayerPosAndAngle(mDoMtx_stack_c::get());
-
+        }
         case 5:
         default:
             break;

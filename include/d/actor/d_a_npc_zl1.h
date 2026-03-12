@@ -2,6 +2,7 @@
 #define D_A_NPC_ZL1_H
 
 #include "d/d_npc.h"
+#include "d/d_particle.h"
 
 class J3DMaterial;
 class J3DNode;
