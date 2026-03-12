@@ -196,9 +196,9 @@ void dMCloth_c::cloth_init() {
     mWaveProgress += HIO_CHILD.waveProgressStep;
 
     DCStoreRangeNoSync(mPosArr[mCurArr], INNER_SIZE * INNER_SIZE * sizeof(cXyz));
-    DCStoreRangeNoSync(mNrmArr[mCurArr], 0x5AC);
+    DCStoreRangeNoSync(mNrmArr[mCurArr], INNER_SIZE * INNER_SIZE * sizeof(cXyz));
 #if VERSION > VERSION_JPN
-    DCStoreRangeNoSync(mBackNrmArr, 0x5AC);
+    DCStoreRangeNoSync(mBackNrmArr, INNER_SIZE * INNER_SIZE * sizeof(cXyz));
 #endif
 
     mClothColor.r = (u8)HIO_CHILD.clothColor.r;
@@ -657,7 +657,7 @@ void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned ch
         }
     }
 
-    DCStoreRangeNoSync(mShadowPosArr, 0x5AC);
+    DCStoreRangeNoSync(mShadowPosArr, INNER_SIZE * INNER_SIZE * sizeof(cXyz));
 
     clothColor = mClothColor;
     shadowColor = mShadowColor;
@@ -859,9 +859,9 @@ void dMCloth_c::cloth_move_sin() {
 
     setBackNrm();
 
-    DCStoreRangeNoSync(getPos(), 0x5AC);
-    DCStoreRangeNoSync(getNrm(), 0x5AC);
-    DCStoreRangeNoSync(getBackNrm(), 0x5AC);
+    DCStoreRangeNoSync(getPos(), INNER_SIZE * INNER_SIZE * sizeof(cXyz));
+    DCStoreRangeNoSync(getNrm(), INNER_SIZE * INNER_SIZE * sizeof(cXyz));
+    DCStoreRangeNoSync(getBackNrm(), INNER_SIZE * INNER_SIZE * sizeof(cXyz));
 }
 
 /* 8019B9C0-8019BCF4       .text cloth_move_simple__9dMCloth_cFv */
@@ -910,9 +910,9 @@ void dMCloth_c::cloth_move_simple() {
 
     setBackNrm();
 
-    DCStoreRangeNoSync(getPos(), 0x5AC);
-    DCStoreRangeNoSync(getNrm(), 0x5AC);
-    DCStoreRangeNoSync(getBackNrm(), 0x5AC);
+    DCStoreRangeNoSync(getPos(), INNER_SIZE * INNER_SIZE * sizeof(cXyz));
+    DCStoreRangeNoSync(getNrm(), INNER_SIZE * INNER_SIZE * sizeof(cXyz));
+    DCStoreRangeNoSync(getBackNrm(), INNER_SIZE * INNER_SIZE * sizeof(cXyz));
 }
 
 /* 8019BCF4-8019BDB8       .text cloth_move__9dMCloth_cFv */
