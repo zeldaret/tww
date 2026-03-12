@@ -956,8 +956,8 @@ void dWood::Packet_c::draw() {
         {GX_VA_NULL, GX_NONE},
     };
     static GXVtxAttrFmtList l_shadowVtxAttrFmtList[] = {
-        {GX_VA_POS, GX_CLR_RGBA, GX_RGB8, 0x00},
-        {GX_VA_TEX0, GX_CLR_RGBA, GX_RGB8, 0x00},
+        {GX_VA_POS, GX_POS_XYZ, GX_S8, 0x00},
+        {GX_VA_TEX0, GX_TEX_ST, GX_S8, 0x00},
         {GX_VA_NULL, GX_CLR_RGBA, GX_RGB8, 0x00},
     };
     static GXVtxDescList l_vtxDescList[] = {
@@ -967,9 +967,9 @@ void dWood::Packet_c::draw() {
         {GX_VA_NULL, GX_NONE},
     };
     static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
-        {GX_VA_POS, GX_CLR_RGBA, GX_F32, 0x00},
+        {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
         {GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0x00},
-        {GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0x00},
+        {GX_VA_TEX0, GX_TEX_ST, GX_F32, 0x00},
         {GX_VA_NULL, GX_CLR_RGBA, GX_RGB8, 0x00},
     };
     static GXColor l_shadowColor = {0x00, 0x00, 0x00, 0x64};
