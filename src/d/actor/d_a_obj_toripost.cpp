@@ -851,11 +851,11 @@ void daObjTpost_c::modeProc(daObjTpost_c::Proc_e proc, int newMode) {
         }
     };
 
-    if(proc == PROC_INIT) {
+    if(proc == PROC_INIT_e) {
         mCurMode = newMode;
         (this->*mode_tbl[mCurMode].init)();
     }
-    else if(proc == PROC_EXEC) {
+    else if(proc == PROC_EXEC_e) {
         (this->*mode_tbl[mCurMode].run)();
     }
 }
@@ -872,7 +872,7 @@ bool daObjTpost_c::_execute() {
     checkOrder();
     setAttention();
     setCollision(40.0f, 140.0f);
-    modeProc(PROC_EXEC, MODE_NULL);
+    modeProc(PROC_EXEC_e, MODE_NULL);
 
     if(dComIfGp_event_runCheck() && !mEventCut.cutProc()) {
         cutProc();

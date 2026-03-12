@@ -1350,7 +1350,7 @@ void daRd_c::modeProc(daRd_c::Proc_e proc, int newMode) {
         },
     };
     
-    if (proc == PROC_INIT) {
+    if (proc == PROC_INIT_e) {
         if (newMode == MODE_CRY || newMode == MODE_ATTACK) {
             onIkari();
             setBtkAnm(3);
@@ -1369,7 +1369,7 @@ void daRd_c::modeProc(daRd_c::Proc_e proc, int newMode) {
         
         mMode = newMode;
         (this->*mode_tbl[mMode].init)();
-    } else if (proc == PROC_EXEC) {
+    } else if (proc == PROC_EXEC_e) {
         (this->*mode_tbl[mMode].run)();
     }
 }
@@ -1624,7 +1624,7 @@ bool daRd_c::_execute() {
         setMtx();
         mpMorf->play(NULL, 0, 0);
         mpMorf->calc();
-        modeProc(PROC_EXEC, MODE_NULL);
+        modeProc(PROC_EXEC_e, MODE_NULL);
         return true;
     }
     
@@ -1712,7 +1712,7 @@ bool daRd_c::_execute() {
     mpMorf->play(&current.pos, 0, 0);
     mpMorf->calc();
     enemy_fire(&mEnemyFire);
-    modeProc(PROC_EXEC, MODE_NULL);
+    modeProc(PROC_EXEC_e, MODE_NULL);
     setAnm(AnmPrm_NULL, false);
     setBtkAnm(0x5);
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);

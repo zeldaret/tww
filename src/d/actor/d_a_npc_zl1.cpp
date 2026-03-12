@@ -70,7 +70,6 @@ public:
     /* 0x07 */ s8 field_0x7;
     /* 0x08 */ int field_0x8;
     /* 0x0C */ hio_prm_c mPrmTbl;
-    /* Place member variables here */
 };
 
 static daNpc_Zl1_HIO_c l_HIO;
@@ -768,13 +767,13 @@ void daNpc_Zl1_c::eye_ctrl() {
 
 
     if(field_0x6D4[0] != NULL) {
-        cLib_addCalc(&field_0x6D4[0]->getNowOffsetX(), temp2, 0.5f, 0.1f, 0.03f);
-        cLib_addCalc(&field_0x6D4[0]->getNowOffsetY(), temp, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(field_0x6D4[0]->getNowOffsetX(), temp2, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(field_0x6D4[0]->getNowOffsetY(), temp, 0.5f, 0.1f, 0.03f);
     }
     temp2 *= -1.0f;
     if(field_0x6D4[1] != NULL) {
-        cLib_addCalc(&field_0x6D4[1]->getNowOffsetX(), temp2, 0.5f, 0.1f, 0.03f);
-        cLib_addCalc(&field_0x6D4[1]->getNowOffsetY(), temp, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(field_0x6D4[1]->getNowOffsetX(), temp2, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(field_0x6D4[1]->getNowOffsetY(), temp, 0.5f, 0.1f, 0.03f);
     }
 }
 

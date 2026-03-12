@@ -7,8 +7,8 @@
 class daGy_Ctrl_c : public fopAc_ac_c {
 public:
     enum Proc_e {
-        PROC_0_e,
-        PROC_1_e,
+        PROC_INIT_e = 0,
+        PROC_EXEC_e = 1,
     };
 
     void getMode() {}

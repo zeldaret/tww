@@ -562,14 +562,14 @@ void daNpc_Ls1_c::eye_ctrl() {
     }
 
     if (mpMatAnms[0]) {
-        cLib_addCalc(&mpMatAnms[0]->getNowOffsetX(), fVar2, 0.5f, 0.1f, 0.03f);
-        cLib_addCalc(&mpMatAnms[0]->getNowOffsetY(), fVar1, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(mpMatAnms[0]->getNowOffsetX(), fVar2, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(mpMatAnms[0]->getNowOffsetY(), fVar1, 0.5f, 0.1f, 0.03f);
     }
 
     fVar2 *= -1.0f;
     if (mpMatAnms[1]) {
-        cLib_addCalc(&mpMatAnms[1]->getNowOffsetX(), fVar2, 0.5f, 0.1f, 0.03f);
-        cLib_addCalc(&mpMatAnms[1]->getNowOffsetY(), fVar1, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(mpMatAnms[1]->getNowOffsetX(), fVar2, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(mpMatAnms[1]->getNowOffsetY(), fVar1, 0.5f, 0.1f, 0.03f);
     }
 }
 

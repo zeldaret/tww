@@ -9,10 +9,10 @@ class J3DNode;
 
 class daNpc_Zl1_matAnm_c : public J3DMaterialAnm{
 public:
-    void clrMoveFlag() {field_0x7C = false;}
-    f32& getNowOffsetX() {return mOffset.x;}
-    f32& getNowOffsetY() {return mOffset.y;}
-    void setMoveFlag() {field_0x7C = true;}
+    void clrMoveFlag() { field_0x7C = false; }
+    f32* getNowOffsetX() { return &mOffset.x; }
+    f32* getNowOffsetY() { return &mOffset.y; }
+    void setMoveFlag() { field_0x7C = true; }
 
     daNpc_Zl1_matAnm_c();
 

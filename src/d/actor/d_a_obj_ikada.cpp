@@ -173,7 +173,7 @@ BOOL daObj_Ikada_c::_pathMove(cXyz* arg1, cXyz* arg2, cXyz* arg3) {
 
     if ((*arg1 - mCurPathP1).absXZ() < speed * (REG12_F(2) + 1.0f) || (*arg1 - mCurPathP1).absXZ() == 0.0f) {
         if (mbCraneMode != 0) {
-            modeProc(PROC_00_e, 5);
+            modeProc(PROC_INIT_e, 5);
         }
         return TRUE;
     }
@@ -216,7 +216,7 @@ void daObj_Ikada_c::_ride(fopAc_ac_c* actor) {
                 }
 
                 mLinkRideRockAmpl = 300;
-                modeProc(PROC_00_e, 12);
+                modeProc(PROC_INIT_e, 12);
             }
         }
     }
@@ -249,7 +249,7 @@ bool daObj_Ikada_c::checkTgHit() {
         f32 abs = (sp58 - current.pos).absXZ();
         if (abs < 1000.0f && mbIsLinkRiding) {
             mLinkRideRockAmpl = 200;
-            modeProc(PROC_00_e, 11);
+            modeProc(PROC_INIT_e, 11);
             return true;
         }
     }
@@ -287,7 +287,7 @@ bool daObj_Ikada_c::checkTgHit() {
                 m04A8 = 230;
             }
             mLinkRideRockAmpl = 300;
-            modeProc(PROC_00_e, 0xc);
+            modeProc(PROC_INIT_e, 0xc);
             return true;
         }
     }
@@ -708,10 +708,10 @@ void daObj_Ikada_c::modeProc(daObj_Ikada_c::Proc_e proc, int mode) {
         {&daObj_Ikada_c::modeStopBombTerryInit, &daObj_Ikada_c::modeStopBombTerry, "STOP_BOMB"},
     };
 
-    if (proc == PROC_00_e) {
+    if (proc == PROC_INIT_e) {
         mCurMode = mode;
         (this->*mode_tbl[mCurMode].init)();
-    } else if (proc == PROC_01_e) {
+    } else if (proc == PROC_EXEC_e) {
         (this->*mode_tbl[mCurMode].exec)();
     }
 }
@@ -1146,7 +1146,7 @@ bool daObj_Ikada_c::_execute() {
         }
     }
 
-    modeProc(PROC_01_e, 13);
+    modeProc(PROC_EXEC_e, 13);
 
     current.pos.y = fVar8 + dLib_getWaterY(current.pos, mObjAcch);
     setMtx();

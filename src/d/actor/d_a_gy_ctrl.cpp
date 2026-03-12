@@ -320,7 +320,7 @@ void daGy_Ctrl_c::modeSwWait() {
     }
 
     if (dComIfGs_isSwitch(m330, sw)) {
-        modeProc(PROC_0_e, 1);
+        modeProc(PROC_INIT_e, 1);
     }
 }
 
@@ -332,11 +332,11 @@ void daGy_Ctrl_c::modeCreateInit() {
 /* 00000CA0-00000E50       .text modeCreate__11daGy_Ctrl_cFv */
 void daGy_Ctrl_c::modeCreate() {
     if (m328 == 1 && m344 == 0) {
-        modeProc(PROC_0_e, 3);
+        modeProc(PROC_INIT_e, 3);
     } else if (m3E8 == 0) {
-        modeProc(PROC_0_e, 3);
+        modeProc(PROC_INIT_e, 3);
     } else if (fopAcM_Search(searchNearActor_CB, this) != NULL) {
-        modeProc(PROC_0_e, 3);
+        modeProc(PROC_INIT_e, 3);
     } else {
         if (m31C < m329 && cLib_calcTimer(&m350) == 0) {
             cXyz sp18 = m290[m31C];
@@ -350,7 +350,7 @@ void daGy_Ctrl_c::modeCreate() {
         }
 
         if (m31C == m329) {
-            modeProc(PROC_0_e, 2);
+            modeProc(PROC_INIT_e, 2);
         }
         setPathPos();
     }
@@ -365,11 +365,11 @@ void daGy_Ctrl_c::modeWaitInit() {
 /* 00000E54-00000F00       .text modeWait__11daGy_Ctrl_cFv */
 void daGy_Ctrl_c::modeWait() {
     if (m328 == 1 && m344 == 0) {
-        modeProc(PROC_0_e, 3);
+        modeProc(PROC_INIT_e, 3);
     } else if (m3E8 == 0) {
-        modeProc(PROC_0_e, 3);
+        modeProc(PROC_INIT_e, 3);
     } else if (fopAcM_Search(searchNearActor_CB, this) != NULL) {
-        modeProc(PROC_0_e, 3);
+        modeProc(PROC_INIT_e, 3);
     } else {
         deadCheckGy();
         setPathPos();
@@ -388,10 +388,10 @@ void daGy_Ctrl_c::modeHide() {
 #if VERSION == VERSION_DEMO
     if (m328 == 1) {
         if (m344 == 1 && m3E8 == 1) {
-            modeProc(PROC_0_e, 1);
+            modeProc(PROC_INIT_e, 1);
         }
     } else if (m328 == 0 && m3E8 == 1) {
-        modeProc(PROC_0_e, 1);
+        modeProc(PROC_INIT_e, 1);
     }
 #else
     bool bVar1 = false;
@@ -413,7 +413,7 @@ void daGy_Ctrl_c::modeHide() {
     }
 
     if (bVar1 && m3E8 == 1) {
-        modeProc(PROC_0_e, 1);
+        modeProc(PROC_INIT_e, 1);
     }
 #endif
 }
@@ -437,7 +437,7 @@ bool daGy_Ctrl_c::_execute() {
     setTarget();
     m344 = setPathTargetPos();
     m3E8 = checkPath();
-    modeProc(PROC_1_e, 4);
+    modeProc(PROC_EXEC_e, 4);
 #if VERSION > VERSION_DEMO
     m334 = fopAcM_GetRoomNo(this);
 #endif
@@ -478,9 +478,9 @@ void daGy_Ctrl_c::createInitNoArer() {
 /* 00001250-000012D4       .text createInit__11daGy_Ctrl_cFv */
 void daGy_Ctrl_c::createInit() {
     if (m330 != 0xff) {
-        modeProc(PROC_0_e, 0);
+        modeProc(PROC_INIT_e, 0);
     } else {
-        modeProc(PROC_0_e, 1);
+        modeProc(PROC_INIT_e, 1);
     }
 
     m320 = 0;

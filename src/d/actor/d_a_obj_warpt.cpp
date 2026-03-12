@@ -635,7 +635,7 @@ void daObj_Warpt_c::modeProc(daObj_Warpt_c::Proc_e proc, int index) {
     if (proc == PROC_INIT_e) {
         m290 = index;
         (this->*mode_tbl[m290].init)();
-    } else if (proc == PROC_RUN_e) {
+    } else if (proc == PROC_EXEC_e) {
         (this->*mode_tbl[m290].run)();
     }
 }
@@ -667,7 +667,7 @@ bool daObj_Warpt_c::_execute() {
         breakHuta(0);
         modeProc(PROC_INIT_e, 2);
     }
-    modeProc(PROC_RUN_e, 5);
+    modeProc(PROC_EXEC_e, 5);
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
     mAcch.CrrPos(*dComIfG_Bgsp());
     setMtx();

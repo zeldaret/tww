@@ -777,12 +777,12 @@ void daOship_c::modeProc(daOship_c::Proc_e i_procType, int i_procNo) {
         { &daOship_c::modeRangeDInit, &daOship_c::modeRangeD, "RANGE_D" }
     };
     
-    if (i_procType == PROC_INIT) {
+    if (i_procType == PROC_INIT_e) {
         fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
         cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
         mCurrentProc = i_procNo;
         (this->*mode_tbl[mCurrentProc].mInitFunc)();
-    } else if (i_procType == PROC_EXEC) {
+    } else if (i_procType == PROC_EXEC_e) {
         (this->*mode_tbl[mCurrentProc].mUpdFunc)();
     }
 }
@@ -838,7 +838,7 @@ bool daOship_c::_execute() {
     cLib_addCalcAngleS2(&mAimRotX, mAimRotXTarget, 6, 0x300);
     cLib_addCalcAngleS2(&mAimRotY, mAimRotYTarget, 6, 0x300);
 
-    modeProc(PROC_EXEC, MODE_NULL);
+    modeProc(PROC_EXEC_e, MODE_NULL);
 
     mpModel->calc();
 

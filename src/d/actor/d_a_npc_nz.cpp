@@ -506,11 +506,11 @@ void daNpc_Nz_c::modeProc(daNpc_Nz_c::Proc_e proc, int newMode) {
         }
     };
 
-    if(proc == PROC_INIT) {
+    if(proc == PROC_INIT_e) {
         mCurMode = newMode;
         (this->*mode_tbl[mCurMode].init)();
     }
-    else if(proc == PROC_EXEC) {
+    else if(proc == PROC_EXEC_e) {
         (this->*mode_tbl[mCurMode].run)();
     }
 }
@@ -809,7 +809,7 @@ void daNpc_Nz_c::anmAtr(u16 i_msgStatus) {
 bool daNpc_Nz_c::_execute() {
     cLib_addCalc2(&speedF, field_0x6EC, 0.3f, 4.0f);
     checkOrder();
-    modeProc(PROC_EXEC, 2);
+    modeProc(PROC_EXEC_e, 2);
     LookBack();
     eventOrder();
     setAttention();

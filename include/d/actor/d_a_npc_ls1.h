@@ -12,8 +12,8 @@ class daNpc_Ls1_matAnm_c : public J3DMaterialAnm {
 public:
     daNpc_Ls1_matAnm_c();
     void clrMoveFlag() { mbMove = 0; }
-    f32& getNowOffsetX() { return mOffset.x; }
-    f32& getNowOffsetY() { return mOffset.y; }
+    f32* getNowOffsetX() { return &mOffset.x; }
+    f32* getNowOffsetY() { return &mOffset.y; }
     void setMoveFlag() { mbMove = 1; }
 
     void calc(J3DMaterial*) const;

@@ -462,11 +462,11 @@ void daObj_Canon_c::modeProc(daObj_Canon_c::Proc_e proc, int newMode) {
         },
     };
 
-    if(proc == PROC_INIT) {
+    if(proc == PROC_INIT_e) {
         mCurMode = newMode;
         (this->*mode_tbl[mCurMode].init)();
     }
-    else if(proc == PROC_EXEC) {
+    else if(proc == PROC_EXEC_e) {
         (this->*mode_tbl[mCurMode].run)();
     }
 }
@@ -480,7 +480,7 @@ bool daObj_Canon_c::_execute() {
     setAttention();
     setCollision();
 
-    modeProc(PROC_EXEC, 5);
+    modeProc(PROC_EXEC_e, 5);
 
     mpModel->calc();
     Vec temp = {0.0f, 0.0f, 0.0f};

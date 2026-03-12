@@ -1308,7 +1308,7 @@ void daFm_c::modePathMove() {
     resetInvKine();
     turnToBaseTarget();
     if(isGrabFoot() && !dComIfGp_event_runCheck()) {
-        modeProc(PROC_0_e,0xf);
+        modeProc(PROC_INIT_e,0xf);
     } else {
         
         dLib_pathMove(&field_0x3B0, &field_0x3BC, mpPath, 3.0f, pathMove_CB, this);
@@ -1316,7 +1316,7 @@ void daFm_c::modePathMove() {
 
         daPy_lk_c* pLink = daPy_getPlayerLinkActorClass();
         if(field_0x9D4 < l_HIO.field_0x0E4  && std::fabsf(pLink->current.pos.y - current.pos.y) < l_HIO.field_0x0A8 && field_0xAE5 == 0) {
-            modeProc(PROC_0_e,5);
+            modeProc(PROC_INIT_e,5);
         }
     }
 }
@@ -1331,22 +1331,22 @@ void daFm_c::modeGoalKeeperInit() {
 void daFm_c::modeGoalKeeper() {
 
     if(field_0x2E5 && dComIfGp_evmng_endCheck("DEFAULT_FM_SUIKOMI_NPC")) {
-        modeProc(PROC_0_e,6);
+        modeProc(PROC_INIT_e,6);
         return;
     }
 
     resetInvKine();
     turnToBaseTarget();
     if(isGrabFoot() && !dComIfGp_event_runCheck()) {
-        modeProc(PROC_0_e, 0xf);
+        modeProc(PROC_INIT_e, 0xf);
     } else {
         if(field_0x2E4 != 0) {
-            modeProc(PROC_0_e, 5);
+            modeProc(PROC_INIT_e, 5);
         } else {
             f32 temp = std::fabsf(current.pos.y - mBaseTarget->current.pos.y);
             if(field_0x9D4 < l_HIO.field_0x0E8 && temp < l_HIO.field_0x0A8) {
                 if((mBaseTarget->current.pos - field_0x69C).absXZ() < field_0x2E0 && field_0xAE5 == 0) {
-                    modeProc(PROC_0_e,5);
+                    modeProc(PROC_INIT_e,5);
                 }
             }
             field_0x690 = field_0x69C;
@@ -1377,12 +1377,12 @@ void daFm_c::modeAppear() {
                 return;
             }
             if(isGrabPos()) {
-                modeProc(PROC_0_e,8);
+                modeProc(PROC_INIT_e,8);
                 return;
             }
         }
         if(mAnmPrmIdx == 1) {
-            modeProc(PROC_0_e,7);
+            modeProc(PROC_INIT_e,7);
         }
     }
 }
@@ -1408,21 +1408,21 @@ void daFm_c::modeDisappear() {
     if(mAnmPrmIdx == 8) {
         if(mpMorf->isStop()) {
             if(field_0x2E4 != 0 || field_0x2E5) {
-                modeProc(PROC_0_e, 0x12);
+                modeProc(PROC_INIT_e, 0x12);
             } else {
                 fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
                 if(isGrabFoot() && !dComIfGp_event_runCheck()) {
-                    modeProc(PROC_0_e, 0xf);
+                    modeProc(PROC_INIT_e, 0xf);
                 } else {
                     switch(field_0x2D0) {
                         case 0:
-                            modeProc(PROC_0_e, 1);
+                            modeProc(PROC_INIT_e, 1);
                             break;
                         case 1:
-                            modeProc(PROC_0_e, 3);
+                            modeProc(PROC_INIT_e, 3);
                             break;
                         case 2:
-                            modeProc(PROC_0_e, 4);
+                            modeProc(PROC_INIT_e, 4);
                             break;
                     }
                 }
@@ -1450,11 +1450,11 @@ void daFm_c::modeWait() {
         return;
     }
     if(!areaCheck()) {
-        modeProc(PROC_0_e, 6);
+        modeProc(PROC_INIT_e, 6);
         return;
     }
     if(isGrabFoot()) {
-        modeProc(PROC_0_e, 6);
+        modeProc(PROC_INIT_e, 6);
         return;
     }
 
@@ -1473,7 +1473,7 @@ void daFm_c::modeWait() {
         if(isGrabPos()) {
             if(checkPlayerGrabTarget()) {
                 if(cLib_calcTimer(&field_0x65C) == 0) {
-                    modeProc(PROC_0_e, 8);
+                    modeProc(PROC_INIT_e, 8);
                     return;
                 }
             } else {
@@ -1481,10 +1481,10 @@ void daFm_c::modeWait() {
                     if(cLib_calcTimer(&field_0x65C) != 0) {
                         return;
                     }
-                    modeProc(PROC_0_e,8);
+                    modeProc(PROC_INIT_e,8);
                     return;
                 }
-                modeProc(PROC_0_e,8);
+                modeProc(PROC_INIT_e,8);
                 return;
             }
         }
@@ -1494,7 +1494,7 @@ void daFm_c::modeWait() {
         }
     }
     if(field_0x2D0 == 2 && (mBaseTarget->current.pos - field_0x69C).absXZ() > field_0x2E0) {
-            modeProc(PROC_0_e, 6);
+            modeProc(PROC_INIT_e, 6);
     } else {
         moveRndBack();
     }
@@ -1503,7 +1503,7 @@ void daFm_c::modeWait() {
     }
     if(field_0x9D4 > l_HIO.field_0x0E8) {
         if(cLib_calcTimer(&field_0x658) == 0) {
-            modeProc(PROC_0_e,6);
+            modeProc(PROC_INIT_e,6);
         }
     } else {
         field_0x658 = l_HIO.field_0x088;
@@ -1513,7 +1513,7 @@ void daFm_c::modeWait() {
 /* 00003F90-00003FF8       .text modeAttackInit__6daFm_cFv */
 void daFm_c::modeAttackInit() {
     if(dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK400_e | daPyStts0_UNK2_e)) {
-        modeProc(PROC_0_e,7);
+        modeProc(PROC_INIT_e,7);
     } else {
         setAnm(4, false);
         field_0x650 = l_HIO.field_0x094;
@@ -1689,10 +1689,10 @@ void daFm_c::modeThrowInit() {
 void daFm_c::modeThrow() {
     resetInvKine();
     if(mAnmPrmIdx == 1 && cLib_calcTimer(&field_0x650) == 0) {
-        modeProc(PROC_0_e, 7);
+        modeProc(PROC_INIT_e, 7);
     }
     if(field_0x684 != 0 && mpActorTarget == NULL) {
-        modeProc(PROC_0_e, 10);
+        modeProc(PROC_INIT_e, 10);
         return;
     }
     if(field_0x684 == 0) {
@@ -1771,7 +1771,7 @@ void daFm_c::modeGrabFootDemoInit() {
 void daFm_c::modeGrabFootDemo() {
     resetInvKine();
     if(l_HIO.field_0x00D) {
-        modeProc(PROC_0_e, 5);
+        modeProc(PROC_INIT_e, 5);
     } else {
         if(eventInfo.mCommand == dEvtCmd_INDEMO_e) {
             // char* cutName;
@@ -1848,7 +1848,7 @@ void daFm_c::modeParalysis() {
         field_0x68C = 0x2b00;
     }
     if(cLib_calcTimer(&field_0x650) == 0) {
-        modeProc(PROC_0_e, 7);
+        modeProc(PROC_INIT_e, 7);
     }
     cancelGrab();
     if (checkTgHit()) {
@@ -1872,10 +1872,10 @@ void daFm_c::modeDamage() {
     if(mAnmPrmIdx == 1 && field_0x64C == 0) {
         searchTarget();
         if(mpActorTarget != NULL && !isNpc(mpActorTarget)) {
-            modeProc(PROC_0_e, 7);
+            modeProc(PROC_INIT_e, 7);
         }
         if(!cLib_calcTimer(&field_0x650)) {
-            modeProc(PROC_0_e, 7);
+            modeProc(PROC_INIT_e, 7);
         }
     }
     if (checkTgHit()) {
@@ -2167,7 +2167,7 @@ void daFm_c::modePrepareItem() {
             if(temp == 9) {
                 if(!daPy_getPlayerLinkActorClass()->checkPlayerGuard()) {
                     if(cLib_calcTimer(&field_0x650) == 0) {
-                        modeProc(PROC_0_e,9);
+                        modeProc(PROC_INIT_e,9);
                     }
                 } else {
                     field_0x650 = l_HIO.field_0x092;
@@ -2200,10 +2200,10 @@ void daFm_c::modeGrabNpcDemo() {
         if(dComIfGp_evmng_endCheck("DEFAULT_FM_NPC_GRAB") != 0) {
             if(field_0x2E4 != 0) {
                 dComIfGp_event_reset();
-                modeProc(PROC_0_e, 0xE);
+                modeProc(PROC_INIT_e, 0xE);
             } else {
                 dComIfGp_event_reset();
-                modeProc(PROC_0_e, 0xD);
+                modeProc(PROC_INIT_e, 0xD);
             }
         }
     }
@@ -2269,7 +2269,7 @@ void daFm_c::modePlayerStartDemo() {
             }
 
         } else if(strcmp(cutName, "DELETE") == 0) {
-            modeProc(PROC_0_e, 0x12);
+            modeProc(PROC_INIT_e, 0x12);
         }
     }
 }
@@ -2320,7 +2320,7 @@ void daFm_c::modeBikubiku() {
     if(mAnmPrmIdx == 0xe) {
         if(cLib_calcTimer(&field_0x650) == 0) {
             if(health <= 0) {
-                modeProc(PROC_0_e, 0xC);
+                modeProc(PROC_INIT_e, 0xC);
                 return;
             } else {
                 setAnm(1, true);
@@ -2329,7 +2329,7 @@ void daFm_c::modeBikubiku() {
             }
         }
     } else if(mAnmPrmIdx == 1 && field_0x64C == 0) {
-        modeProc(PROC_0_e,7);
+        modeProc(PROC_INIT_e,7);
     }
 }
 
@@ -2450,7 +2450,7 @@ void daFm_c::modeProc(daFm_c::Proc_e proc, int newMode) {
         }
     };
 
-    if(proc == PROC_0_e) {
+    if(proc == PROC_INIT_e) {
         switch(newMode) {
             case 0:
             case 1:
@@ -2473,7 +2473,7 @@ void daFm_c::modeProc(daFm_c::Proc_e proc, int newMode) {
         }
         mMode = newMode;
         (this->*mode_tbl[mMode].init)();
-    } else if(proc == PROC_1_e) {
+    } else if(proc == PROC_EXEC_e) {
         (this->*mode_tbl[mMode].run)();
     }
 }
@@ -2670,7 +2670,7 @@ void daFm_c::resetInvKine() {
     if (isBodyAppear()) {
         field_0x390 = 0;
         for(int i = 0; i < 6; i++) {
-            mDoMtx_quatSlerp(&field_0x330[i], &ZeroQuat, &field_0x330[i], 0.05000000074505806f);
+            mDoMtx_quatSlerp(&field_0x330[i], &ZeroQuat, &field_0x330[i], 0.05f);
         }
         mpMorf->calc();
     }
@@ -3069,7 +3069,7 @@ bool daFm_c::_execute() {
                 spAttackNone();
             }
         }
-        modeProc(PROC_1_e, 0x15);
+        modeProc(PROC_EXEC_e, 0x15);
         setAnm(0xF, false);
         mpMorf->play(&current.pos, 0, 0);
         mpMorf->calc();
@@ -3422,18 +3422,18 @@ void daFm_c::createInit() {
     field_0x610 = l_HIO.field_0x02C;
     if(mMode != 0x11) {
         if(field_0x2D4 != 0xff && !dComIfGs_isSwitch(field_0x2D4, fopAcM_GetRoomNo(this))) {
-            modeProc(PROC_0_e, 0);
+            modeProc(PROC_INIT_e, 0);
         } else {
             switch(field_0x2D0) {
                 case 0:
-                    modeProc(PROC_0_e, 2);
+                    modeProc(PROC_INIT_e, 2);
                     break;
                 case 1:
-                    modeProc(PROC_0_e, 3);
+                    modeProc(PROC_INIT_e, 3);
                     JUT_ASSERT(VERSION_SELECT(0x1419, 0x1420, 0x1444, 0x1444), m_path_no != 0xff);
                     break;
                 case 2:
-                    modeProc(PROC_0_e, 4);
+                    modeProc(PROC_INIT_e, 4);
                     break;
             }
         }
@@ -3449,7 +3449,7 @@ cPhs_State daFm_c::_create() {
             fopAc_ac_c* ac = fopAcM_SearchByID(parentActorID);
 
             if(ac != NULL && fopAc_IsActor(ac) && isLink(ac)) {
-                modeProc(PROC_0_e, 0x11);
+                modeProc(PROC_INIT_e, 0x11);
             }
         }
 

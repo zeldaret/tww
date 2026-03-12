@@ -40,7 +40,6 @@ public:
     /* 0x07 */ s8 field_0x7;
     /* 0x08 */ int field_0x8;
     /* 0x0C */ hio_prm_c mPrmTbl;
-    /* Place member variables here */
 };
 
 static daNpc_Hi1_HIO_c l_HIO;

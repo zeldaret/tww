@@ -1063,7 +1063,7 @@ void daBomb_c::waitState_bomtyu() {
     }
 }
 
-// assuming this was here and got stripped, given the leftover ptmf in .data and the other proc/proc_init pairs
+// assuming this was here and got stripped, given the leftover ptmf in .data and the other proc/PROC_INIT_e pairs
 bool daBomb_c::procSink_init() {
     mFunc = &daBomb_c::procSink;
 

@@ -9,13 +9,13 @@
 class daFm_c : public fopEn_enemy_c {
 public:
     enum Proc_e {
-        PROC_0_e,
-        PROC_1_e,
+        PROC_INIT_e = 0,
+        PROC_EXEC_e = 1,
     };
     
-    bool isBodyAppear() {return mMode != 1 && mMode != 0x12 && mMode != 0 && (mMode != 2 && (mMode != 4) && (mMode != 3 && (mMode != 0x11)));}
-    bool isHoleAppear() {return field_0x3E0 > 0.015f;}
-    void modeProcInit(int newMode) {modeProc(PROC_0_e, newMode);}
+    bool isBodyAppear() { return mMode != 1 && mMode != 0x12 && mMode != 0 && (mMode != 2 && (mMode != 4) && (mMode != 3 && (mMode != 0x11))); }
+    bool isHoleAppear() { return field_0x3E0 > 0.015f; }
+    void modeProcInit(int newMode) { modeProc(PROC_INIT_e, newMode); }
 
     void _nodeControl(J3DNode*, J3DModel*);
     BOOL _createHeap();

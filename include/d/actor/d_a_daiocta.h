@@ -21,8 +21,8 @@ public:
     };
 
     enum Proc_e {
-        PROC_INIT = 0,
-        PROC_EXEC = 1
+        PROC_INIT_e = 0,
+        PROC_EXEC_e = 1
     };
 
     enum Mode_e {
