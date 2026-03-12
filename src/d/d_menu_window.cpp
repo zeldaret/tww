@@ -132,33 +132,30 @@ void dDlst_MENU_CAPTURE_c::draw() {
         GXSetProjection(mtx, GX_ORTHOGRAPHIC);
         GXLoadPosMtxImm(mDoMtx_getIdentity(), 0);
         GXSetCurrentMtx(0);
+
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGB8, 0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB8, 0);
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S8, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
 
-        GXPosition1x8(0);
-        GXPosition1x8(0);
-        GXFIFO.s8 = -5;
-        GXPosition1x8(0);
-        GXPosition1x8(0);
-        GXPosition1x8(1);
-        GXPosition1x8(0);
-        GXFIFO.s8 = -5;
-        GXPosition1x8(1);
-        GXPosition1x8(0);
-        GXPosition1x8(1);
-        GXPosition1x8(1);
-        GXFIFO.s8 = -5;
-        GXPosition1x8(1);
-        GXPosition1x8(1);
-        GXPosition1x8(0);
-        GXPosition1x8(1);
-        GXFIFO.s8 = -5;
-        GXPosition1x8(0);
-        GXPosition1x8(1);
+        {
+            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
+            GXPosition3s8(0, 0, -5);
+            GXTexCoord2s8(0, 0);
+
+            GXPosition3s8(1, 0, -5);
+            GXTexCoord2s8(1, 0);
+
+            GXPosition3s8(1, 1, -5);
+            GXTexCoord2s8(1, 1);
+
+            GXPosition3s8(0, 1, -5);
+            GXTexCoord2s8(0, 1);
+
+            GXEnd();
+        }
     }
 }
 
