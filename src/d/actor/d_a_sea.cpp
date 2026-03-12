@@ -833,11 +833,14 @@ void daSea_packet_c::draw() {
 
     GXLoadPosMtxImm(j3dSys.getViewMtx(), 0);
     GXSetClipMode(GX_CLIP_ENABLE);
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS,GX_INDEX16);
     GXSetVtxDesc(GX_VA_TEX0,GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_POS,GX_CLR_RGBA,GX_F32,0);
-    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_TEX0,GX_CLR_RGBA,GX_F32,0);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_POS,GX_POS_XYZ,GX_F32,0);
+    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_TEX0,GX_TEX_ST,GX_F32,0);
+
     GXSetArray(GX_VA_POS, this->m_draw_vtx, sizeof(cXyz));
 
     // TODO: Remove magic numbers
