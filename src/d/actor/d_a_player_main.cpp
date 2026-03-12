@@ -1584,7 +1584,7 @@ void daPy_lk_c::drawShadow() {
         }
         f32 f31;
         if (checkModeFlg(ModeFlg_HANG)) {
-            f31 = m35DC;
+            f31 = mHangGroundH;
         } else {
             f31 = mAcch.GetGroundH();
         }
@@ -1596,13 +1596,13 @@ void daPy_lk_c::drawShadow() {
         } else {
             f1 = m_HIO->mBasic.m.field_0x10;
         }
-        int iVar4 = dComIfGd_setShadow(m3614, 0, mpCLModel, &local_30, f1, 30.0f, current.pos.y,
+        int iVar4 = dComIfGd_setShadow(mShadowId, 0, mpCLModel, &local_30, f1, 30.0f, current.pos.y,
                                        f31, mAcch.m_gnd, &tevStr, 0, 1.0f,
                                        &dDlst_shadowControl_c::mSimpleTexObj);
-        m3614 = iVar4;
-        if ((u32)m3614 != 0) {
+        mShadowId = iVar4;
+        if ((u32)mShadowId != 0) {
             if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES) && !checkCaughtShapeHide()) {
-                dComIfGd_addRealShadow(m3614, mpKatsuraModel);
+                dComIfGd_addRealShadow(mShadowId, mpKatsuraModel);
             }
             if (checkSwordEquip()
 #if VERSION == VERSION_DEMO
@@ -1611,7 +1611,7 @@ void daPy_lk_c::drawShadow() {
                 && !checkDemoSwordNoDraw(1)
 #endif
             ) {
-                dComIfGd_addRealShadow(m3614, mpEquippedSwordModel);
+                dComIfGd_addRealShadow(mShadowId, mpEquippedSwordModel);
             }
             if ((mpEquipItemModel != NULL
 #if VERSION == VERSION_DEMO
@@ -1622,7 +1622,7 @@ void daPy_lk_c::drawShadow() {
             ) &&
                 (!checkBowItem(mEquipItem) || !checkPlayerGuard()))
             {
-                dComIfGd_addRealShadow(m3614, mpEquipItemModel);
+                dComIfGd_addRealShadow(mShadowId, mpEquipItemModel);
             }
             if (dComIfGs_getSelectEquip(1) != dItem_NONE_e
 #if VERSION == VERSION_DEMO
@@ -1631,18 +1631,18 @@ void daPy_lk_c::drawShadow() {
                 && !checkDemoShieldNoDraw()
 #endif
             ) {
-                dComIfGd_addRealShadow(m3614, mpEquippedShieldModel);
+                dComIfGd_addRealShadow(mShadowId, mpEquippedShieldModel);
             }
             fopAc_ac_c* pfVar10;
             if (mActorKeepGrab.getID() != fpcM_ERROR_PROCESS_ID_e) {
                 pfVar10 = fopAcM_SearchByID(mActorKeepGrab.getID());
                 if (pfVar10 != NULL && fopAcM_GetModel(pfVar10) != NULL) {
-                    dComIfGd_addRealShadow(m3614, fopAcM_GetModel(pfVar10));
+                    dComIfGd_addRealShadow(mShadowId, fopAcM_GetModel(pfVar10));
                 }
             } else if (mActorKeepEquip.getID() != fpcM_ERROR_PROCESS_ID_e) {
                 pfVar10 = fopAcM_SearchByID(mActorKeepEquip.getID());
                 if (pfVar10 != NULL && fopAcM_GetModel(pfVar10) != NULL) {
-                    dComIfGd_addRealShadow(m3614, fopAcM_GetModel(pfVar10));
+                    dComIfGd_addRealShadow(mShadowId, fopAcM_GetModel(pfVar10));
                 }
             }
         }
@@ -9073,22 +9073,21 @@ void daPy_lk_c::setNeckAngle() {
                 checkAttentionPosAngle(mpAttnActorZ, &sp18)
             ) {
                 r28 = true;
-            } else {
-                if (dComIfGp_getDetect().chk_attention(&spA0) &&
-                    cLib_distanceAngleS(cLib_targetAngleY(&current.pos, &spA0), m34DE) <= 0x6000)
-                {
+            } else if (
+                dComIfGp_getDetect().chk_attention(&spA0) &&
+                cLib_distanceAngleS(cLib_targetAngleY(&current.pos, &spA0), m34DE) <= 0x6000
+            ) {
+                sp18 = &spA0;
+                r28 = true;
+            } else if (m34C3 == 10) {
+                spA0.set(
+                    current.pos.x - 10.0f * (m3730.x + m36B8.x),
+                    120.0f + current.pos.y,
+                    current.pos.z - 10.0f * (m3730.z + m36B8.z)
+                );
+                if (cLib_distanceAngleS(cLib_targetAngleY(&current.pos, &spA0), m34DE) <= 0x6000) {
                     sp18 = &spA0;
                     r28 = true;
-                } else if (m34C3 == 10) {
-                    spA0.set(
-                        current.pos.x - 10.0f * (m3730.x + m36B8.x),
-                        120.0f + current.pos.y,
-                        current.pos.z - 10.0f * (m3730.z + m36B8.z)
-                    );
-                    if (cLib_distanceAngleS(cLib_targetAngleY(&current.pos, &spA0), m34DE) <= 0x6000) {
-                        sp18 = &spA0;
-                        r28 = true;
-                    }
                 }
             }
         } else if (mCurProc == daPyProc_BOTTLE_OPEN_e) {
@@ -11651,7 +11650,7 @@ BOOL daPy_lk_c::execute() {
     checkRoofRestart();
     mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x08), &mLeftHandPos);
     mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x0C), &mRightHandPos);
-    cMtx_multVec(mpCLModel->getAnmMtx(0x00), &boomerang_catch, &m36F4);
+    cMtx_multVec(mpCLModel->getAnmMtx(0x00), &boomerang_catch, &mBoomerangCatchPos);
     cMtx_multVec(mpCLModel->getAnmMtx(0x08), &hookshot_root, &mHookshotRootPos);
     mpKatsuraModel->setBaseTRMtx(mpCLModel->getAnmMtx(0x0F));
     mpKatsuraModel->calc();

@@ -1769,6 +1769,7 @@ void move(btd_class* i_this) {
 
 /* 00005BCC-00005C24       .text k_a_d_sub__FPvPv */
 void* k_a_d_sub(void* i_this, void* param_2) {
+    UNUSED(param_2);
     if (((fopAc_IsActor(i_this)) && (fopAcM_GetName(i_this) == PROC_KUI)) && (fopAcM_GetParam(i_this) == 0x511)) {
         return i_this;
     }
@@ -1777,6 +1778,7 @@ void* k_a_d_sub(void* i_this, void* param_2) {
 
 /* 00005C24-00005C70       .text dr2_a_d_sub__FPvPv */
 void* dr2_a_d_sub(void* i_this, void* param_2) {
+    UNUSED(param_2);
     if ((fopAc_IsActor(i_this)) && (fopAcM_GetName(i_this) == PROC_DR2)) {
         return i_this;
     } else {
@@ -1786,6 +1788,7 @@ void* dr2_a_d_sub(void* i_this, void* param_2) {
 
 /* 00005C70-00005CC8       .text wepon_s_sub__FPvPv */
 void* wepon_s_sub(void* i_this, void* param_2) {
+    UNUSED(param_2);
     if (((fopAc_IsActor(i_this)) && (fopAcM_GetName(i_this) == PROC_HIMO2)) || (fopAcM_GetName(i_this) == PROC_BOOMERANG)) {
         return i_this;
     }

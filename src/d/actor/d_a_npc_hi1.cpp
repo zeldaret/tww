@@ -371,9 +371,9 @@ void daNpc_Hi1_c::setAnm_ATR() {
 }
 
 /* 00000D1C-00000DD8       .text anmAtr__11daNpc_Hi1_cFUs */
-void daNpc_Hi1_c::anmAtr(u16 param_1) {
-    switch (param_1) {
-        case 6:
+void daNpc_Hi1_c::anmAtr(u16 i_msgStatus) {
+    switch (i_msgStatus) {
+        case fopMsgStts_MSG_TYPING_e: {
             if(field_0x7C8 == 0) {
                 chngAnmAtr(dComIfGp_getMesgAnimeAttrInfo());
                 field_0x7C8++;
@@ -385,7 +385,8 @@ void daNpc_Hi1_c::anmAtr(u16 param_1) {
                 chngAnmTag();
             }
             break;
-        case 0xe:
+        }
+        case fopMsgStts_MSG_DISPLAYED_e:
             field_0x7C8 = 0;
             break;
         default:
@@ -397,7 +398,7 @@ void daNpc_Hi1_c::anmAtr(u16 param_1) {
 
 /* 00000DD8-00000DE0       .text next_msgStatus__11daNpc_Hi1_cFPUl */
 u16 daNpc_Hi1_c::next_msgStatus(u32* pMsgNo) {
-    return 0x10;
+    return fopMsgStts_MSG_ENDS_e;
 }
 
 /* 00000DE0-00000DE8       .text getMsg_HI1_0__11daNpc_Hi1_cFv */

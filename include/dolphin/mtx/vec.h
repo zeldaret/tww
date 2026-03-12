@@ -19,6 +19,10 @@ typedef struct SVec {
     s16 x, y, z;
 } SVec;
 
+typedef struct S16Vec {
+    s16 x, y, z;
+} S16Vec;
+
 void C_VECAdd(const Vec* a, const Vec* b, Vec* ab);
 void PSVECAdd(const Vec* a, const Vec* b, Vec* ab);
 void C_VECSubtract(const Vec* a, const Vec* b, Vec* a_b);

@@ -123,6 +123,10 @@ public:
 
 class MyPicture : public J2DPicture {
 public:
+    MyPicture(J2DPane* pParent, JSURandomInputStream* pStream) : J2DPicture(pParent, pStream) {
+        m134 = 0;
+    }
+
     virtual ~MyPicture() {}
     virtual void drawSelf(f32, f32);
     virtual void drawSelf(f32, f32, Mtx*);
@@ -319,7 +323,15 @@ JKRExpHeap* fopMsgM_createExpHeap(u32);
 fpc_ProcID fopMsgM_Create(s16, fopMsgCreateFunc, void*);
 fpc_ProcID fopMsgM_create(s16 i_procName, fopAc_ac_c* param_1 = NULL, cXyz* param_2 = NULL,
                           u32* param_3 = NULL, u32* param_4 = NULL, fopMsgCreateFunc createFunc = NULL);
+inline fpc_ProcID fopMsgM_MiniGameStarter_create(s16 i_procName, u8 param_1, u16 param_2, fopMsgCreateFunc createFunc) {
+    u32 parameter = param_1;
+    parameter |= param_2 << 16;
+    return fopMsgM_create(i_procName, NULL, NULL, &parameter, &parameter, createFunc);
+}
 fpc_ProcID fop_MGameTerm_create(s16, s16, s16, int, int, fopMsgCreateFunc);
+inline fpc_ProcID fopMsgM_MiniGameTerminater_create(s16 param_0, s16 param_1, s16 param_2, int param_3, int param_4, fopMsgCreateFunc createFunc) {
+    return fop_MGameTerm_create(param_0, param_1, param_2, param_3, param_4, createFunc);
+}
 void fopMsgM_Delete(void* process);
 fopMsg_prm_class* fopMsgM_GetAppend(void* msg);
 void fopMsgM_destroyExpHeap(JKRExpHeap*);
@@ -336,7 +348,7 @@ char* fopMsgM_messageGet(char* msg, u32 string_id);
 void fopMsgM_passwordGet(char*, u32);
 fpc_ProcID fop_Timer_create(s16 param_0, u8 param_1, u16 param_2, u8 param_3, u8 param_4, f32 param_5,
                      f32 param_6, f32 param_7, f32 param_8, fopMsgCreateFunc createFunc);
-inline fpc_ProcID fopMsgM_Timer_create(s16 param_0, u8 param_1, u32 param_2, u8 param_3, u8 param_4,
+inline fpc_ProcID fopMsgM_Timer_create(s16 param_0, u8 param_1, u16 param_2, u8 param_3, u8 param_4,
                                 f32 param_5, f32 param_6, f32 param_7, f32 param_8,
                                 fopMsgCreateFunc createFunc) {
     return fop_Timer_create(param_0, param_1, param_2, param_3, param_4, param_5, param_6, param_7,
@@ -362,11 +374,15 @@ void fopMsgM_setNowAlpha(fopMsgM_pane_alpha_class*, f32);
 void fopMsgM_setAlpha(fopMsgM_pane_alpha_class*);
 
 u32 fopMsgM_searchMessageNumber(u32);
+bool fopMsgM_forceSendOn();
 void fopMsgM_messageSendOn();
 void fopMsgM_messageSendOff();
 bool fopMsgM_checkMessageSend();
 u32 fopMsgM_tactMessageSet();
 void fopMsgM_demoMsgFlagOn();
+
+bool fopMsgM_getScopeMode();
+bool fopMsgM_releaseScopeMode();
 
 void fopMsgM_demoMsgFlagOn();
 void fopMsgM_demoMsgFlagOff();

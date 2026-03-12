@@ -674,7 +674,7 @@ fopAc_ac_c* dEvent_manager_c::specialCast_Shutter(s16 profName, int flag) {
         goal.x += cM_ssin(angle) * 100.0f;
         goal.z += cM_scos(angle) * 100.0f;
         dComIfGp_evmng_setGoal(&goal);
-        g_dComIfG_gameInfo.play.getEvent().setPt2(shutter);
+        g_dComIfG_gameInfo.play.getEvent()->setPt2(shutter);
     }
 
     return shutter;

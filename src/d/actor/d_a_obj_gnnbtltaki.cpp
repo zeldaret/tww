@@ -6,7 +6,7 @@
 #include "d/actor/d_a_obj_gnnbtltaki.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-#include "d/res/res_kamome.h"
+#include "d/res/res_gnnbtltaki.h"
 
 const char daObjGnnbtaki_c::M_arcname[] = "Gnnbtltaki";
 
@@ -18,29 +18,18 @@ BOOL daObjGnnbtaki_c::solidHeapCB(fopAc_ac_c *i_this) {
 
 /* 00000098-000001F4       .text create_heap__15daObjGnnbtaki_cFv */
 BOOL daObjGnnbtaki_c::create_heap() {
-#if VERSION == VERSION_DEMO
     J3DModelData* mdl_data;
     J3DAnmTextureSRTKey* btk_data;
     BOOL ret = FALSE;
-    mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 4);
-#else
-    BOOL ret = FALSE;
-    J3DModelData *mdl_data =  static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 4));
-#endif
-    JUT_ASSERT(0x5A, mdl_data != NULL);
+    mdl_data =  static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GNNBTLTAKI_BDL_GNN_BTL_TAKI));
+    JUT_ASSERT(90, mdl_data != NULL);
     if (mdl_data != NULL) {
-        mJ3DModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
-        if (mJ3DModel != NULL) {
-#if VERSION == VERSION_DEMO
-            btk_data = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(M_arcname, 7);
-#else
-            J3DAnmTextureSRTKey *btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, 7));
-#endif
-            JUT_ASSERT(0x61, btk_data != NULL);
-            if (btk_data != NULL) {
-                if (mBtkAnm.init(mdl_data, btk_data, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0, 0, -1, false, FALSE)) {
-                    ret = TRUE;
-                }
+        mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
+        if (mpModel != NULL) {
+            btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, GNNBTLTAKI_BTK_GNN_BTL_TAKI));
+            JUT_ASSERT(97, btk_data != NULL);
+            if (btk_data != NULL && mBtkAnm.init(mdl_data, btk_data, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0, 0, -1, false, FALSE)) {
+                ret = TRUE;
             }
         }
     }
@@ -58,7 +47,7 @@ cPhs_State daObjGnnbtaki_c::_create() {
             if (field_0x2B1 == 0xF) {
                 field_0x2B1 = 0;
             }
-            cullMtx = mJ3DModel->getBaseTRMtx();
+            cullMtx = mpModel->getBaseTRMtx();
             init_mtx();
             mBtkAnm.getFrameCtrl()->setFrame(mBtkAnm.getStartFrame());
             if (field_0x2B1 == 1) {
@@ -76,17 +65,13 @@ cPhs_State daObjGnnbtaki_c::_create() {
 
 /* 000003EC-0000041C       .text _delete__15daObjGnnbtaki_cFv */
 bool daObjGnnbtaki_c::_delete() {
-#if VERSION == VERSION_DEMO
-    dComIfG_deleteObjectRes(M_arcname);
-#else
-    dComIfG_resDelete(&mPhase, M_arcname);
-#endif
+    dComIfG_resDeleteDemo(&mPhase, M_arcname);
     return true;
 }
 
 /* 0000041C-0000043C       .text init_mtx__15daObjGnnbtaki_cFv */
 void daObjGnnbtaki_c::init_mtx() {
-    mJ3DModel->setBaseScale(scale);
+    mpModel->setBaseScale(scale);
 }
 
 /* 0000043C-00000548       .text _execute__15daObjGnnbtaki_cFv */
@@ -111,9 +96,9 @@ bool daObjGnnbtaki_c::_execute() {
 bool daObjGnnbtaki_c::_draw() {
     if (field_0x2B0 != NULL) {
         g_env_light.settingTevStruct(TEV_TYPE_BG3, &current.pos, &tevStr);
-        g_env_light.setLightTevColorType(mJ3DModel, &tevStr);
-        mBtkAnm.entry(mJ3DModel->getModelData());
-        mDoExt_modelUpdateDL(mJ3DModel);
+        g_env_light.setLightTevColorType(mpModel, &tevStr);
+        mBtkAnm.entry(mpModel->getModelData());
+        mDoExt_modelUpdateDL(mpModel);
     }
     return true;
 }

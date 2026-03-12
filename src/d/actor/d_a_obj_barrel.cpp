@@ -59,7 +59,7 @@ const dCcD_SrcCyl daObjBarrel::Act_c::M_cyl_src = {
 
 const daObjBarrel::Act_c::Attr_c daObjBarrel::Act_c::M_attr = {
     /* mBdlIdx         */ KTARU_01_BDL_KTARU_01,
-    /* m02             */ 60,
+    /* mShadowSize     */ 60,
     /* mEnableCutoff   */ false,
     /* mAttnH          */ 50.0f,
     /* mNormalGravity  */ -6.0f,
@@ -727,7 +727,7 @@ bool daObjBarrel::Act_c::_draw() {
         cM3dGPla* gndPlane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         cXyz *norm = gndPlane->GetNP();
         if (norm && gndH != -G_CM3D_F_INF) {
-            dComIfGd_setSimpleShadow(&current.pos, gndH, attr().m02, norm);        
+            dComIfGd_setSimpleShadow(&current.pos, gndH, attr().mShadowSize, norm);        
         }
     }
     return true;

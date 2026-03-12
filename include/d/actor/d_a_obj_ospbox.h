@@ -2,7 +2,7 @@
 #define D_A_OBJ_OSPBOX_H
 
 #include "d/d_bg_s_movebg_actor.h"
-#include "include/d/d_bg_s_gnd_chk.h"
+#include "d/d_bg_s_gnd_chk.h"
 
 namespace daObjOspbox {
     class Act_c : public dBgS_MoveBgActor {

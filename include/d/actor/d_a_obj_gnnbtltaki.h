@@ -2,6 +2,7 @@
 #define D_A_OBJ_GNNBTLTAKI_H
 
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_ext.h"
 
 class daObjGnnbtaki_c : public fopAc_ac_c {
 public:
@@ -14,8 +15,7 @@ public:
     bool _draw();
     static const char M_arcname[];
 public:
-    /* Place member variables here */
-    /* 0x290 */ J3DModel* mJ3DModel;
+    /* 0x290 */ J3DModel* mpModel;
     /* 0x294 */ request_of_phase_process_class mPhase;
     /* 0x29C */ mDoExt_btkAnm mBtkAnm;
     /* 0x2B0 */ u8 field_0x2B0;

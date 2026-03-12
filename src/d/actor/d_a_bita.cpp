@@ -26,6 +26,7 @@ static u32 ita_Ef[]     = { BITA_BRK_EF_BTDITA0, BITA_BRK_EF_BTDITA1 };
 
 /* 00000078-000000C4       .text b_a_sub__FPvPv */
 static void* b_a_sub(void* search, void* user) {
+    UNUSED(user);
     if (fopAc_IsActor(search) && fopAcM_GetName(search) == PROC_BTD)
         return search;
     return NULL;

@@ -161,12 +161,24 @@ public:
         return mpEvtStaffName;
     }
 
+    int getNowCut() {
+        return mCurActIdx;
+    }
+
     bool getAttnFlag() {
         return mbAttention;
     }
 
     void setAttnFlag(bool flag) {
         mbAttention = flag;
+    }
+
+    void setAttnNoTurnFlag(bool flag) {
+        mbNoTurn = flag;
+    }
+
+    f32 getMoveSpeed() {
+        return mSpeed;
     }
 
     cXyz getAttnPos() {
@@ -270,7 +282,7 @@ public:
 
     virtual u16 next_msgStatus(u32* pMsgNo) { return fopMsgStts_MSG_ENDS_e; }
     virtual u32 getMsg() { return 0; }
-    virtual void anmAtr(u16) {}
+    virtual void anmAtr(u16 i_msgStatus) {}
 
     void setCollision(float radius, float height);
     u16 talk(int);

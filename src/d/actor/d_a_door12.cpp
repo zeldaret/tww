@@ -156,21 +156,12 @@ BOOL daDoor12_c::chkStopOpen() {
     }
 
     if (mFrontCheck == 0 && cVar4 == 2) {
-#if VERSION == VERSION_DEMO
-        if (dComIfGp_event_runCheck() == FALSE && dComIfGp_roomControl_checkRoomDisp(bVar5) && fopAcM_myRoomSearchEnemy(bVar5) == NULL) {
-            if (m2A1 != 0) {
-                m2A1--;
-                return FALSE;
-            }
-
-            if (uVar2 != 0xff) {
-                dComIfGs_onSwitch(uVar2, bVar5);
-            }
-            return TRUE;
-        }
-        m2A1 = 0x41;
-#else
-        if (!dComIfGp_event_runCheck() != FALSE || m2A1 == 0) {
+        if (
+            dComIfGp_event_runCheck() == FALSE
+            #if VERSION > VERSION_DEMO
+            || m2A1 == 0
+            #endif
+        ) {
             if (dComIfGp_roomControl_checkRoomDisp(bVar5) && fopAcM_myRoomSearchEnemy(bVar5) == NULL) {
                 if (m2A1 != 0) {
                     m2A1--;
@@ -182,9 +173,13 @@ BOOL daDoor12_c::chkStopOpen() {
                 }
                 return TRUE;
             }
+            #if VERSION > VERSION_DEMO
             m2A1 = 0x41;
+            #endif
         }
-#endif
+        #if VERSION == VERSION_DEMO
+        m2A1 = 0x41;
+        #endif
     } else if (uVar2 != 0xff && dComIfGs_isSwitch(uVar2, bVar5)) {
         return TRUE;
     }

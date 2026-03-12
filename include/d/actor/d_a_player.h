@@ -1,6 +1,7 @@
 #ifndef D_A_PLAYER
 #define D_A_PLAYER
 
+#include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_particle.h"
 #include "d/d_cc_d.h"
@@ -597,5 +598,9 @@ public:
     void setDoButtonQuake();
     void stopDoButtonQuake(BOOL);
 };  // Size: 0x320
+
+inline daPy_py_c* daPy_getPlayerActorClass() {
+    return (daPy_py_c*)dComIfGp_getPlayer(0);
+}
 
 #endif /* D_A_PLAYER */

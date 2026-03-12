@@ -271,6 +271,7 @@ void damage_mode_move(cc_class* i_this) {
 
 /* 00000C74-00000D30       .text s_b_sub__FPvPv */
 void* s_b_sub(void* arg0, void* arg1) {
+    UNUSED(arg1);
     if (fopAcM_IsActor(arg0)) {
         bool bVar2 = false;
         if (fopAcM_GetName(arg0) == PROC_BOMB) {
