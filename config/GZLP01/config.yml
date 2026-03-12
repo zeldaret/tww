@@ -1135,6 +1135,18 @@ modules:
   splits: config/GZLP01/rels/d_a_goal_flag/splits.txt
   symbols: config/GZLP01/rels/d_a_goal_flag/symbols.txt
   ldscript_template: config/GZLE01/rels/ldscript.tpl
+  extract:
+    - symbol: l_txa_dummy_hataTEX
+      binary: assets/l_txa_dummy_hataTEX.bin
+      header: assets/l_txa_dummy_hataTEX.h
+    - symbol: l_goal_flag_DL
+      binary: assets/l_goal_flag_DL.bin
+      header: assets/l_goal_flag_DL.h
+    - symbol: l_goal_flag_matDL
+      binary: assets/l_goal_flag_matDL.bin
+      header: assets/l_goal_flag_matDL.h
+      header_type: none
+      custom_type: matDL
 
 - object: files/rels/d_a_gy.rel
   splits: config/GZLP01/rels/d_a_gy/splits.txt
@@ -2359,6 +2371,11 @@ extract:
   binary: assets/l_sightDL__d_a_boomerang.bin
   header: assets/l_sightDL__d_a_boomerang.h
 
+- symbol: l_matDL$4438
+  binary: assets/l_matDL__draw__18daBoomerang_blur_cFv.bin
+  header: assets/l_matDL__draw__18daBoomerang_blur_cFv.h
+  rename: l_matDL
+
 - symbol: l_sightDL!.data:0x80396960
   binary: assets/l_sightDL__d_a_player_main.bin
   header: assets/l_sightDL__d_a_player_main.h
@@ -2379,3 +2396,14 @@ extract:
 - symbol: l_toonMat1DL
   binary: assets/l_toonMat1DL.bin
   header: assets/l_toonMat1DL.h
+
+- symbol: l_matDL!.data:0x8037DB00
+  binary: assets/l_matDL__d_cloth_packet.bin
+  header: assets/l_matDL__d_cloth_packet.h
+- symbol: l_alpha_matDL!.data:0x8037DB40
+  binary: assets/l_alpha_matDL__d_cloth_packet.bin
+  header: assets/l_alpha_matDL__d_cloth_packet.h
+
+- symbol: l_matDL!.data:0x80398AC0
+  binary: assets/l_matDL__d_menu_cloth.bin
+  header: assets/l_matDL__d_menu_cloth.h

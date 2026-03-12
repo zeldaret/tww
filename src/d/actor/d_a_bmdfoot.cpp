@@ -607,6 +607,7 @@ void move(bmdfoot_class* i_this) {
 
 /* 000021B8-00002204       .text s_a_d_sub__FPvPv */
 void* s_a_d_sub(void* search, void* param_2) {
+    UNUSED(param_2);
     if ((fopAc_IsActor(search)) && (fopAcM_GetName(search) == PROC_BMD)) {
         return search;
     } else {

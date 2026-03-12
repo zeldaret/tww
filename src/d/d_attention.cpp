@@ -55,7 +55,7 @@ bool dAttDraw_CallBack_c::execute(u16 timing, J3DTransformInfo* xform) {
 
 /* 8009D2E0-8009D654       .text __ct__12dAttention_cFP10fopAc_ac_cUl */
 dAttention_c::dAttention_c(fopAc_ac_c* i_player, u32 i_padNo) {
-    mpPlayer = (daPy_lk_c*)i_player;
+    mpPlayer = i_player;
     mPadNo = i_padNo;
     initList(0xFFFFFFFF);
     mFlagMask = 0;
@@ -848,7 +848,7 @@ void dAttention_c::judgementStatusHd(u32 interactMask) {
 bool dAttention_c::Run(u32 interactMask) {
     bool var = dComIfGs_getOptAttentionType() == 0;
     if (chkFlag(AttnFlag_00000080)) {
-        mpPlayer = (daPy_lk_c*)dComIfGp_getPlayer(0);
+        mpPlayer = dComIfGp_getPlayer(0);
         mPadNo = 0;
     }
     runDebugDisp0();

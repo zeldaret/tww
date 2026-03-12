@@ -76,23 +76,6 @@ BOOL daObjOspbox::Act_c::Create() {
     return TRUE;
 }
 
-const s16 pf_name[] = {
-    PROC_Obj_Ospbox,
-    PROC_KB,
-    PROC_KB,
-    PROC_KB,
-    PROC_Obj_Ospbox,
-    PROC_Obj_Ospbox,
-    PROC_Obj_Ospbox,
-    PROC_Obj_Ospbox
-};
-const u32 prm[] = {
-    0x00000000,
-    0x01FF0000,
-    0x01FF0001,
-    0x01FF0002
-};
-
 Mtx daObjOspbox::Act_c::M_tmp_mtx;
 
 /* 00000294-000004F8       .text Mthd_Create__Q211daObjOspbox5Act_cFv */
@@ -100,7 +83,12 @@ cPhs_State daObjOspbox::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, OSPBOX_DZB_OSPBOX, NULL, 0x8a0);
+        #if VERSION == VERSION_DEMO
+        const u32 heapSize = 0x1620;
+        #else
+        const u32 heapSize = 0x8A0;
+        #endif
+        phase_state = MoveBGCreate(M_arcname, OSPBOX_DZB_OSPBOX, NULL, heapSize);
         JUT_ASSERT(0xc3, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
@@ -134,6 +122,23 @@ void daObjOspbox::Act_c::init_mtx() {
 
 /* 00000CC0-00000D7C       .text make_item__Q211daObjOspbox5Act_cFv */
 void daObjOspbox::Act_c::make_item() {
+    static const s16 pf_name[] = {
+        PROC_Obj_Ospbox,
+        PROC_KB,
+        PROC_KB,
+        PROC_KB,
+        PROC_Obj_Ospbox,
+        PROC_Obj_Ospbox,
+        PROC_Obj_Ospbox,
+        PROC_Obj_Ospbox
+    };
+    static const u32 prm[] = {
+        0x00000000,
+        0x01FF0000,
+        0x01FF0001,
+        0x01FF0002
+    };
+
     int prm_index = prm_get_spec();
     if (pf_name[prm_index] == PROC_Obj_Ospbox) {
         int item_no = prm_get_itemNo();
@@ -141,14 +146,14 @@ void daObjOspbox::Act_c::make_item() {
             item_no, 0x7F,
             fopAcM_GetHomeRoomNo(this),
             daItemType_0_e,
-            fopAcM_GetAngle_p(this),
+            &current.angle,
             daItemAct_7_e,
             NULL);
     } else {
         fopAcM_create(pf_name[prm_index], prm[prm_index],
             &current.pos,
             fopAcM_GetHomeRoomNo(this),
-            fopAcM_GetAngle_p(this),
+            &current.angle,
             NULL,
             0xFF,
             NULL);

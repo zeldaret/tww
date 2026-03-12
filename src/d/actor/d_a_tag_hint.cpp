@@ -496,7 +496,7 @@ void daTag_Hint_c::talkInit() {
 
 /* 000018C0-00001A00       .text talk__12daTag_Hint_cFv */
 u16 daTag_Hint_c::talk() {
-    u16 sVar3 = 0xff;
+    u16 status = 0xff;
     if (m294 == 0) {
         l_msgId = fpcM_ERROR_PROCESS_ID_e;
         m290 = getMsg();
@@ -513,13 +513,13 @@ u16 daTag_Hint_c::talk() {
                 }
                 break;
             case 2:
-                sVar3 = l_msg->mStatus;
-                if (sVar3 == fopMsgStts_MSG_DISPLAYED_e) {
+                status = l_msg->mStatus;
+                if (status == fopMsgStts_MSG_DISPLAYED_e) {
                     l_msg->mStatus = next_msgStatus(&m290);
                     if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
                         fopMsgM_messageSet(m290);
                     }
-                } else if (sVar3 == fopMsgStts_BOX_CLOSED_e) {
+                } else if (status == fopMsgStts_BOX_CLOSED_e) {
                     l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
                     m294 = -1;
                 }
@@ -527,7 +527,7 @@ u16 daTag_Hint_c::talk() {
             }
         }
     }
-    return sVar3;
+    return status;
 }
 
 /* 00001A00-00001D98       .text actionEvent__12daTag_Hint_cFv */
@@ -573,7 +573,7 @@ BOOL daTag_Hint_c::actionEvent() {
     switch (iVar2) {
     case 1:
         sVar3 = talk();
-        if (sVar3 == 0x12) {
+        if (sVar3 == fopMsgStts_BOX_CLOSED_e) {
             mDoAud_seStart(JA_SE_ITM_OMAMORI_ED_TALK);
             dComIfGp_evmng_cutEnd(m29C);
             setActio(1);

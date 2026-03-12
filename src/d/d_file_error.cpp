@@ -4,130 +4,767 @@
 //
 
 #include "d/dolzel.h" // IWYU pragma: keep
+#include "d/d_com_inf_game.h"
 #include "d/d_file_error.h"
 #include "dolphin/types.h"
+#include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_do_controller_pad.h"
+
+dFe_HIO_c g_feHIO;
 
 /* 8017DB40-8017DBA8       .text __ct__9dFe_HIO_cFv */
 dFe_HIO_c::dFe_HIO_c() {
-    /* Nonmatching */
+    m8 = 5;
+    m9 = 5;
+    ma = 0;
+    m6 = -500;
+    mc = 7;
+    md = 0xa0;
+    me = 0x50;
+    mf = 0xe;
+    m10 = -5;
+    m12 = VERSION_SELECT(5, 5, 0, 0);
+
+#if VERSION == VERSION_USA
+    m14[0] = 1.4f;
+    m14[1] = 1.1f;
+#else
+    m14[0] = 1.8f;
+    m14[1] = 2.5f;
+#endif
 }
 
 /* 8017DBA8-8017DDEC       .text _create__13dFile_error_cFv */
 void dFile_error_c::_create() {
-    /* Nonmatching */
+    fileErr.Scr = new MyScreen();
+    JUT_ASSERT(VERSION_SELECT(103, 103, 116, 116), fileErr.Scr != NULL);
+
+    stick = new STControl(5, 2, 3, 2, 0.9, 0.5, 0, 0x2000);
+    JUT_ASSERT(VERSION_SELECT(108, 108, 121, 121), stick != NULL);
+
+    archive = dComIfGp_getErrorResArchive();
+    JUT_ASSERT(VERSION_SELECT(112, 112, 125, 125), archive != NULL);
+    fileErr.Scr->set("file_error.blo", archive);
+
+    fileErr.font = mDoExt_getMesgFont();
+    JUT_ASSERT(VERSION_SELECT(118, 118, 131, 131), fileErr.font != NULL);
+
+    g_feHIO.mNo = mDoHIO_createChild("エラー表示画面", &g_feHIO); // "Error Display Screen"
+
+    screenSet();
+    displayInit();
+    paneTransInit();
 }
 
 /* 8017DDEC-8017DE20       .text initial__13dFile_error_cFv */
 void dFile_error_c::initial() {
-    /* Nonmatching */
+    displayInit();
+    paneTransInit();
 }
 
 /* 8017DE20-8017DEA4       .text _delete__13dFile_error_cFv */
 void dFile_error_c::_delete() {
-    /* Nonmatching */
+    delete fileErr.Scr;
+
+    mDoExt_removeMesgFont();
+
+    delete stick;
+
+    archive->removeResourceAll();
+
+    mDoHIO_deleteChild(g_feHIO.mNo);
+}
+
+MyScreen::~MyScreen() {
 }
 
 /* 8017DF04-8017E010       .text setErrMessage__13dFile_error_cFUli */
-void dFile_error_c::setErrMessage(u32, int) {
-    /* Nonmatching */
+void dFile_error_c::setErrMessage(u32 stringId, int param_2) {
+    m2fa = (u8) param_2;
+
+    char message_buffer[512];
+
+    initial();
+
+    fopMsgM_messageGet(message_buffer, stringId);
+    int line_count = getLineCount(message_buffer);
+    if (line_count + 2 < VERSION_SELECT(9, 9, 12, 12)) {
+        resizeMsgBoard(line_count + 2);
+    }
+
+    f32 lineSpace = ((J2DTextBox*) msgPanes[2].pane)->getLineSpace();
+    f32 bottomY = msgPanes[2].mPosTopLeft.y + msgPanes[2].mSize.y;
+    m300 = bottomY - lineSpace * 2.0f;
+
+    m300 -= msgPanes[0].mPosTopLeft.y;
+
+    if (line_count > VERSION_SELECT(7, 7, 7, 10)) {
+        m300 += 20.0f;
+    }
+
+    ynCursorInit();
+    setMessage(message_buffer);
+
+    m2fe = 0;
+    m2f5 = 1;
+    mState = 1;
+
+    mDoAud_seStart(JA_SE_MSEL_ALERT_PANEL_IN);
 }
 
 /* 8017E010-8017E068       .text closeMessage__13dFile_error_cFv */
 void dFile_error_c::closeMessage() {
-    /* Nonmatching */
+    m2fe = 0;
+    mState = 2;
+
+    mDoAud_seStart(JA_SE_MSEL_ALERT_PANEL_OUT);
 }
 
 /* 8017E068-8017E228       .text resizeMsgBoard__13dFile_error_cFi */
-void dFile_error_c::resizeMsgBoard(int) {
-    /* Nonmatching */
+void dFile_error_c::resizeMsgBoard(int param_1) {
+    J2DPane *pane_2_pane = msgPanes[2].pane;
+    f32 pane_2_height = pane_2_pane->mBounds.f.y - pane_2_pane->mBounds.i.y;
+    f32 scale = ((pane_2_height / VERSION_SELECT(9.0f, 9.0f, 12.0f, 12.0f)) * (f32) param_1) / pane_2_height;
+
+    fopMsgM_paneScaleY(&msgPanes[2], scale);
+    fopMsgM_paneScaleY(&msgPanes[3], scale);
+
+    msgPanes[5].pane->resize(msgPanes[5].mSize.x, msgPanes[3].mSize.y + 32.0f);
+    msgPanes[7].pane->resize(msgPanes[7].mSize.x, msgPanes[3].mSize.y + 32.0f);
+
+    fopMsgM_paneScaleY(&msgPanes[8], scale);
+
+    msgPanes[9].pane->resize(msgPanes[9].mSize.x, msgPanes[8].mSize.y);
+    msgPanes[12].pane->resize(msgPanes[12].mSize.x, msgPanes[8].mSize.y);
+
+    msgPanes[4].pane->move(msgPanes[4].mPosTopLeft.x, msgPanes[3].mSize.y);
+
+    msgPanes[5].pane->move(msgPanes[5].mPosTopLeftOrig.x, msgPanes[5].mPosTopLeftOrig.y);
+    msgPanes[7].pane->move(msgPanes[7].mPosTopLeftOrig.x, msgPanes[7].mPosTopLeftOrig.y);
+    msgPanes[9].pane->move(msgPanes[9].mPosTopLeftOrig.x, msgPanes[9].mPosTopLeftOrig.y);
+    msgPanes[12].pane->move(msgPanes[12].mPosTopLeftOrig.x, msgPanes[12].mPosTopLeftOrig.y);
+
+    msgPanes[10].pane->move(msgPanes[10].mPosTopLeft.x, msgPanes[8].mSize.y);
 }
 
+#if VERSION <= VERSION_JPN
+f32 curxp[2] = {230.0f, 348.0f};
+#elif VERSION == VERSION_PAL
+// In the PAL version, `curxp` is initialized depending on the current language,
+// in `dFile_error_c::displayInit`
+f32 curxp[2];
+#else
+f32 curxp[2] = {265.0f, 345.0f};
+#endif
+
 /* 8017E228-8017E310       .text setMessage__13dFile_error_cFPc */
-void dFile_error_c::setMessage(char*) {
-    /* Nonmatching */
+void dFile_error_c::setMessage(char* message) {
+#if VERSION > VERSION_JPN
+    static char txt[] = "  /  ";
+#else
+    static char txt[] = "　／　";
+#endif
+
+    int j;
+    char* own_message;
+
+    int in_r9;
+#if VERSION > VERSION_JPN
+    switch(dComIfGs_getPalLanguage()) {
+        case 0:
+        case 2:
+            in_r9 = 3;
+            break;
+        case 1:
+        case 3:
+        case 4:
+            in_r9 = 2;
+            break;
+    }
+#else
+    in_r9 = 4;
+#endif
+
+    own_message = mMessage;
+    m2f7 = 0;
+
+    while (*message != '\0') {
+        if (*message == '\x1a') {
+            m2f7 = 1;
+            msgPanes[0].pane->mVisible = true;
+            msgPanes[1].pane->mVisible = true;
+
+            message ++;
+            for (int i = 0; i < in_r9; i ++) {
+                *(own_message ++) = *(message ++);
+            }
+
+            for (j = 0; txt[j] != '\0'; j ++) {
+                *(own_message ++) = txt[j];
+            }
+        } else {
+            *own_message = *message;
+            own_message ++;
+            message ++;
+        }
+    }
+
+    *own_message = '\0';
+
+#if VERSION == VERSION_PAL
+    if (*(own_message - 1) == ' ') {
+        *(own_message - 1) = '\0';
+    }
+#endif
 }
 
 /* 8017E310-8017E34C       .text getLineCount__13dFile_error_cFPc */
-void dFile_error_c::getLineCount(char*) {
-    /* Nonmatching */
+int dFile_error_c::getLineCount(char* text) {
+    int line_count = 0;
+
+    while (*text != '\0') {
+        if (*text == '\n') {
+            if (*(text + 1) != '\0') {
+                line_count ++;
+            }
+        }
+
+        text ++;
+    }
+
+    return line_count + 1;
 }
+
+typedef void(dFile_error_c::*procFunc)();
+procFunc FileErrProc[] = {
+    &dFile_error_c::ProcWait,
+    &dFile_error_c::ShowMsgBoard,
+    &dFile_error_c::HideMsgBoard,
+    &dFile_error_c::msgDispWait,
+    &dFile_error_c::yesNoSelectWait
+};
 
 /* 8017E34C-8017E384       .text _move__13dFile_error_cFv */
 void dFile_error_c::_move() {
-    /* Nonmatching */
+    return (this->*FileErrProc[mState])();
 }
 
 /* 8017E384-8017E388       .text ProcWait__13dFile_error_cFv */
 void dFile_error_c::ProcWait() {
-    /* Nonmatching */
+    return;
 }
 
 /* 8017E388-8017E4FC       .text ShowMsgBoard__13dFile_error_cFv */
 void dFile_error_c::ShowMsgBoard() {
-    /* Nonmatching */
+    int cond1 = PaneTranceBase(
+        m2fe,
+        g_feHIO.m8,
+        (f32) g_feHIO.m6,
+        40.0f,
+        curxp[mSelectedOption] - msgPanes[0].mPosTopLeftOrig.x,
+        m300 + (f32) g_feHIO.m12,
+        1,
+        0
+    );
+
+    int cond2;
+    if (cond1 == 1) {
+        cond2 = PaneTranceBase(
+            m2fe - g_feHIO.m8,
+            g_feHIO.m8,
+            40.0f,
+            0.0f,
+            curxp[mSelectedOption] - msgPanes[0].mPosTopLeftOrig.x,
+            m300 + (f32) g_feHIO.m12,
+            4,
+            2
+        );
+    }
+
+    m2fe ++;
+
+    if (cond1 == 1 && cond2 == 1) {
+        if (m2fa) {
+            mState = 0;
+        } else if (m2f7) {
+            mState = 4;
+        } else {
+            mState = 3;
+        }
+    }
 }
 
 /* 8017E4FC-8017E638       .text ynCursorInit__13dFile_error_cFv */
 void dFile_error_c::ynCursorInit() {
-    /* Nonmatching */
+    for (int i = 0; i < 2; i ++) {
+        fopMsgM_paneScaleX(&msgPanes[i], g_feHIO.m14[mSelectedOption]);
+    }
+
+    msgPanes[0].pane->rotate(
+        msgPanes[0].mSize.x / 2.0f,
+        msgPanes[0].mSize.y / 2.0f,
+        ROTATE_Z,
+        mPane0Rotation - (f32) g_feHIO.m10
+    );
+
+    msgPanes[1].pane->rotate(
+        msgPanes[1].mSize.x / 2.0f,
+        msgPanes[1].mSize.y / 2.0f,
+        ROTATE_Z,
+        mPane1Rotation + (f32) g_feHIO.m10
+    );
 }
 
 /* 8017E638-8017E798       .text HideMsgBoard__13dFile_error_cFv */
 void dFile_error_c::HideMsgBoard() {
-    /* Nonmatching */
+    int cond1 = PaneTranceBase(
+        m2fe,
+        g_feHIO.m9,
+        0.0f,
+        40.0f,
+        curxp[mSelectedOption] - msgPanes[0].mPosTopLeftOrig.x,
+        m300 + (f32) g_feHIO.m12,
+        4,
+        2
+    );
+
+    int cond2;
+    if (cond1 == 1) {
+        cond2 = PaneTranceBase(
+            m2fe - g_feHIO.m9,
+            g_feHIO.m9,
+            40.0f,
+            (f32) g_feHIO.m6,
+            curxp[mSelectedOption] - msgPanes[0].mPosTopLeftOrig.x,
+            m300 + (f32) g_feHIO.m12,
+            1,
+            1
+        );
+    }
+
+    m2fe ++;
+
+    if (cond1 == 1 && cond2 == 1) {
+        m2fc = 0;
+        m2fb = 0x5a;
+        m2f5 = 2;
+        mState = 0;
+    }
 }
 
 /* 8017E798-8017E86C       .text msgDispWait__13dFile_error_cFv */
 void dFile_error_c::msgDispWait() {
-    /* Nonmatching */
+    if (m2fc == 1 && m2fb != 0) {
+        m2fb --;
+    }
+
+    if (CPad_CHECK_TRIG_A(0) == 0 && CPad_CHECK_TRIG_B(0) == 0 && CPad_CHECK_TRIG_X(0) == 0 && CPad_CHECK_TRIG_Y(0) == 0 && CPad_CHECK_TRIG_L(0) == 0 && CPad_CHECK_TRIG_R(0) == 0 && CPad_CHECK_TRIG_Z(0) == 0 && CPad_CHECK_TRIG_START(0) == 0 && m2fb != 0) {
+        return;
+    }
+
+    m2fe = 0;
+    mState = 2;
+
+    mDoAud_seStart(JA_SE_MSEL_ALERT_PANEL_OUT);
 }
 
 /* 8017E86C-8017EA80       .text yesNoSelectWait__13dFile_error_cFv */
 void dFile_error_c::yesNoSelectWait() {
-    /* Nonmatching */
+    stick->checkTrigger();
+
+    if (CPad_CHECK_TRIG_A(0)) {
+        if (mSelectedOption == 0) {
+            mDoAud_seStart(JA_SE_MSEL_OK_1);
+        } else {
+            mDoAud_seStart(JA_SE_MSEL_CANCEL_1);
+        }
+
+        msgPanes[0].pane->mVisible = false;
+        msgPanes[1].pane->mVisible = false;
+
+        m2fe = 0;
+        mState = 2;
+
+        mDoAud_seStart(JA_SE_MSEL_ALERT_PANEL_OUT);
+    } else if (CPad_CHECK_TRIG_B(0)) {
+        mSelectedOption = 1;
+
+        ynCursorMove();
+
+        m2fe = 0;
+        mState = 2;
+
+        mDoAud_seStart(JA_SE_MSEL_ALERT_PANEL_OUT);
+    } else if (stick->checkLeftTrigger()) {
+        if (mSelectedOption != 0) {
+            mDoAud_seStart(JA_SE_MSEL_CURSOR);
+
+            mSelectedOption = 0;
+            ynCursorMove();
+        }
+    } else if (stick->checkRightTrigger()) {
+        if (mSelectedOption != 1) {
+            mDoAud_seStart(JA_SE_MSEL_CURSOR);
+
+            mSelectedOption = 1;
+            ynCursorMove();
+        }
+    }
+
+    ynCursorAnime();
 }
 
 /* 8017EA80-8017EC5C       .text ynCursorMove__13dFile_error_cFv */
 void dFile_error_c::ynCursorMove() {
-    /* Nonmatching */
+    msgPanes[0].mNowAlpha = g_feHIO.md;
+    msgPanes[1].mNowAlpha = g_feHIO.me;
+    msgPanes[0].mUserArea = (s16) g_feHIO.mc;
+    msgPanes[1].mUserArea = (s16) g_feHIO.mf;
+
+    m2f8 = 0;
+    m2f9 = 0;
+
+    fopMsgM_setAlpha(&msgPanes[0]);
+    fopMsgM_setAlpha(&msgPanes[1]);
+
+    for (int i = 0; i < 2; i ++) {
+        fopMsgM_paneScaleX(&msgPanes[i], g_feHIO.m14[mSelectedOption]);
+        fopMsgM_paneTrans(
+            &msgPanes[i],
+            curxp[mSelectedOption] - msgPanes[i].mPosTopLeftOrig.x,
+            m300 + (f32) g_feHIO.m12
+        );
+    }
+
+    msgPanes[0].pane->rotate(
+        msgPanes[0].mSize.x / 2.0f,
+        msgPanes[0].mSize.y / 2.0f,
+        ROTATE_Z,
+        mPane0Rotation - (f32) g_feHIO.m10
+    );
+
+    msgPanes[1].pane->rotate(
+        msgPanes[1].mSize.x / 2.0f,
+        msgPanes[1].mSize.y / 2.0f,
+        ROTATE_Z,
+        mPane1Rotation + (f32) g_feHIO.m10
+    );
 }
 
 /* 8017EC5C-8017EF40       .text ynCursorAnime__13dFile_error_cFv */
 void dFile_error_c::ynCursorAnime() {
-    /* Nonmatching */
+    static f32 xp1[] = {0.0f, 1.0f, 1.0f};
+    static f32 rt1[] = {0.0f, -3.0f, 4.0f};
+    static f32 xp2[] = {0.0f, -1.0f, -1.0f};
+    static f32 rt2[] = {0.0f, 4.0f, -3.0f};
+
+    if (msgPanes[0].mUserArea == 0) {
+        msgPanes[0].mUserArea = g_feHIO.mc;
+        fopMsgM_paneTrans(
+            &msgPanes[0],
+            curxp[mSelectedOption] - msgPanes[0].mPosTopLeftOrig.x + xp1[m2f9],
+            m300 + (f32) g_feHIO.m12
+        );
+
+        fopMsgM_paneTrans(
+            &msgPanes[1],
+            curxp[mSelectedOption] - msgPanes[1].mPosTopLeftOrig.x + xp2[m2f9],
+            m300 + (f32) g_feHIO.m12
+        );
+
+        msgPanes[0].pane->rotate(
+            msgPanes[0].mSize.x / 2.0f,
+            msgPanes[0].mSize.y / 2.0f,
+            ROTATE_Z,
+            (mPane0Rotation - (f32) g_feHIO.m10) + rt1[m2f9]
+        );
+
+        msgPanes[1].pane->rotate(
+            msgPanes[1].mSize.x / 2.0f,
+            msgPanes[1].mSize.y / 2.0f,
+            ROTATE_Z,
+            (mPane1Rotation + (f32) g_feHIO.m10) + rt2[m2f9]
+        );
+
+        m2f9 ++;
+        if (m2f9 > 2) {
+            m2f9 = 0;
+        }
+    } else {
+        msgPanes[0].mUserArea --;
+    }
+
+    f32 dVar9 = fopMsgM_valueIncrease(g_feHIO.mf, msgPanes[1].mUserArea, 0);
+    if (m2f8) {
+        dVar9 = 1.0f - dVar9;
+    }
+
+    f32 subtracted = (g_feHIO.md - g_feHIO.me);
+    u32 extra_alpha = subtracted * dVar9;
+    msgPanes[0].mNowAlpha = g_feHIO.me + extra_alpha;
+    msgPanes[1].mNowAlpha = g_feHIO.me + extra_alpha;
+    fopMsgM_setAlpha(&msgPanes[0]);
+    fopMsgM_setAlpha(&msgPanes[1]);
+
+    if (msgPanes[1].mUserArea == 0) {
+        msgPanes[1].mUserArea = g_feHIO.mf;
+        m2f8 ^= 1;
+    } else {
+        msgPanes[1].mUserArea --;
+    }
 }
 
 /* 8017EF40-8017F228       .text screenSet__13dFile_error_cFv */
 void dFile_error_c::screenSet() {
-    /* Nonmatching */
+    J2DPane* search_result;
+    char text_buffer[512];
+
+    search_result = fileErr.Scr->search('cur1');
+    fopMsgM_setPaneData(&msgPanes[0], search_result);
+    search_result = fileErr.Scr->search('cur2');
+    fopMsgM_setPaneData(&msgPanes[1], search_result);
+
+    mPane0Rotation = msgPanes[0].pane->mRotation;
+    mPane1Rotation = msgPanes[1].pane->mRotation;
+
+    int i;
+    int id_1 = 'cc00';
+    int id_2 = 'b000';
+
+    for (i = 0; i < 5; i ++) {
+        search_result = fileErr.Scr->search(id_1);
+        fopMsgM_setPaneData(&msgPanes[3] + i, search_result);
+        search_result = fileErr.Scr->search(id_2);
+        fopMsgM_setPaneData(&msgPanes[8] + i, search_result);
+
+        id_1 ++;
+        id_2 ++;
+    }
+
+    ((MyPicture*) msgPanes[4].pane)->m134 = 1;
+    ((MyPicture*) msgPanes[4].pane)->m124 = 0.0f;
+    ((MyPicture*) msgPanes[4].pane)->m128 = 0.0f;
+    ((MyPicture*) msgPanes[4].pane)->m12C = 4.0f;
+    ((MyPicture*) msgPanes[4].pane)->m130 = 1.0f;
+
+    ((MyPicture*) msgPanes[6].pane)->m134 = 1;
+    ((MyPicture*) msgPanes[6].pane)->m124 = 0.0f;
+    ((MyPicture*) msgPanes[6].pane)->m128 = 0.0f;
+    ((MyPicture*) msgPanes[6].pane)->m12C = 4.0f;
+    ((MyPicture*) msgPanes[6].pane)->m130 = 1.0f;
+
+    ((MyPicture*) msgPanes[5].pane)->m134 = 1;
+    ((MyPicture*) msgPanes[5].pane)->m124 = 0.0f;
+    ((MyPicture*) msgPanes[5].pane)->m128 = 0.0f;
+    ((MyPicture*) msgPanes[5].pane)->m12C = 4.0f;
+    ((MyPicture*) msgPanes[5].pane)->m130 = 1.0f;
+
+    ((MyPicture*) msgPanes[7].pane)->m134 = 1;
+    ((MyPicture*) msgPanes[7].pane)->m124 = 0.0f;
+    ((MyPicture*) msgPanes[7].pane)->m128 = 0.0f;
+    ((MyPicture*) msgPanes[7].pane)->m12C = 4.0f;
+    ((MyPicture*) msgPanes[7].pane)->m130 = 1.0f;
+
+    ((MyPicture*) msgPanes[10].pane)->m134 = 1;
+    ((MyPicture*) msgPanes[10].pane)->m124 = 0.0f;
+    ((MyPicture*) msgPanes[10].pane)->m128 = 0.0f;
+    ((MyPicture*) msgPanes[10].pane)->m12C = 2.0f;
+    ((MyPicture*) msgPanes[10].pane)->m130 = 1.0f;
+
+    ((MyPicture*) msgPanes[11].pane)->m134 = 1;
+    ((MyPicture*) msgPanes[11].pane)->m124 = 0.0f;
+    ((MyPicture*) msgPanes[11].pane)->m128 = 0.0f;
+    ((MyPicture*) msgPanes[11].pane)->m12C = 2.0f;
+    ((MyPicture*) msgPanes[11].pane)->m130 = 1.0f;
+
+    ((MyPicture*) msgPanes[9].pane)->m134 = 1;
+    ((MyPicture*) msgPanes[9].pane)->m124 = 0.0f;
+    ((MyPicture*) msgPanes[9].pane)->m128 = 0.0f;
+    ((MyPicture*) msgPanes[9].pane)->m12C = 2.0f;
+    ((MyPicture*) msgPanes[9].pane)->m130 = 1.0f;
+
+    ((MyPicture*) msgPanes[12].pane)->m134 = 1;
+    ((MyPicture*) msgPanes[12].pane)->m124 = 0.0f;
+    ((MyPicture*) msgPanes[12].pane)->m128 = 0.0f;
+    ((MyPicture*) msgPanes[12].pane)->m12C = 2.0f;
+    ((MyPicture*) msgPanes[12].pane)->m130 = 1.0f;
+
+    search_result = fileErr.Scr->search('mes');
+    fopMsgM_setPaneData(&msgPanes[2], search_result);
+    ((J2DTextBox *)msgPanes[2].pane)->setFont(fileErr.font);
+
+    for (int i = 0; i < 0x200; i++) {
+        text_buffer[i] = 'A';
+    }
+    text_buffer[511] = '\0';
+    ((J2DTextBox*) msgPanes[2].pane)->setString(text_buffer);
+
+    mMessage = ((J2DTextBox*) msgPanes[2].pane)->getStringPtr();
+    *mMessage = '\0';
 }
 
 /* 8017F228-8017F3E0       .text paneTransInit__13dFile_error_cFv */
 void dFile_error_c::paneTransInit() {
-    /* Nonmatching */
+    m2fe = 0;
+
+    int i;
+
+    for (i = 0; i < 5; i ++) {
+        (&msgPanes[3] + i)->mPosCenter.x = (&msgPanes[3] + i)->mPosCenterOrig.x;
+        (&msgPanes[3] + i)->mPosCenter.y = (&msgPanes[3] + i)->mPosCenterOrig.y;
+        (&msgPanes[3] + i)->mSize.x = (&msgPanes[3] + i)->mSizeOrig.x;
+        (&msgPanes[3] + i)->mSize.y = (&msgPanes[3] + i)->mSizeOrig.y;
+
+        fopMsgM_cposMove(&msgPanes[3] + i);
+
+        (&msgPanes[8] + i)->mPosCenter.x = (&msgPanes[8] + i)->mPosCenterOrig.x;
+        (&msgPanes[8] + i)->mPosCenter.y = (&msgPanes[8] + i)->mPosCenterOrig.y;
+        (&msgPanes[8] + i)->mSize.x = (&msgPanes[8] + i)->mSizeOrig.x;
+        (&msgPanes[8] + i)->mSize.y = (&msgPanes[8] + i)->mSizeOrig.y;
+
+        fopMsgM_cposMove(&msgPanes[8] + i);
+    }
+
+    for (i = 0; i < 2; i ++) {
+        msgPanes[i].mPosCenter.x = msgPanes[i].mPosCenterOrig.x;
+        msgPanes[i].mPosCenter.y = msgPanes[i].mPosCenterOrig.y;
+        msgPanes[i].mSize.x = msgPanes[i].mSizeOrig.x;
+        msgPanes[i].mSize.y = msgPanes[i].mSizeOrig.y;
+
+        fopMsgM_cposMove(&msgPanes[i]);
+    }
+
+    msgPanes[2].mPosCenter.x = msgPanes[2].mPosCenterOrig.x;
+    msgPanes[2].mPosCenter.y = msgPanes[2].mPosCenterOrig.y;
+    msgPanes[2].mSize.x = msgPanes[2].mSizeOrig.x;
+    msgPanes[2].mSize.y = msgPanes[2].mSizeOrig.y;
+
+    fopMsgM_cposMove(&msgPanes[2]);
+
+    msgPanes[0].mNowAlpha = g_feHIO.md;
+    msgPanes[1].mNowAlpha = g_feHIO.me;
+    msgPanes[0].mUserArea = g_feHIO.mc;
+    msgPanes[1].mUserArea = g_feHIO.mf;
+
+    m2f8 = 0;
+    m2f9 = 0;
+
+    fopMsgM_setAlpha(&msgPanes[0]);
+    fopMsgM_setAlpha(&msgPanes[1]);
+
+    mSelectedOption = 1;
+
+    PaneTranceBase(m2fe, g_feHIO.m8, (f32) g_feHIO.m6, 0.0, 0.0, 0.0, 1, 1);
+
+    msgPanes[0].pane->mVisible = false;
+    msgPanes[1].pane->mVisible = false;
 }
 
 /* 8017F3E0-8017F3FC       .text displayInit__13dFile_error_cFv */
 void dFile_error_c::displayInit() {
-    /* Nonmatching */
+#if VERSION == VERSION_PAL
+    switch(dComIfGs_getPalLanguage()) {
+        case 0:
+            curxp[0] = 265.0f;
+            curxp[1] = 345.0f;
+
+            g_feHIO.m14[0] = 1.4f;
+            g_feHIO.m14[1] = 1.1f;
+            break;
+        case 1:
+            curxp[0] = 255.0f;
+            curxp[1] = 338.0f;
+
+            g_feHIO.m14[0] = 1.1f;
+            g_feHIO.m14[1] = 1.6f;
+            break;
+        case 2:
+            curxp[0] = 259.0f;
+            curxp[1] = 344.0f;
+
+            g_feHIO.m14[0] = 1.4f;
+            g_feHIO.m14[1] = 1.5f;
+            break;
+        case 3:
+            curxp[0] = 265.0f;
+            curxp[1] = 337.0f;
+
+            g_feHIO.m14[0] = 1.1f;
+            g_feHIO.m14[1] = 1.1f;
+            break;
+        case 4:
+            curxp[0] = 265.0f;
+            curxp[1] = 337.0f;
+
+            g_feHIO.m14[0] = 1.1f;
+            g_feHIO.m14[1] = 1.1f;
+            break;
+    }
+#endif
+
+    m2fc = 0;
+    m2fb = 0x5a;
+    m2f5 = 0;
+    mState = 0;
 }
 
 /* 8017F3FC-8017F5A4       .text PaneTranceBase__13dFile_error_cFsUcffffUci */
-void dFile_error_c::PaneTranceBase(s16, u8, f32, f32, f32, f32, u8, int) {
-    /* Nonmatching */
+int dFile_error_c::PaneTranceBase(s16 param_1, u8 param_2, f32 param_3, f32 param_4, f32 param_5, f32 offsetY, u8 param_7, int param_8) {
+    int result;
+
+    if (param_1 < 0) {
+        result = 0;
+    } else if (param_1 > param_2) {
+        result = 1;
+    } else {
+        f32 alpha = fopMsgM_valueIncrease(param_2, param_1, param_7);
+        f32 y = alpha * (param_4 - param_3);
+
+        fopMsgM_paneTrans(&msgPanes[2], 0.0, (y = param_3 + y));
+        fopMsgM_paneTrans(&msgPanes[3], 0.0, y);
+        fopMsgM_paneTrans(&msgPanes[8], 0.0, y);
+        fopMsgM_paneTrans(&msgPanes[0], param_5, offsetY + y);
+        fopMsgM_paneTrans(&msgPanes[1], param_5, offsetY + y);
+
+        if (param_8 != 2) {
+            if (param_8 == 1) {
+                alpha = 1.0f - alpha;
+            }
+
+            fopMsgM_setNowAlpha(&msgPanes[2], alpha);
+            fopMsgM_setNowAlpha(&msgPanes[3], alpha);
+            fopMsgM_setNowAlpha(&msgPanes[8], alpha);
+            fopMsgM_setNowAlpha(&msgPanes[0], alpha);
+            fopMsgM_setNowAlpha(&msgPanes[1], alpha);
+
+            fopMsgM_setAlpha(&msgPanes[2]);
+            fopMsgM_setAlpha(&msgPanes[3]);
+            fopMsgM_setAlpha(&msgPanes[8]);
+            fopMsgM_setAlpha(&msgPanes[0]);
+            fopMsgM_setAlpha(&msgPanes[1]);
+        }
+
+        result = 0;
+    }
+
+    return result;
 }
 
 /* 8017F5A4-8017F5E0       .text _draw__13dFile_error_cFv */
 void dFile_error_c::_draw() {
-    /* Nonmatching */
+    dComIfGd_set2DOpa(&fileErr);
 }
 
 /* 8017F5E0-8017F618       .text draw2__13dFile_error_cFv */
 void dFile_error_c::draw2() {
-    /* Nonmatching */
+    fileErr.Scr->draw(0.0, 0.0, dComIfGp_getCurrentGrafPort());
 }
 
 /* 8017F618-8017F67C       .text draw__15dDlst_FileErr_cFv */
 void dDlst_FileErr_c::draw() {
-    /* Nonmatching */
+    J2DOrthoGraph* port = dComIfGp_getCurrentGrafPort();
+
+    port->setPort();
+
+    Scr->draw(0.0, 0.0, port);
 }

@@ -726,7 +726,7 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
 }
 
 /* 00002038-000022C0       .text anmAtr__10daNpc_Nz_cFUs */
-void daNpc_Nz_c::anmAtr(u16) {
+void daNpc_Nz_c::anmAtr(u16 i_msgStatus) {
     if(field_0x6D5 == 9 && mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
         setAnm(0, false);
     }

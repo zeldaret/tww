@@ -696,6 +696,13 @@ void dSv_player_get_bag_item_c::onReserve(u8 i_no) {
     mReserveFlags |= (1 << i_no);
 }
 
+#if VERSION == VERSION_DEMO
+void dSv_player_get_bag_item_c::offReserve(u8 i_no) {
+    JUT_ASSERT(1334, 0 <= i_no && i_no < 32);
+    mReserveFlags &= ~(1 << i_no);
+}
+#endif
+
 /* 8005ABB4-8005AC48       .text isReserve__25dSv_player_get_bag_item_cFUc */
 BOOL dSv_player_get_bag_item_c::isReserve(u8 i_no) {
     JUT_ASSERT(DEMO_SELECT(1349, 1355), 0 <= i_no && i_no < 32);
@@ -953,8 +960,8 @@ void dSv_player_info_c::init() {
     mDeathCount = 0;
     mClearCount = 0;
 
-    for (int i = 0; i < ARRAY_SIZE(field_0x47); i++) {
-        field_0x47[i] = 0;
+    for (int i = 0; i < ARRAY_SIZE(mPuzzleData); i++) {
+        mPuzzleData[i] = 0;
     }
 
     mRandomSalvagePoint = cM_rndF(3.0f);

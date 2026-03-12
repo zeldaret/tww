@@ -1362,11 +1362,12 @@ void bb_atack_move(bb_class* i_this) {
         kuti_open(i_this, 0x30, JA_SE_CV_BB_NORMAL);
     }
 
-#if VERSION == VERSION_DEMO
-    if (&player->base.base == fpcM_Search(pl_name_check, i_this) || l_bbHIO.unk_10 != 0)
-#else
-    if (&player->base.base == fpcM_Search(pl_name_check, i_this))
-#endif
+    if (
+        &player->base.base == fpcM_Search(pl_name_check, i_this)
+        #if VERSION == VERSION_DEMO
+        || l_bbHIO.unk_10 != 0
+        #endif
+    )
     {
         bb_kamome_attack(i_this);
         return;

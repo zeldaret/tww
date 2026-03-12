@@ -58,6 +58,8 @@ public:
         }
     }
 
+    cXyz getPos() { return mPos; }
+
 private:
     /* 0x04 */ bool mDrawFlag;
     /* 0x05 */ bool mLockFlag;
@@ -1276,7 +1278,7 @@ public:
     void setDamageEmitter();
     void endFlameDamageEmitter();
     void endDamageEmitter();
-    static u32 setItemWaterEffect(fopAc_ac_c*, int, int);
+    static BOOL setItemWaterEffect(fopAc_ac_c* i_actor, BOOL inWater, BOOL triggerOnExit);
     fopAc_ac_c* getDemoLookActor();
     void setTinkleCeiverModel();
     void setTalismanModel();
@@ -1608,7 +1610,7 @@ public:
     BOOL procRopeUpHang();
     BOOL checkBoomerangAnime() const;
     void throwBoomerang();
-    int returnBoomerang();
+    BOOL returnBoomerang();
     BOOL checkNextActionBoomerangReady();
     void checkNextActionBoomerangFly();
     BOOL checkNextBoomerangMode();
@@ -1846,8 +1848,8 @@ public:
     BOOL checkNoControll() const { return dComIfGp_getPlayer(0) != this; }
     void exchangeGrabActor(fopAc_ac_c* actor) { mActorKeepGrab.setData(actor); }
     void getDekuLeafWindPos() const {}
-    void getBoomerangCatchPos() const {}
-    void getLineTopPos() {}
+    cXyz getBoomerangCatchPos() const { return mBoomerangCatchPos; }
+    cXyz getLineTopPos() { return mSightPacket.getPos(); }
     cXyz getHookshotRootPos() const { return mHookshotRootPos; }
     void getIceParticleBtk() {}
     void getIceWaterParticleBtk() {}
@@ -2253,7 +2255,7 @@ public:
     /* 0x35D0 */ f32 m35D0;
     /* 0x35D4 */ f32 m35D4;
     /* 0x35D8 */ f32 m35D8;
-    /* 0x35DC */ f32 m35DC;
+    /* 0x35DC */ f32 mHangGroundH;
     /* 0x35E0 */ f32 m35E0;
     /* 0x35E4 */ f32 m35E4;
     /* 0x35E8 */ f32 m35E8;
@@ -2267,7 +2269,7 @@ public:
     /* 0x3608 */ f32 m3608;
     /* 0x360C */ f32 mSeAnmRate;
     /* 0x3610 */ f32 m3610;
-    /* 0x3614 */ int m3614;
+    /* 0x3614 */ int mShadowId;
     /* 0x3618 */ u32 mModeFlg;
     /* 0x361C */ u32 mMtrlSndId;
     /* 0x3620 */ u32 m3620;
@@ -2294,7 +2296,7 @@ public:
     /* 0x36D0 */ cXyz m36D0;
     /* 0x36DC */ cXyz m36DC;
     /* 0x36E8 */ cXyz mHookshotRootPos;
-    /* 0x36F4 */ cXyz m36F4;
+    /* 0x36F4 */ cXyz mBoomerangCatchPos;
     /* 0x3700 */ cXyz m3700;
     /* 0x370C */ cXyz m370C;
     /* 0x3718 */ cXyz m3718;
@@ -2342,5 +2344,9 @@ public:
     };  // Size: 0x08
     static const AnmDataTableEntry mAnmDataTable[];
 };  // Size: 0x4C28
+
+inline daPy_lk_c* daPy_getPlayerLinkActorClass() {
+    return (daPy_lk_c*)dComIfGp_getLinkPlayer();
+}
 
 #endif /* D_A_PLAYER_MAIN */

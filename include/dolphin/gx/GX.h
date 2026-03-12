@@ -188,8 +188,25 @@ inline void GXNormal1x8(u8 x) {
     GXFIFO.u8 = x;
 }
 
+inline void GXNormal1x16(u16 x) {
+    GXFIFO.u16 = x;
+}
+
 inline void GXColor1x16(u16 x) {
     GXFIFO.u16 = x;
+}
+
+inline void GXColor3x8(u8 r, u8 g, u8 b) {
+    GXFIFO.u8 = r;
+    GXFIFO.u8 = g;
+    GXFIFO.u8 = b;
+}
+
+inline void GXColor4x8(u8 r, u8 g, u8 b, u8 a) {
+    GXFIFO.u8 = r;
+    GXFIFO.u8 = g;
+    GXFIFO.u8 = b;
+    GXFIFO.u8 = a;
 }
 
 inline void GXTexCoord1x16(u16 x) {

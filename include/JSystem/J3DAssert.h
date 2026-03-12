@@ -1,0 +1,11 @@
+#ifndef J3DASSERT_H
+#define J3DASSERT_H
+
+#include "JSystem/JUtility/JUTAssert.h"
+
+#define J3D_ASSERT_NULLPTR(LINE, COND) 
+#define J3D_ASSERT_RANGE(LINE, COND) 
+#define J3D_ASSERT_NONZEROARG(LINE, COND) 
+#define J3D_ASSERT_ALLOCMEM(LINE, COND) 
+
+#endif /* J3DASSERT_H */

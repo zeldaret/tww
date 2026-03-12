@@ -186,8 +186,16 @@ public:
     void onShortHitFlg() { onStateFlg(daSFLG_UNK20_e); }
     void onStateFlg(daSHIP_SFLG flag) { mStateFlag |= flag; }
     void onTornadoFlg(u32 tornadoID) { mTornadoID = tornadoID; }
-    void onWhirlFlg(u32, s16) {}
-    void onWhirlFlgDirect(u32, s16) {}
+    void onWhirlFlg(u32 whirlID, s16 linkID) {
+        mWhirlID = whirlID;
+        m03B2 = linkID;
+        m0352 = 1;
+    }
+    void onWhirlFlgDirect(u32 whirlID, s16 linkID) {
+        mWhirlID = whirlID;
+        m03B2 = linkID;
+        m0352 = 0;
+    }
     void setAtnPos(const cXyz* pPos) {
         onStateFlg(daSFLG_UNK1000000_e);
         m1068 = *pPos;

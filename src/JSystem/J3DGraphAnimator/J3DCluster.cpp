@@ -10,8 +10,10 @@
 #include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/J3DAssert.h"
 #include "dolphin/os/OS.h"
 #include "string.h"
+#include "stdint.h"
 
 /* 802F37C4-802F37E4       .text clear__13J3DDeformDataFv */
 void J3DDeformData::clear() {
@@ -75,8 +77,8 @@ void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx, f32* weightList) {
     /* Nonmatching */
     if (checkFlag(2) && vtx->getVertexData()->getVtxPosType() == GX_F32) {
         J3DCluster* cluster = mDeformData->getClusterPointer(idx);
-        s32 posNum = cluster->mPosNum;
-        s32 keyNum = cluster->mKeyNum;
+        int posNum = cluster->mPosNum;
+        int keyNum = cluster->mKeyNum;
 
         u16 keyStart = 0;
         for (u16 i = 0; i < idx; i++)
@@ -88,7 +90,7 @@ void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx, f32* weightList) {
         f32* vtxPosDst = (f32*)vtx->getVtxPosArrayPointer(0);
         f32* vtxPosSrc = (f32*)mDeformData->getVtxPos();
 
-        for (s32 i = 0; i < posNum; i++) {
+        for (int i = 0; i < posNum; i++) {
             f32* vtx = &vtxPosDst[cluster->mPosDstIdx[i] * 3];
             vtx[0] = 0.0f;
             vtx[1] = 0.0f;
@@ -228,8 +230,6 @@ J3DSkinDeform::J3DSkinDeform() {
 
 /* 802F40F0-802F44E8       .text initMtxIndexArray__13J3DSkinDeformFP12J3DModelData */
 int J3DSkinDeform::initMtxIndexArray(J3DModelData* modelData) {
-    /* Nonmatching - operand swap */
-
     if (mPosUseMtx != NULL && mNrmUseMtx != NULL)
         return J3DErrType_Success;
 
@@ -271,18 +271,26 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* modelData) {
                 posOffs = vtxSize;
                 if (desc->type != GX_INDEX16) {
                     OSReport(" Invlid Data : CPU Pipeline process GX_INDEX16 Data Only\n");
+                    #if VERSION == VERSION_DEMO
+                    return; // !@bug: No return value
+                    #endif
                 }
                 break;
             case GX_VA_NRM:
                 nrmOffs = vtxSize;
                 if (desc->type != GX_INDEX16) {
                     OSReport(" Invlid Data : CPU Pipeline process GX_INDEX16 Data Only\n");
+                    #if VERSION == VERSION_DEMO
+                    return; // !@bug: No return value
+                    #endif
                 }
                 break;
             case GX_VA_TEX0:
+                #if VERSION > VERSION_DEMO
                 if (desc->type != GX_INDEX16) {
                     OSReport(" Invlid Data : CPU Pipeline process GX_INDEX16 Data Only\n");
                 }
+                #endif
                 break;
             default:
                 break;
@@ -296,18 +304,20 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* modelData) {
 
             u8* displayListStart = modelData->getShapeNodePointer(i)->getShapeDraw(j)->getDisplayList();
             for (u8* dl = displayListStart; (dl - displayListStart) < modelData->getShapeNodePointer(i)->getShapeDraw(j)->getDisplayListSize(); ) {
-                u8 cmd = dl[0];
+                u8 cmd = *dl;
+                dl++;
                 if (cmd != GX_TRIANGLEFAN && cmd != GX_TRIANGLESTRIP)
                     break;
 
-                u16 vtxCount = *(u16*)&dl[1];
+                int vtxCount = *(u16*)dl;
+                dl += 2;
 
                 u16 useMtxIdxBuf[10];
-                for (s32 k = 0; k < vtxCount; k++) {
-                    u8* vtx = &dl[3 + vtxSize * k];
-                    u8 pnmtxIdx = (u32)*(u8*)&vtx[pnmtxIdxOffs] / 3;
-                    u16 posIdx = *(u16*)&vtx[posOffs];
-                    u16 nrmIdx = *(u16*)&vtx[nrmOffs];
+                for (int k = 0; k < vtxCount; k++) {
+                    u8* src = &dl[vtxSize * k];
+                    u8 pnmtxIdx = (u32)*(u8*)&src[pnmtxIdxOffs] / 3;
+                    u16 posIdx = *(u16*)&src[posOffs];
+                    u16 nrmIdx = *(u16*)&src[nrmOffs];
 
                     u16 useMtxIdx = shapeMtx->getUseMtxIndex(pnmtxIdx);
                     if (useMtxIdx == 0xFFFF) {
@@ -321,8 +331,7 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* modelData) {
                         mNrmUseMtx[nrmIdx] = useMtxIdx;
                 }
 
-                dl += vtxSize * vtxCount;
-                dl += 3;
+                dl = (u8*)dl + vtxSize * vtxCount;
             }
 
             if (nrmOffs == -1) {
@@ -342,69 +351,66 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* modelData) {
     return J3DErrType_Success;
 }
 
-/* 802F44E8-802F4734       .text changeFastSkinDL__13J3DSkinDeformFP12J3DModelData */
-void J3DSkinDeform::changeFastSkinDL(J3DModelData* modelData) {
-    /* Nonmatching */
-    for (u16 i = 0; i < modelData->getShapeNum(); i++) {
-        int size[4] = { 0, 1, 1, 2 };
+void J3DSkinDeform::changeFastSkinDL(J3DModelData* pModelData) {
+    J3D_ASSERT_NULLPTR(740, pModelData != NULL);
+    for (u16 i = 0; i < pModelData->getShapeNum(); i++) {
+        u32 kSize[4] = {0,1,1,2};
         int pnmtxIdxOffs = -1;
         int vtxSize = 0;
 
-        for (GXVtxDescList* desc = modelData->getShapeNodePointer(i)->getVtxDesc(); desc->attr != GX_VA_NULL; desc++) {
-            if (desc->attr == GX_VA_PNMTXIDX) {
+        J3DShape* pShapeNode = pModelData->getShapeNodePointer(i);
+        for (GXVtxDescList* vtxDesc = pShapeNode->getVtxDesc(); vtxDesc->attr != GX_VA_NULL; vtxDesc++) {
+            if (vtxDesc->attr == GX_VA_PNMTXIDX) {
                 pnmtxIdxOffs = vtxSize;
             }
-
-            vtxSize += size[desc->type];
+            vtxSize += kSize[vtxDesc->type];
         }
 
         if (pnmtxIdxOffs != -1) {
-            for (u16 j = 0; j < modelData->getShapeNodePointer(i)->getMtxGroupNum(); j++) {
-                J3DShapeDraw* shapeDraw = modelData->getShapeNodePointer(i)->getShapeDraw(j);
-                u8* displayListStart = shapeDraw->getDisplayList();
+            for (u16 j = 0; j < (u16)pShapeNode->getMtxGroupNum(); j++) {
+                u8* displayListStart = pShapeNode->getShapeDraw(j)->getDisplayList();
                 u8* dl = displayListStart;
                 u8* dst = displayListStart;
-
-                for (; (dl - displayListStart) < shapeDraw->getDisplayListSize(); ) {
-                    u8 cmd = dl[0];
-                    *dst = cmd;
-                    dst += 1;
+                while ((dl - displayListStart) < pShapeNode->getShapeDraw(j)->getDisplayListSize()) {
+                    u8 cmd = *dl;
+                    dl++;
+                    *dst++ = cmd;
 
                     if (cmd != GX_TRIANGLEFAN && cmd != GX_TRIANGLESTRIP)
                         break;
 
-                    u32 vtxCount = *(u16*)&dl[1];
+                    int vtxCount = *(u16*)dl;
+                    dl += 2;
                     *(u16*)dst = vtxCount;
                     dst += 2;
 
-                    u32 vtxSizeDst = vtxSize - 1; // remove GX_VA_PNMTXIDX
-                    for (s32 k = 0; k < vtxCount; k++) {
-                        memcpy(dst, &dl[vtxSize * k + 3 + 1], vtxSizeDst);
-                        dst += vtxSizeDst;
+                    for (int k = 0; k < vtxCount; k++) {
+                        u8* src = &dl[vtxSize * k];
+                        memcpy(dst, src + 1, (int)(vtxSize - 1)); // The -1 is to remove GX_VA_PNMTXIDX
+                        dst += (int)(vtxSize - 1);
                     }
-
-                    dl += vtxSize * vtxCount + 3;
+                    dl = (u8*)dl + vtxSize * vtxCount;
                 }
 
-                u32 newSize = ((u32)dst + 0x1F & ~0x1F) - (u32)displayListStart;
-
-                for (; (dst - displayListStart) < modelData->getShapeNodePointer(i)->getShapeDraw(j)->getDisplayListSize();) {
+                int dlistSize = ((intptr_t)dst - (intptr_t)displayListStart + 0x1f) & ~0x1f;
+                while ((intptr_t)dst - (intptr_t)displayListStart < pShapeNode->getShapeDraw(j)->getDisplayListSize()) {
                     *dst++ = 0;
                 }
 
-                shapeDraw->setDisplayListSize(newSize);
-                DCStoreRange(displayListStart, shapeDraw->getDisplayListSize());
+                pShapeNode->getShapeDraw(j)->setDisplayListSize(dlistSize);
+                DCStoreRange(displayListStart, pShapeNode->getShapeDraw(j)->getDisplayListSize());
             }
         }
     }
 
-    for (u16 i = 0; i < modelData->getShapeNum(); i++) {
-        J3DShape* shape = modelData->getShapeNodePointer(i);
+    for (u16 i = 0; i < pModelData->getShapeNum(); i++) {
+        J3DShape* shape = pModelData->getShapeNodePointer(i);
         GXVtxDescList* desc = shape->getVtxDesc();
         GXVtxDescList* descDst = desc;
         for (; desc->attr != GX_VA_NULL; desc++) {
             if (desc->attr != GX_VA_PNMTXIDX) {
-                *descDst = *desc;
+                descDst->attr = desc->attr;
+                descDst->type = desc->type;
                 descDst++;
             }
         }
@@ -434,23 +440,18 @@ void J3DSkinDeform::calcNrmMtx(J3DModel* model) {
     }
 }
 
-#ifdef DEBUG
-#pragma push
-#pragma optimization_level 1
-#endif
 /* 802F4850-802F4974       .text deformVtxPos_F32__13J3DSkinDeformCFP8J3DModel */
 void J3DSkinDeform::deformVtxPos_F32(J3DModel* model) const {
-    /* Nonmatching - J3DPSMulMtxVec regalloc */
     Mtx* mtxArr[2];
     mtxArr[0] = (Mtx*)model->getAnmMtx(0);
     mtxArr[1] = (Mtx*)model->getWeightAnmMtx(0);
     model->getVertexBuffer()->swapTransformedVtxPos();
 
-    s32 vtxNum = model->getModelData()->getVtxNum();
+    int vtxNum = model->getModelData()->getVtxNum();
     Vec* curVtxPos = (Vec*)model->getCurrentVtxPos();
     Vec* transformedVtxPos = (Vec*)model->getVertexBuffer()->getTransformedVtxPos(0);
 
-    for (s32 i = 0; i < vtxNum; i++) {
+    for (int i = 0; i < vtxNum; i++) {
         Mtx* mtx = mtxArr[model->getModelData()->getDrawMtxFlag(mPosUseMtx[i])];
         J3DPSMulMtxVec(mtx[model->getModelData()->getDrawMtxIndex(mPosUseMtx[i])], &curVtxPos[i], &transformedVtxPos[i]);
     }
@@ -458,13 +459,9 @@ void J3DSkinDeform::deformVtxPos_F32(J3DModel* model) const {
     DCStoreRange(model->getVertexBuffer()->getTransformedVtxPos(0), model->getModelData()->getVtxNum() * sizeof(Vec));
     model->setCurrentVtxPos(transformedVtxPos);
 }
-#ifdef DEBUG
-#pragma pop
-#endif
 
 /* 802F4974-802F4AB4       .text deformVtxPos_S16__13J3DSkinDeformCFP8J3DModel */
 void J3DSkinDeform::deformVtxPos_S16(J3DModel* model) const {
-    /* Nonmatching - J3DPSMulMtxVec regalloc */
     Mtx* mtxArr[2];
     mtxArr[0] = (Mtx*)model->getAnmMtx(0);
     mtxArr[1] = (Mtx*)model->getWeightAnmMtx(0);
@@ -472,16 +469,13 @@ void J3DSkinDeform::deformVtxPos_S16(J3DModel* model) const {
     J3DGQRSetup7(model->getModelData()->getVertexData().getVtxPosFrac(), 7, model->getModelData()->getVertexData().getVtxPosFrac(), 7);
     model->getVertexBuffer()->swapTransformedVtxPos();
 
-    s32 vtxNum = model->getModelData()->getVtxNum();
-    SVec* curVtxPos = (SVec*)model->getCurrentVtxPos();
-    SVec* transformedVtxPos = (SVec*)model->getVertexBuffer()->getTransformedVtxPos(0);
+    int vtxNum = model->getModelData()->getVtxNum();
+    S16Vec* curVtxPos = (S16Vec*)model->getCurrentVtxPos();
+    S16Vec* transformedVtxPos = (S16Vec*)model->getVertexBuffer()->getTransformedVtxPos(0);
 
-    for (s32 i = 0; i < vtxNum; i++) {
+    for (int i = 0; i < vtxNum; i++) {
         Mtx* mtx = mtxArr[model->getModelData()->getDrawMtxFlag(mPosUseMtx[i])];
-// TODO: this line doesn't compile on debug
-#ifndef DEBUG
         J3DPSMulMtxVec(mtx[model->getModelData()->getDrawMtxIndex(mPosUseMtx[i])], &curVtxPos[i], &transformedVtxPos[i]);
-#endif
     }
 
     DCStoreRange(model->getVertexBuffer()->getTransformedVtxPos(0), model->getModelData()->getVtxNum() * sizeof(SVec));
@@ -490,14 +484,13 @@ void J3DSkinDeform::deformVtxPos_S16(J3DModel* model) const {
 
 /* 802F4AB4-802F4BB8       .text deformVtxNrm_F32__13J3DSkinDeformCFP8J3DModel */
 void J3DSkinDeform::deformVtxNrm_F32(J3DModel* model) const {
-    /* Nonmatching - J3DPSMulMtxVec regalloc */
     model->getVertexBuffer()->swapTransformedVtxNrm();
 
-    s32 vtxNum = model->getModelData()->getNrmNum();
+    int vtxNum = model->getModelData()->getNrmNum();
     Vec* curVtxNrm = (Vec*)model->getCurrentVtxNrm();
     Vec* transformedVtxNrm = (Vec*)model->getVertexBuffer()->getTransformedVtxNrm(0);
 
-    for (s32 i = 0; i < vtxNum; i++) {
+    for (int i = 0; i < vtxNum; i++) {
         J3DPSMulMtxVec(mNrmMtx[mNrmUseMtx[i]], &curVtxNrm[i], &transformedVtxNrm[i]);
     }
 
@@ -507,15 +500,14 @@ void J3DSkinDeform::deformVtxNrm_F32(J3DModel* model) const {
 
 /* 802F4BB8-802F4CD8       .text deformVtxNrm_S16__13J3DSkinDeformCFP8J3DModel */
 void J3DSkinDeform::deformVtxNrm_S16(J3DModel* model) const {
-    /* Nonmatching - J3DPSMulMtxVec regalloc */
     J3DGQRSetup7(model->getModelData()->getVertexData().getVtxNrmFrac(), 7, model->getModelData()->getVertexData().getVtxNrmFrac(), 7);
     model->getVertexBuffer()->swapTransformedVtxNrm();
 
-    s32 vtxNum = model->getModelData()->getNrmNum();
-    SVec* curVtxNrm = (SVec*)model->getCurrentVtxNrm();
-    SVec* transformedVtxNrm = (SVec*)model->getVertexBuffer()->getTransformedVtxNrm(0);
+    int vtxNum = model->getModelData()->getNrmNum();
+    S16Vec* curVtxNrm = (S16Vec*)model->getCurrentVtxNrm();
+    S16Vec* transformedVtxNrm = (S16Vec*)model->getVertexBuffer()->getTransformedVtxNrm(0);
 
-    for (s32 i = 0; i < vtxNum; i++) {
+    for (int i = 0; i < vtxNum; i++) {
         J3DPSMulMtxVec(mNrmMtx[mNrmUseMtx[i]], &curVtxNrm[i], &transformedVtxNrm[i]);
     }
 

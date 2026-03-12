@@ -284,7 +284,7 @@ void daNpc_Bm1_c::lookBack() {
 }
 
 /* 00002590-00002A58       .text next_msgStatus__11daNpc_Bm1_cFPUl */
-void daNpc_Bm1_c::next_msgStatus(unsigned long*) {
+u16 daNpc_Bm1_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
 }
 
@@ -354,7 +354,7 @@ void daNpc_Bm1_c::getMsg_BMD_1() {
 }
 
 /* 00003470-00003548       .text getMsg__11daNpc_Bm1_cFv */
-void daNpc_Bm1_c::getMsg() {
+u32 daNpc_Bm1_c::getMsg() {
     /* Nonmatching */
 }
 
