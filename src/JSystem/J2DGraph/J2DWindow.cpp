@@ -331,8 +331,10 @@ void J2DWindow::drawContentsTexture(f32 x0, f32 y0, f32 w, f32 h) {
 
     mpContentsTexture->load(GX_TEXMAP0);
     setTevMode(mpContentsTexture, 0x00000000, 0xFFFFFFFF);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBA6, 0);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
     GXPosition3f32(x0, y0, 0.0f);
