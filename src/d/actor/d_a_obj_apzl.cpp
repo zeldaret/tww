@@ -698,7 +698,7 @@ void daObjApzl_c::privateCut() {
                                         itemNo = dItem_PURPLE_RUPEE_e;
                                     }
                                 } else {
-                                    itemNo =1;
+                                    itemNo = dItem_GREEN_RUPEE_e;
                                 }
 #else
 
@@ -716,9 +716,9 @@ void daObjApzl_c::privateCut() {
                                     itemNo = dItem_PURPLE_RUPEE_e;
                                 }
                             } else if (mGivenRupeeCount % 6 == 0) {
-                                itemNo = 2;
+                                itemNo = dItem_BLUE_RUPEE_e;
                             } else {
-                                itemNo = 1;
+                                itemNo = dItem_GREEN_RUPEE_e;
                             }
 #endif
 
