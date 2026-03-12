@@ -26,7 +26,7 @@ public:
     cXyz* getShadowPos() { return mShadowPosArr; }
     GXTexObj* getTexObj() { return &mTexObj; }
     void setArchive(JKRArchive* arc) { mpArc = arc; }
-    void setClothType(MenuClothType type) { mClothType = type; } // ?
+    void setClothType(MenuClothType type) { mClothType = type; }
 
     void lightSet1(cXyz);
     void cloth_init();
