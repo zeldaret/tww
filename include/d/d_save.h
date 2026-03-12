@@ -439,9 +439,9 @@ public:
         if (mDeathCount < 9999)
             mDeathCount++;
     }
-    void getPuzzleInfo() {}
-    void setPuzzleInfo(u8) {}
-    void setPuzzleData(int, u8) {}
+    u8 getPuzzleInfo() { return mPuzzleData[16]; }
+    void setPuzzleInfo(u8 clearCount) { mPuzzleData[16] = clearCount; }
+    void setPuzzleData(int idx, u8 puzzlePiecePos) { mPuzzleData[idx] = puzzlePiecePos; }
     u8 getRandomSalvage() { return mRandomSalvagePoint; }
     void setRandomSalvage(u8 point) { mRandomSalvagePoint = point; }
 
@@ -451,7 +451,7 @@ public:
     /* 0x14 */ char mPlayerName[17];
     /* 0x25 */ char field_0x25[17];
     /* 0x36 */ char field_0x36[17];
-    /* 0x47 */ char field_0x47[17];
+    /* 0x47 */ u8 mPuzzleData[17];
     /* 0x58 */ u8 mClearCount;
     /* 0x59 */ u8 mRandomSalvagePoint;
     /* 0x5A */ u8 field_0x5a[0x5c - 0x5a];
