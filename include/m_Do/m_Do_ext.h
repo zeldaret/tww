@@ -583,7 +583,10 @@ public:
     
     void draw();
     void setMaterial();
-}; // Size: 0x10
+
+public:
+    /* 0x10 */ J3DModel* mpModel;
+}; // Size: 0x14
 
 class mDoExt_3Dline_c {
 public:
