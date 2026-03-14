@@ -146,7 +146,6 @@ const daObjBarrel2::Attr_c daObjBarrel2::Act_c::M_attr[] = {
         /* m6C */ 5.0f,
         /* m70 */ 1.0f,
     },
-
     {
         /* m00 */ 0x5,
         /* m02 */ 0x9,

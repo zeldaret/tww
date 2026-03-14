@@ -2928,7 +2928,6 @@ BOOL daNpc_Zl1_c::_delete() {
         }
     }
     return TRUE;
-
 #endif
 }
 
@@ -2960,7 +2959,6 @@ cPhs_State daNpc_Zl1_c::_create() {
     if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_siz_tbl[field_0x84E])) {
 #if VERSION == VERSION_DEMO
         mStateIsComplaete = false;
-
 #endif
         return cPhs_ERROR_e;
     } else {

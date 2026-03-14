@@ -35,7 +35,6 @@ daDoor12_HIO_c::daDoor12_HIO_c() {
     m08 = 200.0f;
     m0C = 0;
 }
-
 #endif
 
 /* 00000078-000000C0       .text chkMakeKey__10daDoor12_cFv */

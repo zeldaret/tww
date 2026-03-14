@@ -423,9 +423,9 @@ bool daFm_c::bodyCreateHeap() {
 /* 000009CC-00000A30       .text jntHitCreateHeap__6daFm_cFv */
 bool daFm_c::jntHitCreateHeap() {
     static Vec hand_sph_offset[] = {20.0f, 0.0f, 0.0f};
-    static Vec ude_cyl_offset[] = {{0.0f, 0.0f, 0.0f},    {60.0f, 0.0f, 0.0f}};
-    static Vec yubi_cyl_offset[]   = {{0.0f, 0.0f, 0.0f},    {15.0f, 0.0f, 0.0f}};
-    static Vec te_cyl2_offset[]     = {{20.0f, 0.0f, 0.0f},    {20.0f, -5.0f, 0.0f}};
+    static Vec ude_cyl_offset[] = {{0.0f, 0.0f, 0.0f}, {60.0f, 0.0f, 0.0f}};
+    static Vec yubi_cyl_offset[] = {{0.0f, 0.0f, 0.0f}, {15.0f, 0.0f, 0.0f}};
+    static Vec te_cyl2_offset[] = {{20.0f, 0.0f, 0.0f}, {20.0f, -5.0f, 0.0f}};
 
     static __jnt_hit_data_c search_data[] = {
         {
@@ -434,7 +434,6 @@ bool daFm_c::jntHitCreateHeap() {
             /* mRadius     */ 22.0f,
             /* mpOffsets   */ te_cyl2_offset,
         },
-
         {
             /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x01,
