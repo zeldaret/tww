@@ -3270,6 +3270,10 @@ inline u8 dComIfGp_event_getTactFreeCStick(int which) {
     return g_dComIfG_gameInfo.play.getEvent()->getTactFreeCStick(which);
 }
 
+inline void dComIfGp_event_photoCheck() {
+    g_dComIfG_gameInfo.play.getEvent()->photoCheck();
+}
+
 inline bool dComIfGp_getMetronome() {
     return g_dComIfG_gameInfo.play.getMetronome();
 }
