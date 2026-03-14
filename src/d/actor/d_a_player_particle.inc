@@ -124,8 +124,9 @@ void daPy_sightPacket_c::draw() {
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_S8, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_U8, 0);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U8, 0);
 
     GXTexObj texObj;
     GXColor color;
@@ -279,11 +280,13 @@ void daPy_swBlur_c::draw() {
     GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
 
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_S16, 8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 8);
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+
     GXSetNumChans(0);
 
     if (mBlurColorType == NORMAL_SLASH_BLUR) {
@@ -318,6 +321,7 @@ void daPy_swBlur_c::draw() {
     int r30 = 0xFF / ((field_0x014 >> 1) + 1);
     s16 r29 = r30;
     s16 r28 = 0x00;
+
     GXBegin(GX_QUADS, GX_VTXFMT0, 4 + field_0x014*4);
     for (int i = field_0x014; i >= 0; i--) {
         GXPosition3f32(field_0x034[i+0].x, field_0x034[i+0].y, field_0x034[i+0].z);
@@ -331,6 +335,7 @@ void daPy_swBlur_c::draw() {
         r28 = r29;
         r29 += r30;
     }
+    GXEnd();
 
 #if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();

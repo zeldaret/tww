@@ -110,7 +110,7 @@ void cnvAddress(f32 x1, f32 y1, f32* x2, f32* y2) {
 void dDlst_2Dt_Sp_c::draw() {
     dDlst_setResTimgObj(mDoGph_gInf_c::getFrameBufferTimg(), &mTexObj, mImagePtr, mImageWidth, mImageHeight);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_POS_XYZ, GX_U8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U8, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
