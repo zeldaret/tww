@@ -1,7 +1,9 @@
 #ifndef D_A_BIGELF_H
 #define D_A_BIGELF_H
 
+#include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
 
@@ -54,7 +56,7 @@ public:
     void demoProcCom();
     void getNowEventAction();
     void demoProc();
-    void getType();
+    u8 getType();
     void getSwbit();
     void getSwbit2();
     void getEventFlag();
@@ -68,7 +70,7 @@ public:
     void msgAnm(unsigned char);
     void talkInit();
     void talk();
-    void init();
+    BOOL init();
     void setAttention(bool);
     void lookBack();
     void hunt();
@@ -82,7 +84,7 @@ public:
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void CreateHeap();
+    BOOL CreateHeap();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhaseProcReq;
@@ -91,14 +93,15 @@ public:
     /* 0x2B4 */ mDoExt_btkAnm mBtkAnimator;
     /* 0x2C8 */ J3DModel* mpFlowerModel;
     /* 0x2CC */ mDoExt_brkAnm mFlowerBrkAnimator;
-    /* 0x2E4 */ s8 mHandRBJointIndex;
-    /* 0x2E5 */ u8 m2E5[0x2F0 - 0x2E5];
-    /* 0x2F0 */ s8 mHeadJointIndex;
-    /* 0x2F1 */ s8 mBackboneJointIndex;
-    /* 0x2F2 */ u8 m2F2[0x31C - 0x2F2];
+    /* 0x2E4 */ s8 m_fl_jnt;
+    /* 0x2E5 */ u8 m2E5[0x2E8 - 0x2E5];
+    /* 0x2E8 */ dNpc_JntCtrl_c m_jnt;
     /* 0x31C */ cXyz mUnkPos;
     /* 0x328 */ cXyz mCurrentPos;
-    /* 0x334 */ u8 m334[0x340 - 0x334];
+    /* 0x334 */ u16 m334;
+    /* 0x336 */ u8 m336;
+    /* 0x338 */ f32 m338;
+    /* 0x33C */ u8 m33C[0x340 - 0x33C];
     /* 0x340 */ u16 mStateBits;
     /* 0x342 */ u8 m342[0x346 - 0x342];
     /* 0x346 */ u8 mGivenItem;
@@ -119,12 +122,17 @@ public:
     /* 0x3A8 */ f32 m3A8;
     /* 0x3AC */ u8 m3AC[0x3B0 - 0x3AC];
     /* 0x3B0 */ ActionFunc mCurrentStateFunc;
-    /* 0x3BC */ u8 m3BC[0x3C4 - 0x3BC];
+    /* 0x3BC */ s8 m3BC;
+    /* 0x3BD */ u8 m3BD[0x3C4 - 0x3BD];
     /* 0x3C4 */ int mStaffId;
     /* 0x3C8 */ s16 m3C8;
     /* 0x3CA */ u8 m3CA[0x3E8 - 0x3CA];
     /* 0x3E8 */ f32 mHeightOffset;
-    /* 0x3EC */ u8 m3EC[0x3FC - 0x3EC];
+    /* 0x3EC */ f32 m3EC;
+    /* 0x3F0 */ f32 m3F0;
+    /* 0x3F4 */ u8 m3F4;
+    /* 0x3F5 */ u8 iBrkFrame;
+    /* 0x3F8 */ u8 m3F8[0x3FC - 0x3F8];
 };
 
 #endif /* D_A_BIGELF_H */

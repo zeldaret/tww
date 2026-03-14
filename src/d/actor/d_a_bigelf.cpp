@@ -7,6 +7,7 @@
 #include "d/actor/d_a_bigelf.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/res/res_bigelf.h"
 
 /* 00000078-0000016C       .text oct_delete__10daBigelf_cFv */
 void daBigelf_c::oct_delete() {
@@ -184,7 +185,7 @@ void daBigelf_c::demoProc() {
 }
 
 /* 00001CCC-00001CD8       .text getType__10daBigelf_cFv */
-void daBigelf_c::getType() {
+u8 daBigelf_c::getType() {
     /* Nonmatching */
 }
 
@@ -254,7 +255,7 @@ void daBigelf_c::talk() {
 }
 
 /* 0000236C-00002534       .text init__10daBigelf_cFv */
-void daBigelf_c::init() {
+BOOL daBigelf_c::init() {
     /* Nonmatching */
 }
 
@@ -305,32 +306,209 @@ void daBigelf_c::wait_action(void*) {
 
 /* 00002C8C-00002DB4       .text _draw__10daBigelf_cFv */
 BOOL daBigelf_c::_draw() {
-    /* Nonmatching */
+    J3DModel* bckModel = this->mpBckAnimator->getModel();
+    J3DModelData* bckModelData = bckModel->getModelData();
+    //J3DModel* flowerModel = this->mpFlowerModel;
+    J3DModelData* flowerModelData = this->mpFlowerModel->getModelData();
+    
+    if((this->mStateBits & 0b10) == 0b10){
+        return FALSE;
+    }
+
+    if((this->mStateBits & 0b10000) != 0b10000){
+        dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, fopAcM_GetPosition_p(this), &this->tevStr);
+    }
+
+    dKy_getEnvlight().setLightTevColorType(bckModel, &this->tevStr);
+    dKy_getEnvlight().setLightTevColorType(this->mpFlowerModel, &this->tevStr);
+    
+    this->mBrkAnimator.entry(bckModelData);
+    this->mBtkAnimator.entry(bckModelData);
+    this->mpBckAnimator->entry();
+
+    if((this->mStateBits & 0b1000) == 0b1000){
+        mFlowerBrkAnimator.entry(flowerModelData);
+        this->mpFlowerModel->setBaseTRMtx(bckModel->getAnmMtx(this->m_fl_jnt));
+        mDoExt_modelUpdateDL(this->mpFlowerModel);
+    }
+
+    return TRUE;
 }
 
 /* 00002DB4-00002F5C       .text _execute__10daBigelf_cFv */
 BOOL daBigelf_c::_execute() {
-    /* Nonmatching */
+    this->m_jnt.setParam(0,0,0,0,4000,9000,-2000,-4000,0x1000);
+    if((this->mStateBits & 0b10000) != 0b10000){
+        this->m336 = this->mpBckAnimator->play(&this->eyePos, 0, 0);
+        if(this->mpBckAnimator->getFrame() < this->m338 && this->m3BC != 3){
+            this->m336 = 1;
+        }
+        this->m338 = this->mpBckAnimator->getFrame();
+    }
+    this->mStateBits &= ~(0b1000);
+
+    (this->*mCurrentStateFunc)(NULL);
+
+    this->shape_angle.y = this->current.angle.y;
+    this->tevStr.mRoomNo = this->current.roomNo;
+    
+    J3DModel* bckModel = this->mpBckAnimator->getModel(); 
+    mDoMtx_stack_c::transS(this->current.pos);
+    mDoMtx_stack_c::YrotM(this->current.angle.y);
+    bckModel->setBaseScale(this->scale);
+    if((this->mStateBits & 0b10000) == 0b10000){
+        mDoMtx_stack_c::transM(0, this->mHeightOffset, 0);
+        mDoMtx_stack_c::scaleM(this->m3EC, this->m3F0, this->m3EC);
+        mDoMtx_stack_c::transM(0, -this->mHeightOffset, 0);
+    }
+
+    bckModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    this->mpBckAnimator->calc();
+    this->mBtkAnimator.play();
+
+    return TRUE;
 }
 
 /* 00002F5C-00002FAC       .text _delete__10daBigelf_cFv */
 BOOL daBigelf_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&this->mPhaseProcReq, "bigelf");
+    if(this->mpBckAnimator != NULL){
+        this->mpBckAnimator->stopZelAnime();
+    }
+
+    return TRUE;
 }
 
 /* 00002FAC-00002FCC       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daBigelf_c*>(i_this)->CreateHeap();
 }
 
 /* 00002FCC-00003124       .text _create__10daBigelf_cFv */
 cPhs_State daBigelf_c::_create() {
-    /* Nonmatching */
+
+    fopAcM_SetupActor(this, daBigelf_c);
+    cPhs_State ret = dComIfG_resLoad(&this->mPhaseProcReq, "bigelf");
+    if(ret == cPhs_COMPLEATE_e){
+        if(fopAcM_GetName(this) != PROC_BIGELF){
+            return cPhs_ERROR_e;
+        }
+
+        this->m3F4 = 0;
+
+        if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xb7b0)){
+            this->mpBckAnimator = NULL;
+                return cPhs_ERROR_e;
+            }
+    
+        fopAcM_SetMtx(this, this->mpBckAnimator->getModel()->getBaseTRMtx());
+
+        if(init() == FALSE){
+            this->mpBckAnimator = NULL;
+            return cPhs_ERROR_e;
+        }
+    }
+
+    return ret;
 }
 
 /* 00003224-00003808       .text CreateHeap__10daBigelf_cFv */
-void daBigelf_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daBigelf_c::CreateHeap() {
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("bigelf", BIGELF_BDL_DY));
+    JUT_ASSERT(2004, modelData);
+
+    this->mpBckAnimator = new mDoExt_McaMorf(
+        modelData, 
+        NULL, NULL,
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("bigelf", BIGELF_BCK_WAIT01)),
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
+        NULL,
+        0x80000,
+        0x11000222);
+    
+    if(this->mpBckAnimator == NULL || this->mpBckAnimator->getModel() == 0)
+        return FALSE;
+
+    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("bigelf", BIGELF_BRK_DY_BODY));
+    if(this->mBrkAnimator.init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1, 0, -1, false, 0) == 0)
+        return FALSE;
+
+    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("bigelf", BIGELF_BTK_DY_BODY));
+    if(this->mBtkAnimator.init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1, 0, -1, false, 0) == 0)
+        return FALSE;
+
+    J3DSkinDeform* pSkin = new J3DSkinDeform();
+    if(pSkin == NULL)
+        return FALSE;
+
+    switch(this->mpBckAnimator->getModel()->setSkinDeform(pSkin, 1)){
+        case 0:
+
+            break;
+
+        case 4:
+            return FALSE;
+        
+        default:
+            JUT_ASSERT(2065, 0);
+    }
+
+    J3DModel* bckModel = this->mpBckAnimator->getModel();
+    mDoMtx_stack_c::transS(this->current.pos);
+    mDoMtx_stack_c::YrotM(this->current.angle.y);
+    bckModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    this->mpBckAnimator->calc();
+
+    this->m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
+    JUT_ASSERT(2084, m_jnt.getHeadJntNum() >= 0);
+
+    this->m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
+    JUT_ASSERT(2089, m_jnt.getBackboneJntNum() >= 0);
+
+    this->m_fl_jnt = modelData->getJointName()->getIndex("handRB");
+    JUT_ASSERT(2093, m_fl_jnt >= 0);
+
+    for(u16 i_jnt = 0; i_jnt < modelData->getJointNum(); i_jnt++){
+        if(i_jnt == this->m_jnt.mHeadJntNum || i_jnt == this->m_jnt.mBackboneJntNum || i_jnt == this->m_fl_jnt)
+            this->mpBckAnimator->getModel()->getModelData()->getJointTree().getJointNodePointer(i_jnt)->setCallBack(nodeCallBack_Bigelf);
+    }
+    
+    this->mpBckAnimator->getModel()->setUserArea((u32)this); // Unsafe casting because weird things here
+
+
+    J3DModelData* flModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("bigelf", BIGELF_BDL_DY_FL));
+    JUT_ASSERT(2114, flModelData);
+
+    this->mpFlowerModel = mDoExt_J3DModel__create(flModelData, 0x80000, 0x100000);
+    if(this->mpFlowerModel == 0)
+        return FALSE;
+
+    pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("bigelf", BIGELF_BRK_DY_FL));
+    if(this->mFlowerBrkAnimator.init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1, 0, -1, false, 0) == 0)
+        return FALSE;
+ 
+    this->iBrkFrame = 0;
+    switch(this->getType()){
+        case 2:
+        case 3:
+            this->mBrkAnimator.setFrame(1);
+            this->mFlowerBrkAnimator.setFrame(1);
+            this->iBrkFrame = 1;
+            break;
+        case 4:
+        case 5:
+            this->mBrkAnimator.setFrame(2);
+            this->mFlowerBrkAnimator.setFrame(2);
+            this->iBrkFrame = 2;
+            break;
+        case 6:
+            this->mBrkAnimator.setFrame(3);
+            this->mFlowerBrkAnimator.setFrame(3);
+            this->iBrkFrame = 3;
+            break;
+    }
+
+    return TRUE;
 }
 
 /* 00003808-00003828       .text daBigelf_Create__FP10fopAc_ac_c */
