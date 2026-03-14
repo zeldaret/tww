@@ -385,8 +385,54 @@ void dMs_childHeap_freeAll(sub_ms_screen_class* i_Ms) {
 }
 
 /* 801DD434-801DD5CC       .text dMs_telescopeMove__FP19sub_ms_screen_class */
-void dMs_telescopeMove(sub_ms_screen_class*) {
-    /* Nonmatching */
+void dMs_telescopeMove(sub_ms_screen_class* i_Ms) {
+    if (dComIfGp_isHeapLockFlag() == 0) {
+        dComIfGp_event_photoCheck();
+        if (dComIfGp_checkCameraAttentionStatus(0, 8)) {
+            i_Ms->field_0x1B0 = 99;
+        } else {
+            if (dComIfGp_checkCameraAttentionStatus(0, 0x40)) {
+                i_Ms->field_0x1B0 = 89;
+            } else {
+                if (dComIfGp_getScopeType() == 2) {
+                    i_Ms->field_0x1B0 = 98;
+                } else if (dComIfGp_getPictureStatus() == 2 || dComIfGp_getPictureStatus() == 3) {
+                    i_Ms->field_0x1B0 = 89;
+                    dMenu_flagSet(1);
+                }
+            }
+        }
+
+        if (i_Ms->field_0x1B0 == 99 || i_Ms->field_0x1B0 == 89 || i_Ms->field_0x1B0 == 98) {
+            if (i_Ms->mMsgID == fpcM_ERROR_PROCESS_ID_e) {
+                cXyz pos(0.0f, 0.0f, 0.0f);
+                i_Ms->mMsgID = fopMsgM_messageSet(i_Ms->field_0x1B0 << 0x10, &pos);
+
+                switch (i_Ms->field_0x1B0) {
+                case 98:
+                case 99: {
+                    dComIfGp_setHeapLockFlag(5);
+                } break;
+                case 89: {
+                    dComIfGp_setHeapLockFlag(6);
+                } break;
+                }
+            }
+        }
+    } else {
+        if (i_Ms->mMsgID != fpcM_ERROR_PROCESS_ID_e) {
+            msg_class* msg = fopMsgM_SearchByID(i_Ms->mMsgID);
+            if (msg != NULL) {
+                if (msg->mStatus == fopMsgStts_MSG_DISPLAYED_e) {
+                    msg->mStatus = fopMsgStts_MSG_ENDS_e;
+                } else if (msg->mStatus == fopMsgStts_BOX_CLOSED_e) {
+                    msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+                    i_Ms->mMsgID = fpcM_ERROR_PROCESS_ID_e;
+                    i_Ms->field_0x1B0 = 0;
+                }
+            }
+        }
+    }
 }
 
 /* 801DD5CC-801DD6D8       .text dMs_placenameMove__FP19sub_ms_screen_class */
@@ -437,7 +483,7 @@ static cPhs_State dMs_Create(msg_class* i_this) {
     g_dComIfG_gameInfo.play.field_0x4952 = 0;
 
     i_Ms->mButtonsPressed = 0;
-    i_Ms->field_0x108 = -1;
+    i_Ms->mMsgID = -1;
     i_Ms->field_0x1B0 = 0;
 
     g_dComIfG_gameInfo.play.offHeapLockFlag();
