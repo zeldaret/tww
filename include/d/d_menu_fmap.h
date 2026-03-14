@@ -3,6 +3,7 @@
 
 #include "dolphin/types.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "d_menu_fmap2.h"
 
 class JUTFont;
 class J2DScreen;
@@ -13,6 +14,8 @@ struct aramCmapDatPat_t;
 
 class dMenu_Fmap_c {
 public:
+    virtual ~dMenu_Fmap_c() {}
+
     void draw() {}
     void getCtCurWX() {}
     void getCtCurWY() {}
@@ -169,6 +172,10 @@ public:
     void fmEndWait();
     void _open_wallPaper();
     void getButtonIconMode();
+
+public:
+    /* 0x0004 */ u8 padding_0x4[0x24 - 0x4];
+    /* 0x0024 */ dMenu_Fmap2_c mFmap2;
 };
 
 class dDlst_FMAP_c {

@@ -11,6 +11,8 @@ class dMenu_FmapSv_c;
 
 class dMenu_Fmap2_c {
 public:
+    virtual ~dMenu_Fmap2_c() {}
+
     void getCmapDatPnt(int) {}
     void getCmapDatValue() {}
     void getCtActive() {}
@@ -138,7 +140,12 @@ public:
     void isOpenCollectMapTriforce(signed char);
     void getCollectMapKind(signed char);
     void isCompleteCollectMap(signed char);
+
+public:
+    /* 0x0004 */ u8 padding_0x4[0x2850 - 0x4];
 };
+
+STATIC_ASSERT(sizeof(dMenu_Fmap2_c) == 0x2850);
 
 class dDlst_FMAP2_c {
 public:
