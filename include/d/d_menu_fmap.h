@@ -3,7 +3,7 @@
 
 #include "dolphin/types.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include "d_menu_fmap2.h"
+#include "d/d_menu_fmap2.h"
 
 class JUTFont;
 class J2DScreen;
