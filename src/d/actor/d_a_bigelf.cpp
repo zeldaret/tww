@@ -218,22 +218,22 @@ void daBigelf_c::demoProc() {
 }
 
 /* 00001CCC-00001CD8       .text getType__10daBigelf_cFv */
-u8 daBigelf_c::getType() {
+u32 daBigelf_c::getType() {
     /* Nonmatching */
 }
 
 /* 00001CD8-00001CE4       .text getSwbit__10daBigelf_cFv */
-uint daBigelf_c::getSwbit() {
+u32 daBigelf_c::getSwbit() {
     /* Nonmatching */
 }
 
 /* 00001CE4-00001CF0       .text getSwbit2__10daBigelf_cFv */
-void daBigelf_c::getSwbit2() {
+u32 daBigelf_c::getSwbit2() {
     /* Nonmatching */
 }
 
 /* 00001CF0-00001D70       .text getEventFlag__10daBigelf_cFv */
-void daBigelf_c::getEventFlag() {
+u16 daBigelf_c::getEventFlag() {
     /* Nonmatching */
 }
 
@@ -373,8 +373,20 @@ BOOL daBigelf_c::ready0() {
 }
 
 /* 000029A0-00002A78       .text event0__10daBigelf_cFv */
-void daBigelf_c::event0() {
-    /* Nonmatching */
+BOOL daBigelf_c::event0() {
+    if(dComIfGp_evmng_endCheck(this->mArrivalEvtID)){
+        dComIfGs_onEventBit(getEventFlag());
+        this->m3BD = 3;
+        dComIfGp_event_onEventFlag(8);
+        if((getType() & 0xff) == 6 && (getSwbit2() & 0xff) != 0xff){
+            dComIfGs_onSwitch(getSwbit2() & 0xff, this->current.roomNo);
+        }
+    }
+    else {
+        demoProc();
+    }
+
+    return TRUE;
 }
 
 /* 00002A78-00002A80       .text dead__10daBigelf_cFv */

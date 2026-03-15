@@ -55,10 +55,10 @@ public:
     void demoProcCom();
     void getNowEventAction();
     void demoProc();
-    u8 getType();
-    uint getSwbit();
-    void getSwbit2();
-    void getEventFlag();
+    u32 getType();
+    u32 getSwbit();
+    u32 getSwbit2();
+    u16 getEventFlag();
     void makeFa1S();
     void makeFa1();
     void setAnm(signed char);
@@ -76,7 +76,7 @@ public:
     BOOL oct_search();
     BOOL oct();
     BOOL ready0();
-    void event0();
+    BOOL event0();
     void dead();
     void wait_action(void*);
     BOOL _draw();
