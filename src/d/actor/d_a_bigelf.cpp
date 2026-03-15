@@ -41,17 +41,26 @@ void daBigelf_c::lightProc() {
 
 /* 0000047C-00000488       .text darkInit__10daBigelf_cFv */
 void daBigelf_c::darkInit() {
-    /* Nonmatching */
+    this->bIsDark = 1;
 }
 
 /* 00000488-000004D0       .text darkEnd__10daBigelf_cFv */
 void daBigelf_c::darkEnd() {
-    /* Nonmatching */
+    this->bIsDark = 0;
+    dKy_set_actcol_ratio(0.0f);
+    dKy_set_bgcol_ratio(0.0f);
+    dKy_set_vrboxcol_ratio(0.0f);
 }
 
 /* 000004D0-00000574       .text darkProc__10daBigelf_cFv */
 void daBigelf_c::darkProc() {
-    /* Nonmatching */
+    if(this->bIsDark){
+        cLib_addCalc2(&this->m3A0,this->m3A4, 0.1f, 1.0f);
+        dKy_set_actcol_ratio(this->m3A0 * 0.7f + 0.3f);
+        float ratio = this->m3A0 * 0.6f + 0.4f;
+        dKy_set_bgcol_ratio(ratio);
+        dKy_set_vrboxcol_ratio(ratio);
+    }
 }
 
 /* 00000574-00000588       .text demoInitFlDelete__10daBigelf_cFv */

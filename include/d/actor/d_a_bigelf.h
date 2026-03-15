@@ -116,7 +116,8 @@ public:
     /* 0x380 */ GXColorS10 mLightInfluenceColor;
     /* 0x388 */ f32 mLightInfluencePower;
     /* 0x38C */ f32 mLightInfluenceFluctuation;
-    /* 0x390 */ u8 m390[0x3A0 - 0x390];
+    /* 0x390 */ u8 m390[0x39C - 0x390];
+    /* 0x39C */ u8 bIsDark;
     /* 0x3A0 */ f32 m3A0;
     /* 0x3A4 */ f32 m3A4;
     /* 0x3A8 */ f32 m3A8;
