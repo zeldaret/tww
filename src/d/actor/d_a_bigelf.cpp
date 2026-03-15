@@ -218,18 +218,18 @@ void daBigelf_c::demoProc() {
 }
 
 /* 00001CCC-00001CD8       .text getType__10daBigelf_cFv */
-u32 daBigelf_c::getType() {
-    /* Nonmatching */
+u8 daBigelf_c::getType() {
+    return fopAcM_GetParam(this);
 }
 
 /* 00001CD8-00001CE4       .text getSwbit__10daBigelf_cFv */
-u32 daBigelf_c::getSwbit() {
-    /* Nonmatching */
+u8 daBigelf_c::getSwbit() {
+    return fopAcM_GetParam(this) >> 0x8;
 }
 
 /* 00001CE4-00001CF0       .text getSwbit2__10daBigelf_cFv */
-u32 daBigelf_c::getSwbit2() {
-    /* Nonmatching */
+u8 daBigelf_c::getSwbit2() {
+    return fopAcM_GetParam(this) >> 0x10;
 }
 
 /* 00001CF0-00001D70       .text getEventFlag__10daBigelf_cFv */
@@ -303,12 +303,12 @@ void daBigelf_c::lookBack() {
 }
 
 /* 000025F4-000026C0       .text hunt__10daBigelf_cFv */
-void daBigelf_c::hunt() {
+bool daBigelf_c::hunt() {
     /* Nonmatching */
 }
 
 /* 000026C0-00002730       .text oct_search__10daBigelf_cFv */
-BOOL daBigelf_c::oct_search() {
+bool daBigelf_c::oct_search() {
     fopAc_ac_c* actOcto = fopAcM_searchFromName("Daiocta", 0, 0);
     if(actOcto != NULL){
         this->mOctID = fopAcM_GetID(actOcto);
@@ -316,11 +316,11 @@ BOOL daBigelf_c::oct_search() {
         this->m3AC = 10;
     }
 
-    return TRUE;
+    return true;
 }
 
 /* 00002730-000028E8       .text oct__10daBigelf_cFv */
-BOOL daBigelf_c::oct() {
+bool daBigelf_c::oct() {
     fopAc_ac_c* actOcto = fopAcM_SearchByID(this->mOctID);
     if(actOcto != NULL){
         this->current.pos = actOcto->current.pos;
@@ -339,7 +339,7 @@ BOOL daBigelf_c::oct() {
             this->mStateBits &= ~(0b100000);
     }
 
-    if(dComIfGs_isSwitch(static_cast<u8>(this->getSwbit()), this->current.roomNo)){
+    if(dComIfGs_isSwitch(getSwbit(), fopAcM_GetRoomNo(this))){
         if(this->m3AC > 0){
             this->m3AC--;
         }
@@ -353,11 +353,11 @@ BOOL daBigelf_c::oct() {
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 /* 000028E8-000029A0       .text ready0__10daBigelf_cFv */
-BOOL daBigelf_c::ready0() {
+bool daBigelf_c::ready0() {
     fopAcM_SearchByID(this->mFairyActorID);
     if(this->eventInfo.checkCommandDemoAccrpt()){
         this->m3BD = 2;
@@ -369,34 +369,90 @@ BOOL daBigelf_c::ready0() {
         fopAcM_orderOtherEventId(this, this->mArrivalEvtID);
     }
 
-    return TRUE;
+    return true;
 }
 
 /* 000029A0-00002A78       .text event0__10daBigelf_cFv */
-BOOL daBigelf_c::event0() {
+bool daBigelf_c::event0() {
     if(dComIfGp_evmng_endCheck(this->mArrivalEvtID)){
         dComIfGs_onEventBit(getEventFlag());
         this->m3BD = 3;
         dComIfGp_event_onEventFlag(8);
-        if((getType() & 0xff) == 6 && (getSwbit2() & 0xff) != 0xff){
-            dComIfGs_onSwitch(getSwbit2() & 0xff, this->current.roomNo);
+        if(getType() == 6 && getSwbit2() != 0xff){
+            dComIfGs_onSwitch(getSwbit2(), fopAcM_GetRoomNo(this));
         }
     }
     else {
         demoProc();
     }
 
-    return TRUE;
+    return true;
 }
 
 /* 00002A78-00002A80       .text dead__10daBigelf_cFv */
-BOOL daBigelf_c::dead() {
-    return TRUE;
+bool daBigelf_c::dead() {
+    return true;
 }
 
 /* 00002A80-00002C8C       .text wait_action__10daBigelf_cFPv */
-void daBigelf_c::wait_action(void*) {
-    /* Nonmatching */
+BOOL daBigelf_c::wait_action(void*) {
+    if(this->m3F6 == 0){
+        if(dComIfGs_isEventBit(getEventFlag())){
+            this->m3BD = 3;
+        }
+        else {
+            if(getType() == 6){
+                if(dComIfGs_isSwitch(getSwbit(), fopAcM_GetRoomNo(this))){
+                    if(getSwbit2() != 0xff){
+                        dComIfGs_onSwitch(getSwbit2(), fopAcM_GetRoomNo(this));
+                    }
+                    this->m3BD = 3;
+                }
+                else {
+                    this->m3BD = 4;
+                }
+            }
+            else {
+                this->m3BD = 0;
+            }
+        }
+        this->setAnmStatus();
+        this->m3F6++;
+    }
+    else if(this->m3F6 != -1) {
+        bool bAttention;
+        switch(this->m3BD){
+            case 0:
+                bAttention = hunt();
+                break;
+            case 1:
+                bAttention = ready0();
+                break;
+            case 2:
+                bAttention = event0();
+                break;
+            case 3:
+                bAttention = dead();
+                break;
+            case 4:
+                bAttention = oct_search();
+                break;
+            case 5:
+                bAttention = oct();
+                break;
+            default:
+                bAttention = false;
+        }
+        this->lookBack();
+        this->setAttention(bAttention);
+        if((this->mStateBits & 0b10) == 0b10){
+            this->attention_info.position = this->current.pos;
+            this->eyePos = this->current.pos;
+        }
+        this->oct_delete();
+    }
+
+    return TRUE;
 }
 
 /* 00002C8C-00002DB4       .text _draw__10daBigelf_cFv */

@@ -55,9 +55,9 @@ public:
     void demoProcCom();
     void getNowEventAction();
     void demoProc();
-    u32 getType();
-    u32 getSwbit();
-    u32 getSwbit2();
+    u8 getType();
+    u8 getSwbit();
+    u8 getSwbit2();
     u16 getEventFlag();
     void makeFa1S();
     void makeFa1();
@@ -72,13 +72,13 @@ public:
     BOOL init();
     void setAttention(bool);
     void lookBack();
-    void hunt();
-    BOOL oct_search();
-    BOOL oct();
-    BOOL ready0();
-    BOOL event0();
-    BOOL dead();
-    void wait_action(void*);
+    bool hunt();
+    bool oct_search();
+    bool oct();
+    bool ready0();
+    bool event0();
+    bool dead();
+    BOOL wait_action(void*);
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
@@ -132,6 +132,7 @@ public:
     /* 0x3F0 */ f32 m3F0;
     /* 0x3F4 */ u8 m3F4;
     /* 0x3F5 */ u8 iBrkFrame;
+    /* 0x3F6 */ s8 m3F6;
     /* 0x3F8 */ fpc_ProcID mOctID;
 };
 
