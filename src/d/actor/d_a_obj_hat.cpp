@@ -63,7 +63,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 
 /* 000003CC-0000045C       .text _create__10daObjHat_cFv */
 cPhs_State daObjHat_c::_create() {
-    fopAcM_SetupActor(this, daObjHat_c);
+    fopAcM_ct(this, daObjHat_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Ro");
 

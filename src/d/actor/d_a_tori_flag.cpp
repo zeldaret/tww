@@ -109,7 +109,7 @@ cPhs_State daTori_Flag_c::CreateInit() {
 
 /* 000003C4-00000478       .text _create__13daTori_Flag_cFv */
 cPhs_State daTori_Flag_c::_create() {
-    fopAcM_SetupActor(this, daTori_Flag_c);
+    fopAcM_ct(this, daTori_Flag_c);
     cPhs_State result = dComIfG_resLoad(&mPhsTrflag, M_arcname);
     if (result != cPhs_COMPLEATE_e) {
         return result;

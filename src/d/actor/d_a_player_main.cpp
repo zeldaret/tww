@@ -12460,7 +12460,7 @@ cPhs_State phase_2(daPy_lk_c* i_this) {
     if (dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0)) == NULL)  {
         result = cPhs_INIT_e;
     } else {
-        fopAcM_SetupActor(i_this, daPy_lk_c);
+        fopAcM_ct(i_this, daPy_lk_c);
         i_this->playerInit();
 
         result = cPhs_NEXT_e;

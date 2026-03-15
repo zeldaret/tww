@@ -238,7 +238,7 @@ BOOL daTag_Msg_c::execute() {
 
 cPhs_State daTag_Msg_c::create() {
     int swBit;
-    fopAcM_SetupActor(this, daTag_Msg_c);
+    fopAcM_ct(this, daTag_Msg_c);
     swBit = (int)(getSwbit() & 0xFF);
     if ((getMessage() == 0x9c5) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0502)) {
         setActio(0);

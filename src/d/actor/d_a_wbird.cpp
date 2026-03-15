@@ -75,7 +75,7 @@ BOOL daWbird_c::CreateInit() {
 
 /* 00000388-000003E0       .text create__9daWbird_cFv */
 cPhs_State daWbird_c::create() {
-    fopAcM_SetupActor(this, daWbird_c);
+    fopAcM_ct(this, daWbird_c);
     CreateInit();
     return cPhs_COMPLEATE_e;
 }

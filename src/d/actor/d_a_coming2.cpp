@@ -565,7 +565,7 @@ void daComing2::Act_c::coming_process_main() {
 
 /* 00002154-00002264       .text _create__Q29daComing25Act_cFv */
 cPhs_State daComing2::Act_c::_create() {
-    fopAcM_SetupActor(this, daComing2::Act_c);
+    fopAcM_ct(this, daComing2::Act_c);
     unk_299 = -1;
     init_barrel_info();
     init_coming_info();

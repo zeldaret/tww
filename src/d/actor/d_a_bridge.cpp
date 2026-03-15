@@ -1452,9 +1452,9 @@ static cPhs_State daBridge_Create(fopAc_ac_c* a_this) {
 #if VERSION == VERSION_DEMO
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Bridge");
     if (ret == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(&i_this->actor, bridge_class);
+        fopAcM_ct(&i_this->actor, bridge_class);
 #else
-    fopAcM_SetupActor(&i_this->actor, bridge_class);
+    fopAcM_ct(&i_this->actor, bridge_class);
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Bridge");
     if (ret == cPhs_COMPLEATE_e) {
 #endif

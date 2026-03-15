@@ -127,13 +127,13 @@ static cPhs_State daKytag03_Create(fopAc_ac_c* i_ac) {
     kytag03_class* i_this = (kytag03_class*)i_ac;
 
 #if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_this, kytag03_class);
+    fopAcM_ct(i_this, kytag03_class);
 #endif
 
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhs, "M_DOOR");
     if (ret == cPhs_COMPLEATE_e) {
 #if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(i_this, kytag03_class);
+        fopAcM_ct(i_this, kytag03_class);
 #endif
 
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x4c30)) {

@@ -95,7 +95,7 @@ void daKmon_c::checkTalk() {
 }
 
 cPhs_State daKmon_c::_create() {
-    fopAcM_SetupActor(this, daKmon_c);
+    fopAcM_ct(this, daKmon_c);
 
     cPhs_State state = dComIfG_resLoad(&mPhase, daKmon_c::m_arcname);
     if(state == cPhs_COMPLEATE_e) {

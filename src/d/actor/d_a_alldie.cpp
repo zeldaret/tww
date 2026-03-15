@@ -67,7 +67,7 @@ BOOL daAlldie_c::execute() {
 }
 
 cPhs_State daAlldie_c::create() {
-    fopAcM_SetupActor(this, daAlldie_c);
+    fopAcM_ct(this, daAlldie_c);
 
     if (!dComIfGs_isSwitch(getSwbit(), fopAcM_GetRoomNo(this))) {
         setActio(ACT_CHECK);

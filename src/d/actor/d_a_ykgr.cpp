@@ -127,7 +127,7 @@ static cPhs_State daYkgrCreate(void* i_this) {
 cPhs_State daYkgr_c::_create() {
     u8 uVar4 = fopAcM_GetParam(this) >> 0x14 & 0xF;
 
-    fopAcM_SetupActor(this, daYkgr_c);
+    fopAcM_ct(this, daYkgr_c);
 
     u8 pathIndex = fopAcM_GetParam(this) >> 8 & 0xFF;
     if (pathIndex != 0xff) {

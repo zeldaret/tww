@@ -151,7 +151,7 @@ BOOL daToge_c::Create() {
 
 /* 000004F4-00000620       .text _create__8daToge_cFv */
 cPhs_State daToge_c::_create() {
-    fopAcM_SetupActor(this, daToge_c);
+    fopAcM_ct(this, daToge_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&m_Phs, m_arcname);
 

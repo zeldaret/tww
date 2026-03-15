@@ -28,7 +28,7 @@ daObjQuake_HIO_c::daObjQuake_HIO_c() {
 
 /* 00000134-000002C4       .text _create__12daObjQuake_cFv */
 cPhs_State daObjQuake_c::_create() {
-    fopAcM_SetupActor(this, daObjQuake_c);
+    fopAcM_ct(this, daObjQuake_c);
 
     if (dComIfGs_isSymbol(1)) {
         return cPhs_STOP_e;

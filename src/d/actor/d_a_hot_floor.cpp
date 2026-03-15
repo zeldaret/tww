@@ -55,7 +55,7 @@ cPhs_State daHot_Floor_c::CreateInit() {
 cPhs_State daHot_Floor_c::_create() {
 #if VERSION > VERSION_DEMO
     // Bug: This actor is never initialized in the demo.
-    fopAcM_SetupActor(this, daHot_Floor_c);
+    fopAcM_ct(this, daHot_Floor_c);
 #endif
     return CreateInit();
 }

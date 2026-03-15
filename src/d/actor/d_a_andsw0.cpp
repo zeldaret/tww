@@ -318,7 +318,7 @@ static BOOL daAndsw0_Delete(andsw0_class*) {
 
 /* 00000974-00000A64       .text daAndsw0_Create__FP10fopAc_ac_c */
 static cPhs_State daAndsw0_Create(fopAc_ac_c* ac) {
-    fopAcM_SetupActor(ac, andsw0_class);
+    fopAcM_ct(ac, andsw0_class);
 
     andsw0_class * i_this = (andsw0_class *)ac;
     i_this->mNumSwitchesToCheck = (fopAcM_GetParam(ac) >> 0) & 0xFF;

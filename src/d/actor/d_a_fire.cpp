@@ -219,7 +219,7 @@ BOOL daFire_c::CreateInit() {
 
 /* 00000518-00000758       .text _create__8daFire_cFv */
 cPhs_State daFire_c::_create() {
-    fopAcM_SetupActor(this, daFire_c);
+    fopAcM_ct(this, daFire_c);
 
     field_0x8BC = dComIfGp_particle_set(dPa_name::ID_COMMON_0461, &current.pos);
     field_0x8C0 = dComIfGp_particle_set(dPa_name::ID_COMMON_0462, &current.pos);

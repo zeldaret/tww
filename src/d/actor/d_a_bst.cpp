@@ -3053,7 +3053,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
         }},
     };
 
-    fopAcM_SetupActor(a_this, bst_class);
+    fopAcM_ct(a_this, bst_class);
     cPhs_State res;
     bst_class* i_this = (bst_class*)a_this;
     fopAc_ac_c* actor = &i_this->actor;

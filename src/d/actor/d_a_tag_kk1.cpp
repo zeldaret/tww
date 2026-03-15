@@ -82,7 +82,7 @@ cPhs_State daTag_Kk1_c::_create() {
     u32 name_int = 0;
     s32 o_phsState = cPhs_COMPLEATE_e;
 
-    fopAcM_SetupActor(this, daTag_Kk1_c);
+    fopAcM_ct(this, daTag_Kk1_c);
 
     switch(fopAcM_GetName(this)){
         case PROC_TAG_KK1:

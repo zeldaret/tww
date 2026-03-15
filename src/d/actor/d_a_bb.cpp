@@ -2699,7 +2699,7 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
 
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Bb");
 
-    fopAcM_SetupActor(a_this, bb_class);
+    fopAcM_ct(a_this, bb_class);
 
     if (ret == cPhs_COMPLEATE_e) {
         i_this->unk_2D8 = (fopAcM_GetParam(i_this) >> 0) & 0xFF;

@@ -589,7 +589,7 @@ static cPhs_State daCanonCreate(void* i_this) {
 
 /* 00002094-000023C0       .text _create__9daCanon_cFv */
 cPhs_State daCanon_c::_create() {
-    fopAcM_SetupActor(this, daCanon_c);
+    fopAcM_ct(this, daCanon_c);
 
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
     if (PVar1 == cPhs_COMPLEATE_e) {

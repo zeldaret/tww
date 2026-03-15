@@ -12,7 +12,7 @@
 #include "d/d_priority.h"
 
 cPhs_State daSpotbox_c::create() {
-    fopAcM_SetupActor(this, daSpotbox_c);
+    fopAcM_ct(this, daSpotbox_c);
     f32 baseScale = getType() != 0 ? 1000.0f : 100.0f;
     scale.x *= baseScale;
     scale.y *= baseScale;

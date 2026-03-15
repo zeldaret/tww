@@ -243,7 +243,7 @@ static BOOL daEsa_CreateHeap(fopAc_ac_c* i_actor) {
 static cPhs_State daEsa_Create(fopAc_ac_c* i_actor) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
-    fopAcM_SetupActor(i_actor, esa_class);
+    fopAcM_ct(i_actor, esa_class);
 
     esa_class* i_this = static_cast<esa_class*>(i_actor);
 

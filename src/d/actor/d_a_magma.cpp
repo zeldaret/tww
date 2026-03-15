@@ -16,7 +16,7 @@ daMagma_c::~daMagma_c() {
 }
 
 cPhs_State daMagma_c::create() {
-    fopAcM_SetupActor(this, daMagma_c);
+    fopAcM_ct(this, daMagma_c);
 
     cPhs_State result = dComIfG_resLoad(&mPhs, "Magma");
     if (result != cPhs_COMPLEATE_e) {

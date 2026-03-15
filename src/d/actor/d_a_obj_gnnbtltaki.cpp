@@ -38,7 +38,7 @@ BOOL daObjGnnbtaki_c::create_heap() {
 
 /* 000001F4-00000348       .text _create__15daObjGnnbtaki_cFv */
 cPhs_State daObjGnnbtaki_c::_create() {
-    fopAcM_SetupActor(this, daObjGnnbtaki_c);
+    fopAcM_ct(this, daObjGnnbtaki_c);
     cPhs_State state = dComIfG_resLoad(&mPhase, M_arcname);
     if (state == cPhs_COMPLEATE_e) {
         state = cPhs_ERROR_e;

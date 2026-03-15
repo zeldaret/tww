@@ -99,7 +99,7 @@ static BOOL Roten_create_check(u8 type) {
 
 
 cPhs_State daObj_Roten_c::_create() {
-    fopAcM_SetupActor(this, daObj_Roten_c);
+    fopAcM_ct(this, daObj_Roten_c);
 
     mType = fopAcM_GetParam(this) >> 0x18;
     mType = cLib_minMaxLimit<u8>(mType, 0, 2);

@@ -379,7 +379,7 @@ static cPhs_State daKantera_Create(fopAc_ac_c* a_this) {
 
     kantera_class* i_this = (kantera_class*)a_this;
 
-    fopAcM_SetupActor(a_this, kantera_class);
+    fopAcM_ct(a_this, kantera_class);
 
     i_this->mParam0 = fopAcM_GetParam(a_this);
     i_this->mParam1 = fopAcM_GetParam(a_this) >> 8;

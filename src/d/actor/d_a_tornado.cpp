@@ -295,7 +295,7 @@ cPhs_State daTornado_c::create() {
     static cXyz under_scale(1.01f, 1.0f, 1.01f);
 
     cPhs_State rt = dComIfG_resLoad(&mPhs, l_arcName);
-    fopAcM_SetupActor(this, daTornado_c);
+    fopAcM_ct(this, daTornado_c);
 
     if (rt == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, daTornado_createHeap, 0x8000)) {

@@ -253,7 +253,7 @@ void daMachine_c::set_speed() {
 
 /* 000007F8-00000898       .text _create__11daMachine_cFv */
 cPhs_State daMachine_c::_create() {
-    fopAcM_SetupActor(this, daMachine_c);
+    fopAcM_ct(this, daMachine_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, m_arcname);
     if (ret == cPhs_COMPLEATE_e) {

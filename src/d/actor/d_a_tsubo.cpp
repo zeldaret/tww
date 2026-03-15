@@ -1310,7 +1310,7 @@ cPhs_State Act_c::_create() {
     prmZ_init();
     mType = prm_get_type();
 
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State PVar2;
     if (cLib_checkBit(data().mFlag, DATA_FLAG_1_e)) {

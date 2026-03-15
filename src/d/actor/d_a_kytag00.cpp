@@ -352,7 +352,7 @@ static BOOL daKytag00_Delete(kytag00_class* i_this) {
 static cPhs_State daKytag00_Create(fopAc_ac_c* i_ac) {
     kytag00_class * i_this = (kytag00_class *)i_ac;
 
-    fopAcM_SetupActor(i_this, kytag00_class);
+    fopAcM_ct(i_this, kytag00_class);
 
     i_this->field_0x296 = 0;
     i_this->mPselIdx = (fopAcM_GetParam(i_ac) >> 0) & 0xFF;

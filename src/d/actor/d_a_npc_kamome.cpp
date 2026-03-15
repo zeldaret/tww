@@ -297,7 +297,7 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000ED8-0000101C       .text create__11daNpc_kam_cFv */
 cPhs_State daNpc_kam_c::create() {
-    fopAcM_SetupActor(this, daNpc_kam_c);
+    fopAcM_ct(this, daNpc_kam_c);
     
     if (l_act != NULL && l_act != this) {
         return cPhs_ERROR_e;

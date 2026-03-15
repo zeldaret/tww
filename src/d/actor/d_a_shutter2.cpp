@@ -72,7 +72,7 @@ BOOL daShutter2_c::Create() {
 
 /* 00000350-0000041C       .text _create__12daShutter2_cFv */
 cPhs_State daShutter2_c::_create() {
-    fopAcM_SetupActor(this, daShutter2_c);
+    fopAcM_ct(this, daShutter2_c);
     mType = 0;
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (phase_state == cPhs_COMPLEATE_e) {

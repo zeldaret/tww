@@ -1798,7 +1798,7 @@ static cPhs_State daHimo2_Create(fopAc_ac_c* i_this) {
     himo2_class* a_this = (himo2_class*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
-    fopAcM_SetupActor(i_this, himo2_class);
+    fopAcM_ct(i_this, himo2_class);
 
     cPhs_State phase_state;
     if (!fopAcM_entrySolidHeap(&a_this->actor, CallbackCreateHeap, REG0_S(9) + 0x9050)) {

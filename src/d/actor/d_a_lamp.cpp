@@ -143,7 +143,7 @@ static BOOL daLamp_solidHeapCB(fopAc_ac_c* i_ac) {
 
 /* 0000075C-00000914       .text daLamp_Create__FP10fopAc_ac_c */
 static cPhs_State daLamp_Create(fopAc_ac_c* i_ac) {
-    fopAcM_SetupActor(i_ac, lamp_class);
+    fopAcM_ct(i_ac, lamp_class);
     lamp_class* i_this = (lamp_class*)i_ac;
 
     cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhs, "Lamp");

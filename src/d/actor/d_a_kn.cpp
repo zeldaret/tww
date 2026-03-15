@@ -518,9 +518,9 @@ static cPhs_State daKN_Create(fopAc_ac_c* a_this) {
 #if VERSION == VERSION_DEMO
     cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "KN");
     if (PVar1 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(&i_this->actor, kn_class);
+        fopAcM_ct(&i_this->actor, kn_class);
 #else
-    fopAcM_SetupActor(a_this, kn_class);
+    fopAcM_ct(a_this, kn_class);
     cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "KN");
     if (PVar1 == cPhs_COMPLEATE_e) {
 #endif

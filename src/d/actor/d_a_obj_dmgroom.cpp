@@ -53,7 +53,7 @@ void daObjDmgroom_c::set_mtx() {
 }
 
 cPhs_State daObjDmgroom_c::_create() {
-    fopAcM_SetupActor(this, daObjDmgroom_c);
+    fopAcM_ct(this, daObjDmgroom_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, "Dmgroom");
 

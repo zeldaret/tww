@@ -4004,7 +4004,7 @@ static cPhs_State daBdk_Create(fopAc_ac_c* a_this) {
         }},
     };
 
-    fopAcM_SetupActor(a_this, bdk_class);
+    fopAcM_ct(a_this, bdk_class);
     bdk_class* i_this = (bdk_class*)a_this;
     fopAc_ac_c* actor = &i_this->actor;
 

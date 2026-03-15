@@ -4234,7 +4234,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000075C-000008E0       .text phase_1__FP13daNpcPeople_c */
 static cPhs_State phase_1(daNpcPeople_c* i_this) {
-    fopAcM_SetupActor(i_this, daNpcPeople_c);
+    fopAcM_ct(i_this, daNpcPeople_c);
 
     s16 arg0 = i_this->getPrmArg0();
     switch(i_this->getNpcNo()) {

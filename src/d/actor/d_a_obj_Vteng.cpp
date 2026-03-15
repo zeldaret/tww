@@ -84,7 +84,7 @@ bool daObjVteng_c::jokai_demo() {
 
 /* 00000324-000003F4       .text _create__12daObjVteng_cFv */
 cPhs_State daObjVteng_c::_create() {
-    fopAcM_SetupActor(this, daObjVteng_c);
+    fopAcM_ct(this, daObjVteng_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, l_arcname);
 

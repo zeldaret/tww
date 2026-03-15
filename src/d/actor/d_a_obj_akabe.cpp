@@ -64,7 +64,7 @@ namespace daObjAkabe {
         else
             mType = 0;
 
-        fopAcM_SetupActor(this, daObjAkabe::Act_c);
+        fopAcM_ct(this, daObjAkabe::Act_c);
 
         mbAppear = chk_appear();
         if (mbAppear) {

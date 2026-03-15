@@ -122,7 +122,7 @@ bool daObjZouk::Act_c::create_heap() {
 
 /* 00000468-00000724       .text _create__Q29daObjZouk5Act_cFv */
 cPhs_State daObjZouk::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
 

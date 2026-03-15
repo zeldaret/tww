@@ -79,7 +79,7 @@ BOOL daYgcwp_c::create_heap() {
 
 /* 0000023C-000003A0       .text _create__9daYgcwp_cFv */
 cPhs_State daYgcwp_c::_create() {
-    fopAcM_SetupActor(this, daYgcwp_c);
+    fopAcM_ct(this, daYgcwp_c);
     cPhs_State rt = dComIfG_resLoad(&mPhs, M_arcname);
     if (rt == cPhs_COMPLEATE_e) {
         rt = cPhs_ERROR_e;

@@ -618,7 +618,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000878-0000095C       .text phase_1__FP12daNpcPhoto_c */
 static cPhs_State phase_1(daNpcPhoto_c* i_this) {
-    fopAcM_SetupActor(i_this, daNpcPhoto_c);
+    fopAcM_ct(i_this, daNpcPhoto_c);
     s16 arg0 = i_this->getPrmArg0();
     if(arg0 != 255){
         if(arg0 == 0){

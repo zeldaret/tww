@@ -181,9 +181,9 @@ cPhs_State daMdoor_c::create() {
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
     }
-    fopAcM_SetupActor(this, daMdoor_c);
+    fopAcM_ct(this, daMdoor_c);
 #else
-    fopAcM_SetupActor(this, daMdoor_c);
+    fopAcM_ct(this, daMdoor_c);
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
     }

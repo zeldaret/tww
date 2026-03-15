@@ -375,7 +375,7 @@ cPhs_State daNpc_Md_c::create() {
     int heapSizeIdx = 0;
     
 #if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_Md_c);
+    fopAcM_ct(this, daNpc_Md_c);
 #endif
     
     mType = fopAcM_GetParam(this) >> 0x08;
@@ -431,7 +431,7 @@ cPhs_State daNpc_Md_c::create() {
     m313D = 1;
     if (phase_state == cPhs_COMPLEATE_e) {
 #if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(this, daNpc_Md_c);
+        fopAcM_ct(this, daNpc_Md_c);
 #endif
         
         if (dComIfGp_getCb1Player() != NULL) {

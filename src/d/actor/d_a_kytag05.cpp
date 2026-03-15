@@ -123,7 +123,7 @@ static BOOL daKytag05_Delete(kytag05_class*) {
 /* 00000404-000004C0       .text daKytag05_Create__FP10fopAc_ac_c */
 static cPhs_State daKytag05_Create(fopAc_ac_c* i_this) {
 #if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_this, kytag05_class);
+    fopAcM_ct(i_this, kytag05_class);
 #endif
     kytag05_class *a_this = (kytag05_class*)i_this;
     if (dComIfGs_isSymbol(1) != 0) {
@@ -131,7 +131,7 @@ static cPhs_State daKytag05_Create(fopAc_ac_c* i_this) {
     }
 
 #if VERSION == VERSION_DEMO
-    fopAcM_SetupActor(i_this, kytag05_class);
+    fopAcM_ct(i_this, kytag05_class);
 #endif
 
     a_this->mIndex = 0;

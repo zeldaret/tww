@@ -192,13 +192,13 @@ static BOOL daBranch_Delete(daBranch_c* i_this) {
 
 inline cPhs_State daBranch_c::create() {
 #if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daBranch_c);
+    fopAcM_ct(this, daBranch_c);
 #endif
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, daBranch_c::m_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
 #if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(this, daBranch_c);
+        fopAcM_ct(this, daBranch_c);
 #endif
 
         if (!fopAcM_entrySolidHeap(this, daBranch_c::solidHeapCB, 0x4000)) {

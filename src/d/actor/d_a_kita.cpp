@@ -399,7 +399,7 @@ static cPhs_State daKita_Create(fopAc_ac_c* a_this) {
     };
     
     kita_class* i_this = static_cast<kita_class*>(a_this);
-    fopAcM_SetupActor(a_this, kita_class);
+    fopAcM_ct(a_this, kita_class);
     cPhs_State ret;
 
     ret = dComIfG_resLoad(&i_this->mPhs, "Kita");

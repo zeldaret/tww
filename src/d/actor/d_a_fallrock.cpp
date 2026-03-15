@@ -189,13 +189,13 @@ static cPhs_State daFallRock_Create(fopAc_ac_c* i_this) {
 /* 00001050-0000127C       .text create__12daFallRock_cFv */
 cPhs_State daFallRock_c::create() {
 #if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daFallRock_c);
+    fopAcM_ct(this, daFallRock_c);
 #endif
 
     cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname);
     if (res == cPhs_COMPLEATE_e) {
 #if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(this, daFallRock_c);
+        fopAcM_ct(this, daFallRock_c);
 #endif
 
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xB80)) {

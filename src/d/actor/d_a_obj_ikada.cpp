@@ -1495,7 +1495,7 @@ BOOL daObj_Ikada_c::_createHeap() {
 
 /* 00004B60-00004C18       .text _create__13daObj_Ikada_cFv */
 cPhs_State daObj_Ikada_c::_create() {
-    fopAcM_SetupActor(this, daObj_Ikada_c);
+    fopAcM_ct(this, daObj_Ikada_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhase, m_arc_name);
     if (ret == cPhs_COMPLEATE_e) {

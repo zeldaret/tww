@@ -1046,7 +1046,7 @@ static cPhs_State daKanban_Create(fopAc_ac_c* a_this) {
     u32 maxHeapSize = 0;
     kanban_class* i_this = (kanban_class*)a_this;
 
-    fopAcM_SetupActor(&i_this->actor, kanban_class);
+    fopAcM_ct(&i_this->actor, kanban_class);
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Kanban");
 
     if (ret == cPhs_COMPLEATE_e) {

@@ -48,7 +48,7 @@ void daObjCafelmp_c::set_mtx() {
 }
 
 cPhs_State daObjCafelmp_c::_create() {
-    fopAcM_SetupActor(this, daObjCafelmp_c);
+    fopAcM_ct(this, daObjCafelmp_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, "Cafelmp");
 

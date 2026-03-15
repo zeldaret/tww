@@ -57,7 +57,7 @@ BOOL daObjSmplbg::Act_c::Create() {
 
 /* 0000032C-00000474       .text Mthd_Create__Q211daObjSmplbg5Act_cFv */
 cPhs_State daObjSmplbg::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     mType = prm_get_type();
     if(mType >= 1){

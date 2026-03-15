@@ -398,7 +398,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000005A8-00000624       .text phase_1__FP13daObjFigure_c */
 static cPhs_State phase_1(daObjFigure_c* i_this) {
-    fopAcM_SetupActor(i_this, daObjFigure_c)
+    fopAcM_ct(i_this, daObjFigure_c)
     i_this->setResFlag(0x1);
 
     cPhs_State status = dComIfG_resLoad(i_this->getPhase1P(), "Figure");

@@ -505,7 +505,7 @@ BOOL daTag_Event_c::execute() {
 }
 
 cPhs_State daTag_Event_c::create() {
-    fopAcM_SetupActor(this, daTag_Event_c);
+    fopAcM_ct(this, daTag_Event_c);
 
     int swbit = getSwbit();
 

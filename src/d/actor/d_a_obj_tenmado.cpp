@@ -54,7 +54,7 @@ BOOL daObjTenmado::Act_c::Create() {
 cPhs_State daObjTenmado::Act_c::Mthd_Create() {
     cPhs_State phase_state;
 
-    fopAcM_SetupActor(this, daObjTenmado::Act_c);
+    fopAcM_ct(this, daObjTenmado::Act_c);
 
     phase_state = dComIfG_resLoad(&mPhase, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {

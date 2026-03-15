@@ -324,7 +324,7 @@ static cPhs_State daKamome2_Create(fopAc_ac_c* a_this) {
 
     cPhs_State iVar1 = dComIfG_resLoad(&i_this->mPhase, "Kamome");
     if (iVar1 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, kamome2_class);
+        fopAcM_ct(a_this, kamome2_class);
 
         i_this->m2A4 = fopAcM_GetParam(a_this);
         if (!fopAcM_entrySolidHeap(a_this, useHeapInit, 0x59A0)) {

@@ -67,9 +67,9 @@ cPhs_State daObj_Demo_Barrel_c::_create() {
 #if VERSION == VERSION_DEMO
     cPhs_State ret = dComIfG_resLoad(&mPhase, M_arcname);
     if (ret == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daObj_Demo_Barrel_c);
+        fopAcM_ct(this, daObj_Demo_Barrel_c);
 #else
-    fopAcM_SetupActor(this, daObj_Demo_Barrel_c);
+    fopAcM_ct(this, daObj_Demo_Barrel_c);
     cPhs_State ret = dComIfG_resLoad(&mPhase, M_arcname);
     if (ret == cPhs_COMPLEATE_e) {
 #endif

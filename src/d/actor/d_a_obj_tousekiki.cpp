@@ -61,9 +61,9 @@ cPhs_State daObj_Tousekiki_c::_create() {
 #if VERSION == VERSION_DEMO
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
     if (PVar1 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daObj_Tousekiki_c);
+        fopAcM_ct(this, daObj_Tousekiki_c);
 #else
-    fopAcM_SetupActor(this, daObj_Tousekiki_c);
+    fopAcM_ct(this, daObj_Tousekiki_c);
 
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
     if (PVar1 == cPhs_COMPLEATE_e) {

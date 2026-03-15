@@ -367,9 +367,9 @@ static cPhs_State daSsk_Create(fopAc_ac_c* a_this) {
 #if VERSION == VERSION_DEMO
     cPhs_State PVar2 = dComIfG_resLoad(&i_this->mPhase, "Ssk");
     if (PVar2 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, ssk_class);
+        fopAcM_ct(a_this, ssk_class);
 #else
-    fopAcM_SetupActor(a_this, ssk_class);
+    fopAcM_ct(a_this, ssk_class);
     cPhs_State PVar2 = dComIfG_resLoad(&i_this->mPhase, "Ssk");
     if (PVar2 == cPhs_COMPLEATE_e) {
 #endif

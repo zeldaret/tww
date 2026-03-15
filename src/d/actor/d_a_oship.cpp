@@ -1013,7 +1013,7 @@ void daOship_c::getArg() {
 
 /* 00002F90-000030EC       .text _create__9daOship_cFv */
 cPhs_State daOship_c::_create() {
-    fopAcM_SetupActor(this, daOship_c);
+    fopAcM_ct(this, daOship_c);
 
     cPhs_State state = dComIfG_resLoad(&mPhs, m_arc_name);
     

@@ -476,7 +476,7 @@ static cPhs_State daShand_Create(fopAc_ac_c* i_this) {
     };
 
     shand_class* s_this = static_cast<shand_class*>(i_this);
-    fopAcM_SetupActor(i_this, shand_class);
+    fopAcM_ct(i_this, shand_class);
 
     cPhs_State ret = dComIfG_resLoad(&s_this->mPhs, "Shand");
     if(ret == cPhs_COMPLEATE_e){

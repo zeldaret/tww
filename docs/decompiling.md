@@ -142,10 +142,10 @@ For example, if you were to look at the actor's create function, you should see 
 
 ![Create function in Ghidra](images/ghidra_setup_actor_macro.png)
 
-This code is constructing the actor when it's first created. You shouldn't write it out by hand - instead, use the `fopAcM_SetupActor` macro, like so:
+This code is constructing the actor when it's first created. You shouldn't write it out by hand - instead, use the `fopAcM_ct` macro, like so:
 
 ```cpp
-    fopAcM_SetupActor(this, daWall_c);
+    fopAcM_ct(this, daWall_c);
 ```
 
 That should expand out into the proper code when compiled. If something in there is missing even after using the macro, then you might not have set up all of the actor's member variables properly in the previous step, so add any missing fields now.

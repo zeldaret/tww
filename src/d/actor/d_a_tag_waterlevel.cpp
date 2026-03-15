@@ -29,7 +29,7 @@ namespace daTagWaterlevel {
 
     /* 00000078-000001D4       .text _create__Q28daTagRet5Act_cFv */
     cPhs_State Act_c::_create() {
-        fopAcM_SetupActor(this, Act_c);
+        fopAcM_ct(this, Act_c);
 
         if ((prm_get_sch() & dKy_get_schbit() & 0xFF)) {
             M_now = 1.0f;
