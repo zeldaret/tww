@@ -289,7 +289,35 @@ void daBigelf_c::talk() {
 
 /* 0000236C-00002534       .text init__10daBigelf_cFv */
 BOOL daBigelf_c::init() {
-    /* Nonmatching */
+    switch(this->m3F4){
+        case 0:
+        ActionFunc pActWait = &daBigelf_c::wait_action;
+        if(this->mCurrentStateFunc != pActWait){
+            if(this->mCurrentStateFunc != NULL){
+                this->m3F6 = -1;
+                (this->*mCurrentStateFunc)(NULL);
+            }
+            this->mCurrentStateFunc = pActWait;
+            this->m3F6 = 0;
+            (this->*mCurrentStateFunc)(NULL);
+        }
+    }
+
+    this->current.pos.y = this->home.pos.y + 30;
+    this->mCurrentPos = this->current.pos;
+    this->mCurrentPos.y += 100.0f;
+    this->eyePos = this->mUnkPos = this->mCurrentPos;
+    this->attention_info.position.set(this->mCurrentPos.x, this->mCurrentPos.y + 50, this->mCurrentPos.z);
+    this->mFairyActorID = -1;
+    
+    if(getType() != 6){
+        if(dComIfGs_isEventBit(getEventFlag()))
+            makeFa1S();
+        else
+            makeFa1();
+    }
+    this->setFlag(BIGELF_STATE_UNK1);
+    return TRUE;
 }
 
 /* 00002534-000025A0       .text setAttention__10daBigelf_cFb */
