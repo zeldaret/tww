@@ -14,7 +14,7 @@
 void daBigelf_c::oct_delete() {
     fopAc_ac_c* actOcto = fopAcM_SearchByID(this->mOctID);
     daShip_c* actShip = dComIfGp_getShipActor();
-    if((this->mStateBits & 0b1000000) == 0b1000000){
+    if(chkFlag(BIGELF_STATE_UNK6)){
         if(this->m3AC > 0){
             this->m3AC--;
             return;
@@ -34,7 +34,7 @@ void daBigelf_c::oct_delete() {
             }
             fopAcM_delete(actOcto);
         }
-        this->mStateBits &= ~(0b1000000);
+        this->clrFlag(BIGELF_STATE_UNK6);
     }
 }
 
@@ -304,7 +304,20 @@ void daBigelf_c::lookBack() {
 
 /* 000025F4-000026C0       .text hunt__10daBigelf_cFv */
 bool daBigelf_c::hunt() {
-    /* Nonmatching */
+    fopAc_ac_c* pAcFairy = fopAcM_SearchByID(this->mFairyActorID);
+    fopAc_ac_c* pLink = dComIfGp_getLinkPlayer();
+    if(pAcFairy == NULL){
+        this->m3BD = 3;
+        return false;
+    }
+    else {
+        if(fopAcM_searchActorDistanceXZ(this, pLink) < 900.0f){
+            this->m3BD = 1;
+            this->mArrivalEvtID = dComIfGp_evmng_getEventIdx("BIGELF_ARRIVAL");
+            fopAcM_orderOtherEventId(this, this->mArrivalEvtID);
+        }
+        return true;
+    }
 }
 
 /* 000026C0-00002730       .text oct_search__10daBigelf_cFv */
@@ -333,10 +346,10 @@ bool daBigelf_c::oct() {
         s16 angleInc = cLib_targetAngleY(&p1, &p2);
         this->current.angle.y += angleInc;
         this->shape_angle.y = this->current.angle.y;
-        this->mStateBits |= 0b100000;
+        this->setFlag(BIGELF_STATE_UNK5);
     }
     else {
-            this->mStateBits &= ~(0b100000);
+            this->clrFlag(BIGELF_STATE_UNK5);
     }
 
     if(dComIfGs_isSwitch(getSwbit(), fopAcM_GetRoomNo(this))){
@@ -349,7 +362,7 @@ bool daBigelf_c::oct() {
             this->mArrivalEvtID = dComIfGp_evmng_getEventIdx("BIGELF_ARRIVAL_2");
             fopAcM_orderChangeEventId(this, actLink, this->mArrivalEvtID, 0, 0xffff);
             this->m3AC = 30;
-            this->mStateBits |= 0b1000000;
+            this->setFlag(BIGELF_STATE_UNK6);
         }
     }
 
@@ -445,7 +458,7 @@ BOOL daBigelf_c::wait_action(void*) {
         }
         this->lookBack();
         this->setAttention(bAttention);
-        if((this->mStateBits & 0b10) == 0b10){
+        if(this->chkFlag(BIGELF_STATE_UNK1)){
             this->attention_info.position = this->current.pos;
             this->eyePos = this->current.pos;
         }
@@ -462,11 +475,11 @@ BOOL daBigelf_c::_draw() {
     //J3DModel* flowerModel = this->mpFlowerModel;
     J3DModelData* flowerModelData = this->mpFlowerModel->getModelData();
     
-    if((this->mStateBits & 0b10) == 0b10){
+    if(this->chkFlag(BIGELF_STATE_UNK1)){
         return FALSE;
     }
 
-    if((this->mStateBits & 0b10000) != 0b10000){
+    if(this->chkFlag(BIGELF_STATE_UNK4)){
         dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, fopAcM_GetPosition_p(this), &this->tevStr);
     }
 
@@ -477,7 +490,7 @@ BOOL daBigelf_c::_draw() {
     this->mBtkAnimator.entry(bckModelData);
     this->mpBckAnimator->entry();
 
-    if((this->mStateBits & 0b1000) == 0b1000){
+    if(this->chkFlag(BIGELF_STATE_UNK3)){
         mFlowerBrkAnimator.entry(flowerModelData);
         this->mpFlowerModel->setBaseTRMtx(bckModel->getAnmMtx(this->m_fl_jnt));
         mDoExt_modelUpdateDL(this->mpFlowerModel);
@@ -489,14 +502,14 @@ BOOL daBigelf_c::_draw() {
 /* 00002DB4-00002F5C       .text _execute__10daBigelf_cFv */
 BOOL daBigelf_c::_execute() {
     this->m_jnt.setParam(0,0,0,0,4000,9000,-2000,-4000,0x1000);
-    if((this->mStateBits & 0b10000) != 0b10000){
+    if(!this->chkFlag(BIGELF_STATE_UNK4)){
         this->m336 = this->mpBckAnimator->play(&this->eyePos, 0, 0);
         if(this->mpBckAnimator->getFrame() < this->m338 && this->m3BC != 3){
             this->m336 = 1;
         }
         this->m338 = this->mpBckAnimator->getFrame();
     }
-    this->mStateBits &= ~(0b1000);
+    this->clrFlag(BIGELF_STATE_UNK3);
 
     (this->*mCurrentStateFunc)(NULL);
 
@@ -507,7 +520,7 @@ BOOL daBigelf_c::_execute() {
     mDoMtx_stack_c::transS(this->current.pos);
     mDoMtx_stack_c::YrotM(this->current.angle.y);
     bckModel->setBaseScale(this->scale);
-    if((this->mStateBits & 0b10000) == 0b10000){
+    if(this->chkFlag(BIGELF_STATE_UNK4)){
         mDoMtx_stack_c::transM(0, this->mHeightOffset, 0);
         mDoMtx_stack_c::scaleM(this->m3EC, this->m3F0, this->m3EC);
         mDoMtx_stack_c::transM(0, -this->mHeightOffset, 0);

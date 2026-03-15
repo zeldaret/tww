@@ -10,8 +10,24 @@ class daBigelf_c : public fopAc_ac_c {
 public:
     typedef BOOL (daBigelf_c::*ActionFunc)(void*);
 
-    void chkFlag(unsigned short) {}
-    void clrFlag(unsigned short) {}
+    enum State_t {
+        BIGELF_STATE_UNK0 = 0b1,
+        BIGELF_STATE_UNK1 = 0b10,
+        BIGELF_STATE_UNK2 = 0b100,
+        BIGELF_STATE_UNK3 = 0b1000,
+        BIGELF_STATE_UNK4 = 0b10000,
+        BIGELF_STATE_UNK5 = 0b100000,
+        BIGELF_STATE_UNK6 = 0b1000000,
+        BIGELF_STATE_UNK7 = 0b10000000,
+        BIGELF_STATE_UNK8 = 0b100000000,
+    };
+
+    bool chkFlag(u16 mask) {
+        return (this->mStateBits & mask) == mask;
+    }
+    void clrFlag(u16 mask) {
+        this->mStateBits &= ~mask; 
+    }
     void getBackboneJntNum() {}
     void getHeadJntNum() {}
     void getHead_x() {}
@@ -19,7 +35,9 @@ public:
     void setAction(ActionFunc, void*) {}
     void setAttentionBasePos(cXyz) {}
     void setEyePos(cXyz) {}
-    void setFlag(unsigned short) {}
+    void setFlag(u16 mask) {
+        this->mStateBits |= mask;
+    }
 
     void oct_delete();
     void nodeCallBack(J3DNode*);
