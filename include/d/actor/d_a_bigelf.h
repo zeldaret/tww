@@ -81,12 +81,12 @@ public:
     void makeFa1();
     void setAnm(signed char);
     void setAnmStatus();
-    void next_msgStatus(unsigned long*);
-    void getMsg();
+    u16 next_msgStatus(unsigned long*);
+    int getMsg();
     void msgPushButton();
     void msgAnm(unsigned char);
     void talkInit();
-    void talk();
+    u16 talk();
     BOOL init();
     void setAttention(bool);
     void lookBack();
@@ -118,9 +118,11 @@ public:
     /* 0x336 */ u8 m336;
     /* 0x337 */ u8 m337;
     /* 0x338 */ f32 m338;
-    /* 0x33C */ u8 m33C[0x340 - 0x33C];
+    /* 0x33C */ u32 m33C;
     /* 0x340 */ u16 mStateBits;
-    /* 0x342 */ u8 m342[0x346 - 0x342];
+    /* 0x342 */ u16 m342;
+    /* 0x344 */ u8 m344;
+    /* 0x345 */ u8 m345;
     /* 0x346 */ u8 mGivenItem;
     /* 0x347 */ u8 m347[0x348 - 0x347];
     /* 0x348 */ int mCurrentMessageId;
@@ -153,6 +155,7 @@ public:
     /* 0x3F4 */ u8 m3F4;
     /* 0x3F5 */ u8 iBrkFrame;
     /* 0x3F6 */ s8 m3F6;
+    /* 0x3F7 */ s8 m3F7;
     /* 0x3F8 */ fpc_ProcID mOctID;
 };
 

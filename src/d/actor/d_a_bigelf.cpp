@@ -10,6 +10,9 @@
 #include "d/d_priority.h"
 #include "d/res/res_bigelf.h"
 
+fpc_ProcID l_msgId;
+msg_class* l_msg;
+
 /* 00000078-0000016C       .text oct_delete__10daBigelf_cFv */
 void daBigelf_c::oct_delete() {
     fopAc_ac_c* actOcto = fopAcM_SearchByID(this->mOctID);
@@ -258,12 +261,12 @@ void daBigelf_c::setAnmStatus() {
 }
 
 /* 00002030-000021A4       .text next_msgStatus__10daBigelf_cFPUl */
-void daBigelf_c::next_msgStatus(unsigned long*) {
+u16 daBigelf_c::next_msgStatus(u32*) {
     /* Nonmatching */
 }
 
 /* 000021A4-000021D4       .text getMsg__10daBigelf_cFv */
-void daBigelf_c::getMsg() {
+int daBigelf_c::getMsg() {
     /* Nonmatching */
 }
 
@@ -279,12 +282,53 @@ void daBigelf_c::msgAnm(unsigned char) {
 
 /* 000021DC-000021F0       .text talkInit__10daBigelf_cFv */
 void daBigelf_c::talkInit() {
-    /* Nonmatching */
+    this->m3F7 = 0;
+    this->m344 = -1;
 }
 
 /* 000021F0-0000236C       .text talk__10daBigelf_cFv */
-void daBigelf_c::talk() {
-    /* Nonmatching */
+u16 daBigelf_c::talk() {
+    u16 ret = 0xff;
+
+    if(this->m3F7 == 0){
+        l_msgId = -1;
+        this->m33C = getMsg();
+        this->m3F7 = 1;
+    }
+    else if(this->m3F7 != -1){
+        if(l_msgId == -1){
+            l_msgId = fopMsgM_messageSet(this->m33C, this);
+        }
+        else {
+            if(!chkFlag(BIGELF_STATE_UNK2)){
+                this->msgAnm(dComIfGp_getMesgAnimeAttrInfo());
+            }
+            
+            switch(this->m3F7){
+                case 1:
+                    l_msg = fopMsgM_SearchByID(l_msgId);
+                    if(l_msg != NULL)
+                        this->m3F7 = 2;
+                    break;
+                
+                case 2:
+                    ret = l_msg->mStatus;
+                    if(ret == 14){
+                            this->msgPushButton();
+                            l_msg->mStatus = this->next_msgStatus(&this->m33C);
+                            if(l_msg->mStatus == 15)
+                                fopMsgM_messageSet(this->m33C);
+                    }
+                    else if(ret == 18){
+                        l_msg->mStatus = 19;
+                        this->m3F7 = -1;
+                    }
+                    break;
+            }
+        }
+    }
+
+    return ret;
 }
 
 /* 0000236C-00002534       .text init__10daBigelf_cFv */
