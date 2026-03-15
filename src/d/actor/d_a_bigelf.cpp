@@ -270,32 +270,32 @@ fopMsg_MessageStatus_e daBigelf_c::next_msgStatus(u32* pMsgIdx) {
                 case 0:
                 case 1:
                     if(dComIfGs_getWalletSize() == 0){
-                        this->mGivenItem = 0xAB;
+                        this->mGivenItem = dItem_MAX_RUPEE_UP1_e;
                     }
                     else {
-                        this->mGivenItem = 0xAC;
+                        this->mGivenItem = dItem_MAX_RUPEE_UP2_e;
                     }
                     break;
                 case 2:
                 case 3:
                     if(dComIfGs_getBombMax() <= 30){
-                        this->mGivenItem = 0xAD;
+                        this->mGivenItem = dItem_MAX_BOMB_UP1_e;
                     }
                     else {
-                        this->mGivenItem = 0xAE;
+                        this->mGivenItem = dItem_MAX_BOMB_UP2_e;
                     }
                     break;
                 case 4:
                 case 5:
                     if(dComIfGs_getArrowMax() <= 30){
-                        this->mGivenItem = 0xAF;
+                        this->mGivenItem = dItem_MAX_ARROW_UP1_e;
                     }
                     else {
-                        this->mGivenItem = 0xB0;
+                        this->mGivenItem = dItem_MAX_ARROW_UP2_e;
                     }
                     break;
                 default:
-                    this->mGivenItem = 4;
+                    this->mGivenItem = dItem_RED_RUPEE_e;
                     break;
             }
             dComIfGp_event_setGtItm(this->mGivenItem);
