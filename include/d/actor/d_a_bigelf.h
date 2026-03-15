@@ -77,7 +77,7 @@ public:
     BOOL oct();
     BOOL ready0();
     BOOL event0();
-    void dead();
+    BOOL dead();
     void wait_action(void*);
     BOOL _draw();
     BOOL _execute();

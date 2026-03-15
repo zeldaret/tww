@@ -390,8 +390,8 @@ BOOL daBigelf_c::event0() {
 }
 
 /* 00002A78-00002A80       .text dead__10daBigelf_cFv */
-void daBigelf_c::dead() {
-    /* Nonmatching */
+BOOL daBigelf_c::dead() {
+    return TRUE;
 }
 
 /* 00002A80-00002C8C       .text wait_action__10daBigelf_cFPv */
