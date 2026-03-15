@@ -116,6 +116,7 @@ public:
     /* 0x328 */ cXyz mCurrentPos;
     /* 0x334 */ u16 m334;
     /* 0x336 */ u8 m336;
+    /* 0x337 */ u8 m337;
     /* 0x338 */ f32 m338;
     /* 0x33C */ u8 m33C[0x340 - 0x33C];
     /* 0x340 */ u16 mStateBits;
@@ -144,7 +145,8 @@ public:
     /* 0x3C0 */ u8 m3C0 [0x3C4 - 0x3C0];
     /* 0x3C4 */ int mStaffId;
     /* 0x3C8 */ s16 mArrivalEvtID;
-    /* 0x3CA */ u8 m3CA[0x3E8 - 0x3CA];
+    /* 0x3CA */ s16 iAttCnt;
+    /* 0x3CA */ u8 m3CC[0x3E8 - 0x3CC];
     /* 0x3E8 */ f32 mHeightOffset;
     /* 0x3EC */ f32 m3EC;
     /* 0x3F0 */ f32 m3F0;

@@ -293,8 +293,18 @@ BOOL daBigelf_c::init() {
 }
 
 /* 00002534-000025A0       .text setAttention__10daBigelf_cFb */
-void daBigelf_c::setAttention(bool) {
-    /* Nonmatching */
+void daBigelf_c::setAttention(bool active) {
+    if(this->iAttCnt > 0){
+        this->iAttCnt--;
+        return;
+    }
+
+    if(!active && this->m337 >= 2){
+        return;
+    }
+    
+    this->eyePos.set(this->mUnkPos.x, this->mUnkPos.y, this->mUnkPos.z);
+    this->attention_info.position.set(this->mCurrentPos.x, this->mCurrentPos.y + 50, this->mCurrentPos.z);
 }
 
 /* 000025A0-000025F4       .text lookBack__10daBigelf_cFv */
