@@ -64,7 +64,7 @@ BOOL fopAcM_SearchByID(fpc_ProcID actorID, fopAc_ac_c** pDstActor) {
 
 /* 80024230-800242AC       .text fopAcM_SearchByName__FsPP10fopAc_ac_c */
 BOOL fopAcM_SearchByName(s16 procName, fopAc_ac_c** pDstActor) {
-    *pDstActor = fopAcM_Search((fopAcIt_JudgeFunc)fpcSch_JudgeForPName, &procName);
+    *pDstActor = fopAcM_SearchByName((fopAcIt_JudgeFunc)fpcSch_JudgeForPName, &procName);
     if (*pDstActor == NULL) {
         return FALSE;
     } else {

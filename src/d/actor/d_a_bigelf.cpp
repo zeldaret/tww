@@ -5,13 +5,37 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bigelf.h"
+#include "d/actor/d_a_ship.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/res/res_bigelf.h"
 
 /* 00000078-0000016C       .text oct_delete__10daBigelf_cFv */
 void daBigelf_c::oct_delete() {
-    /* Nonmatching */
+    fopAc_ac_c* actOcto = fopAcM_SearchByID(this->mOctID);
+    daShip_c* actShip = dComIfGp_getShipActor();
+    if((this->mStateBits & 0b1000000) == 0b1000000){
+        if(this->m3AC > 0){
+            this->m3AC--;
+            return;
+        }
+
+        if(actOcto != NULL){
+            if(actShip != NULL){
+                cXyz shipRelPos(0,0,1570), shipAbsPos;
+                
+                fpoAcM_absolutePos(actOcto, &shipRelPos, &shipAbsPos);
+                shipAbsPos.y = actShip->current.pos.y;
+                
+                short shipAngle = cLib_targetAngleY(&this->current.pos, &shipAbsPos);
+                shipAngle += 0x4000;
+                
+                actShip->initStartPos(&shipAbsPos, shipAngle);
+            }
+            fopAcM_delete(actOcto);
+        }
+        this->mStateBits &= ~(0b1000000);
+    }
 }
 
 /* 0000016C-00000338       .text nodeCallBack__10daBigelf_cFP7J3DNode */
@@ -199,7 +223,7 @@ u8 daBigelf_c::getType() {
 }
 
 /* 00001CD8-00001CE4       .text getSwbit__10daBigelf_cFv */
-void daBigelf_c::getSwbit() {
+uint daBigelf_c::getSwbit() {
     /* Nonmatching */
 }
 
@@ -284,13 +308,52 @@ void daBigelf_c::hunt() {
 }
 
 /* 000026C0-00002730       .text oct_search__10daBigelf_cFv */
-void daBigelf_c::oct_search() {
-    /* Nonmatching */
+BOOL daBigelf_c::oct_search() {
+    fopAc_ac_c* actOcto = fopAcM_searchFromName("Daiocta", 0, 0);
+    if(actOcto != NULL){
+        this->mOctID = fopAcM_GetID(actOcto);
+        this->m3BD = 5;
+        this->m3AC = 10;
+    }
+
+    return TRUE;
 }
 
 /* 00002730-000028E8       .text oct__10daBigelf_cFv */
-void daBigelf_c::oct() {
-    /* Nonmatching */
+BOOL daBigelf_c::oct() {
+    fopAc_ac_c* actOcto = fopAcM_SearchByID(this->mOctID);
+    if(actOcto != NULL){
+        this->current.pos = actOcto->current.pos;
+        this->current.pos.y = this->home.pos.y;
+        this->attention_info.position = this->current.pos;
+        this->eyePos = this->current.pos;
+        this->current.angle.y = actOcto->shape_angle.y;
+
+        cXyz p1(0,0,0), p2(-820, 0, 1340);
+        s16 angleInc = cLib_targetAngleY(&p1, &p2);
+        this->current.angle.y += angleInc;
+        this->shape_angle.y = this->current.angle.y;
+        this->mStateBits |= 0b100000;
+    }
+    else {
+            this->mStateBits &= ~(0b100000);
+    }
+
+    if(dComIfGs_isSwitch(static_cast<u8>(this->getSwbit()), this->current.roomNo)){
+        if(this->m3AC > 0){
+            this->m3AC--;
+        }
+        else {
+            fopAc_ac_c* actLink = dComIfGp_getLinkPlayer();
+            this->m3BD = 1;
+            this->mArrivalEvtID = dComIfGp_evmng_getEventIdx("BIGELF_ARRIVAL_2");
+            fopAcM_orderChangeEventId(this, actLink, this->mArrivalEvtID, 0, 0xffff);
+            this->m3AC = 30;
+            this->mStateBits |= 0b1000000;
+        }
+    }
+
+    return TRUE;
 }
 
 /* 000028E8-000029A0       .text ready0__10daBigelf_cFv */

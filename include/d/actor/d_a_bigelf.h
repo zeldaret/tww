@@ -3,7 +3,6 @@
 
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
-#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
 
@@ -57,7 +56,7 @@ public:
     void getNowEventAction();
     void demoProc();
     u8 getType();
-    void getSwbit();
+    uint getSwbit();
     void getSwbit2();
     void getEventFlag();
     void makeFa1S();
@@ -74,8 +73,8 @@ public:
     void setAttention(bool);
     void lookBack();
     void hunt();
-    void oct_search();
-    void oct();
+    BOOL oct_search();
+    BOOL oct();
     void ready0();
     void event0();
     void dead();
@@ -94,7 +93,6 @@ public:
     /* 0x2C8 */ J3DModel* mpFlowerModel;
     /* 0x2CC */ mDoExt_brkAnm mFlowerBrkAnimator;
     /* 0x2E4 */ s8 m_fl_jnt;
-    /* 0x2E5 */ u8 m2E5[0x2E8 - 0x2E5];
     /* 0x2E8 */ dNpc_JntCtrl_c m_jnt;
     /* 0x31C */ cXyz mUnkPos;
     /* 0x328 */ cXyz mCurrentPos;
@@ -121,19 +119,20 @@ public:
     /* 0x3A0 */ f32 m3A0;
     /* 0x3A4 */ f32 m3A4;
     /* 0x3A8 */ f32 m3A8;
-    /* 0x3AC */ u8 m3AC[0x3B0 - 0x3AC];
+    /* 0x3AC */ s16 m3AC;
     /* 0x3B0 */ ActionFunc mCurrentStateFunc;
     /* 0x3BC */ s8 m3BC;
-    /* 0x3BD */ u8 m3BD[0x3C4 - 0x3BD];
+    /* 0x3BD */ s8 m3BD;
+    /* 0x3C0 */ u8 m3C0 [0x3C4 - 0x3C0];
     /* 0x3C4 */ int mStaffId;
-    /* 0x3C8 */ s16 m3C8;
+    /* 0x3C8 */ s16 mArrivalEvtID;
     /* 0x3CA */ u8 m3CA[0x3E8 - 0x3CA];
     /* 0x3E8 */ f32 mHeightOffset;
     /* 0x3EC */ f32 m3EC;
     /* 0x3F0 */ f32 m3F0;
     /* 0x3F4 */ u8 m3F4;
     /* 0x3F5 */ u8 iBrkFrame;
-    /* 0x3F8 */ u8 m3F8[0x3FC - 0x3F8];
+    /* 0x3F8 */ fpc_ProcID mOctID;
 };
 
 #endif /* D_A_BIGELF_H */
