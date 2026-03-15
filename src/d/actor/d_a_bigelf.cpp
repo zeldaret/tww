@@ -299,7 +299,11 @@ void daBigelf_c::setAttention(bool) {
 
 /* 000025A0-000025F4       .text lookBack__10daBigelf_cFv */
 void daBigelf_c::lookBack() {
-    /* Nonmatching */
+    fopAc_ac_c* pLink = dComIfGp_getLinkPlayer();
+    if(!chkFlag(BIGELF_STATE_UNK5)){
+        this->current.angle.y = fopAcM_searchActorAngleY(this, pLink);
+        this->shape_angle.y = this->current.angle.y;
+    }
 }
 
 /* 000025F4-000026C0       .text hunt__10daBigelf_cFv */
