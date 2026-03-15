@@ -81,7 +81,7 @@ public:
     void makeFa1();
     void setAnm(signed char);
     void setAnmStatus();
-    u16 next_msgStatus(unsigned long*);
+    fopMsg_MessageStatus_e next_msgStatus(unsigned long*);
     int getMsg();
     void msgPushButton();
     void msgAnm(unsigned char);
@@ -118,14 +118,14 @@ public:
     /* 0x336 */ u8 m336;
     /* 0x337 */ u8 m337;
     /* 0x338 */ f32 m338;
-    /* 0x33C */ u32 m33C;
+    /* 0x33C */ u32 mMsgIdx;
     /* 0x340 */ u16 mStateBits;
     /* 0x342 */ u16 m342;
     /* 0x344 */ u8 m344;
     /* 0x345 */ u8 m345;
     /* 0x346 */ u8 mGivenItem;
     /* 0x347 */ u8 m347[0x348 - 0x347];
-    /* 0x348 */ int mCurrentMessageId;
+    /* 0x348 */ u32 mCurrentMessageId;
     /* 0x34C */ fpc_ProcID mFairyActorID;
     /* 0x350 */ u8 m350[0x352 - 0x350];
     /* 0x352 */ bool mIsLightShining;

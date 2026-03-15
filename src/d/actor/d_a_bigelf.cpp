@@ -261,23 +261,85 @@ void daBigelf_c::setAnmStatus() {
 }
 
 /* 00002030-000021A4       .text next_msgStatus__10daBigelf_cFPUl */
-u16 daBigelf_c::next_msgStatus(u32*) {
-    /* Nonmatching */
+fopMsg_MessageStatus_e daBigelf_c::next_msgStatus(u32* pMsgIdx) {
+    fopMsg_MessageStatus_e ret = fopMsgStts_MSG_CONTINUES_e;
+    switch(*pMsgIdx){
+        case 0x2EE8:
+            (*pMsgIdx)++;
+            switch(getType()){
+                case 0:
+                case 1:
+                    if(dComIfGs_getWalletSize() == 0){
+                        this->mGivenItem = 0xAB;
+                    }
+                    else {
+                        this->mGivenItem = 0xAC;
+                    }
+                    break;
+                case 2:
+                case 3:
+                    if(dComIfGs_getBombMax() <= 30){
+                        this->mGivenItem = 0xAD;
+                    }
+                    else {
+                        this->mGivenItem = 0xAE;
+                    }
+                    break;
+                case 4:
+                case 5:
+                    if(dComIfGs_getArrowMax() <= 30){
+                        this->mGivenItem = 0xAF;
+                    }
+                    else {
+                        this->mGivenItem = 0xB0;
+                    }
+                    break;
+                default:
+                    this->mGivenItem = 4;
+                    break;
+            }
+            dComIfGp_event_setGtItm(this->mGivenItem);
+            break;
+        
+        case 0x2EEB:
+        case 0x2EEC:
+            (*pMsgIdx)++;
+            break;
+        
+        case 0x2EEF:
+        case 0x2EF0:
+            (*pMsgIdx)++;
+            break;
+        
+        case 0x2EF1:
+            *pMsgIdx = 0x2EEE;
+            break;
+        
+        default:
+            ret = fopMsgStts_MSG_ENDS_e;
+            break;
+    }
+
+    return ret;
 }
 
 /* 000021A4-000021D4       .text getMsg__10daBigelf_cFv */
 int daBigelf_c::getMsg() {
-    /* Nonmatching */
+    if(this->mCurrentMessageId == 0x2eee && dComIfGs_getItem(dInvSlot_BOW_e) == dItem_BOW_e){
+        this->mCurrentMessageId = 0x2eef;
+    }
+
+    return this->mCurrentMessageId;
 }
 
 /* 000021D4-000021D8       .text msgPushButton__10daBigelf_cFv */
 void daBigelf_c::msgPushButton() {
-    /* Nonmatching */
+    return;
 }
 
 /* 000021D8-000021DC       .text msgAnm__10daBigelf_cFUc */
 void daBigelf_c::msgAnm(unsigned char) {
-    /* Nonmatching */
+    return;
 }
 
 /* 000021DC-000021F0       .text talkInit__10daBigelf_cFv */
@@ -292,12 +354,12 @@ u16 daBigelf_c::talk() {
 
     if(this->m3F7 == 0){
         l_msgId = -1;
-        this->m33C = getMsg();
+        this->mMsgIdx = getMsg();
         this->m3F7 = 1;
     }
     else if(this->m3F7 != -1){
         if(l_msgId == -1){
-            l_msgId = fopMsgM_messageSet(this->m33C, this);
+            l_msgId = fopMsgM_messageSet(this->mMsgIdx, this);
         }
         else {
             if(!chkFlag(BIGELF_STATE_UNK2)){
@@ -313,14 +375,14 @@ u16 daBigelf_c::talk() {
                 
                 case 2:
                     ret = l_msg->mStatus;
-                    if(ret == 14){
+                    if(ret == fopMsgStts_MSG_DISPLAYED_e){
                             this->msgPushButton();
-                            l_msg->mStatus = this->next_msgStatus(&this->m33C);
-                            if(l_msg->mStatus == 15)
-                                fopMsgM_messageSet(this->m33C);
+                            l_msg->mStatus = this->next_msgStatus(&this->mMsgIdx);
+                            if(l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e)
+                                fopMsgM_messageSet(this->mMsgIdx);
                     }
-                    else if(ret == 18){
-                        l_msg->mStatus = 19;
+                    else if(ret == fopMsgStts_BOX_CLOSED_e){
+                        l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
                         this->m3F7 = -1;
                     }
                     break;
