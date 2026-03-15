@@ -75,7 +75,7 @@ public:
     void hunt();
     BOOL oct_search();
     BOOL oct();
-    void ready0();
+    BOOL ready0();
     void event0();
     void dead();
     void wait_action(void*);
@@ -105,7 +105,7 @@ public:
     /* 0x346 */ u8 mGivenItem;
     /* 0x347 */ u8 m347[0x348 - 0x347];
     /* 0x348 */ int mCurrentMessageId;
-    /* 0x34C */ void* mpFairyActor;
+    /* 0x34C */ fpc_ProcID mFairyActorID;
     /* 0x350 */ u8 m350[0x352 - 0x350];
     /* 0x352 */ bool mIsLightShining;
     /* 0x353 */ u8 m353[0x354 - 0x353];

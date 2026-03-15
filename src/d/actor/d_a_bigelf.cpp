@@ -357,8 +357,19 @@ BOOL daBigelf_c::oct() {
 }
 
 /* 000028E8-000029A0       .text ready0__10daBigelf_cFv */
-void daBigelf_c::ready0() {
-    /* Nonmatching */
+BOOL daBigelf_c::ready0() {
+    fopAcM_SearchByID(this->mFairyActorID);
+    if(this->eventInfo.checkCommandDemoAccrpt()){
+        this->m3BD = 2;
+        this->mStaffId = dComIfGp_evmng_getMyStaffId("BigElf");
+        this->m3A8 = 1.0f;
+        demoProc();
+    }
+    else {
+        fopAcM_orderOtherEventId(this, this->mArrivalEvtID);
+    }
+
+    return TRUE;
 }
 
 /* 000029A0-00002A78       .text event0__10daBigelf_cFv */
