@@ -437,7 +437,28 @@ void dMs_telescopeMove(sub_ms_screen_class* i_Ms) {
 
 /* 801DD5CC-801DD6D8       .text dMs_placenameMove__FP19sub_ms_screen_class */
 void dMs_placenameMove(sub_ms_screen_class*) {
-    /* Nonmatching */
+    if (dComIfGp_event_getMode() == 0) {
+        return;
+    }
+
+    if (dComIfGp_evmng_startCheck("awake")) {
+        if (dComIfGp_demo_get()) {
+            if (dComIfGp_demo_get()->getFrameNoMsg() == 0xC8) {
+                dComIfGp_setStageNameOn(0);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3510);
+            } else if (dComIfGp_demo_get()->getFrameNoMsg() == 0x15E) {
+                dComIfGp_setStageNameOff();
+            }
+        }
+    } else if (dComIfGp_evmng_startCheck("majyuu_shinnyuu")) {
+        if (dComIfGp_demo_get()) {
+            if (dComIfGp_demo_get()->getFrameNoMsg() == 0xB54) {
+                dComIfGp_setStageNameOn(1);
+            } else if (dComIfGp_demo_get()->getFrameNoMsg() == 0xBEA) {
+                dComIfGp_setStageNameOff();
+            }
+        }
+    }
 }
 
 /* 801DD6D8-801DD960       .text dMs_Draw__FP19sub_ms_screen_class */
