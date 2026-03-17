@@ -13,6 +13,8 @@
 fpc_ProcID l_msgId;
 msg_class* l_msg;
 
+const u32 l_bck_ix_tbl[4] = {8,6,7,6};
+
 /* 00000078-0000016C       .text oct_delete__10daBigelf_cFv */
 void daBigelf_c::oct_delete() {
     fopAc_ac_c* actOcto = fopAcM_SearchByID(this->mOctID);
@@ -251,13 +253,42 @@ void daBigelf_c::makeFa1() {
 }
 
 /* 00001EB4-0000200C       .text setAnm__10daBigelf_cFSc */
-void daBigelf_c::setAnm(signed char) {
-    /* Nonmatching */
+void daBigelf_c::setAnm(s8 anmIdx) {
+    float morf = 8.0f;
+    int loopMode = -1;
+    float speed = 1.0f, startFrame = 0.0f;
+    float duration = -1.0f;
+
+    switch(anmIdx){
+        case 1:
+        case 2:
+            morf = 0.0f;
+            break;
+        case 3:
+            loopMode = 3;
+            startFrame = 0.0f;
+            speed = duration;
+            duration = 100.0f;
+            break;
+    }
+
+    switch(this->m3BC){
+        case 1:
+            morf = 0.0f;
+    }
+    
+    if(anmIdx != this->m3BC && anmIdx != -1){
+        this->m3BC = anmIdx;
+        this->m338 = 0;
+        this->m336 = 0;
+        J3DAnmTransform* pAnimRes = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("bigelf", l_bck_ix_tbl[this->m3BC]));
+        this->mpBckAnimator->setAnm(pAnimRes, loopMode, morf, speed, startFrame, duration, NULL);
+    }
 }
 
 /* 0000200C-00002030       .text setAnmStatus__10daBigelf_cFv */
 void daBigelf_c::setAnmStatus() {
-    /* Nonmatching */
+    this->setAnm(0);
 }
 
 /* 00002030-000021A4       .text next_msgStatus__10daBigelf_cFPUl */

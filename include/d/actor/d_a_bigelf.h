@@ -79,12 +79,12 @@ public:
     u16 getEventFlag();
     void makeFa1S();
     void makeFa1();
-    void setAnm(signed char);
+    void setAnm(s8);
     void setAnmStatus();
-    fopMsg_MessageStatus_e next_msgStatus(unsigned long*);
+    fopMsg_MessageStatus_e next_msgStatus(u32*);
     int getMsg();
     void msgPushButton();
-    void msgAnm(unsigned char);
+    void msgAnm(u8);
     void talkInit();
     u16 talk();
     BOOL init();
