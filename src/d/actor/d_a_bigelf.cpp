@@ -244,12 +244,27 @@ u16 daBigelf_c::getEventFlag() {
 
 /* 00001D70-00001E20       .text makeFa1S__10daBigelf_cFv */
 void daBigelf_c::makeFa1S() {
-    /* Nonmatching */
+    cXyz pos = this->current.pos;
+    csXyz angle;
+    angle.x = this->current.angle.x;
+    angle.y = this->current.angle.y;
+    angle.z = this->current.angle.z;
+    pos.y += this->mHeightOffset;
+    for(int i = 0; i < 10; i++, angle.y += 10000){
+        fopAcM_create(PROC_NPC_FA1, 4, &pos, fopAcM_GetRoomNo(this), &angle);
+    }
+
 }
 
 /* 00001E20-00001EB4       .text makeFa1__10daBigelf_cFv */
 void daBigelf_c::makeFa1() {
-    /* Nonmatching */
+    cXyz pos = this->current.pos;
+    csXyz angle;
+    angle.x = this->current.angle.x;
+    angle.y = this->current.angle.y;
+    angle.z = this->current.angle.z;
+    pos.y += 100.0f;
+    this->mFairyActorID = fopAcM_create(PROC_NPC_FA1, 6, &pos, fopAcM_GetRoomNo(this), &angle);
 }
 
 /* 00001EB4-0000200C       .text setAnm__10daBigelf_cFSc */
