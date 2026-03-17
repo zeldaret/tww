@@ -239,7 +239,25 @@ u8 daBigelf_c::getSwbit2() {
 
 /* 00001CF0-00001D70       .text getEventFlag__10daBigelf_cFv */
 u16 daBigelf_c::getEventFlag() {
-    /* Nonmatching */
+    // Type to event (dSv_event_flag_c)
+    switch(this->getType()){
+        case 0:
+            return dSv_event_flag_c::UNK_3020;
+        case 1:
+            return dSv_event_flag_c::UNK_3010;
+        case 2:
+            return dSv_event_flag_c::UNK_3008;
+        case 3:
+            return dSv_event_flag_c::UNK_3004;
+        case 4:
+            return dSv_event_flag_c::UNK_3002;
+        case 5:
+            return dSv_event_flag_c::UNK_3001;
+        case 6:
+            return dSv_event_flag_c::UNK_3180;
+        default:
+            return 0;
+    }
 }
 
 /* 00001D70-00001E20       .text makeFa1S__10daBigelf_cFv */
