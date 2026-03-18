@@ -112,8 +112,8 @@ public:
     /* 0x4A */ u8 padding_0x4A[0x4C - 0x4A];
     /* 0x4C */ JUtility::TColor mBlackColor;
     /* 0x50 */ JUtility::TColor mWhiteColor;
-    /* 0x54 */ GXColor mColor1;
-    /* 0x58 */ GXColor mColor2;
+    /* 0x54 */ GXColor mClothColor;
+    /* 0x58 */ GXColor mShadowColor;
     /* 0x5C */ u8 field_0x5C;
 };
 

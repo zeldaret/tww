@@ -168,10 +168,10 @@ void dDlst_MENU_CLOTH_c::draw() {
 
     GXSetProjection(mtx, GX_PERSPECTIVE);
 
-    GXColor color1 = g_miHIO.mColor1;
-    GXColor color2 = g_miHIO.mColor2;
+    GXColor clothColor = g_miHIO.mClothColor;
+    GXColor shadowColor = g_miHIO.mShadowColor;
 
-    cloth_c->draw(0.0f, color1, color2, 1);
+    cloth_c->draw(0.0f, clothColor, shadowColor, 1);
 
     g_dComIfG_gameInfo.play.getCurrentGrafPort()->setPort();
 }

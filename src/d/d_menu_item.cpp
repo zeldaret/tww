@@ -41,16 +41,16 @@ dMi_HIO_c::dMi_HIO_c() {
     field_0x44 = -120;
 
     // Light Yellow-Green
-    mColor1.r = 0xE3;
-    mColor1.g = 0xFF;
-    mColor1.b = 0xB3;
-    mColor1.a = 0xDC;
+    mClothColor.r = 0xE3;
+    mClothColor.g = 0xFF;
+    mClothColor.b = 0xB3;
+    mClothColor.a = 0xDC;
 
     // Transparent
-    mColor2.r = 0x00;
-    mColor2.g = 0x00;
-    mColor2.b = 0x00;
-    mColor2.a = 0x00;
+    mShadowColor.r = 0x00;
+    mShadowColor.g = 0x00;
+    mShadowColor.b = 0x00;
+    mShadowColor.a = 0x00;
 
     field_0x5C = 130;
 
