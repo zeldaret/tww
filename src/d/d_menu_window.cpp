@@ -183,7 +183,20 @@ dMw_HIO_c::dMw_HIO_c() {
 
 /* 801DB50C-801DB568       .text __ct__10dMw_DHIO_cFv */
 dMw_DHIO_c::dMw_DHIO_c() {
-    /* Nonmatching */
+    for (int i = 0; i < 0x10; i++) {
+        arr_0x05[0][i] = 0;
+        arr_0x05[1][i] = 0;
+        arr_0x05[2][i] = 0;
+        arr_0x05[3][i] = 0;
+        arr_0x05[4][i] = 0;
+        arr_0x05[5][i] = 0;
+        arr_0x05[6][i] = 0;
+        arr_0x05[7][i] = 0;
+        arr_0x05[8][i] = 0;
+        arr_0x05[9][i] = 0;
+        arr_0x05[10][i] = 0;
+        arr_0x05[11][i] = 0;
+    }
 }
 
 /* 801DB568-801DB91C       .text dMs_item_create__FP19sub_ms_screen_class */
