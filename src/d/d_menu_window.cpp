@@ -168,9 +168,8 @@ void dDlst_MENU_CLOTH_c::draw() {
 
     GXSetProjection(mtx, GX_PERSPECTIVE);
 
-    // TODO: Get colors from g_miHIO in d_menu_item.h
-    GXColor color1 = {};
-    GXColor color2 = {};
+    GXColor color1 = g_miHIO.mColor1;
+    GXColor color2 = g_miHIO.mColor2;
 
     cloth_c->draw(0.0f, color1, color2, 1);
 
