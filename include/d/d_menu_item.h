@@ -82,4 +82,6 @@ public:
     virtual ~dMi_HIO_c() {}
 };
 
+extern dMi_HIO_c g_miHIO;
+
 #endif /* D_MENU_ITEM_H */
