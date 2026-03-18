@@ -76,9 +76,10 @@ public:
     void _close2();
 };
 
-class dMi_HIO_c {
+class dMi_HIO_c : public JORReflexible {
 public:
     dMi_HIO_c();
+    virtual ~dMi_HIO_c() {}
 };
 
 #endif /* D_MENU_ITEM_H */
