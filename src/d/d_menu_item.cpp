@@ -11,7 +11,58 @@ dMi_HIO_c g_miHIO;
 
 /* 801C7B4C-801C7C7C       .text __ct__9dMi_HIO_cFv */
 dMi_HIO_c::dMi_HIO_c() {
-    /* Nonmatching */
+    // mColor0 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF}; // White
+    *reinterpret_cast<s32*>(&mColor0) = -1; // FIXME: This doesn't seem right.
+
+    field_0x50 = -1;
+    field_0x08 = 0.8f;
+    field_0x0C = 15;
+
+    for (int i = 0; i < ARR_SIZE; i++) {
+        arr_0x0E[i] = 0;
+        arr_0x1A[i] = 10;
+    }
+
+    field_0x18 = 0;
+    field_0x24 = 1;
+    field_0x26 = -100;
+    field_0x28 = -100;
+    field_0x2A = -45;
+    field_0x2C = 50;
+    field_0x2E = 30;
+    field_0x30 = -3;
+    field_0x32 = 10;
+    field_0x34 = 7;
+    field_0x36 = 14;
+    field_0x38 = 5;
+    field_0x3A = 12;
+    field_0x3C = 10;
+    field_0x40 = 320;
+    field_0x42 = 240;
+    field_0x3E = 200;
+    field_0x46 = 0;
+    field_0x48 = 20;
+    field_0x44 = -120;
+
+    // Light Yellow-Green
+    mColor1.r = 0xE3;
+    mColor1.g = 0xFF;
+    mColor1.b = 0xB3;
+    mColor1.a = 0xDC;
+
+    // Transparent
+    mColor2.r = 0x00;
+    mColor2.g = 0x00;
+    mColor2.b = 0x00;
+    mColor2.a = 0x00;
+
+    field_0x5C = 130;
+
+    // Black
+    mColor0.r = 0x00;
+    mColor0.g = 0x00;
+    mColor0.b = 0x00;
+    mColor0.a = 0xFF;
 }
 
 /* 801C7C7C-801C7DC4       .text initialize__12dMenu_Item_cFv */
