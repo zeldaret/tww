@@ -557,8 +557,6 @@ static BOOL dMs_IsDelete(sub_ms_screen_class*) {
 
 /* 801DF368-801DF4C4       .text dMs_Delete__FP19sub_ms_screen_class */
 static BOOL dMs_Delete(sub_ms_screen_class* i_Ms) {
-    /* Nonmatching */
-
     dMenu_setPushMenuButton(0);
     dComIfGp_setPictureStatus(0);
 
@@ -577,10 +575,11 @@ static BOOL dMs_Delete(sub_ms_screen_class* i_Ms) {
 
     mDoExt_setCurrentHeap(i_Ms->parentHeap_0xfc);
 
-    // FIXME: Slightly wrong codegen here.
-    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_DUNGEON_e) {
+    if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1) {
+        // Dungeon map
         dMs_dmap_delete(i_Ms);
-    } else if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_OUTDOORS_e) {
+    } else if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0) {
+        // Sea chart
         dMs_fmap_delete(i_Ms);
     }
 
