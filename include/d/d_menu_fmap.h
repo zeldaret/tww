@@ -16,7 +16,7 @@ class dMenu_Fmap_c {
 public:
     virtual ~dMenu_Fmap_c() {}
 
-    void draw() {}
+    void draw() { _draw(); }
     void getCtCurWX() {}
     void getCtCurWY() {}
     void getCtCurX() {}
