@@ -74,6 +74,8 @@ public:
     virtual ~dMw_DHIO_c() {}
 
     /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 arr_0x05[0xC][0x10];
+    /* 0xC5 */ u8 padding_0xC5[0xCC - 0xC5];
 };
 
 extern dMw_HIO_c g_mwHIO;
