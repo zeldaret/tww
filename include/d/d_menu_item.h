@@ -81,11 +81,16 @@ public:
     dMi_HIO_c();
     virtual ~dMi_HIO_c() {}
 
+    static const int ARR_SIZE = 5;
+
 public:
     /* 0x04 */ s8 mNo;
     /* 0x08 */ f32 field_0x08;
     /* 0x0C */ s16 field_0x0C;
-    /* 0x0E */ u8 field_0x0E[0x26 - 0x0E];
+    /* 0x0E */ s16 arr_0x0E[ARR_SIZE];
+    /* 0x18 */ s16 field_0x18;
+    /* 0x1A */ s16 arr_0x1A[ARR_SIZE];
+    /* 0x24 */ s16 field_0x24;
     /* 0x26 */ s16 field_0x26;
     /* 0x28 */ s16 field_0x28;
     /* 0x2A */ s16 field_0x2A;
