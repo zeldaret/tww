@@ -453,6 +453,7 @@ public:
     void setDoStatusForce(u8 value) { mDoStatusForce = value; }
 
     u8 getPictureStatus() { return mPictureStatus; }
+    void setPictureStatus(u8 status) { mPictureStatus = status; }
     void setPictureStatusOn() { mPictureStatus = 2; }
     void setPictureStatusGetOn(u8 to_set) {
         mPictureStatus = 3;
@@ -2844,6 +2845,10 @@ inline void dComIfGp_setDoStatusForce(u8 value) {
 
 inline u8 dComIfGp_getPictureStatus() {
     return g_dComIfG_gameInfo.play.getPictureStatus();
+}
+
+inline void dComIfGp_setPictureStatus(u8 status) {
+    g_dComIfG_gameInfo.play.setPictureStatus(status);
 }
 
 inline void dComIfGp_setPictureStatusOn() {
