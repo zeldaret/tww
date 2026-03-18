@@ -227,6 +227,8 @@ void dMenu_Item_c::equipBeastItem(int) {
 /* 801CF12C-801CF510       .text _create__12dMenu_Item_cFv */
 void dMenu_Item_c::_create() {
     /* Nonmatching */
+
+    g_miHIO.mNo = mDoHIO_createChild("アイテム画面", &g_miHIO); // "Item Screen"
 }
 
 /* 801CF510-801CF618       .text _delete__12dMenu_Item_cFv */
