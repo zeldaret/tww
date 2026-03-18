@@ -676,6 +676,7 @@ void mDoExt_modelEntryDL(J3DModel* i_model);
 
 void mDoExt_modelTexturePatch(J3DModelData*);
 
+JKRHeap* mDoExt_getCurrentHeap();
 JKRExpHeap* mDoExt_getCommandHeap();
 JKRExpHeap* mDoExt_getZeldaHeap();
 JKRExpHeap* mDoExt_getGameHeap();
