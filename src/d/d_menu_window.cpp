@@ -541,7 +541,66 @@ void dMs_placenameMove(sub_ms_screen_class*) {
 
 /* 801DD6D8-801DD960       .text dMs_Draw__FP19sub_ms_screen_class */
 static BOOL dMs_Draw(sub_ms_screen_class*) {
-    /* Nonmatching */
+    if (dMenu_flag() == 1 || dMs_capture_c && dMs_capture_c->mStatus != 0) {
+        if (dMs_capture_c) {
+            dComIfGd_set2DOpa(dMs_capture_c);
+
+            if (dMs_capture_c->mStatus == 2) {
+                dMs_capture_c->mStatus = 0;
+                dMenu_flagSet(1);
+            }
+        }
+
+        if (dMenu_getMenuStatus() == 1) {
+            // Item screen
+            if (dMs_cloth_c) {
+                dComIfGd_set2DOpa(dMs_cloth_c);
+            }
+            if (dMi_c) {
+                dComIfGd_set2DOpa(dMi_c);
+            }
+        } else if (dMenu_getMenuStatus() == 2) {
+            // Collect screen
+            if (dMs_cloth_c) {
+                dComIfGd_set2DOpa(dMs_cloth_c);
+            }
+            if (dMc_c) {
+                dComIfGd_set2DOpa(dMc_c);
+            }
+        } else if (dMenu_getMenuStatus() == 3) {
+            // Map screen
+            if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1) {
+                // Dungeon map
+                if (dMd_c) {
+                    dComIfGd_set2DOpa(dMd_c);
+                }
+            } else if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0) {
+                // Sea chart
+                if (dMs_cloth_c) {
+                    dComIfGd_set2DOpa(dMs_cloth_c);
+                }
+                if (dMf_c) {
+                    dMf_c->draw();
+                }
+            }
+        } else if (dMenu_getMenuStatus() == 4) {
+            // Name entry screen
+            if (dNm_c) {
+                dNm_c->draw();
+            }
+        } else if (dMenu_getMenuStatus() == 5) {
+            // Save screen
+            if (dMs_c) {
+                dMs_c->_draw2();
+            }
+        }
+    } else if (dMenu_flag() == 3) {
+        if (dMs_capture_c) {
+            dComIfGd_set2DOpa(dMs_capture_c);
+        }
+    }
+
+    return TRUE;
 }
 
 /* 801DD960-801DF340       .text dMs_Execute__FP19sub_ms_screen_class */
