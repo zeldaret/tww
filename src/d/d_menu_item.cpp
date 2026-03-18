@@ -11,10 +11,6 @@ dMi_HIO_c g_miHIO;
 
 /* 801C7B4C-801C7C7C       .text __ct__9dMi_HIO_cFv */
 dMi_HIO_c::dMi_HIO_c() {
-    // mColor0 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF}; // White
-    *reinterpret_cast<u32*>(&mColor0) = 0xFFFFFFFF; // FIXME: This doesn't seem right.
-
-    field_0x50 = -1;
     field_0x08 = 0.8f;
     field_0x0C = 15;
 
@@ -58,11 +54,8 @@ dMi_HIO_c::dMi_HIO_c() {
 
     field_0x5C = 130;
 
-    // Black
-    mColor0.r = 0x00;
-    mColor0.g = 0x00;
-    mColor0.b = 0x00;
-    mColor0.a = 0xFF;
+    mBlackColor.set(0x00, 0x00, 0x00, 0xFF); // Black
+    // mWhiteColor stays as default.
 }
 
 /* 801C7C7C-801C7DC4       .text initialize__12dMenu_Item_cFv */
