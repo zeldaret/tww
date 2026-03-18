@@ -12,7 +12,7 @@ dMi_HIO_c g_miHIO;
 /* 801C7B4C-801C7C7C       .text __ct__9dMi_HIO_cFv */
 dMi_HIO_c::dMi_HIO_c() {
     // mColor0 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF}; // White
-    *reinterpret_cast<s32*>(&mColor0) = -1; // FIXME: This doesn't seem right.
+    *reinterpret_cast<u32*>(&mColor0) = 0xFFFFFFFF; // FIXME: This doesn't seem right.
 
     field_0x50 = -1;
     field_0x08 = 0.8f;
