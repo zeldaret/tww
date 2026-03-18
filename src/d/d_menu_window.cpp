@@ -178,7 +178,73 @@ void dDlst_MENU_CLOTH_c::draw() {
 
 /* 801DB384-801DB50C       .text __ct__9dMw_HIO_cFv */
 dMw_HIO_c::dMw_HIO_c() {
-    /* Nonmatching */
+    field_0x12 = 0;
+    field_0x06 = 0;
+    field_0x14 = 0;
+    field_0x08 = 0;
+    field_0x16 = 0;
+    field_0x0A = 0;
+    field_0x17 = 0;
+    field_0x0B = 0;
+    field_0x18 = 0;
+    field_0x0C = 0;
+    field_0x1A = 0;
+    field_0x0E = 0;
+    field_0x1C = 0;
+    field_0x10 = 0;
+    field_0x1D = 0;
+    field_0x11 = 0;
+    field_0x1F = 0;
+    field_0x1E = 0;
+
+    for (int i = 0; i < 21; i++) {
+        arr_0x38[i] = 0xFF;
+        arr_0x20[i] = 0xFF;
+    }
+
+    field_0x9D = 0;
+    field_0x9C = 0;
+    field_0x9B = 0;
+
+    field_0x82 = 0;
+    field_0x81 = 0;
+    field_0x80 = 0;
+
+    for (int i = 0; i < 8; i++) {
+        arr_0x58[i] = 0;
+        arr_0x50[i] = 0;
+        arr_0x68[i] = 0;
+        arr_0x60[i] = 0;
+        arr_0xA6[i] = 0;
+        arr_0x9E[i] = 0;
+        arr_0x8B[i] = 0;
+        arr_0x83[i] = 0;
+    }
+
+    for (int i = 0; i < 8; i++) {
+        arr_0x78[i] = 0xFF;
+        arr_0x70[i] = 0xFF;
+    }
+
+    for (int i = 0; i < 6; i++) {
+        arr_0xBC[i] = 0;
+        arr_0xB6[i] = 0;
+    }
+
+    for (int i = 0; i < 8; i++) {
+        arr_0xCA[i] = 0;
+        arr_0xC2[i] = 0;
+    }
+
+    for (int i = 0; i < 3; i++) {
+        arr_0xD5[i] = 0;
+        arr_0xD2[i] = 0;
+    }
+
+    for (int i = 0; i < 8; i++) {
+        arr_0xE0[i] = 0;
+        arr_0xD8[i] = 0;
+    }
 }
 
 /* 801DB50C-801DB568       .text __ct__10dMw_DHIO_cFv */
