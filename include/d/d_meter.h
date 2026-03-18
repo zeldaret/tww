@@ -771,6 +771,8 @@ void dMenu_flagSet(u8);
 
 void dMeter_mtrShow();
 void dMeter_mtrHide();
+
+u8 dMenu_getMenuStatus();
 void dMenu_setMenuStatus(u8);
 void dMenu_setPushMenuButton(u8);
 
