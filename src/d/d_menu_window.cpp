@@ -160,11 +160,11 @@ void dDlst_MENU_CAPTURE_c::draw() {
 }
 
 void dDlst_MENU_CLOTH_c::draw() {
-    /* Nonmatching */
-    // TODO
     Mtx44 mtx;
-    f32 aspect = g_dComIfG_gameInfo.play.getCurrentViewport()->mWidth / g_dComIfG_gameInfo.play.getCurrentViewport()->mHeight * g_HIO.mAspectRatio;
-    C_MTXPerspective(mtx, 30.0f, aspect, 1.0f, 100000.0f);
+
+    const view_port_class* viewport = dComIfGp_getCurrentViewport();
+    const f32 aspect = viewport->mWidth / viewport->mHeight;
+    C_MTXPerspective(mtx, 30.0f, aspect * g_HIO.mAspectRatio, 1.0f, 100000.0f);
 
     GXSetProjection(mtx, GX_PERSPECTIVE);
 
