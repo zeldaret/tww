@@ -556,8 +556,46 @@ static BOOL dMs_IsDelete(sub_ms_screen_class*) {
 }
 
 /* 801DF368-801DF4C4       .text dMs_Delete__FP19sub_ms_screen_class */
-static BOOL dMs_Delete(sub_ms_screen_class*) {
+static BOOL dMs_Delete(sub_ms_screen_class* i_Ms) {
     /* Nonmatching */
+
+    dMenu_setPushMenuButton(0);
+    dComIfGp_setPictureStatus(0);
+
+    JKRHeap* heap = mDoExt_getCurrentHeap();
+
+    if (i_Ms->childHeap) {
+        mDoExt_setCurrentHeap(i_Ms->childHeap);
+        if (dMi_c) {
+            dMs_item_delete(i_Ms);
+        }
+        if (dMc_c) {
+            dMs_collect_delete(i_Ms);
+        }
+        dMs_childHeap_freeAll(i_Ms);
+    }
+
+    mDoExt_setCurrentHeap(i_Ms->parentHeap_0xfc);
+
+    // FIXME: Slightly wrong codegen here.
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_DUNGEON_e) {
+        dMs_dmap_delete(i_Ms);
+    } else if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_OUTDOORS_e) {
+        dMs_fmap_delete(i_Ms);
+    }
+
+    dMs_name_delete(i_Ms);
+    dMs_save_delete(i_Ms);
+    dMs_cloth_delete(i_Ms);
+
+    mDoExt_setCurrentHeap(heap);
+    mDoExt_removeMesgFont();
+    mDoExt_removeRubyFont();
+
+    mDoHIO_deleteChild(g_mwHIO.mNo);
+    mDoHIO_deleteChild(g_mwDHIO.mNo);
+
+    return TRUE;
 }
 
 /* 801DF4C4-801DF684       .text dMs_Create__FP9msg_class */
