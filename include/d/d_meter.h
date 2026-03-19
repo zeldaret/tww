@@ -774,6 +774,7 @@ void dMeter_mtrHide();
 
 u8 dMenu_getMenuStatus();
 void dMenu_setMenuStatus(u8);
+void dMenu_setMenuStatusOld(u8);
 void dMenu_setPushMenuButton(u8);
 
 void dMeter_weponChange(sub_meter_class* i_Meter);
