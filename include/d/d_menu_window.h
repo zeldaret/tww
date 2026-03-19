@@ -5,6 +5,48 @@
 
 class JKRExpHeap;
 
+enum dMw_Status {
+    MW_STATUS_NO_MENU = 0,
+    MW_STATUS_UNK_1 = 1,
+    MW_STATUS_UNK_2 = 2,
+    MW_STATUS_UNK_3 = 3,
+    MW_STATUS_UNK_4 = 4,
+    MW_STATUS_UNK_5 = 5,
+    MW_STATUS_UNK_6 = 6,
+    MW_STATUS_UNK_7 = 7,
+    MW_STATUS_UNK_8 = 8,
+    MW_STATUS_UNK_9 = 9,
+    MW_STATUS_UNK_10 = 10,
+    MW_STATUS_UNK_11 = 11,
+    MW_STATUS_UNK_12 = 12,
+    MW_STATUS_UNK_13 = 13,
+    MW_STATUS_UNK_14 = 14,
+    MW_STATUS_UNK_15 = 15,
+    MW_STATUS_UNK_16 = 16,
+    MW_STATUS_UNK_17 = 17,
+    MW_STATUS_UNK_18 = 18,
+    MW_STATUS_UNK_19 = 19,
+    MW_STATUS_UNK_20 = 20,
+    MW_STATUS_UNK_21 = 21,
+    MW_STATUS_UNK_22 = 22,
+    MW_STATUS_UNK_23 = 23,
+    MW_STATUS_UNK_24 = 24,
+    MW_STATUS_UNK_25 = 25,
+    MW_STATUS_UNK_26 = 26,
+    MW_STATUS_UNK_27 = 27,
+    MW_STATUS_UNK_28 = 28,
+    MW_STATUS_UNK_29 = 29,
+    MW_STATUS_UNK_30 = 30,
+    MW_STATUS_UNK_31 = 31,
+    MW_STATUS_UNK_32 = 32,
+    MW_STATUS_UNK_33 = 33,
+    MW_STATUS_UNK_34 = 34,
+    MW_STATUS_UNK_35 = 35,
+    MW_STATUS_UNK_36 = 36,
+    MW_STATUS_UNK_37 = 37,
+    MW_STATUS_UNK_38 = 38,
+};
+
 class sub_ms_screen_class : public msg_class {
 public:
     /* 0x00FC */ JKRHeap* parentHeap_0xfc;
@@ -19,7 +61,8 @@ public:
     /* 0x01AC */ u8 field_0x1AC[0x1B0 - 0x1AC];
     /* 0x01B0 */ u16 field_0x1B0;
     /* 0x01B2 */ u8 field_0x1B2;
-    /* 0x01B3 */ u8 field_0x1B3[0x1B6 - 0x1B3];
+    /* 0x01B3 */ u8 field_0x1B3[0x1B5 - 0x1B3];
+    /* 0x01B5 */ u8 mMenuProc; // dMw_Status
     /* 0x01B6 */ u8 mButtonsPressed;
 };
 
