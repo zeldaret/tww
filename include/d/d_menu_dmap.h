@@ -52,7 +52,21 @@ public:
     virtual void _draw();
     virtual void _open();
     virtual void _close();
-};
+
+public:
+    /* 0x0004 */ u8 field_0x0004[0x972 - 0x4];
+    /* 0x0972 */ u16 field_0x0972;
+    /* 0x0974 */ u8 field_0x0974[0x14B4 - 0x974];
+    /* 0x14B4 */ JUtility::TColor color_0x14B4;
+    /* 0x14B8 */ JUtility::TColor color_0x14B8;
+    /* 0x14BC */ JUtility::TColor color_0x14BC;
+    /* 0x14C0 */ JUtility::TColor color_0x14C0;
+    /* 0x14C4 */ JUtility::TColor color_0x14C4;
+    /* 0x14C8 */ JUtility::TColor color_0x14C8;
+    /* 0x14CC */ u8 field_0x14CC[0x1B08 - 0x14CC];
+    /* 0x1B08 */ fopMsgM_msgDataProc_c* mpMsgProc;
+    /* 0x1B0C */ u8 field_0x1B0C[0x1E38 - 0x1B0C];
+}; // Size: 0x1E38
 
 class dMd_HIO_c {
 public:
