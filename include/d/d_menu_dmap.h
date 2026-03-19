@@ -29,7 +29,7 @@ public:
     void cursorMove();
     void cursorAnime();
     void noteInit();
-    void noteCheck();
+    u32 noteCheck();
     void noteAppear();
     void noteOpen();
     void noteClose();

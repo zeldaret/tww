@@ -73,8 +73,10 @@ void dMenu_Dmap_c::noteInit() {
 }
 
 /* 801AC2D8-801AC2EC       .text noteCheck__12dMenu_Dmap_cFv */
-void dMenu_Dmap_c::noteCheck() {
+u32 dMenu_Dmap_c::noteCheck() {
     /* Nonmatching */
+    // TODO
+    return 0;
 }
 
 /* 801AC2EC-801AC390       .text noteAppear__12dMenu_Dmap_cFv */
