@@ -777,6 +777,12 @@ void dMenu_setMenuStatus(u8);
 void dMenu_setMenuStatusOld(u8);
 void dMenu_setPushMenuButton(u8);
 
+u8 dMenu_getCollectMode();
+void dMenu_setCollectMode(u8);
+
+u8 dMenu_getItemMode();
+void dMenu_setItemMode(u8);
+
 void dMeter_weponChange(sub_meter_class* i_Meter);
 void dMeter_weponAnime(sub_meter_class* i_Meter);
 void dMeter_weponTrans(sub_meter_class* i_Meter);
