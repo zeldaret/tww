@@ -89,7 +89,7 @@ public:
     void _move3();
     virtual void _draw();
     bool _open();
-    void _open3();
+    bool _open3();
     void _close();
     void _close3();
     void animeStep1(short, short);
@@ -97,7 +97,7 @@ public:
     void animeStep3(short, short);
     void animeStep4(short, short);
     void _open2();
-    void _close2();
+    bool _close2();
 
     /* 0x000 */ // vtable
     /* 0x004 */ J2DScreen* m004;

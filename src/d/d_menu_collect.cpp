@@ -550,11 +550,13 @@ void dMenu_Collect_c::_draw() {
 /* 801A68EC-801A6B28       .text _open__15dMenu_Collect_cFv */
 bool dMenu_Collect_c::_open() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801A6B28-801A6CC8       .text _open3__15dMenu_Collect_cFv */
-void dMenu_Collect_c::_open3() {
+bool dMenu_Collect_c::_open3() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801A6CC8-801A71EC       .text _close__15dMenu_Collect_cFv */
@@ -593,6 +595,7 @@ void dMenu_Collect_c::_open2() {
 }
 
 /* 801A7F88-801A84B4       .text _close2__15dMenu_Collect_cFv */
-void dMenu_Collect_c::_close2() {
+bool dMenu_Collect_c::_close2() {
     /* Nonmatching */
+    return false;
 }
