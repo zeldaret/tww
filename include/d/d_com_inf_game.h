@@ -290,7 +290,7 @@ public:
         mPlayerInfo[idx].mpPlayer = player;
         mPlayerInfo[idx].mCameraID = cam;
     }
-    
+
     fopAc_ac_c* getPlayerPtr(int idx) { return (fopAc_ac_c*)mpPlayerPtr[idx]; }
     void setPlayerPtr(int idx, fopAc_ac_c* playerPtr) { mpPlayerPtr[idx] = playerPtr; }
     int getCameraPlayer1ID(int i) { return mCameraInfo[i].mCamP1Id; }
@@ -621,7 +621,9 @@ public:
     u8 getDirection() { return mDirection; }
     void setDirection(u8 direction) { mDirection = direction; }
 
+    bool isMenuCollect() { return mMenuCollect; }
     void onMenuCollect() { mMenuCollect = true; }
+    void offMenuCollect() { mMenuCollect = false; }
 
     void nameOpenOn() { mNameOpen = 2; }
     u8 nameOpenCheck() { return mNameOpen; }
@@ -764,7 +766,7 @@ public:
     /* 0x4957 */ u8 mPlacenameIndex;
     /* 0x4958 */ u8 mPlacenameState;
     /* 0x4959 */ u8 mGameoverStatus;
-    /* 0x495A */ u8 mMenuCollect;
+    /* 0x495A */ bool mMenuCollect;
     /* 0x495B */ u8 mPictureFlag;
     /* 0x495C */ u8 mPictureResult;
     /* 0x495D */ u8 mPictureResultDetail;
@@ -2644,8 +2646,16 @@ inline void dComIfGp_clearPlayerStatus1(int param_0, u32 flag) {
     g_dComIfG_gameInfo.play.clearPlayerStatus(param_0, 1, flag);
 }
 
+inline bool dComIfGp_isMenuCollect() {
+    return g_dComIfG_gameInfo.play.isMenuCollect();
+}
+
 inline void dComIfGp_onMenuCollect() {
     g_dComIfG_gameInfo.play.onMenuCollect();
+}
+
+inline void dComIfGp_offMenuCollect() {
+    g_dComIfG_gameInfo.play.offMenuCollect();
 }
 
 /**
