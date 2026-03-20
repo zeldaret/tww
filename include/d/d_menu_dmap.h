@@ -29,7 +29,7 @@ public:
     void cursorMove();
     void cursorAnime();
     void noteInit();
-    u32 noteCheck();
+    bool noteCheck();
     void noteAppear();
     void noteOpen();
     void noteClose();
@@ -55,7 +55,7 @@ public:
 
 public:
     /* 0x0004 */ u8 field_0x0004[0x972 - 0x4];
-    /* 0x0972 */ u16 field_0x0972;
+    /* 0x0972 */ s16 field_0x0972;
     /* 0x0974 */ u8 field_0x0974[0x14B4 - 0x974];
     /* 0x14B4 */ JUtility::TColor color_0x14B4;
     /* 0x14B8 */ JUtility::TColor color_0x14B8;
