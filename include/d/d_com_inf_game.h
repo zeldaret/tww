@@ -623,8 +623,8 @@ public:
 
     void onMenuCollect() { mMenuCollect = true; }
 
-    void nameOpenOn() { field_0x4952 = 2; }
-    u8 nameOpenCheck() { return field_0x4952; }
+    void nameOpenOn() { mNameOpen = 2; }
+    u8 nameOpenCheck() { return mNameOpen; }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -756,7 +756,7 @@ public:
     /* 0x494A */ u8 field_0x494a[6];
     /* 0x4950 */ u8 mMelodyNum;
     /* 0x4951 */ bool mFmapOpen;
-    /* 0x4952 */ u8 field_0x4952;
+    /* 0x4952 */ u8 mNameOpen;
     /* 0x4953 */ u8 field_0x4953;
     /* 0x4954 */ u8 field_0x4954;
     /* 0x4955 */ bool mStartItemTimer;
@@ -4115,6 +4115,9 @@ inline u16 dComIfGp_getWaveFrame() { return g_dComIfG_gameInfo.play.getWaveFrame
 inline bool dComIfGp_fmapOpenCheck() { return g_dComIfG_gameInfo.play.fmapOpenCheck(); }
 inline void dComIfGp_fmapOpenOn() { g_dComIfG_gameInfo.play.fmapOpenOn(); }
 inline void dComIfGp_fmapOpenOff() { g_dComIfG_gameInfo.play.fmapOpenOff(); }
+
+inline u8 dComIfGp_nameOpenCheck() { return g_dComIfG_gameInfo.play.nameOpenCheck(); }
+inline void dComIfGp_nameOpenOn() { g_dComIfG_gameInfo.play.nameOpenOn(); }
 
 inline int dComIfG_getTimerRestTimeMs() {
     int limit = g_dComIfG_gameInfo.play.getTimerLimitTimeMs();
