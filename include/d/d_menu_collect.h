@@ -164,14 +164,23 @@ public:
     /* 0x2470 */ JUTFont* m2470;
     /* 0x2474 */ JUTFont* m2474;
     /* 0x2478 */ J2DPane* m2478;
-    /* 0x247C */ u8 m247C[0x2498 - 0x247C];
+    /* 0x247C */ u8 m247C[0x2488 - 0x247C];
+    /* 0x2488 */ JUtility::TColor color_2488;
+    /* 0x248C */ JUtility::TColor color_248C;
+    /* 0x2490 */ JUtility::TColor color_2490;
+    /* 0x2494 */ JUtility::TColor color_2494;
     /* 0x2498 */ ResTIMG* m2498;
     /* 0x249C */ ResTIMG* m249C;
     /* 0x24A0 */ ResTIMG* m24A0[6];
-    /* 0x24B8 */ u8 m24B8[0x27A8 - 0x24B8];
+    /* 0x24B8 */ u8 m24B8[0x24E0 - 0x24B8];
+    /* 0x24E0 */ fopMsgM_msgDataProc_c mMsgProc;
+    /* 0x27A0 */ u8 m27A0[0x27A8 - 0x27A0];
     /* 0x27A8 */ f32 m27A8;
     /* 0x27AC */ f32 m27AC;
-};
+    /* 0x27B0 */ u8 m27B0[0x27EE - 0x27B0];
+    /* 0x27EE */ u8 mCollectMode;
+    /* 0x27EF */ u8 m27EF[0x27F4 - 0x27EF];
+}; // Size: 0x27F4
 
 class dMc_HIO_c {
 public:
