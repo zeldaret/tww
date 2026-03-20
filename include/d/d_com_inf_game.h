@@ -366,9 +366,9 @@ public:
     void setWaveFrame(u16 frame) { mTimerInfo.mWaveFrame = frame; }
     u16 getWaveFrame() { return mTimerInfo.mWaveFrame; }
 
-    bool fmapOpenCheck() { return mFmapOpen; }
-    void fmapOpenOn() { mFmapOpen = true; }
-    void fmapOpenOff() { mFmapOpen = false; }
+    u8 fmapOpenCheck() { return mFmapOpen; }
+    void fmapOpenOn() { mFmapOpen = 1; }
+    void fmapOpenOff() { mFmapOpen = 0; }
 
     s16 getItemMagicCount() { return mItemMagicCount; }
     void setItemMagicCount(s16 magic) { mItemMagicCount += magic; }
@@ -757,7 +757,7 @@ public:
     /* 0x4949 */ u8 mMesgCancelButton;
     /* 0x494A */ u8 field_0x494a[6];
     /* 0x4950 */ u8 mMelodyNum;
-    /* 0x4951 */ bool mFmapOpen;
+    /* 0x4951 */ u8 mFmapOpen;
     /* 0x4952 */ u8 mNameOpen;
     /* 0x4953 */ u8 field_0x4953;
     /* 0x4954 */ u8 field_0x4954;
@@ -4122,7 +4122,7 @@ inline int dComIfG_getTimerNowTimeMs() { return g_dComIfG_gameInfo.play.getTimer
 inline void dComIfGp_setWaveFrame(u16 frame) { g_dComIfG_gameInfo.play.setWaveFrame(frame); }
 inline u16 dComIfGp_getWaveFrame() { return g_dComIfG_gameInfo.play.getWaveFrame(); }
 
-inline bool dComIfGp_fmapOpenCheck() { return g_dComIfG_gameInfo.play.fmapOpenCheck(); }
+inline u8 dComIfGp_fmapOpenCheck() { return g_dComIfG_gameInfo.play.fmapOpenCheck(); }
 inline void dComIfGp_fmapOpenOn() { g_dComIfG_gameInfo.play.fmapOpenOn(); }
 inline void dComIfGp_fmapOpenOff() { g_dComIfG_gameInfo.play.fmapOpenOff(); }
 
