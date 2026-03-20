@@ -178,7 +178,7 @@ void dMenu_Dmap_c::_draw() {
 }
 
 /* 801AF0C0-801AF294       .text _open__12dMenu_Dmap_cFv */
-void dMenu_Dmap_c::_open() {
+bool dMenu_Dmap_c::_open() {
     /* Nonmatching */
 }
 

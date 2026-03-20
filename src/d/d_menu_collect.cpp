@@ -548,7 +548,7 @@ void dMenu_Collect_c::_draw() {
 }
 
 /* 801A68EC-801A6B28       .text _open__15dMenu_Collect_cFv */
-void dMenu_Collect_c::_open() {
+bool dMenu_Collect_c::_open() {
     /* Nonmatching */
 }
 

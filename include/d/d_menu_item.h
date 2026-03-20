@@ -70,7 +70,7 @@ public:
     virtual void _delete();
     virtual void _move();
     virtual void _draw();
-    virtual void _open();
+    virtual bool _open();
     virtual void _close();
     void _open2();
     void _close2();

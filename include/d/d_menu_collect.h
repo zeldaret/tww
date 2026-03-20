@@ -18,7 +18,7 @@ public:
     virtual void _delete() {}
     virtual void _move() {}
     virtual void _draw() {}
-    virtual void _open() = 0;
+    virtual bool _open() = 0;
     virtual void _close() = 0;
 };
 
@@ -88,7 +88,7 @@ public:
     virtual void _move();
     void _move3();
     virtual void _draw();
-    void _open();
+    bool _open();
     void _open3();
     void _close();
     void _close3();

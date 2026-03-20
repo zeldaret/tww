@@ -291,7 +291,7 @@ void dMenu_Item_c::_draw() {
 }
 
 /* 801D0F50-801D1438       .text _open__12dMenu_Item_cFv */
-void dMenu_Item_c::_open() {
+bool dMenu_Item_c::_open() {
     /* Nonmatching */
 }
 
