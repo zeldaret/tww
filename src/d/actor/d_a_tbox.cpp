@@ -668,14 +668,14 @@ void daTbox_c::demoInitAppear_Tact() {
     angle.y = current.angle.y;
     angle.z = current.angle.z;
 
-    dComIfGp_particle_set(dPa_name::ID_SCENE_82F1, &current.pos, &angle);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_82F0, &current.pos, &angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_WINDCHEST01, &current.pos, &angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_WINDCHEST00, &current.pos, &angle);
 
     angle.y += 0x5555;
-    dComIfGp_particle_set(dPa_name::ID_SCENE_82F0, &current.pos, &angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_WINDCHEST00, &current.pos, &angle);
 
     angle.y += 0x5555;
-    dComIfGp_particle_set(dPa_name::ID_SCENE_82F0, &current.pos, &angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_WINDCHEST00, &current.pos, &angle);
 
     fopAcM_seStart(this, JA_SE_OBJ_TRIFORCE_BOX_IN, 0);
 }
@@ -684,8 +684,8 @@ void daTbox_c::demoInitAppear_Tact() {
 void daTbox_c::demoInitAppear() {
     fopAcM_seStart(this, JA_SE_OBJ_KOUBAKU_TBOX, 0);
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_03EB, &current.pos);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_03EC, &current.pos);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_APPEARCHEST00, &current.pos);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_APPEARCHEST01, &current.pos);
 }
 
 /* 00001B38-00001CF4       .text demoProcAppear_Tact__8daTbox_cFv */
@@ -731,7 +731,7 @@ void daTbox_c::demoProcAppear() {
     }
 
     if (mAppearTimer == 0x05) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &current.pos, NULL, NULL, 0xB9, &mSmokeCB);
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &current.pos, NULL, NULL, 0xB9, &mSmokeCB);
 
         if (emitter != NULL) {
             emitter->setRate(100.0f);
@@ -891,13 +891,13 @@ void daTbox_c::OpenInit() {
 
     flagOn(daTboxFlg_OPENING_e);
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F1, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F2, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F3, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F4, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F6, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_PAKAF, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_NAKAF, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_UEF, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_TSUBU, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_PAKAF_SOTO, &current.pos, &current.angle);
 
-    mSmokeEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_01F5, &current.pos, &current.angle);
+    mSmokeEmitter = dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_VOLM, &current.pos, &current.angle);
     if (mSmokeEmitter != NULL) {
         mSmokeEmitter->mGlobalPrmColor.a = 0;
     }

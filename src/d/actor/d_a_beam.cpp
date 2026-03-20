@@ -513,7 +513,7 @@ void daBeam_c::timer_change() {
     m5F6--;
     if (m5F6 > 0) {
         if (m690 == NULL) {
-            m690 = dComIfGp_particle_set(dPa_name::ID_SCENE_8121, &current.pos);
+            m690 = dComIfGp_particle_set(dPa_name::ID_AK_SN_LASERROOT00, &current.pos);
         }
 
         if (m5F4 == 0) {

@@ -331,7 +331,7 @@ void daComing3::Act_c::eff_break_tsubo() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPM_TUBO);
     texPattern = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", ALWAYS_BTP_MPM_TUBO);
     
-    JPABaseEmitter* baseEmitter = (JPABaseEmitter*)dComIfGp_particle_set(dPa_name::ID_COMMON_0017, &sp1C, NULL, &sp34);
+    JPABaseEmitter* baseEmitter = (JPABaseEmitter*)dComIfGp_particle_set(dPa_name::ID_AK_JN_M_TUBOHAHEN, &sp1C, NULL, &sp34);
     if (baseEmitter != NULL) {
         dPa_J3DmodelEmitter_c* modelEmitter;
         modelEmitter = new dPa_J3DmodelEmitter_c(baseEmitter, modelData, tevStr, texPattern, 0, 0);
@@ -346,7 +346,7 @@ void daComing3::Act_c::eff_break_tsubo() {
     sp18.b = tevStr.mColorC0.b;
     sp18.a = tevStr.mColorC0.a;
     dPa_selectTexEcallBack* cb = &dPa_control_c::mTsubo[1];
-    dComIfGp_particle_set(dPa_name::ID_COMMON_0018, &sp1C, NULL, &sp34, 0xFF, cb, -1, &sp18, &tevStr.mColorK0);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBOKONAGONA, &sp1C, NULL, &sp34, 0xFF, cb, -1, &sp18, &tevStr.mColorK0);
 }
 
 /* 000014DC-00001590       .text coming_process_main__Q29daComing35Act_cFv */

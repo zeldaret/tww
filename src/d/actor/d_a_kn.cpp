@@ -112,7 +112,7 @@ void shibuki_set(kn_class* i_this) {
     JGeometry::TVec3<f32> s;
     s.set(fVar1, fVar1, fVar1);
 
-    JPABaseEmitter* pJVar2 = dComIfGp_particle_set(dPa_name::ID_COMMON_0023, &i_this->actor.current.pos);
+    JPABaseEmitter* pJVar2 = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTSHIBUKI00, &i_this->actor.current.pos);
     if (pJVar2 != NULL) {
         pJVar2->setRate(1.5f);
         pJVar2->setSpread(1.0f);

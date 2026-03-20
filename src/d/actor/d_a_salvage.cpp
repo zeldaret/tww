@@ -79,7 +79,7 @@ bool daSalvage_c::CreateInit() {
     mSalvageHazureEventIdx = dComIfGp_evmng_getEventIdx("SALVAGE_HAZURE", 0xff);
     mSlvgGetItemLeftEventIdx = dComIfGp_evmng_getEventIdx("SLVG_GETITEM_LEFT", 0xff);
     mEventIdx = dComIfGp_evmng_getEventIdx("SLVG_HAZURE_LEFT", 0xff);
-    mEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0437, &current.pos);
+    mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SALVAGELIGHT00, &current.pos);
     if (mEmitter != NULL) {
         mEmitter->setStatus(1);
     }

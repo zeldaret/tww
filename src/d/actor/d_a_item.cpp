@@ -210,7 +210,7 @@ void daItem_c::CreateInit() {
     animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
     
     if (fopAcM_SearchByName(PROC_BST)) { // Gohdan
-        mpParticleEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81E1, &current.pos);
+        mpParticleEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTKIRAKIRAARROW00, &current.pos);
     }
 }
 
@@ -1064,7 +1064,7 @@ BOOL daItem_c::itemActionForArrow() {
         mOnGroundTimer++;
         
         if (mOnGroundTimer == 1 && fopAcM_SearchByName(PROC_BST)) { // Gohdan
-            JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_A1E2, &current.pos, NULL, NULL, 0xFF, &mPtclSmokeCb, fopAcM_GetRoomNo(this));
+            JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_ST_BSTDROPARROWSMOKE00, &current.pos, NULL, NULL, 0xFF, &mPtclSmokeCb, fopAcM_GetRoomNo(this));
             if (emitter) {
                 emitter->setMaxFrame(1);
             }
@@ -1248,7 +1248,7 @@ void daItem_c::mode_water_init() {
     temp3 *= scale.x;
     particleScale.setall(temp3);
     
-    dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &current.pos, NULL, &particleScale, 0xFF, &mPtclRippleCb);
+    dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &current.pos, NULL, &particleScale, 0xFF, &mPtclRippleCb);
     mPtclRippleCb.mRate = 0.0f;
 }
 

@@ -518,7 +518,7 @@ JPABaseEmitter* dPa_simpleEcallBack::create(JPAEmitterManager* manager, u16 effe
     mGrpID = groupID;
     mResID = effectID;
     if (createEmitter(manager)) {
-        if (effectID == dPa_name::ID_SCENE_A06A || effectID == dPa_name::ID_SCENE_A410) {
+        if (effectID == dPa_name::ID_AK_ST_O_BKMSATTACKSMOKE00 || effectID == dPa_name::ID_AK_ST_O_KGTT2JUMPHANDSMOKE00) {
             mbIsSmoke = true;
             mpBaseEmitter->mpParticleCallBack = &dPa_control_c::mSmokePcallback;
         } else {
@@ -805,7 +805,7 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(int code, const cXyz* pos, const cs
 
     cXyz ptclScale;
     JPABaseEmitter* emtr = NULL;
-    if (*i_return_id == dPa_name::ID_COMMON_0023) {
+    if (*i_return_id == dPa_name::ID_AK_JN_ELEMENTSHIBUKI00) {
         if (flag & 0x04) {
             ptclScale.set(scale3, scale3, scale3);
             GXColor amb, dif;
@@ -816,7 +816,7 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(int code, const cXyz* pos, const cs
                 emtr = setNormal(*i_return_id, pos, angle, &ptclScale, 0xFF, NULL, -1, &amb, NULL, NULL);
             }
         }
-    } else if (*i_return_id == dPa_name::ID_COMMON_0024) {
+    } else if (*i_return_id == dPa_name::ID_AK_JN_ELEMENTKUSA00) {
         if (flag & 0x02) {
             ptclScale.set(scale2, scale2, scale2);
 
@@ -832,9 +832,9 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(int code, const cXyz* pos, const cs
                 emtr = setNormal(*i_return_id, pos, angle, &ptclScale, 0xFF, NULL, -1, &amb, &i_tevStr->mColorK0, NULL);
             }
         }
-    } else if (*i_return_id == dPa_name::ID_COMMON_2022) {
+    } else if (*i_return_id == dPa_name::ID_AK_JT_ELEMENTSMOKE00) {
         if (flag & 0x08)
-            *i_return_id = dPa_name::ID_COMMON_2027;
+            *i_return_id = dPa_name::ID_AK_JT_ELEMENTSMOKE01;
 
         if (flag & 0x09) {
             ptclScale.set(scale1, scale1, scale1);
@@ -866,11 +866,11 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(cBgS_PolyInfo& polyInfo, const cXyz
 /* 8007DA58-8007DAA8       .text checkAtrCodeEffect__13dPa_control_cFi */
 s32 dPa_control_c::checkAtrCodeEffect(int code) {
     if (code == dBgS_Attr_WATER_e) {
-        return dPa_name::ID_COMMON_0023;
+        return dPa_name::ID_AK_JN_ELEMENTSHIBUKI00;
     } else if (code == dBgS_Attr_GRASS_e) {
-        return dPa_name::ID_COMMON_0024;
+        return dPa_name::ID_AK_JN_ELEMENTKUSA00;
     } else if (code != dBgS_Attr_UNK1B_e && code != dBgS_Attr_ICE_e && code != dBgS_Attr_GIANT_FLOWER_e && code != dBgS_Attr_CARPET_e) {
-        return dPa_name::ID_COMMON_2022;
+        return dPa_name::ID_AK_JT_ELEMENTSMOKE00;
     } else {
         return -1;
     }

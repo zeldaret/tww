@@ -229,7 +229,7 @@ void daObjVmc::Act_c::daObjVmc_base_main() {
 #if VERSION == VERSION_DEMO
         m4B4_demo =
 #endif
-        dComIfGp_particle_setToon(dPa_name::ID_SCENE_A1BC, &current.pos, &current.angle, NULL, 0xFF, &mSmoke, fopAcM_GetRoomNo(this));
+        dComIfGp_particle_setToon(dPa_name::ID_AK_ST_MACORETREESMOKE00, &current.pos, &current.angle, NULL, 0xFF, &mSmoke, fopAcM_GetRoomNo(this));
 #if VERSION == VERSION_DEMO
         mCyl.Set(cyl_src_tree);
 #endif

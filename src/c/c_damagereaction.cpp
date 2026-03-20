@@ -121,7 +121,7 @@ BOOL enemy_ice(enemyice* ei) {
         
         if (ei->mLightShrinkTimer == 1) { // Just started dying to light arrows.
             ei->mLightShrinkTimer++;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_LIGHT_EXPLOSION, &pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_ENEMYFLASH00, &pos, NULL, &particleScale);
             ac->tevStr.mFogColor.b = 0xFF;
             ac->tevStr.mFogColor.g = 0xFF;
             ac->tevStr.mFogColor.r = 0xFF;
@@ -219,7 +219,7 @@ BOOL enemy_ice(enemyice* ei) {
             particleScale.setall(ei->mParticleScale);
             pos = ac->current.pos;
             pos.y += ei->mYOffset;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0274, &pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_ENEMYFREEZE01, &pos, NULL, &particleScale);
         } else {
             return FALSE;
         }
@@ -330,15 +330,15 @@ BOOL enemy_ice(enemyice* ei) {
                 particleScale.setall(ei->mParticleScale);
                 pos = ac->current.pos;
                 pos.y += ei->mYOffset;
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0273, &pos, NULL, &particleScale);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0274, &pos, NULL, &particleScale);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_ENEMYFREEZE00, &pos, NULL, &particleScale);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_ENEMYFREEZE01, &pos, NULL, &particleScale);
                 
                 if (ei->mFreezeTimer == -2) {
                     // Shattered by Skull Hammer.
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &pos);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &pos);
                     csXyz angle(0, fopAcM_searchPlayerAngleY(ac), 0);
                     particleScale.setall(2.0f);
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &pos, &angle, &particleScale);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &pos, &angle, &particleScale);
                     dScnPly_ply_c::setPauseTimer(8);
                 }
                 
@@ -383,7 +383,7 @@ BOOL enemy_ice(enemyice* ei) {
                 particleScale.setall(ei->mParticleScale);
                 pos = ac->current.pos;
                 pos.y += ei->mYOffset;
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0277, &pos, NULL, &particleScale);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_ENEMYFREEZE02, &pos, NULL, &particleScale);
                 fopAcM_seStart(ac, JA_SE_CM_ICE_RECOVER, 0);
             }
         }
@@ -465,7 +465,7 @@ void enemy_fire(enemyfire* ef) {
                 }
                 cXyz scale;
                 scale.setall(ef->mParticleScale[i]);
-                ef->mpFlameEmitters[i] = dComIfGp_particle_set(dPa_name::ID_COMMON_03F1, &ac->current.pos, NULL, &scale);
+                ef->mpFlameEmitters[i] = dComIfGp_particle_set(dPa_name::ID_AK_JN_BODYABLAZE00, &ac->current.pos, NULL, &scale);
                 ef->mFlameTimers[i] = ef->mFireTimer - (s16)cM_rndF(60.0f);
                 if (ef->mFlameTimers[i] < 10) {
                     ef->mFlameTimers[i] = 10;
@@ -604,7 +604,7 @@ void enemy_fire_remove(enemyfire* ef) {
 /* 8001D428-8001D48C       .text enemy_piyo_set__FP10fopAc_ac_c */
 void enemy_piyo_set(fopAc_ac_c* enemy) {
     // Creates the rotating stars particle for when an enemy is stunned.
-    dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_SPIN, &enemy->attention_info.position);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOPIYO00, &enemy->attention_info.position);
 }
 
 /* 8001D48C-8001D890       .text wall_angle_get__FP10fopAc_ac_cs */

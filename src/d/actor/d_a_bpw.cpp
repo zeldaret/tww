@@ -511,7 +511,7 @@ BOOL body_atari_check(bpw_class* i_this) {
         local_58.x = 2.0f;
         local_58.y = 2.0f;
         local_58.z = 2.0f;
-        dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, &local_4c, &player->shape_angle, &local_58);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_NG, &local_4c, &player->shape_angle, &local_58);
     }
     return FALSE;
 }
@@ -541,13 +541,13 @@ s32 wall_HIT_check(bpw_class* i_this) {
     if (i_this->mAcchCir.ChkWallHit()) {
         dComIfG_Bgsp()->GetTriPnt(i_this->mAcchCir, &acStack_24, &cStack_30, &cStack_3c);
         if (dComIfG_Bgsp()->GetAttributeCode(i_this->mAcchCir) == dBgS_Attr_DAMAGE_e) {
-            dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, &acStack_24, &player->shape_angle, &local_48);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, &acStack_24, &player->shape_angle, &local_48);
 #if VERSION > VERSION_DEMO
             i_this->m408 = 0xb5;
 #endif
             return 2;
         } else {
-            dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, &acStack_24, &player->shape_angle, &local_48);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, &acStack_24, &player->shape_angle, &local_48);
             return 1;
         }
     } else {
@@ -676,7 +676,7 @@ void noroi_check(bpw_class* i_this) {
                 csXyz local_28 = actor->shape_angle;
                 camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
                 i_this->mFire1DousaPos = player2->getHeadTopPos();
-                dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, &i_this->mFire1DousaPos);
+                dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &i_this->mFire1DousaPos);
                 local_28.y = camera->mAngle.y;
                 fopAcM_create(PROC_BPW, bpw_class::Actor_Type_TORITUKI_e, &i_this->mFire1DousaPos, fopAcM_GetRoomNo(actor), &local_28);
             }
@@ -1316,10 +1316,10 @@ void action_kougeki(bpw_class* i_this) {
         i_this->mSomeCountdownTimers[0] = 30;
         i_this->mSomeCountdownTimers[0] += (int)cM_rndF(i_this->mSomeCountdownTimers[0]);
 #if VERSION == VERSION_DEMO
-        i_this->m508_demo = dComIfGp_particle_set(dPa_name::ID_SCENE_82CE, &i_this->m394);
+        i_this->m508_demo = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPWINHALE01, &i_this->m394);
 #else
         if (i_this->m540.getEmitter() != NULL) {
-            dComIfGp_particle_set(dPa_name::ID_SCENE_82CE, &i_this->m394, NULL, NULL, 0xff, &i_this->m540);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BPWINHALE01, &i_this->m394, NULL, NULL, 0xff, &i_this->m540);
         }
 #endif
         i_this->mActionState++;
@@ -1338,7 +1338,7 @@ void action_kougeki(bpw_class* i_this) {
         }
 #endif
         if (i_this->mSomeCountdownTimers[1] == 0) {
-            pJVar11 = dComIfGp_particle_set(dPa_name::ID_SCENE_82CD, &i_this->m394, &actor->shape_angle);
+            pJVar11 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPWINHALE00, &i_this->m394, &actor->shape_angle);
             if (pJVar11 != NULL) {
                 pJVar11->setGlobalSRTMatrix(i_this->mpAnim->getModel()->getAnmMtx(2));
             }
@@ -1367,14 +1367,14 @@ void action_kougeki(bpw_class* i_this) {
             if (i_this->m52C.getEmitter() == NULL)
 #endif
             {
-                dComIfGp_particle_set(dPa_name::ID_SCENE_82CF, &i_this->m394, NULL, NULL, 0xff, DEMO_SELECT(NULL, &i_this->m52C));
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_BPWBLOW00, &i_this->m394, NULL, NULL, 0xff, DEMO_SELECT(NULL, &i_this->m52C));
             }
             i_this->mFire1DousaPos = actor->current.pos;
             i_this->mFire1DousaPos.y = i_this->mAcch.GetGroundH();
             i_this->mFire1DousaRot = actor->shape_angle;
             if (i_this->m50C.getEmitter() == NULL) {
                 dComIfGp_particle_setToon(
-                    dPa_name::ID_SCENE_A2D0, &i_this->mFire1DousaPos, &i_this->mFire1DousaRot, NULL, 0xa0, &i_this->m50C, fopAcM_GetRoomNo(actor)
+                    dPa_name::ID_AK_ST_BPWBLOWSMOKE00, &i_this->mFire1DousaPos, &i_this->mFire1DousaRot, NULL, 0xa0, &i_this->m50C, fopAcM_GetRoomNo(actor)
                 );
             }
             anm_init(i_this, BPW_BCK_IKI_WAIT1, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
@@ -1558,7 +1558,7 @@ void action_karada_taore(bpw_class* i_this) {
             i_this->mFire1DousaPos.y = i_this->mAcch.GetGroundH();
             i_this->m5E0[1].remove();
             pJVar4 = dComIfGp_particle_setToon(
-                dPa_name::ID_SCENE_A401, &i_this->mFire1DousaPos, &actor->shape_angle, NULL, 0xb9, &i_this->m5E0[1], fopAcM_GetRoomNo(actor)
+                dPa_name::ID_AK_ST_BPWJUMPSMOKE00, &i_this->mFire1DousaPos, &actor->shape_angle, NULL, 0xb9, &i_this->m5E0[1], fopAcM_GetRoomNo(actor)
             );
             if (pJVar4 != NULL) {
                 dKy_get_seacolor(&local_24, &local_28);
@@ -1601,7 +1601,7 @@ void action_karada_taore(bpw_class* i_this) {
         i_this->mFire1DousaPos.y = i_this->mAcch.GetGroundH();
         i_this->m5E0[2].remove();
         pJVar4 = dComIfGp_particle_setToon(
-            dPa_name::ID_SCENE_A402, &i_this->mFire1DousaPos, &actor->shape_angle, NULL, 0xb9, &i_this->m5E0[2], fopAcM_GetRoomNo(actor)
+            dPa_name::ID_AK_ST_BPWPRESSSMOKE00, &i_this->mFire1DousaPos, &actor->shape_angle, NULL, 0xb9, &i_this->m5E0[2], fopAcM_GetRoomNo(actor)
         );
         if (pJVar4 != NULL) {
             dKy_get_seacolor(&local_24, &local_28);
@@ -1669,7 +1669,7 @@ void action_karada_taore(bpw_class* i_this) {
             i_this->mFire1DousaPos.y = i_this->mAcch.GetGroundH();
             i_this->m5E0[3].remove();
             pJVar4 = dComIfGp_particle_setToon(
-                dPa_name::ID_SCENE_A403, &i_this->mFire1DousaPos, &actor->shape_angle, NULL, 0xb9, &i_this->m5E0[3], fopAcM_GetRoomNo(actor)
+                dPa_name::ID_AK_ST_BPWPRESSSMOKE01, &i_this->mFire1DousaPos, &actor->shape_angle, NULL, 0xb9, &i_this->m5E0[3], fopAcM_GetRoomNo(actor)
             );
             if (pJVar4 != NULL) {
                 dKy_get_seacolor(&local_24, &local_28);
@@ -1971,7 +1971,7 @@ void action_damage(bpw_class* i_this) {
             i_this->mFire1DousaPos.y = i_this->mAcch.GetGroundH();
             i_this->m5E0[0].remove();
             pJVar7 = dComIfGp_particle_setToon(
-                dPa_name::ID_SCENE_A404, &i_this->mFire1DousaPos, &actor->shape_angle, NULL, 0xb9, &i_this->m5E0[0], fopAcM_GetRoomNo(actor)
+                dPa_name::ID_AK_ST_BPWSIRIMOTISMOKE00, &i_this->mFire1DousaPos, &actor->shape_angle, NULL, 0xb9, &i_this->m5E0[0], fopAcM_GetRoomNo(actor)
             );
             if (pJVar7 != NULL) {
                 dKy_get_seacolor(&local_64, &local_68);
@@ -1979,7 +1979,7 @@ void action_damage(bpw_class* i_this) {
                 pJVar7->setGlobalEnvColor(local_68.r, local_68.g, local_68.b);
             }
             fopAcM_seStart(actor, JA_SE_CM_BPW_DAMAGE_EXPLODE, 0);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8444, &actor->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BPWBUNRETUSMOKE00, &actor->current.pos);
             csXyz pwAngle = actor->shape_angle;
             local_58 = actor->current.pos;
             pwSpreadAmount = (int)(65536.0f / actor->health);
@@ -2715,7 +2715,7 @@ void action_bunri_dousa(bpw_class* i_this) {
             break;
         }
         REG20_S(0) = 0;
-        unk2 = dComIfGp_particle_set(dPa_name::ID_SCENE_8456, &actor->current.pos, &actor->shape_angle);
+        unk2 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPWBREAKMASK00, &actor->current.pos, &actor->shape_angle);
         if (unk2 != NULL) {
             unk2->setGlobalPrmColor(g_env_light.mBG0_K0.r, g_env_light.mBG0_K0.g, g_env_light.mBG0_K0.b);
         }
@@ -3085,7 +3085,7 @@ void action_start_demo(bpw_class* i_this) {
         i_this->mFire1DousaPos = i_this->m3B8;
         i_this->mFire1DousaRot = actor->shape_angle;
         if (i_this->m554.getEmitter() == NULL) {
-            dComIfGp_particle_set(dPa_name::ID_SCENE_845A, &i_this->mFire1DousaPos, &i_this->mFire1DousaRot, NULL, 0xff, &i_this->m554);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BPWOPENINGSMOKE00, &i_this->mFire1DousaPos, &i_this->mFire1DousaRot, NULL, 0xff, &i_this->m554);
         }
         fopAcM_seStart(actor, JA_SE_CM_BPW_MASK_TO_BPW, 0);
         i_this->mActionState++;
@@ -3579,12 +3579,12 @@ void action_b_fire_1_dousa(bpw_class* i_this) {
         i_this->m49C = 40.0f;
         if (i_this->mFire1Dousa_Pa_followEcallBack.getEmitter() == NULL) {
             dComIfGp_particle_set(
-                dPa_name::ID_SCENE_8310, &i_this->mFire1DousaPos, &i_this->mFire1DousaRot, NULL, 0xff, &i_this->mFire1Dousa_Pa_followEcallBack
+                dPa_name::ID_AK_SN_BPWFLAMETHROWER00, &i_this->mFire1DousaPos, &i_this->mFire1DousaRot, NULL, 0xff, &i_this->mFire1Dousa_Pa_followEcallBack
             );
         }
         if (i_this->mFire1Dousa_Pa_followEcallBack2.getEmitter() == NULL) {
             dComIfGp_particle_set(
-                dPa_name::ID_SCENE_8311, &i_this->mFire1DousaPos, &i_this->mFire1DousaRot, NULL, 0xff, &i_this->mFire1Dousa_Pa_followEcallBack2
+                dPa_name::ID_AK_SN_BPWFLAMETHROWER01, &i_this->mFire1DousaPos, &i_this->mFire1DousaRot, NULL, 0xff, &i_this->mFire1Dousa_Pa_followEcallBack2
             );
         }
         i_this->mSomeCountdownTimers[0] = 5;
@@ -3617,7 +3617,7 @@ void action_b_fire_1_dousa(bpw_class* i_this) {
                 i_this->m680 = cM_atan2s(fVar1, fVar2);
             }
             if (i_this->m590.getEmitter() == NULL) {
-                dComIfGp_particle_set(dPa_name::ID_SCENE_8312, &i_this->m66C, (csXyz*)&i_this->m67E, NULL, 0xff, &i_this->m590);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_BPWFLAMETHROWER02, &i_this->m66C, (csXyz*)&i_this->m67E, NULL, 0xff, &i_this->m590);
             }
         } else {
             i_this->m590.remove();
@@ -3661,12 +3661,12 @@ void action_b_fire_2_dousa(bpw_class* i_this) {
         i_this->m49C = 40.0f;
         if (i_this->mFireDousa2_Pa_followEcallBack.getEmitter() == NULL) {
             dComIfGp_particle_set(
-                dPa_name::ID_SCENE_82D1, &i_this->mFire1DousaPos, &i_this->mFire1DousaRot, NULL, 0xff, &i_this->mFireDousa2_Pa_followEcallBack
+                dPa_name::ID_AK_SN_BPWFIRE00, &i_this->mFire1DousaPos, &i_this->mFire1DousaRot, NULL, 0xff, &i_this->mFireDousa2_Pa_followEcallBack
             );
         }
         if (i_this->mFireDousa2_Pa_followEcallBack2.getEmitter() == NULL) {
             dComIfGp_particle_set(
-                dPa_name::ID_SCENE_82D2, &i_this->mFire1DousaPos, &i_this->mFire1DousaRot, NULL, 0xff, &i_this->mFireDousa2_Pa_followEcallBack2
+                dPa_name::ID_AK_SN_BPWFIRE01, &i_this->mFire1DousaPos, &i_this->mFire1DousaRot, NULL, 0xff, &i_this->mFireDousa2_Pa_followEcallBack2
             );
         }
         iVar4 = cM_atan2s(player->current.pos.x - actor->current.pos.x, player->current.pos.z - actor->current.pos.z);
@@ -3693,9 +3693,9 @@ void action_b_fire_2_dousa(bpw_class* i_this) {
             local_30 = actor->current.pos;
             local_30.y = i_this->mAcch.GetGroundH();
             local_38.z = local_38.x = 0;
-            dComIfGp_particle_set(dPa_name::ID_SCENE_82D5, &local_30, &local_38);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_82D6, &local_30, &local_38);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_82D3, &local_30, &actor->current.angle);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BPWFLOORFIRE01, &local_30, &local_38);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BPWFLOORFIRE02, &local_30, &local_38);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BPWHITFIRE00, &local_30, &actor->current.angle);
             i_this->mFireDousa2_Pa_followEcallBack.remove();
             i_this->mFireDousa2_Pa_followEcallBack2.remove();
             if (i_this->mSomeCountdownTimers[1] == 0) {
@@ -3710,7 +3710,7 @@ void action_b_fire_2_dousa(bpw_class* i_this) {
             i_this->mActionState = 0x16;
         } else {
             if ((i_this->mAcch.ChkWallHit()) || (i_this->mDamageBallCoSph.ChkAtHit())) {
-                dComIfGp_particle_set(dPa_name::ID_SCENE_82D3, &actor->current.pos, &actor->current.angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_BPWHITFIRE00, &actor->current.pos, &actor->current.angle);
                 i_this->mActionState = 0x17;
             }
         }
@@ -3907,7 +3907,7 @@ static BOOL daBPW_Execute(bpw_class* i_this) {
         kantera_draw_SUB(i_this);
         if (i_this->m3E7 == 0) {
             if (i_this->m5CC.getEmitter() == NULL) {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_01EA, &i_this->m358, NULL, &actor->scale, 0xff, &i_this->m5CC);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_TORCH, &i_this->m358, NULL, &actor->scale, 0xff, &i_this->m5CC);
                 i_this->mFire1DousaPos = i_this->m358;
             }
             pJVar8 = i_this->m5CC.getEmitter();

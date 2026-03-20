@@ -113,9 +113,9 @@ void daWarpgn_c::CreateInit() {
     fopAcM_setCullSizeFar(this, 1.0f);
     set_mtx();
 
-    mpEmitter1 = dComIfGp_particle_set(dPa_name::ID_SCENE_83FD, &current.pos);
-    mpEmitter2 = dComIfGp_particle_set(dPa_name::ID_SCENE_83FE, &current.pos);
-    mpEmitter3 = dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C3FC, &current.pos);
+    mpEmitter1 = dComIfGp_particle_set(dPa_name::ID_IT_SN_MJWPA00, &current.pos);
+    mpEmitter2 = dComIfGp_particle_set(dPa_name::ID_IT_SN_MJWPB00, &current.pos);
+    mpEmitter3 = dComIfGp_particle_setProjection(dPa_name::ID_IT_SP_MJWPC00, &current.pos);
 
     if (mpEmitter1 != NULL) {
         mpEmitter1->stopCreateParticle();

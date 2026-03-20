@@ -656,7 +656,7 @@ bool daRd_c::checkTgHit() {
             }
             break;
         case AT_TYPE_GRAPPLING_HOOK:
-            dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, &attention_info.position);
+            dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &attention_info.position);
             fopAcM_seStart(this, JA_SE_LK_W_WEP_HIT, 0x44);
             mHitType = 0xE;
             r29 = false;
@@ -671,16 +671,16 @@ bool daRd_c::checkTgHit() {
             cXyz* hitPos = mCyl.GetTgHitPosP();
             cc_at_check(this, &atInfo);
             if (mHitType == 1 || mHitType == 7 || mHitType == 8 || health <= 0) {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, mCyl.GetTgHitPosP());
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, mCyl.GetTgHitPosP());
                 cXyz scale(2.0f, 2.0f, 2.0f);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, hitPos, &player->shape_angle, &scale);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, hitPos, &player->shape_angle, &scale);
                 if (health <= 0) {
                     modeProcInit(MODE_DEATH);
                 } else {
                     modeProcInit(MODE_DAMAGE);
                 }
             } else {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, hitPos, &player->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, hitPos, &player->shape_angle);
                 modeProcInit(MODE_DAMAGE);
             }
         } else if (mHitType == 0xE) {

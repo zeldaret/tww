@@ -257,9 +257,9 @@ static void tower_kaidan_move(bdkobj_class* i_this) {
             i_this->model = NULL;
             i_this->m299 = 100;
 
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8143, &i_this->current.pos, &i_this->current.angle);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8144, &i_this->current.pos, &i_this->current.angle);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8145, &i_this->current.pos, &i_this->current.angle);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_BRIDGE_L00, &i_this->current.pos, &i_this->current.angle);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_BRIDGE_S00, &i_this->current.pos, &i_this->current.angle);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_BRIDGE_TENITA00, &i_this->current.pos, &i_this->current.angle);
             GXColor prim_col;
             prim_col.r = 0x46;
             prim_col.g = 0x3C;
@@ -271,7 +271,7 @@ static void tower_kaidan_move(bdkobj_class* i_this) {
             i_this->m938_demo =
 #endif
                 dComIfGp_particle_setToon(
-                    dPa_name::ID_SCENE_A146, &i_this->current.pos, &i_this->current.angle, NULL, 0xB4, &i_this->m918, (s8)fopAcM_GetRoomNo(i_this)
+                    dPa_name::ID_IT_ST_DK_BRIDGE_SMOKE00, &i_this->current.pos, &i_this->current.angle, NULL, 0xB4, &i_this->m918, (s8)fopAcM_GetRoomNo(i_this)
                 );
 #if VERSION == VERSION_DEMO
             JPABaseEmitter* emitter = i_this->m938_demo;
@@ -371,13 +371,13 @@ static BOOL daBdkobj_Execute(bdkobj_class* i_this) {
                     u16 uVar6;
                     u16 uVar4;
                     if (i_this->m298 == 0) {
-                        uVar8 = dPa_name::ID_SCENE_A13D;
-                        uVar6 = dPa_name::ID_SCENE_813E;
-                        uVar4 = dPa_name::ID_SCENE_813F;
+                        uVar8 = dPa_name::ID_IT_ST_DK_BLOCK_SMOKE00;
+                        uVar6 = dPa_name::ID_IT_SN_DK_BLOCK_S00;
+                        uVar4 = dPa_name::ID_IT_SN_DK_BLOCK_L00;
                     } else {
-                        uVar8 = dPa_name::ID_SCENE_A140;
-                        uVar6 = dPa_name::ID_SCENE_8141;
-                        uVar4 = dPa_name::ID_SCENE_8142;
+                        uVar8 = dPa_name::ID_IT_ST_DK_POLE_SMOKE00;
+                        uVar6 = dPa_name::ID_IT_SN_DK_POLE_S00;
+                        uVar4 = dPa_name::ID_IT_SN_DK_POLE_L00;
                     }
                     static csXyz eff_ang = at->shape_angle;
                     eff_ang.z = 0;

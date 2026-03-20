@@ -143,10 +143,10 @@ void kokiie_move(kokiie_class* i_this) {
         if (i_this->m37A == (s16)(REG0_S(5) + 0x40)) {
             cXyz sp44 = actor->current.pos;
             sp44.y = 1170.0f;
-            dComIfGp_particle_set(dPa_name::ID_SCENE_82A4, &sp44);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_82A5, &sp44);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_82A6, &actor->current.pos);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_82A7, &sp44);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_KOKIRIHOUSESPLASH00, &sp44);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_KOKIRIHOUSESPLASH01, &sp44);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_KOKIRIHOUSEHAMON00, &actor->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_KOKIRIHOUSEHAMON01, &sp44);
         }
 
         i_this->m374 = (REG0_F(9) + 5180.0f) - 3800.0f;

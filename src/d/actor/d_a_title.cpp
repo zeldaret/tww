@@ -245,7 +245,7 @@ void daTitle_proc_c::calc_2d_alpha() {
                 0.0f
             );
 
-            mpEmitter = dComIfGp_particle_set2Dback(dPa_name::ID_SCENE_83F9, &pos);
+            mpEmitter = dComIfGp_particle_set2Dback(dPa_name::ID_AK_S1_TITLESMOKE00, &pos);
         } else {
             pos.set(
                 ((this->pane[4].mPosTopLeftOrig.x - 320.0f) - this->m094) + attr().field_0x30,
@@ -286,7 +286,7 @@ void daTitle_proc_c::calc_2d_alpha() {
 
             m00C.set(pane[4].mPosTopLeftOrig.x - 320.0f, pane[4].mPosTopLeftOrig.y - 240.0f, 0.0f);
 
-            mpEmitter2 = dComIfGp_particle_set2Dfore(dPa_name::ID_SCENE_83FB, &m00C);
+            mpEmitter2 = dComIfGp_particle_set2Dfore(dPa_name::ID_AK_S2_TITLEKIRAKIRA00, &m00C);
         } else if (m018 > 80 && m018 <= 115 && mpEmitter2 != NULL) {
             m00C.x += (pane[5].mPosTopLeftOrig.x - pane[4].mPosTopLeftOrig.x) / 35.0f;
 
@@ -316,7 +316,7 @@ void daTitle_proc_c::calc_2d_alpha() {
     } else {
         if (mpEmitter == NULL) {
             pos.set(pane[4].mPosTopLeftOrig.x - 320.0f, pane[4].mPosTopLeftOrig.y - 240.0f, 0.0f);
-            mpEmitter = dComIfGp_particle_set2Dback(dPa_name::ID_SCENE_83F9, &pos);
+            mpEmitter = dComIfGp_particle_set2Dback(dPa_name::ID_AK_S1_TITLESMOKE00, &pos);
         } else {
             pos.set(
                 ((pane[4].mPosTopLeftOrig.x - 320.0f) - m094) + attr().field_0x30,
@@ -359,7 +359,7 @@ void daTitle_proc_c::calc_2d_alpha() {
         angle.y = 0;
         angle.z = (s16)cM_rndFX(4000.0f);
 
-        dComIfGp_particle_set2Dback(dPa_name::ID_SCENE_83FA, &pos, &angle);
+        dComIfGp_particle_set2Dback(dPa_name::ID_AK_S1_TITLEWIND00, &pos, &angle);
     } else {
         m020 -= 1;
     }

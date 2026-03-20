@@ -463,7 +463,7 @@ void daBoomerang_c::checkBgHit(cXyz* pi_start, cXyz* pi_end) {
     mLinChk.Set(pi_start, pi_end, this);
     if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
         current.pos.set(mLinChk.GetCross());
-        dComIfGp_particle_setP1(dPa_name::ID_COMMON_PURPLE_HIT, &current.pos);
+        dComIfGp_particle_setP1(dPa_name::ID_AK_JN_NG, &current.pos);
         mIsReturning = true;
         current.angle.y += 0x8000;
         shape_angle.y = current.angle.y;

@@ -166,7 +166,7 @@ void daObjMkiek::Act_c::demo_wait() {
             color.g = tevStr.mColorC0.g;
             color.b = tevStr.mColorC0.b;
             color.a = tevStr.mColorC0.a;
-            dComIfGp_particle_setProjection(dPa_name::ID_SCENE_819F,
+            dComIfGp_particle_setProjection(dPa_name::ID_AK_SN_VANISHWALL00,
                 &current.pos, &current.angle, NULL,
                 0xFF, NULL,
                 current.roomNo,

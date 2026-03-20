@@ -232,7 +232,7 @@ void daNpc_Tc_c::playTexPatternAnm() {
 void daNpc_Tc_c::smoke_set(f32 i_rate, f32 i_spread, f32 i_initialVelOmni, f32 i_initialVelAxis, f32 i_initialVelDir) {
     static JGeometry::TVec3<f32> smoke_scale(1.0f, 1.0f, 1.0);
     if(mSmokeCallBack.getEmitter() == NULL) {
-        dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &mSmokePos, &mSmokeAngle, NULL, 0xB9, &mSmokeCallBack, fopAcM_GetRoomNo(this));
+        dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &mSmokePos, &mSmokeAngle, NULL, 0xB9, &mSmokeCallBack, fopAcM_GetRoomNo(this));
     }
 
     if(mSmokeCallBack.getEmitter() != NULL) {
@@ -531,11 +531,11 @@ void daNpc_Tc_c::setAnm() {
         pos.setall(1.0f);
 
         if (mpMorf->getFrame() == 1.0f) {
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8189, &current.pos, &current.angle, &pos);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_818A, &current.pos, &current.angle, &pos);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_818B, &current.pos, &current.angle, &pos);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_818C, &mParticlePos, NULL, NULL, 0xff, &field_0x714, fopAcM_GetRoomNo(this));
-            dComIfGp_particle_set(dPa_name::ID_SCENE_818D, &mParticlePos, NULL, NULL, 0xff, &field_0x728, fopAcM_GetRoomNo(this));
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_TG_KURURINP_KAMI_M00, &current.pos, &current.angle, &pos);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_TG_KURURINP_KAMI_R00, &current.pos, &current.angle, &pos);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_TG_KURURINP_KAMI_L00, &current.pos, &current.angle, &pos);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_TG_KURURINP_BLUR_R00, &mParticlePos, NULL, NULL, 0xff, &field_0x714, fopAcM_GetRoomNo(this));
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_TG_KURURINP_BLUR_G00, &mParticlePos, NULL, NULL, 0xff, &field_0x728, fopAcM_GetRoomNo(this));
         }
 
         if (mpMorf->getFrame() == 88.0f) {
@@ -587,7 +587,7 @@ void daNpc_Tc_c::setAnm() {
             cXyz particleScale;
             particleScale.setall(1.0f);
 
-            JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8152, &particlePos, NULL, &particleScale);
+            JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_IT_SN_PF_BIKON00, &particlePos, NULL, &particleScale);
             
             pEmitter->setGlobalParticleScale(0.62f, 0.6f);
             fopAcM_seStart(this, JA_SE_CM_CMN_NOTICE, 0); // regswap for demo likely happens here, daNpc_Tc_c::cutEffectStart also has a regswap with identical code

@@ -211,12 +211,12 @@ void daCanon_c::makeFireEffect(cXyz& arg1, csXyz& arg2, int arg3) {
     sp18.z = 0;
 
     if (arg3 == 0) {
-        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &arg1, &arg2, &sp2C);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE02, &arg1, &arg2, &sp2C);
     } else {
-        dComIfGp_particle_set(dPa_name::ID_COMMON_LIGHT_FLASH, &arg1, &sp18, &sp2C);
-        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CLOUD, &arg1, &arg2, &sp2C);
-        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &arg1, &arg2, &sp2C);
-        dComIfGp_particle_setToon(dPa_name::ID_COMMON_SMOKE_DEBRIS, &arg1, &arg2, &sp2C);
+        dComIfGp_particle_set(dPa_name::ID_IT_JN_BMEX_SENKO, &arg1, &sp18, &sp2C);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE01, &arg1, &arg2, &sp2C);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE02, &arg1, &arg2, &sp2C);
+        dComIfGp_particle_setToon(dPa_name::ID_IT_JT_BMEX_HAHEN, &arg1, &arg2, &sp2C);
     }
 
     plight.mPos = arg1;
