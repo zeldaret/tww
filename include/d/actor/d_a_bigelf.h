@@ -1,6 +1,7 @@
 #ifndef D_A_BIGELF_H
 #define D_A_BIGELF_H
 
+#include "JSystem/JParticle/JPAEmitter.h"
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
@@ -20,6 +21,9 @@ public:
         BIGELF_STATE_UNK6 = 0b1000000,
         BIGELF_STATE_UNK7 = 0b10000000,
         BIGELF_STATE_UNK8 = 0b100000000,
+        BIGELF_STATE_UNK9 = 0b1000000000,
+        BIGELF_STATE_UNK10 = 0b10000000000,
+        //BIGELF_STATE_UNK11 = 0b100000000000,
     };
 
     bool chkFlag(u16 mask) {
@@ -48,21 +52,21 @@ public:
     void darkEnd();
     void darkProc();
     void demoInitFlDelete();
-    void demoProcFlDelete();
+    BOOL demoProcFlDelete();
     void demoInitFlLink();
-    void demoProcFlLink();
+    BOOL demoProcFlLink();
     void demoInitFlDmAf();
-    void demoProcFlDmAf();
+    BOOL demoProcFlDmAf();
     void demoInitFlDmMd();
-    void demoProcFlDmMd();
+    BOOL demoProcFlDmMd();
     void demoInitFlDmBf();
-    void demoProcFlDmBf();
+    BOOL demoProcFlDmBf();
     void demoInitFlDemo();
-    void demoProcFlDemo();
+    BOOL demoProcFlDemo();
     void demoInitExit();
-    void demoProcExit();
+    BOOL demoProcExit();
     void demoInitTalk();
-    void demoProcTalk();
+    BOOL demoProcTalk();
     void demoInitAppear();
     void demoProcAppear();
     void demoInitFa1();
@@ -115,7 +119,7 @@ public:
     /* 0x31C */ cXyz mUnkPos;
     /* 0x328 */ cXyz mCurrentPos;
     /* 0x334 */ u16 m334;
-    /* 0x336 */ u8 m336;
+    /* 0x336 */ s8 m336;
     /* 0x337 */ u8 m337;
     /* 0x338 */ f32 m338;
     /* 0x33C */ u32 mMsgIdx;
@@ -144,16 +148,21 @@ public:
     /* 0x3B0 */ ActionFunc mCurrentStateFunc;
     /* 0x3BC */ s8 m3BC;
     /* 0x3BD */ s8 m3BD;
-    /* 0x3C0 */ u8 m3C0 [0x3C4 - 0x3C0];
+    /* 0x3BE */ u8 m3BE[0x3C0 - 0x3BE];
+    /* 0x3C0 */ s16 m3C0;
     /* 0x3C4 */ int mStaffId;
     /* 0x3C8 */ s16 mArrivalEvtID;
     /* 0x3CA */ s16 iAttCnt;
-    /* 0x3CA */ u8 m3CC[0x3E8 - 0x3CC];
+    /* 0x3CC */ JPABaseEmitter* m3CC;
+    /* 0x3D0 */ cXyz m3D0;
+    /* 0x3DC */ u8 m3DC;
+    /* 0x3E0 */ JPABaseEmitter* m3E0;
+    /* 0x3E4 */ JPABaseEmitter* m3E4;
     /* 0x3E8 */ f32 mHeightOffset;
     /* 0x3EC */ f32 m3EC;
     /* 0x3F0 */ f32 m3F0;
     /* 0x3F4 */ u8 m3F4;
-    /* 0x3F5 */ u8 iBrkFrame;
+    /* 0x3F5 */ s8 iBrkFrame;
     /* 0x3F6 */ s8 m3F6;
     /* 0x3F7 */ s8 m3F7;
     /* 0x3F8 */ fpc_ProcID mOctID;

@@ -14,6 +14,8 @@ fpc_ProcID l_msgId;
 msg_class* l_msg;
 
 const u32 l_bck_ix_tbl[4] = {8,6,7,6};
+const u16 pa_name_flower[] = {0x834F, 0x8351, 0x8353, 0x8355};
+const u16 pa_name_flower2[] = {0x8350, 0x8352, 0x8354, 0x8356};
 
 /* 00000078-0000016C       .text oct_delete__10daBigelf_cFv */
 void daBigelf_c::oct_delete() {
@@ -94,82 +96,303 @@ void daBigelf_c::darkProc() {
 
 /* 00000574-00000588       .text demoInitFlDelete__10daBigelf_cFv */
 void daBigelf_c::demoInitFlDelete() {
-    /* Nonmatching */
+    this->m3C0 = 0;
+    this->m3DC = -1;
 }
 
 /* 00000588-00000708       .text demoProcFlDelete__10daBigelf_cFv */
-void daBigelf_c::demoProcFlDelete() {
-    /* Nonmatching */
+BOOL daBigelf_c::demoProcFlDelete() {
+    this->m3C0++;
+    if(this->m3C0 == 27){
+        fopAc_ac_c* link_actor = dComIfGp_getLinkPlayer();
+        dComIfGp_particle_set(pa_name_flower2[this->iBrkFrame], &link_actor->current.pos);
+        this->m3A4 = 1.0f;
+    }
+    if(this->m3C0 >= 27){
+        if(this->m3E4 != NULL) {
+            if(this->m3DC > 10){
+                this->m3DC -= 10;
+                this->m3E4->setGlobalAlpha(this->m3DC);
+            }
+            else {
+                this->m3DC = 0;
+                this->m3E4->setGlobalAlpha(0);
+                this->m3E4->becomeInvalidEmitter();
+                this->m3E4 = NULL;
+            }
+        }
+        else {
+            this->lightEnd();
+            dComIfGp_evmng_cutEnd(this->mStaffId);
+            if(this->chkFlag(BIGELF_STATE_UNK0)){
+                this->clrFlag(BIGELF_STATE_UNK0);
+                if(this->getType() == 6){
+                    dComIfGp_setItemMaxMagicCount(32);
+                    dComIfGp_setItemMagicCount(32);
+                }
+            }
+        }
+    }
+    return TRUE;
 }
 
 /* 00000708-000007E4       .text demoInitFlLink__10daBigelf_cFv */
 void daBigelf_c::demoInitFlLink() {
-    /* Nonmatching */
+    fopAc_ac_c* link_actor = dComIfGp_getLinkPlayer();
+    cXyz relPos, absPos;
+    relPos.set(0, 300, 400);
+    fpoAcM_absolutePos(link_actor, &relPos, &absPos);
+    this->m3E4 = dComIfGp_particle_set(pa_name_flower[this->iBrkFrame], &absPos, &this->shape_angle);
+    this->lightInit(&absPos);
+    this->mLightInfluence.mPower = 1000;
+    this->demoInitWait();
 }
 
 /* 000007E4-00000808       .text demoProcFlLink__10daBigelf_cFv */
-void daBigelf_c::demoProcFlLink() {
-    /* Nonmatching */
+BOOL daBigelf_c::demoProcFlLink() {
+    this->demoProcWait();
+    return TRUE;
 }
 
 /* 00000808-000008F0       .text demoInitFlDmAf__10daBigelf_cFv */
 void daBigelf_c::demoInitFlDmAf() {
-    /* Nonmatching */
+    cXyz particle_pos = this->m3D0;
+    particle_pos.y += 20.0f;
+    this->m3E0 = dComIfGp_particle_set(pa_name_flower[this->iBrkFrame], &particle_pos, &this->shape_angle);
+    mDoAud_seStart(JA_SE_OBJ_DY_HANAFUBUKI);
+
 }
 
 /* 000008F0-000009C0       .text demoProcFlDmAf__10daBigelf_cFv */
-void daBigelf_c::demoProcFlDmAf() {
-    /* Nonmatching */
+BOOL daBigelf_c::demoProcFlDmAf() {
+    if(this->m336 != 0 || !this->chkFlag(BIGELF_STATE_UNK0)){
+        dComIfGp_evmng_cutEnd(this->mStaffId);
+        this->clrFlag(BIGELF_STATE_UNK0);
+        if(this->m3E0 != NULL){
+            this->m3E0->becomeInvalidEmitter();
+            this->m3E0 = NULL;
+        }
+        return TRUE;
+    }
+    else {
+        float time = this->mpBckAnimator->getFrame();
+        if(time >= 116 && time <= 173) this->setFlag(BIGELF_STATE_UNK3);
+        return TRUE;
+    }
 }
 
 /* 000009C0-00000A20       .text demoInitFlDmMd__10daBigelf_cFv */
 void daBigelf_c::demoInitFlDmMd() {
-    /* Nonmatching */
+    this->darkInit();
+    this->m3A0 = this->m3A4 = 1.0f;
+    this->clrFlag(BIGELF_STATE_UNK7);
+    this->setFlag(BIGELF_STATE_UNK9);
+    this->setFlag(BIGELF_STATE_UNK10);
 }
 
 /* 00000A20-00000CEC       .text demoProcFlDmMd__10daBigelf_cFv */
-void daBigelf_c::demoProcFlDmMd() {
-    /* Nonmatching */
+BOOL daBigelf_c::demoProcFlDmMd() {
+    f32 time = this->mpBckAnimator->getFrame();
+    if(!chkFlag(BIGELF_STATE_UNK0)){
+        dComIfGp_evmng_cutEnd(this->mStaffId);
+        return TRUE;
+    }
+
+    if(time < 16){}
+    else {
+        if(time < 116){
+            this->m3A4 = (116 - time) * 0.01f;
+        }
+        else {
+            this->m3A4 = 0;
+        }
+    }
+
+    if(!chkFlag(BIGELF_STATE_UNK7) && time >= 116){
+        this->setFlag(BIGELF_STATE_UNK7);
+        cXyz lightPos = this->m3D0;
+        lightPos.x += JMASSin(this->shape_angle.y) * 60;
+        lightPos.z += JMASCos(this->shape_angle.y) * 60;
+        this->lightInit(&lightPos);
+        this->mLightInfluence.mPower = 850.0f;
+        fopAcM_seStart(this, JA_SE_OBJ_DY_FLOWER, 0);
+    }
+
+    if(this->chkFlag(BIGELF_STATE_UNK9) && time >= 126){
+        this->clrFlag(BIGELF_STATE_UNK9);
+        fopAcM_seStart(this, JA_SE_CV_DY_BREATH_IN, 0);
+    }
+
+    if(this->chkFlag(BIGELF_STATE_UNK10) && time >= 154){
+        this->clrFlag(BIGELF_STATE_UNK10);
+        fopAcM_seStart(this, JA_SE_CV_DY_BREATH_OUT, 0);
+    }
+
+    if(time >= 166){
+        dComIfGp_evmng_cutEnd(this->mStaffId);
+        this->clrFlag(BIGELF_STATE_UNK0);
+    }
+
+    if(time >= 116 && time <= 173){
+        this->setFlag(BIGELF_STATE_UNK3);
+    }
+
+    return TRUE;
 }
 
 /* 00000CEC-00000CF0       .text demoInitFlDmBf__10daBigelf_cFv */
 void daBigelf_c::demoInitFlDmBf() {
-    /* Nonmatching */
+    return;
 }
 
 /* 00000CF0-00000D7C       .text demoProcFlDmBf__10daBigelf_cFv */
-void daBigelf_c::demoProcFlDmBf() {
-    /* Nonmatching */
+BOOL daBigelf_c::demoProcFlDmBf() {
+    if(!this->chkFlag(BIGELF_STATE_UNK0)){
+        dComIfGp_evmng_cutEnd(this->mStaffId);
+        return TRUE;
+    }
+    else if(this->m336 != 0){
+        this->setAnm(2);
+        dComIfGp_evmng_cutEnd(this->mStaffId);
+        this->clrFlag(BIGELF_STATE_UNK0);
+    }
+
+    return TRUE;
 }
 
 /* 00000D7C-00000D88       .text demoInitFlDemo__10daBigelf_cFv */
 void daBigelf_c::demoInitFlDemo() {
-    /* Nonmatching */
+    this->m3DC = 0;
 }
 
 /* 00000D88-00000FB8       .text demoProcFlDemo__10daBigelf_cFv */
-void daBigelf_c::demoProcFlDemo() {
-    /* Nonmatching */
+BOOL daBigelf_c::demoProcFlDemo() {
+    if(this->m336 != 0){
+        if(this->chkFlag(BIGELF_STATE_UNK0)){
+            switch(this->m3BC){
+                case 0:
+                    this->setAnm(2);
+                    break;
+                case 2:
+                    this->clrFlag(BIGELF_STATE_UNK0);
+                    dComIfGp_evmng_cutEnd(this->mStaffId);
+                    break;
+            }
+        }
+        else {
+            dComIfGp_evmng_cutEnd(this->mStaffId);
+        }
+    }
+
+    if(this->m3BC == 2){
+        float time = this->mpBckAnimator->getFrame();
+        if(time >= 116.f && time <= 173.f)
+            this->setFlag(BIGELF_STATE_UNK3);
+        
+        cXyz particle_pos;
+        switch(this->m3DC){
+            case 0:
+                particle_pos = this->m3D0;
+                particle_pos.y += 20.f;
+                if(time >= 167.f){
+                    this->m3DC++;
+                    this->m3E0 = dComIfGp_particle_set(pa_name_flower[this->iBrkFrame], &particle_pos, &this->shape_angle);
+                    mDoAud_seStart(JA_SE_OBJ_DY_HANAFUBUKI);
+                }
+            break;
+            
+            case 1:
+                if(!this->chkFlag(BIGELF_STATE_UNK0) && this->m3E0 != NULL){
+                    this->m3DC++;
+                    this->m3E0->becomeInvalidEmitter();
+                    this->m3E0 = NULL;
+                }
+                break;
+        }
+    }
+
+    return TRUE;
 }
 
 /* 00000FB8-0000115C       .text demoInitExit__10daBigelf_cFv */
 void daBigelf_c::demoInitExit() {
-    /* Nonmatching */
+    if(this->m3CC != NULL){
+        this->m3CC->becomeInvalidEmitter();
+        this->m3CC = NULL;
+    }
+
+    this->setFlag(BIGELF_STATE_UNK4);
+    this->m3C0 = 0;
+    this->mHeightOffset = 250.f;
+    this->m3EC = 1.f;
+    this->m3F0 = 1.f;
+
+    cXyz pos, scale;
+    scale.set(1,1,1);
+    pos = current.pos;
+    pos.y += this->mHeightOffset;
+    dComIfGp_particle_set(0x272, &pos, NULL, &scale);
+    this->tevStr.mFogColor.b = 0xFF;
+    this->tevStr.mFogColor.g = 0xFF;
+    this->tevStr.mFogColor.r = 0xFF;
+    this->tevStr.mFogStartZ = 0;
+    this->tevStr.mFogEndZ = 2000.f;
+    
+    fopAcM_seStart(this, JA_SE_CM_DY_GO_AWAY, 0);
+    fopAcM_seStart(this, JA_SE_CV_DY_GO_AWAY, 0);
+    this->darkEnd();
 }
 
 /* 0000115C-000012D4       .text demoProcExit__10daBigelf_cFv */
-void daBigelf_c::demoProcExit() {
-    /* Nonmatching */
+BOOL daBigelf_c::demoProcExit() {
+    this->m3C0++;
+    cLib_addCalc2(&this->tevStr.mFogEndZ, 10, 1, 80);
+    if(this->m3C0 < 70){
+        cLib_addCalc0(&this->m3EC, 0.1, 0.01);
+        cLib_addCalc0(&this->m3F0, 0.1, 0.01);
+        return TRUE;
+    }
+
+    if(this->m3C0 == 70){
+        fopAcM_seStart(this, JA_SE_CM_L_ARROW_PASS_AWAY, 0);
+        if(this->getType() == 6)
+            mDoAud_bgmStop(45);
+    }
+
+    cLib_addCalc2(&this->m3F0, 5, 0.1, 1);
+    cLib_addCalc0(&this->m3EC, 0.1, 0.05);
+    if(this->m3C0 >= 90){
+        dComIfGp_evmng_cutEnd(this->mStaffId);
+        this->setFlag(BIGELF_STATE_UNK1);
+        this->clrFlag(BIGELF_STATE_UNK4);
+        if(this->getType() != 6)
+            this->makeFa1S();
+    }
+
+    return TRUE;
 }
 
 /* 000012D4-000013C0       .text demoInitTalk__10daBigelf_cFv */
 void daBigelf_c::demoInitTalk() {
-    /* Nonmatching */
+    this->talkInit();
+    int* a_intP = dComIfGp_evmng_getMyIntegerP(this->mStaffId, "MsgNo");
+    JUT_ASSERT(0x325, a_intP);
+    this->mCurrentMessageId = *a_intP;
+    if(this->mCurrentMessageId == 0x2EEA){
+        dComIfGp_setItemLifeCount(dComIfGs_getMaxLife());
+        dComIfGp_setItemMagicCount(dComIfGs_getMaxMagic());
+    }
+
 }
 
 /* 000013C0-00001418       .text demoProcTalk__10daBigelf_cFv */
-void daBigelf_c::demoProcTalk() {
-    /* Nonmatching */
+BOOL daBigelf_c::demoProcTalk() {
+    u16 talk_status = this->talk();
+    if(talk_status == fopMsgStts_BOX_CLOSED_e || talk_status == 0xFE){ // What is 0xFE ?
+        dComIfGp_evmng_cutEnd(this->mStaffId);
+    }
+
+    return TRUE;
 }
 
 /* 00001418-0000163C       .text demoInitAppear__10daBigelf_cFv */
