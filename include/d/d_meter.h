@@ -824,6 +824,8 @@ void dMeter_magicAlpha(sub_meter_class* i_Meter);
 void dMeter_menuLRMove(sub_meter_class* i_Meter);
 void dMeter_menuPlusMove(sub_meter_class* i_Meter);
 
+bool dMeter_subWinFlag();
+
 void dMeter_walletChange(sub_meter_class* i_Meter);
 
 void dMeter_compassDirOpen(sub_meter_class* i_Meter);

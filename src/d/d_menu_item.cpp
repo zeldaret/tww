@@ -154,8 +154,9 @@ void dMenu_Item_c::outFontDraw() {
 }
 
 /* 801CC0F8-801CC10C       .text noteCheck__12dMenu_Item_cFv */
-void dMenu_Item_c::noteCheck() {
+u8 dMenu_Item_c::noteCheck() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 801CC10C-801CC1AC       .text noteInit__12dMenu_Item_cFv */

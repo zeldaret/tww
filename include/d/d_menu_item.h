@@ -43,7 +43,7 @@ public:
     void outFontInit();
     void outFontMove();
     void outFontDraw();
-    void noteCheck();
+    u8 noteCheck();
     void noteInit();
     void noteAppear();
     void noteOpen();
@@ -81,7 +81,9 @@ public:
     /* 0x2324 */ JUtility::TColor color_0x2324;
     /* 0x2328 */ JUtility::TColor color_0x2328;
     /* 0x232C */ JUtility::TColor color_0x232C;
-    /* 0x2330 */ u8 field_0x2330[0x23FE - 0x2330];
+    /* 0x2330 */ u8 field_0x2330[0x23F8 - 0x2330];
+    /* 0x23F8 */ u16 field_0x23F8;
+    /* 0x23FA */ u8 field_0x23FA[0x23FE - 0x23FA];
     /* 0x23FE */ u8 mItemMode;
     /* 0x23FF */ u8 field_0x23FF[0x2421 - 0x23FF];
     /* 0x2421 */ u8 field_0x2421;
