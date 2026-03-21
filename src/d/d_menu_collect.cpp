@@ -590,8 +590,9 @@ void dMenu_Collect_c::animeStep4(short, short) {
 }
 
 /* 801A7D60-801A7F88       .text _open2__15dMenu_Collect_cFv */
-void dMenu_Collect_c::_open2() {
+bool dMenu_Collect_c::_open2() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801A7F88-801A84B4       .text _close2__15dMenu_Collect_cFv */

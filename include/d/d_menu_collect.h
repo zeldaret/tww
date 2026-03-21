@@ -96,7 +96,7 @@ public:
     void animeStep2(short, short);
     void animeStep3(short, short);
     void animeStep4(short, short);
-    void _open2();
+    bool _open2();
     bool _close2();
 
     /* 0x000 */ // vtable
@@ -177,7 +177,9 @@ public:
     /* 0x27A0 */ u8 m27A0[0x27A8 - 0x27A0];
     /* 0x27A8 */ f32 m27A8;
     /* 0x27AC */ f32 m27AC;
-    /* 0x27B0 */ u8 m27B0[0x27EE - 0x27B0];
+    /* 0x27B0 */ u8 m27B0[0x27EC - 0x27B0];
+    /* 0x27EC */ u8 m27EC;
+    /* 0x27ED */ u8 m27ED;
     /* 0x27EE */ u8 mCollectMode;
     /* 0x27EF */ u8 m27EF[0x27F4 - 0x27EF];
 }; // Size: 0x27F4

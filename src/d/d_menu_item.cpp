@@ -301,11 +301,13 @@ void dMenu_Item_c::_close() {
 }
 
 /* 801D1CD4-801D21A0       .text _open2__12dMenu_Item_cFv */
-void dMenu_Item_c::_open2() {
+bool dMenu_Item_c::_open2() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801D21A0-801D2A4C       .text _close2__12dMenu_Item_cFv */
-void dMenu_Item_c::_close2() {
+bool dMenu_Item_c::_close2() {
     /* Nonmatching */
+    return false;
 }

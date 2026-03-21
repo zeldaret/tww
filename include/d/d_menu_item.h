@@ -72,8 +72,8 @@ public:
     virtual void _draw();
     virtual bool _open();
     virtual void _close();
-    void _open2();
-    void _close2();
+    bool _open2();
+    bool _close2();
 
 public:
     /* 0x0004 */ u8 field_0x0004[0x2320 - 0x4];
@@ -83,7 +83,10 @@ public:
     /* 0x232C */ JUtility::TColor color_0x232C;
     /* 0x2330 */ u8 field_0x2330[0x23FE - 0x2330];
     /* 0x23FE */ u8 mItemMode;
-    /* 0x23FF */ u8 field_0x23FF[0x2424 - 0x23FF];
+    /* 0x23FF */ u8 field_0x23FF[0x2421 - 0x23FF];
+    /* 0x2421 */ u8 field_0x2421;
+    /* 0x2422 */ u8 field_0x2422;
+    /* 0x2423 */ u8 field_0x2423;
 }; // Size: 0x2424
 
 class dMi_HIO_c : public JORReflexible {
