@@ -675,7 +675,7 @@ static cPhs_State dMs_Create(msg_class* i_this) {
 
     event_wait_frame = 0;
 
-    g_dComIfG_gameInfo.play.field_0x4952 = 0;
+    g_dComIfG_gameInfo.play.mNameOpen = 0;
 
     i_Ms->mButtonsPressed = 0;
     i_Ms->mMsgID = -1;
