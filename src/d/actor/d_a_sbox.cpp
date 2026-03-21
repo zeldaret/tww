@@ -299,24 +299,24 @@ void daSbox_c::demoInitOpen() {
     mDoAud_subBgmStart(JA_BGM_OPEN_BOX);
     setFlag(2);
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F1, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F2, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F6, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_PAKAF, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_NAKAF, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_PAKAF_SOTO, &current.pos, &current.angle);
 
     cXyz scale;
     scale.set(0.7f, 1.0f, 1.0f);
 
-    JPABaseEmitter* pJVar1 = dComIfGp_particle_set(dPa_name::ID_COMMON_01F3, &current.pos, &current.angle);
+    JPABaseEmitter* pJVar1 = dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_UEF, &current.pos, &current.angle);
     if (pJVar1 != NULL) {
         pJVar1->setEmitterScale(scale);
     }
 
-    JPABaseEmitter* pJVar2 = dComIfGp_particle_set(dPa_name::ID_COMMON_01F4, &current.pos, &current.angle);
+    JPABaseEmitter* pJVar2 = dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_TSUBU, &current.pos, &current.angle);
     if (pJVar2 != NULL) {
         pJVar2->setEmitterScale(scale);
     }
 
-    mEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_01F5, &current.pos, &current.angle);
+    mEmitter = dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_VOLM, &current.pos, &current.angle);
     if (mEmitter != NULL) {
         m300 = 0;
         mEmitter->setGlobalAlpha(0);

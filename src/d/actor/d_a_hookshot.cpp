@@ -259,7 +259,7 @@ BOOL daHookshot_c::procShot() {
         mCurrProcFunc = &daHookshot_c::procReturn;
     } else if (m2A3 || current.pos.abs(daPy_getPlayerLinkActorClass()->getHookshotRootPos()) >= 1500.0f) {
         if (m2A3) {
-            if (m2A6 == dPa_name::ID_SCENE_825F) {
+            if (m2A6 == dPa_name::ID_IT_SN_LK_FKSHOT_SUNA00) {
                 dComIfGp_particle_setP1(m2A6, &current.pos);
             } else {
                 dComIfGp_particle_setP1(m2A6, &current.pos, &m2BA);
@@ -298,9 +298,9 @@ BOOL daHookshot_c::procShot() {
                         dComIfG_Bgsp()->GetAttributeCode(mLinChk) == dBgS_Attr_SAND_e
                     )
                 ) {
-                    m2A6 = dPa_name::ID_SCENE_825F;
+                    m2A6 = dPa_name::ID_IT_SN_LK_FKSHOT_SUNA00;
                 } else {
-                    m2A6 = dPa_name::ID_COMMON_PURPLE_HIT;
+                    m2A6 = dPa_name::ID_AK_JN_NG;
                 }
                 mMtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mLinChk);
                 m2A3 = true;

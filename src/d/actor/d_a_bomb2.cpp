@@ -697,10 +697,10 @@ namespace daBomb2 {
     }
 
     void Act_c::eff_explode_normal(const csXyz* rotation) {
-        dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &scale);
-        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CLOUD, &current.pos, NULL, &scale);
-        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &scale);
-        dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &scale);
+        dComIfGp_particle_setP1(dPa_name::ID_IT_JN_BMEX_SENKO, &current.pos, rotation, &scale);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE01, &current.pos, NULL, &scale);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE02, &current.pos, NULL, &scale);
+        dComIfGp_particle_setToonP1(dPa_name::ID_IT_JT_BMEX_HAHEN, &current.pos, NULL, &scale);
     }
 
     void Act_c::eff_explode_water() {
@@ -729,8 +729,8 @@ namespace daBomb2 {
             field_0x6CC = field_0x6C0;
             field_0x6D8 = field_0x6C0;
 
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_FUSE_SPARKS, &field_0x6C0, NULL, &scale, 0xFF, &mSparks);
-            dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_2012, &field_0x6C0, NULL, &scale, 0xDC, &mSmoke);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_BM_HIBANA, &field_0x6C0, NULL, &scale, 0xFF, &mSparks);
+            dComIfGp_particle_setToonP1(dPa_name::ID_IT_JT_BM_SMOKE, &field_0x6C0, NULL, &scale, 0xDC, &mSmoke);
             mSmoke.setOldPosP(&field_0x6CC, &field_0x6D8);
         }
     }

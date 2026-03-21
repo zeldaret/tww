@@ -496,7 +496,7 @@ static BOOL daHimo3_Execute(himo3_class* i_this) {
 #if VERSION == VERSION_DEMO
                 i_this->demo_m20FC =
 #endif
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_01EA, &i_this->m1624, NULL, &fire_scale, 0xff, &i_this->m20FC);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_TORCH, &i_this->m1624, NULL, &fire_scale, 0xff, &i_this->m20FC);
 #if VERSION == VERSION_DEMO
                 i_this->m2110 = 1;
 #endif
@@ -552,7 +552,7 @@ static BOOL daHimo3_Execute(himo3_class* i_this) {
             }
 
             cXyz sp1C(i_this->m1624.x, DEMO_SELECT(i_this->m1624.y + REG0_F(7), i_this->m1624.y) + 20.0f, i_this->m1624.z);
-            dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &sp1C);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_JP_O_KAGEROU00, &sp1C);
             i_this->m1600.mPos = i_this->m1624;
             i_this->m1600.mColor.r = 600;
             i_this->m1600.mColor.g = 400;

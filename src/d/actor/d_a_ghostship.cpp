@@ -355,7 +355,7 @@ bool daGhostship_c::_execute() {
 
         dLib_setCirclePath(&mPaths[i]);
         if(mAlpha != 0.0f) {
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8306, &mPaths[i].mPos);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_GHOSTSHIPFIRE00, &mPaths[i].mPos);
         }
     }
 

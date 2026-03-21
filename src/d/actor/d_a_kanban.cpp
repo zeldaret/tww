@@ -192,7 +192,7 @@ BOOL sea_water_check(kanban_class* i_this) {
         if ((iVar3 == 1) && (i_this->m29C == 0)) {
             cXyz sp30(0.5f, 0.5f, 0.5f);
             i_this->m514.remove();
-            dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &i_this->m528, NULL, &sp30, 0xFF, &i_this->m514);
+            dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &i_this->m528, NULL, &sp30, 0xFF, &i_this->m514);
             i_this->m2BC = 0;
             i_this->m29C = 1;
             i_this->m514.setRate(0.0f);
@@ -317,7 +317,7 @@ void cut_point_check(kanban_class* i_this) {
 
     if (parameters != 0) {
         cXyz sp18 = *i_this->m5B0.GetTgHitPosP();
-        dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &sp18, &player->shape_angle);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &sp18, &player->shape_angle);
         dScnPly_ply_c::setPauseTimer(1);
         a_this->current.angle.z = i_this->m2C4;
         
@@ -370,7 +370,7 @@ void mother_move(kanban_class* i_this) {
                                 i_this->m29A = 1;
                                 i_this->m2C0 = 20;
                                 cXyz sp18 = *i_this->m5B0.GetTgHitPosP();
-                                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &sp18, &player->shape_angle);
+                                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &sp18, &player->shape_angle);
                                 dScnPly_ply_c::setPauseTimer(1);
                                 return;
                             }

@@ -82,7 +82,7 @@ static void move(fgmahou_class* i_this) {
             i_this->mTimers[0] = REG8_S(9) + 5;
             i_this->mTimers[1] = 0x14;
 
-            i_this->mpEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_821E, &i_this->current.pos);
+            i_this->mpEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGDARKSHOT00, &i_this->current.pos);
 
             i_this->mTgSph.SetR(REG6_F(5) + 110.0f);
 
@@ -118,7 +118,7 @@ static void move(fgmahou_class* i_this) {
                 break;
             }
 
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8244, &i_this->current.pos, &i_this->home.angle);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGSMASHDARKSHOT00, &i_this->current.pos, &i_this->home.angle);
             fopAcM_seStartCurrent(i_this, JA_SE_LK_PG_BOMB_STRIKE, 0);
 
             i_this->mState = 5;
@@ -212,9 +212,9 @@ static void move(fgmahou_class* i_this) {
             i_this->field_0x780 = 0x32;
             i_this->health = 1;
 
-            JPABaseEmitter* pEmtr = dComIfGp_particle_set(dPa_name::ID_SCENE_8245, &i_this->current.pos);
+            JPABaseEmitter* pEmtr = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGHITDARKSHOT00, &i_this->current.pos);
             pEmtr->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(1));
-            JPABaseEmitter* pEmtr2 = dComIfGp_particle_set(dPa_name::ID_SCENE_8246, &i_this->current.pos);
+            JPABaseEmitter* pEmtr2 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGHITDARKSHOT01, &i_this->current.pos);
             pEmtr2->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(1));
 
             fopAcM_seStartCurrent(i_this, JA_SE_OBJ_PG_EBALL_EXP_L, 0);

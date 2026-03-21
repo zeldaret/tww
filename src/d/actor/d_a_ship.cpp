@@ -2742,8 +2742,8 @@ BOOL daShip_c::procStartModeWarp() {
             m03BC.x = 0;
             m03BC.y = shape_angle.y + 0x8000;
             m03BC.z = 0;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0285, &current.pos, &shape_angle, NULL, 0xFF, &m1984, -1, &diff);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0285, &current.pos, &m03BC, NULL, 0xFF, &m1998, -1, &diff);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWARPSPLASH00, &current.pos, &shape_angle, NULL, 0xFF, &m1984, -1, &diff);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWARPSPLASH00, &current.pos, &m03BC, NULL, 0xFF, &m1998, -1, &diff);
         }
         if (pfVar2 != NULL) {
             pfVar2->current.pos.y = current.pos.y - 700.0f;
@@ -2789,8 +2789,8 @@ BOOL daShip_c::procTactWarp_init() {
     m03BC.x = 0;
     m03BC.y = shape_angle.y + 0x8000;
     m03BC.z = 0;
-    dComIfGp_particle_set(dPa_name::ID_COMMON_0285, &current.pos, &shape_angle, NULL, 0xFF, &m1984, -1, amb);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_0285, &current.pos, &m03BC, NULL, 0xFF, &m1998, -1, amb);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWARPSPLASH00, &current.pos, &shape_angle, NULL, 0xFF, &m1984, -1, amb);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWARPSPLASH00, &current.pos, &m03BC, NULL, 0xFF, &m1998, -1, amb);
     return TRUE;
 }
 
@@ -2936,8 +2936,8 @@ BOOL daShip_c::procStartModeThrow() {
             amb.g = amb.g * 0.23529412f + 195.0f;
             amb.b = amb.b * 0.23529412f + 195.0f;
             current.pos.y = m03F4;
-            dComIfGp_particle_set(dPa_name::ID_SCENE_82D7, &current.pos, &shape_angle, NULL, 0xFF, NULL, -1, &amb);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_82D8, &current.pos, &shape_angle, NULL, 0xFF, NULL, -1, &amb);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_FN_SHIBUKI00, &current.pos, &shape_angle, NULL, 0xFF, NULL, -1, &amb);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_FN_SHIBUKI01, &current.pos, &shape_angle, NULL, 0xFF, NULL, -1, &amb);
             current.pos.y = m03F4 - 50.0f;
         }
     }
@@ -2990,29 +2990,29 @@ void daShip_c::setEffectData(float param_1, short param_2) {
             if (std::fabsf(speedF) > 3.0f && mFwdVel * speedF > 0.0f) {
                 if (mFwdVel > 11.0f) {
                     if (mWaveL.getEmitter() == NULL) {
-                        mEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0037, &mEffPos, &shape_angle, NULL, 0xFF, &mWaveL);
+                        mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWAVE00, &mEffPos, &shape_angle, NULL, 0xFF, &mWaveL);
                         mWaveL.setTimer(20);
                         if (mEmitter) {
                             mEmitter->setDirection(wave_l_direction);
                         }
                     }
                     if (mWaveR.getEmitter() == NULL) {
-                        mEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0037, &mEffPos, &shape_angle, NULL, 0xFF, &mWaveR);
+                        mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWAVE00, &mEffPos, &shape_angle, NULL, 0xFF, &mWaveR);
                         mWaveR.setTimer(20);
                         if (mEmitter) {
                             mEmitter->setDirection(wave_r_direction);
                         }
                     }
                     if (mSplash.getEmitter() == NULL) {
-                        dComIfGp_particle_set(dPa_name::ID_COMMON_0035, &mEffPos, &shape_angle, NULL, 0xFF, &mSplash);
+                        dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPSPLASH00, &mEffPos, &shape_angle, NULL, 0xFF, &mSplash);
                     }
                 }
                 if (mTrack.getEmitter() == NULL) {
-                    dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0036, &current.pos, &shape_angle, NULL, 0, &mTrack);
+                    dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_SHIPTAIL00, &current.pos, &shape_angle, NULL, 0, &mTrack);
                 }
                 if (checkStateFlg((daSHIP_SFLG)(daSFLG_FLY_e | daSFLG_LAND_e))) {
                     dKy_get_seacolor(&amb, &diff);
-                    mEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0034, &mEffPos, &shape_angle, NULL, 0xFF, NULL, -1, &amb);
+                    mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPIMPACT00, &mEffPos, &shape_angle, NULL, 0xFF, NULL, -1, &amb);
                     if (mEmitter) {
                         fVar1 = 10.0f;
                         fVar2 = (-(speed.y - -15.0f) / 30.0f) * 50.0f + 10.0f;
@@ -3330,7 +3330,7 @@ void daShip_c::setRopePos() {
         m1020.z = r3->z;
 
         if (mRipple.getEmitter() == NULL) { 
-            dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &m1020, NULL, &ripple_scale, 0xFF, &mRipple);
+            dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &m1020, NULL, &ripple_scale, 0xFF, &mRipple);
 
             if (mRipple.getEmitter() != NULL) {
                 mRipple.setRate(0.0f);
@@ -3355,7 +3355,7 @@ void daShip_c::setRopePos() {
                 if (m19AC.getEmitter() == NULL) {
                     ropeSegments = mRopeLine.getPos(0);
 
-                    emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0038, ropeSegments, NULL, NULL, 0xFF, &m19AC);
+                    emitter = dComIfGp_particle_setP1(dPa_name::ID_IT_JN_LK_NURE_POTA00, ropeSegments, NULL, NULL, 0xFF, &m19AC);
 
                     if(emitter) {
                         emitter->setGlobalParticleScale(1.5f, 1.5f);
@@ -3369,7 +3369,7 @@ void daShip_c::setRopePos() {
                 dComIfGp_getVibration().StartShock(3, 1, cXyz(0.0f, 1.0f, 0.0f));
                 
                 if (m19C0.getEmitter() == NULL) {
-                    emitter = dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &m1074, NULL, &ripple_scale, 0xFF, &m19C0);
+                    emitter = dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &m1074, NULL, &ripple_scale, 0xFF, &m19C0);
                     
                     if (emitter) {
                         emitter->setVolumeSize(30);

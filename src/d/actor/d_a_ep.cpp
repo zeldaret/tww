@@ -356,7 +356,7 @@ void ep_move(ep_class* i_this) {
 
             cXyz scale;
             scale.z = scale.y = scale.x = REG0_F(6) + 1.0f;
-            i_this->mpEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_01EA, &pos, NULL, &scale);
+            i_this->mpEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_TORCH, &pos, NULL, &scale);
         }
 
         if (i_this->mpEmitter != NULL) {

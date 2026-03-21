@@ -85,9 +85,9 @@ static void mode_dead(bita_class* i_this) {
                 type = 1;
 
             if (type == 0) {
-                dComIfGp_particle_set(dPa_name::ID_SCENE_80E3, &i_this->current.pos, &i_this->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_BTDBURNEDBOARD00, &i_this->current.pos, &i_this->shape_angle);
             } else {
-                dComIfGp_particle_set(dPa_name::ID_SCENE_80E4, &i_this->current.pos, &i_this->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_BTDBURNEDBOARD01, &i_this->current.pos, &i_this->shape_angle);
             }
         }
 

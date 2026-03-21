@@ -88,17 +88,17 @@ void daIball_c::createDisappearEffect(int param_1, int color_idx) {
     pos.y += m_data.mYOffset;
     switch (param_1) {
     case 0:
-        dComIfGp_particle_set(dPa_name::ID_COMMON_001C, &pos, NULL, &scale, 0xFF, dPa_control_c::getLifeBallSetColorEcallBack(color_idx));
-        dComIfGp_particle_set(dPa_name::ID_COMMON_001D, &pos, NULL, &scale);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_BREAKLIFEBALL, &pos, NULL, &scale, 0xFF, dPa_control_c::getLifeBallSetColorEcallBack(color_idx));
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_HAHENLIFEBALL, &pos, NULL, &scale);
         if (color_idx == 2) {
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0047, &pos);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_LOOTITEM00, &pos);
         }
         fopAcM_seStartCurrent(this, JA_SE_OBJ_CUT_INOCHIDAMA, 0);
         break;
     case 1:
-        dComIfGp_particle_set(dPa_name::ID_COMMON_0019, &pos, NULL, &scale);
-        dComIfGp_particle_set(dPa_name::ID_COMMON_001A, &pos, NULL, &scale);
-        dComIfGp_particle_set(dPa_name::ID_COMMON_001B, &pos, NULL, &scale);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_SHOTENBAKUEN, &pos, NULL, &scale);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_SHOTENPOFU, &pos, NULL, &scale);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_SHOTENSPIRIT, &pos, NULL, &scale);
         fopAcM_seStartCurrent(this, JA_SE_CM_INOCHIDAMA_BREAK, 0);
         break;
     }
@@ -214,7 +214,7 @@ void daIball_c::checkGeo() {
             particle_scale.setall(0.25f);
             cXyz particle_pos(current.pos);
             particle_pos.y = lavaY;
-            dComIfGp_particle_set(dPa_name::ID_SCENE_80D5, &particle_pos, NULL, &particle_scale);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_YOGAN_HANE00, &particle_pos, NULL, &particle_scale);
             fopAcM_delete(this);
         }
     }
@@ -246,7 +246,7 @@ void daIball_c::mode_wait() {
 
 /* 800F3F6C-800F3FE8       .text mode_water_init__9daIball_cFv */
 void daIball_c::mode_water_init() {
-    dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &current.pos, NULL, &scale, 0xFF, &mRippleCb);
+    dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &current.pos, NULL, &scale, 0xFF, &mRippleCb);
     mRippleCb.setRate(0.0f);
     mMode = MODE_WATER;
 }

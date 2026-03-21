@@ -255,9 +255,9 @@ static BOOL medama_atari_check(am_class* i_this) {
                 cc_at_check(actor, &atInfo);
                 actor->max_health = 10;
                 actor->health = 10;
-                dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, &actor->attention_info.position);
+                dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &actor->attention_info.position);
             } else {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, &hitPos);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_NG, &hitPos);
             }
             fopAcM_seStart(actor, JA_SE_LK_MS_WEP_HIT, 0x42);
         }
@@ -295,7 +295,7 @@ static BOOL medama_atari_check(am_class* i_this) {
             i_this->mAction = ACTION_DOUSA;
             i_this->mMode = MODE_DOUSA_OKIRU;
         } else {
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &i_this->mEyeballPos, &player->shape_angle);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &i_this->mEyeballPos, &player->shape_angle);
             fopAcM_seStart(actor, JA_SE_CM_AM_EYE_DAMAGE, 0);
             fopAcM_monsSeStart(actor, JA_SE_CV_AM_EYE_DAMAGE, 0x42);
             i_this->mAction = ACTION_ITAI_MOVE;
@@ -303,7 +303,7 @@ static BOOL medama_atari_check(am_class* i_this) {
         }
         break;
     default:
-        dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, &hitPos);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_NG, &hitPos);
         fopAcM_seStart(actor, JA_SE_LK_MS_WEP_HIT, 0x42);
         break;
     }
@@ -602,7 +602,7 @@ static void action_dousa(am_class* i_this) {
         fopAcM_seStart(actor, JA_SE_CM_AM_JUMP, 0);
         i_this->mSmokeCbs[0].remove();
         dComIfGp_particle_setToon(
-            dPa_name::ID_SCENE_A125, &i_this->mWaistPos, &actor->shape_angle, NULL,
+            dPa_name::ID_AK_ST_AMOTHSMOKE00, &i_this->mWaistPos, &actor->shape_angle, NULL,
             0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(actor)
         );
         dComIfGp_getVibration().StartShock(3, -0x21, cXyz(0.0f, 1.0f, 0.0f));
@@ -638,7 +638,7 @@ static void action_dousa(am_class* i_this) {
                 i_this->m033C_demo = 
 #endif
                 dComIfGp_particle_setToon(
-                    dPa_name::ID_SCENE_A154, &i_this->mWaistPos, &actor->shape_angle, NULL,
+                    dPa_name::ID_AK_ST_AMOTHSMOKE02, &i_this->mWaistPos, &actor->shape_angle, NULL,
                     0xB9, &i_this->mSmokeCbs[2], fopAcM_GetRoomNo(actor)
                 );
             }
@@ -732,7 +732,7 @@ static void action_modoru_move(am_class* i_this) {
         if (i_this->mAcch.ChkGroundHit()) {
             i_this->mSmokeCbs[0].remove();
             dComIfGp_particle_setToon(
-                dPa_name::ID_SCENE_A125, &i_this->mWaistPos, &actor->shape_angle, NULL,
+                dPa_name::ID_AK_ST_AMOTHSMOKE00, &i_this->mWaistPos, &actor->shape_angle, NULL,
                 0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(actor)
             );
 
@@ -851,7 +851,7 @@ static void action_itai_move(am_class* i_this) {
         i_this->mSmokeCbs[3].remove();
         i_this->mStts.SetWeight(0xFF);
         dComIfGp_particle_setToon(
-            dPa_name::ID_SCENE_A155, &i_this->mJawPos, &actor->shape_angle, NULL,
+            dPa_name::ID_AK_ST_AMOTHSMOKE03, &i_this->mJawPos, &actor->shape_angle, NULL,
             0xB9, &i_this->mSmokeCbs[3], fopAcM_GetRoomNo(actor)
         );
         fopAcM_seStart(actor, JA_SE_CM_AM_MOUTH_CLOSE, 0);
@@ -874,11 +874,11 @@ static void action_itai_move(am_class* i_this) {
             i_this->mNeedleCyl.OnAtSetBit();
             i_this->mNeedleCyl.OnAtHitBit();
             dComIfGp_particle_setToon(
-                dPa_name::ID_SCENE_A126, &i_this->mJawPos, &actor->shape_angle, NULL,
+                dPa_name::ID_AK_ST_AMOTHSMOKE01, &i_this->mJawPos, &actor->shape_angle, NULL,
                 0xB9, &i_this->mSmokeCbs[1], fopAcM_GetRoomNo(actor)
             );
-            i_this->m033C = dComIfGp_particle_set(dPa_name::ID_SCENE_8157, &i_this->mJawPos);
-            i_this->m0340 = dComIfGp_particle_set(dPa_name::ID_SCENE_8156, &i_this->mJawPos);
+            i_this->m033C = dComIfGp_particle_set(dPa_name::ID_AK_SN_AMOTHBOMBEYE, &i_this->mJawPos);
+            i_this->m0340 = dComIfGp_particle_set(dPa_name::ID_AK_SN_AMOTHBOMBMOUTH, &i_this->mJawPos);
         }
 
         if (!i_this->mpMorf->isStop()) {
@@ -895,7 +895,7 @@ static void action_itai_move(am_class* i_this) {
             i_this->mSmokeCbs[0].remove();
             fopAcM_seStart(actor, JA_SE_CM_AM_JUMP, 0);
             dComIfGp_particle_setToon(
-                dPa_name::ID_SCENE_A125, &i_this->mWaistPos, &actor->shape_angle, NULL,
+                dPa_name::ID_AK_ST_AMOTHSMOKE00, &i_this->mWaistPos, &actor->shape_angle, NULL,
                 0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(actor)
             );
             dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
@@ -910,8 +910,8 @@ static void action_itai_move(am_class* i_this) {
             break;
         }
         anm_init(i_this, AM_BCK_DEAD, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-        dComIfGp_particle_set(dPa_name::ID_SCENE_8127, &i_this->mWaistPos);
-        dComIfGp_particle_set(dPa_name::ID_SCENE_8128, &i_this->mWaistPos);
+        dComIfGp_particle_set(dPa_name::ID_AK_SN_AMOTHFLASH00, &i_this->mWaistPos);
+        dComIfGp_particle_set(dPa_name::ID_AK_SN_AMOTHHAHEN00, &i_this->mWaistPos);
 
         fopAcM_seStart(actor, JA_SE_CM_AM_BEF_EXPLODE, 0);
         i_this->mTargetAngleY = actor->current.angle.y;
@@ -1006,8 +1006,8 @@ static BOOL daAM_Execute(am_class* i_this) {
     if (i_this->mAction != ACTION_ITAI_MOVE && i_this->mSpawnPosY - 1500.0f > actor->current.pos.y) {
         anm_init(i_this, AM_BCK_DEAD, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
 
-        dComIfGp_particle_set(dPa_name::ID_SCENE_8127, &i_this->mWaistPos);
-        dComIfGp_particle_set(dPa_name::ID_SCENE_8128, &i_this->mWaistPos);
+        dComIfGp_particle_set(dPa_name::ID_AK_SN_AMOTHFLASH00, &i_this->mWaistPos);
+        dComIfGp_particle_set(dPa_name::ID_AK_SN_AMOTHHAHEN00, &i_this->mWaistPos);
 
         fopAcM_seStart(actor, JA_SE_CM_AM_BEF_EXPLODE, 0);
 

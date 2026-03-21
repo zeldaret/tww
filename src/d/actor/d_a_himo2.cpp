@@ -711,7 +711,7 @@ int himo2_bg_check(himo2_class* i_this) {
                 mDoAud_seStart(JA_SE_LK_MS_WEP_HIT, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
                 if (iVar4 == dBgS_Attr_WOOD_e) {
                     pJVar5 = dComIfGp_particle_set(
-                        dPa_name::ID_COMMON_002B,
+                        dPa_name::ID_AK_JN_ELEMENTKIKUZU00,
                         &actor->current.pos,
                         &local_38,
                         NULL,
@@ -728,7 +728,7 @@ int himo2_bg_check(himo2_class* i_this) {
                     }
                 } else {
                     local_38.x = local_38.x + 0x4000;
-                    pJVar5 = dComIfGp_particle_set(dPa_name::ID_COMMON_002C, &actor->current.pos, &local_38);
+                    pJVar5 = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTHIBANA00, &actor->current.pos, &local_38);
                     if (pJVar5 != NULL) {
                         pJVar5->mInitialVelAxis = 15.0f;
                     }

@@ -273,11 +273,11 @@ void daObjSwhammer::Act_c::crush_proc() {
 /* 00000BF0-00000DB8       .text eff_crush__Q213daObjSwhammer5Act_cFv */
 void daObjSwhammer::Act_c::eff_crush() {
     if (mMode == 0) {
-        dComIfGp_particle_set(dPa_name::ID_SCENE_81B7, &current.pos);
-        dComIfGp_particle_set(dPa_name::ID_SCENE_81B8, &current.pos);
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_HAMSW_STAR00, &current.pos);
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_HAMSW_SYOUGEKI00, &current.pos);
     }
     static const cXyz particle_scale(1.5f, 1.5f, 1.0f);
-    JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &current.pos, NULL, NULL, 200, &mSmokeCb, -1, NULL, NULL, &particle_scale);
+    JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &current.pos, NULL, NULL, 200, &mSmokeCb, -1, NULL, NULL, &particle_scale);
     if (emitter) {
         emitter->setRate(30.0f);
         emitter->setMaxFrame(1);

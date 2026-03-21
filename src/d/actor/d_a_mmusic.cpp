@@ -121,7 +121,7 @@ bool daMmusic::Act_c::_execute() {
     if (mpEmitter == NULL && field_0x298 == 1) {
         set_mtx();
         cXyz scale(1.0f, 1.0f, 1.0f);
-        JPABaseEmitter* emtr = dComIfGp_particle_set(dPa_name::ID_SCENE_826C, &current.pos);
+        JPABaseEmitter* emtr = dComIfGp_particle_set(dPa_name::ID_AK_SN_MACOREMUSIC00, &current.pos);
         mpEmitter = emtr;
         if (emtr != NULL) {
             mpEmitter->setGlobalRTMatrix(mMtx);

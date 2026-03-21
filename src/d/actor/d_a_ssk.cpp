@@ -103,10 +103,10 @@ void nomal_move(ssk_class* i_this) {
             i_this->m2BA = 2;
 
             dComIfGp_particle_set(
-                dPa_name::ID_SCENE_816C, &i_this->actor.current.pos, NULL, NULL, 0xff, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0
+                dPa_name::ID_IT_SN_TGSYOKU_ROCK00, &i_this->actor.current.pos, NULL, NULL, 0xff, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0
             );
             dComIfGp_particle_setToon(
-                dPa_name::ID_SCENE_A16D, &i_this->actor.current.pos, &i_this->actor.shape_angle, NULL, 0xb9, &i_this->m2D0, fopAcM_GetRoomNo(&i_this->actor)
+                dPa_name::ID_IT_ST_TGSYOKU_SMOKE00, &i_this->actor.current.pos, &i_this->actor.shape_angle, NULL, 0xb9, &i_this->m2D0, fopAcM_GetRoomNo(&i_this->actor)
             );
         }
         break;

@@ -1951,7 +1951,7 @@ void daNpc_Zl1_c::setWaterRipple() {
     if(!field_0x7CA) {
         if(mObjAcch.ChkWaterIn()) {
             if(mRippleCallBack.getEmitter() == NULL) {
-                dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033,&current.pos, NULL, NULL, 0xff, &mRippleCallBack);
+                dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00,&current.pos, NULL, NULL, 0xff, &mRippleCallBack);
             }
             f32 temp = std::fabsf(speedF) * 0.1f;
             f32 temp2 = temp * temp;

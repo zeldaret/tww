@@ -158,7 +158,7 @@ BOOL daPy_lk_c::checkRopeSwingWall(cXyz* r4, cXyz* r5, s16* r6, f32* r7) {
         foot_effect->setAngle(&angle);
         
         JPABaseEmitter* emitter = dComIfGp_particle_setToonP1(
-            dPa_name::ID_COMMON_2022,
+            dPa_name::ID_AK_JT_ELEMENTSMOKE00,
             &foot_effect->getPos(), &foot_effect->getAngle(),
             NULL, m_HIO->mBasic.m.field_0x2, foot_effect->getSmokeCallBack(),
             fopAcM_GetRoomNo(this)

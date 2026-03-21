@@ -117,7 +117,7 @@ void daLlift_c::CreateInit() {
     if (mWaterY != -G_CM3D_F_INF) {
         cXyz particlePos = current.pos;
         particlePos.y = mWaterY + 1.0f; 
-        mEmitter3 = dComIfGp_particle_set(dPa_name::ID_SCENE_82AA, &particlePos, &current.angle);
+        mEmitter3 = dComIfGp_particle_set(dPa_name::ID_IT_SN_DEKLIFT_HAMONA00, &particlePos, &current.angle);
         if (mEmitter3) {
             mEmitter3->stopCreateParticle();
         }
