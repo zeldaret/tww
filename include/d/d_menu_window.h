@@ -7,9 +7,9 @@ class JKRExpHeap;
 
 enum dMw_Status {
     MW_STATUS_NO_MENU = 0,
-    MW_STATUS_UNK_1 = 1,
-    MW_STATUS_UNK_2 = 2,
-    MW_STATUS_UNK_3 = 3,
+    MW_STATUS_ITEM_OPEN1_1 = 1,
+    MW_STATUS_ITEM_OPEN2_2 = 2,
+    MW_STATUS_ITEM_OPEN3_3 = 3,
     MW_STATUS_UNK_4 = 4,
     MW_STATUS_UNK_5 = 5,
     MW_STATUS_UNK_6 = 6,
