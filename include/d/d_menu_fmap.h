@@ -95,8 +95,8 @@ public:
     void dispEndSalvageHugeMark(float, float);
     void checkDspHugeMapLink();
     void checkDspHugeMapShip();
-    void _open();
-    void _close();
+    bool _open();
+    bool _close();
     void _close_normalMode();
     void _move();
     void _draw();

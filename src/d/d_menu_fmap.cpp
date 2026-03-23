@@ -272,13 +272,15 @@ void dMenu_Fmap_c::checkDspHugeMapShip() {
 }
 
 /* 801B4B44-801B4C0C       .text _open__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::_open() {
+bool dMenu_Fmap_c::_open() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801B4C0C-801B4C78       .text _close__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::_close() {
+bool dMenu_Fmap_c::_close() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801B4C78-801B4D78       .text _close_normalMode__12dMenu_Fmap_cFv */
