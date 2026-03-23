@@ -724,7 +724,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     case MW_STATUS_ITEM_OPEN1_1: {
         timer++;
         cloth_c->cloth_move();
-        if (timer > 0xF6) {
+        if (timer > g_menuHIO.field_0x90) {
             mDoExt_setCurrentHeap(i_Ms->childHeap);
             if (dMi_c->_open()) {
                 i_Ms->mMenuProc = MW_STATUS_UNK_4;
@@ -736,7 +736,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     case MW_STATUS_UNK_11: {
         timer++;
         cloth_c->cloth_move();
-        if (timer > 0xF6) {
+        if (timer > g_menuHIO.field_0x90) {
             mDoExt_setCurrentHeap(i_Ms->childHeap);
             if (dMi_c->_open()) {
                 if (i_Ms->mMenuProc == MW_STATUS_UNK_11) {
@@ -751,7 +751,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     case MW_STATUS_UNK_12: {
         timer++;
         cloth_c->cloth_move();
-        if (timer > 0xF6) {
+        if (timer > g_menuHIO.field_0x90) {
             mDoExt_setCurrentHeap(i_Ms->childHeap);
             if (dMc_c->_open3()) {
                 i_Ms->mMenuProc = MW_STATUS_UNK_15;
