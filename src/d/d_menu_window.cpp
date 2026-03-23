@@ -641,7 +641,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
             if (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq()) {
                 if (dComIfGp_nameOpenCheck() == 2) {
                     timer = 0;
-                    i_Ms->mMenuProc = MW_STATUS_UNK_33;
+                    i_Ms->mMenuProc = MW_STATUS_NAME_OPEN;
                     dMs_name_create(i_Ms);
                     dMenu_flagSet(1);
                     dMenu_setMenuStatusOld(dMenu_getMenuStatus());
@@ -926,21 +926,21 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         // TODO
     } break;
 
-    case MW_STATUS_UNK_30: {
+    case MW_STATUS_DMAP_OPEN: {
         // TODO
     } break;
 
-    case MW_STATUS_UNK_31: {
+    case MW_STATUS_DMAP_MOVE: {
         // TODO
         if ((CPad_CHECK_HOLD_X(0) || CPad_CHECK_HOLD_Y(0) || CPad_CHECK_HOLD_Z(0)) && dMd_c->noteCheck() == 0) {
-            i_Ms->mMenuProc = MW_STATUS_UNK_32;
+            i_Ms->mMenuProc = MW_STATUS_DMAP_CLOSE;
             mDoAud_seStart(JA_SE_ITM_MENU_OUT);
         } else {
             dMd_c->_close();
         }
     } break;
 
-    case MW_STATUS_UNK_32: {
+    case MW_STATUS_DMAP_CLOSE: {
         // TODO
     } break;
 
@@ -978,15 +978,15 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         // TODO
     } break;
 
-    case MW_STATUS_UNK_33: {
+    case MW_STATUS_NAME_OPEN: {
         // TODO
     } break;
 
-    case MW_STATUS_UNK_34: {
+    case MW_STATUS_NAME_MOVE: {
         // TODO
     } break;
 
-    case MW_STATUS_UNK_35: {
+    case MW_STATUS_NAME_CLOSE: {
         // TODO
     } break;
 
