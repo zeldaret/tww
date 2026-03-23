@@ -992,19 +992,49 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     case MW_STATUS_FMAP_MOVE:
     case MW_STATUS_FMAP_MOVE_WARP_MODE: {
-        // TODO
+        if (cloth_c) {
+            cloth_c->cloth_move();
+        }
+
+        if (dMf_c->isFmapClose()) {
+            i_Ms->mMenuProc = MW_STATUS_FMAP_CLOSE;
+            mDoAud_seStart(JA_SE_ITM_MENU_OUT);
+        } else {
+            dMf_c->_move();
+        }
     } break;
 
     case MW_STATUS_FMAP_MOVE_WALLPAPER: {
+        if (dMf_c->isFmapClose()) {
+            i_Ms->mMenuProc = MW_STATUS_FMAP_CLOSE;
+            mDoAud_seStart(JA_SE_ITM_MENU_OUT);
+        } else {
+
+        }
         // TODO
     } break;
 
     case MW_STATUS_FMAP_MOVE_FISHMAN_MODE: {
-        // TODO
+        if (dMf_c->isFmapClose()) {
+            i_Ms->mMenuProc = MW_STATUS_FMAP_CLOSE;
+            mDoAud_seStart(JA_SE_ITM_MENU_OUT);
+        } else {
+            dMf_c->_move();
+        }
     } break;
 
     case MW_STATUS_FMAP_CLOSE: {
-        // TODO
+        if (cloth_c) {
+            cloth_c->alpha_out();
+        }
+        if (dMf_c->_close()) {
+            i_Ms->mMenuProc = MW_STATUS_NO_MENU;
+            dMenu_flagSet(0);
+            dMs_clothOnly_delete(i_Ms);
+            dMs_fmap_delete(i_Ms);
+            i_Ms->parentHeap_0xfc->freeAll();
+            dComIfGp_offHeapLockFlag();
+        }
     } break;
 
     case MW_STATUS_NAME_OPEN: {
