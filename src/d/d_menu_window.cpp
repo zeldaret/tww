@@ -18,7 +18,9 @@
 #include "d/d_name.h"
 #include "d/d_priority.h"
 #include "d/d_procname.h"
+#include "d/actor/d_a_player_main.h"
 #include "f_ap/f_ap_game.h"
+#include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 
@@ -604,8 +606,432 @@ static BOOL dMs_Draw(sub_ms_screen_class*) {
 }
 
 /* 801DD960-801DF340       .text dMs_Execute__FP19sub_ms_screen_class */
-static BOOL dMs_Execute(sub_ms_screen_class*) {
+static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     /* Nonmatching */
+
+    static s16 timer;
+
+    JKRHeap* heap = mDoExt_setCurrentHeap(i_Ms->parentHeap_0xfc);
+
+    if (dComIfGp_event_runCheck()) {
+        event_wait_frame = 5;
+    } else if (event_wait_frame > 0) {
+        event_wait_frame--;
+    } else {
+        event_wait_frame = 0;
+    }
+
+    switch (i_Ms->mMenuProc) {
+    case MW_STATUS_NO_MENU: {
+        if (dComIfGp_isHeapLockFlag() && dComIfGp_getMesgStatus() == 0) {
+            if (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq()) {
+                if (dComIfGp_fmapOpenCheck() == 1) {
+                    timer = 0;
+                    i_Ms->mMenuProc = MW_STATUS_UNK_22;
+                    dMs_fmap_create(i_Ms);
+                    dMenu_flagSet(1);
+                    dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                    dMenu_setMenuStatus(3);
+                    dComIfGp_fmapOpenOff();
+                    mDoAud_seStart(JA_SE_SHIPPU_CHART_OPEN);
+                    break /* out of switch */;
+                }
+            }
+
+            if (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq()) {
+                if (dComIfGp_nameOpenCheck() == 2) {
+                    timer = 0;
+                    i_Ms->mMenuProc = MW_STATUS_UNK_33;
+                    dMs_name_create(i_Ms);
+                    dMenu_flagSet(1);
+                    dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                    dMenu_setMenuStatus(4);
+                    break /* out of switch */;
+                }
+            }
+
+            if (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq()) {
+                if (dComIfGp_isMenuCollect()) {
+                    dMs_cloth_create(i_Ms);
+                    timer = 0;
+                    dMenu_flagSet(1);
+                    i_Ms->mMenuProc = MW_STATUS_UNK_12;
+                    mDoExt_setCurrentHeap(i_Ms->childHeap);
+                    dMs_collect_create2(i_Ms);
+                    dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                    dMenu_setMenuStatus(2);
+                    mDoAud_seStart(JA_SE_ITM_MENU_IN);
+                    mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
+                    dComIfGp_offMenuCollect();
+                    break /* out of switch */;
+                }
+            }
+
+            if (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq()) {
+                if (dComIfGp_fmapOpenCheck() == 2) {
+                    timer = 0;
+                    i_Ms->mMenuProc = MW_STATUS_UNK_24;
+                    dMs_fmap_create(i_Ms);
+                    dMenu_flagSet(1);
+                    dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                    dMenu_setMenuStatus(3);
+                    dComIfGp_fmapOpenOff();
+                    mDoAud_seStart(JA_SE_ITM_MENU_IN);
+                    mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
+                    break /* out of switch */;
+                }
+            }
+
+            if (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq()) {
+                if (!CPad_CHECK_HOLD_X(0) && !CPad_CHECK_HOLD_Y(0) && !CPad_CHECK_HOLD_Z(0)) {
+                    if (event_wait_frame != 0) {
+                        if (!daPy_getPlayerLinkActorClass()->getTactNormalWait() || !CPad_CHECK_HOLD_START(0)) {
+                            if (dComIfGp_getOperateWind() == 2 && CPad_CHECK_HOLD_L(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
+                                dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908))
+                            {
+                            } else {
+                                break /* out of switch */;
+                            }
+                        }
+                    }
+                    if (dComIfGp_getMesgStatus() == 0 && dComIfGp_getScopeMesgStatus() == 0) {
+                        if (!dComIfGp_checkCameraAttentionStatus(0, 8) && !dComIfGp_checkCameraAttentionStatus(0, 0x40) &&
+                            !dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK800000_e))
+                        {
+                            if (dComIfGp_getOperateWind() == 2) {
+                                if (dComIfGp_getOperateWind() == 2 && CPad_CHECK_HOLD_L(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
+                                    dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908))
+                                {
+                                    dMs_cloth_create(i_Ms);
+                                    timer = 0;
+                                    dMenu_flagSet(1);
+                                    i_Ms->mMenuProc = MW_STATUS_UNK_12;
+                                    mDoExt_setCurrentHeap(i_Ms->childHeap);
+                                    dMs_collect_create2(i_Ms);
+                                    dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                                } else {
+                                    break /* out of switch */;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // TODO
+        }
+    } break;
+
+    case MW_STATUS_ITEM_OPEN1_1: {
+        timer++;
+        cloth_c->cloth_move();
+        if (timer > 0xF6) {
+            mDoExt_setCurrentHeap(i_Ms->childHeap);
+            if (dMi_c->_open()) {
+                i_Ms->mMenuProc = MW_STATUS_UNK_4;
+            }
+        }
+    } break;
+
+    case MW_STATUS_UNK_8:
+    case MW_STATUS_UNK_11: {
+        timer++;
+        cloth_c->cloth_move();
+        if (timer > 0xF6) {
+            mDoExt_setCurrentHeap(i_Ms->childHeap);
+            if (dMi_c->_open()) {
+                if (i_Ms->mMenuProc == MW_STATUS_UNK_11) {
+                    i_Ms->mMenuProc = MW_STATUS_UNK_14;
+                } else {
+                    i_Ms->mMenuProc = MW_STATUS_UNK_13;
+                }
+            }
+        }
+    } break;
+
+    case MW_STATUS_UNK_12: {
+        timer++;
+        cloth_c->cloth_move();
+        if (timer > 0xF6) {
+            mDoExt_setCurrentHeap(i_Ms->childHeap);
+            if (dMc_c->_open3()) {
+                i_Ms->mMenuProc = MW_STATUS_UNK_15;
+            }
+        }
+    } break;
+
+    case MW_STATUS_UNK_17: {
+        cloth_c->cloth_move();
+        mDoExt_setCurrentHeap(i_Ms->childHeap);
+        if (dMc_c->_close2()) {
+            i_Ms->mMenuProc = MW_STATUS_ITEM_OPEN2_2;
+            dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+            dMenu_setMenuStatus(1);
+            dMs_collect_delete(i_Ms);
+            dMs_childHeap_freeAll(i_Ms);
+            dMs_item_create(i_Ms);
+            dMi_c->field_0x2421 = 1;
+        }
+    } break;
+
+    case MW_STATUS_UNK_18: {
+        cloth_c->cloth_move();
+        mDoExt_setCurrentHeap(i_Ms->childHeap);
+        if (dMc_c->_close2()) {
+            i_Ms->mMenuProc = MW_STATUS_ITEM_OPEN3_3;
+            dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+            dMenu_setMenuStatus(1);
+            dMs_collect_delete(i_Ms);
+            dMs_childHeap_freeAll(i_Ms);
+            dMs_item_create(i_Ms);
+            dMi_c->field_0x2421 = 2;
+        }
+    } break;
+
+    case MW_STATUS_ITEM_OPEN2_2:
+    case MW_STATUS_ITEM_OPEN3_3: {
+        cloth_c->cloth_move();
+        mDoExt_setCurrentHeap(i_Ms->childHeap);
+        if (dMi_c->_open2()) {
+            i_Ms->mMenuProc = MW_STATUS_UNK_4;
+        }
+    } break;
+
+    case MW_STATUS_UNK_6: {
+        cloth_c->cloth_move();
+        mDoExt_setCurrentHeap(i_Ms->childHeap);
+        if (dMc_c->_close2()) {
+            i_Ms->mMenuProc = MW_STATUS_UNK_9;
+            dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+            dMenu_setMenuStatus(2);
+            dMs_item_delete(i_Ms);
+            dMs_childHeap_freeAll(i_Ms);
+            dMs_collect_create(i_Ms);
+            dMc_c->m27EC = 1;
+        }
+    } break;
+
+    case MW_STATUS_UNK_7: {
+        cloth_c->cloth_move();
+        mDoExt_setCurrentHeap(i_Ms->childHeap);
+        if (dMi_c->_close2()) {
+            i_Ms->mMenuProc = MW_STATUS_UNK_10;
+            dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+            dMenu_setMenuStatus(2);
+            dMs_item_delete(i_Ms);
+            dMs_childHeap_freeAll(i_Ms);
+            dMs_collect_create(i_Ms);
+            dMc_c->m27EC = 2;
+        }
+    } break;
+
+    case MW_STATUS_UNK_9:
+    case MW_STATUS_UNK_10: {
+        cloth_c->cloth_move();
+        mDoExt_setCurrentHeap(i_Ms->childHeap);
+        if (dMc_c->_open2()) {
+            i_Ms->mMenuProc = MW_STATUS_UNK_13;
+        }
+    } break;
+
+    case MW_STATUS_UNK_4: {
+        cloth_c->cloth_move();
+
+        if ((CPad_CHECK_TRIG_L(0) || CPad_CHECK_TRIG_R(0)) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0 && !dMeter_subWinFlag()) {
+            cloth_c->alpha_out();
+            mDoExt_setCurrentHeap(i_Ms->childHeap);
+            i_Ms->mMenuProc = MW_STATUS_UNK_5;
+            dMi_c->field_0x2421 = 0;
+            dMi_c->field_0x23F8 = 10;
+            dMenu_setPushMenuButton(0);
+            mDoAud_seStart(JA_SE_ITM_MENU_OUT);
+        } else {
+            if (dMs_isPush_R_Button(i_Ms) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0) {
+                mDoExt_setCurrentHeap(i_Ms->childHeap);
+                i_Ms->mMenuProc = MW_STATUS_UNK_7;
+                dMi_c->field_0x2421 = 2;
+                dMi_c->field_0x23F8 = g_menuHIO.field_0x92;
+                dMenu_setPushMenuButton(2);
+                mDoAud_seStart(JA_SE_ITEM_COL_SW);
+            } else if (dMs_isPush_L_Button(i_Ms) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0) {
+                mDoExt_setCurrentHeap(i_Ms->childHeap);
+                i_Ms->mMenuProc = MW_STATUS_UNK_6;
+                dMi_c->field_0x2421 = 1;
+                dMi_c->field_0x23F8 = g_menuHIO.field_0x92;
+                dMenu_setPushMenuButton(2);
+                mDoAud_seStart(JA_SE_ITEM_COL_SW);
+            } else {
+                mDoExt_setCurrentHeap(i_Ms->childHeap);
+                dMi_c->_move();
+            }
+        }
+    } break;
+
+    case MW_STATUS_UNK_13: {
+        cloth_c->cloth_move();
+
+        if ((CPad_CHECK_TRIG_L(0) || CPad_CHECK_TRIG_R(0)) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0 && !dMeter_subWinFlag()) {
+            cloth_c->alpha_out();
+            mDoExt_setCurrentHeap(i_Ms->childHeap);
+            i_Ms->mMenuProc = MW_STATUS_UNK_5;
+            dMi_c->field_0x2421 = 0;
+            dMi_c->field_0x23F8 = 10;
+            dMenu_setPushMenuButton(0);
+            mDoAud_seStart(JA_SE_ITM_MENU_OUT);
+        } else {
+            if (dMs_isPush_R_Button(i_Ms) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0) {
+                mDoExt_setCurrentHeap(i_Ms->childHeap);
+                i_Ms->mMenuProc = MW_STATUS_UNK_7;
+                dMi_c->field_0x2421 = 2;
+                dMi_c->field_0x23F8 = g_menuHIO.field_0x92;
+                dMenu_setPushMenuButton(2);
+                mDoAud_seStart(JA_SE_ITEM_COL_SW);
+            } else if (dMs_isPush_L_Button(i_Ms) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0) {
+                mDoExt_setCurrentHeap(i_Ms->childHeap);
+                i_Ms->mMenuProc = MW_STATUS_UNK_6;
+                dMi_c->field_0x2421 = 1;
+                dMi_c->field_0x23F8 = g_menuHIO.field_0x92;
+                dMenu_setPushMenuButton(2);
+                mDoAud_seStart(JA_SE_ITEM_COL_SW);
+            } else {
+                mDoExt_setCurrentHeap(i_Ms->childHeap);
+                dMi_c->_move();
+            }
+        }
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_14: {
+        cloth_c->cloth_move();
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_15: {
+        cloth_c->cloth_move();
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_5: {
+        cloth_c->cloth_move();
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_16:
+    case MW_STATUS_UNK_19: {
+        cloth_c->cloth_move();
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_20: {
+        cloth_c->cloth_move();
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_30: {
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_31: {
+        // TODO
+        if ((CPad_CHECK_HOLD_X(0) || CPad_CHECK_HOLD_Y(0) || CPad_CHECK_HOLD_Z(0)) && dMd_c->noteCheck() == 0) {
+            i_Ms->mMenuProc = MW_STATUS_UNK_32;
+            mDoAud_seStart(JA_SE_ITM_MENU_OUT);
+        } else {
+            dMd_c->_close();
+        }
+    } break;
+
+    case MW_STATUS_UNK_32: {
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_21: {
+        cloth_c->cloth_move();
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_22: {
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_23: {
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_24: {
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_25:
+    case MW_STATUS_UNK_26: {
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_27: {
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_28: {
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_29: {
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_33: {
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_34: {
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_35: {
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_36: {
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_37: {
+        // TODO
+    } break;
+
+    case MW_STATUS_UNK_38: {
+        // TODO
+    } break;
+
+    default:
+        break;
+    }
+
+    if (CPad_CHECK_HOLD_L(0) && dMs_isButtonBit(i_Ms, 1)) {
+        dMs_offButtonBit(i_Ms, 1);
+    }
+
+    if (dMi_c) {
+        dMenu_setItemMode(dMi_c->mItemMode);
+    } else {
+        dMenu_setItemMode(0);
+    }
+
+    if (!dMc_c) {
+        dMenu_setCollectMode(0);
+    } else {
+        dMenu_setCollectMode(dMc_c->mCollectMode);
+    }
+
+    // TODO
+
+    if (dComIfGp_demo_mode() == 1) {
+        dMs_placenameMove(i_Ms);
+    }
+
+    dMs_telescopeMove(i_Ms);
+
+    mDoExt_setCurrentHeap(heap);
+    return TRUE;
 }
 
 /* 801DF340-801DF368       .text dMs_IsDelete__FP19sub_ms_screen_class */
