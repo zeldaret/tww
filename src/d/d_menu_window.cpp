@@ -990,13 +990,13 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         // TODO
     } break;
 
-    case MW_STATUS_UNK_36: {
+    case MW_STATUS_SAVE_OPEN: {
         if (dMs_c->_open()) {
-            i_Ms->mMenuProc = MW_STATUS_UNK_37;
+            i_Ms->mMenuProc = MW_STATUS_SAVE_MOVE;
         }
     } break;
 
-    case MW_STATUS_UNK_37: {
+    case MW_STATUS_SAVE_MOVE: {
         dMs_c->_move();
 
         if (dMs_c->getSaveStatus() == 3) {
@@ -1006,12 +1006,12 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                 dComIfGp_setGameoverStatus(2);
             }
 
-            i_Ms->mMenuProc = MW_STATUS_UNK_38;
+            i_Ms->mMenuProc = MW_STATUS_SAVE_CLOSE;
         }
         // TODO
     } break;
 
-    case MW_STATUS_UNK_38: {
+    case MW_STATUS_SAVE_CLOSE: {
         if (dMs_c->_close()) {
             i_Ms->mMenuProc = MW_STATUS_NO_MENU;
             dMenu_flagSet(0);

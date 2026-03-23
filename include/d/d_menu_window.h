@@ -42,9 +42,9 @@ enum dMw_Status {
     MW_STATUS_UNK_33 = 33,
     MW_STATUS_UNK_34 = 34,
     MW_STATUS_UNK_35 = 35,
-    MW_STATUS_UNK_36 = 36,
-    MW_STATUS_UNK_37 = 37,
-    MW_STATUS_UNK_38 = 38,
+    MW_STATUS_SAVE_OPEN = 36,
+    MW_STATUS_SAVE_MOVE = 37,
+    MW_STATUS_SAVE_CLOSE = 38,
 };
 
 class sub_ms_screen_class : public msg_class {
