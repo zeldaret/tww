@@ -967,19 +967,27 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     case MW_STATUS_FMAP_OPEN: {
         cloth_c->cloth_move();
-        // TODO
+        if (dMf_c->_open()) {
+            i_Ms->mMenuProc = MW_STATUS_FMAP_MOVE;
+        }
     } break;
 
     case MW_STATUS_FMAP_OPEN_WARP_MODE: {
-        // TODO
+        if (dMf_c->_open_warpMode()) {
+            i_Ms->mMenuProc = MW_STATUS_FMAP_MOVE_WARP_MODE;
+        }
     } break;
 
     case MW_STATUS_FMAP_OPEN_WALLPAPER: {
-        // TODO
+        if (dMenu_flag() && dMf_c->_open_wallPaper()) {
+            i_Ms->mMenuProc = MW_STATUS_FMAP_MOVE_WALLPAPER;
+        }
     } break;
 
     case MW_STATUS_FMAP_OPEN_FISHMAN_MODE: {
-        // TODO
+        if (dMenu_flag() && dMf_c->_open_fishManMode()) {
+            i_Ms->mMenuProc = MW_STATUS_FMAP_MOVE_FISHMAN_MODE;
+        }
     } break;
 
     case MW_STATUS_FMAP_MOVE:
