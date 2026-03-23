@@ -54,7 +54,7 @@ public:
     void checkMarkCheck1();
     void checkMarkCheck2();
     void checkMarkCheck3();
-    void isFmapClose();
+    bool isFmapClose();
     void setPaneOnOff(J2DScreen*, unsigned long, bool);
     void childPaneMoveSp(fopMsgM_pane_class*, fopMsgM_pane_class*, float, float, float);
     void selGridMaskAlphaCtrl(short, unsigned char, unsigned char, int);

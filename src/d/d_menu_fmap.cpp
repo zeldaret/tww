@@ -67,8 +67,9 @@ void dMenu_Fmap_c::checkMarkCheck3() {
 }
 
 /* 801B190C-801B1914       .text isFmapClose__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::isFmapClose() {
+bool dMenu_Fmap_c::isFmapClose() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801B1914-801B1978       .text setPaneOnOff__12dMenu_Fmap_cFP9J2DScreenUlb */
