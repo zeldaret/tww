@@ -126,7 +126,7 @@ public:
     void PaneAlphaSelvageItem(short, unsigned char);
     void gShipMarkAnimeInit();
     void gShipMarkAnime();
-    void _open_warpMode();
+    bool _open_warpMode();
     void init_warpMode();
     void selCursorMoveWarp();
     void _close_warpMode();
@@ -156,7 +156,7 @@ public:
     void setDspWarpBackCornerColor(float);
     void setWrapBackEmitter(cXyz);
     void setWrapSpotEmitter(int, cXyz);
-    void _open_fishManMode();
+    bool _open_fishManMode();
     void _close_fishManMode();
     void init_fishManMode();
     void movefishManMode();
@@ -170,7 +170,7 @@ public:
     void fmZoomGridLv2Out();
     void fmZoomGridLv1Out();
     void fmEndWait();
-    void _open_wallPaper();
+    bool _open_wallPaper();
     void getButtonIconMode();
 
 public:

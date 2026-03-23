@@ -429,8 +429,9 @@ void dMenu_Fmap_c::gShipMarkAnime() {
 }
 
 /* 801B78B0-801B79E8       .text _open_warpMode__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::_open_warpMode() {
+bool dMenu_Fmap_c::_open_warpMode() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801B79E8-801B7CD0       .text init_warpMode__12dMenu_Fmap_cFv */
@@ -579,8 +580,9 @@ void dMenu_Fmap_c::setWrapSpotEmitter(int, cXyz) {
 }
 
 /* 801BA110-801BA19C       .text _open_fishManMode__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::_open_fishManMode() {
+bool dMenu_Fmap_c::_open_fishManMode() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801BA19C-801BA214       .text _close_fishManMode__12dMenu_Fmap_cFv */
@@ -649,8 +651,9 @@ void dMenu_Fmap_c::fmEndWait() {
 }
 
 /* 801BAF18-801BAFCC       .text _open_wallPaper__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::_open_wallPaper() {
+bool dMenu_Fmap_c::_open_wallPaper() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801BAFCC-801BB024       .text getButtonIconMode__12dMenu_Fmap_cFv */
