@@ -71,7 +71,7 @@ public:
     virtual void _move();
     virtual void _draw();
     virtual bool _open();
-    virtual void _close();
+    virtual bool _close();
     bool _open2();
     bool _close2();
 

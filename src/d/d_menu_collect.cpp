@@ -560,8 +560,9 @@ bool dMenu_Collect_c::_open3() {
 }
 
 /* 801A6CC8-801A71EC       .text _close__15dMenu_Collect_cFv */
-void dMenu_Collect_c::_close() {
+bool dMenu_Collect_c::_close() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801A71EC-801A7710       .text _close3__15dMenu_Collect_cFv */

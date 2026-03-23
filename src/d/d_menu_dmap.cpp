@@ -183,6 +183,6 @@ bool dMenu_Dmap_c::_open() {
 }
 
 /* 801AF294-801AF3B8       .text _close__12dMenu_Dmap_cFv */
-void dMenu_Dmap_c::_close() {
+bool dMenu_Dmap_c::_close() {
     /* Nonmatching */
 }

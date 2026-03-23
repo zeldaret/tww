@@ -297,7 +297,7 @@ bool dMenu_Item_c::_open() {
 }
 
 /* 801D1438-801D1CD4       .text _close__12dMenu_Item_cFv */
-void dMenu_Item_c::_close() {
+bool dMenu_Item_c::_close() {
     /* Nonmatching */
 }
 

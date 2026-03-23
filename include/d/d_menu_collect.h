@@ -19,7 +19,7 @@ public:
     virtual void _move() {}
     virtual void _draw() {}
     virtual bool _open() = 0;
-    virtual void _close() = 0;
+    virtual bool _close() = 0;
 };
 
 class dMenu_Collect_c : public dMenu_base_c {
@@ -90,7 +90,7 @@ public:
     virtual void _draw();
     bool _open();
     bool _open3();
-    void _close();
+    bool _close();
     void _close3();
     void animeStep1(short, short);
     void animeStep2(short, short);

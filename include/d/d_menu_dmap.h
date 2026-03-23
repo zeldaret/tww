@@ -51,7 +51,7 @@ public:
     virtual void _move();
     virtual void _draw();
     virtual bool _open();
-    virtual void _close();
+    virtual bool _close();
 
 public:
     /* 0x0004 */ u8 field_0x0004[0x972 - 0x4];
