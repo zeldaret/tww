@@ -991,15 +991,34 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     } break;
 
     case MW_STATUS_UNK_36: {
-        // TODO
+        if (dMs_c->_open()) {
+            i_Ms->mMenuProc = MW_STATUS_UNK_37;
+        }
     } break;
 
     case MW_STATUS_UNK_37: {
+        dMs_c->_move();
+
+        if (dMs_c->getSaveStatus() == 3) {
+            if (dMs_c->getEndStatus() == 0) {
+                dComIfGp_setGameoverStatus(3);
+            } else if (dMs_c->getEndStatus() == 1) {
+                dComIfGp_setGameoverStatus(2);
+            }
+
+            i_Ms->mMenuProc = MW_STATUS_UNK_38;
+        }
         // TODO
     } break;
 
     case MW_STATUS_UNK_38: {
-        // TODO
+        if (dMs_c->_close()) {
+            i_Ms->mMenuProc = MW_STATUS_NO_MENU;
+            dMenu_flagSet(0);
+            dMs_save_delete(i_Ms);
+            i_Ms->parentHeap_0xfc->freeAll();
+            dComIfGp_offHeapLockFlag();
+        }
     } break;
 
     default:
