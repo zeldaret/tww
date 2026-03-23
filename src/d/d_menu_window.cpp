@@ -627,7 +627,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
             if (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq()) {
                 if (dComIfGp_fmapOpenCheck() == 1) {
                     timer = 0;
-                    i_Ms->mMenuProc = MW_STATUS_UNK_22;
+                    i_Ms->mMenuProc = MW_STATUS_FMAP_OPEN_WARP_MODE;
                     dMs_fmap_create(i_Ms);
                     dMenu_flagSet(1);
                     dMenu_setMenuStatusOld(dMenu_getMenuStatus());
@@ -670,7 +670,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
             if (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq()) {
                 if (dComIfGp_fmapOpenCheck() == 2) {
                     timer = 0;
-                    i_Ms->mMenuProc = MW_STATUS_UNK_24;
+                    i_Ms->mMenuProc = MW_STATUS_FMAP_OPEN_FISHMAN_MODE;
                     dMs_fmap_create(i_Ms);
                     dMenu_flagSet(1);
                     dMenu_setMenuStatusOld(dMenu_getMenuStatus());
@@ -944,37 +944,37 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         // TODO
     } break;
 
-    case MW_STATUS_UNK_21: {
+    case MW_STATUS_FMAP_OPEN: {
         cloth_c->cloth_move();
         // TODO
     } break;
 
-    case MW_STATUS_UNK_22: {
+    case MW_STATUS_FMAP_OPEN_WARP_MODE: {
         // TODO
     } break;
 
-    case MW_STATUS_UNK_23: {
+    case MW_STATUS_FMAP_OPEN_WALLPAPER: {
         // TODO
     } break;
 
-    case MW_STATUS_UNK_24: {
+    case MW_STATUS_FMAP_OPEN_FISHMAN_MODE: {
         // TODO
     } break;
 
-    case MW_STATUS_UNK_25:
-    case MW_STATUS_UNK_26: {
+    case MW_STATUS_FMAP_MOVE:
+    case MW_STATUS_FMAP_MOVE_WARP_MODE: {
         // TODO
     } break;
 
-    case MW_STATUS_UNK_27: {
+    case MW_STATUS_FMAP_MOVE_WALLPAPER: {
         // TODO
     } break;
 
-    case MW_STATUS_UNK_28: {
+    case MW_STATUS_FMAP_MOVE_FISHMAN_MODE: {
         // TODO
     } break;
 
-    case MW_STATUS_UNK_29: {
+    case MW_STATUS_FMAP_CLOSE: {
         // TODO
     } break;
 
