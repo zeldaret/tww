@@ -944,7 +944,17 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     case MW_STATUS_UNK_20: {
         cloth_c->cloth_move();
-        // TODO
+        mDoExt_setCurrentHeap(i_Ms->childHeap);
+        if (dMc_c->_close3()) {
+            dMs_collect_delete(i_Ms);
+            dMs_childHeap_freeAll(i_Ms);
+            mDoExt_setCurrentHeap(i_Ms->parentHeap_0xfc);
+            dMs_cloth_delete(i_Ms);
+            i_Ms->mMenuProc = MW_STATUS_NO_MENU;
+            dMenu_flagSet(0);
+            i_Ms->parentHeap_0xfc->freeAll();
+            dComIfGp_offHeapLockFlag();
+        }
     } break;
 
     case MW_STATUS_DMAP_OPEN: {
