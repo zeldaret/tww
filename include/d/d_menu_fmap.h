@@ -171,12 +171,13 @@ public:
     void fmZoomGridLv1Out();
     void fmEndWait();
     bool _open_wallPaper();
-    void getButtonIconMode();
+    u8 getButtonIconMode();
 
 public:
     /* 0x0004 */ u8 padding_0x4[0x24 - 0x4];
     /* 0x0024 */ dMenu_Fmap2_c mFmap2;
-};
+    // TODO
+}; // Size: 0x51B4
 
 class dDlst_FMAP_c {
 public:

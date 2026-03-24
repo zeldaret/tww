@@ -658,8 +658,9 @@ bool dMenu_Fmap_c::_open_wallPaper() {
 }
 
 /* 801BAFCC-801BB024       .text getButtonIconMode__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::getButtonIconMode() {
+u8 dMenu_Fmap_c::getButtonIconMode() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 801BB024-801BB088       .text draw__12dDlst_FMAP_cFv */
