@@ -1103,7 +1103,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         break;
     }
 
-    if (CPad_CHECK_HOLD_L(0) && dMs_isButtonBit(i_Ms, 1)) {
+    if (!mDoCPd_L_LOCK_BUTTON(0) && dMs_isButtonBit(i_Ms, 1)) {
         dMs_offButtonBit(i_Ms, 1);
     }
 
