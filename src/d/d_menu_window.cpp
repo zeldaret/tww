@@ -923,7 +923,18 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     case MW_STATUS_UNK_14: {
         cloth_c->cloth_move();
-        // TODO
+        if ((CPad_CHECK_TRIG_L(0) || CPad_CHECK_TRIG_R(0)) && !dMc_c->noteCheck() && (dMc_c->mCollectMode == 0 || dMc_c->mCollectMode == 2)) {
+            cloth_c->alpha_out();
+            mDoExt_setCurrentHeap(i_Ms->childHeap);
+            i_Ms->mMenuProc = MW_STATUS_UNK_19;
+            dMc_c->m27EC = 0;
+            dMc_c->m27E2 = 10;
+            dMenu_setPushMenuButton(0);
+            mDoAud_seStart(JA_SE_ITM_MENU_OUT);
+        } else {
+            mDoExt_setCurrentHeap(i_Ms->childHeap);
+            dMc_c->_move();
+        }
     } break;
 
     case MW_STATUS_UNK_15: {
