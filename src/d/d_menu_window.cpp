@@ -626,65 +626,45 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     switch (i_Ms->mMenuProc) {
     case MW_STATUS_NO_MENU: {
         if (dComIfGp_isHeapLockFlag() && dComIfGp_getMesgStatus() == 0) {
-            if (CAN_PROCEED()) {
-                if (dComIfGp_fmapOpenCheck() == 1) {
-                    timer = 0;
-                    i_Ms->mMenuProc = MW_STATUS_FMAP_OPEN_WARP_MODE;
-                    dMs_fmap_create(i_Ms);
-                    dMenu_flagSet(1);
-                    dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                    dMenu_setMenuStatus(3);
-                    dComIfGp_fmapOpenOff();
-                    mDoAud_seStart(JA_SE_SHIPPU_CHART_OPEN);
-                    break /* out of switch */;
-                }
-            }
-
-            if (CAN_PROCEED()) {
-                if (dComIfGp_nameOpenCheck() == 2) {
-                    timer = 0;
-                    i_Ms->mMenuProc = MW_STATUS_NAME_OPEN;
-                    dMs_name_create(i_Ms);
-                    dMenu_flagSet(1);
-                    dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                    dMenu_setMenuStatus(4);
-                    break /* out of switch */;
-                }
-            }
-
-            if (CAN_PROCEED()) {
-                if (dComIfGp_isMenuCollect()) {
-                    dMs_cloth_create(i_Ms);
-                    timer = 0;
-                    dMenu_flagSet(1);
-                    i_Ms->mMenuProc = MW_STATUS_UNK_12;
-                    mDoExt_setCurrentHeap(i_Ms->childHeap);
-                    dMs_collect_create2(i_Ms);
-                    dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                    dMenu_setMenuStatus(2);
-                    mDoAud_seStart(JA_SE_ITM_MENU_IN);
-                    mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
-                    dComIfGp_offMenuCollect();
-                    break /* out of switch */;
-                }
-            }
-
-            if (CAN_PROCEED()) {
-                if (dComIfGp_fmapOpenCheck() == 2) {
-                    timer = 0;
-                    i_Ms->mMenuProc = MW_STATUS_FMAP_OPEN_FISHMAN_MODE;
-                    dMs_fmap_create(i_Ms);
-                    dMenu_flagSet(1);
-                    dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                    dMenu_setMenuStatus(3);
-                    dComIfGp_fmapOpenOff();
-                    mDoAud_seStart(JA_SE_ITM_MENU_IN);
-                    mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
-                    break /* out of switch */;
-                }
-            }
-
-            if (CAN_PROCEED()) {
+            if (CAN_PROCEED() && dComIfGp_fmapOpenCheck() == 1) {
+                timer = 0;
+                i_Ms->mMenuProc = MW_STATUS_FMAP_OPEN_WARP_MODE;
+                dMs_fmap_create(i_Ms);
+                dMenu_flagSet(1);
+                dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                dMenu_setMenuStatus(3);
+                dComIfGp_fmapOpenOff();
+                mDoAud_seStart(JA_SE_SHIPPU_CHART_OPEN);
+            } else if (CAN_PROCEED() && dComIfGp_nameOpenCheck() == 2) {
+                timer = 0;
+                i_Ms->mMenuProc = MW_STATUS_NAME_OPEN;
+                dMs_name_create(i_Ms);
+                dMenu_flagSet(1);
+                dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                dMenu_setMenuStatus(4);
+            } else if (CAN_PROCEED() && dComIfGp_isMenuCollect()) {
+                dMs_cloth_create(i_Ms);
+                timer = 0;
+                dMenu_flagSet(1);
+                i_Ms->mMenuProc = MW_STATUS_UNK_12;
+                mDoExt_setCurrentHeap(i_Ms->childHeap);
+                dMs_collect_create2(i_Ms);
+                dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                dMenu_setMenuStatus(2);
+                mDoAud_seStart(JA_SE_ITM_MENU_IN);
+                mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
+                dComIfGp_offMenuCollect();
+            } else if (CAN_PROCEED() && dComIfGp_fmapOpenCheck() == 2) {
+                timer = 0;
+                i_Ms->mMenuProc = MW_STATUS_FMAP_OPEN_FISHMAN_MODE;
+                dMs_fmap_create(i_Ms);
+                dMenu_flagSet(1);
+                dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                dMenu_setMenuStatus(3);
+                dComIfGp_fmapOpenOff();
+                mDoAud_seStart(JA_SE_ITM_MENU_IN);
+                mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
+            } else if (CAN_PROCEED()) {
                 if (!CPad_CHECK_HOLD_X(0) && !CPad_CHECK_HOLD_Y(0) && !CPad_CHECK_HOLD_Z(0)) {
                     if (event_wait_frame != 0) {
                         if (!daPy_getPlayerLinkActorClass()->getTactNormalWait() || !CPad_CHECK_HOLD_START(0)) {
