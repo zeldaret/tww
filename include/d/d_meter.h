@@ -546,7 +546,7 @@ public:
     ~dMeter_info_c() {}
 
     /* 0x00 */ u8 field_0x0;
-    /* 0x01 */ u8 field_0x1;
+    /* 0x01 */ u8 mButtonIconMode;
 };
 
 extern dMeter_info_c dMeter_Info;

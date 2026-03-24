@@ -1136,9 +1136,9 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
 
     if (dMf_c) {
-        dMeter_Info.field_0x1 = dMf_c->getButtonIconMode();
+        dMeter_Info.mButtonIconMode = dMf_c->getButtonIconMode();
     } else {
-        dMeter_Info.field_0x1 = 3;
+        dMeter_Info.mButtonIconMode = 3;
     }
 
     mDoExt_setCurrentHeap(heap);
