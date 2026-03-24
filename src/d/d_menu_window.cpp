@@ -609,7 +609,7 @@ static BOOL dMs_Draw(sub_ms_screen_class*) {
 static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     /* Nonmatching */
 
-    static s16 timer;
+    static s16 timer = 0;
 
     JKRHeap* heap = mDoExt_setCurrentHeap(i_Ms->parentHeap_0xfc);
 
@@ -1074,6 +1074,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         } else {
             dMf_c->_move();
         }
+
     } else if (i_Ms->mMenuProc == MW_STATUS_FMAP_MOVE_FISHMAN_MODE) {
         if (dMf_c->isFmapClose()) {
             i_Ms->mMenuProc = MW_STATUS_FMAP_CLOSE;
