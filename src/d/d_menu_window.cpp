@@ -708,24 +708,42 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                                             mDoAud_seStart(JA_SE_ITM_MENU_IN);
                                             mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
                                         }
+                                    } else if (CAN_PROCEED() && CPad_CHECK_TRIG_START(0) && dComIfGp_isEnableNextStage() == 0) {
+                                        timer = 0;
+                                        if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1) {
+                                            i_Ms->mMenuProc = MW_STATUS_DMAP_OPEN;
+                                            dMs_dmap_create(i_Ms);
+                                            dMenu_flagSet(1);
+                                            dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                                            dMenu_setMenuStatus(3);
+                                            mDoAud_seStart(JA_SE_ITM_MENU_IN);
+                                            mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
+                                        } else {
+                                            if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
+                                                dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) && dComIfGp_getMiniGameType() != 1 &&
+                                                dComIfGp_getMiniGameType() != 6)
+                                            {
+                                                if (dComIfGp_getOperateWind() == 2) {
+                                                    i_Ms->mMenuProc = MW_STATUS_FMAP_OPEN_WALLPAPER;
+                                                } else {
+                                                    i_Ms->mMenuProc = MW_STATUS_FMAP_OPEN;
+                                                    dMs_clothOnly_create(i_Ms);
+                                                    dMenu_flagSet(1);
+                                                }
+
+                                                dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                                                dMenu_setMenuStatus(3);
+                                                mDoAud_seStart(JA_SE_ITM_MENU_IN);
+                                                mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
+                                            }
+                                        }
                                     }
                                 }
-                            } else if (CPad_CHECK_TRIG_START(0) && dComIfGp_isEnableNextStage() == 0 &&
-                                       daPy_getPlayerLinkActorClass() == daPy_getPlayerActorClass())
-                            {
-                                dMs_cloth_create(i_Ms);
-                                timer = 0;
-                                dMenu_flagSet(1);
-                                i_Ms->mMenuProc = MW_STATUS_UNK_12;
-                                mDoExt_setCurrentHeap(i_Ms->childHeap);
-                                dMs_collect_create2(i_Ms);
-                                dMenu_setMenuStatusOld(dMenu_getMenuStatus());
                             }
                         }
                     }
                 }
             }
-            // TODO
         }
     } break;
 
