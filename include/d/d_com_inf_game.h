@@ -626,6 +626,8 @@ public:
     void offMenuCollect() { mMenuCollect = false; }
 
     void nameOpenOn() { mNameOpen = 2; }
+    void nameOpenChangeOff() { mNameOpen = 1; }
+    void nameOpenCancelOff() { mNameOpen = 0; }
     u8 nameOpenCheck() { return mNameOpen; }
 
     /* 0x0000 */ dBgS mBgS;
@@ -4128,6 +4130,8 @@ inline void dComIfGp_fmapOpenOff() { g_dComIfG_gameInfo.play.fmapOpenOff(); }
 
 inline u8 dComIfGp_nameOpenCheck() { return g_dComIfG_gameInfo.play.nameOpenCheck(); }
 inline void dComIfGp_nameOpenOn() { g_dComIfG_gameInfo.play.nameOpenOn(); }
+inline void dComIfGp_nameOpenChangeOff() { g_dComIfG_gameInfo.play.nameOpenChangeOff(); }
+inline void dComIfGp_nameOpenCancelOff() { g_dComIfG_gameInfo.play.nameOpenCancelOff(); }
 
 inline int dComIfG_getTimerRestTimeMs() {
     int limit = g_dComIfG_gameInfo.play.getTimerLimitTimeMs();
