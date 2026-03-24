@@ -962,7 +962,13 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     } break;
 
     case MW_STATUS_DMAP_CLOSE: {
-        // TODO
+        if (dMd_c->_close()) {
+            i_Ms->mMenuProc = MW_STATUS_NO_MENU;
+            dMenu_flagSet(0);
+            dMs_dmap_delete(i_Ms);
+            i_Ms->parentHeap_0xfc->freeAll();
+            dComIfGp_offHeapLockFlag();
+        }
     } break;
 
     case MW_STATUS_FMAP_OPEN: {
