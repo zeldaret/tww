@@ -549,6 +549,8 @@ public:
     /* 0x01 */ u8 field_0x1;
 };
 
+extern dMeter_info_c dMeter_Info;
+
 enum dMeterStatus_e {
     dMtrStts_UNK1_e = 0x00000001,
     dMtrStts_UNK2_e = 0x00000002,
