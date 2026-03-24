@@ -870,25 +870,23 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
             dMi_c->field_0x23F8 = 10;
             dMenu_setPushMenuButton(0);
             mDoAud_seStart(JA_SE_ITM_MENU_OUT);
+        } else if (dMs_isPush_R_Button(i_Ms) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0) {
+            mDoExt_setCurrentHeap(i_Ms->childHeap);
+            i_Ms->mMenuProc = MW_STATUS_UNK_7;
+            dMi_c->field_0x2421 = 2;
+            dMi_c->field_0x23F8 = g_menuHIO.field_0x92;
+            dMenu_setPushMenuButton(2);
+            mDoAud_seStart(JA_SE_ITEM_COL_SW);
+        } else if (dMs_isPush_L_Button(i_Ms) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0) {
+            mDoExt_setCurrentHeap(i_Ms->childHeap);
+            i_Ms->mMenuProc = MW_STATUS_UNK_6;
+            dMi_c->field_0x2421 = 1;
+            dMi_c->field_0x23F8 = g_menuHIO.field_0x92;
+            dMenu_setPushMenuButton(2);
+            mDoAud_seStart(JA_SE_ITEM_COL_SW);
         } else {
-            if (dMs_isPush_R_Button(i_Ms) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0) {
-                mDoExt_setCurrentHeap(i_Ms->childHeap);
-                i_Ms->mMenuProc = MW_STATUS_UNK_7;
-                dMi_c->field_0x2421 = 2;
-                dMi_c->field_0x23F8 = g_menuHIO.field_0x92;
-                dMenu_setPushMenuButton(2);
-                mDoAud_seStart(JA_SE_ITEM_COL_SW);
-            } else if (dMs_isPush_L_Button(i_Ms) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0) {
-                mDoExt_setCurrentHeap(i_Ms->childHeap);
-                i_Ms->mMenuProc = MW_STATUS_UNK_6;
-                dMi_c->field_0x2421 = 1;
-                dMi_c->field_0x23F8 = g_menuHIO.field_0x92;
-                dMenu_setPushMenuButton(2);
-                mDoAud_seStart(JA_SE_ITEM_COL_SW);
-            } else {
-                mDoExt_setCurrentHeap(i_Ms->childHeap);
-                dMi_c->_move();
-            }
+            mDoExt_setCurrentHeap(i_Ms->childHeap);
+            dMi_c->_move();
         }
     } break;
 
