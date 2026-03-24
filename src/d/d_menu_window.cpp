@@ -93,7 +93,7 @@ static dMenu_Fmap_c* dMf_c;
 static dName_c* dNm_c;
 static dMenu_save_c* dMs_c;
 
-static u8 event_wait_frame;
+static s8 event_wait_frame;
 
 void dDlst_MENU_CAPTURE_c::draw() {
     if (mStatus == 1) {
@@ -664,36 +664,52 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                 dComIfGp_fmapOpenOff();
                 mDoAud_seStart(JA_SE_ITM_MENU_IN);
                 mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
-            } else if (CAN_PROCEED()) {
-                if (!CPad_CHECK_HOLD_X(0) && !CPad_CHECK_HOLD_Y(0) && !CPad_CHECK_HOLD_Z(0)) {
-                    if (event_wait_frame != 0) {
-                        if (!daPy_getPlayerLinkActorClass()->getTactNormalWait() || !CPad_CHECK_HOLD_START(0)) {
-                            if (dComIfGp_getOperateWind() == 2 && CPad_CHECK_HOLD_L(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
-                                dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908))
-                            {
-                            } else {
-                                break /* out of switch */;
-                            }
-                        }
-                    }
+            } else if (dMenu_flag() == 0 && !fopOvlpM_IsDoingReq() && !(CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_Z(0))) {
+                if (event_wait_frame == 0 || daPy_getPlayerLinkActorClass()->getTactNormalWait() && CPad_CHECK_TRIG_START(0) ||
+                    dComIfGp_getOperateWind() != 2 || !CPad_CHECK_TRIG_UP(0) || dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) != 0 ||
+                    !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908))
+                {
                     if (dComIfGp_getMesgStatus() == 0 && dComIfGp_getScopeMesgStatus() == 0) {
                         if (!dComIfGp_checkCameraAttentionStatus(0, 8) && !dComIfGp_checkCameraAttentionStatus(0, 0x40) &&
                             !dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK800000_e))
                         {
                             if (dComIfGp_getOperateWind() == 2) {
-                                if (dComIfGp_getOperateWind() == 2 && CPad_CHECK_HOLD_L(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
+                                if (dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
                                     dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908))
                                 {
-                                    dMs_cloth_create(i_Ms);
-                                    timer = 0;
-                                    dMenu_flagSet(1);
-                                    i_Ms->mMenuProc = MW_STATUS_UNK_12;
-                                    mDoExt_setCurrentHeap(i_Ms->childHeap);
-                                    dMs_collect_create2(i_Ms);
-                                    dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                                } else {
-                                    break /* out of switch */;
+                                    if (CPad_CHECK_TRIG_START(0) && dComIfGp_isEnableNextStage() == 0 &&
+                                        daPy_getPlayerLinkActorClass() == daPy_getPlayerActorClass())
+                                    {
+                                        dMs_cloth_create(i_Ms);
+                                        timer = 0;
+                                        dMenu_flagSet(1);
+                                        if (dMenu_getMenuStatus() == 2 || daPy_getPlayerLinkActorClass()->getTactNormalWait()) {
+                                            mDoExt_setCurrentHeap(i_Ms->childHeap);
+                                            dMs_collect_create(i_Ms);
+                                            dMc_c->m27EC = 2;
+                                            if (daPy_getPlayerLinkActorClass()->getTactNormalWait()) {
+                                                i_Ms->mMenuProc = MW_STATUS_UNK_11;
+                                            } else {
+                                                i_Ms->mMenuProc = MW_STATUS_UNK_8;
+                                            }
+                                            dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                                            dMenu_setMenuStatus(2);
+                                            dMenu_setPushMenuButton(2);
+                                            mDoAud_seStart(JA_SE_ITM_MENU_IN);
+                                            mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
+                                        }
+                                    }
                                 }
+                            } else if (CPad_CHECK_TRIG_START(0) && dComIfGp_isEnableNextStage() == 0 &&
+                                       daPy_getPlayerLinkActorClass() == daPy_getPlayerActorClass())
+                            {
+                                dMs_cloth_create(i_Ms);
+                                timer = 0;
+                                dMenu_flagSet(1);
+                                i_Ms->mMenuProc = MW_STATUS_UNK_12;
+                                mDoExt_setCurrentHeap(i_Ms->childHeap);
+                                dMs_collect_create2(i_Ms);
+                                dMenu_setMenuStatusOld(dMenu_getMenuStatus());
                             }
                         }
                     }
