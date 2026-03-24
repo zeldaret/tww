@@ -895,35 +895,32 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     case MW_STATUS_UNK_13: {
         cloth_c->cloth_move();
 
-        if ((CPad_CHECK_TRIG_L(0) || CPad_CHECK_TRIG_R(0)) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0 && !dMeter_subWinFlag()) {
+        if ((CPad_CHECK_TRIG_L(0) || CPad_CHECK_TRIG_R(0)) && dMc_c->noteCheck() && (dMc_c->mCollectMode == 0 || dMc_c->mCollectMode == 2)) {
             cloth_c->alpha_out();
             mDoExt_setCurrentHeap(i_Ms->childHeap);
-            i_Ms->mMenuProc = MW_STATUS_UNK_5;
-            dMi_c->field_0x2421 = 0;
-            dMi_c->field_0x23F8 = 10;
+            i_Ms->mMenuProc = MW_STATUS_UNK_16;
+            dMc_c->m27EC = 0;
+            dMc_c->m27E2 = 10;
             dMenu_setPushMenuButton(0);
             mDoAud_seStart(JA_SE_ITM_MENU_OUT);
+        } else if (dMs_isPush_R_Button(i_Ms) && !dMc_c->noteCheck() && (dMc_c->mCollectMode == 0 || dMc_c->mCollectMode == 2)) {
+            mDoExt_setCurrentHeap(i_Ms->childHeap);
+            i_Ms->mMenuProc = MW_STATUS_UNK_18;
+            dMc_c->m27EC = 2;
+            dMc_c->m27E2 = g_menuHIO.field_0x92;
+            dMenu_setPushMenuButton(1);
+            mDoAud_seStart(JA_SE_ITEM_COL_SW);
+        } else if (dMs_isPush_L_Button(i_Ms) && !dMc_c->noteCheck() && (dMc_c->mCollectMode == 0 || dMc_c->mCollectMode == 2)) {
+            mDoExt_setCurrentHeap(i_Ms->childHeap);
+            i_Ms->mMenuProc = MW_STATUS_UNK_17;
+            dMc_c->m27EC = 1;
+            dMc_c->m27E2 = g_menuHIO.field_0x92;
+            dMenu_setPushMenuButton(1);
+            mDoAud_seStart(JA_SE_ITEM_COL_SW);
         } else {
-            if (dMs_isPush_R_Button(i_Ms) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0) {
-                mDoExt_setCurrentHeap(i_Ms->childHeap);
-                i_Ms->mMenuProc = MW_STATUS_UNK_7;
-                dMi_c->field_0x2421 = 2;
-                dMi_c->field_0x23F8 = g_menuHIO.field_0x92;
-                dMenu_setPushMenuButton(2);
-                mDoAud_seStart(JA_SE_ITEM_COL_SW);
-            } else if (dMs_isPush_L_Button(i_Ms) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0) {
-                mDoExt_setCurrentHeap(i_Ms->childHeap);
-                i_Ms->mMenuProc = MW_STATUS_UNK_6;
-                dMi_c->field_0x2421 = 1;
-                dMi_c->field_0x23F8 = g_menuHIO.field_0x92;
-                dMenu_setPushMenuButton(2);
-                mDoAud_seStart(JA_SE_ITEM_COL_SW);
-            } else {
-                mDoExt_setCurrentHeap(i_Ms->childHeap);
-                dMi_c->_move();
-            }
+            mDoExt_setCurrentHeap(i_Ms->childHeap);
+            dMc_c->_move();
         }
-        // TODO
     } break;
 
     case MW_STATUS_UNK_14: {
