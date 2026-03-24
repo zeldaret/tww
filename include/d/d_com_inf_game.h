@@ -304,6 +304,20 @@ public:
     }
     void startItemTimer() { mStartItemTimer = true; }
 
+    void decItemTimer() {
+        if (mStartItemTimer != true) {
+            return;
+        }
+
+        if (mItemTimer > 0) {
+            mItemTimer--;
+
+            return;
+        }
+
+        resetItemTimer(0);
+    }
+
     int getMessageRupee() { return mMessageRupee; }
     void setMessageRupee(s16 count) { mMessageRupee = count; }
 
@@ -906,7 +920,7 @@ inline void dComIfGp_resetItemTimer(s16 timer) {
 }
 
 inline void dComIfGp_decItemTimer() {
-    // TODO
+    g_dComIfG_gameInfo.play.decItemTimer();
 }
 
 inline int dComIfGp_getMessageRupee() {
