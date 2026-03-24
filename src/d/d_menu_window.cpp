@@ -1005,12 +1005,14 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     } break;
 
     case MW_STATUS_FMAP_MOVE_WALLPAPER: {
-        if (dMf_c->isFmapClose()) {
+        if (dMf_c->isFmapClose() || CPad_CHECK_TRIG_DOWN(0) || CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_X(0) || CPad_CHECK_TRIG_Y(0) ||
+            dComIfGp_getOperateWind() != 2)
+        {
             i_Ms->mMenuProc = MW_STATUS_FMAP_CLOSE;
             mDoAud_seStart(JA_SE_ITM_MENU_OUT);
         } else {
+            dMf_c->_move();
         }
-        // TODO
     } break;
 
     case MW_STATUS_FMAP_MOVE_FISHMAN_MODE: {
@@ -1133,7 +1135,6 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     }
 
     dComIfGp_decItemTimer();
-
 
     if (dMf_c) {
         dMeter_Info.mButtonIconMode = dMf_c->getButtonIconMode();
