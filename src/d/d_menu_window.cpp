@@ -1113,10 +1113,10 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         dMenu_setItemMode(0);
     }
 
-    if (!dMc_c) {
-        dMenu_setCollectMode(0);
-    } else {
+    if (dMc_c) {
         dMenu_setCollectMode(dMc_c->mCollectMode);
+    } else {
+        dMenu_setCollectMode(0);
     }
 
     // TODO
