@@ -1132,6 +1132,8 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         dComIfGs_getpItemRecord()->decTimer();
     }
 
+    dComIfGp_decItemTimer();
+
     // TODO
 
     mDoExt_setCurrentHeap(heap);
