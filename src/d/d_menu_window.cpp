@@ -1128,6 +1128,10 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     dMs_telescopeMove(i_Ms);
 
+    if (dMenu_flag() == 0 && dComIfGp_event_getMode() == 0) {
+        dComIfGs_getpItemRecord()->decTimer();
+    }
+
     // TODO
 
     mDoExt_setCurrentHeap(heap);
