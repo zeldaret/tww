@@ -1009,7 +1009,6 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
             i_Ms->mMenuProc = MW_STATUS_FMAP_CLOSE;
             mDoAud_seStart(JA_SE_ITM_MENU_OUT);
         } else {
-
         }
         // TODO
     } break;
@@ -1119,13 +1118,17 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         dMenu_setCollectMode(0);
     }
 
-    // TODO
+    if (!mDoCPd_R_LOCK_BUTTON(0) && dMs_isButtonBit(i_Ms, 2)) {
+        dMs_offButtonBit(i_Ms, 2);
+    }
 
     if (dComIfGp_demo_mode() == 1) {
         dMs_placenameMove(i_Ms);
     }
 
     dMs_telescopeMove(i_Ms);
+
+    // TODO
 
     mDoExt_setCurrentHeap(heap);
     return TRUE;
