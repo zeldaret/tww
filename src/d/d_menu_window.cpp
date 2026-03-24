@@ -948,7 +948,9 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     } break;
 
     case MW_STATUS_DMAP_OPEN: {
-        // TODO
+        if (dMd_c->_open()) {
+            i_Ms->mMenuProc = MW_STATUS_DMAP_MOVE;
+        }
     } break;
 
     case MW_STATUS_DMAP_MOVE: {
