@@ -621,10 +621,12 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         event_wait_frame = 0;
     }
 
+#define CAN_PROCEED() (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq())
+
     switch (i_Ms->mMenuProc) {
     case MW_STATUS_NO_MENU: {
         if (dComIfGp_isHeapLockFlag() && dComIfGp_getMesgStatus() == 0) {
-            if (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq()) {
+            if (CAN_PROCEED()) {
                 if (dComIfGp_fmapOpenCheck() == 1) {
                     timer = 0;
                     i_Ms->mMenuProc = MW_STATUS_FMAP_OPEN_WARP_MODE;
@@ -638,7 +640,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                 }
             }
 
-            if (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq()) {
+            if (CAN_PROCEED()) {
                 if (dComIfGp_nameOpenCheck() == 2) {
                     timer = 0;
                     i_Ms->mMenuProc = MW_STATUS_NAME_OPEN;
@@ -650,7 +652,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                 }
             }
 
-            if (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq()) {
+            if (CAN_PROCEED()) {
                 if (dComIfGp_isMenuCollect()) {
                     dMs_cloth_create(i_Ms);
                     timer = 0;
@@ -667,7 +669,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                 }
             }
 
-            if (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq()) {
+            if (CAN_PROCEED()) {
                 if (dComIfGp_fmapOpenCheck() == 2) {
                     timer = 0;
                     i_Ms->mMenuProc = MW_STATUS_FMAP_OPEN_FISHMAN_MODE;
@@ -682,7 +684,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                 }
             }
 
-            if (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq()) {
+            if (CAN_PROCEED()) {
                 if (!CPad_CHECK_HOLD_X(0) && !CPad_CHECK_HOLD_Y(0) && !CPad_CHECK_HOLD_Z(0)) {
                     if (event_wait_frame != 0) {
                         if (!daPy_getPlayerLinkActorClass()->getTactNormalWait() || !CPad_CHECK_HOLD_START(0)) {
