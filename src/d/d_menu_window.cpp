@@ -697,6 +697,16 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                                             dMenu_setPushMenuButton(2);
                                             mDoAud_seStart(JA_SE_ITM_MENU_IN);
                                             mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
+                                        } else {
+                                            mDoExt_setCurrentHeap(i_Ms->childHeap);
+                                            dMs_item_create(i_Ms);
+                                            dMi_c->field_0x2421 = 2;
+                                            i_Ms->mMenuProc = MW_STATUS_ITEM_OPEN1_1;
+                                            dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                                            dMenu_setMenuStatus(1);
+                                            dMenu_setPushMenuButton(1);
+                                            mDoAud_seStart(JA_SE_ITM_MENU_IN);
+                                            mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
                                         }
                                     }
                                 }
