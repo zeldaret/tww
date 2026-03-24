@@ -91,7 +91,7 @@ public:
     bool _open();
     bool _open3();
     bool _close();
-    void _close3();
+    bool _close3();
     void animeStep1(short, short);
     void animeStep2(short, short);
     void animeStep3(short, short);

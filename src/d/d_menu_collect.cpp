@@ -566,7 +566,7 @@ bool dMenu_Collect_c::_close() {
 }
 
 /* 801A71EC-801A7710       .text _close3__15dMenu_Collect_cFv */
-void dMenu_Collect_c::_close3() {
+bool dMenu_Collect_c::_close3() {
     /* Nonmatching */
 }
 
