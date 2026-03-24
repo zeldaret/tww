@@ -174,7 +174,7 @@ public:
     /* 0x24A0 */ ResTIMG* m24A0[6];
     /* 0x24B8 */ u8 m24B8[0x24E0 - 0x24B8];
     /* 0x24E0 */ fopMsgM_msgDataProc_c mMsgProc;
-    /* 0x27A0 */ u8 m27A0[0x27A8 - 0x27A0];
+    /* 0x2780 */ u8 m2780[0x27A8 - 0x2780];
     /* 0x27A8 */ f32 m27A8;
     /* 0x27AC */ f32 m27AC;
     /* 0x27B0 */ u8 m27B0[0x27EC - 0x27B0];
@@ -183,6 +183,8 @@ public:
     /* 0x27EE */ u8 mCollectMode;
     /* 0x27EF */ u8 m27EF[0x27F4 - 0x27EF];
 }; // Size: 0x27F4
+
+STATIC_ASSERT(sizeof(dMenu_Collect_c) == 0x27F4);
 
 class dMc_HIO_c {
 public:
