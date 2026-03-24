@@ -343,8 +343,9 @@ void dMenu_Collect_c::cursorMainMove() {
 }
 
 /* 8019E570-8019E584       .text noteCheck__15dMenu_Collect_cFv */
-void dMenu_Collect_c::noteCheck() {
+u8 dMenu_Collect_c::noteCheck() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 8019E584-8019E624       .text noteInit__15dMenu_Collect_cFv */
