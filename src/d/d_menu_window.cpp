@@ -952,12 +952,11 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     } break;
 
     case MW_STATUS_DMAP_MOVE: {
-        // TODO
-        if ((CPad_CHECK_HOLD_X(0) || CPad_CHECK_HOLD_Y(0) || CPad_CHECK_HOLD_Z(0)) && dMd_c->noteCheck() == 0) {
+        if ((CPad_CHECK_TRIG_DOWN(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_LEFT(0)) && dMd_c->noteCheck() == 0) {
             i_Ms->mMenuProc = MW_STATUS_DMAP_CLOSE;
             mDoAud_seStart(JA_SE_ITM_MENU_OUT);
         } else {
-            dMd_c->_close();
+            dMd_c->_move();
         }
     } break;
 
