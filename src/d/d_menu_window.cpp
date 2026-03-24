@@ -1038,15 +1038,34 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     } break;
 
     case MW_STATUS_NAME_OPEN: {
-        // TODO
+        if (dNm_c->_open()) {
+            i_Ms->mMenuProc = MW_STATUS_NAME_MOVE;
+        }
     } break;
 
     case MW_STATUS_NAME_MOVE: {
-        // TODO
+        dNm_c->_move();
+        // FIXME: Comparison
+        if (dNm_c->mIsInputEnd == 1) {
+            // FIXME: Register load order
+            dComIfGp_setInputPassword(dNm_c->mInputStr);
+            i_Ms->mMenuProc = MW_STATUS_NAME_CLOSE;
+            dComIfGp_nameOpenChangeOff();
+        } else if (dNm_c->mIsInputEnd == 2) {
+            dComIfGp_setInputPassword("");
+            i_Ms->mMenuProc = MW_STATUS_NAME_CLOSE;
+            dComIfGp_nameOpenCancelOff();
+        }
     } break;
 
     case MW_STATUS_NAME_CLOSE: {
-        // TODO
+        if (dNm_c->_close()) {
+            i_Ms->mMenuProc = MW_STATUS_NO_MENU;
+            dMenu_flagSet(0);
+            dMs_name_delete(i_Ms);
+            i_Ms->parentHeap_0xfc->freeAll();
+            dComIfGp_offHeapLockFlag();
+        }
     } break;
 
     case MW_STATUS_SAVE_OPEN: {
