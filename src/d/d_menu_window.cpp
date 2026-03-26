@@ -607,8 +607,6 @@ static BOOL dMs_Draw(sub_ms_screen_class*) {
 
 /* 801DD960-801DF340       .text dMs_Execute__FP19sub_ms_screen_class */
 static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
-    /* Nonmatching */
-
     static s16 timer = 0;
 
     JKRHeap* heap = mDoExt_setCurrentHeap(i_Ms->parentHeap_0xfc);
@@ -836,7 +834,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     } else if (i_Ms->mMenuProc == MW_STATUS_UNK_6) {
         cloth_c->cloth_move();
         mDoExt_setCurrentHeap(i_Ms->childHeap);
-        if (dMc_c->_close2()) {
+        if (dMi_c->_close2()) {
             i_Ms->mMenuProc = MW_STATUS_UNK_9;
             dMenu_setMenuStatusOld(dMenu_getMenuStatus());
             dMenu_setMenuStatus(2);
@@ -868,7 +866,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     } else if (i_Ms->mMenuProc == MW_STATUS_UNK_4) {
         cloth_c->cloth_move();
-        if ((CPad_CHECK_TRIG_L(0) || CPad_CHECK_TRIG_R(0)) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0 && !dMeter_subWinFlag()) {
+        if ((CPad_CHECK_TRIG_START(0) || CPad_CHECK_TRIG_B(0)) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0 && !dMeter_subWinFlag()) {
 
             cloth_c->alpha_out();
             mDoExt_setCurrentHeap(i_Ms->childHeap);
@@ -902,7 +900,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     } else if (i_Ms->mMenuProc == MW_STATUS_UNK_13) {
         cloth_c->cloth_move();
-        if ((CPad_CHECK_TRIG_L(0) || CPad_CHECK_TRIG_R(0)) && dMc_c->noteCheck() && (dMc_c->mCollectMode == 0 || dMc_c->mCollectMode == 2)) {
+        if ((CPad_CHECK_TRIG_START(0) || CPad_CHECK_TRIG_B(0)) && !dMc_c->noteCheck() && (dMc_c->mCollectMode == 0 || dMc_c->mCollectMode == 2)) {
 
             cloth_c->alpha_out();
             mDoExt_setCurrentHeap(i_Ms->childHeap);
@@ -937,7 +935,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     } else if (i_Ms->mMenuProc == MW_STATUS_UNK_14) {
         cloth_c->cloth_move();
-        if ((CPad_CHECK_TRIG_L(0) || CPad_CHECK_TRIG_R(0)) && !dMc_c->noteCheck() && (dMc_c->mCollectMode == 0 || dMc_c->mCollectMode == 2)) {
+        if ((CPad_CHECK_TRIG_START(0) || CPad_CHECK_TRIG_B(0)) && !dMc_c->noteCheck() && (dMc_c->mCollectMode == 0 || dMc_c->mCollectMode == 2)) {
             cloth_c->alpha_out();
             mDoExt_setCurrentHeap(i_Ms->childHeap);
             i_Ms->mMenuProc = MW_STATUS_UNK_19;
@@ -1107,12 +1105,12 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     } else if (i_Ms->mMenuProc == MW_STATUS_NAME_MOVE) {
         dNm_c->_move();
 
-        if (dNm_c->mIsInputEnd == 1) {
-            dComIfGp_setInputPassword(dNm_c->mInputStr);
+        if (dNm_c->isInputEnd() == 1) {
+            dComIfGp_setInputPassword(dNm_c->getInputStrPtr());
             i_Ms->mMenuProc = MW_STATUS_NAME_CLOSE;
             dComIfGp_nameOpenChangeOff();
 
-        } else if (dNm_c->mIsInputEnd == 2) {
+        } else if (dNm_c->isInputEnd() == 2) {
             dComIfGp_setInputPassword("");
             i_Ms->mMenuProc = MW_STATUS_NAME_CLOSE;
             dComIfGp_nameOpenCancelOff();
@@ -1183,7 +1181,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     dMs_telescopeMove(i_Ms);
 
-    if (dMenu_flag() == 0 && dComIfGp_event_getMode() == 0) {
+    if (dMenu_flag() == 0 && !dComIfGp_event_getMode()) {
         dComIfGs_getpItemRecord()->decTimer();
     }
 
