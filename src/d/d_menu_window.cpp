@@ -625,8 +625,8 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     const u8 menuProc = i_Ms->mMenuProc;
 
-    if (menuProc == MW_STATUS_NO_MENU) {
-        if (dComIfGp_isHeapLockFlag() && dComIfGp_getMesgStatus() == 0) {
+    if (menuProc == MW_STATUS_NO_MENU && !dComIfGp_isHeapLockFlag() && dComIfGp_getMesgStatus() == 0) {
+        {
             if (CAN_PROCEED() && dComIfGp_fmapOpenCheck() == 1) {
                 timer = 0;
                 i_Ms->mMenuProc = MW_STATUS_FMAP_OPEN_WARP_MODE;
@@ -672,8 +672,8 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
             } else if (dMenu_flag() == 0 && !fopOvlpM_IsDoingReq() && !(CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_Z(0))) {
 
                 if (event_wait_frame == 0 || daPy_getPlayerLinkActorClass()->getTactNormalWait() && CPad_CHECK_TRIG_START(0) ||
-                    dComIfGp_getOperateWind() != 2 || !CPad_CHECK_TRIG_UP(0) || dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) != 0 ||
-                    !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908))
+                    dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
+                        dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908))
                 {
 
                     if (dComIfGp_getMesgStatus() == 0 && dComIfGp_getScopeMesgStatus() == 0) {
@@ -724,7 +724,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                                             mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
                                         }
 
-                                    } else if (CAN_PROCEED() && CPad_CHECK_TRIG_START(0) && dComIfGp_isEnableNextStage() == 0) {
+                                    } else if (CAN_PROCEED() && CPad_CHECK_TRIG_UP(0)) {
 
                                         timer = 0;
 
@@ -751,6 +751,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                                                     dMenu_flagSet(1);
                                                 }
 
+                                                dMs_fmap_create(i_Ms);
                                                 dMenu_setMenuStatusOld(dMenu_getMenuStatus());
                                                 dMenu_setMenuStatus(3);
                                                 mDoAud_seStart(JA_SE_ITM_MENU_IN);
