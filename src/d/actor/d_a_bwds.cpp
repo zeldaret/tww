@@ -54,7 +54,6 @@ static void anm_init(bwds_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, 
     } else {
         i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Bwds", bckFileIdx), loopMode, morf, speed, 0.0f, -1.0f, NULL);
     }
-    return;
 }
 
 /* 0000026C-000002E8       .text body_draw__FP10bwds_class */
@@ -99,11 +98,7 @@ static void body_control(bwds_class* i_this) {
     f32 fVar4;
     J3DModel* model = i_this->mpMorf->getModel();
     MTXCopy(model->getAnmMtx(JNT_HEAD), *calc_mtx);
-#if VERSION > VERSION_DEMO
     cXyz vec1((REG0_F(0) + 60.0f) * l_HIO.m008, REG0_F(1), REG0_F(2));
-#else
-    cXyz vec1((REG0_F(0) + 60.0f) * l_HIO.m008, REG0_F(1), REG0_F(2));
-#endif
     cXyz vec2;
     cXyz vec3;
     MtxPosition(&vec1, &i_this->m032C[0]);
@@ -208,7 +203,6 @@ static void easy_bg_check2(bwds_class* i_this) {
         actor->current.pos.x *= 0.99f;
         actor->current.pos.z *= 0.99f;
     }
-    return;
 }
 
 /* 00001004-00001198       .text pos_move__FP10bwds_classs */
@@ -257,8 +251,8 @@ static void ug_move(bwds_class* i_this) {
         } else {
             i_this->m0500 = cM_rndFX(REG0_F(9) + 3000.0f);
         }
-        mDoAud_seStart(JA_SE_CM_BWD_C_JUMP_OUT, &actor->eyePos, 0x0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-        mDoAud_seStart(JA_SE_CV_BWD_C_ATTACK, &actor->eyePos, 0x0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        fopAcM_seStart(actor, JA_SE_CM_BWD_C_JUMP_OUT, 0);
+        fopAcM_seStart(actor, JA_SE_CV_BWD_C_ATTACK, 0);
         break;
     case 0:
         anm_init(i_this, BWDS_BCK_KOBOSS_CLOSE, 2.0f, 0, 1.0f, -1);
@@ -302,8 +296,8 @@ static void ug_move(bwds_class* i_this) {
             } else {
                 i_this->m0500 = cM_rndFX(REG0_F(9) + 3000.0f);
             }
-            mDoAud_seStart(JA_SE_CM_BWD_C_JUMP_OUT, &actor->eyePos, 0x0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-            mDoAud_seStart(JA_SE_CV_BWD_C_ATTACK, &actor->eyePos, 0x0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            fopAcM_seStart(actor, JA_SE_CM_BWD_C_JUMP_OUT, 0);
+            fopAcM_seStart(actor, JA_SE_CV_BWD_C_ATTACK, 0);
         }
         break;
     }
@@ -372,7 +366,6 @@ static void ug_move(bwds_class* i_this) {
     if (actor->speed.y < 0.0f) {
         actor->shape_angle.z += i_this->m0500;
     }
-    return;
 }
 
 /* 000019CC-00001B38       .text hook_on__FP10bwds_class */
@@ -399,7 +392,6 @@ static void hook_on(bwds_class* i_this) {
         }
         break;
     }
-    return;
 }
 
 /* 00001B38-00001DCC       .text hook_chance__FP10bwds_class */
@@ -449,7 +441,6 @@ static void hook_chance(bwds_class* i_this) {
     actor->current.pos += actor->speed;
     actor->speed.y -= (REG0_F(4) + 5.0f);
     i_this->m02FB = 1;
-    return;
 }
 
 /* 00001DCC-00002178       .text fail__FP10bwds_class */
@@ -511,7 +502,6 @@ static void fail(bwds_class* i_this) {
         actor->current.angle.y = cM_atan2s(actor->speed.x, actor->speed.z);
         actor->current.angle.x = -cM_atan2s(actor->speed.y, std::sqrtf(actor->speed.x * actor->speed.x + actor->speed.z * actor->speed.z));
     }
-    return;
 }
 
 /* 000021B4-0000245C       .text damage_check__FP10bwds_class */
@@ -530,7 +520,7 @@ static void damage_check(bwds_class* i_this) {
             i_this->m02F6 = ACTION_HOOK_ON;
             i_this->m02F8 = 0;
             i_this->m031E = 10;
-            mDoAud_seStart(JA_SE_LK_HS_SPIKE, &actor->eyePos, 0x20, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            fopAcM_seStart(actor, JA_SE_LK_HS_SPIKE, 0x20);
             fopAcM_seStart(actor, JA_SE_CV_BWD_C_HS_DAMAGE, 0);
         } else {
             i_this->m0508.Move();
@@ -604,7 +594,6 @@ static void move(bwds_class* i_this) {
         actor->current.pos += cStack_28;
         cLib_addCalc0(&i_this->m0320, 1.0f, 7.0f);
     }
-    return;
 }
 
 /* 00002590-000031B4       .text daBwds_Execute__FP10bwds_class */
@@ -829,7 +818,7 @@ static BOOL daBwds_Delete(bwds_class* i_this) {
 #if VERSION > VERSION_DEMO
     dComIfG_resDelete(&i_this->m02AC, "Bwds");
 #else
-    dComIfG_deleteObjectRes("Bwds");
+    dComIfG_resDeleteDemo(&i_this->m02AC, "Bwds");
 #endif
 
     if (i_this->m18C8 != 0) {
