@@ -679,13 +679,14 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                             !dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK800000_e))
                         {
 
-                            if (dComIfGp_getOperateWind() == 2) {
-                                if (dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
-                                    dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908))
+                            {
+                                if (dComIfGp_getOperateWind() != 2 ||
+                                    (dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
+                                     dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)))
                                 {
 
                                     if (CPad_CHECK_TRIG_START(0) && dComIfGp_isEnableNextStage() == 0 &&
-                                        daPy_getPlayerLinkActorClass() == daPy_getPlayerActorClass())
+                                        daPy_getPlayerActorClass() == daPy_getPlayerLinkActorClass())
                                     {
 
                                         dMs_cloth_create(i_Ms);
@@ -757,7 +758,6 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                                             }
                                         }
                                     }
-                                } else {
                                 }
                             }
                         }
