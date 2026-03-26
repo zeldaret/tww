@@ -680,7 +680,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                         {
 
                             if (dComIfGp_getOperateWind() == 2) {
-                                if (CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
+                                if (dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
                                     dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908))
                                 {
 
@@ -757,6 +757,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                                             }
                                         }
                                     }
+                                } else {
                                 }
                             }
                         }
