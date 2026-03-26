@@ -140,7 +140,7 @@ void daWarphr_c::CreateInit() {
 
 /* 000006BC-00000768       .text _create__10daWarphr_cFv */
 cPhs_State daWarphr_c::_create() {
-    fopAcM_SetupActor(this, daWarphr_c);
+    fopAcM_ct(this, daWarphr_c);
 
     m2FA = daWarphr_prm::getType(this);
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, m_arcname);

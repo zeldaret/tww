@@ -2750,7 +2750,7 @@ static dCcD_SrcSph ball_at_sph_src = {
 /* 00009844-00009C70       .text daFganon_Create__FP10fopAc_ac_c */
 static cPhs_State daFganon_Create(fopAc_ac_c* i_act) {
     fganon_class* i_this = (fganon_class*)i_act;
-    fopAcM_SetupActor(i_act, fganon_class);
+    fopAcM_ct(i_act, fganon_class);
     s32 res;
     s32 res2;
     

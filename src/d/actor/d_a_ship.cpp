@@ -4563,7 +4563,7 @@ cPhs_State daShip_c::create() {
         }},
     };
     
-    fopAcM_SetupActor(this, daShip_c);
+    fopAcM_ct(this, daShip_c);
     
     if (!dComIfGs_isEventBit(dSv_event_flag_c::MET_KORL)) {
         return cPhs_ERROR_e;

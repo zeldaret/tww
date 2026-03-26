@@ -599,7 +599,7 @@ static cPhs_State daMflft_Create(fopAc_ac_c* a_this) {
 
     mflft_class* i_this = (mflft_class*)a_this;
 
-    fopAcM_SetupActor(&i_this->actor, mflft_class);
+    fopAcM_ct(&i_this->actor, mflft_class);
 
     cPhs_State PVar2 = dComIfG_resLoad(&i_this->mPhase, "Mflft");
     if (PVar2 == cPhs_COMPLEATE_e) {

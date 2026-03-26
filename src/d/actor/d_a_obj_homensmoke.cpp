@@ -35,7 +35,7 @@ namespace daObjHomensmoke {
 
     /* 0000026C-0000048C       .text _create__Q215daObjHomensmoke5Act_cFv */
     cPhs_State Act_c::_create() {
-        fopAcM_SetupActor(this, Act_c);
+        fopAcM_ct(this, Act_c);
         
         mbInitialized = FALSE;
         

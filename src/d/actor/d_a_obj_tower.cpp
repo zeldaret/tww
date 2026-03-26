@@ -60,7 +60,7 @@ void daObjTower_c::set_mtx() {
 }
 
 cPhs_State daObjTower_c::_create() {
-    fopAcM_SetupActor(this, daObjTower_c);
+    fopAcM_ct(this, daObjTower_c);
 
     field_0x2d0 = 0;
 

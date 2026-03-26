@@ -1164,7 +1164,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 
 /* 00003C00-00003F5C       .text daAM_Create__FP10fopAc_ac_c */
 static cPhs_State daAM_Create(fopAc_ac_c* i_this) {
-    fopAcM_SetupActor(i_this, am_class);
+    fopAcM_ct(i_this, am_class);
 
     am_class* a_this = (am_class*)i_this;
 

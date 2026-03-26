@@ -67,7 +67,7 @@ namespace daObjMovebox {
     };
     
     cPhs_State Act_c::Mthd_Create() {
-        fopAcM_SetupActor(this, Act_c);
+        fopAcM_ct(this, Act_c);
         
         cPhs_State phase_state;
         mType = prm_get_type();

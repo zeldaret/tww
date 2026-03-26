@@ -85,9 +85,9 @@ bool daObjRcloud_c::create_heap() {
 cPhs_State daObjRcloud_c::_create() {
 #if VERSION == VERSION_DEMO
     cPhs_State phase = cPhs_ERROR_e;
-    fopAcM_SetupActor(this, daObjRcloud_c);
+    fopAcM_ct(this, daObjRcloud_c);
 #else
-    fopAcM_SetupActor(this, daObjRcloud_c);
+    fopAcM_ct(this, daObjRcloud_c);
     cPhs_State phase = cPhs_ERROR_e;
 #endif
 

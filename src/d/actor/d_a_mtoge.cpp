@@ -99,7 +99,7 @@ BOOL daMtoge_c::CreateInit() {
 
 /* 00000384-0000041C       .text create__9daMtoge_cFv */
 cPhs_State daMtoge_c::create() {
-    fopAcM_SetupActor(this, daMtoge_c);
+    fopAcM_ct(this, daMtoge_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhaseProcReq, M_arcname);
     if (phase_state != cPhs_COMPLEATE_e) {

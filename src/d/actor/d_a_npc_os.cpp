@@ -204,7 +204,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000374-00000538       .text create__10daNpc_Os_cFv */
 cPhs_State daNpc_Os_c::create() {
-    fopAcM_SetupActor(this, daNpc_Os_c)
+    fopAcM_ct(this, daNpc_Os_c)
 
     static u32 l_heap_size = 0xFA0;
 

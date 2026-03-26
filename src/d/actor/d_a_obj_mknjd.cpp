@@ -297,7 +297,7 @@ BOOL daObjMknjD::Act_c::Create() {
 
 /* 000008E8-00000A84       .text Mthd_Create__Q210daObjMknjD5Act_cFv */
 cPhs_State daObjMknjD::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjMknjD::Act_c);
+    fopAcM_ct(this, daObjMknjD::Act_c);
 
     m043E = prm_get_Type();
 

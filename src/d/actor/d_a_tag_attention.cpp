@@ -41,7 +41,7 @@ static dCcD_SrcSph sph_check_src = {
 
 /* 00000078-00000188       .text _create__Q214daTagAttention5Act_cFv */
 cPhs_State daTagAttention::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     mStts.Init(0xFF, 0xFF, this);
     mSph.Set(sph_check_src);
     mSph.SetStts(&mStts);

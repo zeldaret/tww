@@ -59,9 +59,9 @@ cPhs_State daDemo_Kmm_c::create() {
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
     }
-    fopAcM_SetupActor(this, daDemo_Kmm_c);
+    fopAcM_ct(this, daDemo_Kmm_c);
 #else
-    fopAcM_SetupActor(this, daDemo_Kmm_c);
+    fopAcM_ct(this, daDemo_Kmm_c);
     cPhs_State ret = dComIfG_resLoad(&this->mPhase, M_arcname);
     if (ret != cPhs_COMPLEATE_e) {
         return ret;

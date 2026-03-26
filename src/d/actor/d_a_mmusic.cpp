@@ -58,7 +58,7 @@ void daMmusic::Act_c::set_mtx() {
 
 /* 000001A4-00000268       .text _create__Q28daMmusic5Act_cFv */
 cPhs_State daMmusic::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State ret = cPhs_COMPLEATE_e;
     if (ret == cPhs_COMPLEATE_e) {

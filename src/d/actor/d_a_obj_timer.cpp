@@ -11,7 +11,7 @@
 
 /* 00000078-00000114       .text _create__Q210daObjTimer5Act_cFv */
 cPhs_State daObjTimer::Act_c::_create() {
-    fopAcM_SetupActor(this, daObjTimer::Act_c);
+    fopAcM_ct(this, daObjTimer::Act_c);
 
     fopAcM_offDraw(this);
 

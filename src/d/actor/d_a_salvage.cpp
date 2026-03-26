@@ -88,7 +88,7 @@ bool daSalvage_c::CreateInit() {
 
 /* 00000570-00000728       .text _create__11daSalvage_cFv */
 cPhs_State daSalvage_c::_create() {
-    fopAcM_SetupActor(this, daSalvage_c);
+    fopAcM_ct(this, daSalvage_c);
 
     cPhs_State PVar3 = dComIfG_resLoad(&mPhase, m_arcname);
     if (PVar3 == cPhs_COMPLEATE_e) {

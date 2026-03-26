@@ -4529,7 +4529,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000DED0-0000DF78       .text _create__11daNpc_Ji1_cFv */
 cPhs_State daNpc_Ji1_c::_create() {
-    fopAcM_SetupActor(this, daNpc_Ji1_c);
+    fopAcM_ct(this, daNpc_Ji1_c);
 
     cPhs_State state = dComIfG_resLoad(&mPhs, "Ji");
     if(state == cPhs_COMPLEATE_e) {

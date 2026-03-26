@@ -404,7 +404,7 @@ namespace daBomb2 {
     }
 
     cPhs_State Act_c::_create() {
-        fopAcM_SetupActor(this, Act_c);
+        fopAcM_ct(this, Act_c);
 
         cPhs_State status = dComIfG_resLoad(&mPhase, attr().resName);
 

@@ -126,7 +126,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 static cPhs_State daDEMO_DK_Create(fopAc_ac_c* a_this) {
     demo_dk_class* i_this = (demo_dk_class*)a_this;
     
-    fopAcM_SetupActor(&i_this->actor, demo_dk_class);
+    fopAcM_ct(&i_this->actor, demo_dk_class);
 
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "DEMO_DK");
     if (ret == cPhs_COMPLEATE_e) {

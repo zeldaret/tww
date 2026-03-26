@@ -75,7 +75,7 @@ BOOL daObjShelf::Act_c::Create() {
 
 /* 000001A0-0000029C       .text Mthd_Create__Q210daObjShelf5Act_cFv */
 cPhs_State daObjShelf::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {

@@ -152,7 +152,7 @@ void daLlift_c::CreateInit() {
 /* 00000634-00000760       .text _create__9daLlift_cFv */
 cPhs_State daLlift_c::_create() {
     int res;
-    fopAcM_SetupActor(this, daLlift_c);
+    fopAcM_ct(this, daLlift_c);
     res = dComIfG_resLoad(&mPhs, m_arcname);
     if (res == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xf40)) {

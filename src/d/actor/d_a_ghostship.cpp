@@ -236,7 +236,7 @@ void daGhostship_c::getArg() {
 }
 
 cPhs_State daGhostship_c::_create() {
-    fopAcM_SetupActor(this, daGhostship_c);
+    fopAcM_ct(this, daGhostship_c);
 
     cPhs_State result = dComIfG_resLoad(&mPhs, m_arc_name);
     if(result != cPhs_COMPLEATE_e) {

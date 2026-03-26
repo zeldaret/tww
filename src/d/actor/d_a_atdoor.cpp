@@ -97,9 +97,9 @@ cPhs_State daAtdoor_c::create() {
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
     }
-    fopAcM_SetupActor(this, daAtdoor_c);
+    fopAcM_ct(this, daAtdoor_c);
 #else
-    fopAcM_SetupActor(this, daAtdoor_c);
+    fopAcM_ct(this, daAtdoor_c);
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
     }

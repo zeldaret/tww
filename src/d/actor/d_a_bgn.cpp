@@ -331,7 +331,7 @@ static cPhs_State daBgn_Create(fopAc_ac_c* i_this) {
             /* Radius */ 70.0f,
         }},
     };
-    fopAcM_SetupActor(i_this, bgn_class);
+    fopAcM_ct(i_this, bgn_class);
 }
 
 static actor_method_class l_daBgn_Method = {

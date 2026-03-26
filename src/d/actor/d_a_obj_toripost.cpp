@@ -976,7 +976,7 @@ void daObjTpost_c::getArg() {
 
 /* 00001BA8-00001D88       .text _create__12daObjTpost_cFv */
 cPhs_State daObjTpost_c::_create() {
-    fopAcM_SetupActor(this, daObjTpost_c);
+    fopAcM_ct(this, daObjTpost_c);
 
     getArg();
     cPhs_State step = dComIfG_resLoad(&mPhs, m_arc_name);

@@ -65,7 +65,7 @@ bool daObjYgush00_c::create_heap() {
 
 /* 00000250-000003F4       .text _create__14daObjYgush00_cFv */
 cPhs_State daObjYgush00_c::_create() {
-    fopAcM_SetupActor(this, daObjYgush00_c);
+    fopAcM_ct(this, daObjYgush00_c);
 
     if (fopAcM_IsFirstCreating(this)) {
         u32 type = param_get_arg();

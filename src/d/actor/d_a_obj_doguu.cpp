@@ -528,7 +528,7 @@ static cPhs_State daObjDoguu_Create(void* i_this) {
 
 /* 000016C4-0000178C       .text _create__12daObjDoguu_cFv */
 cPhs_State daObjDoguu_c::_create() {
-    fopAcM_SetupActor(this, daObjDoguu_c);
+    fopAcM_ct(this, daObjDoguu_c);
     if(argument >= 1) {
         field_0x894 = argument - 1;
     } else {

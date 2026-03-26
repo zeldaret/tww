@@ -1485,7 +1485,7 @@ static f32 fire_sc[10] = {
 
 /* 000034F8-00003A94       .text daKS_Create__FP10fopAc_ac_c */
 static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
-    fopAcM_SetupActor(i_this, ks_class);
+    fopAcM_ct(i_this, ks_class);
     ks_class* a_this = (ks_class*)i_this;
     
     cPhs_State res;

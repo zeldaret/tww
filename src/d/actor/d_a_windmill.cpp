@@ -271,7 +271,7 @@ void daWindMill_c::search_wind() {
 
 /* 00000670-00000804       .text _create__12daWindMill_cFv */
 cPhs_State daWindMill_c::_create() {
-    fopAcM_SetupActor(this, daWindMill_c);
+    fopAcM_ct(this, daWindMill_c);
 
     mType = fopAcM_GetParam(this) & 0xF;
     cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname[mType]);

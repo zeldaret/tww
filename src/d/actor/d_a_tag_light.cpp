@@ -127,7 +127,7 @@ bool Act_c::create_heap() {
 /* 0000035C-000006F0       .text _create__Q210daTagLight5Act_cFv */
 cPhs_State Act_c::_create() {
 #if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 #endif
 
     m2A0 = prm_get_type();
@@ -144,7 +144,7 @@ cPhs_State Act_c::_create() {
     m4A4.z = sp08.z;
 
 #if VERSION == VERSION_DEMO
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 #endif
 
     mDoMtx_stack_c::transS(current.pos);

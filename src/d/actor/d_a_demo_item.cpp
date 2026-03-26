@@ -454,7 +454,7 @@ BOOL daDitem_c::Delete() {
 }
 
 cPhs_State daDitem_c::create() {
-    fopAcM_SetupActor(this, daDitem_c);
+    fopAcM_ct(this, daDitem_c);
     
     m_itemNo = daDitem_prm::getNo(this);
     

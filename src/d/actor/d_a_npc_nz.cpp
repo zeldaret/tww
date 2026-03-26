@@ -928,7 +928,7 @@ void daNpc_Nz_c::getArg() {
 
 /* 00002830-000028FC       .text _create__10daNpc_Nz_cFv */
 cPhs_State daNpc_Nz_c::_create() {
-    fopAcM_SetupActor(this, daNpc_Nz_c);
+    fopAcM_ct(this, daNpc_Nz_c);
 
     getArg();
 

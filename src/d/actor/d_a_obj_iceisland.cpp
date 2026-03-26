@@ -168,7 +168,7 @@ void daObjIceisland_c::daObjIceisland_fail_demo_main() {
 }
 
 cPhs_State daObjIceisland_c::_create(){
-    fopAcM_SetupActor(this, daObjIceisland_c);
+    fopAcM_ct(this, daObjIceisland_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "GiceL");
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x13D0)) {

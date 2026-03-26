@@ -561,7 +561,7 @@ static cPhs_State daBdkobj_Create(fopAc_ac_c* a_this) {
     };
 
     bdkobj_class* i_this = (bdkobj_class*)a_this;
-    fopAcM_SetupActor(a_this, bdkobj_class);
+    fopAcM_ct(a_this, bdkobj_class);
 
     cPhs_State res = dComIfG_resLoad(&i_this->mPhase, "Bdkobj");
     if (res == cPhs_ERROR_e) {

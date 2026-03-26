@@ -497,7 +497,7 @@ void daObjBarrier_ef_c::draw() {
 /* 00001638-0000182C       .text _create__14daObjBarrier_cFv */
 cPhs_State daObjBarrier_c::_create() {
     cPhs_State phase = cPhs_ERROR_e;
-    fopAcM_SetupActor(this, daObjBarrier_c);
+    fopAcM_ct(this, daObjBarrier_c);
 
     if (fopAcM_IsFirstCreating(this)) {
         mMoya = param_get_moya();

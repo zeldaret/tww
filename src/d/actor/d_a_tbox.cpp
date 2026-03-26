@@ -1244,7 +1244,7 @@ static cPhs_State daTbox_Create(fopAc_ac_c* i_actor) {
 
     daTbox_c* tbox = static_cast<daTbox_c*>(i_actor);
 
-    fopAcM_SetupActor(tbox, daTbox_c);
+    fopAcM_ct(tbox, daTbox_c);
 
     cPhs_State result = dComIfG_resLoad(tbox->getPhase(), "Dalways");
 

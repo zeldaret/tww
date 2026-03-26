@@ -47,7 +47,7 @@ static BOOL daSwc00_Delete(swc00_class* i_this) {
 /* 00000190-00000274       .text daSwc00_Create__FP10fopAc_ac_c */
 static cPhs_State daSwc00_Create(fopAc_ac_c* i_this) {
 #if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_this, swc00_class);
+    fopAcM_ct(i_this, swc00_class);
 #endif
 
     swc00_class* a_this = (swc00_class*)i_this;
@@ -63,7 +63,7 @@ static cPhs_State daSwc00_Create(fopAc_ac_c* i_this) {
     }
 
 #if VERSION == VERSION_DEMO
-    fopAcM_SetupActor(i_this, swc00_class);
+    fopAcM_ct(i_this, swc00_class);
 #endif
 
     i_this->scale.x *= 100.0f;

@@ -110,7 +110,7 @@ void daArrow_Iceeff_c::set_mtx() {
 }
 
 cPhs_State daArrow_Iceeff_c::_create() {
-    fopAcM_SetupActor(this, daArrow_Iceeff_c);
+    fopAcM_ct(this, daArrow_Iceeff_c);
 
     void* arrow = fopAcM_SearchByID(parentActorID);
     if(arrow == 0) {

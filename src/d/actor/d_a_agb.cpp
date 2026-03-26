@@ -1775,7 +1775,7 @@ BOOL daAgb_c::createHeap() {
 /* 800D3B58-800D3D2C       .text daAgb_Create__FP10fopAc_ac_c */
 static cPhs_State daAgb_Create(fopAc_ac_c* i_this) {
     daAgb_c* a_this = (daAgb_c*)i_this;
-    fopAcM_SetupActor(i_this, daAgb_c);
+    fopAcM_ct(i_this, daAgb_c);
 
     cPhs_State phase = dComIfG_resLoad(&a_this->mPhase, "Agb");
     if (phase == cPhs_COMPLEATE_e) {

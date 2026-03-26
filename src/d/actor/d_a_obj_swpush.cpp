@@ -203,7 +203,7 @@ cPhs_State daObjSwpush::Act_c::create_res_load() {
 
 /* 0000051C-000008C4       .text Mthd_Create__Q211daObjSwpush5Act_cFv */
 cPhs_State daObjSwpush::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjSwpush::Act_c);
+    fopAcM_ct(this, daObjSwpush::Act_c);
 
     prmZ_init();
     mType = prm_get_type();

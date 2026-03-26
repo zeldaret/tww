@@ -930,7 +930,7 @@ cPhs_State daNpc_Fa1_c::_create() {
     static u32 a_heap_size_tbl = 0x1100;
     cPhs_State phase_state = cPhs_COMPLEATE_e;
 
-    fopAcM_SetupActor(this, daNpc_Fa1_c);
+    fopAcM_ct(this, daNpc_Fa1_c);
     if (fopAcM_entrySolidHeap(this, CheckCreateHeap, a_heap_size_tbl)) {
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
     } else {

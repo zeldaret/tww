@@ -235,7 +235,7 @@ int daBFlower_c::init_bck_anm(s16 param) {
 
 /* 0000080C-000008AC       .text _create__11daBFlower_cFv */
 cPhs_State daBFlower_c::_create() {
-    fopAcM_SetupActor(this, daBFlower_c);
+    fopAcM_ct(this, daBFlower_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arcname);
 

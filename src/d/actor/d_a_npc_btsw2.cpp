@@ -542,7 +542,7 @@ BOOL daNpc_Btsw2_c::wait_action(void*) {
 
 /* 00001660-00001884       .text _create__13daNpc_Btsw2_cFv */
 cPhs_State daNpc_Btsw2_c::_create() {
-    fopAcM_SetupActor(this, daNpc_Btsw2_c);
+    fopAcM_ct(this, daNpc_Btsw2_c);
     
     if (dComIfGs_getEventReg(dSv_event_flag_c::UNK_C203) == 3 || !checkItemGet(dItem_PEARL_DIN_e, TRUE)) {
         return cPhs_ERROR_e;

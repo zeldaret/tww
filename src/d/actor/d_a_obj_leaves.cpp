@@ -474,7 +474,7 @@ void daObjLeaves_c::registFireCollision() {
 cPhs_State daObjLeaves_c::_create() {
     cPhs_State PVar4 = cPhs_ERROR_e;
 
-    fopAcM_SetupActor(this, daObjLeaves_c);
+    fopAcM_ct(this, daObjLeaves_c);
 
     if (fopAcM_IsFirstCreating(this)) {
         m43C = chk_appear();

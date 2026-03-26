@@ -96,7 +96,7 @@ void daPds_c::CreateInit() {
 
 /* 00000380-00000474       .text _create__Q210daPedestal7daPds_cFv */
 cPhs_State daPds_c::_create() {
-    fopAcM_SetupActor(this, daPds_c);
+    fopAcM_ct(this, daPds_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, m_arcname);
 

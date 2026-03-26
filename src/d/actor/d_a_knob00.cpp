@@ -375,9 +375,9 @@ cPhs_State daKnob00_c::create() {
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
     }
-    fopAcM_SetupActor(this, daKnob00_c);
+    fopAcM_ct(this, daKnob00_c);
 #else
-    fopAcM_SetupActor(this, daKnob00_c);
+    fopAcM_ct(this, daKnob00_c);
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
     }

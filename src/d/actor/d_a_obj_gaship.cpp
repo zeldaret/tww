@@ -57,7 +57,7 @@ bool daObjGaship::Act_c::create_heap() {
 
 /* 00000448-000004F8       .text _create__Q211daObjGaship5Act_cFv */
 cPhs_State daObjGaship::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     if (ret == cPhs_COMPLEATE_e) {

@@ -236,7 +236,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000664-000006F4       .text _create__11daAuction_cFv */
 cPhs_State daAuction_c::_create() {
-    fopAcM_SetupActor(this, daAuction_c);
+    fopAcM_ct(this, daAuction_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Pspl");
 

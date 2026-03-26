@@ -307,7 +307,7 @@ cPhs_State daObjHha_c::_create() {
     static const float splash_z[2] = {0.0f, 100.0f};
 
 
-    fopAcM_SetupActor(this, daObjHha_c);
+    fopAcM_ct(this, daObjHha_c);
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     if(ret == cPhs_COMPLEATE_e){
         ret = cPhs_ERROR_e;

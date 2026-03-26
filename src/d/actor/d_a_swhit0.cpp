@@ -191,7 +191,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actr) {
 
 /* 00000508-000006C0       .text create__10daSwhit0_cFv */
 cPhs_State daSwhit0_c::create() {
-    fopAcM_SetupActor(this, daSwhit0_c);
+    fopAcM_ct(this, daSwhit0_c);
 
     shape_angle.z = 0;
     current.angle.z = 0;

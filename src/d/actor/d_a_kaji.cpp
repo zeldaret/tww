@@ -43,7 +43,7 @@ BOOL daKaji_c::CreateHeap() {
 }
 
 cPhs_State daKaji_c::_create() {
-    fopAcM_SetupActor(this, daKaji_c);
+    fopAcM_ct(this, daKaji_c);
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {

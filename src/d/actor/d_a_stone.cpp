@@ -189,7 +189,7 @@ bool Act_c::chk_appear() {
 
 /* 0000033C-00000744       .text _create__Q27daStone5Act_cFv */
 cPhs_State Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     m670 = prm_get_type();
     m68C = chk_appear();
 

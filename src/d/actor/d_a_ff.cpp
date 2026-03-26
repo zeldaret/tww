@@ -288,7 +288,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 
 /* 000013D4-0000164C       .text daFf_Create__FP10fopAc_ac_c */
 static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
-    fopAcM_SetupActor(i_this, ff_class);
+    fopAcM_ct(i_this, ff_class);
     ff_class* a_this = (ff_class*)i_this;
     cPhs_State phase_state = dComIfG_resLoad(&a_this->mPhs, "Ff");
 

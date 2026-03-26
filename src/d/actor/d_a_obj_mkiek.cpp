@@ -86,7 +86,7 @@ BOOL daObjMkiek::Act_c::Create() {
 
 /* 00000314-000004F8       .text Mthd_Create__Q210daObjMkiek5Act_cFv */
 cPhs_State daObjMkiek::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     int switch_index = daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S);
     if (fopAcM_isSwitch(this, switch_index)) {

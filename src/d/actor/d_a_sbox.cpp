@@ -249,9 +249,9 @@ cPhs_State daSbox_c::create() {
     if (PVar1 != cPhs_COMPLEATE_e) {
         return PVar1;
     }
-    fopAcM_SetupActor(this, daSbox_c);
+    fopAcM_ct(this, daSbox_c);
 #else
-    fopAcM_SetupActor(this, daSbox_c);
+    fopAcM_ct(this, daSbox_c);
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
     if (PVar1 != cPhs_COMPLEATE_e) {
         return PVar1;

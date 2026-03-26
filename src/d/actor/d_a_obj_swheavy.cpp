@@ -106,7 +106,7 @@ u8 daObjSwheavy::Act_c::create_heap() {
 
 /* 0000032C-00000628       .text _create__Q212daObjSwheavy5Act_cFv */
 cPhs_State daObjSwheavy::Act_c::_create() {
-    fopAcM_SetupActor(this, daObjSwheavy::Act_c);
+    fopAcM_ct(this, daObjSwheavy::Act_c);
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {

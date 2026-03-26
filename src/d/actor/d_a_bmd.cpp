@@ -1941,7 +1941,7 @@ static cPhs_State daBmd_Create(fopAc_ac_c* a_this) {
     cXyz local_30;
 
     bmd_class* i_this = (bmd_class*)a_this;
-    fopAcM_SetupActor(a_this, bmd_class);
+    fopAcM_ct(a_this, bmd_class);
     res = dComIfG_resLoad(&i_this->mPhs, "Bmd");
 #if VERSION == VERSION_DEMO
     if (res == cPhs_ERROR_e) {

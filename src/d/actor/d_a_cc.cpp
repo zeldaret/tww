@@ -2568,7 +2568,7 @@ static cPhs_State daCC_Create(fopAc_ac_c* a_this) {
 
     cc_class* i_this = (cc_class*)a_this;
 
-    fopAcM_SetupActor(a_this, cc_class);
+    fopAcM_ct(a_this, cc_class);
 
     cPhs_State PVar3 = dComIfG_resLoad(&i_this->mPhase, "CC");
     if (PVar3 == cPhs_COMPLEATE_e) {

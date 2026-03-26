@@ -145,7 +145,7 @@ void daWarpgn_c::CreateInit() {
 cPhs_State daWarpgn_c::_create() {
     cPhs_State rt = cPhs_ERROR_e;
 
-    fopAcM_SetupActor(this, daWarpgn_c);
+    fopAcM_ct(this, daWarpgn_c);
 
     rt = dComIfG_resLoad(&mPhs, m_arcname);
 

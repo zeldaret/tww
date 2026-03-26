@@ -543,7 +543,7 @@ static dCcD_SrcCps l_at_cps_src = {
 
 /* 800F2C14-800F2CC8       .text create__12daHookshot_cFv */
 cPhs_State daHookshot_c::create() {
-    fopAcM_SetupActor(this, daHookshot_c);
+    fopAcM_ct(this, daHookshot_c);
     
     mShape.setUserArea(reinterpret_cast<u32>(this));
     mLinChk.ClrSttsRoofOff();

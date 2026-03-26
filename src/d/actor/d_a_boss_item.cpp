@@ -24,7 +24,7 @@ static BOOL daBossItem_Delete(bossitem_class* i_this) {
 /* 00000088-00000128       .text daBossItem_Create__FP10fopAc_ac_c */
 static cPhs_State daBossItem_Create(fopAc_ac_c* i_this) {
     bossitem_class* a_this = (bossitem_class*)i_this;
-    fopAcM_SetupActor(i_this, bossitem_class);
+    fopAcM_ct(i_this, bossitem_class);
 
     int stageNo = daBossItem_prm::getStage(a_this);
     BOOL isStageBossDead = dComIfGs_isStageBossEnemy(stageNo);

@@ -73,7 +73,7 @@ BOOL daObjNest::Act_c::Create() {
 
 /* 000001F0-000002E8       .text Mthd_Create__Q29daObjNest5Act_cFv */
 cPhs_State daObjNest::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjNest::Act_c);
+    fopAcM_ct(this, daObjNest::Act_c);
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {

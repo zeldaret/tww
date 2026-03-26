@@ -65,7 +65,7 @@ cPhs_State daObj_Pbco_c::CreateInit() {
 }
 
 cPhs_State daObj_Pbco_c::_create() {
-    fopAcM_SetupActor(this, daObj_Pbco_c);
+    fopAcM_ct(this, daObj_Pbco_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x10000)) {
