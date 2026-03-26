@@ -31,7 +31,7 @@ enum KOBOSS_HEAD_JOINT {
 
 static GXColor eff_col;
 static u8 hio_set;
-daBwds_HIO_c l_HIO;
+static daBwds_HIO_c l_HIO;
 
 /* 000000EC-00000144       .text __ct__12daBwds_HIO_cFv */
 daBwds_HIO_c::daBwds_HIO_c() {
@@ -46,7 +46,7 @@ daBwds_HIO_c::daBwds_HIO_c() {
 }
 
 /* 00000144-0000026C       .text anm_init__FP10bwds_classifUcfi */
-void anm_init(bwds_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed, int soundFileIdx) {
+static void anm_init(bwds_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed, int soundFileIdx) {
     if (soundFileIdx >= 0) {
         i_this->mpMorf->setAnm(
             (J3DAnmTransform*)dComIfG_getObjectRes("Bwds", bckFileIdx), loopMode, morf, speed, 0.0f, -1.0f, dComIfG_getObjectRes("Bwds", soundFileIdx)
@@ -58,7 +58,7 @@ void anm_init(bwds_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 spe
 }
 
 /* 0000026C-000002E8       .text body_draw__FP10bwds_class */
-void body_draw(bwds_class* i_this) {
+static void body_draw(bwds_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     J3DModel* model;
     for (s32 i = 0; i < 0xd - i_this->m04F0; i++) {
@@ -70,6 +70,7 @@ void body_draw(bwds_class* i_this) {
 
 /* 000002E8-000003E4       .text daBwds_Draw__FP10bwds_class */
 static BOOL daBwds_Draw(bwds_class* i_this) {
+    cXyz fake; // Fixes function order
     fopAc_ac_c* actor = &i_this->actor;
     J3DModel* model = i_this->mpMorf->getModel();
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, &actor->tevStr);
@@ -88,7 +89,7 @@ static BOOL daBwds_Draw(bwds_class* i_this) {
 }
 
 /* 00000420-00000B5C       .text body_control__FP10bwds_class */
-void body_control(bwds_class* i_this) {
+static void body_control(bwds_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
     f32 diff_x, diff_y, diff_z;
@@ -190,7 +191,7 @@ void body_control(bwds_class* i_this) {
 }
 
 /* 00000EDC-00001004       .text easy_bg_check2__FP10bwds_class */
-void easy_bg_check2(bwds_class* i_this) {
+static void easy_bg_check2(bwds_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz local_54;
 
@@ -211,7 +212,7 @@ void easy_bg_check2(bwds_class* i_this) {
 }
 
 /* 00001004-00001198       .text pos_move__FP10bwds_classs */
-void pos_move(bwds_class* i_this, s16 param_2) {
+static void pos_move(bwds_class* i_this, s16 param_2) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz local_2c;
     cXyz local_38;
@@ -230,7 +231,7 @@ void pos_move(bwds_class* i_this, s16 param_2) {
 }
 
 /* 00001198-000019CC       .text ug_move__FP10bwds_class */
-void ug_move(bwds_class* i_this) {
+static void ug_move(bwds_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     fopAc_ac_c* actor = &i_this->actor;
     cXyz local_34;
@@ -375,7 +376,7 @@ void ug_move(bwds_class* i_this) {
 }
 
 /* 000019CC-00001B38       .text hook_on__FP10bwds_class */
-void hook_on(bwds_class* i_this) {
+static void hook_on(bwds_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
@@ -402,7 +403,7 @@ void hook_on(bwds_class* i_this) {
 }
 
 /* 00001B38-00001DCC       .text hook_chance__FP10bwds_class */
-void hook_chance(bwds_class* i_this) {
+static void hook_chance(bwds_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     i_this->m0670[0].OnCoSetBit();
     switch (i_this->m02F8) {
@@ -452,14 +453,14 @@ void hook_chance(bwds_class* i_this) {
 }
 
 /* 00001DCC-00002178       .text fail__FP10bwds_class */
-void fail(bwds_class* i_this) {
+static void fail(bwds_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player = daPy_getPlayerActorClass();
 
     i_this->m031E = 3;
     i_this->m04F5 = 1;
     switch (i_this->m02F8) {
-    case 0:
+    case 0: {
         cXyz local_34;
         local_34.x = 0.0f;
         local_34.y = REG0_F(19) + 60.0f;
@@ -470,7 +471,7 @@ void fail(bwds_class* i_this) {
         MtxPosition(&local_34, &actor->speed);
         i_this->m02F8++;
         i_this->m0314[0] = REG0_S(4) + 10;
-        // FALL-THROUGH
+    } // FALL-THROUGH
     case 1:
         if (i_this->m0314[0] == 0) {
             i_this->m0314[0] = REG0_S(5) + 1;
@@ -483,7 +484,6 @@ void fail(bwds_class* i_this) {
             csXyz local_54(0, 0, 0);
             local_54.x = cM_rndF(65536.0f);
             local_54.y = cM_rndF(65536.0f);
-            // dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &local_40);
             dComIfGp_particle_set(dPa_name::ID_IT_SN_BWK_SIBOUBAKUEN00, &local_40, &local_54, &local_34);
             dComIfGp_particle_set(dPa_name::ID_IT_SN_BWK_SIBOUFLASH00, &local_40, &local_54, &local_34);
             i_this->m04F0++;
@@ -499,7 +499,6 @@ void fail(bwds_class* i_this) {
         }
         break;
     }
-
     actor->current.pos += actor->speed;
     actor->speed.y -= REG0_F(4) + 5.0f;
 
@@ -512,12 +511,11 @@ void fail(bwds_class* i_this) {
         actor->current.angle.y = cM_atan2s(actor->speed.x, actor->speed.z);
         actor->current.angle.x = -cM_atan2s(actor->speed.y, std::sqrtf(actor->speed.x * actor->speed.x + actor->speed.z * actor->speed.z));
     }
-
     return;
 }
 
 /* 000021B4-0000245C       .text damage_check__FP10bwds_class */
-void damage_check(bwds_class* i_this) {
+static void damage_check(bwds_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* player = daPy_getPlayerActorClass();
     CcAtInfo local_2c;
@@ -569,7 +567,7 @@ void damage_check(bwds_class* i_this) {
 }
 
 /* 0000245C-00002590       .text move__FP10bwds_class */
-void move(bwds_class* i_this) {
+static void move(bwds_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz local_1c;
     cXyz cStack_28;
@@ -822,7 +820,7 @@ static BOOL daBwds_Execute(bwds_class* i_this) {
 }
 
 /* 000031B4-000031BC       .text daBwds_IsDelete__FP10bwds_class */
-static BOOL daBwds_IsDelete(bwds_class* i_this) {
+static BOOL daBwds_IsDelete(bwds_class*) {
     return TRUE;
 }
 
@@ -861,24 +859,25 @@ static u16 body_bdl[] = {
     BWDS_BDL_KOBOSS_BODY,
     BWDS_BDL_KOBOSS_SHIPPO,
 };
-static u32 s_bdl[] = {
-    BWD_BDL_GSP00,
-    BWD_BDL_GSP01,
-};
-static u32 s_btk[] = {
-    BWD_BTK_GSP00,
-    BWD_BTK_GSP01,
-};
-static u32 s_brk[] = {
-    BWD_BRK_GSP00,
-    BWD_BRK_GSP01,
-};
-static u32 s_bck[] = {
-    BWD_BCK_GSP00,
-    BWD_BCK_GSP01,
-};
+
 /* 00003278-00003634       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_actor) {
+    static u32 s_bdl[] = {
+        BWD_BDL_GSP00,
+        BWD_BDL_GSP01,
+    };
+    static u32 s_btk[] = {
+        BWD_BTK_GSP00,
+        BWD_BTK_GSP01,
+    };
+    static u32 s_brk[] = {
+        BWD_BRK_GSP00,
+        BWD_BRK_GSP01,
+    };
+    static u32 s_bck[] = {
+        BWD_BCK_GSP00,
+        BWD_BCK_GSP01,
+    };
     J3DModelData* modelData;
     J3DModel* model;
     bwds_class* i_this = (bwds_class*)i_actor;
