@@ -14,7 +14,10 @@ public:
     void alphaChange(fopMsgM_pane_class*, float) {}
     virtual void draw() {}
     void setArchive(JKRArchive*) {}
-    void setFont(JUTFont*, JUTFont*) {}
+    void setFont(JUTFont* font, JUTFont* rfont) {
+        mFont = font;
+        mRFont = rfont;
+    }
     void setItemTexBuffer(int, void*) {}
     void setTextArea(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
         name[0] = name0;
@@ -63,7 +66,10 @@ public:
 public:
     /* 0x0004 */ u8 field_0x0004[0x972 - 0x4];
     /* 0x0972 */ s16 field_0x0972;
-    /* 0x0974 */ u8 field_0x0974[0x14B4 - 0x974];
+    /* 0x0974 */ u8 field_0x0974[0x14A8 - 0x974];
+    /* 0x14A8 */ JUTFont* mFont;
+    /* 0x14AC */ JUTFont* mRFont;
+    /* 0x14B0 */ u8 field_0x14B0[0x14B4 - 0x14B0];
     /* 0x14B4 */ JUtility::TColor color_0x14B4;
     /* 0x14B8 */ JUtility::TColor color_0x14B8;
     /* 0x14BC */ JUtility::TColor color_0x14BC;
