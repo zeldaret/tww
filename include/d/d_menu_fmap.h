@@ -201,7 +201,7 @@ public:
         field_0x6 = -10;
         field_0x7 = -10;
         field_0x8 = 0;
-        field_0x9 = 1;
+        field_0x9 = -1;
         field_0xA = -10;
         field_0xB = -10;
     }
