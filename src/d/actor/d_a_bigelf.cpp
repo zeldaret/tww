@@ -47,13 +47,56 @@ void daBigelf_c::oct_delete() {
 }
 
 /* 0000016C-00000338       .text nodeCallBack__10daBigelf_cFP7J3DNode */
-void daBigelf_c::nodeCallBack(J3DNode*) {
-    /* Nonmatching */
+BOOL daBigelf_c::nodeCallBack(J3DNode* node) {
+    cXyz relPos, absPos;
+    J3DModel* model = j3dSys.getModel();
+    u16 jntNo = static_cast<J3DJoint*>(node)->getJntNo();
+    
+    
+    cMtx_copy(model->getAnmMtx(jntNo), *calc_mtx);
+    if(jntNo == this->m_jnt.mHeadJntNum){
+        s16 target;
+        if(this->m3BC == 0)
+            target = this->m_jnt.mAngles[0][0];
+        else
+            target = 0;
+
+        cLib_addCalcAngleS(&this->m350, target, 8, 0x400, 0x100);
+        mDoMtx_ZrotM(*calc_mtx, -this->m350);
+        
+        
+
+        relPos.set(0,0,0);
+        MtxPosition(&relPos, &absPos);
+        //attentionPos = absPos;
+        this->setAttentionBasePos(absPos);
+
+        relPos.set(20,-20,0);
+        MtxPosition(&relPos, &absPos);
+        setEyePos(absPos);
+
+        if(this->m337 != 255)
+            this->m337++;
+    }
+    else if(jntNo != this->m_jnt.mBackboneJntNum && jntNo == this->m_fl_jnt){
+        relPos.set(0,0,0);
+        MtxPosition(&relPos, &this->m3D0);
+    }
+
+    cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
+    model->setAnmMtx(jntNo, *calc_mtx);
+
+    return TRUE;
 }
 
 /* 00000338-00000384       .text nodeCallBack_Bigelf__FP7J3DNodei */
-static BOOL nodeCallBack_Bigelf(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_Bigelf(J3DNode* node, int calcTiming) {
+    if(calcTiming == 0 && j3dSys.getModel()->getUserArea() != 0){
+        daBigelf_c* i_this = ((daBigelf_c*)j3dSys.getModel()->getUserArea());
+        i_this->nodeCallBack(node);
+    }
+
+    return TRUE;
 }
 
 /* 00000384-00000438       .text lightInit__10daBigelf_cFP4cXyz */
@@ -993,7 +1036,7 @@ bool daBigelf_c::oct() {
         else {
             fopAc_ac_c* actLink = dComIfGp_getLinkPlayer();
             this->m3BD = 1;
-            this->mArrivalEvtID = dComIfGp_evmng_getEventIdx("BIGELF_ARRIVAL_2");
+            this->mArrivalEvtID = dComIfGp_evmng_getEventIdx("BIGELF_ARRIVAL2");
             fopAcM_orderChangeEventId(this, actLink, this->mArrivalEvtID, 0, 0xffff);
             this->m3AC = 30;
             this->setFlag(BIGELF_STATE_UNK6);

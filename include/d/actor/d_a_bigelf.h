@@ -32,19 +32,29 @@ public:
     void clrFlag(u16 mask) {
         this->mStateBits &= ~mask; 
     }
-    void getBackboneJntNum() {}
-    void getHeadJntNum() {}
-    void getHead_x() {}
+    s8 getBackboneJntNum() {
+        return this->m_jnt.getBackboneJntNum();
+    }
+    s8 getHeadJntNum() {
+        return this->m_jnt.getHeadJntNum();
+    }
+    s16 getHead_x() {
+        return this->m_jnt.getHead_x();
+    }
     void incAttnSetCount() {}
-    void setAction(ActionFunc, void*) {}
-    void setAttentionBasePos(cXyz) {}
-    void setEyePos(cXyz) {}
+    void setAction(ActionFunc,void*) {}
+    void setAttentionBasePos(cXyz pos) {
+        this->mCurrentPos = pos;
+    }
+    void setEyePos(cXyz pos) {
+        this->mUnkPos = pos; // EyePos already exist in fopAc_ac_c
+    }
     void setFlag(u16 mask) {
         this->mStateBits |= mask;
     }
 
     void oct_delete();
-    void nodeCallBack(J3DNode*);
+    BOOL nodeCallBack(J3DNode*);
     void lightInit(cXyz*);
     void lightEnd();
     void lightProc();
@@ -131,7 +141,7 @@ public:
     /* 0x347 */ u8 m347[0x348 - 0x347];
     /* 0x348 */ u32 mCurrentMessageId;
     /* 0x34C */ fpc_ProcID mFairyActorID;
-    /* 0x350 */ u8 m350[0x352 - 0x350];
+    /* 0x350 */ s16 m350;
     /* 0x352 */ bool mIsLightShining;
     /* 0x353 */ u8 m353[0x354 - 0x353];
     /* 0x354 */ LIGHT_INFLUENCE mLightInfluence;
