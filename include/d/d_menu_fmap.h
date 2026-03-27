@@ -191,6 +191,22 @@ public:
 
 class dMenu_FmapSv_c {
 public:
+    dMenu_FmapSv_c() {
+        field_0x0 = 0;
+        field_0x1 = 0;
+        field_0x2 = -10;
+        field_0x3 = -10;
+        field_0x4 = -10;
+        field_0x5 = -10;
+        field_0x6 = -10;
+        field_0x7 = -10;
+        field_0x8 = 0;
+        field_0x9 = 1;
+        field_0xA = -10;
+        field_0xB = -10;
+    }
+
+public:
     /* 0x0 */ s8 field_0x0;
     /* 0x1 */ s8 field_0x1;
     /* 0x2 */ s8 field_0x2;
