@@ -38,7 +38,7 @@ public:
     void setCtZoomGridX(signed char) {}
     void setCtZoomGridY(signed char) {}
     void setFont(JUTFont*, JUTFont*) {}
-    void setSvPtr(dMenu_FmapSv_c*) {}
+    void setSvPtr(dMenu_FmapSv_c* i_ptr) { mSvPtr = i_ptr; }
     void setTextArea_New(char*, char*, char*, char*, char*, char*) {}
     void stopWrapBackEmitter() {}
     void stopWrapSpotEmitter(int) {}
