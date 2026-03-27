@@ -317,12 +317,12 @@ void dMs_item_create(sub_ms_screen_class* i_Ms) {
     dMi_c->mRFont = rfonttype;
 
     // FIXME
-    dMi_c->name0 = i_Ms->name[0];
-    dMi_c->name1 = i_Ms->name[1];
-    dMi_c->note0 = i_Ms->note[0];
-    dMi_c->note1 = i_Ms->note[1];
-    dMi_c->dummy0 = i_Ms->dummy[0];
-    dMi_c->dummy1 = i_Ms->dummy[1];
+    dMi_c->name[0] = i_Ms->name[0];
+    dMi_c->name[1] = i_Ms->name[1];
+    dMi_c->note[0] = i_Ms->note[0];
+    dMi_c->note[1] = i_Ms->note[1];
+    dMi_c->dummy[0] = i_Ms->dummy[0];
+    dMi_c->dummy[1] = i_Ms->dummy[1];
 
     dMi_c->field_0x23FF = g_dComIfG_gameInfo.play.field_0x4943;
 
@@ -335,7 +335,6 @@ void dMs_item_create(sub_ms_screen_class* i_Ms) {
     }
 
     lockFlag = 0;
-    // TODO: init dMi_c
 }
 
 /* 801DB91C-801DBA58       .text dMs_item_delete__FP19sub_ms_screen_class */

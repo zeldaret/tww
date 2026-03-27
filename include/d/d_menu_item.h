@@ -90,12 +90,9 @@ public:
     /* 0x2388 */ u8 padding_0x2388[0x2394 - 0x2388];
     /* 0x2394 */ void* arr_0x2394[9];
     /* 0x23B8 */ u8 padding_0x23B8[0x23E0 - 0x23B8];
-    /* 0x23E0 */ char* name0;
-    /* 0x23E4 */ char* name1;
-    /* 0x23E8 */ char* note0;
-    /* 0x23EC */ char* note1;
-    /* 0x23F0 */ char* dummy0;
-    /* 0x23F4 */ char* dummy1;
+    /* 0x23E0 */ char* name[2];
+    /* 0x23E8 */ char* note[2];
+    /* 0x23F0 */ char* dummy[2];
     /* 0x23F8 */ u16 field_0x23F8;
     /* 0x23FA */ u8 field_0x23FA[0x23FE - 0x23FA];
     /* 0x23FE */ u8 mItemMode;
