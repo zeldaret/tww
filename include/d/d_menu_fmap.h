@@ -12,6 +12,12 @@ class dMenu_FmapSv_c;
 struct cursorTable_t;
 struct aramCmapDatPat_t;
 
+class dDlst_FMAP_c : public dDlst_base_c {
+public:
+    virtual ~dDlst_FMAP_c() {}
+    virtual void draw();
+};
+
 class dMenu_Fmap_c {
 public:
     virtual ~dMenu_Fmap_c() {}
@@ -174,7 +180,9 @@ public:
     u8 getButtonIconMode();
 
 public:
-    /* 0x0004 */ u8 padding_0x4[0x24 - 0x4];
+    /* 0x0004 */ u8 padding_0x4[0x1C - 0x4];
+    /* 0x001C */ dDlst_FMAP_c mDlst;
+    /* 0x0020 */ u8 padding_0x20[0x24 - 0x20];
     /* 0x0024 */ dMenu_Fmap2_c mFmap2;
     // TODO
     /* 0x2874 */ u8 padding_0x2874[0x2878 - 0x2874];
@@ -183,11 +191,6 @@ public:
 }; // Size: 0x51B4
 
 STATIC_ASSERT(sizeof(dMenu_Fmap_c) == 0x51B4);
-
-class dDlst_FMAP_c {
-public:
-    void draw();
-};
 
 class dMf_HIO_c {
 public:
