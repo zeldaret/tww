@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bigelf.h"
+#include "d/actor/d_a_npc_fa1.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -14,8 +15,8 @@ fpc_ProcID l_msgId;
 msg_class* l_msg;
 
 const u32 l_bck_ix_tbl[4] = {8,6,7,6};
-const u16 pa_name_flower[] = {0x834F, 0x8351, 0x8353, 0x8355};
-const u16 pa_name_flower2[] = {0x8350, 0x8352, 0x8354, 0x8356};
+const u16 pa_name_flower[] = {dPa_name::ID_SCENE_834F, dPa_name::ID_SCENE_8351, dPa_name::ID_SCENE_8353, dPa_name::ID_SCENE_8355};
+const u16 pa_name_flower2[] = {dPa_name::ID_SCENE_8350, dPa_name::ID_SCENE_8352, dPa_name::ID_SCENE_8354, dPa_name::ID_SCENE_8356};
 
 /* 00000078-0000016C       .text oct_delete__10daBigelf_cFv */
 void daBigelf_c::oct_delete() {
@@ -331,7 +332,7 @@ void daBigelf_c::demoInitExit() {
     scale.set(1,1,1);
     pos = current.pos;
     pos.y += this->mHeightOffset;
-    dComIfGp_particle_set(0x272, &pos, NULL, &scale);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_LIGHT_EXPLOSION, &pos, NULL, &scale);
     this->tevStr.mFogColor.b = 0xFF;
     this->tevStr.mFogColor.g = 0xFF;
     this->tevStr.mFogColor.r = 0xFF;
@@ -397,52 +398,223 @@ BOOL daBigelf_c::demoProcTalk() {
 
 /* 00001418-0000163C       .text demoInitAppear__10daBigelf_cFv */
 void daBigelf_c::demoInitAppear() {
-    /* Nonmatching */
+    static u16 p_name0[] = {dPa_name::ID_SCENE_8347, dPa_name::ID_SCENE_8349, dPa_name::ID_SCENE_834B, dPa_name::ID_SCENE_834D};
+    static u16 p_name1[] = {dPa_name::ID_SCENE_8348, dPa_name::ID_SCENE_834A, dPa_name::ID_SCENE_834C, dPa_name::ID_SCENE_834E};
+
+    fopAc_ac_c* pFairyActor = fopAcM_SearchByID(this->mFairyActorID);
+    if(pFairyActor != NULL){
+        dComIfGp_event_setTalkPartner(this);
+        fopAcM_delete(pFairyActor);
+    }
+
+    cXyz particlePos;
+    particlePos = this->current.pos;
+    particlePos.y += 70.f;
+
+    dComIfGp_getVibration().StartShock(5, -33, cXyz(0,1,0));
+    dComIfGp_particle_set(p_name0[this->iBrkFrame], &particlePos, NULL, &this->scale);
+    dComIfGp_particle_set(p_name1[this->iBrkFrame], &particlePos, NULL, &this->scale);
+
+    if(this->getType() == 6)
+        this->iAttCnt = 15;
+    this->m3DC = 15;
+    this->mBlend = 0.5;
+    
+    if(this->getType() == 6){
+        fopAcM_seStart(this, JA_SE_CM_DY_ENTER_DO, 0);
+        mDoAud_bgmStart(0x80000053);
+    }
+
+    this->setFlag(BIGELF_STATE_UNK8);
 }
 
 /* 0000163C-000017B4       .text demoProcAppear__10daBigelf_cFv */
-void daBigelf_c::demoProcAppear() {
-    /* Nonmatching */
+BOOL daBigelf_c::demoProcAppear() {
+    if(this->m3DC != 0){
+        this->m3DC--;
+        if(this->m3DC == 0){
+            this->clrFlag(BIGELF_STATE_UNK1);
+            this->setAnm(1);
+            if(this->m3CC == NULL)
+                this->m3CC = dComIfGp_particle_set(dPa_name::ID_SCENE_8346, &this->current.pos);
+        }
+
+        return TRUE;
+    }
+    
+    if (this->chkFlag(BIGELF_STATE_UNK8) && this->mpBckAnimator->getFrame() >= 87.f){
+        this->clrFlag(BIGELF_STATE_UNK8);
+        fopAcM_seStart(this, JA_SE_CV_DY_ENTER, 0);
+    }
+
+    if(this->m336 != 0){
+        this->setAnm(0);
+        dComIfGp_evmng_cutEnd(this->mStaffId);
+    }
+
+    this->scale.set(this->scale.x, this->scale.x, this->scale.x);
+
+    return TRUE;
 }
 
 /* 000017B4-00001848       .text demoInitFa1__10daBigelf_cFv */
 void daBigelf_c::demoInitFa1() {
-    /* Nonmatching */
+    daNpc_Fa1_c* paFairy = static_cast<daNpc_Fa1_c*>(fopAcM_SearchByID(this->mFairyActorID));
+    if(paFairy != NULL){
+        paFairy->init_bigelf_change();
+        fopAcM_seStart(this, JA_SE_CM_DY_ENTER, 0);
+    }
 }
 
 /* 00001848-000018D4       .text demoProcFa1__10daBigelf_cFv */
-void daBigelf_c::demoProcFa1() {
-    /* Nonmatching */
+BOOL daBigelf_c::demoProcFa1() {
+    fopAc_ac_c* paFairy = fopAcM_SearchByID(this->mFairyActorID);
+    if(paFairy != NULL)
+        cLib_addCalc2(&paFairy->current.pos.y, this->current.pos.y + 70.f, 0.2f, 100.f);
+
+    dComIfGp_evmng_cutEnd(this->mStaffId);
+
+    return TRUE;
 }
 
 /* 000018D4-00001948       .text demoInitWait__10daBigelf_cFv */
 void daBigelf_c::demoInitWait() {
-    /* Nonmatching */
+    int* pTimer = dComIfGp_evmng_getMyIntegerP(this->mStaffId, "Timer");
+    if(pTimer != NULL)
+        this->m3C0 = *pTimer;
+    else 
+        this->m3C0 = 0;
+
+    this->setAnm(0);
 }
 
 /* 00001948-00001998       .text demoProcWait__10daBigelf_cFv */
-void daBigelf_c::demoProcWait() {
-    /* Nonmatching */
+BOOL daBigelf_c::demoProcWait() {
+    if(this->m3C0 > 0)
+        this->m3C0--;
+    else 
+        dComIfGp_evmng_cutEnd(this->mStaffId);
+
+    return FALSE;
 }
 
 /* 00001998-00001A74       .text demoInitCom__10daBigelf_cFv */
 void daBigelf_c::demoInitCom() {
-    /* Nonmatching */
+    this->setFlag(BIGELF_STATE_UNK0);
+
+    if(dComIfGp_evmng_getMyIntegerP(this->mStaffId, "Ship") != NULL){
+
+        daShip_c* pShip = dComIfGp_getShipActor();
+        cXyz absShipPos, relShipPos;
+
+        if(pShip != NULL){       
+            relShipPos.set(0,0,800);
+            fpoAcM_absolutePos(this, &relShipPos, &absShipPos);
+            absShipPos.y = pShip->current.pos.y;
+            s16 shipAngle = cLib_targetAngleY(&this->current.pos, &absShipPos);
+            shipAngle += 0x4000;
+            pShip->initStartPos(&absShipPos, shipAngle);
+        }
+        this->setFlag(BIGELF_STATE_UNK5);
+    }
 }
 
 /* 00001A74-00001ACC       .text demoProcCom__10daBigelf_cFv */
 void daBigelf_c::demoProcCom() {
-    /* Nonmatching */
+    if(this->getType() != 6)
+        dKy_custom_colset(4, 0, this->mBlend);
+
+    this->lightProc();
+    this->darkProc();
 }
 
 /* 00001ACC-00001B14       .text getNowEventAction__10daBigelf_cFv */
-void daBigelf_c::getNowEventAction() {
+int daBigelf_c::getNowEventAction() {
     /* Nonmatching */
 }
 
 /* 00001B14-00001CCC       .text demoProc__10daBigelf_cFv */
 void daBigelf_c::demoProc() {
-    /* Nonmatching */
+    int iEvent = this->getNowEventAction();
+
+    if(dComIfGp_evmng_getIsAddvance(this->mStaffId)){
+        demoInitCom();
+        switch(iEvent) {
+            case 0:
+                demoInitWait();
+                break;
+            case 1:
+                demoInitFa1();
+                break;
+            case 2:
+                demoInitAppear();
+                break;
+            case 3:
+                demoInitTalk();
+                break;
+            case 4:
+                demoInitExit();
+                break;
+            case 5:
+                demoInitFlDemo();
+                break;
+            case 6:
+                demoInitFlLink();
+                break;
+            case 7:
+                demoInitFlDelete();
+                break;
+            case 8:
+                demoInitFlDmBf();
+                break;
+            case 9:
+                demoInitFlDmMd();
+                break;
+            case 10:
+                demoInitFlDmAf();
+                break;
+            }
+    }
+    switch(iEvent){
+    case 0:
+        demoProcWait();
+        break;
+    case 1:
+        demoProcFa1();
+        break;
+    case 2:
+        demoProcAppear();
+        break;
+    case 3:
+        demoProcTalk();
+        break;
+    case 4:
+        demoProcExit();
+        break;
+    case 5:
+        demoProcFlDemo();
+        break;
+    case 6:
+        demoProcFlLink();
+        break;
+    case 7:
+        demoProcFlDelete();
+        break;
+    case 8:
+        demoProcFlDmBf();
+        break;
+    case 9:
+        demoProcFlDmMd();
+        break;
+    case 10:
+        demoProcFlDmAf();
+        break;
+    default:
+        dComIfGp_evmng_cutEnd(this->mStaffId);
+        break;
+    }
+
+    demoProcCom();
 }
 
 /* 00001CCC-00001CD8       .text getType__10daBigelf_cFv */
@@ -810,7 +982,7 @@ bool daBigelf_c::ready0() {
     if(this->eventInfo.checkCommandDemoAccrpt()){
         this->m3BD = 2;
         this->mStaffId = dComIfGp_evmng_getMyStaffId("BigElf");
-        this->m3A8 = 1.0f;
+        this->mBlend = 1.0f;
         demoProc();
     }
     else {

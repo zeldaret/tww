@@ -68,14 +68,14 @@ public:
     void demoInitTalk();
     BOOL demoProcTalk();
     void demoInitAppear();
-    void demoProcAppear();
+    BOOL demoProcAppear();
     void demoInitFa1();
-    void demoProcFa1();
+    BOOL demoProcFa1();
     void demoInitWait();
-    void demoProcWait();
+    BOOL demoProcWait();
     void demoInitCom();
     void demoProcCom();
-    void getNowEventAction();
+    int getNowEventAction();
     void demoProc();
     u8 getType();
     u8 getSwbit();
@@ -143,7 +143,7 @@ public:
     /* 0x39C */ u8 bIsDark;
     /* 0x3A0 */ f32 m3A0;
     /* 0x3A4 */ f32 m3A4;
-    /* 0x3A8 */ f32 m3A8;
+    /* 0x3A8 */ f32 mBlend;
     /* 0x3AC */ s16 m3AC;
     /* 0x3B0 */ ActionFunc mCurrentStateFunc;
     /* 0x3BC */ s8 m3BC;
