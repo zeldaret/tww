@@ -13,7 +13,7 @@ class dMenu_Dmap_c : public dMenu_base_c {
 public:
     void alphaChange(fopMsgM_pane_class*, float) {}
     virtual void draw() {}
-    void setArchive(JKRArchive*) {}
+    void setArchive(JKRArchive* arc) { mpArc = arc; }
     void setFont(JUTFont* font, JUTFont* rfont) {
         mFont = font;
         mRFont = rfont;
@@ -66,7 +66,8 @@ public:
 public:
     /* 0x0004 */ u8 field_0x0004[0x972 - 0x4];
     /* 0x0972 */ s16 field_0x0972;
-    /* 0x0974 */ u8 field_0x0974[0x14A8 - 0x974];
+    /* 0x0974 */ u8 field_0x0974[0x14A4 - 0x974];
+    /* 0x14A4 */ JKRArchive* mpArc;
     /* 0x14A8 */ JUTFont* mFont;
     /* 0x14AC */ JUTFont* mRFont;
     /* 0x14B0 */ u8 field_0x14B0[0x14B4 - 0x14B0];
