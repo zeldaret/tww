@@ -1272,8 +1272,8 @@ static cPhs_State dMs_Create(msg_class* i_this) {
 
     g_dComIfG_gameInfo.play.offHeapLockFlag();
 
-    if (g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getTimer() != 0) {
-        g_dComIfG_gameInfo.play.mFwaterTimer = 1;
+    if (dComIfGs_getFwaterTimer() != 0) {
+        dComIfGs_startFwaterTimer();
     }
 
     dMenu_setMenuStatus(1);
