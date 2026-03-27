@@ -177,7 +177,12 @@ public:
     /* 0x0004 */ u8 padding_0x4[0x24 - 0x4];
     /* 0x0024 */ dMenu_Fmap2_c mFmap2;
     // TODO
+    /* 0x2874 */ u8 padding_0x2874[0x2878 - 0x2874];
+    /* 0x2878 */ dMenu_FmapSv_c* mSvPtr;
+    /* 0x287C */ u8 padding_0x287C[0x51B4 - 0x287C];
 }; // Size: 0x51B4
+
+STATIC_ASSERT(sizeof(dMenu_Fmap_c) == 0x51B4);
 
 class dDlst_FMAP_c {
 public:
