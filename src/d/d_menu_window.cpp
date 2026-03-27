@@ -276,7 +276,6 @@ static u8 lockFlag = 0;
 
 /* 801DB568-801DB91C       .text dMs_item_create__FP19sub_ms_screen_class */
 void dMs_item_create(sub_ms_screen_class* i_Ms) {
-    /* Nonmatching */
     i_Ms->arc = dComIfGp_getItemResArchive();
 
     for (int i = 0; i < 2; i++) {
@@ -312,17 +311,9 @@ void dMs_item_create(sub_ms_screen_class* i_Ms) {
         dMi_c->arr_0x2394[i] = i_Ms->buffer_p[i + 24];
     }
 
-    dMi_c->mpArc = i_Ms->arc;
-    dMi_c->mFont = fonttype;
-    dMi_c->mRFont = rfonttype;
-
-    // FIXME
-    dMi_c->name[0] = i_Ms->name[0];
-    dMi_c->name[1] = i_Ms->name[1];
-    dMi_c->note[0] = i_Ms->note[0];
-    dMi_c->note[1] = i_Ms->note[1];
-    dMi_c->dummy[0] = i_Ms->dummy[0];
-    dMi_c->dummy[1] = i_Ms->dummy[1];
+    dMi_c->setArchive(i_Ms->arc);
+    dMi_c->setFont(fonttype, rfonttype);
+    dMi_c->setTextArea(i_Ms->name[0], i_Ms->name[1], i_Ms->note[0], i_Ms->note[1], i_Ms->dummy[0], i_Ms->dummy[1]);
 
     dMi_c->field_0x23FF = g_dComIfG_gameInfo.play.field_0x4943;
 
