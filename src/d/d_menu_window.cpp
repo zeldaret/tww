@@ -342,7 +342,15 @@ void dMs_dmap_delete(sub_ms_screen_class*) {
 
 /* 801DCC80-801DCDA0       .text dMs_name_create__FP19sub_ms_screen_class */
 void dMs_name_create(sub_ms_screen_class*) {
-    /* Nonmatching */
+    dComIfGp_setHeapLockFlag(10);
+
+    dNm_c = new dName_c();
+    JUT_ASSERT(2569, dNm_c != NULL);
+
+    dNm_c->_create();
+
+    dMs_capture_c = new dDlst_MENU_CAPTURE_c();
+    JUT_ASSERT(2573, dMs_capture_c != NULL);
 }
 
 /* 801DCDA0-801DCE20       .text dMs_name_delete__FP19sub_ms_screen_class */
