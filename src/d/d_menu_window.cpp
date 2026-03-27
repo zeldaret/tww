@@ -97,6 +97,9 @@ static dMenu_save_c* dMs_c;
 
 static s8 event_wait_frame;
 
+static void dMs_onButtonBit(sub_ms_screen_class* i_Ms, u8 i_Bit);
+static void dMs_offButtonBit(sub_ms_screen_class* i_Ms, u8 i_Bit);
+
 void dDlst_MENU_CAPTURE_c::draw() {
     if (mStatus == 1) {
         mStatus = 2;
@@ -269,6 +272,8 @@ dMw_DHIO_c::dMw_DHIO_c() {
     }
 }
 
+static u8 lockFlag = 0;
+
 /* 801DB568-801DB91C       .text dMs_item_create__FP19sub_ms_screen_class */
 void dMs_item_create(sub_ms_screen_class* i_Ms) {
     /* Nonmatching */
@@ -297,6 +302,39 @@ void dMs_item_create(sub_ms_screen_class* i_Ms) {
     }
 
     dMi_c = new dMenu_Item_c();
+    JUT_ASSERT(1962, dMi_c != NULL);
+
+    for (int i = 0; i < 21; i++) {
+        dMi_c->arr_0x2334[i] = i_Ms->buffer_p[i];
+    }
+
+    for (int i = 0; i < 9; i++) {
+        dMi_c->arr_0x2394[i] = i_Ms->buffer_p[i + 24];
+    }
+
+    dMi_c->mpArc = i_Ms->arc;
+    dMi_c->mFont = fonttype;
+    dMi_c->mRFont = rfonttype;
+
+    // FIXME
+    dMi_c->name0 = i_Ms->name[0];
+    dMi_c->name1 = i_Ms->name[1];
+    dMi_c->note0 = i_Ms->note[0];
+    dMi_c->note1 = i_Ms->note[1];
+    dMi_c->dummy0 = i_Ms->dummy[0];
+    dMi_c->dummy1 = i_Ms->dummy[1];
+
+    dMi_c->field_0x23FF = g_dComIfG_gameInfo.play.field_0x4943;
+
+    dMi_c->_create();
+
+    if (mDoCPd_L_LOCK_BUTTON(0)) {
+        dMs_onButtonBit(i_Ms, 1);
+    } else if (mDoCPd_R_LOCK_BUTTON(0)) {
+        dMs_onButtonBit(i_Ms, 2);
+    }
+
+    lockFlag = 0;
     // TODO: init dMi_c
 }
 

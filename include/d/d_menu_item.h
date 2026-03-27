@@ -76,20 +76,37 @@ public:
     bool _close2();
 
 public:
-    /* 0x0004 */ u8 field_0x0004[0x2320 - 0x4];
+    /* 0x0004 */ u8 field_0x0004[0x2310 - 0x4];
+    /* 0x2310 */ JKRArchive* mpArc;
+    /* 0x2314 */ JUTFont* mFont;
+    /* 0x2318 */ JUTFont* mRFont;
+    /* 0x231C */ u8 padding_0x231C[0x2320 - 0x231C];
     /* 0x2320 */ JUtility::TColor color_0x2320;
     /* 0x2324 */ JUtility::TColor color_0x2324;
     /* 0x2328 */ JUtility::TColor color_0x2328;
     /* 0x232C */ JUtility::TColor color_0x232C;
-    /* 0x2330 */ u8 field_0x2330[0x23F8 - 0x2330];
+    /* 0x2330 */ u8 field_0x2330[0x2334 - 0x2330];
+    /* 0x2334 */ void* arr_0x2334[21];
+    /* 0x2388 */ u8 padding_0x2388[0x2394 - 0x2388];
+    /* 0x2394 */ void* arr_0x2394[9];
+    /* 0x23B8 */ u8 padding_0x23B8[0x23E0 - 0x23B8];
+    /* 0x23E0 */ char* name0;
+    /* 0x23E4 */ char* name1;
+    /* 0x23E8 */ char* note0;
+    /* 0x23EC */ char* note1;
+    /* 0x23F0 */ char* dummy0;
+    /* 0x23F4 */ char* dummy1;
     /* 0x23F8 */ u16 field_0x23F8;
     /* 0x23FA */ u8 field_0x23FA[0x23FE - 0x23FA];
     /* 0x23FE */ u8 mItemMode;
-    /* 0x23FF */ u8 field_0x23FF[0x2421 - 0x23FF];
+    /* 0x23FF */ u8 field_0x23FF;
+    /* 0x2400 */ u8 padding_0x2400[0x2421 - 0x2400];
     /* 0x2421 */ u8 field_0x2421;
     /* 0x2422 */ u8 field_0x2422;
     /* 0x2423 */ u8 field_0x2423;
 }; // Size: 0x2424
+
+STATIC_ASSERT(sizeof(dMenu_Item_c) == 0x2424);
 
 class dMi_HIO_c : public JORReflexible {
 public:
