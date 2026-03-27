@@ -1267,7 +1267,7 @@ static cPhs_State dMs_Create(msg_class* i_this) {
     g_dComIfG_gameInfo.play.mNameOpen = 0;
 
     i_Ms->mButtonsPressed = 0;
-    i_Ms->mMsgID = -1;
+    i_Ms->mMsgID = fpcM_ERROR_PROCESS_ID_e;
     i_Ms->field_0x1B0 = 0;
 
     g_dComIfG_gameInfo.play.offHeapLockFlag();
