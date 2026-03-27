@@ -15,12 +15,22 @@ public:
     virtual void draw() {}
     void getItemMode() {}
     void getNowItem() {}
-    void setArchive(JKRArchive*) {}
-    void setFont(JUTFont*, JUTFont*) {}
+    void setArchive(JKRArchive* arc) { mpArc = arc; }
+    void setFont(JUTFont* font, JUTFont* rfont) {
+        mFont = font;
+        mRFont = rfont;
+    }
     void setItemTexBuffer(int, void*) {}
     void setNowItem(unsigned char) {}
     void setSubItemTexBuffer(int, void*) {}
-    void setTextArea(char*, char*, char*, char*, char*, char*) {}
+    void setTextArea(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
+        name[0] = name0;
+        name[1] = name1;
+        note[0] = note0;
+        note[1] = note1;
+        dummy[0] = dummy0;
+        dummy[1] = dummy1;
+    }
     void setTimer(short) {}
     void setTriggerInfo(unsigned char) {}
 
