@@ -43,7 +43,10 @@ public:
     void setCtFmapZoom(unsigned char) {}
     void setCtZoomGridX(signed char) {}
     void setCtZoomGridY(signed char) {}
-    void setFont(JUTFont*, JUTFont*) {}
+    void setFont(JUTFont* font, JUTFont* rfont) {
+        mFont = font;
+        mRFont = rfont;
+    }
     void setSvPtr(dMenu_FmapSv_c* i_ptr) { mSvPtr = i_ptr; }
     void setTextArea_New(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
         name[0] = name0;
@@ -194,7 +197,10 @@ public:
     // TODO
     /* 0x2874 */ u8 padding_0x2874[0x2878 - 0x2874];
     /* 0x2878 */ dMenu_FmapSv_c* mSvPtr;
-    /* 0x287C */ u8 padding_0x287C[0x5148 - 0x287C];
+    /* 0x287C */ u8 padding_0x287C[0x50D0 - 0x287C];
+    /* 0x50D0 */ JUTFont* mFont;
+    /* 0x50D4 */ JUTFont* mRFont;
+    /* 0x50D8 */ u8 padding_0x50D8[0x5148 - 0x50D8];
     /* 0x5148 */ char* name[2];
     /* 0x5150 */ char* note[2];
     /* 0x5158 */ char* dummy[2];
