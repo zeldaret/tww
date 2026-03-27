@@ -151,8 +151,8 @@ void dMenu_Collect_c::screenSet() {
 
     if (m820.mUserArea > 180) m820.mUserArea -= 360;
 
-    ((J2DTextBox*)(m740).pane)->setFont(m2474);
-    ((J2DTextBox*)(m778).pane)->setFont(m2470);
+    ((J2DTextBox*)(m740).pane)->setFont(mRFont);
+    ((J2DTextBox*)(m778).pane)->setFont(mFont);
 
     // Couple of functions missing here
     ((J2DTextBox*)(m740).pane)->setWhite(0xFFFFFFFF);
@@ -165,15 +165,15 @@ void dMenu_Collect_c::screenSet() {
     
 
     fopMsgM_setPaneData(&m858, m004, 'wd');
-    ((J2DTextBox*)(m858).pane)->setFont(m2470);
+    ((J2DTextBox*)(m858).pane)->setFont(mFont);
 
-    m2460->setPane(m2470, &m858, &m008, &m040, &m078);
+    m2460->setPane(mFont, &m858, &m008, &m040, &m078);
 
     fopMsgM_setPaneData(&m890, m004, 'nm00');
-    ((J2DTextBox*)(m890).pane)->setFont(m2470);
+    ((J2DTextBox*)(m890).pane)->setFont(mFont);
 
     fopMsgM_setPaneData(&m8C8, m004, 'nm01');
-    ((J2DTextBox*)(m8C8).pane)->setFont(m2470);
+    ((J2DTextBox*)(m8C8).pane)->setFont(mFont);
 
     fopMsgM_setPaneData(&m900, m004, 'itnm');
     fopMsgM_setPaneData(&m938, m004, 'itnk');

@@ -29,7 +29,10 @@ public:
     void getCollectMode() {}
     void getNowItem() {}
     void setArchive(JKRArchive*) {}
-    void setFont(JUTFont*, JUTFont*) {}
+    void setFont(JUTFont* font, JUTFont* rfont) {
+        mFont = font;
+        mRFont = rfont;
+    }
     void setItemTexBuffer(int, void*) {}
     void setMapTexBuffer(void*) {}
     void setNowItem(unsigned char) {}
@@ -168,8 +171,8 @@ public:
     /* 0x2458 */ u8 m2458[0x2460 - 0x2458];
     /* 0x2460 */ dDlst_2DOutFont_c* m2460;
     /* 0x2464 */ u8 m2464[0x2470 - 0x2464];
-    /* 0x2470 */ JUTFont* m2470;
-    /* 0x2474 */ JUTFont* m2474;
+    /* 0x2470 */ JUTFont* mFont;
+    /* 0x2474 */ JUTFont* mRFont;
     /* 0x2478 */ J2DPane* m2478;
     /* 0x247C */ u8 m247C[0x2488 - 0x247C];
     /* 0x2488 */ JUtility::TColor color_2488;
