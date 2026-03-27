@@ -177,7 +177,7 @@ void dDlst_MENU_CLOTH_c::draw() {
 
     cloth_c->draw(0.0f, clothColor, shadowColor, 1);
 
-    g_dComIfG_gameInfo.play.getCurrentGrafPort()->setPort();
+    dComIfGp_getCurrentGrafPort()->setPort();
 }
 
 /* 801DB384-801DB50C       .text __ct__9dMw_HIO_cFv */
@@ -272,7 +272,7 @@ dMw_DHIO_c::dMw_DHIO_c() {
 /* 801DB568-801DB91C       .text dMs_item_create__FP19sub_ms_screen_class */
 void dMs_item_create(sub_ms_screen_class* i_Ms) {
     /* Nonmatching */
-    i_Ms->arc = g_dComIfG_gameInfo.play.getItemResArchive();
+    i_Ms->arc = dComIfGp_getItemResArchive();
 
     for (int i = 0; i < 2; i++) {
         i_Ms->name[i] = (char*)i_Ms->childHeap->alloc(0x20, 4);
@@ -1254,7 +1254,7 @@ static cPhs_State dMs_Create(msg_class* i_this) {
     g_mwHIO.mNo = mDoHIO_createChild("アイテムビット", &g_mwHIO);     // Item Bit
     g_mwDHIO.mNo = mDoHIO_createChild("ダンジョンビット", &g_mwDHIO); // Dungeon Bit
 
-    i_Ms->parentHeap_0xfc = g_dComIfG_gameInfo.play.getExpHeap2D();
+    i_Ms->parentHeap_0xfc = dComIfGp_getExpHeap2D();
 
     fonttype = mDoExt_getMesgFont();
     JUT_ASSERT(4097, fonttype != NULL);
@@ -1264,13 +1264,13 @@ static cPhs_State dMs_Create(msg_class* i_this) {
 
     event_wait_frame = 0;
 
-    g_dComIfG_gameInfo.play.mNameOpen = 0;
+    dComIfGp_nameOpenCancelOff();
 
     i_Ms->mButtonsPressed = 0;
     i_Ms->mMsgID = fpcM_ERROR_PROCESS_ID_e;
     i_Ms->field_0x1B0 = 0;
 
-    g_dComIfG_gameInfo.play.offHeapLockFlag();
+    dComIfGp_offHeapLockFlag();
 
     if (dComIfGs_getFwaterTimer() != 0) {
         dComIfGs_startFwaterTimer();
