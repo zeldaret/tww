@@ -397,7 +397,16 @@ void dMs_name_delete(sub_ms_screen_class*) {
 
 /* 801DCE20-801DCEA0       .text dMs_save_delete__FP19sub_ms_screen_class */
 void dMs_save_delete(sub_ms_screen_class*) {
-    /* Nonmatching */
+    if (dMs_c != NULL) {
+        dMs_c->_delete();
+        delete dMs_c;
+        dMs_c = NULL;
+    }
+
+    if (dMs_capture_c != NULL) {
+        delete dMs_capture_c;
+        dMs_capture_c = NULL;
+    }
 }
 
 /* 801DCEA0-801DD090       .text dMs_cloth_create__FP19sub_ms_screen_class */
