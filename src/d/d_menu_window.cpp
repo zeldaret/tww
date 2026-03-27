@@ -355,7 +355,16 @@ void dMs_name_create(sub_ms_screen_class*) {
 
 /* 801DCDA0-801DCE20       .text dMs_name_delete__FP19sub_ms_screen_class */
 void dMs_name_delete(sub_ms_screen_class*) {
-    /* Nonmatching */
+    if (dNm_c != NULL) {
+        dNm_c->_delete();
+        delete dNm_c;
+        dNm_c = NULL;
+    }
+
+    if (dMs_capture_c != NULL) {
+        delete dMs_capture_c;
+        dMs_capture_c = NULL;
+    }
 }
 
 /* 801DCE20-801DCEA0       .text dMs_save_delete__FP19sub_ms_screen_class */
