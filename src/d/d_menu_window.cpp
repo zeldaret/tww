@@ -1278,7 +1278,8 @@ static cPhs_State dMs_Create(msg_class* i_this) {
     }
 
     dMenu_setMenuStatus(1);
-    // TODO: FMap create
+
+    dMv_CIO_c = dMenu_FmapSv_c();
 
     fopMsgM_setStageLayer(i_Ms);
 
