@@ -1261,7 +1261,7 @@ static cPhs_State dMs_Create(msg_class* i_this) {
     JUT_ASSERT(4097, fonttype != NULL);
 
     rfonttype = mDoExt_getRubyFont();
-    JUT_ASSERT(4100, fonttype != NULL);
+    JUT_ASSERT(4100, rfonttype != NULL);
 
     event_wait_frame = 0;
 
