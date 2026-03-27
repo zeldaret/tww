@@ -76,6 +76,7 @@ public:
     /* 0x04 */ u8 mStatus;
 };
 
+dMenu_FmapSv_c dMv_CIO_c;
 dMw_HIO_c g_mwHIO;
 dMw_DHIO_c g_mwDHIO;
 

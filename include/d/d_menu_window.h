@@ -4,6 +4,7 @@
 #include "dolphin/types.h"
 
 class JKRExpHeap;
+class dMenu_FmapSv_c;
 
 enum dMw_Status {
     MENU_STATE_NO_MENU = 0,
@@ -151,6 +152,7 @@ public:
     /* 0xC5 */ u8 padding_0xC5[0xCC - 0xC5];
 };
 
+extern dMenu_FmapSv_c dMv_CIO_c;
 extern dMw_HIO_c g_mwHIO;
 extern dMw_DHIO_c g_mwDHIO;
 
