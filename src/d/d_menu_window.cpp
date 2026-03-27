@@ -76,6 +76,7 @@ public:
     /* 0x04 */ u8 mStatus;
 };
 
+u8 dummy_arr[0xC];
 dMenu_FmapSv_c dMv_CIO_c;
 dMw_HIO_c g_mwHIO;
 dMw_DHIO_c g_mwDHIO;
@@ -1248,8 +1249,6 @@ static BOOL dMs_Delete(sub_ms_screen_class* i_Ms) {
 
 /* 801DF4C4-801DF684       .text dMs_Create__FP9msg_class */
 static cPhs_State dMs_Create(msg_class* i_this) {
-    /* Nonmatching */
-
     sub_ms_screen_class* i_Ms = (sub_ms_screen_class*)i_this;
 
     g_mwHIO.mNo = mDoHIO_createChild("アイテムビット", &g_mwHIO);     // Item Bit
