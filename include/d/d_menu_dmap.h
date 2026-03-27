@@ -16,7 +16,14 @@ public:
     void setArchive(JKRArchive*) {}
     void setFont(JUTFont*, JUTFont*) {}
     void setItemTexBuffer(int, void*) {}
-    void setTextArea(char*, char*, char*, char*, char*, char*) {}
+    void setTextArea(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
+        name[0] = name0;
+        name[1] = name1;
+        note[0] = note0;
+        note[1] = note1;
+        dummy[0] = dummy0;
+        dummy[1] = dummy1;
+    }
 
     void changeFloorTexture(J2DPane*, int);
     void screenSet();
@@ -65,7 +72,11 @@ public:
     /* 0x14C8 */ JUtility::TColor color_0x14C8;
     /* 0x14CC */ u8 field_0x14CC[0x1B08 - 0x14CC];
     /* 0x1B08 */ fopMsgM_msgDataProc_c* mpMsgProc;
-    /* 0x1B0C */ u8 field_0x1B0C[0x1E38 - 0x1B0C];
+    /* 0x1B0C */ u8 field_0x1B0C[0x1DA8 - 0x1B0C];
+    /* 0x1DA8 */ char* name[2];
+    /* 0x1DB0 */ char* note[2];
+    /* 0x1DB8 */ char* dummy[2];
+    /* 0x1DC0 */ u8 padding_0x1DC0[0x1E38 - 0x1DC0];
 }; // Size: 0x1E38
 
 class dMd_HIO_c {
