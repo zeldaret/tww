@@ -37,7 +37,14 @@ public:
     void setQuitArchive(JKRArchive*) {}
     void setSymbolTexBuffer(int, void*) {}
     void setTactTexBuffer(void*) {}
-    void setTextArea(char*, char*, char*, char*, char*, char*) {}
+    void setTextArea(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
+        name[0] = name0;
+        name[1] = name1;
+        note[0] = note0;
+        note[1] = note1;
+        dummy[0] = dummy0;
+        dummy[1] = dummy1;
+    }
     void setTimer(short) {}
     void setTriforceTexBuffer(int, void*) {}
     void setTriggerInfo(unsigned char) {}
@@ -177,7 +184,10 @@ public:
     /* 0x2780 */ u8 m2780[0x27A8 - 0x2780];
     /* 0x27A8 */ f32 m27A8;
     /* 0x27AC */ f32 m27AC;
-    /* 0x27B0 */ u8 m27B0[0x27E2 - 0x27B0];
+    /* 0x27B0 */ char* name[2];
+    /* 0x27B8 */ char* note[2];
+    /* 0x27C0 */ char* dummy[2];
+    /* 0x27C8 */ u8 m27C8[0x27E2 - 0x27C8];
     /* 0x27E2 */ u16 m27E2;
     /* 0x27E4 */ u8 m27E4[0x27EC - 0x27E4];
     /* 0x27EC */ u8 m27EC;
