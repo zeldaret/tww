@@ -57,18 +57,44 @@ static BOOL nodeCallBack_Bigelf(J3DNode*, int) {
 }
 
 /* 00000384-00000438       .text lightInit__10daBigelf_cFP4cXyz */
-void daBigelf_c::lightInit(cXyz*) {
-    /* Nonmatching */
+void daBigelf_c::lightInit(cXyz* pPos) {
+    this->mLightInfluence.mPos = *pPos;
+    this->mLightInfluencePos = this->mLightInfluence.mPos;
+
+    if(!this->mIsLightShining){
+        this->mIsLightShining = true;
+        
+        this->mLightInfluence.mColor.r = 255;
+        this->mLightInfluence.mColor.g = 255;
+        this->mLightInfluence.mColor.b = 255;
+        
+        this->mLightInfluence.mPower = 0;
+        this->mLightInfluence.mFluctuation = 0;
+        this->mLightInfluencePos = this->mLightInfluence.mPos;
+        
+        this->mLightInfluenceColor.r = 255;
+        this->mLightInfluenceColor.g = 255;
+        this->mLightInfluenceColor.b = 255;
+
+        this->mLightInfluencePower = 0;
+        this->mLightInfluenceFluctuation = 0;
+        dKy_plight_priority_set(&this->mLightInfluence);
+    }
 }
 
 /* 00000438-00000470       .text lightEnd__10daBigelf_cFv */
 void daBigelf_c::lightEnd() {
-    /* Nonmatching */
+    if(this->mIsLightShining){
+        this->mIsLightShining = false;
+        dKy_plight_cut(&this->mLightInfluence);
+    }
 }
 
 /* 00000470-0000047C       .text lightProc__10daBigelf_cFv */
 void daBigelf_c::lightProc() {
-    /* Nonmatching */
+    if(this->mIsLightShining){
+        return;
+    }
 }
 
 /* 0000047C-00000488       .text darkInit__10daBigelf_cFv */
@@ -530,7 +556,8 @@ void daBigelf_c::demoProcCom() {
 
 /* 00001ACC-00001B14       .text getNowEventAction__10daBigelf_cFv */
 int daBigelf_c::getNowEventAction() {
-    /* Nonmatching */
+    static char* action_table [11] = {"WAIT", "FA1", "APPEAR", "TALK", "EXIT", "FL_DEMO", "FL_LINK", "FL_DELETE", "FL_DM_BF", "FL_DM_MD", "FL_DM_AF"};
+    return dComIfGp_evmng_getMyActIdx(this->mStaffId, action_table, ARRAY_SSIZE(action_table), FALSE, 1);
 }
 
 /* 00001B14-00001CCC       .text demoProc__10daBigelf_cFv */
