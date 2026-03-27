@@ -762,6 +762,15 @@ public:
     /* 0x302B */ u8 field_0x302b[0x302C - 0x302B];
 };
 
+enum MenuStatus {
+    MENU_STATUS_NONE = 0,
+    MENU_STATUS_ITEM = 1,
+    MENU_STATUS_COLLECT = 2,
+    MENU_STATUS_MAP = 3,
+    MENU_STATUS_NAME = 4,
+    MENU_STATUS_SAVE = 5,
+};
+
 extern dMeter_map_HIO_c g_meter_mapHIO;
 extern dMeter_HIO_c g_meterHIO;
 extern dMeter_menuHIO_c g_menuHIO;
@@ -774,6 +783,7 @@ void dMenu_flagSet(u8);
 void dMeter_mtrShow();
 void dMeter_mtrHide();
 
+// Use enum MenuStatus.
 u8 dMenu_getMenuStatus();
 void dMenu_setMenuStatus(u8);
 void dMenu_setMenuStatusOld(u8);

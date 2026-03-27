@@ -555,7 +555,7 @@ static BOOL dMs_Draw(sub_ms_screen_class*) {
             }
         }
 
-        if (dMenu_getMenuStatus() == 1) {
+        if (dMenu_getMenuStatus() == MENU_STATUS_ITEM) {
             // Item screen
             if (dMs_cloth_c) {
                 dComIfGd_set2DOpa(dMs_cloth_c);
@@ -563,7 +563,7 @@ static BOOL dMs_Draw(sub_ms_screen_class*) {
             if (dMi_c) {
                 dComIfGd_set2DOpa(dMi_c);
             }
-        } else if (dMenu_getMenuStatus() == 2) {
+        } else if (dMenu_getMenuStatus() == MENU_STATUS_COLLECT) {
             // Collect screen
             if (dMs_cloth_c) {
                 dComIfGd_set2DOpa(dMs_cloth_c);
@@ -571,7 +571,7 @@ static BOOL dMs_Draw(sub_ms_screen_class*) {
             if (dMc_c) {
                 dComIfGd_set2DOpa(dMc_c);
             }
-        } else if (dMenu_getMenuStatus() == 3) {
+        } else if (dMenu_getMenuStatus() == MENU_STATUS_MAP) {
             // Map screen
             if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1) {
                 // Dungeon map
@@ -587,12 +587,12 @@ static BOOL dMs_Draw(sub_ms_screen_class*) {
                     dMf_c->draw();
                 }
             }
-        } else if (dMenu_getMenuStatus() == 4) {
+        } else if (dMenu_getMenuStatus() == MENU_STATUS_NAME) {
             // Name entry screen
             if (dNm_c) {
                 dNm_c->draw();
             }
-        } else if (dMenu_getMenuStatus() == 5) {
+        } else if (dMenu_getMenuStatus() == MENU_STATUS_SAVE) {
             // Save screen
             if (dMs_c) {
                 dMs_c->_draw2();
@@ -631,7 +631,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                 dMs_fmap_create(i_Ms);
                 dMenu_flagSet(1);
                 dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                dMenu_setMenuStatus(3);
+                dMenu_setMenuStatus(MENU_STATUS_MAP);
                 dComIfGp_fmapOpenOff();
                 mDoAud_seStart(JA_SE_SHIPPU_CHART_OPEN);
 
@@ -641,7 +641,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                 dMs_name_create(i_Ms);
                 dMenu_flagSet(1);
                 dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                dMenu_setMenuStatus(4);
+                dMenu_setMenuStatus(MENU_STATUS_NAME);
 
             } else if (CAN_PROCEED() && dComIfGp_isMenuCollect()) {
                 dMs_cloth_create(i_Ms);
@@ -651,7 +651,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                 mDoExt_setCurrentHeap(i_Ms->childHeap);
                 dMs_collect_create2(i_Ms);
                 dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                dMenu_setMenuStatus(2);
+                dMenu_setMenuStatus(MENU_STATUS_COLLECT);
                 mDoAud_seStart(JA_SE_ITM_MENU_IN);
                 mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
                 dComIfGp_offMenuCollect();
@@ -662,7 +662,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                 dMs_fmap_create(i_Ms);
                 dMenu_flagSet(1);
                 dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                dMenu_setMenuStatus(3);
+                dMenu_setMenuStatus(MENU_STATUS_MAP);
                 dComIfGp_fmapOpenOff();
                 mDoAud_seStart(JA_SE_ITM_MENU_IN);
                 mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
@@ -706,7 +706,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                                             }
 
                                             dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                                            dMenu_setMenuStatus(2);
+                                            dMenu_setMenuStatus(MENU_STATUS_COLLECT);
                                             dMenu_setPushMenuButton(2);
                                             mDoAud_seStart(JA_SE_ITM_MENU_IN);
                                             mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
@@ -717,7 +717,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                                             dMi_c->field_0x2421 = 2;
                                             i_Ms->mMenuProc = MENU_STATE_ITEM_OPEN;
                                             dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                                            dMenu_setMenuStatus(1);
+                                            dMenu_setMenuStatus(MENU_STATUS_ITEM);
                                             dMenu_setPushMenuButton(1);
                                             mDoAud_seStart(JA_SE_ITM_MENU_IN);
                                             mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
@@ -732,7 +732,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                                             dMs_dmap_create(i_Ms);
                                             dMenu_flagSet(1);
                                             dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                                            dMenu_setMenuStatus(3);
+                                            dMenu_setMenuStatus(MENU_STATUS_MAP);
                                             mDoAud_seStart(JA_SE_ITM_MENU_IN);
                                             mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
 
@@ -752,7 +752,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
                                                 dMs_fmap_create(i_Ms);
                                                 dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                                                dMenu_setMenuStatus(3);
+                                                dMenu_setMenuStatus(MENU_STATUS_MAP);
                                                 mDoAud_seStart(JA_SE_ITM_MENU_IN);
                                                 mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
                                             }
@@ -806,7 +806,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         if (dMc_c->_close2()) {
             i_Ms->mMenuProc = MENU_STATE_ITEM_OPEN_FROM_COLLECT_LEFT;
             dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-            dMenu_setMenuStatus(1);
+            dMenu_setMenuStatus(MENU_STATUS_ITEM);
             dMs_collect_delete(i_Ms);
             dMs_childHeap_freeAll(i_Ms);
             dMs_item_create(i_Ms);
@@ -819,7 +819,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         if (dMc_c->_close2()) {
             i_Ms->mMenuProc = MENU_STATE_ITEM_OPEN_FROM_COLLECT_RIGHT;
             dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-            dMenu_setMenuStatus(1);
+            dMenu_setMenuStatus(MENU_STATUS_ITEM);
             dMs_collect_delete(i_Ms);
             dMs_childHeap_freeAll(i_Ms);
             dMs_item_create(i_Ms);
@@ -839,7 +839,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         if (dMi_c->_close2()) {
             i_Ms->mMenuProc = MENU_STATE_COLLECT_OPEN_LEFT;
             dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-            dMenu_setMenuStatus(2);
+            dMenu_setMenuStatus(MENU_STATUS_COLLECT);
             dMs_item_delete(i_Ms);
             dMs_childHeap_freeAll(i_Ms);
             dMs_collect_create(i_Ms);
@@ -852,7 +852,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         if (dMi_c->_close2()) {
             i_Ms->mMenuProc = MENU_STATE_COLLECT_OPEN_RIGHT;
             dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-            dMenu_setMenuStatus(2);
+            dMenu_setMenuStatus(MENU_STATUS_COLLECT);
             dMs_item_delete(i_Ms);
             dMs_childHeap_freeAll(i_Ms);
             dMs_collect_create(i_Ms);
@@ -1276,7 +1276,7 @@ static cPhs_State dMs_Create(msg_class* i_this) {
         dComIfGs_startFwaterTimer();
     }
 
-    dMenu_setMenuStatus(1);
+    dMenu_setMenuStatus(MENU_STATUS_ITEM);
 
     dMv_CIO_c = dMenu_FmapSv_c();
 
