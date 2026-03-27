@@ -86,6 +86,8 @@ public:
     /* 0x1DC0 */ u8 padding_0x1DC0[0x1E38 - 0x1DC0];
 }; // Size: 0x1E38
 
+STATIC_ASSERT(sizeof(dMenu_Dmap_c) == 0x1E38);
+
 class dMd_HIO_c {
 public:
     dMd_HIO_c();
