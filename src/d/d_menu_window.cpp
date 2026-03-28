@@ -563,7 +563,31 @@ void dMs_fmap_create(sub_ms_screen_class* i_Ms) {
 
 /* 801DC694-801DC798       .text dMs_fmap_delete__FP19sub_ms_screen_class */
 void dMs_fmap_delete(sub_ms_screen_class* i_Ms) {
-    /* Nonmatching */
+    for (int i = 0; i < 2; i++) {
+        if (i_Ms->name[i] != NULL) {
+            i_Ms->parentHeap_0xfc->free(i_Ms->name[i]);
+            i_Ms->name[i] = NULL;
+        }
+        if (i_Ms->note[i] != NULL) {
+            i_Ms->parentHeap_0xfc->free(i_Ms->note[i]);
+            i_Ms->note[i] = NULL;
+        }
+        if (i_Ms->dummy[i] != NULL) {
+            i_Ms->parentHeap_0xfc->free(i_Ms->dummy[i]);
+            i_Ms->dummy[i] = NULL;
+        }
+    }
+
+    if (dMf_c != NULL) {
+        dMf_c->_delete();
+        delete dMf_c;
+        dMf_c = NULL;
+    }
+
+    if (dMs_capture_c != NULL) {
+        delete dMs_capture_c;
+        dMs_capture_c = NULL;
+    }
 }
 
 /* 801DC798-801DCB30       .text dMs_dmap_create__FP19sub_ms_screen_class */
