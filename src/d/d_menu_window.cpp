@@ -526,7 +526,39 @@ void dMs_collect_delete(sub_ms_screen_class* i_Ms) {
 
 /* 801DC360-801DC694       .text dMs_fmap_create__FP19sub_ms_screen_class */
 void dMs_fmap_create(sub_ms_screen_class* i_Ms) {
-    /* Nonmatching */
+    dComIfGp_setHeapLockFlag(2);
+
+    for (int i = 0; i < 2; i++) {
+        i_Ms->name[i] = (char*)i_Ms->parentHeap_0xfc->alloc(0x40, 4);
+        JUT_ASSERT(2343, i_Ms->name[i] != NULL);
+
+        i_Ms->note[i] = (char*)i_Ms->parentHeap_0xfc->alloc(0x200, 4);
+        JUT_ASSERT(2345, i_Ms->note[i] != NULL);
+
+        i_Ms->dummy[i] = (char*)i_Ms->parentHeap_0xfc->alloc(0x200, 4);
+        JUT_ASSERT(2347, i_Ms->dummy[i] != NULL);
+    }
+
+    dMf_c = new dMenu_Fmap_c();
+    JUT_ASSERT(2352, dMf_c != NULL);
+
+    dMf_c->setSvPtr(&dMv_CIO_c);
+    dMf_c->setFont(fonttype, rfonttype);
+
+    dMf_c->setTextArea_New(i_Ms->name[0], i_Ms->name[1], i_Ms->note[0], i_Ms->note[1], i_Ms->dummy[0], i_Ms->dummy[1]);
+
+    dMf_c->_create();
+
+    dMs_capture_c = new dDlst_MENU_CAPTURE_c();
+    JUT_ASSERT(2362, dMs_capture_c != NULL);
+
+    if (i_Ms->mMenuProc == MENU_STATE_FMAP_OPEN_WALLPAPER) {
+        dMs_capture_c->mStatus = 1;
+    }
+
+    if (i_Ms->mMenuProc == MENU_STATE_FMAP_OPEN) {
+        dMf_c->backClothDispInit();
+    }
 }
 
 /* 801DC694-801DC798       .text dMs_fmap_delete__FP19sub_ms_screen_class */
