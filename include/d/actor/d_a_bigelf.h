@@ -5,7 +5,6 @@
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
-#include "SSystem/SComponent/c_phase.h"
 
 class daBigelf_c : public fopAc_ac_c {
 public:
@@ -23,7 +22,6 @@ public:
         BIGELF_STATE_UNK8 = 0b100000000,
         BIGELF_STATE_UNK9 = 0b1000000000,
         BIGELF_STATE_UNK10 = 0b10000000000,
-        //BIGELF_STATE_UNK11 = 0b100000000000,
     };
 
     bool chkFlag(u16 mask) {
@@ -125,6 +123,7 @@ public:
     /* 0x2C8 */ J3DModel* mpFlowerModel;
     /* 0x2CC */ mDoExt_brkAnm mFlowerBrkAnimator;
     /* 0x2E4 */ s8 m_fl_jnt;
+    /* 0x2E5 */ u8 m2E5[0x2E8 - 0x2E5];
     /* 0x2E8 */ dNpc_JntCtrl_c m_jnt;
     /* 0x31C */ cXyz mUnkPos;
     /* 0x328 */ cXyz mCurrentPos;

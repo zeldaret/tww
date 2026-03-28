@@ -54,10 +54,10 @@ BOOL daBigelf_c::nodeCallBack(J3DNode* node) {
     
     
     cMtx_copy(model->getAnmMtx(jntNo), *calc_mtx);
-    if(jntNo == this->m_jnt.mHeadJntNum){
+    if(jntNo == this->getHeadJntNum()){
         s16 target;
         if(this->m3BC == 0)
-            target = this->m_jnt.mAngles[0][0];
+            target = this->getHead_x();
         else
             target = 0;
 
@@ -148,9 +148,9 @@ void daBigelf_c::darkInit() {
 /* 00000488-000004D0       .text darkEnd__10daBigelf_cFv */
 void daBigelf_c::darkEnd() {
     this->bIsDark = 0;
-    dKy_set_actcol_ratio(0.0f);
-    dKy_set_bgcol_ratio(0.0f);
-    dKy_set_vrboxcol_ratio(0.0f);
+    dKy_set_actcol_ratio(1.0f);
+    dKy_set_bgcol_ratio(1.0f);
+    dKy_set_vrboxcol_ratio(1.0f);
 }
 
 /* 000004D0-00000574       .text darkProc__10daBigelf_cFv */
@@ -254,7 +254,8 @@ BOOL daBigelf_c::demoProcFlDmAf() {
 /* 000009C0-00000A20       .text demoInitFlDmMd__10daBigelf_cFv */
 void daBigelf_c::demoInitFlDmMd() {
     this->darkInit();
-    this->m3A0 = this->m3A4 = 1.0f;
+    this->m3A0 = 1.0f;
+    this->m3A4 = 1.0f;
     this->clrFlag(BIGELF_STATE_UNK7);
     this->setFlag(BIGELF_STATE_UNK9);
     this->setFlag(BIGELF_STATE_UNK10);
@@ -1156,7 +1157,7 @@ BOOL daBigelf_c::_draw() {
         return FALSE;
     }
 
-    if(this->chkFlag(BIGELF_STATE_UNK4)){
+    if(!this->chkFlag(BIGELF_STATE_UNK4)){
         dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, fopAcM_GetPosition_p(this), &this->tevStr);
     }
 
@@ -1231,11 +1232,15 @@ cPhs_State daBigelf_c::_create() {
     fopAcM_SetupActor(this, daBigelf_c);
     cPhs_State ret = dComIfG_resLoad(&this->mPhaseProcReq, "bigelf");
     if(ret == cPhs_COMPLEATE_e){
-        if(fopAcM_GetName(this) != PROC_BIGELF){
-            return cPhs_ERROR_e;
+        switch(fopAcM_GetName(this)){
+            case PROC_BIGELF:
+                this->m3F4 = 0;
+                break;
+            default:
+                return cPhs_ERROR_e;
         }
 
-        this->m3F4 = 0;
+        
 
         if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xb7b0)){
             this->mpBckAnimator = NULL;
@@ -1320,12 +1325,12 @@ BOOL daBigelf_c::CreateHeap() {
     J3DModelData* flModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("bigelf", BIGELF_BDL_DY_FL));
     JUT_ASSERT(2114, flModelData);
 
-    this->mpFlowerModel = mDoExt_J3DModel__create(flModelData, 0x80000, 0x100000);
+    this->mpFlowerModel = mDoExt_J3DModel__create(flModelData, 0x80000, 0x1000000);
     if(this->mpFlowerModel == 0)
         return FALSE;
 
     pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("bigelf", BIGELF_BRK_DY_FL));
-    if(this->mFlowerBrkAnimator.init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1, 0, -1, false, 0) == 0)
+    if(this->mFlowerBrkAnimator.init(flModelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1, 0, -1, false, 0) == 0)
         return FALSE;
  
     this->iBrkFrame = 0;
