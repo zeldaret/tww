@@ -365,7 +365,65 @@ void dMs_item_delete(sub_ms_screen_class* i_Ms) {
 
 /* 801DBA58-801DBE44       .text dMs_collect_create__FP19sub_ms_screen_class */
 void dMs_collect_create(sub_ms_screen_class* i_Ms) {
-    /* Nonmatching */
+    i_Ms->arc = dComIfGp_getCollectResArchive();
+
+    for (int i = 0; i < 2; i++) {
+        i_Ms->name[i] = (char*)i_Ms->childHeap->alloc(0x20, 4);
+        JUT_ASSERT(2089, i_Ms->name[i] != NULL);
+
+        i_Ms->note[i] = (char*)i_Ms->childHeap->alloc(0x200, 4);
+        JUT_ASSERT(2091, i_Ms->note[i] != NULL);
+
+        i_Ms->dummy[i] = (char*)i_Ms->childHeap->alloc(0x200, 4);
+        JUT_ASSERT(2093, i_Ms->dummy[i] != NULL);
+    }
+
+    i_Ms->field_0x1B2 = 0;
+
+    for (int i = 0; i < 21; i++) {
+        i_Ms->buffer_p[i] = i_Ms->childHeap->alloc(0xC00, 0x20);
+        JUT_ASSERT(2101, i_Ms->buffer_p[i] != NULL);
+        i_Ms->field_0x1B2++;
+    }
+
+    dMc_c = new dMenu_Collect_c();
+    JUT_ASSERT(2112, dMc_c != NULL);
+
+    dMc_c->setTactTexBuffer(i_Ms->buffer_p[0]);
+
+    for (int i = 0; i < 3; i++) {
+        dMc_c->m24C0[i] = i_Ms->buffer_p[i + 1];
+    }
+
+    for (int i = 0; i < 5; i++) {
+        dMc_c->m24CC[i] = i_Ms->buffer_p[i + 4];
+    }
+
+    for (int i = 0; i < 8; i++) {
+        dMc_c->m24A0[i] = (ResTIMG*)i_Ms->buffer_p[i + 9];
+    }
+
+    dMc_c->m249C = (ResTIMG*)i_Ms->buffer_p[17];
+
+    dMc_c->setArchive(dComIfGp_getCollectResArchive());
+    dMc_c->setOptionArchive(dComIfGp_getOptionResArchive());
+    dMc_c->setQuitArchive(dComIfGp_getSaveResArchive());
+
+    dMc_c->setFont(fonttype, rfonttype);
+
+    dMc_c->setTextArea(i_Ms->name[0], i_Ms->name[1], i_Ms->note[0], i_Ms->note[1], i_Ms->dummy[0], i_Ms->dummy[1]);
+
+    dMc_c->m27ED = g_dComIfG_gameInfo.play.field_0x4944; // FIXME
+
+    dMc_c->_create();
+
+    if (mDoCPd_L_LOCK_BUTTON(0)) {
+        dMs_onButtonBit(i_Ms, 1);
+    } else if (mDoCPd_R_LOCK_BUTTON(0)) {
+        dMs_onButtonBit(i_Ms, 2);
+    }
+
+    lockFlag = 0;
 }
 
 /* 801DBE44-801DC224       .text dMs_collect_create2__FP19sub_ms_screen_class */
