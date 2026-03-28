@@ -261,8 +261,8 @@ void dMenu_Collect_c::screenSet() {
     fopMsgM_setPaneData(&mD98, m004, 'trim');
     fopMsgM_setPaneData(&mDD0, m004, 'tril');
 
-    mD98.pane->mDrawAlpha = 1;
-    mDD0.pane->mDrawAlpha = 1;
+    mD98.pane->show();
+    mDD0.pane->show();
 
     for (int i = 0; i < 8; i++) {
         fopMsgM_setPaneData(&mE08[i], m004, l_tri[i]);
