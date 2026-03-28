@@ -217,12 +217,12 @@ void dMenu_Collect_c::screenSet() {
 
     // Couple of functions missing here
     ((J2DTextBox*)(m740).pane)->setWhite(0xFFFFFFFF);
-    ((J2DTextBox*)(m740).pane)->setCharColor(0xFFFFFFFF);
-    ((J2DTextBox*)(m740).pane)->setGradColor(0xFFFFFFFF);
+    ((J2DTextBox*)(m740).pane)->setCharColor(0x000000FF);
+    ((J2DTextBox*)(m740).pane)->setGradColor(0x000000FF);
 
     ((J2DTextBox*)(m778).pane)->setWhite(0xFFFFFFFF);
-    ((J2DTextBox*)(m778).pane)->setCharColor(0xFFFFFFFF);
-    ((J2DTextBox*)(m778).pane)->setGradColor(0xFFFFFFFF);
+    ((J2DTextBox*)(m778).pane)->setCharColor(0x000000FF);
+    ((J2DTextBox*)(m778).pane)->setGradColor(0x000000FF);
 
     fopMsgM_setPaneData(&m858, m004, 'wd');
     ((J2DTextBox*)(m858).pane)->setFont(mFont);
