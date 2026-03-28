@@ -39,11 +39,11 @@ public:
         mRFont = rfont;
     }
 
-    void setItemTexBuffer(int idx, void* ptr) {}
-    void setMapTexBuffer(void* ptr) {}
-    void setSymbolTexBuffer(int idx, void* ptr) {}
     void setTactTexBuffer(void* ptr) { m2498 = (ResTIMG*)ptr; }
-    void setTriforceTexBuffer(int idx, void* ptr) {}
+    void setMapTexBuffer(void* ptr) { m249C = (ResTIMG*)ptr; }
+    void setTriforceTexBuffer(int idx, void* ptr) { m24A0[idx] = (ResTIMG*)ptr; }
+    void setSymbolTexBuffer(int idx, void* ptr) { m24C0[idx] = ptr; }
+    void setItemTexBuffer(int idx, void* ptr) { m24CC[idx] = ptr; }
 
     void setTextArea(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
         name[0] = name0;

@@ -36,7 +36,7 @@ void dMenu_Collect_c::screenSet() {
         'ft00', 'ft01', 'ft02', 'ft03', 'ft04', 'ft05', 'ft06', 'ft07',
         'ft08', 'ft09', 'ft10', 'ft11', 'ft12', 'ft13', 'ft14',
     };
-    
+
     static const u32 l_fd[] = {
         'fd00', 'fd01', 'fd02', 'fd03', 'fd04', 'fd05', 'fd06', 'fd07',
         'fd08', 'fd09', 'fd10', 'fd11', 'fd12', 'fd13', 'fd14',
@@ -117,7 +117,7 @@ void dMenu_Collect_c::screenSet() {
     };
 
     static char* triTex[8] = {
-        "triforce_00.bti", "triforce_01.bti", "triforce_02.bti", "triforce_03.bti", 
+        "triforce_00.bti", "triforce_01.bti", "triforce_02.bti", "triforce_03.bti",
         "triforce_04.bti", "triforce_05.bti", "triforce_06.bti", "triforce_07.bti",
     };
     static char* symTex[3] = {
@@ -162,7 +162,7 @@ void dMenu_Collect_c::screenSet() {
     ((J2DTextBox*)(m778).pane)->setWhite(0xFFFFFFFF);
     ((J2DTextBox*)(m778).pane)->setCharColor(0xFFFFFFFF);
     ((J2DTextBox*)(m778).pane)->setGradColor(0xFFFFFFFF);
-    
+
 
     fopMsgM_setPaneData(&m858, m004, 'wd');
     ((J2DTextBox*)(m858).pane)->setFont(mFont);
@@ -191,7 +191,7 @@ void dMenu_Collect_c::screenSet() {
     for(int i = 0; i < 4; i++) {
         fopMsgM_setPaneData(&mB68[i], m004, l_wk[i]);
     }
-    
+
     fopMsgM_setPaneData(&mC48, m004, 'num1');
     fopMsgM_setPaneData(&mC80, m004, 'num2');
     fopMsgM_setPaneData(&mCB8, m004, 'numc');
@@ -200,7 +200,7 @@ void dMenu_Collect_c::screenSet() {
     fopMsgM_setPaneData(&mD60, m004, 'wk0');
     fopMsgM_setPaneData(&mD98, m004, 'trim');
     fopMsgM_setPaneData(&mDD0, m004, 'tril');
-    
+
     mD98.pane->mDrawAlpha = 1;
     mDD0.pane->mDrawAlpha = 1;
 
@@ -214,7 +214,7 @@ void dMenu_Collect_c::screenSet() {
         fopMsgM_setPaneData(&m10A8[i], m004, l_sit[i]);
         fopMsgM_setPaneData(&m3F8[i], m004, l_sik[i]);
     }
-    
+
     if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_DINS_PEARL)) {
         m1000[1].mInitAlpha *= 0.5f;
         m10A8[1].mInitAlpha *= 0.5f;
@@ -266,8 +266,8 @@ void dMenu_Collect_c::screenSet() {
     for (int i = 0; i < 5; i++) {
         fopMsgM_setPaneData(&m2030[i], m004, l_wit[i]);
         fopMsgM_setPaneData(&m2148[i], m004, l_wik[i]);
-    } 
-    
+    }
+
     for (int i = 0; i < 5; i++) {
         fopMsgM_setPaneData(&m2260[i], m004, l_ip[i]);
     }
@@ -276,10 +276,10 @@ void dMenu_Collect_c::screenSet() {
     fopMsgM_setPaneData(&m23B0, m004, 'cc14');
     fopMsgM_setPaneData(&m23E8, m004, 'cc07');
     fopMsgM_setPaneData(&m2420, m004, 'cc00');
-    
+
     JKRArchive::readTypeResource(m2498, 0xc00, 'TIMG', "baton.bti", dComIfGp_getItemIconArchive());
     DCStoreRangeNoSync(m2498, 0xc00);
-    
+
     JKRArchive::readTypeResource(m249C, 0xc00, 'TIMG', "cmap_treasure2.bti", dComIfGp_getItemIconArchive());
     DCStoreRangeNoSync(m249C, 0xc00);
 
@@ -289,7 +289,7 @@ void dMenu_Collect_c::screenSet() {
     }
 
     ((J2DPicture*)mCF0.pane)->changeTexture(m249C, 0);
-    
+
     for(int i = 0; i < 8; i++) {
         JKRArchive::readTypeResource(m24A0[i], 0xc00, 'TIMG', triTex[i], dComIfGp_getItemIconArchive());
         DCStoreRangeNoSync(m24A0[i], 0xc00);
@@ -301,25 +301,24 @@ void dMenu_Collect_c::screenSet() {
     m27AC = mE08[4].mPosCenterOrig.y - mFC8.mPosCenterOrig.y;
 
     for(int i = 0; i < 3; i++) {
-        JKRArchive::readTypeResource(m24A0[i], 0xc00, 'TIMG', symTex[i], dComIfGp_getItemIconArchive());
-        DCStoreRangeNoSync(m24A0[i], 0xc00);
-        ((J2DPicture*)m1000[i].pane)->changeTexture(m24A0[i], 0);
-        ((J2DPicture*)m10A8[i].pane)->changeTexture(m24A0[i], 0);
-    } 
+        JKRArchive::readTypeResource(m24C0[i], 0xc00, 'TIMG', symTex[i], dComIfGp_getItemIconArchive());
+        DCStoreRangeNoSync(m24C0[i], 0xc00);
+        ((J2DPicture*)m1000[i].pane)->changeTexture((ResTIMG*)m24C0[i], 0);
+        ((J2DPicture*)m10A8[i].pane)->changeTexture((ResTIMG*)m24C0[i], 0);
+    }
 
     for(int i = 0; i < 5; i++) {
-        JKRArchive::readTypeResource(m24A0[i], 0xc00, 'TIMG', wepTex[i], dComIfGp_getItemIconArchive());
-        DCStoreRangeNoSync(m24A0[i], 0xc00);
-        ((J2DPicture*)m2030[i].pane)->changeTexture(m24A0[i], 0);
-        ((J2DPicture*)m2148[i].pane)->changeTexture(m24A0[i], 0);
-    } 
+        JKRArchive::readTypeResource(m24CC[i], 0xc00, 'TIMG', wepTex[i], dComIfGp_getItemIconArchive());
+        DCStoreRangeNoSync(m24CC[i], 0xc00);
+        ((J2DPicture*)m2030[i].pane)->changeTexture((ResTIMG*)m24CC[i], 0);
+        ((J2DPicture*)m2148[i].pane)->changeTexture((ResTIMG*)m24CC[i], 0);
+    }
 
     sprintf(print_format, "rupy_num_%02d.bti", dComIfGs_getCollectMapNum() / 10);
     ((J2DPicture*)mC48.pane)->changeTexture(print_format, 0);
 
     sprintf(print_format, "rupy_num_%02d.bti", dComIfGs_getCollectMapNum() % 10);
     ((J2DPicture*)mC80.pane)->changeTexture(print_format, 0);
-    return;
 }
 
 /* 8019CB5C-8019CD40       .text initialize__15dMenu_Collect_cFv */
