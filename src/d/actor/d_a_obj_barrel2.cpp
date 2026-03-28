@@ -146,7 +146,6 @@ const daObjBarrel2::Attr_c daObjBarrel2::Act_c::M_attr[] = {
         /* m6C */ 5.0f,
         /* m70 */ 1.0f,
     },
-
     {
         /* m00 */ 0x5,
         /* m02 */ 0x9,
@@ -699,9 +698,9 @@ void daObjBarrel2::Act_c::eff_break() {
     sp20.set(current.pos.x, current.pos.y + attr()->m14 * attr()->m50 * tmp, current.pos.z);
     sp2C.setall(tmp);
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_0460, &sp20, NULL, &sp2C);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_045F, &sp20, NULL, &sp2C);
-    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_03E6, &sp20, NULL, &sp2C, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TR2_SHIBUKI_B, &sp20, NULL, &sp2C);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TR2_SHIBUKI_A, &sp20, NULL, &sp2C);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_IT_JN_TR_HAHEN_B, &sp20, NULL, &sp2C, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
 
     if (emitter != NULL) {
         emitter->setLifeTime(30);
@@ -727,13 +726,13 @@ void daObjBarrel2::Act_c::eff_explode() {
     sp18.y = fopCamM_GetAngleY(camera) - -0x8000;
     sp18.z = 0;
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_LIGHT_FLASH, &sp20, &sp18, &sp2C);
-    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &sp20, NULL, &sp2C);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_BMEX_SENKO, &sp20, &sp18, &sp2C);
+    dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE02, &sp20, NULL, &sp2C);
     fopKyM_createWpillar(&current.pos, attr()->m6C, attr()->m70, 1);
-    dComIfGp_particle_setToon(dPa_name::ID_COMMON_2041, &sp20, NULL, &sp2C);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_003C, &sp20, NULL, &sp2C);
+    dComIfGp_particle_setToon(dPa_name::ID_IT_JT_WATERSMOKE00, &sp20, NULL, &sp2C);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_MIZUSHIBUKI_A, &sp20, NULL, &sp2C);
 
-    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_03E6, &sp20, NULL, &sp2C);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_IT_JN_TR_HAHEN_B, &sp20, NULL, &sp2C);
     if (emitter != NULL) {
         emitter->setLifeTime(40);
         emitter->setAwayFromAxisSpeed(10.0f);

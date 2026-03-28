@@ -284,7 +284,7 @@ void daBoko_c::setFlameEffect() {
     }
 
     if (mParticleCallBack.getEmitter() == NULL) {
-        dComIfGp_particle_set(dPa_name::ID_COMMON_01EA, &m2D0, NULL, &scale, 0xff, &mParticleCallBack);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_TORCH, &m2D0, NULL, &scale, 0xff, &mParticleCallBack);
         m320 = m2D0;
     }
 
@@ -320,7 +320,7 @@ void daBoko_c::setFlameEffect() {
     }
 
     if (!checkNoDraw()) {
-        dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &m2D0);
+        dComIfGp_particle_setSimple(dPa_name::ID_AK_JP_O_KAGEROU00, &m2D0);
     }
 }
 
@@ -752,7 +752,7 @@ BOOL daBoko_c::execute() {
         f32 waterY;
         if (bVar4 || (fopAcM_getWaterY(&m2D0, &waterY) && waterY >= m2D0.y)) {
             if (mFlameTimer != 0) {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_035A, &m2D0);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_EVAPORATION00, &m2D0);
             }
             mFlameTimer = 0;
         }

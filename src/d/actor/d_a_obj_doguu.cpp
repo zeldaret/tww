@@ -472,11 +472,11 @@ void daObjDoguu_c::privateCut() {
                     mDoMtx_stack_c::multVecZero(&mPos);
                     
                     if (field_0x894 == 0) {
-                        dComIfGp_particle_set(dPa_name::ID_SCENE_8434, &mPos, &current.angle);
+                        dComIfGp_particle_set(dPa_name::ID_IT_SN_SINJYU_GLOWD00, &mPos, &current.angle);
                     } else if (field_0x894 == 1) {
-                        dComIfGp_particle_set(dPa_name::ID_SCENE_8436, &mPos, &current.angle);
+                        dComIfGp_particle_set(dPa_name::ID_IT_SN_SINJYU_GLOWF00, &mPos, &current.angle);
                     } else {
-                        dComIfGp_particle_set(dPa_name::ID_SCENE_8435, &mPos, &current.angle);
+                        dComIfGp_particle_set(dPa_name::ID_IT_SN_SINJYU_GLOWN00, &mPos, &current.angle);
                     }
                 } else if (field_0x8C4 == 125) {
                     field_0x8A3 = true;

@@ -197,11 +197,11 @@ void daObj_Ikada_c::_ride(fopAc_ac_c* actor) {
 
             if (bomb->getBombRestTime() <= 1) {
                 cXyz sp24 = actor->current.pos;
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &sp24);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &sp24);
 
                 daPy_py_c* player = daPy_getPlayerActorClass();
                 cXyz sp18(2.0f, 2.0f, 2.0f);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, &sp24, &player->shape_angle, &sp18);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, &sp24, &player->shape_angle, &sp18);
                 fopAcM_seStart(this, JA_SE_LK_LAST_HIT, 0);
 
                 if (mBombSmokeEasterEgg.getEmitter() == NULL) {
@@ -210,7 +210,7 @@ void daObj_Ikada_c::_ride(fopAc_ac_c* actor) {
                     mBombSmokeRot.y += mBombSmokeAngle;
                     mBombSmokePos = current.pos;
                     dComIfGp_particle_setShipTail(
-                        dPa_name::ID_COMMON_03E1, &mBombSmokePos, &mBombSmokeRot, &scale, 0xff, &mBombSmokeEasterEgg, fopAcM_GetRoomNo(this)
+                        dPa_name::ID_IT_JN_MJTAIHOU_SMOKE01, &mBombSmokePos, &mBombSmokeRot, &scale, 0xff, &mBombSmokeEasterEgg, fopAcM_GetRoomNo(this)
                     );
                     m04A8 = 230;
                 }
@@ -270,10 +270,10 @@ bool daObj_Ikada_c::checkTgHit() {
 
         if (ret) {
             m12E4 = 5;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &sp4C);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &sp4C);
             daPy_py_c* player = daPy_getPlayerActorClass();
             sp40.set(2.0f, 2.0f, 2.0f);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, &sp4C, &player->shape_angle, &sp40);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, &sp4C, &player->shape_angle, &sp40);
             fopAcM_seStart(this, JA_SE_LK_LAST_HIT, 0);
 
             if (mBombSmokeEasterEgg.getEmitter() == NULL) {
@@ -282,7 +282,7 @@ bool daObj_Ikada_c::checkTgHit() {
                 mBombSmokeRot.y += mBombSmokeAngle;
                 mBombSmokePos = current.pos;
                 dComIfGp_particle_setShipTail(
-                    dPa_name::ID_COMMON_03E1, &mBombSmokePos, &mBombSmokeRot, &scale, 0xff, &mBombSmokeEasterEgg, fopAcM_GetRoomNo(this)
+                    dPa_name::ID_IT_JN_MJTAIHOU_SMOKE01, &mBombSmokePos, &mBombSmokeRot, &scale, 0xff, &mBombSmokeEasterEgg, fopAcM_GetRoomNo(this)
                 );
                 m04A8 = 230;
             }
@@ -326,25 +326,25 @@ void daObj_Ikada_c::createWave() {
     static JGeometry::TVec3<f32> wave_r_direction(-0.5f, 1.0f, -0.3f);
 
     if (mWaveLCallback.getEmitter() == NULL) {
-        dComIfGp_particle_set(dPa_name::ID_COMMON_0037, &mWavePos, &mWaveRot, NULL, 0xff, &mWaveLCallback);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWAVE00, &mWavePos, &mWaveRot, NULL, 0xff, &mWaveLCallback);
         if (mWaveLCallback.getEmitter() != NULL) {
             mWaveLCallback.getEmitter()->setDirection(wave_l_direction);
         }
     }
 
     if (mWaveRCallback.getEmitter() == NULL) {
-        dComIfGp_particle_set(dPa_name::ID_COMMON_0037, &mWavePos, &mWaveRot, NULL, 0xff, &mWaveRCallback);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWAVE00, &mWavePos, &mWaveRot, NULL, 0xff, &mWaveRCallback);
         if (mWaveRCallback.getEmitter() != NULL) {
             mWaveRCallback.getEmitter()->setDirection(wave_r_direction);
         }
     }
 
     if (mSplashCallBack.getEmitter() == NULL) {
-        dComIfGp_particle_set(dPa_name::ID_COMMON_0035, &mWavePos, &mWaveRot, NULL, 0xff, &mSplashCallBack);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPSPLASH00, &mWavePos, &mWaveRot, NULL, 0xff, &mSplashCallBack);
     }
 
     if (mTrackCallBack.getEmitter() == NULL) {
-        dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0036, &mTrackPos, &shape_angle, NULL, 0x0, &mTrackCallBack);
+        dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_SHIPTAIL00, &mTrackPos, &shape_angle, NULL, 0x0, &mTrackCallBack);
 
         JPABaseEmitter* emitter = mTrackCallBack.getEmitter();
         if (emitter != NULL) {
@@ -552,7 +552,7 @@ void daObj_Ikada_c::setRopePos() {
         m0444.z = ptr->z;
 
         if (mRippleCallBack.getEmitter() == NULL) {
-            dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &m0444, NULL, &ripple_scale, 0xff, &mRippleCallBack);
+            dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &m0444, NULL, &ripple_scale, 0xff, &mRippleCallBack);
             if (mRippleCallBack.getEmitter() != NULL) {
                 mRippleCallBack.setRate(0.0f);
                 if (m0440 == 0) {
@@ -1072,14 +1072,14 @@ void daObj_Ikada_c::epProc() {
             fire_scale.x = REG12_F(10) + 0.5f;
             fire_scale.y = fire_scale.x;
             fire_scale.z = fire_scale.x;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_01EA, &mFirePos, NULL, &fire_scale, 0xff, &mFireParticle);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_TORCH, &mFirePos, NULL, &fire_scale, 0xff, &mFireParticle);
         }
 
         if (mFireParticle.getEmitter() != NULL) {
             cXyz sp18 = mFirePos;
             sp18.y += 20.0f;
 
-            dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &sp18);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_JP_O_KAGEROU00, &sp18);
 
             if (cLib_calcTimer(&mEpTimer0) == 0) {
                 mEpTimer0 = (s16)(REG0_F(3) + cM_rndF(REG0_F(2) + 5.0f));

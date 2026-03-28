@@ -58,43 +58,43 @@ void daObjVolcano::Act_c::StartFire() {
         }
     }
     this->field_0x2C8[0] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_805A, &this->field_0x4C4,
+                                            dPa_name::ID_AK_SN_O_FIRESHAFTHEAD, &this->field_0x4C4,
                                             &this->current.angle,
                                             &this->field_0x4AC);
     this->field_0x2C8[1] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_805B, &this->field_0x4D0,
+                                            dPa_name::ID_AK_SN_O_FIRESHAFTBODY, &this->field_0x4D0,
                                             &this->current.angle,
                                             &this->field_0x4AC);
     this->field_0x2C8[2] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_805C, &this->field_0x4DC,
+                                            dPa_name::ID_AK_SN_O_FIRESHAFTFOOT, &this->field_0x4DC,
                                             &this->current.angle,
                                             &this->field_0x4AC);
     this->field_0x2C8[3] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_8194, &this->current.pos,
+                                            dPa_name::ID_AK_SN_MINIKAZANSTEAM00, &this->current.pos,
                                             &this->current.angle,
                                             NULL);
     this->field_0x2C8[4] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_8195, &this->current.pos,
+                                            dPa_name::ID_AK_SN_MINIKAZANSTEAM01, &this->current.pos,
                                             &this->current.angle,
                                             NULL);
     this->field_0x2C8[5] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_8196, &this->current.pos,
+                                            dPa_name::ID_AK_SN_MINIKAZANSTEAM02, &this->current.pos,
                                             &this->current.angle,
                                             NULL);
     this->field_0x2C8[6] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_8197, &this->current.pos,
+                                            dPa_name::ID_AK_SN_MINIKAZANSTEAM03, &this->current.pos,
                                             &this->current.angle,
                                             NULL);
     this->field_0x2C8[7] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_8198, &this->current.pos,
+                                            dPa_name::ID_AK_SN_MINIKAZANSTEAM04, &this->current.pos,
                                             &this->current.angle,
                                             NULL);
     this->field_0x2C8[8] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_8199, &this->current.pos,
+                                            dPa_name::ID_AK_SN_MINIKAZANSTEAM05, &this->current.pos,
                                             &this->current.angle,
                                             NULL);
     this->field_0x2C8[9] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_819A, &this->current.pos,
+                                            dPa_name::ID_AK_SN_MINIKAZANSTEAM06, &this->current.pos,
                                             &this->current.angle,
                                             NULL);
 }

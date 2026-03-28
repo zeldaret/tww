@@ -226,13 +226,13 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
             pauseTime = 6 + REG0_S(7);
             
             if (atInfo->pParticlePos) {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, atInfo->pParticlePos);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, atInfo->pParticlePos);
                 cXyz scale;
                 scale.x = scale.y = scale.z = 2.0f;
                 csXyz angle;
                 angle.x = angle.z = 0;
                 angle.y = fopAcM_searchPlayerAngleY(tgActor);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, atInfo->pParticlePos, &angle, &scale);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, atInfo->pParticlePos, &angle, &scale);
             }
         } else {
             u32 r29 = fopAcM_GetName(tgActor) == PROC_ST ? 0x33 : 0x20;

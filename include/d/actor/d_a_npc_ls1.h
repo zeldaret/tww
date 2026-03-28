@@ -232,21 +232,18 @@ public:
         /* 0x12 */ s16 m12;
         /* 0x14 */ f32 mAttPosOffsetY;
         /* 0x18 */ bool m18;
-        /* 0x19 */ // 3 bytes of alignment padding
         /* 0x1C */ f32 m1C;
         /* 0x20 */ f32 m29;
         /* 0x24 */ f32 m24;
         /* 0x28 */ f32 m28;
         /* 0x2C */ f32 m2C;
         /* 0x30 */ s16 m30;
-        /* 0x32 */ // 2 bytes of alignment padding
         /* 0x34 */ f32 mPlayerEyePosOffsetY;
     };  // Size: 0x38
     daNpc_Ls1_HIO_c();
     inline virtual ~daNpc_Ls1_HIO_c();
 public:
     /* 0x04 */ s8 m04;
-    /* 0x05 */ // 3 bytes of alignment padding
     /* 0x08 */ s32 m08;
     /* 0x0C */ hio_prm_c mPrm;
 };  // Size: 0x44

@@ -105,7 +105,7 @@ void kikuzu_set(mflft_class* i_this, cXyz* arg1) {
     sp18.y -= -0x8000;
 
     JPABaseEmitter* pJVar4 = dComIfGp_particle_set(
-        dPa_name::ID_COMMON_002B, arg1, &sp18, NULL, 0xff, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL
+        dPa_name::ID_AK_JN_ELEMENTKIKUZU00, arg1, &sp18, NULL, 0xff, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL
     );
     if (pJVar4 != NULL) {
         pJVar4->setRate(10.0f);
@@ -304,7 +304,7 @@ void mflft_move(mflft_class* i_this) {
             if (i_this->actor.speed.y < -50.0f) {
                 i_this->m2C4 = 2000.0f;
                 i_this->m2BC = 2000.0f;
-                dComIfGp_particle_set(dPa_name::ID_SCENE_8231, &i_this->actor.current.pos, &i_this->actor.shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_MAGMALIFTSPLASH00, &i_this->actor.current.pos, &i_this->actor.shape_angle);
                 fopAcM_seStartCurrent(&i_this->actor, JA_SE_OBJ_BAL_LIFT_LANDING, 0);
                 dComIfGp_getVibration().StartShock(REG0_S(2) + DEMO_SELECT(4, 5), -0x21, cXyz(0.0f, 1.0f, 0.0f));
             }
@@ -380,7 +380,7 @@ void himo_move(mflft_class* i_this) {
                 if (ccAtInfo.mpActor != NULL) {
                     sp48 = i_this->m2D8[i];
                     sp48.y = ccAtInfo.mpActor->eyePos.y;
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &sp48, &player->shape_angle);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &sp48, &player->shape_angle);
                     kikuzu_set(i_this, &sp48);
                     mDoAud_seStart(soundId, &ccAtInfo.mpActor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(&i_this->actor)));
                 }
@@ -412,7 +412,7 @@ void eff_cont(mflft_class* i_this) {
         break;
 
     case 1:
-        i_this->m774 = dComIfGp_particle_set(dPa_name::ID_SCENE_8105, &sp24);
+        i_this->m774 = dComIfGp_particle_set(dPa_name::ID_AK_SN_MAGMAISLAND01, &sp24);
         if (i_this->m774 != NULL) {
             cXyz s(1.8f, 1.8f, 1.8f);
             i_this->m774->setGlobalScale(s);

@@ -442,7 +442,7 @@ void Act_c::mode_gmtw_demo() {
             if (--m2F4 <= 0) {
                 m2F6 = 2;
             } else if (m2F4 == 0x3b) {
-                dComIfGp_particle_set(dPa_name::ID_SCENE_814D, &a_this->current.pos);
+                dComIfGp_particle_set(dPa_name::ID_IT_SN_MT_WATER00, &a_this->current.pos);
                 dComIfG_Bgsp()->Regist(mpBgW, a_this);
                 m2F7 = true;
             }

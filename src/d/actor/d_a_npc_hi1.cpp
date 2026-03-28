@@ -49,20 +49,20 @@ static int l_check_wrk;
 /* 000000EC-00000150       .text __ct__15daNpc_Hi1_HIO_cFv */
 daNpc_Hi1_HIO_c::daNpc_Hi1_HIO_c() {
     static hio_prm_c a_prm_tbl = {
-        0x0000,
-        0x1FFE,
-        0xF600,
-        0xE002,
-        0x0000,
-        0x0744,
-        0xF9DA,
-        0xF8BC,
-        0x0258,
-        0x0000,
-        270.0f,
-        0.0f
+        /* mMaxHeadX         */ 0x0000,
+        /* mMaxHeadY         */ 0x1FFE,
+        /* mMinHeadX         */ 0xF600,
+        /* mMinHeadY         */ 0xE002,
+        /* mMaxBackboneX     */ 0x0000,
+        /* mMaxBackboneY     */ 0x0744,
+        /* mMinBackboneX     */ 0xF9DA,
+        /* mMinBackboneY     */ 0xF8BC,
+        /* mMaxTurnStep      */ 0x0258,
+        /* field_12          */ 0x0000,
+        /* mAttentionYOffset */ 270.0f,
+        /* field_18          */ 0.0f,
     };
-    memcpy(&mPrmTbl,&a_prm_tbl,0x1c);
+    memcpy(&mPrmTbl, &a_prm_tbl, sizeof(hio_prm_c));
     mNo = -1;
     field_0x8 = -1;
 }

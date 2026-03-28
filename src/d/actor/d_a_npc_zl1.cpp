@@ -88,41 +88,41 @@ static char l_BTKName[30];
 /* 000000EC-00000150       .text __ct__15daNpc_Zl1_HIO_cFv */
 daNpc_Zl1_HIO_c::daNpc_Zl1_HIO_c() {
     static hio_prm_c a_prm_tbl = {
-        0x18E2,
-        0x2328,
-        0xE71E,
-        0xDCD8,
-        0x0BB8,
-        0x03E8,
-        0xF8E4,
-        0xFC18,
-        0x1000,
-        0x0800,
-        140.0f,
-        0,
-        0,
-        0,
-        0,
-        200.0f,
-        200.0f,
-        0x0028,
-        0x0014,
-        0x0000,
-        0x003C,
-        130.0f,
-        0.04f,
-        10.0f,
-        0.0f,
-        1.0f,
-        1.0f,
-        200.0f,
-        0.25f,
-        25.0f,
-        10.0f,
-        0x0180,
-        0x1388
+        /* mMaxHeadX     */ 0x18E2,
+        /* mMaxHeadY     */ 0x2328,
+        /* mMinHeadX     */ 0xE71E,
+        /* mMinHeadY     */ 0xDCD8,
+        /* mMaxBackboneX */ 0x0BB8,
+        /* mMaxBackboneY */ 0x03E8,
+        /* mMinBackboneX */ 0xF8E4,
+        /* mMinBackboneY */ 0xFC18,
+        /* mMaxTurnStep  */ 0x1000,
+        /* field_18      */ 0x0800,
+        /* field_1C      */ 140.0f,
+        /* field_20      */ 0,
+        /* field_21      */ 0,
+        /* field_22      */ 0,
+        /* field_23      */ 0,
+        /* field_24      */ 200.0f,
+        /* field_28      */ 200.0f,
+        /* field_2C      */ 0x0028,
+        /* field_2E      */ 0x0014,
+        /* field_30      */ 0x0000,
+        /* field_32      */ 0x003C,
+        /* field_34      */ 130.0f,
+        /* field_38      */ 0.04f,
+        /* field_3C      */ 10.0f,
+        /* field_40      */ 0.0f,
+        /* field_44      */ 1.0f,
+        /* field_48      */ 1.0f,
+        /* field_4C      */ 200.0f,
+        /* field_50      */ 0.25f,
+        /* field_54      */ 25.0f,
+        /* field_58      */ 10.0f,
+        /* field_5C      */ 0x0180,
+        /* field_5E      */ 0x1388,
     };
-    memcpy(&mPrmTbl,&a_prm_tbl,0x58);
+    memcpy(&mPrmTbl, &a_prm_tbl, sizeof(hio_prm_c));
     mNo = -1;
     field_0x8 = -1;
 }
@@ -1951,7 +1951,7 @@ void daNpc_Zl1_c::setWaterRipple() {
     if(!field_0x7CA) {
         if(mObjAcch.ChkWaterIn()) {
             if(mRippleCallBack.getEmitter() == NULL) {
-                dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033,&current.pos, NULL, NULL, 0xff, &mRippleCallBack);
+                dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00,&current.pos, NULL, NULL, 0xff, &mRippleCallBack);
             }
             f32 temp = std::fabsf(speedF) * 0.1f;
             f32 temp2 = temp * temp;
@@ -2052,47 +2052,15 @@ void daNpc_Zl1_c::setEff() {
 
 /* 00004118-0000498C       .text setFrontWallType__11daNpc_Zl1_cFv */
 BOOL daNpc_Zl1_c::setFrontWallType() {
-    BOOL ret;
-
     f32 sin = cM_ssin(shape_angle.y);
     f32 cos = cM_scos(shape_angle.y);
+
     dBgS_LinChk linChk;
-    
     dBgS_ObjRoofChk roofChk;
 
-    cXyz temp;
-    cXyz temp2;
-    f32 tempX;
-    f32 tempY;
-    f32 tempZ;
-
-#if VERSION > VERSION_DEMO
-    temp.set(current.pos.x, current.pos.y + mAcchCir.GetWallH(), current.pos.z);
-#else
-    tempZ = current.pos.z;
-    tempY = current.pos.y + mAcchCir.GetWallH();
-    tempX = current.pos.x;
-    temp.set(tempX, tempY, tempZ);
-#endif
-
-    f32 wallRadius = mAcchCir.GetWallR() + 25.0f;
-#if VERSION > VERSION_DEMO
-    tempX = temp.x;
-    tempY = temp.y;
-    tempZ = temp.z;
-    tempZ += cos * wallRadius;
-    tempX += sin * wallRadius;
-    temp2.set(tempX, tempY, tempZ);
-    // temp2.set(temp.z + sin * wallRadius, temp.y, temp.z + cos * wallRadius);
-#else
-    f32 tempZ2 = temp.z + cos * wallRadius;
-    f32 tempY2 = temp.y;
-    f32 tempX2 = temp.x + sin * wallRadius;
-    temp2.set(tempX2, tempY2, tempZ2);
-#endif
-
-
-    linChk.Set(&temp, &temp2, this);
+    cXyz sp14(current.pos.x, current.pos.y + mAcchCir.GetWallH(), current.pos.z);
+    cXyz sp08(sp14.x + sin * (mAcchCir.GetWallR() + 25.0f), sp14.y, sp14.z + cos * (mAcchCir.GetWallR() + 25.0f));
+    linChk.Set(&sp14, &sp08, this);
     
     if (!dComIfG_Bgsp()->LineCross(&linChk)) {
         return FALSE;
@@ -2103,38 +2071,18 @@ BOOL daNpc_Zl1_c::setFrontWallType() {
         return FALSE;
     }
     
-    f32 tempX3;
-    f32 tempY3;
-    f32 tempZ3;
-    tempZ3 = current.pos.z;
-    tempY3 = current.pos.y + 70.0f + 0.1f;
-    tempX3 = current.pos.x;
+    sp14.set(current.pos.x, current.pos.y + 70.0f + 0.1f, current.pos.z);
+    sp08.set(sp14.x + sin * (mAcchCir.GetWallR() + 25.0f), sp14.y, sp14.z + cos * (mAcchCir.GetWallR() + 25.0f));
+    linChk.Set(&sp14, &sp08, this);
 
-    temp.set(tempX3, tempY3, tempZ3);
-
-#if VERSION > VERSION_DEMO
-    f32 wallRadius2 = mAcchCir.GetWallR() + 25.0f;
-
-    tempZ = temp.z + cos * wallRadius2;
-    tempY = temp.y;
-    tempX = temp.x + sin * wallRadius2;
-    temp2.set(tempX, tempY, tempZ);
-
-#else 
-    wallRadius = mAcchCir.GetWallR() + 25.0f;
-    f32 tempZ4 = temp.z + cos * wallRadius;
-    f32 tempY4 = temp.y;
-    f32 tempX4 = temp.x + sin * wallRadius;
-    temp2.set(tempX4, tempY4, tempZ4);
-#endif
-
-
-    linChk.Set(&temp, &temp2, this);
-
-    ret = dComIfG_Bgsp()->LineCross(&linChk);
+    BOOL ret = dComIfG_Bgsp()->LineCross(&linChk);
     if (!ret) {
         roofChk.SetPos(current.pos);
-        ret = dComIfG_Bgsp()->RoofChk(&roofChk) - current.pos.y > 80.0f ? FALSE : TRUE;
+        if (dComIfG_Bgsp()->RoofChk(&roofChk) - current.pos.y > 80.0f) {
+            ret = FALSE;
+        } else {
+            ret = TRUE;
+        }
     }
     
     return ret == FALSE;
@@ -2928,7 +2876,6 @@ BOOL daNpc_Zl1_c::_delete() {
         }
     }
     return TRUE;
-
 #endif
 }
 
@@ -2960,7 +2907,6 @@ cPhs_State daNpc_Zl1_c::_create() {
     if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_siz_tbl[field_0x84E])) {
 #if VERSION == VERSION_DEMO
         mStateIsComplaete = false;
-
 #endif
         return cPhs_ERROR_e;
     } else {

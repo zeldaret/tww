@@ -220,7 +220,7 @@ void cut_control(bmdhand_class* i_this) {
         pcVar6->m0C.y = (dVar9 * (pcVar6->m00.y - pcVar6->m0C.y));
         pcVar6->m0C.z = (dVar9 * (pcVar6->m00.z - pcVar6->m0C.z));
         if ((i == 0x13) && (i_this->m2CA != 0)) {
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8067, &pcVar6->m00, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMTENTACLEBLOOD00, &pcVar6->m00, 0xFF, g_whiteColor, g_whiteColor, 0);
         }
     }
 }
@@ -498,8 +498,8 @@ void hand_move(bmdhand_class* i_this) {
                 fopAcM_monsSeStart(actor, JA_SE_CV_BKM_CUT_VINE_1, 0);
                 mDoAud_seStart(JA_SE_CM_BKM_CUT_VINE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
                 local_58.setall(0.5f);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0013, &actor->eyePos, NULL, &local_58, 0xFF);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0016, &actor->eyePos, NULL, &local_58, 0xFF);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUBAKUEN, &actor->eyePos, NULL, &local_58, 0xFF);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUFLASH, &actor->eyePos, NULL, &local_58, 0xFF);
                 if (boss->m331 > 0) {
                     boss->m331--;
                     boss->m312 = 3;

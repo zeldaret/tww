@@ -271,7 +271,7 @@ void daObjMkie::Act_c::eff_break() {
     envColor.b = (u8)tevStr.mColorC0.b;
     envColor.a = (u8)tevStr.mColorC0.a;
 
-    dComIfGp_particle_set(dPa_name::ID_SCENE_81A0, &current.pos, &shape_angle, &scale, 0xff, NULL, -1, &tevStr.mColorK0, &envColor, NULL);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_VANISHFIGURE00, &current.pos, &shape_angle, &scale, 0xff, NULL, -1, &tevStr.mColorK0, &envColor, NULL);
 }
 
 /* 00000E84-00000EF4       .text sound_melt__Q29daObjMkie5Act_cFv */

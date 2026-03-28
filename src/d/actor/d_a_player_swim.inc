@@ -337,7 +337,7 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
     onNoResetFlg0(daPyFlg0_UNK100);
 
     if (param_1) {
-        mEmitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0040, &current.pos);
+        mEmitter = dComIfGp_particle_setP1(dPa_name::ID_IT_JN_WP_SHIBUKI, &current.pos);
 
         if (mEmitter) {
             mEmitter->setRate(15.0f);
@@ -345,7 +345,7 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
             mEmitter->setGlobalParticleScale(splash_scale);
         }
 
-        mEmitter = dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_003D, &current.pos, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
+        mEmitter = dComIfGp_particle_setShipTail(dPa_name::ID_IT_JN_WP_HAMON01, &current.pos, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
         
         if (mEmitter) {
             mEmitter->setGlobalDynamicsScale(ripple_scale);

@@ -165,7 +165,7 @@ void daObjOspbox::Act_c::eff_break() {
     static cXyz particle_scale(2.0f, 2.0f, 1.0f);
     cXyz particle_pos(current.pos.x, current.pos.y + 75.0f, current.pos.z);
     JPABaseEmitter* emitter = dComIfGp_particle_set(
-        dPa_name::ID_COMMON_03E6,
+        dPa_name::ID_IT_JN_TR_HAHEN_B,
         &particle_pos,
         NULL, NULL, 0xFF,
         NULL,

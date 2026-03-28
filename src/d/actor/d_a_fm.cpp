@@ -423,9 +423,9 @@ bool daFm_c::bodyCreateHeap() {
 /* 000009CC-00000A30       .text jntHitCreateHeap__6daFm_cFv */
 bool daFm_c::jntHitCreateHeap() {
     static Vec hand_sph_offset[] = {20.0f, 0.0f, 0.0f};
-    static Vec ude_cyl_offset[] = {{0.0f, 0.0f, 0.0f},    {60.0f, 0.0f, 0.0f}};
-    static Vec yubi_cyl_offset[]   = {{0.0f, 0.0f, 0.0f},    {15.0f, 0.0f, 0.0f}};
-    static Vec te_cyl2_offset[]     = {{20.0f, 0.0f, 0.0f},    {20.0f, -5.0f, 0.0f}};
+    static Vec ude_cyl_offset[] = {{0.0f, 0.0f, 0.0f}, {60.0f, 0.0f, 0.0f}};
+    static Vec yubi_cyl_offset[] = {{0.0f, 0.0f, 0.0f}, {15.0f, 0.0f, 0.0f}};
+    static Vec te_cyl2_offset[] = {{20.0f, 0.0f, 0.0f}, {20.0f, -5.0f, 0.0f}};
 
     static __jnt_hit_data_c search_data[] = {
         {
@@ -434,7 +434,6 @@ bool daFm_c::jntHitCreateHeap() {
             /* mRadius     */ 22.0f,
             /* mpOffsets   */ te_cyl2_offset,
         },
-
         {
             /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x01,
@@ -861,7 +860,7 @@ bool daFm_c::checkTgHit() {
                 fopAcM_seStart(this, JA_SE_LK_W_WEP_HIT, 0x44);
                 temp = false;
                 mHitType = 4;
-                dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, &attention_info.position);
+                dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &attention_info.position);
                 fopAcM_monsSeStart(this, JA_SE_CV_FM_DAMAGE, 0);
                 modeProcInit(0x13);
                 break;
@@ -908,7 +907,7 @@ bool daFm_c::checkTgHit() {
 
             case AT_TYPE_GRAPPLING_HOOK:
                 fopAcM_monsSeStart(this, JA_SE_CV_FM_DAMAGE, 0);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, &attention_info.position);
+                dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &attention_info.position);
                 fopAcM_seStart(this, JA_SE_LK_W_WEP_HIT, 0x44);
                 mHitType = 0xD;
                 temp = false;
@@ -922,9 +921,9 @@ bool daFm_c::checkTgHit() {
         if (temp) {
             cc_at_check(this, &atInfo);
             if (mHitType == 1 || mHitType == 8 || mHitType == 9 || mHitType== 0xc || health <= 0) {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, hitPos);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, hitPos);
                 cXyz temp2(2.0f, 2.0f, 2.0f);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, hitPos, &player->shape_angle, &temp2);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, hitPos, &player->shape_angle, &temp2);
 
                 if (health <= 0) {
                     fopAcM_monsSeStart(this, JA_SE_CV_FM_DIE, 0);
@@ -943,7 +942,7 @@ bool daFm_c::checkTgHit() {
                     modeProcInit(10);
                 }
             } else {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, hitPos, &player->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, hitPos, &player->shape_angle);
 
                 fopAcM_monsSeStart(this, JA_SE_CV_FM_DAMAGE, 0);
                 modeProcInit(10);
@@ -2992,7 +2991,7 @@ int daFm_c::setRnd(int param_1, int param_2) {
 /* 00008044-00008114       .text setHoleEffect__6daFm_cFv */
 void daFm_c::setHoleEffect() {
     if(mpFollowEcallBack.getEmitter() == NULL) {
-        dComIfGp_particle_setShipTail(dPa_name::ID_SCENE_809E, &current.pos, NULL, NULL, 0xFF, &mpFollowEcallBack, fopAcM_GetRoomNo(this));
+        dComIfGp_particle_setShipTail(dPa_name::ID_AK_SN_PITFALL00, &current.pos, NULL, NULL, 0xFF, &mpFollowEcallBack, fopAcM_GetRoomNo(this));
     }
     JPABaseEmitter* emitter = mpFollowEcallBack.getEmitter();
     

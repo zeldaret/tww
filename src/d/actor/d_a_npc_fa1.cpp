@@ -293,7 +293,7 @@ int daNpc_Fa1_c::createInit() {
         setPointLightParam();
         dKy_efplight_set(&mPointLight);
     }
-    JPABaseEmitter* pJVar4 = dComIfGp_particle_set(dPa_name::ID_COMMON_0052, &current.pos, NULL,
+    JPABaseEmitter* pJVar4 = dComIfGp_particle_set(dPa_name::ID_AK_JN_CUREFAIRY00, &current.pos, NULL,
                                                    NULL, 0xFF, &mSparklePtclCallback);
     mpEmitter = pJVar4;
     return TRUE;

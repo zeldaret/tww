@@ -468,7 +468,7 @@ BOOL daWarpdm20_c::set_effect(unsigned short arg1) {
 /* 000014CC-00001550       .text set_wpsenko__12daWarpdm20_cFv */
 void daWarpdm20_c::set_wpsenko() {
     if (!m2F8) {
-        dComIfGp_particle_set(dPa_name::ID_SCENE_82BC, &current.pos);
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_DEMO20_WPSENKO00, &current.pos);
         m2F8 = true;
     }
 }

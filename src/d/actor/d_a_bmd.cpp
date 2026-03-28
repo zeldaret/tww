@@ -173,7 +173,7 @@ void damage(bmd_class* i_this) {
             sVar5 = fopAcM_searchPlayerAngleY(actor);
             i_this->m93C = sVar5;
             i_this->mBD8 = 2000.0f;
-            dComIfGp_particle_set(dPa_name::ID_SCENE_80F3, &actor->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMOPENHOUSHI00, &actor->current.pos);
             if (dComIfGp_getStartStageName()[0] == 'X') {
                 mDoAud_bgmStart(JA_BGM_UNK_151);
             } else {
@@ -188,7 +188,7 @@ void damage(bmd_class* i_this) {
         }
         if ((s16)i_this->mpMorf->getFrame() == 30) {
             for (s32 i = 0; i < (s32)ARRAY_SIZE(jno); i++) {
-                pJVar4 = dComIfGp_particle_setToon(dPa_name::ID_SCENE_A0F4, &actor->current.pos, NULL, NULL, 0xB9, &i_this->mA90[i], fopAcM_GetRoomNo(actor));
+                pJVar4 = dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BKMOPENSMOKE00, &actor->current.pos, NULL, NULL, 0xB9, &i_this->mA90[i], fopAcM_GetRoomNo(actor));
                 if (pJVar4 != NULL) {
                     pJVar4->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(jno[i]));
                 }
@@ -222,7 +222,7 @@ void damage(bmd_class* i_this) {
             mDoAud_seStart(JA_SE_CM_BKM_BODY_CLOSE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         if ((s16)i_this->mpMorf->getFrame() == 27) {
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8100, &actor->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMCLOSEHOUSHI00, &actor->current.pos);
             if (dComIfGp_getStartStageName()[0] == 'X') {
                 mDoAud_bgmStart(JA_BGM_PAST_BKM);
             } else {
@@ -297,8 +297,8 @@ void damage(bmd_class* i_this) {
             dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
             mDoAud_seStart(JA_SE_CM_BKM_BODY_FALL, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
             actor->speed.y = 10.0f;
-            dComIfGp_particle_set(dPa_name::ID_SCENE_80F1, &actor->current.pos);
-            dComIfGp_particle_setToon(dPa_name::ID_SCENE_A0F2, &actor->current.pos, NULL, NULL, 0xB9, &i_this->mA90[5], (u8)actor->current.roomNo);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMDROPDOWNSOIL00, &actor->current.pos);
+            dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BKMDROPDOWNSMOKE00, &actor->current.pos, NULL, NULL, 0xB9, &i_this->mA90[5], (u8)actor->current.roomNo);
         } else {
             actor->speed.y = 0.0f;
         }
@@ -356,8 +356,8 @@ void eat(bmd_class* i_this) {
         return;
     case 3:
         if (i_this->mB78 == REG0_S(2) + 0x50) {
-            dComIfGp_particle_set(dPa_name::ID_SCENE_80F8, &actor->current.pos);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_80F7, &actor->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMHAKIDASHISMOKE00, &actor->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMHAKIDASHIHOUSHI01, &actor->current.pos);
             i_this->m314 = 100;
         }
         if (i_this->mB78 == 0x55) {
@@ -482,7 +482,7 @@ void start(bmd_class* i_this) {
             mDoAud_seStart(JA_SE_CM_BKM_FLW_TO_BUD, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         if (i_this->mB76 == 0xb1) {
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8100, &actor->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMCLOSEHOUSHI00, &actor->current.pos);
         }
         if (i_this->mB76 >= 0x96) {
             if (i_this->m331 > 0) {
@@ -550,7 +550,7 @@ void end(bmd_class* i_this) {
             i_this->mBD8 = 2000.0f;
             i_this->m332 = 9;
             for (s32 i = 0; i < (s32)ARRAY_SIZE(jno); i++) {
-                pJVar3 = dComIfGp_particle_set(dPa_name::ID_SCENE_80FF, &actor->current.pos);
+                pJVar3 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMHANAKARERU00, &actor->current.pos);
                 if (pJVar3 != NULL) {
                     pJVar3->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(jno[i]));
                 }
@@ -728,7 +728,7 @@ void core_move(bmd_class* i_this) {
         break;
     case 105:
         if ((s16)i_this->m2C4->getFrame() == 37) {
-            pJVar7 = dComIfGp_particle_set(dPa_name::ID_SCENE_80FE, &actor->current.pos);
+            pJVar7 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMCORESIGH00, &actor->current.pos);
             if (pJVar7 != NULL) {
                 pJVar7->setGlobalRTMatrix(i_this->m2C4->getModel()->getAnmMtx(5));
             }
@@ -817,7 +817,7 @@ void core_move(bmd_class* i_this) {
     i_this->mCoreSph.SetR(50.0f);
     dComIfG_Ccsp()->Set(&i_this->mCoreSph);
     if (bVar5) {
-        dComIfGp_particle_setToon(dPa_name::ID_SCENE_A0FD, &i_this->m924, NULL, NULL, 0xB9, &i_this->mA90[6], (u8)actor->current.roomNo);
+        dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BKMCOREDEADSMOKE00, &i_this->m924, NULL, NULL, 0xB9, &i_this->mA90[6], (u8)actor->current.roomNo);
         mDoAud_seStart(JA_SE_CM_BKM_END_CORE_LEAP, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
     }
 }
@@ -873,7 +873,7 @@ void mk_move(bmd_class* i_this) {
             if ((int)i_this->m2C8->getFrame() == 6) {
                 local_28 = i_this->m2E0;
                 local_28.y += 10.0f;
-                pJVar3 = dComIfGp_particle_setToon(dPa_name::ID_SCENE_A0FD, &local_28, NULL, NULL, 0xB9, &i_this->mA90[6], (u8)actor->current.roomNo);
+                pJVar3 = dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BKMCOREDEADSMOKE00, &local_28, NULL, NULL, 0xB9, &i_this->mA90[6], (u8)actor->current.roomNo);
                 if (pJVar3 != NULL) {
                     pJVar3->mGlobalDynamicsScale.x = 0.5f;
                     pJVar3->mGlobalDynamicsScale.y = 0.5f;
@@ -1086,7 +1086,7 @@ void move(bmd_class* i_this) {
     }
 }
 
-static u16 eff_name[] = {dPa_name::ID_SCENE_80EE, dPa_name::ID_SCENE_80EF, dPa_name::ID_SCENE_80F5};
+static u16 eff_name[] = {dPa_name::ID_AK_SN_BKMCOREWAIT00, dPa_name::ID_AK_SN_BKMCOREDAMAGE00, dPa_name::ID_AK_SN_BKMCOREBLOOD00};
 static u16 eff_joint[] = {0x0008, 0x0009, 0x0004};
 
 /* 00003BDC-00003D48       .text eff_cont__FP9bmd_class */

@@ -574,7 +574,7 @@ void daDaiocta_c::setEffect(u16 effect_name) {
     csXyz particle_angle(shape_angle);
 
     switch (effect_name) {
-        case dPa_name::ID_SCENE_81FE:
+        case dPa_name::ID_IT_SN_DO_APPSHIBUKI00:
 #if VERSION > VERSION_DEMO
             if (!mParticleCallback.getEmitter()) {
                 dComIfGp_particle_set(
@@ -591,22 +591,22 @@ void daDaiocta_c::setEffect(u16 effect_name) {
             );
 #endif
             break;
-        case dPa_name::ID_SCENE_81FF:
-        case dPa_name::ID_SCENE_8200:
-        case dPa_name::ID_SCENE_8201:
-        case dPa_name::ID_SCENE_8202:
-        case dPa_name::ID_SCENE_8203:
-        case dPa_name::ID_SCENE_8204:
-        case dPa_name::ID_SCENE_8205:
+        case dPa_name::ID_IT_SN_DO_HITA_SHIBUKIA00:
+        case dPa_name::ID_IT_SN_DO_HITA_SHIBUKIB00:
+        case dPa_name::ID_IT_SN_DO_HITB_SHIBUKIA00:
+        case dPa_name::ID_IT_SN_DO_HITB_SHIBUKIB00:
+        case dPa_name::ID_IT_SN_DO_HITC_SHIBUKIA00:
+        case dPa_name::ID_IT_SN_DO_HITC_SHIBUKIB00:
+        case dPa_name::ID_IT_SN_DO_DOWNSHIBUKI00:
             dComIfGp_particle_set(
                 effect_name, &particle_pos, NULL, NULL, 
                 0xFF, NULL, -1, &sea_color_ambient
             );
             break;
-        case dPa_name::ID_SCENE_8207:
-        case dPa_name::ID_SCENE_8208:
-        case dPa_name::ID_SCENE_8209:
-        case dPa_name::ID_SCENE_82CC:
+        case dPa_name::ID_IT_SN_DO_SUIKOMIA00:
+        case dPa_name::ID_IT_SN_DO_SUIKOMIB00:
+        case dPa_name::ID_IT_SN_DO_SUIKOMIC00:
+        case dPa_name::ID_IT_SN_DO_HAKIDASHI00:
             dComIfGp_particle_set(
                 effect_name, &particle_pos, &particle_angle, NULL, 
                 0xFF, NULL, -1, &sea_color_ambient
@@ -912,7 +912,7 @@ void daDaiocta_c::modeAppearInit() {
     mpAuzu = fopAcM_create(PROC_Obj_Auzu, auzu_parameters, &auzu_pos, tevStr.mRoomNo);
 #endif
 
-    setEffect(dPa_name::ID_SCENE_81FE);
+    setEffect(dPa_name::ID_IT_SN_DO_APPSHIBUKI00);
     mDoAud_bgmAllMute(90);
     for (int i = 0; i < ARRAY_SSIZE(mDaioctaEyePcId); i++) {
         daDaiocta_Eye_c* big_octo_eye_p;
@@ -1005,8 +1005,8 @@ void daDaiocta_c::modeDamageInit() {
         setAnm();
         mPrmIdx = 4;
 
-        setEffect(dPa_name::ID_SCENE_8201);
-        setEffect(dPa_name::ID_SCENE_8202);
+        setEffect(dPa_name::ID_IT_SN_DO_HITB_SHIBUKIA00);
+        setEffect(dPa_name::ID_IT_SN_DO_HITB_SHIBUKIB00);
     }
 }
 
@@ -1039,8 +1039,8 @@ void daDaiocta_c::modeDamageBombInit() {
         mPrmIdx = 2;
         setAnm();
         mPrmIdx = 3;
-        setEffect(dPa_name::ID_SCENE_81FF);
-        setEffect(dPa_name::ID_SCENE_8200);
+        setEffect(dPa_name::ID_IT_SN_DO_HITA_SHIBUKIA00);
+        setEffect(dPa_name::ID_IT_SN_DO_HITA_SHIBUKIB00);
     }
 }
 
@@ -1067,9 +1067,9 @@ void daDaiocta_c::modeDamageBomb() {
 /* 00002778-000028FC       .text modeDemoInit__11daDaiocta_cFv */
 void daDaiocta_c::modeDemoInit() {
     attention_info.flags = 0;
-    setEffect(dPa_name::ID_SCENE_8207);
-    setEffect(dPa_name::ID_SCENE_8208);
-    setEffect(dPa_name::ID_SCENE_8209);
+    setEffect(dPa_name::ID_IT_SN_DO_SUIKOMIA00);
+    setEffect(dPa_name::ID_IT_SN_DO_SUIKOMIB00);
+    setEffect(dPa_name::ID_IT_SN_DO_SUIKOMIC00);
     J3DModelData* model_data_p = mpSuikomiModel->getModelData();
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_GDO_SUI00));
@@ -1223,8 +1223,8 @@ void daDaiocta_c::modeDeleteInit() {
     fopAcM_seStart(this, JA_SE_CV_DO_DIE, 0);
     fopAcM_seStart(this, JA_SE_CM_DO_JITABATA, 0);
     fopAcM_seStart(this, JA_SE_LK_LAST_HIT, 0);
-    setEffect(dPa_name::ID_SCENE_8203);
-    setEffect(dPa_name::ID_SCENE_8204);
+    setEffect(dPa_name::ID_IT_SN_DO_HITC_SHIBUKIA00);
+    setEffect(dPa_name::ID_IT_SN_DO_HITC_SHIBUKIB00);
 }
 
 /* 00003284-000036A8       .text modeDelete__11daDaiocta_cFv */
@@ -1238,7 +1238,7 @@ void daDaiocta_c::modeDelete() {
             mPrmIdx = 5;
             if (mPrmIdx == 5 && mpMorf->isStop()) {
                 fopAcM_monsSeStart(this, JA_SE_CV_DO_SINK, 0);
-                setEffect(dPa_name::ID_SCENE_8205);
+                setEffect(dPa_name::ID_IT_SN_DO_DOWNSHIBUKI00);
                 daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(mpAuzu);
                 auzu_p->to_disappear();
                 dComIfGp_getVibration().StartQuake(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
@@ -1344,7 +1344,7 @@ void daDaiocta_c::setAnm() {
 
     if (mAnmIdx == 6) {
         if (mpMorf->getFrame() == 1.0f) {
-            setEffect(dPa_name::ID_SCENE_82CC);
+            setEffect(dPa_name::ID_IT_SN_DO_HAKIDASHI00);
         }
         if (mpMorf->getFrame() == 26.0f) {
             dComIfGp_getVibration().StartShock(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));

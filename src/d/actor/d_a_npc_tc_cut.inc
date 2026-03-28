@@ -263,7 +263,7 @@ void daNpc_Tc_c::cutEffectStart(int) {
 
     particleScale.setall(1.0f);
 
-    JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8152, &pos, NULL, &particleScale);
+    JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_IT_SN_PF_BIKON00, &pos, NULL, &particleScale);
     pEmitter->setGlobalParticleScale(0.62f, 0.6f);
     fopAcM_seStart(this, JA_SE_CM_CMN_NOTICE, 0);
     /* Nonmatching */

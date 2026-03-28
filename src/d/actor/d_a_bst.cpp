@@ -237,7 +237,7 @@ static void pos_move(bst_class* i_this, u8 param_2) {
 
 static u16 start_bck_d[] = {BST_BCK_BST_START, BST_BCK_LH_START, BST_BCK_RH_START};
 static u16 start2_bck_d[] = {0, BST_BCK_LH_START2, BST_BCK_RH_START2};
-static u16 start_smoke_name[] = {dPa_name::ID_SCENE_A1DE, dPa_name::ID_SCENE_A1DC, dPa_name::ID_SCENE_A1DD};
+static u16 start_smoke_name[] = {dPa_name::ID_AK_ST_BSTSTARTSMOKEHEAD00, dPa_name::ID_AK_ST_BSTSTARTSMOKELHAND00, dPa_name::ID_AK_ST_BSTSTARTSMOKERHAND00};
 
 /* 00000B1C-00000E58       .text stay__FP9bst_class */
 static void stay(bst_class* i_this) {
@@ -284,7 +284,7 @@ static void stay(bst_class* i_this) {
                 cXyz pos_vec;
                 cXyz vec(0.0f, 0.0f, 0.0f);
                 MtxPosition(&vec, &pos_vec);
-                dComIfGp_particle_setSimple(dPa_name::ID_SCENE_81D5, &pos_vec);
+                dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BSTFINGERFRAGMENT00, &pos_vec);
             }
         }
         cLib_addCalc2(&actor->current.pos.x, i_this->mTargetPos.x, 0.05f, 10.0f);
@@ -474,8 +474,8 @@ static void down_attack(bst_class* i_this) {
                 cXyz particle_pos;
                 particle_pos = actor->current.pos;
                 particle_pos.y = 1.0f;
-                dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C1D6, &particle_pos);
-                dComIfGp_particle_setToon(dPa_name::ID_SCENE_A1D8, &particle_pos, NULL, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
+                dComIfGp_particle_setProjection(dPa_name::ID_AK_SP_BSTSHOCKWAVEH00, &particle_pos);
+                dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BSTATTACK1HSMOKE00, &particle_pos, NULL, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
             }
         } else {
             actor->speed.y += REG0_F(14) + 0.5f;
@@ -577,9 +577,9 @@ static void paa_attack(bst_class* i_this) {
                     fopAcM_seStartCurrent(actor, JA_SE_CM_BST_HAND_CLAP, 0);
                     csXyz local_70 = actor->shape_angle;
                     local_70.y += 0x4000;
-                    dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C1D7, &i_this->mTargetPos, &local_70);
+                    dComIfGp_particle_setProjection(dPa_name::ID_AK_SP_BSTSHOCKWAVEV00, &i_this->mTargetPos, &local_70);
                     dComIfGp_particle_setToon(
-                        dPa_name::ID_SCENE_A1DA, &i_this->mTargetPos, &local_70, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor)
+                        dPa_name::ID_AK_ST_BSTCLAPSMOKE00, &i_this->mTargetPos, &local_70, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor)
                     );
                 }
                 i_this->m112A = REG0_S(8) + 5;
@@ -741,8 +741,8 @@ static void kumi_attack(bst_class* i_this) {
                 if (i_this->mBstPartType == bst_class::Type_LEFT_HAND_e) {
                     local_50 = i_this->mTargetPos;
                     local_50.y = 1.0f;
-                    dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C1D6, &local_50);
-                    dComIfGp_particle_setToon(dPa_name::ID_SCENE_A1D9, &local_50, NULL, NULL, 0xb9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
+                    dComIfGp_particle_setProjection(dPa_name::ID_AK_SP_BSTSHOCKWAVEH00, &local_50);
+                    dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BSTATTACK2HSMOKE00, &local_50, NULL, NULL, 0xb9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
                     dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                     fopAcM_seStartCurrent(actor, JA_SE_CM_BST_2_HAND_ATTACK, 0);
                 }
@@ -931,7 +931,7 @@ static void beam_set(bst_class* i_this) {
     }
 }
 
-static u16 charge_e_name[] = {dPa_name::ID_SCENE_81C2, dPa_name::ID_SCENE_81C3};
+static u16 charge_e_name[] = {dPa_name::ID_AK_SN_BSTENERGYCHARGE00, dPa_name::ID_AK_SN_BSTENERGYCHARGE01};
 
 /* 000035BC-00003B94       .text beam_attack__FP9bst_class */
 static void beam_attack(bst_class* i_this) {
@@ -1089,7 +1089,7 @@ static void head_damage(bst_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz v;
     f32 dist;
-    static u16 bomb_eff_name[] = {dPa_name::ID_SCENE_81E4, dPa_name::ID_SCENE_81E5, dPa_name::ID_SCENE_81E6, dPa_name::ID_SCENE_81E7};
+    static u16 bomb_eff_name[] = {dPa_name::ID_AK_SN_BSTBOMBNOSTRILSMOKEL00, dPa_name::ID_AK_SN_BSTBOMBNOSTRILSMOKER00, dPa_name::ID_AK_SN_BSTBOMBEARSMOKEL00, dPa_name::ID_AK_SN_BSTBOMBEARSMOKER00};
 
     i_this->mState = 10;
     i_this->m2E74[0] = 10;
@@ -1126,7 +1126,7 @@ static void head_damage(bst_class* i_this) {
             if (actor->current.pos.y <= REG0_F(14)) {
                 actor->current.pos.y = REG0_F(14);
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
-                dComIfGp_particle_setToon(dPa_name::ID_SCENE_A1DB, &actor->current.pos, NULL, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
+                dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BSTDROPHEADSMOKE00, &actor->current.pos, NULL, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
                 i_this->m112A = REG0_S(7) + 4;
                 mDoAud_seStart(JA_SE_CM_BST_HEAD_FALL, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
                 mDoAud_seStart(JA_SE_CM_BST_MOUTH_OPEN, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
@@ -1173,7 +1173,7 @@ static void head_damage(bst_class* i_this) {
         }
         anm_init(i_this, BST_BCK_BOM_NOMI, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->mDamage++;
-        i_this->m2EE0[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_81E3, &actor->current.pos);
+        i_this->m2EE0[0] = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTBOMBFLASH00, &actor->current.pos);
         fopAcM_seStart(actor, JA_SE_CM_BST_MOUTH_CLOSE, 0);
         i_this->m10FC[0] = 0x3c;
         // fallthrough
@@ -1446,13 +1446,13 @@ static void damage_check(bst_class* i_this) {
                     i_this->mHurtRecoilAngle2 = -cM_atan2s(player_vec.y, std::sqrtf(SQUARE(player_vec.x) + SQUARE(player_vec.z)));
                     actor->speedF = 0.0f;
                     cXyz* hit_pos = i_this->mEyeSphs[eye_index].GetTgHitPosP();
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, hit_pos);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, hit_pos);
                     cXyz scale;
                     scale.x = scale.y = scale.z = 2.0f;
                     csXyz angle;
                     angle.x = angle.z = 0;
                     angle.y = fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0));
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, hit_pos, &angle, &scale);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, hit_pos, &angle, &scale);
                     dKy_SordFlush_set(*hit_pos, 1);
                 }
             }
@@ -1475,7 +1475,7 @@ static void damage_check(bst_class* i_this) {
                     i_this->mHurtRecoilAngle2 = -cM_atan2s(player_vec.y, std::sqrtf(SQUARE(player_vec.x) + SQUARE(player_vec.z)));
                     actor->speedF = 0.0f;
                     cXyz* hit_pos = i_this->mHandHurtCyl.GetTgHitPosP();
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, hit_pos);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, hit_pos);
                     cXyz scale;
                     scale.z = 2.0f;
                     scale.y = 2.0f;
@@ -1483,7 +1483,7 @@ static void damage_check(bst_class* i_this) {
                     csXyz angle;
                     angle.x = angle.z = 0;
                     angle.y = fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0));
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, hit_pos, &angle, &scale);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, hit_pos, &angle, &scale);
                     dKy_SordFlush_set(*hit_pos, 1);
                     i_this->mActionType = bst_class::ACTION_DAMAGE_e;
                     i_this->mDamage = 0;
@@ -1499,7 +1499,7 @@ static void damage_check(bst_class* i_this) {
     }
 }
 
-static u16 item_smoke_name[2] = {dPa_name::ID_SCENE_A1DF, dPa_name::ID_SCENE_A1E0};
+static u16 item_smoke_name[2] = {dPa_name::ID_AK_ST_BSTNOSTRILSMOKEL00, dPa_name::ID_AK_ST_BSTNOSTRILSMOKER00};
 
 /* 0000591C-00005D9C       .text hana_demo__FP9bst_class */
 static void hana_demo(bst_class* i_this) {
@@ -1583,7 +1583,7 @@ static void end_demo(bst_class* i_this) {
     case 2:
         anm_init(i_this, BST_BCK_BST_HIRAKU, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->mDamage++;
-        i_this->m2EF4 = dComIfGp_particle_set(dPa_name::ID_SCENE_81E8, &actor->current.pos);
+        i_this->m2EF4 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTHALO00, &actor->current.pos);
         if (i_this->m2EF4 != NULL) {
             i_this->m2EF4->setGlobalRTMatrix(i_this->m02B8->getModel()->getAnmMtx(0));
         }
@@ -1882,14 +1882,14 @@ static void main_cont(bst_class* i_this) {
 /* 00006DC0-00006FA4       .text beam_eff_set__FP4cXyzsUc */
 static void beam_eff_set(cXyz* pos, short y, u8 set_angle) {
     if (!set_angle) {
-        dComIfGp_particle_set(dPa_name::ID_SCENE_81BF, pos);
-        dComIfGp_particle_set(dPa_name::ID_SCENE_A1C0, pos);
-        dComIfGp_particle_set(dPa_name::ID_SCENE_A1C1, pos);
+        dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTENERGYSHOTFLOOR00, pos);
+        dComIfGp_particle_set(dPa_name::ID_AK_ST_BSTENERGYSHOTSMOKE00, pos);
+        dComIfGp_particle_set(dPa_name::ID_AK_ST_BSTENERGYSHOTSMOKE01, pos);
     } else {
         csXyz angle(-0x4000, y, 0);
-        dComIfGp_particle_set(dPa_name::ID_SCENE_81BF, pos, &angle);
-        dComIfGp_particle_set(dPa_name::ID_SCENE_A1C0, pos, &angle);
-        dComIfGp_particle_set(dPa_name::ID_SCENE_A1C1, pos, &angle);
+        dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTENERGYSHOTFLOOR00, pos, &angle);
+        dComIfGp_particle_set(dPa_name::ID_AK_ST_BSTENERGYSHOTSMOKE00, pos, &angle);
+        dComIfGp_particle_set(dPa_name::ID_AK_ST_BSTENERGYSHOTSMOKE01, pos, &angle);
     }
 }
 
@@ -2267,7 +2267,7 @@ void demo_camera(bst_class* i_this) {
         cLib_addCalc2(&i_this->m2EC8, 55.0f, 0.1f, 0.4f);
         if (i_this->msFrameCount == 200) {
             local_58.setall(0.0f);
-            pJVar9 = dComIfGp_particle_set(dPa_name::ID_SCENE_81E9, &local_58);
+            pJVar9 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTSTAGEEFFECT00, &local_58);
             i_this->m2EF8 = pJVar9;
             JAIZelBasic::zel_basic->field_0x1dd4 = 1;
         }

@@ -1958,12 +1958,16 @@ void mDoExt_3DlineMat0_c::setMaterial() {
     GXSetNumIndStages(0);
     #endif
     dKy_setLight_again();
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_RGB8, 6);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+
     GXSetArray(GX_VA_NRM, l_normal, sizeof(*l_normal));
+
     if (mpTevStr) {
         dKy_GxFog_tevstr_set(mpTevStr);
         GXCallDisplayList(l_toonMatDL, 0x80);
@@ -1971,6 +1975,7 @@ void mDoExt_3DlineMat0_c::setMaterial() {
         dKy_GxFog_set();
         GXCallDisplayList(l_matDL, 0x80);
     }
+
     GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
     GXLoadNrmMtxImm(cMtx_getIdentity(), GX_PNMTX0);
 }
@@ -2219,14 +2224,18 @@ void mDoExt_3DlineMat1_c::setMaterial() {
     GXSetNumIndStages(0);
     #endif
     dKy_setLight_again();
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX16);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_RGB8, 6);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+
     GXSetArray(GX_VA_NRM, l_normal, sizeof(*l_normal));
+
     if (mpTevStr) {
         dKy_GxFog_tevstr_set(mpTevStr);
         GXCallDisplayList(l_toonMat1DL, 0xA0);
@@ -2234,6 +2243,7 @@ void mDoExt_3DlineMat1_c::setMaterial() {
         dKy_GxFog_set();
         GXCallDisplayList(l_mat1DL, 0x80);
     }
+
     GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
     GXLoadNrmMtxImm(cMtx_getIdentity(), GX_PNMTX0);
 }

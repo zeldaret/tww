@@ -498,8 +498,8 @@ void tama_set(fganon_class* i_this) {
                         i_this->mEmitters3[i] = NULL;
                     }
                 }
-                i_this->mEmitters3[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_821A, &tempPos, NULL);
-                i_this->mEmitters3[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_821B, &tempPos, NULL);
+                i_this->mEmitters3[0] = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGDARKBALL00, &tempPos, NULL);
+                i_this->mEmitters3[1] = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGDARKBALL01, &tempPos, NULL);
                 i_this->m672 = 250;
                 i_this->m671 = 2;
                 i_this->mpBrkAnm3->setPlaySpeed(1.0f);
@@ -510,8 +510,8 @@ void tama_set(fganon_class* i_this) {
             case 3: {
                 i_this->mpBrkAnm3->setPlaySpeed(-1.0f);
                 i_this->m671 = 4;
-                dComIfGp_particle_set(dPa_name::ID_SCENE_8242, &tempPos, &i_this->shape_angle);
-                dComIfGp_particle_set(dPa_name::ID_SCENE_8243, &tempPos, &i_this->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGEXPLODEDARKBALL00, &tempPos, &i_this->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGEXPLODEDARKBALL01, &tempPos, &i_this->shape_angle);
                 break;
             }
             case 4: {
@@ -578,8 +578,8 @@ void shot2(fganon_class* i_this) {
                     i_this->mEmitters2[i] = NULL;
                 }
             }
-            i_this->mEmitters2[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_8218, &i_this->current.pos, NULL);
-            i_this->mEmitters2[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_8219, &i_this->current.pos, NULL);
+            i_this->mEmitters2[0] = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGCREATEDARKBALL00, &i_this->current.pos, NULL);
+            i_this->mEmitters2[1] = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGCREATEDARKBALL01, &i_this->current.pos, NULL);
             fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_MAKE_L, 0);
             i_this->mMode++;
             // Fall-through
@@ -615,8 +615,8 @@ void shot2(fganon_class* i_this) {
             }
             anm_init(i_this, FGANON_BCK_NAGERU_S1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mMode++;
-            i_this->mEmitters2[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_821C, &i_this->current.pos, NULL);
-            i_this->mEmitters2[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_821D, &i_this->current.pos, NULL);
+            i_this->mEmitters2[0] = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGTHROWDARKBALLL00, &i_this->current.pos, NULL);
+            i_this->mEmitters2[1] = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGTHROWDARKBALLR00, &i_this->current.pos, NULL);
             // Fall-through
         }
         case 3: {
@@ -1322,7 +1322,7 @@ void damage_check(fganon_class* i_this) {
                     fopAcM_monsSeStart(i_this, JA_SE_CV_PG_DIE, 0);
                     fopAcM_seStart(a_this, JA_SE_CM_PG_END_2, 0);
                     
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &i_this->eyePos, NULL);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &i_this->eyePos, NULL);
                     
                     local_44.z = 2.0f;
                     local_44.y = 2.0f;
@@ -1332,7 +1332,7 @@ void damage_check(fganon_class* i_this) {
                     local_a0.x = 0.0f;
                     local_a0.y = fopAcM_searchPlayerAngleY(i_this);
                     
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &i_this->eyePos, &local_a0, &local_44);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &i_this->eyePos, &local_a0, &local_44);
                     dKy_SordFlush_set(i_this->eyePos, 1);
 
                     i_this->mAction = 22;
@@ -1346,12 +1346,12 @@ void damage_check(fganon_class* i_this) {
 
                     fopAcM_seStart(a_this, JA_SE_CM_L_ARROW_SHRINK, 0);
 
-                    mEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8405, &i_this->current.pos, NULL);
+                    mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGLIGHTARROW00, &i_this->current.pos, NULL);
                     if (mEmitter != NULL) {
                         mEmitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(10));
                     }
 
-                    mEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8406, &i_this->current.pos, NULL);
+                    mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGLIGHTARROW01, &i_this->current.pos, NULL);
                     if (mEmitter != NULL) {
                         mEmitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(10));
                     }
@@ -1390,7 +1390,7 @@ void damage_check(fganon_class* i_this) {
                     return;
                 }
 
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &i_this->eyePos, NULL);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &i_this->eyePos, NULL);
 
                 local_44.z = 2.0f;
                 local_44.y = 2.0f;
@@ -1400,7 +1400,7 @@ void damage_check(fganon_class* i_this) {
                 local_a0.x = 0.0f;
                 local_a0.y = fopAcM_searchPlayerAngleY(i_this);
 
-                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &i_this->eyePos, &local_a0, &local_44);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &i_this->eyePos, &local_a0, &local_44);
                 dKy_SordFlush_set(i_this->eyePos, 1);
                 
                 i_this->mAction = 8;
@@ -1422,7 +1422,7 @@ void damage_check(fganon_class* i_this) {
     }
     if (i_this->m68F) {
         if ((i_this->mCyl.ChkTgHit()) || (master->mAction == 8)) {
-            mEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_826B, &i_this->current.pos, NULL);
+            mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGVANISHSMOKE00, &i_this->current.pos, NULL);
             if (mEmitter != NULL) {
                 mEmitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0));
             }
@@ -1443,7 +1443,7 @@ void damage_check(fganon_class* i_this) {
                                                                                               dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e)) {
                         atInfo.mpActor = cc_at_check(i_this, &atInfo);
                         if (atInfo.mbDead) {
-                            dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &i_this->eyePos, NULL);
+                            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &i_this->eyePos, NULL);
                             
                             local_44.x = 2.0f;
                             local_44.y = 2.0f;
@@ -1465,7 +1465,7 @@ void damage_check(fganon_class* i_this) {
                         local_a0.x = 0.0f;
                         local_a0.y = fopAcM_searchPlayerAngleY(i_this);
 
-                        dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, pPos, &local_a0, &local_44);
+                        dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, pPos, &local_a0, &local_44);
 
                         if ((i_this->mAction == 7) || (i_this->mAction == 10)) {
                             i_this->mAction = 8;
@@ -1501,7 +1501,7 @@ void damage_check(fganon_class* i_this) {
             }
             else {
                 fopAcM_monsSeStart(i_this, JA_SE_CV_PG_HIT_EBALL, 0);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &i_this->eyePos, NULL);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &i_this->eyePos, NULL);
 
                 local_44.z = 2.0f;
                 local_44.y = 2.0f;
@@ -1511,7 +1511,7 @@ void damage_check(fganon_class* i_this) {
                 local_a0.x = 0.0f;
                 local_a0.y = fopAcM_searchPlayerAngleY(i_this);
 
-                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &i_this->eyePos, &local_a0, &local_44);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &i_this->eyePos, &local_a0, &local_44);
                 dKy_SordFlush_set(i_this->eyePos, 1);
 
                 i_this->mAction = 8;
@@ -2061,8 +2061,8 @@ void energy_ball_move(fganon_class* i_this) {
                 i_this->mEmitters2[i] = NULL;
             }
         }
-        i_this->mEmitters2[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_81CE, &a_this->current.pos, NULL);
-        i_this->mEmitters2[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_81CF, &a_this->current.pos, NULL);
+        i_this->mEmitters2[0] = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGENERGYBALL00, &a_this->current.pos, NULL);
+        i_this->mEmitters2[1] = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGENERGYBALL01, &a_this->current.pos, NULL);
         i_this->m408 = 2;
     }
     if (i_this->m408 == 2) {
@@ -2207,7 +2207,7 @@ void energy_ball_move(fganon_class* i_this) {
                 }
                 csXyz local_7c(0,0,0);
                 local_7c.y = (short)cM_atan2s(i_this->m3F8.x, i_this->m3F8.z);
-                dComIfGp_particle_set(dPa_name::ID_SCENE_81F0, &i_this->m3E0, &local_7c);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGSMASHENERGYBALL00, &i_this->m3E0, &local_7c);
 #if VERSION == VERSION_USA
                 mDoAud_seStart(JA_SE_LK_PG_BOMB_STRIKE, &i_this->m3E0, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
 #endif
@@ -2270,8 +2270,8 @@ void energy_ball_move(fganon_class* i_this) {
 
             csXyz local_7c(0,0,0);
 
-            dComIfGp_particle_set(dPa_name::ID_SCENE_81EE, &i_this->m3E0, &local_7c, 0);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_81EF, &i_this->m3E0, &local_7c, 0);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGBREAKENERGYBALL00, &i_this->m3E0, &local_7c, 0);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGBREAKENERGYBALL01, &i_this->m3E0, &local_7c, 0);
 
             mDoAud_seStart(JA_SE_OBJ_PG_EBALL_EXP_S, &i_this->m3E0, 100, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
 
@@ -2307,7 +2307,7 @@ void* mahou_se_set(void* i_act, void* i_other) {
 }
 
 static u32 jno[2] = {0x7, 0xD};
-static u16 eno[2] = {dPa_name::ID_SCENE_81CD, dPa_name::ID_SCENE_81CC};
+static u16 eno[2] = {dPa_name::ID_AK_SN_BPGLEGSMOKE00, dPa_name::ID_AK_SN_BPGARMSMOKE00};
 
 /* 000086B4-0000924C       .text daFganon_Execute__FP12fganon_class */
 static BOOL daFganon_Execute(fganon_class* i_this) {

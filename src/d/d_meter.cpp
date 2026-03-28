@@ -2561,7 +2561,7 @@ void dMeter_xyMove(sub_meter_class* i_Meter) {
                     i_Meter->field_0x2f2c[j]->playDrawParticle();
                     i_Meter->field_0x2f2c[j]->setGlobalAlpha(i_Meter->field_0x2080[i].mNowAlpha);
                 } else {
-                    i_Meter->field_0x2f2c[j] = dComIfGp_particle_set2DmenuFore(dPa_name::ID_COMMON_002D, &local_38);
+                    i_Meter->field_0x2f2c[j] = dComIfGp_particle_set2DmenuFore(dPa_name::ID_HM_J2_RUPYLIGHT, &local_38);
                 }
             }
         }
@@ -4687,7 +4687,7 @@ void dMeter_rupyAlpha(sub_meter_class* i_Meter) {
             i_Meter->mpRupyParticle->stopDrawParticle();
         } else {
             local_2c.set(i_Meter->field_0x2a20.mPosCenter.x - 320.0f, i_Meter->field_0x2a20.mPosCenter.y - 240.0f, 0.0f);
-            i_Meter->mpRupyParticle = dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_002D, &local_2c);
+            i_Meter->mpRupyParticle = dComIfGp_particle_set2Dfore(dPa_name::ID_HM_J2_RUPYLIGHT, &local_2c);
         }
     } else {
         fVar8 = dMeter_alphaOpen(&i_Meter->field_0x2a20.mUserArea, &i_Meter->field_0x19f0[0].mUserArea);
@@ -4696,7 +4696,7 @@ void dMeter_rupyAlpha(sub_meter_class* i_Meter) {
             i_Meter->mpRupyParticle->playDrawParticle();
         } else {
             local_38.set(i_Meter->field_0x2a20.mPosCenter.x - 320.0f, i_Meter->field_0x2a20.mPosCenter.y - 240.0f, 0.0f);
-            i_Meter->mpRupyParticle = dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_002D, &local_38);
+            i_Meter->mpRupyParticle = dComIfGp_particle_set2Dfore(dPa_name::ID_HM_J2_RUPYLIGHT, &local_38);
         }
     }
     for (s32 i = 0; i < 4; i++) {
@@ -4728,7 +4728,7 @@ void dMeter_rupyInit(sub_meter_class* i_Meter) {
     }
     g_dComIfG_gameInfo.play.mItemNowRupee = i_Meter->mRupyCount;
     local_48.set(i_Meter->field_0x2a20.mPosCenter.x - 320.0f, i_Meter->field_0x2a20.mPosCenter.y - 240.0f, 0.0f);
-    i_Meter->mpRupyParticle = dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_002D, &local_48);
+    i_Meter->mpRupyParticle = dComIfGp_particle_set2Dfore(dPa_name::ID_HM_J2_RUPYLIGHT, &local_48);
 }
 
 /* 801FC2FC-801FC624       .text dMeter_rupyMove__FP15sub_meter_class */
@@ -5783,9 +5783,9 @@ void dMeter_arwInit(sub_meter_class* i_Meter) {
 /* 801FF76C-801FFEB0       .text dMeter_arwMove__FP15sub_meter_class */
 void dMeter_arwMove(sub_meter_class* i_Meter) {
     static const u16 particleName[] = {
-        dPa_name::ID_COMMON_02E1,
-        dPa_name::ID_COMMON_02E2,
-        dPa_name::ID_COMMON_02EF,
+        dPa_name::ID_HM_J2_ARWG_FLAME00,
+        dPa_name::ID_HM_J2_ARWI_COLD00,
+        dPa_name::ID_HM_J2_ARWF_LIGHT00,
     };
 
     f32 dVar15;

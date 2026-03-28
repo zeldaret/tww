@@ -139,7 +139,7 @@ void daObjEbomzo::Act_c::check() {
                     const u8 r = tevStr.mColorK0.r;
                     const u8 g = tevStr.mColorK0.g;
                     const u8 b = tevStr.mColorK0.b;
-                    mpParticleEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_828E, &current.pos, &current.angle);
+                    mpParticleEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BIRDSTATUEHAHEN00, &current.pos, &current.angle);
                     if (mpParticleEmitter) mpParticleEmitter->setGlobalPrmColor(r, g, b);
                 }
             }
@@ -164,7 +164,7 @@ void daObjEbomzo::Act_c::demo() {
             mpParticleEmitter = NULL;
         }
 
-        dComIfGp_particle_set(dPa_name::ID_SCENE_828F, &current.pos, &current.angle);
+        dComIfGp_particle_set(dPa_name::ID_AK_SN_BIRDSTATUESPLASH00, &current.pos, &current.angle);
     }
 }
 

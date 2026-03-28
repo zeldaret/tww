@@ -192,7 +192,7 @@ void daDaiocta_Eye_c::_coHit(fopAc_ac_c* i_actor) {
                 mbIsDead = true;
                 m295 = true;
                 dComIfGp_particle_set(
-                    dPa_name::ID_SCENE_8206, &mParticlePos, &shape_angle, 
+                    dPa_name::ID_IT_SN_DO_SMOKE00, &mParticlePos, &shape_angle, 
                     NULL, 0xFF, &mParticleCallback, fopAcM_GetRoomNo(this)
                 );
                 modeDeathInit();
@@ -257,11 +257,11 @@ void daDaiocta_Eye_c::checkTgHit() {
         if (damaged == true) {        
             daPy_py_c* player_p = daPy_getPlayerActorClass();
             cXyz tg_hit_pos = *mSph.GetTgHitPosP();
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &tg_hit_pos);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &tg_hit_pos);
             if (health <= 0) {
                 cXyz hit_particle_scale(2.0f, 2.0f, 2.0f);
                 dComIfGp_particle_set(
-                    dPa_name::ID_COMMON_BIG_HIT, 
+                    dPa_name::ID_AK_JN_CRITICALHIT, 
                     &tg_hit_pos, 
                     &player_p->shape_angle, 
                     &hit_particle_scale
