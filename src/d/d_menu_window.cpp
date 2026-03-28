@@ -364,27 +364,27 @@ void dMs_item_delete(sub_ms_screen_class* i_Ms) {
 }
 
 /* 801DBA58-801DBE44       .text dMs_collect_create__FP19sub_ms_screen_class */
-void dMs_collect_create(sub_ms_screen_class*) {
+void dMs_collect_create(sub_ms_screen_class* i_Ms) {
     /* Nonmatching */
 }
 
 /* 801DBE44-801DC224       .text dMs_collect_create2__FP19sub_ms_screen_class */
-void dMs_collect_create2(sub_ms_screen_class*) {
+void dMs_collect_create2(sub_ms_screen_class* i_Ms) {
     /* Nonmatching */
 }
 
 /* 801DC224-801DC360       .text dMs_collect_delete__FP19sub_ms_screen_class */
-void dMs_collect_delete(sub_ms_screen_class*) {
+void dMs_collect_delete(sub_ms_screen_class* i_Ms) {
     /* Nonmatching */
 }
 
 /* 801DC360-801DC694       .text dMs_fmap_create__FP19sub_ms_screen_class */
-void dMs_fmap_create(sub_ms_screen_class*) {
+void dMs_fmap_create(sub_ms_screen_class* i_Ms) {
     /* Nonmatching */
 }
 
 /* 801DC694-801DC798       .text dMs_fmap_delete__FP19sub_ms_screen_class */
-void dMs_fmap_delete(sub_ms_screen_class*) {
+void dMs_fmap_delete(sub_ms_screen_class* i_Ms) {
     /* Nonmatching */
 }
 
