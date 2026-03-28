@@ -315,7 +315,7 @@ void dMs_item_create(sub_ms_screen_class* i_Ms) {
     dMi_c->setFont(fonttype, rfonttype);
     dMi_c->setTextArea(i_Ms->name[0], i_Ms->name[1], i_Ms->note[0], i_Ms->note[1], i_Ms->dummy[0], i_Ms->dummy[1]);
 
-    dMi_c->field_0x23FF = g_dComIfG_gameInfo.play.field_0x4943;
+    dMi_c->field_0x23FF = g_dComIfG_gameInfo.play.field_0x4943; // FIXME
 
     dMi_c->_create();
 
@@ -329,8 +329,38 @@ void dMs_item_create(sub_ms_screen_class* i_Ms) {
 }
 
 /* 801DB91C-801DBA58       .text dMs_item_delete__FP19sub_ms_screen_class */
-void dMs_item_delete(sub_ms_screen_class*) {
-    /* Nonmatching */
+void dMs_item_delete(sub_ms_screen_class* i_Ms) {
+    for (int i = 0; i < 2; i++) {
+        if (i_Ms->name[i] != NULL) {
+            i_Ms->childHeap->free(i_Ms->name[i]);
+            i_Ms->name[i] = NULL;
+        }
+        if (i_Ms->note[i] != NULL) {
+            i_Ms->childHeap->free(i_Ms->note[i]);
+            i_Ms->note[i] = NULL;
+        }
+        if (i_Ms->dummy[i] != NULL) {
+            i_Ms->childHeap->free(i_Ms->dummy[i]);
+            i_Ms->dummy[i] = NULL;
+        }
+    }
+
+    for (int i = 0; i < i_Ms->field_0x1B2; i++) {
+        if (i_Ms->buffer_p[i] != NULL) {
+            i_Ms->childHeap->free(i_Ms->buffer_p[i]);
+            i_Ms->buffer_p[i] = NULL;
+        }
+    }
+
+    if (dMi_c != NULL) {
+        g_dComIfG_gameInfo.play.field_0x4943 = dMi_c->field_0x23FF; // FIXME
+
+        dMi_c->_delete();
+        delete dMi_c;
+        dMi_c = NULL;
+    }
+
+    lockFlag = 1;
 }
 
 /* 801DBA58-801DBE44       .text dMs_collect_create__FP19sub_ms_screen_class */
