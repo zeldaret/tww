@@ -276,18 +276,18 @@ void dMenu_Collect_c::screenSet() {
     }
 
     if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_DINS_PEARL)) {
-        m1000[1].mInitAlpha *= 0.5f;
-        m10A8[1].mInitAlpha *= 0.5f;
+        alphaChange(&m1000[1], 0.5f);
+        alphaChange(&m10A8[1], 0.5f);
     }
 
     if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_FARORES_PEARL)) {
-        m1000[2].mInitAlpha *= 0.5f;
-        m10A8[2].mInitAlpha *= 0.5f;
+        alphaChange(&m1000[2], 0.5f);
+        alphaChange(&m10A8[2], 0.5f);
     }
 
     if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_NAYRUS_PEARL)) {
-        m1000[0].mInitAlpha *= 0.5f;
-        m10A8[0].mInitAlpha *= 0.5f;
+        alphaChange(&m1000[0], 0.5f);
+        alphaChange(&m10A8[0], 0.5f);
     }
 
     for (int i = 0; i < 11; i++) {

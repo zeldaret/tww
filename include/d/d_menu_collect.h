@@ -24,8 +24,9 @@ public:
 
 class dMenu_Collect_c : public dMenu_base_c {
 public:
-    void alphaChange(fopMsgM_pane_class*, float) {}
     virtual void draw() {}
+
+    void alphaChange(fopMsgM_pane_class* pane, float alpha) { pane->mInitAlpha *= alpha; }
     void getCollectMode() {}
     void getNowItem() {}
     void setNowItem(unsigned char) {}
