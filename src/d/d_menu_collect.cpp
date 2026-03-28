@@ -39,8 +39,6 @@ dMc_HIO_c::dMc_HIO_c() {
 
 /* 8019BF14-8019CB5C       .text screenSet__15dMenu_Collect_cFv */
 void dMenu_Collect_c::screenSet() {
-    char print_format[0x10];
-
     static const u32 l_ft[] = {
         'ft00',
         'ft01',
@@ -379,6 +377,8 @@ void dMenu_Collect_c::screenSet() {
         ((J2DPicture*)m2030[i].pane)->changeTexture((ResTIMG*)mItemTexBuffer[i], 0);
         ((J2DPicture*)m2148[i].pane)->changeTexture((ResTIMG*)mItemTexBuffer[i], 0);
     }
+
+    char print_format[0x10];
 
     sprintf(print_format, "rupy_num_%02d.bti", dComIfGs_getCollectMapNum() / 10);
     ((J2DPicture*)mC48.pane)->changeTexture(print_format, 0);
