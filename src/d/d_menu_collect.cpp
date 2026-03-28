@@ -337,11 +337,17 @@ void dMenu_Collect_c::screenSet() {
     fopMsgM_setPaneData(&m23E8, m004, 'cc07');
     fopMsgM_setPaneData(&m2420, m004, 'cc00');
 
-    JKRArchive::readTypeResource(mTactTexBuffer, 0xc00, 'TIMG', "baton.bti", dComIfGp_getItemIconArchive());
-    DCStoreRangeNoSync(mTactTexBuffer, 0xc00);
+    {
+        JKRArchive* archive = dComIfGp_getItemIconArchive();
+        JKRArchive::readTypeResource(mTactTexBuffer, 0xc00, 'TIMG', "baton.bti", archive);
+        DCStoreRangeNoSync(mTactTexBuffer, 0xc00);
+    }
 
-    JKRArchive::readTypeResource(mMapTexBuffer, 0xc00, 'TIMG', "cmap_treasure2.bti", dComIfGp_getItemIconArchive());
-    DCStoreRangeNoSync(mMapTexBuffer, 0xc00);
+    {
+        JKRArchive* archive = dComIfGp_getItemIconArchive();
+        JKRArchive::readTypeResource(mMapTexBuffer, 0xc00, 'TIMG', "cmap_treasure2.bti", archive);
+        DCStoreRangeNoSync(mMapTexBuffer, 0xc00);
+    }
 
     for (int i = 0; i < 6; i++) {
         ((J2DPicture*)m1498[i].pane)->changeTexture(mTactTexBuffer, 0);
@@ -351,7 +357,8 @@ void dMenu_Collect_c::screenSet() {
     ((J2DPicture*)mCF0.pane)->changeTexture(mMapTexBuffer, 0);
 
     for (int i = 0; i < 8; i++) {
-        JKRArchive::readTypeResource(mTriforceTexBuffer[i], 0xc00, 'TIMG', triTex[i], dComIfGp_getItemIconArchive());
+        JKRArchive* archive = dComIfGp_getItemIconArchive();
+        JKRArchive::readTypeResource(mTriforceTexBuffer[i], 0xc00, 'TIMG', triTex[i], archive);
         DCStoreRangeNoSync(mTriforceTexBuffer[i], 0xc00);
         ((J2DPicture*)mE08[i].pane)->changeTexture(mTriforceTexBuffer[i], 0);
     }
@@ -361,14 +368,16 @@ void dMenu_Collect_c::screenSet() {
     m27AC = mE08[4].mPosCenterOrig.y - mFC8.mPosCenterOrig.y;
 
     for (int i = 0; i < 3; i++) {
-        JKRArchive::readTypeResource(mSymbolTexBuffer[i], 0xc00, 'TIMG', symTex[i], dComIfGp_getItemIconArchive());
+        JKRArchive* archive = dComIfGp_getItemIconArchive();
+        JKRArchive::readTypeResource(mSymbolTexBuffer[i], 0xc00, 'TIMG', symTex[i], archive);
         DCStoreRangeNoSync(mSymbolTexBuffer[i], 0xc00);
         ((J2DPicture*)m1000[i].pane)->changeTexture((ResTIMG*)mSymbolTexBuffer[i], 0);
         ((J2DPicture*)m10A8[i].pane)->changeTexture((ResTIMG*)mSymbolTexBuffer[i], 0);
     }
 
     for (int i = 0; i < 5; i++) {
-        JKRArchive::readTypeResource(mItemTexBuffer[i], 0xc00, 'TIMG', wepTex[i], dComIfGp_getItemIconArchive());
+        JKRArchive* archive = dComIfGp_getItemIconArchive();
+        JKRArchive::readTypeResource(mItemTexBuffer[i], 0xc00, 'TIMG', wepTex[i], archive);
         DCStoreRangeNoSync(mItemTexBuffer[i], 0xc00);
         ((J2DPicture*)m2030[i].pane)->changeTexture((ResTIMG*)mItemTexBuffer[i], 0);
         ((J2DPicture*)m2148[i].pane)->changeTexture((ResTIMG*)mItemTexBuffer[i], 0);
