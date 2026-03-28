@@ -295,7 +295,7 @@ void dMenu_Collect_c::screenSet() {
     }
 
     for (int i = 0; i < 3; i++) {
-        fopMsgM_setPaneData(&m10A8[i], m004, l_htp[i]);
+        fopMsgM_setPaneData(&m13B8[i], m004, l_htp[i]);
     }
 
     fopMsgM_setPaneData(&m1460, m004, 'htpb');
