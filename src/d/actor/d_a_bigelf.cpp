@@ -10,6 +10,7 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/res/res_bigelf.h"
+#include "d/d_particle_name.h"
 
 fpc_ProcID l_msgId;
 msg_class* l_msg;
