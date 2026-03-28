@@ -194,7 +194,7 @@ BOOL daBigelf_c::demoProcFlDelete() {
             dComIfGp_evmng_cutEnd(this->mStaffId);
             if(this->chkFlag(BIGELF_STATE_UNK0)){
                 this->clrFlag(BIGELF_STATE_UNK0);
-                if(this->getType() == 6){
+                if(this->getType() == BIGELF_TYPE_6){
                     dComIfGp_setItemMaxMagicCount(32);
                     dComIfGp_setItemMagicCount(32);
                 }
@@ -424,7 +424,7 @@ BOOL daBigelf_c::demoProcExit() {
 
     if(this->m3C0 == 70){
         fopAcM_seStart(this, JA_SE_CM_L_ARROW_PASS_AWAY, 0);
-        if(this->getType() == 6)
+        if(this->getType() == BIGELF_TYPE_6)
             mDoAud_bgmStop(45);
     }
 
@@ -434,7 +434,7 @@ BOOL daBigelf_c::demoProcExit() {
         dComIfGp_evmng_cutEnd(this->mStaffId);
         this->setFlag(BIGELF_STATE_UNK1);
         this->clrFlag(BIGELF_STATE_UNK4);
-        if(this->getType() != 6)
+        if(this->getType() != BIGELF_TYPE_6)
             this->makeFa1S();
     }
 
@@ -483,12 +483,12 @@ void daBigelf_c::demoInitAppear() {
     dComIfGp_particle_set(p_name0[this->iBrkFrame], &particlePos, NULL, &this->scale);
     dComIfGp_particle_set(p_name1[this->iBrkFrame], &particlePos, NULL, &this->scale);
 
-    if(this->getType() == 6)
+    if(this->getType() == BIGELF_TYPE_6)
         this->iAttCnt = 15;
     this->m3DC = 15;
     this->mBlend = 0.5;
     
-    if(this->getType() == 6){
+    if(this->getType() == BIGELF_TYPE_6){
         fopAcM_seStart(this, JA_SE_CM_DY_ENTER_DO, 0);
         mDoAud_bgmStart(0x80000053);
     }
@@ -589,7 +589,7 @@ void daBigelf_c::demoInitCom() {
 
 /* 00001A74-00001ACC       .text demoProcCom__10daBigelf_cFv */
 void daBigelf_c::demoProcCom() {
-    if(this->getType() != 6)
+    if(this->getType() != BIGELF_TYPE_6)
         dKy_custom_colset(4, 0, this->mBlend);
 
     this->lightProc();
@@ -689,6 +689,7 @@ void daBigelf_c::demoProc() {
 /* 00001CCC-00001CD8       .text getType__10daBigelf_cFv */
 u8 daBigelf_c::getType() {
     return fopAcM_GetParam(this);
+    // Return enum is daBigelf_c::Type_t
 }
 
 /* 00001CD8-00001CE4       .text getSwbit__10daBigelf_cFv */
@@ -705,19 +706,19 @@ u8 daBigelf_c::getSwbit2() {
 u16 daBigelf_c::getEventFlag() {
     // Type to event (dSv_event_flag_c)
     switch(this->getType()){
-        case 0:
+        case BIGELF_TYPE_0:
             return dSv_event_flag_c::UNK_3020;
-        case 1:
+        case BIGELF_TYPE_1:
             return dSv_event_flag_c::UNK_3010;
-        case 2:
+        case BIGELF_TYPE_2:
             return dSv_event_flag_c::UNK_3008;
-        case 3:
+        case BIGELF_TYPE_3:
             return dSv_event_flag_c::UNK_3004;
-        case 4:
+        case BIGELF_TYPE_4:
             return dSv_event_flag_c::UNK_3002;
-        case 5:
+        case BIGELF_TYPE_5:
             return dSv_event_flag_c::UNK_3001;
-        case 6:
+        case BIGELF_TYPE_6:
             return dSv_event_flag_c::UNK_3180;
         default:
             return 0;
@@ -795,8 +796,8 @@ fopMsg_MessageStatus_e daBigelf_c::next_msgStatus(u32* i_pMsgIdx) {
         case 0x2EE8:
             (*i_pMsgIdx)++;
             switch(getType()){
-                case 0:
-                case 1:
+                case BIGELF_TYPE_0:
+                case BIGELF_TYPE_1:
                     if(dComIfGs_getWalletSize() == 0){
                         this->mGivenItem = dItem_MAX_RUPEE_UP1_e;
                     }
@@ -804,8 +805,8 @@ fopMsg_MessageStatus_e daBigelf_c::next_msgStatus(u32* i_pMsgIdx) {
                         this->mGivenItem = dItem_MAX_RUPEE_UP2_e;
                     }
                     break;
-                case 2:
-                case 3:
+                case BIGELF_TYPE_2:
+                case BIGELF_TYPE_3:
                     if(dComIfGs_getBombMax() <= 30){
                         this->mGivenItem = dItem_MAX_BOMB_UP1_e;
                     }
@@ -813,8 +814,8 @@ fopMsg_MessageStatus_e daBigelf_c::next_msgStatus(u32* i_pMsgIdx) {
                         this->mGivenItem = dItem_MAX_BOMB_UP2_e;
                     }
                     break;
-                case 4:
-                case 5:
+                case BIGELF_TYPE_4:
+                case BIGELF_TYPE_5:
                     if(dComIfGs_getArrowMax() <= 30){
                         this->mGivenItem = dItem_MAX_ARROW_UP1_e;
                     }
@@ -944,7 +945,7 @@ BOOL daBigelf_c::init() {
     this->attention_info.position.set(this->mCurrentPos.x, this->mCurrentPos.y + 50, this->mCurrentPos.z);
     this->mFairyActorID = -1;
     
-    if(getType() != 6){
+    if(getType() != BIGELF_TYPE_6){
         if(dComIfGs_isEventBit(getEventFlag()))
             makeFa1S();
         else
@@ -1067,7 +1068,7 @@ bool daBigelf_c::event0() {
         dComIfGs_onEventBit(getEventFlag());
         this->m3BD = 3;
         dComIfGp_event_onEventFlag(8);
-        if(getType() == 6 && getSwbit2() != 0xff){
+        if(getType() == BIGELF_TYPE_6 && getSwbit2() != 0xff){
             dComIfGs_onSwitch(getSwbit2(), fopAcM_GetRoomNo(this));
         }
     }
@@ -1090,7 +1091,7 @@ BOOL daBigelf_c::wait_action(void*) {
             this->m3BD = 3;
         }
         else {
-            if(getType() == 6){
+            if(getType() == BIGELF_TYPE_6){
                 if(dComIfGs_isSwitch(getSwbit(), fopAcM_GetRoomNo(this))){
                     if(getSwbit2() != 0xff){
                         dComIfGs_onSwitch(getSwbit2(), fopAcM_GetRoomNo(this));
@@ -1333,19 +1334,19 @@ BOOL daBigelf_c::CreateHeap() {
  
     this->iBrkFrame = 0;
     switch(this->getType()){
-        case 2:
-        case 3:
+        case BIGELF_TYPE_2:
+        case BIGELF_TYPE_3:
             this->mBrkAnimator.setFrame(1);
             this->mFlowerBrkAnimator.setFrame(1);
             this->iBrkFrame = 1;
             break;
-        case 4:
-        case 5:
+        case BIGELF_TYPE_4:
+        case BIGELF_TYPE_5:
             this->mBrkAnimator.setFrame(2);
             this->mFlowerBrkAnimator.setFrame(2);
             this->iBrkFrame = 2;
             break;
-        case 6:
+        case BIGELF_TYPE_6:
             this->mBrkAnimator.setFrame(3);
             this->mFlowerBrkAnimator.setFrame(3);
             this->iBrkFrame = 3;

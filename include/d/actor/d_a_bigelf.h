@@ -152,12 +152,10 @@ public:
     /* 0x344 */ u8 m344;
     /* 0x345 */ u8 m345;
     /* 0x346 */ u8 mGivenItem;
-    /* 0x347 */ u8 m347[0x348 - 0x347];
     /* 0x348 */ u32 mCurrentMessageId;
     /* 0x34C */ fpc_ProcID mFairyActorID;
     /* 0x350 */ s16 m350;
     /* 0x352 */ bool mIsLightShining;
-    /* 0x353 */ u8 m353[0x354 - 0x353];
     /* 0x354 */ LIGHT_INFLUENCE mLightInfluence;
     /* 0x374 */ cXyz mLightInfluencePos;
     /* 0x380 */ GXColorS10 mLightInfluenceColor;
