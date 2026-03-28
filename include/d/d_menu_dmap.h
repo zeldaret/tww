@@ -77,9 +77,9 @@ public:
     /* 0x14C0 */ JUtility::TColor color_0x14C0;
     /* 0x14C4 */ JUtility::TColor color_0x14C4;
     /* 0x14C8 */ JUtility::TColor color_0x14C8;
-    /* 0x14CC */ u8 field_0x14CC[0x1B08 - 0x14CC];
-    /* 0x1B08 */ fopMsgM_msgDataProc_c* mpMsgProc;
-    /* 0x1B0C */ u8 field_0x1B0C[0x1DA8 - 0x1B0C];
+    /* 0x14CC */ u8 padding_0x14CC[0x1AFC - 0x14CC];
+    /* 0x1AFC */ void* arr_0x1AFC[3];
+    /* 0x1B08 */ fopMsgM_msgDataProc_c mMsgProc;
     /* 0x1DA8 */ char* name[2];
     /* 0x1DB0 */ char* note[2];
     /* 0x1DB8 */ char* dummy[2];
