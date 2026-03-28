@@ -359,8 +359,46 @@ void dMs_fmap_delete(sub_ms_screen_class*) {
 }
 
 /* 801DC798-801DCB30       .text dMs_dmap_create__FP19sub_ms_screen_class */
-void dMs_dmap_create(sub_ms_screen_class*) {
-    /* Nonmatching */
+void dMs_dmap_create(sub_ms_screen_class* i_Ms) {
+    i_Ms->arc = dComIfGp_getDmapResArchive();
+
+    dComIfGp_setHeapLockFlag(3);
+
+    for (int i = 0; i < 2; i++) {
+        i_Ms->name[i] = (char*)i_Ms->parentHeap_0xfc->alloc(0x20, 4);
+        JUT_ASSERT(2464, i_Ms->name[i] != NULL);
+
+        i_Ms->note[i] = (char*)i_Ms->parentHeap_0xfc->alloc(0x200, 4);
+        JUT_ASSERT(2466, i_Ms->note[i] != NULL);
+
+        i_Ms->dummy[i] = (char*)i_Ms->parentHeap_0xfc->alloc(0x200, 4);
+        JUT_ASSERT(2468, i_Ms->dummy[i] != NULL);
+    }
+
+    i_Ms->field_0x1B2 = 0;
+
+    for (int i = 0; i < 3; i++) {
+        i_Ms->buffer_p[i] = i_Ms->parentHeap_0xfc->alloc(0xC00, 0x20);
+        JUT_ASSERT(2475, i_Ms->buffer_p[i] != NULL);
+        i_Ms->field_0x1B2++;
+    }
+
+    dMd_c = new dMenu_Dmap_c();
+    JUT_ASSERT(2480, dMd_c != NULL);
+
+    for (int i = 0; i < 3; i++) {
+        dMd_c->arr_0x1AFC[i] = i_Ms->buffer_p[i];
+    }
+
+    dMd_c->setArchive(i_Ms->arc);
+    dMd_c->setFont(fonttype, rfonttype);
+
+    dMd_c->setTextArea(i_Ms->name[0], i_Ms->name[1], i_Ms->note[0], i_Ms->note[1], i_Ms->dummy[0], i_Ms->dummy[1]);
+
+    dMd_c->_create();
+
+    dMs_capture_c = new dDlst_MENU_CAPTURE_c();
+    JUT_ASSERT(2491, dMs_capture_c != NULL);
 }
 
 /* 801DCB30-801DCC80       .text dMs_dmap_delete__FP19sub_ms_screen_class */
