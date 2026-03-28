@@ -54,7 +54,8 @@ public:
         dummy[0] = dummy0;
         dummy[1] = dummy1;
     }
-    void setTimer(short) {}
+
+    void setTimer(short timer) { mTimer = timer; }
     void setTriggerInfo(unsigned char) {}
 
     void screenSet();
@@ -199,7 +200,7 @@ public:
     /* 0x27B8 */ char* note[2];
     /* 0x27C0 */ char* dummy[2];
     /* 0x27C8 */ u8 m27C8[0x27E2 - 0x27C8];
-    /* 0x27E2 */ u16 m27E2;
+    /* 0x27E2 */ u16 mTimer;
     /* 0x27E4 */ u8 m27E4[0x27EC - 0x27E4];
     /* 0x27EC */ u8 m27EC;
     /* 0x27ED */ u8 m27ED;
