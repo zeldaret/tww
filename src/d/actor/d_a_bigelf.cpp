@@ -10,14 +10,13 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/res/res_bigelf.h"
-#include "d/d_particle_name.h"
 
 fpc_ProcID l_msgId;
 msg_class* l_msg;
 
 const u32 l_bck_ix_tbl[4] = {8,6,7,6};
-const u16 pa_name_flower[] = {dPa_name::ID_SCENE_834F, dPa_name::ID_SCENE_8351, dPa_name::ID_SCENE_8353, dPa_name::ID_SCENE_8355};
-const u16 pa_name_flower2[] = {dPa_name::ID_SCENE_8350, dPa_name::ID_SCENE_8352, dPa_name::ID_SCENE_8354, dPa_name::ID_SCENE_8356};
+const u16 pa_name_flower[] = {dPa_name::ID_AK_SN_BIGFAIRYTYPE1FLOWER00, dPa_name::ID_AK_SN_BIGFAIRYTYPE2FLOWER00, dPa_name::ID_AK_SN_BIGFAIRYTYPE3FLOWER00, dPa_name::ID_AK_SN_BIGFAIRYTYPE4FLOWER00};
+const u16 pa_name_flower2[] = {dPa_name::ID_AK_SN_BIGFAIRYTYPE1FLOWER01, dPa_name::ID_AK_SN_BIGFAIRYTYPE2FLOWER01, dPa_name::ID_AK_SN_BIGFAIRYTYPE3FLOWER01, dPa_name::ID_AK_SN_BIGFAIRYTYPE4FLOWER01};
 
 /* 00000078-0000016C       .text oct_delete__10daBigelf_cFv */
 void daBigelf_c::oct_delete() {
@@ -401,7 +400,7 @@ void daBigelf_c::demoInitExit() {
     scale.set(1,1,1);
     pos = current.pos;
     pos.y += this->mHeightOffset;
-    dComIfGp_particle_set(dPa_name::ID_COMMON_LIGHT_EXPLOSION, &pos, NULL, &scale);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_ENEMYFLASH00, &pos, NULL, &scale);
     this->tevStr.mFogColor.b = 0xFF;
     this->tevStr.mFogColor.g = 0xFF;
     this->tevStr.mFogColor.r = 0xFF;
@@ -467,8 +466,8 @@ BOOL daBigelf_c::demoProcTalk() {
 
 /* 00001418-0000163C       .text demoInitAppear__10daBigelf_cFv */
 void daBigelf_c::demoInitAppear() {
-    static u16 p_name0[] = {dPa_name::ID_SCENE_8347, dPa_name::ID_SCENE_8349, dPa_name::ID_SCENE_834B, dPa_name::ID_SCENE_834D};
-    static u16 p_name1[] = {dPa_name::ID_SCENE_8348, dPa_name::ID_SCENE_834A, dPa_name::ID_SCENE_834C, dPa_name::ID_SCENE_834E};
+    static u16 p_name0[] = {dPa_name::ID_AK_SN_BIGFAIRYTYPE1APP00, dPa_name::ID_AK_SN_BIGFAIRYTYPE2APP00, dPa_name::ID_AK_SN_BIGFAIRYTYPE3APP00, dPa_name::ID_AK_SN_BIGFAIRYTYPE4APP00};
+    static u16 p_name1[] = {dPa_name::ID_AK_SN_BIGFAIRYTYPE1APP01, dPa_name::ID_AK_SN_BIGFAIRYTYPE2APP01, dPa_name::ID_AK_SN_BIGFAIRYTYPE3APP01, dPa_name::ID_AK_SN_BIGFAIRYTYPE4APP01};
 
     fopAc_ac_c* pFairyActor = fopAcM_SearchByID(this->mFairyActorID);
     if(pFairyActor != NULL){
@@ -505,7 +504,7 @@ BOOL daBigelf_c::demoProcAppear() {
             this->clrFlag(BIGELF_STATE_UNK1);
             this->setAnm(1);
             if(this->m3CC == NULL)
-                this->m3CC = dComIfGp_particle_set(dPa_name::ID_SCENE_8346, &this->current.pos);
+                this->m3CC = dComIfGp_particle_set(dPa_name::ID_AK_SN_BIGFAIRYWAIT00, &this->current.pos);
         }
 
         return TRUE;
