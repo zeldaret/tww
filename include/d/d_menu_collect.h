@@ -39,11 +39,11 @@ public:
         mRFont = rfont;
     }
 
-    void setTactTexBuffer(void* ptr) { m2498 = (ResTIMG*)ptr; }
-    void setMapTexBuffer(void* ptr) { m249C = (ResTIMG*)ptr; }
-    void setTriforceTexBuffer(int idx, void* ptr) { m24A0[idx] = (ResTIMG*)ptr; }
-    void setSymbolTexBuffer(int idx, void* ptr) { m24C0[idx] = ptr; }
-    void setItemTexBuffer(int idx, void* ptr) { m24CC[idx] = ptr; }
+    void setTactTexBuffer(void* ptr) { mTactTexBuffer = (ResTIMG*)ptr; }
+    void setMapTexBuffer(void* ptr) { mMapTexBuffer = (ResTIMG*)ptr; }
+    void setTriforceTexBuffer(int idx, void* ptr) { mTriforceTexBuffer[idx] = (ResTIMG*)ptr; }
+    void setSymbolTexBuffer(int idx, void* ptr) { mSymbolTexBuffer[idx] = ptr; }
+    void setItemTexBuffer(int idx, void* ptr) { mItemTexBuffer[idx] = ptr; }
 
     void setTextArea(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
         name[0] = name0;
@@ -185,11 +185,11 @@ public:
     /* 0x248C */ JUtility::TColor color_248C;
     /* 0x2490 */ JUtility::TColor color_2490;
     /* 0x2494 */ JUtility::TColor color_2494;
-    /* 0x2498 */ ResTIMG* m2498;
-    /* 0x249C */ ResTIMG* m249C;
-    /* 0x24A0 */ ResTIMG* m24A0[8];
-    /* 0x24C0 */ void* m24C0[3];
-    /* 0x24CC */ void* m24CC[5];
+    /* 0x2498 */ ResTIMG* mTactTexBuffer;
+    /* 0x249C */ ResTIMG* mMapTexBuffer;
+    /* 0x24A0 */ ResTIMG* mTriforceTexBuffer[8];
+    /* 0x24C0 */ void* mSymbolTexBuffer[3];
+    /* 0x24CC */ void* mItemTexBuffer[5];
     /* 0x24E0 */ fopMsgM_msgDataProc_c mMsgProc;
     /* 0x2780 */ u8 m2780[0x27A8 - 0x2780];
     /* 0x27A8 */ f32 m27A8;
