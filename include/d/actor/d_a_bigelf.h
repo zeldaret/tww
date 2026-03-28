@@ -53,8 +53,14 @@ public:
         if(this->AttnSetCount != 255)
             this->AttnSetCount++;
     }
-    void setAction(ActionFunc fun,void*) {
+    void setAction(ActionFunc fun,void* arg) {
+        if(this->mCurrentStateFunc != NULL){
+                this->mStateFuncCnt = -1;
+                (this->*mCurrentStateFunc)(arg);
+        }
         this->mCurrentStateFunc = fun;
+        this->mStateFuncCnt = 0;
+        (this->*mCurrentStateFunc)(arg);
     }
     void setAttentionBasePos(cXyz pos) {
         this->mCurrentPos = pos;
@@ -185,7 +191,7 @@ public:
     /* 0x3F0 */ f32 m3F0;
     /* 0x3F4 */ u8 m3F4;
     /* 0x3F5 */ s8 iBrkFrame;
-    /* 0x3F6 */ s8 mWaitCnt;
+    /* 0x3F6 */ s8 mStateFuncCnt;
     /* 0x3F7 */ s8 m3F7;
     /* 0x3F8 */ fpc_ProcID mOctID;
 };

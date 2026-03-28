@@ -52,8 +52,8 @@ BOOL daBigelf_c::nodeCallBack(J3DNode* i_nodeJnt) {
     J3DModel* model = j3dSys.getModel();
     u16 jntNo = static_cast<J3DJoint*>(i_nodeJnt)->getJntNo();
     
-    
-    cMtx_copy(model->getAnmMtx(jntNo), *calc_mtx);
+    MtxP pAnmMtx = model->getAnmMtx(jntNo);
+    cMtx_copy(pAnmMtx, *calc_mtx);
     if(jntNo == this->getHeadJntNum()){
         s16 target;
         if(this->m3BC == 0)
@@ -62,7 +62,8 @@ BOOL daBigelf_c::nodeCallBack(J3DNode* i_nodeJnt) {
             target = 0;
 
         cLib_addCalcAngleS(&this->m350, target, 8, 0x400, 0x100);
-        mDoMtx_ZrotM(*calc_mtx, -this->m350);
+        s16 zRot = -this->m350;
+        mDoMtx_ZrotM(*calc_mtx, zRot);
         
         
 
@@ -76,7 +77,7 @@ BOOL daBigelf_c::nodeCallBack(J3DNode* i_nodeJnt) {
 
         this->incAttnSetCount();
     }
-    else if(jntNo != this->m_jnt.mBackboneJntNum && jntNo == this->m_fl_jnt){
+    else if(jntNo != this->getBackboneJntNum() && jntNo == this->m_fl_jnt){
         relPos.set(0,0,0);
         MtxPosition(&relPos, &this->m3D0);
     }
@@ -537,8 +538,10 @@ void daBigelf_c::demoInitFa1() {
 /* 00001848-000018D4       .text demoProcFa1__10daBigelf_cFv */
 BOOL daBigelf_c::demoProcFa1() {
     fopAc_ac_c* paFairy = fopAcM_SearchByID(this->mFairyActorID);
-    if(paFairy != NULL)
-        cLib_addCalc2(&paFairy->current.pos.y, this->current.pos.y + 70.f, 0.2f, 100.f);
+    if(paFairy != NULL){
+        f32 targetY = this->current.pos.y + 70.f;
+        cLib_addCalc2(&paFairy->current.pos.y, targetY, 0.2f, 100.f);
+    }
 
     dComIfGp_evmng_cutEnd(this->mStaffId);
 
@@ -929,11 +932,11 @@ BOOL daBigelf_c::init() {
         ActionFunc pActWait = &daBigelf_c::wait_action;
         if(this->mCurrentStateFunc != pActWait){
             if(this->mCurrentStateFunc != NULL){
-                this->mWaitCnt = -1;
+                this->mStateFuncCnt = -1;
                 (this->*mCurrentStateFunc)(NULL);
             }
-            this->setAction(pActWait, NULL);
-            this->mWaitCnt = 0;
+            this->mCurrentStateFunc = pActWait;
+            this->mStateFuncCnt = 0;
             (this->*mCurrentStateFunc)(NULL);
         }
     }
@@ -1068,7 +1071,7 @@ bool daBigelf_c::event0() {
         dComIfGs_onEventBit(getEventFlag());
         this->m3BD = 3;
         dComIfGp_event_onEventFlag(8);
-        if(getType() == BIGELF_TYPE_6 && getSwbit2() != 0xff){
+        if(VERSION > VERSION_DEMO && getType() == BIGELF_TYPE_6 && getSwbit2() != 0xff){
             dComIfGs_onSwitch(getSwbit2(), fopAcM_GetRoomNo(this));
         }
     }
@@ -1086,14 +1089,14 @@ bool daBigelf_c::dead() {
 
 /* 00002A80-00002C8C       .text wait_action__10daBigelf_cFPv */
 BOOL daBigelf_c::wait_action(void*) {
-    if(this->mWaitCnt == 0){
+    if(this->mStateFuncCnt == 0){
         if(dComIfGs_isEventBit(getEventFlag())){
             this->m3BD = 3;
         }
         else {
             if(getType() == BIGELF_TYPE_6){
                 if(dComIfGs_isSwitch(getSwbit(), fopAcM_GetRoomNo(this))){
-                    if(getSwbit2() != 0xff){
+                    if(VERSION > VERSION_DEMO && getSwbit2() != 0xff){
                         dComIfGs_onSwitch(getSwbit2(), fopAcM_GetRoomNo(this));
                     }
                     this->m3BD = 3;
@@ -1107,9 +1110,9 @@ BOOL daBigelf_c::wait_action(void*) {
             }
         }
         this->setAnmStatus();
-        this->mWaitCnt++;
+        this->mStateFuncCnt++;
     }
-    else if(this->mWaitCnt != -1) {
+    else if(this->mStateFuncCnt != -1) {
         bool bAttention;
         switch(this->m3BD){
             case 0:
@@ -1157,7 +1160,7 @@ BOOL daBigelf_c::_draw() {
     }
 
     if(!this->chkFlag(BIGELF_STATE_UNK4)){
-        dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, fopAcM_GetPosition_p(this), &this->tevStr);
+        dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, &this->current.pos, &this->tevStr);
     }
 
     dKy_getEnvlight().setLightTevColorType(bckModel, &this->tevStr);
@@ -1227,10 +1230,15 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00002FCC-00003124       .text _create__10daBigelf_cFv */
 cPhs_State daBigelf_c::_create() {
-
-    fopAcM_SetupActor(this, daBigelf_c);
+    #if VERSION > VERSION_DEMO
+        fopAcM_SetupActor(this, daBigelf_c);
+    #endif
     cPhs_State ret = dComIfG_resLoad(&this->mPhaseProcReq, "bigelf");
+    
     if(ret == cPhs_COMPLEATE_e){
+        #if VERSION == VERSION_DEMO
+            fopAcM_SetupActor(this, daBigelf_c);
+        #endif
         switch(fopAcM_GetName(this)){
             case PROC_BIGELF:
                 this->m3F4 = 0;
@@ -1239,17 +1247,20 @@ cPhs_State daBigelf_c::_create() {
                 return cPhs_ERROR_e;
         }
 
-        
-
         if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xb7b0)){
-            this->mpBckAnimator = NULL;
-                return cPhs_ERROR_e;
-            }
+            #if VERSION > VERSION_DEMO
+                this->mpBckAnimator = NULL;
+            #endif
+
+            return cPhs_ERROR_e;
+        }
     
         fopAcM_SetMtx(this, this->mpBckAnimator->getModel()->getBaseTRMtx());
 
         if(init() == FALSE){
-            this->mpBckAnimator = NULL;
+            #if VERSION > VERSION_DEMO
+                this->mpBckAnimator = NULL;
+            #endif
             return cPhs_ERROR_e;
         }
     }
@@ -1260,7 +1271,11 @@ cPhs_State daBigelf_c::_create() {
 /* 00003224-00003808       .text CreateHeap__10daBigelf_cFv */
 BOOL daBigelf_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("bigelf", BIGELF_BDL_DY));
-    JUT_ASSERT(2004, modelData);
+
+    JUT_ASSERT(
+        (VERSION == VERSION_DEMO) ? 1987 : 2004,
+        modelData
+    );
 
     this->mpBckAnimator = new mDoExt_McaMorf(
         modelData, 
@@ -1295,7 +1310,10 @@ BOOL daBigelf_c::CreateHeap() {
             return FALSE;
         
         default:
-            JUT_ASSERT(2065, 0);
+            JUT_ASSERT(
+                (VERSION == VERSION_DEMO) ? 2048 : 2065,
+                0
+            );
     }
 
     J3DModel* bckModel = this->mpBckAnimator->getModel();
@@ -1305,16 +1323,26 @@ BOOL daBigelf_c::CreateHeap() {
     this->mpBckAnimator->calc();
 
     this->m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
-    JUT_ASSERT(2084, m_jnt.getHeadJntNum() >= 0);
+
+    JUT_ASSERT(
+        (VERSION == VERSION_DEMO) ? 2067 : 2084,
+        m_jnt.getHeadJntNum() >= 0
+    );
 
     this->m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
-    JUT_ASSERT(2089, m_jnt.getBackboneJntNum() >= 0);
+    JUT_ASSERT(
+        (VERSION == VERSION_DEMO) ? 2072 : 2089,
+        m_jnt.getBackboneJntNum() >= 0
+    );
 
     this->m_fl_jnt = modelData->getJointName()->getIndex("handRB");
-    JUT_ASSERT(2093, m_fl_jnt >= 0);
+    JUT_ASSERT(
+        (VERSION == VERSION_DEMO) ? 2076 : 2093,
+        m_fl_jnt >= 0
+    );
 
     for(u16 i_jnt = 0; i_jnt < modelData->getJointNum(); i_jnt++){
-        if(i_jnt == this->m_jnt.mHeadJntNum || i_jnt == this->m_jnt.mBackboneJntNum || i_jnt == this->m_fl_jnt)
+        if(i_jnt == this->getHeadJntNum() || i_jnt == this->getBackboneJntNum() || i_jnt == this->m_fl_jnt)
             this->mpBckAnimator->getModel()->getModelData()->getJointTree().getJointNodePointer(i_jnt)->setCallBack(nodeCallBack_Bigelf);
     }
     
@@ -1322,7 +1350,10 @@ BOOL daBigelf_c::CreateHeap() {
 
 
     J3DModelData* flModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("bigelf", BIGELF_BDL_DY_FL));
-    JUT_ASSERT(2114, flModelData);
+    JUT_ASSERT(
+        (VERSION == VERSION_DEMO) ? 2097 : 2114,
+        flModelData
+    );
 
     this->mpFlowerModel = mDoExt_J3DModel__create(flModelData, 0x80000, 0x1000000);
     if(this->mpFlowerModel == 0)
