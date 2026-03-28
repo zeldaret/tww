@@ -47,10 +47,10 @@ void daBigelf_c::oct_delete() {
 }
 
 /* 0000016C-00000338       .text nodeCallBack__10daBigelf_cFP7J3DNode */
-BOOL daBigelf_c::nodeCallBack(J3DNode* node) {
+BOOL daBigelf_c::nodeCallBack(J3DNode* i_nodeJnt) {
     cXyz relPos, absPos;
     J3DModel* model = j3dSys.getModel();
-    u16 jntNo = static_cast<J3DJoint*>(node)->getJntNo();
+    u16 jntNo = static_cast<J3DJoint*>(i_nodeJnt)->getJntNo();
     
     
     cMtx_copy(model->getAnmMtx(jntNo), *calc_mtx);
@@ -68,15 +68,13 @@ BOOL daBigelf_c::nodeCallBack(J3DNode* node) {
 
         relPos.set(0,0,0);
         MtxPosition(&relPos, &absPos);
-        //attentionPos = absPos;
         this->setAttentionBasePos(absPos);
 
         relPos.set(20,-20,0);
         MtxPosition(&relPos, &absPos);
         setEyePos(absPos);
 
-        if(this->m337 != 255)
-            this->m337++;
+        this->incAttnSetCount();
     }
     else if(jntNo != this->m_jnt.mBackboneJntNum && jntNo == this->m_fl_jnt){
         relPos.set(0,0,0);
@@ -90,18 +88,18 @@ BOOL daBigelf_c::nodeCallBack(J3DNode* node) {
 }
 
 /* 00000338-00000384       .text nodeCallBack_Bigelf__FP7J3DNodei */
-static BOOL nodeCallBack_Bigelf(J3DNode* node, int calcTiming) {
+static BOOL nodeCallBack_Bigelf(J3DNode* i_node, int calcTiming) {
     if(calcTiming == 0 && j3dSys.getModel()->getUserArea() != 0){
         daBigelf_c* i_this = ((daBigelf_c*)j3dSys.getModel()->getUserArea());
-        i_this->nodeCallBack(node);
+        i_this->nodeCallBack(i_node);
     }
 
     return TRUE;
 }
 
 /* 00000384-00000438       .text lightInit__10daBigelf_cFP4cXyz */
-void daBigelf_c::lightInit(cXyz* pPos) {
-    this->mLightInfluence.mPos = *pPos;
+void daBigelf_c::lightInit(cXyz* i_pos) {
+    this->mLightInfluence.mPos = *i_pos;
     this->mLightInfluencePos = this->mLightInfluence.mPos;
 
     if(!this->mIsLightShining){
@@ -752,13 +750,13 @@ void daBigelf_c::makeFa1() {
 }
 
 /* 00001EB4-0000200C       .text setAnm__10daBigelf_cFSc */
-void daBigelf_c::setAnm(s8 anmIdx) {
+void daBigelf_c::setAnm(s8 i_anmIdx) {
     float morf = 8.0f;
     int loopMode = -1;
     float speed = 1.0f, startFrame = 0.0f;
     float duration = -1.0f;
 
-    switch(anmIdx){
+    switch(i_anmIdx){
         case 1:
         case 2:
             morf = 0.0f;
@@ -776,8 +774,8 @@ void daBigelf_c::setAnm(s8 anmIdx) {
             morf = 0.0f;
     }
     
-    if(anmIdx != this->m3BC && anmIdx != -1){
-        this->m3BC = anmIdx;
+    if(i_anmIdx != this->m3BC && i_anmIdx != -1){
+        this->m3BC = i_anmIdx;
         this->m338 = 0;
         this->m336 = 0;
         J3DAnmTransform* pAnimRes = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("bigelf", l_bck_ix_tbl[this->m3BC]));
@@ -791,11 +789,11 @@ void daBigelf_c::setAnmStatus() {
 }
 
 /* 00002030-000021A4       .text next_msgStatus__10daBigelf_cFPUl */
-fopMsg_MessageStatus_e daBigelf_c::next_msgStatus(u32* pMsgIdx) {
+fopMsg_MessageStatus_e daBigelf_c::next_msgStatus(u32* i_pMsgIdx) {
     fopMsg_MessageStatus_e ret = fopMsgStts_MSG_CONTINUES_e;
-    switch(*pMsgIdx){
+    switch(*i_pMsgIdx){
         case 0x2EE8:
-            (*pMsgIdx)++;
+            (*i_pMsgIdx)++;
             switch(getType()){
                 case 0:
                 case 1:
@@ -833,16 +831,16 @@ fopMsg_MessageStatus_e daBigelf_c::next_msgStatus(u32* pMsgIdx) {
         
         case 0x2EEB:
         case 0x2EEC:
-            (*pMsgIdx)++;
+            (*i_pMsgIdx)++;
             break;
         
         case 0x2EEF:
         case 0x2EF0:
-            (*pMsgIdx)++;
+            (*i_pMsgIdx)++;
             break;
         
         case 0x2EF1:
-            *pMsgIdx = 0x2EEE;
+            *i_pMsgIdx = 0x2EEE;
             break;
         
         default:
@@ -930,11 +928,11 @@ BOOL daBigelf_c::init() {
         ActionFunc pActWait = &daBigelf_c::wait_action;
         if(this->mCurrentStateFunc != pActWait){
             if(this->mCurrentStateFunc != NULL){
-                this->m3F6 = -1;
+                this->mWaitCnt = -1;
                 (this->*mCurrentStateFunc)(NULL);
             }
-            this->mCurrentStateFunc = pActWait;
-            this->m3F6 = 0;
+            this->setAction(pActWait, NULL);
+            this->mWaitCnt = 0;
             (this->*mCurrentStateFunc)(NULL);
         }
     }
@@ -942,7 +940,7 @@ BOOL daBigelf_c::init() {
     this->current.pos.y = this->home.pos.y + 30;
     this->mCurrentPos = this->current.pos;
     this->mCurrentPos.y += 100.0f;
-    this->eyePos = this->mUnkPos = this->mCurrentPos;
+    this->eyePos = this->mEyePos = this->mCurrentPos;
     this->attention_info.position.set(this->mCurrentPos.x, this->mCurrentPos.y + 50, this->mCurrentPos.z);
     this->mFairyActorID = -1;
     
@@ -963,11 +961,11 @@ void daBigelf_c::setAttention(bool active) {
         return;
     }
 
-    if(!active && this->m337 >= 2){
+    if(!active && this->AttnSetCount >= 2){
         return;
     }
     
-    this->eyePos.set(this->mUnkPos.x, this->mUnkPos.y, this->mUnkPos.z);
+    this->eyePos.set(this->mEyePos.x, this->mEyePos.y, this->mEyePos.z);
     this->attention_info.position.set(this->mCurrentPos.x, this->mCurrentPos.y + 50, this->mCurrentPos.z);
 }
 
@@ -1087,7 +1085,7 @@ bool daBigelf_c::dead() {
 
 /* 00002A80-00002C8C       .text wait_action__10daBigelf_cFPv */
 BOOL daBigelf_c::wait_action(void*) {
-    if(this->m3F6 == 0){
+    if(this->mWaitCnt == 0){
         if(dComIfGs_isEventBit(getEventFlag())){
             this->m3BD = 3;
         }
@@ -1108,9 +1106,9 @@ BOOL daBigelf_c::wait_action(void*) {
             }
         }
         this->setAnmStatus();
-        this->m3F6++;
+        this->mWaitCnt++;
     }
-    else if(this->m3F6 != -1) {
+    else if(this->mWaitCnt != -1) {
         bool bAttention;
         switch(this->m3BD){
             case 0:

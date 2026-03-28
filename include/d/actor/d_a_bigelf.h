@@ -24,6 +24,16 @@ public:
         BIGELF_STATE_UNK10 = 0b10000000000,
     };
 
+    enum Type_t {
+        BIGELF_TYPE_0,
+        BIGELF_TYPE_1,
+        BIGELF_TYPE_2,
+        BIGELF_TYPE_3,
+        BIGELF_TYPE_4,
+        BIGELF_TYPE_5,
+        BIGELF_TYPE_6
+    };
+
     bool chkFlag(u16 mask) {
         return (this->mStateBits & mask) == mask;
     }
@@ -39,13 +49,18 @@ public:
     s16 getHead_x() {
         return this->m_jnt.getHead_x();
     }
-    void incAttnSetCount() {}
-    void setAction(ActionFunc,void*) {}
+    void incAttnSetCount() {
+        if(this->AttnSetCount != 255)
+            this->AttnSetCount++;
+    }
+    void setAction(ActionFunc fun,void*) {
+        this->mCurrentStateFunc = fun;
+    }
     void setAttentionBasePos(cXyz pos) {
         this->mCurrentPos = pos;
     }
     void setEyePos(cXyz pos) {
-        this->mUnkPos = pos; // EyePos already exist in fopAc_ac_c
+        this->mEyePos = pos;
     }
     void setFlag(u16 mask) {
         this->mStateBits |= mask;
@@ -125,11 +140,11 @@ public:
     /* 0x2E4 */ s8 m_fl_jnt;
     /* 0x2E5 */ u8 m2E5[0x2E8 - 0x2E5];
     /* 0x2E8 */ dNpc_JntCtrl_c m_jnt;
-    /* 0x31C */ cXyz mUnkPos;
+    /* 0x31C */ cXyz mEyePos;
     /* 0x328 */ cXyz mCurrentPos;
     /* 0x334 */ u16 m334;
     /* 0x336 */ s8 m336;
-    /* 0x337 */ u8 m337;
+    /* 0x337 */ u8 AttnSetCount;
     /* 0x338 */ f32 m338;
     /* 0x33C */ u32 mMsgIdx;
     /* 0x340 */ u16 mStateBits;
@@ -172,7 +187,7 @@ public:
     /* 0x3F0 */ f32 m3F0;
     /* 0x3F4 */ u8 m3F4;
     /* 0x3F5 */ s8 iBrkFrame;
-    /* 0x3F6 */ s8 m3F6;
+    /* 0x3F6 */ s8 mWaitCnt;
     /* 0x3F7 */ s8 m3F7;
     /* 0x3F8 */ fpc_ProcID mOctID;
 };
