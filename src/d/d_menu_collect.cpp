@@ -39,7 +39,6 @@ dMc_HIO_c::dMc_HIO_c() {
 
 /* 8019BF14-8019CB5C       .text screenSet__15dMenu_Collect_cFv */
 void dMenu_Collect_c::screenSet() {
-    /* Nonmatching */
     char print_format[0x10];
 
     static const u32 l_ft[] = {
@@ -215,7 +214,6 @@ void dMenu_Collect_c::screenSet() {
     ((J2DTextBox*)(m740).pane)->setFont(mRFont);
     ((J2DTextBox*)(m778).pane)->setFont(mFont);
 
-    // Couple of functions missing here
     ((J2DTextBox*)(m740).pane)->setWhite(0xFFFFFFFF);
     ((J2DTextBox*)(m740).pane)->setCharColor(0x000000FF);
     ((J2DTextBox*)(m740).pane)->setGradColor(0x000000FF);
@@ -271,8 +269,8 @@ void dMenu_Collect_c::screenSet() {
     fopMsgM_setPaneData(&mFC8, m004, 'trib');
 
     for (int i = 0; i < 3; i++) {
-        fopMsgM_setPaneData(&m10A8[i], m004, l_sit[i]);
-        fopMsgM_setPaneData(&m3F8[i], m004, l_sik[i]);
+        fopMsgM_setPaneData(&m1000[i], m004, l_sit[i]);
+        fopMsgM_setPaneData(&m10A8[i], m004, l_sik[i]);
     }
 
     if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_DINS_PEARL)) {
