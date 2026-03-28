@@ -40,7 +40,7 @@ dMc_HIO_c::dMc_HIO_c() {
 /* 8019BF14-8019CB5C       .text screenSet__15dMenu_Collect_cFv */
 void dMenu_Collect_c::screenSet() {
     /* Nonmatching */
-    char* print_format;
+    char print_format[0x10];
 
     static const u32 l_ft[] = {
         'ft00',
