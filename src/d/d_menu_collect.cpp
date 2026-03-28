@@ -11,6 +11,16 @@
 
 static dMc_HIO_c g_mcHIO;
 
+// Number of beats in each baton song.
+static const u32 tact_beat[] = {
+    /* Wind's Requiem    */ 3,
+    /* Ballad of Gales   */ 4,
+    /* Command Melody    */ 4,
+    /* Earth God's Lyric */ 6,
+    /* Wind God's Aria   */ 6,
+    /* Song of Passing   */ 3,
+};
+
 /* 8019BE8C-8019BF14       .text __ct__9dMc_HIO_cFv */
 dMc_HIO_c::dMc_HIO_c() {
     m46 = 40;
