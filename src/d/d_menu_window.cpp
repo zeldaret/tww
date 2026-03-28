@@ -491,7 +491,37 @@ void dMs_collect_create2(sub_ms_screen_class* i_Ms) {
 
 /* 801DC224-801DC360       .text dMs_collect_delete__FP19sub_ms_screen_class */
 void dMs_collect_delete(sub_ms_screen_class* i_Ms) {
-    /* Nonmatching */
+    for (int i = 0; i < 2; i++) {
+        if (i_Ms->name[i] != NULL) {
+            i_Ms->childHeap->free(i_Ms->name[i]);
+            i_Ms->name[i] = NULL;
+        }
+        if (i_Ms->note[i] != NULL) {
+            i_Ms->childHeap->free(i_Ms->note[i]);
+            i_Ms->note[i] = NULL;
+        }
+        if (i_Ms->dummy[i] != NULL) {
+            i_Ms->childHeap->free(i_Ms->dummy[i]);
+            i_Ms->dummy[i] = NULL;
+        }
+    }
+
+    for (int i = 0; i < i_Ms->field_0x1B2; i++) {
+        if (i_Ms->buffer_p[i] != NULL) {
+            i_Ms->childHeap->free(i_Ms->buffer_p[i]);
+            i_Ms->buffer_p[i] = NULL;
+        }
+    }
+
+    if (dMc_c != NULL) {
+        g_dComIfG_gameInfo.play.field_0x4944 = dMc_c->m27ED; // FIXME
+
+        dMc_c->_delete();
+        delete dMc_c;
+        dMc_c = NULL;
+    }
+
+    lockFlag = 1;
 }
 
 /* 801DC360-801DC694       .text dMs_fmap_create__FP19sub_ms_screen_class */
