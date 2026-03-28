@@ -28,18 +28,23 @@ public:
     virtual void draw() {}
     void getCollectMode() {}
     void getNowItem() {}
-    void setArchive(JKRArchive*) {}
+    void setNowItem(unsigned char) {}
+
+    void setArchive(JKRArchive* arc) { mpArc = arc; }
+    void setOptionArchive(JKRArchive* arc) { mpOptArc = arc; }
+    void setQuitArchive(JKRArchive* arc) { mpSaveArc = arc; }
+
     void setFont(JUTFont* font, JUTFont* rfont) {
         mFont = font;
         mRFont = rfont;
     }
-    void setItemTexBuffer(int, void*) {}
-    void setMapTexBuffer(void*) {}
-    void setNowItem(unsigned char) {}
-    void setOptionArchive(JKRArchive*) {}
-    void setQuitArchive(JKRArchive*) {}
-    void setSymbolTexBuffer(int, void*) {}
-    void setTactTexBuffer(void*) {}
+
+    void setItemTexBuffer(int idx, void* ptr) {}
+    void setMapTexBuffer(void* ptr) {}
+    void setSymbolTexBuffer(int idx, void* ptr) {}
+    void setTactTexBuffer(void* ptr) { m2498 = (ResTIMG*)ptr; }
+    void setTriforceTexBuffer(int idx, void* ptr) {}
+
     void setTextArea(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
         name[0] = name0;
         name[1] = name1;
@@ -49,7 +54,6 @@ public:
         dummy[1] = dummy1;
     }
     void setTimer(short) {}
-    void setTriforceTexBuffer(int, void*) {}
     void setTriggerInfo(unsigned char) {}
 
     void screenSet();
@@ -170,7 +174,9 @@ public:
     /* 0x2420 */ fopMsgM_pane_class m2420;
     /* 0x2458 */ u8 m2458[0x2460 - 0x2458];
     /* 0x2460 */ dDlst_2DOutFont_c* m2460;
-    /* 0x2464 */ u8 m2464[0x2470 - 0x2464];
+    /* 0x2464 */ JKRArchive* mpArc;
+    /* 0x2468 */ JKRArchive* mpOptArc;
+    /* 0x246C */ JKRArchive* mpSaveArc;
     /* 0x2470 */ JUTFont* mFont;
     /* 0x2474 */ JUTFont* mRFont;
     /* 0x2478 */ J2DPane* m2478;
@@ -181,8 +187,9 @@ public:
     /* 0x2494 */ JUtility::TColor color_2494;
     /* 0x2498 */ ResTIMG* m2498;
     /* 0x249C */ ResTIMG* m249C;
-    /* 0x24A0 */ ResTIMG* m24A0[6];
-    /* 0x24B8 */ u8 m24B8[0x24E0 - 0x24B8];
+    /* 0x24A0 */ ResTIMG* m24A0[8];
+    /* 0x24C0 */ void* m24C0[3];
+    /* 0x24CC */ void* m24CC[5];
     /* 0x24E0 */ fopMsgM_msgDataProc_c mMsgProc;
     /* 0x2780 */ u8 m2780[0x27A8 - 0x2780];
     /* 0x27A8 */ f32 m27A8;
