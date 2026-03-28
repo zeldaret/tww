@@ -402,8 +402,39 @@ void dMs_dmap_create(sub_ms_screen_class* i_Ms) {
 }
 
 /* 801DCB30-801DCC80       .text dMs_dmap_delete__FP19sub_ms_screen_class */
-void dMs_dmap_delete(sub_ms_screen_class*) {
-    /* Nonmatching */
+void dMs_dmap_delete(sub_ms_screen_class* i_Ms) {
+    for (int i = 0; i < 2; i++) {
+        if (i_Ms->name[i] != NULL) {
+            i_Ms->parentHeap_0xfc->free(i_Ms->name[i]);
+            i_Ms->name[i] = NULL;
+        }
+        if (i_Ms->note[i] != NULL) {
+            i_Ms->parentHeap_0xfc->free(i_Ms->note[i]);
+            i_Ms->note[i] = NULL;
+        }
+        if (i_Ms->dummy[i] != NULL) {
+            i_Ms->parentHeap_0xfc->free(i_Ms->dummy[i]);
+            i_Ms->dummy[i] = NULL;
+        }
+    }
+
+    for (int i = 0; i < i_Ms->field_0x1B2; i++) {
+        if (i_Ms->buffer_p[i] != NULL) {
+            i_Ms->parentHeap_0xfc->free(i_Ms->buffer_p[i]);
+            i_Ms->buffer_p[i] = NULL;
+        }
+    }
+
+    if (dMd_c != NULL) {
+        dMd_c->_delete();
+        delete dMd_c;
+        dMd_c = NULL;
+    }
+
+    if (dMs_capture_c != NULL) {
+        delete dMs_capture_c;
+        dMs_capture_c = NULL;
+    }
 }
 
 /* 801DCC80-801DCDA0       .text dMs_name_create__FP19sub_ms_screen_class */
