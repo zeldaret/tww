@@ -202,9 +202,17 @@ public:
     /* 0x50D4 */ JUTFont* mRFont;
     /* 0x50D8 */ u8 padding_0x50D8[0x5148 - 0x50D8];
     /* 0x5148 */ char* name[2];
-    /* 0x5150 */ char* note[2];
-    /* 0x5158 */ char* dummy[2];
-    /* 0x5160 */ u8 padding_0x5160[0x51B4 - 0x5160];
+    /* 0x5150 */ u8 padding_0x5150[0x5154 - 0x5150];
+    /* 0x5154 */ char* note[2];
+    /* 0x515C */ char* dummy[2];
+    /* 0x5164 */ u8 padding_0x5164[0x5194 - 0x5164];
+    /* 0x5194 */ JUtility::TColor color_0x5194;
+    /* 0x5198 */ JUtility::TColor color_0x5198;
+    /* 0x519C */ JUtility::TColor color_0x519C;
+    /* 0x51A0 */ JUtility::TColor color_0x51A0;
+    /* 0x51A4 */ JUtility::TColor color_0x51A4;
+    /* 0x51A8 */ JUtility::TColor color_0x51A8;
+    /* 0x51AC */ u8 padding_0x51AC[0x51B4 - 0x51AC];
 }; // Size: 0x51B4
 
 STATIC_ASSERT(sizeof(dMenu_Fmap_c) == 0x51B4);

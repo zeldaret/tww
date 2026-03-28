@@ -159,8 +159,13 @@ public:
     /* 0x0020 */ dDlst_FMAP2_c mDlst;
     /* 0x0024 */ u8 padding_0x24[0x28 - 0x24];
     /* 0x0028 */ dDlst_FMAP2GS_c mDlstGs;
-    /* 0x002C */ u8 padding_0x2C[0x2850 - 0x2C];
-};
+    /* 0x002C */ u8 padding_0x2C[0x2820 - 0x2C];
+    /* 0x2820 */ JUtility::TColor color_0x2820;
+    /* 0x2824 */ JUtility::TColor color_0x2824;
+    /* 0x2828 */ JUtility::TColor color_0x2828;
+    /* 0x282C */ JUtility::TColor color_0x282C;
+    /* 0x2830 */ u8 padding_0x2830[0x2850 - 0x2830];
+}; // Size: 0x2850?
 
 STATIC_ASSERT(sizeof(dMenu_Fmap2_c) == 0x2850);
 
