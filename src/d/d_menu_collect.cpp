@@ -33,98 +33,148 @@ void dMenu_Collect_c::screenSet() {
     char* print_format;
 
     static const u32 l_ft[] = {
-        'ft00', 'ft01', 'ft02', 'ft03', 'ft04', 'ft05', 'ft06', 'ft07',
-        'ft08', 'ft09', 'ft10', 'ft11', 'ft12', 'ft13', 'ft14',
+        'ft00',
+        'ft01',
+        'ft02',
+        'ft03',
+        'ft04',
+        'ft05',
+        'ft06',
+        'ft07',
+        'ft08',
+        'ft09',
+        'ft10',
+        'ft11',
+        'ft12',
+        'ft13',
+        'ft14',
     };
 
     static const u32 l_fd[] = {
-        'fd00', 'fd01', 'fd02', 'fd03', 'fd04', 'fd05', 'fd06', 'fd07',
-        'fd08', 'fd09', 'fd10', 'fd11', 'fd12', 'fd13', 'fd14',
+        'fd00',
+        'fd01',
+        'fd02',
+        'fd03',
+        'fd04',
+        'fd05',
+        'fd06',
+        'fd07',
+        'fd08',
+        'fd09',
+        'fd10',
+        'fd11',
+        'fd12',
+        'fd13',
+        'fd14',
     };
 
     static const u32 l_car[] = {
-        'car1', 'car2', 'car3', 'car4',
+        'car1',
+        'car2',
+        'car3',
+        'car4',
     };
 
     static const u32 l_tri[] = {
-        'tri0', 'tri1', 'tri2', 'tri3', 'tri4', 'tri5', 'tri6', 'tri7',
+        'tri0',
+        'tri1',
+        'tri2',
+        'tri3',
+        'tri4',
+        'tri5',
+        'tri6',
+        'tri7',
     };
 
     static const u32 l_sit[] = {
-        'it16', 'it14', 'it15',
+        'it16',
+        'it14',
+        'it15',
     };
 
     static const u32 l_sik[] = {
-        'ik16', 'ik14', 'ik15',
+        'ik16',
+        'ik14',
+        'ik15',
     };
 
     static const u32 l_ci[] = {
-        'ci10', 'ci09', 'ci08', 'ci07', 'ci06', 'ci05',
-        'ci04', 'ci03', 'ci02', 'ci01', 'ci00',
+        'ci10',
+        'ci09',
+        'ci08',
+        'ci07',
+        'ci06',
+        'ci05',
+        'ci04',
+        'ci03',
+        'ci02',
+        'ci01',
+        'ci00',
     };
 
     static const u32 l_htp[] = {
-        'htp2', 'htp1', 'htp3',
+        'htp2',
+        'htp1',
+        'htp3',
     };
 
     static const u32 l_tit[] = {
-        'it08', 'it09', 'it10', 'it11', 'it12', 'it13',
+        'it08',
+        'it09',
+        'it10',
+        'it11',
+        'it12',
+        'it13',
     };
 
-    static const u32 l_tik[] = {
-        'ik08', 'ik09', 'ik10', 'ik11', 'ik12', 'ik13'
-    };
+    static const u32 l_tik[] = {'ik08', 'ik09', 'ik10', 'ik11', 'ik12', 'ik13'};
 
-    static const u32 l_cn[] = {
-        'cn01', 'cn02', 'cn03', 'cn04', 'cn05', 'cn06'
-    };
+    static const u32 l_cn[] = {'cn01', 'cn02', 'cn03', 'cn04', 'cn05', 'cn06'};
 
-    static const u32 l_wn[] = {
-        'wn01', 'wn02', 'wn03', 'wn04', 'wn05', 'wn06'
-    };
+    static const u32 l_wn[] = {'wn01', 'wn02', 'wn03', 'wn04', 'wn05', 'wn06'};
 
-    static const u32 l_i0[] = {
-        'i011', 'i021', 'i031', 'i041', 'i051',
-        'i061'
-    };
+    static const u32 l_i0[] = {'i011', 'i021', 'i031', 'i041', 'i051', 'i061'};
 
-    static const u32 l_i1[] = {
-        'i012', 'i022', 'i032', 'i042', 'i052', 'i062'
-    };
+    static const u32 l_i1[] = {'i012', 'i022', 'i032', 'i042', 'i052', 'i062'};
 
-    static const u32 l_bs[] = {
-        'bs01', 'bs02', 'bs03', 'bs04', 'bs05', 'bs06'
-    };
+    static const u32 l_bs[] = {'bs01', 'bs02', 'bs03', 'bs04', 'bs05', 'bs06'};
 
-    static const u32 l_hmb[] = {
-        'hmb1', 'hmb2', 'hmb3', 'hmb4', 'hmb5', 'hmb6'
-    };
+    static const u32 l_hmb[] = {'hmb1', 'hmb2', 'hmb3', 'hmb4', 'hmb5', 'hmb6'};
 
-    static const u32 l_wit[] = {
-        'it00', 'it01', 'it02', 'it03', 'it04'
-    };
+    static const u32 l_wit[] = {'it00', 'it01', 'it02', 'it03', 'it04'};
 
-    static const u32 l_wik[] = {
-        'ik00', 'ik01', 'ik02', 'ik03', 'ik04'
-    };
+    static const u32 l_wik[] = {'ik00', 'ik01', 'ik02', 'ik03', 'ik04'};
 
-    static const u32 l_ip[] = {
-        'ip09', 'ip07', 'ip05', 'ip03', 'ip01'
-    };
+    static const u32 l_ip[] = {'ip09', 'ip07', 'ip05', 'ip03', 'ip01'};
 
     static const u32 l_wk[] = {
-        'wk00', 'wk01', 'wk02', 'wk03',
+        'wk00',
+        'wk01',
+        'wk02',
+        'wk03',
     };
 
     static char* triTex[8] = {
-        "triforce_00.bti", "triforce_01.bti", "triforce_02.bti", "triforce_03.bti",
-        "triforce_04.bti", "triforce_05.bti", "triforce_06.bti", "triforce_07.bti",
+        "triforce_00.bti",
+        "triforce_01.bti",
+        "triforce_02.bti",
+        "triforce_03.bti",
+        "triforce_04.bti",
+        "triforce_05.bti",
+        "triforce_06.bti",
+        "triforce_07.bti",
     };
     static char* symTex[3] = {
-        "god_symbol_02.bti", "god_symbol_00.bti", "god_symbol_01.bti",
+        "god_symbol_02.bti",
+        "god_symbol_00.bti",
+        "god_symbol_01.bti",
     };
     static char* wepTex[5] = {
-        "sword_00.bti", "shield_00.bti", "gloves_00.bti", "amulet_00.bti", "amulet_01.bti",
+        "sword_00.bti",
+        "shield_00.bti",
+        "gloves_00.bti",
+        "amulet_00.bti",
+        "amulet_01.bti",
     };
 
     J2DPane* mPane = m004->search('ROOT');
@@ -149,7 +199,8 @@ void dMenu_Collect_c::screenSet() {
 
     m820.mUserArea = m820.pane->mRotation;
 
-    if (m820.mUserArea > 180) m820.mUserArea -= 360;
+    if (m820.mUserArea > 180)
+        m820.mUserArea -= 360;
 
     ((J2DTextBox*)(m740).pane)->setFont(mRFont);
     ((J2DTextBox*)(m778).pane)->setFont(mFont);
@@ -162,7 +213,6 @@ void dMenu_Collect_c::screenSet() {
     ((J2DTextBox*)(m778).pane)->setWhite(0xFFFFFFFF);
     ((J2DTextBox*)(m778).pane)->setCharColor(0xFFFFFFFF);
     ((J2DTextBox*)(m778).pane)->setGradColor(0xFFFFFFFF);
-
 
     fopMsgM_setPaneData(&m858, m004, 'wd');
     ((J2DTextBox*)(m858).pane)->setFont(mFont);
@@ -181,14 +231,14 @@ void dMenu_Collect_c::screenSet() {
     fopMsgM_setPaneData(&m9A8, m004, 'tl00');
     fopMsgM_setPaneData(&m9E0, m004, 'tk00');
 
-    for(int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         fopMsgM_setPaneData(&mA18[i], m004, l_car[i]);
     }
 
     fopMsgM_setPaneData(&mAF8, m004, 'wdsv');
     fopMsgM_setPaneData(&mB30, m004, 'wdop');
 
-    for(int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         fopMsgM_setPaneData(&mB68[i], m004, l_wk[i]);
     }
 
@@ -204,13 +254,13 @@ void dMenu_Collect_c::screenSet() {
     mD98.pane->mDrawAlpha = 1;
     mDD0.pane->mDrawAlpha = 1;
 
-    for(int i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         fopMsgM_setPaneData(&mE08[i], m004, l_tri[i]);
     }
 
     fopMsgM_setPaneData(&mFC8, m004, 'trib');
 
-    for(int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         fopMsgM_setPaneData(&m10A8[i], m004, l_sit[i]);
         fopMsgM_setPaneData(&m3F8[i], m004, l_sik[i]);
     }
@@ -230,17 +280,17 @@ void dMenu_Collect_c::screenSet() {
         m10A8[0].mInitAlpha *= 0.5f;
     }
 
-    for(int i = 0; i < 11; i++) {
+    for (int i = 0; i < 11; i++) {
         fopMsgM_setPaneData(&m1150[i], m004, l_ci[i]);
     }
 
-    for(int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         fopMsgM_setPaneData(&m10A8[i], m004, l_htp[i]);
     }
 
-    fopMsgM_setPaneData(&m1460,  m004, 'htpb');
+    fopMsgM_setPaneData(&m1460, m004, 'htpb');
 
-    for(int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; i++) {
         fopMsgM_setPaneData(&m1498[i], m004, l_tit[i]);
         fopMsgM_setPaneData(&m15E8[i], m004, l_tik[i]);
         fopMsgM_setPaneData(&m17A8[i], m004, l_cn[i]);
@@ -283,14 +333,14 @@ void dMenu_Collect_c::screenSet() {
     JKRArchive::readTypeResource(mMapTexBuffer, 0xc00, 'TIMG', "cmap_treasure2.bti", dComIfGp_getItemIconArchive());
     DCStoreRangeNoSync(mMapTexBuffer, 0xc00);
 
-    for(int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; i++) {
         ((J2DPicture*)m1498[i].pane)->changeTexture(mTactTexBuffer, 0);
         ((J2DPicture*)m15E8[i].pane)->changeTexture(mTactTexBuffer, 0);
     }
 
     ((J2DPicture*)mCF0.pane)->changeTexture(mMapTexBuffer, 0);
 
-    for(int i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         JKRArchive::readTypeResource(mTriforceTexBuffer[i], 0xc00, 'TIMG', triTex[i], dComIfGp_getItemIconArchive());
         DCStoreRangeNoSync(mTriforceTexBuffer[i], 0xc00);
         ((J2DPicture*)mE08[i].pane)->changeTexture(mTriforceTexBuffer[i], 0);
@@ -300,14 +350,14 @@ void dMenu_Collect_c::screenSet() {
     m27A8 = mE08[4].mPosCenterOrig.x - mFC8.mPosCenterOrig.x;
     m27AC = mE08[4].mPosCenterOrig.y - mFC8.mPosCenterOrig.y;
 
-    for(int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         JKRArchive::readTypeResource(mSymbolTexBuffer[i], 0xc00, 'TIMG', symTex[i], dComIfGp_getItemIconArchive());
         DCStoreRangeNoSync(mSymbolTexBuffer[i], 0xc00);
         ((J2DPicture*)m1000[i].pane)->changeTexture((ResTIMG*)mSymbolTexBuffer[i], 0);
         ((J2DPicture*)m10A8[i].pane)->changeTexture((ResTIMG*)mSymbolTexBuffer[i], 0);
     }
 
-    for(int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++) {
         JKRArchive::readTypeResource(mItemTexBuffer[i], 0xc00, 'TIMG', wepTex[i], dComIfGp_getItemIconArchive());
         DCStoreRangeNoSync(mItemTexBuffer[i], 0xc00);
         ((J2DPicture*)m2030[i].pane)->changeTexture((ResTIMG*)mItemTexBuffer[i], 0);
