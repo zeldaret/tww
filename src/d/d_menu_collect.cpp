@@ -304,17 +304,16 @@ void dMenu_Collect_c::screenSet() {
         fopMsgM_setPaneData(&m1498[i], m004, l_tit[i]);
         fopMsgM_setPaneData(&m15E8[i], m004, l_tik[i]);
         fopMsgM_setPaneData(&m17A8[i], m004, l_cn[i]);
-        fopMsgM_pane_class* pPane = &m18F8[i];
-        fopMsgM_setPaneData(pPane, m004, l_wn[i]);
+        fopMsgM_setPaneData(&m18F8[i], m004, l_wn[i]);
         fopMsgM_setPaneData(&m1A48[i], m004, l_i0[i]);
         fopMsgM_setPaneData(&m1B98[i], m004, l_i1[i]);
         fopMsgM_setPaneData(&m1CE8[i], m004, l_bs[i]);
         fopMsgM_setPaneData(&m1E38[i], m004, l_hmb[i]);
 
-        pPane->mPosCenterOrig.x -= 4.0f;
-        pPane->mPosCenterOrig.y -= 4.0f;
+        m18F8[i].mPosCenterOrig.x -= 4.0f;
+        m18F8[i].mPosCenterOrig.y -= 4.0f;
 
-        fopMsgM_paneTrans(pPane, 0.0f, 0.0f);
+        fopMsgM_paneTrans(&m18F8[i], 0.0f, 0.0f);
     }
 
     fopMsgM_setPaneData(&m1738, m004, 'i111');
