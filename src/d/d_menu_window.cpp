@@ -392,18 +392,18 @@ void dMs_collect_create(sub_ms_screen_class* i_Ms) {
     dMc_c->setTactTexBuffer(i_Ms->buffer_p[0]);
 
     for (int i = 0; i < 3; i++) {
-        dMc_c->m24C0[i] = i_Ms->buffer_p[i + 1];
+        dMc_c->setSymbolTexBuffer(i, i_Ms->buffer_p[i + 1]);
     }
 
     for (int i = 0; i < 5; i++) {
-        dMc_c->m24CC[i] = i_Ms->buffer_p[i + 4];
+        dMc_c->setItemTexBuffer(i, i_Ms->buffer_p[i + 4]);
     }
 
     for (int i = 0; i < 8; i++) {
-        dMc_c->m24A0[i] = (ResTIMG*)i_Ms->buffer_p[i + 9];
+        dMc_c->setTriforceTexBuffer(i, i_Ms->buffer_p[i + 9]);
     }
 
-    dMc_c->m249C = (ResTIMG*)i_Ms->buffer_p[17];
+    dMc_c->setMapTexBuffer(i_Ms->buffer_p[17]);
 
     dMc_c->setArchive(dComIfGp_getCollectResArchive());
     dMc_c->setOptionArchive(dComIfGp_getOptionResArchive());
