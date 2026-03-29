@@ -76,4 +76,6 @@ public:
     /* 0x2AD0 */ char mNextNameStr[0x2AE8 - 0x2AD0];
 };
 
+STATIC_ASSERT(sizeof(dName_c) == 0x2AE8);
+
 #endif /* D_NAME_H */
