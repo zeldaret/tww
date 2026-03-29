@@ -76,7 +76,6 @@ public:
     /* 0x04 */ u8 mStatus;
 };
 
-u8 dummy_arr[0xC];
 dMenu_FmapSv_c dMv_CIO_c;
 dMw_HIO_c g_mwHIO;
 dMw_DHIO_c g_mwDHIO;
@@ -1633,7 +1632,18 @@ static cPhs_State dMs_Create(msg_class* i_this) {
 
     dMenu_setMenuStatus(MENU_STATUS_ITEM);
 
-    dMv_CIO_c = dMenu_FmapSv_c();
+    dMv_CIO_c.field_0x0 = 0;
+    dMv_CIO_c.field_0x1 = 0;
+    dMv_CIO_c.field_0x2 = -10;
+    dMv_CIO_c.field_0x3 = -10;
+    dMv_CIO_c.field_0x4 = -10;
+    dMv_CIO_c.field_0x5 = -10;
+    dMv_CIO_c.field_0x6 = -10;
+    dMv_CIO_c.field_0x7 = -10;
+    dMv_CIO_c.field_0x8 = 0;
+    dMv_CIO_c.field_0x9 = -1;
+    dMv_CIO_c.field_0xA = -10;
+    dMv_CIO_c.field_0xB = -10;
 
     fopMsgM_setStageLayer(i_Ms);
 

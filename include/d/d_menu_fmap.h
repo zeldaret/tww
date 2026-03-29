@@ -224,6 +224,8 @@ public:
 
 class dMenu_FmapSv_c {
 public:
+    ~dMenu_FmapSv_c() {}
+
     dMenu_FmapSv_c() {
         field_0x0 = 0;
         field_0x1 = 0;
