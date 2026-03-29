@@ -47,7 +47,7 @@ public:
         mFont = font;
         mRFont = rfont;
     }
-    void setSvPtr(dMenu_FmapSv_c* i_ptr) { mSvPtr = i_ptr; }
+    void setSvPtr(dMenu_FmapSv_c* i_ptr) { fmapSv = i_ptr; }
     void setTextArea_New(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
         name[0] = name0;
         name[1] = name1;
@@ -196,7 +196,7 @@ public:
     /* 0x0024 */ dMenu_Fmap2_c mFmap2;
     // TODO
     /* 0x2874 */ u8 padding_0x2874[0x2878 - 0x2874];
-    /* 0x2878 */ dMenu_FmapSv_c* mSvPtr;
+    /* 0x2878 */ dMenu_FmapSv_c* fmapSv;
     /* 0x287C */ u8 padding_0x287C[0x50D0 - 0x287C];
     /* 0x50D0 */ JUTFont* mFont;
     /* 0x50D4 */ JUTFont* mRFont;
