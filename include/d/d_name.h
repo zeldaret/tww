@@ -17,12 +17,14 @@ class dDlst_NameIN_c : public dDlst_base_c {
 
 class dName_c {
 public:
+    dName_c() {}
+    virtual ~dName_c() {}
+
     void draw() { _draw(); }
     int isInputEnd() { return mIsInputEnd; }
     char* getInputStrPtr() { return mInputStr; }
     void setNextNameStr(char* i_name) { strcpy(mNextNameStr, i_name); }
 
-    virtual ~dName_c() {}
     void _create();
     void initial();
     void _delete();
