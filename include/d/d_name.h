@@ -6,6 +6,8 @@
 class dNm_HIO_c {
 public:
     dNm_HIO_c();
+
+    void genMessage(JORMContext* ctx) { /* TODO */ }
 };
 
 class dDlst_NameIN_c : public dDlst_base_c {
