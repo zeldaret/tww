@@ -26,7 +26,7 @@
 
 // TODO: Remove me when all the JUT asserts and other strings are filled out.
 // This is temporary, just to make the strings match.
-void dummy0() {
+void d_menu_window_dummy_strings() {
     OSReport("cmap_tri.bti");
     OSReport("cmap_treasure.bti");
     OSReport("cmap_tingle.bti");

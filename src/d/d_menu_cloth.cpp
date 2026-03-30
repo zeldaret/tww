@@ -153,7 +153,7 @@ void dMCloth_c::lightSet1(cXyz) {
 }
 
 // This is to get the floats in the right order.
-void dummy0() {
+void d_menu_cloth_dummy() {
     vf32 a;
     a = 0.0f;
     a = 90.0f;
