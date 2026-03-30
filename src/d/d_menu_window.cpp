@@ -558,7 +558,7 @@ void dMs_fmap_create(sub_ms_screen_class* i_Ms) {
     JUT_ASSERT(2362, dMs_capture_c != NULL);
 
     if (i_Ms->mMenuProc == MENU_STATE_FMAP_OPEN_WALLPAPER) {
-        dMs_capture_c->mStatus = 1;
+        dMs_capture_c->setDrawFlagOn();
     }
 
     if (i_Ms->mMenuProc == MENU_STATE_FMAP_OPEN) {
@@ -905,12 +905,12 @@ void dMs_placenameMove(sub_ms_screen_class*) {
 
 /* 801DD6D8-801DD960       .text dMs_Draw__FP19sub_ms_screen_class */
 static BOOL dMs_Draw(sub_ms_screen_class*) {
-    if (dMenu_flag() == 1 || dMs_capture_c && dMs_capture_c->mStatus != 0) {
+    if (dMenu_flag() == 1 || dMs_capture_c && dMs_capture_c->checkDrawFlag() != 0) {
         if (dMs_capture_c) {
             dComIfGd_set2DOpa(dMs_capture_c);
 
-            if (dMs_capture_c->mStatus == 2) {
-                dMs_capture_c->mStatus = 0;
+            if (dMs_capture_c->checkDrawFlag() == 2) {
+                dMs_capture_c->setDrawFlagOff();
                 dMenu_flagSet(1);
             }
         }
