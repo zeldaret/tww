@@ -91,8 +91,8 @@ public:
     virtual ~dDlst_MENU_CAPTURE_c() {}
 
     virtual void draw() {
-        if (mStatus == 1) {
-            mStatus = 2;
+        if (checkDrawFlag() == 1) {
+            setDrawFlagOn2();
             GXSetTexCopySrc(0, 0, 0x280, 0x1e0);
             GXSetTexCopyDst(0x140, 0xf0, GXTexFmt(mDoGph_gInf_c::mFrameBufferTimg->format), 1);
             GXCopyTex(mDoGph_gInf_c::mFrameBufferTex, 0);
@@ -155,6 +155,11 @@ public:
             }
         }
     }
+
+    u8 checkDrawFlag() { return mStatus; }
+    void setDrawFlagOff() { mStatus = 0; }
+    void setDrawFlagOn() { mStatus = 1; }
+    void setDrawFlagOn2() { mStatus = 2; }
 
 public:
     /* 0x04 */ u8 mStatus;
