@@ -45,6 +45,9 @@ void d_menu_window_dummy_strings() {
     OSReport("i_Ms->note[i] != 0");
     OSReport("i_Ms->dummy[i] != 0");
     OSReport("i_Ms->buffer_p[i] != 0");
+#if VERSION == VERSION_PAL
+    OSReport("i_Ms->title_p != 0");
+#endif
     OSReport("dMi_c != 0");
     OSReport("dMc_c != 0");
     OSReport("dMf_c != 0");
@@ -202,6 +205,11 @@ void dMs_item_create(sub_ms_screen_class* i_Ms) {
         JUT_ASSERT(1951, i_Ms->buffer_p[i] != NULL);
         i_Ms->field_0x1B2++;
     }
+
+#if VERSION == VERSION_PAL
+    i_Ms->title_p = (char*)i_Ms->childHeap->alloc(0x1000, 0x20);
+    JUT_ASSERT(1957, i_Ms->title_p != NULL);
+#endif
 
     dMi_c = new dMenu_Item_c();
     JUT_ASSERT(1962, dMi_c != NULL);
