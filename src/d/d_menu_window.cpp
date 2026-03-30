@@ -6,7 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_window.h"
 
-#include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "f_op/f_op_msg.h"
 #include "d/d_menu_cloth.h"

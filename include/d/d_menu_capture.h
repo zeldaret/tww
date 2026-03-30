@@ -2,10 +2,14 @@
 #define D_MENU_CAPTURE_H
 
 #include "d/d_drawlist.h"
+#include "d/d_menu_cloth.h"
 #include "d/d_menu_item.h"
 #include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_graphic.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
 
+
+extern dMCloth_c* cloth_c;
 
 class dDlst_MENU_CLOTH_c : public dDlst_base_c {
 public:
