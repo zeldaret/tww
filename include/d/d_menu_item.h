@@ -1,8 +1,8 @@
 #ifndef D_MENU_ITEM_H
 #define D_MENU_ITEM_H
 
-#include "d/d_menu_collect.h"
 #include "dolphin/types.h"
+#include "d/d_menu_base.h"
 
 struct fopMsgM_pane_class;
 class JKRArchive;

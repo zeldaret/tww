@@ -4,23 +4,13 @@
 #include "dolphin/types.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
-#include "f_op/f_op_msg_mng.h"
 #include "d/d_2dnumber.h"
+#include "d/d_menu_base.h"
+#include "f_op/f_op_msg_mng.h"
 
 struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
-
-class dMenu_base_c : public dDlst_base_c {
-public:
-    virtual void draw() {}
-    virtual void _create() {}
-    virtual void _delete() {}
-    virtual void _move() {}
-    virtual void _draw() {}
-    virtual bool _open() = 0;
-    virtual bool _close() = 0;
-};
 
 class dMenu_Collect_c : public dMenu_base_c {
 public:

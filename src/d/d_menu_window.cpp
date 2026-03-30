@@ -10,6 +10,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "f_op/f_op_msg.h"
 #include "d/d_menu_cloth.h"
+#include "d/d_menu_collect.h"
 #include "d/d_menu_dmap.h"
 #include "d/d_menu_fmap.h"
 #include "d/d_menu_item.h"
