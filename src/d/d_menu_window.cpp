@@ -13,6 +13,7 @@
 #include "d/d_menu_collect.h"
 #include "d/d_menu_dmap.h"
 #include "d/d_menu_fmap.h"
+#include "d/d_menu_fmap_sv.h"
 #include "d/d_menu_item.h"
 #include "d/d_menu_save.h"
 #include "d/d_meter.h"
