@@ -3,6 +3,7 @@
 
 #include "dolphin/types.h"
 
+class dMCloth_c;
 class JKRExpHeap;
 class dMenu_FmapSv_c;
 
@@ -154,5 +155,7 @@ public:
 extern dMenu_FmapSv_c dMv_CIO_c;
 extern dMw_HIO_c g_mwHIO;
 extern dMw_DHIO_c g_mwDHIO;
+
+extern dMCloth_c* cloth_c;
 
 #endif /* D_MENU_WINDOW_H */
