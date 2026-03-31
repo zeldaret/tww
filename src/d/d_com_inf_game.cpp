@@ -145,7 +145,7 @@ void dComIfG_play_c::itemInit() {
 
     mMelodyNum = 0;
     mFmapOpen = false;
-    field_0x4952 = 0;
+    mNameOpen = 0;
     field_0x4953 = 0;
     field_0x4954 = 0;
     mStartItemTimer = false;

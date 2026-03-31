@@ -22,8 +22,6 @@
 #include "m_Do/m_Do_lib.h"
 #include <stdio.h>
 
-extern dMeter_info_c dMeter_Info;
-
 class J2DTextBox;
 struct fopMsgM_pane_class;
 

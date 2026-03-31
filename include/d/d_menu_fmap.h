@@ -3,6 +3,7 @@
 
 #include "dolphin/types.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "d/d_menu_fmap2.h"
 
 class JUTFont;
 class J2DScreen;
@@ -11,9 +12,17 @@ class dMenu_FmapSv_c;
 struct cursorTable_t;
 struct aramCmapDatPat_t;
 
+class dDlst_FMAP_c : public dDlst_base_c {
+public:
+    virtual ~dDlst_FMAP_c() {}
+    virtual void draw();
+};
+
 class dMenu_Fmap_c {
 public:
-    void draw() {}
+    virtual ~dMenu_Fmap_c() {}
+
+    void draw() { _draw(); }
     void getCtCurWX() {}
     void getCtCurWY() {}
     void getCtCurX() {}
@@ -34,9 +43,19 @@ public:
     void setCtFmapZoom(unsigned char) {}
     void setCtZoomGridX(signed char) {}
     void setCtZoomGridY(signed char) {}
-    void setFont(JUTFont*, JUTFont*) {}
-    void setSvPtr(dMenu_FmapSv_c*) {}
-    void setTextArea_New(char*, char*, char*, char*, char*, char*) {}
+    void setFont(JUTFont* font, JUTFont* rfont) {
+        mFont = font;
+        mRFont = rfont;
+    }
+    void setSvPtr(dMenu_FmapSv_c* i_ptr) { fmapSv = i_ptr; }
+    void setTextArea_New(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
+        name[0] = name0;
+        name[1] = name1;
+        note[0] = note0;
+        note[1] = note1;
+        dummy[0] = dummy0;
+        dummy[1] = dummy1;
+    }
     void stopWrapBackEmitter() {}
     void stopWrapSpotEmitter(int) {}
 
@@ -51,7 +70,7 @@ public:
     void checkMarkCheck1();
     void checkMarkCheck2();
     void checkMarkCheck3();
-    void isFmapClose();
+    bool isFmapClose();
     void setPaneOnOff(J2DScreen*, unsigned long, bool);
     void childPaneMoveSp(fopMsgM_pane_class*, fopMsgM_pane_class*, float, float, float);
     void selGridMaskAlphaCtrl(short, unsigned char, unsigned char, int);
@@ -92,8 +111,8 @@ public:
     void dispEndSalvageHugeMark(float, float);
     void checkDspHugeMapLink();
     void checkDspHugeMapShip();
-    void _open();
-    void _close();
+    bool _open();
+    bool _close();
     void _close_normalMode();
     void _move();
     void _draw();
@@ -123,7 +142,7 @@ public:
     void PaneAlphaSelvageItem(short, unsigned char);
     void gShipMarkAnimeInit();
     void gShipMarkAnime();
-    void _open_warpMode();
+    bool _open_warpMode();
     void init_warpMode();
     void selCursorMoveWarp();
     void _close_warpMode();
@@ -153,7 +172,7 @@ public:
     void setDspWarpBackCornerColor(float);
     void setWrapBackEmitter(cXyz);
     void setWrapSpotEmitter(int, cXyz);
-    void _open_fishManMode();
+    bool _open_fishManMode();
     void _close_fishManMode();
     void init_fishManMode();
     void movefishManMode();
@@ -167,14 +186,35 @@ public:
     void fmZoomGridLv2Out();
     void fmZoomGridLv1Out();
     void fmEndWait();
-    void _open_wallPaper();
-    void getButtonIconMode();
-};
+    bool _open_wallPaper();
+    u8 getButtonIconMode();
 
-class dDlst_FMAP_c {
 public:
-    void draw();
-};
+    /* 0x0004 */ u8 padding_0x4[0x1C - 0x4];
+    /* 0x001C */ dDlst_FMAP_c mDlst;
+    /* 0x0020 */ J2DScreen* scrn;
+    /* 0x0024 */ dMenu_Fmap2_c mFmap2;
+    /* 0x2874 */ u8 padding_0x2874[0x2878 - 0x2874];
+    /* 0x2878 */ dMenu_FmapSv_c* fmapSv;
+    /* 0x287C */ u8 padding_0x287C[0x50D0 - 0x287C];
+    /* 0x50D0 */ JUTFont* mFont;
+    /* 0x50D4 */ JUTFont* mRFont;
+    /* 0x50D8 */ u8 padding_0x50D8[0x5148 - 0x50D8];
+    /* 0x5148 */ char* name[2];
+    /* 0x5150 */ u8 padding_0x5150[0x5154 - 0x5150];
+    /* 0x5154 */ char* note[2];
+    /* 0x515C */ char* dummy[2];
+    /* 0x5164 */ u8 padding_0x5164[0x5194 - 0x5164];
+    /* 0x5194 */ JUtility::TColor color_0x5194;
+    /* 0x5198 */ JUtility::TColor color_0x5198;
+    /* 0x519C */ JUtility::TColor color_0x519C;
+    /* 0x51A0 */ JUtility::TColor color_0x51A0;
+    /* 0x51A4 */ JUtility::TColor color_0x51A4;
+    /* 0x51A8 */ JUtility::TColor color_0x51A8;
+    /* 0x51AC */ u8 padding_0x51AC[0x51B4 - 0x51AC];
+}; // Size: 0x51B4
+
+STATIC_ASSERT(sizeof(dMenu_Fmap_c) == 0x51B4);
 
 class dMf_HIO_c {
 public:

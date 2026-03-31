@@ -615,7 +615,7 @@ config.libs = [
             Object(NonMatching, "d/d_menu_item.cpp"),
             Object(NonMatching, "d/d_menu_option.cpp"),
             Object(NonMatching, "d/d_menu_save.cpp"),
-            Object(NonMatching, "d/d_menu_window.cpp"),
+            Object(Equivalent, "d/d_menu_window.cpp"),
             Object(NonMatching, "d/d_mesg.cpp"),
             Object(NonMatching, "d/d_message.cpp"),
             Object(NonMatching, "d/d_message_paper.cpp"),
