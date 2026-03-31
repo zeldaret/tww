@@ -113,7 +113,9 @@ public:
     /* 0xB80 */ f32 mB80;
     /* 0xB84 */ f32 mB84;
     /* 0xB88 */ u8 mB88;
+    #if VERSION > VERSION_DEMO
     /* 0xB89 */ s8 mB89;
+    #endif
     /* 0xB8A */ u8 mB8A;
     /* 0xB8B */ u8 mB8B;
 };
