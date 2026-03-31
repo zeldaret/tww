@@ -153,7 +153,7 @@ void dMCloth_c::lightSet1(cXyz) {
 }
 
 // This is to get the floats in the right order.
-void d_menu_cloth_dummy() {
+static void dummy0() {
     vf32 a;
     a = 0.0f;
     a = 90.0f;
@@ -244,7 +244,7 @@ void dMCloth_c::cloth_init() {
 }
 
 // This is to get the floats in the right order.
-void dummy1() {
+static void dummy1() {
     vf32 a = 305.0f;
 }
 
@@ -807,7 +807,7 @@ void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned ch
 }
 
 // This is to get the floats in the right order.
-void dummy2() {
+static void dummy2() {
     vf32 a = 0.5f;
 }
 
