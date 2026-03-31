@@ -14,8 +14,9 @@ class mDoExt_McaMorf;
 class mDoExt_brkAnm;
 class mDoExt_btkAnm;
 
-class fganon_class : public fopEn_enemy_c {
+class fganon_class {
 public:
+    /* 0x000 */ fopEn_enemy_c actor;
     /* 0x2AC */ request_of_phase_process_class mPhs1;
     /* 0x2B4 */ request_of_phase_process_class mPhs2;
     /* 0x2BC */ u8 m2BC;

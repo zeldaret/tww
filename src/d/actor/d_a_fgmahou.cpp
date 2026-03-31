@@ -129,7 +129,7 @@ static void move(fgmahou_class* i_this) {
                 break;
             }
 
-            i_this->mTargetPos = fganon2->eyePos;
+            i_this->mTargetPos = fganon2->actor.eyePos;
             i_this->mTargetPos.y -= cM_rndFX(50.0f) + 50.0f;
             i_this->home.angle.y -= 0x8000;
             i_this->home.angle.x *= -1;
