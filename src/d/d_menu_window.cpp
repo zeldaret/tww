@@ -1571,15 +1571,15 @@ msg_method_class l_dMs_Method = {
 };
 
 msg_process_profile_definition g_profile_MENUWINDOW = {
-    /* LayerID      */ (uint)fpcLy_CURRENT_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x000C,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_MENUWINDOW,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ 0x1B8,
+    /* Size         */ sizeof(sub_ms_screen_class),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
     /* Priority     */ PRIO_MENUWINDOW,
-    /* Actor SubMtd */ &l_dMs_Method,
+    /* Msg SubMtd */ &l_dMs_Method,
 };
