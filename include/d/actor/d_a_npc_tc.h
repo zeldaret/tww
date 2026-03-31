@@ -174,7 +174,7 @@ public:
     BOOL _createHeap();
     u16 next_msgStatusNormal2(u32*);
     u32 getMsgNormal2();
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     u32 setRupeeSizeMsg();
 #endif
     bool existUnknownCollectMap();
@@ -287,4 +287,5 @@ public:
     /* 0x814 */ bool field_0x814;
     /* 0x815 */ u8 field_0x815[0x81C - 0x815];
 };  // Size: 0x81C
+
 #endif /* D_A_NPC_TC_H */

@@ -436,7 +436,7 @@ void ki_fire_set_move(ki_class* i_this) {
             a_this->speed.y = REG8_F(9) + 97.0f + cM_rndF(30.0f);
             anm_init(i_this, KI_BCK_WAIT1, 1.0f, 2, 1.0f, KI_BAS_WAIT1);
             i_this->mBehaviorType = 1;
-            i_this->m91C = dComIfGp_particle_set(dPa_name::ID_SCENE_8099, &a_this->current.pos, NULL, NULL, 0xFF, &i_this->m908);
+            i_this->m91C = dComIfGp_particle_set(dPa_name::ID_IT_SN_FIREK_FIRE_A, &a_this->current.pos, NULL, NULL, 0xFF, &i_this->m908);
 
         case 1:
             a_this->shape_angle.x += 0x1400;
@@ -450,8 +450,8 @@ void ki_fire_set_move(ki_class* i_this) {
                     dComIfGp_particle_forceDeleteEmitter(i_this->m91C);
                     i_this->m91C = NULL;
                 }
-                dComIfGp_particle_set(dPa_name::ID_SCENE_809A, &a_this->current.pos);
-                dComIfGp_particle_set(dPa_name::ID_SCENE_809B, &a_this->current.pos);
+                dComIfGp_particle_set(dPa_name::ID_IT_SN_FIREK_FIRE_B, &a_this->current.pos);
+                dComIfGp_particle_set(dPa_name::ID_IT_SN_FIREK_HAHEN, &a_this->current.pos);
             }
             break;
 
@@ -1043,7 +1043,7 @@ static BOOL daKi_Execute(ki_class* i_this) {
     if (i_this->mDamageType != 0) {
         i_this->m920->play();
         if (i_this->mAction != ki_class::ACT_FAIL_MOVE_e) {
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8061, &i_this->actor.current.pos);
+            dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_FIREK_KASU, &i_this->actor.current.pos);
             fopAcM_seStart(&i_this->actor, JA_SE_OBJ_TORCH_BURNING, 0);
         }
     }

@@ -169,7 +169,7 @@ BOOL daPy_lk_c::procVomitJump_init(int param_0) {
     m34D4 = 0;
     m34D0 = 2;
     m33A8.makeEmitterColor(
-        dPa_name::ID_SCENE_8112,
+        dPa_name::ID_IT_SN_LK_BLUR00,
         mpCLModel->getAnmMtx(0x12),
         &current.pos,
         (csXyz*)&shape_angle,

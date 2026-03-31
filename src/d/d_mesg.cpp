@@ -1571,7 +1571,7 @@ void dMesg_screenDataItem_c::createScreen() {
         f32 y = (field_0x1b4.mSize.y / 2.0f + field_0x1b4.pane->getGlbBounds().i.y - 240.0f) - 10.0f;
         f32 x = (field_0x1b4.mSize.x / 2.0f + field_0x1b4.pane->getGlbBounds().i.x - 320.0f) + 10.0f;
         cXyz pos(x, y, 0.0f);
-        field_0x3e4 = dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_02E1, &pos);
+        field_0x3e4 = dComIfGp_particle_set2Dfore(dPa_name::ID_HM_J2_ARWG_FLAME00, &pos);
     }
 }
 

@@ -310,7 +310,7 @@ BOOL daPds_c::actionMoveEvent(int) {
 
 /* 00000AEC-00000B40       .text initialEffectSet__Q210daPedestal7daPds_cFi */
 void daPds_c::initialEffectSet(int) {
-    mOctagonGlowCb.makeEmitter(dPa_name::ID_SCENE_PEDESTAL_OCTAGON_GLOW, &current.pos, &shape_angle, NULL);
+    mOctagonGlowCb.makeEmitter(dPa_name::ID_AK_SN_OTOMOBASELIGHT00, &current.pos, &shape_angle, NULL);
     initBrkAnm(0, true);
 }
 

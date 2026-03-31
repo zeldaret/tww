@@ -357,7 +357,7 @@ int daObjTpost_c::getMsgXY() {
             col.b = REG12_S(2) + 0x80;
             mDoMtx_stack_c::copy(mMorf->getModel()->getAnmMtx(2));
             mDoMtx_stack_c::multVec(&pos, &pos);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0057, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
+            dComIfGp_particle_set(dPa_name::ID_IT_JN_LK_GEPPU00, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
             
             break;
         case dItem_FATHER_LETTER_e:
@@ -649,7 +649,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
         cXyz scale;
         scale.setall(1.0f);
         if(mMorf->getFrame() == 1.0f) {
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8190, &current.pos, &current.angle, &scale);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_POST_TSUBA00, &current.pos, &current.angle, &scale);
             mDoAud_seStart(JA_SE_OBJ_POST_LUGGAGE_OUT);
         }
     }
@@ -851,11 +851,11 @@ void daObjTpost_c::modeProc(daObjTpost_c::Proc_e proc, int newMode) {
         }
     };
 
-    if(proc == PROC_INIT) {
+    if(proc == PROC_INIT_e) {
         mCurMode = newMode;
         (this->*mode_tbl[mCurMode].init)();
     }
-    else if(proc == PROC_EXEC) {
+    else if(proc == PROC_EXEC_e) {
         (this->*mode_tbl[mCurMode].run)();
     }
 }
@@ -872,7 +872,7 @@ bool daObjTpost_c::_execute() {
     checkOrder();
     setAttention();
     setCollision(40.0f, 140.0f);
-    modeProc(PROC_EXEC, MODE_NULL);
+    modeProc(PROC_EXEC_e, MODE_NULL);
 
     if(dComIfGp_event_runCheck() && !mEventCut.cutProc()) {
         cutProc();

@@ -2172,7 +2172,7 @@ void daNpcRoten_c::privateCut() {
 
     int staffIdx = dComIfGp_evmng_getMyStaffId(l_npc_staff_id[mNpcNo]);
     if(staffIdx != -1) {
-        field_0x9C3 = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0);
+        field_0x9C3 = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
         if(field_0x9C3 == -1) {
             dComIfGp_evmng_cutEnd(staffIdx);
             return;

@@ -40,7 +40,6 @@ public:
     /* 0x07 */ s8 field_0x7;
     /* 0x08 */ int field_0x8;
     /* 0x0C */ hio_prm_c mPrmTbl;
-    /* Place member variables here */
 };
 
 static daNpc_Hi1_HIO_c l_HIO;
@@ -50,20 +49,20 @@ static int l_check_wrk;
 /* 000000EC-00000150       .text __ct__15daNpc_Hi1_HIO_cFv */
 daNpc_Hi1_HIO_c::daNpc_Hi1_HIO_c() {
     static hio_prm_c a_prm_tbl = {
-        0x0000,
-        0x1FFE,
-        0xF600,
-        0xE002,
-        0x0000,
-        0x0744,
-        0xF9DA,
-        0xF8BC,
-        0x0258,
-        0x0000,
-        270.0f,
-        0.0f
+        /* mMaxHeadX         */ 0x0000,
+        /* mMaxHeadY         */ 0x1FFE,
+        /* mMinHeadX         */ 0xF600,
+        /* mMinHeadY         */ 0xE002,
+        /* mMaxBackboneX     */ 0x0000,
+        /* mMaxBackboneY     */ 0x0744,
+        /* mMinBackboneX     */ 0xF9DA,
+        /* mMinBackboneY     */ 0xF8BC,
+        /* mMaxTurnStep      */ 0x0258,
+        /* field_12          */ 0x0000,
+        /* mAttentionYOffset */ 270.0f,
+        /* field_18          */ 0.0f,
     };
-    memcpy(&mPrmTbl,&a_prm_tbl,0x1c);
+    memcpy(&mPrmTbl, &a_prm_tbl, sizeof(hio_prm_c));
     mNo = -1;
     field_0x8 = -1;
 }
@@ -568,7 +567,7 @@ void daNpc_Hi1_c::privateCut(int i_staffIdx) {
     };
 
     if(i_staffIdx != -1) {
-        mActIdx = dComIfGp_evmng_getMyActIdx(i_staffIdx, a_cut_tbl, 1, TRUE, 0);
+        mActIdx = dComIfGp_evmng_getMyActIdx(i_staffIdx, a_cut_tbl, ARRAY_SIZE(a_cut_tbl), TRUE, 0);
 
         if(mActIdx == -1) {
             dComIfGp_evmng_cutEnd(i_staffIdx);

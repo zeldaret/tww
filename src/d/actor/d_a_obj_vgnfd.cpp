@@ -65,12 +65,12 @@ static char* l_daObjVgnfd_break_act_name[] = {
 };
 
 static u16 l_daObjVgnfd_pt_table[] = {
-    dPa_name::ID_SCENE_833E,
-    dPa_name::ID_SCENE_833F,
-    dPa_name::ID_SCENE_8340,
-    dPa_name::ID_SCENE_8341,
-    dPa_name::ID_SCENE_8342,
-    dPa_name::ID_SCENE_8343,
+    dPa_name::ID_AK_SN_BOSSDOORHAHEN00,
+    dPa_name::ID_AK_SN_BOSSDOORHAHEN01,
+    dPa_name::ID_AK_SN_BOSSDOORHAHEN02,
+    dPa_name::ID_AK_SN_BOSSDOORDOKURO00,
+    dPa_name::ID_AK_SN_BOSSDOORDOKURO01,
+    dPa_name::ID_AK_SN_BOSSDOORDOKURO02,
 };
 
 enum {
@@ -395,7 +395,7 @@ bool daObjVgnfd_c::_execute() {
                                     emtr->setGlobalPrmColor(tevStr.mColorK0.r, tevStr.mColorK0.g, tevStr.mColorK0.b);
                                 }
                             }
-                            dComIfGp_particle_setToon(dPa_name::ID_SCENE_A344, &current.pos, &current.angle, &scale, 0xA0, &mSmoke);
+                            dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BOSSDOORSMOKE00, &current.pos, &current.angle, &scale, 0xA0, &mSmoke);
                             dComIfGp_getVibration().StartQuake(4, 11, cXyz(0.0f, 1.0f, 0.0f));
                             fopAcM_seStartCurrent(this, JA_SE_OBJ_B_BOSS_DR_BRK_2, 0);
                             break;

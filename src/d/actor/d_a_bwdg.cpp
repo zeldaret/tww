@@ -39,8 +39,8 @@ void daBwdg_packet_c::draw() {
     };
     static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
         {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
-        {GX_VA_NRM, GX_POS_XY, GX_F32, 0x00},
-        {GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0x00},
+        {GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0x00},
+        {GX_VA_TEX0, GX_TEX_ST, GX_F32, 0x00},
         {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
     };
     j3dSys.reinitGX();

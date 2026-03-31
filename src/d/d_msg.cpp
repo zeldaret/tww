@@ -2586,16 +2586,16 @@ s32 dMsg_openItemProc(sub_msg_class* i_Msg) {
             f32 y = (i_Msg->m0624[8].mSize.y * tmp + i_Msg->m0624[8].pane->getGlbBounds().i.y) - 240.0f;
             f32 x = (i_Msg->m0624[8].mSize.x * tmp + i_Msg->m0624[8].pane->getGlbBounds().i.x) - 320.0f;
             local_1c.set(x, y, 0.0f);
-            i_Msg->m10B4[0] = dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_002D, &local_1c);
+            i_Msg->m10B4[0] = dComIfGp_particle_set2Dfore(dPa_name::ID_HM_J2_RUPYLIGHT, &local_1c);
             if (i_Msg->mMsgNo == 0xbe) {
-                i_Msg->m10B4[1] = dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_002D, &local_1c);
+                i_Msg->m10B4[1] = dComIfGp_particle_set2Dfore(dPa_name::ID_HM_J2_RUPYLIGHT, &local_1c);
             }
         } else if (i_Msg->mMsgNo == 0x9a) {
             f32 tmp = 0.5f;
             f32 y = ((i_Msg->m0624[8].mSize.y * tmp + i_Msg->m0624[8].pane->getGlbBounds().i.y) - 240.0f) - 10.0f;
             f32 x = ((i_Msg->m0624[8].mSize.x * tmp + i_Msg->m0624[8].pane->getGlbBounds().i.x) - 320.0f) + 10.0f;
             local_28.set(x, y, 0.0f);
-            i_Msg->m10B4[0] = dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_02E1, &local_28);
+            i_Msg->m10B4[0] = dComIfGp_particle_set2Dfore(dPa_name::ID_HM_J2_ARWG_FLAME00, &local_28);
         }
         dMeter_Info.field_0x0 = 2;
     } else {

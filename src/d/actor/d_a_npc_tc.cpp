@@ -232,7 +232,7 @@ void daNpc_Tc_c::playTexPatternAnm() {
 void daNpc_Tc_c::smoke_set(f32 i_rate, f32 i_spread, f32 i_initialVelOmni, f32 i_initialVelAxis, f32 i_initialVelDir) {
     static JGeometry::TVec3<f32> smoke_scale(1.0f, 1.0f, 1.0);
     if(mSmokeCallBack.getEmitter() == NULL) {
-        dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &mSmokePos, &mSmokeAngle, NULL, 0xB9, &mSmokeCallBack, fopAcM_GetRoomNo(this));
+        dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &mSmokePos, &mSmokeAngle, NULL, 0xB9, &mSmokeCallBack, fopAcM_GetRoomNo(this));
     }
 
     if(mSmokeCallBack.getEmitter() != NULL) {
@@ -502,7 +502,7 @@ void daNpc_Tc_c::setAnm() {
         a_anm_prm_tbl[i].mMorf = l_HIO.field_0x94[i];
     }
 
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     if (mBckIdx == BCK_IDX_MAWASU && (int)mpMorf->getFrame() == 1) {
         if(mType == TYPE_RED) {
             fopAcM_monsSeStart(this, JA_SE_CV_TC_B_PUSH_BAR, 0);
@@ -531,11 +531,11 @@ void daNpc_Tc_c::setAnm() {
         pos.setall(1.0f);
 
         if (mpMorf->getFrame() == 1.0f) {
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8189, &current.pos, &current.angle, &pos);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_818A, &current.pos, &current.angle, &pos);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_818B, &current.pos, &current.angle, &pos);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_818C, &mParticlePos, NULL, NULL, 0xff, &field_0x714, fopAcM_GetRoomNo(this));
-            dComIfGp_particle_set(dPa_name::ID_SCENE_818D, &mParticlePos, NULL, NULL, 0xff, &field_0x728, fopAcM_GetRoomNo(this));
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_TG_KURURINP_KAMI_M00, &current.pos, &current.angle, &pos);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_TG_KURURINP_KAMI_R00, &current.pos, &current.angle, &pos);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_TG_KURURINP_KAMI_L00, &current.pos, &current.angle, &pos);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_TG_KURURINP_BLUR_R00, &mParticlePos, NULL, NULL, 0xff, &field_0x714, fopAcM_GetRoomNo(this));
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_TG_KURURINP_BLUR_G00, &mParticlePos, NULL, NULL, 0xff, &field_0x728, fopAcM_GetRoomNo(this));
         }
 
         if (mpMorf->getFrame() == 88.0f) {
@@ -587,7 +587,7 @@ void daNpc_Tc_c::setAnm() {
             cXyz particleScale;
             particleScale.setall(1.0f);
 
-            JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8152, &particlePos, NULL, &particleScale);
+            JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_IT_SN_PF_BIKON00, &particlePos, NULL, &particleScale);
             
             pEmitter->setGlobalParticleScale(0.62f, 0.6f);
             fopAcM_seStart(this, JA_SE_CM_CMN_NOTICE, 0); // regswap for demo likely happens here, daNpc_Tc_c::cutEffectStart also has a regswap with identical code
@@ -981,7 +981,7 @@ void daNpc_Tc_c::getArg() {
 extern dCcD_SrcCyl dNpc_cyl_src;
 /* 00001C98-0000202C       .text createInit__10daNpc_Tc_cFv */
 void daNpc_Tc_c::createInit() {
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     if (mType == TYPE_NORMAL) {
         fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
     }
@@ -1026,7 +1026,7 @@ void daNpc_Tc_c::createInit() {
             }
             break;
     }
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), &current.angle, &shape_angle);
 #endif
     mOldAnmPrmIdx = 0;
@@ -1867,11 +1867,9 @@ bool daNpc_Tc_c::isCreate() {
 /* 00003FC0-00004090       .text _create__10daNpc_Tc_cFv */
 cPhs_State daNpc_Tc_c::_create() {
 #if VERSION == VERSION_DEMO
-
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Tc");
     if(phase_state == cPhs_COMPLEATE_e) {
         fopAcM_SetupActor(this, daNpc_Tc_c);
-
 #else
     fopAcM_SetupActor(this, daNpc_Tc_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Tc");

@@ -340,14 +340,14 @@ void dMetronome_c::melodyShow() {
             pos.y = pane_wn[mBeat - 1].mPosCenter.y - 240.0f;
         }
 
-        dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_023E, &pos);
+        dComIfGp_particle_set2Dfore(dPa_name::ID_HM_J2_BATONINPUT00, &pos);
 
         if (daPy_getPlayerLinkActorClass()->getTactTopPos(&tactTop)) {
             mDoLib_project(&tactTop, &sparklePos);
 
             sparklePos.x -= 320.0f;
             sparklePos.y -= 240.0f;
-            mpEmitter = dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_023F, &sparklePos);
+            mpEmitter = dComIfGp_particle_set2Dfore(dPa_name::ID_HM_J2_BATONINPUT01, &sparklePos);
             mpEmitter->becomeImmortalEmitter();
         }
 

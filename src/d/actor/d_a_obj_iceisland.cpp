@@ -41,10 +41,10 @@ BOOL daObjIceisland_c::CreateHeap() {
 /* 00000338-00000410       .text daObjIceisland_particle_set__16daObjIceisland_cFv */
 void daObjIceisland_c::daObjIceisland_particle_set() {
     if(mEmitter1 == NULL) {
-        mEmitter1 = dComIfGp_particle_set(dPa_name::ID_SCENE_81AA, &current.pos, &current.angle);
+        mEmitter1 = dComIfGp_particle_set(dPa_name::ID_IT_SN_ICEL_SMOKE00, &current.pos, &current.angle);
     }
     if(mEmitter2 == NULL) {
-        mEmitter2 = dComIfGp_particle_set(dPa_name::ID_SCENE_81AB, &current.pos, &current.angle);
+        mEmitter2 = dComIfGp_particle_set(dPa_name::ID_IT_SN_ICEL_SMOKE01, &current.pos, &current.angle);
     }
 }
 

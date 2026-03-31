@@ -149,12 +149,12 @@ void daObj_Canon_c::setEffect(u16 param_1) {
 #endif
 
     GXColor* prmColor = NULL, *envColor = NULL;
-    if(param_1 == dPa_name::ID_SCENE_82E4) {
+    if(param_1 == dPa_name::ID_IT_SN_MJTAIHOU_HAHEN00) {
         prmColor = &tevStr.mColorK0;
         envColor = &tevStr.mColorK0;
     }
 
-    if(param_1 == dPa_name::ID_COMMON_03E1) {
+    if(param_1 == dPa_name::ID_IT_JN_MJTAIHOU_SMOKE01) {
         dComIfGp_particle_set(
             param_1,
 #if VERSION == VERSION_DEMO
@@ -216,12 +216,12 @@ bool daObj_Canon_c::checkTgHit() {
 
         if(hit) {
             field_0x440 = 5;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &hitPos);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &hitPos);
 
             if(health <= 0) {
                 daPy_py_c* player = daPy_getPlayerActorClass();
                 cXyz particleScale(2.0f, 2.0f, 2.0f);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, &hitPos, &player->shape_angle, &particleScale);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, &hitPos, &player->shape_angle, &particleScale);
                 fopAcM_seStart(this, JA_SE_LK_LAST_HIT, 0);
                 modeProcInit(2);
             }
@@ -381,10 +381,10 @@ void daObj_Canon_c::modeDeleteInit() {
         dComIfGs_onSwitch(field_0x295, fopAcM_GetRoomNo(this));
     }
 
-    setEffect(dPa_name::ID_SCENE_82E4);
-    setEffect(dPa_name::ID_SCENE_82E5);
-    setEffect(dPa_name::ID_SCENE_82E6);
-    setEffect(dPa_name::ID_COMMON_03E1);
+    setEffect(dPa_name::ID_IT_SN_MJTAIHOU_HAHEN00);
+    setEffect(dPa_name::ID_IT_SN_MJTAIHOU_SMOKE00);
+    setEffect(dPa_name::ID_IT_SN_MJTAIHOU_SENKO00);
+    setEffect(dPa_name::ID_IT_JN_MJTAIHOU_SMOKE01);
 
     fopAcM_OffStatus(this, fopAcStts_SHOWMAP_e | 0x1F);
 }
@@ -462,11 +462,11 @@ void daObj_Canon_c::modeProc(daObj_Canon_c::Proc_e proc, int newMode) {
         },
     };
 
-    if(proc == PROC_INIT) {
+    if(proc == PROC_INIT_e) {
         mCurMode = newMode;
         (this->*mode_tbl[mCurMode].init)();
     }
-    else if(proc == PROC_EXEC) {
+    else if(proc == PROC_EXEC_e) {
         (this->*mode_tbl[mCurMode].run)();
     }
 }
@@ -480,7 +480,7 @@ bool daObj_Canon_c::_execute() {
     setAttention();
     setCollision();
 
-    modeProc(PROC_EXEC, 5);
+    modeProc(PROC_EXEC_e, 5);
 
     mpModel->calc();
     Vec temp = {0.0f, 0.0f, 0.0f};

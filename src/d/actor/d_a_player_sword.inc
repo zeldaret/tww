@@ -172,7 +172,7 @@ void daPy_lk_c::setLightSaver() {
     {
         simpleAnmPlay(mpSwordBtk);
         if ((m3454.getEmitter() == NULL) && (checkChanceMode() || checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP))) {
-            pJVar7 = m3454.makeEmitter(dPa_name::ID_COMMON_0309, mpSwordModel1->getAnmMtx(2), &current.pos, NULL);
+            pJVar7 = m3454.makeEmitter(dPa_name::ID_AK_JN_LIGHTSAVER00, mpSwordModel1->getAnmMtx(2), &current.pos, NULL);
             if (pJVar7 != 0) {
                 if (checkMasterSwordEquip()) {
                     pJVar7->setGlobalDynamicsScale(d_scale);
@@ -210,7 +210,7 @@ void daPy_lk_c::setLightSaver() {
                 pbVar8 = &s_env1;
             }
             pJVar7 = dComIfGp_particle_setP1(
-                dPa_name::ID_COMMON_030A, &current.pos, NULL, NULL, 0xFF, NULL, -1, pbVar9, pbVar8, NULL
+                dPa_name::ID_AK_JN_LIGHTSAVER01, &current.pos, NULL, NULL, 0xFF, NULL, -1, pbVar9, pbVar8, NULL
             );
             if (pJVar7 != 0) {
                 pJVar7->setGlobalRTMatrix(mpEquipItemModel->getAnmMtx(2));
@@ -516,7 +516,7 @@ int daPy_lk_c::changeCutReverseProc(daPy_ANM param_0) {
                         JPABaseEmitter* emitter;
                         if (attrib_code == dBgS_Attr_WOOD_e) {
                             emitter = dComIfGp_particle_setP1(
-                                dPa_name::ID_COMMON_002B,
+                                dPa_name::ID_AK_JN_ELEMENTKIKUZU00,
                                 mLinkLinChk.GetCrossP(),
                                 &local_44,
                                 NULL,
@@ -535,7 +535,7 @@ int daPy_lk_c::changeCutReverseProc(daPy_ANM param_0) {
                         } else {
                             local_44.x += 0x4000;
                             emitter =
-                                dComIfGp_particle_setP1(dPa_name::ID_COMMON_002C, mLinkLinChk.GetCrossP(), &local_44);
+                                dComIfGp_particle_setP1(dPa_name::ID_AK_JN_ELEMENTHIBANA00, mLinkLinChk.GetCrossP(), &local_44);
                             if (emitter != 0) {
                                 emitter->setAwayFromAxisSpeed(20.0f);
                                 emitter->setRate(20.0f);
@@ -1388,21 +1388,21 @@ BOOL daPy_lk_c::procCutTurn_init(int param_0) {
     offResetFlg0(daPyRFlg0_UNK8000000);
     mAtCyl.SetR(m35A4 * 0.5f);
     if (!checkNoResetFlg0(daPyFlg0_UNK80000000)) {
-        m32E4.makeEmitter(dPa_name::ID_COMMON_001E, mpCLModel->getAnmMtx(0x28), &current.pos, NULL);
+        m32E4.makeEmitter(dPa_name::ID_AK_JN_ROUNDATTACKTOE, mpCLModel->getAnmMtx(0x28), &current.pos, NULL);
         if (mCurrAttributeCode == dBgS_Attr_GRASS_e) {
             GXColor color = {tevStr.mColorC0.r, tevStr.mColorC0.g, tevStr.mColorC0.b, tevStr.mColorC0.a};
             m32F0.makeEmitterColor(
-                dPa_name::ID_COMMON_0021, mpCLModel->getAnmMtx(0x23), &current.pos, &color, &tevStr.mColorK0
+                dPa_name::ID_AK_JN_ROUNDATTACKKUSA, mpCLModel->getAnmMtx(0x23), &current.pos, &color, &tevStr.mColorK0
             );
             m35A0 = 18.0f;
         } else if (mCurrAttributeCode == dBgS_Attr_WATER_e) {
             GXColor amb, dif;
             dKy_get_seacolor(&amb, &dif);
-            m32F0.makeEmitterColor(dPa_name::ID_COMMON_0020, mpCLModel->getAnmMtx(0x23), &current.pos, &amb, NULL);
+            m32F0.makeEmitterColor(dPa_name::ID_AK_JN_ROUNDATTACKSHIBUKI, mpCLModel->getAnmMtx(0x23), &current.pos, &amb, NULL);
             m35A0 = 17.0f;
         } else {
             dComIfGp_particle_setToonP1(
-                dPa_name::ID_COMMON_201F,
+                dPa_name::ID_AK_JT_ROUNDATTACKSMOKE,
                 &current.pos,
                 NULL,
                 NULL,
@@ -1613,7 +1613,7 @@ BOOL daPy_lk_c::procCutRollEnd_init() {
     static JGeometry::TVec3<f32> emitter_trans(0.0f, 55.0f, 0.0f);
     static JGeometry::TVec3<f32> particle_scale(0.76f, 0.76f, 0.76f);
     JPABaseEmitter* emitter =
-        m33A8.makeEmitter(dPa_name::ID_COMMON_STARS_SPIN, mpCLModel->getAnmMtx(15), &current.pos, NULL);
+        m33A8.makeEmitter(dPa_name::ID_IT_JN_PIYOPIYO00, mpCLModel->getAnmMtx(15), &current.pos, NULL);
     if (emitter != NULL) {
         emitter->becomeImmortalEmitter();
         emitter->setVolumeSize(5);
@@ -1687,8 +1687,8 @@ BOOL daPy_lk_c::procCutTurnMove_init() {
         dComIfGp_getMiniGameType() != 6)
     {
         pcVar4 = checkNormalSwordEquip() ? NULL : (cXyz*)&eff_scale;
-        m32E4.makeEmitter(dPa_name::ID_COMMON_0029, mpCLModel->getAnmMtx(8), &current.pos, pcVar4);
-        m32F0.makeEmitter(dPa_name::ID_COMMON_002A, mpCLModel->getAnmMtx(8), &current.pos, pcVar4);
+        m32E4.makeEmitter(dPa_name::ID_AK_JN_CHARGEPOWER00, mpCLModel->getAnmMtx(8), &current.pos, pcVar4);
+        m32F0.makeEmitter(dPa_name::ID_AK_JN_CHARGEPOWER01, mpCLModel->getAnmMtx(8), &current.pos, pcVar4);
         m34D0 = 0x2f;
     } else {
         m34D0 = -1;

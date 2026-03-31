@@ -1,5 +1,6 @@
 #include "dolphin/dvd/fstload.h"
 #include "dolphin/os/OS.h"
+#include "string.h"
 
 // .bss
 static unsigned char bb2Buf[63]; // size: 0x3F, address: 0x0
@@ -70,7 +71,7 @@ void __fstLoad() {
     bootInfo->fst_location = (void*)bb2->FSTAddress;
     bootInfo->fst_max_length = bb2->FSTMaxLength;
     id = &bootInfo->disk_info;
-    memcpy(id, idTmp, 0x20);
+    memcpy(id, idTmp, sizeof(DVDDiskID));
     OSReport("\n");
     OSReport("  Game Name ... %c%c%c%c\n", id->game_name[0], id->game_name[1], id->game_name[2], id->game_name[3]);
     OSReport("  Company ..... %c%c\n", id->company[0], id->company[1]);

@@ -84,8 +84,8 @@ const HHA_RES_FILE_ID l_daObjHha_dzb_idx_table[2] = {HHA_DZB_HHA1, HHA_DZB_HHA2}
 const HHA_RES_FILE_ID l_daObjHha_btk_idx_table[2] = {HHA_BTK_YSWTR00_01, HHA_BTK_YSWTR00_02};
 const J3DFrameCtrl::Attribute_e l_daObjHha_btk_mode_table[2] = {J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_NONE};
 const u16 l_daObjHha_splash_id_table[] = {
-    dPa_name::ID_SCENE_810D,
-    dPa_name::ID_SCENE_810E,
+    dPa_name::ID_AK_SN_SIRENSUIRYU00,
+    dPa_name::ID_AK_SN_SIRENSUIRYU01,
 };
 
 /* 00000078-00000170       .text init_data__14daObjHhaPart_cFffUsUcUc */

@@ -540,7 +540,7 @@ BOOL daTag_Hint_c::actionEvent() {
         "MESSAGE3",
     };
 
-    s32 iVar2 = dComIfGp_evmng_getMyActIdx(m29C, action_table, ARRAY_SIZE(action_table), 0, 0);
+    s32 iVar2 = dComIfGp_evmng_getMyActIdx(m29C, action_table, ARRAY_SIZE(action_table), FALSE, 0);
     if (dComIfGp_evmng_getIsAddvance(m29C)) {
         setFlag(1);
 

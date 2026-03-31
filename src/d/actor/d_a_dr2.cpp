@@ -286,7 +286,7 @@ void iwa_move(dr2_class* i_this) {
                 i_this->unk_50D = REG0_S(2) + 30;
                 i_this->unk_50E = true;
                 i_this->unk_510 = 1;
-                dComIfGp_particle_setToon(dPa_name::ID_SCENE_A0B8, &i_this->unk_4A8, &i_this->unk_4B4, NULL, 0xb9, &i_this->unk_4EC, fopAcM_GetRoomNo(a_this));
+                dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BTDSMOKE02, &i_this->unk_4A8, &i_this->unk_4B4, NULL, 0xb9, &i_this->unk_4EC, fopAcM_GetRoomNo(a_this));
                 fopAcM_seStartCurrent(a_this, JA_SE_CM_BTD_ROCK_FALL, 0);
             }
             break;
@@ -327,7 +327,7 @@ void iwa_move(dr2_class* i_this) {
 #if VERSION == VERSION_DEMO
                 i_this->unk_4D4_demo = 
 #endif
-                dComIfGp_particle_set(dPa_name::ID_SCENE_80B7, &i_this->unk_4A8, &i_this->unk_4B4, NULL, 0xFF, &i_this->unk_4D8);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_BTDDRIPMAGMA00, &i_this->unk_4A8, &i_this->unk_4B4, NULL, 0xFF, &i_this->unk_4D8);
                 i_this->unk_424 = 1;
             }
             break;
@@ -356,7 +356,7 @@ void iwa_move(dr2_class* i_this) {
 #else
                 i_this->unk_4D8.remove();
 #endif
-                dComIfGp_particle_setToon(dPa_name::ID_SCENE_A0B8, &i_this->unk_4A8, &i_this->unk_4B4, NULL, 0xb9, &i_this->unk_4EC, fopAcM_GetRoomNo(a_this));
+                dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BTDSMOKE02, &i_this->unk_4A8, &i_this->unk_4B4, NULL, 0xb9, &i_this->unk_4EC, fopAcM_GetRoomNo(a_this));
 
                 i_this->unk_50D = REG0_S(2) + 10;
                 i_this->unk_50E = true;
@@ -396,7 +396,7 @@ void iwa_move(dr2_class* i_this) {
                 i_this->unk_4D4->becomeInvalidEmitter();
             }
 
-            i_this->unk_4D4 = dComIfGp_particle_set(dPa_name::ID_SCENE_80B9, &i_this->unk_4A8);
+            i_this->unk_4D4 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BTDBROKENROCK00, &i_this->unk_4A8);
             if (i_this->unk_4D4 != NULL) {
                 i_this->unk_4D4->setRate(i_this->unk_50D);
                 i_this->unk_50E++;
@@ -432,7 +432,7 @@ void iwa_move(dr2_class* i_this) {
                 JGeometry::TVec3<f32> tvec;
                 link->getObject()->getGlobalPosition(tvec);
                 sp40 = tvec;
-                dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8062, &sp40, 0xB9);
+                dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BTDBROKENROCKTAIL00, &sp40, 0xB9);
                 link = link->getNext();
             }
             break;

@@ -15,8 +15,8 @@
 class daOship_c : public fopAc_ac_c {
 public:
     enum Proc_e {
-        PROC_INIT = 0,
-        PROC_EXEC = 1
+        PROC_INIT_e = 0,
+        PROC_EXEC_e = 1
     };
 
     enum Mode_e {
@@ -40,7 +40,7 @@ public:
 
     u8 getSw() { return mSwitchA; }
     bool isSpecial() { return mModelType != 0xFF || REG12_S(0) != 0; }
-    void modeProcInit(int i_newMode) { modeProc(PROC_INIT, i_newMode); }
+    void modeProcInit(int i_newMode) { modeProc(PROC_INIT_e, i_newMode); }
 
     void _nodeControl(J3DNode*, J3DModel*);
     BOOL _pathMove(cXyz*, cXyz*, cXyz*);

@@ -264,14 +264,14 @@ void daWall_c::set_tri() {
 /* 00000D84-00000F74       .text set_effect__8daWall_cFv */
 void daWall_c::set_effect() {
     u16 projection_id[] = {
-        dPa_name::ID_SCENE_A16E,
-        dPa_name::ID_SCENE_A170,
-        dPa_name::ID_SCENE_A172,
+        dPa_name::ID_IT_ST_SHIREN_WL1_HAHEN00,
+        dPa_name::ID_IT_ST_SHIREN_WL2_HAHEN00,
+        dPa_name::ID_IT_ST_SHIREN_WL3_HAHEN00,
     };
     u16 particle_id[] = {
-        dPa_name::ID_SCENE_A16F,
-        dPa_name::ID_SCENE_A171,
-        dPa_name::ID_SCENE_A173,
+        dPa_name::ID_IT_ST_SHIREN_WL1_SMOKE00,
+        dPa_name::ID_IT_ST_SHIREN_WL2_SMOKE00,
+        dPa_name::ID_IT_ST_SHIREN_WL3_SMOKE00,
     };
 
     csXyz local_28 = current.angle;

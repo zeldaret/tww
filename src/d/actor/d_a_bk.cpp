@@ -170,7 +170,7 @@ static void smoke_set_s(bk_class* i_this, f32 rate) {
     case dBgS_Attr_SAND_e: {
         i_this->m0350.remove();
         JPABaseEmitter* emitter1 = dComIfGp_particle_setToon(
-            dPa_name::ID_COMMON_2022, &i_this->m0338, &i_this->m0344, NULL, 0xB9,
+            dPa_name::ID_AK_JT_ELEMENTSMOKE00, &i_this->m0338, &i_this->m0344, NULL, 0xB9,
             &i_this->m0350, fopAcM_GetRoomNo(i_this)
         );
         if (emitter1) {
@@ -185,7 +185,7 @@ static void smoke_set_s(bk_class* i_this, f32 rate) {
         break;
     }
     case dBgS_Attr_GRASS_e:
-        JPABaseEmitter* emitter2 = dComIfGp_particle_set(dPa_name::ID_COMMON_0024, &i_this->m0338, &i_this->m0344);
+        JPABaseEmitter* emitter2 = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTKUSA00, &i_this->m0338, &i_this->m0344);
         if (emitter2) {
             emitter2->setRate(rate * 0.5f);
             emitter2->setMaxFrame(3);
@@ -2288,7 +2288,7 @@ temp_1B8:
                 i_this->m0314 = 0x10;
                 cXyz sp18;
                 sp18.x = sp18.y = sp18.z = 1.0f;
-                dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, &i_this->m11E4, NULL, &sp18);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_NG, &i_this->m11E4, NULL, &sp18);
             }
         }
         
@@ -2677,13 +2677,13 @@ static void yogan_fail(bk_class* i_this) {
         }
         // Fall-through
     case 1:
-        dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8061, &i_this->current.pos);
-        dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8058, &i_this->current.pos);
+        dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_FIREK_KASU, &i_this->current.pos);
+        dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_MAGT_FCHIP, &i_this->current.pos);
         
         if ((i_this->m02F8 & 7) == 0) {
             i_this->m0344.y = cM_rndF(0x10000);
             i_this->m0344.x = -0x2000;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_000E, &i_this->m116C, &i_this->m0344);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBA00, &i_this->m116C, &i_this->m0344);
         }
         
         cLib_addCalcAngleS2(&i_this->current.angle.x, -0x4000, 10, 0x200);
@@ -3540,7 +3540,7 @@ static void damage_check(bk_class* i_this) {
         csXyz sp18(player->shape_angle);
         sp18.y += 0x8000;
         JPABaseEmitter* emitter = dComIfGp_particle_set(
-            dPa_name::ID_COMMON_002B, &i_this->m11CC, &sp18,
+            dPa_name::ID_AK_JN_ELEMENTKIKUZU00, &i_this->m11CC, &sp18,
             NULL, 0xFF, NULL, -1,
             &actor->tevStr.mColorK0, &actor->tevStr.mColorK0
         );
@@ -4436,7 +4436,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
         i_this->m0336--;
         if (i_this->m0336 == 0) {
             i_this->m0344.y = i_this->current.angle.y;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_000E, &i_this->m116C, &i_this->m0344);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBA00, &i_this->m116C, &i_this->m0344);
         }
     }
     

@@ -25,7 +25,7 @@ void daTag_Gship_c::modeClearWaitInit() {
 /* 00000110-000001C0 .text modeClearWait__13daTag_Gship_cFv */
 void daTag_Gship_c::modeClearWait() {
     if(dComIfGp_evmng_endCheck("DEFAULT_TREASURE") || dComIfGp_evmng_endCheck("DEFAULT_TREASURE2") || dComIfGp_evmng_endCheck("DEFAULT_TREASURE_A") || l_HIO.field_0x05) {
-        modeProc(CLEAR_WAIT, 1);
+        modeProc(PROC_INIT_e, 1);
     }
 }
 
@@ -84,18 +84,18 @@ void daTag_Gship_c::modeProc(daTag_Gship_c::Proc_e proc, int param_2) {
         }
     };
 
-    if(proc == CLEAR_WAIT) {
+    if(proc == PROC_INIT_e) {
         mMode = param_2;
         (this->*mode_proc[mMode].init)();
     }
-    else if(proc == CLEAR_EVENT) {
+    else if(proc == PROC_EXEC_e) {
         (this->*mode_proc[mMode].run)();
     }
 }
 
 /* 00000508-00000534 .text _execute__13daTag_Gship_cFv */
 bool daTag_Gship_c::_execute() {
-    modeProc(CLEAR_EVENT, 2);
+    modeProc(PROC_EXEC_e, 2);
     return true;
 }
 

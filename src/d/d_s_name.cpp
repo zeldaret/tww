@@ -850,7 +850,7 @@ void dScnName_c::ShopDemoDataLoad() {
 /* 802320C0-8023213C       .text ShopDemoDataSet__10dScnName_cFv */
 void dScnName_c::ShopDemoDataSet() {
     if (field_0x410->sync()) {
-        memcpy(saveMemory, ((u8*)field_0x410->getMemAddress()) + 8, 0x1650);
+        memcpy(saveMemory, ((u8*)field_0x410->getMemAddress()) + 8, sizeof(saveMemory));
         delete field_0x410;
         mMainProc = 1;
         mDrawProc = 4;

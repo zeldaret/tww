@@ -162,18 +162,18 @@ void daObj_Hole_c::modeProc(daObj_Hole_c::Proc_e proc, int newMode) {
         }
     };
 
-    if (proc == PROC_INIT) {
+    if (proc == PROC_INIT_e) {
         mMode = newMode;
         (this->*mode_tbl[mMode].init)();
     }
-    else if (proc == PROC_EXEC) {
+    else if (proc == PROC_EXEC_e) {
         (this->*mode_tbl[mMode].exec)();
     }
 }
 
 /* 000006C0-00000700       .text _execute__12daObj_Hole_cFv */
 bool daObj_Hole_c::_execute() {
-    modeProc(PROC_EXEC, MODE_NULL);
+    modeProc(PROC_EXEC_e, MODE_NULL);
     setMtx();
     return false;
 }

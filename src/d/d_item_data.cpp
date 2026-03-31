@@ -9973,48 +9973,48 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
 dItem_data_effect_info dItem_data::effect_info[] = {
     {
         // 0x00: dItem_HEART_e
-        dPa_name::ID_COMMON_0002,
+        dPa_name::ID_AK_JN_O_APPEARHEART,
         dPa_name::ID_SCENE_END,
     },
     {
         // 0x01: dItem_GREEN_RUPEE_e
-        dPa_name::ID_COMMON_0003,
+        dPa_name::ID_AK_JN_O_APPEARLUPY,
         dPa_name::ID_SCENE_END,
     },
     {
         // 0x02: dItem_BLUE_RUPEE_e
-        dPa_name::ID_COMMON_0003,
+        dPa_name::ID_AK_JN_O_APPEARLUPY,
         dPa_name::ID_SCENE_END,
     },
     {
         // 0x03: dItem_YELLOW_RUPEE_e
-        dPa_name::ID_COMMON_0003,
+        dPa_name::ID_AK_JN_O_APPEARLUPY,
         dPa_name::ID_SCENE_END,
     },
     {
         // 0x04: dItem_RED_RUPEE_e
-        dPa_name::ID_COMMON_0003,
+        dPa_name::ID_AK_JN_O_APPEARLUPY,
         dPa_name::ID_SCENE_END,
     },
     {
         // 0x05: dItem_PURPLE_RUPEE_e
-        dPa_name::ID_COMMON_0003,
+        dPa_name::ID_AK_JN_O_APPEARLUPY,
         dPa_name::ID_SCENE_END,
     },
     {
         // 0x06: dItem_ORANGE_RUPEE_e
-        dPa_name::ID_COMMON_0002,
+        dPa_name::ID_AK_JN_O_APPEARHEART,
         dPa_name::ID_SCENE_END,
     },
     {
         // 0x07: dItem_HEART_PIECE_e
         dPa_name::ID_SCENE_END,
-        dPa_name::ID_COMMON_0293,
+        dPa_name::ID_AK_JN_HEARTVESSEL,
     },
     {
         // 0x08: dItem_HEART_CONTAINER_e
         dPa_name::ID_SCENE_END,
-        dPa_name::ID_COMMON_0293,
+        dPa_name::ID_AK_JN_HEARTVESSEL,
     },
     {
         // 0x09: dItem_SMALL_MAGIC_e
@@ -10078,7 +10078,7 @@ dItem_data_effect_info dItem_data::effect_info[] = {
     },
     {
         // 0x15: dItem_SMALL_KEY_e
-        dPa_name::ID_COMMON_0003,
+        dPa_name::ID_AK_JN_O_APPEARLUPY,
         dPa_name::ID_SCENE_END,
     },
     {
@@ -10319,37 +10319,37 @@ dItem_data_effect_info dItem_data::effect_info[] = {
     {
         // 0x45: dItem_SKULL_NECKLACE_e
         dPa_name::ID_SCENE_END,
-        dPa_name::ID_COMMON_0293,
+        dPa_name::ID_AK_JN_HEARTVESSEL,
     },
     {
         // 0x46: dItem_BOKOBABA_SEED_e
         dPa_name::ID_SCENE_END,
-        dPa_name::ID_COMMON_0293,
+        dPa_name::ID_AK_JN_HEARTVESSEL,
     },
     {
         // 0x47: dItem_GOLDEN_FEATHER_e
         dPa_name::ID_SCENE_END,
-        dPa_name::ID_COMMON_0293,
+        dPa_name::ID_AK_JN_HEARTVESSEL,
     },
     {
         // 0x48: BOKO_BELT
         dPa_name::ID_SCENE_END,
-        dPa_name::ID_COMMON_0293,
+        dPa_name::ID_AK_JN_HEARTVESSEL,
     },
     {
         // 0x49: dItem_RED_JELLY_e
         dPa_name::ID_SCENE_END,
-        dPa_name::ID_COMMON_0293,
+        dPa_name::ID_AK_JN_HEARTVESSEL,
     },
     {
         // 0x4A: dItem_GREEN_JELLY_e
         dPa_name::ID_SCENE_END,
-        dPa_name::ID_COMMON_0293,
+        dPa_name::ID_AK_JN_HEARTVESSEL,
     },
     {
         // 0x4B: dItem_BLUE_JELLY_e
         dPa_name::ID_SCENE_END,
-        dPa_name::ID_COMMON_0293,
+        dPa_name::ID_AK_JN_HEARTVESSEL,
     },
     {
         // 0x4C: dItem_MAP_e

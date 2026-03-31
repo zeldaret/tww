@@ -221,8 +221,8 @@ void kita_move(kita_class* i_this) {
                         i_this->field_360 = 2;
                         fopAcM_seStart(actor, JA_SE_OBJ_P_FLOWER_LAND_W, 0);
                         cXyz particle_scale(3.0, 3.0, 3.0);
-                        dComIfGp_particle_set(dPa_name::ID_SCENE_828C, &actor->current.pos);
-                        dComIfGp_particle_set(dPa_name::ID_COMMON_003F, &actor->current.pos, 0, &particle_scale);
+                        dComIfGp_particle_set(dPa_name::ID_AK_SN_FFSPLASH00, &actor->current.pos);
+                        dComIfGp_particle_set(dPa_name::ID_IT_JN_WP_HAMON03, &actor->current.pos, 0, &particle_scale);
 
                         dComIfGp_getVibration().StartShock(REG0_S(2) + 4, -0x21, cXyz(0.0, 1.0, 0.0));
                     }
@@ -308,7 +308,7 @@ static BOOL daKita_Execute(kita_class* i_this) {
     i_this->pm_bgw->Move();
     if(i_this->field_360 == 2){
         if(i_this->mBaseEmitter == NULL){
-            i_this->mBaseEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_828D, &i_this->current.pos);
+            i_this->mBaseEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_FFHAMON00, &i_this->current.pos);
         }
         else {
             i_this->mBaseEmitter->setGlobalTranslation(i_this->current.pos.x, i_this->current.pos.y - (REG0_F(17) + 40.0f), i_this->current.pos.z);

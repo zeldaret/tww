@@ -607,21 +607,21 @@ void daObjApzl_c::privateCut() {
     };
 
     enum {
-        WAIT,
-        TALK,
-        GAME,
-        GETITEM,
-        STOP,
-        SOUND,
-        PUSH_A,
-        EVENT_END
+        ACT_WAIT,
+        ACT_TALK,
+        ACT_GAME,
+        ACT_GETITEM,
+        ACT_STOP,
+        ACT_SOUND,
+        ACT_PUSH_A,
+        ACT_EVENT_END
     };
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("Apzl");
     bool temp;
     if (staffIdx != -1) {
 
-        mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, 8, 1, 0);
+        mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
         if (mActIdx == -1) {
             dComIfGp_evmng_cutEnd(staffIdx);
         } else {
@@ -629,22 +629,22 @@ void daObjApzl_c::privateCut() {
 
             if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
                 switch(mActIdx) {
-                    case WAIT:
-                    case TALK:
-                    case STOP:
-                    case PUSH_A:
+                    case ACT_WAIT:
+                    case ACT_TALK:
+                    case ACT_STOP:
+                    case ACT_PUSH_A:
                         break;
-                    case GAME:
+                    case ACT_GAME:
                         mGameStarted = true;
                         break;
-                    case GETITEM:
+                    case ACT_GETITEM:
                         mGaveReward = true;
                         mRewardTimer = 0x96;
                         break;
-                    case SOUND:
+                    case ACT_SOUND:
                         mDoAud_seStart(JA_SE_15PUZZLE_COMPLETE);
                         break;
-                    case EVENT_END:
+                    case ACT_EVENT_END:
                         fopAc_ac_c* actor;
                         for(int i = 0; i < mGivenRupeeCount; i++) {
                             actor = fopAcM_SearchByID(mRupeeIds[i]);

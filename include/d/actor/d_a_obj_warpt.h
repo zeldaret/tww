@@ -12,7 +12,7 @@ class daObj_Warpt_c : public fopAc_ac_c {
 public:
     enum Proc_e {
         PROC_INIT_e,
-        PROC_RUN_e,
+        PROC_EXEC_e,
     };
 
     void modeProcInit(int) {}

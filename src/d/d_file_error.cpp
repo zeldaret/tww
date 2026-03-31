@@ -8,7 +8,7 @@
 #include "d/d_file_error.h"
 #include "dolphin/types.h"
 #include "f_op/f_op_msg_mng.h"
-#include "m_Do/m_do_controller_pad.h"
+#include "m_Do/m_Do_controller_pad.h"
 
 dFe_HIO_c g_feHIO;
 

@@ -10,6 +10,7 @@
 #include "d/d_drawlist.h"
 #include "d/d_lib.h"
 #include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class dFe_HIO_c : public JORReflexible {
 public:

@@ -1542,7 +1542,7 @@ void bb_atack_move(bb_class* i_this) {
                     cXyz scale;
                     scale.x = scale.y = scale.z = 4.0f;
                     
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, &a_this->eyePos, NULL, &scale);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_NG, &a_this->eyePos, NULL, &scale);
 
                     i_this->unk_2F1 = 10;
                     i_this->unk_318[0] = l_bbHIO.unk_30;
@@ -2117,15 +2117,15 @@ void damage_check(bb_class* i_this) {
 #else
         if (sp30.mResultingAttackType == 14) {
             a_this->health = old_health;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, sp30.pParticlePos);
+            dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, sp30.pParticlePos);
         } else if (a_this->health <= 0) {
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0010, sp30.pParticlePos);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, sp30.pParticlePos);
             scale.x = 2.0f;
             scale.y = 2.0f;
             scale.z = 2.0f;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, sp30.pParticlePos, &player->shape_angle, &scale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, sp30.pParticlePos, &player->shape_angle, &scale);
         } else {
-            dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, sp30.pParticlePos, &player->shape_angle);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, sp30.pParticlePos, &player->shape_angle);
         }
 #endif
 
@@ -2150,12 +2150,12 @@ void damage_check(bb_class* i_this) {
             fopAcM_monsSeStart(a_this, JA_SE_CV_BB_DAMAGE, 0);
         }
 
-        dComIfGp_particle_setToon(dPa_name::ID_COMMON_0438, &a_this->current.pos, &a_this->current.angle, NULL, 0xFF, NULL, 
+        dComIfGp_particle_setToon(dPa_name::ID_IT_JN_KG_HANE_A, &a_this->current.pos, &a_this->current.angle, NULL, 0xFF, NULL, 
             fopAcM_GetRoomNo(a_this), &a_this->tevStr.mColorK0, &a_this->tevStr.mColorK0);
         
         i_this->mParticleCallBack.remove();
 
-        emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_0439, &a_this->current.pos, &a_this->current.angle, NULL, 0xFF, &i_this->mParticleCallBack, 
+        emitter = dComIfGp_particle_setToon(dPa_name::ID_IT_JN_KG_HANE_B, &a_this->current.pos, &a_this->current.angle, NULL, 0xFF, &i_this->mParticleCallBack, 
             fopAcM_GetRoomNo(a_this));
 
         if (emitter != NULL) {
