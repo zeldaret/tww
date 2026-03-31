@@ -194,7 +194,6 @@ public:
     /* 0x001C */ dDlst_FMAP_c mDlst;
     /* 0x0020 */ J2DScreen* scrn;
     /* 0x0024 */ dMenu_Fmap2_c mFmap2;
-    // TODO
     /* 0x2874 */ u8 padding_0x2874[0x2878 - 0x2874];
     /* 0x2878 */ dMenu_FmapSv_c* fmapSv;
     /* 0x287C */ u8 padding_0x287C[0x50D0 - 0x287C];

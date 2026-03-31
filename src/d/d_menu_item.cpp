@@ -6,7 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_item.h"
 
-// FIXME: Should be in .bss, not .sbss.
 dMi_HIO_c g_miHIO;
 
 /* 801C7B4C-801C7C7C       .text __ct__9dMi_HIO_cFv */
