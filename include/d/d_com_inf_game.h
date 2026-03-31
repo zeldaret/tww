@@ -4151,10 +4151,10 @@ inline u8 dComIfGp_fmapOpenCheck() { return g_dComIfG_gameInfo.play.fmapOpenChec
 inline void dComIfGp_fmapOpenOn() { g_dComIfG_gameInfo.play.fmapOpenOn(); }
 inline void dComIfGp_fmapOpenOff() { g_dComIfG_gameInfo.play.fmapOpenOff(); }
 
-inline u8 dComIfGp_nameOpenCheck() { return g_dComIfG_gameInfo.play.nameOpenCheck(); }
-inline void dComIfGp_nameOpenOn() { g_dComIfG_gameInfo.play.nameOpenOn(); }
-inline void dComIfGp_nameOpenChangeOff() { g_dComIfG_gameInfo.play.nameOpenChangeOff(); }
-inline void dComIfGp_nameOpenCancelOff() { g_dComIfG_gameInfo.play.nameOpenCancelOff(); }
+inline u8 dComIfGp_InputPasswordOpenCheck() { return g_dComIfG_gameInfo.play.nameOpenCheck(); }
+inline void dComIfGp_InputPasswordOpenOn() { g_dComIfG_gameInfo.play.nameOpenOn(); }
+inline void dComIfGp_InputPasswordOpenChangeOff() { g_dComIfG_gameInfo.play.nameOpenChangeOff(); }
+inline void dComIfGp_InputPasswordOpenCancelOff() { g_dComIfG_gameInfo.play.nameOpenCancelOff(); }
 
 inline int dComIfG_getTimerRestTimeMs() {
     int limit = g_dComIfG_gameInfo.play.getTimerLimitTimeMs();

@@ -901,7 +901,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                 dComIfGp_fmapOpenOff();
                 mDoAud_seStart(JA_SE_SHIPPU_CHART_OPEN);
 
-            } else if (CAN_PROCEED() && dComIfGp_nameOpenCheck() == 2) {
+            } else if (CAN_PROCEED() && dComIfGp_InputPasswordOpenCheck() == 2) {
                 timer = 0;
                 i_Ms->mMenuProc = MENU_STATE_NAME_OPEN;
                 dMs_name_create(i_Ms);
@@ -1376,12 +1376,12 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         if (dNm_c->isInputEnd() == 1) {
             dComIfGp_setInputPassword(dNm_c->getInputStrPtr());
             i_Ms->mMenuProc = MENU_STATE_NAME_CLOSE;
-            dComIfGp_nameOpenChangeOff();
+            dComIfGp_InputPasswordOpenChangeOff();
 
         } else if (dNm_c->isInputEnd() == 2) {
             dComIfGp_setInputPassword("");
             i_Ms->mMenuProc = MENU_STATE_NAME_CLOSE;
-            dComIfGp_nameOpenCancelOff();
+            dComIfGp_InputPasswordOpenCancelOff();
         }
 
     } else if (i_Ms->mMenuProc == MENU_STATE_NAME_CLOSE) {
@@ -1530,7 +1530,7 @@ static cPhs_State dMs_Create(msg_class* i_this) {
 
     event_wait_frame = 0;
 
-    dComIfGp_nameOpenCancelOff();
+    dComIfGp_InputPasswordOpenCancelOff();
 
     i_Ms->mButtonsPressed = 0;
     i_Ms->mMsgID = fpcM_ERROR_PROCESS_ID_e;
