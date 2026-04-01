@@ -1048,7 +1048,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         cloth_c->cloth_move();
         if (timer > g_menuHIO.field_0x90) {
             mDoExt_setCurrentHeap(i_Ms->childHeap);
-            if (dMi_c->_open()) {
+            if (dMc_c->_open()) {
                 if (i_Ms->mMenuProc == MENU_STATE_COLLECT_OPEN_TACT) {
                     i_Ms->mMenuProc = MENU_STATE_COLLECT_MOVE_TACT;
                 } else {
