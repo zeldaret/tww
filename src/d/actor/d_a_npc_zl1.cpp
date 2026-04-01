@@ -180,7 +180,7 @@ void daNpc_Zl1_c::_nodeCB_Head(J3DNode* i_node, J3DModel* i_pModel) {
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
 
     MtxP mtx = mDoMtx_stack_c::get();
-    MTXCopy(mtx, i_pModel->getAnmMtx(jointIdx));
+    i_pModel->setAnmMtx(jointIdx, mtx);
 }
 
 /* 0000043C-00000488       .text nodeCB_BackBone__FP7J3DNodei */
@@ -202,7 +202,7 @@ void daNpc_Zl1_c::_nodeCB_BackBone(J3DNode* i_node, J3DModel* i_pModel) {
     mDoMtx_stack_c::ZrotM(-m_jnt.getBackbone_x());
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
     MtxP mtx = mDoMtx_stack_c::get();
-    MTXCopy(mtx, i_pModel->getAnmMtx(jointIdx));
+    i_pModel->setAnmMtx(jointIdx, mtx);
 }
 
 /* 00000528-00000548       .text CheckCreateHeap__FP10fopAc_ac_c */
