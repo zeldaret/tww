@@ -1562,7 +1562,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_tag_so"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_tornado"),
     ActorRel(NonMatching, "d_a_warpf"),
-    ActorRel(NonMatching, "d_a_wind_tag"),
+    ActorRel(Matching,    "d_a_wind_tag"),
     ActorRel(Matching,    "d_a_acorn_leaf"),
     ActorRel(Matching,    "d_a_atdoor"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_auction"),
