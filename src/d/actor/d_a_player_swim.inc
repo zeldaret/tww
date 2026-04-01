@@ -267,7 +267,7 @@ void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
 /* 8013D638-8013D6B8       .text getSwimTimerRate__9daPy_lk_cFv */
 f32 daPy_lk_c::getSwimTimerRate() {
     f32 swimTimerRate;
-    if (dComIfGp_getItemSwimTimerStatus() && dComIfGp_event_getMode() == dEvtMode_NONE_e) {
+    if (dComIfGp_getItemSwimTimerStatus() && !dComIfGp_event_runCheck()) {
         swimTimerRate = (1.0f - dComIfGp_getItemTimeCount() * 0.0011111111f);
     }
     else {

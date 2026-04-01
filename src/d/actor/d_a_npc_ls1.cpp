@@ -2145,8 +2145,7 @@ BOOL daNpc_Ls1_c::_execute() {
         checkOrder();
         if (!demo()) {
             int staff_id = -1;
-            dBgS* bgs_p = dComIfG_Bgsp();
-            if (dComIfGp_event_getMode() != 0 && eventInfo.checkCommandTalk() == false) {
+            if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk() == false) {
                 staff_id = isEventEntry();
             }
 
@@ -2160,7 +2159,7 @@ BOOL daNpc_Ls1_c::_execute() {
 
             if (mType != 0) {
                 fopAcM_posMoveF(this, mStts.GetCCMoveP());
-                mObjAcch.CrrPos(*bgs_p);
+                mObjAcch.CrrPos(*dComIfG_Bgsp());
             }
 
             play_animation();

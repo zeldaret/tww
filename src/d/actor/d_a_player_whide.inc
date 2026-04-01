@@ -82,7 +82,7 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* param_0, cXyz* param_1, cXyz* par
         }
     }
 
-    dBgS* bgs = dComIfG_Bgsp(); // Maybe fakematch? Fixes regalloc
+    dBgS* bgs = dComIfG_Bgsp(); // Maybe fakematch? Fixes regalloc for retail, but makes demo worse.
 
     cM3dGPla* triPla = bgs->GetTriPla(mLinkLinChk);
     s16 uVar3 = cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z);
@@ -100,7 +100,7 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* param_0, cXyz* param_1, cXyz* par
     local_3c.y = param_2->y;
     local_3c.z = param_2->z + cM_ssin(uVar3) * m_HIO->mWall.m.field_0x50;
     mGndChk.SetPos(&local_3c);
-    float f31 = bgs->GroundCross(&mGndChk);
+    f32 f31 = bgs->GroundCross(&mGndChk);
     if (-G_CM3D_F_INF != f31 && (!cBgW_CheckBGround(bgs->GetTriPla(mGndChk)->GetNP()->y))) {
         return NULL;
     }
@@ -123,9 +123,9 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* param_0, cXyz* param_1, cXyz* par
         if (!bgs->LineCross(&mLinkLinChk)) {
             return NULL;
         }
-        cM3dGPla* pfVar5;
-        pfVar5 = bgs->GetTriPla(mLinkLinChk);
-        iVar4 = cM_atan2s(pfVar5->GetNP()->x, pfVar5->GetNP()->z);
+        cM3dGPla* triPla;
+        triPla = bgs->GetTriPla(mLinkLinChk);
+        iVar4 = cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z);
         if (sVar7 != (s16)iVar4) {
             return NULL;
         }
@@ -142,9 +142,9 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* param_0, cXyz* param_1, cXyz* par
         if (!bgs->LineCross(&mLinkLinChk)) {
             return NULL;
         }
-        cM3dGPla* pfVar5;
-        pfVar5 = bgs->GetTriPla(mLinkLinChk);
-        iVar4 = cM_atan2s(pfVar5->GetNP()->x, pfVar5->GetNP()->z);
+        cM3dGPla* triPla;
+        triPla = bgs->GetTriPla(mLinkLinChk);
+        iVar4 = cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z);
         if (sVar7 != (s16)iVar4) {
             return NULL;
         }

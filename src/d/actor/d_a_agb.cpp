@@ -1123,7 +1123,7 @@ void daAgb_c::FlagsSend(u32 stage_type) {
         mFlags.field_0xa_7 = 1;
     }
     mFlags.field_0xa_6 = dMenu_flag();
-    mFlags.field_0xa_5 = dComIfGp_event_getMode() != dEvtMode_NONE_e;
+    mFlags.field_0xa_5 = dComIfGp_event_runCheck();
     if (dStage_checkRestart() || dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK20000000_e)) {
         mFlags.field_0xa_4 = 1;
     } else {

@@ -786,7 +786,7 @@ void dMs_telescopeMove(sub_ms_screen_class* i_Ms) {
 
 /* 801DD5CC-801DD6D8       .text dMs_placenameMove__FP19sub_ms_screen_class */
 void dMs_placenameMove(sub_ms_screen_class*) {
-    if (dComIfGp_event_getMode() == 0) {
+    if (!dComIfGp_event_runCheck()) {
         return;
     }
 
@@ -1450,7 +1450,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     dMs_telescopeMove(i_Ms);
 
-    if (dMenu_flag() == 0 && !dComIfGp_event_getMode()) {
+    if (dMenu_flag() == 0 && !dComIfGp_event_runCheck()) {
         dComIfGs_getpItemRecord()->decTimer();
     }
 
