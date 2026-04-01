@@ -291,17 +291,17 @@ BOOL daDaiocta_c::createAwaHeap() {
         }
 
         if (!mAwaBckAnms[i].init(modelData, bck, TRUE, 
-                                J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
+                                J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
 
         if (!mAwaBtkAnms[i].init(modelData, btk, TRUE, 
-                                J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+                                J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
 
         if (!mAwaBrkAnms[i].init(modelData, brk, TRUE, 
-                                J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+                                J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
     }

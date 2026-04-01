@@ -2557,7 +2557,7 @@ static BOOL useHeapInit(fopAc_ac_c* ac) {
     J3DAnmTexPattern* btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Bb", bb_tex_anm_idx[4]));
     JUT_ASSERT(DEMO_SELECT(4529, 4556), btp);
 
-    s32 ret = i_this->mBtpAnm.init(i_this->mpMorf->getModel()->getModelData(), btp, 0, 2, 1.0f, 0, -1, false, 0);
+    s32 ret = i_this->mBtpAnm.init(i_this->mpMorf->getModel()->getModelData(), btp, 0, J3DFrameCtrl::EMode_LOOP);
     if (ret == 0) {
         return FALSE;
     }

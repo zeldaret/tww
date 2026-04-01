@@ -1398,7 +1398,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
     if (i_this->mpBodyBrkAnm == NULL)
         return FALSE;
 
-    if (i_this->mpBodyBrkAnm->init(mpBodyModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", KS_BRK_KS_BODY), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0) == 0)
+    if (i_this->mpBodyBrkAnm->init(mpBodyModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", KS_BRK_KS_BODY), TRUE, J3DFrameCtrl::EMode_NONE) == 0)
         return FALSE;
 
     
@@ -1414,14 +1414,14 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
     if (i_this->mpEyeBtkAnm == NULL)
         return FALSE;
 
-    if (i_this->mpEyeBtkAnm->init(mpEyeModel->getModelData(), (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("KS", KS_BTK_KS_EYE), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0) == 0)
+    if (i_this->mpEyeBtkAnm->init(mpEyeModel->getModelData(), (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("KS", KS_BTK_KS_EYE), TRUE, J3DFrameCtrl::EMode_NONE) == 0)
         return FALSE;
     
     i_this->mpEyeBrkAnm = new mDoExt_brkAnm();
     if (i_this->mpEyeBrkAnm == NULL)
         return FALSE;
 
-    if (i_this->mpEyeBrkAnm->init(mpEyeModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", KS_BRK_KS_EYE), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0) == 0) {
+    if (i_this->mpEyeBrkAnm->init(mpEyeModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", KS_BRK_KS_EYE), TRUE, J3DFrameCtrl::EMode_NONE) == 0) {
         return FALSE;
     }
     return TRUE; 

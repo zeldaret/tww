@@ -4553,7 +4553,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
         return cPhs_ERROR_e;
     }
     J3DAnmTexPattern* btp = (J3DAnmTexPattern*)dComIfG_getObjectRes("Bk", BK_BTP_TMABATAKI);
-    if (!i_this->m02C4->init(model->getModelData(), btp, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->m02C4->init(model->getModelData(), btp, TRUE, J3DFrameCtrl::EMode_NONE)) {
         // Bug: Same as above.
         // TODO check this case as well.
         return cPhs_ERROR_e;

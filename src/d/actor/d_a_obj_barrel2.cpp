@@ -202,7 +202,7 @@ bool daObjBarrel2::Act_c::create_heap() {
 
     s32 iVar5 = 0;
     if (m29C != NULL) {
-        iVar5 = m29C->init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+        iVar5 = m29C->init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE);
     }
 
     if (m298 != NULL && iVar5 != 0) {

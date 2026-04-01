@@ -111,9 +111,9 @@ bool daObjBarrier_anm_c::init() {
     } else {
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x1000200);
         BOOL btk_init =
-            mBtk.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+            mBtk.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP);
         BOOL brk_init =
-            mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+            mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP);
 
         if (mpModel == NULL || !btk_init || !brk_init) {
             rt = false;

@@ -2353,7 +2353,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         }
         i_this->m0374[i] = new mDoExt_brkAnm();
         iVar10 =
-            i_this->m0374[i]->init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bwd", fileIndex), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+            i_this->m0374[i]->init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bwd", fileIndex), true, J3DFrameCtrl::EMode_NONE);
         if (iVar10 == 0) {
             return FALSE;
         }
@@ -2395,7 +2395,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             return FALSE;
         }
         iVar16 = i_this->m17F4[i]->init(
-            modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", BWD_BTK_TAKI_START), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0
+            modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", BWD_BTK_TAKI_START), true, J3DFrameCtrl::EMode_NONE
         );
         if (iVar16 == 0) {
             return FALSE;
@@ -2426,14 +2426,14 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             return FALSE;
         }
         iVar10 = i_this->m3B2C[i]->init(
-            modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", s_btk[i]), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0
+            modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", s_btk[i]), true, J3DFrameCtrl::EMode_NONE
         );
         if (iVar10 == 0) {
             return FALSE;
         }
         i_this->m3B34[i] = new mDoExt_brkAnm();
         iVar10 =
-            i_this->m3B34[i]->init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bwd", s_brk[i]), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+            i_this->m3B34[i]->init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bwd", s_brk[i]), true, J3DFrameCtrl::EMode_NONE);
         if (iVar10 == 0) {
             return FALSE;
         }

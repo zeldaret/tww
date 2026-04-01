@@ -868,7 +868,7 @@ BOOL daBoko_c::createHeap() {
                !mBrkAnm.init(
                    modelData,
                    static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Pgsw", PGSW_BRK_KIERU_KEN1)),
-                   true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+                   true, J3DFrameCtrl::EMode_NONE
                ))
     {
         return FALSE;

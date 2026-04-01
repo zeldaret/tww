@@ -379,7 +379,7 @@ bool daFm_c::holeCreateHeap() {
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, FM_BTK_YPIT00));
     JUT_ASSERT(0x2D0, btk != NULL);
 
-    if(!mBtkAnm.init(modelData, btk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if(!mBtkAnm.init(modelData, btk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
     

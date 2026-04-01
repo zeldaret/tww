@@ -2418,7 +2418,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2B8->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2439,7 +2439,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2C8->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_IWA01), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_IWA01), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2451,7 +2451,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2CC->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_IWA02), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_IWA02), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2463,7 +2463,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2D0->init(
-            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", CC_BTK_CC_IWA01), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", CC_BTK_CC_IWA01), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2475,7 +2475,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2D4->init(
-            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", CC_BTK_CC_IWA02), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", CC_BTK_CC_IWA02), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2496,7 +2496,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2C0->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_BETA), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_BETA), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;

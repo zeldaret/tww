@@ -455,7 +455,7 @@ BOOL daNpc_Cb1_c::createHeap() {
 
     mpPropellerModel->setUserArea((u32)this);
 
-    if(!mPropellerBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", CB_BCK_M_OPEN), FALSE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
+    if(!mPropellerBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", CB_BCK_M_OPEN), FALSE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 
@@ -466,7 +466,7 @@ BOOL daNpc_Cb1_c::createHeap() {
         return FALSE;
     }
 
-    if(!mNutBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", CB_BCK_NUT_SOW), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
+    if(!mNutBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", CB_BCK_NUT_SOW), TRUE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 

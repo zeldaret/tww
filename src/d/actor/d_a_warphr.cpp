@@ -82,7 +82,7 @@ BOOL daWarphr_c::CreateHeap() {
         JUT_ASSERT(VERSION_SELECT(226, 230, 239, 239), pbtk != NULL);
 
         mpBtkAnm1 = new mDoExt_btkAnm();
-        if (mpBtkAnm1 == NULL || !mpBtkAnm1->init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        if (mpBtkAnm1 == NULL || !mpBtkAnm1->init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
         mpBtkAnm1->setPlaySpeed(1.0f);
@@ -103,7 +103,7 @@ BOOL daWarphr_c::CreateHeap() {
 
         mpBtkAnm2 = new mDoExt_btkAnm();
 
-        if (mpBtkAnm2 == NULL || !mpBtkAnm2->init(modelData, pbtk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+        if (mpBtkAnm2 == NULL || !mpBtkAnm2->init(modelData, pbtk, true, J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
         mpBtkAnm2->setPlaySpeed(0.0f);
@@ -116,7 +116,7 @@ BOOL daWarphr_c::CreateHeap() {
 
         mpBrkAnm = new mDoExt_brkAnm();
 
-        if (mpBrkAnm == NULL || !mpBrkAnm->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+        if (mpBrkAnm == NULL || !mpBrkAnm->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
         mpBrkAnm->setPlaySpeed(0.0f);

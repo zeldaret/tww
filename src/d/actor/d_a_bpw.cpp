@@ -4038,7 +4038,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pJVar2 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_HIRARU1);
-    if (!i_this->mBrkAnim->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->mBrkAnim->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
     pmVar4 = new mDoExt_brkAnm();
@@ -4047,7 +4047,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pJVar2 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_HIT);
-    if (!i_this->m2C4->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->m2C4->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
     pmVar4 = new mDoExt_brkAnm();
@@ -4056,7 +4056,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pJVar2 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_NOROI_S1);
-    if (!i_this->m2C8->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->m2C8->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
     pmVar4 = new mDoExt_brkAnm();
@@ -4065,7 +4065,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pJVar2 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_NOROI_E1);
-    if (!i_this->m2CC->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->m2CC->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
     pmVar4 = new mDoExt_brkAnm();
@@ -4074,7 +4074,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pJVar2 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_DEFAULT);
-    if (!i_this->m2D0->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->m2D0->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
     if (!i_this->mD78.create(i_this->mpAnim->getModel())) {
@@ -4191,7 +4191,7 @@ static BOOL kantera_useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pJVar3 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_BPW_KAN1);
-    if (!i_this->mKanteraAnim->init(pJVar1->getModelData(), pJVar3, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->mKanteraAnim->init(pJVar1->getModelData(), pJVar3, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
     return TRUE;

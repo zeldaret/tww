@@ -21,7 +21,7 @@ void daPy_lk_c::setHammerModel() {
     J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_HAMMERDAM);
     JKRHeap* oldHeap = setItemHeap();
     J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_HAMMER, 0x37221222);
-    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(32, FALSE);
     }

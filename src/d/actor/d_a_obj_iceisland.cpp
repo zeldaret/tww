@@ -26,15 +26,15 @@ BOOL daObjIceisland_c::CreateHeap() {
 
     J3DAnmTextureSRTKey* btk1 = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("GiceL", GICEL_BTK_GICEL00_01));
     JUT_ASSERT(0x6D, btk1 != NULL);
-    int result1 = mBtkAnm1.init(model_data, btk1, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    int result1 = mBtkAnm1.init(model_data, btk1, true, J3DFrameCtrl::EMode_LOOP);
 
     J3DAnmTextureSRTKey* btk2 = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("GiceL", GICEL_BTK_GICEL00_02));
     JUT_ASSERT(0x73, btk2 != NULL);
-    int result2 = mBtkAnm2.init(model_data, btk2, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    int result2 = mBtkAnm2.init(model_data, btk2, true, J3DFrameCtrl::EMode_LOOP);
 
     J3DAnmTevRegKey * brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("GiceL", GICEL_BRK_GICEL00));
     JUT_ASSERT(0x7A, brk != NULL);
-    int result3 = mBrkAnm.init(model_data, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    int result3 = mBrkAnm.init(model_data, brk, true, J3DFrameCtrl::EMode_NONE);
     return((mpModel != NULL) && (result1 != 0) && (result2 != 0) && (result3 != 0));  
 }
 

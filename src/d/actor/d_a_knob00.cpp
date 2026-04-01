@@ -54,7 +54,7 @@ BOOL daKnob00_c::CreateHeap() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
     J3DAnmTransform* anmTransform = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, KNOB_BCK_DOOROPENADOOR);
-    if (!mBckAnm.init(modelData, anmTransform, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
+    if (!mBckAnm.init(modelData, anmTransform, true, J3DFrameCtrl::EMode_NONE)) {
 #if VERSION == VERSION_DEMO
         return cPhs_ERROR_e;
 #else 

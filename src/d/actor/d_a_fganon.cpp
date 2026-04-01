@@ -2699,7 +2699,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
         return FALSE;
 
     int brk2_res = i_this->mpBrkAnm2->init(
-        pModelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_KEN1), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0
+        pModelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_KEN1), TRUE, J3DFrameCtrl::EMode_NONE
     );
     if (brk2_res == 0)
         return FALSE;
@@ -2714,7 +2714,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
         return FALSE;
 
     int btk_res = i_this->mpBtkAnm->init(
-        pModelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Fganon", FGANON_BTK_YDKBL00), TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, FALSE, 0
+        pModelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Fganon", FGANON_BTK_YDKBL00), TRUE, J3DFrameCtrl::EMode_LOOP
     );
     if (btk_res == 0)
         return FALSE;
@@ -2724,7 +2724,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
         return FALSE;
 
     int brk3_res = i_this->mpBrkAnm3->init(
-        pModelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Fganon", FGANON_BRK_YDKBL00), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0
+        pModelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Fganon", FGANON_BRK_YDKBL00), TRUE, J3DFrameCtrl::EMode_NONE
     );
     if (brk3_res == 0)
         return FALSE;

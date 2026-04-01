@@ -1252,7 +1252,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             return FALSE;
         }
 
-        if (!i_this->m920->init(model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Ki", KI_BTK_FK), true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+        if (!i_this->m920->init(model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Ki", KI_BTK_FK), true, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
     }

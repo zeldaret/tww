@@ -4605,8 +4605,8 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     J3DAnmTextureSRTKey* a_btk = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes("Ji", JI_BTK_YJITR00));
     JUT_ASSERT(0x15D0, a_btk != NULL);
 
-    int temp1 = mCryBrk.init(modelData2, a_brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
-    int temp2 = mCryBtk.init(modelData2, a_btk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    int temp1 = mCryBrk.init(modelData2, a_brk, false, J3DFrameCtrl::EMode_LOOP);
+    int temp2 = mCryBtk.init(modelData2, a_btk, false, J3DFrameCtrl::EMode_LOOP);
 
     if(mpTearsModel == 0 || temp1 == 0 || temp2 == 0) {
         return false;
@@ -4615,7 +4615,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     headTexPattern = (J3DAnmTexPattern*)(dComIfG_getObjectRes("Ji", JI_BTP_JI));
     JUT_ASSERT(0x15D8, headTexPattern != NULL);
 
-    temp2 = mBlinkAnim.init(modelData2, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    temp2 = mBlinkAnim.init(modelData2, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP);
 #if VERSION > VERSION_DEMO
     if(temp2 == 0) {
         return false;

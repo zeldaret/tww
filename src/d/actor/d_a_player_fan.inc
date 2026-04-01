@@ -121,7 +121,7 @@ void daPy_lk_c::setFanModel() {
     J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_USEFANAA);
     JKRHeap* oldHeap = setItemHeap();
     J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_FAN, 0x37221222);
-    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(242, FALSE);
     }
@@ -134,7 +134,7 @@ void daPy_lk_c::setSmallFanModel() {
     J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_FANWAIT);
     JKRHeap* oldHeap = setItemHeap();
     tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_FANSMALL, 0x37221222);
-    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(275, FALSE);
     }

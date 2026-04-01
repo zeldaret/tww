@@ -191,7 +191,7 @@ bool daObj_Warpt_c::createHutaHeap() {
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arc_name, LTUBW_BRK_YWPFM00);
     JUT_ASSERT(291, brk);
 
-    if (!mLidBrk.init(modelData, brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+    if (!mLidBrk.init(modelData, brk, true, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
     return true;

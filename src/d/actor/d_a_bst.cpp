@@ -2798,7 +2798,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     J3DAnmTextureSRTKey* key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", set_btk_d[i_this->mBstPartType]);
-    s32 res = i_this->mpTexMtxAnimator->init(i_this->m02B8->getModel()->getModelData(), key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE);
+    s32 res = i_this->mpTexMtxAnimator->init(i_this->m02B8->getModel()->getModelData(), key, TRUE, J3DFrameCtrl::EMode_NONE);
     if (res == 0) {
         return FALSE;
     }
@@ -2839,7 +2839,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             return FALSE;
         }
         res = i_this->m2FD4->init(
-            modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_HBSITA1), TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE
+            modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_HBSITA1), TRUE, J3DFrameCtrl::EMode_LOOP
         );
         if (res == 0) {
             return FALSE;
@@ -2898,7 +2898,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     res = i_this->mpBrkAnm->init(
-        modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", set_za_brk_d[i_this->mBstPartType]), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+        modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", set_za_brk_d[i_this->mBstPartType]), TRUE, J3DFrameCtrl::EMode_NONE
     );
     if (res == 0) {
         return FALSE;

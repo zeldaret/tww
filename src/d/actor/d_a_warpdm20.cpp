@@ -76,7 +76,7 @@ BOOL daWarpdm20_c::CreateHeap() {
         JUT_ASSERT(DEMO_SELECT(228, 233), pbck != NULL);
 
         mpBckAnm = new mDoExt_bckAnm();
-        if (mpBckAnm == NULL || !mpBckAnm->init(modelData, pbck, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
+        if (mpBckAnm == NULL || !mpBckAnm->init(modelData, pbck, true, J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
         mpBckAnm->setPlaySpeed(0.0f);
@@ -88,7 +88,7 @@ BOOL daWarpdm20_c::CreateHeap() {
         JUT_ASSERT(DEMO_SELECT(270, 275), pbtk != NULL);
 
         mpBtkAnm = new mDoExt_btkAnm();
-        if (mpBtkAnm == NULL || !mpBtkAnm->init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        if (mpBtkAnm == NULL || !mpBtkAnm->init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
         mpBtkAnm->setPlaySpeed(0.0f);
@@ -100,7 +100,7 @@ BOOL daWarpdm20_c::CreateHeap() {
         JUT_ASSERT(DEMO_SELECT(290, 295), pbrk != NULL);
 
         mpBrkAnm = new mDoExt_brkAnm();
-        if (mpBrkAnm == NULL || !mpBrkAnm->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+        if (mpBrkAnm == NULL || !mpBrkAnm->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
         mpBrkAnm->setPlaySpeed(0.0f);
