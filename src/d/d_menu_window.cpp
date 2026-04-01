@@ -23,7 +23,8 @@
 #include "d/actor/d_a_player_main.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include "m_Do/m_Do_graphic.h"
+
+#include "d/d_menu_capture.inc"
 
 // TODO: Remove me when all the JUT asserts and other strings are filled out.
 // This is temporary, just to make the strings match.
