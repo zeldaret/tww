@@ -903,13 +903,12 @@ void daDaiocta_c::modeAppearInit() {
 
 #if VERSION > VERSION_JPN
     fopAc_ac_c* auzu_p;
-
     if (fopAcM_SearchByID(mAuzuId, &auzu_p) && auzu_p) {
         auzu_p->current.pos = auzu_pos;
     }
 #else 
     int auzu_parameters = 0x1100FF;
-    mpAuzu = fopAcM_create(PROC_Obj_Auzu, auzu_parameters, &auzu_pos, tevStr.mRoomNo);
+    mAuzuId = fopAcM_create(PROC_Obj_Auzu, auzu_parameters, &auzu_pos, tevStr.mRoomNo);
 #endif
 
     setEffect(dPa_name::ID_IT_SN_DO_APPSHIBUKI00);
