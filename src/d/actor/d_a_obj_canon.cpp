@@ -143,20 +143,20 @@ BOOL daObj_Canon_c::_createHeap() {
 }
 
 /* 000004CC-000005AC       .text setEffect__13daObj_Canon_cFUs */
-void daObj_Canon_c::setEffect(u16 param_1) {
+void daObj_Canon_c::setEffect(u16 particleID) {
 #if VERSION == VERSION_DEMO
     csXyz sp18 = shape_angle;
 #endif
 
     GXColor* prmColor = NULL, *envColor = NULL;
-    if(param_1 == dPa_name::ID_IT_SN_MJTAIHOU_HAHEN00) {
+    if(particleID == dPa_name::ID_IT_SN_MJTAIHOU_HAHEN00) {
         prmColor = &tevStr.mColorK0;
         envColor = &tevStr.mColorK0;
     }
 
-    if(param_1 == dPa_name::ID_IT_JN_MJTAIHOU_SMOKE01) {
+    if(particleID == dPa_name::ID_IT_JN_MJTAIHOU_SMOKE01) {
         dComIfGp_particle_set(
-            param_1,
+            particleID,
 #if VERSION == VERSION_DEMO
             &current.pos, &sp18, &scale,
 #else
@@ -169,7 +169,7 @@ void daObj_Canon_c::setEffect(u16 param_1) {
     }
     else {
         dComIfGp_particle_set(
-            param_1,
+            particleID,
 #if VERSION == VERSION_DEMO
             &current.pos, &sp18, &scale,
 #else

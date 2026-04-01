@@ -1299,7 +1299,7 @@ int dr_damage_set(damagereaction* dr) {
         dr->mParticleAngle.y = wall_angle_get(dr->mpEnemy, cM_atan2s(-dr->m42C.x, -dr->m42C.z));
         dr->mParticleAngle.x = 0x4000;
         dr->mParticleCallBack.end();
-        JPABaseEmitter* pEmitter = dComIfGp_particle_setToon(0x2022, &dr->mParticlePos, &dr->mParticleAngle, NULL, 0xB9, &dr->mParticleCallBack, fopAcM_GetRoomNo(dr->mpEnemy));
+        JPABaseEmitter* pEmitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &dr->mParticlePos, &dr->mParticleAngle, NULL, 0xB9, &dr->mParticleCallBack, fopAcM_GetRoomNo(dr->mpEnemy));
         if(pEmitter) {
             f32 scale;
             if(dr->mEnemyType == damagereaction::TYPE_BOKOBLIN) {

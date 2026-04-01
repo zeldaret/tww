@@ -448,7 +448,7 @@ f32 daWarpdm20_c::getSeaY(cXyz arg1) {
 }
 
 /* 00001418-000014CC       .text set_effect__12daWarpdm20_cFUs */
-BOOL daWarpdm20_c::set_effect(unsigned short arg1) {
+BOOL daWarpdm20_c::set_effect(u16 arg1) {
     BOOL ret;
 
     if (mRippleCallback.getEmitter() == NULL) {

@@ -329,16 +329,16 @@ bool Act_c::damage_bg_proc_directly() {
 }
 
 /* 00001214-00001368       .text eff_m_break__Q28daStone25Act_cFUsUs */
-void Act_c::eff_m_break(unsigned short arg1, unsigned short arg2) {
+void Act_c::eff_m_break(u16 particleID, u16 texAnmFrame) {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPI_KOISHI);
     J3DAnmTexPattern* texAnm = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", ALWAYS_BTP_MPI_KOISHI);
     cXyz sp18;
     sp18.setall(attr().m54);
 
-    JPABaseEmitter* emitter = dComIfGp_particle_set(arg1, &current.pos, &shape_angle, NULL, 0xff, NULL, -1, NULL, NULL, &sp18);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(particleID, &current.pos, &shape_angle, NULL, 0xff, NULL, -1, NULL, NULL, &sp18);
     if (emitter != NULL) {
         emitter->setGlobalRTMatrix(mpModel->getBaseTRMtx());
-        dPa_J3DmodelEmitter_c* modelEmitter = new dPa_J3DmodelEmitter_c(emitter, modelData, tevStr, texAnm, arg2, 0);
+        dPa_J3DmodelEmitter_c* modelEmitter = new dPa_J3DmodelEmitter_c(emitter, modelData, tevStr, texAnm, texAnmFrame, 0);
         if (modelEmitter != NULL) {
             dComIfGp_particle_addModelEmitter(modelEmitter);
         }
@@ -346,7 +346,7 @@ void Act_c::eff_m_break(unsigned short arg1, unsigned short arg2) {
 }
 
 /* 00001368-0000143C       .text eff_b_break__Q28daStone25Act_cFUs */
-void Act_c::eff_b_break(unsigned short arg1) {
+void Act_c::eff_b_break(u16 arg1) {
     GXColor sp18;
     sp18.r = tevStr.mColorC0.r;
     sp18.g = tevStr.mColorC0.g;

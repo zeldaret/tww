@@ -285,21 +285,24 @@ void daObjVolcano::Act_c::daObjVolcano_freeze_demo_wait() {
         field_0x4E8 = 0;
         StopFire();
         dComIfGp_particle_set(
-            0x8191, &this->field_0x4B8,
+            dPa_name::ID_AK_SN_MINIKAZANICE00,
+            &this->field_0x4B8,
             &this->current.angle,
             &scale, 0xff,
             NULL, -1,
             NULL, NULL,
             NULL);
         dComIfGp_particle_set(
-            0x8192, &this->field_0x4B8,
+            dPa_name::ID_AK_SN_MINIKAZANSMOKE00,
+            &this->field_0x4B8,
             &this->current.angle,
             &scale, 0xff,
             NULL, -1,
             NULL, NULL,
             NULL);
         dComIfGp_particle_set(
-            0x8193, &this->field_0x4B8,
+            dPa_name::ID_AK_SN_MINIKAZANKIRA00,
+            &this->field_0x4B8,
             &this->current.angle,
             &scale, 0xff,
             NULL, -1,

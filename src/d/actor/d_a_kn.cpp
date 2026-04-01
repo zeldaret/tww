@@ -93,7 +93,7 @@ void smoke_set(kn_class* i_this) {
     s.set(fVar1, fVar1, fVar1);
 
     i_this->m314.remove();
-    i_this->m334 = dComIfGp_particle_setToon(0x2027, &i_this->m300, &i_this->actor.shape_angle, NULL, 0xb9, &i_this->m314, fopAcM_GetRoomNo(&i_this->actor));
+    i_this->m334 = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &i_this->m300, &i_this->actor.shape_angle, NULL, 0xb9, &i_this->m314, fopAcM_GetRoomNo(&i_this->actor));
     if (i_this->m334 != NULL) {
         i_this->m334->setMaxFrame(0x19);
         i_this->m334->setAwayFromCenterSpeed(0.0f);
