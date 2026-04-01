@@ -92,8 +92,6 @@ static BOOL nodeCallBack_Km(J3DNode* i_node, int i_calcTiming) {
     return TRUE;
  }
 
-
-extern dCcD_SrcCyl dNpc_cyl_src;
 /* 0000032C-0000043C       .text createInit__11daNpc_Km1_cFv */
 bool daNpc_Km1_c::createInit() {
     mEventCut.setActorInfo2("Km1", this);

@@ -466,5 +466,6 @@ BOOL dKy_daynighttact_stop_chk();
 void dKy_contrast_flg_set(u8);
 u8 dKy_contrast_flg_get();
 BOOL dKyr_player_overhead_bg_chk();
+void dKy_usonami_set(f32 param_0);
 
 #endif /* D_KANKYO_D_KANKYO_H */

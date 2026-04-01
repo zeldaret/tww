@@ -16,8 +16,6 @@
 #include "d/d_a_obj.h"
 #include "d/d_snap.h"
 
-extern dCcD_SrcCyl dNpc_cyl_src;
-
 static const char* l_arcname_tbl[] = {
     "Ro",
     "Ro",

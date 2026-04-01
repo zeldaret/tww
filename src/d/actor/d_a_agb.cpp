@@ -5,6 +5,7 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_agb.h"
+#include "d/d_msg.h"
 #include "d/res/res_agb.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -383,8 +384,6 @@ int daAgb_c::uploadPortCheckWait() {
 
     return 1;
 }
-
-extern JKRHeap* dMsg_getAgbWorkArea();
 
 /* 800CFB68-800CFC94       .text uploadSelect__7daAgb_cFv */
 int daAgb_c::uploadSelect() {

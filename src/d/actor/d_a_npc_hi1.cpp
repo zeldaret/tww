@@ -9,8 +9,6 @@
 #include "d/d_priority.h"
 #include "d/res/res_hi.h"
 
-extern dCcD_SrcCyl dNpc_cyl_src;
-
 class daNpc_Hi1_HIO_c : public mDoHIO_entry_c{
 public:
     struct hio_prm_c {

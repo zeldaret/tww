@@ -20,8 +20,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_lib.h"
 
-extern dCcD_SrcCyl dNpc_cyl_src;
-
 static char* l_npc_staff_id[] = {
     "Uo1",
     "Uo2",

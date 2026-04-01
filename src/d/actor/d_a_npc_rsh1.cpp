@@ -1015,7 +1015,6 @@ static BOOL daNpc_Rsh1_checkRotenItemGet(int i_itemNo) {
     return roten_item_get_check;
 }
 
-extern Vec Item_set_pos_data_rshop_0[];
 /* 000023A8-00002568       .text createShopList__12daNpc_Rsh1_cFv */
 void daNpc_Rsh1_c::createShopList() {
     csXyz temp(0, home.angle.y, 0);

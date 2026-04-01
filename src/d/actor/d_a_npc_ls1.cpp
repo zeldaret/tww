@@ -282,7 +282,6 @@ bool daNpc_Ls1_c::init_LS1_4() {
     return init_LS1_1();
 }
 
-extern dCcD_SrcCyl dNpc_cyl_src;
 /* 00000A60-00000C6C       .text createInit__11daNpc_Ls1_cFv */
 bool daNpc_Ls1_c::createInit() {
     for (int i = 0; i < ARRAY_SSIZE(mEventIDTbl); i++) {

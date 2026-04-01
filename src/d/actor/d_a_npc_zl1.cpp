@@ -17,9 +17,6 @@
 #include "d/res/res_zl.h"
 #include "d/d_snap.h"
 
-
-extern dCcD_SrcCyl dNpc_cyl_src;
-
 class daNpc_Zl1_HIO_c : public mDoHIO_entry_c{
 public:
 struct hio_prm_c {

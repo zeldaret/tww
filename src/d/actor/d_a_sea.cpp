@@ -66,8 +66,6 @@ s8 pos_around[8][2] = {
     {-1,  1},  {-1,  0},
 };
 
-extern void dKy_usonami_set(f32 param_0);
-
 /* 8015B0A4-8015B0FC       .text Pos2Index__25daSea_WaterHeightInfo_MngFfPf */
 int daSea_WaterHeightInfo_Mng::Pos2Index(f32 v, f32* dst) {
     f32 f = 450000.0f;
