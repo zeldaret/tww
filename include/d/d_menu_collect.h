@@ -17,9 +17,9 @@ public:
     virtual void draw() {}
 
     void alphaChange(fopMsgM_pane_class* pane, float alpha) { pane->mInitAlpha *= alpha; }
-    void getCollectMode() {}
-    void getNowItem() {}
-    void setNowItem(unsigned char) {}
+    u8 getCollectMode() { return mCollectMode; }
+    u8 getNowItem() { return mNowItem; }
+    void setNowItem(u8 val) { mNowItem = val; }
 
     void setArchive(JKRArchive* arc) { mpArc = arc; }
     void setOptionArchive(JKRArchive* arc) { mpOptArc = arc; }
@@ -45,8 +45,8 @@ public:
         dummy[1] = dummy1;
     }
 
-    void setTimer(short timer) { mTimer = timer; }
-    void setTriggerInfo(unsigned char) {}
+    void setTimer(s16 timer) { mTimer = timer; }
+    void setTriggerInfo(u8 info) { mTriggerInfo = info; }
 
     void screenSet();
     void initialize();
@@ -105,6 +105,7 @@ public:
     bool _open2();
     bool _close2();
 
+private:
     /* 0x0000 */ // vtable
     /* 0x0004 */ J2DScreen* m004;
     /* 0x0008 */ fopMsgM_pane_class m008;
@@ -192,8 +193,8 @@ public:
     /* 0x27C8 */ u8 m27C8[0x27E2 - 0x27C8];
     /* 0x27E2 */ u16 mTimer;
     /* 0x27E4 */ u8 m27E4[0x27EC - 0x27E4];
-    /* 0x27EC */ u8 m27EC;
-    /* 0x27ED */ u8 m27ED;
+    /* 0x27EC */ u8 mTriggerInfo;
+    /* 0x27ED */ u8 mNowItem;
     /* 0x27EE */ u8 mCollectMode;
     /* 0x27EF */ u8 m27EF[0x27F4 - 0x27EF];
 }; // Size: 0x27F4

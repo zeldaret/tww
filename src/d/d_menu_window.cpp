@@ -216,18 +216,18 @@ void dMs_item_create(sub_ms_screen_class* i_Ms) {
     JUT_ASSERT(1962, dMi_c != NULL);
 
     for (int i = 0; i < 21; i++) {
-        dMi_c->arr_0x2334[i] = i_Ms->buffer_p[i];
+        dMi_c->setItemTexBuffer(i, i_Ms->buffer_p[i]);
     }
 
     for (int i = 0; i < 9; i++) {
-        dMi_c->arr_0x2394[i] = i_Ms->buffer_p[i + 24];
+        dMi_c->setSubItemTexBuffer(i, i_Ms->buffer_p[i + 24]);
     }
 
     dMi_c->setArchive(i_Ms->arc);
     dMi_c->setFont(fonttype, rfonttype);
     dMi_c->setTextArea(i_Ms->name[0], i_Ms->name[1], i_Ms->note[0], i_Ms->note[1], i_Ms->dummy[0], i_Ms->dummy[1]);
 
-    dMi_c->field_0x23FF = g_dComIfG_gameInfo.play.field_0x4943; // FIXME
+    dMi_c->setNowItem(dComIfGp_getButtonInfo(0));
 
     dMi_c->_create();
 
@@ -265,7 +265,7 @@ void dMs_item_delete(sub_ms_screen_class* i_Ms) {
     }
 
     if (dMi_c != NULL) {
-        g_dComIfG_gameInfo.play.field_0x4943 = dMi_c->field_0x23FF; // FIXME
+        dComIfGp_setButtonInfo(0, dMi_c->getNowItem());
 
         dMi_c->_delete();
         delete dMi_c;
@@ -325,7 +325,7 @@ void dMs_collect_create(sub_ms_screen_class* i_Ms) {
 
     dMc_c->setTextArea(i_Ms->name[0], i_Ms->name[1], i_Ms->note[0], i_Ms->note[1], i_Ms->dummy[0], i_Ms->dummy[1]);
 
-    dMc_c->m27ED = g_dComIfG_gameInfo.play.field_0x4944; // FIXME
+    dMc_c->setNowItem(dComIfGp_getButtonInfo(1));
 
     dMc_c->_create();
 
@@ -388,7 +388,7 @@ void dMs_collect_create2(sub_ms_screen_class* i_Ms) {
 
     dMc_c->setTextArea(i_Ms->name[0], i_Ms->name[1], i_Ms->note[0], i_Ms->note[1], i_Ms->dummy[0], i_Ms->dummy[1]);
 
-    dMc_c->m27ED = g_dComIfG_gameInfo.play.field_0x4944; // FIXME
+    dMc_c->setNowItem(dComIfGp_getButtonInfo(1));
 
     dMc_c->_create3();
 
@@ -426,7 +426,7 @@ void dMs_collect_delete(sub_ms_screen_class* i_Ms) {
     }
 
     if (dMc_c != NULL) {
-        g_dComIfG_gameInfo.play.field_0x4944 = dMc_c->m27ED; // FIXME
+        dComIfGp_setButtonInfo(1, dMc_c->getNowItem());
 
         dMc_c->_delete();
         delete dMc_c;
@@ -964,7 +964,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
                                             mDoExt_setCurrentHeap(i_Ms->childHeap);
                                             dMs_collect_create(i_Ms);
-                                            dMc_c->m27EC = 2;
+                                            dMc_c->setTriggerInfo(2);
 
                                             if (daPy_getPlayerLinkActorClass()->getTactNormalWait()) {
                                                 i_Ms->mMenuProc = MENU_STATE_COLLECT_OPEN_TACT;
@@ -981,7 +981,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                                         } else {
                                             mDoExt_setCurrentHeap(i_Ms->childHeap);
                                             dMs_item_create(i_Ms);
-                                            dMi_c->field_0x2421 = 2;
+                                            dMi_c->setTriggerInfo(2);
                                             i_Ms->mMenuProc = MENU_STATE_ITEM_OPEN;
                                             dMenu_setMenuStatusOld(dMenu_getMenuStatus());
                                             dMenu_setMenuStatus(MENU_STATUS_ITEM);
@@ -1077,7 +1077,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
             dMs_collect_delete(i_Ms);
             dMs_childHeap_freeAll(i_Ms);
             dMs_item_create(i_Ms);
-            dMi_c->field_0x2421 = 1;
+            dMi_c->setTriggerInfo(1);
         }
 
     } else if (i_Ms->mMenuProc == MENU_STATE_COLLECT_TO_ITEM_RIGHT) {
@@ -1090,7 +1090,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
             dMs_collect_delete(i_Ms);
             dMs_childHeap_freeAll(i_Ms);
             dMs_item_create(i_Ms);
-            dMi_c->field_0x2421 = 2;
+            dMi_c->setTriggerInfo(2);
         }
 
     } else if (i_Ms->mMenuProc == MENU_STATE_ITEM_OPEN_FROM_COLLECT_LEFT || i_Ms->mMenuProc == MENU_STATE_ITEM_OPEN_FROM_COLLECT_RIGHT) {
@@ -1110,7 +1110,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
             dMs_item_delete(i_Ms);
             dMs_childHeap_freeAll(i_Ms);
             dMs_collect_create(i_Ms);
-            dMc_c->m27EC = 1;
+            dMc_c->setTriggerInfo(1);
         }
 
     } else if (i_Ms->mMenuProc == MENU_STATE_ITEM_TO_COLLECT_RIGHT) {
@@ -1123,7 +1123,7 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
             dMs_item_delete(i_Ms);
             dMs_childHeap_freeAll(i_Ms);
             dMs_collect_create(i_Ms);
-            dMc_c->m27EC = 2;
+            dMc_c->setTriggerInfo(2);
         }
 
     } else if (i_Ms->mMenuProc == MENU_STATE_COLLECT_OPEN_LEFT || i_Ms->mMenuProc == MENU_STATE_COLLECT_OPEN_RIGHT) {
@@ -1135,30 +1135,30 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     } else if (i_Ms->mMenuProc == MENU_STATE_ITEM_MOVE) {
         cloth_c->cloth_move();
-        if ((CPad_CHECK_TRIG_START(0) || CPad_CHECK_TRIG_B(0)) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0 && !dMeter_subWinFlag()) {
+        if ((CPad_CHECK_TRIG_START(0) || CPad_CHECK_TRIG_B(0)) && !dMi_c->noteCheck() && dMi_c->getItemMode() == 0 && !dMeter_subWinFlag()) {
 
             cloth_c->alpha_out();
             mDoExt_setCurrentHeap(i_Ms->childHeap);
             i_Ms->mMenuProc = MENU_STATE_ITEM_CLOSE;
-            dMi_c->field_0x2421 = 0;
-            dMi_c->field_0x23F8 = 10;
+            dMi_c->setTriggerInfo(0);
+            dMi_c->setTimer(10);
             dMenu_setPushMenuButton(0);
             mDoAud_seStart(JA_SE_ITM_MENU_OUT);
 
-        } else if (dMs_isPush_R_Button(i_Ms) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0) {
+        } else if (dMs_isPush_R_Button(i_Ms) && !dMi_c->noteCheck() && dMi_c->getItemMode() == 0) {
             mDoExt_setCurrentHeap(i_Ms->childHeap);
             i_Ms->mMenuProc = MENU_STATE_ITEM_TO_COLLECT_RIGHT;
-            dMi_c->field_0x2421 = 2;
-            dMi_c->field_0x23F8 = g_menuHIO.field_0x92;
+            dMi_c->setTriggerInfo(2);
+            dMi_c->setTimer(g_menuHIO.field_0x92);
             dMenu_setPushMenuButton(2);
             mDoAud_seStart(JA_SE_ITEM_COL_SW);
 
-        } else if (dMs_isPush_L_Button(i_Ms) && !dMi_c->noteCheck() && dMi_c->mItemMode == 0) {
+        } else if (dMs_isPush_L_Button(i_Ms) && !dMi_c->noteCheck() && dMi_c->getItemMode() == 0) {
 
             mDoExt_setCurrentHeap(i_Ms->childHeap);
             i_Ms->mMenuProc = MENU_STATE_ITEM_TO_COLLECT_LEFT;
-            dMi_c->field_0x2421 = 1;
-            dMi_c->field_0x23F8 = g_menuHIO.field_0x92;
+            dMi_c->setTriggerInfo(1);
+            dMi_c->setTimer(g_menuHIO.field_0x92);
             dMenu_setPushMenuButton(2);
             mDoAud_seStart(JA_SE_ITEM_COL_SW);
 
@@ -1169,30 +1169,30 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     } else if (i_Ms->mMenuProc == MENU_STATE_COLLECT_MOVE) {
         cloth_c->cloth_move();
-        if ((CPad_CHECK_TRIG_START(0) || CPad_CHECK_TRIG_B(0)) && !dMc_c->noteCheck() && (dMc_c->mCollectMode == 0 || dMc_c->mCollectMode == 2)) {
+        if ((CPad_CHECK_TRIG_START(0) || CPad_CHECK_TRIG_B(0)) && !dMc_c->noteCheck() && (dMc_c->getCollectMode() == 0 || dMc_c->getCollectMode() == 2)) {
 
             cloth_c->alpha_out();
             mDoExt_setCurrentHeap(i_Ms->childHeap);
             i_Ms->mMenuProc = MENU_STATE_COLLECT_CLOSE;
-            dMc_c->m27EC = 0;
+            dMc_c->setTriggerInfo(0);
             dMc_c->setTimer(10);
             dMenu_setPushMenuButton(0);
             mDoAud_seStart(JA_SE_ITM_MENU_OUT);
 
-        } else if (dMs_isPush_R_Button(i_Ms) && !dMc_c->noteCheck() && (dMc_c->mCollectMode == 0 || dMc_c->mCollectMode == 2)) {
+        } else if (dMs_isPush_R_Button(i_Ms) && !dMc_c->noteCheck() && (dMc_c->getCollectMode() == 0 || dMc_c->getCollectMode() == 2)) {
 
             mDoExt_setCurrentHeap(i_Ms->childHeap);
             i_Ms->mMenuProc = MENU_STATE_COLLECT_TO_ITEM_RIGHT;
-            dMc_c->m27EC = 2;
+            dMc_c->setTriggerInfo(2);
             dMc_c->setTimer(g_menuHIO.field_0x92);
             dMenu_setPushMenuButton(1);
             mDoAud_seStart(JA_SE_ITEM_COL_SW);
 
-        } else if (dMs_isPush_L_Button(i_Ms) && !dMc_c->noteCheck() && (dMc_c->mCollectMode == 0 || dMc_c->mCollectMode == 2)) {
+        } else if (dMs_isPush_L_Button(i_Ms) && !dMc_c->noteCheck() && (dMc_c->getCollectMode() == 0 || dMc_c->getCollectMode() == 2)) {
 
             mDoExt_setCurrentHeap(i_Ms->childHeap);
             i_Ms->mMenuProc = MENU_STATE_COLLECT_TO_ITEM_LEFT;
-            dMc_c->m27EC = 1;
+            dMc_c->setTriggerInfo(1);
             dMc_c->setTimer(g_menuHIO.field_0x92);
             dMenu_setPushMenuButton(1);
             mDoAud_seStart(JA_SE_ITEM_COL_SW);
@@ -1204,11 +1204,11 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     } else if (i_Ms->mMenuProc == MENU_STATE_COLLECT_MOVE_TACT) {
         cloth_c->cloth_move();
-        if ((CPad_CHECK_TRIG_START(0) || CPad_CHECK_TRIG_B(0)) && !dMc_c->noteCheck() && (dMc_c->mCollectMode == 0 || dMc_c->mCollectMode == 2)) {
+        if ((CPad_CHECK_TRIG_START(0) || CPad_CHECK_TRIG_B(0)) && !dMc_c->noteCheck() && (dMc_c->getCollectMode() == 0 || dMc_c->getCollectMode() == 2)) {
             cloth_c->alpha_out();
             mDoExt_setCurrentHeap(i_Ms->childHeap);
             i_Ms->mMenuProc = MENU_STATE_COLLECT_CLOSE_TACT;
-            dMc_c->m27EC = 0;
+            dMc_c->setTriggerInfo(0);
             dMc_c->setTimer(10);
             dMenu_setPushMenuButton(0);
             mDoAud_seStart(JA_SE_ITM_MENU_OUT);
@@ -1219,11 +1219,11 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
     } else if (i_Ms->mMenuProc == MENU_STATE_COLLECT_MOVE_ALT) {
         cloth_c->cloth_move();
-        if (dMc_c->mCollectMode != 5) {
+        if (dMc_c->getCollectMode() != 5) {
             cloth_c->alpha_out();
             mDoExt_setCurrentHeap(i_Ms->childHeap);
             i_Ms->mMenuProc = MENU_STATE_COLLECT_CLOSE_ALT;
-            dMc_c->m27EC = 0;
+            dMc_c->setTriggerInfo(0);
             dMc_c->setTimer(10);
             dMenu_setPushMenuButton(0);
             mDoAud_seStart(JA_SE_ITM_MENU_OUT);
@@ -1429,13 +1429,13 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
     }
 
     if (dMi_c) {
-        dMenu_setItemMode(dMi_c->mItemMode);
+        dMenu_setItemMode(dMi_c->getItemMode());
     } else {
         dMenu_setItemMode(0);
     }
 
     if (dMc_c) {
-        dMenu_setCollectMode(dMc_c->mCollectMode);
+        dMenu_setCollectMode(dMc_c->getCollectMode());
     } else {
         dMenu_setCollectMode(0);
     }

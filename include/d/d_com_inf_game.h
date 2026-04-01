@@ -633,6 +633,9 @@ public:
     u8 getButtonMode() { return mButtonMode; }
     void setButtonMode(u8 mode) { mButtonMode = mode; }
 
+    u8 getButtonInfo(int idx) { return mButtonInfo[idx]; }
+    void setButtonInfo(int idx, u8 info) { mButtonInfo[idx] = info; }
+
     char* getInputPassword() { return mInputPassword; }
     void setInputPassword(const char* password) { strcpy(mInputPassword, password); }
 
@@ -768,8 +771,7 @@ public:
     /* 0x4940 */ u8 field_0x4940;
     /* 0x4941 */ u8 mDirection;
     /* 0x4942 */ u8 mButtonMode;
-    /* 0x4943 */ u8 field_0x4943;
-    /* 0x4944 */ u8 field_0x4944;
+    /* 0x4943 */ u8 mButtonInfo[2];
     /* 0x4945 */ u8 mScopeType;
     /* 0x4946 */ u8 mOperateWind;
     /* 0x4947 */ bool mMetronome;
@@ -3092,8 +3094,36 @@ inline void dComIfGp_setButtonActionMode(u8 mode) {
     g_dComIfG_gameInfo.play.setButtonMode(mode);
 }
 
+inline u8 dComIfGp_getButtonInfo(int idx) {
+    return g_dComIfG_gameInfo.play.getButtonInfo(idx);
+}
+
+inline void dComIfGp_setButtonInfo(int idx, u8 info) {
+    g_dComIfG_gameInfo.play.setButtonInfo(idx, info);
+}
+
+inline char* dComIfGp_getInputPassword() {
+    return g_dComIfG_gameInfo.play.getInputPassword();
+}
+
 inline void dComIfGp_setInputPassword(const char* password) {
     g_dComIfG_gameInfo.play.setInputPassword(password);
+}
+
+inline u8 dComIfGp_InputPasswordOpenCheck() {
+    return g_dComIfG_gameInfo.play.nameOpenCheck();
+}
+
+inline void dComIfGp_InputPasswordOpenOn() {
+    g_dComIfG_gameInfo.play.nameOpenOn();
+}
+
+inline void dComIfGp_InputPasswordOpenChangeOff() {
+    g_dComIfG_gameInfo.play.nameOpenChangeOff();
+}
+
+inline void dComIfGp_InputPasswordOpenCancelOff() {
+    g_dComIfG_gameInfo.play.nameOpenCancelOff();
 }
 
 inline u8 dComIfGp_getAdvanceDirection() {
@@ -4186,22 +4216,5 @@ class scene_class;
 BOOL dComIfG_resetToOpening(scene_class* i_scene);
 
 int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName);
-
-inline u8 dComIfGp_InputPasswordOpenCheck() {
-    return g_dComIfG_gameInfo.play.nameOpenCheck();
-}
-inline void dComIfGp_InputPasswordOpenOn() {
-    g_dComIfG_gameInfo.play.nameOpenOn();
-}
-inline void dComIfGp_InputPasswordOpenChangeOff() {
-    g_dComIfG_gameInfo.play.nameOpenChangeOff();
-}
-inline void dComIfGp_InputPasswordOpenCancelOff() {
-    g_dComIfG_gameInfo.play.nameOpenCancelOff();
-}
-
-inline char* dComIfGp_getInputPassword() {
-    return g_dComIfG_gameInfo.play.getInputPassword();
-}
 
 #endif /* D_COM_D_COM_INF_GAME_H */

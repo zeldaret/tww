@@ -3,6 +3,7 @@
 
 #include "dolphin/types.h"
 #include "d/d_menu_base.h"
+#include "m_Do/m_Do_hostIO.h"
 
 struct fopMsgM_pane_class;
 class JKRArchive;
@@ -11,18 +12,18 @@ class J2DPane;
 
 class dMenu_Item_c : public dMenu_base_c {
 public:
-    void alphaChange(fopMsgM_pane_class*, float) {}
+    void alphaChange(fopMsgM_pane_class*, f32) {}
     virtual void draw() {}
-    void getItemMode() {}
-    void getNowItem() {}
+    u8 getItemMode() { return mItemMode; }
+    u8 getNowItem() { return mNowItem; }
+    void setNowItem(u8 val) { mNowItem = val; }
     void setArchive(JKRArchive* arc) { mpArc = arc; }
     void setFont(JUTFont* font, JUTFont* rfont) {
         mFont = font;
         mRFont = rfont;
     }
-    void setItemTexBuffer(int, void*) {}
-    void setNowItem(unsigned char) {}
-    void setSubItemTexBuffer(int, void*) {}
+    void setItemTexBuffer(int idx, void* buffer) { mItemTexBuffer[idx] = buffer; }
+    void setSubItemTexBuffer(int idx, void* buffer) { mSubItemTexBuffer[idx] = buffer; }
     void setTextArea(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
         name[0] = name0;
         name[1] = name1;
@@ -31,8 +32,8 @@ public:
         dummy[0] = dummy0;
         dummy[1] = dummy1;
     }
-    void setTimer(short) {}
-    void setTriggerInfo(unsigned char) {}
+    void setTimer(s16 val) { mTimer = val; }
+    void setTriggerInfo(u8 info) { mTriggerInfo = info; }
 
     void initialize();
     void screenSet();
@@ -85,7 +86,7 @@ public:
     bool _open2();
     bool _close2();
 
-public:
+private:
     /* 0x0004 */ u8 field_0x0004[0x2310 - 0x4];
     /* 0x2310 */ JKRArchive* mpArc;
     /* 0x2314 */ JUTFont* mFont;
@@ -96,19 +97,19 @@ public:
     /* 0x2328 */ JUtility::TColor color_0x2328;
     /* 0x232C */ JUtility::TColor color_0x232C;
     /* 0x2330 */ u8 field_0x2330[0x2334 - 0x2330];
-    /* 0x2334 */ void* arr_0x2334[21];
+    /* 0x2334 */ void* mItemTexBuffer[21];
     /* 0x2388 */ u8 padding_0x2388[0x2394 - 0x2388];
-    /* 0x2394 */ void* arr_0x2394[9];
+    /* 0x2394 */ void* mSubItemTexBuffer[9];
     /* 0x23B8 */ u8 padding_0x23B8[0x23E0 - 0x23B8];
     /* 0x23E0 */ char* name[2];
     /* 0x23E8 */ char* note[2];
     /* 0x23F0 */ char* dummy[2];
-    /* 0x23F8 */ u16 field_0x23F8;
+    /* 0x23F8 */ u16 mTimer;
     /* 0x23FA */ u8 field_0x23FA[0x23FE - 0x23FA];
     /* 0x23FE */ u8 mItemMode;
-    /* 0x23FF */ u8 field_0x23FF;
+    /* 0x23FF */ u8 mNowItem;
     /* 0x2400 */ u8 padding_0x2400[0x2421 - 0x2400];
-    /* 0x2421 */ u8 field_0x2421;
+    /* 0x2421 */ u8 mTriggerInfo;
     /* 0x2422 */ u8 field_0x2422;
     /* 0x2423 */ u8 field_0x2423;
 }; // Size: 0x2424

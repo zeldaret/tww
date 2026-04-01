@@ -127,12 +127,12 @@ void dComIfG_play_c::itemInit() {
     mButtonMode = 0;
 
     if (dComIfGs_checkGetItem(dItem_TELESCOPE_e)) {
-        field_0x4943 = 0;
+        mButtonInfo[0] = 0;
     } else {
-        field_0x4943 = 0x15;
+        mButtonInfo[0] = 0x15;
     }
 
-    field_0x4944 = 7;
+    mButtonInfo[1] = 7;
     mScopeType = 0;
     mOperateWind = 0;
     mMetronome = false;
