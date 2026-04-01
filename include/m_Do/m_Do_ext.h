@@ -22,7 +22,7 @@ public:
     mDoExt_baseAnm() { mFrameCtrl = NULL; }
     virtual ~mDoExt_baseAnm() {}
 
-    int initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool);
+    int initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify);
     BOOL play();
 
     J3DFrameCtrl* getFrameCtrl() { return mFrameCtrl; }
@@ -145,17 +145,6 @@ private:
     /* 0x0C */ J3DTexNoAnm* field_0xc;
     /* 0x10 */ u16 mUpdateMaterialNum;
 }; // size = 0x14
-
-class mDoExt_blkAnm : public mDoExt_baseAnm {
-public:
-    int init(J3DDeformData* i_deformData, J3DAnmCluster* i_blk, BOOL i_anmPlay,
-                            int i_attribute, f32 i_rate, s16 i_start, s16 param_6);
-
-    J3DAnmCluster* getBlkAnm() { return mpAnm; }
-
-private:
-    /* 0x14 */ J3DAnmCluster* mpAnm;
-};
 
 class mDoExt_bpkAnm : public mDoExt_baseAnm {
 public:
@@ -332,7 +321,7 @@ class mDoExt_McaMorf : public J3DMtxCalcMaya {
 public:
     mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* callback1,
                    mDoExt_McaMorfCallBack2_c* callback2, J3DAnmTransform* anmTransform,
-                   int loopMode, f32 param_5, int param_6, int param_7, int param_8,
+                   int loopMode, f32 playSpeed, int startFrame, int endFrame, BOOL param_8,
                    void* basAnm, u32 modelFlag, u32 differedDlistFlag);
 
     void calc();

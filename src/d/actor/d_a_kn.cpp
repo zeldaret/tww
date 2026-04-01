@@ -79,7 +79,7 @@ static BOOL daKN_Draw(kn_class* i_this) {
 void anm_init(kn_class* i_this, int anmResIdx, float morf, unsigned char loopMode, float speed, int soundResIdx) {
     if (soundResIdx >= 0) {
         i_this->mpMorf->setAnm(
-            (J3DAnmTransform*)dComIfG_getObjectRes("KN", anmResIdx), loopMode, morf, speed, 0.0f, -1.0f, (void*)dComIfG_getObjectRes("KN", soundResIdx)
+            (J3DAnmTransform*)dComIfG_getObjectRes("KN", anmResIdx), loopMode, morf, speed, 0.0f, -1.0f, dComIfG_getObjectRes("KN", soundResIdx)
         );
     } else {
         i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("KN", anmResIdx), loopMode, morf, speed, 0.0f, -1.0f, NULL);

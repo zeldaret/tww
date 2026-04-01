@@ -363,6 +363,7 @@ static actor_method_class l_daKamome2_Method = {
     (process_method_func)daKamome2_Draw,
 };
 
+#if VERSION == VERSION_DEMO
 actor_process_profile_definition g_profile_KAMOME2 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
@@ -379,3 +380,4 @@ actor_process_profile_definition g_profile_KAMOME2 = {
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_0_e,
 };
+#endif
