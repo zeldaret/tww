@@ -2,6 +2,8 @@
 #define D_MENU_WINDOW_H
 
 #include "dolphin/types.h"
+#include "f_op/f_op_msg.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class dMCloth_c;
 class JKRExpHeap;
@@ -60,6 +62,9 @@ enum dMw_Status {
     MENU_STATE_SAVE_MOVE = 37,
     MENU_STATE_SAVE_CLOSE = 38,
 };
+
+class JKRHeap;
+class JKRArchive;
 
 class sub_ms_screen_class : public msg_class {
 public:

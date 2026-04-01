@@ -1,6 +1,7 @@
 #ifndef D_MENU_FMAP_H
 #define D_MENU_FMAP_H
 
+#include "d/d_drawlist.h"
 #include "dolphin/types.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_menu_fmap2.h"

@@ -1,6 +1,7 @@
 #ifndef D_MENU_CAPTURE_H
 #define D_MENU_CAPTURE_H
 
+#include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_menu_cloth.h"
 #include "d/d_menu_item.h"
@@ -35,6 +36,9 @@ public:
 
 class dDlst_MENU_CAPTURE_c : public dDlst_base_c {
 public:
+    dDlst_MENU_CAPTURE_c() { setDrawFlagOff(); }
+    virtual ~dDlst_MENU_CAPTURE_c() {}
+
     virtual void draw() {
         if (checkDrawFlag() == 1) {
             setDrawFlagOn2();
@@ -100,10 +104,6 @@ public:
             }
         }
     }
-
-    virtual ~dDlst_MENU_CAPTURE_c() {}
-
-    dDlst_MENU_CAPTURE_c() { setDrawFlagOff(); }
 
     u8 checkDrawFlag() { return mStatus; }
     void setDrawFlagOff() { mStatus = 0; }

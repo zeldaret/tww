@@ -70,7 +70,7 @@ dMenu_FmapSv_c dMv_CIO_c;
 dMw_HIO_c g_mwHIO;
 dMw_DHIO_c g_mwDHIO;
 
-static dMCloth_c* cloth_c;
+dMCloth_c* cloth_c;
 
 static JUTFont* fonttype;
 static JUTFont* rfonttype;
@@ -178,7 +178,7 @@ dMw_DHIO_c::dMw_DHIO_c() {
     }
 }
 
-static u8 lockFlag = 0;
+static u8 lockFlag = 1;
 
 /* 801DB568-801DB91C       .text dMs_item_create__FP19sub_ms_screen_class */
 void dMs_item_create(sub_ms_screen_class* i_Ms) {
@@ -1581,5 +1581,5 @@ msg_process_profile_definition g_profile_MENUWINDOW = {
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
     /* Priority     */ PRIO_MENUWINDOW,
-    /* Msg SubMtd */ &l_dMs_Method,
+    /* Msg SubMtd   */ &l_dMs_Method,
 };
