@@ -38,7 +38,7 @@ struct WIND_INFLUENCE {
     /* 0x20 */ f32 field_0x20;
     /* 0x24 */ s32 mRegistIdx;
     /* 0x28 */ u8 mbConstant;
-};
+};  // Size: 0x2C
 
 struct WIND_INF_ENTITY {
     /* 0x00 */ u8 mbInUse;
