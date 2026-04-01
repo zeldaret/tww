@@ -534,7 +534,7 @@ void daNpc_Zl1_c::setMtx(bool param_1) {
     if(field_0x7CE) {
 #if VERSION > VERSION_DEMO
         if(!fpcM_IsCreating(mProcId1)) {
-            if(mProcId1 != 0xffffffff) {
+            if(mProcId1 != fpcM_ERROR_PROCESS_ID_e) {
                 if(fopAcM_SearchByID(mProcId1, (fopAc_ac_c **)&actor) == 1) {
                     if(actor != NULL) {
                         temp = true;
@@ -1136,10 +1136,8 @@ fopAc_ac_c* daNpc_Zl1_c::searchByID(fpc_ProcID pid, int* param_2) {
 
 /* 000023AC-0000245C       .text partner_search_sub__11daNpc_Zl1_cFPFPvPv_Pv */
 bool daNpc_Zl1_c::partner_search_sub(void* (*param_1)(void*, void*)) {
-    fpc_ProcID procId;
-
     bool ret = false;
-    mProcId1 = -1;
+    mProcId1 = fpcM_ERROR_PROCESS_ID_e;
 
     l_check_wrk = 0;
     for (s32 i = 0; i < 0x14; i++) {

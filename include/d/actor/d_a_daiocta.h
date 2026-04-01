@@ -149,7 +149,7 @@ public:
     /* 0x26C0 */ u8 m26C0;
     /* 0x26C1 */ u8 m26C1;
     /* 0x26C2 */ u8 m26C2[0x26C4 - 0x26C2];
-    /* 0x26C4 */ fpc_ProcID mpAuzu;
+    /* 0x26C4 */ fpc_ProcID mAuzuId;
     /* 0x26C8 */ JntHit_c* mpJntHit;
     /* 0x26CC */ J3DModel* mpSuikomiModel;
     /* 0x26D0 */ mDoExt_brkAnm mBrkAnm2;

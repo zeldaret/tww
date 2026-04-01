@@ -904,7 +904,7 @@ void daDaiocta_c::modeAppearInit() {
 #if VERSION > VERSION_JPN
     fopAc_ac_c* auzu_p;
 
-    if (fopAcM_SearchByID(mpAuzu, &auzu_p) && auzu_p) {
+    if (fopAcM_SearchByID(mAuzuId, &auzu_p) && auzu_p) {
         auzu_p->current.pos = auzu_pos;
     }
 #else 
@@ -952,7 +952,7 @@ void daDaiocta_c::modeAppear() {
             );
     }
 
-    daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(mpAuzu);
+    daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(mAuzuId);
     if (auzu_p) {
         auzu_p->to_appear();
         if (auzu_p->is_appear()) {
@@ -1173,7 +1173,7 @@ void daDaiocta_c::modeDemo() {
         }
 
         if (strcmp(cut_name, "HAKIDASU") == 0) {
-            fopAc_ac_c* actor_p = fopAcM_SearchByID(mpAuzu);
+            fopAc_ac_c* actor_p = fopAcM_SearchByID(mAuzuId);
             actor_p->current.pos = current.pos;
             actor_p->current.pos.y += 20.0f;
             if (s32(mpMorf->getFrame()) == 26) {
@@ -1239,7 +1239,7 @@ void daDaiocta_c::modeDelete() {
             if (mPrmIdx == 5 && mpMorf->isStop()) {
                 fopAcM_monsSeStart(this, JA_SE_CV_DO_SINK, 0);
                 setEffect(dPa_name::ID_IT_SN_DO_DOWNSHIBUKI00);
-                daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(mpAuzu);
+                daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(mAuzuId);
                 auzu_p->to_disappear();
                 dComIfGp_getVibration().StartQuake(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 dComIfGp_evmng_cutEnd(staff_id);
@@ -1662,7 +1662,7 @@ void daDaiocta_c::createInit() {
     }
 
 #if VERSION > VERSION_JPN
-    mpAuzu = fopAcM_create(
+    mAuzuId = fopAcM_create(
         PROC_Obj_Auzu, 
         0x1100FF, 
         &current.pos, 

@@ -2160,7 +2160,7 @@ void dSnap_packet::SetResult() {
             if (sp8[m_tbl[col].m_obj.GetPhoto()] != 0) {
                 continue;
             }
-            if (m_judge_tbl[m_tbl[col].m_obj.GetPhoto()] != NULL) {
+            if (m_judge_tbl[m_tbl[col].m_obj.GetPhoto()] != 0) {
                 field_0x10 = m_tbl[col].m_obj.GetPhoto();
                 mResult = (this->*m_judge_tbl[m_tbl[col].m_obj.GetPhoto()])();
                 r30 = m_tbl[col].m_obj.mCapturedPixels;

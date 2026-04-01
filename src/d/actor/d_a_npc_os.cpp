@@ -1619,7 +1619,7 @@ void daNpc_Os_c::initialSaveEvent(int) {
 
 /* 00004AF8-00004B64       .text talk_init__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::talk_init() {
-    if(l_msgId == -1) {
+    if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
         l_msgId = fopMsgM_messageSet(field_0x780, this);
     }
     else {
