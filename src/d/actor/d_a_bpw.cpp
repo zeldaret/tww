@@ -881,7 +881,7 @@ void* skull_search_sub(void* param_1, void* param_2) {
     fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
 
     if ((get_check_count < 100) && (fopAc_IsActor(actor))) {
-        if ((fopAcM_GetName(actor) == 0xd0) && (actor->health > 0)) {
+        if ((fopAcM_GetName(actor) == PROC_BL) && (actor->health > 0)) {
             check_info[get_check_count] = actor;
             get_check_count++;
         }
