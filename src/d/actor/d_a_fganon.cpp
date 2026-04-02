@@ -354,7 +354,7 @@ void spinattack(fganon_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     dBgS_LinChk linChk;
-    int mFrame = i_this->mpMorf->getFrame();
+    int frame = i_this->mpMorf->getFrame();
     switch(i_this->mMode) {
         case 0: {
             a_this->shape_angle.y = player->shape_angle.y;
@@ -394,17 +394,17 @@ void spinattack(fganon_class* i_this) {
             break;
         }
         case 3: {
-            if (mFrame == 14) {
+            if (frame == 14) {
                 fopAcM_seStart(a_this, JA_SE_CM_PG_SWING_L, 0);
             }
             i_this->m685 = 1;
             i_this->mWeponSph.SetAtAtp(8);
-            if (mFrame == l_HIO.m3E) {
+            if (frame == l_HIO.m3E) {
               i_this->m6AC = l_HIO.m40 - l_HIO.m3E;
             }
             float fVar9;
             float fVar10;
-            if ((mFrame >= 13) && (mFrame <= 24)) {
+            if ((frame >= 13) && (frame <= 24)) {
                 fVar9 = 20.0f;
                 fVar10 = 4.0f;
             }
@@ -582,7 +582,7 @@ void shot2(fganon_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
     cLib_addCalcAngleS2(&a_this->shape_angle.y, fopAcM_searchPlayerAngleY(a_this), 10, 0x400);
-    int mFrame = i_this->mpMorf->getFrame();
+    int frame = i_this->mpMorf->getFrame();
     switch(i_this->mMode) {
         case 0: {
             anm_init(i_this, FGANON_BCK_TAME_S1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
@@ -618,7 +618,7 @@ void shot2(fganon_class* i_this) {
                     }
                 }
             }
-            if (mFrame == 28) {
+            if (frame == 28) {
                 i_this->m671 = 1;
                 i_this->m680 = 0.0f;
             }
@@ -636,17 +636,17 @@ void shot2(fganon_class* i_this) {
             // Fall-through
         }
         case 3: {
-            if (mFrame == REG8_S(5) + 15) {
+            if (frame == REG8_S(5) + 15) {
                 fopAcM_monsSeStart(&i_this->actor, JA_SE_CV_PG_EBALL_FIRE_L, 0);
                 fopAcM_seStart(a_this, JA_SE_CM_PG_EBALL_FIRE_L, 0);
             }
-            if (mFrame >= REG8_S(5) + 15) {
+            if (frame >= REG8_S(5) + 15) {
                 cLib_addCalc2(&i_this->m680, REG8_F(6) + 250.0f, 1.0f, REG8_F(7) + 50.0f);
-                if (mFrame == REG8_S(6) + 16) {
+                if (frame == REG8_S(6) + 16) {
                     i_this->m671 = 3;
                 }
             
-                if (mFrame == REG8_S(7) + 16) {
+                if (frame == REG8_S(7) + 16) {
                     mahou_set(i_this);
                 }
             }
@@ -692,7 +692,7 @@ void spinattack2(fganon_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     dBgS_LinChk linChk;
-    int mFrame = i_this->mpMorf->getFrame();
+    int frame = i_this->mpMorf->getFrame();
     switch(i_this->mMode) {
         case 0: {
             a_this->shape_angle.y = player->shape_angle.y + i_this->m68F * 0x3333;
@@ -733,12 +733,12 @@ void spinattack2(fganon_class* i_this) {
             break;
         }
         case 3: {
-            if (mFrame == 14) {
+            if (frame == 14) {
                 fopAcM_seStart(a_this, JA_SE_CM_PG_SWING_L, 0);
             }
             i_this->m685 = 1;
             i_this->mWeponSph.SetAtAtp(8);
-            if (mFrame == l_HIO.m3E) {
+            if (frame == l_HIO.m3E) {
               i_this->m6AC = l_HIO.m40 - l_HIO.m3E;
             }
             if (i_this->mpMorf->isStop()) {
@@ -794,8 +794,8 @@ void down(fganon_class* i_this) {
             break;
         }
         case 3: {
-            int mFrame = i_this->mpMorf->getFrame();
-            if (mFrame == 2) {
+            int frame = i_this->mpMorf->getFrame();
+            if (frame == 2) {
                 fopAcM_monsSeStart(a_this, JA_SE_CV_PG_TIRED, 0);
             }
             break;
@@ -1176,7 +1176,7 @@ void end(fganon_class* i_this) {
     i_this->m3AE = 3;
     fopAcM_OffStatus(a_this, 0);
     a_this->attention_info.flags = 0;
-    s32 mFrame = i_this->mpMorf->getFrame();
+    int frame = i_this->mpMorf->getFrame();
     switch(i_this->mMode) {
         case 0: {
             i_this->mMode = 1;
@@ -1185,7 +1185,7 @@ void end(fganon_class* i_this) {
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_3F20); // PG_DEFEATED? It appears further down in `energy_ball_move`
             break;
         case 1: {
-            if (mFrame == 104) {
+            if (frame == 104) {
                 kieru_brk(i_this, 0);
             }
             break;
@@ -1210,10 +1210,10 @@ void end(fganon_class* i_this) {
             if (a_this->speed.y > REG8_F(9) + 20.0f) {
                 a_this->speed.y = REG8_F(9) + 20.0f;
             }
-            if (mFrame == 28) {
+            if (frame == 28) {
                 kieru_brk2(i_this);
             }
-            if (mFrame == 48) {
+            if (frame == 48) {
                 i_this->mMode = 6;
             }
         }
@@ -1322,7 +1322,7 @@ void damage_check(fganon_class* i_this) {
     cXyz local_44;
     cXyz local_80;
     cXyz local_98;
-    JPABaseEmitter* mEmitter;
+    JPABaseEmitter* emitter;
     float distXZ;
 
     fopAc_ac_c* a_this = &i_this->actor;
@@ -1366,14 +1366,14 @@ void damage_check(fganon_class* i_this) {
 
                     fopAcM_seStart(a_this, JA_SE_CM_L_ARROW_SHRINK, 0);
 
-                    mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGLIGHTARROW00, &a_this->current.pos, NULL);
-                    if (mEmitter != NULL) {
-                        mEmitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(10));
+                    emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGLIGHTARROW00, &a_this->current.pos, NULL);
+                    if (emitter != NULL) {
+                        emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(10));
                     }
 
-                    mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGLIGHTARROW01, &a_this->current.pos, NULL);
-                    if (mEmitter != NULL) {
-                        mEmitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(10));
+                    emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGLIGHTARROW01, &a_this->current.pos, NULL);
+                    if (emitter != NULL) {
+                        emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(10));
                     }
 
                     a_this->speedF = 0.0f;
@@ -1442,9 +1442,9 @@ void damage_check(fganon_class* i_this) {
     }
     if (i_this->m68F) {
         if ((i_this->mCyl.ChkTgHit()) || (master->mAction == 8)) {
-            mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGVANISHSMOKE00, &a_this->current.pos, NULL);
-            if (mEmitter != NULL) {
-                mEmitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0));
+            emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGVANISHSMOKE00, &a_this->current.pos, NULL);
+            if (emitter != NULL) {
+                emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0));
             }
             fopAcM_delete(a_this);
         }

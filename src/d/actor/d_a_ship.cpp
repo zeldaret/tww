@@ -2964,7 +2964,7 @@ void daShip_c::setEffectData(float param_1, short param_2) {
     float fVar1;
     float fVar2;
     float fVar3;
-    JPABaseEmitter* mEmitter;
+    JPABaseEmitter* emitter;
     GXColor amb;
     GXColor diff;
     
@@ -2990,17 +2990,17 @@ void daShip_c::setEffectData(float param_1, short param_2) {
             if (std::fabsf(speedF) > 3.0f && mFwdVel * speedF > 0.0f) {
                 if (mFwdVel > 11.0f) {
                     if (mWaveL.getEmitter() == NULL) {
-                        mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWAVE00, &mEffPos, &shape_angle, NULL, 0xFF, &mWaveL);
+                        emitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWAVE00, &mEffPos, &shape_angle, NULL, 0xFF, &mWaveL);
                         mWaveL.setTimer(20);
-                        if (mEmitter) {
-                            mEmitter->setDirection(wave_l_direction);
+                        if (emitter) {
+                            emitter->setDirection(wave_l_direction);
                         }
                     }
                     if (mWaveR.getEmitter() == NULL) {
-                        mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWAVE00, &mEffPos, &shape_angle, NULL, 0xFF, &mWaveR);
+                        emitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWAVE00, &mEffPos, &shape_angle, NULL, 0xFF, &mWaveR);
                         mWaveR.setTimer(20);
-                        if (mEmitter) {
-                            mEmitter->setDirection(wave_r_direction);
+                        if (emitter) {
+                            emitter->setDirection(wave_r_direction);
                         }
                     }
                     if (mSplash.getEmitter() == NULL) {
@@ -3012,8 +3012,8 @@ void daShip_c::setEffectData(float param_1, short param_2) {
                 }
                 if (checkStateFlg((daSHIP_SFLG)(daSFLG_FLY_e | daSFLG_LAND_e))) {
                     dKy_get_seacolor(&amb, &diff);
-                    mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPIMPACT00, &mEffPos, &shape_angle, NULL, 0xFF, NULL, -1, &amb);
-                    if (mEmitter) {
+                    emitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPIMPACT00, &mEffPos, &shape_angle, NULL, 0xFF, NULL, -1, &amb);
+                    if (emitter) {
                         fVar1 = 10.0f;
                         fVar2 = (-(speed.y - -15.0f) / 30.0f) * 50.0f + 10.0f;
                         if (fVar2 < 10.0f) {
@@ -3022,7 +3022,7 @@ void daShip_c::setEffectData(float param_1, short param_2) {
                         else if (fVar2 > 60.0f) {
                             fVar2 = 60.0f;
                         }
-                        mEmitter->setRate(fVar2);
+                        emitter->setRate(fVar2);
                     }
                     seStart(JA_SE_SHIP_JUMP_ALIGHT, &current.pos);
                 }
@@ -3976,17 +3976,17 @@ BOOL daShip_c::execute() {
     
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     
-    J3DModel* mModel1;
-    J3DModel* mModel2;
-    mModel1 = mpBodyAnm->getModel();
-    mModel2 = mpHeadAnm->getModel(); 
+    J3DModel* model1;
+    J3DModel* model2;
+    model1 = mpBodyAnm->getModel();
+    model2 = mpHeadAnm->getModel(); 
     
-    mModel1->setBaseTRMtx(mDoMtx_stack_c::get());
+    model1->setBaseTRMtx(mDoMtx_stack_c::get());
     mpBodyAnm->calc();
     
     setHeadAnm();
     
-    mModel2->setBaseTRMtx(mModel1->getAnmMtx(4));
+    model2->setBaseTRMtx(model1->getAnmMtx(4));
     mpHeadAnm->calc();
 
     if (mPart == PART_CRANE_e) {
@@ -4059,10 +4059,10 @@ BOOL daShip_c::execute() {
         }
     }
 
-    cMtx_multVec(mModel1->getAnmMtx(10), &l_tiller_top_offset, &mTillerTopPos);
+    cMtx_multVec(model1->getAnmMtx(10), &l_tiller_top_offset, &mTillerTopPos);
 
     daGrid_c* grid;
-    MtxP mMtx = mModel1->getAnmMtx(7);
+    MtxP mMtx = model1->getAnmMtx(7);
 
     m0444.x = mMtx[0][3];
     m0444.y = mMtx[1][3];
@@ -4080,7 +4080,7 @@ BOOL daShip_c::execute() {
         cMtx_multVecSR(mMtx, &top_offset, &spD8);
         mpGrid->scale.y = spD8.abs() / 365.0f;
 
-        cMtx_multVecSR(mModel1->getAnmMtx(8), &XZ_top_offset, &spD8);
+        cMtx_multVecSR(model1->getAnmMtx(8), &XZ_top_offset, &spD8);
         grid->m2200 = 1.0f - (spD8.abs() / 265.0f); // No idea why this is generating an extra lwz instruction for loading mpGrid when the instructions above don't
 
         if (mTornadoActor) {
@@ -4119,7 +4119,7 @@ BOOL daShip_c::execute() {
     // This should probably use the mDoMtx_multVecZero inline, but it's not getting inlined
     // mDoMtx_multVecZero(mModel2->getAnmMtx(16), &eyePos);
     MtxP jnt_mtx;
-    jnt_mtx = mModel2->getAnmMtx(16);
+    jnt_mtx = model2->getAnmMtx(16);
     eyePos.x = jnt_mtx[0][3];
     eyePos.y = jnt_mtx[1][3];
     eyePos.z = jnt_mtx[2][3];

@@ -186,10 +186,9 @@ BOOL tyaku_check(ks_class* i_this) {
 
 /* 00000788-0000087C       .text ks_kuttuki_check__FP8ks_class */
 BOOL ks_kuttuki_check(ks_class* i_this) {        
-    fopAc_ac_c* mAtHitAc;    
     if (i_this->mSph.ChkAtHit() && !i_this->mSph.ChkAtShieldHit()) {
-        mAtHitAc = i_this->mSph.GetAtHitAc();
-        if (mAtHitAc && mAtHitAc == dComIfGp_getLinkPlayer() && KUTTUKU_ALL_COUNT >= 0 && KUTTUKU_ALL_COUNT < 20 && GORON_COUNT == 0) {
+        fopAc_ac_c* hit_actor = i_this->mSph.GetAtHitAc();
+        if (hit_actor && hit_actor == daPy_getPlayerLinkActorClass() && KUTTUKU_ALL_COUNT >= 0 && KUTTUKU_ALL_COUNT < 20 && GORON_COUNT == 0) {
             i_this->mSph.OffTgSetBit();
             i_this->mSph.ClrCoSet();
             i_this->mSph.ClrTgHit();
@@ -225,16 +224,16 @@ BOOL shock_damage_check(ks_class* i_this) {
     daPy_lk_c* link = daPy_getPlayerLinkActorClass();
 
     if (link->checkHammerQuake()) {
-        cXyz mSwordTopPos = link->getSwordTopPos();
+        cXyz swordTopPos = link->getSwordTopPos();
 
-        mSwordTopPos.x -= actor->current.pos.x;
-        mSwordTopPos.y -= actor->current.pos.y;
-        mSwordTopPos.z -= actor->current.pos.z;
+        swordTopPos.x -= actor->current.pos.x;
+        swordTopPos.y -= actor->current.pos.y;
+        swordTopPos.z -= actor->current.pos.z;
         
-        f32 distXZ = std::sqrtf(SQUARE(mSwordTopPos.x) + SQUARE(mSwordTopPos.z));
+        f32 distXZ = std::sqrtf(SQUARE(swordTopPos.x) + SQUARE(swordTopPos.z));
         
         if (distXZ < 200.0f) {
-            if (std::sqrtf(SQUARE(mSwordTopPos.y)) < 40.0f) {
+            if (std::sqrtf(SQUARE(swordTopPos.y)) < 40.0f) {
                 i_this->mAction = 3;
                 i_this->mMode = 32;
 
@@ -249,19 +248,17 @@ BOOL shock_damage_check(ks_class* i_this) {
 BOOL body_atari_check(ks_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     daPy_py_c* player = daPy_getPlayerActorClass();
-    cXyz mTgHitPos;
-    cXyz mParticleScale;
     
     i_this->mStts.Move();
     
     if (i_this->mSph.ChkTgHit()) {
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
-        cCcD_Obj* mTgHitObj = i_this->mSph.GetTgHitObj();
+        cCcD_Obj* hitObj = i_this->mSph.GetTgHitObj();
 
-        mTgHitPos = *i_this->mSph.GetTgHitPosP();
+        cXyz hitPos = *i_this->mSph.GetTgHitPosP();
 
-        if (!mTgHitObj) {
+        if (!hitObj) {
             return FALSE;
         }
 
@@ -269,9 +266,10 @@ BOOL body_atari_check(ks_class* i_this) {
         
         i_this->mAction = 3;
 
-        switch (mTgHitObj->GetAtType()) {
+        cXyz particleScale;
+        switch (hitObj->GetAtType()) {
             case AT_TYPE_WIND: {
-                actor->current.angle.y = cM_atan2s(actor->current.pos.x - mTgHitPos.x, actor->current.pos.z - mTgHitPos.z);
+                actor->current.angle.y = cM_atan2s(actor->current.pos.x - hitPos.x, actor->current.pos.z - hitPos.z);
                 
                 i_this->mAction = 2;
                 i_this->mMode = 20;
@@ -297,8 +295,8 @@ BOOL body_atari_check(ks_class* i_this) {
 #endif
                 }
                 
-                mParticleScale.setall(REG8_F(0) + 0.8f); 
-                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &mTgHitPos, &player->shape_angle, &mParticleScale);     
+                particleScale.setall(REG8_F(0) + 0.8f); 
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &hitPos, &player->shape_angle, &particleScale);     
                 
                 break;
             }
@@ -351,8 +349,8 @@ BOOL body_atari_check(ks_class* i_this) {
                 break;
             }
             default: {
-                mParticleScale.setall(REG8_F(0) + 0.8f);
-                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &mTgHitPos, &player->shape_angle, &mParticleScale);
+                particleScale.setall(REG8_F(0) + 0.8f);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &hitPos, &player->shape_angle, &particleScale);
                 break;
             }
         }
@@ -651,6 +649,7 @@ void action_kaze_move(ks_class* i_this) {
 
 static u8 item_tbl[4] = {0xA, 0xB, 0xC, 0xA};
 
+#if VERSION > VERSION_DEMO
 /* 00001874-00001A14       .text dead_eff_set__FP8ks_classP4cXyz */
 void dead_eff_set(ks_class* i_this, cXyz* i_pos) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
@@ -689,6 +688,7 @@ void dead_eff_set(ks_class* i_this, cXyz* i_pos) {
 
     fopAcM_delete(actor);
 }
+#endif
 
 /* 00001A14-00001C5C       .text action_dead_move__FP8ks_class */
 void action_dead_move(ks_class* i_this) {
@@ -738,7 +738,14 @@ void action_dead_move(ks_class* i_this) {
                     case 2:
                         local_28 = actor->current.pos;
                         local_28.y += 20.0f;
+                        #if VERSION == VERSION_DEMO
+                        fopAcM_seStart(actor, JA_SE_CM_KS_DIE, 0);
+                        dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_KUROBOU_SIBOU00, &local_28);
+                        gm_birth_delet(i_this);
+                        fopAcM_delete(actor);
+                        #else
                         dead_eff_set(i_this, &local_28);
+                        #endif
                         break;
                 }
             }
@@ -747,7 +754,14 @@ void action_dead_move(ks_class* i_this) {
         case 32: {
             local_28 = actor->current.pos;
             local_28.y += 45.0f;
+            #if VERSION == VERSION_DEMO
+            fopAcM_seStart(actor, JA_SE_CM_KS_DIE, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_KUROBOU_SIBOU00, &local_28);
+            gm_birth_delet(i_this);
+            fopAcM_delete(actor);
+            #else
             dead_eff_set(i_this, &local_28);
+            #endif
             break;
         }
     }
@@ -791,6 +805,7 @@ void action_omoi(ks_class* i_this) {
 
     switch (i_this->mMode) {
         case 40: {
+            #if VERSION > VERSION_DEMO
             i_this->m52C.remove();
 
             actor->speedF = 0.0f;
@@ -806,6 +821,7 @@ void action_omoi(ks_class* i_this) {
 
                 break;
             }
+            #endif
 
             for (int i = 0; i < 5; i++) {
                 i_this->m2F0[i] = 0;
@@ -815,12 +831,14 @@ void action_omoi(ks_class* i_this) {
                 i_this->m300 = 0x13;
             }
 
+            #if VERSION > VERSION_DEMO
             if (KUTTUKU_ALL_COUNT < 0) {
                 i_this->m300 = 0;
             }
             else {
                 i_this->m300 = KUTTUKU_ALL_COUNT;
             }
+            #endif
 
             i_this->m528 = link->getModelJointMtx(pl_harituki_joint_dt[i_this->m300]);
 
@@ -1271,8 +1289,7 @@ static BOOL daKS_Execute(ks_class* i_this) {
                 }
                 else {
                     if (i_this->mMode != 43) {
-                        daPy_py_c* link = (daPy_py_c*)daPy_getPlayerLinkActorClass();
-                        link->offHeavyState();
+                        daPy_getPlayerLinkActorClass()->offHeavyState();
 
                         HEAVY_IN = FALSE;
                         GORON_COUNT = 0;
@@ -1390,8 +1407,7 @@ static BOOL daKS_Delete(ks_class* i_this) {
 
     KS_ALL_COUNT--;
     if (KS_ALL_COUNT == 0) {
-        daPy_lk_c* link = daPy_getPlayerLinkActorClass();
-        link->offHeavyState();
+        daPy_getPlayerLinkActorClass()->offHeavyState();
 
         KUTTUKU_ALL_COUNT = 0;
         HEAVY_IN = FALSE;
@@ -1505,13 +1521,16 @@ static f32 fire_sc[10] = {
 
 /* 000034F8-00003A94       .text daKS_Create__FP10fopAc_ac_c */
 static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(i_this, ks_class);
+#endif
     ks_class* a_this = (ks_class*)i_this;
     
-    cPhs_State res;
-    u32 parameters;
-    res = dComIfG_resLoad(&a_this->mPhs, "KS");
+    cPhs_State res = dComIfG_resLoad(&a_this->mPhs, "KS");
     if (res == cPhs_COMPLEATE_e) {
+#if VERSION == VERSION_DEMO
+        fopAcM_SetupActor(i_this, ks_class);
+#endif
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x1060)) {
             return cPhs_ERROR_e;
         }
@@ -1535,9 +1554,9 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
         a_this->m318 = a_this->m2CA * 10.0f;
 
         if (a_this->m2C8 <= 1) {
-            parameters = 2;
+            u32 param = 2;
             if (a_this->m2C8 == 0) {
-              parameters = 3;
+              param = 3;
             }
 
             for (int i = 0; i < a_this->m2C9; i++) {
@@ -1558,7 +1577,7 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
                 i_this->shape_angle = i_this->current.angle;
                 i_this->shape_angle.x = 0;
 
-                fopAcM_create(PROC_KS, parameters, &local_4c, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, &i_this->scale, 0);
+                fopAcM_create(PROC_KS, param, &local_4c, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, &i_this->scale, 0);
             }
 
             return cPhs_ERROR_e;
