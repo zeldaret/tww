@@ -1772,7 +1772,7 @@ void action_noboru(cc_class* i_this) {
 
 /* 00004CAC-0000561C       .text action_up_check__FP8cc_class */
 void action_up_check(cc_class* i_this) {
-    fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
+    fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     s16 bVar4 = 0;
 
