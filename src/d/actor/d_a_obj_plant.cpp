@@ -42,8 +42,9 @@ static dCcD_SrcCyl l_cyl_src = {
 
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    ((daObjPlant_c*)i_this)->CreateHeap();
+    return;
 }
 
 /* 00000098-000001E0       .text CreateHeap__12daObjPlant_cFv */
@@ -53,17 +54,43 @@ void daObjPlant_c::CreateHeap() {
 
 /* 000001E0-000002AC       .text CreateInit__12daObjPlant_cFv */
 void daObjPlant_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -600.0f, 0.0f, -600.0f, 600.0f, 900.0f, 600.0f);
+    fopAcM_setCullSizeFar(this, 1.0f);
+    field_0x29C.Init(0xFF, 0xFF, this);
+    field_0x2D8.Set(l_cyl_src);
+    field_0x2D8.SetStts(&field_0x29C);
+    field_0x408 = 0;
+    eyePos = current.pos;
+    eyePos.y += 150.0f; 
+    set_mtx();
 }
 
 /* 000002AC-00000390       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode* node, int param_2) {
+    if (param_2 == 0) {
+        int jntNo = ((J3DJoint*)node)->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        daObjPlant_c* plant = (daObjPlant_c*)model->getUserArea();
+        
+        if (plant != NULL) {
+            PSMTXCopy(model->getAnmMtx(jntNo), calc_mtx[0]);
+            cMtx_XrotM(calc_mtx[0], plant->field_0x40E);
+            cMtx_YrotM(calc_mtx[0], plant->field_0x408);
+            cMtx_XrotM(calc_mtx[0], -plant->field_0x40E);
+            model->setAnmMtx(jntNo, calc_mtx[0]);
+            PSMTXCopy(calc_mtx[0], j3dSys.mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 00000390-00000410       .text set_mtx__12daObjPlant_cFv */
 void daObjPlant_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000410-00000544       .text daObjPlant_Create__FPv */
@@ -72,8 +99,10 @@ static cPhs_State daObjPlant_Create(void*) {
 }
 
 /* 000006FC-0000072C       .text daObjPlant_Delete__FPv */
-static BOOL daObjPlant_Delete(void*) {
-    /* Nonmatching */
+static BOOL daObjPlant_Delete(void* param_1) {
+    daObjPlant_c* plant = (daObjPlant_c*)param_1;
+    dComIfG_resDelete(&plant->mPhase,"Plant");
+    return TRUE;
 }
 
 /* 0000072C-00000814       .text daObjPlant_Draw__FPv */
