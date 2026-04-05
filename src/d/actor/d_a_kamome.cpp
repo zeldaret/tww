@@ -1054,7 +1054,7 @@ void kamome_imouto_move(kamome_class* i_this) {
 
         if (i_this->mpMorf->isStop()) {
             i_this->mAnimState = 1;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 8);
+            anm_init(i_this, KAMOME_BCK_KA_WAIT1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT1);
         }
         break;
 
@@ -1065,7 +1065,7 @@ void kamome_imouto_move(kamome_class* i_this) {
         if (i_this->mpMorf->isStop()) {
             i_this->mAnimState = 0;
             i_this->mTimers[0] = cM_rndF(60.0f) + 20.0f;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 9);
+            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT2);
         }
         break;
     case 20:

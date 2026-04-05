@@ -1240,7 +1240,7 @@ bool Act_c::create_heap() {
 
         mpBrk = new mDoExt_brkAnm();
         if (mpBrk != NULL) {
-            if (mpBrk->init(modelData, brk_data, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+            if (mpBrk->init(modelData, brk_data, false, J3DFrameCtrl::EMode_LOOP)) {
                 ret = true;
             }
         }

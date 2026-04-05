@@ -259,7 +259,7 @@ BOOL daRd_c::_createHeap() {
     
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, RD_BTK_RD_CLOSE));
     JUT_ASSERT(DEMO_SELECT(528, 525), btk != NULL);
-    if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
     
@@ -267,7 +267,7 @@ BOOL daRd_c::_createHeap() {
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
     JUT_ASSERT(DEMO_SELECT(553, 550), brk != NULL);
-    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
     

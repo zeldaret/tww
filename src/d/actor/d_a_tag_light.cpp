@@ -113,7 +113,7 @@ bool Act_c::create_heap() {
     JUT_ASSERT(475, btk_data != NULL);
 
     mpBtk = new mDoExt_btkAnm();
-    if (mpBtk != NULL && mpBtk->init(modelData, btk_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+    if (mpBtk != NULL && mpBtk->init(modelData, btk_data, true, J3DFrameCtrl::EMode_LOOP)) {
         bVar1 = TRUE;
     }
 

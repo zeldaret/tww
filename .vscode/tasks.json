@@ -7,10 +7,10 @@
         "id": "gameVersion",
         "type": "pickString",
         "options": [
-            "D44J01",
-            "GZLJ01",
-            "GZLE01",
-            "GZLP01",
+            "D44J01", // GCN JPN Kiosk Demo
+            "GZLJ01", // GCN JPN
+            "GZLE01", // GCN USA
+            "GZLP01", // GCN PAL
             "D44J01 --debug --map",
         ],
         "default": "GZLE01",

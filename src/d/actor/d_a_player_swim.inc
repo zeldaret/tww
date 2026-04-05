@@ -267,7 +267,7 @@ void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
 /* 8013D638-8013D6B8       .text getSwimTimerRate__9daPy_lk_cFv */
 f32 daPy_lk_c::getSwimTimerRate() {
     f32 swimTimerRate;
-    if (dComIfGp_getItemSwimTimerStatus() && dComIfGp_event_getMode() == dEvtMode_NONE_e) {
+    if (dComIfGp_getItemSwimTimerStatus() && !dComIfGp_event_runCheck()) {
         swimTimerRate = (1.0f - dComIfGp_getItemTimeCount() * 0.0011111111f);
     }
     else {
@@ -316,7 +316,7 @@ void daPy_lk_c::setSwimTimerStartStop() {
 
 /* 8013D814-8013DA18       .text procSwimUp_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
-    JPABaseEmitter* mEmitter;
+    JPABaseEmitter* emitter;
     
     static JGeometry::TVec3<f32> splash_scale(0.4f, 0.4f, 0.4f);
     static JGeometry::TVec3<f32> ripple_scale(0.3f, 0.3f, 0.3f);
@@ -337,19 +337,19 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
     onNoResetFlg0(daPyFlg0_UNK100);
 
     if (param_1) {
-        mEmitter = dComIfGp_particle_setP1(dPa_name::ID_IT_JN_WP_SHIBUKI, &current.pos);
+        emitter = dComIfGp_particle_setP1(dPa_name::ID_IT_JN_WP_SHIBUKI, &current.pos);
 
-        if (mEmitter) {
-            mEmitter->setRate(15.0f);
-            mEmitter->setGlobalDynamicsScale(splash_scale);
-            mEmitter->setGlobalParticleScale(splash_scale);
+        if (emitter) {
+            emitter->setRate(15.0f);
+            emitter->setGlobalDynamicsScale(splash_scale);
+            emitter->setGlobalParticleScale(splash_scale);
         }
 
-        mEmitter = dComIfGp_particle_setShipTail(dPa_name::ID_IT_JN_WP_HAMON01, &current.pos, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
+        emitter = dComIfGp_particle_setShipTail(dPa_name::ID_IT_JN_WP_HAMON01, &current.pos, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
         
-        if (mEmitter) {
-            mEmitter->setGlobalDynamicsScale(ripple_scale);
-            mEmitter->setGlobalParticleScale(ripple_scale);
+        if (emitter) {
+            emitter->setGlobalDynamicsScale(ripple_scale);
+            emitter->setGlobalParticleScale(ripple_scale);
         }
     }
 
@@ -359,22 +359,22 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
 
 /* 8013DA18-8013DB24       .text procSwimUp__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSwimUp() {
-    J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
+    J3DFrameCtrl* frameCtrl = mFrameCtrlUnder;
 
     setSpeedAndAngleSwim();
 
     if (!changeSwimOutProc()) {
-        if (mFrameCtrl->getRate() < 0.01f) {
+        if (frameCtrl->getRate() < 0.01f) {
             procSwimWait_init(FALSE);
         }
         else {
-            if (mFrameCtrl->getFrame() > m_HIO->mSwim.m.field_0x34) {
+            if (frameCtrl->getFrame() > m_HIO->mSwim.m.field_0x34) {
                 if (mStickDistance > 0.05f) {
                     procSwimMove_init(FALSE);
                 }
             }
             else {
-                if (mFrameCtrl->checkPass(4.0f)) {
+                if (frameCtrl->checkPass(4.0f)) {
                     voiceStart(0x1A);
                     seStartOnlyReverb(JA_SE_LK_WALK_IN_WATER);
                     seStartOnlyReverb(JA_SE_LK_SWIM);
@@ -394,12 +394,12 @@ BOOL daPy_lk_c::procSwimUp() {
 BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
     float fVar2;
     
-    J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
+    J3DFrameCtrl* frameCtrl = mFrameCtrlUnder;
 
     commonProcInit(daPyProc_SWIM_WAIT_e);
 
     if (param_1) {
-        fVar2 = mFrameCtrl->getFrame() / (float)mFrameCtrl->getEnd();
+        fVar2 = frameCtrl->getFrame() / (float)frameCtrl->getEnd();
         mVelocity = speedF * (1.0f - m_HIO->mSwim.m.field_0x60) + speedF * std::fabsf(cM_fcos(fVar2 * M_PI)) * m_HIO->mSwim.m.field_0x60;
     }
     else {
@@ -408,8 +408,8 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
 
     gravity = 0.0f;
     setSingleMoveAnime(ANM_SWIMWAIT, (float)(getSwimTimerRate() * m_HIO->mSwim.m.field_0x70) + m_HIO->mSwim.m.field_0x40, 0.0f, -1, m_HIO->mSwim.m.field_0x44);
-    mFrameCtrl->setFrame(fVar2 * mFrameCtrl->getEnd());
-    mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrl->getFrame());
+    frameCtrl->setFrame(fVar2 * frameCtrl->getEnd());
+    mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(frameCtrl->getFrame());
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
     if (checkNoResetFlg0(daPyFlg0_UNK100)) {
@@ -508,7 +508,7 @@ BOOL daPy_lk_c::procSwimMove() {
 
     setSpeedAndAngleSwim();
 
-    J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
+    J3DFrameCtrl* frameCtrl = mFrameCtrlUnder;
 
     int direction;
     if (!checkAttentionLock()) {
@@ -558,11 +558,11 @@ BOOL daPy_lk_c::procSwimMove() {
         }
     }
     else {
-        mFrameCtrl[0].setRate((std::fabsf(mVelocity) * (m_HIO->mSwim.m.field_0x54 - m_HIO->mSwim.m.field_0x50)) / mMaxNormalSpeed + m_HIO->mSwim.m.field_0x50 + (float)(getSwimTimerRate() * m_HIO->mSwim.m.field_0x74));
+        frameCtrl[0].setRate((std::fabsf(mVelocity) * (m_HIO->mSwim.m.field_0x54 - m_HIO->mSwim.m.field_0x50)) / mMaxNormalSpeed + m_HIO->mSwim.m.field_0x50 + (float)(getSwimTimerRate() * m_HIO->mSwim.m.field_0x74));
     }
 
     if (mDirection == DIR_BACKWARD) {
-        mFrameCtrl[0].setRate(mFrameCtrl[0].getRate() * 0.5f);
+        frameCtrl[0].setRate(frameCtrl[0].getRate() * 0.5f);
     }
 
     if (changeSwimOutProc()) {
@@ -591,7 +591,7 @@ BOOL daPy_lk_c::procSwimMove() {
     if (mStickDistance <= 0.05f) {
         procSwimWait_init(TRUE);
     }
-    else if ((mDirection == DIR_FORWARD && mFrameCtrl->checkPass(20.0f)) || (mDirection != DIR_FORWARD && mFrameCtrl->checkPass(0.0f))) {
+    else if ((mDirection == DIR_FORWARD && frameCtrl->checkPass(20.0f)) || (mDirection != DIR_FORWARD && frameCtrl->checkPass(0.0f))) {
             seStartOnlyReverb(JA_SE_LK_SWIM);
     }
 

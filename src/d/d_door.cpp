@@ -472,7 +472,7 @@ BOOL dDoor_key2_c::keyCreate_Nkey() {
         return FALSE;
 
     J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Key", KEY_BCK_VLOCN);
-    if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
+    if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE))
         return FALSE;
 
     return TRUE;
@@ -488,7 +488,7 @@ BOOL dDoor_key2_c::keyCreate_Bkey() {
         return FALSE;
 
     J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Key", KEY_BCK_VLOCB);
-    if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
+    if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE))
         return FALSE;
 
     J3DSkinDeform* deform = new J3DSkinDeform();
@@ -719,7 +719,7 @@ BOOL dDoor_hkyo_c::create() {
         return FALSE;
 
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Hkyo", HKYO_BRK_HKYO1B);
-    if (!mpBrkAnm->init(modelData, brk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    if (!mpBrkAnm->init(modelData, brk, TRUE, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
 
     return TRUE;

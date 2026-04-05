@@ -16,8 +16,6 @@
 #include "d/d_a_obj.h"
 #include "d/d_snap.h"
 
-extern dCcD_SrcCyl dNpc_cyl_src;
-
 static const char* l_arcname_tbl[] = {
     "Ro",
     "Ro",
@@ -1848,9 +1846,7 @@ bool daNpcRoten_c::_execute() {
     chkAttention();
     checkOrder();
 
-    dBgS* bgs = dComIfG_Bgsp(); // fakematch?
-
-    if(dComIfGp_event_getMode() == dEvtMode_NONE_e || (eventInfo.checkCommandTalk() && (field_0x9B2 & 0x8000) == 0)) {
+    if(!dComIfGp_event_runCheck() || (eventInfo.checkCommandTalk() && (field_0x9B2 & 0x8000) == 0)) {
         (this->*moveProc[field_0x9BB])();
     }
     else {
@@ -1863,7 +1859,7 @@ bool daNpcRoten_c::_execute() {
 
     speedF = field_0x990;
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
-    mObjAcch.CrrPos(*bgs);
+    mObjAcch.CrrPos(*dComIfG_Bgsp());
     setCollision(l_npc_dat[mNpcNo].field_0x2C, 200.0f);
     setCollisionH();
 

@@ -8,14 +8,9 @@
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DTevs.h"
+#include "JSystem/JRenderer/JRenderer.h"
 #include "dolphin/os/OS.h"
 #include "global.h"
-
-extern void JRNLoadTexCached(GXTexMapID, u32, GXTexCacheSize, u32, GXTexCacheSize);
-extern void makeTexCoordTable();
-extern void makeAlphaCmpTable();
-extern void makeZModeTable();
-extern void makeTevSwapTable();
 
 /* 802D8AA8-802D8B8C       .text __ct__6J3DSysFv */
 J3DSys::J3DSys() {

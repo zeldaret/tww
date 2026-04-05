@@ -615,7 +615,7 @@ config.libs = [
             Object(NonMatching, "d/d_menu_item.cpp"),
             Object(NonMatching, "d/d_menu_option.cpp"),
             Object(NonMatching, "d/d_menu_save.cpp"),
-            Object(NonMatching, "d/d_menu_window.cpp"),
+            Object(MatchingFor("GZLE01"), "d/d_menu_window.cpp"),
             Object(NonMatching, "d/d_mesg.cpp"),
             Object(NonMatching, "d/d_message.cpp"),
             Object(NonMatching, "d/d_message_paper.cpp"),
@@ -708,7 +708,7 @@ config.libs = [
         "JFramework",
         [
             Object(Matching,    "JSystem/JFramework/JFWDisplay.cpp"),
-            Object(NonMatching, "JSystem/JFramework/JFWSystem.cpp"),
+            Object(Matching,    "JSystem/JFramework/JFWSystem.cpp"),
         ],
     ),
     JSystemLib(
@@ -1562,7 +1562,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_tag_so"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_tornado"),
     ActorRel(NonMatching, "d_a_warpf"),
-    ActorRel(NonMatching, "d_a_wind_tag"),
+    ActorRel(Matching,    "d_a_wind_tag"),
     ActorRel(Matching,    "d_a_acorn_leaf"),
     ActorRel(Matching,    "d_a_atdoor"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_auction"),

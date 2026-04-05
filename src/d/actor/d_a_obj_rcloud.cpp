@@ -149,7 +149,7 @@ bool daObjRcloud_c::_delete() {
 
 /* 00000494-00000500       .text wait_act_proc__13daObjRcloud_cFv */
 void daObjRcloud_c::wait_act_proc() {
-    if (dComIfGp_event_getMode() != 0 && dComIfGp_evmng_startCheck(l_demo_name[mDemoNameIndex]) != 0) {
+    if (dComIfGp_event_runCheck() && dComIfGp_evmng_startCheck(l_demo_name[mDemoNameIndex]) != 0) {
         setup_action(1);
     }
 

@@ -205,11 +205,11 @@ BOOL daObjHhaYgush_c::create_area(const char* arcname) {
             J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, HHA_BTK_YGSTP00));
             JUT_ASSERT(DEMO_SELECT(593, 656), btk_data != NULL);
             
-            if(mBtk.init(M_mdl->getModelData(), btk_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, false) != false){  
+            if(mBtk.init(M_mdl->getModelData(), btk_data, true, J3DFrameCtrl::EMode_LOOP) != false){  
                 J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, HHA_BCK_YGSTP00));
                 JUT_ASSERT(DEMO_SELECT(598, 661), bck_data != NULL);
                 
-                if(mBck.init(M_mdl->getModelData(), bck_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false) != false){
+                if(mBck.init(M_mdl->getModelData(), bck_data, true, J3DFrameCtrl::EMode_LOOP) != false){
                     ret = TRUE;
                 }
             }
@@ -283,7 +283,7 @@ BOOL daObjHha_c::create_heap() {
             for(i = 0; i < 2; i++){
                 J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, l_daObjHha_btk_idx_table[i]));
                 JUT_ASSERT(0x32f, btk_data != NULL);
-                if(mBtkA[i].init(mdl_data, btk_data, true, l_daObjHha_btk_mode_table[i], 1.0f, 0, -1, false, false) == FALSE){
+                if(mBtkA[i].init(mdl_data, btk_data, true, l_daObjHha_btk_mode_table[i]) == FALSE){
                     ret = FALSE;
                     break;
                 }

@@ -5,6 +5,7 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_agb.h"
+#include "d/d_msg.h"
 #include "d/res/res_agb.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -383,8 +384,6 @@ int daAgb_c::uploadPortCheckWait() {
 
     return 1;
 }
-
-extern JKRHeap* dMsg_getAgbWorkArea();
 
 /* 800CFB68-800CFC94       .text uploadSelect__7daAgb_cFv */
 int daAgb_c::uploadSelect() {
@@ -1123,7 +1122,7 @@ void daAgb_c::FlagsSend(u32 stage_type) {
         mFlags.field_0xa_7 = 1;
     }
     mFlags.field_0xa_6 = dMenu_flag();
-    mFlags.field_0xa_5 = dComIfGp_event_getMode() != dEvtMode_NONE_e;
+    mFlags.field_0xa_5 = dComIfGp_event_runCheck();
     if (dStage_checkRestart() || dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK20000000_e)) {
         mFlags.field_0xa_4 = 1;
     } else {
@@ -1757,7 +1756,7 @@ BOOL daAgb_c::createHeap() {
     }
 
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Agb", AGB_BRK_AGBCURSOR);
-    if (!mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 1)) {
+    if (!mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, TRUE)) {
         return FALSE;
     }
 

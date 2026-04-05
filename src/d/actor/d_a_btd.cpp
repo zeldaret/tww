@@ -2620,14 +2620,14 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     i_this->btk = new mDoExt_btkAnm();
     JUT_ASSERT(5370, i_this->btk);
     pJVar10 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Btd", BTD_BTK_BTD);
-    iVar11 = i_this->btk->init(pJVar15->getModelData(), pJVar10, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    iVar11 = i_this->btk->init(pJVar15->getModelData(), pJVar10, true, J3DFrameCtrl::EMode_LOOP);
     if (iVar11 == 0) {
         return FALSE;
     }
     i_this->brk = new mDoExt_brkAnm();
     JUT_ASSERT(5390, i_this->brk);
     pJVar13 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Btd", BTD_BRK_BTD);
-    iVar11 = i_this->brk->init(pJVar15->getModelData(), pJVar13, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    iVar11 = i_this->brk->init(pJVar15->getModelData(), pJVar13, true, J3DFrameCtrl::EMode_LOOP);
     if (iVar11 == 0) {
         return FALSE;
     }
@@ -2658,7 +2658,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     i_this->btkS = new mDoExt_btkAnm();
     JUT_ASSERT(5432, i_this->btkS);
     pJVar10 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Btd", BTD_BTK_DEADA);
-    iVar11 = i_this->btkS->init(pJVar15->getModelData(), pJVar10, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    iVar11 = i_this->btkS->init(pJVar15->getModelData(), pJVar10, true, J3DFrameCtrl::EMode_NONE);
     if (iVar11 == 0) {
         return FALSE;
     }
@@ -2667,7 +2667,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     i_this->brkS = new mDoExt_brkAnm();
     JUT_ASSERT(5463, i_this->brkS);
     pJVar13 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Btd", BTD_BRK_DEADA);
-    iVar11 = i_this->brkS->init(pJVar15->getModelData(), pJVar13, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    iVar11 = i_this->brkS->init(pJVar15->getModelData(), pJVar13, true, J3DFrameCtrl::EMode_NONE);
     if (iVar11 == 0) {
         return FALSE;
     }
@@ -2684,7 +2684,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pJVar10 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Btd", BTD_BTK_NAMAKUBI);
-    iVar11 = i_this->m02D8->init(pJVar15->getModelData(), pJVar10, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    iVar11 = i_this->m02D8->init(pJVar15->getModelData(), pJVar10, true, J3DFrameCtrl::EMode_NONE);
     if (iVar11 == 0) {
         return FALSE;
     }
@@ -2693,7 +2693,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pJVar13 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Btd", BTD_BRK_NAMAKUBI);
-    iVar11 = i_this->m02DC->init(pJVar15->getModelData(), pJVar13, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    iVar11 = i_this->m02DC->init(pJVar15->getModelData(), pJVar13, true, J3DFrameCtrl::EMode_NONE);
     if (iVar11 == 0) {
         return FALSE;
     }

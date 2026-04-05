@@ -74,7 +74,7 @@ BOOL daWarpgn_c::CreateHeap() {
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GMJWP_BTK_GMJWP00);
     JUT_ASSERT(0xDE, pbtk != NULL);
     mpBtkAnm1 = new mDoExt_btkAnm();
-    if ((mpBtkAnm1 == NULL) || mpBtkAnm1->init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
+    if ((mpBtkAnm1 == NULL) || mpBtkAnm1->init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP) == 0) {
         return FALSE;
     }
     mpBtkAnm1->setPlaySpeed(1.0f);
@@ -82,7 +82,7 @@ BOOL daWarpgn_c::CreateHeap() {
     pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GMJWP_BTK_GMJWP02);
     JUT_ASSERT(0xED, pbtk != NULL);
     mpBtkAnm2 = new mDoExt_btkAnm();
-    if ((mpBtkAnm2 == NULL) || mpBtkAnm2->init(modelData, pbtk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
+    if ((mpBtkAnm2 == NULL) || mpBtkAnm2->init(modelData, pbtk, true, J3DFrameCtrl::EMode_NONE) == 0) {
         return FALSE;
     }
     mpBtkAnm2->setPlaySpeed(0.0f);
@@ -90,7 +90,7 @@ BOOL daWarpgn_c::CreateHeap() {
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, GMJWP_BRK_GMJWP01);
     JUT_ASSERT(0xFF, pbrk != NULL);
     mpBrkAnm = new mDoExt_brkAnm();
-    if (mpBrkAnm == NULL || mpBrkAnm->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
+    if (mpBrkAnm == NULL || mpBrkAnm->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE) == 0) {
         return FALSE;
     }
     mpBrkAnm->setPlaySpeed(0.0f);
@@ -98,7 +98,7 @@ BOOL daWarpgn_c::CreateHeap() {
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, GMJWP_BCK_GMJWP01);
     JUT_ASSERT(0x10F, pbck != NULL);
     mpBckAnm = new mDoExt_bckAnm();
-    if (mpBckAnm == NULL || mpBckAnm->init(modelData, pbck, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
+    if (mpBckAnm == NULL || mpBckAnm->init(modelData, pbck, true, J3DFrameCtrl::EMode_NONE) == 0) {
         return FALSE;
     }
     mpBckAnm->setPlaySpeed(0.0f);

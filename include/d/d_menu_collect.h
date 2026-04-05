@@ -4,40 +4,56 @@
 #include "dolphin/types.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
-#include "f_op/f_op_msg_mng.h"
 #include "d/d_2dnumber.h"
+#include "d/d_menu_base.h"
+#include "f_op/f_op_msg_mng.h"
 
 struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
 
-class dMenu_Collect_c {
+class dMenu_Collect_c : public dMenu_base_c {
 public:
+    virtual void draw() {}
 
-    void alphaChange(fopMsgM_pane_class*, float) {}
-    void draw() {}
-    void getCollectMode() {}
-    void getNowItem() {}
-    void setArchive(JKRArchive*) {}
-    void setFont(JUTFont*, JUTFont*) {}
-    void setItemTexBuffer(int, void*) {}
-    void setMapTexBuffer(void*) {}
-    void setNowItem(unsigned char) {}
-    void setOptionArchive(JKRArchive*) {}
-    void setQuitArchive(JKRArchive*) {}
-    void setSymbolTexBuffer(int, void*) {}
-    void setTactTexBuffer(void*) {}
-    void setTextArea(char*, char*, char*, char*, char*, char*) {}
-    void setTimer(short) {}
-    void setTriforceTexBuffer(int, void*) {}
-    void setTriggerInfo(unsigned char) {}
+    void alphaChange(fopMsgM_pane_class* pane, float alpha) { pane->mInitAlpha *= alpha; }
+    u8 getCollectMode() { return mCollectMode; }
+    u8 getNowItem() { return mNowItem; }
+    void setNowItem(u8 val) { mNowItem = val; }
+
+    void setArchive(JKRArchive* arc) { mpArc = arc; }
+    void setOptionArchive(JKRArchive* arc) { mpOptArc = arc; }
+    void setQuitArchive(JKRArchive* arc) { mpSaveArc = arc; }
+
+    void setFont(JUTFont* font, JUTFont* rfont) {
+        mFont = font;
+        mRFont = rfont;
+    }
+
+    void setTactTexBuffer(void* ptr) { mTactTexBuffer = (ResTIMG*)ptr; }
+    void setMapTexBuffer(void* ptr) { mMapTexBuffer = (ResTIMG*)ptr; }
+    void setTriforceTexBuffer(int idx, void* ptr) { mTriforceTexBuffer[idx] = (ResTIMG*)ptr; }
+    void setSymbolTexBuffer(int idx, void* ptr) { mSymbolTexBuffer[idx] = ptr; }
+    void setItemTexBuffer(int idx, void* ptr) { mItemTexBuffer[idx] = ptr; }
+
+    void setTextArea(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
+        name[0] = name0;
+        name[1] = name1;
+        note[0] = note0;
+        note[1] = note1;
+        dummy[0] = dummy0;
+        dummy[1] = dummy1;
+    }
+
+    void setTimer(s16 timer) { mTimer = timer; }
+    void setTriggerInfo(u8 info) { mTriggerInfo = info; }
 
     void screenSet();
     void initialize();
     void cursorAnime();
     void stickDirection(unsigned char);
     void cursorMainMove();
-    void noteCheck();
+    u8 noteCheck();
     void noteInit();
     void noteAppear();
     void noteOpen();
@@ -72,57 +88,58 @@ public:
     void outFontMove();
     void outFontDraw();
     void collectItemGetCheck(unsigned char);
-    void _create();
+    virtual void _create();
     void _create3();
-    void _delete();
-    void _move();
+    virtual void _delete();
+    virtual void _move();
     void _move3();
-    void _draw();
-    void _open();
-    void _open3();
-    void _close();
-    void _close3();
+    virtual void _draw();
+    bool _open();
+    bool _open3();
+    bool _close();
+    bool _close3();
     void animeStep1(short, short);
     void animeStep2(short, short);
     void animeStep3(short, short);
     void animeStep4(short, short);
-    void _open2();
-    void _close2();
+    bool _open2();
+    bool _close2();
 
-    /* 0x000 */ u8 m000[0x004 - 0x000];
-    /* 0x004 */ J2DScreen* m004;
-    /* 0x008 */ fopMsgM_pane_class m008;
-    /* 0x040 */ fopMsgM_pane_class m040;
-    /* 0x078 */ fopMsgM_pane_class m078;
-    /* 0x0B0 */ fopMsgM_pane_class m0B0[15];
-    /* 0x3F8 */ fopMsgM_pane_class m3F8[15];
-    /* 0x740 */ fopMsgM_pane_class m740;
-    /* 0x778 */ fopMsgM_pane_class m778;
-    /* 0x7B0 */ fopMsgM_pane_class m7B0;
-    /* 0x7E8 */ fopMsgM_pane_class m7E8;
-    /* 0x820 */ fopMsgM_pane_class m820;
-    /* 0x858 */ fopMsgM_pane_class m858;
-    /* 0x890 */ fopMsgM_pane_class m890;
-    /* 0x8C8 */ fopMsgM_pane_class m8C8;
-    /* 0x900 */ fopMsgM_pane_class m900;
-    /* 0x938 */ fopMsgM_pane_class m938;
-    /* 0x970 */ fopMsgM_pane_class m970;
-    /* 0x9A8 */ fopMsgM_pane_class m9A8;
-    /* 0x9E0 */ fopMsgM_pane_class m9E0;
-    /* 0xA18 */ fopMsgM_pane_class mA18[4];
-    /* 0xAF8 */ fopMsgM_pane_class mAF8;
-    /* 0xB30 */ fopMsgM_pane_class mB30;
-    /* 0xB68 */ fopMsgM_pane_class mB68[4];
-    /* 0xC48 */ fopMsgM_pane_class mC48;
-    /* 0xC80 */ fopMsgM_pane_class mC80;
-    /* 0xCB8 */ fopMsgM_pane_class mCB8;
-    /* 0xCF0 */ fopMsgM_pane_class mCF0;
-    /* 0xD28 */ fopMsgM_pane_class mD28;
-    /* 0xD60 */ fopMsgM_pane_class mD60;
-    /* 0xD98 */ fopMsgM_pane_class mD98;
-    /* 0xDD0 */ fopMsgM_pane_class mDD0;
-    /* 0xE08 */ fopMsgM_pane_class mE08[8];
-    /* 0xFC8 */ fopMsgM_pane_class mFC8;
+private:
+    /* 0x0000 */ // vtable
+    /* 0x0004 */ J2DScreen* m004;
+    /* 0x0008 */ fopMsgM_pane_class m008;
+    /* 0x0040 */ fopMsgM_pane_class m040;
+    /* 0x0078 */ fopMsgM_pane_class m078;
+    /* 0x00B0 */ fopMsgM_pane_class m0B0[15];
+    /* 0x03F8 */ fopMsgM_pane_class m3F8[15];
+    /* 0x0740 */ fopMsgM_pane_class m740;
+    /* 0x0778 */ fopMsgM_pane_class m778;
+    /* 0x07B0 */ fopMsgM_pane_class m7B0;
+    /* 0x07E8 */ fopMsgM_pane_class m7E8;
+    /* 0x0820 */ fopMsgM_pane_class m820;
+    /* 0x0858 */ fopMsgM_pane_class m858;
+    /* 0x0890 */ fopMsgM_pane_class m890;
+    /* 0x08C8 */ fopMsgM_pane_class m8C8;
+    /* 0x0900 */ fopMsgM_pane_class m900;
+    /* 0x0938 */ fopMsgM_pane_class m938;
+    /* 0x0970 */ fopMsgM_pane_class m970;
+    /* 0x09A8 */ fopMsgM_pane_class m9A8;
+    /* 0x09E0 */ fopMsgM_pane_class m9E0;
+    /* 0x0A18 */ fopMsgM_pane_class mA18[4];
+    /* 0x0AF8 */ fopMsgM_pane_class mAF8;
+    /* 0x0B30 */ fopMsgM_pane_class mB30;
+    /* 0x0B68 */ fopMsgM_pane_class mB68[4];
+    /* 0x0C48 */ fopMsgM_pane_class mC48;
+    /* 0x0C80 */ fopMsgM_pane_class mC80;
+    /* 0x0CB8 */ fopMsgM_pane_class mCB8;
+    /* 0x0CF0 */ fopMsgM_pane_class mCF0;
+    /* 0x0D28 */ fopMsgM_pane_class mD28;
+    /* 0x0D60 */ fopMsgM_pane_class mD60;
+    /* 0x0D98 */ fopMsgM_pane_class mD98;
+    /* 0x0DD0 */ fopMsgM_pane_class mDD0;
+    /* 0x0E08 */ fopMsgM_pane_class mE08[8];
+    /* 0x0FC8 */ fopMsgM_pane_class mFC8;
     /* 0x1000 */ fopMsgM_pane_class m1000[3];
     /* 0x10A8 */ fopMsgM_pane_class m10A8[3];
     /* 0x1150 */ fopMsgM_pane_class m1150[11];
@@ -150,18 +167,39 @@ public:
     /* 0x2420 */ fopMsgM_pane_class m2420;
     /* 0x2458 */ u8 m2458[0x2460 - 0x2458];
     /* 0x2460 */ dDlst_2DOutFont_c* m2460;
-    /* 0x2464 */ u8 m2464[0x2470 - 0x2464];
-    /* 0x2470 */ JUTFont* m2470;
-    /* 0x2474 */ JUTFont* m2474;
+    /* 0x2464 */ JKRArchive* mpArc;
+    /* 0x2468 */ JKRArchive* mpOptArc;
+    /* 0x246C */ JKRArchive* mpSaveArc;
+    /* 0x2470 */ JUTFont* mFont;
+    /* 0x2474 */ JUTFont* mRFont;
     /* 0x2478 */ J2DPane* m2478;
-    /* 0x247C */ u8 m247C[0x2498 - 0x247C];
-    /* 0x2498 */ ResTIMG* m2498;
-    /* 0x249C */ ResTIMG* m249C;
-    /* 0x24A0 */ ResTIMG* m24A0[6];
-    /* 0x24B8 */ u8 m24B8[0x27A8 - 0x24B8];
+    /* 0x247C */ u8 m247C[0x2488 - 0x247C];
+    /* 0x2488 */ JUtility::TColor color_2488;
+    /* 0x248C */ JUtility::TColor color_248C;
+    /* 0x2490 */ JUtility::TColor color_2490;
+    /* 0x2494 */ JUtility::TColor color_2494;
+    /* 0x2498 */ ResTIMG* mTactTexBuffer;
+    /* 0x249C */ ResTIMG* mMapTexBuffer;
+    /* 0x24A0 */ ResTIMG* mTriforceTexBuffer[8];
+    /* 0x24C0 */ void* mSymbolTexBuffer[3];
+    /* 0x24CC */ void* mItemTexBuffer[5];
+    /* 0x24E0 */ fopMsgM_msgDataProc_c mMsgProc;
+    /* 0x2780 */ u8 m2780[0x27A8 - 0x2780];
     /* 0x27A8 */ f32 m27A8;
     /* 0x27AC */ f32 m27AC;
-};
+    /* 0x27B0 */ char* name[2];
+    /* 0x27B8 */ char* note[2];
+    /* 0x27C0 */ char* dummy[2];
+    /* 0x27C8 */ u8 m27C8[0x27E2 - 0x27C8];
+    /* 0x27E2 */ u16 mTimer;
+    /* 0x27E4 */ u8 m27E4[0x27EC - 0x27E4];
+    /* 0x27EC */ u8 mTriggerInfo;
+    /* 0x27ED */ u8 mNowItem;
+    /* 0x27EE */ u8 mCollectMode;
+    /* 0x27EF */ u8 m27EF[0x27F4 - 0x27EF];
+}; // Size: 0x27F4
+
+STATIC_ASSERT(sizeof(dMenu_Collect_c) == 0x27F4);
 
 class dMc_HIO_c {
 public:

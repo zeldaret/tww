@@ -708,7 +708,7 @@ BOOL daNpc_Ji1_c::kaitenAction(void*) {
     else if(field_0xC78 != -1) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("Ji1");
         int actionNo = getEventActionNo(staffIdx);
-        if(l_msgId == -1) {
+        if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
             if(actionNo == 2) {
                 if(mMsgNo == 0x974) {
                     current.angle.y = -0x8000;
@@ -1055,7 +1055,7 @@ BOOL daNpc_Ji1_c::talkAction(void*) {
         l_msg = 0;
     }
     else if(field_0xC78 != -1) {
-        if(l_msgId == -1) {
+        if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
             l_msgId = fopMsgM_messageSet(mMsgNo, &eyePos);
         }
         else if(l_msg == 0) {
@@ -1327,7 +1327,7 @@ BOOL daNpc_Ji1_c::speakBadAction(void*) {
         l_msgId = -1;
     }
     else if(field_0xC78 != -1) {
-        if(l_msgId == -1) {
+        if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
             if(mAnimation == 7) {
                 if(mpOrcaMorf->getFrame() > mpOrcaMorf->getEndFrame() - 2.0f) {
                     l_msgId = fopMsgM_messageSet(mMsgNo, &eyePos);
@@ -2234,7 +2234,7 @@ BOOL daNpc_Ji1_c::endspeakAction(void*) {
         l_msgId = -1;
     }
     else if(field_0xC78 != -1) {
-        if(l_msgId == -1) {
+        if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
             l_msgId = fopMsgM_messageSet(mMsgNo, &eyePos);
             setAnm(5, 4.0f, 0);
         }
@@ -4605,8 +4605,8 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     J3DAnmTextureSRTKey* a_btk = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes("Ji", JI_BTK_YJITR00));
     JUT_ASSERT(0x15D0, a_btk != NULL);
 
-    int temp1 = mCryBrk.init(modelData2, a_brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
-    int temp2 = mCryBtk.init(modelData2, a_btk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    int temp1 = mCryBrk.init(modelData2, a_brk, false, J3DFrameCtrl::EMode_LOOP);
+    int temp2 = mCryBtk.init(modelData2, a_btk, false, J3DFrameCtrl::EMode_LOOP);
 
     if(mpTearsModel == 0 || temp1 == 0 || temp2 == 0) {
         return false;
@@ -4615,7 +4615,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     headTexPattern = (J3DAnmTexPattern*)(dComIfG_getObjectRes("Ji", JI_BTP_JI));
     JUT_ASSERT(0x15D8, headTexPattern != NULL);
 
-    temp2 = mBlinkAnim.init(modelData2, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    temp2 = mBlinkAnim.init(modelData2, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP);
 #if VERSION > VERSION_DEMO
     if(temp2 == 0) {
         return false;

@@ -5,6 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_wind_tag.h"
+#include "d/actor/d_a_sea.h"
+#include "d/d_bg_s_func.h"
 #include "d/res/res_yaflw00.h"
 #include "d/res/res_ybgaf00.h"
 #include "f_op/f_op_camera.h"
@@ -17,124 +19,135 @@
 #include "d/d_priority.h"
 
 namespace daWindTag {
-    dCcD_SrcCps l_cps_src = {
-        // dCcD_SrcGObjInf
-        {
-            /* Flags             */ 0,
-            /* SrcObjAt  Type    */ AT_TYPE_WIND,
-            /* SrcObjAt  Atp     */ 0,
-            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_VsOther_e,
-            /* SrcObjTg  Type    */ 0,
-            /* SrcObjTg  SPrm    */ 0,
-            /* SrcObjCo  SPrm    */ 0,
-            /* SrcGObjAt Se      */ 0,
-            /* SrcGObjAt HitMark */ 0,
-            /* SrcGObjAt Spl     */ 0,
-            /* SrcGObjAt Mtrl    */ 0,
-            /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoHitMark_e,
-            /* SrcGObjTg Se      */ 0,
-            /* SrcGObjTg HitMark */ 0,
-            /* SrcGObjTg Spl     */ 0,
-            /* SrcGObjTg Mtrl    */ 0,
-            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
-            /* SrcGObjCo SPrm    */ 0,
-        },
-        // cM3dGCpsS
-        {{
-            /* Start  */ {0.0f, 0.0f, 0.0f},
-            /* End    */ {0.0f, 0.0f, 0.0f},
-            /* Radius */ 200.0f,
-        }},
-    };
+
+dCcD_SrcCps l_cps_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_WIND,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_VsOther_e,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoHitMark_e,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCpsS
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 200.0f,
+    }},
+};
+
+namespace daWindTag_prm {
+    inline u8 getSch(daWindTag_c* i_this) { return fopAcM_GetParam(i_this) & 0xFF; }
+    inline u8 getPathId(daWindTag_c* i_this) { return (fopAcM_GetParam(i_this) >> 8) & 0xFF; }
+    inline u8 getSpeed(daWindTag_c* i_this) { return (fopAcM_GetParam(i_this) >> 16) & 0x1F; }
+    inline u8 getType(daWindTag_c* i_this) { return (fopAcM_GetParam(i_this) >> 21) & 0x03; }
+    inline u8 getSwType(daWindTag_c* i_this) { return (fopAcM_GetParam(i_this) >> 23) & 0x01; }
+    inline u8 getSwitchNo(daWindTag_c* i_this) { return (fopAcM_GetParam(i_this) >> 24) & 0xFF; }
+    inline u8 getSplashFlag(daWindTag_c* i_this) { return (i_this->home.angle.z & 0x0F) == 1; }
+    inline u8 getDrawFlag(daWindTag_c* i_this) { return (i_this->home.angle.z >> 4) & 0x0F; }
 }
 
 /* 00000078-000000F0       .text _delete__Q29daWindTag11daWindTag_cFv */
-bool daWindTag::daWindTag_c::_delete() {
+bool daWindTag_c::_delete() {
     if (mpEmitter != NULL) {
         mpEmitter->becomeInvalidEmitter();
         mpEmitter = NULL;
     }
 
-    dComIfG_resDelete(&mPhs, m_arcname[mType]);
+    dComIfG_resDeleteDemo(&mPhs, m_arcname[mType]);
     mPointWind.set_pwind_delete();
     return true;
 }
 
 /* 000000F0-00000110       .text CheckCreateHeap__9daWindTagFP10fopAc_ac_c */
-BOOL daWindTag::CheckCreateHeap(fopAc_ac_c* i_ac) {
-    return ((daWindTag::daWindTag_c*)i_ac)->CreateHeap();
+BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
+    return ((daWindTag_c*)i_ac)->CreateHeap();
 }
 
 /* 00000110-000003E4       .text CreateHeap__Q29daWindTag11daWindTag_cFv */
-BOOL daWindTag::daWindTag_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daWindTag_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]);
-    JUT_ASSERT(0x16A, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(359, 362), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
     if (mpModel == NULL)
         return FALSE;
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname[mType], m_btkidx[mType]);
-    JUT_ASSERT(0x17A, pbtk != NULL);
-    if (!mBtkAnm0.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
+    JUT_ASSERT(DEMO_SELECT(375, 378), pbtk != NULL);
+    if (!mBtkAnm0.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
 
     pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname[mType], m_btkidx2[mType]);
-    JUT_ASSERT(0x17A, pbtk != NULL);
-    if (!mBtkAnm1.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
+    JUT_ASSERT(DEMO_SELECT(387, 390), pbtk != NULL);
+    if (!mBtkAnm1.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_NONE))
         return FALSE;
 
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname[mType], m_bckidx[mType]);
-    JUT_ASSERT(0x192, pbck != NULL);
-    if (!mBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
+    JUT_ASSERT(DEMO_SELECT(399, 402), pbck != NULL);
+    if (!mBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
 
     return TRUE;
 }
 
-const char *daWindTag::daWindTag_c::m_arcname[] = { "Yaflw00", "Ybgaf00" };
-s16 daWindTag::daWindTag_c::m_bdlidx[] = { YAFLW00_BDL_YAFLW00, YBGAF00_BDL_YBGAF00 };
-s16 daWindTag::daWindTag_c::m_heapsize[] = { 0x0C40, 0x0C40 };
-s16 daWindTag::daWindTag_c::m_bckidx[] = { YAFLW00_BCK_YAFLW00, YBGAF00_BCK_YBGAF00 };
-s16 daWindTag::daWindTag_c::m_btkidx[] = { YAFLW00_BTK_YAFLW00_01, YBGAF00_BTK_YBGAF00_01 };
-s16 daWindTag::daWindTag_c::m_btkidx2[] = { YAFLW00_BTK_YAFLW00_02, YBGAF00_BTK_YBGAF00_02 };
-f32 daWindTag::daWindTag_c::m_cullsize_far = 4.0f;
-f32 daWindTag::daWindTag_c::m_ef_cullsize_far = 2.0f;
+const char *daWindTag_c::m_arcname[] = { "Yaflw00", "Ybgaf00" };
+s16 daWindTag_c::m_bdlidx[] = { YAFLW00_BDL_YAFLW00, YBGAF00_BDL_YBGAF00 };
+s16 daWindTag_c::m_heapsize[] = { 0x0C40, 0x0C40 };
+s16 daWindTag_c::m_bckidx[] = { YAFLW00_BCK_YAFLW00, YBGAF00_BCK_YBGAF00 };
+s16 daWindTag_c::m_btkidx[] = { YAFLW00_BTK_YAFLW00_01, YBGAF00_BTK_YBGAF00_01 };
+s16 daWindTag_c::m_btkidx2[] = { YAFLW00_BTK_YAFLW00_02, YBGAF00_BTK_YBGAF00_02 };
+f32 daWindTag_c::m_cullsize_far = 4.0f;
+f32 daWindTag_c::m_ef_cullsize_far = 2.0f;
 
 /* 000003E4-00000828       .text CreateInit__Q29daWindTag11daWindTag_cFv */
-void daWindTag::daWindTag_c::CreateInit() {
-    /* Nonmatching */
+void daWindTag_c::CreateInit() {
     mbDraw = true;
-    if (((home.angle.z >> 4) & 0x0F) == 1) {
+    if (daWindTag_prm::getDrawFlag(this) == 1) {
         mbDraw = false;
     }
 
     field_0x57f = false;
-    if ((home.angle.z & 0x0F) == 1) {
+    if (daWindTag_prm::getSplashFlag(this) == 1) {
         field_0x57f = true;
     }
 
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-    f32 radius = scale.x * mData[mType * 2];
-    fopAcM_setCullSizeBox(this, -radius, 0.0f, -radius, radius, 0.0f, radius);
+    f32 maxXZ = scale.x * mData[mType * 2];
+    f32 minXZ = -maxXZ;
+    f32 maxY = scale.y * mData[mType * 2 + 1];
+    fopAcM_setCullSizeBox(this, minXZ, 0.0f, minXZ, maxXZ, maxY, maxXZ);
     fopAcM_setCullSizeFar(this, m_cullsize_far);
 
     mStts.Init(0xFF, 0xFF, this);
     mCps.Set(l_cps_src);
     mCps.SetStts(&mStts);
     field_0x49c = scale.y;
-    mSwNo = fopAcM_GetParam(this) >> 24;
+    mSwNo = daWindTag_prm::getSwitchNo(this);
     field_0x57c = fopAcM_isSwitch(this, mSwNo);
 
-    bool state;
-    if (((fopAcM_GetParam(this) >> 23) & 1) == 0) {
-        state = (mSwNo != 0xFF && !fopAcM_isSwitch(this, mSwNo));
+    u8 r28 = mSwNo == 0xFF;
+    if (daWindTag_prm::getSwType(this) == 0) {
+        r28 |= (mSwNo != 0xFF && !fopAcM_isSwitch(this, mSwNo));
     } else {
-        state = (mSwNo != 0xFF && fopAcM_isSwitch(this, mSwNo));
+        r28 |= (mSwNo != 0xFF && fopAcM_isSwitch(this, mSwNo));
     }
 
-    if (mSwNo == 0xFF | state) { // nice bug
+    if (r28 != 0) {
         mOffsY = field_0x49c * mData[mType * 2 + 1];
         mBtkAnm1.setFrame(mBtkAnm1.getEndFrame());
     } else {
@@ -143,21 +156,28 @@ void daWindTag::daWindTag_c::CreateInit() {
     }
 
     set_wind_angle();
-    mPathId = (fopAcM_GetParam(this) >> 8) & 0xFF;
+    mPathId = daWindTag_prm::getPathId(this);
     if (mPathId != 0xFF) {
         mpPath = dPath_GetRoomPath(mPathId, fopAcM_GetRoomNo(this));
         if (mpPath != NULL) {
             mPathPointDir = 1;
             mCurPathPoint = 1;
-            mTargetPos = mpPath->m_points[mCurPathPoint].m_position;
-            current.pos = mpPath->m_points[0].m_position;
-            speedF = 10.0f + ((fopAcM_GetParam(this) >> 16) & 0x1F);
+            dPnt* pnt = &mpPath->m_points[mCurPathPoint];
+            mTargetPos = pnt->m_position;
+            current.pos.x = mpPath->m_points[0].m_position.x;
+            current.pos.y = mpPath->m_points[0].m_position.y;
+            current.pos.z = mpPath->m_points[0].m_position.z;
+            speedF = 10.0f + daWindTag_prm::getSpeed(this);
         } else {
             mPathId = 0xFF;
         }
     }
     mPointWind.set_pwind_init(&mCpsS);
-    mLevelSeID = fopKyM_create(PROC_LEVEL_SE, checkSizeSpecialBig() ? 0x701e : 0x701d, &eyePos);
+    u32 seNum = JA_SE_OBJ_WIND_TAG;
+    if (checkSizeSpecialBig()) {
+        seNum = JA_SE_OBJ_WIND_TAG_L;
+    }
+    mLevelSeID = fopKyM_create(PROC_LEVEL_SE, seNum, &eyePos);
     mpEmitter = NULL;
     cXyz efScale(scale.x, scale.x, scale.x);
     if (field_0x57f) {
@@ -177,7 +197,7 @@ void daWindTag::daWindTag_c::CreateInit() {
 }
 
 /* 00000828-000008D4       .text set_wind_angle__Q29daWindTag11daWindTag_cFv */
-void daWindTag::daWindTag_c::set_wind_angle() {
+void daWindTag_c::set_wind_angle() {
     mCpsS.mStart = current.pos;
     mCpsS.mRadius = scale.x * mData[mType * 2];
     set_mtx();
@@ -186,9 +206,9 @@ void daWindTag::daWindTag_c::set_wind_angle() {
 }
 
 /* 000008D4-0000099C       .text _create__Q29daWindTag11daWindTag_cFv */
-cPhs_State daWindTag::daWindTag_c::_create() {
+cPhs_State daWindTag_c::_create() {
     fopAcM_SetupActor(this, daWindTag_c);
-    mType = (fopAcM_GetParam(this) >> 21) & 0x03;
+    mType = daWindTag_prm::getType(this);
     cPhs_State rt = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (rt == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType]))
@@ -199,7 +219,7 @@ cPhs_State daWindTag::daWindTag_c::_create() {
 }
 
 /* 00000E60-00000F74       .text set_mtx__Q29daWindTag11daWindTag_cFv */
-void daWindTag::daWindTag_c::set_mtx() {
+void daWindTag_c::set_mtx() {
     f32 offsY = mOffsY;
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(current.angle);
@@ -216,14 +236,14 @@ void daWindTag::daWindTag_c::set_mtx() {
 }
 
 /* 00000F74-00000F88       .text checkSizeSpecialBig__Q29daWindTag11daWindTag_cFv */
-bool daWindTag::daWindTag_c::checkSizeSpecialBig() {
+bool daWindTag_c::checkSizeSpecialBig() {
     if (mType == 1)
         return true;
     return false;
 }
 
 /* 00000F88-00001044       .text set_wind_se_sub__Q29daWindTag11daWindTag_cFUlP4cXyz */
-void daWindTag::daWindTag_c::set_wind_se_sub(u32, cXyz* pos) {
+void daWindTag_c::set_wind_se_sub(u32, cXyz* pos) {
     if (mLevelSeID != fpcM_ERROR_PROCESS_ID_e) {
         dLevelSe_c* se = (dLevelSe_c*)fopKyM_SearchByID(mLevelSeID);
         if (se != NULL) {
@@ -239,48 +259,120 @@ void daWindTag::daWindTag_c::set_wind_se_sub(u32, cXyz* pos) {
 }
 
 /* 00001044-000011CC       .text set_wind_se__Q29daWindTag11daWindTag_cFv */
-void daWindTag::daWindTag_c::set_wind_se() {
-    /* Nonmatching */
+void daWindTag_c::set_wind_se() {
     f32 radius = scale.x * mData[mType * 2];
     camera_class* camera = dComIfGp_getCamera(0);
+    lookat_class* lookat = &camera->mLookat;
 
     cM3dGCps cps;
     cM3dGSph camSph;
+    cXyz cross;
+    cXyz start;
+    cXyz end;
+    start.set(mCpsS.mStart.x, mCpsS.mStart.y, mCpsS.mStart.z);
+    end.set(mCpsS.mEnd.x, mCpsS.mEnd.y, mCpsS.mEnd.z);
+    cps.SetStartEnd(start, end);
     cps.SetR(radius);
-    cps.SetStartEnd(mCpsS.mStart, mCpsS.mEnd);
-    camSph.SetC(camera->mLookat.mEye);
+    camSph.SetC(lookat->mEye);
     camSph.SetR(1.0f);
-    Vec cross;
     if (cM3d_Cross_CpsSph(cps, camSph, &cross)) {
-        mSePos = eyePos;
+        mSePos = lookat->mEye;
         set_wind_se_sub(0, &mSePos);
     } else {
-        cXyz pos = eyePos;
-        cps.NearPos(pos, &mSePos);
+        cps.NearPos(lookat->mEye, &mSePos);
         set_wind_se_sub(0, &mSePos);
     }
 }
 
 /* 00001234-000015C8       .text _execute__Q29daWindTag11daWindTag_cFv */
-bool daWindTag::daWindTag_c::_execute() {
-    /* Nonmatching */
+bool daWindTag_c::_execute() {
+    u8 r26 = dKy_get_schbit();
+    u8 r29 = daWindTag_prm::getSch(this);
+    f32 f0 = daWindTag_prm::getSpeed(this) + 10.0f;
+    f32 f31;
+    f32 f30 = 0.1f;
+    speedF = f0;
+    
+    path_move();
+    
+    u8 r27 = (r29 & r26) != 0 || r29 == 0;
+    
+    u8 r26_2 = mSwNo == 0xFF;
+    u8 r24;
+    if (daWindTag_prm::getSwType(this) == 0) {
+        r24 = mSwNo != 0xFF && !fopAcM_isSwitch(this, mSwNo);
+        r26_2 |= r24;
+    } else {
+        r24 = mSwNo != 0xFF && fopAcM_isSwitch(this, mSwNo);
+        r26_2 |= r24;
+    }
+    
+    if (mSwNo != 0xFF && r29 != 0) {
+        if (field_0x57d != 0 && (r29 & r26) == 0) {
+            field_0x577 = 0;
+        }
+        if (field_0x57c != fopAcM_isSwitch(this, mSwNo) && r24 != 0) {
+            field_0x577 = 1;
+        }
+    }
+    
+    if ((r27 != 0 && r26_2 != 0) || field_0x577 != 0) {
+        cLib_addCalc(&mPointWind.mWind.mStrength, 1.0f, 0.5f, 0.5f, 0.01f);
+        f31 = field_0x49c * mData[mType * 2 + 1];
+        mBtkAnm1.setPlaySpeed(1.0f);
+    } else {
+        cLib_addCalc(&mPointWind.mWind.mStrength, 0.0f, 0.5f, 0.5f, 0.01f);
+        f31 = 0.0f;
+        mBtkAnm1.setPlaySpeed(-1.0f);
+    }
+    
+    set_wind_se();
+    
+    if (daWindTag_prm::getSwType(this) == 0) {
+        f32 f2 = 0.1f;
+        f32 f0 = field_0x49c * mData[mType * 2 + 1];
+        f32 f3 = f2 * f0;
+        cLib_addCalc(&mOffsY, f31, f30, f3, f3 * 0.5f);
+    } else {
+        cLib_chaseF(&mOffsY, f31, (field_0x49c * mData[mType * 2 + 1]) / 20.0f);
+    }
+    
+    set_wind_angle();
+    
+    if (mOffsY < 50.0f) {
+        fopAcM_offDraw(this);
+    } else {
+        fopAcM_onDraw(this);
+        mCps.cM3dGCps::Set(mCpsS);
+        dComIfG_Ccsp()->Set(&mCps);
+        dComIfG_Ccsp()->SetMass(&mCps, 2);
+    }
+    
+    mBtkAnm0.play();
+    mBckAnm.play();
+    mBtkAnm1.play();
+    field_0x57d = r26 & r29;
+    field_0x57c = fopAcM_isSwitch(this, mSwNo);
+    MoveEmitter();
+    mPointWind.set_pwind_move();
+    
+    return true;
 }
 
 /* 000015C8-0000161C       .text path_move__Q29daWindTag11daWindTag_cFv */
-void daWindTag::daWindTag_c::path_move() {
-    if (mPathId != 0xFF && cLib_chasePos(&current.pos, mTargetPos, speedF))
+void daWindTag_c::path_move() {
+    if (mPathId != 0xFF && cLib_chasePos(&current.pos, mTargetPos, fopAcM_GetSpeedF(this)))
         set_next_pnt();
 }
 
 /* 0000161C-00001700       .text set_next_pnt__Q29daWindTag11daWindTag_cFv */
-void daWindTag::daWindTag_c::set_next_pnt() {
-    /* Nonmatching */
+void daWindTag_c::set_next_pnt() {
     if (mPathId == 0xFF)
         return;
 
     mCurPathPoint += mPathPointDir;
     if (dPath_ChkClose(mpPath)) {
-        if (mCurPathPoint > mpPath->m_num - 1) {
+        if (mCurPathPoint > (s8)(mpPath->m_num) - 1) {
             mCurPathPoint = 0;
         } else if (mCurPathPoint < 0) {
             mCurPathPoint = mpPath->m_num - 1;
@@ -291,15 +383,16 @@ void daWindTag::daWindTag_c::set_next_pnt() {
             mCurPathPoint = mpPath->m_num - 2;
         } else if (mCurPathPoint < 0) {
             mPathPointDir = 1;
-            mCurPathPoint = 0;
+            mCurPathPoint = 1;
         }
     }
 
-    mTargetPos = mpPath->m_points[mCurPathPoint].m_position;
+    dPnt* pnt = &mpPath->m_points[mCurPathPoint];
+    mTargetPos = pnt->m_position;
 }
 
 /* 00001700-00001814       .text _draw__Q29daWindTag11daWindTag_cFv */
-bool daWindTag::daWindTag_c::_draw() {
+bool daWindTag_c::_draw() {
     if (!mbDraw)
         return TRUE;
 
@@ -322,10 +415,51 @@ bool daWindTag::daWindTag_c::_draw() {
 }
 
 /* 00001814-00001AA4       .text MoveEmitter__Q29daWindTag11daWindTag_cFv */
-void daWindTag::daWindTag_c::MoveEmitter() {
-    /* Nonmatching */
-    cM3dGTri temp;
+void daWindTag_c::MoveEmitter() {
+    cXyz sp4C = current.pos;
+    JGeometry::TVec3<s16> sp08(0, 0, 0);
+    sp4C.y = dBgS_GetWaterHeight(current.pos);
+    if (daSea_ChkArea(current.pos.x, current.pos.z)) {
+        f32 f30 = daSea_calcWave(current.pos.x - 50.0f, current.pos.z - 50.0f);
+        f32 f31 = daSea_calcWave(current.pos.x - 50.0f, current.pos.z + 50.0f);
+        f32 f1 = daSea_calcWave(current.pos.x + 50.0f, current.pos.z - 50.0f);
+        cXyz sp40(current.pos.x - 50.0f, f30, current.pos.z - 50.0f);
+        cXyz sp34(current.pos.x - 50.0f, f31, current.pos.z + 50.0f);
+        cXyz sp28(current.pos.x + 50.0f, f1, current.pos.z - 50.0f);
+        cM3dGTri sp58(&sp40, &sp34, &sp28);
+        cM3d_CalcVecAngle(*sp58.GetNP(), &sp08.x, &sp08.z);
+    } else {
+        cXyz sp1C = current.pos;
+        sp1C.y += 200.0f;
+        sp4C.y = dBgS_ObjGndChk_Wtr_Func(sp1C);
+    }
+    
+    if (mpEmitter) {
+        cXyz sp10(scale.x, scale.x, scale.x);
+        mpEmitter->setGlobalScale(sp10);
+        mpEmitter->setGlobalRotation(sp08);
+        if (sp4C.y == -G_CM3D_F_INF) {
+            sp4C.y = current.pos.y;
+        }
+        mpEmitter->setGlobalTranslation(sp4C);
+    }
+    
+    fopAcM_setCullSizeFar(this, m_ef_cullsize_far);
+    
+    if (mOffsY < 100.0f || fopAcM_cullingCheck(this)) {
+        if (mpEmitter) {
+            mpEmitter->stopCreateParticle();
+        }
+    } else {
+        if (mpEmitter) {
+            mpEmitter->playCreateParticle();
+        }
+    }
+    
+    fopAcM_setCullSizeFar(this, m_cullsize_far);
 }
+
+}; // namespace daWindTag
 
 /* 00001B00-00001B20       .text daWindTag_Create__FPv */
 static cPhs_State daWindTag_Create(void* i_ac) {

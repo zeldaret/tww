@@ -17,9 +17,6 @@
 #include "d/res/res_zl.h"
 #include "d/d_snap.h"
 
-
-extern dCcD_SrcCyl dNpc_cyl_src;
-
 class daNpc_Zl1_HIO_c : public mDoHIO_entry_c{
 public:
 struct hio_prm_c {
@@ -183,7 +180,7 @@ void daNpc_Zl1_c::_nodeCB_Head(J3DNode* i_node, J3DModel* i_pModel) {
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
 
     MtxP mtx = mDoMtx_stack_c::get();
-    MTXCopy(mtx, i_pModel->getAnmMtx(jointIdx));
+    i_pModel->setAnmMtx(jointIdx, mtx);
 }
 
 /* 0000043C-00000488       .text nodeCB_BackBone__FP7J3DNodei */
@@ -205,7 +202,7 @@ void daNpc_Zl1_c::_nodeCB_BackBone(J3DNode* i_node, J3DModel* i_pModel) {
     mDoMtx_stack_c::ZrotM(-m_jnt.getBackbone_x());
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
     MtxP mtx = mDoMtx_stack_c::get();
-    MTXCopy(mtx, i_pModel->getAnmMtx(jointIdx));
+    i_pModel->setAnmMtx(jointIdx, mtx);
 }
 
 /* 00000528-00000548       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -534,7 +531,7 @@ void daNpc_Zl1_c::setMtx(bool param_1) {
     if(field_0x7CE) {
 #if VERSION > VERSION_DEMO
         if(!fpcM_IsCreating(mProcId1)) {
-            if(mProcId1 != 0xffffffff) {
+            if(mProcId1 != fpcM_ERROR_PROCESS_ID_e) {
                 if(fopAcM_SearchByID(mProcId1, (fopAc_ac_c **)&actor) == 1) {
                     if(actor != NULL) {
                         temp = true;
@@ -1136,10 +1133,8 @@ fopAc_ac_c* daNpc_Zl1_c::searchByID(fpc_ProcID pid, int* param_2) {
 
 /* 000023AC-0000245C       .text partner_search_sub__11daNpc_Zl1_cFPFPvPv_Pv */
 bool daNpc_Zl1_c::partner_search_sub(void* (*param_1)(void*, void*)) {
-    fpc_ProcID procId;
-
     bool ret = false;
-    mProcId1 = -1;
+    mProcId1 = fpcM_ERROR_PROCESS_ID_e;
 
     l_check_wrk = 0;
     for (s32 i = 0; i < 0x14; i++) {

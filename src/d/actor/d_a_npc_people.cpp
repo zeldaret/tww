@@ -20,8 +20,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_lib.h"
 
-extern dCcD_SrcCyl dNpc_cyl_src;
-
 static char* l_npc_staff_id[] = {
     "Uo1",
     "Uo2",
@@ -4725,8 +4723,7 @@ bool daNpcPeople_c::_execute() {
 
     chkAttention();
     checkOrder();
-    dBgS* bgs = dComIfG_Bgsp(); // This is kinda weird, maybe fakematch
-    if(dComIfGp_event_getMode() == dEvtMode_NONE_e || (eventInfo.checkCommandTalk() && m79C != 0)) {
+    if(!dComIfGp_event_runCheck() || (eventInfo.checkCommandTalk() && m79C != 0)) {
         (this->*moveProc[m78F])();
     }
     else {
@@ -4849,7 +4846,7 @@ bool daNpcPeople_c::_execute() {
         }
 
         fopAcM_posMoveF(this, mStts.GetCCMoveP());
-        mObjAcch.CrrPos(*bgs);
+        mObjAcch.CrrPos(*dComIfG_Bgsp());
     }
 
     setCollision(&mCyl, current.pos, m74C, mpNpcDat->field_0x40);

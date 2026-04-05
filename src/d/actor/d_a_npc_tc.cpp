@@ -978,7 +978,6 @@ void daNpc_Tc_c::getArg() {
     mType = TYPE_NORMAL;
 }
 
-extern dCcD_SrcCyl dNpc_cyl_src;
 /* 00001C98-0000202C       .text createInit__10daNpc_Tc_cFv */
 void daNpc_Tc_c::createInit() {
 #if VERSION > VERSION_DEMO

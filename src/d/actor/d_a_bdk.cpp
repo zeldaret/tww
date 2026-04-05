@@ -3608,7 +3608,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     i_this->bva = new mDoExt_bvaAnm();
     JUT_ASSERT(0x1864, i_this->bva);
 
-    s32 bva = i_this->bva->init(i_this->mp8F0, (J3DAnmVisibilityFull *)dComIfG_getObjectRes("Bdk", BDK_BVA_HIBIWARE1), 1, 0, 1.0f, 0, -1, FALSE, 0);
+    s32 bva = i_this->bva->init(i_this->mp8F0, (J3DAnmVisibilityFull *)dComIfG_getObjectRes("Bdk", BDK_BVA_HIBIWARE1), 1, J3DFrameCtrl::EMode_NONE);
     if (bva == 0) {
         return FALSE;
     }

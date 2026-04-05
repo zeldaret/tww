@@ -3,9 +3,8 @@
 
 #include "f_op/f_op_actor.h"
 
-class kytag07_class : public fopAc_ac_c {
-public:
-    /* Place member variables here */
+struct kytag07_class {
+    /* 0x000 */ fopAc_ac_c actor;
 };
 
 #endif /* D_A_KYTAG07_H */

@@ -924,7 +924,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
             }
 
             int ret = i_this->mp18B8[i]->init(
-                modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", s_btk[i]), TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0
+                modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", s_btk[i]), TRUE, J3DFrameCtrl::EMode_LOOP
             );
 
             if (!ret) {
@@ -934,7 +934,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
             i_this->mp18C0[i] = new mDoExt_brkAnm();
 
             ret = i_this->mp18C0[i]->init(
-                modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bwd", s_brk[i]), TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0
+                modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bwd", s_brk[i]), TRUE, J3DFrameCtrl::EMode_LOOP
             );
 
             if (!ret) {

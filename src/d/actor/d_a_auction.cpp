@@ -13,6 +13,7 @@
 #include "d/d_priority.h"
 #include "d/res/res_pspl.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "d/d_auction_screen.h"
 
 struct NpcDatStruct {
     /* 0x00 */ f32 field_0x00;
@@ -186,17 +187,6 @@ static daAuction_c::ProcFunc_t moveProc[] = {
     &daAuction_c::executeNormal,
     &daAuction_c::executeStart,
 };
-
-extern void dAuction_screen_delete();
-extern void dAuction_screen_slotShow();
-extern void dAuction_screen_slotHide();
-extern void dAuction_screen_gaugeHide();
-extern void dAuction_screen_gaugeShow();
-extern void dAuction_screen_gaugeUp();
-extern void dAuction_screen_gaugeDown();
-extern void dAuction_screen_talkStart();
-extern void dAuction_screen_talkEnd();
-extern fpc_ProcID dAuction_screen_create();
 
 /* 000000EC-000002FC       .text __ct__11daAuction_cFv */
 daAuction_c::daAuction_c() {

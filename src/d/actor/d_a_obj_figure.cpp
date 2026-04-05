@@ -482,7 +482,7 @@ BOOL daObjFigure_c::createHeap() {
             return false;
         }
 
-        if(!mpBrkAnm->init(pModelData, pBrkData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+        if(!mpBrkAnm->init(pModelData, pBrkData, true, J3DFrameCtrl::EMode_LOOP)) {
             return false;
         }
     }
@@ -534,7 +534,7 @@ BOOL daObjFigure_c::createHeap() {
         return false;
     }
 
-    if(!mBtpAnm1.init(pPedestalData, mpPedestalBtp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+    if(!mBtpAnm1.init(pPedestalData, mpPedestalBtp, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
 

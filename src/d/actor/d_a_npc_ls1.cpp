@@ -282,7 +282,6 @@ bool daNpc_Ls1_c::init_LS1_4() {
     return init_LS1_1();
 }
 
-extern dCcD_SrcCyl dNpc_cyl_src;
 /* 00000A60-00000C6C       .text createInit__11daNpc_Ls1_cFv */
 bool daNpc_Ls1_c::createInit() {
     for (int i = 0; i < ARRAY_SSIZE(mEventIDTbl); i++) {
@@ -2145,8 +2144,7 @@ BOOL daNpc_Ls1_c::_execute() {
         checkOrder();
         if (!demo()) {
             int staff_id = -1;
-            dBgS* bgs_p = dComIfG_Bgsp();
-            if (dComIfGp_event_getMode() != 0 && eventInfo.checkCommandTalk() == false) {
+            if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk() == false) {
                 staff_id = isEventEntry();
             }
 
@@ -2160,7 +2158,7 @@ BOOL daNpc_Ls1_c::_execute() {
 
             if (mType != 0) {
                 fopAcM_posMoveF(this, mStts.GetCCMoveP());
-                mObjAcch.CrrPos(*bgs_p);
+                mObjAcch.CrrPos(*dComIfG_Bgsp());
             }
 
             play_animation();

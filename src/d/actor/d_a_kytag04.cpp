@@ -53,9 +53,9 @@ static cPhs_State daKytag04_Create(fopAc_ac_c* i_this)  {
     a_this->mState = 0;
     a_this->mOffColPat = fopAcM_GetParam(a_this) & 0xFF;
     a_this->mOnColPat = (fopAcM_GetParam(a_this) >> 8) & 0xFF;
-    a_this->mSwitchNo = a_this->current.angle.x;
-    a_this->mScaleX = a_this->scale.x * 100.0f;
-    a_this->mScaleY = a_this->scale.y * 100.0f;
+    a_this->mSwitchNo = i_this->current.angle.x;
+    a_this->mScaleX = i_this->scale.x * 100.0f;
+    a_this->mScaleY = i_this->scale.y * 100.0f;
     a_this->mTimer = 0;
     a_this->mTimerThreshold = 5;
     return cPhs_COMPLEATE_e;

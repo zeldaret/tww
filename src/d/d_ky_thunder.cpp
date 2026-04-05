@@ -126,12 +126,12 @@ cPhs_State dThunder_c::create() {
 
     J3DAnmTextureSRTKey * anm = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("Always", ALWAYS_BTK_YTHDR00);
     JUT_ASSERT(DEMO_SELECT(126, 125), anm != NULL);
-    if (!mModelInfo.mBtk.init(modelData, anm, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    if (!mModelInfo.mBtk.init(modelData, anm, false, J3DFrameCtrl::EMode_LOOP))
         return cPhs_ERROR_e;
 
     J3DAnmTevRegKey * canm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Always", ALWAYS_BRK_YTHDR00);
     JUT_ASSERT(DEMO_SELECT(141, 140), canm != NULL);
-    if (!mModelInfo.mBrk.init(modelData, canm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
+    if (!mModelInfo.mBrk.init(modelData, canm, true, J3DFrameCtrl::EMode_NONE))
         return cPhs_ERROR_e;
 
     mBtkTime = cM_rndF(1.0f);

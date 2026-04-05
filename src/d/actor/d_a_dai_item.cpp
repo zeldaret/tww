@@ -248,7 +248,7 @@ BOOL daStandItem_c::CreateHeap() {
             /* PRESIDENT_STATUE */ J3DFrameCtrl::EMode_LOOP,
         };
 
-        if (mpBckAnm == NULL || !mpBckAnm->init(modelData, pbck, TRUE, playmode[mItemType], 1.0f, 0, -1, false))
+        if (mpBckAnm == NULL || !mpBckAnm->init(modelData, pbck, TRUE, playmode[mItemType]))
             return FALSE;
 
         mpBckAnm->setPlaySpeed(0.0f);

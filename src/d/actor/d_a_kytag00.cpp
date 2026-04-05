@@ -15,13 +15,14 @@
 
 /* 00000078-0000024C       .text get_check_pos__FP13kytag00_class */
 cXyz get_check_pos(kytag00_class* i_this) {
+    fopAc_ac_c* actor = &i_this->actor;
     cXyz ret;
 
     camera_class * pCamera = (camera_class*)dComIfGp_getCamera(0);
     fopAc_ac_c * pPlayer = dComIfGp_getPlayer(0);
 
-    f32 cameraDist = i_this->current.pos.abs(pCamera->mLookat.mEye);
-    f32 playerDist = i_this->current.pos.abs(pPlayer->current.pos);
+    f32 cameraDist = actor->current.pos.abs(pCamera->mLookat.mEye);
+    f32 playerDist = actor->current.pos.abs(pPlayer->current.pos);
 
     if (dComIfGp_event_runCheck() && i_this->mMode == 0) {
         if (cameraDist < playerDist) {
@@ -38,17 +39,18 @@ cXyz get_check_pos(kytag00_class* i_this) {
 
 /* 0000024C-000005E4       .text wether_tag_move__FP13kytag00_class */
 void wether_tag_move(kytag00_class* i_this) {
+    fopAc_ac_c* actor = &i_this->actor;
     cXyz chk_pos_xz;
     cXyz chk_pos = get_check_pos(i_this);
     f32 fade_y = i_this->mInnerFadeY * 100.0f;
     chk_pos_xz.x = chk_pos.x;
-    chk_pos_xz.y = i_this->current.pos.y;
+    chk_pos_xz.y = actor->current.pos.y;
     chk_pos_xz.z = chk_pos.z;
-    f32 dist_xz = i_this->current.pos.abs(chk_pos_xz);
+    f32 dist_xz = actor->current.pos.abs(chk_pos_xz);
 
     if (dist_xz < i_this->mOuterRadius &&
-        (chk_pos.y >= (i_this->current.pos.y - fade_y) &&
-        chk_pos.y < (i_this->current.pos.y + i_this->scale.y * 5000.0f + fade_y)) &&
+        (chk_pos.y >= (actor->current.pos.y - fade_y) &&
+        chk_pos.y < (actor->current.pos.y + actor->scale.y * 5000.0f + fade_y)) &&
         i_this->mTarget > 0.0f)
     {
         f32 blend = 1.0f;
@@ -62,9 +64,9 @@ void wether_tag_move(kytag00_class* i_this) {
             }
         }
         
-        if (chk_pos.y <= i_this->current.pos.y) {
+        if (chk_pos.y <= actor->current.pos.y) {
             if (fade_y != 0.0f) {
-                f9 = (i_this->current.pos.y - chk_pos.y) / fade_y;
+                f9 = (actor->current.pos.y - chk_pos.y) / fade_y;
                 if (f9 < 0.0f) {
                     f9 = 0.0f;
                 }
@@ -72,7 +74,7 @@ void wether_tag_move(kytag00_class* i_this) {
             }
         } else {
             if (fade_y != 0.0f) {
-                f9 = (chk_pos.y - (i_this->current.pos.y + i_this->scale.y * 5000.0f)) / fade_y;
+                f9 = (chk_pos.y - (actor->current.pos.y + actor->scale.y * 5000.0f)) / fade_y;
                 if (f9 < 0.0f) {
                     f9 = 0.0f;
                 }
@@ -171,17 +173,18 @@ void raincnt_cut() {
 
 /* 000006D8-00000C0C       .text wether_tag_efect_move__FP13kytag00_class */
 void wether_tag_efect_move(kytag00_class* i_this) {
+    fopAc_ac_c* actor = &i_this->actor;
     cXyz chk_pos_xz;
     cXyz chk_pos = get_check_pos(i_this);
     f32 fade_y = i_this->mInnerFadeY * 100.0f;
     chk_pos_xz.x = chk_pos.x;
-    chk_pos_xz.y = i_this->current.pos.y;
+    chk_pos_xz.y = actor->current.pos.y;
     chk_pos_xz.z = chk_pos.z;
-    f32 dist_xz = i_this->current.pos.abs(chk_pos_xz);
+    f32 dist_xz = actor->current.pos.abs(chk_pos_xz);
     
     if (dist_xz < i_this->mOuterRadius &&
-        (chk_pos.y >= (i_this->current.pos.y - fade_y) &&
-        chk_pos.y < (i_this->current.pos.y + i_this->scale.y * 5000.0f + fade_y)) &&
+        (chk_pos.y >= (actor->current.pos.y - fade_y) &&
+        chk_pos.y < (actor->current.pos.y + actor->scale.y * 5000.0f + fade_y)) &&
         i_this->mTarget > 0.0f)
     {
         f32 blend = 1.0f;
@@ -198,9 +201,9 @@ void wether_tag_efect_move(kytag00_class* i_this) {
             }
         }
         
-        if (chk_pos.y <= i_this->current.pos.y) {
+        if (chk_pos.y <= actor->current.pos.y) {
             if (fade_y != 0.0f) {
-                f9 = (i_this->current.pos.y - chk_pos.y) / fade_y;
+                f9 = (actor->current.pos.y - chk_pos.y) / fade_y;
                 if (f9 < 0.0f) {
                     f9 = 0.0f;
                 }
@@ -208,7 +211,7 @@ void wether_tag_efect_move(kytag00_class* i_this) {
             }
         } else {
             if (fade_y != 0.0f) {
-                f9 = (chk_pos.y - (i_this->current.pos.y + i_this->scale.y * 5000.0f)) / fade_y;
+                f9 = (chk_pos.y - (actor->current.pos.y + actor->scale.y * 5000.0f)) / fade_y;
                 if (f9 < 0.0f) {
                     f9 = 0.0f;
                 }
@@ -240,7 +243,7 @@ void wether_tag_efect_move(kytag00_class* i_this) {
             g_env_light.mMoyaCount = 100.0f * blend;
             break;
         case 0x6:
-            if (i_this->home.roomNo == dComIfGp_roomControl_getStayNo()) {
+            if (actor->home.roomNo == dComIfGp_roomControl_getStayNo()) {
                 g_env_light.mHousiCount = 300.0f * blend;
             } else {
                 g_env_light.mHousiCount = 0;
@@ -352,16 +355,16 @@ static BOOL daKytag00_Delete(kytag00_class* i_this) {
 static cPhs_State daKytag00_Create(fopAc_ac_c* i_ac) {
     kytag00_class * i_this = (kytag00_class *)i_ac;
 
-    fopAcM_SetupActor(i_this, kytag00_class);
+    fopAcM_SetupActor(i_ac, kytag00_class);
 
     i_this->field_0x296 = 0;
     i_this->mPselIdx = (fopAcM_GetParam(i_ac) >> 0) & 0xFF;
     i_this->mEfMode = (fopAcM_GetParam(i_ac) >> 8) & 0xFF;
     i_this->mThickness = (fopAcM_GetParam(i_ac) >> 16) & 0xFF;
     i_this->mInnerFadeY = (fopAcM_GetParam(i_ac) >> 24) & 0xFF;
-    i_this->mSwitchNo = (i_this->current.angle.x >> 0) & 0xFF;
-    i_this->mbInvert = (i_this->current.angle.x >> 8) & 0xFF;
-    i_this->mMode = (i_this->current.angle.z >> 0) & 0xFF;
+    i_this->mSwitchNo = (i_ac->current.angle.x >> 0) & 0xFF;
+    i_this->mbInvert = (i_ac->current.angle.x >> 8) & 0xFF;
+    i_this->mMode = (i_ac->current.angle.z >> 0) & 0xFF;
 
     if (!i_this->mbInvert) {
         if (i_this->mSwitchNo != 0xFF && dComIfGs_isSwitch(i_this->mSwitchNo, dComIfGp_roomControl_getStayNo())) {
@@ -384,11 +387,11 @@ static cPhs_State daKytag00_Create(fopAc_ac_c* i_ac) {
         i_this->mInnerFadeY = 10;
 
     if (i_this->mMode == 0) {
-        i_this->mInnerRadius = i_this->scale.x * 5000.0f;
-        i_this->mOuterRadius = i_this->scale.x * 5000.0f + i_this->mThickness * 100.0f;
+        i_this->mInnerRadius = i_ac->scale.x * 5000.0f;
+        i_this->mOuterRadius = i_ac->scale.x * 5000.0f + i_this->mThickness * 100.0f;
     } else {
-        i_this->mInnerRadius = i_this->scale.x * 500.0f;
-        i_this->mOuterRadius = i_this->scale.x * 500.0f + i_this->mThickness * 10.0f;
+        i_this->mInnerRadius = i_ac->scale.x * 500.0f;
+        i_this->mOuterRadius = i_ac->scale.x * 500.0f + i_this->mThickness * 10.0f;
     }
 
     i_this->mbEfSet = false;

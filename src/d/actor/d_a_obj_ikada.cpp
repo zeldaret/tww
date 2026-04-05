@@ -1442,7 +1442,7 @@ BOOL daObj_Ikada_c::_createHeap() {
         J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arc_name, IKADAH_BCK_SVSHIP_KAITEN);
         JUT_ASSERT(2180, bck != NULL);
 
-        if (!mBckAnm.init(modelData, bck, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false)) {
+        if (!mBckAnm.init(modelData, bck, true, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
     }
