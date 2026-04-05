@@ -113,8 +113,8 @@ void daObjPlant_c::set_mtx() {
 }
 
 /* 00000410-00000544       .text daObjPlant_Create__FPv */
-static cPhs_State daObjPlant_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daObjPlant_Create(void* i_this) {
+    return ((daObjPlant_c*)i_this)->_create();
 }
 
 /* 000006FC-0000072C       .text daObjPlant_Delete__FPv */

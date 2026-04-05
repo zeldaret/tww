@@ -41,4 +41,25 @@ inline BOOL daObjPlant_c::_draw() {
     return TRUE;
 }
 
+static BOOL _CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daObjPlant_c*>(i_this)->CreateHeap();
+}
+
+inline cPhs_State daObjPlant_c::_create() {
+    fopAcM_SetupActor(this, daObjPlant_c);
+
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Plant");
+
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, _CheckCreateHeap, 0x0D20)) {
+            return cPhs_ERROR_e;
+        }
+    
+        CreateInit();
+    }
+
+    field_0x410 = 0; 
+    return phase_state;
+}
+
 #endif /* D_A_OBJ_PLANT_H */
