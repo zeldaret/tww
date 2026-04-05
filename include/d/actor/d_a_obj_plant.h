@@ -87,10 +87,10 @@ inline BOOL daObjPlant_c::_execute() {
         mHitTimer++;
         
         if (mHitTimer < 8) {
-            field_0x408 = (s16)((0x100 - mHitTimer) * 32.0f * cM_ssin(field_0x40A));
+            field_0x408 = (s16)((0x100 - mHitTimer) * cM_ssin(field_0x40A) * 32.0f);
             field_0x40A += 0x1000;
         } else {
-            field_0x408 = (s16)((0x100 - mHitTimer) * 16.0f * cM_ssin(field_0x40A));
+            field_0x408 = (s16)((0x100 - mHitTimer) * cM_ssin(field_0x40A) * 16.0f);
             field_0x40A += 0x0800;
         }
         
