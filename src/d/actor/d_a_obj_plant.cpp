@@ -130,8 +130,8 @@ static BOOL daObjPlant_Draw(void* i_this) {
 }
 
 /* 00000814-00000A58       .text daObjPlant_Execute__FPv */
-static BOOL daObjPlant_Execute(void*) {
-    /* Nonmatching */
+static BOOL daObjPlant_Execute(void* i_this) {
+    return ((daObjPlant_c*)i_this)->_execute();
 }
 
 /* 00000A58-00000A60       .text daObjPlant_IsDelete__FPv */

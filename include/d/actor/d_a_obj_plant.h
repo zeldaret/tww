@@ -8,7 +8,7 @@ public:
     inline cPhs_State _create();
     inline bool _delete();
     inline BOOL _draw();
-    inline bool _execute();
+    inline BOOL _execute();
 
     BOOL CreateHeap();
     void CreateInit();
@@ -20,7 +20,8 @@ public:
     /* 0x29C */ dCcD_Stts field_0x29C;
     /* 0x2D8 */ dCcD_Cyl field_0x2D8;
     /* 0x408 */ s16 field_0x408;
-    /* 0x40A */ u8 field_0x40A[0x40E - 0x40A];
+    /* 0x40A */ s16 field_0x40A;
+    /* 0x40C */ s16 mHitTimer;
     /* 0x40E */ s16 field_0x40E;
     /* 0x410 */ u8 field_0x410;
     /* 0x411 */ u8 field_0x411[0x414 - 0x411];
@@ -60,6 +61,51 @@ inline cPhs_State daObjPlant_c::_create() {
 
     field_0x410 = 0; 
     return phase_state;
+}
+
+inline BOOL daObjPlant_c::_execute() {
+    field_0x2D8.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&field_0x2D8);
+
+    if ((mHitTimer > 0x38 || field_0x410 == 0) && field_0x2D8.ChkCoHit()) {
+        
+        fopAc_ac_c* hitAc = field_0x2D8.GetCoHitAc();
+        
+        cXyz diff = current.pos - hitAc->current.pos;
+        s16 angle = cM_atan2s(diff.x, diff.z);
+        
+        field_0x40E = angle - 0x4000;
+        field_0x410 = 1;
+        mHitTimer = 0;
+        field_0x40A = 0;
+        
+        fopAcM_seStart(this, 0x69E6, 0);
+    }
+
+    // 6. Wobble Animation
+    if (field_0x410 != 0) {
+        mHitTimer++;
+        
+        if (mHitTimer < 8) {
+            field_0x408 = (s16)((0x100 - mHitTimer) * 32.0f * cM_ssin(field_0x40A));
+            field_0x40A += 0x1000;
+        } else {
+            field_0x408 = (s16)((0x100 - mHitTimer) * 16.0f * cM_ssin(field_0x40A));
+            field_0x40A += 0x0800;
+        }
+        
+        // Reset after wobbling finishes
+        if (mHitTimer > 0x100) {
+            field_0x410 = 0;
+            mHitTimer = 0;
+            field_0x408 = 0;
+        }
+    }
+
+    // 7. Update Model Matrix
+    set_mtx();
+
+    return TRUE;
 }
 
 #endif /* D_A_OBJ_PLANT_H */
