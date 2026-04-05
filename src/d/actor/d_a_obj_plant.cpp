@@ -40,11 +40,9 @@ static dCcD_SrcCyl l_cyl_src = {
     }},
 };
 
-
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
-    ((daObjPlant_c*)i_this)->CreateHeap();
-    return;
+    return ((daObjPlant_c*)i_this)->CreateHeap();
 }
 
 /* 000002AC-00000390       .text nodeCallBack__FP7J3DNodei */
