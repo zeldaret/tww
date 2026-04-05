@@ -55,7 +55,7 @@ void daObjPlant_c::CreateHeap() {
 /* 000001E0-000002AC       .text CreateInit__12daObjPlant_cFv */
 void daObjPlant_c::CreateInit() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, -600.0f, 0.0f, -600.0f, 600.0f, 900.0f, 600.0f);
+    fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f, 600.0f, 900.0f, 600.0f);
     fopAcM_setCullSizeFar(this, 1.0f);
     field_0x29C.Init(0xFF, 0xFF, this);
     field_0x2D8.Set(l_cyl_src);
@@ -106,8 +106,8 @@ static BOOL daObjPlant_Delete(void* param_1) {
 }
 
 /* 0000072C-00000814       .text daObjPlant_Draw__FPv */
-static BOOL daObjPlant_Draw(void*) {
-    /* Nonmatching */
+static BOOL daObjPlant_Draw(void* i_this) {
+    return ((daObjPlant_c*)i_this)->_draw();
 }
 
 /* 00000814-00000A58       .text daObjPlant_Execute__FPv */
