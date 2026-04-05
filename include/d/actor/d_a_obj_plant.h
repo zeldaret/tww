@@ -10,7 +10,7 @@ public:
     inline BOOL _draw();
     inline bool _execute();
 
-    void CreateHeap();
+    BOOL CreateHeap();
     void CreateInit();
     void set_mtx();
 

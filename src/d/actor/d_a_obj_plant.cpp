@@ -47,25 +47,6 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return;
 }
 
-/* 00000098-000001E0       .text CreateHeap__12daObjPlant_cFv */
-void daObjPlant_c::CreateHeap() {
-    /* Nonmatching */
-}
-
-/* 000001E0-000002AC       .text CreateInit__12daObjPlant_cFv */
-void daObjPlant_c::CreateInit() {
-    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f, 600.0f, 900.0f, 600.0f);
-    fopAcM_setCullSizeFar(this, 1.0f);
-    field_0x29C.Init(0xFF, 0xFF, this);
-    field_0x2D8.Set(l_cyl_src);
-    field_0x2D8.SetStts(&field_0x29C);
-    field_0x408 = 0;
-    eyePos = current.pos;
-    eyePos.y += 150.0f; 
-    set_mtx();
-}
-
 /* 000002AC-00000390       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int param_2) {
     if (param_2 == 0) {
@@ -84,6 +65,44 @@ static BOOL nodeCallBack(J3DNode* node, int param_2) {
     }
     return TRUE;
 }
+
+/* 00000098-000001E0       .text CreateHeap__12daObjPlant_cFv */
+BOOL daObjPlant_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Plant", 3);
+    
+    JUT_ASSERT(0xAA, modelData != 0);
+    
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+    
+    for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
+        if (strcmp("joint2", mpModel->getModelData()->getJointName()->getName(i)) == 0) {
+            mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+            break;
+        }
+    }
+    
+    mpModel->setUserArea((u32)this);
+    
+    return TRUE;
+}
+
+/* 000001E0-000002AC       .text CreateInit__12daObjPlant_cFv */
+void daObjPlant_c::CreateInit() {
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f, 600.0f, 900.0f, 600.0f);
+    fopAcM_setCullSizeFar(this, 1.0f);
+    field_0x29C.Init(0xFF, 0xFF, this);
+    field_0x2D8.Set(l_cyl_src);
+    field_0x2D8.SetStts(&field_0x29C);
+    field_0x408 = 0;
+    eyePos = current.pos;
+    eyePos.y += 150.0f; 
+    set_mtx();
+}
+
 
 /* 00000390-00000410       .text set_mtx__12daObjPlant_cFv */
 void daObjPlant_c::set_mtx() {
