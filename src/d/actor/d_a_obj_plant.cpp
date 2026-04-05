@@ -118,8 +118,8 @@ static cPhs_State daObjPlant_Create(void* i_this) {
 }
 
 /* 000006FC-0000072C       .text daObjPlant_Delete__FPv */
-static BOOL daObjPlant_Delete(void* param_1) {
-    daObjPlant_c* plant = (daObjPlant_c*)param_1;
+static BOOL daObjPlant_Delete(void* i_this) {
+    daObjPlant_c* plant = (daObjPlant_c*)i_this;
     dComIfG_resDelete(&plant->mPhase,"Plant");
     return TRUE;
 }
