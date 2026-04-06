@@ -3156,6 +3156,14 @@ inline u16 dComIfGp_event_checkHind(u16 i_hindFlag) {
     return g_dComIfG_gameInfo.play.getEvent()->checkHind(i_hindFlag);
 }
 
+inline void dComIfGp_event_onHindFlag(u16 flag) {
+    g_dComIfG_gameInfo.play.getEvent()->onHindFlag(flag);
+}
+
+inline void dComIfGp_event_offHindFlag(u16 flag) {
+    g_dComIfG_gameInfo.play.getEvent()->offHindFlag(flag);
+}
+
 /**
  * Returns the button (X Y or Z) that was used to start this event.
  * @return The dTalkXYButton_e of the button the player used to initiate this event.

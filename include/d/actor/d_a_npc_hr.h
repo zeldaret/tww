@@ -4,6 +4,7 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_particle.h"
+#include "d/d_npc.h"
 
 class daNpc_Wind_Eff {
 public:
@@ -29,7 +30,7 @@ public:
 class daNpc_Wind_Clothes {
 public:
     void setSquallPos(int);
-    void create(fopAc_ac_c*, unsigned char, float*, int);
+    void create(fopAc_ac_c*, u8, f32*, int);
     void end();
     void proc();
     void init();
@@ -51,27 +52,31 @@ public:
 
 class daNpc_Hr_c : public fopAc_ac_c {
 public:
-    void ChkOrder(unsigned char) {}
+
+    typedef int (daNpc_Hr_c::*ActionFunc)(void*);
+
+    void ChkOrder(u8) {}
     void ClrOrder() {}
-    void SetOrder(unsigned char) {}
-    void chkEvFlag(unsigned short) {}
-    void chkFlag(unsigned short) {}
-    void clrEvFlag(unsigned short) {}
-    void clrFlag(unsigned short) {}
+    void SetOrder(u8) {}
+    void chkEvFlag(u16) {}
+    void chkFlag(u16) {}
+    void clrEvFlag(u16) {}
+    void clrFlag(u16) {}
     void getBackboneJntNum() {}
     void getBackbone_y() {}
     void getHeadJntNum() {}
     void getHead_x() {}
     void getHead_y() {}
     void incAttnSetCount() {}
-    void setAction(int (daNpc_Hr_c::*)(void*), void*) {}
+    bool setAction(ActionFunc, void*) {}
     void setAttentionBasePos(cXyz) {}
-    void setEvFlag(unsigned short) {}
+    void setEvFlag(u16) {}
     void setEyePos(cXyz) {}
-    void setFlag(unsigned short) {}
+    void setFlag(u16) {}
 
-    void getShapeType();
-    void getSwbit();
+    daNpc_Hr_c();
+    int getShapeType();
+    int getSwbit();
     void XyCheckCB(int);
     void onHide(int);
     void offHide(int);
@@ -96,78 +101,105 @@ public:
     void demoInitChange();
     void demoInitCom();
     void demoProcCom();
-    void demoProc();
+    bool demoProc();
     void node_Ht_ant(int);
-    void initTexPatternAnm(bool);
+    BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
-    void setTexPtn(signed char);
-    void setAnm(signed char);
+    void setTexPtn(s8);
+    void setAnm(s8);
     void setAnmStatus();
     void eventOrder();
     void checkOrder();
-    void next_msgStatus(unsigned long*);
+    void next_msgStatus(u32*);
     void getMsg();
     void setCollision();
-    void nextAnm(signed char, int);
-    void msgAnm(unsigned char);
+    void nextAnm(s8, int);
+    void msgAnm(u8);
     void talkInit();
-    void talk();
-    void init();
+    u16 talk();
+    BOOL init();
     void setAttention(bool);
-    void getNowJointY();
+    int getNowJointY();
     void getTornadoPos(int, cXyz*);
-    void rideTornado();
-    void getLookBackMode();
+    bool rideTornado();
+    u8 getLookBackMode();
     void lookBack();
-    void rt_search();
-    void rt_hide();
-    void rt_intro();
-    void to_rt_hit();
-    void to_rt_tact();
-    void rt_angry();
-    void rt_win();
-    void rt_hit0();
-    void rt_hit1();
-    void ht_hide();
-    void wait01();
-    void wait02();
+    bool rt_search();
+    bool rt_hide();
+    bool rt_intro();
+    bool to_rt_hit();
+    bool to_rt_tact();
+    bool rt_angry();
+    bool rt_win();
+    bool rt_hit0();
+    bool rt_hit1();
+    bool ht_hide();
+    bool wait01();
+    bool wait02();
     void endTalk();
     void endTact();
-    void setEmitFlash(float);
+    void setEmitFlash(f32);
     void smokeProc();
-    void talk01();
-    void ht_tact01();
-    void wait_action(void*);
+    bool talk01();
+    bool ht_tact01();
+    BOOL wait_action(void*);
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void CreateHeap();
+    BOOL CreateHeap();
 
 public:
-    /* 0x290 */ u8 m290[0x294 - 0x290];
+    /* 0x290 */ s8 m_waist_jnt_num;
+    /* 0x291 */ u8 field_0x291[0x294 - 0x291];
     /* 0x294 */ cXyz mPos;
-    /* 0x2A0 */ u8 m2A0[0x2A8 - 0x2A0];
-    /* 0x2A8 */ request_of_phase_process_class mResHrPhs;
-    /* 0x2B0 */ u8 m2B0[0x314 - 0x2B0];
-    /* 0x314 */ cCcD_Obj mObj0;
-    /* 0x364 */ u8 m364[0x42C - 0x364];
-    /* 0x42C */ cM3dGCyl m42C;
-    /* 0x444 */ u8 m444[0x598 - 0x444];
-    /* 0x598 */ cM3dGCyl m598;
-    /* 0x5B0 */ u8 m5B0[0x608 - 0x5B0];
-    /* 0x608 */ u16 m608;
-    /* 0x60A */ u8 m60A[0x60C - 0x60A];
-    /* 0x60C */ u8 m60C;
-    /* 0x60D */ u8 m60D[0x610 - 0x60D];
+    /* 0x2A0 */ s16 mEventIdx;
+    /* 0x2A2 */ s8 field_0x2A2;
+    /* 0x2A3 */ u8 field_0x2A3[0x2A8 - 0x2A3];
+    /* 0x2A8 */ request_of_phase_process_class mPhs;
+    /* 0x2B0 */ mDoExt_McaMorf* mpMorf;
+    /* 0x2B4 */ J3DModel* mpModel;
+    /* 0x2B8 */ mDoExt_McaMorf* mpMorf2;
+    /* 0x2BC */ u8 field_0x2BC[0x2C0 - 0x2BC];
+    /* 0x2C0 */ mDoExt_btpAnm mBtpAnm;
+    /* 0x2D4 */ u8 field_0x2D4;
+    /* 0x2D5 */ u8 field_0x2D5[0x2D8 - 0x2D5];
+    /* 0x2D8 */ dCcD_Stts mStts;
+    /* 0x314 */ dCcD_Cyl mCyl;
+    /* 0x444 */ dCcD_Stts mStts2;
+    /* 0x480 */ dCcD_Cyl mCyl2;
+    /* 0x5B0 */ dNpc_JntCtrl_c m_jnt;
+    /* 0x5E4 */ u8 field_0x5E4[0x5FC - 0x5E4];
+    /* 0x5FC */ s16 mMaxHeadTurnVelocity;
+    /* 0x5FE */ s8 field_0x5FE;
+    /* 0x5FF */ u8 field_0x5FF[0x600 - 0x5FF];
+    /* 0x600 */ f32 field_0x600;
+    /* 0x604 */ u8 field_0x604[0x608 - 0x604];
+    /* 0x608 */ u16 field_0x608;
+    /* 0x60A */ u8 field_0x60A;
+    /* 0x60B */ u8 mHitCount;
+    /* 0x60C */ u8 mHitDelayTimer;
+    /* 0x60D */ u8 field_0x60D[0x610 - 0x60D];
     /* 0x610 */ dPa_followEcallBack mSmokeCallBack;
-    /* 0x624 */ u8 m624[0x638 - 0x624];
-    /* 0x638 */ u8 m638;
-    /* 0x639 */ u8 m639[0x63A - 0x639];
-    /* 0x63A */ u8 mType;
-    /* 0x63B */ u8 m63B[0x694 - 0x63B];
+    /* 0x624 */ fpc_ProcID mProcId;
+    /* 0x628 */ ActionFunc mCurrActionFunc;
+    /* 0x634 */ u8 mSomeTexPatternIdx;
+    /* 0x635 */ u8 field_0x635[0x637 - 0x635];
+    /* 0x637 */ u8 field_0x637;
+    /* 0x638 */ s8 field_0x638;
+    /* 0x639 */ s8 field_0x639;
+    /* 0x63A */ s8 mType;
+    /* 0x63B */ u8 field_0x63B;
+    /* 0x63C */ u8 field_0x63C[0x640 - 0x63C];
+    /* 0x640 */ int mStaffId;
+    /* 0x644 */ int field_0x644;
+    /* 0x648 */ u8 field_0x648[0x650 - 0x648];
+    /* 0x650 */ s16 field_0x650;
+    /* 0x652 */ u8 field_0x652[0x662 - 0x652];
+    /* 0x662 */ u8 field_0x662;
+    /* 0x663 */ u8 field_0x663[0x694 - 0x663];
     /* 0x694 */ daNpc_Wind_Clothes mClothes;
-    /* 0x7C8 */ u8 m7C8[0x828 - 0x7C8];
-};
+    /* 0x7C8 */ u8 field_0x7C8[0x828 - 0x7C8];
+};  // Size: 0x828
 
 #endif /* D_A_NPC_HR_H */

@@ -369,6 +369,7 @@ void dKyw_pwind_cylinder_set(WIND_INFLUENCE*);
 cXyz dKyw_pntwind_get_vecpow(cXyz* pPos);
 void dKyw_evt_wind_set(s16 i_windX, s16 i_windY);
 void dKyw_evt_wind_set_go();
+void dKyw_tact_wind_set(s16 i_windX, s16 i_windY);
 void dKyw_get_AllWind_vec(cXyz* param_0, cXyz* i_direction, f32* i_power);
 cXyz dKyw_get_AllWind_vecpow(cXyz* param_0);
 int dKyw_get_tactwind_dir();
