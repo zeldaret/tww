@@ -6,10 +6,45 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_magma.h"
 #include "dolphin/types.h"
+#include "d/actor/d_a_btd.h"
+#include "d/d_s_play.h"
 
 /* 80076B00-80076CDC       .text calc__17dMagma_ballBoss_cFfUci */
-void dMagma_ballBoss_c::calc(f32, u8, int) {
-    /* Nonmatching */
+void dMagma_ballBoss_c::calc(f32 param_1, u8 param_2, int param_3) {
+    if (btd != NULL && btd->m6E84 <= -150.0f) {
+        this->field_0x8 = -200.0f;
+        return;
+    }
+
+    if (btd != NULL) {
+        f32 distSq = (this->field_0x4 * this->field_0x4) + (this->field_0xc * this->field_0xc);
+        f32 dist = 0.0f;
+        
+        if (distSq > 0.0f) {
+            dist = std::sqrtf(distSq); 
+        }
+        f32 diff = std::fabsf(btd->m6E7C - dist);
+        
+        if (diff < 300.0f) {
+            cLib_addCalc2(&this->field_0x8, 
+            (this->field_0x14 + REG0_F(5) + 50.0f + 30.0f) - (diff * 0.1f), 
+                          0.5f, 20.0f);
+            cLib_addCalc2(&this->field_0x10, 1.5f, 0.2f, 0.2f);
+            
+            this->field_0x18 = 0x4000;
+            this->field_0x7c = 1000;
+            return;
+        }
+    }
+    if (this->field_0x18 < 0) {
+        this->virtualFunc5((double)param_1, this, 0, -1); 
+        this->field_0x18 = 0;
+    }
+    this->field_0x8 = this->field_0x14 + 
+                    (REG0_F(5) + 50.0f) * 
+                    cM_ssin(this->field_0x18); 
+
+    this->field_0x18 += this->field_0x7c;
 }
 
 /* 80076CDC-80076D50       .text update__17dMagma_ballBoss_cFv */

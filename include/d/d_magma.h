@@ -42,6 +42,15 @@ public:
     virtual void calc(f32, u8, int);
     virtual void update();
     virtual void setup(f32, u8, int);
+    virtual void virtualFunc5(f32, dMagma_ballBoss_c*, int, int);
+    
+    float field_0x4;
+    float field_0x8; 
+    float field_0xc;
+    float field_0x14;
+    float field_0x10;
+    float field_0x18;
+    float field_0x7c;
 };
 
 class dMagma_floor_c {
@@ -113,6 +122,11 @@ public:
     /* 0x590 */ dMagma_room_c mRoom[64];
     /* 0x690 */ GXColor mColor1;
     /* 0x694 */ f32 mTimer;
+};
+struct btd_class; 
+extern btd_class* btd;
+class d_boss_magma : public fopAc_ac_c {
+public:
 };
 
 #endif /* D_MAGMA_H */
