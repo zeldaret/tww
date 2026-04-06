@@ -6,7 +6,7 @@
 class daObjPlant_c : public fopAc_ac_c {
 public:
     inline cPhs_State _create();
-    inline bool _delete();
+    inline BOOL _delete();
     inline BOOL _draw();
     inline BOOL _execute();
 

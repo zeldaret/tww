@@ -76,6 +76,15 @@ BOOL daObjPlant_c::_draw() {
     dComIfGd_setSimpleShadow(&current.pos, current.pos.y, 60.0f, &shadow_vec, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
     return TRUE;
 }
+BOOL daObjPlant_c::_delete() {
+    #if VERSION == VERSION_DEMO
+            dComIfG_deleteObjectRes("Plant"); 
+    #else
+            dComIfG_resDelete(&mPhase, "Plant"); 
+    #endif
+     
+    return TRUE;
+}
 
 BOOL daObjPlant_c::_execute() {
     mCyl.SetC(current.pos);
@@ -195,9 +204,8 @@ static cPhs_State daObjPlant_Create(void* i_this) {
 
 /* 000006FC-0000072C       .text daObjPlant_Delete__FPv */
 static BOOL daObjPlant_Delete(void* i_this) {
-    daObjPlant_c* plant = (daObjPlant_c*)i_this;
-    dComIfG_resDelete(&plant->mPhase,"Plant");
-    return TRUE;
+    daObjPlant_c* plant = static_cast<daObjPlant_c*>(i_this);
+    return plant->_delete();
 }
 
 /* 0000072C-00000814       .text daObjPlant_Draw__FPv */
