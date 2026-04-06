@@ -40,6 +40,7 @@ static dCcD_SrcCyl l_cyl_src = {
         /* Height */ 200.0f,
     }},
 }; 
+static BOOL nodeCallBack(J3DNode*, int);
 
 static BOOL _CheckCreateHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjPlant_c*>(i_this)->CreateHeap();
@@ -117,28 +118,10 @@ BOOL daObjPlant_c::_execute() {
 
     return TRUE;
 }
+
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjPlant_c*)i_this)->CreateHeap();
-}
-
-/* 000002AC-00000390       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
-    if (calcTiming == J3DNodeCBCalcTiming_In) {
-        int jntNo = ((J3DJoint*)node)->getJntNo();
-        J3DModel* model = j3dSys.getModel();
-        daObjPlant_c* plant = (daObjPlant_c*)model->getUserArea();
-        
-        if (plant != NULL) {
-            PSMTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            cMtx_XrotM(*calc_mtx, plant->field_0x40E);
-            cMtx_YrotM(*calc_mtx, plant->field_0x408);
-            cMtx_XrotM(*calc_mtx, -plant->field_0x40E);
-            model->setAnmMtx(jntNo, *calc_mtx);
-            PSMTXCopy(*calc_mtx, j3dSys.mCurrentMtx);
-        }
-    }
-    return TRUE;
 }
 
 /* 00000098-000001E0       .text CreateHeap__12daObjPlant_cFv */
@@ -176,6 +159,25 @@ void daObjPlant_c::CreateInit() {
     eyePos = current.pos;
     eyePos.y += 150.0f; 
     set_mtx();
+}
+
+/* 000002AC-00000390       .text nodeCallBack__FP7J3DNodei */
+static inline BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        int jntNo = ((J3DJoint*)node)->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        daObjPlant_c* plant = (daObjPlant_c*)model->getUserArea();
+        
+        if (plant != NULL) {
+            PSMTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            cMtx_XrotM(*calc_mtx, plant->field_0x40E);
+            cMtx_YrotM(*calc_mtx, plant->field_0x408);
+            cMtx_XrotM(*calc_mtx, -plant->field_0x40E);
+            model->setAnmMtx(jntNo, *calc_mtx);
+            PSMTXCopy(*calc_mtx, j3dSys.mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 00000390-00000410       .text set_mtx__12daObjPlant_cFv */

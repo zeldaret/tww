@@ -1740,7 +1740,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_paper"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_pbka"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_pfall"),
-    ActorRel(Equivalent, "d_a_obj_plant"), # Weak Function Ordering issue
+    ActorRel(Matching, "d_a_obj_plant"),
     ActorRel(Matching, "d_a_obj_rflw"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_rforce"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_smplbg"),
