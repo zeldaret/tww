@@ -18,11 +18,9 @@ void dMagma_ballBoss_c::calc(f32 param_1, u8 param_2, int param_3) {
 
     if (btd != NULL) {
         f32 distSq = (this->field_0x4 * this->field_0x4) + (this->field_0xc * this->field_0xc);
-        f32 dist = 0.0f;
         
-        if (distSq > 0.0f) {
-            dist = std::sqrtf(distSq); 
-        }
+        f32 dist = std::sqrtf(distSq); 
+
         f32 diff = std::fabsf(btd->m6E7C - dist);
         
         if (diff < 300.0f) {
