@@ -77,11 +77,7 @@ BOOL daObjPlant_c::_draw() {
     return TRUE;
 }
 BOOL daObjPlant_c::_delete() {
-    #if VERSION == VERSION_DEMO
-            dComIfG_deleteObjectRes("Plant"); 
-    #else
-            dComIfG_resDelete(&mPhase, "Plant"); 
-    #endif
+    dComIfG_resDeleteDemo(&mPhase, "Plant"); 
      
     return TRUE;
 }
