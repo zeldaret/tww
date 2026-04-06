@@ -17,15 +17,11 @@ void dMagma_ballBoss_c::calc(f32 param_1, u8 param_2, int param_3) {
     }
 
     if (btd != NULL) {
-        f32 distSq = (this->field_0x4 * this->field_0x4) + (this->field_0xc * this->field_0xc);
-        
-        f32 dist = std::sqrtf(distSq); 
-
-        f32 diff = std::fabsf(btd->m6E7C - dist);
+        f32 diff = std::fabsf(btd->m6E7C - std::sqrtf((this->field_0x4 * this->field_0x4) + (this->field_0xc * this->field_0xc)));
         
         if (diff < 300.0f) {
             cLib_addCalc2(&this->field_0x8, 
-            (this->field_0x14 + REG0_F(5) + 50.0f + 30.0f) - (diff * 0.1f), 
+                          (this->field_0x14 + REG0_F(5) + 50.0f + 30.0f) - (diff * 0.1f), 
                           0.5f, 20.0f);
             cLib_addCalc2(&this->field_0x10, 1.5f, 0.2f, 0.2f);
             
@@ -35,7 +31,7 @@ void dMagma_ballBoss_c::calc(f32 param_1, u8 param_2, int param_3) {
         }
     }
     if (this->field_0x18 < 0) {
-        this->virtualFunc5((double)param_1, this, 0, -1); 
+        this->virtualFunc5(param_1, this, 0, -1); 
         this->field_0x18 = 0;
     }
     this->field_0x8 = this->field_0x14 + 
