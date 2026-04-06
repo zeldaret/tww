@@ -9,6 +9,7 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/res/res_plant.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -38,19 +39,112 @@ static dCcD_SrcCyl l_cyl_src = {
         /* Radius */ 30.0f,
         /* Height */ 200.0f,
     }},
-};
-static BOOL nodeCallBack(J3DNode* node, int calcTiming); 
+}; 
 
+static BOOL _CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daObjPlant_c*>(i_this)->CreateHeap();
+}
+
+cPhs_State daObjPlant_c::_create() {
+    fopAcM_SetupActor(this, daObjPlant_c);
+
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Plant");
+
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, _CheckCreateHeap, 0x0D20)) {
+            return cPhs_ERROR_e;
+        }
+    
+        CreateInit();
+    }
+
+    field_0x410 = 0; 
+    return phase_state;
+}
+
+BOOL daObjPlant_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList(); 
+    cXyz shadow_vec;
+    shadow_vec.x = 0.0f;
+    shadow_vec.y = 1.0f;
+    shadow_vec.z = 0.0f;
+    dComIfGd_setSimpleShadow(&current.pos, current.pos.y, 60.0f, &shadow_vec, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+    return TRUE;
+}
+
+BOOL daObjPlant_c::_execute() {
+    mCyl.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&mCyl);
+
+    if ((mHitTimer > 0x38 || field_0x410 == 0) && mCyl.ChkCoHit()) {
+        
+        fopAc_ac_c* hitAc = mCyl.GetCoHitAc();
+        
+        cXyz diff = current.pos - hitAc->current.pos;
+        s16 angle = cM_atan2s(diff.x, diff.z);
+        
+        field_0x40E = angle - 0x4000;
+        field_0x410 = 1;
+        mHitTimer = 0;
+        field_0x40A = 0;
+        
+        fopAcM_seStart(this, JA_SE_OBJ_TREE_SWING_S, 0);
+    }
+    
+    if (field_0x410 != 0) {
+        mHitTimer++;
+        
+        if (mHitTimer < 8) {
+            field_0x408 = (s16)((0x100 - mHitTimer) * cM_ssin(field_0x40A) * 32.0f);
+            field_0x40A += 0x1000;
+        } else {
+            field_0x408 = (s16)((0x100 - mHitTimer) * cM_ssin(field_0x40A) * 16.0f);
+            field_0x40A += 0x0800;
+        }
+        
+        if (mHitTimer > 0x100) {
+            field_0x410 = 0;
+            mHitTimer = 0;
+            field_0x408 = 0;
+        }
+    }
+    
+    set_mtx();
+
+    return TRUE;
+}
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjPlant_c*)i_this)->CreateHeap();
 }
 
+/* 000002AC-00000390       .text nodeCallBack__FP7J3DNodei */
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        int jntNo = ((J3DJoint*)node)->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        daObjPlant_c* plant = (daObjPlant_c*)model->getUserArea();
+        
+        if (plant != NULL) {
+            PSMTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            cMtx_XrotM(*calc_mtx, plant->field_0x40E);
+            cMtx_YrotM(*calc_mtx, plant->field_0x408);
+            cMtx_XrotM(*calc_mtx, -plant->field_0x40E);
+            model->setAnmMtx(jntNo, *calc_mtx);
+            PSMTXCopy(*calc_mtx, j3dSys.mCurrentMtx);
+        }
+    }
+    return TRUE;
+}
 
 /* 00000098-000001E0       .text CreateHeap__12daObjPlant_cFv */
 BOOL daObjPlant_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Plant", 3);
-    JUT_ASSERT(0xAA, modelData != 0);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Plant", PLANT_BDL_YRMWD);
+    JUT_ASSERT(0xAA, modelData != NULL);
     
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     
@@ -75,32 +169,13 @@ void daObjPlant_c::CreateInit() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f, 600.0f, 900.0f, 600.0f);
     fopAcM_setCullSizeFar(this, 1.0f);
-    field_0x29C.Init(0xFF, 0xFF, this);
-    field_0x2D8.Set(l_cyl_src);
-    field_0x2D8.SetStts(&field_0x29C);
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
     field_0x408 = 0;
     eyePos = current.pos;
     eyePos.y += 150.0f; 
     set_mtx();
-}
-
-/* 000002AC-00000390       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, int param_2) {
-    if (param_2 == 0) {
-        int jntNo = ((J3DJoint*)node)->getJntNo();
-        J3DModel* model = j3dSys.getModel();
-        daObjPlant_c* plant = (daObjPlant_c*)model->getUserArea();
-        
-        if (plant != NULL) {
-            PSMTXCopy(model->getAnmMtx(jntNo), calc_mtx[0]);
-            cMtx_XrotM(calc_mtx[0], plant->field_0x40E);
-            cMtx_YrotM(calc_mtx[0], plant->field_0x408);
-            cMtx_XrotM(calc_mtx[0], -plant->field_0x40E);
-            model->setAnmMtx(jntNo, calc_mtx[0]);
-            PSMTXCopy(calc_mtx[0], j3dSys.mCurrentMtx);
-        }
-    }
-    return TRUE;
 }
 
 /* 00000390-00000410       .text set_mtx__12daObjPlant_cFv */
