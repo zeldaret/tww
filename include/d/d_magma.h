@@ -13,8 +13,8 @@ public:
     virtual void update() = 0;
 
     void setup(f32, u8, int);
-    virtual void draw();
     virtual void virtualFunc5(f32, int, int);
+    virtual void draw();
 
     BOOL rangeCheck(cXyz&, f32*);
 
@@ -44,7 +44,6 @@ public:
     virtual void calc(f32, u8, int);
     virtual void update();
     void setup(f32, u8, int);
-
     virtual void virtualFunc5(f32, int, int);
 };
 
