@@ -117,7 +117,7 @@ public:
     /* 0x690 */ GXColor mColor1;
     /* 0x694 */ f32 mTimer;
 };
-struct btd_class; 
+struct btd_class;
 extern btd_class* btd;
 class d_boss_magma : public fopAc_ac_c {
 public:
