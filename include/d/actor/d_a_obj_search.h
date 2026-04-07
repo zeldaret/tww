@@ -9,8 +9,10 @@ namespace daObj_Search {
     class Act_c : public fopAc_ac_c {
     public:
         enum Proc_e {
-            
+            PRM_SWSAVE_W = 8, 
+            PRM_SWSAVE_S = 0, 
         };
+        
         
         static bool getFindFlag() { return m_find_flag == true; }
         static void setFindFlag(bool flag) { m_find_flag = flag; }
@@ -64,13 +66,34 @@ namespace daObj_Search {
         bool _delete();
         BOOL _isdelete();
     
-    public:
-        /* Place member variables here */
-        /* 0x290 */ u8 m290[0x664 - 0x290];
-        /* 0x664 */ bool mBkControl;
-        /* 0x665 */ u8 m665[0x84C - 0x665];
-        /* 0x84C */ fpc_ProcID mChildId;
-    };
+public:
+    /* 0x000 */ fopAc_ac_c parent;
+
+    /* 0x290 */ u8 m290[0xd4];
+
+    /* 0x5F4 */ s32 mVar5F4;
+                            
+    /* 0x5F8 */ u8 m5F8[0x664 - 0x5F8];
+
+    /* 0x664 */ bool mBkControl;
+
+    /* 0x665 */ u8 m665[0x706 - 0x665];
+
+    /* 0x706 */ s16 mAngleX;
+    /* 0x708 */ u8 m708[0x70C - 0x708];
+
+    /* 0x70C */ s16 mAngleY;
+    /* 0x70E */ u8 m70E[0x7B2 - 0x70E];
+
+    /* 0x7B2 */ s16 mTargetAngleX;
+    /* 0x7B4 */ s16 mTargetAngleY;
+
+    /* 0x7B6 */ u8 m7B6[0x84C - 0x7B6];
+
+
+    /* 0x84C */ fpc_ProcID mChildId;
+};
+
 
     class Bgc_c {
     public:
