@@ -39,7 +39,11 @@ void dMagma_ballBoss_c::calc(f32 param_1, u8 param_2, int param_3) {
 
 /* 80076CDC-80076D50       .text update__17dMagma_ballBoss_cFv */
 void dMagma_ballBoss_c::update() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(this->mPos.x, this->mPos.y, this->mPos.z);
+    mDoMtx_stack_c::scaleM(this->mScale, 1.0f, this->mScale);
+
+    PSMTXCopy(mDoMtx_stack_c::get(), this->mTexProjMtx);
+    PSMTXConcat(j3dSys.getViewMtx(), this->mTexProjMtx, this->mPosMtx);
 }
 
 /* 80076D50-80076D9C       .text b_a_sub__FPvPv */
