@@ -41,8 +41,8 @@ public:
     virtual ~dMagma_ballBoss_c();
     virtual void calc(f32, u8, int);
     virtual void update();
+    virtual void virtualFunc5(f32, int, int);
     virtual void setup(f32, u8, int);
-    virtual void virtualFunc5(f32, dMagma_ballBoss_c*, int, int);
     
     /* 0x04 */ f32 field_0x4;
     /* 0x08 */ f32 field_0x8; 
