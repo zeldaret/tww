@@ -13,7 +13,7 @@ public:
     virtual void update() = 0;
 
     virtual void setup(f32, u8, int);
-    virtual void draw();
+    void draw();
 
     BOOL rangeCheck(cXyz&, f32*);
 
@@ -114,11 +114,6 @@ public:
     /* 0x590 */ dMagma_room_c mRoom[64];
     /* 0x690 */ GXColor mColor1;
     /* 0x694 */ f32 mTimer;
-};
-struct btd_class;
-extern btd_class* btd;
-class d_boss_magma : public fopAc_ac_c {
-public:
 };
 
 #endif /* D_MAGMA_H */

@@ -10,6 +10,8 @@
 #include "d/d_s_play.h"
 #include "d/d_procname.h"
 
+static btd_class* btd = NULL;
+
 /* 80076B00-80076CDC       .text calc__17dMagma_ballBoss_cFfUci */
 void dMagma_ballBoss_c::calc(f32 param_1, u8 param_2, int param_3) {
     if (btd != NULL && btd->m6E84 <= -150.0f) {
