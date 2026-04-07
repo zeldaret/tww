@@ -12,33 +12,33 @@
 /* 80076B00-80076CDC       .text calc__17dMagma_ballBoss_cFfUci */
 void dMagma_ballBoss_c::calc(f32 param_1, u8 param_2, int param_3) {
     if (btd != NULL && btd->m6E84 <= -150.0f) {
-        this->field_0x8 = -200.0f;
+        this->mPos.y = -200.0f;
         return;
     }
 
-    if (btd != NULL) { 
-        f32 diff = std::fabsf(btd->m6E7C - std::sqrtf((this->field_0x4 * this->field_0x4) + (this->field_0xc * this->field_0xc)));
-        
+    if (btd != NULL) {
+        f32 diff = std::fabsf(btd->m6E7C - std::sqrtf((this->mPos.x * this->mPos.x) + (this->mPos.z * this->mPos.z)));
+
         if (diff < 300.0f) {
-            cLib_addCalc2(&this->field_0x8, 
-                          (this->field_0x14 + REG0_F(5) + 50.0f + 30.0f) - (diff * 0.1f), 
+            cLib_addCalc2(&this->mPos.y,
+                          (this->mBaseY + (50.0f + REG0_F(5)) + 30.0f) - (diff * 0.1f),
                           0.5f, 20.0f);
-            cLib_addCalc2(&this->field_0x10, 1.5f, 0.2f, 0.2f);
-            
-            this->field_0x18 = 0x4000;
-            this->field_0x7c = 1000;
+            cLib_addCalc2(&this->mScale, 1.5f, 0.2f, 0.2f);
+
+            this->mWave = 0x4000;
+            this->mWaveTimer = 1000;
             return;
         }
     }
-    if (this->field_0x18 < 0) { 
-        this->virtualFunc5(param_1, 0, -1); 
-        this->field_0x18 = 0;
+    if (this->mWave < 0) {
+        this->virtualFunc5(param_1, 0, -1);
+        this->mWave = 0;
     }
-    this->field_0x8 = this->field_0x14 + 
-                    (REG0_F(5) + 50.0f) * 
-                    cM_ssin(this->field_0x18); 
+    this->mPos.y = this->mBaseY +
+                    (REG0_F(5) + 50.0f) *
+                    cM_ssin(this->mWave);
 
-    this->field_0x18 += this->field_0x7c;
+    this->mWave += this->mWaveTimer;
 }
 
 /* 80076CDC-80076D50       .text update__17dMagma_ballBoss_cFv */
