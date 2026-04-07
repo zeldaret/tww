@@ -30,7 +30,7 @@ void dMagma_ballBoss_c::calc(f32 param_1, u8 param_2, int param_3) {
         }
     }
     if (this->mWave < 0) {
-        this->virtualFunc5(param_1, 0, -1);
+        this->setup(param_1, 0, -1);
         this->mWave = 0;
     }
     this->mPos.y = this->mBaseY + (REG0_F(5) + 50.0f) * cM_ssin(this->mWave);
