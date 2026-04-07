@@ -8,6 +8,7 @@
 #include "dolphin/types.h"
 #include "d/actor/d_a_btd.h"
 #include "d/d_s_play.h"
+#include "d/d_procname.h"
 
 /* 80076B00-80076CDC       .text calc__17dMagma_ballBoss_cFfUci */
 void dMagma_ballBoss_c::calc(f32 param_1, u8 param_2, int param_3) {
@@ -47,13 +48,42 @@ void dMagma_ballBoss_c::update() {
 }
 
 /* 80076D50-80076D9C       .text b_a_sub__FPvPv */
-void b_a_sub(void*, void*) {
-    /* Nonmatching */
+void* b_a_sub(void* param_1, void* param_2) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BTD) {
+        return param_1;
+    }
+    return NULL;
 }
 
 /* 80076D9C-80076FEC       .text setup__17dMagma_ballBoss_cFfUci */
-void dMagma_ballBoss_c::setup(f32, u8, int) {
-    /* Nonmatching */
+void dMagma_ballBoss_c::setup(f32 param_1, u8 param_2, int param_3) {
+    this->mPos.x = cM_rndFX(1300.0f);
+    this->mPos.y = 0.0f;
+
+    f32 max_z = std::sqrtf((1300.0f * 1300.0f) - (this->mPos.x * this->mPos.x));
+    this->mPos.z = cM_rndFX(max_z);
+
+    this->mScale = REG0_F(11) + 0.5f + cM_rndF(REG0_F(12) + 0.5f);
+
+    this->mBaseY = REG0_F(6) + -150.0f - 20.0f + param_1 + 90.0f;
+
+    btd = (btd_class*)fpcEx_Search(b_a_sub, NULL);
+
+    if (btd != NULL) {
+        if (btd->m6E88 == 1) {
+            f32 dist = std::sqrtf((this->mPos.x * this->mPos.x) + (this->mPos.z * this->mPos.z));
+
+            f32 target_dist = REG0_F(16) + 800.0f;
+
+            if (dist < target_dist) {
+                this->mBaseY += (REG0_F(17) + 0.05f) * (target_dist - dist);
+            }
+        }
+        this->mBaseY += btd->m6E84;
+    }
+
+    this->mWaveTimer = (cM_rndF(100.0f) + 400.0f);
+    this->mWave = (cM_rndF(8.0f) * 4096.0f);
 }
 
 /* 80076FEC-80077048       .text __dt__17dMagma_ballBoss_cFv */
