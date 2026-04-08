@@ -22,9 +22,10 @@ public:
     /* 0x10 */ f32 mScale;
     /* 0x14 */ f32 mBaseY;
     /* 0x18 */ s16 mWave;
+    /* 0x1A */ u8 mTimer;
     /* 0x1C */ Mtx mPosMtx;
     /* 0x4C */ Mtx mTexProjMtx;
-    /* 0x7C */ s16 mWaveTimer;
+    /* 0x7C */ u8 mWaveTimer;
 };
 
 class dMagma_ballPath_c : public dMagma_ball_c {
