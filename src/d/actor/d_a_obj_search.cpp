@@ -191,7 +191,7 @@ void daObj_Search::Act_c::smoke_set(float, int) {
 }
 
 /* 801010C4-801013AC       .text _execute__Q212daObj_Search5Act_cFv */
-bool daObj_Search::Act_c::_execute() {
+BOOL daObj_Search::Act_c::_execute() {
     /* Nonmatching */
 }
 
@@ -251,12 +251,12 @@ void daObj_Search::Act_c::is_path_info() {
 }
 
 /* 80102398-801026F8       .text _draw__Q212daObj_Search5Act_cFv */
-bool daObj_Search::Act_c::_draw() {
+BOOL daObj_Search::Act_c::_draw() {
     /* Nonmatching */
 }
 
 /* 801026F8-8010283C       .text _delete__Q212daObj_Search5Act_cFv */
-bool daObj_Search::Act_c::_delete() {
+BOOL daObj_Search::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -266,28 +266,28 @@ BOOL daObj_Search::Act_c::_isdelete() {
 }
 
 /* 80102844-80102864       .text Create__Q212daObj_Search4MthdFPv */
-cPhs_State daObj_Search::Mthd::Create(void*) {
-    /* Nonmatching */
+cPhs_State daObj_Search::Mthd::Create(void* i_this) {
+    return ((daObj_Search::Act_c*)i_this)->_create();
 }
 
 /* 80102864-80102884       .text Delete__Q212daObj_Search4MthdFPv */
-BOOL daObj_Search::Mthd::Delete(void*) {
-    /* Nonmatching */
+BOOL daObj_Search::Mthd::Delete(void* i_this) {
+    return ((daObj_Search::Act_c*)i_this)->_delete();
 }
 
 /* 80102884-801028A4       .text Execute__Q212daObj_Search4MthdFPv */
-BOOL daObj_Search::Mthd::Execute(void*) {
-    /* Nonmatching */
+BOOL daObj_Search::Mthd::Execute(void* i_this) {
+    return ((daObj_Search::Act_c*)i_this)->_execute();
 }
 
 /* 801028A4-801028C4       .text Draw__Q212daObj_Search4MthdFPv */
-BOOL daObj_Search::Mthd::Draw(void*) {
-    /* Nonmatching */
+BOOL daObj_Search::Mthd::Draw(void* i_this) {
+    return ((daObj_Search::Act_c*)i_this)->_draw();
 }
 
 /* 801028C4-801028E4       .text IsDelete__Q212daObj_Search4MthdFPv */
-BOOL daObj_Search::Mthd::IsDelete(void*) {
-    /* Nonmatching */
+BOOL daObj_Search::Mthd::IsDelete(void* i_this) {
+    return ((daObj_Search::Act_c*)i_this)->_isdelete();
 }
 
 actor_method_class daObj_Search::Mthd::Table = {

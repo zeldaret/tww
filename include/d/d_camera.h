@@ -500,6 +500,7 @@ public:
     bool StopShake();
     void ResetBlure(int);
     void SetBlureAlpha(f32);
+    void SetFilter(s32, int, cXyz*);
     void SetBlureScale(f32, f32, f32);
     void SetBlureScale(f32);
     void SetBlurePosition(f32, f32, f32);

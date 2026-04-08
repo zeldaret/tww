@@ -3050,7 +3050,13 @@ cPhs_State daMP_c::daMP_c_Init() {
 
 /* 00006580-000065F8       .text daMP_c_Finish__6daMP_cFv */
 BOOL daMP_c::daMP_c_Finish() {
-    /* Nonmatching */
+    mDoGph_gInf_c::setFrameRate(daMP_backup_FrameRate);
+    GXRenderModeObj* renderMode = JUTVideo::getManager()->getRenderMode();
+    for (int i = 0; i < 7; i++) {
+        renderMode->vfilter[i] = daMP_backup_vfilter[i];
+    }
+    daMP_ActivePlayer_Finish();
+    return TRUE;
 }
 
 /* 000065F8-0000661C       .text daMP_c_Main__6daMP_cFv */
