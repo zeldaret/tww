@@ -101,11 +101,11 @@ BOOL dMagma_ball_c::rangeCheck(cXyz& pos, f32* dst) {
 void dMagma_ballPath_c::calc(f32 offsY, u8 pathNo, int roomNo) {
     if (mWave < 0) {
         setup(offsY, pathNo, roomNo);
-        mWaveTimer = 0;
+        mPathTimer = 0;
         mWave = 0;
     }
 
-    if (cLib_calcTimer(&mWaveTimer) == 0) {
+    if (cLib_calcTimer(&mPathTimer) == 0) {
         mWave += 200;
         mPos.y = mBaseY + (cM_ssin(mWave) - 1.0f) * 100.0f;
     }

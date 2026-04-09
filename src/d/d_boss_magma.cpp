@@ -23,7 +23,8 @@ void dMagma_ballBoss_c::calc(f32 param_1, u8 param_2, int param_3) {
         f32 diff = std::fabsf(btd->m6E7C - std::sqrtf((this->mPos.x * this->mPos.x) + (this->mPos.z * this->mPos.z)));
 
         if (diff < 300.0f) {
-            cLib_addCalc2(&this->mPos.y, (this->mBaseY + (50.0f + REG0_F(5)) + 30.0f) - (diff * 0.1f), 0.5f, 20.0f);
+            f32 targetY = (this->mBaseY + (50.0f + REG0_F(5)) + 30.0f) - (diff * 0.1f);
+            cLib_addCalc2(&this->mPos.y, targetY, 0.5f, 20.0f);
             cLib_addCalc2(&this->mScale, 1.5f, 0.2f, 0.2f);
 
             this->mWave = 0x4000;

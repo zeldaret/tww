@@ -25,7 +25,10 @@ public:
     /* 0x1A */ u8 mTimer;
     /* 0x1C */ Mtx mPosMtx;
     /* 0x4C */ Mtx mTexProjMtx;
-    /* 0x7C */ s16 mWaveTimer;
+    union {
+        s16 mWaveTimer;
+        u8 mPathTimer;
+    };
 };
 
 class dMagma_ballPath_c : public dMagma_ball_c {
