@@ -129,7 +129,7 @@ void dMagma_ballPath_c::setup(f32 offsY, u8 pathNo, int roomNo) {
     mBaseY = offsY - cM_rndF(20.0f);
     mWave = cM_rndF(8.0f) * 4096.0f;
     mPos.y = mBaseY + (cM_ssin(mWave) - 1.0f) * 100.0f;
-    mWaveTimer = 0;
+    mPathTimer = 0;
     mDoMtx_stack_c::transS(mPos);
     mDoMtx_stack_c::scaleM(mScale, 1.0f, mScale);
     mDoMtx_copy(mDoMtx_stack_c::get(), mTexProjMtx);
