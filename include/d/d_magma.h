@@ -36,7 +36,6 @@ public:
     virtual void update();
     virtual void setup(f32, u8, int);
 
-public:
 };
 
 class dMagma_ballBoss_c : public dMagma_ball_c {
@@ -47,7 +46,6 @@ public:
     virtual void update();
     virtual void setup(f32, u8, int);
 
-public:
 };
 
 class dMagma_floor_c {
