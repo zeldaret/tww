@@ -48,7 +48,7 @@ public:
     virtual void setup(f32, u8, int);
 
 public:
-    /* 0x7C */ s16 mWaveTimer;
+    /* 0x7C */ s16 field_0x7C;
 };
 
 class dMagma_floor_c {
