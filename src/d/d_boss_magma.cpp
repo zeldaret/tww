@@ -19,7 +19,7 @@ void dMagma_ballBoss_c::calc(f32 param_1, u8 param_2, int param_3) {
     }
 
     if (btd != NULL) {
-        f32 diff = std::fabsf(btd->m6E7C - std::sqrtf((mPos.x * mPos.x) + (mPos.z * mPos.z)));
+        f32 diff = std::fabsf(btd->m6E7C - std::sqrtf(SQUARE(mPos.x) + SQUARE(mPos.z)));
 
         if (diff < 300.0f) {
             f32 targetY = (mBaseY + (50.0f + REG0_F(5)) + 30.0f) - (diff * 0.1f);
@@ -73,7 +73,7 @@ void dMagma_ballBoss_c::setup(f32 param_1, u8 param_2, int param_3) {
 
     if (btd != NULL) {
         if (btd->m6E88 == 1) {
-            f32 dist = std::sqrtf((mPos.x * mPos.x) + (mPos.z * mPos.z));
+            f32 dist = std::sqrtf(SQUARE(mPos.x) + SQUARE(mPos.z));
 
             f32 target_dist = REG0_F(16) + 800.0f;
 
