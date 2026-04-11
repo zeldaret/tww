@@ -27,7 +27,7 @@ void dMagma_ballBoss_c::calc(f32 param_1, u8 param_2, int param_3) {
             cLib_addCalc2(&mScale, 1.5f, 0.2f, 0.2f);
 
             mWave = 0x4000;
-            field_0x7C = 1000;
+            mWaveTimer = 1000;
             return;
         }
     }
@@ -37,7 +37,7 @@ void dMagma_ballBoss_c::calc(f32 param_1, u8 param_2, int param_3) {
     }
     mPos.y = mBaseY + (REG0_F(5) + 50.0f) * cM_ssin(mWave);
 
-    mWave += field_0x7C;
+    mWave += mWaveTimer;
 }
 
 /* 80076CDC-80076D50       .text update__17dMagma_ballBoss_cFv */
@@ -84,7 +84,7 @@ void dMagma_ballBoss_c::setup(f32 param_1, u8 param_2, int param_3) {
         mBaseY += btd->m6E84;
     }
 
-    field_0x7C = (cM_rndF(100.0f) + 400.0f);
+    mWaveTimer = (cM_rndF(100.0f) + 400.0f);
     mWave = (cM_rndF(8.0f) * 4096.0f);
 }
 
