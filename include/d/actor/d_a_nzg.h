@@ -6,8 +6,9 @@
 
 struct dPath;
 
-class nzg_class : public fopEn_enemy_c {
+struct nzg_class {
 public:
+    /* 0x000 */ fopEn_enemy_c actor;
     /* 0x2AC */ request_of_phase_process_class mPhs;
     /* 0x2B4 */ J3DModel* mpModel;
     /* 0x2B8 */ u8 m2B8;

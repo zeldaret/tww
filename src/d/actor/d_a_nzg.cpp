@@ -14,8 +14,8 @@
 /* 00000078-000000E4       .text daNZG_Draw__FP9nzg_class */
 static BOOL daNZG_Draw(nzg_class* i_this) {
     J3DModel* model = i_this->mpModel;
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
-    g_env_light.setLightTevColorType(model, &i_this->tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->actor.current.pos, &i_this->actor.tevStr);
+    g_env_light.setLightTevColorType(model, &i_this->actor.tevStr);
     mDoExt_modelUpdateDL(model);
     return TRUE;
 }
@@ -26,24 +26,24 @@ static BOOL daNZG_Draw(nzg_class* i_this) {
 void nzg_00_move(nzg_class* i_this) {
     /* Nonmatching for Demo */
     //fixes regswap issue in demo for the most part but introduces a misplaced instruction error
-    nzg_class* actor = i_this;
+    fopAc_ac_c* actor = &i_this->actor;
 
     if (i_this->m2C2[0] != 0 || i_this->m2BE >= i_this->m2C0) {
         return;
     }
 
-    actor->mCyl.SetC(actor->current.pos);
-    actor->mCyl.SetH(REG8_F(11) + 40.0f);
-    actor->mCyl.SetR(REG8_F(12) + 40.0f);
-    dComIfG_Ccsp()->Set(&actor->mCyl);
+    i_this->mCyl.SetC(actor->current.pos);
+    i_this->mCyl.SetH(REG8_F(11) + 40.0f);
+    i_this->mCyl.SetR(REG8_F(12) + 40.0f);
+    dComIfG_Ccsp()->Set(&i_this->mCyl);
 
-    if (actor->mCyl.ChkCoHit()) {
-        fopAc_ac_c* hit_actor = actor->mCyl.GetCoHitAc();
+    if (i_this->mCyl.ChkCoHit()) {
+        fopAc_ac_c* hit_actor = i_this->mCyl.GetCoHitAc();
         if (hit_actor != NULL) {
             s16 hitAC_name = fopAcM_GetName(hit_actor);
             if (hitAC_name != PROC_NZ && hitAC_name != PROC_BOMB && hitAC_name != PROC_Bomb2 && hitAC_name != PROC_ITEM && hitAC_name != PROC_ESA) {
-                actor->m2D4 = fopAcM_GetID(hit_actor);
-                actor->m2BB = 1;
+                i_this->m2D4 = fopAcM_GetID(hit_actor);
+                i_this->m2BB = 1;
                 return;
             }
         }
@@ -51,14 +51,14 @@ void nzg_00_move(nzg_class* i_this) {
 
     u32 parameters = fopAcM_GetParam(actor) & 0xFF000000;
 
-    if (actor->m2BA == 1) {
+    if (i_this->m2BA == 1) {
         parameters |= 0x100;
-    } else if (actor->m2BA == 2 && cM_rnd() < 0.5f) {
+    } else if (i_this->m2BA == 2 && cM_rnd() < 0.5f) {
         parameters |= 0x100;
     }
 
-    if (parameters & 0x100 || fopAcM_searchActorDistance(actor, dComIfGp_getPlayer(0)) < actor->m2CC * 0.5f) {
-        if (fopAcM_searchActorDistance(actor, dComIfGp_getPlayer(0)) > actor->m2D0 * 0.5f) {
+    if (parameters & 0x100 || fopAcM_searchActorDistance(actor, dComIfGp_getPlayer(0)) < i_this->m2CC * 0.5f) {
+        if (fopAcM_searchActorDistance(actor, dComIfGp_getPlayer(0)) > i_this->m2D0 * 0.5f) {
             parameters |= 1;
             csXyz child_angle = actor->current.angle;
 
@@ -66,8 +66,8 @@ void nzg_00_move(nzg_class* i_this) {
             fpc_ProcID childProcID = fopAcM_createChild(PROC_NZ, fopAcM_GetID(actor), parameters, &actor->current.pos, fopAcM_GetRoomNo(actor), &child_angle, &actor->scale, NULL);
 
             if (childProcID != fpcM_ERROR_PROCESS_ID_e) {
-                actor->m2C2[0] = (childProcID & 3) * 10 + 20;
-                actor->m2BE++;
+                i_this->m2C2[0] = (childProcID & 3) * 10 + 20;
+                i_this->m2BE++;
             }
         }
     }
@@ -78,8 +78,8 @@ void nzg_01_move(nzg_class* i_this) {
     if (i_this->m2D4 != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* ac_id = fopAcM_SearchByID(i_this->m2D4);
         if (ac_id != NULL) {
-            f32 pos_x_diff = i_this->current.pos.x - ac_id->current.pos.x;
-            f32 pos_z_diff = i_this->current.pos.z - ac_id->current.pos.z;
+            f32 pos_x_diff = i_this->actor.current.pos.x - ac_id->current.pos.x;
+            f32 pos_z_diff = i_this->actor.current.pos.z - ac_id->current.pos.z;
             pos_x_diff = (pos_x_diff * pos_x_diff) + (pos_z_diff * pos_z_diff);
 
             if (std::sqrtf(pos_x_diff) < 80.0f) {
@@ -119,11 +119,7 @@ static BOOL daNZG_IsDelete(nzg_class*) {
 
 /* 000004D8-00000508       .text daNZG_Delete__FP9nzg_class */
 static BOOL daNZG_Delete(nzg_class* i_this) {
-#if VERSION == VERSION_DEMO
-    g_dComIfG_gameInfo.mResControl.deleteObjectRes("NZG");
-#else
-    dComIfG_resDelete(&i_this->mPhs, "NZG");
-#endif
+    dComIfG_resDeleteDemo(&i_this->mPhs, "NZG");
     return TRUE;
 }
 
@@ -131,8 +127,8 @@ static BOOL daNZG_Delete(nzg_class* i_this) {
 static BOOL useHeapInit(fopAc_ac_c* i_this) {
     nzg_class* nzg_this = (nzg_class*)i_this;
 
-    mDoMtx_stack_c::transS(nzg_this->current.pos.x,  nzg_this->current.pos.y,  nzg_this->current.pos.z);
-    mDoMtx_stack_c::YrotM(nzg_this->shape_angle.y);
+    mDoMtx_stack_c::transS(nzg_this->actor.current.pos.x,  nzg_this->actor.current.pos.y,  nzg_this->actor.current.pos.z);
+    mDoMtx_stack_c::YrotM(nzg_this->actor.shape_angle.y);
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("NZG",  NZG_BDL_KANA_00);
     JUT_ASSERT(630, modelData != NULL);
@@ -143,9 +139,9 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     }
 
     nzg_this->mpModel = model;
-    model->setBaseScale(nzg_this->scale);
+    model->setBaseScale(nzg_this->actor.scale);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
-    fopAcM_SetMtx(nzg_this, model->getBaseTRMtx());
+    fopAcM_SetMtx(&nzg_this->actor, model->getBaseTRMtx());
     return TRUE;
 }
 
@@ -184,14 +180,14 @@ static cPhs_State daNZG_Create(fopAc_ac_c* i_this) {
     nzg_class* nzg_this = (nzg_class*)i_this;
     cPhs_State phase_state = dComIfG_resLoad(&nzg_this->mPhs, "NZG");
     if (phase_state == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(nzg_this, nzg_class);
+        fopAcM_SetupActor(i_this, nzg_class);
 #else
     nzg_class* nzg_this = (nzg_class*)i_this;
-    fopAcM_SetupActor(nzg_this, nzg_class);
+    fopAcM_SetupActor(i_this, nzg_class);
     cPhs_State phase_state = dComIfG_resLoad(&nzg_this->mPhs, "NZG");
     if (phase_state == cPhs_COMPLEATE_e) {
 #endif
-        if (!fopAcM_entrySolidHeap(nzg_this, useHeapInit, 0x680)) {
+        if (!fopAcM_entrySolidHeap(&nzg_this->actor, useHeapInit, 0x680)) {
             return cPhs_ERROR_e;
         }
         nzg_this->m2B8 = fopAcM_GetParam(nzg_this);
@@ -199,9 +195,9 @@ static cPhs_State daNZG_Create(fopAc_ac_c* i_this) {
         nzg_this->m2BA = fopAcM_GetParam(nzg_this) >> 16;
         nzg_this->m2E9 = fopAcM_GetParam(nzg_this) >> 24;
         if (nzg_this->m2E9 != 0xFF) {
-            nzg_this->mpPath = dPath_GetRoomPath(nzg_this->m2E9, fopAcM_GetRoomNo(nzg_this));
+            nzg_this->mpPath = dPath_GetRoomPath(nzg_this->m2E9, fopAcM_GetRoomNo(i_this));
         }
-        nzg_this->shape_angle.y = nzg_this->current.angle.y;
+        nzg_this->actor.shape_angle.y = nzg_this->actor.current.angle.y;
         nzg_this->m2CC = nzg_this->m2B8 * 10.0f;
         nzg_this->m2C0 = 1;
         if (nzg_this->m2B9 != 0) {
@@ -214,8 +210,8 @@ static cPhs_State daNZG_Create(fopAc_ac_c* i_this) {
         nzg_this->mCyl.Set(body_cyl_src);
         nzg_this->mCyl.SetStts(&nzg_this->mStts);
         if (nzg_this->m2BA == 0) {
-            csXyz child_angle = nzg_this->current.angle;
-            fopAcM_createChild("NpcNz",fpcM_GetID(nzg_this), 0xffffffff,  &nzg_this->current.pos,  fopAcM_GetRoomNo(nzg_this), &child_angle, &nzg_this->scale, NULL);
+            csXyz child_angle = nzg_this->actor.current.angle;
+            fopAcM_createChild("NpcNz",fpcM_GetID(nzg_this), 0xffffffff,  &nzg_this->actor.current.pos,  fopAcM_GetRoomNo(&nzg_this->actor), &child_angle, &nzg_this->actor.scale, NULL);
         }
     }
     return phase_state;
