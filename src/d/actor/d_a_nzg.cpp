@@ -5,28 +5,76 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_nzg.h"
+#include "d/d_path.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/d_s_play.h"
 
 /* 00000078-000000E4       .text daNZG_Draw__FP9nzg_class */
-static BOOL daNZG_Draw(nzg_class*) {
-    /* Nonmatching */
+static BOOL daNZG_Draw(nzg_class* i_this) {
+    J3DModel* model = i_this->m2B4;
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
+    g_env_light.setLightTevColorType(model, &i_this->tevStr);
+    mDoExt_modelUpdateDL(model);
+    return TRUE;
 }
 
 /* 000000E4-00000348       .text nzg_00_move__FP9nzg_class */
-void nzg_00_move(nzg_class*) {
+void nzg_00_move(nzg_class* i_this) {
     /* Nonmatching */
+    if (i_this->m2C2[0] != 0) {
+        return;
+    }
+    if (i_this->m2BE < i_this->m2C0) {
+        return;
+    }
+
+        i_this->m328.SetC(i_this->current.pos);
+        i_this->m328.SetH(REG8_F(11) + 40.0f);
+        i_this->m328.SetR(REG8_F(12) + 40.0f);
+        dComIfG_Ccsp()->Set(&i_this->m328);
+        i_this->m328.ChkCoHit();
 }
 
 /* 00000348-00000450       .text nzg_01_move__FP9nzg_class */
-void nzg_01_move(nzg_class*) {
-    /* Nonmatching */
+void nzg_01_move(nzg_class* i_this) {
+    if (i_this->m2D4 != 0xffffffff) {
+        u32 spC = i_this->m2D4;
+        nzg_class* judgeVal = (nzg_class*)fopAcIt_Judge(fpcSch_JudgeByID, &spC);
+        if (judgeVal != NULL) {
+            f32 fVar1 = i_this->current.pos.x - judgeVal->current.pos.x;
+            f32 fVar2 = i_this->current.pos.z - judgeVal->current.pos.z;
+            fVar1 = (fVar1 * fVar1) + (fVar2 * fVar2);
+
+            if (std::sqrtf(fVar1) < 80.0f) {
+                return;
+            }
+        }
+    }
+    i_this->m2D4 = 0xffffffff;
+    i_this->m2BB = 0;
 }
 
 /* 00000450-000004D0       .text daNZG_Execute__FP9nzg_class */
-static BOOL daNZG_Execute(nzg_class*) {
-    /* Nonmatching */
+static BOOL daNZG_Execute(nzg_class* i_this) {
+    i_this->m2D0 = 400.0f;
+    int i = 0;
+    for (int j = 4; j != 0;  j--) {
+        if (i_this->m2C2[i] != 0) {
+            i_this->m2C2[i]--;
+        }
+        i += 1;
+    }
+    switch (i_this->m2BB) {
+        case 0:
+            nzg_00_move(i_this);
+            break;
+        case 1:
+            nzg_01_move(i_this);
+            break;
+    }
+    return TRUE;
 }
 
 /* 000004D0-000004D8       .text daNZG_IsDelete__FP9nzg_class */
@@ -35,17 +83,36 @@ static BOOL daNZG_IsDelete(nzg_class*) {
 }
 
 /* 000004D8-00000508       .text daNZG_Delete__FP9nzg_class */
-static BOOL daNZG_Delete(nzg_class*) {
-    /* Nonmatching */
+static BOOL daNZG_Delete(nzg_class* i_this) {
+    dComIfG_resDelete(&i_this->m2AC, "NZG");
+    return TRUE;
 }
 
 /* 00000508-00000620       .text useHeapInit__FP10fopAc_ac_c */
-static BOOL useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c* i_this) {
     /* Nonmatching */
+    nzg_class* nzg_this = (nzg_class*)i_this;
+
+    mDoMtx_trans(mDoMtx_stack_c::get(), nzg_this->current.pos.x,  nzg_this->current.pos.y,  nzg_this->current.pos.z);
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), nzg_this->shape_angle.y);
+
+    J3DModelData* modelData = (J3DModelData*)dRes_control_c::getRes("NZG", 3, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+    JUT_ASSERT(DEMO_SELECT(630, 630), modelData != NULL);
+    J3DModel* model = mDoExt_J3DModel__create(modelData, 0,0x11020203);
+
+    if (model == NULL) {
+        return FALSE;
+    }
+
+    nzg_this->m2B4 = model;
+    model->setBaseScale(nzg_this->scale);
+    mDoMtx_copy(mDoMtx_stack_c::get(), model->getBaseTRMtx());
+    nzg_this->cullMtx = model->getBaseTRMtx();
+    return TRUE;
 }
 
 /* 00000620-00000864       .text daNZG_Create__FP10fopAc_ac_c */
-static cPhs_State daNZG_Create(fopAc_ac_c*) {
+static cPhs_State daNZG_Create(fopAc_ac_c* i_this) {
     /* Nonmatching */
     static dCcD_SrcCyl body_cyl_src = {
         // dCcD_SrcGObjInf
@@ -76,6 +143,40 @@ static cPhs_State daNZG_Create(fopAc_ac_c*) {
             /* Height */ 20.0f,
         }},
     };
+
+    fopAcM_SetupActor(i_this, nzg_class);
+    nzg_class* nzg_this = (nzg_class*)i_this;
+    cPhs_State phase_state = dComIfG_resLoad(&nzg_this->m2AC, "NZG");
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(nzg_this, useHeapInit, 0x680)) {
+            return cPhs_ERROR_e;
+        }
+        nzg_this->m2B8 = fopAcM_GetParam(nzg_this);
+        nzg_this->m2B9 = fopAcM_GetParam(nzg_this) >> 8;
+        nzg_this->m2BA = fopAcM_GetParam(nzg_this) >> 16;
+        nzg_this->m2E9 = fopAcM_GetParam(nzg_this) >> 24;
+        if (nzg_this->m2E9 != 0xFF) {
+            nzg_this->m2D8 = dPath_GetRoomPath(nzg_this->m2E9, fopAcM_GetRoomNo(nzg_this));
+        }
+        nzg_this->shape_angle.y = nzg_this->current.angle.y;
+        nzg_this->m2CC = nzg_this->m2B8 * 10.0f;
+        nzg_this->m2C0 = 1;
+        if (nzg_this->m2B9 != 0) {
+            nzg_this->m2C0 = nzg_this->m2B9;
+        }
+
+        if (nzg_this->m2BA > 2) {
+            nzg_this->m2BA = 0;
+        }
+        nzg_this->m328.Set(body_cyl_src);
+        nzg_this->m328.SetStts(&nzg_this->mStts);
+        if (nzg_this->m2BA == 0) {
+            csXyz local_18;
+            local_18.set(nzg_this->current.angle.x, 0, nzg_this->current.angle.z);
+            fopAcM_createChild("NpcNz",fpcM_GetID(nzg_this), 0xffffffff,  &nzg_this->current.pos,  fopAcM_GetRoomNo(nzg_this), &local_18, &nzg_this->scale, NULL);
+        }
+    }
+    return phase_state;
 }
 
 static actor_method_class l_daNZG_Method = {
