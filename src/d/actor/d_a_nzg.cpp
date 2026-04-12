@@ -20,6 +20,8 @@ static BOOL daNZG_Draw(nzg_class* i_this) {
     return TRUE;
 }
 
+//todo: the value 300.0f  in rodata seems to be an remnant from unused functions in this tu
+
 /* 000000E4-00000348       .text nzg_00_move__FP9nzg_class */
 void nzg_00_move(nzg_class* i_this) {
     /* Nonmatching for Demo */
