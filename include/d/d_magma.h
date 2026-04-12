@@ -11,9 +11,10 @@ public:
     virtual ~dMagma_ball_c() {}
     virtual void calc(f32, u8, int) = 0;
     virtual void update() = 0;
-    virtual void setup(f32, u8, int) = 0;
 
+    virtual void setup(f32, u8, int) = 0;
     void draw();
+
     BOOL rangeCheck(cXyz&, f32*);
 
 public:
@@ -21,9 +22,9 @@ public:
     /* 0x10 */ f32 mScale;
     /* 0x14 */ f32 mBaseY;
     /* 0x18 */ s16 mWave;
+    /* 0x1A */ u8 mTimer;
     /* 0x1C */ Mtx mPosMtx;
     /* 0x4C */ Mtx mTexProjMtx;
-    /* 0x7C */ u8 mWaveTimer;
 };
 
 class dMagma_ballPath_c : public dMagma_ball_c {
@@ -33,6 +34,9 @@ public:
     virtual void calc(f32, u8, int);
     virtual void update();
     virtual void setup(f32, u8, int);
+
+public:
+    /* 0x7C */ u8 mWaveTimer;
 };
 
 class dMagma_ballBoss_c : public dMagma_ball_c {
@@ -42,6 +46,9 @@ public:
     virtual void calc(f32, u8, int);
     virtual void update();
     virtual void setup(f32, u8, int);
+
+public:
+    /* 0x7C */ s16 field_0x7C;
 };
 
 class dMagma_floor_c {
