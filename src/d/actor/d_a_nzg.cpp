@@ -20,7 +20,22 @@ static BOOL daNZG_Draw(nzg_class* i_this) {
     return TRUE;
 }
 
-//todo: the value 300.0f  in rodata seems to be an remnant from unused functions in this tu
+//Note: dummy function is required for matching rodata
+static f32 dummy40(int arg1) {
+    if (arg1 == 1) {
+        return 40.0f;
+    } else if (arg1 == 2) {
+        return 0.0f;
+    } else if (arg1 == 3) {
+        f64 val = 0.5;
+        return val;
+    } else if (arg1 == 4) {
+        f64 val = 3.0;
+        return val;
+    } else {
+        return 300.0f;
+    }
+}
 
 /* 000000E4-00000348       .text nzg_00_move__FP9nzg_class */
 void nzg_00_move(nzg_class* i_this) {
