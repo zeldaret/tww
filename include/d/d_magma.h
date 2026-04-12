@@ -11,13 +11,12 @@ public:
     virtual ~dMagma_ball_c() {}
     virtual void calc(f32, u8, int) = 0;
     virtual void update() = 0;
-
     virtual void setup(f32, u8, int) = 0;
-    void draw();
 
+    void draw();
     BOOL rangeCheck(cXyz&, f32*);
 
-public:
+protected:
     /* 0x04 */ cXyz mPos;
     /* 0x10 */ f32 mScale;
     /* 0x14 */ f32 mBaseY;
@@ -35,7 +34,7 @@ public:
     virtual void update();
     virtual void setup(f32, u8, int);
 
-public:
+private:
     /* 0x7C */ u8 mWaveTimer;
 };
 
@@ -47,7 +46,7 @@ public:
     virtual void update();
     virtual void setup(f32, u8, int);
 
-public:
+private:
     /* 0x7C */ s16 field_0x7C;
 };
 
@@ -65,11 +64,13 @@ public:
     dMagma_floor_c* getNext() { return mpNext; }
     void setNext(dMagma_floor_c* v) { mpNext = v; }
     dMagma_ball_c** getBall() { return mpBalls; }
-    s32 getBallNum() { return mBallNum; }
-    cXyz& getPos() { return mPos; }
+    int getBallNum() { return mBallNum; }
+    cXyz* getPos() { return &mPos; }
     f32 getScaleX() { return mScaleX; }
     f32 getScaleZ() { return mScaleZ; }
+    void setYpos(f32 y) { mPos.y = y; }
 
+private:
     /* 0x00 */ dMagma_ball_c** mpBalls;
     /* 0x04 */ u8 mBallNum;
     /* 0x05 */ u8 mPathNo;
@@ -91,6 +92,7 @@ public:
 
     dMagma_room_c();
 
+private:
     /* 0x0 */ dMagma_floor_c* mpFirst;
 };
 
@@ -101,14 +103,14 @@ public:
     void update();
     f32 checkYpos(cXyz&);
     dMagma_floor_c* newFloor(cXyz&, cXyz&, int, s16);
-    void deleteRoom(s32 roomNo) { mRoom[roomNo].deleteFloor(); }
+    void deleteRoom(int roomNo) { mRoom[roomNo].deleteFloor(); }
 
     virtual void draw();
     virtual ~dMagma_packet_c();
 
-    static GXTexObj& getKuroTexObj() { return mKuroTexObj; }
-    static GXTexObj& getColTexObj() { return mColTexObj; }
-    static Mtx& getKuroMtx() { return mKuroMtx; }
+    static GXTexObj* getKuroTexObj() { return &mKuroTexObj; }
+    static GXTexObj* getColTexObj() { return &mColTexObj; }
+    static MtxP getKuroMtx() { return mKuroMtx; }
 
     static GXTexObj mKuroTexObj;
     static Mtx mKuroMtx;
@@ -116,6 +118,7 @@ public:
     static Mtx mBallMtx;
     static Mtx mFloorMtx;
 
+private:
     /* 0x010 */ dMagma_floor_c mFloor[8];
     /* 0x590 */ dMagma_room_c mRoom[64];
     /* 0x690 */ GXColor mColor1;

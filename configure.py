@@ -518,7 +518,7 @@ config.libs = [
             Object(Matching,    "d/d_event.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_event_data.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_event_manager.cpp"),
-            Object(NonMatching, "d/d_magma.cpp"),
+            Object(Matching,    "d/d_magma.cpp"),
             Object(Matching, "d/d_boss_magma.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_grass.cpp"),
             Object(NonMatching, "d/d_tree.cpp"),

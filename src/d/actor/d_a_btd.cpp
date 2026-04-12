@@ -2400,7 +2400,7 @@ static BOOL daBtd_Execute(btd_class* i_this) {
     }
     i_this->m6E88 = 1;
     fVar12 = i_this->m6E80;
-    i_this->floor->getPos().y = fVar12;
+    i_this->floor->setYpos(fVar12);
     i_this->m6E7C += REG0_F(15) + 30.0f;
     if (i_this->m6E7C > REG0_F(18) + 2300.0f) {
         i_this->m6E7C = REG0_F(18) + 2300.0f;
