@@ -26,7 +26,7 @@ BOOL daObjMsdanSub::Act_c::Create() {
     fopAcM_setCullSizeBox(this, -1000.0f, -1000.0f,-1000.0f, 1000.0f, 1000.0f, 1000.0f);
     if (prm_get_size()) {
         if (fopAcM_isSwitch(this, prm_get_swSave())) {
-            mCurObjNo = 0x1F;
+            mCurObjNo = 31;
             current.pos.y = (home.pos.y - 800.0f)  + (prm_get_objNo() + 1) * 25.0f;
         } else {
             mCurObjNo = 0;
@@ -34,7 +34,7 @@ BOOL daObjMsdanSub::Act_c::Create() {
         m2D4 = 0;
     } else {
         if (fopAcM_isSwitch(this, prm_get_swSave())) {
-            mCurObjNo = 0x1F;
+            mCurObjNo = 31;
             current.pos.y = (home.pos.y - 800.0f)  + (prm_get_objNo() + 1) * 25.0f;
         } else {
             mCurObjNo = 16;
@@ -97,7 +97,7 @@ BOOL daObjMsdanSub::Act_c::Execute(Mtx** pMtx) {
             if (m2E0 > 0.0f) {
                 m2E0 = 0.0f;
             }
-            if (mCurObjNo < 0x1F) {
+            if (mCurObjNo < 31) {
                 m2E0 -= 10.0f;
                 m2DC += m2E0;
 
@@ -107,7 +107,7 @@ BOOL daObjMsdanSub::Act_c::Execute(Mtx** pMtx) {
                         current.pos.y = home.pos.y - 800.0f  + (mCurObjNo + 1) * 25.0f;
                         mCurObjNo++;
                         if (!m2E4) {
-                            if (m2DC <= (((home.pos.y * 25.0f) - 800.0f) + (mCurObjNo + 1)  * 0.5f) && (mCurObjNo <= 0x14 || (mCurObjNo & 1) == 1)) {
+                            if (m2DC <= (((home.pos.y * 25.0f) - 800.0f) + (mCurObjNo + 1)  * 0.5f) && (mCurObjNo <= 20 || (mCurObjNo & 1) == 1)) {
                                 dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                                 m2E4 = true;
                             }
@@ -130,7 +130,7 @@ BOOL daObjMsdanSub::Act_c::Execute(Mtx** pMtx) {
                 m2E0 = 0.0f;
             }
 
-            if (mCurObjNo < 0x1F) {
+            if (mCurObjNo < 31) {
                 m2E0 -= 10.0f;
                 m2DC += m2E0;
 
@@ -140,14 +140,14 @@ BOOL daObjMsdanSub::Act_c::Execute(Mtx** pMtx) {
                 if (m2DC <=  (home.pos.y - 800.0f)  + (mCurObjNo + 1) * 25.0f) {
                     if (mCurObjNo == prm_get_objNo()) {
                         current.pos.y = (home.pos.y - 800.0f)  + (mCurObjNo + 1) * 25.0f;
-                        fopAcM_seStartCurrent(this, 0x69bb, 0);
+                        fopAcM_seStartCurrent(this, JA_SE_OBJ_SW_STAIR_ON_1, 0);
                     }
                     mCurObjNo++;
                     m2E0 = 0.0f;
                     m2DC = home.pos.y;
                 }
                 if (mCurObjNo == prm_get_objNo() && !m2E4) {
-                    if (m2DC <= (((home.pos.y * 25.0f) - 800.0f) + (mCurObjNo + 1)  * 0.5f) && (mCurObjNo <= 0x14 || (mCurObjNo & 1) == 1)) {
+                    if (m2DC <= (((home.pos.y * 25.0f) - 800.0f) + (mCurObjNo + 1)  * 0.5f) && (mCurObjNo <= 20 || (mCurObjNo & 1) == 1)) {
                         dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                         m2E4 = true;
                     }
