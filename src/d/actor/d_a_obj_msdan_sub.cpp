@@ -16,18 +16,18 @@ Mtx daObjMsdanSub::Act_c::M_tmp_mtx;
 BOOL daObjMsdanSub::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MSDAN_BDL_MSDAN);
     JUT_ASSERT(93, model_data != NULL);
-    mModel = mDoExt_J3DModel__create(model_data, 0,0x11020203);
+    mModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
     return mModel != NULL;
 }
 
 /* 0000012C-00000304       .text Create__Q213daObjMsdanSub5Act_cFv */
 BOOL daObjMsdanSub::Act_c::Create() {
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, -1000.0f, -1000.0f,-1000.0f, 1000.0f, 1000.0f, 1000.0f);
+    fopAcM_setCullSizeBox(this, -1000.0f, -1000.0f, -1000.0f, 1000.0f, 1000.0f, 1000.0f);
     if (prm_get_size()) {
         if (fopAcM_isSwitch(this, prm_get_swSave())) {
             mCurObjNo = 31;
-            current.pos.y = (home.pos.y - 800.0f)  + (prm_get_objNo() + 1) * 25.0f;
+            current.pos.y = (home.pos.y - 800.0f) + (prm_get_objNo() + 1) * 25.0f;
         } else {
             mCurObjNo = 0;
         }
@@ -35,7 +35,7 @@ BOOL daObjMsdanSub::Act_c::Create() {
     } else {
         if (fopAcM_isSwitch(this, prm_get_swSave())) {
             mCurObjNo = 31;
-            current.pos.y = (home.pos.y - 800.0f)  + (prm_get_objNo() + 1) * 25.0f;
+            current.pos.y = (home.pos.y - 800.0f) + (prm_get_objNo() + 1) * 25.0f;
         } else {
             mCurObjNo = 16;
         }
@@ -103,21 +103,20 @@ BOOL daObjMsdanSub::Act_c::Execute(Mtx** pMtx) {
 
                 if (mCurObjNo == prm_get_objNo()) {
                     current.pos.y = m2DC;
-                    if (m2DC <=   home.pos.y - 800.0f  + (mCurObjNo + 1) * 25.0f) {
-                        current.pos.y = home.pos.y - 800.0f  + (mCurObjNo + 1) * 25.0f;
+                    if (m2DC <= home.pos.y - 800.0f + (mCurObjNo + 1) * 25.0f) {
+                        current.pos.y = home.pos.y - 800.0f + (mCurObjNo + 1) * 25.0f;
                         mCurObjNo++;
                         if (!m2E4) {
-                            if (m2DC <= (((home.pos.y * 25.0f) - 800.0f) + (mCurObjNo + 1)  * 0.5f) && (mCurObjNo <= 20 || (mCurObjNo & 1) == 1)) {
+                            if (m2DC <= (((home.pos.y * 25.0f) - 800.0f) + (mCurObjNo + 1) * 0.5f) && (mCurObjNo <= 20 || (mCurObjNo & 1) == 1)) {
                                 dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                                 m2E4 = true;
                             }
-
                         }
                     }
                     fopAcM_seStartCurrent(this, JA_SE_OBJ_SW_STAIR_ON_1, 0);
                     m2E0 = 0.0f;
                 } else {
-                    if (m2DC <= ((home.pos.y * 2.0f - 800.0f)  + (mCurObjNo + 1) * 25.0f) * 0.5f) {
+                    if (m2DC <= ((home.pos.y * 2.0f - 800.0f) + (mCurObjNo + 1) * 25.0f) * 0.5f) {
                         mCurObjNo++;
                         m2E0 = 0.0f;
                         m2DC = home.pos.y;
@@ -126,33 +125,33 @@ BOOL daObjMsdanSub::Act_c::Execute(Mtx** pMtx) {
             }
         }
     } else if (fopAcM_isSwitch(this, prm_get_swSave())) {
-            if (m2E0 > 0.0f) {
-                m2E0 = 0.0f;
+        if (m2E0 > 0.0f) {
+            m2E0 = 0.0f;
+        }
+
+        if (mCurObjNo < 31) {
+            m2E0 -= 10.0f;
+            m2DC += m2E0;
+
+            if (mCurObjNo == prm_get_objNo()) {
+                current.pos.y = m2DC;
             }
-
-            if (mCurObjNo < 31) {
-                m2E0 -= 10.0f;
-                m2DC += m2E0;
-
+            if (m2DC <= (home.pos.y - 800.0f) + (mCurObjNo + 1) * 25.0f) {
                 if (mCurObjNo == prm_get_objNo()) {
-                    current.pos.y = m2DC;
+                    current.pos.y = (home.pos.y - 800.0f) + (mCurObjNo + 1) * 25.0f;
+                    fopAcM_seStartCurrent(this, JA_SE_OBJ_SW_STAIR_ON_1, 0);
                 }
-                if (m2DC <=  (home.pos.y - 800.0f)  + (mCurObjNo + 1) * 25.0f) {
-                    if (mCurObjNo == prm_get_objNo()) {
-                        current.pos.y = (home.pos.y - 800.0f)  + (mCurObjNo + 1) * 25.0f;
-                        fopAcM_seStartCurrent(this, JA_SE_OBJ_SW_STAIR_ON_1, 0);
-                    }
-                    mCurObjNo++;
-                    m2E0 = 0.0f;
-                    m2DC = home.pos.y;
-                }
-                if (mCurObjNo == prm_get_objNo() && !m2E4) {
-                    if (m2DC <= (((home.pos.y * 25.0f) - 800.0f) + (mCurObjNo + 1)  * 0.5f) && (mCurObjNo <= 20 || (mCurObjNo & 1) == 1)) {
-                        dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
-                        m2E4 = true;
-                    }
+                mCurObjNo++;
+                m2E0 = 0.0f;
+                m2DC = home.pos.y;
+            }
+            if (mCurObjNo == prm_get_objNo() && !m2E4) {
+                if (m2DC <= (((home.pos.y * 25.0f) - 800.0f) + (mCurObjNo + 1) * 0.5f) && (mCurObjNo <= 20 || (mCurObjNo & 1) == 1)) {
+                    dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+                    m2E4 = true;
                 }
             }
+        }
     } else {
         if (m2E0 < 0.0f) {
             m2E0 = 0.0f;
@@ -170,12 +169,12 @@ BOOL daObjMsdanSub::Act_c::Execute(Mtx** pMtx) {
                 }
 
                 if (mCurObjNo > m2D4) {
-                     if (mCurObjNo == prm_get_objNo()) {
+                    if (mCurObjNo == prm_get_objNo()) {
                         fopAcM_seStartCurrent(this, JA_SE_OBJ_SW_STAIR_OFF_1, 0);
                         m2E4 = false;
-                     }
-                     mCurObjNo--;
-                     m2DC = home.pos.y - 800.0f  + (mCurObjNo + 1) * 25.0f;
+                    }
+                    mCurObjNo--;
+                    m2DC = home.pos.y - 800.0f + (mCurObjNo + 1) * 25.0f;
                 } else {
                     m2DC = home.pos.y;
                 }
