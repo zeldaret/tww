@@ -49,7 +49,7 @@ dPath* get_nearpos_rail(kytag02_class* i_this, dPath* i_path, cXyz* pos, int* i_
 
     bestIdx = 0;
     path = i_path;
-    best = 1000000000.0f;
+    best = 1000000000.0f; // This is not G_CM3D_F_INF
     bestPath = i_path;
 
     while (true) {
