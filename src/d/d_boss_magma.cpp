@@ -87,8 +87,3 @@ void dMagma_ballBoss_c::setup(f32 param_1, u8 param_2, int param_3) {
     field_0x7C = (cM_rndF(100.0f) + 400.0f);
     mWave = (cM_rndF(8.0f) * 4096.0f);
 }
-
-/* 80076FEC-80077048       .text __dt__17dMagma_ballBoss_cFv */
-dMagma_ballBoss_c::~dMagma_ballBoss_c() {
-    /* Nonmatching */
-}

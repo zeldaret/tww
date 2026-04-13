@@ -39,8 +39,6 @@ static f32 dummy40(int arg1) {
 
 /* 000000E4-00000348       .text nzg_00_move__FP9nzg_class */
 void nzg_00_move(nzg_class* i_this) {
-    /* Nonmatching for Demo */
-    //fixes regswap issue in demo for the most part but introduces a misplaced instruction error
     fopAc_ac_c* actor = &i_this->actor;
 
     if (i_this->m2C2[0] != 0 || i_this->m2BE >= i_this->m2C0) {
@@ -162,45 +160,14 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 
 /* 00000620-00000864       .text daNZG_Create__FP10fopAc_ac_c */
 static cPhs_State daNZG_Create(fopAc_ac_c* i_this) {
-    static dCcD_SrcCyl body_cyl_src = {
-        // dCcD_SrcGObjInf
-        {
-            /* Flags             */ 0,
-            /* SrcObjAt  Type    */ 0,
-            /* SrcObjAt  Atp     */ 0,
-            /* SrcObjAt  SPrm    */ 0,
-            /* SrcObjTg  Type    */ 0,
-            /* SrcObjTg  SPrm    */ 0,
-            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e | cCcD_CoSPrm_NoCrr_e,
-            /* SrcGObjAt Se      */ 0,
-            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
-            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
-            /* SrcGObjAt Mtrl    */ 0,
-            /* SrcGObjAt SPrm    */ 0,
-            /* SrcGObjTg Se      */ 0,
-            /* SrcGObjTg HitMark */ 0,
-            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
-            /* SrcGObjTg Mtrl    */ 0,
-            /* SrcGObjTg SPrm    */ 0,
-            /* SrcGObjCo SPrm    */ 0,
-        },
-        // cM3dGCylS
-        {{
-            /* Center */ {0.0f, 0.0f, 0.0f},
-            /* Radius */ 50.0f,
-            /* Height */ 20.0f,
-        }},
-    };
-#if VERSION == VERSION_DEMO
     nzg_class* nzg_this = (nzg_class*)i_this;
-    cPhs_State phase_state = dComIfG_resLoad(&nzg_this->mPhs, "NZG");
-    if (phase_state == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(i_this, nzg_class);
-#else
-    nzg_class* nzg_this = (nzg_class*)i_this;
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(i_this, nzg_class);
+#endif
     cPhs_State phase_state = dComIfG_resLoad(&nzg_this->mPhs, "NZG");
     if (phase_state == cPhs_COMPLEATE_e) {
+#if VERSION == VERSION_DEMO
+        fopAcM_SetupActor(i_this, nzg_class);
 #endif
         if (!fopAcM_entrySolidHeap(&nzg_this->actor, useHeapInit, 0x680)) {
             return cPhs_ERROR_e;
@@ -222,6 +189,36 @@ static cPhs_State daNZG_Create(fopAc_ac_c* i_this) {
         if (nzg_this->m2BA > 2) {
             nzg_this->m2BA = 0;
         }
+
+        static dCcD_SrcCyl body_cyl_src = {
+            // dCcD_SrcGObjInf
+            {
+                /* Flags             */ 0,
+                /* SrcObjAt  Type    */ 0,
+                /* SrcObjAt  Atp     */ 0,
+                /* SrcObjAt  SPrm    */ 0,
+                /* SrcObjTg  Type    */ 0,
+                /* SrcObjTg  SPrm    */ 0,
+                /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e | cCcD_CoSPrm_NoCrr_e,
+                /* SrcGObjAt Se      */ 0,
+                /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+                /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+                /* SrcGObjAt Mtrl    */ 0,
+                /* SrcGObjAt SPrm    */ 0,
+                /* SrcGObjTg Se      */ 0,
+                /* SrcGObjTg HitMark */ 0,
+                /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+                /* SrcGObjTg Mtrl    */ 0,
+                /* SrcGObjTg SPrm    */ 0,
+                /* SrcGObjCo SPrm    */ 0,
+            },
+            // cM3dGCylS
+            {{
+                /* Center */ {0.0f, 0.0f, 0.0f},
+                /* Radius */ 50.0f,
+                /* Height */ 20.0f,
+            }},
+        };
         nzg_this->mCyl.Set(body_cyl_src);
         nzg_this->mCyl.SetStts(&nzg_this->mStts);
         if (nzg_this->m2BA == 0) {

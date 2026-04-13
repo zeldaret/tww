@@ -41,7 +41,7 @@ private:
 class dMagma_ballBoss_c : public dMagma_ball_c {
 public:
     dMagma_ballBoss_c() {}
-    virtual ~dMagma_ballBoss_c();
+    virtual ~dMagma_ballBoss_c() {}
     virtual void calc(f32, u8, int);
     virtual void update();
     virtual void setup(f32, u8, int);

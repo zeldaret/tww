@@ -61,7 +61,10 @@ static daAuction_c::ItemData l_item_dat2[] = {
     {PRESIDENT_STATUE, 0x1D15, 40, dSv_event_flag_c::UNK_1004},
 };
 
-static s16 l_item_dat22[] = {0x002A, 0x00F9};
+static s16 l_item_dat22[] = {
+    dItem_MAGIC_ARMOR_e,
+    dItem_COLLECT_MAP_06_e,
+};
 
 static NpcDatStruct l_npc_dat[7] = {
     {2.0f, 2.1f, 0x0, 0x0, 1000},
