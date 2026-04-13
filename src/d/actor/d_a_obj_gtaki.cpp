@@ -8,6 +8,8 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/res/res_gtaki.h"
+#include "m_Do/m_Do_graphic.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -41,28 +43,90 @@ static dCcD_SrcCyl l_cyl_src = {
 
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
+    return ((daObjGtaki_c*)i_actor)->CreateHeap();
 }
 
 /* 00000098-00000280       .text setDummyTexture__12daObjGtaki_cFv */
 void daObjGtaki_c::setDummyTexture() {
-    /* Nonmatching */
+    J3DModelData* modeldata = mpModel->getModelData();
+    J3DTexture* texture = modeldata->getTexture();
+    JUTNameTab* textureName = modeldata->getTextureName();
+    JUT_ASSERT(0xb4, texture != NULL);
+    JUT_ASSERT(0xb5, textureName != NULL);
+
+    for (u16 i = 0; i<texture->getNum(); i++) {
+        if(!strcmp(textureName->getName(i), "B_dummy")){
+            texture->setResTIMG(i,*mDoGph_gInf_c::getFrameBufferTimg());
+        }
+    }
+    mDoExt_modelTexturePatch(modeldata);
 }
 
 /* 00000280-00000484       .text CreateHeap__12daObjGtaki_cFv */
-void daObjGtaki_c::CreateHeap() {
+BOOL daObjGtaki_c::CreateHeap() {
     /* Nonmatching */
+    J3DModelData* modelData;
+    J3DAnmTextureSRTKey* btk;
+    
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Gtaki", GTAKI_BDL_GTAKI);
+    JUT_ASSERT(0x10b, modelData != NULL);
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if(mpModel == NULL) return FALSE;
+
+    btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Gtaki", GTAKI_BTK_GTAKI));
+    JUT_ASSERT(0x115, btk != NULL);
+    mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0, 0, -1, false, 0);
+    setDummyTexture();
+    
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::scaleM(scale);
+    MTXCopy(mDoMtx_stack_c::get(), mMtx);
+
+    mpBgW = new dBgW();
+    
+    if(!mpBgW || mpBgW->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Gtaki", GTAKI_DZB_ITAKI)), cBgW::MOVE_BG_e, &mMtx)){
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 00000484-00000604       .text CreateInit__12daObjGtaki_cFv */
-void daObjGtaki_c::CreateInit() {
+bool daObjGtaki_c::CreateInit() {
     /* Nonmatching */
+    cullMtx = mpModel->getBaseTRMtx();
+    fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f,600.0f,10000.0f,600.0f);
+    cullSizeFar = 1.0f;
+    mStts.Init(0xff, 0xff, this);
+
+    mCyl.Set(l_cyl_src);
+    mCyl.SetR(scale.x * 70.0f);
+    mCyl.SetStts(&mStts);
+
+    dKy_tevstr_init(&mTevStr, home.roomNo, 0xff);
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevStr);
+
+    JPABaseEmitter* emitter = dComIfGp_particle_setP1(0x835b, &current.pos, NULL, NULL, 0xff, NULL, -1, NULL, NULL, NULL);
+    if(emitter != NULL){
+        JGeometry::TVec3<f32> gd_scale (scale.x, scale.y, scale.z);
+        emitter->setGlobalDynamicsScale(gd_scale);
+
+        JGeometry::TVec3<f32> gp_scale(scale.x, scale.x, scale.x);
+        emitter->setGlobalParticleScale(gp_scale);
+        emitter->setGlobalPrmColor(mTevStr.mColorC0.r, mTevStr.mColorC0.g, mTevStr.mColorC0.b);
+    }
+    set_mtx();
+    return dComIfG_Bgsp()->Regist(mpBgW, this);
 }
 
 /* 00000604-00000684       .text set_mtx__12daObjGtaki_cFv */
 void daObjGtaki_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000684-000006A4       .text daObjGtaki_Create__FPv */
@@ -72,22 +136,65 @@ static cPhs_State daObjGtaki_Create(void* i_this) {
 
 /* 000006A4-0000087C       .text _create__12daObjGtaki_cFv */
 cPhs_State daObjGtaki_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjGtaki_c);
+    cPhs_State state = dComIfG_resLoad(&mPhase, "Gtaki");
+    if(state == cPhs_COMPLEATE_e){
+        if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x3450)){       
+            state = cPhs_ERROR_e;
+            return state;
+        }
+        else CreateInit();
+    }
+    return state;
+}
+
+bool daObjGtaki_c::_delete(){
+    if(heap != NULL){
+        dComIfG_Bgsp()->Release(mpBgW);
+    }
+    dComIfG_resDelete(&mPhase, "Gtaki");
+    return true;
 }
 
 /* 00000AD8-00000B38       .text daObjGtaki_Delete__FPv */
-static BOOL daObjGtaki_Delete(void*) {
-    /* Nonmatching */
+static BOOL daObjGtaki_Delete(void* i_this) {
+    return ((daObjGtaki_c*)i_this)->_delete();
+}
+
+bool daObjGtaki_c::_draw(){
+    g_env_light.settingTevStruct(TEV_TYPE_BG3, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    dComIfGd_setListInvisisble();
+
+    mBtkAnm.entry(mpModel->getModelData());
+    mDoExt_modelUpdateDL(mpModel);
+    mBtkAnm.remove(mpModel->getModelData());
+
+    j3dSys.setDrawBuffer(j3dSys.getDrawBuffer(OPA_BUFFER), OPA_BUFFER);
+    j3dSys.setDrawBuffer(j3dSys.getDrawBuffer(XLU_BUFFER), XLU_BUFFER);
+    dComIfGd_setList();
+
+    return true;
 }
 
 /* 00000B38-00000C08       .text daObjGtaki_Draw__FPv */
-static BOOL daObjGtaki_Draw(void*) {
+static BOOL daObjGtaki_Draw(void* i_this) {
     /* Nonmatching */
+    return ((daObjGtaki_c*)i_this)->_draw();
+}
+
+bool daObjGtaki_c::_execute(){
+    mCyl.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&mCyl);
+    mBtkAnm.play();
+    set_mtx();
+    return true;
 }
 
 /* 00000C08-00000C64       .text daObjGtaki_Execute__FPv */
-static BOOL daObjGtaki_Execute(void*) {
-    /* Nonmatching */
+static BOOL daObjGtaki_Execute(void* i_this) {
+    return ((daObjGtaki_c*)i_this)->_execute();
 }
 
 /* 00000C64-00000C6C       .text daObjGtaki_IsDelete__FPv */
