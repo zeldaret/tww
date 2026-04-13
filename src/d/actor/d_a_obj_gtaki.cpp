@@ -95,9 +95,9 @@ BOOL daObjGtaki_c::CreateHeap() {
 /* 00000484-00000604       .text CreateInit__12daObjGtaki_cFv */
 bool daObjGtaki_c::CreateInit() {
     /* Nonmatching */
-    cullMtx = mpModel->getBaseTRMtx();
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f,600.0f,10000.0f,600.0f);
-    cullSizeFar = 1.0f;
+    fopAcM_setCullSizeFar(this, 1.0f);
     mStts.Init(0xff, 0xff, this);
 
     mCyl.Set(l_cyl_src);
@@ -107,7 +107,7 @@ bool daObjGtaki_c::CreateInit() {
     dKy_tevstr_init(&mTevStr, home.roomNo, 0xff);
     g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevStr);
 
-    JPABaseEmitter* emitter = dComIfGp_particle_setP1(0x835b, &current.pos, NULL, NULL, 0xff, NULL, -1, NULL, NULL, NULL);
+    JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_AK_SN_GANONFALLSSPLASH00, &current.pos, NULL, NULL, 0xff, NULL, -1, NULL, NULL, NULL);
     if(emitter != NULL){
         JGeometry::TVec3<f32> gd_scale (scale.x, scale.y, scale.z);
         emitter->setGlobalDynamicsScale(gd_scale);
@@ -170,8 +170,6 @@ bool daObjGtaki_c::_draw(){
     mDoExt_modelUpdateDL(mpModel);
     mBtkAnm.remove(mpModel->getModelData());
 
-    j3dSys.setDrawBuffer(j3dSys.getDrawBuffer(OPA_BUFFER), OPA_BUFFER);
-    j3dSys.setDrawBuffer(j3dSys.getDrawBuffer(XLU_BUFFER), XLU_BUFFER);
     dComIfGd_setList();
 
     return true;
@@ -179,7 +177,6 @@ bool daObjGtaki_c::_draw(){
 
 /* 00000B38-00000C08       .text daObjGtaki_Draw__FPv */
 static BOOL daObjGtaki_Draw(void* i_this) {
-    /* Nonmatching */
     return ((daObjGtaki_c*)i_this)->_draw();
 }
 
