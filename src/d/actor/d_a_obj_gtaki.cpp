@@ -65,7 +65,6 @@ void daObjGtaki_c::setDummyTexture() {
 
 /* 00000280-00000484       .text CreateHeap__12daObjGtaki_cFv */
 BOOL daObjGtaki_c::CreateHeap() {
-    /* Nonmatching */
     J3DModelData* modelData;
     J3DAnmTextureSRTKey* btk;
     
