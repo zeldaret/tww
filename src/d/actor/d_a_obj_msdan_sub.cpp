@@ -90,8 +90,6 @@ void daObjMsdanSub::Act_c::init_mtx() {
 
 /* 00000534-00000BB4       .text Execute__Q213daObjMsdanSub5Act_cFPPA3_A4_f */
 BOOL daObjMsdanSub::Act_c::Execute(Mtx** pMtx) {
-    //https://decomp.me/scratch/OWEBm
-    /* Nonmatching */
     if (prm_get_size()) {
         if (fopAcM_isSwitch(this, prm_get_swSave())) {
             if (m2E0 > 0.0f) {
@@ -107,16 +105,16 @@ BOOL daObjMsdanSub::Act_c::Execute(Mtx** pMtx) {
                         current.pos.y = home.pos.y - 800.0f + (mCurObjNo + 1) * 25.0f;
                         mCurObjNo++;
                         if (!m2E4) {
-                            if (m2DC <= (((home.pos.y * 25.0f) - 800.0f) + (mCurObjNo + 1) * 0.5f) && (mCurObjNo <= 20 || (mCurObjNo & 1) == 1)) {
+                            if (m2DC <= (home.pos.y + ((25.0f * (mCurObjNo + 1)) - 800.0f) / 2.0f) && (mCurObjNo <= 20 || (mCurObjNo & 1) == 1)) {
                                 dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                                 m2E4 = true;
                             }
                         }
+                        fopAcM_seStartCurrent(this, JA_SE_OBJ_SW_STAIR_ON_1, 0);
+                        m2E0 = 0.0f;
                     }
-                    fopAcM_seStartCurrent(this, JA_SE_OBJ_SW_STAIR_ON_1, 0);
-                    m2E0 = 0.0f;
                 } else {
-                    if (m2DC <= ((home.pos.y * 2.0f - 800.0f) + (mCurObjNo + 1) * 25.0f) * 0.5f) {
+                    if (m2DC <= ((home.pos.y * 2.0f - 800.0f) + (mCurObjNo + 1) * 25.0f) / 2.0f) {
                         mCurObjNo++;
                         m2E0 = 0.0f;
                         m2DC = home.pos.y;
@@ -146,7 +144,7 @@ BOOL daObjMsdanSub::Act_c::Execute(Mtx** pMtx) {
                 m2DC = home.pos.y;
             }
             if (mCurObjNo == prm_get_objNo() && !m2E4) {
-                if (m2DC <= (((home.pos.y * 25.0f) - 800.0f) + (mCurObjNo + 1) * 0.5f) && (mCurObjNo <= 20 || (mCurObjNo & 1) == 1)) {
+                if (m2DC <= (home.pos.y + ((25.0f * (mCurObjNo + 1)) - 800.0f) / 2.0f) && (mCurObjNo <= 20 || (mCurObjNo & 1) == 1)) {
                     dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                     m2E4 = true;
                 }
