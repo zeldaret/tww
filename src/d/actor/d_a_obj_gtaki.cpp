@@ -65,15 +65,12 @@ void daObjGtaki_c::setDummyTexture() {
 
 /* 00000280-00000484       .text CreateHeap__12daObjGtaki_cFv */
 BOOL daObjGtaki_c::CreateHeap() {
-    J3DModelData* modelData;
-    J3DAnmTextureSRTKey* btk;
-    
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Gtaki", GTAKI_BDL_GTAKI);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Gtaki", GTAKI_BDL_GTAKI);
     JUT_ASSERT(DEMO_SELECT(265, 267), modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if(mpModel == NULL) return FALSE;
 
-    btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Gtaki", GTAKI_BTK_GTAKI));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Gtaki", GTAKI_BTK_GTAKI));
     JUT_ASSERT(DEMO_SELECT(275, 277), btk != NULL);
     mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0, 0, -1, false, 0);
     setDummyTexture();
@@ -95,13 +92,12 @@ BOOL daObjGtaki_c::CreateHeap() {
 void daObjGtaki_c::set_effect() {
     JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_AK_SN_GANONFALLSSPLASH00, &current.pos, NULL, NULL, 0xff, NULL, -1, NULL, NULL, NULL);
     if(emitter != NULL){
-        JGeometry::TVec3<f32> gd_scale;
-        gd_scale.set(scale.x, scale.y, scale.z);
-        emitter->setGlobalDynamicsScale(gd_scale);
+        JGeometry::TVec3<f32> p_scale;
+        p_scale.set(scale.x, scale.y, scale.z);
+        emitter->setGlobalDynamicsScale(p_scale);
 
-        JGeometry::TVec3<f32> gp_scale;
-        gp_scale.set(scale.x, scale.x, scale.x);
-        emitter->setGlobalParticleScale(gp_scale);
+        p_scale.set(scale.x, scale.x, scale.x);
+        emitter->setGlobalParticleScale(p_scale);
 
         emitter->setGlobalPrmColor(mTevStr.mColorC0.r, mTevStr.mColorC0.g, mTevStr.mColorC0.b);
     }

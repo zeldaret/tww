@@ -92,7 +92,7 @@ void dPa_J3DmodelEmitter_c::draw() {
                 vel.normalize();
             }
             JGeometry::TVec3<f32> tmp;
-            tmp.cross_hack(params->mAxis, vel); // fake inline
+            tmp.cross(params->mAxis, vel);
             if (tmp.isZero()) {
                 tmp.set(0.0f, 0.0f, 1.0f);
             } else {

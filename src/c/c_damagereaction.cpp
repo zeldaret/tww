@@ -546,11 +546,9 @@ void enemy_fire(enemyfire* ef) {
                 ef->mpFlameEmitters[i]->setDirection(ef->mDirection);
                 
                 JGeometry::TVec3<f32> scale;
-                scale.set(
-                    ef->mParticleScale[i],
-                    ef->mFlameScaleY * ef->mParticleScale[i],
-                    ef->mParticleScale[i]
-                );
+                scale.x = ef->mParticleScale[i];
+                scale.z = ef->mParticleScale[i];
+                scale.y = ef->mFlameScaleY * ef->mParticleScale[i];
                 ef->mpFlameEmitters[i]->setGlobalParticleScale(scale);
                 
                 if (ef->mHitboxFlameIdx == numFlamesLeft) {
