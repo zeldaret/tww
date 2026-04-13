@@ -12,7 +12,7 @@ public:
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
-    void set_effect() {}
+    inline void set_effect();
 
     void setDummyTexture();
     BOOL CreateHeap();

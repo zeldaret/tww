@@ -52,8 +52,8 @@ void daObjGtaki_c::setDummyTexture() {
     J3DModelData* modeldata = mpModel->getModelData();
     J3DTexture* texture = modeldata->getTexture();
     JUTNameTab* textureName = modeldata->getTextureName();
-    JUT_ASSERT(0xb4, texture != NULL);
-    JUT_ASSERT(0xb5, textureName != NULL);
+    JUT_ASSERT(DEMO_SELECT(178, 180), texture != NULL);
+    JUT_ASSERT(DEMO_SELECT(179, 181), textureName != NULL);
 
     for (u16 i = 0; i<texture->getNum(); i++) {
         if(!strcmp(textureName->getName(i), "B_dummy")){
@@ -69,12 +69,12 @@ BOOL daObjGtaki_c::CreateHeap() {
     J3DAnmTextureSRTKey* btk;
     
     modelData = (J3DModelData*)dComIfG_getObjectRes("Gtaki", GTAKI_BDL_GTAKI);
-    JUT_ASSERT(0x10b, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(265, 267), modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if(mpModel == NULL) return FALSE;
 
     btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Gtaki", GTAKI_BTK_GTAKI));
-    JUT_ASSERT(0x115, btk != NULL);
+    JUT_ASSERT(DEMO_SELECT(275, 277), btk != NULL);
     mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0, 0, -1, false, 0);
     setDummyTexture();
     
@@ -92,6 +92,22 @@ BOOL daObjGtaki_c::CreateHeap() {
     return TRUE;
 }
 
+void daObjGtaki_c::set_effect() {
+    JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_AK_SN_GANONFALLSSPLASH00, &current.pos, NULL, NULL, 0xff, NULL, -1, NULL, NULL, NULL);
+    if(emitter != NULL){
+        JGeometry::TVec3<f32> gd_scale;
+        gd_scale.set(scale.x, scale.y, scale.z);
+        emitter->setGlobalDynamicsScale(gd_scale);
+
+        JGeometry::TVec3<f32> gp_scale;
+        gp_scale.set(scale.x, scale.x, scale.x);
+        emitter->setGlobalParticleScale(gp_scale);
+
+        emitter->setGlobalPrmColor(mTevStr.mColorC0.r, mTevStr.mColorC0.g, mTevStr.mColorC0.b);
+    }
+    set_mtx();
+}
+
 /* 00000484-00000604       .text CreateInit__12daObjGtaki_cFv */
 bool daObjGtaki_c::CreateInit() {
     /* Nonmatching */
@@ -107,16 +123,7 @@ bool daObjGtaki_c::CreateInit() {
     dKy_tevstr_init(&mTevStr, home.roomNo, 0xff);
     g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevStr);
 
-    JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_AK_SN_GANONFALLSSPLASH00, &current.pos, NULL, NULL, 0xff, NULL, -1, NULL, NULL, NULL);
-    if(emitter != NULL){
-        JGeometry::TVec3<f32> gd_scale (scale.x, scale.y, scale.z);
-        emitter->setGlobalDynamicsScale(gd_scale);
-
-        JGeometry::TVec3<f32> gp_scale(scale.x, scale.x, scale.x);
-        emitter->setGlobalParticleScale(gp_scale);
-        emitter->setGlobalPrmColor(mTevStr.mColorC0.r, mTevStr.mColorC0.g, mTevStr.mColorC0.b);
-    }
-    set_mtx();
+    set_effect();
     return dComIfG_Bgsp()->Regist(mpBgW, this);
 }
 
@@ -138,7 +145,7 @@ cPhs_State daObjGtaki_c::_create() {
     fopAcM_SetupActor(this, daObjGtaki_c);
     cPhs_State state = dComIfG_resLoad(&mPhase, "Gtaki");
     if(state == cPhs_COMPLEATE_e){
-        if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x3450)){       
+        if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, DEMO_SELECT(0xD20, 0x3450))){
             state = cPhs_ERROR_e;
             return state;
         }
@@ -148,10 +155,13 @@ cPhs_State daObjGtaki_c::_create() {
 }
 
 bool daObjGtaki_c::_delete(){
-    if(heap != NULL){
+#if VERSION > VERSION_DEMO
+    if(heap != NULL)
+#endif
+    {
         dComIfG_Bgsp()->Release(mpBgW);
     }
-    dComIfG_resDelete(&mPhase, "Gtaki");
+    dComIfG_resDeleteDemo(&mPhase, "Gtaki");
     return true;
 }
 
