@@ -27,48 +27,48 @@ void daNpc_So_c::cutProc() {
         cut_func mProc;
     };
 
-    static char* cut_name[] = {
-        "SWIM",            "JUMP",            "APPEAR",          "DIVE",            "DISAPPEAR",
-        "SET_ANM",         "EFFECT",          "EQUIP",           "UNEQUIP",         "EATESA",
-        "EATESA1ST",       "JUMP_MAPOPEN",    "MINIGAME",        "TURN",            "MINIGAME_WARP",
-        "MINIGAME_RETURN", "PARTNER_SHIP",    "MINIGAME_WAIT",   "MINIGAME_END",    "MINIGAME_PL_TURN",
-        "MINIGAME_PL_UP",
-    };
-
-    static cut_entry cut_table[] = {
-        {&daNpc_So_c::cutSwimStart, &daNpc_So_c::cutSwimProc},
-        {&daNpc_So_c::cutJumpStart, &daNpc_So_c::cutJumpProc},
-        {&daNpc_So_c::cutAppearStart, &daNpc_So_c::cutAppearProc},
-        {&daNpc_So_c::cutDiveStart, &daNpc_So_c::cutDiveProc},
-        {&daNpc_So_c::cutDisappearStart, &daNpc_So_c::cutDisappearProc},
-        {&daNpc_So_c::cutSetAnmStart, &daNpc_So_c::cutSetAnmProc},
-        {&daNpc_So_c::cutEffectStart, &daNpc_So_c::cutEffectProc},
-        {&daNpc_So_c::cutEquipStart, &daNpc_So_c::cutEquipProc},
-        {&daNpc_So_c::cutUnequipStart, &daNpc_So_c::cutUnequipProc},
-        {&daNpc_So_c::cutEatesaStart, &daNpc_So_c::cutEatesaProc},
-        {&daNpc_So_c::cutEatesaFirstStart, &daNpc_So_c::cutEatesaFirstProc},
-        {&daNpc_So_c::cutJumpMapopenStart, &daNpc_So_c::cutJumpMapopenProc},
-        {&daNpc_So_c::cutMiniGameStart, &daNpc_So_c::cutMiniGameProc},
-        {&daNpc_So_c::cutTurnStart, &daNpc_So_c::cutTurnProc},
-        {&daNpc_So_c::cutMiniGameWarpStart, &daNpc_So_c::cutMiniGameWarpProc},
-        {&daNpc_So_c::cutMiniGameReturnStart, &daNpc_So_c::cutMiniGameReturnProc},
-        {&daNpc_So_c::cutPartnerShipStart, &daNpc_So_c::cutPartnerShipProc},
-        {&daNpc_So_c::cutMiniGameWaitStart, &daNpc_So_c::cutMiniGameWaitProc},
-        {&daNpc_So_c::cutMiniGameEndStart, &daNpc_So_c::cutMiniGameEndProc},
-        {&daNpc_So_c::cutMiniGamePlTurnStart, &daNpc_So_c::cutMiniGamePlTurnProc},
-        {&daNpc_So_c::cutMiniGamePlUpStart, &daNpc_So_c::cutMiniGamePlUpProc},
-    };
-
     mStaffId = dComIfGp_getPEvtManager()->getMyStaffId("NpcSo", NULL, 0);
     if (mStaffId != -1) {
+        static char* cut_name[] = {
+            "SWIM",            "JUMP",            "APPEAR",          "DIVE",            "DISAPPEAR",
+            "SET_ANM",         "EFFECT",          "EQUIP",           "UNEQUIP",         "EATESA",
+            "EATESA1ST",       "JUMP_MAPOPEN",    "MINIGAME",        "TURN",            "MINIGAME_WARP",
+            "MINIGAME_RETURN", "PARTNER_SHIP",    "MINIGAME_WAIT",   "MINIGAME_END",    "MINIGAME_PL_TURN",
+            "MINIGAME_PL_UP",
+        };
+
+        static cut_entry cut_table[] = {
+            {&daNpc_So_c::cutSwimStart, &daNpc_So_c::cutSwimProc},
+            {&daNpc_So_c::cutJumpStart, &daNpc_So_c::cutJumpProc},
+            {&daNpc_So_c::cutAppearStart, &daNpc_So_c::cutAppearProc},
+            {&daNpc_So_c::cutDiveStart, &daNpc_So_c::cutDiveProc},
+            {&daNpc_So_c::cutDisappearStart, &daNpc_So_c::cutDisappearProc},
+            {&daNpc_So_c::cutSetAnmStart, &daNpc_So_c::cutSetAnmProc},
+            {&daNpc_So_c::cutEffectStart, &daNpc_So_c::cutEffectProc},
+            {&daNpc_So_c::cutEquipStart, &daNpc_So_c::cutEquipProc},
+            {&daNpc_So_c::cutUnequipStart, &daNpc_So_c::cutUnequipProc},
+            {&daNpc_So_c::cutEatesaStart, &daNpc_So_c::cutEatesaProc},
+            {&daNpc_So_c::cutEatesaFirstStart, &daNpc_So_c::cutEatesaFirstProc},
+            {&daNpc_So_c::cutJumpMapopenStart, &daNpc_So_c::cutJumpMapopenProc},
+            {&daNpc_So_c::cutMiniGameStart, &daNpc_So_c::cutMiniGameProc},
+            {&daNpc_So_c::cutTurnStart, &daNpc_So_c::cutTurnProc},
+            {&daNpc_So_c::cutMiniGameWarpStart, &daNpc_So_c::cutMiniGameWarpProc},
+            {&daNpc_So_c::cutMiniGameReturnStart, &daNpc_So_c::cutMiniGameReturnProc},
+            {&daNpc_So_c::cutPartnerShipStart, &daNpc_So_c::cutPartnerShipProc},
+            {&daNpc_So_c::cutMiniGameWaitStart, &daNpc_So_c::cutMiniGameWaitProc},
+            {&daNpc_So_c::cutMiniGameEndStart, &daNpc_So_c::cutMiniGameEndProc},
+            {&daNpc_So_c::cutMiniGamePlTurnStart, &daNpc_So_c::cutMiniGamePlTurnProc},
+            {&daNpc_So_c::cutMiniGamePlUpStart, &daNpc_So_c::cutMiniGamePlUpProc},
+        };
+
         int act_idx = dComIfGp_getPEvtManager()->getMyActIdx(mStaffId, cut_name, ARRAY_SIZE(cut_name), 1, 0);
-        if (act_idx != -1) {
+        if (act_idx == -1) {
+            dComIfGp_getPEvtManager()->cutEnd(mStaffId);
+        } else {
             if (dComIfGp_getPEvtManager()->getIsAddvance(mStaffId)) {
                 (this->*cut_table[act_idx].mStart)();
             }
             (this->*cut_table[act_idx].mProc)();
-        } else {
-            dComIfGp_getPEvtManager()->cutEnd(mStaffId);
         }
     }
 }
@@ -556,14 +556,17 @@ void daNpc_So_c::cutTurnProc() {
     } else {
         s16 targetAngle = ship->shape_angle.y + 0x4000;
         cXyz targetPos;
-        targetPos.x = ship->current.pos.x + -300.0f * JMASSin(targetAngle);
+        targetPos.x = ship->current.pos.x;
         targetPos.y = ship->current.pos.y;
-        targetPos.z = ship->current.pos.z + -300.0f * JMASCos(targetAngle);
+        targetPos.z = ship->current.pos.z;
+        targetPos.x += -300.0f * JMASSin(targetAngle);
+        targetPos.z += -300.0f * JMASCos(targetAngle);
 
         s16 target = cLib_targetAngleY(&current.pos, &targetPos);
         cLib_addCalcAngleS2(&shape_angle.y, target, 8, 0x400);
 
-        if (cLib_calcTimer(&m0A9C) == 0 || cLib_distanceAngleS(shape_angle.y, target) <= 0x400) {
+        s16 dist = cLib_distanceAngleS(shape_angle.y, target);
+        if (cLib_calcTimer(&m0A9C) == 0 || dist <= 0x400) {
             dComIfGp_getPEvtManager()->cutEnd(mStaffId);
         }
     }
@@ -572,12 +575,9 @@ void daNpc_So_c::cutTurnProc() {
 /* 00005BF8-00005C6C       .text cutEatesaFirstStart__10daNpc_So_cFv */
 void daNpc_So_c::cutEatesaFirstStart() {
     offsetZero();
-    mB28 = 600.0f + g_regHIO.mChild[11].mFloatRegs[14];
-    
     daShip_c* ship = dComIfGp_getShipActor();
-    if (ship != NULL) {
-        mB30 = ship->shape_angle.y;
-    }
+    mB28 = 600.0f + g_regHIO.mChild[11].mFloatRegs[14];
+    mB30 = ship->shape_angle.y;
     mBDA = 1;
     m0AFC = 0.0f;
     speedF = 0.0f;

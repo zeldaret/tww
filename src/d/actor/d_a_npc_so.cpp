@@ -237,20 +237,21 @@ void searchTagSo_CB(void* i_actor, void* i_data) {
 }
 
 /* 000004DC-0000054C       .text _searchTagSo__10daNpc_So_cFP10fopAc_ac_c */
-void daNpc_So_c::_searchTagSo(fopAc_ac_c* i_actor) {
-    if (fopAcM_GetProfName(i_actor) == PROC_TAG_SO) {
-        if (m0A79 != *(u8*)((u32)i_actor + 0x290))
-            return;
-        if (*(u8*)((u32)i_actor + 0x298) == 1)
-            return;
-        m0A7C = *(f32*)((u32)i_actor + 0x294);
-        m0A80.x = i_actor->current.pos.x;
-        m0A80.y = i_actor->current.pos.y;
-        m0A80.z = i_actor->current.pos.z;
-        current.pos.x = m0A80.x;
-        current.pos.y = m0A80.y;
-        current.pos.z = m0A80.z;
+fopAc_ac_c* daNpc_So_c::_searchTagSo(fopAc_ac_c* i_actor) {
+    if (fopAcM_GetName(i_actor) == PROC_TAG_SO) {
+        if (m0A79 == *(u8*)((u32)i_actor + 0x290) &&
+            *(u8*)((u32)i_actor + 0x298) != 1) {
+            m0A7C = *(f32*)((u32)i_actor + 0x294);
+            m0A80.x = i_actor->current.pos.x;
+            m0A80.y = i_actor->current.pos.y;
+            m0A80.z = i_actor->current.pos.z;
+            current.pos.x = m0A80.x;
+            current.pos.y = m0A80.y;
+            current.pos.z = m0A80.z;
+            return i_actor;
+        }
     }
+    return NULL;
 }
 
 /* 0000054C-00000578       .text searchMinigameTagSo_CB__FPvPv */
@@ -259,16 +260,18 @@ void searchMinigameTagSo_CB(void* i_actor, void* i_data) {
 }
 
 /* 00000578-000005C8       .text _searchMinigameTagSo__10daNpc_So_cFP10fopAc_ac_c */
-void daNpc_So_c::_searchMinigameTagSo(fopAc_ac_c* i_actor) {
-    if (fopAcM_GetProfName(i_actor) == PROC_TAG_SO) {
-        if (*(u8*)((u32)i_actor + 0x298) != 1)
-            return;
-        mB90.x = i_actor->current.pos.x;
-        mB90.y = i_actor->current.pos.y;
-        mB90.z = i_actor->current.pos.z;
-        mB9C = i_actor->shape_angle.y;
-        *(u8*)((u32)this + 0xBAE) = 1;
+fopAc_ac_c* daNpc_So_c::_searchMinigameTagSo(fopAc_ac_c* i_actor) {
+    if (fopAcM_GetName(i_actor) == PROC_TAG_SO) {
+        if (*(u8*)((u32)i_actor + 0x298) == 1) {
+            mB90.x = i_actor->current.pos.x;
+            mB90.y = i_actor->current.pos.y;
+            mB90.z = i_actor->current.pos.z;
+            mB9C = i_actor->shape_angle.y;
+            *(u8*)((u32)this + 0xBAE) = 1;
+            return i_actor;
+        }
     }
+    return NULL;
 }
 
 /* 000005C8-000005E8       .text daNpc_So_XyCheckCB__FPvi */
@@ -1372,7 +1375,7 @@ void daNpc_So_c::createInit() {
 /* 00003DF8-00003E24       .text getArg__10daNpc_So_cFv */
 void daNpc_So_c::getArg() {
     m06D0 = home.angle.x;
-    if (m06D0 == -1 || m06D0 == 0) {
+    if (m06D0 == 0xFFFF || m06D0 == 0) {
         m06D0 = 1;
     }
 }

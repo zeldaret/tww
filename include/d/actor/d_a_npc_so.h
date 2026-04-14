@@ -3,62 +3,68 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_s_acch.h"
+#include "d/d_cc_d.h"
 #include "d/d_npc.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "d/d_jnt_hit.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
+#include "SSystem/SComponent/c_phase.h"
 
 class J3DNode;
 class J3DModel;
-class dCcD_SrcSph;
 class mDoExt_McaMorf;
 class dCamera_c;
 
 // Forward declarations
 class daNpc_So_HIO_c;
 
-class daNpc_So_c : public fopAc_ac_c {
+class daNpc_So_c : public fopNpc_npc_c {
 public:
     enum Proc_e {
-        PROC_WAIT_e,
-        PROC_HIDE_e,
-        PROC_JUMP_e,
-        PROC_SWIM_e,
-        PROC_NEAR_SWIM_e,
-        PROC_EVENT_FIRST_WAIT_e,
-        PROC_EVENT_FIRST_e,
-        PROC_EVENT_FIRST_END_e,
-        PROC_EVENT_ESA_e,
-        PROC_EVENT_MAPOPEN_e,
-        PROC_EVENT_BOW_e,
-        PROC_TALK_e,
-        PROC_DISAPPEAR_e,
-        PROC_DEBUG_e,
-        PROC_GET_RUPEE_e,
-        PROC_EVENT_TRIFORCE_e,
+        PROC_INIT_e = 0,
+        PROC_EXEC_e = 1,
+    };
+
+    enum {
+        MODE_WAIT_e,
+        MODE_HIDE_e,
+        MODE_JUMP_e,
+        MODE_SWIM_e,
+        MODE_NEAR_SWIM_e,
+        MODE_EVENT_FIRST_WAIT_e,
+        MODE_EVENT_FIRST_e,
+        MODE_EVENT_FIRST_END_e,
+        MODE_EVENT_ESA_e,
+        MODE_EVENT_MAPOPEN_e,
+        MODE_EVENT_BOW_e,
+        MODE_TALK_e,
+        MODE_DISAPPEAR_e,
+        MODE_DEBUG_e,
+        MODE_GET_RUPEE_e,
+        MODE_EVENT_TRIFORCE_e,
     };
 
     int getMiniGameRestArrow() { return 10 - mB78; }
     void isAnm(signed char) {}
-    void modeProcInit(int) {}
+    void modeProcInit(int newMode) { modeProc(PROC_INIT_e, newMode); }
 
     void _searchEsa(fopAc_ac_c*);
     void _nodeControl(J3DNode*, J3DModel*);
-    void _searchTagSo(fopAc_ac_c*);
-    void _searchMinigameTagSo(fopAc_ac_c*);
+    fopAc_ac_c* _searchTagSo(fopAc_ac_c*);
+    fopAc_ac_c* _searchMinigameTagSo(fopAc_ac_c*);
     s16 XyCheckCB(int);
     s16 XyEventCB(int);
     bool jntHitCreateHeap();
     int _createHeap();
-    void checkTgHit();
+    BOOL checkTgHit();
     void offsetZero();
     void offsetDive();
     void offsetSwim();
     void offsetAppear();
-    void getMsg();
-    void next_msgStatus(unsigned long*);
+    u32 getMsg();
+    u16 next_msgStatus(unsigned long*);
     void lookBack();
     void setAttention();
     void setAnm(signed char, bool);
@@ -159,44 +165,37 @@ public:
     static char* m_arc_name;
 
 public:
-    // Binary offsets from actor start. fopAc_ac_c base ends at 0x290.
-    // All offsets below are absolute from the actor start.
-    /* 0x290 */ s16 mJointAngleY;
-    /* 0x292 */ s16 mJointAngleX;
-    /* 0x294 */ s16 mJointAngleZ;
-    /* 0x296 */ s16 mJointAngleW;
-    /* 0x298 */ u8 mHeadJointIdx;
-    /* 0x299 */ u8 mBackJointIdx;
-    /* 0x29A */ u8 m29A_pad[0x2C4 - 0x29A];
-    /* 0x2C4 */ dNpc_EventCut_c mEventCut;
-    /* 0x330 */ s32 m330;
-    /* 0x334 */ u8 m334_pad[0x33C - 0x334];
-    /* 0x33C */ s32 m33C;
-    /* 0x340 */ u8 m340_pad[0x344 - 0x340];
-    /* 0x344 */ s32 m344;
-    /* 0x348 */ u8 m348_pad[0x36C - 0x348];
-    /* 0x36C */ s32 m36C;
-    /* 0x370 */ u8 m370_pad[0x390 - 0x370];
-    /* 0x390 */ s32 m390;
-    /* 0x394 */ u8 m394_pad[0x6B0 - 0x394];
-    /* 0x6B0 */ void* m06B0;
-    /* 0x6B4 */ u8 m6B4_pad[0x6D0 - 0x6B4];
+    // Binary offsets from actor start. fopNpc_npc_c base ends at 0x6C4.
+    // Fields 0x290-0x6C3 are inherited from fopNpc_npc_c.
+    // m029C (0x29C) maps to m_jnt.mbBackBoneLock in fopNpc_npc_c.
+    // mEventCut (0x2C4) is inherited from fopNpc_npc_c.
+    /* 0x6C4 */ u8 m6C4_pad[0x6CC - 0x6C4];
+    /* 0x6CC */ s32 mCurMode;
+    /* 0x6D0 */ // continues below
     /* 0x6D0 */ s16 m06D0;
-    /* 0x6D2 */ u8 m06D2;
-    /* 0x6D3 */ u8 m06D3;
+    /* 0x6D2 */ s8 m06D2;
+    /* 0x6D3 */ s8 m06D3;
     /* 0x6D4 */ u8 m6D4_pad[0x6D8 - 0x6D4];
-    /* 0x6D8 */ s32 m06D8;
-    /* 0x6DC */ u8 m6DC_pad[0x84C - 0x6DC];
+    /* 0x6D8 */ int m06D8;
+    /* 0x6DC */ request_of_phase_process_class mPhs;
+    /* 0x6E4 */ dCcD_Stts mStts;
+    /* 0x720 */ dCcD_Sph mSph;
     /* 0x84C */ mDoExt_McaMorf* mpMorf;
     /* 0x850 */ J3DModel* mpModel;
-    /* 0x854 */ u8 m854_pad[0xA78 - 0x854];
+    /* 0x854 */ mDoExt_btpAnm mBtpAnm;
+    /* 0x868 */ u8 m868_pad[0x870 - 0x868];
+    /* 0x870 */ dBgS_ObjAcch mAcch;
+    /* 0xA34 */ dBgS_AcchCir mAcchCir;
+    /* 0xA74 */ u8 mA74_pad[0xA78 - 0xA74];
     /* 0xA78 */ u8 mEquipNecklace;
     /* 0xA79 */ u8 m0A79;
     /* 0xA7A */ u8 mA7A_pad[0xA7C - 0xA7A];
     /* 0xA7C */ f32 m0A7C;
     /* 0xA80 */ cXyz m0A80;
-    /* 0xA8C */ u8 mA8C_pad[0xA9C - 0xA8C];
-    /* 0xA9C */ s32 m0A9C;
+    /* 0xA8C */ u8 mA8C_pad[0xA90 - 0xA8C];
+    /* 0xA90 */ s32 m0A90;
+    /* 0xA94 */ u8 mA94_pad[0xA9C - 0xA94];
+    /* 0xA9C */ int m0A9C;
     /* 0xAA0 */ u8 mAA0_pad[0xAA8 - 0xAA0];
     /* 0xAA8 */ JntHit_c* mpJntHit2;
     /* 0xAAC */ u8 mAAC_pad[0xAFC - 0xAAC];
@@ -204,7 +203,8 @@ public:
     /* 0xB00 */ f32 mB00;
     /* 0xB04 */ f32 field_0xB04;
     /* 0xB08 */ f32 mB08;
-    /* 0xB0C */ u8 mB0C_pad[0xB10 - 0xB0C];
+    /* 0xB0C */ s8 mB0C;
+    /* 0xB0D */ u8 mB0D_pad[0xB10 - 0xB0D];
     /* 0xB10 */ cXyz mB10;
     /* 0xB1C */ cXyz mB1C;
     /* 0xB28 */ f32 mB28;
@@ -219,7 +219,8 @@ public:
     /* 0xB54 */ cXyz mB54;
     /* 0xB60 */ cXyz mB60;
     /* 0xB6C */ s32 mStaffId;
-    /* 0xB70 */ u32 mB70;
+    /* 0xB70 */ u8 mB70;
+    /* 0xB71 */ u8 mB71_pad[0xB74 - 0xB71];
     /* 0xB74 */ s32 mB74;
     /* 0xB78 */ s32 mB78;
     /* 0xB7C */ s32 mB7C;
@@ -236,9 +237,10 @@ public:
     /* 0xBAE */ u8 mBAE;
     /* 0xBAF */ u8 mBAF_pad[0xBBC - 0xBAF];
     /* 0xBBC */ s32 mBbc;
-    /* 0xBC0 */ cXyz mBC0_2;
+    /* 0xBC0 */ cXyz mBC0;
     /* 0xBCC */ cXyz mBCC;
-    /* 0xBD8 */ u8 mBD8_pad[0xBDA - 0xBD8];
+    /* 0xBD8 */ u8 mBD8;
+    /* 0xBD9 */ u8 mBD9;
     /* 0xBDA */ u8 mBDA;
     /* 0xBDB */ u8 mBDB;
     /* 0xBDC */ s16 mBDC;
@@ -283,7 +285,13 @@ public:
     /* 0x8C */ f32 m008C;
     /* 0x90 */ f32 m0090;
     /* 0x94 */ f32 m0094;
-    /* 0x98 */ JntHit_HIO_c mJntHitHIO; // size 0x2C, occupies 0x98-0xC3
+    /* 0x98 */ u8 m0098_pad[0xA8 - 0x98];
+    /* 0xA8 */ f32 m00A8;
+    /* 0xAC */ u8 m00AC_pad[0xB0 - 0xAC];
+    /* 0xB0 */ f32 m00B0;
+    /* 0xB4 */ f32 m00B4;
+    /* 0xB8 */ f32 m00B8;
+    /* 0xBC */ u8 m00BC_pad[0xC4 - 0xBC];
     /* 0xC4 */ f32 m00C4;
     /* 0xC8 */ f32 m00C8;
     /* 0xCC */ f32 m00CC;
