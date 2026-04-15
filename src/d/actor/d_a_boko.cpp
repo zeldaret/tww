@@ -86,7 +86,7 @@ void daBoko_c::keDraw() {
 
 /* 0000017C-00000620       .text keCalc1__8daBoko_cFP6ke_c_si */
 void daBoko_c::keCalc1(ke_c_s* arg1, int arg2) {
-    s32 i;
+    int i;
     cXyz* pcVar11 = &arg1->m000[1];
     cXyz* pcVar10 = &arg1->m078[1];
     cXyz sp18(0.0f, 0.0f, 21.875f);
@@ -97,7 +97,12 @@ void daBoko_c::keCalc1(ke_c_s* arg1, int arg2) {
     f32 fVar6;
 
     dBgS_GndChk gndChk;
-    gndChk.m_pos.set(pcVar11->x, pcVar11->y + 100.0f, pcVar11->z);
+    Vec temp;
+    temp.x = pcVar11->x;
+    temp.y = pcVar11->y;
+    temp.z = pcVar11->z;
+    temp.y += 100.0f;
+    gndChk.m_pos.set(temp);
 
     f32 fVar14 = dComIfG_Bgsp()->GroundCross(&gndChk) + 3.0f;
     if (fVar14 == -G_CM3D_F_INF) {
@@ -122,7 +127,7 @@ void daBoko_c::keCalc1(ke_c_s* arg1, int arg2) {
 
         fVar5 = fVar5tmp - pcVar11[-1].y;
         s16 iVar7 = -cM_atan2s(fVar5, fVar6);
-        s32 iVar8 = cM_atan2s(fVar7, std::sqrtf(SQUARE(fVar5) + SQUARE(fVar6)));
+        int iVar8 = cM_atan2s(fVar7, std::sqrtf(SQUARE(fVar5) + SQUARE(fVar6)));
         mDoMtx_XrotS(*calc_mtx, iVar7);
         mDoMtx_YrotM(*calc_mtx, iVar8);
         cXyz sp0C;
@@ -142,7 +147,7 @@ void daBoko_c::keCalc1(ke_c_s* arg1, int arg2) {
     }
 
     cXyz* segments = mpLineKe->lineMat.getPos(arg2);
-    for (s32 i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++) {
         *segments++ = arg1->m000[i];
     }
 }
@@ -153,7 +158,7 @@ void daBoko_c::keCalc() {
 
     MTXCopy(mpModel->getBaseTRMtx(), *calc_mtx);
 
-    for (s32 i = 0; i < ARRAY_SSIZE(mpLineKe->m001C); i++, ke++) {
+    for (int i = 0; i < ARRAY_SSIZE(mpLineKe->m001C); i++, ke++) {
         MtxPush();
         cXyz sp08;
         sp08.x = cM_ssin(15000 * i) * 12.0f;
@@ -186,13 +191,13 @@ BOOL daBoko_c::draw() {
             GXColor color = {0xEB, 0x7D, 0, 0};
             dComIfGd_setAlphaModelColor(color);
 
-            s32 i;
+            int i;
             for (i = 0; i < 2; i++) {
                 dComIfGd_setAlphaModel(dDlst_alphaModel_c::TYPE_SPHERE, mAlphaModelMtx[i], dark_stts->getBokoAlpha(i));
             }
 
             if (getNowMode() == Mode_PLAYER_CARRY_e && dStage_roomControl_c::getDarkMode() != 0) {
-                for (s32 j = i; j < 4; j++) {
+                for (int j = i; j < 4; j++) {
                     dComIfGd_setSpotModel(dDlst_alphaModel_c::TYPE_SPHERE, mAlphaModelMtx[j], dark_stts->getBokoAlpha(j));
                 }
             }
@@ -235,7 +240,7 @@ static BOOL daBoko_Draw(daBoko_c* i_this) {
 
 /* 00000DE4-00000EB0       .text setTopRootPos__8daBoko_cFi */
 void daBoko_c::setTopRootPos(int arg1) {
-    s32 type = fopAcM_GetParam(this);
+    int type = fopAcM_GetParam(this);
     if (arg1 != 0) {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y + 5.0f, current.pos.z);
         mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -272,7 +277,7 @@ void daBoko_c::setFlameEffect() {
     dStage_darkStatus_c* dark_stts = dStage_roomControl_c::getDarkStatus();
 
     if (dark_stts != NULL) {
-        for (s32 i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             cLib_addCalc2(&m7E4, cM_rndF(0.2f) + 1.0f, 0.5f, 0.01f);
             f32 scale = m7E4 * dark_stts->getBokoScale(i);
             s16 y = g_Counter.mTimer * base_angle[i];
@@ -290,30 +295,33 @@ void daBoko_c::setFlameEffect() {
 
     JPABaseEmitter* pJVar5 = mParticleCallBack.getEmitter();
     if (pJVar5 != NULL) {
-        f32 fVar1 = (REG0_F(4) + -0.03f) * (m2D0.x - m320.x);
-        if (fVar1 > 1.0f) {
-            fVar1 = 1.0f;
-        } else if (fVar1 < -1.0f) {
-            fVar1 = -1.0f;
+        Vec temp;
+
+        temp.x = (REG0_F(4) + -0.03f) * (m2D0.x - m320.x);
+        if (temp.x > 1.0f) {
+            temp.x = 1.0f;
+        } else if (temp.x < -1.0f) {
+            temp.x = -1.0f;
         }
 
-        f32 fVar2 = (REG0_F(4) + -0.03f) * (m2D0.z - m320.z);
-        if (fVar2 > 1.0f) {
-            fVar2 = 1.0f;
-        } else if (fVar2 < -1.0f) {
-            fVar2 = -1.0f;
+        temp.z = (REG0_F(4) + -0.03f) * (m2D0.z - m320.z);
+        if (temp.z > 1.0f) {
+            temp.z = 1.0f;
+        } else if (temp.z < -1.0f) {
+            temp.z = -1.0f;
         }
 
-        JGeometry::TVec3<f32> s(fVar1, 0.1f, fVar2);
+        JGeometry::TVec3<f32> s(temp.x, 0.1f, temp.z);
         pJVar5->setDirection(s);
 
         s = current.pos - old.pos;
+        const f32 f5 = 1.0f; // TODO: nonmatching for demo
         f32 fVar11 = (REG0_F(12) + 0.05f) * std::sqrtf(SQUARE(s.x) + SQUARE(s.y) + SQUARE(s.z)) + 1.0f;
         if (fVar11 > REG0_F(13) + 2.0f) {
             fVar11 = REG0_F(13) + 2.0f;
         }
 
-        JGeometry::TVec3<f32> s2(1.0f, fVar11, 1.0f);
+        JGeometry::TVec3<f32> s2(f5, fVar11, f5);
         pJVar5->setGlobalParticleScale(s2);
         m320 = m2D0;
         mDoAud_seStart(JA_SE_OBJ_TORCH_BURNING, &m2D0, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -354,7 +362,7 @@ void daBoko_c::setThrowReverse(s16 arg1) {
     speedF *= 0.25f;
     current.angle.y = arg1 + cM_rndFX(12288.0f);
 
-    s32 sVar1 = cLib_distanceAngleS(current.angle.y, shape_angle.y);
+    int sVar1 = cLib_distanceAngleS(current.angle.y, shape_angle.y);
     if (sVar1 >= 0x4000) {
         m2C2 = -(cM_rndFX(500.0f) + 3500.0f);
         shape_angle.y = current.angle.y - -0x8000;
@@ -425,21 +433,23 @@ BOOL daBoko_c::procMove() {
     cXyz sp1C(m2DC.x, fVar14_2, m2DC.z);
     m_ground_check.SetPos(&sp1C);
 
-    f32 fVar14 = dComIfG_Bgsp()->GroundCross(&m_ground_check);
-    if (fVar14 == -G_CM3D_F_INF) {
-        fVar14 = mAcch.GetGroundH();
+    f32 f31;
+    f32 f30;
+    f30 = dComIfG_Bgsp()->GroundCross(&m_ground_check);
+    if (f30 == -G_CM3D_F_INF) {
+        f30 = mAcch.GetGroundH();
     }
-    f32 fVar2 = m2DC.y - fVar14;
+    f31 = m2DC.y - f30;
     sp1C.set(m2D0.x, fVar15_2, m2D0.z);
     m_ground_check.SetPos(&sp1C);
 
-    f32 fVar15 = dComIfG_Bgsp()->GroundCross(&m_ground_check);
-    if (fVar15 == -G_CM3D_F_INF) {
-        fVar15 = mAcch.GetGroundH();
+    f32 f1 = dComIfG_Bgsp()->GroundCross(&m_ground_check);
+    if (f1 == -G_CM3D_F_INF) {
+        f1 = mAcch.GetGroundH();
     }
 
-    f32 fVar3 = m2D0.y - fVar15;
-    if ((fVar2 < fVar3 && fVar2 < 0.0f) || (fVar3 < fVar2 && fVar3 < 0.0f)) {
+    f32 f3 = m2D0.y - f1;
+    if ((f31 < f3 && f31 < 0.0f) || (f3 < f31 && f3 < 0.0f)) {
         if (speed.y < -10.0f) {
             speed.y *= -0.5f;
             if (speed.y > 20.0f) {
@@ -448,15 +458,15 @@ BOOL daBoko_c::procMove() {
         }
 
         if (m2BB != 0) {
-            if (fVar2 < fVar3) {
-                current.pos.y -= fVar2;
+            if (f31 < f3) {
+                current.pos.y -= f31;
             } else {
-                current.pos.y -= fVar3;
+                current.pos.y -= f3;
             }
             m2BB--;
         }
 
-        sp1C.set(m2D0.x - m2DC.x, fVar15 - fVar14, m2D0.z - m2DC.z);
+        sp1C.set(m2D0.x - m2DC.x, f1 - f30, m2D0.z - m2DC.z);
         s16 sVar5 = shape_angle.x - cM_atan2s(-sp1C.y, sp1C.absXZ());
         m2C0 = sVar5 * -0.2f;
         if (m2C0 == 0 && sVar5 != 0) {
@@ -489,8 +499,8 @@ BOOL daBoko_c::procMove() {
         bVar4 = TRUE;
     }
 
-    s32 iVar6 = abs(m2C0);
-    s32 iVar8 = abs(m2C2);
+    int iVar6 = abs(m2C0);
+    int iVar8 = abs(m2C2);
     if (iVar8 > iVar6) {
         shape_angle.x += m2C2;
     } else {
@@ -519,7 +529,7 @@ BOOL daBoko_c::procMove() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     setRoomInfo();
 
-    if (mAcch.ChkGroundHit() && fVar14 <= 2.5f) {
+    if (mAcch.ChkGroundHit() && fVar14_3 <= 2.5f) {
         if (dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd) && fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) == PROC_TBOX) {
             if (speedF < 15.0f) {
                 speedF = 15.0f;
@@ -527,10 +537,9 @@ BOOL daBoko_c::procMove() {
             speed.y = 20.0f;
         } else {
             cM3dGPla* pcVar10 = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
-            s16 iVar6 = cM_atan2s(pcVar10->mNormal.x, pcVar10->mNormal.z);
-            s16 tmp = iVar6 - shape_angle.y;
-            iVar6 = cM_atan2s(std::sqrtf(SQUARE(pcVar10->mNormal.x) + SQUARE(pcVar10->mNormal.z)) * cM_scos(tmp), pcVar10->mNormal.y);
-            s16 __x = iVar6 - shape_angle.x;
+            s16 r0 = cM_atan2s(pcVar10->mNormal.x, pcVar10->mNormal.z) - shape_angle.y;
+            s16 r30 = cM_atan2s(std::sqrtf(SQUARE(pcVar10->mNormal.x) + SQUARE(pcVar10->mNormal.z)) * cM_scos(r0), pcVar10->mNormal.y);
+            s16 __x = r30 - shape_angle.x;
 
             if (abs(__x) > 0x1000 && m2BB != 0) {
                 speed.y = 15.0f;
@@ -545,7 +554,7 @@ BOOL daBoko_c::procMove() {
                     m2BB = 0;
                 }
             } else {
-                shape_angle.x = iVar6;
+                shape_angle.x = r30;
                 shape_angle.z = 0;
                 procWait_init();
             }
@@ -692,7 +701,7 @@ BOOL daBoko_c::procCarry() {
 
             procMove_init();
 
-            s32 i;
+            int i;
             for (i = 0; i < 3; i++) {
                 m_ground_check.SetPos(&current.pos);
                 if (dComIfG_Bgsp()->GroundCross(&m_ground_check) != -G_CM3D_F_INF) {
@@ -838,7 +847,7 @@ static BOOL daBoko_createHeap(fopAc_ac_c* i_this) {
 
 /* 00002AE8-00002CFC       .text createHeap__8daBoko_cFv */
 BOOL daBoko_c::createHeap() {
-    static const s32 model_idx[] = {BOKO_BDL_BOKO, NATA_BDL_BK_NATA, CLUB_BDL_ST_BUKI, TKWN_BDL_TN_KEN1, SPEAR_BDL_MO_YARI, PGSW_BDL_BPG_KEN1};
+    static const int model_idx[] = {BOKO_BDL_BOKO, NATA_BDL_BK_NATA, CLUB_BDL_ST_BUKI, TKWN_BDL_TN_KEN1, SPEAR_BDL_MO_YARI, PGSW_BDL_BPG_KEN1};
 
     u32 type = fopAcM_GetParam(this);
     if (type >= Type_COUNT_e) {
@@ -850,7 +859,7 @@ BOOL daBoko_c::createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name[type], model_idx[type]));
     JUT_ASSERT(DEMO_SELECT(1708, 1746), modelData != NULL);
 
-    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, type == Type_PGANON_SWORD_e ? 0x11000002 : 0x11000002);
     if (mpModel == NULL) {
         return FALSE;
     }

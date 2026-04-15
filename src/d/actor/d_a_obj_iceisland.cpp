@@ -53,7 +53,7 @@ void daObjIceisland_c::CreateInit() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeFar(this, 1.0f);
     set_mtx();
-    dKy_tevstr_init(&mTevStr, fopAcM_GetHomeRoomNo(this), 0xFF);
+    dKy_tevstr_init(&mTevStr, home.roomNo, 0xFF);
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     mEmitter1 = NULL;
     mEmitter2 = NULL;
@@ -171,7 +171,7 @@ cPhs_State daObjIceisland_c::_create(){
     fopAcM_SetupActor(this, daObjIceisland_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "GiceL");
     if (phase_state == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x13D0)) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, DEMO_SELECT(0x300, 0x13D0))) {
             return cPhs_ERROR_e;
         } else {
             CreateInit();
@@ -181,7 +181,7 @@ cPhs_State daObjIceisland_c::_create(){
 }
 
 bool daObjIceisland_c::_delete(){
-    dComIfG_resDelete(&mPhs, "GiceL");
+    dComIfG_resDeleteDemo(&mPhs, "GiceL");
     return true;
 }
 

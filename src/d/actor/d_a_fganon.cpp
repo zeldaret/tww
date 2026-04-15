@@ -2371,9 +2371,6 @@ void* mahou_se_set(void* i_act, void* i_other) {
     return NULL;
 }
 
-static u32 jno[2] = {0x7, 0xD};
-static u16 eno[2] = {dPa_name::ID_AK_SN_BPGLEGSMOKE00, dPa_name::ID_AK_SN_BPGARMSMOKE00};
-
 /* 000086B4-0000924C       .text daFganon_Execute__FP12fganon_class */
 static BOOL daFganon_Execute(fganon_class* i_this) {
     fopEn_enemy_c* a_this = &i_this->actor;
@@ -2509,9 +2506,11 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
     for (int i = 0; i < 2; i++) {
         if ((i_this->mbIsMaterialized != 0) && (i_this->mAction != 22)) {
             if (i_this->mEmitters1[i] != NULL) {
+                static u32 jno[2] = {0x7, 0xD};
                 i_this->mEmitters1[i]->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(jno[i]));
             }
             else {
+                static u16 eno[2] = {dPa_name::ID_AK_SN_BPGLEGSMOKE00, dPa_name::ID_AK_SN_BPGARMSMOKE00};
                 i_this->mEmitters1[i] = dComIfGp_particle_set(eno[i], &a_this->current.pos, NULL);
             }
         }
@@ -2732,123 +2731,6 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
     return TRUE;
 }
 
-static dCcD_SrcCyl cc_cyl_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ ~(AT_TYPE_UNK8 | AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
-        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
-        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ dCcG_TgHitMark_Nrm_e,
-        /* SrcGObjTg Spl     */ 0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGCylS
-    {{
-        /* Center */ {0.0f, -150.0f, 0.0f},
-        /* Radius */ 100.0f,
-        /* Height */ 100.0f,
-    }},
-};
-
-static dCcD_SrcSph wepon_sph_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ AT_TYPE_UNK8,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
-        /* SrcObjTg  Type    */ 0,
-        /* SrcObjTg  SPrm    */ 0,
-        /* SrcObjCo  SPrm    */ 0,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ dCcG_AtHitMark_Nrm_e,
-        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK7,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ 0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGSphS
-    {{
-        /* Center */ {0.0f, 0.0f, 0.0f},
-        /* Radius */ 200.0f,
-    }},
-};
-
-static dCcD_SrcSph ball_tg_sph_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
-        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
-        /* SrcObjCo  SPrm    */ 0,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ 0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ 0,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGSphS
-    {{
-        /* Center */ {0.0f, 0.0f, 0.0f},
-        /* Radius */ 60.0f,
-    }},
-};
-
-static dCcD_SrcSph ball_at_sph_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ AT_TYPE_UNK800,
-        /* SrcObjAt  Atp     */ 0x2,
-        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
-        /* SrcObjTg  Type    */ 0,
-        /* SrcObjTg  SPrm    */ 0,
-        /* SrcObjCo  SPrm    */ 0,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNKA,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ 0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ 0,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGSphS
-    {{
-        /* Center */ {0.0f, 0.0f, 0.0f},
-        /* Radius */ 30.0f,
-    }},
-};
-
 /* 00009844-00009C70       .text daFganon_Create__FP10fopAc_ac_c */
 static cPhs_State daFganon_Create(fopAc_ac_c* a_this) {
     fganon_class* i_this = (fganon_class*)a_this;
@@ -2911,6 +2793,123 @@ static cPhs_State daFganon_Create(fopAc_ac_c* a_this) {
         
         i_this->mStts.Init(0xFA, 0xFF, a_this);
         
+        static dCcD_SrcCyl cc_cyl_src = {
+            // dCcD_SrcGObjInf
+            {
+                /* Flags             */ 0,
+                /* SrcObjAt  Type    */ 0,
+                /* SrcObjAt  Atp     */ 0,
+                /* SrcObjAt  SPrm    */ 0,
+                /* SrcObjTg  Type    */ ~(AT_TYPE_UNK8 | AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+                /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+                /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
+                /* SrcGObjAt Se      */ 0,
+                /* SrcGObjAt HitMark */ 0,
+                /* SrcGObjAt Spl     */ 0,
+                /* SrcGObjAt Mtrl    */ 0,
+                /* SrcGObjAt SPrm    */ 0,
+                /* SrcGObjTg Se      */ 0,
+                /* SrcGObjTg HitMark */ dCcG_TgHitMark_Nrm_e,
+                /* SrcGObjTg Spl     */ 0,
+                /* SrcGObjTg Mtrl    */ 0,
+                /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
+                /* SrcGObjCo SPrm    */ 0,
+            },
+            // cM3dGCylS
+            {{
+                /* Center */ {0.0f, -150.0f, 0.0f},
+                /* Radius */ 100.0f,
+                /* Height */ 100.0f,
+            }},
+        };
+
+        static dCcD_SrcSph wepon_sph_src = {
+            // dCcD_SrcGObjInf
+            {
+                /* Flags             */ 0,
+                /* SrcObjAt  Type    */ AT_TYPE_UNK8,
+                /* SrcObjAt  Atp     */ 0,
+                /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
+                /* SrcObjTg  Type    */ 0,
+                /* SrcObjTg  SPrm    */ 0,
+                /* SrcObjCo  SPrm    */ 0,
+                /* SrcGObjAt Se      */ 0,
+                /* SrcGObjAt HitMark */ dCcG_AtHitMark_Nrm_e,
+                /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK7,
+                /* SrcGObjAt Mtrl    */ 0,
+                /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
+                /* SrcGObjTg Se      */ 0,
+                /* SrcGObjTg HitMark */ 0,
+                /* SrcGObjTg Spl     */ 0,
+                /* SrcGObjTg Mtrl    */ 0,
+                /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
+                /* SrcGObjCo SPrm    */ 0,
+            },
+            // cM3dGSphS
+            {{
+                /* Center */ {0.0f, 0.0f, 0.0f},
+                /* Radius */ 200.0f,
+            }},
+        };
+
+        static dCcD_SrcSph ball_tg_sph_src = {
+            // dCcD_SrcGObjInf
+            {
+                /* Flags             */ 0,
+                /* SrcObjAt  Type    */ 0,
+                /* SrcObjAt  Atp     */ 0,
+                /* SrcObjAt  SPrm    */ 0,
+                /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+                /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+                /* SrcObjCo  SPrm    */ 0,
+                /* SrcGObjAt Se      */ 0,
+                /* SrcGObjAt HitMark */ 0,
+                /* SrcGObjAt Spl     */ 0,
+                /* SrcGObjAt Mtrl    */ 0,
+                /* SrcGObjAt SPrm    */ 0,
+                /* SrcGObjTg Se      */ 0,
+                /* SrcGObjTg HitMark */ 0,
+                /* SrcGObjTg Spl     */ 0,
+                /* SrcGObjTg Mtrl    */ 0,
+                /* SrcGObjTg SPrm    */ 0,
+                /* SrcGObjCo SPrm    */ 0,
+            },
+            // cM3dGSphS
+            {{
+                /* Center */ {0.0f, 0.0f, 0.0f},
+                /* Radius */ 60.0f,
+            }},
+        };
+
+        static dCcD_SrcSph ball_at_sph_src = {
+            // dCcD_SrcGObjInf
+            {
+                /* Flags             */ 0,
+                /* SrcObjAt  Type    */ AT_TYPE_UNK800,
+                /* SrcObjAt  Atp     */ 0x2,
+                /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
+                /* SrcObjTg  Type    */ 0,
+                /* SrcObjTg  SPrm    */ 0,
+                /* SrcObjCo  SPrm    */ 0,
+                /* SrcGObjAt Se      */ 0,
+                /* SrcGObjAt HitMark */ 0,
+                /* SrcGObjAt Spl     */ dCcG_At_Spl_UNKA,
+                /* SrcGObjAt Mtrl    */ 0,
+                /* SrcGObjAt SPrm    */ 0,
+                /* SrcGObjTg Se      */ 0,
+                /* SrcGObjTg HitMark */ 0,
+                /* SrcGObjTg Spl     */ 0,
+                /* SrcGObjTg Mtrl    */ 0,
+                /* SrcGObjTg SPrm    */ 0,
+                /* SrcGObjCo SPrm    */ 0,
+            },
+            // cM3dGSphS
+            {{
+                /* Center */ {0.0f, 0.0f, 0.0f},
+                /* Radius */ 30.0f,
+            }},
+        };
+
         i_this->mCyl.Set(cc_cyl_src);
         i_this->mCyl.SetStts(&i_this->mStts);
         i_this->mCyl.OnTgNoHitMark();
