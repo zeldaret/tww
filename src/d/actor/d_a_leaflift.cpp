@@ -62,9 +62,13 @@ bool daLlift_c::_delete() {
         mEmitter3->becomeInvalidEmitter();
         mEmitter3 = NULL;
     }
+#if VERSION > VERSION_DEMO
     if (heap)
+#endif
+    {
         dComIfG_Bgsp()->Release(mpBgW);
-    dComIfG_resDelete(&mPhs, m_arcname);
+    }
+    dComIfG_resDeleteDemo(&mPhs, m_arcname);
     return TRUE;
 }
 
@@ -78,7 +82,7 @@ static void rideCallBack(dBgW* param1, fopAc_ac_c* i_this, fopAc_ac_c* i_other);
 /* 000001E0-00000338       .text CreateHeap__9daLlift_cFv */
 BOOL daLlift_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, OLIFT_BDL_OLIFT);
-    JUT_ASSERT(0x14e, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(327, 334), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (!mpModel) {
@@ -204,13 +208,14 @@ static void rideCallBack(dBgW* param1, fopAc_ac_c* i_act, fopAc_ac_c* i_other) {
             mDoMtx_stack_c::YrotS(-i_this->current.angle.y);
             mDoMtx_stack_c::multVec(&posOffset, &posOffset);
             s16 angle = (i_this->mActorLifetimeFrameCount % 32U) * (0x10000 / 32);
-            tiltFactor = cM_ssin(angle) * 2.0f * 0.25f * (cM_rndFX(0.2f) + 1.0f);
+            tiltFactor = cM_ssin(angle) * tiltFactor * 0.25f * (cM_rndFX(0.2f) + 1.0f);
         }
         offsetMagnitude = posOffset.abs();
         if (!posOffset.normalizeRS() ) {
           return;
         }
-        cLib_addCalcAngleS2(&i_this->mTiltAngle, -offsetMagnitude * tiltFactor, 8, 0x200);
+        s16 temp = -offsetMagnitude * tiltFactor;
+        cLib_addCalcAngleS2(&i_this->mTiltAngle, temp, 8, 0x200);
         tiltFactor = cM_ssin(i_this->mTiltAngle);
         i_this->mTargetRotation.x = posOffset.x * tiltFactor;
         i_this->mTargetRotation.y = posOffset.y * tiltFactor;
@@ -240,7 +245,8 @@ void daLlift_c::setMoveBGMtx() {
 bool daLlift_c::_execute() {
     Quaternion interpolatedRotation;
     cXyz adjustedPosition;
-    float distXZ = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    f32 distXZ = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    f32 f2 = 270.0f;
     mActorLifetimeFrameCount++;
     if (m43F > 0) {
         m43F--;
@@ -250,7 +256,7 @@ bool daLlift_c::_execute() {
     }
     if ((!m43C) && (m43E)) {
         mTargetRotation = ZeroQuat;
-        if (distXZ > 270.0f) {
+        if (distXZ > f2) {
             mbIsDescending = TRUE;
         }
     }

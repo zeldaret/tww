@@ -53,14 +53,14 @@ static dCcD_SrcSph l_sph_src = {
 
 /* 00000078-000000B8       .text Delete__7daHys_cFv */
 BOOL daHys_c::Delete() {
-    dComIfG_resDelete(&mPhs, m_arcname[mType]);
+    dComIfG_resDeleteDemo(&mPhs, m_arcname[mType]);
     return TRUE;
 }
 
 /* 000000B8-00000250       .text CreateHeap__7daHys_cFv */
 BOOL daHys_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]);
-    JUT_ASSERT(0x106, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(258, 262), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020022);
     if (mpModel == NULL) {
@@ -68,7 +68,7 @@ BOOL daHys_c::CreateHeap() {
     }
 
     J3DAnmTexPattern* pbtp = (J3DAnmTexPattern *)dComIfG_getObjectRes(m_arcname[mType], m_btpidx[mType]);
-    JUT_ASSERT(0x114, pbtp != NULL);
+    JUT_ASSERT(DEMO_SELECT(272, 276), pbtp != NULL);
 
     if (!mBtpAnm.init(modelData, pbtp, FALSE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;

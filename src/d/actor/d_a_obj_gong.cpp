@@ -92,7 +92,7 @@ cPhs_State daObjGong::Act_c::_create() {
 
 /* 00000374-000003A4       .text _delete__Q29daObjGong5Act_cFv */
 bool daObjGong::Act_c::_delete() {
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return true;
 }
 

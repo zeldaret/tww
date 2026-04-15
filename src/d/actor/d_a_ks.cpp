@@ -185,7 +185,8 @@ BOOL tyaku_check(ks_class* i_this) {
 }
 
 /* 00000788-0000087C       .text ks_kuttuki_check__FP8ks_class */
-BOOL ks_kuttuki_check(ks_class* i_this) {        
+BOOL ks_kuttuki_check(ks_class* i_this) {     
+    daPy_lk_c* link = daPy_getPlayerLinkActorClass();   
     if (i_this->mSph.ChkAtHit() && !i_this->mSph.ChkAtShieldHit()) {
         fopAc_ac_c* hit_actor = i_this->mSph.GetAtHitAc();
         if (hit_actor && hit_actor == daPy_getPlayerLinkActorClass() && KUTTUKU_ALL_COUNT >= 0 && KUTTUKU_ALL_COUNT < 20 && GORON_COUNT == 0) {
@@ -387,8 +388,9 @@ void speed_keisan(ks_class* i_this, short i_speed) {
 }
 
 /* 00000EBC-00001314       .text action_dousa_move__FP8ks_class */
-void action_dousa_move(ks_class* i_this) { 
+void action_dousa_move(ks_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     daPy_lk_c* link = daPy_getPlayerLinkActorClass();
 
     switch (i_this->mMode) {
@@ -403,10 +405,11 @@ void action_dousa_move(ks_class* i_this) {
 
             i_this->mMode++;
             // Fall-through
-        case 1:
+        case 1: {
             cLib_addCalcAngleS2(&actor->shape_angle.z, 0, 1, 0x1000);
             
-            if (fopAcM_searchPlayerDistance(actor) > 10000.0f) {
+            f32 max_dist = 10000.0f;
+            if (fopAcM_searchPlayerDistance(actor) > max_dist) {
                 break;
             }
             
@@ -429,14 +432,16 @@ void action_dousa_move(ks_class* i_this) {
             
             i_this->mMode++;
             // Fall-through
-        case 2:
+        }
+        case 2: {
             if (i_this->mAcch.ChkGroundHit()) {
                 actor->current.angle.y = i_this->m2FC + fopAcM_searchPlayerAngleY(actor);
             }
 
+            f32 max_dist = 500.0f;
             if (KUTTUKU_ALL_COUNT >= 0 && KUTTUKU_ALL_COUNT < 0x14 && 
                 (link->getSpeedF() > 12.0f || HEAVY_IN) && 
-                fopAcM_searchPlayerDistance(actor) < 500.0f &&
+                fopAcM_searchPlayerDistance(actor) < max_dist &&
                 !dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e) &&
                 tyaku_check(i_this)) {
                 
@@ -478,11 +483,14 @@ void action_dousa_move(ks_class* i_this) {
                 actor->speed.y += cM_rndF(5.0f);
             }
             break;
-        case 3:
-            if (fopAcM_searchPlayerDistance(actor) < 500.0f) {
+        }
+        case 3: {
+            f32 max_dist = 500.0f;
+            if (fopAcM_searchPlayerDistance(actor) < max_dist) {
                 actor->current.angle.y = fopAcM_searchPlayerAngleY(actor);
             }
             break;
+        }
     }
 
     if (i_this->mMode == 2 || i_this->mMode == 3) {
@@ -647,8 +655,6 @@ void action_kaze_move(ks_class* i_this) {
     }
 }
 
-static u8 item_tbl[4] = {0xA, 0xB, 0xC, 0xA};
-
 #if VERSION > VERSION_DEMO
 /* 00001874-00001A14       .text dead_eff_set__FP8ks_classP4cXyz */
 void dead_eff_set(ks_class* i_this, cXyz* i_pos) {
@@ -669,6 +675,12 @@ void dead_eff_set(ks_class* i_this, cXyz* i_pos) {
                 drop_type = daDisItem_ARROW_e;
             }
             else {
+                static u8 item_tbl[] = {
+                    daDisItem_HEART_e,
+                    daDisItem_MAGIC_e,
+                    daDisItem_ARROW_e,
+                    daDisItem_HEART_e,
+                };
                 drop_type = item_tbl[(int)cM_rndF(2.99f)];
             }
         }
@@ -827,20 +839,42 @@ void action_omoi(ks_class* i_this) {
                 i_this->m2F0[i] = 0;
             }
 
+        #if VERSION == VERSION_DEMO
+            if (KUTTUKU_ALL_COUNT >= 0x14) {
+                i_this->m528 = NULL;
+            } else {
+                i_this->m528 = link->getModelJointMtx(pl_harituki_joint_dt[KUTTUKU_ALL_COUNT]);
+            }
+
+            i_this->m52C.remove();
+            if (i_this->m528 == NULL) {
+                fopAcM_OffStatus(actor, fopAcStts_UNK4000_e);
+                i_this->mMode = 42;
+                break;
+            } else {
+                i_this->m300 = KUTTUKU_ALL_COUNT;
+                if (i_this->m300 > KUTTUKU_ALL_COUNT - 1) {
+                    i_this->m300 = KUTTUKU_ALL_COUNT - 1;
+                } else if (i_this->m300 < 0) {
+                    i_this->m300 = 0;
+                }
+                actor->speedF = 0.0f;
+                actor->gravity = 0.0f;
+                actor->speed.setall(0.0f);
+            }
+        #else
             if (KUTTUKU_ALL_COUNT >= 0x14) {
                 i_this->m300 = 0x13;
             }
-
-            #if VERSION > VERSION_DEMO
             if (KUTTUKU_ALL_COUNT < 0) {
                 i_this->m300 = 0;
             }
             else {
                 i_this->m300 = KUTTUKU_ALL_COUNT;
             }
-            #endif
 
             i_this->m528 = link->getModelJointMtx(pl_harituki_joint_dt[i_this->m300]);
+        #endif
 
             if (KUTTUKU_ALL_COUNT == 0) {
                 GORON_COUNT = 0;
@@ -850,9 +884,20 @@ void action_omoi(ks_class* i_this) {
 
             KUTTUKU_ALL_COUNT++;
 
-            if (HEAVY_IN == FALSE && KUTTUKU_ALL_COUNT >= 5) {
-                link->onHeavyState();
-                HEAVY_IN = TRUE;
+        #if VERSION == VERSION_DEMO
+            if (KUTTUKU_ALL_COUNT >= 0x14) {
+                KUTTUKU_ALL_COUNT = 0x14;
+            }
+        #endif
+
+            if (HEAVY_IN == FALSE) {
+                int r0;
+                int r3 = KUTTUKU_ALL_COUNT;
+                r0 = 5;
+                if (r3 >= r0) {
+                    link->onHeavyState();
+                    HEAVY_IN = TRUE;
+                }
             }
 
             i_this->m2D2 = 0;
@@ -868,6 +913,16 @@ void action_omoi(ks_class* i_this) {
             // Fall-through
         }
         case 0x29: {
+        #if VERSION == VERSION_DEMO
+            if (i_this->m528 == NULL) {
+                if (KUTTUKU_ALL_COUNT > 0) {
+                    KUTTUKU_ALL_COUNT--;
+                }
+                i_this->mMode = 42;
+                break;
+            }
+        #endif
+            
             fopAcM_SetRoomNo(actor, fopAcM_GetRoomNo(mpCurPlayerActor));
             
             if (!(fopAcM_GetID(actor) & 1)) {
@@ -877,7 +932,7 @@ void action_omoi(ks_class* i_this) {
                 actor->shape_angle.y -= i_this->m2FE * 0.25f;
             }
 
-            if (i_this->m528) {
+            if (VERSION == VERSION_DEMO || i_this->m528) {
                 local_10.x = i_this->m528[0][3];
                 local_10.y = i_this->m528[1][3];
                 local_10.z = i_this->m528[2][3];
@@ -887,7 +942,15 @@ void action_omoi(ks_class* i_this) {
             }
 
             if (!(local_10.x || local_10.y || local_10.z)) {
+                #if VERSION == VERSION_DEMO
+                if (KUTTUKU_ALL_COUNT > 0) {
+                    KUTTUKU_ALL_COUNT--;
+                }
+                i_this->mMode = 42;
+                break;
+                #else
                 local_10 = mpCurPlayerActor->current.pos;
+                #endif
             }
 
             local_1c.x = std::fabsf(mpCurPlayerActor->speed.x * 10.0f);
@@ -946,6 +1009,16 @@ void action_omoi(ks_class* i_this) {
                     }
 
                     i_this->m528 = link->getModelJointMtx(pl_harituki_joint_dt[i_this->m300]);
+
+                #if VERSION == VERSION_DEMO
+                    if (i_this->m528 == NULL) {
+                        if (KUTTUKU_ALL_COUNT > 0) {
+                            KUTTUKU_ALL_COUNT--;
+                        }
+                        i_this->mMode = 42;
+                        break;
+                    }
+                #endif
                 }
             }
 
@@ -957,7 +1030,14 @@ void action_omoi(ks_class* i_this) {
             cLib_addCalc2(&actor->current.pos.y, local_10.y, 1.0f, local_1c.y);
             cLib_addCalc2(&actor->current.pos.z, local_10.z, 1.0f, local_1c.z);
             
-            if (link->checkFrontRollCrash() || link->getCutType() == 8 || link->getCutType() == 9 || dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e)) {
+            if (
+                link->checkFrontRollCrash() ||
+                link->getCutType() == 8 ||
+            #if VERSION > VERSION_DEMO
+                link->getCutType() == 9 ||
+            #endif
+                dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e)
+            ) {
                 i_this->mSph.OnCoSetBit();
                 i_this->mSph.OnTgSetBit();
 
@@ -1050,9 +1130,12 @@ void action_omoi(ks_class* i_this) {
                 GORON_COUNT--;
                 KUTTUKU_ALL_COUNT--;
 
-                if (HEAVY_IN && KUTTUKU_ALL_COUNT < 5) {
-                    HEAVY_IN = FALSE;
-                    link->offHeavyState();
+                if (HEAVY_IN) {
+                    int r0 = 5;
+                    if (KUTTUKU_ALL_COUNT < r0) {
+                        HEAVY_IN = FALSE;
+                        link->offHeavyState();
+                    }
                 }
 
                 i_this->mMode = 42;
@@ -1064,7 +1147,7 @@ void action_omoi(ks_class* i_this) {
             if (i_this->m528) {
                 fopAcM_OffStatus(actor, fopAcStts_UNK4000_e);
                 
-                fopAcM_setRoomLayer(actor, fopAcM_GetRoomNo(actor));
+                fopAcM_setRoomLayer(actor, actor->current.roomNo);
                 
                 i_this->m528 = 0;
             }
@@ -1103,7 +1186,8 @@ void action_omoi(ks_class* i_this) {
 void* tsubo_search(void* param_1, void* i_data) {
     ks_class* i_this = (ks_class*)i_data;
     fopAc_ac_c* actor = &i_this->actor;
-    if (fopAc_IsActor(param_1) && (fopAcM_GetName(param_1) == PROC_TSUBO)) {
+    int r0 = 0;
+    if (r0 < 100 && fopAc_IsActor(param_1) && (fopAcM_GetName(param_1) == PROC_TSUBO)) {
         fopAc_ac_c* tsubo_actor = (fopAc_ac_c*)param_1;
         
         if (std::fabsf(tsubo_actor->current.pos.x - actor->current.pos.x) < 20.0f &&
@@ -1253,8 +1337,11 @@ static BOOL daKS_Execute(ks_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
     if (enemy_ice(&i_this->mEnemyIce)) {
-        i_this->mpBodyMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
-        i_this->mpEyeMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+        J3DModel* model;
+        model = i_this->mpBodyMorf->getModel();
+        model->setBaseTRMtx(mDoMtx_stack_c::get());
+        model = i_this->mpEyeMorf->getModel();
+        model->setBaseTRMtx(mDoMtx_stack_c::get());
         if (i_this->m2D0 && (i_this->m320++, i_this->m320 > 7.0f)) {
             i_this->m320 = 7.0f;
         }
@@ -1463,62 +1550,6 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
     return TRUE; 
 }
 
-static dCcD_SrcSph body_co_sph_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ AT_TYPE_STALFOS_MACE,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_NoTgHitInfSet_e,
-        /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
-        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
-        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
-        /* SrcGObjAt Se      */ dCcG_SE_UNK6,
-        /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ 0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGSphS
-    {{
-        /* Center */ {0.0f, 0.0f, 0.0f},
-        /* Radius */ 15.0f,
-    }},
-};
-
-static s8 fire_j[10] = {
-    0,
-    -1,
-    -1,
-    -1,
-    -1,
-    -1,
-    -1,
-    -1,
-    -1,
-    -1,
-     
-};
-
-static f32 fire_sc[10] = {
-    1.0f,
-    1.0f,
-    1.0f,
-    1.0f,
-    1.0f,
-    1.0f,
-    1.0f,
-    1.0f,
-    1.0f,
-    1.0f,
-};
-
 /* 000034F8-00003A94       .text daKS_Create__FP10fopAc_ac_c */
 static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
 #if VERSION > VERSION_DEMO
@@ -1612,6 +1643,35 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
 
         a_this->m2FE = (fopAcM_GetID(i_this) & 7) * 0x32 + 1000;
 
+        static dCcD_SrcSph body_co_sph_src = {
+            // dCcD_SrcGObjInf
+            {
+                /* Flags             */ 0,
+                /* SrcObjAt  Type    */ AT_TYPE_STALFOS_MACE,
+                /* SrcObjAt  Atp     */ 0,
+                /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_NoTgHitInfSet_e,
+                /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+                /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+                /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
+                /* SrcGObjAt Se      */ dCcG_SE_UNK6,
+                /* SrcGObjAt HitMark */ 0,
+                /* SrcGObjAt Spl     */ 0,
+                /* SrcGObjAt Mtrl    */ 0,
+                /* SrcGObjAt SPrm    */ 0,
+                /* SrcGObjTg Se      */ 0,
+                /* SrcGObjTg HitMark */ 0,
+                /* SrcGObjTg Spl     */ 0,
+                /* SrcGObjTg Mtrl    */ 0,
+                /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
+                /* SrcGObjCo SPrm    */ 0,
+            },
+            // cM3dGSphS
+            {{
+                /* Center */ {0.0f, 0.0f, 0.0f},
+                /* Radius */ 15.0f,
+            }},
+        };
+
         a_this->mSph.Set(body_co_sph_src);
         a_this->mSph.SetStts(&a_this->mStts);
 
@@ -1622,6 +1682,32 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
 
         a_this->mEnemyFire.mpMcaMorf = a_this->mpBodyMorf;
         a_this->mEnemyFire.mpActor = i_this;
+
+        static s8 fire_j[10] = {
+            0,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            
+        };
+        static f32 fire_sc[10] = {
+            1.0f,
+            1.0f,
+            1.0f,
+            1.0f,
+            1.0f,
+            1.0f,
+            1.0f,
+            1.0f,
+            1.0f,
+            1.0f,
+        };
 
         for (int i = 0; i < 10; i++) {
             a_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
