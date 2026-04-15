@@ -219,8 +219,8 @@ void daMbdoor_c::calcMtx() {
 
 /* 00000898-00000A44       .text CreateInit__10daMbdoor_cFv */
 BOOL daMbdoor_c::CreateInit() {
-    s32 swbit = getSwbit();
-    s32 type = getType();
+    int swbit = getSwbit();
+    int type = getType();
     
     if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
         JUT_ASSERT(334, FALSE);
@@ -257,12 +257,18 @@ BOOL daMbdoor_c::CreateInit() {
 /* 00000A44-00000AF4       .text create__10daMbdoor_cFv */
 cPhs_State daMbdoor_c::create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, getArcName());
-    
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(this, daMbdoor_c);
+#endif
     
     if (phase_state != cPhs_COMPLEATE_e) {
         return phase_state;
     }
+
+#if VERSION == VERSION_DEMO
+    fopAcM_SetupActor(this, daMbdoor_c);
+#endif
+
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x8200)) {
         return cPhs_ERROR_e;
     }
@@ -273,7 +279,7 @@ cPhs_State daMbdoor_c::create() {
 }
 
 /* 00000AF4-00000B3C       .text getDemoAction__10daMbdoor_cFv */
-s32 daMbdoor_c::getDemoAction() {
+int daMbdoor_c::getDemoAction() {
     static char* action_table[] = {
         "WAIT",
         "SET_START",
@@ -293,7 +299,7 @@ s32 daMbdoor_c::getDemoAction() {
 void daMbdoor_c::demoProc() {
     // Explicit cast from daPy_py_c to daPy_py_c necessary for matching regalloc.
     daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
-    s32 actIdx = getDemoAction();
+    int actIdx = getDemoAction();
     cXyz goal;
     s16 angle;
     
@@ -343,7 +349,7 @@ void daMbdoor_c::demoProc() {
         if (field_0x2b4 < 250) {
             field_0x2b4 += 50;
         }
-        s32 temp = field_0x2b2 - field_0x2b4;
+        int temp = field_0x2b2 - field_0x2b4;
         if (temp < -0x1C71) {
             field_0x2b2 = -0x1C71;
             dComIfGp_evmng_cutEnd(mEvtStaffId);
@@ -364,7 +370,7 @@ void daMbdoor_c::demoProc() {
             if (field_0x2b4 < 400) {
                 field_0x2b4 += 40;
             }
-            s32 temp = field_0x2b0 - field_0x2b4;
+            int temp = field_0x2b0 - field_0x2b4;
             if (temp < -0x3F65) {
                 field_0x2b0 = -0x3F65;
                 dComIfGp_evmng_cutEnd(mEvtStaffId);
@@ -378,9 +384,10 @@ void daMbdoor_c::demoProc() {
             dComIfGp_evmng_cutEnd(mEvtStaffId);
         }
         break;
-    case ACT_ADJUSTMENT:
+    case ACT_ADJUSTMENT: {
         angle = player->shape_angle.y;
-        cLib_addCalcAngleS2(&angle, current.angle.y + 0x7FFF, 10, 0x800);
+        s16 r4 = current.angle.y + 0x7FFF;
+        cLib_addCalcAngleS2(&angle, r4, 10, 0x800);
         goal = player->current.pos;
         goal.x = goal.x*0.9f + field_0x2c4.x*0.1f;
         goal.z = goal.z*0.9f + field_0x2c4.z*0.1f;
@@ -391,6 +398,7 @@ void daMbdoor_c::demoProc() {
             dComIfGp_evmng_cutEnd(mEvtStaffId);
         }
         break;
+    }
     default:
         dComIfGp_evmng_cutEnd(mEvtStaffId);
         break;
@@ -426,7 +434,7 @@ BOOL daMbdoor_c::checkArea() {
 
 /* 000010CC-00001198       .text checkUnlock__10daMbdoor_cFv */
 BOOL daMbdoor_c::checkUnlock() {
-    s32 swbit = getSwbit();
+    int swbit = getSwbit();
     switch (getType()) {
     case 0:
         return dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this));
@@ -446,13 +454,13 @@ BOOL daMbdoor_c::checkUnlock() {
 }
 
 /* 00001198-000011BC       .text daMbdoor_actionWait__FP10daMbdoor_c */
-BOOL daMbdoor_actionWait(daMbdoor_c* i_this) {
+static BOOL daMbdoor_actionWait(daMbdoor_c* i_this) {
     i_this->calcMtx();
     return TRUE;
 }
 
 /* 000011BC-0000121C       .text daMbdoor_actionLockWait__FP10daMbdoor_c */
-BOOL daMbdoor_actionLockWait(daMbdoor_c* i_this) {
+static BOOL daMbdoor_actionLockWait(daMbdoor_c* i_this) {
     if (i_this->checkUnlock()) {
         i_this->setAction(2);
         fopAcM_orderOtherEvent(i_this, "MBDOOR_STOP_OPEN");
@@ -461,7 +469,7 @@ BOOL daMbdoor_actionLockWait(daMbdoor_c* i_this) {
 }
 
 /* 0000121C-000012AC       .text daMbdoor_actionLockOff__FP10daMbdoor_c */
-BOOL daMbdoor_actionLockOff(daMbdoor_c* i_this) {
+static BOOL daMbdoor_actionLockOff(daMbdoor_c* i_this) {
     if (i_this->eventInfo.checkCommandDemoAccrpt()) {
         i_this->mEvtStaffId = dComIfGp_evmng_getMyStaffId("MBDOOR");
         i_this->demoProc();
@@ -473,7 +481,7 @@ BOOL daMbdoor_actionLockOff(daMbdoor_c* i_this) {
 }
 
 /* 000012AC-00001324       .text daMbdoor_actionLockDemo__FP10daMbdoor_c */
-BOOL daMbdoor_actionLockDemo(daMbdoor_c* i_this) {
+static BOOL daMbdoor_actionLockDemo(daMbdoor_c* i_this) {
     if (dComIfGp_evmng_endCheck("MBDOOR_STOP_OPEN")) {
         dComIfGp_event_reset();
         i_this->setAction(4);
@@ -484,7 +492,7 @@ BOOL daMbdoor_actionLockDemo(daMbdoor_c* i_this) {
 }
 
 /* 00001324-000013E4       .text daMbdoor_actionCloseWait__FP10daMbdoor_c */
-BOOL daMbdoor_actionCloseWait(daMbdoor_c* i_this) {
+static BOOL daMbdoor_actionCloseWait(daMbdoor_c* i_this) {
     if (i_this->eventInfo.checkCommandDoor()) {
         i_this->mEvtStaffId = dComIfGp_evmng_getMyStaffId("MBDOOR");
         i_this->demoProc();
@@ -501,7 +509,7 @@ BOOL daMbdoor_actionCloseWait(daMbdoor_c* i_this) {
 }
 
 /* 000013E4-00001408       .text daMbdoor_actionOpen__FP10daMbdoor_c */
-BOOL daMbdoor_actionOpen(daMbdoor_c* i_this) {
+static BOOL daMbdoor_actionOpen(daMbdoor_c* i_this) {
     i_this->demoProc();
     return TRUE;
 }
@@ -565,7 +573,12 @@ static BOOL daMbdoor_IsDelete(daMbdoor_c* i_this) {
 
 /* 00001560-000015D4       .text daMbdoor_Delete__FP10daMbdoor_c */
 static BOOL daMbdoor_Delete(daMbdoor_c* i_this) {
-    if (i_this->heap) {
+#if VERSION == VERSION_DEMO
+    if (i_this->field_0x2ac)
+#else
+    if (i_this->heap)
+#endif
+    {
         dComIfG_Bgsp()->Release(i_this->mpBgW);
     }
     dComIfG_resDelete(&i_this->mPhs, i_this->getArcName());

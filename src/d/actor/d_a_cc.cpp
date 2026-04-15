@@ -23,7 +23,7 @@ static u8 DEMO_COME_START_FLAG;
 static u8 DEMO_RET_START_FLAG;
 static u8 DEMO_SHORT_CUT_FLAG;
 static fopAc_ac_c* target_info[10];
-static s32 target_info_count;
+static int target_info_count;
 
 /* 00000078-000002AC       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {

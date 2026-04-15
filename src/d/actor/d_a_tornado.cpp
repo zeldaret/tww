@@ -44,7 +44,6 @@ BOOL daTornado_c::jointCallBack(int jntNo) {
 }
 
 static const float l_joint_scale[11] = { 0.1f, 0.4f, 0.7f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
-static const float joint_offset[11] = { 100.0f, 200.0f, 300.0f, 400.0f, 300.0f, 300.0f, 400.0f, 500.0f, 400.0f, 500.0f, 600.0f };
 
 static daTornado_HIO_c0 l_HIO;
 
@@ -137,9 +136,8 @@ BOOL daTornado_c::execute() {
     }
 
     for (int i = 0; i < 11; i++) {
-        f32 sin = cM_ssin(mAngle1 - 0x1000 * i);
-        f32 tmp1 = fVar8 * joint_offset[i];
-        f32 fVar1 = tmp1 * (sin + 1.0f);
+        static const f32 joint_offset[11] = { 100.0f, 200.0f, 300.0f, 400.0f, 300.0f, 300.0f, 400.0f, 500.0f, 400.0f, 500.0f, 600.0f };
+        f32 fVar1 = (fVar8 * joint_offset[i]) * ((cM_ssin(mAngle1 - 0x1000 * i)) + 1.0f);
         s16 angle2 = mAngle2 - 0x1800 * i;
         mJointX[i] = cM_ssin(angle2) * fVar1 * scale.x;
         mJointZ[i] = cM_scos(angle2) * fVar1 * scale.x;

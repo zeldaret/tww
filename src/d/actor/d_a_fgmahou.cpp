@@ -119,7 +119,9 @@ static void move(fgmahou_class* i_this) {
             }
 
             dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGSMASHDARKSHOT00, &i_this->current.pos, &i_this->home.angle);
+        #if VERSION > VERSION_DEMO
             fopAcM_seStartCurrent(i_this, JA_SE_LK_PG_BOMB_STRIKE, 0);
+        #endif
 
             i_this->mState = 5;
         case 5:
@@ -178,16 +180,16 @@ static void move(fgmahou_class* i_this) {
     i_this->field_0x2D4 += REG0_S(6) + 0xDAC;
     i_this->field_0x2D6 += REG0_S(7) + 0xCE4;
 
-    f32 temp5 = cM_ssin(i_this->field_0x2D4);
-    f32 temp7 = cM_ssin(i_this->field_0x2D6);
-    i_this->shape_angle.y = i_this->home.angle.y + (s16)(temp4 * temp5);
-    i_this->shape_angle.x = i_this->home.angle.x + (s16)(temp4 * temp7 * 0.75f);
+    s16 temp5 = (s16)(temp4 * cM_ssin(i_this->field_0x2D4));
+    s16 temp7 = (s16)(temp4 * cM_ssin(i_this->field_0x2D6) * 0.75f);
+    i_this->shape_angle.y = i_this->home.angle.y + temp5;
+    i_this->shape_angle.x = i_this->home.angle.x + temp7;
 
     diff2.x = 0.0f;
     diff2.y = 0.0f;
     diff2.z = i_this->speedF;
-    mDoMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
-    mDoMtx_XrotM(*calc_mtx, i_this->shape_angle.x);
+    cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
+    cMtx_XrotM(*calc_mtx, i_this->shape_angle.x);
     MtxPosition(&diff2, &i_this->speed);
 
     if(temp2 <= 1) {
@@ -288,7 +290,7 @@ static BOOL daFgmahou_IsDelete(fgmahou_class* i_this) {
 
 /* 00000DE0-00000E3C       .text daFgmahou_Delete__FP13fgmahou_class */
 static BOOL daFgmahou_Delete(fgmahou_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "Fganon");
+    dComIfG_resDeleteDemo(&i_this->mPhs, "Fganon");
 
     if(i_this->mpEmitter) {
         i_this->mpEmitter->becomeInvalidEmitter();
@@ -398,10 +400,16 @@ static cPhs_State daFgmahou_Create(fopAc_ac_c* a_this) {
 
     fgmahou_class* i_this = static_cast<fgmahou_class*>(a_this);
 
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(i_this, fgmahou_class);
+#endif
 
     cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhs, "Fganon");
     if(phase_state == cPhs_COMPLEATE_e) {
+    #if VERSION == VERSION_DEMO
+        fopAcM_SetupActor(i_this, fgmahou_class);
+    #endif
+
         i_this->mOrbNumber = fopAcM_GetParam(i_this) & 0xF;
 
         if(!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x19000)) {
