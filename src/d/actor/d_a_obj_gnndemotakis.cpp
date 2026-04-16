@@ -20,7 +20,6 @@ BOOL daObjGnntakis_c::solidHeapCB(fopAc_ac_c* a_this) {
 
 /* 00000098-000001F4       .text create_heap__15daObjGnntakis_cFv */
 BOOL daObjGnntakis_c::create_heap() {
-    /* Nonmatching */
     BOOL ret = FALSE;
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, GNNDEMOTAKIS_BDL_GNN_DEMO_TAKI_S));
     JUT_ASSERT(0x9b, mdl_data != NULL);
@@ -73,7 +72,7 @@ void daObjGnntakis_c::init_mtx() {
 /* 000003FC-00000514       .text _execute__15daObjGnntakis_cFv */
 bool daObjGnntakis_c::_execute() {
     if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0 &&
-        g_dComIfG_gameInfo.play.mEvtCtrl.runCheck() &&
+        dComIfGp_event_runCheck() &&
         dComIfGp_evmng_startCheck("g2before") && 
         dComIfGp_demo_get()) {
         if (m2B0 == 0 && 
