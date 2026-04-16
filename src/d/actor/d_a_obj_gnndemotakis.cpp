@@ -73,7 +73,7 @@ void daObjGnntakis_c::init_mtx() {
 /* 000003FC-00000514       .text _execute__15daObjGnntakis_cFv */
 bool daObjGnntakis_c::_execute() {
     if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0 &&
-        dComIfGp_event_runCheck() &&
+        g_dComIfG_gameInfo.play.mEvtCtrl.runCheck() &&
         dComIfGp_evmng_startCheck("g2before") && 
         dComIfGp_demo_get()) {
         if (m2B0 == 0 && 
