@@ -20,6 +20,7 @@ BOOL daObjGnntakis_c::solidHeapCB(fopAc_ac_c* a_this) {
 
 /* 00000098-000001F4       .text create_heap__15daObjGnntakis_cFv */
 BOOL daObjGnntakis_c::create_heap() {
+    /* Nonmatching */
     BOOL ret = FALSE;
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, GNNDEMOTAKIS_BDL_GNN_DEMO_TAKI_S));
     JUT_ASSERT(0x9b, mdl_data != NULL);
