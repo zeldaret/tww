@@ -272,8 +272,15 @@ cPhs_State daObjBarrel2::Act_c::_create() {
             csXyz sp10(0, home.angle.y, 0);
             sp24.setall(attr()->m28 * attr()->m2C);
 
-            m458 =
-                fopAcM_createRaceItemFromTable(&sp30, prm_get_itemNo(), prm_get_itemSave(), fopAcM_GetHomeRoomNo(this), &sp10, &sp24, prm_get_coming() ? 1 : 0);
+            mItemId = fopAcM_createRaceItemFromTable(
+                &sp30,
+                prm_get_itemNo(),
+                prm_get_itemSave(),
+                fopAcM_GetHomeRoomNo(this),
+                &sp10,
+                &sp24,
+                prm_get_coming() ? 1 : 0
+            );
             m45C = 3.4028235e+38f;
             m468 = 0;
             m470 = 0;
@@ -796,7 +803,7 @@ void daObjBarrel2::Act_c::item_delete() {
 void daObjBarrel2::Act_c::item_give() {
     if (M_tmp_item_actor != NULL) {
         M_tmp_item_actor->raceItemForceGet();
-        m458 = fpcM_ERROR_PROCESS_ID_e;
+        mItemId = fpcM_ERROR_PROCESS_ID_e;
         m476 = 1;
         M_tmp_item_actor = NULL;
     }
@@ -805,19 +812,19 @@ void daObjBarrel2::Act_c::item_give() {
 /* 000022A4-0000233C       .text item_connect_check__Q212daObjBarrel25Act_cFv */
 void daObjBarrel2::Act_c::item_connect_check() {
     M_tmp_item_actor = NULL;
-    if (m458 != fpcM_ERROR_PROCESS_ID_e) {
+    if (mItemId != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* pRaceitem;
-        if (fopAcM_SearchByID(m458, &pRaceitem)) {
+        if (fopAcM_SearchByID(mItemId, &pRaceitem)) {
             daRaceItem_c* raceitem = (daRaceItem_c*)pRaceitem;
             if (raceitem != NULL) {
                 if (raceitem->checkOffsetPos()) {
                     M_tmp_item_actor = raceitem;
                 } else {
-                    m458 = fpcM_ERROR_PROCESS_ID_e;
+                    mItemId = fpcM_ERROR_PROCESS_ID_e;
                 }
             }
         } else {
-            m458 = fpcM_ERROR_PROCESS_ID_e;
+            mItemId = fpcM_ERROR_PROCESS_ID_e;
         }
     }
 }

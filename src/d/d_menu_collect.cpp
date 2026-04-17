@@ -184,8 +184,8 @@ void dMenu_Collect_c::screenSet() {
         "amulet_01.bti",
     };
 
-    J2DPane* mPane = m004->search('ROOT');
-    m2478 = mPane;
+    J2DPane* pane = m004->search('ROOT');
+    m2478 = pane;
 
     fopMsgM_setPaneData(&m008, m004, 'ft15');
     fopMsgM_setPaneData(&m040, m004, 'ft16');
