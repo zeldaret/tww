@@ -675,8 +675,8 @@ void dMeter_PaneHide(fopMsgM_pane_class* pane) {
 }
 
 /* 801EFA78-801EFA90       .text dMeter_isBit8__FPUcUc */
-bool dMeter_isBit8(u8* flag, u8 bit) {
-    return (*flag & bit) != 0;
+BOOL dMeter_isBit8(u8* flag, u8 bit) {
+    return (*flag & bit) ? 1 : 0;
 }
 
 /* 801EFA90-801EFAA4       .text dMeter_onBit8__FPUcUc */
@@ -4504,12 +4504,12 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
         switch (moveStatus) {
         case 2:
         case 3:
+        case 6:
+        case 7:
             x = g_meterHIO.field_0x9c;
             y = g_meterHIO.field_0x9e;
             break;
         case 4:
-        case 6:
-        case 7:
             x = g_meterHIO.field_0x9c + 0x52;
             y = g_meterHIO.field_0x9e;
             break;
