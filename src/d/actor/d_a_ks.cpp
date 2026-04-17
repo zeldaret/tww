@@ -808,7 +808,7 @@ void action_omoi(ks_class* i_this) {
     cXyz local_1c;
     cXyz local_10;
     
-    daPy_py_c* mpCurPlayerActor = (daPy_py_c*)daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
     daPy_lk_c* link = daPy_getPlayerLinkActorClass();
     
     if (i_this->m2CE == 1 && HEAVY_IN == TRUE) {
@@ -923,7 +923,7 @@ void action_omoi(ks_class* i_this) {
             }
         #endif
             
-            fopAcM_SetRoomNo(actor, fopAcM_GetRoomNo(mpCurPlayerActor));
+            fopAcM_SetRoomNo(actor, fopAcM_GetRoomNo(player));
             
             if (!(fopAcM_GetID(actor) & 1)) {
                 actor->shape_angle.y += i_this->m2FE * 0.25f;
@@ -938,7 +938,7 @@ void action_omoi(ks_class* i_this) {
                 local_10.z = i_this->m528[2][3];
             }
             else {
-                local_10 = mpCurPlayerActor->current.pos;
+                local_10 = player->current.pos;
             }
 
             if (!(local_10.x || local_10.y || local_10.z)) {
@@ -949,26 +949,26 @@ void action_omoi(ks_class* i_this) {
                 i_this->mMode = 42;
                 break;
                 #else
-                local_10 = mpCurPlayerActor->current.pos;
+                local_10 = player->current.pos;
                 #endif
             }
 
-            local_1c.x = std::fabsf(mpCurPlayerActor->speed.x * 10.0f);
+            local_1c.x = std::fabsf(player->speed.x * 10.0f);
             if (local_1c.x < REG12_F(16) + 10.0f) {
                 local_1c.x = REG12_F(16) + 10.0f;
             }
 
-            local_1c.y = std::fabsf(mpCurPlayerActor->speed.y * 10.0f);
+            local_1c.y = std::fabsf(player->speed.y * 10.0f);
             if (local_1c.y < REG12_F(16) + 10.0f) {
                 local_1c.y = REG12_F(16) + 10.0f;
             }
 
-            local_1c.z = std::fabsf(mpCurPlayerActor->speed.z * 10.0f);
+            local_1c.z = std::fabsf(player->speed.z * 10.0f);
             if (local_1c.z < REG12_F(16) + 10.0f) {
                 local_1c.z = REG12_F(16) + 10.0f;
             }
 
-            if (std::sqrtf(SQUARE(mpCurPlayerActor->speed.x) + SQUARE(mpCurPlayerActor->speed.y) + SQUARE(mpCurPlayerActor->speed.z)) < REG12_F(17) + 8.0f) {
+            if (std::sqrtf(SQUARE(player->speed.x) + SQUARE(player->speed.y) + SQUARE(player->speed.z)) < REG12_F(17) + 8.0f) {
                 local_1c.setall(REG12_F(18) + 8.0f);
 
                 f32 x = actor->current.pos.x - local_10.x;
@@ -1219,10 +1219,10 @@ void action_tubo_search(ks_class* i_this) {
             break;
         }
         case 51: {
-            fopAc_ac_c* mpCurrActor = (fopAc_ac_c*)fopAcM_SearchByID(i_this->mKsID);
+            fopAc_ac_c* ksActor = (fopAc_ac_c*)fopAcM_SearchByID(i_this->mKsID);
 
-            if (mpCurrActor) {
-                actor->current.pos = mpCurrActor->current.pos;
+            if (ksActor) {
+                actor->current.pos = ksActor->current.pos;
 
                 if (!i_this->m318) {
                     return;
@@ -1355,13 +1355,13 @@ static BOOL daKS_Execute(ks_class* i_this) {
     }
 
     if (i_this->mGmID != 0 && i_this->mAction != 3) {
-        fopAc_ac_c* mpGmActor = fopAcM_SearchByID(i_this->mGmID);
+        fopAc_ac_c* gmActor = fopAcM_SearchByID(i_this->mGmID);
 
         bool bVar5 = false;
 
-        if (mpGmActor && ((fopAcM_GetParam(mpGmActor) & 0xff0000) == 0xff0000 || (fopAcM_GetParam(mpGmActor) & 0xff0000) == 0)) {
-            if (fopAcM_GetName(mpGmActor) == PROC_GM) {
-                if (mpGmActor->health <= 0) {
+        if (gmActor && ((fopAcM_GetParam(gmActor) & 0xff0000) == 0xff0000 || (fopAcM_GetParam(gmActor) & 0xff0000) == 0)) {
+            if (fopAcM_GetName(gmActor) == PROC_GM) {
+                if (gmActor->health <= 0) {
                     bVar5 = true;
                 }
             }
@@ -1506,8 +1506,8 @@ static BOOL daKS_Delete(ks_class* i_this) {
 
 /* 000030F4-000034B0       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_act) {
-    J3DModel* mpBodyModel;
-    J3DModel* mpEyeModel;
+    J3DModel* bodyModel;
+    J3DModel* eyeModel;
 
     ks_class* i_this = (ks_class*)i_act;
 
@@ -1515,13 +1515,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
                                             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
     if (i_this->mpBodyMorf == NULL || i_this->mpBodyMorf->getModel() == NULL)
         return FALSE;
-    mpBodyModel = i_this->mpBodyMorf->getModel();
+    bodyModel = i_this->mpBodyMorf->getModel();
 
     i_this->mpBodyBrkAnm = new mDoExt_brkAnm();
     if (i_this->mpBodyBrkAnm == NULL)
         return FALSE;
 
-    if (i_this->mpBodyBrkAnm->init(mpBodyModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", KS_BRK_KS_BODY), TRUE, J3DFrameCtrl::EMode_NONE) == 0)
+    if (i_this->mpBodyBrkAnm->init(bodyModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", KS_BRK_KS_BODY), TRUE, J3DFrameCtrl::EMode_NONE) == 0)
         return FALSE;
 
     
@@ -1531,20 +1531,20 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
 
     if (i_this->mpEyeMorf == NULL || i_this->mpEyeMorf->getModel() == NULL)
         return FALSE;
-    mpEyeModel = i_this->mpEyeMorf->getModel();
+    eyeModel = i_this->mpEyeMorf->getModel();
 
     i_this->mpEyeBtkAnm = new mDoExt_btkAnm();
     if (i_this->mpEyeBtkAnm == NULL)
         return FALSE;
 
-    if (i_this->mpEyeBtkAnm->init(mpEyeModel->getModelData(), (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("KS", KS_BTK_KS_EYE), TRUE, J3DFrameCtrl::EMode_NONE) == 0)
+    if (i_this->mpEyeBtkAnm->init(eyeModel->getModelData(), (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("KS", KS_BTK_KS_EYE), TRUE, J3DFrameCtrl::EMode_NONE) == 0)
         return FALSE;
     
     i_this->mpEyeBrkAnm = new mDoExt_brkAnm();
     if (i_this->mpEyeBrkAnm == NULL)
         return FALSE;
 
-    if (i_this->mpEyeBrkAnm->init(mpEyeModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", KS_BRK_KS_EYE), TRUE, J3DFrameCtrl::EMode_NONE) == 0) {
+    if (i_this->mpEyeBrkAnm->init(eyeModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", KS_BRK_KS_EYE), TRUE, J3DFrameCtrl::EMode_NONE) == 0) {
         return FALSE;
     }
     return TRUE; 

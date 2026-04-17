@@ -2801,8 +2801,8 @@ BOOL daShip_c::procTactWarp() {
     
     shape_angle.y += m03A6;
     current.angle.y = shape_angle.y;
-    daTornado_c* mpTornado = (daTornado_c*)fopAcM_SearchByID(mTactWarpID);
-    if (mpTornado == NULL || fpcM_IsCreating(mTactWarpID)) {
+    daTornado_c* tornado = (daTornado_c*)fopAcM_SearchByID(mTactWarpID);
+    if (tornado == NULL || fpcM_IsCreating(mTactWarpID)) {
         if (mTactWarpID == fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_reset();
             m1984.remove();
@@ -2813,33 +2813,33 @@ BOOL daShip_c::procTactWarp() {
         res = FALSE;
     }
     else {
-        if (cLib_chaseS(&m03A6, 0x1C25, 0x40) && (mpTornado->mJointScale[10] > 0.8f)) {
+        if (cLib_chaseS(&m03A6, 0x1C25, 0x40) && (tornado->mJointScale[10] > 0.8f)) {
             speed.y += 1.0f;
             if (speed.y > 50.0f) {
                 speed.y = 50.0f;
             }
             current.pos.y += speed.y;
-            mpTornado->current.pos.y = current.pos.y - 700.0f;
+            tornado->current.pos.y = current.pos.y - 700.0f;
             m1984.remove();
             m1998.remove();
         }
         else {
             if ((!m037A) && (m03A6 > 0x1000)) {
                 m037A = 1;
-                mpTornado->m31c = 1;
+                tornado->m31c = 1;
             }
         }
         if (m037A == 1) {
-            cLib_chaseF(&mpTornado->current.pos.y, current.pos.y - 700.0f, 20.0f);
+            cLib_chaseF(&tornado->current.pos.y, current.pos.y - 700.0f, 20.0f);
             iVar4 = 0;
             for (int i = 0; i < 11; iVar4++, i++) {
-                if (current.pos.y < mpTornado->getJointYPos(i)) break;
+                if (current.pos.y < tornado->getJointYPos(i)) break;
             }
             if (iVar4 == 11) {
                 iVar4 = 10;
             }
-              cLib_chaseF(&current.pos.x, mpTornado->getJointXPos(iVar4), 50.0f);
-              cLib_chaseF(&current.pos.z, mpTornado->getJointZPos(iVar4), 50.0f);
+              cLib_chaseF(&current.pos.x, tornado->getJointXPos(iVar4), 50.0f);
+              cLib_chaseF(&current.pos.z, tornado->getJointZPos(iVar4), 50.0f);
         }
         if (m037A != 2 && current.pos.y > m03F4 + 5000.0f ) {
             m037A = 2;
@@ -4062,11 +4062,11 @@ BOOL daShip_c::execute() {
     cMtx_multVec(model1->getAnmMtx(10), &l_tiller_top_offset, &mTillerTopPos);
 
     daGrid_c* grid;
-    MtxP mMtx = model1->getAnmMtx(7);
+    MtxP mtx = model1->getAnmMtx(7);
 
-    m0444.x = mMtx[0][3];
-    m0444.y = mMtx[1][3];
-    m0444.z = mMtx[2][3];
+    m0444.x = mtx[0][3];
+    m0444.y = mtx[1][3];
+    m0444.z = mtx[2][3];
 
     cXyz spD8;
     grid = mpGrid;
@@ -4077,7 +4077,7 @@ BOOL daShip_c::execute() {
         mpGrid->current.pos = m0444;
         mpGrid->current.angle = shape_angle;
 
-        cMtx_multVecSR(mMtx, &top_offset, &spD8);
+        cMtx_multVecSR(mtx, &top_offset, &spD8);
         mpGrid->scale.y = spD8.abs() / 365.0f;
 
         cMtx_multVecSR(model1->getAnmMtx(8), &XZ_top_offset, &spD8);
@@ -4432,12 +4432,12 @@ BOOL daShip_c::createHeap() {
 
     if (mpBodyAnm && mpBodyAnm->getModel()) {
         J3DModel* pModel = mpBodyAnm->getModel();
-        J3DSkinDeform* mSkinDeform = new J3DSkinDeform();
-        if (mSkinDeform == NULL) {
+        J3DSkinDeform* skinDeform = new J3DSkinDeform();
+        if (skinDeform == NULL) {
             return FALSE;
         }
 
-        if (pModel->setSkinDeform(mSkinDeform, 1) != J3DErrType_Success) {
+        if (pModel->setSkinDeform(skinDeform, 1) != J3DErrType_Success) {
             return FALSE;
         }
     }

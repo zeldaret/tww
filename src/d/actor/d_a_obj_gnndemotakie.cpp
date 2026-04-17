@@ -23,6 +23,7 @@ BOOL daObjGnntakie_c::create_heap() {
     BOOL ret = FALSE;
     mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIE_BDL_GNN_DEMO_TAKI_E));
     JUT_ASSERT(90, mdl_data != NULL);
+
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mpModel != NULL) {
