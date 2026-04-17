@@ -1675,7 +1675,10 @@ void dMap_c::getFmapChkPntPrm(int, s8*, s8*, s16*, s16*, u8*) {
 
 /* 8004ACD8-8004AD00       .text setFmapChkDtPrm__6dMap_cFv */
 void dMap_c::setFmapChkDtPrm() {
-    /* Nonmatching */
+    int* p = (int*)g_dComIfG_gameInfo.play.mpFmapData;
+    if (p == NULL) return;
+    mFmapChkPntValue = *p;
+    mFmapChkPntData_p = (int)(p + 1);
 }
 
 /* 8004AD00-8004ADC8       .text getFmapChkPntDtPnt__6dMap_cFi */
@@ -1990,7 +1993,9 @@ void dMap_c::mapBufferSendAGB_ocean() {
 
 /* 8004D4CC-8004D4F8       .text mapBufferSendAGB_dungeon__6dMap_cFv */
 void dMap_c::mapBufferSendAGB_dungeon() {
-    /* Nonmatching */
+    if (mAGBMapSendStatus == 4) {
+        mapBufferSendAGB_commonCursor();
+    }
 }
 
 /* 8004D4F8-8004D5F8       .text mapSetPointAll__6dMap_cFv */

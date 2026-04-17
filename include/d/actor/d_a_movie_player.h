@@ -129,13 +129,34 @@ struct daMP_THPReadBuffer {
     /* 0x04 */ s32 m04;
 };
 
+struct THPVideoInfo;
+struct THPAudioInfo;
+
 struct daMP_Player_c { // Fake name
     /* 0x00 */ DVDFileInfo mFileInfo;
     /* 0x3C */ u8 m3C[0x50 - 0x3C];
     /* 0x50 */ u32 m50;
     /* 0x54 */ u8 m54[0x64 - 0x54];
     /* 0x64 */ s32 m64;
-    /* 0x68 */ u8 m68[0xA6 - 0x68];
+    /* 0x68 */ u8 m68[0x6C - 0x68];
+    /* 0x6C */ u32 m6C;
+    /* 0x70 */ u8 m70;
+    /* 0x71 */ u8 m71[0x80 - 0x71];
+    /* 0x80 */ struct {
+        /* 0x0 */ u32 m00;
+        /* 0x4 */ u32 m04;
+        /* 0x8 */ u32 m08;
+    } mVideoInfo;
+    /* 0x8C */ struct {
+        /* 0x0 */ u32 m00;
+        /* 0x4 */ u32 m04;
+        /* 0x8 */ u32 m08;
+        /* 0xC */ u32 m0C;
+    } mAudioInfo;
+    /* 0x9C */ u8 m9C[0xA0 - 0x9C];
+    /* 0xA0 */ s32 mA0;
+    /* 0xA4 */ u8 mA4;
+    /* 0xA5 */ u8 mA5[0xA6 - 0xA5];
     /* 0xA6 */ u8 mA6;
     /* 0xA7 */ u8 mA7[0xA8 - 0xA7];
     /* 0xA8 */ s32 mA8;
@@ -143,6 +164,11 @@ struct daMP_Player_c { // Fake name
     /* 0xB8 */ s32 mB8;
     /* 0xBC */ s32 mBC;
     /* 0xC0 */ s32 mC0;
+    /* 0xC4 */ u8 mC4[0xC8 - 0xC4];
+    /* 0xC8 */ s32 mC8;
+    /* 0xCC */ s32 mCC;
+    /* 0xD0 */ s32 mD0;
+    /* 0xD4 */ s32 mD4;
 };
 
 struct THPVideoInfo {

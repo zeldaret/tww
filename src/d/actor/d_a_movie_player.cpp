@@ -20,6 +20,8 @@
 #include "m_Do/m_Do_graphic.h"
 #include "dolphin/os/OSMessage.h"
 #include "dolphin/base/PPCArch.h"
+#include "dolphin/vi/vi.h"
+#include "JSystem/JAudio/JASAiCtrl.h"
 
 static u8 THPStatistics[0x460]; // TODO
 
@@ -108,7 +110,7 @@ THPVideoInfo daMP_videoInfo;
 THPAudioInfo daMP_audioInfo;
 u32 daMP_DrawPosX;
 u32 daMP_DrawPosY;
-void** daMP_buffer;
+void* daMP_buffer;
 
 BOOL daMP_Fail_alloc;
 u16 daMP_backup_FrameRate;
@@ -2766,23 +2768,30 @@ void daMP_VideoDecodeThreadCancel() {
 }
 
 /* 00003AF0-00003B24       .text daMP_PopFreeAudioBuffer__Fv */
-void daMP_PopFreeAudioBuffer() {
-    /* Nonmatching */
+void* daMP_PopFreeAudioBuffer() {
+    OSMessage msg;
+    OSReceiveMessage(&daMP_FreeAudioBufferQueue, &msg, OS_MESSAGE_BLOCK);
+    return msg;
 }
 
 /* 00003B24-00003B54       .text daMP_PushFreeAudioBuffer__FPv */
-void daMP_PushFreeAudioBuffer(void*) {
-    /* Nonmatching */
+void daMP_PushFreeAudioBuffer(void* msg) {
+    OSSendMessage(&daMP_FreeAudioBufferQueue, msg, OS_MESSAGE_NOBLOCK);
 }
 
 /* 00003B54-00003B98       .text daMP_PopDecodedAudioBuffer__Fl */
-void daMP_PopDecodedAudioBuffer(s32) {
-    /* Nonmatching */
+void* daMP_PopDecodedAudioBuffer(s32 r3) {
+    OSMessage msg;
+    if (OSReceiveMessage(&daMP_DecodedAudioBufferQueue, &msg, r3) == TRUE) {
+        return msg;
+    } else {
+        return NULL;
+    }
 }
 
 /* 00003B98-00003BC8       .text daMP_PushDecodedAudioBuffer__FPv */
-void daMP_PushDecodedAudioBuffer(void*) {
-    /* Nonmatching */
+void daMP_PushDecodedAudioBuffer(void* msg) {
+    OSSendMessage(&daMP_DecodedAudioBufferQueue, msg, OS_MESSAGE_BLOCK);
 }
 
 /* 00003BC8-00003CA4       .text daMP_AudioDecode__FP18daMP_THPReadBuffer */
@@ -2792,7 +2801,11 @@ void daMP_AudioDecode(daMP_THPReadBuffer*) {
 
 /* 00003CA4-00003CCC       .text daMP_AudioDecoder__FPv */
 void daMP_AudioDecoder(void*) {
-    /* Nonmatching */
+    while (true) {
+        void* buf = daMP_PopReadedBuffer();
+        daMP_AudioDecode((daMP_THPReadBuffer*)buf);
+        daMP_PushReadedBuffer2(buf);
+    }
 }
 
 /* 00003CCC-00003D74       .text daMP_AudioDecoderForOnMemory__FPv */
@@ -2847,22 +2860,28 @@ void daMP_audioCallbackWithMSound(s32) {
 
 /* 00004A04-00004A30       .text daMP_audioInitWithMSound__Fv */
 void daMP_audioInitWithMSound() {
-    /* Nonmatching */
+    JASystem::Kernel::registerMixCallback((s16*(*)(s32))daMP_audioCallbackWithMSound, 3);
 }
 
 /* 00004A30-00004A58       .text daMP_audioQuitWithMSound__Fv */
 void daMP_audioQuitWithMSound() {
-    /* Nonmatching */
+    JASystem::Kernel::registerMixCallback(NULL, 0);
 }
 
 /* 00004A58-00004A88       .text daMP_PushUsedTextureSet__FPv */
-void daMP_PushUsedTextureSet(void*) {
-    /* Nonmatching */
+void daMP_PushUsedTextureSet(void* r3) {
+    OSMessage msg = (OSMessage)r3;
+    OSSendMessage(&daMP_UsedTextureSetQueue, msg, OS_MESSAGE_NOBLOCK);
 }
 
 /* 00004A88-00004ACC       .text daMP_PopUsedTextureSet__Fv */
-void daMP_PopUsedTextureSet() {
-    /* Nonmatching */
+void* daMP_PopUsedTextureSet() {
+    OSMessage msg;
+    if (OSReceiveMessage(&daMP_UsedTextureSetQueue, &msg, OS_MESSAGE_NOBLOCK) == TRUE) {
+        return msg;
+    } else {
+        return NULL;
+    }
 }
 
 /* 00004ACC-00004BA4       .text daMP_THPPlayerInit__Fl */
@@ -2872,7 +2891,9 @@ void daMP_THPPlayerInit(s32) {
 
 /* 00004BA4-00004BD4       .text daMP_THPPlayerQuit__Fv */
 void daMP_THPPlayerQuit() {
-    /* Nonmatching */
+    LCDisable();
+    daMP_audioQuitWithMSound();
+    daMP_Initialized = FALSE;
 }
 
 /* 00004BD4-00004FB4       .text daMP_THPPlayerOpen__FPCci */
@@ -2881,8 +2902,13 @@ void daMP_THPPlayerOpen(const char*, int) {
 }
 
 /* 00004FB4-00005008       .text daMP_THPPlayerClose__Fv */
-void daMP_THPPlayerClose() {
-    /* Nonmatching */
+BOOL daMP_THPPlayerClose() {
+    if (daMP_ActivePlayer.mA0 != 0 && daMP_ActivePlayer.mA4 == 0) {
+        daMP_ActivePlayer.mA0 = 0;
+        DVDClose(&daMP_ActivePlayer.mFileInfo);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00005008-000050B8       .text daMP_THPPlayerCalcNeedMemory__Fv */
@@ -2901,8 +2927,14 @@ void daMP_InitAllMessageQueue() {
 }
 
 /* 000053A4-00005410       .text daMP_ProperTimingForStart__Fv */
-void daMP_ProperTimingForStart() {
-    /* Nonmatching */
+BOOL daMP_ProperTimingForStart() {
+    u32 x = daMP_ActivePlayer.mVideoInfo.m08;
+    if (x & 1) {
+        if (VIGetNextField() != 0) return FALSE;
+    } else if (x & 2) {
+        if (VIGetNextField() != 1) return FALSE;
+    }
+    return TRUE;
 }
 
 /* 00005410-00005554       .text daMP_ProperTimingForGettingNextFrame__Fv */
@@ -2936,12 +2968,30 @@ void daMP_THPPlayerPrepare(s32, s32, s32) {
 
 /* 00005B68-00005BAC       .text daMP_THPPlayerDrawDone__Fv */
 void daMP_THPPlayerDrawDone() {
-    /* Nonmatching */
+    GXDrawDone();
+    if (daMP_Initialized) {
+        while (true) {
+            void* tex = daMP_PopUsedTextureSet();
+            if (tex == NULL) break;
+            daMP_PushFreeTextureSet(tex);
+        }
+    }
 }
 
 /* 00005BAC-00005C0C       .text daMP_THPPlayerPlay__Fv */
-void daMP_THPPlayerPlay() {
-    /* Nonmatching */
+BOOL daMP_THPPlayerPlay() {
+    if (daMP_ActivePlayer.mA0 != 0) {
+        u8 state = daMP_ActivePlayer.mA4;
+        if (state == 1 || state == 4) {
+            daMP_ActivePlayer.mA4 = 2;
+            daMP_ActivePlayer.mD0 = 0;
+            daMP_ActivePlayer.mD4 = 0;
+            daMP_ActivePlayer.mCC = -1;
+            daMP_ActivePlayer.mC8 = -1;
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 00005C0C-00005CCC       .text daMP_THPPlayerStop__Fv */
@@ -2955,23 +3005,34 @@ void daMP_THPPlayerDrawCurrentFrame(const GXRenderModeObj*, u32, u32, u32, u32) 
 }
 
 /* 00005DAC-00005DF4       .text daMP_THPPlayerGetVideoInfo__FP12THPVideoInfo */
-void daMP_THPPlayerGetVideoInfo(THPVideoInfo*) {
-    /* Nonmatching */
+BOOL daMP_THPPlayerGetVideoInfo(THPVideoInfo* info) {
+    if (daMP_ActivePlayer.mA0 != 0) {
+        memcpy(info, &daMP_ActivePlayer.mVideoInfo, 0xC);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00005DF4-00005E3C       .text daMP_THPPlayerGetAudioInfo__FP12THPAudioInfo */
-void daMP_THPPlayerGetAudioInfo(THPAudioInfo*) {
-    /* Nonmatching */
+BOOL daMP_THPPlayerGetAudioInfo(THPAudioInfo* info) {
+    if (daMP_ActivePlayer.mA0 != 0) {
+        memcpy(info, &daMP_ActivePlayer.mAudioInfo, 0x10);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00005E3C-00005E60       .text daMP_THPPlayerGetTotalFrame__Fv */
-void daMP_THPPlayerGetTotalFrame() {
-    /* Nonmatching */
+u32 daMP_THPPlayerGetTotalFrame() {
+    if (daMP_ActivePlayer.mA0 != 0) {
+        return daMP_ActivePlayer.m50;
+    }
+    return 0;
 }
 
 /* 00005E60-00005E70       .text daMP_THPPlayerGetState__Fv */
-void daMP_THPPlayerGetState() {
-    /* Nonmatching */
+int daMP_THPPlayerGetState() {
+    return daMP_ActivePlayer.mA4;
 }
 
 /* 00005E70-00005F9C       .text daMP_THPPlayerSetVolume__Fll */
@@ -2986,17 +3047,32 @@ BOOL daMP_ActivePlayer_Init(const char*) {
 
 /* 0000611C-0000615C       .text daMP_ActivePlayer_Finish__Fv */
 void daMP_ActivePlayer_Finish() {
-    /* Nonmatching */
+    daMP_THPPlayerStop();
+    daMP_THPPlayerClose();
+    daMP_THPPlayerQuit();
+    if (daMP_buffer != NULL) {
+        JKRFree(daMP_buffer);
+    }
 }
 
 /* 00006180-000061DC       .text daMP_ActivePlayer_Main__Fv */
 void daMP_ActivePlayer_Main() {
-    /* Nonmatching */
+    if (daMP_THPPlayerGetState() == 5) {
+        daMP_THPPlayerStop();
+        daMP_THPPlayerClose();
+        if (daMP_buffer != NULL) {
+            JKRFree(daMP_buffer);
+        }
+        OSReport("Error happen");
+    }
 }
 
 /* 000061DC-00006230       .text daMP_ActivePlayer_Draw__Fv */
 void daMP_ActivePlayer_Draw() {
-    /* Nonmatching */
+    const GXRenderModeObj* renderMode = JUTVideo::getManager()->getRenderMode();
+    daMP_THPPlayerDrawCurrentFrame(renderMode, daMP_DrawPosX, daMP_DrawPosY,
+        ((u32*)&daMP_videoInfo)[0], ((u32*)&daMP_videoInfo)[1]);
+    daMP_THPPlayerDrawDone();
 }
 
 /* 00006230-000062F0       .text daMP_Get_MovieRestFrame__Fv */
@@ -3050,7 +3126,17 @@ cPhs_State daMP_c::daMP_c_Init() {
 
 /* 00006580-000065F8       .text daMP_c_Finish__6daMP_cFv */
 BOOL daMP_c::daMP_c_Finish() {
-    /* Nonmatching */
+    mDoGph_gInf_c::setFrameRate(daMP_backup_FrameRate);
+    GXRenderModeObj* mode = JUTVideo::getManager()->getRenderMode();
+    mode->vfilter[0] = daMP_backup_vfilter[0];
+    mode->vfilter[1] = daMP_backup_vfilter[1];
+    mode->vfilter[2] = daMP_backup_vfilter[2];
+    mode->vfilter[3] = daMP_backup_vfilter[3];
+    mode->vfilter[4] = daMP_backup_vfilter[4];
+    mode->vfilter[5] = daMP_backup_vfilter[5];
+    mode->vfilter[6] = daMP_backup_vfilter[6];
+    daMP_ActivePlayer_Finish();
+    return TRUE;
 }
 
 /* 000065F8-0000661C       .text daMP_c_Main__6daMP_cFv */
