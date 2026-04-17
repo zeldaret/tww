@@ -9,9 +9,7 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
-dComIfG_inf_c g_dComIfG_gameInfo;
-
-const char daObjGnntakis_c::m_arcname[] = "Gnndemotakis";
+const char daObjGnntakis_c::M_arcname[] = "Gnndemotakis";
 
 /* 00000078-00000098       .text solidHeapCB__15daObjGnntakis_cFP10fopAc_ac_c */
 BOOL daObjGnntakis_c::solidHeapCB(fopAc_ac_c* a_this) {
@@ -22,13 +20,13 @@ BOOL daObjGnntakis_c::solidHeapCB(fopAc_ac_c* a_this) {
 BOOL daObjGnntakis_c::create_heap() {
     /* Nonmatching */
     BOOL ret = FALSE;
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, GNNDEMOTAKIS_BDL_GNN_DEMO_TAKI_S));
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIS_BDL_GNN_DEMO_TAKI_S));
     JUT_ASSERT(0x9b, mdl_data != NULL);
 
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mpModel != NULL) {
-            J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arcname, GNNDEMOTAKIS_BTK_GNN_DEMO_TAKI_S));
+            J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIS_BTK_GNN_DEMO_TAKI_S));
             JUT_ASSERT(0xa2, btk_data != NULL);
             if (btk_data != NULL && mpBtkAnm.init(mdl_data, btk_data, TRUE, 0, 1.0f, 0, -1, FALSE, 0)) {
                 ret = TRUE;
@@ -42,7 +40,7 @@ BOOL daObjGnntakis_c::create_heap() {
 cPhs_State daObjGnntakis_c::_create() {
     fopAcM_SetupActor(this, daObjGnntakis_c);
 
-    cPhs_State PVar1 = dComIfG_resLoad(&mPhs, m_arcname);
+    cPhs_State PVar1 = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (PVar1 == cPhs_COMPLEATE_e) {
         PVar1 = cPhs_ERROR_e;
@@ -61,7 +59,7 @@ cPhs_State daObjGnntakis_c::_create() {
 
 /* 000003AC-000003DC       .text _delete__15daObjGnntakis_cFv */
 bool daObjGnntakis_c::_delete() {
-    dComIfG_resDelete(&mPhs, m_arcname);
+    dComIfG_resDelete(&mPhs, M_arcname);
     return TRUE;
 }
 

@@ -14,7 +14,7 @@ public:
     bool _execute();
     bool _draw();
 
-    static const char m_arcname[];
+    static const char M_arcname[];
 
 public:
     /* 0x290 */ J3DModel* mpModel;
