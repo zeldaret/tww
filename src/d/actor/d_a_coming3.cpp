@@ -198,7 +198,15 @@ void daComing3::Act_c::coming_start_main() {
                 static s32 make_item_table[] = {
                     dItem_BLUE_RUPEE_e, dItem_YELLOW_RUPEE_e,
                 };
-                unk_400 = daObjBarrel2::Act_c::make_coming(&sp18, fopAcM_GetRoomNo(this), daObjBarrel2::Type_01_e, make_item_table[get_challenge_id()], true, shape_angle.y, daObjBuoyflag::Texture_01_e);
+                unk_400 = daObjBarrel2::Act_c::make_coming(
+                    &sp18,
+                    fopAcM_GetRoomNo(this),
+                    daObjBarrel2::Type_01_e,
+                    make_item_table[get_challenge_id()],
+                    false,
+                    shape_angle.y,
+                    daObjBuoyflag::Texture_00_e
+                );
             }
 
             if (unk_400 != fpcM_ERROR_PROCESS_ID_e) {
@@ -253,7 +261,7 @@ void daComing3::Act_c::coming_game_main() {
                 unk_404 = 3;
                 eff_break_tsubo();
             } else if ((unk_478 <= get_limit_dist()) && (barrel != NULL)) {
-                barrel->m474 = 1;
+                barrel->exit_req();
                 unk_404 = 2;
             }
             break;
@@ -284,8 +292,8 @@ void daComing3::Act_c::coming_wait_main() {
 
     fopAcM_SearchByID(unk_400, &ac1);
     daObjBarrel2::Act_c* barrel = (daObjBarrel2::Act_c*)ac1;
-    if (barrel != NULL && !fopAcM_SearchByID(barrel->m458, &ac2)) {
-        barrel->m474 = 1;
+    if (barrel != NULL && !fopAcM_SearchByID(barrel->get_item_id(), &ac2)) {
+        barrel->exit_req();
         fopAcM_delete(this);
     }
 }
