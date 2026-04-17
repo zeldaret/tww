@@ -18,16 +18,17 @@ BOOL daObjGnntakis_c::solidHeapCB(fopAc_ac_c* a_this) {
 
 /* 00000098-000001F4       .text create_heap__15daObjGnntakis_cFv */
 BOOL daObjGnntakis_c::create_heap() {
-    /* Nonmatching */
+    J3DModelData* mdl_data;
+    J3DAnmTextureSRTKey* btk_data;
     BOOL ret = FALSE;
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIS_BDL_GNN_DEMO_TAKI_S));
-    JUT_ASSERT(0x9b, mdl_data != NULL);
+    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIS_BDL_GNN_DEMO_TAKI_S));
+    JUT_ASSERT(155, mdl_data != NULL);
 
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mpModel != NULL) {
-            J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIS_BTK_GNN_DEMO_TAKI_S));
-            JUT_ASSERT(0xa2, btk_data != NULL);
+            btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIS_BTK_GNN_DEMO_TAKI_S));
+            JUT_ASSERT(162, btk_data != NULL);
             if (btk_data != NULL && mpBtkAnm.init(mdl_data, btk_data, TRUE, 0, 1.0f, 0, -1, FALSE, 0)) {
                 ret = TRUE;
             }
@@ -40,21 +41,21 @@ BOOL daObjGnntakis_c::create_heap() {
 cPhs_State daObjGnntakis_c::_create() {
     fopAcM_SetupActor(this, daObjGnntakis_c);
 
-    cPhs_State PVar1 = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State state = dComIfG_resLoad(&mPhs, M_arcname);
 
-    if (PVar1 == cPhs_COMPLEATE_e) {
-        PVar1 = cPhs_ERROR_e;
+    if (state == cPhs_COMPLEATE_e) {
+        state = cPhs_ERROR_e;
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             init_mtx();
             mpBtkAnm.getFrameCtrl()->setFrame(mpBtkAnm.getStartFrame());
             mpBtkAnm.setPlaySpeed(0.0f);
-            PVar1 = cPhs_COMPLEATE_e;
+            state = cPhs_COMPLEATE_e;
             m2B0 = FALSE;
         }
     }
 
-    return PVar1;
+    return state;
 }
 
 /* 000003AC-000003DC       .text _delete__15daObjGnntakis_cFv */
@@ -74,8 +75,7 @@ bool daObjGnntakis_c::_execute() {
         dComIfGp_event_runCheck() != FALSE &&
         dComIfGp_evmng_startCheck("g2before") && 
         dComIfGp_demo_get()) {
-        if (m2B0 == 0 && 
-            dComIfGp_demo_get()->getFrameNoMsg() >= 0x11d9) {
+        if (m2B0 == 0 && dComIfGp_demo_get()->getFrameNoMsg() >= 0x11d9) {
             mpBtkAnm.setFrame(mpBtkAnm.getStartFrame());
             mpBtkAnm.setPlaySpeed(1.0f);
             m2B0 = TRUE;
