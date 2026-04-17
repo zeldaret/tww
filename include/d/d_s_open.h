@@ -40,6 +40,7 @@ public:
     /* 0x22E4 */ u32 field_0x22e4;
     /* 0x22E8 */ u8 field_0x22e8;
     /* 0x22EC */ u32 field_0x22ec;
+    /* 0x22F0 */ u32 field_0x22f0;
 };
 
 class dScnOpen_proc_c : public dDlst_base_c {
