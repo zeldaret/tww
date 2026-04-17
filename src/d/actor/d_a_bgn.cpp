@@ -921,7 +921,7 @@ static void* ki_del_sub(void* param_1, void*) {
 static void* ks_del_sub(void* param_1, void*) {
     ks_class* morth = (ks_class*)param_1;
     if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_KS)) {
-        fopAcM_delete(morth);
+        fopAcM_delete(&morth->actor);
     }
     return NULL;
 }
