@@ -876,7 +876,7 @@ config.libs = [
             Object(Matching,    "JSystem/JAudio/JAISequenceHeap.cpp"),
             Object(NonMatching, "JSystem/JAudio/JAISequenceMgr.cpp"),
             Object(NonMatching, "JSystem/JAudio/JAISound.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JAISoundTable.cpp"),
+            Object(Matching,    "JSystem/JAudio/JAISoundTable.cpp"),
             Object(NonMatching, "JSystem/JAudio/JAIStreamMgr.cpp"),
             Object(Matching,    "JSystem/JAudio/JAISystemInterface.cpp"),
         ],
