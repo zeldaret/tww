@@ -82,14 +82,12 @@ void daNpc_So_c::cutSwimProc() {
     cXyz attnPos = mEventCut.getAttnPos();
     m0AFC = 7.0f + REG12_F(10);
     
-    cXyz diff = current.pos - attnPos;
-    diff.y = 0.0f;
-    f32 dist = diff.abs();
+    f32 dist = (current.pos - attnPos).absXZ();
     
     s16 targetAngle = cLib_targetAngleY(&current.pos, &attnPos);
     cLib_addCalcAngleS2(&shape_angle.y, targetAngle, 8, 0x400);
     
-    if (dist < 1.0f + REG12_F(7)) {
+    if (dist < 150.0f + REG12_F(7)) {
         m0AFC = 0.0f;
         dComIfGp_getPEvtManager()->cutEnd(mStaffId);
     }
@@ -121,7 +119,8 @@ void daNpc_So_c::cutJumpStart() {
     speedF = m0AFC;
     setAnm(4, false);
     
-    fopAcM_seStart(this, JA_SE_CM_SO_JUMP_L, 0);
+    s8 reverb = dComIfGp_getReverb(current.roomNo);
+    JAIZelBasic::zel_basic->seStart(JA_SE_CM_SO_JUMP_L, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
 /* 000054A4-00005598       .text cutJumpProc__10daNpc_So_cFv */
@@ -129,7 +128,8 @@ void daNpc_So_c::cutJumpProc() {
     f32 waterY = dLib_getWaterY(current.pos, mAcch);
     
     if (cLib_calcTimer(&m0A9C) == 0 && current.pos.y <= waterY) {
-        fopAcM_seStart(this, JA_SE_CM_SO_LANDING_L, 0);
+        s8 reverb = dComIfGp_getReverb(current.roomNo);
+        JAIZelBasic::zel_basic->seStart(JA_SE_CM_SO_LANDING_L, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
         fopKyM_createWpillar(&current.pos, 1.4f * scale.x, 1.4f, 0);
         
         m0AFC = 0.0f;
@@ -140,7 +140,8 @@ void daNpc_So_c::cutJumpProc() {
 
 /* 00005598-00005610       .text cutAppearStart__10daNpc_So_cFv */
 void daNpc_So_c::cutAppearStart() {
-    fopAcM_seStart(this, JA_SE_CM_SO_RISE, 0);
+    s8 reverb = dComIfGp_getReverb(current.roomNo);
+    JAIZelBasic::zel_basic->seStart(JA_SE_CM_SO_RISE, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
     offsetAppear();
 }
 
@@ -166,7 +167,8 @@ void daNpc_So_c::cutDiveProc() {
 /* 000056E0-00005778       .text cutDisappearStart__10daNpc_So_cFv */
 void daNpc_So_c::cutDisappearStart() {
     offsetDive();
-    fopAcM_seStart(this, JA_SE_CM_SO_DIVE, 0);
+    s8 reverb = dComIfGp_getReverb(current.roomNo);
+    JAIZelBasic::zel_basic->seStart(JA_SE_CM_SO_DIVE, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
     fopKyM_createWpillar(&current.pos, 1.2f * scale.x, 1.4f, 0);
 }
 
@@ -207,15 +209,16 @@ void daNpc_So_c::cutSetAnmProc() {
 /* 0000599C-00005AA8       .text cutEffectStart__10daNpc_So_cFv */
 void daNpc_So_c::cutEffectStart() {
     cXyz pos = current.pos;
-    pos.y -= 150.0f;
+    pos.y -= 80.0f;
     cXyz scale_v(1.0f, 1.0f, 1.0f);
     
     JPABaseEmitter* emitter = dComIfGp_particle_set(0x8152, &pos, NULL, &scale_v);
-    *(f32*)((u8*)emitter + 0x1F0) = m_heapsize.m00D8;
-    *(f32*)((u8*)emitter + 0x1F4) = m_heapsize.m00DC;
+    *(f32*)((u8*)emitter + 0x1F0) = 0.62f;
+    *(f32*)((u8*)emitter + 0x1F4) = 0.6f;
     *(f32*)((u8*)emitter + 0x1F8) = 1.0f;
     
-    fopAcM_seStart(this, JA_SE_CM_CMN_NOTICE, 0);
+    s8 reverb = dComIfGp_getReverb(current.roomNo);
+    JAIZelBasic::zel_basic->seStart(JA_SE_CM_CMN_NOTICE, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
 /* 00005AA8-00005ADC       .text cutEffectProc__10daNpc_So_cFv */
@@ -343,24 +346,23 @@ void daNpc_So_c::cutMiniGameStart() {
     g_dComIfG_gameInfo.play.mMiniGameType = 8;
     g_dComIfG_gameInfo.play.mMinigameFlags |= 0x80;
     
-    u32 reverb = dComIfGp_getReverb(current.roomNo);
-    JAIZelBasic::zel_basic->seStart(0x8F0, &eyePos, 0, reverb, l_HIO.m0094, l_HIO.m00C8, -1.0f, -1.0f, 0); /* TODO: nonmatching, asm uses offsets 0xA8/0xC8 */
+    JAIZelBasic::zel_basic->seStart(0x8F0, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
     
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     
-    if (l_HIO.m012A == 0) { // heap 0x13E? No, check assembly
+    if (REG8_S(1) == 0) {
         mBCC.x = player->current.pos.x;
         mBCC.y = player->current.pos.y;
         mBCC.z = player->current.pos.z;
         
-        mBCC.x += l_HIO.m003C * JMASSin(player->shape_angle.y);
-        mBCC.z += l_HIO.m003C * JMASCos(player->shape_angle.y);
-        mBCC.y += l_HIO.m0060;
+        mBCC.x += l_HIO.m0050 * JMASSin(player->shape_angle.y);
+        mBCC.z += l_HIO.m0050 * JMASCos(player->shape_angle.y);
+        mBCC.y += l_HIO.m0074;
         
         mBC0 = player->current.pos;
-        mBC0.x += l_HIO.m00F4 * JMASSin(player->shape_angle.y);
-        mBC0.z += l_HIO.m00F4 * JMASCos(player->shape_angle.y);
-        mBC0.y += l_HIO.m0070;
+        mBC0.x += -200.0f * JMASSin(player->shape_angle.y);
+        mBC0.z += -200.0f * JMASCos(player->shape_angle.y);
+        mBC0.y += l_HIO.m0050;
         
         dCamera_c* camera = (dCamera_c*)dComIfGp_getCamera(0);
         camera->Reset(mBCC, mBC0);
@@ -377,14 +379,14 @@ void daNpc_So_c::cutMiniGameStart() {
 
 /* 00006710-00006FE4       .text cutMiniGameProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameProc() {
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     s16 playerAngle = player->shape_angle.y;
     cXyz playerPos = player->current.pos;
     bool forced_end = false;
     
     daShip_c* ship = dComIfGp_getShipActor();
     if (ship != NULL) {
-        s16 angle = ship->shape_angle.y + g_regHIO.mChild[11].mShortRegs[24];
+        s16 angle = ship->shape_angle.y + REG12_S(6);
         playerAngle = angle - 0x4000;
         playerPos = ship->current.pos;
     }
@@ -402,7 +404,7 @@ void daNpc_So_c::cutMiniGameProc() {
             moveCam();
             
             u32 reverb = dComIfGp_getReverb(current.roomNo);
-            JAIZelBasic::zel_basic->seStart(0x8F1, &eyePos, 0, reverb, l_HIO.m0094, l_HIO.m00C8, -1.0f, -1.0f, 0);
+            JAIZelBasic::zel_basic->seStart(0x8F1, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             
             g_dComIfG_gameInfo.play.mMiniGameType = 0;
             g_dComIfG_gameInfo.play.mMinigameFlags ^= 0x80;
@@ -443,8 +445,8 @@ void daNpc_So_c::cutMiniGameProc() {
             break;
         case 2:
             setAnm(2, false);
-            mB8C = l_HIO.m00F8 + cM_rndF(l_HIO.m0064);
-            mB88 = l_HIO.m00F8 + cM_rndF(-l_HIO.m00F8 * l_HIO.m00FC);
+            mB8C = 0.0f + cM_rndF(l_HIO.m0064);
+            mB88 = 0.0f + cM_rndF(-0.0f * 0.0f);
             
             mDoMtx_stack_c::YrotS(playerAngle);
             {
@@ -461,17 +463,17 @@ void daNpc_So_c::cutMiniGameProc() {
                 dist.y = 0.0f;
                 f32 mag = PSVECSquareMag(&dist);
                 cLib_addCalcAngleS2(&shape_angle.y, cLib_targetAngleY(&current.pos, &mB90), 8, 0x400);
-                if (mag < l_HIO.m0054 + l_HIO.m012C) {
+                if (mag < l_HIO.m0054 + 0.0f) {
                     m0AFC = 0.0f;
                     mB74++;
                 } else {
-                    m0AFC = l_HIO.m0130 + l_HIO.m00E0;
+                    m0AFC = -40.0f + 0.001f;
                 }
             }
             break;
         case 4:
             setAnm(2, false);
-            mB88 = l_HIO.m00FC * (cM_rndF(l_HIO.m0074) - l_HIO.m00FC);
+            mB88 = 0.0f * (cM_rndF(l_HIO.m0074) - 0.0f);
             mDoMtx_stack_c::YrotS(playerAngle);
             {
                 cXyz offset(mB88, 0.0f, mB8C);
@@ -492,17 +494,17 @@ void daNpc_So_c::cutMiniGameProc() {
         case 6:
             {
                 current.pos.y = dLib_getWaterY(current.pos, mAcch);
-                speedF = mB08 * (cM_rndF(l_HIO.m00CC) + l_HIO.m00CC);
+                speedF = mB08 * (cM_rndF(0.0f) + 0.0f);
                 m0AFC = speedF;
-                speed.y = l_HIO.m007C * mB08 + l_HIO.m0100 * speedF;
+                speed.y = l_HIO.m007C * mB08 + 0.5f * speedF;
                 if (speed.y > l_HIO.m003C) speed.y = l_HIO.m003C;
-                gravity = l_HIO.m0104;
+                gravity = 1.0f;
                 setAnm(4, false);
                 shape_angle.x = l_HIO.m0054;
                 offsetZero();
                 mB74++;
                 u32 reverb = dComIfGp_getReverb(current.roomNo);
-                JAIZelBasic::zel_basic->seStart(0x5938, &eyePos, 0, reverb, l_HIO.m0094, l_HIO.m00C8, -1.0f, -1.0f, 0);
+                JAIZelBasic::zel_basic->seStart(0x5938, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             }
             break;
         case 7:
@@ -516,8 +518,8 @@ void daNpc_So_c::cutMiniGameProc() {
                 
                 if (current.pos.y <= waterY) {
                     u32 reverb = dComIfGp_getReverb(current.roomNo);
-                    JAIZelBasic::zel_basic->seStart(0x5939, &eyePos, 0, reverb, l_HIO.m0094, l_HIO.m00C8, -1.0f, -1.0f, 0);
-                    fopKyM_createWpillar(&current.pos, l_HIO.m00D0 * scale.x, 0.0f, 0);
+                    JAIZelBasic::zel_basic->seStart(0x5939, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                    fopKyM_createWpillar(&current.pos, 0.0f * scale.x, 0.0f, 0);
                     m0AFC = 0.0f;
                     speedF = 0.0f;
                     mB80++;
@@ -526,7 +528,7 @@ void daNpc_So_c::cutMiniGameProc() {
                         player->mDemo.setParam0(1);
                         initCam();
                         moveCam();
-                        JAIZelBasic::zel_basic->seStart(0x8F1, &eyePos, 0, reverb, l_HIO.m0094, l_HIO.m00C8, -1.0f, -1.0f, 0);
+                        JAIZelBasic::zel_basic->seStart(0x8F1, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
                         g_dComIfG_gameInfo.play.mMiniGameType = 0;
                         g_dComIfG_gameInfo.play.mMinigameFlags ^= 0x80;
                         g_dComIfG_gameInfo.play.mMinigameResult = 0;
@@ -565,7 +567,7 @@ void daNpc_So_c::cutTurnProc() {
         s16 target = cLib_targetAngleY(&current.pos, &targetPos);
         cLib_addCalcAngleS2(&shape_angle.y, target, 8, 0x400);
 
-        s16 dist = cLib_distanceAngleS(shape_angle.y, target);
+        s32 dist = cLib_distanceAngleS(shape_angle.y, target);
         if (cLib_calcTimer(&m0A9C) == 0 || dist <= 0x400) {
             dComIfGp_getPEvtManager()->cutEnd(mStaffId);
         }
@@ -576,7 +578,7 @@ void daNpc_So_c::cutTurnProc() {
 void daNpc_So_c::cutEatesaFirstStart() {
     offsetZero();
     daShip_c* ship = dComIfGp_getShipActor();
-    mB28 = 600.0f + g_regHIO.mChild[11].mFloatRegs[14];
+    mB28 = 600.0f + REG8_F(11);
     mB30 = ship->shape_angle.y;
     mBDA = 1;
     m0AFC = 0.0f;
@@ -585,12 +587,12 @@ void daNpc_So_c::cutEatesaFirstStart() {
 
 /* 00005C6C-000060FC       .text cutEatesaFirstProc__10daNpc_So_cFv */
 void daNpc_So_c::cutEatesaFirstProc() {
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     daShip_c* ship = dComIfGp_getShipActor();
     
     cXyz targetPos = player->current.pos;
     if (ship != NULL) {
-        s16 targetAngle = ship->shape_angle.y + g_regHIO.mChild[11].mShortRegs[8] - 0x4000;
+        s16 targetAngle = ship->shape_angle.y + REG12_S(6) - 0x4000;
         
         cXyz offset;
         f32 radius = 600.0f;
@@ -605,9 +607,9 @@ void daNpc_So_c::cutEatesaFirstProc() {
     diff.y = 0.0f;
     f32 distSq = diff.abs2();
     
-    f32 targetSpeed = 8.0f + g_regHIO.mChild[11].mFloatRegs[14];
+    f32 targetSpeed = 8.0f + REG8_F(11);
     if (distSq < targetSpeed * targetSpeed) {
-        cLib_addCalc2(&mB28, 50.0f + g_regHIO.mChild[11].mFloatRegs[13], 0.2f, 2.0f + g_regHIO.mChild[11].mFloatRegs[13]);
+        cLib_addCalc2(&mB28, 50.0f + REG8_F(10), 0.2f, 2.0f + REG8_F(10));
     }
     
     mB32 = 0x300;
@@ -621,7 +623,7 @@ void daNpc_So_c::cutEatesaFirstProc() {
 void daNpc_So_c::cutMiniGameWarpStart() {
     JAIZelBasic::zel_basic->field_0x00bf = 1;
     
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     player->mDemo.setOriginalDemoType();
     player->mDemo.setParam0(0);
     
@@ -641,12 +643,12 @@ void daNpc_So_c::cutMiniGameWarpStart() {
     m0AFC = 1.0f;
     speedF = 1.0f; // mB08 in actor? Check assembly 8408: stfs f0, 0x254(r31)
     mBDB = 1;
-    m0A9C = g_regHIO.mChild[7].mShortRegs[22] + 10;
+    m0A9C = REG8_S(6) + 10;
 }
 
 /* 00007324-00007438       .text cutMiniGameWarpProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameWarpProc() {
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     player->mDemo.setOriginalDemoType();
     player->mDemo.setParam0(0);
     player->mDemo.setDemoMode(6);
@@ -658,7 +660,7 @@ void daNpc_So_c::cutMiniGameWarpProc() {
     mB90.z = ship->current.pos.z;
     
     // Position calculation based on ship angle and HIO reg 0x750
-    s16 angle = ship->current.angle.y + g_regHIO.mChild[7].mShortRegs[16];
+    s16 angle = ship->current.angle.y + REG12_S(6);
     s16 targetAngle = angle - 0x4000;
     
     current.pos = ship->current.pos;
@@ -675,13 +677,13 @@ void daNpc_So_c::cutMiniGameWarpProc() {
 void daNpc_So_c::cutMiniGameReturnStart() {
     JAIZelBasic::zel_basic->field_0x00bf = 0;
     
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     player->mDemo.setOriginalDemoType();
     player->mDemo.setParam0(0);
     
     daShip_c* ship = (daShip_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeForPName, (void*)PROC_SHIP);
     
-    ship->initStartPos(&mBA0, mB9C + g_regHIO.mChild[5].mShortRegs[8]);
+    ship->initStartPos(&mBA0, mB9C + REG8_S(6));
     ship->initStartPos(&mBA0, mBAC);
     
     m0AFC = 1.0f;
@@ -694,22 +696,22 @@ void daNpc_So_c::cutMiniGameReturnStart() {
 
 /* 00007524-0000781C       .text cutMiniGameReturnProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameReturnProc() {
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     daShip_c* ship = dComIfGp_getShipActor();
     current.pos = ship->current.pos;
     
-    s16 angle = ship->current.angle.y + g_regHIO.mChild[11].mShortRegs[8];
+    s16 angle = ship->current.angle.y + REG12_S(6);
     s16 targetAngle = angle - 0x4000;
     
-    current.pos.x += m_heapsize.m0088 * JMASSin(targetAngle);
-    current.pos.z += m_heapsize.m0088 * JMASCos(targetAngle);
+    current.pos.x += l_HIO.m0088 * JMASSin(targetAngle);
+    current.pos.z += l_HIO.m0088 * JMASCos(targetAngle);
     
     shape_angle.y = 0;
     
     cXyz diff = mB90 - current.pos;
     f32 magSq = PSVECSquareMag(&diff);
     
-    if (magSq < m_heapsize.m0078) {
+    if (magSq < l_HIO.m0078) {
          player->mDemo.setOriginalDemoType();
          player->mDemo.setParam0(0);
          player->mDemo.setDemoMode(6);
@@ -717,16 +719,15 @@ void daNpc_So_c::cutMiniGameReturnProc() {
          
          mDoMtx_stack_c::YrotS(player->shape_angle.y);
          cXyz offset;
-         offset.x = m_heapsize.m0034 + g_regHIO.mChild[11].mFloatRegs[7];
-         offset.y = m_heapsize.m0038 + g_regHIO.mChild[11].mFloatRegs[8];
-         offset.z = m_heapsize.m003C + g_regHIO.mChild[11].mFloatRegs[9];
+         offset.x = l_HIO.m0034 + REG0_F(4);
+         offset.y = l_HIO.m0038 + REG0_F(5);
+         offset.z = l_HIO.m003C + REG0_F(6);
          
-         mDoMtx_stack_c::multVec(&offset, &mBCC);
-         mBCC += ship->current.pos;
-         mBCC.y += m_heapsize.m0040 + g_regHIO.mChild[11].mFloatRegs[10];
+         mDoMtx_stack_c::multVec(&offset, &mBC0);
+         mBC0 += player->current.pos;
          
-         mBC0 = ship->current.pos;
-         mBC0.y += m_heapsize.m0044 + g_regHIO.mChild[11].mFloatRegs[11];
+         mBCC = player->current.pos;
+         mBCC.y += l_HIO.m0040 + REG0_F(7);
          
          dCamera_c* camera = (dCamera_c*)dComIfGp_getCamera(0);
          camera->Reset(mBCC, mBC0);
@@ -751,7 +752,7 @@ void daNpc_So_c::cutPartnerShipProc() {
 
 /* 00007878-000078E0       .text cutMiniGameWaitStart__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameWaitStart() {
-    if (g_regHIO.mChild[11].mShortRegs[3] == 0) {
+    if (REG8_S(1) == 0) {
         dCamera_c* camera = (dCamera_c*)dComIfGp_getCamera(0);
         camera->Stop();
         camera->SetTrimSize(1);
@@ -765,79 +766,60 @@ void daNpc_So_c::cutMiniGameWaitProc() {
 
 /* 00004754-000048BC       .text initCam__10daNpc_So_cFv */
 void daNpc_So_c::initCam() {
-    if (m0BDE != 0) {
+    if (m0BDE == 1) {
         return;
     }
     m0BDE = 1;
 
-    dCamera_c* cam = dCam_getBody();
-    cam->Stop();
-    cam->SetTrimSize(1);
-    cam->SetTypeForce("BoatBattle", this);
+    int camID = dComIfGp_getPlayerCameraID(0);
+    camera_class* cam = (camera_class*)dComIfGp_getCamera(camID);
 
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    daShip_c* ship = dComIfGp_getShipActor();
-
-    s16 angle;
-    cXyz basePos;
-    if (ship != NULL) {
-        angle = ship->shape_angle.y + g_regHIO.mChild[11].mShortRegs[24];
-        basePos = ship->current.pos;
-    } else {
-        angle = player->shape_angle.y;
-        basePos = player->current.pos;
+    if (REG8_S(1) != 0) {
+        return;
     }
 
-    mDoMtx_stack_c::YrotS(angle);
-    cXyz offset;
-    offset.x = m_heapsize.m0034 + g_regHIO.mChild[11].mFloatRegs[7];
-    offset.y = m_heapsize.m0038 + g_regHIO.mChild[11].mFloatRegs[8];
-    offset.z = m_heapsize.m003C + g_regHIO.mChild[11].mFloatRegs[9];
+    cam->mCamera.Stop();
+    cam->mCamera.SetTrimSize(1);
 
-    mDoMtx_stack_c::multVec(&offset, &mBCC);
-    mBCC += basePos;
-    mBCC.y += m_heapsize.m0040 + g_regHIO.mChild[11].mFloatRegs[10];
+    fopAc_ac_c* player = dComIfGp_getLinkPlayer();
 
-    mBC0 = basePos;
-    mBC0.y += m_heapsize.m0044 + g_regHIO.mChild[11].mFloatRegs[11];
+    mBCC = player->current.pos;
+    mBCC.x += 100.0f * JMASSin(player->shape_angle.y);
+    mBCC.z += 100.0f * JMASCos(player->shape_angle.y);
+    mBCC.y += 50.0f;
 
-    cam->Set(mBCC, mBC0);
+    mBC0 = player->current.pos;
+    mBC0.x += -200.0f * JMASSin(player->shape_angle.y);
+    mBC0.z += -200.0f * JMASCos(player->shape_angle.y);
+    mBC0.y += 100.0f;
 }
 
 /* 000048BC-00004A78       .text moveCam__10daNpc_So_cFv */
 void daNpc_So_c::moveCam() {
-    dCamera_c* cam = dCam_getBody();
-
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    daShip_c* ship = dComIfGp_getShipActor();
-
-    s16 angle;
-    cXyz basePos;
-    if (ship != NULL) {
-        angle = ship->shape_angle.y + g_regHIO.mChild[11].mShortRegs[24];
-        basePos = ship->current.pos;
-    } else {
-        angle = player->shape_angle.y;
-        basePos = player->current.pos;
+    if (REG8_S(1) != 0) {
+        return;
     }
 
-    mDoMtx_stack_c::YrotS(angle);
-    cXyz offset;
-    offset.x = m_heapsize.m0034 + g_regHIO.mChild[11].mFloatRegs[7];
-    offset.y = m_heapsize.m0038 + g_regHIO.mChild[11].mFloatRegs[8];
-    offset.z = m_heapsize.m003C + g_regHIO.mChild[11].mFloatRegs[9];
+    int camID = dComIfGp_getPlayerCameraID(0);
+    camera_class* cam = (camera_class*)dComIfGp_getCamera(camID);
 
-    cXyz target;
-    mDoMtx_stack_c::multVec(&offset, &target);
-    target += basePos;
-    target.y += m_heapsize.m0040 + g_regHIO.mChild[11].mFloatRegs[10];
-    cLib_addCalcPos2(&mBCC, target, 0.5f, 10.0f);
+    fopAc_ac_c* player = dComIfGp_getLinkPlayer();
 
-    target = basePos;
-    target.y += m_heapsize.m0044 + g_regHIO.mChild[11].mFloatRegs[11];
-    cLib_addCalcPos2(&mBC0, target, 0.5f, 10.0f);
+    cXyz target1 = player->current.pos;
+    s16 angle = player->shape_angle.y;
+    target1.x += 150.0f * JMASSin(angle);
+    target1.z += 150.0f * JMASCos(angle);
+    target1.y += 100.0f;
 
-    cam->Set(mBCC, mBC0);
+    cXyz target2 = player->current.pos;
+    target2.x += -400.0f * JMASSin(angle);
+    target2.z += -400.0f * JMASCos(angle);
+    target2.y += 300.0f;
+
+    cLib_addCalcPos2(&mBC0, target2, 0.05f, 5.0f);
+    cLib_addCalcPos2(&mBCC, target1, 0.05f, 5.0f);
+
+    cam->mCamera.Set(mBCC, mBC0);
 }
 
 /* 00007914-00007934       .text cutMiniGameEndStart__10daNpc_So_cFv */
@@ -863,32 +845,39 @@ void daNpc_So_c::cutMiniGamePlTurnStart() {
 
 /* 000079AC-00007AC0       .text cutMiniGamePlTurnProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGamePlTurnProc() {
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    daShip_c* ship = dComIfGp_getShipActor();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     
     player->mDemo.setOriginalDemoType();
-    player->mDemo.setParam0(3);
+    player->mDemo.setParam0(0);
+    
+    daShip_c* ship = dComIfGp_getShipActor();
+    
     player->mDemo.setDemoMode(6);
     player->mDemo.setParam0(1);
     
-    s16 angle = player->shape_angle.y + g_regHIO.mChild[11].mShortRegs[10] - 0x4000;
-    current.pos = player->current.pos;
+    s16 angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
+    current.pos = ship->current.pos;
     
     current.pos.x += 300.0f * JMASSin(angle);
     current.pos.z += 300.0f * JMASCos(angle);
     
-    dComIfGp_getPEvtManager()->cutEnd(mStaffId);
+    if (cLib_calcTimer(&m0A9C) == 0) {
+        dComIfGp_getPEvtManager()->cutEnd(mStaffId);
+    }
 }
 
 /* 00007AC0-00007AE0       .text cutMiniGamePlUpStart__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGamePlUpStart() {
-    m0A9C = g_regHIO.mChild[11].mShortRegs[22] + 10;
-    m0BDE = 0;
+    m0A9C = 30;
+    
+    dCamera_c* camera = (dCamera_c*)dComIfGp_getCamera(0);
+    camera->Stop();
+    camera->SetTrimSize(1);
 }
 
 /* 00007AE0-00007C24       .text cutMiniGamePlUpProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGamePlUpProc() {
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     player->mDemo.setOriginalDemoType();
     player->mDemo.setParam0(14);
     player->mDemo.setDemoMode(1);
