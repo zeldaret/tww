@@ -199,10 +199,14 @@ void daNpc_So_c::cutSetAnmStart() {
 
 /* 000058D0-0000599C       .text cutSetAnmProc__10daNpc_So_cFv */
 void daNpc_So_c::cutSetAnmProc() {
+    dEvent_manager_c* evtMgr = dComIfGp_getPEvtManager();
+    evtMgr->getMySubstanceP(mStaffId, "Name", 4);
+
     if (m06D3 == 1 || m06D3 == 4 || m06D3 == 3 || m06D3 == 2) {
-        dComIfGp_getPEvtManager()->cutEnd(mStaffId);
-    } else if (mpMorf->isStop() || mpMorf->checkFrame(0.0f)) {
-        dComIfGp_getPEvtManager()->cutEnd(mStaffId);
+        evtMgr->cutEnd(mStaffId);
+    }
+    if (mpMorf->isStop()) {
+        evtMgr->cutEnd(mStaffId);
     }
 }
 
@@ -743,19 +747,17 @@ void daNpc_So_c::cutPartnerShipStart() {
 /* 00007820-00007878       .text cutPartnerShipProc__10daNpc_So_cFv */
 void daNpc_So_c::cutPartnerShipProc() {
     daShip_c* ship = dComIfGp_getShipActor();
-    if (ship != NULL) {
-        dEvt_control_c* event = g_dComIfG_gameInfo.play.getEvent();
-        event->mPtTalk = event->getPId(ship);
-    }
+    dEvt_control_c* event = g_dComIfG_gameInfo.play.getEvent();
+    event->mPtTalk = event->getPId(ship);
     dComIfGp_getPEvtManager()->cutEnd(mStaffId);
 }
 
 /* 00007878-000078E0       .text cutMiniGameWaitStart__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameWaitStart() {
+    camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     if (REG8_S(1) == 0) {
-        dCamera_c* camera = (dCamera_c*)dComIfGp_getCamera(0);
-        camera->Stop();
-        camera->SetTrimSize(1);
+        cam->mCamera.Stop();
+        cam->mCamera.SetTrimSize(1);
     }
 }
 
@@ -869,20 +871,36 @@ void daNpc_So_c::cutMiniGamePlTurnProc() {
 /* 00007AC0-00007AE0       .text cutMiniGamePlUpStart__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGamePlUpStart() {
     m0A9C = 30;
-    
-    dCamera_c* camera = (dCamera_c*)dComIfGp_getCamera(0);
-    camera->Stop();
-    camera->SetTrimSize(1);
+
+    camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    cam->mCamera.Stop();
+    cam->mCamera.SetTrimSize(1);
 }
 
 /* 00007AE0-00007C24       .text cutMiniGamePlUpProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGamePlUpProc() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
-    player->mDemo.setOriginalDemoType();
-    player->mDemo.setParam0(14);
-    player->mDemo.setDemoMode(1);
-    player->mDemo.setParam0(1);
-    
+    player->mDemo.setDemoMode(6);
+
+    cXyz offset(0.0f, 0.0f, 0.0f);
+    cXyz result(0.0f, 0.0f, 0.0f);
+
+    mDoMtx_YrotS(*calc_mtx, player->shape_angle.y);
+
+    offset.x = -50.0f + REG0_F(4);
+    offset.y = 50.0f + REG0_F(5);
+    offset.z = 100.0f + REG0_F(6);
+
+    MtxPosition(&offset, &result);
+    mBC0 = player->current.pos + result;
+
+    mBCC = player->current.pos;
+    mBCC.y += 90.0f + REG0_F(7);
+
+    int camID = dComIfGp_getPlayerCameraID(0);
+    camera_class* cam = (camera_class*)dComIfGp_getCamera(camID);
+    cam->mCamera.Set(mBCC, mBC0);
+
     if (cLib_calcTimer(&m0A9C) == 0) {
         dComIfGp_getPEvtManager()->cutEnd(mStaffId);
     }

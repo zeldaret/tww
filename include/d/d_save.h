@@ -65,7 +65,8 @@ public:
     /* 0x10 */ u16 mDate;
     /* 0x12 */ s16 mTactWindAngleX;
     /* 0x14 */ s16 mTactWindAngleY;
-    /* 0x16 */ /* 2 bytes of alignment padding */
+    /* 0x16 */ u8 field_0x16;
+    /* 0x17 */ u8 field_0x17;
 };  // Size: 0x18
 
 STATIC_ASSERT(sizeof(dSv_player_status_b_c) == 0x18);

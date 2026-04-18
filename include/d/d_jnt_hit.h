@@ -109,5 +109,7 @@ public:
 };  // Size: 0x2C
 
 JntHit_c* JntHit_create(J3DModel* model, __jnt_hit_data_c* jntHitData, s16 hitDataCount);
+void JntHit_set(JntHit_c* jntHit, JntHit_HIO_c* hio);
+void JntHit_draw(JntHit_c* jntHit, JntHit_HIO_c* hio);
 
 #endif /* D_JNT_HIT_H */
