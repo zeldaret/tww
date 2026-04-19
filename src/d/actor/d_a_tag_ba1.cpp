@@ -5,57 +5,124 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_ba1.h"
+#include "d/d_item_data.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "m_Do/m_Do_hostIO.h"
+
+class daTag_Ba1_HIO_c : public JORReflexible {
+public:
+    struct hio_prm_c {
+        /* 0x0 */ u8 field_0x0;
+    };
+
+    daTag_Ba1_HIO_c();
+    virtual ~daTag_Ba1_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ s32 mRefCount;
+    /* 0x0C */ hio_prm_c prm;
+};
+
+static const char* l_evn_tbl[1] = {"Use_Fairy"};
+
+static daTag_Ba1_HIO_c l_HIO;
 
 /* 000000EC-00000144       .text __ct__15daTag_Ba1_HIO_cFv */
 daTag_Ba1_HIO_c::daTag_Ba1_HIO_c() {
-    /* Nonmatching */
+    static hio_prm_c a_prm_tbl = { 0 };
+    memcpy(&prm, &a_prm_tbl, sizeof(hio_prm_c));
+    mNo = -1;
+    mRefCount = -1;
 }
 
 /* 00000144-00000164       .text daTag_Ba1_XyCheck_cB__FPvi */
-void daTag_Ba1_XyCheck_cB(void*, int) {
-    /* Nonmatching */
+static s16 daTag_Ba1_XyCheck_cB(void* obj, int idx) {
+    return static_cast<daTag_Ba1_c*>(obj)->XyCheck_cB(idx);
 }
 
 /* 00000164-00000184       .text XyCheck_cB__11daTag_Ba1_cFi */
-void daTag_Ba1_c::XyCheck_cB(int) {
-    /* Nonmatching */
+s16 daTag_Ba1_c::XyCheck_cB(int index) {
+    return g_dComIfG_gameInfo.play.mSelectItem[index] == dItem_FAIRY_BOTTLE_e;
 }
 
 /* 00000184-000001A4       .text daTag_Ba1_XyEvent_cB__FPvi */
-void daTag_Ba1_XyEvent_cB(void*, int) {
-    /* Nonmatching */
+static s16 daTag_Ba1_XyEvent_cB(void* obj, int idx) {
+    return static_cast<daTag_Ba1_c*>(obj)->XyEvent_cB(idx);
 }
 
 /* 000001A4-000001C0       .text XyEvent_cB__11daTag_Ba1_cFi */
-void daTag_Ba1_c::XyEvent_cB(int) {
-    /* Nonmatching */
+s16 daTag_Ba1_c::XyEvent_cB(int idx) {
+    this->eventIdx = 0;
+    return this->eventIds[this->eventIdx];
 }
 
 /* 000001C0-00000288       .text createInit__11daTag_Ba1_cFv */
-void daTag_Ba1_c::createInit() {
-    /* Nonmatching */
+bool daTag_Ba1_c::createInit() {
+    bool needsInit = dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520);
+    if (!needsInit) {
+        return needsInit;
+    }
+
+    needsInit = !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A20);
+    if (needsInit) {
+        this->attention_info.flags = fopAc_Attn_ACTION_SPEAK_e;
+        this->attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x1a;
+        this->eventIds[0] = dComIfGp_evmng_getEventIdx(l_evn_tbl[0], 0xff);
+        this->eventInfo.mpCheckCB = daTag_Ba1_XyCheck_cB;
+        this->eventInfo.mpEventCB = daTag_Ba1_XyEvent_cB;
+    }
+
+    return needsInit;
 }
 
 /* 00000288-00000290       .text _draw__11daTag_Ba1_cFv */
 BOOL daTag_Ba1_c::_draw() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000290-00000340       .text _execute__11daTag_Ba1_cFv */
 BOOL daTag_Ba1_c::_execute() {
-    /* Nonmatching */
+    int staffId = -1;
+    dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
+    if (play->getEvent()->mMode != dEvtMode_NONE_e) {
+        if (eventInfo.mCommand != dEvtCmd_INTALK_e) {
+            staffId = play->getEvtManager().getMyStaffId("TagBa1", NULL, 0);
+        }
+    }
+    if (staffId >= 0) {
+        if (play->getEvtManager().endCheck(eventIds[eventIdx]) != 0) {
+            play->getEvent()->mEventFlag |= dEvtFlag_UNK8_e;
+            fopAcM_delete(this);
+        }
+    }
+    return TRUE;
 }
 
 /* 00000340-00000394       .text _delete__11daTag_Ba1_cFv */
 BOOL daTag_Ba1_c::_delete() {
-    /* Nonmatching */
+    if (l_HIO.mRefCount >= 0 && --l_HIO.mRefCount < 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+    }
+
+    return TRUE;
 }
 
 /* 00000394-00000454       .text _create__11daTag_Ba1_cFv */
 cPhs_State daTag_Ba1_c::_create() {
-    /* Nonmatching */
+    if (l_HIO.mRefCount < 0) {
+        l_HIO.mNo = mDoHIO_createChild("おばあちゃんタグ", &l_HIO);
+    }
+
+    l_HIO.mRefCount++;
+    fopAcM_SetupActor(this, daTag_Ba1_c);
+    if (!this->createInit()) {
+        return cPhs_ERROR_e;
+    }
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000454-00000474       .text daTag_Ba1_Create__FP10fopAc_ac_c */
