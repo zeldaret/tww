@@ -15,7 +15,9 @@
 #include "JSystem/JAudio/JAISeMgr.h"
 #include "JSystem/JAudio/JAISequenceHeap.h"
 #include "JSystem/JAudio/JAISequenceMgr.h"
+#include "JSystem/JAudio/JAISoundTable.h"
 #include "JSystem/JAudio/JAIStreamMgr.h"
+#include "JSystem/JAudio/JAISystemInterface.h"
 #include "JSystem/JAudio/JASAudioThread.h"
 #include "JSystem/JAudio/JASDriverIF.h"
 #include "JSystem/JAudio/JASSystemHeap.h"
@@ -92,9 +94,6 @@ void JAIBasic::initHeap() {
         msCurrentHeap = field_0x8;
     } else {
         msCurrentHeap = JASDram;
-        if (msCurrentHeap) {
-            return;
-        }
     }
     JUT_ASSERT_MSG(186, msCurrentHeap, "JAIBasic::initHeap オーディオヒープが異常（NULL）です。\n");
 }
@@ -206,12 +205,19 @@ BOOL JAIBasic::initReadFile() {
 
 /* 8029046C-802904B4       .text processFrameWork__8JAIBasicFv */
 void JAIBasic::processFrameWork() {
-    /* Nonmatching */
+    JAInter::DummyObjectMgr::check();
+    JAInter::BankWave::loadSecondStayWave();
+    JAInter::SeMgr::processGFrameSe();
+    JAInter::SequenceMgr::processGFrameSequence();
+    JAInter::StreamMgr::processGFrameStream();
+    field_0x10 += 1;
 }
 
 /* 802904B4-802904EC       .text startSoundVec__8JAIBasicFUlPP8JAISoundP3VecUlUlUc */
-void JAIBasic::startSoundVec(u32, JAISound**, Vec*, u32, u32, u8) {
-    /* Nonmatching */
+void JAIBasic::startSoundVec(u32 param_1, JAISound** param_2, Vec* param_3, u32 param_4, u32 param_5, u8 param_6) {
+    JAInter::Actor actor(param_3, param_3, (u32)param_3, (void*) param_5);
+
+    startSoundActor(param_1, param_2, &actor, param_4, param_6);
 }
 
 /* 802904EC-8029050C       .text startSoundActor__8JAIBasicFUlPP8JAISoundPQ27JAInter5ActorUlUc */
@@ -220,23 +226,90 @@ void JAIBasic::startSoundActor(u32 param_1, JAISound** param_2, JAInter::Actor* 
 }
 
 /* 8029050C-8029057C       .text startSoundDirectID__8JAIBasicFUlPP8JAISoundPQ27JAInter5ActorUlUc */
-void JAIBasic::startSoundDirectID(u32, JAISound**, JAInter::Actor*, u32, u8) {
-    /* Nonmatching */
+void JAIBasic::startSoundDirectID(u32 param_1, JAISound** param_2, JAInter::Actor* param_3, u32 param_4, u8 param_5) {
+    SoundInfo* infoPtr = JAInter::SoundTable::getInfoPointer(param_1);
+    if (infoPtr) {
+        startSoundBasic(param_1, param_2, param_3, param_4, param_5, infoPtr);
+    }
 }
 
 /* 8029057C-80290708       .text startSoundBasic__8JAIBasicFUlPP8JAISoundPQ27JAInter5ActorUlUcPv */
-void JAIBasic::startSoundBasic(u32, JAISound**, JAInter::Actor*, u32, u8, void*) {
-    /* Nonmatching */
+void JAIBasic::startSoundBasic(u32 param_1, JAISound** param_2, JAInter::Actor* param_3, u32 param_4, u8 param_5, void* param_6) {
+    switch (param_1 & JAISoundID_TypeMask) {
+    case JAISoundID_Type_Sequence:
+        if (field_0xe.flag2 == 1) {
+            return;
+        }
+        if ((JAInter::SeMgr::seHandle != 0) && ((JAInter::SeMgr::seHandle->mSoundID & 0x3ff) == (param_1 & 0x3ff))) {
+            return;
+        }
+        if (!param_2) {
+            param_2 = (JAISound**)&JAInter::SequenceMgr::FixSeqBufPointer[((SoundInfo*)param_6)->_05];
+        }
+        JAInter::SequenceMgr::storeSeqBuffer(param_2, param_3, param_1, param_4, param_5, param_6);
+        return;
+    case JAISoundID_Type_Se:
+        if (JAInter::SeMgr::seEntryCancel[param_1 >> 0xc] == 0) {
+            JAInter::SeMgr::storeSeBuffer(param_2, param_3, param_1, param_4, param_5, param_6);
+            return;
+        }
+        if (param_2 == (JAISound**)0x0) {
+            return;
+        }
+        *param_2 = (JAISound*)0x0;
+        return;
+
+    case JAISoundID_Type_Stream:
+        if ((JAInter::StreamMgr::flags.flag2 == 0) && field_0xe.flag3 != 1) {
+            JAInter::StreamMgr::storeStreamBuffer(param_2, param_3, param_1, param_4, param_5, param_6);
+        }
+        return;
+    }
+
+    JUT_ASSERT_MSG(567, 0, "JAIBasic::startSoundBasic サウンドカテゴリービットが異常です。\n");
+}
+
+static void dummy() {
+    OSReport("JAIBasic::getPlayingSoundHandle シーケンスカテゴリー以外のサウンドが設定されました\n");
 }
 
 /* 80290708-802907E0       .text stopSoundHandle__8JAIBasicFP8JAISoundUl */
-void JAIBasic::stopSoundHandle(JAISound*, u32 fadeTime) {
-    /* Nonmatching */
+void JAIBasic::stopSoundHandle(JAISound* param_1, u32 fadeTime) {
+    if (param_1 != (JAISound*)0x0) {
+        switch (param_1->mSoundID & JAISoundID_TypeMask) {
+        case JAISoundID_Type_Sequence:
+            JAInter::SequenceMgr::releaseSeqBuffer(param_1, fadeTime);
+            return;
+        case JAISoundID_Type_Se:
+            JAInter::SeMgr::releaseSeBuffer(param_1, fadeTime);
+            return;
+        case JAISoundID_Type_Stream:
+            JAInter::StreamMgr::releaseStreamBuffer(param_1, fadeTime);
+            return;
+        }
+
+        JUT_ASSERT_MSG(617, 0, "JAIBasic::stopSoundHandle サウンドカテゴリービットが異常です。\n");
+    }
+}
+
+static void dummy2() {
+    OSReport("JAIBasic::getPlayingSoundLinkHeadPointer サウンドカテゴリービットが異常です。\n");
 }
 
 /* 802907E0-80290864       .text stopPlayingCategoryObjectSe__8JAIBasicFUcPv */
-void JAIBasic::stopPlayingCategoryObjectSe(u8, void*) {
-    /* Nonmatching */
+void JAIBasic::stopPlayingCategoryObjectSe(u8 param_1, void* param_2) {
+    JAISound* sound;
+
+    if (param_1 < JAIGlobalParameter::getParamSeCategoryMax()) {
+        sound = JAInter::SeMgr::seRegist[param_1].field_0x4;
+        while (sound) {
+            JAISound* next = sound->field_0x34;
+            if (sound->field_0x24 == param_2) {
+                stopSoundHandle(sound, 0);
+            }
+            sound = next;
+        }
+    }
 }
 
 /* 80290864-80290884       .text stopAllSe__8JAIBasicFUcPv */
@@ -245,38 +318,127 @@ void JAIBasic::stopAllSe(u8 param_1, void* param_2) {
 }
 
 /* 80290884-802908E8       .text stopActorSoundOneBuffer__8JAIBasicFPvP8JAISound */
-void JAIBasic::stopActorSoundOneBuffer(void*, JAISound*) {
-    /* Nonmatching */
+void JAIBasic::stopActorSoundOneBuffer(void* param_1, JAISound* sound) {
+    while (sound) {
+        if (sound->field_0x24 == param_1) {
+            JAISound* nextSound = sound->field_0x34;
+            sound->stop(1);
+            sound = nextSound;
+        } else {
+            sound = sound->field_0x34;
+        }
+    }
 }
 
 /* 802908E8-8029094C       .text stopIDSoundOneBuffer__8JAIBasicFUlP8JAISound */
-void JAIBasic::stopIDSoundOneBuffer(u32, JAISound*) {
-    /* Nonmatching */
+void JAIBasic::stopIDSoundOneBuffer(u32 param_1, JAISound* sound) {
+    while (sound) {
+        JAISound* next = sound->field_0x34;
+        if (sound->mSoundID == param_1) {
+            stopSoundHandle(sound, 0);
+        }
+        sound = next;
+    }
 }
 
 /* 8029094C-802909C0       .text stopIDActorSoundOneBuffer__8JAIBasicFUlPvP8JAISound */
-void JAIBasic::stopIDActorSoundOneBuffer(u32, void*, JAISound*) {
-    /* Nonmatching */
+void JAIBasic::stopIDActorSoundOneBuffer(u32 param_1, void* param_2, JAISound* sound) {
+    while (sound) {
+        JAISound* next = sound->field_0x34;
+        if ((sound->mSoundID == param_1) && (sound->field_0x24 == param_2)) {
+            stopSoundHandle(sound, 0);
+        }
+        sound = next;
+    }
 }
 
 /* 802909C0-80290A5C       .text stopAllSound__8JAIBasicFPv */
-void JAIBasic::stopAllSound(void*) {
-    /* Nonmatching */
+void JAIBasic::stopAllSound(void* param_1) {
+    JAISound* sound;
+    for (u32 i = 0; i < JAIGlobalParameter::getParamSeCategoryMax(); i++) {
+        sound = JAInter::SeMgr::seRegist[i].field_0x4;
+        stopActorSoundOneBuffer(param_1, sound);
+    }
+
+    sound = JAInter::SequenceMgr::seqControl.field_0x4;
+    stopActorSoundOneBuffer(param_1, sound);
+    sound = JAInter::StreamMgr::streamControl.field_0x4;
+    stopActorSoundOneBuffer(param_1, sound);
 }
 
-/* 80290A5C-80290B64       .text stopAllSound__8JAIBasicFUl */
-void JAIBasic::stopAllSound(u32) {
-    /* Nonmatching */
+/* 80290A5C-80290B64       .text stopAllSound__8JAIBasiwwcFUl */
+void JAIBasic::stopAllSound(u32 param_1) {
+    switch (param_1 & JAISoundID_TypeMask) {
+    case JAISoundID_Type_Se:
+        stopIDSoundOneBuffer(param_1, JAInter::SeMgr::seRegist[JAInter::SeMgr::changeIDToCategory(param_1) & 0xff].field_0x4);
+        return;
+    case JAISoundID_Type_Sequence:
+        stopIDSoundOneBuffer(param_1, JAInter::SequenceMgr::seqControl.field_0x4);
+        return;
+    case JAISoundID_Type_Stream:
+        stopIDSoundOneBuffer(param_1, JAInter::StreamMgr::streamControl.field_0x4);
+        return;
+    }
+
+    JUT_ASSERT_MSG(859, 0, "JAIBasic::stopAllSound サウンドカテゴリービットが異常です。\n");
 }
 
 /* 80290B64-80290C74       .text stopAllSound__8JAIBasicFUlPv */
-void JAIBasic::stopAllSound(u32, void*) {
-    /* Nonmatching */
+void JAIBasic::stopAllSound(u32 param_1, void* param_2) {
+    switch (param_1 & JAISoundID_TypeMask) {
+
+    case JAISoundID_Type_Se:
+        stopIDActorSoundOneBuffer(param_1, param_2, JAInter::SeMgr::seRegist[JAInter::SeMgr::changeIDToCategory(param_1)].field_0x4);
+        return;
+    case JAISoundID_Type_Sequence:
+        stopIDActorSoundOneBuffer(param_1, param_2, JAInter::SequenceMgr::seqControl.field_0x4);
+        return;
+    case JAISoundID_Type_Stream:
+        stopIDActorSoundOneBuffer(param_1, param_2, JAInter::StreamMgr::streamControl.field_0x4);
+        return;
+
+    default:
+        JUT_ASSERT_MSG(880, 0, "JAIBasic::stopAllSound サウンドカテゴリービットが異常です。\n");
+    }
 }
 
 /* 80290C74-80290D94       .text deleteObject__8JAIBasicFPv */
-void JAIBasic::deleteObject(void*) {
+void JAIBasic::deleteObject(void* param_1) {
     /* Nonmatching */
+    JAInter::DummyVec* dummyVec;
+    bool bVar1;
+    u32 i;
+    JAISound* sound;
+    JAISound* next;
+
+    dummyVec = NULL;
+
+    for (i = 0; i < JAIGlobalParameter::getParamSeCategoryMax(); i++) {
+        sound = JAInter::SeMgr::seRegist[i].field_0x4;
+        while (sound) {
+            next = sound->field_0x34;
+            if (sound->field_0x24 == param_1) {
+                bVar1 = false;
+                if (sound->checkSwBit(0x8000)) {
+                    bVar1 = true;
+                    if (!dummyVec) {
+                        dummyVec = JAInter::DummyObjectMgr::getPointer(JAIGlobalParameter::dummyObjectLifeTime, false);
+                    }
+                }
+                if (bVar1 && dummyVec) {
+                    dummyVec->field_0xc = *sound->field_0x28;
+                    dummyVec->field_0x8 = sound;
+                    sound->clearMainSoundPPointer();
+                    sound->field_0x38 = &dummyVec->field_0x8;
+                    sound->field_0x28 = &dummyVec->field_0xc;
+                    sound->field_0x24 = NULL;
+                } else {
+                    stopSoundHandle(sound, 0);
+                }
+            }
+            sound = next;
+        }
+    }
 }
 
 /* 80290D94-80290DA0       .text getMapInfoFxline__8JAIBasicFUl */
@@ -291,7 +453,6 @@ BOOL JAIBasic::getMapInfoGround(u32 param_1) {
 
 /* 80290DAC-80290DC4       .text getMapInfoFxParameter__8JAIBasicFUl */
 f32 JAIBasic::getMapInfoFxParameter(u32 param_1) {
-    /* Nonmatching */
     if (param_1 == 0) {
         return 0.0f;
     }
@@ -299,36 +460,124 @@ f32 JAIBasic::getMapInfoFxParameter(u32 param_1) {
 }
 
 /* 80290DC4-80290E14       .text getSoundOffsetNumberFromID__8JAIBasicFUl */
-u16 JAIBasic::getSoundOffsetNumberFromID(u32) {
-    /* Nonmatching */
+u16 JAIBasic::getSoundOffsetNumberFromID(u32 soundId) {
+    u16 result;
+  
+    u8 format = JAInter::SoundTable::getInfoFormat(soundId);
+    if (format & 1) {
+        SoundInfo *info = JAInter::SoundTable::getInfoPointer(soundId);
+        result = info->mOffsetNo;
+    } else {
+        result = (u16)soundId & 0x3ff;
+    }
+    return result;
 }
 
 /* 80290E14-80290E50       .text setSeCategoryVolume__8JAIBasicFUcUc */
-void JAIBasic::setSeCategoryVolume(u8, u8) {
-    /* Nonmatching */
+void JAIBasic::setSeCategoryVolume(u8 category, u8 volume) {
+    JAInter::SeMgr::seCategoryVolume[category] = (f32)volume / 127.0f;
 }
 
 /* 80290E50-80291034       .text setParameterSeqSync__8JAIBasicFPQ28JASystem6TTrackUs */
-u16 JAIBasic::setParameterSeqSync(JASystem::TTrack*, u16) {
+u16 JAIBasic::setParameterSeqSync(JASystem::TTrack* param_1, u16 param_2) {
     /* Nonmatching */
+    using namespace JAInter;
+
+    u16 uVar5 = 0;
+
+    switch (param_2) {
+    case 0: {
+        for (u32 i = 0; i < JAIGlobalParameter::seqPlayTrackMax; i++) {
+            if (SequenceMgr::getPlayTrackInfo(i)->field_0x48) {
+                JASystem::TTrack* pSVar7, *parentTrack;
+
+                pSVar7 = &SequenceMgr::getPlayTrackInfo(i)->field_0x48->JAISound::getSeqParameter()->mTrack;
+                if (SequenceMgr::getPlayTrackInfo(i)->field_0x48->mSoundID & 0x800) {
+                    parentTrack = param_1->mParent->mParent;
+                } else {
+                    parentTrack = param_1->mParent;
+                }
+
+                if (pSVar7 == parentTrack) {
+                    u32 uVar8 = routeToTrack(param_1->field_0x36c);
+                    SoundInfo* pSVar9 = SoundTable::getInfoPointer(SequenceMgr::getPlayTrackInfo(i)->field_0x48->mSoundID);
+                    uVar5 = (pSVar9->mFlag >> 8) & 0xFFFF;
+                    SystemInterface::outerInit(SequenceMgr::getPlayTrackInfo(i), param_1, uVar8, uVar5, param_2 & 1);
+                    SequenceMgr::getPlayTrackInfo(i)->field_0x4 |= 1 << uVar8;
+                    uVar5 = 0;
+                    i = JAIGlobalParameter::seqPlayTrackMax;
+                }
+            }
+        }
+        break;
+    }
+    case 1: {
+        SeMgr::seTrackUpdate_s* pJVar3;
+        u32 uVar2;
+        JASystem::TTrack::TOuterParam* outer;
+
+        uVar2 = param_1->field_0x36c & 0xff;
+        pJVar3 = SeMgr::seTrackUpdate;
+        outer = param_1->mOuterParam;
+        outer->setParam(1, SeMgr::seTrackUpdate[uVar2].field_0x4);
+        outer->setParam(8, pJVar3[uVar2].field_0x10);
+        outer->setParam(2, pJVar3[uVar2].field_0x8);
+        outer->setParam(4, pJVar3[uVar2].field_0xc);
+        f32 fVar1;
+        if (msBasic->field_0xd != 2) {
+            fVar1 = 0.0;
+        } else {
+            fVar1 = pJVar3[uVar2].field_0x14;
+        }
+        outer->setParam(0x10, fVar1);
+        break;
+    }
+    case 0x7f:
+        param_1->writePortApp(0, JAInter::SeMgr::seScene);
+        break;
+    }
+
+    return uVar5;
 }
 
 /* 80291034-80291114       .text setSeExtParameter__8JAIBasicFP8JAISound */
-void JAIBasic::setSeExtParameter(JAISound*) {
-    /* Nonmatching */
+void JAIBasic::setSeExtParameter(JAISound* sound) {
+  if (sound) {
+    u8 uVar1 = JAInter::SoundTable::getInfoFormat(sound->mSoundID);
+    if ((uVar1 & 4) != 0) {
+      sound->setVolume((float)sound->field_0x40->mVolume / 127.0f, 0, 1);
+    }
+    if ((uVar1 & 8) != 0) {
+      sound->setFxmix((float)sound->field_0x40->mFxMix / 127.0f, 0, 1);
+    }
+    if ((uVar1 & 2) != 0) {
+      sound->setPitch(sound->field_0x40->mPitch, 0, 1);
+    }
+  }
 }
 
 /* 80291114-802911A8       .text makeSound__8JAIBasicFUl */
-JAISound* JAIBasic::makeSound(u32) {
-    /* Nonmatching */
+JAISound* JAIBasic::makeSound(u32 count) {
+    if (field_0x8) {
+        return new (field_0x8, 0) JAISound[count];
+    } else {
+        return new (JASDram, 0) JAISound[count];
+    }
 }
 
 /* 802911A8-80291200       .text allocStreamBuffer__8JAIBasicFPvl */
-bool JAIBasic::allocStreamBuffer(void*, s32) {
-    /* Nonmatching */
+bool JAIBasic::allocStreamBuffer(void* param_1, s32 param_2) {
+  u32 uVar1;
+  
+  uVar1 = JAInter::StreamLib::getNeedBufferSize();
+  if (uVar1 <= (u32)param_2) {
+    JAInter::StreamLib::allocBuffer(param_1, param_2);
+    return true;
+  }
+  return false;
 }
 
 /* 80291200-80291220       .text deallocStreamBuffer__8JAIBasicFv */
 bool JAIBasic::deallocStreamBuffer() {
-    /* Nonmatching */
+    JAInter::StreamLib::deallocBuffer();
 }

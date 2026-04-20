@@ -95,7 +95,8 @@ namespace JAInter {
         /* 0x0860 */ MoveParaSetInitZero mTrackFxmixes[32];
         /* 0x0A60 */ MoveParaSetInitZero mTrackDolbys[32];
         /* 0x0C60 */ MoveParaSetInitZero field_0xc60[32];
-        /* 0x0E60 */ u8 field_0xe60[0x1261 - 0xe60];
+        /* 0x0E60 */ u16 field_0xe60[32][16];
+        /* 0x1260 */ u8 field_0x1260;
         /* 0x1261 */ u8 field_0x1261;
         /* 0x1262 */ u8 field_0x1262[0x1268 - 0x1262];
         /* 0x1268 */ int field_0x1268;
