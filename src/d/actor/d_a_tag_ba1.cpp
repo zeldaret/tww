@@ -10,23 +10,6 @@
 #include "d/d_priority.h"
 #include "m_Do/m_Do_hostIO.h"
 
-class daTag_Ba1_HIO_c : public JORReflexible {
-public:
-    struct hio_prm_c {
-        /* 0x0 */ u8 field_0x0;
-    };
-
-    daTag_Ba1_HIO_c();
-    virtual ~daTag_Ba1_HIO_c() {}
-
-    void genMessage(JORMContext* ctx) {}
-
-public:
-    /* 0x04 */ s8 mNo;
-    /* 0x08 */ s32 mRefCount;
-    /* 0x0C */ hio_prm_c prm;
-};
-
 static const char* l_evn_tbl[1] = {"Use_Fairy"};
 
 static daTag_Ba1_HIO_c l_HIO;
@@ -34,7 +17,7 @@ static daTag_Ba1_HIO_c l_HIO;
 /* 000000EC-00000144       .text __ct__15daTag_Ba1_HIO_cFv */
 daTag_Ba1_HIO_c::daTag_Ba1_HIO_c() {
     static hio_prm_c a_prm_tbl = { 0 };
-    memcpy(&prm, &a_prm_tbl, sizeof(hio_prm_c));
+    memcpy(&mPrm, &a_prm_tbl, sizeof(hio_prm_c));
     mNo = -1;
     mRefCount = -1;
 }
@@ -46,7 +29,7 @@ static s16 daTag_Ba1_XyCheck_cB(void* obj, int idx) {
 
 /* 00000164-00000184       .text XyCheck_cB__11daTag_Ba1_cFi */
 s16 daTag_Ba1_c::XyCheck_cB(int index) {
-    return g_dComIfG_gameInfo.play.mSelectItem[index] == dItem_FAIRY_BOTTLE_e;
+     return dComIfGp_getSelectItem(index) == dItem_FAIRY_BOTTLE_e;
 }
 
 /* 00000184-000001A4       .text daTag_Ba1_XyEvent_cB__FPvi */
@@ -56,8 +39,8 @@ static s16 daTag_Ba1_XyEvent_cB(void* obj, int idx) {
 
 /* 000001A4-000001C0       .text XyEvent_cB__11daTag_Ba1_cFi */
 s16 daTag_Ba1_c::XyEvent_cB(int idx) {
-    this->eventIdx = 0;
-    return this->eventIds[this->eventIdx];
+    mEventIdx = 0;
+    return mEventIds[this->mEventIdx];
 }
 
 /* 000001C0-00000288       .text createInit__11daTag_Ba1_cFv */
@@ -69,11 +52,11 @@ bool daTag_Ba1_c::createInit() {
 
     needsInit = !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A20);
     if (needsInit) {
-        this->attention_info.flags = fopAc_Attn_ACTION_SPEAK_e;
-        this->attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x1a;
-        this->eventIds[0] = dComIfGp_evmng_getEventIdx(l_evn_tbl[0], 0xff);
-        this->eventInfo.mpCheckCB = daTag_Ba1_XyCheck_cB;
-        this->eventInfo.mpEventCB = daTag_Ba1_XyEvent_cB;
+        attention_info.flags = fopAc_Attn_ACTION_SPEAK_e;
+        attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x1a;
+        mEventIds[0] = dComIfGp_evmng_getEventIdx(l_evn_tbl[0], 0xff);
+        eventInfo.mpCheckCB = daTag_Ba1_XyCheck_cB;
+        eventInfo.mpEventCB = daTag_Ba1_XyEvent_cB;
     }
 
     return needsInit;
@@ -87,18 +70,19 @@ BOOL daTag_Ba1_c::_draw() {
 /* 00000290-00000340       .text _execute__11daTag_Ba1_cFv */
 BOOL daTag_Ba1_c::_execute() {
     int staffId = -1;
-    dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-    if (play->getEvent()->mMode != dEvtMode_NONE_e) {
+    if (dComIfGp_event_runCheck()) {
         if (eventInfo.mCommand != dEvtCmd_INTALK_e) {
-            staffId = play->getEvtManager().getMyStaffId("TagBa1", NULL, 0);
+            staffId = dComIfGp_evmng_getMyStaffId("TagBa1", NULL, 0);
         }
     }
+
     if (staffId >= 0) {
-        if (play->getEvtManager().endCheck(eventIds[eventIdx]) != 0) {
-            play->getEvent()->mEventFlag |= dEvtFlag_UNK8_e;
+        if (dComIfGp_evmng_endCheck(mEventIds[mEventIdx]) != 0) {
+            dComIfGp_event_onEventFlag(dEvtFlag_UNK8_e);
             fopAcM_delete(this);
         }
     }
+
     return TRUE;
 }
 
@@ -119,7 +103,7 @@ cPhs_State daTag_Ba1_c::_create() {
 
     l_HIO.mRefCount++;
     fopAcM_SetupActor(this, daTag_Ba1_c);
-    if (!this->createInit()) {
+    if (!createInit()) {
         return cPhs_ERROR_e;
     }
     return cPhs_COMPLEATE_e;

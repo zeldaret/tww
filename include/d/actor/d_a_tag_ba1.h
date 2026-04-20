@@ -14,8 +14,26 @@ public:
     cPhs_State _create();
 
 public:
-    /* 0x290 */ s16 eventIds[1];
-    /* 0x292 */ s16 eventIdx;
+    /* 0x290 */ s16 mEventIds[1];
+    /* 0x292 */ s16 mEventIdx;
 };
+
+class daTag_Ba1_HIO_c : public JORReflexible {
+public:
+    struct hio_prm_c {
+        /* 0x0 */ u8 field_0x0;
+    };
+
+    daTag_Ba1_HIO_c();
+    virtual ~daTag_Ba1_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ s32 mRefCount;
+    /* 0x0C */ hio_prm_c mPrm;
+};
+
 
 #endif /* D_A_TAG_BA1_H */
