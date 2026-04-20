@@ -240,7 +240,7 @@ void JAIBasic::startSoundBasic(u32 param_1, JAISound** param_2, JAInter::Actor* 
         if (field_0xe.flag2 == 1) {
             return;
         }
-        if ((JAInter::SeMgr::seHandle != 0) && ((JAInter::SeMgr::seHandle->mSoundID & 0x3ff) == (param_1 & 0x3ff))) {
+        if (JAInter::SeMgr::seHandle && (JAInter::SeMgr::seHandle->mSoundID & 0x3ff) == (param_1 & 0x3ff)) {
             return;
         }
         if (!param_2) {
@@ -253,10 +253,10 @@ void JAIBasic::startSoundBasic(u32 param_1, JAISound** param_2, JAInter::Actor* 
             JAInter::SeMgr::storeSeBuffer(param_2, param_3, param_1, param_4, param_5, param_6);
             return;
         }
-        if (param_2 == (JAISound**)0x0) {
+        if (!param_2) {
             return;
         }
-        *param_2 = (JAISound*)0x0;
+        *param_2 = NULL;
         return;
 
     case JAISoundID_Type_Stream:
@@ -275,7 +275,7 @@ static void dummy() {
 
 /* 80290708-802907E0       .text stopSoundHandle__8JAIBasicFP8JAISoundUl */
 void JAIBasic::stopSoundHandle(JAISound* param_1, u32 fadeTime) {
-    if (param_1 != (JAISound*)0x0) {
+    if (param_1) {
         switch (param_1->mSoundID & JAISoundID_TypeMask) {
         case JAISoundID_Type_Sequence:
             JAInter::SequenceMgr::releaseSeqBuffer(param_1, fadeTime);
@@ -519,13 +519,13 @@ u16 JAIBasic::setParameterSeqSync(JASystem::TTrack* param_1, u16 param_2) {
         uVar2 = param_1->field_0x36c & 0xff;
         pJVar3 = SeMgr::seTrackUpdate;
         outer = param_1->mOuterParam;
-        outer->setParam(1, SeMgr::seTrackUpdate[uVar2].field_0x4);
-        outer->setParam(8, pJVar3[uVar2].field_0x10);
-        outer->setParam(2, pJVar3[uVar2].field_0x8);
-        outer->setParam(4, pJVar3[uVar2].field_0xc);
+        outer->setParam(OUTERPARAM_Volume, SeMgr::seTrackUpdate[uVar2].field_0x4);
+        outer->setParam(OUTERPARAM_Pan, pJVar3[uVar2].field_0x10);
+        outer->setParam(OUTERPARAM_Pitch, pJVar3[uVar2].field_0x8);
+        outer->setParam(OUTERPARAM_Fxmix, pJVar3[uVar2].field_0xc);
         f32 fVar1;
         if (msBasic->field_0xd != 2) {
-            fVar1 = 0.0;
+            fVar1 = 0.0f;
         } else {
             fVar1 = pJVar3[uVar2].field_0x14;
         }
