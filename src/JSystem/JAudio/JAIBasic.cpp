@@ -215,7 +215,7 @@ void JAIBasic::processFrameWork() {
 
 /* 802904B4-802904EC       .text startSoundVec__8JAIBasicFUlPP8JAISoundP3VecUlUlUc */
 void JAIBasic::startSoundVec(u32 param_1, JAISound** param_2, Vec* param_3, u32 param_4, u32 param_5, u8 param_6) {
-    JAInter::Actor actor(param_3, param_3, (u32)param_3, (void*) param_5);
+    JAInter::Actor actor(param_3, param_3, TRUE, (void*) param_5);
 
     startSoundActor(param_1, param_2, &actor, param_4, param_6);
 }

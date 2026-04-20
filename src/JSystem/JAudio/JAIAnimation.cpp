@@ -75,7 +75,7 @@ void JAIAnimeSound::initActorAnimSound(void* _asdata, u32 direction, f32 loopEnd
 
 /* 8028F268-8028F2A0       .text setAnimSoundVec__13JAIAnimeSoundFP8JAIBasicP3VecffUlUc */
 void JAIAnimeSound::setAnimSoundVec(JAIBasic* basic, Vec* r5, f32 currentFrame, f32 speed, u32 r6, u8 ownerID) {
-    JAInter::Actor actor(r5, r5, (u32)r5, (void*)r6);
+    JAInter::Actor actor(r5, r5, TRUE, (void*)r6);
     setAnimSoundActor(basic, &actor, currentFrame, speed, ownerID);
 }
 
