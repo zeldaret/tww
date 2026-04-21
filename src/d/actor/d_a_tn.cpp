@@ -26,6 +26,7 @@
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -37,52 +38,91 @@
 
 namespace {
 
-struct tnHIO_c {
-    u8 raw[0x104];
+class tnHIO_c : public mDoHIO_entry_c {
+public:
+    tnHIO_c();
+    virtual ~tnHIO_c() {}
+
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 field_0x05[4];
+    /* 0x09 */ u8 field_0x09[0xD8 - 0x09];
+    /* 0xD8 */ JntHit_HIO_c mJntHitHIO;
 };
 
 template <typename T>
 static inline void init_hio_field(tnHIO_c& hio, size_t offset, T value) {
-    *reinterpret_cast<T*>(&hio.raw[offset]) = value;
+    *reinterpret_cast<T*>(reinterpret_cast<u8*>(&hio) + offset) = value;
+};
+
+tnHIO_c::tnHIO_c() {
+    field_0x05[0] = 0;
+    field_0x05[1] = 0;
+    field_0x05[2] = 0;
+    field_0x05[3] = 0;
+
+    init_hio_field<s16>(*this, 0x0A, 50);
+    init_hio_field<f32>(*this, 0x0C, 1.0f);
+    init_hio_field<f32>(*this, 0x14, 1.0f);
+    init_hio_field<f32>(*this, 0x18, 25.0f);
+    init_hio_field<s16>(*this, 0x1C, 0);
+    init_hio_field<s16>(*this, 0x1E, 0x00B9);
+    init_hio_field<s16>(*this, 0x20, 0x000C);
+    init_hio_field<f32>(*this, 0x24, 100.0f);
+    init_hio_field<f32>(*this, 0x28, 20000.0f);
+    init_hio_field<f32>(*this, 0x2C, 400.0f);
+    init_hio_field<f32>(*this, 0x30, 250.0f);
+    init_hio_field<s16>(*this, 0x34, 0x59D8);
+    init_hio_field<s16>(*this, 0x36, 0x2AF8);
+    init_hio_field<f32>(*this, 0x38, 400.0f);
+    init_hio_field<f32>(*this, 0x3C, 500.0f);
+    init_hio_field<f32>(*this, 0x40, 130.0f);
+    init_hio_field<f32>(*this, 0x44, 500.0f);
+    init_hio_field<f32>(*this, 0x48, -125.0f);
+    init_hio_field<f32>(*this, 0x4C, 20.0f);
+    init_hio_field<f32>(*this, 0x50, 20.0f);
+    init_hio_field<f32>(*this, 0x54, 70.0f);
+    init_hio_field<f32>(*this, 0x58, 90.0f);
+    init_hio_field<f32>(*this, 0x5C, 10.0f);
+    init_hio_field<f32>(*this, 0x60, 10.0f);
+    init_hio_field<f32>(*this, 0x64, 70.0f);
+    init_hio_field<f32>(*this, 0x68, 1.0f);
+    init_hio_field<s16>(*this, 0x6C, 30);
+    init_hio_field<f32>(*this, 0x70, 75.0f);
+    init_hio_field<f32>(*this, 0x74, 80.0f);
+    init_hio_field<f32>(*this, 0x78, 80.0f);
+    init_hio_field<f32>(*this, 0x7C, 70.0f);
+    init_hio_field<s16>(*this, 0x80, 30);
+    init_hio_field<s16>(*this, 0x82, 300);
+    init_hio_field<f32>(*this, 0x84, 0.9f);
+    init_hio_field<f32>(*this, 0x88, 1.0f);
+    init_hio_field<f32>(*this, 0x8C, 1.0f);
+    init_hio_field<s16>(*this, 0xC4, 14);
+    init_hio_field<f32>(*this, 0x90, 1.0f);
+    init_hio_field<f32>(*this, 0x94, 1.0f);
+    init_hio_field<f32>(*this, 0x98, 1.0f);
+    init_hio_field<s16>(*this, 0xC6, 24);
+    init_hio_field<f32>(*this, 0x9C, 1.1f);
+    init_hio_field<f32>(*this, 0xA0, 1.0f);
+    init_hio_field<f32>(*this, 0xA4, 1.0f);
+    init_hio_field<s16>(*this, 0xC8, 22);
+    init_hio_field<f32>(*this, 0xA8, 0.5f);
+    init_hio_field<f32>(*this, 0xAC, 1.0f);
+    init_hio_field<f32>(*this, 0xB0, 1.2f);
+    init_hio_field<s16>(*this, 0xCA, 5);
+    init_hio_field<f32>(*this, 0xB4, 1.0f);
+    init_hio_field<s16>(*this, 0xCC, 100);
+    init_hio_field<f32>(*this, 0xB8, 1.0f);
+    init_hio_field<f32>(*this, 0xBC, 1.0f);
+    init_hio_field<f32>(*this, 0xC0, 1.0f);
+    init_hio_field<s16>(*this, 0xCE, 28);
+    init_hio_field<f32>(*this, 0xD0, 0.0f);
+    init_hio_field<f32>(*this, 0xD4, 500.0f);
 }
 
-static tnHIO_c make_tn_hio() {
-    tnHIO_c hio = {};
+static u8 hio_set;
+static tnHIO_c l_tnHIO;
 
-    init_hio_field<s16>(hio, 0x1E, 0x00B9);
-    init_hio_field<s16>(hio, 0x20, 0x000C);
-    init_hio_field<f32>(hio, 0x24, 50.0f);
-    init_hio_field<f32>(hio, 0x28, 1000.0f);
-    init_hio_field<f32>(hio, 0x2C, 400.0f);
-    init_hio_field<f32>(hio, 0x30, 250.0f);
-    init_hio_field<s16>(hio, 0x34, 0x59D8);
-    init_hio_field<s16>(hio, 0x36, 0x2AF8);
-    init_hio_field<f32>(hio, 0x38, 400.0f);
-    init_hio_field<f32>(hio, 0x3C, 500.0f);
-    init_hio_field<f32>(hio, 0x40, 130.0f);
-    init_hio_field<f32>(hio, 0x44, 500.0f);
-    init_hio_field<f32>(hio, 0x48, -125.0f);
-    init_hio_field<f32>(hio, 0x4C, 10.0f);
-    init_hio_field<f32>(hio, 0x50, 10.0f);
-    init_hio_field<f32>(hio, 0x54, 70.0f);
-    init_hio_field<f32>(hio, 0x58, 90.0f);
-    init_hio_field<f32>(hio, 0x5C, 10.0f);
-    init_hio_field<f32>(hio, 0x60, 10.0f);
-    init_hio_field<f32>(hio, 0x64, 70.0f);
-    init_hio_field<s16>(hio, 0x6C, 30);
-    init_hio_field<f32>(hio, 0x70, 75.0f);
-    init_hio_field<f32>(hio, 0x74, 40.0f);
-    init_hio_field<f32>(hio, 0x78, 40.0f);
-    init_hio_field<f32>(hio, 0x7C, 70.0f);
-    init_hio_field<s16>(hio, 0x80, 30);
-    init_hio_field<s16>(hio, 0x82, 300);
-    init_hio_field<f32>(hio, 0x84, 0.9f);
-    init_hio_field<f32>(hio, 0xD4, 500.0f);
-
-    return hio;
-}
-
-static tnHIO_c l_tnHIO = make_tn_hio();
+typedef char tnHIO_c_size_check[sizeof(tnHIO_c) == 0x104 ? 1 : -1];
 
 static s8 joint_check[] = {
     -1, -1, 12, 11, 7, 3, 10, 6, 2, -1, 19, 9, 5, 1, 17, 100, 100,
@@ -178,7 +218,7 @@ static inline T& reg_hio_field(size_t offset) {
 
 template <typename T>
 static inline T& tn_hio_field(size_t offset) {
-    return *reinterpret_cast<T*>(&l_tnHIO.raw[offset]);
+    return *reinterpret_cast<T*>(reinterpret_cast<u8*>(&l_tnHIO) + offset);
 }
 
 static inline mDoExt_McaMorf* get_main_morf(tn_class* i_this) {
@@ -3945,8 +3985,8 @@ static BOOL daTn_Delete(tn_class* i_this) {
     dComIfG_resDelete(&get_phase_2ac(i_this), "Tn");
 
     if (get_hio_created_1433(i_this) != 0) {
-        tn_hio_field<s8>(0x49) = 0;
-        mDoHIO_deleteChild(tn_hio_field<s8>(0x5C));
+        hio_set = 0;
+        mDoHIO_deleteChild(l_tnHIO.mNo);
     }
 
     tn_field<dPa_cutTurnEcallBack_c>(i_this, 0x144C).end();
@@ -3971,10 +4011,10 @@ static BOOL daTn_Delete(tn_class* i_this) {
 
     if ((s8)i_this->mRangeOrFrozenAnim == -0x80 && (tn_field<u32>(i_this, 0x01C4) & 0x04000000) != 0)
     {
-        if (tn_hio_field<s8>(0x28B) == 0) {
+        if (s_check == 0) {
             mDoAud_subBgmStop();
         } else {
-            tn_hio_field<s8>(0x28B) = 0;
+            s_check = 0;
         }
     }
 
@@ -4379,7 +4419,7 @@ static cPhs_State daTn_Create(fopAc_ac_c* i_actor) {
         return cPhs_ERROR_e;
     }
 
-    tn_hio_field<s8>(0x28B) = 0;
+    s_check = 0;
 
     if (i_this->mBehaviorType == 0x0D || i_this->mBehaviorType == 0x0E) {
         tn_field<u32>(i_this, 0x01C4) |= 0x04000000;
@@ -4415,11 +4455,10 @@ static cPhs_State daTn_Create(fopAc_ac_c* i_actor) {
         return cPhs_ERROR_e;
     }
 
-    if (tn_hio_field<s8>(0x49) == 0) {
-        tn_hio_field<s8>(0x5C) =
-            mDoHIO_createChild("ダークナック", reinterpret_cast<JORReflexible*>(&tn_hio_field<u8>(0x58)));
+    if (hio_set == 0) {
+        l_tnHIO.mNo = mDoHIO_createChild("ダークナック", &l_tnHIO);
         get_hio_created_1433(i_this) = 1;
-        tn_hio_field<s8>(0x49) = 1;
+        hio_set = 1;
     }
 
     fopAcM_SetMin(i_this, -200.0f, -50.0f, -100.0f);
