@@ -13,11 +13,11 @@ namespace JAInter {
 
     class Actor {
     public:
-        Actor(Vec* p1, Vec* p2, BOOL, void* p4) {
+        Actor(Vec* p1, Vec* p2, u32, void* p4) {
             field_0x0 = p1;
             field_0x4 = p2;
-            // I suspect that BOOL (type guess) controls an internal branch that's constant-folded.
-            // So the bool argument is unused and instead the inline sites just always duplicate the params.
+            // I suspect that u32 param controls an internal branch that's constant-folded.
+            // So the argument is unused and instead the inline sites just always duplicate the params.
             field_0x8 = p2;
             field_0xc = p4;
         }
