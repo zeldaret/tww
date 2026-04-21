@@ -122,8 +122,6 @@ tnHIO_c::tnHIO_c() {
 static u8 hio_set;
 static tnHIO_c l_tnHIO;
 
-typedef char tnHIO_c_size_check[sizeof(tnHIO_c) == 0x104 ? 1 : -1];
-
 static s8 joint_check[] = {
     -1, -1, 12, 11, 7, 3, 10, 6, 2, -1, 19, 9, 5, 1, 17, 100, 100,
     100, 8, 4, 0, 16, 20, -1, -1, -1, 13, 18, -1, -1, -1, -1, -1,
