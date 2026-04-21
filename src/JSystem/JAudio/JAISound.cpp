@@ -955,17 +955,17 @@ void JAISound::initParameter(JAISound** param_1, JAInter::Actor* param_2, u32 pa
         field_0x24 = param_2->field_0x0;
         if (param_2->field_0x0) {
             field_0x28 = param_2->field_0x4;
-            field_0x2c = (int)param_2->field_0x8;
-            field_0x1c = (int)param_2->field_0xc;
+            field_0x2c = param_2->field_0x8;
+            field_0x1c = param_2->field_0xc;
         } else {
             field_0x28 = NULL;
-            field_0x2c = 0;
-            field_0x1c = (int)param_2->field_0xc;
+            field_0x2c = NULL;
+            field_0x1c = param_2->field_0xc;
         }
     } else {
         field_0x24 = NULL;
         field_0x28 = NULL;
-        field_0x2c = 0;
+        field_0x2c = NULL;
         field_0x1c = 0;
     }
     field_0x38 = param_1;
