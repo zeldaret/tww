@@ -325,7 +325,9 @@ public:
     void drawEmitterCallBack() {}
     void getgReRDirection(JGeometry::TVec3<f32>&) {}
     void isContinuousParticle() {}
-    void setEmitterRotation(const JGeometry::TVec3<s16>&) {}
+    void setEmitterRotation(const JGeometry::TVec3<s16>& rot) {
+        mEmitterRot.set(rot);
+    }
 
     static JPAEmitterInfo emtrInfo;
 
