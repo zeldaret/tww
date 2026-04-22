@@ -324,7 +324,9 @@ public:
     void getgReRDirection(JGeometry::TVec3<f32>&) {}
     void isContinuousParticle() {}
     void loadTexture(u8, GXTexMapID) {}
-    void setEmitterRotation(const JGeometry::TVec3<s16>&) {}
+    void setEmitterRotation(const JGeometry::TVec3<s16>& rot) {
+        mEmitterRot = rot;
+    }
     void setGlobalParticleHeightScale(f32 y) { mGlobalParticleScale.y = y; }
     void setGlobalParticleWidthScale(f32) {}
 
