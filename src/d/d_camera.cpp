@@ -3942,7 +3942,7 @@ bool dCamera_c::subjectCamera(s32 param_1) {
     }
 
     if (!m100) {
-        if (check_owner_action(mPadId, 0x2000)) {
+        if (check_owner_action(mPadId, daPyStts0_UNK2000_e)) {
             end = 7;
         }
         else {
@@ -3988,10 +3988,10 @@ bool dCamera_c::subjectCamera(s32 param_1) {
             m060 += t * (p25 - m060);
         } else {
             if (m108 >= (u32)(end - 6)) {
-                if (check_owner_action(mPadId, 0x200000)) {
+                if (check_owner_action(mPadId, daPyStts0_TELESCOPE_LOOK_e)) {
                     setComStat(8);
                 }
-                if (check_owner_action1(mPadId, 8)) {
+                if (check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
                     setComStat(0x40);
                 }
 
@@ -4004,7 +4004,7 @@ bool dCamera_c::subjectCamera(s32 param_1) {
 
                     f32 s = (640.0f - x) / 320.0f;
 
-                    if (dComIfGp_demo_getCamera() || check_owner_action1(mPadId, 8)) {
+                    if (dComIfGp_demo_getCamera() || check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
                         setView(s * 160.0f, s * 35.0f, x, (s * -160.0f) + 480.0f);
                     }
 
@@ -4012,10 +4012,10 @@ bool dCamera_c::subjectCamera(s32 param_1) {
                 }
             } else {
                 if (m108 < (u32)(end - 7)) {
-                    if (check_owner_action(mPadId, 0x200000)) {
+                    if (check_owner_action(mPadId, daPyStts0_TELESCOPE_LOOK_e)) {
                         setComStat(8);
                     }
-                    if (check_owner_action1(mPadId, 8)) {
+                    if (check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
                         setComStat(0x40);
                     }
                     
@@ -4046,11 +4046,11 @@ bool dCamera_c::subjectCamera(s32 param_1) {
         return TRUE;
     }
 
-    if (check_owner_action(mPadId, 0x8000000)) {
+    if (check_owner_action(mPadId, daPyStts0_CRAWL_e)) {
         dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x80);
     }
 
-    if (dComIfGs_getTime() || check_owner_action1(mPadId, 8)) {
+    if (dComIfGs_getTime() || check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
         if (mWork.subject.m3BC) {
             setView(0.0f, 0.0f, 640.0f, 480.0f);
         }
@@ -4185,10 +4185,10 @@ bool dCamera_c::subjectCamera(s32 param_1) {
 
         dComIfGp_setCameraZoomScale(mCameraInfoIdx, scale);
 
-        if (check_owner_action(mPadId, 0x200000)) {
+        if (check_owner_action(mPadId, daPyStts0_TELESCOPE_LOOK_e)) {
             dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 8);
         }
-        if (check_owner_action1(mPadId, 8)) {
+        if (check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
             dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x40);
         }
 
@@ -4203,7 +4203,7 @@ bool dCamera_c::subjectCamera(s32 param_1) {
     mWork.subject.m37D = 1;
 
     // “C-stick down” behavior block
-    if (check_owner_action(mPadId, 0x2000)) {
+    if (check_owner_action(mPadId, daPyStts0_UNK2000_e)) {
         if (mWork.subject.m3C4 == 2 && mStickCPosYLast >= -0.001f) {
             mWork.subject.m3C4 = 0;
         }
@@ -4250,7 +4250,7 @@ bool dCamera_c::crawlCamera(s32 param_1) {
         mWork.crawl.m399 = 0;
         mWork.crawl.m37C = 10;
 
-        if (check_owner_action(mPadId, 0x8000000) && m1AE) {
+        if (check_owner_action(mPadId, daPyStts0_CRAWL_e) && m1AE) {
             mWork.crawl.m37C = 6;
         }
 
