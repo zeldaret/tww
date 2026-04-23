@@ -111,9 +111,9 @@ bool daObjBarrier_anm_c::init() {
     } else {
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x1000200);
         BOOL btk_init =
-            mBtk.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+            mBtk.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP);
         BOOL brk_init =
-            mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+            mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP);
 
         if (mpModel == NULL || !btk_init || !brk_init) {
             rt = false;
@@ -412,7 +412,7 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
         mDoMtx_stack_c::ZXYrotM(0, angle.y, 0);
         mpModel[effect_idx]->setBaseTRMtx(mDoMtx_stack_c::get());
 
-        dComIfGp_particle_set(dPa_name::ID_SCENE_81A9, &pos, &angle);
+        dComIfGp_particle_set(dPa_name::ID_AK_SN_HIRALBARRIER00, &pos, &angle);
     }
 }
 

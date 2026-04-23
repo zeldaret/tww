@@ -838,14 +838,14 @@ void landing(bdk_class* i_this) {
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
 
                 dComIfGp_particle_set(
-                    dPa_name::ID_SCENE_8131, &actor->current.pos, NULL, NULL,
+                    dPa_name::ID_IT_SN_DK_TYAKUTI_ROCK00, &actor->current.pos, NULL, NULL,
                     0xFF, NULL, (s8)fopAcM_GetRoomNo(actor),
                     &i_this->m6224.mColorK0, &i_this->m6224.mColorK0
                 );
                 if (i_this->m6078[0] == 0) {
                     i_this->m6078[0] = 100;
                     dComIfGp_particle_setToon(
-                        dPa_name::ID_SCENE_A132, &actor->current.pos, NULL, NULL,
+                        dPa_name::ID_IT_ST_DK_TYAKUTI_SMOKE00, &actor->current.pos, NULL, NULL,
                         0xB9, &i_this->m6080[0], (s8)fopAcM_GetRoomNo(actor)
                     );
                 }
@@ -1095,14 +1095,14 @@ void jida_attack(bdk_class* i_this) {
                     index = 1;
                 }
                 dComIfGp_particle_set(
-                dPa_name::ID_SCENE_8133, &i_this->m1174[index], NULL, NULL,
+                dPa_name::ID_IT_SN_DK_JIDANDA_ROCK00, &i_this->m1174[index], NULL, NULL,
                 0xFF, NULL, (s8)fopAcM_GetRoomNo(actor),
                 &i_this->m6224.mColorK0, &i_this->m6224.mColorK0
             );
             if (i_this->m6078[1] == 0) {
                 i_this->m6078[1] = 0xA;
                 dComIfGp_particle_setToon(
-                dPa_name::ID_SCENE_A134, &i_this->m1174[index], 0, NULL, 0xB9,
+                dPa_name::ID_IT_ST_DK_JIDANDA_SMOKE00, &i_this->m1174[index], 0, NULL, 0xB9,
                 &i_this->m6080[1], (s8)fopAcM_GetRoomNo(actor)
                 );
             }
@@ -1175,7 +1175,7 @@ void kuti_attack(bdk_class* i_this) {
             i_this->m261C[0x27].m004 += actor->current.pos;
 
             dComIfGp_particle_set(
-                dPa_name::ID_SCENE_812D, &i_this->m261C[0x27].m004, NULL, NULL,
+                dPa_name::ID_IT_SN_DK_KUTI_SENKO00, &i_this->m261C[0x27].m004, NULL, NULL,
                 0xFF, NULL, -1
             );
             eff_hane_set(i_this, &i_this->m1168, 5, 0);
@@ -1244,12 +1244,12 @@ void kuti_attack(bdk_class* i_this) {
             i_this->m6078[2] = 0x3c;
 
             dComIfGp_particle_setToon(
-                dPa_name::ID_SCENE_A12E, &i_this->m261C[0x27].m004, 0, NULL, 0xB9,
+                dPa_name::ID_IT_ST_DK_KUTI_SMOKE00, &i_this->m261C[0x27].m004, 0, NULL, 0xB9,
                 &i_this->m6080[2], (s8)fopAcM_GetRoomNo(actor)
             );
         }
         dComIfGp_particle_set(
-            dPa_name::ID_SCENE_812C, &i_this->m261C[0x27].m004, NULL, NULL,
+            dPa_name::ID_IT_SN_DK_KUTI_ROCK00, &i_this->m261C[0x27].m004, NULL, NULL,
             0xFF, NULL, (s8)fopAcM_GetRoomNo(actor),
             &i_this->m6224.mColorK0, &i_this->m6224.mColorK0
         );
@@ -1368,7 +1368,7 @@ void fly_attack(bdk_class* i_this) {
         if (i_this->m6078[3] == 0) {
             i_this->m6078[3] = 100;
             emitter = dComIfGp_particle_setToon(
-                dPa_name::ID_SCENE_A135, &actor->current.pos, &actor->shape_angle, NULL,
+                dPa_name::ID_IT_ST_DK_BUTSUKARI_SMOKE00, &actor->current.pos, &actor->shape_angle, NULL,
                 0xB9, &i_this->m6080[3], (s8)fopAcM_GetRoomNo(actor)
             );
             if (emitter) {
@@ -1376,7 +1376,7 @@ void fly_attack(bdk_class* i_this) {
             }
         }
         emitter = dComIfGp_particle_set(
-            dPa_name::ID_SCENE_8137, &actor->current.pos, &actor->shape_angle, NULL,
+            dPa_name::ID_IT_SN_DK_DMG_HANE_M00, &actor->current.pos, &actor->shape_angle, NULL,
             0xFF, NULL, (s8)fopAcM_GetRoomNo(actor), &actor->tevStr.mColorK0, &actor->tevStr.mColorK0
         );
         if (emitter) {
@@ -1424,10 +1424,10 @@ void fly_attack(bdk_class* i_this) {
                 foot_eff_pos[i] = i_this->m1174[i];
 
                 i_this->mp6214[0 + i] = dComIfGp_particle_set(
-                dPa_name::ID_SCENE_812A, &foot_eff_pos[i], &actor->shape_angle);
+                dPa_name::ID_IT_SN_DK_TSUME_HIBANA_A00, &foot_eff_pos[i], &actor->shape_angle);
 
                 i_this->mp6214[2 + i] = dComIfGp_particle_set(
-                dPa_name::ID_SCENE_812B, &foot_eff_pos[i], &actor->shape_angle);
+                dPa_name::ID_IT_SN_DK_TSUME_HIBANA_B00, &foot_eff_pos[i], &actor->shape_angle);
             }
             i_this->m2619++;
         }
@@ -1581,8 +1581,8 @@ void damage_check(bdk_class* i_this) {
                 angle.z = 0;
                 angle.x = 0;
                 angle.y = player->shape_angle.y + 0x8000;
-                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, i_this->mHeadTgSph.GetTgHitPosP(), &angle, &pos);
-                dComIfGp_particle_set(dPa_name::ID_SCENE_8129, i_this->mHeadTgSph.GetTgHitPosP(), &actor->shape_angle, NULL);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, i_this->mHeadTgSph.GetTgHitPosP(), &angle, &pos);
+                dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_KAMEN_HAHEN00, i_this->mHeadTgSph.GetTgHitPosP(), &actor->shape_angle, NULL);
 
                 dKy_SordFlush_set(actor->current.pos, 1);
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 5,
@@ -1633,7 +1633,7 @@ void damage_check(bdk_class* i_this) {
                 fopAcM_monsSeStart(actor, JA_SE_CV_DK_LAST_DAMAGE, 0);
             } else if (sVar1) {
                 JPABaseEmitter* emitter = dComIfGp_particle_set(
-                dPa_name::ID_SCENE_8137, &actor->current.pos, &actor->shape_angle, NULL,
+                dPa_name::ID_IT_SN_DK_DMG_HANE_M00, &actor->current.pos, &actor->shape_angle, NULL,
                 0xFF, NULL, (s8)fopAcM_GetRoomNo(actor),
                 &actor->tevStr.mColorK0, &actor->tevStr.mColorK0
                 );
@@ -1768,7 +1768,7 @@ void start(bdk_class* i_this) {
             anm_init(i_this, BDK_BCK_S_DEMO1, 5.0f, 2, 1.0f, -1, 0);
             fopAcM_seStart(actor, JA_SE_CM_DK_ROUND_UP, 0);
 
-            dComIfGp_particle_set(dPa_name::ID_SCENE_813C, &actor->current.pos, &actor->shape_angle, NULL,
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_DEMO_HANE00, &actor->current.pos, &actor->shape_angle, NULL,
             0xFF, &i_this->m61B0, (s8)fopAcM_GetRoomNo(actor),
             &actor->tevStr.mColorK0, &actor->tevStr.mColorK0);
         }
@@ -1793,7 +1793,7 @@ void start(bdk_class* i_this) {
             fopAcM_monsSeStart(actor, JA_SE_CV_DK_ENTER, 0);
             i_this->m61B0.remove();
             for (s32 i = 0; i < 2; i++) {
-                JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8158, &actor->current.pos, &actor->shape_angle, NULL,
+                JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_DEMO_HANE01, &actor->current.pos, &actor->shape_angle, NULL,
                 0xFF, NULL, (s8)fopAcM_GetRoomNo(actor),
                 &actor->tevStr.mColorK0, &actor->tevStr.mColorK0);
 
@@ -1827,19 +1827,19 @@ void end(bdk_class* i_this) {
         anm_init(i_this, BDK_BCK_LAST_DAMAGE1, 2.0f, 0, 1.0f, BDK_BAS_LAST_DAMAGE1, 0);
         i_this->mState = 5;
         i_this->m2EC[0] = 0xB3;
-        particle_id = dPa_name::ID_SCENE_8139;
+        particle_id = dPa_name::ID_IT_SN_DK_LASTDMG_HANE_W00;
         break;
     case 1:
         anm_init(i_this, BDK_BCK_LAST_DAMAGE3, 2.0f, 0, 1.0f, BDK_BAS_LAST_DAMAGE3, 0);
         i_this->mState = 5;
         i_this->m2EC[0] = 0xB3;
-        particle_id = dPa_name::ID_SCENE_815A;
+        particle_id = dPa_name::ID_IT_SN_DK_LASTDMG_HANE_W02;
         break;
     case 2:
         anm_init(i_this, BDK_BCK_LAST_DAMAGE2, 2.0f, 0, 1.0f, BDK_BAS_LAST_DAMAGE2, 0);
         i_this->mState = 5;
         i_this->m2EC[0] = 0;
-        particle_id = dPa_name::ID_SCENE_8159;
+        particle_id = dPa_name::ID_IT_SN_DK_LASTDMG_HANE_W01;
         break;
     case 5:
         if (i_this->mpMorf->isStop()) {
@@ -1849,7 +1849,7 @@ void end(bdk_class* i_this) {
 
             for (s32 i = 0; i <= 1; i++) {
                 JPABaseEmitter* emitter = dComIfGp_particle_set(
-                dPa_name::ID_SCENE_813A, &actor->current.pos, NULL, NULL,
+                dPa_name::ID_IT_SN_DK_DEAD_HANE_A00, &actor->current.pos, NULL, NULL,
                 0xFF, NULL, (s8)fopAcM_GetRoomNo(actor),
                 &actor->tevStr.mColorK0, &actor->tevStr.mColorK0);
 
@@ -1903,7 +1903,7 @@ void end(bdk_class* i_this) {
                 }
             }
             dComIfGp_particle_set(
-            dPa_name::ID_SCENE_813B, &actor->current.pos, NULL, NULL,
+            dPa_name::ID_IT_SN_DK_DEAD_HANE_B00, &actor->current.pos, NULL, NULL,
             0xFF, NULL, (s8)fopAcM_GetRoomNo(actor),
             &actor->tevStr.mColorK0, &actor->tevStr.mColorK0);
         }
@@ -1929,7 +1929,7 @@ void end(bdk_class* i_this) {
     cLib_addCalcAngleS2(&actor->current.angle.x, 0, 2, 0x800);
     if ((u16)particle_id) {
         JPABaseEmitter* emitter = dComIfGp_particle_set(
-        dPa_name::ID_SCENE_8138, &actor->current.pos, &actor->shape_angle, NULL,
+        dPa_name::ID_IT_SN_DK_LASTDMG_HANE_M00, &actor->current.pos, &actor->shape_angle, NULL,
         0xFF, NULL, (s8)fopAcM_GetRoomNo(actor),
         &actor->tevStr.mColorK0, &actor->tevStr.mColorK0);
         if (emitter) {
@@ -2144,7 +2144,7 @@ void t_lastattack(bdk_class* i_this) {
         i_this->mState++;
         dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
         dComIfGp_particle_set(
-            dPa_name::ID_SCENE_8131, &actor->current.pos, NULL, NULL,
+            dPa_name::ID_IT_SN_DK_TYAKUTI_ROCK00, &actor->current.pos, NULL, NULL,
             0xFF, NULL, (s8)fopAcM_GetRoomNo(actor),
             &i_this->m6224.mColorK0, &i_this->m6224.mColorK0);
 
@@ -2152,7 +2152,7 @@ void t_lastattack(bdk_class* i_this) {
             i_this->m6078[0] = 100;
 
         dComIfGp_particle_setToon(
-            dPa_name::ID_SCENE_A132, &actor->current.pos, NULL, NULL, 0xB9,
+            dPa_name::ID_IT_ST_DK_TYAKUTI_SMOKE00, &actor->current.pos, NULL, NULL, 0xB9,
             &i_this->m6080[0], (s8)fopAcM_GetRoomNo(actor));
         }
         break;
@@ -2241,10 +2241,10 @@ void t_down(bdk_class* i_this) {
             offset.y = 6900.f;
             offset.z = -3800.f;
 
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8147, &offset, NULL, NULL);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8148, &offset, NULL, NULL);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8149, &offset, NULL, NULL);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_814A, &offset, NULL, NULL);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_DOBON_HAMON00, &offset, NULL, NULL);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_DOBON_HAMON01, &offset, NULL, NULL);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_DOBON_SHIBUKI00, &offset, NULL, NULL);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_DOBON_WP00, &offset, NULL, NULL);
             fopAcM_seStart(actor, JA_SE_CM_DK_WATER_COLUMN, 0);
         }
         if (actor->current.pos.y < 5500.0f) {
@@ -2783,10 +2783,10 @@ void demo_camera(bdk_class* i_this) {
                 local_14C.z = 0;
                 for (s32 i = 0; i <= 2; i++) {
                     local_14C.y = 10000 + i * 0x5555 + REG8_S(4);
-                    dComIfGp_particle_setToon(dPa_name::ID_SCENE_A14F, &center_pos, &local_14C, NULL, 0xB9, &i_this->m6130[i], (s16)fopAcM_GetRoomNo(actor));
+                    dComIfGp_particle_setToon(dPa_name::ID_IT_ST_DK_FUTATOJI_SMOKE_A00, &center_pos, &local_14C, NULL, 0xB9, &i_this->m6130[i], (s16)fopAcM_GetRoomNo(actor));
                 }
-                dComIfGp_particle_setToon(dPa_name::ID_SCENE_A150, &center_pos2, NULL, NULL, 0xB9, &i_this->m6130[3], (s16)fopAcM_GetRoomNo(actor));
-                i_this->m6100[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_814E, &center_pos2, NULL, NULL, 0xFF);
+                dComIfGp_particle_setToon(dPa_name::ID_IT_ST_DK_FUTATOJI_SMOKE_B00, &center_pos2, NULL, NULL, 0xB9, &i_this->m6130[3], (s16)fopAcM_GetRoomNo(actor));
+                i_this->m6100[1] = dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_FUTATOJI_ROCK00, &center_pos2, NULL, NULL, 0xFF);
             }
             i_this->m25D4 = REG0_F(18) + 1.5f;
             mDoAud_seStart(JA_SE_ATM_MJT_JINARI, 0);
@@ -2910,7 +2910,7 @@ void demo_camera(bdk_class* i_this) {
                 for (i = 0; i <= 2; i++) {
                     a = &i_this->m6130[i];
                     local_154.y = i * 0x5555;
-                    dComIfGp_particle_setToon(dPa_name::ID_SCENE_A151, &center_pos,
+                    dComIfGp_particle_setToon(dPa_name::ID_IT_ST_DK_FUTATOJI_SMOKE_C00, &center_pos,
                     &local_154, NULL, 0xB9, a, (u8)fopAcM_GetRoomNo(actor));
                 }
                 i_this->m6130[3].remove();
@@ -3488,7 +3488,7 @@ static BOOL daBdk_Execute(bdk_class* i_this) {
     }
     if (i_this->m2618 != 0 && (i_this->m2618--, i_this->m2618 == 0)) {
         dComIfGp_particle_setToon(
-            dPa_name::ID_SCENE_A136, &i_this->m260C, &actor->shape_angle, NULL, 0xB9,
+            dPa_name::ID_IT_ST_DK_TOBITATI_SMOKE00, &i_this->m260C, &actor->shape_angle, NULL, 0xB9,
             &i_this->m6110, (s8)fopAcM_GetRoomNo(actor)
         );
     }
@@ -3608,7 +3608,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     i_this->bva = new mDoExt_bvaAnm();
     JUT_ASSERT(0x1864, i_this->bva);
 
-    s32 bva = i_this->bva->init(i_this->mp8F0, (J3DAnmVisibilityFull *)dComIfG_getObjectRes("Bdk", BDK_BVA_HIBIWARE1), 1, 0, 1.0f, 0, -1, FALSE, 0);
+    s32 bva = i_this->bva->init(i_this->mp8F0, (J3DAnmVisibilityFull *)dComIfG_getObjectRes("Bdk", BDK_BVA_HIBIWARE1), 1, J3DFrameCtrl::EMode_NONE);
     if (bva == 0) {
         return FALSE;
     }

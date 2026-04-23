@@ -121,7 +121,7 @@ void daPy_lk_c::setFanModel() {
     J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_USEFANAA);
     JKRHeap* oldHeap = setItemHeap();
     J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_FAN, 0x37221222);
-    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(242, FALSE);
     }
@@ -134,7 +134,7 @@ void daPy_lk_c::setSmallFanModel() {
     J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_FANWAIT);
     JKRHeap* oldHeap = setItemHeap();
     tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_FANSMALL, 0x37221222);
-    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(275, FALSE);
     }
@@ -228,7 +228,7 @@ BOOL daPy_lk_c::procFanSwing() {
             mFanSwingCb.deleteCallBack();
         }
         mDoMtx_multVecZero(mpCLModel->getAnmMtx(0), &local_6c);
-        dComIfGp_particle_setP1(dPa_name::ID_COMMON_004A, &local_6c, &shape_angle, NULL, 0xff, &mFanSwingCb, -1);
+        dComIfGp_particle_setP1(dPa_name::ID_AK_JN_LEAFFAN00, &local_6c, &shape_angle, NULL, 0xff, &mFanSwingCb, -1);
     }
 
     if (frameCtrl.getFrame() < 22.0f) {
@@ -264,7 +264,7 @@ BOOL daPy_lk_c::procFanSwing() {
             }
             mpYuchw00Brk->setFrame(0.0f);
             m33E8.end();
-            m33E8.makeEmitter(dPa_name::ID_COMMON_0032, mpYuchw00Model->getAnmMtx(2), &local_60, NULL);
+            m33E8.makeEmitter(dPa_name::ID_AK_JN_UCHIWAWIND00, mpYuchw00Model->getAnmMtx(2), &local_60, NULL);
             pJVar5 = m33E8.getEmitter();
             if (pJVar5 != NULL) {
                 pJVar5->setGlobalPrmColor(tevStr.mColorC0.r, tevStr.mColorC0.g, tevStr.mColorC0.b);
@@ -281,7 +281,7 @@ BOOL daPy_lk_c::procFanSwing() {
             if (local_48.y >= current.pos.y - 50.0f) {
                 int attrib_code = dComIfG_Bgsp()->GetAttributeCode(mGndChk);
                 if (!strcmp(dComIfGp_getStartStageName(), "Adanmae")) {
-                    dComIfGp_particle_setP1(dPa_name::ID_SCENE_8236, &local_48, &shape_angle);
+                    dComIfGp_particle_setP1(dPa_name::ID_AK_SN_VOLCANICASHESFAN00, &local_48, &shape_angle);
                 }
                 dPa_control_c::mSmokeEcallback.onWindOff();
                 int iStack_84;
@@ -372,13 +372,13 @@ BOOL daPy_lk_c::procFanGlide() {
         m34D2--;
     }
     if (frameCtrl.checkPass(4.0f)) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_004B, &current.pos);
+        JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_AK_JN_LEAFPARACHUTE00, &current.pos);
         if (emitter) {
             emitter->setGlobalRTMatrix(mpCLModel->getAnmMtx(0xf));
         }
     }
     if (frameCtrl.getRate() < 0.01f && mProcVar0.m3570 == 0 && m32E4.getEmitter() == NULL) {
-        m32E4.makeEmitter(dPa_name::ID_COMMON_004C, mpCLModel->getAnmMtx(0xf), &current.pos, NULL);
+        m32E4.makeEmitter(dPa_name::ID_AK_JN_LEAFPARACHUTE01, mpCLModel->getAnmMtx(0xf), &current.pos, NULL);
     }
 
     if (frameCtrl.getFrame() > 2.0f || mProcVar0.m3570 != 0) {

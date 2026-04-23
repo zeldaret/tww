@@ -68,8 +68,12 @@ for i in range (struct.getNumComponents()):
         member_name = undefined_member_name_prefix+hex_offset_string
     
     if member_name in ["parent", "base"] and data_type in ['fopAc_ac_c', 'dBgS_MoveBgActor', 'fopNpc_npc_c', 'fopEn_enemy_c', 'daPy_py_c', 'daPy_npc_c']:
-      # Not a member, inheritance
-      continue
+      if type_name.endswith("_class"):
+        # C-style actors use composition instead of inheritance
+        member_name = "actor"
+      else:
+        # Not a member, inheritance
+        continue
     
     # if undefined member
     if data_type == 'undefined' or check == True:

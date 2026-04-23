@@ -4,7 +4,7 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_cc_d.h"
-#include "m_do/m_Do_ext.h"
+#include "m_Do/m_Do_ext.h"
 #include "d/d_particle.h"
 
 class fgmahou_class : public fopAc_ac_c {

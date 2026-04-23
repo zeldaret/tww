@@ -61,7 +61,7 @@ BOOL daObjMkiek::Act_c::CreateHeap() {
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, MKIEK_BRK_YLSMK00);
     JUT_ASSERT(0xA2, brk != NULL);
 
-    int result = mBrkAnm.init(model_data_v, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE);
+    int result = mBrkAnm.init(model_data_v, brk, true, J3DFrameCtrl::EMode_NONE);
     return result == 0 ? FALSE : mpModel != NULL && mpModelV != NULL;
 }
 
@@ -166,7 +166,7 @@ void daObjMkiek::Act_c::demo_wait() {
             color.g = tevStr.mColorC0.g;
             color.b = tevStr.mColorC0.b;
             color.a = tevStr.mColorC0.a;
-            dComIfGp_particle_setProjection(dPa_name::ID_SCENE_819F,
+            dComIfGp_particle_setProjection(dPa_name::ID_AK_SN_VANISHWALL00,
                 &current.pos, &current.angle, NULL,
                 0xFF, NULL,
                 current.roomNo,

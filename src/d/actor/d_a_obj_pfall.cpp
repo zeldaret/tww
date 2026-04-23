@@ -183,10 +183,17 @@ void daObj_Pfall_c::CreateInit() {
 
 /* 000008CC-000009E8       .text _create__13daObj_Pfall_cFv */
 cPhs_State daObj_Pfall_c::_create() {
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(this, daObj_Pfall_c);
+#endif
+
     cPhs_State phase = dComIfG_resLoad(&mPhsPfall, "Pfall");
 
     if (phase == cPhs_COMPLEATE_e) {
+#if VERSION == VERSION_DEMO
+            fopAcM_SetupActor(this, daObj_Pfall_c);
+#endif
+
         if (!fopAcM_entrySolidHeap(this, CallbackCreateHeap, 0x38E0)) {
             return cPhs_ERROR_e;
         } else {
@@ -198,7 +205,7 @@ cPhs_State daObj_Pfall_c::_create() {
 
 /* 000009EC-00000AB0       .text _delete__13daObj_Pfall_cFv */
 bool daObj_Pfall_c::_delete() {
-    dComIfG_resDelete(&mPhsPfall, "Pfall");
+    dComIfG_resDeleteDemo(&mPhsPfall, "Pfall");
     if(mpBgW && mpBgW->ChkUsed()) {
         dComIfG_Bgsp()->Release(mpBgW);
     }
@@ -217,7 +224,7 @@ void daObj_Pfall_c::cutProc() {
     };
     int staffIdx = dComIfGp_evmng_getMyStaffId("Nzfall");
     if(staffIdx != -1) {
-        int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), NULL, 0);
+        int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), FALSE, 0);
         if(actIdx == -1) {
             dComIfGp_evmng_cutEnd(staffIdx);
         } else {
@@ -322,10 +329,13 @@ void daObj_Pfall_c::mode_wait_init() {
 
 /* 00000F1C-00000FC0       .text mode_wait__13daObj_Pfall_cFv */
 void daObj_Pfall_c::mode_wait() {
-    if(dLib_checkPlayerInCircle(current.pos, 100.0f, 100.0f) 
-        && dComIfGp_getPlayer(0)->speedF == 0.0f
-        && cLib_calcTimer(&field_0x3B8) == 0) {
-            mode_event_init();
+    if(dLib_checkPlayerInCircle(current.pos, 100.0f, 100.0f)) {
+        daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+        if (player->getSpeedF() == 0.0f) {
+            if (cLib_calcTimer(&field_0x3B8) == 0) {
+                mode_event_init();
+            }
+        }
     }
     mpBgW->Move();
     mpBgW2->Move();
@@ -377,17 +387,15 @@ bool daObj_Pfall_c::_execute() {
         if(mpMorf->getFrame() == 6.0f) {
             fopAcM_seStart(this, JA_SE_OBJ_TC_JAIL_STRING, 0);
         }
-        f32 frame = mpMorf->getFrame();
-        if (!(frame > 0.0f && frame <= 6.0f)) {
-            if (frame > 6.0f && frame <= 10.0f) {
-                field_0x438 += 1.0f;
-            }
-            else {
-                if (!(frame > 10.0f && frame <= 23.0f) && frame > 23.0f && frame <= 29.0f) {
-                    field_0x438 -= 3.0f;
-                }
-            }
-        }     
+        if (mpMorf->getFrame() > 0.0f && mpMorf->getFrame() <= 6.0f) {
+            // Do nothing
+        } else if (mpMorf->getFrame() > 6.0f && mpMorf->getFrame() <= 10.0f) {
+            field_0x438 += 1.0f;
+        } else if (mpMorf->getFrame() > 10.0f && mpMorf->getFrame() <= 23.0f) {
+            // Do nothing
+        } else if (mpMorf->getFrame() > 23.0f && mpMorf->getFrame() <= 29.0f) {
+            field_0x438 -= 3.0f;
+        }
     } else {
         field_0x438 = 0.0f;
     }

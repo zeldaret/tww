@@ -178,9 +178,11 @@ void JUTResFont::setGX() {
     GXSetChanCtrl(GX_COLOR0A0, false, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGBA4, 0);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBX8, 0xf);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U16, 0xf);
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
@@ -209,9 +211,11 @@ void JUTResFont::setGX(JUtility::TColor col1, JUtility::TColor col2) {
         GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
         GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGBA4, 0);
+
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBX8, 15);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U16, 0xf);
+
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
         GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
@@ -256,6 +260,7 @@ f32 JUTResFont::drawChar_scale(f32 posX, f32 posY, f32 scaleX, f32 scaleY, int c
     s32 v2 = ((mHeight + mpGlyphBlocks[field_0x66]->cellHeight) * 0x8000) / mpGlyphBlocks[field_0x66]->textureHeight;
 
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
     // Bottom Left
@@ -277,6 +282,8 @@ f32 JUTResFont::drawChar_scale(f32 posX, f32 posY, f32 scaleX, f32 scaleY, int c
     GXPosition3f32(x1, y2, 0.0f);
     GXColor1u32(mColor3);
     GXTexCoord2s16(u1, v2);
+
+    GXEnd();
 
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
 
@@ -361,7 +368,7 @@ int JUTResFont::getFontCode(int chr) const {
                 ret = chr - map->startCode;
                 break;
             } else if (map->mappingMethod == 2) {
-                ret = *(&mpMapBlocks[i]->mLeading + ((chr - mpMapBlocks[i]->startCode)));
+                ret = *(&mpMapBlocks[i]->mLeading + (chr - mpMapBlocks[i]->startCode));
                 break;
             } else if (map->mappingMethod == 3) {
                 u16* leading_temp = &map->mLeading;
@@ -420,9 +427,16 @@ void JUTResFont::loadImage(int code, GXTexMapID id) {
     mHeight = cellRow * mpGlyphBlocks[i]->cellHeight;
 
     if (pageIdx != mTexPageIdx || i != field_0x66) {
-        GXInitTexObj(&mTexObj, &mpGlyphBlocks[i]->data[pageIdx * mpGlyphBlocks[i]->textureSize],
-                     mpGlyphBlocks[i]->textureWidth, mpGlyphBlocks[i]->textureHeight,
-                     (GXTexFmt)mpGlyphBlocks[i]->textureFormat, GX_CLAMP, GX_CLAMP, 0);
+        GXInitTexObj(
+            &mTexObj,
+            &mpGlyphBlocks[i]->data[pageIdx * mpGlyphBlocks[i]->textureSize],
+            mpGlyphBlocks[i]->textureWidth,
+            mpGlyphBlocks[i]->textureHeight,
+            (GXTexFmt)mpGlyphBlocks[i]->textureFormat,
+            GX_CLAMP,
+            GX_CLAMP,
+            0
+        );
 
         GXInitTexObjLOD(&mTexObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, 0U, 0U, GX_ANISO_1);
         mTexPageIdx = pageIdx;

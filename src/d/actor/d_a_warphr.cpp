@@ -82,7 +82,7 @@ BOOL daWarphr_c::CreateHeap() {
         JUT_ASSERT(VERSION_SELECT(226, 230, 239, 239), pbtk != NULL);
 
         mpBtkAnm1 = new mDoExt_btkAnm();
-        if (mpBtkAnm1 == NULL || !mpBtkAnm1->init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        if (mpBtkAnm1 == NULL || !mpBtkAnm1->init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
         mpBtkAnm1->setPlaySpeed(1.0f);
@@ -103,7 +103,7 @@ BOOL daWarphr_c::CreateHeap() {
 
         mpBtkAnm2 = new mDoExt_btkAnm();
 
-        if (mpBtkAnm2 == NULL || !mpBtkAnm2->init(modelData, pbtk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+        if (mpBtkAnm2 == NULL || !mpBtkAnm2->init(modelData, pbtk, true, J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
         mpBtkAnm2->setPlaySpeed(0.0f);
@@ -116,7 +116,7 @@ BOOL daWarphr_c::CreateHeap() {
 
         mpBrkAnm = new mDoExt_brkAnm();
 
-        if (mpBrkAnm == NULL || !mpBrkAnm->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+        if (mpBrkAnm == NULL || !mpBrkAnm->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
         mpBrkAnm->setPlaySpeed(0.0f);
@@ -187,7 +187,7 @@ bool daWarphr_c::_execute() {
                     m2E4 = true;
                 }
             } else {
-                m2B0 = dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C2B9, &current.pos);
+                m2B0 = dComIfGp_particle_setProjection(dPa_name::ID_IT_SP_DEMO20_INDWP00, &current.pos);
                 mDoGph_gInf_c::offMonotone();
             }
         }
@@ -237,7 +237,7 @@ void daWarphr_c::demo_proc() {
 
     m304 = dComIfGp_evmng_getMyStaffId("Ghrwp");
     if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && m304 != -1) {
-        s32 iVar1 = dComIfGp_evmng_getMyActIdx(m304, action_table, ARRAY_SIZE(action_table), 0, 0);
+        s32 iVar1 = dComIfGp_evmng_getMyActIdx(m304, action_table, ARRAY_SIZE(action_table), FALSE, 0);
         if (iVar1 == -1) {
             dComIfGp_evmng_cutEnd(m304);
         } else {
@@ -275,8 +275,8 @@ BOOL daWarphr_c::actStartWarp(int) {
 
 /* 00000CF4-00000DEC       .text initWarp__10daWarphr_cFi */
 void daWarphr_c::initWarp(int) {
-    dComIfGp_particle_set(dPa_name::ID_SCENE_8291, &current.pos);
-    m2AC = dComIfGp_particle_set(dPa_name::ID_SCENE_8292, &current.pos);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_HRWARPA00, &current.pos);
+    m2AC = dComIfGp_particle_set(dPa_name::ID_IT_SN_HRWARPB00, &current.pos);
     mDoAud_seStart(JA_SE_LK_HL_WAPR_U_IN);
 }
 
@@ -288,8 +288,8 @@ BOOL daWarphr_c::actWarp(int) {
 
 /* 00000E14-00000F70       .text initWarpArrive__10daWarphr_cFi */
 void daWarphr_c::initWarpArrive(int) {
-    dComIfGp_particle_set(dPa_name::ID_SCENE_8291, &current.pos);
-    m2AC = dComIfGp_particle_set(dPa_name::ID_SCENE_8292, &current.pos);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_HRWARPA00, &current.pos);
+    m2AC = dComIfGp_particle_set(dPa_name::ID_IT_SN_HRWARPB00, &current.pos);
 
     set_end_anim();
 

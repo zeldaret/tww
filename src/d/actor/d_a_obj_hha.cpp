@@ -84,8 +84,8 @@ const HHA_RES_FILE_ID l_daObjHha_dzb_idx_table[2] = {HHA_DZB_HHA1, HHA_DZB_HHA2}
 const HHA_RES_FILE_ID l_daObjHha_btk_idx_table[2] = {HHA_BTK_YSWTR00_01, HHA_BTK_YSWTR00_02};
 const J3DFrameCtrl::Attribute_e l_daObjHha_btk_mode_table[2] = {J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_NONE};
 const u16 l_daObjHha_splash_id_table[] = {
-    dPa_name::ID_SCENE_810D,
-    dPa_name::ID_SCENE_810E,
+    dPa_name::ID_AK_SN_SIRENSUIRYU00,
+    dPa_name::ID_AK_SN_SIRENSUIRYU01,
 };
 
 /* 00000078-00000170       .text init_data__14daObjHhaPart_cFffUsUcUc */
@@ -205,11 +205,11 @@ BOOL daObjHhaYgush_c::create_area(const char* arcname) {
             J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, HHA_BTK_YGSTP00));
             JUT_ASSERT(DEMO_SELECT(593, 656), btk_data != NULL);
             
-            if(mBtk.init(M_mdl->getModelData(), btk_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, false) != false){  
+            if(mBtk.init(M_mdl->getModelData(), btk_data, true, J3DFrameCtrl::EMode_LOOP) != false){  
                 J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, HHA_BCK_YGSTP00));
                 JUT_ASSERT(DEMO_SELECT(598, 661), bck_data != NULL);
                 
-                if(mBck.init(M_mdl->getModelData(), bck_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false) != false){
+                if(mBck.init(M_mdl->getModelData(), bck_data, true, J3DFrameCtrl::EMode_LOOP) != false){
                     ret = TRUE;
                 }
             }
@@ -283,7 +283,7 @@ BOOL daObjHha_c::create_heap() {
             for(i = 0; i < 2; i++){
                 J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, l_daObjHha_btk_idx_table[i]));
                 JUT_ASSERT(0x32f, btk_data != NULL);
-                if(mBtkA[i].init(mdl_data, btk_data, true, l_daObjHha_btk_mode_table[i], 1.0f, 0, -1, false, false) == FALSE){
+                if(mBtkA[i].init(mdl_data, btk_data, true, l_daObjHha_btk_mode_table[i]) == FALSE){
                     ret = FALSE;
                     break;
                 }

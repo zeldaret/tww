@@ -103,13 +103,13 @@ void daTitle_proc_c::proc_init3D() {
     J3DAnmTransform* bck_ship = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BCK_TITLE_SHIP, TLOGO_BCK_TITLE_SHIP, TLOGOE_BCK_TITLE_SHIP, TLOGOE0_BCK_TITLE_SHIP)));
     JUT_ASSERT(VERSION_SELECT(0xED, 0xED, 0x118, 0x118), bck_ship != NULL);
 
-    BOOL ok_bck = mBckShip.init(modelData_ship, bck_ship, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    BOOL ok_bck = mBckShip.init(modelData_ship, bck_ship, TRUE, J3DFrameCtrl::EMode_LOOP);
     JUT_ASSERT(VERSION_SELECT(0xF4, 0xF4, 0x11F, 0x11F), ok_bck != FALSE);
 
     J3DAnmColor* bpk_ship = static_cast<J3DAnmColor*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BPK_TITLE_SHIP, TLOGO_BPK_TITLE_SHIP, TLOGOE_BPK_TITLE_SHIP, TLOGOE0_BPK_TITLE_SHIP)));
     JUT_ASSERT(VERSION_SELECT(0xF9, 0xF9, 0x124, 0x124), bpk_ship != NULL);
 
-    BOOL ok_bpk = mBpkShip.init(modelData_ship, bpk_ship, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    BOOL ok_bpk = mBpkShip.init(modelData_ship, bpk_ship, TRUE, J3DFrameCtrl::EMode_LOOP);
     JUT_ASSERT(VERSION_SELECT(0xFF, 0xFF, 0x12A, 0x12A), ok_bpk != FALSE);
 
     mBpkShip.setFrame(0.0f);
@@ -118,13 +118,13 @@ void daTitle_proc_c::proc_init3D() {
     J3DAnmTextureSRTKey* btk_sub = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BTK_SUBTITLE_START_ANIM, TLOGO_BTK_SUBTITLE_START_ANIM, TLOGOE_BTK_SUBTITLE_START_ANIM_E, TLOGOE0_BTK_SUBTITLE_START_ANIM_E)));
     JUT_ASSERT(VERSION_SELECT(0x106, 0x106, 0x131, 0x131), btk_sub != NULL);
 
-    BOOL ok_btk_subtitle = mBtkSub.init(modelData_sub, btk_sub, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    BOOL ok_btk_subtitle = mBtkSub.init(modelData_sub, btk_sub, TRUE, J3DFrameCtrl::EMode_NONE);
     JUT_ASSERT(VERSION_SELECT(0x10D, 0x10D, 0x138, 0x138), ok_btk_subtitle != FALSE);
 
     J3DAnmTextureSRTKey* btk_kirari = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BTK_SUBTITLE_KIRARI, TLOGO_BTK_SUBTITLE_KIRARI, TLOGOE_BTK_SUBTITLE_KIRARI_E, TLOGOE0_BTK_SUBTITLE_KIRARI_E)));
     JUT_ASSERT(VERSION_SELECT(0x112, 0x112, 0x13D, 0x13D), btk_kirari != NULL);
 
-    BOOL ok_btk_kirari = mBtkKirari.init(modelData_kirari, btk_kirari, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    BOOL ok_btk_kirari = mBtkKirari.init(modelData_kirari, btk_kirari, TRUE, J3DFrameCtrl::EMode_LOOP);
     JUT_ASSERT(VERSION_SELECT(0x119, 0x119, 0x144, 0x144), ok_btk_kirari != FALSE);
 
     mDoExt_restoreCurrentHeap();
@@ -245,7 +245,7 @@ void daTitle_proc_c::calc_2d_alpha() {
                 0.0f
             );
 
-            mpEmitter = dComIfGp_particle_set2Dback(dPa_name::ID_SCENE_83F9, &pos);
+            mpEmitter = dComIfGp_particle_set2Dback(dPa_name::ID_AK_S1_TITLESMOKE00, &pos);
         } else {
             pos.set(
                 ((this->pane[4].mPosTopLeftOrig.x - 320.0f) - this->m094) + attr().field_0x30,
@@ -286,7 +286,7 @@ void daTitle_proc_c::calc_2d_alpha() {
 
             m00C.set(pane[4].mPosTopLeftOrig.x - 320.0f, pane[4].mPosTopLeftOrig.y - 240.0f, 0.0f);
 
-            mpEmitter2 = dComIfGp_particle_set2Dfore(dPa_name::ID_SCENE_83FB, &m00C);
+            mpEmitter2 = dComIfGp_particle_set2Dfore(dPa_name::ID_AK_S2_TITLEKIRAKIRA00, &m00C);
         } else if (m018 > 80 && m018 <= 115 && mpEmitter2 != NULL) {
             m00C.x += (pane[5].mPosTopLeftOrig.x - pane[4].mPosTopLeftOrig.x) / 35.0f;
 
@@ -316,7 +316,7 @@ void daTitle_proc_c::calc_2d_alpha() {
     } else {
         if (mpEmitter == NULL) {
             pos.set(pane[4].mPosTopLeftOrig.x - 320.0f, pane[4].mPosTopLeftOrig.y - 240.0f, 0.0f);
-            mpEmitter = dComIfGp_particle_set2Dback(dPa_name::ID_SCENE_83F9, &pos);
+            mpEmitter = dComIfGp_particle_set2Dback(dPa_name::ID_AK_S1_TITLESMOKE00, &pos);
         } else {
             pos.set(
                 ((pane[4].mPosTopLeftOrig.x - 320.0f) - m094) + attr().field_0x30,
@@ -359,7 +359,7 @@ void daTitle_proc_c::calc_2d_alpha() {
         angle.y = 0;
         angle.z = (s16)cM_rndFX(4000.0f);
 
-        dComIfGp_particle_set2Dback(dPa_name::ID_SCENE_83FA, &pos, &angle);
+        dComIfGp_particle_set2Dback(dPa_name::ID_AK_S1_TITLEWIND00, &pos, &angle);
     } else {
         m020 -= 1;
     }

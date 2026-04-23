@@ -173,7 +173,7 @@ void daDaiocta_c::_coHit(fopAc_ac_c* i_actor) {
         if ((mMode == MODE_WAIT || mMode == MODE_DAMAGE_BOMB || 
             mMode == MODE_APPEAR || mMode == MODE_DAMAGE) && 
             bomb_p->chk_state(daBomb_c::STATE_4)) {
-            modeProc(PROC_INIT, MODE_DAMAGE_BOMB);
+            modeProc(PROC_INIT_e, MODE_DAMAGE_BOMB);
         }
     }
 }
@@ -291,17 +291,17 @@ BOOL daDaiocta_c::createAwaHeap() {
         }
 
         if (!mAwaBckAnms[i].init(modelData, bck, TRUE, 
-                                J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
+                                J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
 
         if (!mAwaBtkAnms[i].init(modelData, btk, TRUE, 
-                                J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+                                J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
 
         if (!mAwaBrkAnms[i].init(modelData, brk, TRUE, 
-                                J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+                                J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
     }
@@ -574,7 +574,7 @@ void daDaiocta_c::setEffect(u16 effect_name) {
     csXyz particle_angle(shape_angle);
 
     switch (effect_name) {
-        case dPa_name::ID_SCENE_81FE:
+        case dPa_name::ID_IT_SN_DO_APPSHIBUKI00:
 #if VERSION > VERSION_DEMO
             if (!mParticleCallback.getEmitter()) {
                 dComIfGp_particle_set(
@@ -591,22 +591,22 @@ void daDaiocta_c::setEffect(u16 effect_name) {
             );
 #endif
             break;
-        case dPa_name::ID_SCENE_81FF:
-        case dPa_name::ID_SCENE_8200:
-        case dPa_name::ID_SCENE_8201:
-        case dPa_name::ID_SCENE_8202:
-        case dPa_name::ID_SCENE_8203:
-        case dPa_name::ID_SCENE_8204:
-        case dPa_name::ID_SCENE_8205:
+        case dPa_name::ID_IT_SN_DO_HITA_SHIBUKIA00:
+        case dPa_name::ID_IT_SN_DO_HITA_SHIBUKIB00:
+        case dPa_name::ID_IT_SN_DO_HITB_SHIBUKIA00:
+        case dPa_name::ID_IT_SN_DO_HITB_SHIBUKIB00:
+        case dPa_name::ID_IT_SN_DO_HITC_SHIBUKIA00:
+        case dPa_name::ID_IT_SN_DO_HITC_SHIBUKIB00:
+        case dPa_name::ID_IT_SN_DO_DOWNSHIBUKI00:
             dComIfGp_particle_set(
                 effect_name, &particle_pos, NULL, NULL, 
                 0xFF, NULL, -1, &sea_color_ambient
             );
             break;
-        case dPa_name::ID_SCENE_8207:
-        case dPa_name::ID_SCENE_8208:
-        case dPa_name::ID_SCENE_8209:
-        case dPa_name::ID_SCENE_82CC:
+        case dPa_name::ID_IT_SN_DO_SUIKOMIA00:
+        case dPa_name::ID_IT_SN_DO_SUIKOMIB00:
+        case dPa_name::ID_IT_SN_DO_SUIKOMIC00:
+        case dPa_name::ID_IT_SN_DO_HAKIDASHI00:
             dComIfGp_particle_set(
                 effect_name, &particle_pos, &particle_angle, NULL, 
                 0xFF, NULL, -1, &sea_color_ambient
@@ -884,7 +884,7 @@ void daDaiocta_c::modeHide() {
     f32 dist_xz = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
     if ((dist_xz < mAppearRadius || dist_xz < l_HIO.mMinAppearRadius) && 
         dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
-        modeProc(PROC_INIT, MODE_APPEAR);
+        modeProc(PROC_INIT_e, MODE_APPEAR);
     }    
 }
 
@@ -903,16 +903,15 @@ void daDaiocta_c::modeAppearInit() {
 
 #if VERSION > VERSION_JPN
     fopAc_ac_c* auzu_p;
-
-    if (fopAcM_SearchByID(mpAuzu, &auzu_p) && auzu_p) {
+    if (fopAcM_SearchByID(mAuzuId, &auzu_p) && auzu_p) {
         auzu_p->current.pos = auzu_pos;
     }
 #else 
     int auzu_parameters = 0x1100FF;
-    mpAuzu = fopAcM_create(PROC_Obj_Auzu, auzu_parameters, &auzu_pos, tevStr.mRoomNo);
+    mAuzuId = fopAcM_create(PROC_Obj_Auzu, auzu_parameters, &auzu_pos, tevStr.mRoomNo);
 #endif
 
-    setEffect(dPa_name::ID_SCENE_81FE);
+    setEffect(dPa_name::ID_IT_SN_DO_APPSHIBUKI00);
     mDoAud_bgmAllMute(90);
     for (int i = 0; i < ARRAY_SSIZE(mDaioctaEyePcId); i++) {
         daDaiocta_Eye_c* big_octo_eye_p;
@@ -925,7 +924,7 @@ void daDaiocta_c::modeAppearInit() {
 /* 000020C8-0000236C       .text modeAppear__11daDaiocta_cFv */
 void daDaiocta_c::modeAppear() {
     if (isDamageEye()) {
-        modeProc(PROC_INIT, MODE_DAMAGE);
+        modeProc(PROC_INIT_e, MODE_DAMAGE);
     }
 
     if (DEMO_SELECT(mpEmitter, mParticleCallback.getEmitter())) {
@@ -952,7 +951,7 @@ void daDaiocta_c::modeAppear() {
             );
     }
 
-    daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(mpAuzu);
+    daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(mAuzuId);
     if (auzu_p) {
         auzu_p->to_appear();
         if (auzu_p->is_appear()) {
@@ -968,7 +967,7 @@ void daDaiocta_c::modeAppear() {
             }
 
             if (dist <= 0.1) {
-                modeProc(PROC_INIT, MODE_WAIT);
+                modeProc(PROC_INIT_e, MODE_WAIT);
             } else {
                 s16 target = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
                 cLib_addCalcAngleS2(&shape_angle.y, target, 4, l_HIO.m010);
@@ -980,7 +979,7 @@ void daDaiocta_c::modeAppear() {
 /* 0000236C-000023B0       .text modeWaitInit__11daDaiocta_cFv */
 void daDaiocta_c::modeWaitInit() {
     if (isDead()) {
-        modeProc(PROC_INIT, MODE_DELETE);
+        modeProc(PROC_INIT_e, MODE_DELETE);
     }
 }
 
@@ -988,25 +987,25 @@ void daDaiocta_c::modeWaitInit() {
 void daDaiocta_c::modeWait() {
     current.pos.y = mWaterY;
     if (isDead() || l_HIO.m006 != 0) {
-        modeProc(PROC_INIT, MODE_DELETE);
+        modeProc(PROC_INIT_e, MODE_DELETE);
     } else if (isDamageEye()) {
-        modeProc(PROC_INIT, MODE_DAMAGE);
+        modeProc(PROC_INIT_e, MODE_DAMAGE);
     } else if (isDamageBombEye()) {
-        modeProc(PROC_INIT, MODE_DAMAGE_BOMB);
+        modeProc(PROC_INIT_e, MODE_DAMAGE_BOMB);
     }
 }
 
 /* 00002458-000024D8       .text modeDamageInit__11daDaiocta_cFv */
 void daDaiocta_c::modeDamageInit() {
     if (isDead()) {
-        modeProc(PROC_INIT, MODE_DELETE);
+        modeProc(PROC_INIT_e, MODE_DELETE);
     } else {
         mPrmIdx = 2;
         setAnm();
         mPrmIdx = 4;
 
-        setEffect(dPa_name::ID_SCENE_8201);
-        setEffect(dPa_name::ID_SCENE_8202);
+        setEffect(dPa_name::ID_IT_SN_DO_HITB_SHIBUKIA00);
+        setEffect(dPa_name::ID_IT_SN_DO_HITB_SHIBUKIB00);
     }
 }
 
@@ -1014,18 +1013,18 @@ void daDaiocta_c::modeDamageInit() {
 void daDaiocta_c::modeDamage() {
     current.pos.y = mWaterY;
     if (isDead()) {
-        modeProc(PROC_INIT, MODE_DELETE);
+        modeProc(PROC_INIT_e, MODE_DELETE);
     } else if (isDamageEye()) {
-        modeProc(PROC_INIT, MODE_DAMAGE);
+        modeProc(PROC_INIT_e, MODE_DAMAGE);
     } else if (isDamageBombEye()) {
-        modeProc(PROC_INIT, MODE_DAMAGE_BOMB);
+        modeProc(PROC_INIT_e, MODE_DAMAGE_BOMB);
     }
 
     if (mPrmIdx == 2) {
         if (std::fabsf(current.pos.y - mWaterY) <= 0.1) {
-            modeProc(PROC_INIT, MODE_WAIT);
+            modeProc(PROC_INIT_e, MODE_WAIT);
         } else {
-            modeProc(PROC_INIT, MODE_APPEAR);
+            modeProc(PROC_INIT_e, MODE_APPEAR);
         }
     }
 }
@@ -1033,14 +1032,14 @@ void daDaiocta_c::modeDamage() {
 /* 000025C4-0000268C       .text modeDamageBombInit__11daDaiocta_cFv */
 void daDaiocta_c::modeDamageBombInit() {
     if (isDead()) {
-        modeProc(PROC_INIT, MODE_DELETE);
+        modeProc(PROC_INIT_e, MODE_DELETE);
     } else {
         fopAcM_seStart(this, JA_SE_LK_LAST_HIT, 0);
         mPrmIdx = 2;
         setAnm();
         mPrmIdx = 3;
-        setEffect(dPa_name::ID_SCENE_81FF);
-        setEffect(dPa_name::ID_SCENE_8200);
+        setEffect(dPa_name::ID_IT_SN_DO_HITA_SHIBUKIA00);
+        setEffect(dPa_name::ID_IT_SN_DO_HITA_SHIBUKIB00);
     }
 }
 
@@ -1048,18 +1047,18 @@ void daDaiocta_c::modeDamageBombInit() {
 void daDaiocta_c::modeDamageBomb() {
     current.pos.y = mWaterY;
     if (isDead()) {
-        modeProc(PROC_INIT, MODE_DELETE);
+        modeProc(PROC_INIT_e, MODE_DELETE);
     } else if (isDamageEye()) {
-        modeProc(PROC_INIT, MODE_DAMAGE);
+        modeProc(PROC_INIT_e, MODE_DAMAGE);
     } else if (isDamageBombEye()) {
-        modeProc(PROC_INIT, MODE_DAMAGE_BOMB);
+        modeProc(PROC_INIT_e, MODE_DAMAGE_BOMB);
     } 
     
     if (mPrmIdx == 2) {
         if (std::fabsf(current.pos.y - mWaterY) <= 0.1) {
-            modeProc(PROC_INIT, MODE_WAIT);
+            modeProc(PROC_INIT_e, MODE_WAIT);
         } else {
-            modeProc(PROC_INIT, MODE_APPEAR);
+            modeProc(PROC_INIT_e, MODE_APPEAR);
         }
     }
 }
@@ -1067,9 +1066,9 @@ void daDaiocta_c::modeDamageBomb() {
 /* 00002778-000028FC       .text modeDemoInit__11daDaiocta_cFv */
 void daDaiocta_c::modeDemoInit() {
     attention_info.flags = 0;
-    setEffect(dPa_name::ID_SCENE_8207);
-    setEffect(dPa_name::ID_SCENE_8208);
-    setEffect(dPa_name::ID_SCENE_8209);
+    setEffect(dPa_name::ID_IT_SN_DO_SUIKOMIA00);
+    setEffect(dPa_name::ID_IT_SN_DO_SUIKOMIB00);
+    setEffect(dPa_name::ID_IT_SN_DO_SUIKOMIC00);
     J3DModelData* model_data_p = mpSuikomiModel->getModelData();
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_GDO_SUI00));
@@ -1173,7 +1172,7 @@ void daDaiocta_c::modeDemo() {
         }
 
         if (strcmp(cut_name, "HAKIDASU") == 0) {
-            fopAc_ac_c* actor_p = fopAcM_SearchByID(mpAuzu);
+            fopAc_ac_c* actor_p = fopAcM_SearchByID(mAuzuId);
             actor_p->current.pos = current.pos;
             actor_p->current.pos.y += 20.0f;
             if (s32(mpMorf->getFrame()) == 26) {
@@ -1223,8 +1222,8 @@ void daDaiocta_c::modeDeleteInit() {
     fopAcM_seStart(this, JA_SE_CV_DO_DIE, 0);
     fopAcM_seStart(this, JA_SE_CM_DO_JITABATA, 0);
     fopAcM_seStart(this, JA_SE_LK_LAST_HIT, 0);
-    setEffect(dPa_name::ID_SCENE_8203);
-    setEffect(dPa_name::ID_SCENE_8204);
+    setEffect(dPa_name::ID_IT_SN_DO_HITC_SHIBUKIA00);
+    setEffect(dPa_name::ID_IT_SN_DO_HITC_SHIBUKIB00);
 }
 
 /* 00003284-000036A8       .text modeDelete__11daDaiocta_cFv */
@@ -1238,8 +1237,8 @@ void daDaiocta_c::modeDelete() {
             mPrmIdx = 5;
             if (mPrmIdx == 5 && mpMorf->isStop()) {
                 fopAcM_monsSeStart(this, JA_SE_CV_DO_SINK, 0);
-                setEffect(dPa_name::ID_SCENE_8205);
-                daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(mpAuzu);
+                setEffect(dPa_name::ID_IT_SN_DO_DOWNSHIBUKI00);
+                daObjAuzu::Act_c* auzu_p = (daObjAuzu::Act_c *) fopAcM_SearchByID(mAuzuId);
                 auzu_p->to_disappear();
                 dComIfGp_getVibration().StartQuake(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 dComIfGp_evmng_cutEnd(staff_id);
@@ -1297,10 +1296,10 @@ void daDaiocta_c::modeProc(daDaiocta_c::Proc_e i_procType, daDaiocta_c::Mode_e i
         { &daDaiocta_c::modeDemoInit,       &daDaiocta_c::modeDemo,       "DEMO"        }
     };
 
-    if (i_procType == PROC_INIT) {
+    if (i_procType == PROC_INIT_e) {
         mMode = i_modeProc;
         (this->*mode_tbl[mMode].mInitFunc)();
-    } else if (i_procType == PROC_EXEC) {
+    } else if (i_procType == PROC_EXEC_e) {
         (this->*mode_tbl[mMode].mUpdFunc)();
     }
 }
@@ -1344,7 +1343,7 @@ void daDaiocta_c::setAnm() {
 
     if (mAnmIdx == 6) {
         if (mpMorf->getFrame() == 1.0f) {
-            setEffect(dPa_name::ID_SCENE_82CC);
+            setEffect(dPa_name::ID_IT_SN_DO_HAKIDASHI00);
         }
         if (mpMorf->getFrame() == 26.0f) {
             dComIfGp_getVibration().StartShock(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
@@ -1410,7 +1409,7 @@ bool daDaiocta_c::_execute() {
             mMode != MODE_DEMO && 
             mMode != MODE_DELETE && 
             dist_angle_s < l_HIO.m012) {
-            modeProc(PROC_INIT, MODE_DEMO);
+            modeProc(PROC_INIT_e, MODE_DEMO);
         }
 #if VERSION > VERSION_DEMO
     }
@@ -1437,7 +1436,7 @@ bool daDaiocta_c::_execute() {
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
     }
 
-    modeProc(PROC_EXEC, MODE_NULL);
+    modeProc(PROC_EXEC_e, MODE_NULL);
 
     if (mMode != MODE_HIDE) {
         setCollision();
@@ -1603,7 +1602,7 @@ void daDaiocta_c::getArg() {
 void daDaiocta_c::createInit() {
     m220C = current.pos;
     initAwa();
-    modeProc(PROC_INIT, MODE_HIDE);
+    modeProc(PROC_INIT_e, MODE_HIDE);
     initMtx();
     attention_info.flags = 0;
     shape_angle = current.angle;
@@ -1662,7 +1661,7 @@ void daDaiocta_c::createInit() {
     }
 
 #if VERSION > VERSION_JPN
-    mpAuzu = fopAcM_create(
+    mAuzuId = fopAcM_create(
         PROC_Obj_Auzu, 
         0x1100FF, 
         &current.pos, 

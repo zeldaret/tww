@@ -21,7 +21,8 @@ dPath* set_path_info(fopAc_ac_c* i_this) {
 
 /* 000000C0-000000F0       .text set_next_path_info__FP13kytag02_classP5dPath */
 dPath* set_next_path_info(kytag02_class* i_this, dPath* path) {
-    return dPath_GetNextRoomPath(path, fopAcM_GetRoomNo(i_this));
+    fopAc_ac_c* actor = &i_this->actor;
+    return dPath_GetNextRoomPath(path, fopAcM_GetRoomNo(actor));
 }
 
 /* 000000F0-0000017C       .text get_railwind_vec__FP5dPathi */
@@ -48,7 +49,7 @@ dPath* get_nearpos_rail(kytag02_class* i_this, dPath* i_path, cXyz* pos, int* i_
 
     bestIdx = 0;
     path = i_path;
-    best = 1000000000.0f;
+    best = 1000000000.0f; // This is not G_CM3D_F_INF
     bestPath = i_path;
 
     while (true) {
@@ -113,8 +114,8 @@ static BOOL daKytag02_Delete(kytag02_class* i_this) {
 /* 00000420-0000047C       .text daKytag02_Create__FP10fopAc_ac_c */
 static cPhs_State daKytag02_Create(fopAc_ac_c* i_this) {
     kytag02_class* a_this = (kytag02_class*)i_this;
-    fopAcM_SetupActor(a_this, kytag02_class);
-    a_this->mpPath = set_path_info(a_this);
+    fopAcM_SetupActor(i_this, kytag02_class);
+    a_this->mpPath = set_path_info(i_this);
     return cPhs_COMPLEATE_e;
 }
 

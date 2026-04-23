@@ -51,7 +51,7 @@ void HeapCheck::CheckHeap1() {
         mMaxTotalFreeSize = freeSize;
 }
 
-char mDoMain::COPYDATE_STRING[18] = "\?\?/\?\?/?? ??:??:??";
+char mDoMain::COPYDATE_STRING[] = "\?\?/\?\?/?? ??:??:??";
 
 static HeapCheck RootHeapCheck = {
     "Root", NULL, 0, 0x7FFFFFFF, 0x1400000, 0x140, 0x10000, 0, 0,
@@ -366,7 +366,7 @@ s32 LOAD_COPYDATE(void*) {
 
     if (status) {
         DVDReadPrio(&fileInfo, &buffer, 32, 0, 2);
-        memcpy(mDoMain::COPYDATE_STRING, buffer, 17);
+        memcpy(mDoMain::COPYDATE_STRING, buffer, sizeof(mDoMain::COPYDATE_STRING)-1);
         status = DVDClose(&fileInfo);
     }
     return status;

@@ -52,7 +52,7 @@ struct DynamicModuleControl : DynamicModuleControlBase {
     virtual const char* getModuleName() const { return mName; }
     virtual int getModuleSize() const;
     virtual const char* getModuleTypeString() const;
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     virtual void dump2();
 #endif
     virtual bool do_load();
@@ -73,7 +73,7 @@ struct DynamicModuleControl : DynamicModuleControlBase {
     /* 0x20 */ u8 mResourceType;
     /* 0x21 */ u8 unk_33;
     /* 0x22 */ u16 mChecksum;
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     /* 0x24 */ s32 mSize;
 #endif
     /* 0x28 */ mDoDvdThd_callback_c* mAsyncLoadCallback;

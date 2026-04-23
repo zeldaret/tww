@@ -455,7 +455,7 @@ BOOL daNpc_Cb1_c::createHeap() {
 
     mpPropellerModel->setUserArea((u32)this);
 
-    if(!mPropellerBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", CB_BCK_M_OPEN), FALSE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
+    if(!mPropellerBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", CB_BCK_M_OPEN), FALSE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 
@@ -466,7 +466,7 @@ BOOL daNpc_Cb1_c::createHeap() {
         return FALSE;
     }
 
-    if(!mNutBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", CB_BCK_NUT_SOW), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
+    if(!mNutBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", CB_BCK_NUT_SOW), TRUE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 
@@ -747,7 +747,7 @@ BOOL daNpc_Cb1_c::flyAction(BOOL param_1, f32 param_2, s16 param_3, BOOL param_4
         }
         else if(mpMorf->checkFrame(6.0f)) {
             fopAcM_seStart(this, JA_SE_CM_PRAPELLO_OPEN, 0);
-            JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_830B, &current.pos);
+            JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_PERAPROOPEN00, &current.pos);
             if(emitter) {
                 emitter->setGlobalRTMatrix(mpPropellerModel->getAnmMtx(m_center_jnt_num));
             }

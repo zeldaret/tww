@@ -113,7 +113,7 @@ bool Act_c::create_heap() {
     JUT_ASSERT(475, btk_data != NULL);
 
     mpBtk = new mDoExt_btkAnm();
-    if (mpBtk != NULL && mpBtk->init(modelData, btk_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+    if (mpBtk != NULL && mpBtk->init(modelData, btk_data, true, J3DFrameCtrl::EMode_LOOP)) {
         bVar1 = TRUE;
     }
 
@@ -498,7 +498,7 @@ bool Act_c::_execute() {
 }
 
 /* 00001C90-00001D20       .text set_material__Q210daTagLight5Act_cFP11J3DMaterialUc */
-void Act_c::set_material(J3DMaterial* material, unsigned char alpha) {
+void Act_c::set_material(J3DMaterial* material, u8 alpha) {
     while (material != NULL) {
         if (alpha == 0) {
             material->getShape()->hide();
@@ -534,9 +534,11 @@ bool Act_c::_draw() {
         }
 
         J3DModelData* modelData = mpModel->getModelData();
-        u8 tmp = (s8)(m308 * 255.5f);
-        set_material(modelData->getJointNodePointer(1)->getMesh(), tmp);
-        set_material(modelData->getJointNodePointer(2)->getMesh(), tmp);
+        s8 tmp = (m308 * 255.5f);
+        // Fakematch?
+        u8 tmp2 = tmp;
+        set_material(modelData->getJointNodePointer(1)->getMesh(), (u8)tmp2);
+        set_material(modelData->getJointNodePointer(2)->getMesh(), (u8)tmp2);
         mDoExt_modelUpdateDL(mpModel);
     }
     return true;

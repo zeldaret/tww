@@ -506,11 +506,11 @@ void daNpc_Nz_c::modeProc(daNpc_Nz_c::Proc_e proc, int newMode) {
         }
     };
 
-    if(proc == PROC_INIT) {
+    if(proc == PROC_INIT_e) {
         mCurMode = newMode;
         (this->*mode_tbl[mCurMode].init)();
     }
-    else if(proc == PROC_EXEC) {
+    else if(proc == PROC_EXEC_e) {
         (this->*mode_tbl[mCurMode].run)();
     }
 }
@@ -809,7 +809,7 @@ void daNpc_Nz_c::anmAtr(u16 i_msgStatus) {
 bool daNpc_Nz_c::_execute() {
     cLib_addCalc2(&speedF, field_0x6EC, 0.3f, 4.0f);
     checkOrder();
-    modeProc(PROC_EXEC, 2);
+    modeProc(PROC_EXEC_e, 2);
     LookBack();
     eventOrder();
     setAttention();
@@ -911,7 +911,7 @@ void daNpc_Nz_c::setSmokeParticle() {
     }
 
     if(field_0x914.getEmitter() == NULL) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &current.pos, &current.angle, 0, 0xB9, &field_0x914, fopAcM_GetRoomNo(this));
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &current.pos, &current.angle, 0, 0xB9, &field_0x914, fopAcM_GetRoomNo(this));
         if(emitter) {
             emitter->setRate(3.0f);
             emitter->setSpread(0.2f);

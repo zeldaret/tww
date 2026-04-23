@@ -17,9 +17,7 @@ dCloth_packet_c::dCloth_packet_c(
 ) {
     JUT_ASSERT(43, i_toonimage != NULL);
 
-#if VERSION == VERSION_DEMO
     GXBool mipmap = i_toonimage->mipmapCount > 1;
-#endif
 
     GXInitTexObj(
         getToonTexObjP(),
@@ -29,11 +27,7 @@ dCloth_packet_c::dCloth_packet_c(
         (GXTexFmt)i_toonimage->format,
         (GXTexWrapMode)i_toonimage->wrapS,
         (GXTexWrapMode)i_toonimage->wrapT,
-#if VERSION == VERSION_DEMO
         mipmap
-#else
-        i_toonimage->mipmapCount > 1
-#endif
     );
     GXInitTexObjLOD(
         getTexObjP(),
@@ -54,12 +48,7 @@ dCloth_packet_c::dCloth_packet_c(
     mpTevstr = tevstr;
     mCurArr = 0;
 
-#if VERSION == VERSION_DEMO
-    const MtxP mtx = mDoMtx_getIdentity();
-    setMtx(mtx);
-#else
-    setMtx(g_mDoMtx_identity);
-#endif
+    setMtx(cMtx_getIdentity());
 
     if (posArr == NULL) {
         mpPosArr[0] = new cXyz[mFlyGridSize * mHoistGridSize];
@@ -188,21 +177,12 @@ void dCloth_packet_c::draw() {
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
 
-#if VERSION == VERSION_DEMO
-    {
-        cXyz* pos = getPosP();
-        GXSetArray(GX_VA_POS, pos, sizeof(cXyz));
-        cXyz* nrm = getNrmP();
-        GXSetArray(GX_VA_NRM, nrm, sizeof(cXyz));
-    }
-#else
     GXSetArray(GX_VA_POS, getPosP(), sizeof(cXyz));
     GXSetArray(GX_VA_NRM, getNrmP(), sizeof(cXyz));
-#endif
 
     TexObjLoad();
     GXLoadTexObj(getToonTexObjP(), GX_TEXMAP1);
@@ -211,14 +191,7 @@ void dCloth_packet_c::draw() {
     mDoMtx_stack_c::copy(mMtx);
     mDoMtx_stack_c::scaleM(mScale);
     Mtx mtx;
-#if VERSION == VERSION_DEMO
-    {
-        MtxP calc_mtx = mDoMtx_stack_c::get();
-        MTXConcat(j3dSys.getViewMtx(), calc_mtx, mtx);
-    }
-#else
-    MTXConcat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mtx);
-#endif
+    cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mtx);
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXLoadNrmMtxImm(mtx, GX_PNMTX0);
 
@@ -228,14 +201,7 @@ void dCloth_packet_c::draw() {
 
     // Draw back
     GXSetCullMode(GX_CULL_FRONT);
-#if VERSION == VERSION_DEMO
-    {
-        cXyz* backNrm = getBackNrmP();
-        GXSetArray(GX_VA_NRM, backNrm, sizeof(cXyz));
-    }
-#else
     GXSetArray(GX_VA_NRM, getBackNrmP(), sizeof(cXyz));
-#endif
 
     plot();
 
@@ -396,9 +362,7 @@ void dCloth_packet_c::cloth_draw() {
 
 /* 80064330-8006441C       .text TexObjInit__15dCloth_packet_cFP7ResTIMG */
 void dCloth_packet_c::TexObjInit(ResTIMG* i_img) {
-#if VERSION == VERSION_DEMO
     GXBool mipmap = i_img->mipmapCount > 1;
-#endif
 
     GXInitTexObj(
         getTexObjP(),
@@ -408,11 +372,7 @@ void dCloth_packet_c::TexObjInit(ResTIMG* i_img) {
         GXTexFmt(i_img->format),
         GXTexWrapMode(i_img->wrapS),
         GXTexWrapMode(i_img->wrapT),
-#if VERSION == VERSION_DEMO
         mipmap
-#else
-        i_img->mipmapCount > 1
-#endif
     );
     GXInitTexObjLOD(
         getTexObjP(),
@@ -488,11 +448,12 @@ void dCloth_packet_c::plot() {
         float yPos = 0.0f;
         for (int y = 0; y < mHoistGridSize; y++) {
             GXPosition1x8(x + y * mFlyGridSize);
-            GXPosition1x8(x + y * mFlyGridSize);
-            GXPosition2f32(xPos, yPos);
+            GXNormal1x8(x + y * mFlyGridSize);
+            GXTexCoord2f32(xPos, yPos);
+
             GXPosition1x8(xNext + y * mFlyGridSize);
-            GXPosition1x8(xNext + y * mFlyGridSize);
-            GXPosition2f32(xPos + xStep, yPos);
+            GXNormal1x8(xNext + y * mFlyGridSize);
+            GXTexCoord2f32(xPos + xStep, yPos);
 
             yPos += yStep;
         }
@@ -655,9 +616,7 @@ void dClothVobj03_c::cloth_move() {
 /* 8006515C-80065268       .text TexObjInit__14dClothVobj03_cFP7ResTIMG */
 void dClothVobj03_c::TexObjInit(ResTIMG* timg) {
     GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
-#if VERSION == VERSION_DEMO
-    const GXBool mipmap = timg->mipmapCount > 1;
-#endif
+    GXBool mipmap = timg->mipmapCount > 1;
 
     GXInitTexObjCI(
         getTexObjP(),
@@ -667,11 +626,7 @@ void dClothVobj03_c::TexObjInit(ResTIMG* timg) {
         GXCITexFmt(timg->format),
         GXTexWrapMode(timg->wrapS),
         GXTexWrapMode(timg->wrapT),
-#if VERSION == VERSION_DEMO
         mipmap,
-#else
-        timg->mipmapCount > 1,
-#endif
         0
     );
 
@@ -762,9 +717,7 @@ void dClothVobj04_c::cloth_move() {
 /* 80065700-8006580C       .text TexObjInit__14dClothVobj04_cFP7ResTIMG */
 void dClothVobj04_c::TexObjInit(ResTIMG* timg) {
     GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
-#if VERSION == VERSION_DEMO
-    const GXBool mipmap = timg->mipmapCount > 1;
-#endif
+    GXBool mipmap = timg->mipmapCount > 1;
 
     GXInitTexObjCI(
         getTexObjP(),
@@ -774,11 +727,7 @@ void dClothVobj04_c::TexObjInit(ResTIMG* timg) {
         GXCITexFmt(timg->format),
         GXTexWrapMode(timg->wrapS),
         GXTexWrapMode(timg->wrapT),
-#if VERSION == VERSION_DEMO
         mipmap,
-#else
-        timg->mipmapCount > 1,
-#endif
         0
     );
 
@@ -869,9 +818,7 @@ void dClothVobj05_c::cloth_move() {
 /* 80065CA0-80065DAC       .text TexObjInit__14dClothVobj05_cFP7ResTIMG */
 void dClothVobj05_c::TexObjInit(ResTIMG* timg) {
     GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
-#if VERSION == VERSION_DEMO
-    const GXBool mipmap = timg->mipmapCount > 1;
-#endif
+    GXBool mipmap = timg->mipmapCount > 1;
 
     GXInitTexObjCI(
         getTexObjP(),
@@ -881,11 +828,7 @@ void dClothVobj05_c::TexObjInit(ResTIMG* timg) {
         GXCITexFmt(timg->format),
         GXTexWrapMode(timg->wrapS),
         GXTexWrapMode(timg->wrapT),
-#if VERSION == VERSION_DEMO
         mipmap,
-#else
-        timg->mipmapCount > 1,
-#endif
         0
     );
 
@@ -982,9 +925,7 @@ void dClothVobj07_0_c::cloth_move() {
 /* 8006625C-80066368       .text TexObjInit__16dClothVobj07_0_cFP7ResTIMG */
 void dClothVobj07_0_c::TexObjInit(ResTIMG* timg) {
     GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
-#if VERSION == VERSION_DEMO
-    const GXBool mipmap = timg->mipmapCount > 1;
-#endif
+    GXBool mipmap = timg->mipmapCount > 1;
 
     GXInitTexObjCI(
         getTexObjP(),
@@ -994,11 +935,7 @@ void dClothVobj07_0_c::TexObjInit(ResTIMG* timg) {
         GXCITexFmt(timg->format),
         GXTexWrapMode(timg->wrapS),
         GXTexWrapMode(timg->wrapT),
-#if VERSION == VERSION_DEMO
         mipmap,
-#else
-        timg->mipmapCount > 1,
-#endif
         0
     );
 

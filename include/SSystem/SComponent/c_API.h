@@ -3,11 +3,10 @@
 
 #include "dolphin/types.h"
 
-typedef bool (*cAPIGph_Mthd)(void);
+typedef void (*cAPIGph_Mthd)(void);
 
-struct cAPIGph__Iface
-{
-    u8 * mpGInfo;
+struct cAPIGph__Iface {
+    void* mpGInfo;
     cAPIGph_Mthd mpCreate;
     cAPIGph_Mthd mpBeforeOfDraw;
     cAPIGph_Mthd mpAfterOfDraw;

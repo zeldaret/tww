@@ -122,7 +122,7 @@ void wait(bmdfoot_class* i_this) {
         MTXCopy(i_this->m2B4->getModel()->getAnmMtx(eff_id[i]), *calc_mtx);
         MtxPosition(&local_98, &i_this->m3F8[i]);
         if (i_this->m3F4 == 0) {
-            dComIfGp_particle_set(dPa_name::ID_SCENE_80ED, &i_this->m3F8[i], NULL, NULL, 0xFF, &i_this->m41C[i]);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMASIWAIT00, &i_this->m3F8[i], NULL, NULL, 0xFF, &i_this->m41C[i]);
         }
         if (i_this->m41C[i].getEmitter() != NULL) {
             if (iVar3 == 0) {
@@ -242,10 +242,10 @@ void attack_1(bmdfoot_class* i_this) {
             for (s32 i = 0; i < (s32)ARRAY_SIZE(jno); i++) {
                 MTXCopy(i_this->m2B4->getModel()->getAnmMtx(jno[i]), *calc_mtx);
                 MtxPosition(&local_5c, &cStack_68);
-                dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8065, &cStack_68, 0xFF, g_whiteColor, g_whiteColor, 0);
+                dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &cStack_68, 0xFF, g_whiteColor, g_whiteColor, 0);
             }
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8066, &i_this->mAE8, 0xFF, g_whiteColor, g_whiteColor, 0);
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_A06A, &i_this->mAE8, 0xB9, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKSOIL00, &i_this->mAE8, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_ST_O_BKMSATTACKSMOKE00, &i_this->mAE8, 0xB9, g_whiteColor, g_whiteColor, 0);
         }
         if (i_this->m2B4->isStop()) {
             i_this->m2BA = 0;
@@ -303,7 +303,7 @@ s32 ug_move(bmdfoot_class* i_this) {
         i_this->mBA8 = 2;
         fVar7 = cM_rndF(10000.0f);
         i_this->m2B8 = (s16)(int)fVar7;
-        dComIfGp_particle_setToon(dPa_name::ID_SCENE_A0FC, &i_this->mBAC, &i_this->mBB8, NULL, 0xB9, &i_this->m4B0, (u8)actor->current.roomNo);
+        dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BKMLATTACKSMOKE01, &i_this->mBAC, &i_this->mBB8, NULL, 0xB9, &i_this->m4B0, (u8)actor->current.roomNo);
         break;
     case 0xa:
         break;
@@ -373,9 +373,9 @@ void attack_2(bmdfoot_class* i_this) {
         if ((s32)i_this->m2B4->getFrame() == 49) {
             MTXCopy(i_this->m2B4->getModel()->getAnmMtx(0x11), *calc_mtx);
             MtxPosition(&local_3c, &local_48);
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8065, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8066, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_A06A, &local_48, 0xB9, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKSOIL00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_ST_O_BKMSATTACKSMOKE00, &local_48, 0xB9, g_whiteColor, g_whiteColor, 0);
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_IN_G, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         if (i_this->m2B4->isStop()) {
@@ -395,9 +395,9 @@ void attack_2(bmdfoot_class* i_this) {
     case 4:
         if ((s32)i_this->mAF4->getFrame() == 2) {
             local_48 = i_this->mBAC;
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8065, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8066, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_A06A, &local_48, 0xB9, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKSOIL00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_ST_O_BKMSATTACKSMOKE00, &local_48, 0xB9, g_whiteColor, g_whiteColor, 0);
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_OUT_G, &i_this->mBAC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         ug_move(i_this);
@@ -427,12 +427,12 @@ void attack_2(bmdfoot_class* i_this) {
     case 6:
         ug_move(i_this);
         if ((s32)i_this->mAF4->getFrame() == 12) {
-            dComIfGp_particle_set(dPa_name::ID_SCENE_80F9, &i_this->mBAC);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_80FA, &i_this->mBAC);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMLATTACKHOUSHI00, &i_this->mBAC);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMLATTACKSOIL00, &i_this->mBAC);
             i_this->m498[0].x = i_this->mBAC.x;
             i_this->m498[0].y = i_this->mBAC.y;
             i_this->m498[0].z = i_this->mBAC.z;
-            dComIfGp_particle_setToon(dPa_name::ID_SCENE_A0FB, &i_this->m498[0], NULL, NULL, 0xB9, &i_this->m458[0], (u8)actor->current.roomNo);
+            dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BKMLATTACKSMOKE00, &i_this->m498[0], NULL, NULL, 0xB9, &i_this->m458[0], (u8)actor->current.roomNo);
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_IN_G2, &i_this->mBAC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         if (i_this->mAF4->isStop()) {
@@ -446,12 +446,12 @@ void attack_2(bmdfoot_class* i_this) {
         if ((s32)i_this->m2B4->getFrame() == 13) {
             local_48 = actor->current.pos;
             local_48.y = i_this->mBAC.y;
-            dComIfGp_particle_set(dPa_name::ID_SCENE_80F9, &local_48);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_80FA, &local_48);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMLATTACKHOUSHI00, &local_48);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMLATTACKSOIL00, &local_48);
             i_this->m498[1].x = local_48.x;
             i_this->m498[1].y = local_48.y;
             i_this->m498[1].z = local_48.z;
-            dComIfGp_particle_setToon(dPa_name::ID_SCENE_A0FB, &i_this->m498[1], NULL, NULL, 0xB9, &i_this->m458[1], (u8)actor->current.roomNo);
+            dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BKMLATTACKSMOKE00, &i_this->m498[1], NULL, NULL, 0xB9, &i_this->m458[1], (u8)actor->current.roomNo);
         }
         if (i_this->m2B4->isStop()) {
             i_this->m2BA = 0;
@@ -744,7 +744,7 @@ s32 useHeapInit(bmdfoot_class* i_this) {
     i_this->btk = pmVar5;
     JUT_ASSERT(DEMO_SELECT(1416, 1426), i_this->btk);
     pAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BTK_ASI);
-    iVar7 = i_this->btk->init(pJVar9->getModelData(), pAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    iVar7 = i_this->btk->init(pJVar9->getModelData(), pAnm, true, J3DFrameCtrl::EMode_NONE);
 #if VERSION > VERSION_DEMO
     if (iVar7 == 0) {
         return FALSE;

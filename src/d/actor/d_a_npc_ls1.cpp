@@ -26,27 +26,27 @@ static int l_check_wrk;
 /* 000000EC-00000150       .text __ct__15daNpc_Ls1_HIO_cFv */
 daNpc_Ls1_HIO_c::daNpc_Ls1_HIO_c() {
     static hio_prm_c a_prm_tbl = {
-        0x2EE0,
-        0x4650,
-        0xFC18,
-        0xB9B0,
-        0x0BB8,
-        0x1B58,
-        0x0000,
-        0xE4A8,
-        0x1000,
-        0x0960,
-        110.0f,
-        0,
-        700.0f,
-        200.0f,
-        2.0f,
-        9.0f,
-        50.0f,
-        0x1A2C,
-        9.0f
+        /* mMaxHeadX            */ 0x2EE0,
+        /* mMaxHeadY            */ 0x4650,
+        /* mMinHeadX            */ 0xFC18,
+        /* mMinHeadY            */ 0xB9B0,
+        /* mMaxBackBoneX        */ 0x0BB8,
+        /* mMaxBackBoneY        */ 0x1B58,
+        /* mMinBackBoneX        */ 0x0000,
+        /* mMinBackBoneY        */ 0xE4A8,
+        /* mMaxTurnStep         */ 0x1000,
+        /* m12                  */ 0x0960,
+        /* mAttPosOffsetY       */ 110.0f,
+        /* m18                  */ 0,
+        /* m1C                  */ 700.0f,
+        /* m29                  */ 200.0f,
+        /* m24                  */ 2.0f,
+        /* m28                  */ 9.0f,
+        /* m2C                  */ 50.0f,
+        /* m30                  */ 0x1A2C,
+        /* mPlayerEyePosOffsetY */ 9.0f,
     };
-    memcpy(&mPrm, &a_prm_tbl, 0x38);
+    memcpy(&mPrm, &a_prm_tbl, sizeof(hio_prm_c));
     m04 = -1;
     m08 = -1;
 }
@@ -282,7 +282,6 @@ bool daNpc_Ls1_c::init_LS1_4() {
     return init_LS1_1();
 }
 
-extern dCcD_SrcCyl dNpc_cyl_src;
 /* 00000A60-00000C6C       .text createInit__11daNpc_Ls1_cFv */
 bool daNpc_Ls1_c::createInit() {
     for (int i = 0; i < ARRAY_SSIZE(mEventIDTbl); i++) {
@@ -562,14 +561,14 @@ void daNpc_Ls1_c::eye_ctrl() {
     }
 
     if (mpMatAnms[0]) {
-        cLib_addCalc(&mpMatAnms[0]->getNowOffsetX(), fVar2, 0.5f, 0.1f, 0.03f);
-        cLib_addCalc(&mpMatAnms[0]->getNowOffsetY(), fVar1, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(mpMatAnms[0]->getNowOffsetX(), fVar2, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(mpMatAnms[0]->getNowOffsetY(), fVar1, 0.5f, 0.1f, 0.03f);
     }
 
     fVar2 *= -1.0f;
     if (mpMatAnms[1]) {
-        cLib_addCalc(&mpMatAnms[1]->getNowOffsetX(), fVar2, 0.5f, 0.1f, 0.03f);
-        cLib_addCalc(&mpMatAnms[1]->getNowOffsetY(), fVar1, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(mpMatAnms[1]->getNowOffsetX(), fVar2, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(mpMatAnms[1]->getNowOffsetY(), fVar1, 0.5f, 0.1f, 0.03f);
     }
 }
 
@@ -2145,8 +2144,7 @@ BOOL daNpc_Ls1_c::_execute() {
         checkOrder();
         if (!demo()) {
             int staff_id = -1;
-            dBgS* bgs_p = dComIfG_Bgsp();
-            if (dComIfGp_event_getMode() != 0 && eventInfo.checkCommandTalk() == false) {
+            if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk() == false) {
                 staff_id = isEventEntry();
             }
 
@@ -2160,7 +2158,7 @@ BOOL daNpc_Ls1_c::_execute() {
 
             if (mType != 0) {
                 fopAcM_posMoveF(this, mStts.GetCCMoveP());
-                mObjAcch.CrrPos(*bgs_p);
+                mObjAcch.CrrPos(*dComIfG_Bgsp());
             }
 
             play_animation();

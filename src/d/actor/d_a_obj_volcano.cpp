@@ -58,43 +58,43 @@ void daObjVolcano::Act_c::StartFire() {
         }
     }
     this->field_0x2C8[0] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_805A, &this->field_0x4C4,
+                                            dPa_name::ID_AK_SN_O_FIRESHAFTHEAD, &this->field_0x4C4,
                                             &this->current.angle,
                                             &this->field_0x4AC);
     this->field_0x2C8[1] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_805B, &this->field_0x4D0,
+                                            dPa_name::ID_AK_SN_O_FIRESHAFTBODY, &this->field_0x4D0,
                                             &this->current.angle,
                                             &this->field_0x4AC);
     this->field_0x2C8[2] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_805C, &this->field_0x4DC,
+                                            dPa_name::ID_AK_SN_O_FIRESHAFTFOOT, &this->field_0x4DC,
                                             &this->current.angle,
                                             &this->field_0x4AC);
     this->field_0x2C8[3] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_8194, &this->current.pos,
+                                            dPa_name::ID_AK_SN_MINIKAZANSTEAM00, &this->current.pos,
                                             &this->current.angle,
                                             NULL);
     this->field_0x2C8[4] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_8195, &this->current.pos,
+                                            dPa_name::ID_AK_SN_MINIKAZANSTEAM01, &this->current.pos,
                                             &this->current.angle,
                                             NULL);
     this->field_0x2C8[5] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_8196, &this->current.pos,
+                                            dPa_name::ID_AK_SN_MINIKAZANSTEAM02, &this->current.pos,
                                             &this->current.angle,
                                             NULL);
     this->field_0x2C8[6] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_8197, &this->current.pos,
+                                            dPa_name::ID_AK_SN_MINIKAZANSTEAM03, &this->current.pos,
                                             &this->current.angle,
                                             NULL);
     this->field_0x2C8[7] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_8198, &this->current.pos,
+                                            dPa_name::ID_AK_SN_MINIKAZANSTEAM04, &this->current.pos,
                                             &this->current.angle,
                                             NULL);
     this->field_0x2C8[8] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_8199, &this->current.pos,
+                                            dPa_name::ID_AK_SN_MINIKAZANSTEAM05, &this->current.pos,
                                             &this->current.angle,
                                             NULL);
     this->field_0x2C8[9] = dComIfGp_particle_set(
-                                            dPa_name::ID_SCENE_819A, &this->current.pos,
+                                            dPa_name::ID_AK_SN_MINIKAZANSTEAM06, &this->current.pos,
                                             &this->current.angle,
                                             NULL);
 }
@@ -123,7 +123,7 @@ BOOL daObjVolcano::Act_c::CreateHeap() {
     J3DAnmTextureSRTKey * btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, YKZYG_BTK_QKZYG));
     JUT_ASSERT(0xca, btk != NULL);
 
-    s32 btkRet = field_0x2FC.init(model_data, btk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
+    s32 btkRet = field_0x2FC.init(model_data, btk, TRUE, J3DFrameCtrl::EMode_LOOP);
     J3DModelData * model_data_fire = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YKZYG_BDL_YMNKZ00));
     JUT_ASSERT(0xe1, model_data_fire != NULL);
 
@@ -131,11 +131,11 @@ BOOL daObjVolcano::Act_c::CreateHeap() {
     J3DAnmTextureSRTKey * btk_f = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, YKZYG_BTK_YMNKZ00));
     JUT_ASSERT(0xec, btk_f != NULL);
     
-    s32 btkFRet = field_0x314.init(model_data_fire, btk_f, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
+    s32 btkFRet = field_0x314.init(model_data_fire, btk_f, TRUE, J3DFrameCtrl::EMode_LOOP);
     
     J3DAnmTevRegKey * brk_f = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, YKZYG_BRK_YMNKZ00));
     JUT_ASSERT(0xf3, brk_f != NULL);
-    s32 brkRet = field_0x328.init(model_data_fire, brk_f, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE);
+    s32 brkRet = field_0x328.init(model_data_fire, brk_f, TRUE, J3DFrameCtrl::EMode_NONE);
 
     field_0x4F4 = 1;
     return field_0x2F8 != NULL && field_0x310 != NULL && btkRet != 0  && btkFRet != 0 && brkRet != 0;
@@ -285,21 +285,24 @@ void daObjVolcano::Act_c::daObjVolcano_freeze_demo_wait() {
         field_0x4E8 = 0;
         StopFire();
         dComIfGp_particle_set(
-            0x8191, &this->field_0x4B8,
+            dPa_name::ID_AK_SN_MINIKAZANICE00,
+            &this->field_0x4B8,
             &this->current.angle,
             &scale, 0xff,
             NULL, -1,
             NULL, NULL,
             NULL);
         dComIfGp_particle_set(
-            0x8192, &this->field_0x4B8,
+            dPa_name::ID_AK_SN_MINIKAZANSMOKE00,
+            &this->field_0x4B8,
             &this->current.angle,
             &scale, 0xff,
             NULL, -1,
             NULL, NULL,
             NULL);
         dComIfGp_particle_set(
-            0x8193, &this->field_0x4B8,
+            dPa_name::ID_AK_SN_MINIKAZANKIRA00,
+            &this->field_0x4B8,
             &this->current.angle,
             &scale, 0xff,
             NULL, -1,

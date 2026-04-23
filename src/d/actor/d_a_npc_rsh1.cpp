@@ -879,7 +879,7 @@ u16 daNpc_Rsh1_c::shop_talk() {
 
 /* 00001DE4-00001FE0       .text talk__12daNpc_Rsh1_cFv */
 u16 daNpc_Rsh1_c::talk() {
-    u16 result = 0xFF;
+    u16 status = 0xFF;
 
     if (m961 == 0) {
         l_msgId = fpcM_ERROR_PROCESS_ID_e;
@@ -904,10 +904,10 @@ u16 daNpc_Rsh1_c::talk() {
             setAnmFromMsgTag();
             switch (m961) {
                 case 2:
-                    result = normal_talk();
+                    status = normal_talk();
                     break;
                 case 3:
-                    result = shop_talk();
+                    status = shop_talk();
                     break;
             }
             if (dComIfGp_checkMesgSendButton()) {
@@ -933,7 +933,7 @@ u16 daNpc_Rsh1_c::talk() {
         mShopCamAct.m54 = mpShopItems->mSelectedItemIdx;
     }
 
-    return result;
+    return status;
 }
 
 /* 00001FE0-00002358       .text CreateInit__12daNpc_Rsh1_cFv */
@@ -1015,7 +1015,6 @@ static BOOL daNpc_Rsh1_checkRotenItemGet(int i_itemNo) {
     return roten_item_get_check;
 }
 
-extern Vec Item_set_pos_data_rshop_0[];
 /* 000023A8-00002568       .text createShopList__12daNpc_Rsh1_cFv */
 void daNpc_Rsh1_c::createShopList() {
     csXyz temp(0, home.angle.y, 0);

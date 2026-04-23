@@ -36,14 +36,14 @@ BOOL daKmon_c::CreateHeap() {
 
     J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(daKmon_c::m_arcname, ALWAYS_BTK_VBELL));
     JUT_ASSERT(176, pbtk != NULL);
-    if (!mBtkAnm.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+    if (!mBtkAnm.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
     mBtkAnm.setPlaySpeed(1.0);
 
     J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(daKmon_c::m_arcname, ALWAYS_BCK_VBELL));
     JUT_ASSERT(188, pbck != NULL);
-    if (!mBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false)) {
+    if (!mBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
     mBckAnm.setPlaySpeed(0.0);

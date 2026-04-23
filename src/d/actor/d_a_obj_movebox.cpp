@@ -1519,7 +1519,7 @@ namespace daObjMovebox {
         
         for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); i++) {
             JPABaseEmitter* emitter = dComIfGp_particle_setToon(
-                dPa_name::ID_COMMON_2022, &mSmokeCbs[i].field_0x20, &mSmokeCbs[i].field_0x2C,
+                dPa_name::ID_AK_JT_ELEMENTSMOKE00, &mSmokeCbs[i].field_0x20, &mSmokeCbs[i].field_0x2C,
                 &scl, 0xB9, &mSmokeCbs[i], fopAcM_GetRoomNo(this)
             );
             if (emitter) {
@@ -1716,7 +1716,7 @@ namespace daObjMovebox {
         cXyz particlePos;
         particlePos.set(current.pos.x, current.pos.y + 75.0f, current.pos.z);
         JPABaseEmitter* emitter = dComIfGp_particle_set(
-            dPa_name::ID_COMMON_03E6, &particlePos, NULL, NULL, 0xFF, NULL, -1,
+            dPa_name::ID_IT_JN_TR_HAHEN_B, &particlePos, NULL, NULL, 0xFF, NULL, -1,
             &tevStr.mColorK0, &tevStr.mColorK0, &particle_scale
         );
         if (emitter) {

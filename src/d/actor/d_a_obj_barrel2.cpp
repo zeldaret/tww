@@ -146,7 +146,6 @@ const daObjBarrel2::Attr_c daObjBarrel2::Act_c::M_attr[] = {
         /* m6C */ 5.0f,
         /* m70 */ 1.0f,
     },
-
     {
         /* m00 */ 0x5,
         /* m02 */ 0x9,
@@ -203,7 +202,7 @@ bool daObjBarrel2::Act_c::create_heap() {
 
     s32 iVar5 = 0;
     if (m29C != NULL) {
-        iVar5 = m29C->init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+        iVar5 = m29C->init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE);
     }
 
     if (m298 != NULL && iVar5 != 0) {
@@ -273,8 +272,15 @@ cPhs_State daObjBarrel2::Act_c::_create() {
             csXyz sp10(0, home.angle.y, 0);
             sp24.setall(attr()->m28 * attr()->m2C);
 
-            m458 =
-                fopAcM_createRaceItemFromTable(&sp30, prm_get_itemNo(), prm_get_itemSave(), fopAcM_GetHomeRoomNo(this), &sp10, &sp24, prm_get_coming() ? 1 : 0);
+            mItemId = fopAcM_createRaceItemFromTable(
+                &sp30,
+                prm_get_itemNo(),
+                prm_get_itemSave(),
+                fopAcM_GetHomeRoomNo(this),
+                &sp10,
+                &sp24,
+                prm_get_coming() ? 1 : 0
+            );
             m45C = 3.4028235e+38f;
             m468 = 0;
             m470 = 0;
@@ -699,9 +705,9 @@ void daObjBarrel2::Act_c::eff_break() {
     sp20.set(current.pos.x, current.pos.y + attr()->m14 * attr()->m50 * tmp, current.pos.z);
     sp2C.setall(tmp);
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_0460, &sp20, NULL, &sp2C);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_045F, &sp20, NULL, &sp2C);
-    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_03E6, &sp20, NULL, &sp2C, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TR2_SHIBUKI_B, &sp20, NULL, &sp2C);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TR2_SHIBUKI_A, &sp20, NULL, &sp2C);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_IT_JN_TR_HAHEN_B, &sp20, NULL, &sp2C, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
 
     if (emitter != NULL) {
         emitter->setLifeTime(30);
@@ -727,13 +733,13 @@ void daObjBarrel2::Act_c::eff_explode() {
     sp18.y = fopCamM_GetAngleY(camera) - -0x8000;
     sp18.z = 0;
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_LIGHT_FLASH, &sp20, &sp18, &sp2C);
-    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &sp20, NULL, &sp2C);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_BMEX_SENKO, &sp20, &sp18, &sp2C);
+    dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE02, &sp20, NULL, &sp2C);
     fopKyM_createWpillar(&current.pos, attr()->m6C, attr()->m70, 1);
-    dComIfGp_particle_setToon(dPa_name::ID_COMMON_2041, &sp20, NULL, &sp2C);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_003C, &sp20, NULL, &sp2C);
+    dComIfGp_particle_setToon(dPa_name::ID_IT_JT_WATERSMOKE00, &sp20, NULL, &sp2C);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_MIZUSHIBUKI_A, &sp20, NULL, &sp2C);
 
-    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_03E6, &sp20, NULL, &sp2C);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_IT_JN_TR_HAHEN_B, &sp20, NULL, &sp2C);
     if (emitter != NULL) {
         emitter->setLifeTime(40);
         emitter->setAwayFromAxisSpeed(10.0f);
@@ -797,7 +803,7 @@ void daObjBarrel2::Act_c::item_delete() {
 void daObjBarrel2::Act_c::item_give() {
     if (M_tmp_item_actor != NULL) {
         M_tmp_item_actor->raceItemForceGet();
-        m458 = fpcM_ERROR_PROCESS_ID_e;
+        mItemId = fpcM_ERROR_PROCESS_ID_e;
         m476 = 1;
         M_tmp_item_actor = NULL;
     }
@@ -806,19 +812,19 @@ void daObjBarrel2::Act_c::item_give() {
 /* 000022A4-0000233C       .text item_connect_check__Q212daObjBarrel25Act_cFv */
 void daObjBarrel2::Act_c::item_connect_check() {
     M_tmp_item_actor = NULL;
-    if (m458 != fpcM_ERROR_PROCESS_ID_e) {
+    if (mItemId != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* pRaceitem;
-        if (fopAcM_SearchByID(m458, &pRaceitem)) {
+        if (fopAcM_SearchByID(mItemId, &pRaceitem)) {
             daRaceItem_c* raceitem = (daRaceItem_c*)pRaceitem;
             if (raceitem != NULL) {
                 if (raceitem->checkOffsetPos()) {
                     M_tmp_item_actor = raceitem;
                 } else {
-                    m458 = fpcM_ERROR_PROCESS_ID_e;
+                    mItemId = fpcM_ERROR_PROCESS_ID_e;
                 }
             }
         } else {
-            m458 = fpcM_ERROR_PROCESS_ID_e;
+            mItemId = fpcM_ERROR_PROCESS_ID_e;
         }
     }
 }

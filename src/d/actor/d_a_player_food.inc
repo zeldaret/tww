@@ -39,8 +39,6 @@ BOOL daPy_lk_c::procFoodThrow_init() {
         return FALSE;
     }
 
-    dBgS* bgs = dComIfG_Bgsp(); // This is kinda weird, maybe fakematch
-
     if (!dComIfGp_event_runCheck()) {
         if (!dComIfGp_event_compulsory(this)) {
             return FALSE;
@@ -63,7 +61,7 @@ BOOL daPy_lk_c::procFoodThrow_init() {
         cXyz end;
         end.set(start.x + offset1, start.y, start.z + offset2);
         mLinkLinChk.Set(&start, &end, this);
-        if (bgs->LineCross(&mLinkLinChk)) {
+        if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
             end.x = start.x - offset1;
             end.z = start.z - offset2;
             mLinkLinChk.Set(&start, &end, this);

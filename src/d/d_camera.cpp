@@ -4823,7 +4823,7 @@ bool dCamera_c::eventCamera(s32) {
             m100 = 0;
             m11C = 0;
         }
-        lVar12 = dComIfGp_evmng_getMyActIdx(mEventData.mStaffIdx, ActionNames, ARRAY_SIZE(ActionNames), 0, 0);
+        lVar12 = dComIfGp_evmng_getMyActIdx(mEventData.mStaffIdx, ActionNames, ARRAY_SIZE(ActionNames), FALSE, 0);
     }
     else {
         mEventData.mStaffIdx = -1;
@@ -5411,27 +5411,27 @@ void store(camera_process_class* i_this) {
     cSAngle bank = fopCamM_GetBank(a_this);
     f32 fovy = fopCamM_GetFovy(a_this);
 
-    dDemo_camera_c* mDemoCamera = dComIfGp_demo_getCamera();
+    dDemo_camera_c* demoCamera = dComIfGp_demo_getCamera();
 
-    if (mDemoCamera) {
-        if (mDemoCamera->checkEnable(0x40)) {
-            oldCenter = mDemoCamera->getTarget();
+    if (demoCamera) {
+        if (demoCamera->checkEnable(0x40)) {
+            oldCenter = demoCamera->getTarget();
         }
 
-        if (mDemoCamera->checkEnable(0x10)) {
-            oldEye = mDemoCamera->getTrans();
+        if (demoCamera->checkEnable(0x10)) {
+            oldEye = demoCamera->getTrans();
         }
 
-        if (mDemoCamera->checkEnable(0x20)) {
-            oldUp = mDemoCamera->getUp();
+        if (demoCamera->checkEnable(0x20)) {
+            oldUp = demoCamera->getUp();
         }
 
-        if (mDemoCamera->checkEnable(0x80)) {
-            bank = cAngle::d2s(-mDemoCamera->getRoll());
+        if (demoCamera->checkEnable(0x80)) {
+            bank = cAngle::d2s(-demoCamera->getRoll());
         }
 
-        if (mDemoCamera->checkEnable(4)) {
-            fovy = mDemoCamera->getFovy();
+        if (demoCamera->checkEnable(4)) {
+            fovy = demoCamera->getFovy();
         }
     }
     else {

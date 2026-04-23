@@ -228,25 +228,25 @@ void daOship_c::createWave() {
     static const JGeometry::TVec3<f32> wave_r_direction(-0.5, 1.0f, -0.3f);
 
     if (!mWaveCallback1.getEmitter()) {
-        dComIfGp_particle_set(dPa_name::ID_COMMON_0037, &mWavePos, &mWaveRot, NULL, 0xFF, &mWaveCallback1);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWAVE00, &mWavePos, &mWaveRot, NULL, 0xFF, &mWaveCallback1);
         if (mWaveCallback1.getEmitter()) {
             mWaveCallback1.getEmitter()->setDirection(wave_l_direction);
         }
     }
 
     if (!mWaveCallback2.getEmitter()) {
-        dComIfGp_particle_set(dPa_name::ID_COMMON_0037, &mWavePos, &mWaveRot, NULL, 0xFF, &mWaveCallback2);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWAVE00, &mWavePos, &mWaveRot, NULL, 0xFF, &mWaveCallback2);
         if (mWaveCallback2.getEmitter()) {
             mWaveCallback2.getEmitter()->setDirection(wave_r_direction);
         }
     }
 
     if (!mSplashCallback.getEmitter()) {
-        dComIfGp_particle_set(dPa_name::ID_COMMON_0035, &mWavePos, &mWaveRot, NULL, 0xFF, &mSplashCallback);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPSPLASH00, &mWavePos, &mWaveRot, NULL, 0xFF, &mSplashCallback);
     }
 
     if (!mTrackCallback.getEmitter()) {
-        dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0036, &mTrackPos, &shape_angle, NULL, 0, &mTrackCallback);
+        dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_SHIPTAIL00, &mTrackPos, &shape_angle, NULL, 0, &mTrackCallback);
         JPABaseEmitter* emitter_p = mTrackCallback.getEmitter();
         if (emitter_p) {
             Vec vec_scale = { 3.0f, 3.0f, 3.0f };
@@ -366,7 +366,7 @@ bool daOship_c::checkTgHit() {
                 mSmokeRot[mSmokePtclCount] = shape_angle;
                 mSmokeRot[mSmokePtclCount].y += mSmokeRotY[mSmokePtclCount];
                 dComIfGp_particle_set(
-                    dPa_name::ID_COMMON_03E1, 
+                    dPa_name::ID_IT_JN_MJTAIHOU_SMOKE01, 
                     &mSmokePos, &mSmokeRot[mSmokePtclCount], 
                     &scale, 0xff, &mSmokeFollowCallback[mSmokePtclCount], 
                     fopAcM_GetRoomNo(this)
@@ -375,10 +375,10 @@ bool daOship_c::checkTgHit() {
             }
 
             daPy_py_c* player_p = (daPy_py_c *) dComIfGp_getPlayer(0);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &hit_pos);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &hit_pos);
             
             cXyz particle_scale(2.0f, 2.0f, 2.0f);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, &hit_pos, &player_p->shape_angle, &particle_scale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, &hit_pos, &player_p->shape_angle, &particle_scale);
         
             mHitTimer = 5;
 
@@ -777,12 +777,12 @@ void daOship_c::modeProc(daOship_c::Proc_e i_procType, int i_procNo) {
         { &daOship_c::modeRangeDInit, &daOship_c::modeRangeD, "RANGE_D" }
     };
     
-    if (i_procType == PROC_INIT) {
+    if (i_procType == PROC_INIT_e) {
         fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
         cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
         mCurrentProc = i_procNo;
         (this->*mode_tbl[mCurrentProc].mInitFunc)();
-    } else if (i_procType == PROC_EXEC) {
+    } else if (i_procType == PROC_EXEC_e) {
         (this->*mode_tbl[mCurrentProc].mUpdFunc)();
     }
 }
@@ -838,7 +838,7 @@ bool daOship_c::_execute() {
     cLib_addCalcAngleS2(&mAimRotX, mAimRotXTarget, 6, 0x300);
     cLib_addCalcAngleS2(&mAimRotY, mAimRotYTarget, 6, 0x300);
 
-    modeProc(PROC_EXEC, MODE_NULL);
+    modeProc(PROC_EXEC_e, MODE_NULL);
 
     mpModel->calc();
 

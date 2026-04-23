@@ -135,7 +135,7 @@ BOOL daObjMkie::Act_c::CreateHeap() {
 
     J3DAnmTevRegKey* brk_van = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, MKIEB_BRK_YLSMF00);
     JUT_ASSERT(0x1a5, brk_van != NULL);
-    int init = mBrkVan.init(model_data_van, brk_van, true, 0, 1.0f, 0, -1, false, 0);
+    int init = mBrkVan.init(model_data_van, brk_van, true, J3DFrameCtrl::EMode_NONE);
 
     bool ret = false;
     if (mModelBase != NULL && mModelVan != NULL && init != 0) {
@@ -271,7 +271,7 @@ void daObjMkie::Act_c::eff_break() {
     envColor.b = (u8)tevStr.mColorC0.b;
     envColor.a = (u8)tevStr.mColorC0.a;
 
-    dComIfGp_particle_set(dPa_name::ID_SCENE_81A0, &current.pos, &shape_angle, &scale, 0xff, NULL, -1, &tevStr.mColorK0, &envColor, NULL);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_VANISHFIGURE00, &current.pos, &shape_angle, &scale, 0xff, NULL, -1, &tevStr.mColorK0, &envColor, NULL);
 }
 
 /* 00000E84-00000EF4       .text sound_melt__Q29daObjMkie5Act_cFv */

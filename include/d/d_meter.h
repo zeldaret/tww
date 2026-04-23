@@ -546,8 +546,10 @@ public:
     ~dMeter_info_c() {}
 
     /* 0x00 */ u8 field_0x0;
-    /* 0x01 */ u8 field_0x1;
+    /* 0x01 */ u8 mButtonIconMode;
 };
+
+extern dMeter_info_c dMeter_Info;
 
 enum dMeterStatus_e {
     dMtrStts_UNK1_e = 0x00000001,
@@ -760,6 +762,15 @@ public:
     /* 0x302B */ u8 field_0x302b[0x302C - 0x302B];
 };
 
+enum MenuStatus {
+    MENU_STATUS_NONE = 0,
+    MENU_STATUS_ITEM = 1,
+    MENU_STATUS_COLLECT = 2,
+    MENU_STATUS_MAP = 3,
+    MENU_STATUS_NAME = 4,
+    MENU_STATUS_SAVE = 5,
+};
+
 extern dMeter_map_HIO_c g_meter_mapHIO;
 extern dMeter_HIO_c g_meterHIO;
 extern dMeter_menuHIO_c g_menuHIO;
@@ -771,7 +782,18 @@ void dMenu_flagSet(u8);
 
 void dMeter_mtrShow();
 void dMeter_mtrHide();
+
+// Use enum MenuStatus.
+u8 dMenu_getMenuStatus();
+void dMenu_setMenuStatus(u8);
+void dMenu_setMenuStatusOld(u8);
 void dMenu_setPushMenuButton(u8);
+
+u8 dMenu_getCollectMode();
+void dMenu_setCollectMode(u8);
+
+u8 dMenu_getItemMode();
+void dMenu_setItemMode(u8);
 
 void dMeter_weponChange(sub_meter_class* i_Meter);
 void dMeter_weponAnime(sub_meter_class* i_Meter);
@@ -813,6 +835,8 @@ void dMeter_magicAlpha(sub_meter_class* i_Meter);
 
 void dMeter_menuLRMove(sub_meter_class* i_Meter);
 void dMeter_menuPlusMove(sub_meter_class* i_Meter);
+
+bool dMeter_subWinFlag();
 
 void dMeter_walletChange(sub_meter_class* i_Meter);
 

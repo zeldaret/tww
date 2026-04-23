@@ -85,7 +85,7 @@ template <>
 struct TVec3<f32> : public Vec {
     TVec3() {}
 
-    TVec3(const f32 x, const f32 y, const f32 z) { set(x, y, z); }
+    TVec3(const f32 x, const f32 y, const f32 z) { set((f32)x, (f32)y, (f32)z); }
 
     TVec3(const Vec& b) { set(b); }
 
@@ -94,9 +94,9 @@ struct TVec3<f32> : public Vec {
 
     template<typename f32>
     void set(const TVec3<f32>& other) {
-        x = other.x;
-        y = other.y;
-        z = other.z;
+        x = (f32)other.x;
+        y = (f32)other.y;
+        z = (f32)other.z;
     }
 
     void set(const Vec& vec) {
@@ -107,9 +107,9 @@ struct TVec3<f32> : public Vec {
 
     template<typename f32>
     void set(f32 x_, f32 y_, f32 z_) {
-        x = x_;
-        y = y_;
-        z = z_;
+        x = (f32)x_;
+        y = (f32)y_;
+        z = (f32)z_;
     }
 
     void zero() { x = y = z = 0.0f; }
@@ -210,13 +210,6 @@ struct TVec3<f32> : public Vec {
             a.z * b.x - a.x * b.z,
             a.x * b.y - a.y * b.x
         );
-    }
-
-    void cross_hack(const TVec3<f32>& a, const TVec3<f32>& b) {
-        // obviously fake
-        x = a.y * b.z - a.z * b.y;
-        y = a.z * b.x - a.x * b.z;
-        z = a.x * b.y - a.y * b.x;
     }
 
     f32 setLength(f32 len) {

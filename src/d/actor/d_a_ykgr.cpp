@@ -143,7 +143,7 @@ cPhs_State daYkgr_c::_create() {
     if (m_emitter == NULL) {
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
         current.pos = player->current.pos;
-        m_emitter = dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C06D, &current.pos);
+        m_emitter = dComIfGp_particle_setProjection(dPa_name::ID_AK_SP_MTDRAGONKAGEROU, &current.pos);
         if (m_emitter != NULL) {
             m_emitter->setParticleCallBackPtr(&YkgrCB);
             YkgrCB.setParam(-3.0f);

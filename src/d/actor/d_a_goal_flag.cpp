@@ -22,99 +22,99 @@
 #include "m_Do/m_Do_controller_pad.h"
 
 static Vec l_pos[] = {
-    { -1000.0f,    0.0f, 0.0f }, 
-    {  -750.0f,    0.0f, 0.0f }, 
-    {  -500.0f,    0.0f, 0.0f }, 
-    {  -250.0f,    0.0f, 0.0f }, 
-    {     0.0f,    0.0f, 0.0f }, 
-    {   250.0f,    0.0f, 0.0f }, 
-    {   500.0f,    0.0f, 0.0f }, 
-    {   750.0f,    0.0f, 0.0f }, 
-    {  1000.0f,    0.0f, 0.0f }, 
-    { -1000.0f, -100.0f, 0.0f }, 
-    {  -750.0f, -100.0f, 0.0f }, 
-    {  -500.0f, -100.0f, 0.0f }, 
-    {  -250.0f, -100.0f, 0.0f }, 
-    {     0.0f, -100.0f, 0.0f }, 
-    {   250.0f, -100.0f, 0.0f }, 
-    {   500.0f, -100.0f, 0.0f }, 
-    {   750.0f, -100.0f, 0.0f }, 
-    {  1000.0f, -100.0f, 0.0f }, 
-    { -1000.0f, -200.0f, 0.0f }, 
-    {  -750.0f, -200.0f, 0.0f }, 
-    {  -500.0f, -200.0f, 0.0f }, 
-    {  -250.0f, -200.0f, 0.0f }, 
-    {     0.0f, -200.0f, 0.0f }, 
-    {   250.0f, -200.0f, 0.0f }, 
-    {   500.0f, -200.0f, 0.0f }, 
-    {   750.0f, -200.0f, 0.0f }, 
-    {  1000.0f, -200.0f, 0.0f }, 
-    { -1000.0f, -300.0f, 0.0f }, 
-    {  -750.0f, -300.0f, 0.0f }, 
-    {  -500.0f, -300.0f, 0.0f }, 
-    {  -250.0f, -300.0f, 0.0f }, 
-    {     0.0f, -300.0f, 0.0f }, 
-    {   250.0f, -300.0f, 0.0f }, 
-    {   500.0f, -300.0f, 0.0f }, 
-    {   750.0f, -300.0f, 0.0f }, 
-    {  1000.0f, -300.0f, 0.0f }, 
-    { -1000.0f, -400.0f, 0.0f }, 
-    {  -750.0f, -400.0f, 0.0f }, 
-    {  -500.0f, -400.0f, 0.0f }, 
-    {  -250.0f, -400.0f, 0.0f }, 
-    {     0.0f, -400.0f, 0.0f }, 
-    {   250.0f, -400.0f, 0.0f }, 
-    {   500.0f, -400.0f, 0.0f }, 
-    {   750.0f, -400.0f, 0.0f }, 
-    {  1000.0f, -400.0f, 0.0f } 
+    { -1000.0f,    0.0f, 0.0f },
+    {  -750.0f,    0.0f, 0.0f },
+    {  -500.0f,    0.0f, 0.0f },
+    {  -250.0f,    0.0f, 0.0f },
+    {     0.0f,    0.0f, 0.0f },
+    {   250.0f,    0.0f, 0.0f },
+    {   500.0f,    0.0f, 0.0f },
+    {   750.0f,    0.0f, 0.0f },
+    {  1000.0f,    0.0f, 0.0f },
+    { -1000.0f, -100.0f, 0.0f },
+    {  -750.0f, -100.0f, 0.0f },
+    {  -500.0f, -100.0f, 0.0f },
+    {  -250.0f, -100.0f, 0.0f },
+    {     0.0f, -100.0f, 0.0f },
+    {   250.0f, -100.0f, 0.0f },
+    {   500.0f, -100.0f, 0.0f },
+    {   750.0f, -100.0f, 0.0f },
+    {  1000.0f, -100.0f, 0.0f },
+    { -1000.0f, -200.0f, 0.0f },
+    {  -750.0f, -200.0f, 0.0f },
+    {  -500.0f, -200.0f, 0.0f },
+    {  -250.0f, -200.0f, 0.0f },
+    {     0.0f, -200.0f, 0.0f },
+    {   250.0f, -200.0f, 0.0f },
+    {   500.0f, -200.0f, 0.0f },
+    {   750.0f, -200.0f, 0.0f },
+    {  1000.0f, -200.0f, 0.0f },
+    { -1000.0f, -300.0f, 0.0f },
+    {  -750.0f, -300.0f, 0.0f },
+    {  -500.0f, -300.0f, 0.0f },
+    {  -250.0f, -300.0f, 0.0f },
+    {     0.0f, -300.0f, 0.0f },
+    {   250.0f, -300.0f, 0.0f },
+    {   500.0f, -300.0f, 0.0f },
+    {   750.0f, -300.0f, 0.0f },
+    {  1000.0f, -300.0f, 0.0f },
+    { -1000.0f, -400.0f, 0.0f },
+    {  -750.0f, -400.0f, 0.0f },
+    {  -500.0f, -400.0f, 0.0f },
+    {  -250.0f, -400.0f, 0.0f },
+    {     0.0f, -400.0f, 0.0f },
+    {   250.0f, -400.0f, 0.0f },
+    {   500.0f, -400.0f, 0.0f },
+    {   750.0f, -400.0f, 0.0f },
+    {  1000.0f, -400.0f, 0.0f }
 };
 
 static cXy l_texCoord[] = {
-    {   1.0f,  0.0f }, 
-    { 0.875f,  0.0f }, 
-    {  0.75f,  0.0f }, 
-    { 0.625f,  0.0f }, 
-    {   0.5f,  0.0f }, 
-    { 0.375f,  0.0f }, 
-    {  0.25f,  0.0f }, 
-    { 0.125f,  0.0f }, 
-    {   0.0f,  0.0f }, 
-    {   1.0f, 0.25f }, 
-    { 0.875f, 0.25f }, 
-    {  0.75f, 0.25f }, 
-    { 0.625f, 0.25f }, 
-    {   0.5f, 0.25f }, 
-    { 0.375f, 0.25f }, 
-    {  0.25f, 0.25f }, 
-    { 0.125f, 0.25f }, 
-    {   0.0f, 0.25f }, 
-    {   1.0f,  0.5f }, 
-    { 0.875f,  0.5f }, 
-    {  0.75f,  0.5f }, 
-    { 0.625f,  0.5f }, 
-    {   0.5f,  0.5f }, 
-    { 0.375f,  0.5f }, 
-    {  0.25f,  0.5f }, 
-    { 0.125f,  0.5f }, 
-    {   0.0f,  0.5f }, 
-    {   1.0f, 0.75f }, 
-    { 0.875f, 0.75f }, 
-    {  0.75f, 0.75f }, 
-    { 0.625f, 0.75f }, 
-    {   0.5f, 0.75f }, 
-    { 0.375f, 0.75f }, 
-    {  0.25f, 0.75f }, 
-    { 0.125f, 0.75f }, 
-    {   0.0f, 0.75f }, 
-    {   1.0f,  1.0f }, 
-    { 0.875f,  1.0f }, 
-    {  0.75f,  1.0f }, 
-    { 0.625f,  1.0f }, 
-    {   0.5f,  1.0f }, 
-    { 0.375f,  1.0f }, 
-    {  0.25f,  1.0f }, 
-    { 0.125f,  1.0f }, 
-    {   0.0f,  1.0f } 
+    {   1.0f,  0.0f },
+    { 0.875f,  0.0f },
+    {  0.75f,  0.0f },
+    { 0.625f,  0.0f },
+    {   0.5f,  0.0f },
+    { 0.375f,  0.0f },
+    {  0.25f,  0.0f },
+    { 0.125f,  0.0f },
+    {   0.0f,  0.0f },
+    {   1.0f, 0.25f },
+    { 0.875f, 0.25f },
+    {  0.75f, 0.25f },
+    { 0.625f, 0.25f },
+    {   0.5f, 0.25f },
+    { 0.375f, 0.25f },
+    {  0.25f, 0.25f },
+    { 0.125f, 0.25f },
+    {   0.0f, 0.25f },
+    {   1.0f,  0.5f },
+    { 0.875f,  0.5f },
+    {  0.75f,  0.5f },
+    { 0.625f,  0.5f },
+    {   0.5f,  0.5f },
+    { 0.375f,  0.5f },
+    {  0.25f,  0.5f },
+    { 0.125f,  0.5f },
+    {   0.0f,  0.5f },
+    {   1.0f, 0.75f },
+    { 0.875f, 0.75f },
+    {  0.75f, 0.75f },
+    { 0.625f, 0.75f },
+    {   0.5f, 0.75f },
+    { 0.375f, 0.75f },
+    {  0.25f, 0.75f },
+    { 0.125f, 0.75f },
+    {   0.0f, 0.75f },
+    {   1.0f,  1.0f },
+    { 0.875f,  1.0f },
+    {  0.75f,  1.0f },
+    { 0.625f,  1.0f },
+    {   0.5f,  1.0f },
+    { 0.375f,  1.0f },
+    {  0.25f,  1.0f },
+    { 0.125f,  1.0f },
+    {   0.0f,  1.0f }
 };
 
 #include "assets/l_goal_flag_DL.h"
@@ -143,17 +143,17 @@ void daGFlag_packet_c::setTexObj(u8 i_arcIdx) {
         GFLAG_BTI_B_FRAGGAIKOT,
         TGFLAG_BTI_B_FRAGTORI
     };
-    // index_tbl likely existed in this function but passing 
+    // index_tbl likely existed in this function but passing
     // an element of it into getObjectRes breaks the match
     ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectRes(arc_name_tbl[i_arcIdx], 3);
     GXBool mipmap_cnt_over_one = GXBool(tex_info_p->mipmapCount > 1);
     GXInitTexObj(
-        &mTexObj, 
-        (u8*)tex_info_p + tex_info_p->imageOffset, 
-        tex_info_p->width, 
-        tex_info_p->height, 
-        GXTexFmt(tex_info_p->format), 
-        GXTexWrapMode(tex_info_p->wrapS), 
+        &mTexObj,
+        (u8*)tex_info_p + tex_info_p->imageOffset,
+        tex_info_p->width,
+        tex_info_p->height,
+        GXTexFmt(tex_info_p->format),
+        GXTexWrapMode(tex_info_p->wrapS),
         GXTexWrapMode(tex_info_p->wrapT),
         mipmap_cnt_over_one
     );
@@ -175,12 +175,12 @@ void daGFlag_packet_c::setToonTexObj() {
     ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
     GXBool mipmap_cnt_over_one = GXBool(tex_info_p->mipmapCount > 1);
     GXInitTexObj(
-        &mToonTexObj, 
-        (u8*)tex_info_p + tex_info_p->imageOffset, 
-        tex_info_p->width, 
-        tex_info_p->height, 
-        GXTexFmt(tex_info_p->format), 
-        GXTexWrapMode(tex_info_p->wrapS), 
+        &mToonTexObj,
+        (u8*)tex_info_p + tex_info_p->imageOffset,
+        tex_info_p->width,
+        tex_info_p->height,
+        GXTexFmt(tex_info_p->format),
+        GXTexWrapMode(tex_info_p->wrapS),
         GXTexWrapMode(tex_info_p->wrapT),
         mipmap_cnt_over_one
     );
@@ -205,16 +205,20 @@ void daGFlag_packet_c::draw() {
 #endif
     dKy_GxFog_tevstr_set(mpTevStr);
     dKy_setLight_mine(mpTevStr);
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+
     GXSetArray(GX_VA_POS, &mDPos[mCurrArr], sizeof(cXyz));
     GXSetArray(GX_VA_NRM, &mNrm[mCurrArr], sizeof(cXyz));
     GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(cXy));
+
     GXLoadTexObj(getTexObjP(), GX_TEXMAP0);
     GXLoadTexObj(getToonTexObjP(), GX_TEXMAP1);
     GXSetNumChans(1);
@@ -305,7 +309,7 @@ void daGFlag_packet_c::setBackNrm() {
         nrm_arr++;
         back_nrm_arr++;
     }
-} 
+}
 
 /* 00000A04-00000E78       .text setNrmVtx__16daGFlag_packet_cFP4cXyzii */
 void daGFlag_packet_c::setNrmVtx(cXyz* o_nrm, int i_col, int i_row) {
@@ -331,7 +335,7 @@ void daGFlag_packet_c::setNrmVtx(cXyz* o_nrm, int i_col, int i_row) {
             tri_normal = tri_normal.normZP();
             averaged_normal += tri_normal;
         }
-    } 
+    }
     if (i_col != 8) {
         horizontal_edge = dpos_arr[(i_col + 1) + i_row * 9] - center_vertex;
         if (i_row != 0) {
@@ -350,19 +354,19 @@ void daGFlag_packet_c::setNrmVtx(cXyz* o_nrm, int i_col, int i_row) {
     averaged_normal = averaged_normal.normZC();
 
     MtxPush();
-    cMtx_YrotM(*calc_mtx, 
+    cMtx_YrotM(*calc_mtx,
         DEMO_SELECT(REG10_S(2) + 0x200, 512.0f) *
         cM_ssin(
-            mNormalFlutterPhase + 
-            (i_col * (DEMO_SELECT(REG10_S(3), 0) + -0x400) + 
+            mNormalFlutterPhase +
+            (i_col * (DEMO_SELECT(REG10_S(3), 0) + -0x400) +
             i_row * (DEMO_SELECT(REG10_S(4), 0) + 0x100))
         )
     );
-    cMtx_XrotM(*calc_mtx, 
-        DEMO_SELECT(REG10_S(5) + 0x200, 512.0f) * 
+    cMtx_XrotM(*calc_mtx,
+        DEMO_SELECT(REG10_S(5) + 0x200, 512.0f) *
         cM_scos(
-            mNormalFlutterPhase + 
-            (i_col * (DEMO_SELECT(REG10_S(6), 0) + -0x400) + 
+            mNormalFlutterPhase +
+            (i_col * (DEMO_SELECT(REG10_S(6), 0) + -0x400) +
             i_row * (DEMO_SELECT(REG10_S(7), 0) + 0x100))
         )
     );
@@ -378,10 +382,10 @@ BOOL daGoal_Flag_c::getRacePath(u8 i_pathId) {
     if (!mpRopePaths[i]) {
         return FALSE;
     }
- 
+
     mNumRopeBuoys[i] = mpRopePaths[i]->m_num;
     u8 next_path_id = mpRopePaths[i]->m_nextID;
-    for (i++; i < ARRAY_SSIZE(mpRopePaths) && next_path_id != 0xFFU; i++) {        
+    for (i++; i < ARRAY_SSIZE(mpRopePaths) && next_path_id != 0xFFU; i++) {
         mpRopePaths[i] = dPath_GetRoomPath(next_path_id, fopAcM_GetRoomNo(this));
         mNumRopeBuoys[i] = mpRopePaths[i]->m_num;
         next_path_id = mpRopePaths[i]->m_nextID;
@@ -432,15 +436,15 @@ BOOL daGoal_Flag_c::CreateBuoyRaces() {
                 rope_points_p->m_position.z
             );
             fopAcM_createChild(
-                PROC_Obj_Buoyrace, 
-                fopAcM_GetID(this), 
-                j | (i << 8), &rope_point_pos, 
-                fopAcM_GetRoomNo(this), 
+                PROC_Obj_Buoyrace,
+                fopAcM_GetID(this),
+                j | (i << 8), &rope_point_pos,
+                fopAcM_GetRoomNo(this),
                 NULL
             );
             segment->set(
-                rope_points_p->m_position.x, 
-                rope_points_p->m_position.y + 250.0f, 
+                rope_points_p->m_position.x,
+                rope_points_p->m_position.y + 250.0f,
                 rope_points_p->m_position.z
             );
         }
@@ -463,7 +467,7 @@ int daGoal_Flag_c::goal_check() {
 
     f32 finish_line_len = (mGoalFlagPolePos[1] - mGoalFlagPolePos[0]).absXZ();
     f32 player_along_line = finish_line_dir.getDotProduct(player_from_line_start);
-    
+
     cXyz finish_line_normal;
     finish_line_normal.set(finish_line_dir.z, 0.0f, -finish_line_dir.x);
 
@@ -519,10 +523,10 @@ void daGoal_Flag_c::flag_move() {
             index = i + j * 9;
             curr_pos_arr[index].set(prev_pos_arr[index]);
             cloth_anim_factor = get_cloth_anim_factor(
-                prev_pos_arr, 
-                prev_nrm_arr, 
-                &wind_vector, 
-                i, 
+                prev_pos_arr,
+                prev_nrm_arr,
+                &wind_vector,
+                i,
                 j
             );
             velocity_arr[index] += cloth_anim_factor;
@@ -537,12 +541,12 @@ void daGoal_Flag_c::flag_move() {
             index = k + l * 9;
             curr_dpos_arr[index] = curr_pos_arr[index];
             f32 center_to_edge_falloff = ((20.25f - std::abs(4.5f - (f32)k) * std::abs(4.5f - (f32)k)) / 20.25f);
-            curr_dpos_arr[index].z += ( 
-                DEMO_SELECT(40.0f + REG10_F(10), 40.0f) * 
-                center_to_edge_falloff * 
+            curr_dpos_arr[index].z += (
+                DEMO_SELECT(40.0f + REG10_F(10), 40.0f) *
+                center_to_edge_falloff *
                 cM_ssin(k * 0x4000 + l * 0x2000 + mFlagPacket.mFlagWavePhase)
             );
-        }    
+        }
     }
 
     cXyz* curr_nrm_p = mFlagPacket.getNrm();
@@ -599,8 +603,8 @@ cPhs_State daGoal_Flag_c::_create() {
 #else
     if (cloth_resload_state == cPhs_ERROR_e || flag_resload_state == cPhs_ERROR_e) {
         return cPhs_ERROR_e;
-    } 
-    if (cloth_resload_state != cPhs_COMPLEATE_e) { 
+    }
+    if (cloth_resload_state != cPhs_COMPLEATE_e) {
         return cloth_resload_state;
     }
     if (flag_resload_state != cPhs_COMPLEATE_e) {
@@ -608,7 +612,7 @@ cPhs_State daGoal_Flag_c::_create() {
     }
 
     int dummy_int = 4;
-    if (dummy_int == 4) 
+    if (dummy_int == 4)
 #endif
     {
         u8 path_id = fopAcM_GetParam(this) >> 16u;
@@ -658,29 +662,29 @@ cPhs_State daGoal_Flag_c::_create() {
             u16 time_limit_modifier = (u16)dComIfGs_getEventReg(dSv_event_flag_c::UNK_AAFF) * 10;
             time_limit -= time_limit_modifier;
             mTimerProcID = fopMsgM_Timer_create(
-                PROC_TIMER, 
-                2, 
-                time_limit, 
-                3, 
-                0, 
-                221.0f, 
-                439.0f, 
-                32.0f, 
-                419.0f, 
+                PROC_TIMER,
+                2,
+                time_limit,
+                3,
+                0,
+                221.0f,
+                439.0f,
+                32.0f,
+                419.0f,
                 NULL
             );
-            
+
             mMgameStartProcID = fopMsgM_MiniGameStarter_create(
-                PROC_MINIGAME_STARTER, 
-                0, 
-                0x200, 
+                PROC_MINIGAME_STARTER,
+                0,
+                0x200,
                 NULL
             );
 
             dComIfGp_startMiniGame(1);
             dComIfGp_setMiniGameRupee(0);
 
-            setAction(&daGoal_Flag_c::RaceStart);     
+            setAction(&daGoal_Flag_c::RaceStart);
             mRaceStartState = 0;
         }
 
@@ -709,7 +713,7 @@ cPhs_State daGoal_Flag_c::_create() {
 void get_cloth_anim_sub_factor(cXyz* i_posP, cXyz* i_otherP, cXyz* o_dst, f32 i_idealDist) {
     cXyz vec_to_neighbor = *i_otherP - *i_posP;
     cXyz correction_dir = vec_to_neighbor.normZP();
-    
+
     f32 diff_from_ideal = (vec_to_neighbor.abs() - i_idealDist);
     diff_from_ideal *= l_HIO.mClothStiffness;
 
@@ -729,58 +733,58 @@ cXyz daGoal_Flag_c::get_cloth_anim_factor(cXyz* i_posArr, cXyz* i_nrmArr, cXyz* 
         anim_factor.y += l_HIO.mFlagSagFactor * ((float)i_row * 0.25f);
         if (i_col != 0) {
             get_cloth_anim_sub_factor(
-                &pos, &i_posArr[(i_col - 1) + (i_row * 9)], 
-                &anim_factor, 250.0f); 
+                &pos, &i_posArr[(i_col - 1) + (i_row * 9)],
+                &anim_factor, 250.0f);
             if (i_row != 0) {
                 get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[i_col + (i_row - 1) * 9], 
-                    &anim_factor, 120.0f); 
+                    &pos, &i_posArr[i_col + (i_row - 1) * 9],
+                    &anim_factor, 120.0f);
                 get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[(i_col - 1) + (i_row - 1) * 9], 
-                    &anim_factor, 277.3085f);     
+                    &pos, &i_posArr[(i_col - 1) + (i_row - 1) * 9],
+                    &anim_factor, 277.3085f);
             }
             if (i_row != 4) {
                 get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[i_col + (i_row + 1) * 9], 
-                    &anim_factor, 120.0f); 
+                    &pos, &i_posArr[i_col + (i_row + 1) * 9],
+                    &anim_factor, 120.0f);
                 get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[(i_col - 1) + (i_row + 1) * 9], 
-                    &anim_factor, 277.3085f);     
+                    &pos, &i_posArr[(i_col - 1) + (i_row + 1) * 9],
+                    &anim_factor, 277.3085f);
             }
             if (i_col != 8) {
                 get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[(i_col + 1) + i_row * 9], 
+                    &pos, &i_posArr[(i_col + 1) + i_row * 9],
                     &anim_factor, 250.0f);
                 if (i_row != 0) {
                     get_cloth_anim_sub_factor(
-                        &pos, &i_posArr[(i_col + 1) + (i_row - 1) * 9], 
+                        &pos, &i_posArr[(i_col + 1) + (i_row - 1) * 9],
                         &anim_factor, 277.3085f);
                 }
                 if (i_row != 4) {
                     get_cloth_anim_sub_factor(
-                        &pos, &i_posArr[(i_col + 1) + (i_row + 1) * 9], 
+                        &pos, &i_posArr[(i_col + 1) + (i_row + 1) * 9],
                         &anim_factor, 277.3085f);
                 }
             }
             return anim_factor;
         } else {
             get_cloth_anim_sub_factor(
-                &pos, &i_posArr[(i_col + 1) + (i_row * 9)], 
+                &pos, &i_posArr[(i_col + 1) + (i_row * 9)],
                 &anim_factor, 250.0f);
             if (i_row != 0) {
                 get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[i_col + (i_row - 1) * 9], 
+                    &pos, &i_posArr[i_col + (i_row - 1) * 9],
                     &anim_factor, 120.0f);
                 get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[(i_col + 1) + (i_row - 1) * 9], 
+                    &pos, &i_posArr[(i_col + 1) + (i_row - 1) * 9],
                     &anim_factor, 277.3085f);
             }
             if (i_row != 4) {
                 get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[i_col + (i_row + 1) * 9], 
+                    &pos, &i_posArr[i_col + (i_row + 1) * 9],
                     &anim_factor, 120.0f);
                 get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[(i_col + 1) + (i_row + 1) * 9], 
+                    &pos, &i_posArr[(i_col + 1) + (i_row + 1) * 9],
                     &anim_factor, 277.3085f);
             }
             return anim_factor;
@@ -824,14 +828,14 @@ bool daGoal_Flag_c::_delete() {
 
 /* 00001D74-00001DB4       .text getDemoAction__13daGoal_Flag_cFi */
 int daGoal_Flag_c::getDemoAction(int param_1) {
-    static char* ActionNames[] = { 
+    static char* ActionNames[] = {
         "00_dummy",
         "01_dummy",
         "02_dummy",
         "03_dummy",
-        "04_dummy" 
+        "04_dummy"
     };
-    return dComIfGp_evmng_getMyActIdx(param_1, ActionNames, 5, FALSE, 0);
+    return dComIfGp_evmng_getMyActIdx(param_1, ActionNames, ARRAY_SIZE(ActionNames), FALSE, 0);
 }
 
 /* 00001DB4-00001F60       .text RaceStart__13daGoal_Flag_cFv */
@@ -844,7 +848,7 @@ BOOL daGoal_Flag_c::RaceStart() {
             dComIfGp_evmng_cutEnd(staff_idx);
         } else {
             return TRUE;
-        }         
+        }
         mRaceStartState++;
     } else {
         dTimer_c* timer_p = (dTimer_c*) fopMsgM_SearchByID(mTimerProcID);
@@ -933,11 +937,11 @@ BOOL daGoal_Flag_c::TimerExecute() {
             rupees_collected = dComIfGp_getMiniGameRupee();
             remaining_time = timer_p->getRestTimeMs() / 10;
             mMgameTermProcID = fopMsgM_MiniGameTerminater_create(
-                PROC_MINIGAME_TERMINATER, 
-                0, 
-                finish_type, 
-                remaining_time, 
-                rupees_collected, 
+                PROC_MINIGAME_TERMINATER,
+                0,
+                finish_type,
+                remaining_time,
+                rupees_collected,
                 NULL
             );
             fopMsgM_SearchByID(mMgameTermProcID); // Unused return
@@ -966,10 +970,10 @@ BOOL daGoal_Flag_c::RaceEnd() {
     };
 
     mCamFramesPassed++;
-    
+
     dTimer_c* timer_p;
     if (
-        mTimerProcID != -1 && 
+        mTimerProcID != -1 &&
         (timer_p = (dTimer_c*)fopMsgM_SearchByID(mTimerProcID)) &&
         timer_p->deleteCheck()
     ) {
@@ -978,14 +982,14 @@ BOOL daGoal_Flag_c::RaceEnd() {
     }
 
     int staff_idx = dComIfGp_evmng_getMyStaffId("Gflag");
-    
+
     if (staff_idx != -1) {
         dComIfGp_evmng_cutEnd(staff_idx);
-    } 
+    }
 
     BOOL end_chk = dComIfGp_evmng_endCheck(event_name_tbl[mRaceEndState != 3 ? 1 : 0]);
-    
-    if (end_chk || (mCamFramesPassed > l_HIO.mEndCamEarlyFrame && 
+
+    if (end_chk || (mCamFramesPassed > l_HIO.mEndCamEarlyFrame &&
         (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0)) )) {
         dComIfGp_setNextStage("sea", 1, 0x30);
     }
@@ -1010,7 +1014,7 @@ bool daGoal_Flag_c::_execute() {
     flag_move();
     RopeMove();
     return true;
-} 
+}
 
 /* 00002AAC-00002B14       .text daGoal_FlagExecute__FPv */
 static BOOL daGoal_FlagExecute(void* i_this) {

@@ -690,7 +690,7 @@ void daBomb_c::makeFireEffect(cXyz& pos, csXyz& rotation) {
 
     rotation.x = rotation.x + 0x4000;
     rotation.z = rotation.z;
-    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &pos, &rotation, &scale);
+    dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE02, &pos, &rotation, &scale);
 
     dComIfGp_getVibration().StartShock(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
 }
@@ -726,8 +726,8 @@ void daBomb_c::setFuseEffect() {
         mFusePos2 = mFusePos;
         mFusePos3 = mFusePos;
 
-        dComIfGp_particle_setP1(dPa_name::ID_COMMON_FUSE_SPARKS, &mFusePos, NULL, &scale, 0xFF, &mSparks);
-        dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_2012, &mFusePos, NULL, &scale, 0xDC, &mSmoke);
+        dComIfGp_particle_setP1(dPa_name::ID_IT_JN_BM_HIBANA, &mFusePos, NULL, &scale, 0xFF, &mSparks);
+        dComIfGp_particle_setToonP1(dPa_name::ID_IT_JT_BM_SMOKE, &mFusePos, NULL, &scale, 0xDC, &mSmoke);
         mSmoke.field_0x0C = &mFusePos2;
         mSmoke.field_0x10 = &mFusePos3;
         mSmoke.field_0x04 = 0x14;
@@ -736,28 +736,28 @@ void daBomb_c::setFuseEffect() {
 
 /* 800DAD6C-800DAE54       .text eff_explode_normal__8daBomb_cFPC5csXyz */
 void daBomb_c::eff_explode_normal(const csXyz* rotation) {
-    dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &scale);
-    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CLOUD, &current.pos, NULL, &scale);
-    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &scale);
-    dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &scale);
+    dComIfGp_particle_setP1(dPa_name::ID_IT_JN_BMEX_SENKO, &current.pos, rotation, &scale);
+    dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE01, &current.pos, NULL, &scale);
+    dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE02, &current.pos, NULL, &scale);
+    dComIfGp_particle_setToonP1(dPa_name::ID_IT_JT_BMEX_HAHEN, &current.pos, NULL, &scale);
 }
 
 /* 800DAE54-800DAF94       .text eff_explode_cheap__8daBomb_cFPC5csXyz */
 void daBomb_c::eff_explode_cheap(const csXyz* rotation) {
-    JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &scale);
+    JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_IT_JN_BMEX_SENKO, &current.pos, rotation, &scale);
     if(emitter) {
         emitter->setLifeTime(12);
         emitter->setGlobalParticleScale(0.5f, 0.67f);
     }
 
-    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_232A, &current.pos, NULL, &scale);
+    dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKELIGHT, &current.pos, NULL, &scale);
     
-    emitter = dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &scale);
+    emitter = dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE02, &current.pos, NULL, &scale);
     if(emitter) {
         emitter->setLifeTime(70);
     }
     
-    emitter = dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &scale);
+    emitter = dComIfGp_particle_setToonP1(dPa_name::ID_IT_JT_BMEX_HAHEN, &current.pos, NULL, &scale);
     if(emitter) {
         emitter->setLifeTime(70);
         emitter->setAwayFromAxisSpeed(25.0f);
@@ -1063,7 +1063,7 @@ void daBomb_c::waitState_bomtyu() {
     }
 }
 
-// assuming this was here and got stripped, given the leftover ptmf in .data and the other proc/proc_init pairs
+// assuming this was here and got stripped, given the leftover ptmf in .data and the other proc/PROC_INIT_e pairs
 bool daBomb_c::procSink_init() {
     mFunc = &daBomb_c::procSink;
 
@@ -1324,19 +1324,19 @@ BOOL daBomb_c::createHeap() {
         
         J3DAnmTransform* bck0_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_attrType[mType].resName, VBAKH_BCK_VBAMX));
         JUT_ASSERT(DEMO_SELECT(2425, 2478), bck0_data != NULL);
-        int temp = mBck0.init(modelData, bck0_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
+        int temp = mBck0.init(modelData, bck0_data, true, J3DFrameCtrl::EMode_NONE);
         
         J3DAnmTransform* bck1_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_attrType[mType].resName, VBAKH_BCK_VBAKM));
         JUT_ASSERT(DEMO_SELECT(2431, 2484), bck1_data != NULL);
-        int temp2 = mBck1.init(modelData, bck1_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
+        int temp2 = mBck1.init(modelData, bck1_data, true, J3DFrameCtrl::EMode_NONE);
         
         J3DAnmTevRegKey* brk0_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_attrType[mType].resName, VBAKH_BRK_VBAMX));
         JUT_ASSERT(DEMO_SELECT(2438, 2491), brk0_data != NULL);
-        int temp3 = mBrk0.init(modelData, brk0_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+        int temp3 = mBrk0.init(modelData, brk0_data, true, J3DFrameCtrl::EMode_NONE);
         
         J3DAnmTevRegKey* brk1_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_attrType[mType].resName, VBAKH_BRK_VBAKM));
         JUT_ASSERT(DEMO_SELECT(2444, 2497), brk1_data != NULL);
-        int temp4 = mBrk1.init(modelData, brk1_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+        int temp4 = mBrk1.init(modelData, brk1_data, true, J3DFrameCtrl::EMode_NONE);
 
         return mpModel && temp && temp2 && temp3 && temp4;
     }
@@ -1350,7 +1350,7 @@ BOOL daBomb_c::createHeap() {
         }
         else {
             J3DAnmTransform* bck0_data = (J3DAnmTransform*)dComIfG_getObjectRes(m_attrType[mType].resName, LINK_BCK_BOMB);
-            int temp = mBck0.init(modelData, bck0_data, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+            int temp = mBck0.init(modelData, bck0_data, false, J3DFrameCtrl::EMode_LOOP);
 
             return temp ? TRUE : FALSE;
         }

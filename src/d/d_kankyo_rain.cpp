@@ -143,7 +143,7 @@ void dKyr_kamome_move() {
                     pWind->mKamomeEff[i].mAngleYSpeed = cM_rndFX(1.0f);
                     pWind->mKamomeEff[i].mScale = 0.0f;
                     pWind->mKamomeEff[i].mTimer = 300.0f + cM_rndF(180.0f);
-                    pWind->mKamomeEff[i].mpEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0429, &pWind->mKamomeEff[i].mPos);
+                    pWind->mKamomeEff[i].mpEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_KAMOME00, &pWind->mKamomeEff[i].mPos);
                     pWind->mKamomeEff[i].mStatus++;
                 } else {
                     pWind->mKamomeEff[i].mTimer--;
@@ -367,7 +367,7 @@ void dKyr_wind_move() {
                 pos.y = windEff.mBasePos.y + windEff.mPos.y;
                 pos.z = windEff.mBasePos.z + windEff.mPos.z;
 
-                windEff.mpEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0031, &pos);
+                windEff.mpEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_WINDLINE00, &pos);
                 if (windEff.mpEmitter != NULL) {
                     windEff.mpEmitter->setGlobalAlpha(0);
                     windEff.mpEmitter->setGlobalScale(JGeometry::TVec3<f32>(fVar23, fVar23, fVar23));
@@ -2313,7 +2313,7 @@ void dKyr_drawLenzflare(Mtx drawMtx, cXyz* pPos, GXColor& color, u8** pImg) {
             GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
             GXSetClipMode(GX_CLIP_ENABLE);
             GXSetNumIndStages(0);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
@@ -3132,7 +3132,7 @@ void dKyr_drawStar(Mtx drawMtx, u8** pImg) {
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
         GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
         GXSetNumIndStages(0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
 

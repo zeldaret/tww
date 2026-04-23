@@ -161,12 +161,24 @@ public:
         return mpEvtStaffName;
     }
 
+    int getNowCut() {
+        return mCurActIdx;
+    }
+
     bool getAttnFlag() {
         return mbAttention;
     }
 
     void setAttnFlag(bool flag) {
         mbAttention = flag;
+    }
+
+    void setAttnNoTurnFlag(bool flag) {
+        mbNoTurn = flag;
+    }
+
+    f32 getMoveSpeed() {
+        return mSpeed;
     }
 
     cXyz getAttnPos() {
@@ -286,5 +298,7 @@ bool dNpc_chkArasoi();
 bool dNpc_chkLetterPassed();
 bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName);
 bool dNpc_chkAttn(fopAc_ac_c* i_this, cXyz destPos, f32 param_3, f32 param_4, f32 param_5, bool param_6);
+
+extern dCcD_SrcCyl dNpc_cyl_src;
 
 #endif /* D_NPC_H */

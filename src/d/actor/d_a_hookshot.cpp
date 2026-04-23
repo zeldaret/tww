@@ -68,8 +68,8 @@ void daHookshot_shape::draw() {
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXSetArray(GX_VA_POS, &l_pos, sizeof(l_pos[0]));
     GXSetArray(GX_VA_TEX0, &l_texCoord, sizeof(l_texCoord[0]));
     dKy_GxFog_set();
@@ -259,7 +259,7 @@ BOOL daHookshot_c::procShot() {
         mCurrProcFunc = &daHookshot_c::procReturn;
     } else if (m2A3 || current.pos.abs(daPy_getPlayerLinkActorClass()->getHookshotRootPos()) >= 1500.0f) {
         if (m2A3) {
-            if (m2A6 == dPa_name::ID_SCENE_825F) {
+            if (m2A6 == dPa_name::ID_IT_SN_LK_FKSHOT_SUNA00) {
                 dComIfGp_particle_setP1(m2A6, &current.pos);
             } else {
                 dComIfGp_particle_setP1(m2A6, &current.pos, &m2BA);
@@ -298,9 +298,9 @@ BOOL daHookshot_c::procShot() {
                         dComIfG_Bgsp()->GetAttributeCode(mLinChk) == dBgS_Attr_SAND_e
                     )
                 ) {
-                    m2A6 = dPa_name::ID_SCENE_825F;
+                    m2A6 = dPa_name::ID_IT_SN_LK_FKSHOT_SUNA00;
                 } else {
-                    m2A6 = dPa_name::ID_COMMON_PURPLE_HIT;
+                    m2A6 = dPa_name::ID_AK_JN_NG;
                 }
                 mMtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mLinChk);
                 m2A3 = true;

@@ -441,7 +441,7 @@ void daObjComing::Act_c::mode_barrel2_wait(daObjComing::Ctrl_c* ctrl) {
                     barrel2.mItem,
                     barrel2.m14,
                     barrel2.mAngleY,
-                    daObjBuoyflag::Texture_01_e
+                    daObjBuoyflag::Texture_00_e
                 );
                 ctrl->set_appear_timer(this);
                 ctrl->m00 = 1;
@@ -463,7 +463,7 @@ void daObjComing::Act_c::mode_barrel2_appear(daObjComing::Ctrl_c* ctrl) {
                 if (ac != NULL) {
                     daObjBarrel2::Act_c* barrel2_act = (daObjBarrel2::Act_c*)ac;
                     JUT_ASSERT(1119, fopAcM_GetName(barrel2_act) == tk_Obj_Barrel2_e);
-                    barrel2_act->m474 = 1;
+                    barrel2_act->exit_req();
                 }
             } else {
                 ctrl->m08 = fpcM_ERROR_PROCESS_ID_e;
@@ -487,7 +487,7 @@ void daObjComing::Act_c::mode_barrel2_leave(daObjComing::Ctrl_c* ctrl) {
             if (ac != NULL) {
                 daObjBarrel2::Act_c* barrel2_act = (daObjBarrel2::Act_c*)ac;
                 JUT_ASSERT(1145, fopAcM_GetName(barrel2_act) == tk_Obj_Barrel2_e);
-                barrel2_act->m474 = 1;
+                barrel2_act->exit_req();
             }
         } else {
             ctrl->m08 = fpcM_ERROR_PROCESS_ID_e;
