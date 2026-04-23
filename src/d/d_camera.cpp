@@ -3976,7 +3976,6 @@ bool dCamera_c::subjectCamera(s32 param_1) {
         cXyz delta = targetPos - m044;
         m044 += delta * t;
 
-        // Smooth globe toward desired radius/yaw
         desired.Val(p10, cSAngle::_0, baseYaw);
 
         m03C.R(m03C.R() + (desired.R() - m03C.R()) * t);
