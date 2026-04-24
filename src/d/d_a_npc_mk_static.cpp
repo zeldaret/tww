@@ -32,19 +32,19 @@ void daNpc_Mk_Static_c::aroundWalk(fopAc_ac_c* param_1, fopAc_ac_c* param_2, u8 
 }
 
 /* 800CB778-800CB88C       .text turnPath__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_cUc */
-u32 daNpc_Mk_Static_c::turnPath(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, u8 param_3) {
+u32 daNpc_Mk_Static_c::turnPath(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, u8 options) {
     cXyz local_2c = param_2->getPoint(param_2->mCurrPointIndex);
 
     s16 local_48;
     dNpc_calc_DisXZ_AngY(param_1->current.pos, local_2c, NULL, &local_48);
 
-    if (param_3 & 2) {
+    if (options & 2) {
         cLib_addCalcAngleS(&param_1->current.angle.y, local_48, 2, 0x2000, 0x400);
     } else {
         cLib_addCalcAngleS(&param_1->current.angle.y, local_48, 8, 0x800, 0x200);
     }
 
-    f32 cosine = JMASCos(param_1->current.angle.y - local_48);
+    f32 cosine = cM_scos(param_1->current.angle.y - local_48);
     if (cosine < 0.0f) {
         m4 = cosine + 1.0f;
     }
@@ -53,11 +53,11 @@ u32 daNpc_Mk_Static_c::turnPath(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, u8
 }
 
 /* 800CB88C-800CB934       .text chkPath__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_cUc */
-BOOL daNpc_Mk_Static_c::chkPath(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, u8 param_3) {
-    bool bVar2 = param_2->chkPointPass(param_1->current.pos, (param_3 & 1) != 1);
+BOOL daNpc_Mk_Static_c::chkPath(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, u8 options) {
+    bool bVar2 = param_2->chkPointPass(param_1->current.pos, (options & 1) != 1);
 
     if (bVar2) {
-        if (param_3 & 1 != 0) {
+        if (options & 1) {
             param_2->decIdxLoop();
         } else {
             param_2->incIdxLoop();
@@ -73,9 +73,9 @@ BOOL daNpc_Mk_Static_c::chkPath(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, u8
 }
 
 /* 800CB934-800CB990       .text walkPath__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_cUc */
-BOOL daNpc_Mk_Static_c::walkPath(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, u8 param_3) {
-    BOOL result = chkPath(param_1, param_2, param_3);
-    turnPath(param_1, param_2, param_3);
+BOOL daNpc_Mk_Static_c::walkPath(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, u8 options) {
+    BOOL result = chkPath(param_1, param_2, options);
+    turnPath(param_1, param_2, options);
     return result;
 }
 
@@ -113,33 +113,31 @@ u8 daNpc_Mk_Static_c::goFarLink_3(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2) 
 
     if (mPointIndex2 == mPointIndex1) {
         return m0;
-    } else {
-        cXyz local_60 = dStack_74.getPoint(mPointIndex2);
-        cXyz local_6c = dStack_74.getPoint(mPointIndex1);
-        s16 sVar4 = cLib_targetAngleY(&param_1->current.pos, &link_actor->current.pos);
-        s16 sVar5 = cLib_targetAngleY(&local_60, &local_6c);
+    }
 
-        cM3dGLin unusedLine;
+    cXyz local_60 = dStack_74.getPoint(mPointIndex2);
+    cXyz local_6c = dStack_74.getPoint(mPointIndex1);
+    s16 sVar4 = cLib_targetAngleY(fopAcM_GetPosition_p(param_1), fopAcM_GetPosition_p(link_actor));
+    s16 sVar5 = cLib_targetAngleY(&local_60, &local_6c);
 
-        if (m0 == 1 || m0 == 2) {
-            if (abs(sVar5 - sVar4) < 0x1800) {
-                cXyz output1;
-                f32 output2;
+    cM3dGLin unusedLine;
 
-                if (cM3d_Len2dSqPntAndSegLine(fopAcM_GetPosition_p(link_actor)->x, fopAcM_GetPosition_p(link_actor)->z, local_60.x, local_60.z, local_6c.x, local_6c.z, &output1.x, &output1.z, &output2)) {
-                    if (output2 < 10000.0f) {
-                        if (m0 == 1) {
-                            return 2;
-                        } else {
-                            return 1;
-                        }
-                    }
+    if ((m0 == 1 || m0 == 2) && abs(sVar5 - sVar4) < 0x1800) {
+        cXyz output1;
+        f32 output2;
+
+        if (cM3d_Len2dSqPntAndSegLine(link_actor->current.pos.x, link_actor->current.pos.z, local_60.x, local_60.z, local_6c.x, local_6c.z, &output1.x, &output1.z, &output2)) {
+            if (output2 < 10000.0f) {
+                if (m0 == 1) {
+                    return 2;
+                } else {
+                    return 1;
                 }
             }
         }
-
-        return m0;
     }
+
+    return m0;
 }
 
 /* 800CBBC4-800CBE7C       .text goFarLink_2__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_c */
@@ -170,7 +168,7 @@ u8 daNpc_Mk_Static_c::goFarLink_2(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2) 
 
     int iVar1 = sVar6 - sVar5;
     if (abs(iVar1) < 0x1800) {
-        if (cM3d_Len2dSqPntAndSegLine(fopAcM_GetPosition_p(link_actor)->x, fopAcM_GetPosition_p(link_actor)->z, local_8c.x,local_8c.z, local_80.x, local_80.z, &output1.x, &output1.z, &output2)) {
+        if (cM3d_Len2dSqPntAndSegLine(link_actor->current.pos.x, link_actor->current.pos.z, local_8c.x,local_8c.z, local_80.x, local_80.z, &output1.x, &output1.z, &output2)) {
             if (output2 < 10000.0f) {
                 return 2;
             }
@@ -179,14 +177,14 @@ u8 daNpc_Mk_Static_c::goFarLink_2(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2) 
 
     int iVar2 = sVar7 - sVar5;
     if (abs(iVar2) < 0x1800) {
-        if (cM3d_Len2dSqPntAndSegLine(fopAcM_GetPosition_p(link_actor)->x, fopAcM_GetPosition_p(link_actor)->z, local_8c.x, local_8c.z, local_74.x, local_74.z, &output1.x, &output1.z, &output2)) {
+        if (cM3d_Len2dSqPntAndSegLine(link_actor->current.pos.x, link_actor->current.pos.z, local_8c.x, local_8c.z, local_74.x, local_74.z, &output1.x, &output1.z, &output2)) {
             if (output2 < 10000.0f) {
                 return 1;
             }
         }
     }
 
-    if (dStack_94.setNearPathIndxMk2(fopAcM_GetPosition_p(link_actor), mPointIndex2, 5)) {
+    if (dStack_94.setNearPathIndxMk2(&link_actor->current.pos, mPointIndex2, 5)) {
         int index_diff = dStack_94.mCurrPointIndex - mPointIndex2;
         if ((index_diff > 0) == (abs(index_diff) <= 5)) {
             return 2;
@@ -217,7 +215,7 @@ void daNpc_Mk_Static_c::runaway_com2(dNpc_PathRun_c* param_1, u8 param_2) {
 u8 daNpc_Mk_Static_c::runAwayProc(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, dCcD_Cyl* param_3, s16* param_4) {
     daPy_lk_c *link_actor = daPy_getPlayerLinkActorClass();
     if (param_3->GetCoHitAc() == link_actor) {
-        *param_4 = cLib_targetAngleY(fopAcM_GetPosition_p(link_actor), fopAcM_GetPosition_p(param_1));
+        *param_4 = cLib_targetAngleY(fopAcM_GetPosition_p(link_actor), &param_1->current.pos);
         return 4;
     }
 
@@ -227,7 +225,7 @@ u8 daNpc_Mk_Static_c::runAwayProc(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, 
 
     switch (m0) {
         case 0:
-            f32 dVar8 = param_2->setNearPathIndxMk(fopAcM_GetPosition_p(param_1));
+            f32 dVar8 = param_2->setNearPathIndxMk(&param_1->current.pos);
             mPointIndex1 = param_2->mCurrPointIndex;
             mPointIndex2 = mPointIndex1;
 
@@ -263,7 +261,8 @@ u8 daNpc_Mk_Static_c::runAwayProc(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, 
         case 2:
             f32 fVar9 = (link_actor->current.pos - param_1->current.pos).absXZ();
 
-            if (walkPath(param_1, param_2, (m0 == 1) ? (u8)2 : (u8)3)) {
+            u8 options = (m0 == 1) ? (u8)2 : (u8)3;
+            if (walkPath(param_1, param_2, options)) {
                 if (fVar9 > 900.0f) {
                     return 3;
                 } else {
@@ -317,12 +316,13 @@ void daNpc_Mk_Static_c::setRndPathPos(fopAc_ac_c* param_1, dNpc_PathRun_c* param
     dBgS_GndChk local_90;
     if (param_2->mPath != NULL) {
         param_1->current.pos = param_2->getPoint((int) cM_rndF((int) param_2->maxPoint()));
-        local_90.mFlag &= 0xfffffffd;
+        local_90.OffWall();
 
-        f32 z = fopAcM_GetPosition_p(param_1)->z;
-        f32 y = fopAcM_GetPosition_p(param_1)->y + 200.0f;
-        f32 x = fopAcM_GetPosition_p(param_1)->x;
-        cXyz pos(x, y, z);
+        cXyz pos(
+            param_1->current.pos.x,
+            param_1->current.pos.y + 200.0f,
+            param_1->current.pos.z
+        );
 
         local_90.m_pos = pos;
 
@@ -337,7 +337,7 @@ bool daNpc_Mk_Static_c::chkPointPass(cXyz* param_1, cXyz* param_2, cXyz* param_3
         return true;
     } else if (param_3->x == param_2->x && param_3->z == param_2->z) {
         return true;
-    } else if (JMASCos(cLib_targetAngleY(param_1, param_2) - cLib_targetAngleY(param_3, param_2)) < 0.0f) {
+    } else if (cM_scos(cLib_targetAngleY(param_1, param_2) - cLib_targetAngleY(param_3, param_2)) < 0.0f) {
         return true;
     } else {
         return false;
