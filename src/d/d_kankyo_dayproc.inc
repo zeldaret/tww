@@ -73,13 +73,12 @@ static void dKankyo_DayProc() {
     dComIfGs_offEventBit(dSv_event_flag_c::UNK_2680);
 
 #if VERSION > VERSION_JPN
-    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A20)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A20))
 #endif
+    {
         clamped = cLib_maxLimit(dComIfGs_getEventReg(dSv_event_flag_c::UNK_A60F) + 1, 3);
         dComIfGs_setEventReg(dSv_event_flag_c::UNK_A60F, clamped);
-#if VERSION > VERSION_JPN
     }
-#endif
 
     if (dKy_get_dayofweek() == 5) {
         dComIfGs_offEventBit(dSv_event_flag_c::UNK_2080);

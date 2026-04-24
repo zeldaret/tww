@@ -412,6 +412,7 @@ BOOL dEvt_control_c::endProc() {
         break;
     default:
         JUT_ASSERT(DEMO_SELECT(787, 789), FALSE);
+        break;
     }
 
     mMode = dEvtMode_NONE_e;

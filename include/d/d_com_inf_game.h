@@ -2420,6 +2420,10 @@ inline u32 dComIfGp_checkCameraAttentionStatus(int idx, u32 flag) {
     return g_dComIfG_gameInfo.play.checkCameraAttentionStatus(idx, flag);
 }
 
+inline u32 dComIfGp_getCameraAttentionStatus(int i_no) {
+    return g_dComIfG_gameInfo.play.getCameraAttentionStatus(i_no);
+}
+
 inline void dComIfGp_onCameraAttentionStatus(int i, u32 flag) {
     g_dComIfG_gameInfo.play.onCameraAttentionStatus(i, flag);
 }
@@ -2450,10 +2454,6 @@ inline void dComIfGp_setCameraZoomForcus(int i_no, f32 i_focus) {
 
 inline f32 dComIfGp_getCameraZoomForcus(int i_no) {
     return g_dComIfG_gameInfo.play.getCameraZoomForcus(i_no);
-}
-
-inline u32 dComIfGp_getCameraAttentionStatus(int i_no) {
-    return g_dComIfG_gameInfo.play.getCameraAttentionStatus(i_no);
 }
 
 inline void dComIfGp_saveCameraPosition(int i, cXyz* i_pos, cXyz* i_target, f32 i_fovy, s16 i_bank) {

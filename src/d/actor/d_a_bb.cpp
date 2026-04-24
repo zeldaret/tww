@@ -780,10 +780,10 @@ void bb_path_move(bb_class* i_this) {
                 i_this->unk_304 = 2.0f;
                 i_this->unk_364 = 0;
             } else if (a_this->current.pos.y < i_this->unk_2F4.y) {
-                i_this->unk_300 = 20.0;
+                i_this->unk_300 = 20.0f;
                 i_this->unk_304 = REG0_F(11) + 1.0f;
             } else {
-                i_this->unk_300 = 30.0;
+                i_this->unk_300 = 30.0f;
                 i_this->unk_304 = REG0_F(13) + 1.0f;
             }
 
@@ -997,7 +997,7 @@ void bb_auto_move(bb_class* i_this) {
                     i_this->unk_2F4.y = i_this->actor.home.pos.y + cM_rndF(500.0f);
                     i_this->unk_2F4.z = z + i_this->actor.current.pos.z;
 
-                    i_this->unk_308 = 0.0;
+                    i_this->unk_308 = 0.0f;
                     i_this->unk_300 = REG0_F(10) + 25.0f;
                     i_this->unk_304 = REG0_F(11) + 1.0f;
                     i_this->unk_310 = cM_rndF(300.0f) + 200.0f;
@@ -1121,7 +1121,7 @@ void bb_auto_move(bb_class* i_this) {
             r29 = 1;
             i_this->unk_C60 = 0;
             i_this->unk_300 = l_bbHIO.unk_54;
-            i_this->actor.speedF = 1.0;
+            i_this->actor.speedF = 1.0f;
 
             f32 x = i_this->unk_2F4.x - i_this->actor.current.pos.x;
             f32 z = i_this->unk_2F4.z - i_this->actor.current.pos.z;
@@ -1393,7 +1393,7 @@ void bb_atack_move(bb_class* i_this) {
             z = i_this->unk_2F4.z - a_this->current.pos.z;
 
             if (i_this->unk_2F1 == 1) {
-                i_this->unk_310 = 400.0;
+                i_this->unk_310 = 400.0f;
 
                 if (std::sqrtf(x * x + y * y + z * z) < l_bbHIO.unk_50) {
                     i_this->unk_2F1 = 2;
@@ -1401,7 +1401,7 @@ void bb_atack_move(bb_class* i_this) {
                     kuti_open(i_this, 0x15, JA_SE_CV_BB_FIND);
                 }
             } else {
-                i_this->unk_310 = 2000.0;
+                i_this->unk_310 = 2000.0f;
                 if (std::sqrtf(x * x + y * y + z * z) < REG0_F(9) * 100.0f + 350.0f) {
                     i_this->unk_2F1 = 3;
                 }
@@ -1615,7 +1615,7 @@ void bb_atack_move(bb_class* i_this) {
 
                 anm_init(i_this, BB_BCK_FLY02, REG0_F(0) + 12.0f, 2, 1.0f, BB_BAS_FLY02);
 
-                a_this->speedF = 0.0;
+                a_this->speedF = 0.0f;
                 i_this->unk_2F4.y = player->current.pos.y + 500.0f;
                 i_this->unk_318[3] = cM_rndF(200.0f) + 300.0f;
             }
@@ -1724,9 +1724,9 @@ void bb_wait_move(bb_class* i_this) {
         case 12: {
             r30 = 0;
             i_this->unk_C60 = 0;
-            v.x = 0.0;
-            v.y = 0.0;
-            v.z = 0.0;
+            v.x = 0.0f;
+            v.y = 0.0f;
+            v.z = 0.0f;
             cMtx_YrotS(*calc_mtx, i_this->actor.current.angle.y);
             MtxPosition(&v, &v2);
 
@@ -1772,6 +1772,7 @@ void bb_wait_move(bb_class* i_this) {
             i_this->unk_C60 = 0;
             s16 old_354 = i_this->unk_354;
             i_this->unk_354++;
+
             cLib_addCalc2(&i_this->actor.current.pos.x, i_this->actor.home.pos.x, 0.1f, speedX);
             cLib_addCalc2(&i_this->actor.current.pos.z, i_this->actor.home.pos.z, 0.1f, speedZ);
 
@@ -1864,7 +1865,7 @@ void bb_su_wait_move(bb_class* i_this) {
             i_this->unk_C60 = 1;
             cLib_addCalcAngleS2(&i_this->actor.current.angle.y, i_this->unk_336, 10, 0x200);
 
-            v.x = 0.0;
+            v.x = 0.0f;
             v.y = REG0_F(0) * 10.0f + 300.0f;
             v.z = REG0_F(1) * 10.0f + 300.0f;
             cMtx_YrotS(*calc_mtx, i_this->actor.current.angle.y);
@@ -1885,9 +1886,9 @@ void bb_su_wait_move(bb_class* i_this) {
         case 12: {
             r30 = 0;
             i_this->unk_C60 = 0;
-            v.x = 0.0;
-            v.y = 0.0;
-            v.z = 0.0;
+            v.x = 0.0f;
+            v.y = 0.0f;
+            v.z = 0.0f;
             cMtx_YrotS(*calc_mtx, i_this->actor.current.angle.y);
             MtxPosition(&v, &v2);
 
