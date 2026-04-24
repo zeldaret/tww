@@ -138,13 +138,21 @@ public:
     /* 0x028 */ cXyz mUp;
     /* 0x034 */ cSAngle mBank;
     /* 0x036 */ u8 m036[0x038 - 0x036];
-    /* 0x038 */ f32 mFovY;
-    /* 0x03C */ cSGlobe m03C;
-    /* 0x044 */ cXyz m044;
-    /* 0x050 */ cXyz m050;
-    /* 0x05C */ cSAngle m05C;
-    /* 0x05E */ u8 m05E[0x060 - 0x05E];
-    /* 0x060 */ f32 m060;
+    /* 0x038 */ f32 mFovy;
+    class {
+    public:
+        /* 0x00 */ cSGlobe mDirection;
+        /* 0x08 */ cXyz mCenter;
+        /* 0x14 */ cXyz mEye;
+        /* 0x20 */ cSAngle mBank;
+        /* 0x24 */ f32 mFovy;
+#if defined(__MWERKS__) && __MWERKS__ < 0x4200
+        // Static data members in an anonymous class are illegal in C++, but MWCC for GC accepts it.
+        // However, MWCC for Wii does not so this was removed for the Shield release of TP.
+        static const int PatternLengthMax = 4;
+#endif
+    }
+    /* 0x05C */ mViewCache;
     /* 0x064 */ f32 m064;
     /* 0x068 */ int m068;
     /* 0x06C */ cSAngle mAngleY;
@@ -558,7 +566,7 @@ public:
     bool SetExtendedPosition(cXyz*);
     bool ScopeViewMsgModeOff();
 
-    f32 Fovy() { return mFovY + mFovYShake; }
+    f32 Fovy() { return mFovy + mFovYShake; }
     cSAngle Bank() { return mBank + mBankShake; }
     cXyz Up() { return mUp; }
     cXyz Center() { return mCenter + mCenterShake; }
