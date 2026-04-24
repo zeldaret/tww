@@ -615,6 +615,7 @@ fopAc_ac_c* fopAcM_searchFromName4Event(char* name, s16 eventID);
 
 BOOL fopAcM_getWaterY(const cXyz*, f32*);
 void fpoAcM_relativePos(fopAc_ac_c* actor, cXyz* p_inPos, cXyz* p_outPos);
+void fpoAcM_absolutePos(fopAc_ac_c* actor, cXyz* p_inPos, cXyz* p_outPos);
 
 void fopAcM_setGbaName(fopAc_ac_c* i_this, u8 itemNo, u8 gbaName0, u8 gbaName1);
 

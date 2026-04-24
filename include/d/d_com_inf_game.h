@@ -3324,6 +3324,10 @@ inline char* dComIfGp_evmng_getMyActName(int staffIdx) {
     return dComIfGp_getPEvtManager()->getMyActName(staffIdx);
 }
 
+inline s32 dComIfGp_evmng_getMySubstanceNum(int staffIdx, char* name) {
+    return dComIfGp_getPEvtManager()->getMySubstanceNum(staffIdx, name);
+}
+
 inline f32* dComIfGp_evmng_getMyFloatP(int staffIdx, char* name) {
     return reinterpret_cast<f32*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, dEvDtData_c::TYPE_FLOAT));
 }
