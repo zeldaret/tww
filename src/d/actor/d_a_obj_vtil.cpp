@@ -12,26 +12,23 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_camera.h"
 
+#include "d/res/res_vtil.h"
 const char daObjVtil_c::M_arcname[] = "Vtil";
 
 const int daObjVtil_c::l_daObjVtil_scene_no_table[] = {
-    0x3,
-    0x4,
-    0x5,
-    0x7,
-    0x6,
+    VTIL_BDL_VTIL1,
+    VTIL_BDL_VTIL2,
+    VTIL_BDL_VTIL3,
+    VTIL_BDL_VTIL5,
+    VTIL_BDL_VTIL4,
 };
 
 const int daObjVtil_c::l_daObjVtil_bdl_idx_table[] = {
-    0x3,
-    0x4,
-    0x5,
-    0x7,
-    0x6,
-};
-
-static dCcD_SrcCyl M_co_cyl_data = {
-
+    VTIL_BDL_VTIL1,
+    VTIL_BDL_VTIL2,
+    VTIL_BDL_VTIL3,
+    VTIL_BDL_VTIL5,
+    VTIL_BDL_VTIL4,
 };
 
 /* 00000078-00000098       .text solidHeapCB__11daObjVtil_cFP10fopAc_ac_c */
@@ -59,8 +56,39 @@ BOOL daObjVtil_c::create_heap() {
 
 /* 0000016C-000003C0       .text _create__11daObjVtil_cFv */
 cPhs_State daObjVtil_c::_create() {
-    /* Nonmatching */
+    cPhs_State ret = cPhs_ERROR_e;
     fopAcM_SetupActor(this, daObjVtil_c);
+    m60C = daObj::PrmAbstract(this, (Prm_e)PRM_TYPE_W, (Prm_e)PRM_TYPE_S);
+    if (m60C == 0xF || m60C == -1) {
+        m60C = 0;
+    }
+
+    if (check_ev_bit()) {
+        ret = dComIfG_resLoad(&mPhs, M_arcname);
+        if (ret == cPhs_COMPLEATE_e) {
+            ret = cPhs_ERROR_e;
+            if (fopAcM_entrySolidHeap(this, solidHeapCB, 0xCC0)) {
+                fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+                init_mtx();
+                fopAcM_setCullSizeBox(this, -50.0f, 0.0f, -50.0f, 50.0f, 160.0f, 50.0f);
+                init_co();
+                init_bgc();
+                fopAcM_SetGravity(this, -6.0f);
+                renew_attention_pos();
+                eyePos = current.pos;
+                eyePos.y += 110.0f;
+                cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
+                attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 0x17;
+                m616 = 1;
+                to_wait_mode();
+                dKy_plight_set(&mPLight);
+                model = mpModel;
+                ret = cPhs_COMPLEATE_e;
+            }
+        }
+    }
+
+    return ret;
 }
 
 /* 000006CC-00000718       .text _delete__11daObjVtil_cFv */
@@ -72,8 +100,8 @@ BOOL daObjVtil_c::_delete() {
 }
 
 /* 00000718-00000750       .text check_ev_bit__11daObjVtil_cCFv */
-void daObjVtil_c::check_ev_bit() const {
-    dComIfGs_isStageTbox( l_daObjVtil_scene_no_table[m60C], 0xF);
+BOOL daObjVtil_c::check_ev_bit() const {
+    return dComIfGs_isStageTbox(l_daObjVtil_scene_no_table[m60C], 0xF);
 }
 
 /* 00000750-00000770       .text tell_agb_attack__11daObjVtil_cFv */

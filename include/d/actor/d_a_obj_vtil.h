@@ -17,8 +17,13 @@ public:
         MODE_WALK  = 0x6,
     };
 
+    enum Prm_e {
+        PRM_TYPE_W = 0x4,
+        PRM_TYPE_S = 0x0,
+    };
+
     void camera_off() {};
-    void check_ev_bit() const; // weak but not inlined?
+    BOOL check_ev_bit() const; // weak but not inlined?
     void prm_get_type() const {};
 
     static BOOL solidHeapCB(fopAc_ac_c*);
