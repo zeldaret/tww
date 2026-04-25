@@ -2,17 +2,29 @@
 #define D_A_OBJ_VTIL_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_bg_s_acch.h"
+#include "d/d_cc_d.h"
 
 class daObjVtil_c : public fopAc_ac_c {
 public:
-    void camera_off() {}
-    void check_ev_bit() const; // weak but not inlined?
-    void prm_get_type() const {}
+    enum Mode {
+        MODE_WAIT  = 0x0,
+        MODE_CARRY = 0x1,
+        MODE_THROW  = 0x2,
+        MODE_SINK  = 0x3,
+        MODE_VIB2  = 0x4,
+        MODE_JUMP  = 0x5,
+        MODE_WALK  = 0x6,
+    };
 
-    void solidHeapCB(fopAc_ac_c*);
-    void create_heap();
+    void camera_off() {};
+    void check_ev_bit() const; // weak but not inlined?
+    void prm_get_type() const {};
+
+    static BOOL solidHeapCB(fopAc_ac_c*);
+    BOOL create_heap();
     cPhs_State _create();
-    bool _delete();
+    BOOL _delete();
     void tell_agb_attack();
     void tell_agb_sink();
     void init_mtx();
@@ -34,16 +46,33 @@ public:
     void to_sink_mode();
     void mode_sink();
     void hit_co();
-    void check_sink();
-    void check_sink_end();
+    BOOL check_sink();
+    BOOL check_sink_end();
     void hit_bg();
     void make_vib();
-    void check_circle();
-    bool _execute();
+    BOOL check_circle();
+    BOOL _execute();
     bool _draw();
 
+    static const char M_arcname[];
+    static const int l_daObjVtil_scene_no_table[];
+    static const int l_daObjVtil_bdl_idx_table[];
+    static const dCcD_SrcCyl M_co_cyl_data;
+
 public:
-    /* Place member variables here */
-};
+    /* 0x290 */ J3DModel* mpModel;
+    /* 0x294 */ request_of_phase_process_class mPhs;
+    /* 0x29C */ dBgS_Acch mAcch;
+    /* 0x460 */ dBgS_AcchCir mAcchCir;
+    /* 0x4A0 */ dCcD_Stts mStts;
+    /* 0x4DC */ dCcD_Cyl mCyl;
+    /* 0x60C */ int m60C;
+    /* 0x610 */ f32 mSpeedY;
+    /* 0x614 */ Mode mMode;
+    /* 0x615 */ u8 m615;
+    /* 0x616 */ u8 m616;
+    /* 0x617 */ u8 field_0x617[0x61C - 0x617];
+    /* 0x61C */ LIGHT_INFLUENCE mPLight;
+};  // Size: 0x63C
 
 #endif /* D_A_OBJ_VTIL_H */
