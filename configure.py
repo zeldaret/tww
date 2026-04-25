@@ -564,7 +564,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_item.cpp"),
             Object(NonMatching, "d/d_2dnumber.cpp"),
             Object(Matching,    "d/d_a_npc_cb1_static.cpp"),
-            Object(NonMatching, "d/d_a_npc_mk_static.cpp"),
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_a_npc_mk_static.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_salvage.cpp"),
             Object(Matching,    "d/d_snap.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_point_wind.cpp"),
