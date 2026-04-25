@@ -22,9 +22,7 @@ public:
         PRM_TYPE_S = 0x0,
     };
 
-    void camera_off() {};
     BOOL check_ev_bit() const; // weak but not inlined?
-    void prm_get_type() const {};
 
     static BOOL solidHeapCB(fopAc_ac_c*);
     BOOL create_heap();
