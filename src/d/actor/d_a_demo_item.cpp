@@ -26,7 +26,7 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x03, // dItem_RED_RUPEE_e
     0x03, // dItem_PURPLE_RUPEE_e
     0x03, // dItem_ORANGE_RUPEE_e
-    0x00, // dItem_HEART_PIECE_e
+    DEMO_SELECT(0x01, 0x00), // dItem_HEART_PIECE_e
     0x00, // dItem_HEART_CONTAINER_e
     0x04, // dItem_SMALL_MAGIC_e
     0x04, // dItem_LARGE_MAGIC_e
@@ -34,7 +34,7 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x04, // dItem_BOMB_10_e
     0x04, // dItem_BOMB_20_e
     0x04, // dItem_BOMB_30_e
-    0x03, // dItem_SILVER_RUPEE_e
+    DEMO_SELECT(0x04, 0x03), // dItem_SILVER_RUPEE_e
     0x04, // dItem_ARROW_10_e
     0x04, // dItem_ARROW_20_e
     0x04, // dItem_ARROW_30_e
@@ -80,7 +80,7 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x04, // dItem_MASTER_SWORD_2_e
     0x00, // dItem_SHIELD_e
     0x00, // dItem_MIRROR_SHIELD_e
-    0x00, // dItem_DROPPED_SWORD_e
+    DEMO_SELECT(0x04, 0x00), // dItem_DROPPED_SWORD_e
     0x04, // dItem_MASTER_SWORD_3_e
     0x01, // KAKERA_HEART2
     0x04, // noentry64
@@ -103,7 +103,7 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x02, // dItem_RED_POTION_e
     0x02, // dItem_GREEN_POTION_e
     0x02, // dItem_BLUE_POTION_e
-    0x00, // dItem_HALF_SOUP_BOTTLE_e
+    DEMO_SELECT(0x04, 0x00), // dItem_HALF_SOUP_BOTTLE_e
     0x00, // dItem_SOUP_BOTTLE_e
     0x02, // dItem_WATER_BOTTLE_e
     0x02, // dItem_FAIRY_BOTTLE_e
@@ -175,10 +175,10 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x02, // dItem_NOTE_TO_MOM_e
     0x02, // MAGYS_LETTER
     0x02, // MO_LETTER
-    0x00, // COTTAGE_PAPER
+    DEMO_SELECT(0x04, 0x00), // COTTAGE_PAPER
     0x02, // KAISEN_PRESENT1
     0x02, // KAISEN_PRESENT2
-    0x00, // SALVAGE_ITEM1
+    DEMO_SELECT(0x04, 0x00), // SALVAGE_ITEM1
     0x04, // SALVAGE_ITEM2
     0x04, // SALVAGE_ITEM3
     0x04, // XXX_039
@@ -296,13 +296,13 @@ void daDitem_c::setParticle() {
     
     switch (m_effect_type[m_itemNo]) {
     case 0:
-        mpEmitters[0] = dComIfGp_particle_set(dPa_name::ID_COMMON_01F7, &current.pos, &angle);
+        mpEmitters[0] = dComIfGp_particle_set(dPa_name::ID_IT_JN_GETITEM_FLASH_L00, &current.pos, &angle);
     case 1:
-        mpEmitters[1] = dComIfGp_particle_set(dPa_name::ID_COMMON_01F8, &current.pos, &angle);
+        mpEmitters[1] = dComIfGp_particle_set(dPa_name::ID_IT_JN_GETITEM_FLASH_S00, &current.pos, &angle);
     case 2:
-        mpEmitters[2] = dComIfGp_particle_set(dPa_name::ID_COMMON_01F9, &current.pos, &angle);
+        mpEmitters[2] = dComIfGp_particle_set(dPa_name::ID_IT_JN_GETITEM_HALO00, &current.pos, &angle);
     case 3:
-        mpEmitters[3] = dComIfGp_particle_set(dPa_name::ID_COMMON_01FA, &current.pos, &angle);
+        mpEmitters[3] = dComIfGp_particle_set(dPa_name::ID_IT_JN_GETITEM_STAR00, &current.pos, &angle);
     case 4:
         break;
     }

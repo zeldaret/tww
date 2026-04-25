@@ -7702,7 +7702,7 @@ BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 
         if ((!strcmp(dComIfGp_getStartStageName(), "kinBOSS")) ||
             (!strcmp(dComIfGp_getStartStageName(), "Xboss1")))
         {
-            m32E4.makeEmitter(dPa_name::ID_SCENE_80F6, mpCLModel->getAnmMtx(0x1), &current.pos, NULL);
+            m32E4.makeEmitter(dPa_name::ID_AK_SN_BKMHAKIDASHIHOUSHI00, mpCLModel->getAnmMtx(0x1), &current.pos, NULL);
         }
         dComIfGp_getVibration().StartShock(6, -0x21, cXyz(0.0f, 1.0f, 0.0f));
     } else if (param_1 == -3) {
@@ -8176,7 +8176,7 @@ BOOL daPy_lk_c::procLavaDamage_init() {
     mVelocity = 15.0f + (40.0f * dVar3);
     speed.y = 32.0f + (36.0f * dVar3);
     setSingleMoveAnime(ANM_LAVADAM, m_HIO->mRestart.m.field_0x0, 0.0f, -1, m_HIO->mRestart.m.field_0x4);
-    m32E4.makeEmitter(dPa_name::ID_SCENE_8078, mpCLModel->getAnmMtx(0), &current.pos, NULL);
+    m32E4.makeEmitter(dPa_name::ID_AK_SN_HIDARUMAFIRE, mpCLModel->getAnmMtx(0), &current.pos, NULL);
     voiceStart(4);
     seStartMapInfo(JA_SE_LK_FALL_MAGMA);
     current.angle.y = cM_atan2s(current.pos.x, current.pos.z);
@@ -9687,7 +9687,7 @@ void daPy_lk_c::checkLightHit() {
         }
         if (mFanLightCps.ChkAtHit()) {
             if (m3438.getEmitter() == NULL) {
-                dComIfGp_particle_setP1(dPa_name::ID_SCENE_8232, &current.pos, NULL, NULL, 0xFF,
+                dComIfGp_particle_setP1(dPa_name::ID_AK_SN_HITSHIELDLIGHT00, &current.pos, NULL, NULL, 0xFF,
                                         &m3438);
             }
             cM3d_lineVsPosSuisenCross(mFanLightCps.GetStart(), mFanLightCps.GetEnd(),
@@ -9721,7 +9721,7 @@ void daPy_lk_c::checkLightHit() {
         checkResetFlg0(daPyRFlg0_UNK200000))
     {
         if (m342C.getEmitter() == NULL) {
-            m342C.makeEmitter(dPa_name::ID_SCENE_8226, mpEquippedShieldModel->getBaseTRMtx(),
+            m342C.makeEmitter(dPa_name::ID_AK_SN_MIRRORSHIELD00, mpEquippedShieldModel->getBaseTRMtx(),
                               &current.pos, NULL);
         }
     } else if (m342C.getEmitter() != NULL) {
@@ -9978,7 +9978,7 @@ void daPy_lk_c::setCollision() {
                         }
                     }
                     JPABaseEmitter* emitter1 = dComIfGp_particle_setP1(
-                        dPa_name::ID_COMMON_0025,
+                        dPa_name::ID_AK_JN_ROUNDATTACK00,
                         &current.pos,
                         &shape_angle,
                         NULL,
@@ -9990,7 +9990,7 @@ void daPy_lk_c::setCollision() {
                         NULL
                     );
                     JPABaseEmitter* emitter2 = dComIfGp_particle_setP1(
-                        dPa_name::ID_COMMON_0026,
+                        dPa_name::ID_AK_JN_ROUNDATTACK01,
                         &current.pos,
                         &shape_angle,
                         NULL,
@@ -10002,7 +10002,7 @@ void daPy_lk_c::setCollision() {
                         NULL
                     );
                     JPABaseEmitter* emitter3 = dComIfGp_particle_setP1(
-                        dPa_name::ID_COMMON_0028,
+                        dPa_name::ID_AK_JN_ROUNDATTACK02,
                         &current.pos,
                         &shape_angle,
                         NULL,
@@ -10173,7 +10173,7 @@ void daPy_lk_c::setCollision() {
                     0
                 );
                 mpYbafo00Model->setBaseTRMtx(mDoMtx_stack_c::get());
-                JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0049, &sp88);
+                JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_AK_JN_UCHIWAWIND01, &sp88);
                 if (emitter != NULL) {
                     emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
                     emitter->setGlobalPrmColor(tevStr.mColorK0.r, tevStr.mColorK0.g, tevStr.mColorK0.b);
@@ -11650,7 +11650,7 @@ BOOL daPy_lk_c::execute() {
     checkRoofRestart();
     mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x08), &mLeftHandPos);
     mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x0C), &mRightHandPos);
-    cMtx_multVec(mpCLModel->getAnmMtx(0x00), &boomerang_catch, &m36F4);
+    cMtx_multVec(mpCLModel->getAnmMtx(0x00), &boomerang_catch, &mBoomerangCatchPos);
     cMtx_multVec(mpCLModel->getAnmMtx(0x08), &hookshot_root, &mHookshotRootPos);
     mpKatsuraModel->setBaseTRMtx(mpCLModel->getAnmMtx(0x0F));
     mpKatsuraModel->calc();
@@ -11991,7 +11991,7 @@ BOOL daPy_lk_c::createHeap() {
     
     tmp_modelData = initModel(&mpSwgripmsModel, LINK_BDL_SWGRIPMS, 0x37221222);
     bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_SWGRIPMSAB);
-    ret = mSwgripmsabBckAnim.init(mpSwgripmsModel->getModelData(), bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    ret = mSwgripmsabBckAnim.init(mpSwgripmsModel->getModelData(), bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(20966, 20966, 21046, 21046), FALSE); }
     mpTswgripmsabBrk = entryBrk(tmp_modelData, LINK_BRK_TSWGRIPMSAB);
     mpTswgripmsBtk = entryBtk(tmp_modelData, LINK_BTK_TSWGRIPMS);
@@ -12000,7 +12000,7 @@ BOOL daPy_lk_c::createHeap() {
     
     tmp_modelData = initModel(&mpShaModel, LINK_BDL_SHA, 0x37221222);
     bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_ATNGSHA);
-    ret = mAtngshaBck.init(mpShaModel->getModelData(), bck, false, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
+    ret = mAtngshaBck.init(mpShaModel->getModelData(), bck, false, J3DFrameCtrl::EMode_NONE);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(20983, 20983, 21063, 21063), FALSE); }
     
     tmp_modelData = initModel(&mpShmsModel, LINK_BDL_SHMS, 0x37221222);
@@ -12020,7 +12020,7 @@ BOOL daPy_lk_c::createHeap() {
     
     tmp_modelData = initModel(&mpYuchw00Model, LINK_BDL_YUCHW00, 0x13000222);
     bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_YUCHW00);
-    ret = mYuchw00Bck.init(tmp_modelData, bck, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    ret = mYuchw00Bck.init(tmp_modelData, bck, 1, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(21033, 21033, 21113, 21113), FALSE); }
     mpYuchw00Btk = entryBtk(tmp_modelData, LINK_BTK_YUCHW00);
     mpYuchw00Brk = entryBrk(tmp_modelData, LINK_BRK_YUCHW00);
@@ -12040,14 +12040,14 @@ BOOL daPy_lk_c::createHeap() {
     }
     mpYaura00Btk = entryBtk(tmp_modelData, LINK_BTK_YAURA00);
     brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_R);
-    ret = mYaura00rBrk.init(tmp_modelData, brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    ret = mYaura00rBrk.init(tmp_modelData, brk, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(21067, 21067, 21147, 21147), FALSE); }
     mYaura00rBrk.entryFrame(0.0f);
     
     tmp_modelData = initModel(&mpYmgcs00Model, LINK_BDL_YMGCS00, 0x11001222);
     mpYmgcs00Btk = entryBtk(tmp_modelData, LINK_BTK_YMGCS00);
     brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_MS);
-    ret = mYmgcs00Brk.init(tmp_modelData, brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    ret = mYmgcs00Brk.init(tmp_modelData, brk, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(21081, 21081, 21161, 21161), FALSE); }
     mYmgcs00Brk.entryFrame(0.0f);
     
@@ -12695,7 +12695,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
     m357C = m3580;
     if (sceneMode == 4) {
         mDoMtx_multVecZero(mpCLModel->getAnmMtx(0), &local_50);
-        dComIfGp_particle_setP1(dPa_name::ID_SCENE_8089, &local_50);
+        dComIfGp_particle_setP1(dPa_name::ID_AK_SN_OSHIRIKUROKOGE, &local_50);
     }
     if ((dComIfGs_getLastSceneMode() & 0x8000) != 0) {
         changeDragonShield(0);

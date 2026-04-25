@@ -2359,6 +2359,11 @@ extract:
   binary: assets/l_sightDL__d_a_boomerang.bin
   header: assets/l_sightDL__d_a_boomerang.h
 
+- symbol: l_matDL$4438
+  binary: assets/l_matDL__draw__18daBoomerang_blur_cFv.bin
+  header: assets/l_matDL__draw__18daBoomerang_blur_cFv.h
+  rename: l_matDL
+
 - symbol: l_sightDL!.data:0x80383320
   binary: assets/l_sightDL__d_a_player_main.bin
   header: assets/l_sightDL__d_a_player_main.h
@@ -2379,3 +2384,14 @@ extract:
 - symbol: l_toonMat1DL
   binary: assets/l_toonMat1DL.bin
   header: assets/l_toonMat1DL.h
+
+- symbol: l_matDL!.data:0x8036A2C0
+  binary: assets/l_matDL__d_cloth_packet.bin
+  header: assets/l_matDL__d_cloth_packet.h
+- symbol: l_alpha_matDL!.data:0x8036A300
+  binary: assets/l_alpha_matDL__d_cloth_packet.bin
+  header: assets/l_alpha_matDL__d_cloth_packet.h
+
+- symbol: l_matDL!.data:0x80385480
+  binary: assets/l_matDL__d_menu_cloth.bin
+  header: assets/l_matDL__d_menu_cloth.h

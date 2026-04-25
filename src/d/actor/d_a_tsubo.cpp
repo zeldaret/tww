@@ -102,7 +102,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -167,7 +167,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         43.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0x3E8,
@@ -234,7 +234,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         43.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0x3E8,
@@ -301,7 +301,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         43.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0x3E8,
@@ -368,7 +368,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -433,7 +433,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -498,7 +498,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -563,7 +563,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         50.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0x3E8,
@@ -636,7 +636,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -705,7 +705,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -770,7 +770,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -835,7 +835,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -900,7 +900,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -965,7 +965,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         45.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0x3E8,
@@ -1034,7 +1034,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         43.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0x3E8,
@@ -1105,7 +1105,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -1240,7 +1240,7 @@ bool Act_c::create_heap() {
 
         mpBrk = new mDoExt_brkAnm();
         if (mpBrk != NULL) {
-            if (mpBrk->init(modelData, brk_data, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+            if (mpBrk->init(modelData, brk_data, false, J3DFrameCtrl::EMode_LOOP)) {
                 ret = true;
             }
         }
@@ -3091,14 +3091,14 @@ void Act_c::set_tensor_afl() {
 void Act_c::eff_drop_water() {
     for (s32 i = 0; i < ARRAY_SSIZE(m70C); i++) {
         if (m70C[i].isEnd()) {
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8085, &m700, &shape_angle, NULL, 0xff, &m70C[i], -1, NULL, NULL, NULL);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_WPOT_PITYA, &m700, &shape_angle, NULL, 0xff, &m70C[i], -1, NULL, NULL, NULL);
             break;
         }
     }
 
     for (s32 i = 0; i < ARRAY_SSIZE(m748); i++) {
         if (m748[i].isEnd()) {
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8092, &m700, &shape_angle, NULL, 0xff, &m748[i], -1, NULL, NULL, NULL);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_WPOT_PITYA_C, &m700, &shape_angle, NULL, 0xff, &m748[i], -1, NULL, NULL, NULL);
             break;
         }
     }
@@ -3112,7 +3112,7 @@ void Act_c::eff_land_smoke() {
 /* 00006744-00006888       .text eff_break_barrel__Q27daTsubo5Act_cFv */
 void Act_c::eff_break_barrel() {
     cXyz sp18(current.pos.x, current.pos.y + data().mAcchRoofHeight * 0.5f, current.pos.z);
-    JPABaseEmitter* pJVar1 = dComIfGp_particle_set(dPa_name::ID_COMMON_03E5, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+    JPABaseEmitter* pJVar1 = dComIfGp_particle_set(dPa_name::ID_IT_JN_TR_HAHEN_A, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
     if (pJVar1 != NULL) {
         static JGeometry::TVec3<f32> em_scl(1.0f, 0.8f, 1.0f);
         pJVar1->setEmitterScale(em_scl);
@@ -3126,7 +3126,7 @@ void Act_c::eff_break_tsubo() {
     J3DModelData* pJVar2 = (J3DModelData*)(dComIfG_getObjectRes("Always", ALWAYS_BDL_MPM_TUBO));
     J3DAnmTexPattern* pJVar3 = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Always", ALWAYS_BTP_MPM_TUBO));
     JPABaseEmitter* pJVar4 =
-        static_cast<JPABaseEmitter*>(dComIfGp_particle_set(dPa_name::ID_COMMON_0017, &current.pos, NULL, (cXyz*)data().get_particle_scale()));
+        static_cast<JPABaseEmitter*>(dComIfGp_particle_set(dPa_name::ID_AK_JN_M_TUBOHAHEN, &current.pos, NULL, (cXyz*)data().get_particle_scale()));
     if (pJVar4 != NULL) {
         dPa_J3DmodelEmitter_c* modelEmitter = new dPa_J3DmodelEmitter_c(pJVar4, pJVar2, tevStr, pJVar3, uVar1, 0);
         if (modelEmitter != NULL) {
@@ -3140,7 +3140,7 @@ void Act_c::eff_break_tsubo() {
     color.b = tevStr.mColorC0.b;
     color.a = tevStr.mColorC0.a;
     dComIfGp_particle_set(
-        dPa_name::ID_COMMON_0018,
+        dPa_name::ID_AK_JN_TUBOKONAGONA,
         &current.pos,
         NULL,
         (cXyz*)data().get_particle_scale(),
@@ -3158,7 +3158,7 @@ void Act_c::eff_break_stool() {
     cXyz sp18(current.pos.x, current.pos.y + 35.0f, current.pos.z);
     static cXyz particle_scl(1.0f, 0.8f, 1.0f);
     JPABaseEmitter* pJVar1 =
-        dComIfGp_particle_set(dPa_name::ID_COMMON_03E7, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0, &particle_scl);
+        dComIfGp_particle_set(dPa_name::ID_IT_JN_TR_HAHEN_C, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0, &particle_scl);
     if (pJVar1 != NULL) {
         pJVar1->setDirectionalSpeed(25.0f);
     }
@@ -3169,7 +3169,7 @@ void Act_c::eff_break_stool() {
 void Act_c::eff_break_skull() {
     cXyz sp18(current.pos.x, current.pos.y + 20.0f, current.pos.z);
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_03E8, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_DOKURO00, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
     daObjEff::Act_c::make_skull_smoke(&sp18);
 }
 
@@ -3197,7 +3197,7 @@ void Act_c::eff_break_try() {
 void Act_c::eff_break_pinecone() {
     cXyz sp18(current.pos.x, current.pos.y + data().mAcchRoofHeight * 0.5f, current.pos.z);
 
-    dComIfGp_particle_set(dPa_name::ID_SCENE_816A, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_BOKKURI_MATSU00, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
     daObjEff::Act_c::make_pinecone_smoke(&sp18);
 }
 
@@ -3225,7 +3225,7 @@ void Act_c::eff_hit_lava_splash() {
 /* 00006E50-00006ED4       .text eff_kutani_set__Q27daTsubo5Act_cFv */
 void Act_c::eff_kutani_set() {
     if (m798 != 0 && --m798 == 0) {
-        dComIfGp_particle_set(dPa_name::ID_SCENE_814B, &current.pos, NULL, NULL, 0xff, &m784);
+        dComIfGp_particle_set(dPa_name::ID_AK_SN_KUTANIVESSEL, &current.pos, NULL, NULL, 0xff, &m784);
     }
 }
 

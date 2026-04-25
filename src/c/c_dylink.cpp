@@ -464,7 +464,7 @@ const DynamicNameTableEntry DynamicNameTable[] = {
 
 /* 800227A0-800229E0       .text cCc_Init__Fv */
 BOOL cCc_Init() {
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     JUT_ASSERT(0x2a, !DMC_initialized);
 #endif
 
@@ -553,7 +553,7 @@ cPhs_State cDyl_Link(s16 i_ProfName) {
     }
 }
 
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
 static void dummy() {
     OSReport_Error("cDyl_LinkASync: リンクに失敗しました。諦めます\n");
 }
@@ -581,14 +581,14 @@ cPhs_State cDyl_LinkASync(s16 i_ProfName) {
     JUT_ASSERT(DEMO_SELECT(208, 273), i_ProfName < ARRAY_SIZE(DMC));
     DynamicModuleControlBase * d = DMC[i_ProfName];
     if (d != NULL) {
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
         JUT_ASSERT(0x115, cDyl_Initialized);
 #endif
         if (d->load_async()) {
             if (d->link()) {
                 return cPhs_COMPLEATE_e;
             } else {
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
                 OSReport_Error("cDyl_LinkASync: リンクに失敗しました。諦めます\n");
 #endif
                 return cPhs_ERROR_e;
@@ -623,7 +623,7 @@ BOOL cDyl_InitCallback(void*) {
 
 /* 80022DF8-80022E70       .text cDyl_InitAsync__Fv */
 void cDyl_InitAsync() {
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
     cCc_Init();
 #endif
 

@@ -77,7 +77,7 @@ BOOL daAleaf_c::CreateHeap() {
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(daAleaf_c::m_arcname, VIGAH_BCK_VIGAH);
     JUT_ASSERT(DEMO_SELECT(273, 277), pbck != NULL);
 
-    if (!unk_408.init(modelData, pbck, 1, 1, 1.0f, 0, -1, 0)) {
+    if (!unk_408.init(modelData, pbck, true, J3DFrameCtrl::EMode_RESET)) {
         return FALSE;
     }
 

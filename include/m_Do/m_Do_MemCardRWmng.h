@@ -9,8 +9,7 @@ typedef struct CARDFileInfo CARDFileInfo;
 struct mDoMemCdRWm_HeaderData
 {
     /* 0x0000 */ u8 banner[0x0E00];
-    /* 0x0E00 */ u8 icon[0x0200];
-    /* 0x1000 */ u8 field_0x1000[0x0C00];
+    /* 0x0E00 */ u8 icon[0x0E00];
     /* 0x1C00 */ char comment[32];
     /* 0x1C20 */ char info[32];
 };  // Size: 0x1C40

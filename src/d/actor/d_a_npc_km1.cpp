@@ -48,20 +48,20 @@ static daNpc_Km1_HIO_c l_HIO;
 /* 000000EC-00000144       .text __ct__15daNpc_Km1_HIO_cFv */
 daNpc_Km1_HIO_c::daNpc_Km1_HIO_c() {
     static hio_prm_c a_prm_tbl = {
-        0x1FFE,
-        0x38E0,
-        0xE002,
-        0xC720,
-        0x0000,
-        0x0000,
-        0x0000,
-        0x0000,
-        0x0800,
-        0x0800,
-        150.0f,
-        0.0f
+        /* field_0                */ 0x1FFE,
+        /* field_2                */ 0x38E0,
+        /* field_4                */ 0xE002,
+        /* field_6                */ 0xC720,
+        /* field_8                */ 0x0000,
+        /* field_A                */ 0x0000,
+        /* field_C                */ 0x0000,
+        /* field_E                */ 0x0000,
+        /* field_10               */ 0x0800,
+        /* field_12               */ 0x0800,
+        /* mAttentionArrowYOffset */ 150.0f,
+        /* field_18               */ 0.0f,
     };
-    memcpy(&mPrmTbl,&a_prm_tbl,sizeof(hio_prm_c));
+    memcpy(&mPrmTbl, &a_prm_tbl, sizeof(hio_prm_c));
     mNo = -1;
     field_0x8 = -1;
 }
@@ -92,8 +92,6 @@ static BOOL nodeCallBack_Km(J3DNode* i_node, int i_calcTiming) {
     return TRUE;
  }
 
-
-extern dCcD_SrcCyl dNpc_cyl_src;
 /* 0000032C-0000043C       .text createInit__11daNpc_Km1_cFv */
 bool daNpc_Km1_c::createInit() {
     mEventCut.setActorInfo2("Km1", this);
@@ -472,7 +470,7 @@ void daNpc_Km1_c::privateCut() {
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("Km1",NULL,0);
     if(staffIdx != -1){
-        int uVar1 = dComIfGp_evmng_getMyActIdx(staffIdx,cut_name_tbl,1,1,0);
+        int uVar1 = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
         field_0x7C9 = uVar1;
         if(field_0x7C9 == -1){
             dComIfGp_evmng_cutEnd(staffIdx);

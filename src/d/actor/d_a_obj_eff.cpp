@@ -164,7 +164,7 @@ bool daObjEff::Act_c::create_heap() {
 /* 00000898-00000998       .text eff_set_barrel_smoke__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set_barrel_smoke() {
     static cXyz particle_scl(2.5f, 2.5f, 1.0f);
-    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &current.pos, NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &current.pos, NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
     if (emitter != NULL) {
         emitter->setVolumeSize(0x28);
         emitter->setRate(20.0f);
@@ -180,7 +180,7 @@ BOOL daObjEff::Act_c::eff_set_barrel_smoke() {
 /* 000009D4-00000AD0       .text eff_set_stool_smoke__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set_stool_smoke() {
     static cXyz particle_scl(2.5f, 2.5f, 1.0f);
-    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &current.pos,
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &current.pos,
                                                         NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
     if (emitter != NULL) {
         emitter->setVolumeSize(0x1E);
@@ -197,7 +197,7 @@ BOOL daObjEff::Act_c::eff_set_stool_smoke() {
 /* 00000AD0-00000BC0       .text eff_set_skull_smoke__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set_skull_smoke() {
     static cXyz particle_scl(1.6f, 1.6f, 1.0f);
-    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &current.pos,
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &current.pos,
                                                         NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
     if (emitter != NULL) {
         emitter->setRate(10.0f);
@@ -217,7 +217,7 @@ BOOL daObjEff::Act_c::eff_set_land_smoke() {
     pScale.y = scale.y;
     pScale.z = scale.z;
 
-    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &current.pos,
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &current.pos,
                                                         NULL,  &pScale, 0xB4, mParticleCallback, -1, NULL, NULL, NULL);
     if (emitter != NULL) {
         emitter->setVolumeSize(0x1E);
@@ -239,7 +239,7 @@ BOOL daObjEff::Act_c::eff_set_land_smoke() {
 
 /* 00000D24-00000D98       .text eff_set_pinecone_smoke__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set_pinecone_smoke() {
-    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_SCENE_A16B, &current.pos,
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_IT_ST_BOKKURI_SMOKE00, &current.pos,
                                                         NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, NULL);
     return emitter != NULL;
 }
@@ -247,7 +247,7 @@ BOOL daObjEff::Act_c::eff_set_pinecone_smoke() {
 /* 00000D98-00000E80       .text eff_set_woodBox_smoke__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set_woodBox_smoke() {
     static cXyz particle_scl(2.5f, 2.5f, 1.0f);
-    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &current.pos,
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &current.pos,
                                                         NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
     if (emitter != NULL) {
         emitter->setRate(30.0f);

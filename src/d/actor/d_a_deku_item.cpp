@@ -73,14 +73,14 @@ BOOL daDekuItem_c::CreateHeap() {
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, DEKU_BCK_VLFDK);
     JUT_ASSERT(0x103, pbck != NULL);
 
-    if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false)) {
+    if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
 
     pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, DEKU_BCK_VLFDM);
     JUT_ASSERT(0x110, pbck != NULL);
 
-    if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
+    if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 
@@ -176,7 +176,7 @@ void daDekuItem_c::mode_wait() {
     }
 
     if (mpEmitter == NULL) {
-        mpEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_820F, &current.pos);
+        mpEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_DEKULEAFSHINE00, &current.pos);
     } else if (mpEmitter != NULL) {
         mpEmitter->setGlobalTranslation(current.pos);
     }

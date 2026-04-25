@@ -2742,8 +2742,8 @@ BOOL daShip_c::procStartModeWarp() {
             m03BC.x = 0;
             m03BC.y = shape_angle.y + 0x8000;
             m03BC.z = 0;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0285, &current.pos, &shape_angle, NULL, 0xFF, &m1984, -1, &diff);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0285, &current.pos, &m03BC, NULL, 0xFF, &m1998, -1, &diff);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWARPSPLASH00, &current.pos, &shape_angle, NULL, 0xFF, &m1984, -1, &diff);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWARPSPLASH00, &current.pos, &m03BC, NULL, 0xFF, &m1998, -1, &diff);
         }
         if (pfVar2 != NULL) {
             pfVar2->current.pos.y = current.pos.y - 700.0f;
@@ -2789,8 +2789,8 @@ BOOL daShip_c::procTactWarp_init() {
     m03BC.x = 0;
     m03BC.y = shape_angle.y + 0x8000;
     m03BC.z = 0;
-    dComIfGp_particle_set(dPa_name::ID_COMMON_0285, &current.pos, &shape_angle, NULL, 0xFF, &m1984, -1, amb);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_0285, &current.pos, &m03BC, NULL, 0xFF, &m1998, -1, amb);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWARPSPLASH00, &current.pos, &shape_angle, NULL, 0xFF, &m1984, -1, amb);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWARPSPLASH00, &current.pos, &m03BC, NULL, 0xFF, &m1998, -1, amb);
     return TRUE;
 }
 
@@ -2801,8 +2801,8 @@ BOOL daShip_c::procTactWarp() {
     
     shape_angle.y += m03A6;
     current.angle.y = shape_angle.y;
-    daTornado_c* mpTornado = (daTornado_c*)fopAcM_SearchByID(mTactWarpID);
-    if (mpTornado == NULL || fpcM_IsCreating(mTactWarpID)) {
+    daTornado_c* tornado = (daTornado_c*)fopAcM_SearchByID(mTactWarpID);
+    if (tornado == NULL || fpcM_IsCreating(mTactWarpID)) {
         if (mTactWarpID == fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_reset();
             m1984.remove();
@@ -2813,33 +2813,33 @@ BOOL daShip_c::procTactWarp() {
         res = FALSE;
     }
     else {
-        if (cLib_chaseS(&m03A6, 0x1C25, 0x40) && (mpTornado->mJointScale[10] > 0.8f)) {
+        if (cLib_chaseS(&m03A6, 0x1C25, 0x40) && (tornado->mJointScale[10] > 0.8f)) {
             speed.y += 1.0f;
             if (speed.y > 50.0f) {
                 speed.y = 50.0f;
             }
             current.pos.y += speed.y;
-            mpTornado->current.pos.y = current.pos.y - 700.0f;
+            tornado->current.pos.y = current.pos.y - 700.0f;
             m1984.remove();
             m1998.remove();
         }
         else {
             if ((!m037A) && (m03A6 > 0x1000)) {
                 m037A = 1;
-                mpTornado->m31c = 1;
+                tornado->m31c = 1;
             }
         }
         if (m037A == 1) {
-            cLib_chaseF(&mpTornado->current.pos.y, current.pos.y - 700.0f, 20.0f);
+            cLib_chaseF(&tornado->current.pos.y, current.pos.y - 700.0f, 20.0f);
             iVar4 = 0;
             for (int i = 0; i < 11; iVar4++, i++) {
-                if (current.pos.y < mpTornado->getJointYPos(i)) break;
+                if (current.pos.y < tornado->getJointYPos(i)) break;
             }
             if (iVar4 == 11) {
                 iVar4 = 10;
             }
-              cLib_chaseF(&current.pos.x, mpTornado->getJointXPos(iVar4), 50.0f);
-              cLib_chaseF(&current.pos.z, mpTornado->getJointZPos(iVar4), 50.0f);
+              cLib_chaseF(&current.pos.x, tornado->getJointXPos(iVar4), 50.0f);
+              cLib_chaseF(&current.pos.z, tornado->getJointZPos(iVar4), 50.0f);
         }
         if (m037A != 2 && current.pos.y > m03F4 + 5000.0f ) {
             m037A = 2;
@@ -2936,8 +2936,8 @@ BOOL daShip_c::procStartModeThrow() {
             amb.g = amb.g * 0.23529412f + 195.0f;
             amb.b = amb.b * 0.23529412f + 195.0f;
             current.pos.y = m03F4;
-            dComIfGp_particle_set(dPa_name::ID_SCENE_82D7, &current.pos, &shape_angle, NULL, 0xFF, NULL, -1, &amb);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_82D8, &current.pos, &shape_angle, NULL, 0xFF, NULL, -1, &amb);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_FN_SHIBUKI00, &current.pos, &shape_angle, NULL, 0xFF, NULL, -1, &amb);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_FN_SHIBUKI01, &current.pos, &shape_angle, NULL, 0xFF, NULL, -1, &amb);
             current.pos.y = m03F4 - 50.0f;
         }
     }
@@ -2964,7 +2964,7 @@ void daShip_c::setEffectData(float param_1, short param_2) {
     float fVar1;
     float fVar2;
     float fVar3;
-    JPABaseEmitter* mEmitter;
+    JPABaseEmitter* emitter;
     GXColor amb;
     GXColor diff;
     
@@ -2990,30 +2990,30 @@ void daShip_c::setEffectData(float param_1, short param_2) {
             if (std::fabsf(speedF) > 3.0f && mFwdVel * speedF > 0.0f) {
                 if (mFwdVel > 11.0f) {
                     if (mWaveL.getEmitter() == NULL) {
-                        mEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0037, &mEffPos, &shape_angle, NULL, 0xFF, &mWaveL);
+                        emitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWAVE00, &mEffPos, &shape_angle, NULL, 0xFF, &mWaveL);
                         mWaveL.setTimer(20);
-                        if (mEmitter) {
-                            mEmitter->setDirection(wave_l_direction);
+                        if (emitter) {
+                            emitter->setDirection(wave_l_direction);
                         }
                     }
                     if (mWaveR.getEmitter() == NULL) {
-                        mEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0037, &mEffPos, &shape_angle, NULL, 0xFF, &mWaveR);
+                        emitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWAVE00, &mEffPos, &shape_angle, NULL, 0xFF, &mWaveR);
                         mWaveR.setTimer(20);
-                        if (mEmitter) {
-                            mEmitter->setDirection(wave_r_direction);
+                        if (emitter) {
+                            emitter->setDirection(wave_r_direction);
                         }
                     }
                     if (mSplash.getEmitter() == NULL) {
-                        dComIfGp_particle_set(dPa_name::ID_COMMON_0035, &mEffPos, &shape_angle, NULL, 0xFF, &mSplash);
+                        dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPSPLASH00, &mEffPos, &shape_angle, NULL, 0xFF, &mSplash);
                     }
                 }
                 if (mTrack.getEmitter() == NULL) {
-                    dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0036, &current.pos, &shape_angle, NULL, 0, &mTrack);
+                    dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_SHIPTAIL00, &current.pos, &shape_angle, NULL, 0, &mTrack);
                 }
                 if (checkStateFlg((daSHIP_SFLG)(daSFLG_FLY_e | daSFLG_LAND_e))) {
                     dKy_get_seacolor(&amb, &diff);
-                    mEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0034, &mEffPos, &shape_angle, NULL, 0xFF, NULL, -1, &amb);
-                    if (mEmitter) {
+                    emitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPIMPACT00, &mEffPos, &shape_angle, NULL, 0xFF, NULL, -1, &amb);
+                    if (emitter) {
                         fVar1 = 10.0f;
                         fVar2 = (-(speed.y - -15.0f) / 30.0f) * 50.0f + 10.0f;
                         if (fVar2 < 10.0f) {
@@ -3022,7 +3022,7 @@ void daShip_c::setEffectData(float param_1, short param_2) {
                         else if (fVar2 > 60.0f) {
                             fVar2 = 60.0f;
                         }
-                        mEmitter->setRate(fVar2);
+                        emitter->setRate(fVar2);
                     }
                     seStart(JA_SE_SHIP_JUMP_ALIGHT, &current.pos);
                 }
@@ -3330,7 +3330,7 @@ void daShip_c::setRopePos() {
         m1020.z = r3->z;
 
         if (mRipple.getEmitter() == NULL) { 
-            dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &m1020, NULL, &ripple_scale, 0xFF, &mRipple);
+            dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &m1020, NULL, &ripple_scale, 0xFF, &mRipple);
 
             if (mRipple.getEmitter() != NULL) {
                 mRipple.setRate(0.0f);
@@ -3355,7 +3355,7 @@ void daShip_c::setRopePos() {
                 if (m19AC.getEmitter() == NULL) {
                     ropeSegments = mRopeLine.getPos(0);
 
-                    emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0038, ropeSegments, NULL, NULL, 0xFF, &m19AC);
+                    emitter = dComIfGp_particle_setP1(dPa_name::ID_IT_JN_LK_NURE_POTA00, ropeSegments, NULL, NULL, 0xFF, &m19AC);
 
                     if(emitter) {
                         emitter->setGlobalParticleScale(1.5f, 1.5f);
@@ -3369,7 +3369,7 @@ void daShip_c::setRopePos() {
                 dComIfGp_getVibration().StartShock(3, 1, cXyz(0.0f, 1.0f, 0.0f));
                 
                 if (m19C0.getEmitter() == NULL) {
-                    emitter = dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &m1074, NULL, &ripple_scale, 0xFF, &m19C0);
+                    emitter = dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &m1074, NULL, &ripple_scale, 0xFF, &m19C0);
                     
                     if (emitter) {
                         emitter->setVolumeSize(30);
@@ -3976,17 +3976,17 @@ BOOL daShip_c::execute() {
     
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     
-    J3DModel* mModel1;
-    J3DModel* mModel2;
-    mModel1 = mpBodyAnm->getModel();
-    mModel2 = mpHeadAnm->getModel(); 
+    J3DModel* model1;
+    J3DModel* model2;
+    model1 = mpBodyAnm->getModel();
+    model2 = mpHeadAnm->getModel(); 
     
-    mModel1->setBaseTRMtx(mDoMtx_stack_c::get());
+    model1->setBaseTRMtx(mDoMtx_stack_c::get());
     mpBodyAnm->calc();
     
     setHeadAnm();
     
-    mModel2->setBaseTRMtx(mModel1->getAnmMtx(4));
+    model2->setBaseTRMtx(model1->getAnmMtx(4));
     mpHeadAnm->calc();
 
     if (mPart == PART_CRANE_e) {
@@ -4059,14 +4059,14 @@ BOOL daShip_c::execute() {
         }
     }
 
-    cMtx_multVec(mModel1->getAnmMtx(10), &l_tiller_top_offset, &mTillerTopPos);
+    cMtx_multVec(model1->getAnmMtx(10), &l_tiller_top_offset, &mTillerTopPos);
 
     daGrid_c* grid;
-    MtxP mMtx = mModel1->getAnmMtx(7);
+    MtxP mtx = model1->getAnmMtx(7);
 
-    m0444.x = mMtx[0][3];
-    m0444.y = mMtx[1][3];
-    m0444.z = mMtx[2][3];
+    m0444.x = mtx[0][3];
+    m0444.y = mtx[1][3];
+    m0444.z = mtx[2][3];
 
     cXyz spD8;
     grid = mpGrid;
@@ -4077,10 +4077,10 @@ BOOL daShip_c::execute() {
         mpGrid->current.pos = m0444;
         mpGrid->current.angle = shape_angle;
 
-        cMtx_multVecSR(mMtx, &top_offset, &spD8);
+        cMtx_multVecSR(mtx, &top_offset, &spD8);
         mpGrid->scale.y = spD8.abs() / 365.0f;
 
-        cMtx_multVecSR(mModel1->getAnmMtx(8), &XZ_top_offset, &spD8);
+        cMtx_multVecSR(model1->getAnmMtx(8), &XZ_top_offset, &spD8);
         grid->m2200 = 1.0f - (spD8.abs() / 265.0f); // No idea why this is generating an extra lwz instruction for loading mpGrid when the instructions above don't
 
         if (mTornadoActor) {
@@ -4119,7 +4119,7 @@ BOOL daShip_c::execute() {
     // This should probably use the mDoMtx_multVecZero inline, but it's not getting inlined
     // mDoMtx_multVecZero(mModel2->getAnmMtx(16), &eyePos);
     MtxP jnt_mtx;
-    jnt_mtx = mModel2->getAnmMtx(16);
+    jnt_mtx = model2->getAnmMtx(16);
     eyePos.x = jnt_mtx[0][3];
     eyePos.y = jnt_mtx[1][3];
     eyePos.z = jnt_mtx[2][3];
@@ -4432,12 +4432,12 @@ BOOL daShip_c::createHeap() {
 
     if (mpBodyAnm && mpBodyAnm->getModel()) {
         J3DModel* pModel = mpBodyAnm->getModel();
-        J3DSkinDeform* mSkinDeform = new J3DSkinDeform();
-        if (mSkinDeform == NULL) {
+        J3DSkinDeform* skinDeform = new J3DSkinDeform();
+        if (skinDeform == NULL) {
             return FALSE;
         }
 
-        if (pModel->setSkinDeform(mSkinDeform, 1) != J3DErrType_Success) {
+        if (pModel->setSkinDeform(skinDeform, 1) != J3DErrType_Success) {
             return FALSE;
         }
     }

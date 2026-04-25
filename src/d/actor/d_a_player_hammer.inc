@@ -21,7 +21,7 @@ void daPy_lk_c::setHammerModel() {
     J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_HAMMERDAM);
     JKRHeap* oldHeap = setItemHeap();
     J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_HAMMER, 0x37221222);
-    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(32, FALSE);
     }
@@ -72,15 +72,15 @@ void daPy_lk_c::setHammerQuake(cBgS_PolyInfo* param_1, const cXyz* param_2, int 
         local_38.y = mDoMtx_stack_c::now[1][3];
         local_38.z = mDoMtx_stack_c::now[2][3];
         if (!fopAcM_getWaterY(&local_38, &local_54) || (local_54 < (5.0f + local_38.y))) {
-            emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0214, &local_38);
+            emitter = dComIfGp_particle_setP1(dPa_name::ID_IT_JN_HM_SENKO00, &local_38);
             if (emitter != NULL) {
                 emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
             }
-            emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0215, &local_38);
+            emitter = dComIfGp_particle_setP1(dPa_name::ID_IT_JN_HM_SENPU00, &local_38);
             if (emitter != NULL) {
                 emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
             }
-            emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0216, &local_38);
+            emitter = dComIfGp_particle_setP1(dPa_name::ID_IT_JN_HM_SYOGEKI00, &local_38);
             if (emitter != NULL) {
                 emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
             }
@@ -93,9 +93,9 @@ void daPy_lk_c::setHammerQuake(cBgS_PolyInfo* param_1, const cXyz* param_2, int 
         }
         if (bVar2) {
             attrib_code = dBgS_Attr_WATER_e;
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_027C, &local_38);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_HM_WP00, &local_38);
             dComIfGp_particle_setShipTail(
-                dPa_name::ID_COMMON_003D, &local_38, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack
+                dPa_name::ID_IT_JN_WP_HAMON01, &local_38, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack
             );
         } else {
             attrib_code = dComIfG_Bgsp()->GetAttributeCode(*param_1);
@@ -146,14 +146,14 @@ void daPy_lk_c::setHammerWaterSplash() {
             mGndChk.SetPos(&local_28);
             if (!(local_50 < dComIfG_Bgsp()->GroundCross(&mGndChk) + 5.0f)) {
                 local_28.y = local_50;
-                dComIfGp_particle_setP1(dPa_name::ID_COMMON_027C, &local_28);
+                dComIfGp_particle_setP1(dPa_name::ID_IT_JN_HM_WP00, &local_28);
                 dComIfGp_particle_setShipTail(
-                    dPa_name::ID_COMMON_003D, &local_28, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack
+                    dPa_name::ID_IT_JN_WP_HAMON01, &local_28, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack
                 );
                 GXColor amb, dif;
                 dKy_get_seacolor(&amb, &dif);
                 JPABaseEmitter* emitter =
-                    dComIfGp_particle_setP1(dPa_name::ID_COMMON_0023, &local_28, NULL, NULL, 0xFF, NULL, -1, &amb);
+                    dComIfGp_particle_setP1(dPa_name::ID_AK_JN_ELEMENTSHIBUKI00, &local_28, NULL, NULL, 0xFF, NULL, -1, &amb);
                 if (emitter != NULL) {
                     emitter->setRate(60.0f);
                     emitter->setSpread(1.0f);

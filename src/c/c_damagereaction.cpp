@@ -3,6 +3,7 @@
 // Translation Unit: c_damagereaction.o
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "c/c_damagereaction.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_sea.h"
@@ -121,7 +122,7 @@ BOOL enemy_ice(enemyice* ei) {
         
         if (ei->mLightShrinkTimer == 1) { // Just started dying to light arrows.
             ei->mLightShrinkTimer++;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_LIGHT_EXPLOSION, &pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_ENEMYFLASH00, &pos, NULL, &particleScale);
             ac->tevStr.mFogColor.b = 0xFF;
             ac->tevStr.mFogColor.g = 0xFF;
             ac->tevStr.mFogColor.r = 0xFF;
@@ -219,7 +220,7 @@ BOOL enemy_ice(enemyice* ei) {
             particleScale.setall(ei->mParticleScale);
             pos = ac->current.pos;
             pos.y += ei->mYOffset;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0274, &pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_ENEMYFREEZE01, &pos, NULL, &particleScale);
         } else {
             return FALSE;
         }
@@ -330,15 +331,15 @@ BOOL enemy_ice(enemyice* ei) {
                 particleScale.setall(ei->mParticleScale);
                 pos = ac->current.pos;
                 pos.y += ei->mYOffset;
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0273, &pos, NULL, &particleScale);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0274, &pos, NULL, &particleScale);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_ENEMYFREEZE00, &pos, NULL, &particleScale);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_ENEMYFREEZE01, &pos, NULL, &particleScale);
                 
                 if (ei->mFreezeTimer == -2) {
                     // Shattered by Skull Hammer.
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &pos);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &pos);
                     csXyz angle(0, fopAcM_searchPlayerAngleY(ac), 0);
                     particleScale.setall(2.0f);
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &pos, &angle, &particleScale);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &pos, &angle, &particleScale);
                     dScnPly_ply_c::setPauseTimer(8);
                 }
                 
@@ -383,7 +384,7 @@ BOOL enemy_ice(enemyice* ei) {
                 particleScale.setall(ei->mParticleScale);
                 pos = ac->current.pos;
                 pos.y += ei->mYOffset;
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0277, &pos, NULL, &particleScale);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_ENEMYFREEZE02, &pos, NULL, &particleScale);
                 fopAcM_seStart(ac, JA_SE_CM_ICE_RECOVER, 0);
             }
         }
@@ -465,7 +466,7 @@ void enemy_fire(enemyfire* ef) {
                 }
                 cXyz scale;
                 scale.setall(ef->mParticleScale[i]);
-                ef->mpFlameEmitters[i] = dComIfGp_particle_set(dPa_name::ID_COMMON_03F1, &ac->current.pos, NULL, &scale);
+                ef->mpFlameEmitters[i] = dComIfGp_particle_set(dPa_name::ID_AK_JN_BODYABLAZE00, &ac->current.pos, NULL, &scale);
                 ef->mFlameTimers[i] = ef->mFireTimer - (s16)cM_rndF(60.0f);
                 if (ef->mFlameTimers[i] < 10) {
                     ef->mFlameTimers[i] = 10;
@@ -477,7 +478,7 @@ void enemy_fire(enemyfire* ef) {
             ef->mSph.Set(fire_at_sph_src);
             ef->mSph.SetStts(&ef->mStts);
         }
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
         else {
             ef->mLight.mPower = 0.0f;
         }
@@ -545,11 +546,9 @@ void enemy_fire(enemyfire* ef) {
                 ef->mpFlameEmitters[i]->setDirection(ef->mDirection);
                 
                 JGeometry::TVec3<f32> scale;
-                scale.set(
-                    ef->mParticleScale[i],
-                    ef->mFlameScaleY * ef->mParticleScale[i],
-                    ef->mParticleScale[i]
-                );
+                scale.x = ef->mParticleScale[i];
+                scale.z = ef->mParticleScale[i];
+                scale.y = ef->mFlameScaleY * ef->mParticleScale[i];
                 ef->mpFlameEmitters[i]->setGlobalParticleScale(scale);
                 
                 if (ef->mHitboxFlameIdx == numFlamesLeft) {
@@ -572,7 +571,7 @@ void enemy_fire(enemyfire* ef) {
         
         if (ef->mFireTimer == 0) {
             ef->mMode = 0; // Not on fire
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
             dKy_plight_cut(&ef->mLight);
 #endif
             ef->mSph.SetC(non_pos);
@@ -604,7 +603,7 @@ void enemy_fire_remove(enemyfire* ef) {
 /* 8001D428-8001D48C       .text enemy_piyo_set__FP10fopAc_ac_c */
 void enemy_piyo_set(fopAc_ac_c* enemy) {
     // Creates the rotating stars particle for when an enemy is stunned.
-    dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_SPIN, &enemy->attention_info.position);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOPIYO00, &enemy->attention_info.position);
 }
 
 /* 8001D48C-8001D890       .text wall_angle_get__FP10fopAc_ac_cs */
@@ -722,7 +721,7 @@ int dr_joint_bg_check(damagereaction* dr) {
                 dr->m1F0[i].y = G_CM3D_F_INF;
             }
 
-            if((u32)i <= 2 || i == 3) {
+            if(i == 0 || i == 1 || i == 2 || i == 3) {
                 if(dr->m1F0[i].y == G_CM3D_F_INF) {
                     dr->m3D0[i] = 2;
                 }
@@ -745,11 +744,11 @@ int dr_joint_bg_check(damagereaction* dr) {
         f32 diffY = dr->m100[0xE].y - dr->m100[0xA].y;
         f32 diffZ = dr->m100[0xE].z - dr->m100[0xA].z;
         temp.z = std::sqrtf(diffX * diffX + diffY * diffY + diffZ * diffZ);
-        s16 angle = cM_atan2s(diffX, diffZ);
-        s16 i = 0;
-        for(; i >= -0x4000; i -= 0x400) {
-            mDoMtx_YrotS(*calc_mtx, angle);
-            mDoMtx_XrotM(*calc_mtx, i);
+        s16 angleY = cM_atan2s(diffX, diffZ);
+        s16 angleX = 0;
+        for(; angleX >= -0x4000; angleX -= 0x400) {
+            cMtx_YrotS(*calc_mtx, angleY);
+            cMtx_XrotM(*calc_mtx, angleX);
             MtxPosition(&temp, &temp2);
             temp2.x = temp2.x + dr->m100[0xA].x;
             temp2.y = temp2.y + dr->m100[0xA].y;
@@ -760,8 +759,8 @@ int dr_joint_bg_check(damagereaction* dr) {
             }
         }
 
-        if(i != 0) {
-            dr->m440 = i + 0x400;
+        if(angleX != 0) {
+            dr->m440 = angleX + 0x400;
             dr->m408 = 2;
         }
         else {
@@ -790,11 +789,11 @@ int dr_joint_bg_check(damagereaction* dr) {
         diffY = dr->m100[0xF].y - dr->m100[0xB].y;
         diffZ = dr->m100[0xF].z - dr->m100[0xB].z;
         temp.z = std::sqrtf(diffX * diffX + diffY * diffY + diffZ * diffZ);
-        angle = cM_atan2s(diffX, diffZ);
-        i = 0;
-        for(; i >= -0x4000; i -= 0x400) {
-            mDoMtx_YrotS(*calc_mtx, angle);
-            mDoMtx_XrotM(*calc_mtx, i);
+        angleY = cM_atan2s(diffX, diffZ);
+        angleX = 0;
+        for(; angleX >= -0x4000; angleX -= 0x400) {
+            cMtx_YrotS(*calc_mtx, angleY);
+            cMtx_XrotM(*calc_mtx, angleX);
             MtxPosition(&temp, &temp2);
             temp2.x = temp2.x + dr->m100[0xB].x;
             temp2.y = temp2.y + dr->m100[0xB].y;
@@ -805,8 +804,8 @@ int dr_joint_bg_check(damagereaction* dr) {
             }
         }
 
-        if(i != 0) {
-            dr->m442 = i + 0x400;
+        if(angleX != 0) {
+            dr->m442 = angleX + 0x400;
             dr->m40C = 2;
         }
         else {
@@ -828,11 +827,11 @@ int dr_joint_bg_check(damagereaction* dr) {
         diffY = dr->m100[0x10].y - dr->m100[0x8].y;
         diffZ = dr->m100[0x10].z - dr->m100[0x8].z;
         temp.z = std::sqrtf(diffX * diffX + diffY * diffY + diffZ * diffZ);
-        angle = cM_atan2s(diffX, diffZ);
-        i = 0;
-        for(; i >= -0x4000; i -= 0x400) {
-            mDoMtx_YrotS(*calc_mtx, angle);
-            mDoMtx_XrotM(*calc_mtx, i);
+        angleY = cM_atan2s(diffX, diffZ);
+        angleX = 0;
+        for(; angleX >= -0x4000; angleX -= 0x400) {
+            cMtx_YrotS(*calc_mtx, angleY);
+            cMtx_XrotM(*calc_mtx, angleX);
             MtxPosition(&temp, &temp2);
             temp2.x = temp2.x + dr->m100[0x8].x;
             temp2.y = temp2.y + dr->m100[0x8].y;
@@ -843,8 +842,8 @@ int dr_joint_bg_check(damagereaction* dr) {
             }
         }
 
-        if(i != 0) {
-            dr->m444 = i + 0x400;
+        if(angleX != 0) {
+            dr->m444 = angleX + 0x400;
             dr->m410 = 2;
         }
         else {
@@ -861,11 +860,11 @@ int dr_joint_bg_check(damagereaction* dr) {
         diffY = dr->m100[0x11].y - dr->m100[0x9].y;
         diffZ = dr->m100[0x11].z - dr->m100[0x9].z;
         temp.z = std::sqrtf(diffX * diffX + diffY * diffY + diffZ * diffZ);
-        angle = cM_atan2s(diffX, diffZ);
-        i = 0;
-        for(; i >= -0x4000; i -= 0x400) {
-            mDoMtx_YrotS(*calc_mtx, angle);
-            mDoMtx_XrotM(*calc_mtx, i);
+        angleY = cM_atan2s(diffX, diffZ);
+        angleX = 0;
+        for(; angleX >= -0x4000; angleX -= 0x400) {
+            cMtx_YrotS(*calc_mtx, angleY);
+            cMtx_XrotM(*calc_mtx, angleX);
             MtxPosition(&temp, &temp2);
             temp2.x = temp2.x + dr->m100[0x9].x;
             temp2.y = temp2.y + dr->m100[0x9].y;
@@ -876,8 +875,8 @@ int dr_joint_bg_check(damagereaction* dr) {
             }
         }
 
-        if(i != 0) {
-            dr->m446 = i + 0x400;
+        if(angleX != 0) {
+            dr->m446 = angleX + 0x400;
             dr->m414 = 2;
         }
         else {
@@ -894,13 +893,13 @@ int dr_joint_bg_check(damagereaction* dr) {
         diffY = dr->m100[0x12].y - dr->m100[0xC].y;
         diffZ = dr->m100[0x12].z - dr->m100[0xC].z;
         temp.z = std::sqrtf(diffX * diffX + diffY * diffY + diffZ * diffZ);
-        angle = cM_atan2s(diffX, diffZ);
+        angleY = cM_atan2s(diffX, diffZ);
 
         if(REG0_S(4) == 0) {
-            i = 0;
-            for(; i >= -0x4000; i -= 0x400) {
-                mDoMtx_YrotS(*calc_mtx, angle);
-                mDoMtx_XrotM(*calc_mtx, i);
+            angleX = 0;
+            for(; angleX >= -0x4000; angleX -= 0x400) {
+                cMtx_YrotS(*calc_mtx, angleY);
+                cMtx_XrotM(*calc_mtx, angleX);
                 MtxPosition(&temp, &temp2);
                 temp2.x = temp2.x + dr->m100[0xC].x;
                 temp2.y = temp2.y + dr->m100[0xC].y;
@@ -911,8 +910,8 @@ int dr_joint_bg_check(damagereaction* dr) {
                 }
             }
 
-            if(i != 0) {
-                dr->m448 = i + 0x400;
+            if(angleX != 0) {
+                dr->m448 = angleX + 0x400;
                 dr->m418 = 2;
             }
             else {
@@ -944,14 +943,16 @@ int kado_check(damagereaction* dr) {
 
     int result = 0;
 
-    mDoMtx_YrotS(*calc_mtx, dr->m482);
-    mDoMtx_XrotM(*calc_mtx, dr->m480);
+    cMtx_YrotS(*calc_mtx, dr->m482);
+    cMtx_XrotM(*calc_mtx, dr->m480);
 
     for(int i = 0; i < 2; i++) {
         cXyz temp1;
         cXyz start = dr->mpEnemy->current.pos;
         start.y += REG14_F(0) + 100.0f;
-        temp1.set(REG14_F(1), REG14_F(2), REG14_F(3) + -70.0f);
+        temp1.x = REG14_F(1);
+        temp1.y = REG14_F(2);
+        temp1.z = REG14_F(3) + -70.0f;
         cXyz temp2;
         MtxPosition(&temp1, &temp2);
         start += temp2;
@@ -981,7 +982,7 @@ s16 hang_ang_get(damagereaction* dr) {
 
     cXyz temp = dr->m7A0 - dr->mpEnemy->current.pos;
 
-    mDoMtx_YrotS(*calc_mtx, cM_atan2s(temp.x, temp.z));
+    cMtx_YrotS(*calc_mtx, cM_atan2s(temp.x, temp.z));
     cXyz temp3;
     temp.set(0.0f, 0.0f, -100.0f);
     MtxPosition(&temp, &temp3);
@@ -1094,7 +1095,7 @@ int dr_damage_set(damagereaction* dr) {
                 temp2.x = 0.0f;
                 temp2.y = 0.0f;
                 temp2.z = dr->m478;
-                mDoMtx_YrotS(*calc_mtx, dr->m482);
+                cMtx_YrotS(*calc_mtx, dr->m482);
                 MtxPosition(&temp2, &temp4);
                 dr->mpEnemy->speed.x = temp4.x;
                 dr->mpEnemy->speed.z = temp4.z;
@@ -1194,7 +1195,7 @@ int dr_damage_set(damagereaction* dr) {
 
     if(dr->m7B6 == 0 && test_sw == 0) {
         if(dr->m4C8[0] == 0) {
-            mDoMtx_YrotS(*calc_mtx, cM_atan2s(-dr->m42C.x, -dr->m42C.z));
+            cMtx_YrotS(*calc_mtx, cM_atan2s(-dr->m42C.x, -dr->m42C.z));
             temp2.x = 0.0f;
             temp2.y = 0.0f;
             temp2.z = dr->m4D4;
@@ -1282,7 +1283,7 @@ int dr_damage_set(damagereaction* dr) {
                 }
                 temp2.y = 0.0f;
                 temp2.z = dr->m478 * 0.5f;
-                mDoMtx_YrotS(*calc_mtx, dr->m482);
+                cMtx_YrotS(*calc_mtx, dr->m482);
                 MtxPosition(&temp2, &temp4);
                 dr->mpEnemy->speed.x = temp4.x;
                 dr->mpEnemy->speed.z = temp4.z;
@@ -1299,7 +1300,7 @@ int dr_damage_set(damagereaction* dr) {
         dr->mParticleAngle.y = wall_angle_get(dr->mpEnemy, cM_atan2s(-dr->m42C.x, -dr->m42C.z));
         dr->mParticleAngle.x = 0x4000;
         dr->mParticleCallBack.end();
-        JPABaseEmitter* pEmitter = dComIfGp_particle_setToon(0x2022, &dr->mParticlePos, &dr->mParticleAngle, NULL, 0xB9, &dr->mParticleCallBack, fopAcM_GetRoomNo(dr->mpEnemy));
+        JPABaseEmitter* pEmitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &dr->mParticlePos, &dr->mParticleAngle, NULL, 0xB9, &dr->mParticleCallBack, fopAcM_GetRoomNo(dr->mpEnemy));
         if(pEmitter) {
             f32 scale;
             if(dr->mEnemyType == damagereaction::TYPE_BOKOBLIN) {
@@ -1384,7 +1385,7 @@ int dr_damage_set(damagereaction* dr) {
                 }
                 temp2.y = 0.0f;
                 temp2.z = dr->m478 * 0.75f;
-                mDoMtx_YrotS(*calc_mtx, dr->m482);
+                cMtx_YrotS(*calc_mtx, dr->m482);
                 MtxPosition(&temp2, &temp4);
                 dr->mpEnemy->speed.x = temp4.x;
                 dr->mpEnemy->speed.z = temp4.z;
@@ -1455,12 +1456,14 @@ void dr_damage_anime(damagereaction* dr) {
         dr->m010[i].x = dr->m010[i].y = dr->m010[i].z = 0;
     }
 
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
     s16 maxSpeed;
     if(dr->m47C != 0 || test_sw != 0) {
         maxSpeed = 0x3000;
 
-        s16 temp7 = dr->m482 + 0x8000 - dr->mpEnemy->current.angle.y;
-        f32 temp = temp7;
+        f32 temp = (s16)(dr->m482 + 0x8000 - dr->mpEnemy->current.angle.y);
+        f32 zero = 0.0f;
         f32 temp2 = temp;
         if(temp2 > 5000.0f) {
             temp2 = 5000.0f;
@@ -1468,11 +1471,10 @@ void dr_damage_anime(damagereaction* dr) {
         if(temp2 < -22000.0f) {
             temp2 = -22000.0f;
         }
-        dr->m010[8].y = temp2 * 0.4f + 8192.0f;
-        dr->m010[4].z = -temp2 * 0.4f - 8192.0f;
-        f32 temp_8192 = 8192.0f;
-        dr->m010[8].z = temp_8192;
-        dr->m010[4].y = temp_8192;
+        dr->m010[8].y = 0.4f * temp2 + 8192.0f;
+        dr->m010[4].z = 0.4f * -temp2 - 8192.0f;
+        dr->m010[8].z = 0.4f * zero + 8192.0f;
+        dr->m010[4].y = 0.4f * zero + 8192.0f;
 
         f32 temp3 = temp;
         if(temp3 > 22000.0f) {
@@ -1481,11 +1483,10 @@ void dr_damage_anime(damagereaction* dr) {
         if(temp3 < -5000.0f) {
             temp3 = -5000.0f;
         }
-        dr->m010[9].y = temp3 * 0.4f - 8192.0f;
-        dr->m010[5].z = temp3 * 0.4f - 8192.0f;
-        f32 zero = 0.0f;
-        dr->m010[9].z = temp_8192;
-        dr->m010[5].y = -zero * 0.4f - temp_8192;
+        dr->m010[9].y = 0.4f * temp3 - 8192.0f;
+        dr->m010[5].z = 0.4f * temp3 - 8192.0f;
+        dr->m010[9].z = 0.4f * zero + 8192.0f;
+        dr->m010[5].y = 0.4f * -zero - 8192.0f;
 
         f32 temp4 = temp;
         if(temp4 > 20000.0f) {
@@ -1494,10 +1495,10 @@ void dr_damage_anime(damagereaction* dr) {
         if(temp4 < -20000.0f) {
             temp4 = -20000.0f;
         }
-        dr->m010[0xC].x = temp4 * 0.2f;
-        dr->m010[0x13].x = temp4 * 0.2f;
-        dr->m010[0xC].z = -zero * 0.2f;
-        dr->m010[0x13].z = -zero * 0.2f;
+        dr->m010[0x0C].x = 0.2f * temp4;
+        dr->m010[0x13].x = 0.2f * temp4;
+        dr->m010[0x0C].z = 0.2f * -zero;
+        dr->m010[0x13].z = 0.2f * -zero;
 
         f32 temp5 = temp;
         if(temp5 > 7000.0f) {
@@ -1559,7 +1560,7 @@ void dr_damage_anime(damagereaction* dr) {
         cxyz_temp.x = 0.0f;
         cxyz_temp.y = 0.0f;
         cxyz_temp.z = dr->m470;
-        mDoMtx_YrotS(*calc_mtx, angle - dr->mpEnemy->current.angle.y);
+        cMtx_YrotS(*calc_mtx, angle - dr->mpEnemy->current.angle.y);
         MtxPosition(&cxyz_temp, &cxyz_temp2);
 
         if(dr->mEnemyType == damagereaction::TYPE_BOKOBLIN) {
@@ -1588,6 +1589,7 @@ void dr_damage_anime(damagereaction* dr) {
         maxSpeed = 0x3000;
     }
     else if(dr->m710 != 0 || dr->m49E != 0) {
+        f32 f31 = 0.5f;
         maxSpeed = 0x800;
 
         s16 temp;
@@ -1640,8 +1642,8 @@ void dr_damage_anime(damagereaction* dr) {
                 }
                 else {
                     dr->m010[0xD].y -= temp2;
-                    dr->m010[0xC].y -= temp2 / 2.0f;
-                    dr->m010[0xC].x = dr->m010[0xC].y + temp2 / 2.0f;
+                    dr->m010[0xC].y -= temp2 * f31;
+                    dr->m010[0xC].x = dr->m010[0xC].y + temp2 * f31;
                     dr->m010[0xD].z += temp;
                 }
             }
@@ -1686,7 +1688,7 @@ void dr_damage_anime(damagereaction* dr) {
         cxyz_temp.x = dr->m48C.z;
         cxyz_temp.y = 0.0f;
         cxyz_temp.z = dr->m48C.x;
-        mDoMtx_YrotS(*calc_mtx, dr->mpEnemy->current.angle.y);
+        cMtx_YrotS(*calc_mtx, dr->mpEnemy->current.angle.y);
         MtxPosition(&cxyz_temp, &cxyz_temp2);
         cLib_addCalcAngleS2(&dr->m492, cxyz_temp2.x, 4, 0x100);
         cLib_addCalcAngleS2(&dr->m494, cxyz_temp2.z, 4, 0x100);
@@ -1864,17 +1866,17 @@ void dr_damage_anime(damagereaction* dr) {
 /* 80022460-800225D0       .text dr_matrix_set__FP14damagereaction */
 void dr_matrix_set(damagereaction* dr) {
     MtxTrans(dr->mpEnemy->current.pos.x + dr->m458.x, dr->mpEnemy->current.pos.y + dr->m458.y, dr->mpEnemy->current.pos.z + dr->m458.z, false);
-    mDoMtx_XrotM(*calc_mtx, dr->m48C.x);
-    mDoMtx_ZrotM(*calc_mtx, dr->m48C.z);
+    cMtx_XrotM(*calc_mtx, dr->m48C.x);
+    cMtx_ZrotM(*calc_mtx, dr->m48C.z);
     MtxTrans(-dr->m44C.x, -dr->m44C.y, -dr->m44C.z, true);
-    mDoMtx_YrotM(*calc_mtx, dr->m482);
-    mDoMtx_XrotM(*calc_mtx, dr->m480);
-    mDoMtx_YrotM(*calc_mtx, dr->m484);
-    mDoMtx_YrotM(*calc_mtx, -dr->m482);
+    cMtx_YrotM(*calc_mtx, dr->m482);
+    cMtx_XrotM(*calc_mtx, dr->m480);
+    cMtx_YrotM(*calc_mtx, dr->m484);
+    cMtx_YrotM(*calc_mtx, -dr->m482);
     MtxTrans(dr->m44C.x, dr->m44C.y, dr->m44C.z, true);
-    mDoMtx_YrotM(*calc_mtx, dr->mpEnemy->shape_angle.y);
-    mDoMtx_XrotM(*calc_mtx, dr->mpEnemy->shape_angle.x);
-    mDoMtx_ZrotM(*calc_mtx, dr->mpEnemy->shape_angle.z);
+    cMtx_YrotM(*calc_mtx, dr->mpEnemy->shape_angle.y);
+    cMtx_XrotM(*calc_mtx, dr->mpEnemy->shape_angle.x);
+    cMtx_ZrotM(*calc_mtx, dr->mpEnemy->shape_angle.z);
     MtxTrans(0.0f, dr->m468, dr->m46C, true);
 
     cXyz temp(0.0f, 0.0f, 10000.0f);

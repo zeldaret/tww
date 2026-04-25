@@ -84,7 +84,7 @@ BOOL Act_c::CreateHeap() {
         JUT_ASSERT(474, brk != NULL);
 
         mBrk1 = new mDoExt_brkAnm();
-        if (mBrk1 == NULL || !mBrk1->init(model_data, brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        if (mBrk1 == NULL || !mBrk1->init(model_data, brk, true, J3DFrameCtrl::EMode_LOOP)) {
             bVar3 = false;
         }
     }
@@ -94,7 +94,7 @@ BOOL Act_c::CreateHeap() {
         JUT_ASSERT(487, btk != NULL);
 
         mBtk = new mDoExt_btkAnm();
-        if (mBtk == NULL || !mBtk->init(model_data, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        if (mBtk == NULL || !mBtk->init(model_data, btk, true, J3DFrameCtrl::EMode_LOOP)) {
             bVar4 = false;
         }
     }
@@ -442,7 +442,7 @@ void Act_c::mode_gmtw_demo() {
             if (--m2F4 <= 0) {
                 m2F6 = 2;
             } else if (m2F4 == 0x3b) {
-                dComIfGp_particle_set(dPa_name::ID_SCENE_814D, &a_this->current.pos);
+                dComIfGp_particle_set(dPa_name::ID_IT_SN_MT_WATER00, &a_this->current.pos);
                 dComIfG_Bgsp()->Regist(mpBgW, a_this);
                 m2F7 = true;
             }

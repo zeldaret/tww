@@ -143,9 +143,9 @@ BOOL daBeam_c::CreateHeap() {
     M_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BTK_YLESR00));
     JUT_ASSERT(318, M_brk != NULL);
 
-    BOOL tmp1 = mBckAnm.init(modelData, M_bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
-    BOOL tmp2 = mBrkAnm.init(modelData, M_brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
-    BOOL tmp3 = mBtkAnm.init(modelData, M_btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
+    BOOL tmp1 = mBckAnm.init(modelData, M_bck, false, J3DFrameCtrl::EMode_LOOP);
+    BOOL tmp2 = mBrkAnm.init(modelData, M_brk, false, J3DFrameCtrl::EMode_LOOP);
+    BOOL tmp3 = mBtkAnm.init(modelData, M_btk, true, J3DFrameCtrl::EMode_LOOP);
 
     if (M_mdl == NULL || !tmp1 || !tmp2 || !tmp3) {
         return false;
@@ -263,7 +263,7 @@ cPhs_State daBeam_c::CreateInit() {
     fopAcM_SetMtx(this, M_mdl->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -50.0f, -50.0f, 0.0f, 50.0f, 50.0f, 2000.0f);
 
-    if (parentActorID == -1) {
+    if (parentActorID == fpcM_ERROR_PROCESS_ID_e) {
         u8 params1 = fopAcM_GetParam(this) & 0xFF;
         s8 params2 = (fopAcM_GetParam(this) >> 8) & 0xFF;
         params1 = cLib_maxLimit<u8>(params1, 2);
@@ -513,7 +513,7 @@ void daBeam_c::timer_change() {
     m5F6--;
     if (m5F6 > 0) {
         if (m690 == NULL) {
-            m690 = dComIfGp_particle_set(dPa_name::ID_SCENE_8121, &current.pos);
+            m690 = dComIfGp_particle_set(dPa_name::ID_AK_SN_LASERROOT00, &current.pos);
         }
 
         if (m5F4 == 0) {

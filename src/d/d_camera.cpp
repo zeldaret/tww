@@ -30,6 +30,7 @@
 #include "d/d_a_obj.h"
 #include "d/actor/d_a_tsubo.h"
 #include "d/actor/d_a_npc_cb1.h"
+#include "d/actor/d_a_canon.h"
 
 namespace {  
     static f32 limitf(f32 value, f32 min, f32 max) {
@@ -50,7 +51,7 @@ namespace {
     }
 
     inline static bool isPlayerFlying(u32 param_0) {
-        return dComIfGp_checkPlayerStatus1(param_0, daPyStts1_DEKU_LEAF_FLY_e) || daNpc_Cb1_c::isFlying() || daNpc_Md_c::isFlying();
+        return dComIfGp_checkPlayerStatus1(param_0, daPyStts1_DEKU_LEAF_FLY_e) || (daNpc_Cb1_c::isFlying() || daNpc_Md_c::isFlying());
     }
 
     inline static fopAc_ac_c* get_boomerang_actor(fopAc_ac_c* actor) {
@@ -382,17 +383,17 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     cXyz attnPos = attentionPos(mpPlayerActor);
     attnPos.y += mCamParam.CenterHeight(0.0f);
 
-    m044 = attnPos + cSGlobe(0.0f, cSAngle((s16)0), directionOf(mpPlayerActor)).Xyz();
+    mViewCache.mCenter = attnPos + cSGlobe(0.0f, cSAngle((s16)0), directionOf(mpPlayerActor)).Xyz();
 
-    mCenter = m044;
+    mCenter = mViewCache.mCenter;
 
-    m03C.Val(200.0f, 0, directionOf(mpPlayerActor).Inv());
+    mViewCache.mDirection.Val(200.0f, 0, directionOf(mpPlayerActor).Inv());
     
-    mDirection = m03C;
+    mDirection = mViewCache.mDirection;
 
-    m050 =  m044 + m03C.Xyz();
+    mViewCache.mEye =  mViewCache.mCenter + mViewCache.mDirection.Xyz();
 
-    mEye = m050;
+    mEye = mViewCache.mEye;
 
     mAngleY = cSAngle(mDirection.U().Inv());
 
@@ -402,9 +403,9 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
 
     mBank = cSAngle::_0;
 
-    m05C = mBank;
+    mViewCache.mBank = mBank;
 
-    m060 = mFovY = mCamParam.Fovy(0.0f);
+    mViewCache.mFovy = mFovy = mCamParam.Fovy(0.0f);
 
     mDMCSystem.field_0x0 = 0;
 }
@@ -427,9 +428,9 @@ void dCamera_c::Stay() {
 /* 8016214C-801621A0       .text ChangeModeOK__9dCamera_cFl */
 bool dCamera_c::ChangeModeOK(s32 param_1) {
     if (dComIfGp_evmng_cameraPlay() || chkFlag(0x20000000)) {
-        return 0;
+        return false;
     }
-    return !(types[mCurType].mStyles[param_1] < 0);
+    return types[mCurType].mStyles[param_1] >= 0;
 }
 
 /* 801621A0-801623A0       .text initPad__9dCamera_cFv */
@@ -490,7 +491,6 @@ void dCamera_c::updatePad() {
     float fVar1;
     float fVar2;
     float fVar3;
-    cSAngle local_48;
     
     if (chkFlag(0x1000000)) {
         fVar1 = 0.0f;
@@ -601,8 +601,8 @@ void dCamera_c::initMonitor() {
     mMonitor.field_0x0C.z = 0.0f;
     mMonitor.field_0x0C.y = 0.0f;
     mMonitor.field_0x0C.x = 0.0f;
-    mMonitor.field_0x10 = 0;
-    mMonitor.field_0x14 = 0.0f;
+    mMonitor.field_0x18 = 0;
+    mMonitor.field_0x1C = 0.0f;
 }
 
 /* 801627A4-801628DC       .text updateMonitor__9dCamera_cFv */
@@ -628,13 +628,13 @@ void dCamera_c::updateMonitor() {
         mMonitor.mPos = playerPos;
 
         if (!m144 && *(u16*)&g_mDoCPd_cpadInfo[0].mButtonHold == 0 && mStickMainValueLast < 0.05f && mStickCValueLast < 0.05f) { // Possible union between u16 and bitfield rather than *(u16*) cast
-            mMonitor.field_0x10++;
+            mMonitor.field_0x18++;
         }
         else {
-            mMonitor.field_0x10 = 0;
+            mMonitor.field_0x18 = 0;
         }
 
-        mMonitor.field_0x14 = mDirection.R() - mMonitor.field_0x14;
+        mMonitor.field_0x1C = mDirection.R() - mMonitor.field_0x1C;
     }
 }
 
@@ -725,7 +725,6 @@ bool dCamera_c::Run() {
     float fVar3;
     long next;
     dCamera_c* camera;
-    cSAngle local_40;
 
     bool res = FALSE;
     
@@ -749,7 +748,7 @@ bool dCamera_c::Run() {
             }
             m53C = fVar3;
             m538 = fVar2;
-            m044.y -= m53C * mCamSetup.mManualStartCThreshold;
+            mViewCache.mCenter.y -= m53C * mCamSetup.mManualStartCThreshold;
         }
     }
 
@@ -759,7 +758,7 @@ bool dCamera_c::Run() {
 
     dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 0x3400);
 
-    if (!(dComIfGp_evmng_cameraPlay() || chkFlag(0x20000000))) {
+    if (!dComIfGp_evmng_cameraPlay() && !chkFlag(0x20000000)) {
         updatePad();
         mCamSetup.mCstick.Shift(mPadId);
     }
@@ -852,7 +851,7 @@ bool dCamera_c::Run() {
     }
 
     if (!chkFlag(0x400)) {
-        m05C -= m05C * 0.05f;
+        mViewCache.mBank -= mViewCache.mBank * 0.05f;
     }
 
     shakeCamera();
@@ -872,25 +871,25 @@ bool dCamera_c::Run() {
 
     fVar1 = m354 + mCamSetup.mBGChk.FloorMargin();
 
-    if (m044.y < fVar1) {
-        mCenter.x = m044.x;
-        mCenter.z = m044.z;
+    if (mViewCache.mCenter.y < fVar1) {
+        mCenter.x = mViewCache.mCenter.x;
+        mCenter.z = mViewCache.mCenter.z;
         
         if ((mCamParam.Algorythmn(mCurStyle) == 4) && chkFlag(0x10000800)) {
             m068 &= ~8;
-            mCenter.y = m044.y;
+            mCenter.y = mViewCache.mCenter.y;
         }
         else {
             mCenter.y = fVar1;
         }
     }
     else {
-        mCenter = m044;
+        mCenter = mViewCache.mCenter;
     }
     
-    mFovY = m060;
+    mFovy = mViewCache.mFovy;
 
-    mBank = m05C;
+    mBank = mViewCache.mBank;
 
     bumpCheck(m068);
 
@@ -908,19 +907,13 @@ bool dCamera_c::Run() {
     }
 
     if (mCenter.x == mEye.x && mCenter.z == mEye.z) {
-        mUp.x = 0.01f;
-        mUp.y = 1.0f;
-        mUp.z = 0.0f;
+        mUp.set(0.01f, 1.0f, 0.0f);
     }
-    else if (mDirection.V().Val() > cSAngle(-90.0f) && mDirection.V() < cSAngle(90.0f)) {
-        mUp.x = 0.0f;
-        mUp.y = 1.0f;
-        mUp.z = 0.0f;
+    else if (mDirection.V() > cSAngle(-90.0f) && mDirection.V() < cSAngle(90.0f)) {
+        mUp.set(0.0f, 1.0f, 0.0f);
     }
     else {
-        mUp.x = 0.0f;
-        mUp.y = -1.0f;
-        mUp.z = 0.0f;
+        mUp.set(0.0f, -1.0f, 0.0f);
     }
 
     for (u32 i = 0; i < 3; i++) {
@@ -935,7 +928,7 @@ bool dCamera_c::Run() {
 
     m258 = m254;
     bool r3 = FALSE;
-    m254 = r3;    
+    m254 = FALSE;    
     
     if (m100 && m101 && m102) { // Also Inline?
         r3 = TRUE;
@@ -1095,8 +1088,9 @@ int dCamera_c::nextMode(s32 i_curMode) {
                                 !(
                                     mStickMainValueLast >= 0.5f ||
                                     attn.LockonTruth() ||
-                                    check_owner_action(mPadId, daPyStts0_SWIM_e))
-                                ) {
+                                    check_owner_action(mPadId, daPyStts0_SWIM_e)
+                                )
+                            ) {
                                 if (m184 == 1) {
                                     if (mStickCPosYLast < mCamSetup.mCstick.m00) {
                                         m184 = 0;
@@ -1582,10 +1576,10 @@ int dCamera_c::GetCameraTypeFromCameraName(const char* i_name) {
 
 /* 801651F0-80165234       .text pushPos__9dCamera_cFv */
 void dCamera_c::pushPos() {
-    m084 = m044;
-    m090 = m050;
-    m09C = m060;
-    m0A0 = m05C;
+    m084 = mViewCache.mCenter;
+    m090 = mViewCache.mEye;
+    m09C = mViewCache.mFovy;
+    m0A0 = mViewCache.mBank;
     return;
 }
 
@@ -1675,7 +1669,7 @@ cXyz dCamera_c::relationalPos(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cXyz* 
 
     offset_globe.V(directionOf(i_actor1) + offset_globe.U());
     
-    cSAngle acStack_104 = m03C.U() - delta_globe.U();
+    cSAngle acStack_104 = mViewCache.mDirection.U() - delta_globe.U();
     delta_globe.R(0.5f * delta_globe.R() * acStack_104.Cos() * param_3);
 
     cXyz ret = mid + delta_globe.Xyz() + offset_globe.Xyz();
@@ -1690,7 +1684,7 @@ void dCamera_c::setDMCAngle() {
 }
 
 /* 80165720-80165744       .text getDMCAngle__9dCamera_cF7cSAngle */
-cSAngle dCamera_c::getDMCAngle(cSAngle param_0) {
+cSAngle dCamera_c::getDMCAngle(cSAngle) {
     return mDMCSystem.field_0x2;
 }
 
@@ -1707,7 +1701,7 @@ bool dCamera_c::pointInSight(cXyz* i_point) {
 
 /* 80165800-80165830       .text radiusActorInSight__9dCamera_cFP10fopAc_ac_cP10fopAc_ac_c */
 f32 dCamera_c::radiusActorInSight(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2) {
-    return radiusActorInSight(i_actor1, i_actor2, &m044, &m050 , mFovY, mBank.Val());
+    return radiusActorInSight(i_actor1, i_actor2, &mViewCache.mCenter, &mViewCache.mEye , mFovy, mBank.Val());
 }
 
 /* 80165830-80165CC4       .text radiusActorInSight__9dCamera_cFP10fopAc_ac_cP10fopAc_ac_cP4cXyzP4cXyzfs */
@@ -1925,12 +1919,16 @@ u32 dCamera_c::lineCollisionCheckBush(cXyz* i_start, cXyz* i_end) {
 
 /* 80166DE8-80166EA4       .text sph_chk_callback__FP11dBgS_SphChkP10cBgD_Vtx_tiiiP8cM3dGPlaPv */
 void sph_chk_callback(dBgS_SphChk* i_sphChk, cBgD_Vtx_t* i_vtxTbl, int i_vtxIdx0, int i_vtxIdx1, int i_vtxIdx2, cM3dGPla* i_plane, void* i_data) {
-    /* Nonmatching - Code 100% */
     camSphChkdata* sph_chk_data = (camSphChkdata*)i_data;
     f32 len = cM3d_SignedLenPlaAndPos(i_plane, &sph_chk_data->field_0x8);
-    if (i_plane->getPlaneFunc(&sph_chk_data->field_0x14) >= -0.0001f && len < sph_chk_data->field_0x4) {
-        cXyz normal = *i_plane->GetNP();
-        sph_chk_data->field_0x8 += normal * (sph_chk_data->field_0x4 - len);
+#if VERSION > VERSION_DEMO
+    if (i_plane->getPlaneFunc(&sph_chk_data->field_0x14) >= -0.0001f)
+#endif
+    {
+        if (len < sph_chk_data->field_0x4) {
+            cXyz normal = *i_plane->GetNP();
+            sph_chk_data->field_0x8 += normal * (sph_chk_data->field_0x4 - len);
+        }
     }
 }
 
@@ -1938,7 +1936,7 @@ void sph_chk_callback(dBgS_SphChk* i_sphChk, cBgD_Vtx_t* i_vtxTbl, int i_vtxIdx0
 cXyz dCamera_c::compWallMargin(cXyz* i_center, f32 i_radius) {
     dBgS_CamSphChk sph_chk;
     camSphChkdata sph_chk_data(i_center, i_radius);
-    sph_chk_data.field_0x14 = m044;
+    sph_chk_data.field_0x14 = mViewCache.mCenter;
     sph_chk.SetCallback(&sph_chk_callback);
     sph_chk.Set(*i_center, i_radius);
 
@@ -2144,8 +2142,8 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
         }
     }
 
-    cXyz eye = m050;
-    cSGlobe direction = m03C;
+    cXyz eye = mViewCache.mEye;
+    cSGlobe direction = mViewCache.mDirection;
 
     if (chkFlag(0x2000) && mpLockonTarget) {
         f32 sight_radius = radiusActorInSight(mpPlayerActor, mpLockonTarget);
@@ -2166,16 +2164,16 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
         }
         
         direction.R(m14C * fVar15 + direction.R());
-        eye = m044 + direction.Xyz();
+        eye = mViewCache.mCenter + direction.Xyz();
     }
 
     if ((i_flags & 0x40) && m364 != 0) {
-        cSGlobe cStack_3e4 = m36C - m044;
+        cSGlobe cStack_3e4 = m36C - mViewCache.mCenter;
         if (direction.V() < cStack_3e4.V()) {
             cSAngle local_408 = mDirection.V();
             local_408 += (cStack_3e4.V() - local_408) * 0.05f;
             direction.U(local_408);
-            eye = m044 + direction.Xyz();
+            eye = mViewCache.mCenter + direction.Xyz();
             res |= 0x20;
         }
     }
@@ -2351,9 +2349,9 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                 fVar2 = 0.2f;
             }
 
-            mDirection.R(mDirection.R() + (m03C.R() - mDirection.R()) * fVar2);
-            mDirection.U(mDirection.V() + (m03C.V() - mDirection.V()) * fVar2);
-            mDirection.V(m03C.U());
+            mDirection.R(mDirection.R() + (mViewCache.mDirection.R() - mDirection.R()) * fVar2);
+            mDirection.U(mDirection.V() + (mViewCache.mDirection.V() - mDirection.V()) * fVar2);
+            mDirection.V(mViewCache.mDirection.U());
 
             mEye = mCenter + mDirection.Xyz();
 
@@ -2362,7 +2360,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                 mEye = compWallMargin(&cross, 0.5f + gaze_back_margin);
             }
 
-            cSAngle acStack_440 = mDirection.V() - m03C.V();
+            cSAngle acStack_440 = mDirection.V() - mViewCache.mDirection.V();
             corner_angle_max_cos = acStack_440.Degree();
 
             if (std::fabsf(corner_angle_max_cos) < 0.2f) {
@@ -2530,7 +2528,7 @@ void dCamera_c::checkGroundInfo() {
                 m338 = m33A - angle;
 
                 if (fopAcM_GetName(m33C) == PROC_Obj_Pirateship) {
-                    m044.y += m320.y * mCamSetup.mManualStartCThreshold;
+                    mViewCache.mCenter.y += m320.y * mCamSetup.mManualStartCThreshold;
                 }
             }
 
@@ -2541,9 +2539,9 @@ void dCamera_c::checkGroundInfo() {
             }
 
             if (m31D) {
-                dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C.m04, true, &m044, NULL, NULL);
-                dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C.m04, true, &m050, NULL, NULL);
-                m03C.Val(m050 - m044);
+                dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C.m04, true, &mViewCache.mCenter, NULL, NULL);
+                dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C.m04, true, &mViewCache.mEye, NULL, NULL);
+                mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
             }
 
             m32C = pos;
@@ -2810,7 +2808,7 @@ bool dCamera_c::followCamera(s32 param_1) {
     cXyz local_314(mWork.follow.m3AC, dVar20, mWork.follow.m3B0);
     cXyz local_158;
     if (m108 == 0) {
-        m03C.Val(m050 - m044);
+        mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
         mWork.follow.m378 = 'FLLW';
         mWork.follow.m394 = fVar40;
         mWork.follow.m388 = 0x50;
@@ -2818,15 +2816,15 @@ bool dCamera_c::followCamera(s32 param_1) {
         mWork.follow.m39C = dVar24;
         mWork.follow.m38C = mWork.follow.m392 = mWork.follow.m390 = 0;
         mWork.follow.m3A0 = mWork.follow.m3BC = mDirection.V().Degree();
-        mWork.follow.m3C0 = m044;
-        mWork.follow.m3CC = m050;
+        mWork.follow.m3C0 = mViewCache.mCenter;
+        mWork.follow.m3CC = mViewCache.mEye;
         mWork.follow.m3E8 = mWork.follow.m3E0 = mWork.follow.m3E4 = 0.01f;
         mWork.follow.m3DC = 0.75f;
         mWork.follow.m3EC = dVar23;
         mWork.follow.m3F0 = dVar22;
         mWork.follow.m3B4 = 0;
         mWork.follow.m3D8 = 1;
-        mWork.follow.m3A8 = m060;
+        mWork.follow.m3A8 = mViewCache.mFovy;
         mWork.follow.m3B8 = 0.0f;
         mWork.follow.m3DA = 0;
 
@@ -2845,7 +2843,7 @@ bool dCamera_c::followCamera(s32 param_1) {
                 acStack_4a4.Val(directionOf(mpPlayerActor).Inv());
             }
             else {
-                acStack_4a4.Val(m03C.V());
+                acStack_4a4.Val(mViewCache.mDirection.V());
             }
             
             cSGlobe cStack_46c(dVar24, cSAngle(dVar28), acStack_4a4);
@@ -2876,14 +2874,14 @@ bool dCamera_c::followCamera(s32 param_1) {
         }
 
         mWork.follow.m398 = mWork.follow.m39C = mDirection.R();
-        mWork.follow.m3A8 = mFovY;
+        mWork.follow.m3A8 = mFovy;
         mWork.follow.m380 = mWork.follow.m37C * (mWork.follow.m37C + 1) >> 1;
         mWork.follow.m384 = 0.0f;
     }
 
     cXyz cStack_260 = relationalPos(mpPlayerActor, &local_314);
     cSAngle acStack_4a8 = directionOf(mpPlayerActor);
-    cSAngle local_4ac = acStack_4a8 - m03C.V();
+    cSAngle local_4ac = acStack_4a8 - mViewCache.mDirection.V();
     cStack_260.y = getWaterSurfaceHeight(&cStack_260);
     cM3dGPla* plane;
     cXyz cross;
@@ -2897,7 +2895,7 @@ bool dCamera_c::followCamera(s32 param_1) {
         f32 temp = (mWork.follow.m384 / mWork.follow.m380);
         mWork.follow.m3C0 += (cStack_260 - mWork.follow.m3C0) * temp;
 
-        m044 += (mWork.follow.m3C0 - m044) * dVar23;
+        mViewCache.mCenter += (mWork.follow.m3C0 - mViewCache.mCenter) * dVar23;
 
         f32 xyzDist = dCamMath::xyzHorizontalDistance(cStack_260, mWork.follow.m3C0);
 
@@ -2909,16 +2907,16 @@ bool dCamera_c::followCamera(s32 param_1) {
             cXyz cStack_26c = attentionPos(mpPlayerActor);
             cStack_26c.y -= 15.0f;
             dBgS_CamLinChk_NorWtr lin_chk;
-            if (lineBGCheck(&cStack_26c, &m044, &lin_chk, 0x7f)) {
+            if (lineBGCheck(&cStack_26c, &mViewCache.mCenter, &lin_chk, 0x7f)) {
                 plane = dComIfG_Bgsp()->GetTriPla(lin_chk);
-                m044 = lin_chk.GetCross();
-                m044 += plane->mNormal;
+                mViewCache.mCenter = lin_chk.GetCross();
+                mViewCache.mCenter += plane->mNormal;
             }
         }
 
-        dVar29 = limitf(m03C.R(), dVar25, dVar24);
+        dVar29 = limitf(mViewCache.mDirection.R(), dVar25, dVar24);
 
-        cSAngle local_4b0 = m03C.U();
+        cSAngle local_4b0 = mViewCache.mDirection.U();
 
         if (local_4b0 < local_498) {
             local_4b0 = local_498;
@@ -2929,14 +2927,14 @@ bool dCamera_c::followCamera(s32 param_1) {
         }
         
         cSGlobe local_474(dVar29, local_4b0, cSAngle(mAngleY.Inv()));
-        m03C.R(m03C.R() + fVar40 * (local_474.R() - m03C.R()));
-        m03C.V(m03C.U() + ((local_474.U() - m03C.U()) * fVar40));
+        mViewCache.mDirection.R(mViewCache.mDirection.R() + fVar40 * (local_474.R() - mViewCache.mDirection.R()));
+        mViewCache.mDirection.V(mViewCache.mDirection.U() + ((local_474.U() - mViewCache.mDirection.U()) * fVar40));
 
         if (chkFlag(0x100000)) {
-            m03C.U(m03C.U() + ((acStack_4a8.Inv() - m03C.U()) * fVar40));
+            mViewCache.mDirection.U(mViewCache.mDirection.U() + ((acStack_4a8.Inv() - mViewCache.mDirection.U()) * fVar40));
         }
 
-        mWork.follow.m3CC = m050 = m044 + m03C.Xyz();
+        mWork.follow.m3CC = mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
 
         if (mWork.follow.m37C <= m108) {
             m102 = 1;
@@ -2944,9 +2942,9 @@ bool dCamera_c::followCamera(s32 param_1) {
             m100 = 1;
         }
 
-        mWork.follow.m3A0 = m03C.V().Degree();
-        mWork.follow.m398 = mWork.follow.m39C = m03C.R();
-        m060 += (fVar40 * (dVar31 - m060));
+        mWork.follow.m3A0 = mViewCache.mDirection.V().Degree();
+        mWork.follow.m398 = mWork.follow.m39C = mViewCache.mDirection.R();
+        mViewCache.mFovy += (fVar40 * (dVar31 - mViewCache.mFovy));
         mWork.follow.m380 -= mWork.follow.m384;
         return true;
     }
@@ -3019,8 +3017,8 @@ bool dCamera_c::followCamera(s32 param_1) {
         }
     }
 
-    cXyz cStack_3c8 = cStack_260 - m044;
-    m044 += cStack_3c8 * cStack_3c8;
+    cXyz cStack_3c8 = cStack_260 - mViewCache.mCenter;
+    mViewCache.mCenter += cStack_3c8 * cStack_3c8;
     
     if (m780) {
         cXyz attn_pos = attentionPos(mpPlayerActor);
@@ -3032,14 +3030,14 @@ bool dCamera_c::followCamera(s32 param_1) {
         }
 
         dBgS_CamLinChk_NorWtr lin_chk;
-        if (lineBGCheck(&attn_pos, &m044, &lin_chk, 0x7f)) {
+        if (lineBGCheck(&attn_pos, &mViewCache.mCenter, &lin_chk, 0x7f)) {
             plane = dComIfG_Bgsp()->GetTriPla(lin_chk);
-            m044 = lin_chk.GetCross();
-            m044 += plane->mNormal;
+            mViewCache.mCenter = lin_chk.GetCross();
+            mViewCache.mCenter += plane->mNormal;
         }
     }
 
-    cSGlobe local_484(m050 - m044);
+    cSGlobe local_484(mViewCache.mEye - mViewCache.mCenter);
     
     if (mWork.follow.m392 <= 0 || iVar17 <= mWork.follow.m392) {
         dVar20 = dCamMath::rationalBezierRatio((float) iVar5 / (float)iVar17, fVar38);
@@ -3156,7 +3154,7 @@ bool dCamera_c::followCamera(s32 param_1) {
 
     cSAngle acStack_4b8 = cSAngle((s16)0);
     cSAngle acStack_51c = (acStack_4b4 - local_484.V()) * mWork.follow.m3B8 * local_484.U().Cos();
-    m03C.U(local_484.V() + acStack_51c + acStack_4b8);
+    mViewCache.mDirection.U(local_484.V() + acStack_51c + acStack_4b8);
     cSAngle local_4bc;
     if (check_owner_action1(mPadId, daPyStts1_UNK20000_e)) {
         if (mWork.follow.m392 <= iVar17) {
@@ -3251,10 +3249,10 @@ bool dCamera_c::followCamera(s32 param_1) {
         local_4bc.Val(local_49c);
     }
 
-    m03C.V(m03C.U() + ((local_4bc - m03C.U()) * mWork.follow.m3E0));
+    mViewCache.mDirection.V(mViewCache.mDirection.U() + ((local_4bc - mViewCache.mDirection.U()) * mWork.follow.m3E0));
 
-    if (local_494 > m03C.U()) {
-        m03C.V(local_494);
+    if (local_494 > mViewCache.mDirection.U()) {
+        mViewCache.mDirection.V(local_494);
     }
 
     mWork.follow.m398 += dVar27 * (dVar25 - mWork.follow.m398);
@@ -3273,30 +3271,30 @@ bool dCamera_c::followCamera(s32 param_1) {
         mWork.follow.m3DC = 1.0f;
     }
 
-    m03C.R(m03C.R() + mWork.follow.m3DC * (local_484.R() - m03C.R()));
-    mWork.follow.m3CC = m044 + m03C.Xyz();
+    mViewCache.mDirection.R(mViewCache.mDirection.R() + mWork.follow.m3DC * (local_484.R() - mViewCache.mDirection.R()));
+    mWork.follow.m3CC = mViewCache.mCenter + mViewCache.mDirection.Xyz();
 
     if (bVar3 && bVar4 && mCamParam.Flag(param_1, dCamPrmFlg_UNK001)) {
-        cSGlobe cStack_48c(m03C);
+        cSGlobe cStack_48c(mViewCache.mDirection);
         cStack_48c.V(cSAngle(dVar28));
-        cXyz cStack_2b4 = m044 + cStack_48c.Xyz();
-        if (lineBGCheck(&m044, &cStack_2b4, 0x7f)) {
+        cXyz cStack_2b4 = mViewCache.mCenter + cStack_48c.Xyz();
+        if (lineBGCheck(&mViewCache.mCenter, &cStack_2b4, 0x7f)) {
             setFlag(8);
         }
     }
 
-    m050 += (mWork.follow.m3CC - m050) * 0.75f;
-    m03C.Val(m050 - m044);
+    mViewCache.mEye += (mWork.follow.m3CC - mViewCache.mEye) * 0.75f;
+    mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
     
     if (chkFlag(8)) {
         mWork.follow.m3DA = 1;
     }
 
     mWork.follow.m3E8 += (dVar32 - mWork.follow.m3E8) * 0.01f;
-    m060 += mWork.follow.m3E8 * (dVar31 - m060);
+    mViewCache.mFovy += mWork.follow.m3E8 * (dVar31 - mViewCache.mFovy);
 
     if (check_owner_action1(mPadId, daPyStts1_DEKU_LEAF_FAN_e)) {
-        m060 += cM_rndFX(mCamSetup.m078);
+        mViewCache.mFovy += cM_rndFX(mCamSetup.m078);
     }
 
     if (isPlayerFlying(mPadId) || daNpc_kam_c::m_hyoi_kamome) {
@@ -3310,12 +3308,12 @@ bool dCamera_c::followCamera(s32 param_1) {
             fVar38 = 0.04f;
         }
         
-        m060 += mCamSetup.m07C * cSAngle((s16)(m07C << 7)).Sin();
-        m05C += (cSAngle(fVar40 * mCamSetup.FanBank()) - m05C) * fVar38;
+        mViewCache.mFovy += mCamSetup.m07C * cSAngle((s16)(m07C << 7)).Sin();
+        mViewCache.mBank += (cSAngle(fVar40 * mCamSetup.FanBank()) - mViewCache.mBank) * fVar38;
         setFlag(0x400);
     }
 
-    return 1;
+    return true;
 }
 
 /* 8016C55C-8016C578       .text eyePos__9dCamera_cFP10fopAc_ac_c */
@@ -3336,6 +3334,8 @@ f32 dCamera_c::heightOf(fopAc_ac_c* i_actor) {
 /* 8016C618-8016D824       .text lockonCamera__9dCamera_cFl */
 bool dCamera_c::lockonCamera(s32 param_1) {
     /* Nonmatching - Lots of conficts between the asm produced by this function and `followCamera` regarding class member types */
+    int r28 = 0x3C;
+    f32 f30 = 0.05f;
     int iVar15 = mCamSetup.ChargeTimer();
     f32 fVar22 = mCamSetup.ChargeBRatio();
     cSAngle local_250 = cSAngle(mCamSetup.m0A4);
@@ -3343,6 +3343,7 @@ bool dCamera_c::lockonCamera(s32 param_1) {
     f32 fVar1 = mCamSetup.ChargeLatitude();
     f32 fVar2 = mCamParam.Val(param_1 ,dCamStyleParam_UNK4);
     f32 fVar21 = mCamParam.Val(param_1 ,dCamStyleParam_UNK3);
+    dAttention_c& attn = dComIfGp_getAttention();
     if (m108 == 0) {
         m100 = 1;
         m101 = 1;
@@ -3352,8 +3353,8 @@ bool dCamera_c::lockonCamera(s32 param_1) {
         mWork.lockon.m384 = 1.0f;
         mWork.lockon.m38C = 0;
         mWork.lockon.m39C = 0;
-        mWork.lockon.m390 = m044;
-        cXyz cStack_150 = m044 - attentionPos(mpPlayerActor);
+        mWork.lockon.m390 = mViewCache.mCenter;
+        cXyz cStack_150 = mViewCache.mCenter - attentionPos(mpPlayerActor);
         mWork.lockon.m3A8.Val(cStack_150);
         mWork.lockon.m3A0 = mWork.lockon.m39C = 0.0f;
         mWork.lockon.m3B8 = mCamSetup.Cushion4Base();
@@ -3369,7 +3370,7 @@ bool dCamera_c::lockonCamera(s32 param_1) {
     if (m31D != 0) {
         dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C.m04, true, &m36C, NULL, NULL);
     }
-    if (dComIfGp_getAttention().LockonTruth() && check_owner_action(mPadId, daPyStts0_BOOMERANG_WAIT_e)) {
+    if (attn.LockonTruth() && check_owner_action(mPadId, daPyStts0_BOOMERANG_WAIT_e)) {
         mWork.lockon.m38C = 1;
     }
     else {
@@ -3441,7 +3442,7 @@ bool dCamera_c::lockonCamera(s32 param_1) {
         setFlag(0x100);
     }
 
-    cSAngle local_25c = m03C.U().Inv() - acStack_254;
+    cSAngle local_25c = mViewCache.mDirection.U().Inv() - acStack_254;
 
     if (local_25c < cSAngle::_0) {
         mWork.lockon.m38C = 0;
@@ -3457,17 +3458,17 @@ bool dCamera_c::lockonCamera(s32 param_1) {
     bVar6 = false;
     if (chkFlag(0x80080)) {
         cXyz local_114 = attentionPos(mpPlayerActor);
-        if (pointInSight(&local_114)) {
+        if (!pointInSight(&local_114)) {
             if (mWork.lockon.m388 == 0) {
                 int iVar10 = -mWork.lockon.m38C + 1;
                 mWork.lockon.m388 = iVar10 - (-mWork.lockon.m38C + (iVar10 == 0));
             }
             bVar6 = true;
-            mWork.lockon.m388 = 0x3c;
+            mWork.lockon.m388 = r28;
         }
     }
 
-    if (lineBGCheckBack(&m044, &local_108, 0x7f) && lineBGCheck(&m050, &m044, 0x7f)) {
+    if (lineBGCheckBack(&mViewCache.mCenter, &local_108, 0x7f) && lineBGCheck(&mViewCache.mEye, &mViewCache.mCenter, 0x7f)) {
         bVar6 = true;
         mWork.lockon.m388 = 0x3c;
     }
@@ -3481,7 +3482,7 @@ bool dCamera_c::lockonCamera(s32 param_1) {
     }
 
     f32 fVar5 = mStickCPosYLast; 
-    dCamMath::customRBRatio(mCamParam.RadiusRatio(m03C.R()), fVar3);
+    dCamMath::customRBRatio(mCamParam.RadiusRatio(mViewCache.mDirection.R()), fVar3);
 
     if (chkFlag(0x10)) {
         fVar3 = 0.01f;
@@ -3529,27 +3530,27 @@ bool dCamera_c::lockonCamera(s32 param_1) {
     cSAngle acStack_268;
     if (bVar6) {
         fVar2 = mWork.lockon.m3A8.R() * 0.75f;
-        acStack_268.Val(m534 + (local_230.U() - m534) * 0.05f);
+        acStack_268.Val(mWork.lockon.m3A8.V() + (local_230.U() - mWork.lockon.m3A8.V()) * f30);
     }
     else {
         fVar2 = mWork.lockon.m3A8.R() + mWork.lockon.m3B0 * (mWork.lockon.m384 * (dVar19 + dVar17 * 0.05f) - mWork.lockon.m3A8.R());
-        acStack_268.Val(m534 + mWork.lockon.m3B4 * (local_230.U() - m534));
+        acStack_268.Val(mWork.lockon.m3A8.V() + (local_230.U() - mWork.lockon.m3A8.V()) * mWork.lockon.m3B4);
     }
 
     mWork.lockon.m3A8.Val(fVar2, acStack_268, acStack_264);
-    m044 = mWork.lockon.m390 + mWork.lockon.m3A8.Xyz();
+    mViewCache.mCenter = mWork.lockon.m390 + mWork.lockon.m3A8.Xyz();
     if (mpLockonTarget && mLockOnActorId != -1) {
         cXyz local_120 = attentionPos(mpPlayerActor);
-        if (lineBGCheck(&local_120, &m044, 0x7f)) {
+        if (lineBGCheck(&local_120, &mViewCache.mCenter, 0x7f)) {
               ForceLockOff(mLockOnActorId);
         }
     }
 
-    cSGlobe cStack_238(mEye - m044);
-    cSGlobe local_240(m050 - m044);
-    cSAngle acStack_26c(m03C.V());
-    cSAngle local_270(m03C.U());
-    fVar2 = m03C.R();
+    cSGlobe cStack_238(mEye - mViewCache.mCenter);
+    cSGlobe local_240(mViewCache.mEye - mViewCache.mCenter);
+    cSAngle acStack_26c(mViewCache.mDirection.V());
+    cSAngle local_270(mViewCache.mDirection.U());
+    fVar2 = mViewCache.mDirection.R();
     cSAngle local_274 = local_25c - local_258;
     fVar21 = mCamSetup.m044;
 
@@ -3561,7 +3562,7 @@ bool dCamera_c::lockonCamera(s32 param_1) {
         else {
             acStack_278.Val(-15.0f);
         }
-        acStack_26c += (m03C.U().Inv() + acStack_278 - acStack_26c) * 0.05f;
+        acStack_26c += (mViewCache.mDirection.U().Inv() + acStack_278 - acStack_26c) * 0.05f;
     }
     else {
         if (!mpLockonTarget) {
@@ -3602,7 +3603,7 @@ bool dCamera_c::lockonCamera(s32 param_1) {
                 }
             }
         }
-        local_274 = acStack_254.Inv() - m03C.U();
+        local_274 = acStack_254.Inv() - mViewCache.mDirection.U();
         local_274.Degree();
         acStack_26c += local_274 * dVar17;
     }
@@ -3629,8 +3630,7 @@ bool dCamera_c::lockonCamera(s32 param_1) {
                 local_270 += (mCamParam.LockonLatitude(fVar4) - local_270) * 0.05f;
             }
             else if (!m360 && !check_owner_action(mPadId, daPyStts0_UNK400_e)) {
-                //dVar17 = mWork.lockon.m3A8.V().Cos();
-                local_270 += (local_240.U() - local_270) * (1.0f - std::fabsf(fVar5)) * std::fabsf(dVar17);
+                local_270 += (local_240.U() - local_270) * std::fabsf(fVar5) * std::fabsf(mWork.lockon.m3A8.V().Cos());
             }
             else {
                 fopAc_ac_c* playerActor;
@@ -3685,9 +3685,9 @@ bool dCamera_c::lockonCamera(s32 param_1) {
         }
     }
 
-    m03C.Val(fVar22, local_270, acStack_26c);
-    m044 = m044 + m03C.Xyz();
-    m060 += (mCamParam.LockonFovy(fVar4) - m060) * mCamSetup.m028;
+    mViewCache.mDirection.Val(fVar22, local_270, acStack_26c);
+    mViewCache.mCenter = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+    mViewCache.mFovy += (mCamParam.LockonFovy(fVar4) - mViewCache.mFovy) * mCamSetup.m028;
     setFlag(0x2000);
     return true;
 }
@@ -3879,8 +3879,356 @@ bool dCamera_c::CalcSubjectAngle(s16* param_1, s16* param_2) {
 }
 
 /* 801708E0-801719C4       .text subjectCamera__9dCamera_cFl */
-bool dCamera_c::subjectCamera(s32) {
-    /* Nonmatching */
+bool dCamera_c::subjectCamera(s32 param_1) {
+    // Non-matching
+    f32 p1  = mCamParam.Val(param_1, 1);
+    f32 p5  = mCamParam.Val(param_1, 5);
+    f32 p0  = mCamParam.Val(param_1, 0);
+    f32 p10 = mCamParam.Val(param_1, 10);
+    f32 p25 = mCamParam.Val(param_1, 25);
+    f32 p20 = mCamParam.Val(param_1, 20);
+    f32 p19 = mCamParam.Val(param_1, 19);
+    f32 p24 = mCamParam.Val(param_1, 24);
+    f32 p26 = mCamParam.Val(param_1, 26);
+
+    cSAngle baseYaw = directionOf(mpPlayerActor).Inv();
+    cSAngle angX, angY;
+    s16 tmpX, tmpY;
+
+    cXyz camRel;
+
+    cSGlobe desired;
+
+    int end;
+
+    if (m108 == 0) {
+        mWork.subject.m378 = 'SUBJ';
+        mWork.subject.m37C = 0;
+        mWork.subject.m37D = 1;
+        mWork.subject.m380 = param_1;
+
+        mWork.subject.m384 = 0.0f;
+        mWork.subject.m388 = 0.0f;
+        mWork.subject.m38C = 0.0f;
+
+        mWork.subject.m3A8 = 100;
+        mWork.subject.m3C0 = 0;
+        mWork.subject.m3BC = 0;
+
+        if (dComIfGp_getMiniGameType() == 3) {
+            mWork.subject.m3C0 = 2;
+        } else if (dComIfGp_checkPlayerStatus0(mPadId, 0x2000) == 0 && (mCamParam.Flag(param_1, 0x10) == 0)) {
+            mWork.subject.m3C0 = 1;
+        }
+
+        if (attentionPos(mpPlayerActor).y < m354 + 20.0f) {
+            mWork.subject.m3BD = 1;
+        } else {
+            mWork.subject.m3BD = 0;
+        }
+
+        if (mStickCPosYLast < -0.74f) {
+            mWork.subject.m3C4 = 2;
+        } else {
+            mWork.subject.m3C4 = 0;
+        }
+    }
+
+    if (mWork.subject.m3BD) {
+        p5 = 60.0f;
+        p0 = -5.0f;
+    }
+
+    camRel.set(p1, p5, p0);
+
+    if (mCamParam.Flag(param_1, 0x80)) {
+        setFlag(0x800);
+    }
+    if (mCamParam.Flag(param_1, 0x100)) {
+        setFlag(0x10000000);
+    }
+
+    if (!m100) {
+        if (check_owner_action(mPadId, daPyStts0_UNK2000_e)) {
+            end = 7;
+        }
+        else {
+            end = 10;
+        }
+
+        const int framesLeft = end - m108;
+        const f32 t = 1.0f / (f32)framesLeft;
+
+        cXyz targetPos;
+
+        switch (mWork.subject.m3C0) {
+            case 1: {
+                cSGlobe g(camRel);
+                g.U(directionOf(mpPlayerActor) + g.U());
+                targetPos = eyePos(mpPlayerActor) + g.Xyz();
+                break;
+            }
+            case 2: {
+                targetPos = mExtendedPos;
+                cSAngle ang = m0FA;
+                baseYaw.Val(ang.Inv());
+                break;
+            }
+            default: {
+                targetPos = relationalPos(mpPlayerActor, &camRel);
+                break;
+            }
+        }
+
+        cXyz delta = targetPos - mViewCache.mCenter;
+        mViewCache.mCenter += delta * t;
+
+        desired.Val(p10, cSAngle::_0, baseYaw);
+
+        mViewCache.mDirection.R(mViewCache.mDirection.R() + (desired.R() - mViewCache.mDirection.R()) * t);
+        mViewCache.mDirection.U(mViewCache.mDirection.U() + (desired.U() - mViewCache.mDirection.U()) * t);
+        mViewCache.mDirection.V(mViewCache.mDirection.V() + (desired.V() - mViewCache.mDirection.V()) * t);
+
+        mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+
+        if (!mCamParam.CheckFlag(0x10)) {
+            mViewCache.mFovy += t * (p25 - mViewCache.mFovy);
+        } else {
+            if (m108 >= (u32)(end - 6)) {
+                if (check_owner_action(mPadId, daPyStts0_TELESCOPE_LOOK_e)) {
+                    setComStat(8);
+                }
+                if (check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
+                    setComStat(0x40);
+                }
+
+                setComZoomScale(1.0f);
+
+                f32 x = (g_dComIfG_gameInfo.play.field_0x48b8 - 1.0f) * 0.5f * 640.0f + 320.0f;
+                if (x < 640.0f &&
+                    g_dComIfG_gameInfo.play.field_0x48b8 >= 1.0f &&
+                    g_dComIfG_gameInfo.play.field_0x48b8 <= 3.0f) {
+
+                    f32 s = (640.0f - x) / 320.0f;
+
+                    if (dComIfGp_demo_getCamera() || check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
+                        setView(s * 160.0f, s * 35.0f, x, (s * -160.0f) + 480.0f);
+                    }
+
+                    mViewCache.mFovy = mWork.subject.m39C + s * (mWork.subject.m3A0 - mWork.subject.m39C);
+                }
+            } else {
+                if (m108 < (u32)(end - 7)) {
+                    if (check_owner_action(mPadId, daPyStts0_TELESCOPE_LOOK_e)) {
+                        setComStat(8);
+                    }
+                    if (check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
+                        setComStat(0x40);
+                    }
+                    
+                    setComZoomScale(1.0f);
+                } else {
+                    if (m108 == 0) {
+                        mWork.subject.m3A0 = mViewCache.mFovy;
+                        mWork.subject.m39C = mViewCache.mFovy * 0.666667f;
+                    }
+                }
+            }
+
+            if (m108 == end - 1) {
+                m100 = 1;
+                m101 = 1;
+                m102 = 1;
+
+                mWork.subject.m384 = 0.0f;
+                mWork.subject.m388 = 0.0f;
+                mWork.subject.m38C = 0.0f;
+
+                mWork.subject.m39C = mViewCache.mFovy;
+                mWork.subject.m398 = 0;
+                mWork.subject.m390 = 0.0f;
+            }
+        }
+
+        return TRUE;
+    }
+
+    if (check_owner_action(mPadId, daPyStts0_CRAWL_e)) {
+        dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x80);
+    }
+
+    if (dComIfGs_getTime() || check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
+        if (mWork.subject.m3BC) {
+            setView(0.0f, 0.0f, 640.0f, 480.0f);
+        }
+    } else {
+        setView(160.0f, 35.0f, 320.0f, 320.0f);
+        mWork.subject.m3BC = 1;
+    }
+
+    if (mWork.subject.m37D) {
+        mWork.subject.m37C = 1;
+        CalcSubjectAngle(&tmpX, &tmpY);
+        angX = tmpX;
+        angY = tmpY - mWork.subject.m3BA;
+    } else {
+        // actor-angle path
+        if (is_player(mpPlayerActor)) {
+            angX = (cSAngle)mpPlayerActor->shape_angle.x;
+        } else {
+            angX = mpPlayerActor->shape_angle.x;
+        }
+        angY = mpPlayerActor->shape_angle.y - mWork.subject.m3BA;
+
+        mWork.subject.m388 = angX.Degree() / p19;
+        mWork.subject.m384 = angY.Degree() / p24;
+    }
+
+    // rotate camera-relative vector
+    cXyz v1 = dCamMath::xyzRotateX(camRel, angX);
+    cXyz v2 = dCamMath::xyzRotateY(v1, angY);
+
+    switch (mWork.subject.m3C0) {
+        case 1: {
+            cSGlobe g(v2);
+            g.V(directionOf(mpPlayerActor) + g.U());
+            mViewCache.mCenter = eyePos(mpPlayerActor) + g.Xyz();
+            break;
+        }
+        case 2: {
+            mViewCache.mCenter = mExtendedPos;
+            cSAngle ang(m0FA);
+            baseYaw = ang.Inv();
+            break;
+        }
+        default: {
+            mViewCache.mCenter = relationalPos(mpPlayerActor, &v2);
+            break;
+        }
+    }
+
+    // lock-on / attention smoothing blocks
+    if ((((mEventFlags >> 0x19) & 1) == 0 && (mLockOnActorId == -1)) || mpLockonTarget == NULL) {
+        cXyz at = attentionPos(mpLockonTarget);
+        at.y -= 25.0f;
+
+        desired.Val(mViewCache.mCenter - at);
+
+        mViewCache.mDirection.R(mViewCache.mDirection.R() + (p10 - mViewCache.mDirection.R()) * 0.04f);
+        desired.R(p10);
+
+        mViewCache.mDirection.U(mViewCache.mDirection.U() + (desired.U() - mViewCache.mDirection.U()) * 0.04f);
+        mViewCache.mDirection.V(mViewCache.mDirection.V() + (desired.V() - mViewCache.mDirection.V()) * 0.04f);
+
+        cSAngle dy = mViewCache.mDirection.U() - baseYaw;
+        cSAngle ax = mViewCache.mDirection.U();
+
+        mWork.subject.m384 = dy.Degree() / p24;
+        mWork.subject.m388 = ax.Degree() / p19;
+        mWork.subject.m3A8 = 0;
+        mWork.subject.m37C = 0;
+    } else {
+        if (!mWork.subject.m3BC || ((mEventFlags & 0x2000000) == 0)) {
+            cSGlobe g;
+            g.Val(mExtendedPos - mViewCache.mCenter);
+
+            mViewCache.mDirection.R(mViewCache.mDirection.R() + (p10 - mViewCache.mDirection.R()) * 0.05f);
+            g.R(p10);
+
+            mViewCache.mDirection.U(mViewCache.mDirection.U() + (g.U() - mViewCache.mDirection.U()) * 0.05f);
+            mViewCache.mDirection.V(mViewCache.mDirection.V() + (g.V() - mViewCache.mDirection.V()) * 0.05f);
+
+            cSAngle dy;
+            cSAngle ax;
+            dy = mViewCache.mDirection.V() - baseYaw;
+            ax = mViewCache.mDirection.U();
+
+            mWork.subject.m384 = dy.Degree() / p24;
+            mWork.subject.m388 = ax.Degree() / p19;
+
+            mWork.subject.m3A8 = 0;
+            mWork.subject.m37C = 0;
+        } else {
+            cSGlobe g;
+            g.Val(p10, angX, baseYaw + angY);
+
+            mViewCache.mDirection.R(mViewCache.mDirection.R() + (g.R() - mViewCache.mDirection.R()) * p20);
+            mViewCache.mDirection.U(mViewCache.mDirection.U() + (g.U() - mViewCache.mDirection.U()) * p20);
+            mViewCache.mDirection.V(mViewCache.mDirection.V() + (g.V() - mViewCache.mDirection.V()) * p20);
+
+            if (mWork.subject.m3A8 < 10) {
+                mWork.subject.m3A8++;
+            }
+            mWork.subject.m37C = 1;
+        }
+    }
+
+    mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+
+    if (mCamParam.CheckFlag(0x10)) {
+        // zoom control block
+        f32 a = 0.0f;
+        f32 stick = mStickCPosYLast;
+
+        f32 b = dCamMath::rationalBezierRatio(-stick, mCamSetup.mCurveWeight);
+
+        f32 next = mWork.subject.m38C + p26 * (a - b) * 0.1f;
+        if (next < 0.0f) {
+            mWork.subject.m38C = 0.0f;
+        }
+        else if (next > 1.0f) {
+            mWork.subject.m38C = 1.0f;
+        }
+        else {
+            mWork.subject.m38C = next;
+        }
+
+        f32 z = mWork.subject.m38C;
+        if (z == 0.0f || z == 0.5f || z == 1.0f) {
+            a = 0.0f;
+            b = 0.0f;
+        }
+
+        f32 scale = z * 8.0f + 1.0f;
+        mViewCache.mFovy += p20 * ((dCamMath::zoomFovy(mWork.subject.m39C * 0.5f, scale) * 2.0f) - mViewCache.mFovy);
+
+        dComIfGp_setCameraZoomScale(mCameraInfoIdx, scale);
+
+        if (check_owner_action(mPadId, daPyStts0_TELESCOPE_LOOK_e)) {
+            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 8);
+        }
+        if (check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
+            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x40);
+        }
+
+        const f32 focus = 1.0f - (std::fabsf(a - b) * 511.0f);
+        dComIfGp_setCameraZoomForcus(mCameraInfoIdx, focus);
+
+        mDoGph_gInf_c::mAutoForcus = 0;
+    } else {
+        mViewCache.mFovy += p20 * (p25 - mViewCache.mFovy);
+    }
+
+    mWork.subject.m37D = 1;
+
+    // “C-stick down” behavior block
+    if (check_owner_action(mPadId, daPyStts0_UNK2000_e)) {
+        if (mWork.subject.m3C4 == 2 && mStickCPosYLast >= -0.001f) {
+            mWork.subject.m3C4 = 0;
+        }
+        else if (mWork.subject.m3C4 == 1 && mStickCPosYLast < -0.74f) {
+            mWork.subject.m3C4 = 2;
+            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x2000);
+        }
+        else if (mStickCPosYLast < -0.001f) {
+            mWork.subject.m3C4 = 1;
+        }
+        else {
+            mWork.subject.m3C4 = 0;
+        }
+    }
+
+    return TRUE;
 }
 
 /* 801719C4-80172C20       .text towerCamera__9dCamera_cFl */
@@ -3889,8 +4237,158 @@ bool dCamera_c::towerCamera(s32) {
 }
 
 /* 80172C20-8017346C       .text crawlCamera__9dCamera_cFl */
-bool dCamera_c::crawlCamera(s32) {
-    /* Nonmatching */
+bool dCamera_c::crawlCamera(s32 param_1) {
+    cXyz sp134;
+    cXyz sp128;
+    
+    f32 f0 = mCamParam.Val(param_1, 1);
+    f32 f1 = mCamParam.Val(param_1, 5);
+    f32 f2 = mCamParam.Val(param_1, 0);
+    f32 f29 = mCamParam.Val(param_1, 3);
+    f32 f28 = mCamParam.Val(param_1, 4);
+    f32 f30 = mCamParam.Val(param_1, 10); 
+    f32 f31 = mCamParam.Val(param_1, 25);
+    sp134.set(f0, f1, f2);
+
+    cSAngle local_118(directionOf(mpPlayerActor) - mViewCache.mDirection.U());
+
+    if (m108 == 0) {
+        mWork.crawl.m378 = 'CRWL';
+        mWork.crawl.m398 = mCamParam.Flag(param_1, 0x80) ? 1 : 0;
+
+        mWork.crawl.m399 = 0;
+        mWork.crawl.m37C = 10;
+
+        if (check_owner_action(mPadId, daPyStts0_CRAWL_e) && m1AE) {
+            mWork.crawl.m37C = 6;
+        }
+
+        mWork.crawl.m39C = 0x5;
+        mWork.crawl.m380 = mWork.crawl.m37C * (mWork.crawl.m37C + 1) >> 1;
+
+        if (mCamParam.Flag(param_1, 0x40) == 0) {
+            mWork.crawl.m388 = 1;
+        }
+        else if (local_118 > cSAngle::_270 && local_118 < cSAngle::_90) {
+            mWork.crawl.m388 = 0;
+        }
+        else {
+            mWork.crawl.m388 = 1;
+        }
+    }
+    else if (mCamParam.Flag(param_1, 0x40) == 0) {
+        mWork.crawl.m388 = 1;
+    }
+    else if (local_118 > cSAngle(-75.0f) && local_118 < cSAngle(75.0f)) {
+        mWork.crawl.m388 = 0;
+    }
+    else if (local_118 < cSAngle(-135.0f) || local_118 > cSAngle(135.0f)){
+        mWork.crawl.m388 = 1;
+
+    }
+
+    if (m1AE) {
+        dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x80);
+    }
+
+    if (mCamParam.Flag(param_1, 0x40) && mCurArrowIdx != 0xff && mCurRoomCamEntry.field_0x12 != 0xff) {
+        local_118 = mViewCache.mDirection.U() - mCurRoomArrowEntry.angle.y;
+        if (local_118 > cSAngle::_270 && local_118 < cSAngle::_90) {
+            mWork.crawl.m38C = mCurRoomArrowEntry.position;
+            mWork.crawl.m399 = 1;
+            m102 = 1;
+            m101 = 1;
+            m100 = 1;
+        }
+        
+    }
+    else {
+        mWork.crawl.m399 = 0;
+    }
+
+    if (m100 == 0) {
+        mWork.crawl.m384 = (f32)(s32)(mWork.crawl.m37C - m108);
+        f28 = mWork.crawl.m384 / mWork.crawl.m380;
+        sp128 = relationalPos(mpPlayerActor, &sp134);
+        mViewCache.mCenter += (sp128 - mViewCache.mCenter) * f28;
+
+        if (mCamParam.Flag(param_1, 0x80)) {
+            f30 = 2.0f;
+        }
+
+        f1 = mViewCache.mDirection.R();
+        f32 f29 = f1 + f28 * (f30 - f1);
+        cSAngle acStack_11c(mViewCache.mDirection.V() + (mpPlayerActor->shape_angle.x - mViewCache.mDirection.V()) * f28);
+
+        cSAngle sp80;
+        if (mWork.crawl.m388) {
+            sp80.Val(directionOf(mpPlayerActor).Inv());
+        }
+        else {
+            sp80.Val(directionOf(mpPlayerActor));
+        }
+
+        cSAngle acStack_124(mViewCache.mDirection.U() + (sp80 - mViewCache.mDirection.U()) * f28);
+        mViewCache.mDirection.Val(f29, acStack_11c, acStack_124);
+
+        mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+        mViewCache.mFovy += f28 * (f31 - mViewCache.mFovy);
+
+        if (m108 >= mWork.crawl.m37C - 1) {
+            m102 = 1;
+            m101 = 1;
+            m100 = 1;
+        }
+
+        mWork.crawl.m380 -= mWork.crawl.m384;
+        return true;
+    }
+
+    cXyz local_7c(f29, f28, f29);
+    mViewCache.mCenter += (relationalPos(mpPlayerActor,&sp134) - mViewCache.mCenter) * local_7c;
+    switch (mWork.crawl.m399) {
+    case 1:
+        if (lineBGCheck(&mViewCache.mCenter, &mWork.crawl.m38C, 0x7f) == 0) {
+            mViewCache.mEye = mWork.crawl.m38C;
+            mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+    
+            if (mDMCSystem.field_0x0 == 0) {
+                setDMCAngle();
+            }
+            
+            m1AE = 0;
+            break;
+        }
+        // Fall-through
+    default:
+        cSAngle sp78;
+        cSAngle sp74;
+        cSAngle sp70;
+        if (mWork.crawl.m388) {
+            sp70.Val(directionOf(mpPlayerActor).Inv());
+        }
+        else {
+            sp70.Val(directionOf(mpPlayerActor));
+        }
+
+        if (mWork.crawl.m398) {
+            mViewCache.mCenter.y = positionOf(mpPlayerActor).y + 30.0f;
+            f0 = mViewCache.mDirection.R();
+            f0 = f0 + (2.0f - f0) * 0.8f;
+            sp78 = mViewCache.mDirection.U() + ((sp70 - mViewCache.mDirection.U()) * 0.8f);
+            setFlag(0x800);
+        }
+        else {
+            f0 = mViewCache.mDirection.R();
+            f0 = f0 + (f30 - f0) * 0.25f;
+            sp78 = mViewCache.mDirection.U() + (sp70 - mViewCache.mDirection.U()) * 0.2f;
+        }
+        sp74 = mViewCache.mDirection.V() + ((mpPlayerActor->shape_angle.x - mViewCache.mDirection.V()) * 0.25f);
+        mViewCache.mDirection.Val(f0, sp74, sp78);
+        mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+    }
+    mViewCache.mFovy = mViewCache.mFovy + (f31 - mViewCache.mFovy) * 0.5f;
+    return true;
 }
 
 /* 8017346C-80173E40       .text hookshotCamera__9dCamera_cFl */
@@ -3929,18 +4427,301 @@ bool dCamera_c::manualCamera(s32) {
 }
 
 /* 801795C8-801799C0       .text nonOwnerCamera__9dCamera_cFl */
-bool dCamera_c::nonOwnerCamera(s32) {
-    /* Nonmatching */
+bool dCamera_c::nonOwnerCamera(s32 param_1) {
+    cXyz local_90;
+    cXyz local_84;
+
+    mpLockonTarget = daCanon_c::canon_p;
+
+    if (mpLockonTarget == NULL) {
+        return false;
+    }
+
+    float f0 = mCamParam.Val(param_1, 1);
+    float f1 = mCamParam.Val(param_1, 5);
+    float f2 = mCamParam.Val(param_1, 0);
+    float f29 = mCamParam.Val(param_1, 23);
+    float f28 = mCamParam.Val(param_1, 18);
+    float f27 = mCamParam.Val(param_1, 10);
+    float f26 = mCamParam.Val(param_1, 15);
+    float f31 = mCamParam.Val(param_1, 25);
+    float f30 = mCamParam.Val(param_1, 20);
+    local_90.set(f0, f1, f2);
+
+    if (m11C == 0) {
+        mViewCache.mCenter = relationalPos(mpLockonTarget, &local_90);
+        mViewCache.mDirection.Val(f27, f26 * 182.04445f, directionOf(mpLockonTarget).Inv());
+        mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+        mViewCache.mFovy = f31;
+        m100 = 1;
+        m101 = 1;
+        m102 = 1;
+        return true;
+    }
+
+    cSGlobe cStack_110(local_90);
+    cStack_110.U(cStack_110.V() - mpLockonTarget->shape_angle.x);
+    cStack_110.V(cStack_110.U() + mpLockonTarget->shape_angle.y);
+
+    local_84 = attentionPos(mpLockonTarget) + cStack_110.Xyz();
+    mViewCache.mCenter += (local_84 - mViewCache.mCenter) * 0.2f;
+    cSAngle acStack_5c(f26);
+    cSAngle acStack_58;
+    cSAngle acStack_54((s16)0);
+    cSAngle acStack_50;
+    
+    acStack_58.Val(mpLockonTarget->shape_angle.x);
+    acStack_50.Val(directionOf(mpLockonTarget).Inv());
+
+    mViewCache.mDirection.U(mViewCache.mDirection.V() + ((acStack_5c + (acStack_58 * f28)) - mViewCache.mDirection.V()) * f30);
+    mViewCache.mDirection.V(mViewCache.mDirection.U() + ((acStack_54 + (acStack_50 * f29)) - mViewCache.mDirection.U()) * f30);
+    mViewCache.mDirection.R(mViewCache.mDirection.R() + f30 * (f27 - mViewCache.mDirection.R()));
+    mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+    mViewCache.mFovy += f30 * (f31 - mViewCache.mFovy);
+    return true;
 }
 
 /* 801799C0-80179F8C       .text fixedFrameCamera__9dCamera_cFl */
-bool dCamera_c::fixedFrameCamera(s32) {
+bool dCamera_c::fixedFrameCamera(s32 param_1) {
     /* Nonmatching */
+    f32 cam24  = mCamParam.Val(param_1, 24);
+    f32 cam25  = mCamParam.Val(param_1, 25);
+    cXyz spF0;
+    cXyz spE4;
+    cXyz spD8;
+    cXyz sp6C;
+    cSGlobe g;
+    f32 sp30;
+
+    dCamera_c::Work::FixedFrame* p = &mWork.fixedFrame;
+    
+    if (mCurArrowIdx == 0xFF) {
+        return false;
+    }
+    
+    if (m11C == 0) {
+        p->m378 = cXyz(mCurRoomArrowEntry.position.x, mCurRoomArrowEntry.position.y, mCurRoomArrowEntry.position.z);
+                
+        p->m3A8 = p->m378 + cSGlobe(3000.0f, -mCurRoomArrowEntry.angle.x, mCurRoomArrowEntry.angle.y).Xyz();
+        p->m39C = p->m3A8;
+
+        cM3dGLin line;
+        line.set(p->m3A8, p->m378);
+        spF0 = attentionPos(mpPlayerActor);
+
+        if (cM3d_Len3dSqPntAndSegLine(&line, &spF0, &spE4, &sp30)) {
+            p->m3A8 = spE4;
+        }
+
+        p->m384.Val(p->m378 - p->m3A8);
+
+        if (m530 && p->m384.R() < 350.0f) {
+            g.R(350.0f);
+            p->m3A8 = p->m378 + g.Xyz();
+            p->m384.R(350.0f);
+        }
+ 
+        p->m398 = mCurRoomCamEntry.field_0x12 == 0xFF ? cam25 : mCurRoomCamEntry.field_0x12;
+    
+        int uVar3 = mCurRoomCamEntry.field_0x13 == 0xFF ? -1 : mCurRoomCamEntry.field_0x13;
+        if (uVar3 == -1) {
+            sp6C = p->m378 - mEye;
+            cam25 = sp6C.abs();
+            f32 temp;
+            if (is_player(mpPlayerActor)) {
+                temp = ((daPy_py_c *)mpPlayerActor)->getHeight();
+            }
+            else {
+                temp = (mpPlayerActor->eyePos.y - mpPlayerActor->current.pos.y) * 1.1f;
+            }
+            cam25 = cam25 / temp;
+            cam25 = std::sqrtf(cam25);
+            p->m38C = (int)(cam24 * cam25) + 1;
+        }
+        else {
+            p->m38C = uVar3;
+        }
+        p->m390 = p->m38C * (p->m38C + 1) >> 1;
+    }
+    if (m100 == 0) {
+        p->m394 = (int)(p->m38C - m11C);
+        cam25 = p->m394 / p->m390;
+        p->m390 -= p->m394;
+
+        mViewCache.mCenter += (p->m39C - mViewCache.mCenter) * cam25;
+
+        mViewCache.mDirection.R(mViewCache.mDirection.R() + (p->m384.R() - mViewCache.mDirection.R()) * cam25);
+        mViewCache.mDirection.U(mViewCache.mDirection.U() + (p->m384.U() - mViewCache.mDirection.U()) * cam25);
+        mViewCache.mDirection.V(mViewCache.mDirection.V() + (p->m384.V() - mViewCache.mDirection.V()) * cam25);
+
+        mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+
+        if (lineBGCheck(&mViewCache.mEye, &mViewCache.mCenter, &spD8, 0x7F)) {
+            mViewCache.mCenter = spD8;
+        }
+
+        mViewCache.mFovy += cam25 * (p->m398 - mViewCache.mFovy);
+
+        if (m11C >= p->m38C - 1) {
+            m102 = 1;
+            m101 = 1;
+            m100 = 1;
+        }
+    }
+    return true;
 }
 
 /* 80179F8C-8017A80C       .text fixedPositionCamera__9dCamera_cFl */
-bool dCamera_c::fixedPositionCamera(s32) {
+bool dCamera_c::fixedPositionCamera(s32 param_1) {
     /* Nonmatching */
+    uint uVar10;
+    cXyz cStack_1a8;
+    cXyz cStack_16c;
+    cXyz local_124;
+    cXyz local_10c;
+    cXyz local_f4;
+    cXyz local_dc;
+    cXyz local_d0;
+    
+    f32 fVar15 = mCamParam.Val(param_1, 1);
+    f32 fVar16 = mCamParam.Val(param_1, 5);
+    f32 fVar1 = mCamParam.Val(param_1, 0);
+    f32 fVar2 = mCamParam.Val(param_1, 4);
+    f32 fVar3 = mCamParam.Val(param_1, 3);
+    f32 fVar4 = mCamParam.Val(param_1, 10);
+    f32 fVar5 = mCamParam.Val(param_1, 11);
+    f32 fVar6 = mCamParam.Val(param_1, 24);
+    f32 fVar7 = mCamParam.Val(param_1, 23);
+    f32 fVar8 = mCamParam.Val(param_1, 25);
+
+    if (m11C == 0) {
+        mWork.fixedPos.m390 = cXyz::Zero;
+    }
+
+    mWork.fixedPos.m39C = 0;
+
+    if (mCamParam.Flag(param_1, 0x40) && mCurArrowIdx != 0xff) {
+        local_d0 = mCurRoomArrowEntry.position;
+
+        if (mWork.fixedPos.m390 != local_d0) {
+            setDMCAngle();
+        }
+
+        mWork.fixedPos.m390 = local_d0;
+
+    
+        fVar8 = mCurRoomCamEntry.field_0x12 == 0xff ? fVar8 : mCurRoomCamEntry.field_0x12;
+
+        if (mCurRoomCamEntry.field_0x13 == 0xff) {
+            uVar10 = 0xffffffff;
+        }
+        else {
+            uVar10 = mCurRoomCamEntry.field_0x13;
+            mWork.fixedPos.m39C = 1;
+        }
+    }
+    else {
+        local_d0 = mEye;
+        uVar10 = 0xffffffff;
+    }
+
+    local_dc.set(fVar15, fVar16, fVar1);
+
+    if (m11C == 0) {
+        if (mWork.fixedPos.m39C == 0) {
+            local_10c = local_d0 - mEye;
+            fVar15 = std::sqrtf(local_10c.getSquareMag());
+            if (fVar15 > fVar4) {
+                fVar15 = fVar4;
+            }
+
+            local_124 = mCenter - relationalPos(mpPlayerActor, &local_dc);
+            fVar16 = std::sqrtf(local_124.getSquareMag());
+            if (fVar15 > fVar16) {
+                fVar16 = fVar15;
+            }
+
+            f32 temp;
+            if (is_player(mpPlayerActor)) {
+                temp = ((daPy_py_c *)mpPlayerActor)->getHeight();
+            }
+            else {
+                temp = (mpPlayerActor->eyePos.y - mpPlayerActor->current.pos.y) * 1.1f;
+            }
+
+            temp = temp < 10.0f ? 10.0f : temp;
+
+            fVar16 = fVar16 / temp;
+
+            mWork.fixedPos.m378 = (s32)(fVar6 * std::sqrtf(fVar16)) + 1;
+            mWork.fixedPos.m37C = mWork.fixedPos.m378 * (mWork.fixedPos.m378 + 1) >> 1;
+        }
+        else {
+            mWork.fixedPos.m378 = uVar10;
+            mWork.fixedPos.m37C = mWork.fixedPos.m378;
+        }
+        mWork.fixedPos.m384 = mViewCache.mCenter;
+    }
+
+    local_dc.set(fVar3, fVar2, fVar3);
+    local_f4 = relationalPos(mpPlayerActor, &local_dc);
+    
+    if (m100 == 0) {
+        if (mWork.fixedPos.m39C == 0) {
+            mWork.fixedPos.m380 = mWork.fixedPos.m378 - (s32)m11C;
+            fVar15 = mWork.fixedPos.m380 / mWork.fixedPos.m37C;
+            mWork.fixedPos.m37C -= mWork.fixedPos.m380;
+        }
+        else {
+            fVar15 = 1.0f / mWork.fixedPos.m37C;
+            mWork.fixedPos.m37C -= 1.0f;
+        }
+
+        mWork.fixedPos.m384 += (local_f4 - mWork.fixedPos.m384) * fVar15;
+        mViewCache.mCenter += cStack_16c * (mWork.fixedPos.m384 - mViewCache.mCenter);
+        
+        cSGlobe g(local_d0 - mViewCache.mCenter);
+        if (g.R() < fVar5) {
+            g.R(fVar5);
+        }
+
+        if (g.R() > fVar4) {
+            g.R(fVar4);
+        }
+
+        mViewCache.mDirection.R(mViewCache.mDirection.R() + (g.R() - mViewCache.mDirection.R()) * fVar15);
+        mViewCache.mDirection.U(mViewCache.mDirection.U() + (g.U() - mViewCache.mDirection.U()) * fVar15);
+        mViewCache.mDirection.V(mViewCache.mDirection.V() + (g.V() - mViewCache.mDirection.V()) * fVar15);
+        
+        mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+        mViewCache.mFovy += fVar15 * (fVar8 - mViewCache.mFovy);
+        if (m11C >= mWork.fixedPos.m378 - 1U) {
+            m102 = 1;
+            m101 = 1;
+            m100 = 1;
+        }
+        return true;
+    }
+
+    mViewCache.mCenter += cStack_1a8 * (local_f4 - mViewCache.mCenter);
+
+    cSGlobe g(local_d0 - mViewCache.mCenter);
+    if (g.R() < fVar5) {
+        g.R(fVar5);
+    }
+
+    if (g.R() > fVar4) {
+        g.R(fVar4);
+    }
+
+    mViewCache.mDirection.R(mViewCache.mDirection.R() + (g.R() - mViewCache.mDirection.R()) * fVar7);
+    mViewCache.mDirection.U(mViewCache.mDirection.U() + (g.U() - mViewCache.mDirection.U()) * fVar7);
+    mViewCache.mDirection.V(mViewCache.mDirection.V() + (g.V() - mViewCache.mDirection.V()) * fVar7);
+    
+    mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+    mViewCache.mFovy += fVar7 * (fVar8 - mViewCache.mFovy);
+
+    return true;
 }
 
 /* 8017A80C-8017B144       .text eventCamera__9dCamera_cFl */
@@ -4016,7 +4797,7 @@ bool dCamera_c::eventCamera(s32) {
         m0A4[1].m00.mEye = mEye;
         m0A4[0].m00.mEye = m0A4[1].m00.mEye;
 
-        m0A4[0].m00.mFovY = m0A4[1].m00.mFovY = mFovY;
+        m0A4[0].m00.mFovY = m0A4[1].m00.mFovY = mFovy;
 
         m0A4[1].m00.mBank = mBank;
         m0A4[0].m00.mBank = m0A4[1].m00.mBank;
@@ -4028,13 +4809,13 @@ bool dCamera_c::eventCamera(s32) {
     
     if (!chkFlag(0x20000000)) {
         if (!dComIfGp_evmng_cameraPlay()) {
-            return 0;
+            return false;
         }
 
         int staff_id = dComIfGp_evmng_getMyStaffId("CAMERA");
 
         if (staff_id < 0) {
-            return 0;
+            return false;
         }
 
         if (mEventData.mStaffIdx != staff_id) {
@@ -4051,7 +4832,7 @@ bool dCamera_c::eventCamera(s32) {
             m100 = 0;
             m11C = 0;
         }
-        lVar12 = dComIfGp_evmng_getMyActIdx(mEventData.mStaffIdx, ActionNames, ARRAY_SIZE(ActionNames), 0, 0);
+        lVar12 = dComIfGp_evmng_getMyActIdx(mEventData.mStaffIdx, ActionNames, ARRAY_SIZE(ActionNames), FALSE, 0);
     }
     else {
         mEventData.mStaffIdx = -1;
@@ -4063,7 +4844,7 @@ bool dCamera_c::eventCamera(s32) {
 
     if (lVar12 < 0 || lVar12 >= 0x1c) {
         dComIfGp_evmng_cutEnd(mEventData.mStaffIdx);
-        return 0;
+        return false;
     }
 
     if (m11C == 0) {
@@ -4140,13 +4921,16 @@ bool dCamera_c::eventCamera(s32) {
         dComIfGp_evmng_cutEnd(mEventData.mStaffIdx);
     }
 
+#if VERSION > VERSION_DEMO
     if (mEventData.field_0x20 == 4) {
         dBgS_LinChk lin_chk;
-        if (lineBGCheck(&m044, &m050, &lin_chk, 4)) {
-            m050 = lin_chk.GetCross();
+        if (lineBGCheck(&mViewCache.mCenter, &mViewCache.mEye, &lin_chk, 4)) {
+            mViewCache.mEye = lin_chk.GetCross();
         }
     }
-    return 1;
+#endif
+
+    return true;
 }
 
 /* 8017B144-8017B14C       .text demoCamera__9dCamera_cFl */
@@ -4174,7 +4958,7 @@ bool dCamera_c::Set(cXyz center, cXyz eye, f32 fovY, s16 bank) {
 
     mEye = eye;
 
-    mFovY = fovY;
+    mFovy = fovY;
 
     mBank.Val(bank);
 
@@ -4187,7 +4971,7 @@ bool dCamera_c::Set(cXyz center, cXyz eye, s16 bank, f32 fovY) {
 
     mEye = eye;
 
-    mFovY = fovY;
+    mFovy = fovY;
 
     mBank.Val(bank);
 
@@ -4196,50 +4980,50 @@ bool dCamera_c::Set(cXyz center, cXyz eye, s16 bank, f32 fovY) {
 
 /* 8017B24C-8017B31C       .text Reset__9dCamera_cF4cXyz4cXyzfs */
 bool dCamera_c::Reset(cXyz center, cXyz eye, f32 fovY, s16 bank) {
-    m044 = mCenter = center;
+    mViewCache.mCenter = mCenter = center;
 
-    m050 = mEye = eye;
+    mViewCache.mEye = mEye = eye;
 
-    m060 = mFovY = fovY;
+    mViewCache.mFovy = mFovy = fovY;
 
     mBank = cSAngle(bank);
-    m05C = mBank;
+    mViewCache.mBank = mBank;
 
-    m03C.Val(m050 - m044);
+    mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
 
     return Reset();
 }
 
 /* 8017B31C-8017B3D8       .text Reset__9dCamera_cF4cXyz4cXyz */
 bool dCamera_c::Reset(cXyz center, cXyz eye) {
-    m044 = mCenter = center;
+    mViewCache.mCenter = mCenter = center;
 
-    m050 = mEye = eye;
+    mViewCache.mEye = mEye = eye;
 
-    m060 = mFovY;
+    mViewCache.mFovy = mFovy;
 
-    m05C = mBank;
+    mViewCache.mBank = mBank;
 
-    m03C.Val(m050 - m044);
+    mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
 
     return Reset();
 }
 
 /* 8017B3D8-8017B494       .text Reset__9dCamera_cFv */
 bool dCamera_c::Reset() {
-    m044 = mCenter;
+    mViewCache.mCenter = mCenter;
 
-    m050 = mEye;
+    mViewCache.mEye = mEye;
 
-    m060 = mFovY;
+    mViewCache.mFovy = mFovy;
 
     mDirection.Val(mEye - mCenter);
 
-    m03C = mDirection;
+    mViewCache.mDirection = mDirection;
 
-    m05C = mBank;
+    mViewCache.mBank = mBank;
 
-    m03C.Val(m050 - m044);
+    mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
 
     return TRUE;
 }
@@ -4395,20 +5179,26 @@ f32 dCamera_c::shakeCamera() {
     return fVar6;
 }
 
-static const int PatternLengthMax[] = {0x00000004};
-
 /* 8017BA50-8017BB8C       .text StartShake__9dCamera_cFlPUcl4cXyz */
 int dCamera_c::StartShake(s32 i_length, u8* i_pattern, s32 i_flags, cXyz i_pos) {
-    /* Nonmatching - Code 100%, just need to figure out where PatternLengthMax is meant to be placed */
-    if (i_length < 0 || i_length > PatternLengthMax[0] << 3) {
-        i_length = PatternLengthMax[0] << 3;
+    // This function originally used a constant defined as a static data member in one of
+    // dCamera_c's anonymous classes, but this is illegal in C++ and is not accepted by
+    // MWCC for Wii.
+#if defined(__MWERKS__) && __MWERKS__ < 0x4200
+#define PATTERN_LENGTH_MAX mViewCache.PatternLengthMax
+#else
+#define PATTERN_LENGTH_MAX 4
+#endif
+
+    if (i_length < 0 || i_length > PATTERN_LENGTH_MAX << 3) {
+        i_length = PATTERN_LENGTH_MAX << 3;
     }
     
     m550 = i_length;
     
     int i;
     int var_r28 = i_length >> 3;
-    for (i = 0; i < PatternLengthMax[0]; i++) {
+    for (i = 0; i < PATTERN_LENGTH_MAX; i++) {
         m544[i] = m548[i] = 0;
     }
 
@@ -4419,7 +5209,7 @@ int dCamera_c::StartShake(s32 i_length, u8* i_pattern, s32 i_flags, cXyz i_pos) 
     var_r28 = i_length & 7;
     m544[i] = (0xFF << (8 - var_r28)) & i_pattern[i];
 
-    if (i_length == (PatternLengthMax[0] << 3)) {
+    if (i_length == (PATTERN_LENGTH_MAX << 3)) {
         m548[i] = m544[i] | (i_pattern[0] >> var_r28);
     } else {
         m548[i] = m544[i];
@@ -4428,7 +5218,7 @@ int dCamera_c::StartShake(s32 i_length, u8* i_pattern, s32 i_flags, cXyz i_pos) 
     m55C = i_pos.norm();
     m554 = 0;
     m588 = i_flags;
-    return 1;
+    return TRUE;
 }
 
 /* 8017BB8C-8017BBA4       .text StopShake__9dCamera_cFv */
@@ -4639,27 +5429,27 @@ void store(camera_process_class* i_this) {
     cSAngle bank = fopCamM_GetBank(a_this);
     f32 fovy = fopCamM_GetFovy(a_this);
 
-    dDemo_camera_c* mDemoCamera = dComIfGp_demo_getCamera();
+    dDemo_camera_c* demoCamera = dComIfGp_demo_getCamera();
 
-    if (mDemoCamera) {
-        if (mDemoCamera->checkEnable(0x40)) {
-            oldCenter = mDemoCamera->getTarget();
+    if (demoCamera) {
+        if (demoCamera->checkEnable(0x40)) {
+            oldCenter = demoCamera->getTarget();
         }
 
-        if (mDemoCamera->checkEnable(0x10)) {
-            oldEye = mDemoCamera->getTrans();
+        if (demoCamera->checkEnable(0x10)) {
+            oldEye = demoCamera->getTrans();
         }
 
-        if (mDemoCamera->checkEnable(0x20)) {
-            oldUp = mDemoCamera->getUp();
+        if (demoCamera->checkEnable(0x20)) {
+            oldUp = demoCamera->getUp();
         }
 
-        if (mDemoCamera->checkEnable(0x80)) {
-            bank = cAngle::d2s(-mDemoCamera->getRoll());
+        if (demoCamera->checkEnable(0x80)) {
+            bank = cAngle::d2s(-demoCamera->getRoll());
         }
 
-        if (mDemoCamera->checkEnable(4)) {
-            fovy = mDemoCamera->getFovy();
+        if (demoCamera->checkEnable(4)) {
+            fovy = demoCamera->getFovy();
         }
     }
     else {

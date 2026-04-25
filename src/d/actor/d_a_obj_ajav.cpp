@@ -163,7 +163,7 @@ void daObjAjav::daObjAjav_make_splash(cXyz i_splashPos, f32 i_scale) {
     scale.x = i_scale;
     scale.y = 4.0f;
     scale.z = scale.x;
-    dComIfGp_particle_set(dPa_name::ID_COMMON_003C, &i_splashPos,  NULL, &scale);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_MIZUSHIBUKI_A, &i_splashPos,  NULL, &scale);
 }
 
 /* 000001AC-00000268       .text make_hamon__Q29daObjAjav6Part_cF4cXyzf */
@@ -182,7 +182,7 @@ void daObjAjav::Part_c::make_hamon(cXyz i_hamonPos, f32 i_scale) {
         i_hamonPos.y = water_height;
     }
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_003F, &i_hamonPos, NULL, &scale);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_WP_HAMON03, &i_hamonPos, NULL, &scale);
 }
 
 /* 00000268-0000026C       .text no_proc__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
@@ -416,7 +416,7 @@ void daObjAjav::Part_c::draw_shy(daObjAjav::Act_c*) {
 
 /* 00001090-00001168       .text make_fall_rock__Q29daObjAjav6Part_cFi */
 void daObjAjav::Part_c::make_fall_rock(BOOL i_increasedRate) {
-    JPABaseEmitter* particle_emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8427, &mRockParticlePos);
+    JPABaseEmitter* particle_emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_JBROCKGATE01, &mRockParticlePos);
     if (particle_emitter && mpTevStr) {
         if (i_increasedRate != FALSE) {
             particle_emitter->setRate(20.0f);
@@ -634,7 +634,7 @@ BOOL daObjAjav::Act_c::damage_part() {
 /* 00002124-000021EC       .text make_shot_rock__Q29daObjAjav5Act_cFv */
 void daObjAjav::Act_c::make_shot_rock() {
     cXyz sph_center = mSph.GetC();
-    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8426, &sph_center);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_JBROCKGATE00, &sph_center);
     if (emitter) {
         g_env_light.settingTevStruct(TEV_TYPE_BG0, &sph_center, &tevStr);
         emitter->setGlobalPrmColor(
@@ -661,7 +661,7 @@ void daObjAjav::Act_c::make_hamon2(cXyz i_hamonPos, f32 i_scale) {
         i_hamonPos.y = water_height;
     }
 
-    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8454, &i_hamonPos, NULL, &scale);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_JBROCKGATEHAMON00, &i_hamonPos, NULL, &scale);
 
     if (emitter) {
         g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);

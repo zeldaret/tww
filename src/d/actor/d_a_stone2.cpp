@@ -54,15 +54,8 @@ const Attr_c Act_c::M_attr[5] = {
         NULL, 0x0, 0x0, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0.0f, 0x0, 0x0,  0x0,  0x0,  0x0,
         0x0,  0x0, 0x0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0x0, 1.0f, 1.0f, 1.0f,
     },
-
     {
-        "Ebrock", 0x4,   0x8,
-#if VERSION == VERSION_DEMO
-        0x2000,
-#else
-        0xE40,
-#endif
-        0x19,     0x140, 0x12C,  0x118,  0x1C6, 0x696A, 13,   0x0,  0xC8, 0x0, 0xFFFF, 0x0,  0xC8, 0x0,
+        "Ebrock", 0x4,   0x8, DEMO_SELECT(0x2000, 0xE40), 0x19,     0x140, 0x12C,  0x118,  0x1C6, 0x696A, 13,   0x0,  0xC8, 0x0, 0xFFFF, 0x0,  0xC8, 0x0,
         0x190,    -6.0f, 200.0f, 200.0f, 27.0f, 36.0f,  0.0f, 0.0f, 3.0f, 0x6, 3.0f,   1.0f, 1.5f,
     },
     {
@@ -336,16 +329,16 @@ bool Act_c::damage_bg_proc_directly() {
 }
 
 /* 00001214-00001368       .text eff_m_break__Q28daStone25Act_cFUsUs */
-void Act_c::eff_m_break(unsigned short arg1, unsigned short arg2) {
+void Act_c::eff_m_break(u16 particleID, u16 texAnmFrame) {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPI_KOISHI);
     J3DAnmTexPattern* texAnm = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", ALWAYS_BTP_MPI_KOISHI);
     cXyz sp18;
     sp18.setall(attr().m54);
 
-    JPABaseEmitter* emitter = dComIfGp_particle_set(arg1, &current.pos, &shape_angle, NULL, 0xff, NULL, -1, NULL, NULL, &sp18);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(particleID, &current.pos, &shape_angle, NULL, 0xff, NULL, -1, NULL, NULL, &sp18);
     if (emitter != NULL) {
         emitter->setGlobalRTMatrix(mpModel->getBaseTRMtx());
-        dPa_J3DmodelEmitter_c* modelEmitter = new dPa_J3DmodelEmitter_c(emitter, modelData, tevStr, texAnm, arg2, 0);
+        dPa_J3DmodelEmitter_c* modelEmitter = new dPa_J3DmodelEmitter_c(emitter, modelData, tevStr, texAnm, texAnmFrame, 0);
         if (modelEmitter != NULL) {
             dComIfGp_particle_addModelEmitter(modelEmitter);
         }
@@ -353,7 +346,7 @@ void Act_c::eff_m_break(unsigned short arg1, unsigned short arg2) {
 }
 
 /* 00001368-0000143C       .text eff_b_break__Q28daStone25Act_cFUs */
-void Act_c::eff_b_break(unsigned short arg1) {
+void Act_c::eff_b_break(u16 arg1) {
     GXColor sp18;
     sp18.r = tevStr.mColorC0.r;
     sp18.g = tevStr.mColorC0.g;
@@ -371,15 +364,15 @@ void Act_c::eff_b_break(unsigned short arg1) {
 
 /* 0000143C-000015D8       .text eff_break_ebrock__Q28daStone25Act_cFv */
 void Act_c::eff_break_ebrock() {
-    eff_m_break(dPa_name::ID_COMMON_03F4, 2);
-    eff_b_break(dPa_name::ID_COMMON_03F3);
+    eff_m_break(dPa_name::ID_AK_JN_M_BREAKGREATROCK00, 2);
+    eff_b_break(dPa_name::ID_AK_JN_BREAKGREATROCK00);
 
     static cXyz offset_vec(0.0f, 250.0f, 0.0f);
 
     mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
     mDoMtx_stack_c::multVec(&offset_vec, &m67C);
 
-    JPABaseEmitter* pJVar1 = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &m67C, NULL, NULL, 200, &m65C);
+    JPABaseEmitter* pJVar1 = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &m67C, NULL, NULL, 200, &m65C);
     if (pJVar1 != NULL) {
         pJVar1->setRate(30.0f);
         pJVar1->setMaxFrame(1);
@@ -394,15 +387,15 @@ void Act_c::eff_break_ebrock() {
 
 /* 000015D8-00001774       .text eff_break_ekao__Q28daStone25Act_cFv */
 void Act_c::eff_break_ekao() {
-    eff_m_break(dPa_name::ID_COMMON_03F8, 3);
-    eff_b_break(dPa_name::ID_COMMON_03F7);
+    eff_m_break(dPa_name::ID_AK_JN_M_BREAKFACEROCK00, 3);
+    eff_b_break(dPa_name::ID_AK_JN_BREAKFACEROCK00);
 
     static cXyz offset_vec(0.0f, 250.0f, 0.0f);
 
     mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
     mDoMtx_stack_c::multVec(&offset_vec, &m67C);
 
-    JPABaseEmitter* pJVar1 = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &m67C, NULL, NULL, 200, &m65C);
+    JPABaseEmitter* pJVar1 = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &m67C, NULL, NULL, 200, &m65C);
     if (pJVar1 != NULL) {
         pJVar1->setRate(30.0f);
         pJVar1->setMaxFrame(1);
@@ -417,15 +410,15 @@ void Act_c::eff_break_ekao() {
 
 /* 00001774-00001910       .text eff_break_ebrock2__Q28daStone25Act_cFv */
 void Act_c::eff_break_ebrock2() {
-    eff_m_break(dPa_name::ID_COMMON_03F6, 2);
-    eff_b_break(dPa_name::ID_COMMON_03F5);
+    eff_m_break(dPa_name::ID_AK_JN_M_BREAKLITTLEROCK00, 2);
+    eff_b_break(dPa_name::ID_AK_JN_BREAKLITTLEROCK00);
 
     static cXyz offset_vec(0.0f, 100.0f, 0.0f);
 
     mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
     mDoMtx_stack_c::multVec(&offset_vec, &m67C);
 
-    JPABaseEmitter* pJVar1 = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &m67C, NULL, NULL, 200, &m65C);
+    JPABaseEmitter* pJVar1 = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &m67C, NULL, NULL, 200, &m65C);
     if (pJVar1 != NULL) {
         pJVar1->setRate(30.0f);
         pJVar1->setMaxFrame(1);
@@ -464,7 +457,7 @@ void Act_c::eff_lift_smoke_start() {
         cXyz sp1C;
         sp1C.setall(attr().m5C);
 
-        dComIfGp_particle_setToon(dPa_name::ID_COMMON_23F2, &current.pos, NULL, &sp1C, 0x80, &m688, -1, &color, &tev.mColorK0, NULL);
+        dComIfGp_particle_setToon(dPa_name::ID_AK_JT_LIFTROCKSMOKE00, &current.pos, NULL, &sp1C, 0x80, &m688, -1, &color, &tev.mColorK0, NULL);
     }
 }
 

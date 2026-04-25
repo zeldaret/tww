@@ -5,6 +5,11 @@
 #include "dolphin/mtx/mtx.h"
 
 bool mDoGph_Create();
+bool mDoGph_BeforeOfDraw();
+bool mDoGph_AfterOfDraw();
+bool mDoGph_Painter();
+void mDoGph_BlankingON();
+void mDoGph_BlankingOFF();
 
 struct ResTIMG;
 

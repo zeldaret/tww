@@ -31,14 +31,14 @@ BOOL daLbridge_c::CreateHeap() {
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BTK_GBRG00);
     JUT_ASSERT(DEMO_SELECT(231, 232), pbtk != NULL);
 
-    if (!mBtkAnm.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if (!mBtkAnm.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
 
     J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(m_arcname, GBRG00_BPK_GBRG00);
     JUT_ASSERT(DEMO_SELECT(245, 246), pbpk != NULL);
 
-    if (!mBpkAnm.init(modelData, pbpk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!mBpkAnm.init(modelData, pbpk, TRUE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 
@@ -48,7 +48,7 @@ BOOL daLbridge_c::CreateHeap() {
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BRK_GBRG00);
     JUT_ASSERT(DEMO_SELECT(261, 262), pbrk != NULL);
 
-    if (!mBrkAnm.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if (!mBrkAnm.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
 
@@ -74,7 +74,7 @@ void daLbridge_c::CreateInit() {
     fopAcM_setCullSizeBox(this, -600.0f, -100.0f, -150.0f, 600.0f, 100.0f, 150.0f);
     fopAcM_setCullSizeFar(this, 1.5f);
 
-    mpEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_810F, &current.pos, &current.angle);
+    mpEmitter = dComIfGp_particle_set(dPa_name::ID_IT_SN_RBRIDGE_FLSH00, &current.pos, &current.angle);
 
     if (mpEmitter != NULL) {
         mpEmitter->stopDrawParticle();
@@ -233,8 +233,8 @@ void daLbridge_c::appear_bridge() {
     pos1.z += 100.0f;
     pos2.z -= 100.0f;
 
-    dComIfGp_particle_setProjection(dPa_name::ID_SCENE_8119, &pos1, &current.angle);
-    dComIfGp_particle_setProjection(dPa_name::ID_SCENE_8119, &pos2, &current.angle);
+    dComIfGp_particle_setProjection(dPa_name::ID_IT_SN_RBRIDGE_APP00, &pos1, &current.angle);
+    dComIfGp_particle_setProjection(dPa_name::ID_IT_SN_RBRIDGE_APP00, &pos2, &current.angle);
 
     set_on_se();
 

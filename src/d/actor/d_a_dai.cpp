@@ -268,7 +268,7 @@ void daDai_c::proc() {
         }
     }
 
-    if ((m84C != 0) && talk(1) == 0x12) {
+    if ((m84C != 0) && talk(1) == fopMsgStts_BOX_CLOSED_e) {
         dComIfGp_event_reset();
         m84C = 0;
     }

@@ -51,7 +51,7 @@ BOOL daBg_btkAnm_c::create(J3DModelData* modelData, J3DAnmTextureSRTKey* anmData
     if (anm == NULL)
         return FALSE;
 
-    if (!anm->init(modelData, anmData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    if (!anm->init(modelData, anmData, true, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
 
     J3DAnmTextureSRTKey * data = anm->getBtkAnm();
@@ -92,7 +92,7 @@ BOOL daBg_brkAnm_c::create(J3DModelData* modelData, J3DAnmTevRegKey* anmData) {
     if (anm == NULL)
         return FALSE;
 
-    if (!anm->init(modelData, anmData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    if (!anm->init(modelData, anmData, true, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
 
     J3DAnmTevRegKey * data = anm->getBrkAnm();

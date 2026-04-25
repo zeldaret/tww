@@ -310,17 +310,17 @@ void dCcS::ProcAtTgHitmark(bool, bool, cCcD_Obj* atObj, cCcD_Obj* tgObj, dCcD_GO
     if (!ChkShield(atObj, tgObj, atInf, tgInf)) {
         if (atInf->GetAtHitMark() == dCcG_AtHitMark_None_e) { return; }
         if (atInf->GetAtHitMark() == dCcG_AtHitMark_Unk1_e && tgInf->GetTgHitMark() == dCcG_TgHitMark_Unk1_e) {
-            dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, pos);
+            dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, pos);
         } else {
             csXyz angle;
             CalcParticleAngle(atInf, atStts, tgStts, &angle);
             if (atInf->GetAtHitMark() == dCcG_AtHitMark_Big_e) {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, pos);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, pos);
                 cXyz scale;
                 scale.x = scale.y = scale.z = 2.0f;
-                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, pos, &angle, &scale);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, pos, &angle, &scale);
             } else if (atInf->GetAtHitMark() == dCcG_AtHitMark_Unk1_e) {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, pos, &angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, pos, &angle);
             } else {
                 dComIfGp_particle_set(atInf->GetAtHitMark(), pos, &angle);
             }

@@ -432,7 +432,9 @@ inline void mDoAud_talkOut() {
     mDoAud_zelAudio_c::getInterface()->talkOut();
 }
 
-inline void mDoAud_checkSePlaying(u32 param_0) {}
+inline BOOL mDoAud_checkSePlaying(u32 param_0) {
+    return mDoAud_zelAudio_c::getInterface()->checkSePlaying(param_0);
+}
 inline void mDoAud_heartGaugeOn() {
     mDoAud_zelAudio_c::getInterface()->heartGaugeOn();
 }

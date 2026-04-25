@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tbox.h"
+#include "d/d_npc.h"
 #include "d/res/res_dalways.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_s_acch.h"
@@ -30,8 +31,6 @@
 #define FUNC_TYPE_TACT 6
 #define FUNC_TYPE_EXTRA_SAVE_INFO 7
 #define FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN 8
-
-extern dCcD_SrcCyl dNpc_cyl_src;
 
 static daTbox_HIO_c l_HIO;
 
@@ -103,7 +102,7 @@ cPhs_State daTbox_c::commonShapeSet() {
         }
 
         J3DAnmTextureSRTKey* appearTexData = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", mdlInfo.btkId);
-        if (mpAppearTexAnm->init(modelData, appearTexData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
+        if (mpAppearTexAnm->init(modelData, appearTexData, true, J3DFrameCtrl::EMode_LOOP) == 0) {
             return cPhs_ERROR_e;
         }
 
@@ -118,7 +117,7 @@ cPhs_State daTbox_c::commonShapeSet() {
         }
 
         J3DAnmTevRegKey* appearRegData = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", mdlInfo.brkId);
-        if (mpAppearRegAnm->init(modelData, appearRegData, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
+        if (mpAppearRegAnm->init(modelData, appearRegData, true, J3DFrameCtrl::EMode_NONE) == 0) {
             return cPhs_ERROR_e;
         }
 
@@ -142,7 +141,7 @@ cPhs_State daTbox_c::commonShapeSet() {
         }
 
         J3DAnmTevRegKey* tactPlatformBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_YTRIF00);
-        if (mTactPlatformBrk.init(modelData, tactPlatformBrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
+        if (mTactPlatformBrk.init(modelData, tactPlatformBrk, true, J3DFrameCtrl::EMode_NONE) == 0) {
             return cPhs_ERROR_e;
         }
     }
@@ -174,17 +173,17 @@ cPhs_State daTbox_c::effectShapeSet() {
     }
 
     J3DAnmTransform* flashAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", DALWAYS_BCK_IT_TAKARA_FLASH2);
-    if (mFlashAnm.init(flashModelData, flashAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
+    if (mFlashAnm.init(flashModelData, flashAnm, true, J3DFrameCtrl::EMode_NONE) == 0) {
         return cPhs_ERROR_e;
     }
 
     J3DAnmTextureSRTKey* flashTexAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BTK_IT_TAKARA_FLASH);
-    if (mFlashTexAnm.init(flashModelData, flashTexAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
+    if (mFlashTexAnm.init(flashModelData, flashTexAnm, true, J3DFrameCtrl::EMode_NONE) == 0) {
         return cPhs_ERROR_e;
     }
 
     J3DAnmTevRegKey* flashRegAnm = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_IT_TAKARA_FLASH);
-    int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, J3DFrameCtrl::EMode_NONE);
 
     if (regInit) {
         return cPhs_COMPLEATE_e;
@@ -668,14 +667,14 @@ void daTbox_c::demoInitAppear_Tact() {
     angle.y = current.angle.y;
     angle.z = current.angle.z;
 
-    dComIfGp_particle_set(dPa_name::ID_SCENE_82F1, &current.pos, &angle);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_82F0, &current.pos, &angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_WINDCHEST01, &current.pos, &angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_WINDCHEST00, &current.pos, &angle);
 
     angle.y += 0x5555;
-    dComIfGp_particle_set(dPa_name::ID_SCENE_82F0, &current.pos, &angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_WINDCHEST00, &current.pos, &angle);
 
     angle.y += 0x5555;
-    dComIfGp_particle_set(dPa_name::ID_SCENE_82F0, &current.pos, &angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_WINDCHEST00, &current.pos, &angle);
 
     fopAcM_seStart(this, JA_SE_OBJ_TRIFORCE_BOX_IN, 0);
 }
@@ -684,8 +683,8 @@ void daTbox_c::demoInitAppear_Tact() {
 void daTbox_c::demoInitAppear() {
     fopAcM_seStart(this, JA_SE_OBJ_KOUBAKU_TBOX, 0);
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_03EB, &current.pos);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_03EC, &current.pos);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_APPEARCHEST00, &current.pos);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_APPEARCHEST01, &current.pos);
 }
 
 /* 00001B38-00001CF4       .text demoProcAppear_Tact__8daTbox_cFv */
@@ -731,7 +730,7 @@ void daTbox_c::demoProcAppear() {
     }
 
     if (mAppearTimer == 0x05) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &current.pos, NULL, NULL, 0xB9, &mSmokeCB);
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &current.pos, NULL, NULL, 0xB9, &mSmokeCB);
 
         if (emitter != NULL) {
             emitter->setRate(100.0f);
@@ -891,13 +890,13 @@ void daTbox_c::OpenInit() {
 
     flagOn(daTboxFlg_OPENING_e);
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F1, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F2, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F3, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F4, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F6, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_PAKAF, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_NAKAF, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_UEF, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_TSUBU, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_PAKAF_SOTO, &current.pos, &current.angle);
 
-    mSmokeEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_01F5, &current.pos, &current.angle);
+    mSmokeEmitter = dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_VOLM, &current.pos, &current.angle);
     if (mSmokeEmitter != NULL) {
         mSmokeEmitter->mGlobalPrmColor.a = 0;
     }

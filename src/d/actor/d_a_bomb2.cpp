@@ -271,11 +271,11 @@ namespace daBomb2 {
 
         J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(resName, VBAKH_BCK_VBAKM));
         JUT_ASSERT(0x30D, bck_data != NULL);
-        int temp = mBck0.init(mdl_data, bck_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
+        int temp = mBck0.init(mdl_data, bck_data, true, J3DFrameCtrl::EMode_NONE);
 
         J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(resName, VBAKH_BRK_VBAKM));
         JUT_ASSERT(0x314, brk_data != NULL);
-        int temp3 = mBrk0.init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+        int temp3 = mBrk0.init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE);
 
         return mpModel && temp && temp3;
     }
@@ -697,10 +697,10 @@ namespace daBomb2 {
     }
 
     void Act_c::eff_explode_normal(const csXyz* rotation) {
-        dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &scale);
-        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CLOUD, &current.pos, NULL, &scale);
-        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &scale);
-        dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &scale);
+        dComIfGp_particle_setP1(dPa_name::ID_IT_JN_BMEX_SENKO, &current.pos, rotation, &scale);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE01, &current.pos, NULL, &scale);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE02, &current.pos, NULL, &scale);
+        dComIfGp_particle_setToonP1(dPa_name::ID_IT_JT_BMEX_HAHEN, &current.pos, NULL, &scale);
     }
 
     void Act_c::eff_explode_water() {
@@ -729,8 +729,8 @@ namespace daBomb2 {
             field_0x6CC = field_0x6C0;
             field_0x6D8 = field_0x6C0;
 
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_FUSE_SPARKS, &field_0x6C0, NULL, &scale, 0xFF, &mSparks);
-            dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_2012, &field_0x6C0, NULL, &scale, 0xDC, &mSmoke);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_BM_HIBANA, &field_0x6C0, NULL, &scale, 0xFF, &mSparks);
+            dComIfGp_particle_setToonP1(dPa_name::ID_IT_JT_BM_SMOKE, &field_0x6C0, NULL, &scale, 0xDC, &mSmoke);
             mSmoke.setOldPosP(&field_0x6CC, &field_0x6D8);
         }
     }

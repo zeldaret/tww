@@ -62,7 +62,7 @@ BOOL daYgcwp_c::create_heap() {
                 J3DAnmTevRegKey* brk_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, M_brk_table[i]));
                 JUT_ASSERT(0xC9, brk_p != NULL);
                 if (brk_p != NULL) {
-                    if (!mBrkAnm[i].init(mdl_data, brk_p, TRUE, M_brk_mode_table[i], 1.0f, 0, -1, false, 0)) {
+                    if (!mBrkAnm[i].init(mdl_data, brk_p, TRUE, M_brk_mode_table[i])) {
                         ret = FALSE;
                         break;
                     }
@@ -130,7 +130,7 @@ void daYgcwp_c::init_mtx() {
 
 /* 00000588-000005F0       .text make_shine__9daYgcwp_cFv */
 void daYgcwp_c::make_shine() {
-    dComIfGp_particle_set(dPa_name::ID_SCENE_8316, &current.pos, NULL, &scale);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_GANONCASTLEWARP00, &current.pos, NULL, &scale);
 }
 
 /* 000005F0-00000654       .text set_timer__9daYgcwp_cFv */

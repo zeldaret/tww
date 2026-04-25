@@ -81,7 +81,7 @@ void daPy_lk_c::setBottleModel(u16 param_0) {
     }
     mDoExt_setCurrentHeap(oldHeap);
     if (param_0 == dItem_FOREST_WATER_e) {
-        m32F0.makeEmitter(dPa_name::ID_COMMON_020D, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
+        m32F0.makeEmitter(dPa_name::ID_AK_JN_FORESTWATER00, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
     }
 }
 
@@ -183,7 +183,7 @@ BOOL daPy_lk_c::procBottleDrink() {
                     p_Var3 = &blue;
                 }
                 m33A8.makeEmitterColor(
-                    dPa_name::ID_COMMON_0057, mpCLModel->getAnmMtx(0x12), &current.pos, &shape_angle, p_Var3, NULL
+                    dPa_name::ID_IT_JN_LK_GEPPU00, mpCLModel->getAnmMtx(0x12), &current.pos, &shape_angle, p_Var3, NULL
                 );
             }
         } else {
@@ -320,7 +320,7 @@ BOOL daPy_lk_c::procBottleOpen() {
                 m34D4 = 1;
                 static const Vec splash_scale = {0.3f, 0.3f, 0.3f};
                 JPABaseEmitter* emitter = dComIfGp_particle_setP1(
-                    dPa_name::ID_COMMON_0040, &sp64,
+                    dPa_name::ID_IT_JN_WP_SHIBUKI, &sp64,
                     NULL, (cXyz*)&splash_scale, 0xFF, NULL, -1,
                     &tevStr.mColorK0, &tevStr.mColorK0
                 );
@@ -330,7 +330,7 @@ BOOL daPy_lk_c::procBottleOpen() {
                 }
                 static const Vec ripple_scale = {0.5f, 0.5f, 0.5f};
                 if (r27) {
-                    dComIfGp_particle_setSingleRipple(dPa_name::ID_COMMON_003F, &sp64, NULL, (cXyz*)&ripple_scale);
+                    dComIfGp_particle_setSingleRipple(dPa_name::ID_IT_JN_WP_HAMON03, &sp64, NULL, (cXyz*)&ripple_scale);
                 } else {
                     m370C = sp64;
                     m34D0 = 1;
@@ -365,7 +365,7 @@ BOOL daPy_lk_c::procBottleOpen() {
                 (frameCtrl.checkPass(9.0f))
             ) {
                 seStartOnlyReverb(JA_SE_LK_SPRINKLE_WATER);
-                m32E4.makeEmitterColor(dPa_name::ID_COMMON_0279, mpCLModel->getAnmMtx(0x08), &current.pos, &tevStr.mColorK0, &tevStr.mColorK0);
+                m32E4.makeEmitterColor(dPa_name::ID_AK_JN_SPILLWATER00, mpCLModel->getAnmMtx(0x08), &current.pos, &tevStr.mColorK0, &tevStr.mColorK0);
                 dCcG_At_Spl spl;
                 if (mEquipItem == dItem_WATER_BOTTLE_e) {
                     spl = dCcG_At_Spl_UNK0;
@@ -550,7 +550,7 @@ BOOL daPy_lk_c::procBottleGet_init() {
     mProcVar0.m3570 = 0;
     dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar0.m3570, 0);
     if (mEquipItem == dItem_FOREST_WATER_e) {
-        m32F0.makeEmitter(dPa_name::ID_COMMON_020D, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
+        m32F0.makeEmitter(dPa_name::ID_AK_JN_FORESTWATER00, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
     }
     initShipRideUseItem(iVar1, 2);
     return true;

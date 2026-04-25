@@ -67,8 +67,9 @@ void dMenu_Fmap_c::checkMarkCheck3() {
 }
 
 /* 801B190C-801B1914       .text isFmapClose__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::isFmapClose() {
+bool dMenu_Fmap_c::isFmapClose() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801B1914-801B1978       .text setPaneOnOff__12dMenu_Fmap_cFP9J2DScreenUlb */
@@ -272,13 +273,15 @@ void dMenu_Fmap_c::checkDspHugeMapShip() {
 }
 
 /* 801B4B44-801B4C0C       .text _open__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::_open() {
+bool dMenu_Fmap_c::_open() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801B4C0C-801B4C78       .text _close__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::_close() {
+bool dMenu_Fmap_c::_close() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801B4C78-801B4D78       .text _close_normalMode__12dMenu_Fmap_cFv */
@@ -427,8 +430,9 @@ void dMenu_Fmap_c::gShipMarkAnime() {
 }
 
 /* 801B78B0-801B79E8       .text _open_warpMode__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::_open_warpMode() {
+bool dMenu_Fmap_c::_open_warpMode() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801B79E8-801B7CD0       .text init_warpMode__12dMenu_Fmap_cFv */
@@ -577,8 +581,9 @@ void dMenu_Fmap_c::setWrapSpotEmitter(int, cXyz) {
 }
 
 /* 801BA110-801BA19C       .text _open_fishManMode__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::_open_fishManMode() {
+bool dMenu_Fmap_c::_open_fishManMode() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801BA19C-801BA214       .text _close_fishManMode__12dMenu_Fmap_cFv */
@@ -647,13 +652,15 @@ void dMenu_Fmap_c::fmEndWait() {
 }
 
 /* 801BAF18-801BAFCC       .text _open_wallPaper__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::_open_wallPaper() {
+bool dMenu_Fmap_c::_open_wallPaper() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801BAFCC-801BB024       .text getButtonIconMode__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::getButtonIconMode() {
+u8 dMenu_Fmap_c::getButtonIconMode() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 801BB024-801BB088       .text draw__12dDlst_FMAP_cFv */

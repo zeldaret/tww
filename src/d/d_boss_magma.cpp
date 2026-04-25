@@ -5,29 +5,85 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_magma.h"
-#include "dolphin/types.h"
+#include "d/actor/d_a_btd.h"
+#include "d/d_s_play.h"
+#include "d/d_procname.h"
+
+static btd_class* btd = NULL;
 
 /* 80076B00-80076CDC       .text calc__17dMagma_ballBoss_cFfUci */
-void dMagma_ballBoss_c::calc(f32, u8, int) {
-    /* Nonmatching */
+void dMagma_ballBoss_c::calc(f32 param_1, u8 param_2, int param_3) {
+    if (btd != NULL && btd->m6E84 <= -150.0f) {
+        mPos.y = -200.0f;
+        return;
+    }
+
+    if (btd != NULL) {
+        f32 diff = std::fabsf(btd->m6E7C - std::sqrtf(SQUARE(mPos.x) + SQUARE(mPos.z)));
+
+        if (diff < 300.0f) {
+            f32 targetY = (mBaseY + (50.0f + REG0_F(5)) + 30.0f) - (diff * 0.1f);
+            cLib_addCalc2(&mPos.y, targetY, 0.5f, 20.0f);
+            cLib_addCalc2(&mScale, 1.5f, 0.2f, 0.2f);
+
+            mWave = 0x4000;
+            field_0x7C = 1000;
+            return;
+        }
+    }
+    if (mWave < 0) {
+        setup(param_1, 0, -1);
+        mWave = 0;
+    }
+    mPos.y = mBaseY + (REG0_F(5) + 50.0f) * cM_ssin(mWave);
+
+    mWave += field_0x7C;
 }
 
 /* 80076CDC-80076D50       .text update__17dMagma_ballBoss_cFv */
 void dMagma_ballBoss_c::update() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(mPos.x, mPos.y, mPos.z);
+    mDoMtx_stack_c::scaleM(mScale, 1.0f, mScale);
+
+    mDoMtx_copy(mDoMtx_stack_c::get(), mTexProjMtx);
+    mDoMtx_concat(j3dSys.getViewMtx(), mTexProjMtx, mPosMtx);
 }
 
 /* 80076D50-80076D9C       .text b_a_sub__FPvPv */
-void b_a_sub(void*, void*) {
-    /* Nonmatching */
+void* b_a_sub(void* param_1, void* param_2) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BTD) {
+        return param_1;
+    }
+    return NULL;
 }
 
 /* 80076D9C-80076FEC       .text setup__17dMagma_ballBoss_cFfUci */
-void dMagma_ballBoss_c::setup(f32, u8, int) {
-    /* Nonmatching */
-}
+void dMagma_ballBoss_c::setup(f32 param_1, u8 param_2, int param_3) {
+    mPos.x = cM_rndFX(1300.0f);
+    mPos.y = 0.0f;
 
-/* 80076FEC-80077048       .text __dt__17dMagma_ballBoss_cFv */
-dMagma_ballBoss_c::~dMagma_ballBoss_c() {
-    /* Nonmatching */
+    f32 max_z = std::sqrtf(SQUARE(1300.0f) - SQUARE(this->mPos.x));
+    mPos.z = cM_rndFX(max_z);
+
+    mScale = REG0_F(11) + 0.5f + cM_rndF(REG0_F(12) + 0.5f);
+
+    mBaseY = REG0_F(6) + -150.0f - 20.0f + param_1 + 90.0f;
+
+    btd = (btd_class*)fpcEx_Search(b_a_sub, NULL);
+
+    if (btd != NULL) {
+        if (btd->m6E88 == 1) {
+            f32 dist = std::sqrtf(SQUARE(mPos.x) + SQUARE(mPos.z));
+
+            f32 target_dist = REG0_F(16) + 800.0f;
+
+            if (dist < target_dist) {
+                mBaseY += (REG0_F(17) + 0.05f) * (target_dist - dist);
+            }
+        }
+        mBaseY += btd->m6E84;
+    }
+
+    field_0x7C = (cM_rndF(100.0f) + 400.0f);
+    mWave = (cM_rndF(8.0f) * 4096.0f);
 }

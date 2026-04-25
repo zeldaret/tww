@@ -150,7 +150,7 @@ void setBatta(cXyz* pos, GXColor* color) {
         strcmp(dComIfGp_getStartStageName(), "Xboss1") != 0 &&
         cM_rnd() > 0.99f
     ) {
-        dComIfGp_particle_set(dPa_name::ID_COMMON_0453, pos, NULL, NULL, 0xFF, NULL, -1, color, color);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_BATTA00, pos, NULL, NULL, 0xFF, NULL, -1, color, color);
     }
 }
 
@@ -329,8 +329,8 @@ dGrass_packet_c::dGrass_packet_c() {
         mDLSize = 0xa0;
         mpDLCut = l_Vmori_01DL;
         mDLCutSize = 0x80;
-        mCoParticle = dPa_name::ID_SCENE_8222;
-        mAtParticle = dPa_name::ID_SCENE_8221;
+        mCoParticle = dPa_name::ID_IT_SN_O_KINDANKUSA_RUN;
+        mAtParticle = dPa_name::ID_IT_SN_O_KINDANKUSA_KEN;
     } else {
         mpPosArr = (f32*)l_pos;
         mpColorArr = l_color;
@@ -341,8 +341,8 @@ dGrass_packet_c::dGrass_packet_c() {
         mDLSize = 0xa0;
         mpDLCut = l_Oba_kusa_a_cutDL;
         mDLCutSize = 0x80;
-        mCoParticle = dPa_name::ID_COMMON_03DB;
-        mAtParticle = dPa_name::ID_COMMON_03DA;
+        mCoParticle = dPa_name::ID_IT_JN_O_KUSA_RUN;
+        mAtParticle = dPa_name::ID_IT_JN_O_KUSA_KEN;
     }
 }
 

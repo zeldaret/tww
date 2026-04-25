@@ -184,19 +184,19 @@ BOOL daYougan_c::useHeapInit() {
         field_0x298[i].field_0x00 = 0;
         J3DModel* p_model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         field_0x298[i].field_0x04 = p_model;
-#if VERSION != VERSION_DEMO
+#if VERSION > VERSION_DEMO
         if(field_0x298[i].field_0x04 == NULL) {
             return FALSE;
         }
 #endif
     }
     for(s32 i = 0; i < yg_awa_num; i++) {
-        if(!field_0x298[i].field_0x08.init(modelData, anmKey, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
+        if(!field_0x298[i].field_0x08.init(modelData, anmKey, TRUE, J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
     }
     for(s32 i = 0; i < yg_awa_num; i++) {
-        if(!field_0x298[i].field_0x18.init(modelData, srtKey, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+        if(!field_0x298[i].field_0x18.init(modelData, srtKey, TRUE, J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
     }

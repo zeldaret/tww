@@ -44,7 +44,7 @@ BOOL daGhostship_c::_createHeap() {
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BTK_AYUSH));
     JUT_ASSERT(DEMO_SELECT(87, 95), btk != NULL);
 
-    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
 
@@ -355,7 +355,7 @@ bool daGhostship_c::_execute() {
 
         dLib_setCirclePath(&mPaths[i]);
         if(mAlpha != 0.0f) {
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8306, &mPaths[i].mPos);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_GHOSTSHIPFIRE00, &mPaths[i].mPos);
         }
     }
 
