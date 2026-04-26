@@ -65,7 +65,7 @@ static cPhs_State daObjPbka_Create(void* i_this) {
 }
 
 bool daObjPbka_c::_delete() {
-    dComIfG_resDelete(&mPhase,"Pbka");
+    dComIfG_resDeleteDemo(&mPhase,"Pbka");
     return TRUE;
 }
 

@@ -32,7 +32,7 @@ BOOL daObjOjtree::Act_c::Create() {
     fopAcM_setCullSizeBox(this, -500.0f, -1.0f, -300.0f, 251.0f, 5001.0f, 251.0f);
     pos.set(current.pos);
     pos.y += 5000.0f;
-    fopAcM_create(PROC_JBO, daJbo_Type_NORMAL_e, &pos, home.roomNo, &shape_angle, NULL, 0xff, NULL);
+    fopAcM_create(PROC_JBO, daJbo_Type_NORMAL_e, &pos, fopAcM_GetHomeRoomNo(this), &shape_angle, NULL, 0xff, NULL);
     mLockTimer = 2;
     return TRUE;
 }
@@ -43,7 +43,7 @@ cPhs_State daObjOjtree::Act_c::Mthd_Create() {
        
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, OJTREE_DZB_OJTREE, NULL, 0x26a0);
+        phase_state = MoveBGCreate(M_arcname, OJTREE_DZB_OJTREE, NULL, DEMO_SELECT(0x34A0, 0x26A0));
         JUT_ASSERT(123, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     
@@ -58,7 +58,7 @@ BOOL daObjOjtree::Act_c::Delete() {
 /* 000002EC-00000338       .text Mthd_Delete__Q211daObjOjtree5Act_cFv */
 BOOL daObjOjtree::Act_c::Mthd_Delete() {
     s32 result = MoveBGDelete();
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return result;
 }
 

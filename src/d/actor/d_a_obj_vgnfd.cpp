@@ -86,14 +86,16 @@ BOOL daObjVgnfd_c::solidHeapCB(fopAc_ac_c* i_ac) {
 
 /* 00000098-0000022C       .text create_bdl_brk__12daObjVgnfd_cFi */
 BOOL daObjVgnfd_c::create_bdl_brk(int i) {
+    J3DModelData* mdl_data;
+    J3DAnmTevRegKey* brk_p;
     BOOL ret = FALSE;
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, M_bdl_table[i]));
-    JUT_ASSERT(0xfe, mdl_data != NULL);
+    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, M_bdl_table[i]));
+    JUT_ASSERT(254, mdl_data != NULL);
     if (mdl_data != NULL) {
         mModel[i] = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mModel[i] != NULL) {
             if (M_brk_table[i] != -1) {
-                J3DAnmTevRegKey* brk_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, M_brk_table[i]));
+                brk_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, M_brk_table[i]));
                 JUT_ASSERT(0x105, brk_p != NULL);
                 if (brk_p != NULL) {
                     if (mBrkAnm[i].init(mdl_data, brk_p, TRUE, J3DFrameCtrl::EMode_NONE))
@@ -109,6 +111,7 @@ BOOL daObjVgnfd_c::create_bdl_brk(int i) {
 
 /* 0000022C-000004A4       .text create_heap__12daObjVgnfd_cFv */
 BOOL daObjVgnfd_c::create_heap() {
+    J3DModelData* mdl_data;
     BOOL ret = TRUE;
     s32 i;
     for (i = 0; i < (s32)ARRAY_SIZE(mModel); i++) {
@@ -120,7 +123,7 @@ BOOL daObjVgnfd_c::create_heap() {
 
     if (ret) {
         for (i = 0; i < (s32)ARRAY_SIZE(mModel2); i++) {
-            J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, M_door_bdl_table[i]));
+            mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, M_door_bdl_table[i]));
             JUT_ASSERT(0x133, mdl_data != NULL);
 
             if (mdl_data != NULL) {
@@ -146,9 +149,11 @@ BOOL daObjVgnfd_c::create_heap() {
     }
 
     if (ret) {
-        Mtx* mtx = &mModel[0]->getBaseTRMtx();
-        cBgD_t* dzb_data = (cBgD_t*)dComIfG_getObjectRes(M_arcname, VGNFD_DZB_VGNFD);
-        M_bgw = dBgW_NewSet(dzb_data, dBgW::MOVE_BG_e, mtx);
+        M_bgw = dBgW_NewSet(
+            (cBgD_t*)dComIfG_getObjectRes(M_arcname, VGNFD_DZB_VGNFD),
+            dBgW::MOVE_BG_e,
+            &mModel[0]->getBaseTRMtx()
+        );
         JUT_ASSERT(0x151, M_bgw != NULL);
 
         if (M_bgw == NULL)
@@ -206,14 +211,24 @@ cPhs_State daObjVgnfd_c::_create() {
 
 /* 00000830-000008D8       .text _delete__12daObjVgnfd_cFv */
 bool daObjVgnfd_c::_delete() {
-    if (heap != NULL) {
+#if VERSION > VERSION_DEMO
+    if (heap != NULL)
+#endif
+    {
         if (M_bgw != NULL && M_bgw->ChkUsed()) {
             dComIfG_Bgsp()->Release(M_bgw);
+#if VERSION > VERSION_DEMO
             M_bgw = NULL;
+#endif
         }
     }
 
-    mSmoke.remove();
+#if VERSION == VERSION_DEMO
+    if (mInit)
+#endif
+    {
+        mSmoke.remove();
+    }
     dComIfG_resDelete(&mPhs, M_arcname);
     return true;    
 }
@@ -333,7 +348,9 @@ bool daObjVgnfd_c::_execute() {
                         if (mTimer <= 0) {
                             dComIfGp_evmng_cutEnd(mStaffId);
                             mBrkAnm[M_demo_idx + 1].setPlaySpeed(1.0f);
+                        #if VERSION > VERSION_DEMO
                             mDoAud_seStart(JA_SE_OBJ_B_BOSS_DR_LT_1);
+                        #endif
                             if (check_fin()) {
                                 mDoAud_seStart(JA_SE_READ_RIDDLE_1);
                             }

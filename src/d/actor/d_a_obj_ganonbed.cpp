@@ -19,6 +19,29 @@ namespace {
     static const char l_arcname[] = "Gbed";
 };
 
+#if VERSION == VERSION_DEMO
+class daObjGbed_HIO_c : public JORReflexible {
+public:
+    daObjGbed_HIO_c();
+    virtual ~daObjGbed_HIO_c() {}
+
+    void genMessage(JORMContext*) {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 field_0x5;
+    /* 0x06 */ u8 field_0x6;
+};
+
+static daObjGbed_HIO_c l_HIO;
+
+daObjGbed_HIO_c::daObjGbed_HIO_c() {
+    mNo = -1;
+    field_0x5 = 0;
+    field_0x6 = 0;
+}
+#endif
+
 /* 00000078-00000100       .text init_mtx__11daObjGbed_cFv */
 void daObjGbed_c::init_mtx() {
     mpModel->setBaseScale(scale);
@@ -39,7 +62,7 @@ bool daObjGbed_c::create_heap() {
     J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, GBED_BDL_K_GBED));
 
     if (!pModelData) {
-        JUT_ASSERT(0xb1, FALSE);
+        JUT_ASSERT(DEMO_SELECT(173, 177), FALSE);
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000022);
@@ -71,6 +94,12 @@ cPhs_State daObjGbed_c::_create() {
         }
     }
 
+#if VERSION == VERSION_DEMO
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("ガノンベッド", &l_HIO); // "Ganon bed"
+    }
+#endif
+
     return ret;
 }
 
@@ -78,27 +107,57 @@ cPhs_State daObjGbed_c::_create() {
 bool daObjGbed_c::_delete() {
     dComIfG_resDelete(&mPhs, l_arcname);
 
-    if (heap != NULL && mpBgW != NULL) {
+    if (
+#if VERSION > VERSION_DEMO
+        heap != NULL &&
+#endif
+        mpBgW != NULL
+    ) {
         if (mpBgW->ChkUsed()) {
             dComIfG_Bgsp()->Release(mpBgW);
         }
 
+#if VERSION > VERSION_DEMO
         mpBgW = NULL;
+#endif
+}
+
+#if VERSION == VERSION_DEMO
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
+#endif
 
     return true;
 }
 
 /* 0000038C-000003E4       .text _execute__11daObjGbed_cFv */
 bool daObjGbed_c::_execute() {
-    if (mpBgW != NULL && mpBgW->ChkUsed())
+    if (mpBgW != NULL && mpBgW->ChkUsed()) {
         mpBgW->Move();
+    }
+
+#if VERSION == VERSION_DEMO
+    if (l_HIO.field_0x5 == 1) {
+        fopAcM_delete(this);
+    }
+#endif
+
     return true;
 }
 
 /* 000003E4-00000444       .text _draw__11daObjGbed_cFv */
 bool daObjGbed_c::_draw() {
+#if VERSION == VERSION_DEMO
+    if (l_HIO.field_0x6 == 1) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    } else {
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    }
+#else
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+#endif
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     return true;
