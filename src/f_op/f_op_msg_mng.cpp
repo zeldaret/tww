@@ -4462,8 +4462,26 @@ void fopMsgM_msgDataProc_c::tag_kaisen_game() {
 
     dComIfGs_getEventReg(dSv_event_flag_c::UNK_BEFF);
 
+#if VERSION == VERSION_PAL
+    char buf2[20];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, " coups");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf2, " ca\361onazos");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf2, " cannonate");
+    } else {
+        strcpy(buf2, "");
+    }
+#else
     char buf2[12];
+
     strcpy(buf2, "");
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
@@ -4475,12 +4493,39 @@ void fopMsgM_msgDataProc_c::tag_rupee() {
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Rubine");
+        } else {
+            strcat(buf, " Rubin");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, " rubis");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " rupias");
+        } else {
+            strcat(buf, " rupia");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcat(buf, " Rupie");
+    } else {
+        if (num != 1) {
+            strcat(buf, " Rupees");
+        } else {
+            strcat(buf, " Rupee");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " Rupees");
     }
     else {
         strcat(buf, " Rupee");
     }
+#endif
 
     char* p1;
     u8* p2;
@@ -4500,7 +4545,7 @@ void fopMsgM_msgDataProc_c::tag_rupee() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, buf);
+    strcat(field_0x60, p1);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4528,7 +4573,22 @@ void fopMsgM_msgDataProc_c::tag_num_input() {
     strcat(field_0x68, buf2);
     field_0x14 = temp;
     field_0x150 += 3;
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf, " Rubin(e)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf, " rubis");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf, " rupia(s)");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf, " Rupie");
+    } else {
+        strcpy(buf, " Rupee(s)");
+    }
+#else
     strcpy(buf, " Rupee(s)");
+#endif
 
     char* p1 = buf;
     u8* p2 = (u8*)buf;
@@ -4546,7 +4606,7 @@ void fopMsgM_msgDataProc_c::tag_num_input() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, buf);
+    strcat(field_0x60, p1);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4597,12 +4657,40 @@ void fopMsgM_msgDataProc_c::tag_sword_game() {
     }
 
     char buf2[12];
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf2, " Treffer");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, " fois");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, " golpes");
+        } else {
+            strcpy(buf2, " golpe");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, " colpi");
+        } else {
+            strcpy(buf2, " colpo");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " blows");
+        } else {
+            strcpy(buf2, " blow");
+        }
+    }
+#else
     if(num != 1) {
         strcpy(buf2, " blows");
     }
     else {
         strcpy(buf2, " blow");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
@@ -4734,12 +4822,39 @@ void fopMsgM_msgDataProc_c::tag_fish_rupee() {
 
     int num = dComIfGp_getMessageCountNumber() * 10;
     fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Rubine");
+        } else {
+            strcat(buf, " Rubin");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, " rubis");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " rupias");
+        } else {
+            strcat(buf, " rupia");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcat(buf, " Rupie");
+    } else {
+        if (num != 1) {
+            strcat(buf, " Rupees");
+        } else {
+            strcat(buf, " Rupee");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " Rupees");
     }
     else {
         strcat(buf, " Rupee");
     }
+#endif
 
     char* p1 = buf;
     u8* p2 = (u8*)buf;
@@ -4811,12 +4926,52 @@ void fopMsgM_msgDataProc_c::tag_letter() {
     }
 
     char buf2[12];
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (field_0x0C->mMsgNo == 0xCEB) {
+            if (num != 1) {
+                strcpy(buf2, " Briefe");
+            } else {
+                strcpy(buf2, " Brief");
+            }
+        } else {
+            strcpy(buf2, ". Brief");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, " cartas");
+        } else {
+            strcpy(buf2, " carta");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " letters");
+        } else {
+            strcpy(buf2, " letter");
+        }
+    }
+#else
     if(num != 1) {
         strcpy(buf2, " letters");
     }
     else {
         strcpy(buf2, " letter");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
@@ -4824,7 +4979,7 @@ void fopMsgM_msgDataProc_c::tag_letter() {
 /* 80038F70-8003912C       .text tag_rescue__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_rescue() {
     /* Nonmatching */
-    char buf[24];
+    char buf[20];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
@@ -4858,7 +5013,30 @@ void fopMsgM_msgDataProc_c::tag_rescue() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char buf2[12];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Freunde");
+        } else {
+            strcpy(buf2, " Freund");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf2, "");
+    } else {
+        strcpy(buf2, "");
+    }
+
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
+#else
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
@@ -4947,12 +5125,43 @@ void fopMsgM_msgDataProc_c::tag_birdman() {
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcat(buf, " Meter");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcat(buf, " m\350tres");
+        } else {
+            strcat(buf, " m\350tre");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " metros");
+        } else {
+            strcat(buf, " metro");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, " metri");
+        } else {
+            strcat(buf, " metro");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, " yards");
+        } else {
+            strcat(buf, " yard");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " yards");
     }
     else {
         strcat(buf, " yard");
     }
+#endif
 
     char* p1 = buf;
     u8* p2 = (u8*)buf;
@@ -4993,12 +5202,47 @@ void fopMsgM_msgDataProc_c::tag_point() {
 
     int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
     fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Punkte");
+        } else {
+            strcat(buf, " Punkt");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcat(buf, " points");
+        } else {
+            strcat(buf, " point");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " puntos Terry");
+        } else {
+            strcat(buf, " punto Terry");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, " punti");
+        } else {
+            strcat(buf, " punto");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, " points");
+        } else {
+            strcat(buf, " point");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " points");
     }
     else {
         strcat(buf, " point");
     }
+#endif
 
     char* p1 = buf;
     u8* p2 = (u8*)buf;
@@ -5035,7 +5279,7 @@ void fopMsgM_msgDataProc_c::tag_point() {
 /* 80039834-80039A28       .text tag_get_pendant__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_get_pendant() {
     /* Nonmatching */
-    char buf[16];
+    char buf[20];
 
     int num = dComIfGs_getBeastNum(7);
     fopMsgM_int_to_char(buf, num, false);
@@ -5069,13 +5313,51 @@ void fopMsgM_msgDataProc_c::tag_get_pendant() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char buf2[28];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Gl\374cksamulette");
+        } else {
+            strcpy(buf2, " Gl\374cksamulett");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcpy(buf2, " Pendentifs du Bonheur");
+        } else {
+            strcpy(buf2, " Pendentif du Bonheur");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    }
+#else
     char buf2[12];
+
     if(num != 1) {
         strcpy(buf2, "");
     }
     else {
         strcpy(buf2, "");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
@@ -5083,7 +5365,7 @@ void fopMsgM_msgDataProc_c::tag_get_pendant() {
 /* 80039A28-80039C2C       .text tag_rev_pendant__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_rev_pendant() {
     /* Nonmatching */
-    char buf[16];
+    char buf[20];
 
     int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF);
     fopMsgM_int_to_char(buf, num, false);
@@ -5117,13 +5399,51 @@ void fopMsgM_msgDataProc_c::tag_rev_pendant() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char buf2[28];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Gl\374cksamulette");
+        } else {
+            strcpy(buf2, " Gl\374cksamulett");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcpy(buf2, " Pendentifs du Bonheur");
+        } else {
+            strcpy(buf2, " Pendentif du Bonheur");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    }
+#else
     char buf2[12];
+
     if(num != 1) {
         strcpy(buf2, "");
     }
     else {
         strcpy(buf2, "");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
@@ -5244,12 +5564,36 @@ void fopMsgM_msgDataProc_c::tag_get_bomb() {
     }
 
     char buf2[12];
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Bomben");
+        } else {
+            strcpy(buf2, " Bombe");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, " bombes");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf2, " bombas");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf2, " Bombe");
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " bombs");
+        } else {
+            strcpy(buf2, " bomb");
+        }
+    }
+#else
     if(num != 1) {
         strcpy(buf2, " bombs");
     }
     else {
         strcpy(buf2, " bomb");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
@@ -5292,12 +5636,36 @@ void fopMsgM_msgDataProc_c::tag_get_arrow() {
     }
 
     char buf2[12];
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Pfeile");
+        } else {
+            strcpy(buf2, " Pfeil");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, " fl\350ches");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf2, " flechas");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf2, " Frecce");
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " arrows");
+        } else {
+            strcpy(buf2, " arrow");
+        }
+    }
+#else
     if(num != 1) {
         strcpy(buf2, " arrows");
     }
     else {
         strcpy(buf2, " arrow");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
@@ -5305,7 +5673,7 @@ void fopMsgM_msgDataProc_c::tag_get_arrow() {
 /* 8003A388-8003A574       .text tag_stock_bokobaba__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
     /* Nonmatching */
-    char buf[16];
+    char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
@@ -5339,7 +5707,36 @@ void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char buf2[20];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf2, " Plantagranda-Samen");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, " semillas");
+        } else {
+            strcpy(buf2, " semilla");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " seeds");
+        } else {
+            strcpy(buf2, " seed");
+        }
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
+#else
     char buf2[12];
+
     if(num != 1) {
         strcpy(buf2, " seeds");
     }
@@ -5347,13 +5744,15 @@ void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
         strcpy(buf2, " seed");
     }
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 8003A574-8003A760       .text tag_stock_dokuro__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_dokuro() {
     /* Nonmatching */
-    char buf[16];
+    char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
@@ -5387,13 +5786,47 @@ void fopMsgM_msgDataProc_c::tag_stock_dokuro() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char buf2[20];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Totenkopfketten");
+        } else {
+            strcpy(buf2, " Totenkopfkette");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, " colgantes");
+        } else {
+            strcpy(buf2, " colgante");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " neckalces");
+        } else {
+            strcpy(buf2, " neckalce");
+        }
+    }
+#else
     char buf2[12];
+
     if(num != 1) {
         strcpy(buf2, " necklaces");
     }
     else {
         strcpy(buf2, " necklace");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
@@ -5401,7 +5834,7 @@ void fopMsgM_msgDataProc_c::tag_stock_dokuro() {
 /* 8003A760-8003A914       .text tag_stock_chuchu__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_chuchu() {
     /* Nonmatching */
-    char buf[24];
+    char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
@@ -5435,14 +5868,44 @@ void fopMsgM_msgDataProc_c::tag_stock_chuchu() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char text_buf[20];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(text_buf, " Schleim-Gelees");
+        } else {
+            strcpy(text_buf, " Schleim-Gelee");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(text_buf, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(text_buf, " jugos");
+        } else {
+            strcpy(text_buf, " jugo");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(text_buf, "");
+        } else {
+            strcpy(text_buf, "");
+        }
+    } else {
+        strcpy(text_buf, "");
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+#else
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 8003A914-8003AB00       .text tag_stock_pendant__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_pendant() {
     /* Nonmatching */
-    char buf[16];
+    char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
@@ -5476,13 +5939,47 @@ void fopMsgM_msgDataProc_c::tag_stock_pendant() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char buf2[20];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Gl\374cksamulette");
+        } else {
+            strcpy(buf2, " Gl\374cksamulett");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, " collares");
+        } else {
+            strcpy(buf2, " collar");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " necklaces");
+        } else {
+            strcpy(buf2, " necklace");
+        }
+    }
+#else
     char buf2[12];
+
     if(num != 1) {
         strcpy(buf2, " necklaces");
     }
     else {
         strcpy(buf2, " necklace");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
@@ -5490,7 +5987,7 @@ void fopMsgM_msgDataProc_c::tag_stock_pendant() {
 /* 8003AB00-8003ACEC       .text tag_stock_hane__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_hane() {
     /* Nonmatching */
-    char buf[16];
+    char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
@@ -5524,13 +6021,47 @@ void fopMsgM_msgDataProc_c::tag_stock_hane() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char buf2[16];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Goldfedern");
+        } else {
+            strcpy(buf2, " Goldfeder");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, " plumas");
+        } else {
+            strcpy(buf2, " pluma");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " feathers");
+        } else {
+            strcpy(buf2, " feather");
+        }
+    }
+#else
     char buf2[12];
+
     if(num != 1) {
         strcpy(buf2, " feathers");
     }
     else {
         strcpy(buf2, " feather");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
@@ -5573,12 +6104,40 @@ void fopMsgM_msgDataProc_c::tag_stock_kenshi() {
     }
 
     char buf2[12];
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf2, " Ritterwappen");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, " blasones");
+        } else {
+            strcpy(buf2, " blas\363n");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " crests");
+        } else {
+            strcpy(buf2, " crest");
+        }
+    }
+#else
     if(num != 1) {
         strcpy(buf2, " crests");
     }
     else {
         strcpy(buf2, " crest");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
@@ -5590,12 +6149,39 @@ void fopMsgM_msgDataProc_c::tag_terry_rupee() {
 
     int num = daNpc_Bs1_c::getPayRupee();
     fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Rubine");
+        } else {
+            strcat(buf, " Rubin");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, " rubis");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " rupias");
+        } else {
+            strcat(buf, " rupia");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcat(buf, " Rupie");
+    } else {
+        if (num != 1) {
+            strcat(buf, " Rupees");
+        } else {
+            strcat(buf, " Rupee");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " Rupees");
     }
     else {
         strcat(buf, " Rupee");
     }
+#endif
 
     char* p1 = buf;
     u8* p2 = (u8*)buf;
@@ -5651,7 +6237,26 @@ void fopMsgM_msgDataProc_c::tag_input_bokobaba() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "seed(s)", "", &field_0x20, &field_0x24, &field_0x150);
+#if VERSION == VERSION_PAL
+    char text_buf[32];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(text_buf, " Plantagranda-Samen");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(text_buf, " ");
+    } else {
+        strcpy(text_buf, " seed(s)");
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+#else
+    char* text = "seed(s)";
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
@@ -5677,7 +6282,26 @@ void fopMsgM_msgDataProc_c::tag_input_dokuro() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "necklace(s)", "", &field_0x20, &field_0x24, &field_0x150);
+#if VERSION == VERSION_PAL
+    char text_buf[32];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(text_buf, " Totenkopfkette(n)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(text_buf, " ");
+    } else {
+        strcpy(text_buf, " necklace(s)");
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+#else
+    char* text = "necklace(s)";
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
@@ -5703,7 +6327,25 @@ void fopMsgM_msgDataProc_c::tag_input_chuchu() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char text_buf[32];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(text_buf, " Schleim-Gelee(s)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(text_buf, " ");
+    } else {
+        strcpy(text_buf, " ");
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+#else
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
@@ -5729,7 +6371,26 @@ void fopMsgM_msgDataProc_c::tag_input_pendant() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "pendant(s)", "", &field_0x20, &field_0x24, &field_0x150);
+#if VERSION == VERSION_PAL
+    char text_buf[32];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(text_buf, " Gl\374cksamulett(e)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(text_buf, " ");
+    } else {
+        strcpy(text_buf, " pendant(s)");
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+#else
+    char* text = "pendant(s)";
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
@@ -5755,7 +6416,26 @@ void fopMsgM_msgDataProc_c::tag_input_hane() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "feather(s)", "", &field_0x20, &field_0x24, &field_0x150);
+#if VERSION == VERSION_PAL
+    char text_buf[24];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(text_buf, " Goldfeder(n)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(text_buf, " ");
+    } else {
+        strcpy(text_buf, " feather(s)");
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+#else
+    char* text = "feather(s)";
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
@@ -5781,7 +6461,26 @@ void fopMsgM_msgDataProc_c::tag_input_kenshi() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "crest(s)", "", &field_0x20, &field_0x24, &field_0x150);
+#if VERSION == VERSION_PAL
+    char text_buf[24];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(text_buf, " Ritterwappen");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(text_buf, " ");
+    } else {
+        strcpy(text_buf, " crest(s)");
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+#else
+    char* text = "crest(s)";
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
