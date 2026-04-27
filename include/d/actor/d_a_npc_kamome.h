@@ -90,6 +90,10 @@ public:
     void animationPlay();
     BOOL execute();
     BOOL draw();
+#if VERSION == VERSION_DEMO
+    void emitterDelete(JPABaseEmitter**);
+#endif
+
     f32 getGroundY() { return mAcch.GetGroundH(); }
     MtxP getLeftHandMatrix() { return cullMtx; }
     MtxP getRightHandMatrix() { return cullMtx; }
@@ -109,6 +113,9 @@ public:
     /* 0x7E4 */ dCcD_Sph mAtSph;
     /* 0x910 */ dCcD_Sph mTgSph;
     /* 0xA3C */ dCcD_Cps mCps;
+#if VERSION == VERSION_DEMO
+    JPABaseEmitter* mB74;
+#endif
     /* 0xB74 */ cXyz mDescendStartPos;
     /* 0xB80 */ cXyz mDescendStartPosUnangled;
     /* 0xB8C */ csXyz mDescendStartAngle;

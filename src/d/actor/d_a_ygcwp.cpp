@@ -48,9 +48,11 @@ BOOL daYgcwp_c::solidHeapCB(fopAc_ac_c* i_ac) {
 
 /* 00000098-0000023C       .text create_heap__9daYgcwp_cFv */
 BOOL daYgcwp_c::create_heap() {
+    J3DModelData* mdl_data;
+    J3DAnmTevRegKey* brk_p;
     s32 i;
     BOOL ret = FALSE;
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YGCWP_BDL_YGCWP00));
+    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YGCWP_BDL_YGCWP00));
     JUT_ASSERT(0xBE, mdl_data != NULL);
 
     if (mdl_data != NULL) {
@@ -59,7 +61,7 @@ BOOL daYgcwp_c::create_heap() {
             ret = TRUE;
 
             for (i = 0; i < (s32)ARRAY_SIZE(mBrkAnm); i++) {
-                J3DAnmTevRegKey* brk_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, M_brk_table[i]));
+                brk_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, M_brk_table[i]));
                 JUT_ASSERT(0xC9, brk_p != NULL);
                 if (brk_p != NULL) {
                     if (!mBrkAnm[i].init(mdl_data, brk_p, TRUE, M_brk_mode_table[i])) {
@@ -106,7 +108,7 @@ cPhs_State daYgcwp_c::_create() {
 
 /* 00000470-000004A0       .text _delete__9daYgcwp_cFv */
 bool daYgcwp_c::_delete() {
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return true;
 }
 

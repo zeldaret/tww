@@ -448,12 +448,14 @@ void daTagKbItem_c::dig_main() {
     field_0x299 = 0;
 }
 
+#if VERSION > VERSION_DEMO
 bool daTitle_proc_c::daTitle_Kirakira_Sound_flag = true;
 
 /* 80056CC0-80056CCC       .text daTitle_Kirakira_Sound_flag_on__14daTitle_proc_cFv */
 void daTitle_proc_c::daTitle_Kirakira_Sound_flag_on() {
     daTitle_Kirakira_Sound_flag = true;
 }
+#endif
 
 /* 80056CCC-80056DE0       .text daiItemNodeCallBack__13daStandItem_cFP7J3DNodei */
 BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int calcTiming) {

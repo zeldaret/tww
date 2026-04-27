@@ -189,7 +189,9 @@ daTitle_proc_c::~daTitle_proc_c() {
     mDoExt_destroySolidHeap(m_solid_heap);
     m_solid_heap = NULL;
     mDoExt_setCurrentHeap(oldHeap);
+#if VERSION > VERSION_DEMO
     fopMsgM_destroyExpHeap(m_exp_heap);
+#endif
 }
 
 /* 00000D7C-00000D94       .text setEnterMode__14daTitle_proc_cFv */
@@ -279,10 +281,12 @@ void daTitle_proc_c::calc_2d_alpha() {
 #endif
 
         if (m018 == 80) {
+#if VERSION > VERSION_DEMO
             if (daTitle_Kirakira_Sound_flag == true) {
                 mDoAud_seStart(JA_SE_TITLE_KIRA);
                 daTitle_Kirakira_Sound_flag = false;
             }
+#endif
 
             m00C.set(pane[4].mPosTopLeftOrig.x - 320.0f, pane[4].mPosTopLeftOrig.y - 240.0f, 0.0f);
 

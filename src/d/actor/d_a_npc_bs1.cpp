@@ -195,7 +195,7 @@ static BOOL nodeCallBack_Bs(J3DNode* node, int calcTiming) {
             if (jntNo == i_this->getHeadJntNum()) {
                 cXyz offset(0.0f, 0.0f, 0.0f);
                 mDoMtx_XrotM(*calc_mtx, i_this->getHead_y());
-                mDoMtx_ZrotM(*calc_mtx, -i_this->getHead_x());
+                cMtx_ZrotM(*calc_mtx, -i_this->getHead_x());
                 cXyz pos;
                 MtxPosition(&offset, &pos);
                 i_this->setAttentionBasePos(pos);
@@ -207,7 +207,7 @@ static BOOL nodeCallBack_Bs(J3DNode* node, int calcTiming) {
                 i_this->incAttnSetCount();
             } else if (jntNo == i_this->getBackboneJntNum()) {
                 mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
-                mDoMtx_ZrotM(*calc_mtx, -i_this->getBackbone_x());
+                cMtx_ZrotM(*calc_mtx, -i_this->getBackbone_x());
             }
             cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             model->setAnmMtx(jntNo, *calc_mtx);
@@ -471,7 +471,7 @@ static void daNpc_Bs1_setPayRupee(int unknownParam1, int unknownParam2) {
 
 /* 000010EC-00001F7C       .text next_msgStatus__11daNpc_Bs1_cFPUl */
 u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
-    /* Nonmatching */
+    /* Nonmatching - retail-only regalloc */
     u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
 
     switch(*pMsgNo) {
@@ -1218,11 +1218,13 @@ void daNpc_Bs1_c::setCollision() {
     offset.z = -16.0f;
     cXyz out;
     MtxTrans(current.pos.x, current.pos.y, current.pos.z, false);
-    mDoMtx_YrotM(*calc_mtx, m726.y);
+    cMtx_YrotM(*calc_mtx, m726.y);
     MtxPosition(&offset, &out);
+    f32 radius = 46.0f;
+    f32 height = 130.0f;
     mCyl.SetC(out);
-    mCyl.SetR(46.0f);
-    mCyl.SetH(130.0f);
+    mCyl.SetR(radius);
+    mCyl.SetH(height);
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
@@ -1787,7 +1789,7 @@ BOOL daNpc_Bs1_c::getdemo_action(void*) {
         m830 = m831;
         mShopCamAction.Reset();
         u16 itemNo = mShopItems.getSelectItemNo();
-        fpc_ProcID itemPID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, current.roomNo);
+        fpc_ProcID itemPID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, DEMO_SELECT(-1, current.roomNo));
         if (itemPID != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(itemPID);
         }
@@ -2137,7 +2139,12 @@ BOOL daNpc_Bs1_c::_execute() {
 /* 000048D4-00004960       .text _delete__11daNpc_Bs1_cFv */
 BOOL daNpc_Bs1_c::_delete() {
     dComIfG_resDelete(&mPhase, "Bs");
-    if (heap != NULL && mpMorf != NULL) {
+    if (
+#if VERSION > VERSION_DEMO
+        heap != NULL &&
+#endif
+        mpMorf != NULL
+    ) {
         mpMorf->stopZelAnime();
     }
     if (l_HIO.m8 >= 0 && (l_HIO.m8 -= 1) < 0) {
@@ -2153,10 +2160,15 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00004980-00004AD8       .text _create__11daNpc_Bs1_cFv */
 cPhs_State daNpc_Bs1_c::_create() {
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(this, daNpc_Bs1_c);
+#endif
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Bs");
     if (phase_state == cPhs_COMPLEATE_e) {
+#if VERSION == VERSION_DEMO
+        fopAcM_SetupActor(this, daNpc_Bs1_c);
+#endif
         mType = fopAcM_GetParamBit(fopAcM_GetParam(this), 0x14, 0x4);
         switch (mType) {
         case 0:
@@ -2200,14 +2212,16 @@ BOOL daNpc_Bs1_c::CreateHeap() {
         0, 0x11020203
     );
     if (!mpMorf || !mpMorf->getModel()) {
+#if VERSION > VERSION_DEMO
         mpMorf = NULL;
+#endif
         return FALSE;
     }
     
     m_head_jnt_num = modelData->getJointName()->getIndex("head");
-    JUT_ASSERT(0xa68, m_head_jnt_num >= 0);
+    JUT_ASSERT(DEMO_SELECT(2660, 2664), m_head_jnt_num >= 0);
     m_backbone_jnt_num = modelData->getJointName()->getIndex("backbone1");
-    JUT_ASSERT(0xa6a, m_backbone_jnt_num >= 0);
+    JUT_ASSERT(DEMO_SELECT(2662, 2666), m_backbone_jnt_num >= 0);
     
     switch (mType) {
     case 0:
@@ -2219,7 +2233,9 @@ BOOL daNpc_Bs1_c::CreateHeap() {
     }
     
     if (!initTexPatternAnm(FALSE)) {
+#if VERSION > VERSION_DEMO
         return FALSE;
+#endif
     }
     
     mpHelmetModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BDL_BS_MET), 0, 0x11020203);
@@ -2235,16 +2251,16 @@ BOOL daNpc_Bs1_c::CreateHeap() {
     }
     
     for (u16 jntNo = 0; jntNo < modelData->getJointNum(); jntNo++) {
-        if (jntNo == getHeadJntNum() || jntNo == getBackboneJntNum()) {
+        if (jntNo == m_head_jnt_num || jntNo == m_backbone_jnt_num) {
             mpMorf->getModel()->getModelData()->getJointNodePointer(jntNo)->setCallBack(nodeCallBack_Bs);
         }
     }
     mpMorf->getModel()->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 0.0f);
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
-    mpShopCursor = ShopCursor_create((J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BMD_SHOP_CURSOR01),
-                                     (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bs", BS_INDEX_BRK_SHOP_CURSOR01),
-                                     l_HIO.mChild[mType].m30);
+    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bs", BS_INDEX_BRK_SHOP_CURSOR01);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BMD_SHOP_CURSOR01);
+    mpShopCursor = ShopCursor_create(modelData, brk, l_HIO.mChild[mType].m30);
     
     if (mpShopCursor != NULL) {
         return TRUE;

@@ -147,16 +147,17 @@ BOOL daNpc_kam_c::callDemoStartCheck() {
     cXyz line_start_pos;
     cXyz line_end_pos;
     
-    s16 angle = link->shape_angle.y + 0x8000;
+    s16 angleY = link->shape_angle.y + 0x8000;
+    s16 angleX = -0x1555;
     mLinChk.OnBackFlag();
     
     line_end_pos = hyoi_pear_pos;
     
     // Check if there are any straight lines from any angle around the Hyoi Pear that the Hyoi Seagull can descend from.
     for (int i = 0; i < 0x10; i++) {
-        mDoMtx_stack_c::YrotS(angle + 0x8000);
+        mDoMtx_stack_c::YrotS(angleY + 0x8000);
         mDoMtx_stack_c::multVec(&l_call_local_kyori, &line_end_pos);
-        mDoMtx_stack_c::YrotS(angle);
+        mDoMtx_stack_c::YrotS(angleY);
         mDoMtx_stack_c::multVec(&l_call_local_kyori, &line_start_pos);
         mDoMtx_stack_c::XrotM(-0x1555);
         mDoMtx_stack_c::multVec(&l_call_local_kyori, &descend_start_pos);
@@ -172,14 +173,14 @@ BOOL daNpc_kam_c::callDemoStartCheck() {
                 // Found a direction with no collisions.
                 mDescendStartPos = descend_start_pos;
                 mDescendStartPosUnangled = line_start_pos; // Unused
-                mDescendStartAngle.set(0x1555, angle + 0x8000, 0);
+                mDescendStartAngle.set(-angleX, angleY + 0x8000, 0);
                 mLinChk.OffBackFlag();
                 l_demo_start_chk_flag = 1;
                 return TRUE;
             }
         }
         
-        angle = angle + 0x2000;
+        angleY = angleY + 0x2000;
     }
     
     mLinChk.OffBackFlag();
@@ -207,9 +208,13 @@ daNpc_kam_c::~daNpc_kam_c() {
     
     dComIfG_resDelete(&mPhs, "Kamome");
     
+#if VERSION == VERSION_DEMO
+    emitterDelete(&mB74);
+#else
     if (heap) {
         mpMorf->stopZelAnime();
     }
+#endif
     
     if (l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
@@ -218,6 +223,16 @@ daNpc_kam_c::~daNpc_kam_c() {
     
     offHyoiKamome();
 }
+
+#if VERSION == VERSION_DEMO
+void daNpc_kam_c::emitterDelete(JPABaseEmitter** pEmitter) {
+    if (*pEmitter) {
+        (*pEmitter)->quitImmortalEmitter();
+        (*pEmitter)->becomeInvalidEmitter();
+        *pEmitter = NULL;
+    }
+}
+#endif
 
 /* 00000A6C-00000B20       .text setAttention__11daNpc_kam_cFbi */
 void daNpc_kam_c::setAttention(bool param_1, int param_2) {
@@ -262,7 +277,7 @@ static int headNodeCallBack(J3DNode* node, int calcTiming) {
 /* 00000CD0-00000EB8       .text createHeap__11daNpc_kam_cFv */
 BOOL daNpc_kam_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kamome", KAMOME_BDL_KA_HYOI);
-    JUT_ASSERT(763, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(762, 763), modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -283,7 +298,7 @@ BOOL daNpc_kam_c::createHeap() {
         modelData->getJointNodePointer(head1JntIdx)->setCallBack(headNodeCallBack);
     }
     m_jnt_body = modelData->getJointName()->getIndex("j_ka_spin1");
-    JUT_ASSERT(783, m_jnt_body >= 0);
+    JUT_ASSERT(DEMO_SELECT(782, 783), m_jnt_body >= 0);
     
     mpMorf->getModel()->setUserArea((u32)this);
     
@@ -297,7 +312,9 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000ED8-0000101C       .text create__11daNpc_kam_cFv */
 cPhs_State daNpc_kam_c::create() {
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(this, daNpc_kam_c);
+#endif
     
     if (l_act != NULL && l_act != this) {
         return cPhs_ERROR_e;
@@ -309,8 +326,14 @@ cPhs_State daNpc_kam_c::create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Kamome");
     
     if (phase_state == cPhs_COMPLEATE_e) {
+#if VERSION == VERSION_DEMO
+        fopAcM_SetupActor(this, daNpc_kam_c);
+#endif
+
         if (!fopAcM_entrySolidHeap(this, checkCreateHeap, l_heap_size)) {
+#if VERSION > VERSION_DEMO
             mpMorf = NULL;
+#endif
             return cPhs_ERROR_e;
         }
         
@@ -1046,7 +1069,9 @@ BOOL daNpc_kam_c::actionWaitEvent(int evtStaffId) {
 
 /* 000035C8-0000361C       .text initialChangeEvent__11daNpc_kam_cFi */
 void daNpc_kam_c::initialChangeEvent(int evtStaffId) {
+#if VERSION > VERSION_DEMO
     fopAcM_SetRoomNo(this, fopAcM_GetHomeRoomNo(this));
+#endif
     changePlayer(this);
     dComIfGs_setBaitItemEmpty();
     offNoBgCheck();
@@ -1098,7 +1123,11 @@ BOOL daNpc_kam_c::actionDescendEvent(int evtStaffId) {
         return TRUE;
     }
     
-    return cLib_calcTimer(&mWaitTimer) == 0 ? TRUE : FALSE;
+    if (cLib_calcTimer(&mWaitTimer) == 0) {
+        return TRUE;
+    }
+    
+    return FALSE;
 }
 
 /* 00003864-00003884       .text initialAreaOutTurn__11daNpc_kam_cFi */
@@ -1216,7 +1245,8 @@ void daNpc_kam_c::setAnm(int anmIdx) {
 
 /* 00003B14-00003C80       .text setCollision__11daNpc_kam_cFv */
 void daNpc_kam_c::setCollision() {
-    MtxP mtx = mpMorf->getModel()->getAnmMtx(m_jnt_body);
+    J3DModel* model = mpMorf->getModel();
+    MtxP mtx = model->getAnmMtx(m_jnt_body);
     cXyz center;
     center.set(mtx[0][3], mtx[1][3], mtx[2][3]);
     

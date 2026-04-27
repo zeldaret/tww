@@ -20,9 +20,11 @@ public:
     inline void draw();
     s32 getEnterMode() { return mEnterMode; }
 
+#if VERSION > VERSION_DEMO
     static void daTitle_Kirakira_Sound_flag_on();
-
     static bool daTitle_Kirakira_Sound_flag;
+#endif
+
 public:
     /* 0x004 */ JPABaseEmitter* mpEmitter;
     /* 0x008 */ JPABaseEmitter* mpEmitter2;

@@ -72,11 +72,15 @@ static BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
 
         if (fpcM_GetName(i_this) == PROC_ENDING_SCENE) {
             if (movie->mpCallBack1() == 0) {
+#if VERSION == VERSION_DEMO
+                fopScnM_ChangeReq(i_this, PROC_NAMEEX_SCENE, PROC_OVERLAP0, 5);
+#else
                 if (dComIfGs_getClearCount() == 0) {
                     fopScnM_ChangeReq(i_this, PROC_NAMEEX_SCENE, PROC_OVERLAP0, 5);
                 } else {
                     dComIfG_changeOpeningScene(i_this, PROC_OPENING_SCENE);
                 }
+#endif
                 movie->mpCallBack2(0.0f);
             }
         } else {
@@ -111,10 +115,11 @@ static cPhs_State dScnTitle_Create(scene_class* i_scn) {
 
     dMenu_flagSet(0);
     fopAc_ac_c::setStopStatus(0);
+#if VERSION > VERSION_DEMO
     dComIfGp_offEnableNextStage();
-    u32 parameter = fpcM_GetName(i_this) == PROC_TITLE_SCENE ? 0 : 1;
+#endif
 
-    i_this->mMoviePId = fopAcM_create(PROC_MP, parameter);
+    i_this->mMoviePId = fopAcM_create(PROC_MP, fpcM_GetName(i_this) == PROC_TITLE_SCENE ? 0 : 1);
 
 #if VERSION == VERSION_PAL
     dScnTitle_c::mMp = NULL;
