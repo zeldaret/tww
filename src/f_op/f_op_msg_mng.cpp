@@ -574,36 +574,46 @@ u32 fopMsgM_tactMessageSet() {
 
 /* 8002BB78-8002BDBC       .text fopMsgM_messageGet__FPcUl */
 char* fopMsgM_messageGet(char* dst, u32 msgNo) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
     fopMsgM_itemMsgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mMsgNo = 0;
     msgGet.mResMsgNo = 0;
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
-    JUT_ASSERT(0x6BD, head_p);
+    JUT_ASSERT(VERSION_SELECT(0x690, 0x690, 0x6BD, 0x6BD), head_p);
 
     const char* src = (char*)msgGet.getMessage(head_p);
+    const char* cursor = src;
     char* dstPtr = dst;
 
-    char dstBuf[24];
-    const char* cursor = src;
+    char dstBuf[20];
     char current;
     while(current = *cursor, current != '\0') {
-        if(current == '\x1A') {
-            u32 next_as_int = *(u32*)++cursor;
+        if((u32)current == '\x1A') {
+            u32 next_as_int = *(u32*)(++cursor);
             if ((next_as_int & 0xFFFFFF) == 0x1E) {
                 *dstPtr = '\x1A';
                 dstPtr++;
             }
             else if ((next_as_int & 0xFFFFFF) == 0) {
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
+                // There are some modifications done to the player name before
+                // writing it to the dst pointer when the language is set to German.
+
                 strcpy(dstBuf, dComIfGs_getPlayerName());
                 if(
-#if VERSION > VERSION_JPN
                     dComIfGs_getPalLanguage() == 1 &&
+                    (
+
+#if VERSION == VERSION_PAL
+    // Version is PAL
+                        msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7
+#else
+    // Version is USA, we know it's not DEMO or JPN because of the outer #if
+                        msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE
 #endif
-                    (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)
+                    )
                 ) {
                     s32 bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
@@ -614,26 +624,33 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
                         strcat(dstBuf, "s");
                     }
                 }
-#endif
 
-                for (char* bufPtr = dstBuf; *bufPtr != '\0'; bufPtr++) {
+                for (char* bufPtr = dstBuf; *bufPtr != '\0'; bufPtr ++) {
                     *dstPtr = *bufPtr;
                     dstPtr++;
                 }
+#else
+                // In the JPN and DEMO versions, the player name is just written
+                // to dst directly.
 
-                cursor = (char*)next_as_int + (next_as_int - 1);
+                for (const char* bufPtr = dComIfGs_getPlayerName(); *bufPtr != '\0'; bufPtr ++) {
+                    *dstPtr = *bufPtr;
+                    dstPtr++;
+                }
+#endif
             }
-        }
-        else if((current >> 4) == 8 || (current >> 4) == 9) {
-            *dstPtr = *cursor;
-            *(dstPtr + 1) = *(cursor + 1);
-            dstPtr += 2;
-            cursor += 2;
+
+            cursor += *cursor - 1;
         }
         else {
-            *dstPtr = *cursor;
-            dstPtr++;
-            cursor++;
+            int shifted = ((u32)*cursor >> 4) & 0xF;
+            if((shifted == 8 || shifted == 9) && VERSION != VERSION_PAL) {
+                *(dstPtr++) = *(cursor++);
+                *(dstPtr++) = *(cursor++);
+            }
+            else {
+                *(dstPtr++) = *(cursor++);
+            }
         }
     }
 
@@ -642,32 +659,43 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
 }
 
 /* 8002BE04-8002C02C       .text fopMsgM_passwordGet__FPcUl */
-void fopMsgM_passwordGet(char* dst, u32 msgNo) {
-    /* Nonmatching */
+char* fopMsgM_passwordGet(char* dst, u32 msgNo) {
+    /* Nonmatching - regalloc */
     fopMsgM_itemMsgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mMsgNo = 0;
     msgGet.mResMsgNo = 0;
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
-    JUT_ASSERT(0x735, head_p);
+    JUT_ASSERT(VERSION_SELECT(0x6F6, 0x6F6, 0x735, 0x739), head_p);
 
-    s32 curOffset = 0;
-    s32 numRead = 0;
     const char* src = (char*)msgGet.getMessage(head_p);
-    char dstBuf[24];
-    const u32* cursor;
-    s32 current;
-    while(cursor = (u32*)src + curOffset, current = *cursor, (s8)*cursor != '\0') {
-        if(*cursor == 0x1A) {
-            if((cursor[1] & 0xFFFFFF) == 0) {
-#if VERSION > VERSION_DEMO
+    const char* cursor = src;
+    char* dstPtr = dst;
+
+    char dstBuf[20];
+    char current;
+    while(current = *cursor, current != '\0') {
+        if((u32)current == '\x1A') {
+            u32 next_as_int = *(u32*)(++cursor);
+            if ((next_as_int & 0xFFFFFF) == 0) {
+#if VERSION > VERSION_JPN
+                // There are some modifications done to the player name before
+                // writing it to the dst pointer when the language is set to German.
+
                 strcpy(dstBuf, dComIfGs_getPlayerName());
                 if(
-#if VERSION > VERSION_JPN
                     dComIfGs_getPalLanguage() == 1 &&
+                    (
+
+#if VERSION == VERSION_PAL
+    // Version is PAL
+                        msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7
+#else
+    // Version is USA, we know it's not DEMO or JPN because of the outer #if
+                        msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE
 #endif
-                    (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)
+                    )
                 ) {
                     s32 bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
@@ -678,28 +706,38 @@ void fopMsgM_passwordGet(char* dst, u32 msgNo) {
                         strcat(dstBuf, "s");
                     }
                 }
-#endif
 
-                for(s32 i = 0; dstBuf[i] != '\0'; i++) {
-                    dst[numRead] = dstBuf[i];
-                    numRead++;
+                for (char* bufPtr = dstBuf; *bufPtr != '\0'; bufPtr ++) {
+                    *dstPtr = *bufPtr;
+                    dstPtr++;
                 }
+#else
+                // In the JPN and DEMO versions, the player name is just written
+                // to dst directly.
+
+                for (const char* bufPtr = dComIfGs_getPlayerName(); *bufPtr != '\0'; bufPtr ++) {
+                    *dstPtr = *bufPtr;
+                    dstPtr++;
+                }
+#endif
             }
-        }
-        else if((*cursor >> 4) == 8 || (*cursor >> 4) == 9) {
-            dst[numRead] = current;
-            dst[numRead + 1] = current + 1;
-            curOffset += 2;
-            numRead += 2;
+
+            cursor += *cursor - 1;
         }
         else {
-            dst[numRead] = current;
-            curOffset++;
-            numRead++;
+            int shifted = ((u32)*cursor >> 4) & 0xF;
+            if((shifted == 8 || shifted == 9) && VERSION != VERSION_PAL) {
+                *(dstPtr++) = *(cursor++);
+                *(dstPtr++) = *(cursor++);
+            }
+            else {
+                *(dstPtr++) = *(cursor++);
+            }
         }
     }
 
-    dst[numRead] = '\0';
+    *dstPtr = '\0';
+    return dst;
 }
 
 /* 8002C02C-8002C568       .text fopMsgM_selectMessageGet__FP7J2DPaneP7J2DPanePcPcPcPcUl */
