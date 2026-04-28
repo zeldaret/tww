@@ -60,7 +60,7 @@ static BOOL daAtt_Execute(att_class* i_this) {
                 mDoAud_seStart(JA_SE_LK_W_WEP_HIT, NULL, 0x21, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
                 if (r30 <= 1) {
                     if (boss->mAAA8[1-r30].m2D0 != 0) {
-                        boss->mC7B0 = 600;
+                        boss->mC7AC[2] = 600;
                     }
                 }
             } else {

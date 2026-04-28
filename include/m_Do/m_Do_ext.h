@@ -567,12 +567,15 @@ public:
     mDoExt_J3DModelPacketS() {}
     ~mDoExt_J3DModelPacketS() {}
 
-    void setModel(J3DModel*) {}
+    void setModel(J3DModel* model) { mpModel = model; }
     void update() {}
     
     void draw();
     void setMaterial();
-}; // Size: 0x10
+
+public:
+    /* 0x10 */ J3DModel* mpModel;
+}; // Size: 0x14
 
 class mDoExt_3Dline_c {
 public:
