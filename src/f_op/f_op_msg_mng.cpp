@@ -2663,14 +2663,10 @@ void fopMsgM_msgDataProc_c::tag_len_kaisen_game(int* param_1, f32* param_2, int*
     strcat(buf, "");
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2686,7 +2682,6 @@ void fopMsgM_msgDataProc_c::tag_len_kaisen_game(int* param_1, f32* param_2, int*
 
 /* 80035E40-80035F68       .text tag_len_rupee__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_rupee(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
     char buf[24];
 
     s16 num = dComIfGp_getMessageCountNumber();
@@ -2724,14 +2719,10 @@ void fopMsgM_msgDataProc_c::tag_len_rupee(int* param_1, f32* param_2, int* param
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2769,14 +2760,10 @@ void fopMsgM_msgDataProc_c::tag_len_num_input(int* param_1, f32* param_2, int* p
     strcpy(buf, "000 Rupee(s)");
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2792,8 +2779,6 @@ void fopMsgM_msgDataProc_c::tag_len_num_input(int* param_1, f32* param_2, int* p
 
 /* 80036068-80036190       .text tag_len_sword_game__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_sword_game(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
     char buf[24];
 
     s16 num = dComIfGp_getMessageCountNumber();
@@ -2831,14 +2816,10 @@ void fopMsgM_msgDataProc_c::tag_len_sword_game(int* param_1, f32* param_2, int* 
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2858,14 +2839,10 @@ void fopMsgM_msgDataProc_c::tag_len_letter_game(int* param_1, f32* param_2, int*
 
     fopMsgM_int_to_char(buf, dComIfGp_getMiniGameRupee(), false);
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2881,19 +2858,13 @@ void fopMsgM_msgDataProc_c::tag_len_letter_game(int* param_1, f32* param_2, int*
 
 /* 80036280-80036384       .text tag_len_letter_game_max__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_letter_game_max(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[24];
     fopMsgM_int_to_char(buf, dComIfGs_getEventReg(dSv_event_flag_c::UNK_8AFF), false);
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2909,19 +2880,13 @@ void fopMsgM_msgDataProc_c::tag_len_letter_game_max(int* param_1, f32* param_2, 
 
 /* 80036384-80036474       .text tag_len_fish__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_fish(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[24];
     fopMsgM_int_to_char(buf, dComIfGp_getMessageCountNumber(), false);
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2937,8 +2902,6 @@ void fopMsgM_msgDataProc_c::tag_len_fish(int* param_1, f32* param_2, int* param_
 
 /* 80036474-800365A0       .text tag_len_fish_rupee__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_fish_rupee(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
     char buf[24];
 
     int num = dComIfGp_getMessageCountNumber() * 10;
@@ -2976,14 +2939,10 @@ void fopMsgM_msgDataProc_c::tag_len_fish_rupee(int* param_1, f32* param_2, int* 
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2999,8 +2958,6 @@ void fopMsgM_msgDataProc_c::tag_len_fish_rupee(int* param_1, f32* param_2, int* 
 
 /* 800365A0-800366C8       .text tag_len_letter__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_letter(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
     char buf[24];
 
     int num = dComIfGp_getMessageCountNumber();
@@ -3050,14 +3007,10 @@ void fopMsgM_msgDataProc_c::tag_len_letter(int* param_1, f32* param_2, int* para
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3073,8 +3026,6 @@ void fopMsgM_msgDataProc_c::tag_len_letter(int* param_1, f32* param_2, int* para
 
 /* 800366C8-800367CC       .text tag_len_rescue__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_rescue(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
     char buf[24];
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
@@ -3099,14 +3050,10 @@ void fopMsgM_msgDataProc_c::tag_len_rescue(int* param_1, f32* param_2, int* para
     strcat(buf, "");
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3122,8 +3069,6 @@ void fopMsgM_msgDataProc_c::tag_len_rescue(int* param_1, f32* param_2, int* para
 
 /* 800367CC-8003693C       .text tag_len_forest_timer__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_forest_timer(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
 #if VERSION == VERSION_PAL
     char buf[32];
 #else
@@ -3221,14 +3166,10 @@ void fopMsgM_msgDataProc_c::tag_len_forest_timer(int* param_1, f32* param_2, int
     strcat(buf, "");
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3244,8 +3185,6 @@ void fopMsgM_msgDataProc_c::tag_len_forest_timer(int* param_1, f32* param_2, int
 
 /* 8003693C-80036A64       .text tag_len_birdman__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_birdman(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
     char buf[24];
 
     int num = dComIfGp_getMessageCountNumber();
@@ -3288,14 +3227,10 @@ void fopMsgM_msgDataProc_c::tag_len_birdman(int* param_1, f32* param_2, int* par
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3311,8 +3246,6 @@ void fopMsgM_msgDataProc_c::tag_len_birdman(int* param_1, f32* param_2, int* par
 
 /* 80036A64-80036B9C       .text tag_len_point__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_point(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
     char buf[24];
 
     int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
@@ -3359,14 +3292,10 @@ void fopMsgM_msgDataProc_c::tag_len_point(int* param_1, f32* param_2, int* param
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3382,8 +3311,6 @@ void fopMsgM_msgDataProc_c::tag_len_point(int* param_1, f32* param_2, int* param
 
 /* 80036B9C-80036CC4       .text tag_len_get_pendant__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_get_pendant(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
     int num = dComIfGs_getBeastNum(7);
@@ -3430,14 +3357,10 @@ void fopMsgM_msgDataProc_c::tag_len_get_pendant(int* param_1, f32* param_2, int*
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3453,8 +3376,6 @@ void fopMsgM_msgDataProc_c::tag_len_get_pendant(int* param_1, f32* param_2, int*
 
 /* 80036CC4-80036E18       .text tag_len_rev_pendant__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_rev_pendant(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
     int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF);
@@ -3501,12 +3422,10 @@ void fopMsgM_msgDataProc_c::tag_len_rev_pendant(int* param_1, f32* param_2, int*
     }
 #endif
 
-    char* p1 = buf;
-    u8* p2 = (u8*)p1;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3522,8 +3441,6 @@ void fopMsgM_msgDataProc_c::tag_len_rev_pendant(int* param_1, f32* param_2, int*
 
 /* 80036E18-80036F74       .text tag_len_pig_timer__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_pig_timer(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
 #if VERSION == VERSION_PAL
     char buf[32];
 #else
@@ -3621,12 +3538,10 @@ void fopMsgM_msgDataProc_c::tag_len_pig_timer(int* param_1, f32* param_2, int* p
     strcat(buf, "");
 #endif
 
-    char* p1 = buf;
-    u8* p2 = (u8*)p1;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3642,8 +3557,6 @@ void fopMsgM_msgDataProc_c::tag_len_pig_timer(int* param_1, f32* param_2, int* p
 
 /* 80036F74-8003709C       .text tag_len_get_bomb__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_get_bomb(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[24];
 
     int num = dComIfGs_getBombMax();
@@ -3678,14 +3591,10 @@ void fopMsgM_msgDataProc_c::tag_len_get_bomb(int* param_1, f32* param_2, int* pa
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3701,8 +3610,6 @@ void fopMsgM_msgDataProc_c::tag_len_get_bomb(int* param_1, f32* param_2, int* pa
 
 /* 8003709C-800371C4       .text tag_len_get_arrow__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_get_arrow(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
     char buf[24];
 
     int num = dComIfGs_getArrowMax();
@@ -3737,14 +3644,10 @@ void fopMsgM_msgDataProc_c::tag_len_get_arrow(int* param_1, f32* param_2, int* p
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3760,8 +3663,6 @@ void fopMsgM_msgDataProc_c::tag_len_get_arrow(int* param_1, f32* param_2, int* p
 
 /* 800371C4-800372E4       .text tag_len_stock_bokobaba__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_stock_bokobaba(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
     char buf[28];
 
     int num = daNpc_Bs1_c::getBuyItem();
@@ -3800,14 +3701,10 @@ void fopMsgM_msgDataProc_c::tag_len_stock_bokobaba(int* param_1, f32* param_2, i
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3823,8 +3720,6 @@ void fopMsgM_msgDataProc_c::tag_len_stock_bokobaba(int* param_1, f32* param_2, i
 
 /* 800372E4-80037404       .text tag_len_stock_dokuro__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_stock_dokuro(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
     char buf[28];
 
     int num = daNpc_Bs1_c::getBuyItem();
@@ -3867,14 +3762,10 @@ void fopMsgM_msgDataProc_c::tag_len_stock_dokuro(int* param_1, f32* param_2, int
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3890,8 +3781,6 @@ void fopMsgM_msgDataProc_c::tag_len_stock_dokuro(int* param_1, f32* param_2, int
 
 /* 80037404-80037500       .text tag_len_stock_chuchu__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_stock_chuchu(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
     char buf[28];
 
     int num = daNpc_Bs1_c::getBuyItem();
@@ -3925,14 +3814,10 @@ void fopMsgM_msgDataProc_c::tag_len_stock_chuchu(int* param_1, f32* param_2, int
     strcat(buf, "");
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3948,8 +3833,6 @@ void fopMsgM_msgDataProc_c::tag_len_stock_chuchu(int* param_1, f32* param_2, int
 
 /* 80037500-80037620       .text tag_len_stock_pendant__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_stock_pendant(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
     char buf[28];
 
     int num = daNpc_Bs1_c::getBuyItem();
@@ -3992,14 +3875,10 @@ void fopMsgM_msgDataProc_c::tag_len_stock_pendant(int* param_1, f32* param_2, in
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -4015,8 +3894,6 @@ void fopMsgM_msgDataProc_c::tag_len_stock_pendant(int* param_1, f32* param_2, in
 
 /* 80037620-80037740       .text tag_len_stock_hane__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_stock_hane(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
     char buf[28];
 
     int num = daNpc_Bs1_c::getBuyItem();
@@ -4059,14 +3936,10 @@ void fopMsgM_msgDataProc_c::tag_len_stock_hane(int* param_1, f32* param_2, int* 
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -4082,8 +3955,6 @@ void fopMsgM_msgDataProc_c::tag_len_stock_hane(int* param_1, f32* param_2, int* 
 
 /* 80037740-80037860       .text tag_len_stock_kenshi__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_stock_kenshi(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
     char buf[28];
 
     int num = daNpc_Bs1_c::getBuyItem();
@@ -4122,14 +3993,10 @@ void fopMsgM_msgDataProc_c::tag_len_stock_kenshi(int* param_1, f32* param_2, int
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -4145,8 +4012,6 @@ void fopMsgM_msgDataProc_c::tag_len_stock_kenshi(int* param_1, f32* param_2, int
 
 /* 80037860-80037980       .text tag_len_terry_rupee__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_terry_rupee(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching - regalloc */
-
     char buf[24];
 
     int num = daNpc_Bs1_c::getPayRupee();
@@ -4184,14 +4049,10 @@ void fopMsgM_msgDataProc_c::tag_len_terry_rupee(int* param_1, f32* param_2, int*
     }
 #endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -4477,21 +4338,15 @@ void fopMsgM_msgDataProc_c::tag_len_input_kenshi(int* param_1, f32* param_2, int
 
 /* 80037F80-80038178       .text tag_kaisen_game__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_kaisen_game() {
-    /* Nonmatching */
     char buf[12];
 
     int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BEFF);
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4502,7 +4357,7 @@ void fopMsgM_msgDataProc_c::tag_kaisen_game() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4540,7 +4395,6 @@ void fopMsgM_msgDataProc_c::tag_kaisen_game() {
 
 /* 80038178-80038330       .text tag_rupee__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_rupee() {
-    /* Nonmatching */
     char buf[20];
 
     int num = dComIfGp_getMessageCountNumber();
@@ -4579,14 +4433,10 @@ void fopMsgM_msgDataProc_c::tag_rupee() {
     }
 #endif
 
-    char* p1;
-    u8* p2;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4597,7 +4447,7 @@ void fopMsgM_msgDataProc_c::tag_rupee() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p1);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4612,7 +4462,6 @@ void fopMsgM_msgDataProc_c::tag_rupee() {
 
 /* 80038330-80038538       .text tag_num_input__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_num_input() {
-    /* Nonmatching */
     char buf[8];
     char buf2[16];
 
@@ -4642,12 +4491,10 @@ void fopMsgM_msgDataProc_c::tag_num_input() {
     strcpy(buf, " Rupee(s)");
 #endif
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4658,7 +4505,7 @@ void fopMsgM_msgDataProc_c::tag_num_input() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p1);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4673,21 +4520,15 @@ void fopMsgM_msgDataProc_c::tag_num_input() {
 
 /* 80038538-8003872C       .text tag_sword_game__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_sword_game() {
-    /* Nonmatching */
     char buf[16];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4698,7 +4539,7 @@ void fopMsgM_msgDataProc_c::tag_sword_game() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4749,21 +4590,15 @@ void fopMsgM_msgDataProc_c::tag_sword_game() {
 
 /* 8003872C-800388AC       .text tag_letter_game__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_letter_game() {
-    /* Nonmatching */
     char buf[24];
 
     int num = dComIfGp_getMiniGameRupee();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4774,7 +4609,7 @@ void fopMsgM_msgDataProc_c::tag_letter_game() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4789,21 +4624,15 @@ void fopMsgM_msgDataProc_c::tag_letter_game() {
 
 /* 800388AC-80038A40       .text tag_letter_game_max__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_letter_game_max() {
-    /* Nonmatching */
     char buf[24];
 
     int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_8AFF);
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4814,7 +4643,7 @@ void fopMsgM_msgDataProc_c::tag_letter_game_max() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4829,21 +4658,15 @@ void fopMsgM_msgDataProc_c::tag_letter_game_max() {
 
 /* 80038A40-80038BC0       .text tag_fish__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_fish() {
-    /* Nonmatching */
     char buf[24];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4854,7 +4677,7 @@ void fopMsgM_msgDataProc_c::tag_fish() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4869,7 +4692,6 @@ void fopMsgM_msgDataProc_c::tag_fish() {
 
 /* 80038BC0-80038D7C       .text tag_fish_rupee__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_fish_rupee() {
-    /* Nonmatching */
     char buf[24];
 
     int num = dComIfGp_getMessageCountNumber() * 10;
@@ -4908,15 +4730,10 @@ void fopMsgM_msgDataProc_c::tag_fish_rupee() {
     }
 #endif
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4927,7 +4744,7 @@ void fopMsgM_msgDataProc_c::tag_fish_rupee() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4942,21 +4759,15 @@ void fopMsgM_msgDataProc_c::tag_fish_rupee() {
 
 /* 80038D7C-80038F70       .text tag_letter__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_letter() {
-    /* Nonmatching */
     char buf[16];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4967,7 +4778,7 @@ void fopMsgM_msgDataProc_c::tag_letter() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -5030,21 +4841,15 @@ void fopMsgM_msgDataProc_c::tag_letter() {
 
 /* 80038F70-8003912C       .text tag_rescue__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_rescue() {
-    /* Nonmatching */
     char buf[20];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5055,7 +4860,7 @@ void fopMsgM_msgDataProc_c::tag_rescue() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -5094,21 +4899,16 @@ void fopMsgM_msgDataProc_c::tag_rescue() {
 
 /* 8003912C-800394B4       .text tag_forest_timer__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_forest_timer() {
-    /* Nonmatching */
     char buf[16];
     char buf2[4];
 
     int minutes = dComIfGs_getFwaterTimer() / 1800;
     fopMsgM_int_to_char(buf, minutes, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5137,15 +4937,10 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
     }
     fopMsgM_int_to_char2(buf, seconds);
 
-    p1 = buf;
-    p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5156,7 +4951,7 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -5172,7 +4967,6 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
 
 /* 800394B4-8003966C       .text tag_birdman__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_birdman() {
-    /* Nonmatching */
     char buf[24];
 
     int num = dComIfGp_getMessageCountNumber();
@@ -5215,15 +5009,10 @@ void fopMsgM_msgDataProc_c::tag_birdman() {
     }
 #endif
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5234,7 +5023,7 @@ void fopMsgM_msgDataProc_c::tag_birdman() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -5249,7 +5038,6 @@ void fopMsgM_msgDataProc_c::tag_birdman() {
 
 /* 8003966C-80039834       .text tag_point__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_point() {
-    /* Nonmatching */
     char buf[24];
 
     int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
@@ -5296,15 +5084,10 @@ void fopMsgM_msgDataProc_c::tag_point() {
     }
 #endif
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5315,7 +5098,7 @@ void fopMsgM_msgDataProc_c::tag_point() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -5330,21 +5113,15 @@ void fopMsgM_msgDataProc_c::tag_point() {
 
 /* 80039834-80039A28       .text tag_get_pendant__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_get_pendant() {
-    /* Nonmatching */
     char buf[20];
 
     int num = dComIfGs_getBeastNum(7);
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5355,7 +5132,7 @@ void fopMsgM_msgDataProc_c::tag_get_pendant() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -5416,21 +5193,15 @@ void fopMsgM_msgDataProc_c::tag_get_pendant() {
 
 /* 80039A28-80039C2C       .text tag_rev_pendant__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_rev_pendant() {
-    /* Nonmatching */
     char buf[20];
 
     int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF);
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5441,7 +5212,7 @@ void fopMsgM_msgDataProc_c::tag_rev_pendant() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -5502,21 +5273,16 @@ void fopMsgM_msgDataProc_c::tag_rev_pendant() {
 
 /* 80039C2C-80039FA0       .text tag_pig_timer__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_pig_timer() {
-    /* Nonmatching */
     char buf[16];
     char buf2[4];
 
     int minutes = dComIfGp_getItemTimer() / 1800;
     fopMsgM_int_to_char(buf, minutes, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5545,15 +5311,10 @@ void fopMsgM_msgDataProc_c::tag_pig_timer() {
     }
     fopMsgM_int_to_char2(buf, seconds);
 
-    p1 = buf;
-    p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5564,7 +5325,7 @@ void fopMsgM_msgDataProc_c::tag_pig_timer() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -5580,21 +5341,15 @@ void fopMsgM_msgDataProc_c::tag_pig_timer() {
 
 /* 80039FA0-8003A194       .text tag_get_bomb__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_get_bomb() {
-    /* Nonmatching */
     char buf[16];
 
     int num = dComIfGs_getBombMax();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5605,7 +5360,7 @@ void fopMsgM_msgDataProc_c::tag_get_bomb() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -5652,21 +5407,15 @@ void fopMsgM_msgDataProc_c::tag_get_bomb() {
 
 /* 8003A194-8003A388       .text tag_get_arrow__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_get_arrow() {
-    /* Nonmatching */
     char buf[16];
 
     int num = dComIfGs_getArrowMax();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5677,7 +5426,7 @@ void fopMsgM_msgDataProc_c::tag_get_arrow() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -5724,21 +5473,15 @@ void fopMsgM_msgDataProc_c::tag_get_arrow() {
 
 /* 8003A388-8003A574       .text tag_stock_bokobaba__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
-    /* Nonmatching */
     char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5749,7 +5492,7 @@ void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -5803,21 +5546,15 @@ void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
 
 /* 8003A574-8003A760       .text tag_stock_dokuro__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_dokuro() {
-    /* Nonmatching */
     char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5828,7 +5565,7 @@ void fopMsgM_msgDataProc_c::tag_stock_dokuro() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -5885,21 +5622,15 @@ void fopMsgM_msgDataProc_c::tag_stock_dokuro() {
 
 /* 8003A760-8003A914       .text tag_stock_chuchu__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_chuchu() {
-    /* Nonmatching */
     char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5910,7 +5641,7 @@ void fopMsgM_msgDataProc_c::tag_stock_chuchu() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -5956,21 +5687,15 @@ void fopMsgM_msgDataProc_c::tag_stock_chuchu() {
 
 /* 8003A914-8003AB00       .text tag_stock_pendant__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_pendant() {
-    /* Nonmatching */
     char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -5981,7 +5706,7 @@ void fopMsgM_msgDataProc_c::tag_stock_pendant() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -6038,21 +5763,15 @@ void fopMsgM_msgDataProc_c::tag_stock_pendant() {
 
 /* 8003AB00-8003ACEC       .text tag_stock_hane__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_hane() {
-    /* Nonmatching */
     char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -6063,7 +5782,7 @@ void fopMsgM_msgDataProc_c::tag_stock_hane() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -6120,21 +5839,15 @@ void fopMsgM_msgDataProc_c::tag_stock_hane() {
 
 /* 8003ACEC-8003AED8       .text tag_stock_kenshi__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_kenshi() {
-    /* Nonmatching */
     char buf[16];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -6145,7 +5858,7 @@ void fopMsgM_msgDataProc_c::tag_stock_kenshi() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -6196,7 +5909,6 @@ void fopMsgM_msgDataProc_c::tag_stock_kenshi() {
 
 /* 8003AED8-8003B088       .text tag_terry_rupee__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_terry_rupee() {
-    /* Nonmatching */
     char buf[24];
 
     int num = daNpc_Bs1_c::getPayRupee();
@@ -6235,15 +5947,10 @@ void fopMsgM_msgDataProc_c::tag_terry_rupee() {
     }
 #endif
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -6254,7 +5961,7 @@ void fopMsgM_msgDataProc_c::tag_terry_rupee() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
