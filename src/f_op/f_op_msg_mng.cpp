@@ -208,7 +208,7 @@ bool fopMsgM_hyrule_language_check(u32 msgNo) {
 /* 8002AE28-8002AED4       .text fopMsgM_setStageLayer__FPv */
 s32 fopMsgM_setStageLayer(void* proc) {
     scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
-    JUT_ASSERT(0x189, stageProc != NULL);
+    JUT_ASSERT(VERSION_SELECT(0x15C, 0x15C, 0x189, 0x189), stageProc != NULL);
     u32 layer = fpcM_LayerID(stageProc);
     return fpcM_ChangeLayerID(proc, layer);
 }
@@ -605,7 +605,6 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
                 if(
                     dComIfGs_getPalLanguage() == 1 &&
                     (
-
 #if VERSION == VERSION_PAL
     // Version is PAL
                         msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7
@@ -687,7 +686,6 @@ char* fopMsgM_passwordGet(char* dst, u32 msgNo) {
                 if(
                     dComIfGs_getPalLanguage() == 1 &&
                     (
-
 #if VERSION == VERSION_PAL
     // Version is PAL
                         msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7
@@ -1548,13 +1546,13 @@ const char* fopMsgM_itemMsgGet_c::getMessage(mesg_header* msg) {
 
         mMsgIdx = i;
         if (mMsgNo == info->mEntries[i].mMsgNo) {
-            mesg_entry* entry = &info->mEntries[i];
-            mResMsgNo = entry->mMsgNo;
-            return &data[entry->mDataOffs];
+            break;
         }
     }
 
-    return NULL;
+    const char* result = &data[info->mEntries[mMsgIdx].mDataOffs];
+    mResMsgNo = info->mEntries[mMsgIdx].mMsgNo;
+    return result;
 }
 
 /* 8002E7DC-8002E95C       .text dataInit__21fopMsgM_msgDataProc_cFv */
@@ -2391,8 +2389,16 @@ u32 fopMsgM_getColorTable(u16 param_1) {
 void fopMsgM_int_to_char(char* dst, int num, bool param_3) {
     int temp = 10000;
     bool temp2 = false;
+#if VERSION > VERSION_JPN
     char buf[2];
     buf[1] = '\0';
+#else
+    char buf[3];
+    // The JPN version uses shift-jis digits instead of ascii ones- this is the
+    // high byte for those digits
+    buf[0] = '\x82';
+    buf[2] = '\0';
+#endif
 
     if(!param_3) {
         strcpy(dst, "");
@@ -2400,7 +2406,11 @@ void fopMsgM_int_to_char(char* dst, int num, bool param_3) {
 
     for(int i = 0; i < 5; i++) {
         if(num / temp != 0 || temp2 || temp == 1) {
+#if VERSION > VERSION_JPN
             buf[0] = (num / temp) + '0';
+#else
+            buf[1] = (num / temp) + '\x4F';
+#endif
             strcat(dst, buf);
             if(!temp2) {
                 temp2 = true;
@@ -2431,18 +2441,16 @@ void fopMsgM_msgDataProc_c::getString(char* dst, u32 msgNo) {
     msgGet.mGroupID = 0;
     msgGet.mMsgNo = 0;
     msgGet.mResMsgNo = 0;
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     static const char* name = "no name";
-#endif
 
-#if VERSION > VERSION_DEMO
     s32 curOffset = 0;
     s32 numRead = 0;
 #endif
 
     mesg_header* header;
     const char* src;
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     if(msgNo == 0) {
         src = name;
     }
@@ -2453,7 +2461,7 @@ void fopMsgM_msgDataProc_c::getString(char* dst, u32 msgNo) {
         src = msgGet.getMessage(header);
     }
 
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     s32 curOffset = 0;
     s32 numRead = 0;
 #endif
@@ -2464,16 +2472,20 @@ void fopMsgM_msgDataProc_c::getString(char* dst, u32 msgNo) {
         if(*cursor == 0x1A) {
             int codeLen = cursor[1];
             if(cursor[2] == 0 && cursor[3] == 0 && cursor[4] == 0) {
-#if VERSION == VERSION_DEMO
-                const char* str = dComIfGs_getPlayerName();
-#else
+#if VERSION > VERSION_JPN
                 char str[24];
                 strcpy(str, dComIfGs_getPlayerName());
                 if(
-#if VERSION > VERSION_JPN
                     dComIfGs_getPalLanguage() == 1 &&
+                    (
+#if VERSION == VERSION_PAL
+    // Version is PAL
+                        msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7
+#else
+    // Version is USA, we know it's not DEMO or JPN because of the outer #if
+                        msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE
 #endif
-                    (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)
+                    )
                 ) {
                     s32 bufLen = strlen(str);
                     current = (str)[bufLen - 1];
@@ -2484,6 +2496,8 @@ void fopMsgM_msgDataProc_c::getString(char* dst, u32 msgNo) {
                         strcat(str, "s");
                     }
                 }
+#else
+                const char* str = dComIfGs_getPlayerName();
 #endif
 
                 for(i = 0; str[i] != '\0'; i++) {
@@ -6585,7 +6599,7 @@ void fopMsgM_setPaneData(fopMsgM_pane_alpha_class* i_this, J2DScreen* scrn, u32 
         i_this->pane = pane;
         fopMsgM_pane_parts_set(i_this);
     } else {
-        JUT_ASSERT(0x398d, FALSE);
+        JUT_ASSERT(VERSION_SELECT(0x22F9, 0x22F9, 0x398D, 0x3A73), FALSE);
     }
 }
 
