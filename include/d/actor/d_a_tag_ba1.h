@@ -5,24 +5,35 @@
 
 class daTag_Ba1_c : public fopAc_ac_c {
 public:
-    void XyCheck_cB(int);
-    void XyEvent_cB(int);
-    void createInit();
+    s16 XyCheck_cB(int);
+    s16 XyEvent_cB(int);
+    bool createInit();
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
 
 public:
-    /* Place member variables here */
+    /* 0x290 */ s16 mEventIds[1];
+    /* 0x292 */ s16 mEventIdx;
 };
 
-class daTag_Ba1_HIO_c {
+class daTag_Ba1_HIO_c : public JORReflexible {
 public:
+    struct hio_prm_c {
+        /* 0x0 */ u8 field_0x0;
+    };
+
     daTag_Ba1_HIO_c();
+    virtual ~daTag_Ba1_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
 
 public:
-    /* Place member variables here */
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ s32 mRefCount;
+    /* 0x0C */ hio_prm_c mPrm;
 };
+
 
 #endif /* D_A_TAG_BA1_H */
