@@ -221,6 +221,7 @@ public:
     void setGlobalRotation(const JGeometry::TVec3<s16>& rot) {
         JPAGetXYZRotateMtx(rot.x, rot.y, rot.z, mGlobalRotation);
     }
+    void setGlobalRotation(s16 x, s16 y, s16 z) { JPAGetXYZRotateMtx(x, y, z, mGlobalRotation); }
     void getGlobalTranslation(JGeometry::TVec3<f32>& out) const { out.set(mGlobalTranslation); }
     void setGlobalTranslation(f32 x, f32 y, f32 z) { mGlobalTranslation.set(x, y, z); }
     void setGlobalTranslation(const JGeometry::TVec3<f32>& trans) { mGlobalTranslation.set(trans); }
