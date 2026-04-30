@@ -16,15 +16,14 @@ namespace JAInter {
         Actor(Vec* p1, Vec* p2, u32 p3, void* p4) {
             field_0x0 = p1;
             field_0x4 = p2;
-            field_0x8 = p3;
-            field_0xc = p4;
+            field_0x8 = p4;
+            field_0xc = p3;
         }
 
-        // order is unclear
         Vec* field_0x0;
         Vec* field_0x4;
-        u32 field_0x8;
-        void* field_0xc;
+        void* field_0x8;
+        u32 field_0xc;
     };
 
     class Camera {
