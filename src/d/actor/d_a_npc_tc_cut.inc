@@ -26,63 +26,63 @@ void daNpc_Tc_c::cutProc() {
             dComIfGp_evmng_cutEnd(staffIdx);
         } else {
             if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
-                switch(actIdx) {
-                    case 0:
-                        cutSitToJumpStart(staffIdx);
-                        break;
-                    case 1:
-                        cutPresentStart(staffIdx);
-                        break;
-                    case 2:
-                        cutSetAnmStart(staffIdx);
-                        break;
-                    case 3:
-                        cutBackJumpStart(staffIdx);
-                        break;
-                    case 4:
-                        cutEffectStart(staffIdx);
-                        break;
-                    case 5:
-                        cutDoorOpenStart(staffIdx);
-                        break;
-                    case 6:
-                        cutDoorCloseStart(staffIdx);
-                        break;
-                    case 7:
-                        cutDoorClose2Start(staffIdx);
-                        break;
-                    case 8:
-                        cutPayStart(staffIdx);
-                        break;
-                }
-            }
-            switch(actIdx) {
+                switch (actIdx) {
                 case 0:
-                    cutSitToJumpProc(staffIdx);
+                    cutSitToJumpStart(staffIdx);
                     break;
                 case 1:
-                    cutPresentProc(staffIdx);
+                    cutPresentStart(staffIdx);
                     break;
                 case 2:
-                    cutSetAnmProc(staffIdx);
+                    cutSetAnmStart(staffIdx);
                     break;
                 case 3:
-                    cutBackJumpProc(staffIdx);
+                    cutBackJumpStart(staffIdx);
                     break;
                 case 4:
-                    cutEffectProc(staffIdx);
+                    cutEffectStart(staffIdx);
                     break;
                 case 5:
-                    cutDoorOpenProc(staffIdx);
+                    cutDoorOpenStart(staffIdx);
                     break;
                 case 6:
-                    cutDoorCloseProc(staffIdx);
+                    cutDoorCloseStart(staffIdx);
                     break;
                 case 7:
-                    cutDoorClose2Proc(staffIdx);
+                    cutDoorClose2Start(staffIdx);
                     break;
                 case 8:
-                    cutPayProc(staffIdx);
+                    cutPayStart(staffIdx);
+                    break;
+                }
+            }
+            switch (actIdx) {
+            case 0:
+                cutSitToJumpProc(staffIdx);
+                break;
+            case 1:
+                cutPresentProc(staffIdx);
+                break;
+            case 2:
+                cutSetAnmProc(staffIdx);
+                break;
+            case 3:
+                cutBackJumpProc(staffIdx);
+                break;
+            case 4:
+                cutEffectProc(staffIdx);
+                break;
+            case 5:
+                cutDoorOpenProc(staffIdx);
+                break;
+            case 6:
+                cutDoorCloseProc(staffIdx);
+                break;
+            case 7:
+                cutDoorClose2Proc(staffIdx);
+                break;
+            case 8:
+                cutPayProc(staffIdx);
             }
         }
     }
@@ -102,11 +102,11 @@ void daNpc_Tc_c::cutSitToJumpProc(int i_staffIdx) {
         mAnmPrmIdx = ANM_PRM_IDX_JAMP_B;
     }
 
-    if(speed.y <= 0.0f && mAnmPrmIdx == ANM_PRM_IDX_JAMP_B) {
+    if (speed.y <= 0.0f && mAnmPrmIdx == ANM_PRM_IDX_JAMP_B) {
         mAnmPrmIdx = ANM_PRM_IDX_JAMP_C1;
     }
 
-    if(mObjAcch.ChkGroundHit() && mAnmPrmIdx == ANM_PRM_IDX_JAMP_C1) {
+    if (mObjAcch.ChkGroundHit() && mAnmPrmIdx == ANM_PRM_IDX_JAMP_C1) {
         speedF = 0.0f;
         mAnmPrmIdx = ANM_PRM_IDX_JAMP_C2;
         mJumpLandingTimer = 0x33;
@@ -126,80 +126,80 @@ void daNpc_Tc_c::cutPresentStart(int) {
 void daNpc_Tc_c::cutPresentProc(int i_staffIdx) {
     int* pItemType = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "ItemType");
     int temp;
-    if(pItemType == NULL) {
-        temp = 0; 
+    if (pItemType == NULL) {
+        temp = 0;
     } else {
         temp = *pItemType;
     }
     int itemNo;
-    switch(temp) {
-        case 0:
-            itemNo = dItem_TINGLE_TUNER_e;
-            break;
+    switch (temp) {
+    case 0:
+        itemNo = dItem_TINGLE_TUNER_e;
+        break;
 
-        case 1:
-            itemNo = dItem_COLLECT_MAP_35_e;
-            break;
+    case 1:
+        itemNo = dItem_COLLECT_MAP_35_e;
+        break;
 
-        case 2:
-            if (mType == TYPE_RED) {
-                if (checkAllMonumentFee()) {
-                    itemNo = TINCLE_RUPEE6;
-                } else {
-                    switch (checkAllMonumentPay()) {
-                        case 1:
-                            itemNo = TINCLE_RUPEE1;
-                            break;
-                        case 2:
-                            itemNo = TINCLE_RUPEE2;
-                            break;
-                        case 3:
-                            itemNo = TINCLE_RUPEE3;
-                            break;
-                        case 4:
-                            itemNo = TINCLE_RUPEE4;
-                            break;
-                        case 5:
-                            itemNo = TINCLE_RUPEE5;
-                            break;
-                    }
-                }
-            } else if (mType == TYPE_NORMAL2) {
-                switch (analysisCollectMap()) {
-                    case 1:
-                        itemNo = TRIFORCE_MAP1;
-                        break;
-                    case 2:
-                        itemNo = TRIFORCE_MAP2;
-                        break;
-                    case 3:
-                        itemNo = TRIFORCE_MAP3;
-                        break;
-                    case 4:
-                        itemNo = TRIFORCE_MAP4;
-                        break;
-                    case 5:
-                        itemNo = TRIFORCE_MAP5;
-                        break;
-                    case 6:
-                        itemNo = TRIFORCE_MAP6;
-                        break;
-                    case 7:
-                        itemNo = TRIFORCE_MAP7;
-                        break;
-                    case 8:
-                        itemNo = TRIFORCE_MAP8;
-                        break;
+    case 2:
+        if (mType == TYPE_RED) {
+            if (checkAllMonumentFee()) {
+                itemNo = TINCLE_RUPEE6;
+            } else {
+                switch (checkAllMonumentPay()) {
+                case 1:
+                    itemNo = TINCLE_RUPEE1;
+                    break;
+                case 2:
+                    itemNo = TINCLE_RUPEE2;
+                    break;
+                case 3:
+                    itemNo = TINCLE_RUPEE3;
+                    break;
+                case 4:
+                    itemNo = TINCLE_RUPEE4;
+                    break;
+                case 5:
+                    itemNo = TINCLE_RUPEE5;
+                    break;
                 }
             }
-            break;
+        } else if (mType == TYPE_NORMAL2) {
+            switch (analysisCollectMap()) {
+            case 1:
+                itemNo = TRIFORCE_MAP1;
+                break;
+            case 2:
+                itemNo = TRIFORCE_MAP2;
+                break;
+            case 3:
+                itemNo = TRIFORCE_MAP3;
+                break;
+            case 4:
+                itemNo = TRIFORCE_MAP4;
+                break;
+            case 5:
+                itemNo = TRIFORCE_MAP5;
+                break;
+            case 6:
+                itemNo = TRIFORCE_MAP6;
+                break;
+            case 7:
+                itemNo = TRIFORCE_MAP7;
+                break;
+            case 8:
+                itemNo = TRIFORCE_MAP8;
+                break;
+            }
+        }
+        break;
     }
 #if VERSION == VERSION_DEMO
     fpc_ProcID itemPID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1);
 #else
     fpc_ProcID itemPID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, current.roomNo);
 #endif
-    if(itemPID != fpcM_ERROR_PROCESS_ID_e) {
+    if (itemPID != fpcM_ERROR_PROCESS_ID_e) {
         dComIfGp_event_setItemPartnerId(itemPID);
         dComIfGp_evmng_cutEnd(i_staffIdx);
     }
@@ -208,7 +208,7 @@ void daNpc_Tc_c::cutPresentProc(int i_staffIdx) {
 /* 00006174-000061F0       .text cutSetAnmStart__10daNpc_Tc_cFi */
 void daNpc_Tc_c::cutSetAnmStart(int i_staffIdx) {
     const char* pName = dComIfGp_evmng_getMyStringP(i_staffIdx, "Name");
-    if(pName != NULL && strcmp(pName, "GET") == 0) {
+    if (pName != NULL && strcmp(pName, "GET") == 0) {
         mAnmPrmIdx = ANM_PRM_IDX_GET;
     } else {
         mAnmPrmIdx = ANM_PRM_IDX_WAIT01;
@@ -221,7 +221,7 @@ void daNpc_Tc_c::cutSetAnmProc(int i_staffIdx) {
     if (mAnmPrmIdx == ANM_PRM_IDX_GET) {
         dComIfGp_evmng_cutEnd(i_staffIdx);
     }
-    if(mpMorf->isStop()) {
+    if (mpMorf->isStop()) {
         dComIfGp_evmng_cutEnd(i_staffIdx);
     }
 }
@@ -244,7 +244,7 @@ void daNpc_Tc_c::cutBackJumpProc(int i_staffIdx) {
         mSmokePos.set(current.pos);
         mSmokeAngle = current.angle;
         smoke_set(2.0f, 0.25f, 0.0f, 5.0f, 20.0f);
-    } else if (mObjAcch.ChkGroundHit()  && speed.y == 0.0f){
+    } else if (mObjAcch.ChkGroundHit() && speed.y == 0.0f) {
         speedF = 0.0f;
         dComIfGp_evmng_cutEnd(i_staffIdx);
     }
@@ -262,7 +262,10 @@ void daNpc_Tc_c::cutEffectStart(int) {
 
     particleScale.setall(1.0f);
 
-    JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_IT_SN_PF_BIKON00, &pos, NULL, &particleScale);
+    // reg swap
+    JPABaseEmitter* pEmitter =
+        g_dComIfG_gameInfo.play.getParticle()->setNormal(dPa_name::ID_IT_SN_PF_BIKON00, &pos, NULL, &particleScale, 0xFF, NULL, -1, NULL, NULL, NULL);
+    //JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_IT_SN_PF_BIKON00, &pos, NULL, &particleScale);
     pEmitter->setGlobalParticleScale(0.62f, 0.6f);
     fopAcM_seStart(this, JA_SE_CM_CMN_NOTICE, 0);
 }

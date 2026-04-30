@@ -1169,6 +1169,10 @@ inline s32 dComIfGs_getCollectMapNum() {
     return g_dComIfG_gameInfo.save.getPlayer().getMap().getCollectMapNum();
 }
 
+inline BOOL dComIfGs_isSaveArriveGrid(int i_no) {
+    return g_dComIfG_gameInfo.save.getPlayer().getMap().isSaveArriveGrid(i_no);
+}
+
 inline void dComIfGs_onSaveArriveGridForAgb(int i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getMap().onSaveArriveGridForAgb(i_no);
 }
