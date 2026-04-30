@@ -213,8 +213,8 @@ BOOL ks_kuttuki_check(ks_class* i_this) {
 void gm_birth_delet(ks_class* i_this) {
     if (i_this->mGmID) {
         gm_class* i_gm = (gm_class*)fopAcM_SearchByID(i_this->mGmID);
-        if (i_gm && fopAc_IsActor(i_gm) && fopAcM_GetName(i_gm) == PROC_GM && i_gm->m31E > 0) {
-            i_gm->m31E--;
+        if (i_gm && fopAc_IsActor(i_gm) && fopAcM_GetName(i_gm) == PROC_GM && i_gm->m031E > 0) {
+            i_gm->m031E--;
         }
     }
 }
