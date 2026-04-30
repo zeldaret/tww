@@ -302,7 +302,7 @@ BOOL body_atari_check(ks_class* i_this) {
                 break;
             }
             case AT_TYPE_SKULL_HAMMER: {
-                if (player->getCutType() == 0x12 || player->getCutType() == 0x13) {
+                if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING || player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER) {
                     actor->speedF = 0.0f;
                     actor->gravity = 0.0f;
                     actor->speed.setall(0.0f);
@@ -1032,9 +1032,9 @@ void action_omoi(ks_class* i_this) {
             
             if (
                 link->checkFrontRollCrash() ||
-                link->getCutType() == 8 ||
+                link->getCutType() == daPy_py_c::CUT_TYPE_CUT_TURN ||
             #if VERSION > VERSION_DEMO
-                link->getCutType() == 9 ||
+                link->getCutType() == daPy_py_c::CUT_TYPE_CUT_ROLL ||
             #endif
                 dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e)
             ) {

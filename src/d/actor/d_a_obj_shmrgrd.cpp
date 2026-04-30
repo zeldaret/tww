@@ -388,9 +388,9 @@ void daObjShmrgrd_c::set_damage() {
         cCcD_Obj *hitObj = mCylTg.GetTgHitObj();
         fopAc_ac_c* hitActor = mCylTg.GetTgHitAc();
         if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
-            if (check_player_angle(hitActor) && (attackState == 0x12 || attackState == 0x13)) {
+            if (check_player_angle(hitActor) && (attackState == daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING || attackState == daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER)) {
                 M_damage = 1;
-            } else if (attackState == 0x11) {
+            } else if (attackState == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                 M_damage_dir = cM_atan2s(mCylTg.GetTgRVecP()->x, mCylTg.GetTgRVecP()->z);
                 M_damage = 2;
             }

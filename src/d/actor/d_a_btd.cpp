@@ -2521,7 +2521,7 @@ static BOOL daBtd_Execute(btd_class* i_this) {
         }
     }
     local_6c = player->eyePos - actor->eyePos;
-    if (player->mCutType != 0) {
+    if (player->getCutType() != daPy_py_c::CUT_TYPE_NONE) {
         fVar12 = local_6c.abs();
         if (fVar12 < 400.0f) {
             i_this->m02F8 = 0x14;

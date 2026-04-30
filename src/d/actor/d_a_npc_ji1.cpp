@@ -3031,10 +3031,10 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
 
             s32 cutType = player->getCutType();
 #if VERSION == VERSION_DEMO
-            if(cutType == 9)
+            if(cutType == daPy_py_c::CUT_TYPE_CUT_ROLL)
 #else
             f32 y_diff = std::fabsf(temp.y);
-            if(cutType == 9 && y_diff < 20.0f)
+            if(cutType == daPy_py_c::CUT_TYPE_CUT_ROLL && y_diff < 20.0f)
 #endif
             {
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_0B20);
@@ -3051,7 +3051,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                 return TRUE;
             }
             
-            if(cutType == 8) {
+            if(cutType == daPy_py_c::CUT_TYPE_CUT_TURN) {
                 field_0xC84 = 0xB;
 
                 setAction(&daNpc_Ji1_c::eventAction, 0);

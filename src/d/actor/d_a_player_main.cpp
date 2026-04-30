@@ -11363,7 +11363,7 @@ BOOL daPy_lk_c::execute() {
     }
     
     if (checkResetFlg0(daPyRFlg0_UNK8000000)) {
-        mCutType = 0;
+        mCutType = CUT_TYPE_NONE;
     }
     
     mResetFlg0 = 0;

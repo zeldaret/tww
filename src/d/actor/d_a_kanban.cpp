@@ -363,7 +363,7 @@ void mother_move(kanban_class* i_this) {
                     switch (hitObj->GetAtType()) {
                         case AT_TYPE_SKULL_HAMMER:
                             i_this->m29A = 2;
-                            if (player->getCutType() != 17) {
+                            if (player->getCutType() != daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                                 i_this->m29B = 0;
                                 i_this->m2A4 = 0.0f;
                                 i_this->m2A8 = 0.0f;
