@@ -168,6 +168,7 @@ public:
     void getString(char*, u32);
     void getString(char*, char*, char*, char*, u32, f32*, f32*, int*);
     void getRubyString(char*, char*, char*, char*, char*, char*, f32*, f32*, int*);
+#if VERSION >= VERSION_USA
     void tag_len_kaisen_game(int*, f32*, int*, int*, int*);
     void tag_len_rupee(int*, f32*, int*, int*, int*);
     void tag_len_num_input(int*, f32*, int*, int*, int*);
@@ -230,6 +231,7 @@ public:
     void tag_input_pendant();
     void tag_input_hane();
     void tag_input_kenshi();
+#endif
 
 public:
     /* 0x004 */ JUTFont* font[2];
@@ -336,7 +338,9 @@ void fopMsgM_Delete(void* process);
 fopMsg_prm_class* fopMsgM_GetAppend(void* msg);
 void fopMsgM_destroyExpHeap(JKRExpHeap*);
 f32 fopMsgM_valueIncrease(int param_0, int param_1, u8 param_2);
+#if VERSION >= VERSION_USA
 bool fopMsgM_hyrule_language_check(u32 msgNo);
+#endif
 s32 fopMsgM_setStageLayer(void*);
 fpc_ProcID fopMsgM_messageSet(u32 i_msgNo, fopAc_ac_c* i_actorP);
 fpc_ProcID fopMsgM_messageSet(u32 param_0, cXyz*);

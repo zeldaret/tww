@@ -175,6 +175,7 @@ void MyPicture::drawFullSet2(f32 x, f32 y, f32 width, f32 height, J2DBinding bin
     }
 }
 
+#if VERSION >= VERSION_USA
 /* 8002AD4C-8002AE28       .text fopMsgM_hyrule_language_check__FUl */
 bool fopMsgM_hyrule_language_check(u32 msgNo) {
     if(dComIfGs_getClearCount() != 0) {
@@ -204,6 +205,7 @@ bool fopMsgM_hyrule_language_check(u32 msgNo) {
 
     return false;
 }
+#endif
 
 /* 8002AE28-8002AED4       .text fopMsgM_setStageLayer__FPv */
 s32 fopMsgM_setStageLayer(void* proc) {
@@ -574,7 +576,6 @@ u32 fopMsgM_tactMessageSet() {
 
 /* 8002BB78-8002BDBC       .text fopMsgM_messageGet__FPcUl */
 char* fopMsgM_messageGet(char* dst, u32 msgNo) {
-    /* Nonmatching - regalloc */
     fopMsgM_itemMsgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mMsgNo = 0;
@@ -583,17 +584,17 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(VERSION_SELECT(0x690, 0x690, 0x6BD, 0x6BD), head_p);
 
-    const char* src = (char*)msgGet.getMessage(head_p);
+    const char* src = msgGet.getMessage(head_p);
     const char* cursor = src;
     char* dstPtr = dst;
 
     char dstBuf[20];
-    char current;
-    while(current = *cursor, current != '\0') {
-        if((u32)current == '\x1A') {
+    s32 current;
+    while(current = *cursor, *cursor != '\0') {
+        if((u8)*cursor == 0x1A) {
             u32 next_as_int = *(u32*)(++cursor);
             if ((next_as_int & 0xFFFFFF) == 0x1E) {
-                *dstPtr = '\x1A';
+                *dstPtr = 0x1A;
                 dstPtr++;
             }
             else if ((next_as_int & 0xFFFFFF) == 0) {
@@ -660,7 +661,6 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
 
 /* 8002BE04-8002C02C       .text fopMsgM_passwordGet__FPcUl */
 char* fopMsgM_passwordGet(char* dst, u32 msgNo) {
-    /* Nonmatching - regalloc */
     fopMsgM_itemMsgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mMsgNo = 0;
@@ -669,14 +669,14 @@ char* fopMsgM_passwordGet(char* dst, u32 msgNo) {
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(VERSION_SELECT(0x6F6, 0x6F6, 0x735, 0x739), head_p);
 
-    const char* src = (char*)msgGet.getMessage(head_p);
+    const char* src = msgGet.getMessage(head_p);
     const char* cursor = src;
     char* dstPtr = dst;
 
     char dstBuf[20];
-    char current;
-    while(current = *cursor, current != '\0') {
-        if((u32)current == '\x1A') {
+    s32 current;
+    while(current = *cursor, *cursor != '\0') {
+        if((u8)*cursor == 0x1A) {
             u32 next_as_int = *(u32*)(++cursor);
             if ((next_as_int & 0xFFFFFF) == 0) {
 #if VERSION > VERSION_JPN
@@ -2412,6 +2412,7 @@ void fopMsgM_int_to_char(char* dst, int num, bool param_3) {
     }
 }
 
+#if VERSION >= VERSION_USA
 /* 80035170-800351E8       .text fopMsgM_int_to_char2__FPci */
 void fopMsgM_int_to_char2(char* dst, int num) {
     char buf[2];
@@ -2421,6 +2422,7 @@ void fopMsgM_int_to_char2(char* dst, int num) {
     buf[0] = num % 10 + '0';
     strcat(dst, buf);
 }
+#endif
 
 /* 800351E8-80035408       .text getString__21fopMsgM_msgDataProc_cFPcUl */
 void fopMsgM_msgDataProc_c::getString(char* dst, u32 msgNo) {
@@ -2628,6 +2630,7 @@ void fopMsgM_msgDataProc_c::getRubyString(char* param_1, char* param_2, char* pa
     strcat(param_4, param_6);
 }
 
+#if VERSION >= VERSION_USA
 /* 80035D28-80035E40       .text tag_len_kaisen_game__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_kaisen_game(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
     char buf[12];
@@ -3372,7 +3375,7 @@ void fopMsgM_msgDataProc_c::tag_len_get_pendant(int* param_1, f32* param_2, int*
 
     char buf[28];
 
-    int num = dComIfGs_getBeastNum(7);
+    int num = (u8)dComIfGs_getBeastNum(7);
     fopMsgM_int_to_char(buf, num, false);
 
 #if VERSION == VERSION_PAL
@@ -5319,7 +5322,7 @@ void fopMsgM_msgDataProc_c::tag_get_pendant() {
     /* Nonmatching */
     char buf[20];
 
-    int num = dComIfGs_getBeastNum(7);
+    int num = (u8)dComIfGs_getBeastNum(7);
     fopMsgM_int_to_char(buf, num, false);
 
     char* p1 = buf;
@@ -6521,6 +6524,7 @@ void fopMsgM_msgDataProc_c::tag_input_kenshi() {
 
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
+#endif
 
 /* 8003BA00-8003BA40       .text fopMsgM_centerPosCalc__F17fopMsgM_f2d_class17fopMsgM_f2d_class */
 fopMsgM_f2d_class fopMsgM_centerPosCalc(fopMsgM_f2d_class param_1, fopMsgM_f2d_class param_2) {

@@ -39,7 +39,9 @@ J2DPicture* maskPane;
 f32 talkPosX;
 f32 talkPosY;
 s16 textOffsetY;
+#if VERSION >= VERSION_USA
 bool dMsg_font_flag;
+#endif
 JKRHeap* agb_work_area;
 static dDlst_2DMSG_c message;
 dDlst_2Dtact_c capture;
@@ -637,6 +639,7 @@ void dMsg_screenDataSetTact(sub_msg_class* i_Msg) {
 /* 8020DAC0-8020DC78       .text dMsg_screenDataSet__FP13sub_msg_class */
 void dMsg_screenDataSet(sub_msg_class* i_Msg) {
     sScreen2 = NULL;
+#if VERSION >= VERSION_USA
     if (fopMsgM_hyrule_language_check(i_Msg->mMsgNo)) {
         textFont = mDoExt_getRubyFont();
         JUT_ASSERT(1162, textFont != NULL);
@@ -647,6 +650,12 @@ void dMsg_screenDataSet(sub_msg_class* i_Msg) {
         dMsg_font_flag = 0;
     }
     rubyFont = textFont;
+#else
+    textFont = mDoExt_getMesgFont();
+    JUT_ASSERT(1157, textFont != NULL);
+    textFont = mDoExt_getRubyFont();
+    JUT_ASSERT(1159, textFont != NULL);
+#endif
     for (s32 i = 0; i < 3; i++) {
         numberPane[i] = new J2DTextBox("rock_24_20_4i_usa.bfn", "0");
     }
@@ -3026,11 +3035,16 @@ static BOOL dMsg_Delete(sub_msg_class* i_Msg) {
     if (sScreen2 != NULL) {
         delete (J2DScreen*)sScreen2;
     }
+#if VERSION >= VERSION_USA
     if (dMsg_font_flag != 0) {
         mDoExt_removeRubyFont();
     } else {
         mDoExt_removeMesgFont();
     }
+#else
+    mDoExt_removeMesgFont();
+    mDoExt_removeRubyFont();
+#endif
     for (s32 i = 0; i < 8; i++) {
         delete (J2DPicture*)button_icon[i];
         delete (J2DPicture*)button_kage[i];
