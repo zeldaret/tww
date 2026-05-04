@@ -1360,7 +1360,7 @@ void fly_attack(bdk_class* i_this) {
         actor->speed.y = 0.0f;
         i_this->m2EC[0] = REG0_S(5) + 0x28;
         i_this->m2EC[1] = REG0_S(6) + 0x50;
-        dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+        dComIfGp_getVibration().StartShock(DEMO_SELECT(REG6_S(2), REG0_S(2)) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
         fopAcM_seStart(actor, JA_SE_CM_DK_CRASH_WALL, 0);
         fopAcM_monsSeStart(actor, JA_SE_CV_DK_KABE_DAMAGE, 0);
 
@@ -1417,8 +1417,8 @@ void fly_attack(bdk_class* i_this) {
     if (i_this->mAction == ACTION_FLY_ATTACK && (i_this->mState < 10)) {
         i_this->m2584 = 2;
         pos_move(i_this);
-        i_this->mAcchCir.SetWall(REG0_F(17) + 500.0f, 500.0f);
-        i_this->mAcch.SetGroundUpY(REG0_F(18));
+        i_this->mAcchCir.SetWall(DEMO_SELECT(REG6_F(17), REG0_F(17)) + 500.0f, 500.0f);
+        i_this->mAcch.SetGroundUpY(DEMO_SELECT(REG6_F(18), REG0_F(18)));
         if (i_this->mAcch.ChkGroundHit() && (i_this->m2619 == 0)) {
             for (s32 i = 0; i <= 1; i++) {
                 foot_eff_pos[i] = i_this->m1174[i];

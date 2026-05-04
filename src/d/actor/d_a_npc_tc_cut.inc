@@ -252,7 +252,6 @@ void daNpc_Tc_c::cutBackJumpProc(int i_staffIdx) {
 
 /* 000063BC-000064C8       .text cutEffectStart__10daNpc_Tc_cFi */
 void daNpc_Tc_c::cutEffectStart(int) {
-    // regswap for demo daNpc_Tc_c::setAnm also has a regswap with identical code
     cXyz pos;
     pos.x = current.pos.x;
     pos.y = current.pos.y;
@@ -266,7 +265,6 @@ void daNpc_Tc_c::cutEffectStart(int) {
     JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_IT_SN_PF_BIKON00, &pos, NULL, &particleScale);
     pEmitter->setGlobalParticleScale(0.62f, 0.6f);
     fopAcM_seStart(this, JA_SE_CM_CMN_NOTICE, 0);
-    /* Nonmatching */
 }
 
 /* 000064C8-000064F4       .text cutEffectProc__10daNpc_Tc_cFi */
