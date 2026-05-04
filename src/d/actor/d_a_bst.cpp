@@ -475,7 +475,9 @@ static void down_attack(bst_class* i_this) {
                 particle_pos = actor->current.pos;
                 particle_pos.y = 1.0f;
                 dComIfGp_particle_setProjection(dPa_name::ID_AK_SP_BSTSHOCKWAVEH00, &particle_pos);
-                dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BSTATTACK1HSMOKE00, &particle_pos, NULL, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
+                dComIfGp_particle_setToon(
+                    dPa_name::ID_AK_ST_BSTATTACK1HSMOKE00, &particle_pos, NULL, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor)
+                );
             }
         } else {
             actor->speed.y += REG0_F(14) + 0.5f;
@@ -537,7 +539,7 @@ static void paa_attack(bst_class* i_this) {
         if (local_38.abs() > REG0_F(0xc) + 200.0f) {
             cLib_addCalc2(&actor->speedF, 40.0f, 1.0f, REG0_F(0xd) + 2.0f);
         } else {
-            cLib_addCalc0(&actor->speedF, 1.0f, (REG0_F(0xd) + 2.0f));
+            cLib_addCalc0(&actor->speedF, 1.0f, REG0_F(0xd) + 2.0f);
         }
         i_this->m10EC.x = REG0_F(5) + 8000.0f;
         cMtx_YrotS(*calc_mtx, (int)i_this->m111C);
@@ -672,7 +674,7 @@ static void kumi_attack(bst_class* i_this) {
         if (local_38.abs() > REG0_F(0xc) + 200.0f) {
             cLib_addCalc2(&actor->speedF, 40.0f, 1.0f, REG0_F(0xd) + 2.0f);
         } else {
-            cLib_addCalc0(&actor->speedF, 1.0f, (REG0_F(0xd) + 2.0f));
+            cLib_addCalc0(&actor->speedF, 1.0f, REG0_F(0xd) + 2.0f);
         }
         i_this->m10EC.x = REG0_F(5) + 8000.0f;
         cMtx_YrotS(*calc_mtx, (int)i_this->m111C);
@@ -742,7 +744,9 @@ static void kumi_attack(bst_class* i_this) {
                     local_50 = i_this->mTargetPos;
                     local_50.y = 1.0f;
                     dComIfGp_particle_setProjection(dPa_name::ID_AK_SP_BSTSHOCKWAVEH00, &local_50);
-                    dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BSTATTACK2HSMOKE00, &local_50, NULL, NULL, 0xb9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
+                    dComIfGp_particle_setToon(
+                        dPa_name::ID_AK_ST_BSTATTACK2HSMOKE00, &local_50, NULL, NULL, 0xb9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor)
+                    );
                     dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                     fopAcM_seStartCurrent(actor, JA_SE_CM_BST_2_HAND_ATTACK, 0);
                 }
@@ -852,7 +856,7 @@ static void harai_attack(bst_class* i_this) {
         break;
     case 3:
         cVar3 = 1;
-        cLib_addCalc0(&actor->speedF, 1.0f, (REG0_F(0xd) + 3.0f));
+        cLib_addCalc0(&actor->speedF, 1.0f, REG0_F(0xd) + 3.0f);
         if (i_this->m10FC[0] == 0) {
             i_this->mActionType = bst_class::ACTION_FLY_e;
             i_this->mDamage = 0;
@@ -1089,7 +1093,12 @@ static void head_damage(bst_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz v;
     f32 dist;
-    static u16 bomb_eff_name[] = {dPa_name::ID_AK_SN_BSTBOMBNOSTRILSMOKEL00, dPa_name::ID_AK_SN_BSTBOMBNOSTRILSMOKER00, dPa_name::ID_AK_SN_BSTBOMBEARSMOKEL00, dPa_name::ID_AK_SN_BSTBOMBEARSMOKER00};
+    static u16 bomb_eff_name[] = {
+        dPa_name::ID_AK_SN_BSTBOMBNOSTRILSMOKEL00,
+        dPa_name::ID_AK_SN_BSTBOMBNOSTRILSMOKER00,
+        dPa_name::ID_AK_SN_BSTBOMBEARSMOKEL00,
+        dPa_name::ID_AK_SN_BSTBOMBEARSMOKER00
+    };
 
     i_this->mState = 10;
     i_this->m2E74[0] = 10;
@@ -1126,7 +1135,9 @@ static void head_damage(bst_class* i_this) {
             if (actor->current.pos.y <= REG0_F(14)) {
                 actor->current.pos.y = REG0_F(14);
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
-                dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BSTDROPHEADSMOKE00, &actor->current.pos, NULL, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
+                dComIfGp_particle_setToon(
+                    dPa_name::ID_AK_ST_BSTDROPHEADSMOKE00, &actor->current.pos, NULL, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor)
+                );
                 i_this->m112A = REG0_S(7) + 4;
                 mDoAud_seStart(JA_SE_CM_BST_HEAD_FALL, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
                 mDoAud_seStart(JA_SE_CM_BST_MOUTH_OPEN, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
@@ -1895,14 +1906,14 @@ static void beam_eff_set(cXyz* pos, short y, u8 set_angle) {
 
 /* 00006FA4-00007308       .text beam_wall_check__FP4cXyzP4cXyz */
 static BOOL beam_wall_check(cXyz* pos_1, cXyz* pos_2) {
-    dBgS_LinChk chk;
+    dBgS_LinChk gndChk;
     cXyz start = *pos_1 - *pos_2;
     start.y += 50.0f;
     cXyz end(*pos_1);
     end.y = start.y;
-    chk.Set(&start, &end, NULL);
-    if (dComIfG_Bgsp()->LineCross(&chk)) {
-        *pos_1 = chk.mLin.GetEnd();
+    gndChk.Set(&start, &end, NULL);
+    if (dComIfG_Bgsp()->LineCross(&gndChk)) {
+        *pos_1 = gndChk.mLin.GetEnd();
         return TRUE;
     }
     return FALSE;
@@ -1916,7 +1927,7 @@ static void beam_move(bst_class* i_this) {
     cXyz* pos2;
     J3DModel* model;
     s8 beam_set;
-    dBgS_GndChk chk;
+    dBgS_GndChk gndChk;
     for (s32 i = 0; i < 10; i++) {
         if (i_this->m04E4[i] == 0) {
             continue;
@@ -1933,8 +1944,8 @@ static void beam_move(bst_class* i_this) {
         cLib_addCalc2(&i_this->m10A8[i], REG0_F(4) + 5.0f, 1.0f, REG0_F(5) + 0.5f);
         beam_set = FALSE;
         f32 fVar1 = 500.0f;
-        chk.m_pos.set(i_this->m03B8[i].x, i_this->m03B8[i].z + fVar1, i_this->m03B8[i].y);
-        f32 ground_cross = dComIfG_Bgsp()->GroundCross(&chk);
+        gndChk.m_pos.set(i_this->m03B8[i].x, i_this->m03B8[i].z + fVar1, i_this->m03B8[i].y);
+        f32 ground_cross = dComIfG_Bgsp()->GroundCross(&gndChk);
         if (ground_cross >= i_this->m03B8[i].y) {
             i_this->m03B8[i].y = ground_cross;
             beam_eff_set(pos1, 0, 0);
@@ -2278,7 +2289,7 @@ void demo_camera(bst_class* i_this) {
             dComIfGp_event_reset();
             i_this->m2E9A = 0;
             i_this->m2E7C = 10;
-            g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossDemo();
+            dComIfGs_onStageBossDemo();
             mDoAud_bgmStart(JA_BGM_BST_BATTLE);
             i_this->m2FE4 = 1;
             i_this->m2E98 = 1;
@@ -2838,9 +2849,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         if (i_this->m2FD4 == NULL) {
             return FALSE;
         }
-        res = i_this->m2FD4->init(
-            modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_HBSITA1), TRUE, J3DFrameCtrl::EMode_LOOP
-        );
+        res = i_this->m2FD4->init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_HBSITA1), TRUE, J3DFrameCtrl::EMode_LOOP);
         if (res == 0) {
             return FALSE;
         }
@@ -2897,9 +2906,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     if (i_this->mpBrkAnm == NULL) {
         return FALSE;
     }
-    res = i_this->mpBrkAnm->init(
-        modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", set_za_brk_d[i_this->mBstPartType]), TRUE, J3DFrameCtrl::EMode_NONE
-    );
+    res = i_this->mpBrkAnm->init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", set_za_brk_d[i_this->mBstPartType]), TRUE, J3DFrameCtrl::EMode_NONE);
     if (res == 0) {
         return FALSE;
     }

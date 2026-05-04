@@ -71,7 +71,7 @@ daBdk_HIO_c::daBdk_HIO_c() {
 
 /* 0000015C-000001A8       .text kamome_delete_sub__FPvPv */
 void* kamome_delete_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_KAMOME) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_KAMOME) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -79,7 +79,7 @@ void* kamome_delete_sub(void* param_1, void*) {
 
 /* 000001A8-000001F4       .text kui_delete_sub__FPvPv */
 void* kui_delete_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_KUI) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_KUI) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -87,7 +87,7 @@ void* kui_delete_sub(void* param_1, void*) {
 
 /* 000001F4-00000240       .text ep_delete_sub__FPvPv */
 void* ep_delete_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_EP) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_EP) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -95,7 +95,7 @@ void* ep_delete_sub(void* param_1, void*) {
 
 /* 00000240-0000028C       .text dk_delete_sub__FPvPv */
 void* dk_delete_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_DK) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_DK) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -104,7 +104,7 @@ void* dk_delete_sub(void* param_1, void*) {
 /* 0000028C-000002E8       .text obj_delete_sub__FPvPv */
 void* obj_delete_sub(void* param_1, void*) {
     fopAc_ac_c* actor = static_cast<fopAc_ac_c*>(param_1);
-    if (fopAc_IsActor(actor) && fopAcM_GetName(actor) == PROC_BDKOBJ
+    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_BDKOBJ
     && (fopAcM_GetParam(actor) & 0xF) >= 2) {
         fopAcM_delete(actor);
     }
@@ -113,7 +113,7 @@ void* obj_delete_sub(void* param_1, void*) {
 
 /* 000002E8-00000334       .text sea_delete_sub__FPvPv */
 void* sea_delete_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_Obj_Tide) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_Obj_Tide) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -121,7 +121,7 @@ void* sea_delete_sub(void* param_1, void*) {
 
 /* 00000334-00000380       .text bk_delete_sub__FPvPv */
 void* bk_delete_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BK) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BK) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -129,7 +129,7 @@ void* bk_delete_sub(void* param_1, void*) {
 
 /* 00000380-000003CC       .text boko_delete_sub__FPvPv */
 void* boko_delete_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BOKO) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BOKO) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -138,7 +138,7 @@ void* boko_delete_sub(void* param_1, void*) {
 /* 000003CC-00000424       .text obj2_delete_sub__FPvPv */
 void* obj2_delete_sub(void* param_1, void*) {
     fopAc_ac_c* actor = static_cast<fopAc_ac_c*>(param_1);
-    if (fopAc_IsActor(actor) && fopAcM_GetName(actor) == PROC_BDKOBJ
+    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_BDKOBJ
     && actor->model == NULL) {
         fopAcM_delete(actor);
     }
@@ -1952,7 +1952,7 @@ void end(bdk_class* i_this) {
 /* 00005EA0-00005F08       .text obj_s_sub__FPvPv */
 void* obj_s_sub(void* param_1, void*) {
     fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
-    if (fopAc_IsActor(actor) && fopAcM_GetName(actor) == PROC_BDKOBJ && (fpcM_GetParam(actor) & 0xF) != 0xF && actor->health != 0) {
+    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_BDKOBJ && (fpcM_GetParam(actor) & 0xF) != 0xF && actor->health != 0) {
         return param_1;
     }
     return NULL;

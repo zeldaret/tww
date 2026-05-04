@@ -7,49 +7,16 @@
 #include "d/d_particle.h"
 
 struct bpw_class {
-    enum Actor_Type_e {
-        Actor_Type_BODY_e = 0,
-        Actor_Type_KANTERA_e = 1,
-        Actor_Type_DAMAGE_BALL_e = 2,
-        Actor_Type_TORITUKI_e = 3,
-    };
-
-    enum Damage_Action_e {
-        Damage_Action_LINE_e = 0,
-        Damage_Action_DAMAGE_BALL_e = 1,
-    };
-
-    enum Action_e {
-        Action_MOVE_DOUSA_e = 0,
-        Action_ATTACK_KOUGEKI_e = 1,
-        Action_BODY_DOWN_KARADA_TAORE_e = 2,
-        Action_DAMAGE_e = 3,
-        Action_SEPARATION_BUNRI_DOUSA_e = 4,
-        Action_START_DEMO_e = 20,
-    };
-
-    enum Action_State_Type_e {
-        Action_State_DAMAGE_CARRIED_e = 0x54,
-        Action_State_DAMAGE_THROWN_e = 0x55,
-        Action_State_DAMAGE_HIT_e = 0x65,
-        Action_State_SEPARATE_BUNRI_DOUSA_INIT_e = 0x6E,
-        Action_State_SEPARATE_BUNRI_DOUSA_EXECUTE_e = 0x6F,
-        Action_State_SEPARATE_BUNRI_DOUSA_END_INIT_e = 0x72,
-        Action_State_SEPARATE_BUNRI_DOUSA_END_GATHER_e = 0x73,
-        Action_State_SEPARATE_BUNRI_DOUSA_END_GROW_e = 0x74,
-        Action_State_SEPARATE_BUNRI_DOUSA_END_FINISH_e = 0x75,
-    };
-
     /* 0x000 */ fopEn_enemy_c actor;
-    /* 0x2AC */ request_of_phase_process_class m2AC;
-    /* 0x2B4 */ mDoExt_McaMorf* mpAnim;
+    /* 0x2AC */ request_of_phase_process_class mPhase;
+    /* 0x2B4 */ mDoExt_McaMorf* mpMorf;
     /* 0x2B8 */ u8 m2B8[0x2BC - 0x2B8];
-    /* 0x2BC */ mDoExt_brkAnm* mBrkAnim;
-    /* 0x2C0 */ mDoExt_brkAnm* mKanteraAnim;
-    /* 0x2C4 */ mDoExt_brkAnm* m2C4;
-    /* 0x2C8 */ mDoExt_brkAnm* m2C8;
-    /* 0x2CC */ mDoExt_brkAnm* m2CC;
-    /* 0x2D0 */ mDoExt_brkAnm* m2D0;
+    /* 0x2BC */ mDoExt_brkAnm* mpLightFreezeBrkAnm; // Freezing before falling to the ground
+    /* 0x2C0 */ mDoExt_brkAnm* mpLanternGlowBrkAnm;
+    /* 0x2C4 */ mDoExt_brkAnm* mpLightStunBrkAnm;  // Hit with light from the Mirror Shield before freezing
+    /* 0x2C8 */ mDoExt_brkAnm* mpCurseStartBrkAnm; // Falling on Link and inverting the controls
+    /* 0x2CC */ mDoExt_brkAnm* mpCurseEndBrkAnm;
+    /* 0x2D0 */ mDoExt_brkAnm* mpDefaultBrkAnm;
     /* 0x2D4 */ Mtx m2D4;
     /* 0x304 */ cXyz m304[3];
     /* 0x328 */ cXyz m328[3];
@@ -73,7 +40,7 @@ struct bpw_class {
     /* 0x3DC */ u8 mType;
     /* 0x3DD */ u8 mUnknownParam2;
     /* 0x3DE */ u8 mLightState;
-    /* 0x3DF */ u8 m3DF;
+    /* 0x3DF */ u8 mHitType;
     /* 0x3E0 */ u8 m3E0;
     /* 0x3E1 */ u8 m3E1;
     /* 0x3E2 */ u8 m3E2;
@@ -94,9 +61,9 @@ struct bpw_class {
     /* 0x3FC */ fpc_ProcID m3FC;
     /* 0x400 */ fpc_ProcID m400;
     /* 0x404 */ fpc_ProcID m404;
-    #if VERSION > VERSION_DEMO
+#if VERSION > VERSION_DEMO
     /* 0x408 */ s16 m408;
-    #endif
+#endif
     /* 0x40C */ cXyz m40C;
     /* 0x418 */ cXyz m418;
     /* 0x424 */ cXyz m424;
@@ -131,31 +98,31 @@ struct bpw_class {
     /* 0x4A4 */ f32 m4A4;
     /* 0x4A8 */ f32 m4A8;
     /* 0x4AC */ int mChildPoeIds[15];
-    /* 0x4E8 */ u32 m4E8;
-    /* 0x4EC */ LIGHT_INFLUENCE m4EC;
-    #if VERSION == VERSION_DEMO
+    /* 0x4E8 */ u32 mShadowId;
+    /* 0x4EC */ LIGHT_INFLUENCE mLightInfluence;
+#if VERSION == VERSION_DEMO
     /* 0x508 */ JPABaseEmitter* m508_demo;
     /* 0x50C */ JPABaseEmitter* m50C_demo;
     /* 0x510 */ JPABaseEmitter* m510_demo;
-    #endif
+#endif
     /* 0x50C */ dPa_smokeEcallBack m50C;
-    #if VERSION == VERSION_DEMO
+#if VERSION == VERSION_DEMO
     /* 0x534 */ JPABaseEmitter* m534_demo;
     /* 0x538 */ JPABaseEmitter* m538_demo;
     /* 0x53C */ JPABaseEmitter* m53C_demo;
     /* 0x540 */ JPABaseEmitter* m540_demo;
-    #else
+#else
     /* 0x52C */ dPa_followEcallBack m52C;
     /* 0x540 */ dPa_followEcallBack m540;
-    #endif
+#endif
     /* 0x554 */ dPa_followEcallBack m554;
     /* 0x568 */ dPa_followEcallBack mFire1Dousa_Pa_followEcallBack;
     /* 0x57C */ dPa_followEcallBack mFire1Dousa_Pa_followEcallBack2;
     /* 0x590 */ dPa_followEcallBack m590;
-    #if VERSION == VERSION_DEMO
+#if VERSION == VERSION_DEMO
     /* 0x594 */ JPABaseEmitter* m594_demo;
     /* 0x598 */ JPABaseEmitter* m598_demo;
-    #endif
+#endif
     /* 0x5A4 */ dPa_followEcallBack mFireDousa2_Pa_followEcallBack;
     /* 0x5B8 */ dPa_followEcallBack mFireDousa2_Pa_followEcallBack2;
     /* 0x5CC */ dPa_followEcallBack m5CC;
@@ -175,7 +142,7 @@ struct bpw_class {
     /* 0x9F4 */ dCcD_Sph mBodyAtSph;
     /* 0xB20 */ dCcD_Sph mKanteraCoSph;
     /* 0xC4C */ dCcD_Sph mDamageBallCoSph;
-    /* 0xD78 */ mDoExt_invisibleModel mD78;
+    /* 0xD78 */ mDoExt_invisibleModel mInvisibleModel;
 };
 
 #endif /* D_A_BPW_H */
