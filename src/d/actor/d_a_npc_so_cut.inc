@@ -265,10 +265,7 @@ void daNpc_So_c::cutEffectStart() {
     cXyz local_28;
     local_28.setall(1.0f);
 
-    // reg swap
-    JPABaseEmitter* pEmitter =
-        g_dComIfG_gameInfo.play.getParticle()->setNormal(dPa_name::ID_IT_SN_PF_BIKON00, &local_1C, NULL, &local_28, 0xFF, NULL, -1, NULL, NULL, NULL);
-    // JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_IT_SN_PF_BIKON00, &local_1C, NULL, &local_28);
+    JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_IT_SN_PF_BIKON00, &local_1C, NULL, &local_28);
     pEmitter->setGlobalParticleScale(0.62f, 0.6f);
     fopAcM_seStart(this, JA_SE_CM_CMN_NOTICE, 0);
 }
