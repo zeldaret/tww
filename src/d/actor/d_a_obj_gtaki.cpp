@@ -41,6 +41,7 @@ static dCcD_SrcCyl l_cyl_src = {
     }},
 };
 
+
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
     return ((daObjGtaki_c*)i_actor)->CreateHeap();
@@ -54,9 +55,9 @@ void daObjGtaki_c::setDummyTexture() {
     JUT_ASSERT(DEMO_SELECT(178, 180), texture != NULL);
     JUT_ASSERT(DEMO_SELECT(179, 181), textureName != NULL);
 
-    for (u16 i = 0; i < texture->getNum(); i++) {
-        if (!strcmp(textureName->getName(i), "B_dummy")) {
-            texture->setResTIMG(i, *mDoGph_gInf_c::getFrameBufferTimg());
+    for (u16 i = 0; i<texture->getNum(); i++) {
+        if(!strcmp(textureName->getName(i), "B_dummy")){
+            texture->setResTIMG(i,*mDoGph_gInf_c::getFrameBufferTimg());
         }
     }
     mDoExt_modelTexturePatch(modeldata);
@@ -67,22 +68,21 @@ BOOL daObjGtaki_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Gtaki", GTAKI_BDL_GTAKI);
     JUT_ASSERT(DEMO_SELECT(265, 267), modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-    if (mpModel == NULL)
-        return FALSE;
+    if(mpModel == NULL) return FALSE;
 
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Gtaki", GTAKI_BTK_GTAKI));
     JUT_ASSERT(DEMO_SELECT(275, 277), btk != NULL);
     mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0, 0, -1, false, 0);
     setDummyTexture();
-
+    
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mDoMtx_stack_c::scaleM(scale);
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
 
     mpBgW = new dBgW();
-
-    if (!mpBgW || mpBgW->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Gtaki", GTAKI_DZB_ITAKI)), cBgW::MOVE_BG_e, &mMtx)) {
+    
+    if(!mpBgW || mpBgW->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Gtaki", GTAKI_DZB_ITAKI)), cBgW::MOVE_BG_e, &mMtx)){
         return FALSE;
     }
 
@@ -91,7 +91,7 @@ BOOL daObjGtaki_c::CreateHeap() {
 
 void daObjGtaki_c::set_effect() {
     JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_AK_SN_GANONFALLSSPLASH00, &current.pos, NULL, NULL, 0xff, NULL, -1, NULL, NULL, NULL);
-    if (emitter != NULL) {
+    if(emitter != NULL){
         JGeometry::TVec3<f32> p_scale;
         p_scale.set(scale.x, scale.y, scale.z);
         emitter->setGlobalDynamicsScale(p_scale);
@@ -108,7 +108,7 @@ void daObjGtaki_c::set_effect() {
 bool daObjGtaki_c::CreateInit() {
     /* Nonmatching */
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f, 600.0f, 10000.0f, 600.0f);
+    fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f,600.0f,10000.0f,600.0f);
     fopAcM_setCullSizeFar(this, 1.0f);
     mStts.Init(0xff, 0xff, this);
 
@@ -140,19 +140,19 @@ static cPhs_State daObjGtaki_Create(void* i_this) {
 cPhs_State daObjGtaki_c::_create() {
     fopAcM_SetupActor(this, daObjGtaki_c);
     cPhs_State state = dComIfG_resLoad(&mPhase, "Gtaki");
-    if (state == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, DEMO_SELECT(0xD20, 0x3450))) {
+    if(state == cPhs_COMPLEATE_e){
+        if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, DEMO_SELECT(0xD20, 0x3450))){
             state = cPhs_ERROR_e;
             return state;
-        } else
-            CreateInit();
+        }
+        else CreateInit();
     }
     return state;
 }
 
-bool daObjGtaki_c::_delete() {
+bool daObjGtaki_c::_delete(){
 #if VERSION > VERSION_DEMO
-    if (heap != NULL)
+    if(heap != NULL)
 #endif
     {
         dComIfG_Bgsp()->Release(mpBgW);
@@ -166,7 +166,7 @@ static BOOL daObjGtaki_Delete(void* i_this) {
     return ((daObjGtaki_c*)i_this)->_delete();
 }
 
-bool daObjGtaki_c::_draw() {
+bool daObjGtaki_c::_draw(){
     g_env_light.settingTevStruct(TEV_TYPE_BG3, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
@@ -186,7 +186,7 @@ static BOOL daObjGtaki_Draw(void* i_this) {
     return ((daObjGtaki_c*)i_this)->_draw();
 }
 
-bool daObjGtaki_c::_execute() {
+bool daObjGtaki_c::_execute(){
     mCyl.SetC(current.pos);
     dComIfG_Ccsp()->Set(&mCyl);
     mBtkAnm.play();
