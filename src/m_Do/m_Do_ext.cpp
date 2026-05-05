@@ -1266,7 +1266,7 @@ void mDoExt_MtxCalcOldFrame::decOldFrameMorfCounter() {
 /* 80012650-800129E4       .text __ct__14mDoExt_McaMorfFP12J3DModelDataP25mDoExt_McaMorfCallBack1_cP25mDoExt_McaMorfCallBack2_cP15J3DAnmTransformifiiiPvUlUl */
 mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* callback1,
                                mDoExt_McaMorfCallBack2_c* callback2, J3DAnmTransform* anmTransform,
-                               int loopMode, f32 param_5, int param_6, int param_7, int param_8,
+                               int loopMode, f32 playSpeed, int startFrame, int endFrame, BOOL param_8,
                                void* basAnm, u32 modelFlag, u32 differedDlistFlag) {
     mpModel = NULL;
     mpSound = NULL;
@@ -1292,7 +1292,7 @@ mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_
     if (basAnm == NULL && anmTransform) {
         basAnm = ((mDoExt_transAnmBas*)anmTransform)->getBas();
         if (basAnm) {
-            param_8 = 1;
+            param_8 = TRUE;
         }
     }
     if (param_8) {
@@ -1301,7 +1301,7 @@ mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_
             goto ERROR_EXIT;
         }
     }
-    setAnm(anmTransform, loopMode, 0.0f, param_5, param_6, param_7, basAnm);
+    setAnm(anmTransform, loopMode, 0.0f, playSpeed, startFrame, endFrame, basAnm);
     mPrevMorf = -1.0f;
     mpTransformInfo = new J3DTransformInfo[modelData->getJointNum()];
     if (!mpTransformInfo) {

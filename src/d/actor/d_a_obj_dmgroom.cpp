@@ -23,14 +23,14 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000098-000001FC       .text CreateHeap__14daObjDmgroom_cFv */
 BOOL daObjDmgroom_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Dmgroom", DMGROOM_BDL_DMGROOM));
-    JUT_ASSERT(0x52, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(81, 82), modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x00, 0x11020203);
     if (!mpModel)
         return FALSE;
 
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Dmgroom", DMGROOM_BRK_DMGROOM));
-    JUT_ASSERT(0x5c, brk != NULL);
-    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
+    JUT_ASSERT(DEMO_SELECT(91, 92), brk != NULL);
+    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE))
         return FALSE;
 
     return TRUE;
@@ -69,15 +69,26 @@ cPhs_State daObjDmgroom_c::_create() {
 }
 
 bool daObjDmgroom_c::_delete() {
-    dComIfG_resDelete(&mPhs, "Dmgroom");
+    dComIfG_resDeleteDemo(&mPhs, "Dmgroom");
     return true;
 }
 
 bool daObjDmgroom_c::_execute() {
     if (demoActorID != 0) {
         dDemo_actor_c * demoAc = dComIfGp_demo_getActor(demoActorID);
-        if (demoAc != NULL && demoAc->checkEnable(dDemo_actor_c::ENABLE_ANM_FRAME_e))
-            mBrkAnm.setFrame(demoAc->getAnmFrame());
+        if (demoAc != NULL) {
+#if VERSION == VERSION_DEMO
+            if (demoAc->checkEnable(dDemo_actor_c::ENABLE_ROTATE_e)) {
+                current.angle = *demoAc->getRatate();
+            }
+            if (demoAc->checkEnable(dDemo_actor_c::ENABLE_TRANS_e)) {
+                current.pos = *demoAc->getTrans();
+            }
+#endif
+            if (demoAc->checkEnable(dDemo_actor_c::ENABLE_ANM_FRAME_e)) {
+                mBrkAnm.setFrame(demoAc->getAnmFrame());
+            }
+        }
     }
     set_mtx();
     return true;

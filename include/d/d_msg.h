@@ -91,6 +91,6 @@ public:
     void* field_0x8;
 };
 
-extern JKRHeap* dMsg_getAgbWorkArea();
+JKRHeap* dMsg_getAgbWorkArea();
 
 #endif /* D_MSG_H */

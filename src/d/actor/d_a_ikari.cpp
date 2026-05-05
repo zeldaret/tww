@@ -138,12 +138,12 @@ cPhs_State daIkari_c::_create() {
         } else {
             setMtx();
 
-            f32 mScaleX = scale.x;
+            f32 scaleX = scale.x;
 
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             fopAcM_setCullSizeBox(this,
-                -160.0f * mScaleX, -2500.0f * mScaleX, -600.0f * mScaleX,
-                160.0f * mScaleX, 100.0f * mScaleX, 600.0f * mScaleX);
+                -160.0f * scaleX, -2500.0f * scaleX, -600.0f * scaleX,
+                160.0f * scaleX, 100.0f * scaleX, 600.0f * scaleX);
             fopAcM_setCullSizeFar(this, 10.0f);
 
             mTimer = (short)(int)cM_rndF(32768.0f);

@@ -73,14 +73,14 @@ BOOL daDekuItem_c::CreateHeap() {
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, DEKU_BCK_VLFDK);
     JUT_ASSERT(0x103, pbck != NULL);
 
-    if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false)) {
+    if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
 
     pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, DEKU_BCK_VLFDM);
     JUT_ASSERT(0x110, pbck != NULL);
 
-    if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
+    if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 

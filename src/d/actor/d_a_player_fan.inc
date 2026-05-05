@@ -121,7 +121,7 @@ void daPy_lk_c::setFanModel() {
     J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_USEFANAA);
     JKRHeap* oldHeap = setItemHeap();
     J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_FAN, 0x37221222);
-    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(242, FALSE);
     }
@@ -134,7 +134,7 @@ void daPy_lk_c::setSmallFanModel() {
     J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_FANWAIT);
     JKRHeap* oldHeap = setItemHeap();
     tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_FANSMALL, 0x37221222);
-    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(275, FALSE);
     }
@@ -191,7 +191,7 @@ BOOL daPy_lk_c::procFanSwing_init() {
     setFanModel();
     mProcVar0.m3570 = 0;
     voiceStart(7);
-    setAtParam(AT_TYPE_UNK2000000, 1, dCcG_At_Spl_UNK0, dCcG_SE_UNK4, dCcG_AtHitMark_Nrm_e, 0, 50.0f);
+    setAtParam(AT_TYPE_UNK2000000, 1, dCcG_At_Spl_UNK0, dCcG_SE_UNK4, dCcG_AtHitMark_Nrm_e, CUT_TYPE_NONE, 50.0f);
     m35EC = m_HIO->mItem.mFan.m.field_0x10;
     if (setShapeFanLeaf()) {
         m34D0 = 1;

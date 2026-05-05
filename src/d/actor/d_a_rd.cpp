@@ -259,7 +259,7 @@ BOOL daRd_c::_createHeap() {
     
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, RD_BTK_RD_CLOSE));
     JUT_ASSERT(DEMO_SELECT(528, 525), btk != NULL);
-    if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
     
@@ -267,7 +267,7 @@ BOOL daRd_c::_createHeap() {
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
     JUT_ASSERT(DEMO_SELECT(553, 550), brk != NULL);
-    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
     
@@ -566,21 +566,21 @@ bool daRd_c::checkTgHit() {
             fopAcM_seStart(this, JA_SE_LK_SW_HIT_S, 0x20);
             
             switch (player->getCutType()) {
-            case 0x05:
-            case 0x06:
-            case 0x07:
-            case 0x08:
-            case 0x09:
-            case 0x0A:
-            case 0x0C:
-            case 0x0E:
-            case 0x0F:
-            case 0x10:
-            case 0x15:
-            case 0x17:
-            case 0x19:
-            case 0x1A:
-            case 0x1B:
+            case daPy_py_c::CUT_TYPE_BT_JUMPCUT:
+            case daPy_py_c::CUT_TYPE_CUT_EA:
+            case daPy_py_c::CUT_TYPE_CUT_EB:
+            case daPy_py_c::CUT_TYPE_CUT_TURN:
+            case daPy_py_c::CUT_TYPE_CUT_ROLL:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_STICK:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE:
+            case daPy_py_c::CUT_TYPE_BT_ROLLCUT:
+            case daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_CLUB:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR:
+            case daPy_py_c::CUT_TYPE_CUT_EXA:
+            case daPy_py_c::CUT_TYPE_CUT_EXB:
                 mHitType = 1;
                 break;
             default:
@@ -609,7 +609,7 @@ bool daRd_c::checkTgHit() {
         case AT_TYPE_STALFOS_MACE:
             fopAcM_seStart(this, JA_SE_LK_HAMMER_HIT, 0x20);
             mHitType = 7;
-            if (player->getCutType() == 0x11) {
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                 mHitType = 8;
             }
             break;

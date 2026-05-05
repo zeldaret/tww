@@ -68,14 +68,21 @@ cPhs_State daObjEayogn_c::_create() {
 
 /* 0000029C-00000330       .text _delete__13daObjEayogn_cFv */
 bool daObjEayogn_c::_delete() {
-    if (heap != NULL && mpBgW != NULL) {
+    if (
+#if VERSION > VERSION_DEMO
+        heap != NULL &&
+#endif
+        mpBgW != NULL
+    ) {
         if (mpBgW->ChkUsed()) {
             dComIfG_Bgsp()->Release(mpBgW);
+#if VERSION > VERSION_DEMO
             mpBgW = NULL;
+#endif
         }
     }
 
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
 
     return true;
 }

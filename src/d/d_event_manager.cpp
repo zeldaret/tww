@@ -399,7 +399,7 @@ BOOL dEvent_manager_c::endCheckOld(const char* eventName) {
 
 /* 800745E0-80074718       .text getMyStaffId__16dEvent_manager_cFPCcP10fopAc_ac_ci */
 int dEvent_manager_c::getMyStaffId(const char* name, fopAc_ac_c* actor, int tagId) {
-    if (dComIfGp_event_getMode() == dEvtMode_NONE_e)
+    if (!dComIfGp_event_runCheck())
         return -1;
 
     if (mList.getHeaderP() == NULL)

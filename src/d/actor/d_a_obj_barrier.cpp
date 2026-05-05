@@ -111,9 +111,9 @@ bool daObjBarrier_anm_c::init() {
     } else {
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x1000200);
         BOOL btk_init =
-            mBtk.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+            mBtk.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP);
         BOOL brk_init =
-            mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+            mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP);
 
         if (mpModel == NULL || !btk_init || !brk_init) {
             rt = false;
@@ -236,16 +236,16 @@ void daObjBarrier_c::break_start_wait_proc() {
             dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e)
         {
             switch (player_p->getCutType()) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
+            case daPy_py_c::CUT_TYPE_CUT_A:
+            case daPy_py_c::CUT_TYPE_CUT_F:
+            case daPy_py_c::CUT_TYPE_CUT_R:
+            case daPy_py_c::CUT_TYPE_CUT_L:
+            case daPy_py_c::CUT_TYPE_BT_JUMPCUT: // ???
+            case daPy_py_c::CUT_TYPE_CUT_EA:
+            case daPy_py_c::CUT_TYPE_CUT_EB:
+            case daPy_py_c::CUT_TYPE_CUT_TURN:
+            case daPy_py_c::CUT_TYPE_CUT_ROLL:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
                 dComIfGs_onEventBit(dSv_event_flag_c::BARRIER_BREAK);
                 mEventID = dComIfGp_evmng_getEventIdx("seal");
                 mBarrierProc = PROC_BREAK_ORDER;

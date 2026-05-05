@@ -148,8 +148,7 @@ BOOL daWindMill_c::CreateHeap() {
     if (m_dzbidx[mType] != -1) {
         mpBgW = new dBgW();
         if (mpBgW != NULL) {
-            cBgD_t* res = (cBgD_t*) dComIfG_getObjectRes(
-                m_arcname[mType], m_dzbidx[mType]);
+            cBgD_t* res = (cBgD_t*) dComIfG_getObjectRes(m_arcname[mType], m_dzbidx[mType]);
             if (mpBgW->Set(res, cBgW::MOVE_BG_e, &mMtx) == TRUE) {
                 return FALSE;
             }

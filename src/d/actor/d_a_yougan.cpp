@@ -191,12 +191,12 @@ BOOL daYougan_c::useHeapInit() {
 #endif
     }
     for(s32 i = 0; i < yg_awa_num; i++) {
-        if(!field_0x298[i].field_0x08.init(modelData, anmKey, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
+        if(!field_0x298[i].field_0x08.init(modelData, anmKey, TRUE, J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
     }
     for(s32 i = 0; i < yg_awa_num; i++) {
-        if(!field_0x298[i].field_0x18.init(modelData, srtKey, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+        if(!field_0x298[i].field_0x18.init(modelData, srtKey, TRUE, J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
     }

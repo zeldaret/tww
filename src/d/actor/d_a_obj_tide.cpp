@@ -84,7 +84,7 @@ BOOL Act_c::CreateHeap() {
         JUT_ASSERT(474, brk != NULL);
 
         mBrk1 = new mDoExt_brkAnm();
-        if (mBrk1 == NULL || !mBrk1->init(model_data, brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        if (mBrk1 == NULL || !mBrk1->init(model_data, brk, true, J3DFrameCtrl::EMode_LOOP)) {
             bVar3 = false;
         }
     }
@@ -94,7 +94,7 @@ BOOL Act_c::CreateHeap() {
         JUT_ASSERT(487, btk != NULL);
 
         mBtk = new mDoExt_btkAnm();
-        if (mBtk == NULL || !mBtk->init(model_data, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        if (mBtk == NULL || !mBtk->init(model_data, btk, true, J3DFrameCtrl::EMode_LOOP)) {
             bVar4 = false;
         }
     }
@@ -275,6 +275,7 @@ void Act_c::mode_norm_init() {
 
 /* 00000DD8-00000FAC       .text mode_norm__Q29daObjTide5Act_cFv */
 void Act_c::mode_norm() {
+    /* Compiler bug: Nondeterministically nonmatching? */
     bool uVar1;
     f32 fVar2;
     daTagWaterlevel::State_e uVar3;

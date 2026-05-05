@@ -25,7 +25,7 @@ BOOL daSbox_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Dalways", DALWAYS_BDL_BOXSEA));
     JUT_ASSERT(113, modelData != NULL);
 
-    if (!mBck1.init(modelData, (J3DAnmTransform*)(dComIfG_getObjectRes("Dalways", DALWAYS_BCK_BOXOPENBOX)), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
+    if (!mBck1.init(modelData, (J3DAnmTransform*)(dComIfG_getObjectRes("Dalways", DALWAYS_BCK_BOXOPENBOX)), true, J3DFrameCtrl::EMode_NONE))
     {
         return FALSE;
     }

@@ -14,10 +14,6 @@
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 
-extern void J3DFifoLoadNrmMtxImm(Mtx, u32);
-extern void J3DFifoLoadNrmMtxImm3x3(Mtx33, u32);
-extern void J3DFifoLoadPosMtxImm(Mtx, u32);
-
 u32 J3DShapeMtx::sCurrentPipeline;
 
 /* 802DB9D8-802DBA1C       .text loadMtxIndx_PNGP__11J3DShapeMtxCFiUs */

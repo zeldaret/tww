@@ -1448,7 +1448,7 @@ int dSnap_PhotoIndex2TableIndex(int photoIndex) {
 
 /* 800CCFE4-800CD00C       .text dSnap_GetFigRoomId__Fi */
 int dSnap_GetFigRoomId(int tableIndex) {
-    if (tableIndex >= (int)ARRAY_SIZE(l_CharaData)) {
+    if (tableIndex >= CharaDataTblSize) {
         return 0xFF;
     }
     return l_CharaData[tableIndex].figRoom;
@@ -2160,7 +2160,7 @@ void dSnap_packet::SetResult() {
             if (sp8[m_tbl[col].m_obj.GetPhoto()] != 0) {
                 continue;
             }
-            if (m_judge_tbl[m_tbl[col].m_obj.GetPhoto()] != NULL) {
+            if (m_judge_tbl[m_tbl[col].m_obj.GetPhoto()] != 0) {
                 field_0x10 = m_tbl[col].m_obj.GetPhoto();
                 mResult = (this->*m_judge_tbl[m_tbl[col].m_obj.GetPhoto()])();
                 r30 = m_tbl[col].m_obj.mCapturedPixels;

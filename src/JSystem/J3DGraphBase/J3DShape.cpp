@@ -9,13 +9,10 @@
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DVertex.h"
+#include "JSystem/J3DGraphBase/J3DGD.h"
 #include "dolphin/gd/GDBase.h"
 #include "dolphin/gd/GDGeometry.h"
 #include "dolphin/types.h"
-
-extern void J3DGDSetVtxAttrFmtv(GXVtxFmt, GXVtxAttrFmtList *, bool);
-extern void J3DFifoLoadPosMtxImm(Mtx, u32);
-extern void J3DFifoLoadNrmMtxImm(Mtx, u32);
 
 /* 802DD18C-802DD1FC       .text initialize__8J3DShapeFv */
 void J3DShape::initialize() {

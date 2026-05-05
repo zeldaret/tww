@@ -116,10 +116,10 @@ BOOL daArrow_Lighteff_c::CreateHeap() {
     JUT_ASSERT(216, btk != NULL);
     JUT_ASSERT(217, brk != NULL);
 
-    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
-    if(!mBrk.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if(!mBrk.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE)) {
         return false;
     }
 

@@ -26,20 +26,29 @@ bool daObjGaship2::Act_c::create_heap() {
     cBgD_t *bgw_data;
 
     mdl_data = (J3DModelData *) (dComIfG_getObjectRes(M_arcname, YAKEROM_BDL_YAKEROM));
-    JUT_ASSERT(0x5A, mdl_data != NULL);
+    JUT_ASSERT(90, mdl_data != NULL);
 
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
     set_mtx();
     bgw_data = (cBgD_t *) (dComIfG_getObjectRes(M_arcname, YAKEROM_DZB_YAKEROM));
-    JUT_ASSERT(0x67, bgw_data != NULL);
-    if (bgw_data != NULL) {
+    JUT_ASSERT(103, bgw_data != NULL);
+#if VERSION > VERSION_DEMO
+    if (bgw_data != NULL)
+#endif
+    {
         mpBgW = new dBgW();
         if (mpBgW != NULL && (mpBgW->Set(bgw_data, cBgW::MOVE_BG_e, &mMtx) == true)) {
+#if VERSION > VERSION_DEMO
             return false;
+#endif
         }
     }
 
+#if VERSION == VERSION_DEMO
+    return mdl_data != NULL && bgw_data != NULL && mpBgW != NULL;
+#else
     return mdl_data != NULL && mpModel != NULL && bgw_data != NULL && mpBgW != NULL;
+#endif
 }
 
 /* 00000220-000002F8       .text _create__Q212daObjGaship25Act_cFv */
@@ -60,7 +69,10 @@ cPhs_State daObjGaship2::Act_c::_create() {
 
 /* 000002F8-00000384       .text _delete__Q212daObjGaship25Act_cFv */
 bool daObjGaship2::Act_c::_delete() {
-    if (heap != NULL && mpBgW != NULL) {
+#if VERSION > VERSION_DEMO
+    if (heap != NULL && mpBgW != NULL)
+#endif
+    {
         if (mpBgW->ChkUsed()) {
             dComIfG_Bgsp()->Release(mpBgW);
         }

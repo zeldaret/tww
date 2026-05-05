@@ -79,7 +79,7 @@ static BOOL daKN_Draw(kn_class* i_this) {
 void anm_init(kn_class* i_this, int anmResIdx, float morf, unsigned char loopMode, float speed, int soundResIdx) {
     if (soundResIdx >= 0) {
         i_this->mpMorf->setAnm(
-            (J3DAnmTransform*)dComIfG_getObjectRes("KN", anmResIdx), loopMode, morf, speed, 0.0f, -1.0f, (void*)dComIfG_getObjectRes("KN", soundResIdx)
+            (J3DAnmTransform*)dComIfG_getObjectRes("KN", anmResIdx), loopMode, morf, speed, 0.0f, -1.0f, dComIfG_getObjectRes("KN", soundResIdx)
         );
     } else {
         i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("KN", anmResIdx), loopMode, morf, speed, 0.0f, -1.0f, NULL);
@@ -93,7 +93,7 @@ void smoke_set(kn_class* i_this) {
     s.set(fVar1, fVar1, fVar1);
 
     i_this->m314.remove();
-    i_this->m334 = dComIfGp_particle_setToon(0x2027, &i_this->m300, &i_this->actor.shape_angle, NULL, 0xb9, &i_this->m314, fopAcM_GetRoomNo(&i_this->actor));
+    i_this->m334 = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &i_this->m300, &i_this->actor.shape_angle, NULL, 0xb9, &i_this->m314, fopAcM_GetRoomNo(&i_this->actor));
     if (i_this->m334 != NULL) {
         i_this->m334->setMaxFrame(0x19);
         i_this->m334->setAwayFromCenterSpeed(0.0f);

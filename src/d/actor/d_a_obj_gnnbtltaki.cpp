@@ -28,7 +28,7 @@ BOOL daObjGnnbtaki_c::create_heap() {
         if (mpModel != NULL) {
             btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, GNNBTLTAKI_BTK_GNN_BTL_TAKI));
             JUT_ASSERT(97, btk_data != NULL);
-            if (btk_data != NULL && mBtkAnm.init(mdl_data, btk_data, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0, 0, -1, false, FALSE)) {
+            if (btk_data != NULL && mBtkAnm.init(mdl_data, btk_data, TRUE, J3DFrameCtrl::EMode_LOOP)) {
                 ret = TRUE;
             }
         }

@@ -257,7 +257,6 @@ dCamSetup_c::dCamSetup_c() {
 
 /* 800AFEE0-800AFF40       .text __dt__11dCamSetup_cFv */
 dCamSetup_c::~dCamSetup_c() {
-    /* Nonmatching */
 }
 
 /* 800AFF40-800AFFB0       .text CheckLatitudeRange__11dCamSetup_cFPs */

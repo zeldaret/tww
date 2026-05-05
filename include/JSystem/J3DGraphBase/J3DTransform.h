@@ -40,6 +40,7 @@ void J3DScaleNrmMtx33(Mtx33, const Vec&);
 void J3DMtxProjConcat(Mtx, Mtx, Mtx);
 void J3DPSMtx33Copy(Mtx3P src, Mtx3P dst);
 void J3DPSMtx33CopyFrom34(MtxP src, Mtx3P dst);
+void J3DPSMtxArrayConcat(Mtx, Mtx, Mtx, u32);
 
 inline void J3DPSMulMtxVec(register MtxP mtx, register Vec* vec, register Vec* dst) {
 #ifdef __MWERKS__

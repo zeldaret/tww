@@ -1,9 +1,11 @@
 #ifndef D_MENU_CLOTH_H
 #define D_MENU_CLOTH_H
 
+#include "SSystem/SComponent/c_sxyz.h"
 #include "dolphin/types.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "dolphin/gx/GXStruct.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class JKRArchive;
 

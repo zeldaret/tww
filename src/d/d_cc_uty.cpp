@@ -16,23 +16,23 @@
 u16 cc_pl_cut_bit_get() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     u16 r3 = 0x00;
-    if (player->getCutType() == 1) {
+    if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_A) {
         r3 = 0x01;
-    } else if (player->getCutType() == 2) {
+    } else if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_F) {
         r3 = 0x02;
-    } else if (player->getCutType() == 3) {
+    } else if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_R) {
         r3 = 0x04;
-    } else if (player->getCutType() == 4) {
+    } else if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_L) {
         r3 = 0x08;
-    } else if (player->getCutType() == 5) {
+    } else if (player->getCutType() == daPy_py_c::CUT_TYPE_BT_JUMPCUT) {
         r3 = 0x10;
-    } else if (player->getCutType() == 6) {
+    } else if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EA) {
         r3 = 0x20;
-    } else if (player->getCutType() == 7) {
+    } else if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EB) {
         r3 = 0x40;
-    } else if (player->getCutType() == 8 || player->getCutType() == 9) {
+    } else if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_TURN || player->getCutType() == daPy_py_c::CUT_TYPE_CUT_ROLL) {
         r3 = 0x80;
-    } else if (player->getCutType() == 10) {
+    } else if (player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SWORD) {
         r3 = 0x100;
     }
     return r3;
@@ -121,9 +121,11 @@ fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
                     atInfo->mHitSoundId = 1;
                 } else if (player->getCutCount() == 4) {
                     atInfo->mHitSoundId = 4;
-                } else if (player->getCutType() == 0xA) {
+                } else if (player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SWORD) {
                     atInfo->mHitSoundId = 2;
-                } else if (player->getCutType() == 0x5 || player->getCutType() == 0xF || player->getCutType() == 0x10) {
+                } else if (player->getCutType() == daPy_py_c::CUT_TYPE_BT_JUMPCUT || player->getCutType() == daPy_py_c::CUT_TYPE_BT_ROLLCUT ||
+                           player->getCutType() == daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT)
+                {
                     atInfo->mHitSoundId = 3;
                 } else {
                     atInfo->mHitSoundId = 0;

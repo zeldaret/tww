@@ -853,7 +853,7 @@ bool dAttention_c::Run(u32 interactMask) {
     }
     runDebugDisp0();
     clrFlag(~(AttnFlag_80000000 | AttnFlag_40000000 | AttnFlag_20000000 | AttnFlag_10000000 | AttnFlag_08000000));
-    if (dComIfGp_event_getMode() != 0) {
+    if (dComIfGp_event_runCheck()) {
         mLockOnState = LockState_NONE;
         field_0x01a = 0;
         field_0x01b = 0;

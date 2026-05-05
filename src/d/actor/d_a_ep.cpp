@@ -264,7 +264,7 @@ void ep_move(ep_class* i_this) {
             cLib_addCalc2(&i_this->mLightPower, i_this->m4E0, 0.5f, 0.2f);
             if (i_this->mType != 2) {
                 if (i_this->m7D4 < (s16)(REG0_S(7) + 7)) {
-                    dComIfGp_particle_setSimple(1, &pos);
+                    dComIfGp_particle_setSimple(dPa_name::ID_AK_JN_O_FIRE00, &pos);
                     if (i_this->m7D4 == 0 && i_this->mSph1.ChkTgHit()) {
                         cCcD_Obj* hitObj = i_this->mSph1.GetTgHitObj();
 
@@ -282,7 +282,7 @@ void ep_move(ep_class* i_this) {
                 }
 
                 pos.y += 20.0f;
-                dComIfGp_particle_setSimple(0x4004, &pos);
+                dComIfGp_particle_setSimple(dPa_name::ID_AK_JP_O_KAGEROU00, &pos);
             }
 
             if (i_this->mTimers[3] == 1 && (i_this->m507 == 0xFF || !dComIfGs_isSwitch(i_this->m507, fopAcM_GetRoomNo(&i_this->actor)))) {

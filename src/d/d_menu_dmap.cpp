@@ -73,8 +73,8 @@ void dMenu_Dmap_c::noteInit() {
 }
 
 /* 801AC2D8-801AC2EC       .text noteCheck__12dMenu_Dmap_cFv */
-void dMenu_Dmap_c::noteCheck() {
-    /* Nonmatching */
+bool dMenu_Dmap_c::noteCheck() {
+    return field_0x0972 == 1 ? TRUE : FALSE;
 }
 
 /* 801AC2EC-801AC390       .text noteAppear__12dMenu_Dmap_cFv */
@@ -178,11 +178,11 @@ void dMenu_Dmap_c::_draw() {
 }
 
 /* 801AF0C0-801AF294       .text _open__12dMenu_Dmap_cFv */
-void dMenu_Dmap_c::_open() {
+bool dMenu_Dmap_c::_open() {
     /* Nonmatching */
 }
 
 /* 801AF294-801AF3B8       .text _close__12dMenu_Dmap_cFv */
-void dMenu_Dmap_c::_close() {
+bool dMenu_Dmap_c::_close() {
     /* Nonmatching */
 }

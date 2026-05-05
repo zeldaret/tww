@@ -224,7 +224,6 @@ void hahen_move(dr2_class* i_this) {
 
 /* 00000884-0000130C       .text iwa_move__FP9dr2_class */
 void iwa_move(dr2_class* i_this) {
-    /* Nonmatching - retail-only regalloc */
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp58;
     cXyz sp4C;
@@ -651,7 +650,10 @@ static BOOL daDr2_Delete(dr2_class* i_this) {
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
     dr2_class* i_this = (dr2_class*)a_this;
 
-    i_this->mpMorf1 = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BMD_DR_SIPPO), NULL, NULL, NULL, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
+    i_this->mpMorf1 = new mDoExt_McaMorf(
+        (J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BMD_DR_SIPPO),
+        NULL, NULL, NULL, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203
+    );
     
     if ((i_this->mpMorf1 == NULL) || (i_this->mpMorf1->getModel() == NULL)) {
         return FALSE;
@@ -684,7 +686,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     J3DAnmTextureSRTKey* srtKey = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dr2", DR2_BTK_GAN_MAGMA);
-    BOOL init = i_this->unk_420->init(i_this->unk_41C->getModelData(), srtKey, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    BOOL init = i_this->unk_420->init(i_this->unk_41C->getModelData(), srtKey, true, J3DFrameCtrl::EMode_NONE);
 #if VERSION > VERSION_DEMO
     if (!init) {
         return FALSE;
@@ -731,7 +733,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     srtKey = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dr2", DR2_BTK_MBYO1);
-    if (!i_this->unk_430->init(i_this->unk_428->getModelData(), srtKey, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->unk_430->init(i_this->unk_428->getModelData(), srtKey, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
 
@@ -741,7 +743,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     srtKey = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dr2", DR2_BTK_MBYO2);
-    if (!i_this->unk_434->init(i_this->unk_42C->getModelData(), srtKey, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->unk_434->init(i_this->unk_42C->getModelData(), srtKey, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 
@@ -751,7 +753,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     J3DAnmTevRegKey* tevRegKey = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dr2", DR2_BRK_MBYO2);
-    if (!i_this->unk_438->init(i_this->unk_42C->getModelData(), tevRegKey, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->unk_438->init(i_this->unk_42C->getModelData(), tevRegKey, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 

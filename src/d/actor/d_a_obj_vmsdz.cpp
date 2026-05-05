@@ -56,7 +56,7 @@ cPhs_State daObjVmsdz_c::_create() {
 
 /* 00000208-00000238       .text _delete__12daObjVmsdz_cFv */
 bool daObjVmsdz_c::_delete() {
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return true;
 }
 

@@ -269,5 +269,14 @@ extern __shop_items_set_data* Item_set_data_bshop_5[];
 extern __shop_items_set_data* Item_set_data_bshop_6[];
 extern __shop_items_set_data** Item_set_data_tbl[];
 extern Vec* Item_set_pos_data_tbl[];
+extern Vec Item_set_pos_data_dshop[];
+extern Vec Item_set_pos_data_bmshop1[];
+extern Vec Item_set_pos_data_bmshop2[];
+extern Vec Item_set_pos_data_bshop_3[];
+extern Vec Item_set_pos_data_bshop_4[];
+extern Vec Item_set_pos_data_bshop_5[];
+extern Vec Item_set_pos_data_bshop_6[];
+extern Vec Item_set_pos_data_bshop_7[];
+extern Vec Item_set_pos_data_rshop_0[];
 
 #endif /* D_SHOP_H */

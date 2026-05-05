@@ -1330,8 +1330,8 @@ int JASystem::TTrack::writePortAppDirect(u32 port, u16 value) {
     if (port == 0 || port == 1) {
         TIntrMgr& intrMgr = mIntrMgr;
 
-        u32 mIntrParam = port == 0 ? REQUEST_UNK_3 : REQUEST_UNK_4;
-        intrMgr.request(mIntrParam);
+        u32 intrParam = port == 0 ? REQUEST_UNK_3 : REQUEST_UNK_4;
+        intrMgr.request(intrParam);
     }
     return 1;
 }

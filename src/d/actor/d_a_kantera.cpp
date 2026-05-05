@@ -303,7 +303,7 @@ static BOOL daKantera_CreateHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    if (!i_this->mpBrkAnm1->init(modelData, anm_res_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+    if (!i_this->mpBrkAnm1->init(modelData, anm_res_brk, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
 
@@ -323,7 +323,7 @@ static BOOL daKantera_CreateHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    if (!i_this->mpBrkAnm2->init(modelData, anm_res_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+    if (!i_this->mpBrkAnm2->init(modelData, anm_res_brk, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
 

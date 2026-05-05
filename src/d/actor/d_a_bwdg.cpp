@@ -67,7 +67,8 @@ void daBwdg_packet_c::draw() {
 /* 000001C4-00000260       .text daBwdg_Draw__FP10bwdg_class */
 static BOOL daBwdg_Draw(bwdg_class* i_this) {
     g_env_light.settingTevStruct(TEV_TYPE_BG0_FULL, &i_this->current.pos, &i_this->tevStr);
-    MtxTrans(0.0f, 10.0f, 0.0f, 0);
+    f32 f1 = 0.0f;
+    MtxTrans(0.0f, 10.0f + f1, 0.0f, 0);
     cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, i_this->mBwdgPacket.getMtx());
     i_this->mBwdgPacket.setTevStr(&i_this->tevStr);
     j3dSys.getDrawBuffer(0)->entryImm(&i_this->mBwdgPacket, 0);
@@ -138,7 +139,11 @@ static void wave_cont(bwdg_class* i_this, u8 r4) {
     cXyz* nrmVtx = i_this->mBwdgPacket.getNrm();
     posVtx = i_this->mBwdgPacket.getPos();
     cXyz sp18(0.0f, 0.0f, 1.0f);
+#if VERSION == VERSION_DEMO
+    cMtx_XrotM(*calc_mtx, -0x4A38);
+#else
     cMtx_XrotS(*calc_mtx, -0x4A38);
+#endif
     cXyz sp0C;
     MtxPosition(&sp18, &sp0C);
     
@@ -185,7 +190,10 @@ static BOOL daBwdg_IsDelete(bwdg_class* i_this) {
 /* 00000854-000008B0       .text daBwdg_Delete__FP10bwdg_class */
 static BOOL daBwdg_Delete(bwdg_class* i_this) {
     dComIfG_resDeleteDemo(&i_this->mPhase, "Bwdg");
-    if (i_this->heap) {
+#if VERSION > VERSION_DEMO
+    if (i_this->heap)
+#endif
+    {
         dComIfG_Bgsp()->Release(i_this->mpBgW);
     }
     return TRUE;

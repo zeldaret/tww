@@ -38,7 +38,7 @@ struct WIND_INFLUENCE {
     /* 0x20 */ f32 field_0x20;
     /* 0x24 */ s32 mRegistIdx;
     /* 0x28 */ u8 mbConstant;
-};
+};  // Size: 0x2C
 
 struct WIND_INF_ENTITY {
     /* 0x00 */ u8 mbInUse;
@@ -466,5 +466,6 @@ BOOL dKy_daynighttact_stop_chk();
 void dKy_contrast_flg_set(u8);
 u8 dKy_contrast_flg_get();
 BOOL dKyr_player_overhead_bg_chk();
+void dKy_usonami_set(f32 param_0);
 
 #endif /* D_KANKYO_D_KANKYO_H */

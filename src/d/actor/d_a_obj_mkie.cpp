@@ -135,7 +135,7 @@ BOOL daObjMkie::Act_c::CreateHeap() {
 
     J3DAnmTevRegKey* brk_van = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, MKIEB_BRK_YLSMF00);
     JUT_ASSERT(0x1a5, brk_van != NULL);
-    int init = mBrkVan.init(model_data_van, brk_van, true, 0, 1.0f, 0, -1, false, 0);
+    int init = mBrkVan.init(model_data_van, brk_van, true, J3DFrameCtrl::EMode_NONE);
 
     bool ret = false;
     if (mModelBase != NULL && mModelVan != NULL && init != 0) {

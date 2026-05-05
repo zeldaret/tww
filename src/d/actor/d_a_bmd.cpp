@@ -1726,7 +1726,7 @@ BOOL useHeapInit(bmd_class* i_this) {
         return FALSE;
     }
     pJVar5 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bmd", BMD_BRK_BKM);
-    iVar6 = i_this->mpBrkAnm->init(pJVar13->getModelData(), pJVar5, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    iVar6 = i_this->mpBrkAnm->init(pJVar13->getModelData(), pJVar5, true, J3DFrameCtrl::EMode_NONE);
     if (iVar6 == 0) {
         return FALSE;
     }
@@ -1735,7 +1735,7 @@ BOOL useHeapInit(bmd_class* i_this) {
         return FALSE;
     }
     pAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bmd", BMD_BTK_BKM);
-    iVar6 = i_this->mpBtkAnm->init(pJVar13->getModelData(), pAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    iVar6 = i_this->mpBtkAnm->init(pJVar13->getModelData(), pAnm, true, J3DFrameCtrl::EMode_NONE);
     if (iVar6 == 0) {
         return FALSE;
     }

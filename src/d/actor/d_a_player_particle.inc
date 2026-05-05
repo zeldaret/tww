@@ -504,7 +504,7 @@ void daPy_lk_c::setAuraEffect() {
         J3DAnmTevRegKey* pYmgcs00Brk;
 
         if (checkEquipDragonShield()) {
-            if (dComIfGp_event_getMode() == 0) {
+            if (!dComIfGp_event_runCheck()) {
                 m3548 -= 1;
             }
 
@@ -520,7 +520,7 @@ void daPy_lk_c::setAuraEffect() {
             pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_R));
             pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_MS));
         } else {
-            if (dComIfGp_event_getMode() == 0) {
+            if (!dComIfGp_event_runCheck()) {
                 mTinkleShieldTimer -= 1;
             }
 
@@ -539,7 +539,7 @@ void daPy_lk_c::setAuraEffect() {
         }
     }
 
-    if (checkNoDamageMode() && (dComIfGp_event_getMode() == 0 || (eventInfo.checkCommandDoor() && !dComIfGp_event_chkEventFlag(dEvtFlag_TALK_e))) ) {
+    if (checkNoDamageMode() && (!dComIfGp_event_runCheck() || (eventInfo.checkCommandDoor() && !dComIfGp_event_chkEventFlag(dEvtFlag_TALK_e))) ) {
         if (yauraFrame < 0.01f) {
             for (int idx = 0; idx < (int)ARRAY_SIZE(mMagicArmorAuraEntries); idx++) {
                 mMagicArmorAuraEntries[idx].setFrame(cM_rndF(y00BtkFrameMax));

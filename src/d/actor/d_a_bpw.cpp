@@ -441,10 +441,23 @@ BOOL body_atari_check(bpw_class* i_this) {
     case AT_TYPE_MACHETE:
     case AT_TYPE_SWORD:
         fopAcM_seStart(actor, JA_SE_LK_SW_HIT_S, 0x44);
-        if (player->getCutType() == 6 || player->getCutType() == 7 || player->getCutType() == 8 || player->getCutType() == 9 || player->getCutType() == 10 ||
-            player->getCutType() == 0xc || player->getCutType() == 0xe || player->getCutType() == 5 || player->getCutType() == 0xf ||
-            player->getCutType() == 0x10 || player->getCutType() == 0x15 || player->getCutType() == 0x17 || player->getCutType() == 0x19 ||
-            player->getCutType() == 0x1a || player->getCutType() == 0x1b || player->getCutType() == 0x1e || player->getCutType() == 0x1f)
+        if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EA ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EB ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_CUT_TURN ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_CUT_ROLL ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SWORD ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_STICK ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_BT_JUMPCUT ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_BT_ROLLCUT ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_CLUB ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXA ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXB ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXMJ ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_CUT_KESA)
         {
             i_this->m3DF = 2;
             anm_init(i_this, BPW_BCK_BOYON_L1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
@@ -476,7 +489,7 @@ BOOL body_atari_check(bpw_class* i_this) {
     case AT_TYPE_SKULL_HAMMER:
         fopAcM_seStart(actor, JA_SE_LK_HAMMER_HIT, 0x44);
         i_this->m3DF = 8;
-        if (player->mCutType == 17) {
+        if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
             i_this->m3DF = 9;
         }
         anm_init(i_this, BPW_BCK_BOYON_L1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
@@ -881,7 +894,7 @@ void* skull_search_sub(void* param_1, void* param_2) {
     fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
 
     if ((get_check_count < 100) && (fopAc_IsActor(actor))) {
-        if ((fopAcM_GetName(actor) == 0xd0) && (actor->health > 0)) {
+        if ((fopAcM_GetName(actor) == PROC_BL) && (actor->health > 0)) {
             check_info[get_check_count] = actor;
             get_check_count++;
         }
@@ -3403,7 +3416,7 @@ BOOL kantera_atari_check(bpw_class* i_this) {
         actor->speedF = 60.0f;
         actor->current.angle.y = player->shape_angle.y;
         i_this->m3DF = 8;
-        if (player->mCutType == 17) {
+        if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
             i_this->m3DF = 9;
             actor->current.angle.y = player->shape_angle.y + -0x4000;
         }
@@ -4038,7 +4051,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pJVar2 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_HIRARU1);
-    if (!i_this->mBrkAnim->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->mBrkAnim->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
     pmVar4 = new mDoExt_brkAnm();
@@ -4047,7 +4060,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pJVar2 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_HIT);
-    if (!i_this->m2C4->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->m2C4->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
     pmVar4 = new mDoExt_brkAnm();
@@ -4056,7 +4069,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pJVar2 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_NOROI_S1);
-    if (!i_this->m2C8->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->m2C8->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
     pmVar4 = new mDoExt_brkAnm();
@@ -4065,7 +4078,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pJVar2 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_NOROI_E1);
-    if (!i_this->m2CC->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->m2CC->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
     pmVar4 = new mDoExt_brkAnm();
@@ -4074,7 +4087,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pJVar2 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_DEFAULT);
-    if (!i_this->m2D0->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->m2D0->init(pJVar1->getModelData(), pJVar2, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
     if (!i_this->mD78.create(i_this->mpAnim->getModel())) {
@@ -4191,7 +4204,7 @@ static BOOL kantera_useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pJVar3 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_BPW_KAN1);
-    if (!i_this->mKanteraAnim->init(pJVar1->getModelData(), pJVar3, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->mKanteraAnim->init(pJVar1->getModelData(), pJVar3, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
     return TRUE;

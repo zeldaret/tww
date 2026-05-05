@@ -54,7 +54,7 @@ BOOL daSalvage_c::CreateHeap() {
     JUT_ASSERT(347, pbrk != NULL);
 
     mpBrk = new mDoExt_brkAnm();
-    if (mpBrk == NULL || !mpBrk->init(mModelData, pbrk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+    if (mpBrk == NULL || !mpBrk->init(mModelData, pbrk, true, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
 
@@ -62,7 +62,7 @@ BOOL daSalvage_c::CreateHeap() {
     JUT_ASSERT(361, pbtk != NULL);
 
     mpBtk = new mDoExt_btkAnm();
-    if (mpBtk == NULL || !mpBtk->init(mModelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+    if (mpBtk == NULL || !mpBtk->init(mModelData, pbtk, true, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
     return true;

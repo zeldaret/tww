@@ -744,7 +744,7 @@ s32 useHeapInit(bmdfoot_class* i_this) {
     i_this->btk = pmVar5;
     JUT_ASSERT(DEMO_SELECT(1416, 1426), i_this->btk);
     pAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BTK_ASI);
-    iVar7 = i_this->btk->init(pJVar9->getModelData(), pAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    iVar7 = i_this->btk->init(pJVar9->getModelData(), pAnm, true, J3DFrameCtrl::EMode_NONE);
 #if VERSION > VERSION_DEMO
     if (iVar7 == 0) {
         return FALSE;

@@ -191,7 +191,7 @@ bool daObj_Warpt_c::createHutaHeap() {
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arc_name, LTUBW_BRK_YWPFM00);
     JUT_ASSERT(291, brk);
 
-    if (!mLidBrk.init(modelData, brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+    if (!mLidBrk.init(modelData, brk, true, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
     return true;
@@ -426,7 +426,7 @@ void daObj_Warpt_c::checkHitSE() {
     case AT_TYPE_PGANON_SWORD:
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
         s32 cutType = player->getCutType();
-        if (cutType != 8 && cutType != 9) {
+        if (cutType != daPy_py_c::CUT_TYPE_CUT_TURN && cutType != daPy_py_c::CUT_TYPE_CUT_ROLL) {
             fopAcM_seStart(this, JA_SE_OBJ_COL_SWM_NSTPOT, 0);
             daObj::HitEff_hibana(this, &mCyl1);
         }

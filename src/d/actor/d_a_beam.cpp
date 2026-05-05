@@ -143,9 +143,9 @@ BOOL daBeam_c::CreateHeap() {
     M_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BTK_YLESR00));
     JUT_ASSERT(318, M_brk != NULL);
 
-    BOOL tmp1 = mBckAnm.init(modelData, M_bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
-    BOOL tmp2 = mBrkAnm.init(modelData, M_brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
-    BOOL tmp3 = mBtkAnm.init(modelData, M_btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
+    BOOL tmp1 = mBckAnm.init(modelData, M_bck, false, J3DFrameCtrl::EMode_LOOP);
+    BOOL tmp2 = mBrkAnm.init(modelData, M_brk, false, J3DFrameCtrl::EMode_LOOP);
+    BOOL tmp3 = mBtkAnm.init(modelData, M_btk, true, J3DFrameCtrl::EMode_LOOP);
 
     if (M_mdl == NULL || !tmp1 || !tmp2 || !tmp3) {
         return false;

@@ -23,7 +23,7 @@ static u8 DEMO_COME_START_FLAG;
 static u8 DEMO_RET_START_FLAG;
 static u8 DEMO_SHORT_CUT_FLAG;
 static fopAc_ac_c* target_info[10];
-static s32 target_info_count;
+static int target_info_count;
 
 /* 00000078-000002AC       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
@@ -557,11 +557,23 @@ BOOL body_atari_check(cc_class* i_this) {
                 return FALSE;
             }
 
-            if (player->getCutType() == 6 || player->getCutType() == 7 || player->getCutType() == 8 || player->getCutType() == 9 ||
-                player->getCutType() == 10 || player->getCutType() == 0xc || player->getCutType() == 0xe || player->getCutType() == 5 ||
-                player->getCutType() == 0xf || player->getCutType() == 0x10 || player->getCutType() == 0x15 || player->getCutType() == 0x17 ||
-                player->getCutType() == 0x19 || player->getCutType() == 0x1a || player->getCutType() == 0x1b || player->getCutType() == 0x1e ||
-                player->getCutType() == 0x1f)
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EA ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EB ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_TURN ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_ROLL ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SWORD ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_STICK ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_BT_JUMPCUT ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_BT_ROLLCUT ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_CLUB ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXA ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXB ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXMJ ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_KESA)
             {
                 i_this->m2F6 = 1;
             }
@@ -637,7 +649,7 @@ BOOL body_atari_check(cc_class* i_this) {
 
             i_this->m2F6 = 1;
 
-            if (player->getCutType() == 0x12 || player->getCutType() == 0x13) {
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING || player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER) {
                 i_this->m2F6 = 6;
             }
 
@@ -1772,7 +1784,7 @@ void action_noboru(cc_class* i_this) {
 
 /* 00004CAC-0000561C       .text action_up_check__FP8cc_class */
 void action_up_check(cc_class* i_this) {
-    fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
+    fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     s16 bVar4 = 0;
 
@@ -2418,7 +2430,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2B8->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2439,7 +2451,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2C8->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_IWA01), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_IWA01), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2451,7 +2463,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2CC->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_IWA02), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_IWA02), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2463,7 +2475,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2D0->init(
-            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", CC_BTK_CC_IWA01), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", CC_BTK_CC_IWA01), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2475,7 +2487,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2D4->init(
-            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", CC_BTK_CC_IWA02), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", CC_BTK_CC_IWA02), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2496,7 +2508,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2C0->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_BETA), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_BETA), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;

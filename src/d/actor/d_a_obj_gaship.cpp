@@ -31,7 +31,7 @@ void daObjGaship::Act_c::birth_flag() {
             cXyz offset;
             mDoMtx_multVec(mtx, &flag_offset[i], &offset);
             csXyz angle(flag_angle[i]);
-            fpc_ProcID pid = fopAcM_create(PROC_MAJUU_FLAG, 0x01, &offset, current.roomNo, &angle);
+            fpc_ProcID pid = fopAcM_create(PROC_MAJUU_FLAG, 0x01, &offset, fopAcM_GetRoomNo(this), &angle);
             if (pid != fpcM_ERROR_PROCESS_ID_e)
                 birthFlag[i] = true;
         }
@@ -46,13 +46,21 @@ BOOL daObjGaship::Act_c::solidHeapCB(fopAc_ac_c* i_ac) {
 /* 00000378-00000448       .text create_heap__Q211daObjGaship5Act_cFv */
 bool daObjGaship::Act_c::create_heap() {
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GASHIP_BDL_GASHIP));
-    JUT_ASSERT(0x8c, mdl_data != NULL);
+    JUT_ASSERT(140, mdl_data != NULL);
+#if VERSION > VERSION_DEMO
     if (mdl_data != NULL)
+#endif
+    {
         mModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
+    }
 
     set_mtx();
 
+#if VERSION == VERSION_DEMO
+    return mdl_data != NULL ? TRUE : FALSE;
+#else
     return mdl_data != NULL && mModel != NULL;
+#endif
 }
 
 /* 00000448-000004F8       .text _create__Q211daObjGaship5Act_cFv */

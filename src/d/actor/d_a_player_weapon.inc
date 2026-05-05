@@ -18,12 +18,12 @@
 /* 80153554-801535D8       .text setEnemyWeaponAtParam__9daPy_lk_cFi */
 void daPy_lk_c::setEnemyWeaponAtParam(BOOL r4) {
     static const u8 cut_type[] = {
-        /* daBoko_c::Type_STICK_e    */ 0x0B,
-        /* daBoko_c::Type_MACHETE_e  */ 0x0D,
-        /* daBoko_c::Type_CLUB_e     */ 0x14,
-        /* daBoko_c::Type_DN_SWORD_e */ 0x16,
-        /* daBoko_c::Type_SPEAR_e    */ 0x18,
-        /* daBoko_c::Type_PG_SWORD_e */ 0x1C,
+        /* daBoko_c::Type_STICK_e    */ CUT_TYPE_STICK,
+        /* daBoko_c::Type_MACHETE_e  */ CUT_TYPE_MACHETE,
+        /* daBoko_c::Type_CLUB_e     */ CUT_TYPE_CLUB,
+        /* daBoko_c::Type_DN_SWORD_e */ CUT_TYPE_DN_SWORD,
+        /* daBoko_c::Type_SPEAR_e    */ CUT_TYPE_SPEAR,
+        /* daBoko_c::Type_PG_SWORD_e */ CUT_TYPE_PG_SWORD,
     };
     daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
     u8 cutType = cut_type[fopAcM_GetParam(boko)];
@@ -66,7 +66,7 @@ BOOL daPy_lk_c::procWeaponNormalSwing_init() {
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
     m351E = m34DC;
     setBlurPosResource(LKANM__CUTBOKO_POS);
-    setEnemyWeaponAtParam(0);
+    setEnemyWeaponAtParam(FALSE);
     m34D0 = m_HIO->mCut.mCutBoko.m.field_0x4;
 
     return true;
@@ -166,7 +166,7 @@ BOOL daPy_lk_c::procWeaponSideSwing_init() {
     voiceStart(1);
     m34D4 = shape_angle.y;
     setBlurPosResource(LKANM__HAMMERSIDE_POS);
-    setEnemyWeaponAtParam(0);
+    setEnemyWeaponAtParam(FALSE);
     return true;
 }
 
@@ -244,7 +244,7 @@ BOOL daPy_lk_c::procWeaponFrontSwingReady_init() {
     } else {
         m34D4 = m34E8;
     }
-    setEnemyWeaponAtParam(0);
+    setEnemyWeaponAtParam(FALSE);
     voiceStart(7);
     return true;
 }
@@ -295,7 +295,7 @@ BOOL daPy_lk_c::procWeaponFrontSwing_init() {
     }
     m34D4 = shape_angle.y;
     setBlurPosResource(LKANM__HAMMERFRONT_POS);
-    setEnemyWeaponAtParam(0);
+    setEnemyWeaponAtParam(FALSE);
     onResetFlg0(daPy_RFLG0(daPyRFlg0_UNK1 | daPyRFlg0_UNK2));
     m34D0 = 0;
     return true;
@@ -342,7 +342,7 @@ BOOL daPy_lk_c::procWeaponFrontSwingEnd_init() {
     );
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
-    setEnemyWeaponAtParam(0);
+    setEnemyWeaponAtParam(FALSE);
     return true;
 }
 

@@ -121,7 +121,8 @@ bool daSwTact_c::_execute() {
     if (player == NULL || dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e))
         return true;
 
-    if ((player->current.pos - current.pos).absXZ() <= getR()) {
+    f32 dist = (player->current.pos - current.pos).absXZ();
+    if (dist <= getR()) {
         if (mPlayerStatus != stts1 && stts1 != 0) {
             player->setTactZev(fopAcM_GetID(this), getAnswer(), NULL);
         }
@@ -160,7 +161,7 @@ bool daSwTact_c::_execute() {
     }
 
     if (mTrigger != 0 && !dComIfGp_event_runCheck()) {
-        dComIfGs_onSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this));
+        fopAcM_onSwitch(this, mSwitchNo);
         mTrigger = 0;
     }
 

@@ -58,7 +58,6 @@ void JFWSystem::firstInit() {
 
 /* 80254E54-802551C0       .text init__9JFWSystemFv */
 void JFWSystem::init() {
-    /* Nonmatching - regalloc */
     JUT_ASSERT(101, sInitCalled == false);
 
     if(rootHeap == 0) {

@@ -1168,10 +1168,7 @@ s32 daPy_lk_c::setItemModel() {
                 if (mpBottleContentsModel != NULL) {
                     if (mEquipItem == dItem_FIREFLY_BOTTLE_e) {
                         cXyz bottleScale; // ?
-                        fVar1 =
-                            1.0f + 0.1f * cM_ssin(cM_rad2s(
-                                              (37.699112f * mpEquipItemBrk->getFrame()) / mpEquipItemBrk->getFrameMax()
-                                          ));
+                        fVar1 = 1.0f + 0.1f * cM_ssin(cM_rad2s((37.699112f * mpEquipItemBrk->getFrame()) / mpEquipItemBrk->getFrameMax()));
                         bottleScale.setall(fVar1);
                         mDoMtx_stack_c::transS(11.0f, 0.0f, 0.0f);
                         mDoMtx_stack_c::revConcat(pMVar13);
@@ -1436,7 +1433,7 @@ s32 daPy_lk_c::setDrawHandModel() {
             uVar5 = mRightHandIdx;
         }
     } else if ((mEquipItem == dItem_GRAPPLING_HOOK_e && !checkModeFlg(ModeFlg_ROPE)) ||
-               (mEquipItem == dItem_SKULL_HAMMER_e && mCutType == 0))
+               (mEquipItem == dItem_SKULL_HAMMER_e && mCutType == CUT_TYPE_NONE))
     {
         uVar4 = 3;
         uVar5 = 8;
@@ -11363,7 +11360,7 @@ BOOL daPy_lk_c::execute() {
     }
     
     if (checkResetFlg0(daPyRFlg0_UNK8000000)) {
-        mCutType = 0;
+        mCutType = CUT_TYPE_NONE;
     }
     
     mResetFlg0 = 0;
@@ -11991,7 +11988,7 @@ BOOL daPy_lk_c::createHeap() {
     
     tmp_modelData = initModel(&mpSwgripmsModel, LINK_BDL_SWGRIPMS, 0x37221222);
     bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_SWGRIPMSAB);
-    ret = mSwgripmsabBckAnim.init(mpSwgripmsModel->getModelData(), bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    ret = mSwgripmsabBckAnim.init(mpSwgripmsModel->getModelData(), bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(20966, 20966, 21046, 21046), FALSE); }
     mpTswgripmsabBrk = entryBrk(tmp_modelData, LINK_BRK_TSWGRIPMSAB);
     mpTswgripmsBtk = entryBtk(tmp_modelData, LINK_BTK_TSWGRIPMS);
@@ -12000,7 +11997,7 @@ BOOL daPy_lk_c::createHeap() {
     
     tmp_modelData = initModel(&mpShaModel, LINK_BDL_SHA, 0x37221222);
     bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_ATNGSHA);
-    ret = mAtngshaBck.init(mpShaModel->getModelData(), bck, false, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
+    ret = mAtngshaBck.init(mpShaModel->getModelData(), bck, false, J3DFrameCtrl::EMode_NONE);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(20983, 20983, 21063, 21063), FALSE); }
     
     tmp_modelData = initModel(&mpShmsModel, LINK_BDL_SHMS, 0x37221222);
@@ -12020,7 +12017,7 @@ BOOL daPy_lk_c::createHeap() {
     
     tmp_modelData = initModel(&mpYuchw00Model, LINK_BDL_YUCHW00, 0x13000222);
     bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_YUCHW00);
-    ret = mYuchw00Bck.init(tmp_modelData, bck, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    ret = mYuchw00Bck.init(tmp_modelData, bck, 1, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(21033, 21033, 21113, 21113), FALSE); }
     mpYuchw00Btk = entryBtk(tmp_modelData, LINK_BTK_YUCHW00);
     mpYuchw00Brk = entryBrk(tmp_modelData, LINK_BRK_YUCHW00);
@@ -12040,14 +12037,14 @@ BOOL daPy_lk_c::createHeap() {
     }
     mpYaura00Btk = entryBtk(tmp_modelData, LINK_BTK_YAURA00);
     brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_R);
-    ret = mYaura00rBrk.init(tmp_modelData, brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    ret = mYaura00rBrk.init(tmp_modelData, brk, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(21067, 21067, 21147, 21147), FALSE); }
     mYaura00rBrk.entryFrame(0.0f);
     
     tmp_modelData = initModel(&mpYmgcs00Model, LINK_BDL_YMGCS00, 0x11001222);
     mpYmgcs00Btk = entryBtk(tmp_modelData, LINK_BTK_YMGCS00);
     brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_MS);
-    ret = mYmgcs00Brk.init(tmp_modelData, brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    ret = mYmgcs00Brk.init(tmp_modelData, brk, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(21081, 21081, 21161, 21161), FALSE); }
     mYmgcs00Brk.entryFrame(0.0f);
     

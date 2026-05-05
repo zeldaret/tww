@@ -374,7 +374,7 @@ BOOL daPy_lk_c::procBottleOpen() {
                     onNoResetFlg1(daPyFlg1_FOREST_WATER_USE);
                     m3554 = 3;
                 }
-                setAtParam(AT_TYPE_WATER, 0, spl, 0, dCcG_AtHitMark_None_e, 0, 5.0f);
+                setAtParam(AT_TYPE_WATER, 0, spl, 0, dCcG_AtHitMark_None_e, CUT_TYPE_NONE, 5.0f);
             } else if (
                 (mEquipItem == dItem_FAIRY_BOTTLE_e && frameCtrl.getFrame() >= m_HIO->mItem.mBottle.m.field_0x58) ||
                 (mEquipItem != dItem_FAIRY_BOTTLE_e && mEquipItem != dItem_FOREST_WATER_e && frameCtrl.getFrame() >= m_HIO->mItem.mBottle.m.field_0x4C)

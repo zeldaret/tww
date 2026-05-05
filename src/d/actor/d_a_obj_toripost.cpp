@@ -36,8 +36,6 @@ public:
     /* 0x16 */ s16 field_0x16;
 };
 
-extern dScnPly_reg_HIO_c g_regHIO;
-
 const char daObjTpost_c::m_arc_name[] = "Toripost";
 
 const daObjTpost_c__letter_data daObjTpost_c::m_letter[] = {

@@ -4,17 +4,19 @@
 #include "dolphin/gx/GXAttr.h" // IWYU pragma: export
 #include "dolphin/gx/GXBump.h" // IWYU pragma: export
 #include "dolphin/gx/GXDisplayList.h" // IWYU pragma: export
+#include "dolphin/gx/GXEnum.h" // IWYU pragma: export
 #include "dolphin/gx/GXFifo.h" // IWYU pragma: export
 #include "dolphin/gx/GXFrameBuf.h" // IWYU pragma: export
 #include "dolphin/gx/GXGeometry.h" // IWYU pragma: export
+#include "dolphin/gx/GXInit.h" // IWYU pragma: export
 #include "dolphin/gx/GXLight.h" // IWYU pragma: export
 #include "dolphin/gx/GXMisc.h" // IWYU pragma: export
 #include "dolphin/gx/GXPerf.h" // IWYU pragma: export
 #include "dolphin/gx/GXPixel.h" // IWYU pragma: export
+#include "dolphin/gx/GXStruct.h" // IWYU pragma: export
 #include "dolphin/gx/GXTev.h" // IWYU pragma: export
 #include "dolphin/gx/GXTexture.h" // IWYU pragma: export
 #include "dolphin/gx/GXTransform.h" // IWYU pragma: export
-#include "dolphin/gx/GXStruct.h" // IWYU pragma: export
 
 #include "dolphin/os/OSUtil.h"
 

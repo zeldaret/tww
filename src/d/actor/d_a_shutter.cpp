@@ -29,8 +29,11 @@ char* daShutter_c::m_staff_name[2] = {"Htobi1", "Htobi2"};
 
 /* 00000078-00000108       .text _delete__11daShutter_cFv */
 bool daShutter_c::_delete() {
-    dComIfG_resDelete(&mPhs, m_arcname[mType]);
-    if (heap != NULL) {
+    dComIfG_resDeleteDemo(&mPhs, m_arcname[mType]);
+#if VERSION > VERSION_DEMO
+    if (heap != NULL)
+#endif
+    {
         for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
             dComIfG_Bgsp()->Release(mdBgW[i]);
         };

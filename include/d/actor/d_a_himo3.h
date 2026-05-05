@@ -27,13 +27,14 @@ struct h3_ga_s {
     /* 0x2F */ u8 m2F;
 }; // size = 0x30
 
-class himo3_class : public fopAc_ac_c {
+class himo3_class {
 public:
     void getPlayerMoveLength() {}
 
     void setActorHang(cXyz, short);
 
 public:
+    /* 0x0000 */ fopAc_ac_c actor;
     /* 0x0290 */ request_of_phase_process_class mPhase;
     /* 0x0298 */ u8 m0298;
     /* 0x0299 */ u8 m0299;
@@ -51,7 +52,7 @@ public:
     /* 0x02C0 */ himo3_s m02C0[200];
     /* 0x1580 */ mDoExt_3DlineMat1_c mLineMat;
     /* 0x15BC */ u8 m15BC[0x15C0 - 0x15BC];
-    /* 0x15C0 */ s32 m15C0;
+    /* 0x15C0 */ int m15C0;
     /* 0x15C4 */ cXyz m15C4;
     /* 0x15D0 */ f32 m15D0;
     /* 0x15D4 */ f32 m15D4;

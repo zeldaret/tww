@@ -27,9 +27,10 @@ static BOOL useHeapInit(fopAc_ac_c* i_ac) {
 
 /* 0000015C-000001D8       .text daKytag03_Draw__FP13kytag03_class */
 static BOOL daKytag03_Draw(kytag03_class* i_this) {
+    fopAc_ac_c* actor = &i_this->actor;
     J3DModel* model = i_this->mpModel->getModel();
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
-    g_env_light.setLightTevColorType(model, &i_this->tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, &actor->tevStr);
+    g_env_light.setLightTevColorType(model, &actor->tevStr);
     if (i_this->mbVisible)
         i_this->mpModel->updateDL();
     return TRUE;
@@ -37,18 +38,19 @@ static BOOL daKytag03_Draw(kytag03_class* i_this) {
 
 /* 000001D8-00000280       .text draw_SUB__FP13kytag03_class */
 void draw_SUB(kytag03_class* i_this) {
+    fopAc_ac_c* actor = &i_this->actor;
     J3DModel* model = i_this->mpModel->getModel();
-    model->setBaseScale(i_this->scale);
-    mDoMtx_stack_c::transS(i_this->current.pos);
-    mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
-    mDoMtx_stack_c::XrotM(i_this->shape_angle.x);
-    mDoMtx_stack_c::ZrotM(i_this->shape_angle.z);
+    model->setBaseScale(actor->scale);
+    mDoMtx_stack_c::transS(actor->current.pos);
+    mDoMtx_stack_c::YrotM(actor->shape_angle.y);
+    mDoMtx_stack_c::XrotM(actor->shape_angle.x);
+    mDoMtx_stack_c::ZrotM(actor->shape_angle.z);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000280-0000050C       .text daKytag03_Execute__FP13kytag03_class */
 static BOOL daKytag03_Execute(kytag03_class* i_this) {
-    fopAc_ac_c* actor = i_this;
+    fopAc_ac_c* actor = &i_this->actor;
     if (dComIfGp_event_runCheck() == FALSE || !dComIfGp_event_chkEventFlag(dEvtFlag_STAFF_ALL_e)) {
         if (actor->tevStr.mRoomNo == dComIfGp_roomControl_getStayNo()) {
             i_this->mbRoomActive = true;
@@ -127,22 +129,22 @@ static cPhs_State daKytag03_Create(fopAc_ac_c* i_ac) {
     kytag03_class* i_this = (kytag03_class*)i_ac;
 
 #if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_this, kytag03_class);
+    fopAcM_SetupActor(i_ac, kytag03_class);
 #endif
 
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhs, "M_DOOR");
     if (ret == cPhs_COMPLEATE_e) {
 #if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(i_this, kytag03_class);
+        fopAcM_SetupActor(i_ac, kytag03_class);
 #endif
 
-        if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x4c30)) {
+        if (!fopAcM_entrySolidHeap(&i_this->actor, useHeapInit, 0x4c30)) {
             return cPhs_ERROR_e;
         }
 
         i_this->field_0x2a0 = 0;
         i_this->field_0x2a8 = 0.0f;
-        i_this->mSwitchNo = fopAcM_GetParam(i_this);
+        i_this->mSwitchNo = fopAcM_GetParam(i_ac) & 0xFF;
         i_this->mbRoomActive = false;
         i_this->mbIsActive = false;
         i_this->mbVisible = false;

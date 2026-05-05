@@ -807,7 +807,7 @@ BOOL daObjApzl_c::CreateHeap() {
             return FALSE;
         }
 
-        if(mScoreboardBtpAnm[i].init(modelData, btp_data, 1, 0, 1.0f, 0, -1, false, FALSE) == 0) {
+        if(mScoreboardBtpAnm[i].init(modelData, btp_data, 1, 0) == 0) {
             return FALSE;
 
         }

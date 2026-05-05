@@ -19,10 +19,7 @@
 #include "d/d_picture_box.h"
 #include "d/actor/d_a_tag_photo.h"
 
-extern dCcD_SrcCyl dNpc_cyl_src;
-
 const char daNpcPhoto_c::m_arcname[] = "Auc";
-
 
 static const char* l_arcname_tbl[] = {
     "Po"

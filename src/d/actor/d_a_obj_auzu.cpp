@@ -250,7 +250,7 @@ bool daObjAuzu::Act_c::_execute() {
     } else if (mScaleAnimFactor == 0.0f && fpcM_IsErrorID(mKytagPcId) == FALSE) {
         kytag01_class* kytag01_p = (kytag01_class *) fopAcM_SearchByID(mKytagPcId);
         if (kytag01_p){
-            fopAcM_delete(kytag01_p);
+            fopAcM_delete(&kytag01_p->actor);
         }
     }
 
