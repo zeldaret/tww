@@ -441,10 +441,23 @@ BOOL body_atari_check(bpw_class* i_this) {
     case AT_TYPE_MACHETE:
     case AT_TYPE_SWORD:
         fopAcM_seStart(actor, JA_SE_LK_SW_HIT_S, 0x44);
-        if (player->getCutType() == 6 || player->getCutType() == 7 || player->getCutType() == 8 || player->getCutType() == 9 || player->getCutType() == 10 ||
-            player->getCutType() == 0xc || player->getCutType() == 0xe || player->getCutType() == 5 || player->getCutType() == 0xf ||
-            player->getCutType() == 0x10 || player->getCutType() == 0x15 || player->getCutType() == 0x17 || player->getCutType() == 0x19 ||
-            player->getCutType() == 0x1a || player->getCutType() == 0x1b || player->getCutType() == 0x1e || player->getCutType() == 0x1f)
+        if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EA ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EB ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_CUT_TURN ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_CUT_ROLL ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SWORD ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_STICK ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_BT_JUMPCUT ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_BT_ROLLCUT ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_CLUB ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXA ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXB ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXMJ ||
+            player->getCutType() == daPy_py_c::CUT_TYPE_CUT_KESA)
         {
             i_this->m3DF = 2;
             anm_init(i_this, BPW_BCK_BOYON_L1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
@@ -476,7 +489,7 @@ BOOL body_atari_check(bpw_class* i_this) {
     case AT_TYPE_SKULL_HAMMER:
         fopAcM_seStart(actor, JA_SE_LK_HAMMER_HIT, 0x44);
         i_this->m3DF = 8;
-        if (player->mCutType == 17) {
+        if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
             i_this->m3DF = 9;
         }
         anm_init(i_this, BPW_BCK_BOYON_L1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
@@ -3403,7 +3416,7 @@ BOOL kantera_atari_check(bpw_class* i_this) {
         actor->speedF = 60.0f;
         actor->current.angle.y = player->shape_angle.y;
         i_this->m3DF = 8;
-        if (player->mCutType == 17) {
+        if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
             i_this->m3DF = 9;
             actor->current.angle.y = player->shape_angle.y + -0x4000;
         }

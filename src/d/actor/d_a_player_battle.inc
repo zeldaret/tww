@@ -173,7 +173,7 @@ BOOL daPy_lk_c::procBtJumpCut_init(cXyz* param_0) {
     dComIfGp_setPlayerStatus0(0, (daPyStts0_UNK2_e | daPyStts0_UNK400_e));
     voiceStart(1);
     setBlurPosResource(LKANM__BTJUMPCUT_POS);
-    setExtraFinishCutAtParam(5);
+    setExtraFinishCutAtParam(CUT_TYPE_BT_JUMPCUT);
     dComIfGp_getVibration().StartShock(6, -0x21, cXyz(0.0f, 1.0f, 0.0f));
     return true;
 }
@@ -350,7 +350,7 @@ BOOL daPy_lk_c::procBtRollCut_init(cXyz* param_0) {
     speed.y = m_HIO->mBattle.mBRoll.m.field_0x2C;
     gravity = m_HIO->mBattle.mBRoll.m.field_0x30;
     voiceStart(1);
-    setExtraFinishCutAtParam(15);
+    setExtraFinishCutAtParam(CUT_TYPE_BT_ROLLCUT);
     offNoResetFlg0(daPyFlg0_NO_FALL_VOICE);
     onResetFlg0(daPyRFlg0_UNK2);
     onResetFlg0(daPyRFlg0_UNK1);
@@ -445,7 +445,7 @@ BOOL daPy_lk_c::procBtVerticalJumpCut_init() {
     mpCutfBpk->setFrame(0.0f);
     mpCutfBtk->setFrame(0.0f);
     gravity = m_HIO->mBattle.mBVerJump.m.field_0x28;
-    setExtraFinishCutAtParam(16);
+    setExtraFinishCutAtParam(CUT_TYPE_BT_VERTICALJUMPCUT);
     dComIfGp_setPlayerStatus0(0, (daPyStts0_UNK2_e | daPyStts0_UNK400_e));
     return true;
 }

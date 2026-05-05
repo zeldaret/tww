@@ -3856,9 +3856,7 @@ inline JPABaseEmitter* dComIfGp_particle_set(u16 particleID, const cXyz* pos,
                                              s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                              const GXColor* pEnvColor = NULL,
                                              const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setNormal(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                                pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->setNormal(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setP1(u16 particleID, const cXyz* pos,
@@ -3867,9 +3865,7 @@ inline JPABaseEmitter* dComIfGp_particle_setP1(u16 particleID, const cXyz* pos,
                                                s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                const GXColor* pEnvColor = NULL,
                                                const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setNormalP1(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                                pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->setNormalP1(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setToon(u16 particleID, const cXyz* pos,
@@ -3878,9 +3874,7 @@ inline JPABaseEmitter* dComIfGp_particle_setToon(u16 particleID, const cXyz* pos
                                                  s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                  const GXColor* pEnvColor = NULL,
                                                  const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setToon(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                              pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->setToon(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setToonP1(u16 particleID, const cXyz* pos,
@@ -3889,9 +3883,7 @@ inline JPABaseEmitter* dComIfGp_particle_setToonP1(u16 particleID, const cXyz* p
                                                    s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                    const GXColor* pEnvColor = NULL,
                                                    const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setToonP1(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                              pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->setToonP1(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setProjection(u16 particleID, const cXyz* pos,
@@ -3900,9 +3892,7 @@ inline JPABaseEmitter* dComIfGp_particle_setProjection(u16 particleID, const cXy
                                                        s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                        const GXColor* pEnvColor = NULL,
                                                        const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setProjection(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                                    pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->setProjection(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setShipTail(u16 particleID, const cXyz* pos,
@@ -3911,9 +3901,7 @@ inline JPABaseEmitter* dComIfGp_particle_setShipTail(u16 particleID, const cXyz*
                                                      s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                      const GXColor* pEnvColor = NULL,
                                                      const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setShipTail(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                                  pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->setShipTail(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_set2Dfore(u16 particleID, const cXyz* pos,
@@ -3922,9 +3910,7 @@ inline JPABaseEmitter* dComIfGp_particle_set2Dfore(u16 particleID, const cXyz* p
                                                    s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                    const GXColor* pEnvColor = NULL,
                                                    const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->set2Dfore(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                                pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->set2Dfore(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_set2Dback(u16 particleID, const cXyz* pos,
@@ -3933,9 +3919,7 @@ inline JPABaseEmitter* dComIfGp_particle_set2Dback(u16 particleID, const cXyz* p
                                                    s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                    const GXColor* pEnvColor = NULL,
                                                    const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->set2Dback(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                                pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->set2Dback(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_set2DmenuFore(u16 particleID, const cXyz* pos,
@@ -3944,43 +3928,36 @@ inline JPABaseEmitter* dComIfGp_particle_set2DmenuFore(u16 particleID, const cXy
                                                        s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                        const GXColor* pEnvColor = NULL,
                                                        const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->set2DmenuFore(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                                    pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->set2DmenuFore(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setSingleRipple(u16 particleID, const cXyz* pos,
                                                          const csXyz* angle = NULL,
                                                          const cXyz* scale = NULL,
                                                          u8 alpha = 0xFF) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setSingleRipple(particleID, pos, angle, scale, alpha);
+    return g_dComIfG_gameInfo.play.getParticle()->setSingleRipple(particleID, pos, angle, scale, alpha);
 }
 
 inline void dComIfGp_particle_setStripes(u16 particleID, const cXyz* pos, const csXyz* angle,
                                          const cXyz* scale, u8 param_4, u16 param_5) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    pParticle->setNormalStripes(particleID, pos, angle, scale, param_4, param_5);
+    g_dComIfG_gameInfo.play.getParticle()->setNormalStripes(particleID, pos, angle, scale, param_4, param_5);
 }
 
 inline void dComIfGp_particle_setSimple(u16 particleID, cXyz* pos, u8 alpha = 0xFF,
                                         GXColor& prmColor = g_whiteColor,
                                         GXColor& envColor = g_whiteColor,
                                         int param_6 = 0) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    pParticle->setSimple(particleID, pos, alpha, prmColor, envColor, param_6);
+    g_dComIfG_gameInfo.play.getParticle()->setSimple(particleID, pos, alpha, prmColor, envColor, param_6);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setSimpleLand(int code, const cXyz* param_1, const csXyz* param_2,
                                             f32 param_3, f32 param_4, f32 param_5,
                                             dKy_tevstr_c* param_6, int* param_7, int param_8) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setSimpleLand(code, param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8);
+    return g_dComIfG_gameInfo.play.getParticle()->setSimpleLand(code, param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setSimpleLand(cBgS_PolyInfo& param_1, const cXyz* pos, const csXyz* angle, f32 param_4, f32 param_5, f32 param_6, dKy_tevstr_c* param_7, int* param_8, int param_9) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setSimpleLand(param_1, pos, angle, param_4, param_5, param_6, param_7, param_8, param_9);
+    return g_dComIfG_gameInfo.play.getParticle()->setSimpleLand(param_1, pos, angle, param_4, param_5, param_6, param_7, param_8, param_9);
 }
 
 inline void dComIfGp_particle_forceDeleteEmitter(JPABaseEmitter* emitter) {
@@ -3990,8 +3967,7 @@ inline void dComIfGp_particle_forceDeleteEmitter(JPABaseEmitter* emitter) {
 inline JPABaseEmitter* dComIfGp_particle_setBombSmoke(u16 particleID, const cXyz* pos,
                                            const csXyz* angle = NULL, const cXyz* scale = NULL,
                                            u8 alpha = 0xFF) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setBombSmoke(particleID, pos, angle, scale, alpha);
+    return g_dComIfG_gameInfo.play.getParticle()->setBombSmoke(particleID, pos, angle, scale, alpha);
 }
 
 inline void dComIfGp_particle_calc3D() {

@@ -1168,10 +1168,7 @@ s32 daPy_lk_c::setItemModel() {
                 if (mpBottleContentsModel != NULL) {
                     if (mEquipItem == dItem_FIREFLY_BOTTLE_e) {
                         cXyz bottleScale; // ?
-                        fVar1 =
-                            1.0f + 0.1f * cM_ssin(cM_rad2s(
-                                              (37.699112f * mpEquipItemBrk->getFrame()) / mpEquipItemBrk->getFrameMax()
-                                          ));
+                        fVar1 = 1.0f + 0.1f * cM_ssin(cM_rad2s((37.699112f * mpEquipItemBrk->getFrame()) / mpEquipItemBrk->getFrameMax()));
                         bottleScale.setall(fVar1);
                         mDoMtx_stack_c::transS(11.0f, 0.0f, 0.0f);
                         mDoMtx_stack_c::revConcat(pMVar13);
@@ -1436,7 +1433,7 @@ s32 daPy_lk_c::setDrawHandModel() {
             uVar5 = mRightHandIdx;
         }
     } else if ((mEquipItem == dItem_GRAPPLING_HOOK_e && !checkModeFlg(ModeFlg_ROPE)) ||
-               (mEquipItem == dItem_SKULL_HAMMER_e && mCutType == 0))
+               (mEquipItem == dItem_SKULL_HAMMER_e && mCutType == CUT_TYPE_NONE))
     {
         uVar4 = 3;
         uVar5 = 8;
@@ -11363,7 +11360,7 @@ BOOL daPy_lk_c::execute() {
     }
     
     if (checkResetFlg0(daPyRFlg0_UNK8000000)) {
-        mCutType = 0;
+        mCutType = CUT_TYPE_NONE;
     }
     
     mResetFlg0 = 0;

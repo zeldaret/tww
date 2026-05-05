@@ -14,17 +14,6 @@
 #include "d/actor/d_a_obj_smplbg.h"
 #include "d/d_lib.h"
 
-
-#if VERSION == VERSION_DEMO
-static f32 lbl_285_data_1C[] = {
-	0.0f,
-    2.125f,
-    0.0f,
-    1.75f,
-    0.0f
-};
-#endif
-
 class daNpc_Tc_HIO_c : public mDoHIO_entry_c{
 public:
     daNpc_Tc_HIO_c();
@@ -590,12 +579,11 @@ void daNpc_Tc_c::setAnm() {
             JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_IT_SN_PF_BIKON00, &particlePos, NULL, &particleScale);
             
             pEmitter->setGlobalParticleScale(0.62f, 0.6f);
-            fopAcM_seStart(this, JA_SE_CM_CMN_NOTICE, 0); // regswap for demo likely happens here, daNpc_Tc_c::cutEffectStart also has a regswap with identical code
+            fopAcM_seStart(this, JA_SE_CM_CMN_NOTICE, 0);
         }
         mSmokeCallBack.end();
     }
     dLib_bcks_setAnm("Tc", mpMorf, &mBckIdx, &mAnmPrmIdx, &mOldAnmPrmIdx, a_anm_bck_tbl, a_anm_prm_tbl, false);
-    /* Nonmatching */
 }
 
 /* 00001168-000011C0       .text setTexAnm__10daNpc_Tc_cFv */
@@ -1976,7 +1964,7 @@ actor_process_profile_definition g_profile_NPC_TC = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ PRIO_NPC_TC,
     /* Actor SubMtd */ &l_daNpc_Tc_Method,
-    /* Status       */ fopAcStts_UNK40000_e,
+    /* Status       */ DEMO_SELECT(fopAcStts_UNK4000_e, 0) | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_12_e,
 };

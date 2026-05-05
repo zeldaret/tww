@@ -224,7 +224,6 @@ void hahen_move(dr2_class* i_this) {
 
 /* 00000884-0000130C       .text iwa_move__FP9dr2_class */
 void iwa_move(dr2_class* i_this) {
-    /* Nonmatching - retail-only regalloc */
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp58;
     cXyz sp4C;

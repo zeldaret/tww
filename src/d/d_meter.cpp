@@ -2535,7 +2535,12 @@ void dMeter_xyMove(sub_meter_class* i_Meter) {
         if (i_Meter->field_0x3021[i] != dComIfGp_getSelectItem(i)) {
             dMeter_xyItemChange(i_Meter, i);
             bVar2 = false;
-            if ((dComIfGp_getSelectItem(i) != dItem_MAGIC_ARROW_e) && (dComIfGp_getSelectItem(i) != dItem_LIGHT_ARROW_e)) {
+#if VERSION == VERSION_DEMO
+            if ((i_Meter->field_0x3021[i] == dItem_MAGIC_ARROW_e) || (i_Meter->field_0x3021[i] == dItem_LIGHT_ARROW_e))
+#else
+            if ((dComIfGp_getSelectItem(i) != dItem_MAGIC_ARROW_e) && (dComIfGp_getSelectItem(i) != dItem_LIGHT_ARROW_e))
+#endif
+            {
                 i_Meter->field_0x2320[i].pane->hide();
                 i_Meter->field_0x23c8[i].pane->hide();
                 i_Meter->field_0x2470[i].pane->hide();

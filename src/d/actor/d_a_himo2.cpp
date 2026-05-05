@@ -699,7 +699,7 @@ int himo2_bg_check(himo2_class* i_this) {
             i_this->m0308 = 30;
             cBgS_PolyInfo local_24;
             flag = i_this->m2574.GetOnePolyInfo(&local_24);
-            JUT_ASSERT(1569, flag == NULL);
+            JUT_ASSERT(DEMO_SELECT(1534, 1569), flag == NULL);
             uVar3 = dComIfG_Bgsp()->GetMtrlSndId(local_24);
             mDoAud_seStart(JA_SE_LK_SW_HIT_S, &actor->current.pos, uVar3, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
             iVar4 = dComIfG_Bgsp()->GetAttributeCode(local_24);

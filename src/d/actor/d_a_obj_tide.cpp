@@ -275,6 +275,7 @@ void Act_c::mode_norm_init() {
 
 /* 00000DD8-00000FAC       .text mode_norm__Q29daObjTide5Act_cFv */
 void Act_c::mode_norm() {
+    /* Compiler bug: Nondeterministically nonmatching? */
     bool uVar1;
     f32 fVar2;
     daTagWaterlevel::State_e uVar3;

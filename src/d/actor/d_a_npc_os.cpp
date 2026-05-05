@@ -2132,7 +2132,9 @@ BOOL daNpc_Os_c::execute() {
     static JGeometry::TVec3<f32> splash_scale(0.6f, 0.6f, 0.6f);
     static JGeometry::TVec3<f32> ripple_scale(1.0f, 1.0f, 1.0f);
 
+#if VERSION > VERSION_DEMO
     field_0x784 &= ~0x10;
+#endif
     fopAcM_OffStatus(this, fopAcStts_SHOWMAP_e);
     checkPlayerRoom();
     if(!finishCheck()) {
@@ -2166,7 +2168,14 @@ BOOL daNpc_Os_c::execute() {
         mAcchCir[1].SetWallR(40.0f);
     }
 
+#if VERSION == VERSION_DEMO
+    if (mpPedestal == NULL) {
+        mpPedestal = (daPedestal::daPds_c*)searchFromName(l_daiza_name[argument], 0xFF, 1);
+    }
+#else
     mpPedestal = (daPedestal::daPds_c*)searchFromName(l_daiza_name[argument], 0xFF, 1);
+#endif
+
     if(mpPedestal) {
         if(!isFinish()) {
             if(finishCheck()) {
@@ -2190,7 +2199,9 @@ BOOL daNpc_Os_c::execute() {
 
             mAcch.CrrPos(*dComIfG_Bgsp());
             
+#if VERSION > VERSION_DEMO
             field_0x784 |= 0x10;
+#endif
             if(mAcch.GetGroundH() != -G_CM3D_F_INF) {
                 tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
                 tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
@@ -2254,7 +2265,9 @@ BOOL daNpc_Os_c::execute() {
         
     
         mAcch.CrrPos(*dComIfG_Bgsp());
+#if VERSION > VERSION_DEMO
         field_0x784 |= 0x10;
+#endif
 
         if(chkPlayerAction(&daNpc_Os_c::walkPlayerAction) || chkNpcAction(&daNpc_Os_c::searchNpcAction)) {
             if(!mAcch.ChkGroundHit()) {
@@ -2326,6 +2339,7 @@ BOOL daNpc_Os_c::execute() {
             }
         }
     }
+#if VERSION > VERSION_DEMO
     else {
         mAcch.CrrPos(*dComIfG_Bgsp());
 
@@ -2335,6 +2349,7 @@ BOOL daNpc_Os_c::execute() {
             tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
         }
     }
+#endif
 
     if(!fopAcM_checkCarryNow(this)) {
         setCollision();

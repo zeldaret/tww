@@ -241,11 +241,21 @@ static BOOL week_atari_check(am2_class* i_this) {
             case AT_TYPE_DARKNUT_SWORD:
             case AT_TYPE_MOBLIN_SPEAR:
                 fopAcM_seStart(actor, JA_SE_LK_SW_HIT_S, 0x35);
-                if (player->getCutType() == 0x06 || player->getCutType() == 0x07 || player->getCutType() == 0x08 ||
-                    player->getCutType() == 0x09 || player->getCutType() == 0x0A || player->getCutType() == 0x0C ||
-                    player->getCutType() == 0x0E || player->getCutType() == 0x0F || player->getCutType() == 0x10 ||
-                    player->getCutType() == 0x15 || player->getCutType() == 0x19 || player->getCutType() == 0x1A ||
-                    player->getCutType() == 0x1B || player->getCutType() == 0x1E || player->getCutType() == 0x1F)
+                if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EA ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EB ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_TURN ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_ROLL ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SWORD ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_STICK ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_BT_ROLLCUT ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_CLUB ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXA ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXB ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXMJ ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_KESA)
                 {
                     hitType = 1;
                     i_this->m2CE = 1;
@@ -267,7 +277,7 @@ static BOOL week_atari_check(am2_class* i_this) {
                 fopAcM_seStart(actor, JA_SE_LK_HAMMER_HIT, 0x35);
                 hitType = 1;
                 i_this->m2CE = 7;
-                if (player->getCutType() == 0x11) {
+                if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                     i_this->m2CE = 8;
                 }
                 break;
@@ -352,7 +362,7 @@ static BOOL body_atari_check(am2_class* i_this) {
             i_this->mAction = ACTION_HANDOU_MOVE;
             i_this->mMode = 30;
             i_this->m2CE = 7;
-            if (player->getCutType() == 0x11) {
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                 i_this->m2CE = 8;
             }
             break;

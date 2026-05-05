@@ -159,7 +159,7 @@ BOOL daNpc_kam_c::callDemoStartCheck() {
         mDoMtx_stack_c::multVec(&l_call_local_kyori, &line_end_pos);
         mDoMtx_stack_c::YrotS(angleY);
         mDoMtx_stack_c::multVec(&l_call_local_kyori, &line_start_pos);
-        mDoMtx_stack_c::XrotM(-0x1555);
+        mDoMtx_stack_c::XrotM(angleX);
         mDoMtx_stack_c::multVec(&l_call_local_kyori, &descend_start_pos);
         
         line_end_pos += hyoi_pear_pos;

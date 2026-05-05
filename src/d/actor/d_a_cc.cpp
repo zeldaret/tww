@@ -557,11 +557,23 @@ BOOL body_atari_check(cc_class* i_this) {
                 return FALSE;
             }
 
-            if (player->getCutType() == 6 || player->getCutType() == 7 || player->getCutType() == 8 || player->getCutType() == 9 ||
-                player->getCutType() == 10 || player->getCutType() == 0xc || player->getCutType() == 0xe || player->getCutType() == 5 ||
-                player->getCutType() == 0xf || player->getCutType() == 0x10 || player->getCutType() == 0x15 || player->getCutType() == 0x17 ||
-                player->getCutType() == 0x19 || player->getCutType() == 0x1a || player->getCutType() == 0x1b || player->getCutType() == 0x1e ||
-                player->getCutType() == 0x1f)
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EA ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EB ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_TURN ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_ROLL ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SWORD ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_STICK ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_BT_JUMPCUT ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_BT_ROLLCUT ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_CLUB ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXA ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXB ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXMJ ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_KESA)
             {
                 i_this->m2F6 = 1;
             }
@@ -637,7 +649,7 @@ BOOL body_atari_check(cc_class* i_this) {
 
             i_this->m2F6 = 1;
 
-            if (player->getCutType() == 0x12 || player->getCutType() == 0x13) {
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING || player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER) {
                 i_this->m2F6 = 6;
             }
 

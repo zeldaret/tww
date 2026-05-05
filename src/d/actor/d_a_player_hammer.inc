@@ -182,7 +182,7 @@ BOOL daPy_lk_c::procHammerSideSwing_init() {
     voiceStart(1);
     m34D4 = shape_angle.y;
     setBlurPosResource(LKANM__HAMMERSIDE_POS);
-    setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK0, dCcG_SE_UNK5, dCcG_AtHitMark_Nrm_e, 17, 50.0f);
+    setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK0, dCcG_SE_UNK5, dCcG_AtHitMark_Nrm_e, CUT_TYPE_HAMMER_SIDESWING, 50.0f);
     mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMSWINGAA));
     m35EC = m_HIO->mItem.mHam.m.field_0xC;
     return true;
@@ -254,7 +254,7 @@ BOOL daPy_lk_c::procHammerFrontSwingReady_init() {
     } else {
         m34D4 = m34E8;
     }
-    setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK0, dCcG_SE_UNK5, dCcG_AtHitMark_Nrm_e, 18, 50.0f);
+    setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK0, dCcG_SE_UNK5, dCcG_AtHitMark_Nrm_e, CUT_TYPE_HAMMER_FRONTSWING, 50.0f);
     voiceStart(7);
     mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMSWINGBPREA));
     m35EC = m_HIO->mItem.mHam.m.field_0x24;
@@ -304,7 +304,7 @@ BOOL daPy_lk_c::procHammerFrontSwing_init() {
     }
     m34D4 = shape_angle.y;
     setBlurPosResource(LKANM__HAMMERFRONT_POS);
-    mCutType = 18;
+    mCutType = CUT_TYPE_HAMMER_FRONTSWING;
     offResetFlg0(daPyRFlg0_UNK8000000);
     onResetFlg0(daPy_RFLG0(daPyRFlg0_UNK1 | daPyRFlg0_UNK2));
     m34D0 = 0;
@@ -398,7 +398,7 @@ BOOL daPy_lk_c::procHammerFrontSwingEnd_init() {
     );
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
-    mCutType = 18;
+    mCutType = CUT_TYPE_HAMMER_FRONTSWING;
     offResetFlg0(daPyRFlg0_UNK8000000);
     return true;
 }
