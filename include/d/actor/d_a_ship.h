@@ -63,6 +63,7 @@ public:
         MODE_CANNON_e = 9,
         MODE_CRANE_e = 10,
         MODE_CRANE_UP_e = 11,
+        MODE_TORNADO_WARP_e = 12,
         MODE_START_MODE_WARP_e = 13,
         MODE_TACT_WARP_e = 14,
         MODE_START_MODE_THROW_e = 16,
