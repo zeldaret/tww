@@ -260,7 +260,7 @@ void dPa_followEcallBack::execute(JPABaseEmitter* emtr) {
     if (field_0x12 == 0 && !(mFlag & 2)) {
         emtr->setGlobalTranslation(mPos->x, mPos->y, mPos->z);
         if (mAngle != NULL)
-            emtr->setGlobalRotation(JGeometry::TVec3<s16>(mAngle->x, mAngle->y, mAngle->z));
+            emtr->setGlobalRotation(*mAngle);
     }
 
     if (emtr->isEnableDeleteEmitter()) {
@@ -753,7 +753,7 @@ JPABaseEmitter* dPa_control_c::set(u8 groupID, u16 userID, const cXyz* pos, cons
         return NULL;
 
     if (angle != NULL)
-        emtr->setGlobalRotation(*(JGeometry::TVec3<s16>*)angle);
+        emtr->setGlobalRotation(*angle);
 
     if (scale != NULL)
         emtr->setGlobalScale(*scale);
