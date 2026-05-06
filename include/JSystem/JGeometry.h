@@ -67,9 +67,9 @@ struct TVec3<s16> : public SVec {
         
     template<typename s16>
     void set(s16 x_, s16 y_, s16 z_) {
-        x = x_;
-        y = y_;
-        z = z_;
+        x = (s16)x_;
+        y = (s16)y_;
+        z = (s16)z_;
     }
 
     TVec3<s16>& operator=(const TVec3<s16>& b) {
