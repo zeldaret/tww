@@ -99,12 +99,12 @@ void daNpc_Wind_Eff::proc() {
                 mAlphaFactor -= 0.1f;
                 move();
 
-#if VERSION > VERSION_DEMO
+#if VERSION == VERSION_DEMO
+                pEmitter->setGlobalAlpha(mAlphaFactor * 128.0f);
+#else
                 if (pEmitter != NULL) {
                     pEmitter->setGlobalAlpha(mAlphaFactor * 128.0f);
                 }
-#else
-                pEmitter->setGlobalAlpha(mAlphaFactor * 128.0f);
 #endif
             } else {
                 remove();
@@ -291,21 +291,15 @@ void daNpc_Hr_c::offHide(int param_1) {
         }
         
         JPABaseEmitter* pEmitter = dComIfGp_particle_set(particleID, &mCloudPos, &shape_angle, &scale, 0xFF, &mSmokeCallBack, fopAcM_GetRoomNo(this));
+
 #if VERSION == VERION_DEMO
         mpEmitter = pEmitter;
 #endif
 
-#if VERSION == VERION_DEMO
-        if(mpEmitter != NULL && mType == 1) {
-            mpEmitter->setGlobalPrmColor(0x97, 0x76, 0xA9);
-            mpEmitter->setGlobalEnvColor(0x84, 0x70, 0x93);
+        if(DEMO_SELECT(mpEmitter, pEmitter) != NULL && mType == 1) {
+            DEMO_SELECT(mpEmitter, pEmitter)->setGlobalPrmColor(0x97, 0x76, 0xA9);
+            DEMO_SELECT(mpEmitter, pEmitter)->setGlobalEnvColor(0x84, 0x70, 0x93);
         }
-#else
-        if(pEmitter != NULL && mType == 1) {
-            pEmitter->setGlobalPrmColor(0x97, 0x76, 0xA9);
-            pEmitter->setGlobalEnvColor(0x84, 0x70, 0x93);
-        }
-#endif
     }
 }
 
@@ -439,7 +433,7 @@ void daNpc_Hr_c::demoInitSpeak() {
 /* 00000F38-00000FA8       .text demoProcSpeak__10daNpc_Hr_cFv */
 BOOL daNpc_Hr_c::demoProcSpeak() {
     u16 temp = talk();
-    if (temp == 0x12 || temp == 0xFE) {
+    if (temp == fopMsgStts_BOX_CLOSED_e || temp == 0xFE) {
         dComIfGp_evmng_cutEnd(mStaffIdx);
 
         if (chkFlag(HR_FLAG_00000002)) {
@@ -452,7 +446,7 @@ BOOL daNpc_Hr_c::demoProcSpeak() {
 /* 00000FA8-00001008       .text demoProcPatten__10daNpc_Hr_cFv */
 BOOL daNpc_Hr_c::demoProcPatten() {
     u16 temp = talk();
-    if (temp == 0x12 || temp == 0xFE || temp == 0x15) {
+    if (temp == fopMsgStts_BOX_CLOSED_e || temp == 0xFE || temp == fopMsgStts_INPUT_e) {
         dComIfGp_evmng_cutEnd(mStaffIdx);
     }
     return TRUE;
@@ -484,7 +478,7 @@ BOOL daNpc_Hr_c::demoProcTact0() {
 /* 000010DC-00001174       .text demoProcTact1__10daNpc_Hr_cFv */
 BOOL daNpc_Hr_c::demoProcTact1() {
     u16 temp = talk();
-    if ((u16)(temp - 0x12) <= 1 || temp == 0xFE) {
+    if (temp == fopMsgStts_BOX_CLOSED_e || temp == fopMsgStts_MSG_DESTROYED_e || temp == 0xFE) {
         if (chkFlag(HR_FLAG_00000200)) {
             endTalk();
             endTact();
@@ -602,11 +596,7 @@ BOOL daNpc_Hr_c::demoProcSmall() {
     }
     scale.setall(mScaleFactor);
 
-#if VERSION == VERSION_DEMO
-    JPABaseEmitter* pEmitter = mpEmitter;
-#else
-    JPABaseEmitter* pEmitter = mSmokeCallBack.getEmitter();
-#endif
+    JPABaseEmitter* pEmitter = DEMO_SELECT(mpEmitter, mSmokeCallBack.getEmitter());
 
     if(pEmitter != NULL) {
         pEmitter->setGlobalScale(scale);
@@ -1533,11 +1523,7 @@ bool daNpc_Hr_c::rt_search() {
         scale.setall(11.0f);
         speed.setall(0.0f);
 
-#if VERSION == VERSION_DEMO
-        JPABaseEmitter* pEmitter = mpEmitter;
-#else
-        JPABaseEmitter* pEmitter = mSmokeCallBack.getEmitter();
-#endif
+        JPABaseEmitter* pEmitter = DEMO_SELECT(mpEmitter, mSmokeCallBack.getEmitter());
 
         if(pEmitter != NULL) {
             pEmitter->setGlobalScale(scale);
@@ -1572,7 +1558,7 @@ bool daNpc_Hr_c::rt_hide() {
         mDoAud_seStart(JA_SE_CV_RC_ENTER);
         mDoAud_bgmAllMute(90);
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_3D01);
-    } else if (pShip != NULL && pShip->mTornadoID != fpcM_ERROR_PROCESS_ID_e) {
+    } else if (pShip != NULL && pShip->checkTornadoFlg()) {
         if (mMoveTimer > 0) {
             mMoveTimer--;
         } else {
@@ -1623,15 +1609,12 @@ bool daNpc_Hr_c::rt_angry() {
     scale.setall(11.0f);
     current.angle.y = fopAcM_searchActorAngleY(this, daPy_getPlayerLinkActorClass());
     
-#if VERSION == VERSION_DEMO
-    JPABaseEmitter* pEmitter = mpEmitter;
-#else
-    JPABaseEmitter* pEmitter = mSmokeCallBack.getEmitter();
-#endif
+    JPABaseEmitter* pEmitter = DEMO_SELECT(mpEmitter, mSmokeCallBack.getEmitter());
 
     if(pEmitter != NULL) {
         pEmitter->setGlobalScale(scale);
     }
+
     rideTornado();
     cCcD_Obj* hitObj = NULL;
     if (mCyl2.ChkTgHit()) {
@@ -1645,7 +1628,7 @@ bool daNpc_Hr_c::rt_angry() {
     }
     daShip_c* pShip = dComIfGp_getShipActor();
 
-    if (pShip->mCurMode == daShip_c::MODE_TORNADO_WARP_e) {
+    if (pShip->checkTornadoUp()) {
         mState = HR_STATE_RT_WIN;
         fopAcM_OnStatus(this, fopAcStts_UNK800_e);
 
@@ -1699,7 +1682,7 @@ bool daNpc_Hr_c::rt_hit0() {
         mStaffIdx = dComIfGp_evmng_getMyStaffId("Hr2");
         setEvFlag(EVFLAG_TORNADO_ACTIVE);
         demoProc();
-    } else if (pShip->mCurMode == daShip_c::MODE_TORNADO_WARP_e) {
+    } else if (pShip->checkTornadoUp()) {
         mState = HR_STATE_RT_WIN;
         fopAcM_OnStatus(this, fopAcStts_UNK800_e);
         setAnm(12);
@@ -1813,15 +1796,15 @@ void daNpc_Hr_c::setEmitFlash(f32 param_1) {
         param_1 = 0.0f;
     }
 
-#if VERSION > VERSION_DEMO
+#if VERSION == VERSION_DEMO
+    mpEmitter->setGlobalPrmColor(param_1 * 104.0f + 151.0f, param_1 * 137.0f + 118.0f, param_1 * 86.0f + 169.0f);
+    mpEmitter->setGlobalEnvColor(param_1 * 123.0f + 132.0f, param_1 * 143.0f + 112.0f, param_1 * 33.0f + 147.0f);
+#else
     JPABaseEmitter* pEmitter = mSmokeCallBack.getEmitter();
     if(pEmitter != NULL) {
         pEmitter->setGlobalPrmColor(param_1 * 104.0f + 151.0f, param_1 * 137.0f + 118.0f, param_1 * 86.0f + 169.0f);
         pEmitter->setGlobalEnvColor(param_1 * 123.0f + 132.0f, param_1 * 143.0f + 112.0f, param_1 * 33.0f + 147.0f);
     }
-#else
-    mpEmitter->setGlobalPrmColor(param_1 * 104.0f + 151.0f, param_1 * 137.0f + 118.0f, param_1 * 86.0f + 169.0f);
-    mpEmitter->setGlobalEnvColor(param_1 * 123.0f + 132.0f, param_1 * 143.0f + 112.0f, param_1 * 33.0f + 147.0f);
 #endif
 
 }
@@ -1832,20 +1815,11 @@ void daNpc_Hr_c::smokeProc() {
     JPABaseEmitter* pEmitter = mSmokeCallBack.getEmitter();
 #endif
 
-#if VERSION == VERSION_DEMO
-    if(!chkFlag(HR_FLAG_00000010) && mpEmitter != NULL && mType == 1 && mHitDelayTimer != 0) {
-#else 
-    if(!chkFlag(HR_FLAG_00000010) && pEmitter != NULL && mType == 1 && mHitDelayTimer != 0) {
-#endif        
+    if(!chkFlag(HR_FLAG_00000010) && DEMO_SELECT(mpEmitter, pEmitter) != NULL && mType == 1 && mHitDelayTimer != 0) {
         mHitDelayTimer--;
         if(mHitDelayTimer >= 0x50) {
-#if VERSION == VERSION_DEMO
-            mpEmitter->setGlobalPrmColor(0x7F, 0x5E, 0x91);
-            mpEmitter->setGlobalEnvColor(0x6C, 0x58, 0x7B);
-#else            
-            pEmitter->setGlobalPrmColor(0x7F, 0x5E, 0x91);
-            pEmitter->setGlobalEnvColor(0x6C, 0x58, 0x7B);
-#endif
+            DEMO_SELECT(mpEmitter, pEmitter)->setGlobalPrmColor(0x7F, 0x5E, 0x91);
+            DEMO_SELECT(mpEmitter, pEmitter)->setGlobalEnvColor(0x6C, 0x58, 0x7B);
         } else {
             if(mHitDelayTimer > 0xF) {
                 int temp = (mHitDelayTimer - 0x10);
@@ -1872,7 +1846,7 @@ void daNpc_Hr_c::smokeProc() {
 
 /* 000049B8-00004A38       .text talk01__10daNpc_Hr_cFv */
 bool daNpc_Hr_c::talk01() {
-    if (talk() == 0x12) {
+    if (talk() == fopMsgStts_BOX_CLOSED_e) {
         endTalk();
         daPy_getPlayerLinkActorClass()->offPlayerNoDraw();
     }
@@ -2106,17 +2080,15 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000051A8-000052C4       .text _create__10daNpc_Hr_cFv */
 cPhs_State daNpc_Hr_c::_create() {
-#if VERSION == VERSION_DEMO
-    cPhs_State state = dComIfG_resLoad(&mPhs, "Hr");
-    if (state == cPhs_COMPLEATE_e) {
-    fopAcM_SetupActor(this, daNpc_Hr_c);
-#else
-    fopAcM_SetupActor(this, daNpc_Hr_c);
-    cPhs_State state = dComIfG_resLoad(&mPhs, "Hr");
-    if (state == cPhs_COMPLEATE_e) {
-#endif
 
-    
+#if VERSION > VERSION_DEMO
+    fopAcM_SetupActor(this, daNpc_Hr_c);
+#endif
+    cPhs_State state = dComIfG_resLoad(&mPhs, "Hr");
+    if (state == cPhs_COMPLEATE_e) {
+#if VERSION == VERSION_DEMO
+    fopAcM_SetupActor(this, daNpc_Hr_c);
+#endif
         switch(fopAcM_GetName(this)) {
             case PROC_NPC_HR:
                 switch (getShapeType()) {
