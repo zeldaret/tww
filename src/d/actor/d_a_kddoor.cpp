@@ -5,118 +5,396 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kddoor.h"
+#include "JSystem/JMath/JMATrigonometric.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/res/res_ssk.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_ext.h"
+
+typedef void (*ActionFunc)(daKddoor_c*);
 
 /* 00000078-000000A8       .text chkMakeKey__10daKddoor_cFv */
-void daKddoor_c::chkMakeKey() {
-    /* Nonmatching */
+BOOL daKddoor_c::chkMakeKey() {
+    return getType() == 2 ? TRUE : FALSE;
 }
 
 /* 000000A8-00000114       .text setKey__10daKddoor_cFv */
 void daKddoor_c::setKey() {
-    /* Nonmatching */
+    if (chkMakeKey() && !dComIfGs_isSwitch(getSwbit(), -1)) {
+        mKeyLock.keyOn();
+    } else {
+        mKeyLock.keyOff();
+    }
 }
 
 /* 00000114-00000184       .text chkMakeStop__10daKddoor_cFv */
-void daKddoor_c::chkMakeStop() {
-    /* Nonmatching */
+BOOL daKddoor_c::chkMakeStop() {
+    if (getSwbit2() != 0xFF) {
+        return TRUE;
+    }
+
+    if (!chkMakeKey() && getSwbit() != 0xFF) {
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00000184-00000240       .text chkStopF__10daKddoor_cFv */
-void daKddoor_c::chkStopF() {
-    /* Nonmatching */
+s32 daKddoor_c::chkStopF() {
+    u8 type = getType();
+    u8 swbit = getSwbit();
+    u8 room_no = getFRoomNo();
+
+    if (swbit == 0xFF) {
+        return 0;
+    }
+
+    switch (type) {
+    case 0:
+    case 1:
+        if (dComIfGp_roomControl_checkStatusFlag(room_no, 0x1) == FALSE) {
+            return -1;
+        }
+    return !dComIfGs_isSwitch(swbit, room_no);
+}
+
+    return 0;
 }
 
 /* 00000240-000002D0       .text chkStopB__10daKddoor_cFv */
-void daKddoor_c::chkStopB() {
-    /* Nonmatching */
+s32 daKddoor_c::chkStopB() {
+    u8 swbit = getSwbit2();
+    u8 room_no = getBRoomNo();
+
+    if (swbit == 0xFF) {
+        return 0;
+    }
+
+    if (!dComIfGp_roomControl_checkStatusFlag(room_no, 0x1)) {
+        return -1;
+    }
+
+    return !dComIfGs_isSwitch(swbit, room_no);
 }
 
 /* 000002D0-0000034C       .text setStop__10daKddoor_cFv */
 void daKddoor_c::setStop() {
-    /* Nonmatching */
+    if (chkMakeStop()) {
+        mStopBars.m9 = mFrontCheck;
+        if (mFrontCheck == 0) {
+            mStopBars.m8 = chkStopF();
+            mStopBars.mA = chkStopB();
+        } else {
+            mStopBars.m8 = chkStopB();
+            mStopBars.mA = chkStopF();
+        }
+    }
 }
 
 /* 0000034C-000003CC       .text chkGenocideCase__10daKddoor_cFv */
-void daKddoor_c::chkGenocideCase() {
-    /* Nonmatching */
+BOOL daKddoor_c::chkGenocideCase() {
+    u8 type = getType();
+
+    if (mFrontCheck == 0) {
+        switch (type) {
+        case 1:
+            return TRUE;
+        }
+    } else {
+        switch (type) {
+        case 2:
+        case 4:
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }
 
 /* 000003CC-00000428       .text chkFeelerCase__10daKddoor_cFv */
-void daKddoor_c::chkFeelerCase() {
-    /* Nonmatching */
+BOOL daKddoor_c::chkFeelerCase() {
+    u8 type = getType();
+
+    if (mFrontCheck == 0) {
+        switch (type) {
+        case 3:
+        case 4:
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }
 
 /* 00000428-00000558       .text chkStopOpen__10daKddoor_cFv */
-void daKddoor_c::chkStopOpen() {
-    /* Nonmatching */
+BOOL daKddoor_c::chkStopOpen() {
+    u8 swbit;
+    u8 room_no;
+
+    if (mFrontCheck == 0) {
+        swbit = getSwbit();
+        room_no = getFRoomNo();
+    } else {
+        swbit = getSwbit2();
+        room_no = getBRoomNo();
+    }
+
+    if (chkGenocideCase()) {
+        if (dComIfGp_event_getMode() == dEvtMode_NONE_e) {
+            if (dComIfGp_roomControl_checkRoomDisp(room_no)) {
+                if (fopAcM_myRoomSearchEnemy(room_no) == NULL) {
+                    if (m2A1 != 0) {
+                        m2A1--;
+                        return FALSE;
+                    }
+
+                    if (swbit != 0xFF) {
+                        dComIfGs_onSwitch(swbit, room_no);
+                    }
+
+                    return TRUE;
+                }
+            }
+
+            m2A1 = 0x41;
+        }
+    } else {
+        if (swbit != 0xFF && dComIfGs_isSwitch(swbit, room_no)) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }
 
 /* 00000558-0000057C       .text setStopDemo__10daKddoor_cFv */
 void daKddoor_c::setStopDemo() {
-    /* Nonmatching */
+    if (mFrontCheck == 0) {
+        m2C6 = 0;
+    } else {
+        m2C6 = 1;
+    }
 }
 
 /* 0000057C-00000670       .text chkStopClose__10daKddoor_cFv */
-void daKddoor_c::chkStopClose() {
-    /* Nonmatching */
+BOOL daKddoor_c::chkStopClose() {
+    u8 type = getType();
+    u8 room_no;
+
+    if (chkGenocideCase()) {
+        return FALSE;
+    }
+
+    if (chkFeelerCase()) {
+        return FALSE;
+    }
+
+    if (mFrontCheck == 0) {
+        switch (type) {
+        case 3:
+        case 4:
+            return FALSE;
+        }
+
+        type = getSwbit();
+        room_no = getFRoomNo();
+    } else {
+        type = getSwbit2();
+        room_no = getBRoomNo();
+    }
+
+    if (type == 0xFF) {
+        return FALSE;
+    }
+
+    if (dComIfGs_isSwitch(type, room_no)) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* 00000670-000006D0       .text init__11dDoor_ssk_cFP12dDoor_info_c */
-void dDoor_ssk_c::init(dDoor_info_c*) {
-    /* Nonmatching */
+void dDoor_ssk_c::init(dDoor_info_c* i_door) {
+    dKy_tevstr_init(&mTevStr, i_door->tevStr.mRoomNo, 0xFF);
+
+    for (s32 i = 0; i < 3; i++) {
+        mSub[i].init();
+    }
 }
 
 /* 000006D0-00000720       .text end__11dDoor_ssk_cFv */
 void dDoor_ssk_c::end() {
-    /* Nonmatching */
+    for (s32 i = 0; i < 3; i++) {
+        mSub[i].end();
+    }
 }
 
 /* 00000720-000007A8       .text calcMtx__11dDoor_ssk_cFP12dDoor_info_c */
-void dDoor_ssk_c::calcMtx(dDoor_info_c*) {
-    /* Nonmatching */
+void dDoor_ssk_c::calcMtx(dDoor_info_c* i_door) {
+    if (m8 != 0) {
+        dDoor_ssk_sub_c& sub0 = mSub[0];
+        dDoor_ssk_sub_c& sub1 = mSub[1];
+        dDoor_ssk_sub_c& sub2 = mSub[2];
+        sub0.calcMtx(i_door, 0.0f, 100.0f, m9);
+        sub1.calcMtx(i_door, 100.0f, 75.0f, m9);
+        sub2.calcMtx(i_door, -100.0f, 75.0f, m9);
+    }
 }
 
 /* 000007A8-00000978       .text nodeCB__FP7J3DNodei */
-static BOOL nodeCB(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCB(J3DNode* node, int calcTiming) {
+    if (calcTiming == 0) {
+        J3DJoint* joint = (J3DJoint*)node;
+        int jnt_no = (u16)joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        dDoor_ssk_sub_c* i_this = (dDoor_ssk_sub_c*)model->getUserArea();
+
+        if (i_this != NULL && jnt_no > 0 && jnt_no <= 3) {
+            PSMTXCopy(model->getAnmMtx(jnt_no), *calc_mtx);
+
+            f32 s = JMASSin((jnt_no * 0x4e20) + (i_this->m196 * i_this->m19E) * 2);
+            mDoMtx_YrotM(*calc_mtx, (int)(s16)(2000.0f * s));
+
+            s = JMASSin((i_this->m196 * 0x28a) + (jnt_no * 0x2ee0));
+            mDoMtx_XrotM(*calc_mtx, (int)(s16)(2000.0f * s));
+
+            s = JMASSin((jnt_no * 0x3a98) + (i_this->m196 * i_this->m19E));
+            mDoMtx_ZrotM(*calc_mtx, (int)(s16)(4000.0f * s));
+
+            PSMTXCopy(*calc_mtx, model->getAnmMtx(jnt_no));
+            PSMTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+        }
+    }
+
+    return TRUE;
 }
 
 /* 00000978-00000AF8       .text execute__11dDoor_ssk_cFP12dDoor_info_c */
-void dDoor_ssk_c::execute(dDoor_info_c*) {
-    /* Nonmatching */
+void dDoor_ssk_c::execute(dDoor_info_c* i_door) {
+    cXyz* eyePos;
+    dDoor_ssk_sub_c* sub;
+    s32 i;
+    for (i = 0; i < 3; i++) {
+        sub = &mSub[i];
+        if (sub->mpModel != NULL) {
+            for (u16 j = 0; j < sub->mpModel->getModel()->getModelData()->getJointNum(); j++) {
+                sub->mpModel->getModel()->getModelData()->getJointNodePointer(j)->setCallBack(nodeCB);
+            }
+
+            sub->mpModel->calc();
+            sub->m196 += sub->m198;
+        }
+
+        dComIfG_Ccsp()->Set(&sub->mCyl);
+
+        eyePos = &i_door->eyePos;
+        if (sub->m1A0 > 0.9f) {
+            if (sub->m1C5 == 0) {
+                s8 reverb = dComIfGp_getReverb(i_door->current.roomNo);
+                JAIZelBasic::zel_basic->seStart(
+                    0x3823,
+                    eyePos,
+                    0,
+                    reverb,
+                    1.0f,
+                    1.0f,
+                    -1.0f,
+                    -1.0f,
+                    0);
+                sub->m1C5 = (u8)(50.0f + 30.0f * cM_rnd());
+            } else {
+                sub->m1C5--;
+            }
+        } else {
+            sub->m1C5 = 0;
+        }
+    }
 }
 
 /* 00000AF8-00000BB0       .text draw__11dDoor_ssk_cFP12dDoor_info_c */
-void dDoor_ssk_c::draw(dDoor_info_c*) {
-    /* Nonmatching */
+void dDoor_ssk_c::draw(dDoor_info_c* i_door) {
+    g_env_light.settingTevStruct(0, &i_door->current.pos, &mTevStr);
+
+    dDoor_ssk_sub_c* sub;
+    s32 i;
+    for (i = 0; i < 3; i++) {
+        sub = &mSub[i];
+        if (sub->mpModel != NULL) {
+            g_env_light.setLightTevColorType(sub->mpModel->getModel(), &mTevStr);
+            sub->mpModel->entryDL();
+        }
+        if (sub->mpMorf != NULL) {
+            g_env_light.setLightTevColorType(sub->mpMorf->getModel(), &mTevStr);
+            sub->mpMorf->updateDL();
+        }
+    }
 }
 
 /* 00000BB0-00000C08       .text closeInit__11dDoor_ssk_cFv */
 void dDoor_ssk_c::closeInit() {
-    /* Nonmatching */
+    mB = 1;
+
+    for (s32 i = 0; i < 3; i++) {
+        mSub[i].closeInit();
+    }
 }
 
 /* 00000C08-00000C98       .text closeProc__11dDoor_ssk_cFP12dDoor_info_c */
-void dDoor_ssk_c::closeProc(dDoor_info_c*) {
-    /* Nonmatching */
+BOOL dDoor_ssk_c::closeProc(dDoor_info_c* i_door) {
+    if (mB == 0) {
+        return TRUE;
+    }
+
+    BOOL complete = TRUE;
+    for (s32 i = 0; i < 3; i++) {
+        if (!mSub[i].closeProc(i_door)) {
+            complete = FALSE;
+        }
+    }
+
+    if (complete) {
+        mB = 0;
+    }
+
+    return complete;
 }
 
 /* 00000C98-00000CF0       .text openInit__11dDoor_ssk_cFv */
 void dDoor_ssk_c::openInit() {
-    /* Nonmatching */
+    mB = 1;
+
+    for (s32 i = 0; i < 3; i++) {
+        mSub[i].openInit();
+    }
 }
 
 /* 00000CF0-00000D84       .text openProc__11dDoor_ssk_cFP12dDoor_info_c */
-void dDoor_ssk_c::openProc(dDoor_info_c*) {
-    /* Nonmatching */
+BOOL dDoor_ssk_c::openProc(dDoor_info_c* i_door) {
+    if (mB == 0) {
+        return TRUE;
+    }
+
+    BOOL complete = TRUE;
+    for (s32 i = 0; i < 3; i++) {
+        if (!mSub[i].openProc(i_door)) {
+            complete = FALSE;
+        }
+    }
+
+    if (complete) {
+        mB = 0;
+        m8 = 0;
+    }
+
+    return complete;
 }
 
 /* 00000D84-00000DE8       .text init__15dDoor_ssk_sub_cFv */
 void dDoor_ssk_sub_c::init() {
-    /* Nonmatching */
     static dCcD_SrcCyl body_co_cyl = {
         // dCcD_SrcGObjInf
         {
@@ -146,151 +424,654 @@ void dDoor_ssk_sub_c::init() {
             /* Height */ 300.0f,
         }},
     };
+
+    mStts.Init(0xFF, 0xFF, NULL);
+    mCyl.Set(body_co_cyl);
+    mCyl.SetStts(&mStts);
+    m194 = 1;
+    mSmokeCb.setRateOff(0);
 }
 
 /* 00000DE8-00000E14       .text end__15dDoor_ssk_sub_cFv */
 void dDoor_ssk_sub_c::end() {
-    /* Nonmatching */
+    mSmokeCb.end();
 }
 
 /* 00000E14-00000E84       .text openInit__15dDoor_ssk_sub_cFv */
 void dDoor_ssk_sub_c::openInit() {
-    /* Nonmatching */
+    m1A0 = 1.0f;
+    m1A4 = 1.0f;
+    m1A8 = 1.0f;
+    m1AC = 1.0f;
+    m1B0 = 1.0f;
+    m1B4 = 1.0f;
+    m19C = cM_rnd() * 5.0f;
+    m1C4 = 0;
 }
 
 /* 00000E84-00000FB4       .text openProc__15dDoor_ssk_sub_cFP12dDoor_info_c */
-void dDoor_ssk_sub_c::openProc(dDoor_info_c*) {
-    /* Nonmatching */
+BOOL dDoor_ssk_sub_c::openProc(dDoor_info_c* i_door) {
+    f32 tmp;
+    if (m19C > 0) {
+        m19C--;
+        return FALSE;
+    }
+
+    if (m1A4 > 0.1f) {
+        if (m1C4 == 0) {
+            m1C4 = 1;
+            JAIZelBasic::zel_basic->seStart(
+                0x694D,
+                &i_door->eyePos,
+                0,
+                dComIfGp_getReverb(i_door->current.roomNo),
+                1.0f,
+                1.0f,
+                -1.0f,
+                -1.0f,
+                0
+            );
+        }
+
+        cLib_addCalc0(&m1A4, 0.25f, 0.3f);
+        tmp = m1A4;
+        m1A0 = tmp;
+        m1A8 = tmp;
+        return FALSE;
+
+    }
+
+    m1A0 = 0.0f;
+    m1A4 = 0.0f;
+    m1A8 = 0.0f;
+
+    if (m1B0 > 0.1f) {
+        cLib_addCalc0(&m1B0, 0.5f, 0.3f);
+        tmp = m1B0;
+        m1AC = tmp;
+        m1B4 = tmp;
+        return FALSE;
+    }
+
+    m1AC = 0.0f;
+    m1B0 = 0.0f;
+    m1B4 = 0.0f;
+    return TRUE;
 }
 
 /* 00000FB4-00001024       .text closeInit__15dDoor_ssk_sub_cFv */
 void dDoor_ssk_sub_c::closeInit() {
-    /* Nonmatching */
+    m1A0 = 0.0f;
+    m1A4 = 0.0f;
+    m1A8 = 0.0f;
+    m1AC = 0.0f;
+    m1B0 = 0.0f;
+    m1B4 = 0.0f;
+    m19C = cM_rnd() * 5.0f;
+    m1C4 = 0;
 }
 
 /* 00001024-0000121C       .text closeProc__15dDoor_ssk_sub_cFP12dDoor_info_c */
-void dDoor_ssk_sub_c::closeProc(dDoor_info_c*) {
-    /* Nonmatching */
+BOOL dDoor_ssk_sub_c::closeProc(dDoor_info_c* i_door) {
+    f32 tmp;
+    if (m19C > 0) {
+        m19C--;
+        return FALSE;
+    }
+
+    if (m1B0 < 0.9f) {
+        cLib_addCalc2(&m1B0, 1.0f, 0.5f, 0.3f);
+        tmp = m1B0;
+        m1AC = tmp;
+        m1B4 = tmp;
+        return FALSE;
+    }
+
+    m1AC = 1.0f;
+    m1B0 = 1.0f;
+    m1B4 = 1.0f;
+
+    if (m1C4 == 0) {
+        m1C4 = 1;
+        JAIZelBasic::zel_basic->seStart(
+            0x694B,
+            &i_door->eyePos,
+            0,
+            dComIfGp_getReverb(i_door->current.roomNo),
+            1.0f,
+            1.0f,
+            -1.0f,
+            -1.0f,
+            0
+        );
+        dComIfGp_particle_set(0x816C, &m1B8, NULL, NULL, 0xFF, NULL, -1, &i_door->tevStr.mColorK0,
+                              &i_door->tevStr.mColorK0, NULL);
+
+        csXyz angle;
+        angle.x = i_door->shape_angle.x;
+        angle.y = i_door->shape_angle.y;
+        angle.z = i_door->shape_angle.z;
+        if (i_door->mFrontCheck == 1) {
+            angle.y += 0x7FFF;
+        }
+
+        dComIfGp_particle_setToon(0xA16D, &m1B8, &angle, NULL, 0xB9, &mSmokeCb, fopAcM_GetRoomNo(i_door));
+    }
+
+    if (m1A4 < 0.9f) {
+        cLib_addCalc2(&m1A4, 1.0f, 0.3f, 0.3f);
+        tmp = m1A4;
+        m1A0 = tmp;
+        m1A8 = tmp;
+        return FALSE;
+    }
+
+    m1A0 = 1.0f;
+    m1A4 = 1.0f;
+    m1A8 = 1.0f;
+    return TRUE;
 }
 
 /* 0000121C-00001390       .text __ct__15dDoor_ssk_sub_cFv */
-dDoor_ssk_sub_c::dDoor_ssk_sub_c() {
-    /* Nonmatching */
+dDoor_ssk_sub_c::dDoor_ssk_sub_c() : mSmokeCb(1) {
+    m198 = (s16)(2.0f + cM_rnd() * 3.0f);
+    if (cM_rnd() < 0.5f) {
+        m198 *= (s16)-1;
+    }
+    m19E = (s16)(450.0f + cM_rnd() * 100.0f);
+    m19A = (s16)((cM_rnd() - 0.5f) * 12000.0f);
+    m1A0 = 1.0f;
+    m1A4 = 1.0f;
+    m1A8 = 1.0f;
+    m1AC = 1.0f;
+    m1B0 = 1.0f;
+    m1B4 = 1.0f;
 }
 
+static const f32 l_force10000_data[1] = {10000.0f};
+char const daKddoor_c::M_arcname[] = "Ssk";
+
 /* 000015A4-00001778       .text drawSet__15dDoor_ssk_sub_cFv */
-void dDoor_ssk_sub_c::drawSet() {
-    /* Nonmatching */
+BOOL dDoor_ssk_sub_c::drawSet() {
+    mpModel = new mDoExt_McaMorf(
+        (J3DModelData*)dComIfG_getObjectRes("Ssk", SSK_BDL_TURU_02),
+        NULL, NULL, NULL, 2, 1.0f, 0, -1, 0, NULL, 0, 0x11020203
+    );
+
+    if (mpModel == NULL || mpModel->getModel() == NULL) {
+        return FALSE;
+    }
+
+    mpModel->getModel()->setUserArea((u32)this);
+
+    for (u16 j = 0; j < mpModel->getModel()->getModelData()->getJointNum(); j++) {
+        mpModel->getModel()->getModelData()->getJointNodePointer(j)->setCallBack(nodeCB);
+    }
+
+    mpMorf = new mDoExt_McaMorf(
+        (J3DModelData*)dComIfG_getObjectRes("Ssk", SSK_BDL_KTANA_00),
+        NULL, NULL, NULL, 2, 1.0f, 0, -1, 0, NULL, 0, 0x11020203
+    );
+
+    if (mpModel == NULL || mpModel->getModel() == NULL) {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 00001778-00001904       .text calcMtx__15dDoor_ssk_sub_cFP12dDoor_info_cffUc */
-void dDoor_ssk_sub_c::calcMtx(dDoor_info_c*, float, float, unsigned char) {
-    /* Nonmatching */
+void dDoor_ssk_sub_c::calcMtx(dDoor_info_c* i_door, f32 i_xoff, f32 i_yoff, u8 i_frontCheck) {
+    if (mpModel == NULL) {
+        return;
+    }
+
+    {
+        J3DModel* model = mpModel->getModel();
+        model->getBaseScale()->x = m1A0;
+        model->getBaseScale()->y = m1A4;
+        model->getBaseScale()->z = m1A8;
+    }
+
+    {
+        J3DModel* model = mpMorf->getModel();
+        model->getBaseScale()->x = m1AC;
+        model->getBaseScale()->y = m1B0;
+        model->getBaseScale()->z = m1B4;
+    }
+
+    mDoMtx_stack_c::transS(i_door->current.pos);
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), i_door->current.angle.y);
+
+    if (i_frontCheck == 1) {
+        mDoMtx_YrotM(mDoMtx_stack_c::get(), 0x7FFF);
+    }
+
+    mDoMtx_stack_c::transM(i_xoff, 0.0f, i_yoff);
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), m19A);
+
+    mpModel->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    cXyz zero(0.0f, 0.0f, 0.0f);
+    PSMTXMultVec(mDoMtx_stack_c::get(), &zero, &m1B8);
+
+    mCyl.SetC(m1B8);
+    mCyl.SetR(50.0f * m1AC);
 }
 
 /* 00001904-00001914       .text getBmdName__10daKddoor_cFv */
-void daKddoor_c::getBmdName() {
-    /* Nonmatching */
+const char* daKddoor_c::getBmdName() {
+    return "door10.bmd";
 }
 
 /* 00001914-00001924       .text getBmdName2__10daKddoor_cFv */
-void daKddoor_c::getBmdName2() {
-    /* Nonmatching */
+const char* daKddoor_c::getBmdName2() {
+    return "door10.bdl";
 }
 
 /* 00001924-00001934       .text getDzbName__10daKddoor_cFv */
-void daKddoor_c::getDzbName() {
-    /* Nonmatching */
+const char* daKddoor_c::getDzbName() {
+    return "door10.dzb";
 }
 
 /* 00001934-00001954       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daKddoor_c*)i_this)->CreateHeap();
 }
 
 /* 00001954-00001B74       .text CreateHeap__10daKddoor_cFv */
-void daKddoor_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daKddoor_c::CreateHeap() {
+    void* temp = dComIfG_getStageRes("Stage", getBmdName());
+    J3DModelData* modelData = (J3DModelData*)temp;
+
+    if (modelData == NULL) {
+        modelData = (J3DModelData*)dComIfG_getStageRes("Stage", getBmdName2());
+    }
+
+    JUT_ASSERT(0x364, modelData != 0);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+
+    if (chkMakeKey()) {
+        if (!mKeyLock.keyCreate(0)) {
+            return FALSE;
+        }
+    }
+
+    if (chkMakeStop()) {
+        for (u16 i = 0; i < 3; i++) {
+            if (!mStopBars.mSub[i].drawSet()) {
+                return FALSE;
+            }
+        }
+    }
+
+    mpBgW = new dBgW();
+    if (mpBgW == NULL) {
+        return FALSE;
+    }
+
+    cBgD_t* bgd = (cBgD_t*)dComIfG_getStageRes("Stage", getDzbName());
+    if (bgd == NULL) {
+        return FALSE;
+    }
+
+    calcMtx();
+    mKeyLock.calcMtx(this);
+    mStopBars.calcMtx(this);
+
+    if (mpBgW->Set(bgd, 1, &mpModel->getBaseTRMtx()) != 1) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00001B74-00001CD0       .text setEventPrm__10daKddoor_cFv */
 void daKddoor_c::setEventPrm() {
-    /* Nonmatching */
+    u8 swbit;
+
+    if (mFrontCheck == 0) {
+        m2C6 = 2;
+        if (mStopBars.mA == 0xFF) {
+            mStopBars.mA = chkStopB();
+        }
+    } else {
+        m2C6 = 3;
+        if (mStopBars.mA == 0xFF) {
+            mStopBars.mA = chkStopF();
+        }
+    }
+
+    if (mStopBars.m8 != 0) {
+        return;
+    }
+
+    if (mStopBars.mA == 1) {
+        m2C6 += 2;
+    }
+
+    if (mKeyLock.mbEnabled != 0 && dComIfGs_getKeyNum() == 0) {
+        return;
+    }
+
+    swbit = getSwbit();
+    if (chkFeelerCase() && swbit != 0xFF && !dComIfGs_isSwitch(swbit, getFRoomNo())) {
+        return;
+    }
+
+    if (checkArea(12100.0f, 12100.0f, 62500.0f)) {
+        eventInfo.setEventId(mEventIdx[m2C6]);
+        eventInfo.setToolId(mToolId[m2C6]);
+        eventInfo.onCondition(dEvtCnd_CANDOOR_e);
+    }
 }
 
 /* 00001CD0-00001D7C       .text openInit__10daKddoor_cFv */
 void daKddoor_c::openInit() {
-    /* Nonmatching */
+    openInitCom(1);
+    onFlag(1);
+    dComIfG_Bgsp()->Release(mpBgW);
+    m94C = 0.0f;
+    speedF = 0.0f;
+    JAIZelBasic::zel_basic->seStart(0x6907, &eyePos, 0,
+                                    dComIfGp_getReverb(current.roomNo), 1.0f,
+                                    1.0f, -1.0f, -1.0f, 0);
 }
 
-/* 00001D7C-00001DF0       .text openProc__10daKddoor_cFv */
-void daKddoor_c::openProc() {
-    /* Nonmatching */
+/* 00001D7C-00001DEC       .text openProc__10daKddoor_cFv */
+BOOL daKddoor_c::openProc() {
+    BOOL matched = FALSE;
+    cLib_chaseF(&speedF, 30.0f, 4.0f);
+    if (cLib_chaseF(&m94C, 300.0f, speedF)) {
+        matched = TRUE;
+    }
+    calcMtx();
+    return matched;
 }
 
 /* 00001DF0-00001E84       .text openEnd__10daKddoor_cFv */
 void daKddoor_c::openEnd() {
-    /* Nonmatching */
+    JAIZelBasic::zel_basic->seStart(0x6909, &eyePos, 0,
+                                    dComIfGp_getReverb(current.roomNo), 1.0f,
+                                    1.0f, -1.0f, -1.0f, 0);
+    offFlag(1);
+    m94C = 300.0f;
+    speedF = 0.0f;
 }
 
 /* 00001E84-00001F64       .text closeInit__10daKddoor_cFv */
 void daKddoor_c::closeInit() {
-    /* Nonmatching */
+    onFlag(2);
+    BOOL rt = dComIfG_Bgsp()->Regist(mpBgW, this);
+    JUT_ASSERT(0x3FF, !rt);
+    dMap_c::mAGBMapSendStopFlg = 0;
+    JAIZelBasic::zel_basic->seStart(0x6908, &eyePos, 0,
+                                    dComIfGp_getReverb(current.roomNo), 1.0f,
+                                    1.0f, -1.0f, -1.0f, 0);
 }
 
 /* 00001F64-00001FD8       .text closeProc__10daKddoor_cFv */
-void daKddoor_c::closeProc() {
-    /* Nonmatching */
+BOOL daKddoor_c::closeProc() {
+    BOOL matched = FALSE;
+    cLib_chaseF(&speedF, 60.0f, 6.0f);
+    if (cLib_chaseF(&m94C, 0.0f, speedF)) {
+        matched = TRUE;
+    }
+    calcMtx();
+    return matched;
 }
 
 /* 00001FD8-00002090       .text closeEnd__10daKddoor_cFv */
 void daKddoor_c::closeEnd() {
-    /* Nonmatching */
+    mFlags &= ~2;
+    closeEndCom();
+
+    dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+
+    JAIZelBasic::zel_basic->seStart(0x690A, &eyePos, 0,
+                                     dComIfGp_getReverb(current.roomNo), 1.0f,
+                                      1.0f, -1.0f, -1.0f, 0);
 }
 
 /* 00002090-00002108       .text calcMtx__10daKddoor_cFv */
 void daKddoor_c::calcMtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), home.angle.y);
+    mDoMtx_stack_c::transM(0.0f, m94C, 0.0f);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00002108-0000220C       .text CreateInit__10daKddoor_cFv */
-void daKddoor_c::CreateInit() {
-    /* Nonmatching */
+int daKddoor_c::CreateInit() {
+    if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
+        JUT_ASSERT(0x43E, 0);
+    }
+
+    tevStr.mRoomNo = current.roomNo;
+    m94C = 0.0f;
+    mAction = 0;
+    attention_info.position.y += 150.0f;
+    eyePos.y += 150.0f;
+    attention_info.flags = 0x20;
+    calcMtx();
+    mpBgW->Move();
+    mpBgW->SetRoomId(getFRoomNo());
+    initProc(1);
+    mStopBars.init(this);
+    return 1;
 }
 
-/* 0000220C-000023CC       .text create__10daKddoor_cFv */
 cPhs_State daKddoor_c::create() {
-    /* Nonmatching */
+    int phase_state = dComIfG_resLoad(&mPhase, M_arcname);
+    fopAcM_SetupActor(this, daKddoor_c);
+
+    if (phase_state != cPhs_COMPLEATE_e) {
+        return (cPhs_State)phase_state;
+    }
+
+    if (chkMakeKey()) {
+        int key_state = mKeyLock.keyResLoad();
+        if (key_state != cPhs_COMPLEATE_e) {
+            return (cPhs_State)key_state;
+        }
+    }
+
+    current.roomNo = getFRoomNo();
+
+    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xD960)) {
+        mpBgW = NULL;
+        return cPhs_ERROR_e;
+    }
+
+    CreateInit();
+    return cPhs_COMPLEATE_e;
 }
 
-/* 000023CC-00002678       .text demoProc__10daKddoor_cFv */
 void daKddoor_c::demoProc() {
-    /* Nonmatching */
+    daKddoor_c* i_this = this;
+    s32 demoAction = i_this->getDemoAction();
+    if (dComIfGp_evmng_getIsAddvance(i_this->mStaffId)) {
+        switch (demoAction) {
+        case 3:
+            openInit();
+            break;
+        case 4:
+            closeInit();
+            break;
+        case 7:
+            setGoal();
+            break;
+        case 5:
+            mSmoke.smokeInit(this);
+            break;
+        case 6:
+            mSmoke.smokeEnd();
+            break;
+        case 8:
+            mKeyLock.keyInit(this);
+            break;
+        case 2:
+            setStop();
+            if (mStopBars.m8 != 0) {
+                mStopBars.closeInit();
+            }
+            break;
+        case 1:
+            mStopBars.openInit();
+            break;
+        case 0:
+            break;
+        }
+    }
+
+    switch (demoAction) {
+    case 3:
+        if (checkFlag(1)) {
+            if (openProc()) {
+                openEnd();
+                dComIfGp_evmng_cutEnd(mStaffId);
+            }
+        } else {
+            dComIfGp_evmng_cutEnd(mStaffId);
+        }
+        break;
+    case 4:
+        if (checkFlag(2)) {
+            if (closeProc()) {
+                closeEnd();
+                dComIfGp_evmng_cutEnd(mStaffId);
+            }
+        } else {
+            dComIfGp_evmng_cutEnd(mStaffId);
+        }
+        break;
+    case 5:
+        mSmoke.smokeProc(this);
+        dComIfGp_evmng_cutEnd(mStaffId);
+        break;
+    case 8:
+        if (mKeyLock.keyProc()) {
+            dComIfGp_evmng_cutEnd(mStaffId);
+        }
+        mKeyLock.calcMtx(this);
+        break;
+    case 2:
+        if (mStopBars.closeProc(this)) {
+            dComIfGp_evmng_cutEnd(mStaffId);
+        }
+        mStopBars.calcMtx(this);
+        break;
+    case 1:
+        if (mStopBars.openProc(this)) {
+            dComIfGp_evmng_cutEnd(mStaffId);
+        }
+        mStopBars.calcMtx(this);
+        break;
+    case 19:
+        if (dComIfGp_event_chkEventFlag(1)) {
+            mAction = 1;
+            dComIfGp_event_reset();
+            shape_angle.y = current.angle.y;
+            dComIfGp_event_offEventFlag(1);
+            if (dComIfGp_evmng_checkStartDemo()) {
+                dComIfGp_evmng_cancelStartDemo();
+            }
+        }
+        dComIfGp_evmng_cutEnd(mStaffId);
+        break;
+    default:
+        dComIfGp_evmng_cutEnd(mStaffId);
+        break;
+    }
 }
 
-/* 00002678-000027C0       .text daKddoor_actionWait__FP10daKddoor_c */
-void daKddoor_actionWait(daKddoor_c*) {
-    /* Nonmatching */
+static int daKddoor_actionWait(daKddoor_c* i_this) {
+    u16 cmd = i_this->eventInfo.getCommand();
+
+    if (cmd == 3) {
+        i_this->initOpenDemo(1);
+        i_this->setAction(3);
+        i_this->demoProc();
+    } else if (i_this->mStopBars.m8 != 0) {
+        if (cmd == 2) {
+            i_this->mStaffId = dComIfGp_evmng_getMyStaffId("SHUTTER_DOOR");
+            i_this->shape_angle.y = i_this->current.angle.y;
+            if (i_this->mFrontCheck == 1) {
+                i_this->shape_angle.y += 0x7fff;
+            }
+            i_this->setAction(3);
+            i_this->demoProc();
+        } else if (i_this->chkStopOpen()) {
+            i_this->setStopDemo();
+            fopAcM_orderOtherEventId(i_this, i_this->mEventIdx[i_this->m2C6], i_this->mToolId[i_this->m2C6], 0xFFFF, 0, 1);
+        }
+    } else if (i_this->chkStopClose()) {
+        i_this->mStopBars.m8 = 1;
+        i_this->mStopBars.closeInit();
+        i_this->mStopBars.calcMtx(i_this);
+        i_this->setAction(2);
+    } else {
+        i_this->setEventPrm();
+    }
+
+    return 1;
 }
 
-/* 000027C0-00002814       .text daKddoor_actionStopClose__FP10daKddoor_c */
-void daKddoor_actionStopClose(daKddoor_c*) {
-    /* Nonmatching */
+static int daKddoor_actionStopClose(daKddoor_c* i_this) {
+    if (i_this->mStopBars.closeProc(i_this)) {
+        i_this->mAction = 1;
+    }
+    i_this->mStopBars.calcMtx(i_this);
+    return 1;
 }
 
-/* 00002814-00002898       .text daKddoor_actionDemo__FP10daKddoor_c */
-void daKddoor_actionDemo(daKddoor_c*) {
-    /* Nonmatching */
+static BOOL daKddoor_actionDemo(daKddoor_c* i_this) {
+    if (dComIfGp_evmng_endCheck(i_this->mEventIdx[i_this->m2C6])) {
+        i_this->mAction = 1;
+        dComIfGp_event_reset();
+        i_this->shape_angle.y = i_this->current.angle.y;
+    } else {
+        i_this->demoProc();
+    }
+    return TRUE;
 }
 
-/* 00002898-000028F8       .text daKddoor_actionInit__FP10daKddoor_c */
-void daKddoor_actionInit(daKddoor_c*) {
-    /* Nonmatching */
+static int daKddoor_actionInit(daKddoor_c* i_this) {
+    i_this->setKey();
+    i_this->mKeyLock.calcMtx(i_this);
+    i_this->setStop();
+    i_this->mStopBars.calcMtx(i_this);
+    daKddoor_actionWait(i_this);
+    i_this->mAction = 1;
+    return 1;
 }
 
 /* 000028F8-000029E0       .text draw__10daKddoor_cFv */
 BOOL daKddoor_c::draw() {
-    /* Nonmatching */
+    if (!drawCheck(0)) {
+        return TRUE;
+    }
+
+    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+
+    if (mKeyLock.mbEnabled) {
+        mKeyLock.draw(this);
+    }
+
+    if (mStopBars.m8 != 0) {
+        mStopBars.draw(this);
+    }
+
+    return TRUE;
 }
 
 /* 000029E0-00002A00       .text daKddoor_Draw__FP10daKddoor_c */
@@ -298,9 +1079,41 @@ static BOOL daKddoor_Draw(daKddoor_c* i_this) {
     return ((daKddoor_c*)i_this)->draw();
 }
 
-/* 00002A00-00002AF4       .text daKddoor_Execute__FP10daKddoor_c */
-static BOOL daKddoor_Execute(daKddoor_c*) {
-    /* Nonmatching */
+inline int daKddoor_c::execute() {
+    typedef BOOL (*ActionFunc)(daKddoor_c*);
+    static ActionFunc l_action[] = {
+        daKddoor_actionInit,
+        daKddoor_actionWait,
+        daKddoor_actionStopClose,
+        daKddoor_actionDemo,
+    };
+
+    int action = checkExecute();
+    switch (action) {
+    case 0:
+        mAction = 0;
+        break;
+    case 2:
+        l_action[mAction](this);
+        break;
+    case 1:
+        startDemoProc();
+        demoProc();
+        break;
+    default:
+        JUT_ASSERT(0x57d, 0);
+    }
+
+    mRoomNo2 = dComIfGp_roomControl_getStayNo();
+    if (mStopBars.m8 != 0) {
+        mStopBars.execute(this);
+    }
+
+    return 1;
+}
+
+static int daKddoor_Execute(daKddoor_c* i_this) {
+    return i_this->execute();
 }
 
 /* 00002AF4-00002AFC       .text daKddoor_IsDelete__FP10daKddoor_c */
@@ -309,8 +1122,22 @@ static BOOL daKddoor_IsDelete(daKddoor_c*) {
 }
 
 /* 00002AFC-00002C44       .text daKddoor_Delete__FP10daKddoor_c */
-static BOOL daKddoor_Delete(daKddoor_c*) {
-    /* Nonmatching */
+static int daKddoor_Delete(daKddoor_c* i_this) {
+    if (i_this->heap != NULL) {
+        dComIfG_Bgsp()->Release(i_this->mpBgW);
+    }
+
+    i_this->mStopBars.end();
+    dComIfG_resDelete(&i_this->mPhase, daKddoor_c::M_arcname);
+
+    if (i_this->chkMakeKey()) {
+        i_this->mKeyLock.keyResDelete();
+    }
+
+    i_this->mSmoke.smokeEnd();
+
+    i_this->~daKddoor_c();
+    return 1;
 }
 
 /* 00002C44-00002C64       .text daKddoor_Create__FP10fopAc_ac_c */
@@ -342,3 +1169,6 @@ actor_process_profile_definition g_profile_KDDOOR = {
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_6_e,
 };
+
+
+ 
