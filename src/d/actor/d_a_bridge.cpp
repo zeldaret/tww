@@ -131,7 +131,7 @@ void kikuzu_set(bridge_class* i_this, cXyz* pPos) {
     csXyz shapeAngle = player->shape_angle;
     shapeAngle.y -= -0x8000;
 
-    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_002B, pPos, &shapeAngle, NULL, 0xFF, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTKIKUZU00, pPos, &shapeAngle, NULL, 0xFF, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL);
     if (emitter != NULL) {
         emitter->setRate(10.0f);
         emitter->setMaxFrame(1);
@@ -973,7 +973,7 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
                         bVar1 = true;
                     }
 
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &pBr->m3A8[0], &a_player->shape_angle);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &pBr->m3A8[0], &a_player->shape_angle);
                     kikuzu_set(i_this, &pBr->m3A8[0]);
                 }
 
@@ -997,7 +997,7 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
                         bVar1 = true;
                     }
 
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &pBr->m3A8[1], &a_player->shape_angle);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &pBr->m3A8[1], &a_player->shape_angle);
                     kikuzu_set(i_this, &pBr->m3A8[1]);
                 }
             } else {
@@ -1007,14 +1007,14 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
                     pBr->mCyl[0].OnTgNoConHit();
                     pBr->m3A0[0] = 15;
                     soundId = JA_SE_LK_HIT_SBRIDGE_CHAIN;
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, pBr->mCyl[0].GetTgHitPosP(), &a_player->shape_angle, &spB4);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_NG, pBr->mCyl[0].GetTgHitPosP(), &a_player->shape_angle, &spB4);
                 }
 
                 if (pBr->mCyl[1].ChkTgHit() && (pBr->m3A0[1] < 10)) {
                     pBr->mCyl[1].OnTgNoConHit();
                     pBr->m3A0[1] = 15;
                     soundId = JA_SE_LK_HIT_SBRIDGE_CHAIN;
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, pBr->mCyl[1].GetTgHitPosP(), &a_player->shape_angle, &spB4);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_NG, pBr->mCyl[1].GetTgHitPosP(), &a_player->shape_angle, &spB4);
                 }
             }
 
@@ -1054,7 +1054,7 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
 
                 if (sp48.abs() < 50.0f) {
                     pBr->m3C0 = 30;
-                    pBr->m3C4 = dComIfGp_particle_set(dPa_name::ID_SCENE_80EA, &spA8);
+                    pBr->m3C4 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BRIDGEROPEFIRE00, &spA8);
                 }
             }
 
@@ -1086,7 +1086,7 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
 
                 if (sp48.abs() < 50.0f) {
                     pBr->m3C2 = 30;
-                    pBr->m3C8 = dComIfGp_particle_set(dPa_name::ID_SCENE_80EA, &spA8);
+                    pBr->m3C8 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BRIDGEROPEFIRE00, &spA8);
                 }
             }
 

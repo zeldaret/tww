@@ -13,7 +13,7 @@
 #include "d/d_particle.h"
 #include "d/d_com_inf_game.h"
 
-const u16 l_daTpota_idx_table[2] = {dPa_name::ID_SCENE_82AE, dPa_name::ID_SCENE_82AF};
+const u16 l_daTpota_idx_table[2] = {dPa_name::ID_IT_SN_TAKIURA_POTAA00, dPa_name::ID_IT_SN_TAKIURA_POTAB00};
 
 /* 00000078-000001D0       .text _create__9daTpota_cFv */
 cPhs_State daTpota_c::_create() {
@@ -46,7 +46,7 @@ bool daTpota_c::_delete() {
 
 /* 00000298-000002FC       .text make_ripple__9daTpota_cF4cXyz */
 void daTpota_c::make_ripple(cXyz i_position) {
-    dComIfGp_particle_set(dPa_name::ID_SCENE_82B0, &i_position,
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_TAKIURA_HAMON00, &i_position,
         NULL, NULL, 0xff, NULL, -1, NULL, NULL, NULL);
 }
 

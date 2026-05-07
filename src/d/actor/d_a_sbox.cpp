@@ -25,7 +25,7 @@ BOOL daSbox_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Dalways", DALWAYS_BDL_BOXSEA));
     JUT_ASSERT(113, modelData != NULL);
 
-    if (!mBck1.init(modelData, (J3DAnmTransform*)(dComIfG_getObjectRes("Dalways", DALWAYS_BCK_BOXOPENBOX)), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
+    if (!mBck1.init(modelData, (J3DAnmTransform*)(dComIfG_getObjectRes("Dalways", DALWAYS_BCK_BOXOPENBOX)), true, J3DFrameCtrl::EMode_NONE))
     {
         return FALSE;
     }
@@ -299,24 +299,24 @@ void daSbox_c::demoInitOpen() {
     mDoAud_subBgmStart(JA_BGM_OPEN_BOX);
     setFlag(2);
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F1, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F2, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_01F6, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_PAKAF, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_NAKAF, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_PAKAF_SOTO, &current.pos, &current.angle);
 
     cXyz scale;
     scale.set(0.7f, 1.0f, 1.0f);
 
-    JPABaseEmitter* pJVar1 = dComIfGp_particle_set(dPa_name::ID_COMMON_01F3, &current.pos, &current.angle);
+    JPABaseEmitter* pJVar1 = dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_UEF, &current.pos, &current.angle);
     if (pJVar1 != NULL) {
         pJVar1->setEmitterScale(scale);
     }
 
-    JPABaseEmitter* pJVar2 = dComIfGp_particle_set(dPa_name::ID_COMMON_01F4, &current.pos, &current.angle);
+    JPABaseEmitter* pJVar2 = dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_TSUBU, &current.pos, &current.angle);
     if (pJVar2 != NULL) {
         pJVar2->setEmitterScale(scale);
     }
 
-    mEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_01F5, &current.pos, &current.angle);
+    mEmitter = dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_VOLM, &current.pos, &current.angle);
     if (mEmitter != NULL) {
         m300 = 0;
         mEmitter->setGlobalAlpha(0);
@@ -396,7 +396,7 @@ void daSbox_c::demoProcCom() {
 s32 daSbox_c::getNowEventAction() {
     static char* action_table[] = {"WAIT", "OPEN", "DELETE"};
 
-    return dComIfGp_evmng_getMyActIdx(m2F8, action_table, ARRAY_SIZE(action_table), 0, 1);
+    return dComIfGp_evmng_getMyActIdx(m2F8, action_table, ARRAY_SIZE(action_table), FALSE, 1);
 }
 
 /* 00001240-00001388       .text demoProc__8daSbox_cFv */

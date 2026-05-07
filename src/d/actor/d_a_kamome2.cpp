@@ -88,7 +88,7 @@ static void key_move(kamome2_class* i_this) {
         i_this->m2C0 = unused_4207[0];
         if (!CPad_CHECK_HOLD_A(0) && iVar1 == REG0_S(0) + 9) {
             i_this->m2AC = 1;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT1, REG0_F(0) + 12.0f, 2, 1.0f, 8);
+            anm_init(i_this, KAMOME_BCK_KA_WAIT1, REG0_F(0) + 12.0f, 2, 1.0f, KAMOME_BAS_KA_WAIT1);
         }
         break;
 
@@ -103,7 +103,7 @@ static void key_move(kamome2_class* i_this) {
 
         if (CPad_CHECK_HOLD_A(0)) {
             i_this->m2AC = 0;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 5.0f, 2, 1.0f, 9);
+            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 5.0f, 2, 1.0f, KAMOME_BAS_KA_WAIT2);
             fopAcM_seStart(&i_this->actor, JA_SE_CV_KAMOME, 0);
         }
         break;
@@ -363,6 +363,7 @@ static actor_method_class l_daKamome2_Method = {
     (process_method_func)daKamome2_Draw,
 };
 
+#if VERSION == VERSION_DEMO
 actor_process_profile_definition g_profile_KAMOME2 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
@@ -379,3 +380,4 @@ actor_process_profile_definition g_profile_KAMOME2 = {
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_0_e,
 };
+#endif

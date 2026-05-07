@@ -544,6 +544,21 @@ public:
 
 class daPy_HIO_cut_c0 {
 public:
+    static daPy_HIO_cutA_c0 const mCutA;
+    static daPy_HIO_cutF_c0 const mCutF;
+    static daPy_HIO_cutR_c0 const mCutR;
+    static daPy_HIO_cutL_c0 const mCutL;
+    static daPy_HIO_cutEA_c0 const mCutEA;
+    static daPy_HIO_cutEB_c0 const mCutEB;
+    static daPy_HIO_cutExA_c0 const mCutExA;
+    static daPy_HIO_cutExB_c0 const mCutExB;
+    static daPy_HIO_cutExMJ_c0 const mCutExMJ;
+    static daPy_HIO_cutKesa_c0 const mCutKesa;
+    static daPy_HIO_cutTurn_c0 const mCutTurn;
+    static daPy_HIO_cutTurnR_c0 const mCutTurnR;
+    static daPy_HIO_cutRoll_c0 const mCutRoll;
+    static daPy_HIO_cutJump_c0 const mCutJump;
+    static daPy_HIO_cutBoko_c0 const mCutBoko;
     static daPy_HIO_cut_c1 const m;
 };
 
@@ -847,6 +862,21 @@ public:
 class daPy_HIO_b_verJump_c0 {
 public:
     static daPy_HIO_b_verJump_c1 const m;
+};
+
+class daPy_HIO_battle_c1 {
+public:
+    /* 0x00 */ f32 field_0x0;
+    /* 0x04 */ f32 field_0x4;
+};
+
+class daPy_HIO_battle_c0 {
+public:
+    static daPy_HIO_b_jump_c0 const mBJump;
+    static daPy_HIO_b_roll_c0 const mBRoll;
+    static daPy_HIO_b_slide_c0 const mBSlide;
+    static daPy_HIO_b_verJump_c0 const mBVerJump;
+    static daPy_HIO_battle_c1 const m;
 };
 
 class daPy_HIO_wall_c1 {
@@ -1186,6 +1216,21 @@ public:
 class daPy_HIO_elecDamage_c0 {
 public:
     static daPy_HIO_elecDamage_c1 const m;
+};
+
+class daPy_HIO_dam_c1 {
+public:
+    /* 0x00 */ s16 field_0x0;
+    /* 0x02 */ s16 field_0x2;
+};
+
+class daPy_HIO_dam_c0 {
+public:
+    static daPy_HIO_damage_c0 const mDamage;
+    static daPy_HIO_laDamage_c0 const mLaDamage;
+    static daPy_HIO_huDamage_c0 const mHuDamage;
+    static daPy_HIO_elecDamage_c0 const mElecDamage;
+    static daPy_HIO_dam_c1 const m;
 };
 
 class daPy_HIO_slowJump_c1 {
@@ -1600,6 +1645,17 @@ public:
     static daPy_HIO_food_c1 const m;
 };
 
+class daPy_HIO_magicShield_c1 {
+public:
+    /* 0x00 */ s16 field_0x0;
+    /* 0x02 */ s16 field_0x2;
+};
+
+class daPy_HIO_magicShield_c0 {
+public:
+    static daPy_HIO_magicShield_c1 const m;
+};
+
 class daPy_HIO_item_c1 {
 public:
     /* 0x00 */ s16 field_0x0;
@@ -1620,6 +1676,16 @@ public:
 
 class daPy_HIO_item_c0 {
 public:
+    static daPy_HIO_rope_c0 const mRope;
+    static daPy_HIO_boom_c0 const mBoom;
+    static daPy_HIO_fan_c0 const mFan;
+    static daPy_HIO_tact_c0 const mTact;
+    static daPy_HIO_ham_c0 const mHam;
+    static daPy_HIO_boots_c0 const mBoots;
+    static daPy_HIO_bottle_c0 const mBottle;
+    static daPy_HIO_bow_c0 const mBow;
+    static daPy_HIO_food_c0 const mFood;
+    static daPy_HIO_magicShield_c0 const mMagicShield;
     static daPy_HIO_item_c1 const m;
 };
 
@@ -1731,39 +1797,6 @@ public:
 class daPy_HIO_warp_c0 {
 public:
     static daPy_HIO_warp_c1 const m;
-};
-
-class daPy_HIO_battle_c1 {
-public:
-    /* 0x00 */ f32 field_0x0;
-    /* 0x04 */ f32 field_0x4;
-};
-
-class daPy_HIO_battle_c0 {
-public:
-    static daPy_HIO_battle_c1 const m;
-};
-
-class daPy_HIO_dam_c1 {
-public:
-    /* 0x00 */ s16 field_0x0;
-    /* 0x02 */ s16 field_0x2;
-};
-
-class daPy_HIO_dam_c0 {
-public:
-    static daPy_HIO_dam_c1 const m;
-};
-
-class daPy_HIO_magicShield_c1 {
-public:
-    /* 0x00 */ s16 field_0x0;
-    /* 0x02 */ s16 field_0x2;
-};
-
-class daPy_HIO_magicShield_c0 {
-public:
-    static daPy_HIO_magicShield_c1 const m;
 };
 
 #endif /* D_A_PLAYER_HIO_H */

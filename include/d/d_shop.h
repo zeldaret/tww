@@ -120,7 +120,11 @@ public:
     s16 getItemDataIdx() { return mItemSetListGlobalIdx; }
     void setItemDataIdx(s16 idx) { mItemSetListGlobalIdx = idx; }
     void setItemSum(s16 count) { mNumItems = count; }
-    void init() {}
+    void init() {
+        mSelectedItemIdx = - 1;
+        m3C = 0;
+        mbIsHide = false;
+    }
     
     void createItem(int, int);
     BOOL Item_Select(int);
@@ -265,5 +269,14 @@ extern __shop_items_set_data* Item_set_data_bshop_5[];
 extern __shop_items_set_data* Item_set_data_bshop_6[];
 extern __shop_items_set_data** Item_set_data_tbl[];
 extern Vec* Item_set_pos_data_tbl[];
+extern Vec Item_set_pos_data_dshop[];
+extern Vec Item_set_pos_data_bmshop1[];
+extern Vec Item_set_pos_data_bmshop2[];
+extern Vec Item_set_pos_data_bshop_3[];
+extern Vec Item_set_pos_data_bshop_4[];
+extern Vec Item_set_pos_data_bshop_5[];
+extern Vec Item_set_pos_data_bshop_6[];
+extern Vec Item_set_pos_data_bshop_7[];
+extern Vec Item_set_pos_data_rshop_0[];
 
 #endif /* D_SHOP_H */

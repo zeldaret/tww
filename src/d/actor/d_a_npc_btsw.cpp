@@ -418,7 +418,7 @@ u32 daNpc_Btsw_c::getMsg() {
 }
 
 /* 00000DF0-00000F0C       .text anmAtr__12daNpc_Btsw_cFUs */
-void daNpc_Btsw_c::anmAtr(unsigned short mesgNo) {
+void daNpc_Btsw_c::anmAtr(u16 i_msgStatus) {
     switch (dComIfGp_getMesgAnimeAttrInfo()) {
         case 0:
             setAnm(0);

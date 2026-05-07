@@ -562,7 +562,7 @@ void daNpc_Os_c::eventOrderCheck() {
 /* 00001300-000013D4       .text makeBeam__10daNpc_Os_cFi */
 void daNpc_Os_c::makeBeam(int param_1) {
     if(field_0x738.getEmitter() == NULL) {
-        field_0x738.makeEmitter(dPa_name::ID_SCENE_826E, &current.pos, &shape_angle, 0);
+        field_0x738.makeEmitter(dPa_name::ID_AK_SN_OTOMOBEAM00, &current.pos, &shape_angle, 0);
 
         if(param_1) {
             fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_LIGHT_ST, 0);
@@ -570,7 +570,7 @@ void daNpc_Os_c::makeBeam(int param_1) {
     }
 
     if(field_0x740.getEmitter() == NULL) {
-        field_0x740.makeEmitter(dPa_name::ID_SCENE_826F, &current.pos, &shape_angle, 0);
+        field_0x740.makeEmitter(dPa_name::ID_AK_SN_OTOMOBEAM01, &current.pos, &shape_angle, 0);
     }
 }
 
@@ -934,7 +934,7 @@ BOOL daNpc_Os_c::carryNpcAction(void* param_1) {
             }
             else {
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_PUT, 0);
-                smokeSet(dPa_name::ID_SCENE_A328);
+                smokeSet(dPa_name::ID_AK_ST_OTOMOSMOKE00);
                 setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
 
                 return true;
@@ -969,7 +969,7 @@ BOOL daNpc_Os_c::throwNpcAction(void* param_1) {
     else if(field_0x7A9 != -1) {
         if(mAcch.ChkGroundHit()) {
             fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_PUT, 0);
-            smokeSet(dPa_name::ID_SCENE_A33B);
+            smokeSet(dPa_name::ID_AK_ST_OTOMOSMOKE01);
             setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
         }
 
@@ -995,7 +995,7 @@ BOOL daNpc_Os_c::jumpNpcAction(void* param_1) {
     }
     else if(field_0x7A9 != -1) {
         if(mAcch.ChkGroundHit()) {
-            smokeSet(dPa_name::ID_SCENE_A33B);
+            smokeSet(dPa_name::ID_AK_ST_OTOMOSMOKE01);
             setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
         }
 
@@ -1619,7 +1619,7 @@ void daNpc_Os_c::initialSaveEvent(int) {
 
 /* 00004AF8-00004B64       .text talk_init__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::talk_init() {
-    if(l_msgId == -1) {
+    if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
         l_msgId = fopMsgM_messageSet(field_0x780, this);
     }
     else {
@@ -1641,7 +1641,7 @@ BOOL daNpc_Os_c::talk() {
             fopMsgM_messageSet(field_0x780);
         }
     }
-    else if(l_msg->mStatus != fopMsgStts_UNK15_e && l_msg->mStatus != fopMsgStts_MSG_TYPING_e && l_msg->mStatus == fopMsgStts_BOX_CLOSED_e) {
+    else if(l_msg->mStatus != fopMsgStts_INPUT_e && l_msg->mStatus != fopMsgStts_MSG_TYPING_e && l_msg->mStatus == fopMsgStts_BOX_CLOSED_e) {
         l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
 
         return true;
@@ -2116,7 +2116,7 @@ void daNpc_Os_c::animationPlay() {
     mPrevMorfFrame = frame;
 
     if(field_0x78C == 1 && mpMorf->checkFrame(17.0f)) {
-        smokeSet(dPa_name::ID_SCENE_A328);
+        smokeSet(dPa_name::ID_AK_ST_OTOMOSMOKE00);
     }
 
     playBrkAnm();
@@ -2132,7 +2132,9 @@ BOOL daNpc_Os_c::execute() {
     static JGeometry::TVec3<f32> splash_scale(0.6f, 0.6f, 0.6f);
     static JGeometry::TVec3<f32> ripple_scale(1.0f, 1.0f, 1.0f);
 
+#if VERSION > VERSION_DEMO
     field_0x784 &= ~0x10;
+#endif
     fopAcM_OffStatus(this, fopAcStts_SHOWMAP_e);
     checkPlayerRoom();
     if(!finishCheck()) {
@@ -2166,7 +2168,14 @@ BOOL daNpc_Os_c::execute() {
         mAcchCir[1].SetWallR(40.0f);
     }
 
+#if VERSION == VERSION_DEMO
+    if (mpPedestal == NULL) {
+        mpPedestal = (daPedestal::daPds_c*)searchFromName(l_daiza_name[argument], 0xFF, 1);
+    }
+#else
     mpPedestal = (daPedestal::daPds_c*)searchFromName(l_daiza_name[argument], 0xFF, 1);
+#endif
+
     if(mpPedestal) {
         if(!isFinish()) {
             if(finishCheck()) {
@@ -2190,7 +2199,9 @@ BOOL daNpc_Os_c::execute() {
 
             mAcch.CrrPos(*dComIfG_Bgsp());
             
+#if VERSION > VERSION_DEMO
             field_0x784 |= 0x10;
+#endif
             if(mAcch.GetGroundH() != -G_CM3D_F_INF) {
                 tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
                 tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
@@ -2254,7 +2265,9 @@ BOOL daNpc_Os_c::execute() {
         
     
         mAcch.CrrPos(*dComIfG_Bgsp());
+#if VERSION > VERSION_DEMO
         field_0x784 |= 0x10;
+#endif
 
         if(chkPlayerAction(&daNpc_Os_c::walkPlayerAction) || chkNpcAction(&daNpc_Os_c::searchNpcAction)) {
             if(!mAcch.ChkGroundHit()) {
@@ -2312,13 +2325,13 @@ BOOL daNpc_Os_c::execute() {
                 if(!isWaterHit()) {
                     onWaterHit();
 
-                    JPABaseEmitter* splash = dComIfGp_particle_set(dPa_name::ID_COMMON_0040, &current.pos);
+                    JPABaseEmitter* splash = dComIfGp_particle_set(dPa_name::ID_IT_JN_WP_SHIBUKI, &current.pos);
                     if(splash) {
                         splash->setRate(15.0f);
                         splash->setGlobalScale(splash_scale);
                     }
 
-                    JPABaseEmitter* ripple = dComIfGp_particle_setSingleRipple(dPa_name::ID_COMMON_003D, &current.pos);
+                    JPABaseEmitter* ripple = dComIfGp_particle_setSingleRipple(dPa_name::ID_IT_JN_WP_HAMON01, &current.pos);
                     if(ripple) {
                         ripple->setGlobalScale(ripple_scale);
                     }
@@ -2326,6 +2339,7 @@ BOOL daNpc_Os_c::execute() {
             }
         }
     }
+#if VERSION > VERSION_DEMO
     else {
         mAcch.CrrPos(*dComIfG_Bgsp());
 
@@ -2335,6 +2349,7 @@ BOOL daNpc_Os_c::execute() {
             tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
         }
     }
+#endif
 
     if(!fopAcM_checkCarryNow(this)) {
         setCollision();

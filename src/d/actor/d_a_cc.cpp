@@ -23,7 +23,7 @@ static u8 DEMO_COME_START_FLAG;
 static u8 DEMO_RET_START_FLAG;
 static u8 DEMO_SHORT_CUT_FLAG;
 static fopAc_ac_c* target_info[10];
-static s32 target_info_count;
+static int target_info_count;
 
 /* 00000078-000002AC       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
@@ -215,12 +215,12 @@ static BOOL daCC_Draw(cc_class* i_this) {
 
 /* 00000900-00000AB0       .text cc_eff_set__FP8cc_classUc */
 void cc_eff_set(cc_class* i_this, unsigned char arg1) {
-    u16 userID = dPa_name::ID_COMMON_03F0;
+    u16 userID = dPa_name::ID_AK_JN_CCHEAD00;
     cXyz sp1C = i_this->m470;
     GXColor sp18 = {};
 
     if (arg1 != 0) {
-        userID = dPa_name::ID_COMMON_03EF;
+        userID = dPa_name::ID_AK_JN_CCFOOT00;
         sp1C = i_this->actor.current.pos;
     }
 
@@ -263,7 +263,7 @@ void anm_init(cc_class* i_this, const int transformResIdx, const float morf, con
 void damage_mode_move(cc_class* i_this) {
     i_this->m2F6 = 2;
     if (i_this->m2F5 != 0x2d && i_this->m2F5 != 0x2e) {
-        dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, &i_this->actor.attention_info.position);
+        dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &i_this->actor.attention_info.position);
         i_this->mCurrAction = 3;
         i_this->m2F5 = 0x28;
     }
@@ -271,6 +271,7 @@ void damage_mode_move(cc_class* i_this) {
 
 /* 00000C74-00000D30       .text s_b_sub__FPvPv */
 void* s_b_sub(void* arg0, void* arg1) {
+    UNUSED(arg1);
     if (fopAcM_IsActor(arg0)) {
         bool bVar2 = false;
         if (fopAcM_GetName(arg0) == PROC_BOMB) {
@@ -329,11 +330,11 @@ void naraku_check(cc_class* i_this) {
                 cXyz sp18(0.5f, 0.5f, 0.5f);
 #if VERSION == VERSION_DEMO
                 i_this->m368.remove();
-                dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &i_this->actor.current.pos, NULL, &sp18, 0xff, &i_this->m368);
+                dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &i_this->actor.current.pos, NULL, &sp18, 0xff, &i_this->m368);
                 i_this->m368.setRate(0.0f);
 #else
                 i_this->m390.remove();
-                dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &i_this->actor.current.pos, NULL, &sp18, 0xff, &i_this->m390);
+                dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &i_this->actor.current.pos, NULL, &sp18, 0xff, &i_this->m390);
                 i_this->m390.setRate(0.0f);
 #endif
             }
@@ -488,9 +489,9 @@ BOOL body_atari_check(cc_class* i_this) {
         if ((i_this->m304 != 0) && (pdVar7 != NULL) && (dComIfGp_getPlayer(0) != pdVar7)) {
             i_this->m304 = 2;
             a_this->health = 0;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &sp30);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &sp30);
             cXyz sp24(2.0f, 2.0f, 2.0f);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, &sp30, &player->shape_angle, &sp24);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, &sp30, &player->shape_angle, &sp24);
             i_this->mCurrAction = 3;
             i_this->m2F5 = 0x28;
             return TRUE;
@@ -556,11 +557,23 @@ BOOL body_atari_check(cc_class* i_this) {
                 return FALSE;
             }
 
-            if (player->getCutType() == 6 || player->getCutType() == 7 || player->getCutType() == 8 || player->getCutType() == 9 ||
-                player->getCutType() == 10 || player->getCutType() == 0xc || player->getCutType() == 0xe || player->getCutType() == 5 ||
-                player->getCutType() == 0xf || player->getCutType() == 0x10 || player->getCutType() == 0x15 || player->getCutType() == 0x17 ||
-                player->getCutType() == 0x19 || player->getCutType() == 0x1a || player->getCutType() == 0x1b || player->getCutType() == 0x1e ||
-                player->getCutType() == 0x1f)
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EA ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EB ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_TURN ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_ROLL ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SWORD ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_STICK ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_BT_JUMPCUT ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_BT_ROLLCUT ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_CLUB ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXA ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXB ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXMJ ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_KESA)
             {
                 i_this->m2F6 = 1;
             }
@@ -636,7 +649,7 @@ BOOL body_atari_check(cc_class* i_this) {
 
             i_this->m2F6 = 1;
 
-            if (player->getCutType() == 0x12 || player->getCutType() == 0x13) {
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING || player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER) {
                 i_this->m2F6 = 6;
             }
 
@@ -703,11 +716,11 @@ BOOL body_atari_check(cc_class* i_this) {
             cc_at_check(a_this, &sp3C);
 
             if ((i_this->m2F6 == 1) || (i_this->m2F6 == 6) || (a_this->health <= 0)) {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &sp30);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &sp30);
                 cXyz sp18(2.0f, 2.0f, 2.0f);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, &sp30, &player->shape_angle, &sp18);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, &sp30, &player->shape_angle, &sp18);
             } else {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &sp30, &player->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &sp30, &player->shape_angle);
             }
         }
 
@@ -1207,7 +1220,7 @@ void action_damage_move(cc_class* i_this) {
         case 4:
         case 9:
             anm_init(i_this, CC_BCK_MAHI, 0.0f, 0, 1.0f, -1);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, &a_this->attention_info.position);
+            dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &a_this->attention_info.position);
             i_this->m32C = 0.0f;
             i_this->m330 = 0.0f;
             i_this->m348 = 0;
@@ -1319,7 +1332,7 @@ void action_damage_move(cc_class* i_this) {
         i_this->m301 = 1;
         i_this->m2D8->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("CC", CC_BCK_CC_PTCL), 0, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
 
-        pJVar6 = dComIfGp_particle_set(dPa_name::ID_SCENE_82A8, &a_this->attention_info.position, &a_this->current.angle);
+        pJVar6 = dComIfGp_particle_set(dPa_name::ID_AK_SN_CCSPLIT00, &a_this->attention_info.position, &a_this->current.angle);
         if (pJVar6 != NULL) {
             f32 tmp = (a_this->tevStr.mColorK0.r / 255.0f);
             sp18.r = tmp * 40.0f;
@@ -1501,7 +1514,7 @@ void deku_come_demo(cc_class* i_this) {
 
     case 4:
         iVar2 = dComIfGp_evmng_getMyStaffId("CyuCyu");
-        actIdx = dComIfGp_evmng_getMyActIdx(iVar2, cut_name_tbl, ARRAY_SSIZE(cut_name_tbl), 1, 0);
+        actIdx = dComIfGp_evmng_getMyActIdx(iVar2, cut_name_tbl, ARRAY_SSIZE(cut_name_tbl), TRUE, 0);
         if (actIdx == 1) {
             dComIfGp_evmng_cutEnd(iVar2);
             i_this->m2FC++;
@@ -1563,7 +1576,7 @@ void deku_ret_demo(cc_class* i_this) {
 
     case 5:
         iVar2 = dComIfGp_evmng_getMyStaffId("CyuCyu");
-        actIdx = dComIfGp_evmng_getMyActIdx(iVar2, cut_name_tbl, ARRAY_SSIZE(cut_name_tbl), 1, 0);
+        actIdx = dComIfGp_evmng_getMyActIdx(iVar2, cut_name_tbl, ARRAY_SSIZE(cut_name_tbl), TRUE, 0);
         if (actIdx == 1) {
             dComIfGp_evmng_cutEnd(iVar2);
             i_this->m2FD++;
@@ -1771,7 +1784,7 @@ void action_noboru(cc_class* i_this) {
 
 /* 00004CAC-0000561C       .text action_up_check__FP8cc_class */
 void action_up_check(cc_class* i_this) {
-    fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
+    fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     s16 bVar4 = 0;
 
@@ -1931,7 +1944,7 @@ void action_up_check(cc_class* i_this) {
             }
 
             cXyz sp24 = *i_this->mCyl.GetTgHitPosP();
-            dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, &sp24, &player->shape_angle);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_NG, &sp24, &player->shape_angle);
 
             switch (pcVar6->GetAtType()) {
             case AT_TYPE_SWORD:
@@ -1967,7 +1980,7 @@ void action_up_check(cc_class* i_this) {
     }
 
     if (bVar4) {
-        JPABaseEmitter* pJVar7 = dComIfGp_particle_set(dPa_name::ID_SCENE_82A9, &a_this->attention_info.position, &a_this->current.angle);
+        JPABaseEmitter* pJVar7 = dComIfGp_particle_set(dPa_name::ID_AK_SN_CCBREAKHAHEN00, &a_this->attention_info.position, &a_this->current.angle);
         if (pJVar7 != NULL) {
             pJVar7->setGlobalPrmColor(a_this->tevStr.mColorK0.r, a_this->tevStr.mColorK0.g, a_this->tevStr.mColorK0.b);
             pJVar7->setGlobalEnvColor(a_this->tevStr.mColorK0.r, a_this->tevStr.mColorK0.g, a_this->tevStr.mColorK0.b);
@@ -2211,18 +2224,18 @@ static BOOL daCC_Execute(cc_class* i_this) {
 
         case 1:
 #if VERSION == VERSION_DEMO
-            i_this->mpEmitter1 = dComIfGp_particle_set(dPa_name::ID_COMMON_03ED, &i_this->actor.current.pos);
-            i_this->mpEmitter2 = dComIfGp_particle_set(dPa_name::ID_COMMON_03EE, &i_this->actor.current.pos);
+            i_this->mpEmitter1 = dComIfGp_particle_set(dPa_name::ID_AK_JN_CCTHUNDER00, &i_this->actor.current.pos);
+            i_this->mpEmitter2 = dComIfGp_particle_set(dPa_name::ID_AK_JN_CCTHUNDER01, &i_this->actor.current.pos);
             if (i_this->mpEmitter1 != NULL && i_this->mpEmitter2 != NULL) {
                 i_this->m2F7++;
             }
 #else
             if (i_this->m368.getEmitter() == NULL) {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_03ED, &i_this->m3A4, NULL, NULL, 0xff, &i_this->m368);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CCTHUNDER00, &i_this->m3A4, NULL, NULL, 0xff, &i_this->m368);
             }
 
             if (i_this->m37C.getEmitter() == NULL) {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_03EE, &i_this->m3A4, NULL, NULL, 0xff, &i_this->m37C);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CCTHUNDER01, &i_this->m3A4, NULL, NULL, 0xff, &i_this->m37C);
             }
 
             if (i_this->m368.getEmitter() != NULL && i_this->m37C.getEmitter() != NULL) {
@@ -2417,7 +2430,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2B8->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2438,7 +2451,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2C8->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_IWA01), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_IWA01), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2450,7 +2463,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2CC->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_IWA02), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_IWA02), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2462,7 +2475,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2D0->init(
-            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", CC_BTK_CC_IWA01), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", CC_BTK_CC_IWA01), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2474,7 +2487,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2D4->init(
-            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", CC_BTK_CC_IWA02), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", CC_BTK_CC_IWA02), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2495,7 +2508,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2C0->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_BETA), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_BETA), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;

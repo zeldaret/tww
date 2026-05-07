@@ -1028,7 +1028,7 @@ inline u32 dStage_stagInfo_GetSTType(stage_stag_info_class* i_stagInfo) {
     return (i_stagInfo->mStageTypeAndSchbit >> 16) & 7;
 }
 
-inline u8 dStage_stagInfo_GetUpButton(stage_stag_info_class* i_stagInfo) {
+inline s8 dStage_stagInfo_GetUpButton(stage_stag_info_class* i_stagInfo) {
     return i_stagInfo->mParticleSceneNo & 3;
 }
 

@@ -121,7 +121,7 @@ void daPy_lk_c::setFanModel() {
     J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_USEFANAA);
     JKRHeap* oldHeap = setItemHeap();
     J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_FAN, 0x37221222);
-    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(242, FALSE);
     }
@@ -134,7 +134,7 @@ void daPy_lk_c::setSmallFanModel() {
     J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_FANWAIT);
     JKRHeap* oldHeap = setItemHeap();
     tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_FANSMALL, 0x37221222);
-    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(275, FALSE);
     }
@@ -157,9 +157,9 @@ void daPy_lk_c::setParachuteFanModel(f32 f31) {
         NULL,
         bck,
         J3DFrameCtrl::EMode_NONE,
-        daPy_HIO_fan_c0::m.field_0x20,
+        m_HIO->mItem.mFan.m.field_0x20,
         f31,
-        daPy_HIO_fan_c0::m.field_0x4,
+        m_HIO->mItem.mFan.m.field_0x4,
         0,
         NULL,
         0x00000000,
@@ -183,16 +183,16 @@ BOOL daPy_lk_c::procFanSwing_init() {
     commonProcInit(daPyProc_FAN_SWING_e);
     setSingleMoveAnime(
         ANM_USEFANA,
-        daPy_HIO_fan_c0::m.field_0xC,
-        daPy_HIO_fan_c0::m.field_0x10,
-        daPy_HIO_fan_c0::m.field_0x2,
-        daPy_HIO_fan_c0::m.field_0x14
+        m_HIO->mItem.mFan.m.field_0xC,
+        m_HIO->mItem.mFan.m.field_0x10,
+        m_HIO->mItem.mFan.m.field_0x2,
+        m_HIO->mItem.mFan.m.field_0x14
     );
     setFanModel();
     mProcVar0.m3570 = 0;
     voiceStart(7);
-    setAtParam(AT_TYPE_UNK2000000, 1, dCcG_At_Spl_UNK0, dCcG_SE_UNK4, dCcG_AtHitMark_Nrm_e, 0, 50.0f);
-    m35EC = daPy_HIO_fan_c0::m.field_0x10;
+    setAtParam(AT_TYPE_UNK2000000, 1, dCcG_At_Spl_UNK0, dCcG_SE_UNK4, dCcG_AtHitMark_Nrm_e, CUT_TYPE_NONE, 50.0f);
+    m35EC = m_HIO->mItem.mFan.m.field_0x10;
     if (setShapeFanLeaf()) {
         m34D0 = 1;
         seStartOnlyReverb(JA_SE_LK_FAN_PRE_SWING);
@@ -228,16 +228,16 @@ BOOL daPy_lk_c::procFanSwing() {
             mFanSwingCb.deleteCallBack();
         }
         mDoMtx_multVecZero(mpCLModel->getAnmMtx(0), &local_6c);
-        dComIfGp_particle_setP1(dPa_name::ID_COMMON_004A, &local_6c, &shape_angle, NULL, 0xff, &mFanSwingCb, -1);
+        dComIfGp_particle_setP1(dPa_name::ID_AK_JN_LEAFFAN00, &local_6c, &shape_angle, NULL, 0xff, &mFanSwingCb, -1);
     }
 
     if (frameCtrl.getFrame() < 22.0f) {
         cLib_addCalc(
             &mVelocity,
             0.0f,
-            daPy_HIO_move_c0::m.field_0x24,
-            daPy_HIO_move_c0::m.field_0x1C,
-            daPy_HIO_move_c0::m.field_0x20
+            m_HIO->mMove.m.field_0x24,
+            m_HIO->mMove.m.field_0x1C,
+            m_HIO->mMove.m.field_0x20
         );
     } else if (mProcVar0.m3570 == 0) {
         if (m34D0 != 0) {
@@ -264,7 +264,7 @@ BOOL daPy_lk_c::procFanSwing() {
             }
             mpYuchw00Brk->setFrame(0.0f);
             m33E8.end();
-            m33E8.makeEmitter(dPa_name::ID_COMMON_0032, mpYuchw00Model->getAnmMtx(2), &local_60, NULL);
+            m33E8.makeEmitter(dPa_name::ID_AK_JN_UCHIWAWIND00, mpYuchw00Model->getAnmMtx(2), &local_60, NULL);
             pJVar5 = m33E8.getEmitter();
             if (pJVar5 != NULL) {
                 pJVar5->setGlobalPrmColor(tevStr.mColorC0.r, tevStr.mColorC0.g, tevStr.mColorC0.b);
@@ -281,7 +281,7 @@ BOOL daPy_lk_c::procFanSwing() {
             if (local_48.y >= current.pos.y - 50.0f) {
                 int attrib_code = dComIfG_Bgsp()->GetAttributeCode(mGndChk);
                 if (!strcmp(dComIfGp_getStartStageName(), "Adanmae")) {
-                    dComIfGp_particle_setP1(dPa_name::ID_SCENE_8236, &local_48, &shape_angle);
+                    dComIfGp_particle_setP1(dPa_name::ID_AK_SN_VOLCANICASHESFAN00, &local_48, &shape_angle);
                 }
                 dPa_control_c::mSmokeEcallback.onWindOff();
                 int iStack_84;
@@ -332,12 +332,12 @@ BOOL daPy_lk_c::procFanGlide_init(int param_0) {
     commonProcInit(daPyProc_FAN_GLIDE_e);
     deleteEquipItem(FALSE);
     if (param_0 != 0) {
-        fVar1 = daPy_HIO_fan_c0::m.field_0x24;
+        fVar1 = m_HIO->mItem.mFan.m.field_0x24;
     } else {
-        fVar1 = daPy_HIO_fan_c0::m.field_0x28;
+        fVar1 = m_HIO->mItem.mFan.m.field_0x28;
     }
     setSingleMoveAnime(
-        ANM_USEFANB, daPy_HIO_fan_c0::m.field_0x20, fVar1, daPy_HIO_fan_c0::m.field_0x4, daPy_HIO_fan_c0::m.field_0x2C
+        ANM_USEFANB, m_HIO->mItem.mFan.m.field_0x20, fVar1, m_HIO->mItem.mFan.m.field_0x4, m_HIO->mItem.mFan.m.field_0x2C
     );
     mEquipItem = daPyItem_UNK102_e;
     setParachuteFanModel(fVar1);
@@ -352,12 +352,12 @@ BOOL daPy_lk_c::procFanGlide_init(int param_0) {
     m3730 = cXyz::Zero;
     voiceStart(5);
     seStartOnlyReverb(JA_SE_LK_FAN_CHUTE_OPEN);
-    m3574 = daPy_HIO_fan_c0::m.field_0x8;
+    m3574 = m_HIO->mItem.mFan.m.field_0x8;
     if (!checkHeavyStateOn()) {
         dComIfGp_setItemMagicCount(-1);
     }
     dComIfGp_setPlayerStatus1(0, daPyStts1_DEKU_LEAF_FLY_e);
-    m34D2 = daPy_HIO_fan_c0::m.field_0xA;
+    m34D2 = m_HIO->mItem.mFan.m.field_0xA;
     return true;
 }
 
@@ -372,21 +372,21 @@ BOOL daPy_lk_c::procFanGlide() {
         m34D2--;
     }
     if (frameCtrl.checkPass(4.0f)) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_004B, &current.pos);
+        JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_AK_JN_LEAFPARACHUTE00, &current.pos);
         if (emitter) {
             emitter->setGlobalRTMatrix(mpCLModel->getAnmMtx(0xf));
         }
     }
     if (frameCtrl.getRate() < 0.01f && mProcVar0.m3570 == 0 && m32E4.getEmitter() == NULL) {
-        m32E4.makeEmitter(dPa_name::ID_COMMON_004C, mpCLModel->getAnmMtx(0xf), &current.pos, NULL);
+        m32E4.makeEmitter(dPa_name::ID_AK_JN_LEAFPARACHUTE01, mpCLModel->getAnmMtx(0xf), &current.pos, NULL);
     }
 
     if (frameCtrl.getFrame() > 2.0f || mProcVar0.m3570 != 0) {
         if (mAcch.ChkGroundHit()) {
             if (checkHeavyStateOn()) {
-                return changeLandProc(daPy_HIO_fan_c0::m.field_0x50);
+                return changeLandProc(m_HIO->mItem.mFan.m.field_0x50);
             } else {
-                return procLand_init(daPy_HIO_fan_c0::m.field_0x50, 1);
+                return procLand_init(m_HIO->mItem.mFan.m.field_0x50, 1);
             }
         } else if (checkJumpFlower() || checkJumpRideShip()) {
             return true;
@@ -403,12 +403,12 @@ BOOL daPy_lk_c::procFanGlide() {
 
         if (m34D0 <= 0) {
             if (!checkHeavyStateOn()) {
-                maxFallSpeed = daPy_HIO_fan_c0::m.field_0x38;
+                maxFallSpeed = m_HIO->mItem.mFan.m.field_0x38;
                 if (m34D0 == 0) {
-                    speed.y = daPy_HIO_fan_c0::m.field_0x40;
-                    mVelocity = daPy_HIO_fan_c0::m.field_0x48;
+                    speed.y = m_HIO->mItem.mFan.m.field_0x40;
+                    mVelocity = m_HIO->mItem.mFan.m.field_0x48;
                 } else {
-                    speed.y = daPy_HIO_fan_c0::m.field_0x44;
+                    speed.y = m_HIO->mItem.mFan.m.field_0x44;
                 }
             }
             m34D0 = 1;
@@ -417,7 +417,7 @@ BOOL daPy_lk_c::procFanGlide() {
                 m3574--;
                 if (m3574 == 0 && dComIfGs_getMagic() >= 1) {
                     dComIfGp_setItemMagicCount(-1);
-                    m3574 = daPy_HIO_fan_c0::m.field_0x8;
+                    m3574 = m_HIO->mItem.mFan.m.field_0x8;
                 }
             }
             if (m34D2 == 0) {
@@ -430,30 +430,30 @@ BOOL daPy_lk_c::procFanGlide() {
                 if (swordTrigger()) {
                     setAnimeEquipSword(0);
                 }
-                return procFall_init(2, daPy_HIO_wallCatch_c0::m.field_0x54);
+                return procFall_init(2, m_HIO->mWallCatch.m.field_0x54);
             }
             if (speed.y < -gravity && !checkHeavyStateOn()) {
-                gravity = daPy_HIO_fan_c0::m.field_0x3C;
-                maxFallSpeed = daPy_HIO_fan_c0::m.field_0x38;
+                gravity = m_HIO->mItem.mFan.m.field_0x3C;
+                maxFallSpeed = m_HIO->mItem.mFan.m.field_0x38;
             }
             if (checkSetItemTrigger(dItem_DEKU_LEAF_e, 1) && frameCtrl.getRate() < 0.01f && mProcVar0.m3570 == 0) {
                 setSingleMoveAnime(
                     ANM_USEFANB,
-                    daPy_HIO_fan_c0::m.field_0x20,
-                    daPy_HIO_fan_c0::m.field_0x28,
-                    daPy_HIO_fan_c0::m.field_0x4,
-                    daPy_HIO_fan_c0::m.field_0x2C
+                    m_HIO->mItem.mFan.m.field_0x20,
+                    m_HIO->mItem.mFan.m.field_0x28,
+                    m_HIO->mItem.mFan.m.field_0x4,
+                    m_HIO->mItem.mFan.m.field_0x2C
                 );
                 mpParachuteFanMorf->setAnm(
                     getItemAnimeResource(LKANM_BCK_FANBA),
                     0,
-                    daPy_HIO_fan_c0::m.field_0x2C,
-                    daPy_HIO_fan_c0::m.field_0x20,
-                    daPy_HIO_fan_c0::m.field_0x28,
-                    daPy_HIO_fan_c0::m.field_0x4,
+                    m_HIO->mItem.mFan.m.field_0x2C,
+                    m_HIO->mItem.mFan.m.field_0x20,
+                    m_HIO->mItem.mFan.m.field_0x28,
+                    m_HIO->mItem.mFan.m.field_0x4,
                     NULL
                 );
-                gravity = daPy_HIO_autoJump_c0::m.field_0xC;
+                gravity = m_HIO->mAutoJump.m.field_0xC;
                 voiceStart(5);
                 seStartOnlyReverb(JA_SE_LK_FAN_CHUTE_RISE);
                 m353A = 5;
@@ -470,7 +470,7 @@ BOOL daPy_lk_c::procFanGlide() {
                 }
             }
             if (checkHeavyStateOn()) {
-                cLib_chaseF(&mVelocity, 0.0f, (0.1f * daPy_HIO_autoJump_c0::m.field_0x3C));
+                cLib_chaseF(&mVelocity, 0.0f, (0.1f * m_HIO->mAutoJump.m.field_0x3C));
             }
 
             f32 local_64;
@@ -478,7 +478,7 @@ BOOL daPy_lk_c::procFanGlide() {
             int uVar6 = m34E8 - shape_angle.y;
             cLib_addCalc(
                 &mVelocity,
-                (daPy_HIO_fan_c0::m.field_0x48 * mStickDistance) * cM_scos(uVar6),
+                (m_HIO->mItem.mFan.m.field_0x48 * mStickDistance) * cM_scos(uVar6),
                 0.5f,
                 (0.1f + 0.4f * mStickDistance),
                 0.01f
@@ -497,11 +497,11 @@ BOOL daPy_lk_c::procFanGlide() {
                 local_64 = 1.0f;
                 if (mProcVar0.m3570 == 0) {
                     mProcVar0.m3570 = 1;
-                    setSingleMoveAnime(ANM_USEFANB2, fVar1, 0.0f, -1, daPy_HIO_fan_c0::m.field_0x30);
+                    setSingleMoveAnime(ANM_USEFANB2, fVar1, 0.0f, -1, m_HIO->mItem.mFan.m.field_0x30);
                     mpParachuteFanMorf->setAnm(
                         getItemAnimeResource(LKANM_BCK_FANB2A),
                         0,
-                        daPy_HIO_fan_c0::m.field_0x30,
+                        m_HIO->mItem.mFan.m.field_0x30,
                         1.0f,
                         0.0f,
                         -1.0f,
@@ -513,26 +513,26 @@ BOOL daPy_lk_c::procFanGlide() {
                 if (local_64 >= 1.0f) {
                     local_64 = 1.0f;
                 }
-                local_54.x = local_64 * daPy_HIO_fan_c0::m.field_0x4C * local_60.x;
+                local_54.x = local_64 * m_HIO->mItem.mFan.m.field_0x4C * local_60.x;
                 local_54.y = 0.5f * local_64 * local_60.y;
-                local_54.z = local_64 * daPy_HIO_fan_c0::m.field_0x4C * local_60.z;
+                local_54.z = local_64 * m_HIO->mItem.mFan.m.field_0x4C * local_60.z;
                 dVar13 = 3.0f;
                 if (mProcVar0.m3570 != 0) {
                     mProcVar0.m3570 = 0;
                     setSingleMoveAnime(
                         ANM_USEFANB,
-                        daPy_HIO_fan_c0::m.field_0x20,
-                        daPy_HIO_fan_c0::m.field_0x4 - 0.001f,
-                        daPy_HIO_fan_c0::m.field_0x4,
-                        daPy_HIO_fan_c0::m.field_0x34
+                        m_HIO->mItem.mFan.m.field_0x20,
+                        m_HIO->mItem.mFan.m.field_0x4 - 0.001f,
+                        m_HIO->mItem.mFan.m.field_0x4,
+                        m_HIO->mItem.mFan.m.field_0x34
                     );
                     mpParachuteFanMorf->setAnm(
                         getItemAnimeResource(LKANM_BCK_FANBA),
                         0,
-                        daPy_HIO_fan_c0::m.field_0x34,
-                        daPy_HIO_fan_c0::m.field_0x20,
-                        daPy_HIO_fan_c0::m.field_0x4 - 0.001f,
-                        daPy_HIO_fan_c0::m.field_0x4,
+                        m_HIO->mItem.mFan.m.field_0x34,
+                        m_HIO->mItem.mFan.m.field_0x20,
+                        m_HIO->mItem.mFan.m.field_0x4 - 0.001f,
+                        m_HIO->mItem.mFan.m.field_0x4,
                         NULL
                     );
                 }

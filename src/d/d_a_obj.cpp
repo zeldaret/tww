@@ -20,7 +20,7 @@ namespace daObj {
         case dBgS_Attr_WATER_e:
             {
                 scaleV.setall(scale * 0.85f);
-                JPABaseEmitter* pEmtr = dComIfGp_particle_set(dPa_name::ID_COMMON_0023, &ac->current.pos, NULL, &scaleV);
+                JPABaseEmitter* pEmtr = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTSHIBUKI00, &ac->current.pos, NULL, &scaleV);
                 if (pEmtr != NULL) {
                     pEmtr->setRate(20.0f);
                     pEmtr->setMaxFrame(1);
@@ -32,7 +32,7 @@ namespace daObj {
         case dBgS_Attr_GRASS_e:
             {
                 scaleV.setall(scale);
-                JPABaseEmitter* pEmtr = dComIfGp_particle_set(dPa_name::ID_COMMON_0024, &ac->current.pos, NULL, &scaleV);
+                JPABaseEmitter* pEmtr = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTKUSA00, &ac->current.pos, NULL, &scaleV);
                 if (pEmtr != NULL) {
                     pEmtr->setLifeTime(20);
                     pEmtr->setRate(50.0f);

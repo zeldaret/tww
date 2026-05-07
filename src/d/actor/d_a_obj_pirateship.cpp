@@ -290,7 +290,7 @@ BOOL daObjPirateship::Act_c::CreateHeap() {
 void daObjPirateship::Act_c::CreateWave() {
     m6C8 = current.pos;
     if (m4AC.getEmitter() == NULL) {
-        dComIfGp_particle_setShipTail(0x8315, &m6C8, &current.angle, NULL, 0, &m4AC);
+        dComIfGp_particle_setShipTail(dPa_name::ID_AK_SN_PIRATESHIPTAIL00, &m6C8, &current.angle, NULL, 0, &m4AC);
         JPABaseEmitter* emitter = m4AC.getEmitter();
         if (emitter != NULL) {
             const JGeometry::TVec3<f32> scale = (Vec){20.0f, 20.0f, 20.0f};
@@ -305,7 +305,7 @@ void daObjPirateship::Act_c::CreateWave() {
     {
         GXColor sea_color;
         dKy_get_seacolor(&m500, &sea_color);
-        m4FC = dComIfGp_particle_set(0x833d, &current.pos, &current.angle, NULL, 0xff, NULL, -1, &m500);
+        m4FC = dComIfGp_particle_set(dPa_name::ID_AK_SN_PIRATESHIPSPLASH00, &current.pos, &current.angle, NULL, 0xff, NULL, -1, &m500);
     }
 }
 

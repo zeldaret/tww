@@ -186,6 +186,7 @@ static BOOL daDr2_Draw(dr2_class* i_this) {
 
 /* 000006D4-00000720       .text s_a_d_sub__FPvPv */
 void* s_a_d_sub(void* ac1, void* ac2) {
+    UNUSED(ac2);
     if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == PROC_BTD) {
         return ac1;
     }
@@ -223,7 +224,6 @@ void hahen_move(dr2_class* i_this) {
 
 /* 00000884-0000130C       .text iwa_move__FP9dr2_class */
 void iwa_move(dr2_class* i_this) {
-    /* Nonmatching - retail-only regalloc */
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp58;
     cXyz sp4C;
@@ -285,7 +285,7 @@ void iwa_move(dr2_class* i_this) {
                 i_this->unk_50D = REG0_S(2) + 30;
                 i_this->unk_50E = true;
                 i_this->unk_510 = 1;
-                dComIfGp_particle_setToon(dPa_name::ID_SCENE_A0B8, &i_this->unk_4A8, &i_this->unk_4B4, NULL, 0xb9, &i_this->unk_4EC, fopAcM_GetRoomNo(a_this));
+                dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BTDSMOKE02, &i_this->unk_4A8, &i_this->unk_4B4, NULL, 0xb9, &i_this->unk_4EC, fopAcM_GetRoomNo(a_this));
                 fopAcM_seStartCurrent(a_this, JA_SE_CM_BTD_ROCK_FALL, 0);
             }
             break;
@@ -310,7 +310,7 @@ void iwa_move(dr2_class* i_this) {
             cLib_addCalc2(&i_this->unk_414, 2000.0f, 0.5f, 100.0f);
 
             i_this->unk_4A8.y = btd->m02FC[3].y + REG0_F(3);
-            i_this->unk_4B4.y = i_this->unk_514->current.angle.y;
+            i_this->unk_4B4.y = i_this->unk_514->actor.current.angle.y;
             
             if (btd->m02FC[3].y < REG0_F(6) + 100.0f) {
                 i_this->unk_4C0 = (REG0_F(6) + 100.0f) - btd->m02FC[3].y;
@@ -326,7 +326,7 @@ void iwa_move(dr2_class* i_this) {
 #if VERSION == VERSION_DEMO
                 i_this->unk_4D4_demo = 
 #endif
-                dComIfGp_particle_set(dPa_name::ID_SCENE_80B7, &i_this->unk_4A8, &i_this->unk_4B4, NULL, 0xFF, &i_this->unk_4D8);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_BTDDRIPMAGMA00, &i_this->unk_4A8, &i_this->unk_4B4, NULL, 0xFF, &i_this->unk_4D8);
                 i_this->unk_424 = 1;
             }
             break;
@@ -355,7 +355,7 @@ void iwa_move(dr2_class* i_this) {
 #else
                 i_this->unk_4D8.remove();
 #endif
-                dComIfGp_particle_setToon(dPa_name::ID_SCENE_A0B8, &i_this->unk_4A8, &i_this->unk_4B4, NULL, 0xb9, &i_this->unk_4EC, fopAcM_GetRoomNo(a_this));
+                dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BTDSMOKE02, &i_this->unk_4A8, &i_this->unk_4B4, NULL, 0xb9, &i_this->unk_4EC, fopAcM_GetRoomNo(a_this));
 
                 i_this->unk_50D = REG0_S(2) + 10;
                 i_this->unk_50E = true;
@@ -395,7 +395,7 @@ void iwa_move(dr2_class* i_this) {
                 i_this->unk_4D4->becomeInvalidEmitter();
             }
 
-            i_this->unk_4D4 = dComIfGp_particle_set(dPa_name::ID_SCENE_80B9, &i_this->unk_4A8);
+            i_this->unk_4D4 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BTDBROKENROCK00, &i_this->unk_4A8);
             if (i_this->unk_4D4 != NULL) {
                 i_this->unk_4D4->setRate(i_this->unk_50D);
                 i_this->unk_50E++;
@@ -431,7 +431,7 @@ void iwa_move(dr2_class* i_this) {
                 JGeometry::TVec3<f32> tvec;
                 link->getObject()->getGlobalPosition(tvec);
                 sp40 = tvec;
-                dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8062, &sp40, 0xB9);
+                dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BTDBROKENROCKTAIL00, &sp40, 0xB9);
                 link = link->getNext();
             }
             break;
@@ -650,7 +650,10 @@ static BOOL daDr2_Delete(dr2_class* i_this) {
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
     dr2_class* i_this = (dr2_class*)a_this;
 
-    i_this->mpMorf1 = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BMD_DR_SIPPO), NULL, NULL, NULL, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
+    i_this->mpMorf1 = new mDoExt_McaMorf(
+        (J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BMD_DR_SIPPO),
+        NULL, NULL, NULL, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203
+    );
     
     if ((i_this->mpMorf1 == NULL) || (i_this->mpMorf1->getModel() == NULL)) {
         return FALSE;
@@ -683,7 +686,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     J3DAnmTextureSRTKey* srtKey = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dr2", DR2_BTK_GAN_MAGMA);
-    BOOL init = i_this->unk_420->init(i_this->unk_41C->getModelData(), srtKey, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    BOOL init = i_this->unk_420->init(i_this->unk_41C->getModelData(), srtKey, true, J3DFrameCtrl::EMode_NONE);
 #if VERSION > VERSION_DEMO
     if (!init) {
         return FALSE;
@@ -730,7 +733,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     srtKey = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dr2", DR2_BTK_MBYO1);
-    if (!i_this->unk_430->init(i_this->unk_428->getModelData(), srtKey, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->unk_430->init(i_this->unk_428->getModelData(), srtKey, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
 
@@ -740,7 +743,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     srtKey = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dr2", DR2_BTK_MBYO2);
-    if (!i_this->unk_434->init(i_this->unk_42C->getModelData(), srtKey, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->unk_434->init(i_this->unk_42C->getModelData(), srtKey, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 
@@ -750,7 +753,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     J3DAnmTevRegKey* tevRegKey = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dr2", DR2_BRK_MBYO2);
-    if (!i_this->unk_438->init(i_this->unk_42C->getModelData(), tevRegKey, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if (!i_this->unk_438->init(i_this->unk_42C->getModelData(), tevRegKey, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 

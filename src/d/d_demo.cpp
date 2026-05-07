@@ -52,7 +52,7 @@ void dDemo_actor_c::setActor(fopAc_ac_c* ac) {
 }
 
 /* 80069434-80069550       .text getP_BtpData__13dDemo_actor_cFPCc */
-void* dDemo_actor_c::getP_BtpData(const char* name) {
+J3DAnmTexPattern* dDemo_actor_c::getP_BtpData(const char* name) {
     /* Nonmatching */
     if (!checkEnable(ENABLE_UNK_e))
         return NULL;
@@ -64,7 +64,7 @@ void* dDemo_actor_c::getP_BrkData(const char*) {
 }
 
 /* 800695E8-8006969C       .text getP_BtkData__13dDemo_actor_cFPCc */
-void* dDemo_actor_c::getP_BtkData(const char*) {
+J3DAnmTextureSRTKey* dDemo_actor_c::getP_BtkData(const char*) {
     /* Nonmatching */
 }
 

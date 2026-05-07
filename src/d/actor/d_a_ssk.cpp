@@ -103,10 +103,10 @@ void nomal_move(ssk_class* i_this) {
             i_this->m2BA = 2;
 
             dComIfGp_particle_set(
-                dPa_name::ID_SCENE_816C, &i_this->actor.current.pos, NULL, NULL, 0xff, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0
+                dPa_name::ID_IT_SN_TGSYOKU_ROCK00, &i_this->actor.current.pos, NULL, NULL, 0xff, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0
             );
             dComIfGp_particle_setToon(
-                dPa_name::ID_SCENE_A16D, &i_this->actor.current.pos, &i_this->actor.shape_angle, NULL, 0xb9, &i_this->m2D0, fopAcM_GetRoomNo(&i_this->actor)
+                dPa_name::ID_IT_ST_TGSYOKU_SMOKE00, &i_this->actor.current.pos, &i_this->actor.shape_angle, NULL, 0xb9, &i_this->m2D0, fopAcM_GetRoomNo(&i_this->actor)
             );
         }
         break;
@@ -280,15 +280,16 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-#if VERSION == VERSION_DEMO
     i_this->mpMorf2 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Ssk", SSK_BDL_KTANA_00), NULL, NULL, NULL, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0x0, 0x11020203
+        (J3DModelData*)dComIfG_getObjectRes("Ssk", SSK_BDL_KTANA_00),
+        NULL, NULL, NULL,
+        DEMO_SELECT(J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_NULL),
+        1.0f, 0, -1,
+        DEMO_SELECT(0, 1),
+        NULL,
+        DEMO_SELECT(0x0, 0x80000),
+        DEMO_SELECT(0x11020203, 0x11000022)
     );
-#else
-    i_this->mpMorf2 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Ssk", SSK_BDL_KTANA_00), NULL, NULL, NULL, ~J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022
-    );
-#endif
     if (i_this->mpMorf2 == NULL || i_this->mpMorf2->getModel() == NULL) {
         return FALSE;
     }
@@ -391,11 +392,7 @@ static cPhs_State daSsk_Create(fopAc_ac_c* a_this) {
             i_this->m2C0 = 400.0f;
         }
 
-#if VERSION == VERSION_DEMO
-        u32 heapSize = 0x13C0;
-#else
-        u32 heapSize = 0x1300;
-#endif
+        u32 heapSize = DEMO_SELECT(0x13C0, 0x1300);
         if (!fopAcM_entrySolidHeap(a_this, useHeapInit, heapSize)) {
             return cPhs_ERROR_e;
         }

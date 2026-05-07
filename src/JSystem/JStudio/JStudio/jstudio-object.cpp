@@ -3,6 +3,8 @@
 // Translation Unit: jstudio-object.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio/jstudio-object.h"
 #include "dolphin/types.h"
 
@@ -67,7 +69,6 @@ void JStudio::TVariableValue::update_functionValue_(JStudio::TVariableValue* par
 
 /* 8026EA58-8026EAB8       .text __dt__Q37JStudio14TVariableValue13TOutput_none_Fv */
 JStudio::TVariableValue::TOutput_none_::~TOutput_none_() {
-    /* Nonmatching */
 }
 
 /* 8026EAB8-8026EABC       .text __cl__Q37JStudio14TVariableValue13TOutput_none_CFfPQ27JStudio8TAdaptor */

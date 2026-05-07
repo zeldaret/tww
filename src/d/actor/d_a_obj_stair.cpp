@@ -55,7 +55,6 @@ public:
     /* 0x10 */ f32 m10;
     /* 0x14 */ f32 m14;
     /* 0x18 */ s16 m18;
-    /* Place member variables here */
 };
 
 static daobj_stairHIO_c l_HIO;

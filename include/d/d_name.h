@@ -6,20 +6,25 @@
 class dNm_HIO_c {
 public:
     dNm_HIO_c();
+
+    void genMessage(JORMContext* ctx) { /* TODO */ }
 };
 
 class dDlst_NameIN_c : public dDlst_base_c {
+    virtual ~dDlst_NameIN_c() {}
     void draw();
 };
 
 class dName_c {
 public:
+    dName_c() {}
+    virtual ~dName_c() {}
+
     void draw() { _draw(); }
     int isInputEnd() { return mIsInputEnd; }
     char* getInputStrPtr() { return mInputStr; }
     void setNextNameStr(char* i_name) { strcpy(mNextNameStr, i_name); }
 
-    virtual ~dName_c() {}
     void _create();
     void initial();
     void _delete();
@@ -74,5 +79,7 @@ public:
     /* 0x2A64 */ u8 field_0x2964[0x2AD0 - 0x2A64];
     /* 0x2AD0 */ char mNextNameStr[0x2AE8 - 0x2AD0];
 };
+
+STATIC_ASSERT(sizeof(dName_c) == 0x2AE8);
 
 #endif /* D_NAME_H */

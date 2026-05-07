@@ -209,7 +209,7 @@ void daObjIce_c::tg_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf* arg1, fopAc_ac
                     csXyz sp18(0, 0, 0);
                     sp18.x = cM_atan2s(-pPos->y + i_this->current.pos.y, pPos->z - i_this->current.pos.z);
                     sp18.y = cM_atan2s(pPos->x - i_this->current.pos.x, pPos->z - i_this->current.pos.z);
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_0465, pPos, &sp18, NULL, 0xFF, NULL, -1, &i_this->tevStr.mColorK0);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_ICEHAHEN00, pPos, &sp18, NULL, 0xFF, NULL, -1, &i_this->tevStr.mColorK0);
                     break;
                 }
                 case AT_TYPE_BOMB:
@@ -326,7 +326,7 @@ void daObjIce_c::wait_act_proc() {
 
     case 1: {
         m458 = 0x5a;
-        JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0464, &current.pos, NULL, &scale, 0xFF, NULL, -1, &tevStr.mColorK0);
+        JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_ICETHAW00, &current.pos, NULL, &scale, 0xFF, NULL, -1, &tevStr.mColorK0);
         if (emitter != NULL) {
 #if VERSION == VERSION_DEMO
             JGeometry::TVec3<f32> s;
@@ -356,7 +356,7 @@ void daObjIce_c::wait_act_proc() {
                 dComIfG_Bgsp()->Release(mBgw);
             }
             m458 = 0x5A;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0464, &current.pos, NULL, &scale, 0xFF, NULL, -1, &tevStr.mColorK0);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_ICETHAW00, &current.pos, NULL, &scale, 0xFF, NULL, -1, &tevStr.mColorK0);
             m43C = &daObjIce_c::fade_out_retire_act_proc;
         }
 #else

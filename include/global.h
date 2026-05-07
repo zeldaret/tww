@@ -4,7 +4,7 @@
 #include "dolphin/types.h"
 
 #define ARRAY_SIZE(o) (sizeof(o) / sizeof(o[0]))
-#define ARRAY_SSIZE(o) ((s32)(sizeof(o) / sizeof(o[0])))
+#define ARRAY_SSIZE(o) ((int)(sizeof(o) / sizeof(o[0])))
 
 // Align X to the previous N bytes (N must be power of two)
 #define ALIGN_PREV(X, N) ((X) & ~((N)-1))
@@ -12,6 +12,10 @@
 #define ALIGN_NEXT(X, N) ALIGN_PREV(((X) + (N)-1), N)
 #define IS_ALIGNED(X, N) (((X) & ((N)-1)) == 0)
 #define IS_NOT_ALIGNED(X, N) (((X) & ((N)-1)) != 0)
+
+// Silence unused parameter warnings.
+// TP debug suggests the original devs used something like this.
+#define UNUSED(x) ((void)(x))
 
 #define JUT_EXPECT(...)
 #define ASSERT(...)

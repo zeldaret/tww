@@ -26,6 +26,7 @@ static u32 ita_Ef[]     = { BITA_BRK_EF_BTDITA0, BITA_BRK_EF_BTDITA1 };
 
 /* 00000078-000000C4       .text b_a_sub__FPvPv */
 static void* b_a_sub(void* search, void* user) {
+    UNUSED(user);
     if (fopAc_IsActor(search) && fopAcM_GetName(search) == PROC_BTD)
         return search;
     return NULL;
@@ -84,9 +85,9 @@ static void mode_dead(bita_class* i_this) {
                 type = 1;
 
             if (type == 0) {
-                dComIfGp_particle_set(dPa_name::ID_SCENE_80E3, &i_this->current.pos, &i_this->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_BTDBURNEDBOARD00, &i_this->current.pos, &i_this->shape_angle);
             } else {
-                dComIfGp_particle_set(dPa_name::ID_SCENE_80E4, &i_this->current.pos, &i_this->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_BTDBURNEDBOARD01, &i_this->current.pos, &i_this->shape_angle);
             }
         }
 
@@ -187,7 +188,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_ac) {
     if (i_this->mpBrkAnm == NULL)
         return FALSE;
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bita", ita_Ef[type]);
-    if (!i_this->mpBrkAnm->init(i_this->mpModelEf->getModelData(), brk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
+    if (!i_this->mpBrkAnm->init(i_this->mpModelEf->getModelData(), brk, TRUE, J3DFrameCtrl::EMode_NONE))
         return FALSE;
 
     i_this->mpBgW = new dBgW();

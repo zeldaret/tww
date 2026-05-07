@@ -723,11 +723,11 @@ void Act_c::eff_break() {
     cXyz sp18;
     sp18.set(current.pos.x, current.pos.y + data().m04, current.pos.z);
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_03E3, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_STS_HAHEN, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
 
     J3DModelData* pJVar1 = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPI_KOISHI);
     J3DAnmTexPattern* pJVar2 = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", ALWAYS_BTP_MPI_KOISHI);
-    JPABaseEmitter* pJVar3 = (JPABaseEmitter*)dComIfGp_particle_set(dPa_name::ID_COMMON_03E2, &sp18);
+    JPABaseEmitter* pJVar3 = (JPABaseEmitter*)dComIfGp_particle_set(dPa_name::ID_IT_JN_M_STS_HAHEN, &sp18);
 
     if (pJVar3 != NULL) {
         dPa_J3DmodelEmitter_c* modelEmitter = new dPa_J3DmodelEmitter_c(pJVar3, pJVar1, tevStr, pJVar2, data().m88, 0);
@@ -937,7 +937,7 @@ bool Act_c::_execute() {
                 mCyl.MoveCAtTg(current.pos);
                 dComIfG_Ccsp()->Set(&mCyl);
                 if (m674 == 2 || m674 == 3 || m67B != 0) {
-                    dComIfG_Ccsp_SetMass(&mCyl, 3);
+                    dComIfG_Ccsp()->SetMass(&mCyl, 3);
                 }
                 attention_info.position.x = current.pos.x;
                 attention_info.position.y = current.pos.y + data().m08;
@@ -969,7 +969,7 @@ bool Act_c::_draw() {
         g_env_light.setLightTevColorType(mpModel, &tevStr);
         mDoExt_modelUpdateDL(mpModel);
         if (fopAcM_GetModel(this) == NULL) {
-            dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), data().m80, mAcch.m_gnd);
+            dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), data().shadowScaleXZ, mAcch.m_gnd);
         }
     }
     return true;

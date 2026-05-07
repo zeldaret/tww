@@ -19,10 +19,7 @@
 #include "d/d_picture_box.h"
 #include "d/actor/d_a_tag_photo.h"
 
-extern dCcD_SrcCyl dNpc_cyl_src;
-
 const char daNpcPhoto_c::m_arcname[] = "Auc";
-
 
 static const char* l_arcname_tbl[] = {
     "Po"
@@ -1714,7 +1711,7 @@ u32 daNpcPhoto_c::getMsg() {
     field_0x980 = 0;
     field_0x9D0 = 0;
     
-    if(g_dComIfG_gameInfo.play.getEvent().chkPhoto()) {
+    if(g_dComIfG_gameInfo.play.getEvent()->chkPhoto()) {
         if (eventReg < 1) {
             msgNo = 0x2A5C;
         } else if (eventReg < 3) {

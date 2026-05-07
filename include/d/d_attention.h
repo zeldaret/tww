@@ -119,8 +119,6 @@ public:
     virtual bool execute(u16, J3DTransformInfo*);
 };
 
-class daPy_lk_c;
-
 enum AttentionFlags {
     AttnFlag_00000001 = 0x00000001,
     AttnFlag_00000002 = 0x00000002,
@@ -205,7 +203,7 @@ public:
     bool LockonTruth();
 
     void Init(fopAc_ac_c* i_owner, u32 i_padNo) {
-        mpPlayer = (daPy_lk_c*)i_owner;
+        mpPlayer = i_owner;
         mPadNo = i_padNo;
     }
 
@@ -260,10 +258,12 @@ public:
     void LookRequest(fopAc_ac_c* reqActor, f32 horizontalDist, f32 upDist, f32 downDist, s16 angle, int param_5) {
         mLook[0].request(reqActor, horizontalDist, upDist, downDist, angle, param_5);
     }
-    void Look2RequestF(fopAc_ac_c* param_1, s16 param_2, int param_3) {mLook[1].requestF(param_1,param_2,param_3);}
+    void Look2RequestF(fopAc_ac_c* param_1, s16 param_2, int param_3) {
+        mLook[1].requestF(param_1,param_2,param_3);
+    }
 
 public:
-    /* 0x000 */ daPy_lk_c* mpPlayer;
+    /* 0x000 */ fopAc_ac_c* mpPlayer;
     /* 0x004 */ fpc_ProcID mLockonTargetID;
     /* 0x008 */ dAttDraw_CallBack_c mCallBack;
     /* 0x00C */ int mPadNo;

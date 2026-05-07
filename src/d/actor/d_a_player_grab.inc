@@ -195,7 +195,7 @@ void daPy_lk_c::freeGrabItem() {
     }
     mActorKeepGrab.clearData();
     if (checkGrabAnime()) {
-        resetActAnimeUpper(UPPER_MOVE2_e, daPy_HIO_basic_c0::m.field_0xC);
+        resetActAnimeUpper(UPPER_MOVE2_e, m_HIO->mBasic.m.field_0xC);
     }
     field_0x2b0 = 0.0f;
     m35CC = 0.0f;
@@ -313,14 +313,14 @@ BOOL daPy_lk_c::procGrabReady_init() {
         }
         setSingleMoveAnime(
             ANM_GRABP,
-            daPy_HIO_grab_c0::m.field_0x20,
-            daPy_HIO_grab_c0::m.field_0x24,
-            daPy_HIO_grab_c0::m.field_0x0,
-            daPy_HIO_grab_c0::m.field_0x28
+            m_HIO->mGrab.m.field_0x20,
+            m_HIO->mGrab.m.field_0x24,
+            m_HIO->mGrab.m.field_0x0,
+            m_HIO->mGrab.m.field_0x28
         );
         mProcVar0.m3570 = 1;
     } else {
-        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
         setAnimeUnequip();
         mProcVar0.m3570 = 0;
     }
@@ -366,16 +366,16 @@ BOOL daPy_lk_c::procGrabReady() {
             } else if (fopAcM_CheckStatus(grab_actor, fopAcStts_UNK10000_e | fopAcStts_UNK8000000_e)) {
                 f32 fVar1;
                 if (fopAcM_CheckStatus(grab_actor, fopAcStts_UNK8000000_e)) {
-                    fVar1 = daPy_HIO_grab_c0::m.field_0xA4;
+                    fVar1 = m_HIO->mGrab.m.field_0xA4;
                 } else {
-                    fVar1 = daPy_HIO_grab_c0::m.field_0xA8;
+                    fVar1 = m_HIO->mGrab.m.field_0xA8;
                 }
                 setSingleMoveAnime(
                     ANM_GRABNG,
                     fVar1,
-                    daPy_HIO_grab_c0::m.field_0x40,
-                    daPy_HIO_grab_c0::m.field_0x10,
-                    daPy_HIO_grab_c0::m.field_0x44
+                    m_HIO->mGrab.m.field_0x40,
+                    m_HIO->mGrab.m.field_0x10,
+                    m_HIO->mGrab.m.field_0x44
                 );
                 mProcVar0.m3570 = 2;
             } else {
@@ -389,10 +389,10 @@ BOOL daPy_lk_c::procGrabReady() {
     } else if (mProcVar0.m3570 == 0 && checkNoUpperAnime()) {
         setSingleMoveAnime(
             ANM_GRABP,
-            daPy_HIO_grab_c0::m.field_0x20,
-            daPy_HIO_grab_c0::m.field_0x24,
-            daPy_HIO_grab_c0::m.field_0x0,
-            daPy_HIO_grab_c0::m.field_0x28
+            m_HIO->mGrab.m.field_0x20,
+            m_HIO->mGrab.m.field_0x24,
+            m_HIO->mGrab.m.field_0x0,
+            m_HIO->mGrab.m.field_0x28
         );
         mProcVar0.m3570 = 1;
     }
@@ -405,16 +405,16 @@ BOOL daPy_lk_c::procGrabUp_init() {
     fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
     s16 sVar1;
     if (fopAcM_CheckStatus(grab_actor, fopAcStts_UNK10000_e | fopAcStts_UNK8000000_e)) {
-        sVar1 = daPy_HIO_grab_c0::m.field_0x12;
+        sVar1 = m_HIO->mGrab.m.field_0x12;
     } else {
-        sVar1 = daPy_HIO_grab_c0::m.field_0x2;
+        sVar1 = m_HIO->mGrab.m.field_0x2;
     }
     setSingleMoveAnime(
         ANM_GRABUP,
-        daPy_HIO_grab_c0::m.field_0x2C,
-        daPy_HIO_grab_c0::m.field_0x30,
+        m_HIO->mGrab.m.field_0x2C,
+        m_HIO->mGrab.m.field_0x30,
         sVar1,
-        daPy_HIO_grab_c0::m.field_0x38
+        m_HIO->mGrab.m.field_0x38
     );
     m370C = mActorKeepGrab.getActor()->current.pos - m3748;
     m35C8 = m370C.absXZ() - 47.0f;
@@ -445,7 +445,7 @@ BOOL daPy_lk_c::procGrabUp() {
         } else {
             initGrabNextMode();
         }
-    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_grab_c0::m.field_0x34) {
+    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mGrab.m.field_0x34) {
         if (fopAcM_CheckStatus(grab_actor, fopAcStts_UNK10000_e | fopAcStts_UNK8000000_e)) {
             if (mStickDistance > 0.05f) {
                 onResetFlg0(daPyRFlg0_GRAB_UP_END);
@@ -472,13 +472,13 @@ BOOL daPy_lk_c::procGrabMiss_init() {
     commonProcInit(daPyProc_GRAB_MISS_e);
     setSingleMoveAnime(
         ANM_GRABNG,
-        daPy_HIO_grab_c0::m.field_0x3C,
-        daPy_HIO_grab_c0::m.field_0x40,
-        daPy_HIO_grab_c0::m.field_0x4,
-        daPy_HIO_grab_c0::m.field_0x44
+        m_HIO->mGrab.m.field_0x3C,
+        m_HIO->mGrab.m.field_0x40,
+        m_HIO->mGrab.m.field_0x4,
+        m_HIO->mGrab.m.field_0x44
     );
     mProcVar0.m3570 = 0;
-    m34D0 = daPy_HIO_grab_c0::m.field_0x6;
+    m34D0 = m_HIO->mGrab.m.field_0x6;
     dComIfGs_onEventBit(dSv_event_flag_c::UNK_4020);
     return true;
 }
@@ -495,10 +495,10 @@ BOOL daPy_lk_c::procGrabMiss() {
             } else {
                 setSingleMoveAnime(
                     ANM_GRABP,
-                    daPy_HIO_grab_c0::m.field_0x48,
-                    daPy_HIO_grab_c0::m.field_0x4C,
-                    daPy_HIO_grab_c0::m.field_0x8,
-                    daPy_HIO_grab_c0::m.field_0x54
+                    m_HIO->mGrab.m.field_0x48,
+                    m_HIO->mGrab.m.field_0x4C,
+                    m_HIO->mGrab.m.field_0x8,
+                    m_HIO->mGrab.m.field_0x54
                 );
                 mProcVar0.m3570 = 1;
                 freeGrabItem();
@@ -506,7 +506,7 @@ BOOL daPy_lk_c::procGrabMiss() {
         }
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() > -0.01f) {
         checkNextMode(0);
-    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < daPy_HIO_grab_c0::m.field_0x50) {
+    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < m_HIO->mGrab.m.field_0x50) {
         checkNextMode(1);
     }
     return true;
@@ -521,19 +521,19 @@ BOOL daPy_lk_c::procGrabThrow_init(int param_0) {
     if (fopAcM_CheckStatus(mActorKeepGrab.getActor(), fopAcStts_UNK10000_e)) {
         setSingleMoveAnime(
             ANM_GRABRE,
-            daPy_HIO_grab_c0::m.field_0x94,
-            daPy_HIO_grab_c0::m.field_0x98,
-            daPy_HIO_grab_c0::m.field_0x1C,
-            daPy_HIO_grab_c0::m.field_0xA0
+            m_HIO->mGrab.m.field_0x94,
+            m_HIO->mGrab.m.field_0x98,
+            m_HIO->mGrab.m.field_0x1C,
+            m_HIO->mGrab.m.field_0xA0
         );
         m3574 = 0;
     } else {
         setSingleMoveAnime(
             ANM_GRABTHROW,
-            daPy_HIO_grab_c0::m.field_0x58,
-            daPy_HIO_grab_c0::m.field_0x5C,
-            daPy_HIO_grab_c0::m.field_0xA,
-            daPy_HIO_grab_c0::m.field_0x64
+            m_HIO->mGrab.m.field_0x58,
+            m_HIO->mGrab.m.field_0x5C,
+            m_HIO->mGrab.m.field_0xA,
+            m_HIO->mGrab.m.field_0x64
         );
         m3574 = 1;
     }
@@ -549,26 +549,26 @@ BOOL daPy_lk_c::procGrabThrow() {
     fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
 
     cLib_addCalc(
-        &mVelocity, 0.0f, daPy_HIO_move_c0::m.field_0x24, daPy_HIO_move_c0::m.field_0x1C, daPy_HIO_move_c0::m.field_0x20
+        &mVelocity, 0.0f, m_HIO->mMove.m.field_0x24, m_HIO->mMove.m.field_0x1C, m_HIO->mMove.m.field_0x20
     );
     if (m3574 == 0) {
         if (frameCtrl.getRate() < 0.01f) {
             setSingleMoveAnime(
                 ANM_GRABTHROW,
-                daPy_HIO_grab_c0::m.field_0x58,
-                daPy_HIO_grab_c0::m.field_0x5C,
-                daPy_HIO_grab_c0::m.field_0xA,
-                daPy_HIO_grab_c0::m.field_0x64
+                m_HIO->mGrab.m.field_0x58,
+                m_HIO->mGrab.m.field_0x5C,
+                m_HIO->mGrab.m.field_0xA,
+                m_HIO->mGrab.m.field_0x64
             );
             m3574 = 1;
         }
         return true;
     }
 
-    if (frameCtrl.checkPass(daPy_HIO_grab_c0::m.field_0x8C) && grab_actor != NULL) {
+    if (frameCtrl.checkPass(m_HIO->mGrab.m.field_0x8C) && grab_actor != NULL) {
         grab_actor->current.angle.y = shape_angle.y;
-        grab_actor->speedF = daPy_HIO_grab_c0::m.field_0x84;
-        grab_actor->speed.y = daPy_HIO_grab_c0::m.field_0x88;
+        grab_actor->speedF = m_HIO->mGrab.m.field_0x84;
+        grab_actor->speed.y = m_HIO->mGrab.m.field_0x88;
         dComIfGp_getCamera(mCameraInfoIdx)->mCamera.ForceLockOn(mActorKeepGrab.getID());
         if (fopAcM_CheckStatus(grab_actor, fopAcStts_UNK10000_e)) {
             voiceStart(18);
@@ -586,7 +586,7 @@ BOOL daPy_lk_c::procGrabThrow() {
             setAnimeEquipSword(0);
         }
         checkNextMode(0);
-    } else if (frameCtrl.getFrame() > daPy_HIO_grab_c0::m.field_0x60) {
+    } else if (frameCtrl.getFrame() > m_HIO->mGrab.m.field_0x60) {
         if (mProcVar0.m3570 != 0) {
             mProcVar0.m3570 = 0;
             setAnimeEquipSword(0);
@@ -605,15 +605,15 @@ BOOL daPy_lk_c::procGrabPut_init() {
     commonProcInit(daPyProc_GRAB_PUT_e);
     if (checkGrabWear()) {
         mProcVar0.m3570 = 1;
-        setSingleMoveAnime(ANM_GRABWAIT, daPy_HIO_grab_c0::m.field_0x78, 0.0f, -1, daPy_HIO_grab_c0::m.field_0x7C);
+        setSingleMoveAnime(ANM_GRABWAIT, m_HIO->mGrab.m.field_0x78, 0.0f, -1, m_HIO->mGrab.m.field_0x7C);
     } else {
         mProcVar0.m3570 = 0;
         setSingleMoveAnime(
             ANM_GRABUP,
-            daPy_HIO_grab_c0::m.field_0x68,
-            daPy_HIO_grab_c0::m.field_0x6C,
-            daPy_HIO_grab_c0::m.field_0xC,
-            daPy_HIO_grab_c0::m.field_0x74
+            m_HIO->mGrab.m.field_0x68,
+            m_HIO->mGrab.m.field_0x6C,
+            m_HIO->mGrab.m.field_0xC,
+            m_HIO->mGrab.m.field_0x74
         );
     }
     mVelocity = 0.0f;
@@ -645,10 +645,10 @@ BOOL daPy_lk_c::procGrabPut() {
             mProcVar0.m3570 = 0;
             setSingleMoveAnime(
                 ANM_GRABUP,
-                daPy_HIO_grab_c0::m.field_0x68,
-                daPy_HIO_grab_c0::m.field_0x6C,
-                daPy_HIO_grab_c0::m.field_0xC,
-                daPy_HIO_grab_c0::m.field_0x74
+                m_HIO->mGrab.m.field_0x68,
+                m_HIO->mGrab.m.field_0x6C,
+                m_HIO->mGrab.m.field_0xC,
+                m_HIO->mGrab.m.field_0x74
             );
         } else {
             return true;
@@ -692,7 +692,7 @@ BOOL daPy_lk_c::procGrabPut() {
         } else {
             checkNextMode(0);
         }
-    } else if ((mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < daPy_HIO_grab_c0::m.field_0x70) && checkNextMode(1)) {
+    } else if ((mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < m_HIO->mGrab.m.field_0x70) && checkNextMode(1)) {
         grab_actor->speedF = 0.0f;
         freeGrabItem();
     }
@@ -707,12 +707,12 @@ BOOL daPy_lk_c::procGrabWait_init() {
     }
     commonProcInit(daPyProc_GRAB_WAIT_e);
     if (checkGrabSpecialHeavyState()) {
-        setSingleMoveAnime(ANM_GRABWAITB, daPy_HIO_grab_c0::m.field_0x90, 0.0f, -1, daPy_HIO_grab_c0::m.field_0x7C);
+        setSingleMoveAnime(ANM_GRABWAITB, m_HIO->mGrab.m.field_0x90, 0.0f, -1, m_HIO->mGrab.m.field_0x7C);
         if (!checkGrabAnime()) {
             setActAnimeUpper(LKANM_BCK_GRABWAITB, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
         }
     } else {
-        setSingleMoveAnime(ANM_GRABWAIT, daPy_HIO_grab_c0::m.field_0x78, 0.0f, -1, daPy_HIO_grab_c0::m.field_0x7C);
+        setSingleMoveAnime(ANM_GRABWAIT, m_HIO->mGrab.m.field_0x78, 0.0f, -1, m_HIO->mGrab.m.field_0x7C);
         if (!checkGrabAnime()) {
             setActAnimeUpper(LKANM_BCK_GRABWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
         }
@@ -739,7 +739,7 @@ BOOL daPy_lk_c::procGrabWait() {
     if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
     } else {
-        setSpeedAndAngleNormal(daPy_HIO_move_c0::m.field_0x0);
+        setSpeedAndAngleNormal(m_HIO->mMove.m.field_0x0);
     }
     if (m35D8 <= -29.0f) {
         if ((mFrameCtrlUnder[UNDER_MOVE0_e].getRate() > 0.0f) && mProcVar0.m3570 == 0) {
@@ -750,7 +750,7 @@ BOOL daPy_lk_c::procGrabWait() {
         }
         mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.0f);
     } else {
-        mFrameCtrlUnder[UNDER_MOVE0_e].setRate(daPy_HIO_grab_c0::m.field_0x78);
+        mFrameCtrlUnder[UNDER_MOVE0_e].setRate(m_HIO->mGrab.m.field_0x78);
     }
     if (checkNextMode(0)) {
         if (checkGrabAnime()) {
@@ -761,7 +761,7 @@ BOOL daPy_lk_c::procGrabWait() {
         if (checkNoResetFlg1(daPyFlg1_UNK800000)) {
             fVar2 = -1.0f;
         } else {
-            fVar2 = daPy_HIO_basic_c0::m.field_0xC;
+            fVar2 = m_HIO->mBasic.m.field_0xC;
         }
         setBlendMoveAnime(fVar2);
         m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
@@ -769,9 +769,9 @@ BOOL daPy_lk_c::procGrabWait() {
         onNoResetFlg1(daPyFlg1_UNK800000);
     } else if (checkNoResetFlg1(daPyFlg1_UNK800000)) {
         if (checkGrabSpecialHeavyState()) {
-            setSingleMoveAnime(ANM_GRABWAITB, daPy_HIO_grab_c0::m.field_0x90, 0.0f, -1, daPy_HIO_grab_c0::m.field_0x7C);
+            setSingleMoveAnime(ANM_GRABWAITB, m_HIO->mGrab.m.field_0x90, 0.0f, -1, m_HIO->mGrab.m.field_0x7C);
         } else {
-            setSingleMoveAnime(ANM_GRABWAIT, daPy_HIO_grab_c0::m.field_0x78, 0.0f, -1, daPy_HIO_grab_c0::m.field_0x7C);
+            setSingleMoveAnime(ANM_GRABWAIT, m_HIO->mGrab.m.field_0x78, 0.0f, -1, m_HIO->mGrab.m.field_0x7C);
         }
         m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
         m35A0 = 0.0f;
@@ -783,7 +783,7 @@ BOOL daPy_lk_c::procGrabWait() {
 /* 8013C914-8013C9AC       .text procGrabHeavyWait_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procGrabHeavyWait_init() {
     commonProcInit(daPyProc_GRAB_HEAVY_WAIT_e);
-    setSingleMoveAnime(ANM_GRABWAITB, daPy_HIO_grab_c0::m.field_0x90, 0.0f, -1, daPy_HIO_grab_c0::m.field_0x7C);
+    setSingleMoveAnime(ANM_GRABWAITB, m_HIO->mGrab.m.field_0x90, 0.0f, -1, m_HIO->mGrab.m.field_0x7C);
     setActAnimeUpper(LKANM_BCK_GRABWAITB, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
     m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
     current.angle.y = shape_angle.y;
@@ -803,18 +803,18 @@ BOOL daPy_lk_c::procGrabHeavyWait() {
         cLib_addCalcAngleS(
             &shape_angle.y,
             m34E8,
-            daPy_HIO_grab_c0::m.field_0x16,
-            daPy_HIO_grab_c0::m.field_0x18,
-            daPy_HIO_grab_c0::m.field_0x1A
+            m_HIO->mGrab.m.field_0x16,
+            m_HIO->mGrab.m.field_0x18,
+            m_HIO->mGrab.m.field_0x1A
         );
         s16 y_diff = shape_angle.y - current.angle.y;
-        m35A0 = y_diff / (f32)daPy_HIO_grab_c0::m.field_0x18;
+        m35A0 = y_diff / (f32)m_HIO->mGrab.m.field_0x18;
         current.angle.y = shape_angle.y;
         f32 fVar1;
         if (checkNoResetFlg1(daPyFlg1_UNK800000)) {
             fVar1 = -1.0f;
         } else {
-            fVar1 = daPy_HIO_basic_c0::m.field_0xC;
+            fVar1 = m_HIO->mBasic.m.field_0xC;
         }
         setBlendMoveAnime(fVar1);
         m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
@@ -822,7 +822,7 @@ BOOL daPy_lk_c::procGrabHeavyWait() {
     } else {
         m35A0 = 0.0f;
         if (checkNoResetFlg1(daPyFlg1_UNK800000)) {
-            setSingleMoveAnime(ANM_GRABWAITB, daPy_HIO_grab_c0::m.field_0x90, 0.0f, -1, daPy_HIO_grab_c0::m.field_0x7C);
+            setSingleMoveAnime(ANM_GRABWAITB, m_HIO->mGrab.m.field_0x90, 0.0f, -1, m_HIO->mGrab.m.field_0x7C);
             m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
             offNoResetFlg1(daPyFlg1_UNK800000);
         }
@@ -842,10 +842,10 @@ BOOL daPy_lk_c::procGrabRebound_init() {
     commonProcInit(daPyProc_GRAB_REBOUND_e);
     setSingleMoveAnime(
         ANM_GRABRE,
-        daPy_HIO_grab_c0::m.field_0x94,
-        daPy_HIO_grab_c0::m.field_0x98,
-        daPy_HIO_grab_c0::m.field_0xE,
-        daPy_HIO_grab_c0::m.field_0xA0
+        m_HIO->mGrab.m.field_0x94,
+        m_HIO->mGrab.m.field_0x98,
+        m_HIO->mGrab.m.field_0xE,
+        m_HIO->mGrab.m.field_0xA0
     );
     return true;
 }
@@ -863,7 +863,7 @@ BOOL daPy_lk_c::procGrabRebound() {
 
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         initGrabNextMode();
-    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_grab_c0::m.field_0x9C &&
+    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mGrab.m.field_0x9C &&
                fopAcM_CheckStatus(grab_actor, fopAcStts_UNK10000_e))
     {
         initGrabNextMode();

@@ -27,14 +27,14 @@ public:
         /* 0x1 */ TEXPATTERN_END,
     };
 
-    s8 getHeadJntNum() {return m_head_jnt_num;}
-    s8 getBackboneJntNum() {return m_backbone_jnt_num;}
-    s16 getBackbone_x() {return m_jnt.getBackbone_x();}
-    s16 getBackbone_y() {return m_jnt.getBackbone_y();}
-    s16 getHead_x() {return m_jnt.getHead_x();}
-    s16 getHead_y() {return m_jnt.getHead_y();}
-    Vec* getAttPos() {return &mAttPos;}
-    Vec* getEyePos() {return &mEyePos;}
+    s8 getHeadJntNum() { return m_head_jnt_num; }
+    s8 getBackboneJntNum()  {return m_backbone_jnt_num; }
+    s16 getBackbone_x() { return m_jnt.getBackbone_x(); }
+    s16 getBackbone_y() { return m_jnt.getBackbone_y(); }
+    s16 getHead_x() { return m_jnt.getHead_x(); }
+    s16 getHead_y() { return m_jnt.getHead_y(); }
+    Vec* getAttPos() { return &mAttPos; }
+    Vec* getEyePos() { return &mEyePos; }
 
     bool createInit();
     void setMtx();

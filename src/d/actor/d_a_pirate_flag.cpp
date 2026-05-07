@@ -227,16 +227,20 @@ void daPirate_Flag_packet_c::draw() {
 
     dKy_GxFog_tevstr_set(mTevStr);
     dKy_setLight_mine(mTevStr);
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_POS_XY, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+
     GXSetArray(GX_VA_POS, mPos[m87E], sizeof(cXyz));
     GXSetArray(GX_VA_NRM, mNrm[m87E], sizeof(cXyz));
     GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(*l_texCoord));
+
     GXTexObj texObj;
     ResTIMG* timg = static_cast<ResTIMG*>(dComIfG_getObjectRes("Kaizokusen", KAIZOKUSEN_INDEX_BTI_TXA_KAIZOKU_HATA));
     GXInitTexObj(&texObj, (char*)timg + timg->imageOffset, timg->width, timg->height,

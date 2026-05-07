@@ -44,7 +44,7 @@ BOOL daGhostship_c::_createHeap() {
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BTK_AYUSH));
     JUT_ASSERT(DEMO_SELECT(87, 95), btk != NULL);
 
-    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
 
@@ -286,16 +286,12 @@ static BOOL daGhostshipExecute(void* i_this) {
 /* 00001048-0000182C .text _execute__13daGhostship_cFv */
 bool daGhostship_c::_execute() {
     f32 time = dComIfGs_getTime();
-    f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    // Fakematch, debug map says fopAcM_searchPlayerDistanceXZ was used
+    f32 dist = fopAcM_searchActorDistanceXZ(this, player);
 
     mbCanEnterShip = false;
-    if(moonPhase != dKy_moon_type_chk() ||
-#if VERSION == VERSION_DEMO
-        (time > 90.0f && time < 330.0f)
-#else
-        (time > 90.0f && time < 285.0f)
-#endif
-    ) {
+    if(moonPhase != dKy_moon_type_chk() || (time > 90.0f && time < DEMO_SELECT(330.0f, 285.0f))) {
         dKy_pship_existense_cut();
         mAlpha = 0.0f;
     }
@@ -355,7 +351,7 @@ bool daGhostship_c::_execute() {
 
         dLib_setCirclePath(&mPaths[i]);
         if(mAlpha != 0.0f) {
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8306, &mPaths[i].mPos);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_GHOSTSHIPFIRE00, &mPaths[i].mPos);
         }
     }
 

@@ -13,6 +13,7 @@
 #include "d/d_priority.h"
 #include "d/res/res_pspl.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "d/d_auction_screen.h"
 
 struct NpcDatStruct {
     /* 0x00 */ f32 field_0x00;
@@ -60,7 +61,10 @@ static daAuction_c::ItemData l_item_dat2[] = {
     {PRESIDENT_STATUE, 0x1D15, 40, dSv_event_flag_c::UNK_1004},
 };
 
-static s16 l_item_dat22[] = {0x002A, 0x00F9};
+static s16 l_item_dat22[] = {
+    dItem_MAGIC_ARMOR_e,
+    dItem_COLLECT_MAP_06_e,
+};
 
 static NpcDatStruct l_npc_dat[7] = {
     {2.0f, 2.1f, 0x0, 0x0, 1000},
@@ -186,17 +190,6 @@ static daAuction_c::ProcFunc_t moveProc[] = {
     &daAuction_c::executeNormal,
     &daAuction_c::executeStart,
 };
-
-extern void dAuction_screen_delete();
-extern void dAuction_screen_slotShow();
-extern void dAuction_screen_slotHide();
-extern void dAuction_screen_gaugeHide();
-extern void dAuction_screen_gaugeShow();
-extern void dAuction_screen_gaugeUp();
-extern void dAuction_screen_gaugeDown();
-extern void dAuction_screen_talkStart();
-extern void dAuction_screen_talkEnd();
-extern fpc_ProcID dAuction_screen_create();
 
 /* 000000EC-000002FC       .text __ct__11daAuction_cFv */
 daAuction_c::daAuction_c() {
@@ -1169,7 +1162,7 @@ void daAuction_c::eventMainMsgBikonC() {
         m7A8 = getNpcActorP(m827)->current.pos;
         m7A8.y += getPiconDispOfs(m827);
 
-        dComIfGp_particle_set(dPa_name::ID_SCENE_8153, &m7A8, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_PF_BIKON01, &m7A8, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
         mTimer = 30;
 
         if (m827 == 0) {

@@ -92,7 +92,7 @@ void dPa_J3DmodelEmitter_c::draw() {
                 vel.normalize();
             }
             JGeometry::TVec3<f32> tmp;
-            tmp.cross_hack(params->mAxis, vel); // fake inline
+            tmp.cross(params->mAxis, vel);
             if (tmp.isZero()) {
                 tmp.set(0.0f, 0.0f, 1.0f);
             } else {
@@ -259,8 +259,10 @@ dPa_followEcallBack::dPa_followEcallBack(u8 param_1, u8 param_2) {
 void dPa_followEcallBack::execute(JPABaseEmitter* emtr) {
     if (field_0x12 == 0 && !(mFlag & 2)) {
         emtr->setGlobalTranslation(mPos->x, mPos->y, mPos->z);
-        if (mAngle != NULL)
-            emtr->setGlobalRotation(JGeometry::TVec3<s16>(mAngle->x, mAngle->y, mAngle->z));
+        if (mAngle != NULL) {
+            JGeometry::TVec3<s16> tmp(mAngle->x, mAngle->y, mAngle->z);
+            emtr->setGlobalRotation(tmp);
+        }
     }
 
     if (emtr->isEnableDeleteEmitter()) {
@@ -518,7 +520,7 @@ JPABaseEmitter* dPa_simpleEcallBack::create(JPAEmitterManager* manager, u16 effe
     mGrpID = groupID;
     mResID = effectID;
     if (createEmitter(manager)) {
-        if (effectID == dPa_name::ID_SCENE_A06A || effectID == dPa_name::ID_SCENE_A410) {
+        if (effectID == dPa_name::ID_AK_ST_O_BKMSATTACKSMOKE00 || effectID == dPa_name::ID_AK_ST_O_KGTT2JUMPHANDSMOKE00) {
             mbIsSmoke = true;
             mpBaseEmitter->mpParticleCallBack = &dPa_control_c::mSmokePcallback;
         } else {
@@ -748,21 +750,26 @@ void dPa_control_c::draw(JPADrawInfo* param_1, u8 param_2) {
 
 /* 8007D1DC-8007D378       .text set__13dPa_control_cFUcUsPC4cXyzPC5csXyzPC4cXyzUcP18dPa_levelEcallBackScPC8_GXColorPC8_GXColorPC4cXyz */
 JPABaseEmitter* dPa_control_c::set(u8 groupID, u16 userID, const cXyz* pos, const csXyz* angle, const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack, s8 setupInfo, const GXColor* prm, const GXColor* env, const cXyz* globalScale) {
-    JPABaseEmitter* emtr = mEmitterMng->createSimpleEmitterID(JGeometry::TVec3<f32>(pos->x, pos->y, pos->z), userID, groupID, getRM_ID(userID), NULL, NULL);
+    JGeometry::TVec3<f32> tmp(pos->x, pos->y, pos->z);
+    JPABaseEmitter* emtr = mEmitterMng->createSimpleEmitterID(tmp, userID, groupID, getRM_ID(userID), NULL, NULL);
     if (emtr == NULL)
         return NULL;
 
-    if (angle != NULL)
-        emtr->setGlobalRotation(*(JGeometry::TVec3<s16>*)angle);
+    if (angle != NULL) {
+        JGeometry::TVec3<s16> tmp2(angle->x, angle->y, angle->z);
+        emtr->setGlobalRotation(tmp2);
+    }
 
-    if (scale != NULL)
-        emtr->setGlobalScale(*scale);
+    if (scale != NULL) {
+        JGeometry::TVec3<f32> tmp2(scale->x, scale->y, scale->z);
+        emtr->setGlobalScale(tmp2);
+    }
 
     emtr->mGlobalPrmColor.a = alpha;
     if (pCallBack != NULL) {
         emtr->setEmitterCallBackPtr(pCallBack);
         pCallBack->setup(emtr, pos, angle, setupInfo);
-    } else if (!!(userID & 0x4000)) {
+    } else if (userID & 0x4000) {
         emtr->setEmitterCallBackPtr(&mKagero);
     }
 
@@ -770,8 +777,10 @@ JPABaseEmitter* dPa_control_c::set(u8 groupID, u16 userID, const cXyz* pos, cons
         emtr->setGlobalPrmColor(prm->r, prm->g, prm->b);
     if (env != NULL)
         emtr->setGlobalEnvColor(env->r, env->g, env->b);
-    if (globalScale != NULL)
-        emtr->setGlobalParticleScale(*globalScale);
+    if (globalScale != NULL) {
+        JGeometry::TVec3<f32> tmp2(globalScale->x, globalScale->y, globalScale->z);
+        emtr->setGlobalParticleScale(tmp2);
+    }
     return emtr;
 }
 
@@ -805,7 +814,7 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(int code, const cXyz* pos, const cs
 
     cXyz ptclScale;
     JPABaseEmitter* emtr = NULL;
-    if (*i_return_id == dPa_name::ID_COMMON_0023) {
+    if (*i_return_id == dPa_name::ID_AK_JN_ELEMENTSHIBUKI00) {
         if (flag & 0x04) {
             ptclScale.set(scale3, scale3, scale3);
             GXColor amb, dif;
@@ -816,7 +825,7 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(int code, const cXyz* pos, const cs
                 emtr = setNormal(*i_return_id, pos, angle, &ptclScale, 0xFF, NULL, -1, &amb, NULL, NULL);
             }
         }
-    } else if (*i_return_id == dPa_name::ID_COMMON_0024) {
+    } else if (*i_return_id == dPa_name::ID_AK_JN_ELEMENTKUSA00) {
         if (flag & 0x02) {
             ptclScale.set(scale2, scale2, scale2);
 
@@ -832,9 +841,9 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(int code, const cXyz* pos, const cs
                 emtr = setNormal(*i_return_id, pos, angle, &ptclScale, 0xFF, NULL, -1, &amb, &i_tevStr->mColorK0, NULL);
             }
         }
-    } else if (*i_return_id == dPa_name::ID_COMMON_2022) {
+    } else if (*i_return_id == dPa_name::ID_AK_JT_ELEMENTSMOKE00) {
         if (flag & 0x08)
-            *i_return_id = dPa_name::ID_COMMON_2027;
+            *i_return_id = dPa_name::ID_AK_JT_ELEMENTSMOKE01;
 
         if (flag & 0x09) {
             ptclScale.set(scale1, scale1, scale1);
@@ -866,11 +875,11 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(cBgS_PolyInfo& polyInfo, const cXyz
 /* 8007DA58-8007DAA8       .text checkAtrCodeEffect__13dPa_control_cFi */
 s32 dPa_control_c::checkAtrCodeEffect(int code) {
     if (code == dBgS_Attr_WATER_e) {
-        return dPa_name::ID_COMMON_0023;
+        return dPa_name::ID_AK_JN_ELEMENTSHIBUKI00;
     } else if (code == dBgS_Attr_GRASS_e) {
-        return dPa_name::ID_COMMON_0024;
+        return dPa_name::ID_AK_JN_ELEMENTKUSA00;
     } else if (code != dBgS_Attr_UNK1B_e && code != dBgS_Attr_ICE_e && code != dBgS_Attr_GIANT_FLOWER_e && code != dBgS_Attr_CARPET_e) {
-        return dPa_name::ID_COMMON_2022;
+        return dPa_name::ID_AK_JT_ELEMENTSMOKE00;
     } else {
         return -1;
     }

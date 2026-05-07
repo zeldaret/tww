@@ -2468,12 +2468,12 @@ void dFile_select_c::yesNoPaneMoveSet() {
 
 /* 8018A46C-8018A4B0       .text MessagePaneMove__14dFile_select_cFffffsUci */
 int dFile_select_c::MessagePaneMove(f32 param_1, f32 param_2, f32 param_3, f32 param_4, s16 param_5, u8 param_6, int param_7) {
-    PaneTranceMessageBase(field_0x3930 - param_5, g_fsHIO.field_0x32, param_1, param_2, param_3, param_4, param_6, param_7);
+    return PaneTranceMessageBase(field_0x3930 - param_5, g_fsHIO.field_0x32, param_1, param_2, param_3, param_4, param_6, param_7);
 }
 
 /* 8018A4B0-8018A4F4       .text recInfoPaneMove__14dFile_select_cFffffsUci */
 int dFile_select_c::recInfoPaneMove(f32 param_1, f32 param_2, f32 param_3, f32 param_4, s16 param_5, u8 param_6, int param_7) {
-    PaneTranceRecBase(field_0x3930 - param_5, g_fsHIO.field_0x2F, param_1, param_2, param_3, param_4, param_6, param_7);
+    return PaneTranceRecBase(field_0x3930 - param_5, g_fsHIO.field_0x2F, param_1, param_2, param_3, param_4, param_6, param_7);
 }
 
 /* 8018A4F4-8018A644       .text menuPaneMove__14dFile_select_cFffsUci */

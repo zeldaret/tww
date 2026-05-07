@@ -7,7 +7,7 @@
 
 struct hand_s {
     /* 0x00 */ cXyz m00;
-    /* 0x0C */ u8 m0C[0x18 - 0x0C];
+    /* 0x0C */ cXyz m0C;
     /* 0x18 */ f32 m18;
 }; // Size: 0x1C
 

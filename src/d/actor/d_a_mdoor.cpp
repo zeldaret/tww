@@ -91,7 +91,7 @@ void daMdoor_c::calcMtx() {
 
 /* 0000029C-00000344       .text smokeInit__9daMdoor_cFv */
 void daMdoor_c::smokeInit() {
-    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_2022, &current.pos, &shape_angle, NULL, 0xAA, &m290, fopAcM_GetRoomNo(this));
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &current.pos, &shape_angle, NULL, 0xAA, &m290, fopAcM_GetRoomNo(this));
     if (emitter != NULL) {
         emitter->setRate(16.0f);
         emitter->setSpread(0.35f);
@@ -203,7 +203,7 @@ void daMdoor_c::demoProc() {
         "WAIT", "CLOSE", "STOP_OPEN",
     };
 
-    s32 actIdx = dComIfGp_evmng_getMyActIdx(m2C0, action_table, ARRAY_SIZE(action_table), 0, 0);
+    s32 actIdx = dComIfGp_evmng_getMyActIdx(m2C0, action_table, ARRAY_SIZE(action_table), FALSE, 0);
 
     if (dComIfGp_evmng_getIsAddvance(m2C0)) {
         switch (actIdx) {
@@ -216,7 +216,7 @@ void daMdoor_c::demoProc() {
             case 2:
                 speedF = 0.0f;
                 if (getShapeType() != 1) {
-                    dComIfGp_particle_set(dPa_name::ID_SCENE_81B2, &current.pos, &current.angle);
+                    dComIfGp_particle_set(dPa_name::ID_AK_SN_WOODCAGE00, &current.pos, &current.angle);
                 }
                 fopAcM_seStart(this, JA_SE_OBJ_CAGE_OPEN, 0);
                 break;
@@ -231,7 +231,7 @@ void daMdoor_c::demoProc() {
                 if (chkFlag(1)) {
                     clrFlag(1);
                     if (getShapeType() != 1) {
-                        dComIfGp_particle_set(dPa_name::ID_SCENE_81B2, &current.pos, &current.angle);
+                        dComIfGp_particle_set(dPa_name::ID_AK_SN_WOODCAGE00, &current.pos, &current.angle);
                     }
                     smokeInit();
                 }
@@ -311,7 +311,7 @@ BOOL daMdoor_actionOpen(daMdoor_c* i_this) {
         if (i_this->m2C4 == 0) {
             i_this->speedF = 0.0f;
             if (i_this->getShapeType() != 1) {
-                dComIfGp_particle_set(dPa_name::ID_SCENE_81B2, &i_this->current.pos, &i_this->current.angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_WOODCAGE00, &i_this->current.pos, &i_this->current.angle);
             }
             fopAcM_seStart(i_this, JA_SE_OBJ_CAGE_OPEN, 0);
         }

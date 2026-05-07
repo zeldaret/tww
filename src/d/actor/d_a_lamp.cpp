@@ -55,7 +55,7 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
     if (!i_this->mParticleInit) {
         static cXyz fire_scale(0.5f, 0.5f, 0.5f);
 
-        dComIfGp_particle_set(dPa_name::ID_COMMON_01EA, &i_this->mPos, NULL, &fire_scale, 0xFF, &i_this->mPa);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_TORCH, &i_this->mPos, NULL, &fire_scale, 0xFF, &i_this->mPa);
         i_this->mParticleInit = 1;
         i_this->mParticlePower = 1.0f;
     }
@@ -63,7 +63,7 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
     if (i_this->mPa.getEmitter()) {
         cXyz whitePartPos = i_this->mPos;
         whitePartPos.y += 20.0f;
-        dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &whitePartPos);
+        dComIfGp_particle_setSimple(dPa_name::ID_AK_JP_O_KAGEROU00, &whitePartPos);
         cLib_addCalc2(&i_this->mParticlePower, cM_rndF(0.2f) + 1.0f, 0.5f, 0.02f);
     } else {
         i_this->mParticlePower = 0.0f;

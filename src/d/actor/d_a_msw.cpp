@@ -177,7 +177,7 @@ static BOOL daMsw_Execute(msw_class* i_this) {
 
             cXyz scale;
             scale.x = scale.y = scale.z = 2.0f;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, i_this->mChainCyls[chainIdx].GetTgHitPosP(), &player->shape_angle, &scale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_NG, i_this->mChainCyls[chainIdx].GetTgHitPosP(), &player->shape_angle, &scale);
         }
         i_this->mChainCyls[chainIdx].SetC(i_this->m2E0[chainIdx]);
 

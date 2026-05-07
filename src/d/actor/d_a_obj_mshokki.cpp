@@ -221,7 +221,7 @@ void daObjMshokki_c::co_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_
 
 /* 000004E4-00000610       .text break_proc__14daObjMshokki_cFv */
 void daObjMshokki_c::break_proc() {
-    static u16 particle_id[] = {dPa_name::ID_COMMON_0441, dPa_name::ID_COMMON_043F, dPa_name::ID_COMMON_0440};
+    static u16 particle_id[] = {dPa_name::ID_AK_JN_BREAKMAJUPOT00, dPa_name::ID_AK_JN_BREAKMAJUPLATE00, dPa_name::ID_AK_JN_BREAKMAJUCUP00};
 
     dComIfGp_particle_set(particle_id[m60C], &current.pos, &shape_angle, NULL, 0xff, NULL, -1, &tevStr.mColorK0);
     fopAcM_seStartCurrent(this, JA_SE_OBJ_COL_SWC_CHNS, dComIfG_Bgsp()->GetMtrlSndId(mAcch.m_gnd));

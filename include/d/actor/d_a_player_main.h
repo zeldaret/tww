@@ -9,6 +9,7 @@
 #include "d/d_drawlist.h"
 #include "d/d_bg_w.h"
 #include "d/actor/d_a_player.h"
+#include "d/actor/d_a_player_HIO.h"
 #include "d/res/res_link.h" // IWYU pragma: export
 #include "d/res/res_lkanm.h"
 
@@ -56,6 +57,8 @@ public:
             mFrame = 0;
         }
     }
+
+    cXyz getPos() { return mPos; }
 
 private:
     /* 0x04 */ bool mDrawFlag;
@@ -375,7 +378,41 @@ public:
     daPy_HIO_c();
 
 public:
-    /* 0x00 */ u8 temp[0x3F - 0x00];
+    daPy_HIO_basic_c0 mBasic;
+    daPy_HIO_move_c0 mMove;
+    daPy_HIO_atnMove_c0 mAtnMove;
+    daPy_HIO_atnMoveB_c0 mAtnMoveB;
+    daPy_HIO_turn_c0 mTurn;
+    daPy_HIO_cut_c0 mCut;
+    daPy_HIO_roll_c0 mRoll;
+    daPy_HIO_backJump_c0 mBackJump;
+    daPy_HIO_slip_c0 mSlip;
+    daPy_HIO_slide_c0 mSlide;
+    daPy_HIO_autoJump_c0 mAutoJump;
+    daPy_HIO_fall_c0 mFall;
+    daPy_HIO_swim_c0 mSwim;
+    daPy_HIO_battle_c0 mBattle;
+    daPy_HIO_wall_c0 mWall;
+    daPy_HIO_smallJump_c0 mSmallJump;
+    daPy_HIO_wallCatch_c0 mWallCatch;
+    daPy_HIO_hang_c0 mHang;
+    daPy_HIO_guard_c0 mGuard;
+    daPy_HIO_nockback_c0 mNockback;
+    daPy_HIO_iceSlip_c0 mIceSlip;
+    daPy_HIO_dam_c0 mDam;
+    daPy_HIO_slowJump_c0 mSlowJump;
+    daPy_HIO_sideStep_c0 mSideStep;
+    daPy_HIO_grab_c0 mGrab;
+    daPy_HIO_ladder_c0 mLadder;
+    daPy_HIO_crouch_c0 mCrouch;
+    daPy_HIO_pushpull_c0 mPushpull;
+    daPy_HIO_item_c0 mItem;
+    daPy_HIO_ship_c0 mShip;
+    daPy_HIO_restart_c0 mRestart;
+    daPy_HIO_holdup_c0 mHoldup;
+    daPy_HIO_vomit_c0 mVomit;
+    daPy_HIO_warp_c0 mWarp;
+    u8 pad[0x3F - 0x22];
 };  // Size: 0x3F
 
 class daPy_lk_c : public daPy_py_c {
@@ -1241,7 +1278,7 @@ public:
     void setDamageEmitter();
     void endFlameDamageEmitter();
     void endDamageEmitter();
-    static u32 setItemWaterEffect(fopAc_ac_c*, int, int);
+    static BOOL setItemWaterEffect(fopAc_ac_c* i_actor, BOOL inWater, BOOL triggerOnExit);
     fopAc_ac_c* getDemoLookActor();
     void setTinkleCeiverModel();
     void setTalismanModel();
@@ -1573,7 +1610,7 @@ public:
     BOOL procRopeUpHang();
     BOOL checkBoomerangAnime() const;
     void throwBoomerang();
-    int returnBoomerang();
+    BOOL returnBoomerang();
     BOOL checkNextActionBoomerangReady();
     void checkNextActionBoomerangFly();
     BOOL checkNextBoomerangMode();
@@ -1811,8 +1848,8 @@ public:
     BOOL checkNoControll() const { return dComIfGp_getPlayer(0) != this; }
     void exchangeGrabActor(fopAc_ac_c* actor) { mActorKeepGrab.setData(actor); }
     void getDekuLeafWindPos() const {}
-    void getBoomerangCatchPos() const {}
-    void getLineTopPos() {}
+    cXyz getBoomerangCatchPos() const { return mBoomerangCatchPos; }
+    cXyz getLineTopPos() { return mSightPacket.getPos(); }
     cXyz getHookshotRootPos() const { return mHookshotRootPos; }
     void getIceParticleBtk() {}
     void getIceWaterParticleBtk() {}
@@ -2218,7 +2255,7 @@ public:
     /* 0x35D0 */ f32 m35D0;
     /* 0x35D4 */ f32 m35D4;
     /* 0x35D8 */ f32 m35D8;
-    /* 0x35DC */ f32 m35DC;
+    /* 0x35DC */ f32 mHangGroundH;
     /* 0x35E0 */ f32 m35E0;
     /* 0x35E4 */ f32 m35E4;
     /* 0x35E8 */ f32 m35E8;
@@ -2232,7 +2269,7 @@ public:
     /* 0x3608 */ f32 m3608;
     /* 0x360C */ f32 mSeAnmRate;
     /* 0x3610 */ f32 m3610;
-    /* 0x3614 */ int m3614;
+    /* 0x3614 */ int mShadowId;
     /* 0x3618 */ u32 mModeFlg;
     /* 0x361C */ u32 mMtrlSndId;
     /* 0x3620 */ u32 m3620;
@@ -2259,7 +2296,7 @@ public:
     /* 0x36D0 */ cXyz m36D0;
     /* 0x36DC */ cXyz m36DC;
     /* 0x36E8 */ cXyz mHookshotRootPos;
-    /* 0x36F4 */ cXyz m36F4;
+    /* 0x36F4 */ cXyz mBoomerangCatchPos;
     /* 0x3700 */ cXyz m3700;
     /* 0x370C */ cXyz m370C;
     /* 0x3718 */ cXyz m3718;
@@ -2307,5 +2344,9 @@ public:
     };  // Size: 0x08
     static const AnmDataTableEntry mAnmDataTable[];
 };  // Size: 0x4C28
+
+inline daPy_lk_c* daPy_getPlayerLinkActorClass() {
+    return (daPy_lk_c*)dComIfGp_getLinkPlayer();
+}
 
 #endif /* D_A_PLAYER_MAIN */

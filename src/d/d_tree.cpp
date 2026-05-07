@@ -230,7 +230,7 @@ void dTree_packet_c::draw() {
     };
     static GXVtxAttrFmtList l_shadowVtxAttrFmtList[] = {
         {GX_VA_POS, GX_POS_XYZ, GX_S8, 0x00},
-        {GX_VA_TEX0, GX_POS_XYZ, GX_S8, 0x00},
+        {GX_VA_TEX0, GX_TEX_ST, GX_S8, 0x00},
         {GX_VA_NULL, GX_POS_XYZ, GX_S8, 0x00},
     };
     static GXVtxDescList l_vtxDescList[] = {
@@ -241,8 +241,8 @@ void dTree_packet_c::draw() {
     };
     static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
         {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
-        {GX_VA_CLR0, GX_POS_XYZ, GX_RGBA8, 0x00},
-        {GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0x00},
+        {GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0x00},
+        {GX_VA_TEX0, GX_TEX_ST, GX_F32, 0x00},
         {GX_VA_NULL, GX_POS_XYZ, GX_S8, 0x00},
     };
     static struct {

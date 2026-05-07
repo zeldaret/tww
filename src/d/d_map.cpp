@@ -1783,7 +1783,7 @@ void dMap_c::setGbaPoint(u8 param_1, f32 param_2, f32 param_3, s16 param_4, u8 p
 /* 8004B8DC-8004B9C8       .text setArriveInfo__6dMap_cFff */
 void dMap_c::setArriveInfo(f32 param_1, f32 param_2) {
     /* Nonmatching */
-    if (dComIfGp_event_getMode() == 0 && strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
+    if (!dComIfGp_event_runCheck() && strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
         s8 gridX;
         s8 gridY;
         s16 localX;

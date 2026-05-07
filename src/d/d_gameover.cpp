@@ -265,7 +265,7 @@ BOOL dDlst_GameOverScrnDraw_c::animeOpen() {
                 anime1(i);
                 if (letter[i].mUserArea == 5) {
                     cXyz temp(x[i], 50.0f, 0.0f);
-                    dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_002E, &temp);
+                    dComIfGp_particle_set2Dfore(dPa_name::ID_HM_J2_GAMEOVER00, &temp);
                 }
             }
 
@@ -327,12 +327,12 @@ BOOL dDlst_GameOverScrnDraw_c::animeClose() {
 
 /* 8018F05C-8018F0CC       .text setEmitter0__24dDlst_GameOverScrnDraw_cF4cXyz */
 void dDlst_GameOverScrnDraw_c::setEmitter0(cXyz pos) {
-    mpEmitter0 = dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_002F, &pos);
+    mpEmitter0 = dComIfGp_particle_set2Dfore(dPa_name::ID_HM_J2_GAMEOVER01, &pos);
 }
 
 /* 8018F0CC-8018F13C       .text setEmitter1__24dDlst_GameOverScrnDraw_cF4cXyz */
 void dDlst_GameOverScrnDraw_c::setEmitter1(cXyz pos) {
-    mpEmitter1 = dComIfGp_particle_set2DmenuFore(dPa_name::ID_COMMON_0030, &pos);
+    mpEmitter1 = dComIfGp_particle_set2DmenuFore(dPa_name::ID_HM_J2_GAMEOVERHA, &pos);
 }
 
 /* 8018F13C-8018F334       .text anime1__24dDlst_GameOverScrnDraw_cFi */

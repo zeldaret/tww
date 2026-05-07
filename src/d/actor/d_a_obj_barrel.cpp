@@ -59,7 +59,7 @@ const dCcD_SrcCyl daObjBarrel::Act_c::M_cyl_src = {
 
 const daObjBarrel::Act_c::Attr_c daObjBarrel::Act_c::M_attr = {
     /* mBdlIdx         */ KTARU_01_BDL_KTARU_01,
-    /* m02             */ 60,
+    /* mShadowSize     */ 60,
     /* mEnableCutoff   */ false,
     /* mAttnH          */ 50.0f,
     /* mNormalGravity  */ -6.0f,
@@ -474,7 +474,7 @@ void daObjBarrel::Act_c::set_walk_rot() {
 /* 00001710-00001824       .text eff_break__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::eff_break() {
     cXyz pos(current.pos.x, current.pos.y + 50.0f, current.pos.z);
-    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_03E5, &pos, NULL, NULL, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_IT_JN_TR_HAHEN_A, &pos, NULL, NULL, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
     if (emitter) {
         static JGeometry::TVec3<f32> em_scl(1.0f, 0.8f, 1.0f);
         emitter->setEmitterScale(em_scl);
@@ -727,7 +727,7 @@ bool daObjBarrel::Act_c::_draw() {
         cM3dGPla* gndPlane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         cXyz *norm = gndPlane->GetNP();
         if (norm && gndH != -G_CM3D_F_INF) {
-            dComIfGd_setSimpleShadow(&current.pos, gndH, attr().m02, norm);        
+            dComIfGd_setSimpleShadow(&current.pos, gndH, attr().mShadowSize, norm);        
         }
     }
     return true;

@@ -84,11 +84,11 @@ void wave_make() {
 static cPhs_State daKytag01_Create(fopAc_ac_c* i_ac) {
     dScnKy_env_light_c& env_light = dKy_getEnvlight();
     kytag01_class* i_this = (kytag01_class*)i_ac;
-    fopAcM_SetupActor(i_this, kytag01_class);
+    fopAcM_SetupActor(i_ac, kytag01_class);
 
-    i_this->mWaveInfo.mPos = i_this->current.pos;
-    i_this->mWaveInfo.mInnerRadius = i_this->scale.x * 5000.0f;
-    i_this->mWaveInfo.mOuterRadius = i_this->scale.z * 5000.0f;
+    i_this->mWaveInfo.mPos = i_ac->current.pos;
+    i_this->mWaveInfo.mInnerRadius = i_ac->scale.x * 5000.0f;
+    i_this->mWaveInfo.mOuterRadius = i_ac->scale.z * 5000.0f;
 
     f32 defaultOuter = i_this->mWaveInfo.mInnerRadius + 500.0f;
     if (defaultOuter >= i_this->mWaveInfo.mOuterRadius)

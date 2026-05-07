@@ -37,19 +37,55 @@ static daKanban_HIO_c l_HIO;
 static fopAc_ac_c* target_info[10];
 static s32 target_info_count;
 
-static s16 pl_cut_real_no_dt[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
+static s16 pl_cut_real_no_dt[] = {
+    daPy_py_c::CUT_TYPE_NONE,
+    daPy_py_c::CUT_TYPE_CUT_A,
+    daPy_py_c::CUT_TYPE_CUT_F,
+    daPy_py_c::CUT_TYPE_CUT_R,
+    daPy_py_c::CUT_TYPE_CUT_L,
+    daPy_py_c::CUT_TYPE_BT_JUMPCUT,
+    daPy_py_c::CUT_TYPE_CUT_EA,
+    daPy_py_c::CUT_TYPE_CUT_EB,
+    daPy_py_c::CUT_TYPE_CUT_TURN,
+    daPy_py_c::CUT_TYPE_CUT_ROLL,
+    daPy_py_c::CUT_TYPE_JUMPCUT_SWORD,
+    daPy_py_c::CUT_TYPE_STICK,
+    daPy_py_c::CUT_TYPE_JUMPCUT_STICK,
+    daPy_py_c::CUT_TYPE_MACHETE,
+    daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE,
+    daPy_py_c::CUT_TYPE_BT_ROLLCUT,
+    daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT,
+    daPy_py_c::CUT_TYPE_HAMMER_SIDESWING,
+    daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING,
+    daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER,
+    daPy_py_c::CUT_TYPE_CLUB,
+    daPy_py_c::CUT_TYPE_JUMPCUT_CLUB,
+    daPy_py_c::CUT_TYPE_DN_SWORD,
+    daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD,
+    daPy_py_c::CUT_TYPE_SPEAR,
+    daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR,
+    daPy_py_c::CUT_TYPE_CUT_EXA,
+    daPy_py_c::CUT_TYPE_CUT_EXB,
+    daPy_py_c::CUT_TYPE_PG_SWORD,
+    daPy_py_c::CUT_TYPE_JUMPCUT_PG_SWORD,
+    daPy_py_c::CUT_TYPE_CUT_EXMJ,
+    daPy_py_c::CUT_TYPE_CUT_KESA,
+};
+
+// TODO: enum for this
 static s16 pl_cut_no_dt[] = {255, 0, 4, 3, 3, 1, 0, 4, 4, 4, 1, 3, 1, 3, 1, 1, 1, 3, 1, 1, 0, 1, 0, 1, 0, 1, 1, 4, 0, 1, 1, 1};
+
 static u32 cut_parts_arg_data[] = {
-        0x2000000, 0x4000000, 0x800000, 0x1000000,
-        0x7FE00000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
-        0x4000000, 0x800000, 0x1000000, 0x10000000,
-        0x40000000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
-        0x400000, 0x200000, 0x2000000, 0x4000000,
-        0x7FE00000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
-        0x200000, 0x2000000, 0x4000000, 0x800000,
-        0x7FE00000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
-        0x8000000, 0x400000, 0x200000, 0x2000000,
-        0x4000000, 0x800000, 0x1000000, 0x10000000,
+    0x02000000, 0x04000000, 0x00800000, 0x01000000,
+    0x7FE00000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
+    0x04000000, 0x00800000, 0x01000000, 0x10000000,
+    0x40000000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
+    0x00400000, 0x00200000, 0x02000000, 0x04000000,
+    0x7FE00000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
+    0x00200000, 0x02000000, 0x04000000, 0x00800000,
+    0x7FE00000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
+    0x08000000, 0x00400000, 0x00200000, 0x02000000,
+    0x04000000, 0x00800000, 0x01000000, 0x10000000,
 };
 
 /* 000000EC-0000012C       .text __ct__14daKanban_HIO_cFv */
@@ -192,7 +228,7 @@ BOOL sea_water_check(kanban_class* i_this) {
         if ((iVar3 == 1) && (i_this->m29C == 0)) {
             cXyz sp30(0.5f, 0.5f, 0.5f);
             i_this->m514.remove();
-            dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &i_this->m528, NULL, &sp30, 0xFF, &i_this->m514);
+            dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &i_this->m528, NULL, &sp30, 0xFF, &i_this->m514);
             i_this->m2BC = 0;
             i_this->m29C = 1;
             i_this->m514.setRate(0.0f);
@@ -317,7 +353,7 @@ void cut_point_check(kanban_class* i_this) {
 
     if (parameters != 0) {
         cXyz sp18 = *i_this->m5B0.GetTgHitPosP();
-        dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &sp18, &player->shape_angle);
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &sp18, &player->shape_angle);
         dScnPly_ply_c::setPauseTimer(1);
         a_this->current.angle.z = i_this->m2C4;
         
@@ -363,27 +399,27 @@ void mother_move(kanban_class* i_this) {
                     switch (hitObj->GetAtType()) {
                         case AT_TYPE_SKULL_HAMMER:
                             i_this->m29A = 2;
-                            if (player->getCutType() != 17) {
+                            if (player->getCutType() != daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                                 i_this->m29B = 0;
                                 i_this->m2A4 = 0.0f;
                                 i_this->m2A8 = 0.0f;
                                 i_this->m29A = 1;
                                 i_this->m2C0 = 20;
                                 cXyz sp18 = *i_this->m5B0.GetTgHitPosP();
-                                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &sp18, &player->shape_angle);
+                                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &sp18, &player->shape_angle);
                                 dScnPly_ply_c::setPauseTimer(1);
                                 return;
                             }
 
                         case AT_TYPE_SWORD: {
                             s32 i = 0;
-                            for (; i < 32; i++) {
+                            for (; i < ARRAY_SSIZE(pl_cut_real_no_dt); i++) {
                                 if (pl_cut_real_no_dt[i] == player->getCutType()) {
                                     break;
                                 }
                             }
 
-                            if (i < 32 && pl_cut_no_dt[i] != 0xFF) {
+                            if (i < ARRAY_SSIZE(pl_cut_real_no_dt) && pl_cut_no_dt[i] != 0xFF) {
                                 i_this->m2C4 = pl_cut_no_dt[i];
                                 cut_point_check(i_this);
                             }

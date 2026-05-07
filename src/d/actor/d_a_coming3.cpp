@@ -198,7 +198,15 @@ void daComing3::Act_c::coming_start_main() {
                 static s32 make_item_table[] = {
                     dItem_BLUE_RUPEE_e, dItem_YELLOW_RUPEE_e,
                 };
-                unk_400 = daObjBarrel2::Act_c::make_coming(&sp18, fopAcM_GetRoomNo(this), daObjBarrel2::Type_01_e, make_item_table[get_challenge_id()], true, shape_angle.y, daObjBuoyflag::Texture_01_e);
+                unk_400 = daObjBarrel2::Act_c::make_coming(
+                    &sp18,
+                    fopAcM_GetRoomNo(this),
+                    daObjBarrel2::Type_01_e,
+                    make_item_table[get_challenge_id()],
+                    false,
+                    shape_angle.y,
+                    daObjBuoyflag::Texture_00_e
+                );
             }
 
             if (unk_400 != fpcM_ERROR_PROCESS_ID_e) {
@@ -253,7 +261,7 @@ void daComing3::Act_c::coming_game_main() {
                 unk_404 = 3;
                 eff_break_tsubo();
             } else if ((unk_478 <= get_limit_dist()) && (barrel != NULL)) {
-                barrel->m474 = 1;
+                barrel->exit_req();
                 unk_404 = 2;
             }
             break;
@@ -284,8 +292,8 @@ void daComing3::Act_c::coming_wait_main() {
 
     fopAcM_SearchByID(unk_400, &ac1);
     daObjBarrel2::Act_c* barrel = (daObjBarrel2::Act_c*)ac1;
-    if (barrel != NULL && !fopAcM_SearchByID(barrel->m458, &ac2)) {
-        barrel->m474 = 1;
+    if (barrel != NULL && !fopAcM_SearchByID(barrel->get_item_id(), &ac2)) {
+        barrel->exit_req();
         fopAcM_delete(this);
     }
 }
@@ -331,7 +339,7 @@ void daComing3::Act_c::eff_break_tsubo() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPM_TUBO);
     texPattern = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", ALWAYS_BTP_MPM_TUBO);
     
-    JPABaseEmitter* baseEmitter = (JPABaseEmitter*)dComIfGp_particle_set(dPa_name::ID_COMMON_0017, &sp1C, NULL, &sp34);
+    JPABaseEmitter* baseEmitter = (JPABaseEmitter*)dComIfGp_particle_set(dPa_name::ID_AK_JN_M_TUBOHAHEN, &sp1C, NULL, &sp34);
     if (baseEmitter != NULL) {
         dPa_J3DmodelEmitter_c* modelEmitter;
         modelEmitter = new dPa_J3DmodelEmitter_c(baseEmitter, modelData, tevStr, texPattern, 0, 0);
@@ -346,7 +354,7 @@ void daComing3::Act_c::eff_break_tsubo() {
     sp18.b = tevStr.mColorC0.b;
     sp18.a = tevStr.mColorC0.a;
     dPa_selectTexEcallBack* cb = &dPa_control_c::mTsubo[1];
-    dComIfGp_particle_set(dPa_name::ID_COMMON_0018, &sp1C, NULL, &sp34, 0xFF, cb, -1, &sp18, &tevStr.mColorK0);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBOKONAGONA, &sp1C, NULL, &sp34, 0xFF, cb, -1, &sp18, &tevStr.mColorK0);
 }
 
 /* 000014DC-00001590       .text coming_process_main__Q29daComing35Act_cFv */

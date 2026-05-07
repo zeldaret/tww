@@ -3,6 +3,8 @@
 // Translation Unit: JPAFieldBlock.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPAFieldBlock.h"
 #include "dolphin/types.h"
 

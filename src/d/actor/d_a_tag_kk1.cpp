@@ -48,12 +48,12 @@ BOOL daTag_Kk1_c::createInit() {
 }
 
 /* 00000128-00000130       .text _draw__11daTag_Kk1_cFv */
-bool daTag_Kk1_c::_draw() {
+BOOL daTag_Kk1_c::_draw() {
     return true;
 }
 
 /* 00000130-0000024C       .text _execute__11daTag_Kk1_cFv */
-bool daTag_Kk1_c::_execute() {
+BOOL daTag_Kk1_c::_execute() {
     f32 distance = current.pos.abs(dComIfGp_getPlayer(0)->current.pos);
     f32 vert_distance = dComIfGp_getPlayer(0)->current.pos.y - current.pos.y;
     mTagSet = false;
@@ -69,7 +69,7 @@ bool daTag_Kk1_c::_execute() {
 
 
 /* 0000024C-000002A0       .text _delete__11daTag_Kk1_cFv */
-bool daTag_Kk1_c::_delete() {
+BOOL daTag_Kk1_c::_delete() {
     if (l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
         l_HIO.mNo = -1;
@@ -107,22 +107,22 @@ cPhs_State daTag_Kk1_c::_create() {
 
 /* 00000694-000006B4       .text daTag_Kk1_Create__FP10fopAc_ac_c */
 static cPhs_State daTag_Kk1_Create(fopAc_ac_c* obj) {
-    (static_cast<daTag_Kk1_c*>(obj))->_create();
+    return (static_cast<daTag_Kk1_c*>(obj))->_create();
 }
 
 /* 000006B4-000006D4       .text daTag_Kk1_Delete__FP11daTag_Kk1_c */
 static BOOL daTag_Kk1_Delete(daTag_Kk1_c* obj) {
-    (static_cast<daTag_Kk1_c*>(obj))->_delete();
+    return (static_cast<daTag_Kk1_c*>(obj))->_delete();
 }
 
 /* 000006D4-000006F4       .text daTag_Kk1_Execute__FP11daTag_Kk1_c */
 static BOOL daTag_Kk1_Execute(daTag_Kk1_c* obj) {
-    (static_cast<daTag_Kk1_c*>(obj))->_execute();
+    return (static_cast<daTag_Kk1_c*>(obj))->_execute();
 }
 
 /* 000006F4-00000714       .text daTag_Kk1_Draw__FP11daTag_Kk1_c */
 static BOOL daTag_Kk1_Draw(daTag_Kk1_c* obj) {
-    (static_cast<daTag_Kk1_c*>(obj))->_draw();
+    return (static_cast<daTag_Kk1_c*>(obj))->_draw();
 }
 
 /* 00000714-0000071C       .text daTag_Kk1_IsDelete__FP11daTag_Kk1_c */

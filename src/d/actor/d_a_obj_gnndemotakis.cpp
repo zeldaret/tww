@@ -4,43 +4,97 @@
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
+#include "d/res/res_gnndemotakis.h"
 #include "d/actor/d_a_obj_gnndemotakis.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+const char daObjGnntakis_c::M_arcname[] = "Gnndemotakis";
+
 /* 00000078-00000098       .text solidHeapCB__15daObjGnntakis_cFP10fopAc_ac_c */
-void daObjGnntakis_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjGnntakis_c::solidHeapCB(fopAc_ac_c* a_this) {
+    return ((daObjGnntakis_c*)a_this)->create_heap();
 }
 
 /* 00000098-000001F4       .text create_heap__15daObjGnntakis_cFv */
-void daObjGnntakis_c::create_heap() {
-    /* Nonmatching */
+BOOL daObjGnntakis_c::create_heap() {
+    J3DModelData* mdl_data;
+    J3DAnmTextureSRTKey* btk_data;
+    BOOL ret = FALSE;
+    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIS_BDL_GNN_DEMO_TAKI_S));
+    JUT_ASSERT(155, mdl_data != NULL);
+
+    if (mdl_data != NULL) {
+        mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
+        if (mpModel != NULL) {
+            btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIS_BTK_GNN_DEMO_TAKI_S));
+            JUT_ASSERT(162, btk_data != NULL);
+            if (btk_data != NULL && mpBtkAnm.init(mdl_data, btk_data, TRUE, 0, 1.0f, 0, -1, FALSE, 0)) {
+                ret = TRUE;
+            }
+        }
+    }
+    return ret;
 }
 
 /* 000001F4-00000308       .text _create__15daObjGnntakis_cFv */
 cPhs_State daObjGnntakis_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjGnntakis_c);
+
+    cPhs_State state = dComIfG_resLoad(&mPhs, M_arcname);
+
+    if (state == cPhs_COMPLEATE_e) {
+        state = cPhs_ERROR_e;
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
+            fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+            init_mtx();
+            mpBtkAnm.getFrameCtrl()->setFrame(mpBtkAnm.getStartFrame());
+            mpBtkAnm.setPlaySpeed(0.0f);
+            state = cPhs_COMPLEATE_e;
+            m2B0 = FALSE;
+        }
+    }
+
+    return state;
 }
 
 /* 000003AC-000003DC       .text _delete__15daObjGnntakis_cFv */
 bool daObjGnntakis_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return TRUE;
 }
 
 /* 000003DC-000003FC       .text init_mtx__15daObjGnntakis_cFv */
 void daObjGnntakis_c::init_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
 }
 
 /* 000003FC-00000514       .text _execute__15daObjGnntakis_cFv */
 bool daObjGnntakis_c::_execute() {
-    /* Nonmatching */
+    if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0 &&
+        dComIfGp_event_runCheck() != FALSE &&
+        dComIfGp_evmng_startCheck("g2before") && 
+        dComIfGp_demo_get()) {
+        if (m2B0 == 0 && dComIfGp_demo_get()->getFrameNoMsg() >= 0x11d9) {
+            mpBtkAnm.setFrame(mpBtkAnm.getStartFrame());
+            mpBtkAnm.setPlaySpeed(1.0f);
+            m2B0 = TRUE;
+        } else if (dComIfGp_demo_get()->getFrameNoMsg() >= 0x126f) {
+            fopAcM_delete(this);
+        }
+    }
+
+    mpBtkAnm.play();
+    return TRUE;
 }
 
 /* 00000514-0000058C       .text _draw__15daObjGnntakis_cFv */
 bool daObjGnntakis_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG3, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mpBtkAnm.entry(mpModel->getModelData());
+    mDoExt_modelUpdateDL(mpModel);
+    return TRUE;
 }
 
 namespace {

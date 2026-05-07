@@ -1,15 +1,13 @@
 #include "SSystem/SComponent/c_API.h"
 #include "dolphin/types.h"
-
-extern u8 g_mDoGph_graphicInfo;
-extern bool mDoGph_Create();
-extern bool mDoGph_BeforeOfDraw();
-extern bool mDoGph_AfterOfDraw();
-extern bool mDoGph_Painter();
-extern bool mDoGph_BlankingON();
-extern bool mDoGph_BlankingOFF();
+#include "m_Do/m_Do_graphic.h"
 
 cAPIGph__Iface g_cAPI_Interface = {
-    &g_mDoGph_graphicInfo, mDoGph_Create,     mDoGph_BeforeOfDraw, mDoGph_AfterOfDraw,
-    mDoGph_Painter,        mDoGph_BlankingON, mDoGph_BlankingOFF,
+    /* mpGInfo        */ &g_mDoGph_graphicInfo,
+    /* mpCreate       */ (cAPIGph_Mthd)mDoGph_Create,
+    /* mpBeforeOfDraw */ (cAPIGph_Mthd)mDoGph_BeforeOfDraw,
+    /* mpAfterOfDraw  */ (cAPIGph_Mthd)mDoGph_AfterOfDraw,
+    /* mpPainter      */ (cAPIGph_Mthd)mDoGph_Painter,
+    /* mpBlankingOn   */ (cAPIGph_Mthd)mDoGph_BlankingON,
+    /* mpBlankingOff  */ (cAPIGph_Mthd)mDoGph_BlankingOFF,
 };

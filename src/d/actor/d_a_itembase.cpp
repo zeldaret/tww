@@ -62,7 +62,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
         pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(resName, btkAnm1);
         JUT_ASSERT(140, pbtk != NULL);
         mpBtkAnm1 = new mDoExt_btkAnm();
-        if (!mpBtkAnm1 || !mpBtkAnm1->init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+        if (!mpBtkAnm1 || !mpBtkAnm1->init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
     }
@@ -72,7 +72,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
         pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(resName, btkAnm2);
         JUT_ASSERT(156, pbtk != NULL);
         mpBtkAnm2 = new mDoExt_btkAnm();
-        if (!mpBtkAnm2 || !mpBtkAnm2->init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+        if (!mpBtkAnm2 || !mpBtkAnm2->init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
     }
@@ -88,7 +88,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
             shouldAnimate = FALSE;
         }
         mpBrkAnm1 = new mDoExt_brkAnm();
-        if (!mpBrkAnm1 || !mpBrkAnm1->init(modelData, pbrk, shouldAnimate, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, false)) {
+        if (!mpBrkAnm1 || !mpBrkAnm1->init(modelData, pbrk, shouldAnimate, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
     }
@@ -98,7 +98,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
         pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(resName, brkAnm2);
         JUT_ASSERT(197, pbrk != NULL);
         mpBrkAnm2 = new mDoExt_brkAnm();
-        if (!mpBrkAnm2 || !mpBrkAnm2->init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, false)) {
+        if (!mpBrkAnm2 || !mpBrkAnm2->init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
     }
@@ -109,7 +109,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
         pbck = (J3DAnmTransform*)dComIfG_getObjectRes(resName, bckAnm);
         JUT_ASSERT(212, pbck != NULL);
         mpBckAnm = new mDoExt_bckAnm();
-        if (!mpBckAnm || !mpBckAnm->init(modelData, pbck, TRUE, 2, 1.0f, 0, -1, false)) {
+        if (!mpBckAnm || !mpBckAnm->init(modelData, pbck, TRUE, 2)) {
             return FALSE;
         }
     }

@@ -116,10 +116,10 @@ BOOL daArrow_Lighteff_c::CreateHeap() {
     JUT_ASSERT(216, btk != NULL);
     JUT_ASSERT(217, brk != NULL);
 
-    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
-    if(!mBrk.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if(!mBrk.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE)) {
         return false;
     }
 
@@ -147,23 +147,23 @@ void daArrow_Lighteff_c::CreateInit() {
 
     if(field_0x2E8 == 1) {
         if(field_0x2F4.getEmitter() == 0) {
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_0299, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWF_HINOKO00, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
         }
     }
     else if(field_0x2E8 == 2) {
         if(field_0x2F4.getEmitter() == 0) {
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_029C, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWI_KIRAKIRA00, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
         }
         if(field_0x308.getEmitter() == 0) {
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_029D, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x308);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWI_REIKI00, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x308);
         }
     }
     else if(field_0x2E8 == 3) {
         if(field_0x2F4.getEmitter() == 0) {
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_029F, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWG_TSUBU00, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
         }
         if(field_0x308.getEmitter() == 0) {
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_02A0, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x308);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWG_FLASH00, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x308);
         }
     }
 
@@ -373,7 +373,7 @@ bool daArrow_Lighteff_c::_execute() {
     if(field_0x2E8 == 1) {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_FIRE_ARROW_AMB, 0);
         if(!dComIfGp_checkCameraAttentionStatus(cam, 0x20)) {
-            dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &field_0x29C);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_JP_O_KAGEROU00, &field_0x29C);
         }
     }
     else if(field_0x2E8 == 2) {

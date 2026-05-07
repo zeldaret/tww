@@ -216,7 +216,7 @@ void ep_move(ep_class* i_this) {
     switch (i_this->m4D0) {
         case 0:
             if (i_this->m508 != 0) {
-                cLib_addCalc0(&i_this->mLightPower, 0.5f, 0.05000000074505806f);
+                cLib_addCalc0(&i_this->mLightPower, 0.5f, 0.05f);
 
                 if (i_this->mSph1.ChkTgHit()) {
                     cCcD_Obj* hitObj = i_this->mSph1.GetTgHitObj();
@@ -264,7 +264,7 @@ void ep_move(ep_class* i_this) {
             cLib_addCalc2(&i_this->mLightPower, i_this->m4E0, 0.5f, 0.2f);
             if (i_this->mType != 2) {
                 if (i_this->m7D4 < (s16)(REG0_S(7) + 7)) {
-                    dComIfGp_particle_setSimple(1, &pos);
+                    dComIfGp_particle_setSimple(dPa_name::ID_AK_JN_O_FIRE00, &pos);
                     if (i_this->m7D4 == 0 && i_this->mSph1.ChkTgHit()) {
                         cCcD_Obj* hitObj = i_this->mSph1.GetTgHitObj();
 
@@ -282,7 +282,7 @@ void ep_move(ep_class* i_this) {
                 }
 
                 pos.y += 20.0f;
-                dComIfGp_particle_setSimple(0x4004, &pos);
+                dComIfGp_particle_setSimple(dPa_name::ID_AK_JP_O_KAGEROU00, &pos);
             }
 
             if (i_this->mTimers[3] == 1 && (i_this->m507 == 0xFF || !dComIfGs_isSwitch(i_this->m507, fopAcM_GetRoomNo(&i_this->actor)))) {
@@ -356,7 +356,7 @@ void ep_move(ep_class* i_this) {
 
             cXyz scale;
             scale.z = scale.y = scale.x = REG0_F(6) + 1.0f;
-            i_this->mpEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_01EA, &pos, NULL, &scale);
+            i_this->mpEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_TORCH, &pos, NULL, &scale);
         }
 
         if (i_this->mpEmitter != NULL) {

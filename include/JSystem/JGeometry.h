@@ -55,29 +55,26 @@ struct TVec3 {
 
 template <>
 struct TVec3<s16> : public SVec {
-    // s16 x, y, z;
-
-    TVec3& operator=(const TVec3& b) {
-        set(b.x, b.y, b.z);
-        return *this;
-    }
-
     TVec3() {}
-
+    TVec3(const SVec& b) { set(b); }
     TVec3(const s16 x, const s16 y, const s16 z) { set(x, y, z); }
 
+    void set(const SVec& vec) {
+        x = vec.x;
+        y = vec.y;
+        z = vec.z;
+    }
+        
+    template<typename s16>
     void set(s16 x_, s16 y_, s16 z_) {
-        x = x_;
-        y = y_;
-        z = z_;
+        x = (s16)x_;
+        y = (s16)y_;
+        z = (s16)z_;
     }
 
-    TVec3(const int x, const int y, const int z) { set(x, y, z); }
-
-    void set(int x_, int y_, int z_) {
-        x = x_;
-        y = y_;
-        z = z_;
+    TVec3<s16>& operator=(const TVec3<s16>& b) {
+        set(b.x, b.y, b.z);
+        return *this;
     }
 };
 
@@ -85,7 +82,7 @@ template <>
 struct TVec3<f32> : public Vec {
     TVec3() {}
 
-    TVec3(const f32 x, const f32 y, const f32 z) { set(x, y, z); }
+    TVec3(const f32 x, const f32 y, const f32 z) { set((f32)x, (f32)y, (f32)z); }
 
     TVec3(const Vec& b) { set(b); }
 
@@ -94,9 +91,9 @@ struct TVec3<f32> : public Vec {
 
     template<typename f32>
     void set(const TVec3<f32>& other) {
-        x = other.x;
-        y = other.y;
-        z = other.z;
+        x = (f32)other.x;
+        y = (f32)other.y;
+        z = (f32)other.z;
     }
 
     void set(const Vec& vec) {
@@ -107,9 +104,9 @@ struct TVec3<f32> : public Vec {
 
     template<typename f32>
     void set(f32 x_, f32 y_, f32 z_) {
-        x = x_;
-        y = y_;
-        z = z_;
+        x = (f32)x_;
+        y = (f32)y_;
+        z = (f32)z_;
     }
 
     void zero() { x = y = z = 0.0f; }
@@ -212,13 +209,6 @@ struct TVec3<f32> : public Vec {
         );
     }
 
-    void cross_hack(const TVec3<f32>& a, const TVec3<f32>& b) {
-        // obviously fake
-        x = a.y * b.z - a.z * b.y;
-        y = a.z * b.x - a.x * b.z;
-        z = a.x * b.y - a.y * b.x;
-    }
-
     f32 setLength(f32 len) {
         f32 sq = squared();
         if (sq <= TUtil<f32>::epsilon()) {
@@ -278,9 +268,9 @@ struct TVec3<f32> : public Vec {
 template <typename T>
 struct TVec2 {
     TVec2() {}
-    TVec2(T x, T y) { set(x, y); }
+    TVec2(const T x, const T y) { set(x, y); }
 
-    void set(T x, T y) {
+    void set(const T x, const T y) {
         this->x = x;
         this->y = y;
     }
@@ -369,9 +359,12 @@ template<> struct TBox<TVec2<f32> > {
 };
 
 template <typename T>
-struct TBox2 : TBox<TVec2<T> > {
+struct TBox2 : public TBox<TVec2<T> > {
     TBox2() {}
-    TBox2(const TVec2<f32>& i, const TVec2<f32> f) { set(i, f); }
+    TBox2(const TVec2<f32>& _i, const TVec2<f32>& _f) { 
+        TBox<TVec2<T> >::i.set(_i);
+        TBox<TVec2<T> >::f.set(_f);
+    }
     TBox2(f32 x0, f32 y0, f32 x1, f32 y1) { set(x0, y0, x1, y1); }
 
     void absolute() {

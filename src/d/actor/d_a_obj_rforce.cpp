@@ -28,18 +28,25 @@ bool daObjRforce::Act_c::create_heap() {
 
     cBgD_t* bgw_data = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, STPTETU_DZB_STPTETU));
     JUT_ASSERT(0x64, bgw_data != NULL);
-    if(bgw_data != NULL){
+#if VERSION > VERSION_DEMO
+    if(bgw_data != NULL)
+#endif
+    {
         mpBgw = new dBgW();
         if(mpBgw != NULL){
-            if(mpBgw->Set(bgw_data, cBgW::MOVE_BG_e, &mtx) == true) return false;
+            if(mpBgw->Set(bgw_data, cBgW::MOVE_BG_e, &mtx) == true) {
+#if VERSION > VERSION_DEMO
+                return false;
+#endif
+            }
         }
     }
 
-    bool ret = false;
-    if(mdl_data != NULL && mpModel != NULL && bgw_data != NULL && mpBgw != NULL){
-        ret = true;
-    }
-    return ret;
+#if VERSION == VERSION_DEMO
+    return mdl_data != NULL && bgw_data != NULL && mpBgw != NULL;
+#else
+    return mdl_data != NULL && mpModel != NULL && bgw_data != NULL && mpBgw != NULL;
+#endif
 }
 
 /* 00000220-000002F8       .text _create__Q211daObjRforce5Act_cFv */
@@ -64,7 +71,13 @@ cPhs_State daObjRforce::Act_c::_create() {
 
 /* 000002F8-00000384       .text _delete__Q211daObjRforce5Act_cFv */
 bool daObjRforce::Act_c::_delete() {
-    if(heap != NULL && mpBgw != NULL && mpBgw->ChkUsed()){
+    if(
+#if VERSION > VERSION_DEMO
+        heap != NULL &&
+        mpBgw != NULL && 
+#endif
+        mpBgw->ChkUsed()
+    ){
         dComIfG_Bgsp()->Release(mpBgw);
     }
     dComIfG_resDelete(&mPhs, M_arcname);

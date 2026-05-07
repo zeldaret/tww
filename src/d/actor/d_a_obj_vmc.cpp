@@ -104,7 +104,7 @@ bool daObjVmc::Act_c::create_heap() {
     {
         J3DAnmTransform* bck_wg = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, VMC_BCK_VMCWG);
         JUT_ASSERT(215, bck_wg != NULL);
-        BOOL ret = mBckAnmGrow.init(mdl_wd_data, bck_wg, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
+        BOOL ret = mBckAnmGrow.init(mdl_wd_data, bck_wg, TRUE, J3DFrameCtrl::EMode_NONE);
         mBckAnmGrow.setPlaySpeed(0.75f);
         if (!ret)
             return false;
@@ -113,7 +113,7 @@ bool daObjVmc::Act_c::create_heap() {
     {
         J3DAnmTransform* bck_wh = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, VMC_BCK_VMCWH);
         JUT_ASSERT(226, bck_wh != NULL);
-        if (!mBckAnmHookshot.init(mdl_wd_data, bck_wh, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
+        if (!mBckAnmHookshot.init(mdl_wd_data, bck_wh, TRUE, J3DFrameCtrl::EMode_NONE))
             return false;
     }
 
@@ -229,7 +229,7 @@ void daObjVmc::Act_c::daObjVmc_base_main() {
 #if VERSION == VERSION_DEMO
         m4B4_demo =
 #endif
-        dComIfGp_particle_setToon(dPa_name::ID_SCENE_A1BC, &current.pos, &current.angle, NULL, 0xFF, &mSmoke, fopAcM_GetRoomNo(this));
+        dComIfGp_particle_setToon(dPa_name::ID_AK_ST_MACORETREESMOKE00, &current.pos, &current.angle, NULL, 0xFF, &mSmoke, fopAcM_GetRoomNo(this));
 #if VERSION == VERSION_DEMO
         mCyl.Set(cyl_src_tree);
 #endif

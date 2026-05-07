@@ -102,13 +102,39 @@ cPhs_State daTori_Flag_c::CreateInit() {
     mWindvec.y = wind_vec->y;
     mWindvec.z = wind_vec->z;
     set_mtx();
+#if VERSION > VERSION_DEMO
     dKy_tevstr_init(&mClothTevStr, current.roomNo, 0xFF);
+#endif
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     return cPhs_COMPLEATE_e;
 }
 
 /* 000003C4-00000478       .text _create__13daTori_Flag_cFv */
 cPhs_State daTori_Flag_c::_create() {
+#if VERSION == VERSION_DEMO
+    cPhs_State result1 = dComIfG_resLoad(&mPhsTrflag, M_arcname);
+    cPhs_State result2 = dComIfG_resLoad(&mPhsCloth, "Cloth");
+    if (result1 == cPhs_ERROR_e || result2 == cPhs_ERROR_e) {
+        return cPhs_ERROR_e;
+    }
+    if (result1 != cPhs_COMPLEATE_e) {
+        return result1;
+    }
+    if (result2 != cPhs_COMPLEATE_e) {
+        return result2;
+    }
+    cPhs_State result3 = cPhs_COMPLEATE_e;
+    if (result3 == cPhs_COMPLEATE_e) {
+        fopAcM_SetupActor(this, daTori_Flag_c);
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1020)) {
+            result3 = CreateInit();
+        }
+        else {
+            result3 = cPhs_ERROR_e;
+        }
+    }
+    return result3;
+#else
     fopAcM_SetupActor(this, daTori_Flag_c);
     cPhs_State result = dComIfG_resLoad(&mPhsTrflag, M_arcname);
     if (result != cPhs_COMPLEATE_e) {
@@ -125,6 +151,7 @@ cPhs_State daTori_Flag_c::_create() {
         result = cPhs_ERROR_e;
     }
     return result;
+#endif
 }
 
 /* 000003A4-000003C4       .text daTori_FlagCreate__FPv */
@@ -148,7 +175,7 @@ bool daTori_Flag_c::_execute() {
     set_mtx();
     mStts.Move();
     if (mCyl.ChkTgHit()) {
-        daObj::HitSeStart(&current.pos, current.roomNo, &mCyl, 0x0B);
+        daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), &mCyl, 0x0B);
     }
     fopAcM_rollPlayerCrash(this, 40.0f, 7);
     cXyz wind;

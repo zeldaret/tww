@@ -350,8 +350,8 @@ void hand_move(shand_class* i_this) {
                 i_this->field_300 = cM_rndF(20.0f) + 30.0f;
                 *i_this->field_314 = 1;
                 cXyz particle_scale(0.5f, 0.5f, 0.5f);
-                dComIfGp_particle_set(19, &hit_atInfo.mpActor->eyePos, NULL, &particle_scale);
-                dComIfGp_particle_set(22, &hit_atInfo.mpActor->eyePos, NULL, &particle_scale);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUBAKUEN, &hit_atInfo.mpActor->eyePos, NULL, &particle_scale);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUFLASH, &hit_atInfo.mpActor->eyePos, NULL, &particle_scale);
             }
         }
     }

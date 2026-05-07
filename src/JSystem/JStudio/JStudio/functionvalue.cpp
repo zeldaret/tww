@@ -3,6 +3,8 @@
 // Translation Unit: functionvalue.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio/functionvalue.h"
 #include "JSystem/JUtility/JUTException.h"
 #include "JSystem/JGadget/linklist.h"
@@ -43,12 +45,6 @@ TFunctionValue::TFunctionValue() {}
 
 /* 80271078-802710C0       .text __dt__Q27JStudio14TFunctionValueFv */
 TFunctionValue::~TFunctionValue() {}
-
-// This seems like it would belong in the functionvalue.h header, but putting it there causes the
-// `JGadget::TAllocator<void*>()` part to spawn a weak bss object that appears in many TUs.
-// Some TUs do need a weak bss object like that, but it also gets put in ones that don't need it.
-TFunctionValueAttribute_refer::TFunctionValueAttribute_refer() :
-    JGadget::TVector_pointer<TFunctionValue*>(JGadget::TAllocator<void*>()) {}
 
 /* 802710C0-802710E8       .text refer_initialize__Q27JStudio29TFunctionValueAttribute_referFv */
 void TFunctionValueAttribute_refer::refer_initialize() {
@@ -650,7 +646,7 @@ f64 TFunctionValue_list::update_INTERPOLATE_BSPLINE_dataMore3_(const TFunctionVa
             dVar8 = rThis._44[data._10 + 2];
         }
     }
-    functionvalue::interpolateValue_BSpline_uniform(data._0 - data._8, dVar9, dVar11, dVar10, dVar8);
+    return functionvalue::interpolateValue_BSpline_uniform(data._0 - data._8, dVar9, dVar11, dVar10, dVar8);
 }
 
 /* 80272728-80272794       .text __ct__Q27JStudio29TFunctionValue_list_parameterFv */
@@ -834,7 +830,7 @@ f64 TFunctionValue_list_parameter::update_INTERPOLATE_BSPLINE_dataMore3_(const T
         }
         break;
     }
-    functionvalue::interpolateValue_BSpline_nonuniform(d, (f64*)&local_68, (f64*)&local_48);
+    return functionvalue::interpolateValue_BSpline_nonuniform(d, (f64*)&local_68, (f64*)&local_48);
 }
 
 /* 80272CB8-80272D38       .text __ct__Q27JStudio22TFunctionValue_hermiteFv */

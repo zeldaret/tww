@@ -28,9 +28,7 @@ public:
     static GXCompare stCompare[8];
     static GXAlphaOp stAlphaOp[4];
 
-    // ~JPABaseShape should defined in the header but that breaks the order of weak functions in JPABaseShape.cpp.
-    // Instead we define it in JPABaseShape.cpp in order to fakematch the order and explicitly mark it as inline.
-    inline virtual ~JPABaseShape();
+    virtual ~JPABaseShape() {}
     virtual u8 getType() = 0;
     virtual u8 getDirType() = 0;
     virtual u8 getRotType() = 0;

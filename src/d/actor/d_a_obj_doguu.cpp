@@ -111,7 +111,7 @@ BOOL daObjDoguu_c::CreateHeap() {
     J3DAnmTevRegKey* brk_doguu = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table.brk[field_0x894]));
     JUT_ASSERT(0x170, brk_doguu != NULL);
     
-    if (mBrk.init(modelData, brk_doguu, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
+    if (mBrk.init(modelData, brk_doguu, true, J3DFrameCtrl::EMode_LOOP) == 0) {
         return FALSE;
     }
     
@@ -126,7 +126,7 @@ BOOL daObjDoguu_c::CreateHeap() {
     J3DAnmTransform* bck_head = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table.bck[field_0x894]));
     JUT_ASSERT(0x17D, bck_head != NULL);
     
-    if (mBckHead.init(modelData, bck_head, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
+    if (mBckHead.init(modelData, bck_head, true, J3DFrameCtrl::EMode_NONE) == 0) {
         return FALSE;
     }
 
@@ -161,7 +161,7 @@ BOOL daObjDoguu_c::CreateHeap() {
     J3DAnmTransform* bck_body = static_cast<J3DAnmTransform *>(dComIfG_getObjectRes("Doguu", DOGUU_BCK_VGSBA));
     JUT_ASSERT(0x1AB, bck_body != NULL);
     
-    if (mBckBody.init(modelData, bck_body, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
+    if (mBckBody.init(modelData, bck_body, true, J3DFrameCtrl::EMode_NONE) == 0) {
         return FALSE;
     }
 
@@ -184,7 +184,7 @@ BOOL daObjDoguu_c::CreateHeap() {
     J3DAnmTransform* bck_crystal = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Doguu", DOGUU_BCK_VGSPA));
     JUT_ASSERT(0x1c3, bck_crystal != NULL);
     
-    if(mBckCrystal.init(modelData, bck_crystal, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0){
+    if(mBckCrystal.init(modelData, bck_crystal, true, J3DFrameCtrl::EMode_NONE) == 0){
         return FALSE;
     }
 
@@ -472,11 +472,11 @@ void daObjDoguu_c::privateCut() {
                     mDoMtx_stack_c::multVecZero(&mPos);
                     
                     if (field_0x894 == 0) {
-                        dComIfGp_particle_set(dPa_name::ID_SCENE_8434, &mPos, &current.angle);
+                        dComIfGp_particle_set(dPa_name::ID_IT_SN_SINJYU_GLOWD00, &mPos, &current.angle);
                     } else if (field_0x894 == 1) {
-                        dComIfGp_particle_set(dPa_name::ID_SCENE_8436, &mPos, &current.angle);
+                        dComIfGp_particle_set(dPa_name::ID_IT_SN_SINJYU_GLOWF00, &mPos, &current.angle);
                     } else {
-                        dComIfGp_particle_set(dPa_name::ID_SCENE_8435, &mPos, &current.angle);
+                        dComIfGp_particle_set(dPa_name::ID_IT_SN_SINJYU_GLOWN00, &mPos, &current.angle);
                     }
                 } else if (field_0x8C4 == 125) {
                     field_0x8A3 = true;

@@ -40,6 +40,7 @@ dBgS_ObjGndChk_Yogan Act_c::M_bg_lava;
 #endif
 
 fopAc_ac_c* Act_c::M_spec_act[3];
+
 const char* const Act_c::M_arcname[] = {
     "Always",
     "Always",
@@ -48,11 +49,7 @@ const char* const Act_c::M_arcname[] = {
     "Okmono",
     "Odokuro",
     "Okioke",
-#if VERSION == VERSION_DEMO
-    "Sitem",
-#else
-    "Kmi00x",
-#endif
+    DEMO_SELECT("Sitem", "Kmi00x"),
     "Hbox2",
     "Hseki",
     "Hseki",
@@ -62,6 +59,7 @@ const char* const Act_c::M_arcname[] = {
     "Ptubo",
     "Kkiba_00",
 };
+
 const dCcD_SrcCyl Act_c::M_cyl_src = {
     // dCcD_SrcGObjInf
     {
@@ -102,7 +100,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -112,7 +110,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         4.0f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -154,7 +152,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x4C0,
         0.5f,
         0.75f,
-        0.34999999f,
+        0.35f,
         0.6f,
     },
     {
@@ -167,7 +165,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         43.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0x3E8,
@@ -177,7 +175,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         5.0f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -234,7 +232,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         43.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0x3E8,
@@ -244,7 +242,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         5.0f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -301,7 +299,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         43.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0x3E8,
@@ -311,7 +309,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         5.0f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -368,7 +366,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -433,7 +431,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -443,7 +441,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         4.0f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -485,7 +483,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x4C0,
         0.5f,
         0.75f,
-        0.34999999f,
+        0.35f,
         0.56f,
     },
     {
@@ -498,7 +496,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -508,7 +506,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         4.0f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -551,7 +549,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0.85f,
         0.75f,
         0.4f,
-        0.51999998f,
+        0.52f,
     },
     {
         -5.0f,
@@ -563,7 +561,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         50.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0x3E8,
@@ -573,7 +571,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         4.0f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -587,11 +585,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_10_e | DATA_FLAG_20_e),
-#if VERSION == VERSION_DEMO
-        SITEM_BDL_KMI_00,
-#else
-        KMI00X_BDL_KMI_00X,
-#endif
+        DEMO_SELECT(SITEM_BDL_KMI_00, KMI00X_BDL_KMI_00X),
         0x32,
         0x32,
         0x64,
@@ -616,11 +610,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         {0x00, 0x00, 0x00, 0x00},
         8000.0f,
         {0x00, 0x00, 0x00, 0x00},
-#if VERSION == VERSION_DEMO
-        0x4000,
-#else
-        0x860,
-#endif
+        DEMO_SELECT(0x4000, 0x860),
         0.85f,
         0.75f,
         0.5f,
@@ -636,7 +626,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -646,7 +636,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         7.5f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -685,12 +675,8 @@ const Act_c::Data_c Act_c::M_data[] = {
         {0x00, 0x00, 0x00, 0x00},
         8000.0f,
         {0x00, 0x00, 0x00, 0x00},
-#if VERSION == VERSION_DEMO
-        0x4000,
-#else
-        0x4C0,
-#endif
-        0.69999999f,
+        DEMO_SELECT(0x4000, 0x4C0),
+        0.7f,
         0.75f,
         0.4f,
         0.8f,
@@ -705,7 +691,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -715,7 +701,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         4.0f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -770,7 +756,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -780,7 +766,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         4.0f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -835,7 +821,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -845,7 +831,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         4.0f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -900,7 +886,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -910,7 +896,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         4.0f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -965,7 +951,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         45.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0x3E8,
@@ -975,7 +961,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         4.0f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -1014,11 +1000,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         {0x00, 0x00, 0x00, 0x00},
         8000.0f,
         {0x00, 0x00, 0x00, 0x00},
-#if VERSION == VERSION_DEMO
-        0x1240,
-#else
-        0x4C0,
-#endif
+        DEMO_SELECT(0x1240, 0x4C0),
         0.85f,
         0.75f,
         0.5f,
@@ -1034,7 +1016,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         43.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0x3E8,
@@ -1044,7 +1026,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         5.0f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -1085,11 +1067,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         {0x00, 0x00, 0x00, 0x00},
         8000.0f,
         {0x00, 0x00, 0x00, 0x00},
-#if VERSION == VERSION_DEMO
-        0x1240,
-#else
-        0x4C0,
-#endif
+        DEMO_SELECT(0x1240, 0x4C0),
         0.85f,
         0.75f,
         0.5f,
@@ -1105,7 +1083,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         36.0f,
         0.0f,
         0.002f,
-        0.00019999999f,
+        0.0002f,
         0x7D0,
         0x7D0,
         0xF63C,
@@ -1115,7 +1093,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         7.5f,
         0.2f,
         0.02f,
-        0.039999999f,
+        0.04f,
         0.015f,
         30.0f,
         0xF,
@@ -1154,12 +1132,8 @@ const Act_c::Data_c Act_c::M_data[] = {
         {0x00, 0x00, 0x00, 0x00},
         8000.0f,
         {0x00, 0x00, 0x00, 0x00},
-#if VERSION == VERSION_DEMO
-        0x1240,
-#else
-        0x4C0,
-#endif
-        0.69999999f,
+        DEMO_SELECT(0x1240, 0x4C0),
+        0.7f,
         0.75f,
         0.4f,
         0.8f,
@@ -1188,8 +1162,8 @@ const Act_c::SpecBokoData Act_c::M_data_spec_boko[] = {
 const Act_c::AttrSpine_c Act_c::M_attrSpine = {
     0.55f,
     0.55f,
-    0.69999999f,
-    0.69999999f,
+    0.7f,
+    0.7f,
     0.2f,
     0.2f,
     0x50,
@@ -1208,7 +1182,7 @@ void Act_c::prmZ_init() {
     if (m67E != 0) {
         return;
     }
-    mSwitchNo = home.angle.z;
+    mPrmZ = home.angle.z;
     m67E = 1;
     home.angle.z = 0;
     current.angle.z = 0;
@@ -1231,16 +1205,12 @@ bool Act_c::create_heap() {
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, modelFlag);
     bool ret = false;
     if (mType == 7) {
-#if VERSION == VERSION_DEMO
-        J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname[mType], SITEM_BRK_KMI_00));
-#else
-        J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname[mType], KMI00X_BRK_KMI_00X));
-#endif
+        J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname[mType], DEMO_SELECT(SITEM_BRK_KMI_00, KMI00X_BRK_KMI_00X)));
         JUT_ASSERT(DEMO_SELECT(1885, 1887), brk_data != NULL);
 
         mpBrk = new mDoExt_brkAnm();
         if (mpBrk != NULL) {
-            if (mpBrk->init(modelData, brk_data, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+            if (mpBrk->init(modelData, brk_data, false, J3DFrameCtrl::EMode_LOOP)) {
                 ret = true;
             }
         }
@@ -1388,8 +1358,8 @@ cPhs_State Act_c::_create() {
             m682 = 1;
             m683 = 0;
             m684 = 0;
-            m685 = 0;
-            m686 = 0;
+            m685 = false;
+            m686 = false;
             m811 = 0;
 
             if (mType == 2) {
@@ -1939,28 +1909,28 @@ void Act_c::mode_carry_init() {
     }
 
     prm_off_stick();
-    m685 = 0;
-    m686 = 0;
+    m685 = false;
+    m686 = false;
     m678 = 4;
 }
 
 /* 00002EF8-0000310C       .text mode_carry__Q27daTsubo5Act_cFv */
 void Act_c::mode_carry() {
-    daPy_py_c* player = daPy_getPlayerActorClass();
-    u8 tmp = m685;
+    daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
+    const bool tmp = m685;
 
-    if (tmp == 0) {
+    if (!m685) {
         if (prm_get_spec() == 6) {
-            m685 = 1;
-            m686 = 1;
+            m685 = true;
+            m686 = true;
         } else if (player->getGrabActorID() == fopAcM_GetID(this)) {
             if (player->getGrabUpStart()) {
-                m685 = 1;
-                m686 = 1;
+                m685 = true;
+                m686 = true;
             }
         } else {
-            m685 = 1;
-            m686 = 0;
+            m685 = true;
+            m686 = false;
         }
     }
 
@@ -1970,7 +1940,7 @@ void Act_c::mode_carry() {
         shape_angle.z = 0;
     }
 
-    bool bVar2 = player->getGrabUpEnd() || player->getRightFootOnGround();
+    const bool bVar2 = player->getGrabUpEnd() || player->getRightFootOnGround();
     if (bVar2 && mType == 2) {
         eff_drop_water();
         fopAcM_seStart(this, JA_SE_LK_CONVEY_WPOT, 0);
@@ -2931,7 +2901,7 @@ void Act_c::set_mtx() {
         fVar1 = 0.0f;
     }
 
-    if (m678 == 4 && m685 != 0) {
+    if (m678 == 4 && m685) {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y + m6EC + fVar1, current.pos.z);
         mDoMtx_stack_c::concat(mPoseMtx);
     } else {
@@ -3091,14 +3061,14 @@ void Act_c::set_tensor_afl() {
 void Act_c::eff_drop_water() {
     for (s32 i = 0; i < ARRAY_SSIZE(m70C); i++) {
         if (m70C[i].isEnd()) {
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8085, &m700, &shape_angle, NULL, 0xff, &m70C[i], -1, NULL, NULL, NULL);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_WPOT_PITYA, &m700, &shape_angle, NULL, 0xff, &m70C[i], -1, NULL, NULL, NULL);
             break;
         }
     }
 
     for (s32 i = 0; i < ARRAY_SSIZE(m748); i++) {
         if (m748[i].isEnd()) {
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8092, &m700, &shape_angle, NULL, 0xff, &m748[i], -1, NULL, NULL, NULL);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_WPOT_PITYA_C, &m700, &shape_angle, NULL, 0xff, &m748[i], -1, NULL, NULL, NULL);
             break;
         }
     }
@@ -3112,7 +3082,7 @@ void Act_c::eff_land_smoke() {
 /* 00006744-00006888       .text eff_break_barrel__Q27daTsubo5Act_cFv */
 void Act_c::eff_break_barrel() {
     cXyz sp18(current.pos.x, current.pos.y + data().mAcchRoofHeight * 0.5f, current.pos.z);
-    JPABaseEmitter* pJVar1 = dComIfGp_particle_set(dPa_name::ID_COMMON_03E5, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+    JPABaseEmitter* pJVar1 = dComIfGp_particle_set(dPa_name::ID_IT_JN_TR_HAHEN_A, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
     if (pJVar1 != NULL) {
         static JGeometry::TVec3<f32> em_scl(1.0f, 0.8f, 1.0f);
         pJVar1->setEmitterScale(em_scl);
@@ -3126,7 +3096,7 @@ void Act_c::eff_break_tsubo() {
     J3DModelData* pJVar2 = (J3DModelData*)(dComIfG_getObjectRes("Always", ALWAYS_BDL_MPM_TUBO));
     J3DAnmTexPattern* pJVar3 = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Always", ALWAYS_BTP_MPM_TUBO));
     JPABaseEmitter* pJVar4 =
-        static_cast<JPABaseEmitter*>(dComIfGp_particle_set(dPa_name::ID_COMMON_0017, &current.pos, NULL, (cXyz*)data().get_particle_scale()));
+        static_cast<JPABaseEmitter*>(dComIfGp_particle_set(dPa_name::ID_AK_JN_M_TUBOHAHEN, &current.pos, NULL, (cXyz*)data().get_particle_scale()));
     if (pJVar4 != NULL) {
         dPa_J3DmodelEmitter_c* modelEmitter = new dPa_J3DmodelEmitter_c(pJVar4, pJVar2, tevStr, pJVar3, uVar1, 0);
         if (modelEmitter != NULL) {
@@ -3140,7 +3110,7 @@ void Act_c::eff_break_tsubo() {
     color.b = tevStr.mColorC0.b;
     color.a = tevStr.mColorC0.a;
     dComIfGp_particle_set(
-        dPa_name::ID_COMMON_0018,
+        dPa_name::ID_AK_JN_TUBOKONAGONA,
         &current.pos,
         NULL,
         (cXyz*)data().get_particle_scale(),
@@ -3158,7 +3128,7 @@ void Act_c::eff_break_stool() {
     cXyz sp18(current.pos.x, current.pos.y + 35.0f, current.pos.z);
     static cXyz particle_scl(1.0f, 0.8f, 1.0f);
     JPABaseEmitter* pJVar1 =
-        dComIfGp_particle_set(dPa_name::ID_COMMON_03E7, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0, &particle_scl);
+        dComIfGp_particle_set(dPa_name::ID_IT_JN_TR_HAHEN_C, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0, &particle_scl);
     if (pJVar1 != NULL) {
         pJVar1->setDirectionalSpeed(25.0f);
     }
@@ -3169,7 +3139,7 @@ void Act_c::eff_break_stool() {
 void Act_c::eff_break_skull() {
     cXyz sp18(current.pos.x, current.pos.y + 20.0f, current.pos.z);
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_03E8, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_DOKURO00, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
     daObjEff::Act_c::make_skull_smoke(&sp18);
 }
 
@@ -3197,7 +3167,7 @@ void Act_c::eff_break_try() {
 void Act_c::eff_break_pinecone() {
     cXyz sp18(current.pos.x, current.pos.y + data().mAcchRoofHeight * 0.5f, current.pos.z);
 
-    dComIfGp_particle_set(dPa_name::ID_SCENE_816A, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_BOKKURI_MATSU00, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
     daObjEff::Act_c::make_pinecone_smoke(&sp18);
 }
 
@@ -3225,7 +3195,7 @@ void Act_c::eff_hit_lava_splash() {
 /* 00006E50-00006ED4       .text eff_kutani_set__Q27daTsubo5Act_cFv */
 void Act_c::eff_kutani_set() {
     if (m798 != 0 && --m798 == 0) {
-        dComIfGp_particle_set(dPa_name::ID_SCENE_814B, &current.pos, NULL, NULL, 0xff, &m784);
+        dComIfGp_particle_set(dPa_name::ID_AK_SN_KUTANIVESSEL, &current.pos, NULL, NULL, 0xff, &m784);
     }
 }
 
@@ -3327,12 +3297,10 @@ void Act_c::calc_drop_param(float* outArg1, float* outArg2, float* outArg3) cons
 
         if (fVar3 >= 0.0f) {
             fVar0 = 0.0f;
+        } else if (fVar3 <= -data().mAcchRoofHeight) {
+            fVar0 = 0.5f;
         } else {
-            if (fVar3 <= -data().mAcchRoofHeight) {
-                fVar0 = 0.5f;
-            } else {
-                fVar0 = -fVar3 * (0.5f / data().mAcchRoofHeight);
-            }
+            fVar0 = -fVar3 * (0.5f / data().mAcchRoofHeight);
         }
 
         f32 fVar6 = 1.0f - fVar0;
@@ -3432,7 +3400,7 @@ void Act_c::se_fall_water() {
     for (s32 i = 0; i < ARRAY_SSIZE(polyInfoArr); i++) {
         if (
 #if VERSION > VERSION_DEMO
-        polyInfoArr[i] != NULL &&
+            polyInfoArr[i] != NULL &&
 #endif
             polyInfoArr[i]->GetBgIndex() >= 0 && polyInfoArr[i]->GetBgIndex() < 0x100)
         {
@@ -3523,7 +3491,7 @@ bool Act_c::_execute() {
 
     bool bVar4;
     if (prm_get_spec() == 5) {
-        bVar4 = is_switch() == FALSE;
+        bVar4 = is_switch() == false;
     } else {
         bVar4 = false;
     }
@@ -3554,7 +3522,7 @@ bool Act_c::_execute() {
                         }
 
                         if (m678 == 5 || m678 == 6 || m678 == 3 || m683 != 0) {
-                            dComIfG_Ccsp_SetMass(&mCyl, 3);
+                            dComIfG_Ccsp()->SetMass(&mCyl, 3);
                         }
 
                         attention_info.position.x = current.pos.x;
@@ -3567,7 +3535,7 @@ bool Act_c::_execute() {
 
             spec_clr_actor();
 
-            fopAcM_SetModel(this, m678 == 4 && m686 != 0 ? mpModel : NULL);
+            fopAcM_SetModel(this, m678 == 4 && m686 ? mpModel : NULL);
 
             if (bVar6) {
                 fopAcM_delete(this);

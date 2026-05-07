@@ -43,11 +43,11 @@ BOOL daObjGryw00_c::setup_high_water_level_btk_anm() {
 /* 00000168-000002D0       .text particle_set__13daObjGryw00_cFv */
 void daObjGryw00_c::particle_set() {
     cXyz homePos = this->home.pos;
-    dComIfGp_particle_set(dPa_name::ID_SCENE_8295, &homePos, NULL, NULL, 0xff, NULL, -1, NULL, &tevStr.mColorK0, NULL);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_8297, &homePos, NULL, NULL, 0xff, NULL, -1, NULL, &tevStr.mColorK0, NULL);
-    mpEmitters[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_8296, &homePos, NULL, NULL, 0xff, NULL, -1, NULL,
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_RYUDANMAESPLASH00, &homePos, NULL, NULL, 0xff, NULL, -1, NULL, &tevStr.mColorK0, NULL);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_RYUDANMAESTEAM00, &homePos, NULL, NULL, 0xff, NULL, -1, NULL, &tevStr.mColorK0, NULL);
+    mpEmitters[0] = dComIfGp_particle_set(dPa_name::ID_AK_SN_RYUDANMAESPLASH01, &homePos, NULL, NULL, 0xff, NULL, -1, NULL,
                                           &tevStr.mColorK0, NULL);
-    mpEmitters[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_8298, &homePos, NULL, NULL, 0xff, NULL, -1, NULL,
+    mpEmitters[1] = dComIfGp_particle_set(dPa_name::ID_AK_SN_RYUDANMAEHAMON00, &homePos, NULL, NULL, 0xff, NULL, -1, NULL,
                                           &tevStr.mColorK0, NULL);
 }
 

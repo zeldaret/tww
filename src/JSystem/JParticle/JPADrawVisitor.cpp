@@ -3,6 +3,8 @@
 // Translation Unit: JPADrawVisitor.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPADrawVisitor.h"
 #include "JSystem/JParticle/JPABaseShape.h"
 #include "JSystem/JParticle/JPAEmitter.h"

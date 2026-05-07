@@ -16,7 +16,7 @@
 
 /* 80135B50-80135B74       .text getClimbMoveAnmSpeed__9daPy_lk_cFv */
 f32 daPy_lk_c::getClimbMoveAnmSpeed() {
-    return getAnmSpeedStickRate(daPy_HIO_ladder_c0::m.field_0x34, daPy_HIO_ladder_c0::m.field_0x30);
+    return getAnmSpeedStickRate(m_HIO->mLadder.m.field_0x34, m_HIO->mLadder.m.field_0x30);
 }
 
 /* 80135B74-80135DA0       .text setClimbShapeOffset__9daPy_lk_cFv */
@@ -100,7 +100,7 @@ BOOL daPy_lk_c::setMoveBGCorrectClimb() {
         dComIfG_Bgsp()->MoveBgTransPos(mPolyInfo, true, &current.pos, &current.angle, &shape_angle);
     }
     if (checkNoResetFlg1(daPyFlg1_VINE_CATCH)) {
-        return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+        return procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
     }
 
     if (mCurProc == daPyProc_CLIMB_DOWN_START_e && (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() > 0.01f)) {
@@ -118,13 +118,13 @@ BOOL daPy_lk_c::setMoveBGCorrectClimb() {
         ((mCurProc == daPyProc_CLIMB_MOVE_UP_DOWN_e || mCurProc == daPyProc_CLIMB_MOVE_SIDE_e) &&
          current.pos.y - 15.0f < mAcch.GetGroundH()))
     {
-        return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+        return procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
     }
 
     cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
     s16 uVar6 = cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z);
     if (cLib_distanceAngleS(uVar6, shape_angle.y) <= 0x549f) {
-        return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+        return procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
     }
 
     current.pos.x = mLinkLinChk.GetCrossP()->x + 20.5f * cM_ssin(uVar6);
@@ -197,9 +197,9 @@ void daPy_lk_c::checkBgClimbMove() {
             current.pos.x = local_5c.x - (dVar4 * dVar7);
             current.pos.y = dVar3;
             current.pos.z = local_5c.z - (dVar4 * dVar6);
-            procHangClimb_init(daPy_HIO_wallCatch_c0::m.field_0x2C);
+            procHangClimb_init(m_HIO->mWallCatch.m.field_0x2C);
         } else {
-            procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+            procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
         }
     } else {
         setClimbShapeOffset();
@@ -208,7 +208,7 @@ void daPy_lk_c::checkBgClimbMove() {
 
 /* 80136588-801365F4       .text procClimbUpStart_init_sub__9daPy_lk_cFv */
 void daPy_lk_c::procClimbUpStart_init_sub() {
-    setSingleMoveAnime(ANM_LADDERUPST, daPy_HIO_ladder_c0::m.field_0x4, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x8);
+    setSingleMoveAnime(ANM_LADDERUPST, m_HIO->mLadder.m.field_0x4, 0.0f, -1, m_HIO->mLadder.m.field_0x8);
     mProcVar0.m3570 = 1;
     m34C2 = 4;
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK10000_e);
@@ -227,7 +227,7 @@ BOOL daPy_lk_c::procClimbUpStart_init() {
         }
         procClimbUpStart_init_sub();
     } else {
-        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
         setAnimeUnequip();
         mProcVar0.m3570 = 0;
         m3598 = 0.0f;
@@ -263,7 +263,7 @@ BOOL daPy_lk_c::procClimbUpStart() {
             }
             if (doTrigger()) {
                 m34C2 = 0;
-                procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+                procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
             } else {
                 changeClimbMoveProc(1);
             }
@@ -283,7 +283,7 @@ BOOL daPy_lk_c::procClimbDownStart_init(s16 param_0) {
     mVelocity = 0.0f;
     speedF = 0.0f;
     deleteEquipItem(TRUE);
-    setSingleMoveAnime(ANM_LADDERDWST, daPy_HIO_ladder_c0::m.field_0x14, 30.0f, -1, 3.0f);
+    setSingleMoveAnime(ANM_LADDERDWST, m_HIO->mLadder.m.field_0x14, 30.0f, -1, 3.0f);
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK10000_e);
     setOldRootQuaternion(0, -0x8000, 0);
     shape_angle.y = param_0 + 0x8000;
@@ -308,7 +308,7 @@ BOOL daPy_lk_c::procClimbDownStart() {
         dComIfGp_setDoStatus(dActStts_LET_GO_e);
         if (doTrigger()) {
             m34C2 = 0;
-            procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+            procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
         } else {
             changeClimbMoveProc(1);
         }
@@ -345,7 +345,7 @@ BOOL daPy_lk_c::procClimbMoveUpDown_init(int param_0) {
             dVar2 = ANM_LADDERLTOR;
         }
     }
-    setSingleMoveAnime(dVar2, dVar3, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x2C);
+    setSingleMoveAnime(dVar2, dVar3, 0.0f, -1, m_HIO->mLadder.m.field_0x2C);
     if (mDirection == DIR_FORWARD) {
         setTextureAnime(10, 0);
     } else {
@@ -371,7 +371,7 @@ BOOL daPy_lk_c::procClimbMoveUpDown() {
     dComIfGp_setDoStatus(dActStts_LET_GO_e);
     if (doTrigger()) {
         m34C2 = 0;
-        procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+        procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
     } else if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) < 0.01f) {
         if (m34D0 != 0) {
             m34D0 = 0;
@@ -414,9 +414,9 @@ BOOL daPy_lk_c::procClimbMoveSide_init(int param_0) {
     setSingleMoveAnime(
         dVar2,
         dVar4,
-        daPy_HIO_ladder_c0::m.field_0x38,
-        daPy_HIO_ladder_c0::m.field_0x0,
-        daPy_HIO_ladder_c0::m.field_0x3C
+        m_HIO->mLadder.m.field_0x38,
+        m_HIO->mLadder.m.field_0x0,
+        m_HIO->mLadder.m.field_0x3C
     );
     gravity = 0.0f;
     speed.y = 0.0f;
@@ -440,7 +440,7 @@ BOOL daPy_lk_c::procClimbMoveSide() {
     dComIfGp_setDoStatus(dActStts_LET_GO_e);
     if (doTrigger()) {
         m34C2 = 0;
-        procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+        procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
     } else if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) < 0.01f) {
         if (m34D0 != 0) {
             m34D0 = 0;
@@ -456,7 +456,7 @@ BOOL daPy_lk_c::procClimbMoveSide() {
         mFrameCtrlUnder[UNDER_MOVE0_e].setRate(dVar5);
         cXyz local_28 = mRightHandPos - mLeftHandPos;
         dVar5 = local_28.absXZ();
-        f32 fVar1 = std::fabsf(dVar5 - m35A0) * daPy_HIO_ladder_c0::m.field_0x40;
+        f32 fVar1 = std::fabsf(dVar5 - m35A0) * m_HIO->mLadder.m.field_0x40;
         f32 fVar2 = fVar1 * cM_ssin(m34D4);
         current.pos.y += fVar1 * cM_scos(m34D4);
         current.pos.x += fVar2 * cM_scos(shape_angle.y);

@@ -85,20 +85,20 @@ void dOvlpFd2_dlst_c::draw() {
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_S16, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_POS_XYZ, GX_S8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition2s16(-320, 240);
-        GXTexCoord2u8(0, 0);
+        GXTexCoord2s8(0, 0);
 
         GXPosition2s16(320, 240);
-        GXTexCoord2u8(1, 0);
+        GXTexCoord2s8(1, 0);
 
         GXPosition2s16(320, -240);
-        GXTexCoord2u8(1, 1);
+        GXTexCoord2s8(1, 1);
 
         GXPosition2s16(-320, -240);
-        GXTexCoord2u8(0, 1);
+        GXTexCoord2s8(0, 1);
     GXEnd();
 
     J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();

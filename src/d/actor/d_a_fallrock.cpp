@@ -249,7 +249,7 @@ void daFallRock_c::setParticle(int param_1, cXyz* pos) {
     switch (param_1) {
         case 0: {
             dComIfGp_particle_set(
-                dPa_name::ID_COMMON_03E3,
+                dPa_name::ID_IT_JN_STS_HAHEN,
                 &pos_copy,
                 NULL,
                 &particle_scale,
@@ -266,7 +266,7 @@ void daFallRock_c::setParticle(int param_1, cXyz* pos) {
                 dComIfG_getObjectRes(m_arcname, ALWAYS_BTP_MPI_KOISHI);
 
             JPABaseEmitter* emitter = (JPABaseEmitter*)dComIfGp_particle_set(
-                dPa_name::ID_COMMON_03E2,
+                dPa_name::ID_IT_JN_M_STS_HAHEN,
                 &pos_copy,
                 NULL,
                 &particle_scale,

@@ -44,7 +44,6 @@ BOOL daTornado_c::jointCallBack(int jntNo) {
 }
 
 static const float l_joint_scale[11] = { 0.1f, 0.4f, 0.7f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
-static const float joint_offset[11] = { 100.0f, 200.0f, 300.0f, 400.0f, 300.0f, 300.0f, 400.0f, 500.0f, 400.0f, 500.0f, 600.0f };
 
 static daTornado_HIO_c0 l_HIO;
 
@@ -137,9 +136,8 @@ BOOL daTornado_c::execute() {
     }
 
     for (int i = 0; i < 11; i++) {
-        f32 sin = cM_ssin(mAngle1 - 0x1000 * i);
-        f32 tmp1 = fVar8 * joint_offset[i];
-        f32 fVar1 = tmp1 * (sin + 1.0f);
+        static const f32 joint_offset[11] = { 100.0f, 200.0f, 300.0f, 400.0f, 300.0f, 300.0f, 400.0f, 500.0f, 400.0f, 500.0f, 600.0f };
+        f32 fVar1 = (fVar8 * joint_offset[i]) * ((cM_ssin(mAngle1 - 0x1000 * i)) + 1.0f);
         s16 angle2 = mAngle2 - 0x1800 * i;
         mJointX[i] = cM_ssin(angle2) * fVar1 * scale.x;
         mJointZ[i] = cM_scos(angle2) * fVar1 * scale.x;
@@ -175,7 +173,7 @@ BOOL daTornado_c::execute() {
             mPtclTimer -= 1;
         } else {
             mPtclTimer = 10;
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8213, &current.pos, NULL, (cXyz*)&wind_scale);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_TORNADOWIND00, &current.pos, NULL, (cXyz*)&wind_scale);
         }
 
         fopAcM_seStartCurrent(this, JA_SE_OBJ_TORNADE_SUS, 100);
@@ -261,11 +259,11 @@ BOOL daTornado_c::createHeap() {
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
     if (!mpModel)
         return FALSE;
-    if (!mBck.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YTRND00), true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false))
+    if (!mBck.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YTRND00), true, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YTRND00), false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    if (!mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YTRND00), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBrk.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YTRND00), false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    if (!mBrk.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YTRND00), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
 
     modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, TRND_BDL_YWUWT00);
@@ -273,11 +271,11 @@ BOOL daTornado_c::createHeap() {
     mpModelUnder = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
     if (!mpModelUnder)
         return FALSE;
-    if (!mBckUnder.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false))
+    if (!mBckUnder.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBtkUnder.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    if (!mBtkUnder.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBrkUnder.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    if (!mBrkUnder.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
 
     return TRUE;
@@ -321,7 +319,7 @@ cPhs_State daTornado_c::create() {
             dKyw_tornado_Notice(&current.pos);
             mpModelUnder->setBaseScale(under_scale);
             mCenter = current.pos;
-            dComIfGp_particle_set(dPa_name::ID_SCENE_81BB, &mCenter, NULL, NULL, 0xFF, &mPtclCb);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_WINDUPWATER00, &mCenter, NULL, NULL, 0xFF, &mPtclCb);
             fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
         }
         mDoMtx_stack_c::transS(current.pos);

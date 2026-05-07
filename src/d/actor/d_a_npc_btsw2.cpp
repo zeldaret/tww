@@ -257,7 +257,7 @@ void daNpc_Btsw2_c::checkOrder() {
 }
 
 /* 00000860-0000097C       .text anmAtr__13daNpc_Btsw2_cFUs */
-void daNpc_Btsw2_c::anmAtr(u16) {
+void daNpc_Btsw2_c::anmAtr(u16 i_msgStatus) {
     switch (dComIfGp_getMesgAnimeAttrInfo()) {
     case 0:
         setAnm(0);

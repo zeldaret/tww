@@ -399,7 +399,7 @@ BOOL dEvent_manager_c::endCheckOld(const char* eventName) {
 
 /* 800745E0-80074718       .text getMyStaffId__16dEvent_manager_cFPCcP10fopAc_ac_ci */
 int dEvent_manager_c::getMyStaffId(const char* name, fopAc_ac_c* actor, int tagId) {
-    if (dComIfGp_event_getMode() == dEvtMode_NONE_e)
+    if (!dComIfGp_event_runCheck())
         return -1;
 
     if (mList.getHeaderP() == NULL)
@@ -674,7 +674,7 @@ fopAc_ac_c* dEvent_manager_c::specialCast_Shutter(s16 profName, int flag) {
         goal.x += cM_ssin(angle) * 100.0f;
         goal.z += cM_scos(angle) * 100.0f;
         dComIfGp_evmng_setGoal(&goal);
-        g_dComIfG_gameInfo.play.getEvent().setPt2(shutter);
+        g_dComIfG_gameInfo.play.getEvent()->setPt2(shutter);
     }
 
     return shutter;

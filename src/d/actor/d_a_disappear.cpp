@@ -78,21 +78,21 @@ void set_disappear(disappear_class* i_this, float scale) {
         case 0xB:
         case 0xC:
         case 0xD:
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0014, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUPOFU, &i_this->current.pos, NULL, &particleScale);
             // Fall-through
         case 0x3:
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0013, &i_this->current.pos, NULL, &particleScale);
-            dComIfGp_particle_setStripes(dPa_name::ID_COMMON_0015, &i_this->current.pos, NULL, &particleScale, 0xFF, 0x96);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0016, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUBAKUEN, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_setStripes(dPa_name::ID_AK_JN_SIBOUSPIRIT, &i_this->current.pos, NULL, &particleScale, 0xFF, 0x96);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUFLASH, &i_this->current.pos, NULL, &particleScale);
             break;
         case 0x1:
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0013, &i_this->current.pos, NULL, &particleScale);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0016, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUBAKUEN, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUFLASH, &i_this->current.pos, NULL, &particleScale);
             break;
         case 0x4:
-            dComIfGp_particle_set(dPa_name::ID_COMMON_043C, &i_this->current.pos);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_043D, &i_this->current.pos);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_043E, &i_this->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_IT_JN_PUCHI_SHIBOUA, &i_this->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_IT_JN_PUCHI_SHIBOUB, &i_this->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_IT_JN_PUCHI_SHIBOUC, &i_this->current.pos);
             break;
     }
 }

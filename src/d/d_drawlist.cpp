@@ -1427,118 +1427,131 @@ void seaRealCallBack(void* user, cXyz& v0, cXyz& v1, cXyz& v2) {
 }
 
 /* 80083E18-800840B0       .text realPolygonCheck__FP4cXyzffP4cXyzP18dDlst_shadowPoly_c */
-BOOL realPolygonCheck(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3, dDlst_shadowPoly_c* param_4) {
+BOOL realPolygonCheck(cXyz* param_0, f32 casterRadius, f32 heightAgl, cXyz* lightDir, dDlst_shadowPoly_c* shadowPoly) {
     ShdwDrawPoly_c shdwDrawPoly;
-    cXyz local_8c;
-    cXyz local_98;
-    f32 tmp1 = param_1 * param_1 * 0.002f;
+    
+    // Compute a bounding box around the shadow receiver based on its position, size, and light direction
+    cXyz bbMin;
+    cXyz bbMax;
+    f32 tmp1 = casterRadius * casterRadius * 0.002f;
     f32 tmp2 = cLib_maxLimit(tmp1, 120.0f);
-    f32 var1 = param_1 + param_2 - tmp2;
-    local_8c.y = param_0->y - var1;
-    local_98.y = param_0->y + param_1 * 0.4f;
-    local_98.x = param_0->x + param_3->x * var1;
-    if (local_98.x < param_0->x) {
-        local_8c.x = local_98.x;
-        local_98.x = param_0->x;
+    f32 var1 = casterRadius + heightAgl - tmp2;
+    bbMin.y = param_0->y - var1;
+    bbMax.y = param_0->y + casterRadius * 0.4f;
+    bbMax.x = param_0->x + lightDir->x * var1;
+    if (bbMax.x < param_0->x) {
+        bbMin.x = bbMax.x;
+        bbMax.x = param_0->x;
     } else {
-        local_8c.x = param_0->x;
+        bbMin.x = param_0->x;
     }
-    local_8c.x -= param_1;
-    local_98.x += param_1;
-    var1 = param_0->z + param_3->z * var1;
-    local_98.z = var1;
+    bbMin.x -= casterRadius;
+    bbMax.x += casterRadius;
+    var1 = param_0->z + lightDir->z * var1;
+    bbMax.z = var1;
     if (var1 < param_0->z) {
-        local_8c.z = local_98.z;
-        local_98.z = param_0->z;
+        bbMin.z = bbMax.z;
+        bbMax.z = param_0->z;
     } else {
-        local_8c.z = param_0->z;
+        bbMin.z = param_0->z;
     }
-    local_8c.z -= param_1;
-    local_98.z += param_1;
+    bbMin.z -= casterRadius;
+    bbMax.z += casterRadius;
+
     mDoLib_clipper::changeFar(mDoLib_clipper::getFovyRate() * 3000.0f);
-    s32 clip = mDoLib_clipper::clip(j3dSys.getViewMtx(), &local_98, &local_8c);
+    s32 clip = mDoLib_clipper::clip(j3dSys.getViewMtx(), &bbMax, &bbMin);
     mDoLib_clipper::resetFar();
     if (clip) {
         return FALSE;
     }
-    shdwDrawPoly.Set(local_8c, local_98);
+
+    // Gather a list of polygons from the bg geometry (dBgS) or the sea (daSea) that will act as shadow receivers
+    // ShdwDrawPoly_c is a transient object for collecting the triangles, which are stored permanently in dDlst_shadowPoly_c
+    shdwDrawPoly.Set(bbMin, bbMax);
     shdwDrawPoly.SetCallback(psdRealCallBack);
     shdwDrawPoly.setCenter(param_0);
-    shdwDrawPoly.setLightVec(param_3);
-    shdwDrawPoly.setPoly(param_4);
+    shdwDrawPoly.setLightVec(lightDir);
+    shdwDrawPoly.setPoly(shadowPoly);
     dComIfG_Bgsp()->ShdwDraw(&shdwDrawPoly);
-    daSea_GetPoly(&shdwDrawPoly, seaRealCallBack, local_8c, local_98);
+    daSea_GetPoly(&shdwDrawPoly, seaRealCallBack, bbMin, bbMax);
     return TRUE;
 }
 
 /* 800841B0-8008450C       .text setShadowRealMtx__FPA4_fPA4_fPA4_fP4cXyzP4cXyzffP18dDlst_shadowPoly_cf */
-u8 setShadowRealMtx(Mtx r26, Mtx r27, Mtx r28, cXyz* r6, cXyz* r29, f32 f30, f32 f31, dDlst_shadowPoly_c* r30, f32 f3) {
-    r30->reset();
-    if (f3 >= 1.0f) {
+u8 setShadowRealMtx(Mtx viewMtx, Mtx renderProjMtx, Mtx receiverProjMtx, cXyz* lightPos, cXyz* pos, f32 casterSize, f32 heightAgl, dDlst_shadowPoly_c* shadowPoly, f32 heightFade) {
+    shadowPoly->reset();
+    if (heightFade >= 1.0f) {
         return 0;
     }
-    f32 f1 = 1.0f - f3;
-    if (f1 > 1.0f) {
-        f1 = 1.0f;
+    f32 opacity = 1.0f - heightFade;
+    if (opacity > 1.0f) {
+        opacity = 1.0f;
     }
-    int r31 = 200.0f * f1;
-    cXyz local_64 = *r6 - *r29;
-    local_64.y += f31;
-    f32 tmp = 0.02f * (50.0f - f31);
+    int alpha = 200.0f * opacity;
+    cXyz lightVec = *lightPos - *pos;
+    
+    // The higher off the ground a shadow caster is, the weaker the shadow's horizontal components become
+    // This cheats the light vec to be more vertical when the caster is high up, a la platforming drop shadows
+    // At 50 units above ground, the shadow is fully vertical
+    lightVec.y += heightAgl;
+    f32 tmp = 0.02f * (50.0f - heightAgl);
     if (tmp < 0.0f) {
-        local_64.x = 0.0f;
-        local_64.z = 0.0f;
+        lightVec.x = 0.0f;
+        lightVec.z = 0.0f;
     } else if (tmp < 1.0f) {
-        local_64.x *= tmp;
-        local_64.z *= tmp;
+        lightVec.x *= tmp;
+        lightVec.z *= tmp;
     }
-    f32 tmp2 = std::sqrtf(local_64.abs2());
-    if (tmp2 != 0.0f) {
-        f32 tmp3 = (local_64.y / tmp2);
+
+    f32 lightDist = std::sqrtf(lightVec.abs2());
+    if (lightDist != 0.0f) {
+        f32 tmp3 = (lightVec.y / lightDist);
         if (tmp3 < 1.5f) {
-            local_64.y = 1.5f * tmp2;
-            tmp2 = local_64.abs2();
-            tmp2 = std::sqrtf(tmp2);
+            lightVec.y = 1.5f * lightDist;
+            lightDist = lightVec.abs2();
+            lightDist = std::sqrtf(lightDist);
         }
-        tmp2 = (f30 * 0.5f) / tmp2;
+        lightDist = (casterSize * 0.5f) / lightDist;
     }
-    local_64 *= tmp2;
-    local_64 += *r29;
-    f32 f29 = f30 * 0.4f;
-    cXyz local_70 = *r29 - local_64;
-    if (local_70.isZero()) {
-        local_70.y = -1.0f;
-        local_64.y = r29->y + 1.0f;
+    lightVec *= lightDist;
+    lightVec += *pos;
+
+    f32 casterRadius = casterSize * 0.4f;
+    cXyz rayDir = *pos - lightVec;
+    if (rayDir.isZero()) {
+        rayDir.y = -1.0f;
+        lightVec.y = pos->y + 1.0f;
     } else {
-        local_70.normalize();
+        rayDir.normalize();
     }
-    if (!realPolygonCheck(r29, f29, f31, &local_70, r30)) {
+
+    if (!realPolygonCheck(pos, casterRadius, heightAgl, &rayDir, shadowPoly)) {
         return 0;
     }
-    cMtx_lookAt(r26, &local_64, r29, 0);
-    C_MTXOrtho(r27, f29, -f29, -f29, f29, 1.0f, 10000.0f);
-    C_MTXLightOrtho(r28, f29, -f29, -f29, f29, 0.5f, -0.5f, 0.5f, 0.5f);
-    cMtx_concat(r28, r26, r28);
-    return r31;
+    cMtx_lookAt(viewMtx, &lightVec, pos, 0);
+    C_MTXOrtho(renderProjMtx, casterRadius, -casterRadius, -casterRadius, casterRadius, 1.0f, 10000.0f);
+    C_MTXLightOrtho(receiverProjMtx, casterRadius, -casterRadius, -casterRadius, casterRadius, 0.5f, -0.5f, 0.5f, 0.5f);
+    cMtx_concat(receiverProjMtx, viewMtx, receiverProjMtx);
+    return alpha;
 }
 
 /* 8008450C-800846C8       .text set__18dDlst_shadowReal_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-u32 dDlst_shadowReal_c::set(u32 key, s8 param_2, J3DModel* model, cXyz* param_4, f32 param_5, f32 param_6, dKy_tevstr_c* tevstr) {
+u32 dDlst_shadowReal_c::set(u32 key, s8 shouldFade, J3DModel* model, cXyz* pos, f32 casterSize, f32 heightAboveGround, dKy_tevstr_c* tevstr) {
     if (mState != 1 || key != mKey) {
         cXyz lightPos = dKy_plight_near_pos();
         if (tevstr) {
             lightPos = tevstr->mLightPosWorld;
         }
         mAlpha = setShadowRealMtx(
-            mViewMtx, mRenderProjMtx, mReceiverProjMtx, &lightPos, param_4, param_5, param_6, &mShadowRealPoly,
-            param_2 == 0 ? 0.0f : param_6 * 0.0007f
+            mViewMtx, mRenderProjMtx, mReceiverProjMtx, &lightPos, pos, casterSize, heightAboveGround, &mShadowRealPoly,
+            shouldFade == 0 ? 0.0f : heightAboveGround * 0.0007f
         );
         if (mAlpha == 0) {
             return 0;
         }
         mState = 1;
         mKey = key;
-        field_0x1 = param_2;
+        field_0x1 = shouldFade;
         mpDrawBuffer->setCallBackPacket(mpCallBack);
         mModelNum = 0;
     }
@@ -1558,22 +1571,22 @@ u32 dDlst_shadowReal_c::set(u32 key, s8 param_2, J3DModel* model, cXyz* param_4,
 }
 
 /* 800846C8-80084844       .text set2__18dDlst_shadowReal_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-u32 dDlst_shadowReal_c::set2(u32 key, s8 r27, J3DModel* model, cXyz* r28, f32 f30, f32 f31, dKy_tevstr_c* tevstr) {
+u32 dDlst_shadowReal_c::set2(u32 key, s8 shouldFade, J3DModel* model, cXyz* pos, f32 casterSize, f32 heightAboveGround, dKy_tevstr_c* tevstr) {
     if (mModelNum == 0) {
         cXyz lightPos = dKy_plight_near_pos();
         if (tevstr) {
             lightPos = tevstr->mLightPosWorld;
         }
         mAlpha = setShadowRealMtx(
-            mViewMtx, mRenderProjMtx, mReceiverProjMtx, &lightPos, r28, f30, f31, &mShadowRealPoly,
-            r27 == 0 ? 0.0f : f31 * 0.00025f
+            mViewMtx, mRenderProjMtx, mReceiverProjMtx, &lightPos, pos, casterSize, heightAboveGround, &mShadowRealPoly,
+            shouldFade == 0 ? 0.0f : heightAboveGround * 0.00025f
         );
         if (mAlpha == 0) {
             return 0;
         }
         mState = 1;
         mKey = key;
-        field_0x1 = r27;
+        field_0x1 = shouldFade;
         mModelNum = 0;
     }
 
@@ -1645,11 +1658,11 @@ void dDlst_shadowSimple_c::draw() {
 }
 
 /* 80084AC8-80084D48       .text set__20dDlst_shadowSimple_cFP4cXyzffP4cXyzsfP9_GXTexObj */
-void dDlst_shadowSimple_c::set(cXyz* pos, f32 y, f32 param_3, cXyz* floorNrm, s16 rotY, f32 param_6, GXTexObj* texObj) {
-    f32 offsetY = param_3 * 16.0f * (1.0f - floorNrm->y) + 1.0f;
+void dDlst_shadowSimple_c::set(cXyz* pos, f32 y, f32 scaleXZ, cXyz* floorNrm, s16 rotY, f32 scaleZ, GXTexObj* texObj) {
+    f32 offsetY = scaleXZ * 16.0f * (1.0f - floorNrm->y) + 1.0f;
     mDoMtx_stack_c::transS(pos->x, y + offsetY, pos->z);
     mDoMtx_stack_c::YrotM(rotY);
-    mDoMtx_stack_c::scaleM(param_3, offsetY + offsetY + 16.0f, param_3 * param_6);
+    mDoMtx_stack_c::scaleM(scaleXZ, offsetY + offsetY + 16.0f, scaleXZ * scaleZ);
     mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mVolumeMtx);
 
     f32 xs = std::sqrtf(1.0f - floorNrm->x * floorNrm->x);
@@ -1679,7 +1692,7 @@ void dDlst_shadowSimple_c::set(cXyz* pos, f32 y, f32 param_3, cXyz* floorNrm, s1
     mDoMtx_stack_c::get()[2][3] = pos->z;
 
     mDoMtx_stack_c::YrotM(rotY);
-    mDoMtx_stack_c::scaleM(param_3, 1.0f, param_3 * param_6);
+    mDoMtx_stack_c::scaleM(scaleXZ, 1.0f, scaleXZ * scaleZ);
     mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mMtx);
     f32 dist = 1.0f - (pos->y - y) * 0.0007f;
     if (dist < 0.0f)
@@ -1762,12 +1775,12 @@ void dDlst_shadowControl_c::draw(Mtx drawMtx) {
 }
 
 /* 800850D4-80085170       .text setReal__21dDlst_shadowControl_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-int dDlst_shadowControl_c::setReal(u32 key, s8 size, J3DModel* model, cXyz* pos, f32 f0, f32 f1, dKy_tevstr_c* tevstr) {
+int dDlst_shadowControl_c::setReal(u32 key, s8 shouldFade, J3DModel* model, cXyz* pos, f32 casterSize, f32 heightAboveGround, dKy_tevstr_c* tevstr) {
     if (key != 0) {
         dDlst_shadowReal_c * real = &mReal[0];
         for (s32 i = 0; i < (s32)ARRAY_SIZE(mReal); i++, real++) {
             if (real->isUse() && real->checkKey(key)) {
-                return real->set(key, size, model, pos, f0, f1, tevstr);
+                return real->set(key, shouldFade, model, pos, casterSize, heightAboveGround, tevstr);
             }
         }
     }
@@ -1776,7 +1789,7 @@ int dDlst_shadowControl_c::setReal(u32 key, s8 size, J3DModel* model, cXyz* pos,
     for (s32 i = 0; i < (s32)ARRAY_SIZE(mReal); i++, real++) {
         if (real->isNoUse()) {
             while (++mNextID == 0) {}
-            return real->set(mNextID, size, model, pos, f0, f1, tevstr);
+            return real->set(mNextID, shouldFade, model, pos, casterSize, heightAboveGround, tevstr);
         }
     }
 
@@ -1784,12 +1797,12 @@ int dDlst_shadowControl_c::setReal(u32 key, s8 size, J3DModel* model, cXyz* pos,
 }
 
 /* 80085170-8008520C       .text setReal2__21dDlst_shadowControl_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-int dDlst_shadowControl_c::setReal2(u32 key, s8 size, J3DModel* model, cXyz* pos, f32 f0, f32 f1, dKy_tevstr_c* tevstr) {
+int dDlst_shadowControl_c::setReal2(u32 key, s8 shouldFade, J3DModel* model, cXyz* pos, f32 casterSize, f32 heightAboveGround, dKy_tevstr_c* tevstr) {
     if (key != 0) {
         dDlst_shadowReal_c * real = &mReal[0];
         for (s32 i = 0; i < (s32)ARRAY_SIZE(mReal); i++, real++) {
             if (real->isUse() && real->checkKey(key)) {
-                return real->set2(key, size, model, pos, f0, f1, tevstr);
+                return real->set2(key, shouldFade, model, pos, casterSize, heightAboveGround, tevstr);
             }
         }
     }
@@ -1798,7 +1811,7 @@ int dDlst_shadowControl_c::setReal2(u32 key, s8 size, J3DModel* model, cXyz* pos
     for (s32 i = 0; i < (s32)ARRAY_SIZE(mReal); i++, real++) {
         if (real->isNoUse()) {
             while (++mNextID == 0) {}
-            return real->set2(mNextID, size, model, pos, f0, f1, tevstr);
+            return real->set2(mNextID, shouldFade, model, pos, casterSize, heightAboveGround, tevstr);
         }
     }
 
@@ -1821,11 +1834,11 @@ bool dDlst_shadowControl_c::addReal(u32 key, J3DModel* model) {
 }
 
 /* 80085274-800852D8       .text setSimple__21dDlst_shadowControl_cFP4cXyzffP4cXyzsfP9_GXTexObj */
-int dDlst_shadowControl_c::setSimple(cXyz* pos, f32 groundY, f32 f1, cXyz* floor_nrm, s16 rotY, f32 f2, GXTexObj* tex) {
+int dDlst_shadowControl_c::setSimple(cXyz* pos, f32 groundY, f32 scaleXZ, cXyz* floor_nrm, s16 rotY, f32 scaleZ, GXTexObj* tex) {
     if (floor_nrm == NULL || mSimpleNum >= ARRAY_SIZE(mSimple))
         return false;
 
-    mSimple[mSimpleNum].set(pos, groundY, f1, floor_nrm, rotY, f2, tex);
+    mSimple[mSimpleNum].set(pos, groundY, scaleXZ, floor_nrm, rotY, scaleZ, tex);
     mSimpleNum++;
     return true;
 }

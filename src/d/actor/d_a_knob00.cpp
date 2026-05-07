@@ -54,7 +54,7 @@ BOOL daKnob00_c::CreateHeap() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
     J3DAnmTransform* anmTransform = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, KNOB_BCK_DOOROPENADOOR);
-    if (!mBckAnm.init(modelData, anmTransform, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
+    if (!mBckAnm.init(modelData, anmTransform, true, J3DFrameCtrl::EMode_NONE)) {
 #if VERSION == VERSION_DEMO
         return cPhs_ERROR_e;
 #else 
@@ -618,14 +618,9 @@ BOOL daKnob00_c::actionPassward2() {
                     dComIfGs_onEventBit(dSv_event_flag_c::UNK_3B20);
                     dComIfGs_setEventReg(dSv_event_flag_c::UNK_BA0F, (s8)cM_rndF(6.0f));
                 }
-#if VERSION == VERSION_DEMO
-                s32 tmp = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
-                m2D0.init(tmp + 0x1b1a);
-#else
-                s32 tmp = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
-                tmp += 0x1b1a;
-                m2D0.init(tmp);
-#endif
+                int tmp = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
+                int tmp2 = tmp;
+                m2D0.init(tmp2 + 0x1b1a);
             }
             break;
 

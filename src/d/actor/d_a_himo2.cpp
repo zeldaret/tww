@@ -5,6 +5,7 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bk.h"
+#include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ykgr.h"
 #include "d/actor/d_a_himo2.h"
 #include "d/actor/d_a_btd.h"
@@ -698,7 +699,7 @@ int himo2_bg_check(himo2_class* i_this) {
             i_this->m0308 = 30;
             cBgS_PolyInfo local_24;
             flag = i_this->m2574.GetOnePolyInfo(&local_24);
-            JUT_ASSERT(1569, flag == NULL);
+            JUT_ASSERT(DEMO_SELECT(1534, 1569), flag == NULL);
             uVar3 = dComIfG_Bgsp()->GetMtrlSndId(local_24);
             mDoAud_seStart(JA_SE_LK_SW_HIT_S, &actor->current.pos, uVar3, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
             iVar4 = dComIfG_Bgsp()->GetAttributeCode(local_24);
@@ -710,7 +711,7 @@ int himo2_bg_check(himo2_class* i_this) {
                 mDoAud_seStart(JA_SE_LK_MS_WEP_HIT, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
                 if (iVar4 == dBgS_Attr_WOOD_e) {
                     pJVar5 = dComIfGp_particle_set(
-                        dPa_name::ID_COMMON_002B,
+                        dPa_name::ID_AK_JN_ELEMENTKIKUZU00,
                         &actor->current.pos,
                         &local_38,
                         NULL,
@@ -727,7 +728,7 @@ int himo2_bg_check(himo2_class* i_this) {
                     }
                 } else {
                     local_38.x = local_38.x + 0x4000;
-                    pJVar5 = dComIfGp_particle_set(dPa_name::ID_COMMON_002C, &actor->current.pos, &local_38);
+                    pJVar5 = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTHIBANA00, &actor->current.pos, &local_38);
                     if (pJVar5 != NULL) {
                         pJVar5->mInitialVelAxis = 15.0f;
                     }
@@ -1016,7 +1017,7 @@ void new_himo2_move(himo2_class* i_this) {
                 i_this->m24D8 = 1;
                 #if VERSION > VERSION_DEMO
                 if (btd != 0) {
-                    fopAcM_OffStatus(btd, fopAcStts_UNK4000_e);
+                    fopAcM_OffStatus(&btd->actor, fopAcStts_UNK4000_e);
                 }
                 #endif
                 break;
@@ -1393,7 +1394,7 @@ void new_himo2_move(himo2_class* i_this) {
         i_this->m217C->health = 0;
         #if VERSION > VERSION_DEMO
         if (btd != 0) {
-            fopAcM_OnStatus(btd, 0x4000);
+            fopAcM_OnStatus(&btd->actor, 0x4000);
         }
         #endif
     }
@@ -1518,12 +1519,12 @@ void new_himo2_move(himo2_class* i_this) {
             break;
         }
         i_this->m24F4 = REG0_F(12) + 50.0f;
-        fopAcM_OnStatus(btd, 0x4000);
+        fopAcM_OnStatus(&btd->actor, 0x4000);
         i_this->m24D9 = 8;
         i_this->m24E8.x = 0.0f;
         i_this->m24E8.y = REG0_F(5) * 0.1f + 3000.0f;
         i_this->m24E8.z = REG0_F(6) * 0.1f;
-        cMtx_YrotS(*calc_mtx, btd->current.angle.y);
+        cMtx_YrotS(*calc_mtx, btd->actor.current.angle.y);
         sp130.x = REG0_F(7) * 0.1f;
         sp130.y = REG0_F(8) * 0.1f + 1000.0f;
         sp130.z = REG0_F(9) * 0.1f + 1400.0f;
@@ -1585,7 +1586,7 @@ void new_himo2_move(himo2_class* i_this) {
                 camera->mCamera.Reset(player->eyePos, spDC);
                 camera->mCamera.Start();
                 camera->mCamera.SetTrimSize(0);
-                fopAcM_OffStatus(btd, fopAcStts_UNK4000_e);
+                fopAcM_OffStatus(&btd->actor, fopAcStts_UNK4000_e);
                 dComIfGp_event_reset();
             }
             dr->unk_40A = 0;
@@ -1594,8 +1595,8 @@ void new_himo2_move(himo2_class* i_this) {
     }
     case 9: {
         cLib_addCalc2(&i_this->m24F4, REG0_F(4) + 50.0f, 0.5f, 3.0f);
-        cLib_addCalc2(&i_this->m24E8.y, btd->eyePos.y + REG0_F(5) * 0.1f + 200.0f, 0.2f, 1000.0f);
-        cMtx_YrotS(*calc_mtx, btd->current.angle.y);
+        cLib_addCalc2(&i_this->m24E8.y, btd->actor.eyePos.y + REG0_F(5) * 0.1f + 200.0f, 0.2f, 1000.0f);
+        cMtx_YrotS(*calc_mtx, btd->actor.current.angle.y);
         sp130.x = REG0_F(7) * 0.1f + -300.0f;
         sp130.y = REG0_F(8) * 0.1f + 100.0f;
         sp130.z = REG0_F(9) * 0.1f + 2000.0f;
@@ -1626,7 +1627,7 @@ void new_himo2_move(himo2_class* i_this) {
             camera->mCamera.Reset(player->eyePos, spD0);
             camera->mCamera.Start();
             camera->mCamera.SetTrimSize(0);
-            fopAcM_OffStatus(btd, fopAcStts_UNK4000_e);
+            fopAcM_OffStatus(&btd->actor, fopAcStts_UNK4000_e);
             dComIfGp_event_reset();
         }
         break;
@@ -1664,7 +1665,7 @@ void new_himo2_move(himo2_class* i_this) {
                         i_this->m029C = 0;
                         #if VERSION > VERSION_DEMO
                         if (btd != 0) {
-                            fopAcM_OnStatus(btd, 0x4000);
+                            fopAcM_OnStatus(&btd->actor, 0x4000);
                         }
                         #endif
                     } else {

@@ -54,7 +54,7 @@ BOOL daSalvage_c::CreateHeap() {
     JUT_ASSERT(347, pbrk != NULL);
 
     mpBrk = new mDoExt_brkAnm();
-    if (mpBrk == NULL || !mpBrk->init(mModelData, pbrk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+    if (mpBrk == NULL || !mpBrk->init(mModelData, pbrk, true, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
 
@@ -62,7 +62,7 @@ BOOL daSalvage_c::CreateHeap() {
     JUT_ASSERT(361, pbtk != NULL);
 
     mpBtk = new mDoExt_btkAnm();
-    if (mpBtk == NULL || !mpBtk->init(mModelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+    if (mpBtk == NULL || !mpBtk->init(mModelData, pbtk, true, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
     return true;
@@ -79,7 +79,7 @@ bool daSalvage_c::CreateInit() {
     mSalvageHazureEventIdx = dComIfGp_evmng_getEventIdx("SALVAGE_HAZURE", 0xff);
     mSlvgGetItemLeftEventIdx = dComIfGp_evmng_getEventIdx("SLVG_GETITEM_LEFT", 0xff);
     mEventIdx = dComIfGp_evmng_getEventIdx("SLVG_HAZURE_LEFT", 0xff);
-    mEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0437, &current.pos);
+    mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SALVAGELIGHT00, &current.pos);
     if (mEmitter != NULL) {
         mEmitter->setStatus(1);
     }
@@ -242,7 +242,7 @@ void daSalvage_c::checkOrder() {
 
 /* 00000C58-00000D64       .text eventOrder__11daSalvage_cFv */
 void daSalvage_c::eventOrder() {
-    if (dComIfGp_checkPlayerStatus0(0, 0x10000)) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         if (m2E9 == 2) {
             fopAcM_orderOtherEventId(this, mSalvageGetItemEventIdx, 0xff, 0xffff, 0, 1);
             eventInfo.onCondition(2);

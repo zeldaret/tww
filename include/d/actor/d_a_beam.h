@@ -24,7 +24,7 @@ public:
         m690 = NULL;
     }
     void beamOn() {
-        m690 = dComIfGp_particle_set(dPa_name::ID_SCENE_8121, &current.pos);
+        m690 = dComIfGp_particle_set(dPa_name::ID_AK_SN_LASERROOT00, &current.pos);
     }
     bool checkHFloorParticle() { return !(s32)m5F8; }
     bool checkSmokeParticle() { return !(s32)m5F9; }
@@ -34,7 +34,10 @@ public:
     void onSmokeParticle() { m5F9 = true; }
     void setDefaultProc(Func func) { m55C = func; }
     void setEmitterOffset(float) {}
-    void setPosAngle(cXyz&, csXyz&) {}
+    void setPosAngle(cXyz& pos, csXyz& angle) {
+        current.pos = pos;
+        current.angle = angle;
+    }
     void setSearchProc(Func func) { m550 = func; }
 
     void set_mtx();

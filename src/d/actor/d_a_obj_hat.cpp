@@ -128,7 +128,7 @@ cPhs_State daObjHat_c::createInit() {
 
 /* 000006AC-000006DC       .text _delete__10daObjHat_cFv */
 BOOL daObjHat_c::_delete() {
-    dComIfG_resDelete(&mPhs, "Ro");
+    dComIfG_resDeleteDemo(&mPhs, "Ro");
     return TRUE;
 }
 

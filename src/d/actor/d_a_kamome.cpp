@@ -114,6 +114,7 @@ fopAc_ac_c* search_esa(kamome_class* i_this) {
 
 /* 00000A44-00000A90       .text s_a_i_sub__FPvPv */
 void* s_a_i_sub(void* ac1, void* ac2) {
+    UNUSED(ac2);
     if (fopAc_IsActor(ac1) && fpcM_GetName(ac1) == PROC_NPC_LS1) {
         return ac1;
     }
@@ -257,6 +258,7 @@ void kamome_ground_pos_move(kamome_class* i_this) {
 
 /* 00001150-000011B8       .text ko_s_sub__FPvPv */
 void* ko_s_sub(void* ac1, void* ac2) {
+    UNUSED(ac2);
     kamome_class* i_this = (kamome_class*)ac1;
     if (fopAcM_IsActor(&i_this->actor) && fopAcM_GetName(&i_this->actor) == PROC_KAMOME && (fopAcM_GetParam(&i_this->actor) & 0xf) == 7) {
         ko_count++;
@@ -292,6 +294,7 @@ void heisou_control(kamome_class* i_this) {
 
 /* 00001304-00001360       .text h_s_sub__FPvPv */
 void* h_s_sub(void* ac1, void* ac2) {
+    UNUSED(ac2);
     kamome_class* i_this = (kamome_class*)ac1;
     if (fopAcM_IsActor(&i_this->actor) && fopAcM_GetName(&i_this->actor) == PROC_KAMOME && (fopAcM_GetParam(&i_this->actor) & 0xf) == 6) {
         return &i_this->actor;
@@ -1051,7 +1054,7 @@ void kamome_imouto_move(kamome_class* i_this) {
 
         if (i_this->mpMorf->isStop()) {
             i_this->mAnimState = 1;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 8);
+            anm_init(i_this, KAMOME_BCK_KA_WAIT1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT1);
         }
         break;
 
@@ -1062,7 +1065,7 @@ void kamome_imouto_move(kamome_class* i_this) {
         if (i_this->mpMorf->isStop()) {
             i_this->mAnimState = 0;
             i_this->mTimers[0] = cM_rndF(60.0f) + 20.0f;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 9);
+            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT2);
         }
         break;
     case 20:

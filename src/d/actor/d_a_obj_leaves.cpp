@@ -190,12 +190,12 @@ void daObjLeaves_c::birthEffect(int arg1, cXyz* arg2, csXyz* arg3, GXColor* arg4
     }; // size = 0x14
 
     static ParticleData particle_data[] = {
-        {dPa_name::ID_SCENE_822F, 0, 0, -12.0f},
-        {dPa_name::ID_SCENE_A230, 1, 0, -12.0f},
-        {dPa_name::ID_SCENE_822E, 0, 0, -12.0f},
-        {dPa_name::ID_SCENE_8268, 0, 60, -3.0f},
-        {dPa_name::ID_SCENE_8269, 0, 60, -3.0f},
-        {dPa_name::ID_SCENE_826A, 0, 0, -12.0f},
+        {dPa_name::ID_AK_SN_FALLENLEAFFAN00, 0, 0, -12.0f},
+        {dPa_name::ID_AK_ST_FALLENLEAFSMOKE00, 1, 0, -12.0f},
+        {dPa_name::ID_AK_SN_FALLENLEAFRUN00, 0, 0, -12.0f},
+        {dPa_name::ID_AK_SN_FALLENLEAFFIRE00, 0, 60, -3.0f},
+        {dPa_name::ID_AK_SN_FALLENLEAFFIRE01, 0, 60, -3.0f},
+        {dPa_name::ID_AK_SN_FALLENLEAFBOMB00, 0, 0, -12.0f},
     };
 #else
     struct ParticleData {
@@ -207,12 +207,12 @@ void daObjLeaves_c::birthEffect(int arg1, cXyz* arg2, csXyz* arg3, GXColor* arg4
     }; // size = 0x14
 
     static ParticleData particle_data[] = {
-        {dPa_name::ID_SCENE_822F, 0, 0, 1, -12.0f},
-        {dPa_name::ID_SCENE_A230, 1, 0, 1, -12.0f},
-        {dPa_name::ID_SCENE_822E, 0, 0, 1, -12.0f},
-        {dPa_name::ID_SCENE_8268, 0, 60, 120, -3.0f},
-        {dPa_name::ID_SCENE_8269, 0, 60, 120, -3.0f},
-        {dPa_name::ID_SCENE_826A, 0, 0, 1, -12.0f},
+        {dPa_name::ID_AK_SN_FALLENLEAFFAN00, 0, 0, 1, -12.0f},
+        {dPa_name::ID_AK_ST_FALLENLEAFSMOKE00, 1, 0, 1, -12.0f},
+        {dPa_name::ID_AK_SN_FALLENLEAFRUN00, 0, 0, 1, -12.0f},
+        {dPa_name::ID_AK_SN_FALLENLEAFFIRE00, 0, 60, 120, -3.0f},
+        {dPa_name::ID_AK_SN_FALLENLEAFFIRE01, 0, 60, 120, -3.0f},
+        {dPa_name::ID_AK_SN_FALLENLEAFBOMB00, 0, 0, 1, -12.0f},
     };
 #endif
 

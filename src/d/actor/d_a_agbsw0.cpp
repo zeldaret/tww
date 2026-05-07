@@ -586,7 +586,6 @@ BOOL daAgbsw0_c::ExeSubA2() {
 
             field_0x298 = 0;
         }
-
 #endif
         return true;
     }
@@ -1088,8 +1087,8 @@ BOOL daAgbsw0_c::ExeSubMW() {
         ) {
             return TRUE;
         }
-
 #endif
+
         static bool se_flag = 0;
 
         eyePos = current.pos;

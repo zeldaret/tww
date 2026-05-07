@@ -3,6 +3,8 @@
 // Translation Unit: JPAEmitterLoader.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPAEmitterLoader.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAResourceManager.h"

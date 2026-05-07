@@ -6,9 +6,55 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_item.h"
 
+dMi_HIO_c g_miHIO;
+
 /* 801C7B4C-801C7C7C       .text __ct__9dMi_HIO_cFv */
 dMi_HIO_c::dMi_HIO_c() {
-    /* Nonmatching */
+    field_0x08 = 0.8f;
+    field_0x0C = 15;
+
+    for (int i = 0; i < ARR_SIZE; i++) {
+        arr_0x0E[i] = 0;
+        arr_0x1A[i] = 10;
+    }
+
+    field_0x18 = 0;
+    field_0x24 = 1;
+    field_0x26 = -100;
+    field_0x28 = -100;
+    field_0x2A = -45;
+    field_0x2C = 50;
+    field_0x2E = 30;
+    field_0x30 = -3;
+    field_0x32 = 10;
+    field_0x34 = 7;
+    field_0x36 = 14;
+    field_0x38 = 5;
+    field_0x3A = 12;
+    field_0x3C = 10;
+    field_0x40 = 320;
+    field_0x42 = 240;
+    field_0x3E = 200;
+    field_0x46 = 0;
+    field_0x48 = 20;
+    field_0x44 = -120;
+
+    // Light Yellow-Green
+    mClothColor.r = 0xE3;
+    mClothColor.g = 0xFF;
+    mClothColor.b = 0xB3;
+    mClothColor.a = 0xDC;
+
+    // Transparent
+    mShadowColor.r = 0x00;
+    mShadowColor.g = 0x00;
+    mShadowColor.b = 0x00;
+    mShadowColor.a = 0x00;
+
+    field_0x5C = 130;
+
+    mBlackColor.set(0x00, 0x00, 0x00, 0xFF); // Black
+    // mWhiteColor stays as default.
 }
 
 /* 801C7C7C-801C7DC4       .text initialize__12dMenu_Item_cFv */
@@ -107,8 +153,9 @@ void dMenu_Item_c::outFontDraw() {
 }
 
 /* 801CC0F8-801CC10C       .text noteCheck__12dMenu_Item_cFv */
-void dMenu_Item_c::noteCheck() {
+u8 dMenu_Item_c::noteCheck() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 801CC10C-801CC1AC       .text noteInit__12dMenu_Item_cFv */
@@ -224,6 +271,8 @@ void dMenu_Item_c::equipBeastItem(int) {
 /* 801CF12C-801CF510       .text _create__12dMenu_Item_cFv */
 void dMenu_Item_c::_create() {
     /* Nonmatching */
+
+    g_miHIO.mNo = mDoHIO_createChild("アイテム画面", &g_miHIO); // "Item Screen"
 }
 
 /* 801CF510-801CF618       .text _delete__12dMenu_Item_cFv */
@@ -242,21 +291,23 @@ void dMenu_Item_c::_draw() {
 }
 
 /* 801D0F50-801D1438       .text _open__12dMenu_Item_cFv */
-void dMenu_Item_c::_open() {
+bool dMenu_Item_c::_open() {
     /* Nonmatching */
 }
 
 /* 801D1438-801D1CD4       .text _close__12dMenu_Item_cFv */
-void dMenu_Item_c::_close() {
+bool dMenu_Item_c::_close() {
     /* Nonmatching */
 }
 
 /* 801D1CD4-801D21A0       .text _open2__12dMenu_Item_cFv */
-void dMenu_Item_c::_open2() {
+bool dMenu_Item_c::_open2() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801D21A0-801D2A4C       .text _close2__12dMenu_Item_cFv */
-void dMenu_Item_c::_close2() {
+bool dMenu_Item_c::_close2() {
     /* Nonmatching */
+    return false;
 }

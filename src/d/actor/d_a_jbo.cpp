@@ -100,7 +100,7 @@ void jbo_move(jbo_class* i_this) {
                 fopAcM_seStart(actor, JA_SE_OBJ_JFLOWER_OUT, 0);
                 i_this->mAnimationSpeed = 0;
                 i_this->mAnimRotation = 0;
-                JPABaseEmitter* emitter = dComIfGp_particle_setToon(0xa110, &i_this->mParticlePos);
+                JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_IT_ST_JMPFLOWER_SMOKE00, &i_this->mParticlePos);
                 if (emitter != NULL) {
                     emitter->setGlobalAlpha(100);
                 }

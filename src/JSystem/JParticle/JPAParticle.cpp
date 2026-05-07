@@ -3,6 +3,8 @@
 // Translation Unit: JPAParticle.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPADynamicsBlock.h"
 #include "JSystem/JParticle/JPAEmitter.h"

@@ -30,16 +30,16 @@ const s32 daObjVgnfd_c::M_door_bdl_table[] = {
     VGNFD_BDL_YGCBD00,
 };
 const u16 daObjVgnfd_c::M_door_ev_table[] = {
-    dSv_event_flag_c::UNK_3904,
-    dSv_event_flag_c::UNK_3902,
-    dSv_event_flag_c::UNK_3901,
-    dSv_event_flag_c::UNK_3A80,
+    dSv_event_flag_c::TRIALS_DOOR_LIGHT_GOHMA,
+    dSv_event_flag_c::TRIALS_DOOR_LIGHT_KALLE_DEMOS,
+    dSv_event_flag_c::TRIALS_DOOR_LIGHT_JALHALLA,
+    dSv_event_flag_c::TRIALS_DOOR_LIGHT_MOLGERA,
 };
 const u16 daObjVgnfd_c::M_boss_ev_table[] = {
-    dSv_event_flag_c::UNK_3240,
-    dSv_event_flag_c::UNK_3220,
-    dSv_event_flag_c::UNK_3210,
-    dSv_event_flag_c::UNK_3208,
+    dSv_event_flag_c::GOHMA_TRIALS_CLEAR,
+    dSv_event_flag_c::KALLE_DEMOS_TRIALS_CLEAR,
+    dSv_event_flag_c::JALHALLA_TRIALS_CLEAR,
+    dSv_event_flag_c::MOLGERA_TRIALS_CLEAR,
 };
 const char daObjVgnfd_c::M_arcname[6] = "VgnFD";
 
@@ -65,12 +65,12 @@ static char* l_daObjVgnfd_break_act_name[] = {
 };
 
 static u16 l_daObjVgnfd_pt_table[] = {
-    dPa_name::ID_SCENE_833E,
-    dPa_name::ID_SCENE_833F,
-    dPa_name::ID_SCENE_8340,
-    dPa_name::ID_SCENE_8341,
-    dPa_name::ID_SCENE_8342,
-    dPa_name::ID_SCENE_8343,
+    dPa_name::ID_AK_SN_BOSSDOORHAHEN00,
+    dPa_name::ID_AK_SN_BOSSDOORHAHEN01,
+    dPa_name::ID_AK_SN_BOSSDOORHAHEN02,
+    dPa_name::ID_AK_SN_BOSSDOORDOKURO00,
+    dPa_name::ID_AK_SN_BOSSDOORDOKURO01,
+    dPa_name::ID_AK_SN_BOSSDOORDOKURO02,
 };
 
 enum {
@@ -86,17 +86,19 @@ BOOL daObjVgnfd_c::solidHeapCB(fopAc_ac_c* i_ac) {
 
 /* 00000098-0000022C       .text create_bdl_brk__12daObjVgnfd_cFi */
 BOOL daObjVgnfd_c::create_bdl_brk(int i) {
+    J3DModelData* mdl_data;
+    J3DAnmTevRegKey* brk_p;
     BOOL ret = FALSE;
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, M_bdl_table[i]));
-    JUT_ASSERT(0xfe, mdl_data != NULL);
+    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, M_bdl_table[i]));
+    JUT_ASSERT(254, mdl_data != NULL);
     if (mdl_data != NULL) {
         mModel[i] = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mModel[i] != NULL) {
             if (M_brk_table[i] != -1) {
-                J3DAnmTevRegKey* brk_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, M_brk_table[i]));
+                brk_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, M_brk_table[i]));
                 JUT_ASSERT(0x105, brk_p != NULL);
                 if (brk_p != NULL) {
-                    if (mBrkAnm[i].init(mdl_data, brk_p, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE))
+                    if (mBrkAnm[i].init(mdl_data, brk_p, TRUE, J3DFrameCtrl::EMode_NONE))
                         ret = TRUE;
                 }
             } else {
@@ -109,6 +111,7 @@ BOOL daObjVgnfd_c::create_bdl_brk(int i) {
 
 /* 0000022C-000004A4       .text create_heap__12daObjVgnfd_cFv */
 BOOL daObjVgnfd_c::create_heap() {
+    J3DModelData* mdl_data;
     BOOL ret = TRUE;
     s32 i;
     for (i = 0; i < (s32)ARRAY_SIZE(mModel); i++) {
@@ -120,7 +123,7 @@ BOOL daObjVgnfd_c::create_heap() {
 
     if (ret) {
         for (i = 0; i < (s32)ARRAY_SIZE(mModel2); i++) {
-            J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, M_door_bdl_table[i]));
+            mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, M_door_bdl_table[i]));
             JUT_ASSERT(0x133, mdl_data != NULL);
 
             if (mdl_data != NULL) {
@@ -140,15 +143,17 @@ BOOL daObjVgnfd_c::create_heap() {
         J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, VGNFD_BTK_YGCBD00));
         JUT_ASSERT(0x144, btk_data != NULL);
 
-        if (btk_data == NULL || !mBtkAnm.init(mModel2[1]->getModelData(), btk_data, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+        if (btk_data == NULL || !mBtkAnm.init(mModel2[1]->getModelData(), btk_data, TRUE, J3DFrameCtrl::EMode_NONE)) {
             ret = FALSE;
         }
     }
 
     if (ret) {
-        Mtx* mtx = &mModel[0]->getBaseTRMtx();
-        cBgD_t* dzb_data = (cBgD_t*)dComIfG_getObjectRes(M_arcname, VGNFD_DZB_VGNFD);
-        M_bgw = dBgW_NewSet(dzb_data, dBgW::MOVE_BG_e, mtx);
+        M_bgw = dBgW_NewSet(
+            (cBgD_t*)dComIfG_getObjectRes(M_arcname, VGNFD_DZB_VGNFD),
+            dBgW::MOVE_BG_e,
+            &mModel[0]->getBaseTRMtx()
+        );
         JUT_ASSERT(0x151, M_bgw != NULL);
 
         if (M_bgw == NULL)
@@ -206,14 +211,24 @@ cPhs_State daObjVgnfd_c::_create() {
 
 /* 00000830-000008D8       .text _delete__12daObjVgnfd_cFv */
 bool daObjVgnfd_c::_delete() {
-    if (heap != NULL) {
+#if VERSION > VERSION_DEMO
+    if (heap != NULL)
+#endif
+    {
         if (M_bgw != NULL && M_bgw->ChkUsed()) {
             dComIfG_Bgsp()->Release(M_bgw);
+#if VERSION > VERSION_DEMO
             M_bgw = NULL;
+#endif
         }
     }
 
-    mSmoke.remove();
+#if VERSION == VERSION_DEMO
+    if (mInit)
+#endif
+    {
+        mSmoke.remove();
+    }
     dComIfG_resDelete(&mPhs, M_arcname);
     return true;    
 }
@@ -333,7 +348,9 @@ bool daObjVgnfd_c::_execute() {
                         if (mTimer <= 0) {
                             dComIfGp_evmng_cutEnd(mStaffId);
                             mBrkAnm[M_demo_idx + 1].setPlaySpeed(1.0f);
+                        #if VERSION > VERSION_DEMO
                             mDoAud_seStart(JA_SE_OBJ_B_BOSS_DR_LT_1);
+                        #endif
                             if (check_fin()) {
                                 mDoAud_seStart(JA_SE_READ_RIDDLE_1);
                             }
@@ -395,7 +412,7 @@ bool daObjVgnfd_c::_execute() {
                                     emtr->setGlobalPrmColor(tevStr.mColorK0.r, tevStr.mColorK0.g, tevStr.mColorK0.b);
                                 }
                             }
-                            dComIfGp_particle_setToon(dPa_name::ID_SCENE_A344, &current.pos, &current.angle, &scale, 0xA0, &mSmoke);
+                            dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BOSSDOORSMOKE00, &current.pos, &current.angle, &scale, 0xA0, &mSmoke);
                             dComIfGp_getVibration().StartQuake(4, 11, cXyz(0.0f, 1.0f, 0.0f));
                             fopAcM_seStartCurrent(this, JA_SE_OBJ_B_BOSS_DR_BRK_2, 0);
                             break;

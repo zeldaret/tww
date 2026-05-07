@@ -159,9 +159,9 @@ static BOOL medama_atari_check(am2_class* i_this) {
                         atInfo.pParticlePos = NULL;
                         cc_at_check(actor, &atInfo);
                         actor->health = origHealth;
-                        dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, &actor->attention_info.position);
+                        dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &actor->attention_info.position);
                     } else {
-                        dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, &hitPos);
+                        dComIfGp_particle_set(dPa_name::ID_AK_JN_NG, &hitPos);
                     }
                     fopAcM_seStart(actor, JA_SE_LK_MS_WEP_HIT, 0x42);
                 }
@@ -189,7 +189,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
                     i_this->mAction = ACTION_DOUSA;
                     i_this->mMode = 2;
                 } else {
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &hitPos, &player->shape_angle);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &hitPos, &player->shape_angle);
                     fopAcM_seStart(actor, JA_SE_CM_AM2_PARALYZED, 0);
                     fopAcM_monsSeStart(actor, JA_SE_CV_AM2_PARALYZED, 0x42);
                     i_this->mAction = ACTION_MAHI;
@@ -241,11 +241,21 @@ static BOOL week_atari_check(am2_class* i_this) {
             case AT_TYPE_DARKNUT_SWORD:
             case AT_TYPE_MOBLIN_SPEAR:
                 fopAcM_seStart(actor, JA_SE_LK_SW_HIT_S, 0x35);
-                if (player->getCutType() == 0x06 || player->getCutType() == 0x07 || player->getCutType() == 0x08 ||
-                    player->getCutType() == 0x09 || player->getCutType() == 0x0A || player->getCutType() == 0x0C ||
-                    player->getCutType() == 0x0E || player->getCutType() == 0x0F || player->getCutType() == 0x10 ||
-                    player->getCutType() == 0x15 || player->getCutType() == 0x19 || player->getCutType() == 0x1A ||
-                    player->getCutType() == 0x1B || player->getCutType() == 0x1E || player->getCutType() == 0x1F)
+                if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EA ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EB ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_TURN ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_ROLL ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SWORD ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_STICK ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_BT_ROLLCUT ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_CLUB ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXA ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXB ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXMJ ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_KESA)
                 {
                     hitType = 1;
                     i_this->m2CE = 1;
@@ -267,7 +277,7 @@ static BOOL week_atari_check(am2_class* i_this) {
                 fopAcM_seStart(actor, JA_SE_LK_HAMMER_HIT, 0x35);
                 hitType = 1;
                 i_this->m2CE = 7;
-                if (player->getCutType() == 0x11) {
+                if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                     i_this->m2CE = 8;
                 }
                 break;
@@ -294,11 +304,11 @@ static BOOL week_atari_check(am2_class* i_this) {
                 cc_at_check(actor, &atInfo);
                 
                 if (hitType == 1) {
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &hitPos);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &hitPos);
                     cXyz particleScale(2.0f, 2.0f, 2.0f);
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, &hitPos, &player->shape_angle, &particleScale);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, &hitPos, &player->shape_angle, &particleScale);
                 } else {
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &hitPos, &player->shape_angle);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &hitPos, &player->shape_angle);
                 }
                 
                 i_this->mAction = ACTION_ITAI;
@@ -352,7 +362,7 @@ static BOOL body_atari_check(am2_class* i_this) {
             i_this->mAction = ACTION_HANDOU_MOVE;
             i_this->mMode = 30;
             i_this->m2CE = 7;
-            if (player->getCutType() == 0x11) {
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                 i_this->m2CE = 8;
             }
             break;
@@ -434,7 +444,7 @@ static BOOL naraku_check(am2_class* i_this) {
                 
                 cXyz particleScale(1.0f, 1.0f, 1.0f);
                 i_this->mRippleCb.remove();
-                dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &actor->current.pos, NULL, &particleScale, 0xFF, &i_this->mRippleCb);
+                dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &actor->current.pos, NULL, &particleScale, 0xFF, &i_this->mRippleCb);
                 i_this->mRippleCb.setRate(0.0f);
             }
         }
@@ -554,7 +564,7 @@ static void action_dousa(am2_class* i_this) {
             i_this->mSmokeCb.remove();
             fopAcM_seStart(actor, JA_SE_CM_AM_JUMP_S, 0);
             
-            dComIfGp_particle_setToon(dPa_name::ID_SCENE_A125, &actor->current.pos, &actor->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor));
+            dComIfGp_particle_setToon(dPa_name::ID_AK_ST_AMOTHSMOKE00, &actor->current.pos, &actor->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor));
             if (i_this->mSmokeCb.getEmitter()) {
                 i_this->mSmokeCb.getEmitter()->setRate(12.0f);
                 JGeometry::TVec3<f32> scale;
@@ -736,7 +746,7 @@ static void action_mahi(am2_class* i_this) {
                     i_this->mSmokeCb.remove();
                     fopAcM_seStart(actor, JA_SE_CM_AM2_LANDING, 0);
                     
-                    dComIfGp_particle_setToon(dPa_name::ID_SCENE_A125, &actor->current.pos, &actor->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor));
+                    dComIfGp_particle_setToon(dPa_name::ID_AK_ST_AMOTHSMOKE00, &actor->current.pos, &actor->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor));
                     if (i_this->mSmokeCb.getEmitter()) {
                         i_this->mSmokeCb.getEmitter()->setRate(12.0f);
                         JGeometry::TVec3<f32> scale;
@@ -850,7 +860,7 @@ static void action_itai(am2_class* i_this) {
         actor->speedF = 20.0f;
         
         fopAcM_monsSeStart(actor, JA_SE_CV_AM2_DAMAGE, 0x42);
-        dComIfGp_particle_set(dPa_name::ID_SCENE_81AE, &i_this->mWeakPos, &actor->shape_angle);
+        dComIfGp_particle_set(dPa_name::ID_AK_SN_AMOTH2WEAKPOINT00, &i_this->mWeakPos, &actor->shape_angle);
         
         if (actor->health > 0) {
             anm_init(i_this, AM2_BCK_DAMAGE, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
@@ -909,7 +919,7 @@ static void action_itai(am2_class* i_this) {
         
         if (i_this->mAcch.ChkGroundHit()) {
             i_this->mSmokeCb.remove();
-            dComIfGp_particle_setToon(dPa_name::ID_SCENE_A125, &actor->current.pos, &actor->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor));
+            dComIfGp_particle_setToon(dPa_name::ID_AK_ST_AMOTHSMOKE00, &actor->current.pos, &actor->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor));
             if (i_this->mSmokeCb.getEmitter()) {
                 i_this->mSmokeCb.getEmitter()->setRate(12.0f);
                 JGeometry::TVec3<f32> scale;
@@ -941,8 +951,8 @@ static void action_itai(am2_class* i_this) {
         
         cXyz centerPos = actor->current.pos;
         centerPos.y += 50.0f;
-        dComIfGp_particle_set(dPa_name::ID_SCENE_81AF, &actor->current.pos, &actor->shape_angle);
-        dComIfGp_particle_set(dPa_name::ID_SCENE_81B0, &actor->current.pos, &actor->shape_angle);
+        dComIfGp_particle_set(dPa_name::ID_AK_SN_AMOTH2WEAKPOINT01, &actor->current.pos, &actor->shape_angle);
+        dComIfGp_particle_set(dPa_name::ID_AK_SN_AMOTH2HAHEN00, &actor->current.pos, &actor->shape_angle);
         fopAcM_seStart(actor, JA_SE_CM_AM2_EXPLODE, 0);
         fopAcM_createDisappear(actor, &centerPos, 5, daDisItem_IBALL_e);
         fopAcM_onActor(actor);
@@ -1212,14 +1222,14 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     a_this->mpBtkAnm = new mDoExt_btkAnm();
     if (!a_this->mpBtkAnm) { return FALSE; }
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("AM2", AM2_BTK_AM2);
-    int ret = a_this->mpBtkAnm->init(model->getModelData(), pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    int ret = a_this->mpBtkAnm->init(model->getModelData(), pbtk, TRUE, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { return FALSE; }
     if (!a_this->mpBtkAnm) { return FALSE; }
     
     a_this->mpBrkAnm = new mDoExt_brkAnm();
     if (!a_this->mpBrkAnm) { return FALSE; }
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("AM2", AM2_BRK_AM2);
-    ret = a_this->mpBrkAnm->init(model->getModelData(), pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    ret = a_this->mpBrkAnm->init(model->getModelData(), pbrk, TRUE, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { return FALSE; }
     if (!a_this->mpBrkAnm) { return FALSE; }
     

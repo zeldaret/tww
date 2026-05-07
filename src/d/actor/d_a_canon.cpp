@@ -211,12 +211,12 @@ void daCanon_c::makeFireEffect(cXyz& arg1, csXyz& arg2, int arg3) {
     sp18.z = 0;
 
     if (arg3 == 0) {
-        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &arg1, &arg2, &sp2C);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE02, &arg1, &arg2, &sp2C);
     } else {
-        dComIfGp_particle_set(dPa_name::ID_COMMON_LIGHT_FLASH, &arg1, &sp18, &sp2C);
-        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CLOUD, &arg1, &arg2, &sp2C);
-        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &arg1, &arg2, &sp2C);
-        dComIfGp_particle_setToon(dPa_name::ID_COMMON_SMOKE_DEBRIS, &arg1, &arg2, &sp2C);
+        dComIfGp_particle_set(dPa_name::ID_IT_JN_BMEX_SENKO, &arg1, &sp18, &sp2C);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE01, &arg1, &arg2, &sp2C);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE02, &arg1, &arg2, &sp2C);
+        dComIfGp_particle_setToon(dPa_name::ID_IT_JT_BMEX_HAHEN, &arg1, &arg2, &sp2C);
     }
 
     plight.mPos = arg1;
@@ -257,7 +257,7 @@ void daCanon_c::wait_proc() {
 
     int iVar2 = dComIfGp_evmng_getMyStaffId("Canon");
     if (iVar2 != -1) {
-        if (!dComIfGp_evmng_getMyActIdx(iVar2, cut_name_tbl, ARRAY_SSIZE(cut_name_tbl), 1, 0)) {
+        if (!dComIfGp_evmng_getMyActIdx(iVar2, cut_name_tbl, ARRAY_SSIZE(cut_name_tbl), TRUE, 0)) {
             cXyz sp24 = current.pos;
             daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
             createTargetObj();
@@ -437,7 +437,7 @@ void daCanon_c::end_proc() {
         int staffIdx = dComIfGp_evmng_getMyStaffId("Canon");
         if (staffIdx == -1) {
             wait_proc_init();
-        } else if (!dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0)) {
+        } else if (!dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0)) {
             dComIfGp_evmng_cutEnd(staffIdx);
             if (dComIfGp_getMiniGameType() == 3) {
                 dComIfGp_endMiniGame(3);

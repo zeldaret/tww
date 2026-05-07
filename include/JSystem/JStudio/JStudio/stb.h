@@ -118,7 +118,6 @@ public:
 class TObject_control : public TObject {
 public:
     TObject_control(void const*, u32);
-    ~TObject_control() {}
 };
 
 // Manages TObjects

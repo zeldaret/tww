@@ -82,7 +82,7 @@ struct fopMsgM_pane_class {
     /* 0x34 */ u8 mInitAlpha;
     /* 0x35 */ u8 mNowAlpha;
     /* 0x36 */ s16 mUserArea;
-};
+};  // Size: 0x38
 
 struct fopMsgM_pane_alpha_class {
     /* 0x00 */ J2DPane * pane;
@@ -123,12 +123,16 @@ public:
 
 class MyPicture : public J2DPicture {
 public:
+    MyPicture(J2DPane* pParent, JSURandomInputStream* pStream) : J2DPicture(pParent, pStream) {
+        m134 = 0;
+    }
+
     virtual ~MyPicture() {}
     virtual void drawSelf(f32, f32);
     virtual void drawSelf(f32, f32, Mtx*);
     virtual void drawFullSet2(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mtx*);
 
-private:
+public:
     /* 0x124 */ f32 m124;
     /* 0x128 */ f32 m128;
     /* 0x12C */ f32 m12C;
@@ -164,6 +168,7 @@ public:
     void getString(char*, u32);
     void getString(char*, char*, char*, char*, u32, f32*, f32*, int*);
     void getRubyString(char*, char*, char*, char*, char*, char*, f32*, f32*, int*);
+#if VERSION >= VERSION_USA
     void tag_len_kaisen_game(int*, f32*, int*, int*, int*);
     void tag_len_rupee(int*, f32*, int*, int*, int*);
     void tag_len_num_input(int*, f32*, int*, int*, int*);
@@ -226,6 +231,7 @@ public:
     void tag_input_pendant();
     void tag_input_hane();
     void tag_input_kenshi();
+#endif
 
 public:
     /* 0x004 */ JUTFont* font[2];
@@ -319,11 +325,22 @@ JKRExpHeap* fopMsgM_createExpHeap(u32);
 fpc_ProcID fopMsgM_Create(s16, fopMsgCreateFunc, void*);
 fpc_ProcID fopMsgM_create(s16 i_procName, fopAc_ac_c* param_1 = NULL, cXyz* param_2 = NULL,
                           u32* param_3 = NULL, u32* param_4 = NULL, fopMsgCreateFunc createFunc = NULL);
+inline fpc_ProcID fopMsgM_MiniGameStarter_create(s16 i_procName, u8 param_1, u16 param_2, fopMsgCreateFunc createFunc) {
+    u32 parameter = param_1;
+    parameter |= param_2 << 16;
+    return fopMsgM_create(i_procName, NULL, NULL, &parameter, &parameter, createFunc);
+}
 fpc_ProcID fop_MGameTerm_create(s16, s16, s16, int, int, fopMsgCreateFunc);
+inline fpc_ProcID fopMsgM_MiniGameTerminater_create(s16 param_0, s16 param_1, s16 param_2, int param_3, int param_4, fopMsgCreateFunc createFunc) {
+    return fop_MGameTerm_create(param_0, param_1, param_2, param_3, param_4, createFunc);
+}
 void fopMsgM_Delete(void* process);
 fopMsg_prm_class* fopMsgM_GetAppend(void* msg);
 void fopMsgM_destroyExpHeap(JKRExpHeap*);
 f32 fopMsgM_valueIncrease(int param_0, int param_1, u8 param_2);
+#if VERSION >= VERSION_USA
+bool fopMsgM_hyrule_language_check(u32 msgNo);
+#endif
 s32 fopMsgM_setStageLayer(void*);
 fpc_ProcID fopMsgM_messageSet(u32 i_msgNo, fopAc_ac_c* i_actorP);
 fpc_ProcID fopMsgM_messageSet(u32 param_0, cXyz*);
@@ -331,11 +348,11 @@ fpc_ProcID fopMsgM_messageSet(u32 param_0);
 fpc_ProcID fopMsgM_scopeMessageSet(u32 param_0);
 int fopMsgM_messageSetDemo(u32 param_0);
 msg_class* fopMsgM_SearchByID(fpc_ProcID param_0);
-char* fopMsgM_messageGet(char* msg, u32 string_id);
-void fopMsgM_passwordGet(char*, u32);
+char* fopMsgM_messageGet(char* dst, u32 msgNo);
+char* fopMsgM_passwordGet(char* dst, u32 msgNo);
 fpc_ProcID fop_Timer_create(s16 param_0, u8 param_1, u16 param_2, u8 param_3, u8 param_4, f32 param_5,
                      f32 param_6, f32 param_7, f32 param_8, fopMsgCreateFunc createFunc);
-inline fpc_ProcID fopMsgM_Timer_create(s16 param_0, u8 param_1, u32 param_2, u8 param_3, u8 param_4,
+inline fpc_ProcID fopMsgM_Timer_create(s16 param_0, u8 param_1, u16 param_2, u8 param_3, u8 param_4,
                                 f32 param_5, f32 param_6, f32 param_7, f32 param_8,
                                 fopMsgCreateFunc createFunc) {
     return fop_Timer_create(param_0, param_1, param_2, param_3, param_4, param_5, param_6, param_7,
@@ -348,6 +365,9 @@ void fopMsgM_setInitAlpha(fopMsgM_pane_class*);
 void fopMsgM_setNowAlpha(fopMsgM_pane_class*, f32);
 void fopMsgM_setNowAlphaZero(fopMsgM_pane_class*);
 void fopMsgM_setAlpha(fopMsgM_pane_class*);
+void fopMsgM_paneScaleX(fopMsgM_pane_class* i_this, f32 s);
+void fopMsgM_paneScaleY(fopMsgM_pane_class* i_this, f32 s);
+void fopMsgM_paneScale(fopMsgM_pane_class* i_this, f32 sx, f32 sy);
 void fopMsgM_paneScaleXY(fopMsgM_pane_class*, f32);
 void fopMsgM_cposMove(fopMsgM_pane_class*);
 void fopMsgM_paneTrans(fopMsgM_pane_class*, f32, f32);
@@ -358,9 +378,15 @@ void fopMsgM_setNowAlpha(fopMsgM_pane_alpha_class*, f32);
 void fopMsgM_setAlpha(fopMsgM_pane_alpha_class*);
 
 u32 fopMsgM_searchMessageNumber(u32);
+bool fopMsgM_forceSendOn();
 void fopMsgM_messageSendOn();
+void fopMsgM_messageSendOff();
+bool fopMsgM_checkMessageSend();
 u32 fopMsgM_tactMessageSet();
 void fopMsgM_demoMsgFlagOn();
+
+bool fopMsgM_getScopeMode();
+bool fopMsgM_releaseScopeMode();
 
 void fopMsgM_demoMsgFlagOn();
 void fopMsgM_demoMsgFlagOff();
@@ -368,9 +394,13 @@ bool fopMsgM_demoMsgFlagCheck();
 void fopMsgM_tactMsgFlagOn();
 void fopMsgM_tactMsgFlagOff();
 bool fopMsgM_tactMsgFlagCheck();
+void fopMsgM_nextMsgFlagOff();
+bool fopMsgM_nextMsgFlagCheck();
 
 void fopMsgM_blendInit(fopMsgM_pane_class* i_this, const char* data);
 void fopMsgM_blendInit(J2DPicture* pic, const char* data);
+u8 fopMsgM_itemNumIdx(u8 i);
+u8 fopMsgM_itemNum(u8 itemNo);
 u32 fopMsgM_getColorTable(u16 param_1);
 void fopMsgM_blendDraw(fopMsgM_pane_class* i_this, const char* data);
 void fopMsgM_blendDraw(J2DPicture* pic, const char* data);

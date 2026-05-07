@@ -372,7 +372,7 @@ void daNpc_Ji1_c::normalSubActionHarpoonGuard(s16 param_1) {
             field_0xD74++;
             field_0xD68 = 0;
             setAnm(9, 0.0f, 1);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, field_0x7E0.GetTgHitPosP());
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_NG, field_0x7E0.GetTgHitPosP());
             fopAcM_seStart(this, JA_SE_CV_JI_DEFENCE, 0);
             fopAcM_seStart(this, JA_SE_OBJ_COL_SWS_NMTLP, 0);
         }
@@ -708,7 +708,7 @@ BOOL daNpc_Ji1_c::kaitenAction(void*) {
     else if(field_0xC78 != -1) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("Ji1");
         int actionNo = getEventActionNo(staffIdx);
-        if(l_msgId == -1) {
+        if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
             if(actionNo == 2) {
                 if(mMsgNo == 0x974) {
                     current.angle.y = -0x8000;
@@ -1026,6 +1026,7 @@ u16 daNpc_Ji1_c::next_msgStatus(u32* pMsgNo) {
             break;
         default:
             status = fopMsgStts_MSG_ENDS_e;
+            break;
     }
 
     return status;
@@ -1055,7 +1056,7 @@ BOOL daNpc_Ji1_c::talkAction(void*) {
         l_msg = 0;
     }
     else if(field_0xC78 != -1) {
-        if(l_msgId == -1) {
+        if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
             l_msgId = fopMsgM_messageSet(mMsgNo, &eyePos);
         }
         else if(l_msg == 0) {
@@ -1327,7 +1328,7 @@ BOOL daNpc_Ji1_c::speakBadAction(void*) {
         l_msgId = -1;
     }
     else if(field_0xC78 != -1) {
-        if(l_msgId == -1) {
+        if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
             if(mAnimation == 7) {
                 if(mpOrcaMorf->getFrame() > mpOrcaMorf->getEndFrame() - 2.0f) {
                     l_msgId = fopMsgM_messageSet(mMsgNo, &eyePos);
@@ -1974,7 +1975,7 @@ u32 daNpc_Ji1_c::privateCut() {
         ACT_CONTINUETALK,
         ACT_SETANGLE,
     };
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
     if(actIdx == -1) {
         dComIfGp_evmng_cutEnd(staffIdx);
     }
@@ -2036,6 +2037,7 @@ u32 daNpc_Ji1_c::privateCut() {
                 break;
             default:
                 end = true;
+                break;
         }
 
         if(end) {
@@ -2052,7 +2054,7 @@ u32 daNpc_Ji1_c::setParticle(int max, f32 rate, f32 spread) {
 #endif
     dtParticle();
     if(field_0x2E0.getEmitter() == 0) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &current.pos, 0, 0, 0xB9, &field_0x2E0, fopAcM_GetRoomNo(this));
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &current.pos, 0, 0, 0xB9, &field_0x2E0, fopAcM_GetRoomNo(this));
         if(emitter) {
             emitter->setRate(rate);
             emitter->setSpread(spread);
@@ -2076,7 +2078,7 @@ void daNpc_Ji1_c::dtParticle() {
 /* 000058F0-000059E8       .text setParticleAT__11daNpc_Ji1_cFiff */
 u32 daNpc_Ji1_c::setParticleAT(int max, f32 rate, f32 spread) {
     if(field_0x300.getEmitter() == 0) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &field_0x320, 0, 0, 0xB9, &field_0x300, fopAcM_GetRoomNo(this));
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &field_0x320, 0, 0, 0xB9, &field_0x300, fopAcM_GetRoomNo(this));
         if(field_0x300.getEmitter()) {
             JGeometry::TVec3<f32> scaleVec;
             scaleVec.x = 2.0f;
@@ -2234,7 +2236,7 @@ BOOL daNpc_Ji1_c::endspeakAction(void*) {
         l_msgId = -1;
     }
     else if(field_0xC78 != -1) {
-        if(l_msgId == -1) {
+        if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
             l_msgId = fopMsgM_messageSet(mMsgNo, &eyePos);
             setAnm(5, 4.0f, 0);
         }
@@ -2750,22 +2752,23 @@ BOOL daNpc_Ji1_c::teachAction(void*) {
         
         if(field_0x7E0.ChkTgHit() && field_0xD6C != 1) {
             switch(field_0xC24) {
-                case 0xF:
+                case daPy_py_c::CUT_TYPE_BT_ROLLCUT:
                     teachSubActionJumpInit();
                     break;
-                case 1:
-                case 6:
-                case 8:
-                case 9:
+                case daPy_py_c::CUT_TYPE_CUT_A:
+                case daPy_py_c::CUT_TYPE_CUT_EA:
+                case daPy_py_c::CUT_TYPE_CUT_TURN:
+                case daPy_py_c::CUT_TYPE_CUT_ROLL:
                     setAnm(8, 0.0f, 1);
                     break;
-                case 10:
+                case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
                     setAnm(10, 0.0f, 1);
                     field_0xC9C = 0.0f;
                     field_0xD38 = current.pos;
                     break;
                 default:
                     setAnm(9, 0.0f, 1);
+                    break;
             }
 
             if(checkCutType(field_0xC24, field_0xD70)) {
@@ -2811,7 +2814,7 @@ BOOL daNpc_Ji1_c::teachAction(void*) {
                 if(checkCutType(field_0xC8C, field_0xD70)) {
                     if(--field_0xC98 > 0) {
                         if(field_0xC94 == 0 && field_0xC98 > 0 && field_0xD34 == 0) {
-                            if(field_0xC8C != 9) {
+                            if(field_0xC8C != daPy_py_c::CUT_TYPE_CUT_ROLL) {
                                 fopAcM_orderOtherEventId(this, mEventIdx[1]);
                                 eventInfo.onCondition(dEvtCnd_UNK2_e);
                                 field_0xC90 = 1;
@@ -2825,7 +2828,7 @@ BOOL daNpc_Ji1_c::teachAction(void*) {
                             field_0xD6C = 0;
                         }
                     }
-                    else if(field_0xC8C != 9 && field_0xD34 == 0) {
+                    else if(field_0xC8C != daPy_py_c::CUT_TYPE_CUT_ROLL && field_0xD34 == 0) {
                         if(field_0xD70 >= 5 || (field_0xD70 >= 2 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001))) {
                             if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F10) == 0) {
                                 field_0xC84 = 0xF;
@@ -2846,7 +2849,7 @@ BOOL daNpc_Ji1_c::teachAction(void*) {
                         field_0xD34 = 3;
                     }
                 }
-                else if(field_0xC8C != 9 && field_0xD34 == 0) {
+                else if(field_0xC8C != daPy_py_c::CUT_TYPE_CUT_ROLL && field_0xD34 == 0) {
                     fopAcM_orderOtherEventId(this, mEventIdx[3]);
                     eventInfo.onCondition(dEvtCnd_UNK2_e);
                     field_0xC90 = 2;
@@ -2890,7 +2893,7 @@ BOOL daNpc_Ji1_c::teachAction(void*) {
                 field_0x6B0.OffTgShield();
                 field_0x7E0.OnTgShield();
 
-                if(field_0xC8C != 9) {
+                if(field_0xC8C != daPy_py_c::CUT_TYPE_CUT_ROLL) {
                     if(field_0xC90 == 1 || field_0xC90 == 3) {
                         field_0xD6C = 0;
                         field_0xC9C = 0.0f;
@@ -3031,10 +3034,10 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
 
             s32 cutType = player->getCutType();
 #if VERSION == VERSION_DEMO
-            if(cutType == 9)
+            if(cutType == daPy_py_c::CUT_TYPE_CUT_ROLL)
 #else
             f32 y_diff = std::fabsf(temp.y);
-            if(cutType == 9 && y_diff < 20.0f)
+            if(cutType == daPy_py_c::CUT_TYPE_CUT_ROLL && y_diff < 20.0f)
 #endif
             {
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_0B20);
@@ -3051,7 +3054,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                 return TRUE;
             }
             
-            if(cutType == 8) {
+            if(cutType == daPy_py_c::CUT_TYPE_CUT_TURN) {
                 field_0xC84 = 0xB;
 
                 setAction(&daNpc_Ji1_c::eventAction, 0);
@@ -3063,23 +3066,24 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
             field_0x7E0.OnTgShield();
             if(field_0x7E0.ChkTgHit() && field_0xD6C != 1) {
                 switch(field_0xC24) {
-                    case 1:
-                    case 6:
-                    case 8:
+                    case daPy_py_c::CUT_TYPE_CUT_A:
+                    case daPy_py_c::CUT_TYPE_CUT_EA:
+                    case daPy_py_c::CUT_TYPE_CUT_TURN:
                         setAnm(8, 0.0f, 1);
                         break;
-                    case 9:
+                    case daPy_py_c::CUT_TYPE_CUT_ROLL:
                         break;
-                    case 10:
+                    case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
                         setAnm(10, 0.0f, 1);
                         field_0xC9C = 0.0f;
                         field_0xD38 = current.pos;
                         break;
                     default:
                         setAnm(9, 0.0f, 1);
+                        break;
                 }
 
-                if(field_0xC24 == 9) {
+                if(field_0xC24 == daPy_py_c::CUT_TYPE_CUT_ROLL) {
                     setHitParticle(0, 0x4833);
                     field_0xC9C = 0.0f;
                     field_0xD38 = current.pos;
@@ -3096,7 +3100,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
             if(field_0xD6C == 1) {
                 if(!player->getCutAtFlg() || mpOrcaMorf->getFrame() > mpOrcaMorf->getEndFrame() - 2.0f) {
                     if(field_0xC90 == 0) {
-                        if(field_0xC8C == 9) {
+                        if(field_0xC8C == daPy_py_c::CUT_TYPE_CUT_ROLL) {
                             field_0xC84 = 0xA;
 
                             setAction(&daNpc_Ji1_c::eventAction, 0);
@@ -3112,7 +3116,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                     }
                 }
 
-                if(mAnimation == 10 && field_0xC8C == 9) {
+                if(mAnimation == 10 && field_0xC8C == daPy_py_c::CUT_TYPE_CUT_ROLL) {
                     cLib_addCalc2(&field_0xC9C, l_HIO.field_0x34 * 2.0f, 0.25f, l_HIO.field_0x38);
                     cXyz temp(field_0xD38);
                     temp.x -= field_0xC9C * cM_ssin(current.angle.y);
@@ -3708,7 +3712,7 @@ BOOL daNpc_Ji1_c::battleSubActionGuard() {
 
     cXyz temp = field_0xD38;
 
-    if(field_0xC24 != 5) {
+    if(field_0xC24 != daPy_py_c::CUT_TYPE_BT_JUMPCUT) {
         temp.x -= field_0xC9C * cM_ssin(current.angle.y);
         temp.z -= field_0xC9C * cM_scos(current.angle.y);
     }
@@ -3785,19 +3789,19 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
 
     if(field_0x7E0.ChkTgHit() && field_0xD6C != 1) {
         switch(field_0xC24) {
-            case 0xF:
-            case 0x10:
+            case daPy_py_c::CUT_TYPE_BT_ROLLCUT:
+            case daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT:
                 battleSubActionJumpInit();
                 break;
-            case 5:
+            case daPy_py_c::CUT_TYPE_BT_JUMPCUT:
                 current.angle.y += 0x8000;
                 battleSubActionDamageInit();
                 break;
-            case 0x1:
-            case 0x6:
-            case 0x8:
-            case 0x9:
-            case 0x1A: {
+            case daPy_py_c::CUT_TYPE_CUT_A:
+            case daPy_py_c::CUT_TYPE_CUT_EA:
+            case daPy_py_c::CUT_TYPE_CUT_TURN:
+            case daPy_py_c::CUT_TYPE_CUT_ROLL:
+            case daPy_py_c::CUT_TYPE_CUT_EXA: {
                 if(!isAttackAnim()) {
                     if(!checkSubAction(&daNpc_Ji1_c::battleSubActionNockBack)) {
                         setAnm(8, 0.0f, 1);
@@ -3829,32 +3833,32 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
 
                 break;
             }
-            case 0xA:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
                 battleSubActionJpGuardInit();
                 break;
-            case 0x0:
-            case 0x2:
-            case 0x3:
-            case 0x4:
-            case 0x7:
-            case 0xB:
-            case 0xC:
-            case 0xD:
-            case 0xE:
-            case 0x11:
-            case 0x12:
-            case 0x13:
-            case 0x14:
-            case 0x15:
-            case 0x16:
-            case 0x17:
-            case 0x18:
-            case 0x19:
-            case 0x1B:
-            case 0x1C:
-            case 0x1D:
-            case 0x1E:
-            case 0x1F:
+            case daPy_py_c::CUT_TYPE_NONE:
+            case daPy_py_c::CUT_TYPE_CUT_F:
+            case daPy_py_c::CUT_TYPE_CUT_R:
+            case daPy_py_c::CUT_TYPE_CUT_L:
+            case daPy_py_c::CUT_TYPE_CUT_EB:
+            case daPy_py_c::CUT_TYPE_STICK:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_STICK:
+            case daPy_py_c::CUT_TYPE_MACHETE:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE:
+            case daPy_py_c::CUT_TYPE_HAMMER_SIDESWING:
+            case daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER:
+            case daPy_py_c::CUT_TYPE_CLUB:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_CLUB:
+            case daPy_py_c::CUT_TYPE_DN_SWORD:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD:
+            case daPy_py_c::CUT_TYPE_SPEAR:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR:
+            case daPy_py_c::CUT_TYPE_CUT_EXB:
+            case daPy_py_c::CUT_TYPE_PG_SWORD:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_PG_SWORD:
+            case daPy_py_c::CUT_TYPE_CUT_EXMJ:
+            case daPy_py_c::CUT_TYPE_CUT_KESA:
             default: {
                 &daNpc_Ji1_c::battleSubActionNockBack; // seems super fake, needed to match .data
                 if(!isAttackAnim()) {
@@ -3890,15 +3894,19 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
             }
         }
         
-        if(field_0xC24 == 0) {
+        if(field_0xC24 == daPy_py_c::CUT_TYPE_NONE) {
             setGuardParticle();
         }
         else {
-            if(field_0xC24 == 0xF || field_0xC24 == 0x10 || field_0xC24 == 0x5) {
+            if(
+                field_0xC24 == daPy_py_c::CUT_TYPE_BT_ROLLCUT ||
+                field_0xC24 == daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT ||
+                field_0xC24 == daPy_py_c::CUT_TYPE_BT_JUMPCUT
+            ) {
                 fopAcM_seStart(this, JA_SE_LK_SW_CRT_HIT, 0);
 
                 static cXyz scale(1.25f, 1.25f, 1.25f);
-                if(field_0xC24 == 5) {
+                if(field_0xC24 == daPy_py_c::CUT_TYPE_BT_JUMPCUT) {
                     setHitParticle(&scale, JA_SE_CV_JI_FUTTOBI);
                 }
                 else {
@@ -4040,23 +4048,23 @@ BOOL daNpc_Ji1_c::battleAction(void*) {
 }
 
 /* 0000CA98-0000CC28       .text checkCutType__11daNpc_Ji1_cFii */
-BOOL daNpc_Ji1_c::checkCutType(int param_1, int param_2) {
+BOOL daNpc_Ji1_c::checkCutType(int cutType, int param_2) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     BOOL ret = false;
     switch(param_2) {
         case 0:
-            switch(param_1) {
-                case 3:
-                case 4:
-                case 7:
-                case 0x1A:
-                case 0x1B:
-                case 0x1E:
-                case 0x1F:
+            switch(cutType) {
+                case daPy_py_c::CUT_TYPE_CUT_R:
+                case daPy_py_c::CUT_TYPE_CUT_L:
+                case daPy_py_c::CUT_TYPE_CUT_EB:
+                case daPy_py_c::CUT_TYPE_CUT_EXA:
+                case daPy_py_c::CUT_TYPE_CUT_EXB:
+                case daPy_py_c::CUT_TYPE_CUT_EXMJ:
+                case daPy_py_c::CUT_TYPE_CUT_KESA:
                     ret = true;
                     break;
-                case 8:
+                case daPy_py_c::CUT_TYPE_CUT_TURN:
                     if(player->checkComboCutTurn()) {
                         ret = true;
                     }
@@ -4067,16 +4075,16 @@ BOOL daNpc_Ji1_c::checkCutType(int param_1, int param_2) {
 
             break;
         case 1:
-            switch(param_1) {
-                case 1:
-                case 6:
-                case 0x1A:
-                case 0x1B:
-                case 0x1E:
-                case 0x1F:
+            switch(cutType) {
+                case daPy_py_c::CUT_TYPE_CUT_A:
+                case daPy_py_c::CUT_TYPE_CUT_EA:
+                case daPy_py_c::CUT_TYPE_CUT_EXA:
+                case daPy_py_c::CUT_TYPE_CUT_EXB:
+                case daPy_py_c::CUT_TYPE_CUT_EXMJ:
+                case daPy_py_c::CUT_TYPE_CUT_KESA:
                     ret = true;
                     break;
-                case 8:
+                case daPy_py_c::CUT_TYPE_CUT_TURN:
                     if(player->checkComboCutTurn()) {
                         ret = true;
                     }
@@ -4087,13 +4095,13 @@ BOOL daNpc_Ji1_c::checkCutType(int param_1, int param_2) {
 
             break;
         case 2:
-            switch(param_1) {
-                case 2:
-                case 6:
-                case 0x1A:
-                case 0x1B:
-                case 0x1E:
-                case 0x1F:
+            switch(cutType) {
+                case daPy_py_c::CUT_TYPE_CUT_F:
+                case daPy_py_c::CUT_TYPE_CUT_EA:
+                case daPy_py_c::CUT_TYPE_CUT_EXA:
+                case daPy_py_c::CUT_TYPE_CUT_EXB:
+                case daPy_py_c::CUT_TYPE_CUT_EXMJ:
+                case daPy_py_c::CUT_TYPE_CUT_KESA:
                     ret = true;
                     break;
                 case 8:
@@ -4107,9 +4115,9 @@ BOOL daNpc_Ji1_c::checkCutType(int param_1, int param_2) {
 
             break;
         case 3:
-            switch(param_1) {
-                case 8:
-                case 9:
+            switch(cutType) {
+                case daPy_py_c::CUT_TYPE_CUT_TURN:
+                case daPy_py_c::CUT_TYPE_CUT_ROLL:
                     ret = true;
                     break;
                 default:
@@ -4118,10 +4126,10 @@ BOOL daNpc_Ji1_c::checkCutType(int param_1, int param_2) {
 
             break;
         case 4:
-            switch(param_1) {
-                case 5:
-                case 0xF:
-                case 0x10:
+            switch(cutType) {
+                case daPy_py_c::CUT_TYPE_BT_JUMPCUT:
+                case daPy_py_c::CUT_TYPE_BT_ROLLCUT:
+                case daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT:
                     ret = true;
                     break;
                 default:
@@ -4130,8 +4138,8 @@ BOOL daNpc_Ji1_c::checkCutType(int param_1, int param_2) {
 
             break;
         default:
-            switch(param_1) {
-                case 0xA:
+            switch(cutType) {
+                case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
                     ret = true;
                     break;
             }
@@ -4204,7 +4212,7 @@ void daNpc_Ji1_c::setAnimFromMsgNo(u32 msgNo) {
             if(field_0x430 != 0) {
                 field_0x430->becomeInvalidEmitter();
                 field_0x430 = 0;
-                field_0x430 = dComIfGp_particle_set(dPa_name::ID_SCENE_81A5, &current.pos);
+                field_0x430 = dComIfGp_particle_set(dPa_name::ID_AK_SN_JITEAR01, &current.pos);
             }
 
             setAnm(0x18, 8.0f, 0);
@@ -4395,7 +4403,7 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
                 pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_NAKU);
 
                 if(field_0x430 == 0) {
-                    field_0x430 = dComIfGp_particle_set(dPa_name::ID_SCENE_81A4, &current.pos);
+                    field_0x430 = dComIfGp_particle_set(dPa_name::ID_AK_SN_JITEAR00, &current.pos);
                     harpoonRelease(0);
                 }
 
@@ -4605,8 +4613,8 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     J3DAnmTextureSRTKey* a_btk = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes("Ji", JI_BTK_YJITR00));
     JUT_ASSERT(0x15D0, a_btk != NULL);
 
-    int temp1 = mCryBrk.init(modelData2, a_brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
-    int temp2 = mCryBtk.init(modelData2, a_btk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    int temp1 = mCryBrk.init(modelData2, a_brk, false, J3DFrameCtrl::EMode_LOOP);
+    int temp2 = mCryBtk.init(modelData2, a_btk, false, J3DFrameCtrl::EMode_LOOP);
 
     if(mpTearsModel == 0 || temp1 == 0 || temp2 == 0) {
         return false;
@@ -4615,7 +4623,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     headTexPattern = (J3DAnmTexPattern*)(dComIfG_getObjectRes("Ji", JI_BTP_JI));
     JUT_ASSERT(0x15D8, headTexPattern != NULL);
 
-    temp2 = mBlinkAnim.init(modelData2, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    temp2 = mBlinkAnim.init(modelData2, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP);
 #if VERSION > VERSION_DEMO
     if(temp2 == 0) {
         return false;
@@ -5219,8 +5227,8 @@ void daNpc_Ji1_c::setHitParticle(cXyz* param_1, u32 param_2) {
         scale = *param_1;
     }
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, field_0x7E0.GetTgHitPosP(), &angle, &scale);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, field_0x7E0.GetTgHitPosP(), 0, &scale);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, field_0x7E0.GetTgHitPosP(), &angle, &scale);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, field_0x7E0.GetTgHitPosP(), 0, &scale);
     fopAcM_seStart(this, JA_SE_CM_JI_DAMAGE, 0);
     fopAcM_seStart(this, param_2, 0);
     dKy_SordFlush_set(*field_0x7E0.GetTgHitPosP(), 0);
@@ -5228,7 +5236,7 @@ void daNpc_Ji1_c::setHitParticle(cXyz* param_1, u32 param_2) {
 
 /* 000114EC-0001161C       .text setGuardParticle__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::setGuardParticle() {
-    dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, field_0x7E0.GetTgHitPosP());
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_NG, field_0x7E0.GetTgHitPosP());
     fopAcM_seStart(this, JA_SE_OBJ_COL_SWS_NMTLP, 0);
     fopAcM_seStart(this, JA_SE_CV_JI_DEFENCE, 0);
     dKy_SordFlush_set(*field_0x7E0.GetTgHitPosP(), 0);

@@ -3,6 +3,8 @@
 // Translation Unit: JUTGba.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JUtility/JUTGba.h"
 #include "JSystem/JKernel/JKRThread.h"
 #include "JSystem/JUtility/JUTAssert.h"

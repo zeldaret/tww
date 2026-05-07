@@ -63,7 +63,7 @@ namespace daObjBarrel2 {
             PRM_TYPE_S = 0x18,
 
             PRM_TEXTURE_W = 1,
-            PRM_TEXTURE_S = 10,
+            PRM_TEXTURE_S = 0xA,
 
             PRM_COMING_W = 1,
             PRM_COMING_S = 0x1C,
@@ -72,17 +72,23 @@ namespace daObjBarrel2 {
         const Attr_c* attr() const { return &M_attr[m410]; }
         u8 chk_item_give() const { return m476; }
         void delete_req() {}
-        void exit_req() {}
-        void get_item_id() {}
-        static fpc_ProcID make_coming(cXyz* pos, int roomNo, Type_e type, int droppedItem, bool hasFlag, short angleY, daObjBuoyflag::Texture_e arg6) {
+        void exit_req() { m474 = 1; }
+        fpc_ProcID get_item_id() { return mItemId; }
+        static fpc_ProcID make_coming(cXyz* pos, int roomNo, Type_e type, int droppedItem, bool hasFlag, s16 angleY, daObjBuoyflag::Texture_e tex) {
             csXyz angle(0, angleY, 0);
-            return fopAcM_create(PROC_Obj_Barrel2, make_prm(type, droppedItem, hasFlag, false, arg6), pos, roomNo, &angle);
+            return fopAcM_create(PROC_Obj_Barrel2, make_prm(type, droppedItem, !hasFlag, true, tex), pos, roomNo, &angle);
         }
-        static u32 make_prm(Type_e arg0, int droppedItem, bool hasFlag, bool flagType, daObjBuoyflag::Texture_e arg4) {
-            s32 item = (droppedItem & 0x3F);
-            s32 tmp = hasFlag ? 1 : 0;
-            s32 a6 = arg4;
-            return (item | (0x7F << 16)) | (arg0 << 24) | (tmp << 8) | ((flagType ? 1 : 0) << 10) | (a6 << 28);
+        static u32 make_prm(Type_e type, int droppedItem, bool hasFlag, bool _unused, daObjBuoyflag::Texture_e tex) {
+            int itemNo = (droppedItem & 0x3F);
+            int buoy = hasFlag ? 1 : 0;
+            bool coming = true;
+            return 
+                (itemNo << PRM_ITEM_NO_S) |
+                (0x7F << PRM_ITEM_SAVE_S) |
+                (type << PRM_TYPE_S) |
+                (buoy << PRM_BUOY_S) |
+                ((tex == daObjBuoyflag::Texture_00_e ? 0 : 1) << PRM_TEXTURE_S) |
+                (coming << PRM_COMING_S);
         }
         s32 prm_get_buoy() const {
             return daObj::PrmAbstract(this, PRM_BUOY_W, PRM_BUOY_S);
@@ -181,7 +187,7 @@ namespace daObjBarrel2 {
         /* 0x44C */ f32 m44C;
         /* 0x450 */ f32 m450;
         /* 0x458 */ f32 m454;
-        /* 0x458 */ fpc_ProcID m458;
+        /* 0x458 */ fpc_ProcID mItemId;
         /* 0x45C */ f32 m45C;
         /* 0x460 */ fpc_ProcID m460;
         /* 0x464 */ s32 m464;

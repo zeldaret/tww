@@ -17,7 +17,7 @@ const char daObj_Demo_Barrel_c::M_arcname[] = "DBarrel";
 /* 00000078-00000144       .text setParticleHahen__19daObj_Demo_Barrel_cFv */
 void daObj_Demo_Barrel_c::setParticleHahen() {
     JPABaseEmitter* emitter =
-        dComIfGp_particle_set(dPa_name::ID_COMMON_03E5, &current.pos, NULL, NULL, 0xFF, NULL, -1,
+        dComIfGp_particle_set(dPa_name::ID_IT_JN_TR_HAHEN_A, &current.pos, NULL, NULL, 0xFF, NULL, -1,
                               &tevStr.mColorK0, &tevStr.mColorK0, NULL);
     if (emitter != NULL) {
         static JGeometry::TVec3<f32> em_scl(1.0f, 0.8f, 1.0f);
@@ -31,13 +31,13 @@ void daObj_Demo_Barrel_c::setParticleSibuki() {
     sp18.y = 100.0f;
     m2D0 = current.pos;
     m2D0.y = dBgS_ObjGndChk_Wtr_Func(sp18);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_003D, &m2D0);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_003E, &m2D0);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_80CB, &m2D0);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_80CC, &m2D0);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_80CE, &m2D0);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_80DC, &m2D0);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_80DD, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_WP_HAMON01, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_WP_HAMON02, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_DEMO_HAMON_S, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_DEMO_SUIMEN_A, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_MIZUBASHIRA2, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_DEMO_SHIBUKI_A, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_DEMO_SHIBUKI_B, &m2D0);
 }
 
 /* 00000378-00000398       .text CheckCreateHeap__FP10fopAc_ac_c */

@@ -20,8 +20,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_lib.h"
 
-extern dCcD_SrcCyl dNpc_cyl_src;
-
 static char* l_npc_staff_id[] = {
     "Uo1",
     "Uo2",
@@ -4725,8 +4723,7 @@ bool daNpcPeople_c::_execute() {
 
     chkAttention();
     checkOrder();
-    dBgS* bgs = dComIfG_Bgsp(); // This is kinda weird, maybe fakematch
-    if(dComIfGp_event_getMode() == dEvtMode_NONE_e || (eventInfo.checkCommandTalk() && m79C != 0)) {
+    if(!dComIfGp_event_runCheck() || (eventInfo.checkCommandTalk() && m79C != 0)) {
         (this->*moveProc[m78F])();
     }
     else {
@@ -4849,7 +4846,7 @@ bool daNpcPeople_c::_execute() {
         }
 
         fopAcM_posMoveF(this, mStts.GetCCMoveP());
-        mObjAcch.CrrPos(*bgs);
+        mObjAcch.CrrPos(*dComIfG_Bgsp());
     }
 
     setCollision(&mCyl, current.pos, m74C, mpNpcDat->field_0x40);
@@ -6289,7 +6286,7 @@ u16 daNpcPeople_c::talk2(int param_1, fopAc_ac_c* param_2) {
                 }
 
                 break;
-            case fopMsgStts_UNKA_e:
+            case fopMsgStts_CLOSE_WAIT_e:
                 if(m7A8 == 0) {
                     chkMsg();
                     m7A8 = 1;
@@ -6667,7 +6664,7 @@ u32 daNpcPeople_c::getMsg() {
 
     m734 = NULL;
 
-    if(g_dComIfG_gameInfo.play.getEvent().chkPhoto()) {
+    if(g_dComIfG_gameInfo.play.getEvent()->chkPhoto()) {
         switch(mNpcType) {
             case 2:
                 if(dComIfGp_getPictureResult() == 1) {

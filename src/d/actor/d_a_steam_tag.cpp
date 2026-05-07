@@ -95,9 +95,9 @@ BOOL daSteamTag_c::createEmitter() {
     if (mEmitterNum < 8) {
         u16 particleID;
         if (((s16)cM_rndF(100.0f) % 2) != 0) {
-            particleID = dPa_name::ID_SCENE_808B;
+            particleID = dPa_name::ID_AK_SN_STEAM00;
         } else {
-            particleID = dPa_name::ID_SCENE_808C;
+            particleID = dPa_name::ID_AK_SN_STEAM01;
         }
         mpEmitter = dComIfGp_particle_setToon(particleID, &current.pos, &current.angle, &scale, getData()->steam_alpha);
         if (mpEmitter) {

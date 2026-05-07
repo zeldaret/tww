@@ -3,6 +3,8 @@
 // Translation Unit: J3DModelLoader.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J3DGraphLoader/J3DModelLoader.h"
 #include "JSystem/J3DGraphLoader/J3DMaterialFactory.h"
 #include "JSystem/J3DGraphLoader/J3DMaterialFactory_v21.h"

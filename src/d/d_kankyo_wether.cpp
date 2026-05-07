@@ -690,7 +690,7 @@ void wether_move_housi() {
             g_env_light.mpHousiPacket->field_0x5ddc = 0.0f;
 
             for (int i = 0; i < 300; i++) {
-                g_env_light.mpHousiPacket->mEff[i].mState = 0;
+                g_env_light.mpHousiPacket->mEffect[i].mStatus = 0;
             }
 
             dKyr_housi_move();

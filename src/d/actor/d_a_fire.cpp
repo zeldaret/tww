@@ -221,9 +221,9 @@ BOOL daFire_c::CreateInit() {
 cPhs_State daFire_c::_create() {
     fopAcM_SetupActor(this, daFire_c);
 
-    field_0x8BC = dComIfGp_particle_set(dPa_name::ID_COMMON_0461, &current.pos);
-    field_0x8C0 = dComIfGp_particle_set(dPa_name::ID_COMMON_0462, &current.pos);
-    field_0x8C4 = dComIfGp_particle_setProjection(dPa_name::ID_COMMON_445B, &current.pos);
+    field_0x8BC = dComIfGp_particle_set(dPa_name::ID_IT_JN_KAKOMI_FIRE_A00, &current.pos);
+    field_0x8C0 = dComIfGp_particle_set(dPa_name::ID_IT_JN_KAKOMI_FIRE_B00, &current.pos);
+    field_0x8C4 = dComIfGp_particle_setProjection(dPa_name::ID_IT_JP_KAKOMI_KAGERO00, &current.pos);
 
     if (!CreateInit()) {
         return cPhs_ERROR_e;
@@ -282,7 +282,7 @@ void daFire_c::ctrlEffect() {
                     field_0x8D1 = 0;
                     flag = true;
                     execStopNowFire();
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_0463, &current.pos);
+                    dComIfGp_particle_set(dPa_name::ID_IT_JN_KAKOMI_STEAM00, &current.pos);
                 } else if (hit_obj->ChkAtType(AT_TYPE_WIND) && wind != field_0x2CC[0].GetTgHitAc()) {
                     field_0x8E0 = *field_0x2CC[0].GetTgRVecP();
 
