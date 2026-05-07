@@ -2,27 +2,58 @@
 #define D_A_OBJ_SWLIGHT_H
 
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_ext.h"
+#include "d/d_cc_d.h"
+#include "d/d_a_obj.h"
+#include "f_op/f_op_actor_mng.h"
 
 class J3DNode;
 class J3DMaterial;
+class dBgW;
 
 namespace daObjSwlight {
     static void setMaterial(J3DMaterial*, unsigned char);
     static void setMaterial_Before_mirror(J3DMaterial*, unsigned char);
 
     class Act_c : public fopAc_ac_c {
+        typedef void (Act_c::*ModeFunc)();
+
     public:
+        
+        struct Attr_c {
+            /* 0x00 */ s16 m00;
+            /* 0x04 */ f32 m04;
+            /* 0x08 */ f32 m08;
+            /* 0x0C */ f32 m0C;
+        }; // size = 0x10
+                
         void get_power() const {}
-        void is_switch() const {}
-        void off_switch() const {}
-        void on_switch() const {}
-        void prm_get_swSave() const {}
-        void prm_get_swSave2() const {}
-        void prm_get_type() const {}
+        bool is_switch() const {
+            return fopAcM_isSwitch(const_cast<Act_c*>(this), prm_get_swSave());
+        }
+        void off_switch() const {
+            fopAcM_offSwitch(const_cast<Act_c*>(this), prm_get_swSave());
+        }
+        void on_switch() const {
+            fopAcM_onSwitch(const_cast<Act_c*>(this), prm_get_swSave());
+        }
+        s32 prm_get_swSave() const {
+            return daObj::PrmAbstract(this, 8, 0);
+        }
+        s32 prm_get_swSave2() const {
+            return daObj::PrmAbstract(this, 8, 8);
+        }
+        s32 prm_get_type() const {
+            return daObj::PrmAbstract(this, 1, 0x10);
+        }
     
-        void is_switch2() const;
-        void solidHeapCB(fopAc_ac_c*);
-        void create_heap();
+        bool is_switch2() const;
+        static BOOL solidHeapCB(fopAc_ac_c*);
+#if VERSION == VERSION_DEMO
+        bool create_heap();
+#else
+        u8 create_heap();
+#endif
         cPhs_State _create();
         bool _delete();
         static BOOL jnodeCB_moon(J3DNode*, int);
@@ -32,9 +63,9 @@ namespace daObjSwlight {
         void set_cc_pos();
         void set_cc();
         void init_eye_pos();
-        void chk_light();
-        void power_up();
-        void power_down();
+        bool chk_light();
+        bool power_up();
+        bool power_down();
         void mode_norm_moon_init();
         void mode_norm_moon();
         void mode_norm_sun_init();
@@ -45,10 +76,26 @@ namespace daObjSwlight {
         void mode_active_sun();
         bool _execute();
         bool _draw();
+
+        static const char M_arcname[];
+        static const dCcD_SrcTri M_tri_src;
     
     public:
-        /* Place member variables here */
-    };
+        /* 0x290 */ request_of_phase_process_class mPhase;
+        /* 0x298 */ J3DModel* m298;
+        /* 0x29C */ mDoExt_btkAnm m29C;
+        /* 0x2B0 */ mDoExt_bckAnm m2B0;
+        /* 0x2C0 */ dBgW* m2C0;
+        /* 0x2C4 */ dCcD_Tri m2C4[8];
+        /* 0xD44 */ dCcD_Stts mD44[8];
+        /* 0xF24 */ s32 mF24;
+        /* 0xF28 */ s32 mF28;
+        /* 0xF2C */ s16 mF2C;
+        /* 0xF2E */ u8 mF2E[0xF30 - 0xF2E];
+        /* 0xF30 */ f32 mF30;
+        /* 0xF34 */ u8 mF34[0xF38 - 0xF34];
+        /* 0xF38 */ Mtx mF38;
+    };  // Size: 0xF68
 };
 
 #endif /* D_A_OBJ_SWLIGHT_H */
