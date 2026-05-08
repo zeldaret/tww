@@ -64,22 +64,26 @@ J3DAnmTexPattern* dDemo_actor_c::getP_BtpData(const char* param_1) {
         if (!checkEnable(ENABLE_UNK_e))
             return NULL;
 
-        dDemo_prm_data* prm = mPrm.mData;
+        const void* prm = mPrm.mData;
         name = param_1;
 
         switch(mPrm.getId()) {
             case ID_UNK_1:
-                id = *(s16*)(&prm->field_0x1);
+                // Get the s16 at offset 0x1 of prm
+                id = *(s16*)((u8*)prm + 0x1);
                 break;
             case ID_UNK_2:
-                id = *(s16*)(&prm->field_0x2);
+                // Get the s16 at offset 0x2 of prm
+                id = *(s16*)((u8*)prm + 0x2);
                 break;
             case ID_UNK_4:
-                id = *(u32*)(&prm->field_0x1);
+                // Get the u32 at offset 0x1 of prm
+                id = *(u32*)((u8*)prm + 0x1);
                 break;
             case ID_UNK_5:
             case ID_UNK_6:
-                id = *(u32*)(&prm->field_0x2);
+                // Get the u32 at offset 0x2 of prm
+                id = *(u32*)((u8*)prm + 0x2);
                 break;
             default:
                 return NULL;
@@ -110,12 +114,13 @@ void* dDemo_actor_c::getP_BrkData(const char* param_1) {
         return NULL;
     }
 
-    dDemo_prm_data* prm = mPrm.mData;
+    const void* prm = mPrm.mData;
 
     u32 id;
     switch(mPrm.getId()) {
         case ID_UNK_6:
-            id = *(u32*)(&prm->field_0xa);
+                // Get the u32 at offset 0xa of prm
+                id = *(u32*)((u8*)prm + 0xa);
             break;
         default:
             return NULL;
@@ -139,16 +144,18 @@ J3DAnmTextureSRTKey* dDemo_actor_c::getP_BtkData(const char* param_1) {
         return NULL;
     }
 
-    dDemo_prm_data* prm = mPrm.mData;
+    const void* prm = mPrm.mData;
 
     u32 id;
     switch(mPrm.getId()) {
         case ID_UNK_2:
-            id = *(s16*)(&prm->field_0x4);
+                // Get the s16 at offset 0x4 of prm
+                id = *(s16*)((u8*)prm + 0x4);
             break;
         case ID_UNK_5:
         case ID_UNK_6:
-            id = *(u32*)(&prm->field_0x6);
+                // Get the s16 at offset 0x6 of prm
+                id = *(u32*)((u8*)prm + 0x6);
             break;
         default:
             return NULL;
@@ -176,34 +183,44 @@ f32 dDemo_actor_c::getPrm_Morf() {
         return 0.0f;
     }
 
-    dDemo_prm_data* prm = mPrm.mData;
+    const void* prm = mPrm.mData;
 
     switch (mPrm.mId) {
     case ID_UNK_1:
         if (field_0x54 < 4) {
             return 0.0f;
         }
-        return prm->field_0x4;
+
+        // Get the s8 at offset 0x4 of prm
+        return *(s8*)((u8*)prm + 0x4);
     case ID_UNK_2:
         if (field_0x54 < 7) {
             return 0.0f;
         }
-        return prm->field_0x7;
+
+        // Get the s8 at offset 0x7 of prm
+        return *(s8*)((u8*)prm + 0x7);
     case ID_UNK_4:
         if (field_0x54 < 6) {
             return 0.0f;
         }
-        return prm->field_0x6;
+
+        // Get the s8 at offset 0x6 of prm
+        return *(s8*)((u8*)prm + 0x6);
     case ID_UNK_5:
         if (field_0x54 < 0xB) {
             return 0.0f;
         }
-        return prm->field_0xb;
+
+        // Get the s8 at offset 0xb of prm
+        return *(s8*)((u8*)prm + 0xb);
     case ID_UNK_6:
         if (field_0x54 < 0xF) {
             return 0.0f;
         }
-        return prm->field_0xf;
+
+        // Get the s8 at offset 0xf of prm
+        return *(s8*)((u8*)prm + 0xf);
     default:
         return 0.0f;
     }
@@ -302,7 +319,7 @@ BOOL dDemo_setDemoData(fopAc_ac_c* i_actor, u8 i_flags, mDoExt_McaMorf* i_morf, 
 /* 80069BC0-80069BDC       .text JSGSetData__13dDemo_actor_cFUlPCvUl */
 void dDemo_actor_c::JSGSetData(u32 p0, const void* p1, u32 p2) {
     mPrm.mId = p0;
-    mPrm.mData = (dDemo_prm_data*)p1;
+    mPrm.mData = p1;
     field_0x54 = p2;
     onEnable(ENABLE_UNK_e);
 }

@@ -200,7 +200,7 @@ BOOL daPy_lk_c::dProcTool() {
         }
         f32 f30 = -1.0f;
         if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_UNK_e)) {
-            dDemo_prm_data* data = demo_actor->getPrm()->getData();
+            const void* data = demo_actor->getPrm()->getData();
             u32 id = demo_actor->getPrm()->getId();
             if (
                 id == 0 || id == 2
