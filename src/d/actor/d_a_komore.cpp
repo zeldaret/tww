@@ -46,7 +46,7 @@ bool daKomore::Act_c::create_heap() {
 
 /* 000001F8-000002F8       .text _create__Q28daKomore5Act_cFv */
 cPhs_State daKomore::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {

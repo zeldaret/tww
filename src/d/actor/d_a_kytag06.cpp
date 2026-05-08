@@ -60,18 +60,14 @@ static BOOL daKytag06_Delete(kytag06_class*) {
 
 /* 000001A4-00000224       .text daKytag06_Create__FP10fopAc_ac_c */
 static cPhs_State daKytag06_Create(fopAc_ac_c* i_this) {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_this, kytag06_class);
-#endif
+    fopAcM_ct_Retail(i_this, kytag06_class);
     kytag06_class* a_this = (kytag06_class*)i_this;
 
     cPhs_State phase_state;
     if(dComIfGs_isSymbol(0)) {
         phase_state = cPhs_ERROR_e;
     } else {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(i_this, kytag06_class);
-#endif
+        fopAcM_ct_Demo(i_this, kytag06_class);
         a_this->field_0x294 = 0;
         phase_state = cPhs_COMPLEATE_e;
     }

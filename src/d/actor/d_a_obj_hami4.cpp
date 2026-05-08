@@ -116,7 +116,7 @@ void daObjHami4_c::daObjHami4_open_demo() {
 void daObjHami4_c::daObjHami4_open_stop() {}
 
 cPhs_State daObjHami4_c::_create() {
-    fopAcM_SetupActor(this, daObjHami4_c);
+    fopAcM_ct(this, daObjHami4_c);
     for (int i = 0; i < 4; i++){
         mdBgW[i] = NULL;
     }

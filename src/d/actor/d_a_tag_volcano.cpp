@@ -25,7 +25,7 @@ namespace daTagvolcano {
 
 /* 00000078-000002B4       .text _create__Q212daTagvolcano5Act_cFv */
 cPhs_State daTagvolcano::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     field_0x298 = 0;
     field_0x299 = 0;

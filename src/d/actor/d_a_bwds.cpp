@@ -1033,7 +1033,7 @@ static cPhs_State daBwds_Create(fopAc_ac_c* a_this) {
     };
 
     bwds_class* i_this = (bwds_class*)a_this;
-    fopAcM_SetupActor(&i_this->actor, bwds_class);
+    fopAcM_ct(&i_this->actor, bwds_class);
 
     cPhs_State res = dComIfG_resLoad(&i_this->m02AC, "Bwds");
     if (res == cPhs_COMPLEATE_e) {

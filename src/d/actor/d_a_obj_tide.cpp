@@ -148,7 +148,7 @@ BOOL Act_c::Create() {
 
 /* 000007BC-00000998       .text Mthd_Create__Q29daObjTide5Act_cFv */
 cPhs_State Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     M_type = prm_get_type();
     se_init_gmtw();

@@ -3441,7 +3441,7 @@ void daFm_c::createInit() {
 
 /* 000090DC-00009258       .text _create__6daFm_cFv */
 cPhs_State daFm_c::_create() {
-    fopAcM_SetupActor(this, daFm_c);
+    fopAcM_ct(this, daFm_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
     if(phase_state == cPhs_COMPLEATE_e) {
         if(parentActorID != -1) {

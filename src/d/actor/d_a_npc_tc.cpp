@@ -1853,15 +1853,10 @@ bool daNpc_Tc_c::isCreate() {
 
 /* 00003FC0-00004090       .text _create__10daNpc_Tc_cFv */
 cPhs_State daNpc_Tc_c::_create() {
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daNpc_Tc_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Tc");
     if(phase_state == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daNpc_Tc_c);
-#else
-    fopAcM_SetupActor(this, daNpc_Tc_c);
-    cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Tc");
-    if(phase_state == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(this, daNpc_Tc_c);
         getArg();
 
         if(!isCreate()) {

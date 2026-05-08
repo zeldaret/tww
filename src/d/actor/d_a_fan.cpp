@@ -156,7 +156,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 000006F4-00000900       .text _create__7daFan_cFv */
 cPhs_State daFan_c::_create() {
-    fopAcM_SetupActor(this, daFan_c);
+    fopAcM_ct(this, daFan_c);
 
     mType = daFan_prm::getType(this);
     cPhs_State rt1 = dComIfG_resLoad(&mPhs, m_arcname[mType]);

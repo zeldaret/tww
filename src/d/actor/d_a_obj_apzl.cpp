@@ -937,7 +937,7 @@ void daObjApzl_c::set_mtx() {
 }
 
 cPhs_State daObjApzl_c::_create(){
-    fopAcM_SetupActor(this, daObjApzl_c);
+    fopAcM_ct(this, daObjApzl_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Apzl");
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1460)) {

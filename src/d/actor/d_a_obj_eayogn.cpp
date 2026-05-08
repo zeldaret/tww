@@ -45,7 +45,7 @@ BOOL daObjEayogn_c::create_heap() {
 cPhs_State daObjEayogn_c::_create() {
     cPhs_State ret = cPhs_ERROR_e;
 
-    fopAcM_SetupActor(this, daObjEayogn_c);
+    fopAcM_ct(this, daObjEayogn_c);
 
     if (check_ev_bit()) {
         ret = dComIfG_resLoad(&mPhs, M_arcname);

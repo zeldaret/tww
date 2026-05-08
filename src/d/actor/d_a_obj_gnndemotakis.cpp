@@ -39,7 +39,7 @@ BOOL daObjGnntakis_c::create_heap() {
 
 /* 000001F4-00000308       .text _create__15daObjGnntakis_cFv */
 cPhs_State daObjGnntakis_c::_create() {
-    fopAcM_SetupActor(this, daObjGnntakis_c);
+    fopAcM_ct(this, daObjGnntakis_c);
 
     cPhs_State state = dComIfG_resLoad(&mPhs, M_arcname);
 

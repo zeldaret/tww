@@ -365,15 +365,10 @@ static cPhs_State daSsk_Create(fopAc_ac_c* a_this) {
 
     ssk_class* i_this = (ssk_class*)a_this;
 
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(a_this, ssk_class);
     cPhs_State PVar2 = dComIfG_resLoad(&i_this->mPhase, "Ssk");
     if (PVar2 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, ssk_class);
-#else
-    fopAcM_SetupActor(a_this, ssk_class);
-    cPhs_State PVar2 = dComIfG_resLoad(&i_this->mPhase, "Ssk");
-    if (PVar2 == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(a_this, ssk_class);
         i_this->m2D0.setRateOff(0);
         i_this->m2B4 = fopAcM_GetParam(a_this);
         i_this->m2B5 = fopAcM_GetParam(a_this) >> 8;

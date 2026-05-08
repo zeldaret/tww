@@ -234,7 +234,7 @@ static cPhs_State daBita_Create(fopAc_ac_c* i_ac) {
         }},
     };
 
-    fopAcM_SetupActor(i_ac, bita_class);
+    fopAcM_ct(i_ac, bita_class);
     bita_class* i_this = (bita_class*)i_ac;
 
     cPhs_State rt = dComIfG_resLoad(&i_this->mPhs, "Bita");

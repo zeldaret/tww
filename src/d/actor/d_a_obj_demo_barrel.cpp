@@ -64,15 +64,10 @@ BOOL daObj_Demo_Barrel_c::CreateHeap() {
 }
 
 cPhs_State daObj_Demo_Barrel_c::_create() {
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daObj_Demo_Barrel_c);
     cPhs_State ret = dComIfG_resLoad(&mPhase, M_arcname);
     if (ret == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daObj_Demo_Barrel_c);
-#else
-    fopAcM_SetupActor(this, daObj_Demo_Barrel_c);
-    cPhs_State ret = dComIfG_resLoad(&mPhase, M_arcname);
-    if (ret == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(this, daObj_Demo_Barrel_c);
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x22E0)) {
             return cPhs_ERROR_e;
         }

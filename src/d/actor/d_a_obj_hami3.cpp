@@ -82,7 +82,7 @@ BOOL daObjHami3::Act_c::Create() {
 
 /* 00000354-00000450       .text Mthd_Create__Q210daObjHami35Act_cFv */
 cPhs_State daObjHami3::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjHami3::Act_c);
+    fopAcM_ct(this, daObjHami3::Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&field_0x2CC, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, HAMI3_DZB_HAMI3, dBgS_MoveBGProc_Typical, 0x1fc0);

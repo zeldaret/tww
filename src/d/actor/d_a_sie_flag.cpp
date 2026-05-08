@@ -139,9 +139,9 @@ cPhs_State daSie_Flag_c::_create() {
         return rt2;
     }
 
-    fopAcM_SetupActor(this, daSie_Flag_c);
+    fopAcM_ct(this, daSie_Flag_c);
 #else
-    fopAcM_SetupActor(this, daSie_Flag_c);
+    fopAcM_ct(this, daSie_Flag_c);
     
     cPhs_State result = dComIfG_resLoad(&mPhsEshata, M_arcname);
     if (result != cPhs_COMPLEATE_e) {

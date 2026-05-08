@@ -47,7 +47,7 @@ static BOOL _CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 cPhs_State daObjPlant_c::_create() {
-    fopAcM_SetupActor(this, daObjPlant_c);
+    fopAcM_ct(this, daObjPlant_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Plant");
 

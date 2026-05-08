@@ -130,7 +130,7 @@ bool daObjOhatch_c::create_heap() {
 
 /* 000003CC-00000548       .text _create__13daObjOhatch_cFv */
 cPhs_State daObjOhatch_c::_create() {
-    fopAcM_SetupActor(this, daObjOhatch_c);
+    fopAcM_ct(this, daObjOhatch_c);
     cPhs_State ret = dComIfG_resLoad(&mPhase, l_arcname);
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0xB90)) {

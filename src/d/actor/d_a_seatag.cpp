@@ -29,7 +29,7 @@ static BOOL daSeatag_Delete(daSeatag_c* a_this) {
 
 /* 000000C0-00000110       .text daSeatag_Create__FP10fopAc_ac_c */
 static cPhs_State daSeatag_Create(fopAc_ac_c* a_this) {
-    fopAcM_SetupActor(a_this, daSeatag_c);
+    fopAcM_ct(a_this, daSeatag_c);
     return cPhs_COMPLEATE_e;
 }
 

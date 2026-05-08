@@ -485,7 +485,7 @@ static BOOL daBdk_Draw(bdk_class* i_this) {
     #endif
 
     if (!dComIfGs_isStageBossEnemy()) {
-        fopAc_ac_c* player = dComIfGp_getPlayer(1);
+        fopAc_ac_c* player = dComIfGp_getLinkPlayer();
         actor->tevStr = player->tevStr;
         g_env_light.setLightTevColorType(model, &actor->tevStr);
         i_this->mpMorf->entryDL();
@@ -4004,7 +4004,7 @@ static cPhs_State daBdk_Create(fopAc_ac_c* a_this) {
         }},
     };
 
-    fopAcM_SetupActor(a_this, bdk_class);
+    fopAcM_ct(a_this, bdk_class);
     bdk_class* i_this = (bdk_class*)a_this;
     fopAc_ac_c* actor = &i_this->actor;
 

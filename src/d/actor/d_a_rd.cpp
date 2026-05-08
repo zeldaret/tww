@@ -1876,7 +1876,7 @@ void daRd_c::getArg() {
 
 /* 00004720-000047C8       .text _create__6daRd_cFv */
 cPhs_State daRd_c::_create() {
-    fopAcM_SetupActor(this, daRd_c);
+    fopAcM_ct(this, daRd_c);
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
     

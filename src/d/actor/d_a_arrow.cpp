@@ -1216,7 +1216,7 @@ BOOL daArrow_c::_draw() {
 
 /* 800D7960-800D7A38       .text _create__9daArrow_cFv */
 cPhs_State daArrow_c::_create() {
-    fopAcM_SetupActor(this, daArrow_c);
+    fopAcM_ct(this, daArrow_c);
     
     checkCreater();
     

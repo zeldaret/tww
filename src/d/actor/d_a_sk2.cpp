@@ -188,15 +188,10 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 /* 00000918-00000BC4       .text daSk2_Create__FP10fopAc_ac_c */
 static cPhs_State daSk2_Create(fopAc_ac_c* a_this) {
     sk2_class* i_this = (sk2_class*)a_this;
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(a_this, sk2_class);
     cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Sk2");
     if (PVar1 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, sk2_class);
-#else
-    fopAcM_SetupActor(a_this, sk2_class);
-    cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Sk2");
-    if (PVar1 == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(a_this, sk2_class);
         i_this->m2B4 = fopAcM_GetParam(a_this);
         i_this->m2B5 = fopAcM_GetParam(a_this) >> 8;
 

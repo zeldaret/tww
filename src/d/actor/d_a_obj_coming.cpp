@@ -210,7 +210,7 @@ bool daObjComing::Act_c::chk_switch() {
 
 /* 000003B0-000004B0       .text _create__Q211daObjComing5Act_cFv */
 cPhs_State daObjComing::Act_c::_create() {
-    fopAcM_SetupActor(this, daObjComing::Act_c);
+    fopAcM_ct(this, daObjComing::Act_c);
 
     m290 = prm_get_type();
     fopAcM_offDraw(this);

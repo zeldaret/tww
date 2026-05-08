@@ -4585,16 +4585,11 @@ void tori_create_init(bpw_class* i_this) {
 /* 0000D43C-0000DB08       .text daBPW_Create__FP10fopAc_ac_c */
 static cPhs_State daBPW_Create(fopAc_ac_c* a_this) {
     bpw_class* i_this = (bpw_class*)a_this;
-
     csXyz sp18 = a_this->shape_angle;
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(a_this, bpw_class);
-#endif
+    fopAcM_ct_Retail(a_this, bpw_class);
     cPhs_State res = dComIfG_resLoad(&i_this->mPhase, "BPW");
     if (res == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(a_this, bpw_class);
-#endif
+        fopAcM_ct_Demo(a_this, bpw_class);
         i_this->mType = fopAcM_GetParam(a_this);
         i_this->mUnknownParam2 = (fopAcM_GetParam(a_this) >> 8);
         i_this->mLightState = (fopAcM_GetParam(a_this) >> 0x10);

@@ -12,158 +12,160 @@
 #include "d/d_com_inf_game.h"
 
 namespace daObjHomensmoke {
-    /* 000000EC-00000230       .text set_mtx__Q215daObjHomensmoke5Act_cFv */
-    void Act_c::set_mtx() {
-        if (param_get_axis() != 0) {
-            cXyz backOffset(0.0f, 0.0f, -200.0f);
-            cXyz forwardOffset(0.0f, 0.0f, 200.0f);
-            mDoMtx_stack_c::transS(current.pos);
-            mDoMtx_stack_c::transM(forwardOffset);
-            mDoMtx_stack_c::ZrotM(shape_angle.z);
-            mDoMtx_stack_c::YrotM(shape_angle.y);
-            mDoMtx_stack_c::XrotM(shape_angle.x);
-            mDoMtx_stack_c::transM(backOffset);
-            mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
-        } else {
-            mDoMtx_stack_c::transS(current.pos);
-            mDoMtx_stack_c::ZrotM(shape_angle.z);
-            mDoMtx_stack_c::YrotM(shape_angle.y);
-            mDoMtx_stack_c::XrotM(shape_angle.x);
-            mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
-        }
-    }
 
-    /* 0000026C-0000048C       .text _create__Q215daObjHomensmoke5Act_cFv */
-    cPhs_State Act_c::_create() {
-        fopAcM_SetupActor(this, Act_c);
-        
-        mbInitialized = FALSE;
-        
-        set_mtx();
-        fopAcM_SetMtx(this, mMtx);
-        
-        mType = param_get_arg0();
-        
-        struct daObjHomensmoke__cullbox {
-            /* 0x0 */ Vec mMin;
-            /* 0xC */ Vec mMax;
-        };
-        static daObjHomensmoke__cullbox culling_dat[] = {
-            {-300.0f, -30.0f, -100.0f, 300.0f, 600.0f, 300.0f},
-            {-100.0f, -30.0f, -100.0f, 100.0f, 250.0f, 120.0f},
-        };
-        fopAcM_setCullSizeBox(this,
-            culling_dat[mType].mMin.x, culling_dat[mType].mMin.y, culling_dat[mType].mMin.z,
-            culling_dat[mType].mMax.x, culling_dat[mType].mMax.y, culling_dat[mType].mMax.z
-        );
-        
-        fopAc_ac_c* parent = fopAcM_SearchByID(parentActorID);
-        if (parent) {
-            tevStr = parent->tevStr;
-        }
-        
-        return cPhs_COMPLEATE_e;
+/* 000000EC-00000230       .text set_mtx__Q215daObjHomensmoke5Act_cFv */
+void Act_c::set_mtx() {
+    if (param_get_axis() != 0) {
+        cXyz backOffset(0.0f, 0.0f, -200.0f);
+        cXyz forwardOffset(0.0f, 0.0f, 200.0f);
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::transM(forwardOffset);
+        mDoMtx_stack_c::ZrotM(shape_angle.z);
+        mDoMtx_stack_c::YrotM(shape_angle.y);
+        mDoMtx_stack_c::XrotM(shape_angle.x);
+        mDoMtx_stack_c::transM(backOffset);
+        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+    } else {
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::ZrotM(shape_angle.z);
+        mDoMtx_stack_c::YrotM(shape_angle.y);
+        mDoMtx_stack_c::XrotM(shape_angle.x);
+        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
     }
+}
 
-    /* 0000048C-000004C8       .text _delete__Q215daObjHomensmoke5Act_cFv */
-    bool Act_c::_delete() {
-        if (mSmokeCb.getEmitter()) {
-            mSmokeCb.remove();
-        }
-        return true;
+/* 0000026C-0000048C       .text _create__Q215daObjHomensmoke5Act_cFv */
+cPhs_State Act_c::_create() {
+    fopAcM_ct(this, Act_c);
+    
+    mbInitialized = FALSE;
+    
+    set_mtx();
+    fopAcM_SetMtx(this, mMtx);
+    
+    mType = param_get_arg0();
+    
+    struct daObjHomensmoke__cullbox {
+        /* 0x0 */ Vec mMin;
+        /* 0xC */ Vec mMax;
+    };
+    static daObjHomensmoke__cullbox culling_dat[] = {
+        {-300.0f, -30.0f, -100.0f, 300.0f, 600.0f, 300.0f},
+        {-100.0f, -30.0f, -100.0f, 100.0f, 250.0f, 120.0f},
+    };
+    fopAcM_setCullSizeBox(this,
+        culling_dat[mType].mMin.x, culling_dat[mType].mMin.y, culling_dat[mType].mMin.z,
+        culling_dat[mType].mMax.x, culling_dat[mType].mMax.y, culling_dat[mType].mMax.z
+    );
+    
+    fopAc_ac_c* parent = fopAcM_SearchByID(parentActorID);
+    if (parent) {
+        tevStr = parent->tevStr;
     }
+    
+    return cPhs_COMPLEATE_e;
+}
 
-    /* 000004C8-00000738       .text _execute__Q215daObjHomensmoke5Act_cFv */
-    bool Act_c::_execute() {
+/* 0000048C-000004C8       .text _delete__Q215daObjHomensmoke5Act_cFv */
+bool Act_c::_delete() {
+    if (mSmokeCb.getEmitter()) {
+        mSmokeCb.remove();
+    }
+    return true;
+}
+
+/* 000004C8-00000738       .text _execute__Q215daObjHomensmoke5Act_cFv */
+bool Act_c::_execute() {
 #if VERSION == VERSION_DEMO
-        if (m2D0 == NULL)
+    if (m2D0 == NULL)
 #else
-        if (!mbInitialized)
+    if (!mbInitialized)
 #endif
-        {
-            static cXyz norse_offsetL(0.0f, 300.0f, 20.0f);
-            static cXyz norse_offsetS(0.0f, 70.0f, 20.0f);
-            if (mType == 0) {
-                cMtx_multVec(mMtx, &norse_offsetL, &mSmokePos);
-            } else {
-                cMtx_multVec(mMtx, &norse_offsetS, &mSmokePos);
-            }
-            
-            JPABaseEmitter* smokeEmitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &mSmokePos, NULL, NULL, 0xFF, &mSmokeCb, fopAcM_GetRoomNo(this));
-            if (smokeEmitter) {
-                static f32 rate_table[2] = {1.0f, 0.5f};
-                f32 rate = rate_table[mType & 1];
-                smokeEmitter->setGlobalAlpha(0xB4);
-                smokeEmitter->setRate(50.0f);
-                smokeEmitter->setMaxFrame(1);
-                JGeometry::TVec3<f32> scale;
-                scale.set(rate, 0.0f, rate);
-                smokeEmitter->setEmitterScale(scale);
-                scale.set(rate*5.0f, rate*5.0f, rate*5.0f);
-                smokeEmitter->setGlobalDynamicsScale(scale);
-                scale.set(rate*6.0f, rate*6.0f, rate*6.0f);
-                smokeEmitter->setGlobalParticleScale(scale);
-            }
-            
-            JPABaseEmitter* rubbleEmitter = dComIfGp_particle_setToon(dPa_name::ID_AK_SN_KAZEMASKHAHEN00, &current.pos);
-            if (rubbleEmitter) {
-                rubbleEmitter->setGlobalPrmColor(tevStr.mColorK0.r, tevStr.mColorK0.g, tevStr.mColorK0.b);
-                if (mType == 1) {
-                    JGeometry::TVec3<f32> scale(0.6f, 0.6f, 0.6f);
-                    rubbleEmitter->setEmitterScale(scale);
-                    rubbleEmitter->setGlobalDynamicsScale(scale);
-                    rubbleEmitter->setGlobalParticleScale(scale);
-                }
-                rubbleEmitter->setGlobalRTMatrix(mMtx);
-            }
-            
-            mbInitialized = TRUE;
-        } else if (mSmokeCb.isEnd()) {
-            fopAcM_delete(this);
-        }
-        return true;
-    }
-
-    /* 00000738-00000740       .text _draw__Q215daObjHomensmoke5Act_cFv */
-    bool Act_c::_draw() {
-        return true;
-    }
-
-    namespace {
-        /* 00000740-00000760       .text Mthd_Create__Q215daObjHomensmoke32@unnamed@d_a_obj_homensmoke_cpp@FPv */
-        cPhs_State Mthd_Create(void* i_this) {
-            return ((Act_c*)i_this)->_create();
-        }
-
-        /* 00000760-00000784       .text Mthd_Delete__Q215daObjHomensmoke32@unnamed@d_a_obj_homensmoke_cpp@FPv */
-        BOOL Mthd_Delete(void* i_this) {
-            return ((Act_c*)i_this)->_delete();
-        }
-
-        /* 00000784-000007A8       .text Mthd_Execute__Q215daObjHomensmoke32@unnamed@d_a_obj_homensmoke_cpp@FPv */
-        BOOL Mthd_Execute(void* i_this) {
-            return ((Act_c*)i_this)->_execute();
-        }
-
-        /* 000007A8-000007CC       .text Mthd_Draw__Q215daObjHomensmoke32@unnamed@d_a_obj_homensmoke_cpp@FPv */
-        BOOL Mthd_Draw(void* i_this) {
-            return ((Act_c*)i_this)->_draw();
-        }
-
-        /* 000007CC-000007D4       .text Mthd_IsDelete__Q215daObjHomensmoke32@unnamed@d_a_obj_homensmoke_cpp@FPv */
-        BOOL Mthd_IsDelete(void* i_this) {
-            return TRUE;
+    {
+        static cXyz norse_offsetL(0.0f, 300.0f, 20.0f);
+        static cXyz norse_offsetS(0.0f, 70.0f, 20.0f);
+        if (mType == 0) {
+            cMtx_multVec(mMtx, &norse_offsetL, &mSmokePos);
+        } else {
+            cMtx_multVec(mMtx, &norse_offsetS, &mSmokePos);
         }
         
-        static actor_method_class Mthd_Table = {
-            (process_method_func)Mthd_Create,
-            (process_method_func)Mthd_Delete,
-            (process_method_func)Mthd_Execute,
-            (process_method_func)Mthd_IsDelete,
-            (process_method_func)Mthd_Draw,
-        };
+        JPABaseEmitter* smokeEmitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &mSmokePos, NULL, NULL, 0xFF, &mSmokeCb, fopAcM_GetRoomNo(this));
+        if (smokeEmitter) {
+            static f32 rate_table[2] = {1.0f, 0.5f};
+            f32 rate = rate_table[mType & 1];
+            smokeEmitter->setGlobalAlpha(0xB4);
+            smokeEmitter->setRate(50.0f);
+            smokeEmitter->setMaxFrame(1);
+            JGeometry::TVec3<f32> scale;
+            scale.set(rate, 0.0f, rate);
+            smokeEmitter->setEmitterScale(scale);
+            scale.set(rate*5.0f, rate*5.0f, rate*5.0f);
+            smokeEmitter->setGlobalDynamicsScale(scale);
+            scale.set(rate*6.0f, rate*6.0f, rate*6.0f);
+            smokeEmitter->setGlobalParticleScale(scale);
+        }
+        
+        JPABaseEmitter* rubbleEmitter = dComIfGp_particle_setToon(dPa_name::ID_AK_SN_KAZEMASKHAHEN00, &current.pos);
+        if (rubbleEmitter) {
+            rubbleEmitter->setGlobalPrmColor(tevStr.mColorK0.r, tevStr.mColorK0.g, tevStr.mColorK0.b);
+            if (mType == 1) {
+                JGeometry::TVec3<f32> scale(0.6f, 0.6f, 0.6f);
+                rubbleEmitter->setEmitterScale(scale);
+                rubbleEmitter->setGlobalDynamicsScale(scale);
+                rubbleEmitter->setGlobalParticleScale(scale);
+            }
+            rubbleEmitter->setGlobalRTMatrix(mMtx);
+        }
+        
+        mbInitialized = TRUE;
+    } else if (mSmokeCb.isEnd()) {
+        fopAcM_delete(this);
+    }
+    return true;
+}
+
+/* 00000738-00000740       .text _draw__Q215daObjHomensmoke5Act_cFv */
+bool Act_c::_draw() {
+    return true;
+}
+
+namespace {
+    /* 00000740-00000760       .text Mthd_Create__Q215daObjHomensmoke32@unnamed@d_a_obj_homensmoke_cpp@FPv */
+    cPhs_State Mthd_Create(void* i_this) {
+        return ((Act_c*)i_this)->_create();
+    }
+
+    /* 00000760-00000784       .text Mthd_Delete__Q215daObjHomensmoke32@unnamed@d_a_obj_homensmoke_cpp@FPv */
+    BOOL Mthd_Delete(void* i_this) {
+        return ((Act_c*)i_this)->_delete();
+    }
+
+    /* 00000784-000007A8       .text Mthd_Execute__Q215daObjHomensmoke32@unnamed@d_a_obj_homensmoke_cpp@FPv */
+    BOOL Mthd_Execute(void* i_this) {
+        return ((Act_c*)i_this)->_execute();
+    }
+
+    /* 000007A8-000007CC       .text Mthd_Draw__Q215daObjHomensmoke32@unnamed@d_a_obj_homensmoke_cpp@FPv */
+    BOOL Mthd_Draw(void* i_this) {
+        return ((Act_c*)i_this)->_draw();
+    }
+
+    /* 000007CC-000007D4       .text Mthd_IsDelete__Q215daObjHomensmoke32@unnamed@d_a_obj_homensmoke_cpp@FPv */
+    BOOL Mthd_IsDelete(void* i_this) {
+        return TRUE;
+    }
+    
+    static actor_method_class Mthd_Table = {
+        (process_method_func)Mthd_Create,
+        (process_method_func)Mthd_Delete,
+        (process_method_func)Mthd_Execute,
+        (process_method_func)Mthd_IsDelete,
+        (process_method_func)Mthd_Draw,
     };
 };
+
+};  // namespace daObjHomensmoke
 
 actor_process_profile_definition g_profile_Obj_Homensmk = {
     /* LayerID      */ fpcLy_CURRENT_e,

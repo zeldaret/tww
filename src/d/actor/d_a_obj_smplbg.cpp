@@ -57,18 +57,14 @@ BOOL daObjSmplbg::Act_c::Create() {
 
 /* 0000032C-00000474       .text Mthd_Create__Q211daObjSmplbg5Act_cFv */
 cPhs_State daObjSmplbg::Act_c::Mthd_Create() {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, Act_c);
-#endif
+    fopAcM_ct_Retail(this, Act_c);
 
     mType = prm_get_type();
     if(mType >= 1){
         mType = 0;
     }
 
-#if VERSION == VERSION_DEMO
-    fopAcM_SetupActor(this, Act_c);
-#endif
+    fopAcM_ct_Demo(this, Act_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, attr().mResName);
     if(phase_state == cPhs_COMPLEATE_e){

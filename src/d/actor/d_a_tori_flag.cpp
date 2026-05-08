@@ -125,7 +125,7 @@ cPhs_State daTori_Flag_c::_create() {
     }
     cPhs_State result3 = cPhs_COMPLEATE_e;
     if (result3 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daTori_Flag_c);
+        fopAcM_ct(this, daTori_Flag_c);
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1020)) {
             result3 = CreateInit();
         }
@@ -135,7 +135,7 @@ cPhs_State daTori_Flag_c::_create() {
     }
     return result3;
 #else
-    fopAcM_SetupActor(this, daTori_Flag_c);
+    fopAcM_ct(this, daTori_Flag_c);
     cPhs_State result = dComIfG_resLoad(&mPhsTrflag, M_arcname);
     if (result != cPhs_COMPLEATE_e) {
         return result;

@@ -113,7 +113,7 @@ void daObjRflw_c::set_mtx() {
 
 inline cPhs_State daObjRflw_c::_create() {
     cPhs_State rt = cPhs_ERROR_e;
-    fopAcM_SetupActor(this, daObjRflw_c);
+    fopAcM_ct(this, daObjRflw_c);
 
     rt = dComIfG_resLoad(&mPhs, "Rflw");
 

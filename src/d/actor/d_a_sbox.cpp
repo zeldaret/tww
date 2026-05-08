@@ -244,19 +244,12 @@ BOOL daSbox_c::CreateInit() {
 
 /* 000008F0-000009F0       .text create__8daSbox_cFv */
 cPhs_State daSbox_c::create() {
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daSbox_c);
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
     if (PVar1 != cPhs_COMPLEATE_e) {
         return PVar1;
     }
-    fopAcM_SetupActor(this, daSbox_c);
-#else
-    fopAcM_SetupActor(this, daSbox_c);
-    cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
-    if (PVar1 != cPhs_COMPLEATE_e) {
-        return PVar1;
-    }
-#endif
+    fopAcM_ct_Demo(this, daSbox_c);
 
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x15C0)) {
         return cPhs_ERROR_e;

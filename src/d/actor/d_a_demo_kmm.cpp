@@ -54,19 +54,12 @@ BOOL daDemo_Kmm_c::CreateInit() {
 
 /* 00000308-000003A0       .text create__12daDemo_Kmm_cFv */
 cPhs_State daDemo_Kmm_c::create() {
-#if VERSION == DEMO
+    fopAcM_ct_Retail(this, daDemo_Kmm_c);
     cPhs_State ret = dComIfG_resLoad(&this->mPhase, M_arcname);
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
     }
-    fopAcM_SetupActor(this, daDemo_Kmm_c);
-#else
-    fopAcM_SetupActor(this, daDemo_Kmm_c);
-    cPhs_State ret = dComIfG_resLoad(&this->mPhase, M_arcname);
-    if (ret != cPhs_COMPLEATE_e) {
-        return ret;
-    }
-#endif
+    fopAcM_ct_Demo(this, daDemo_Kmm_c);
 
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x5700)) {
         return cPhs_ERROR_e;

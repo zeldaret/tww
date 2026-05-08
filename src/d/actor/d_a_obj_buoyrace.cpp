@@ -69,7 +69,7 @@ cPhs_State daObjBuoyrace::Act_c::create_load() {
 
 /* 00000238-00000374       .text _create__Q213daObjBuoyrace5Act_cFv */
 cPhs_State daObjBuoyrace::Act_c::_create() {
-    fopAcM_SetupActor(this, daObjBuoyrace::Act_c);
+    fopAcM_ct(this, daObjBuoyrace::Act_c);
 
 #if VERSION > VERSION_DEMO
     cPhs_State result = create_load();

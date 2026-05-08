@@ -400,7 +400,7 @@ static BOOL daLodbg_Delete(daLodbg_c* i_this) {
 /* 000012EC-0000133C       .text daLodbg_Create__FP10fopAc_ac_c */
 static cPhs_State daLodbg_Create(fopAc_ac_c* i_ac) {
     daLodbg_c* i_this = (daLodbg_c*)i_ac;
-    fopAcM_SetupActor(i_this, daLodbg_c);
+    fopAcM_ct(i_this, daLodbg_c);
     return cPhs_COMPLEATE_e;
 }
 

@@ -216,7 +216,7 @@ void daItem_c::CreateInit() {
 
 /* 800F53EC-800F5668       .text _daItem_create__8daItem_cFv */
 cPhs_State daItem_c::_daItem_create() {
-    fopAcM_SetupActor(this, daItem_c);
+    fopAcM_ct(this, daItem_c);
     
     m_itemNo = daItem_prm::getItemNo(this);
     
@@ -978,7 +978,7 @@ BOOL daItem_c::itemActionForEmono() {
 
 /* 800F73A4-800F7898       .text itemActionForSword__8daItem_cFv */
 BOOL daItem_c::itemActionForSword() {
-    /* Nonmatching - regalloc */
+    /* Nonmatching - retail-only regalloc */
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     bool isQuake = dComIfGp_getDetect().chk_quake(&current.pos);

@@ -17,8 +17,8 @@
 
 /* 8013CC64-8013CF2C       .text setSpeedAndAngleSwim__9daPy_lk_cFv */
 void daPy_lk_c::setSpeedAndAngleSwim() {
-    float fVar1;
-    short oldAngleY;
+    f32 fVar1;
+    s16 oldAngleY;
 
     BOOL bVar3 = false;
 
@@ -147,7 +147,7 @@ BOOL daPy_lk_c::changeSwimProc() {
                 speed.y = 0.0f;
             }
 
-            float oldSpeedY = mOldSpeed.y * mOldSpeed.y * 0.0004f + 0.2f;
+            f32 oldSpeedY = mOldSpeed.y * mOldSpeed.y * 0.0004f + 0.2f;
 
             if (oldSpeedY > 1.0f) {
                 oldSpeedY = 1.0f;
@@ -283,18 +283,18 @@ f32 daPy_lk_c::getSwimTimerRate() {
 
 /* 8013D6B8-8013D814       .text setSwimTimerStartStop__9daPy_lk_cFv */
 void daPy_lk_c::setSwimTimerStartStop() {
-    float target = 0.0f;
+    f32 target = 0.0f;
 
     if (mAcch.GetGroundH() <= m35D0 - 175.0f) {
         dComIfGp_startItemSwimTimer();
 
         if (checkNoResetFlg0(daPyFlg0_UNK100)) {
-            float swimTimerRate = getSwimTimerRate();
+            f32 swimTimerRate = getSwimTimerRate();
 
             if (swimTimerRate > 0.5f) {
                 target = cM_fcos((1.0f - swimTimerRate) * M_PI) * -m_HIO->mSwim.m.field_0x78;
 
-                if (mFrameCtrlUnder->checkPass(0.0f) && mCurProc != daPyProc_SWIM_UP_e) {
+                if (mFrameCtrlUnder[UNDER_MOVE0_e].checkPass(0.0f) && mCurProc != daPyProc_SWIM_UP_e) {
                     if (mProcVar0.m3570 && !checkNoResetFlg0(daPyFlg0_UNK4000)) {
                         voiceStart(0x22);
                         mProcVar0.m3570 = 0;
@@ -359,22 +359,22 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
 
 /* 8013DA18-8013DB24       .text procSwimUp__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSwimUp() {
-    J3DFrameCtrl* frameCtrl = mFrameCtrlUnder;
+    J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
 
     setSpeedAndAngleSwim();
 
     if (!changeSwimOutProc()) {
-        if (frameCtrl->getRate() < 0.01f) {
+        if (frameCtrl.getRate() < 0.01f) {
             procSwimWait_init(FALSE);
         }
         else {
-            if (frameCtrl->getFrame() > m_HIO->mSwim.m.field_0x34) {
+            if (frameCtrl.getFrame() > m_HIO->mSwim.m.field_0x34) {
                 if (mStickDistance > 0.05f) {
                     procSwimMove_init(FALSE);
                 }
             }
             else {
-                if (frameCtrl->checkPass(4.0f)) {
+                if (frameCtrl.checkPass(4.0f)) {
                     voiceStart(0x1A);
                     seStartOnlyReverb(JA_SE_LK_WALK_IN_WATER);
                     seStartOnlyReverb(JA_SE_LK_SWIM);
@@ -392,14 +392,14 @@ BOOL daPy_lk_c::procSwimUp() {
 
 /* 8013DB24-8013DCDC       .text procSwimWait_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
-    float fVar2;
+    f32 fVar2;
     
-    J3DFrameCtrl* frameCtrl = mFrameCtrlUnder;
+    J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
 
     commonProcInit(daPyProc_SWIM_WAIT_e);
 
     if (param_1) {
-        fVar2 = frameCtrl->getFrame() / (float)frameCtrl->getEnd();
+        fVar2 = frameCtrl.getFrame() / (f32)frameCtrl.getEnd();
         mVelocity = speedF * (1.0f - m_HIO->mSwim.m.field_0x60) + speedF * std::fabsf(cM_fcos(fVar2 * M_PI)) * m_HIO->mSwim.m.field_0x60;
     }
     else {
@@ -407,9 +407,9 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
     }
 
     gravity = 0.0f;
-    setSingleMoveAnime(ANM_SWIMWAIT, (float)(getSwimTimerRate() * m_HIO->mSwim.m.field_0x70) + m_HIO->mSwim.m.field_0x40, 0.0f, -1, m_HIO->mSwim.m.field_0x44);
-    frameCtrl->setFrame(fVar2 * frameCtrl->getEnd());
-    mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(frameCtrl->getFrame());
+    setSingleMoveAnime(ANM_SWIMWAIT, (f32)(getSwimTimerRate() * m_HIO->mSwim.m.field_0x70) + m_HIO->mSwim.m.field_0x40, 0.0f, -1, m_HIO->mSwim.m.field_0x44);
+    frameCtrl.setFrame(fVar2 * frameCtrl.getEnd());
+    mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(frameCtrl.getFrame());
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
     if (checkNoResetFlg0(daPyFlg0_UNK100)) {
@@ -429,7 +429,7 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
 /* 8013DCDC-8013DE8C       .text procSwimWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSwimWait() {
     setSpeedAndAngleSwim();
-    m34D4 += (short)((cM_rndF(0.3f) + 0.85f) * m_HIO->mSwim.m.field_0x2);
+    m34D4 += (s16)((cM_rndF(0.3f) + 0.85f) * m_HIO->mSwim.m.field_0x2);
     m35C4 = cM_ssin(m34D4) * m_HIO->mSwim.m.field_0x4C + m_HIO->mSwim.m.field_0x48;
 
     if (changeSwimOutProc()) {
@@ -452,7 +452,7 @@ BOOL daPy_lk_c::procSwimWait() {
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)) {
         fopAc_ac_c* talkEventPartner = fopAcM_getTalkEventPartner(this);
         if (talkEventPartner) {
-            short targetAngleY = cLib_targetAngleY(&current.pos, &talkEventPartner->eyePos);
+            s16 targetAngleY = cLib_targetAngleY(&current.pos, &talkEventPartner->eyePos);
             cLib_addCalcAngleS(&shape_angle.y, targetAngleY, m_HIO->mTurn.m.field_0x6, m_HIO->mTurn.m.field_0x8, m_HIO->mTurn.m.field_0xA);
             current.angle.y = shape_angle.y;
         }
@@ -508,7 +508,7 @@ BOOL daPy_lk_c::procSwimMove() {
 
     setSpeedAndAngleSwim();
 
-    J3DFrameCtrl* frameCtrl = mFrameCtrlUnder;
+    J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
 
     int direction;
     if (!checkAttentionLock()) {
@@ -523,7 +523,7 @@ BOOL daPy_lk_c::procSwimMove() {
 
     if (mDirection != direction) {
         mDirection = direction;
-        float fVar1 = m35C4;
+        f32 fVar1 = m35C4;
 
         if (mDirection == DIR_FORWARD) {
             anm = ANM_SWIMING;
@@ -558,11 +558,11 @@ BOOL daPy_lk_c::procSwimMove() {
         }
     }
     else {
-        frameCtrl[0].setRate((std::fabsf(mVelocity) * (m_HIO->mSwim.m.field_0x54 - m_HIO->mSwim.m.field_0x50)) / mMaxNormalSpeed + m_HIO->mSwim.m.field_0x50 + (float)(getSwimTimerRate() * m_HIO->mSwim.m.field_0x74));
+        frameCtrl.setRate((std::fabsf(mVelocity) * (m_HIO->mSwim.m.field_0x54 - m_HIO->mSwim.m.field_0x50)) / mMaxNormalSpeed + m_HIO->mSwim.m.field_0x50 + (f32)(getSwimTimerRate() * m_HIO->mSwim.m.field_0x74));
     }
 
     if (mDirection == DIR_BACKWARD) {
-        frameCtrl[0].setRate(frameCtrl[0].getRate() * 0.5f);
+        frameCtrl.setRate(frameCtrl.getRate() * 0.5f);
     }
 
     if (changeSwimOutProc()) {
@@ -591,7 +591,7 @@ BOOL daPy_lk_c::procSwimMove() {
     if (mStickDistance <= 0.05f) {
         procSwimWait_init(TRUE);
     }
-    else if ((mDirection == DIR_FORWARD && frameCtrl->checkPass(20.0f)) || (mDirection != DIR_FORWARD && frameCtrl->checkPass(0.0f))) {
+    else if ((mDirection == DIR_FORWARD && frameCtrl.checkPass(20.0f)) || (mDirection != DIR_FORWARD && frameCtrl.checkPass(0.0f))) {
             seStartOnlyReverb(JA_SE_LK_SWIM);
     }
 

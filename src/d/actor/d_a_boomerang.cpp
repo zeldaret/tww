@@ -326,7 +326,7 @@ static BOOL daBoomerang_Draw(daBoomerang_c* i_this) {
 
 /* 800E19B8-800E1A14       .text getFlyMax__13daBoomerang_cFv */
 float daBoomerang_c::getFlyMax() {
-    if (dComIfGp_checkPlayerStatus0(0, 0x10000) != 0) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         return 5000.0f;
     }
 
@@ -797,7 +797,7 @@ static dCcD_SrcCps l_at_cps_src = {
 
 /* 800E2CE8-800E2EF0       .text create__13daBoomerang_cFv */
 cPhs_State daBoomerang_c::create() {
-    fopAcM_SetupActor(this, daBoomerang_c);
+    fopAcM_ct(this, daBoomerang_c);
 
     if (!fopAcM_entrySolidHeap(this, daBoomerang_createHeap, 0xD40)) {
         return cPhs_ERROR_e;

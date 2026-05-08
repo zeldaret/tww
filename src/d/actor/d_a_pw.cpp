@@ -544,7 +544,7 @@ static cPhs_State daPW_Create(fopAc_ac_c* i_actor) {
             /* Radius */ 15.0f,
         }},
     };
-    fopAcM_SetupActor(i_actor, pw_class);
+    fopAcM_ct(i_actor, pw_class);
 }
 
 static actor_method_class l_daPW_Method = {

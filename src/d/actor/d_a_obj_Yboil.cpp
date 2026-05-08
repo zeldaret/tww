@@ -85,7 +85,7 @@ void daObjYboil_c::set_mtx() {
 }
 
 cPhs_State daObjYboil_c::_create() {
-    fopAcM_SetupActor(this, daObjYboil_c);
+    fopAcM_ct(this, daObjYboil_c);
 
     cPhs_State ret;
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1902)) {

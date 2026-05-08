@@ -469,7 +469,7 @@ void daDaiocta_Eye_c::createInit() {
 
 /* 000012D4-00001450       .text _create__15daDaiocta_Eye_cFv */
 cPhs_State daDaiocta_Eye_c::_create() {
-    fopAcM_SetupActor(this, daDaiocta_Eye_c);
+    fopAcM_ct(this, daDaiocta_Eye_c);
     cPhs_State result = dComIfG_resLoad(&mPhs, m_arc_name);
     if (result == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {

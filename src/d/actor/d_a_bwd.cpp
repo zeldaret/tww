@@ -2473,9 +2473,7 @@ static cPhs_State daBwd_Create(fopAc_ac_c* a_this) {
     };
     f32 fVar1;
 
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(a_this, bwd_class);
-#endif
+    fopAcM_ct_Retail(a_this, bwd_class);
     bwd_class* i_this = (bwd_class*)a_this;
     cPhs_State res = dComIfG_resLoad(&i_this->mPhaseBwd, "Bwd");
 #if VERSION == VERSION_DEMO

@@ -79,7 +79,7 @@ void daObjAdnno_c::set_mtx() {
 }
 
 cPhs_State daObjAdnno_c::_create() {
-    fopAcM_SetupActor(this, daObjAdnno_c);
+    fopAcM_ct(this, daObjAdnno_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, "Adnno");
 

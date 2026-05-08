@@ -82,7 +82,7 @@ struct fopMsgM_pane_class {
     /* 0x34 */ u8 mInitAlpha;
     /* 0x35 */ u8 mNowAlpha;
     /* 0x36 */ s16 mUserArea;
-};
+};  // Size: 0x38
 
 struct fopMsgM_pane_alpha_class {
     /* 0x00 */ J2DPane * pane;

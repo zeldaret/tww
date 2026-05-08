@@ -80,7 +80,7 @@ Mtx daObjOspbox::Act_c::M_tmp_mtx;
 
 /* 00000294-000004F8       .text Mthd_Create__Q211daObjOspbox5Act_cFv */
 cPhs_State daObjOspbox::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         #if VERSION == VERSION_DEMO

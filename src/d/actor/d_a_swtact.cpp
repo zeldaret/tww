@@ -72,7 +72,7 @@ void daSwTact_c::set_mtx() {
 
 /* 000002CC-0000038C       .text _create__10daSwTact_cFv */
 cPhs_State daSwTact_c::_create() {
-    fopAcM_SetupActor(this, daSwTact_c);
+    fopAcM_ct(this, daSwTact_c);
 
     s32 result = cPhs_COMPLEATE_e;
     if (daSwTact_prm::getModel(this) == 1) {

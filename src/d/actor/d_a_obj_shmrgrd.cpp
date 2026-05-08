@@ -197,7 +197,7 @@ BOOL daObjShmrgrd_c::create_heap() {
 
 /* 000006E0-00000964       .text _create__14daObjShmrgrd_cFv */
 cPhs_State daObjShmrgrd_c::_create() {
-    fopAcM_SetupActor(this, daObjShmrgrd_c);
+    fopAcM_ct(this, daObjShmrgrd_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = cPhs_ERROR_e;

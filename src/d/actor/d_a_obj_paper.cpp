@@ -148,7 +148,7 @@ namespace daObjPaper {
 
     /* 00000170-000004E0       .text _create__Q210daObjPaper5Act_cFv */
     cPhs_State Act_c::_create() {
-        fopAcM_SetupActor(this, Act_c);
+        fopAcM_ct(this, Act_c);
 
         mType = prm_get_type();
 

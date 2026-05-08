@@ -86,7 +86,7 @@ BOOL daObjVfan::Act_c::Create() {
 
 /* 00000214-000003D0       .text Mthd_Create__Q29daObjVfan5Act_cFv */
 cPhs_State daObjVfan::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjVfan::Act_c);
+    fopAcM_ct(this, daObjVfan::Act_c);
 
     cPhs_State phase_state;
     if (fopAcM_isSwitch(this, prm_get_swSave())) {

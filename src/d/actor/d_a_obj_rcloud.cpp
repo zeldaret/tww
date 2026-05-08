@@ -83,13 +83,9 @@ bool daObjRcloud_c::create_heap() {
 
 /* 00000238-000003B4       .text _create__13daObjRcloud_cFv */
 cPhs_State daObjRcloud_c::_create() {
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daObjRcloud_c);
     cPhs_State phase = cPhs_ERROR_e;
-    fopAcM_SetupActor(this, daObjRcloud_c);
-#else
-    fopAcM_SetupActor(this, daObjRcloud_c);
-    cPhs_State phase = cPhs_ERROR_e;
-#endif
+    fopAcM_ct_Demo(this, daObjRcloud_c);
 
     if (fopAcM_IsFirstCreating(this)) {
         mDemoNameIndex = param_get_arg();

@@ -2954,7 +2954,7 @@ bool dCamera_c::followCamera(s32 param_1) {
     fVar37 = mpPlayerActor->current.pos.y;
     fVar37 -= groundHeight(&player_pos);
 
-    if (m360 && (check_owner_action(mPadId, daPyStts0_SWIM_e) || daNpc_kam_c::m_hyoi_kamome == 0 || check_owner_action(mPadId, 0x200))) {
+    if (m360 && (check_owner_action(mPadId, daPyStts0_SWIM_e) || daNpc_kam_c::m_hyoi_kamome == 0 || check_owner_action(mPadId, daPyStts0_UNK200_e))) {
         if (mWork.follow.m388 < 0x50) {
             mWork.follow.m388++;
             local_158.x = 176.0f;
@@ -3085,7 +3085,10 @@ bool dCamera_c::followCamera(s32 param_1) {
             mWork.follow.m3B8 *= 0.1f;
         }
 
-        if (check_owner_action(mPadId, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e) || check_owner_action1(mPadId, check_owner_action1(mPadId, daPyStts1_UNK10000_e))) {
+        if (
+            check_owner_action(mPadId, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e) ||
+            check_owner_action1(mPadId, check_owner_action1(mPadId, daPyStts1_UNK10000_e))
+        ) {
             if (mWork.follow.m38C == 0) {
                 if (local_4ac > cSAngle::_270 && local_4ac < cSAngle::_90) {
                     mWork.follow.m38C = 1;
@@ -3917,7 +3920,7 @@ bool dCamera_c::subjectCamera(s32 param_1) {
 
         if (dComIfGp_getMiniGameType() == 3) {
             mWork.subject.m3C0 = 2;
-        } else if (dComIfGp_checkPlayerStatus0(mPadId, 0x2000) == 0 && (mCamParam.Flag(param_1, 0x10) == 0)) {
+        } else if (dComIfGp_checkPlayerStatus0(mPadId, daPyStts0_UNK2000_e) == 0 && (mCamParam.Flag(param_1, 0x10) == 0)) {
             mWork.subject.m3C0 = 1;
         }
 

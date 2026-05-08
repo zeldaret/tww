@@ -75,6 +75,7 @@ enum dCcG_CoRPrm_e {
 };
 
 enum dCcG_hitSe {
+    /* 0x00 */ dCcG_SE_NONE = 0,
     /* 0x01 */ dCcG_SE_UNK1 = 1,
     /* 0x02 */ dCcG_SE_UNK2 = 2,
     /* 0x03 */ dCcG_SE_UNK3 = 3,

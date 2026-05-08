@@ -105,7 +105,7 @@ BOOL daObjLadder::Act_c::Create() {
 
 /* 000002F0-000004F8       .text Mthd_Create__Q211daObjLadder5Act_cFv */
 cPhs_State daObjLadder::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (phase_state == cPhs_COMPLEATE_e) {

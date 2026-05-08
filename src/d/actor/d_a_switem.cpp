@@ -69,7 +69,7 @@ BOOL daSwItem_c::CreateInit() {
 
 /* 00000154-00000250       .text _create__10daSwItem_cFv */
 cPhs_State daSwItem_c::_create() {
-    fopAcM_SetupActor(this, daSwItem_c);
+    fopAcM_ct(this, daSwItem_c);
 
     if (!CreateInit()) {
         return cPhs_ERROR_e;

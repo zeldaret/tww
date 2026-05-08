@@ -201,7 +201,7 @@ BOOL daObjMkie::Act_c::Create() {
 /* 00000568-00000754       .text Mthd_Create__Q29daObjMkie5Act_cFv */
 cPhs_State daObjMkie::Act_c::Mthd_Create() {
     cPhs_State phase_state = cPhs_ERROR_e;
-    fopAcM_SetupActor(this, daObjMkie::Act_c);
+    fopAcM_ct(this, daObjMkie::Act_c);
     mSwitch = !fopAcM_isSwitch(this, prm_get_swSave());
     if (mSwitch && (phase_state = dComIfG_resLoad(&mPhs, M_arcname), phase_state == cPhs_COMPLEATE_e)) {
         mType = prm_get_type();

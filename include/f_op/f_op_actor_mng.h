@@ -1,7 +1,7 @@
 #ifndef F_OP_ACTOR_MNG_H_
 #define F_OP_ACTOR_MNG_H_
 
-#include "new.h" // IWYU pragma: export // Used by the fopAcM_SetupActor macro.
+#include "new.h" // IWYU pragma: export // Used by the fopAcM_ct macro.
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_iter.h"
 #include "f_pc/f_pc_manager.h"
@@ -11,11 +11,23 @@
 #include "d/d_save.h"
 #include "d/d_event.h"
 
-#define fopAcM_SetupActor(ptr,ClassName) \
-    if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) { \
-        new (ptr) ClassName(); \
-        fopAcM_OnCondition(ptr, fopAcCnd_INIT_e); \
+// The name of this macro is official and comes from a TP debug assert: "fopAcM_ct No Call !!"
+#define fopAcM_ct(ptr, ClassName)                                                                  \
+    if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) {                                            \
+        new (ptr) ClassName();                                                                     \
+        fopAcM_OnCondition(ptr, fopAcCnd_INIT_e);                                                  \
     }
+
+// Unofficial name, kept to avoid conflicts with open PRs. TODO: Remove later.
+#define fopAcM_SetupActor fopAcM_ct
+
+#if VERSION == VERSION_DEMO
+#define fopAcM_ct_Demo fopAcM_ct
+#define fopAcM_ct_Retail(ptr, ClassName)
+#else
+#define fopAcM_ct_Demo(ptr, ClassName)
+#define fopAcM_ct_Retail fopAcM_ct
+#endif
 
 class J3DModelData;
 class daItem_c;
@@ -615,6 +627,7 @@ fopAc_ac_c* fopAcM_searchFromName4Event(char* name, s16 eventID);
 
 BOOL fopAcM_getWaterY(const cXyz*, f32*);
 void fpoAcM_relativePos(fopAc_ac_c* actor, cXyz* p_inPos, cXyz* p_outPos);
+void fpoAcM_absolutePos(fopAc_ac_c* actor, cXyz* p_inPos, cXyz* p_outPos);
 
 void fopAcM_setGbaName(fopAc_ac_c* i_this, u8 itemNo, u8 gbaName0, u8 gbaName1);
 

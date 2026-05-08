@@ -312,9 +312,7 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000ED8-0000101C       .text create__11daNpc_kam_cFv */
 cPhs_State daNpc_kam_c::create() {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_kam_c);
-#endif
+    fopAcM_ct_Retail(this, daNpc_kam_c);
     
     if (l_act != NULL && l_act != this) {
         return cPhs_ERROR_e;
@@ -326,9 +324,7 @@ cPhs_State daNpc_kam_c::create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Kamome");
     
     if (phase_state == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(this, daNpc_kam_c);
-#endif
+        fopAcM_ct_Demo(this, daNpc_kam_c);
 
         if (!fopAcM_entrySolidHeap(this, checkCreateHeap, l_heap_size)) {
 #if VERSION > VERSION_DEMO

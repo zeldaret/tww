@@ -51,7 +51,7 @@ BOOL daObjMsdanSub::Act_c::Create() {
 
 /* 00000304-00000400       .text Mthd_Create__Q213daObjMsdanSub5Act_cFv */
 cPhs_State daObjMsdanSub::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (phase_state == cPhs_COMPLEATE_e) {

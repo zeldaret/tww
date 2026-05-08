@@ -783,7 +783,7 @@ static cPhs_State daBmdfoot_Create(fopAc_ac_c* a_this) {
         }},
     };
 
-    fopAcM_SetupActor(a_this, bmdfoot_class);
+    fopAcM_ct(a_this, bmdfoot_class);
     bmdfoot_class* i_this = (bmdfoot_class*)a_this;
     cPhs_State res = dComIfG_resLoad(&i_this->mPhase, "Bmdfoot");
     if (res == cPhs_ERROR_e) {

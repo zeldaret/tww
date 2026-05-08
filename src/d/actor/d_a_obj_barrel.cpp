@@ -108,7 +108,7 @@ bool daObjBarrel::Act_c::create_heap() {
 
 /* 00000160-00000474       .text _create__Q211daObjBarrel5Act_cFv */
 cPhs_State daObjBarrel::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     cPhs_State rt = dComIfG_resLoad(&mPhs, M_arcname);
     if (rt == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(this, solidHeapCB, 0x820) != 0) {

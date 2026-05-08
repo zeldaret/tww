@@ -36,7 +36,7 @@ void daWarpfout_c::CreateInit() {
 
 /* 0000008C-000000E4       .text _create__12daWarpfout_cFv */
 cPhs_State daWarpfout_c::_create() {
-    fopAcM_SetupActor(this, daWarpfout_c);
+    fopAcM_ct(this, daWarpfout_c);
     CreateInit();
 
     return cPhs_COMPLEATE_e;

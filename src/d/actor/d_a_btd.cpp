@@ -2895,7 +2895,7 @@ static cPhs_State daBtd_Create(fopAc_ac_c* a_this) {
     };
 
     fopAc_ac_c* actor = a_this;
-    fopAcM_SetupActor(actor, btd_class);
+    fopAcM_ct(actor, btd_class);
     btd_class* i_this = (btd_class*)a_this;
 
     cPhs_State res = dComIfG_resLoad(&i_this->mPhaseBtd, "Btd");

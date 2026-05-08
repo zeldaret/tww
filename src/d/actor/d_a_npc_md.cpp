@@ -374,9 +374,7 @@ cPhs_State daNpc_Md_c::create() {
     strcpy(mModelArcName, l_arc_name);
     int heapSizeIdx = 0;
     
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_Md_c);
-#endif
+    fopAcM_ct_Retail(this, daNpc_Md_c);
     
     mType = fopAcM_GetParam(this) >> 0x08;
     if ((int)mType == -2) { // Bug: Comparing unsigned value with -2 is always false.
@@ -430,9 +428,7 @@ cPhs_State daNpc_Md_c::create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, mModelArcName);
     m313D = 1;
     if (phase_state == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(this, daNpc_Md_c);
-#endif
+        fopAcM_ct_Demo(this, daNpc_Md_c);
         
         if (dComIfGp_getCb1Player() != NULL) {
             return cPhs_ERROR_e;

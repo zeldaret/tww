@@ -2160,15 +2160,11 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00004980-00004AD8       .text _create__11daNpc_Bs1_cFv */
 cPhs_State daNpc_Bs1_c::_create() {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_Bs1_c);
-#endif
+    fopAcM_ct_Retail(this, daNpc_Bs1_c);
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Bs");
     if (phase_state == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(this, daNpc_Bs1_c);
-#endif
+        fopAcM_ct_Demo(this, daNpc_Bs1_c);
         mType = fopAcM_GetParamBit(fopAcM_GetParam(this), 0x14, 0x4);
         switch (mType) {
         case 0:

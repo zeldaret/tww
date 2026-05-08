@@ -2210,9 +2210,7 @@ cPhs_State daNpc_Ls1_c::_create() {
 
     cPhs_State state;
 
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_Ls1_c);
-#endif 
+    fopAcM_ct_Retail(this, daNpc_Ls1_c); 
 
     if (!decideType(fopAcM_GetParam(this) & 0xFF)) {
         return cPhs_ERROR_e;
@@ -2226,7 +2224,7 @@ cPhs_State daNpc_Ls1_c::_create() {
 
 #if VERSION == VERSION_DEMO
     l_HIO.entryHIO("アリル"); // Aryll
-    fopAcM_SetupActor(this, daNpc_Ls1_c);
+    fopAcM_ct(this, daNpc_Ls1_c);
 #endif
 
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_siz_tbl[m854])) {

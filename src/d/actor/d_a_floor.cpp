@@ -56,7 +56,7 @@ BOOL daFloor_c::Create() {
 
 /* 0000025C-00000354       .text _create__9daFloor_cFv */
 cPhs_State daFloor_c::_create() {
-    fopAcM_SetupActor(this, daFloor_c);
+    fopAcM_ct(this, daFloor_c);
 
     mSwitchNo = daFloor_prm::getSwitchNo(this);
     if (mSwitchNo != 0xFF && dComIfGs_isSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this)))

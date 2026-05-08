@@ -976,7 +976,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00002BB0-00002CAC       .text _create__12daNpc_Btsw_cFv */
 cPhs_State daNpc_Btsw_c::_create() {
-    fopAcM_SetupActor(this, daNpc_Btsw_c);
+    fopAcM_ct(this, daNpc_Btsw_c);
 
     cPhs_State res = dComIfG_resLoad(&mPhs, "Btsw");
     if (res == cPhs_COMPLEATE_e) {

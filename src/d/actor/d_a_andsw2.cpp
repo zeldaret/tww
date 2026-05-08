@@ -180,7 +180,7 @@ BOOL daAndsw2_c::execute() {
 cPhs_State daAndsw2_c::create() {
     int sw = getSwbit();
     
-    fopAcM_SetupActor(this, daAndsw2_c);
+    fopAcM_ct(this, daAndsw2_c);
     
     switch (getType()) {
     case TYPE_ONE_OFF:

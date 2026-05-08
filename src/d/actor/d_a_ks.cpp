@@ -1552,16 +1552,12 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
 
 /* 000034F8-00003A94       .text daKS_Create__FP10fopAc_ac_c */
 static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_this, ks_class);
-#endif
+    fopAcM_ct_Retail(i_this, ks_class);
     ks_class* a_this = (ks_class*)i_this;
     
     cPhs_State res = dComIfG_resLoad(&a_this->mPhs, "KS");
     if (res == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(i_this, ks_class);
-#endif
+        fopAcM_ct_Demo(i_this, ks_class);
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x1060)) {
             return cPhs_ERROR_e;
         }

@@ -205,7 +205,7 @@ static BOOL daSyan_solidHeapCB(fopAc_ac_c* i_ac) {
 
 /* 00000E10-00000FE0       .text daSyan_Create__FP10fopAc_ac_c */
 static cPhs_State daSyan_Create(fopAc_ac_c* i_ac) {
-    fopAcM_SetupActor(i_ac, syan_class);
+    fopAcM_ct(i_ac, syan_class);
     syan_class* i_this = (syan_class*)i_ac;
     cPhs_State rt = dComIfG_resLoad(&i_this->mPhs, "Syan");
     if (rt == cPhs_COMPLEATE_e) {

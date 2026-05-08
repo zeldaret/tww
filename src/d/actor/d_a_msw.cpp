@@ -280,7 +280,7 @@ static cPhs_State daMsw_Create(fopAc_ac_c* i_this) {
         }},
     };
 
-    fopAcM_SetupActor(i_this, msw_class);
+    fopAcM_ct(i_this, msw_class);
     msw_class* a_this = static_cast<msw_class*>(i_this);
 
     cPhs_State phase_state = dComIfG_resLoad(&a_this->mPhs, "Msw");

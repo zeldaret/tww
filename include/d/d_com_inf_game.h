@@ -389,7 +389,7 @@ public:
     s16 getItemMaxMagicCount() { return mItemMaxMagicCount; }
     void setItemMaxMagicCount(s16 magic) { mItemMaxMagicCount += magic; }
 
-    s16 getItemBombNumCount() { return mItemBombNumCount; }
+    int getItemBombNumCount() { return mItemBombNumCount; }
     void setItemBombNumCount(s16 num) { mItemBombNumCount += num; }
 
     u16 getItemNowLife() { return mItemNowLife; }
@@ -401,8 +401,13 @@ public:
     s16 getItemMaxLifeCount() { return mItemMaxLifeCount; }
     void setItemMaxLifeCount(s16 num) { mItemMaxLifeCount += num; }
 
-    s16 getItemArrowNumCount() { return mItemArrowNumCount; }
+    s16 getItemPictureNumCount() { return mItemPictureNumCount; }
+    void setItemPictureNumCount(s16 num) { mItemPictureNumCount += num; }
+    void clearItemPictureNumCount() { mItemPictureNumCount = 0; }
+
+    int getItemArrowNumCount() { return mItemArrowNumCount; }
     void setItemArrowNumCount(s16 num) { mItemArrowNumCount += num; }
+    void clearItemArrowNumCount() { mItemArrowNumCount = 0; }
 
     void setNpcNameMessageID(u32 id) { mNpcNameMessageID = id; }
     void setItemNameMessageID(u32 id) { mItemNameMessageID = id; }
@@ -412,6 +417,7 @@ public:
 
     s16 getItemBeastNumCount(int i_idx) { return mItemBeastNumCounts[i_idx]; }
     void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
+    void clearItemBeastNumCount(int i_idx) { mItemBeastNumCounts[i_idx] = 0; }
 
     s32 getItemTimeCount() { return mAirMeter; }
     void setItemTimeCount(s32 time) {
@@ -735,7 +741,7 @@ public:
     /* 0x48D8 */ s16 mItemMagicCount;
     /* 0x48DA */ s16 field_0x48da;
     /* 0x48DC */ s16 mItemMaxMagicCount;
-    /* 0x48DE */ s16 field_0x48de;
+    /* 0x48DE */ s16 mItemPictureNumCount;
     /* 0x48E0 */ s16 mItemArrowNumCount;
     /* 0x48E2 */ s16 field_0x48e2;
     /* 0x48E4 */ s16 mItemBombNumCount;
@@ -1085,6 +1091,10 @@ inline u8 dComIfGs_getBeast(int i_idx) {
 
 inline void dComIfGs_setBeastItem(u8 i_itemNo) {
     g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBeastItem(i_itemNo);
+}
+
+inline void dComIfGs_setBeastItemEmpty(u8 i_itemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBeastItemEmpty(i_itemNo);
 }
 
 inline u8 dComIfGs_getBait(int i_idx) {
@@ -2580,7 +2590,7 @@ inline void dComIfGp_setItemMaxMagicCount(s16 magic) {
     g_dComIfG_gameInfo.play.setItemMaxMagicCount(magic);
 }
 
-inline s16 dComIfGp_getItemBombNumCount() {
+inline int dComIfGp_getItemBombNumCount() {
     return g_dComIfG_gameInfo.play.getItemBombNumCount();
 }
 
@@ -2588,12 +2598,28 @@ inline void dComIfGp_setItemBombNumCount(s16 num) {
     g_dComIfG_gameInfo.play.setItemBombNumCount(num);
 }
 
-inline s16 dComIfGp_getItemArrowNumCount() {
+inline s16 dComIfGp_getItemPictureNumCount() {
+    return g_dComIfG_gameInfo.play.getItemPictureNumCount();
+}
+
+inline void dComIfGp_setItemPictureNumCount(s16 num) {
+    return g_dComIfG_gameInfo.play.setItemPictureNumCount(num);
+}
+
+inline void dComIfGp_clearItemPictureNumCount() {
+    g_dComIfG_gameInfo.play.clearItemPictureNumCount();
+}
+
+inline int dComIfGp_getItemArrowNumCount() {
     return g_dComIfG_gameInfo.play.getItemArrowNumCount();
 }
 
 inline void dComIfGp_setItemArrowNumCount(s16 num) {
     return g_dComIfG_gameInfo.play.setItemArrowNumCount(num);
+}
+
+inline void dComIfGp_clearItemArrowNumCount() {
+    g_dComIfG_gameInfo.play.clearItemArrowNumCount();
 }
 
 inline void dComIfGp_setItemBeastNumCount(int i_idx, s16 num) {
@@ -2602,6 +2628,10 @@ inline void dComIfGp_setItemBeastNumCount(int i_idx, s16 num) {
 
 inline s16 dComIfGp_getItemBeastNumCount(int i_idx) {
     return g_dComIfG_gameInfo.play.getItemBeastNumCount(i_idx);
+}
+
+inline void dComIfGp_clearItemBeastNumCount(int i_idx) {
+    g_dComIfG_gameInfo.play.clearItemBeastNumCount(i_idx);
 }
 
 inline u8 dComIfGp_getScopeType() {
@@ -3225,6 +3255,14 @@ inline u16 dComIfGp_event_checkHind(u16 i_hindFlag) {
     return g_dComIfG_gameInfo.play.getEvent()->checkHind(i_hindFlag);
 }
 
+inline void dComIfGp_event_onHindFlag(u16 flag) {
+    g_dComIfG_gameInfo.play.getEvent()->onHindFlag(flag);
+}
+
+inline void dComIfGp_event_offHindFlag(u16 flag) {
+    g_dComIfG_gameInfo.play.getEvent()->offHindFlag(flag);
+}
+
 /**
  * Returns the button (X Y or Z) that was used to start this event.
  * @return The dTalkXYButton_e of the button the player used to initiate this event.
@@ -3387,6 +3425,10 @@ inline int dComIfGp_evmng_getMyActIdx(int staffIdx, char** pActions, int actionC
 
 inline char* dComIfGp_evmng_getMyActName(int staffIdx) {
     return dComIfGp_getPEvtManager()->getMyActName(staffIdx);
+}
+
+inline s32 dComIfGp_evmng_getMySubstanceNum(int staffIdx, char* name) {
+    return dComIfGp_getPEvtManager()->getMySubstanceNum(staffIdx, name);
 }
 
 inline f32* dComIfGp_evmng_getMyFloatP(int staffIdx, char* name) {

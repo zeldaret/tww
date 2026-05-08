@@ -200,7 +200,7 @@ static cPhs_State daAtt_Create(fopAc_ac_c* i_this) {
     };
     
     att_class* a_this = (att_class*)i_this;
-    fopAcM_SetupActor(i_this, att_class);
+    fopAcM_ct(i_this, att_class);
     
     a_this->m2B5 = fopAcM_GetParam(a_this) & 0xFF;
     a_this->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;

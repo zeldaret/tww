@@ -63,6 +63,7 @@ public:
         MODE_CANNON_e = 9,
         MODE_CRANE_e = 10,
         MODE_CRANE_UP_e = 11,
+        MODE_TORNADO_UP_e = 12,
         MODE_START_MODE_WARP_e = 13,
         MODE_TACT_WARP_e = 14,
         MODE_START_MODE_THROW_e = 16,
@@ -142,8 +143,8 @@ public:
     daTornado_c* getTornadoActor() const { return mTornadoActor; }
     fopAc_ac_c* getWhirlActor() const { return mWhirlActor; }
 #endif
-    void checkTornadoFlg() const {}
-    void checkTornadoUp() const {}
+    bool checkTornadoFlg() const { return mTornadoID != fpcM_ERROR_PROCESS_ID_e; }
+    bool checkTornadoUp() const { return mCurMode == MODE_TORNADO_UP_e; }
     f32 getBeltSpeed() const { return m1044.absXZ(); }
     s16 getCannonAngleX() const { return shape_angle.x + m0396 - 0x4000; }
     s16 getCannonAngleY() const { return shape_angle.y + m0394; }

@@ -66,7 +66,7 @@ bool daObjAuzu::Act_c::create_heap() {
 cPhs_State daObjAuzu::Act_c::_create() {
     cPhs_State state = cPhs_ERROR_e;
     mType = prm_get_type();
-    fopAcM_SetupActor(this, daObjAuzu::Act_c);
+    fopAcM_ct(this, daObjAuzu::Act_c);
 
     mbIsExist = is_exist();
     if (mbIsExist != 0) {

@@ -791,7 +791,7 @@ static cPhs_State daBmdhand_Create(fopAc_ac_c* a_this) {
     };
 
     fopAc_ac_c* actor = a_this;
-    fopAcM_SetupActor(actor, bmdhand_class);
+    fopAcM_ct(actor, bmdhand_class);
     bmdhand_class* i_this = (bmdhand_class*)a_this;
     cPhs_State res = dComIfG_resLoad(&i_this->mPhase, "Bmdhand");
     if (res == cPhs_ERROR_e) {

@@ -742,7 +742,9 @@ public:
     /* 0x3012 */ s16 field_0x3012;
     /* 0x3014 */ s16 field_0x3014;
     /* 0x3016 */ u16 field_0x3016;
+#if VERSION > VERSION_DEMO
     /* 0x3018 */ u8 field_0x3018;
+#endif
     /* 0x3019 */ u8 field_0x3019;
     /* 0x301A */ u8 field_0x301a;
     /* 0x301B */ u8 field_0x301b;

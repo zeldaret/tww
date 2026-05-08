@@ -810,7 +810,7 @@ void daObj_Warpt_c::createInit() {
 
 /* 0000215C-00002378       .text _create__13daObj_Warpt_cFv */
 cPhs_State daObj_Warpt_c::_create() {
-    fopAcM_SetupActor(this, daObj_Warpt_c);
+    fopAcM_ct(this, daObj_Warpt_c);
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, m_arc_name);
     if (PVar1 == cPhs_COMPLEATE_e) {
         getArg();

@@ -104,7 +104,7 @@ cPhs_State daTag_Etc_c::create() {
     float fVar1;
     u8 stageEVNTListIndex;
 
-    fopAcM_SetupActor(this, daTag_Etc_c);
+    fopAcM_ct(this, daTag_Etc_c);
 
     stageEVNTListIndex = getEventNo();
     mEventIdx = dComIfGp_evmng_getEventIdx(NULL, stageEVNTListIndex);
