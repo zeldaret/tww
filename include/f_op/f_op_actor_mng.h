@@ -604,6 +604,8 @@ void* fopAcM_fastCreateItem(cXyz* p_pos, int i_itemNo, int i_roomNo, csXyz* p_an
                             cXyz* p_scale, f32 speedF, f32 speedY, f32 gravity,
                             int i_itemBitNo = -1, createFunc p_createFunc = NULL);
 
+fopAc_ac_c* fopAcM_createItemForKP2(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, cXyz* scale, f32 speedF, f32 speedY, f32 gravity, u16 i_itemBitNo);
+
 void* fopAcM_createStealItem(cXyz* p_pos, int i_tblNo, int i_roomNo, csXyz* p_angle, int i_itemBitNo);
 
 fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo);
