@@ -256,7 +256,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
                 MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
             } else {
                 cXyz offset;
-                jnt_no = (jnt_no - 0x3A) / 2;
+                jnt_no = (jnt_no - DK_JNT_J_DK_O_LA2_e) / 2;
                 offset.x = offset.y = offset.z = 0.0f;
                 MtxPosition(&offset, &bdk->m300[jnt_no].m0150[1]);
                 offset.x = -10.0f;
@@ -1940,7 +1940,7 @@ static void end(bdk_class* i_this) {
             for (s32 i = 0; i <= 1; i++) {
                 JPABaseEmitter* emitter = i_this->m6100[i];
                 if (emitter) {
-                    emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_HANE_L2_e + i * 0xA)); // j_dk_hane_l2 joint, j_dk_hane_r2 joint
+                    emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_HANE_L2_e + i * DK_JNT_J_DK_YUBI_LC1_e));
                 }
             }
             if (i_this->m2EC[0] == 0xAA) {
@@ -2036,7 +2036,7 @@ static void end(bdk_class* i_this) {
             );
 
             if (emitter) {
-                emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_HANE_L2_e + i * 0xA)); // j_dk_hane_l2 joint, j_dk_hane_r2 joint
+                emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_HANE_L2_e + i * DK_JNT_J_DK_YUBI_LC1_e));
             }
         }
     }
@@ -2494,7 +2494,7 @@ static void col_set(bdk_class* i_this) {
 
     if (4 <= i_this->m8F8) {
         MTXCopy(
-            i_this->mpMorf->getModel()->getAnmMtx(REG8_S(2) + 0x21), // j_dk_tosaka_a3 joint
+            i_this->mpMorf->getModel()->getAnmMtx(REG8_S(2) + (s16)DK_JNT_J_DK_TOSAKA_A3_e),
             *calc_mtx
         );
 

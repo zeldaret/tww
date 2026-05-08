@@ -66,10 +66,12 @@ static BOOL body_nodeCallBack(J3DNode* node, int calcTiming) {
         J3DModel* model = j3dSys.getModel();
         bpw_class* i_this = (bpw_class*)model->getUserArea();
         if (i_this != NULL) {
-            if ((((jntNo == 0) || (jntNo == 2)) || (jntNo - 0x1d <= (u32)1)) || (jntNo == 0x25)) {
+            if (jntNo == BPW_JNT_BPW_ALLROOT_e || jntNo == BPW_JNT_J_BPW_KOSI1_e || jntNo == BPW_JNT_J_BPW_UDE_R3_e || jntNo == BPW_JNT_J_BPW_ITEM_e ||
+                jntNo == BPW_JNT_J_BPW_AGO1_e)
+            {
                 MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             }
-            if (jntNo == 0) {
+            if (jntNo == BPW_JNT_BPW_ALLROOT_e) {
                 local_28.x = 0.0f;
                 local_28.y = i_this->m4A0;
                 local_28.z = 0.0f;
@@ -79,31 +81,33 @@ static BOOL body_nodeCallBack(J3DNode* node, int calcTiming) {
                 local_28.z = 0.0f;
                 MtxPosition(&local_28, &i_this->m370);
             }
-            if (jntNo == 2) {
+            if (jntNo == BPW_JNT_J_BPW_KOSI1_e) {
                 local_28.x = 0.0f;
                 local_28.y = 0.0f;
                 local_28.z = 0.0f;
                 MtxPosition(&local_28, &i_this->m394);
             }
-            if (jntNo == 0x1d) {
+            if (jntNo == BPW_JNT_J_BPW_UDE_R3_e) {
                 local_28.x = 0.0f;
                 local_28.y = 0.0f;
                 local_28.z = 0.0f;
                 MtxPosition(&local_28, &i_this->m3B8);
             }
-            if (jntNo == 0x1e) {
+            if (jntNo == BPW_JNT_J_BPW_ITEM_e) {
                 local_28.x = 0.0f;
                 local_28.y = 0.0f;
                 local_28.z = 0.0f;
                 MtxPosition(&local_28, &i_this->mChildActorPos);
             }
-            if (jntNo == 0x25) {
+            if (jntNo == BPW_JNT_J_BPW_AGO1_e) {
                 local_28.x = 0.0f;
                 local_28.y = 0.0f;
                 local_28.z = 0.0f;
                 MtxPosition(&local_28, &i_this->m3C4);
             }
-            if (((jntNo == 0) || (jntNo == 2)) || (jntNo - 0x1d <= (u32)1 || (jntNo == 0x25))) {
+            if (jntNo == BPW_JNT_BPW_ALLROOT_e || jntNo == BPW_JNT_J_BPW_KOSI1_e || jntNo == BPW_JNT_J_BPW_UDE_R3_e || jntNo == BPW_JNT_J_BPW_ITEM_e ||
+                jntNo == BPW_JNT_J_BPW_AGO1_e)
+            {
                 model->setAnmMtx(jntNo, *calc_mtx);
                 cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             }
@@ -121,10 +125,10 @@ static BOOL kantera_nodeCallBack(J3DNode* node, int calcTiming) {
         J3DModel* model = j3dSys.getModel();
         bpw_class* i_this = (bpw_class*)model->getUserArea();
         if (i_this != NULL) {
-            if ((jntNo == 0) || (jntNo == 1)) {
+            if ((jntNo == BPW_KAN1_JNT_TOTTE_e) || (jntNo == BPW_KAN1_JNT_KANTERA_e)) {
                 MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             }
-            if (jntNo == 1) {
+            if (jntNo == BPW_KAN1_JNT_KANTERA_e) {
                 cMtx_YrotM(*calc_mtx, i_this->mKanteraDousaRot.y);
                 cMtx_XrotM(*calc_mtx, i_this->mKanteraDousaRot.x);
                 cMtx_ZrotM(*calc_mtx, i_this->mKanteraDousaRot.z);
@@ -133,7 +137,7 @@ static BOOL kantera_nodeCallBack(J3DNode* node, int calcTiming) {
                 local_28.z = 0.0f;
                 MtxPosition(&local_28, &i_this->m358);
             }
-            if ((jntNo == 0) || (jntNo == 1)) {
+            if ((jntNo == BPW_KAN1_JNT_TOTTE_e) || (jntNo == BPW_KAN1_JNT_KANTERA_e)) {
                 model->setAnmMtx(jntNo, *calc_mtx);
                 cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             }
@@ -1339,13 +1343,13 @@ void action_kougeki(bpw_class* i_this) {
         }
 #else
         if (i_this->m540.getEmitter() != NULL) {
-            i_this->m540.getEmitter()->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(2));
+            i_this->m540.getEmitter()->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(BPW_JNT_J_BPW_KOSI1_e));
         }
 #endif
         if (i_this->mSomeCountdownTimers[1] == 0) {
             JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPWINHALE00, &i_this->m394, &actor->shape_angle);
             if (emitter != NULL) {
-                emitter->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(2));
+                emitter->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(BPW_JNT_J_BPW_KOSI1_e));
             }
             i_this->mSomeCountdownTimers[1] = 6;
         }
@@ -1412,11 +1416,11 @@ void action_kougeki(bpw_class* i_this) {
         search_get_skull(i_this, 1);
 #if VERSION == VERSION_DEMO
         if (i_this->m50C_demo != NULL) {
-            i_this->m50C_demo->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(2));
+            i_this->m50C_demo->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(BPW_JNT_J_BPW_KOSI1_e));
         }
 #else
         if (i_this->m52C.getEmitter() != NULL) {
-            i_this->m52C.getEmitter()->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(2));
+            i_this->m52C.getEmitter()->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(BPW_JNT_J_BPW_KOSI1_e));
         }
 #endif
         i_this->mFire1DousaPos = actor->current.pos;

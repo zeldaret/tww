@@ -587,7 +587,20 @@ static s32 damage(btd_class* i_this)
         dPa_name::ID_AK_SN_BTDBREAKSHELLBODY,
         dPa_name::ID_AK_SN_BTDBREAKSHELLBODY
     };
-    static s32 hahen_eff_index[] = {0x2E, 0x21, 0x24, 0x42, 0x31, 0x27, 0x2A, 0x46, 0x37, 0x20, 0x2D, 0x34};
+    static s32 hahen_eff_index[] = {
+        BTD_JNT_ASIL11_e,
+        BTD_JNT_ASIL21_e,
+        BTD_JNT_ASIL31_e,
+        BTD_JNT_UDEL2_e,
+        BTD_JNT_ASIR11_e,
+        BTD_JNT_ASIR21_e,
+        BTD_JNT_ASIR31_e,
+        BTD_JNT_UDER2_e,
+        BTD_JNT_HEAD_e,
+        BTD_JNT_MUNE1_e,
+        BTD_JNT_MUNE2_e,
+        BTD_JNT_MUNE3_e
+    };
     fopAc_ac_c* actor = &i_this->actor;
     cXyz local_58;
 
@@ -677,7 +690,7 @@ static s32 damage(btd_class* i_this)
                 for (int i = 0, j = 0; i < 3; i++, j++) {
                     JPABaseEmitter* emitter = dComIfGp_particle_set(hibi_eff_name[j], &actor->current.pos);
                     if (emitter != NULL) {
-                        emitter->setGlobalRTMatrix(morf->getModel()->getAnmMtx(0x37));
+                        emitter->setGlobalRTMatrix(morf->getModel()->getAnmMtx(BTD_JNT_HEAD_e));
                     }
                 }
                 if (l_HIO.m06 != 0) {
@@ -859,7 +872,28 @@ static void end(btd_class* i_this) {
         dPa_name::ID_AK_SN_BTDBREAKDOWNARMR,
         dPa_name::ID_AK_SN_BTDBREAKDOWNARMR
     };
-    static s32 last_eff_index[] = {0x20, 0x2D, 0x34, 0x42, 0x43, 0x2E, 0x2F, 0x21, 0x22, 0x24, 0x25, 0x46, 0x47, 0x31, 0x32, 0x27, 0x28, 0x2A, 0x2B};
+    static s32 last_eff_index[] = {
+        SOTAI_JNT_MUNE1_e,
+        SOTAI_JNT_MUNE2_e,
+        SOTAI_JNT_MUNE3_e,
+        SOTAI_JNT_UDEL2_e,
+        SOTAI_JNT_UDEL3_e,
+        SOTAI_JNT_ASIL11_e,
+        SOTAI_JNT_ASHIL12_e,
+        SOTAI_JNT_ASIL21_e,
+        SOTAI_JNT_ASIL22_e,
+        SOTAI_JNT_ASIL31_e,
+        SOTAI_JNT_ASIL32_e,
+        SOTAI_JNT_UDER2_e,
+        SOTAI_JNT_UDER3_e,
+        SOTAI_JNT_ASIR11_e,
+        SOTAI_JNT_ASIR12_e,
+        SOTAI_JNT_ASIR21_e,
+        SOTAI_JNT_ASIR22_e,
+        SOTAI_JNT_ASIR31_e,
+        SOTAI_JNT_ASIR32_e
+    };
+
     fopAc_ac_c* actor = &i_this->actor;
     J3DModel* model;
     f32 fVar13;
@@ -1030,7 +1064,7 @@ static void end(btd_class* i_this) {
         i_this->m6E74.z += REG0_S(4) + 0x5dc;
         kubi_calc(i_this);
         if (i_this->m6038 != NULL) {
-            i_this->m6038->setGlobalRTMatrix(i_this->mpDeadHeadMorf->getModel()->getAnmMtx(0));
+            i_this->m6038->setGlobalRTMatrix(i_this->mpDeadHeadMorf->getModel()->getAnmMtx(NAMAKUBI_JNT_CENT_e));
         }
         break;
     case 0x36:
@@ -1485,7 +1519,7 @@ static void fire_attack(btd_class* i_this) {
         if (i_this->m02EC[0] <= 1) {
             i_this->mKankyoState = 2;
             mDoAud_seStart(JA_SE_CM_BTD_HIFUKI, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-            MTXCopy(morf->getModel()->getAnmMtx(0x3a), *calc_mtx);
+            MTXCopy(morf->getModel()->getAnmMtx(BTD_JNT_KUTI_e), *calc_mtx);
             local_2c.x = 0.0f;
             local_2c.y = i_this->m5E80 * -200.0f;
             local_2c.z = i_this->m5E80 * 1000.0f;
@@ -1568,7 +1602,7 @@ static void up_fire_attack(btd_class* i_this) {
         if (i_this->m02EC[0] == 0) {
             i_this->mKankyoState = 2;
             mDoAud_seStart(JA_SE_CM_BTD_HIFUKI, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-            MTXCopy(morf->getModel()->getAnmMtx(0x3a), *calc_mtx);
+            MTXCopy(morf->getModel()->getAnmMtx(BTD_JNT_KUTI_e), *calc_mtx);
             local_2c.x = 0.0f;
             local_2c.y = i_this->m5E80 * -200.0f;
             local_2c.z = i_this->m5E80 * 1000.0f;
@@ -1640,7 +1674,7 @@ static void yoko_fire_attack(btd_class* i_this) {
         if (i_this->m02EC[0] == 0) {
             i_this->mKankyoState = 2;
             mDoAud_seStart(JA_SE_CM_BTD_HIFUKI, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-            MTXCopy(morf->getModel()->getAnmMtx(0x3a), *calc_mtx);
+            MTXCopy(morf->getModel()->getAnmMtx(BTD_JNT_KUTI_e), *calc_mtx);
             local_2c.x = 0.0f;
             local_2c.y = i_this->m5E80 * -200.0f;
             local_2c.z = i_this->m5E80 * 1000.0f;
@@ -2249,7 +2283,7 @@ static f32 at_size[] = {
 
 /* 000072BC-00007608       .text btd_effect__FP9btd_class */
 static void btd_effect(btd_class* i_this) {
-    static s32 eff_index[] = {0x43, 0x47, 0x20, 0x2D, 0x34};
+    static s32 eff_index[] = {BTD_JNT_UDEL3_e, BTD_JNT_UDER3_e, BTD_JNT_MUNE1_e, BTD_JNT_MUNE2_e, BTD_JNT_MUNE3_e};
     static u16 eff_name[] = {
         dPa_name::ID_AK_SN_ARMFIRECHIP,
         dPa_name::ID_AK_SN_ARMFIRECHIP,
@@ -2295,12 +2329,12 @@ static void btd_effect(btd_class* i_this) {
             if (i_this->m600C[i] != NULL) {
                 if (i >= 4) {
                     if (i_this->m02EA != 0) {
-                        i_this->m600C[i]->setGlobalRTMatrix(morf->getModel()->getAnmMtx(0x48));
+                        i_this->m600C[i]->setGlobalRTMatrix(morf->getModel()->getAnmMtx(BTD_JNT_UDER4BUKI_e));
                     } else {
-                        i_this->m600C[i]->setGlobalRTMatrix(morf->getModel()->getAnmMtx(0x44));
+                        i_this->m600C[i]->setGlobalRTMatrix(morf->getModel()->getAnmMtx(BTD_JNT_UDEL4BUKI_e));
                     }
                 } else {
-                    i_this->m600C[i]->setGlobalRTMatrix(morf->getModel()->getAnmMtx(0x3a));
+                    i_this->m600C[i]->setGlobalRTMatrix(morf->getModel()->getAnmMtx(BTD_JNT_KUTI_e));
                 }
             } else if (i == 6) {
                 userID = dPa_name::ID_AK_ST_BTDCLAWSMOKEL00;

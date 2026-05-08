@@ -115,10 +115,10 @@ void daOship_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
     csXyz aim_rot(0, 0, 0);
 
     switch (jnt_no) {
-        case 1:
+        case VBTSP_JNT_HEAD_e:
             aim_rot.x = mAimRotY;
             break;
-        case 2:
+        case VBTSP_JNT_CANON_e:
             mDoMtx_stack_c::ZrotM(l_HIO.mNode2RotZ);
             aim_rot.z = -mAimRotX;
             break;
@@ -842,10 +842,10 @@ bool daOship_c::_execute() {
 
     Vec bomb_offset = { 0.0f, 0.0f, 0.0f };
     bomb_offset = l_HIO.mBombOffset;
-    cMtx_multVec(mpModel->getAnmMtx(2), &bomb_offset, &mBombSpawnPos);
+    cMtx_multVec(mpModel->getAnmMtx(VBTSP_JNT_CANON_e), &bomb_offset, &mBombSpawnPos);
     
     Vec smoke_offset = { 0.0f, 0.0f, 0.0f };
-    cMtx_multVec(mpModel->getAnmMtx(1), &smoke_offset, &mSmokePos);
+    cMtx_multVec(mpModel->getAnmMtx(VBTSP_JNT_HEAD_e), &smoke_offset, &mSmokePos);
 
     setAttention();
     setCollision();
@@ -977,8 +977,8 @@ BOOL daOship_c::_createHeap() {
     mpModel->setUserArea((u32) this);
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         switch (i) {
-            case 1:
-            case 2:
+            case VBTSP_JNT_HEAD_e:
+            case VBTSP_JNT_CANON_e:
                 modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
                 break;
             default:

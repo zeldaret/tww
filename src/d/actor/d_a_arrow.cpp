@@ -228,22 +228,22 @@ void daArrow_c::setDrawShapeMaterial() {
         {
             /* mAtType      */ AT_TYPE_NORMAL_ARROW,
             /* mAtp         */ 2,
-            /* mTipJointIdx */ 4,
+            /* mTipJointIdx */ ARROW_JNT_TIPNOMAL_e,
         },
         {
             /* mAtType      */ AT_TYPE_FIRE_ARROW,
             /* mAtp         */ 4,
-            /* mTipJointIdx */ 2,
+            /* mTipJointIdx */ ARROW_JNT_TIPFIRE_e,
         },
         {
             /* mAtType      */ AT_TYPE_ICE_ARROW,
             /* mAtp         */ 4,
-            /* mTipJointIdx */ 3,
+            /* mTipJointIdx */ ARROW_JNT_TIPICE_e,
         },
         {
             /* mAtType      */ AT_TYPE_LIGHT_ARROW,
             /* mAtp         */ 0xFF,
-            /* mTipJointIdx */ 0,
+            /* mTipJointIdx */ ARROWGLITTER_JNT_ARROWGLITTER_e,
         },
     };
     
@@ -1068,10 +1068,10 @@ BOOL daArrow_c::createInit() {
     
     if (mArrowType != TYPE_LIGHT) {
         J3DModelData* modelData = mpModel->getModelData();
-        modelData->getJointNodePointer(4)->getMesh()->getShape()->hide();
-        modelData->getJointNodePointer(2)->getMesh()->getShape()->hide();
-        modelData->getJointNodePointer(3)->getMesh()->getShape()->hide();
-        modelData->getJointNodePointer(3)->getMesh()->getNext()->getShape()->hide();
+        modelData->getJointNodePointer(ARROW_JNT_TIPNOMAL_e)->getMesh()->getShape()->hide();
+        modelData->getJointNodePointer(ARROW_JNT_TIPFIRE_e)->getMesh()->getShape()->hide();
+        modelData->getJointNodePointer(ARROW_JNT_TIPICE_e)->getMesh()->getShape()->hide();
+        modelData->getJointNodePointer(ARROW_JNT_TIPICE_e)->getMesh()->getNext()->getShape()->hide();
     }
     setDrawShapeMaterial();
     
