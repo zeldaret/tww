@@ -53,15 +53,13 @@ void dDemo_actor_c::setActor(fopAc_ac_c* ac) {
 
 /* 80069434-80069550       .text getP_BtpData__13dDemo_actor_cFPCc */
 J3DAnmTexPattern* dDemo_actor_c::getP_BtpData(const char* param_1) {
-    /* Nonmatching */
-
     const char* name;
 
     u32 id;
     if (checkEnable(ENABLE_TEX_ANM)) {
         id = this->mTexAnimation;
     } else {
-        if (!checkEnable(ENABLE_UNK_e))
+        if (!checkEnable(ENABLE_DATA_e))
             return NULL;
 
         const void* prm = mPrm.mData;
@@ -110,7 +108,7 @@ J3DAnmTexPattern* dDemo_actor_c::getP_BtpData(const char* param_1) {
 
 /* 80069550-800695E8       .text getP_BrkData__13dDemo_actor_cFPCc */
 void* dDemo_actor_c::getP_BrkData(const char* param_1) {
-    if (!checkEnable(ENABLE_UNK_e)) {
+    if (!checkEnable(ENABLE_DATA_e)) {
         return NULL;
     }
 
@@ -140,7 +138,7 @@ void* dDemo_actor_c::getP_BrkData(const char* param_1) {
 
 /* 800695E8-8006969C       .text getP_BtkData__13dDemo_actor_cFPCc */
 J3DAnmTextureSRTKey* dDemo_actor_c::getP_BtkData(const char* param_1) {
-    if (!checkEnable(ENABLE_UNK_e)) {
+    if (!checkEnable(ENABLE_DATA_e)) {
         return NULL;
     }
 
@@ -179,7 +177,7 @@ f32 dDemo_actor_c::getPrm_Morf() {
         return mAnmTransition;
     }
 
-    if (!checkEnable(ENABLE_UNK_e)) {
+    if (!checkEnable(ENABLE_DATA_e)) {
         return 0.0f;
     }
 
@@ -321,7 +319,7 @@ void dDemo_actor_c::JSGSetData(u32 p0, const void* p1, u32 p2) {
     mPrm.mId = p0;
     mPrm.mData = p1;
     field_0x54 = p2;
-    onEnable(ENABLE_UNK_e);
+    onEnable(ENABLE_DATA_e);
 }
 
 /* 80069BDC-80069C04       .text JSGSetTranslation__13dDemo_actor_cFRC3Vec */

@@ -39,7 +39,7 @@ public:
 class dDemo_actor_c : public JStage::TActor {
 public:
     enum Enable_e {
-        /* 0x001 */ ENABLE_UNK_e = (1 << 0),
+        /* 0x001 */ ENABLE_DATA_e = (1 << 0),
         /* 0x002 */ ENABLE_TRANS_e = (1 << 1),
         /* 0x004 */ ENABLE_SCALE_e = (1 << 2),
         /* 0x008 */ ENABLE_ROTATE_e = (1 << 3),

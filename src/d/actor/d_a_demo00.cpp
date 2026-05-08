@@ -228,7 +228,7 @@ BOOL daDemo00_c::execute() {
         if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_ANM_e)) {
             nextRes.bckID = demo_actor->getAnmId();
         }
-        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_UNK_e)) {
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_DATA_e)) {
 #if VERSION > VERSION_DEMO
             u8 r29 = field_0x29c;
 #endif
