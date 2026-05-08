@@ -24,6 +24,7 @@
 #include "d/actor/d_a_obj_mmrr.h"
 #include "d/actor/d_a_obj_mkie.h"
 #include "d/actor/d_a_player.h"
+#include "d/actor/d_a_obj_eff.h"
 
 namespace daObjMovebox {
     dBgS_ObjGndChk Bgc_c::M_gnd_work[23];
@@ -1723,8 +1724,7 @@ namespace daObjMovebox {
             emitter->setLifeTime(30);
             emitter->setAwayFromAxisSpeed(30.0f);
         }
-        fopAcM_create(PROC_Obj_Eff, 0x5, &particlePos);
-        // TODO daObjEff::Act_c::make_woodBox_smoke(cXyz*)
+        daObjEff::Act_c::make_woodBox_smoke(&particlePos);
     }
     
     /* 00003570-00003808       .text sound_break__Q212daObjMovebox5Act_cFv */

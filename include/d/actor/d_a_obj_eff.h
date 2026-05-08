@@ -19,12 +19,25 @@ namespace daObjEff {
             PRM_TYPE_S = 0,
         };
 
-        static void make_barrel_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, 0, pos); }
-        static void make_land_smoke(cXyz*, float) {}
-        static void make_pinecone_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, 4, pos); }
-        static void make_skull_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, 2, pos); }
-        static void make_stool_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, 1, pos); }
-        static void make_woodBox_smoke(cXyz*) {}
+        enum Type_e {
+            Type_BARREL_SMOKE_e = 0,
+            Type_STOOL_SMOKE_e = 1,
+            Type_SKULL_SMOKE_e = 2,
+            Type_LAND_SMOKE_e = 3,
+            Type_PINECONE_SMOKE_e = 4,
+            Type_WOODBOX_SMOKE_e = 5,
+        };
+
+        static void make_barrel_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, Type_BARREL_SMOKE_e, pos); }
+        static void make_stool_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, Type_STOOL_SMOKE_e, pos); }
+        static void make_skull_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, Type_SKULL_SMOKE_e, pos); }
+        static void make_land_smoke(cXyz* i_pos, f32 i_scale) {
+            cXyz scale(i_scale, i_scale, i_scale);
+            scale *= (5.0f / 3.0f);
+            fopAcM_create(PROC_Obj_Eff, Type_LAND_SMOKE_e, i_pos, -1, NULL, &scale);
+        }
+        static void make_pinecone_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, Type_PINECONE_SMOKE_e, pos); }
+        static void make_woodBox_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, Type_WOODBOX_SMOKE_e, pos); }
         int prm_get_type() const {
             return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S);
         }
@@ -63,7 +76,7 @@ namespace daObjEff {
         bool _execute();
     
     public:
-        /* 0x290 */ int mProcIndex;
+        /* 0x290 */ int mType;
         /* 0x294 */ dPa_followEcallBack* mParticleCallback;
     };
 

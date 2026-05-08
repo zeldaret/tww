@@ -5,8 +5,11 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_a_obj.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_obj_eff.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_lib.h"
 #include "d/d_procname.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_path.h"
@@ -15,13 +18,13 @@
 namespace daObj {
 
 /* 800666EC-800668BC       .text make_land_effect__5daObjFP10fopAc_ac_cP11dBgS_GndChkf */
-void make_land_effect(fopAc_ac_c* ac, dBgS_GndChk* chk, f32 scale) {
+void make_land_effect(fopAc_ac_c* i_actor, dBgS_GndChk* chk, f32 scale) {
     cXyz scaleV;
     switch (dComIfG_Bgsp()->GetAttributeCode(*chk)) {
     case dBgS_Attr_WATER_e:
         {
             scaleV.setall(scale * 0.85f);
-            JPABaseEmitter* pEmtr = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTSHIBUKI00, &ac->current.pos, NULL, &scaleV);
+            JPABaseEmitter* pEmtr = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTSHIBUKI00, &i_actor->current.pos, NULL, &scaleV);
             if (pEmtr != NULL) {
                 pEmtr->setRate(20.0f);
                 pEmtr->setMaxFrame(1);
@@ -33,7 +36,7 @@ void make_land_effect(fopAc_ac_c* ac, dBgS_GndChk* chk, f32 scale) {
     case dBgS_Attr_GRASS_e:
         {
             scaleV.setall(scale);
-            JPABaseEmitter* pEmtr = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTKUSA00, &ac->current.pos, NULL, &scaleV);
+            JPABaseEmitter* pEmtr = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTKUSA00, &i_actor->current.pos, NULL, &scaleV);
             if (pEmtr != NULL) {
                 pEmtr->setLifeTime(20);
                 pEmtr->setRate(50.0f);
@@ -51,25 +54,20 @@ void make_land_effect(fopAc_ac_c* ac, dBgS_GndChk* chk, f32 scale) {
     case dBgS_Attr_UNK1B_e:
         break;
     default:
-        {
-            cXyz scaleV;
-            scaleV.setall(scale);
-            scaleV *= (5.0f / 3.0f);
-            fopAcM_create(PROC_Obj_Eff, 3, &ac->current.pos, -1, NULL, &scaleV);
-        }
+        daObjEff::Act_c::make_land_smoke(&i_actor->current.pos, scale);
         break;
     }
 }
 
 /* 800668BC-800669E8       .text get_wind_spd__5daObjFP10fopAc_ac_cf */
-cXyz& get_wind_spd(fopAc_ac_c* param_1, f32 param_2) {
+cXyz& get_wind_spd(fopAc_ac_c* i_actor, f32 param_2) {
     static cXyz total_spd(cXyz::Zero);
 
     cXyz wind = *dKyw_get_wind_vec() * dKyw_get_wind_pow();
 
     cXyz pntVec;
     f32 pntPow;
-    dKyw_pntwind_get_info(&param_1->current.pos, &pntVec, &pntPow);
+    dKyw_pntwind_get_info(&i_actor->current.pos, &pntVec, &pntPow);
     pntVec *= pntPow;
 
     total_spd = (wind + pntVec) * (param_2 * 0.5f);
@@ -94,35 +92,31 @@ cXyz& get_path_spd(cBgS_PolyInfo& param_1, f32 param_2) {
 }
 
 /* 80066B0C-80066B3C       .text posMoveF_stream__5daObjFP10fopAc_ac_cPC4cXyzPC4cXyzff */
-void posMoveF_stream(fopAc_ac_c* param_1, const cXyz* param_2, const cXyz* param_3, f32 param_4, f32 param_5) {
-    posMoveF_grade(param_1, param_2, param_3, param_4, param_5, 0, 0.0f, 0.0f, 0);
+void posMoveF_stream(fopAc_ac_c* i_actor, const cXyz* param_2, const cXyz* param_3, f32 param_4, f32 param_5) {
+    posMoveF_grade(i_actor, param_2, param_3, param_4, param_5, 0, 0.0f, 0.0f, 0);
 }
 
 namespace {
     /* 80066B3C-80066C38       .text posMoveF_resist_acc__Q25daObj21@unnamed@d_a_obj_cpp@FP4cXyzPC10fopAc_ac_cPC4cXyzff */
-    void posMoveF_resist_acc(cXyz* pDst, const fopAc_ac_c* pActor, const cXyz* pStreamSpd, f32 param_4, f32 param_5) {
-        cXyz delta = pActor->speed - *pStreamSpd;
+    void posMoveF_resist_acc(cXyz* pDst, const fopAc_ac_c* i_actor, const cXyz* pStreamSpd, f32 param_4, f32 param_5) {
+        const cXyz delta = i_actor->speed - *pStreamSpd;
+        cXyz result(delta.x * param_4, delta.y * param_4, delta.z * param_4);
 
-        f32 dx = delta.x;
-        f32 dy = delta.y;
-        f32 dz = delta.z;
-
-        cXyz result(dx * param_4, dy * param_4, dz * param_4);
-        result.x += std::fabsf(dx) * dx * param_5;
-        result.y += std::fabsf(dy) * dy * param_5;
-        result.z += std::fabsf(dz) * dz * param_5;
+        result.x += std::fabsf(delta.x) * delta.x * param_5;
+        result.y += std::fabsf(delta.y) * delta.y * param_5;
+        result.z += std::fabsf(delta.z) * delta.z * param_5;
 
         result *= -1.0f;
         *pDst = result;
     }
 
     /* 80066C38-80066D6C       .text posMoveF_grade_acc__Q25daObj21@unnamed@d_a_obj_cpp@FP4cXyzPC10fopAc_ac_cPC4cXyzffPC4cXyzPC4cXyz */
-    void posMoveF_grade_acc(cXyz* pDst, const fopAc_ac_c* pActor, const cXyz* pNorm, f32 friction, f32 noGradeCos, const cXyz* pAccel0, const cXyz* pAccel1) {
+    void posMoveF_grade_acc(cXyz* pDst, const fopAc_ac_c* i_actor, const cXyz* pNorm, f32 friction, f32 noGradeCos, const cXyz* pAccel0, const cXyz* pAccel1) {
         *pDst = cXyz::Zero;
 
         if(pNorm) {
             cXyz accel = *pAccel0;
-            accel.y = pAccel0->y + pActor->gravity;
+            accel.y = pAccel0->y + i_actor->gravity;
             if(pAccel1) {
                 accel += *pAccel1;
             }
@@ -135,7 +129,7 @@ namespace {
                 }
 
                 cXyz temp;
-                cM3d_CrawVec(*pNorm, pActor->speed, &temp);
+                cM3d_CrawVec(*pNorm, i_actor->speed, &temp);
                 *pDst -= temp * friction;
             }
         }
@@ -181,55 +175,214 @@ void posMoveF_grade(fopAc_ac_c* i_actor, const cXyz* p_add_vel, const cXyz* stre
 }
 
 /* 8006700C-800671D4       .text quat_rotBaseY__5daObjFP10QuaternionRC4cXyz */
-void quat_rotBaseY(Quaternion*, const cXyz&) {
-    /* Nonmatching */
+void quat_rotBaseY(Quaternion* quat, const cXyz& param_1) {
+    static const Quaternion zero_quat = {0.0f, 0.0f, 0.0f, 1.0f};
+
+    f32 f30 = param_1.abs2();
+    if (f30 > 9.999999E-9f) {
+        cXyz sp4C = cXyz::BaseY.outprod(param_1);
+
+        f32 f31 = sp4C.abs2();
+        if (f31 > 9.999999E-9f) {
+            cXyz sp58 = param_1 / f30;
+            f32 f1 = acos(cXyz::BaseY.inprod(sp58));
+            f32 f30_2 = f1; // Fakematch? Fixes missing fmr for demo
+            sp4C /= f31;
+            mDoMtx_quatRotAxisRad(quat, &sp4C, f30_2);
+        } else {
+            *quat = zero_quat;
+        }
+    } else {
+        *quat = zero_quat;
+    }
 }
 
 /* 800671D4-8006737C       .text quat_rotBaseY2__5daObjFP10QuaternionRC4cXyz */
-void quat_rotBaseY2(Quaternion*, const cXyz&) {
-    /* Nonmatching */
+void quat_rotBaseY2(Quaternion* quat, const cXyz& param_1) {
+    static const Quaternion zero_quat = {0.0f, 0.0f, 0.0f, 1.0f};
+
+    cXyz sp18 = param_1;
+    if (sp18.normalizeRS()) {
+        f32 f31 = std::sqrtf(2.0f * (cXyz::BaseY.inprod(sp18) + 1.0f));
+
+        sp18 = cXyz::BaseY.outprod(sp18);
+        if (std::fabsf(f31) > 0.0001f) {
+            f32 f1 = 1.0f / f31;
+            quat->x = sp18.x * f1;
+            quat->y = sp18.y * f1;
+            quat->z = sp18.z * f1;
+            quat->w = 0.5f * f31;
+        } else {
+            *quat = zero_quat;
+        }
+    } else {
+        *quat = zero_quat;
+    }
 }
 
 /* 8006737C-80067524       .text quat_rotBaseZ__5daObjFP10QuaternionRC4cXyz */
-void quat_rotBaseZ(Quaternion*, const cXyz&) {
-    /* Nonmatching */
+void quat_rotBaseZ(Quaternion* quat, const cXyz& param_1) {
+    cXyz sp18 = param_1;
+    if (sp18.normalizeRS()) {
+        f32 f31 = std::sqrtf(2.0f * (cXyz::BaseZ.inprod(sp18) + 1.0f));
+
+        sp18 = cXyz::BaseZ.outprod(sp18);
+        if (std::fabsf(f31) > 0.0001f) {
+            f32 f1 = 1.0f / f31;
+            quat->x = sp18.x * f1;
+            quat->y = sp18.y * f1;
+            quat->z = sp18.z * f1;
+            quat->w = 0.5f * f31;
+        } else {
+            *quat = ZeroQuat;
+        }
+    } else {
+        *quat = ZeroQuat;
+    }
 }
 
 /* 80067524-800676EC       .text quat_rotVec__5daObjFP10QuaternionRC4cXyzRC4cXyz */
-void quat_rotVec(Quaternion*, const cXyz&, const cXyz&) {
-    /* Nonmatching */
+void quat_rotVec(Quaternion* quat, const cXyz& param_1, const cXyz& param_2) {
+    cXyz sp24 = param_2;
+    cXyz sp18 = param_1;
+    if (sp24.normalizeRS() && sp18.normalizeRS()) {
+        f32 f31 = std::sqrtf(2.0f * (sp18.inprod(sp24) + 1.0f));
+
+        sp24 = sp18.outprod(sp24);
+        if (std::fabsf(f31) > 0.0001f) {
+            f32 f1 = 1.0f / f31;
+            quat->x = sp24.x * f1;
+            quat->y = sp24.y * f1;
+            quat->z = sp24.z * f1;
+            quat->w = 0.5f * f31;
+        } else {
+            *quat = ZeroQuat;
+        }
+    } else {
+        *quat = ZeroQuat;
+    }
 }
 
 /* 800676EC-80067734       .text SetCurrentRoomNo__5daObjFP10fopAc_ac_cP11dBgS_GndChk */
-void SetCurrentRoomNo(fopAc_ac_c* ac, dBgS_GndChk* chk) {
+void SetCurrentRoomNo(fopAc_ac_c* i_actor, dBgS_GndChk* chk) {
     s32 roomId = dComIfG_Bgsp()->GetRoomId(*chk);
     if (roomId >= 0)
-        fopAcM_SetRoomNo(ac, roomId);
+        fopAcM_SetRoomNo(i_actor, roomId);
 }
 
 /* 80067734-800678A8       .text HitSeStart__5daObjFPC4cXyziPC12dCcD_GObjInfUl */
-void HitSeStart(const cXyz*, int, const dCcD_GObjInf*, unsigned long) {
-    /* Nonmatching */
+void HitSeStart(const cXyz* i_sePos, int i_roomNo, const dCcD_GObjInf* i_CcObj, u32 param_3) {
+    int hit_se = const_cast<dCcD_GObjInf*>(i_CcObj)->GetTgHitObjSe();
+    fopAc_ac_c* hit_actor = const_cast<dCcD_GObjInf*>(i_CcObj)->GetTgHitAc();
+    cCcD_Obj* hit_obj = const_cast<dCcD_GObjInf*>(i_CcObj)->GetTgHitObj();
+    bool master_sword_hit = false;
+    u32 sfx;
+
+    if (hit_se != dCcG_SE_NONE) {
+        if (hit_actor != NULL && hit_obj != NULL) {
+            if (hit_obj->ChkAtType(AT_TYPE_SKULL_HAMMER)) {
+                sfx = JA_SE_LK_HAMMER_HIT;
+            } else if (hit_obj->ChkAtType(AT_TYPE_NORMAL_ARROW | AT_TYPE_FIRE_ARROW | AT_TYPE_ICE_ARROW | AT_TYPE_LIGHT_ARROW)) {
+                sfx = JA_SE_LK_ARROW_REBOUND;
+            } else if (hit_obj->ChkAtType(AT_TYPE_HOOKSHOT)) {
+                sfx = JA_SE_LK_HS_REBOUND;
+            } else {
+                if (fopAcM_GetProfName(hit_actor) == PROC_PLAYER) {
+                    daPy_py_c* sp14 = (daPy_py_c*)hit_actor;
+                    if (sp14->checkMasterSwordEquip()) {
+                        master_sword_hit = true;
+                    }
+                }
+
+                if (hit_se == dCcG_SE_UNK4) {
+                    sfx = JA_SE_LK_W_WEP_HIT;
+                } else if (hit_se == dCcG_SE_UNK5) {
+                    sfx = JA_SE_LK_MS_WEP_HIT;
+                } else if (master_sword_hit) {
+                    sfx = JA_SE_LK_SW_HIT_M;
+                } else {
+                    sfx = JA_SE_LK_SW_HIT_S;
+                }
+            }
+        }
+
+        u32 sp10 = param_3 & 0xFF;
+        s8 reverb = dComIfGp_getReverb(i_roomNo);
+        mDoAud_seStart(sfx, (Vec*)i_sePos, sp10, (s8)reverb);
+    }
 }
 
 /* 800678A8-800679FC       .text HitEff_sub_kikuzu__5daObjFPC4cXyzPC4cXyzPC12dKy_tevstr_c */
-void HitEff_sub_kikuzu(const cXyz*, const cXyz*, const dKy_tevstr_c*) {
-    /* Nonmatching */
+void HitEff_sub_kikuzu(const cXyz* r30, const cXyz* r31, const dKy_tevstr_c* i_tevStr) {
+    cXyz sp24(r31->x, 0.0f, r31->z);
+    csXyz sp1C;
+    sp1C.x = cM_atan2s(r31->y, sp24.abs());
+    sp1C.y = cM_atan2s(r31->x, r31->z);
+    sp1C.z = 0;
+    JPABaseEmitter* emitter = dComIfGp_particle_set(
+        dPa_name::ID_AK_JN_ELEMENTKIKUZU00, r30, &sp1C,
+        NULL, 0xFF, NULL, -1,
+        &((dKy_tevstr_c*)i_tevStr)->mColorK0, &((dKy_tevstr_c*)i_tevStr)->mColorK0
+    );
+    if (emitter) {
+        emitter->setRate(8.0f);
+        emitter->setMaxFrame(1);
+        emitter->setSpread(0.2f);
+        emitter->setVolumeSweep(0.15f);
+    }
 }
 
 /* 800679FC-80067AE0       .text HitEff_kikuzu__5daObjFPC10fopAc_ac_cPC8dCcD_Cyl */
-void HitEff_kikuzu(const fopAc_ac_c*, const dCcD_Cyl*) {
-    /* Nonmatching */
+void HitEff_kikuzu(const fopAc_ac_c* i_actor, const dCcD_Cyl* i_cyl) {
+    dCcD_Cyl* p_cyl = const_cast<dCcD_Cyl*>(i_cyl);
+    int hit_se = p_cyl->GetTgHitObjSe();
+    if (hit_se != dCcG_SE_NONE) {
+        cXyz* r31 = p_cyl->GetTgHitPosP();
+        cXyz sp14 = *p_cyl->GetTgRVecP() * -1.0f;
+        if (sp14.getSquareMag() < 0.010000001f) {
+            sp14.x = r31->x - p_cyl->GetCoCP()->x;
+            sp14.y = 0.0f;
+            sp14.z = r31->z - p_cyl->GetCoCP()->z;
+        }
+        HitEff_sub_kikuzu(r31, &sp14, &i_actor->tevStr);
+    }
+}
+
+static void dummy(cCcD_SphAttr* sph) {
+    sph->GetCoCP();
 }
 
 /* 80067AF0-80067C40       .text HitEff_hibana__5daObjFPC4cXyzPC4cXyz */
-void HitEff_hibana(const cXyz*, const cXyz*) {
-    /* Nonmatching */
+void HitEff_hibana(const cXyz* r30, const cXyz* r31) {
+    cXyz sp24(r31->x, 0.0f, r31->z);
+    csXyz sp1C;
+    sp1C.x = cM_atan2s(r31->y, sp24.abs());
+    sp1C.x += 0x4000;
+    sp1C.y = cM_atan2s(r31->x, r31->z);
+    sp1C.z = 0;
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTHIBANA00, r30, &sp1C);
+    if (emitter) {
+        emitter->setRate(20.0f);
+        emitter->setMaxFrame(1);
+        emitter->setAwayFromAxisSpeed(20.0f);
+        emitter->setDirectionalSpeed(20.0f);
+    }
 }
 
 /* 80067C40-80067D1C       .text HitEff_hibana__5daObjFPC10fopAc_ac_cPC8dCcD_Cyl */
-void HitEff_hibana(const fopAc_ac_c*, const dCcD_Cyl*) {
-    /* Nonmatching */
+void HitEff_hibana(const fopAc_ac_c* i_actor, const dCcD_Cyl* i_cyl) {
+    dCcD_Cyl* p_cyl = const_cast<dCcD_Cyl*>(i_cyl);
+    int hit_se = p_cyl->GetTgHitObjSe();
+    if (hit_se != dCcG_SE_NONE) {
+        cXyz* r31 = p_cyl->GetTgHitPosP();
+        cXyz sp14 = *p_cyl->GetTgRVecP() * -1.0f;
+        if (sp14.getSquareMag() < 0.010000001f) {
+            sp14.x = r31->x - p_cyl->GetCoCP()->x;
+            sp14.y = 0.0f;
+            sp14.z = r31->z - p_cyl->GetCoCP()->z;
+        }
+        HitEff_hibana(r31, &sp14);
+    }
 }
 
 }  // namespace daObj
