@@ -109,7 +109,7 @@ public:
 #else
     virtual ~mDoHIO_entry_c() {}
 #endif
-};
+}; // size = 0x8
 
 extern mDoHIO_root_c mDoHIO_root;
 

@@ -181,8 +181,10 @@ public:
         return mSpeed;
     }
 
-    cXyz getAttnPos() {
-        return mPos;
+    cXyz getAttnPos() { return mPos; }
+
+    void setAttnPos(cXyz& pos) {
+        mPos = pos;
     }
 
     s16 getTurnSpeed() {

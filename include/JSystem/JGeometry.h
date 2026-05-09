@@ -91,9 +91,9 @@ struct TVec3<f32> : public Vec {
 
     template<typename f32>
     void set(const TVec3<f32>& other) {
-        x = (f32)other.x;
-        y = (f32)other.y;
-        z = (f32)other.z;
+        x = other.x;
+        y = other.y;
+        z = other.z;
     }
 
     void set(const Vec& vec) {
