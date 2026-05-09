@@ -324,7 +324,7 @@ BOOL daPy_lk_c::jointBeforeCB(int jnt_no, J3DTransformInfo* param_2, Quaternion*
         mCurProc != daPyProc_VOMIT_WAIT_e && mCurProc != daPyProc_ELEC_DAMAGE_e && mCurProc != daPyProc_DEMO_DOOR_OPEN_e
     )
 #else
-    if (!checkResetFlg0(daPyRFlg0_UNK800000))
+    if (!checkResetFlg0(daPyRFlg0_ORIGINAL_HAT_ANIM))
 #endif
     {
         if (jnt_no == 0x1A) {
@@ -2432,13 +2432,11 @@ void daPy_lk_c::posMoveFromFootPos() {
     } else {
         speedF = sp7C.z;
         if (mCurProc == daPyProc_SWIM_MOVE_e) {
-            u16 r3 =
-                cM_rad2s(M_PI * (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() / mFrameCtrlUnder[UNDER_MOVE0_e].getEnd()));
-            f32 f30;
-            f30 = std::abs(cM_scos(r3 & 0xFFFF));
-            f32 f1 =
-                ((speedF * (1.0f - m_HIO->mSwim.m.field_0x60)) + m_HIO->mSwim.m.field_0x60 * (speedF * f30)) /
-                (1.0f + (m_HIO->mSwim.m.field_0x7C * getSwimTimerRate()));
+            f32 f1 = (
+                (speedF * (1.0f - m_HIO->mSwim.m.field_0x60)) +
+                m_HIO->mSwim.m.field_0x60 *
+                (speedF * std::abs(cM_scos(cM_rad2s(M_PI * (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() / mFrameCtrlUnder[UNDER_MOVE0_e].getEnd())))))
+            ) / (1.0f + (m_HIO->mSwim.m.field_0x7C * getSwimTimerRate()));
             speed.x = f1 * cM_ssin(current.angle.y);
             speed.z = f1 * cM_scos(current.angle.y);
         } else if (mCurProc != daPyProc_CUT_ROLL_e || !dComIfGp_event_runCheck() ||
@@ -2761,15 +2759,10 @@ void daPy_lk_c::setBodyAngleXReadyAnime() {
 
 /* 8010A4D4-8010A96C       .text setSpeedAndAngleNormal__9daPy_lk_cFs */
 void daPy_lk_c::setSpeedAndAngleNormal(s16 param_1) {
-    BOOL bVar2;
-    s16 sVar6;
-    s16 sVar7;
     f32 dVar11;
-    f32 dVar10;
     f32 dVar9;
-
     if (mStickDistance > 0.05f) {
-        bVar2 = false;
+        BOOL bVar2 = false;
         dVar11 = mStickDistance * mStickDistance;
         if (checkHeavyStateOn()) {
             dVar11 *= 1.0f / (m_HIO->mMove.m.field_0x80 * m_HIO->mMove.m.field_0x80);
@@ -2800,6 +2793,8 @@ void daPy_lk_c::setSpeedAndAngleNormal(s16 param_1) {
                                    m_HIO->mMove.m.field_0x4);
             }
         } else {
+            s16 sVar6;
+            s16 sVar7;
             if (dComIfGp_event_runCheck()) {
                 sVar6 = param_1;
                 sVar7 = m_HIO->mMove.m.field_0x4;
@@ -2813,8 +2808,7 @@ void daPy_lk_c::setSpeedAndAngleNormal(s16 param_1) {
                     sVar7 = 1;
                 }
             }
-            cLib_addCalcAngleS(&current.angle.y, m34E8, m_HIO->mMove.m.field_0x6, sVar6,
-                               sVar7);
+            cLib_addCalcAngleS(&current.angle.y, m34E8, m_HIO->mMove.m.field_0x6, sVar6, sVar7);
         }
         if (!bVar2) {
             dVar9 = cM_scos(m34E8 - current.angle.y);
@@ -2828,7 +2822,7 @@ void daPy_lk_c::setSpeedAndAngleNormal(s16 param_1) {
             if (dComIfGp_event_runCheck()) {
                 dVar9 *= m_HIO->mMove.m.field_0x14 * mStickDistance;
             } else {
-                dVar10 = 0.5f - (0.5f * std::abs(mVelocity / mMaxNormalSpeed));
+                f32 dVar10 = 0.5f - (0.5f * std::abs(mVelocity / mMaxNormalSpeed));
                 if (checkHeavyStateOn()) {
                     dVar10 *= m_HIO->mMove.m.field_0x80;
                 }
@@ -2850,10 +2844,10 @@ void daPy_lk_c::setSpeedAndAngleNormal(s16 param_1) {
     if ((!checkAttentionLock() && mCurProc != daPyProc_MOVE_TURN_e) &&
         mStickDistance > 0.05f)
     {
-        sVar6 = shape_angle.y;
+        s16 sVar6 = shape_angle.y;
         cLib_addCalcAngleS(&shape_angle.y, m34E8, m_HIO->mMove.m.field_0x6,
                            (s16)(param_1 << 1), (s16)(m_HIO->mMove.m.field_0x4 << 1));
-        sVar7 = current.angle.y;
+        s16 sVar7 = current.angle.y;
         if ((s16)(sVar6 - sVar7) * (s16)(shape_angle.y - sVar7) <= 0) {
             shape_angle.y = sVar7;
         }
@@ -3797,7 +3791,7 @@ BOOL daPy_lk_c::changeDragonShield(int param_1) {
 
 /* 8010CD34-8010CFB4       .text checkNewItemChange__9daPy_lk_cFUc */
 BOOL daPy_lk_c::checkNewItemChange(u8 param_1) {
-    u32 uVar4 = dComIfGp_getSelectItem(param_1);
+    u16 uVar4 = dComIfGp_getSelectItem(param_1);
 
     if (uVar4 == dItem_MAGIC_ARMOR_e) {
         return changeDragonShield(1);
@@ -4188,7 +4182,9 @@ BOOL daPy_lk_c::checkNextActionFromButton() {
                 if (dComIfGp_getDoStatus() == dActStts_OPEN_e) {
                     if (mpAttnEntryA->mType == 5) {
                         fopAcM_orderDoorEvent(this, mpAttnActorA);
+#if VERSION > VERSION_DEMO
                         changeWaitProc();
+#endif
                     } else {
                         fopAcM_orderTreasureEvent(this, mpAttnActorA);
                     }
@@ -4285,9 +4281,12 @@ BOOL daPy_lk_c::checkNextActionFromButton() {
         if (changeSpecialBattle())
             return true;
     }
-    if ((dComIfGp_getRStatus() == dActStts_BLANK_e && !checkUpperReadyThrowAnime()) &&
-        !checkEquipAnime())
-    {
+    if (
+        (dComIfGp_getRStatus() == dActStts_BLANK_e && !checkUpperReadyThrowAnime())
+#if VERSION > VERSION_DEMO
+        && !checkEquipAnime()
+#endif
+    ) {
         if (!checkGrabAnime()) {
             if (checkNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND)) {
                 dComIfGp_setRStatus(dActStts_CALL_e);
@@ -4336,9 +4335,12 @@ BOOL daPy_lk_c::checkNextActionFromButton() {
             return procFrontRoll_init(m_HIO->mRoll.m.field_0xC);
         }
     }
-    if ((daPy_getPlayerActorClass() == this && !dComIfGp_event_runCheck()) &&
-        !checkGrabWear())
-    {
+    if (
+        (daPy_getPlayerActorClass() == this && !dComIfGp_event_runCheck())
+#if VERSION > VERSION_DEMO
+        && !checkGrabWear()
+#endif
+    ) {
         onResetFlg0(daPyRFlg0_SUBJECT_ACCEPT);
         if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000)) {
             return procSubjectivity_init(0);
@@ -4461,6 +4463,11 @@ BOOL daPy_lk_c::checkNextMode(int r29) {
     if (checkNextActionFromButton()) {
         return true;
     }
+#if VERSION == VERSION_DEMO
+    if (checkResetFlg0(daPyRFlg0_UNK10000000)) {
+        return procCutReverse_init(ANM_CUTRER);
+    }
+#endif
     if (r29 != 0 && !(mStickDistance > 0.05f) && !spActionButton()) {
         mMaxNormalSpeed = f31;
         return false;
@@ -4958,11 +4965,7 @@ BOOL daPy_lk_c::changeWaitProc() {
 
 /* 80110028-8011029C       .text changeLandProc__9daPy_lk_cFf */
 BOOL daPy_lk_c::changeLandProc(f32 param_1) {
-    BOOL bVar2;
-    f32 dVar6;
-    f32 dVar7;
-
-    dVar7 = m35F0 - current.pos.y;
+    f32 dVar7 = m35F0 - current.pos.y;
     if (mCurrAttributeCode != dBgS_Attr_GIANT_FLOWER_e &&
         ((dVar7 >= (100.0f * m_HIO->mFall.m.field_0x14))))
     {
@@ -4972,8 +4975,8 @@ BOOL daPy_lk_c::changeLandProc(f32 param_1) {
             return procLandDamage_init(1);
         }
     }
-    dVar6 = param_1;
     int direction = getDirectionFromAngle(current.angle.y - shape_angle.y);
+    BOOL bVar2;
     if (mCurProc == daPyProc_CUT_EX_MJ_e && ((m34C5 != 0 || checkNoResetFlg0(daPyFlg0_UNK4)))) {
         bVar2 = true;
     } else {
@@ -5004,13 +5007,24 @@ BOOL daPy_lk_c::changeLandProc(f32 param_1) {
             } else if (bVar2) {
                 checkNextMode(0);
             } else {
-                procLand_init(dVar6, 0);
+                procLand_init(param_1, 0);
             }
         }
     }
     return true;
 }
 
+#if VERSION == VERSION_DEMO
+void daPy_lk_c::setDamagePoint(f32 amount) {
+    if (!checkNoDamageMode()) {
+        dComIfGp_setItemLifeCount(amount);
+    } else {
+        seStartMapInfo(JA_SE_LK_MGC_SHIELD_DEF);
+    }
+    offNoResetFlg1(daPyFlg1_SOUP_POWER_UP);
+    offNoResetFlg1(daPyFlg1_UNK200000);
+}
+#else
 /* 8011029C-80110338       .text setDamagePoint__9daPy_lk_cFf */
 BOOL daPy_lk_c::setDamagePoint(f32 amount) {
     if (!checkNoDamageMode()) {
@@ -5030,6 +5044,7 @@ BOOL daPy_lk_c::setDamagePoint(f32 amount) {
         return FALSE;
     }
 }
+#endif
 
 /* 80110338-80110448       .text checkNormalDamage__9daPy_lk_cFi */
 BOOL daPy_lk_c::checkNormalDamage(int param_1) {
@@ -5711,8 +5726,9 @@ BOOL daPy_lk_c::checkSubjectEnd(BOOL i_playSound) {
         if(i_playSound) {
             seStartSystem(JA_SE_SUBJ_VIEW_OUT);
         }
-
+#if VERSION > VERSION_DEMO
         onResetFlg0(daPyRFlg0_UNK10000000);
+#endif
         return true;
     }
 
@@ -7602,7 +7618,9 @@ BOOL daPy_lk_c::procDamage_init() {
     seStartOnlyReverb(JA_SE_LK_DAMAGE_NORMAL);
     mProcVar0.mDamageAnm = dVar2;
     offNoResetFlg0(daPyFlg0_UNK2);
+#if VERSION > VERSION_DEMO
     dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+#endif
     return true;
 }
 
@@ -7671,7 +7689,6 @@ BOOL daPy_lk_c::procPolyDamage() {
 
 /* 801177CC-80117EAC       .text procLargeDamage_init__9daPy_lk_cFiiss */
 BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 param_4) {
-    f32 fVar2;
     s16 sVar3;
     cXyz* damage_vec;
     int iVar7;
@@ -7741,9 +7758,8 @@ BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 
     } else if (param_1 == -7) {
         iVar7 = 0;
         current.angle.y = shape_angle.y;
-        fVar2 =
-            ((2.0f * m_HIO->mDam.mHuDamage.m.field_0x20) / -m_HIO->mDam.mHuDamage.m.field_0x1C) *
-            m_HIO->mDam.mHuDamage.m.field_0x18;
+        f32 fVar2 = ((2.0f * m_HIO->mDam.mHuDamage.m.field_0x20) / -m_HIO->mDam.mHuDamage.m.field_0x1C) *
+                    m_HIO->mDam.mHuDamage.m.field_0x18;
         current.pos.x = current.pos.x - fVar2 * cM_ssin(shape_angle.y);
         current.pos.z = current.pos.z - fVar2 * cM_scos(shape_angle.y);
         mDamageWaitTimer = 0;
@@ -7782,6 +7798,7 @@ BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 
         m34D6 = 4;
         shape_angle.y = current.angle.y + 0x8000;
     }
+    f32 fVar2;
     if (param_2 != 0) {
         fVar2 = m_HIO->mDam.mLaDamage.m.field_0x14;
         gravity = m_HIO->mDam.mLaDamage.m.field_0x1C;
@@ -7801,11 +7818,10 @@ BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 
         if (param_1 != -7) {
             voiceStart(3);
         }
-        fVar2 = 0.0f;
         if (param_1 != -5) {
             if (m34D0 > 0) {
                 mVelocity = 0.0f;
-                speed.y = fVar2;
+                speed.y = 0.0f;
             } else {
                 if (param_2 != 0) {
                     mVelocity = m_HIO->mDam.mLaDamage.m.field_0x18;
@@ -9306,7 +9322,7 @@ void daPy_lk_c::checkOriginalHatAnimation() {
         mCurProc == daPyProc_DEMO_DOOR_OPEN_e ||
         (!strcmp(dComIfGp_getStartStageName(), "GTower") && dComIfGp_getStartStageLayer() == 9)
     ) {
-        onResetFlg0(daPyRFlg0_UNK800000);
+        onResetFlg0(daPyRFlg0_ORIGINAL_HAT_ANIM);
     }
 }
 #endif
@@ -9552,7 +9568,7 @@ void daPy_lk_c::setMoveSlantAngle() {
         if (sVar2 == 0) {
             m351C = 0;
         } else {
-            m351C = m351C - sVar2;
+            m351C -= sVar2;
         }
     }
 
@@ -10404,9 +10420,9 @@ void daPy_lk_c::setDemoData() {
         if (mStaffIdx != -1) {
             char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(mStaffIdx);
             if (cut_name != NULL) {
-                // Take the first 3 chars in cut_name, convert them to integers, and calculate
-                // demo_mode
+                // Take the first 3 chars in cut_name, convert them to integers, and calculate demo_mode
                 demo_mode = ((cut_name[0] - '0') * 100 + (cut_name[1] - '0') * 10 + (cut_name[2] - '0'));
+#if VERSION > VERSION_DEMO
                 if (
                     mDemo.getDemoType() != 4 &&
                     (
@@ -10420,6 +10436,7 @@ void daPy_lk_c::setDemoData() {
                         speedF = 0.0f;
                     }
                 }
+#endif
                 pos_p = dComIfGp_evmng_getMyXyzP(mStaffIdx, "pos");
                 if (pos_p == NULL) {
                     pos_p = dComIfGp_evmng_getGoal();
@@ -10519,7 +10536,8 @@ void daPy_lk_c::setDemoData() {
             m34EC -= (s16)(current.angle.y - r24);
         } else if ((demo_mode == daPy_demo_c::DEMO_N_WALK_e) || (demo_mode == daPy_demo_c::DEMO_N_DASH_e)) {
             cXyz sp44 = *pos_p - current.pos;
-            if (std::abs(mVelocity) / mMaxNormalSpeed < m_HIO->mMove.m.field_0x2C) {
+            f32 temp = std::abs(mVelocity) / mMaxNormalSpeed;
+            if (temp < m_HIO->mMove.m.field_0x2C) {
                 demo_mode = daPy_demo_c::DEMO_N_WALK_e;
             }
             f32 dVar22 = sp44.abs2XZ();
@@ -10916,7 +10934,7 @@ BOOL daPy_lk_c::startRestartRoom(u32 mode, int eventInfoIdx, f32 param_3, int i_
             (current.roomNo == dIsleRoom_WindfallIsland_e || current.roomNo == dIsleRoom_OutsetIsland_e) &&
             dStage_chkPlayerId(0x80, current.roomNo))
         {
-            dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0x80, current.roomNo, -1, 0.0f, mode);
+            dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0x80, fopAcM_GetRoomNo(this), -1, 0.0f, mode);
             u32 roomParam = setParamData(-1, 0, eventInfoIdx, 0);
             dComIfGs_setRestartRoomParam(roomParam);
             seStartSystem(JA_SE_FORCE_BACK);
@@ -10973,10 +10991,12 @@ BOOL daPy_lk_c::startRestartRoom(u32 mode, int eventInfoIdx, f32 param_3, int i_
                 }
                 return TRUE;
             }
+#if VERSION > VERSION_DEMO
         } else if (checkNoResetFlg0(daPyFlg0_DEKU_SP_RETURN_FLG)) {
             dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, 41, -1, 0.0f, mode);
+#endif
         } else {
-            dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, current.roomNo, -1, 0.0f, mode);
+            dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, fopAcM_GetRoomNo(this), -1, 0.0f, mode);
         }
 
         if (mCurProc != daPyProc_DEMO_DEAD_e) {
@@ -11863,7 +11883,7 @@ static BOOL daPy_Delete(daPy_lk_c* i_this) {
 /* 80123078-80123360       .text initTextureAnime__9daPy_lk_cFv */
 void daPy_lk_c::initTextureAnime() {
     m_tex_anm_heap.m_buffer = new(0x20) u8[0x1000];
-    JUT_ASSERT(VERSION_SELECT(20789, 20789, 20869, 20869), m_tex_anm_heap.m_buffer != NULL);
+    JUT_ASSERT(VERSION_SELECT(20682, 20789, 20869, 20869), m_tex_anm_heap.m_buffer != NULL);
     
     JKRReadIdxResource(m_tex_anm_heap.m_buffer, 0x1000, LKANM_BTP_TMABAA, dComIfGp_getAnmArchive());
     J3DAnmTexPattern* btp = static_cast<J3DAnmTexPattern*>(J3DAnmLoaderDataBase::load(m_tex_anm_heap.m_buffer));
@@ -12139,7 +12159,7 @@ J3DModelData* daPy_lk_c::initModel(J3DModel** i_model, int i_fileIndex, u32 i_di
 J3DAnmTextureSRTKey* daPy_lk_c::entryBtk(J3DModelData* param_1, int param_2) {
     J3DAnmTextureSRTKey* btk_anm =
         static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcName, param_2));
-    JUT_ASSERT(VERSION_SELECT(21293, 21293, 21373, 21373), btk_anm != NULL);
+    JUT_ASSERT(VERSION_SELECT(21186, 21293, 21373, 21373), btk_anm != NULL);
     btk_anm->searchUpdateMaterialID(param_1);
     param_1->entryTexMtxAnimator(btk_anm);
     btk_anm->setFrame(0.0f);
@@ -12159,8 +12179,9 @@ J3DAnmTevRegKey* daPy_lk_c::entryBrk(J3DModelData* param_1, int param_2) {
 
 /* 80124C98-80125CC8       .text playerInit__9daPy_lk_cFv */
 void daPy_lk_c::playerInit() {
-    if (!fopAcM_entrySolidHeap(this, daPy_createHeap, 0xB0000)) {
-        JUT_ASSERT(VERSION_SELECT(21350, 21350, 21430, 21430), FALSE);
+    u32 heapSize = 0xB0000;
+    if (!fopAcM_entrySolidHeap(this, daPy_createHeap, heapSize)) {
+        JUT_ASSERT(VERSION_SELECT(21243, 21350, 21430, 21430), FALSE);
     }
     
     fopAcM_SetMtx(this, mpCLModel->getBaseTRMtx());
@@ -12199,23 +12220,23 @@ void daPy_lk_c::playerInit() {
             if (mtl->getZMode()->getCompareEnable() == 0) {
                 if ((u8)mtl->getBlend()->getType() == GX_BM_BLEND) {
                     mpZOffBlendShape[zoff_blend_cnt++] = mtl->getShape();
-                    JUT_ASSERT(VERSION_SELECT(21406, 21406, 21486, 21486), zoff_blend_cnt <= 4);
+                    JUT_ASSERT(VERSION_SELECT(21299, 21406, 21486, 21486), zoff_blend_cnt <= 4);
                 } else {
                     mpZOffNoneShape[zoff_none_cnt++] = mtl->getShape();
-                    JUT_ASSERT(VERSION_SELECT(21410, 21410, 21490, 21490), zoff_none_cnt <= 4);
+                    JUT_ASSERT(VERSION_SELECT(21303, 21410, 21490, 21490), zoff_none_cnt <= 4);
                 }
             } else {
                 mpZOnShape[zon_cnt++] = mtl->getShape();
-                JUT_ASSERT(VERSION_SELECT(21414, 21414, 21494, 21494), zon_cnt <= 4);
+                JUT_ASSERT(VERSION_SELECT(21307, 21414, 21494, 21494), zon_cnt <= 4);
             }
             mtl = mtl->getNext();
         }
         mtl = mpCLModelData->getJointNodePointer(0x15)->getMesh(); // cl_mayu joint
     }
     
-    JUT_ASSERT(VERSION_SELECT(21421, 21421, 21501, 21501), zon_cnt == 4);
-    JUT_ASSERT(VERSION_SELECT(21422, 21422, 21502, 21502), zoff_none_cnt == 4);
-    JUT_ASSERT(VERSION_SELECT(21423, 21423, 21503, 21503), zoff_blend_cnt == 4);
+    JUT_ASSERT(VERSION_SELECT(21314, 21421, 21501, 21501), zon_cnt == 4);
+    JUT_ASSERT(VERSION_SELECT(21315, 21422, 21502, 21502), zoff_none_cnt == 4);
+    JUT_ASSERT(VERSION_SELECT(21316, 21423, 21503, 21503), zoff_blend_cnt == 4);
     
     mpLhandShape = mpCLModelData->getJointNodePointer(0x08)->getMesh()->getShape(); // cl_LhandA joint
     mpRhandShape = mpCLModelData->getJointNodePointer(0x0C)->getMesh()->getShape(); // cl_RhandA joint
@@ -12308,13 +12329,13 @@ void daPy_lk_c::playerInit() {
     
     mpItemHeaps[0] = mDoExt_createSolidHeapFromGameToCurrent(0xE600, 0x20);
     u8* dummy_data = new u8[0xE600];
-    JUT_ASSERT(VERSION_SELECT(21571, 21571, 21651, 21651), dummy_data != NULL);
+    JUT_ASSERT(VERSION_SELECT(21464, 21571, 21651, 21651), dummy_data != NULL);
     mDoExt_restoreCurrentHeap();
     mDoExt_adjustSolidHeap(mpItemHeaps[0]);
     
     mpItemHeaps[1] = mDoExt_createSolidHeapFromGameToCurrent(0xE600, 0x20);
     dummy_data = new u8[0xE600];
-    JUT_ASSERT(VERSION_SELECT(21577, 21577, 21657, 21657), dummy_data != NULL);
+    JUT_ASSERT(VERSION_SELECT(21470, 21577, 21657, 21657), dummy_data != NULL);
     mDoExt_restoreCurrentHeap();
     mDoExt_adjustSolidHeap(mpItemHeaps[1]);
     
@@ -12339,10 +12360,10 @@ void daPy_lk_c::playerInit() {
     resetSeAnime();
     
     ResTIMG* tmp_tex = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_I4_BALL128B);
-    JUT_ASSERT(VERSION_SELECT(21607, 21607, 21687, 21687), tmp_tex != NULL);
+    JUT_ASSERT(VERSION_SELECT(21500, 21607, 21687, 21687), tmp_tex != NULL);
     mSightPacket.setSightTex(tmp_tex);
     ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_ROCK_MARK);
-    JUT_ASSERT(VERSION_SELECT(21613, 21613, 21693, 21693), tmp_img != NULL);
+    JUT_ASSERT(VERSION_SELECT(21506, 21613, 21693, 21693), tmp_img != NULL);
     void* tmp_img_data = reinterpret_cast<void*>(reinterpret_cast<u32>(tmp_img) + tmp_img->imageOffset);
     mSightPacket.setLockTex(tmp_img_data);
     mSightPacket.setImage(tmp_img);
@@ -12390,9 +12411,9 @@ void daPy_lk_c::playerInit() {
     ResTIMG* linktex_casual = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_LINKTEXBCI4);
     int num_linktex_headers_seen = 0;
     J3DTexture* texture = mpCLModelData->getTexture();
-    JUT_ASSERT(VERSION_SELECT(21684, 21684, 21764, 21764), texture != NULL);
+    JUT_ASSERT(VERSION_SELECT(21577, 21684, 21764, 21764), texture != NULL);
     JUTNameTab* textureName = mpCLModelData->getTextureName();
-    JUT_ASSERT(VERSION_SELECT(21686, 21686, 21766, 21766), textureName != NULL);
+    JUT_ASSERT(VERSION_SELECT(21579, 21686, 21766, 21766), textureName != NULL);
     for (u16 i = 0; i < texture->getNum(); i++) {
         const char* texName = textureName->getName(i);
         if (strcmp(texName, "linktexS3TC") != 0) {
@@ -12469,10 +12490,6 @@ daPy_footData_c::daPy_footData_c() {}
 
 /* 80127160-80127B50       .text makeBgWait__9daPy_lk_cFv */
 cPhs_State daPy_lk_c::makeBgWait() {
-    cXyz local_38;
-    cXyz local_44;
-    cXyz local_50;
-
 #if VERSION > VERSION_DEMO
     if ((int)m352E != 0) {
         m352E--;
@@ -12574,7 +12591,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
             } else if (startMode == 9) {
                 ship->setStartModeWarp();
 #if VERSION > VERSION_DEMO
-                local_38.set(current.pos.x, current.pos.y + 1500.0f, current.pos.z);
+                cXyz local_38(current.pos.x, current.pos.y + 1500.0f, current.pos.z);
                 fpc_ProcID uVar8 = fopAcM_create(PROC_TORNADO, 2, &local_38, fopAcM_GetRoomNo(this));
                 ship->setTactWarpID(uVar8);
 #endif
@@ -12634,8 +12651,8 @@ cPhs_State daPy_lk_c::makeBgWait() {
             procWait_init();
         }
     } else if (startMode == 7) {
-        local_44.set(current.pos.x + 200.0f * cM_ssin(shape_angle.y), 150.0f + current.pos.y,
-                     current.pos.z + 200.0f * cM_scos(shape_angle.y));
+        cXyz local_44(current.pos.x + 200.0f * cM_ssin(shape_angle.y), 150.0f + current.pos.y,
+                      current.pos.z + 200.0f * cM_scos(shape_angle.y));
         dComIfGs_setRestartRoom(local_44, shape_angle.y, getStartRoomNo());
         procVomitJump_init(1);
         mAcch.ClrGroundHit();
@@ -12683,6 +12700,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
     m3580 = dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd);
     m357C = m3580;
     if (sceneMode == 4) {
+        cXyz local_50;
         mDoMtx_multVecZero(mpCLModel->getAnmMtx(0), &local_50);
         dComIfGp_particle_setP1(dPa_name::ID_AK_SN_OSHIRIKUROKOGE, &local_50);
     }
@@ -12734,10 +12752,9 @@ void daPy_lk_c::setSeAnime(const daPy_anmHeap_c* anmHeap, J3DFrameCtrl* frameCtr
         
         u32 data_size = fileHeader->mFileSize - fileHeader->mSeAnmOffset;
         const u32 l_sanm_buffer_size = 0x200;
-        JUT_ASSERT(VERSION_SELECT(22228, 22228, 22318, 22318), data_size < l_sanm_buffer_size);
+        JUT_ASSERT(VERSION_SELECT(22108, 22228, 22318, 22318), data_size < l_sanm_buffer_size);
         
-        u8* seAnmPtr = reinterpret_cast<u8*>(anmHeap->m_buffer) + fileHeader->mSeAnmOffset;
-        cLib_memCpy(m_sanm_buffer, seAnmPtr, data_size);
+        cLib_memCpy(m_sanm_buffer, (u8*)(anmHeap->m_buffer) + fileHeader->mSeAnmOffset, data_size);
         mpSeAnmFrameCtrl = frameCtrl;
         mSeAnmIdx = anmHeap->mIdx;
         m34F0 = anmHeap->field_0x6;
@@ -12750,8 +12767,7 @@ void daPy_lk_c::setSeAnime(const daPy_anmHeap_c* anmHeap, J3DFrameCtrl* frameCtr
 void daPy_lk_c::initSeAnime() {
     if (mpSeAnmFrameCtrl) {
         s16 loop = mpSeAnmFrameCtrl->getLoop();
-        u32 direction = mpSeAnmFrameCtrl->getRate() >= 0.0f ? 1 : -1;
-        mJAIZelAnime.initActorAnimSound(m_sanm_buffer, direction, loop);
+        mJAIZelAnime.initActorAnimSound(m_sanm_buffer, mpSeAnmFrameCtrl->getRate() >= 0.0f ? 1 : -1, loop);
     }
     
     if (mpSeAnmFrameCtrl->getAttribute() == J3DFrameCtrl::EMode_LOOP) {

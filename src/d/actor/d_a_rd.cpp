@@ -444,7 +444,7 @@ bool daRd_c::checkPlayerInAttack() {
 /* 00000A38-00000AA0       .text checkPlayerInCry__6daRd_cFv */
 bool daRd_c::checkPlayerInCry() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
-    return dLib_checkActorInFan(current.pos, player, mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, 100.0f);
+    return dLib_checkActorInFan(current.pos, player, mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, DEMO_SELECT(1000.0f, 100.0f));
 }
 
 /* 00000AA0-00000D78       .text lookBack__6daRd_cFv */
@@ -638,7 +638,7 @@ bool daRd_c::checkTgHit() {
             break;
         case AT_TYPE_NORMAL_ARROW:
             mHitType = 5;
-            if (!dLib_checkActorInCircle(current.pos, player, l_HIO.mCryRadius, 1000.0f)) {
+            if (!dLib_checkActorInCircle(current.pos, player, l_HIO.mCryRadius, DEMO_SELECT(100.0f, 1000.0f))) {
                 fopAcM_seStart(this, JA_SE_LK_ARROW_HIT, 0x44);
                 mCE0 = 40;
                 r29 = false;
@@ -792,7 +792,7 @@ void daRd_c::modeWait() {
     fopAc_ac_c* player = dComIfGp_getLinkPlayer();
     BOOL isOto = fopAcM_otoCheck(this, mAreaRadius);
     if (!isLinkControl()) {
-        if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f)) {
+        if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, DEMO_SELECT(100.0f, 1000.0f))) {
             // The ReDead will only wake up if the player is in a 200-unit-tall cylinder around its spawn point.
             // Bug: If the ReDead spawned high up in the air, its spawn point will remain there even after the ReDead
             // itself has fallen down to ground level. This means it will not be able to notice the player properly.
@@ -808,7 +808,7 @@ void daRd_c::modeWait() {
         }
     }
     
-    if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f)) {
+    if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, DEMO_SELECT(100.0f, 1000.0f))) {
         cLib_addCalcAngleS2(&shape_angle.y, mSpawnAngle, 0x4, 0x200);
         if (cLib_distanceAngleS(shape_angle.y, mSpawnAngle) <= 0x200) {
             shape_angle.y = mSpawnAngle;
@@ -819,7 +819,7 @@ void daRd_c::modeWait() {
                 setAnm(AnmPrm_TACHIP1, false);
             }
         }
-    } else if (!dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f) ||
+    } else if (!dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, DEMO_SELECT(100.0f, 1000.0f)) ||
                !dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)
     ) {
         modeProcInit(MODE_RETURN);
@@ -922,7 +922,10 @@ void daRd_c::modeMove() {
             return;
         }
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
-        if (!dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f) || !dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)) {
+        if (
+            !dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, DEMO_SELECT(100.0f, 1000.0f)) ||
+            !dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)
+        ) {
             modeProcInit(MODE_RETURN);
             return;
         }
@@ -1175,7 +1178,7 @@ void daRd_c::modeReturn() {
     
     setAnm(AnmPrm_WALK, false);
     
-    if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f)) {
+    if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, DEMO_SELECT(100.0f, 1000.0f))) {
         speedF = 0.0f;
         cLib_addCalcAngleS2(&shape_angle.y, mSpawnAngle, 0xA, 0x200);
         if (cLib_distanceAngleS(shape_angle.y, mSpawnAngle) <= 0x200) {
@@ -1194,7 +1197,7 @@ void daRd_c::modeReturn() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     BOOL isOto = fopAcM_otoCheck(this, mAreaRadius);
     if (!isLinkControl()) {
-        if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f)) {
+        if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, DEMO_SELECT(100.0f, 1000.0f))) {
             if (dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)) {
                 if ((dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f) && player->speedF > 10.0f + REG12_F(4)) ||
                     isOto ||
@@ -1224,7 +1227,7 @@ void daRd_c::modeSilentPray() {
     fopAc_ac_c* corpse;
     if (fopAcM_SearchByID(mCorpseID, &corpse)) {
         mTargetPos = corpse->current.pos;
-        if (dLib_checkActorInCircle(mTargetPos, this, 200.0f, 1000.0f)) {
+        if (dLib_checkActorInCircle(mTargetPos, this, 200.0f, DEMO_SELECT(100.0f, 1000.0f))) {
             setAnm(AnmPrm_TACHIP1, false);
             speedF = 0.0f;
         } else {
@@ -1257,7 +1260,7 @@ void daRd_c::modeSwWaitInit() {
 
 /* 00003428-00003480       .text modeSwWait__6daRd_cFv */
 void daRd_c::modeSwWait() {
-    if (dComIfGs_isSwitch(mSwNo, current.roomNo)) {
+    if (dComIfGs_isSwitch(mSwNo, fopAcM_GetRoomNo(this))) {
         modeProcInit(MODE_KANOKE);
     }
 }
@@ -1659,7 +1662,8 @@ bool daRd_c::_execute() {
     }
     
     if (enemy_ice(&mEnemyIce)) {
-        mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+        J3DModel* model = mpMorf->getModel();
+        model->setBaseTRMtx(mDoMtx_stack_c::get());
         mpMorf->calc();
         speedF = 0.0f;
         setAttention();
@@ -1752,7 +1756,11 @@ bool daRd_c::_draw() {
     } else {
         mBrkAnm.entry(modelData);
         mBtkAnm.entry(modelData);
+#if VERSION == VERSION_DEMO
+        mpMorf->entryDL();
+#else
         mpMorf->updateDL();
+#endif
         mBtkAnm.remove(modelData);
         mBrkAnm.remove(modelData);
     }

@@ -409,6 +409,9 @@ public:
     void setItemArrowNumCount(s16 num) { mItemArrowNumCount += num; }
     void clearItemArrowNumCount() { mItemArrowNumCount = 0; }
 
+    int getItemNowMagic() { return mItemNowMagicCount; }
+    void setItemNowMagic(s16 num) { mItemNowMagicCount = num; }
+
     void setNpcNameMessageID(u32 id) { mNpcNameMessageID = id; }
     void setItemNameMessageID(u32 id) { mItemNameMessageID = id; }
 
@@ -739,7 +742,7 @@ public:
     /* 0x48D4 */ s16 mItemKeyNumCount;
     /* 0x48D6 */ s16 mItemMaxLifeCount;
     /* 0x48D8 */ s16 mItemMagicCount;
-    /* 0x48DA */ s16 field_0x48da;
+    /* 0x48DA */ s16 mItemNowMagicCount;
     /* 0x48DC */ s16 mItemMaxMagicCount;
     /* 0x48DE */ s16 mItemPictureNumCount;
     /* 0x48E0 */ s16 mItemArrowNumCount;
@@ -2512,6 +2515,14 @@ inline s16 dComIfGp_getItemMaxLifeCount() {
 
 inline void dComIfGp_setItemMaxLifeCount(s16 num) {
     g_dComIfG_gameInfo.play.setItemMaxLifeCount(num);
+}
+
+inline s16 dComIfGp_getItemNowMagic() {
+    return g_dComIfG_gameInfo.play.getItemNowMagic();
+}
+
+inline void dComIfGp_setItemNowMagic(s16 num) {
+    g_dComIfG_gameInfo.play.setItemNowMagic(num);
 }
 
 inline void dComIfGp_setNpcNameMessageID(u32 id) {

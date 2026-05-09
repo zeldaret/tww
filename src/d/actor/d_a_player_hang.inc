@@ -105,16 +105,15 @@ BOOL daPy_lk_c::changeHangMoveProc(int i_direction) {
 
 /* 801342D8-80134440       .text changeHangEndProc__9daPy_lk_cFi */
 int daPy_lk_c::changeHangEndProc(int param_0) {
-    MtxP pMVar6 = mpCLModel->getAnmMtx(0);
+    MtxP mtx = mpCLModel->getAnmMtx(0);
     cXyz pos;
-
-    pos.x = pMVar6[0][3] - cM_ssin(shape_angle.y) * 4.0f;
-    pos.y = pMVar6[1][3];
-    pos.z = pMVar6[2][3] - cM_scos(shape_angle.y) * 4.0f;
+    pos.x = mtx[0][3] - cM_ssin(shape_angle.y) * 4.0f;
+    pos.y = mtx[1][3];
+    pos.z = mtx[2][3] - cM_scos(shape_angle.y) * 4.0f;
 
     mGndChk.SetPos(&pos);
     mHangGroundH = dComIfG_Bgsp()->GroundCross(&mGndChk);
-    if (-G_CM3D_F_INF != mHangGroundH) {
+    if (mHangGroundH != -G_CM3D_F_INF) {
         m3588 = dComIfG_Bgsp()->GetAttributeCode(mGndChk);
     } else {
         m3588 = dBgS_Attr_UNK1B_e;
@@ -175,15 +174,27 @@ BOOL daPy_lk_c::procHangStart_init() {
     cXyz local_28;
     cXyz local_34;
 
-    if (mCurProc != daPyProc_ROPE_UP_HANG_e && mCurProc != daPyProc_ROPE_UP_e) {
+    if (
+        mCurProc != daPyProc_ROPE_UP_HANG_e
+#if VERSION > VERSION_DEMO
+        && mCurProc != daPyProc_ROPE_UP_e
+#endif
+    ) {
         local_34.set(m3724.x, 0.0f, m3724.z);
         local_28.set(current.pos.x, 0.0f, current.pos.z);
         if (local_34.abs(local_28) > (mAcchCir[0].GetWallR() + 20.0f)) {
             return false;
         }
     }
+#if VERSION > VERSION_DEMO
     s32 sVar3 = 0;
-    if (mCurProc != daPyProc_ROPE_UP_HANG_e && mCurProc != daPyProc_ROPE_UP_e) {
+#endif
+    if (
+        mCurProc != daPyProc_ROPE_UP_HANG_e
+#if VERSION > VERSION_DEMO
+        && mCurProc != daPyProc_ROPE_UP_e
+#endif
+    ) {
         local_1c.x = m3724.x - 1.5f * cM_ssin(m352C);
         local_1c.y = m3724.y + 10.0f;
         local_1c.z = m3724.z - 1.5f * cM_scos(m352C);
@@ -196,12 +207,16 @@ BOOL daPy_lk_c::procHangStart_init() {
         local_1c.x = m3724.x - 2.25f * cM_ssin(m352C);
         local_1c.y = m3724.y + 10.0f;
         local_1c.z = m3724.z - 2.25f * cM_scos(m352C);
+#if VERSION > VERSION_DEMO
         if (!strcmp(dComIfGp_getStartStageName(), "GanonK")) {
             sVar3 = 1;
         }
+#endif
     }
     commonProcInit(daPyProc_HANG_START_e);
+#if VERSION > VERSION_DEMO
     mProcVar0.m3570 = sVar3;
+#endif
     setSingleMoveAnime(
         ANM_VJMPCHA,
         m_HIO->mWallCatch.m.field_0x44,
@@ -265,9 +280,7 @@ BOOL daPy_lk_c::procHangFallStart_init(cM3dGPla* param_0) {
             local_40.z += dVar10;
         }
     }
-    local_4c.x = local_40.x + dVar11;
-    local_4c.y = local_40.y;
-    local_4c.z = local_40.z + dVar10;
+    local_4c.set(local_40.x + dVar11, local_40.y, local_40.z + dVar10);
     mLinkLinChk.Set(&local_40, &local_4c, this);
     if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
         param_0 = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
@@ -433,23 +446,20 @@ BOOL daPy_lk_c::procHangWait() {
 
 /* 801351FC-80135354       .text procHangMove_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procHangMove_init(int param_0) {
-    daPy_ANM dVar1;
-
     commonProcInit(daPyProc_HANG_MOVE_e);
+    daPy_ANM anm;
     if (param_0 == 2) {
-        dVar1 = ANM_HANGMOVEL;
+        anm = ANM_HANGMOVEL;
         current.angle.y = shape_angle.y + 0x4000;
     } else {
-        dVar1 = ANM_HANGMOVER;
+        anm = ANM_HANGMOVER;
         current.angle.y = shape_angle.y + -0x4000;
     }
-    f32 dVar3 = getHangMoveAnmSpeed();
-    setSingleMoveAnime(dVar1, dVar3, 0.0f, -1, m_HIO->mHang.m.field_0x2C);
+    setSingleMoveAnime(anm, getHangMoveAnmSpeed(), 0.0f, -1, m_HIO->mHang.m.field_0x2C);
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK100_e);
     mVelocity = 0.0f;
     cXyz local_1c = mLeftHandPos - mRightHandPos;
-    dVar3 = local_1c.absXZ();
-    m35A0 = dVar3;
+    m35A0 = local_1c.absXZ();
     return true;
 }
 
@@ -500,8 +510,7 @@ BOOL daPy_lk_c::procHangMove() {
                             } else {
                                 current.angle.y = sVar6 + -0x4000;
                             }
-                            s16 sVar7 = shape_angle.y - sVar6;
-                            m34EC += sVar7;
+                            m34EC += (s16)(shape_angle.y - sVar6);
                             shape_angle.y = sVar6;
                             cXyz local_88;
                             local_88.set(*mLinkLinChk.GetLinP()->GetEndP());

@@ -154,7 +154,7 @@ BOOL daPy_lk_c::procBottleDrink() {
         }
     } else if (uVar1 == LKANM_BCK_BINDRINKING) {
         if (dComIfGp_getItemNowLife() == dComIfGs_getLife() &&
-            dComIfGs_getMagic() == g_dComIfG_gameInfo.play.field_0x48da)
+            dComIfGp_getItemNowMagic() == dComIfGs_getMagic())
         {
             setSingleMoveAnime(
                 ANM_BINDRINKAFTER,

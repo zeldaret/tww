@@ -91,9 +91,9 @@ namespace daObjMovebox {
     }
     
     BOOL Act_c::Mthd_Delete() {
-        s32 result = MoveBGDelete();
+        BOOL result = MoveBGDelete();
         if (mbShouldAppear) {
-            dComIfG_resDelete(&mPhs, M_arcname[mType]);
+            dComIfG_resDeleteDemo(&mPhs, M_arcname[mType]);
         }
         return result;
     }
@@ -283,7 +283,8 @@ namespace daObjMovebox {
     bool Bgc_c::chk_wall_touch2(const Act_c* movebox, const BgcSrc_c* bgcSrc, int bgcSrcCount, s16 dirAngle) {
         bool touch = false;
         for (int i = 0; i < bgcSrcCount; i++) {
-            if (chk_wall_touch(movebox, &bgcSrc[i], dirAngle)) {
+            const BgcSrc_c* currBgcSrc = &bgcSrc[i];
+            if (chk_wall_touch(movebox, currBgcSrc, dirAngle)) {
                 touch = true;
                 break;
             }
@@ -368,7 +369,7 @@ namespace daObjMovebox {
             /* m54             */ 0.075f,
             /* mModelFileIndex */ KKIBA_00_BDL_KKIBA_00,
             /* mDZBFileIndex   */ KKIBA_00_DZB_KKIBA_00,
-            /* mDZBHeapSize    */ 0x8A0,
+            /* mDZBHeapSize    */ DEMO_SELECT(0x1620, 0x8A0),
             /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
             /* m6C             */ 1.0f/150.0f,
@@ -419,7 +420,7 @@ namespace daObjMovebox {
             /* m54             */ 0.075f,
             /* mModelFileIndex */ OSIBLK_BDL_OBM_OSIHIKIBLK1,
             /* mDZBFileIndex   */ OSIBLK_DZB_OBM_OSIHIKIBLK1,
-            /* mDZBHeapSize    */ 0x8A0,
+            /* mDZBHeapSize    */ DEMO_SELECT(0x1620, 0x8A0),
             /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
             /* m6C             */ 1.0f/150.0f,
@@ -471,7 +472,7 @@ namespace daObjMovebox {
             /* m54             */ 0.075f,
             /* mModelFileIndex */ OSIBLK_BDL_OBM_OSIHIKIBLK2,
             /* mDZBFileIndex   */ OSIBLK_DZB_OBM_OSIHIKIBLK2,
-            /* mDZBHeapSize    */ 0x1560,
+            /* mDZBHeapSize    */ DEMO_SELECT(0x8000, 0x1560),
             /* mScaleY         */ 150.0f,
             /* m68             */ 300.0f,
             /* m6C             */ 1.0f/300.0f,
@@ -522,7 +523,7 @@ namespace daObjMovebox {
             /* m54             */ 0.075f,
             /* mModelFileIndex */ MPWRB_BDL_MPWRB,
             /* mDZBFileIndex   */ MPWRB_DZB_MPWRB,
-            /* mDZBHeapSize    */ 0x8A0,
+            /* mDZBHeapSize    */ DEMO_SELECT(0x8000, 0x8A0),
             /* mScaleY         */ 300.0f,
             /* m68             */ 300.0f,
             /* m6C             */ 1.0f/300.0f,
@@ -624,7 +625,7 @@ namespace daObjMovebox {
             /* m54             */ 0.075f,
             /* mModelFileIndex */ HBOX2_BDL_HBOX2,
             /* mDZBFileIndex   */ HBOX2_DZB_HBOX2,
-            /* mDZBHeapSize    */ 0x8A0,
+            /* mDZBHeapSize    */ DEMO_SELECT(0x8000, 0x8A0),
             /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
             /* m6C             */ 1.0f/150.0f,
@@ -675,7 +676,7 @@ namespace daObjMovebox {
             /* m54             */ 0.075f,
             /* mModelFileIndex */ HJUMP_BDL_HBOX1,
             /* mDZBFileIndex   */ HJUMP_DZB_HBOX1,
-            /* mDZBHeapSize    */ 0x7E0,
+            /* mDZBHeapSize    */ DEMO_SELECT(0x8000, 0x7E0),
             /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
             /* m6C             */ 1.0f/150.0f,
@@ -726,7 +727,7 @@ namespace daObjMovebox {
             /* m54             */ 0.075f,
             /* mModelFileIndex */ -1,
             /* mDZBFileIndex   */ HJUMP_DZB_HJUMP1A,
-            /* mDZBHeapSize    */ 0x320,
+            /* mDZBHeapSize    */ DEMO_SELECT(0x8000, 0x320),
             /* mScaleY         */ 150.0f,
             /* m68             */ 300.0f,
             /* m6C             */ 1.0f/300.0f,
@@ -879,7 +880,7 @@ namespace daObjMovebox {
             /* m54             */ 0.075f,
             /* mModelFileIndex */ -1,
             /* mDZBFileIndex   */ MMIRROR_DZB_MMRR,
-            /* mDZBHeapSize    */ 0xD40,
+            /* mDZBHeapSize    */ DEMO_SELECT(0x8000, 0xD40),
             /* mScaleY         */ 300.0f,
             /* m68             */ 450.0f,
             /* m6C             */ 1.0f/450.0f,
@@ -930,7 +931,7 @@ namespace daObjMovebox {
             /* m54             */ 0.075f,
             /* mModelFileIndex */ OSIBLK_BDL_OBM_OSIHIKIBLK1,
             /* mDZBFileIndex   */ OSIBLK_DZB_OBM_OSIHIKIBLK1,
-            /* mDZBHeapSize    */ 0x8A0,
+            /* mDZBHeapSize    */ DEMO_SELECT(0x1620, 0x8A0),
             /* mScaleY         */ 150.0f,
             /* m68             */ 350.0f,
             /* m6C             */ 1.0f/350.0f,
@@ -981,7 +982,7 @@ namespace daObjMovebox {
             /* m54             */ 0.075f,
             /* mModelFileIndex */ ECUBE_BDL_ECUBE,
             /* mDZBFileIndex   */ ECUBE_DZB_ECUBE,
-            /* mDZBHeapSize    */ 0x8A0,
+            /* mDZBHeapSize    */ DEMO_SELECT(0x8000, 0x8A0),
             /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
             /* m6C             */ 1.0f/150.0f,
@@ -1014,7 +1015,7 @@ namespace daObjMovebox {
     }
     
     /* 000012E0-00001308       .text prm_get_swSave1__Q212daObjMovebox5Act_cCFv */
-    s32 Act_c::prm_get_swSave1() const {
+    int Act_c::prm_get_swSave1() const {
         return prm_get_swSave();
     }
     
@@ -1025,7 +1026,7 @@ namespace daObjMovebox {
         }
         mbPrmZInitialized = true;
         
-        s32 switchEnablesSpawn = prm_get_dmy();
+        int switchEnablesSpawn = prm_get_dmy();
         if (switchEnablesSpawn) {
             // The appearing/disappearing type of box does not take pathId or swSave2 params.
             mPrmZ = 0xFFFF;
@@ -1105,13 +1106,12 @@ namespace daObjMovebox {
             } else {
                 cXyz buoyOffset(0.0f, attr()->m68 - 5.0f, 0.0f);
                 cXyz buoyOffsetSR;
-                MtxP mtx = mDoMtx_stack_c::get();
-                cMtx_multVecSR(mtx, &buoyOffset, &buoyOffsetSR);
-                mtx[0][3] += buoyOffsetSR.x;
-                mtx[1][3] += buoyOffsetSR.y;
-                mtx[2][3] += buoyOffsetSR.z;
+                cMtx_multVecSR(mDoMtx_stack_c::get(), &buoyOffset, &buoyOffsetSR);
+                mDoMtx_stack_c::get()[0][3] += buoyOffsetSR.x;
+                mDoMtx_stack_c::get()[1][3] += buoyOffsetSR.y;
+                mDoMtx_stack_c::get()[2][3] += buoyOffsetSR.z;
                 daObjBuoyflag::Act_c* buoyflag = (daObjBuoyflag::Act_c*)childActor;
-                buoyflag->setup(mtx);
+                buoyflag->setup(mDoMtx_stack_c::get());
             }
         } else {
             mChildPID = fpcM_ERROR_PROCESS_ID_e;
@@ -1129,14 +1129,14 @@ namespace daObjMovebox {
     /* 000016B8-00001830       .text path_init__Q212daObjMovebox5Act_cFv */
     void Act_c::path_init() {
         // Load the position the box was last left pushed to based on the path and switch(es).
-        s32 pathId = prmZ_get_pathId();
-        s32 swSave1 = prm_get_swSave1();
+        int pathId = prmZ_get_pathId();
+        int swSave1 = prm_get_swSave1();
         if (pathId != 0xFF && swSave1 != 0xFF) {
-            s32 swSave2 = prmZ_get_swSave2();
+            int swSave2 = prmZ_get_swSave2();
             
             bool isMoved1 = is_switch1();
             u32 isMoved2 = false;
-            if (0xFF == swSave2) { // Literal must be on the left hand side for a match
+            if (swSave2 == 0xFF) {
                 isMoved2 = false;
             } else {
                 isMoved2 = is_switch2();
@@ -1144,7 +1144,7 @@ namespace daObjMovebox {
             }
             isMoved2 = !!isMoved2;
             
-            s32 pntIdx = 0;
+            int pntIdx = 0;
             if (isMoved1 != false) {
                 pntIdx = 1;
             }
@@ -1152,7 +1152,7 @@ namespace daObjMovebox {
                 pntIdx += 2;
             }
             
-            mpPath = dPath_GetRoomPath(pathId, home.roomNo);
+            mpPath = dPath_GetRoomPath(pathId, fopAcM_GetHomeRoomNo(this));
             dPnt* pnt = dPath_GetPnt(mpPath, pntIdx);
             home.pos = pnt->m_position;
             current.pos = pnt->m_position;
@@ -1163,13 +1163,13 @@ namespace daObjMovebox {
     void Act_c::path_save() {
         // Determine how far along the path the box has been pushed and save the position to the switch(es).
         // Supports up to 4 possible path points.
-        s32 pathId = prmZ_get_pathId();
-        s32 swSave1 = prm_get_swSave1();
+        int pathId = prmZ_get_pathId();
+        int swSave1 = prm_get_swSave1();
         if (pathId != 0xFF && swSave1 != 0xFF) {
-            s32 swSave2 = prmZ_get_swSave2();
+            int swSave2 = prmZ_get_swSave2();
             
-            s32 numPnts;
-            if (0xFF == swSave2) { // Literal must be on the left hand side for a match
+            int numPnts;
+            if (swSave2 == 0xFF) {
                 numPnts = 2;
             } else {
                 numPnts = 4;
@@ -1178,7 +1178,7 @@ namespace daObjMovebox {
                 numPnts = mpPath->m_num;
             }
             
-            s32 pntIdx;
+            int pntIdx;
             for (pntIdx = 0; pntIdx < numPnts; pntIdx++) {
                 cXyz pntPos = dPath_GetPnt(mpPath, pntIdx)->m_position;
                 if (current.pos.abs2(pntPos) < SQUARE(3.0f)) {
@@ -1345,7 +1345,7 @@ namespace daObjMovebox {
         cLib_offBit(mBgc.mStateFlags, static_cast<Bgc_c::State_e>(Bgc_c::BgcState_JUST_LEFT_GROUND_e | Bgc_c::BgcState_JUST_HIT_GROUND_e | Bgc_c::BgcState_JUST_HIT_WATER_e));
         
         m64F = true;
-        mReverb = dComIfGp_getReverb(fopAcM_GetHomeRoomNo(this));
+        mReverb = dComIfGp_getReverb(home.roomNo);
         
         mChildPID = fpcM_ERROR_PROCESS_ID_e;
         if (prm_get_buoy() == 0) {
@@ -1476,7 +1476,7 @@ namespace daObjMovebox {
     /* 0000268C-00002768       .text chk_appear__Q212daObjMovebox5Act_cCFv */
     bool Act_c::chk_appear() const {
         // Boxes that do not have a path to save their position instead use swSave1 to enable or disable spawning.
-        s32 pathId = prmZ_get_pathId();
+        int pathId = prmZ_get_pathId();
         int sw = prm_get_swSave1();
         if (pathId != 0xFF || sw == 0xFF) {
             return TRUE;
@@ -1702,8 +1702,8 @@ namespace daObjMovebox {
     
     /* 000033D8-00003450       .text make_item__Q212daObjMovebox5Act_cFv */
     void Act_c::make_item() {
-        s32 itemTableNo = prm_get_itemNo();
-        s32 itemBitNo = prm_get_itemSave();
+        int itemTableNo = prm_get_itemNo();
+        int itemBitNo = prm_get_itemSave();
         fopAcM_createItemFromTable(
             &current.pos, itemTableNo, itemBitNo,
             fopAcM_GetHomeRoomNo(this), daItemType_0_e,
@@ -1734,7 +1734,7 @@ namespace daObjMovebox {
         gndChk.SetPos(&centerPos);
         gndChk.SetActorPid(base.base.mBsPcId);
         dComIfG_Bgsp()->GroundCross(&gndChk);
-        s32 bgIndex = gndChk.GetBgIndex();
+        int bgIndex = gndChk.GetBgIndex();
         s32 mtrlSndId = 0;
         if (bgIndex >= 0 && bgIndex < 0x100) {
             mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(gndChk);
@@ -1856,8 +1856,10 @@ namespace daObjMovebox {
     /* 000040D0-00004254       .text Draw__Q212daObjMovebox5Act_cFv */
     BOOL Act_c::Draw() {
         if (mpModel) {
-            int tevType = !attr()->mbUseBGTevType ? TEV_TYPE_ACTOR : TEV_TYPE_BG0;
-            g_env_light.settingTevStruct(tevType, &current.pos, &tevStr);
+            g_env_light.settingTevStruct(
+                !attr()->mbUseBGTevType ? TEV_TYPE_ACTOR : TEV_TYPE_BG0,
+                &current.pos, &tevStr
+            );
             g_env_light.setLightTevColorType(mpModel, &tevStr);
             dComIfGd_setListBG();
             mDoExt_modelUpdateDL(mpModel);

@@ -495,8 +495,10 @@ void daObjFerris::Act_c::make_lean() {
             delta.normalizeRS();
 
             f32 z = -delta.z;
-            f32 h = std::fabsf(-(z * pt0.x + delta.x * pt0.z) + (z * mRidePos.x + delta.x * mRidePos.z)) / 162.0f;
-            if (delta.x * delta2.z - delta.z * delta2.x < 0.0f) {
+            f32 h = std::fabsf(-(z * pt0.x + delta.x * pt0.z) + (z * mRidePos.x + delta.x * mRidePos.z));
+            f32 temp = delta.x * delta2.z - delta.z * delta2.x;
+            h /= 162.0f;
+            if (temp < 0.0f) {
                 mRideWaveTarget[i] = h * 550.0f;
             } else {
                 mRideWaveTarget[i] = h * -550.0f;

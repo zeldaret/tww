@@ -232,7 +232,9 @@ public:
         daPyRFlg0_POISON_CURSE          = 0x00100000,
         daPyRFlg0_LIGHT_REFLECT         = 0x00200000,
         daPyRFlg0_GRAB_PUT_START        = 0x00400000,
-        daPyRFlg0_UNK800000             = 0x00800000,
+#if VERSION > VERSION_DEMO
+        daPyRFlg0_ORIGINAL_HAT_ANIM     = 0x00800000,
+#endif
         daPyRFlg0_TACT_INPUT            = 0x01000000,
         daPyRFlg0_FAIRY_USE             = 0x02000000,
         daPyRFlg0_SUBJECT_ACCEPT        = 0x04000000,

@@ -215,7 +215,11 @@ BOOL daPy_lk_c::checkWHideFrontFloor(cXyz* param_0) {
     if (checkNoResetFlg0(daPyFlg0_UNK80000000) && current.pos.y > ground_y) {
         ground_y = current.pos.y;
     }
-    return std::fabsf(ground_y - current.pos.y) < 5.0f;
+    if (std::fabsf(ground_y - current.pos.y) < 5.0f) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 80137828-80137914       .text checkWHideModeChange__9daPy_lk_cFP4cXyz */

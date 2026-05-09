@@ -78,11 +78,6 @@ BOOL daPy_lk_c::changeSpecialBattle() {
 
 /* 8013E454-8013E72C       .text procBtJump_init__9daPy_lk_cFP13fopEn_enemy_c */
 BOOL daPy_lk_c::procBtJump_init(fopEn_enemy_c* enemy) {
-    f32 fVar1;
-    s16 sVar2;
-    f32 dVar3;
-    f32 dVar5;
-
     cXyz local_34 = enemy->current.pos - current.pos;
     commonProcInit(daPyProc_BT_JUMP_e);
     gravity = m_HIO->mBattle.mBJump.m.field_0x20;
@@ -93,16 +88,14 @@ BOOL daPy_lk_c::procBtJump_init(fopEn_enemy_c* enemy) {
         -1,
         m_HIO->mBattle.mBJump.m.field_0x10
     );
-    fVar1 = local_34.y + enemy->getBtHeight();
-    if (local_34.y + enemy->getBtHeight() < 30.0f) {
+    f32 fVar1 = local_34.y + enemy->getBtHeight();
+    if (fVar1 < 30.0f) {
         fVar1 = 30.0f;
     }
-    dVar5 = std::sqrtf((-2.0f * fVar1) / gravity);
+    f32 dVar5 = std::sqrtf((-2.0f * fVar1) / gravity);
     m35A0 = dVar5 * -gravity;
-    dVar3 = local_34.absXZ();
-    m35A4 = dVar3 / dVar5;
-    sVar2 = fopAcM_searchActorAngleY(this, enemy);
-    current.angle.y = sVar2;
+    m35A4 = local_34.absXZ() / dVar5;
+    current.angle.y = fopAcM_searchActorAngleY(this, enemy);
     shape_angle.y = current.angle.y;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2_e);
     m34D0 = 0;
@@ -187,8 +180,10 @@ BOOL daPy_lk_c::procBtJumpCut() {
         m34F2 = -m_HIO->mBattle.mBJump.m.field_0x6 * temp;
     }
 
-    f32 frame = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
-    if (frame >= m_HIO->mBattle.mBJump.m.field_0x44 && frame < m_HIO->mBattle.mBJump.m.field_0x48) {
+    if (
+        mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= m_HIO->mBattle.mBJump.m.field_0x44 &&
+        mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < m_HIO->mBattle.mBJump.m.field_0x48
+    ) {
         onResetFlg0(daPyRFlg0_UNK2);
         if (!checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
             onResetFlg0(daPyRFlg0_UNK1);

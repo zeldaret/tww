@@ -3823,7 +3823,11 @@ void dMeter_magicInit(sub_meter_class* i_Meter) {
     i_Meter->field_0x2f14.set(((J2DPicture*)i_Meter->field_0x0f38[0].pane)->getBlack());
     i_Meter->field_0x2f18.set(((J2DPicture*)i_Meter->field_0x0f38[1].pane)->getWhite());
     i_Meter->field_0x2f1c.set(((J2DPicture*)i_Meter->field_0x0f38[1].pane)->getBlack());
+#if VERSION == VERSION_DEMO
+    dMeter_magicTrans(i_Meter, 0.0f, 0.0f);
+#else
     dMeter_magicTransNowInit(i_Meter);
+#endif
     fopMsgM_setInitAlpha(&i_Meter->field_0x10f8);
     fopMsgM_setInitAlpha(&i_Meter->field_0x11a0);
     fopMsgM_setInitAlpha(&i_Meter->field_0x11d8);
@@ -3879,8 +3883,10 @@ void dMeter_magicGaugeMove(sub_meter_class* i_Meter) {
         }
         i_Meter->field_0x0f38[0].mUserArea = 0;
         dMeter_magicTransScale(i_Meter, 0.0f, 0.0f, 1.0f);
+#if VERSION > VERSION_DEMO
         dMeter_magicInitTrans(i_Meter);
         dMeter_magicChange(i_Meter, i_Meter->field_0x3016 / 100.0f);
+#endif
     }
     if (dComIfGp_getItemMaxMagicCount() != 0) {
         sVar4 = dComIfGs_getMaxMagic() + dComIfGp_getItemMaxMagicCount();
@@ -3979,8 +3985,13 @@ void dMeter_flyGaugeMove(sub_meter_class* i_Meter, u8 param_2, s16 param_3, s16 
     JUtility::TColor color6(0xB4, 0xB4, 0xFF, 0x00);
 
     if (param_2 != 0) {
+        f32 f30 = (f32)(param_4) / (f32)(param_3) * 25.0f * 8.0f;
+#if VERSION == VERSION_DEMO
+        dMeter_magicInitTrans(i_Meter, 0.0f, 0.0f);
+#else
         dMeter_magicInitTrans(i_Meter);
-        dMeter_magicChange(i_Meter, (((f32)(param_4)) / (f32)(param_3) * 25.0f * 8.0f));
+#endif
+        dMeter_magicChange(i_Meter, f30);
         if (i_Meter->field_0x0f38[0].mUserArea == 0) {
             ((J2DPicture*)i_Meter->field_0x11a0.pane)->setWhite(color1);
             ((J2DPicture*)i_Meter->field_0x11a0.pane)->setBlack(color2);
@@ -4025,7 +4036,11 @@ void dMeter_flyGaugeMove(sub_meter_class* i_Meter, u8 param_2, s16 param_3, s16 
         } else {
             dVar8 = 0.0f;
             i_Meter->field_0x11a0.mUserArea = 0;
+#if VERSION == VERSION_DEMO
+            dMeter_magicTrans(i_Meter, 0.0f, 0.0f);
+#else
             dMeter_magicTransNowInit(i_Meter);
+#endif
         }
         if (i_Meter->field_0x1130.mUserArea != 0) {
             i_Meter->field_0x1130.mUserArea = 0;
@@ -4036,8 +4051,12 @@ void dMeter_flyGaugeMove(sub_meter_class* i_Meter, u8 param_2, s16 param_3, s16 
 
 /* 801F9A24-801F9B3C       .text dMeter_magicChange__FP15sub_meter_classf */
 void dMeter_magicChange(sub_meter_class* i_Meter, f32 param_2) {
-    g_dComIfG_gameInfo.play.field_0x48da = (param_2 / i_Meter->field_0x0f38[0].mSizeOrig.x) * 4.0f;
+    dComIfGp_setItemNowMagic((param_2 / i_Meter->field_0x0f38[0].mSizeOrig.x) * 4.0f);
+#if VERSION == VERSION_DEMO
+    dMeter_magicTrans(i_Meter, 0.0f, 0.0f);
+#else
     dMeter_magicTransNowInit(i_Meter);
+#endif
     for (s32 i = 0; i < 8; i++) {
         if (param_2 >= i_Meter->field_0x0f38[i].mSizeOrig.x) {
             fopMsgM_paneScaleXY(&i_Meter->field_0x0f38[i], 1.0f);
@@ -4058,14 +4077,12 @@ void dMeter_magicChange(sub_meter_class* i_Meter, f32 param_2) {
 
 #if VERSION == VERSION_DEMO
 void dMeter_magicTrans(sub_meter_class* i_Meter, f32 param_1, f32 param_2) {
-    f32 fVar1;
-
+    f32 y;
     if (dComIfGs_getMaxLife() <= 0x2B) {
-        fVar1 = -22.0f + param_2;
+        y = -22.0f + param_2;
     } else {
-        fVar1 = param_2;
+        y = param_2;
     }
-    f32 y = fVar1;
     f32 fVar2 = param_1 + (i_Meter->field_0x10f8.mPosCenter.x - i_Meter->field_0x10f8.mPosCenterOrig.x);
     fopMsgM_paneTrans(&i_Meter->field_0x10f8, fVar2, y);
     fVar2 = param_1 + (i_Meter->field_0x11a0.mPosCenter.x - i_Meter->field_0x11a0.mPosCenterOrig.x);
@@ -4080,14 +4097,12 @@ void dMeter_magicTrans(sub_meter_class* i_Meter, f32 param_1, f32 param_2) {
 #else
 /* 801F9B3C-801F9C14       .text dMeter_magicTransNowInit__FP15sub_meter_class */
 void dMeter_magicTransNowInit(sub_meter_class* i_Meter) {
-    f32 fVar1;
-
+    f32 y;
     if (dComIfGs_getMaxLife() <= 0x2B) {
-        fVar1 = -22.0f;
+        y = -22.0f;
     } else {
-        fVar1 = 0.0f;
+        y = 0.0f;
     }
-    f32 y = fVar1;
     f32 fVar2 = i_Meter->field_0x10f8.mPosCenter.x - i_Meter->field_0x10f8.mPosCenterOrig.x;
     fopMsgM_paneTrans(&i_Meter->field_0x10f8, fVar2, y);
     fVar2 = i_Meter->field_0x11a0.mPosCenter.x - i_Meter->field_0x11a0.mPosCenterOrig.x;
@@ -4100,16 +4115,32 @@ void dMeter_magicTransNowInit(sub_meter_class* i_Meter) {
     }
 }
 #endif
+
+#if VERSION == VERSION_DEMO
+void dMeter_magicInitTrans(sub_meter_class* i_Meter, f32 param_1, f32 param_2) {
+    /* Nonmatching - regalloc */
+    f32 y;
+    if (dComIfGs_getMaxLife() <= 0x2B) {
+        y = -22.0f + param_2;
+    } else {
+        y = param_2;
+    }
+    fopMsgM_paneTrans(&i_Meter->field_0x10f8, param_1, y);
+    fopMsgM_paneTrans(&i_Meter->field_0x11a0, param_1, y);
+    fopMsgM_paneTrans(&i_Meter->field_0x11d8, param_1, y);
+    for (s32 i = 0; i < 8; i++) {
+        fopMsgM_paneTrans(&i_Meter->field_0x0f38[i], param_1, y);
+    }
+}
+#else
 /* 801F9C14-801F9CCC       .text dMeter_magicInitTrans__FP15sub_meter_class */
 void dMeter_magicInitTrans(sub_meter_class* i_Meter) {
-    f32 fVar1;
-
+    f32 y;
     if (dComIfGs_getMaxLife() <= 0x2B) {
-        fVar1 = -22.0f;
+        y = -22.0f;
     } else {
-        fVar1 = 0.0f;
+        y = 0.0f;
     }
-    f32 y = fVar1;
     fopMsgM_paneTrans(&i_Meter->field_0x10f8, 0.0f, y);
     fopMsgM_paneTrans(&i_Meter->field_0x11a0, 0.0f, y);
     fopMsgM_paneTrans(&i_Meter->field_0x11d8, 0.0f, y);
@@ -4117,6 +4148,7 @@ void dMeter_magicInitTrans(sub_meter_class* i_Meter) {
         fopMsgM_paneTrans(&i_Meter->field_0x0f38[i], 0.0f, y);
     }
 }
+#endif
 
 /* 801F9CCC-801F9F18       .text dMeter_magicTransScale__FP15sub_meter_classfff */
 void dMeter_magicTransScale(sub_meter_class* i_Meter, f32 param_2, f32 param_3, f32 param_4) {
