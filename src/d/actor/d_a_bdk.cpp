@@ -2887,11 +2887,10 @@ static void demo_camera(bdk_class* i_this) {
                 cMtx_YrotS(*calc_mtx, actor->shape_angle.y);
 
 #if VERSION > VERSION_DEMO
-                local_104.x = DEMO_SELECT(REG14_F(0), REG0_F(0)) + -30.0f - 50.0f;
+                local_104.x = REG0_F(0) + -30.0f - 50.0f;
 #else
-                local_104.x = DEMO_SELECT(REG14_F(0), REG0_F(0)) + -30.0f;
+                local_104.x = REG14_F(0) + -30.0f;
 #endif
-
                 local_104.y = DEMO_SELECT(REG14_F(1), REG0_F(1)) + -30.0f;
                 local_104.z = DEMO_SELECT(REG14_F(2), REG0_F(2)) + 50.0f;
                 MtxPosition(&local_104, &i_this->m25B4);
@@ -2904,10 +2903,9 @@ static void demo_camera(bdk_class* i_this) {
                 i_this->m25A8 += i_this->m1150;
 
 #if VERSION > VERSION_DEMO
-                local_104.x = DEMO_SELECT(REG6_F(0), REG0_F(0) + -150.0f) - 30.0f - 50.0f;
+                local_104.x = REG0_F(0) + -150.0f - 30.0f - 50.0f;
 #else
-                local_104.x = DEMO_SELECT(REG6_F(0), REG0_F(0)) + -150.0f - 30.0f;
-
+                local_104.x = REG6_F(0) + -150.0f - 30.0f;
 #endif
                 local_104.y = 0.0f;
                 local_104.z = DEMO_SELECT(REG6_F(2), REG0_F(2)) + 100.0f + 10.0f;
@@ -3795,7 +3793,6 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     }
 
     for (u16 i = 0; i < i_this->mpMorf->getModel()->getModelData()->getJointNum(); i++) {
-        // j_dk_kubi1, (j_dk_tosaka_A1 to j_dk_tosaka_B2), j_dk_o_lA2, j_dk_o_lB2, j_dk_o_rA2, j_dk_o_rB2 joints
         if (i == JNT_J_DK_KUBI1 || (JNT_J_DK_TOSAKA_A1 <= i && i <= JNT_J_DK_TOSAKA_B2) || i == JNT_J_DK_O_LA2 || i == JNT_J_DK_O_LB2 || i == JNT_J_DK_O_RA2 ||
             i == JNT_J_DK_O_RB2)
         {
@@ -3824,12 +3821,9 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
             return FALSE;
         }
     }
+
     i_this->bva = new mDoExt_bvaAnm();
-#if VERSION == VERSION_DEMO
-    JUT_ASSERT(0x1831, i_this->bva);
-#else
-    JUT_ASSERT(0x1864, i_this->bva);
-#endif
+    JUT_ASSERT(DEMO_SELECT(0x1831, 0x1864), i_this->bva);
 
     s32 bva = i_this->bva->init(i_this->mp8F0, (J3DAnmVisibilityFull*)dComIfG_getObjectRes("Bdk", BDK_BVA_HIBIWARE1), 1, J3DFrameCtrl::EMode_NONE);
 #if VERSION > VERSION_DEMO
@@ -3839,11 +3833,8 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
 #endif
 
     modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", BDK_BDL_DK_TAIL);
-#if VERSION == VERSION_DEMO
-    JUT_ASSERT(0x183D, modelData != NULL);
-#else
-    JUT_ASSERT(0x1878, modelData != NULL);
-#endif
+    JUT_ASSERT(DEMO_SELECT(0x183D, 0x1878), modelData != NULL);
+
     for (int i = 0; i < 4; i++) {
         for (s32 j = 0; j < 9; j++) {
             i_this->m300[i].m000[j] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -3861,11 +3852,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
         } else if (i < 0x27) {
             modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", BDK_BDL_GHANE00);
         }
-#if VERSION == VERSION_DEMO
-        JUT_ASSERT(0x185B, modelData != NULL);
-#else
-        JUT_ASSERT(0x189C, modelData != NULL);
-#endif
+        JUT_ASSERT(DEMO_SELECT(0x185B, 0x189C), modelData != NULL);
         i_this->m261C[i].m044 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
         if (i_this->m261C[i].m044 == NULL) {
             return FALSE;
@@ -3873,11 +3860,8 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     }
 
     modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", BDK_BDL_S_TSHUTTER);
-#if VERSION == VERSION_DEMO
-    JUT_ASSERT(0x1868, modelData != NULL);
-#else
-    JUT_ASSERT(0x18A9, modelData != NULL);
-#endif
+    JUT_ASSERT(DEMO_SELECT(0x1868, 0x18A9), modelData != NULL);
+
     for (s32 i = 0; i < 3; i++) {
         i_this->mp6310[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
         if (i_this->mp6310[i] == NULL) {
@@ -3894,22 +3878,15 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
         i_this->mp63BC[i]->SetCrrFunc(dBgS_MoveBGProc_Typical);
     }
     modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", BDK_BDL_S_TTOGE);
-#if VERSION == VERSION_DEMO
-    JUT_ASSERT(0x1883, modelData != NULL);
-#else
-    JUT_ASSERT(0x18C4, modelData != NULL);
-#endif
+    JUT_ASSERT(DEMO_SELECT(0x1883, 0x18C4), modelData != NULL);
+
     i_this->mp62D8 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (i_this->mp62D8 == NULL) {
         return FALSE;
     }
 
     i_this->pm_bgw = new dBgW();
-#if VERSION == VERSION_DEMO
-    JUT_ASSERT(0x188D, i_this->pm_bgw != NULL);
-#else
-    JUT_ASSERT(0x18CE, i_this->pm_bgw != NULL);
-#endif
+    JUT_ASSERT(DEMO_SELECT(0x188D, 0x18CE), i_this->pm_bgw != NULL);
 
     i_this->pm_bgw->Set((cBgD_t*)(dComIfG_getObjectRes("Bdk", BDK_DZB_S_TTOGE)), dBgW::MOVE_BG_e, &i_this->m62DC);
     i_this->pm_bgw->SetCrrFunc(dBgS_MoveBGProc_Typical);
