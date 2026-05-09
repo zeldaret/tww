@@ -1340,7 +1340,8 @@ void bb_kamome_attack(bb_class* i_this) {
 /* 000044EC-00005534       .text bb_atack_move__FP8bb_class */
 void bb_atack_move(bb_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    fopAc_ac_c* player_actor = dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)player_actor;
     s8 r29 = 0;
     s8 r28 = 0;
     f32 x;
@@ -1363,7 +1364,7 @@ void bb_atack_move(bb_class* i_this) {
     }
 
     if (
-        &player->base.base == fpcM_Search(pl_name_check, i_this)
+        player_actor == (fopAc_ac_c*)fpcM_Search(pl_name_check, i_this)
         #if VERSION == VERSION_DEMO
         || l_bbHIO.unk_10 != 0
         #endif
@@ -1383,7 +1384,7 @@ void bb_atack_move(bb_class* i_this) {
 
         case 1:
         case 2:
-            i_this->unk_2F4 = player->current.pos;
+            i_this->unk_2F4 = player_actor->current.pos;
             i_this->unk_2F4.y += 200.0f;
 
             bb_pos_move(i_this);
@@ -1459,9 +1460,9 @@ void bb_atack_move(bb_class* i_this) {
             }
 
             if (i_this->unk_318[0] == 0) {
-                i_this->unk_2F4.x = player->current.pos.x + cM_rndFX(400.0f);
-                i_this->unk_2F4.y = player->current.pos.y + 100.0f + cM_rndF(200.0f);
-                i_this->unk_2F4.z = player->current.pos.z + cM_rndFX(400.0f);
+                i_this->unk_2F4.x = player_actor->current.pos.x + cM_rndFX(400.0f);
+                i_this->unk_2F4.y = player_actor->current.pos.y + 100.0f + cM_rndF(200.0f);
+                i_this->unk_2F4.z = player_actor->current.pos.z + cM_rndFX(400.0f);
                 i_this->unk_318[0] = cM_rndF(100.0f) + 20.0f;
                 i_this->unk_308 = 0.0f;
                 i_this->unk_30C = 0.0f;
@@ -1485,7 +1486,7 @@ void bb_atack_move(bb_class* i_this) {
             z = cM_scos(i_this->unk_354 * (REG0_S(4) + 1500)) * 200.0f;
 
             cLib_addCalc2(&a_this->current.pos.x, i_this->unk_2F4.x + x, 0.1f, i_this->unk_308 * 30.0f);
-            cLib_addCalc2(&a_this->current.pos.y, player->current.pos.y + 175.0f, 0.1f, i_this->unk_308 * 30.0f);
+            cLib_addCalc2(&a_this->current.pos.y, player_actor->current.pos.y + 175.0f, 0.1f, i_this->unk_308 * 30.0f);
             cLib_addCalc2(&a_this->current.pos.z, i_this->unk_2F4.z + z, 0.1f, i_this->unk_308 * 30.0f);
             cLib_addCalc2(&i_this->unk_308, l_bbHIO.unk_1C, 1.0f, l_bbHIO.unk_1C * 0.1f);
 
@@ -1496,9 +1497,9 @@ void bb_atack_move(bb_class* i_this) {
                 i_this->unk_2F1 = 6;
                 anm_init(i_this, BB_BCK_ATACK01, 2.0f, 0, l_bbHIO.unk_2C, BB_BAS_ATACK01);
                 
-                i_this->unk_2F4.x = player->current.pos.x;
-                i_this->unk_2F4.y = player->current.pos.y + 100.0f;
-                i_this->unk_2F4.z = player->current.pos.z;
+                i_this->unk_2F4.x = player_actor->current.pos.x;
+                i_this->unk_2F4.y = player_actor->current.pos.y + 100.0f;
+                i_this->unk_2F4.z = player_actor->current.pos.z;
 
                 i_this->unk_308 = 0.0f;
                 i_this->unk_30C = 0.0f;
@@ -1616,7 +1617,7 @@ void bb_atack_move(bb_class* i_this) {
                 anm_init(i_this, BB_BCK_FLY02, REG0_F(0) + 12.0f, 2, 1.0f, BB_BAS_FLY02);
 
                 a_this->speedF = 0.0f;
-                i_this->unk_2F4.y = player->current.pos.y + 500.0f;
+                i_this->unk_2F4.y = player_actor->current.pos.y + 500.0f;
                 i_this->unk_318[3] = cM_rndF(200.0f) + 300.0f;
             }
             i_this->unk_308 = 0.0f;

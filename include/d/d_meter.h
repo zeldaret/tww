@@ -828,8 +828,13 @@ void dMeter_magicGaugeMove(sub_meter_class* i_Meter);
 void dMeter_flyGaugeMove(sub_meter_class* i_Meter, u8 param_2, s16 param_3, s16 param_4);
 void dMeter_magicChange(sub_meter_class* i_Meter, f32 param_2);
 void dMeter_magicLength(sub_meter_class* i_Meter, f32 param_2);
+#if VERSION == VERSION_DEMO
+void dMeter_magicTrans(sub_meter_class* i_Meter, f32, f32);
+void dMeter_magicInitTrans(sub_meter_class* i_Meter, f32, f32);
+#else
 void dMeter_magicTransNowInit(sub_meter_class* i_Meter);
 void dMeter_magicInitTrans(sub_meter_class* i_Meter);
+#endif
 void dMeter_magicTransScale(sub_meter_class* i_Meter, f32 param_2, f32 param_3, f32 param_4);
 void dMeter_magicColor(sub_meter_class* i_Meter);
 void dMeter_magicAlpha(sub_meter_class* i_Meter);

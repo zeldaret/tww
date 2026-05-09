@@ -1080,7 +1080,11 @@ public:
     int changeSlideProc();
     BOOL changeWaitProc();
     BOOL changeLandProc(f32);
+#if VERSION == VERSION_DEMO
+    void setDamagePoint(f32);
+#else
     BOOL setDamagePoint(f32);
+#endif
     BOOL checkNormalDamage(int);
     void setDashDamage();
     BOOL checkAtHitEnemy(dCcD_GObjInf*);
@@ -1299,8 +1303,8 @@ public:
     BOOL dProcHoldup();
     BOOL dProcOpenTreasure_init();
     BOOL dProcOpenTreasure();
-    void setGetItemSound(u16, int);
 #if VERSION > VERSION_DEMO
+    void setGetItemSound(u16, int);
     BOOL setGetDemo();
 #endif
     BOOL dProcGetItem_init();

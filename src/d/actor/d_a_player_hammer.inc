@@ -334,13 +334,11 @@ BOOL daPy_lk_c::procHammerFrontSwing() {
                 int r27;
                 int r26;
                 r26 = -1;
-                f32 f30 = 300.0f;
-                f32 f31 = -G_CM3D_F_INF;
                 for (r27 = 0; r27 < mSwBlur.field_0x014; r27++) {
-                    sp08.set(mSwBlur.field_0x034[r27].x, f30 + mSwBlur.field_0x034[r27].y, mSwBlur.field_0x034[r27].z);
+                    sp08.set(mSwBlur.field_0x034[r27].x, 300.0f + mSwBlur.field_0x034[r27].y, mSwBlur.field_0x034[r27].z);
                     mGndChk.SetPos(&sp08);
                     sp08.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
-                    if (f31 != sp08.y && mSwBlur.field_0x034[r27].y > sp08.y) {
+                    if (sp08.y != -G_CM3D_F_INF && mSwBlur.field_0x034[r27].y > sp08.y) {
                         r26 = dComIfG_Bgsp()->GetMtrlSndId(mGndChk);
                         break;
                     }

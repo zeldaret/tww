@@ -731,10 +731,12 @@ BOOL daPy_lk_c::procGrabWait_init() {
 
 /* 8013C678-8013C914       .text procGrabWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procGrabWait() {
+#if VERSION > VERSION_DEMO
     if (mActorKeepGrab.getActor() == NULL) {
         resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         return checkNextMode(0);
     }
+#endif
 
     if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
@@ -794,10 +796,12 @@ BOOL daPy_lk_c::procGrabHeavyWait_init() {
 
 /* 8013C9AC-8013CB78       .text procGrabHeavyWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procGrabHeavyWait() {
+#if VERSION > VERSION_DEMO
     if (mActorKeepGrab.getActor() == NULL) {
         resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         return checkNextMode(0);
     }
+#endif
 
     if (!checkAttentionLock() && mStickDistance > 0.05f) {
         cLib_addCalcAngleS(
@@ -807,14 +811,13 @@ BOOL daPy_lk_c::procGrabHeavyWait() {
             m_HIO->mGrab.m.field_0x18,
             m_HIO->mGrab.m.field_0x1A
         );
-        s16 y_diff = shape_angle.y - current.angle.y;
-        m35A0 = y_diff / (f32)m_HIO->mGrab.m.field_0x18;
+        m35A0 = (s16)(shape_angle.y - current.angle.y) / (f32)m_HIO->mGrab.m.field_0x18;
         current.angle.y = shape_angle.y;
         f32 fVar1;
-        if (checkNoResetFlg1(daPyFlg1_UNK800000)) {
-            fVar1 = -1.0f;
-        } else {
+        if (!checkNoResetFlg1(daPyFlg1_UNK800000)) {
             fVar1 = m_HIO->mBasic.m.field_0xC;
+        } else {
+            fVar1 = -1.0f;
         }
         setBlendMoveAnime(fVar1);
         m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);

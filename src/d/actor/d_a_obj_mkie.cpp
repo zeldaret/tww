@@ -126,15 +126,15 @@ const daObjMkie::Act_c::Attr_c daObjMkie::Act_c::M_attr[2] = {
 /* 00000078-00000250       .text CreateHeap__Q29daObjMkie5Act_cFv */
 BOOL daObjMkie::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKIEB_BDL_MKIEB);
-    JUT_ASSERT(0x192, model_data != NULL);
+    JUT_ASSERT(DEMO_SELECT(395, 402), model_data != NULL);
     mModelBase = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
 
     J3DModelData* model_data_van = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKIEB_BDL_YLSMF00);
-    JUT_ASSERT(0x19b, model_data_van != NULL);
+    JUT_ASSERT(DEMO_SELECT(404, 411), model_data_van != NULL);
     mModelVan = mDoExt_J3DModel__create(model_data_van, 0x80000, 0x11000022);
 
     J3DAnmTevRegKey* brk_van = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, MKIEB_BRK_YLSMF00);
-    JUT_ASSERT(0x1a5, brk_van != NULL);
+    JUT_ASSERT(DEMO_SELECT(414, 421), brk_van != NULL);
     int init = mBrkVan.init(model_data_van, brk_van, true, J3DFrameCtrl::EMode_NONE);
 
     bool ret = false;
@@ -160,9 +160,9 @@ void daObjMkie::Act_c::set_cc_pos() {
     for (int i = 0; i < 8; i++) {
         Vec src[3];
         Vec dst[3];
-        src[0] = M_attr[mType].table[i][0];
-        src[1] = M_attr[mType].table[i][1];
-        src[2] = M_attr[mType].table[i][2];
+        src[0] = attr().table[i][0];
+        src[1] = attr().table[i][1];
+        src[2] = attr().table[i][2];
         mDoMtx_multVecArray(mModelBase->getBaseTRMtx(), src, dst, 3);
         mTri[i].setPos(&dst[0], &dst[1], &dst[2]);
     }
@@ -173,28 +173,33 @@ BOOL daObjMkie::Act_c::Create() {
     fopAcM_SetMtx(this, mModelBase->getBaseTRMtx());
     init_mtx();
     {
-        const Attr_c* mAttrPtr = M_attr + mType;
-        float initialScale = mAttrPtr->mScale;
         fopAcM_setCullSizeBox(
-            this, initialScale * -80.0f, initialScale * -1.0f, initialScale * -80.0f, initialScale * 80.0f, initialScale * 230.0f, initialScale * 80.0f
+            this,
+            attr().mScale * -80.0f,
+            attr().mScale * -1.0f,
+            attr().mScale * -80.0f,
+            attr().mScale * 80.0f,
+            attr().mScale * 230.0f,
+            attr().mScale * 80.0f
         );
     }
     init_cc();
 
+#if VERSION > VERSION_DEMO
     if (daObj::PrmAbstract<Prm_e>(this, PRM_FLAG_W, PRM_FLAG_S) != 0) {
         actor_status &= ~0x3F;
         gbaName = 0;
     }
+#endif
 
     mCcInit = false;
     mBaseAnmPlaying = false;
 
     {
-        const Attr_c* mAttrPtr = M_attr + mType;
-        attention_info.position.y = current.pos.y + mAttrPtr->mScale * 130.0f;
+        attention_info.position.y = current.pos.y + attr().mScale * 130.0f;
     }
     eyePos = attention_info.position;
-    mEvtIdx = dComIfGp_evmng_getEventIdx(M_attr[mType].name, prm_get_evId());
+    mEvtIdx = dComIfGp_evmng_getEventIdx(attr().name, prm_get_evId());
     return true;
 }
 
@@ -205,11 +210,10 @@ cPhs_State daObjMkie::Act_c::Mthd_Create() {
     mSwitch = !fopAcM_isSwitch(this, prm_get_swSave());
     if (mSwitch && (phase_state = dComIfG_resLoad(&mPhs, M_arcname), phase_state == cPhs_COMPLEATE_e)) {
         mType = prm_get_type();
-        const Attr_c* mAttrPtr = M_attr + mType;
-        float initialScale = mAttrPtr->mScale;
+        float initialScale = attr().mScale;
         scale.setall(initialScale);
-        phase_state = MoveBGCreate(M_arcname, MKIEB_DZB_MKIEB, dBgS_MoveBGProc_Trans, 0x1b20);
-        JUT_ASSERT(0x216, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+        phase_state = MoveBGCreate(M_arcname, MKIEB_DZB_MKIEB, dBgS_MoveBGProc_Trans, DEMO_SELECT(0x10000, 0x1B20));
+        JUT_ASSERT(DEMO_SELECT(521, 534), (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
 }
@@ -224,7 +228,7 @@ BOOL daObjMkie::Act_c::Mthd_Delete() {
     BOOL ret = true;
     if (mSwitch != false) {
         ret = MoveBGDelete();
-        dComIfG_resDelete(&mPhs, M_arcname);
+        dComIfG_resDeleteDemo(&mPhs, M_arcname);
     }
     return ret;
 }
@@ -397,8 +401,7 @@ void daObjMkie::Act_c::mode_proc_call() {
 /* 000013DC-000014A0       .text Execute__Q29daObjMkie5Act_cFPPA3_A4_f */
 BOOL daObjMkie::Act_c::Execute(Mtx** pMtx) {
     attention_info.position.x = current.pos.x;
-    const Attr_c* mAttrPtr = M_attr + mType;
-    attention_info.position.y = current.pos.y + mAttrPtr->mScale * 130.0f;
+    attention_info.position.y = current.pos.y + attr().mScale * 130.0f;
     attention_info.position.z = current.pos.z;
 
     eyePos = attention_info.position;
@@ -415,13 +418,8 @@ BOOL daObjMkie::Act_c::Execute(Mtx** pMtx) {
 /* 000014A0-000015B8       .text Draw__Q29daObjMkie5Act_cFv */
 BOOL daObjMkie::Act_c::Draw() {
     if (!mBaseAnmPlaying) {
-        bool flagVan = false;
-        if (mModeProc == 2) {
-            if (mTimer == 0) {
-                flagVan = true;
-            }
-        }
-        g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+        bool flagVan = mModeProc == 2 && mTimer == 0;
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
         if (flagVan) {
             g_env_light.setLightTevColorType(mModelVan, &tevStr);
             J3DModelData* modelData = mModelVan->getModelData();

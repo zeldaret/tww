@@ -1575,7 +1575,9 @@ daNpcRoten_c::daNpcRoten_c() {
     field_0x9C9 = 0;
     field_0x9CA = 0;
     field_0x6FC = fpcM_ERROR_PROCESS_ID_e;
+#if VERSION > VERSION_DEMO
     field_0x994 = -1.0f;
+#endif
 }
 
 /* 000007B4-000008CC       .text daNpc_Roten_nodeCallBack__FP7J3DNodei */
@@ -1586,7 +1588,8 @@ static BOOL daNpc_Roten_nodeCallBack(J3DNode* node, int calcTiming) {
         daNpcRoten_c* i_this = (daNpcRoten_c*)model->getUserArea();
         
         s32 jntNo = joint->getJntNo();
-        cMtx_copy(model->getAnmMtx(jntNo), *calc_mtx);
+        MtxP mtx = model->getAnmMtx(jntNo);
+        cMtx_copy(mtx, *calc_mtx);
 
         if(jntNo == i_this->m_jnt.getHeadJntNum()) {
             mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getHead_y());
@@ -1627,11 +1630,13 @@ static cPhs_State phase_1(daNpcRoten_c* i_this) {
 static cPhs_State phase_2(daNpcRoten_c* i_this) {
     cPhs_State result = dComIfG_resLoad(i_this->getPhaseP(), l_arcname_tbl[i_this->getPrmNpcNo()]);
     if(result == cPhs_COMPLEATE_e) {
-        if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0x4620)) {
+        if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, DEMO_SELECT(0, 0x4620))) {
             result = i_this->createInit();
         }
         else {
+#if VERSION > VERSION_DEMO
             i_this->mpMorf = NULL;
+#endif
             return cPhs_ERROR_e;
         }
     }
@@ -2222,7 +2227,8 @@ void daNpcRoten_c::privateCut() {
         daDitem_c* pItem;
         if (fopAcM_SearchByID(field_0x6F8, (fopAc_ac_c**)&pItem) && pItem) {
             if(field_0x9C0 == 7 && (s16)mpMorf->getFrame() >= 0x3C) {
-                cMtx_copy(mpMorf->getModel()->getAnmMtx(m_hand_L_jnt_num), *calc_mtx);
+                MtxP mtx = mpMorf->getModel()->getAnmMtx(m_hand_L_jnt_num);
+                cMtx_copy(mtx, *calc_mtx);
                 mDoMtx_stack_c::transS(20.0f, -30.0f, -30.0f);
                 cMtx_concat(*calc_mtx, mDoMtx_stack_c::get(), *calc_mtx);
 
@@ -2407,8 +2413,10 @@ u16 daNpcRoten_c::next_msgStatus(u32* pMsgNo) {
 
                             dComIfGp_setItemRupeeCount(-dComIfGp_getMessageRupee());
                             u8 temp = l_item_dat[mNpcNo][field_0x9BE];
-                            u8 temp2 = dComIfGs_getEventReg(l_save_dat[mNpcNo].field_0x02);
-                            dComIfGs_setEventReg(l_save_dat[mNpcNo].field_0x02, temp2 + 1);
+                            dComIfGs_setEventReg(
+                                l_save_dat[mNpcNo].field_0x02,
+                                dComIfGs_getEventReg(l_save_dat[mNpcNo].field_0x02) + 1
+                            );
                             if(dComIfGs_isGetItemReserve(temp)) {
                                 *pMsgNo = l_msg_xy_koukan_end[mNpcNo];
                                 field_0x9B2 |= 0x40;

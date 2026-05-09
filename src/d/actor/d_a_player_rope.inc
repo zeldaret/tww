@@ -89,7 +89,7 @@ int daPy_lk_c::changeRopeEndProc(int param_0) {
 
 /* 801430D4-80143138       .text checkSpecialRope__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkSpecialRope() {
-    if ((!strcmp(dComIfGp_getStartStageName(), "GanonK")) && (mActorKeepEquip.getActor() == NULL)) {
+    if (!strcmp(dComIfGp_getStartStageName(), "GanonK") && mActorKeepEquip.getActor() == NULL) {
         return true;
     } else {
         return false;
@@ -969,15 +969,24 @@ BOOL daPy_lk_c::procRopeUp_init() {
         dVar5 = dVar5 - 60.0f;
         if (dVar5 < dVar4) {
             dVar4 = dVar5;
-        } else if ((fopAcM_GetName(rope)) == PROC_HIMO2 || (checkSpecialRope())) {
+        } else if (
+            fopAcM_GetName(rope) == PROC_HIMO2 ||
+#if VERSION == VERSION_DEMO
+            !strcmp(dComIfGp_getStartStageName(), "GanonK")
+#else
+            checkSpecialRope()
+#endif
+        ) {
             mProcVar0.m3570 = 1;
         }
     }
     if (dVar4 <= current.pos.y) {
         if (specialRopeHangUp()) {
             return true;
+#if VERSION > VERSION_DEMO
         } else if (changeRopeToHangProc()) {
             return true;
+#endif
         } else {
             return procRopeHangWait_init(0);
         }
@@ -1151,13 +1160,20 @@ BOOL daPy_lk_c::procRopeSwingStart() {
                 }
             }
         }
+#if VERSION == VERSION_DEMO
+        mDoMtx_stack_c::transS(mRopePos.x, mRopePos.y, mRopePos.z);
+        mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, 0);
+        mDoMtx_stack_c::multVec(&local_28, &current.pos);
+#endif
         if (mAcch.ChkWallHit()) {
             procRopeSwing_init(NULL, shape_angle.x);
         }
     }
+#if VERSION > VERSION_DEMO
     mDoMtx_stack_c::transS(mRopePos.x, mRopePos.y, mRopePos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, 0);
     mDoMtx_stack_c::multVec(&local_28, &current.pos);
+#endif
     return true;
 }
 

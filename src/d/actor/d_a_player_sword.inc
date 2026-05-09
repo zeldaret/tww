@@ -58,8 +58,7 @@ void daPy_lk_c::setSwordModel(BOOL r28)
 
     u8* buffer;
 
-    J3DAnmTransform* bck =
-        checkNormalSwordEquip() ? getItemAnimeResource(LKANM_BCK_CUTAA) : getItemAnimeResource(LKANM_BCK_CUTAMS);
+    J3DAnmTransform* bck = checkNormalSwordEquip() ? getItemAnimeResource(LKANM_BCK_CUTAA) : getItemAnimeResource(LKANM_BCK_CUTAMS);
 
     mEquipItem = daPyItem_SWORD_e;
     JKRHeap* oldHeap = setItemHeap();
@@ -1509,18 +1508,26 @@ BOOL daPy_lk_c::procCutRoll_init() {
     offResetFlg0(daPyRFlg0_NOT_ATTACKING);
     if (checkNormalSwordEquip()) {
         m35A4 = m_HIO->mCut.mCutRoll.m.field_0x20;
+#if VERSION == VERSION_DEMO
+        mAtCyl.SetAtAtp(2);
+#else
         if (checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
             mAtCyl.SetAtAtp(4);
         } else {
             mAtCyl.SetAtAtp(2);
         }
+#endif
     } else {
         m35A4 = m_HIO->mCut.mCutRoll.m.field_0x24;
+#if VERSION == VERSION_DEMO
+        mAtCyl.SetAtAtp(4);
+#else
         if (checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
             mAtCyl.SetAtAtp(8);
         } else {
             mAtCyl.SetAtAtp(4);
         }
+#endif
     }
     mAtCyl.SetR(m35A4 * 0.5f);
     m34D0 = m_HIO->mCut.mCutRoll.m.field_0x2;
@@ -1774,8 +1781,7 @@ BOOL daPy_lk_c::procCutTurnMove() {
             offModeFlg(ModeFlg_00000001);
             m3598 = 1.0f;
         }
-        if (mEquipItem == daPyItem_BOKO_e && (mAnmRatioUpper[UPPER_MOVE0_e].getAnmTransform() != (J3DAnmTransform*)0x0))
-        {
+        if (mEquipItem == daPyItem_BOKO_e && (mAnmRatioUpper[UPPER_MOVE0_e].getAnmTransform() != NULL)) {
             mFrameCtrlUpper[UPPER_MOVE0_e].setFrame(mFrameCtrlUpper[UPPER_MOVE0_e].getEnd() - 0.001f);
             mAnmRatioUpper[UPPER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrlUpper[UPPER_MOVE0_e].getFrame());
         }

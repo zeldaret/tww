@@ -114,7 +114,15 @@ BOOL daPy_lk_c::changeSwimProc() {
     BOOL res;
     cXyz local_18;
     
-    if (checkNoResetFlg0(daPyFlg0_UNK80) && !checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_SWIM) && !checkNoControll() && mDemo.getDemoMode() != daPy_demo_c::DEMO_PFALL_e && m35D0 - current.pos.y > m_HIO->mSwim.m.field_0x24) {
+    if (
+        checkNoResetFlg0(daPyFlg0_UNK80) &&
+        !checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_SWIM) &&
+#if VERSION > VERSION_DEMO
+        !checkNoControll() &&
+#endif
+        mDemo.getDemoMode() != daPy_demo_c::DEMO_PFALL_e &&
+        m35D0 - current.pos.y > m_HIO->mSwim.m.field_0x24
+    ) {
         dComIfGp_setItemTimeCount(900);
         dComIfGp_setItemTimeMax(900);
 
@@ -254,12 +262,16 @@ BOOL daPy_lk_c::changeSwimOutProc() {
 
 /* 8013D530-8013D638       .text setSwimMoveAnime__9daPy_lk_cFQ29daPy_lk_c8daPy_ANM */
 void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
-    f32 startFrame = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
-    f32 endFrame = startFrame * mFrameCtrlUnder[UNDER_MOVE0_e].getEnd();
-    f32 rate = (std::fabsf(mVelocity) * (m_HIO->mSwim.m.field_0x54 - m_HIO->mSwim.m.field_0x50) / mMaxNormalSpeed) +
-                m_HIO->mSwim.m.field_0x50 +
-               (getSwimTimerRate() * m_HIO->mSwim.m.field_0x74);
-    setSingleMoveAnime(swimMoveAnm, rate, 0.0f, -1, m_HIO->mSwim.m.field_0x58);
+    f32 endFrame = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() * mFrameCtrlUnder[UNDER_MOVE0_e].getEnd();
+    setSingleMoveAnime(
+        swimMoveAnm,
+        (std::fabsf(mVelocity) * (m_HIO->mSwim.m.field_0x54 - m_HIO->mSwim.m.field_0x50) / mMaxNormalSpeed) +
+            m_HIO->mSwim.m.field_0x50 +
+            (getSwimTimerRate() * m_HIO->mSwim.m.field_0x74),
+        0.0f,
+        -1,
+        m_HIO->mSwim.m.field_0x58
+    );
     mFrameCtrlUnder[UNDER_MOVE0_e].setFrame(endFrame * mFrameCtrlUnder[UNDER_MOVE0_e].getEnd());
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
 }
@@ -452,8 +464,13 @@ BOOL daPy_lk_c::procSwimWait() {
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)) {
         fopAc_ac_c* talkEventPartner = fopAcM_getTalkEventPartner(this);
         if (talkEventPartner) {
-            s16 targetAngleY = cLib_targetAngleY(&current.pos, &talkEventPartner->eyePos);
-            cLib_addCalcAngleS(&shape_angle.y, targetAngleY, m_HIO->mTurn.m.field_0x6, m_HIO->mTurn.m.field_0x8, m_HIO->mTurn.m.field_0xA);
+            cLib_addCalcAngleS(
+                &shape_angle.y,
+                cLib_targetAngleY(&current.pos, &talkEventPartner->eyePos),
+                m_HIO->mTurn.m.field_0x6,
+                m_HIO->mTurn.m.field_0x8,
+                m_HIO->mTurn.m.field_0xA
+            );
             current.angle.y = shape_angle.y;
         }
     }

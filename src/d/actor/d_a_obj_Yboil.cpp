@@ -66,10 +66,10 @@ void daObjYboil_c::CreateInit() {
         fopAcM_SetMtx(this, mModel[i]->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -3000.0f, -0.0f, -3000.0f, 3000.0f, 200.0f, 3000.0f);
         fopAcM_setCullSizeFar(this, 1.0f);
-        f32 frame = cM_rndF(29.9999f);
-        mBckAnm[i].setFrame((s32)frame);
-        mBtkAnm[i].setFrame((s32)frame);
-        mBrkAnm[i].setFrame((s32)frame);
+        int frame = cM_rndF(29.9999f);
+        mBckAnm[i].setFrame(frame);
+        mBtkAnm[i].setFrame(frame);
+        mBrkAnm[i].setFrame(frame);
         mMdlTimer[i] = 0;
     }
     set_mtx();
@@ -105,7 +105,7 @@ cPhs_State daObjYboil_c::_create() {
 
 bool daObjYboil_c::_delete() {
     if (fpcM_CreateResult(this) != cPhs_STOP_e) {
-        dComIfG_resDelete(&mPhs, "Yboil");
+        dComIfG_resDeleteDemo(&mPhs, "Yboil");
     }
     return true;
 }
