@@ -349,9 +349,11 @@ void ho_move(daGrid_c* i_this) {
     i_this->m1B44 += waveSpeed;
 
     i_this->m2212 += (s16)(3000.0f * cM_scos(windRelAngle));
-    s16 windAngleStep = -300;
+    s16 windAngleStep;
     if (i_this->m2212 > 0) {
         windAngleStep = 300;
+    } else {
+        windAngleStep = -300;
     }
     i_this->m2212 += windAngleStep;
 
