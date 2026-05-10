@@ -464,7 +464,11 @@ void ho_move(daGrid_c* i_this) {
         zWave += i_this->m2204 * clothOpen * windSide * localWind.z;
 
         f32 waveLen = std::sqrtf(SQUARE(xWave) + SQUARE(zWave));
-        f32 yWave = 0.25f * waveLen * i_this->m1B54[i];
+        f32 yWave = 0.25f * waveLen;
+        f32 waveAmp = i_this->m1B54[i];
+        xWave *= waveAmp;
+        yWave *= waveAmp;
+        zWave *= waveAmp;
 
         f32 upperRow = rowCenter < 0.0f ? rowCenter : 0.0f;
         f32 foldRate = 1.0f - ((0.67f + 0.3f * (SQUARE(upperRow) * 0.25f)) * i_this->m2200);
