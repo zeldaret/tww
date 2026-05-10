@@ -468,10 +468,9 @@ void ho_move(daGrid_c* i_this) {
             zSag *= i_this->m2200 * (6.0f * l_defaultDepthRate[row] * (col / 6.0f));
         }
 
-        f32 waveScale = 0.35f * clothOpen + 0.65f;
-        pos->x += depthSwing + waveScale * (i_this->m2204 * xWave);
-        pos->y += rowSwing + waveScale * yWave;
-        pos->z += zSag + waveScale * (i_this->m2204 * zWave) - 13.75f;
+        pos->x += depthSwing + (0.35f * clothOpen + 0.65f) * (i_this->m2204 * xWave);
+        pos->y += rowSwing + (0.35f * clothOpen + 0.65f) * yWave;
+        pos->z += zSag + (0.35f * clothOpen + 0.65f) * (i_this->m2204 * zWave) - 13.75f;
 
         row = col < 6 ? row : row + 1;
         col = col < 6 ? col + 1 : 0;
