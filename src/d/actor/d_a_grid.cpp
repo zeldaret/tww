@@ -304,7 +304,7 @@ void ho_move(daGrid_c* i_this) {
     cXyz* windVec = dKyw_get_wind_vec();
     f32 windPow = dKyw_get_wind_pow();
 
-    i_this->mPacket.mActiveBuffer ^= 1;
+    i_this->mPacket.changeCurrentPos();
     i_this->m1B4C = 0x1D4C;
     i_this->m1B4E = 0x1C20;
 
