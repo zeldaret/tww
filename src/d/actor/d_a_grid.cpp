@@ -472,14 +472,14 @@ void ho_move(daGrid_c* i_this) {
         }
     }
 
-    f32 topX = std::fabsf(i_this->mPacket.getPos()[59].x);
+    pos = i_this->mPacket.getPos();
+    f32 topX = std::fabsf(pos[59].x);
     f32 row8Rate = 1.0f - topX * (0.0015f + REG6_F(8));
     f32 row7Rate = 1.0f - topX * (0.00070000003f + REG6_F(9));
     f32 row6Rate = 1.0f - topX * (0.00020000007f + REG6_F(10));
     f32 row9Rate = 1.0f - topX * (0.0015f + REG6_F(11));
     f32 row10Rate = 1.0f - topX * (0.0012f + REG6_F(12));
 
-    pos = i_this->mPacket.getPos();
     for (int i = 0; i < 0x55; i++, pos++) {
         if (i >= 56 && i <= 62) {
             pos->z *= row8Rate;
@@ -494,10 +494,10 @@ void ho_move(daGrid_c* i_this) {
         }
     }
 
+    cXyz* nrm = i_this->mPacket.getNrm();
     cXyz windRel = i_this->tevStr.mLightPosWorld - i_this->current.pos;
     i_this->mPacket.setNrmMtx(windRel);
 
-    cXyz* nrm = i_this->mPacket.getNrm();
     for (int y = 0; y < 12; y++) {
         for (int x = 0; x < 7; x++, nrm++) {
             i_this->mPacket.setNrmVtx(nrm, x, y);
