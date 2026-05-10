@@ -645,19 +645,23 @@ bool daGrid_c::_delete() {
 /* 800EAF28-800EB0EC       .text _execute__8daGrid_cFv */
 bool daGrid_c::_execute() {
     daGrid_c* i_this = this;
-    u8 targetAlpha;
     u8 alpha = i_this->mPacket.getAlpha();
+    u8 targetAlpha;
 
     if (!dComIfGp_event_runCheck()) {
+        u8 calcAlpha;
+
         cXyz eye = dComIfGp_getCamera(0)->mCamera.Eye();
         f32 dist = (i_this->current.pos - eye).abs();
 
         if (dist > l_HIO.mAlphaDist) {
-            targetAlpha = l_HIO.mFarAlpha;
+            calcAlpha = l_HIO.mFarAlpha;
         } else {
             f32 rate = dist / l_HIO.mAlphaDist;
-            targetAlpha = l_HIO.mFarAlpha * rate + l_HIO.mNearAlpha * (1.0f - rate);
+            calcAlpha = l_HIO.mFarAlpha * rate + l_HIO.mNearAlpha * (1.0f - rate);
         }
+
+        targetAlpha = calcAlpha;
     } else {
         targetAlpha = l_HIO.mFarAlpha;
     }
