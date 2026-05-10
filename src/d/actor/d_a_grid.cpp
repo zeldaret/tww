@@ -646,7 +646,7 @@ bool daGrid_c::_delete() {
 bool daGrid_c::_execute() {
     daGrid_c* i_this = this;
     u8 targetAlpha;
-    int alpha = i_this->mPacket.getAlpha();
+    u8 alpha = i_this->mPacket.getAlpha();
 
     if (!dComIfGp_event_runCheck()) {
         cXyz eye = dComIfGp_getCamera(0)->mCamera.Eye();
