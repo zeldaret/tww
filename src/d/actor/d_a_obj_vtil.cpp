@@ -13,23 +13,54 @@
 #include "f_op/f_op_camera.h"
 
 #include "d/res/res_vtil.h"
+
+const int daObjVtil_c::l_daObjVtil_bdl_idx_table[5] = {
+    VTIL_BDL_VTIL1,
+    VTIL_BDL_VTIL2,
+    VTIL_BDL_VTIL3,
+    VTIL_BDL_VTIL5,
+    VTIL_BDL_VTIL4,
+};
+
+const int daObjVtil_c::l_daObjVtil_scene_no_table[5] = {
+    VTIL_BDL_VTIL1,
+    VTIL_BDL_VTIL2,
+    VTIL_BDL_VTIL3,
+    VTIL_BDL_VTIL5,
+    VTIL_BDL_VTIL4,
+};
+
+const dCcD_SrcCyl daObjVtil_c::M_co_cyl_data = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_UNK8,
+        /* SrcObjAt  Atp     */ 1,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsEnemy_e | cCcD_AtSPrm_VsOther_e,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 52.0f,
+        /* Height */ 160.0f,
+    }},
+};
+
 const char daObjVtil_c::M_arcname[] = "Vtil";
-
-const int daObjVtil_c::l_daObjVtil_scene_no_table[] = {
-    VTIL_BDL_VTIL1,
-    VTIL_BDL_VTIL2,
-    VTIL_BDL_VTIL3,
-    VTIL_BDL_VTIL5,
-    VTIL_BDL_VTIL4,
-};
-
-const int daObjVtil_c::l_daObjVtil_bdl_idx_table[] = {
-    VTIL_BDL_VTIL1,
-    VTIL_BDL_VTIL2,
-    VTIL_BDL_VTIL3,
-    VTIL_BDL_VTIL5,
-    VTIL_BDL_VTIL4,
-};
 
 /* 00000078-00000098       .text solidHeapCB__11daObjVtil_cFP10fopAc_ac_c */
 BOOL daObjVtil_c::solidHeapCB(fopAc_ac_c* i_this) {
@@ -56,7 +87,7 @@ BOOL daObjVtil_c::create_heap() {
 
 /* 0000016C-000003C0       .text _create__11daObjVtil_cFv */
 cPhs_State daObjVtil_c::_create() {
-    cPhs_State ret = cPhs_ERROR_e;
+    cPhs_State state = cPhs_ERROR_e;
     fopAcM_SetupActor(this, daObjVtil_c);
     m60C = daObj::PrmAbstract(this, (Prm_e)PRM_TYPE_W, (Prm_e)PRM_TYPE_S);
     if (m60C == 0xF || m60C == -1) {
@@ -64,9 +95,9 @@ cPhs_State daObjVtil_c::_create() {
     }
 
     if (check_ev_bit()) {
-        ret = dComIfG_resLoad(&mPhs, M_arcname);
-        if (ret == cPhs_COMPLEATE_e) {
-            ret = cPhs_ERROR_e;
+        state = dComIfG_resLoad(&mPhs, M_arcname);
+        if (state == cPhs_COMPLEATE_e) {
+            state = cPhs_ERROR_e;
             if (fopAcM_entrySolidHeap(this, solidHeapCB, 0xCC0)) {
                 fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
                 init_mtx();
@@ -83,12 +114,12 @@ cPhs_State daObjVtil_c::_create() {
                 to_wait_mode();
                 dKy_plight_set(&mPLight);
                 model = mpModel;
-                ret = cPhs_COMPLEATE_e;
+                state = cPhs_COMPLEATE_e;
             }
         }
     }
 
-    return ret;
+    return state;
 }
 
 /* 000006CC-00000718       .text _delete__11daObjVtil_cFv */
