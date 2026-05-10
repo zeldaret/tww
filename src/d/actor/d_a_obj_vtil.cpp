@@ -147,12 +147,10 @@ void daObjVtil_c::tell_agb_sink() {
 
 /* 00000790-0000082C       .text init_mtx__11daObjVtil_cFv */
 void daObjVtil_c::init_mtx() {
-    /* Nonmatching */
-    J3DModel* pJVar1 = mpModel;
-    pJVar1->setBaseScale(scale);
+    mpModel->setBaseScale(scale);
     PSMTXTrans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_ZXYrotM(mDoMtx_stack_c::get(), shape_angle.x, shape_angle.y, shape_angle.z);
-    PSMTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpModel->calc();
 }
 
@@ -205,7 +203,7 @@ void daObjVtil_c::se_smoke() {
 /* 00000A88-00000AD8       .text make_splash__11daObjVtil_cFv */
 void daObjVtil_c::make_splash() {
     /* Nonmatching */
-    cXyz pos(current.pos.x, mAcch.m_wtr.GetHeight(), current.pos.z);
+    cXyz pos(current.pos.x, mAcch.GetSeaHeight(), current.pos.z);
     fopKyM_createWpillar(&pos, 1.0f, 0.75f, 0);
 }
 
@@ -326,8 +324,8 @@ void daObjVtil_c::to_throw_mode() {
 void daObjVtil_c::calc_throw(float* gravity, float* param_2, float* param_3) const {
     /* Nonmatching */
     float fVar1;
-    if (const_cast<dBgS_Acch&>(mAcch).ChkSeaIn()){
-        float fVar2 = current.pos.y - const_cast<dBgS_Acch&>(mAcch).GetSeaHeight();
+    if (const_cast<dBgS_ObjAcch&>(mAcch).ChkSeaIn()){
+        float fVar2 = current.pos.y - const_cast<dBgS_ObjAcch&>(mAcch).GetSeaHeight();
         if (!(fVar2 >= 0.0f)) {
             fVar1 = 0.0f;
         } else {
@@ -444,7 +442,7 @@ void daObjVtil_c::hit_bg() {
     //uVar3 = (this->mAcch).mFlags >> 5 & 1;
     BOOL groundHit = mAcch.ChkGroundHit();
     BOOL isSink = check_sink();
-    Mode mode = mMode;
+    Mode mode = (Mode)mMode;
     
     if (mode == MODE_WAIT) {
         if (((isSink & 0xFF) != 0)) {

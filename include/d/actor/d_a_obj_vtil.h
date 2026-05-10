@@ -65,13 +65,13 @@ public:
 public:
     /* 0x290 */ J3DModel* mpModel;
     /* 0x294 */ request_of_phase_process_class mPhs;
-    /* 0x29C */ dBgS_Acch mAcch;
+    /* 0x29C */ dBgS_ObjAcch mAcch;
     /* 0x460 */ dBgS_AcchCir mAcchCir;
     /* 0x4A0 */ dCcD_Stts mStts;
     /* 0x4DC */ dCcD_Cyl mCyl;
     /* 0x60C */ int m60C;
     /* 0x610 */ f32 mSpeedY;
-    /* 0x614 */ Mode mMode;
+    /* 0x614 */ u8 mMode;
     /* 0x615 */ u8 m615;
     /* 0x616 */ u8 m616;
     /* 0x617 */ u8 field_0x617[0x61C - 0x617];
