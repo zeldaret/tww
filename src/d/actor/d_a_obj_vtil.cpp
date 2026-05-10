@@ -372,8 +372,8 @@ void daObjVtil_c::to_sink_mode() {
     fopAcM_SetGravity(this, -2.0f);
 
     f32 sqrt = std::sqrtf(speed.y * speed.y + speedF * speedF);
-    if (sqrt > 0.0f) {
-        sqrt = 1.0f / sqrt;
+    if (sqrt > 30.0) {
+        sqrt = 30.0f / sqrt;
         speed *= sqrt;
         speedF *= sqrt;
     }
@@ -438,51 +438,39 @@ BOOL daObjVtil_c::check_sink_end() {
 
 /* 00001374-000014E0       .text hit_bg__11daObjVtil_cFv */
 void daObjVtil_c::hit_bg() {
-    /* Nonmatching */
-
-    //uVar3 = (this->mAcch).mFlags >> 5 & 1;
-    BOOL groundHit = mAcch.ChkGroundHit();
+    bool groundHit = mAcch.ChkGroundHit();
     BOOL isSink = check_sink();
-    Mode mode = (Mode)mMode;
-    
-    if (mode == MODE_WAIT) {
-        if (((isSink & 0xFF) != 0)) {
+
+    if (mMode == MODE_WAIT) {
+        if ((isSink & 0xFF) != 0) {
             to_sink_mode();
         }
-    } else if (mode == MODE_THROW){
-        if (!groundHit && !mAcch.ChkWallHit() && mAcch.ChkRoofHit()) {
-            if (((isSink & 0xFF) == 0)) {
-                return;
-            }
-
-            return;
-        }
-
-        if (fopAcM_GetGravity(this) - 1.0f < mSpeedY) {
-            if (groundHit) {
-                make_smoke();
-                se_smoke();
-                make_vib();
-            }
-
-            fopAcM_SetSpeedF(this, 0.0f);
-            to_wait_mode();
-            camera_class* camera = dComIfGp_getCamera(0);
-            camera->mCamera.ForceLockOff(base.base.mBsPcId);
-        }
-        // fopAcM_SetSpeedF(this, fopAcM_GetSpeedF(this) * 0.6f);
-    } else if (mode == MODE_SINK) {
-        BOOL cVar4 = check_sink_end();
-        if ((cVar4 & 0xFF) == 0) {
-            if ((isSink & 0xFF) == 0) {
-                return;
-            }
+    } else if (mMode == MODE_THROW) {
+        if (groundHit || mAcch.ChkWallHit() || mAcch.ChkRoofHit()) {
+            if (mSpeedY < fopAcM_GetGravity(this) - 1.0f) {
+                speedF *= 0.6f;
+            } else {
+                if (groundHit) {
+                    make_smoke();
+                    se_smoke();
+                    make_vib();
+                }
+                fopAcM_SetSpeedF(this, 0.0f);
                 to_wait_mode();
-                camera_class* camera = dComIfGp_getCamera(0);
-                camera->mCamera.ForceLockOff(base.base.mBsPcId);
+                camera_off();
+            }
         } else {
+            if ((isSink & 0xFF) != 0) {
+                to_sink_mode();
+            }
+        }
+    } else if (mMode == MODE_SINK) {
+        if ((check_sink_end() & 0xFF) != 0) {
             tell_agb_sink();
             m615 = 1;
+        } else if ((isSink & 0xFF) == 0) {
+            to_wait_mode();
+            camera_off();
         }
     }
 }

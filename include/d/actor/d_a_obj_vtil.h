@@ -2,8 +2,10 @@
 #define D_A_OBJ_VTIL_H
 
 #include "f_op/f_op_actor.h"
+#include "f_op/f_op_camera.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_cc_d.h"
+#include "d/d_com_inf_game.h"
 
 class daObjVtil_c : public fopAc_ac_c {
 public:
@@ -56,6 +58,11 @@ public:
     BOOL check_circle();
     BOOL _execute();
     bool _draw();
+
+    void camera_off() {
+        camera_class* camera = dComIfGp_getCamera(0);
+        camera->mCamera.ForceLockOff(base.base.mBsPcId);
+    }
 
     static const char M_arcname[];
     static const int l_daObjVtil_scene_no_table[];
