@@ -387,6 +387,8 @@ void ho_move(daGrid_c* i_this) {
 
     int col = 0;
     int row = 0;
+    f32 xWave;
+    f32 zWave;
 
     for (int i = 0; i < 0x55; i++, pos++) {
         f32 clothOpen = 1.0f - i_this->m2200;
@@ -395,8 +397,8 @@ void ho_move(daGrid_c* i_this) {
         f32 xRate = x_rate_tbl[row];
         s16 rowWaveAngle = 10922.0f * xRate;
 
-        f32 xWave = windDepth * cM_ssin(i_this->m1B44 + i * i_this->m1B4C);
-        f32 zWave = 0.5f * (windDepth * cM_scos(i_this->m1B44 + i * i_this->m1B4E));
+        xWave = windDepth * cM_ssin(i_this->m1B44 + i * i_this->m1B4C);
+        zWave = 0.5f * (windDepth * cM_scos(i_this->m1B44 + i * i_this->m1B4E));
 
         MtxPosition(&localIn, &localWind);
         f32 localWindX = localWind.x;
