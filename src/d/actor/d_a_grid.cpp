@@ -426,16 +426,19 @@ void ho_move(daGrid_c* i_this) {
         f32 upperRow = rowCenter < 0.0f ? rowCenter : 0.0f;
         f32 foldRate = 1.0f - ((0.67f + 0.3f * (SQUARE(upperRow) * 0.25f)) * i_this->m2200);
         f32 depthRate;
+        f32 depthSwing;
+        f32 rowSwing;
         if (l_HIO.mUseHioRates != 0) {
             foldRate *= clothOpen + l_HIO.mWaveRate[row] * i_this->m2200;
             depthRate = l_HIO.mDepthRate[row];
+            depthSwing = 120.0f * (depthRate * i_this->m2200);
+            rowSwing = 5.0f * depthRate * row * i_this->m2200;
         } else {
             foldRate *= clothOpen + l_defaultWaveRate[row] * i_this->m2200;
             depthRate = l_defaultDepthRate[row];
+            depthSwing = 120.0f * (depthRate * i_this->m2200);
+            rowSwing = 5.0f * depthRate * row * i_this->m2200;
         }
-
-        f32 depthSwing = 120.0f * (depthRate * i_this->m2200);
-        f32 rowSwing = 5.0f * depthRate * row * i_this->m2200;
 
         pos->x = gridPos[i].x;
         pos->y = foldRate * gridPos[i].y + (1.0f - foldRate) * gridPos[row * 7].y;
