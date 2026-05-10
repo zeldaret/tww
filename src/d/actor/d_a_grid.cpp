@@ -557,6 +557,7 @@ cPhs_State daGrid_c::_create() {
         l_HIO.mNo = mDoHIO_root.m_subroot.createChild("\221D\202\314\224\277", &l_HIO);
     }
 
+    int columnTop;
     int i = 0;
     Vec* gridPos = (Vec*)l_pos;
     for (; i < 0x55; i++) {
@@ -571,7 +572,7 @@ cPhs_State daGrid_c::_create() {
             baseAmplitude = 80.0f;
         }
 
-        int columnTop = 6;
+        columnTop = 6;
 
         f32 edgeDistA = std::fabsf(gridPos[0].z - gridPos[i].z);
         f32 edgeDistB = std::fabsf(gridPos[6].z - gridPos[i].z);
