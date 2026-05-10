@@ -301,6 +301,9 @@ void ho_move(daGrid_c* i_this) {
         return;
     }
 
+    f32 xWave;
+    f32 zWave;
+
     cXyz* windVec = dKyw_get_wind_vec();
     f32 windPow = dKyw_get_wind_pow();
 
@@ -387,8 +390,6 @@ void ho_move(daGrid_c* i_this) {
 
     int col = 0;
     int row = 0;
-    f32 xWave;
-    f32 zWave;
 
     for (int i = 0; i < 0x55; i++, pos++) {
         f32 clothOpen = 1.0f - i_this->m2200;
