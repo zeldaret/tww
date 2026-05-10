@@ -472,16 +472,12 @@ void ho_move(daGrid_c* i_this) {
 
         f32 upperRow = rowCenter < 0.0f ? rowCenter : 0.0f;
         f32 foldRate = 1.0f - ((0.67f + 0.3f * (SQUARE(upperRow) * 0.25f)) * i_this->m2200);
-        if (l_HIO.mUseHioRates != 0) {
-            foldRate *= clothOpen + l_HIO.mWaveRate[row] * i_this->m2200;
-        } else {
-            foldRate *= clothOpen + l_defaultWaveRate[row] * i_this->m2200;
-        }
-
         f32 depthRate;
         if (l_HIO.mUseHioRates != 0) {
+            foldRate *= clothOpen + l_HIO.mWaveRate[row] * i_this->m2200;
             depthRate = l_HIO.mDepthRate[row];
         } else {
+            foldRate *= clothOpen + l_defaultWaveRate[row] * i_this->m2200;
             depthRate = l_defaultDepthRate[row];
         }
 
