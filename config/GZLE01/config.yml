@@ -2804,19 +2804,15 @@ extract:
 - symbol: l_pos!.data:0x8038B1D8
   binary: assets/l_grid_pos.bin
   header: assets/l_grid_pos.h
-  rename: l_grid_pos
 - symbol: l_texCoord!.data:0x8038B5D4
   binary: assets/l_grid_texCoord.bin
   header: assets/l_grid_texCoord.h
-  rename: l_grid_texCoord
 - symbol: l_DL!.data:0x8038B880
   binary: assets/l_grid_DL.bin
   header: assets/l_grid_DL.h
-  rename: l_grid_DL
 - symbol: l_matDL!.data:0x8038BAC0
   binary: assets/l_grid_matDL.bin
   header: assets/l_grid_matDL.h
-  rename: l_grid_matDL
 
 - symbol: l_matDL!.data:0x80376e20
   binary: assets/l_matDL__d_cloth_packet.bin

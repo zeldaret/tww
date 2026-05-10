@@ -31,21 +31,6 @@ static daHo_HIO_c l_HIO;
 #include "assets/l_grid_DL.h"
 #include "assets/l_grid_matDL.h"
 
-static f32 l_defaultDepthRate[] = {
-    0.05f, 0.125f, 0.175f, 0.15f, 0.0625f, 0.15f, 0.2f,
-    0.15f, 0.075f, 0.175f, 0.175f, 0.1f, 0.0f,
-};
-
-static f32 l_defaultWaveRate[] = {
-    1.0f, 0.425f, 0.45f, 0.4f, 0.2f, 0.4f, 0.45f,
-    0.4f, 0.2f, 0.5f, 0.75f, 1.0f, 1.0f,
-};
-
-static f32 l_xRate[] = {
-    1.0f, 0.95f, 0.9f, 0.85f, 0.8f, 0.75f, 0.7f,
-    0.65f, 0.55f, 0.4f, 0.25f, 0.1f, 0.0f,
-};
-
 /* 800E8CC0-800E8D48       .text setBackNrm__13daHo_packet_cFv */
 void daHo_packet_c::setBackNrm() {
     cXyz* nrm = getNrm();
@@ -166,7 +151,7 @@ void daHo_packet_c::draw() {
 
     GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
     GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
-    GXSetArray(GX_VA_TEX0, l_grid_texCoord, sizeof(cXy));
+    GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(cXy));
 
     GXTexObj texObj;
     GXTlutObj tlutObj;
@@ -275,17 +260,17 @@ void daHo_packet_c::draw() {
     GXSetTevColorS10(GX_TEVREG0, mTevStr->mColorC0);
     GXSetTevColor(GX_TEVREG1, mTevStr->mColorK0);
     GXSetTevColor(GX_TEVREG2, mTevStr->mColorK1);
-    GXCallDisplayList(l_grid_matDL, 0x20);
+    GXCallDisplayList(l_matDL, 0x20);
 
     GXLoadPosMtxImm(*getMtx(), 0);
     GXLoadNrmMtxImm(*getMtx(), 0);
 
     GXSetCullMode(GX_CULL_BACK);
-    GXCallDisplayList(l_grid_DL, 0x220);
+    GXCallDisplayList(l_DL, 0x220);
 
     GXSetCullMode(GX_CULL_FRONT);
     GXSetArray(GX_VA_NRM, getBackNrm(), sizeof(cXyz));
-    GXCallDisplayList(l_grid_DL, 0x220);
+    GXCallDisplayList(l_DL, 0x220);
 
     J3DShape::resetVcdVatCache();
 }
@@ -297,6 +282,21 @@ static BOOL daGrid_Draw(daGrid_c* i_this) {
 
 /* 800E9C0C-800EA928       .text ho_move__FP8daGrid_c */
 void ho_move(daGrid_c* i_this) {
+    static f32 z_rate_tbl[] = {
+        0.05f, 0.125f, 0.175f, 0.15f, 0.0625f, 0.15f, 0.2f,
+        0.15f, 0.075f, 0.175f, 0.175f, 0.1f, 0.0f,
+    };
+
+    static f32 z_rate_tbl2[] = {
+        1.0f, 0.425f, 0.45f, 0.4f, 0.2f, 0.4f, 0.45f,
+        0.4f, 0.2f, 0.5f, 0.75f, 1.0f, 1.0f,
+    };
+
+    static f32 x_rate_tbl[] = {
+        1.0f, 0.95f, 0.9f, 0.85f, 0.8f, 0.75f, 0.7f,
+        0.65f, 0.55f, 0.4f, 0.25f, 0.1f, 0.0f,
+    };
+
     if (l_HIO.mStopMove != 0) {
         return;
     }
@@ -362,7 +362,7 @@ void ho_move(daGrid_c* i_this) {
     i_this->m2212 += windAngleStep;
 
     f32 windBend = 0.5f * cM_ssin(windRelAngle);
-    Vec* gridPos = (Vec*)l_grid_pos;
+    Vec* gridPos = (Vec*)l_pos;
     localIn.x = 0.0f;
     localIn.z = 1.6f;
     cXyz* pos = i_this->mPacket.getPos();
@@ -398,7 +398,7 @@ void ho_move(daGrid_c* i_this) {
         f32 clothOpen = 1.0f - i_this->m2200;
         f32 colCenter = 3 - col;
         f32 rowCenter = row - 2;
-        f32 xRate = l_xRate[row];
+        f32 xRate = x_rate_tbl[row];
         s16 rowWaveAngle = 10922.0f * xRate;
 
         f32 xWave = windDepth * cM_ssin(i_this->m1B44 + i * i_this->m1B4C);
@@ -434,8 +434,8 @@ void ho_move(daGrid_c* i_this) {
             depthSwing *= depthRate * i_this->m2200;
             rowSwing = 5.0f * depthRate * col * i_this->m2200;
         } else {
-            foldRate *= clothOpen + l_defaultWaveRate[row] * i_this->m2200;
-            depthRate = l_defaultDepthRate[row];
+            foldRate *= clothOpen + z_rate_tbl2[row] * i_this->m2200;
+            depthRate = z_rate_tbl[row];
             depthSwing *= depthRate * i_this->m2200;
             rowSwing = 5.0f * depthRate * col * i_this->m2200;
         }
@@ -467,7 +467,7 @@ void ho_move(daGrid_c* i_this) {
         if (l_HIO.mUseHioRates != 0) {
             zSag *= i_this->m2200 * (6.0f * l_HIO.mDepthRate[row] * (col / 6.0f));
         } else {
-            zSag *= i_this->m2200 * (6.0f * l_defaultDepthRate[row] * (col / 6.0f));
+            zSag *= i_this->m2200 * (6.0f * z_rate_tbl[row] * (col / 6.0f));
         }
 
         pos->x += depthSwing + (0.35f * clothOpen + 0.65f) * (i_this->m2204 * xWave);
@@ -558,7 +558,7 @@ cPhs_State daGrid_c::_create() {
     }
 
     int i = 0;
-    Vec* gridPos = (Vec*)l_grid_pos;
+    Vec* gridPos = (Vec*)l_pos;
     for (; i < 0x55; i++) {
         f32 baseAmplitude;
         if (i >= 0 && i <= 6) {
