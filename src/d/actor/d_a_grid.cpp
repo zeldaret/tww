@@ -595,14 +595,13 @@ cPhs_State daGrid_c::_create() {
         }
 
         f32 verticalAmplitude;
-        f32 verticalDistA;
-        f32 verticalDistB;
-        f32 verticalEdgeDist;
+        f32 verticalDist;
+        f32 verticalLimit;
         f32 verticalRate;
         if (gridPos[i].y < gridPos[columnTop].y) {
-            verticalDistA = std::fabsf(gridPos[0].y - gridPos[i].y);
-            verticalDistB = std::fabsf(gridPos[columnTop].y - gridPos[i].y);
-            verticalEdgeDist = std::fabsf(gridPos[columnTop].y - gridPos[0].y);
+            verticalDist = std::fabsf(gridPos[0].y - gridPos[i].y);
+            verticalLimit = std::fabsf(gridPos[columnTop].y - gridPos[i].y);
+            f32 verticalEdgeDist = std::fabsf(gridPos[columnTop].y - gridPos[0].y);
             verticalEdgeDist *= 0.5f;
             verticalRate = 1.05f * (1.5707964f / verticalEdgeDist);
             if (columnTop == 56) {
@@ -613,18 +612,18 @@ cPhs_State daGrid_c::_create() {
                 verticalAmplitude = 80.0f;
             }
         } else {
-            verticalDistA = std::fabsf(gridPos[columnTop].y - gridPos[i].y);
-            verticalDistB = std::fabsf(gridPos[84].y - gridPos[i].y);
-            verticalEdgeDist = std::fabsf(gridPos[columnTop].y - gridPos[84].y);
+            verticalDist = std::fabsf(gridPos[columnTop].y - gridPos[i].y);
+            verticalLimit = std::fabsf(gridPos[84].y - gridPos[i].y);
+            f32 verticalEdgeDist = std::fabsf(gridPos[columnTop].y - gridPos[84].y);
             verticalEdgeDist *= 0.5f;
             verticalRate = 1.15f * (1.5707964f / verticalEdgeDist);
             verticalAmplitude = 20.0f;
         }
 
-        if (verticalDistA > verticalDistB) {
-            verticalDistA = verticalDistB;
+        if (verticalDist > verticalLimit) {
+            verticalDist = verticalLimit;
         }
-        f32 verticalSin = sin(verticalDistA * verticalRate);
+        f32 verticalSin = sin(verticalDist * verticalRate);
         f32 verticalValue = verticalAmplitude * verticalSin;
 
         m1B54[i] = std::sqrtf(SQUARE(baseAmplitude) + SQUARE(verticalValue));
