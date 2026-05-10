@@ -603,9 +603,9 @@ cPhs_State daGrid_c::_create() {
     Vec* gridPos = (Vec*)l_grid_pos;
     for (int i = 0; i < 0x55; i++) {
         f32 baseAmplitude;
-        if (i <= 6) {
+        if (i >= 0 && i <= 6) {
             baseAmplitude = 40.0f;
-        } else if (i <= 13) {
+        } else if (i >= 7 && i <= 13) {
             baseAmplitude = 70.0f;
         } else if ((i >= 49 && i <= 55) || (i >= 42 && i <= 48)) {
             baseAmplitude = 85.0f;
@@ -620,7 +620,8 @@ cPhs_State daGrid_c::_create() {
         if (edgeDistA > edgeDistB) {
             edgeDistA = edgeDistB;
         }
-        baseAmplitude *= sin(edgeDistA * edgeRate);
+        f32 edgeSin = sin(edgeDistA * edgeRate);
+        baseAmplitude *= edgeSin;
 
         int columnTop = 6;
         for (int j = 0; j < 7; j++) {
@@ -660,7 +661,8 @@ cPhs_State daGrid_c::_create() {
         if (verticalDistA > verticalDistB) {
             verticalDistA = verticalDistB;
         }
-        verticalAmplitude *= sin(verticalDistA * verticalRate);
+        f32 verticalSin = sin(verticalDistA * verticalRate);
+        verticalAmplitude *= verticalSin;
 
         m1B54[i] = std::sqrtf(SQUARE(baseAmplitude) + SQUARE(verticalAmplitude));
     }
