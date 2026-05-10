@@ -19,6 +19,8 @@ public:
 
     Mtx* getMtx() { return &mMtx; }
     void setTevStr(dKy_tevstr_c* tevStr) { mTevStr = tevStr; }
+    void setAlpha(u8 alpha) { mAlpha = alpha; }
+    u8 getAlpha() { return mAlpha; }
     cXyz* getPos() { return mPos[mActiveBuffer]; }
     cXyz* getNrm() { return mNrm[mActiveBuffer]; }
     cXyz* getBackNrm() { return mBackNrm[mActiveBuffer]; }

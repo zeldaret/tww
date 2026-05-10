@@ -308,7 +308,7 @@ void ho_move(daGrid_c* i_this) {
     i_this->m1B4C = 0x1D4C;
     i_this->m1B4E = 0x1C20;
 
-    s16 shipSailAngle = l_ship->mSailAngle;
+    s16 shipSailAngle = l_ship->getSailAngle();
     s16 windAngle = cM_atan2s(windVec->x, windVec->z);
     s16 windRelAngle = (s16)(i_this->current.angle.y + shipSailAngle) - windAngle;
     s16 targetWindAngle = windRelAngle + 0x8000;
@@ -324,7 +324,7 @@ void ho_move(daGrid_c* i_this) {
     if (i_this->mForceWindRelAngleFlag == 0) {
         cLib_addCalcAngleS2(&i_this->m2210, targetAngle, 4, 0x1000);
     } else {
-        s16 forceTarget = i_this->mForceWindRelAngle - l_ship->mSailAngle + 0x8000;
+        s16 forceTarget = i_this->mForceWindRelAngle - l_ship->getSailAngle() + 0x8000;
         cLib_addCalcAngleS2(&i_this->m2210, forceTarget, 2, 0x1400);
     }
     i_this->mForceWindRelAngleFlag = 0;
@@ -344,13 +344,7 @@ void ho_move(daGrid_c* i_this) {
 
     f32 windWaveRate = 1.0f + (0.01f + REG6_F(15)) * (windSide * cM_ssin(i_this->m1B44));
     s32 calcWaveSpeed = 2500.0f + (9000.0f * (0.8f * windPow));
-    s32 waveSpeed;
-    if (calcWaveSpeed > 10000) {
-        waveSpeed = 10000;
-    } else {
-        waveSpeed = calcWaveSpeed;
-    }
-    i_this->m1B44 += waveSpeed;
+    i_this->m1B44 += cLib_maxLimit(calcWaveSpeed, (s32)10000);
 
     i_this->m2212 += (s16)(3000.0f * cM_scos(windRelAngle));
     s16 windAngleStep;
@@ -368,7 +362,7 @@ void ho_move(daGrid_c* i_this) {
     cXyz* pos = i_this->mPacket.getPos();
 
     if (l_HIO.m08 == 0) {
-        if (l_ship->mStateFlag & 0x200) {
+        if (l_ship->getSailOn()) {
             if (i_this->m2208 == 0.0f) {
                 if (i_this->m2200 <= 0.0001f + l_HIO.m0C) {
                     i_this->m2208 = 1.0f;
@@ -407,11 +401,11 @@ void ho_move(daGrid_c* i_this) {
         MtxPosition(&localIn, &localWind);
         f32 localWindX = localWind.x;
         f32 xLimit = 0.25f + 0.75f * windPow;
-        localWind.x = localWindX * (xLimit > 1.0f ? 1.0f : xLimit);
+        localWind.x = localWindX * cLib_maxLimit(xLimit, 1.0f);
 
         f32 localWindZ = localWind.z;
         f32 zLimit = 0.5f + 0.25f * windPow;
-        localWind.z = localWindZ * (zLimit > 1.0f ? 1.0f : zLimit);
+        localWind.z = localWindZ * cLib_maxLimit(zLimit, 1.0f);
 
         xWave += i_this->m2204 * (clothOpen * (windWaveRate * localWind.x));
         zWave += i_this->m2204 * (clothOpen * (windSide * localWind.z));
@@ -652,7 +646,7 @@ bool daGrid_c::_delete() {
 bool daGrid_c::_execute() {
     daGrid_c* i_this = this;
     u8 targetAlpha;
-    int alpha = i_this->mPacket.mAlpha;
+    int alpha = i_this->mPacket.getAlpha();
 
     if (!dComIfGp_event_runCheck()) {
         cXyz eye = dComIfGp_getCamera(0)->mCamera.Eye();
@@ -669,11 +663,11 @@ bool daGrid_c::_execute() {
     }
 
     if (targetAlpha > alpha + 5) {
-        i_this->mPacket.mAlpha = alpha + 5;
+        i_this->mPacket.setAlpha(alpha + 5);
     } else if (targetAlpha < alpha - 5) {
-        i_this->mPacket.mAlpha = alpha - 5;
+        i_this->mPacket.setAlpha(alpha - 5);
     } else {
-        i_this->mPacket.mAlpha = targetAlpha;
+        i_this->mPacket.setAlpha(targetAlpha);
     }
 
     if (i_this->scale.y < 0.06f) {
@@ -697,7 +691,7 @@ bool daGrid_c::_draw() {
     cMtx_YrotM(*calc_mtx, current.angle.y);
     cMtx_XrotM(*calc_mtx, current.angle.x);
     cMtx_ZrotM(*calc_mtx, current.angle.z);
-    s16 shipSailAngle = l_ship->mSailAngle;
+    s16 shipSailAngle = l_ship->getSailAngle();
     cMtx_YrotM(*calc_mtx, shipSailAngle);
     MtxScale(1.0f, scale.y, 1.0f, true);
     MtxScale(l_HIO.mScaleX, l_HIO.mScaleY, l_HIO.mScaleZ, true);
