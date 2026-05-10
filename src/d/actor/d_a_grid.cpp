@@ -46,56 +46,6 @@ static f32 l_xRate[] = {
     0.65f, 0.55f, 0.4f, 0.25f, 0.1f, 0.0f,
 };
 
-daHo_HIO_c::daHo_HIO_c() {
-    mNo = -1;
-    m05 = 1;
-    m06 = 0;
-    m07 = 0;
-    m08 = 0;
-    m0C = 0.1f;
-    m10 = 0.0f;
-    m14 = 40.0f;
-    m18 = 0.5f;
-    m1C = 0.1f;
-    m20 = 0.4f;
-    mScaleX = 1.0f;
-    mScaleY = 1.0f;
-    mScaleZ = 1.0f;
-    mFarAlpha = 0xFF;
-    mNearAlpha = 0x32;
-    mAlphaDist = 900.0f;
-    mStopMove = 0;
-    mUseHioRates = 0;
-
-    mDepthRate[0] = 0.05f;
-    mDepthRate[1] = 0.125f;
-    mDepthRate[2] = 0.175f;
-    mDepthRate[3] = 0.15f;
-    mDepthRate[4] = 0.0625f;
-    mDepthRate[5] = 0.15f;
-    mDepthRate[6] = 0.2f;
-    mDepthRate[7] = 0.15f;
-    mDepthRate[8] = 0.075f;
-    mDepthRate[9] = 0.175f;
-    mDepthRate[10] = 0.175f;
-    mDepthRate[11] = 0.1f;
-    mDepthRate[12] = 0.0f;
-
-    mWaveRate[0] = 1.0f;
-    mWaveRate[1] = 0.425f;
-    mWaveRate[2] = 0.45f;
-    mWaveRate[3] = 0.4f;
-    mWaveRate[4] = 0.2f;
-    mWaveRate[5] = 0.4f;
-    mWaveRate[6] = 0.45f;
-    mWaveRate[7] = 0.4f;
-    mWaveRate[8] = 0.2f;
-    mWaveRate[9] = 0.5f;
-    mWaveRate[10] = 0.75f;
-    mWaveRate[11] = 1.0f;
-    mWaveRate[12] = 1.0f;
-}
-
 /* 800E8CC0-800E8D48       .text setBackNrm__13daHo_packet_cFv */
 void daHo_packet_c::setBackNrm() {
     cXyz* nrm = getNrm();
