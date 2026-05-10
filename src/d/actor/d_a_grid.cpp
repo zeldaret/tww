@@ -650,8 +650,7 @@ bool daGrid_c::_execute() {
     int alpha = i_this->mPacket.mAlpha;
 
     if (!dComIfGp_event_runCheck()) {
-        camera_class* camera = dComIfGp_getCamera(0);
-        cXyz eye = camera->mCamera.Eye();
+        cXyz eye = dComIfGp_getCamera(0)->mCamera.Eye();
         f32 dist = (i_this->current.pos - eye).abs();
 
         if (dist > l_HIO.mAlphaDist) {
