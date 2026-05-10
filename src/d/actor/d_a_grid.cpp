@@ -555,8 +555,9 @@ cPhs_State daGrid_c::_create() {
         l_HIO.mNo = mDoHIO_root.m_subroot.createChild("\221D\202\314\224\277", &l_HIO);
     }
 
+    int i = 0;
     Vec* gridPos = (Vec*)l_grid_pos;
-    for (int i = 0; i < 0x55; i++) {
+    for (; i < 0x55; i++) {
         f32 baseAmplitude;
         if (i >= 0 && i <= 6) {
             baseAmplitude = 40.0f;
