@@ -472,7 +472,7 @@ void ho_move(daGrid_c* i_this) {
 
         pos->x += depthSwing + (0.35f * clothOpen + 0.65f) * (i_this->m2204 * xWave);
         pos->y += rowSwing + (0.35f * clothOpen + 0.65f) * yWave;
-        pos->z += zSag + (0.35f * clothOpen + 0.65f) * (i_this->m2204 * zWave) - 13.75f;
+        pos->z += zSag + ((0.35f * clothOpen + 0.65f) * (i_this->m2204 * zWave) - 13.75f);
 
         row = col < 6 ? row : row + 1;
         col = col < 6 ? col + 1 : 0;
