@@ -1066,7 +1066,11 @@ u8 daNpc_Co1_c::demo() {
             }
         }
 
+#if VERSION != 0
         dDemo_setDemoData(this, 0x6A, mpMorf, "Co", 0, NULL, 0, 0);
+#else
+        dDemo_setDemoData(this, 0x6A, mpMorf, "Co", 0, NULL);
+#endif
     }
     return mDemo;
 }
