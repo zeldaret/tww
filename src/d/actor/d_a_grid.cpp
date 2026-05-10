@@ -462,7 +462,11 @@ void ho_move(daGrid_c* i_this) {
             zSag += 4.25f * ((col - 4) * edgeWave);
         }
 
-        zSag *= i_this->m2200 * (6.0f * depthRate * (col / 6.0f));
+        if (l_HIO.mUseHioRates != 0) {
+            zSag *= i_this->m2200 * (6.0f * l_HIO.mDepthRate[row] * (col / 6.0f));
+        } else {
+            zSag *= i_this->m2200 * (6.0f * l_defaultDepthRate[row] * (col / 6.0f));
+        }
 
         f32 waveScale = 0.35f * clothOpen + 0.65f;
         pos->x += depthSwing + waveScale * (i_this->m2204 * xWave);
