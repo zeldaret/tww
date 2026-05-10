@@ -29,7 +29,7 @@ public:
     static BOOL solidHeapCB(fopAc_ac_c*);
     BOOL create_heap();
     cPhs_State _create();
-    BOOL _delete();
+    bool _delete();
     void tell_agb_attack();
     void tell_agb_sink();
     void init_mtx();
@@ -56,7 +56,7 @@ public:
     void hit_bg();
     void make_vib();
     BOOL check_circle();
-    BOOL _execute();
+    bool _execute();
     bool _draw();
 
     void camera_off() {

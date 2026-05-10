@@ -69,7 +69,6 @@ BOOL daObjVtil_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 00000098-0000016C       .text create_heap__11daObjVtil_cFv */
 BOOL daObjVtil_c::create_heap() {
-    /* Nonmatching */
     BOOL ret = FALSE;
 
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, l_daObjVtil_bdl_idx_table[m60C]));
@@ -123,7 +122,7 @@ cPhs_State daObjVtil_c::_create() {
 }
 
 /* 000006CC-00000718       .text _delete__11daObjVtil_cFv */
-BOOL daObjVtil_c::_delete() {
+bool daObjVtil_c::_delete() {
     dKy_plight_cut(&mPLight);
     this->model = NULL;
     dComIfG_resDelete(&mPhs, M_arcname);
@@ -491,7 +490,7 @@ BOOL daObjVtil_c::check_circle() {
 }
 
 /* 00001634-000017CC       .text _execute__11daObjVtil_cFv */
-BOOL daObjVtil_c::_execute() {
+bool daObjVtil_c::_execute() {
     static void (daObjVtil_c::*mode_exe[])() = {
         &daObjVtil_c::mode_wait,
         &daObjVtil_c::mode_carry,
