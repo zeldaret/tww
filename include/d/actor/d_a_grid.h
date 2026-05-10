@@ -9,12 +9,12 @@
 class daHo_packet_c : public J3DMatPacket {
 public:
     daHo_packet_c() {
-        setShapePacket(&mShapePacket);
-        m189C = 0;
-        m189E = 0;
-        m18A0 = 0;
         mActiveBuffer = 0;
+        m189C = 0;
+        m18A0 = 0;
+        m189E = 0;
         mAlpha = 0xFF;
+        setShapePacket(&mShapePacket);
     }
 
     Mtx* getMtx() { return &mMtx; }
