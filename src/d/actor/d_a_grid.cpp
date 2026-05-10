@@ -564,6 +564,8 @@ cPhs_State daGrid_c::_create() {
             baseAmplitude = 80.0f;
         }
 
+        int columnTop = 6;
+
         f32 edgeDistA = std::fabsf(gridPos[0].z - gridPos[i].z);
         f32 edgeDistB = std::fabsf(gridPos[6].z - gridPos[i].z);
         f32 edgeDist = std::fabsf(gridPos[0].z - gridPos[6].z);
@@ -574,7 +576,6 @@ cPhs_State daGrid_c::_create() {
         f32 edgeSin = sin(edgeDistA * edgeRate);
         baseAmplitude *= edgeSin;
 
-        int columnTop = 6;
         for (int j = 0; j < 7; j++) {
             if (i == j || i == j + 7 || i == j + 14 || i == j + 21 || i == j + 28 ||
                 i == j + 35 || i == j + 42 || i == j + 49 || i == j + 56 || i == j + 63 ||
@@ -613,9 +614,9 @@ cPhs_State daGrid_c::_create() {
             verticalDistA = verticalDistB;
         }
         f32 verticalSin = sin(verticalDistA * verticalRate);
-        verticalAmplitude *= verticalSin;
+        f32 verticalValue = verticalAmplitude * verticalSin;
 
-        m1B54[i] = std::sqrtf(SQUARE(baseAmplitude) + SQUARE(verticalAmplitude));
+        m1B54[i] = std::sqrtf(SQUARE(baseAmplitude) + SQUARE(verticalValue));
     }
 
     s16 procName = PROC_SHIP;
