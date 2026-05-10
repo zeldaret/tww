@@ -198,7 +198,6 @@ void Act_c::init_cc() {
 
 /* 00000E04-00000FC4       .text set_cc_pos__Q212daObjSwlight5Act_cFv */
 void Act_c::set_cc_pos() {
-    /* Nonmatching */
     f32 tmp0C;
     f32 tmp04;
     f32 tmp08;
@@ -209,8 +208,10 @@ void Act_c::set_cc_pos() {
     Vec local_20;
 
     tmp04 = attr().m04;
+#if VERSION == VERSION_DEMO
     tmp08 = attr().m08;
     tmp0C = attr().m0C;
+#endif
 
     fVar1 = tmp04 * cM_ssin(0x2000);
     fVar2 = tmp04 * cM_scos(0x2000);
@@ -221,23 +222,50 @@ void Act_c::set_cc_pos() {
         {0.0f, 0.0f, 0.0f},
     };
 
+#if VERSION > VERSION_DEMO
+    tmp08 = attr().m08;
+#endif
     _4319[0].z = tmp08;
 
     _4319[1].y = tmp04;
+#if VERSION > VERSION_DEMO
+    tmp0C = attr().m0C;
+#endif
     _4319[1].z = tmp0C;
 
+#if VERSION > VERSION_DEMO
+    register const Vec* local_38;
+    register const Vec* local_44;
+    // Fakematch: keeps the retail register allocation without an extra pointer move.
+    asm {
+        addi local_44, r1, 0x44
+    }
+    _4319[2].x = fVar1;
+    _4319[2].y = fVar2;
+    _4319[2].z = tmp0C;
+    s32 i = 0;
+    local_38 = &_4319[1];
+
+    for (; i < ARRAY_SSIZE(m2C4); i++) {
+#else
     _4319[2].x = fVar1;
     _4319[2].y = fVar2;
     _4319[2].z = tmp0C;
 
     for (s32 i = 0; i < ARRAY_SSIZE(m2C4); i++) {
+#endif
         s16 z = (i * 0x10000) / 8;
         mDoMtx_stack_c::copy(m298->getBaseTRMtx());
         mDoMtx_stack_c::ZrotM(z);
 
         mDoMtx_stack_c::multVec(&_4319[0], &local_08);
+#if VERSION > VERSION_DEMO
+        mDoMtx_stack_c::multVec(local_38, &local_14);
+        mDoMtx_stack_c::multVec(local_44, &local_20);
+#else
         mDoMtx_stack_c::multVec(&_4319[1], &local_14);
         mDoMtx_stack_c::multVec(&_4319[2], &local_20);
+#endif
 
         m2C4[i].setPos(&local_08, &local_14, &local_20);
     }
