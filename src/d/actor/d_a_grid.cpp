@@ -450,7 +450,7 @@ void ho_move(daGrid_c* i_this) {
         depthSwing *= depthShape;
         rowSwing *= (i_this->m2200 * cM_scos(colWaveAngle) * col) / 6.0f;
 
-        f32 xAtten = 1.0f - 0.5f * xRate;
+        f32 xAtten = 1.0f - 0.5f * (SQUARE(upperRow) * 0.25f);
         depthSwing *= xAtten;
         rowSwing *= xAtten;
 
