@@ -390,7 +390,7 @@ void ho_move(daGrid_c* i_this) {
     MtxPosition(&localIn, &localWind);
     f32 windSide = std::fabsf(localWind.z) * (1.0f - i_this->m2200);
 
-    f32 windWaveRate = 1.0f + (0.01f + REG6_F(15)) * windSide * cM_ssin(i_this->m1B44);
+    f32 windWaveRate = 1.0f + (0.01f + REG6_F(15)) * (windSide * cM_ssin(i_this->m1B44));
     s32 waveSpeed = 2500.0f + (9000.0f * (0.8f * windPow));
     if (waveSpeed > 10000) {
         waveSpeed = 10000;
@@ -445,7 +445,7 @@ void ho_move(daGrid_c* i_this) {
         s16 rowWaveAngle = 10922.0f * xRate;
 
         f32 xWave = windDepth * cM_ssin(i_this->m1B44 + i * i_this->m1B4C);
-        f32 zWave = 0.5f * windDepth * cM_scos(i_this->m1B44 + i * i_this->m1B4E);
+        f32 zWave = 0.5f * (windDepth * cM_scos(i_this->m1B44 + i * i_this->m1B4E));
 
         MtxPosition(&localIn, &localWind);
         f32 xLimit = 0.25f + 0.75f * windPow;
@@ -460,8 +460,8 @@ void ho_move(daGrid_c* i_this) {
         }
         localWind.z *= zLimit;
 
-        xWave += i_this->m2204 * clothOpen * windWaveRate * localWind.x;
-        zWave += i_this->m2204 * clothOpen * windSide * localWind.z;
+        xWave += i_this->m2204 * (clothOpen * (windWaveRate * localWind.x));
+        zWave += i_this->m2204 * (clothOpen * (windSide * localWind.z));
 
         f32 waveLen = std::sqrtf(SQUARE(xWave) + SQUARE(zWave));
         f32 yWave = 0.25f * waveLen;
@@ -500,18 +500,18 @@ void ho_move(daGrid_c* i_this) {
         rowSwing *= xAtten;
 
         f32 swingLen = std::sqrtf(SQUARE(depthSwing) + SQUARE(rowSwing));
-        f32 zSag = -0.25f * swingLen;
+        f32 zSag = 0.25f * -swingLen;
         if (col > 4) {
-            f32 edgeWave = std::fabsf(cM_ssin(i_this->m2212 + rowWaveAngle * col * 2));
-            zSag += 4.25f * (col - 4) * edgeWave;
+            f32 edgeWave = std::fabsf(cM_ssin(i_this->m2212 + (rowWaveAngle * 2) * col));
+            zSag += 4.25f * ((col - 4) * edgeWave);
         }
 
         zSag *= i_this->m2200 * (6.0f * depthRate * (col / 6.0f));
 
         f32 waveScale = 0.35f * clothOpen + 0.65f;
-        pos->x += depthSwing + waveScale * i_this->m2204 * xWave;
+        pos->x += depthSwing + waveScale * (i_this->m2204 * xWave);
         pos->y += rowSwing + waveScale * yWave;
-        pos->z += zSag + waveScale * i_this->m2204 * zWave - 13.75f;
+        pos->z += zSag + waveScale * (i_this->m2204 * zWave) - 13.75f;
 
         if (col >= 6) {
             col = 0;
@@ -521,12 +521,12 @@ void ho_move(daGrid_c* i_this) {
         }
     }
 
-    f32 topZ = std::fabsf(i_this->mPacket.getPos()[59].z);
-    f32 row8Rate = 1.0f - topZ * (0.0015f + REG6_F(8));
-    f32 row7Rate = 1.0f - topZ * (0.00070000003f + REG6_F(9));
-    f32 row6Rate = 1.0f - topZ * (0.00020000007f + REG6_F(10));
-    f32 row9Rate = 1.0f - topZ * (0.0015f + REG6_F(11));
-    f32 row10Rate = 1.0f - topZ * (0.0012f + REG6_F(12));
+    f32 topX = std::fabsf(i_this->mPacket.getPos()[59].x);
+    f32 row8Rate = 1.0f - topX * (0.0015f + REG6_F(8));
+    f32 row7Rate = 1.0f - topX * (0.00070000003f + REG6_F(9));
+    f32 row6Rate = 1.0f - topX * (0.00020000007f + REG6_F(10));
+    f32 row9Rate = 1.0f - topX * (0.0015f + REG6_F(11));
+    f32 row10Rate = 1.0f - topX * (0.0012f + REG6_F(12));
 
     pos = i_this->mPacket.getPos();
     for (int i = 0; i < 0x55; i++, pos++) {
