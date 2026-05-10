@@ -67,8 +67,8 @@ void daHo_packet_c::setNrmVtx(cXyz* i_nrm, int i_x, int i_y) {
     cXyz leftRight;
     cXyz upDown;
     cXyz triNrm;
-    cXyz pos;
     cXyz nrm;
+    cXyz pos;
     cXyz* vtxPos = getPos();
     s32 idx = i_y * 7;
 
@@ -136,6 +136,7 @@ void daHo_packet_c::setNrmVtx(cXyz* i_nrm, int i_x, int i_y) {
 void daHo_packet_c::setTopNrmVtx(cXyz* i_nrm) {
     cXyz sp18;
     cXyz sp0C;
+    cXyz sp24;
     cXyz nrm;
     cXyz* vtxPos = getPos();
 
@@ -143,8 +144,8 @@ void daHo_packet_c::setTopNrmVtx(cXyz* i_nrm) {
     sp0C = vtxPos[83] - vtxPos[84];
     nrm = sp18.outprod(sp0C);
     nrm = nrm.normZC();
-    MtxPosition(&nrm, &sp18);
-    *i_nrm = sp18.normZC();
+    MtxPosition(&nrm, &sp24);
+    *i_nrm = sp24.normZC();
 }
 
 /* 800E93B8-800E9BE8       .text draw__13daHo_packet_cFv */
