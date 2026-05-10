@@ -312,8 +312,8 @@ void daObjVtil_c::to_throw_mode() {
     mAcch.ClrWallNone();
     mAcch.ClrGrndNone();
     mAcch.ClrWaterNone();
-    mAcch.OnLineCheckNone();
-    fopAcM_OffStatus(this, fopAcStts_CARRY_e);
+    mAcch.OnLineCheck();
+    cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     fopAcM_GetSpeed(this).y = 27.0f;
     fopAcM_SetSpeedF(this, 36.0f);
     fopAcM_SetGravity(this, -6.0f);
