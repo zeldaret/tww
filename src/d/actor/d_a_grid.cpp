@@ -398,13 +398,17 @@ void ho_move(daGrid_c* i_this) {
     i_this->m1B44 += waveSpeed;
 
     i_this->m2212 += (s16)(3000.0f * cM_scos(windRelAngle));
+    s16 windAngleStep = -300;
     if (i_this->m2212 > 0) {
-        i_this->m2212 += 300;
-    } else {
-        i_this->m2212 -= 300;
+        windAngleStep = 300;
     }
+    i_this->m2212 += windAngleStep;
 
     f32 windBend = 0.5f * cM_ssin(windRelAngle);
+    Vec* gridPos = (Vec*)l_grid_pos;
+    cXyz* pos = i_this->mPacket.getPos();
+    localIn.x = 0.0f;
+    localIn.z = 1.6f;
 
     if (l_HIO.m08 == 0) {
         if (l_ship->mStateFlag & 0x200) {
@@ -430,12 +434,8 @@ void ho_move(daGrid_c* i_this) {
         i_this->m2200 = l_HIO.m10;
     }
 
-    Vec* gridPos = (Vec*)l_grid_pos;
-    cXyz* pos = i_this->mPacket.getPos();
     int row = 0;
     int col = 0;
-    localIn.x = 0.0f;
-    localIn.z = 1.6f;
 
     for (int i = 0; i < 0x55; i++, pos++) {
         f32 clothOpen = 1.0f - i_this->m2200;
