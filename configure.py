@@ -354,7 +354,7 @@ def MatchingFor(*versions):
     return config.version in versions
 
 def EquivalentFor(*versions):
-    return False
+    return config.non_matching and config.version in versions
 
 config.warn_missing_config = True
 config.warn_missing_source = False
@@ -1589,7 +1589,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_daiocta"),
     ActorRel(Matching,    "d_a_daiocta_eye"),
     ActorRel(Matching,    "d_a_deku_item"),
-    ActorRel(NonMatching, "d_a_dk"),
+    ActorRel(EquivalentFor("GZLE01", "GZLP01"), "d_a_dk"),
     ActorRel(Matching,    "d_a_dummy"),
     ActorRel(NonMatching, "d_a_fallrock_tag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_fan"),

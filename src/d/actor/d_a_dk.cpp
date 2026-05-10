@@ -79,6 +79,7 @@ static void tail_control(dk_class* a_this, tail_s* tail) {
     csXyz* field_9C_ptr = &tail->field_0x09C[1];
     cXyz* field_D8_ptr = &tail->field_0x0D8[1];
 
+    f32 y_2;
     f32 unk = REG0_F(2) + 0.77000004f;
     f32 unk2;
     if (a_this->field_0x2B4 >= 2) {
@@ -102,7 +103,7 @@ static void tail_control(dk_class* a_this, tail_s* tail) {
             y_base = unk2;
         }
 
-        f32 y_2 = y_base - field_24_ptr_prev->y;
+        y_2 = y_base - field_24_ptr_prev->y;
         f32 x_2 = new_vec.x + (field_24_ptr->x - field_24_ptr_prev->x);
         f32 z_2 = new_vec.z + (field_24_ptr->z - field_24_ptr_prev->z);
 
@@ -116,8 +117,8 @@ static void tail_control(dk_class* a_this, tail_s* tail) {
         vec.x = 0.0f;
         vec.y = 0.0f;
 
-        f32 temp = l_HIO.field_0x10 * ((i * 0.03f) + 0.25f) * 20.0f;
-        vec.z = temp * (2.0f * l_HIO.field_0x0C);
+        vec.z = l_HIO.field_0x10 *
+                (2.0f * (((i * 0.03f) + 0.25f) * 20.0f) * l_HIO.field_0x0C);
 
         cMtx_YrotS(*calc_mtx, new_y_angle);
         cMtx_XrotM(*calc_mtx, new_x_angle);
