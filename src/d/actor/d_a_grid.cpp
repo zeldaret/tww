@@ -577,7 +577,8 @@ cPhs_State daGrid_c::_create() {
         f32 edgeDistA = std::fabsf(gridPos[0].z - gridPos[i].z);
         f32 edgeDistB = std::fabsf(gridPos[6].z - gridPos[i].z);
         f32 edgeDist = std::fabsf(gridPos[0].z - gridPos[6].z);
-        f32 edgeRate = 1.05f * (1.5707964f / (edgeDist * 0.5f));
+        edgeDist *= 0.5f;
+        f32 edgeRate = 1.05f * (1.5707964f / edgeDist);
         if (edgeDistA > edgeDistB) {
             edgeDistA = edgeDistB;
         }
@@ -602,7 +603,8 @@ cPhs_State daGrid_c::_create() {
             verticalDistA = std::fabsf(gridPos[0].y - gridPos[i].y);
             verticalDistB = std::fabsf(gridPos[columnTop].y - gridPos[i].y);
             verticalEdgeDist = std::fabsf(gridPos[columnTop].y - gridPos[0].y);
-            verticalRate = 1.05f * (1.5707964f / (verticalEdgeDist * 0.5f));
+            verticalEdgeDist *= 0.5f;
+            verticalRate = 1.05f * (1.5707964f / verticalEdgeDist);
             if (columnTop == 56) {
                 verticalAmplitude = 35.0f;
             } else if (columnTop == 57) {
@@ -614,7 +616,8 @@ cPhs_State daGrid_c::_create() {
             verticalDistA = std::fabsf(gridPos[columnTop].y - gridPos[i].y);
             verticalDistB = std::fabsf(gridPos[84].y - gridPos[i].y);
             verticalEdgeDist = std::fabsf(gridPos[columnTop].y - gridPos[84].y);
-            verticalRate = 1.15f * (1.5707964f / (verticalEdgeDist * 0.5f));
+            verticalEdgeDist *= 0.5f;
+            verticalRate = 1.15f * (1.5707964f / verticalEdgeDist);
             verticalAmplitude = 20.0f;
         }
 
