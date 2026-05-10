@@ -432,12 +432,12 @@ void ho_move(daGrid_c* i_this) {
             foldRate *= clothOpen + l_HIO.mWaveRate[row] * i_this->m2200;
             depthRate = l_HIO.mDepthRate[row];
             depthSwing *= depthRate * i_this->m2200;
-            rowSwing = 5.0f * depthRate * row * i_this->m2200;
+            rowSwing = 5.0f * depthRate * col * i_this->m2200;
         } else {
             foldRate *= clothOpen + l_defaultWaveRate[row] * i_this->m2200;
             depthRate = l_defaultDepthRate[row];
             depthSwing *= depthRate * i_this->m2200;
-            rowSwing = 5.0f * depthRate * row * i_this->m2200;
+            rowSwing = 5.0f * depthRate * col * i_this->m2200;
         }
 
         pos->x = gridPos[i].x;
