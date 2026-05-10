@@ -579,7 +579,7 @@ void daObj_Canon_c::getArg() {
 
 /* 00001880-000019D8       .text _create__13daObj_Canon_cFv */
 cPhs_State daObj_Canon_c::_create() {
-    fopAcM_SetupActor(this, daObj_Canon_c);
+    fopAcM_ct(this, daObj_Canon_c);
 
     int result = dComIfG_resLoad(&mPhs, m_arc_name);
     if(result == cPhs_COMPLEATE_e) {

@@ -98,7 +98,7 @@ static cPhs_State daSs_Create(fopAc_ac_c*) {
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
-            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg Se      */ dCcG_SE_METAL,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,

@@ -518,9 +518,8 @@ public:
 
 class mapCtrlDisp_c {
 public:
-    // TODO: these two functions are supposed to be weak
-    void initMapCtrlDisp();
-    void moveMapCtrlDisp();
+    inline void initMapCtrlDisp();
+    inline void moveMapCtrlDisp();
 
     void Create() {}
     void Delete() {}
@@ -742,7 +741,9 @@ public:
     /* 0x3012 */ s16 field_0x3012;
     /* 0x3014 */ s16 field_0x3014;
     /* 0x3016 */ u16 field_0x3016;
+#if VERSION > VERSION_DEMO
     /* 0x3018 */ u8 field_0x3018;
+#endif
     /* 0x3019 */ u8 field_0x3019;
     /* 0x301A */ u8 field_0x301a;
     /* 0x301B */ u8 field_0x301b;
@@ -827,8 +828,13 @@ void dMeter_magicGaugeMove(sub_meter_class* i_Meter);
 void dMeter_flyGaugeMove(sub_meter_class* i_Meter, u8 param_2, s16 param_3, s16 param_4);
 void dMeter_magicChange(sub_meter_class* i_Meter, f32 param_2);
 void dMeter_magicLength(sub_meter_class* i_Meter, f32 param_2);
+#if VERSION == VERSION_DEMO
+void dMeter_magicTrans(sub_meter_class* i_Meter, f32, f32);
+void dMeter_magicInitTrans(sub_meter_class* i_Meter, f32, f32);
+#else
 void dMeter_magicTransNowInit(sub_meter_class* i_Meter);
 void dMeter_magicInitTrans(sub_meter_class* i_Meter);
+#endif
 void dMeter_magicTransScale(sub_meter_class* i_Meter, f32 param_2, f32 param_3, f32 param_4);
 void dMeter_magicColor(sub_meter_class* i_Meter);
 void dMeter_magicAlpha(sub_meter_class* i_Meter);

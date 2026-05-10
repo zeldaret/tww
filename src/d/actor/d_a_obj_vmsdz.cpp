@@ -39,7 +39,7 @@ BOOL daObjVmsdz_c::create_heap() {
 cPhs_State daObjVmsdz_c::_create() {
     cPhs_State ret = cPhs_ERROR_e;
 
-    fopAcM_SetupActor(this, daObjVmsdz_c);
+    fopAcM_ct(this, daObjVmsdz_c);
 
     ret = dComIfG_resLoad(&mPhs, M_arcname);
     if (ret == cPhs_COMPLEATE_e) {
@@ -56,7 +56,7 @@ cPhs_State daObjVmsdz_c::_create() {
 
 /* 00000208-00000238       .text _delete__12daObjVmsdz_cFv */
 bool daObjVmsdz_c::_delete() {
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return true;
 }
 

@@ -128,7 +128,7 @@ bool daIkari_c::_draw() {
 cPhs_State daIkari_c::_create() {
     cPhs_State phase = dComIfG_resLoad(&mPhs, M_arcname);
 
-    fopAcM_SetupActor(this, daIkari_c);
+    fopAcM_ct(this, daIkari_c);
 
     if (phase == cPhs_COMPLEATE_e) {
         getArg();
@@ -146,7 +146,7 @@ cPhs_State daIkari_c::_create() {
                 160.0f * scaleX, 100.0f * scaleX, 600.0f * scaleX);
             fopAcM_setCullSizeFar(this, 10.0f);
 
-            mTimer = (short)(int)cM_rndF(32768.0f);
+            mTimer = (s16)(int)cM_rndF(32768.0f);
         }
     }
 

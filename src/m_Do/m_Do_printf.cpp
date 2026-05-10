@@ -26,7 +26,10 @@ extern "C" void* OSGetCallerPC(int param_0) {
 }
 
 /* 80006640-800066B0       .text OSGetActiveThreadID */
-extern "C" int OSGetActiveThreadID(OSThread* thread) {
+#if VERSION > VERSION_DEMO
+extern "C"
+#endif
+int OSGetActiveThreadID(OSThread* thread) {
     OSThread* r31;
     int id = -1;
     BOOL enable = OSDisableInterrupts();
@@ -205,6 +208,7 @@ void OSPanic(const char* file, s32 line, const char* fmt, ...) {
     u32 i;
     u32* p;
     u32* tmp;
+    u32 tmp2;
 
     OSDisableInterrupts();
     va_start(args, fmt);
@@ -217,7 +221,8 @@ void OSPanic(const char* file, s32 line, const char* fmt, ...) {
         OSReport("0x%08x:   0x%08x    0x%08x\n", p, p[0], p[1]);
     }
 
-    tmp = (u32*)0x1234567;  // ??????
-    *tmp = 0x1234567;
+    tmp2 = 0x1234567;
+    tmp = (u32*)tmp2;
+    *tmp = tmp2;
     PPCHalt();
 }

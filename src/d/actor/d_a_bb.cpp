@@ -780,10 +780,10 @@ void bb_path_move(bb_class* i_this) {
                 i_this->unk_304 = 2.0f;
                 i_this->unk_364 = 0;
             } else if (a_this->current.pos.y < i_this->unk_2F4.y) {
-                i_this->unk_300 = 20.0;
+                i_this->unk_300 = 20.0f;
                 i_this->unk_304 = REG0_F(11) + 1.0f;
             } else {
-                i_this->unk_300 = 30.0;
+                i_this->unk_300 = 30.0f;
                 i_this->unk_304 = REG0_F(13) + 1.0f;
             }
 
@@ -997,7 +997,7 @@ void bb_auto_move(bb_class* i_this) {
                     i_this->unk_2F4.y = i_this->actor.home.pos.y + cM_rndF(500.0f);
                     i_this->unk_2F4.z = z + i_this->actor.current.pos.z;
 
-                    i_this->unk_308 = 0.0;
+                    i_this->unk_308 = 0.0f;
                     i_this->unk_300 = REG0_F(10) + 25.0f;
                     i_this->unk_304 = REG0_F(11) + 1.0f;
                     i_this->unk_310 = cM_rndF(300.0f) + 200.0f;
@@ -1121,7 +1121,7 @@ void bb_auto_move(bb_class* i_this) {
             r29 = 1;
             i_this->unk_C60 = 0;
             i_this->unk_300 = l_bbHIO.unk_54;
-            i_this->actor.speedF = 1.0;
+            i_this->actor.speedF = 1.0f;
 
             f32 x = i_this->unk_2F4.x - i_this->actor.current.pos.x;
             f32 z = i_this->unk_2F4.z - i_this->actor.current.pos.z;
@@ -1340,7 +1340,8 @@ void bb_kamome_attack(bb_class* i_this) {
 /* 000044EC-00005534       .text bb_atack_move__FP8bb_class */
 void bb_atack_move(bb_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    fopAc_ac_c* player_actor = dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)player_actor;
     s8 r29 = 0;
     s8 r28 = 0;
     f32 x;
@@ -1363,7 +1364,7 @@ void bb_atack_move(bb_class* i_this) {
     }
 
     if (
-        &player->base.base == fpcM_Search(pl_name_check, i_this)
+        player_actor == (fopAc_ac_c*)fpcM_Search(pl_name_check, i_this)
         #if VERSION == VERSION_DEMO
         || l_bbHIO.unk_10 != 0
         #endif
@@ -1383,7 +1384,7 @@ void bb_atack_move(bb_class* i_this) {
 
         case 1:
         case 2:
-            i_this->unk_2F4 = player->current.pos;
+            i_this->unk_2F4 = player_actor->current.pos;
             i_this->unk_2F4.y += 200.0f;
 
             bb_pos_move(i_this);
@@ -1393,7 +1394,7 @@ void bb_atack_move(bb_class* i_this) {
             z = i_this->unk_2F4.z - a_this->current.pos.z;
 
             if (i_this->unk_2F1 == 1) {
-                i_this->unk_310 = 400.0;
+                i_this->unk_310 = 400.0f;
 
                 if (std::sqrtf(x * x + y * y + z * z) < l_bbHIO.unk_50) {
                     i_this->unk_2F1 = 2;
@@ -1401,7 +1402,7 @@ void bb_atack_move(bb_class* i_this) {
                     kuti_open(i_this, 0x15, JA_SE_CV_BB_FIND);
                 }
             } else {
-                i_this->unk_310 = 2000.0;
+                i_this->unk_310 = 2000.0f;
                 if (std::sqrtf(x * x + y * y + z * z) < REG0_F(9) * 100.0f + 350.0f) {
                     i_this->unk_2F1 = 3;
                 }
@@ -1459,9 +1460,9 @@ void bb_atack_move(bb_class* i_this) {
             }
 
             if (i_this->unk_318[0] == 0) {
-                i_this->unk_2F4.x = player->current.pos.x + cM_rndFX(400.0f);
-                i_this->unk_2F4.y = player->current.pos.y + 100.0f + cM_rndF(200.0f);
-                i_this->unk_2F4.z = player->current.pos.z + cM_rndFX(400.0f);
+                i_this->unk_2F4.x = player_actor->current.pos.x + cM_rndFX(400.0f);
+                i_this->unk_2F4.y = player_actor->current.pos.y + 100.0f + cM_rndF(200.0f);
+                i_this->unk_2F4.z = player_actor->current.pos.z + cM_rndFX(400.0f);
                 i_this->unk_318[0] = cM_rndF(100.0f) + 20.0f;
                 i_this->unk_308 = 0.0f;
                 i_this->unk_30C = 0.0f;
@@ -1485,7 +1486,7 @@ void bb_atack_move(bb_class* i_this) {
             z = cM_scos(i_this->unk_354 * (REG0_S(4) + 1500)) * 200.0f;
 
             cLib_addCalc2(&a_this->current.pos.x, i_this->unk_2F4.x + x, 0.1f, i_this->unk_308 * 30.0f);
-            cLib_addCalc2(&a_this->current.pos.y, player->current.pos.y + 175.0f, 0.1f, i_this->unk_308 * 30.0f);
+            cLib_addCalc2(&a_this->current.pos.y, player_actor->current.pos.y + 175.0f, 0.1f, i_this->unk_308 * 30.0f);
             cLib_addCalc2(&a_this->current.pos.z, i_this->unk_2F4.z + z, 0.1f, i_this->unk_308 * 30.0f);
             cLib_addCalc2(&i_this->unk_308, l_bbHIO.unk_1C, 1.0f, l_bbHIO.unk_1C * 0.1f);
 
@@ -1496,9 +1497,9 @@ void bb_atack_move(bb_class* i_this) {
                 i_this->unk_2F1 = 6;
                 anm_init(i_this, BB_BCK_ATACK01, 2.0f, 0, l_bbHIO.unk_2C, BB_BAS_ATACK01);
                 
-                i_this->unk_2F4.x = player->current.pos.x;
-                i_this->unk_2F4.y = player->current.pos.y + 100.0f;
-                i_this->unk_2F4.z = player->current.pos.z;
+                i_this->unk_2F4.x = player_actor->current.pos.x;
+                i_this->unk_2F4.y = player_actor->current.pos.y + 100.0f;
+                i_this->unk_2F4.z = player_actor->current.pos.z;
 
                 i_this->unk_308 = 0.0f;
                 i_this->unk_30C = 0.0f;
@@ -1615,8 +1616,8 @@ void bb_atack_move(bb_class* i_this) {
 
                 anm_init(i_this, BB_BCK_FLY02, REG0_F(0) + 12.0f, 2, 1.0f, BB_BAS_FLY02);
 
-                a_this->speedF = 0.0;
-                i_this->unk_2F4.y = player->current.pos.y + 500.0f;
+                a_this->speedF = 0.0f;
+                i_this->unk_2F4.y = player_actor->current.pos.y + 500.0f;
                 i_this->unk_318[3] = cM_rndF(200.0f) + 300.0f;
             }
             i_this->unk_308 = 0.0f;
@@ -1724,9 +1725,9 @@ void bb_wait_move(bb_class* i_this) {
         case 12: {
             r30 = 0;
             i_this->unk_C60 = 0;
-            v.x = 0.0;
-            v.y = 0.0;
-            v.z = 0.0;
+            v.x = 0.0f;
+            v.y = 0.0f;
+            v.z = 0.0f;
             cMtx_YrotS(*calc_mtx, i_this->actor.current.angle.y);
             MtxPosition(&v, &v2);
 
@@ -1772,6 +1773,7 @@ void bb_wait_move(bb_class* i_this) {
             i_this->unk_C60 = 0;
             s16 old_354 = i_this->unk_354;
             i_this->unk_354++;
+
             cLib_addCalc2(&i_this->actor.current.pos.x, i_this->actor.home.pos.x, 0.1f, speedX);
             cLib_addCalc2(&i_this->actor.current.pos.z, i_this->actor.home.pos.z, 0.1f, speedZ);
 
@@ -1864,7 +1866,7 @@ void bb_su_wait_move(bb_class* i_this) {
             i_this->unk_C60 = 1;
             cLib_addCalcAngleS2(&i_this->actor.current.angle.y, i_this->unk_336, 10, 0x200);
 
-            v.x = 0.0;
+            v.x = 0.0f;
             v.y = REG0_F(0) * 10.0f + 300.0f;
             v.z = REG0_F(1) * 10.0f + 300.0f;
             cMtx_YrotS(*calc_mtx, i_this->actor.current.angle.y);
@@ -1885,9 +1887,9 @@ void bb_su_wait_move(bb_class* i_this) {
         case 12: {
             r30 = 0;
             i_this->unk_C60 = 0;
-            v.x = 0.0;
-            v.y = 0.0;
-            v.z = 0.0;
+            v.x = 0.0f;
+            v.y = 0.0f;
+            v.z = 0.0f;
             cMtx_YrotS(*calc_mtx, i_this->actor.current.angle.y);
             MtxPosition(&v, &v2);
 
@@ -2576,7 +2578,7 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
             /* SrcObjTg  Type    */ 0,
             /* SrcObjTg  SPrm    */ 0,
             /* SrcObjCo  SPrm    */ 0,
-            /* SrcGObjAt Se      */ dCcG_SE_UNK5,
+            /* SrcGObjAt Se      */ dCcG_SE_METAL,
             /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
@@ -2610,18 +2612,10 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
             /* SrcGObjTg Se      */ 0,
-#if VERSION == DEMO
-            /* SrcGObjTg HitMark */ dCcG_SE_UNK1,
-#else
-            /* SrcGObjTg HitMark */ 0,
-#endif
+            /* SrcGObjTg HitMark */ DEMO_SELECT(dCcG_TgHitMark_Unk1_e, dCcG_AtHitMark_None_e),
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
-#if VERSION == DEMO
-            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
-#else
-            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
-#endif
+            /* SrcGObjTg SPrm    */ DEMO_SELECT(dCcG_TgSPrm_NoConHit_e, dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e),
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
@@ -2646,18 +2640,10 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
             /* SrcGObjTg Se      */ 0,
-#if VERSION == DEMO
-            /* SrcGObjTg HitMark */ dCcG_SE_UNK1,
-#else
-            /* SrcGObjTg HitMark */ 0,
-#endif
+            /* SrcGObjTg HitMark */ DEMO_SELECT(dCcG_TgHitMark_Unk1_e, dCcG_TgHitMark_None_e),
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
-#if VERSION == DEMO
-            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
-#else
-            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
-#endif
+            /* SrcGObjTg SPrm    */ DEMO_SELECT(dCcG_TgSPrm_NoConHit_e, dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e),
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
@@ -2699,7 +2685,7 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
 
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Bb");
 
-    fopAcM_SetupActor(a_this, bb_class);
+    fopAcM_ct(a_this, bb_class);
 
     if (ret == cPhs_COMPLEATE_e) {
         i_this->unk_2D8 = (fopAcM_GetParam(i_this) >> 0) & 0xFF;

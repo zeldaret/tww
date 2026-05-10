@@ -370,7 +370,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 /* 00000FFC-000011EC       .text daDk_Create__FP10fopAc_ac_c */
 static cPhs_State daDk_Create(fopAc_ac_c* i_this) {
     dk_class* a_this = (dk_class*)i_this;
-    fopAcM_SetupActor(i_this, dk_class);
+    fopAcM_ct(i_this, dk_class);
 
     cPhs_State res = dComIfG_resLoad(&a_this->mPhs, "Dk");
     if (res == cPhs_COMPLEATE_e) {

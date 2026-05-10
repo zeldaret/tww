@@ -195,7 +195,7 @@ BOOL daObjVolcano::Act_c::Create() {
 
 /* 000009C8-00000BA0       .text Mthd_Create__Q212daObjVolcano5Act_cFv */
 cPhs_State daObjVolcano::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjVolcano::Act_c);
+    fopAcM_ct(this, daObjVolcano::Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&field_0x2F0, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, 0x11, NULL, 0xaed0);

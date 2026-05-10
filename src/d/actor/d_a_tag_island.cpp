@@ -449,7 +449,7 @@ BOOL daTag_Island_c::actionWait() {
 }
 
 cPhs_State daTag_Island_c::create() {
-    fopAcM_SetupActor(this, daTag_Island_c);
+    fopAcM_ct(this, daTag_Island_c);
     s32 swbit = getSwbit();
     makeEvId();
     eventInfo.setEventId(mEventId);

@@ -23,6 +23,7 @@ BOOL daObjGnntakie_c::create_heap() {
     BOOL ret = FALSE;
     mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIE_BDL_GNN_DEMO_TAKI_E));
     JUT_ASSERT(90, mdl_data != NULL);
+
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mpModel != NULL) {
@@ -38,7 +39,7 @@ BOOL daObjGnntakie_c::create_heap() {
 
 /* 000001F4-00000300       .text _create__15daObjGnntakie_cFv */
 cPhs_State daObjGnntakie_c::_create() {
-    fopAcM_SetupActor(this, daObjGnntakie_c);
+    fopAcM_ct(this, daObjGnntakie_c);
     cPhs_State state = dComIfG_resLoad(&mPhase, M_arcname);
     if (state == cPhs_COMPLEATE_e) {
         state = cPhs_ERROR_e;

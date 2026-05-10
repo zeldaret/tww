@@ -376,7 +376,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
 static cPhs_State daKokiie_Create(fopAc_ac_c* a_this) {
     kokiie_class* i_this = (kokiie_class*)a_this;
 
-    fopAcM_SetupActor(a_this, kokiie_class);
+    fopAcM_ct(a_this, kokiie_class);
 
     cPhs_State PVar3 = dComIfG_resLoad(&i_this->mPhase, "Kokiie");
 #if VERSION == VERSION_DEMO

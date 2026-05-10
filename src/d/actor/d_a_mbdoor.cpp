@@ -257,17 +257,13 @@ BOOL daMbdoor_c::CreateInit() {
 /* 00000A44-00000AF4       .text create__10daMbdoor_cFv */
 cPhs_State daMbdoor_c::create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, getArcName());
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daMbdoor_c);
-#endif
+    fopAcM_ct_Retail(this, daMbdoor_c);
     
     if (phase_state != cPhs_COMPLEATE_e) {
         return phase_state;
     }
 
-#if VERSION == VERSION_DEMO
-    fopAcM_SetupActor(this, daMbdoor_c);
-#endif
+    fopAcM_ct_Demo(this, daMbdoor_c);
 
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x8200)) {
         return cPhs_ERROR_e;

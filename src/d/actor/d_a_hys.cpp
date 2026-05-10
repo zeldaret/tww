@@ -78,7 +78,7 @@ BOOL daHys_c::CreateHeap() {
 }
 
 cPhs_State daHys_c::_create() {
-    fopAcM_SetupActor(this, daHys_c);
+    fopAcM_ct(this, daHys_c);
 
     mType = fopAcM_GetParam(this) >> 8;
     cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname[mType]);

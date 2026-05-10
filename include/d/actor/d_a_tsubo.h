@@ -162,9 +162,8 @@ namespace daTsubo {
         const AttrSpine_c& attrSpine() { return M_attrSpine; }
         const Data_c& data() const { return M_data[mType]; }
         const SpecBokoData& data_spec_boko(int index) { return M_data_spec_boko[index]; }
-        BOOL is_switch() const { 
-            int sw = prmZ_get_swSave();
-            return fopAcM_isSwitch(const_cast<Act_c*>(this), sw);
+        bool is_switch() const { 
+            return fopAcM_isSwitch(const_cast<Act_c*>(this), prmZ_get_swSave());
         }
 
         bool pos_init() {
@@ -186,7 +185,7 @@ namespace daTsubo {
             return false;
         }
 
-        u8 prmZ_get_swSave() const { return mSwitchNo; }
+        int prmZ_get_swSave() const { return mPrmZ & 0xFF; }
         s32 prm_get_cull() const { return daObj::PrmAbstract(this, PRM_CULL_W, PRM_CULL_S); }
         s32 prm_get_itemNo() const { return daObj::PrmAbstract(this, PRM_ITEMNO_W, PRM_ITEMNO_S); }
         s32 prm_get_itemSave() const { return daObj::PrmAbstract(this, PRM_ITEMSAVE_W, PRM_ITEMSAVE_S); }
@@ -367,7 +366,7 @@ namespace daTsubo {
 #endif
         /* 0x674 */ s32 mType;
         /* 0x678 */ s32 m678;
-        /* 0x67C */ u16 mSwitchNo;
+        /* 0x67C */ u16 mPrmZ;
         /* 0x67E */ u8 m67E;
         /* 0x67F */ u8 m67F;
         /* 0x680 */ u8 m680;
@@ -376,7 +375,7 @@ namespace daTsubo {
         /* 0x683 */ u8 m683;
         /* 0x684 */ u8 m684;
         /* 0x685 */ bool m685;
-        /* 0x686 */ u8 m686;
+        /* 0x686 */ bool m686;
         /* 0x687 */ u8 m687[0x688 - 0x687];
         /* 0x688 */ cSAngle m688;
         /* 0x68A */ cSAngle m68A;

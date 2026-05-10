@@ -1796,17 +1796,13 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00004328-00004464       .text _create__12daNpc_Rsh1_cFv */
 cPhs_State daNpc_Rsh1_c::_create() {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_Rsh1_c);
-#endif
+    fopAcM_ct_Retail(this, daNpc_Rsh1_c);
 
     cPhs_State state = dComIfG_resLoad(&mPhs, m_arcname);
 
 
     if (state == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(this, daNpc_Rsh1_c);
-#endif
+        fopAcM_ct_Demo(this, daNpc_Rsh1_c);
         m95E = (fopAcM_GetParam(this) >> 0x14) & 0xF;
 
         switch (m95E) {

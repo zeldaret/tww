@@ -495,15 +495,15 @@ void daTbox_c::CreateInit() {
                 switch (funcType) {
                     case FUNC_TYPE_ENEMIES:
                         setAction(&daTbox_c::actionGenocide);
-                        mGenocideDelayTimer = 0x41;
+                        mGenocideDelayTimer = 65;
                         flagOn(daTboxFlg_UNK_01 | daTboxFlg_UNK_02);
-                        mAppearTimer = 0x78;
+                        mAppearTimer = 120;
                         break;
                     case FUNC_TYPE_SWITCH:
                     case FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN:
                         setAction(&daTbox_c::actionSwOnWait);
                         flagOn(daTboxFlg_UNK_01 | daTboxFlg_UNK_02);
-                        mAppearTimer = 0x78;
+                        mAppearTimer = 120;
                         break;
                     case FUNC_TYPE_TACT:
                         setAction(&daTbox_c::actionSwOnWait);
@@ -513,7 +513,7 @@ void daTbox_c::CreateInit() {
                     case FUNC_TYPE_SWITCH_TRANSPARENT:
                         setAction(&daTbox_c::actionSwOnWait);
                         flagOn(daTboxFlg_UNK_02);
-                        mAppearTimer = 0x5A;
+                        mAppearTimer = 90;
 
                         mpAppearRegAnm->setFrame(30.0f);
                         break;
@@ -612,7 +612,7 @@ void daTbox_c::darkProc() {
 
 /* 0000172C-000017CC       .text volmProc__8daTbox_cFv */
 void daTbox_c::volmProc() {
-    if (mOpenTimer == 0x24) {
+    if (mOpenTimer == 36) {
         mSmokeEmitter->mGlobalPrmColor.a = 0xFF;
     }
     else if (mOpenTimer >= 0xB5) {
@@ -642,7 +642,7 @@ void daTbox_c::demoProcOpen() {
         lightDownProc();
     }
 
-    if (mOpenTimer == 0x24) {
+    if (mOpenTimer == 36) {
         mOpenAnm.setPlaySpeed(1.0f);
 
         mFlashAnm.setPlaySpeed(1.0f);
@@ -725,11 +725,11 @@ void daTbox_c::demoProcAppear() {
         cLib_chaseF(&mInvisibleScrollVal, 2.0f, 1.0f / 30.0f);
     }
 
-    if (mAppearTimer == 0x3C) {
+    if (mAppearTimer == 60) {
         mpAppearRegAnm->setFrame(150.0f);
     }
 
-    if (mAppearTimer == 0x05) {
+    if (mAppearTimer == 5) {
         JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &current.pos, NULL, NULL, 0xB9, &mSmokeCB);
 
         if (emitter != NULL) {
@@ -739,11 +739,11 @@ void daTbox_c::demoProcAppear() {
         }
     }
 
-    if (mAppearTimer == 0x04 && mSmokeCB.getEmitter() != NULL) {
+    if (mAppearTimer == 4 && mSmokeCB.getEmitter() != NULL) {
         mSmokeCB.remove();
     }
 
-    if (mAppearTimer != 0x00) {
+    if (mAppearTimer != 0) {
         mAppearTimer--;
     }
 
@@ -1243,7 +1243,7 @@ static cPhs_State daTbox_Create(fopAc_ac_c* i_actor) {
 
     daTbox_c* tbox = static_cast<daTbox_c*>(i_actor);
 
-    fopAcM_SetupActor(tbox, daTbox_c);
+    fopAcM_ct(tbox, daTbox_c);
 
     cPhs_State result = dComIfG_resLoad(tbox->getPhase(), "Dalways");
 

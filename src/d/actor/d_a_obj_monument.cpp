@@ -58,7 +58,7 @@ bool daObjMonument::Act_c::create_heap() {
 
 /* 00000238-00000318       .text _create__Q213daObjMonument5Act_cFv */
 cPhs_State daObjMonument::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
 

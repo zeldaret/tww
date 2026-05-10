@@ -46,7 +46,7 @@ static BOOL daHitobj_Delete(hitobj_class* i_this) {
 /* 00000120-0000025C       .text daHitobj_Create__FP10fopAc_ac_c */
 static cPhs_State daHitobj_Create(fopAc_ac_c* pActor) {
     hitobj_class* i_this = (hitobj_class*)pActor;
-    fopAcM_SetupActor(i_this, hitobj_class);
+    fopAcM_ct(i_this, hitobj_class);
 
     cPhs_State res = dComIfG_resLoad(&(i_this->mPhs), "Hitobj");
     if (res == cPhs_COMPLEATE_e) {

@@ -1481,17 +1481,11 @@ static cPhs_State daKamome_Create(fopAc_ac_c* a_this) {
     };
 
     kamome_class* i_this = (kamome_class*)a_this;
-
-#if VERSION == VERSION_DEMO
-    cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Kamome");
-    if (PVar1 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, kamome_class);
-#else
-    fopAcM_SetupActor(a_this, kamome_class);
+    fopAcM_ct_Retail(a_this, kamome_class);
 
     cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Kamome");
     if (PVar1 == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(a_this, kamome_class);
 
         i_this->mType = fopAcM_GetParam(a_this);
         if (i_this->mType == 0xff) {

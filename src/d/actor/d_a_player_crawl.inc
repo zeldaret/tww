@@ -140,13 +140,15 @@ BOOL daPy_lk_c::changeCrawlAutoMoveProc(cXyz* param_1) {
             var_r29 |= 8;
         }
     }
+    f32 x1 = param_1->x - (75.0f * temp_f31);
+    f32 y1 = param_1->z - (75.0f * temp_f30);
     if (cM3d_Len2dSqPntAndSegLine(
             0.5f * (sp34.x + sp28.x),
             0.5f * (sp34.z + sp28.z),
             sp70.x,
             sp70.z,
-            param_1->x - (75.0f * temp_f31),
-            param_1->z - (75.0f * temp_f30),
+            x1,
+            y1,
             &sp64.x,
             &sp64.z,
             &spC
@@ -164,14 +166,15 @@ int daPy_lk_c::getCrawlMoveVec(cXyz* param_0, cXyz* param_1, cXyz* param_2) {
     if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
         cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
         int iVar4 = dComIfG_Bgsp()->GetSpecialCode(mLinkLinChk);
-        if (cBgW_CheckBWall(triPla->GetNP()->y)) {
+        f32 temp = triPla->GetNP()->y;
+        if (cBgW_CheckBWall(temp)) {
             cXyz local_3c = (*param_1 - mLinkLinChk.GetCross());
             f32 dVar7 = local_3c.absXZ();
             param_2->x = -dVar7 * triPla->GetNP()->x;
             param_2->y = local_3c.y;
             param_2->z = -dVar7 * triPla->GetNP()->z;
             return true;
-        } else if (iVar4 == 1 || (triPla->GetNP()->y < 0.643832f && iVar4 == 2)) {
+        } else if (iVar4 == 1 || (temp < 0.643832f && iVar4 == 2)) {
             *param_2 = (*param_1 - mLinkLinChk.GetCross());
             return true;
         }
@@ -553,9 +556,6 @@ BOOL daPy_lk_c::procCrawlAutoMove_init(int param_0, cXyz* param_1) {
 
 /* 8013A0F0-8013A630       .text procCrawlAutoMove__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCrawlAutoMove() {
-    f32 fVar2;
-    f32 fVar3;
-
     dComIfGp_setRStatus(dActStts_CROUCH_e);
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
     onResetFlg0(daPyRFlg0_CRAWL_AUTO_MOVE);
@@ -563,7 +563,7 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
     s16 sVar5 = current.angle.y;
     if (m34D0 > 0) {
         if (frameCtrl.checkPass(0.0f) || frameCtrl.checkPass(17.0f)) {
-            fVar3 = 0.0f;
+            f32 fVar2;
             if (frameCtrl.checkPass(0.0f)) {
                 fVar2 = 0.0f;
             } else {
@@ -572,7 +572,7 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
             frameCtrl.setRate(0.0f);
             frameCtrl.setFrame(fVar2);
             mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(fVar2);
-            mVelocity = fVar3;
+            mVelocity = 0.0f;
         } else if (std::fabsf(frameCtrl.getRate()) < 0.01f) {
             mVelocity = 0.0f;
             m34D0--;

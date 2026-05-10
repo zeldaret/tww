@@ -709,9 +709,7 @@ cPhs_State daNpc_Km1_c::_create() {
         0x272E0
     };
 
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_Km1_c);
-#endif
+    fopAcM_ct_Retail(this, daNpc_Km1_c);
 
     if (!decideType(fopAcM_GetParam(this) & 0xFF )) {
         return cPhs_ERROR_e;
@@ -728,9 +726,7 @@ cPhs_State daNpc_Km1_c::_create() {
     }
     l_HIO.field_0x8 += 1;
 
-#if VERSION == VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_Km1_c);
-#endif
+    fopAcM_ct_Demo(this, daNpc_Km1_c);
 
     if(fopAcM_entrySolidHeap(this,CheckCreateHeap,a_heap_size_tbl[field_0x7D3])){
         fopAcM_SetMtx(this,mpMorf->getModel()->getBaseTRMtx());

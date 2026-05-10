@@ -56,11 +56,7 @@ namespace daObjPaper {
             },
             {
                 /* mResName           */ "Ppos",
-#if VERSION == VERSION_DEMO
-                /* mHeapSize          */ 0x1000,
-#else
-                /* mHeapSize          */ 0x04C0,
-#endif
+                /* mHeapSize          */ DEMO_SELECT(0x1000, 0x04C0),
                 /* mModelId           */ PPOS_BDL_PPOS,
                 /* mEyeOffset         */ 0x00,
                 /* mAttentionOffset   */ 0x32,
@@ -74,11 +70,7 @@ namespace daObjPaper {
             },
             {
                 /* mResName           */ "Piwa",
-#if VERSION == VERSION_DEMO
-                /* mHeapSize          */ 0x8000,
-#else
-                /* mHeapSize          */ 0x04C0,
-#endif
+                /* mHeapSize          */ DEMO_SELECT(0x8000, 0x04C0),
                 /* mModelId           */ PIWA_BDL_PIWA,
                 /* mEyeOffset         */ 0x3C,
                 /* mAttentionOffset   */ 0x82,
@@ -148,7 +140,7 @@ namespace daObjPaper {
 
     /* 00000170-000004E0       .text _create__Q210daObjPaper5Act_cFv */
     cPhs_State Act_c::_create() {
-        fopAcM_SetupActor(this, Act_c);
+        fopAcM_ct(this, Act_c);
 
         mType = prm_get_type();
 

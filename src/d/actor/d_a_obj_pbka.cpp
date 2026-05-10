@@ -46,7 +46,7 @@ void daObjPbka_c::set_mtx() {
 }
 
 cPhs_State daObjPbka_c::_create() {
-    fopAcM_SetupActor(this, daObjPbka_c);
+    fopAcM_ct(this, daObjPbka_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Pbka");
     if (phase_state == cPhs_COMPLEATE_e) {
@@ -65,7 +65,7 @@ static cPhs_State daObjPbka_Create(void* i_this) {
 }
 
 bool daObjPbka_c::_delete() {
-    dComIfG_resDelete(&mPhase,"Pbka");
+    dComIfG_resDeleteDemo(&mPhase,"Pbka");
     return TRUE;
 }
 

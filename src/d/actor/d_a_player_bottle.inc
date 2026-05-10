@@ -154,7 +154,7 @@ BOOL daPy_lk_c::procBottleDrink() {
         }
     } else if (uVar1 == LKANM_BCK_BINDRINKING) {
         if (dComIfGp_getItemNowLife() == dComIfGs_getLife() &&
-            dComIfGs_getMagic() == g_dComIfG_gameInfo.play.field_0x48da)
+            dComIfGp_getItemNowMagic() == dComIfGs_getMagic())
         {
             setSingleMoveAnime(
                 ANM_BINDRINKAFTER,
@@ -369,12 +369,12 @@ BOOL daPy_lk_c::procBottleOpen() {
                 dCcG_At_Spl spl;
                 if (mEquipItem == dItem_WATER_BOTTLE_e) {
                     spl = dCcG_At_Spl_UNK0;
-                } else {
+                } else { // dItem_FOREST_WATER_e
                     spl = dCcG_At_Spl_UNK4;
                     onNoResetFlg1(daPyFlg1_FOREST_WATER_USE);
                     m3554 = 3;
                 }
-                setAtParam(AT_TYPE_WATER, 0, spl, 0, dCcG_AtHitMark_None_e, 0, 5.0f);
+                setAtParam(AT_TYPE_WATER, 0, spl, 0, dCcG_AtHitMark_None_e, CUT_TYPE_NONE, 5.0f);
             } else if (
                 (mEquipItem == dItem_FAIRY_BOTTLE_e && frameCtrl.getFrame() >= m_HIO->mItem.mBottle.m.field_0x58) ||
                 (mEquipItem != dItem_FAIRY_BOTTLE_e && mEquipItem != dItem_FOREST_WATER_e && frameCtrl.getFrame() >= m_HIO->mItem.mBottle.m.field_0x4C)

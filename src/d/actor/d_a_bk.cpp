@@ -1731,7 +1731,7 @@ static void attack_set(bk_class* i_this, u8 r28) {
         i_this->m1040.SetAtSe(dCcG_SE_UNK2);
     } else {
         i_this->m1040.SetAtType(AT_TYPE_UNK2000);
-        i_this->m1040.SetAtSe(dCcG_SE_UNK4);
+        i_this->m1040.SetAtSe(dCcG_SE_WOOD);
     }
     
     if (r28 == 0) {
@@ -2015,7 +2015,7 @@ static void fight_run(bk_class* i_this) {
                 daBk_player_way_check(i_this) &&
                 (
                     r27 || (
-                        player->getCutType() != 0 &&
+                        player->getCutType() != daPy_py_c::CUT_TYPE_NONE &&
                         (cc_pl_cut_bit_get() & i_this->m1208) &&
                         attention.Lockon() &&
                         i_this == attention.LockonTarget(0)
@@ -2025,7 +2025,7 @@ static void fight_run(bk_class* i_this) {
                 if (i_this->m02D4 != 0 && (cM_rndF(1.0f) <= 0.5f || l_bkHIO.m008 != 0)) {
                     i_this->dr.mAction = 10;
                     i_this->dr.mMode = 0;
-                    if (player->getCutType() == 0xA) {
+                    if (player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SWORD) {
                         i_this->m0300[1] = 0x1E;
                     } else {
                         i_this->m0300[1] = 0x0F;
@@ -2826,7 +2826,7 @@ static void wepon_search(bk_class* i_this) {
                 if (fopAcM_GetParam(boko) == daBoko_c::Type_BOKO_STICK_e) {
                     i_this->m02D5 = 0;
                     i_this->m1040.SetAtType(AT_TYPE_UNK2000);
-                    i_this->m1040.SetAtSe(dCcG_SE_UNK4);
+                    i_this->m1040.SetAtSe(dCcG_SE_WOOD);
                 } else {
                     i_this->m02D5 = 1;
                     i_this->m1040.SetAtType(AT_TYPE_UNK800);
@@ -3645,7 +3645,7 @@ static void damage_check(bk_class* i_this) {
             if (r3 < 0) {
                 r3 = -r3;
             }
-            if (player->getCutType() == 5) {
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_BT_JUMPCUT) {
                 r27 = 2;
             } else if ((u16)r3 > 0x4000) {
                 if (atInfo.mbDead) {
@@ -3662,7 +3662,7 @@ static void damage_check(bk_class* i_this) {
                     r27 = 5;
                 }
             }
-        } else if (atInfo.mResultingAttackType == 9 && player->getCutType() == 17) {
+        } else if (atInfo.mResultingAttackType == 9 && player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
             r27 = 7;
             cMtx_YrotS(*calc_mtx, player->shape_angle.y + 0x4000);
         } else if (atInfo.mResultingAttackType == 2) {
@@ -4743,7 +4743,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
 
 /* 0000E310-0000EA2C       .text daBk_Create__FP10fopAc_ac_c */
 static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
-    fopAcM_SetupActor(i_actor, bk_class);
+    fopAcM_ct(i_actor, bk_class);
     bk_class* i_this = (bk_class*)i_actor;
     
     cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhase, "Bk");
@@ -4808,7 +4808,7 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
         
         J3DModel* model = i_this->mpMorf->getModel();
         for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
-            s32 r3 = joint_check[i];
+            s32 r3 = (s8)joint_check[i];
             if (r3 < 0) {
                 continue;
             }

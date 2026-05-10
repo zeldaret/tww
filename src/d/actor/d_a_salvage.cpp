@@ -88,7 +88,7 @@ bool daSalvage_c::CreateInit() {
 
 /* 00000570-00000728       .text _create__11daSalvage_cFv */
 cPhs_State daSalvage_c::_create() {
-    fopAcM_SetupActor(this, daSalvage_c);
+    fopAcM_ct(this, daSalvage_c);
 
     cPhs_State PVar3 = dComIfG_resLoad(&mPhase, m_arcname);
     if (PVar3 == cPhs_COMPLEATE_e) {
@@ -242,7 +242,7 @@ void daSalvage_c::checkOrder() {
 
 /* 00000C58-00000D64       .text eventOrder__11daSalvage_cFv */
 void daSalvage_c::eventOrder() {
-    if (dComIfGp_checkPlayerStatus0(0, 0x10000)) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         if (m2E9 == 2) {
             fopAcM_orderOtherEventId(this, mSalvageGetItemEventIdx, 0xff, 0xffff, 0, 1);
             eventInfo.onCondition(2);

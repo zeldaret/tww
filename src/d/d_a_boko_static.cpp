@@ -77,7 +77,7 @@ f32 daBoko_c::m_blur_rate[] = {
     /* Type_PGANON_SWORD_e  */ 0.2f,
 };
 u8 daBoko_c::m_se_type[] = {
-    /* Type_BOKO_STICK_e    */ dCcG_SE_UNK4,
+    /* Type_BOKO_STICK_e    */ dCcG_SE_WOOD,
     /* Type_MACHETE_e       */ dCcG_SE_UNK1,
     /* Type_STALFOS_MACE_e  */ dCcG_SE_UNK1,
     /* Type_DARKNUT_SWORD_e */ dCcG_SE_UNK1,

@@ -819,11 +819,7 @@ void dFile_select_c::menuSelect() {
             field_0x3944 = 0.0f;
             mIconMode = 5;
             field_0x392b = 6;
-#if VERSION == VERSION_DEMO
-            field_0x392a = 7;
-#else
-            field_0x392a = 8;
-#endif
+            field_0x392a = DEMO_SELECT(7, 8);
         }
     }
     else if(CPad_CHECK_TRIG_B(0)){
@@ -832,11 +828,7 @@ void dFile_select_c::menuSelect() {
         field_0x30d8.pane->hide();
         mIconMode = 5;
         field_0x392b = 6;
-#if VERSION == VERSION_DEMO
-        field_0x392a = 7;
-#else
-        field_0x392a = 8;
-#endif
+        field_0x392a = DEMO_SELECT(7, 8);
     }
     else if(stick->checkRightTrigger()) {
         if(field_0x3928 != 3) {

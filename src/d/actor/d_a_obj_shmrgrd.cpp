@@ -197,7 +197,7 @@ BOOL daObjShmrgrd_c::create_heap() {
 
 /* 000006E0-00000964       .text _create__14daObjShmrgrd_cFv */
 cPhs_State daObjShmrgrd_c::_create() {
-    fopAcM_SetupActor(this, daObjShmrgrd_c);
+    fopAcM_ct(this, daObjShmrgrd_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = cPhs_ERROR_e;
@@ -380,7 +380,7 @@ BOOL daObjShmrgrd_c::check_player_angle(fopAc_ac_c* ac) {
 
 /* 00000EF4-0000102C       .text set_damage__14daObjShmrgrd_cFv */
 void daObjShmrgrd_c::set_damage() {
-    u8 attackState = daPy_getPlayerActorClass()->getCutType();
+    u8 cutType = daPy_getPlayerActorClass()->getCutType();
     M_damage = 0;
     M_damage_dir = 0;
     mSttsTg.Move();
@@ -388,9 +388,9 @@ void daObjShmrgrd_c::set_damage() {
         cCcD_Obj *hitObj = mCylTg.GetTgHitObj();
         fopAc_ac_c* hitActor = mCylTg.GetTgHitAc();
         if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
-            if (check_player_angle(hitActor) && (attackState == 0x12 || attackState == 0x13)) {
+            if (check_player_angle(hitActor) && (cutType == daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING || cutType == daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER)) {
                 M_damage = 1;
-            } else if (attackState == 0x11) {
+            } else if (cutType == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                 M_damage_dir = cM_atan2s(mCylTg.GetTgRVecP()->x, mCylTg.GetTgRVecP()->z);
                 M_damage = 2;
             }

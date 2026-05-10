@@ -400,15 +400,11 @@ static cPhs_State daFgmahou_Create(fopAc_ac_c* a_this) {
 
     fgmahou_class* i_this = static_cast<fgmahou_class*>(a_this);
 
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_this, fgmahou_class);
-#endif
+    fopAcM_ct_Retail(i_this, fgmahou_class);
 
     cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhs, "Fganon");
     if(phase_state == cPhs_COMPLEATE_e) {
-    #if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(i_this, fgmahou_class);
-    #endif
+        fopAcM_ct_Demo(i_this, fgmahou_class);
 
         i_this->mOrbNumber = fopAcM_GetParam(i_this) & 0xF;
 

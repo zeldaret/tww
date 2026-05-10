@@ -721,11 +721,7 @@ dStage_objectNameInf l_objectName[] = {
     OBJNAME("Bmcon2", PROC_NPC_BMCON1, 1, 0),
     OBJNAME("Bmsw", PROC_NPC_BMSW, 255, 0),
     OBJNAME("Btsw", PROC_NPC_BTSW, 255, 0),
-#if VERSION == VERSION_DEMO
-    OBJNAME("Btsw2", PROC_NPC_BTSW2, 255, 0),
-#else
-    OBJNAME("Btsw2", PROC_NPC_BTSW2, 255, 59),
-#endif
+    OBJNAME("Btsw2", PROC_NPC_BTSW2, 255, DEMO_SELECT(0, 59)),
     OBJNAME("Zk1", PROC_NPC_ZK1, 255, 59),
     OBJNAME("Zl1", PROC_NPC_ZL1, 255, 60),
     OBJNAME("Ob1", PROC_NPC_OB1, 255, 60),
@@ -1021,11 +1017,7 @@ dStage_objectNameInf l_objectName[] = {
     OBJNAME("UkD2", PROC_NPC_UK, 7, 0),
     OBJNAME("Co1", PROC_NPC_CO1, 255, 59),
     OBJNAME("Mt", PROC_NPC_MT, 255, 0),
-#if VERSION == VERSION_DEMO
-    OBJNAME("Mn", PROC_NPC_MN, 255, 0),
-#else
-    OBJNAME("Mn", PROC_NPC_MN, 255, 59),
-#endif
+    OBJNAME("Mn", PROC_NPC_MN, 255, DEMO_SELECT(0, 59)),
     OBJNAME("Ah", PROC_NPC_AH, 255, 0),
     OBJNAME("Hyuf1", PROC_Hmlif, 255, 61),
     OBJNAME("Hyuf2", PROC_Hmlif, 255, 61),

@@ -144,7 +144,7 @@ bool daObjEff::Act_c::create_heap_woodBox_smoke() {
 
 /* 00000790-00000898       .text create_heap__Q28daObjEff5Act_cFv */
 bool daObjEff::Act_c::create_heap() {
-    static HeapProc proc[] = {
+    static CreateHeapProc proc[] = {
         &Act_c::create_heap_barrel_smoke,
         &Act_c::create_heap_stool_smoke,
         &Act_c::create_heap_skull_smoke,
@@ -154,7 +154,7 @@ bool daObjEff::Act_c::create_heap() {
     };
 
     bool ret = false;
-    if ((this->*proc[mProcIndex])()) {
+    if ((this->*proc[mType])()) {
         ret = true;
     }
 
@@ -260,7 +260,7 @@ BOOL daObjEff::Act_c::eff_set_woodBox_smoke() {
 
 /* 00000E80-00000F6C       .text eff_set__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set() {
-    static Proc proc[] = {
+    static SetProc proc[] = {
         &Act_c::eff_set_barrel_smoke,
         &Act_c::eff_set_stool_smoke,
         &Act_c::eff_set_skull_smoke,
@@ -269,7 +269,7 @@ BOOL daObjEff::Act_c::eff_set() {
         &Act_c::eff_set_woodBox_smoke
     };
 
-    return (this->*proc[mProcIndex])();
+    return (this->*proc[mType])();
 }
 
 /* 00000F6C-00001030       .text _create__Q28daObjEff5Act_cFv */
@@ -283,10 +283,10 @@ cPhs_State daObjEff::Act_c::_create() {
         0x00000040,
     };
 
-    mProcIndex = prm_get_type();
-    fopAcM_SetupActor(this, daObjEff::Act_c);
+    mType = prm_get_type();
+    fopAcM_ct(this, daObjEff::Act_c);
     int phase = cPhs_COMPLEATE_e;
-    if (fopAcM_entrySolidHeap(this, &solidHeapCB, heap_size[mProcIndex])) {
+    if (fopAcM_entrySolidHeap(this, &solidHeapCB, heap_size[mType])) {
         if ((u8) eff_set() != 0) {
             fopDwTg_DrawQTo(&draw_tag);
         } else {
@@ -343,7 +343,7 @@ void daObjEff::Act_c::remove_woodBox_smoke() {
 
 /* 00001180-0000126C       .text remove__Q28daObjEff5Act_cFv */
 void daObjEff::Act_c::remove() {
-    static voidProc proc[] = {
+    static RemoveProc proc[] = {
         &Act_c::remove_barrel_smoke,
         &Act_c::remove_stool_smoke,
         &Act_c::remove_skull_smoke,
@@ -351,7 +351,7 @@ void daObjEff::Act_c::remove() {
         &Act_c::remove_pinecone_smoke,
         &Act_c::remove_woodBox_smoke
     };
-    (this->*proc[mProcIndex])();
+    (this->*proc[mType])();
 }
 
 /* 0000126C-00001290       .text _delete__Q28daObjEff5Act_cFv */
@@ -404,7 +404,7 @@ void daObjEff::Act_c::die_woodBox_smoke() {
 
 /* 000013B0-0000149C       .text die__Q28daObjEff5Act_cFv */
 void daObjEff::Act_c::die() {
-    static voidProc proc[] = {
+    static DieProc proc[] = {
         &Act_c::die_barrel_smoke,
         &Act_c::die_stool_smoke,
         &Act_c::die_skull_smoke,
@@ -413,7 +413,7 @@ void daObjEff::Act_c::die() {
         &Act_c::die_woodBox_smoke
     };
 
-    (this->*proc[mProcIndex])();
+    (this->*proc[mType])();
 }
 
 /* 0000149C-000014C0       .text _execute__Q28daObjEff5Act_cFv */

@@ -328,7 +328,7 @@ static BOOL daKt_solidHeapCB(fopAc_ac_c* i_ac) {
 
 /* 0000134C-00001530       .text daKt_Create__FP10fopAc_ac_c */
 static cPhs_State daKt_Create(fopAc_ac_c* i_ac) {
-    fopAcM_SetupActor(i_ac, kt_class);
+    fopAcM_ct(i_ac, kt_class);
     kt_class* i_this = (kt_class*)i_ac;
 
     cPhs_State rt = dComIfG_resLoad(&i_this->mPhs, "Kt");

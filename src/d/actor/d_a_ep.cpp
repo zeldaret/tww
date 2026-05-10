@@ -637,16 +637,11 @@ static cPhs_State daEp_Create(fopAc_ac_c* a_this) {
     };
 
     ep_class* i_this = (ep_class*)a_this;
+    fopAcM_ct_Retail(a_this, ep_class);
 
-#if VERSION == VERSION_DEMO
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Ep");
     if (ret == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, ep_class);
-#else
-    fopAcM_SetupActor(a_this, ep_class);
-    cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Ep");
-    if (ret == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(a_this, ep_class);
         i_this->mType = fopAcM_GetParam(a_this) & 0x3F;
         if (i_this->mType == 0x3F) {
             i_this->mType = 0;

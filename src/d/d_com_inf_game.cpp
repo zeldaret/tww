@@ -81,9 +81,9 @@ void dComIfG_play_c::itemInit() {
     mItemKeyNumCount = 0;
     mItemMaxLifeCount = 0;
     mItemMagicCount = 0;
-    field_0x48da = 0;
+    mItemNowMagicCount = 0;
     mItemMaxMagicCount = 0;
-    field_0x48de = 0;
+    mItemPictureNumCount = 0;
     mItemArrowNumCount = 0;
     field_0x48e2 = 0;
     mItemBombNumCount = 0;

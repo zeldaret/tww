@@ -128,7 +128,7 @@ daNpc_Cb1_HIO_c::daNpc_Cb1_HIO_c() {
     field_0x84 = 0.2f;
     mStickWalkSpeedScale = 10.0f;
     field_0xC8 = -0x1000;
-    mPlayerFlyTimer = 0x1C2;
+    mPlayerFlyTimer = 450;
     field_0xCC = 0x64;
     field_0xCE = 0xF;
     field_0xD0 = 0x4E20;
@@ -148,7 +148,7 @@ daNpc_Cb1_HIO_c::daNpc_Cb1_HIO_c() {
     field_0xDA = 0x2968;
     field_0xB0 = 34.0f;
     field_0xB4 = 2.0f;
-    mNpcFlyTimer = 0x3C;
+    mNpcFlyTimer = 60;
     field_0xDE = 0xD;
     field_0xB8 = 2.0f;
     mFlyLaunchSpeedY = 50.0f;
@@ -157,7 +157,7 @@ daNpc_Cb1_HIO_c::daNpc_Cb1_HIO_c() {
     field_0xE4 = 0x14;
     field_0xE6 = 0xBB8;
     field_0xC4 = 20.0f;
-    mDamageTimer = 0x3C;
+    mDamageTimer = 60;
     field_0xEF = 0;
     mNo = -1;
 }
@@ -192,7 +192,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000004F8-00000814       .text create__11daNpc_Cb1_cFv */
 cPhs_State daNpc_Cb1_c::create() {
-    fopAcM_SetupActor(this, daNpc_Cb1_c);
+    fopAcM_ct(this, daNpc_Cb1_c);
 
     if(!isTypeBossDie()) {
 #if VERSION == VERSION_DEMO

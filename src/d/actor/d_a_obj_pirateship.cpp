@@ -462,7 +462,7 @@ bool daObjPirateship::Act_c::_execute() {
 
 /* 00000F10-000012A4       .text _create__Q215daObjPirateship5Act_cFv */
 cPhs_State daObjPirateship::Act_c::_create() {
-    fopAcM_SetupActor(this, daObjPirateship::Act_c);
+    fopAcM_ct(this, daObjPirateship::Act_c);
 
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, mArcname);
     if (PVar1 == cPhs_COMPLEATE_e) {

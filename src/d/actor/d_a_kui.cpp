@@ -470,7 +470,7 @@ static cPhs_State daKui_Create(fopAc_ac_c* a_this) {
     kui_class* i_this;
     cPhs_State result;
 
-    fopAcM_SetupActor(a_this, kui_class);
+    fopAcM_ct(a_this, kui_class);
     i_this = (kui_class*) a_this;
 
     result = dComIfG_resLoad(&i_this->mPhs, "Kui");

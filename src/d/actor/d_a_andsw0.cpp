@@ -318,15 +318,15 @@ static BOOL daAndsw0_Delete(andsw0_class*) {
 
 /* 00000974-00000A64       .text daAndsw0_Create__FP10fopAc_ac_c */
 static cPhs_State daAndsw0_Create(fopAc_ac_c* ac) {
-    fopAcM_SetupActor(ac, andsw0_class);
+    fopAcM_ct(ac, andsw0_class);
 
     andsw0_class * i_this = (andsw0_class *)ac;
     i_this->mNumSwitchesToCheck = (fopAcM_GetParam(ac) >> 0) & 0xFF;
     i_this->mBehaviorType = (fopAcM_GetParam(ac) >> 8) & 0xFF;
     i_this->mSwitchToSet = (fopAcM_GetParam(ac) >> 24) & 0xFF;
     i_this->mFirstSwitchToCheck = (fopAcM_GetParam(ac) >> 16) & 0xFF;
-    i_this->mTimer = (i_this->home.angle.z & 0xFF) * 15;
-    i_this->mEventNo = i_this->home.angle.x;
+    i_this->mTimer = (ac->home.angle.z & 0xFF) * 15;
+    i_this->mEventNo = ac->home.angle.x;
     i_this->mEventIdx = dComIfGp_evmng_getEventIdx(NULL, i_this->mEventNo);
     if (i_this->mBehaviorType == 2)
         i_this->mAction = ACT_TIMER;

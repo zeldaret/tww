@@ -162,7 +162,7 @@ static cPhs_State daBgn3_Create(fopAc_ac_c*) {
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK9,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
-            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg Se      */ dCcG_SE_METAL,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,

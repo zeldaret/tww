@@ -57,7 +57,7 @@ BOOL daObjTable::Act_c::Create() {
 /* 00000284-000003B4       .text Mthd_Create__Q210daObjTable5Act_cFv */
 cPhs_State daObjTable::Act_c::Mthd_Create() {
     cPhs_State phase_state;
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {

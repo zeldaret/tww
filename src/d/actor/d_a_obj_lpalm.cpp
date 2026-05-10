@@ -81,15 +81,10 @@ void daObjLpalm_c::CreateInit() {
 }
 
 cPhs_State daObjLpalm_c::_create() {
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daObjLpalm_c);
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     if (ret == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daObjLpalm_c);
-#else
-    fopAcM_SetupActor(this, daObjLpalm_c);
-    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
-    if (ret == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(this, daObjLpalm_c);
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xf00) == 0) {
             ret = cPhs_ERROR_e;
         } else {

@@ -188,15 +188,11 @@ static cPhs_State daFallRock_Create(fopAc_ac_c* i_this) {
 
 /* 00001050-0000127C       .text create__12daFallRock_cFv */
 cPhs_State daFallRock_c::create() {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daFallRock_c);
-#endif
+    fopAcM_ct_Retail(this, daFallRock_c);
 
     cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname);
     if (res == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(this, daFallRock_c);
-#endif
+        fopAcM_ct_Demo(this, daFallRock_c);
 
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xB80)) {
             return cPhs_ERROR_e;

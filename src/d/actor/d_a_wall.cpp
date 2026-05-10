@@ -138,7 +138,7 @@ void daWall_c::CreateInit() {
 
 /* 00000380-000004EC       .text _create__8daWall_cFv */
 cPhs_State daWall_c::_create() {
-    fopAcM_SetupActor(this, daWall_c);
+    fopAcM_ct(this, daWall_c);
     mType = fopAcM_GetParam(this) >> 8;
     mSwitchNo = fopAcM_GetParam(this) & 0xFF;
     bool isSwitch = dComIfGs_isSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this));

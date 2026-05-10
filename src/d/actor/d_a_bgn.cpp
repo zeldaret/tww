@@ -290,7 +290,7 @@ static cPhs_State daBgn_Create(fopAc_ac_c* i_this) {
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK9,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
-            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg Se      */ dCcG_SE_METAL,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
@@ -331,7 +331,7 @@ static cPhs_State daBgn_Create(fopAc_ac_c* i_this) {
             /* Radius */ 70.0f,
         }},
     };
-    fopAcM_SetupActor(i_this, bgn_class);
+    fopAcM_ct(i_this, bgn_class);
 }
 
 static actor_method_class l_daBgn_Method = {

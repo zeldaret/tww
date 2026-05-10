@@ -131,7 +131,7 @@ static cPhs_State daGrass_Create(fopAc_ac_c* i_ac) {
 
     grass_class * i_this = (grass_class*)i_ac;
 
-    fopAcM_SetupActor(i_this, grass_class);
+    fopAcM_ct(i_this, grass_class);
 
     u32 grp = daGrass_prm::getType(i_this);
     OffsetData * offset = &l_offsetData[grp];

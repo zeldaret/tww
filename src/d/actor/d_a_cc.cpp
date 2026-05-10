@@ -328,15 +328,9 @@ void naraku_check(cc_class* i_this) {
                 fopAcM_seStart(&i_this->actor, JA_SE_OBJ_FALL_WATER_M, 0);
                 i_this->m300 = true;
                 cXyz sp18(0.5f, 0.5f, 0.5f);
-#if VERSION == VERSION_DEMO
-                i_this->m368.remove();
-                dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &i_this->actor.current.pos, NULL, &sp18, 0xff, &i_this->m368);
-                i_this->m368.setRate(0.0f);
-#else
-                i_this->m390.remove();
-                dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &i_this->actor.current.pos, NULL, &sp18, 0xff, &i_this->m390);
-                i_this->m390.setRate(0.0f);
-#endif
+                DEMO_SELECT(i_this->m368, i_this->m390).remove();
+                dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &i_this->actor.current.pos, NULL, &sp18, 0xff, &DEMO_SELECT(i_this->m368, i_this->m390));
+                DEMO_SELECT(i_this->m368, i_this->m390).setRate(0.0f);
             }
 
             f32 fVar1 = 40.0f + REG12_F(0);
@@ -368,11 +362,7 @@ void naraku_check(cc_class* i_this) {
     } else if (i_this->m300) {
         i_this->m2F8 = 0;
         i_this->m300 = false;
-#if VERSION == VERSION_DEMO
-        i_this->m368.remove();
-#else
-        i_this->m390.remove();
-#endif
+        DEMO_SELECT(i_this->m368, i_this->m390).remove();
     }
 }
 
@@ -535,11 +525,7 @@ BOOL body_atari_check(cc_class* i_this) {
 
             if (i_this->m2F5 == 0x15) {
                 fopAcM_seStart(a_this, JA_SE_LK_MS_WEP_HIT, 0x36);
-#if VERSION == VERSION_DEMO
-                a_this->gravity = -(REG12_F(19) + 10.0f);
-#else
-                a_this->gravity = -(REG12_F(19) + 3.0f);
-#endif
+                a_this->gravity = -(REG12_F(19) + DEMO_SELECT(10.0f, 3.0f));
                 i_this->m324 = 0.0f;
                 i_this->m2F8 = 0;
                 return FALSE;
@@ -557,11 +543,23 @@ BOOL body_atari_check(cc_class* i_this) {
                 return FALSE;
             }
 
-            if (player->getCutType() == 6 || player->getCutType() == 7 || player->getCutType() == 8 || player->getCutType() == 9 ||
-                player->getCutType() == 10 || player->getCutType() == 0xc || player->getCutType() == 0xe || player->getCutType() == 5 ||
-                player->getCutType() == 0xf || player->getCutType() == 0x10 || player->getCutType() == 0x15 || player->getCutType() == 0x17 ||
-                player->getCutType() == 0x19 || player->getCutType() == 0x1a || player->getCutType() == 0x1b || player->getCutType() == 0x1e ||
-                player->getCutType() == 0x1f)
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EA ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EB ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_TURN ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_ROLL ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SWORD ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_STICK ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_BT_JUMPCUT ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_BT_ROLLCUT ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_CLUB ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXA ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXB ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXMJ ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_KESA)
             {
                 i_this->m2F6 = 1;
             }
@@ -591,11 +589,7 @@ BOOL body_atari_check(cc_class* i_this) {
             bVar4 = true;
             if (i_this->m2F5 == 0x15) {
                 fopAcM_seStart(a_this, JA_SE_LK_W_WEP_HIT, 0x36);
-#if VERSION == VERSION_DEMO
-                a_this->gravity = -(REG12_F(19) + 10.0f);
-#else
-                a_this->gravity = -(REG12_F(19) + 3.0f);
-#endif
+                a_this->gravity = -(REG12_F(19) + DEMO_SELECT(10.0f, 3.0f));
                 i_this->m324 = 0.0f;
                 i_this->m2F8 = 0;
                 return FALSE;
@@ -637,7 +631,7 @@ BOOL body_atari_check(cc_class* i_this) {
 
             i_this->m2F6 = 1;
 
-            if (player->getCutType() == 0x12 || player->getCutType() == 0x13) {
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING || player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER) {
                 i_this->m2F6 = 6;
             }
 
@@ -1692,11 +1686,7 @@ void action_noboru(cc_class* i_this) {
         i_this->m310.y = 0;
         i_this->m310.z = 0;
         i_this->m2F9 = 1;
-#if VERSION == VERSION_DEMO
-        i_this->m368.remove();
-#else
-        i_this->m390.remove();
-#endif
+        DEMO_SELECT(i_this->m368, i_this->m390).remove();
         a_this->attention_info.flags = 0;
 
         if (i_this->m320 != CC_BCK_TACHI_WALK) {
@@ -2568,7 +2558,7 @@ static cPhs_State daCC_Create(fopAc_ac_c* a_this) {
 
     cc_class* i_this = (cc_class*)a_this;
 
-    fopAcM_SetupActor(a_this, cc_class);
+    fopAcM_ct(a_this, cc_class);
 
     cPhs_State PVar3 = dComIfG_resLoad(&i_this->mPhase, "CC");
     if (PVar3 == cPhs_COMPLEATE_e) {

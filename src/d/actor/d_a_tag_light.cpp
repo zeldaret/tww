@@ -126,9 +126,7 @@ bool Act_c::create_heap() {
 
 /* 0000035C-000006F0       .text _create__Q210daTagLight5Act_cFv */
 cPhs_State Act_c::_create() {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, Act_c);
-#endif
+    fopAcM_ct_Retail(this, Act_c);
 
     m2A0 = prm_get_type();
     cXyz sp08;
@@ -143,9 +141,7 @@ cPhs_State Act_c::_create() {
     m4A4.y = sp08.y;
     m4A4.z = sp08.z;
 
-#if VERSION == VERSION_DEMO
-    fopAcM_SetupActor(this, Act_c);
-#endif
+    fopAcM_ct_Demo(this, Act_c);
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);

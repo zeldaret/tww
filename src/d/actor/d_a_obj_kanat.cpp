@@ -35,7 +35,7 @@ BOOL daObjKanat::Act_c::Create() {
 
 /* 000001AC-000002EC       .text Mthd_Create__Q210daObjKanat5Act_cFv */
 cPhs_State daObjKanat::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjKanat::Act_c);
+    fopAcM_ct(this, daObjKanat::Act_c);
     
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
         return cPhs_STOP_e;

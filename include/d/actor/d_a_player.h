@@ -230,13 +230,15 @@ public:
         daPyRFlg0_UNK40000              = 0x00040000,
         daPyRFlg0_UNK80000              = 0x00080000,
         daPyRFlg0_POISON_CURSE          = 0x00100000,
-        daPyRFlg0_UNK200000             = 0x00200000,
+        daPyRFlg0_LIGHT_REFLECT         = 0x00200000,
         daPyRFlg0_GRAB_PUT_START        = 0x00400000,
-        daPyRFlg0_UNK800000             = 0x00800000,
+#if VERSION > VERSION_DEMO
+        daPyRFlg0_ORIGINAL_HAT_ANIM     = 0x00800000,
+#endif
         daPyRFlg0_TACT_INPUT            = 0x01000000,
         daPyRFlg0_FAIRY_USE             = 0x02000000,
         daPyRFlg0_SUBJECT_ACCEPT        = 0x04000000,
-        daPyRFlg0_UNK8000000            = 0x08000000,
+        daPyRFlg0_NOT_ATTACKING         = 0x08000000,
         daPyRFlg0_UNK10000000           = 0x10000000,
         daPyRFlg0_ARROW_SHOOT           = 0x20000000,
         daPyRFlg0_ROPE_FORCE_END        = 0x40000000,
@@ -418,6 +420,41 @@ public:
         daPyFace_TTAKTAYATSURI = 0xAB,
         daPyFace_TTAKTCHISIN = 0xAC,
         daPyFace_UNKNOWN = 0xAD, // Not an index, this is a special value checked in checkNormalFace()
+    };
+    
+    enum daPy_CUT_TYPE {
+        /* 0x00 */ CUT_TYPE_NONE,
+        /* 0x01 */ CUT_TYPE_CUT_A, // Slash once while targeting and not holding a direction
+        /* 0x02 */ CUT_TYPE_CUT_F, // Slash once while holding a single direction (not diagonal)
+        /* 0x03 */ CUT_TYPE_CUT_R, // Right slash
+        /* 0x04 */ CUT_TYPE_CUT_L, // Left slash
+        /* 0x05 */ CUT_TYPE_BT_JUMPCUT, // Jumping over an enemy's head, slashing it's head, and landing behind it
+        /* 0x06 */ CUT_TYPE_CUT_EA, // 4 slash combo while holding a direction
+        /* 0x07 */ CUT_TYPE_CUT_EB, // 4 slash combo while not holding a direction
+        /* 0x08 */ CUT_TYPE_CUT_TURN, // Spin attack
+        /* 0x09 */ CUT_TYPE_CUT_ROLL, // Hurricane Spin
+        /* 0x0A */ CUT_TYPE_JUMPCUT_SWORD,
+        /* 0x0B */ CUT_TYPE_STICK,
+        /* 0x0C */ CUT_TYPE_JUMPCUT_STICK,
+        /* 0x0D */ CUT_TYPE_MACHETE,
+        /* 0x0E */ CUT_TYPE_JUMPCUT_MACHETE,
+        /* 0x0F */ CUT_TYPE_BT_ROLLCUT, // Rolling behind an enemy and slashing it's back
+        /* 0x10 */ CUT_TYPE_BT_VERTICALJUMPCUT, // Jumping and stabbing the ground to hit an enemy
+        /* 0x11 */ CUT_TYPE_HAMMER_SIDESWING,
+        /* 0x12 */ CUT_TYPE_HAMMER_FRONTSWING,
+        /* 0x13 */ CUT_TYPE_JUMPCUT_HAMMER,
+        /* 0x14 */ CUT_TYPE_CLUB,
+        /* 0x15 */ CUT_TYPE_JUMPCUT_CLUB,
+        /* 0x16 */ CUT_TYPE_DN_SWORD,
+        /* 0x17 */ CUT_TYPE_JUMPCUT_DN_SWORD,
+        /* 0x18 */ CUT_TYPE_SPEAR,
+        /* 0x19 */ CUT_TYPE_JUMPCUT_SPEAR,
+        /* 0x1A */ CUT_TYPE_CUT_EXA, // 3 slash combo while slashing an enemy
+        /* 0x1B */ CUT_TYPE_CUT_EXB, // 4 slash combo while slashing an enemy
+        /* 0x1C */ CUT_TYPE_PG_SWORD,
+        /* 0x1D */ CUT_TYPE_JUMPCUT_PG_SWORD,
+        /* 0x1E */ CUT_TYPE_CUT_EXMJ, // 3 slash combo after parrying (slashing while spinning and jumping)
+        /* 0x1F */ CUT_TYPE_CUT_KESA, // 3 slash combo after parrying and holding right (slashing while spinning and standing)
     };
     
     /* 0x290 */ u8 mCutType;

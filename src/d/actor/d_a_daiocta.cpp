@@ -1687,7 +1687,7 @@ void daDaiocta_c::createInit() {
 
 /* 00004660-00004918       .text _create__11daDaiocta_cFv */
 cPhs_State daDaiocta_c::_create() {
-    fopAcM_SetupActor(this, daDaiocta_c);
+    fopAcM_ct(this, daDaiocta_c);
     cPhs_State state = dComIfG_resLoad(&mPhs, m_arc_name);
 
     if (state == cPhs_COMPLEATE_e) {

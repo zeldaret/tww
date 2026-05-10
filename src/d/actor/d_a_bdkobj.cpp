@@ -517,7 +517,7 @@ static cPhs_State daBdkobj_Create(fopAc_ac_c* a_this) {
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
-            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg Se      */ dCcG_SE_METAL,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
@@ -546,7 +546,7 @@ static cPhs_State daBdkobj_Create(fopAc_ac_c* a_this) {
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
-            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg Se      */ dCcG_SE_METAL,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
@@ -561,7 +561,7 @@ static cPhs_State daBdkobj_Create(fopAc_ac_c* a_this) {
     };
 
     bdkobj_class* i_this = (bdkobj_class*)a_this;
-    fopAcM_SetupActor(a_this, bdkobj_class);
+    fopAcM_ct(a_this, bdkobj_class);
 
     cPhs_State res = dComIfG_resLoad(&i_this->mPhase, "Bdkobj");
     if (res == cPhs_ERROR_e) {

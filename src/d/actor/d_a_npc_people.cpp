@@ -4207,7 +4207,7 @@ static BOOL daNpc_People_nodeCallBack(J3DNode* node, int calcTiming) {
         daNpcPeople_c* i_this = (daNpcPeople_c*)model->getUserArea();
 
         s32 jntNo = joint->getJntNo();
-        cMtx_copy(model->getAnmMtx(jntNo), *calc_mtx);
+        MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
 
         if(jntNo == i_this->m_jnt.getHeadJntNum()) {
             mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getHead_y());
@@ -4219,7 +4219,7 @@ static BOOL daNpc_People_nodeCallBack(J3DNode* node, int calcTiming) {
         }
 
         model->setAnmMtx(jntNo, *calc_mtx);
-        cMtx_copy(*calc_mtx, j3dSys.mCurrentMtx);
+        MTXCopy(*calc_mtx, j3dSys.mCurrentMtx);
     }
 
     return true;
@@ -4232,7 +4232,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000075C-000008E0       .text phase_1__FP13daNpcPeople_c */
 static cPhs_State phase_1(daNpcPeople_c* i_this) {
-    fopAcM_SetupActor(i_this, daNpcPeople_c);
+    fopAcM_ct(i_this, daNpcPeople_c);
 
     s16 arg0 = i_this->getPrmArg0();
     switch(i_this->getNpcNo()) {

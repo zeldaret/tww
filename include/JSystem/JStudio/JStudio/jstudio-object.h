@@ -258,7 +258,6 @@ struct TObject_actor : public TObject {
     TObject_actor(JStudio::stb::data::TParse_TBlock_object const&,
                                  JStudio::TAdaptor_actor*);
     
-    virtual ~TObject_actor();
     virtual void do_paragraph(u32, void const*, u32);
 };
 
@@ -280,7 +279,6 @@ struct TObject_ambientLight : public TObject {
     TObject_ambientLight(JStudio::stb::data::TParse_TBlock_object const&,
                                         JStudio::TAdaptor_ambientLight*);
     
-    virtual ~TObject_ambientLight();
     virtual void do_paragraph(u32, void const*, u32);
 };
 
@@ -313,7 +311,6 @@ struct TAdaptor_camera : public TAdaptor {
 struct TObject_camera : public TObject {
     TObject_camera(JStudio::stb::data::TParse_TBlock_object const&, JStudio::TAdaptor_camera*);
     
-    virtual ~TObject_camera();
     virtual void do_paragraph(u32, void const*, u32);
 };
 
@@ -342,7 +339,6 @@ struct TObject_fog : public TObject {
     TObject_fog(JStudio::stb::data::TParse_TBlock_object const&,
                                JStudio::TAdaptor_fog*);
     
-    virtual ~TObject_fog();
     virtual void do_paragraph(u32, void const*, u32);
 };
 
@@ -383,7 +379,6 @@ struct TObject_light : public TObject {
     TObject_light(JStudio::stb::data::TParse_TBlock_object const&,
                                  JStudio::TAdaptor_light*);
     
-    virtual ~TObject_light();
     virtual void do_paragraph(u32, void const*, u32);
 };
 
@@ -401,7 +396,6 @@ struct TObject_message : public TObject {
     TObject_message(JStudio::stb::data::TParse_TBlock_object const&,
                                    JStudio::TAdaptor_message*);
     
-    virtual ~TObject_message();
     virtual void do_paragraph(u32, void const*, u32);
 };
 
@@ -432,7 +426,6 @@ struct TObject_particle : public TObject {
     TObject_particle(JStudio::stb::data::TParse_TBlock_object const&,
                                     JStudio::TAdaptor_particle*);
     
-    virtual ~TObject_particle();
     virtual void do_paragraph(u32, void const*, u32);
 };
 
@@ -464,7 +457,6 @@ struct TObject_sound : public TObject {
     TObject_sound(JStudio::stb::data::TParse_TBlock_object const&,
                                  JStudio::TAdaptor_sound*);
     
-    virtual ~TObject_sound();
     virtual void do_paragraph(u32, void const*, u32);
 };
 

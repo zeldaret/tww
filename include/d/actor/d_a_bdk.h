@@ -127,7 +127,9 @@ public:
     /* 0x2593 */ s8 m2593;
     /* 0x2594 */ s8 m2594;
     /* 0x2598 */ fopAc_ac_c* mp2598;
+#if VERSION > VERSION_DEMO
     /* 0x259C */ u8 m259C[0x259E - 0x259C];
+#endif
     /* 0x259E */ s16 m259E;
     /* 0x25A0 */ s16 m25A0;
     /* 0x25A2 */ s8 m25A2;

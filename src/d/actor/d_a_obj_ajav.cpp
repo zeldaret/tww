@@ -460,7 +460,7 @@ BOOL daObjAjav::Act_c::create_heap() {
 cPhs_State daObjAjav::Act_c::_create() {
     cPhs_State rt = cPhs_ERROR_e;
 
-    fopAcM_SetupActor(this, daObjAjav::Act_c);
+    fopAcM_ct(this, daObjAjav::Act_c);
 
     mSwNo = fopAcM_GetParam(this) & 0xFF;
     mbResLoaded = false;

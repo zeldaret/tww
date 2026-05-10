@@ -19,3 +19,5 @@ SortIncludes: false
 IncludeCategories:
   - Regex: '"d/dolzel(_rel)?\.h"'
     Priority: -1000
+IndentCaseBlocks: true
+IndentCaseLabels: true

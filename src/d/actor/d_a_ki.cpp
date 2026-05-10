@@ -1140,7 +1140,7 @@ static BOOL daKi_Execute(ki_class* i_this) {
                 i_this->m31C = 150.0f;
             } else
 #endif
-            if (i_this->mStts.GetAtSpl() == 1) {
+            if (i_this->mStts.GetAtSpl() == dCcG_At_Spl_UNK1) {
                 i_this->m31C = l_kiHIO.m38;
             } else {
                 i_this->m31C = l_kiHIO.m34;
@@ -1369,7 +1369,7 @@ static cPhs_State daKi_Create(fopAc_ac_c* a_this) {
 
     ki_class* i_this = (ki_class*)a_this;
 
-    fopAcM_SetupActor(a_this, ki_class);
+    fopAcM_ct(a_this, ki_class);
 
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Ki");
     if (ret == cPhs_COMPLEATE_e) {

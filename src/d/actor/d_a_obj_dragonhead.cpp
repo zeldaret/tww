@@ -113,7 +113,7 @@ void daObjDragonhead_c::set_mtx() {
 }
 
 cPhs_State daObjDragonhead_c::_create() {
-    fopAcM_SetupActor(this, daObjDragonhead_c);
+    fopAcM_ct(this, daObjDragonhead_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, "Qdghd");
 

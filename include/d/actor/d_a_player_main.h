@@ -1080,7 +1080,11 @@ public:
     int changeSlideProc();
     BOOL changeWaitProc();
     BOOL changeLandProc(f32);
+#if VERSION == VERSION_DEMO
+    void setDamagePoint(f32);
+#else
     BOOL setDamagePoint(f32);
+#endif
     BOOL checkNormalDamage(int);
     void setDashDamage();
     BOOL checkAtHitEnemy(dCcD_GObjInf*);
@@ -1211,7 +1215,9 @@ public:
     void autoGroundHit();
     BOOL checkAttentionPosAngle(fopAc_ac_c*, cXyz**);
     void setNeckAngle();
+#if VERSION > VERSION_DEMO
     void checkOriginalHatAnimation();
+#endif
     void setHatAngle();
     void setMoveSlantAngle();
     void setWaistAngle();
@@ -1297,8 +1303,8 @@ public:
     BOOL dProcHoldup();
     BOOL dProcOpenTreasure_init();
     BOOL dProcOpenTreasure();
-    void setGetItemSound(u16, int);
 #if VERSION > VERSION_DEMO
+    void setGetItemSound(u16, int);
     BOOL setGetDemo();
 #endif
     BOOL dProcGetItem_init();
@@ -2314,8 +2320,8 @@ public:
     /* 0x4284 */ dCcD_Cyl mAtCyl;
     /* 0x43B4 */ dCcD_Cyl mLightCyl;
     /* 0x44E4 */ dCcD_Cps mAtCps[3];
-    /* 0x488C */ dCcD_Cps mFanWindCps;
-    /* 0x49C4 */ dCcD_Sph mFanWindSph;
+    /* 0x488C */ dCcD_Cps mFanWindCps; // Used when swinging the Deku Leaf
+    /* 0x49C4 */ dCcD_Sph mFanWindSph; // Used when swinging the Deku Leaf and when creating a burst of air while gliding with it
     /* 0x4AF0 */ dCcD_Cps mFanLightCps;
     
     struct ProcInitTableEntry {
