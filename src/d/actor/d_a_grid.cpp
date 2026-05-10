@@ -310,7 +310,7 @@ void ho_move(daGrid_c* i_this) {
 
     s16 shipSailAngle = l_ship->getSailAngle();
     s16 windAngle = cM_atan2s(windVec->x, windVec->z);
-    s16 windRelAngle = (s16)(i_this->current.angle.y + shipSailAngle) - windAngle;
+    s16 windRelAngle = i_this->current.angle.y + shipSailAngle - windAngle;
     s16 targetWindAngle = windRelAngle + 0x8000;
     if (targetWindAngle > 0) {
         if (shipSailAngle > 0 && shipSailAngle < 0x4000) {
