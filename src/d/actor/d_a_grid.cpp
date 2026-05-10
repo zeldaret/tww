@@ -405,16 +405,10 @@ void ho_move(daGrid_c* i_this) {
 
         MtxPosition(&localIn, &localWind);
         f32 xLimit = 0.25f + 0.75f * windPow;
-        if (xLimit > 1.0f) {
-            xLimit = 1.0f;
-        }
-        localWind.x *= xLimit;
+        localWind.x *= xLimit > 1.0f ? 1.0f : xLimit;
 
         f32 zLimit = 0.5f + 0.25f * windPow;
-        if (zLimit > 1.0f) {
-            zLimit = 1.0f;
-        }
-        localWind.z *= zLimit;
+        localWind.z *= zLimit > 1.0f ? 1.0f : zLimit;
 
         xWave += i_this->m2204 * (clothOpen * (windWaveRate * localWind.x));
         zWave += i_this->m2204 * (clothOpen * (windSide * localWind.z));
