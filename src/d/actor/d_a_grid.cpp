@@ -343,8 +343,10 @@ void ho_move(daGrid_c* i_this) {
 
     f32 windWaveRate = 1.0f + (0.01f + REG6_F(15)) * (windSide * cM_ssin(i_this->m1B44));
     s32 calcWaveSpeed = 2500.0f + (9000.0f * (0.8f * windPow));
-    s32 waveSpeed = 10000;
-    if (calcWaveSpeed <= 10000) {
+    s32 waveSpeed;
+    if (calcWaveSpeed > 10000) {
+        waveSpeed = 10000;
+    } else {
         waveSpeed = calcWaveSpeed;
     }
     i_this->m1B44 += waveSpeed;
