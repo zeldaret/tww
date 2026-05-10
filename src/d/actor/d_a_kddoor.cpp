@@ -160,7 +160,7 @@ BOOL daKddoor_c::chkStopOpen() {
                 }
             }
 
-            m2A1 = 0x41;
+            m2A1 = 0x41; // ~65 frames (~1 second) before auto-opening
         }
     } else {
         if (swbit != 0xFF && dComIfGs_isSwitch(swbit, room_no)) {
@@ -246,24 +246,28 @@ void dDoor_ssk_c::calcMtx(dDoor_info_c* i_door) {
 }
 
 /* 000007A8-00000978       .text nodeCB__FP7J3DNodei */
+static const s32 JOINT_ANIM_FREQ_Y = 0x4E20;
+static const s32 JOINT_ANIM_FREQ_Z = 0x3A98;
+static const s32 JOINT_ANIM_FREQ_X2 = 0x2EE0;
+static const s32 JOINT_ANIM_FREQ_X1 = 0x028A;
+
 static BOOL nodeCB(J3DNode* node, int calcTiming) {
     if (calcTiming == 0) {
         J3DJoint* joint = (J3DJoint*)node;
         int jnt_no = (u16)joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         dDoor_ssk_sub_c* i_this = (dDoor_ssk_sub_c*)model->getUserArea();
-
         if (i_this != NULL && jnt_no > 0 && jnt_no <= 3) {
             PSMTXCopy(model->getAnmMtx(jnt_no), *calc_mtx);
 
-            f32 s = JMASSin((jnt_no * 0x4e20) + (i_this->m196 * i_this->m19E) * 2);
-            mDoMtx_YrotM(*calc_mtx, (int)(s16)(2000.0f * s));
+            f32 s = JMASSin((jnt_no * JOINT_ANIM_FREQ_Y) + (i_this->mFrameCounter * i_this->mSpeedScale) * 2);
+            mDoMtx_YrotM(*calc_mtx, (s16)(int)(2000.0f * s));
 
-            s = JMASSin((i_this->m196 * 0x28a) + (jnt_no * 0x2ee0));
-            mDoMtx_XrotM(*calc_mtx, (int)(s16)(2000.0f * s));
+            s = JMASSin((i_this->mFrameCounter * JOINT_ANIM_FREQ_X1) + (jnt_no * JOINT_ANIM_FREQ_X2));
+            mDoMtx_XrotM(*calc_mtx, (s16)(int)(2000.0f * s));
 
-            s = JMASSin((jnt_no * 0x3a98) + (i_this->m196 * i_this->m19E));
-            mDoMtx_ZrotM(*calc_mtx, (int)(s16)(4000.0f * s));
+            s = JMASSin((jnt_no * JOINT_ANIM_FREQ_Z) + (i_this->mFrameCounter * i_this->mSpeedScale));
+            mDoMtx_ZrotM(*calc_mtx, (s16)(int)(4000.0f * s));
 
             PSMTXCopy(*calc_mtx, model->getAnmMtx(jnt_no));
             PSMTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
@@ -286,17 +290,17 @@ void dDoor_ssk_c::execute(dDoor_info_c* i_door) {
             }
 
             sub->mpModel->calc();
-            sub->m196 += sub->m198;
+            sub->mFrameCounter += sub->mFrameVel;
         }
 
         dComIfG_Ccsp()->Set(&sub->mCyl);
 
         eyePos = &i_door->eyePos;
-        if (sub->m1A0 > 0.9f) {
-            if (sub->m1C5 == 0) {
+        if (sub->mOpenScaleX > 0.9f) {
+            if (sub->mSoundCooldown == 0) {
                 s8 reverb = dComIfGp_getReverb(i_door->current.roomNo);
                 JAIZelBasic::zel_basic->seStart(
-                    0x3823,
+                    JA_SE_OBJ_SHOKU_LIFT_MOVE,
                     eyePos,
                     0,
                     reverb,
@@ -305,12 +309,12 @@ void dDoor_ssk_c::execute(dDoor_info_c* i_door) {
                     -1.0f,
                     -1.0f,
                     0);
-                sub->m1C5 = (u8)(50.0f + 30.0f * cM_rnd());
+                sub->mSoundCooldown = (u8)(50.0f + 30.0f * cM_rnd());
             } else {
-                sub->m1C5--;
+                sub->mSoundCooldown--;
             }
         } else {
-            sub->m1C5 = 0;
+            sub->mSoundCooldown = 0;
         }
     }
 }
@@ -405,7 +409,7 @@ void dDoor_ssk_sub_c::init() {
             /* SrcObjTg  Type    */ 0,
             /* SrcObjTg  SPrm    */ 0,
             /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
-            /* SrcGObjAt Se      */ dCcG_SE_UNK4,
+            /* SrcGObjAt Se      */ dCcG_SE_WOOD,
             /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
             /* SrcGObjAt Mtrl    */ 0,
@@ -428,7 +432,7 @@ void dDoor_ssk_sub_c::init() {
     mStts.Init(0xFF, 0xFF, NULL);
     mCyl.Set(body_co_cyl);
     mCyl.SetStts(&mStts);
-    m194 = 1;
+    mActiveFlag = 1; // dead store — compiler artifact
     mSmokeCb.setRateOff(0);
 }
 
@@ -439,29 +443,29 @@ void dDoor_ssk_sub_c::end() {
 
 /* 00000E14-00000E84       .text openInit__15dDoor_ssk_sub_cFv */
 void dDoor_ssk_sub_c::openInit() {
-    m1A0 = 1.0f;
-    m1A4 = 1.0f;
-    m1A8 = 1.0f;
-    m1AC = 1.0f;
-    m1B0 = 1.0f;
-    m1B4 = 1.0f;
-    m19C = cM_rnd() * 5.0f;
-    m1C4 = 0;
+    mOpenScaleX = 1.0f;
+    mOpenScaleY = 1.0f;
+    mOpenScaleZ = 1.0f;
+    mCloseScaleX = 1.0f;
+    mCloseScaleY = 1.0f;
+    mCloseScaleZ = 1.0f;
+    mDelayTimer = cM_rnd() * 5.0f;
+    mSoundPlayed = 0;
 }
 
 /* 00000E84-00000FB4       .text openProc__15dDoor_ssk_sub_cFP12dDoor_info_c */
 BOOL dDoor_ssk_sub_c::openProc(dDoor_info_c* i_door) {
     f32 tmp;
-    if (m19C > 0) {
-        m19C--;
+    if (mDelayTimer > 0) {
+        mDelayTimer--;
         return FALSE;
     }
 
-    if (m1A4 > 0.1f) {
-        if (m1C4 == 0) {
-            m1C4 = 1;
+    if (mOpenScaleY > 0.1f) {
+        if (mSoundPlayed == 0) {
+            mSoundPlayed = 1;
             JAIZelBasic::zel_basic->seStart(
-                0x694D,
+                JA_SE_OBJ_JAMA_SHOKU_IN,
                 &i_door->eyePos,
                 0,
                 dComIfGp_getReverb(i_door->current.roomNo),
@@ -473,68 +477,68 @@ BOOL dDoor_ssk_sub_c::openProc(dDoor_info_c* i_door) {
             );
         }
 
-        cLib_addCalc0(&m1A4, 0.25f, 0.3f);
-        tmp = m1A4;
-        m1A0 = tmp;
-        m1A8 = tmp;
+        cLib_addCalc0(&mOpenScaleY, 0.25f, 0.3f);
+        tmp = mOpenScaleY;
+        mOpenScaleX = tmp;
+        mOpenScaleZ = tmp;
         return FALSE;
 
     }
 
-    m1A0 = 0.0f;
-    m1A4 = 0.0f;
-    m1A8 = 0.0f;
+    mOpenScaleX = 0.0f;
+    mOpenScaleY = 0.0f;
+    mOpenScaleZ = 0.0f;
 
-    if (m1B0 > 0.1f) {
-        cLib_addCalc0(&m1B0, 0.5f, 0.3f);
-        tmp = m1B0;
-        m1AC = tmp;
-        m1B4 = tmp;
+    if (mCloseScaleY > 0.1f) {
+        cLib_addCalc0(&mCloseScaleY, 0.5f, 0.3f);
+        tmp = mCloseScaleY;
+        mCloseScaleX = tmp;
+        mCloseScaleZ = tmp;
         return FALSE;
     }
 
-    m1AC = 0.0f;
-    m1B0 = 0.0f;
-    m1B4 = 0.0f;
+    mCloseScaleX = 0.0f;
+    mCloseScaleY = 0.0f;
+    mCloseScaleZ = 0.0f;
     return TRUE;
 }
 
 /* 00000FB4-00001024       .text closeInit__15dDoor_ssk_sub_cFv */
 void dDoor_ssk_sub_c::closeInit() {
-    m1A0 = 0.0f;
-    m1A4 = 0.0f;
-    m1A8 = 0.0f;
-    m1AC = 0.0f;
-    m1B0 = 0.0f;
-    m1B4 = 0.0f;
-    m19C = cM_rnd() * 5.0f;
-    m1C4 = 0;
+    mOpenScaleX = 0.0f;
+    mOpenScaleY = 0.0f;
+    mOpenScaleZ = 0.0f;
+    mCloseScaleX = 0.0f;
+    mCloseScaleY = 0.0f;
+    mCloseScaleZ = 0.0f;
+    mDelayTimer = cM_rnd() * 5.0f;
+    mSoundPlayed = 0;
 }
 
 /* 00001024-0000121C       .text closeProc__15dDoor_ssk_sub_cFP12dDoor_info_c */
 BOOL dDoor_ssk_sub_c::closeProc(dDoor_info_c* i_door) {
     f32 tmp;
-    if (m19C > 0) {
-        m19C--;
+    if (mDelayTimer > 0) {
+        mDelayTimer--;
         return FALSE;
     }
 
-    if (m1B0 < 0.9f) {
-        cLib_addCalc2(&m1B0, 1.0f, 0.5f, 0.3f);
-        tmp = m1B0;
-        m1AC = tmp;
-        m1B4 = tmp;
+    if (mCloseScaleY < 0.9f) {
+        cLib_addCalc2(&mCloseScaleY, 1.0f, 0.5f, 0.3f);
+        tmp = mCloseScaleY;
+        mCloseScaleX = tmp;
+        mCloseScaleZ = tmp;
         return FALSE;
     }
 
-    m1AC = 1.0f;
-    m1B0 = 1.0f;
-    m1B4 = 1.0f;
+    mCloseScaleX = 1.0f;
+    mCloseScaleY = 1.0f;
+    mCloseScaleZ = 1.0f;
 
-    if (m1C4 == 0) {
-        m1C4 = 1;
+    if (mSoundPlayed == 0) {
+        mSoundPlayed = 1;
         JAIZelBasic::zel_basic->seStart(
-            0x694B,
+             JA_SE_OBJ_JAMA_SHOKU_OUT,
             &i_door->eyePos,
             0,
             dComIfGp_getReverb(i_door->current.roomNo),
@@ -544,7 +548,7 @@ BOOL dDoor_ssk_sub_c::closeProc(dDoor_info_c* i_door) {
             -1.0f,
             0
         );
-        dComIfGp_particle_set(0x816C, &m1B8, NULL, NULL, 0xFF, NULL, -1, &i_door->tevStr.mColorK0,
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_TGSYOKU_ROCK00, &mCylCenter, NULL, NULL, 0xFF, NULL, -1, &i_door->tevStr.mColorK0,
                               &i_door->tevStr.mColorK0, NULL);
 
         csXyz angle;
@@ -555,37 +559,37 @@ BOOL dDoor_ssk_sub_c::closeProc(dDoor_info_c* i_door) {
             angle.y += 0x7FFF;
         }
 
-        dComIfGp_particle_setToon(0xA16D, &m1B8, &angle, NULL, 0xB9, &mSmokeCb, fopAcM_GetRoomNo(i_door));
+        dComIfGp_particle_setToon(dPa_name::ID_IT_ST_TGSYOKU_SMOKE00, &mCylCenter, &angle, NULL, 0xB9, &mSmokeCb, fopAcM_GetRoomNo(i_door));
     }
 
-    if (m1A4 < 0.9f) {
-        cLib_addCalc2(&m1A4, 1.0f, 0.3f, 0.3f);
-        tmp = m1A4;
-        m1A0 = tmp;
-        m1A8 = tmp;
+    if (mOpenScaleY < 0.9f) {
+        cLib_addCalc2(&mOpenScaleY, 1.0f, 0.3f, 0.3f);
+        tmp = mOpenScaleY;
+        mOpenScaleX = tmp;
+        mOpenScaleZ = tmp;
         return FALSE;
     }
 
-    m1A0 = 1.0f;
-    m1A4 = 1.0f;
-    m1A8 = 1.0f;
+    mOpenScaleX = 1.0f;
+    mOpenScaleY = 1.0f;
+    mOpenScaleZ = 1.0f;
     return TRUE;
 }
 
 /* 0000121C-00001390       .text __ct__15dDoor_ssk_sub_cFv */
 dDoor_ssk_sub_c::dDoor_ssk_sub_c() : mSmokeCb(1) {
-    m198 = (s16)(2.0f + cM_rnd() * 3.0f);
+    mFrameVel = (s16)(2.0f + cM_rnd() * 3.0f);
     if (cM_rnd() < 0.5f) {
-        m198 *= (s16)-1;
+        mFrameVel *= -1;
     }
-    m19E = (s16)(450.0f + cM_rnd() * 100.0f);
-    m19A = (s16)((cM_rnd() - 0.5f) * 12000.0f);
-    m1A0 = 1.0f;
-    m1A4 = 1.0f;
-    m1A8 = 1.0f;
-    m1AC = 1.0f;
-    m1B0 = 1.0f;
-    m1B4 = 1.0f;
+    mSpeedScale = (s16)(450.0f + cM_rnd() * 100.0f);
+    mRotYOff = (s16)((cM_rnd() - 0.5f) * 12000.0f);
+    mOpenScaleX = 1.0f;
+    mOpenScaleY = 1.0f;
+    mOpenScaleZ = 1.0f;
+    mCloseScaleX = 1.0f;
+    mCloseScaleY = 1.0f;
+    mCloseScaleZ = 1.0f;
 }
 
 static const f32 l_force10000_data[1] = {10000.0f};
@@ -628,16 +632,16 @@ void dDoor_ssk_sub_c::calcMtx(dDoor_info_c* i_door, f32 i_xoff, f32 i_yoff, u8 i
 
     {
         J3DModel* model = mpModel->getModel();
-        model->getBaseScale()->x = m1A0;
-        model->getBaseScale()->y = m1A4;
-        model->getBaseScale()->z = m1A8;
+        model->getBaseScale()->x = mOpenScaleX;
+        model->getBaseScale()->y = mOpenScaleY;
+        model->getBaseScale()->z = mOpenScaleZ;
     }
 
     {
         J3DModel* model = mpMorf->getModel();
-        model->getBaseScale()->x = m1AC;
-        model->getBaseScale()->y = m1B0;
-        model->getBaseScale()->z = m1B4;
+        model->getBaseScale()->x = mCloseScaleX;
+        model->getBaseScale()->y = mCloseScaleY;
+        model->getBaseScale()->z = mCloseScaleZ;
     }
 
     mDoMtx_stack_c::transS(i_door->current.pos);
@@ -648,16 +652,16 @@ void dDoor_ssk_sub_c::calcMtx(dDoor_info_c* i_door, f32 i_xoff, f32 i_yoff, u8 i
     }
 
     mDoMtx_stack_c::transM(i_xoff, 0.0f, i_yoff);
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), m19A);
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), mRotYOff);
 
     mpModel->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
 
     cXyz zero(0.0f, 0.0f, 0.0f);
-    PSMTXMultVec(mDoMtx_stack_c::get(), &zero, &m1B8);
+    PSMTXMultVec(mDoMtx_stack_c::get(), &zero, &mCylCenter);
 
-    mCyl.SetC(m1B8);
-    mCyl.SetR(50.0f * m1AC);
+    mCyl.SetC(mCylCenter);
+    mCyl.SetR(50.0f * mCloseScaleX);
 }
 
 /* 00001904-00001914       .text getBmdName__10daKddoor_cFv */
@@ -775,9 +779,9 @@ void daKddoor_c::openInit() {
     openInitCom(1);
     onFlag(1);
     dComIfG_Bgsp()->Release(mpBgW);
-    m94C = 0.0f;
+    mSlideOffset = 0.0f;
     speedF = 0.0f;
-    JAIZelBasic::zel_basic->seStart(0x6907, &eyePos, 0,
+    JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_STN_DOOR_MOVE_U, &eyePos, 0,
                                     dComIfGp_getReverb(current.roomNo), 1.0f,
                                     1.0f, -1.0f, -1.0f, 0);
 }
@@ -786,7 +790,7 @@ void daKddoor_c::openInit() {
 BOOL daKddoor_c::openProc() {
     BOOL matched = FALSE;
     cLib_chaseF(&speedF, 30.0f, 4.0f);
-    if (cLib_chaseF(&m94C, 300.0f, speedF)) {
+    if (cLib_chaseF(&mSlideOffset, 300.0f, speedF)) {
         matched = TRUE;
     }
     calcMtx();
@@ -795,11 +799,11 @@ BOOL daKddoor_c::openProc() {
 
 /* 00001DF0-00001E84       .text openEnd__10daKddoor_cFv */
 void daKddoor_c::openEnd() {
-    JAIZelBasic::zel_basic->seStart(0x6909, &eyePos, 0,
+    JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_STN_DOOR_STOP_U, &eyePos, 0,
                                     dComIfGp_getReverb(current.roomNo), 1.0f,
                                     1.0f, -1.0f, -1.0f, 0);
     offFlag(1);
-    m94C = 300.0f;
+    mSlideOffset = 300.0f;
     speedF = 0.0f;
 }
 
@@ -809,7 +813,7 @@ void daKddoor_c::closeInit() {
     BOOL rt = dComIfG_Bgsp()->Regist(mpBgW, this);
     JUT_ASSERT(0x3FF, !rt);
     dMap_c::mAGBMapSendStopFlg = 0;
-    JAIZelBasic::zel_basic->seStart(0x6908, &eyePos, 0,
+    JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_STN_DOOR_MOVE_D, &eyePos, 0,
                                     dComIfGp_getReverb(current.roomNo), 1.0f,
                                     1.0f, -1.0f, -1.0f, 0);
 }
@@ -818,7 +822,7 @@ void daKddoor_c::closeInit() {
 BOOL daKddoor_c::closeProc() {
     BOOL matched = FALSE;
     cLib_chaseF(&speedF, 60.0f, 6.0f);
-    if (cLib_chaseF(&m94C, 0.0f, speedF)) {
+    if (cLib_chaseF(&mSlideOffset, 0.0f, speedF)) {
         matched = TRUE;
     }
     calcMtx();
@@ -832,7 +836,7 @@ void daKddoor_c::closeEnd() {
 
     dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
 
-    JAIZelBasic::zel_basic->seStart(0x690A, &eyePos, 0,
+    JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_STN_DOOR_STOP_D, &eyePos, 0,
                                      dComIfGp_getReverb(current.roomNo), 1.0f,
                                       1.0f, -1.0f, -1.0f, 0);
 }
@@ -841,7 +845,7 @@ void daKddoor_c::closeEnd() {
 void daKddoor_c::calcMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_YrotM(mDoMtx_stack_c::get(), home.angle.y);
-    mDoMtx_stack_c::transM(0.0f, m94C, 0.0f);
+    mDoMtx_stack_c::transM(0.0f, mSlideOffset, 0.0f);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
@@ -852,7 +856,7 @@ int daKddoor_c::CreateInit() {
     }
 
     tevStr.mRoomNo = current.roomNo;
-    m94C = 0.0f;
+    mSlideOffset = 0.0f;
     mAction = 0;
     attention_info.position.y += 150.0f;
     eyePos.y += 150.0f;

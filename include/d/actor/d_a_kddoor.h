@@ -25,22 +25,22 @@ public:
     /* 0x008 */ dPa_smokeEcallBack mSmokeCb;
     /* 0x028 */ dCcD_Stts mStts;
     /* 0x064 */ dCcD_Cyl mCyl;
-    /* 0x194 */ u8 m194;
+    /* 0x194 */ u8 mActiveFlag; // TODO: active flag or similar — currently dead store
     /* 0x195 */ u8 m195;
-    /* 0x196 */ s16 m196;
-    /* 0x198 */ s16 m198;
-    /* 0x19A */ s16 m19A;
-    /* 0x19C */ s16 m19C;
-    /* 0x19E */ s16 m19E;
-    /* 0x1A0 */ f32 m1A0;
-    /* 0x1A4 */ f32 m1A4;
-    /* 0x1A8 */ f32 m1A8;
-    /* 0x1AC */ f32 m1AC;
-    /* 0x1B0 */ f32 m1B0;
-    /* 0x1B4 */ f32 m1B4;
-    /* 0x1B8 */ cXyz m1B8;
-    /* 0x1C4 */ u8 m1C4;
-    /* 0x1C5 */ u8 m1C5;
+    /* 0x196 */ s16 mFrameCounter;
+    /* 0x198 */ s16 mFrameVel;
+    /* 0x19A */ s16 mRotYOff;
+    /* 0x19C */ s16 mDelayTimer;
+    /* 0x19E */ s16 mSpeedScale;
+    /* 0x1A0 */ f32 mOpenScaleX;
+    /* 0x1A4 */ f32 mOpenScaleY;
+    /* 0x1A8 */ f32 mOpenScaleZ;
+    /* 0x1AC */ f32 mCloseScaleX;
+    /* 0x1B0 */ f32 mCloseScaleY;
+    /* 0x1B4 */ f32 mCloseScaleZ;
+    /* 0x1B8 */ cXyz mCylCenter;
+    /* 0x1C4 */ u8 mSoundPlayed;
+    /* 0x1C5 */ u8 mSoundCooldown;
 };  // Size: 0x1C8
 
 class dDoor_ssk_c {
@@ -109,18 +109,11 @@ public:
     /* 0x310 */ dDoor_key2_c mKeyLock;
     /* 0x334 */ dDoor_ssk_c mStopBars;
     /* 0x940 */ J3DModel* mpModel;
-    /* 0x944 */ union {
-        dBgW* mpBgW;
-        struct {
-            u8 m944;
-            u8 m945;
-            u16 m946;
-        } m_bgw_union;
-    };
+    /* 0x944 */ dBgW* mpBgW;
     /* 0x948 */ u8 mAction;
     /* 0x949 */ u8 m949;
     /* 0x94A */ u16 mFlags;
-    /* 0x94C */ f32 m94C;
+    /* 0x94C */ f32 mSlideOffset;
 };
 
 #endif /* D_A_KDDOOR_H */
