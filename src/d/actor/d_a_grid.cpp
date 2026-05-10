@@ -76,9 +76,9 @@ void daHo_packet_c::setNrmVtx(cXyz* i_nrm, int i_x, int i_y) {
     nrm.setall(0.0f);
 
     if (i_x != 0) {
-        leftRight = vtxPos[i_x + idx - 1] - pos;
+        leftRight = vtxPos[idx - 1 + i_x] - pos;
         if (i_y != 0 && i_y != 9) {
-            upDown = vtxPos[i_x + (i_y - 1) * 7] - pos;
+            upDown = vtxPos[(i_y - 1) * 7 + i_x] - pos;
             triNrm = leftRight.outprod(upDown);
             triNrm = triNrm.normZC();
             nrm += triNrm;
@@ -89,7 +89,7 @@ void daHo_packet_c::setNrmVtx(cXyz* i_nrm, int i_x, int i_y) {
             triNrm = triNrm.normZC();
             nrm += triNrm;
         } else if (i_y != 8) {
-            upDown = vtxPos[i_x + (i_y + 1) * 7] - pos;
+            upDown = vtxPos[(i_y + 1) * 7 + i_x] - pos;
             triNrm = upDown.outprod(leftRight);
             triNrm = triNrm.normZC();
             nrm += triNrm;
@@ -97,9 +97,9 @@ void daHo_packet_c::setNrmVtx(cXyz* i_nrm, int i_x, int i_y) {
     }
 
     if (i_x != 6) {
-        leftRight = vtxPos[i_x + idx + 1] - pos;
+        leftRight = vtxPos[i_x + 1 + idx] - pos;
         if (i_y != 0 && i_y != 9) {
-            upDown = vtxPos[i_x + (i_y - 1) * 7] - pos;
+            upDown = vtxPos[(i_y - 1) * 7 + i_x] - pos;
             triNrm = upDown.outprod(leftRight);
             triNrm = triNrm.normZC();
             nrm += triNrm;
@@ -110,7 +110,7 @@ void daHo_packet_c::setNrmVtx(cXyz* i_nrm, int i_x, int i_y) {
             triNrm = triNrm.normZC();
             nrm += triNrm;
         } else if (i_y != 8) {
-            upDown = vtxPos[i_x + (i_y + 1) * 7] - pos;
+            upDown = vtxPos[(i_y + 1) * 7 + i_x] - pos;
             triNrm = leftRight.outprod(upDown);
             triNrm = triNrm.normZC();
             nrm += triNrm;
