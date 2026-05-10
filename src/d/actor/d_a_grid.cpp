@@ -359,9 +359,9 @@ void ho_move(daGrid_c* i_this) {
 
     f32 windBend = 0.5f * cM_ssin(windRelAngle);
     Vec* gridPos = (Vec*)l_grid_pos;
-    cXyz* pos = i_this->mPacket.getPos();
     localIn.x = 0.0f;
     localIn.z = 1.6f;
+    cXyz* pos = i_this->mPacket.getPos();
 
     if (l_HIO.m08 == 0) {
         if (l_ship->mStateFlag & 0x200) {
