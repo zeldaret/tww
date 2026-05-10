@@ -339,7 +339,8 @@ void ho_move(daGrid_c* i_this) {
     localIn.x = 1.0f;
     localIn.z = 0.0f;
     MtxPosition(&localIn, &localWind);
-    f32 windSide = std::fabsf(localWind.z) * (1.0f - i_this->m2200);
+    f32 windSide = std::fabsf(localWind.z);
+    windSide *= 1.0f - i_this->m2200;
 
     f32 windWaveRate = 1.0f + (0.01f + REG6_F(15)) * (windSide * cM_ssin(i_this->m1B44));
     s32 calcWaveSpeed = 2500.0f + (9000.0f * (0.8f * windPow));
