@@ -15,6 +15,7 @@
 #include "d/d_priority.h"
 #include "d/res/res_cloth.h"
 #include "d/res/res_ship.h"
+#include "d/d_s_play.h"
 #include "f_op/f_op_actor_iter.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
@@ -389,7 +390,7 @@ void ho_move(daGrid_c* i_this) {
     MtxPosition(&localIn, &localWind);
     f32 windSide = std::fabsf(localWind.z) * (1.0f - i_this->m2200);
 
-    f32 windWaveRate = 1.0f + 0.01f * windSide * cM_ssin(i_this->m1B44);
+    f32 windWaveRate = 1.0f + (0.01f + REG6_F(15)) * windSide * cM_ssin(i_this->m1B44);
     s32 waveSpeed = 2500.0f + (9000.0f * (0.8f * windPow));
     if (waveSpeed > 10000) {
         waveSpeed = 10000;
@@ -433,6 +434,8 @@ void ho_move(daGrid_c* i_this) {
     cXyz* pos = i_this->mPacket.getPos();
     int row = 0;
     int col = 0;
+    localIn.x = 0.0f;
+    localIn.z = 1.6f;
 
     for (int i = 0; i < 0x55; i++, pos++) {
         f32 clothOpen = 1.0f - i_this->m2200;
@@ -444,7 +447,6 @@ void ho_move(daGrid_c* i_this) {
         f32 xWave = windDepth * cM_ssin(i_this->m1B44 + i * i_this->m1B4C);
         f32 zWave = 0.5f * windDepth * cM_scos(i_this->m1B44 + i * i_this->m1B4E);
 
-        localIn.set(0.0f, 0.0f, 1.6f);
         MtxPosition(&localIn, &localWind);
         f32 xLimit = 0.25f + 0.75f * windPow;
         if (xLimit > 1.0f) {
@@ -520,11 +522,11 @@ void ho_move(daGrid_c* i_this) {
     }
 
     f32 topZ = std::fabsf(i_this->mPacket.getPos()[59].z);
-    f32 row8Rate = 1.0f - topZ * 0.0015f;
-    f32 row7Rate = 1.0f - topZ * 0.00070000003f;
-    f32 row6Rate = 1.0f - topZ * 0.00020000007f;
-    f32 row9Rate = 1.0f - topZ * 0.0015f;
-    f32 row10Rate = 1.0f - topZ * 0.0012f;
+    f32 row8Rate = 1.0f - topZ * (0.0015f + REG6_F(8));
+    f32 row7Rate = 1.0f - topZ * (0.00070000003f + REG6_F(9));
+    f32 row6Rate = 1.0f - topZ * (0.00020000007f + REG6_F(10));
+    f32 row9Rate = 1.0f - topZ * (0.0015f + REG6_F(11));
+    f32 row10Rate = 1.0f - topZ * (0.0012f + REG6_F(12));
 
     pos = i_this->mPacket.getPos();
     for (int i = 0; i < 0x55; i++, pos++) {
