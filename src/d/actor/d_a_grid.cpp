@@ -390,8 +390,8 @@ void ho_move(daGrid_c* i_this) {
         i_this->m2200 = l_HIO.m10;
     }
 
-    int row = 0;
     int col = 0;
+    int row = 0;
 
     for (int i = 0; i < 0x55; i++, pos++) {
         f32 clothOpen = 1.0f - i_this->m2200;
