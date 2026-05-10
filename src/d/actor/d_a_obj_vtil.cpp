@@ -325,18 +325,19 @@ void daObjVtil_c::calc_throw(float* gravity, float* param_2, float* param_3) con
     /* Nonmatching */
     float fVar1;
     if (const_cast<dBgS_ObjAcch&>(mAcch).ChkSeaIn()){
-        float fVar2 = current.pos.y - const_cast<dBgS_ObjAcch&>(mAcch).GetSeaHeight();
-        if (!(fVar2 >= 0.0f)) {
+        float sea_height = const_cast<dBgS_ObjAcch&>(mAcch).GetSeaHeight();
+        float height_above_sea = current.pos.y - sea_height;
+        if (height_above_sea >= 0.0f) {
             fVar1 = 0.0f;
         } else {
-            if (fVar2 <= -160.0f) {
-                fVar1 = -fVar2 * (1.0f / 320.0f);
-            } else {
+            if (height_above_sea <= -160.0f) {
                 fVar1 = 0.5f;
+            } else {
+                fVar1 = -height_above_sea * (1.0f / 320.0f);
             }
         }
 
-        *param_2 = fVar1 * 0.2 + (1.0f - fVar1) * 0.002f;
+        *param_2 = fVar1 * 0.2f + (1.0f - fVar1) * 0.002f;
         *param_3 = fVar1 * 0.02f + (1.0f - fVar1) * 0.0002f;
         *gravity = fVar1 * 4.0f + -6.0f;
     } else {
@@ -367,9 +368,9 @@ void daObjVtil_c::to_sink_mode() {
     mAcch.ClrWallNone();
     mAcch.ClrGrndNone();
     mAcch.ClrWaterNone();
-    mAcch.OnLineCheckNone();
+    mAcch.OnLineCheck();
     fopAcM_SetGravity(this, -2.0f);
-    
+
     f32 sqrt = std::sqrtf(speed.y * speed.y + speedF * speedF);
     if (sqrt > 0.0f) {
         sqrt = 1.0f / sqrt;
