@@ -470,11 +470,9 @@ void ho_move(daGrid_c* i_this) {
         pos->z += zSag + waveScale * (i_this->m2204 * zWave) - 13.75f;
 
         if (col >= 6) {
-            col = 0;
             row++;
-        } else {
-            col++;
         }
+        col = col < 6 ? col + 1 : 0;
     }
 
     pos = i_this->mPacket.getPos();
