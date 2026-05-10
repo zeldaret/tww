@@ -208,7 +208,7 @@ void daHo_packet_c::draw() {
         GXSetChanCtrl(GX_COLOR0, 1, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP,
                       GX_AF_NONE);
         GXSetNumTexGens(2);
-        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY);
+        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
         GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY);
         GXSetNumTevStages(numTevStages);
         GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP1);
@@ -241,7 +241,7 @@ void daHo_packet_c::draw() {
         GXSetChanCtrl(GX_COLOR0, 1, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP,
                       GX_AF_NONE);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY);
+        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
         GXSetNumTevStages(numTevStages);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
         GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP1, GX_TEV_SWAP0);
