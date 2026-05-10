@@ -446,11 +446,12 @@ void ho_move(daGrid_c* i_this) {
 
         s16 colWaveAngle = i_this->m2212 + rowWaveAngle * col;
         f32 colWaveSin = cM_ssin(colWaveAngle);
+        f32 colWaveCos = cM_scos(colWaveAngle);
         f32 rowShape = 9.0f - SQUARE(colCenter);
         f32 depthShape = ((i_this->m2200 * colWaveSin * rowShape) / 9.0f) -
                          ((windBend * rowShape) / 9.0f);
         depthSwing *= depthShape;
-        rowSwing *= (i_this->m2200 * cM_scos(colWaveAngle) * col) / 6.0f;
+        rowSwing *= (i_this->m2200 * colWaveCos * col) / 6.0f;
 
         f32 xAtten = 1.0f - 0.5f * (SQUARE(upperRow) * 0.25f);
         rowSwing *= xAtten;
