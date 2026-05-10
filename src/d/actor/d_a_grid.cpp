@@ -5,35 +5,337 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_grid.h"
+#include "d/actor/d_a_ship.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
+#include "SSystem/SComponent/c_lib.h"
+#include "SSystem/SComponent/c_math.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo_wether.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/res/res_cloth.h"
+#include "d/res/res_ship.h"
+#include "f_op/f_op_actor_iter.h"
+#include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_camera.h"
+#include "f_pc/f_pc_searcher.h"
+#include "m_Do/m_Do_graphic.h"
+#include "m_Do/m_Do_mtx.h"
 
+static daShip_c* l_ship;
 static daHo_HIO_c l_HIO;
+
+#include "assets/l_grid_pos.h"
+#include "assets/l_grid_texCoord.h"
+#include "assets/l_grid_DL.h"
+#include "assets/l_grid_matDL.h"
+
+static f32 l_defaultDepthRate[] = {
+    0.05f, 0.125f, 0.175f, 0.15f, 0.0625f, 0.15f, 0.2f,
+    0.15f, 0.075f, 0.175f, 0.175f, 0.1f, 0.0f,
+};
+
+static f32 l_defaultWaveRate[] = {
+    1.0f, 0.425f, 0.45f, 0.4f, 0.2f, 0.4f, 0.45f,
+    0.4f, 0.2f, 0.5f, 0.75f, 1.0f, 1.0f,
+};
+
+static f32 l_xRate[] = {
+    1.0f, 0.95f, 0.9f, 0.85f, 0.8f, 0.75f, 0.7f,
+    0.65f, 0.55f, 0.4f, 0.25f, 0.1f, 0.0f,
+};
+
+daHo_HIO_c::daHo_HIO_c() {
+    mNo = -1;
+    m05 = 1;
+    m06 = 0;
+    m07 = 0;
+    m08 = 0;
+    m0C = 0.1f;
+    m10 = 0.0f;
+    m14 = 40.0f;
+    m18 = 0.5f;
+    m1C = 0.1f;
+    m20 = 0.4f;
+    mScaleX = 1.0f;
+    mScaleY = 1.0f;
+    mScaleZ = 1.0f;
+    mFarAlpha = 0xFF;
+    mNearAlpha = 0x32;
+    mAlphaDist = 900.0f;
+    mStopMove = 0;
+    mUseHioRates = 0;
+
+    mDepthRate[0] = 0.05f;
+    mDepthRate[1] = 0.125f;
+    mDepthRate[2] = 0.175f;
+    mDepthRate[3] = 0.15f;
+    mDepthRate[4] = 0.0625f;
+    mDepthRate[5] = 0.15f;
+    mDepthRate[6] = 0.2f;
+    mDepthRate[7] = 0.15f;
+    mDepthRate[8] = 0.075f;
+    mDepthRate[9] = 0.175f;
+    mDepthRate[10] = 0.175f;
+    mDepthRate[11] = 0.1f;
+    mDepthRate[12] = 0.0f;
+
+    mWaveRate[0] = 1.0f;
+    mWaveRate[1] = 0.425f;
+    mWaveRate[2] = 0.45f;
+    mWaveRate[3] = 0.4f;
+    mWaveRate[4] = 0.2f;
+    mWaveRate[5] = 0.4f;
+    mWaveRate[6] = 0.45f;
+    mWaveRate[7] = 0.4f;
+    mWaveRate[8] = 0.2f;
+    mWaveRate[9] = 0.5f;
+    mWaveRate[10] = 0.75f;
+    mWaveRate[11] = 1.0f;
+    mWaveRate[12] = 1.0f;
+}
 
 /* 800E8CC0-800E8D48       .text setBackNrm__13daHo_packet_cFv */
 void daHo_packet_c::setBackNrm() {
-    /* Nonmatching */
+    cXyz* nrm = getNrm();
+    cXyz* backNrm = getBackNrm();
+
+    for (int i = 0; i < 0x55; i++, nrm++, backNrm++) {
+        backNrm->setall(0.0f);
+        *backNrm -= *nrm;
+    }
 }
 
 /* 800E8D48-800E8D74       .text setNrmMtx__13daHo_packet_cFR4cXyz */
 void daHo_packet_c::setNrmMtx(cXyz&) {
-    /* Nonmatching */
+    cMtx_YrotS(*calc_mtx, m189C);
 }
 
 /* 800E8D74-800E92AC       .text setNrmVtx__13daHo_packet_cFP4cXyzii */
-void daHo_packet_c::setNrmVtx(cXyz*, int, int) {
-    /* Nonmatching */
+void daHo_packet_c::setNrmVtx(cXyz* i_nrm, int i_x, int i_y) {
+    cXyz leftRight;
+    cXyz upDown;
+    cXyz triNrm;
+    cXyz pos;
+    cXyz nrm;
+    cXyz* vtxPos = getPos();
+    s32 idx = i_y * 7;
+
+    pos.set(vtxPos[i_x + idx]);
+    nrm.setall(0.0f);
+
+    if (i_x != 0) {
+        leftRight = vtxPos[i_x + idx - 1] - pos;
+        if (i_y != 0 && i_y != 9) {
+            upDown = vtxPos[i_x + (i_y - 1) * 7] - pos;
+            triNrm = leftRight.outprod(upDown);
+            triNrm = triNrm.normZC();
+            nrm += triNrm;
+        }
+        if (i_y == 11) {
+            upDown = vtxPos[84] - pos;
+            triNrm = upDown.outprod(leftRight);
+            triNrm = triNrm.normZC();
+            nrm += triNrm;
+        } else if (i_y != 8) {
+            upDown = vtxPos[i_x + (i_y + 1) * 7] - pos;
+            triNrm = upDown.outprod(leftRight);
+            triNrm = triNrm.normZC();
+            nrm += triNrm;
+        }
+    }
+
+    if (i_x != 6) {
+        leftRight = vtxPos[i_x + idx + 1] - pos;
+        if (i_y != 0 && i_y != 9) {
+            upDown = vtxPos[i_x + (i_y - 1) * 7] - pos;
+            triNrm = upDown.outprod(leftRight);
+            triNrm = triNrm.normZC();
+            nrm += triNrm;
+        }
+        if (i_y == 11) {
+            upDown = vtxPos[84] - pos;
+            triNrm = leftRight.outprod(upDown);
+            triNrm = triNrm.normZC();
+            nrm += triNrm;
+        } else if (i_y != 8) {
+            upDown = vtxPos[i_x + (i_y + 1) * 7] - pos;
+            triNrm = leftRight.outprod(upDown);
+            triNrm = triNrm.normZC();
+            nrm += triNrm;
+        }
+    }
+
+    if (i_y > 7) {
+        nrm.y = 0.0f;
+    }
+
+    if (!nrm.normalizeRS()) {
+        nrm.set(1.0f, 0.0f, 0.0f);
+    }
+
+    MtxPush();
+    cMtx_YrotM(*calc_mtx, cM_ssin((i_x + i_y) * -800) * 900.0f);
+    MtxPosition(&nrm, &triNrm);
+    *i_nrm = triNrm.normZC();
+    MtxPull();
 }
 
 /* 800E92AC-800E93B8       .text setTopNrmVtx__13daHo_packet_cFP4cXyz */
-void daHo_packet_c::setTopNrmVtx(cXyz*) {
-    /* Nonmatching */
+void daHo_packet_c::setTopNrmVtx(cXyz* i_nrm) {
+    cXyz sp18;
+    cXyz sp0C;
+    cXyz nrm;
+    cXyz* vtxPos = getPos();
+
+    sp18 = vtxPos[77] - vtxPos[84];
+    sp0C = vtxPos[83] - vtxPos[84];
+    nrm = sp18.outprod(sp0C);
+    nrm = nrm.normZC();
+    MtxPosition(&nrm, &sp18);
+    *i_nrm = sp18.normZC();
 }
 
 /* 800E93B8-800E9BE8       .text draw__13daHo_packet_cFv */
 void daHo_packet_c::draw() {
-    /* Nonmatching */
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+
+    dKy_GxFog_tevstr_set(mTevStr);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+
+    GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+    GXSetArray(GX_VA_TEX0, l_grid_texCoord, sizeof(cXy));
+
+    GXTexObj texObj;
+    GXTlutObj tlutObj;
+
+    ResTIMG* ship = (ResTIMG*)dComIfG_getObjectRes("Ship", SHIP_BTI_NEW_HO1);
+    GXInitTlutObj(&tlutObj, (u8*)ship + ship->paletteOffset, GX_TL_RGB565, 0x100);
+    GXInitTexObjCI(&texObj, (u8*)ship + ship->imageOffset, ship->width, ship->height,
+                   (GXCITexFmt)ship->format, (GXTexWrapMode)ship->wrapS,
+                   (GXTexWrapMode)ship->wrapT, ship->mipmapCount > 1, GX_TLUT0);
+    GXInitTexObjLOD(&texObj, (GXTexFilter)ship->minFilter, (GXTexFilter)ship->magFilter,
+                    ship->minLOD * 0.125f, ship->maxLOD * 0.125f, ship->LODBias * 0.01f,
+                    ship->biasClamp, ship->doEdgeLOD, (GXAnisotropy)ship->maxAnisotropy);
+    GXLoadTlut(&tlutObj, GX_TLUT0);
+    GXLoadTexObj(&texObj, GX_TEXMAP0);
+
+    ResTIMG* cloth = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+    GXInitTexObj(&texObj, (u8*)cloth + cloth->imageOffset, cloth->width, cloth->height,
+                 (GXTexFmt)cloth->format, (GXTexWrapMode)cloth->wrapS,
+                 (GXTexWrapMode)cloth->wrapT, cloth->mipmapCount > 1);
+    GXInitTexObjLOD(&texObj, (GXTexFilter)cloth->minFilter, (GXTexFilter)cloth->magFilter,
+                    cloth->minLOD * 0.125f, cloth->maxLOD * 0.125f,
+                    cloth->LODBias * 0.01f, cloth->biasClamp, cloth->doEdgeLOD,
+                    (GXAnisotropy)cloth->maxAnisotropy);
+    GXLoadTexObj(&texObj, GX_TEXMAP1);
+
+    GXSetNumChans(1);
+
+    u8 numTevStages;
+    u8 lightMask;
+    if (mTevStr->mColorK1.a != 0) {
+        numTevStages = 3;
+        lightMask = GX_LIGHT0 | GX_LIGHT1;
+    } else {
+        numTevStages = 2;
+        lightMask = GX_LIGHT0;
+    }
+
+    if (l_HIO.m05 != 0) {
+        GXSetChanCtrl(GX_COLOR0, 1, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP,
+                      GX_AF_NONE);
+        GXSetNumTexGens(2);
+        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY);
+        GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY);
+        GXSetNumTevStages(numTevStages);
+        GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR0A0);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
+                        GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
+                        GX_TEVPREV);
+        GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
+                        GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
+                        GX_TEVPREV);
+        if (numTevStages == 3) {
+            GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP2);
+            GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+            GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_TEXC, GX_CC_CPREV);
+            GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
+                            GX_TEVPREV);
+            GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+            GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
+                            GX_TEVPREV);
+        }
+    } else {
+        GXSetChanCtrl(GX_COLOR0, 1, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP,
+                      GX_AF_NONE);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY);
+        GXSetNumTevStages(numTevStages);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+        GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP1, GX_TEV_SWAP0);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_RASC, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
+                        GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
+                        GX_TEVPREV);
+        GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_CPREV, GX_CC_TEXC, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
+                        GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
+                        GX_TEVPREV);
+        if (numTevStages == 3) {
+            GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP2, GX_TEV_SWAP0);
+            GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+            GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_RASC, GX_CC_CPREV);
+            GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
+                            GX_TEVPREV);
+            GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+            GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
+                            GX_TEVPREV);
+        }
+    }
+
+    mTevStr->mColorC0.a = mAlpha;
+    GXSetTevColorS10(GX_TEVREG0, mTevStr->mColorC0);
+    GXSetTevColor(GX_TEVREG1, mTevStr->mColorK0);
+    GXSetTevColor(GX_TEVREG2, mTevStr->mColorK1);
+    GXCallDisplayList(l_grid_matDL, 0x20);
+
+    GXLoadPosMtxImm(*getMtx(), 0);
+    GXLoadNrmMtxImm(*getMtx(), 0);
+
+    GXSetCullMode(GX_CULL_BACK);
+    GXCallDisplayList(l_grid_DL, 0x220);
+
+    GXSetCullMode(GX_CULL_FRONT);
+    GXSetArray(GX_VA_NRM, getBackNrm(), sizeof(cXyz));
+    GXCallDisplayList(l_grid_DL, 0x220);
+
+    J3DShape::resetVcdVatCache();
 }
 
 /* 800E9BE8-800E9C0C       .text daGrid_Draw__FP8daGrid_c */
@@ -42,8 +344,218 @@ static BOOL daGrid_Draw(daGrid_c* i_this) {
 }
 
 /* 800E9C0C-800EA928       .text ho_move__FP8daGrid_c */
-void ho_move(daGrid_c*) {
-    /* Nonmatching */
+void ho_move(daGrid_c* i_this) {
+    if (l_HIO.mStopMove != 0) {
+        return;
+    }
+
+    cXyz* windVec = dKyw_get_wind_vec();
+    f32 windPow = dKyw_get_wind_pow();
+
+    i_this->mPacket.mActiveBuffer ^= 1;
+    i_this->m1B4C = 0x1D4C;
+    i_this->m1B4E = 0x1C20;
+
+    s16 shipSailAngle = l_ship->mSailAngle;
+    s16 windAngle = cM_atan2s(windVec->x, windVec->z);
+    s16 windRelAngle = (s16)(i_this->current.angle.y + shipSailAngle) - windAngle;
+    s16 targetWindAngle = windRelAngle + 0x8000;
+    if (targetWindAngle > 0) {
+        if (shipSailAngle > 0 && shipSailAngle < 0x4000) {
+            targetWindAngle = 0;
+        }
+    } else if (shipSailAngle < 0 && shipSailAngle > -0x4000) {
+        targetWindAngle = 0;
+    }
+
+    s16 targetAngle = 0.6f * targetWindAngle;
+    if (i_this->mForceWindRelAngleFlag == 0) {
+        cLib_addCalcAngleS2(&i_this->m2210, targetAngle, 4, 0x1000);
+    } else {
+        s16 forceTarget = i_this->mForceWindRelAngle - l_ship->mSailAngle + 0x8000;
+        cLib_addCalcAngleS2(&i_this->m2210, forceTarget, 2, 0x1400);
+    }
+    i_this->mForceWindRelAngleFlag = 0;
+
+    cMtx_YrotS(*calc_mtx, i_this->m2210);
+
+    cXyz localIn(0.0f, 0.0f, 0.064f);
+    cXyz localWind;
+    MtxPosition(&localIn, &localWind);
+    f32 windDepth = std::fabsf(localWind.z) + 0.02f;
+
+    localIn.x = 1.0f;
+    localIn.z = 0.0f;
+    MtxPosition(&localIn, &localWind);
+    f32 windSide = std::fabsf(localWind.z) * (1.0f - i_this->m2200);
+
+    f32 windWaveRate = 1.0f + 0.01f * windSide * cM_ssin(i_this->m1B44);
+    s32 waveSpeed = 2500.0f + (9000.0f * (0.8f * windPow));
+    if (waveSpeed > 10000) {
+        waveSpeed = 10000;
+    }
+    i_this->m1B44 += waveSpeed;
+
+    i_this->m2212 += (s16)(3000.0f * cM_scos(windRelAngle));
+    if (i_this->m2212 > 0) {
+        i_this->m2212 += 300;
+    } else {
+        i_this->m2212 -= 300;
+    }
+
+    f32 windBend = 0.5f * cM_ssin(windRelAngle);
+
+    if (l_HIO.m08 == 0) {
+        if (l_ship->mStateFlag & 0x200) {
+            if (i_this->m2208 == 0.0f) {
+                if (i_this->m2200 <= 0.0001f + l_HIO.m0C) {
+                    i_this->m2208 = 1.0f;
+                    i_this->m1B4A = 15;
+                }
+            } else if (i_this->m1B4A > 0) {
+                cLib_addCalc2(&i_this->m2204, 1.414f, 0.25f, l_HIO.m20);
+                i_this->m1B4A--;
+            } else {
+                cLib_addCalc2(&i_this->m2204, 1.0f, 0.1f, 0.05f);
+            }
+        } else {
+            if (i_this->m2200 > 0.7f) {
+                i_this->m2208 = 0.0f;
+                i_this->m1B4A = 0;
+            }
+            cLib_addCalc2(&i_this->m2204, 1.0f - 0.65f * i_this->m2200, 0.1f, 0.05f);
+        }
+    } else {
+        i_this->m2200 = l_HIO.m10;
+    }
+
+    Vec* gridPos = (Vec*)l_grid_pos;
+    cXyz* pos = i_this->mPacket.getPos();
+    int row = 0;
+    int col = 0;
+
+    for (int i = 0; i < 0x55; i++, pos++) {
+        f32 clothOpen = 1.0f - i_this->m2200;
+        f32 colCenter = 3 - col;
+        f32 rowCenter = row - 2;
+        f32 xRate = l_xRate[row];
+        s16 rowWaveAngle = 10922.0f * xRate;
+
+        f32 xWave = windDepth * cM_ssin(i_this->m1B44 + i * i_this->m1B4C);
+        f32 zWave = 0.5f * windDepth * cM_scos(i_this->m1B44 + i * i_this->m1B4E);
+
+        localIn.set(0.0f, 0.0f, 1.6f);
+        MtxPosition(&localIn, &localWind);
+        f32 xLimit = 0.25f + 0.75f * windPow;
+        if (xLimit > 1.0f) {
+            xLimit = 1.0f;
+        }
+        localWind.x *= xLimit;
+
+        f32 zLimit = 0.5f + 0.25f * windPow;
+        if (zLimit > 1.0f) {
+            zLimit = 1.0f;
+        }
+        localWind.z *= zLimit;
+
+        xWave += i_this->m2204 * clothOpen * windWaveRate * localWind.x;
+        zWave += i_this->m2204 * clothOpen * windSide * localWind.z;
+
+        f32 waveLen = std::sqrtf(SQUARE(xWave) + SQUARE(zWave));
+        f32 yWave = 0.25f * waveLen * i_this->m1B54[i];
+
+        f32 upperRow = rowCenter < 0.0f ? rowCenter : 0.0f;
+        f32 foldRate = 1.0f - ((0.67f + 0.3f * (SQUARE(upperRow) * 0.25f)) * i_this->m2200);
+        if (l_HIO.mUseHioRates != 0) {
+            foldRate *= clothOpen + l_HIO.mWaveRate[row] * i_this->m2200;
+        } else {
+            foldRate *= clothOpen + l_defaultWaveRate[row] * i_this->m2200;
+        }
+
+        f32 depthRate;
+        if (l_HIO.mUseHioRates != 0) {
+            depthRate = l_HIO.mDepthRate[row];
+        } else {
+            depthRate = l_defaultDepthRate[row];
+        }
+
+        f32 depthSwing = 120.0f * (depthRate * i_this->m2200);
+        f32 rowSwing = 5.0f * depthRate * row * i_this->m2200;
+
+        pos->x = gridPos[i].x;
+        pos->y = foldRate * gridPos[i].y + (1.0f - foldRate) * gridPos[row * 7].y;
+        pos->z = foldRate * gridPos[i].z;
+
+        s16 colWaveAngle = i_this->m2212 + rowWaveAngle * col;
+        f32 rowShape = 9.0f - SQUARE(colCenter);
+        f32 depthShape = ((i_this->m2200 * cM_ssin(colWaveAngle) * rowShape) / 9.0f) -
+                         ((windBend * rowShape) / 9.0f);
+        depthSwing *= depthShape;
+        rowSwing *= (i_this->m2200 * cM_scos(colWaveAngle) * col) / 6.0f;
+
+        f32 xAtten = 1.0f - 0.5f * xRate;
+        depthSwing *= xAtten;
+        rowSwing *= xAtten;
+
+        f32 swingLen = std::sqrtf(SQUARE(depthSwing) + SQUARE(rowSwing));
+        f32 zSag = -0.25f * swingLen;
+        if (col > 4) {
+            f32 edgeWave = std::fabsf(cM_ssin(i_this->m2212 + rowWaveAngle * col * 2));
+            zSag += 4.25f * (col - 4) * edgeWave;
+        }
+
+        zSag *= i_this->m2200 * (6.0f * depthRate * (col / 6.0f));
+
+        f32 waveScale = 0.35f * clothOpen + 0.65f;
+        pos->x += depthSwing + waveScale * i_this->m2204 * xWave;
+        pos->y += rowSwing + waveScale * yWave;
+        pos->z += zSag + waveScale * i_this->m2204 * zWave - 13.75f;
+
+        if (col >= 6) {
+            col = 0;
+            row++;
+        } else {
+            col++;
+        }
+    }
+
+    f32 topZ = std::fabsf(i_this->mPacket.getPos()[59].z);
+    f32 row8Rate = 1.0f - topZ * 0.0015f;
+    f32 row7Rate = 1.0f - topZ * 0.00070000003f;
+    f32 row6Rate = 1.0f - topZ * 0.00020000007f;
+    f32 row9Rate = 1.0f - topZ * 0.0015f;
+    f32 row10Rate = 1.0f - topZ * 0.0012f;
+
+    pos = i_this->mPacket.getPos();
+    for (int i = 0; i < 0x55; i++, pos++) {
+        if (i >= 56 && i <= 62) {
+            pos->z *= row8Rate;
+        } else if (i >= 49 && i <= 55) {
+            pos->z *= row7Rate;
+        } else if (i >= 42 && i <= 48) {
+            pos->z *= row6Rate;
+        } else if (i >= 63 && i <= 69) {
+            pos->z *= row9Rate;
+        } else if (i >= 70 && i <= 77) {
+            pos->z *= row10Rate;
+        }
+    }
+
+    cXyz windRel = i_this->tevStr.mLightPosWorld - i_this->current.pos;
+    i_this->mPacket.setNrmMtx(windRel);
+
+    cXyz* nrm = i_this->mPacket.getNrm();
+    for (int y = 0; y < 12; y++) {
+        for (int x = 0; x < 7; x++, nrm++) {
+            i_this->mPacket.setNrmVtx(nrm, x, y);
+        }
+    }
+    i_this->mPacket.setTopNrmVtx(nrm);
+    i_this->mPacket.setBackNrm();
+
+    DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(i_this->mPacket.mPos[0]));
+    DCStoreRangeNoSync(i_this->mPacket.getNrm(), sizeof(i_this->mPacket.mNrm[0]));
+    DCStoreRangeNoSync(i_this->mPacket.getBackNrm(), sizeof(i_this->mPacket.mBackNrm[0]));
 }
 
 /* 800EA928-800EA94C       .text daGrid_Execute__FP8daGrid_c */
@@ -68,22 +580,168 @@ static cPhs_State daGrid_Create(fopAc_ac_c* i_this) {
 
 /* 800EA998-800EAEAC       .text _create__8daGrid_cFv */
 cPhs_State daGrid_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daGrid_c);
+
+    mRoomNo = fopAcM_GetParam(this);
+
+    cPhs_State phase = dComIfG_resLoad(&mClothPhase, "Cloth");
+    if (phase != cPhs_COMPLEATE_e) {
+        return phase;
+    }
+
+    phase = dComIfG_resLoad(&mShipPhase, "Ship");
+    if (phase != cPhs_COMPLEATE_e) {
+        return phase;
+    }
+
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_root.m_subroot.createChild("\221D\202\314\224\277", &l_HIO);
+    }
+
+    Vec* gridPos = (Vec*)l_grid_pos;
+    for (int i = 0; i < 0x55; i++) {
+        f32 baseAmplitude;
+        if (i <= 6) {
+            baseAmplitude = 40.0f;
+        } else if (i <= 13) {
+            baseAmplitude = 70.0f;
+        } else if ((i >= 49 && i <= 55) || (i >= 42 && i <= 48)) {
+            baseAmplitude = 85.0f;
+        } else {
+            baseAmplitude = 80.0f;
+        }
+
+        f32 edgeDistA = std::fabsf(gridPos[0].z - gridPos[i].z);
+        f32 edgeDistB = std::fabsf(gridPos[6].z - gridPos[i].z);
+        f32 edgeDist = std::fabsf(gridPos[0].z - gridPos[6].z);
+        f32 edgeRate = 1.05f * (1.5707964f / (edgeDist * 0.5f));
+        if (edgeDistA > edgeDistB) {
+            edgeDistA = edgeDistB;
+        }
+        baseAmplitude *= sin(edgeDistA * edgeRate);
+
+        int columnTop = 6;
+        for (int j = 0; j < 7; j++) {
+            if (i == j || i == j + 7 || i == j + 14 || i == j + 21 || i == j + 28 ||
+                i == j + 35 || i == j + 42 || i == j + 49 || i == j + 56 || i == j + 63 ||
+                i == j + 70 || i == j + 77)
+            {
+                columnTop = j + 56;
+            }
+        }
+
+        f32 verticalAmplitude;
+        f32 verticalDistA;
+        f32 verticalDistB;
+        f32 verticalEdgeDist;
+        f32 verticalRate;
+        if (gridPos[i].y < gridPos[columnTop].y) {
+            verticalDistA = std::fabsf(gridPos[0].y - gridPos[i].y);
+            verticalDistB = std::fabsf(gridPos[columnTop].y - gridPos[i].y);
+            verticalEdgeDist = std::fabsf(gridPos[columnTop].y - gridPos[0].y);
+            verticalRate = 1.05f * (1.5707964f / (verticalEdgeDist * 0.5f));
+            if (columnTop == 56) {
+                verticalAmplitude = 35.0f;
+            } else if (columnTop == 57) {
+                verticalAmplitude = 70.0f;
+            } else {
+                verticalAmplitude = 80.0f;
+            }
+        } else {
+            verticalDistA = std::fabsf(gridPos[columnTop].y - gridPos[i].y);
+            verticalDistB = std::fabsf(gridPos[84].y - gridPos[i].y);
+            verticalEdgeDist = std::fabsf(gridPos[columnTop].y - gridPos[84].y);
+            verticalRate = 1.15f * (1.5707964f / (verticalEdgeDist * 0.5f));
+            verticalAmplitude = 20.0f;
+        }
+
+        if (verticalDistA > verticalDistB) {
+            verticalDistA = verticalDistB;
+        }
+        verticalAmplitude *= sin(verticalDistA * verticalRate);
+
+        m1B54[i] = std::sqrtf(SQUARE(baseAmplitude) + SQUARE(verticalAmplitude));
+    }
+
+    s16 procName = PROC_SHIP;
+    l_ship = (daShip_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeForPName, &procName);
+    ho_move(this);
+    return cPhs_COMPLEATE_e;
 }
 
 /* 800EAEAC-800EAF28       .text _delete__8daGrid_cFv */
 bool daGrid_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mClothPhase, "Cloth");
+    dComIfG_resDelete(&mShipPhase, "Ship");
+
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_root.m_subroot.deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
+
+    return TRUE;
 }
 
 /* 800EAF28-800EB0EC       .text _execute__8daGrid_cFv */
 bool daGrid_c::_execute() {
-    /* Nonmatching */
+    daGrid_c* i_this = this;
+    u8 targetAlpha;
+    int alpha = i_this->mPacket.mAlpha;
+
+    if (dComIfGp_event_runCheck()) {
+        targetAlpha = l_HIO.mFarAlpha;
+    } else {
+        camera_class* camera = dComIfGp_getCamera(0);
+        cXyz eye = camera->mCamera.Eye();
+        f32 dist = (i_this->current.pos - eye).abs();
+
+        if (dist <= l_HIO.mAlphaDist) {
+            f32 rate = dist / l_HIO.mAlphaDist;
+            targetAlpha = l_HIO.mFarAlpha * rate + l_HIO.mNearAlpha * (1.0f - rate);
+        } else {
+            targetAlpha = l_HIO.mFarAlpha;
+        }
+    }
+
+    if (targetAlpha > alpha + 5) {
+        i_this->mPacket.mAlpha = alpha + 5;
+    } else if (targetAlpha < alpha - 5) {
+        i_this->mPacket.mAlpha = alpha - 5;
+    } else {
+        i_this->mPacket.mAlpha = targetAlpha;
+    }
+
+    if (i_this->scale.y >= 0.06f) {
+        ho_move(i_this);
+    }
+
+    return TRUE;
 }
 
 /* 800EB0EC-800EB328       .text _draw__8daGrid_cFv */
 bool daGrid_c::_draw() {
-    /* Nonmatching */
+    if (scale.y < 0.06f) {
+        return TRUE;
+    }
+
+    tevStr = l_ship->tevStr;
+
+    MtxTrans(current.pos.x, current.pos.y, current.pos.z, false);
+    cMtx_YrotM(*calc_mtx, current.angle.y);
+    cMtx_XrotM(*calc_mtx, current.angle.x);
+    cMtx_ZrotM(*calc_mtx, current.angle.z);
+    s16 shipSailAngle = l_ship->mSailAngle;
+    cMtx_YrotM(*calc_mtx, shipSailAngle);
+    MtxScale(1.0f, scale.y, 1.0f, true);
+    MtxScale(l_HIO.mScaleX, l_HIO.mScaleY, l_HIO.mScaleZ, true);
+    cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, *mPacket.getMtx());
+    mPacket.setTevStr(&tevStr);
+
+    J3DDrawBuffer* buffer = mDoGph_gInf_c::isMonotone() ? dComIfGd_getXluListP1() : dComIfGd_getXluList();
+    buffer->setZMtx(*calc_mtx);
+    buffer->entryZSort(&mPacket);
+
+    return TRUE;
 }
 
 static actor_method_class l_daGrid_Method = {

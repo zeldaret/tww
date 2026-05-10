@@ -2385,6 +2385,23 @@ extract:
   binary: assets/l_toonMat1DL.bin
   header: assets/l_toonMat1DL.h
 
+- symbol: l_pos!.data:0x8037E878
+  binary: assets/l_grid_pos.bin
+  header: assets/l_grid_pos.h
+  rename: l_grid_pos
+- symbol: l_texCoord!.data:0x8037EC74
+  binary: assets/l_grid_texCoord.bin
+  header: assets/l_grid_texCoord.h
+  rename: l_grid_texCoord
+- symbol: l_DL!.data:0x8037EF20
+  binary: assets/l_grid_DL.bin
+  header: assets/l_grid_DL.h
+  rename: l_grid_DL
+- symbol: l_matDL!.data:0x8037F160
+  binary: assets/l_grid_matDL.bin
+  header: assets/l_grid_matDL.h
+  rename: l_grid_matDL
+
 - symbol: l_matDL!.data:0x8036A2C0
   binary: assets/l_matDL__d_cloth_packet.bin
   header: assets/l_matDL__d_cloth_packet.h
