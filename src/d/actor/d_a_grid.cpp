@@ -692,19 +692,19 @@ bool daGrid_c::_execute() {
     u8 targetAlpha;
     int alpha = i_this->mPacket.mAlpha;
 
-    if (dComIfGp_event_runCheck()) {
-        targetAlpha = l_HIO.mFarAlpha;
-    } else {
+    if (!dComIfGp_event_runCheck()) {
         camera_class* camera = dComIfGp_getCamera(0);
         cXyz eye = camera->mCamera.Eye();
         f32 dist = (i_this->current.pos - eye).abs();
 
-        if (dist <= l_HIO.mAlphaDist) {
+        if (dist > l_HIO.mAlphaDist) {
+            targetAlpha = l_HIO.mFarAlpha;
+        } else {
             f32 rate = dist / l_HIO.mAlphaDist;
             targetAlpha = l_HIO.mFarAlpha * rate + l_HIO.mNearAlpha * (1.0f - rate);
-        } else {
-            targetAlpha = l_HIO.mFarAlpha;
         }
+    } else {
+        targetAlpha = l_HIO.mFarAlpha;
     }
 
     if (targetAlpha > alpha + 5) {
@@ -715,9 +715,11 @@ bool daGrid_c::_execute() {
         i_this->mPacket.mAlpha = targetAlpha;
     }
 
-    if (i_this->scale.y >= 0.06f) {
-        ho_move(i_this);
+    if (i_this->scale.y < 0.06f) {
+        return TRUE;
     }
+
+    ho_move(i_this);
 
     return TRUE;
 }
