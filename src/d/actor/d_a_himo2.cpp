@@ -64,17 +64,17 @@ dr2_class* dr;
 void spin_draw(himo2_class* i_this) {
     /* Nonmatching - regalloc, cXyz */
     fopAc_ac_c* actor = &i_this->actor;
-    f32 fVar1;
-    s16 sVar2;
-    s16 sVar3;
     s16 sVar4;
-    f32 fVar5;
-    int iVar6;
+    s16 sVar3;
+    s16 sVar2;
+    f32 fVar1;
     cXyz* pcVar7;
     s16 sVar9;
     s16 sVar8;
-    f32 fVar10;
     int iVar11;
+    int iVar6;
+    f32 fVar5;
+    f32 fVar10;
     cXyz local_504;
     cXyz local_510;
     cXyz local_51c;
