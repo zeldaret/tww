@@ -607,7 +607,7 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
                 uVar17++;
             if (uVar17 == i_this->m24AC) {
                 uVar17 = 0;
-                dVar22 = (dVar22 + 100.0f);
+                dVar22 += 100.0f;
                 if (bVar1) {
                     search_limit = 2000.0f;
                 } else {
@@ -618,6 +618,8 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
                 }
             }
         }
+    } else {
+        return NULL;
     }
     return NULL;
 }
