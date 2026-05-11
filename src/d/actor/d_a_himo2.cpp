@@ -1046,10 +1046,7 @@ void new_himo2_move(himo2_class* i_this) {
     }
     case 3: {
         i_this->m02CC = REG0_S(0);
-        // fakematch - why is this not getting inlined?
-        // r24 = fopAcM_SearchByID(i_this->m2180);
-        fpc_ProcID sp08 = i_this->m2180;
-        r24 = (fopAc_ac_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &sp08);
+        r24 = fopAcM_SearchByID(i_this->m2180);
         if (r24 != NULL) {
             sp130 = r24->eyePos - actor->current.pos;
             cLib_addCalcAngleS2(&actor->current.angle.y, cM_atan2s(sp130.x, sp130.z), 2, REG0_S(1) + 0x800);
@@ -1087,10 +1084,7 @@ void new_himo2_move(himo2_class* i_this) {
         break;
     }
     case 4: {
-        // fakematch - why is this not getting inlined?
-        // r24 = fopAcM_SearchByID(i_this->m2180);
-        fpc_ProcID sp08 = i_this->m2180;
-        r24 = (fopAc_ac_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &sp08);
+        r24 = fopAcM_SearchByID(i_this->m2180);
         if (r24 == NULL) {
             i_this->m02DC = 5;
         } else {
