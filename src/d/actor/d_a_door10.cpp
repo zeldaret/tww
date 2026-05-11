@@ -107,11 +107,11 @@ void daDoor10_c::setStop() {
     if (chkMakeStop() && mStopBars.mpModel != NULL) {
         mStopBars.mFrontCheck = mFrontCheck;
         if (mFrontCheck == 0) {
-            mStopBars.mBarDir = chkStopF();
-            mStopBars.mBarState = chkStopB();
+            mStopBars.m8 = chkStopF();
+            mStopBars.mA = chkStopB();
         } else {
-            mStopBars.mBarDir = chkStopB();
-            mStopBars.mBarState =chkStopF();
+            mStopBars.m8 = chkStopB();
+            mStopBars.mA =chkStopF();
         }
         mStopBars.mOffsY = 0.0f;
     }
@@ -135,13 +135,13 @@ BOOL daDoor10_c::chkStopOpen() {
         if (
             dComIfGp_event_runCheck() == FALSE
             #if VERSION > VERSION_DEMO
-            || m2A1 == 0
+            || mGenocideTimer == 0
             #endif
         ) {
             if (dComIfGp_roomControl_checkRoomDisp(roomNo)) {
                 if (fopAcM_myRoomSearchEnemy(roomNo) == NULL) {
-                    if (m2A1 != 0) {
-                        m2A1--;
+                    if (mGenocideTimer != 0) {
+                        mGenocideTimer--;
                         return FALSE;
                     }
 
@@ -154,18 +154,18 @@ BOOL daDoor10_c::chkStopOpen() {
             
             #if VERSION > VERSION_DEMO
             if (getArg1() == 15) {
-                m2A1 = 0;
+                mGenocideTimer = 0;
             } else {
-                m2A1 = 0x41;
+                mGenocideTimer = 0x41;
             }
             #endif
         }
 
         #if VERSION == VERSION_DEMO
         if (getArg1() == 15) {
-            m2A1 = 0;
+            mGenocideTimer = 0;
         } else {
-            m2A1 = 0x41;
+            mGenocideTimer = 0x41;
         }
         #endif
     } else if (swbit != 0xFF && dComIfGs_isSwitch(swbit, roomNo)) {
@@ -177,9 +177,9 @@ BOOL daDoor10_c::chkStopOpen() {
 /* 00000598-000005BC       .text setStopDemo__10daDoor10_cFv */
 void daDoor10_c::setStopDemo() {
     if (mFrontCheck == 0) {
-        m2C6 = 0;
+        mEventDemoIdx = 0;
     } else {
-        m2C6 = 1;
+        mEventDemoIdx = 1;
     }
 }
 
@@ -333,29 +333,29 @@ BOOL daDoor10_c::CreateHeap() {
 /* 00000AEC-00000C8C       .text setEventPrm__10daDoor10_cFv */
 void daDoor10_c::setEventPrm() {
     if (mFrontCheck == 0) {
-        m2C6 = 2;
-        if (mStopBars.mBarState == 0xff) {
-            mStopBars.mBarState = chkStopB();
+        mEventDemoIdx = 2;
+        if (mStopBars.mA == 0xff) {
+            mStopBars.mA = chkStopB();
         }
     } else {
-        m2C6 = 3;
+        mEventDemoIdx = 3;
         if (getType() == 1 && getArg1() != 16) {
             return;
         }
 
-        if (mStopBars.mBarState == 0xff) {
-            mStopBars.mBarState = chkStopF();
+        if (mStopBars.mA == 0xff) {
+            mStopBars.mA = chkStopF();
         }
     }
 
-    if (mStopBars.mBarDir != 0) {
+    if (mStopBars.m8 != 0) {
         return;
     }
 
     if (getType() == 1 && getArg1() != 16) {
-        m2C6 = 6;
-    } else if (mStopBars.mBarState == 1) {
-        m2C6 += 2;
+        mEventDemoIdx = 6;
+    } else if (mStopBars.mA == 1) {
+        mEventDemoIdx += 2;
     }
 
     if (mKeyLock.mbEnabled != 0) {
@@ -375,8 +375,8 @@ void daDoor10_c::setEventPrm() {
     }
 
     if (checkArea(getSize2X(), SQUARE(110.0f), SQUARE(250.0f))) {
-        eventInfo.setEventId(mEventIdx[m2C6]);
-        eventInfo.setToolId(mToolId[m2C6]);
+        eventInfo.setEventId(mEventIdx[mEventDemoIdx]);
+        eventInfo.setToolId(mToolId[mEventDemoIdx]);
         eventInfo.onCondition(dEvtCnd_CANDOOR_e);
     }
 }
@@ -478,7 +478,7 @@ BOOL daDoor10_c::CreateInit() {
         mHkyo.calcMtx(this, 0.0f);
     }
 #if VERSION > VERSION_DEMO
-    m2A1 = 0x41;
+    mGenocideTimer = 0x41;
 #endif
     return TRUE;
 }
@@ -565,7 +565,7 @@ void daDoor10_c::demoProc() {
                 
             case 2:
                 setStop();
-                if (mStopBars.mBarDir != 0) {
+                if (mStopBars.m8 != 0) {
                     mStopBars.closeInit(this);
                 }
                 break;
@@ -657,7 +657,7 @@ BOOL daDoor10_actionWait(daDoor10_c* i_this) {
         i_this->setAction(3);
         i_this->demoProc();
     } else {
-        if (i_this->mStopBars.mBarDir != 0) {
+        if (i_this->mStopBars.m8 != 0) {
             if (i_this->eventInfo.checkCommandDemoAccrpt()) {
                 i_this->mStaffId = dComIfGp_evmng_getMyStaffId("SHUTTER_DOOR");
                 i_this->shape_angle.y = i_this->current.angle.y;
@@ -671,13 +671,13 @@ BOOL daDoor10_actionWait(daDoor10_c* i_this) {
             
             if (i_this->chkStopOpen()) {
                 i_this->setStopDemo();
-                fopAcM_orderOtherEventId(i_this, i_this->mEventIdx[i_this->m2C6], i_this->mToolId[i_this->m2C6]);
+                fopAcM_orderOtherEventId(i_this, i_this->mEventIdx[i_this->mEventDemoIdx], i_this->mToolId[i_this->mEventDemoIdx]);
                 return TRUE;
             }
         }
         
-        if (i_this->mStopBars.mBarDir == 0 && i_this->chkStopClose()) {
-            i_this->mStopBars.mBarDir = 1;
+        if (i_this->mStopBars.m8 == 0 && i_this->chkStopClose()) {
+            i_this->mStopBars.m8 = 1;
             i_this->mStopBars.closeInit(i_this);
             i_this->mStopBars.calcMtx(i_this);
             i_this->setAction(2);
@@ -689,7 +689,7 @@ BOOL daDoor10_actionWait(daDoor10_c* i_this) {
             return TRUE;
         }
 
-        if (i_this->mStopBars.mBarDir == 0) {
+        if (i_this->mStopBars.m8 == 0) {
             i_this->setEventPrm();
         }
     }
@@ -709,7 +709,7 @@ BOOL daDoor10_actionStopClose(daDoor10_c* i_this) {
 
 /* 000018A4-00001928       .text daDoor10_actionDemo__FP10daDoor10_c */
 BOOL daDoor10_actionDemo(daDoor10_c* i_this) {
-    if (dComIfGp_evmng_endCheck(i_this->mEventIdx[i_this->m2C6])) {
+    if (dComIfGp_evmng_endCheck(i_this->mEventIdx[i_this->mEventDemoIdx])) {
         i_this->setAction(1);
         dComIfGp_event_reset();
         i_this->shape_angle.y = i_this->current.angle.y;
@@ -731,8 +731,8 @@ BOOL daDoor10_actionHkyo(daDoor10_c* i_this) {
         i_this->setAction(3);
         i_this->demoProc();
     } else if (i_this->mHkyo.chkStart()) {
-        i_this->m2C6 = 10;
-        fopAcM_orderOtherEventId(i_this, i_this->mEventIdx[i_this->m2C6], i_this->mToolId[i_this->m2C6]);
+        i_this->mEventDemoIdx = 10;
+        fopAcM_orderOtherEventId(i_this, i_this->mEventIdx[i_this->mEventDemoIdx], i_this->mToolId[i_this->mEventDemoIdx]);
     }
     return TRUE;
 }
@@ -768,7 +768,7 @@ BOOL daDoor10_c::draw() {
         mKeyLock.draw(this);
     }
 
-    if (mStopBars.mBarDir != 0 && mStopBars.mpModel != NULL) {
+    if (mStopBars.m8 != 0 && mStopBars.mpModel != NULL) {
         g_env_light.setLightTevColorType(mStopBars.mpModel, &tevStr);
         mDoExt_modelUpdateDL(mStopBars.mpModel);
     }

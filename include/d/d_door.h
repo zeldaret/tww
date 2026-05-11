@@ -47,10 +47,10 @@ public:
     /* 0x293 */ u8 m293[0x294 - 0x293];
     /* 0x294 */ cXyz mAngleVec;
     /* 0x2A0 */ u8 mFrontCheck;
-    /* 0x2A1 */ u8 m2A1;
+    /* 0x2A1 */ u8 mGenocideTimer;
     /* 0x2A2 */ s16 mEventIdx[12];
     /* 0x2BA */ u8 mToolId[12];
-    /* 0x2C6 */ u8 m2C6;
+    /* 0x2C6 */ u8 mEventDemoIdx;
     /* 0x2C7 */ u8 m2C7;
     /* 0x2C8 */ int mStaffId;
     /* 0x2CC */ s8 mRoomNo;
@@ -111,10 +111,10 @@ public:
 public:
     /* 0x0 */ J3DModel* mpModel;
     /* 0x4 */ f32 mOffsY;
-    /* 0x8 */ u8 mBarDir;
+    /* 0x8 */ u8 m8;
     /* 0x9 */ u8 mFrontCheck;
-    /* 0xA */ u8 mBarState;
-    /* 0xB */ u8 mIsActive;
+    /* 0xA */ u8 mA;
+    /* 0xB */ u8 mB;
 };
 
 class dDoor_msg_c {

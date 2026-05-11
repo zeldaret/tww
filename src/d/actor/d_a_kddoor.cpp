@@ -14,11 +14,54 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 
+// BAM angle constants
+#define BAM_180 0x7FFF
+
+// Event sentinels
+#define EVT_NO_TARGET 0xFFFF
+
+// Joint animation amplitudes (BAM sine output range is ±32767)
+#define JOINT_AMPLITUDE_Y 2000.0f
+#define JOINT_AMPLITUDE_X 2000.0f
+#define JOINT_AMPLITUDE_Z 4000.0f
+
+// Sound cooldown range in frames
+#define SOUND_COOLDOWN_BASE 50.0f
+#define SOUND_COOLDOWN_RAND 30.0f
+
+// Frame velocity range
+#define FRAME_VEL_BASE 2.0f
+#define FRAME_VEL_RAND 3.0f
+
+// Speed scale range
+#define SPEED_SCALE_BASE 450.0f
+#define SPEED_SCALE_RAND 100.0f
+
+// Rotation offset scale
+#define ROT_OFFSET_SCALE 12000.0f
+
+// Door event detection area
+#define EVENT_AREA_XZ 12100.0f
+#define EVENT_AREA_Y 62500.0f
+
+// Vibration
+#define VIB_TYPE 4
+#define VIB_POWER (-0x21)
+
+// Heap size for CreateHeap
+#define HEAP_SIZE 0xD960
+
+// Particle color ID for smoke
+#define PARTICLE_TOON_COL 0xB9
+
 typedef void (*ActionFunc)(daKddoor_c*);
 
 /* 00000078-000000A8       .text chkMakeKey__10daKddoor_cFv */
 BOOL daKddoor_c::chkMakeKey() {
-    return getType() == 2 ? TRUE : FALSE;
+    if (getType() == 2) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 000000A8-00000114       .text setKey__10daKddoor_cFv */
@@ -147,8 +190,8 @@ BOOL daKddoor_c::chkStopOpen() {
         if (dComIfGp_event_getMode() == dEvtMode_NONE_e) {
             if (dComIfGp_roomControl_checkRoomDisp(room_no)) {
                 if (fopAcM_myRoomSearchEnemy(room_no) == NULL) {
-                    if (m2A1 != 0) {
-                        m2A1--;
+                    if (mGenocideTimer != 0) {
+                        mGenocideTimer--;
                         return FALSE;
                     }
 
@@ -160,7 +203,7 @@ BOOL daKddoor_c::chkStopOpen() {
                 }
             }
 
-            m2A1 = 0x41; // ~65 frames (~1 second) before auto-opening
+            mGenocideTimer = 0x41; // ~65 frames (~1 second) before auto-opening
         }
     } else {
         if (swbit != 0xFF && dComIfGs_isSwitch(swbit, room_no)) {
@@ -174,9 +217,9 @@ BOOL daKddoor_c::chkStopOpen() {
 /* 00000558-0000057C       .text setStopDemo__10daKddoor_cFv */
 void daKddoor_c::setStopDemo() {
     if (mFrontCheck == 0) {
-        m2C6 = 0;
+        mEventDemoIdx = 0;
     } else {
-        m2C6 = 1;
+        mEventDemoIdx = 1;
     }
 }
 
@@ -261,13 +304,13 @@ static BOOL nodeCB(J3DNode* node, int calcTiming) {
             PSMTXCopy(model->getAnmMtx(jnt_no), *calc_mtx);
 
             f32 s = JMASSin((jnt_no * JOINT_ANIM_FREQ_Y) + (i_this->mFrameCounter * i_this->mSpeedScale) * 2);
-            mDoMtx_YrotM(*calc_mtx, (s16)(int)(2000.0f * s));
+            mDoMtx_YrotM(*calc_mtx, (s16)(int)(JOINT_AMPLITUDE_Y * s));
 
             s = JMASSin((i_this->mFrameCounter * JOINT_ANIM_FREQ_X1) + (jnt_no * JOINT_ANIM_FREQ_X2));
-            mDoMtx_XrotM(*calc_mtx, (s16)(int)(2000.0f * s));
+            mDoMtx_XrotM(*calc_mtx, (s16)(int)(JOINT_AMPLITUDE_X * s));
 
             s = JMASSin((jnt_no * JOINT_ANIM_FREQ_Z) + (i_this->mFrameCounter * i_this->mSpeedScale));
-            mDoMtx_ZrotM(*calc_mtx, (s16)(int)(4000.0f * s));
+            mDoMtx_ZrotM(*calc_mtx, (s16)(int)(JOINT_AMPLITUDE_Z * s));
 
             PSMTXCopy(*calc_mtx, model->getAnmMtx(jnt_no));
             PSMTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
@@ -309,7 +352,7 @@ void dDoor_ssk_c::execute(dDoor_info_c* i_door) {
                     -1.0f,
                     -1.0f,
                     0);
-                sub->mSoundCooldown = (u8)(50.0f + 30.0f * cM_rnd());
+                sub->mSoundCooldown = (u8)(SOUND_COOLDOWN_BASE + SOUND_COOLDOWN_RAND * cM_rnd());
             } else {
                 sub->mSoundCooldown--;
             }
@@ -409,7 +452,7 @@ void dDoor_ssk_sub_c::init() {
             /* SrcObjTg  Type    */ 0,
             /* SrcObjTg  SPrm    */ 0,
             /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
-            /* SrcGObjAt Se      */ dCcG_SE_UNK4,
+            /* SrcGObjAt Se      */ dCcG_SE_WOOD,
             /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
             /* SrcGObjAt Mtrl    */ 0,
@@ -556,10 +599,10 @@ BOOL dDoor_ssk_sub_c::closeProc(dDoor_info_c* i_door) {
         angle.y = i_door->shape_angle.y;
         angle.z = i_door->shape_angle.z;
         if (i_door->mFrontCheck == 1) {
-            angle.y += 0x7FFF;
+            angle.y += BAM_180;
         }
 
-        dComIfGp_particle_setToon(dPa_name::ID_IT_ST_TGSYOKU_SMOKE00, &mCylCenter, &angle, NULL, 0xB9, &mSmokeCb, fopAcM_GetRoomNo(i_door));
+        dComIfGp_particle_setToon(dPa_name::ID_IT_ST_TGSYOKU_SMOKE00, &mCylCenter, &angle, NULL, PARTICLE_TOON_COL, &mSmokeCb, fopAcM_GetRoomNo(i_door));
     }
 
     if (mOpenScaleY < 0.9f) {
@@ -578,12 +621,12 @@ BOOL dDoor_ssk_sub_c::closeProc(dDoor_info_c* i_door) {
 
 /* 0000121C-00001390       .text __ct__15dDoor_ssk_sub_cFv */
 dDoor_ssk_sub_c::dDoor_ssk_sub_c() : mSmokeCb(1) {
-    mFrameVel = (s16)(2.0f + cM_rnd() * 3.0f);
+    mFrameVel = (s16)(FRAME_VEL_BASE + cM_rnd() * FRAME_VEL_RAND);
     if (cM_rnd() < 0.5f) {
         mFrameVel *= -1;
     }
-    mSpeedScale = (s16)(450.0f + cM_rnd() * 100.0f);
-    mRotYOff = (s16)((cM_rnd() - 0.5f) * 12000.0f);
+    mSpeedScale = (s16)(SPEED_SCALE_BASE + cM_rnd() * SPEED_SCALE_RAND);
+    mRotYOff = (s16)((cM_rnd() - 0.5f) * ROT_OFFSET_SCALE);
     mOpenScaleX = 1.0f;
     mOpenScaleY = 1.0f;
     mOpenScaleZ = 1.0f;
@@ -592,7 +635,7 @@ dDoor_ssk_sub_c::dDoor_ssk_sub_c() : mSmokeCb(1) {
     mCloseScaleZ = 1.0f;
 }
 
-static const f32 l_force10000_data[1] = {10000.0f};
+static const f32 l_dead_constant_10000f[1] = {10000.0f};
 char const daKddoor_c::M_arcname[] = "Ssk";
 
 /* 000015A4-00001778       .text drawSet__15dDoor_ssk_sub_cFv */
@@ -648,7 +691,7 @@ void dDoor_ssk_sub_c::calcMtx(dDoor_info_c* i_door, f32 i_xoff, f32 i_yoff, u8 i
     mDoMtx_YrotM(mDoMtx_stack_c::get(), i_door->current.angle.y);
 
     if (i_frontCheck == 1) {
-        mDoMtx_YrotM(mDoMtx_stack_c::get(), 0x7FFF);
+        mDoMtx_YrotM(mDoMtx_stack_c::get(), BAM_180);
     }
 
     mDoMtx_stack_c::transM(i_xoff, 0.0f, i_yoff);
@@ -739,12 +782,12 @@ void daKddoor_c::setEventPrm() {
     u8 swbit;
 
     if (mFrontCheck == 0) {
-        m2C6 = 2;
+        mEventDemoIdx = 2;
         if (mStopBars.mBarState == 0xFF) {
             mStopBars.mBarState = chkStopB();
         }
     } else {
-        m2C6 = 3;
+        mEventDemoIdx = 3;
         if (mStopBars.mBarState == 0xFF) {
             mStopBars.mBarState = chkStopF();
         }
@@ -755,7 +798,7 @@ void daKddoor_c::setEventPrm() {
     }
 
     if (mStopBars.mBarState == 1) {
-        m2C6 += 2;
+        mEventDemoIdx += 2;
     }
 
     if (mKeyLock.mbEnabled != 0 && dComIfGs_getKeyNum() == 0) {
@@ -767,9 +810,9 @@ void daKddoor_c::setEventPrm() {
         return;
     }
 
-    if (checkArea(12100.0f, 12100.0f, 62500.0f)) {
-        eventInfo.setEventId(mEventIdx[m2C6]);
-        eventInfo.setToolId(mToolId[m2C6]);
+    if (checkArea(EVENT_AREA_XZ, EVENT_AREA_XZ, EVENT_AREA_Y)) {
+        eventInfo.setEventId(mEventIdx[mEventDemoIdx]);
+        eventInfo.setToolId(mToolId[mEventDemoIdx]);
         eventInfo.onCondition(dEvtCnd_CANDOOR_e);
     }
 }
@@ -834,7 +877,7 @@ void daKddoor_c::closeEnd() {
     mFlags &= ~2;
     closeEndCom();
 
-    dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+    dComIfGp_getVibration().StartShock(VIB_TYPE, VIB_POWER, cXyz(0.0f, 1.0f, 0.0f));
 
     JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_STN_DOOR_STOP_D, &eyePos, 0,
                                      dComIfGp_getReverb(current.roomNo), 1.0f,
@@ -874,19 +917,19 @@ cPhs_State daKddoor_c::create() {
     fopAcM_SetupActor(this, daKddoor_c);
 
     if (phase_state != cPhs_COMPLEATE_e) {
-        return (cPhs_State)phase_state;
+        return phase_state;
     }
 
     if (chkMakeKey()) {
         int key_state = mKeyLock.keyResLoad();
         if (key_state != cPhs_COMPLEATE_e) {
-            return (cPhs_State)key_state;
+            return key_state;
         }
     }
 
     current.roomNo = getFRoomNo();
 
-    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xD960)) {
+    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, HEAP_SIZE)) {
         mpBgW = NULL;
         return cPhs_ERROR_e;
     }
@@ -1005,13 +1048,13 @@ static int daKddoor_actionWait(daKddoor_c* i_this) {
             i_this->mStaffId = dComIfGp_evmng_getMyStaffId("SHUTTER_DOOR");
             i_this->shape_angle.y = i_this->current.angle.y;
             if (i_this->mFrontCheck == 1) {
-                i_this->shape_angle.y += 0x7fff;
+                i_this->shape_angle.y += BAM_180;
             }
             i_this->setAction(3);
             i_this->demoProc();
         } else if (i_this->chkStopOpen()) {
             i_this->setStopDemo();
-            fopAcM_orderOtherEventId(i_this, i_this->mEventIdx[i_this->m2C6], i_this->mToolId[i_this->m2C6], 0xFFFF, 0, 1);
+            fopAcM_orderOtherEventId(i_this, i_this->mEventIdx[i_this->mEventDemoIdx], i_this->mToolId[i_this->mEventDemoIdx], EVT_NO_TARGET, 0, 1);
         }
     } else if (i_this->chkStopClose()) {
         i_this->mStopBars.mBarDir = 1;
@@ -1034,7 +1077,7 @@ static int daKddoor_actionStopClose(daKddoor_c* i_this) {
 }
 
 static BOOL daKddoor_actionDemo(daKddoor_c* i_this) {
-    if (dComIfGp_evmng_endCheck(i_this->mEventIdx[i_this->m2C6])) {
+    if (dComIfGp_evmng_endCheck(i_this->mEventIdx[i_this->mEventDemoIdx])) {
         i_this->mAction = 1;
         dComIfGp_event_reset();
         i_this->shape_angle.y = i_this->current.angle.y;

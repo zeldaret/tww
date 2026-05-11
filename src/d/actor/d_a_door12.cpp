@@ -130,11 +130,11 @@ void daDoor12_c::setStop() {
     if (chkMakeStop() && mStopBars.mpModel != NULL) {
         mStopBars.mFrontCheck = mFrontCheck;
         if (mFrontCheck == 0) {
-            mStopBars.mBarDir = chkStopF();
-            mStopBars.mBarState = chkStopB();
+            mStopBars.m8 = chkStopF();
+            mStopBars.mA = chkStopB();
         } else {
-            mStopBars.mBarDir = chkStopB();
-            mStopBars.mBarState = chkStopF();
+            mStopBars.m8 = chkStopB();
+            mStopBars.mA = chkStopF();
         }
         mStopBars.mOffsY = 0.0f;
     }
@@ -158,12 +158,12 @@ BOOL daDoor12_c::chkStopOpen() {
         if (
             dComIfGp_event_runCheck() == FALSE
             #if VERSION > VERSION_DEMO
-            || m2A1 == 0
+            || mGenocideTimer == 0
             #endif
         ) {
             if (dComIfGp_roomControl_checkRoomDisp(bVar5) && fopAcM_myRoomSearchEnemy(bVar5) == NULL) {
-                if (m2A1 != 0) {
-                    m2A1--;
+                if (mGenocideTimer != 0) {
+                    mGenocideTimer--;
                     return FALSE;
                 }
 
@@ -173,11 +173,11 @@ BOOL daDoor12_c::chkStopOpen() {
                 return TRUE;
             }
             #if VERSION > VERSION_DEMO
-            m2A1 = 0x41;
+            mGenocideTimer = 0x41;
             #endif
         }
         #if VERSION == VERSION_DEMO
-        m2A1 = 0x41;
+        mGenocideTimer = 0x41;
         #endif
     } else if (uVar2 != 0xff && dComIfGs_isSwitch(uVar2, bVar5)) {
         return TRUE;
@@ -188,9 +188,9 @@ BOOL daDoor12_c::chkStopOpen() {
 /* 0000055C-00000580       .text setStopDemo__10daDoor12_cFv */
 void daDoor12_c::setStopDemo() {
     if (mFrontCheck == 0) {
-        m2C6 = 0;
+        mEventDemoIdx = 0;
     } else {
-        m2C6 = 1;
+        mEventDemoIdx = 1;
     }
 }
 
@@ -378,31 +378,31 @@ f32 daDoor12_c::openWide() {
 /* 00000ACC-00000CD0       .text setEventPrm__10daDoor12_cFv */
 void daDoor12_c::setEventPrm() {
     if (mFrontCheck == 0) {
-        m2C6 = 2;
-        if (mStopBars.mBarState == 0xff) {
-            mStopBars.mBarState = chkStopB();
+        mEventDemoIdx = 2;
+        if (mStopBars.mA == 0xff) {
+            mStopBars.mA = chkStopB();
         }
     } else {
-        m2C6 = 3;
+        mEventDemoIdx = 3;
         if (getType() == 3) {
             return;
         }
 
-        if (mStopBars.mBarState == 0xff) {
-            mStopBars.mBarState = chkStopF();
+        if (mStopBars.mA == 0xff) {
+            mStopBars.mA = chkStopF();
         }
     }
 
-    if (mStopBars.mBarDir == 0) {
+    if (mStopBars.m8 == 0) {
         if (getType() == 3) {
-            m2C6 = 6;
-        } else if (mStopBars.mBarState == 1) {
-            m2C6 += 2;
+            mEventDemoIdx = 6;
+        } else if (mStopBars.mA == 1) {
+            mEventDemoIdx += 2;
         }
 
         if (getShapeType() == 1 || getShapeType() == 2 || getShapeType() == 4 || getShapeType() == 5) {
             if (fopAcM_SearchByID(daPy_getPlayerActorClass()->getGrabActorID()) != NULL) {
-                m2C6 = 0xb;
+                mEventDemoIdx = 0xb;
             }
         }
 
@@ -423,8 +423,8 @@ void daDoor12_c::setEventPrm() {
         }
 
         if (checkArea(SQUARE(110.0f), SQUARE(110.0f), SQUARE(250.0f))) {
-            eventInfo.setEventId(mEventIdx[m2C6]);
-            eventInfo.setToolId(mToolId[m2C6]);
+            eventInfo.setEventId(mEventIdx[mEventDemoIdx]);
+            eventInfo.setToolId(mToolId[mEventDemoIdx]);
             eventInfo.onCondition(dEvtCnd_CANDOOR_e);
         }
     }
@@ -450,7 +450,7 @@ void daDoor12_c::openInit() {
 BOOL daDoor12_c::openProc() {
     BOOL ret = FALSE;
 
-    switch (m2C6) {
+    switch (mEventDemoIdx) {
     case 2:
     case 3:
     case 11:
@@ -555,7 +555,7 @@ BOOL daDoor12_c::CreateInit() {
     initProc(2);
 
 #if VERSION > VERSION_DEMO
-    m2A1 = 0x41;
+    mGenocideTimer = 0x41;
 #endif
 
 #if VERSION == VERSION_DEMO
@@ -624,7 +624,7 @@ void daDoor12_c::demoProc() {
 
         case 2:
             setStop();
-            if (mStopBars.mBarDir) {
+            if (mStopBars.m8) {
                 mStopBars.closeInit(this);
             }
             break;
@@ -718,7 +718,7 @@ BOOL daDoor12_actionWait(daDoor12_c* i_this) {
         i_this->initOpenDemo(1);
         i_this->setAction(3);
         i_this->demoProc();
-    } else if (i_this->mStopBars.mBarDir != 0) {
+    } else if (i_this->mStopBars.m8 != 0) {
         if (i_this->eventInfo.checkCommandDemoAccrpt()) {
             i_this->mStaffId = dComIfGp_evmng_getMyStaffId("SHUTTER_DOOR");
             i_this->shape_angle.y = i_this->current.angle.y;
@@ -729,10 +729,10 @@ BOOL daDoor12_actionWait(daDoor12_c* i_this) {
             i_this->demoProc();
         } else if (i_this->chkStopOpen()) {
             i_this->setStopDemo();
-            fopAcM_orderOtherEventId(i_this, i_this->mEventIdx[i_this->m2C6], i_this->mToolId[i_this->m2C6]);
+            fopAcM_orderOtherEventId(i_this, i_this->mEventIdx[i_this->mEventDemoIdx], i_this->mToolId[i_this->mEventDemoIdx]);
         }
     } else if (i_this->chkStopClose()) {
-        i_this->mStopBars.mBarDir = 1;
+        i_this->mStopBars.m8 = 1;
         i_this->mStopBars.closeInit(i_this);
         i_this->mStopBars.calcMtx(i_this);
         i_this->setAction(2);
@@ -744,7 +744,7 @@ BOOL daDoor12_actionWait(daDoor12_c* i_this) {
 
 /* 00001868-000018EC       .text daDoor12_actionDemo__FP10daDoor12_c */
 BOOL daDoor12_actionDemo(daDoor12_c* i_this) {
-    if (dComIfGp_evmng_endCheck(i_this->mEventIdx[i_this->m2C6])) {
+    if (dComIfGp_evmng_endCheck(i_this->mEventIdx[i_this->mEventDemoIdx])) {
         i_this->setAction(1);
         dComIfGp_event_reset();
         i_this->shape_angle.y = i_this->current.angle.y;
@@ -801,7 +801,7 @@ BOOL daDoor12_c::draw() {
         mKeyLock.draw(this);
     }
 
-    if (mStopBars.mBarDir != 0 && mStopBars.mpModel != NULL) {
+    if (mStopBars.m8 != 0 && mStopBars.mpModel != NULL) {
         g_env_light.setLightTevColorType(mStopBars.mpModel, &tevStr);
         mDoExt_modelUpdateDL(mStopBars.mpModel);
     }
