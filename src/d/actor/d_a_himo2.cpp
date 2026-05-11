@@ -277,7 +277,7 @@ void himo2_draw(himo2_class* i_this, himo2_s* param_2) {
     pcVar6->z = i_this->m02B4.z;
     i_this->m1F6C++;
     int iVar2 = i_this->m02CC;
-    himo2_s* phVar4 = param_2 + iVar2 + 1;
+    himo2_s* phVar4 = param_2 + (iVar2 + 1);
     pcVar6++;
     for (; iVar2 < 98; iVar2++, phVar4++) {
         if (iVar2 == 97) {
