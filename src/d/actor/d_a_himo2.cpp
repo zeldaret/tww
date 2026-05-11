@@ -1733,7 +1733,7 @@ static BOOL daHimo2_Execute(himo2_class* i_this) {
     }
     new_himo2_move(i_this);
     phVar3 = &i_this->m0310[0];
-    for (iVar5 = 0; iVar5 < i_this->m02CC + 1; iVar5++, phVar3++) {
+    for (iVar4 = 0; iVar4 < i_this->m02CC + 1; iVar4++, phVar3++) {
         phVar3->m10 = i_this->m02B4;
     }
     phVar3 = &i_this->m0310[0];
