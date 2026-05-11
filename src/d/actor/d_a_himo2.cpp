@@ -288,7 +288,7 @@ void himo2_draw(himo2_class* i_this, himo2_s* param_2) {
     phVar4 = param_2 + (i_this->m02CC + 1);
     iVar2 = i_this->m02CC;
     pcVar6++;
-    for (; iVar2 < 98; iVar2++, phVar4++) {
+    for (; iVar2 < 98; iVar2++) {
         if (iVar2 == 97) {
             if ((i_this->m02DC == 0) && (i_this->m2188 < REG0_F(3) + 50.0f)) {
                 MTXCopy(apdVar1->getLeftHandMatrix(), *calc_mtx);
@@ -319,6 +319,7 @@ void himo2_draw(himo2_class* i_this, himo2_s* param_2) {
             i_this->m1F6C++;
             pcVar6++;
         }
+        phVar4++;
     }
 }
 
