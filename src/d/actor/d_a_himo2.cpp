@@ -325,8 +325,8 @@ void himo_e_draw(himo2_class* i_this, himo2_s*) {
 
 /* 800EC1E4-800EC300       .text himo_hang_draw__FP11himo2_class */
 void himo_hang_draw(himo2_class* i_this) {
-    /* Nonmatching - regalloc */
-    cXyz* pcVar3 = i_this->m1F30.getPos(0) + i_this->m1F6C;
+    cXyz* pcVar3 = i_this->m1F30.getPos(0);
+    pcVar3 += i_this->m1F6C;
     cXyz local_38 = i_this->m02EC[0] - i_this->m2504;
     local_38.x *= 0.25f;
     local_38.y *= 0.25f;
