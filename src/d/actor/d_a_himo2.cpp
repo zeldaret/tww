@@ -228,7 +228,6 @@ void himo2_control2(himo2_class* i_this, himo2_s* param_2) {
 
     local_a8.x = 0.0f;
     local_a8.y = 0.0f;
-    himo2_s* puVar6 = param_2 + 98;
     if (i_this->m02DC == 0) {
         local_a8.z = i_this->m2188 * 15.625f * (REG8_F(18) + 0.002f);
     } else {
@@ -237,6 +236,7 @@ void himo2_control2(himo2_class* i_this, himo2_s* param_2) {
     f32 dVar9 = 0.0f;
     f32 dVar8 = (REG8_F(17) + 10.0f);
     int iVar4 = i_this->m02CC + 1;
+    himo2_s* puVar6 = param_2 + 98;
     f32 dVar10 = dVar9;
     for (; iVar4 < 100; iVar4++, puVar6--) {
         f32 dVar11 = (puVar6->m10.y - puVar6[1].m10.y);
