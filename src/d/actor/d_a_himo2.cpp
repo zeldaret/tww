@@ -372,8 +372,6 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
     cXyz local_a40;
     cXyz local_a28;
     cXyz local_a1c;
-    f32 local_b0;
-    f32 local_a8;
 
     if (((i_this->m24D9 >= 0) && (i_this->m029E == 0)) &&
         (i_this->m02DC != 0 || (!(daPy_getPlayerActorClass()->checkPlayerNoDraw()) && !(daPy_getPlayerActorClass()->checkPlayerGuard()))))
@@ -423,7 +421,6 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             if (local_a28.z < -16384.0f) {
                 local_a28.z = -16384.0f;
             }
-            local_b0 = local_a28.z;
             cLib_addCalcAngleS2(&i_this->m1F90, local_a28.z, 2, REG0_S(2) + 0x800);
             local_a28.x *= REG0_F(6) + -200.0f;
             fVar1 = REG0_F(7) + 4000.0f;
@@ -433,7 +430,6 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             if (local_a28.x < -fVar1) {
                 local_a28.x = -fVar1;
             }
-            local_a8 = local_a28.x;
             cLib_addCalcAngleS2(&i_this->m1F94, local_a28.x, 2, REG0_S(2) + 0x800);
             if (local_a28.y < REG0_F(8) + -20.0f) {
                 cLib_addCalcAngleS2(&i_this->m1F92, -0x8000, 2, 0x1000);
@@ -462,7 +458,6 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                 local_a1c.y = (dVar10 * i_this->m1F70[iVar3]);
                 cMtx_YrotS(*calc_mtx, apdVar2->shape_angle.y);
                 iVar8 = ((dVar11 - i_this->m1F70[iVar3]) * (dVar12 + REG0_F(13)));
-                local_a8 = iVar8;
                 cMtx_ZrotM(*calc_mtx, i_this->m1F92 + iVar9 * (REG0_S(0) + i_this->m1F94 + -2000) + iVar8);
                 cMtx_XrotM(*calc_mtx, i_this->m1F90);
                 MtxTrans(0.0f, -local_a1c.y, 0.0f, true);
@@ -478,7 +473,6 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             i_this->m1F98.update(0x20, rope_scale, local_a54, 0, &actor->tevStr);
             dComIfGd_set3DlineMat(&i_this->m1F98);
             pcVar7 = i_this->m1FD8.getPos(0);
-            local_a8 = i_this->m2188;
             if (((int)i_this->m2188 & REG0_S(4) + 64) != 0) {
                 fVar1 = REG0_F(14) + 15.0f;
             } else {
