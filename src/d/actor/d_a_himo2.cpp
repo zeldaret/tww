@@ -633,9 +633,8 @@ BOOL himo2_class::setTargetPos(cXyz* param_1, float* param_2, float* param_3) {
     *param_2 = -1.0f;
     *param_3 = -1.0f;
     m2524 = *param_1;
-    fopAc_ac_c* pfVar1 = search_target(this, m2524);
-    m217C = pfVar1;
-    if (pfVar1 != NULL) {
+    fopAc_ac_c* pfVar1;
+    if ((m217C = (pfVar1 = search_target(this, m2524))) != NULL) {
         if ((fopAcM_GetParam(m217C) & 0xF0) != 0) {
             *param_2 = 700.0f;
             *param_3 = 100.0f;
