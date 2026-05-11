@@ -276,13 +276,15 @@ void himo2_draw(himo2_class* i_this, himo2_s* param_2) {
     /* Nonmatching - regalloc */
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* apdVar1 = (daPy_py_c*)dComIfGp_getPlayer(0);
+    himo2_s* phVar4;
+    int iVar2;
     cXyz* pcVar6 = i_this->m1F30.getPos(0) + i_this->m1F6C;
     pcVar6->x = i_this->m02B4.x;
     pcVar6->y = i_this->m02B4.y;
     pcVar6->z = i_this->m02B4.z;
     i_this->m1F6C++;
-    himo2_s* phVar4 = param_2 + (i_this->m02CC + 1);
-    int iVar2 = i_this->m02CC;
+    phVar4 = param_2 + (i_this->m02CC + 1);
+    iVar2 = i_this->m02CC;
     pcVar6++;
     for (; iVar2 < 98; iVar2++, phVar4++) {
         if (iVar2 == 97) {
