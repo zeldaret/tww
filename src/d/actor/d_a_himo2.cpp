@@ -478,8 +478,10 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             local_a4c = i_this->m02EC[0] - i_this->m02EC[1];
             cMtx_YrotS(*calc_mtx, (cM_atan2s(local_a4c.x, local_a4c.z) + REG0_S(0) + -0x4000));
             local_a1c.x = 0.0f;
-            local_a1c.y = (REG0_F(7) + -10.0f - i_this->m1FD4) * i_this->m1F70[0];
-            local_a1c.z = (REG0_F(8) + 10.0f + i_this->m1FD4) * i_this->m1F70[0];
+            local_a1c.y = REG0_F(7) + -10.0f - i_this->m1FD4;
+            local_a1c.z = REG0_F(8) + 10.0f + i_this->m1FD4;
+            local_a1c.y *= i_this->m1F70[0];
+            local_a1c.z *= i_this->m1F70[0];
             MtxPosition(&local_a1c, &local_a28);
             local_a4c.x = local_a4c.x * 0.06666667f;
             local_a4c.y = local_a4c.y * 0.06666667f;
