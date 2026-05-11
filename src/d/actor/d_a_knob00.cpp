@@ -137,20 +137,20 @@ u8 daKnob00_c::getShapeType() {
 /* 000003D8-000004B0       .text setEventPrm__10daKnob00_cFv */
 void daKnob00_c::setEventPrm() {
     if (mFrontCheck == 0) {
-        m2C6 = 7;
+        mEventDemoIdx = 7;
     } else {
-        m2C6 = 8;
+        mEventDemoIdx = 8;
     }
 
     if ((mAction == 4) || (mAction == 5) || (mAction == 8) || (mAction == 10)) {
-        m2C6 = 9;
+        mEventDemoIdx = 9;
     }
 
     if (!checkArea(SQUARE(80.0f), SQUARE(110.0f), SQUARE(250.0f))) {
         offFlag(4);
     } else {
-        eventInfo.setEventId(mEventIdx[m2C6]);
-        eventInfo.setToolId(mToolId[m2C6]);
+        eventInfo.setEventId(mEventIdx[mEventDemoIdx]);
+        eventInfo.setToolId(mToolId[mEventDemoIdx]);
         eventInfo.onCondition(dEvtCnd_CANDOOR_e);
     }
 }
@@ -562,8 +562,8 @@ BOOL daKnob00_c::actionWait() {
 
 /* 000013F0-00001488       .text actionDemo__10daKnob00_cFv */
 BOOL daKnob00_c::actionDemo() {
-    if (dComIfGp_evmng_endCheck(mEventIdx[m2C6])) {
-        if (m2C6 != 7 && m2C6 != 8) {
+    if (dComIfGp_evmng_endCheck(mEventIdx[mEventDemoIdx])) {
+        if (mEventDemoIdx != 7 && mEventDemoIdx != 8) {
             setAction(1);
             dComIfGp_event_reset();
             shape_angle.y = current.angle.y;
