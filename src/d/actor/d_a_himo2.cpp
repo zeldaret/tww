@@ -592,9 +592,10 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
                                 iVar16 = cM_atan2s(target_vec.y, target_dist);
                                 f32 actor_dist_xz = std::sqrtf(actor_vec.x * actor_vec.x + actor_vec.z * actor_vec.z);
                                 int iVar19 = cM_atan2s(actor_vec.y, actor_dist_xz);
-                                sVar14 = l_himo2HIO.m0C;
                                 if (bVar1) {
                                     sVar14 = 2000;
+                                } else {
+                                    sVar14 = l_himo2HIO.m0C;
                                 }
                                 int negTarget = -iVar16;
                                 int negActor = -iVar19;
