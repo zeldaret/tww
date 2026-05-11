@@ -578,7 +578,7 @@ config.libs = [
             Object(NonMatching, "d/actor/d_a_demo00.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_disappear.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_esa.cpp"),
-            Object(NonMatching, "d/actor/d_a_grid.cpp"),
+            Object(Equivalent,  "d/actor/d_a_grid.cpp"), # weak func order
             Object(NonMatching, "d/actor/d_a_himo2.cpp"),
             Object(Matching,    "d/actor/d_a_hookshot.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_ib.cpp"),
