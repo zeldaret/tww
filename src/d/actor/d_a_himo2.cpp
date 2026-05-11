@@ -84,9 +84,9 @@ void spin_draw(himo2_class* i_this) {
     sVar2 = i_this->m2510;
     fVar5 = 8.0f;
     fVar1 = i_this->m217C->scale.y;
-    f32 scale_delta = fVar1 - 1.0f;
-    fVar5 *= scale_delta;
-    fVar10 = -7.0f * scale_delta;
+    fVar10 = fVar1 - 1.0f;
+    fVar5 *= fVar10;
+    fVar10 = -7.0f * fVar10;
     #if VERSION > VERSION_DEMO
     if ((fopAcM_GetParam(i_this->m217C) & 0x0F) == 3) {
         fVar5 += REG8_F(8) + -3.0f;
