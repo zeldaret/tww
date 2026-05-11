@@ -490,9 +490,9 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             int uVar4 = 0;
             for (int i = 0; i < 16; i++) {
                 f32 fVar1 = cM_ssin(uVar4);
-                pcVar7->x = i_this->m02EC[0].x + local_a4c.x * uVar6 + local_a28.x * fVar1;
-                pcVar7->y = i_this->m02EC[0].y + local_a4c.y * uVar6 + local_a28.y * fVar1;
-                pcVar7->z = i_this->m02EC[0].z + local_a4c.z * uVar6 + local_a28.z * fVar1;
+                pcVar7->x = i_this->m02EC[1].x + local_a4c.x * uVar6 + local_a28.x * fVar1;
+                pcVar7->y = i_this->m02EC[1].y + local_a4c.y * uVar6 + local_a28.y * fVar1;
+                pcVar7->z = i_this->m02EC[1].z + local_a4c.z * uVar6 + local_a28.z * fVar1;
                 pcVar7++;
                 uVar6 += 1;
                 uVar4 += 0x888;
