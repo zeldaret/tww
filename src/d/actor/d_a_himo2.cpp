@@ -583,7 +583,7 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
                             }
                             f32 actor_dist =
                                 std::sqrtf(actor_vec.z * actor_vec.z + (actor_vec.x * actor_vec.x + actor_vec.y * actor_vec.y));
-                            sVar15 = cM_atan2s((pfVar18->scale).z * l_himo2HIO.m10, actor_dist);
+                            sVar15 = (s16)cM_atan2s((pfVar18->scale).z * l_himo2HIO.m10, actor_dist);
                             if (sVar15 < 0) {
                                 sVar15 = -sVar15;
                             }
