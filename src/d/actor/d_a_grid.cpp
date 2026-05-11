@@ -421,7 +421,8 @@ void ho_move(daGrid_c* i_this) {
         zWave *= waveAmp;
 
         f32 upperRow = rowCenter < 0.0f ? rowCenter : 0.0f;
-        f32 foldRate = 1.0f - ((0.67f + 0.3f * (SQUARE(upperRow) * 0.25f)) * i_this->m2200);
+        f32 foldPoly = 0.67f + 0.3f * (SQUARE(upperRow) * 0.25f);
+        f32 foldRate = 1.0f - foldPoly * i_this->m2200;
         f32 depthRate;
         f32 depthSwing = 120.0f;
         f32 rowSwing;
