@@ -525,7 +525,7 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
     s16 sVar14;
     s16 sVar15;
     int iVar16;
-    uint uVar17;
+    int uVar17;
     u8 bVar1;
     f32 dVar22;
     f32 search_limit;
