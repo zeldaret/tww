@@ -122,7 +122,7 @@ void spin_draw(himo2_class* i_this) {
         if (iVar11 < 50) {
             sVar3 = sVar8;
             sVar8 += (s16)(REG0_S(2) + 100);
-        } else if ((iVar11 >= 50) && (i_this->m24BC + 49 <= iVar11)) {
+        } else if ((iVar11 >= 50) && (iVar11 <= i_this->m24BC + 49)) {
             sVar3 = sVar8;
             sVar8 = (s16)(sVar8 + i_this->m24C8);
             if (iVar11 >= 100 - (REG0_S(4) + 5)) {
@@ -155,7 +155,7 @@ void spin_draw(himo2_class* i_this) {
                 MtxTrans(local_51c.x, local_51c.y, local_51c.z, false);
                 cMtx_YrotM(*calc_mtx, sVar2);
                 cMtx_ZrotM(*calc_mtx, sVar4);
-                cMtx_XrotM(*calc_mtx, sVar8);
+                cMtx_XrotM(*calc_mtx, sVar3);
                 cMtx_YrotM(*calc_mtx, sVar9);
                 MtxTrans(0.0f, 0.0f, -3.0f, true);
                 cMtx_XrotM(*calc_mtx, i_this->m24CA);
