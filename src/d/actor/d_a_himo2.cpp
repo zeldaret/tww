@@ -817,9 +817,9 @@ void new_himo2_move(himo2_class* i_this) {
         i_this->m029E = 0;
     }
     r27 = false;
-    r26 = false;
     r25 = false;
     r24 = NULL;
+    r26 = false;
     if (attention->LockonTruth()) {
         r24 = attention->LockonTarget(0);
         if (r24) {
