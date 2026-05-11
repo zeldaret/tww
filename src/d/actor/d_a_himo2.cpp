@@ -262,7 +262,7 @@ void himo2_control2(himo2_class* i_this, himo2_s* param_2) {
         f32 dVar6 = fVar2;
         iVar3 = cM_atan2s(fVar1, fVar2);
         dVar6 = std::sqrtf((dVar7 * dVar7) + (dVar6 * dVar6));
-        s16 iVar5 = -cM_atan2s(dVar11, dVar6);
+        int iVar5 = (s16)-cM_atan2s(dVar11, dVar6);
         puVar6[1].m1E = iVar3;
         puVar6[1].m1C = iVar5;
         cMtx_YrotS(*calc_mtx, iVar3);
