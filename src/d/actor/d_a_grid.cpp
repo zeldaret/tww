@@ -434,7 +434,7 @@ void ho_move(daGrid_c* i_this) {
         } else {
             foldRate *= clothOpen + z_rate_tbl2[row] * i_this->m2200;
             depthRate = z_rate_tbl[row];
-            depthSwing *= depthRate * i_this->m2200;
+            depthSwing *= i_this->m2200 * depthRate;
             rowSwing = i_this->m2200 * (col * (5.0f * depthRate));
         }
 
