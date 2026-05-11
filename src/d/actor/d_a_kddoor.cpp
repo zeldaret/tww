@@ -54,6 +54,37 @@
 // Particle color ID for smoke
 #define PARTICLE_TOON_COL 0xB9
 
+// Sentinel for "no switch / no value"
+#define SWITCH_NONE 0xFF
+
+// Room status flag
+#define ROOM_STS_ACTIVE 0x1
+
+// Attention info flags
+#define ATTN_FLAG_TYPE 0x20
+
+// Collision cylinder radius
+#define CYL_RADIUS 50.0f
+
+// Eye/attention Y offset above actor origin
+#define EYE_OFFSET_Y 150.0f
+
+// Door slide animation
+#define SLIDE_OPEN_MAX 300.0f
+#define SLIDE_OPEN_SPEED 30.0f
+#define SLIDE_OPEN_ACCEL 4.0f
+#define SLIDE_CLOSE_SPEED 60.0f
+#define SLIDE_CLOSE_ACCEL 6.0f
+
+// Scale thresholds
+#define SCALE_NEARLY_OPEN 0.9f
+#define SCALE_BARELY_OPEN 0.1f
+
+// Door scale animation interpolation
+#define SCALE_OPEN_ACCEL 0.25f
+#define SCALE_CLOSE_ACCEL 0.5f
+#define SCALE_DAMPING 0.3f
+
 /* 00000078-000000A8       .text chkMakeKey__10daKddoor_cFv */
 BOOL daKddoor_c::chkMakeKey() {
     if (getType() == 2) {
@@ -73,11 +104,11 @@ void daKddoor_c::setKey() {
 
 /* 00000114-00000184       .text chkMakeStop__10daKddoor_cFv */
 BOOL daKddoor_c::chkMakeStop() {
-    if (getSwbit2() != 0xFF) {
+    if (getSwbit2() != SWITCH_NONE) {
         return TRUE;
     }
 
-    if (!chkMakeKey() && getSwbit() != 0xFF) {
+    if (!chkMakeKey() && getSwbit() != SWITCH_NONE) {
         return TRUE;
     }
 
@@ -90,14 +121,14 @@ s32 daKddoor_c::chkStopF() {
     u8 swbit = getSwbit();
     u8 room_no = getFRoomNo();
 
-    if (swbit == 0xFF) {
+    if (swbit == SWITCH_NONE) {
         return 0;
     }
 
     switch (type) {
     case 0:
     case 1:
-        if (dComIfGp_roomControl_checkStatusFlag(room_no, 0x1) == FALSE) {
+        if (dComIfGp_roomControl_checkStatusFlag(room_no, ROOM_STS_ACTIVE) == FALSE) {
             return -1;
         }
     return !dComIfGs_isSwitch(swbit, room_no);
@@ -111,11 +142,11 @@ s32 daKddoor_c::chkStopB() {
     u8 swbit = getSwbit2();
     u8 room_no = getBRoomNo();
 
-    if (swbit == 0xFF) {
+    if (swbit == SWITCH_NONE) {
         return 0;
     }
 
-    if (!dComIfGp_roomControl_checkStatusFlag(room_no, 0x1)) {
+    if (!dComIfGp_roomControl_checkStatusFlag(room_no, ROOM_STS_ACTIVE)) {
         return -1;
     }
 
@@ -193,7 +224,7 @@ BOOL daKddoor_c::chkStopOpen() {
                         return FALSE;
                     }
 
-                    if (swbit != 0xFF) {
+                    if (swbit != SWITCH_NONE) {
                         dComIfGs_onSwitch(swbit, room_no);
                     }
 
@@ -204,7 +235,7 @@ BOOL daKddoor_c::chkStopOpen() {
             mGenocideTimer = 0x41; // ~65 frames (~1 second) before auto-opening
         }
     } else {
-        if (swbit != 0xFF && dComIfGs_isSwitch(swbit, room_no)) {
+        if (swbit != SWITCH_NONE && dComIfGs_isSwitch(swbit, room_no)) {
             return TRUE;
         }
     }
@@ -470,7 +501,7 @@ void dDoor_ssk_sub_c::init() {
         }},
     };
 
-    mStts.Init(0xFF, 0xFF, NULL);
+    mStts.Init(SWITCH_NONE, SWITCH_NONE, NULL);
     mCyl.Set(body_co_cyl);
     mCyl.SetStts(&mStts);
     mActiveFlag = 1; // dead store — compiler artifact
@@ -502,7 +533,7 @@ BOOL dDoor_ssk_sub_c::openProc(dDoor_info_c* i_door) {
         return FALSE;
     }
 
-    if (mOpenScaleY > 0.1f) {
+    if (mOpenScaleY > SCALE_BARELY_OPEN) {
         if (mSoundPlayed == 0) {
             mSoundPlayed = 1;
             JAIZelBasic::zel_basic->seStart(
@@ -518,7 +549,7 @@ BOOL dDoor_ssk_sub_c::openProc(dDoor_info_c* i_door) {
             );
         }
 
-        cLib_addCalc0(&mOpenScaleY, 0.25f, 0.3f);
+        cLib_addCalc0(&mOpenScaleY, SCALE_OPEN_ACCEL, SCALE_DAMPING);
         curScale = mOpenScaleY;
         mOpenScaleX = curScale;
         mOpenScaleZ = curScale;
@@ -530,8 +561,8 @@ BOOL dDoor_ssk_sub_c::openProc(dDoor_info_c* i_door) {
     mOpenScaleY = 0.0f;
     mOpenScaleZ = 0.0f;
 
-    if (mCloseScaleY > 0.1f) {
-        cLib_addCalc0(&mCloseScaleY, 0.5f, 0.3f);
+    if (mCloseScaleY > SCALE_BARELY_OPEN) {
+        cLib_addCalc0(&mCloseScaleY, SCALE_CLOSE_ACCEL, SCALE_DAMPING);
         curScale = mCloseScaleY;
         mCloseScaleX = curScale;
         mCloseScaleZ = curScale;
@@ -565,8 +596,8 @@ BOOL dDoor_ssk_sub_c::closeProc(dDoor_info_c* i_door) {
         return FALSE;
     }
 
-    if (mCloseScaleY < 0.9f) {
-        cLib_addCalc2(&mCloseScaleY, 1.0f, 0.5f, 0.3f);
+    if (mCloseScaleY < SCALE_NEARLY_OPEN) {
+        cLib_addCalc2(&mCloseScaleY, 1.0f, SCALE_CLOSE_ACCEL, SCALE_DAMPING);
         curScale = mCloseScaleY;
         mCloseScaleX = curScale;
         mCloseScaleZ = curScale;
@@ -604,8 +635,8 @@ BOOL dDoor_ssk_sub_c::closeProc(dDoor_info_c* i_door) {
         dComIfGp_particle_setToon(dPa_name::ID_IT_ST_TGSYOKU_SMOKE00, &mCylCenter, &angle, NULL, PARTICLE_TOON_COL, &mSmokeCb, fopAcM_GetRoomNo(i_door));
     }
 
-    if (mOpenScaleY < 0.9f) {
-        cLib_addCalc2(&mOpenScaleY, 1.0f, 0.3f, 0.3f);
+    if (mOpenScaleY < SCALE_NEARLY_OPEN) {
+        cLib_addCalc2(&mOpenScaleY, 1.0f, SCALE_OPEN_ACCEL, SCALE_DAMPING);
         curScale = mOpenScaleY;
         mOpenScaleX = curScale;
         mOpenScaleZ = curScale;
@@ -703,7 +734,7 @@ void dDoor_ssk_sub_c::calcMtx(dDoor_info_c* i_door, f32 i_xoff, f32 i_yoff, u8 i
     PSMTXMultVec(mDoMtx_stack_c::get(), &zero, &mCylCenter);
 
     mCyl.SetC(mCylCenter);
-    mCyl.SetR(50.0f * mCloseScaleX);
+    mCyl.SetR(CYL_RADIUS * mCloseScaleX);
 }
 
 /* 00001904-00001914       .text getBmdName__10daKddoor_cFv */
@@ -782,12 +813,12 @@ void daKddoor_c::setEventPrm() {
 
     if (mFrontCheck == 0) {
         mEventDemoIdx = 2;
-        if (mStopBars.mBarState == 0xFF) {
+        if (mStopBars.mBarState == SWITCH_NONE) {
             mStopBars.mBarState = chkStopB();
         }
     } else {
         mEventDemoIdx = 3;
-        if (mStopBars.mBarState == 0xFF) {
+        if (mStopBars.mBarState == SWITCH_NONE) {
             mStopBars.mBarState = chkStopF();
         }
     }
@@ -805,7 +836,7 @@ void daKddoor_c::setEventPrm() {
     }
 
     swbit = getSwbit();
-    if (chkFeelerCase() && swbit != 0xFF && !dComIfGs_isSwitch(swbit, getFRoomNo())) {
+    if (chkFeelerCase() && swbit != SWITCH_NONE && !dComIfGs_isSwitch(swbit, getFRoomNo())) {
         return;
     }
 
@@ -831,8 +862,8 @@ void daKddoor_c::openInit() {
 /* 00001D7C-00001DEC       .text openProc__10daKddoor_cFv */
 BOOL daKddoor_c::openProc() {
     BOOL matched = FALSE;
-    cLib_chaseF(&speedF, 30.0f, 4.0f);
-    if (cLib_chaseF(&mSlideOffset, 300.0f, speedF)) {
+    cLib_chaseF(&speedF, SLIDE_OPEN_SPEED, SLIDE_OPEN_ACCEL);
+    if (cLib_chaseF(&mSlideOffset, SLIDE_OPEN_MAX, speedF)) {
         matched = TRUE;
     }
     calcMtx();
@@ -845,7 +876,7 @@ void daKddoor_c::openEnd() {
                                     dComIfGp_getReverb(current.roomNo), 1.0f,
                                     1.0f, -1.0f, -1.0f, 0);
     offFlag(1);
-    mSlideOffset = 300.0f;
+    mSlideOffset = SLIDE_OPEN_MAX;
     speedF = 0.0f;
 }
 
@@ -863,7 +894,7 @@ void daKddoor_c::closeInit() {
 /* 00001F64-00001FD8       .text closeProc__10daKddoor_cFv */
 BOOL daKddoor_c::closeProc() {
     BOOL matched = FALSE;
-    cLib_chaseF(&speedF, 60.0f, 6.0f);
+    cLib_chaseF(&speedF, SLIDE_CLOSE_SPEED, SLIDE_CLOSE_ACCEL);
     if (cLib_chaseF(&mSlideOffset, 0.0f, speedF)) {
         matched = TRUE;
     }
@@ -900,9 +931,9 @@ int daKddoor_c::CreateInit() {
     tevStr.mRoomNo = current.roomNo;
     mSlideOffset = 0.0f;
     mAction = 0;
-    attention_info.position.y += 150.0f;
-    eyePos.y += 150.0f;
-    attention_info.flags = 0x20;
+    attention_info.position.y += EYE_OFFSET_Y;
+    eyePos.y += EYE_OFFSET_Y;
+    attention_info.flags = ATTN_FLAG_TYPE;
     calcMtx();
     mpBgW->Move();
     mpBgW->SetRoomId(getFRoomNo());
