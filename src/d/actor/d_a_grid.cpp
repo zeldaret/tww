@@ -410,11 +410,11 @@ void ho_move(daGrid_c* i_this) {
         f32 zLimit = 0.5f + 0.25f * windPow;
         localWind.z = localWindZ * cLib_maxLimit(zLimit, 1.0f);
 
-        xWave += i_this->m2204 * (clothOpen * (windWaveRate * localWind.x));
-        zWave += i_this->m2204 * (clothOpen * (windSide * localWind.z));
+        xWave += i_this->m2204 * (clothOpen * (localWind.x * windWaveRate));
+        zWave += i_this->m2204 * (clothOpen * (localWind.z * windSide));
 
         f32 waveLen = std::sqrtf(SQUARE(xWave) + SQUARE(zWave));
-        f32 yWave = 0.25f * waveLen;
+        f32 yWave = 0.05f * waveLen;
         f32 waveAmp = i_this->m1B54[i];
         xWave *= waveAmp;
         yWave *= waveAmp;
@@ -467,9 +467,9 @@ void ho_move(daGrid_c* i_this) {
             zSag *= i_this->m2200 * (6.0f * z_rate_tbl[row] * (col / 6.0f));
         }
 
-        pos->x += depthSwing + (0.35f * clothOpen + 0.65f) * (i_this->m2204 * xWave);
-        pos->y += rowSwing + (0.35f * clothOpen + 0.65f) * yWave;
-        pos->z += zSag + ((0.35f * clothOpen + 0.65f) * (i_this->m2204 * zWave) - 13.75f);
+        pos->x += depthSwing + (0.35f * clothOpen + 0.65f) * (xWave * i_this->m2204);
+        pos->y += rowSwing + yWave * (0.35f * clothOpen + 0.65f);
+        pos->z += zSag + ((0.35f * clothOpen + 0.65f) * (zWave * i_this->m2204) - 13.75f);
 
         row = col < 6 ? row : row + 1;
         col = col < 6 ? col + 1 : 0;
