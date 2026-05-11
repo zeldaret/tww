@@ -38,6 +38,10 @@ static inline int daGrid_getWindRelAngle(daGrid_c* i_this, cXyz* windVec, s16 sh
     return windRelAngle;
 }
 
+static inline f32 daGrid_mul(f32 lhs, f32 rhs) {
+    return lhs * rhs;
+}
+
 /* 800E8CC0-800E8D48       .text setBackNrm__13daHo_packet_cFv */
 void daHo_packet_c::setBackNrm() {
     cXyz* nrm = getNrm();
@@ -426,7 +430,7 @@ void ho_move(daGrid_c* i_this) {
         zWave *= waveAmp;
 
         f32 upperRow = rowCenter < 0.0f ? rowCenter : 0.0f;
-        f32 foldPoly = 0.67f + 0.3f * (SQUARE(upperRow) * 0.25f);
+        f32 foldPoly = 0.67f + 0.3f * daGrid_mul(SQUARE(upperRow), 0.25f);
         f32 foldRate = 1.0f - foldPoly * i_this->m2200;
         f32 depthRate;
         f32 depthSwing = 120.0f;
@@ -455,7 +459,7 @@ void ho_move(daGrid_c* i_this) {
         f32 colWaveCos = cM_scos(i_this->m2212 + rowWaveAngle * col);
         rowSwing *= (i_this->m2200 * colWaveCos * col) / 6.0f;
 
-        f32 xAtten = 1.0f - 0.5f * (SQUARE(upperRow) * 0.25f);
+        f32 xAtten = 1.0f - 0.5f * daGrid_mul(SQUARE(upperRow), 0.25f);
         rowSwing *= xAtten;
         depthSwing *= xAtten;
 
@@ -472,9 +476,9 @@ void ho_move(daGrid_c* i_this) {
             zSag *= i_this->m2200 * (6.0f * z_rate_tbl[row] * (col / 6.0f));
         }
 
-        pos->x += depthSwing + (0.35f * clothOpen + 0.65f) * (xWave * i_this->m2204);
-        pos->y += rowSwing + yWave * (0.35f * clothOpen + 0.65f);
-        pos->z += zSag + ((0.35f * clothOpen + 0.65f) * (zWave * i_this->m2204) - 13.75f);
+        pos->x += depthSwing + (0.65f * clothOpen + 0.35f) * (xWave * i_this->m2204);
+        pos->y += rowSwing + yWave * (0.65f * clothOpen + 0.35f);
+        pos->z += zSag + ((0.65f * clothOpen + 0.35f) * (zWave * i_this->m2204) - 13.75f);
 
         row = col < 6 ? row : row + 1;
         col = col < 6 ? col + 1 : 0;
