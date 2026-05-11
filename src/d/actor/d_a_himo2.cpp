@@ -850,9 +850,9 @@ void new_himo2_move(himo2_class* i_this) {
     case 0: {
         actor->speedF = 0.0f;
         if ((r30 == 0) && player->checkRopeReadyAnime()) {
-            cMtx_YrotS(*calc_mtx, player->shape_angle.y);
-            cMtx_ZrotM(*calc_mtx, REG0_S(2) + -12000);
-            cMtx_YrotM(*calc_mtx, i_this->m02D8 * (REG0_S(3) + 0x2000));
+            mDoMtx_YrotS(*calc_mtx, player->shape_angle.y);
+            mDoMtx_ZrotM(*calc_mtx, REG0_S(2) + -12000);
+            mDoMtx_YrotM(*calc_mtx, i_this->m02D8 * (REG0_S(3) + 0x2000));
             sp130.x = 0.0f;
             sp130.y = 0.0f;
             sp130.z = REG0_F(11) + 70.0f;
@@ -891,8 +891,8 @@ void new_himo2_move(himo2_class* i_this) {
             if (std::sqrtf(f31 + SQUARE(f27) + f30) > sp130.z) {
                 int r24 = cM_atan2s(f28, f26);
                 r22 = -cM_atan2s(f27, std::sqrtf(f31 + f30));
-                cMtx_YrotS(*calc_mtx, r24);
-                cMtx_XrotM(*calc_mtx, r22);
+                mDoMtx_YrotS(*calc_mtx, r24);
+                mDoMtx_XrotM(*calc_mtx, r22);
                 sp130.x = 0.0f;
                 sp130.y = 0.0f;
                 MtxPosition(&sp130, &sp124);
@@ -925,9 +925,9 @@ void new_himo2_move(himo2_class* i_this) {
         break;
     }
     case 1: {
-        cMtx_YrotS(*calc_mtx, actor->shape_angle.y);
-        cMtx_ZrotM(*calc_mtx, REG0_S(2) + -12000);
-        cMtx_YrotM(*calc_mtx, i_this->m02D8 * (REG0_S(3) + 0x2000));
+        mDoMtx_YrotS(*calc_mtx, actor->shape_angle.y);
+        mDoMtx_ZrotM(*calc_mtx, REG0_S(2) + -12000);
+        mDoMtx_YrotM(*calc_mtx, i_this->m02D8 * (REG0_S(3) + 0x2000));
         sp130.x = 0.0f;
         sp130.y = 0.0f;
         sp130.z = REG0_F(11) + 70.0f;
@@ -968,8 +968,8 @@ void new_himo2_move(himo2_class* i_this) {
             } else {
                 sp10C = i_this->m2524;
             }
-            cMtx_YrotS(*calc_mtx, actor->current.angle.y);
-            cMtx_XrotM(*calc_mtx, actor->current.angle.x);
+            mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
+            mDoMtx_XrotM(*calc_mtx, actor->current.angle.x);
             sp130.y = 0.0f;
             sp130.x = 0.0f;
             sp130.z = REG0_F(14) * 100.0f + 100.0f;
@@ -996,8 +996,8 @@ void new_himo2_move(himo2_class* i_this) {
             actor->current.angle.x = -cM_atan2s(f30, f27);
         }
         actor->speedF = 20.0f;
-        cMtx_YrotS(*calc_mtx, actor->current.angle.y);
-        cMtx_XrotM(*calc_mtx, actor->current.angle.x + r23);
+        mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
+        mDoMtx_XrotM(*calc_mtx, actor->current.angle.x + r23);
         sp130.y = 0.0f;
         sp130.x = 0.0f;
         sp130.z = actor->speedF;
@@ -1063,8 +1063,8 @@ void new_himo2_move(himo2_class* i_this) {
             }
         }
         actor->speedF = REG0_F(14) + 30.0f;
-        cMtx_YrotS(*calc_mtx, actor->current.angle.y);
-        cMtx_XrotM(*calc_mtx, actor->current.angle.x);
+        mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
+        mDoMtx_XrotM(*calc_mtx, actor->current.angle.x);
         sp130.y = 0.0f;
         sp130.x = 0.0f;
         sp130.z = actor->speedF;
@@ -1097,7 +1097,7 @@ void new_himo2_move(himo2_class* i_this) {
         if (r24 == NULL) {
             i_this->m02DC = 5;
         } else {
-            cMtx_YrotS(*calc_mtx, (i_this->m02D8 << 13));
+            mDoMtx_YrotS(*calc_mtx, (i_this->m02D8 << 13));
             sp130.x = 0.0f;
             sp130.y = 0.0f;
             sp130.z = i_this->m2184;
@@ -1327,7 +1327,7 @@ void new_himo2_move(himo2_class* i_this) {
         cLib_addCalc2(&i_this->m24E8.y, i_this->m217C->current.pos.y, 0.3f, 100.0f);
         cLib_addCalc2(&i_this->m24E8.z, i_this->m217C->current.pos.z, 0.3f, 100.0f);
         i_this->m24DC = i_this->m217C->current.pos;
-        cMtx_YrotS(*calc_mtx, i_this->m2510);
+        mDoMtx_YrotS(*calc_mtx, i_this->m2510);
         sp130.x = (REG0_F(5) * 10.0f + 50.0f) * i_this->m2514;
         sp130.y = (REG0_F(4) * 10.0f - 200.0f) + 140.0f;
         sp130.z = ((REG0_F(3) * 10.0f + 200.f) - 80.0f) * i_this->m2518;
@@ -1344,7 +1344,7 @@ void new_himo2_move(himo2_class* i_this) {
     }
     case 3: {
         i_this->m217C->health = 2;
-        cMtx_YrotS(*calc_mtx, i_this->m217C->current.angle.y);
+        mDoMtx_YrotS(*calc_mtx, i_this->m217C->current.angle.y);
         sp130.x = ((REG0_F(11) + 2000.0f) - 800.0f) - 300.0f;
         sp130.y = i_this->m217C->home.pos.y + REG0_F(12) + 2000.0f;
         sp130.z = REG0_F(13) + 1000.0f;
@@ -1415,7 +1415,7 @@ void new_himo2_move(himo2_class* i_this) {
             i_this->m2512 = i_this->m2510;
             i_this->m24F4 = 65.0f;
             i_this->m24F8 = 65.0f;
-            cMtx_YrotS(*calc_mtx, i_this->m2510);
+            mDoMtx_YrotS(*calc_mtx, i_this->m2510);
             sp130.x = REG0_F(7) + 100.0f + 200.0f;
             sp130.y = player->current.pos.y + 700.0f + REG0_F(8);
             sp130.z = REG0_F(9) + -500.0f;
@@ -1461,7 +1461,7 @@ void new_himo2_move(himo2_class* i_this) {
             cLib_addCalc2(&i_this->m24F8, REG0_F(8) + 20.0f, 1.0f, std::fabsf(f26) * 3.0f);
         }
         cLib_addCalc2(&i_this->m24F4, i_this->m24F8, 0.1f, 10.0f);
-        cMtx_YrotS(*calc_mtx, i_this->m2510);
+        mDoMtx_YrotS(*calc_mtx, i_this->m2510);
         sp130.x = REG0_F(7) + 100.0f + 200.0f;
         sp130.y = player->current.pos.y + 700.0f + REG0_F(8);
         sp130.z = REG0_F(9) + -500.0f;
@@ -1518,7 +1518,7 @@ void new_himo2_move(himo2_class* i_this) {
         i_this->m24E8.x = 0.0f;
         i_this->m24E8.y = REG0_F(5) * 0.1f + 3000.0f;
         i_this->m24E8.z = REG0_F(6) * 0.1f;
-        cMtx_YrotS(*calc_mtx, btd->actor.current.angle.y);
+        mDoMtx_YrotS(*calc_mtx, btd->actor.current.angle.y);
         sp130.x = REG0_F(7) * 0.1f;
         sp130.y = REG0_F(8) * 0.1f + 1000.0f;
         sp130.z = REG0_F(9) * 0.1f + 1400.0f;
@@ -1590,7 +1590,7 @@ void new_himo2_move(himo2_class* i_this) {
     case 9: {
         cLib_addCalc2(&i_this->m24F4, REG0_F(4) + 50.0f, 0.5f, 3.0f);
         cLib_addCalc2(&i_this->m24E8.y, btd->actor.eyePos.y + REG0_F(5) * 0.1f + 200.0f, 0.2f, 1000.0f);
-        cMtx_YrotS(*calc_mtx, btd->actor.current.angle.y);
+        mDoMtx_YrotS(*calc_mtx, btd->actor.current.angle.y);
         sp130.x = REG0_F(7) * 0.1f + -300.0f;
         sp130.y = REG0_F(8) * 0.1f + 100.0f;
         sp130.z = REG0_F(9) * 0.1f + 2000.0f;
