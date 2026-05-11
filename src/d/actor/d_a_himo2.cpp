@@ -368,10 +368,10 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
     f32 dVar12;
     f32 dVar13;
     f32 dVar14;
-    cXyz local_a4c;
     cXyz local_a40;
-    cXyz local_a28;
     cXyz local_a1c;
+    cXyz local_a28;
+    cXyz local_a4c;
 
     if (((i_this->m24D9 >= 0) && (i_this->m029E == 0)) &&
         (i_this->m02DC != 0 || (!(daPy_getPlayerActorClass()->checkPlayerNoDraw()) && !(daPy_getPlayerActorClass()->checkPlayerGuard()))))
