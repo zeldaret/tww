@@ -71,8 +71,8 @@ void spin_draw(himo2_class* i_this) {
     f32 fVar5;
     int iVar6;
     cXyz* pcVar7;
-    s16 sVar8;
     s16 sVar9;
+    s16 sVar8;
     f32 fVar10;
     int iVar11;
     cXyz local_504;
@@ -120,25 +120,28 @@ void spin_draw(himo2_class* i_this) {
     for (iVar11 = 0, iVar6 = 0; iVar11 < 100; iVar11++, iVar6 += 12) {
         local_4f8[iVar6].y = -200000.0f;
         if (iVar11 < 50) {
-            sVar3 = sVar8 + REG0_S(2) + 100;
+            sVar3 = sVar8;
+            sVar8 += REG0_S(2) + 100;
         } else if ((iVar11 >= 50) && (i_this->m24BC + 49 <= iVar11)) {
-            sVar3 = sVar8 + i_this->m24C8;
+            sVar3 = sVar8;
+            sVar8 += i_this->m24C8;
             if (iVar11 >= 100 - (REG0_S(4) + 5)) {
-                sVar3 = REG0_S(5) + sVar3 + -1000;
+                sVar8 += REG0_S(5) + -1000;
             }
             if ((i_this->m217C != NULL) && (fopAcM_GetParam(i_this->m217C) != 0)) {
                 sVar4 = REG0_S(4) + sVar4 + -400;
             }
         } else {
+            sVar3 = sVar8;
             if (i_this->m24BC == 0) {
-                sVar3 = sVar8 + (s16)(REG0_S(2) + 70);
+                sVar8 += (s16)(REG0_S(2) + 70);
             } else {
-                sVar3 = sVar8 + 50;
+                sVar8 += 50;
             }
         }
         cMtx_YrotS(*calc_mtx, sVar2);
         cMtx_ZrotM(*calc_mtx, sVar4);
-        cMtx_XrotM(*calc_mtx, sVar8);
+        cMtx_XrotM(*calc_mtx, sVar3);
         cMtx_YrotM(*calc_mtx, sVar9);
         MtxPosition(&local_504, &local_510);
         local_51c.x = local_51c.x + local_510.x;
@@ -169,7 +172,6 @@ void spin_draw(himo2_class* i_this) {
                 local_4f8[iVar6] = local_51c;
             }
         }
-        sVar8 = sVar3;
     }
     iVar6 = 99;
     for (iVar11 = 0; iVar11 < 100; iVar11++, iVar6--) {
