@@ -31,6 +31,13 @@ static daHo_HIO_c l_HIO;
 #include "assets/l_grid_DL.h"
 #include "assets/l_grid_matDL.h"
 
+static inline int daGrid_getWindRelAngle(daGrid_c* i_this, cXyz* windVec, s16 shipSailAngle) {
+    s16 windAngle = cM_atan2s(windVec->x, windVec->z);
+    int windRelAngle = (s16)(i_this->current.angle.y + shipSailAngle);
+    windRelAngle -= windAngle;
+    return windRelAngle;
+}
+
 /* 800E8CC0-800E8D48       .text setBackNrm__13daHo_packet_cFv */
 void daHo_packet_c::setBackNrm() {
     cXyz* nrm = getNrm();
@@ -312,9 +319,7 @@ void ho_move(daGrid_c* i_this) {
     i_this->m1B4E = 0x1C20;
 
     s16 shipSailAngle = l_ship->getSailAngle();
-    s16 windAngle = cM_atan2s(windVec->x, windVec->z);
-    int windRelAngle = (s16)(i_this->current.angle.y + shipSailAngle);
-    windRelAngle -= windAngle;
+    int windRelAngle = daGrid_getWindRelAngle(i_this, windVec, shipSailAngle);
     s16 targetWindAngle = windRelAngle + 0x8000;
     if (targetWindAngle > 0) {
         if (shipSailAngle > 0 && shipSailAngle < 0x4000) {
