@@ -236,7 +236,7 @@ void himo2_control2(himo2_class* i_this, himo2_s* param_2) {
     }
     f32 dVar9 = 0.0f;
     f32 dVar8 = (REG8_F(17) + 10.0f);
-    int iVar4 = i_this->m02CC;
+    int iVar4 = i_this->m02CC + 1;
     f32 dVar10 = dVar9;
     for (; iVar4 < 100; iVar4++, puVar6--) {
         f32 dVar11 = (puVar6->m10.y - puVar6[1].m10.y);
