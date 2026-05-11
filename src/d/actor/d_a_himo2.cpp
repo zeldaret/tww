@@ -436,13 +436,14 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             local_a1c.z = 0.0f;
             local_a1c.x = 0.0f;
             dVar13 = ((REG0_F(10) + i_this->m2188 * (REG0_F(9) + 3.0f)) - 120.0f);
+            int iVar9 = 0;
             iVar3 = 0;
             iVar5 = 0;
             dVar14 = 300.0f;
             dVar10 = 15.0f;
             dVar11 = 1.0f;
             dVar12 = -20000.0f;
-            for (int iVar9 = 0; iVar9 < 5; iVar9++) {
+            for (; iVar9 < 5; iVar9++) {
                 pcVar7 = i_this->m1F98.getPos(iVar5);
 
                 if (dVar13 > (dVar14 * (4 - iVar9))) {
@@ -476,7 +477,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             }
             cLib_addCalc2(&i_this->m1FD4, fVar1, 1.0f, REG0_F(15) + 4.0f);
             local_a4c = i_this->m02EC[0] - i_this->m02EC[1];
-            cMtx_YrotS(*calc_mtx, cM_atan2s(local_a4c.x, local_a4c.z) + (REG0_S(0) - 0x4000));
+            cMtx_YrotS(*calc_mtx, (cM_atan2s(local_a4c.x, local_a4c.z) - 0x4000) + REG0_S(0));
             local_a1c.x = 0.0f;
             local_a1c.y = REG0_F(7) + -10.0f - i_this->m1FD4;
             local_a1c.z = REG0_F(8) + 10.0f + i_this->m1FD4;
