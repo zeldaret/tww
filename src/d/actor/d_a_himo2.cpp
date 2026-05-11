@@ -487,8 +487,10 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             local_a4c.x *= 0.06666667f;
             local_a4c.y *= 0.06666667f;
             local_a4c.z *= 0.06666667f;
-            int uVar4 = 0;
-            int uVar6 = 0;
+            int uVar4;
+            int uVar6;
+            uVar6 = 0;
+            uVar4 = 0;
             for (int i = 0; i < 16; i++) {
                 f32 fVar1 = cM_ssin(uVar4);
                 pcVar7->x = i_this->m02EC[1].x + local_a4c.x * uVar6 + local_a28.x * fVar1;
