@@ -391,21 +391,17 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
         } else {
             pcVar7 = i_this->m1F30.getPos(0);
             cXyz local_a10[200];
-            iVar3 = 0;
-            for (iVar5 = 0; iVar5 < i_this->m1F6C; iVar5++) {
+            for (iVar5 = 0, iVar3 = 0; iVar5 < i_this->m1F6C; iVar5++, iVar3++) {
                 local_a10[iVar3].x = pcVar7->x;
                 local_a10[iVar3].y = pcVar7->y;
                 local_a10[iVar3].z = pcVar7->z;
                 pcVar7++;
-                iVar3++;
             }
-            iVar3 = 0;
-            for (iVar5 = 0; iVar5 < i_this->m1F6C; iVar5++) {
+            for (iVar5 = 0, iVar3 = 0; iVar5 < i_this->m1F6C; iVar5++, iVar3++) {
                 pcVar7--;
                 pcVar7->x = local_a10[iVar3].x;
                 pcVar7->y = local_a10[iVar3].y;
                 pcVar7->z = local_a10[iVar3].z;
-                iVar3++;
             }
             GXColor local_a50 = {200, 0x96, 50, 0xFF};
             i_this->m1F30.update((u16)i_this->m1F6C, rope_scale, local_a50, 0, &actor->tevStr);
