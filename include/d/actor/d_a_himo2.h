@@ -64,8 +64,7 @@ struct himo2_class {
     /* 0x2180 */ fpc_ProcID m2180;
     /* 0x2184 */ f32 m2184;
     /* 0x2188 */ f32 m2188;
-    /* 0x218C */ fopAc_ac_c* m218C;
-    /* 0x2190 */ u8 m2190[0x24AC - 0x2190];
+    /* 0x218C */ fopAc_ac_c* m218C[200];
     /* 0x24AC */ u8 m24AC;
     /* 0x24AD */ u8 m24AD[0x24B0 - 0x24AD];
     /* 0x24B0 */ J3DModel* m24B0;

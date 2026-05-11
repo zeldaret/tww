@@ -509,7 +509,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
 void* s_a_d_sub(void* param_1, void* param_2) {
     if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_KUI)) {
         himo2_class* rope = (himo2_class*)param_2;
-        (&rope->m218C)[rope->m24AC] = (fopAc_ac_c*)param_1;
+        rope->m218C[rope->m24AC] = (fopAc_ac_c*)param_1;
         rope->m24AC++;
     }
     return NULL;
@@ -537,7 +537,7 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
     apdVar11 = daPy_getPlayerActorClass();
     i_this->m24AC = 0;
     for (int iVar16 = 0; iVar16 < 100; iVar16++) {
-        (&i_this->m218C)[iVar16] = NULL;
+        i_this->m218C[iVar16] = NULL;
     }
     fpcM_Search(s_a_d_sub, i_this);
     cMtx_YrotS(*calc_mtx, -apdVar11->shape_angle.y);
@@ -548,7 +548,7 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
         uVar17 = 0;
         while (uVar17 < i_this->m24AC) {
                 bVar1 = 0;
-                pfVar18 = (&i_this->m218C)[uVar17];
+                pfVar18 = i_this->m218C[uVar17];
                 if ((fopAcM_GetParam(pfVar18) & 0xF0) != 0) {
                     bVar1 = 1;
                 }
