@@ -54,8 +54,6 @@
 // Particle color ID for smoke
 #define PARTICLE_TOON_COL 0xB9
 
-typedef void (*ActionFunc)(daKddoor_c*);
-
 /* 00000078-000000A8       .text chkMakeKey__10daKddoor_cFv */
 BOOL daKddoor_c::chkMakeKey() {
     if (getType() == 2) {
@@ -498,7 +496,7 @@ void dDoor_ssk_sub_c::openInit() {
 
 /* 00000E84-00000FB4       .text openProc__15dDoor_ssk_sub_cFP12dDoor_info_c */
 BOOL dDoor_ssk_sub_c::openProc(dDoor_info_c* i_door) {
-    f32 tmp;
+    f32 curScale;
     if (mDelayTimer > 0) {
         mDelayTimer--;
         return FALSE;
@@ -521,9 +519,9 @@ BOOL dDoor_ssk_sub_c::openProc(dDoor_info_c* i_door) {
         }
 
         cLib_addCalc0(&mOpenScaleY, 0.25f, 0.3f);
-        tmp = mOpenScaleY;
-        mOpenScaleX = tmp;
-        mOpenScaleZ = tmp;
+        curScale = mOpenScaleY;
+        mOpenScaleX = curScale;
+        mOpenScaleZ = curScale;
         return FALSE;
 
     }
@@ -534,10 +532,11 @@ BOOL dDoor_ssk_sub_c::openProc(dDoor_info_c* i_door) {
 
     if (mCloseScaleY > 0.1f) {
         cLib_addCalc0(&mCloseScaleY, 0.5f, 0.3f);
-        tmp = mCloseScaleY;
-        mCloseScaleX = tmp;
-        mCloseScaleZ = tmp;
+        curScale = mCloseScaleY;
+        mCloseScaleX = curScale;
+        mCloseScaleZ = curScale;
         return FALSE;
+
     }
 
     mCloseScaleX = 0.0f;
@@ -560,7 +559,7 @@ void dDoor_ssk_sub_c::closeInit() {
 
 /* 00001024-0000121C       .text closeProc__15dDoor_ssk_sub_cFP12dDoor_info_c */
 BOOL dDoor_ssk_sub_c::closeProc(dDoor_info_c* i_door) {
-    f32 tmp;
+    f32 curScale;
     if (mDelayTimer > 0) {
         mDelayTimer--;
         return FALSE;
@@ -568,9 +567,9 @@ BOOL dDoor_ssk_sub_c::closeProc(dDoor_info_c* i_door) {
 
     if (mCloseScaleY < 0.9f) {
         cLib_addCalc2(&mCloseScaleY, 1.0f, 0.5f, 0.3f);
-        tmp = mCloseScaleY;
-        mCloseScaleX = tmp;
-        mCloseScaleZ = tmp;
+        curScale = mCloseScaleY;
+        mCloseScaleX = curScale;
+        mCloseScaleZ = curScale;
         return FALSE;
     }
 
@@ -607,9 +606,9 @@ BOOL dDoor_ssk_sub_c::closeProc(dDoor_info_c* i_door) {
 
     if (mOpenScaleY < 0.9f) {
         cLib_addCalc2(&mOpenScaleY, 1.0f, 0.3f, 0.3f);
-        tmp = mOpenScaleY;
-        mOpenScaleX = tmp;
-        mOpenScaleZ = tmp;
+        curScale = mOpenScaleY;
+        mOpenScaleX = curScale;
+        mOpenScaleZ = curScale;
         return FALSE;
     }
 
@@ -874,7 +873,7 @@ BOOL daKddoor_c::closeProc() {
 
 /* 00001FD8-00002090       .text closeEnd__10daKddoor_cFv */
 void daKddoor_c::closeEnd() {
-    mFlags &= ~2;
+    offFlag(2);
     closeEndCom();
 
     dComIfGp_getVibration().StartShock(VIB_TYPE, VIB_POWER, cXyz(0.0f, 1.0f, 0.0f));
