@@ -368,7 +368,6 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
     f32 dVar12;
     f32 dVar13;
     f32 dVar14;
-    cXyz local_a40;
     cXyz local_a1c;
     cXyz local_a28;
     cXyz local_a4c;
@@ -408,8 +407,8 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             dComIfGd_set3DlineMat(&i_this->m1F30);
             daPy_py_c* apdVar2 = (daPy_py_c*)dComIfGp_getPlayer(0);
             cMtx_YrotS(*calc_mtx, -apdVar2->shape_angle.y);
-            local_a40 = i_this->m02EC[1] - i_this->m1F84;
-            MtxPosition(&local_a40, &local_a28);
+            local_a1c = i_this->m02EC[1] - i_this->m1F84;
+            MtxPosition(&local_a1c, &local_a28);
             local_a28.z = local_a28.z * (REG0_F(5) + 500.0f);
             if (local_a28.z > 16384.0f) {
                 local_a28.z = 16384.0f;
