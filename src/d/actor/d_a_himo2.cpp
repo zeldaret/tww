@@ -229,6 +229,7 @@ void himo2_control2(himo2_class* i_this, himo2_s* param_2) {
     /* Nonmatching - for loop, regalloc */
     cXyz local_a8;
     cXyz local_b4;
+    int iVar4;
 
     local_a8.x = 0.0f;
     local_a8.y = 0.0f;
@@ -244,7 +245,7 @@ void himo2_control2(himo2_class* i_this, himo2_s* param_2) {
     f32 dVar9;
     dVar10 = dVar9 = 0.0f;
     f32 dVar8 = (REG8_F(17) + 10.0f);
-    int iVar4 = i_this->m02CC + 1;
+    iVar4 = i_this->m02CC + 1;
     for (; iVar4 < 100; iVar4++, puVar6--) {
         dVar11 = (puVar6->m10.y - puVar6[1].m10.y);
         int iVar3 = i_this->m02DC;
@@ -279,6 +280,7 @@ void himo2_draw(himo2_class* i_this, himo2_s* param_2) {
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* apdVar1 = (daPy_py_c*)dComIfGp_getPlayer(0);
     int iVar2;
+    J3DModel* pJVar5;
     himo2_s* phVar4;
     cXyz* pcVar6;
     pcVar6 = i_this->m1F30.getPos(0);
@@ -310,7 +312,7 @@ void himo2_draw(himo2_class* i_this, himo2_s* param_2) {
             local_38.y = 0.0f;
             local_38.z = 15.0f;
             MtxPosition(&local_38, &i_this->m24CC);
-            J3DModel* pJVar5 = i_this->m24B0;
+            pJVar5 = i_this->m24B0;
             pJVar5->setBaseTRMtx(*calc_mtx);
             g_env_light.setLightTevColorType(pJVar5, &actor->tevStr);
             mDoExt_modelUpdateDL(pJVar5);
