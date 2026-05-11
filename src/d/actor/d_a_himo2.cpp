@@ -524,15 +524,6 @@ void* s_a_d_sub(void* param_1, void* param_2) {
 /* 800ECC54-800ED19C       .text search_target__FP11himo2_class4cXyz */
 fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
     /* Nonmatching - cXyz, regalloc */
-    bool bVar1;
-    f32 fVar2;
-    f32 fVar3;
-    f32 fVar4;
-    f32 fVar5;
-    f32 fVar6;
-    f32 fVar7;
-    f32 fVar8;
-    f32 fVar9;
     daPy_py_c* apdVar11;
     s16 sVar12;
     s16 sVar13;
@@ -541,11 +532,13 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
     int iVar16;
     uint uVar17;
     fopAc_ac_c* pfVar18;
-    int iVar19;
-    f32 dVar21;
+    u8 bVar1;
     f32 dVar22;
-    cXyz local_60;
+    f32 search_limit;
     cXyz local_54;
+    cXyz local_60;
+    cXyz target_vec;
+    cXyz actor_vec;
 
     apdVar11 = daPy_getPlayerActorClass();
     i_this->m24AC = 0;
@@ -559,13 +552,12 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
     sVar13 = l_himo2HIO.m08 + 0x4000;
     if (i_this->m24AC != 0) {
         uVar17 = 0;
-        do {
-            do {
-                if ((uint)(s8)i_this->m24AC <= uVar17) {
-                    return NULL;
-                }
+        while (uVar17 < i_this->m24AC) {
                 pfVar18 = (&i_this->m218C)[uVar17];
-                bVar1 = fopAcM_GetParam(pfVar18) != 0;
+                bVar1 = 0;
+                if ((fopAcM_GetParam(pfVar18) & 0xF0) != 0) {
+                    bVar1 = 1;
+                }
                 local_54.x = apdVar11->current.pos.x - pfVar18->current.pos.x;
                 local_54.z = apdVar11->current.pos.z - pfVar18->current.pos.z;
                 iVar16 = cM_atan2s(local_54.x, local_54.z);
@@ -576,39 +568,37 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
                 } else {
                     i_this->m251C = 0;
                 }
-                if ((bVar1) || (sVar12 > sVar14 && (sVar14 < sVar13))) {
+                if ((bVar1) || (sVar14 > sVar12 && (sVar14 < sVar13))) {
                     local_54.x = pfVar18->current.pos.x - apdVar11->current.pos.x;
                     local_54.y = pfVar18->current.pos.y - apdVar11->current.pos.y;
                     local_54.z = pfVar18->current.pos.z - apdVar11->current.pos.z;
                     MtxPosition(&local_54, &local_60);
                     if ((local_60.z > 100.0f) && (bVar1 || (std::fabsf(local_60.y) < l_himo2HIO.m14))) {
-                        dVar21 = std::sqrtf(local_60.x * local_60.x + local_60.z * local_60.z);
-                        if (dVar21 < dVar22) {
-                            fVar2 = dComIfGp_getCamera(0)->mLookat.mEye.x;
-                            fVar4 = dComIfGp_getCamera(0)->mLookat.mEye.y;
-                            fVar5 = dComIfGp_getCamera(0)->mLookat.mEye.z;
-                            fVar6 = param_2.x - fVar2;
-                            fVar3 = param_2.y;
-                            fVar8 = param_2.z - fVar5;
-                            fVar2 = pfVar18->current.pos.x - fVar2;
-                            fVar7 = pfVar18->current.pos.y - fVar4;
-                            fVar5 = pfVar18->current.pos.z - fVar5;
-                            iVar16 = cM_atan2s(fVar6, fVar8);
-                            iVar19 = cM_atan2s(fVar2, fVar5);
-                            sVar14 = iVar19 - iVar16;
+                        f32 dist = std::sqrtf(local_60.x * local_60.x + local_60.z * local_60.z);
+                        if (dist < dVar22) {
+                            camera_class* camera = dComIfGp_getCamera(0);
+                            target_vec.x = param_2.x - camera->mLookat.mEye.x;
+                            target_vec.y = param_2.y - camera->mLookat.mEye.y;
+                            target_vec.z = param_2.z - camera->mLookat.mEye.z;
+                            actor_vec.x = pfVar18->current.pos.x - camera->mLookat.mEye.x;
+                            actor_vec.y = pfVar18->current.pos.y - camera->mLookat.mEye.y;
+                            actor_vec.z = pfVar18->current.pos.z - camera->mLookat.mEye.z;
+                            iVar16 = cM_atan2s(target_vec.x, target_vec.z);
+                            sVar14 = cM_atan2s(actor_vec.x, actor_vec.z) - iVar16;
                             if (sVar14 < 0) {
                                 sVar14 = -sVar14;
                             }
-                            fVar9 = std::sqrtf(fVar5 * fVar5 + fVar2 * fVar2 + fVar7 * fVar7);
-                            sVar15 = cM_atan2s((pfVar18->scale).z * l_himo2HIO.m10, fVar9);
+                            f32 actor_dist =
+                                std::sqrtf(actor_vec.z * actor_vec.z + actor_vec.x * actor_vec.x + actor_vec.y * actor_vec.y);
+                            sVar15 = cM_atan2s((pfVar18->scale).z * l_himo2HIO.m10, actor_dist);
                             if (sVar15 < 0) {
                                 sVar15 = -sVar15;
                             }
                             if ((-sVar15 > sVar14) && (sVar14 < sVar15)) {
-                                fVar6 = std::sqrtf(fVar6 * fVar6 + fVar8 * fVar8);
-                                iVar16 = cM_atan2s(fVar3 - fVar4, fVar6);
-                                fVar2 = std::sqrtf(fVar2 * fVar2 + fVar5 * fVar5);
-                                iVar19 = cM_atan2s(fVar7, fVar2);
+                                f32 target_dist = std::sqrtf(target_vec.x * target_vec.x + target_vec.z * target_vec.z);
+                                iVar16 = cM_atan2s(target_vec.y, target_dist);
+                                f32 actor_dist_xz = std::sqrtf(actor_vec.x * actor_vec.x + actor_vec.z * actor_vec.z);
+                                int iVar19 = cM_atan2s(actor_vec.y, actor_dist_xz);
                                 sVar14 = l_himo2HIO.m0C;
                                 if (bVar1) {
                                     sVar14 = 2000;
@@ -621,15 +611,19 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
                     }
                 }
                 uVar17++;
-            } while (uVar17 != (s8)i_this->m24AC);
-            uVar17 = 0;
-            dVar22 = (dVar22 + 100.0f);
-            if (bVar1) {
-                fVar2 = 2000.0f;
-            } else {
-                fVar2 = l_himo2HIO.m18;
+            if (uVar17 == i_this->m24AC) {
+                uVar17 = 0;
+                dVar22 = (dVar22 + 100.0f);
+                if (bVar1) {
+                    search_limit = 2000.0f;
+                } else {
+                    search_limit = l_himo2HIO.m18;
+                }
+                if (dVar22 > search_limit) {
+                    return NULL;
+                }
             }
-        } while (!(dVar22 > fVar2));
+        }
     }
     return NULL;
 }
