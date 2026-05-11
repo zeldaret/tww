@@ -601,7 +601,7 @@ cPhs_State daGrid_c::_create() {
             verticalDist = std::fabsf(gridPos[0].y - currentY);
             verticalLimit = std::fabsf(topPos->y - currentY);
             f32 verticalEdgeDist = std::fabsf(topPos->y - gridPos[0].y);
-            verticalRate = 1.05f * ((1.5707964f / verticalEdgeDist) * 2.0f);
+            verticalRate = (1.05f * (1.5707964f / verticalEdgeDist)) * 2.0f;
             if (columnTop == 56) {
                 verticalAmplitude = 35.0f;
             } else if (columnTop == 57) {
@@ -613,7 +613,7 @@ cPhs_State daGrid_c::_create() {
             verticalDist = std::fabsf(topPos->y - currentY);
             verticalLimit = std::fabsf(gridPos[84].y - currentY);
             f32 verticalEdgeDist = std::fabsf(topPos->y - gridPos[84].y);
-            verticalRate = 1.15f * ((1.5707964f / verticalEdgeDist) * 2.0f);
+            verticalRate = (1.15f * (1.5707964f / verticalEdgeDist)) * 2.0f;
             verticalAmplitude = 20.0f;
         }
 
