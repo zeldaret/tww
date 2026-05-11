@@ -399,14 +399,14 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                 local_a10[iVar3].y = pcVar7->y;
                 local_a10[iVar3].z = pcVar7->z;
                 pcVar7++;
-                iVar3 = iVar3 + 12;
+                iVar3++;
             }
             iVar3 = 0;
             for (iVar5 = 0; iVar5 < i_this->m1F6C; iVar5++) {
                 pcVar7[-1].x = local_a10[iVar3].x;
                 pcVar7[0].y = local_a10[iVar3].y;
                 pcVar7[0].z = local_a10[iVar3].z;
-                iVar3 = iVar3 + 12;
+                iVar3++;
                 pcVar7 = pcVar7 + -1;
             }
             GXColor local_a50 = {200, 0x96, 50, 0xFF};
