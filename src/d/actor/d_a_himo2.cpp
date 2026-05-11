@@ -525,13 +525,13 @@ void* s_a_d_sub(void* param_1, void* param_2) {
 fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
     /* Nonmatching - cXyz, regalloc */
     daPy_py_c* apdVar11;
+    fopAc_ac_c* pfVar18;
     s16 sVar12;
     s16 sVar13;
     s16 sVar14;
     s16 sVar15;
     int iVar16;
     uint uVar17;
-    fopAc_ac_c* pfVar18;
     u8 bVar1;
     f32 dVar22;
     f32 search_limit;
@@ -553,15 +553,14 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
     if (i_this->m24AC != 0) {
         uVar17 = 0;
         while (uVar17 < i_this->m24AC) {
-                pfVar18 = (&i_this->m218C)[uVar17];
                 bVar1 = 0;
+                pfVar18 = (&i_this->m218C)[uVar17];
                 if ((fopAcM_GetParam(pfVar18) & 0xF0) != 0) {
                     bVar1 = 1;
                 }
                 local_54.x = apdVar11->current.pos.x - pfVar18->current.pos.x;
                 local_54.z = apdVar11->current.pos.z - pfVar18->current.pos.z;
-                iVar16 = cM_atan2s(local_54.x, local_54.z);
-                sVar14 = pfVar18->current.angle.y - iVar16;
+                sVar14 = pfVar18->current.angle.y - cM_atan2s(local_54.x, local_54.z);
                 if (sVar14 < 0 && !bVar1) {
                     sVar14 = -sVar14;
                     i_this->m251C = 1;
@@ -584,17 +583,17 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
                             actor_vec.y = pfVar18->current.pos.y - camera->mLookat.mEye.y;
                             actor_vec.z = pfVar18->current.pos.z - camera->mLookat.mEye.z;
                             iVar16 = cM_atan2s(target_vec.x, target_vec.z);
-                            sVar14 = cM_atan2s(actor_vec.x, actor_vec.z) - iVar16;
+                            sVar14 = (s16)cM_atan2s(actor_vec.x, actor_vec.z) - iVar16;
                             if (sVar14 < 0) {
                                 sVar14 = -sVar14;
                             }
                             f32 actor_dist =
-                                std::sqrtf(actor_vec.z * actor_vec.z + actor_vec.x * actor_vec.x + actor_vec.y * actor_vec.y);
+                                std::sqrtf(actor_vec.z * actor_vec.z + (actor_vec.x * actor_vec.x + actor_vec.y * actor_vec.y));
                             sVar15 = cM_atan2s((pfVar18->scale).z * l_himo2HIO.m10, actor_dist);
                             if (sVar15 < 0) {
                                 sVar15 = -sVar15;
                             }
-                            if ((-sVar15 > sVar14) && (sVar14 < sVar15)) {
+                            if ((-sVar15 < sVar14) && (sVar14 < sVar15)) {
                                 f32 target_dist = std::sqrtf(target_vec.x * target_vec.x + target_vec.z * target_vec.z);
                                 iVar16 = cM_atan2s(target_vec.y, target_dist);
                                 f32 actor_dist_xz = std::sqrtf(actor_vec.x * actor_vec.x + actor_vec.z * actor_vec.z);
