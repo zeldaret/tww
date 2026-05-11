@@ -117,7 +117,7 @@ void spin_draw(himo2_class* i_this) {
     sVar8 = -0x30d4;
     pcVar7 = i_this->m1F30.getPos(0) + i_this->m1F6C;
     cXyz local_4f8[100];
-    for (iVar11 = 0, iVar6 = 0; iVar11 < 100; iVar11++, iVar6 += 12) {
+    for (iVar11 = 0, iVar6 = 0; iVar11 < 100; iVar11++, iVar6++) {
         local_4f8[iVar6].y = -200000.0f;
         if (iVar11 < 50) {
             sVar3 = sVar8;
