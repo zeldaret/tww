@@ -49,8 +49,7 @@ struct himo2_class {
     /* 0x1120 */ himo2_s m1120[100];
     /* 0x1F30 */ mDoExt_3DlineMat1_c m1F30;
     /* 0x1F6C */ s32 m1F6C;
-    /* 0x1F70 */ f32 m1F70;
-    /* 0x1F74 */ u8 m1F74[0x1F84 - 0x1F74];
+    /* 0x1F70 */ f32 m1F70[5];
     /* 0x1F84 */ cXyz m1F84;
     /* 0x1F90 */ s16 m1F90;
     /* 0x1F92 */ s16 m1F92;

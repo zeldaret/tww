@@ -403,11 +403,11 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             }
             iVar3 = 0;
             for (iVar5 = 0; iVar5 < i_this->m1F6C; iVar5++) {
-                pcVar7[-1].x = local_a10[iVar3].x;
-                pcVar7[0].y = local_a10[iVar3].y;
-                pcVar7[0].z = local_a10[iVar3].z;
+                pcVar7--;
+                pcVar7->x = local_a10[iVar3].x;
+                pcVar7->y = local_a10[iVar3].y;
+                pcVar7->z = local_a10[iVar3].z;
                 iVar3++;
-                pcVar7 = pcVar7 + -1;
             }
             GXColor local_a50 = {200, 0x96, 50, 0xFF};
             i_this->m1F30.update((u16)i_this->m1F6C, rope_scale, local_a50, 0, &actor->tevStr);
@@ -454,14 +454,14 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                 pcVar7 = i_this->m1F98.getPos(iVar3);
 
                 if (dVar13 > (dVar14 * (4 - iVar9))) {
-                    cLib_addCalc0(&i_this->m1F70, dVar11, (REG0_F(11) + 0.2f));
+                    cLib_addCalc0(&i_this->m1F70[iVar9], dVar11, (REG0_F(11) + 0.2f));
                 } else {
-                    cLib_addCalc2(&i_this->m1F70, 1.0f, 1.0f, REG0_F(12) + 0.1f);
+                    cLib_addCalc2(&i_this->m1F70[iVar9], 1.0f, 1.0f, REG0_F(12) + 0.1f);
                 }
 
-                local_a1c.y = (dVar10 * i_this->m1F70);
+                local_a1c.y = (dVar10 * i_this->m1F70[iVar9]);
                 cMtx_YrotS(*calc_mtx, apdVar2->shape_angle.y);
-                iVar8 = ((dVar11 - i_this->m1F70) * (dVar12 + REG0_F(13)));
+                iVar8 = ((dVar11 - i_this->m1F70[iVar9]) * (dVar12 + REG0_F(13)));
                 local_a8 = iVar8;
                 cMtx_ZrotM(*calc_mtx, i_this->m1F92 + iVar9 * (REG0_S(0) + i_this->m1F94 + -2000) + iVar8);
                 cMtx_XrotM(*calc_mtx, i_this->m1F90);
@@ -488,8 +488,8 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             local_a4c = i_this->m02EC[0] - i_this->m02EC[1];
             cMtx_YrotS(*calc_mtx, (cM_atan2s(local_a4c.x, local_a4c.z) + REG0_S(0) + -0x4000));
             local_a1c.x = 0.0f;
-            local_a1c.y = (REG0_F(7) + -10.0f - i_this->m1FD4) * i_this->m1F70;
-            local_a1c.z = (REG0_F(8) + 10.0f + i_this->m1FD4) * i_this->m1F70;
+            local_a1c.y = (REG0_F(7) + -10.0f - i_this->m1FD4) * i_this->m1F70[0];
+            local_a1c.z = (REG0_F(8) + 10.0f + i_this->m1FD4) * i_this->m1F70[0];
             MtxPosition(&local_a1c, &local_a28);
             local_a4c.x = local_a4c.x * 0.06666667f;
             local_a4c.y = local_a4c.y * 0.06666667f;
