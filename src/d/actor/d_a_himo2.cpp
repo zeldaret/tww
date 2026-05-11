@@ -121,14 +121,14 @@ void spin_draw(himo2_class* i_this) {
         local_4f8[iVar6].y = -200000.0f;
         if (iVar11 < 50) {
             sVar3 = sVar8;
-            sVar8 += REG0_S(2) + 100;
+            sVar8 += (s16)(REG0_S(2) + 100);
         } else if ((iVar11 >= 50) && (i_this->m24BC + 49 <= iVar11)) {
             sVar3 = sVar8;
-            sVar8 += i_this->m24C8;
+            sVar8 = (s16)(sVar8 + i_this->m24C8);
             if (iVar11 >= 100 - (REG0_S(4) + 5)) {
                 sVar8 += REG0_S(5) + -1000;
             }
-            if ((i_this->m217C != NULL) && (fopAcM_GetParam(i_this->m217C) != 0)) {
+            if ((i_this->m217C != NULL) && ((fopAcM_GetParam(i_this->m217C) & 0xF0) != 0)) {
                 sVar4 = REG0_S(4) + sVar4 + -400;
             }
         } else {
