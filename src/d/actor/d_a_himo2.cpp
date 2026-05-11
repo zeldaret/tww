@@ -549,7 +549,7 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
 
     apdVar11 = daPy_getPlayerActorClass();
     i_this->m24AC = 0;
-    for (int iVar16 = 0, iVar19 = 100; iVar19 != 0; iVar16 += 4, iVar19--) {
+    for (int iVar16 = 0; iVar16 < 100; iVar16++) {
         (&i_this->m218C)[iVar16] = NULL;
     }
     fpcM_Search(s_a_d_sub, i_this);
@@ -570,7 +570,7 @@ fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
                 local_54.z = apdVar11->current.pos.z - pfVar18->current.pos.z;
                 iVar16 = cM_atan2s(local_54.x, local_54.z);
                 sVar14 = pfVar18->current.angle.y - iVar16;
-                if ((sVar14 >= -1) || (!bVar1)) {
+                if (sVar14 < 0 && !bVar1) {
                     sVar14 = -sVar14;
                     i_this->m251C = 1;
                 } else {
