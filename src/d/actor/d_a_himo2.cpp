@@ -278,7 +278,9 @@ void himo2_draw(himo2_class* i_this, himo2_s* param_2) {
     daPy_py_c* apdVar1 = (daPy_py_c*)dComIfGp_getPlayer(0);
     himo2_s* phVar4;
     int iVar2;
-    cXyz* pcVar6 = i_this->m1F30.getPos(0) + i_this->m1F6C;
+    cXyz* pcVar6;
+    pcVar6 = i_this->m1F30.getPos(0);
+    pcVar6 += i_this->m1F6C;
     pcVar6->x = i_this->m02B4.x;
     pcVar6->y = i_this->m02B4.y;
     pcVar6->z = i_this->m02B4.z;
