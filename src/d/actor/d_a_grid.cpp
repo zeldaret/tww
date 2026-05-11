@@ -313,7 +313,7 @@ void ho_move(daGrid_c* i_this) {
 
     s16 shipSailAngle = l_ship->getSailAngle();
     s16 windAngle = cM_atan2s(windVec->x, windVec->z);
-    s16 windRelAngle = i_this->current.angle.y + shipSailAngle - windAngle;
+    s16 windRelAngle = (s16)(i_this->current.angle.y + shipSailAngle) - windAngle;
     s16 targetWindAngle = windRelAngle + 0x8000;
     if (targetWindAngle > 0) {
         if (shipSailAngle > 0 && shipSailAngle < 0x4000) {
@@ -359,7 +359,6 @@ void ho_move(daGrid_c* i_this) {
     i_this->m2212 += windAngleStep;
 
     f32 windBend = 0.5f * cM_ssin(windRelAngle);
-    Vec* gridPos = (Vec*)l_pos;
     localIn.x = 0.0f;
     localIn.z = 1.6f;
     cXyz* pos = i_this->mPacket.getPos();
@@ -438,17 +437,16 @@ void ho_move(daGrid_c* i_this) {
             rowSwing = i_this->m2200 * (col * (5.0f * depthRate));
         }
 
-        pos->x = gridPos[i].x;
-        pos->y = foldRate * gridPos[i].y + (1.0f - foldRate) * gridPos[row * 7].y;
-        pos->z = foldRate * gridPos[i].z;
+        pos->x = ((Vec*)l_pos)[i].x;
+        pos->y = foldRate * ((Vec*)l_pos)[i].y + (1.0f - foldRate) * ((Vec*)l_pos)[row * 7].y;
+        pos->z = foldRate * ((Vec*)l_pos)[i].z;
 
-        s16 colWaveAngle = i_this->m2212 + rowWaveAngle * col;
-        f32 colWaveSin = cM_ssin(colWaveAngle);
+        f32 colWaveSin = cM_ssin(i_this->m2212 + rowWaveAngle * col);
         f32 rowShape = 9.0f - SQUARE(colCenter);
         f32 depthShape = ((i_this->m2200 * colWaveSin * rowShape) / 9.0f) -
                          ((windBend * rowShape) / 9.0f);
         depthSwing *= depthShape;
-        f32 colWaveCos = cM_scos(colWaveAngle);
+        f32 colWaveCos = cM_scos(i_this->m2212 + rowWaveAngle * col);
         rowSwing *= (i_this->m2200 * colWaveCos * col) / 6.0f;
 
         f32 xAtten = 1.0f - 0.5f * (SQUARE(upperRow) * 0.25f);
