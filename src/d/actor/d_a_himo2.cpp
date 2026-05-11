@@ -368,7 +368,6 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
     f32 dVar14;
     cXyz local_a4c;
     cXyz local_a40;
-    cXyz local_a34;
     cXyz local_a28;
     cXyz local_a1c;
     f32 local_b0;
@@ -490,16 +489,16 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             local_a1c.y = (REG0_F(7) + -10.0f - i_this->m1FD4) * i_this->m1F70;
             local_a1c.z = (REG0_F(8) + 10.0f + i_this->m1FD4) * i_this->m1F70;
             MtxPosition(&local_a1c, &local_a28);
-            local_a34.x = local_a34.x * 0.06666667f;
-            local_a34.y = local_a34.y * 0.06666667f;
-            local_a34.z = local_a34.z * 0.06666667f;
+            local_a4c.x = local_a4c.x * 0.06666667f;
+            local_a4c.y = local_a4c.y * 0.06666667f;
+            local_a4c.z = local_a4c.z * 0.06666667f;
             int uVar6 = 0;
             int uVar4 = 0;
             for (int i = 0; i < 16; i++) {
                 f32 fVar1 = cM_ssin(uVar4);
-                pcVar7->x = i_this->m02EC[0].x + local_a34.x * uVar6 + local_a28.x * fVar1;
-                pcVar7->y = i_this->m02EC[0].y + local_a34.y * uVar6 + local_a28.y * fVar1;
-                pcVar7->z = i_this->m02EC[0].z + local_a34.z * uVar6 + local_a28.z * fVar1;
+                pcVar7->x = i_this->m02EC[0].x + local_a4c.x * uVar6 + local_a28.x * fVar1;
+                pcVar7->y = i_this->m02EC[0].y + local_a4c.y * uVar6 + local_a28.y * fVar1;
+                pcVar7->z = i_this->m02EC[0].z + local_a4c.z * uVar6 + local_a28.z * fVar1;
                 pcVar7++;
                 uVar6 += 1;
                 uVar4 += 0x888;
