@@ -547,7 +547,7 @@ void dDoor_key2_c::draw(dDoor_info_c* door) {
 
 /* 8006CA78-8006CB28       .text calcMtx__12dDoor_stop_cFP12dDoor_info_c */
 void dDoor_stop_c::calcMtx(dDoor_info_c* door) {
-    if (m8 == 0 || mpModel == NULL)
+    if (mBarDir == 0 || mpModel == NULL)
         return;
     mDoMtx_stack_c::transS(door->current.pos.x, door->current.pos.y + mOffsY, door->current.pos.z);
     mDoMtx_stack_c::YrotM(door->current.angle.y);
@@ -565,17 +565,17 @@ void dDoor_stop_c::closeInit(dDoor_info_c* door) {
     } else {
         fopAcM_seStart(door, JA_SE_OBJ_STN_DOOR_STL_BAR, 0);
     }
-    mB = 1;
+    mIsActive = 1;
 }
 
 /* 8006CBFC-8006CC80       .text closeProc__12dDoor_stop_cFP12dDoor_info_c */
 s32 dDoor_stop_c::closeProc(dDoor_info_c* door) {
-    if (!mB)
+    if (!mIsActive)
         return 1;
 
     cLib_chaseF(&door->speedF, 60.0f, 6.0f);
     if (cLib_chaseF(&mOffsY, 0.0f, door->speedF)) {
-        mB = FALSE;
+        mIsActive = FALSE;
         return 2;
     } else {
         return 0;
@@ -591,18 +591,18 @@ void dDoor_stop_c::openInit(dDoor_info_c* door) {
     } else {
         fopAcM_seStart(door, JA_SE_OBJ_STN_DOOR_STL_BAR, 0);
     }
-    mB = 1;
+    mIsActive = 1;
 }
 
 /* 8006CD50-8006CDD8       .text openProc__12dDoor_stop_cFP12dDoor_info_c */
 s32 dDoor_stop_c::openProc(dDoor_info_c* door) {
-    if (!mB)
+    if (!mIsActive)
         return 1;
 
     cLib_chaseF(&door->speedF, 30.0f, 4.0f);
     if (cLib_chaseF(&mOffsY, 300.0f, door->speedF)) {
-        mB = FALSE;
-        m8 = FALSE;
+        mIsActive = FALSE;
+        mBarDir = FALSE;
         return 2;
     } else {
         return 0;

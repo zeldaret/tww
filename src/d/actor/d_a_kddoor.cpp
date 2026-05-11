@@ -84,13 +84,13 @@ s32 daKddoor_c::chkStopB() {
 /* 000002D0-0000034C       .text setStop__10daKddoor_cFv */
 void daKddoor_c::setStop() {
     if (chkMakeStop()) {
-        mStopBars.m9 = mFrontCheck;
+        mStopBars.mFrontChk = mFrontCheck;
         if (mFrontCheck == 0) {
-            mStopBars.m8 = chkStopF();
-            mStopBars.mA = chkStopB();
+            mStopBars.mBarDir = chkStopF();
+            mStopBars.mBarState = chkStopB();
         } else {
-            mStopBars.m8 = chkStopB();
-            mStopBars.mA = chkStopF();
+            mStopBars.mBarDir = chkStopB();
+            mStopBars.mBarState = chkStopF();
         }
     }
 }
@@ -235,13 +235,13 @@ void dDoor_ssk_c::end() {
 
 /* 00000720-000007A8       .text calcMtx__11dDoor_ssk_cFP12dDoor_info_c */
 void dDoor_ssk_c::calcMtx(dDoor_info_c* i_door) {
-    if (m8 != 0) {
+    if (mBarDir != 0) {
         dDoor_ssk_sub_c& sub0 = mSub[0];
         dDoor_ssk_sub_c& sub1 = mSub[1];
         dDoor_ssk_sub_c& sub2 = mSub[2];
-        sub0.calcMtx(i_door, 0.0f, 100.0f, m9);
-        sub1.calcMtx(i_door, 100.0f, 75.0f, m9);
-        sub2.calcMtx(i_door, -100.0f, 75.0f, m9);
+        sub0.calcMtx(i_door, 0.0f, 100.0f, mFrontChk);
+        sub1.calcMtx(i_door, 100.0f, 75.0f, mFrontChk);
+        sub2.calcMtx(i_door, -100.0f, 75.0f, mFrontChk);
     }
 }
 
@@ -340,7 +340,7 @@ void dDoor_ssk_c::draw(dDoor_info_c* i_door) {
 
 /* 00000BB0-00000C08       .text closeInit__11dDoor_ssk_cFv */
 void dDoor_ssk_c::closeInit() {
-    mB = 1;
+    mIsActive = 1;
 
     for (s32 i = 0; i < 3; i++) {
         mSub[i].closeInit();
@@ -349,7 +349,7 @@ void dDoor_ssk_c::closeInit() {
 
 /* 00000C08-00000C98       .text closeProc__11dDoor_ssk_cFP12dDoor_info_c */
 BOOL dDoor_ssk_c::closeProc(dDoor_info_c* i_door) {
-    if (mB == 0) {
+    if (mIsActive == 0) {
         return TRUE;
     }
 
@@ -361,7 +361,7 @@ BOOL dDoor_ssk_c::closeProc(dDoor_info_c* i_door) {
     }
 
     if (complete) {
-        mB = 0;
+        mIsActive = 0;
     }
 
     return complete;
@@ -369,7 +369,7 @@ BOOL dDoor_ssk_c::closeProc(dDoor_info_c* i_door) {
 
 /* 00000C98-00000CF0       .text openInit__11dDoor_ssk_cFv */
 void dDoor_ssk_c::openInit() {
-    mB = 1;
+    mIsActive = 1;
 
     for (s32 i = 0; i < 3; i++) {
         mSub[i].openInit();
@@ -378,7 +378,7 @@ void dDoor_ssk_c::openInit() {
 
 /* 00000CF0-00000D84       .text openProc__11dDoor_ssk_cFP12dDoor_info_c */
 BOOL dDoor_ssk_c::openProc(dDoor_info_c* i_door) {
-    if (mB == 0) {
+    if (mIsActive == 0) {
         return TRUE;
     }
 
@@ -390,8 +390,8 @@ BOOL dDoor_ssk_c::openProc(dDoor_info_c* i_door) {
     }
 
     if (complete) {
-        mB = 0;
-        m8 = 0;
+        mIsActive = 0;
+        mBarDir = 0;
     }
 
     return complete;
@@ -409,7 +409,7 @@ void dDoor_ssk_sub_c::init() {
             /* SrcObjTg  Type    */ 0,
             /* SrcObjTg  SPrm    */ 0,
             /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
-            /* SrcGObjAt Se      */ dCcG_SE_WOOD,
+            /* SrcGObjAt Se      */ dCcG_SE_UNK4,
             /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
             /* SrcGObjAt Mtrl    */ 0,
@@ -740,21 +740,21 @@ void daKddoor_c::setEventPrm() {
 
     if (mFrontCheck == 0) {
         m2C6 = 2;
-        if (mStopBars.mA == 0xFF) {
-            mStopBars.mA = chkStopB();
+        if (mStopBars.mBarState == 0xFF) {
+            mStopBars.mBarState = chkStopB();
         }
     } else {
         m2C6 = 3;
-        if (mStopBars.mA == 0xFF) {
-            mStopBars.mA = chkStopF();
+        if (mStopBars.mBarState == 0xFF) {
+            mStopBars.mBarState = chkStopF();
         }
     }
 
-    if (mStopBars.m8 != 0) {
+    if (mStopBars.mBarDir != 0) {
         return;
     }
 
-    if (mStopBars.mA == 1) {
+    if (mStopBars.mBarState == 1) {
         m2C6 += 2;
     }
 
@@ -920,7 +920,7 @@ void daKddoor_c::demoProc() {
             break;
         case 2:
             setStop();
-            if (mStopBars.m8 != 0) {
+            if (mStopBars.mBarDir != 0) {
                 mStopBars.closeInit();
             }
             break;
@@ -1000,7 +1000,7 @@ static int daKddoor_actionWait(daKddoor_c* i_this) {
         i_this->initOpenDemo(1);
         i_this->setAction(3);
         i_this->demoProc();
-    } else if (i_this->mStopBars.m8 != 0) {
+    } else if (i_this->mStopBars.mBarDir != 0) {
         if (cmd == 2) {
             i_this->mStaffId = dComIfGp_evmng_getMyStaffId("SHUTTER_DOOR");
             i_this->shape_angle.y = i_this->current.angle.y;
@@ -1014,7 +1014,7 @@ static int daKddoor_actionWait(daKddoor_c* i_this) {
             fopAcM_orderOtherEventId(i_this, i_this->mEventIdx[i_this->m2C6], i_this->mToolId[i_this->m2C6], 0xFFFF, 0, 1);
         }
     } else if (i_this->chkStopClose()) {
-        i_this->mStopBars.m8 = 1;
+        i_this->mStopBars.mBarDir = 1;
         i_this->mStopBars.closeInit();
         i_this->mStopBars.calcMtx(i_this);
         i_this->setAction(2);
@@ -1071,7 +1071,7 @@ BOOL daKddoor_c::draw() {
         mKeyLock.draw(this);
     }
 
-    if (mStopBars.m8 != 0) {
+    if (mStopBars.mBarDir != 0) {
         mStopBars.draw(this);
     }
 
@@ -1109,7 +1109,7 @@ inline int daKddoor_c::execute() {
     }
 
     mRoomNo2 = dComIfGp_roomControl_getStayNo();
-    if (mStopBars.m8 != 0) {
+    if (mStopBars.mBarDir != 0) {
         mStopBars.execute(this);
     }
 

@@ -26,7 +26,7 @@ public:
     /* 0x028 */ dCcD_Stts mStts;
     /* 0x064 */ dCcD_Cyl mCyl;
     /* 0x194 */ u8 mActiveFlag; // TODO: active flag or similar — currently dead store
-    /* 0x195 */ u8 m195;
+    /* 0x195 */ u8 mPad_0x195;
     /* 0x196 */ s16 mFrameCounter;
     /* 0x198 */ s16 mFrameVel;
     /* 0x19A */ s16 mRotYOff;
@@ -57,10 +57,10 @@ public:
 
 public:
     /* 0x000 */ dDoor_ssk_sub_c mSub[3];
-    /* 0x558 */ u8 m8;
-    /* 0x559 */ u8 m9;
-    /* 0x55A */ u8 mA;
-    /* 0x55B */ u8 mB;
+    /* 0x558 */ u8 mBarDir;
+    /* 0x559 */ u8 mFrontChk;
+    /* 0x55A */ u8 mBarState;
+    /* 0x55B */ u8 mIsActive;
     /* 0x55C */ dKy_tevstr_c mTevStr;
 };  // Size: 0x60C
 

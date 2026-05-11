@@ -130,11 +130,11 @@ void daDoor12_c::setStop() {
     if (chkMakeStop() && mStopBars.mpModel != NULL) {
         mStopBars.mFrontCheck = mFrontCheck;
         if (mFrontCheck == 0) {
-            mStopBars.m8 = chkStopF();
-            mStopBars.mA = chkStopB();
+            mStopBars.mBarDir = chkStopF();
+            mStopBars.mBarState = chkStopB();
         } else {
-            mStopBars.m8 = chkStopB();
-            mStopBars.mA = chkStopF();
+            mStopBars.mBarDir = chkStopB();
+            mStopBars.mBarState = chkStopF();
         }
         mStopBars.mOffsY = 0.0f;
     }
@@ -379,8 +379,8 @@ f32 daDoor12_c::openWide() {
 void daDoor12_c::setEventPrm() {
     if (mFrontCheck == 0) {
         m2C6 = 2;
-        if (mStopBars.mA == 0xff) {
-            mStopBars.mA = chkStopB();
+        if (mStopBars.mBarState == 0xff) {
+            mStopBars.mBarState = chkStopB();
         }
     } else {
         m2C6 = 3;
@@ -388,15 +388,15 @@ void daDoor12_c::setEventPrm() {
             return;
         }
 
-        if (mStopBars.mA == 0xff) {
-            mStopBars.mA = chkStopF();
+        if (mStopBars.mBarState == 0xff) {
+            mStopBars.mBarState = chkStopF();
         }
     }
 
-    if (mStopBars.m8 == 0) {
+    if (mStopBars.mBarDir == 0) {
         if (getType() == 3) {
             m2C6 = 6;
-        } else if (mStopBars.mA == 1) {
+        } else if (mStopBars.mBarState == 1) {
             m2C6 += 2;
         }
 
@@ -624,7 +624,7 @@ void daDoor12_c::demoProc() {
 
         case 2:
             setStop();
-            if (mStopBars.m8) {
+            if (mStopBars.mBarDir) {
                 mStopBars.closeInit(this);
             }
             break;
@@ -718,7 +718,7 @@ BOOL daDoor12_actionWait(daDoor12_c* i_this) {
         i_this->initOpenDemo(1);
         i_this->setAction(3);
         i_this->demoProc();
-    } else if (i_this->mStopBars.m8 != 0) {
+    } else if (i_this->mStopBars.mBarDir != 0) {
         if (i_this->eventInfo.checkCommandDemoAccrpt()) {
             i_this->mStaffId = dComIfGp_evmng_getMyStaffId("SHUTTER_DOOR");
             i_this->shape_angle.y = i_this->current.angle.y;
@@ -732,7 +732,7 @@ BOOL daDoor12_actionWait(daDoor12_c* i_this) {
             fopAcM_orderOtherEventId(i_this, i_this->mEventIdx[i_this->m2C6], i_this->mToolId[i_this->m2C6]);
         }
     } else if (i_this->chkStopClose()) {
-        i_this->mStopBars.m8 = 1;
+        i_this->mStopBars.mBarDir = 1;
         i_this->mStopBars.closeInit(i_this);
         i_this->mStopBars.calcMtx(i_this);
         i_this->setAction(2);
@@ -801,7 +801,7 @@ BOOL daDoor12_c::draw() {
         mKeyLock.draw(this);
     }
 
-    if (mStopBars.m8 != 0 && mStopBars.mpModel != NULL) {
+    if (mStopBars.mBarDir != 0 && mStopBars.mpModel != NULL) {
         g_env_light.setLightTevColorType(mStopBars.mpModel, &tevStr);
         mDoExt_modelUpdateDL(mStopBars.mpModel);
     }

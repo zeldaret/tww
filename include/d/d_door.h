@@ -111,10 +111,10 @@ public:
 public:
     /* 0x0 */ J3DModel* mpModel;
     /* 0x4 */ f32 mOffsY;
-    /* 0x8 */ u8 m8;
+    /* 0x8 */ u8 mBarDir;
     /* 0x9 */ u8 mFrontCheck;
-    /* 0xA */ u8 mA;
-    /* 0xB */ u8 mB;
+    /* 0xA */ u8 mBarState;
+    /* 0xB */ u8 mIsActive;
 };
 
 class dDoor_msg_c {
