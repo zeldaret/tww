@@ -444,24 +444,24 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             local_a1c.z = 0.0f;
             local_a1c.x = 0.0f;
             dVar13 = ((REG0_F(10) + i_this->m2188 * (REG0_F(9) + 3.0f)) - 120.0f);
-            iVar5 = 0;
             iVar3 = 0;
+            iVar5 = 0;
             dVar14 = 300.0f;
             dVar10 = 15.0f;
             dVar11 = 1.0f;
             dVar12 = -20000.0f;
             for (int iVar9 = 0; iVar9 < 5; iVar9++) {
-                pcVar7 = i_this->m1F98.getPos(iVar3);
+                pcVar7 = i_this->m1F98.getPos(iVar5);
 
                 if (dVar13 > (dVar14 * (4 - iVar9))) {
-                    cLib_addCalc0(&i_this->m1F70[iVar9], dVar11, (REG0_F(11) + 0.2f));
+                    cLib_addCalc0(&i_this->m1F70[iVar3], dVar11, (REG0_F(11) + 0.2f));
                 } else {
-                    cLib_addCalc2(&i_this->m1F70[iVar9], 1.0f, 1.0f, REG0_F(12) + 0.1f);
+                    cLib_addCalc2(&i_this->m1F70[iVar3], 1.0f, 1.0f, REG0_F(12) + 0.1f);
                 }
 
-                local_a1c.y = (dVar10 * i_this->m1F70[iVar9]);
+                local_a1c.y = (dVar10 * i_this->m1F70[iVar3]);
                 cMtx_YrotS(*calc_mtx, apdVar2->shape_angle.y);
-                iVar8 = ((dVar11 - i_this->m1F70[iVar9]) * (dVar12 + REG0_F(13)));
+                iVar8 = ((dVar11 - i_this->m1F70[iVar3]) * (dVar12 + REG0_F(13)));
                 local_a8 = iVar8;
                 cMtx_ZrotM(*calc_mtx, i_this->m1F92 + iVar9 * (REG0_S(0) + i_this->m1F94 + -2000) + iVar8);
                 cMtx_XrotM(*calc_mtx, i_this->m1F90);
@@ -471,8 +471,8 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                     MtxPosition(&local_a1c, pcVar7);
                     *pcVar7 += i_this->m02EC[1];
                 }
-                iVar5 += 4;
-                iVar3 += 24;
+                iVar3++;
+                iVar5++;
             }
             GXColor local_a54 = {200, 0x96, 50, 0xFF};
             i_this->m1F98.update(0x20, rope_scale, local_a54, 0, &actor->tevStr);
