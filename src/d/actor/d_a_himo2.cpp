@@ -453,7 +453,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                 local_a1c.y = (dVar10 * i_this->m1F70[iVar3]);
                 cMtx_YrotS(*calc_mtx, apdVar2->shape_angle.y);
                 iVar8 = ((dVar11 - i_this->m1F70[iVar3]) * (dVar12 + REG0_F(13)));
-                cMtx_ZrotM(*calc_mtx, i_this->m1F92 + iVar9 * (REG0_S(0) + i_this->m1F94 + -2000) + iVar8);
+                cMtx_ZrotM(*calc_mtx, i_this->m1F92 + iVar9 * (REG0_S(0) + (i_this->m1F94 - 2000)) + iVar8);
                 cMtx_XrotM(*calc_mtx, i_this->m1F90);
                 MtxTrans(0.0f, -local_a1c.y, 0.0f, true);
                 for (int j = 0; j < 32; j++, pcVar7++) {
@@ -475,7 +475,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             }
             cLib_addCalc2(&i_this->m1FD4, fVar1, 1.0f, REG0_F(15) + 4.0f);
             local_a4c = i_this->m02EC[0] - i_this->m02EC[1];
-            cMtx_YrotS(*calc_mtx, (cM_atan2s(local_a4c.x, local_a4c.z) + REG0_S(0) + -0x4000));
+            cMtx_YrotS(*calc_mtx, cM_atan2s(local_a4c.x, local_a4c.z) + (REG0_S(0) - 0x4000));
             local_a1c.x = 0.0f;
             local_a1c.y = REG0_F(7) + -10.0f - i_this->m1FD4;
             local_a1c.z = REG0_F(8) + 10.0f + i_this->m1FD4;
