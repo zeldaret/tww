@@ -455,7 +455,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                 local_a1c.y = (dVar10 * i_this->m1F70[iVar3]);
                 cMtx_YrotS(*calc_mtx, apdVar2->shape_angle.y);
                 iVar8 = ((dVar11 - i_this->m1F70[iVar3]) * (dVar12 + REG0_F(13)));
-                cMtx_ZrotM(*calc_mtx, i_this->m1F92 + iVar9 * (REG0_S(0) + (i_this->m1F94 - 2000)) + iVar8);
+                cMtx_ZrotM(*calc_mtx, i_this->m1F92 + iVar9 * ((REG0_S(0) - 2000) + i_this->m1F94) + iVar8);
                 cMtx_XrotM(*calc_mtx, i_this->m1F90);
                 MtxTrans(0.0f, -local_a1c.y, 0.0f, true);
                 for (int j = 0; j < 32; j++, pcVar7++) {
