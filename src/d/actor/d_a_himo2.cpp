@@ -483,9 +483,9 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             local_a1c.y *= i_this->m1F70[0];
             local_a1c.z *= i_this->m1F70[0];
             MtxPosition(&local_a1c, &local_a28);
-            local_a4c.x = local_a4c.x * 0.06666667f;
-            local_a4c.y = local_a4c.y * 0.06666667f;
-            local_a4c.z = local_a4c.z * 0.06666667f;
+            local_a4c.x *= 0.06666667f;
+            local_a4c.y *= 0.06666667f;
+            local_a4c.z *= 0.06666667f;
             int uVar4 = 0;
             int uVar6 = 0;
             for (int i = 0; i < 16; i++) {
