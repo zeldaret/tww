@@ -1065,8 +1065,8 @@ void daPz_c::ctrlEye() {
     f32 y_offset = 0.1f * eye_y_rate;
     f32 x_offset = 0.1f * eye_x_rate;
 
-    m06DC = cLib_checkMinMaxLimit(y_offset, -0.1f, 0.1f);
-    m06DC = cLib_checkMinMaxLimit(x_offset, -0.1f, 0.1f);
+    m06DC = (int)cLib_checkMinMaxLimit(y_offset, -0.1f, 0.1f);
+    m06DC = (int)cLib_checkMinMaxLimit(x_offset, -0.1f, 0.1f);
 
     y_offset = cLib_minMaxLimit(y_offset, -0.1f, 0.1f);
     x_offset = cLib_minMaxLimit(x_offset, -0.1f, 0.1f);
