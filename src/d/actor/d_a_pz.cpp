@@ -8,14 +8,18 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_material.h"
 #include "d/d_particle_name.h"
 #include "d/d_s_play.h"
 #include "d/res/res_pz.h"
+#include "d/actor/d_a_arrow.h"
 #include "d/actor/d_a_item.h"
+#include "d/actor/d_a_player.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_actor_mng.h"
+#include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -530,8 +534,167 @@ void daPz_c::demo() {
 }
 
 /* 00001954-00001EEC       .text checkTgHit__6daPz_cFv */
-void daPz_c::checkTgHit() {
-    /* Nonmatching */
+BOOL daPz_c::checkTgHit() {
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+
+    mStts.Move();
+    if (cLib_calcTimer(&m06D0) != 0) {
+        return FALSE;
+    }
+
+    if (!mCyl.ChkTgHit()) {
+        return FALSE;
+    }
+
+    BOOL do_damage = TRUE;
+    cCcD_Obj* hit_obj = mCyl.GetTgHitObj();
+    m06D0 = l_HIO.m0E0;
+    if (hit_obj == NULL) {
+        return FALSE;
+    }
+
+    switch (hit_obj->GetAtType()) {
+    case AT_TYPE_SWORD:
+    case AT_TYPE_MACHETE:
+    case AT_TYPE_UNK800:
+    case AT_TYPE_FIRE_ARROW:
+    case AT_TYPE_PGANON_SWORD:
+        switch (player->mCutType) {
+        case daPy_py_c::CUT_TYPE_BT_JUMPCUT:
+        case daPy_py_c::CUT_TYPE_CUT_EA:
+        case daPy_py_c::CUT_TYPE_CUT_EB:
+        case daPy_py_c::CUT_TYPE_CUT_TURN:
+        case daPy_py_c::CUT_TYPE_CUT_ROLL:
+        case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
+        case daPy_py_c::CUT_TYPE_JUMPCUT_STICK:
+        case daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE:
+        case daPy_py_c::CUT_TYPE_BT_ROLLCUT:
+        case daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT:
+        case daPy_py_c::CUT_TYPE_JUMPCUT_CLUB:
+        case daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD:
+        case daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR:
+        case daPy_py_c::CUT_TYPE_CUT_EXA:
+        case daPy_py_c::CUT_TYPE_CUT_EXB:
+            m06D1 = 1;
+            break;
+        default:
+            m06D1 = 0;
+            break;
+        }
+        break;
+    case AT_TYPE_WIND:
+        do_damage = FALSE;
+        m06D1 = 3;
+        break;
+    case AT_TYPE_BOOMERANG:
+    case AT_TYPE_BOKO_STICK:
+        m06D1 = 4;
+        break;
+    case AT_TYPE_HOOKSHOT:
+        m06D1 = 0x0C;
+        break;
+    case AT_TYPE_SKULL_HAMMER:
+    case AT_TYPE_STALFOS_MACE:
+        m06D1 = 7;
+        if (player->mCutType == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
+            m06D1 = 8;
+        }
+        break;
+    case AT_TYPE_BOMB:
+        m06D1 = 6;
+        break;
+    case AT_TYPE_NORMAL_ARROW:
+    case AT_TYPE_ICE_ARROW:
+    case AT_TYPE_LIGHT_ARROW:
+    case AT_TYPE_DARKNUT_SWORD:
+        m06D1 = 5;
+        break;
+    case AT_TYPE_GRAPPLING_HOOK:
+        m06D1 = 0x0E;
+        do_damage = FALSE;
+        break;
+    default:
+        break;
+    }
+
+    fopAc_ac_c* hit_actor = mCyl.GetTgHitAc();
+    if (fopAcM_GetName(hit_actor) == PROC_ARROW) {
+        daArrow_c* arrow = (daArrow_c*)hit_actor;
+        if (arrow->isLinkReflect()) {
+            m06D1 = 5;
+        } else if (arrow->isSetByZelda()) {
+            return FALSE;
+        }
+    }
+
+    if (do_damage) {
+        cXyz* hit_pos = mCyl.GetTgHitPosP();
+        m0F6C = fopAcM_searchActorAngleY(this, hit_actor);
+        hit_obj = mCyl.GetTgHitObj();
+        def_se_set(this, mCyl.GetTgHitObj(), 0x41);
+
+        cXyz flush_pos = *hit_pos;
+        dKy_SordFlush_set(flush_pos, 0);
+
+        if (m06D1 == 1 || m06D1 == 7 || m06D1 == 8) {
+            m0F68 = 40.0f;
+        } else {
+            m0F68 = l_HIO.m0D0;
+        }
+
+        dComIfGp_particle_set(
+            dCcg_TgHitMark_Purple_e, hit_pos, &player->current.angle, NULL, 0xFF, NULL, -1, NULL, NULL, NULL
+        );
+        modeProc(PROC_INIT_e, 4);
+
+        if (fopAcM_GetName(hit_actor) == PROC_GND) {
+            m0744 = 0;
+            m0F68 *= 1.5f;
+            m0754 = 0;
+            m075C = 0;
+            m0760++;
+            if (m0760 > l_HIO.m0E2[0]) {
+                m0760 = 0;
+                m0764 = l_HIO.m0E2[1];
+                m0768 = 1;
+            }
+
+            if (cM_rndF(1.0f) < 0.0f) {
+                fopAcM_monsSeStart(this, JA_SE_CV_ZL_GN_DAMAGE, 0);
+            }
+        } else {
+            m0744 = 1;
+            m0760 = 0;
+            m0768 = 0;
+            m0754++;
+            if (m0754 > l_HIO.m0E2[2]) {
+                m0754 = 0;
+                m0758 = l_HIO.m0E2[3];
+                m075C = 1;
+            }
+
+            if (cM_rndF(1.0f) < 0.5f) {
+                fopAcM_monsSeStart(this, JA_SE_CV_ZL_GN_DAMAGE, 0);
+            }
+        }
+
+        m0748 = *hit_pos;
+    } else if (m06D1 == 0x0E) {
+        fopAcM_monsSeStart(this, JA_SE_CV_ZL_GN_DAMAGE, 0);
+
+        int item_no = 0;
+        if (dComIfGs_getLife() <= 0x0C) {
+            item_no = 0x1E;
+        }
+
+        fopAcM_fastCreateItem(
+            &current.pos, item_no, fopAcM_GetRoomNo(this), &current.angle, NULL, 0.0f, 0.0f, -6.0f, -1,
+            stealItem_CB
+        );
+        modeProc(PROC_INIT_e, 4);
+    }
+
+    return TRUE;
 }
 
 /* 00001EEC-00001F10       .text getArg__6daPz_cFv */
@@ -869,8 +1032,34 @@ void daPz_c::modeFollow() {
 }
 
 /* 000059B8-00005C58       .text modeProc__6daPz_cFQ26daPz_c6Proc_ei */
-void daPz_c::modeProc(daPz_c::Proc_e, int) {
-    /* Nonmatching */
+void daPz_c::modeProc(daPz_c::Proc_e proc, int mode) {
+    typedef void (daPz_c::*ProcFunc)();
+    struct ProcEntry {
+        /* 0x00 */ ProcFunc init;
+        /* 0x0C */ ProcFunc run;
+        /* 0x18 */ const char* name;
+    };
+
+    static ProcEntry mode_tbl[] = {
+        {&daPz_c::modeWaitInit, &daPz_c::modeWait, "WAIT"},
+        {&daPz_c::modeMoveInit, &daPz_c::modeMove, "MOVE"},
+        {&daPz_c::modeAttackWaitInit, &daPz_c::modeAttackWait, "ATTACKWAIT"},
+        {&daPz_c::modeAttackInit, &daPz_c::modeAttack, "ATTACK"},
+        {&daPz_c::modeDefendInit, &daPz_c::modeDefend, "DEFEND"},
+        {&daPz_c::modeDownInit, &daPz_c::modeDown, "DOWN"},
+        {&daPz_c::modeAfraidInit, &daPz_c::modeAfraid, "AFRAID"},
+        {&daPz_c::modeSideStepInit, &daPz_c::modeSideStep, "SIDE_STEP"},
+        {&daPz_c::modeBackStepInit, &daPz_c::modeBackStep, "BACK_STEP"},
+        {&daPz_c::modeTalkInit, &daPz_c::modeTalk, "TALK"},
+        {&daPz_c::modeFollowInit, &daPz_c::modeFollow, "FOLLOW"},
+    };
+
+    if (proc == PROC_INIT_e) {
+        mMode = mode;
+        (this->*mode_tbl[mMode].init)();
+    } else if (proc == PROC_EXEC_e) {
+        (this->*mode_tbl[mMode].run)();
+    }
 }
 
 /* 00005C58-000060D8       .text _execute__6daPz_cFv */
@@ -913,7 +1102,53 @@ bool daPz_c::_draw() {
 
 /* 0000676C-00006974       .text bodyCreateInit__6daPz_cFv */
 void daPz_c::bodyCreateInit() {
-    /* Nonmatching */
+    static u8 l_eyeMatNo[] = {
+        3, 2, 1, 6, 5, 4,
+    };
+    static u8 l_eyeblowMatNo[] = {
+        0x0D, 0x0C, 0x0B, 0x10, 0x0F, 0x0E,
+    };
+    static u8 l_faceMatNo[] = {
+        0x12, 0x13, 0x08, 0x07,
+    };
+
+    if (strcmp(dComIfGp_getStartStageName(), "btl_of_swroom") == 0) {
+        eventInfo.setEventId(dComIfGp_evmng_getEventIdx("p_zelda", 0xFF));
+    }
+
+    J3DModelData* modelData = mpMorf->getModel()->getModelData();
+    m0FD0 = *(u32*)modelData->getVtxAttrFmtList();
+
+    for (int i = 0; i < 6; i++) {
+        mEyeMat[i] = modelData->getMaterialNodePointer(l_eyeMatNo[i]);
+        mEyeShape[i] = mEyeMat[i]->getShape();
+    }
+
+    for (int i = 0; i < 6; i++) {
+        mEyebrowMat[i] = modelData->getMaterialNodePointer(l_eyeblowMatNo[i]);
+        mEyebrowShape[i] = mEyebrowMat[i]->getShape();
+    }
+
+    for (int i = 0; i < 4; i++) {
+        mFaceMat[i] = modelData->getMaterialNodePointer(l_faceMatNo[i]);
+        mFaceShape[i] = mFaceMat[i]->getShape();
+    }
+
+    J3DMaterialAnm* mat_anm = mEyeMat[2]->getMaterialAnm();
+    mEyeMat[1]->setMaterialAnm(mat_anm);
+    mEyeMat[0]->setMaterialAnm(mat_anm);
+
+    mat_anm = mEyeMat[5]->getMaterialAnm();
+    mEyeMat[4]->setMaterialAnm(mat_anm);
+    mEyeMat[3]->setMaterialAnm(mat_anm);
+
+    mat_anm = mEyebrowMat[2]->getMaterialAnm();
+    mEyebrowMat[1]->setMaterialAnm(mat_anm);
+    mEyebrowMat[0]->setMaterialAnm(mat_anm);
+
+    mat_anm = mEyebrowMat[5]->getMaterialAnm();
+    mEyebrowMat[4]->setMaterialAnm(mat_anm);
+    mEyebrowMat[3]->setMaterialAnm(mat_anm);
 }
 
 /* 00006974-00006BAC       .text createInit__6daPz_cFv */

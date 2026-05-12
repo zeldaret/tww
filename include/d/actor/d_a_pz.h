@@ -9,6 +9,9 @@
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 #include "m_Do/m_Do_hostIO.h"
 
+class J3DMaterial;
+class J3DShape;
+
 class daPz_matAnm_c : public J3DMaterialAnm {
 public:
     daPz_matAnm_c();
@@ -29,13 +32,14 @@ private:
 class daPz_c : public fopNpc_npc_c {
 public:
     enum Proc_e {
-        
+        PROC_INIT_e = 0,
+        PROC_EXEC_e = 1,
     };
 
     MtxP getRightHandMatrix() { return mpMorf->getModel()->getAnmMtx(0x13); } // hand_R1 joint
     void isAnm(s8) {}
     void isEyeAnm(s8) {}
-    void modeProcInit(int) {}
+    void modeProcInit(int newMode) { modeProc(PROC_INIT_e, newMode); }
     void setAfraid() {}
     void setDown() { m08EA = true; }
     void setMove() {}
@@ -60,7 +64,7 @@ public:
     void setRipple();
     void setJntStatus();
     void demo();
-    void checkTgHit();
+    BOOL checkTgHit();
     void getArg();
     void setAttention();
     void setBowAnm(s8, bool);
@@ -117,7 +121,9 @@ public:
     /* 0x06C4 */ int mMode;
     /* 0x06C8 */ int m06C8;
     /* 0x06CC */ int m06CC;
-    /* 0x06D0 */ u8 m06D0[0x06D3 - 0x06D0];
+    /* 0x06D0 */ u8 m06D0;
+    /* 0x06D1 */ u8 m06D1;
+    /* 0x06D2 */ u8 m06D2;
     /* 0x06D3 */ u8 m06D3;
     /* 0x06D4 */ u8 m06D4[0x06D5 - 0x06D4];
     /* 0x06D5 */ u8 mCurEye;
@@ -131,7 +137,17 @@ public:
     /* 0x0738 */ u8 m0738[0x073E - 0x0738];
     /* 0x073E */ u8 mbEyesFollowGanondorf;
     /* 0x073F */ u8 m073F;
-    /* 0x0740 */ u8 m0740[0x076C - 0x0740];
+    /* 0x0740 */ u8 m0740[0x0744 - 0x0740];
+    /* 0x0744 */ int m0744;
+    /* 0x0748 */ cXyz m0748;
+    /* 0x0754 */ int m0754;
+    /* 0x0758 */ int m0758;
+    /* 0x075C */ u8 m075C;
+    /* 0x075D */ u8 m075D[0x0760 - 0x075D];
+    /* 0x0760 */ int m0760;
+    /* 0x0764 */ int m0764;
+    /* 0x0768 */ u8 m0768;
+    /* 0x0769 */ u8 m0769[0x076C - 0x0769];
     /* 0x076C */ request_of_phase_process_class mPhs;
     /* 0x0774 */ u32 m0774;
     /* 0x0778 */ mDoExt_invisibleModel mInvisibleModel;
@@ -167,7 +183,9 @@ public:
     /* 0x0F65 */ u8 m0F65;
     /* 0x0F66 */ u8 m0F66;
     /* 0x0F67 */ u8 mEyeBtpState;
-    /* 0x0F68 */ u8 m0F68[0x0F70 - 0x0F68];
+    /* 0x0F68 */ f32 m0F68;
+    /* 0x0F6C */ s16 m0F6C;
+    /* 0x0F6E */ u8 m0F6E[0x0F70 - 0x0F6E];
     /* 0x0F70 */ f32 m0F70;
     /* 0x0F74 */ u8 m0F74[0x0F78 - 0x0F74];
     /* 0x0F78 */ s16 mWaist2RotZ;
@@ -184,7 +202,14 @@ public:
     /* 0x0F90 */ mDoExt_brkAnm mBrkAnm;
     /* 0x0FA8 */ mDoExt_btkAnm mBtkAnm;
     /* 0x0FBC */ mDoExt_btpAnm mBtpAnm;
-    /* 0x0FD0 */ u8 m0FD0[0x1049 - 0x0FD0];
+    /* 0x0FD0 */ u32 m0FD0;
+    /* 0x0FD4 */ J3DMaterial* mEyeMat[6];
+    /* 0x0FEC */ J3DMaterial* mEyebrowMat[6];
+    /* 0x1004 */ J3DMaterial* mFaceMat[4];
+    /* 0x1014 */ J3DShape* mEyeShape[6];
+    /* 0x102C */ J3DShape* mEyebrowShape[6];
+    /* 0x1044 */ J3DShape* mFaceShape[4];
+    /* 0x1054 */ u8 m1054[0x1094 - 0x1054];
 };
 
 class daPz_HIO_c : public mDoHIO_entry_c {
