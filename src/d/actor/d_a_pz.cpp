@@ -363,8 +363,27 @@ u32 daPz_c::getMsg() {
 }
 
 /* 00001194-00001208       .text next_msgStatus__6daPz_cFPUl */
-u16 daPz_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
+u16 daPz_c::next_msgStatus(u32* pMsgNo) {
+    u16 status = fopMsgStts_MSG_CONTINUES_e;
+    u32 msgNo = *pMsgNo;
+
+    switch (msgNo) {
+    case 0x3563:
+        *pMsgNo = 0x3564;
+        break;
+    default:
+        if (msgNo == 0x3564) {
+            fopAc_ac_c* ganondorf;
+            if (fopAcM_SearchByName(PROC_GND, &ganondorf) && ganondorf->stealItemBitNo == 0) {
+                ganondorf->stealItemBitNo = 0x23;
+            }
+        }
+
+        status = fopMsgStts_MSG_ENDS_e;
+        break;
+    }
+
+    return status;
 }
 
 /* 00001208-00001288       .text anmAtr__6daPz_cFUs */
