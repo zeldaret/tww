@@ -9,7 +9,9 @@
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_material.h"
 #include "d/actor/d_a_item.h"
+#include "d/d_snap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -573,7 +575,17 @@ void daPz_c::drawShadow() {
 
 /* 000066D8-0000676C       .text _draw__6daPz_cFv */
 bool daPz_c::_draw() {
-    /* Nonmatching */
+    if (mEventIce.mFreezeTimer > 20) {
+        dMat_control_c::iceEntryDL(mpMorf, -1, &mInvisibleModel);
+    } else {
+        bodyDraw();
+    }
+    if (m0F88) {
+        bowDraw();
+    }
+    drawShadow();
+    dSnap_RegistFig(DSNAP_TYPE_UNK87, this, 1.0f, 1.0f, 1.0f);
+    return TRUE;
 }
 
 /* 0000676C-00006974       .text bodyCreateInit__6daPz_cFv */
