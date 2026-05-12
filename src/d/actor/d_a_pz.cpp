@@ -1587,7 +1587,7 @@ void daPz_c::bodyDraw() {
     mEyebrowShape[2]->show();
     mEyebrowShape[5]->show();
     mRootJoint->entryIn();
-    modelData->removeTexMtxAnimator(mBtkAnm.getBtkAnm());
+    modelData->getMaterialTable().removeTexMtxAnimator(mBtkAnm.getBtkAnm());
 
     mEyeShape[2]->hide();
     mEyeShape[5]->hide();
@@ -1632,9 +1632,9 @@ void daPz_c::bodyDraw() {
         modelData->getMaterialNodePointer(i)->getShape()->show();
     }
 
-    modelData->removeTexNoAnimator(mBtpAnm.getBtpAnm());
+    modelData->getMaterialTable().removeTexNoAnimator(mBtpAnm.getBtpAnm());
     if (mArg != 0) {
-        modelData->removeTevRegAnimator(mBrkAnm.getBrkAnm());
+        modelData->getMaterialTable().removeTevRegAnimator(mBrkAnm.getBrkAnm());
     }
 }
 
