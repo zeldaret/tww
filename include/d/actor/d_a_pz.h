@@ -129,7 +129,9 @@ public:
     /* 0x06D3 */ s8 mAnmPrmIdx;
     /* 0x06D4 */ s8 mOldAnmPrmIdx;
     /* 0x06D5 */ u8 mCurEye;
-    /* 0x06D6 */ u8 m06D6[0x06DD - 0x06D6];
+    /* 0x06D6 */ u8 m06D6[0x06D8 - 0x06D6];
+    /* 0x06D8 */ int mEyeTimer;
+    /* 0x06DC */ u8 m06DC[0x06DD - 0x06DC];
     /* 0x06DD */ s8 mBowBckIdx;
     /* 0x06DE */ s8 mBowAnmPrmIdx;
     /* 0x06DF */ s8 mBowOldAnmPrmIdx;

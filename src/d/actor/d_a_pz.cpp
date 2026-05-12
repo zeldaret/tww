@@ -1037,7 +1037,43 @@ void daPz_c::modeWaitInit() {
 
 /* 00002E2C-00002FE8       .text modeWait__6daPz_cFv */
 void daPz_c::modeWait() {
-    /* Nonmatching */
+    m08C4 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+
+    dEvent_manager_c* evt_mgr = dComIfGp_getPEvtManager();
+    if (evt_mgr->getEventData(evt_mgr->getEventIdx("btl_of_swroom", 0xFF)) != NULL) {
+        int staff_id = evt_mgr->getMyStaffId("p_zelda", NULL, 0);
+        if (staff_id != -1) {
+            if (strcmp(evt_mgr->getMyNowCutName(staff_id), "Turn") == 0) {
+                m08EA = false;
+                m_jnt.mbTrn = true;
+                m_jnt.mbHeadLock = false;
+                m_jnt.mbBackBoneLock = false;
+                if (cLib_calcTimer(&m08EC) == 0) {
+                    evt_mgr->cutEnd(staff_id);
+                }
+            } else if (strcmp(evt_mgr->getMyNowCutName(staff_id), "Retire") == 0) {
+                mEyeTimer = 0;
+                u8 cur_eye_frame = mEyeBtpState;
+                int eye_frame = REG8_S(1) + 4;
+                if (cur_eye_frame >= eye_frame) {
+                    mEyeBtpState = eye_frame;
+                    mEventIce.mLightShrinkTimer = 1;
+                    mEyeTimer = 1000;
+                    evt_mgr->cutEnd(staff_id);
+                }
+            } else {
+                if (!mEventIce.mLightShrinkTimer) {
+                    mEyeTimer = 1000;
+                }
+                m_jnt.mbTrn = false;
+            }
+        }
+    } else {
+        m_jnt.mbTrn = false;
+        m08EA = true;
+        m_jnt.mbHeadLock = true;
+        m_jnt.mbBackBoneLock = true;
+    }
 }
 
 /* 00002FE8-000031E8       .text modeMoveInit__6daPz_cFv */
