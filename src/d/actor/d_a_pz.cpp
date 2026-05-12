@@ -1404,7 +1404,7 @@ void daPz_c::modeAttackWait() {
 
     if (m08B0 == 0) {
         fopAc_ac_c* ganondorf;
-        if (fopAcM_SearchByName(PROC_GND, &ganondorf) && ganondorf->stealItemBitNo > 60 &&
+        if (fopAcM_SearchByName(PROC_GND, &ganondorf) && ganondorf->health > 60 &&
             dComIfGs_getLife() >= 12 && m075C)
         {
             m08C4 = dNpc_playerEyePos(l_HIO.mNpc.m04);
@@ -1478,7 +1478,7 @@ void daPz_c::modeAttack() {
 
     if (m08B0 == 0) {
         fopAc_ac_c* ganondorf;
-        if (fopAcM_SearchByName(PROC_GND, &ganondorf) && ganondorf->stealItemBitNo > 60 &&
+        if (fopAcM_SearchByName(PROC_GND, &ganondorf) && ganondorf->health > 60 &&
             dComIfGs_getLife() >= 12 && m075C)
         {
             m08C4 = dNpc_playerEyePos(l_HIO.mNpc.m04);
