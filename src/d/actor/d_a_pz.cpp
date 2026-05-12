@@ -305,8 +305,16 @@ void daPz_c::setBowAnm(signed char, bool) {
 }
 
 /* 00002114-00002184       .text setBowString__6daPz_cFb */
-void daPz_c::setBowString(bool) {
-    /* Nonmatching */
+void daPz_c::setBowString(bool i_show) {
+    J3DMaterial* mat = mpBowMcaMorf->getModel()->getModelData()->getJointNodePointer(0)->getMesh()->getNext();
+    J3DMaterial* string_mat = mat->getNext();
+    if (i_show) {
+        mat->getShape()->show();
+        string_mat->getShape()->hide();
+    } else {
+        mat->getShape()->hide();
+        string_mat->getShape()->show();
+    }
 }
 
 /* 00002184-0000246C       .text setAnm__6daPz_cFScbi */
