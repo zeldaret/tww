@@ -66,13 +66,14 @@ void spin_draw(himo2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     int iVar11;
     s16 sVar3;
-    f32 fVar10;
+    f32 delta;
+    f32 fVar1;
     f32 fVar5;
+    f32 fVar10;
     int iVar6;
     s16 sVar2;
     s16 sVar4;
     s16 sVar9;
-    f32 fVar1;
     s16 sVar8;
     cXyz* pcVar7;
     cXyz local_504;
@@ -82,8 +83,8 @@ void spin_draw(himo2_class* i_this) {
 
     sVar4 = 0;
     sVar2 = i_this->m2510;
-    fVar5 = 8.0f * (fVar10 = (fVar1 = i_this->m217C->scale.y) - 1.0f);
-    fVar10 = -7.0f * fVar10;
+    fVar5 = 8.0f * (delta = (fVar1 = i_this->m217C->scale.y) - 1.0f);
+    fVar10 = -7.0f * delta;
     #if VERSION > VERSION_DEMO
     if ((fopAcM_GetParam(i_this->m217C) & 0x0F) == 3) {
         fVar5 += REG8_F(8) + -3.0f;
