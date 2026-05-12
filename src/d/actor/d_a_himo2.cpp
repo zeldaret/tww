@@ -766,7 +766,6 @@ void new_himo2_move(himo2_class* i_this) {
     fopAc_ac_c* r24;
     dAttention_c* attention; // r23
     u32 r30;
-    int r23;
     s16 r22;
     f32 f31;
     f32 f30;
@@ -871,7 +870,7 @@ void new_himo2_move(himo2_class* i_this) {
                 fopAcM_seStart(actor, JA_SE_LK_ROPE_COIL_1, 0);
             }
         } else {
-            r23 = (i_this->m2188 * (REG0_F(3) + 0.060000002f));
+            int r23 = (i_this->m2188 * (REG0_F(3) + 0.060000002f));
             i_this->m02CC = 97 - r23;
             cLib_addCalc2(&actor->current.pos.x, sp100.x, 1.0f, i_this->m2500 * 200.0f);
             cLib_addCalc2(&actor->current.pos.y, sp100.y, 1.0f, i_this->m2500 * 200.0f);
@@ -995,7 +994,7 @@ void new_himo2_move(himo2_class* i_this) {
         f27 = (dVar25 * dVar25);
         f32 f26 = std::sqrtf(f31 + (f27 + (f30 * f30)));
         f27 = std::sqrtf(f27 + f31);
-        r23 = (s16)(f26 * (REG0_F(3) + -5.0f));
+        int r23 = (s16)(f26 * (REG0_F(3) + -5.0f));
         if (r23 < (s16)(REG0_S(2) + -3000)) {
             r23 = REG0_S(2) + -3000;
         }
@@ -1076,7 +1075,7 @@ void new_himo2_move(himo2_class* i_this) {
         MtxPosition(&sp130, &actor->speed);
         actor->current.pos += actor->speed;
         pl_pos_add(i_this);
-        r23 = himo2_bg_check(i_this);
+        int r23 = himo2_bg_check(i_this);
         if (r23 != 0) {
             r26 = true;
             i_this->m2500 = 0.1f;
@@ -1109,7 +1108,7 @@ void new_himo2_move(himo2_class* i_this) {
             if (i_this->m2184 < 0.1f) {
                 fopAcM_SetParam(actor, 0);
             }
-            r23 = (i_this->m2188 * (REG0_F(5) + 0.060000002f));
+            int r23 = (i_this->m2188 * (REG0_F(5) + 0.060000002f));
             r23 = 97 - r23;
             if ((r23 < i_this->m02CC) || (i_this->m2184 < 0.1f)) {
                 i_this->m02CC = r23;
@@ -1134,7 +1133,7 @@ void new_himo2_move(himo2_class* i_this) {
         cLib_addCalc2(&i_this->m2500, 1.0f, 1.0f, 0.01f);
         pl_pos_add(i_this);
         sp130 = actor->current.pos - sp100;
-        r23 = -1;
+        int r23 = -1;
         if (sp130.abs() > 5.0f) {
             fopAcM_seStart(player, JA_SE_LK_ROPE_UNWIND, 0);
         } else {
@@ -1156,7 +1155,7 @@ void new_himo2_move(himo2_class* i_this) {
         cLib_addCalc2(&i_this->m2500, 1.0f, 1.0f, 0.01f);
         pl_pos_add(i_this);
         sp130 = actor->current.pos - sp100;
-        r23 = -1;
+        int r23 = -1;
         if (sp130.abs() > 5.0f) {
             fopAcM_seStart(player, JA_SE_LK_ROPE_UNWIND, 0);
         } else {
@@ -1169,7 +1168,7 @@ void new_himo2_move(himo2_class* i_this) {
         break;
     }
     case 10: {
-        r23 = (i_this->m2188 * (REG0_F(1) + 0.060000002f));
+        int r23 = (i_this->m2188 * (REG0_F(1) + 0.060000002f));
         i_this->m02CC = 100 - r23;
         actor->current.pos = i_this->m2504;
         cLib_addCalc2(&i_this->m02E4, -6.25f, 1.0f, 0.375f);
@@ -1186,7 +1185,7 @@ void new_himo2_move(himo2_class* i_this) {
     }
     case 11: {
         actor->current.pos = i_this->m2504;
-        r23 = (i_this->m2188 * (REG0_F(2) + 0.060000002f));
+        int r23 = (i_this->m2188 * (REG0_F(2) + 0.060000002f));
         i_this->m02CC = 100 - r23;
         i_this->m217C->health = 3;
     label_1260:
