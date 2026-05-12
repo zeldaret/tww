@@ -652,7 +652,6 @@ BOOL daPz_c::checkTgHit() {
     case AT_TYPE_SWORD:
     case AT_TYPE_MACHETE:
     case AT_TYPE_UNK800:
-    case AT_TYPE_FIRE_ARROW:
     case AT_TYPE_DARKNUT_SWORD:
     case AT_TYPE_MOBLIN_SPEAR:
         switch (player->mCutType) {
@@ -700,6 +699,7 @@ BOOL daPz_c::checkTgHit() {
         m06D1 = 6;
         break;
     case AT_TYPE_NORMAL_ARROW:
+    case AT_TYPE_FIRE_ARROW:
     case AT_TYPE_ICE_ARROW:
     case AT_TYPE_LIGHT_ARROW:
         m06D1 = 5;
