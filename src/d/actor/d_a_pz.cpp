@@ -1115,7 +1115,34 @@ void daPz_c::modeDefendInit() {
 
 /* 000044B4-00004630       .text modeDefend__6daPz_cFv */
 void daPz_c::modeDefend() {
-    /* Nonmatching */
+    m0924 = 0.0f;
+    m_jnt.mbTrn = false;
+
+    s16 target_angle = cLib_targetAngleY(&current.pos, &m0748);
+    cLib_addCalcAngleS2(&shape_angle.y, target_angle, 4, 0x1000);
+    cLib_distanceAngleS(shape_angle.y, target_angle);
+
+    if (m0F68 > 0.1f) {
+        cXyz offset(0.0f, 0.0f, -m0F68);
+        cXyz rotated(0.0f, 0.0f, 0.0f);
+        mDoMtx_stack_c::YrotS(m0F6C);
+        mDoMtx_stack_c::multVec(&offset, &rotated);
+        PSVECAdd(&current.pos, &rotated, &current.pos);
+        cLib_addCalc0(&m0F68, 1.0f, 5.0f);
+
+        int land_id;
+        dComIfGp_particle_setSimpleLand(
+            mObjAcch.m_gnd, &current.pos, &shape_angle, 1.25f, 1.5f, 1.0f, &tevStr, &land_id, 7
+        );
+    } else {
+        if (m075C || m0768) {
+            modeProc(PROC_INIT_e, 2);
+        } else if (cLib_calcTimer(&m08EC) == 0) {
+            modeProc(PROC_INIT_e, 1);
+        }
+    }
+
+    (u8)checkTgHit();
 }
 
 /* 00004630-0000470C       .text modeDownInit__6daPz_cFv */
