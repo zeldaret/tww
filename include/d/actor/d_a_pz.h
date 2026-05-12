@@ -160,7 +160,9 @@ public:
     /* 0x0F65 */ u8 m0F65;
     /* 0x0F66 */ u8 m0F66[0x0F70 - 0x0F66];
     /* 0x0F70 */ f32 m0F70;
-    /* 0x0F74 */ u8 m0F74[0x0F7C - 0x0F74];
+    /* 0x0F74 */ u8 m0F74[0x0F78 - 0x0F74];
+    /* 0x0F78 */ s16 mWaist2RotZ;
+    /* 0x0F7A */ s16 mWaist2RotY;
     /* 0x0F7C */ int m0F7C;
     /* 0x0F80 */ u8 m0F80;
     /* 0x0F81 */ u8 m0F81[0x0F82 - 0x0F81];

@@ -13,6 +13,7 @@
 #include "d/actor/d_a_item.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_actor_mng.h"
+#include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "m_Do/m_Do_mtx.h"
 
 const u32 daPz_c::m_heapsize = 0xA740;
@@ -194,8 +195,13 @@ static BOOL nodeWaist2Control_CB(J3DNode* i_node, int i_calcTiming) {
 }
 
 /* 0000075C-000007F4       .text _nodeWaist2Control__6daPz_cFP7J3DNodeP8J3DModel */
-void daPz_c::_nodeWaist2Control(J3DNode*, J3DModel*) {
-    /* Nonmatching */
+void daPz_c::_nodeWaist2Control(J3DNode* i_node, J3DModel* i_model) {
+    u16 jnt_no = ((J3DJoint*)i_node)->getJntNo();
+    mDoMtx_stack_c::copy(i_model->getAnmMtx(jnt_no));
+    mDoMtx_stack_c::YrotM(mWaist2RotY);
+    mDoMtx_stack_c::ZrotM(mWaist2RotZ);
+    cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+    PSMTXCopy(mDoMtx_stack_c::now, i_model->getAnmMtx(jnt_no));
 }
 
 /* 000007F4-00000840       .text nodeSkirtControl_CB__FP7J3DNodei */
