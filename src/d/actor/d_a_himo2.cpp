@@ -69,9 +69,9 @@ void spin_draw(himo2_class* i_this) {
     f32 fVar10;
     f32 fVar5;
     int iVar6;
+    s16 sVar2;
     s16 sVar4;
     s16 sVar9;
-    s16 sVar2;
     f32 fVar1;
     s16 sVar8;
     cXyz* pcVar7;
