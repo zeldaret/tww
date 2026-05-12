@@ -1522,19 +1522,20 @@ void daPz_c::modeAttack() {
         }
     }
 
-    if (mAnmPrmIdx == 4) {
+    u8 anm_idx = mAnmPrmIdx;
+    if (anm_idx == 4) {
         if (mpMorf->isStop()) {
             m_jnt.mbTrn = true;
             setAnm(5, false, 0xF);
             return;
         }
-    } else if (mAnmPrmIdx == 5) {
+    } else if ((s8)anm_idx == 5) {
         m_jnt.mbTrn = true;
         if (cLib_calcTimer(&m08EC) == 0) {
             setAnm(6, false, 0xF);
             return;
         }
-    } else if (mAnmPrmIdx == 6 && mpMorf->isStop()) {
+    } else if ((s8)anm_idx == 6 && mpMorf->isStop()) {
         m_jnt.mbTrn = false;
         if (m075C) {
             m0758--;
