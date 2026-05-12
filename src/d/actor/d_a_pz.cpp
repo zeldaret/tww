@@ -1280,7 +1280,93 @@ void daPz_c::bowDraw() {
 
 /* 00006154-00006600       .text bodyDraw__6daPz_cFv */
 void daPz_c::bodyDraw() {
-    /* Nonmatching */
+    J3DModel* model = mpMorf->getModel();
+    J3DModelData* modelData = model->getModelData();
+
+    g_env_light.setLightTevColorType(model, &tevStr);
+    mpMorf->calc();
+    model->unlock();
+
+    if (mArg != 0) {
+        mBrkAnm.entry(modelData, mBrkAnm.getFrame());
+    }
+
+    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaListP0, OPA_BUFFER);
+    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaListP0, XLU_BUFFER);
+    mBtpAnm.entry(modelData, mEyeBtpState);
+    m1084.entryOpa();
+
+    for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
+        J3DMaterial* mat = modelData->getMaterialNodePointer(i);
+        if (i != 3 && i != 6 && i != 0x0D && i != 0x10) {
+            mat->getShape()->hide();
+        } else {
+            mat->getShape()->show();
+        }
+    }
+    mRootJoint->entryIn();
+    m1064.entryOpa();
+
+    mBtkAnm.entry(modelData, mBtkAnm.getFrame());
+
+    mEyeShape[0]->hide();
+    mEyeShape[3]->hide();
+    mEyeShape[2]->show();
+    mEyeShape[5]->show();
+    mEyebrowShape[0]->hide();
+    mEyebrowShape[3]->hide();
+    mEyebrowShape[2]->show();
+    mEyebrowShape[5]->show();
+    mRootJoint->entryIn();
+    modelData->removeTexMtxAnimator(mBtkAnm.getBtkAnm());
+
+    mEyeShape[2]->hide();
+    mEyeShape[5]->hide();
+    mEyebrowShape[2]->hide();
+    mEyebrowShape[5]->hide();
+    for (int i = 0; i < 4; i++) {
+        mFaceShape[i]->show();
+    }
+    mRootJoint->entryIn();
+    m1074.entryOpa();
+
+    for (int i = 0; i < 4; i++) {
+        mFaceShape[i]->hide();
+    }
+    mEyeShape[1]->show();
+    mEyeShape[4]->show();
+    mEyebrowShape[1]->show();
+    mEyebrowShape[4]->show();
+    mRootJoint->entryIn();
+    m1054.entryOpa();
+
+    mEyeShape[1]->hide();
+    mEyeShape[4]->hide();
+    mEyebrowShape[1]->hide();
+    mEyebrowShape[4]->hide();
+
+    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaListP1, OPA_BUFFER);
+    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpXluListP1, XLU_BUFFER);
+    for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
+        if (i != 3 && i != 2 && i != 1 && i != 6 && i != 5 && i != 4 && i != 0x0D &&
+            i != 0x0C && i != 0x0B && i != 0x10 && i != 0x0F && i != 0x0E && i != 0x12 &&
+            i != 0x13 && i != 0x08 && i != 0x07)
+        {
+            modelData->getMaterialNodePointer(i)->getShape()->show();
+        }
+    }
+    mpMorf->entryDL();
+
+    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaList, OPA_BUFFER);
+    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpXluList, XLU_BUFFER);
+    for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
+        modelData->getMaterialNodePointer(i)->getShape()->show();
+    }
+
+    modelData->removeTexNoAnimator(mBtpAnm.getBtpAnm());
+    if (mArg != 0) {
+        modelData->removeTevRegAnimator(mBrkAnm.getBrkAnm());
+    }
 }
 
 /* 00006600-000066D8       .text drawShadow__6daPz_cFv */
