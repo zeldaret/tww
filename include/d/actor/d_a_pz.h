@@ -4,9 +4,11 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_npc.h"
 #include "d/d_particle.h"
+#include "d/d_bg_s_lin_chk.h"
 #include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
+#include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
 
 class J3DMaterial;
@@ -155,7 +157,8 @@ public:
     /* 0x0774 */ u32 m0774;
     /* 0x0778 */ mDoExt_invisibleModel mInvisibleModel;
     /* 0x0780 */ dKy_tevstr_c mTevstr;
-    /* 0x0830 */ u8 m0830[0x08A8 - 0x0830];
+    /* 0x0830 */ u8 m0830[0x083C - 0x0830];
+    /* 0x083C */ dBgS_ObjLinChk m083C;
     /* 0x08A8 */ J3DMaterialAnm* m08A8[1];
     /* 0x08AC */ u8 m08AC[0x08B0 - 0x08AC];
     /* 0x08B0 */ int m08B0;
@@ -212,7 +215,10 @@ public:
     /* 0x1014 */ J3DShape* mEyeShape[6];
     /* 0x102C */ J3DShape* mEyebrowShape[6];
     /* 0x1044 */ J3DShape* mFaceShape[4];
-    /* 0x1054 */ u8 m1054[0x1094 - 0x1054];
+    /* 0x1054 */ mDoExt_offCupOnAupPacket m1054;
+    /* 0x1064 */ mDoExt_offCupOnAupPacket m1064;
+    /* 0x1074 */ mDoExt_onCupOffAupPacket m1074;
+    /* 0x1084 */ mDoExt_onCupOffAupPacket m1084;
 };
 
 class daPz_HIO_c : public mDoHIO_entry_c {
