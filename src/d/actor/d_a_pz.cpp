@@ -1280,17 +1280,13 @@ void daPz_c::modeMove() {
     m_jnt.mbTrn = false;
     cLib_addCalc2(&mMovePath.mRadius, l_HIO.mMoveRadius[m08B0], 0.1f, 10.0f);
 
-    cXyz move_diff = current.pos - mMovePath.mPos;
-    move_diff.y = 0.0f;
-    f32 move_dist = move_diff.abs();
+    f32 move_dist = (current.pos - mMovePath.mPos).absXZ();
 
     cXyz eye_diff = current.pos - m08C4;
     eye_diff.y = 0.0f;
     eye_diff.abs();
 
-    cXyz target_diff = m08C4 - mMovePath.mPos;
-    target_diff.y = 0.0f;
-    f32 target_dist = target_diff.abs();
+    f32 target_dist = (m08C4 - mMovePath.mPos).absXZ();
 
     if (move_dist > 200.0f + REG12_F(7) || !mbEyesFollowGanondorf) {
         m0924 = l_HIO.m050;
@@ -1309,14 +1305,10 @@ void daPz_c::modeMove() {
 
     if (cLib_calcTimer(&m08F0) == 0) {
         f32 dist = 100000.0f;
-        cXyz diff = current.pos - m08C4;
-        diff.y = 0.0f;
-        f32 dist_to_target = diff.abs();
+        f32 dist_to_target = (current.pos - m08C4).absXZ();
 
         if (mbHasGanondorf) {
-            cXyz ganondorf_diff = current.pos - mGanondorfPosCurrent;
-            ganondorf_diff.y = 0.0f;
-            dist = ganondorf_diff.abs();
+            dist = (current.pos - mGanondorfPosCurrent).absXZ();
         }
 
         if (mbEyesFollowGanondorf && (dist_to_target < l_HIO.m0D0 || dist < l_HIO.m0D0)) {
