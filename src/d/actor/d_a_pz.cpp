@@ -1951,9 +1951,7 @@ void daPz_c::modeFollow() {
 
     m_jnt.mbTrn = false;
 
-    cXyz follow_diff = current.pos - m0830;
-    follow_diff.y = 0.0f;
-    f32 follow_dist = follow_diff.abs();
+    f32 follow_dist = (current.pos - m0830).absXZ();
 
     if (follow_dist > 200.0f && !mbEyesFollowGanondorf && !blocked) {
         m0924 = l_HIO.m050;
@@ -1978,14 +1976,10 @@ void daPz_c::modeFollow() {
 
     if (cLib_calcTimer(&m08F0) == 0) {
         f32 dist_to_ganondorf = 100000.0f;
-        cXyz diff = current.pos - m08C4;
-        diff.y = 0.0f;
-        f32 dist_to_target = diff.abs();
+        f32 dist_to_target = (current.pos - m08C4).absXZ();
 
         if (mbHasGanondorf) {
-            cXyz ganondorf_diff = current.pos - mGanondorfPosCurrent;
-            ganondorf_diff.y = 0.0f;
-            dist_to_ganondorf = ganondorf_diff.abs();
+            dist_to_ganondorf = (current.pos - mGanondorfPosCurrent).absXZ();
         }
 
         if (mbEyesFollowGanondorf &&
