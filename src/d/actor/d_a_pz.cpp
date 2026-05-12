@@ -1808,7 +1808,87 @@ void daPz_c::modeFollowInit() {
 
 /* 0000549C-000059B8       .text modeFollow__6daPz_cFv */
 void daPz_c::modeFollow() {
-    /* Nonmatching */
+    bool blocked = false;
+    m083C.Set(&current.pos, &m0830, this);
+    if (dComIfG_Bgsp()->LineCross(&m083C)) {
+        blocked = true;
+    }
+    if (mObjAcch.ChkWallHit()) {
+        blocked = true;
+    }
+
+    if ((u8)checkTgHit()) {
+        return;
+    }
+
+    if (l_HIO.m030 == 0) {
+        if (mbHasGanondorf) {
+            m08C4 = mGanondorfPos4;
+        }
+    } else {
+        m08C4 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+    }
+
+    m_jnt.mbTrn = false;
+
+    cXyz follow_diff = current.pos - m0830;
+    follow_diff.y = 0.0f;
+    f32 follow_dist = follow_diff.abs();
+
+    if (follow_dist > 200.0f && !mbEyesFollowGanondorf && !blocked) {
+        m0924 = l_HIO.m050;
+    } else {
+        if (mbEyesFollowGanondorf) {
+            m0924 = 0.0f;
+        } else if (blocked) {
+            m0924 = 2.0f;
+        } else {
+            m0924 = 1.0f;
+        }
+    }
+
+    f32 offset = l_HIO.m0EC;
+    fopAc_ac_c* player = dComIfGp_getLinkPlayer();
+    m0830 = mGanondorfPosCurrent;
+    s16 angle = cLib_targetAngleY(&player->current.pos, &mGanondorfPosCurrent);
+    cLib_distanceAngleS(angle, shape_angle.y);
+    m0830.x += offset * cM_ssin(REG12_S(0) + angle + 0x4000);
+    m0830.z += offset * cM_scos(REG12_S(0) + angle + 0x4000);
+    m0830.y += 200.0f;
+
+    if (cLib_calcTimer(&m08F0) == 0) {
+        f32 dist_to_ganondorf = 100000.0f;
+        cXyz diff = current.pos - m08C4;
+        diff.y = 0.0f;
+        f32 dist_to_target = diff.abs();
+
+        if (mbHasGanondorf) {
+            cXyz ganondorf_diff = current.pos - mGanondorfPosCurrent;
+            ganondorf_diff.y = 0.0f;
+            dist_to_ganondorf = ganondorf_diff.abs();
+        }
+
+        if (mbEyesFollowGanondorf &&
+            (dist_to_target < l_HIO.m0D0 || dist_to_ganondorf < l_HIO.m0D0))
+        {
+            m06C8 = mMode;
+            modeProc(PROC_INIT_e, 8);
+            return;
+        }
+    }
+
+    cLib_addCalcAngleS2(&shape_angle.y, cLib_targetAngleY(&current.pos, &m0830), 8, 0x400);
+    if (speedF < 0.5f) {
+        setAnm(2, false, 0xF);
+    } else {
+        setAnm(3, false, 0xF);
+    }
+
+    if (!l_HIO.m034[1] && cLib_calcTimer(&m08EC) == 0) {
+        modeProc(PROC_INIT_e, 2);
+    }
+
+    m0F82 = 2;
 }
 
 /* 000059B8-00005C58       .text modeProc__6daPz_cFQ26daPz_c6Proc_ei */

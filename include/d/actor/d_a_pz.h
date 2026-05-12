@@ -162,7 +162,7 @@ public:
     /* 0x0774 */ u32 m0774;
     /* 0x0778 */ mDoExt_invisibleModel mInvisibleModel;
     /* 0x0780 */ dKy_tevstr_c mTevstr;
-    /* 0x0830 */ u8 m0830[0x083C - 0x0830];
+    /* 0x0830 */ cXyz m0830;
     /* 0x083C */ dBgS_ObjLinChk m083C;
     /* 0x08A8 */ J3DMaterialAnm* m08A8[2];
     /* 0x08B0 */ int m08B0;
