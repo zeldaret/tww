@@ -294,7 +294,7 @@ int daPz_c::bowCreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, PZ_BDL_BOW);
     JUT_ASSERT(0x29f, modelData != NULL);
 
-    mpBowMcaMorf = new mDoExt_McaMorf(modelData, NULL, NULL, NULL, TRUE, 1.0f, 0, -1, TRUE, NULL,
+    mpBowMcaMorf = new mDoExt_McaMorf(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, TRUE, NULL,
                                       0x80000, 0x11000022);
     if (mpBowMcaMorf == NULL || mpBowMcaMorf->getModel() == NULL) {
         return 0;
