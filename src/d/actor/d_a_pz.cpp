@@ -644,7 +644,7 @@ BOOL daPz_c::checkTgHit() {
     cCcD_Obj* hit_obj = mCyl.GetTgHitObj();
     m06D0 = l_HIO.m0E0;
     if (hit_obj == NULL) {
-        goto fail;
+        return FALSE;
     }
 
     switch (hit_obj->GetAtType()) {
@@ -717,7 +717,7 @@ BOOL daPz_c::checkTgHit() {
         if (arrow->isLinkReflect()) {
             m06D1 = 5;
         } else if (arrow->isSetByZelda()) {
-            goto fail;
+            return FALSE;
         }
     }
 
