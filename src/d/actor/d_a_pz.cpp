@@ -329,10 +329,9 @@ int daPz_c::bodyCreateHeap() {
         return 0;
     }
 
-    J3DAnmTextureSRTKey* btkAnm = mBtkAnm.getBtkAnm();
-    u16 updateMaterialNum = btkAnm->getUpdateMaterialNum();
+    u16 updateMaterialNum = mBtkAnm.getBtkAnm()->getUpdateMaterialNum();
     for (u16 i = 0; i < updateMaterialNum; i++) {
-        u16 materialId = btkAnm->getUpdateMaterialID(i);
+        u16 materialId = mBtkAnm.getBtkAnm()->getUpdateMaterialID(i);
         m08A8[i] = modelData->getMaterialNodePointer(materialId)->getMaterialAnm();
     }
 
