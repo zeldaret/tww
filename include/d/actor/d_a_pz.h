@@ -155,7 +155,8 @@ public:
     /* 0x0924 */ f32 m0924;
     /* 0x0928 */ enemyice mEventIce;
     /* 0x0CE0 */ enemyfire mEnemyFire;
-    /* 0x0F08 */ u8 m0F08[0x0F44 - 0x0F08];
+    /* 0x0F08 */ Mtx mWaistMtx;
+    /* 0x0F38 */ cXyz mWaistPos;
     /* 0x0F44 */ f32 m0F44;
     /* 0x0F48 */ u8 m0F48;
     /* 0x0F49 */ u8 m0F49[0x0F4C - 0x0F49];

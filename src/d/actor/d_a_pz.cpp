@@ -193,8 +193,37 @@ static BOOL nodeWaistControl_CB(J3DNode* i_node, int i_calcTiming) {
 }
 
 /* 00000584-00000710       .text _nodeWaistControl__6daPz_cFP7J3DNodeP8J3DModel */
-void daPz_c::_nodeWaistControl(J3DNode*, J3DModel*) {
-    /* Nonmatching */
+void daPz_c::_nodeWaistControl(J3DNode* i_node, J3DModel* i_model) {
+    static s16 tmp_angle;
+
+    u16 jnt_no = ((J3DJoint*)i_node)->getJntNo();
+    tmp_angle += 0x1000;
+    mDoMtx_stack_c::copy(i_model->getAnmMtx(jnt_no));
+
+    if ((s8)m06D3 == 4 || (s8)m06D3 == 5 || (s8)m06D3 == 6) {
+        mDoMtx_stack_c::ZrotM(0xDAC);
+        mDoMtx_stack_c::YrotM(0x5DC);
+    }
+
+    if (REG12_S(6) != 0) {
+        mDoMtx_stack_c::XrotM(tmp_angle);
+    } else {
+        MtxP mtx = mDoMtx_stack_c::now;
+        mDoMtx_XrotM(mtx, m_jnt.getBackbone_y());
+        mDoMtx_stack_c::ZrotM(-m_jnt.getBackbone_x());
+    }
+
+    if ((s8)m06D3 == 4 || (s8)m06D3 == 5 || (s8)m06D3 == 6) {
+        mDoMtx_stack_c::YrotM(-0x5DC);
+        mDoMtx_stack_c::ZrotM(-0xDAC);
+    }
+
+    PSMTXCopy(mDoMtx_stack_c::now, mWaistMtx);
+    mWaistPos.x = mDoMtx_stack_c::now[0][3];
+    mWaistPos.y = mDoMtx_stack_c::now[1][3];
+    mWaistPos.z = mDoMtx_stack_c::now[2][3];
+    cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+    PSMTXCopy(mDoMtx_stack_c::now, i_model->getAnmMtx(jnt_no));
 }
 
 /* 00000710-0000075C       .text nodeWaist2Control_CB__FP7J3DNodei */
