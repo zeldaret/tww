@@ -633,18 +633,18 @@ BOOL daPz_c::checkTgHit() {
 
     mStts.Move();
     if (cLib_calcTimer(&m06D0) != 0) {
-        return FALSE;
+        goto fail;
     }
 
     if (!mCyl.ChkTgHit()) {
-        return FALSE;
+        goto fail;
     }
 
-    BOOL do_damage = TRUE;
+    bool do_damage = true;
     cCcD_Obj* hit_obj = mCyl.GetTgHitObj();
     m06D0 = l_HIO.m0E0;
     if (hit_obj == NULL) {
-        return FALSE;
+        goto fail;
     }
 
     switch (hit_obj->GetAtType()) {
@@ -652,7 +652,8 @@ BOOL daPz_c::checkTgHit() {
     case AT_TYPE_MACHETE:
     case AT_TYPE_UNK800:
     case AT_TYPE_FIRE_ARROW:
-    case AT_TYPE_PGANON_SWORD:
+    case AT_TYPE_DARKNUT_SWORD:
+    case AT_TYPE_MOBLIN_SPEAR:
         switch (player->mCutType) {
         case daPy_py_c::CUT_TYPE_BT_JUMPCUT:
         case daPy_py_c::CUT_TYPE_CUT_EA:
@@ -700,7 +701,6 @@ BOOL daPz_c::checkTgHit() {
     case AT_TYPE_NORMAL_ARROW:
     case AT_TYPE_ICE_ARROW:
     case AT_TYPE_LIGHT_ARROW:
-    case AT_TYPE_DARKNUT_SWORD:
         m06D1 = 5;
         break;
     case AT_TYPE_GRAPPLING_HOOK:
@@ -717,7 +717,7 @@ BOOL daPz_c::checkTgHit() {
         if (arrow->isLinkReflect()) {
             m06D1 = 5;
         } else if (arrow->isSetByZelda()) {
-            return FALSE;
+            goto fail;
         }
     }
 
@@ -788,6 +788,9 @@ BOOL daPz_c::checkTgHit() {
     }
 
     return TRUE;
+
+fail:
+    return FALSE;
 }
 
 /* 00001EEC-00001F10       .text getArg__6daPz_cFv */
