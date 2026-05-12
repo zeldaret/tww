@@ -500,7 +500,16 @@ void daPz_c::modeTalk() {
 
 /* 0000539C-0000549C       .text modeFollowInit__6daPz_cFv */
 void daPz_c::modeFollowInit() {
-    /* Nonmatching */
+    attention_info.flags |= 8;
+    attention_info.flags |= 2;
+    m08EC = l_HIO.mFollowTimerBase[m08B0] + cM_rndF(l_HIO.mFollowTimerRange[m08B0]);
+    m08F0 = 10;
+    m08F4 = 120;
+    setAnm(3, false, 0xF);
+    m08EA = false;
+    m_jnt.mbTrn = false;
+    m_jnt.mbHeadLock = false;
+    m_jnt.mbBackBoneLock = false;
 }
 
 /* 0000549C-000059B8       .text modeFollow__6daPz_cFv */

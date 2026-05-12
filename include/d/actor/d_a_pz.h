@@ -140,7 +140,8 @@ public:
     /* 0x08EB */ u8 m08EB[0x08EC - 0x08EB];
     /* 0x08EC */ int m08EC;
     /* 0x08F0 */ int m08F0;
-    /* 0x08F4 */ u8 m08F4[0x0920 - 0x08F4];
+    /* 0x08F4 */ int m08F4;
+    /* 0x08F8 */ u8 m08F8[0x0920 - 0x08F8];
     /* 0x0920 */ int m0920;
     /* 0x0924 */ f32 m0924;
     /* 0x0928 */ enemyice mEventIce;
@@ -177,7 +178,10 @@ public:
 
 public:
     /* 0x004 */ dNpc_HIO_c mNpc;
-    /* 0x02C */ u8 m02C[0x0B4 - 0x02C];
+    /* 0x02C */ u8 m02C[0x086 - 0x02C];
+    /* 0x086 */ s16 mFollowTimerBase[3];
+    /* 0x08C */ s16 mFollowTimerRange[3];
+    /* 0x092 */ u8 m092[0x0B4 - 0x092];
     /* 0x0B4 */ f32 mBackStepSpeedY;
     /* 0x0B8 */ f32 mBackStepSpeedF;
     /* 0x0BC */ f32 mSideStepSpeedY;
