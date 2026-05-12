@@ -335,8 +335,14 @@ void daPz_c::getGndPos() {
 }
 
 /* 00001038-0000114C       .text checkEyeArea__6daPz_cFR4cXyz */
-void daPz_c::checkEyeArea(cXyz&) {
-    /* Nonmatching */
+BOOL daPz_c::checkEyeArea(cXyz& i_pos) {
+    s32 angle = cLib_distanceAngleS(shape_angle.y, cLib_targetAngleY(&current.pos, &i_pos));
+    f32 dist = (current.pos - i_pos).absXZ();
+
+    if (angle < l_HIO.m054 && dist < l_HIO.m058) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 0000114C-00001194       .text getMsg__6daPz_cFv */

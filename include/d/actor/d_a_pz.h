@@ -49,7 +49,7 @@ public:
     int bowCreateHeap();
     bool _createHeap();
     void getGndPos();
-    void checkEyeArea(cXyz&);
+    BOOL checkEyeArea(cXyz&);
     virtual u32 getMsg();
     virtual u16 next_msgStatus(u32*);
     virtual void anmAtr(u16);
