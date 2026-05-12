@@ -207,7 +207,7 @@ void daPz_c::_nodeWaistControl(J3DNode* i_node, J3DModel* i_model) {
     tmp_angle += 0x1000;
     mDoMtx_stack_c::copy(i_model->getAnmMtx(jnt_no));
 
-    if ((s8)m06D3 == 4 || (s8)m06D3 == 5 || (s8)m06D3 == 6) {
+    if (mAnmPrmIdx == 4 || mAnmPrmIdx == 5 || mAnmPrmIdx == 6) {
         mDoMtx_stack_c::ZrotM(0xDAC);
         mDoMtx_stack_c::YrotM(0x5DC);
     }
@@ -220,7 +220,7 @@ void daPz_c::_nodeWaistControl(J3DNode* i_node, J3DModel* i_model) {
         mDoMtx_stack_c::ZrotM(-m_jnt.getBackbone_x());
     }
 
-    if ((s8)m06D3 == 4 || (s8)m06D3 == 5 || (s8)m06D3 == 6) {
+    if (mAnmPrmIdx == 4 || mAnmPrmIdx == 5 || mAnmPrmIdx == 6) {
         mDoMtx_stack_c::YrotM(-0x5DC);
         mDoMtx_stack_c::ZrotM(-0xDAC);
     }
@@ -771,8 +771,100 @@ void daPz_c::setBowString(bool i_show) {
 }
 
 /* 00002184-0000246C       .text setAnm__6daPz_cFScbi */
-void daPz_c::setAnm(signed char, bool, int) {
-    /* Nonmatching */
+void daPz_c::setAnm(s8 i_anm, bool i_force, int i_eye) {
+    static const int a_anm_bcks_tbl[] = {
+        PZ_BCK_WAIT01,
+        PZ_BCK_WAIT02,
+        PZ_BCK_RUN01,
+        PZ_BCK_RELORD,
+        PZ_BCK_WAIT03,
+        PZ_BCK_SHOOT,
+        PZ_BCK_DAM01,
+        PZ_BCK_DAM02,
+        PZ_BCK_STAND,
+        PZ_BCK_DEFEND,
+        PZ_BCK_WAIT04,
+    };
+
+    if (i_anm != 15) {
+        mAnmPrmIdx = i_anm;
+    }
+
+    dLib_anm_prm_c a_anm_prm_tbl[] = {
+        {0, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {0, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {1, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {2, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {3, -1, 0, 2.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {4, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {5, -1, 0, 2.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {6, -1, 0, 4.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {7, -1, 0, 4.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {8, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {9, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {10, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {1, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {1, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {4, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+    };
+    static const u8 eye_anm[] = {
+        0, 0, 7, 7, 1, 1, 1, 2, 3, 4, 5, 6, 8, 9, 8,
+    };
+
+    a_anm_prm_tbl[7].mMorf = l_HIO.m0F0;
+    a_anm_prm_tbl[8].mMorf = l_HIO.m0F4;
+
+    if (mOldAnmPrmIdx != mAnmPrmIdx) {
+        if (mAnmPrmIdx == 4) {
+            fopAcM_monsSeStart(this, JA_SE_CV_ZL_DRAW_BOW, 0);
+            setBowAnm(2, false);
+            mArrowId = fopAcM_createChild(PROC_ARROW, fopAcM_GetID(this), 0, &current.pos,
+                                          fopAcM_GetRoomNo(this), NULL, NULL, -1, NULL);
+        }
+
+        if (mAnmPrmIdx == 5) {
+            setBowAnm(3, true);
+        }
+
+        if (mAnmPrmIdx == 6) {
+            fopAcM_monsSeStart(this, JA_SE_CV_ZL_SHOOT_BOW, 0);
+            setBowAnm(4, true);
+
+            fopAc_ac_c* arrow;
+            if (fopAcM_SearchByID(mArrowId, &arrow)) {
+                fpcM_SetParam(arrow, 1);
+            }
+        }
+
+        if (mAnmPrmIdx != 4 && mAnmPrmIdx != 5) {
+            fopAc_ac_c* arrow;
+            if (fopAcM_SearchByID(mArrowId, &arrow)) {
+                fpcM_SetParam(arrow, 1);
+            }
+        }
+
+        if (mAnmPrmIdx == 9) {
+            setHeadSplash();
+        } else {
+            mHeadSplash.remove();
+        }
+
+        if (mAnmPrmIdx == 4 || mAnmPrmIdx == 5 || mAnmPrmIdx == 6) {
+            setBowString(true);
+        } else {
+            setBowAnm(1, true);
+            setBowString(false);
+        }
+
+        if (i_eye == 15) {
+            setEyeAnm(eye_anm[mAnmPrmIdx]);
+        } else {
+            setEyeAnm(eye_anm[i_eye]);
+        }
+    }
+
+    dLib_bcks_setAnm(m_arc_name, mpMorf, &mBckIdx, &mAnmPrmIdx, &mOldAnmPrmIdx,
+                     a_anm_bcks_tbl, a_anm_prm_tbl, i_force);
 }
 
 /* 0000246C-00002684       .text setAnmRunSpeed__6daPz_cFv */
@@ -892,7 +984,7 @@ void daPz_c::modeAttackInit() {
         idx = 0;
     }
 
-    s8 cur_anm = m06D3;
+    s8 cur_anm = mAnmPrmIdx;
     if (cur_anm != 4 && cur_anm != 5) {
         m08EC = l_HIO.mAttackTimerBase[idx] + cM_rndF(l_HIO.mAttackTimerRange[idx]);
         m08F0 = l_HIO.mAttackWaitTimer[idx];

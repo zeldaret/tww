@@ -123,9 +123,9 @@ public:
     /* 0x06CC */ int m06CC;
     /* 0x06D0 */ u8 m06D0;
     /* 0x06D1 */ u8 m06D1;
-    /* 0x06D2 */ u8 m06D2;
-    /* 0x06D3 */ u8 m06D3;
-    /* 0x06D4 */ u8 m06D4[0x06D5 - 0x06D4];
+    /* 0x06D2 */ s8 mBckIdx;
+    /* 0x06D3 */ s8 mAnmPrmIdx;
+    /* 0x06D4 */ s8 mOldAnmPrmIdx;
     /* 0x06D5 */ u8 mCurEye;
     /* 0x06D6 */ u8 m06D6[0x06DD - 0x06D6];
     /* 0x06DD */ s8 mBowBckIdx;
@@ -159,7 +159,7 @@ public:
     /* 0x08A8 */ J3DMaterialAnm* m08A8[1];
     /* 0x08AC */ u8 m08AC[0x08B0 - 0x08AC];
     /* 0x08B0 */ int m08B0;
-    /* 0x08B4 */ u8 m08B4[0x08B8 - 0x08B4];
+    /* 0x08B4 */ fpc_ProcID mArrowId;
     /* 0x08B8 */ cXyz mHeadTopPos;
     /* 0x08C4 */ cXyz m08C4;
     /* 0x08D0 */ u8 m08D0[0x08DC - 0x08D0];
