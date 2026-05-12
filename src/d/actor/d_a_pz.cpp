@@ -10,6 +10,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_lib.h"
 #include "d/d_material.h"
 #include "d/d_particle_name.h"
 #include "d/d_s_play.h"
@@ -733,8 +734,27 @@ void daPz_c::setAttention() {
 }
 
 /* 000020B8-00002114       .text setBowAnm__6daPz_cFScb */
-void daPz_c::setBowAnm(signed char, bool) {
-    /* Nonmatching */
+void daPz_c::setBowAnm(s8 i_anm, bool i_force) {
+    static const int a_anm_bcks_tbl[] = {
+        PZ_BCK_ARROW_RELORD,
+        PZ_BCK_ARROW_WAIT03,
+        PZ_BCK_ARROW_SHOOT,
+    };
+
+    static const dLib_anm_prm_c a_anm_prm_tbl[] = {
+        {2, -1, 0, 0.0f, 0.0f, J3DFrameCtrl::EMode_NONE},
+        {2, -1, 0, 0.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {0, -1, 0, 0.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {1, -1, 0, 0.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {2, -1, 0, 0.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+    };
+
+    if (i_anm != 5) {
+        mBowAnmPrmIdx = i_anm;
+    }
+
+    dLib_bcks_setAnm(m_arc_name, mpBowMcaMorf, &mBowBckIdx, &mBowAnmPrmIdx,
+                     &mBowOldAnmPrmIdx, a_anm_bcks_tbl, a_anm_prm_tbl, i_force);
 }
 
 /* 00002114-00002184       .text setBowString__6daPz_cFb */
@@ -1082,7 +1102,21 @@ void daPz_c::bodyDraw() {
 
 /* 00006600-000066D8       .text drawShadow__6daPz_cFv */
 void daPz_c::drawShadow() {
-    /* Nonmatching */
+    cXyz shadowPos(
+        current.pos.x,
+        current.pos.y + 100.0f + REG8_F(18),
+        current.pos.z
+    );
+
+    m0774 = dComIfGd_setShadow(
+        m0774, 1, mpMorf->getModel(), &shadowPos, 250.0f + REG8_F(19), 40.0f,
+        current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr, 0, 1.0f,
+        dDlst_shadowControl_c::getSimpleTex()
+    );
+
+    if (m0F88 && m0774 != 0) {
+        dComIfGd_addRealShadow(m0774, mpBowMcaMorf->getModel());
+    }
 }
 
 /* 000066D8-0000676C       .text _draw__6daPz_cFv */

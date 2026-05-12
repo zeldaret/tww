@@ -127,7 +127,10 @@ public:
     /* 0x06D3 */ u8 m06D3;
     /* 0x06D4 */ u8 m06D4[0x06D5 - 0x06D4];
     /* 0x06D5 */ u8 mCurEye;
-    /* 0x06D6 */ u8 m06D6[0x06E0 - 0x06D6];
+    /* 0x06D6 */ u8 m06D6[0x06DD - 0x06D6];
+    /* 0x06DD */ s8 mBowBckIdx;
+    /* 0x06DE */ s8 mBowAnmPrmIdx;
+    /* 0x06DF */ s8 mBowOldAnmPrmIdx;
     /* 0x06E0 */ dPa_rippleEcallBack mRipple;
     /* 0x06F4 */ dPa_followEcallBack mFallSplash;
     /* 0x0708 */ dPa_followEcallBack mHeadSplash;
