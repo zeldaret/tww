@@ -536,7 +536,7 @@ void daPz_c::demo() {
 
 /* 00001954-00001EEC       .text checkTgHit__6daPz_cFv */
 BOOL daPz_c::checkTgHit() {
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     mStts.Move();
     if (cLib_calcTimer(&m06D0) != 0) {
@@ -634,8 +634,7 @@ BOOL daPz_c::checkTgHit() {
         hit_obj = mCyl.GetTgHitObj();
         def_se_set(this, mCyl.GetTgHitObj(), 0x41);
 
-        cXyz flush_pos = *hit_pos;
-        dKy_SordFlush_set(flush_pos, 0);
+        dKy_SordFlush_set(*hit_pos, 0);
 
         if (m06D1 == 1 || m06D1 == 7 || m06D1 == 8) {
             m0F68 = 40.0f;
@@ -644,13 +643,13 @@ BOOL daPz_c::checkTgHit() {
         }
 
         dComIfGp_particle_set(
-            dCcg_TgHitMark_Purple_e, hit_pos, &player->current.angle, NULL, 0xFF, NULL, -1, NULL, NULL, NULL
+            dCcg_TgHitMark_Purple_e, hit_pos, &player->shape_angle, NULL, 0xFF, NULL, -1, NULL, NULL, NULL
         );
         modeProc(PROC_INIT_e, 4);
 
         if (fopAcM_GetName(hit_actor) == PROC_GND) {
             m0744 = 0;
-            m0F68 *= 1.5f;
+            m0F68 *= 1.5;
             m0754 = 0;
             m075C = 0;
             m0760++;
@@ -689,7 +688,7 @@ BOOL daPz_c::checkTgHit() {
         }
 
         fopAcM_fastCreateItem(
-            &current.pos, item_no, fopAcM_GetRoomNo(this), &current.angle, NULL, 0.0f, 0.0f, -6.0f, -1,
+            &current.pos, item_no, fopAcM_GetRoomNo(this), &shape_angle, NULL, 0.0f, 0.0f, -6.0f, -1,
             stealItem_CB
         );
         modeProc(PROC_INIT_e, 4);
