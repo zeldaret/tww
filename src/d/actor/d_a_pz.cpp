@@ -428,7 +428,42 @@ void daPz_c::checkOrder() {
 
 /* 00001338-0000151C       .text setFallSplash__6daPz_cFv */
 void daPz_c::setFallSplash() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevstr);
+
+    mFallSplashPos = mHeadFrontPos;
+    mFallSplashPos.y += l_HIO.m0D4;
+
+    if (mObjAcch.ChkGroundHit()) {
+        if (dComIfG_Bgsp()->GetAttributeCode(mObjAcch.m_gnd) == dBgS_Attr_WATERFALL_e) {
+            if (mFallSplash.getEmitter() == NULL) {
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTSHIBUKI00, &mFallSplashPos, &shape_angle,
+                                      NULL, 0xFF, &mFallSplash);
+                if (mFallSplash.getEmitter() != NULL) {
+                    mFallSplash.getEmitter()->setRate(4.0f);
+                    mFallSplash.getEmitter()->setSpread(1.0f);
+                    mFallSplash.getEmitter()->setGlobalPrmColor(mTevstr.mColorC0.r, mTevstr.mColorC0.g,
+                                                                mTevstr.mColorC0.b);
+                }
+            }
+        } else {
+            mFallSplash.end();
+        }
+
+        if (cLib_calcTimer(&mFallRippleTimer) == 0) {
+            static Vec fall_ripple_scale = {0.75f, 0.75f, 0.75f};
+            cXyz pos;
+            MtxP mtx = mpMorf->getModel()->getAnmMtx(0);
+            pos.x = mtx[0][3];
+            pos.y = mtx[1][3];
+            pos.z = mtx[2][3];
+            dComIfGp_particle_setShipTail(dPa_name::ID_IT_JN_WP_HAMON03, &pos, NULL,
+                                          (cXyz*)&fall_ripple_scale, 0xFF,
+                                          &dPa_control_c::mSingleRippleEcallBack);
+            mFallRippleTimer = 15;
+        }
+    } else {
+        mFallSplash.end();
+    }
 }
 
 /* 0000151C-000015F4       .text setHeadSplash__6daPz_cFv */

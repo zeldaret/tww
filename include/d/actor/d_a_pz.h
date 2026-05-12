@@ -125,7 +125,8 @@ public:
     /* 0x06E0 */ dPa_rippleEcallBack mRipple;
     /* 0x06F4 */ dPa_followEcallBack mFallSplash;
     /* 0x0708 */ dPa_followEcallBack mHeadSplash;
-    /* 0x071C */ u8 m071C[0x072C - 0x071C];
+    /* 0x071C */ cXyz mFallSplashPos;
+    /* 0x0728 */ int mFallRippleTimer;
     /* 0x072C */ cXyz mHeadCenterPos;
     /* 0x0738 */ u8 m0738[0x073E - 0x0738];
     /* 0x073E */ u8 mbEyesFollowGanondorf;
