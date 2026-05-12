@@ -8,6 +8,7 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "f_op/f_op_actor_mng.h"
 
 const dCcD_SrcCyl daPz_c::m_cyl_src = {
     // dCcD_SrcGObjInf
@@ -187,7 +188,10 @@ void daPz_c::checkTgHit() {
 
 /* 00001EEC-00001F10       .text getArg__6daPz_cFv */
 void daPz_c::getArg() {
-    /* Nonmatching */
+    mArg = (fopAcM_GetParam(this) >> 8) & 0xFF;
+    if (mArg == 0xFF) {
+        mArg = 0;
+    }
 }
 
 /* 00001F10-000020B8       .text setAttention__6daPz_cFv */
