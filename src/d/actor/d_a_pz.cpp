@@ -431,7 +431,21 @@ void daPz_c::setHeadSplash() {
 
 /* 000015F4-00001704       .text setRipple__6daPz_cFv */
 void daPz_c::setRipple() {
-    /* Nonmatching */
+    if (mObjAcch.ChkGroundHit()) {
+        if (dComIfG_Bgsp()->GetAttributeCode(mObjAcch.m_gnd) == dBgS_Attr_WATER_e) {
+            if (mRipple.getEmitter() == NULL) {
+                static cXyz ripple_scale(0.8f, 0.8f, 0.8f);
+                dComIfGp_particle_setShipTail(
+                    dPa_name::ID_AK_JN_HAMON00, &current.pos, NULL, &ripple_scale, 0xFF, &mRipple
+                );
+                if (mRipple.getEmitter() != NULL) {
+                    mRipple.setRate(0.0f);
+                }
+            }
+        } else {
+            mRipple.end();
+        }
+    }
 }
 
 /* 00001704-0000175C       .text setJntStatus__6daPz_cFv */
