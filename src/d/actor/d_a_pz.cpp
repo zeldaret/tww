@@ -9,6 +9,7 @@
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
+#include "d/actor/d_a_item.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -52,8 +53,13 @@ daPz_HIO_c::daPz_HIO_c() {
 }
 
 /* 00000310-00000340       .text stealItem_CB__FPv */
-static void stealItem_CB(void*) {
-    /* Nonmatching */
+static BOOL stealItem_CB(void* actor) {
+    if (actor != NULL) {
+        daItem_c* item = (daItem_c*)actor;
+        item->scale.setall(1.0f);
+        item->setFlag(daItem_c::FLAG_HOOK);
+    }
+    return TRUE;
 }
 
 /* 00000340-0000038C       .text nodeHeadControl_CB__FP7J3DNodei */
@@ -374,7 +380,13 @@ void daPz_c::modeMove() {
 
 /* 0000395C-000039C0       .text modeAttackWaitInit__6daPz_cFv */
 void daPz_c::modeAttackWaitInit() {
-    /* Nonmatching */
+    m0924 = 0.0f;
+    m08EC = 20;
+    m08F0 = 10;
+    setAnm(2, false, 0xF);
+    m08EA = false;
+    m_jnt.mbHeadLock = false;
+    m_jnt.mbBackBoneLock = false;
 }
 
 /* 000039C0-00003D88       .text modeAttackWait__6daPz_cFv */
@@ -414,7 +426,12 @@ void daPz_c::modeDown() {
 
 /* 00004C20-00004C78       .text modeAfraidInit__6daPz_cFv */
 void daPz_c::modeAfraidInit() {
-    /* Nonmatching */
+    setAnm(11, true, 0xF);
+    m0924 = 0.0f;
+    speedF = 0.0f;
+    m08EA = false;
+    m_jnt.mbHeadLock = false;
+    m_jnt.mbBackBoneLock = false;
 }
 
 /* 00004C78-00004E8C       .text modeAfraid__6daPz_cFv */
@@ -424,7 +441,14 @@ void daPz_c::modeAfraid() {
 
 /* 00004E8C-00004F08       .text modeSideStepInit__6daPz_cFv */
 void daPz_c::modeSideStepInit() {
-    /* Nonmatching */
+    if (m06C8 != 2 && m06C8 != 3) {
+        setAnm(11, true, 0xF);
+    }
+    m0924 = 0.0f;
+    speedF = 0.0f;
+    m08EA = false;
+    speed.y = l_HIO.mSideStepSpeedY;
+    m0F70 = l_HIO.mSideStepSpeedF;
 }
 
 /* 00004F08-00005098       .text modeSideStep__6daPz_cFv */
@@ -434,7 +458,14 @@ void daPz_c::modeSideStep() {
 
 /* 00005098-00005114       .text modeBackStepInit__6daPz_cFv */
 void daPz_c::modeBackStepInit() {
-    /* Nonmatching */
+    if (m06C8 != 2 && m06C8 != 3) {
+        setAnm(11, true, 0xF);
+    }
+    m0924 = 0.0f;
+    speedF = 0.0f;
+    m08EA = false;
+    speed.y = l_HIO.mBackStepSpeedY;
+    m0F70 = l_HIO.mBackStepSpeedF;
 }
 
 /* 00005114-0000527C       .text modeBackStep__6daPz_cFv */

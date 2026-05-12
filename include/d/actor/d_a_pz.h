@@ -111,7 +111,7 @@ public:
 
 public:
     /* 0x06C4 */ int mMode;
-    /* 0x06C8 */ u8 m06C8[0x06CC - 0x06C8];
+    /* 0x06C8 */ int m06C8;
     /* 0x06CC */ int m06CC;
     /* 0x06D0 */ u8 m06D0[0x06D3 - 0x06D0];
     /* 0x06D3 */ u8 m06D3;
@@ -139,7 +139,8 @@ public:
     /* 0x08EA */ u8 m08EA;
     /* 0x08EB */ u8 m08EB[0x08EC - 0x08EB];
     /* 0x08EC */ int m08EC;
-    /* 0x08F0 */ u8 m08F0[0x0920 - 0x08F0];
+    /* 0x08F0 */ int m08F0;
+    /* 0x08F4 */ u8 m08F4[0x0920 - 0x08F4];
     /* 0x0920 */ int m0920;
     /* 0x0924 */ f32 m0924;
     /* 0x0928 */ enemyice mEventIce;
@@ -151,7 +152,9 @@ public:
     /* 0x0F58 */ cXyz mGanondorfPos4;
     /* 0x0F64 */ u8 mbHasGanondorf;
     /* 0x0F65 */ u8 m0F65;
-    /* 0x0F66 */ u8 m0F66[0x0F7C - 0x0F66];
+    /* 0x0F66 */ u8 m0F66[0x0F70 - 0x0F66];
+    /* 0x0F70 */ f32 m0F70;
+    /* 0x0F74 */ u8 m0F74[0x0F7C - 0x0F74];
     /* 0x0F7C */ int m0F7C;
     /* 0x0F80 */ u8 m0F80;
     /* 0x0F81 */ u8 m0F81[0x0F82 - 0x0F81];
@@ -174,7 +177,12 @@ public:
 
 public:
     /* 0x004 */ dNpc_HIO_c mNpc;
-    /* 0x02C */ u8 m02C[0x10C - 0x02C];
+    /* 0x02C */ u8 m02C[0x0B4 - 0x02C];
+    /* 0x0B4 */ f32 mBackStepSpeedY;
+    /* 0x0B8 */ f32 mBackStepSpeedF;
+    /* 0x0BC */ f32 mSideStepSpeedY;
+    /* 0x0C0 */ f32 mSideStepSpeedF;
+    /* 0x0C4 */ u8 m0C4[0x10C - 0x0C4];
 };
 
 #endif /* D_A_PZ_H */
