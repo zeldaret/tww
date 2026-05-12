@@ -12,6 +12,7 @@
 #include "d/d_material.h"
 #include "d/d_particle_name.h"
 #include "d/d_s_play.h"
+#include "d/res/res_pz.h"
 #include "d/actor/d_a_item.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_actor_mng.h"
@@ -290,7 +291,17 @@ int daPz_c::bodyCreateHeap() {
 
 /* 00000D54-00000E74       .text bowCreateHeap__6daPz_cFv */
 int daPz_c::bowCreateHeap() {
-    /* Nonmatching */
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, PZ_BDL_BOW);
+    JUT_ASSERT(0x29f, modelData != NULL);
+
+    mpBowMcaMorf = new mDoExt_McaMorf(modelData, NULL, NULL, NULL, TRUE, 1.0f, 0, -1, TRUE, NULL,
+                                      0x80000, 0x11000022);
+    if (mpBowMcaMorf == NULL || mpBowMcaMorf->getModel() == NULL) {
+        return 0;
+    }
+
+    mpBowMcaMorf->getModel()->setUserArea((u32)this);
+    return 1;
 }
 
 /* 00000E74-00000EC0       .text _createHeap__6daPz_cFv */
@@ -565,13 +576,20 @@ void daPz_c::setAnmRunSpeed() {
 }
 
 /* 00002684-0000274C       .text setEyeBtp__6daPz_cFi */
-void daPz_c::setEyeBtp(int) {
-    /* Nonmatching */
+void daPz_c::setEyeBtp(int i_btp) {
+    J3DModel* model = mpMorf->getModel();
+    J3DAnmTexPattern* btp = (J3DAnmTexPattern*)dComIfG_getObjectRes(m_arc_name, i_btp);
+    JUT_ASSERT(0x683, btp != NULL);
+    mEyeBtpState = 0;
+    mBtpAnm.init(model->getModelData(), btp, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
 }
 
 /* 0000274C-00002810       .text setEyeBtk__6daPz_cFi */
-void daPz_c::setEyeBtk(int) {
-    /* Nonmatching */
+void daPz_c::setEyeBtk(int i_btk) {
+    J3DModel* model = mpMorf->getModel();
+    J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arc_name, i_btk);
+    JUT_ASSERT(0x691, btk != NULL);
+    mBtkAnm.init(model->getModelData(), btk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
 }
 
 /* 00002810-00002888       .text setEyeAnm__6daPz_cFSc */

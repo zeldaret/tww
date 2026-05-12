@@ -165,7 +165,9 @@ public:
     /* 0x0F58 */ cXyz mGanondorfPos4;
     /* 0x0F64 */ u8 mbHasGanondorf;
     /* 0x0F65 */ u8 m0F65;
-    /* 0x0F66 */ u8 m0F66[0x0F70 - 0x0F66];
+    /* 0x0F66 */ u8 m0F66;
+    /* 0x0F67 */ u8 mEyeBtpState;
+    /* 0x0F68 */ u8 m0F68[0x0F70 - 0x0F68];
     /* 0x0F70 */ f32 m0F70;
     /* 0x0F74 */ u8 m0F74[0x0F78 - 0x0F74];
     /* 0x0F78 */ s16 mWaist2RotZ;
