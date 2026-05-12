@@ -2,6 +2,7 @@
 #define D_A_PZ_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_lib.h"
 #include "d/d_npc.h"
 #include "d/d_particle.h"
 #include "d/d_bg_s_lin_chk.h"
@@ -174,7 +175,8 @@ public:
     /* 0x08EC */ int m08EC;
     /* 0x08F0 */ int m08F0;
     /* 0x08F4 */ int m08F4;
-    /* 0x08F8 */ u8 m08F8[0x0920 - 0x08F8];
+    /* 0x08F8 */ u8 m08F8[0x08FC - 0x08F8];
+    /* 0x08FC */ dLib_circle_path_c mMovePath;
     /* 0x0920 */ int m0920;
     /* 0x0924 */ f32 m0924;
     /* 0x0928 */ enemyice mEventIce;
@@ -256,9 +258,7 @@ public:
     /* 0x092 */ s16 mAttackTimerBase[3];
     /* 0x098 */ s16 mAttackTimerRange[3];
     /* 0x09E */ u8 m09E[0x0A0 - 0x09E];
-    /* 0x0A0 */ f32 m0A0;
-    /* 0x0A4 */ u8 m0A4[0x0A8 - 0x0A4];
-    /* 0x0A8 */ f32 m0A8;
+    /* 0x0A0 */ f32 mMoveRadius[3];
     /* 0x0AC */ f32 m0AC;
     /* 0x0B0 */ f32 m0B0;
     /* 0x0B4 */ f32 mBackStepSpeedY;

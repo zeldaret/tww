@@ -106,7 +106,7 @@ daPz_HIO_c::daPz_HIO_c() {
     mFollowTimerRange[0] = 0;
     mAttackTimerBase[0] = 30;
     mAttackTimerRange[0] = 0;
-    m0A0 = 1000.0f;
+    mMoveRadius[0] = 1000.0f;
     mTalkTimer[0] = 60;
     m100 = 3000.0f;
 
@@ -118,7 +118,7 @@ daPz_HIO_c::daPz_HIO_c() {
     mFollowTimerRange[2] = 100;
     mAttackTimerBase[2] = 30;
     mAttackTimerRange[2] = 60;
-    m0A8 = 1000.0f;
+    mMoveRadius[2] = 1000.0f;
     mTalkTimer[2] = 600;
     m108 = 800.0f;
     m0AC = 100.0f;
@@ -1078,7 +1078,39 @@ void daPz_c::modeWait() {
 
 /* 00002FE8-000031E8       .text modeMoveInit__6daPz_cFv */
 void daPz_c::modeMoveInit() {
-    /* Nonmatching */
+    attention_info.flags |= 8;
+    attention_info.flags |= 2;
+    m08EC = l_HIO.mFollowTimerBase[m08B0] + cM_rndF(l_HIO.mFollowTimerRange[m08B0]);
+    m08F0 = 10;
+    m08F4 = 120;
+    setAnm(3, false, 0xF);
+
+    if (cM_rndF(100.0f) < l_HIO.m0D8) {
+        if (m0920 == 1) {
+            m0920 = -1;
+        } else {
+            m0920 = 1;
+        }
+    }
+
+    if (l_HIO.m030 == 0) {
+        if (mbHasGanondorf) {
+            m08C4 = mGanondorfPos4;
+        }
+    } else {
+        m08C4 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+    }
+
+    mMovePath.mRadius = l_HIO.mMoveRadius[m08B0];
+    mMovePath.mWobbleAmplitude = l_HIO.m0AC;
+    mMovePath.mAngleSpeed = (REG12_S(0) + 0x150) * m0920;
+    mMovePath.mTranslation = m08C4;
+    dLib_setCirclePath(&mMovePath);
+
+    m08EA = false;
+    m_jnt.mbTrn = false;
+    m_jnt.mbHeadLock = false;
+    m_jnt.mbBackBoneLock = false;
 }
 
 /* 000031E8-0000395C       .text modeMove__6daPz_cFv */
