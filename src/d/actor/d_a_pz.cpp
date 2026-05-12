@@ -2049,7 +2049,103 @@ void daPz_c::modeProc(daPz_c::Proc_e proc, int mode) {
 
 /* 00005C58-000060D8       .text _execute__6daPz_cFv */
 bool daPz_c::_execute() {
-    /* Nonmatching */
+    if (l_HIO.m033) {
+        modeProc(PROC_INIT_e, 0);
+
+        fopAc_ac_c* player = dComIfGp_getLinkPlayer();
+        current.pos = player->current.pos;
+        current.pos.y += 50.0f;
+        current.pos.x -= 200.0f * cM_ssin(player->shape_angle.y);
+        current.pos.z -= 200.0f * cM_scos(player->shape_angle.y);
+    }
+
+    setFallSplash();
+    getGndPos();
+
+    mbEyesFollowGanondorf = false;
+    if (mbHasGanondorf) {
+        mbEyesFollowGanondorf = checkEyeArea(mGanondorfPosCurrent);
+    }
+
+    gravity = l_HIO.m0B0;
+
+    if (mMode != 6 && mMode != 5 && m073F) {
+        modeProc(PROC_INIT_e, 6);
+    }
+
+    setRipple();
+
+    if (mMode != 5 && m08B0 == 1) {
+        modeProc(PROC_INIT_e, 5);
+    }
+
+    setJntStatus();
+
+    if (demo()) {
+        mBtkAnm.play();
+        mBrkAnm.play();
+        setMtx();
+        g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+        return true;
+    }
+
+    current.angle = shape_angle;
+    mpMorf->calc();
+    enemy_fire(&mEnemyFire);
+    if (enemy_ice(&mEventIce)) {
+        PSMTXCopy(mpMorf->getModel()->getBaseTRMtx(), mDoMtx_stack_c::get());
+        return true;
+    }
+
+    if (mAnmPrmIdx == 9) {
+        setHeadSplash();
+    }
+
+    if (mArg == 0 && (m08B0 == 0 || m08B0 == 2) && !m0F80 && mMode != 2 && mMode != 3 &&
+        mMode != 5 && mMode != 9 && cLib_calcTimer(&m0F7C) == 0)
+    {
+        fopAc_ac_c* ganondorf;
+        if (fopAcM_SearchByName(PROC_GND, &ganondorf)) {
+            f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+            if (dist < (&l_HIO.m100)[m08B0] && ganondorf->stealItemBitNo == 0) {
+                m0F82 = 1;
+                modeProc(PROC_INIT_e, 9);
+            }
+        }
+    }
+
+    checkOrder();
+    modeProc(PROC_EXEC_e, 11);
+    eventOrder();
+    setAttention();
+
+    cLib_addCalc2(&speedF, m0924, 0.3f, 4.0f);
+
+    u8 room_no = current.roomNo;
+    u32 mtrl_snd_id = 0;
+    if (mObjAcch.ChkGroundHit()) {
+        mtrl_snd_id = dComIfG_Bgsp()->GetMtrlSndId(mObjAcch.m_gnd);
+    }
+
+    s8 reverb = dComIfGp_getReverb((s8)room_no);
+    mpMorf->play(&eyePos, mtrl_snd_id, reverb);
+    mpBowMcaMorf->play(NULL, 0, 0);
+    mBrkAnm.play();
+    playEyeAnm();
+
+    if (l_HIO.m02F) {
+        setAnm(l_HIO.m02F, false, 0xF);
+    }
+
+    fopAcM_posMoveF(this, NULL);
+    mObjAcch.CrrPos(*dComIfG_Bgsp());
+    setCollision(30.0f, 130.0f);
+    setAnmRunSpeed();
+
+    current.angle = shape_angle;
+    setMtx();
+    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+    return true;
 }
 
 /* 000060D8-00006154       .text bowDraw__6daPz_cFv */
