@@ -10,6 +10,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_material.h"
+#include "d/d_s_play.h"
 #include "d/actor/d_a_item.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_actor_mng.h"
@@ -217,8 +218,20 @@ static BOOL nodeSkirtControl_CB(J3DNode* i_node, int i_calcTiming) {
 }
 
 /* 00000840-00000920       .text _nodeSkirtControl__6daPz_cFP7J3DNodeP8J3DModel */
-void daPz_c::_nodeSkirtControl(J3DNode*, J3DModel*) {
-    /* Nonmatching */
+void daPz_c::_nodeSkirtControl(J3DNode* i_node, J3DModel* i_model) {
+    u16 jnt_no = ((J3DJoint*)i_node)->getJntNo();
+    mDoMtx_stack_c::copy(i_model->getAnmMtx(jnt_no));
+
+    s16 rot_z = mWaist2RotZ;
+    if (rot_z > mWaist2RotY) {
+        rot_z = mWaist2RotY;
+    }
+
+    mDoMtx_stack_c::XrotM(REG12_S(2));
+    mDoMtx_stack_c::YrotM(REG12_S(3));
+    mDoMtx_stack_c::ZrotM(-(rot_z + REG12_S(4)));
+    cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+    PSMTXCopy(mDoMtx_stack_c::now, i_model->getAnmMtx(jnt_no));
 }
 
 /* 00000920-00000940       .text createHeap_CB__FP10fopAc_ac_c */
