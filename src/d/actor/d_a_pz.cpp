@@ -343,8 +343,29 @@ void daPz_c::setEyeBtk(int) {
 }
 
 /* 00002810-00002888       .text setEyeAnm__6daPz_cFSc */
-void daPz_c::setEyeAnm(signed char) {
-    /* Nonmatching */
+void daPz_c::setEyeAnm(signed char i_eye) {
+    static const int a_eye_tbl[][2] = {
+        {0x27, 0x1F},
+        {0x23, 0x1E},
+        {0x24, -1},
+        {0x25, -1},
+        {0x29, 0x20},
+        {0x26, -1},
+        {0x2C, -1},
+        {0x28, 0x1F},
+        {0x2A, -1},
+        {0x2B, -1},
+    };
+
+    int btp = a_eye_tbl[i_eye][0];
+    if (btp != -1) {
+        setEyeBtp(btp);
+    }
+    int btk = a_eye_tbl[i_eye][1];
+    if (btk != -1) {
+        setEyeBtk(btk);
+    }
+    mCurEye = i_eye;
 }
 
 /* 00002888-00002AE0       .text ctrlEye__6daPz_cFv */
