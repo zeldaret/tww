@@ -1012,7 +1012,7 @@ void new_himo2_move(himo2_class* i_this) {
         actor->current.pos += actor->speed;
         pl_pos_add(i_this);
         if (i_this->m217C != NULL) {
-            if ((f30 < (actor->speedF * 10.0f)) || (i_this->m0308 == 0)) {
+            if ((f26 < (actor->speedF * 10.0f)) || (i_this->m0308 == 0)) {
                 i_this->m02DC = 10;
                 i_this->m24D9 = 0xFF;
                 i_this->m24D8 = 1;
