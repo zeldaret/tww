@@ -45,8 +45,8 @@ public:
     void _nodeWaistControl(J3DNode*, J3DModel*);
     void _nodeWaist2Control(J3DNode*, J3DModel*);
     void _nodeSkirtControl(J3DNode*, J3DModel*);
-    void bodyCreateHeap();
-    void bowCreateHeap();
+    int bodyCreateHeap();
+    int bowCreateHeap();
     bool _createHeap();
     void getGndPos();
     void checkEyeArea(cXyz&);

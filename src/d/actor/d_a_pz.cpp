@@ -138,18 +138,21 @@ static bool createHeap_CB(fopAc_ac_c* i_this) {
 }
 
 /* 00000940-00000D54       .text bodyCreateHeap__6daPz_cFv */
-void daPz_c::bodyCreateHeap() {
+int daPz_c::bodyCreateHeap() {
     /* Nonmatching */
 }
 
 /* 00000D54-00000E74       .text bowCreateHeap__6daPz_cFv */
-void daPz_c::bowCreateHeap() {
+int daPz_c::bowCreateHeap() {
     /* Nonmatching */
 }
 
 /* 00000E74-00000EC0       .text _createHeap__6daPz_cFv */
 bool daPz_c::_createHeap() {
-    /* Nonmatching */
+    if (bodyCreateHeap() == 0) {
+        return false;
+    }
+    return bowCreateHeap() != 0;
 }
 
 /* 00000EC0-00000F20       .text __ct__13daPz_matAnm_cFv */
