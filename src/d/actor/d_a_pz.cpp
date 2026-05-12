@@ -753,7 +753,7 @@ BOOL daPz_c::checkTgHit() {
                 m0768 = 1;
             }
 
-            if (cM_rndF(1.0f) < 0.0f) {
+            if (cM_rndF(100.0f) < 60.0f) {
                 fopAcM_monsSeStart(this, JA_SE_CV_ZL_GN_DAMAGE, 0);
             }
         } else {
@@ -767,7 +767,7 @@ BOOL daPz_c::checkTgHit() {
                 m075C = 1;
             }
 
-            if (cM_rndF(1.0f) < 0.5f) {
+            if (cM_rndF(100.0f) < 30.0f) {
                 fopAcM_monsSeStart(this, JA_SE_CV_ZL_GN_DAMAGE, 0);
             }
         }
