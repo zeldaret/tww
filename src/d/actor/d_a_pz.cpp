@@ -475,7 +475,17 @@ void daPz_c::modeBackStep() {
 
 /* 0000527C-00005304       .text modeTalkInit__6daPz_cFv */
 void daPz_c::modeTalkInit() {
-    /* Nonmatching */
+    setAnm(2, true, 0xF);
+    speedF = 0.0f;
+    m0924 = 0.0f;
+    m08EA = false;
+    m_jnt.mbHeadLock = false;
+    m_jnt.mbBackBoneLock = false;
+    if (m08B0 == 0) {
+        m0F80 = true;
+    } else {
+        m0F7C = l_HIO.mTalkTimer[m08B0];
+    }
 }
 
 /* 00005304-0000539C       .text modeTalk__6daPz_cFv */

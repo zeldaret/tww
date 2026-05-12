@@ -182,7 +182,9 @@ public:
     /* 0x0B8 */ f32 mBackStepSpeedF;
     /* 0x0BC */ f32 mSideStepSpeedY;
     /* 0x0C0 */ f32 mSideStepSpeedF;
-    /* 0x0C4 */ u8 m0C4[0x10C - 0x0C4];
+    /* 0x0C4 */ u8 m0C4[0x0F8 - 0x0C4];
+    /* 0x0F8 */ s16 mTalkTimer[3];
+    /* 0x0FE */ u8 m0FE[0x10C - 0x0FE];
 };
 
 #endif /* D_A_PZ_H */
