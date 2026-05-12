@@ -1773,7 +1773,8 @@ void daPz_c::modeAfraid() {
             f32 dist = (current.pos - ganondorf->current.pos).absXZ();
             f32 min_y = ganondorf->current.pos.y + 50.0f;
 
-            m08C4.y = 8.0f * (ganondorf->eyePos.y - dist * 0.5f);
+            f32 dist_scale = 0.5f;
+            m08C4.y = 8.0f * (ganondorf->eyePos.y - dist * dist_scale);
             if (m08C4.y <= min_y) {
                 m08C4.y = min_y;
             }
