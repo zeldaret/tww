@@ -869,7 +869,48 @@ void daPz_c::setAnm(s8 i_anm, bool i_force, int i_eye) {
 
 /* 0000246C-00002684       .text setAnmRunSpeed__6daPz_cFv */
 void daPz_c::setAnmRunSpeed() {
-    /* Nonmatching */
+    if (mAnmPrmIdx == 3) {
+        f32 run_speed = (current.pos - old.pos).abs() / (10.0f + REG12_F(6));
+        if (run_speed <= 0.0f) {
+            run_speed = 0.0f;
+        } else if (run_speed >= 1.0f) {
+            run_speed = 1.0f;
+        }
+
+        f32 play_speed = run_speed * l_HIO.m044;
+        play_speed = play_speed < l_HIO.m04C ? l_HIO.m04C : play_speed;
+        play_speed = play_speed > l_HIO.m048 ? l_HIO.m048 : play_speed;
+        mpMorf->setPlaySpeed(play_speed);
+
+        int frame = mpMorf->getFrame();
+        if (frame == 7 || frame == 14) {
+            static s8 run_splash_scale_init;
+            static Vec run_splash_scale;
+            if (!run_splash_scale_init) {
+                run_splash_scale.x = 0.6f;
+                run_splash_scale.y = 0.6f;
+                run_splash_scale.z = 0.6f;
+                run_splash_scale_init = true;
+            }
+
+            int land_id;
+            JPABaseEmitter* emitter = dComIfGp_particle_setSimpleLand(
+                mObjAcch.m_gnd, &current.pos, &shape_angle, 1.25f, 1.5f, 1.0f,
+                &tevStr, &land_id, 7
+            );
+
+            if (emitter != NULL) {
+                emitter->setRate(18.0f);
+                emitter->setSpread(1.0f);
+                emitter->mGlobalDynamicsScale.x = run_splash_scale.x;
+                emitter->mGlobalDynamicsScale.y = run_splash_scale.y;
+                emitter->mGlobalDynamicsScale.z = run_splash_scale.z;
+                emitter->mGlobalParticleScale.x = run_splash_scale.x;
+                emitter->mGlobalParticleScale.y = run_splash_scale.y;
+                emitter->mGlobalParticleScale.z = run_splash_scale.z;
+            }
+        }
+    }
 }
 
 /* 00002684-0000274C       .text setEyeBtp__6daPz_cFi */
