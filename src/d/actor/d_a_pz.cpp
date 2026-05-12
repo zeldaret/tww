@@ -1334,7 +1334,7 @@ void daPz_c::bodyCreateInit() {
     }
 
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
-    m0FD0 = *(u32*)modelData->getVtxAttrFmtList();
+    mRootJoint = modelData->getJointNodePointer(0);
 
     for (int i = 0; i < 6; i++) {
         mEyeMat[i] = modelData->getMaterialNodePointer(l_eyeMatNo[i]);
@@ -1370,7 +1370,79 @@ void daPz_c::bodyCreateInit() {
 
 /* 00006974-00006BAC       .text createInit__6daPz_cFv */
 void daPz_c::createInit() {
-    /* Nonmatching */
+    static u8 fire_j[ARRAY_SIZE(mEnemyFire.mFlameJntIdxs)] = {
+        0x07,
+        0x02,
+        0x0C,
+        0x0D,
+        0x11,
+        0x12,
+        0x16,
+        0x17,
+        0x19,
+        0x1A,
+    };
+    static f32 fire_sc[ARRAY_SIZE(mEnemyFire.mParticleScale)] = {
+        2.0f,
+        2.0f,
+        1.0f,
+        1.0f,
+        1.0f,
+        1.0f,
+        1.0f,
+        1.0f,
+        1.0f,
+        1.0f,
+    };
+
+    max_health = 30;
+    health = max_health;
+    stealItemLeft = 10;
+
+    mEnemyFire.mpMcaMorf = mpMorf;
+    mEnemyFire.mpActor = this;
+    for (int i = 0; i < ARRAY_SIZE(mEnemyFire.mFlameJntIdxs); i++) {
+        mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
+        mEnemyFire.mParticleScale[i] = fire_sc[i];
+    }
+
+    mEventIce.mpActor = this;
+    mEventIce.m00C = true;
+    mEventIce.mWallRadius = 50.0f;
+    mEventIce.mCylHeight = 250.0f;
+
+    m08B0 = 0;
+    m0F7C = l_HIO.mTalkTimer[0];
+    m0F80 = 0;
+    bodyCreateInit();
+
+    if (mArg == 0) {
+        m0F88 = true;
+        modeProcInit(1);
+        attention_info.distances[1] = 3;
+        attention_info.distances[3] = 3;
+        attention_info.flags |= fopAc_Attn_ACTION_SPEAK_e;
+        attention_info.flags |= fopAc_Attn_LOCKON_TALK_e;
+    } else {
+        attention_info.flags = fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
+        modeProcInit(0);
+    }
+
+    m0920 = 1;
+    cullMtx = mpMorf->getModel()->getBaseTRMtx();
+    fopAcM_setCullSizeBox(this, -60.0f, -50.0f, -60.0f, 60.0f, 1800.0f, 60.0f);
+    mAcchCir.SetWall(80.0f, 60.0f);
+    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+    mObjAcch.SetRoofNone();
+    gravity = l_HIO.m0B0;
+
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(m_cyl_src);
+    mCyl.SetStts(&mStts);
+    setCollision(30.0f, 130.0f);
+
+    dKy_tevstr_init(&mTevstr, home.roomNo, 0xFF);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
 }
 
 /* 00006BAC-00006CB0       .text _create__6daPz_cFv */

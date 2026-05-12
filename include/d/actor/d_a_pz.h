@@ -207,7 +207,7 @@ public:
     /* 0x0F90 */ mDoExt_brkAnm mBrkAnm;
     /* 0x0FA8 */ mDoExt_btkAnm mBtkAnm;
     /* 0x0FBC */ mDoExt_btpAnm mBtpAnm;
-    /* 0x0FD0 */ u32 m0FD0;
+    /* 0x0FD0 */ J3DJoint* mRootJoint;
     /* 0x0FD4 */ J3DMaterial* mEyeMat[6];
     /* 0x0FEC */ J3DMaterial* mEyebrowMat[6];
     /* 0x1004 */ J3DMaterial* mFaceMat[4];
