@@ -490,7 +490,12 @@ void daPz_c::modeTalkInit() {
 
 /* 00005304-0000539C       .text modeTalk__6daPz_cFv */
 void daPz_c::modeTalk() {
-    /* Nonmatching */
+    m08C4 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+    m_jnt.mbTrn = true;
+    if (talk(1) == fopMsgStts_BOX_CLOSED_e) {
+        dComIfGp_event_onEventFlag(dEvtFlag_UNK8_e);
+        modeProc((Proc_e)0, 2);
+    }
 }
 
 /* 0000539C-0000549C       .text modeFollowInit__6daPz_cFv */
