@@ -146,7 +146,8 @@ public:
     /* 0x0924 */ f32 m0924;
     /* 0x0928 */ enemyice mEventIce;
     /* 0x0CE0 */ enemyfire mEnemyFire;
-    /* 0x0F08 */ u8 m0F08[0x0F48 - 0x0F08];
+    /* 0x0F08 */ u8 m0F08[0x0F44 - 0x0F08];
+    /* 0x0F44 */ f32 m0F44;
     /* 0x0F48 */ u8 m0F48;
     /* 0x0F49 */ u8 m0F49[0x0F4C - 0x0F49];
     /* 0x0F4C */ cXyz mGanondorfPosCurrent;
@@ -178,10 +179,16 @@ public:
 
 public:
     /* 0x004 */ dNpc_HIO_c mNpc;
-    /* 0x02C */ u8 m02C[0x086 - 0x02C];
+    /* 0x02C */ u8 m02C[0x05C - 0x02C];
+    /* 0x05C */ f32 mAttackAimRange[3];
+    /* 0x068 */ f32 mAttackShootChance[3];
+    /* 0x074 */ f32 mAttackAimZeroChance[3];
+    /* 0x080 */ s16 mAttackWaitTimer[3];
     /* 0x086 */ s16 mFollowTimerBase[3];
     /* 0x08C */ s16 mFollowTimerRange[3];
-    /* 0x092 */ u8 m092[0x0B4 - 0x092];
+    /* 0x092 */ s16 mAttackTimerBase[3];
+    /* 0x098 */ s16 mAttackTimerRange[3];
+    /* 0x09E */ u8 m09E[0x0B4 - 0x09E];
     /* 0x0B4 */ f32 mBackStepSpeedY;
     /* 0x0B8 */ f32 mBackStepSpeedF;
     /* 0x0BC */ f32 mSideStepSpeedY;

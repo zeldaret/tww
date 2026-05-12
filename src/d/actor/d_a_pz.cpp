@@ -430,7 +430,34 @@ void daPz_c::modeAttackWait() {
 
 /* 00003D88-00003F14       .text modeAttackInit__6daPz_cFv */
 void daPz_c::modeAttackInit() {
-    /* Nonmatching */
+    m08F4 = 30;
+
+    int idx = m08B0;
+    if (!m0F65) {
+        idx = 0;
+    }
+
+    s8 cur_anm = m06D3;
+    if (cur_anm != 4 && cur_anm != 5) {
+        m08EC = l_HIO.mAttackTimerBase[idx] + cM_rndF(l_HIO.mAttackTimerRange[idx]);
+        m08F0 = l_HIO.mAttackWaitTimer[idx];
+        setAnm(4, false, 0xF);
+    }
+
+    if (cM_rndF(100.0f) < l_HIO.mAttackShootChance[idx]) {
+        m0F48 = true;
+    } else {
+        m0F48 = false;
+        if (cM_rndF(100.0f) < l_HIO.mAttackAimZeroChance[idx]) {
+            m0F44 = 0.0f;
+        } else {
+            m0F44 = cM_rndF(l_HIO.mAttackAimRange[idx]);
+        }
+    }
+
+    m08EA = false;
+    m_jnt.mbHeadLock = true;
+    m_jnt.mbBackBoneLock = false;
 }
 
 /* 00003F14-0000445C       .text modeAttack__6daPz_cFv */
