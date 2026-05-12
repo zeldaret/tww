@@ -555,7 +555,10 @@ bool daPz_c::_execute() {
 
 /* 000060D8-00006154       .text bowDraw__6daPz_cFv */
 void daPz_c::bowDraw() {
-    /* Nonmatching */
+    g_env_light.setLightTevColorType(mpBowMcaMorf->getModel(), &tevStr);
+    PSMTXCopy(mpMorf->getModel()->getAnmMtx(14), mDoMtx_stack_c::get());
+    mpBowMcaMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpBowMcaMorf->updateDL();
 }
 
 /* 00006154-00006600       .text bodyDraw__6daPz_cFv */
