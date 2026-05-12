@@ -544,7 +544,29 @@ void daPz_c::getArg() {
 
 /* 00001F10-000020B8       .text setAttention__6daPz_cFv */
 void daPz_c::setAttention() {
-    /* Nonmatching */
+    attention_info.position = mHeadTopPos;
+    attention_info.position.y += l_HIO.m040;
+    eyePos = mHeadFrontPos;
+
+    f32 dist_xz = (mHeadFrontPos - m08C4).absXZ();
+    (void)dist_xz;
+
+    cLib_distanceAngleS(shape_angle.y, cLib_targetAngleY(&mHeadFrontPos, &m08C4));
+
+    s16 max_turn_vel;
+    if (m_jnt.trnChk()) {
+        s16 turn_speed = mEventCut.getTurnSpeed();
+        if (turn_speed != 0) {
+            max_turn_vel = turn_speed;
+        } else {
+            max_turn_vel = l_HIO.mNpc.mMaxHeadTurnVel;
+        }
+    } else {
+        max_turn_vel = 0;
+    }
+
+    cLib_addCalcAngleS2(&m08E8, max_turn_vel, 4, 0x800);
+    m_jnt.lookAtTarget(&shape_angle.y, &m08C4, mHeadFrontPos, shape_angle.y, m08E8, m08EA);
 }
 
 /* 000020B8-00002114       .text setBowAnm__6daPz_cFScb */

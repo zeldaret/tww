@@ -145,8 +145,8 @@ public:
     /* 0x08C4 */ cXyz m08C4;
     /* 0x08D0 */ u8 m08D0[0x08DC - 0x08D0];
     /* 0x08DC */ cXyz mHeadFrontPos;
-    /* 0x08E8 */ u8 m08E8[0x08EA - 0x08E8];
-    /* 0x08EA */ u8 m08EA;
+    /* 0x08E8 */ s16 m08E8;
+    /* 0x08EA */ bool m08EA;
     /* 0x08EB */ u8 m08EB[0x08EC - 0x08EB];
     /* 0x08EC */ int m08EC;
     /* 0x08F0 */ int m08F0;
