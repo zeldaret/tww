@@ -1228,7 +1228,128 @@ void daPz_c::modeMoveInit() {
 
 /* 000031E8-0000395C       .text modeMove__6daPz_cFv */
 void daPz_c::modeMove() {
-    /* Nonmatching */
+    if (l_HIO.m032) {
+        l_HIO.m032 = 0;
+        modeProc(PROC_INIT_e, 7);
+        return;
+    }
+
+    if (l_HIO.m034[0]) {
+        l_HIO.m034[0] = 0;
+        modeProc(PROC_INIT_e, 8);
+        return;
+    }
+
+    bool blocked = false;
+    m083C.Set(&current.pos, &mMovePath.mPos, this);
+    if (dComIfG_Bgsp()->LineCross(&m083C)) {
+        blocked = true;
+    }
+    if (mObjAcch.ChkWallHit()) {
+        blocked = true;
+    }
+
+    if (cLib_calcTimer(&m08F8) == 0 && blocked) {
+        m08F8 = 60;
+        if (m0920 == 1) {
+            m0920 = -1;
+        } else {
+            m0920 = 1;
+        }
+        mMovePath.mAngleSpeed = (REG12_S(0) + 0x4000) * m0920;
+        if (cLib_calcTimer(&m08F4) == 0) {
+            dLib_setCirclePath(&mMovePath);
+            modeProc(PROC_INIT_e, 7);
+        }
+    }
+
+    if ((u8)checkTgHit()) {
+        return;
+    }
+
+    if (l_HIO.m030 == 0) {
+        if (mbHasGanondorf) {
+            m08C4 = mGanondorfPos4;
+        }
+    } else {
+        m08C4 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+    }
+
+    m_jnt.mbTrn = false;
+    cLib_addCalc2(&mMovePath.mRadius, l_HIO.mMoveRadius[m08B0], 0.1f, 10.0f);
+
+    cXyz move_diff = current.pos - mMovePath.mPos;
+    move_diff.y = 0.0f;
+    f32 move_dist = move_diff.abs();
+
+    cXyz eye_diff = current.pos - m08C4;
+    eye_diff.y = 0.0f;
+    eye_diff.abs();
+
+    cXyz target_diff = m08C4 - mMovePath.mPos;
+    target_diff.y = 0.0f;
+    f32 target_dist = target_diff.abs();
+
+    if (move_dist > 200.0f + REG12_F(7) || !mbEyesFollowGanondorf) {
+        m0924 = l_HIO.m050;
+    } else {
+        m0924 = 0.0f;
+    }
+
+    if (blocked || move_dist <= 200.0f || target_dist >= 2.0f * l_HIO.mMoveRadius[m08B0] ||
+        mbEyesFollowGanondorf)
+    {
+        mMovePath.mWobbleAmplitude = l_HIO.m0AC;
+        mMovePath.mAngleSpeed = (REG12_S(0) + 0x150) * m0920;
+        mMovePath.mTranslation = m08C4;
+        dLib_setCirclePath(&mMovePath);
+    }
+
+    if (cLib_calcTimer(&m08F0) == 0) {
+        f32 dist = 100000.0f;
+        cXyz diff = current.pos - m08C4;
+        diff.y = 0.0f;
+        f32 dist_to_target = diff.abs();
+
+        if (mbHasGanondorf) {
+            cXyz ganondorf_diff = current.pos - mGanondorfPosCurrent;
+            ganondorf_diff.y = 0.0f;
+            dist = ganondorf_diff.abs();
+        }
+
+        if (mbEyesFollowGanondorf && (dist_to_target < l_HIO.m0D0 || dist < l_HIO.m0D0)) {
+            m06C8 = mMode;
+            modeProc(PROC_INIT_e, 8);
+            return;
+        }
+    }
+
+    cLib_addCalcAngleS2(&shape_angle.y, cLib_targetAngleY(&current.pos, &mMovePath.mPos), 8, 0x400);
+    if (speedF < 0.5f) {
+        setAnm(2, false, 0xF);
+    } else {
+        setAnm(3, false, 0xF);
+    }
+
+    if (m08B0 == 2) {
+        fopAc_ac_c* player = dComIfGp_getLinkPlayer();
+        m0F81[0] = dLib_checkActorInFan(player->current.pos, this, player->shape_angle.y, 0x2500, 30000.0f, 1000.0f);
+    }
+
+    if (!l_HIO.m034[1] && cLib_calcTimer(&m08EC) == 0) {
+        if (m08B0 == 0) {
+            modeProc(PROC_INIT_e, 2);
+        } else if (m08B0 == 2) {
+            if (!m0F65) {
+                m0F81[0] = 1;
+            }
+            if (m0F81[0]) {
+                modeProc(PROC_INIT_e, 2);
+            }
+        }
+    }
+
+    m0F82 = 2;
 }
 
 /* 0000395C-000039C0       .text modeAttackWaitInit__6daPz_cFv */

@@ -177,7 +177,7 @@ public:
     /* 0x08EC */ int m08EC;
     /* 0x08F0 */ int m08F0;
     /* 0x08F4 */ int m08F4;
-    /* 0x08F8 */ u8 m08F8[0x08FC - 0x08F8];
+    /* 0x08F8 */ int m08F8;
     /* 0x08FC */ dLib_circle_path_c mMovePath;
     /* 0x0920 */ int m0920;
     /* 0x0924 */ f32 m0924;
