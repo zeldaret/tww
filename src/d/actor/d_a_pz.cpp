@@ -166,7 +166,14 @@ void daPz_matAnm_c::calc(J3DMaterial* i_material) const {
 
 /* 00000FB4-00001038       .text getGndPos__6daPz_cFv */
 void daPz_c::getGndPos() {
-    /* Nonmatching */
+    mbHasGanondorf = false;
+
+    fopAc_ac_c* ganondorf;
+    if (fopAcM_SearchByName(PROC_GND, &ganondorf)) {
+        mGanondorfPos4 = ganondorf->eyePos;
+        mGanondorfPosCurrent = ganondorf->current.pos;
+        mbHasGanondorf = true;
+    }
 }
 
 /* 00001038-0000114C       .text checkEyeArea__6daPz_cFR4cXyz */
