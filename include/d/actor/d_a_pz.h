@@ -7,6 +7,7 @@
 #include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class daPz_matAnm_c : public J3DMaterialAnm {
 public:
@@ -110,7 +111,9 @@ public:
 
 public:
     /* 0x06C4 */ int mMode;
-    /* 0x06C8 */ u8 m06C8[0x06D3 - 0x06C8];
+    /* 0x06C8 */ u8 m06C8[0x06CC - 0x06C8];
+    /* 0x06CC */ int m06CC;
+    /* 0x06D0 */ u8 m06D0[0x06D3 - 0x06D0];
     /* 0x06D3 */ u8 m06D3;
     /* 0x06D4 */ u8 m06D4[0x06D5 - 0x06D4];
     /* 0x06D5 */ u8 mCurEye;
@@ -132,9 +135,13 @@ public:
     /* 0x08B0 */ int m08B0;
     /* 0x08B4 */ u8 m08B4[0x08C4 - 0x08B4];
     /* 0x08C4 */ cXyz m08C4;
-    /* 0x08D0 */ u8 m08D0[0x0920 - 0x08D0];
+    /* 0x08D0 */ u8 m08D0[0x08EA - 0x08D0];
+    /* 0x08EA */ u8 m08EA;
+    /* 0x08EB */ u8 m08EB[0x08EC - 0x08EB];
+    /* 0x08EC */ int m08EC;
+    /* 0x08F0 */ u8 m08F0[0x0920 - 0x08F0];
     /* 0x0920 */ int m0920;
-    /* 0x0924 */ u8 m0924[0x0928 - 0x0924];
+    /* 0x0924 */ f32 m0924;
     /* 0x0928 */ enemyice mEventIce;
     /* 0x0CE0 */ enemyfire mEnemyFire;
     /* 0x0F08 */ u8 m0F08[0x0F48 - 0x0F08];
@@ -160,12 +167,14 @@ public:
     /* 0x0FD0 */ u8 m0FD0[0x1049 - 0x0FD0];
 };
 
-class daPz_HIO_c {
+class daPz_HIO_c : public mDoHIO_entry_c {
 public:
     daPz_HIO_c();
+    virtual ~daPz_HIO_c() {}
 
 public:
-    /* Place member variables here */
+    /* 0x004 */ dNpc_HIO_c mNpc;
+    /* 0x02C */ u8 m02C[0x10C - 0x02C];
 };
 
 #endif /* D_A_PZ_H */
