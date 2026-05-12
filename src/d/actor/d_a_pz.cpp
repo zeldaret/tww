@@ -1464,7 +1464,100 @@ void daPz_c::modeAttackInit() {
 
 /* 00003F14-0000445C       .text modeAttack__6daPz_cFv */
 void daPz_c::modeAttack() {
-    /* Nonmatching */
+    if ((u8)checkTgHit()) {
+        return;
+    }
+
+    if (!m0F48) {
+        if (mbHasGanondorf) {
+            m08C4 = mGanondorfPos4;
+        }
+    } else {
+        m08C4 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+    }
+
+    if (m08B0 == 0) {
+        fopAc_ac_c* ganondorf;
+        if (fopAcM_SearchByName(PROC_GND, &ganondorf) && ganondorf->stealItemBitNo > 60 &&
+            dComIfGs_getLife() >= 12 && m075C)
+        {
+            m08C4 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+        }
+
+        if (m0768 && mbHasGanondorf) {
+            m08C4 = mGanondorfPos4;
+        }
+    } else {
+        if (m075C) {
+            m08C4 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+        }
+
+        if (m0768 && mbHasGanondorf) {
+            m08C4 = mGanondorfPos4;
+        }
+    }
+
+    if ((mAnmPrmIdx == 4 || mAnmPrmIdx == 5) && cLib_calcTimer(&m08F4) == 0) {
+        cXyz diff = current.pos - m08C4;
+        diff.y = 0.0f;
+        f32 dist_to_target = diff.abs();
+
+        f32 dist_to_ganondorf = 100000.0f;
+        if (mbHasGanondorf) {
+            cXyz ganondorf_diff = current.pos - mGanondorfPosCurrent;
+            ganondorf_diff.y = 0.0f;
+            dist_to_ganondorf = ganondorf_diff.abs();
+        }
+
+        if (mbEyesFollowGanondorf &&
+            (dist_to_target < l_HIO.m0D0 || dist_to_ganondorf < l_HIO.m0D0))
+        {
+            m06C8 = mMode;
+            if (cM_rndF(100.0f) < 50.0f) {
+                modeProc(PROC_INIT_e, 8);
+            } else {
+                modeProc(PROC_INIT_e, 7);
+            }
+            return;
+        }
+    }
+
+    if (mAnmPrmIdx == 4) {
+        if (mpMorf->isStop()) {
+            m_jnt.mbTrn = true;
+            setAnm(5, false, 0xF);
+            return;
+        }
+    } else if (mAnmPrmIdx == 5) {
+        m_jnt.mbTrn = true;
+        if (cLib_calcTimer(&m08EC) == 0) {
+            setAnm(6, false, 0xF);
+            return;
+        }
+    } else if (mAnmPrmIdx == 6 && mpMorf->isStop()) {
+        m_jnt.mbTrn = false;
+        if (m075C) {
+            m0758--;
+            if (cLib_calcTimer(&m0758) != 0) {
+                modeProc(PROC_INIT_e, 2);
+                return;
+            }
+            m075C = 0;
+        } else if (m0768) {
+            m0764--;
+            if (cLib_calcTimer(&m0764) != 0) {
+                modeProc(PROC_INIT_e, 2);
+                return;
+            }
+            m0768 = 0;
+        } else {
+            if (cLib_calcTimer(&m08F0) == 0) {
+                modeProc(PROC_INIT_e, 1);
+                return;
+            }
+            m08EA = true;
+        }
+    }
 }
 
 /* 0000445C-000044B4       .text modeDefendInit__6daPz_cFv */
