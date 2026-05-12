@@ -37,7 +37,7 @@ public:
     void isEyeAnm(s8) {}
     void modeProcInit(int) {}
     void setAfraid() {}
-    void setDown() {}
+    void setDown() { m08EA = true; }
     void setMove() {}
     void setStand() {}
 
@@ -186,7 +186,10 @@ public:
     /* 0x0B8 */ f32 mBackStepSpeedF;
     /* 0x0BC */ f32 mSideStepSpeedY;
     /* 0x0C0 */ f32 mSideStepSpeedF;
-    /* 0x0C4 */ u8 m0C4[0x0F8 - 0x0C4];
+    /* 0x0C4 */ f32 mDownSpeedY;
+    /* 0x0C8 */ f32 mDownSpeedF;
+    /* 0x0CC */ s16 mDownTimer;
+    /* 0x0CE */ u8 m0CE[0x0F8 - 0x0CE];
     /* 0x0F8 */ s16 mTalkTimer[3];
     /* 0x0FE */ u8 m0FE[0x10C - 0x0FE];
 };

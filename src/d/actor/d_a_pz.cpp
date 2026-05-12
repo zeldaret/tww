@@ -421,7 +421,20 @@ void daPz_c::modeDefend() {
 
 /* 00004630-0000470C       .text modeDownInit__6daPz_cFv */
 void daPz_c::modeDownInit() {
-    /* Nonmatching */
+    attention_info.flags &= ~8;
+    attention_info.flags &= ~2;
+    setAnm(7, true, 0xF);
+    fopAcM_monsSeStart(this, JA_SE_CV_ZL_GN_DAMAGE, 0);
+    setDown();
+    m0924 = 0.0f;
+    speedF = 0.0f;
+    m08EA = false;
+    m_jnt.mbTrn = false;
+    m_jnt.mbHeadLock = true;
+    m_jnt.mbBackBoneLock = true;
+    speed.y = l_HIO.mDownSpeedY;
+    m0F70 = l_HIO.mDownSpeedF;
+    m08EC = l_HIO.mDownTimer;
 }
 
 /* 0000470C-00004C20       .text modeDown__6daPz_cFv */
