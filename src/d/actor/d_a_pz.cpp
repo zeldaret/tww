@@ -1622,7 +1622,132 @@ void daPz_c::modeDownInit() {
 
 /* 0000470C-00004C20       .text modeDown__6daPz_cFv */
 void daPz_c::modeDown() {
-    /* Nonmatching */
+    int land_id;
+
+    m0924 = 0.0f;
+    speedF = 0.0f;
+    m_jnt.mbTrn = false;
+
+    if (mAnmPrmIdx == 7 && mpMorf->getMorfRatio() == 1.0f && mObjAcch.ChkGroundHit()) {
+        setAnm(8, false, 0xF);
+    }
+
+    if (cLib_calcTimer(&m08EC) != 0) {
+        cXyz offset(m0F70, 0.0f, 0.0f);
+        cXyz rotated(0.0f, 0.0f, 0.0f);
+        mDoMtx_stack_c::YrotS(shape_angle.y);
+        mDoMtx_stack_c::multVec(&offset, &rotated);
+        PSVECAdd(&current.pos, &rotated, &current.pos);
+
+        if (mAnmPrmIdx == 8 && mpMorf->isStop()) {
+            dComIfGp_particle_setSimpleLand(
+                mObjAcch.m_gnd, &current.pos, &shape_angle, 1.25f, 1.5f, 1.0f, &tevStr, &land_id, 7
+            );
+        }
+    }
+
+    int frame = mpMorf->getFrame();
+    if (mAnmPrmIdx == 8) {
+        if (frame == 1.0f + REG12_F(10)) {
+            static s8 down_splash_scale_init;
+            static Vec down_splash_scale;
+            if (!down_splash_scale_init) {
+                down_splash_scale.x = 0.6f;
+                down_splash_scale.y = 0.6f;
+                down_splash_scale.z = 0.6f;
+                down_splash_scale_init = true;
+            }
+
+            JPABaseEmitter* emitter = dComIfGp_particle_setSimpleLand(
+                mObjAcch.m_gnd, &current.pos, &shape_angle, 2.5f, 3.0f, 2.0f, &tevStr, &land_id, 7
+            );
+
+            if (emitter != NULL) {
+                emitter->setRate(18.0f);
+                emitter->setSpread(1.0f);
+                emitter->mGlobalDynamicsScale.x = down_splash_scale.x;
+                emitter->mGlobalDynamicsScale.y = down_splash_scale.y;
+                emitter->mGlobalDynamicsScale.z = down_splash_scale.z;
+                emitter->mGlobalParticleScale.x = down_splash_scale.x;
+                emitter->mGlobalParticleScale.y = down_splash_scale.y;
+                emitter->mGlobalParticleScale.z = down_splash_scale.z;
+            }
+        }
+
+        if (frame == 2.0f + REG12_F(10)) {
+            static s8 down_waist_splash_scale_init;
+            static Vec down_waist_splash_scale;
+            if (!down_waist_splash_scale_init) {
+                down_waist_splash_scale.x = 0.6f;
+                down_waist_splash_scale.y = 0.6f;
+                down_waist_splash_scale.z = 0.6f;
+                down_waist_splash_scale_init = true;
+            }
+
+            JPABaseEmitter* emitter = dComIfGp_particle_setSimpleLand(
+                mObjAcch.m_gnd, &mWaistPos, &shape_angle, 2.5f, 3.0f, 2.0f, &tevStr, &land_id, 7
+            );
+
+            if (emitter != NULL) {
+                emitter->setRate(18.0f);
+                emitter->setSpread(1.0f);
+                emitter->mGlobalDynamicsScale.x = down_waist_splash_scale.x;
+                emitter->mGlobalDynamicsScale.y = down_waist_splash_scale.y;
+                emitter->mGlobalDynamicsScale.z = down_waist_splash_scale.z;
+                emitter->mGlobalParticleScale.x = down_waist_splash_scale.x;
+                emitter->mGlobalParticleScale.y = down_waist_splash_scale.y;
+                emitter->mGlobalParticleScale.z = down_waist_splash_scale.z;
+            }
+        }
+
+        if (frame == 3.0f + REG12_F(10)) {
+            static s8 down_head_splash_scale_init;
+            static Vec down_head_splash_scale;
+            if (!down_head_splash_scale_init) {
+                down_head_splash_scale.x = 0.6f;
+                down_head_splash_scale.y = 0.6f;
+                down_head_splash_scale.z = 0.6f;
+                down_head_splash_scale_init = true;
+            }
+
+            JPABaseEmitter* emitter = dComIfGp_particle_setSimpleLand(
+                mObjAcch.m_gnd, &mHeadFrontPos, &shape_angle, 2.5f, 3.0f, 2.0f, &tevStr, &land_id, 7
+            );
+
+            if (emitter != NULL) {
+                emitter->setRate(18.0f);
+                emitter->setSpread(1.0f);
+                emitter->mGlobalDynamicsScale.x = down_head_splash_scale.x;
+                emitter->mGlobalDynamicsScale.y = down_head_splash_scale.y;
+                emitter->mGlobalDynamicsScale.z = down_head_splash_scale.z;
+                emitter->mGlobalParticleScale.x = down_head_splash_scale.x;
+                emitter->mGlobalParticleScale.y = down_head_splash_scale.y;
+                emitter->mGlobalParticleScale.z = down_head_splash_scale.z;
+            }
+        }
+    }
+
+    if (mAnmPrmIdx == 8 && mpMorf->isStop()) {
+        m08EA = true;
+    }
+
+    if (m08B0 != 1) {
+        if (mAnmPrmIdx == 9) {
+            if (mpMorf->isStop()) {
+                m08EA = false;
+                setAnm(2, false, 0xF);
+            }
+        } else if (m0740[0]) {
+            m0740[0] = 0;
+            m0F7C = l_HIO.mTalkTimer[2];
+            m0F80 = 0;
+            m075C = 0;
+            m0768 = 0;
+            modeProc(PROC_INIT_e, 1);
+        } else {
+            setAnm(9, false, 0xF);
+        }
+    }
 }
 
 /* 00004C20-00004C78       .text modeAfraidInit__6daPz_cFv */
