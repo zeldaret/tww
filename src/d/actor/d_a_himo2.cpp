@@ -765,12 +765,12 @@ void new_himo2_move(himo2_class* i_this) {
     dAttention_c* attention; // r23
     u32 r30;
     s16 r22;
+    f32 f29;
+    f32 f27;
+    f32 f28;
     f32 f31;
     f32 f30;
-    f32 f28;
-    f32 f27;
     f32 f26;
-    f32 dVar25;
     f32 fVar26;
     cXyz sp130;
     cXyz sp124;
@@ -985,20 +985,20 @@ void new_himo2_move(himo2_class* i_this) {
         } else {
             sp10C = i_this->m2524;
         }
-        dVar25 = (sp10C.x - actor->current.pos.x);
-        f30 = (sp10C.y - actor->current.pos.y);
-        f28 = (sp10C.z - actor->current.pos.z);
-        f31 = (f28 * f28);
-        f27 = (dVar25 * dVar25);
-        f32 f26 = std::sqrtf(f31 + (f27 + (f30 * f30)));
-        f27 = std::sqrtf(f27 + f31);
-        int r23 = f26 * (REG0_F(3) + -5.0f);
+        f31 = (sp10C.x - actor->current.pos.x);
+        f27 = (sp10C.y - actor->current.pos.y);
+        f26 = (sp10C.z - actor->current.pos.z);
+        f29 = (f26 * f26);
+        f28 = (f31 * f31);
+        f30 = std::sqrtf(f29 + (f28 + (f27 * f27)));
+        f28 = std::sqrtf(f28 + f29);
+        int r23 = f30 * (REG0_F(3) + -5.0f);
         if ((s16)r23 < (s16)(REG0_S(2) + -3000)) {
             r23 = (s16)(REG0_S(2) + -3000);
         }
-        if ((i_this->m217C != NULL) || (f26 > (actor->speedF * 10.0f))) {
-            actor->current.angle.y = cM_atan2s(dVar25, f28);
-            actor->current.angle.x = -cM_atan2s(f30, f27);
+        if ((i_this->m217C != NULL) || (f30 > (actor->speedF * 10.0f))) {
+            actor->current.angle.y = cM_atan2s(f31, f26);
+            actor->current.angle.x = -cM_atan2s(f27, f28);
         }
         actor->speedF = 20.0f;
         mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
@@ -1010,7 +1010,7 @@ void new_himo2_move(himo2_class* i_this) {
         actor->current.pos += actor->speed;
         pl_pos_add(i_this);
         if (i_this->m217C != NULL) {
-            if ((f26 < (actor->speedF * 10.0f)) || (i_this->m0308 == 0)) {
+            if ((f30 < (actor->speedF * 10.0f)) || (i_this->m0308 == 0)) {
                 i_this->m02DC = 10;
                 i_this->m24D9 = 0xFF;
                 i_this->m24D8 = 1;
@@ -1639,9 +1639,7 @@ void new_himo2_move(himo2_class* i_this) {
         spB8.x = (i_this->m24E8.x + f26);
         spB8.y = i_this->m24E8.y + f1;
         spB8.z = i_this->m24E8.z;
-        f32 f1_3 = cM_scos(i_this->m02D8 * 0x1C00);
-        f32 f1_2 = (i_this->m2520 * f1_3);
-        s16 r23 = 7.5f * f1_2;
+        s16 r23 = (i_this->m2520 * cM_scos(i_this->m02D8 * 0x1C00)) * 7.5f;
         camera->mCamera.Set(spB8, spC4, r23, i_this->m24F4);
         cLib_addCalc0(&i_this->m2520, 1.0f, (REG0_F(16) + 2.0f));
         s16 r23_2 = 0;
