@@ -123,8 +123,8 @@ void daPz_c::_nodeSkirtControl(J3DNode*, J3DModel*) {
 }
 
 /* 00000920-00000940       .text createHeap_CB__FP10fopAc_ac_c */
-static BOOL createHeap_CB(fopAc_ac_c*) {
-    /* Nonmatching */
+static bool createHeap_CB(fopAc_ac_c* i_this) {
+    return ((daPz_c*)i_this)->_createHeap();
 }
 
 /* 00000940-00000D54       .text bodyCreateHeap__6daPz_cFv */
@@ -138,7 +138,7 @@ void daPz_c::bowCreateHeap() {
 }
 
 /* 00000E74-00000EC0       .text _createHeap__6daPz_cFv */
-void daPz_c::_createHeap() {
+bool daPz_c::_createHeap() {
     /* Nonmatching */
 }
 
