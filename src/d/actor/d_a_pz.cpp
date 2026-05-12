@@ -1170,7 +1170,38 @@ void daPz_c::modeSideStepInit() {
 
 /* 00004F08-00005098       .text modeSideStep__6daPz_cFv */
 void daPz_c::modeSideStep() {
-    /* Nonmatching */
+    if ((u8)checkTgHit()) {
+        mWaist2RotY = 0;
+        return;
+    }
+
+    m0924 = 0.0f;
+    speedF = 0.0f;
+    m08EA = false;
+    m_jnt.mbTrn = true;
+    m073F = 0;
+    cLib_addCalcAngleS2(&mWaist2RotY, m0920 * 0x1194, 4, 0x800);
+
+    s16 angle = cLib_targetAngleY(&mHeadFrontPos, &m08C4);
+    cXyz offset(m0F70 * (f32)m0920, 0.0f, 0.0f);
+    cXyz rotated(0.0f, 0.0f, 0.0f);
+    mDoMtx_stack_c::YrotS(angle);
+    mDoMtx_stack_c::multVec(&offset, &rotated);
+    PSVECAdd(&current.pos, &rotated, &current.pos);
+
+    if (mObjAcch.ChkGroundHit()) {
+        int land_id;
+        mWaist2RotY = 0;
+        dComIfGp_particle_setSimpleLand(
+            mObjAcch.m_gnd, &current.pos, &shape_angle, 1.25f, 1.5f, 1.0f, &tevStr, &land_id, 7
+        );
+
+        if (m06C8 == 2 || m06C8 == 3) {
+            modeProc(PROC_INIT_e, 3);
+        } else {
+            modeProc(PROC_INIT_e, 1);
+        }
+    }
 }
 
 /* 00005098-00005114       .text modeBackStepInit__6daPz_cFv */
@@ -1187,7 +1218,38 @@ void daPz_c::modeBackStepInit() {
 
 /* 00005114-0000527C       .text modeBackStep__6daPz_cFv */
 void daPz_c::modeBackStep() {
-    /* Nonmatching */
+    if ((u8)checkTgHit()) {
+        mWaist2RotZ = 0;
+        return;
+    }
+
+    m0924 = 0.0f;
+    speedF = 0.0f;
+    m08EA = false;
+    m_jnt.mbTrn = true;
+    m073F = 0;
+    cLib_addCalcAngleS2(&mWaist2RotZ, -0x1194, 4, 0x800);
+
+    s16 angle = cLib_targetAngleY(&current.pos, &m08C4);
+    cXyz offset(0.0f, 0.0f, -m0F70);
+    cXyz rotated(0.0f, 0.0f, 0.0f);
+    mDoMtx_stack_c::YrotS(angle);
+    mDoMtx_stack_c::multVec(&offset, &rotated);
+    PSVECAdd(&current.pos, &rotated, &current.pos);
+
+    if (mObjAcch.ChkGroundHit()) {
+        int land_id;
+        mWaist2RotZ = 0;
+        dComIfGp_particle_setSimpleLand(
+            mObjAcch.m_gnd, &current.pos, &shape_angle, 1.25f, 1.5f, 1.0f, &tevStr, &land_id, 7
+        );
+
+        if (m06C8 == 2 || m06C8 == 3) {
+            modeProc(PROC_INIT_e, 3);
+        } else {
+            modeProc(PROC_INIT_e, 1);
+        }
+    }
 }
 
 /* 0000527C-00005304       .text modeTalkInit__6daPz_cFv */
