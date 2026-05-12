@@ -106,8 +106,12 @@ public:
     cPhs_State _create();
     bool _delete();
 
-    static const dCcD_SrcCyl m_cyl_src;
+    static const u32 m_heapsize;
     static const char m_arc_name[];
+    static const f32 m_smoke_ef;
+    static const f32 m_grass_ef;
+    static const f32 m_splash_ef;
+    static const dCcD_SrcCyl m_cyl_src;
 
 public:
     /* 0x06C4 */ int mMode;
@@ -179,7 +183,24 @@ public:
 
 public:
     /* 0x004 */ dNpc_HIO_c mNpc;
-    /* 0x02C */ u8 m02C[0x05C - 0x02C];
+    /* 0x02C */ u8 m02C;
+    /* 0x02D */ u8 m02D;
+    /* 0x02E */ u8 m02E[0x02F - 0x02E];
+    /* 0x02F */ u8 m02F;
+    /* 0x030 */ u8 m030;
+    /* 0x031 */ u8 m031;
+    /* 0x032 */ u8 m032;
+    /* 0x033 */ u8 m033;
+    /* 0x034 */ u8 m034[0x03E - 0x034];
+    /* 0x03E */ u8 m03E[0x040 - 0x03E];
+    /* 0x040 */ f32 m040;
+    /* 0x044 */ f32 m044;
+    /* 0x048 */ f32 m048;
+    /* 0x04C */ f32 m04C;
+    /* 0x050 */ f32 m050;
+    /* 0x054 */ s16 m054;
+    /* 0x056 */ u8 m056[0x058 - 0x056];
+    /* 0x058 */ f32 m058;
     /* 0x05C */ f32 mAttackAimRange[3];
     /* 0x068 */ f32 mAttackShootChance[3];
     /* 0x074 */ f32 mAttackAimZeroChance[3];
@@ -188,7 +209,12 @@ public:
     /* 0x08C */ s16 mFollowTimerRange[3];
     /* 0x092 */ s16 mAttackTimerBase[3];
     /* 0x098 */ s16 mAttackTimerRange[3];
-    /* 0x09E */ u8 m09E[0x0B4 - 0x09E];
+    /* 0x09E */ u8 m09E[0x0A0 - 0x09E];
+    /* 0x0A0 */ f32 m0A0;
+    /* 0x0A4 */ u8 m0A4[0x0A8 - 0x0A4];
+    /* 0x0A8 */ f32 m0A8;
+    /* 0x0AC */ f32 m0AC;
+    /* 0x0B0 */ f32 m0B0;
     /* 0x0B4 */ f32 mBackStepSpeedY;
     /* 0x0B8 */ f32 mBackStepSpeedF;
     /* 0x0BC */ f32 mSideStepSpeedY;
@@ -196,9 +222,23 @@ public:
     /* 0x0C4 */ f32 mDownSpeedY;
     /* 0x0C8 */ f32 mDownSpeedF;
     /* 0x0CC */ s16 mDownTimer;
-    /* 0x0CE */ u8 m0CE[0x0F8 - 0x0CE];
+    /* 0x0CE */ u8 m0CE[0x0D0 - 0x0CE];
+    /* 0x0D0 */ f32 m0D0;
+    /* 0x0D4 */ f32 m0D4;
+    /* 0x0D8 */ f32 m0D8;
+    /* 0x0DC */ s16 m0DC;
+    /* 0x0DE */ s16 m0DE;
+    /* 0x0E0 */ s16 m0E0;
+    /* 0x0E2 */ s16 m0E2[4];
+    /* 0x0EA */ u8 m0EA[0x0EC - 0x0EA];
+    /* 0x0EC */ f32 m0EC;
+    /* 0x0F0 */ f32 m0F0;
+    /* 0x0F4 */ f32 m0F4;
     /* 0x0F8 */ s16 mTalkTimer[3];
-    /* 0x0FE */ u8 m0FE[0x10C - 0x0FE];
+    /* 0x0FE */ u8 m0FE[0x100 - 0x0FE];
+    /* 0x100 */ f32 m100;
+    /* 0x104 */ u8 m104[0x108 - 0x104];
+    /* 0x108 */ f32 m108;
 };
 
 #endif /* D_A_PZ_H */

@@ -15,7 +15,11 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
 
+const u32 daPz_c::m_heapsize = 0xA740;
 const char daPz_c::m_arc_name[] = "PZ";
+const f32 daPz_c::m_smoke_ef = 1.25f;
+const f32 daPz_c::m_grass_ef = 1.5f;
+const f32 daPz_c::m_splash_ef = 1.0f;
 static daPz_HIO_c l_HIO;
 
 const dCcD_SrcCyl daPz_c::m_cyl_src = {
@@ -51,7 +55,86 @@ const dCcD_SrcCyl daPz_c::m_cyl_src = {
 
 /* 000000EC-00000310       .text __ct__10daPz_HIO_cFv */
 daPz_HIO_c::daPz_HIO_c() {
-    /* Nonmatching */
+    m02C = 0;
+    m02D = 1;
+    m032 = 0;
+    m033 = 0;
+    for (int i = 0; i < 10; i++) {
+        m034[i] = 0;
+    }
+
+    mNpc.m04 = -20.0f;
+    mNpc.mMaxHeadX = 0x1FFE;
+    mNpc.mMaxHeadY = 0x2710;
+    mNpc.mMaxBackboneX = 0x1B58;
+    mNpc.mMaxBackboneY = 0x32C8;
+    mNpc.mMinHeadX = -0x9C4;
+    mNpc.mMinHeadY = -0x2710;
+    mNpc.mMinBackboneX = -0x1B58;
+    mNpc.mMinBackboneY = -0x32C8;
+    mNpc.mMaxTurnStep = 0x1000;
+    mNpc.mMaxHeadTurnVel = 0x800;
+    mNpc.mAttnYOffset = 50.0f;
+    mNpc.mMaxAttnAngleY = 0x32C8;
+    mNpc.m22 = 0;
+    mNpc.mMaxAttnDistXZ = 400.0f;
+
+    m040 = 60.0f;
+    m02F = 0;
+    m054 = 0x2000;
+    m058 = 200.0f;
+    m044 = 1.2f;
+    m04C = 0.9f;
+    m048 = 2.0f;
+    m050 = 10.0f;
+    m031 = 0;
+
+    mAttackAimRange[0] = 100.0f;
+    mAttackShootChance[0] = 0.0f;
+    mAttackAimZeroChance[0] = 100.0f;
+    mAttackWaitTimer[0] = 30;
+    mFollowTimerBase[0] = 300;
+    mFollowTimerRange[0] = 0;
+    mAttackTimerBase[0] = 30;
+    mAttackTimerRange[0] = 0;
+    m0A0 = 1000.0f;
+    mTalkTimer[0] = 60;
+    m100 = 3000.0f;
+
+    mAttackAimRange[2] = 100.0f;
+    mAttackShootChance[2] = 100.0f;
+    mAttackAimZeroChance[2] = 80.0f;
+    mAttackWaitTimer[2] = 30;
+    mFollowTimerBase[2] = 100;
+    mFollowTimerRange[2] = 100;
+    mAttackTimerBase[2] = 30;
+    mAttackTimerRange[2] = 60;
+    m0A8 = 1000.0f;
+    mTalkTimer[2] = 600;
+    m108 = 800.0f;
+    m0AC = 100.0f;
+    m0E2[0] = 4;
+    m0E2[1] = 6;
+    m0E2[2] = 4;
+    m0E2[3] = 6;
+
+    m0B0 = -2.5f;
+    mBackStepSpeedY = 20.0f;
+    mBackStepSpeedF = 20.0f;
+    mSideStepSpeedY = 20.0f;
+    mSideStepSpeedF = 20.0f;
+    mDownSpeedY = 4.0f;
+    mDownSpeedF = 15.0f;
+    mDownTimer = 14;
+    m0D8 = 30.0f;
+    m0DC = 40;
+    m0DE = 40;
+    m0E0 = 5;
+    m0D0 = 600.0f;
+    m0EC = 800.0f;
+    m0D4 = 15.0f;
+    m0F0 = 2.0f;
+    m0F4 = 1.0f;
 }
 
 /* 00000310-00000340       .text stealItem_CB__FPv */
