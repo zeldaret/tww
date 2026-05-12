@@ -47,7 +47,7 @@ public:
     void _nodeSkirtControl(J3DNode*, J3DModel*);
     int bodyCreateHeap();
     int bowCreateHeap();
-    bool _createHeap();
+    BOOL _createHeap();
     void getGndPos();
     BOOL checkEyeArea(cXyz&);
     virtual u32 getMsg();

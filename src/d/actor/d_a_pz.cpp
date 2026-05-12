@@ -280,7 +280,7 @@ void daPz_c::_nodeSkirtControl(J3DNode* i_node, J3DModel* i_model) {
 }
 
 /* 00000920-00000940       .text createHeap_CB__FP10fopAc_ac_c */
-static bool createHeap_CB(fopAc_ac_c* i_this) {
+static BOOL createHeap_CB(fopAc_ac_c* i_this) {
     return ((daPz_c*)i_this)->_createHeap();
 }
 
@@ -305,11 +305,11 @@ int daPz_c::bowCreateHeap() {
 }
 
 /* 00000E74-00000EC0       .text _createHeap__6daPz_cFv */
-bool daPz_c::_createHeap() {
+BOOL daPz_c::_createHeap() {
     if (bodyCreateHeap() == 0) {
-        return false;
+        return FALSE;
     }
-    return bowCreateHeap() != 0;
+    return bowCreateHeap() ? TRUE : FALSE;
 }
 
 /* 00000EC0-00000F20       .text __ct__13daPz_matAnm_cFv */
@@ -923,7 +923,26 @@ void daPz_c::createInit() {
 
 /* 00006BAC-00006CB0       .text _create__6daPz_cFv */
 cPhs_State daPz_c::_create() {
-    /* Nonmatching */
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
+    fopAcM_ct(this, daPz_c);
+
+    if (phase_state == cPhs_COMPLEATE_e) {
+        getArg();
+
+        if (mArg != 0 && strcmp(dComIfGp_getStartStageName(), "GTower") == 0 &&
+            dComIfGs_isEventBit(0x3520) == TRUE)
+        {
+            return cPhs_ERROR_e;
+        }
+
+        if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
+            return cPhs_ERROR_e;
+        }
+
+        createInit();
+    }
+
+    return phase_state;
 }
 
 /* 00007DA0-00007E20       .text _delete__6daPz_cFv */
