@@ -1365,7 +1365,69 @@ void daPz_c::modeAttackWaitInit() {
 
 /* 000039C0-00003D88       .text modeAttackWait__6daPz_cFv */
 void daPz_c::modeAttackWait() {
-    /* Nonmatching */
+    if ((u8)checkTgHit()) {
+        return;
+    }
+
+    if (l_HIO.m030 == 0) {
+        if (mbHasGanondorf) {
+            m08C4 = mGanondorfPos4;
+        }
+    } else {
+        m08C4 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+    }
+
+    if (cLib_calcTimer(&m08F0) == 0) {
+        cXyz diff = current.pos - m08C4;
+        diff.y = 0.0f;
+        f32 dist_to_target = diff.abs();
+
+        f32 dist_to_ganondorf = 100000.0f;
+        if (mbHasGanondorf) {
+            cXyz ganondorf_diff = current.pos - mGanondorfPosCurrent;
+            ganondorf_diff.y = 0.0f;
+            dist_to_ganondorf = ganondorf_diff.abs();
+        }
+
+        if (mbEyesFollowGanondorf &&
+            (dist_to_target < l_HIO.m0D0 || dist_to_ganondorf < l_HIO.m0D0))
+        {
+            m06C8 = mMode;
+            if (cM_rndF(100.0f) < 50.0f) {
+                modeProc(PROC_INIT_e, 8);
+            } else {
+                modeProc(PROC_INIT_e, 7);
+            }
+            return;
+        }
+    }
+
+    if (m08B0 == 0) {
+        fopAc_ac_c* ganondorf;
+        if (fopAcM_SearchByName(PROC_GND, &ganondorf) && ganondorf->stealItemBitNo > 60 &&
+            dComIfGs_getLife() >= 12 && m075C)
+        {
+            m08C4 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+        }
+
+        if (m0768 && mbHasGanondorf) {
+            m08C4 = mGanondorfPos4;
+        }
+    } else {
+        if (m075C) {
+            m08C4 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+        }
+
+        if (m0768 && mbHasGanondorf) {
+            m08C4 = mGanondorfPos4;
+        }
+    }
+
+    if (l_HIO.m02D && cLib_calcTimer(&m08EC) == 0) {
+        modeProc(PROC_INIT_e, 3);
+    }
+
+    m_jnt.mbTrn = true;
 }
 
 /* 00003D88-00003F14       .text modeAttackInit__6daPz_cFv */
