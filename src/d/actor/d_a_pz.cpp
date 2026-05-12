@@ -1361,7 +1361,38 @@ void daPz_c::modeAfraidInit() {
 
 /* 00004C78-00004E8C       .text modeAfraid__6daPz_cFv */
 void daPz_c::modeAfraid() {
-    /* Nonmatching */
+    m0924 = 0.0f;
+    speedF = 0.0f;
+    m08EA = false;
+    m_jnt.mbTrn = false;
+    m073F = 0;
+    m_jnt.mbHeadLock = false;
+    m_jnt.mbBackBoneLock = false;
+
+    fopAc_ac_c* ganondorf;
+    if (fopAcM_SearchByName(PROC_GND, &ganondorf)) {
+        if (REG12_S(9) == 1) {
+            m08C4 = ganondorf->current.pos;
+            m08C4.y += 1200.0f + REG12_F(10);
+        } else if (REG12_S(9) == 2) {
+            m08C4 = ganondorf->eyePos;
+            m08C4.y += 800.0f + REG12_F(10);
+        } else {
+            m08C4 = ganondorf->current.pos;
+
+            cXyz diff = current.pos - ganondorf->current.pos;
+            diff.y = 0.0f;
+            f32 dist = diff.abs();
+            f32 min_y = ganondorf->current.pos.y + 50.0f;
+
+            m08C4.y = 8.0f * (ganondorf->eyePos.y - 0.5f * dist);
+            if (m08C4.y <= min_y) {
+                m08C4.y = min_y;
+            }
+        }
+
+        cLib_addCalcAngleS2(&shape_angle.y, cLib_targetAngleY(&current.pos, &ganondorf->current.pos), 4, 0x400);
+    }
 }
 
 /* 00004E8C-00004F08       .text modeSideStepInit__6daPz_cFv */
