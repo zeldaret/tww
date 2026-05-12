@@ -2099,8 +2099,7 @@ bool daPz_c::_execute() {
     enemy_fire(&mEnemyFire);
     if (enemy_ice(&mEventIce)) {
         J3DModel* model = mpMorf->getModel();
-        MtxP base_mtx = model->getBaseTRMtx();
-        PSMTXCopy(mDoMtx_stack_c::get(), base_mtx);
+        PSMTXCopy(mDoMtx_stack_c::get(), model->getBaseTRMtx());
         return true;
     }
 
