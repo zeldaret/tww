@@ -162,8 +162,22 @@ static BOOL nodeHeadControl_CB(J3DNode* i_node, int i_calcTiming) {
 }
 
 /* 0000038C-000004FC       .text _nodeHeadControl__6daPz_cFP7J3DNodeP8J3DModel */
-void daPz_c::_nodeHeadControl(J3DNode*, J3DModel*) {
-    /* Nonmatching */
+void daPz_c::_nodeHeadControl(J3DNode* i_node, J3DModel* i_model) {
+    u16 jnt_no = ((J3DJoint*)i_node)->getJntNo();
+    mDoMtx_stack_c::copy(i_model->getAnmMtx(jnt_no));
+
+    static cXyz top_offset(0.0f, 0.0f, 0.0f);
+    static cXyz front_offset(24.0f, -16.0f, 0.0f);
+
+    PSMTXMultVec(mDoMtx_stack_c::now, &top_offset, &mHeadTopPos);
+    mDoMtx_stack_c::YrotM(-m_jnt.getHead_y());
+    mDoMtx_stack_c::ZrotM(-m_jnt.getHead_x());
+    PSMTXMultVec(mDoMtx_stack_c::now, &front_offset, &mHeadFrontPos);
+    mHeadCenterPos.x = mDoMtx_stack_c::now[0][3];
+    mHeadCenterPos.y = mDoMtx_stack_c::now[1][3];
+    mHeadCenterPos.z = mDoMtx_stack_c::now[2][3];
+    cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+    PSMTXCopy(mDoMtx_stack_c::now, i_model->getAnmMtx(jnt_no));
 }
 
 /* 00000538-00000584       .text nodeWaistControl_CB__FP7J3DNodei */
