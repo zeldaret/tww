@@ -291,7 +291,58 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 00000940-00000D54       .text bodyCreateHeap__6daPz_cFv */
 int daPz_c::bodyCreateHeap() {
-    /* Nonmatching */
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, PZ_BDL_PZ);
+    JUT_ASSERT(0x23e, modelData != NULL);
+
+    for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
+        J3DMaterial* mat = modelData->getMaterialNodePointer(i);
+        mat->setMaterialAnm(new daPz_matAnm_c());
+    }
+
+    mpMorf = new mDoExt_McaMorf(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, TRUE, NULL, 0x80000,
+                                0x11020222);
+    if (mpMorf == NULL || mpMorf->getModel() == NULL) {
+        return 0;
+    }
+
+    mpMorf->getModel()->setUserArea((u32)this);
+    if (!mInvisibleModel.create(mpMorf->getModel())) {
+        return 0;
+    }
+
+    m_jnt.setHeadJntNum(4);
+    modelData->getJointNodePointer(4)->setCallBack(nodeHeadControl_CB);
+    m_jnt.setBackboneJntNum(1);
+    modelData->getJointNodePointer(1)->setCallBack(nodeWaistControl_CB);
+    modelData->getJointNodePointer(0x15)->setCallBack(nodeWaist2Control_CB);
+    modelData->getJointNodePointer(0x19)->setCallBack(nodeSkirtControl_CB);
+
+    J3DAnmTexPattern* btp = (J3DAnmTexPattern*)dComIfG_getObjectRes(m_arc_name, PZ_BTP_MABA_A);
+    JUT_ASSERT(0x277, btp != NULL);
+    if (!mBtpAnm.init(modelData, btp, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+        return 0;
+    }
+
+    J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arc_name, PZ_BTK_MABA_A);
+    JUT_ASSERT(0x27d, btk != NULL);
+    if (!mBtkAnm.init(modelData, btk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+        return 0;
+    }
+
+    J3DAnmTextureSRTKey* btkAnm = mBtkAnm.getBtkAnm();
+    u16 updateMaterialNum = btkAnm->getUpdateMaterialNum();
+    for (u16 i = 0; i < updateMaterialNum; i++) {
+        u16 materialId = btkAnm->getUpdateMaterialID(i);
+        m08A8[i] = modelData->getMaterialNodePointer(materialId)->getMaterialAnm();
+    }
+
+    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arc_name, PZ_BRK_TRI_TEST);
+    JUT_ASSERT(0x28e, brk != NULL);
+    if (!mBrkAnm.init(modelData, brk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        return 0;
+    }
+
+    return 1;
 }
 
 /* 00000D54-00000E74       .text bowCreateHeap__6daPz_cFv */

@@ -159,8 +159,7 @@ public:
     /* 0x0780 */ dKy_tevstr_c mTevstr;
     /* 0x0830 */ u8 m0830[0x083C - 0x0830];
     /* 0x083C */ dBgS_ObjLinChk m083C;
-    /* 0x08A8 */ J3DMaterialAnm* m08A8[1];
-    /* 0x08AC */ u8 m08AC[0x08B0 - 0x08AC];
+    /* 0x08A8 */ J3DMaterialAnm* m08A8[2];
     /* 0x08B0 */ int m08B0;
     /* 0x08B4 */ fpc_ProcID mArrowId;
     /* 0x08B8 */ cXyz mHeadTopPos;
