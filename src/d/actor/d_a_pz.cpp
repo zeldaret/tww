@@ -730,9 +730,9 @@ BOOL daPz_c::checkTgHit() {
         dKy_SordFlush_set(*hit_pos, 0);
 
         if (m06D1 == 1 || m06D1 == 7 || m06D1 == 8) {
-            m0F68 = 40.0f;
+            m0F68 = 60.0f;
         } else {
-            m0F68 = l_HIO.m0D0;
+            m0F68 = 40.0f;
         }
 
         dComIfGp_particle_set(
