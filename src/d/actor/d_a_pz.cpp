@@ -1051,12 +1051,81 @@ void daPz_c::setEyeAnm(signed char i_eye) {
 
 /* 00002888-00002AE0       .text ctrlEye__6daPz_cFv */
 void daPz_c::ctrlEye() {
-    /* Nonmatching */
+    mEyeTarget = m08C4;
+    s16 target_x = cLib_targetAngleX(&mHeadFrontPos, &mEyeTarget);
+    s16 target_y = cLib_targetAngleY(&mHeadFrontPos, &mEyeTarget);
+
+    s16 eye_x = target_y - (s16)(shape_angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y());
+    s16 eye_y = target_x - (s16)(m_jnt.getHead_x() + m_jnt.getBackbone_x());
+
+    f32 eye_y_rate = (s16)eye_y / 8192.0f;
+    f32 eye_x_rate = (s16)eye_x / 8192.0f;
+    f32 y_offset = 0.1f * eye_y_rate;
+    f32 x_offset = 0.1f * eye_x_rate;
+
+    m06DC = cLib_checkMinMaxLimit(y_offset, -0.1f, 0.1f);
+    m06DC = cLib_checkMinMaxLimit(x_offset, -0.1f, 0.1f);
+
+    y_offset = cLib_minMaxLimit(y_offset, -0.1f, 0.1f);
+    x_offset = cLib_minMaxLimit(x_offset, -0.1f, 0.1f);
+
+    if (mMode == 3) {
+        x_offset = 0.1f;
+    }
+
+    if (m08A8[0] != NULL) {
+        cLib_addCalc(((daPz_matAnm_c*)m08A8[0])->getNowOffsetXP(), x_offset, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(((daPz_matAnm_c*)m08A8[0])->getNowOffsetYP(), y_offset, 0.5f, 0.1f, 0.03f);
+    }
+
+    x_offset *= -1.0f;
+    if (m08A8[1] != NULL) {
+        cLib_addCalc(((daPz_matAnm_c*)m08A8[1])->getNowOffsetXP(), x_offset, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(((daPz_matAnm_c*)m08A8[1])->getNowOffsetYP(), y_offset, 0.5f, 0.1f, 0.03f);
+    }
 }
 
 /* 00002AE0-00002D38       .text playEyeAnm__6daPz_cFv */
 void daPz_c::playEyeAnm() {
-    /* Nonmatching */
+    bool move_eye = true;
+
+    if (mCurEye == 0 || mCurEye == 7) {
+        if (cLib_calcTimer(&mEyeTimer) == 0) {
+            mEyeBtpState++;
+            if (mEyeBtpState > mBtpAnm.getEndFrame()) {
+                mEyeTimer = (s16)(100.0f + cM_rndF(100.0f));
+                mEyeBtpState = 0;
+            }
+        }
+    } else if (mCurEye == 1 || mCurEye == 2 || mCurEye == 5 || mCurEye == 6) {
+        mEyeBtpState = 1;
+    } else {
+        mEyeBtpState++;
+        if (mEyeBtpState > mBtpAnm.getEndFrame()) {
+            mEyeTimer = (s16)(100.0f + cM_rndF(100.0f));
+            mEyeBtpState = mBtpAnm.getEndFrame();
+        }
+    }
+
+    if (mCurEye == 4) {
+        move_eye = false;
+    }
+
+    if (move_eye) {
+        for (int i = 0; i < 2; i++) {
+            if (m08A8[i] != NULL) {
+                ((daPz_matAnm_c*)m08A8[i])->setMoveFlag();
+            }
+        }
+        ctrlEye();
+    } else {
+        for (int i = 0; i < 2; i++) {
+            if (m08A8[i] != NULL) {
+                ((daPz_matAnm_c*)m08A8[i])->clrMoveFlag();
+            }
+        }
+        mBtkAnm.play();
+    }
 }
 
 /* 00002D38-00002DC8       .text setMtx__6daPz_cFv */

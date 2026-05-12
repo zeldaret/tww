@@ -23,6 +23,8 @@ public:
     void clrMoveFlag() { mMoveFlag = false; }
     f32 getNowOffsetX() { return mNowOffsetX; }
     f32 getNowOffsetY() { return mNowOffsetY; }
+    f32* getNowOffsetXP() { return &mNowOffsetX; }
+    f32* getNowOffsetYP() { return &mNowOffsetY; }
     void setMoveFlag() { mMoveFlag = true; }
 
 private:
@@ -129,10 +131,10 @@ public:
     /* 0x06D2 */ s8 mBckIdx;
     /* 0x06D3 */ s8 mAnmPrmIdx;
     /* 0x06D4 */ s8 mOldAnmPrmIdx;
-    /* 0x06D5 */ u8 mCurEye;
+    /* 0x06D5 */ s8 mCurEye;
     /* 0x06D6 */ u8 m06D6[0x06D8 - 0x06D6];
     /* 0x06D8 */ int mEyeTimer;
-    /* 0x06DC */ u8 m06DC[0x06DD - 0x06DC];
+    /* 0x06DC */ bool m06DC;
     /* 0x06DD */ s8 mBowBckIdx;
     /* 0x06DE */ s8 mBowAnmPrmIdx;
     /* 0x06DF */ s8 mBowOldAnmPrmIdx;
@@ -167,7 +169,7 @@ public:
     /* 0x08B4 */ fpc_ProcID mArrowId;
     /* 0x08B8 */ cXyz mHeadTopPos;
     /* 0x08C4 */ cXyz m08C4;
-    /* 0x08D0 */ u8 m08D0[0x08DC - 0x08D0];
+    /* 0x08D0 */ cXyz mEyeTarget;
     /* 0x08DC */ cXyz mHeadFrontPos;
     /* 0x08E8 */ s16 m08E8;
     /* 0x08EA */ bool m08EA;
