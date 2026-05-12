@@ -2300,8 +2300,8 @@ void daPz_c::bodyCreateInit() {
         0x12, 0x13, 0x08, 0x07,
     };
 
-    if (strcmp(dComIfGp_getStartStageName(), "btl_of_swroom") == 0) {
-        eventInfo.setEventId(dComIfGp_evmng_getEventIdx("p_zelda", 0xFF));
+    if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
+        eventInfo.setEventId(dComIfGp_evmng_getEventIdx("PZ_TALK", 0xFF));
     }
 
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
@@ -2424,7 +2424,7 @@ cPhs_State daPz_c::_create() {
     if (phase_state == cPhs_COMPLEATE_e) {
         getArg();
 
-        if (mArg != 0 && strcmp(dComIfGp_getStartStageName(), "GTower") == 0 &&
+        if (mArg != 0 && strcmp(dComIfGp_getStartStageName(), "kenroom") == 0 &&
             dComIfGs_isEventBit(0x3520) == TRUE)
         {
             return cPhs_ERROR_e;
