@@ -16,6 +16,7 @@
 #include "d/d_s_play.h"
 #include "d/res/res_pz.h"
 #include "d/actor/d_a_arrow.h"
+#include "d/actor/d_a_gnd.h"
 #include "d/actor/d_a_item.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_snap.h"
@@ -2093,7 +2094,9 @@ bool daPz_c::_execute() {
     mpMorf->calc();
     enemy_fire(&mEnemyFire);
     if (enemy_ice(&mEventIce)) {
-        PSMTXCopy(mpMorf->getModel()->getBaseTRMtx(), mDoMtx_stack_c::get());
+        J3DModel* model = mpMorf->getModel();
+        MtxP base_mtx = model->getBaseTRMtx();
+        PSMTXCopy(mDoMtx_stack_c::get(), base_mtx);
         return true;
     }
 
@@ -2106,8 +2109,9 @@ bool daPz_c::_execute() {
     {
         fopAc_ac_c* ganondorf;
         if (fopAcM_SearchByName(PROC_GND, &ganondorf)) {
+            gnd_class* gnd = (gnd_class*)ganondorf;
             f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
-            if (dist < (&l_HIO.m100)[m08B0] && ganondorf->stealItemBitNo == 0) {
+            if (dist < (&l_HIO.m100)[m08B0] && gnd->m02CE == 0) {
                 m0F82 = 1;
                 modeProc(PROC_INIT_e, 9);
             }
@@ -2122,9 +2126,11 @@ bool daPz_c::_execute() {
     cLib_addCalc2(&speedF, m0924, 0.3f, 4.0f);
 
     u8 room_no = current.roomNo;
-    u32 mtrl_snd_id = 0;
+    u32 mtrl_snd_id;
     if (mObjAcch.ChkGroundHit()) {
         mtrl_snd_id = dComIfG_Bgsp()->GetMtrlSndId(mObjAcch.m_gnd);
+    } else {
+        mtrl_snd_id = 0;
     }
 
     s8 reverb = dComIfGp_getReverb((s8)room_no);
@@ -2139,7 +2145,9 @@ bool daPz_c::_execute() {
 
     fopAcM_posMoveF(this, NULL);
     mObjAcch.CrrPos(*dComIfG_Bgsp());
-    setCollision(30.0f, 130.0f);
+    if (!dComIfGp_event_runCheck()) {
+        setCollision(30.0f, 130.0f);
+    }
     setAnmRunSpeed();
 
     current.angle = shape_angle;

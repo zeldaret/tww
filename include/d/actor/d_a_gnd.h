@@ -9,7 +9,9 @@ struct gnd_ke_s {
 
 class gnd_class : public fopEn_enemy_c {
 public:
-    /* 0x02AC */ u8 m02AC[0x13CF - 0x02AC];
+    /* 0x02AC */ u8 m02AC[0x02CE - 0x02AC];
+    /* 0x02CE */ s16 m02CE;
+    /* 0x02D0 */ u8 m02D0[0x13CF - 0x02D0];
     /* 0x13CF */ u8 mNextParryOpeningType;
     /* 0x13D0 */ u8 m13D0;
     /* 0x13D1 */ u8 m13D1;
