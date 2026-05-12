@@ -406,7 +406,12 @@ void daPz_c::modeAttack() {
 
 /* 0000445C-000044B4       .text modeDefendInit__6daPz_cFv */
 void daPz_c::modeDefendInit() {
-    /* Nonmatching */
+    setAnm(10, true, 0xF);
+    m08EC = 30;
+    m_jnt.mbTrn = false;
+    m_jnt.mbHeadLock = true;
+    m_jnt.mbBackBoneLock = true;
+    m08EA = true;
 }
 
 /* 000044B4-00004630       .text modeDefend__6daPz_cFv */
