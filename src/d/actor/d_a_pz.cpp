@@ -1524,14 +1524,16 @@ void daPz_c::modeAttack() {
         }
     }
 
-    u8 anm_idx = mAnmPrmIdx;
+    int anm_idx = (u8)mAnmPrmIdx;
     if (anm_idx == 4) {
         if (mpMorf->isStop()) {
             m_jnt.mbTrn = true;
             setAnm(5, false, 0xF);
             return;
         }
-    } else if ((s8)anm_idx == 5) {
+    }
+
+    if ((s8)anm_idx == 5) {
         m_jnt.mbTrn = true;
         if (cLib_calcTimer(&m08EC) == 0) {
             setAnm(6, false, 0xF);
