@@ -10,6 +10,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_material.h"
+#include "d/d_particle_name.h"
 #include "d/d_s_play.h"
 #include "d/actor/d_a_item.h"
 #include "d/d_snap.h"
@@ -413,7 +414,19 @@ void daPz_c::setFallSplash() {
 
 /* 0000151C-000015F4       .text setHeadSplash__6daPz_cFv */
 void daPz_c::setHeadSplash() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevstr);
+    if (mHeadSplash.getEmitter() == NULL) {
+        dComIfGp_particle_set(
+            dPa_name::ID_AK_SN_PZSHAKEHEADSPLASH00, &mHeadCenterPos, NULL, NULL, 0xFF, &mHeadSplash
+        );
+    }
+
+    JPABaseEmitter* emitter = mHeadSplash.getEmitter();
+    if (emitter != NULL) {
+        emitter->setGlobalPrmColor(mTevstr.mColorC0.r, mTevstr.mColorC0.g, mTevstr.mColorC0.b);
+        MtxP mtx = mpMorf->getModel()->getAnmMtx(4);
+        mHeadSplash.getEmitter()->setGlobalRTMatrix(mtx);
+    }
 }
 
 /* 000015F4-00001704       .text setRipple__6daPz_cFv */
