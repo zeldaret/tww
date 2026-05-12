@@ -1630,16 +1630,15 @@ void new_himo2_move(himo2_class* i_this) {
     }
     
     if (i_this->m24D9 > 0) {
-        f32 f26 = cM_ssin(i_this->m02D8 * 0x3300);
-        f27 = (i_this->m2520 * f26);
-        f26 = cM_scos(i_this->m02D8 * 0x3000);
+        f26 = i_this->m2520 * cM_ssin(i_this->m02D8 * 0x3300);
+        f27 = cM_scos(i_this->m02D8 * 0x3000);
         cXyz spC4;
         cXyz spB8;
-        f32 f1 = (i_this->m2520 * f26);
-        spC4.x = (i_this->m24DC.x + f27);
+        f32 f1 = (i_this->m2520 * f27);
+        spC4.x = (i_this->m24DC.x + f26);
         spC4.y = i_this->m24DC.y + f1;
         spC4.z = i_this->m24DC.z;
-        spB8.x = (i_this->m24E8.x + f27);
+        spB8.x = (i_this->m24E8.x + f26);
         spB8.y = i_this->m24E8.y + f1;
         spB8.z = i_this->m24E8.z;
         f32 f1_3 = cM_scos(i_this->m02D8 * 0x1C00);
