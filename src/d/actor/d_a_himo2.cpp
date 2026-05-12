@@ -994,9 +994,9 @@ void new_himo2_move(himo2_class* i_this) {
         f27 = (dVar25 * dVar25);
         f32 f26 = std::sqrtf(f31 + (f27 + (f30 * f30)));
         f27 = std::sqrtf(f27 + f31);
-        int r23 = (s16)(f26 * (REG0_F(3) + -5.0f));
-        if (r23 < (s16)(REG0_S(2) + -3000)) {
-            r23 = REG0_S(2) + -3000;
+        int r23 = f26 * (REG0_F(3) + -5.0f);
+        if ((s16)r23 < (s16)(REG0_S(2) + -3000)) {
+            r23 = (s16)(REG0_S(2) + -3000);
         }
         if ((i_this->m217C != NULL) || (f26 > (actor->speedF * 10.0f))) {
             actor->current.angle.y = cM_atan2s(dVar25, f28);
