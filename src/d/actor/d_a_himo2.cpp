@@ -1725,7 +1725,11 @@ BOOL daHimo2_Execute(himo2_class* i_this) {
     phVar3 = &i_this->m1120[0];
     for (iVar4 = 0; iVar4 < iVar5; iVar4++, phVar3++) {
         if (i_this->m02DC != 2) {
-            local_bc.GetPointP()->set(phVar3->m10.x, phVar3->m10.y + 60.0f, phVar3->m10.z);
+            f32 gy = phVar3->m10.y;
+            f32 gz = phVar3->m10.z;
+            gy += 60.0f;
+            f32 gx = phVar3->m10.x;
+            local_bc.GetPointP()->set(gx, gy, gz);
             phVar3->m0C = (5.0f + dComIfG_Bgsp()->GroundCross(&local_bc));
         } else {
             phVar3->m0C = -100000.0f;
