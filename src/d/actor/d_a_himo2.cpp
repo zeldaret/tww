@@ -1684,12 +1684,12 @@ void new_himo2_move(himo2_class* i_this) {
 BOOL daHimo2_Execute(himo2_class* i_this) {
     /* Nonmatching - last for loop, regalloc */
     fopAc_ac_c* actor = &i_this->actor;
+    daPy_py_c* apdVar1 = (daPy_py_c*)dComIfGp_getPlayer(0);
     himo2_s* phVar3;
     int iVar4;
     int iVar5;
     cXyz local_c8;
 
-    daPy_py_c* apdVar1 = daPy_getPlayerActorClass();
 #if VERSION > VERSION_DEMO
     if (btd == NULL) {
         btd = (btd_class*)fpcM_Search(b_a_sub, i_this);
