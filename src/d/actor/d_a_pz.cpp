@@ -1165,9 +1165,8 @@ void daPz_c::modeWait() {
                 }
             } else if (strcmp(evt_mgr->getMyNowCutName(staff_id), "Retire") == 0) {
                 mEyeTimer = 0;
-                u8 cur_eye_frame = mEyeBtpState;
-                int eye_frame = REG8_S(1) + 4;
-                if (cur_eye_frame >= eye_frame) {
+                int eye_frame = REG8_S(0) + 4;
+                if (mEyeBtpState >= eye_frame) {
                     mEyeBtpState = eye_frame;
                     mEventIce.mLightShrinkTimer = 1;
                     mEyeTimer = 1000;
@@ -1302,13 +1301,13 @@ void daPz_c::modeDefend() {
     cLib_addCalcAngleS2(&shape_angle.y, target_angle, 4, 0x1000);
     cLib_distanceAngleS(shape_angle.y, target_angle);
 
-    if (m0F68 > 0.1f) {
+    if (m0F68 > 0.01f) {
         cXyz offset(0.0f, 0.0f, -m0F68);
         cXyz rotated(0.0f, 0.0f, 0.0f);
         mDoMtx_stack_c::YrotS(m0F6C);
         mDoMtx_stack_c::multVec(&offset, &rotated);
         PSVECAdd(&current.pos, &rotated, &current.pos);
-        cLib_addCalc0(&m0F68, 1.0f, 5.0f);
+        cLib_addCalc0(&m0F68, 1.0f, 7.0f);
 
         int land_id;
         dComIfGp_particle_setSimpleLand(
