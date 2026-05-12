@@ -1372,15 +1372,11 @@ void daPz_c::modeAttackWait() {
     }
 
     if (cLib_calcTimer(&m08F0) == 0) {
-        cXyz diff = current.pos - m08C4;
-        diff.y = 0.0f;
-        f32 dist_to_target = diff.abs();
+        f32 dist_to_target = (current.pos - m08C4).absXZ();
 
         f32 dist_to_ganondorf = 100000.0f;
         if (mbHasGanondorf) {
-            cXyz ganondorf_diff = current.pos - mGanondorfPosCurrent;
-            ganondorf_diff.y = 0.0f;
-            dist_to_ganondorf = ganondorf_diff.abs();
+            dist_to_ganondorf = (current.pos - mGanondorfPosCurrent).absXZ();
         }
 
         if (mbEyesFollowGanondorf &&
