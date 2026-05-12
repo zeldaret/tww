@@ -144,12 +144,24 @@ bool daPz_c::_createHeap() {
 
 /* 00000EC0-00000F20       .text __ct__13daPz_matAnm_cFv */
 daPz_matAnm_c::daPz_matAnm_c() {
-    /* Nonmatching */
+    mMoveFlag = false;
+    mNowOffsetX = 0.0f;
+    mNowOffsetY = 0.0f;
 }
 
 /* 00000F20-00000FB4       .text calc__13daPz_matAnm_cCFP11J3DMaterial */
-void daPz_matAnm_c::calc(J3DMaterial*) const {
-    /* Nonmatching */
+void daPz_matAnm_c::calc(J3DMaterial* i_material) const {
+    J3DMaterialAnm::calc(i_material);
+
+    for (u32 i = 0; i < 8; i++) {
+        if (getTexMtxAnm(i) != NULL) {
+            J3DTexMtx* tex_mtx = i_material->getTexMtx(i);
+            if (mMoveFlag) {
+                tex_mtx->getTexMtxInfo().mSRT.mTranslationX = mNowOffsetX;
+                tex_mtx->getTexMtxInfo().mSRT.mTranslationY = mNowOffsetY;
+            }
+        }
+    }
 }
 
 /* 00000FB4-00001038       .text getGndPos__6daPz_cFv */

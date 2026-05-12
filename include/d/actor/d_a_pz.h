@@ -6,15 +6,23 @@
 #include "d/d_particle.h"
 #include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_phase.h"
+#include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 
-class daPz_matAnm_c {
-    void clrMoveFlag() {}
-    void getNowOffsetX() {}
-    void getNowOffsetY() {}
-    void setMoveFlag() {}
-
+class daPz_matAnm_c : public J3DMaterialAnm {
+public:
     daPz_matAnm_c();
-    void calc(J3DMaterial*) const;
+    virtual void calc(J3DMaterial*) const;
+
+    void clrMoveFlag() { mMoveFlag = false; }
+    f32 getNowOffsetX() { return mNowOffsetX; }
+    f32 getNowOffsetY() { return mNowOffsetY; }
+    void setMoveFlag() { mMoveFlag = true; }
+
+private:
+    /* 0x6C */ f32 mNowOffsetX;
+    /* 0x70 */ f32 mNowOffsetY;
+    /* 0x74 */ u8 m74[0x7C - 0x74];
+    /* 0x7C */ bool mMoveFlag;
 };
 
 class daPz_c : public fopNpc_npc_c {
