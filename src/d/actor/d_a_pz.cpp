@@ -8,7 +8,10 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
+
+const char daPz_c::m_arc_name[] = "PZ";
 
 const dCcD_SrcCyl daPz_c::m_cyl_src = {
     // dCcD_SrcGObjInf
@@ -434,7 +437,18 @@ cPhs_State daPz_c::_create() {
 
 /* 00007DA0-00007E20       .text _delete__6daPz_cFv */
 bool daPz_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, m_arc_name);
+    mRipple.end();
+
+    dPa_followEcallBack* follow_cb = &mFallSplash;
+    follow_cb->end();
+    follow_cb = &mHeadSplash;
+    follow_cb->end();
+
+    if (heap != NULL) {
+        mpMorf->stopZelAnime();
+    }
+    return TRUE;
 }
 
 /* 00007E20-00007E40       .text daPzCreate__FPv */

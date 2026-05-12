@@ -3,6 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_npc.h"
+#include "d/d_particle.h"
 #include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_phase.h"
 
@@ -97,6 +98,7 @@ public:
     bool _delete();
 
     static const dCcD_SrcCyl m_cyl_src;
+    static const char m_arc_name[];
 
 public:
     /* 0x06C4 */ int mMode;
@@ -104,7 +106,11 @@ public:
     /* 0x06D3 */ u8 m06D3;
     /* 0x06D4 */ u8 m06D4[0x06D5 - 0x06D4];
     /* 0x06D5 */ u8 mCurEye;
-    /* 0x06D6 */ u8 m06D6[0x073E - 0x06D6];
+    /* 0x06D6 */ u8 m06D6[0x06E0 - 0x06D6];
+    /* 0x06E0 */ dPa_rippleEcallBack mRipple;
+    /* 0x06F4 */ dPa_followEcallBack mFallSplash;
+    /* 0x0708 */ dPa_followEcallBack mHeadSplash;
+    /* 0x071C */ u8 m071C[0x073E - 0x071C];
     /* 0x073E */ u8 mbEyesFollowGanondorf;
     /* 0x073F */ u8 m073F;
     /* 0x0740 */ u8 m0740[0x076C - 0x0740];
