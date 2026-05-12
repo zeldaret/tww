@@ -365,7 +365,7 @@ void himo2_disp(himo2_class* i_this) {
 }
 
 /* 800EC338-800ECBE8       .text daHimo2_Draw__FP11himo2_class */
-static BOOL daHimo2_Draw(himo2_class* i_this) {
+BOOL daHimo2_Draw(himo2_class* i_this) {
     /* Nonmatching - cXyz */
     fopAc_ac_c* actor = &i_this->actor;
     f32 fVar1;
@@ -674,7 +674,7 @@ void* dr_a_sub(void* param_1, void* param_2) {
 }
 
 /* 800ED32C-800ED378       .text b_a_sub__FPvPv */
-void* b_a_sub(void* param_1, void* param_2) {
+static void* b_a_sub(void* param_1, void* param_2) {
     if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BTD)) {
         return param_1;
     } else {
@@ -1685,7 +1685,7 @@ void new_himo2_move(himo2_class* i_this) {
 }
 
 /* 800F01BC-800F062C       .text daHimo2_Execute__FP11himo2_class */
-static BOOL daHimo2_Execute(himo2_class* i_this) {
+BOOL daHimo2_Execute(himo2_class* i_this) {
     /* Nonmatching - last for loop, regalloc */
     fopAc_ac_c* actor = &i_this->actor;
     himo2_s* phVar3;
@@ -1754,18 +1754,18 @@ static BOOL daHimo2_Execute(himo2_class* i_this) {
 }
 
 /* 800F062C-800F0634       .text daHimo2_IsDelete__FP11himo2_class */
-static BOOL daHimo2_IsDelete(himo2_class*) {
+BOOL daHimo2_IsDelete(himo2_class*) {
     return TRUE;
 }
 
 /* 800F0634-800F0670       .text daHimo2_Delete__FP11himo2_class */
-static BOOL daHimo2_Delete(himo2_class*) {
+BOOL daHimo2_Delete(himo2_class*) {
     mDoHIO_deleteChild(l_himo2HIO.mNo);
     return TRUE;
 }
 
 /* 800F0670-800F07F4       .text CallbackCreateHeap__FP10fopAc_ac_c */
-static int CallbackCreateHeap(fopAc_ac_c* i_this) {
+int CallbackCreateHeap(fopAc_ac_c* i_this) {
     ResTIMG* pRVar1;
     J3DModelData* modelData;
     himo2_class* a_this = (himo2_class*)i_this;
@@ -1792,7 +1792,7 @@ static int CallbackCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 800F07F4-800F0B08       .text daHimo2_Create__FP10fopAc_ac_c */
-static cPhs_State daHimo2_Create(fopAc_ac_c* i_this) {
+cPhs_State daHimo2_Create(fopAc_ac_c* i_this) {
     himo2_class* a_this = (himo2_class*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
