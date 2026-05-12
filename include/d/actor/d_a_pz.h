@@ -66,7 +66,7 @@ public:
     void setHeadSplash();
     void setRipple();
     void setJntStatus();
-    void demo();
+    u8 demo();
     BOOL checkTgHit();
     void getArg();
     void setAttention();

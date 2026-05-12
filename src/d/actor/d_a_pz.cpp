@@ -581,8 +581,51 @@ void daPz_c::setJntStatus() {
 }
 
 /* 0000175C-00001954       .text demo__6daPz_cFv */
-void daPz_c::demo() {
-    /* Nonmatching */
+u8 daPz_c::demo() {
+    if (demoActorID == 0) {
+        if (m0F66) {
+            m0F66 = false;
+        }
+    } else {
+        m0F66 = true;
+        dDemo_actor_c* demo_actor = dComIfGp_demo_get()->getObject()->getActor(demoActorID);
+
+        for (int i = 0; i < 2; i++) {
+            if (m08A8[i] != NULL) {
+                ((daPz_matAnm_c*)m08A8[i])->clrMoveFlag();
+            }
+        }
+
+        if (mBtpAnm.getBtpAnm() != NULL) {
+            u8 frame_max = mBtpAnm.getBtpAnm()->getFrameMax();
+            mEyeBtpState++;
+            if (mEyeBtpState >= frame_max) {
+                mEyeBtpState = frame_max;
+            }
+        }
+
+        J3DAnmTexPattern* btp = demo_actor->getP_BtpData(m_arc_name);
+        if (btp != NULL) {
+            mBtpAnm.init(mpMorf->getModel()->getModelData(), btp, TRUE, J3DFrameCtrl::EMode_NONE,
+                         1.0f, 0, -1, true, FALSE);
+            mEyeBtpState = 0;
+        }
+
+        J3DAnmTextureSRTKey* btk = demo_actor->getP_BtkData(m_arc_name);
+        if (btk != NULL) {
+            mBtkAnm.init(mpMorf->getModel()->getModelData(), btk, TRUE, J3DFrameCtrl::EMode_NONE,
+                         1.0f, 0, -1, true, FALSE);
+        }
+
+        J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)demo_actor->getP_BrkData(m_arc_name);
+        if (brk != NULL) {
+            mBrkAnm.init(mpMorf->getModel()->getModelData(), brk, TRUE, J3DFrameCtrl::EMode_LOOP,
+                         1.0f, 0, -1, true, FALSE);
+        }
+
+        dDemo_setDemoData(this, 0x6A, mpMorf, m_arc_name, 0, NULL, 0, 0);
+    }
+    return m0F66;
 }
 
 /* 00001954-00001EEC       .text checkTgHit__6daPz_cFv */
