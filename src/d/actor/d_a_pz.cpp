@@ -52,8 +52,15 @@ static void stealItem_CB(void*) {
 }
 
 /* 00000340-0000038C       .text nodeHeadControl_CB__FP7J3DNodei */
-static BOOL nodeHeadControl_CB(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeHeadControl_CB(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == 0) {
+        J3DModel* model = j3dSys.getModel();
+        daPz_c* i_this = (daPz_c*)model->getUserArea();
+        if (i_this != NULL) {
+            i_this->_nodeHeadControl(i_node, model);
+        }
+    }
+    return TRUE;
 }
 
 /* 0000038C-000004FC       .text _nodeHeadControl__6daPz_cFP7J3DNodeP8J3DModel */
@@ -62,8 +69,15 @@ void daPz_c::_nodeHeadControl(J3DNode*, J3DModel*) {
 }
 
 /* 00000538-00000584       .text nodeWaistControl_CB__FP7J3DNodei */
-static BOOL nodeWaistControl_CB(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeWaistControl_CB(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == 0) {
+        J3DModel* model = j3dSys.getModel();
+        daPz_c* i_this = (daPz_c*)model->getUserArea();
+        if (i_this != NULL) {
+            i_this->_nodeWaistControl(i_node, model);
+        }
+    }
+    return TRUE;
 }
 
 /* 00000584-00000710       .text _nodeWaistControl__6daPz_cFP7J3DNodeP8J3DModel */
@@ -72,8 +86,15 @@ void daPz_c::_nodeWaistControl(J3DNode*, J3DModel*) {
 }
 
 /* 00000710-0000075C       .text nodeWaist2Control_CB__FP7J3DNodei */
-static BOOL nodeWaist2Control_CB(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeWaist2Control_CB(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == 0) {
+        J3DModel* model = j3dSys.getModel();
+        daPz_c* i_this = (daPz_c*)model->getUserArea();
+        if (i_this != NULL) {
+            i_this->_nodeWaist2Control(i_node, model);
+        }
+    }
+    return TRUE;
 }
 
 /* 0000075C-000007F4       .text _nodeWaist2Control__6daPz_cFP7J3DNodeP8J3DModel */
@@ -82,8 +103,15 @@ void daPz_c::_nodeWaist2Control(J3DNode*, J3DModel*) {
 }
 
 /* 000007F4-00000840       .text nodeSkirtControl_CB__FP7J3DNodei */
-static BOOL nodeSkirtControl_CB(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeSkirtControl_CB(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == 0) {
+        J3DModel* model = j3dSys.getModel();
+        daPz_c* i_this = (daPz_c*)model->getUserArea();
+        if (i_this != NULL) {
+            i_this->_nodeSkirtControl(i_node, model);
+        }
+    }
+    return TRUE;
 }
 
 /* 00000840-00000920       .text _nodeSkirtControl__6daPz_cFP7J3DNodeP8J3DModel */
