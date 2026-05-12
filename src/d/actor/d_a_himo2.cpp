@@ -932,7 +932,7 @@ void new_himo2_move(himo2_class* i_this) {
         break;
     }
     case 1: {
-        mDoMtx_YrotS(*calc_mtx, actor->shape_angle.y);
+        mDoMtx_YrotS(*calc_mtx, player->shape_angle.y);
         mDoMtx_ZrotM(*calc_mtx, REG0_S(2) + -12000);
         mDoMtx_YrotM(*calc_mtx, i_this->m02D8 * (REG0_S(3) + 0x2000));
         sp130.x = 0.0f;
