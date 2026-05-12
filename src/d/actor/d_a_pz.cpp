@@ -1168,9 +1168,8 @@ void daPz_c::modeWait() {
                 }
             } else if (strcmp(evt_mgr->getMyNowCutName(staff_id), "Retire") == 0) {
                 mEyeTimer = 0;
-                int eye_frame = REG8_S(0) + 4;
-                if (mEyeBtpState >= eye_frame) {
-                    mEyeBtpState = eye_frame;
+                if (mEyeBtpState >= REG8_S(0) + 4) {
+                    mEyeBtpState = REG8_S(0) + 4;
                     mEventIce.mLightShrinkTimer = 1;
                     mEyeTimer = 1000;
                     evt_mgr->cutEnd(staff_id);
