@@ -1058,11 +1058,12 @@ void daPz_c::ctrlEye() {
     s16 target_x = cLib_targetAngleX(&mHeadFrontPos, &mEyeTarget);
     s16 target_y = cLib_targetAngleY(&mHeadFrontPos, &mEyeTarget);
 
-    s16 eye_x = target_y - (s16)(shape_angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y());
-    s16 eye_y = target_x - (s16)(m_jnt.getHead_x() + m_jnt.getBackbone_x());
+    csXyz eye_angle;
+    eye_angle.x = target_y - (s16)(shape_angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y());
+    eye_angle.y = target_x - (s16)(m_jnt.getHead_x() + m_jnt.getBackbone_x());
 
-    f32 eye_x_rate = (s16)eye_x / 8192.0f;
-    f32 eye_y_rate = (s16)eye_y / 8192.0f;
+    f32 eye_x_rate = (s16)eye_angle.x / 8192.0f;
+    f32 eye_y_rate = (s16)eye_angle.y / 8192.0f;
     f32 x_offset = eye_x_rate;
     f32 y_offset = eye_y_rate;
     y_offset *= 0.1f;
