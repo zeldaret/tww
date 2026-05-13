@@ -1458,6 +1458,9 @@ void daPz_c::modeAttack() {
         return;
     }
 
+    // Original unused aim-spread temp.
+    cXyz unused(m0F44, m0F44, m0F44);
+
     if (!m0F48) {
         if (mbHasGanondorf) {
             m08C4 = mGanondorfPos4;
