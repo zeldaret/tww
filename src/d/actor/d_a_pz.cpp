@@ -725,7 +725,9 @@ BOOL daPz_c::checkTgHit() {
     if (do_damage) {
         cXyz* hit_pos = mCyl.GetTgHitPosP();
         m0F6C = fopAcM_searchActorAngleY(this, hit_actor);
-        hit_obj = mCyl.GetTgHitObj();
+        // Original damage-info temp; the sound helper does its own hit-object lookup.
+        CcAtInfo atInfo;
+        atInfo.mpObj = mCyl.GetTgHitObj();
         def_se_set(this, mCyl.GetTgHitObj(), 0x41);
 
         dKy_SordFlush_set(*hit_pos, 0);
