@@ -1283,7 +1283,8 @@ void daPz_c::modeMove() {
 
     f32 move_dist = (current.pos - mMovePath.mPos).absXZ();
 
-    (current.pos - m08C4).absXZ();
+    f32 eye_dist = (current.pos - m08C4).absXZ();
+    (void)eye_dist;
 
     f32 target_dist = (m08C4 - mMovePath.mPos).absXZ();
 
