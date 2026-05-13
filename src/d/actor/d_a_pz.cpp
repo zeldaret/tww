@@ -1965,8 +1965,8 @@ void daPz_c::modeFollow() {
     m0830 = mGanondorfPosCurrent;
     s16 angle = cLib_targetAngleY(&player->current.pos, &mGanondorfPosCurrent);
     cLib_distanceAngleS(angle, shape_angle.y);
-    m0830.x += offset * cM_ssin(REG12_S(0) + angle + 0x4000);
-    m0830.z += offset * cM_scos(REG12_S(0) + angle + 0x4000);
+    m0830.x += offset * cM_ssin(REG12_S(0) + (angle + 0x4000));
+    m0830.z += offset * cM_scos(REG12_S(0) + (angle + 0x4000));
     m0830.y += 200.0f;
 
     if (cLib_calcTimer(&m08F0) == 0) {
