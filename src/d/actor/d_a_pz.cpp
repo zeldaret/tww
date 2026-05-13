@@ -1508,7 +1508,7 @@ void daPz_c::modeAttack() {
         }
     }
 
-    int anm_idx = (u8)mAnmPrmIdx;
+    s8 anm_idx = mAnmPrmIdx;
     if (anm_idx == 4) {
         if (mpMorf->isStop()) {
             m_jnt.mbTrn = true;
