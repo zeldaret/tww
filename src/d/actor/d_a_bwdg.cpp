@@ -208,9 +208,11 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
         return FALSE;
     }
     
-    u16* r30 = (u16*)dComIfG_getObjectRes("Bwdg", BWDG_DAT_GRIDIDX);
-    cBgD_t* r3 = (cBgD_t*)dComIfG_getObjectRes("Bwdg", BWDG_DZB_HSAND1);
-    if (!i_this->mpBgW->Set(r3, r30, 130.0f, 0x40, 0x40, 0)) {
+    if (!i_this->mpBgW->Set(
+        (cBgD_t*)dComIfG_getObjectRes("Bwdg", BWDG_DZB_HSAND1),
+        (u16*)dComIfG_getObjectRes("Bwdg", BWDG_DAT_GRIDIDX),
+        130.0f, 0x40, 0x40, 0
+    )) {
         return TRUE;
     } else {
         return FALSE;
@@ -220,7 +222,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
 /* 000009A0-00000B5C       .text daBwdg_Create__FP10fopAc_ac_c */
 static cPhs_State daBwdg_Create(fopAc_ac_c* i_actor) {
     bwdg_class* i_this = (bwdg_class*)i_actor;
-    fopAcM_SetupActor(i_this, bwdg_class);
+    fopAcM_ct(i_this, bwdg_class);
     
     cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhase, "Bwdg");
     if (phase_state == cPhs_COMPLEATE_e) {

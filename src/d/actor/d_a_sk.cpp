@@ -287,17 +287,10 @@ static cPhs_State daSk_Create(fopAc_ac_c* a_this) {
     };
 
     sk_class* i_this = (sk_class*)a_this;
-
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(a_this, sk_class);
     cPhs_State PVar2 = dComIfG_resLoad(&i_this->mPhase, "Sk");
     if (PVar2 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, sk_class);
-#else
-    fopAcM_SetupActor(a_this, sk_class);
-
-    cPhs_State PVar2 = dComIfG_resLoad(&i_this->mPhase, "Sk");
-    if (PVar2 == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(a_this, sk_class);
         i_this->m2B4 = fopAcM_GetParam(i_this);
         if (i_this->m2B4 == 0xff) {
             i_this->m2B4 = 0;

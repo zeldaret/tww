@@ -261,7 +261,7 @@ BOOL daPy_lk_c::procVomitLand_init() {
     );
     m34D0 = m_HIO->mVomit.m.field_0x6;
     mProcVar0.m3570 = 0;
-    m34BE = 5;
+    setFootEffectPosType(5);
     return true;
 }
 

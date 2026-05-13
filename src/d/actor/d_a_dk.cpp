@@ -13,11 +13,6 @@
 #include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
-static void dummy() {
-    // string-ordering fix.
-    OSReport("Dk");
-}
-
 daDk_HIO_c l_HIO;
 
 /* 000000EC-00000130       .text __ct__10daDk_HIO_cFv */
@@ -30,9 +25,14 @@ daDk_HIO_c::daDk_HIO_c() {
     field_0x14 = 0;
 }
 
+static void dummy(f32* out) {
+    OSReport("Dk");
+    *out = 0.0f;
+    *out = -1.0f;
+}
+
 /* 00000130-000001EC       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
-    /* Nonmatching */
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jnt_no = joint->getJntNo();
@@ -57,9 +57,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000228-00000720       .text tail_control__FP8dk_classP6tail_s */
 static void tail_control(dk_class* a_this, tail_s* tail) {
-    /* Nonmatching */
-    s32 i;
-
+    int i;
     cXyz vec = tail->field_0x150[1] - tail->field_0x150[0];
 
     tail->field_0x168.y = cM_atan2s(vec.x, vec.z);
@@ -79,12 +77,12 @@ static void tail_control(dk_class* a_this, tail_s* tail) {
     csXyz* field_9C_ptr = &tail->field_0x09C[1];
     cXyz* field_D8_ptr = &tail->field_0x0D8[1];
 
-    f32 unk = REG0_F(2) + 0.77000004f;
-    f32 unk2;
+    f32 f22 = REG0_F(2) + 0.77000004f;
+    f32 f21;
     if (a_this->field_0x2B4 >= 2) {
-        unk2 = -G_CM3D_F_INF;
+        f21 = -G_CM3D_F_INF;
     } else {
-        unk2 = a_this->field_0x900.GetGroundH() + 5.0f;
+        f21 = a_this->field_0x900.GetGroundH() + 5.0f;
     }
 
     for (i = 1; i < 10; i++) {
@@ -98,26 +96,25 @@ static void tail_control(dk_class* a_this, tail_s* tail) {
         new_vec.z = field_D8_ptr->z + tail->field_0x170.z * multiplier;
 
         f32 y_base = field_24_ptr->y + new_vec.y;
-        if (y_base < unk2) {
-            y_base = unk2;
+        if (y_base < f21) {
+            y_base = f21;
         }
 
-        f32 y_2 = y_base - field_24_ptr_prev->y;
-        f32 x_2 = new_vec.x + (field_24_ptr->x - field_24_ptr_prev->x);
-        f32 z_2 = new_vec.z + (field_24_ptr->z - field_24_ptr_prev->z);
+        Vec temp;
+        temp.y = y_base - field_24_ptr_prev->y;
+        temp.x = new_vec.x + (field_24_ptr->x - field_24_ptr_prev->x);
+        temp.z = new_vec.z + (field_24_ptr->z - field_24_ptr_prev->z);
 
         s16 new_x_angle;
-        s32 new_y_angle = cM_atan2s(x_2, z_2);
-        f32 xz_dist = std::sqrtf(x_2 * x_2 + z_2 * z_2);
-        new_x_angle = -cM_atan2s(y_2, xz_dist);
+        s32 new_y_angle = cM_atan2s(temp.x, temp.z);
+        f32 xz_dist = std::sqrtf(SQUARE(temp.x) + SQUARE(temp.z));
+        new_x_angle = -cM_atan2s(temp.y, xz_dist);
         (field_9C_ptr - 1)->y = new_y_angle;
         (field_9C_ptr - 1)->x = new_x_angle;
 
         vec.x = 0.0f;
         vec.y = 0.0f;
-
-        f32 temp = l_HIO.field_0x10 * ((i * 0.03f) + 0.25f) * 20.0f;
-        vec.z = temp * (2.0f * l_HIO.field_0x0C);
+        vec.z = ((i * 0.03f) + 0.25f) * 20.0f * 2.0f * l_HIO.field_0x0C * l_HIO.field_0x10;
 
         cMtx_YrotS(*calc_mtx, new_y_angle);
         cMtx_XrotM(*calc_mtx, new_x_angle);
@@ -129,9 +126,9 @@ static void tail_control(dk_class* a_this, tail_s* tail) {
         field_24_ptr->y = field_24_ptr_prev->y + pos_vec.y;
         field_24_ptr->z = field_24_ptr_prev->z + pos_vec.z;
 
-        field_D8_ptr->x = unk * (field_24_ptr->x - field_D8_ptr->x);
-        field_D8_ptr->y = unk * (field_24_ptr->y - field_D8_ptr->y);
-        field_D8_ptr->z = unk * (field_24_ptr->z - field_D8_ptr->z);
+        field_D8_ptr->x = f22 * (field_24_ptr->x - field_D8_ptr->x);
+        field_D8_ptr->y = f22 * (field_24_ptr->y - field_D8_ptr->y);
+        field_D8_ptr->z = f22 * (field_24_ptr->z - field_D8_ptr->z);
 
         field_24_ptr++;
         field_9C_ptr++;
@@ -370,7 +367,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 /* 00000FFC-000011EC       .text daDk_Create__FP10fopAc_ac_c */
 static cPhs_State daDk_Create(fopAc_ac_c* i_this) {
     dk_class* a_this = (dk_class*)i_this;
-    fopAcM_SetupActor(i_this, dk_class);
+    fopAcM_ct(i_this, dk_class);
 
     cPhs_State res = dComIfG_resLoad(&a_this->mPhs, "Dk");
     if (res == cPhs_COMPLEATE_e) {

@@ -161,14 +161,10 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 /* 00000620-00000864       .text daNZG_Create__FP10fopAc_ac_c */
 static cPhs_State daNZG_Create(fopAc_ac_c* i_this) {
     nzg_class* nzg_this = (nzg_class*)i_this;
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_this, nzg_class);
-#endif
+    fopAcM_ct_Retail(i_this, nzg_class);
     cPhs_State phase_state = dComIfG_resLoad(&nzg_this->mPhs, "NZG");
     if (phase_state == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(i_this, nzg_class);
-#endif
+        fopAcM_ct_Demo(i_this, nzg_class);
         if (!fopAcM_entrySolidHeap(&nzg_this->actor, useHeapInit, 0x680)) {
             return cPhs_ERROR_e;
         }

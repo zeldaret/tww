@@ -34,7 +34,7 @@ static void* boss_s_sub(void* param_1, void*) {
 
 /* 00000130-00000C14       .text move__FP13fgmahou_class */
 static void move(fgmahou_class* i_this) {
-    static float spdd[] = {
+    static f32 spdd[] = {
         0.65f,
         0.3f,
         0.1f,
@@ -119,9 +119,9 @@ static void move(fgmahou_class* i_this) {
             }
 
             dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGSMASHDARKSHOT00, &i_this->current.pos, &i_this->home.angle);
-        #if VERSION > VERSION_DEMO
+#if VERSION == VERSION_USA
             fopAcM_seStartCurrent(i_this, JA_SE_LK_PG_BOMB_STRIKE, 0);
-        #endif
+#endif
 
             i_this->mState = 5;
         case 5:
@@ -400,15 +400,11 @@ static cPhs_State daFgmahou_Create(fopAc_ac_c* a_this) {
 
     fgmahou_class* i_this = static_cast<fgmahou_class*>(a_this);
 
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_this, fgmahou_class);
-#endif
+    fopAcM_ct_Retail(i_this, fgmahou_class);
 
     cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhs, "Fganon");
     if(phase_state == cPhs_COMPLEATE_e) {
-    #if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(i_this, fgmahou_class);
-    #endif
+        fopAcM_ct_Demo(i_this, fgmahou_class);
 
         i_this->mOrbNumber = fopAcM_GetParam(i_this) & 0xF;
 

@@ -177,17 +177,11 @@ BOOL daMdoor_c::CreateInit() {
 /* 000005E0-00000698       .text create__9daMdoor_cFv */
 cPhs_State daMdoor_c::create() {
     cPhs_State ret = dComIfG_resLoad(&mPhase, M_arcname);
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daMdoor_c);
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
     }
-    fopAcM_SetupActor(this, daMdoor_c);
-#else
-    fopAcM_SetupActor(this, daMdoor_c);
-    if (ret != cPhs_COMPLEATE_e) {
-        return ret;
-    }
-#endif
+    fopAcM_ct_Demo(this, daMdoor_c);
 
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1640)) {
         return cPhs_ERROR_e;

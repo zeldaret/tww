@@ -93,17 +93,11 @@ bool daAtdoor_c::CreateInit() {
 /* 0000036C-00000418       .text create__10daAtdoor_cFv */
 cPhs_State daAtdoor_c::create() {
     cPhs_State ret = dComIfG_resLoad(&mPhase, daAtdoor_c::M_arcname);
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daAtdoor_c);
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
     }
-    fopAcM_SetupActor(this, daAtdoor_c);
-#else
-    fopAcM_SetupActor(this, daAtdoor_c);
-    if (ret != cPhs_COMPLEATE_e) {
-        return ret;
-    }
-#endif
+    fopAcM_ct_Demo(this, daAtdoor_c);
 
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1580)) {
         return cPhs_ERROR_e;

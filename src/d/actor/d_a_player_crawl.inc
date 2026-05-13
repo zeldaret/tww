@@ -140,13 +140,15 @@ BOOL daPy_lk_c::changeCrawlAutoMoveProc(cXyz* param_1) {
             var_r29 |= 8;
         }
     }
+    f32 x1 = param_1->x - (75.0f * temp_f31);
+    f32 y1 = param_1->z - (75.0f * temp_f30);
     if (cM3d_Len2dSqPntAndSegLine(
             0.5f * (sp34.x + sp28.x),
             0.5f * (sp34.z + sp28.z),
             sp70.x,
             sp70.z,
-            param_1->x - (75.0f * temp_f31),
-            param_1->z - (75.0f * temp_f30),
+            x1,
+            y1,
             &sp64.x,
             &sp64.z,
             &spC
@@ -164,14 +166,15 @@ int daPy_lk_c::getCrawlMoveVec(cXyz* param_0, cXyz* param_1, cXyz* param_2) {
     if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
         cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
         int iVar4 = dComIfG_Bgsp()->GetSpecialCode(mLinkLinChk);
-        if (cBgW_CheckBWall(triPla->GetNP()->y)) {
+        f32 temp = triPla->GetNP()->y;
+        if (cBgW_CheckBWall(temp)) {
             cXyz local_3c = (*param_1 - mLinkLinChk.GetCross());
             f32 dVar7 = local_3c.absXZ();
             param_2->x = -dVar7 * triPla->GetNP()->x;
             param_2->y = local_3c.y;
             param_2->z = -dVar7 * triPla->GetNP()->z;
             return true;
-        } else if (iVar4 == 1 || (triPla->GetNP()->y < 0.643832f && iVar4 == 2)) {
+        } else if (iVar4 == 1 || (temp < 0.643832f && iVar4 == 2)) {
             *param_2 = (*param_1 - mLinkLinChk.GetCross());
             return true;
         }
@@ -236,22 +239,22 @@ BOOL daPy_lk_c::checkCrawlSideWall(
 /* 801392BC-80139424       .text setDoStatusCrawl__9daPy_lk_cFv */
 void daPy_lk_c::setDoStatusCrawl() {
     dComIfGp_setRStatus(dActStts_CROUCH_e);
-    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x80)) {
+    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000080_e)) {
         dComIfGp_setAStatus(dActStts_RETURN_e);
-        if (checkSubjectEnd(1) || m35D0 > current.pos.y) {
-            dComIfGp_clearPlayerStatus0(0, daPyStts0_UNK2000_e);
+        if (checkSubjectEnd(TRUE) || mWaterY > current.pos.y) {
+            dComIfGp_clearPlayerStatus0(0, daPyStts0_SUBJECT_e);
         } else {
-            dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000_e);
+            dComIfGp_setPlayerStatus0(0, daPyStts0_SUBJECT_e);
         }
     } else if (dCam_getBody()->ChangeModeOK(4)) {
-        if (m35D0 <= current.pos.y) {
+        if (mWaterY <= current.pos.y) {
             onResetFlg0(daPyRFlg0_SUBJECT_ACCEPT);
-            if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000) && !dComIfGp_event_runCheck()) {
+            if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00001000_e) && !dComIfGp_event_runCheck()) {
                 setSubjectMode();
             }
         }
     }
-    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x80) &&
+    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000080_e) &&
         (mCurProc != daPyProc_CRAWL_MOVE_e || mProcVar0.m3570 == 0))
     {
         setBodyAngleToCamera();
@@ -294,7 +297,7 @@ BOOL daPy_lk_c::procCrawlStart() {
     local_20.y = 50.0f;
     mDoMtx_multVec(mpCLModel->getBaseTRMtx(), &local_20, &cStack_38);
     crawlBgCheck(&cStack_38, &cStack_38);
-    if (!spActionButton() || m35D0 > 15.0f + current.pos.y) {
+    if (!spActionButton() || checkCrawlWaterIn()) {
         procCrawlEnd_init(0, shape_angle.x, shape_angle.z);
     } else if (mStickDistance > 0.05f &&
                ((mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) ||
@@ -335,7 +338,7 @@ BOOL daPy_lk_c::procCrawlMove_init(s16 param_0, s16 param_1) {
         var_r29 = 1;
     }
     BOOL var_r27;
-    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000_e)) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SUBJECT_e)) {
         var_r27 = 1;
     } else {
         var_r27 = 0;
@@ -358,7 +361,7 @@ BOOL daPy_lk_c::procCrawlMove_init(s16 param_0, s16 param_1) {
     m35E4 = 1.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_CRAWL_e);
     if (var_r27 != 0) {
-        dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000_e);
+        dComIfGp_setPlayerStatus0(0, daPyStts0_SUBJECT_e);
     }
     return true;
 }
@@ -407,7 +410,7 @@ BOOL daPy_lk_c::procCrawlMove() {
         bVar5 = true;
         offModeFlg(ModeFlg_04000000);
     }
-    if ((bVar5 != false && !spActionButton()) || (getSlidePolygon() != NULL || m35D0 > current.pos.y + 15.0f)) {
+    if ((bVar5 != false && !spActionButton()) || getSlidePolygon() != NULL || checkCrawlWaterIn()) {
         procCrawlEnd_init(1, shape_angle.x, shape_angle.z);
     } else {
         bVar4 = false;
@@ -531,7 +534,7 @@ BOOL daPy_lk_c::procCrawlMove() {
 
 /* 8013A004-8013A0F0       .text procCrawlAutoMove_init__9daPy_lk_cFiP4cXyz */
 BOOL daPy_lk_c::procCrawlAutoMove_init(int param_0, cXyz* param_1) {
-    BOOL uVar1 = dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000_e) ? TRUE : FALSE;
+    BOOL uVar1 = dComIfGp_checkPlayerStatus0(0, daPyStts0_SUBJECT_e) ? TRUE : FALSE;
     commonProcInit(daPyProc_CRAWL_AUTO_MOVE_e);
     m370C = *param_1;
     m35E4 = 1.0f;
@@ -546,16 +549,13 @@ BOOL daPy_lk_c::procCrawlAutoMove_init(int param_0, cXyz* param_1) {
         mAcchCir[i].SetWallR(9.99f);
     }
     if (uVar1) {
-        dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000_e);
+        dComIfGp_setPlayerStatus0(0, daPyStts0_SUBJECT_e);
     }
     return true;
 }
 
 /* 8013A0F0-8013A630       .text procCrawlAutoMove__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCrawlAutoMove() {
-    f32 fVar2;
-    f32 fVar3;
-
     dComIfGp_setRStatus(dActStts_CROUCH_e);
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
     onResetFlg0(daPyRFlg0_CRAWL_AUTO_MOVE);
@@ -563,7 +563,7 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
     s16 sVar5 = current.angle.y;
     if (m34D0 > 0) {
         if (frameCtrl.checkPass(0.0f) || frameCtrl.checkPass(17.0f)) {
-            fVar3 = 0.0f;
+            f32 fVar2;
             if (frameCtrl.checkPass(0.0f)) {
                 fVar2 = 0.0f;
             } else {
@@ -572,7 +572,7 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
             frameCtrl.setRate(0.0f);
             frameCtrl.setFrame(fVar2);
             mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(fVar2);
-            mVelocity = fVar3;
+            mVelocity = 0.0f;
         } else if (std::fabsf(frameCtrl.getRate()) < 0.01f) {
             mVelocity = 0.0f;
             m34D0--;

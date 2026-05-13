@@ -1179,6 +1179,14 @@ BOOL heapSizeCheck() {
 
 /* 802355A8-802356B0       .text phase_00__FP13dScnPly_ply_c */
 cPhs_State phase_00(dScnPly_ply_c* i_this) {
+#if VERSION == VERSION_DEMO
+    if (fpcM_GetName(i_this) == PROC_OPENING_SCENE) {
+        if (mDoRst::isReset()) {
+            mDoRst_reset(0, 0, 0);
+        }
+    }
+    return cPhs_NEXT_e;
+#else
     if (mDoAud_isUsedHeapForStreamBuffer()) {
         return cPhs_INIT_e;
     }
@@ -1186,11 +1194,9 @@ cPhs_State phase_00(dScnPly_ply_c* i_this) {
     mDoGph_gInf_c::offBlure();
 
     if (fpcM_GetName(i_this) != PROC_PLAY_SCENE) {
-        #if VERSION > VERSION_DEMO
         if (!heapSizeCheck()) {
             mDoRst_reset(0, 0x80000000, 0);
         }
-        #endif
 
         if (mDoRst::isReset()) {
             if (mDoAud_zelAudio_c::isResetFlag()) {
@@ -1208,14 +1214,13 @@ cPhs_State phase_00(dScnPly_ply_c* i_this) {
 
         dComIfGs_init();
     } else {
-        #if VERSION > VERSION_DEMO
         if (!heapSizeCheck()) {
-            JUT_WARN(VERSION_SELECT(3356, 3356, 3372, 3372), "%s", "Memory Danger !!");
+            JUT_WARN(VERSION_SELECT(0, 3356, 3372, 3372), "%s", "Memory Danger !!");
         }
-        #endif
     }
 
     return cPhs_NEXT_e;
+#endif
 }
 
 /* 802356B0-802356E0       .text phase_01__FP13dScnPly_ply_c */

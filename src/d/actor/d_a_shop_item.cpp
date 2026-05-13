@@ -194,7 +194,7 @@ static cPhs_State daShopItem_Create(void* i_this) {
 
 /* 000007C4-00000AA4       .text _create__12daShopItem_cFv */
 cPhs_State daShopItem_c::_create() {
-    fopAcM_SetupActor(this, daShopItem_c);
+    fopAcM_ct(this, daShopItem_c);
     
     m_itemNo = fopAcM_GetParamBit(fopAcM_GetParam(this), 0, 8);
     

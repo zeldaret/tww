@@ -594,15 +594,10 @@ static cPhs_State daBeamCreate(void* i_this) {
 
 /* 00001CA4-00001D34       .text _create__8daBeam_cFv */
 cPhs_State daBeam_c::_create() {
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daBeam_c);
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
     if (PVar1 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daBeam_c);
-#else
-    fopAcM_SetupActor(this, daBeam_c);
-    cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
-    if (PVar1 == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(this, daBeam_c);
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x22A0)) {
             return CreateInit();
         }

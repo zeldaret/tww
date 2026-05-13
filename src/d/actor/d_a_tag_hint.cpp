@@ -739,7 +739,7 @@ static BOOL daTag_Hint_Delete(daTag_Hint_c* i_this) {
 }
 
 cPhs_State daTag_Hint_c::create() {
-    fopAcM_SetupActor(this, daTag_Hint_c);
+    fopAcM_ct(this, daTag_Hint_c);
 
     m2A8 = SQUARE(scale.x) * SQUARE(100.0f);
     m2AC = scale.y * 100.0f;

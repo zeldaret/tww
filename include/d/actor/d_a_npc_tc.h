@@ -261,7 +261,7 @@ public:
     /* 0x7EA */ u8 field_0x7EA[0x7F1 - 0x7EA];
     /* 0x7F1 */ bool mHasTalkedNearJail;
     /* 0x7F2 */ bool mHasEnteredSitRadius;
-    /* 0x7F3 */ s8 mJumpLandingTimer;
+    /* 0x7F3 */ char mJumpLandingTimer;
     /* 0x7F4 */ u8 field_0x7F4[0x7F6 - 0x7F4];
     /* 0x7F6 */ s8 mTexPatternNum;
     /* 0x7F7 */ s8 mTexPatternNumIdx;

@@ -699,7 +699,7 @@ int himo2_bg_check(himo2_class* i_this) {
             i_this->m0308 = 30;
             cBgS_PolyInfo local_24;
             flag = i_this->m2574.GetOnePolyInfo(&local_24);
-            JUT_ASSERT(1569, flag == NULL);
+            JUT_ASSERT(DEMO_SELECT(1534, 1569), flag == NULL);
             uVar3 = dComIfG_Bgsp()->GetMtrlSndId(local_24);
             mDoAud_seStart(JA_SE_LK_SW_HIT_S, &actor->current.pos, uVar3, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
             iVar4 = dComIfG_Bgsp()->GetAttributeCode(local_24);
@@ -1798,7 +1798,7 @@ static cPhs_State daHimo2_Create(fopAc_ac_c* i_this) {
     himo2_class* a_this = (himo2_class*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
-    fopAcM_SetupActor(i_this, himo2_class);
+    fopAcM_ct(i_this, himo2_class);
 
     cPhs_State phase_state;
     if (!fopAcM_entrySolidHeap(&a_this->actor, CallbackCreateHeap, REG0_S(9) + 0x9050)) {
@@ -1824,7 +1824,7 @@ static cPhs_State daHimo2_Create(fopAc_ac_c* i_this) {
                 /* SrcObjTg  Type    */ 0,
                 /* SrcObjTg  SPrm    */ 0,
                 /* SrcObjCo  SPrm    */ 0,
-                /* SrcGObjAt Se      */ dCcG_SE_UNK5,
+                /* SrcGObjAt Se      */ dCcG_SE_METAL,
                 /* SrcGObjAt HitMark */ dCcG_AtHitMark_Unk1_e,
                 /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
                 /* SrcGObjAt Mtrl    */ 0,

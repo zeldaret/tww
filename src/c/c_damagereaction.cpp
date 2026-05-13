@@ -90,7 +90,7 @@ dCcD_SrcCyl cc_cyl_src = {
         /* SrcGObjAt Spl     */ 0,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+        /* SrcGObjTg Se      */ dCcG_SE_METAL,
         /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,

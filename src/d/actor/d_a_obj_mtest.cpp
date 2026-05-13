@@ -241,7 +241,7 @@ cPhs_State daObjMtest::Act_c::Mthd_Create() {
         },
     };
     
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     
     M_type = prm_get_type();
     JUT_ASSERT(327, M_type < Type_Max);

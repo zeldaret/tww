@@ -1131,7 +1131,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00002D60-00002ECC       .text _create__12daNpc_Bmsw_cFv */
 cPhs_State daNpc_Bmsw_c::_create() {
-    fopAcM_SetupActor(this, daNpc_Bmsw_c);
+    fopAcM_ct(this, daNpc_Bmsw_c);
 
     u8 reg_val = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C203);
     if (reg_val >= 3 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2701)) {

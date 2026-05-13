@@ -78,11 +78,6 @@ BOOL daPy_lk_c::changeSpecialBattle() {
 
 /* 8013E454-8013E72C       .text procBtJump_init__9daPy_lk_cFP13fopEn_enemy_c */
 BOOL daPy_lk_c::procBtJump_init(fopEn_enemy_c* enemy) {
-    f32 fVar1;
-    s16 sVar2;
-    f32 dVar3;
-    f32 dVar5;
-
     cXyz local_34 = enemy->current.pos - current.pos;
     commonProcInit(daPyProc_BT_JUMP_e);
     gravity = m_HIO->mBattle.mBJump.m.field_0x20;
@@ -93,16 +88,14 @@ BOOL daPy_lk_c::procBtJump_init(fopEn_enemy_c* enemy) {
         -1,
         m_HIO->mBattle.mBJump.m.field_0x10
     );
-    fVar1 = local_34.y + enemy->getBtHeight();
-    if (local_34.y + enemy->getBtHeight() < 30.0f) {
+    f32 fVar1 = local_34.y + enemy->getBtHeight();
+    if (fVar1 < 30.0f) {
         fVar1 = 30.0f;
     }
-    dVar5 = std::sqrtf((-2.0f * fVar1) / gravity);
+    f32 dVar5 = std::sqrtf((-2.0f * fVar1) / gravity);
     m35A0 = dVar5 * -gravity;
-    dVar3 = local_34.absXZ();
-    m35A4 = dVar3 / dVar5;
-    sVar2 = fopAcM_searchActorAngleY(this, enemy);
-    current.angle.y = sVar2;
+    m35A4 = local_34.absXZ() / dVar5;
+    current.angle.y = fopAcM_searchActorAngleY(this, enemy);
     shape_angle.y = current.angle.y;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2_e);
     m34D0 = 0;
@@ -173,7 +166,7 @@ BOOL daPy_lk_c::procBtJumpCut_init(cXyz* param_0) {
     dComIfGp_setPlayerStatus0(0, (daPyStts0_UNK2_e | daPyStts0_UNK400_e));
     voiceStart(1);
     setBlurPosResource(LKANM__BTJUMPCUT_POS);
-    setExtraFinishCutAtParam(5);
+    setExtraFinishCutAtParam(CUT_TYPE_BT_JUMPCUT);
     dComIfGp_getVibration().StartShock(6, -0x21, cXyz(0.0f, 1.0f, 0.0f));
     return true;
 }
@@ -187,8 +180,10 @@ BOOL daPy_lk_c::procBtJumpCut() {
         m34F2 = -m_HIO->mBattle.mBJump.m.field_0x6 * temp;
     }
 
-    f32 frame = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
-    if (frame >= m_HIO->mBattle.mBJump.m.field_0x44 && frame < m_HIO->mBattle.mBJump.m.field_0x48) {
+    if (
+        mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= m_HIO->mBattle.mBJump.m.field_0x44 &&
+        mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < m_HIO->mBattle.mBJump.m.field_0x48
+    ) {
         onResetFlg0(daPyRFlg0_UNK2);
         if (!checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
             onResetFlg0(daPyRFlg0_UNK1);
@@ -268,7 +263,7 @@ BOOL daPy_lk_c::procBtRoll_init(fopEn_enemy_c* enemy) {
     m34D6 = cM_atan2s(local_2c.x, local_2c.z);
     shape_angle.y = fopAcM_searchActorAngleY(this, enemy);
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2_e);
-    m34BE = 4;
+    setFootEffectPosType(4);
     voiceStart(7);
     endFlameDamageEmitter();
     return true;
@@ -350,7 +345,7 @@ BOOL daPy_lk_c::procBtRollCut_init(cXyz* param_0) {
     speed.y = m_HIO->mBattle.mBRoll.m.field_0x2C;
     gravity = m_HIO->mBattle.mBRoll.m.field_0x30;
     voiceStart(1);
-    setExtraFinishCutAtParam(15);
+    setExtraFinishCutAtParam(CUT_TYPE_BT_ROLLCUT);
     offNoResetFlg0(daPyFlg0_NO_FALL_VOICE);
     onResetFlg0(daPyRFlg0_UNK2);
     onResetFlg0(daPyRFlg0_UNK1);
@@ -445,7 +440,7 @@ BOOL daPy_lk_c::procBtVerticalJumpCut_init() {
     mpCutfBpk->setFrame(0.0f);
     mpCutfBtk->setFrame(0.0f);
     gravity = m_HIO->mBattle.mBVerJump.m.field_0x28;
-    setExtraFinishCutAtParam(16);
+    setExtraFinishCutAtParam(CUT_TYPE_BT_VERTICALJUMPCUT);
     dComIfGp_setPlayerStatus0(0, (daPyStts0_UNK2_e | daPyStts0_UNK400_e));
     return true;
 }

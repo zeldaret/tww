@@ -113,6 +113,7 @@ class dSv_player_get_item_c {
 public:
     void init();
     void onItem(int, u8);
+    void offItem(int, u8);
     BOOL isItem(int, u8);
     void onBottleItem(u8);
     BOOL isBottleItem(u8);
@@ -801,7 +802,7 @@ public:
     cXyz& getRestartOptionPos() { return mOptionRoomPos; }
 
     /* 0x00 */ s8 mRestartRoom;
-    /* 0x01 */ u8 mOption;
+    /* 0x01 */ s8 mOption;
     /* 0x02 */ s8 mOptionRoomNo;
     /* 0x04 */ s16 mOptionPoint;
     /* 0x06 */ s16 mOptionRoomAngleY;

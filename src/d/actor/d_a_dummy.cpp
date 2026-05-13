@@ -22,7 +22,7 @@ bool daDummy::Act_c::create_heap() {
 
 /* 000000A4-0000015C       .text _create__Q27daDummy5Act_cFv */
 cPhs_State daDummy::Act_c::_create() {  
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
         set_mtx();

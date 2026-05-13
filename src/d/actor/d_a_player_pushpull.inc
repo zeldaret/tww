@@ -17,7 +17,7 @@
 /* 801514B0-80151644       .text setPushPullKeepData__9daPy_lk_cFQ24dBgW13PushPullLabel */
 BOOL daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel pp_label) {
     if (pp_label != dBgW::PPLABEL_NONE) {
-        if (dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e) {
+        if (checkPowerGloveEquip()) {
             cLib_onBit<dBgW::PushPullLabel>(pp_label, dBgW::PPLABEL_HEAVY);
         }
         if (mProcVar0.m3570) {

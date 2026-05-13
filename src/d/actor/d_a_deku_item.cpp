@@ -107,7 +107,7 @@ void daDekuItem_c::CreateInit() {
 
 /* 000003A8-00000598       .text _create__12daDekuItem_cFv */
 cPhs_State daDekuItem_c::_create() {
-    fopAcM_SetupActor(this, daDekuItem_c);
+    fopAcM_ct(this, daDekuItem_c);
 
     mItemBitNo = daDekuItem_prm::getItemBitNo(this);
 

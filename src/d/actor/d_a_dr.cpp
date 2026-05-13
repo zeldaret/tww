@@ -247,15 +247,11 @@ static BOOL createHeap(fopAc_ac_c* i_actor) {
 static cPhs_State daDr_Create(fopAc_ac_c* i_this) {
     dr_class* a_this = (dr_class*)i_this;
 
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(a_this, dr_class);
-#endif
+    fopAcM_ct_Retail(a_this, dr_class);
 
     cPhs_State phase_state = dComIfG_resLoad(&a_this->mPhs, "Dr");
     if (phase_state == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(a_this, dr_class);
-#endif
+        fopAcM_ct_Demo(a_this, dr_class);
 
         if (!fopAcM_entrySolidHeap(a_this, createHeap, 0xF000)) {
             return cPhs_ERROR_e;

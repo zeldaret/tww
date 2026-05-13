@@ -140,7 +140,7 @@ void daWarphr_c::CreateInit() {
 
 /* 000006BC-00000768       .text _create__10daWarphr_cFv */
 cPhs_State daWarphr_c::_create() {
-    fopAcM_SetupActor(this, daWarphr_c);
+    fopAcM_ct(this, daWarphr_c);
 
     m2FA = daWarphr_prm::getType(this);
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, m_arcname);
@@ -394,7 +394,7 @@ void daWarphr_c::set_end_anim() {
 
 /* 000012F8-0000134C       .text get_return_count__10daWarphr_cFv */
 s32 daWarphr_c::get_return_count() {
-    if (!dComIfGs_isStageBossEnemy(2)) {
+    if (!dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_FF)) {
         return 0;
     }
 
@@ -406,7 +406,7 @@ BOOL daWarphr_c::check_warp() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 abs = (player->current.pos - current.pos).absXZ();
 
-    if (dComIfGp_checkPlayerStatus0(0, 0x10000)) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         daShip_c* ship = dComIfGp_getShipActor();
         if (ship != NULL) {
             f32 abs = (ship->current.pos - current.pos).absXZ();

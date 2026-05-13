@@ -56,11 +56,7 @@ namespace daObjPaper {
             },
             {
                 /* mResName           */ "Ppos",
-#if VERSION == VERSION_DEMO
-                /* mHeapSize          */ 0x1000,
-#else
-                /* mHeapSize          */ 0x04C0,
-#endif
+                /* mHeapSize          */ DEMO_SELECT(0x1000, 0x04C0),
                 /* mModelId           */ PPOS_BDL_PPOS,
                 /* mEyeOffset         */ 0x00,
                 /* mAttentionOffset   */ 0x32,
@@ -74,11 +70,7 @@ namespace daObjPaper {
             },
             {
                 /* mResName           */ "Piwa",
-#if VERSION == VERSION_DEMO
-                /* mHeapSize          */ 0x8000,
-#else
-                /* mHeapSize          */ 0x04C0,
-#endif
+                /* mHeapSize          */ DEMO_SELECT(0x8000, 0x04C0),
                 /* mModelId           */ PIWA_BDL_PIWA,
                 /* mEyeOffset         */ 0x3C,
                 /* mAttentionOffset   */ 0x82,
@@ -148,7 +140,7 @@ namespace daObjPaper {
 
     /* 00000170-000004E0       .text _create__Q210daObjPaper5Act_cFv */
     cPhs_State Act_c::_create() {
-        fopAcM_SetupActor(this, Act_c);
+        fopAcM_ct(this, Act_c);
 
         mType = prm_get_type();
 
@@ -227,7 +219,7 @@ namespace daObjPaper {
 
     /* 000007A4-00000820       .text mode_talk0__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_talk0() {
-        if (mMsgId == fpcM_ERROR_PROCESS_ID_e && dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) {
+        if (mMsgId == fpcM_ERROR_PROCESS_ID_e && dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), dCamAttnStts_00000004_e)) {
             mMsgId = fopMsgM_messageSet(prm_get_msgNo(), &eyePos);
 
             mode_talk1_init();

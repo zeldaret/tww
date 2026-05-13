@@ -526,7 +526,7 @@ static cPhs_State daPW_Create(fopAc_ac_c* i_actor) {
             /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
             /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_GrpAll_e,
             /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_VsGrpAll_e,
-            /* SrcGObjAt Se      */ dCcG_SE_UNK5,
+            /* SrcGObjAt Se      */ dCcG_SE_METAL,
             /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
@@ -544,7 +544,7 @@ static cPhs_State daPW_Create(fopAc_ac_c* i_actor) {
             /* Radius */ 15.0f,
         }},
     };
-    fopAcM_SetupActor(i_actor, pw_class);
+    fopAcM_ct(i_actor, pw_class);
 }
 
 static actor_method_class l_daPW_Method = {

@@ -130,8 +130,8 @@ calc_012:
         offs.x = 0.0f;
         offs.y = 0.0f;
         offs.z = i_this->mSpeedFwd;
-        mDoMtx_YrotS(*calc_mtx, *r18);
-        mDoMtx_XrotM(*calc_mtx, *r17);
+        cMtx_YrotS(*calc_mtx, *r18);
+        cMtx_XrotM(*calc_mtx, *r17);
         MtxPosition(&offs, &i_this->mSpeedVel);
         *r28 += i_this->mSpeedVel.x;
         *r26 += i_this->mSpeedVel.y;
@@ -148,7 +148,7 @@ calc_012:
         offs.x = 0.0f;
         offs.y = 0.0f;
         offs.z = i_this->mSpeedFwd;
-        mDoMtx_YrotS(*calc_mtx, *r16);
+        cMtx_YrotS(*calc_mtx, *r16);
         MtxPosition(&offs, &pt);
         *r28 += pt.x;
         *r27 += pt.z;
@@ -180,7 +180,7 @@ calc_012:
         offs.x = 0.0f;
         offs.y = 0.0f;
         offs.z = i_this->mSpeedFwd;
-        mDoMtx_YrotS(*calc_mtx, *r16);
+        cMtx_YrotS(*calc_mtx, *r16);
         MtxPosition(&offs, &pt);
         *r28 += pt.x;
         *r27 += pt.z;
@@ -226,7 +226,7 @@ calc_012:
         offs.x = 0.0f;
         offs.y = 0.0f;
         offs.z = REG0_F(11) + 10.0f;
-        mDoMtx_YrotS(*calc_mtx, *r16_2);
+        cMtx_YrotS(*calc_mtx, *r16_2);
         MtxPosition(&offs, &i_this->mSpeedVel);
         *r28 += i_this->mSpeedVel.x;
         *r27 += i_this->mSpeedVel.z;
@@ -309,7 +309,7 @@ static BOOL daKt_IsDelete(kt_class* i_this) {
 
 /* 00001248-00001278       .text daKt_Delete__FP8kt_class */
 static BOOL daKt_Delete(kt_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "Kt");
+    dComIfG_resDeleteDemo(&i_this->mPhs, "Kt");
     return TRUE;
 }
 
@@ -328,7 +328,7 @@ static BOOL daKt_solidHeapCB(fopAc_ac_c* i_ac) {
 
 /* 0000134C-00001530       .text daKt_Create__FP10fopAc_ac_c */
 static cPhs_State daKt_Create(fopAc_ac_c* i_ac) {
-    fopAcM_SetupActor(i_ac, kt_class);
+    fopAcM_ct(i_ac, kt_class);
     kt_class* i_this = (kt_class*)i_ac;
 
     cPhs_State rt = dComIfG_resLoad(&i_this->mPhs, "Kt");

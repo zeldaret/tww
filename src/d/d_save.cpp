@@ -207,6 +207,12 @@ void dSv_player_get_item_c::onItem(int i_field, u8 i_item) {
     mItemFlags[i_field] |= (u8)(1 << i_item);
 }
 
+void dSv_player_get_item_c::offItem(int i_field, u8 i_item) {
+    JUT_ASSERT(408, 0 <= i_item && i_item < 8);
+
+    mItemFlags[i_field] &= ~(u8)(1 << i_item);
+}
+
 /* 8005955C-800595F8       .text isItem__21dSv_player_get_item_cFiUc */
 BOOL dSv_player_get_item_c::isItem(int i_field, u8 i_item) {
     JUT_ASSERT(DEMO_SELECT(423, 429), 0 <= i_item && i_item < 8);

@@ -72,7 +72,7 @@ bool daObjGong::Act_c::create_heap() {
 
 /* 0000028C-00000374       .text _create__Q29daObjGong5Act_cFv */
 cPhs_State daObjGong::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
 

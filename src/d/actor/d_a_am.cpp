@@ -207,7 +207,7 @@ static void body_atari_check(am_class* i_this) {
             i_this->mAction = ACTION_HANDOU_MOVE;
             i_this->mMode = MODE_HANDOU_MOVE_INIT;
             i_this->mHugeKnockback = 0;
-            if (player->getCutType() == 0x11) {
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                 // If the player hits the Armos Knight with the Skull Hammer's side swing, knock it back much farther than normal.
                 i_this->mHugeKnockback = 1;
             }
@@ -1164,7 +1164,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 
 /* 00003C00-00003F5C       .text daAM_Create__FP10fopAc_ac_c */
 static cPhs_State daAM_Create(fopAc_ac_c* i_this) {
-    fopAcM_SetupActor(i_this, am_class);
+    fopAcM_ct(i_this, am_class);
 
     am_class* a_this = (am_class*)i_this;
 

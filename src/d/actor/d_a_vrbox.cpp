@@ -180,7 +180,7 @@ static BOOL daVrbox_solidHeapCB(fopAc_ac_c* i_actor) {
 
 /* 8015E968-8015EA14       .text daVrbox_Create__FP10fopAc_ac_c */
 static cPhs_State daVrbox_Create(fopAc_ac_c* i_actor) {
-    fopAcM_SetupActor(i_actor, vrbox_class);
+    fopAcM_ct(i_actor, vrbox_class);
     vrbox_class* i_this = static_cast<vrbox_class*>(i_actor);
 
     i_this->m29C = 0;

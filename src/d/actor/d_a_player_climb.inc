@@ -182,21 +182,22 @@ void daPy_lk_c::checkBgClimbMove() {
     if (dVar3 - 125.0f < current.pos.y) {
         current.pos.y = dVar3 - 125.0f;
     }
-    local_5c.x = local_68.x + (100.0f * dVar7);
-    local_5c.y = local_68.y;
-    local_5c.z = local_68.z + (100.0f * dVar6);
+    local_5c.set(
+        local_68.x + (100.0f * dVar7),
+        local_68.y,
+        local_68.z + (100.0f * dVar6)
+    );
     mLinkLinChk.Set(&local_68, &local_5c, this);
     if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
         local_5c.set(current.pos.x + (25.0f * dVar7), local_68.y + 30.0f, current.pos.z + (25.0f * dVar6));
         mGndChk.SetPos(&local_5c);
         dVar3 = dComIfG_Bgsp()->GroundCross(&mGndChk);
-        if (-G_CM3D_F_INF != dVar3 && cBgW_CheckBGround(dComIfG_Bgsp()->GetTriPla(mGndChk)->GetNP()->y) &&
+        if (dVar3 != -G_CM3D_F_INF && cBgW_CheckBGround(dComIfG_Bgsp()->GetTriPla(mGndChk)->GetNP()->y) &&
             dVar3 >= local_68.y - 30.0f)
         {
-            dVar4 = 3.0f;
-            current.pos.x = local_5c.x - (dVar4 * dVar7);
+            current.pos.x = local_5c.x - (3.0f * dVar7);
             current.pos.y = dVar3;
-            current.pos.z = local_5c.z - (dVar4 * dVar6);
+            current.pos.z = local_5c.z - (3.0f * dVar6);
             procHangClimb_init(m_HIO->mWallCatch.m.field_0x2C);
         } else {
             procFall_init(1, m_HIO->mWallCatch.m.field_0x54);

@@ -189,7 +189,7 @@ bool Act_c::chk_appear() {
 
 /* 0000033C-00000744       .text _create__Q27daStone5Act_cFv */
 cPhs_State Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     m670 = prm_get_type();
     m68C = chk_appear();
 
@@ -913,7 +913,7 @@ void Act_c::set_senv(int arg1, int arg2) const {
 /* 00003124-0000315C       .text cam_lockoff__Q27daStone5Act_cCFv */
 void Act_c::cam_lockoff() const {
     camera_class* camera = dComIfGp_getCamera(0);
-    camera->mCamera.ForceLockOff(((base_process_class*)this)->mBsPcId);
+    camera->mCamera.ForceLockOff(base.base.mBsPcId);
 }
 
 /* 0000315C-00003358       .text _execute__Q27daStone5Act_cFv */

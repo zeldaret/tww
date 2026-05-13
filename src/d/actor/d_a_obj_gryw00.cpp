@@ -152,7 +152,7 @@ BOOL daObjGryw00_c::Create() {
 
 /* 000007D4-0000090C       .text Mthd_Create__13daObjGryw00_cFv */
 cPhs_State daObjGryw00_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjGryw00_c);
+    fopAcM_ct(this, daObjGryw00_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, l_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {

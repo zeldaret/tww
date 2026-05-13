@@ -108,7 +108,7 @@ BOOL daTama_c::_delete() {
 /* 000002DC-00000410       .text _create__8daTama_cFv */
 cPhs_State daTama_c::_create() {
     cPhs_State rt = cPhs_COMPLEATE_e;
-    fopAcM_SetupActor(this, daTama_c);
+    fopAcM_ct(this, daTama_c);
     if (!createInit())
         rt = cPhs_ERROR_e;
     return rt;

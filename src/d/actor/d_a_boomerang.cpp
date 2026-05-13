@@ -326,7 +326,7 @@ static BOOL daBoomerang_Draw(daBoomerang_c* i_this) {
 
 /* 800E19B8-800E1A14       .text getFlyMax__13daBoomerang_cFv */
 float daBoomerang_c::getFlyMax() {
-    if (dComIfGp_checkPlayerStatus0(0, 0x10000) != 0) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         return 5000.0f;
     }
 
@@ -548,10 +548,7 @@ BOOL daBoomerang_c::procWait() {
         if (dCam_getBody()->mCurMode != 0xB) {
             resetLockActor();
         } else {
-            bool isAiming = (pPlayer->mCurProc == daPy_lk_c::daPyProc_BOOMERANG_SUBJECT_e || pPlayer->mCurProc == daPy_lk_c::daPyProc_SHIP_BOOMERANG_e) &&
-                            pPlayer->mSightPacket.getDrawFlg();
-
-            if (isAiming) {
+            if (pPlayer->checkBoomerangRock()) {
                 camera_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
                 cXyz eyePos = *fopCamM_GetEye_p(pCamera);
                 cXyz topPos = pPlayer->getLineTopPos();
@@ -775,7 +772,7 @@ static dCcD_SrcCps l_at_cps_src = {
         /* SrcObjTg  Type    */ 0,
         /* SrcObjTg  SPrm    */ 0,
         /* SrcObjCo  SPrm    */ 0,
-        /* SrcGObjAt Se      */ dCcG_SE_UNK4,
+        /* SrcGObjAt Se      */ dCcG_SE_WOOD,
         /* SrcGObjAt HitMark */ dCcG_AtHitMark_Unk1_e,
         /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
         /* SrcGObjAt Mtrl    */ 0,
@@ -797,7 +794,7 @@ static dCcD_SrcCps l_at_cps_src = {
 
 /* 800E2CE8-800E2EF0       .text create__13daBoomerang_cFv */
 cPhs_State daBoomerang_c::create() {
-    fopAcM_SetupActor(this, daBoomerang_c);
+    fopAcM_ct(this, daBoomerang_c);
 
     if (!fopAcM_entrySolidHeap(this, daBoomerang_createHeap, 0xD40)) {
         return cPhs_ERROR_e;

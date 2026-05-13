@@ -1449,15 +1449,10 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
 static cPhs_State daBridge_Create(fopAc_ac_c* a_this) {
     bridge_class* i_this = (bridge_class*)a_this;
 
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(&i_this->actor, bridge_class);
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Bridge");
     if (ret == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(&i_this->actor, bridge_class);
-#else
-    fopAcM_SetupActor(&i_this->actor, bridge_class);
-    cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Bridge");
-    if (ret == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(&i_this->actor, bridge_class);
         i_this->mTypeBits = fopAcM_GetParam(a_this);
         if (i_this->mTypeBits == 0xFF) {
             i_this->mTypeBits = 0;

@@ -327,7 +327,7 @@ void dCcS::ProcAtTgHitmark(bool, bool, cCcD_Obj* atObj, cCcD_Obj* tgObj, dCcD_GO
             dKy_SordFlush_set(*pos, 1);
         }
     } else {
-        if (tgInf->GetTgHitMark() == 0) { return; }
+        if (tgInf->GetTgHitMark() == dCcG_TgHitMark_None_e) { return; }
         dKy_SordFlush_set(*pos, 0);
         csXyz angle;
         CalcParticleAngle(atInf, atStts, tgStts, &angle);
@@ -353,7 +353,7 @@ void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg,
         atObjInf->SetAtHitPos(*i_hitPos);
         atObjInf->SetAtRVec(*tgObjInf->GetTgVecP());
 
-        if (atGStts != NULL && atGStts->GetTgSpl() == 0) {
+        if (atGStts != NULL && atGStts->GetTgSpl() == dCcG_Tg_Spl_UNK0) {
             atGStts->SetTgSpl(tgObjInf->GetTgSpl());
         }
 

@@ -172,7 +172,7 @@ static BOOL daKamome_Draw(kamome_class* i_this) {
         &i_this->actor.tevStr
     );
 
-    dSnap_RegistFig(0x55, &i_this->actor, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_KAMOME, &i_this->actor, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 
@@ -709,6 +709,7 @@ void kamome_path_move(kamome_class* i_this) {
 /* 00002740-00003628       .text kamome_auto_move__FP12kamome_class */
 void kamome_auto_move(kamome_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
+    fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     fopAc_ac_c* pfVar4;
     s8 moveType = 0;
     s32 frame;
@@ -1481,17 +1482,11 @@ static cPhs_State daKamome_Create(fopAc_ac_c* a_this) {
     };
 
     kamome_class* i_this = (kamome_class*)a_this;
-
-#if VERSION == VERSION_DEMO
-    cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Kamome");
-    if (PVar1 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, kamome_class);
-#else
-    fopAcM_SetupActor(a_this, kamome_class);
+    fopAcM_ct_Retail(a_this, kamome_class);
 
     cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Kamome");
     if (PVar1 == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(a_this, kamome_class);
 
         i_this->mType = fopAcM_GetParam(a_this);
         if (i_this->mType == 0xff) {

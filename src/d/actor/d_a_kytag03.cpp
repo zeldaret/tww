@@ -128,15 +128,11 @@ static BOOL daKytag03_Delete(kytag03_class* i_this) {
 static cPhs_State daKytag03_Create(fopAc_ac_c* i_ac) {
     kytag03_class* i_this = (kytag03_class*)i_ac;
 
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_ac, kytag03_class);
-#endif
+    fopAcM_ct_Retail(i_ac, kytag03_class);
 
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhs, "M_DOOR");
     if (ret == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(i_ac, kytag03_class);
-#endif
+        fopAcM_ct_Demo(i_ac, kytag03_class);
 
         if (!fopAcM_entrySolidHeap(&i_this->actor, useHeapInit, 0x4c30)) {
             return cPhs_ERROR_e;

@@ -51,7 +51,7 @@ BOOL daObjHbrf1::Act_c::Create() {
 
 /* 000002B4-000003B0       .text Mthd_Create__Q210daObjHbrf15Act_cFv */
 cPhs_State daObjHbrf1::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjHbrf1::Act_c);
+    fopAcM_ct(this, daObjHbrf1::Act_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
 

@@ -148,7 +148,7 @@ BOOL daObjEskban::Act_c::Create() {
 /* 000003A4-000004D0       .text Mthd_Create__Q211daObjEskban5Act_cFv */
 cPhs_State daObjEskban::Act_c::Mthd_Create() {
     cPhs_State phase_state;
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     M_smoke = NULL;
 
     s32 swSave = param_get_swSave();

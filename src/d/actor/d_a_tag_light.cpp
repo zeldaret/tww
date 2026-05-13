@@ -126,9 +126,7 @@ bool Act_c::create_heap() {
 
 /* 0000035C-000006F0       .text _create__Q210daTagLight5Act_cFv */
 cPhs_State Act_c::_create() {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, Act_c);
-#endif
+    fopAcM_ct_Retail(this, Act_c);
 
     m2A0 = prm_get_type();
     cXyz sp08;
@@ -143,9 +141,7 @@ cPhs_State Act_c::_create() {
     m4A4.y = sp08.y;
     m4A4.z = sp08.z;
 
-#if VERSION == VERSION_DEMO
-    fopAcM_SetupActor(this, Act_c);
-#endif
+    fopAcM_ct_Demo(this, Act_c);
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -293,7 +289,6 @@ void Act_c::get_base_model_light_start_offset(cXyz* outPos) {
 
 /* 00000BCC-0000111C       .text get_projection_info__Q210daTagLight5Act_cFP4cXyzP4cXyzP4cXyzPC4cXyzPC4cXyz */
 void Act_c::get_projection_info(cXyz* outArg1, cXyz* outArg2, cXyz* outArg3, const cXyz* arg4, const cXyz* arg5) {
-    /* Nonmatching - stack order */
     *outArg3 = current.pos;
 
     f32 ratio = prm_get_coneRatio();
@@ -321,37 +316,17 @@ void Act_c::get_projection_info(cXyz* outArg1, cXyz* outArg2, cXyz* outArg3, con
                 cXyz sp40;
 
                 for (s32 i = 0; i < 4; i++) {
-                    /*
-                    Mtx sp10;
-                    sp10[2][0] = fVar1;
-                    sp10[2][1] = 0.0f;
-                    sp10[2][2] = 0.0f;
-                    sp10[2][3] = -fVar1;
-                    sp10[1][0] = 0.0f;
-                    sp10[1][1] = 0.0f;
-                    sp10[1][2] = 0.0f;
-                    sp10[1][3] = 0.0f;
-                    sp10[2][0] = fVar2;
-                    sp10[2][1] = 0.0f;
-                    sp10[2][2] = 0.0f;
-                    sp10[2][3] = -fVar2;
-                    sp4C[0].set(sp10[2][0], sp10[2][1], sp10[2][2]);
-                    sp4C[1].set(sp10[2][3], sp10[1][0], sp10[1][1]);
-                    sp4C[2].set(sp10[1][2], sp10[1][3], sp10[2][0]);
-                    sp4C[3].set(sp10[2][1], sp10[2][2], sp10[2][3]);
-                    */
-                    cXyz sp10[4];
-                    sp10[3].set(fVar1, 0.0f, 0.0f);
-                    sp4C[0].set(sp10[3]);
+                    cXyz sp10(fVar1, 0.0f, 0.0f);
+                    sp4C[0].set(sp10);
 
-                    sp10[2].set(-fVar1, 0.0f, 0.0f);
-                    sp4C[1].set(sp10[2]);
+                    cXyz sp1C(-fVar1, 0.0f, 0.0f);
+                    sp4C[1].set(sp1C);
 
-                    sp10[1].set(0.0f, 0.0f, fVar2);
-                    sp4C[2].set(sp10[1]);
+                    cXyz sp28(0.0f, 0.0f, fVar2);
+                    sp4C[2].set(sp28);
 
-                    sp10[0].set(0.0f, 0.0f, -fVar2);
-                    sp4C[3].set(sp10[0]);
+                    cXyz sp34(0.0f, 0.0f, -fVar2);
+                    sp4C[3].set(sp34);
 
                     sp7C[i] = *outArg1;
                     mDoMtx_multVec(m2A4, &sp4C[i], &sp40);
@@ -512,7 +487,6 @@ void Act_c::set_material(J3DMaterial* material, u8 alpha) {
 
 /* 00001D20-00001EAC       .text _draw__Q210daTagLight5Act_cFv */
 bool Act_c::_draw() {
-    /* Nonmatching - regalloc */
     if (m2A0 == 1 && m308 > 0.0f) {
         g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(mpModel, &tevStr);

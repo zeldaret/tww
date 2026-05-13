@@ -58,16 +58,10 @@ static cPhs_State daObj_TousekikiCreate(void* i_this) {
 
 /* 000002DC-000004F4       .text _create__17daObj_Tousekiki_cFv */
 cPhs_State daObj_Tousekiki_c::_create() {
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daObj_Tousekiki_c);
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
     if (PVar1 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daObj_Tousekiki_c);
-#else
-    fopAcM_SetupActor(this, daObj_Tousekiki_c);
-
-    cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
-    if (PVar1 == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(this, daObj_Tousekiki_c);
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x900)) {
             return cPhs_ERROR_e;
         }

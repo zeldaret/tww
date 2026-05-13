@@ -241,7 +241,7 @@ cPhs_State daMozo_c::CreateInit() {
 
 /* 00002228-000023B0       .text _create__8daMozo_cFv */
 cPhs_State daMozo_c::_create() {
-    fopAcM_SetupActor(this, daMozo_c);
+    fopAcM_ct(this, daMozo_c);
 
     cPhs_State result = dComIfG_resLoad(&mPhs, "Mozo");
 

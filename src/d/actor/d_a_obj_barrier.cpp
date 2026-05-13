@@ -236,16 +236,16 @@ void daObjBarrier_c::break_start_wait_proc() {
             dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e)
         {
             switch (player_p->getCutType()) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
+            case daPy_py_c::CUT_TYPE_CUT_A:
+            case daPy_py_c::CUT_TYPE_CUT_F:
+            case daPy_py_c::CUT_TYPE_CUT_R:
+            case daPy_py_c::CUT_TYPE_CUT_L:
+            case daPy_py_c::CUT_TYPE_BT_JUMPCUT: // ???
+            case daPy_py_c::CUT_TYPE_CUT_EA:
+            case daPy_py_c::CUT_TYPE_CUT_EB:
+            case daPy_py_c::CUT_TYPE_CUT_TURN:
+            case daPy_py_c::CUT_TYPE_CUT_ROLL:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
                 dComIfGs_onEventBit(dSv_event_flag_c::BARRIER_BREAK);
                 mEventID = dComIfGp_evmng_getEventIdx("seal");
                 mBarrierProc = PROC_BREAK_ORDER;
@@ -497,7 +497,7 @@ void daObjBarrier_ef_c::draw() {
 /* 00001638-0000182C       .text _create__14daObjBarrier_cFv */
 cPhs_State daObjBarrier_c::_create() {
     cPhs_State phase = cPhs_ERROR_e;
-    fopAcM_SetupActor(this, daObjBarrier_c);
+    fopAcM_ct(this, daObjBarrier_c);
 
     if (fopAcM_IsFirstCreating(this)) {
         mMoya = param_get_moya();

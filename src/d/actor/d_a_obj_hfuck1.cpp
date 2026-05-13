@@ -119,7 +119,7 @@ bool daObjHfuck1_c::checkCollision() {
 
 /* 000002AC-000004B0       .text _create__13daObjHfuck1_cFv */
 cPhs_State daObjHfuck1_c::_create() {
-    fopAcM_SetupActor(this, daObjHfuck1_c);
+    fopAcM_ct(this, daObjHfuck1_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, l_arcname);
 

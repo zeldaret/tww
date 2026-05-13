@@ -706,7 +706,7 @@ u32 daNpc_Rsh1_c::getMsg() {
         msg_no = m780;
         m780 = 0;
     } else {
-        if (!checkItemGet(0x2A, TRUE) && daNpc_Rsh1_countShop() >= 3) {
+        if (!checkItemGet(dItem_MAGIC_ARMOR_e, TRUE) && daNpc_Rsh1_countShop() >= 3) {
             return 0x285D;
         }
 
@@ -1683,7 +1683,7 @@ BOOL daNpc_Rsh1_c::_draw() {
         mpShopCursor->draw();
     }
 
-    dSnap_RegistFig(DSNAP_TYPE_UNK5F, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_RSH1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
 
     return TRUE;
 }
@@ -1796,17 +1796,13 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00004328-00004464       .text _create__12daNpc_Rsh1_cFv */
 cPhs_State daNpc_Rsh1_c::_create() {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_Rsh1_c);
-#endif
+    fopAcM_ct_Retail(this, daNpc_Rsh1_c);
 
     cPhs_State state = dComIfG_resLoad(&mPhs, m_arcname);
 
 
     if (state == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(this, daNpc_Rsh1_c);
-#endif
+        fopAcM_ct_Demo(this, daNpc_Rsh1_c);
         m95E = (fopAcM_GetParam(this) >> 0x14) & 0xF;
 
         switch (m95E) {

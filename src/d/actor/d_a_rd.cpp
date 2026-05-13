@@ -444,7 +444,7 @@ bool daRd_c::checkPlayerInAttack() {
 /* 00000A38-00000AA0       .text checkPlayerInCry__6daRd_cFv */
 bool daRd_c::checkPlayerInCry() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
-    return dLib_checkActorInFan(current.pos, player, mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, 100.0f);
+    return dLib_checkActorInFan(current.pos, player, mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, DEMO_SELECT(1000.0f, 100.0f));
 }
 
 /* 00000AA0-00000D78       .text lookBack__6daRd_cFv */
@@ -566,21 +566,21 @@ bool daRd_c::checkTgHit() {
             fopAcM_seStart(this, JA_SE_LK_SW_HIT_S, 0x20);
             
             switch (player->getCutType()) {
-            case 0x05:
-            case 0x06:
-            case 0x07:
-            case 0x08:
-            case 0x09:
-            case 0x0A:
-            case 0x0C:
-            case 0x0E:
-            case 0x0F:
-            case 0x10:
-            case 0x15:
-            case 0x17:
-            case 0x19:
-            case 0x1A:
-            case 0x1B:
+            case daPy_py_c::CUT_TYPE_BT_JUMPCUT:
+            case daPy_py_c::CUT_TYPE_CUT_EA:
+            case daPy_py_c::CUT_TYPE_CUT_EB:
+            case daPy_py_c::CUT_TYPE_CUT_TURN:
+            case daPy_py_c::CUT_TYPE_CUT_ROLL:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_STICK:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE:
+            case daPy_py_c::CUT_TYPE_BT_ROLLCUT:
+            case daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_CLUB:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR:
+            case daPy_py_c::CUT_TYPE_CUT_EXA:
+            case daPy_py_c::CUT_TYPE_CUT_EXB:
                 mHitType = 1;
                 break;
             default:
@@ -609,7 +609,7 @@ bool daRd_c::checkTgHit() {
         case AT_TYPE_STALFOS_MACE:
             fopAcM_seStart(this, JA_SE_LK_HAMMER_HIT, 0x20);
             mHitType = 7;
-            if (player->getCutType() == 0x11) {
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                 mHitType = 8;
             }
             break;
@@ -638,7 +638,7 @@ bool daRd_c::checkTgHit() {
             break;
         case AT_TYPE_NORMAL_ARROW:
             mHitType = 5;
-            if (!dLib_checkActorInCircle(current.pos, player, l_HIO.mCryRadius, 1000.0f)) {
+            if (!dLib_checkActorInCircle(current.pos, player, l_HIO.mCryRadius, DEMO_SELECT(100.0f, 1000.0f))) {
                 fopAcM_seStart(this, JA_SE_LK_ARROW_HIT, 0x44);
                 mCE0 = 40;
                 r29 = false;
@@ -792,7 +792,7 @@ void daRd_c::modeWait() {
     fopAc_ac_c* player = dComIfGp_getLinkPlayer();
     BOOL isOto = fopAcM_otoCheck(this, mAreaRadius);
     if (!isLinkControl()) {
-        if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f)) {
+        if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, DEMO_SELECT(100.0f, 1000.0f))) {
             // The ReDead will only wake up if the player is in a 200-unit-tall cylinder around its spawn point.
             // Bug: If the ReDead spawned high up in the air, its spawn point will remain there even after the ReDead
             // itself has fallen down to ground level. This means it will not be able to notice the player properly.
@@ -808,7 +808,7 @@ void daRd_c::modeWait() {
         }
     }
     
-    if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f)) {
+    if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, DEMO_SELECT(100.0f, 1000.0f))) {
         cLib_addCalcAngleS2(&shape_angle.y, mSpawnAngle, 0x4, 0x200);
         if (cLib_distanceAngleS(shape_angle.y, mSpawnAngle) <= 0x200) {
             shape_angle.y = mSpawnAngle;
@@ -819,7 +819,7 @@ void daRd_c::modeWait() {
                 setAnm(AnmPrm_TACHIP1, false);
             }
         }
-    } else if (!dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f) ||
+    } else if (!dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, DEMO_SELECT(100.0f, 1000.0f)) ||
                !dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)
     ) {
         modeProcInit(MODE_RETURN);
@@ -922,7 +922,10 @@ void daRd_c::modeMove() {
             return;
         }
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
-        if (!dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f) || !dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)) {
+        if (
+            !dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, DEMO_SELECT(100.0f, 1000.0f)) ||
+            !dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)
+        ) {
             modeProcInit(MODE_RETURN);
             return;
         }
@@ -1175,7 +1178,7 @@ void daRd_c::modeReturn() {
     
     setAnm(AnmPrm_WALK, false);
     
-    if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f)) {
+    if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, DEMO_SELECT(100.0f, 1000.0f))) {
         speedF = 0.0f;
         cLib_addCalcAngleS2(&shape_angle.y, mSpawnAngle, 0xA, 0x200);
         if (cLib_distanceAngleS(shape_angle.y, mSpawnAngle) <= 0x200) {
@@ -1194,7 +1197,7 @@ void daRd_c::modeReturn() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     BOOL isOto = fopAcM_otoCheck(this, mAreaRadius);
     if (!isLinkControl()) {
-        if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f)) {
+        if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, DEMO_SELECT(100.0f, 1000.0f))) {
             if (dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)) {
                 if ((dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f) && player->speedF > 10.0f + REG12_F(4)) ||
                     isOto ||
@@ -1224,7 +1227,7 @@ void daRd_c::modeSilentPray() {
     fopAc_ac_c* corpse;
     if (fopAcM_SearchByID(mCorpseID, &corpse)) {
         mTargetPos = corpse->current.pos;
-        if (dLib_checkActorInCircle(mTargetPos, this, 200.0f, 1000.0f)) {
+        if (dLib_checkActorInCircle(mTargetPos, this, 200.0f, DEMO_SELECT(100.0f, 1000.0f))) {
             setAnm(AnmPrm_TACHIP1, false);
             speedF = 0.0f;
         } else {
@@ -1257,7 +1260,7 @@ void daRd_c::modeSwWaitInit() {
 
 /* 00003428-00003480       .text modeSwWait__6daRd_cFv */
 void daRd_c::modeSwWait() {
-    if (dComIfGs_isSwitch(mSwNo, current.roomNo)) {
+    if (dComIfGs_isSwitch(mSwNo, fopAcM_GetRoomNo(this))) {
         modeProcInit(MODE_KANOKE);
     }
 }
@@ -1659,7 +1662,8 @@ bool daRd_c::_execute() {
     }
     
     if (enemy_ice(&mEnemyIce)) {
-        mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+        J3DModel* model = mpMorf->getModel();
+        model->setBaseTRMtx(mDoMtx_stack_c::get());
         mpMorf->calc();
         speedF = 0.0f;
         setAttention();
@@ -1752,7 +1756,11 @@ bool daRd_c::_draw() {
     } else {
         mBrkAnm.entry(modelData);
         mBtkAnm.entry(modelData);
+#if VERSION == VERSION_DEMO
+        mpMorf->entryDL();
+#else
         mpMorf->updateDL();
+#endif
         mBtkAnm.remove(modelData);
         mBrkAnm.remove(modelData);
     }
@@ -1876,7 +1884,7 @@ void daRd_c::getArg() {
 
 /* 00004720-000047C8       .text _create__6daRd_cFv */
 cPhs_State daRd_c::_create() {
-    fopAcM_SetupActor(this, daRd_c);
+    fopAcM_ct(this, daRd_c);
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
     

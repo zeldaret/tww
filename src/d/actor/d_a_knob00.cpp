@@ -371,17 +371,11 @@ BOOL daKnob00_c::CreateInit() {
 /* 00000D84-00000E70       .text create__10daKnob00_cFv */
 cPhs_State daKnob00_c::create() {
     cPhs_State ret = dComIfG_resLoad(&mPhase, M_arcname);
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daKnob00_c);
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
     }
-    fopAcM_SetupActor(this, daKnob00_c);
-#else
-    fopAcM_SetupActor(this, daKnob00_c);
-    if (ret != cPhs_COMPLEATE_e) {
-        return ret;
-    }
-#endif
+    fopAcM_ct_Demo(this, daKnob00_c);
 
     if (fopAcM_GetRoomNo(this) == -1) {
         fopAcM_SetRoomNo(this, getFRoomNo());

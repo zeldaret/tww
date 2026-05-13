@@ -27,7 +27,7 @@
 /* 8013F848-8013F8AC       .text shipSpecialDemoStart__9daPy_lk_cFv */
 BOOL daPy_lk_c::shipSpecialDemoStart() {
     if (dComIfGp_event_compulsory(this)) {
-        mDemo.setDemoType(5);
+        mDemo.setSpecialDemoType();
         return true;
     } else {
         return false;
@@ -322,7 +322,7 @@ BOOL daPy_lk_c::changeShipEndProc() {
                  m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_FREEB) ||
                 m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_FREED)
             {
-                if ((!dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000_e) && !spActionButton()) &&
+                if ((!dComIfGp_checkPlayerStatus0(0, daPyStts0_SUBJECT_e) && !spActionButton()) &&
                     (dComIfGp_getDoStatus() == dActStts_BLANK_e && mCurProc == daPyProc_SHIP_PADDLE_e))
                 {
                     if (!ship->checkForceMove()) {
@@ -649,14 +649,14 @@ BOOL daPy_lk_c::procShipPaddle() {
     if (dComIfGp_getDoStatus() == dActStts_BLANK_e && dComIfGp_getShipActor()->speedF >= 3.0f) {
         dComIfGp_setDoStatus(dActStts_STOP_e);
     }
-    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000_e)) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SUBJECT_e)) {
         dComIfGp_setAStatus(dActStts_RETURN_e);
-        if (checkSubjectEnd(1)) {
-            dComIfGp_clearPlayerStatus0(0, daPyStts0_UNK2000_e);
+        if (checkSubjectEnd(TRUE)) {
+            dComIfGp_clearPlayerStatus0(0, daPyStts0_SUBJECT_e);
         }
     } else {
         onResetFlg0(daPyRFlg0_SUBJECT_ACCEPT);
-        if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000) && !dComIfGp_event_runCheck()) {
+        if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00001000_e) && !dComIfGp_event_runCheck()) {
             setSubjectMode();
         }
     }
@@ -730,8 +730,8 @@ BOOL daPy_lk_c::procShipScope() {
     }
     if (checkScopeEnd()) {
         procShipPaddle_init();
-    } else if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x10) && !dComIfGp_event_runCheck() &&
-               mDemo.getDemoType() == 0)
+    } else if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000010_e) && !dComIfGp_event_runCheck() &&
+               !checkPlayerDemoMode())
     {
         shape_angle.y = fopCamM_GetAngleY(dComIfGp_getCamera(mCameraInfoIdx));
         iVar2 = 0;

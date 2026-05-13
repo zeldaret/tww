@@ -34,7 +34,7 @@ cXyz setArrowTrans(s16 yRot, cXyz offset) {
 /* 800F4C4C-800F4CD8       .text getYOffset__8daItem_cFv */
 float daItem_c::getYOffset() {
     switch (m_itemNo) {
-    case BOKO_BELT:
+    case dItem_KNIGHTS_CREST_e:
         return 0.0f;
     case dItem_SKULL_NECKLACE_e:
         return 0.0f;
@@ -216,7 +216,7 @@ void daItem_c::CreateInit() {
 
 /* 800F53EC-800F5668       .text _daItem_create__8daItem_cFv */
 cPhs_State daItem_c::_daItem_create() {
-    fopAcM_SetupActor(this, daItem_c);
+    fopAcM_ct(this, daItem_c);
     
     m_itemNo = daItem_prm::getItemNo(this);
     
@@ -655,9 +655,9 @@ void daItem_c::itemGetExecute() {
         break;
     case dItem_JOY_PENDANT_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(7)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_JOY_PENDANT_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(7);
+            dComIfGs_onGetItemBeast(dBeastIdx_JOY_PENDANT_e);
         } else {
             execItemGet(m_itemNo);
         }
@@ -686,63 +686,63 @@ void daItem_c::itemGetExecute() {
         break;
     case dItem_SKULL_NECKLACE_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(0)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_SKULL_NECKLACE_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(0);
+            dComIfGs_onGetItemBeast(dBeastIdx_SKULL_NECKLACE_e);
         } else {
             execItemGet(m_itemNo);
         }
         break;
     case dItem_BOKOBABA_SEED_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(1)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_BOKOBABA_SEED_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(1);
+            dComIfGs_onGetItemBeast(dBeastIdx_BOKOBABA_SEED_e);
         } else {
             execItemGet(m_itemNo);
         }
         break;
     case dItem_GOLDEN_FEATHER_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(2)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_GOLDEN_FEATHER_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(2);
+            dComIfGs_onGetItemBeast(dBeastIdx_GOLDEN_FEATHER_e);
         } else {
             execItemGet(m_itemNo);
         }
         break;
-    case BOKO_BELT:
+    case dItem_KNIGHTS_CREST_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(3)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_KNIGHTS_CREST_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(3);
+            dComIfGs_onGetItemBeast(dBeastIdx_KNIGHTS_CREST_e);
         } else {
             execItemGet(m_itemNo);
         }
         break;
     case dItem_RED_JELLY_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(4)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_RED_JELLY_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(4);
+            dComIfGs_onGetItemBeast(dBeastIdx_RED_JELLY_e);
         } else {
             execItemGet(m_itemNo);
         }
         break;
     case dItem_GREEN_JELLY_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(5)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_GREEN_JELLY_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(5);
+            dComIfGs_onGetItemBeast(dBeastIdx_GREEN_JELLY_e);
         } else {
             execItemGet(m_itemNo);
         }
         break;
     case dItem_BLUE_JELLY_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(6)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_BLUE_JELLY_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(6);
+            dComIfGs_onGetItemBeast(dBeastIdx_BLUE_JELLY_e);
         } else {
             execItemGet(m_itemNo);
         }
@@ -978,7 +978,7 @@ BOOL daItem_c::itemActionForEmono() {
 
 /* 800F73A4-800F7898       .text itemActionForSword__8daItem_cFv */
 BOOL daItem_c::itemActionForSword() {
-    /* Nonmatching - regalloc */
+    /* Nonmatching - retail-only regalloc */
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     bool isQuake = dComIfGp_getDetect().chk_quake(&current.pos);
@@ -1288,7 +1288,7 @@ void daItem_c::mode_wait() {
     case dItem_SKULL_NECKLACE_e:
     case dItem_BOKOBABA_SEED_e:
     case dItem_GOLDEN_FEATHER_e:
-    case BOKO_BELT:
+    case dItem_KNIGHTS_CREST_e:
     case dItem_RED_JELLY_e:
     case dItem_GREEN_JELLY_e:
     case dItem_BLUE_JELLY_e:

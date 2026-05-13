@@ -55,29 +55,26 @@ struct TVec3 {
 
 template <>
 struct TVec3<s16> : public SVec {
-    // s16 x, y, z;
-
-    TVec3& operator=(const TVec3& b) {
-        set(b.x, b.y, b.z);
-        return *this;
-    }
-
     TVec3() {}
-
+    TVec3(const SVec& b) { set(b); }
     TVec3(const s16 x, const s16 y, const s16 z) { set(x, y, z); }
 
+    void set(const SVec& vec) {
+        x = vec.x;
+        y = vec.y;
+        z = vec.z;
+    }
+        
+    template<typename s16>
     void set(s16 x_, s16 y_, s16 z_) {
-        x = x_;
-        y = y_;
-        z = z_;
+        x = (s16)x_;
+        y = (s16)y_;
+        z = (s16)z_;
     }
 
-    TVec3(const int x, const int y, const int z) { set(x, y, z); }
-
-    void set(int x_, int y_, int z_) {
-        x = x_;
-        y = y_;
-        z = z_;
+    TVec3<s16>& operator=(const TVec3<s16>& b) {
+        set(b.x, b.y, b.z);
+        return *this;
     }
 };
 

@@ -83,10 +83,9 @@ void dPlace_name_c::setScreen(const char* name, JKRArchive* arc) {
 
 /* 801610A8-80161100       .text _openAnime__13dPlace_name_cFv */
 BOOL dPlace_name_c::_openAnime() {
-    if (pane.mUserArea < 10) {
-        pane.mUserArea++;
-        s16 tmp = pane.mUserArea;
-        f32 alpha = fopMsgM_valueIncrease(10, tmp, 0);
+    if (getCounter() < 10) {
+        addCounter();
+        f32 alpha = fopMsgM_valueIncrease(10, getCounter(), 0);
         fopMsgM_setNowAlpha(&pane, alpha);
     }
 
@@ -97,14 +96,13 @@ BOOL dPlace_name_c::_openAnime() {
 BOOL dPlace_name_c::_closeAnime() {
     BOOL ret = FALSE;
 
-    if (pane.mUserArea > 0) {
-        pane.mUserArea--;
-        s16 tmp = pane.mUserArea;
-        f32 alpha = fopMsgM_valueIncrease(10, tmp, 0);
+    if (getCounter() > 0) {
+        decCounter();
+        f32 alpha = fopMsgM_valueIncrease(10, getCounter(), 0);
         fopMsgM_setNowAlpha(&pane, alpha);
     }
 
-    if (pane.mUserArea <= 0)
+    if (getCounter() <= 0)
         ret = TRUE;
 
     return ret;
@@ -175,7 +173,7 @@ cPhs_State dPn_c::_create() {
 #else
             DCStoreRangeNoSync(mpTIMG, 0x3c00);
 #endif
-            ((J2DPicture*)dPn_scrn->pane.pane)->changeTexture(mpTIMG, 0);
+            dPn_scrn->changeTexture(mpTIMG);
             mState = 3;
         }
         mDoExt_setCurrentHeap(oldHeap);
@@ -209,7 +207,7 @@ BOOL dPn_c::_draw() {
 BOOL dPn_c::_delete() {
     JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
     dComIfGp_setStageNameDelete();
-    delete dPn_scrn->scrn;
+    dPn_scrn->deleteScreen();
     delete dPn_scrn;
     if (dvd != NULL)
         delete dvd;

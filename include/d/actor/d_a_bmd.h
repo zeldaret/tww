@@ -11,15 +11,15 @@
 struct bmd_class {
     /* 0x000 */ fopEn_enemy_c actor;
     /* 0x2AC */ request_of_phase_process_class mPhs;
-    /* 0x2B4 */ mDoExt_McaMorf* mpMorf;
+    /* 0x2B4 */ mDoExt_McaMorf* mpBodyMorf;
     /* 0x2B8 */ mDoExt_brkAnm* mpBrkAnm;
     /* 0x2BC */ mDoExt_btkAnm* mpBtkAnm;
-    /* 0x2C0 */ mDoExt_McaMorf* m2C0;
-    /* 0x2C4 */ mDoExt_McaMorf* m2C4;
-    /* 0x2C8 */ mDoExt_McaMorf* m2C8;
-    /* 0x2CC */ J3DModel* m2CC;
-    /* 0x2D0 */ J3DModel* m2D0;
-    /* 0x2D4 */ mDoExt_brkAnm* m2D4;
+    /* 0x2C0 */ mDoExt_McaMorf* mpHeadMorf;
+    /* 0x2C4 */ mDoExt_McaMorf* mpHeadDeadMorf;
+    /* 0x2C8 */ mDoExt_McaMorf* mpMakarMorf;
+    /* 0x2CC */ J3DModel* mpMakarFaceModel;
+    /* 0x2D0 */ J3DModel* mpR00_EFModel;
+    /* 0x2D4 */ mDoExt_brkAnm* mpR00_EFBrk;
     /* 0x2D8 */ f32 m2D8;
     /* 0x2DC */ s8 m2DC;
     /* 0x2DD */ u8 m2DD[0x2E0 - 0x2DD];
@@ -76,12 +76,12 @@ struct bmd_class {
     /* 0xA88 */ s16 mA88[2];
     /* 0xA8C */ s16 mA8C;
     /* 0xA8E */ u8 mA8E[0xA90 - 0xA8E];
-    /* 0xA90 */ dPa_smokeEcallBack mA90[7];
+    /* 0xA90 */ dPa_smokeEcallBack mSmokeCb[7];
     /* 0xB70 */ u8 mB70;
     /* 0xB71 */ s8 mB71;
-    #if VERSION > VERSION_DEMO
+#if VERSION > VERSION_DEMO
     /* 0xB72 */ s16 mB72;
-    #endif
+#endif
     /* 0xB74 */ s16 mB74;
     /* 0xB76 */ s16 mB76;
     /* 0xB78 */ s16 mB78;

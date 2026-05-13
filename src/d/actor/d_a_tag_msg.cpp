@@ -132,7 +132,7 @@ static BOOL daTag_Msg_actionEvent(daTag_Msg_c* a_this) {
     int message = a_this->getMessage();
     switch (msg_mode / 1) {
     case 0:
-        if (dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) {
+        if (dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), dCamAttnStts_00000004_e)) {
             msg_mode++;
         }
         break;
@@ -238,7 +238,7 @@ BOOL daTag_Msg_c::execute() {
 
 cPhs_State daTag_Msg_c::create() {
     int swBit;
-    fopAcM_SetupActor(this, daTag_Msg_c);
+    fopAcM_ct(this, daTag_Msg_c);
     swBit = (int)(getSwbit() & 0xFF);
     if ((getMessage() == 0x9c5) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0502)) {
         setActio(0);

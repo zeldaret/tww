@@ -990,7 +990,7 @@ static cPhs_State daBwds_Create(fopAc_ac_c* a_this) {
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
-            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg Se      */ dCcG_SE_METAL,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
@@ -1033,7 +1033,7 @@ static cPhs_State daBwds_Create(fopAc_ac_c* a_this) {
     };
 
     bwds_class* i_this = (bwds_class*)a_this;
-    fopAcM_SetupActor(&i_this->actor, bwds_class);
+    fopAcM_ct(&i_this->actor, bwds_class);
 
     cPhs_State res = dComIfG_resLoad(&i_this->m02AC, "Bwds");
     if (res == cPhs_COMPLEATE_e) {

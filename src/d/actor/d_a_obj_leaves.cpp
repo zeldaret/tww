@@ -331,14 +331,7 @@ bool daObjLeaves_c::checkCollision() {
 
             default:
                 f32 abs = (*mSph.GetTgHitPosP() - current.pos).absXZ();
-#if VERSION == VERSION_DEMO
-                if (abs < l_HIO.m10)
-#elif VERSION == VERSION_JPN
-                if (abs < 95.0f)
-#else
-                if (abs < 110.0f)
-#endif
-                {
+                if (abs < VERSION_SELECT(l_HIO.m10, 95.0f, 110.0f, 110.0f)) {
                     switch (cVar5) {
                     case AT_TYPE_HOOKSHOT:
                     case AT_TYPE_MACHETE:
@@ -353,7 +346,7 @@ bool daObjLeaves_c::checkCollision() {
                     case AT_TYPE_LIGHT_ARROW:
                     case AT_TYPE_ICE_ARROW:
                     case AT_TYPE_DARKNUT_SWORD:
-                    case AT_TYPE_UNK2000000:
+                    case AT_TYPE_FAN_SWING:
                     case AT_TYPE_STALFOS_MACE:
                     case AT_TYPE_MOBLIN_SPEAR:
                         birthEffect(2, mSph.GetTgHitPosP(), NULL, &tevStr.mColorK0);
@@ -436,7 +429,7 @@ void daObjLeaves_c::tg_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf* arg1, fopAc
             case AT_TYPE_LIGHT_ARROW:
             case AT_TYPE_ICE_ARROW:
             case AT_TYPE_DARKNUT_SWORD:
-            case AT_TYPE_UNK2000000:
+            case AT_TYPE_FAN_SWING:
             case AT_TYPE_STALFOS_MACE:
             case AT_TYPE_MOBLIN_SPEAR:
                 i_this->birthEffect(2, i_this->mSph.GetTgHitPosP(), NULL, &a_this->tevStr.mColorK0);
@@ -474,7 +467,7 @@ void daObjLeaves_c::registFireCollision() {
 cPhs_State daObjLeaves_c::_create() {
     cPhs_State PVar4 = cPhs_ERROR_e;
 
-    fopAcM_SetupActor(this, daObjLeaves_c);
+    fopAcM_ct(this, daObjLeaves_c);
 
     if (fopAcM_IsFirstCreating(this)) {
         m43C = chk_appear();

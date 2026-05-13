@@ -46,7 +46,7 @@ enum daPy__PlayerStatus0 {
     daPyStts0_UNK400_e         = 0x00000400,
     daPyStts0_UNK800_e         = 0x00000800,
     daPyStts0_BOW_AIM_e        = 0x00001000,
-    daPyStts0_UNK2000_e        = 0x00002000,
+    daPyStts0_SUBJECT_e        = 0x00002000, // First person
     daPyStts0_HOOKSHOT_AIM_e   = 0x00004000,
     daPyStts0_SWORD_SWING_e    = 0x00008000,
     daPyStts0_SHIP_RIDE_e      = 0x00010000,
@@ -69,7 +69,7 @@ enum daPy__PlayerStatus0 {
     // This is some combination of flags which is seemingly related to "judgement", used in dAttention_c
     daPyStts0_UNK37a02371_e    = daPyStts0_UNK1_e | daPyStts0_UNK10_e | daPyStts0_UNK20_e
                                  | daPyStts0_UNK40_e | daPyStts0_UNK100_e | daPyStts0_UNK200_e
-                                 | daPyStts0_UNK2000_e| daPyStts0_TELESCOPE_LOOK_e
+                                 | daPyStts0_SUBJECT_e| daPyStts0_TELESCOPE_LOOK_e
                                  | daPyStts0_UNK800000_e | daPyStts0_UNK1000000_e
                                  | daPyStts0_UNK2000000_e | daPyStts0_UNK4000000_e
                                  | daPyStts0_UNK10000000_e | daPyStts0_UNK20000000_e
@@ -96,6 +96,23 @@ enum daPy__PlayerStatus1 {
     daPyStts1_UNK20000_e           = 0x00020000,
     daPyStts1_UNK40000_e           = 0x00040000,
     daPyStts1_UNK80000_e           = 0x00080000,
+};
+
+enum dCamera__AttentionStatus {
+    dCamAttnStts_00000001_e = 0x00000001, // just locked on?
+    dCamAttnStts_SUBJECT_e = 0x00000002, // First person
+    dCamAttnStts_00000004_e = 0x00000004,
+    dCamAttnStts_TELESCOPE_LOOK_e = 0x00000008,
+    dCamAttnStts_00000010_e = 0x00000010,
+    dCamAttnStts_00000020_e = 0x00000020,
+    dCamAttnStts_PICTO_BOX_AIM_e = 0x00000040,
+    dCamAttnStts_00000080_e = 0x00000080,
+    dCamAttnStts_00000100_e = 0x00000100,
+    // dCamAttnStts_00000200_e = 0x00000200,
+    dCamAttnStts_00000400_e = 0x00000400, // manual camera control, as opposed to free camera control?
+    // dCamAttnStts_00000800_e = 0x00000800,
+    dCamAttnStts_00001000_e = 0x00001000, // just pressed c-stick up to enter first person?
+    dCamAttnStts_00002000_e = 0x00002000,
 };
 
 class __d_timer_info_c {
@@ -389,7 +406,7 @@ public:
     s16 getItemMaxMagicCount() { return mItemMaxMagicCount; }
     void setItemMaxMagicCount(s16 magic) { mItemMaxMagicCount += magic; }
 
-    s16 getItemBombNumCount() { return mItemBombNumCount; }
+    int getItemBombNumCount() { return mItemBombNumCount; }
     void setItemBombNumCount(s16 num) { mItemBombNumCount += num; }
 
     u16 getItemNowLife() { return mItemNowLife; }
@@ -401,8 +418,16 @@ public:
     s16 getItemMaxLifeCount() { return mItemMaxLifeCount; }
     void setItemMaxLifeCount(s16 num) { mItemMaxLifeCount += num; }
 
-    s16 getItemArrowNumCount() { return mItemArrowNumCount; }
+    s16 getItemPictureNumCount() { return mItemPictureNumCount; }
+    void setItemPictureNumCount(s16 num) { mItemPictureNumCount += num; }
+    void clearItemPictureNumCount() { mItemPictureNumCount = 0; }
+
+    int getItemArrowNumCount() { return mItemArrowNumCount; }
     void setItemArrowNumCount(s16 num) { mItemArrowNumCount += num; }
+    void clearItemArrowNumCount() { mItemArrowNumCount = 0; }
+
+    int getItemNowMagic() { return mItemNowMagicCount; }
+    void setItemNowMagic(s16 num) { mItemNowMagicCount = num; }
 
     void setNpcNameMessageID(u32 id) { mNpcNameMessageID = id; }
     void setItemNameMessageID(u32 id) { mItemNameMessageID = id; }
@@ -412,6 +437,7 @@ public:
 
     s16 getItemBeastNumCount(int i_idx) { return mItemBeastNumCounts[i_idx]; }
     void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
+    void clearItemBeastNumCount(int i_idx) { mItemBeastNumCounts[i_idx] = 0; }
 
     s32 getItemTimeCount() { return mAirMeter; }
     void setItemTimeCount(s32 time) {
@@ -733,9 +759,9 @@ public:
     /* 0x48D4 */ s16 mItemKeyNumCount;
     /* 0x48D6 */ s16 mItemMaxLifeCount;
     /* 0x48D8 */ s16 mItemMagicCount;
-    /* 0x48DA */ s16 field_0x48da;
+    /* 0x48DA */ s16 mItemNowMagicCount;
     /* 0x48DC */ s16 mItemMaxMagicCount;
-    /* 0x48DE */ s16 field_0x48de;
+    /* 0x48DE */ s16 mItemPictureNumCount;
     /* 0x48E0 */ s16 mItemArrowNumCount;
     /* 0x48E2 */ s16 field_0x48e2;
     /* 0x48E4 */ s16 mItemBombNumCount;
@@ -1087,6 +1113,10 @@ inline void dComIfGs_setBeastItem(u8 i_itemNo) {
     g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBeastItem(i_itemNo);
 }
 
+inline void dComIfGs_setBeastItemEmpty(u8 i_itemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBeastItemEmpty(i_itemNo);
+}
+
 inline u8 dComIfGs_getBait(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBait(i_idx);
 }
@@ -1201,12 +1231,25 @@ inline void dComIfGs_setPictureNum(u8 num) {
     g_dComIfG_gameInfo.save.getPlayer().getItemRecord().setPictureNum(num);
 }
 
-inline u8 dComIfGs_getBeastNum(int i_idx) {
-    return g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().getBeastNum(i_idx);
+// The index into the Spoils Bag for each type of spoil.
+enum dBeastIndex_e {
+    /* 0x0 */ dBeastIdx_SKULL_NECKLACE_e,
+    /* 0x1 */ dBeastIdx_BOKOBABA_SEED_e,
+    /* 0x2 */ dBeastIdx_GOLDEN_FEATHER_e,
+    /* 0x3 */ dBeastIdx_KNIGHTS_CREST_e,
+    /* 0x4 */ dBeastIdx_RED_JELLY_e,
+    /* 0x5 */ dBeastIdx_GREEN_JELLY_e,
+    /* 0x6 */ dBeastIdx_BLUE_JELLY_e,
+    /* 0x7 */ dBeastIdx_JOY_PENDANT_e,
+    /* 0x8 */ dBeastIdx_COUNT_e,
+};
+
+inline u8 dComIfGs_getBeastNum(int i_beastIdx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().getBeastNum(i_beastIdx);
 }
 
-inline void dComIfGs_setBeastNum(int i_idx, u8 num) {
-    g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().setBeastNum(i_idx, num);
+inline void dComIfGs_setBeastNum(int i_beastIdx, u8 num) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().setBeastNum(i_beastIdx, num);
 }
 
 inline u8 dComIfGs_getBaitNum(int i_idx) {
@@ -1758,12 +1801,12 @@ inline void dComIfGs_onGetItem(int i_field, u8 i_item) {
     return g_dComIfG_gameInfo.save.getPlayer().getGetItem().onItem(i_field, i_item);
 }
 
-inline BOOL dComIfGs_isGetItemBeast(u8 i_beast) {
-    return g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().isBeast(i_beast);
+inline BOOL dComIfGs_isGetItemBeast(u8 i_beastIdx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().isBeast(i_beastIdx);
 }
 
-inline void dComIfGs_onGetItemBeast(u8 i_beast) {
-    g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().onBeast(i_beast);
+inline void dComIfGs_onGetItemBeast(u8 i_beastIdx) {
+    g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().onBeast(i_beastIdx);
 }
 
 inline BOOL dComIfGs_isGetItemBait(u8 i_bait) {
@@ -2420,6 +2463,10 @@ inline u32 dComIfGp_checkCameraAttentionStatus(int idx, u32 flag) {
     return g_dComIfG_gameInfo.play.checkCameraAttentionStatus(idx, flag);
 }
 
+inline u32 dComIfGp_getCameraAttentionStatus(int i_no) {
+    return g_dComIfG_gameInfo.play.getCameraAttentionStatus(i_no);
+}
+
 inline void dComIfGp_onCameraAttentionStatus(int i, u32 flag) {
     g_dComIfG_gameInfo.play.onCameraAttentionStatus(i, flag);
 }
@@ -2450,10 +2497,6 @@ inline void dComIfGp_setCameraZoomForcus(int i_no, f32 i_focus) {
 
 inline f32 dComIfGp_getCameraZoomForcus(int i_no) {
     return g_dComIfG_gameInfo.play.getCameraZoomForcus(i_no);
-}
-
-inline u32 dComIfGp_getCameraAttentionStatus(int i_no) {
-    return g_dComIfG_gameInfo.play.getCameraAttentionStatus(i_no);
 }
 
 inline void dComIfGp_saveCameraPosition(int i, cXyz* i_pos, cXyz* i_target, f32 i_fovy, s16 i_bank) {
@@ -2502,6 +2545,14 @@ inline s16 dComIfGp_getItemMaxLifeCount() {
 
 inline void dComIfGp_setItemMaxLifeCount(s16 num) {
     g_dComIfG_gameInfo.play.setItemMaxLifeCount(num);
+}
+
+inline s16 dComIfGp_getItemNowMagic() {
+    return g_dComIfG_gameInfo.play.getItemNowMagic();
+}
+
+inline void dComIfGp_setItemNowMagic(s16 num) {
+    g_dComIfG_gameInfo.play.setItemNowMagic(num);
 }
 
 inline void dComIfGp_setNpcNameMessageID(u32 id) {
@@ -2580,7 +2631,7 @@ inline void dComIfGp_setItemMaxMagicCount(s16 magic) {
     g_dComIfG_gameInfo.play.setItemMaxMagicCount(magic);
 }
 
-inline s16 dComIfGp_getItemBombNumCount() {
+inline int dComIfGp_getItemBombNumCount() {
     return g_dComIfG_gameInfo.play.getItemBombNumCount();
 }
 
@@ -2588,7 +2639,19 @@ inline void dComIfGp_setItemBombNumCount(s16 num) {
     g_dComIfG_gameInfo.play.setItemBombNumCount(num);
 }
 
-inline s16 dComIfGp_getItemArrowNumCount() {
+inline s16 dComIfGp_getItemPictureNumCount() {
+    return g_dComIfG_gameInfo.play.getItemPictureNumCount();
+}
+
+inline void dComIfGp_setItemPictureNumCount(s16 num) {
+    return g_dComIfG_gameInfo.play.setItemPictureNumCount(num);
+}
+
+inline void dComIfGp_clearItemPictureNumCount() {
+    g_dComIfG_gameInfo.play.clearItemPictureNumCount();
+}
+
+inline int dComIfGp_getItemArrowNumCount() {
     return g_dComIfG_gameInfo.play.getItemArrowNumCount();
 }
 
@@ -2596,12 +2659,20 @@ inline void dComIfGp_setItemArrowNumCount(s16 num) {
     return g_dComIfG_gameInfo.play.setItemArrowNumCount(num);
 }
 
-inline void dComIfGp_setItemBeastNumCount(int i_idx, s16 num) {
-    g_dComIfG_gameInfo.play.setItemBeastNumCount(i_idx, num);
+inline void dComIfGp_clearItemArrowNumCount() {
+    g_dComIfG_gameInfo.play.clearItemArrowNumCount();
 }
 
-inline s16 dComIfGp_getItemBeastNumCount(int i_idx) {
-    return g_dComIfG_gameInfo.play.getItemBeastNumCount(i_idx);
+inline s16 dComIfGp_getItemBeastNumCount(int i_beastIdx) {
+    return g_dComIfG_gameInfo.play.getItemBeastNumCount(i_beastIdx);
+}
+
+inline void dComIfGp_setItemBeastNumCount(int i_beastIdx, s16 num) {
+    g_dComIfG_gameInfo.play.setItemBeastNumCount(i_beastIdx, num);
+}
+
+inline void dComIfGp_clearItemBeastNumCount(int i_beastIdx) {
+    g_dComIfG_gameInfo.play.clearItemBeastNumCount(i_beastIdx);
 }
 
 inline u8 dComIfGp_getScopeType() {
@@ -3225,6 +3296,14 @@ inline u16 dComIfGp_event_checkHind(u16 i_hindFlag) {
     return g_dComIfG_gameInfo.play.getEvent()->checkHind(i_hindFlag);
 }
 
+inline void dComIfGp_event_onHindFlag(u16 flag) {
+    g_dComIfG_gameInfo.play.getEvent()->onHindFlag(flag);
+}
+
+inline void dComIfGp_event_offHindFlag(u16 flag) {
+    g_dComIfG_gameInfo.play.getEvent()->offHindFlag(flag);
+}
+
 /**
  * Returns the button (X Y or Z) that was used to start this event.
  * @return The dTalkXYButton_e of the button the player used to initiate this event.
@@ -3257,7 +3336,7 @@ inline void dComIfGp_event_reset() {
     g_dComIfG_gameInfo.play.getEvent()->reset();
 }
 
-inline int dComIfGp_event_getPreItemNo() {
+inline u8 dComIfGp_event_getPreItemNo() {
     return g_dComIfG_gameInfo.play.getEvent()->getPreItemNo();
 }
 
@@ -3387,6 +3466,10 @@ inline int dComIfGp_evmng_getMyActIdx(int staffIdx, char** pActions, int actionC
 
 inline char* dComIfGp_evmng_getMyActName(int staffIdx) {
     return dComIfGp_getPEvtManager()->getMyActName(staffIdx);
+}
+
+inline s32 dComIfGp_evmng_getMySubstanceNum(int staffIdx, char* name) {
+    return dComIfGp_getPEvtManager()->getMySubstanceNum(staffIdx, name);
 }
 
 inline f32* dComIfGp_evmng_getMyFloatP(int staffIdx, char* name) {
@@ -3856,9 +3939,7 @@ inline JPABaseEmitter* dComIfGp_particle_set(u16 particleID, const cXyz* pos,
                                              s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                              const GXColor* pEnvColor = NULL,
                                              const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setNormal(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                                pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->setNormal(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setP1(u16 particleID, const cXyz* pos,
@@ -3867,9 +3948,7 @@ inline JPABaseEmitter* dComIfGp_particle_setP1(u16 particleID, const cXyz* pos,
                                                s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                const GXColor* pEnvColor = NULL,
                                                const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setNormalP1(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                                pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->setNormalP1(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setToon(u16 particleID, const cXyz* pos,
@@ -3878,9 +3957,7 @@ inline JPABaseEmitter* dComIfGp_particle_setToon(u16 particleID, const cXyz* pos
                                                  s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                  const GXColor* pEnvColor = NULL,
                                                  const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setToon(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                              pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->setToon(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setToonP1(u16 particleID, const cXyz* pos,
@@ -3889,9 +3966,7 @@ inline JPABaseEmitter* dComIfGp_particle_setToonP1(u16 particleID, const cXyz* p
                                                    s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                    const GXColor* pEnvColor = NULL,
                                                    const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setToonP1(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                              pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->setToonP1(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setProjection(u16 particleID, const cXyz* pos,
@@ -3900,9 +3975,7 @@ inline JPABaseEmitter* dComIfGp_particle_setProjection(u16 particleID, const cXy
                                                        s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                        const GXColor* pEnvColor = NULL,
                                                        const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setProjection(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                                    pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->setProjection(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setShipTail(u16 particleID, const cXyz* pos,
@@ -3911,9 +3984,7 @@ inline JPABaseEmitter* dComIfGp_particle_setShipTail(u16 particleID, const cXyz*
                                                      s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                      const GXColor* pEnvColor = NULL,
                                                      const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setShipTail(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                                  pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->setShipTail(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_set2Dfore(u16 particleID, const cXyz* pos,
@@ -3922,9 +3993,7 @@ inline JPABaseEmitter* dComIfGp_particle_set2Dfore(u16 particleID, const cXyz* p
                                                    s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                    const GXColor* pEnvColor = NULL,
                                                    const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->set2Dfore(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                                pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->set2Dfore(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_set2Dback(u16 particleID, const cXyz* pos,
@@ -3933,9 +4002,7 @@ inline JPABaseEmitter* dComIfGp_particle_set2Dback(u16 particleID, const cXyz* p
                                                    s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                    const GXColor* pEnvColor = NULL,
                                                    const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->set2Dback(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                                pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->set2Dback(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_set2DmenuFore(u16 particleID, const cXyz* pos,
@@ -3944,43 +4011,36 @@ inline JPABaseEmitter* dComIfGp_particle_set2DmenuFore(u16 particleID, const cXy
                                                        s8 setupInfo = -1, const GXColor* pPrmColor = NULL,
                                                        const GXColor* pEnvColor = NULL,
                                                        const cXyz* pScale2D = NULL) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->set2DmenuFore(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
-                                    pPrmColor, pEnvColor, pScale2D);
+    return g_dComIfG_gameInfo.play.getParticle()->set2DmenuFore(particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setSingleRipple(u16 particleID, const cXyz* pos,
                                                          const csXyz* angle = NULL,
                                                          const cXyz* scale = NULL,
                                                          u8 alpha = 0xFF) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setSingleRipple(particleID, pos, angle, scale, alpha);
+    return g_dComIfG_gameInfo.play.getParticle()->setSingleRipple(particleID, pos, angle, scale, alpha);
 }
 
 inline void dComIfGp_particle_setStripes(u16 particleID, const cXyz* pos, const csXyz* angle,
                                          const cXyz* scale, u8 param_4, u16 param_5) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    pParticle->setNormalStripes(particleID, pos, angle, scale, param_4, param_5);
+    g_dComIfG_gameInfo.play.getParticle()->setNormalStripes(particleID, pos, angle, scale, param_4, param_5);
 }
 
 inline void dComIfGp_particle_setSimple(u16 particleID, cXyz* pos, u8 alpha = 0xFF,
                                         GXColor& prmColor = g_whiteColor,
                                         GXColor& envColor = g_whiteColor,
                                         int param_6 = 0) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    pParticle->setSimple(particleID, pos, alpha, prmColor, envColor, param_6);
+    g_dComIfG_gameInfo.play.getParticle()->setSimple(particleID, pos, alpha, prmColor, envColor, param_6);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setSimpleLand(int code, const cXyz* param_1, const csXyz* param_2,
                                             f32 param_3, f32 param_4, f32 param_5,
                                             dKy_tevstr_c* param_6, int* param_7, int param_8) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setSimpleLand(code, param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8);
+    return g_dComIfG_gameInfo.play.getParticle()->setSimpleLand(code, param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setSimpleLand(cBgS_PolyInfo& param_1, const cXyz* pos, const csXyz* angle, f32 param_4, f32 param_5, f32 param_6, dKy_tevstr_c* param_7, int* param_8, int param_9) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setSimpleLand(param_1, pos, angle, param_4, param_5, param_6, param_7, param_8, param_9);
+    return g_dComIfG_gameInfo.play.getParticle()->setSimpleLand(param_1, pos, angle, param_4, param_5, param_6, param_7, param_8, param_9);
 }
 
 inline void dComIfGp_particle_forceDeleteEmitter(JPABaseEmitter* emitter) {
@@ -3990,8 +4050,7 @@ inline void dComIfGp_particle_forceDeleteEmitter(JPABaseEmitter* emitter) {
 inline JPABaseEmitter* dComIfGp_particle_setBombSmoke(u16 particleID, const cXyz* pos,
                                            const csXyz* angle = NULL, const cXyz* scale = NULL,
                                            u8 alpha = 0xFF) {
-    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->setBombSmoke(particleID, pos, angle, scale, alpha);
+    return g_dComIfG_gameInfo.play.getParticle()->setBombSmoke(particleID, pos, angle, scale, alpha);
 }
 
 inline void dComIfGp_particle_calc3D() {

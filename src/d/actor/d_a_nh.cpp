@@ -136,7 +136,7 @@ cPhs_State daNh_c::create() {
     
     cPhs_State phase_state = cPhs_COMPLEATE_e;
     
-    fopAcM_SetupActor(this, daNh_c);
+    fopAcM_ct(this, daNh_c);
     
     if (!fopAcM_entrySolidHeap(this, checkCreateHeap, a_heap_size_tbl)) {
         return cPhs_ERROR_e;

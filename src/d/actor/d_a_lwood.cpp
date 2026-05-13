@@ -113,7 +113,7 @@ void daLwood_c::setMoveBGMtx() {
 }
 
 cPhs_State daLwood_c::_create() {
-    fopAcM_SetupActor(this, daLwood_c);
+    fopAcM_ct(this, daLwood_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, m_arcname);
 

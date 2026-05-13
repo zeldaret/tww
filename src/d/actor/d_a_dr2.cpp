@@ -224,7 +224,6 @@ void hahen_move(dr2_class* i_this) {
 
 /* 00000884-0000130C       .text iwa_move__FP9dr2_class */
 void iwa_move(dr2_class* i_this) {
-    /* Nonmatching - retail-only regalloc */
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp58;
     cXyz sp4C;
@@ -783,7 +782,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 static cPhs_State daDr2_Create(fopAc_ac_c* a_this) {
     dr2_class* i_this = (dr2_class*)a_this;
 
-    fopAcM_SetupActor(&i_this->actor, dr2_class);
+    fopAcM_ct(&i_this->actor, dr2_class);
 
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Dr2");
     if (ret == cPhs_COMPLEATE_e) {

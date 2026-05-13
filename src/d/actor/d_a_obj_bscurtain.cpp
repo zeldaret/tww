@@ -61,7 +61,7 @@ cPhs_State daObj_Bscurtain_c::CreateInit() {
 }
 
 cPhs_State daObj_Bscurtain_c::_create() {
-    fopAcM_SetupActor(this, daObj_Bscurtain_c);
+    fopAcM_ct(this, daObj_Bscurtain_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
 

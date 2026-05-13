@@ -297,7 +297,7 @@ void daIball_c::damage() {
         if (hitObj) {
             if (hitObj->ChkAtType(AT_TYPE_SWORD)         || hitObj->ChkAtType(AT_TYPE_BOKO_STICK)   ||
                 hitObj->ChkAtType(AT_TYPE_MACHETE)       || hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) ||
-                hitObj->ChkAtType(AT_TYPE_UNK2000000)    || hitObj->ChkAtType(AT_TYPE_STALFOS_MACE) ||
+                hitObj->ChkAtType(AT_TYPE_FAN_SWING)     || hitObj->ChkAtType(AT_TYPE_STALFOS_MACE) ||
                 hitObj->ChkAtType(AT_TYPE_DARKNUT_SWORD) || hitObj->ChkAtType(AT_TYPE_HOOKSHOT)     ||
                 hitObj->ChkAtType(AT_TYPE_BOOMERANG)     || hitObj->ChkAtType(AT_TYPE_NORMAL_ARROW) ||
                 hitObj->ChkAtType(AT_TYPE_FIRE_ARROW)    || hitObj->ChkAtType(AT_TYPE_ICE_ARROW)    ||
@@ -408,7 +408,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 800F4698-800F4870       .text _daIball_create__9daIball_cFv */
 cPhs_State daIball_c::_daIball_create() {
-    fopAcM_SetupActor(this, daIball_c);
+    fopAcM_ct(this, daIball_c);
     
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x3500)) {
         return cPhs_ERROR_e;

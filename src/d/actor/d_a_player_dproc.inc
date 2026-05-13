@@ -172,7 +172,9 @@ BOOL daPy_lk_c::dProcTool_init() {
     mProcVar0.m3570 = 0;
     m3574 = 0;
     m34D4 = 0;
+#if VERSION > VERSION_DEMO
     m34D6 = 0;
+#endif
     return true;
 }
 
@@ -466,7 +468,7 @@ BOOL daPy_lk_c::dProcHoldup_init() {
         return false;
     }
 
-    BOOL uVar1 = checkModeFlg(ModeFlg_WHIDE) ? TRUE : FALSE;
+    BOOL uVar1 = checkModeFlg(ModeFlg_WHIDE) != 0;
     commonProcInit(daPyProc_DEMO_HOLDUP_e);
     if (uVar1) {
         if (checkNoResetFlg0(daPyFlg0_UNK10000)) {
@@ -551,6 +553,7 @@ BOOL daPy_lk_c::dProcOpenTreasure() {
     return true;
 }
 
+#if VERSION > VERSION_DEMO
 /* 8012E28C-8012E418       .text setGetItemSound__9daPy_lk_cFUsi */
 void daPy_lk_c::setGetItemSound(u16 param_1, int param_2) {
     if (param_1 == dItem_GREEN_RUPEE_e || param_1 == dItem_BLUE_RUPEE_e || param_1 == dItem_YELLOW_RUPEE_e ||
@@ -576,6 +579,7 @@ void daPy_lk_c::setGetItemSound(u16 param_1, int param_2) {
         dComIfGp_setMesgBgmOn();
     }
 }
+#endif
 
 #if VERSION > VERSION_DEMO
 /* 8012E418-8012E6B4       .text setGetDemo__9daPy_lk_cFv */
@@ -731,7 +735,32 @@ BOOL daPy_lk_c::dProcGetItem() {
     if ((mProcVar0.m3570 == 0) && (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= 11.0f)) {
         if ((m34D0 == 0) && (m34D4 != -1)) {
             m34D0 = 1;
+#if VERSION == VERSION_DEMO
+            if (m34D4 == dItem_GREEN_RUPEE_e || m34D4 == dItem_BLUE_RUPEE_e || m34D4 == dItem_YELLOW_RUPEE_e ||
+                m34D4 == dItem_RED_RUPEE_e || m34D4 == dItem_PURPLE_RUPEE_e || m34D4 == TINCLE_RUPEE1)
+            {
+                seStartSystem(JA_SE_ME_ITEM_GET_S);
+                dComIfGp_setMesgBgmOn2();
+            } else if ((m34D4 == dItem_HEART_CONTAINER_e) ||
+                    (m34D4 == dItem_HEART_PIECE_e && ((dComIfGs_getMaxLife() % 4) == 3)))
+            {
+                mDoAud_subBgmStart(JA_BGM_GET_HEART);
+                dComIfGp_setMesgBgmOn();
+            } else if (m34D4 == dItem_HEART_PIECE_e || m34D4 == dItem_JOY_PENDANT_e || m34D4 == dItem_SMALL_KEY_e ||
+                    m34D4 == dItem_SILVER_RUPEE_e || m34D4 == dItem_ORANGE_RUPEE_e)
+            {
+                mDoAud_subBgmStart(JA_BGM_ITEM_GET_S);
+                dComIfGp_setMesgBgmOn();
+            } else if (m34DA != dItem_HEART_e) {
+                seStartSystem(JA_SE_ME_ITEM_GET_S);
+                dComIfGp_setMesgBgmOn2();
+            } else {
+                mDoAud_subBgmStart(JA_BGM_ITEM_GET);
+                dComIfGp_setMesgBgmOn();
+            }
+#else
             setGetItemSound(m34D4, m34DA);
+#endif
         }
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() <= 17.0f) {
             if (m34D6 > 0x4000) {
@@ -817,7 +846,7 @@ void daPy_lk_c::dProcLavaDamage_init_sub() {
     voiceStart(4);
     seStartMapInfo(JA_SE_LK_FALL_MAGMA);
     gravity = m_HIO->mAutoJump.m.field_0xC;
-    mDemo.setDemoType(5);
+    mDemo.setSpecialDemoType();
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK10000000_e);
     daPy_py_c::changePlayer(this);
 }
@@ -867,7 +896,7 @@ void daPy_lk_c::dProcFreezeDamage_init_sub(int param_0) {
 
     if (param_0 != 0) {
         mProcVar0.m3570 = 1;
-        mDemo.setDemoType(5);
+        mDemo.setSpecialDemoType();
         daPy_py_c::changePlayer(this);
     }
     endDamageEmitter();
@@ -923,7 +952,7 @@ void daPy_lk_c::dProcDead_init_sub() {
     mProcVar0.m3570 = 0;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK20000000_e);
     m3628 = fopMsgM_create(PROC_GAMEOVER);
-    mDemo.setDemoType(5);
+    mDemo.setSpecialDemoType();
     daPy_py_c::changePlayer(this);
 }
 
@@ -1081,7 +1110,7 @@ BOOL daPy_lk_c::dProcDead() {
             if (!dComIfGp_checkPlayerStatus0(0, (daPyStts0_SHIP_RIDE_e | daPyStts0_SWIM_e))) {
                 if (frameCtrl.checkPass(129.0f)) {
                     voiceStart(0x17);
-                    m34BE = 6;
+                    setFootEffectPosType(6);
                 } else {
                     if (frameCtrl.getFrame() >= 129.0f) {
                         resetFootEffect();
@@ -1915,19 +1944,18 @@ BOOL daPy_lk_c::dProcAgbUse() {
 
 /* 8013194C-801319D0       .text dProcLookTurn_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcLookTurn_init() {
-    daPy_ANM dVar2;
-
     if (mCurProc == daPyProc_DEMO_LOOK_TURN_e) {
         return false;
     }
     commonProcInit(daPyProc_DEMO_LOOK_TURN_e);
     mVelocity = 0.0f;
-    if (mDemo.getParam0() != 0) {
-        dVar2 = ANM_WINDL;
+    daPy_ANM anm;
+    if (mDemo.getParam0()) {
+        anm = ANM_WINDL;
     } else {
-        dVar2 = ANM_WINDR;
+        anm = ANM_WINDR;
     }
-    setSingleMoveAnime(dVar2, 1.0f, 0.0f, -1, 5.0f);
+    setSingleMoveAnime(anm, 1.0f, 0.0f, -1, 5.0f);
     mProcVar0.m3570 = 0;
     return true;
 }
@@ -2391,7 +2419,7 @@ BOOL daPy_lk_c::dProcLastCombo_init() {
     m35E8 = m35EC = 0.0f;
     bck = (J3DAnmTransform*)(dComIfG_getObjectRes(l_arcName, LINK_BCK_COMBO_TATE));
     mAtngshaBck.init(mpShmsModel->getModelData(), bck, false, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, true);
-    m34BE = 4;
+    setFootEffectPosType(4);
     offNoResetFlg1(daPyFlg1_LAST_COMBO_WAIT);
     setBlurPosResource(LKANM__LASTCOMBO_POS);
     mProcVar0.m3570 = 1;

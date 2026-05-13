@@ -48,7 +48,7 @@ bool daObjAjavW_c::create_heap() {
 
 /* 00000208-00000350       .text _create__12daObjAjavW_cFv */
 cPhs_State daObjAjavW_c::_create() {
-    fopAcM_SetupActor(this, daObjAjavW_c);
+    fopAcM_ct(this, daObjAjavW_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, l_arcname);
 

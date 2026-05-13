@@ -114,7 +114,7 @@ static BOOL daKytag02_Delete(kytag02_class* i_this) {
 /* 00000420-0000047C       .text daKytag02_Create__FP10fopAc_ac_c */
 static cPhs_State daKytag02_Create(fopAc_ac_c* i_this) {
     kytag02_class* a_this = (kytag02_class*)i_this;
-    fopAcM_SetupActor(i_this, kytag02_class);
+    fopAcM_ct(i_this, kytag02_class);
     a_this->mpPath = set_path_info(i_this);
     return cPhs_COMPLEATE_e;
 }

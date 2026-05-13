@@ -178,7 +178,7 @@ void daObjVmc::Act_c::CreateInit() {
 
 /* 000005BC-00000730       .text _create__Q28daObjVmc5Act_cFv */
 cPhs_State daObjVmc::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     mHasTreeBg = false;
 

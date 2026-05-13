@@ -794,8 +794,7 @@ void down(fganon_class* i_this) {
             break;
         }
         case 3: {
-            int frame = i_this->mpMorf->getFrame();
-            if (frame == 2) {
+            if ((int)i_this->mpMorf->getFrame() == 2) {
                 fopAcM_monsSeStart(a_this, JA_SE_CV_PG_TIRED, 0);
             }
             break;
@@ -2438,9 +2437,9 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
     
     cLib_addCalc0(&i_this->m3BC, 1.0f, 1.0f);
 
-    J3DModel* mpModel = i_this->mpMorf->getModel();
+    J3DModel* model = i_this->mpMorf->getModel();
     
-    mpModel->setBaseScale(a_this->scale);
+    model->setBaseScale(a_this->scale);
     
     mDoMtx_stack_c::transS(a_this->current.pos.x + local_94.x, a_this->current.pos.y + local_94.y, a_this->current.pos.z + local_94.z);
     
@@ -2452,10 +2451,10 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
     mDoMtx_stack_c::XrotM(a_this->shape_angle.x + cos);
     mDoMtx_stack_c::ZrotM(a_this->shape_angle.z);
 
-    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
     i_this->mpMorf->calc();
 
-    MtxP mtx = mpModel->getAnmMtx(27);
+    MtxP mtx = model->getAnmMtx(27);
     cMtx_copy(mtx, *calc_mtx);
     
     MtxPosition(&local_70, &a_this->eyePos);
@@ -2735,7 +2734,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
 static cPhs_State daFganon_Create(fopAc_ac_c* a_this) {
     fganon_class* i_this = (fganon_class*)a_this;
     fopEn_enemy_c* e_this = (fopEn_enemy_c*)a_this;
-    fopAcM_SetupActor(a_this, fganon_class);
+    fopAcM_ct(a_this, fganon_class);
     s32 res;
     s32 res2;
     

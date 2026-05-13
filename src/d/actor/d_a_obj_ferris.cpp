@@ -92,42 +92,61 @@ bool daObjFerris::Act_c::create_heap() {
     s32 i;
     J3DModelData* mdl_data_gondola = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, SKANRAN_BDL_SGONDOR));
     JUT_ASSERT(0x183, mdl_data_gondola != NULL);
-    if (mdl_data_gondola != NULL) {
+    if (VERSION == VERSION_DEMO || mdl_data_gondola != NULL) {
         for (i = 0; i < 5; i++)
             mpModel[i] = mDoExt_J3DModel__create(mdl_data_gondola, 0, 0x11020203);
     }
 
     J3DModelData* mdl_data_wheelbase = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, SKANRAN_BDL_SKANRAN));
-    JUT_ASSERT(0x18c, mdl_data_wheelbase != NULL);
-    if (mdl_data_wheelbase != NULL) {
+    JUT_ASSERT(DEMO_SELECT(394, 396), mdl_data_wheelbase != NULL);
+    if (VERSION == VERSION_DEMO || mdl_data_wheelbase != NULL) {
         mpModel[5] = mDoExt_J3DModel__create(mdl_data_wheelbase, 0, 0x11020203);
     }
 
     if (mdl_data_gondola != NULL && mdl_data_wheelbase != NULL)
         init_mtx();
 
+#if VERSION == VERSION_DEMO
+    int r29 = 0;
+#endif
+
     cBgD_t* bgw_data_gondola = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, SKANRAN_DZB_SGONDOR));
-    JUT_ASSERT(0x1a0, bgw_data_gondola != NULL);
-    if (bgw_data_gondola != NULL) {
+    JUT_ASSERT(DEMO_SELECT(412, 416), bgw_data_gondola != NULL);
+    if (VERSION == VERSION_DEMO || bgw_data_gondola != NULL) {
         for (i = 0; i < 5; i++) {
             mpBgW[i] = new dBgW();
-            if (mpBgW[i] != NULL && mpBgW[i]->Set(bgw_data_gondola, dBgW::MOVE_BG_e, &mMtx[i]) == true)
+            if (mpBgW[i] != NULL && mpBgW[i]->Set(bgw_data_gondola, dBgW::MOVE_BG_e, &mMtx[i]) == true) {
+#if VERSION == VERSION_DEMO
+                r29 |= 1;
+#else
                 return false;
+#endif
+            }
         }
     }
 
     cBgD_t* bgw_data_wheelbase = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, SKANRAN_DZB_SKANRAN));
-    JUT_ASSERT(0x1b0, bgw_data_wheelbase != NULL);
-    if (bgw_data_wheelbase != NULL) {
-        mpBgW[5] = new dBgW();
-        if (mpBgW[5] != NULL && mpBgW[5]->Set(bgw_data_wheelbase, dBgW::MOVE_BG_e, &mMtx[5]) == true)
+    JUT_ASSERT(DEMO_SELECT(426, 432), bgw_data_wheelbase != NULL);
+    if (VERSION == VERSION_DEMO || bgw_data_wheelbase != NULL) {
+        int r24 = 5;
+        mpBgW[r24] = new dBgW();
+        if (mpBgW[r24] != NULL && mpBgW[r24]->Set(bgw_data_wheelbase, dBgW::MOVE_BG_e, &mMtx[r24]) == true) {
+#if VERSION == VERSION_DEMO
+            r29 |= 1;
+#else
             return false;
+#endif
+        }
     }
 
+#if VERSION == VERSION_DEMO
+    return mdl_data_gondola != NULL && mdl_data_wheelbase != NULL && r29 == 0;
+#else
     return ((mdl_data_gondola != NULL && mpModel[0] != NULL && mpModel[1] != NULL && mpModel[2] != NULL && mpModel[3] != NULL && mpModel[4] != NULL) &&
             (mdl_data_wheelbase != NULL && mpModel[5] != NULL) &&
             (bgw_data_gondola != NULL && mpBgW[0] != NULL && mpBgW[1] != NULL && mpBgW[2] != NULL && mpBgW[3] != NULL && mpBgW[4] != NULL) &&
             (bgw_data_wheelbase != NULL && mpBgW[5] != NULL));
+#endif
 }
 
 /* 0000048C-000004DC       .text ride_call_back__Q211daObjFerris5Act_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
@@ -144,7 +163,7 @@ void daObjFerris::Act_c::ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c*
 
 /* 000004DC-00000898       .text _create__Q211daObjFerris5Act_cFv */
 cPhs_State daObjFerris::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
 
@@ -470,16 +489,16 @@ void daObjFerris::Act_c::make_lean() {
             mDoMtx_multVec(*mtx, &offs0, &pt0);
             mDoMtx_multVec(*mtx, &offs1, &pt1);
 
-            delta.x = pt1.x - pt0.x;
-            delta.y = 0.0f;
-            delta.z = pt1.z - pt0.z;
+            delta.set(pt1.x - pt0.x, 0.0f, pt1.z - pt0.z);
 
             delta2.set(mRidePos.x - pt0.x, 0.0f, mRidePos.z - pt0.z);
             delta.normalizeRS();
 
             f32 z = -delta.z;
-            f32 h = std::fabsf(-(z * pt0.x + delta.x * pt0.z) + (z * mRidePos.x + delta.x * mRidePos.z)) / 162.0f;
-            if (delta.x * delta2.z - delta.z * delta2.x < 0.0f) {
+            f32 h = std::fabsf(-(z * pt0.x + delta.x * pt0.z) + (z * mRidePos.x + delta.x * mRidePos.z));
+            f32 temp = delta.x * delta2.z - delta.z * delta2.x;
+            h /= 162.0f;
+            if (temp < 0.0f) {
                 mRideWaveTarget[i] = h * 550.0f;
             } else {
                 mRideWaveTarget[i] = h * -550.0f;

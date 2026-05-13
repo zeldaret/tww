@@ -204,7 +204,7 @@ daSteamTag_c::~daSteamTag_c() {
 }
 
 cPhs_State daSteamTag_c::create() {
-    fopAcM_SetupActor(this, daSteamTag_c);
+    fopAcM_ct(this, daSteamTag_c);
     CreateInit();
 
     cPhs_State phase_state;

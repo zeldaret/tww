@@ -837,7 +837,7 @@ static BOOL daDoor10_IsDelete(daDoor10_c*) {
 
 /* 00001CD4-00001E18       .text daDoor10_Delete__FP10daDoor10_c */
 static BOOL daDoor10_Delete(daDoor10_c* i_this) {
-    fpc_ProcID proc = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this);
 
 #if VERSION > VERSION_DEMO
     if (i_this->heap != NULL)
@@ -867,7 +867,8 @@ static BOOL daDoor10_Delete(daDoor10_c* i_this) {
 
 /* 00001E18-00001EA8       .text daDoor10_Create__FP10fopAc_ac_c */
 static cPhs_State daDoor10_Create(fopAc_ac_c* a_this) {
-    fopAcM_SetupActor(a_this, daDoor10_c);
+    fopAcM_RegisterCreateID(a_this);
+    fopAcM_ct(a_this, daDoor10_c);
     return ((daDoor10_c*)a_this)->create();
 }
 

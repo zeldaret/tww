@@ -138,7 +138,7 @@ static cPhs_State daObjGtaki_Create(void* i_this) {
 
 /* 000006A4-0000087C       .text _create__12daObjGtaki_cFv */
 cPhs_State daObjGtaki_c::_create() {
-    fopAcM_SetupActor(this, daObjGtaki_c);
+    fopAcM_ct(this, daObjGtaki_c);
     cPhs_State state = dComIfG_resLoad(&mPhase, "Gtaki");
     if(state == cPhs_COMPLEATE_e){
         if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, DEMO_SELECT(0xD20, 0x3450))){

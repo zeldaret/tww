@@ -682,7 +682,8 @@ BOOL daNpc_Km1_c::_execute() {
 
 /* 00001808-0000188C       .text _delete__11daNpc_Km1_cFv */
 BOOL daNpc_Km1_c::_delete() {
-    fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this);
+
     dComIfG_resDeleteDemo(&field_0x6C4,"Km");
 
     if(mpMorf != NULL){
@@ -705,13 +706,13 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 
 /* 000018AC-00001A1C       .text _create__11daNpc_Km1_cFv */
 cPhs_State daNpc_Km1_c::_create() {
+    fopAcM_RegisterCreateID(this);
+
     static int a_heap_size_tbl[] = {
         0x272E0
     };
 
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_Km1_c);
-#endif
+    fopAcM_ct_Retail(this, daNpc_Km1_c);
 
     if (!decideType(fopAcM_GetParam(this) & 0xFF )) {
         return cPhs_ERROR_e;
@@ -728,9 +729,7 @@ cPhs_State daNpc_Km1_c::_create() {
     }
     l_HIO.field_0x8 += 1;
 
-#if VERSION == VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_Km1_c);
-#endif
+    fopAcM_ct_Demo(this, daNpc_Km1_c);
 
     if(fopAcM_entrySolidHeap(this,CheckCreateHeap,a_heap_size_tbl[field_0x7D3])){
         fopAcM_SetMtx(this,mpMorf->getModel()->getBaseTRMtx());

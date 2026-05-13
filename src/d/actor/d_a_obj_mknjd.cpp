@@ -142,8 +142,8 @@ static BOOL nodeCallBack_Hahen(J3DNode* i_node, int calcTiming) {
 }
 
 /* 000002B0-000002D0       .text daObjMknjD_XyCheckCB__FPvi */
-static s16 daObjMknjD_XyCheckCB(void* i_this, int i_param2) {
-    return static_cast<daObjMknjD::Act_c*>(i_this)->XyCheckCB(i_param2);
+static s16 daObjMknjD_XyCheckCB(void* i_this, int i_itemBtn) {
+    return static_cast<daObjMknjD::Act_c*>(i_this)->XyCheckCB(i_itemBtn);
 }
 
 /* 000002D0-000002F0       .text daObjMknjD_XyEventCB__FPvi */
@@ -297,7 +297,7 @@ BOOL daObjMknjD::Act_c::Create() {
 
 /* 000008E8-00000A84       .text Mthd_Create__Q210daObjMknjD5Act_cFv */
 cPhs_State daObjMknjD::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjMknjD::Act_c);
+    fopAcM_ct(this, daObjMknjD::Act_c);
 
     m043E = prm_get_Type();
 

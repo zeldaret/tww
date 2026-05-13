@@ -49,7 +49,7 @@ inline static const Attr_c& attr(daObjCorrect::Type_e type) { return L_attr[type
 cPhs_State daObjCorrect::Act_c::_create() {
     int swSave = prm_get_swSave();
 
-    fopAcM_SetupActor(this, daObjCorrect::Act_c);
+    fopAcM_ct(this, daObjCorrect::Act_c);
 
     if (swSave == 0xFF) {
         return cPhs_ERROR_e;

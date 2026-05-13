@@ -451,8 +451,8 @@ void daNpc_Btsw_c::anmAtr(u16 i_msgStatus) {
 }
 
 /* 00000F0C-00000F30       .text daNpc_Btsw_XyCheckCB__FPvi */
-static s16 daNpc_Btsw_XyCheckCB(void*, int idx) {
-    if (dComIfGp_getSelectItem(idx) == dItem_NOTE_TO_MOM_e) {
+static s16 daNpc_Btsw_XyCheckCB(void*, int i_itemBtn) {
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItem_NOTE_TO_MOM_e) {
         return TRUE;
     }
     return FALSE;
@@ -976,7 +976,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00002BB0-00002CAC       .text _create__12daNpc_Btsw_cFv */
 cPhs_State daNpc_Btsw_c::_create() {
-    fopAcM_SetupActor(this, daNpc_Btsw_c);
+    fopAcM_ct(this, daNpc_Btsw_c);
 
     cPhs_State res = dComIfG_resLoad(&mPhs, "Btsw");
     if (res == cPhs_COMPLEATE_e) {

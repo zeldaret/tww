@@ -64,7 +64,7 @@ void daObjDoguuD_c::set_mtx() {
 }
 
 cPhs_State daObjDoguuD_c::_create() {
-    fopAcM_SetupActor(this, daObjDoguuD_c);
+    fopAcM_ct(this, daObjDoguuD_c);
     mBgwRegistered = false;
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "DoguuD");

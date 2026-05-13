@@ -71,7 +71,7 @@ static BOOL daKN_Draw(kn_class* i_this) {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &a_this->current.pos, &a_this->tevStr);
     g_env_light.setLightTevColorType(pJVar1, &a_this->tevStr);
     i_this->mpMorf->updateDL();
-    dSnap_RegistFig(0x56, a_this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_KN, a_this, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 
@@ -515,15 +515,10 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 static cPhs_State daKN_Create(fopAc_ac_c* a_this) {
     kn_class* i_this = (kn_class*)a_this;
 
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(a_this, kn_class);
     cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "KN");
     if (PVar1 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(&i_this->actor, kn_class);
-#else
-    fopAcM_SetupActor(a_this, kn_class);
-    cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "KN");
-    if (PVar1 == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(&i_this->actor, kn_class);
         i_this->m2B4 = fopAcM_GetParam(a_this);
         i_this->m2B5 = fopAcM_GetParam(a_this) >> 8;
         i_this->m2EC = a_this->current.pos;

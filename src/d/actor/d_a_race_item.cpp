@@ -58,7 +58,7 @@ BOOL daRaceItem_c::Delete() {
 
 /* 0000012C-00000318       .text create__12daRaceItem_cFv */
 cPhs_State daRaceItem_c::create() {
-    fopAcM_SetupActor(this, daRaceItem_c);
+    fopAcM_ct(this, daRaceItem_c);
 
     m_itemNo = fopAcM_GetParam(this) & 0xFF;
     mItemBitNo = fopAcM_GetParam(this) >> 8 & 0x7F;

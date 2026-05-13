@@ -59,7 +59,7 @@ static BOOL daKamome2_Draw(kamome2_class* i_this) {
     cXyz sp08;
     sp08.set(i_this->actor.current.pos.x, i_this->actor.current.pos.y + REG0_F(1) * 10.0f, i_this->actor.current.pos.z);
     i_this->m2A0 = dComIfGd_setRealShadow(i_this->m2A0, 1, i_this->mpModel, &sp08, REG0_F(2) * 10.0f + 500.0f, 0.0f, &i_this->actor.tevStr);
-    dSnap_RegistFig(0x55, &i_this->actor, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_KAMOME, &i_this->actor, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 
@@ -324,7 +324,7 @@ static cPhs_State daKamome2_Create(fopAc_ac_c* a_this) {
 
     cPhs_State iVar1 = dComIfG_resLoad(&i_this->mPhase, "Kamome");
     if (iVar1 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, kamome2_class);
+        fopAcM_ct(a_this, kamome2_class);
 
         i_this->m2A4 = fopAcM_GetParam(a_this);
         if (!fopAcM_entrySolidHeap(a_this, useHeapInit, 0x59A0)) {

@@ -24,7 +24,7 @@ daSceneChgHIO_c::daSceneChgHIO_c() {
 static cPhs_State daSceneChgCreate(void* i_this) {
     d_a_scene_change_c* scnChg = static_cast<d_a_scene_change_c*>(i_this);
     
-    fopAcM_SetupActor(scnChg, d_a_scene_change_c);
+    fopAcM_ct(scnChg, d_a_scene_change_c);
     
     mDoMtx_stack_c::transS(scnChg->current.pos);
     mDoMtx_stack_c::ZXYrotM(scnChg->shape_angle);
