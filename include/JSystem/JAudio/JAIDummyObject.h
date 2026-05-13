@@ -1,6 +1,7 @@
 #ifndef JAIDUMMYOBJECT_H
 #define JAIDUMMYOBJECT_H
 
+#include "dolphin/mtx/vec.h"
 #include "dolphin/types.h"
 
 class JAISound;
@@ -10,9 +11,7 @@ namespace JAInter {
         DummyVec* field_0x0;
         DummyVec* field_0x4;
         JAISound* field_0x8;
-        u32 field_0xc;
-        int field_0x10;
-        int field_0x14;
+        Vec field_0xc;
         u32 field_0x18;
         bool field_0x1c;
     };

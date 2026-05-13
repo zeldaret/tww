@@ -1,6 +1,7 @@
 #ifndef JAISOUND_H
 #define JAISOUND_H
 
+#include "dolphin/mtx/vec.h"
 #include "dolphin/types.h"
 
 enum JAISoundType {
@@ -62,13 +63,23 @@ namespace JAInter {
     class StreamParameter;
 }
 
+struct JAISoundParameters {
+    /* 0x00 */ u32 field_0x0;
+    /* 0x04 */ u8 field_0x4;
+    /* 0x08 */ f32 mPitch;
+    /* 0x0c */ u8 mVolume;
+    /* 0x0d */ u8 mFxMix;
+};
+
 class JAISound {
 public:
     struct PositionInfo_t {
         /* 0x00 */ f32 field_0x0;
-        /* 0x04 */ u8 field_0x4[0x8 - 0x4];
+        /* 0x04 */ f32 field_0x4;
         /* 0x08 */ f32 field_0x8;
-        /* 0x0C */ u8 field_0xc[0x18 - 0xc];
+        /* 0x0C */ f32 field_0xc;
+        /* 0x10 */ f32 field_0x10;
+        /* 0x14 */ f32 field_0x14;
         /* 0x18 */ f32 field_0x18;
     };
 
@@ -86,8 +97,8 @@ public:
     virtual void setSePositionDopplar();
 
     u8 getSeCategoryNumber();
-    int getSwBit();
-    int checkSwBit(u32);
+    u32 getSwBit();
+    u32 checkSwBit(u32);
     u8 getInfoPriority();
     void clearMainSoundPPointer();
     void start(u32);
@@ -186,16 +197,16 @@ public:
     /* 0x10 */ int field_0x10;
     /* 0x14 */ u32 mFadeCounter;
     /* 0x18 */ u32 field_0x18;
-    /* 0x1c */ int field_0x1c;
+    /* 0x1c */ u32 field_0x1c;
     /* 0x20 */ PositionInfo_t* mPositionInfo;
     /* 0x24 */ void* field_0x24;
-    /* 0x28 */ u32 field_0x28;
-    /* 0x2C */ int field_0x2c;
+    /* 0x28 */ Vec* field_0x28;
+    /* 0x2C */ void* field_0x2c;
     /* 0x30 */ JAISound* field_0x30;
     /* 0x34 */ JAISound* field_0x34;
     /* 0x38 */ JAISound** field_0x38;
     /* 0x3C */ void* field_0x3c;
-    /* 0x40 */ void* field_0x40;
+    /* 0x40 */ JAISoundParameters* field_0x40;
 };
 
 namespace JAInter {
