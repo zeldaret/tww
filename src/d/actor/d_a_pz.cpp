@@ -1589,7 +1589,9 @@ void daPz_c::modeDefend() {
         }
     }
 
-    (u8)checkTgHit();
+    if ((u8)checkTgHit()) {
+        return;
+    }
 }
 
 /* 00004630-0000470C       .text modeDownInit__6daPz_cFv */
