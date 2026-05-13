@@ -630,7 +630,7 @@ u8 daPz_c::demo() {
 
 /* 00001954-00001EEC       .text checkTgHit__6daPz_cFv */
 BOOL daPz_c::checkTgHit() {
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    daPy_py_c* player = daPy_getPlayerActorClass();
 
     mStts.Move();
     if (cLib_calcTimer(&m06D0) != 0) {
