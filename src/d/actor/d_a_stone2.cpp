@@ -89,7 +89,7 @@ void Act_c::prmZ_init() {
     if (m656) {
         return;
     }
-    m652 = home.angle.z;
+    mPrmZ = home.angle.z;
     m656 = true;
     home.angle.z = 0;
     current.angle.z = 0;
@@ -163,7 +163,7 @@ BOOL Act_c::Create() {
     m6A9 = 0;
     m65A = 2;
     mode_wait_init();
-    m650 = dComIfGp_evmng_getEventIdx(NULL, m652);
+    m650 = dComIfGp_evmng_getEventIdx(NULL, prmZ_get_evId());
     demo_non_init();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     init_mtx();
@@ -622,7 +622,7 @@ bool Act_c::mode_proc_call() {
         }
 
         if (m648 == 3) {
-            if (prmZ_get_evId() == 0 && m65C.isEnd()) {
+            if (m64C == 0 && m65C.isEnd()) {
                 BOOL tmp;
                 if (m6A8) {
                     tmp = m688.isEnd();
@@ -650,9 +650,8 @@ void Act_c::demo_non() {
 
 /* 000021AC-00002214       .text demo_req_init__Q28daStone25Act_cFv */
 void Act_c::demo_req_init() {
-    if (prmZ_get_evId() == 0) {
-        u8 evno = m652;
-        fopAcM_orderOtherEventId(this, m650, evno);
+    if (m64C == 0) {
+        fopAcM_orderOtherEventId(this, m650, prmZ_get_evId());
         eventInfo.onCondition(dEvtCmd_INDEMO_e);
         m64C = 1;
     }
@@ -664,8 +663,7 @@ void Act_c::demo_req() {
         if (eventInfo.checkCommandDemoAccrpt()) {
             demo_run_init();
         } else {
-            u8 evno = m652;
-            fopAcM_orderOtherEventId(this, m650, evno);
+            fopAcM_orderOtherEventId(this, m650, prmZ_get_evId());
             eventInfo.onCondition(dEvtCmd_INDEMO_e);
         }
     } else {
@@ -694,7 +692,7 @@ void Act_c::demo_proc_call() {
         &Act_c::demo_req,
         &Act_c::demo_run,
     };
-    (this->*demo_proc[prmZ_get_evId()])();
+    (this->*demo_proc[m64C])();
 }
 
 /* 000023BC-00002574       .text Execute__Q28daStone25Act_cFPPA3_A4_f */

@@ -30,10 +30,11 @@ public:
     };
 
     // daPy_py_c virtuals
-    f32 getBaseAnimeFrame() { return 0.0f; }
-    f32 getBaseAnimeFrameRate() { return 1.0f; }
-    MtxP getLeftHandMatrix() { return cullMtx; }
-    MtxP getRightHandMatrix() { return cullMtx; }
+    virtual f32 getGroundY() { return mAcch.GetGroundH(); }
+    virtual MtxP getLeftHandMatrix() { return cullMtx; }
+    virtual MtxP getRightHandMatrix() { return cullMtx; }
+    virtual f32 getBaseAnimeFrameRate() { return 1.0f; }
+    virtual f32 getBaseAnimeFrame() { return 0.0f; }
 
     s16 XyCheckCB(int i_itemBtn) {
         if(dComIfGp_getSelectItem(i_itemBtn) == dItem_WIND_WAKER_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_1880)) {
@@ -49,7 +50,6 @@ public:
     s16 getBackbone_y() { return mJntCtrl.getBackbone_y(); }
     s16 getHead_y() { return mJntCtrl.getHead_y(); }
     cXyz& getEyePos() { return mEyePos; }
-    f32 getGroundY() { return mAcch.GetGroundH(); }
     cXyz& getNusSpeed() { return mNusSpeed; } // not entirely sure about this one
     cXyz& getNutPos() { return mNutPos; } // not entirely sure about this one
     s16 getWork3() { return m8FA; }
@@ -321,75 +321,5 @@ private:
 
     static mode_entry_t m_evProcTbl[];
 };
-
-class daNpc_Cb1_HIO_c : public JORReflexible {
-public:
-    daNpc_Cb1_HIO_c();
-    virtual ~daNpc_Cb1_HIO_c() {}
-    void genMessage(JORMContext*) {}
-
-public:
-    /* 0x04 */ s8 mNo;
-    /* 0x08 */ dNpc_HIO_c mNpc;
-    /* 0x30 */ f32 field_0x30;
-    /* 0x34 */ f32 mPlayerChaseDistance; // distance from the player before Makar starts following him (while called)
-    /* 0x38 */ f32 mChaseDistScale; // scales the distance to the player to get a target speed
-    /* 0x3C */ f32 mMaxWalkSpeed;
-    /* 0x40 */ f32 mMinWalkSpeed;
-    /* 0x44 */ f32 mForwardAccel;
-    /* 0x48 */ f32 mDecelScale; // scales speed to get deceleration in daNpc_Cb1_c::breaking()
-    /* 0x4C */ f32 mMaxDecel;
-    /* 0x50 */ f32 mDecel;
-    /* 0x54 */ f32 mWalkAnmSpeedScale;
-    /* 0x58 */ f32 mMaxWalkAnmSpeed;
-    /* 0x5C */ f32 mNpcFlyLaunchSpeedF; // forward speed when Makar jumps to start flying
-    /* 0x60 */ f32 mNpcFlyLaunchSpeedY;
-    /* 0x64 */ f32 field_0x64;
-    /* 0x68 */ f32 mHitSpeedScaleF; // scales forward speed when Makar is hit
-    /* 0x6C */ f32 mHitSpeedScaleY; // scales forward speed to get y recoil speed when Makar is hit
-    /* 0x70 */ f32 field_0x70;
-    /* 0x74 */ f32 field_0x74;
-    /* 0x78 */ f32 field_0x78;
-    /* 0x7C */ f32 field_0x7C;
-    /* 0x80 */ f32 field_0x80;
-    /* 0x84 */ f32 field_0x84;
-    /* 0x88 */ f32 mStickWalkSpeedScale; // scales main stick value to get a target speed
-    /* 0x8C */ f32 field_0x8C;
-    /* 0x90 */ f32 field_0x90;
-    /* 0x94 */ u8 field_0x94[4];
-    /* 0x98 */ f32 field_0x98;
-    /* 0x9C */ f32 field_0x9C;
-    /* 0xA0 */ f32 field_0xA0;
-    /* 0xA4 */ f32 field_0xA4;
-    /* 0xA8 */ f32 field_0xA8;
-    /* 0xAC */ f32 mStickFlySpeedScale;
-    /* 0xB0 */ f32 field_0xB0;
-    /* 0xB4 */ f32 field_0xB4;
-    /* 0xB8 */ f32 field_0xB8;
-    /* 0xBC */ f32 mFlyLaunchSpeedY;
-    /* 0xC0 */ f32 field_0xC0;
-    /* 0xC4 */ f32 field_0xC4;
-    /* 0xC8 */ s16 field_0xC8;
-    /* 0xCA */ s16 mPlayerFlyTimer;
-    /* 0xCC */ s16 field_0xCC;
-    /* 0xCE */ s16 field_0xCE;
-    /* 0xD0 */ s16 field_0xD0;
-    /* 0xD2 */ s16 field_0xD2;
-    /* 0xD4 */ s16 field_0xD4;
-    /* 0xD6 */ s16 field_0xD6;
-    /* 0xD8 */ s16 field_0xD8;
-    /* 0xDA */ s16 field_0xDA;
-    /* 0xDC */ s16 mNpcFlyTimer;
-    /* 0xDE */ s16 field_0xDE;
-    /* 0xE0 */ s16 field_0xE0;
-    /* 0xE2 */ s16 field_0xE2;
-    /* 0xE4 */ s16 field_0xE4;
-    /* 0xE6 */ s16 field_0xE6;
-    /* 0xE8 */ s16 field_0xE8;
-    /* 0xEA */ s16 field_0xEA;
-    /* 0xEC */ s16 field_0xEC;
-    /* 0xEE */ u8 mDamageTimer;
-    /* 0xEF */ u8 field_0xEF;
-}; // Size: 0xF0
 
 #endif /* D_A_NPC_CB1_H */
