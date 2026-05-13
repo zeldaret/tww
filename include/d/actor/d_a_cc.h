@@ -24,7 +24,6 @@ struct cc_class {
     /* 0x2D4 */ mDoExt_btkAnm* m2D4;
     /* 0x2D8 */ mDoExt_McaMorf* m2D8;
     /* 0x2DC */ mDoExt_J3DModelPacketS m2DC;
-    /* 0x2EC */ u8 m2EC[0x2F0 - 0x2EC];
     /* 0x2F0 */ u8 mBehaviorType;
     /* 0x2F1 */ u8 mColorType;
     /* 0x2F2 */ u8 mNoticeRangeByte;

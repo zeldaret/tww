@@ -25,7 +25,6 @@ struct ki_class {
     /* 0x2AC */ request_of_phase_process_class mPhase;
     /* 0x2B4 */ mDoExt_McaMorf* mpMorf;
     /* 0x2B8 */ mDoExt_J3DModelPacketS m2B8;
-    /* 0x2C8 */ u8 m2C8[0x2CC - 0x2C8];
     /* 0x2CC */ u8 mParameters;
     /* 0x2CD */ u8 m2CD;
     /* 0x2CE */ u8 mKiPathIndex;
