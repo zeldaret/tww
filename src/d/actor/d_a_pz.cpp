@@ -2147,6 +2147,17 @@ void daPz_c::bowDraw() {
 
 /* 00006154-00006600       .text bodyDraw__6daPz_cFv */
 void daPz_c::bodyDraw() {
+    static const GXColor color_ok = {0x00, 0xFF, 0x00, 0x80};
+    static const GXColor color_ng = {0xFF, 0x00, 0x00, 0x80};
+    static const u32 debug_colors[] = {
+        0xFFFF0080,
+        0xFF000080,
+        0xFFFF0080,
+        0x0000FF80,
+        0xFF00FF80,
+        0x461C4000,
+    };
+
     J3DModel* model = mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
 
