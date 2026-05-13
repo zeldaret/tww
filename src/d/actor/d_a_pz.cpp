@@ -292,7 +292,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 00000940-00000D54       .text bodyCreateHeap__6daPz_cFv */
 int daPz_c::bodyCreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, PZ_BDL_PZ);
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, PZ_BDL_PZ));
     JUT_ASSERT(0x23e, modelData != NULL);
 
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
@@ -318,13 +318,13 @@ int daPz_c::bodyCreateHeap() {
     modelData->getJointNodePointer(0x15)->setCallBack(nodeWaist2Control_CB);
     modelData->getJointNodePointer(0x19)->setCallBack(nodeSkirtControl_CB);
 
-    J3DAnmTexPattern* btp = (J3DAnmTexPattern*)dComIfG_getObjectRes(m_arc_name, PZ_BTP_MABA_A);
+    J3DAnmTexPattern* btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes(m_arc_name, PZ_BTP_MABA_A));
     JUT_ASSERT(0x277, btp != NULL);
     if (!mBtpAnm.init(modelData, btp, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
         return 0;
     }
 
-    J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arc_name, PZ_BTK_MABA_A);
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, PZ_BTK_MABA_A));
     JUT_ASSERT(0x27d, btk != NULL);
     if (!mBtkAnm.init(modelData, btk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
         return 0;
@@ -336,7 +336,7 @@ int daPz_c::bodyCreateHeap() {
         m08A8[i] = modelData->getMaterialNodePointer(materialId)->getMaterialAnm();
     }
 
-    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arc_name, PZ_BRK_TRI_TEST);
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, PZ_BRK_TRI_TEST));
     JUT_ASSERT(0x28e, brk != NULL);
     if (!mBrkAnm.init(modelData, brk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
         return 0;
