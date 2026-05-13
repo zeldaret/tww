@@ -1177,12 +1177,12 @@ void daPz_c::modeWait() {
                 mEyeTimer = 0;
                 if (mEyeBtpState >= REG8_S(0) + 4) {
                     mEyeBtpState = REG8_S(0) + 4;
-                    mEventIce.mLightShrinkTimer = 1;
+                    getEventIce()->mLightShrinkTimer = 1;
                     mEyeTimer = 1000;
                     evt_mgr->cutEnd(staff_id);
                 }
             } else {
-                if (!mEventIce.mLightShrinkTimer) {
+                if (!getEventIce()->mLightShrinkTimer) {
                     mEyeTimer = 1000;
                 }
                 m_jnt.mbTrn = false;
@@ -2082,8 +2082,8 @@ bool daPz_c::_execute() {
 
     current.angle = shape_angle;
     mpMorf->calc();
-    enemy_fire(&mEnemyFire);
-    if (enemy_ice(&mEventIce)) {
+    enemy_fire(getEnemyFire());
+    if (enemy_ice(getEventIce())) {
         J3DModel* model = mpMorf->getModel();
         PSMTXCopy(mDoMtx_stack_c::get(), model->getBaseTRMtx());
         return true;
@@ -2276,7 +2276,7 @@ void daPz_c::drawShadow() {
 
 /* 000066D8-0000676C       .text _draw__6daPz_cFv */
 bool daPz_c::_draw() {
-    if (mEventIce.mFreezeTimer > 20) {
+    if (getEventIce()->mFreezeTimer > 20) {
         dMat_control_c::iceEntryDL(mpMorf, -1, &mInvisibleModel);
     } else {
         bodyDraw();
@@ -2342,7 +2342,7 @@ void daPz_c::bodyCreateInit() {
 
 /* 00006974-00006BAC       .text createInit__6daPz_cFv */
 void daPz_c::createInit() {
-    static u8 fire_j[ARRAY_SIZE(mEnemyFire.mFlameJntIdxs)] = {
+    static u8 fire_j[ARRAY_SIZE(mEnemyFire_mFlameJntIdxs)] = {
         0x07,
         0x02,
         0x0C,
@@ -2354,7 +2354,7 @@ void daPz_c::createInit() {
         0x19,
         0x1A,
     };
-    static f32 fire_sc[ARRAY_SIZE(mEnemyFire.mParticleScale)] = {
+    static f32 fire_sc[ARRAY_SIZE(mEnemyFire_mParticleScale)] = {
         2.0f,
         2.0f,
         1.0f,
@@ -2371,17 +2371,17 @@ void daPz_c::createInit() {
     health = max_health;
     stealItemLeft = 10;
 
-    mEnemyFire.mpMcaMorf = mpMorf;
-    mEnemyFire.mpActor = this;
-    for (int i = 0; i < ARRAY_SIZE(mEnemyFire.mFlameJntIdxs); i++) {
-        mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
-        mEnemyFire.mParticleScale[i] = fire_sc[i];
+    mEnemyFire_mpMcaMorf = mpMorf;
+    mEnemyFire_mpActor = this;
+    for (int i = 0; i < ARRAY_SIZE(mEnemyFire_mFlameJntIdxs); i++) {
+        mEnemyFire_mFlameJntIdxs[i] = fire_j[i];
+        mEnemyFire_mParticleScale[i] = fire_sc[i];
     }
 
-    mEventIce.mpActor = this;
-    mEventIce.m00C = true;
-    mEventIce.mWallRadius = 50.0f;
-    mEventIce.mCylHeight = 250.0f;
+    mEventIce_mpActor = this;
+    mEventIce_m00C = true;
+    mEventIce_mWallRadius = 50.0f;
+    mEventIce_mCylHeight = 250.0f;
 
     m08B0 = 0;
     m0F7C = l_HIO.mTalkTimer[0];

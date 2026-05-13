@@ -42,6 +42,8 @@ public:
     };
 
     MtxP getRightHandMatrix() { return mpMorf->getModel()->getAnmMtx(0x13); } // hand_R1 joint
+    enemyice* getEventIce() { return (enemyice*)&mEventIce_mpActor; }
+    enemyfire* getEnemyFire() { return (enemyfire*)&mEnemyFire_mpActor; }
     void isAnm(s8) {}
     void isEyeAnm(s8) {}
     void modeProcInit(int newMode) { modeProc(PROC_INIT_e, newMode); }
@@ -181,8 +183,55 @@ public:
     /* 0x08FC */ dLib_circle_path_c mMovePath;
     /* 0x0920 */ int m0920;
     /* 0x0924 */ f32 m0924;
-    /* 0x0928 */ enemyice mEventIce;
-    /* 0x0CE0 */ enemyfire mEnemyFire;
+    /* 0x0928 */ fopAc_ac_c* mEventIce_mpActor;
+    /* 0x092C */ s16 mEventIce_mFreezeDuration;
+    /* 0x092E */ s8 mEventIce_mLightShrinkTimer;
+    /* 0x092F */ u8 mEventIce_092F[0x0930 - 0x092F];
+    /* 0x0930 */ f32 mEventIce_mYOffset;
+    /* 0x0934 */ s8 mEventIce_m00C;
+    /* 0x0935 */ s8 mEventIce_mMode;
+    /* 0x0936 */ s16 mEventIce_mFreezeTimer;
+    /* 0x0938 */ s16 mEventIce_mMoveDelayTimer;
+    /* 0x093A */ s16 mEventIce_mAngleY;
+    /* 0x093C */ s16 mEventIce_mAngularVelY;
+    /* 0x093E */ u8 mEventIce_093E[0x0940 - 0x093E];
+    /* 0x0940 */ cXyz mEventIce_mSpeed;
+    /* 0x094C */ f32 mEventIce_mSpeedF;
+    /* 0x0950 */ f32 mEventIce_m028;
+    /* 0x0954 */ f32 mEventIce_m02C;
+    /* 0x0958 */ dCcD_Stts mEventIce_mStts;
+    /* 0x0994 */ dCcD_Cyl mEventIce_mCyl;
+    /* 0x0AC4 */ f32 mEventIce_mCylHeight;
+    /* 0x0AC8 */ f32 mEventIce_mWallRadius;
+    /* 0x0ACC */ f32 mEventIce_mScaleXZ;
+    /* 0x0AD0 */ f32 mEventIce_mScaleY;
+    /* 0x0AD4 */ f32 mEventIce_mParticleScale;
+    /* 0x0AD8 */ u8 mEventIce_m1B0;
+    /* 0x0AD9 */ u8 mEventIce_mDeathSwitch;
+    /* 0x0ADA */ u8 mEventIce_0ADA[0x0ADC - 0x0ADA];
+    /* 0x0ADC */ dBgS_AcchCir mEventIce_mBgAcchCir;
+    /* 0x0B1C */ dBgS_ObjAcch mEventIce_mBgAcch;
+    /* 0x0CE0 */ fopAc_ac_c* mEnemyFire_mpActor;
+    /* 0x0CE4 */ s16 mEnemyFire_mFireDuration;
+    /* 0x0CE6 */ s8 mEnemyFire_mMode;
+    /* 0x0CE7 */ u8 mEnemyFire_0CE7[0x0CE8 - 0x0CE7];
+    /* 0x0CE8 */ s16 mEnemyFire_mFireTimer;
+    /* 0x0CEA */ u8 mEnemyFire_0CEA[0x0CEC - 0x0CEA];
+    /* 0x0CEC */ mDoExt_McaMorf* mEnemyFire_mpMcaMorf;
+    /* 0x0CF0 */ s8 mEnemyFire_mFlameJntIdxs[10];
+    /* 0x0CFA */ u8 mEnemyFire_0CFA[0x0CFC - 0x0CFA];
+    /* 0x0CFC */ f32 mEnemyFire_mParticleScale[10];
+    /* 0x0D24 */ s16 mEnemyFire_mFlameTimers[10];
+    /* 0x0D38 */ JPABaseEmitter* mEnemyFire_mpFlameEmitters[10];
+    /* 0x0D60 */ cXyz mEnemyFire_mPrevPos;
+    /* 0x0D6C */ JGeometry::TVec3<f32> mEnemyFire_mDirection;
+    /* 0x0D78 */ f32 mEnemyFire_mFlameScaleY;
+    /* 0x0D7C */ u8 mEnemyFire_0D7C[0x0D7D - 0x0D7C];
+    /* 0x0D7D */ u8 mEnemyFire_mHitboxFlameIdx;
+    /* 0x0D7E */ u8 mEnemyFire_0D7E[0x0D80 - 0x0D7E];
+    /* 0x0D80 */ dCcD_Stts mEnemyFire_mStts;
+    /* 0x0DBC */ dCcD_Sph mEnemyFire_mSph;
+    /* 0x0EE8 */ LIGHT_INFLUENCE mEnemyFire_mLight;
     /* 0x0F08 */ Mtx mWaistMtx;
     /* 0x0F38 */ cXyz mWaistPos;
     /* 0x0F44 */ f32 m0F44;
