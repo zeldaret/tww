@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_md_cb.h"
+#include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_npc_cb1.h"
 #include "d/d_procname.h"
@@ -217,11 +218,11 @@ BOOL daTag_MdCb_c::messageAction(void*) {
         daPy_npc_c* npc = (daPy_npc_c*)dComIfGp_getCb1Player();
 
         if (npc != NULL && npc->isTagCheckOK()) {
-            s16 sVar2 = fpcM_GetName(npc);
-            
+            s16 sVar2 = fopAcM_GetName(npc);
+
             if (sVar2 == PROC_NPC_MD) {
                 daNpc_Md_c* md = (daNpc_Md_c*)npc;
-                
+
                 if (argument == 5) {
                     m2B4 = 2;
                 } else {
@@ -235,7 +236,7 @@ BOOL daTag_MdCb_c::messageAction(void*) {
                 }
             } else if (sVar2 == PROC_NPC_CB1) {
                 daNpc_Cb1_c* cb1 = (daNpc_Cb1_c*)npc;
-                
+
                 if (argument == 9) {
                     m2B4 = 5;
                 } else if (argument == 11) {
@@ -466,13 +467,13 @@ BOOL daTag_MdCb_c::actionMessageEvent(int) {
 
 /* 00000FF0-0000100C       .text initialPlayerOffDrow__12daTag_MdCb_cFi */
 void daTag_MdCb_c::initialPlayerOffDrow(int) {
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    daPy_py_c* player = daPy_getPlayerLinkActorClass();
     player->onPlayerNoDraw();
 }
 
 /* 0000100C-00001028       .text initialPlayerOnDrow__12daTag_MdCb_cFi */
 void daTag_MdCb_c::initialPlayerOnDrow(int arg1) {
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    daPy_py_c* player = daPy_getPlayerLinkActorClass();
     player->offPlayerNoDraw();
 }
 
@@ -532,7 +533,7 @@ BOOL daTag_MdCb_c::checkCondition() {
         }
     } else if (argument == 2) {
         if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3310) && dComIfGs_isSwitch(m2B0, fopAcM_GetRoomNo(this)) && player != NULL &&
-            fopAcM_searchActorDistanceXZ2(player, dComIfGp_getPlayer(0)) < 250000.0f)
+            fopAcM_searchPlayerDistanceXZ2(player) < 250000.0f)
         {
             uVar3 = checkTimer();
         }
@@ -540,7 +541,7 @@ BOOL daTag_MdCb_c::checkCondition() {
 #if VERSION == VERSION_DEMO
         if (!dComIfGs_isSwitch(m2B0, fopAcM_GetRoomNo(this))) {
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3320)) {
-                if (checkAreaIn(dComIfGp_getLinkPlayer()) || checkAreaIn(player)) {
+                if (checkAreaIn(daPy_getPlayerLinkActorClass()) || checkAreaIn(player)) {
                     uVar3 = checkTimer();
                 }
             }
@@ -556,7 +557,7 @@ BOOL daTag_MdCb_c::checkCondition() {
         if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_4180) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3310)) {
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_4001)) {
                 uVar3 = checkTimer();
-            } else if (checkAreaIn(dComIfGp_getLinkPlayer()) || checkAreaIn(player)) {
+            } else if (checkAreaIn(daPy_getPlayerLinkActorClass()) || checkAreaIn(player)) {
                 uVar3 = checkTimer();
             }
         }
@@ -570,7 +571,7 @@ BOOL daTag_MdCb_c::checkCondition() {
             uVar3 = checkTimer();
         }
     } else if (argument == 5) {
-        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3404) && checkAreaIn(dComIfGp_getLinkPlayer())) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3404) && checkAreaIn(daPy_getPlayerLinkActorClass())) {
             uVar3 = TRUE;
         }
     } else if (argument == 6) {
@@ -619,7 +620,7 @@ BOOL daTag_MdCb_c::checkCondition() {
             uVar3 = checkTimer();
         }
     } else if (argument == 9) {
-        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3408) && checkAreaIn(dComIfGp_getLinkPlayer())) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3408) && checkAreaIn(daPy_getPlayerLinkActorClass())) {
             uVar3 = TRUE;
         }
     } else if (argument == 10) {
@@ -647,7 +648,7 @@ BOOL daTag_MdCb_c::checkCondition() {
         if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3410))
 #endif
         {
-            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3440) && checkAreaIn(dComIfGp_getLinkPlayer())) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3440) && checkAreaIn(daPy_getPlayerLinkActorClass())) {
                 uVar3 = TRUE;
             }
         }
