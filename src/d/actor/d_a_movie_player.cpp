@@ -2724,7 +2724,9 @@ static void daMP_Reader(void*) {
 /* 000034A0-00003550       .text daMP_CreateReadThread__Fl */
 static BOOL daMP_CreateReadThread(s32 param_0) {
     if (!OSCreateThread(&daMP_ReadThread, (void*)daMP_Reader, 0, daMP_ReadThreadStack + sizeof(daMP_ReadThreadStack), sizeof(daMP_ReadThreadStack), param_0, 1)) {
+#if VERSION > VERSION_DEMO
         OSReport("Can't create read thread\n");
+#endif
         return FALSE;
     }
 
@@ -2898,12 +2900,16 @@ static void daMP_VideoDecoderForOnMemory(void* param_0) {
 static BOOL daMP_CreateVideoDecodeThread(s32 prio, u8* param_1) {
     if (param_1 != NULL) {
         if (!OSCreateThread(&daMP_VideoDecodeThread, (void*)daMP_VideoDecoderForOnMemory, param_1, daMP_VideoDecodeThreadStack + sizeof(daMP_VideoDecodeThreadStack), sizeof(daMP_VideoDecodeThreadStack), prio, 1)) {
+#if VERSION > VERSION_DEMO
             OSReport("Can't create video decode thread\n");
+#endif
             return FALSE;
         }
     } else {
         if (!OSCreateThread(&daMP_VideoDecodeThread, (void*)daMP_VideoDecoder, NULL, daMP_VideoDecodeThreadStack + sizeof(daMP_VideoDecodeThreadStack), sizeof(daMP_VideoDecodeThreadStack), prio, 1)) {
+#if VERSION > VERSION_DEMO
             OSReport("Can't create video decode thread\n");
+#endif
             return FALSE;
         }
     }
@@ -3037,7 +3043,9 @@ static BOOL daMP_CreateAudioDecodeThread(s32 prio, u8* param_1) {
         }
     } else {
         if (!OSCreateThread(&daMP_AudioDecodeThread, (void*)daMP_AudioDecoder, NULL, daMP_AudioDecodeThreadStack + sizeof(daMP_AudioDecodeThreadStack), sizeof(daMP_AudioDecodeThreadStack), prio, 1)) {
+#if VERSION > VERSION_DEMO
             OSReport("Can't create audio decode thread\n");
+#endif
             return FALSE;
         }
     }
@@ -3110,6 +3118,9 @@ static void daMP_THPGXYuv2RgbSetup(const GXRenderModeObj* rmode) {
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
     GXSetColorUpdate(GX_ENABLE);
     GXSetAlphaUpdate(GX_DISABLE);
+#if VERSION == VERSION_DEMO
+    GXSetDispCopyGamma(GX_GM_1_0);
+#endif
     GXSetNumChans(0);
     GXSetNumTexGens(2);
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60);
@@ -3151,6 +3162,15 @@ static void daMP_THPGXYuv2RgbSetup(const GXRenderModeObj* rmode) {
     GXSetTevSwapMode(GX_TEVSTAGE3, GX_TEV_SWAP0, GX_TEV_SWAP0);
     GXSetTevKColorSel(GX_TEVSTAGE3, GX_TEV_KCSEL_K2);
 
+#if VERSION == VERSION_DEMO
+    GXSetTevColorS10(GX_TEVREG0, (GXColorS10){-0x5A, 0x00, -0x72, 0x87});
+
+    GXSetTevKColor(GX_KCOLOR0, (GXColor){0x00, 0x00, 0xE2, 0x58});
+
+    GXSetTevKColor(GX_KCOLOR1, (GXColor){0xB3, 0x00, 0x00, 0xB6});
+
+    GXSetTevKColor(GX_KCOLOR2, (GXColor){0xFF, 0x00, 0xFF, 0x80});
+#else
     GXColorS10 spA8 = {-0x5A, 0x00, -0x72, 0x87};
     GXSetTevColorS10(GX_TEVREG0, spA8);
 
@@ -3162,6 +3182,7 @@ static void daMP_THPGXYuv2RgbSetup(const GXRenderModeObj* rmode) {
 
     GXColor spB8 = {0xFF, 0x00, 0xFF, 0x80};
     GXSetTevKColor(GX_KCOLOR2, spB8);
+#endif
 
     GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
 }
@@ -3231,7 +3252,6 @@ static void daMP_MixAudio(s16* destination, s16*, u32 sample) {
         requestSample = sample;
         dst = destination;
 
-        BOOL loop = TRUE;
         do {
             do {
                 if (daMP_ActivePlayer.playAudioBuffer == (THPAudioBuffer*)NULL) {
@@ -3293,7 +3313,7 @@ static void daMP_MixAudio(s16* destination, s16*, u32 sample) {
                 break;
             }
 
-        } while (loop);
+        } while (TRUE);
     } else {
         memset(destination, 0, sample * 4);
     }
@@ -3362,7 +3382,11 @@ static BOOL daMP_THPPlayerInit(s32 param_0) {
 
     if (daMP_AudioSystem == 0) {
         memset(daMP_SoundBuffer, 0, sizeof(daMP_SoundBuffer));
+#if VERSION <= VERSION_JPN
+        DCFlushRange(daMP_SoundBuffer, sizeof(daMP_SoundBuffer));
+#else
         DCStoreRange(daMP_SoundBuffer, sizeof(daMP_SoundBuffer));
+#endif
     }
 
     daMP_Initialized = TRUE;
@@ -3374,21 +3398,29 @@ static void daMP_THPPlayerQuit() {
     LCDisable();
     daMP_audioQuitWithMSound();
     daMP_Initialized = FALSE;
+#if VERSION == VERSION_PAL
+    daMP_ActivePlayer.dvdError = 0;
+    daMP_ActivePlayer.videoError = 0;
+#endif
 }
 
 /* 00004BD4-00004FB4       .text daMP_THPPlayerOpen__FPCci */
 static BOOL daMP_THPPlayerOpen(const char* filename, BOOL onMemory) {
-    /* Nonmatching - regalloc */
+    /* Nonmatching - retail-only regalloc */
     s32 offset;
     s32 i;
 
     if (!daMP_Initialized) {
+#if VERSION > VERSION_DEMO
         OSReport("You must call daMP_THPPlayerInit before you call this function\n");
+#endif
         return FALSE;
     }
 
     if (daMP_ActivePlayer.open) {
+#if VERSION > VERSION_DEMO
         OSReport("Can't open %s. Because thp file have already opened.\n");
+#endif
         return FALSE;
     }
 
@@ -3396,12 +3428,16 @@ static BOOL daMP_THPPlayerOpen(const char* filename, BOOL onMemory) {
     memset(&daMP_ActivePlayer.audioInfo, 0, sizeof(THPAudioInfo));
 
     if (!DVDOpen(filename, &daMP_ActivePlayer.fileInfo)) {
+#if VERSION > VERSION_DEMO
         OSReport("Can't open %s.\n", filename);
+#endif
         return FALSE;
     }
 
     if (DVDReadPrio(&daMP_ActivePlayer.fileInfo, daMP_WorkBuffer, sizeof(daMP_WorkBuffer), 0, 2) < 0) {
+#if VERSION > VERSION_DEMO
         OSReport("Fail to read the header from THP file.\n");
+#endif
         DVDClose(&daMP_ActivePlayer.fileInfo);
         return FALSE;
     }
@@ -3409,13 +3445,17 @@ static BOOL daMP_THPPlayerOpen(const char* filename, BOOL onMemory) {
     memcpy(&daMP_ActivePlayer.header, daMP_WorkBuffer, sizeof(THPHeader));
 
     if (strcmp(daMP_ActivePlayer.header.magic, "THP") != 0) {
+#if VERSION > VERSION_DEMO
         OSReport("This file is not THP file.\n");
+#endif
         DVDClose(&daMP_ActivePlayer.fileInfo);
         return FALSE;
     }
 
     if (daMP_ActivePlayer.header.version != 0x11000) {
+#if VERSION > VERSION_DEMO
         OSReport("invalid version.\n");
+#endif
         DVDClose(&daMP_ActivePlayer.fileInfo);
         return FALSE;
     }
@@ -3423,7 +3463,9 @@ static BOOL daMP_THPPlayerOpen(const char* filename, BOOL onMemory) {
     offset = daMP_ActivePlayer.header.compInfoDataOffsets;
 
     if (DVDReadPrio(&daMP_ActivePlayer.fileInfo, daMP_WorkBuffer, 0x20, offset, 2) < 0) {
+#if VERSION > VERSION_DEMO
         OSReport("Fail to read the frame component infomation from THP file.\n");
+#endif
         DVDClose(&daMP_ActivePlayer.fileInfo);
         return FALSE;
     }
@@ -3437,7 +3479,9 @@ static BOOL daMP_THPPlayerOpen(const char* filename, BOOL onMemory) {
         switch (daMP_ActivePlayer.compInfo.frameComp[i]) {
         case 0:
             if (DVDReadPrio(&daMP_ActivePlayer.fileInfo, daMP_WorkBuffer, 0x20, offset, 2) < 0) {
+#if VERSION > VERSION_DEMO
                 OSReport("Fail to read the video infomation from THP file.\n");
+#endif
                 DVDClose(&daMP_ActivePlayer.fileInfo);
                 return FALSE;
             }
@@ -3447,7 +3491,9 @@ static BOOL daMP_THPPlayerOpen(const char* filename, BOOL onMemory) {
             break;
         case 1:
             if (DVDReadPrio(&daMP_ActivePlayer.fileInfo, daMP_WorkBuffer, 0x20, offset, 2) < 0) {
+#if VERSION > VERSION_DEMO
                 OSReport("Fail to read the video infomation from THP file.\n");
+#endif
                 DVDClose(&daMP_ActivePlayer.fileInfo);
                 return FALSE;
             }
@@ -3457,7 +3503,9 @@ static BOOL daMP_THPPlayerOpen(const char* filename, BOOL onMemory) {
             offset += sizeof(THPAudioInfo);
             break;
         default:
+#if VERSION > VERSION_DEMO
             OSReport("Unknow frame components.\n");
+#endif
             return FALSE;
         }
     }
@@ -3517,7 +3565,7 @@ static BOOL daMP_THPPlayerSetBuffer(u8* buffer) {
     if (daMP_ActivePlayer.open && daMP_ActivePlayer.state == 0) {
         ptr = buffer;
         if (daMP_ActivePlayer.onMemory) {
-            daMP_ActivePlayer.movieData = buffer;
+            daMP_ActivePlayer.movieData = ptr;
             ptr += daMP_ActivePlayer.header.movieDataSize;
         } else {
             for (i = 0; i < ARRAY_SIZE(daMP_ActivePlayer.readBuffer); i++) {
@@ -3727,14 +3775,18 @@ static BOOL daMP_THPPlayerPrepare(s32 frame, s32 flag, s32 audioTrack) {
     if (daMP_ActivePlayer.open && daMP_ActivePlayer.state == 0) {
         if (frame > 0) {
             if (daMP_ActivePlayer.header.offsetDataOffsets == 0) {
+#if VERSION > VERSION_DEMO
                 OSReport("This thp file doesn't have the offset data\n");
+#endif
                 return FALSE;
             }
 
             if (daMP_ActivePlayer.header.numFrames > frame) {
                 int offset = daMP_ActivePlayer.header.offsetDataOffsets + (frame - 1) * 4;
                 if (DVDReadPrio(&daMP_ActivePlayer.fileInfo, daMP_WorkBuffer, 0x20, offset, 2) < 0) {
+#if VERSION > VERSION_DEMO
                     OSReport("Fail to read the offset data from THP file.\n");
+#endif
                     return FALSE;
                 }
 
@@ -3742,7 +3794,9 @@ static BOOL daMP_THPPlayerPrepare(s32 frame, s32 flag, s32 audioTrack) {
                 daMP_ActivePlayer.initReadFrame = frame;
                 daMP_ActivePlayer.initReadSize = daMP_WorkBuffer[1] - daMP_WorkBuffer[0];
             } else {
+#if VERSION > VERSION_DEMO
                 OSReport("Specified frame number is over total frame number\n");
+#endif
                 return FALSE;
             }
         } else {
@@ -3753,7 +3807,9 @@ static BOOL daMP_THPPlayerPrepare(s32 frame, s32 flag, s32 audioTrack) {
 
         if (daMP_ActivePlayer.audioExist) {
             if (audioTrack < 0 || audioTrack >= daMP_ActivePlayer.audioInfo.sndNumTracks) {
+#if VERSION > VERSION_DEMO
                 OSReport("Specified audio track number is invalid\n");
+#endif
                 return FALSE;
             }
             daMP_ActivePlayer.curAudioTrack = audioTrack;
@@ -3765,7 +3821,9 @@ static BOOL daMP_THPPlayerPrepare(s32 frame, s32 flag, s32 audioTrack) {
 
         if (daMP_ActivePlayer.onMemory) {
             if (DVDReadPrio(&daMP_ActivePlayer.fileInfo, daMP_ActivePlayer.movieData, daMP_ActivePlayer.header.movieDataSize, daMP_ActivePlayer.header.movieDataOffsets, 2) < 0) {
+#if VERSION > VERSION_DEMO
                 OSReport("Fail to read all movie data from THP file\n");
+#endif
                 return FALSE;
             }
 
@@ -3859,8 +3917,10 @@ static void daMP_THPPlayerStop() {
 
         daMP_ActivePlayer.curVolume = daMP_ActivePlayer.targetVolume;
         daMP_ActivePlayer.rampCount = 0;
+#if VERSION < VERSION_PAL
         daMP_ActivePlayer.dvdError = 0;
         daMP_ActivePlayer.videoError = 0;
+#endif
     }
 }
 
@@ -3956,13 +4016,20 @@ static BOOL daMP_THPPlayerSetVolume(s32 vol, s32 duration) {
 }
 
 /* 00005F9C-00006104       .text daMP_ActivePlayer_Init__FPCc */
-static BOOL daMP_ActivePlayer_Init(const char* moviePath) {
+#if VERSION == VERSION_DEMO
+static void daMP_ActivePlayer_Init(const char* moviePath)
+#else
+static BOOL daMP_ActivePlayer_Init(const char* moviePath)
+#endif
+{
     daMP_THPPlayerInit(0);
     
     if (!daMP_THPPlayerOpen(moviePath, 0)) {
+        #if VERSION >= VERSION_JPN
         OSReport("Fail to open the thp file\n");
-        #if DEBUG
-        JUT_ASSERT(9135, FALSE);
+        #endif
+        #if VERSION <= VERSION_JPN
+        JUT_ASSERT(VERSION_SELECT(9103, 9113, 0, 0), FALSE);
         #else
         return FALSE;
         #endif
@@ -3976,10 +4043,10 @@ static BOOL daMP_ActivePlayer_Init(const char* moviePath) {
 
     daMP_buffer = mDoExt_getArchiveHeap()->alloc(daMP_THPPlayerCalcNeedMemory(), 0x20);
     if (daMP_buffer == NULL) {
-        OSReport("Can't allocate the memory");
-        #if DEBUG
-        JUT_ASSERT(9162, FALSE);
+        #if VERSION == VERSION_DEMO
+        JUT_ASSERT(9120, FALSE);
         #else
+        OSReport("Can't allocate the memory");
         return FALSE;
         #endif
     }
@@ -3987,16 +4054,21 @@ static BOOL daMP_ActivePlayer_Init(const char* moviePath) {
     daMP_THPPlayerSetBuffer((u8*)daMP_buffer);
 
     if (!daMP_THPPlayerPrepare(0, 0, daMP_audioInfo.sndNumTracks != 1 ? OSGetTick() % daMP_audioInfo.sndNumTracks : 0)) {
+        #if VERSION >= VERSION_JPN
         OSReport("Fail to prepare\n");
-        #if DEBUG
-        JUT_ASSERT(9190, FALSE);
+        #endif
+        #if VERSION <= VERSION_JPN
+        JUT_ASSERT(VERSION_SELECT(9144, 9162, 0, 0), FALSE);
         #else
         return FALSE;
         #endif
     }
 
     daMP_THPPlayerPlay();
+
+#if VERSION > VERSION_DEMO
     return TRUE;
+#endif
 }
 
 /* 0000611C-0000615C       .text daMP_ActivePlayer_Finish__Fv */
@@ -4005,7 +4077,10 @@ static void daMP_ActivePlayer_Finish() {
     daMP_THPPlayerClose();
     daMP_THPPlayerQuit();
 
-    if (daMP_buffer != NULL) {
+#if VERSION > VERSION_DEMO
+    if (daMP_buffer != NULL)
+#endif
+    {
         JKRFree(daMP_buffer);
     }
 }
@@ -4016,16 +4091,27 @@ static void daMP_ActivePlayer_Main() {
         daMP_THPPlayerStop();
         daMP_THPPlayerClose();
 
-        if (daMP_buffer != NULL) {
+#if VERSION > VERSION_DEMO
+        if (daMP_buffer != NULL)
+#endif
+        {
             JKRFree(daMP_buffer);
         }
 
+#if VERSION >= VERSION_JPN
         OSReport("Error happen");
+#endif
+#if VERSION <= VERSION_JPN
+        JUT_ASSERT(VERSION_SELECT(9174, 9198, 0, 0), FALSE);
+#endif
     }
 }
 
 /* 000061DC-00006230       .text daMP_ActivePlayer_Draw__Fv */
 static void daMP_ActivePlayer_Draw() {
+#if VERSION == VERSION_DEMO
+    GXSetDispCopyGamma(GX_GM_1_0);
+#endif
     daMP_THPPlayerDrawCurrentFrame(JUTVideo::getManager()->getRenderMode(), daMP_DrawPosX, daMP_DrawPosY, daMP_videoInfo.xSize, daMP_videoInfo.ySize);
     daMP_THPPlayerDrawDone();
 }
@@ -4033,9 +4119,15 @@ static void daMP_ActivePlayer_Draw() {
 /* 00006230-000062F0       .text daMP_Get_MovieRestFrame__Fv */
 static u32 daMP_Get_MovieRestFrame() {
     int temp_r31;
+#if VERSION == VERSION_PAL
+    if (daMP_Fail_alloc != 0 || daMP_THPPlayerGetState() == 5) {
+        return 0;
+    }
+#elif VERSION > VERSION_DEMO
     if (daMP_Fail_alloc != 0) {
         return 0;
     }
+#endif
 
     if (daMP_ActivePlayer.open && daMP_ActivePlayer.dispTextureSet != NULL) {
         temp_r31 = (daMP_ActivePlayer.dispTextureSet->frameNumber + daMP_ActivePlayer.initReadFrame) % daMP_ActivePlayer.header.numFrames;
@@ -4062,7 +4154,10 @@ static u32 daMP_Get_MovieRestFrame() {
 /* 000062F0-00006370       .text daMP_Set_PercentMovieVolume__Ff */
 static u32 daMP_Set_PercentMovieVolume(f32 volume) {
     /* Nonmatching - regalloc */
-    if (!daMP_Fail_alloc) {
+#if VERSION > VERSION_DEMO
+    if (!daMP_Fail_alloc)
+#endif
+    {
         s32 player_vol;
         if (volume >= 1.0f) {
             player_vol = 127;
@@ -4083,6 +4178,24 @@ u32 daMP_c::daMP_c_Get_arg_data() {
 
 /* 00006390-00006500       .text daMP_c_Init__6daMP_cFv */
 cPhs_State daMP_c::daMP_c_Init() {
+#if VERSION == VERSION_DEMO
+    static const char* filename_table[2] = {
+        "/thpdemo/title_loop.thp",
+        "/thpdemo/end.thp",
+    };
+    
+    mpGetMovieRestFrame = daMP_Get_MovieRestFrame;
+    mpSetPercentMovieVol = daMP_Set_PercentMovieVolume;
+    
+    int r4 = daMP_c_Get_arg_data();
+    if (r4 >= 0 && r4 < ARRAY_SSIZE(filename_table) && filename_table[r4] != NULL) {
+        daMP_ActivePlayer_Init(filename_table[r4]);
+        return cPhs_COMPLEATE_e;
+    } else {
+        daMP_ActivePlayer_Init(filename_table[0]);
+    }
+    
+#else
     static u8 set_vfilter[7] = {
         0x00, 0x00, 0x15, 0x16, 0x15, 0x00, 0x00,
     };
@@ -4107,6 +4220,9 @@ cPhs_State daMP_c::daMP_c_Init() {
     
     mpGetMovieRestFrame = daMP_Get_MovieRestFrame;
     mpSetPercentMovieVol = daMP_Set_PercentMovieVolume;
+#if VERSION == VERSION_PAL
+    mpTHPGetTotalFrame = daMP_THPPlayerGetTotalFrame;
+#endif
     
     int r4 = daMP_c_Get_arg_data();
     if (r4 >= 0 && r4 < ARRAY_SSIZE(filename_table) && filename_table[r4] != NULL) {
@@ -4120,17 +4236,20 @@ cPhs_State daMP_c::daMP_c_Init() {
             daMP_Fail_alloc = TRUE;
         }
     }
+#endif
     
     return cPhs_COMPLEATE_e;
 }
 
 /* 00006580-000065F8       .text daMP_c_Finish__6daMP_cFv */
 BOOL daMP_c::daMP_c_Finish() {
+#if VERSION > VERSION_DEMO
     mDoGph_gInf_c::setFrameRate(daMP_backup_FrameRate);
     GXRenderModeObj* renderMode = JUTVideo::getManager()->getRenderMode();
     for (int i = 0; i < 7; i++) {
         renderMode->vfilter[i] = daMP_backup_vfilter[i];
     }
+#endif
     daMP_ActivePlayer_Finish();
     return TRUE;
 }
@@ -4166,17 +4285,21 @@ BOOL daMP_c::daMP_c_Callback_Finish(daMP_c* i_this) {
 
 /* 00006748-00006780       .text daMP_c_Callback_Main__6daMP_cFP6daMP_c */
 BOOL daMP_c::daMP_c_Callback_Main(daMP_c* i_this) {
+#if VERSION > VERSION_DEMO
     if (daMP_Fail_alloc) {
         return TRUE;
     }
+#endif
     return i_this->daMP_c_Main();
 }
 
 /* 00006780-000067B8       .text daMP_c_Callback_Draw__6daMP_cFP6daMP_c */
 BOOL daMP_c::daMP_c_Callback_Draw(daMP_c* i_this) {
+#if VERSION > VERSION_DEMO
     if (daMP_Fail_alloc) {
         return TRUE;
     }
+#endif
     return i_this->daMP_c_Draw();
 }
 

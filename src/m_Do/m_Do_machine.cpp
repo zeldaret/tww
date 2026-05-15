@@ -424,7 +424,17 @@ GXRenderModeObj g_ntscZeldaProg = {
 };
 #else
 GXRenderModeObj g_ntscZeldaIntDf = {
-    4, 640, 480, 534, 30, 20, 660, 534, 1, 0, 0,
+    VI_TVMODE_PAL_INT,
+    640,
+    480,
+    534,
+    30,
+    20,
+    660,
+    534,
+    VI_XFBMODE_DF,
+    0,
+    0,
     {{6, 6},
      {6, 6},
      {6, 6},
@@ -440,7 +450,17 @@ GXRenderModeObj g_ntscZeldaIntDf = {
     {8, 8, 10, 12, 10, 8, 8},
 };
 GXRenderModeObj g_ntscZeldaProg = {
-    20, 640, 480, 480, 30, 0, 660, 480, 1, 0, 0,
+    VI_TVMODE_EURGB60_INT,
+    640,
+    480,
+    480,
+    30,
+    0,
+    660,
+    480,
+    VI_XFBMODE_DF,
+    0,
+    0,
     {{6, 6},
      {6, 6},
      {6, 6},

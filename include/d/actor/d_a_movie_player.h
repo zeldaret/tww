@@ -64,6 +64,9 @@ public:
 public:
     /* 0x290 */ u32 (*mpGetMovieRestFrame)();
     /* 0x294 */ u32 (*mpSetPercentMovieVol)(f32);
+#if VERSION == VERSION_PAL
+    /* 0x29C */ u32 (*mpTHPGetTotalFrame)(void);
+#endif
 };
 
 class daMP_Dlst_base_c : public dDlst_base_c {
