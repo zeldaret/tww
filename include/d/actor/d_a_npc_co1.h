@@ -45,7 +45,7 @@ public:
     void checkOrder();
     void setCollision_SP_();
     void set_target(int);
-    u8 chk_talk();
+    BOOL chk_talk();
     BOOL chk_partsNotMove();
     void lookBack();
     u16 next_msgStatus(unsigned long*);
@@ -74,7 +74,7 @@ public:
     BOOL read_1();
     BOOL modoru();
     BOOL wait_action1(void*);
-    u8 demo();
+    BOOL demo();
     void shadowDraw();
     BOOL _draw();
     BOOL _execute();
@@ -144,19 +144,12 @@ public:
     /* 0x814 */ u8 mInitStep2;
     /* 0x815 */ u8 mExecStarted;
     /* 0x816 */ u8 mPad_0x816[0x818 - 0x816];
-    /* 0x818 */ union {
-        fopAc_ac_c* mpAttnActor;
-        BOOL mAttnScratch;
-    };
+    /* 0x818 */ BOOL mAttnScratch;
     /* 0x81C */ u8 mAttnFlag;
     /* 0x81D */ bool mHide;
     /* 0x81E */ bool mInitDone;
     /* 0x81F */ bool mDemo;
-    /* 0x820 */ cXyz mPrevPos;
-    /* 0x82C */ s16 mPrevPos2[3];
-    /* 0x832 */ u8 mPad_0x832[2];
-    /* 0x834 */ f32 mFloatVal;
-    /* 0x838 */ u8 mPad_0x838[0x840 - 0x838];
+    /* 0x820 */ LIGHT_INFLUENCE mLight;
     /* 0x840 */ cXyz mCurPos;
     /* 0x84C */ f32 mOscillation;
     /* 0x850 */ s16 mSinAngle;

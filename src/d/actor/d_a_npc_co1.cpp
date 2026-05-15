@@ -1,6 +1,4 @@
-#pragma weak_inline off
-#include "d/dolzel_rel.h"
-#pragma weak_inline on
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_co1.h"
 #include "d/d_snap.h"
 #include "d/d_item_data.h"
@@ -10,7 +8,7 @@
 #include "d/d_priority.h"
 #include "d/d_kankyo.h"
 #include "d/d_drawlist.h"
-#include <math.h>
+inline f32 fabs(f32 x) { return __fabs(x); }
 
 #define mpBtpRes m_hed_tex_pttrn
 #define mpBtkRes m_prl_btk
@@ -25,8 +23,8 @@
 #define ATTN_DIST_ACTION 0x45
 
 // BAM angles
-#define BAM_45DEG 0x800
-#define BAM_90DEG 0x2000
+#define BAM_11DEG 0x800
+#define BAM_45DEG 0x2000
 
 // Param mask for character type
 #define CHAR_TYPE_MASK 0xFF
@@ -58,47 +56,40 @@
 
 static daNpc_Co1_HIO_c l_HIO;
 
-static u32 a_prm_tbl[11] = {
-    0x20002328, 0xE000DCD8, 0x00000000, 0x00000000,
-    0x04000400, 0x42B60000, 0x000000FF, 0x00960000,
-    0x42200000, 0x41A00000, 0x02000040,
-};
+extern daNpc_Co1_c::anm_prm_c a_anm_tbl1[12];
+extern daNpc_Co1_c::anm_prm_c a_anm_tbl2[8];
+extern daNpc_Co1_c::anm_prm_c a_anm_tbl3[14];
 
-static daNpc_Co1_c::anm_prm_c a_anm_tbl1[12] = {
-    { 0, 0, 0, 0, 8.0f, 1.0f, 2 }, { 1, 4, 0, 0, 8.0f, 1.0f, 2 },
-    { 2, 6, 0, 0, 8.0f, 1.0f, 0 }, { 3, 5, 0, 0, 8.0f, 1.0f, 0 },
-    { 4, 4, 0, 0, 8.0f, 1.0f, 2 }, { 5, 0, 0, 0, 8.0f, 1.0f, 2 },
-    { 6, 3, 0, 0, 8.0f, 1.0f, 2 }, { 7, 4, 0, 0, 8.0f, 1.0f, 2 },
-    { 8, 0, 0, 0, 8.0f, 1.0f, 0 }, { 9, 5, 0, 0, 8.0f, 1.0f, 0 },
-    { 10, 6, 0, 0, 8.0f, 1.0f, 0 }, { 7, 0, 0, 0, 8.0f, 1.0f, 2 },
-};
+daNpc_Co1_HIO_c::daNpc_Co1_HIO_c() {
+    static struct {
+        s16 mMaxHeadX, mMaxHeadY, mMinHeadX, mMinHeadY;
+        s16 mMaxBackboneX, mMaxBackboneY, mMinBackboneX, mMinBackboneY;
+        s16 mMaxTurnStep, mMaxTurnVel;
+        f32 mAttnYOff;
+        s16 mAttnAngleY, mPrevPosOfsX, mPrevPosOfsY, mPrevPosOfsZ;
+        f32 mOscMaxOfs, mOscMinOfs;
+        s16 mOscAngVel, mAlpha;
+    } a_prm_tbl = {
+        0x2000, 0x2328, 0xE000, 0xDCD8,
+        0, 0, 0, 0,
+        0x0400, 0x0400,
+        91.0f,
+        0, 0xFF, 0x96, 0,
+        40.0f, 20.0f,
+        0x0200, 0x40,
+    };
+    memcpy(&mNpc, &a_prm_tbl, sizeof(mNpc));
+    mNo = -1;
+    mNo2 = -1;
+}
 
-static daNpc_Co1_c::anm_prm_c a_anm_tbl2[8] = {
-    { -1, 0, 0, 0, 0.0f, 0.0f, -1 }, { 1, 4, 0, 0, 8.0f, 1.0f, 2 },
-    { -1, 0, 0, 0, 0.0f, 0.0f, -1 }, { 3, 5, 0, 0, 8.0f, 1.0f, 0 },
-    { 7, 0, 0, 0, 8.0f, 1.0f, 2 }, { -1, 0, 0, 0, 0.0f, 0.0f, -1 },
-    { 4, 4, 0, 0, 8.0f, 1.0f, 2 }, { 10, 6, 0, 0, 8.0f, 1.0f, 0 },
-};
-
-static daNpc_Co1_c::anm_prm_c a_anm_tbl3[14] = {
-    { 0, 0, 0, 0, 8.0f, 1.0f, 2 }, { 1, 4, 0, 0, 8.0f, 1.0f, 2 },
-    { 3, 5, 0, 0, 8.0f, 1.0f, 0 }, { 8, 0, 0, 0, 8.0f, 1.0f, 0 },
-    { 5, 0, 0, 0, 8.0f, 1.0f, 2 }, { 6, 3, 0, 0, 8.0f, 1.0f, 2 },
-    { 7, 4, 0, 0, 8.0f, 1.0f, 2 }, { 2, 6, 0, 0, 8.0f, 1.0f, 0 },
-    { 10, 6, 0, 0, 8.0f, 1.0f, 0 }, { 9, 5, 0, 0, 8.0f, 1.0f, 0 },
-    { 4, 4, 0, 0, 8.0f, 1.0f, 2 }, { 5, 4, 0, 0, 8.0f, 1.0f, 2 },
-    { 5, 0, 0, 0, 8.0f, 1.0f, 2 }, { 6, 3, 0, 0, 8.0f, 1.0f, 2 },
-};
 
 static const char* l_evn_tbl[3] = {
     "Prl_Flw", "Contact", "Red_Ltr",
 };
 
-daNpc_Co1_HIO_c::daNpc_Co1_HIO_c() {
-    memcpy(&mNpc, a_prm_tbl, sizeof(mNpc));
-    mNo = -1;
-    mNo2 = -1;
-}
+
+
 
 static BOOL nodeCallBack_Co1(J3DNode* i_node, int i_calcTiming) {
     if (i_calcTiming == J3DNodeCBCalcTiming_In) {
@@ -134,55 +125,62 @@ void daNpc_Co1_c::nodeCo1Control(J3DNode* i_node, J3DModel* i_model) {
 
 BOOL daNpc_Co1_c::init_CO1_0() {
     u32 isSym = dComIfGs_isSymbol(1);
-    u32 result = isSym ? 0 : 1;
-    if ((u8)result) {
+    u32 ret = isSym ? 0 : 1;
+    if ((u8)ret) {
         actor_status &= ~fopAcStts_NOCULLEXEC_e;
         actor_status |= fopAcStts_UNK4000_e;
         set_action(&daNpc_Co1_c::wait_action1, NULL);
     }
-    return (BOOL)(result);
+    return ret;
 }
 
+
 BOOL daNpc_Co1_c::createInit() {
-    for (int i = 0; i < 3; i++) {
+    int i = 0;
+    for (; i < 3; i++) {
         mEventIdx[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i], EVT_NO_EVENT);
     }
 
-    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
-    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = ATTN_DIST_SPOKEN;
-    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = ATTN_DIST_ACTION;
+    attention_info.flags = 10;
+    attention_info.distances[1] = ATTN_DIST_SPOKEN;
+    attention_info.distances[3] = ATTN_DIST_ACTION;
     gravity = -4.5f;
-    mEventPos = current.pos;
+
+    mEventPos.x = current.pos.x;
+    mEventPos.y = current.pos.y;
+    mEventPos.z = current.pos.z;
 
     mInitDone = TRUE;
+
     mDemoEventCut.setActorInfo2("Co1", this);
 
     mCurrAnmNum = 11;
 
-    int initResult;
+    BOOL result;
     switch (mInitStep) {
     case 0:
-        initResult = init_CO1_0();
+        result = init_CO1_0();
         break;
     default:
-        initResult = 0;
+        result = FALSE;
         break;
     }
-
-    if ((u8)initResult) {
-        shape_angle = current.angle;
-    } else {
-        return 0;
+    if (result & 0xFF) {
+        shape_angle.x = current.angle.x;
+        shape_angle.y = current.angle.y;
+        shape_angle.z = current.angle.z;
+        goto success;
     }
-        
+    return FALSE;
+success:
     mStts.Init(0xFF, 0xFF, this);
     mCyl.SetStts(&mStts);
     mCyl.Set(dNpc_cyl_src);
-
     mpMorf->setMorf(0.0f);
     setMtx(TRUE);
-    return 1;
+    return TRUE;
 }
+
 
 void daNpc_Co1_c::setMtx(bool i_init) {
     if (!mDemo) {
@@ -231,24 +229,24 @@ void daNpc_Co1_c::setMtx(bool i_init) {
     }
 
     cMtx_copy(mpPrlMorf->getModel()->getAnmMtx(m_prl_jnt_num), mDoMtx_stack_c::get());
-    mCurPos.x = mDoMtx_stack_c::get()[0][3];
-    mCurPos.y = mDoMtx_stack_c::get()[1][3];
-    mCurPos.z = mDoMtx_stack_c::get()[2][3];
+    MtxP mtx = mDoMtx_stack_c::get();
+    mCurPos.x = mtx[0][3];
+    mCurPos.y = mtx[1][3];
+    mCurPos.z = mtx[2][3];
 
-    mPrevPos = mCurPos;
-
-    mPrevPos2[0] = l_HIO.mNpc.mPrevPosOfsX;
-    mPrevPos2[1] = l_HIO.mNpc.mPrevPosOfsY;
-    mPrevPos2[2] = l_HIO.mNpc.mPrevPosOfsZ;
+    mLight.mPos = mCurPos;
+    mLight.mColor.r = l_HIO.mNpc.mPrevPosOfsX;
+    mLight.mColor.g = l_HIO.mNpc.mPrevPosOfsY;
+    mLight.mColor.b = l_HIO.mNpc.mPrevPosOfsZ;
 
     mSinAngle += l_HIO.mNpc.mOscAngVel;
 
     mOscillation = fabs(cM_ssin(mSinAngle));
 
     f32 diff = l_HIO.mNpc.mOscMaxOfs - l_HIO.mNpc.mOscMinOfs;
-    f32 clamped1 = cLib_minLimit<f32>(diff, 0.0f);
+    f32 clampedDiff = cLib_minLimit<f32>(diff, 0.0f);
 
-    mFloatVal = cLib_minLimit<f32>(clamped1 * mOscillation + l_HIO.mNpc.mOscMinOfs, 0.001f);
+    mLight.mPower = cLib_minLimit<f32>(clampedDiff * mOscillation + l_HIO.mNpc.mOscMinOfs, 0.001f);
 
     setAttention(i_init);
 }
@@ -277,12 +275,13 @@ s32 daNpc_Co1_c::btpNum_toResID(int i_idx) {
     return a_btp_resID_tbl[i_idx];
 }
 
-BOOL daNpc_Co1_c::setBtp(bool i_inherit, int i_texNum) {
+BOOL daNpc_Co1_c::setBtp(bool i_inherit, int i_texNum)
+{
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     int btpNum = btpNum_toResID(i_texNum);
-    J3DAnmTexPattern* btpRes = (J3DAnmTexPattern*)dComIfG_getObjectIDRes("Co", btpNum);
+    J3DAnmTexPattern* btpRes = (J3DAnmTexPattern*)dComIfG_getObjectIDRes("Co", (u16)btpNum);
     mpBtpRes = btpRes;
-    JUT_ASSERT(0x1CE, m_hed_tex_pttrn != 0);
+    JUT_ASSERT(0x1CE, mpBtpRes != 0);
 
     int initRes = mBtpAnm.init(modelData, mpBtpRes, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_inherit, FALSE);
     int notRes = 1 - initRes;
@@ -291,23 +290,26 @@ BOOL daNpc_Co1_c::setBtp(bool i_inherit, int i_texNum) {
         mBtpFrame = 0;
         mBtpTimer = 0;
     }
-    return (BOOL)(result);
+    return result;
 }
 
-BOOL daNpc_Co1_c::setBtk(bool i_inherit) {
+BOOL daNpc_Co1_c::setBtk(bool i_inherit)
+{
     J3DModelData* modelData = mpPrlMorf->getModel()->getModelData();
     J3DAnmTextureSRTKey* btkRes = (J3DAnmTextureSRTKey*)dComIfG_getObjectIDRes("Co", CO_BTK_CO_PEAL);
     mpBtkRes = btkRes;
-    JUT_ASSERT(0x1EA, m_prl_btk != 0);
+    JUT_ASSERT(0x1EA, mpBtkRes != 0);
 
-    int initRes = mBtkAnm.init(modelData, mpBtkRes, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_inherit);
+    int initRes = mBtkAnm.init(modelData, mpBtkRes, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_inherit, FALSE);
     int notRes = 1 - initRes;
     u32 result = notRes ? 0 : 1;
     if ((u8)result) {
         mBtkFrame = 0;
     }
-    return (BOOL)(result);
+    return result;
 }
+
+
 
 BOOL daNpc_Co1_c::iniTexPttrnAnm(bool i_inherit) {
     return setBtp(i_inherit, mTexPatternNum);
@@ -373,6 +375,22 @@ BOOL daNpc_Co1_c::setAnm() {
     }
     return TRUE;
 }
+
+daNpc_Co1_c::anm_prm_c a_anm_tbl1[12] = {
+    { 0, 0, 0, 0, 8.0f, 1.0f, 2 }, { 1, 4, 0, 0, 8.0f, 1.0f, 2 },
+    { 2, 6, 0, 0, 8.0f, 1.0f, 0 }, { 3, 5, 0, 0, 8.0f, 1.0f, 0 },
+    { 4, 4, 0, 0, 8.0f, 1.0f, 2 }, { 5, 0, 0, 0, 8.0f, 1.0f, 2 },
+    { 6, 3, 0, 0, 8.0f, 1.0f, 2 }, { 7, 4, 0, 0, 8.0f, 1.0f, 2 },
+    { 8, 0, 0, 0, 8.0f, 1.0f, 0 },     { 9, 5, 0, 0, 8.0f, -1.0f, 0 },
+    { 10, 6, 0, 0, 8.0f, -1.0f, 0 }, { 7, 0, 0, 0, 8.0f, 1.0f, 2 },
+};
+
+daNpc_Co1_c::anm_prm_c a_anm_tbl2[8] = {
+    { -1, 0, 0, 0, 0.0f, 0.0f, -1 }, { 1, 4, 0, 0, 8.0f, 1.0f, 2 },
+    { -1, 0, 0, 0, 0.0f, 0.0f, -1 }, { 3, 5, 0, 0, 8.0f, 1.0f, 0 },
+    { 7, 0, 0, 0, 8.0f, 1.0f, 2 }, { -1, 0, 0, 0, 0.0f, 0.0f, -1 },
+    { 4, 4, 0, 0, 8.0f, 1.0f, 2 }, { 10, 6, 0, 0, 8.0f, -1.0f, 0 },
+};
 
 void daNpc_Co1_c::chg_anmTag() {
 }
@@ -446,6 +464,16 @@ void daNpc_Co1_c::control_anmAtr() {
     }
 }
 
+daNpc_Co1_c::anm_prm_c a_anm_tbl3[14] = {
+    { 0, 0, 0, 0, 8.0f, 1.0f, 2 }, { 1, 4, 0, 0, 8.0f, 1.0f, 2 },
+    { 3, 5, 0, 0, 8.0f, 1.0f, 0 }, { 8, 0, 0, 0, 8.0f, 1.0f, 0 },
+    { 5, 0, 0, 0, 8.0f, 1.0f, 2 }, { 6, 3, 0, 0, 8.0f, 1.0f, 2 },
+    { 7, 4, 0, 0, 8.0f, 1.0f, 2 }, { 2, 6, 0, 0, 8.0f, 1.0f, 0 },
+    { 10, 6, 0, 0, 8.0f, -1.0f, 0 }, { 9, 5, 0, 0, 8.0f, -1.0f, 0 },
+    { 4, 4, 0, 0, 8.0f, 1.0f, 2 }, { 5, 4, 0, 0, 8.0f, 1.0f, 2 },
+    { 5, 0, 0, 0, 8.0f, 1.0f, 2 }, { 6, 3, 0, 0, 8.0f, 1.0f, 2 },
+};
+
 void daNpc_Co1_c::setAnm_ATR(int i_updateTex) {
     if (i_updateTex != 0) {
         setAnm_tex(a_anm_tbl3[mCurrAnmAtr].mResIndex);
@@ -464,7 +492,7 @@ void daNpc_Co1_c::anmAtr(u16 i_msgStatus) {
         u8 tag = dComIfGp_getMesgAnimeTagInfo();
         dComIfGp_clearMesgAnimeTagInfo();
         if (tag != 0xFF && mCurrAnmTag != tag) {
-            mCurrAnmTag = (s8)tag;
+            mCurrAnmTag = tag;
             chg_anmTag();
         }
         break;
@@ -525,10 +553,7 @@ void daNpc_Co1_c::setCollision_SP_() {
     if (mCurrAnmNum == 1) {
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(current.angle.y);
-        cXyz off;
-        off.x = 0.0f;
-        off.y = 0.0f;
-        off.z = -20.0f;
+        cXyz off(0.0f, 0.0f, -20.0f);
         radius = 70.0f;
         height = 60.0f;
         MTXMultVec(mDoMtx_stack_c::get(), &off, &pos);
@@ -551,11 +576,11 @@ void daNpc_Co1_c::set_target(int i_type) {
         break;
     case 1: {
         cXyz vec = dNpc_playerEyePos(-20.0f);
-        f32 dist = fopAcM_searchActorDistance(this, dComIfGp_getPlayer(0));
-        s16 angle = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
-        angle -= BAM_90DEG;
+        f32 dist = fopAcM_searchPlayerDistance(this);
+        s16 angle = fopAcM_searchPlayerAngleY(this);
+        angle -= BAM_45DEG;
         mDoMtx_stack_c::transS(current.pos.x, vec.y, current.pos.z);
-        mDoMtx_YrotM(mDoMtx_stack_c::get(), angle);
+        mDoMtx_stack_c::YrotM(angle);
         vec.x = 0.0f;
         vec.y = 0.0f;
         vec.z = dist;
@@ -566,8 +591,9 @@ void daNpc_Co1_c::set_target(int i_type) {
     }
 }
 
-u8 daNpc_Co1_c::chk_talk() {
-    u8 ret = 1;
+
+BOOL daNpc_Co1_c::chk_talk() {
+    BOOL ret = TRUE;
     mGetItem = dItem_NONE_e;
     if (dComIfGp_event_chkTalkXY()) {
         if (dComIfGp_evmng_ChkPresentEnd()) {
@@ -597,9 +623,7 @@ void daNpc_Co1_c::lookBack() {
     cXyz dstPos;
     cXyz srcPos = current.pos;
     srcPos.y = eyePos.y;
-    dstPos.x = 0.0f;
-    dstPos.y = 0.0f;
-    dstPos.z = 0.0f;
+    dstPos.set(0.0f, 0.0f, 0.0f);
     cXyz* dstPtr = NULL;
     s16 targetY = current.angle.y;
     bool headOnlyFollow = mInitDone;
@@ -622,13 +646,14 @@ void daNpc_Co1_c::lookBack() {
         break;
     }
 
-    cLib_addCalcAngleS2(&mHeadAngle, l_HIO.mNpc.mMaxTurnVel, 4, BAM_45DEG);
+    cLib_addCalcAngleS2(&mHeadAngle, l_HIO.mNpc.mMaxTurnVel, 4, BAM_11DEG);
     if (!m_jnt.trnChk()) {
         mHeadAngle = 0;
     }
 
     m_jnt.lookAtTarget(&current.angle.y, dstPtr, srcPos, targetY, mHeadAngle, headOnlyFollow);
 }
+
 
 u16 daNpc_Co1_c::next_msgStatus(u32* pMsgNo) {
     u16 ret = fopMsgStts_MSG_CONTINUES_e;
@@ -685,11 +710,12 @@ u32 daNpc_Co1_c::getMsg() {
 }
 
 BOOL daNpc_Co1_c::chkAttention() {
-    dAttention_c& attention = dComIfGp_getAttention();
-    if (attention.LockonTruth()) {
-        return this == attention.LockonTarget(0) ? TRUE : FALSE;
+    dAttention_c* attention = &dComIfGp_getAttention();
+    if (attention->LockonTruth()) {
+        return this == attention->LockonTarget(0) ? 1 : 0;
+    } else {
+        return this == attention->ActionTarget(0) ? 1 : 0;
     }
-    return this == attention.ActionTarget(0) ? TRUE : FALSE;
 }
 
 void daNpc_Co1_c::setAttention(bool i_forceUpdate) {
@@ -709,10 +735,12 @@ void daNpc_Co1_c::setAttention(bool i_forceUpdate) {
 
 BOOL daNpc_Co1_c::charDecide(int i_type) {
     mType = 0;
-    mInitStep = -1; // dead store - compiler artifact, do not remove
+    mInitStep = -1;
     mInitStep = 0;
     return TRUE;
 }
+
+
 
 void daNpc_Co1_c::eInit_MDR_() {
     setAnm_NUM(10, TRUE);
@@ -739,13 +767,15 @@ void daNpc_Co1_c::event_actionInit(int i_staffIdx) {
 }
 
 BOOL daNpc_Co1_c::eMove_MDR_() {
-    int frame = (int)mpMorf->getFrame();
-    u32 result = frame ? 0 : 1;
-    if ((u8)result) {
+    f32 frame = mpMorf->getFrame();
+    s32 frameInt = (s32)frame;
+    u32 ret = frameInt ? 0 : 1;
+    if ((u8)ret) {
         setAnm_NUM(11, TRUE);
     }
-    return (BOOL)(result);
+    return ret;
 }
+
 
 BOOL daNpc_Co1_c::eMove_RED_LTR_() {
     BOOL ret = FALSE;
@@ -781,9 +811,9 @@ BOOL daNpc_Co1_c::event_action() {
 void daNpc_Co1_c::privateCut(int staffIdx) {
     if (staffIdx == -1) return;
 
-    static char* a_cut_tbl[] = {"ACTION"};
+    static const char* a_cut_tbl[] = {"ACTION"};
 
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, a_cut_tbl, 1, TRUE, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, (char**)a_cut_tbl, 1, TRUE, 0);
     mCurActIdx = actIdx;
 
     if (mCurActIdx == -1) {
@@ -809,10 +839,12 @@ void daNpc_Co1_c::privateCut(int staffIdx) {
         break;
     }
 
-    if ((u8)done) {
+    u32 doneByte = done;
+    if ((doneByte << 24) >> 24) {
         dComIfGp_evmng_cutEnd(staffIdx);
     }
 }
+
 
 void daNpc_Co1_c::endEvent() {
     dComIfGp_event_reset();
@@ -820,8 +852,7 @@ void daNpc_Co1_c::endEvent() {
 }
 
 s32 daNpc_Co1_c::isEventEntry() {
-    char* name = mDemoEventCut.getActorName();
-    return dComIfGp_evmng_getMyStaffId(name, NULL, 0);
+    return dComIfGp_evmng_getMyStaffId(mDemoEventCut.getActorName());
 }
 
 void daNpc_Co1_c::event_proc(int staffIdx) {
@@ -887,7 +918,8 @@ BOOL daNpc_Co1_c::wait_1() {
     }
 
     if (mHide) {
-        if (chk_talk()) {
+        u8 talked = chk_talk();
+        if (talked) {
             mNextAnmNum = 4;
             setStt(3);
         }
@@ -900,7 +932,8 @@ BOOL daNpc_Co1_c::wait_1() {
 
 BOOL daNpc_Co1_c::wait_2() {
     if (mHide) {
-        if (chk_talk()) {
+        u8 talked = chk_talk();
+        if (talked) {
             if (dNpc_chkLetterPassed()) {
                 mNextAnmNum = 7;
             } else {
@@ -956,7 +989,7 @@ BOOL daNpc_Co1_c::talk_1() {
     if (mpCurrMsg != NULL) {
         switch (mpCurrMsg->mStatus) {
         case fopMsgStts_MSG_DESTROYED_e:
-            switch ((s32)mCurrMsgNo) {
+            switch (mCurrMsgNo) {
             case MSG_CO_GREETING:
                 dComIfGs_onEventBit(EVTBIT_GREETED);
                 break;
@@ -1037,55 +1070,54 @@ BOOL daNpc_Co1_c::wait_action1(void*) {
             }
             setStt(1);
         }
-        
-        mPrevPos = current.pos;
-        mFloatVal = 0.0f;
-        dKy_plight_set((LIGHT_INFLUENCE*)&mPrevPos);
-        
+
+        mLight.mPos = current.pos;
+        mLight.mPower = 0.0f;
+        dKy_plight_set(&mLight);
+
         mActionState++;
         break;
     case 1:
     case 2:
     case 3:
         mAttnFlag = chkAttention();
-        
-        BOOL result;
+
         switch (mAnmTagIndex) {
         case 1:
-            result = wait_1();
+            mAttnScratch = wait_1();
             break;
         case 2:
         case 3:
-            result = talk_1();
+            mAttnScratch = talk_1();
             break;
         case 4:
-            result = wakeup();
+            mAttnScratch = wakeup();
             break;
         case 5:
-            result = wait_2();
+            mAttnScratch = wait_2();
             break;
         case 6:
-            result = toru_1();
+            mAttnScratch = toru_1();
             break;
         case 7:
-            result = read_1();
+            mAttnScratch = read_1();
             break;
         case 0:
-            result = modoru();
+            mAttnScratch = modoru();
             break;
         }
-        mAttnScratch = result;
-        
+
         lookBack();
         break;
     case 9:
         break;
     }
-    
+
     return TRUE;
 }
 
-u8 daNpc_Co1_c::demo() {
+
+BOOL daNpc_Co1_c::demo() {
     if (demoActorID == 0) {
         if (mDemo) {
             mDemo = false;
@@ -1129,24 +1161,30 @@ void daNpc_Co1_c::shadowDraw() {
                                      mObjAcch.m_gnd, &tevStr, 0, 1.0f);
 }
 
+static const u32 a_gx_tev_color[] = {
+    0xFF000080,
+    0x0000FF80,
+    0x00FF0080,
+};
+
 BOOL daNpc_Co1_c::_draw() {
     J3DModel* mainModel = mpMorf->getModel();
     J3DModelData* mainModelData = mainModel->getModelData();
     J3DModel* prlModel = mpPrlMorf->getModel();
     J3DModelData* prlModelData = prlModel->getModelData();
 
-    if (mInitFlags || mDemoFlags) {
-        return TRUE;
-    }
+    if (mInitFlags || mDemoFlags) return TRUE;
 
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
 
-    dKy_tevstr_c& tr = tevStr;
-    u8 alpha = l_HIO.mNpc.mAlpha;
-    u8 alpha_calc = (255 - alpha) * mOscillation;
-    tr.mLightObj.mInfo.mColor.r = alpha_calc + alpha;
+    dKy_tevstr_c* tr = &tevStr;
+    u32 alpha = l_HIO.mNpc.mAlpha & 0xFF;
+    s32 invAlpha = 255 - alpha;
+    f32 calc = (f32)invAlpha * mOscillation;
+    s32 iCalc = (s32)calc;
+    tr->mLightObj.mInfo.mColor.r = (iCalc & 0xFF) + (u8)alpha;
 
-    g_env_light.setLightTevColorType(mainModel, &tr);
+    g_env_light.setLightTevColorType(mainModel, tr);
 
     mBtpAnm.entry(mainModelData, mBtpFrame);
     mpMorf->entryDL();
@@ -1154,7 +1192,7 @@ BOOL daNpc_Co1_c::_draw() {
 
     g_env_light.setLightTevColorType(prlModel, &tevStr);
 
-    mBtkAnm.entry(prlModelData, (f32)mBtkFrame);
+    mBtkAnm.entry(prlModelData, mBtkFrame);
     mpPrlMorf->entryDL();
     prlModelData->getMaterialTable().removeTexMtxAnimator(mBtkAnm.getBtkAnm());
 
@@ -1168,6 +1206,7 @@ BOOL daNpc_Co1_c::_draw() {
 
     return TRUE;
 }
+
 
 BOOL daNpc_Co1_c::_execute() {
     if (!mExecStarted) {
@@ -1197,7 +1236,8 @@ BOOL daNpc_Co1_c::_execute() {
 
     checkOrder();
 
-    if (demo() == 0) {
+    u32 demoResult = demo();
+    if (((demoResult << 24) >> 24) == 0) {
         int staffId = -1;
         if (dComIfGp_event_runCheck()) {
             if (!eventInfo.checkCommandTalk()) {
@@ -1230,16 +1270,19 @@ BOOL daNpc_Co1_c::_execute() {
     return TRUE;
 }
 
+
 BOOL daNpc_Co1_c::_delete() {
     dComIfG_resDelete(&mPhs, "Co");
-    dKy_plight_cut((LIGHT_INFLUENCE*)&mPrevPos);
-
+    dKy_plight_cut(&mLight);
     if (heap != NULL && mpMorf != NULL) {
         mpMorf->stopZelAnime();
     }
-
     return TRUE;
 }
+
+
+
+
 
 static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
     return ((daNpc_Co1_c*)actor)->CreateHeap();
@@ -1253,12 +1296,12 @@ cPhs_State daNpc_Co1_c::_create() {
         return resLoad;
     }
 
-    u8 decResult = charDecide(fopAcM_GetParam(this) & CHAR_TYPE_MASK);
-    if (!decResult) {
+    if (!(charDecide(fopAcM_GetParam(this) & CHAR_TYPE_MASK) & 0xFF)) {
         return cPhs_ERROR_e;
     }
 
-    static int a_size_tbl[] = { 0x272E0 };
+    enum { HEAP_SIZE = 0x272E0 };
+    static int a_size_tbl[] = { HEAP_SIZE };
 
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_size_tbl[mType])) {
         return cPhs_ERROR_e;
@@ -1267,12 +1310,9 @@ cPhs_State daNpc_Co1_c::_create() {
     fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -40.0f, -20.0f, -100.0f, 40.0f, 100.0f, 60.0f);
 
-    u8 initResult = createInit();
-    if (initResult == 0) {
-        return cPhs_ERROR_e;
-    }
-    return resLoad;
+    return (createInit() & 0xFF) ? resLoad : cPhs_ERROR_e;
 }
+
 
 J3DModelData* daNpc_Co1_c::create_Anm() {
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Co", CO_BDL_CO);
@@ -1352,9 +1392,12 @@ BOOL daNpc_Co1_c::CreateHeap() {
 
     mTexPatternNum = 6;
 
-    if ((u8)iniTexPttrnAnm(FALSE) == 0) {
-        mpMorf = NULL;
-        return FALSE;
+    {
+        u32 texResult = iniTexPttrnAnm(FALSE);
+        if ((texResult << 24) >> 24 == 0) {
+            mpMorf = NULL;
+            return FALSE;
+        }
     }
 
     if (create_prl_Anm() == NULL) {
@@ -1362,14 +1405,20 @@ BOOL daNpc_Co1_c::CreateHeap() {
         return FALSE;
     }
 
-    if ((u8)setBtk(FALSE) == 0) {
-        mpMorf = NULL;
-        mpPrlMorf = NULL;
-        return FALSE;
+    {
+        u32 btkResult = setBtk(FALSE);
+        if ((btkResult << 24) >> 24 == 0) {
+            mpMorf = NULL;
+            mpPrlMorf = NULL;
+            return FALSE;
+        }
     }
 
-    if ((u8)create_itm_Mdl() == 0) {
-        goto error; // cleanup path
+    {
+        u32 itmResult = create_itm_Mdl();
+        if ((itmResult << 24) >> 24 == 0) {
+            goto error;
+        }
     }
 
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
@@ -1391,6 +1440,7 @@ error:
     mpPrlMorf = NULL;
     return FALSE;
 }
+
 
 static cPhs_State daNpc_Co1_Create(fopAc_ac_c* i_this) {
     return ((daNpc_Co1_c*)i_this)->_create();
