@@ -1678,7 +1678,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_zk1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_npc_zl1"),
     ActorRel(NonMatching, "d_a_nz"),
-    ActorRel(NonMatching, "d_a_obj_Itnak"),
+    ActorRel(Equivalent, "d_a_obj_Itnak"), # _create/_draw minor regalloc/inline nonmatching
     ActorRel(NonMatching, "d_a_obj_Vds"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_Vteng"),
     ActorRel(NonMatching, "d_a_obj_YLzou"),
