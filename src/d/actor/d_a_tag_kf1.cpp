@@ -29,8 +29,27 @@ void daTag_Kf1_c::setStt(signed char) {
 }
 
 /* 00000234-00000294       .text next_msgStatus__11daTag_Kf1_cFPUl */
-void daTag_Kf1_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
+u16 daTag_Kf1_c::next_msgStatus(unsigned long* param_1) {
+    u16 uVar1 = 0xF;
+
+    switch (*param_1) {
+        case 0x1C30:
+            *param_1 = 0x1C35;
+            break;
+
+        case 0x1C35:
+            *param_1 = 0x1C31;
+            break;
+
+        case 0x1C2E:
+            mRupeeCount = dComIfGs_getRupee();
+
+        default:
+            uVar1 = 0x10;
+            break;
+    }
+
+    return uVar1;
 }
 
 /* 00000294-00000314       .text eventOrder__11daTag_Kf1_cFv */
