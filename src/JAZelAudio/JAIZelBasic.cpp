@@ -254,18 +254,18 @@ void JAIZelBasic::resetRecover() {
 }
 
 /* 802A334C-802A33D0       .text bgmStreamPrepare__11JAIZelBasicFUl */
-void JAIZelBasic::bgmStreamPrepare(u32 param_1) {
+void JAIZelBasic::bgmStreamPrepare(u32 soundID) {
     if (field_0x0063) {
         return;
     }
-    startSoundVec(param_1, &mpStreamBgmSound, NULL, 0, 0, 4);
+    startSoundVec(soundID, &mpStreamBgmSound, NULL, 0, 0, 4);
     if (mpStreamBgmSound) {
         mpStreamBgmSound->setPrepareFlag(1);
     }
-    if (param_1 == JA_STRM_BST_START) {
+    if (soundID == JA_STRM_BST_START) {
         field_0x00be = 1;
     }
-    mStreamBgmNum = param_1;
+    mStreamBgmNum = soundID;
 }
 
 /* 802A33D0-802A34A4       .text bgmStreamPlay__11JAIZelBasicFv */
@@ -686,7 +686,7 @@ void JAIZelBasic::initSe() {
 }
 
 /* 802A6720-802A8550       .text seStart__11JAIZelBasicFUlP3VecUlScffffUc */
-void JAIZelBasic::seStart(u32 i_seNum, Vec*, u32, s8, f32, f32, f32, f32, u8) {
+JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec*, u32, s8, f32, f32, f32, f32, u8) {
     /* Nonmatching */
     // "Kurobo voices should be played in monsSeStart!\n"
     OSReport("クロボーの声は monsSeStartで！\n");
@@ -794,7 +794,7 @@ void JAIZelBasic::charVoicePlay(s32 param_1, s32 param_2, Vec* param_3, s8 param
     if (field_0x2060) {
         field_0x2060->stop(0);
     }
-    startSoundVec(0x481f, &field_0x2060, param_3, 0, 0, 4);
+    startSoundVec(JA_SE_CV_COMMON_PEOPLE, &field_0x2060, param_3, 0, 0, 4);
     if (field_0x2060) {
         field_0x2060->setPortData(8, r31);
         field_0x2060->setPortData(9, param_4);
@@ -1357,7 +1357,7 @@ void JAIZelBasic::setScene(s32 sceneNum, s32 roomNo, s32 param_3, s32 layerNo) {
 
 /* 802AACE8-802AAD0C       .text expandSceneBgmNum__11JAIZelBasicFUl */
 u32 JAIZelBasic::expandSceneBgmNum(u32 bgmNum) {
-    /* Nonmatching - regalloc */
+    /* Nonmatching - retail-only regalloc */
     if ((bgmNum & 0xF000) == 0x8000) {
         u32 temp = bgmNum & 0x7FFF;
         temp |= JAISoundID_Type_Stream;
@@ -1590,11 +1590,12 @@ void JAIZelBasic::setEventBit(void* param_1) {
 /* 802ABE18-802ABE50       .text checkEventBit__11JAIZelBasicFUs */
 BOOL JAIZelBasic::checkEventBit(u16 param_1) {
     if (field_0x0024 == NULL) {
-        return false;
+        return FALSE;
     }
-    u32 var1 = param_1 & 0xff;
     u32 var2 = (param_1 & 0xff00) >> 8;
-    if (u8(field_0x0024[var2] & var1)) {
+    u32 var1 = param_1 & 0xff;
+    u8 temp = field_0x0024[var2] & var1;
+    if (temp) {
         return TRUE;
     } else {
         return FALSE;
@@ -1659,9 +1660,13 @@ int JAIZelBasic::checkOnOuterSea(f32* r4) {
         return 4;
     }
     int islandX = ((mIslandRoomNo - 1) % 7) - 3;
+    f32 f5 = islandX * 100000.0f;
     int islandY = ((mIslandRoomNo - 1) / 7) - 3;
-    f32 f6 = sp0C.field_0x0 - (mAudioCamera->field_0x0->x - islandX * 100000.0f);
-    f32 f0 = sp0C.field_0x8 - (mAudioCamera->field_0x0->z - islandY * 100000.0f);
+    f32 f1 = islandY * 100000.0f;
+    f32 f2 = mAudioCamera->field_0x0->x - f5;
+    f32 f1_2 = mAudioCamera->field_0x0->z - f1;
+    f32 f6 = sp0C.field_0x0 - f2;
+    f32 f0 = sp0C.field_0x8 - f1_2;
     *r4 = f6*f6 + f0*f0;
     *r4 = std::sqrtf(*r4);
     

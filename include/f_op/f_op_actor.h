@@ -305,7 +305,7 @@ public:
     /* 0x26C */ actor_attention_types attention_info;
     /* 0x284 */ s8 max_health;
     /* 0x285 */ s8 health;
-    /* 0x288 */ s32 itemTableIdx;
+    /* 0x288 */ int itemTableIdx;
     /* 0x28C */ u8 stealItemBitNo; // For limited items (Blue Chu Jelly), this is the first itemBitNo to set.
     /* 0x28D */ s8 stealItemLeft;
 
@@ -368,7 +368,7 @@ public:
 
 STATIC_ASSERT(sizeof(fopEn_enemy_c) == 0x2AC);
 
-s32 fopAc_IsActor(void* actor);
+BOOL fopAc_IsActor(void* actor);
 
 extern int g_fopAc_type;
 extern actor_method_class g_fopAc_Method;

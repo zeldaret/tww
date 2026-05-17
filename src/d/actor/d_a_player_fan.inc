@@ -587,8 +587,8 @@ BOOL daPy_lk_c::procFanGlide() {
             prev = m34F4;
             cLib_addCalcAngleS(&m34F4, r30, 5, 0x800, 0x100);
             m34E4 += m34D8;
-            m34E4 = m34E4 - (s16)(prev - m34F4);
-            m34D8 = m34D8 + (s16)(prev - m34F4);
+            m34E4 -= (s16)(prev - m34F4);
+            m34D8 += (s16)(prev - m34F4);
             if (m34D8 > 0x380) {
                 m34D8 = 0x380;
             } else if (m34D8 < -0x380) {

@@ -555,7 +555,7 @@ BOOL daPy_lk_c::dProcOpenTreasure() {
 
 #if VERSION > VERSION_DEMO
 /* 8012E28C-8012E418       .text setGetItemSound__9daPy_lk_cFUsi */
-void daPy_lk_c::setGetItemSound(u16 param_1, int param_2) {
+void daPy_lk_c::setGetItemSound(u16 param_1, BOOL param_2) {
     if (param_1 == dItem_GREEN_RUPEE_e || param_1 == dItem_BLUE_RUPEE_e || param_1 == dItem_YELLOW_RUPEE_e ||
         param_1 == dItem_RED_RUPEE_e || param_1 == dItem_PURPLE_RUPEE_e || param_1 == TINCLE_RUPEE1)
     {
@@ -571,7 +571,7 @@ void daPy_lk_c::setGetItemSound(u16 param_1, int param_2) {
     {
         mDoAud_subBgmStart(JA_BGM_ITEM_GET_S);
         dComIfGp_setMesgBgmOn();
-    } else if (param_2 != dItem_HEART_e) {
+    } else if (param_2) {
         seStartSystem(JA_SE_ME_ITEM_GET_S);
         dComIfGp_setMesgBgmOn2();
     } else {
@@ -656,8 +656,8 @@ BOOL daPy_lk_c::setGetDemo() {
 
 /* 8012E6B4-8012E8B0       .text dProcGetItem_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcGetItem_init() {
-    BOOL sVar6 = 0;
-    BOOL sVar5 = 0;
+    BOOL sVar6 = FALSE;
+    BOOL sVar5 = FALSE;
 
     if (mCurProc == daPyProc_DEMO_GET_ITEM_e) {
         return true;
@@ -666,11 +666,11 @@ BOOL daPy_lk_c::dProcGetItem_init() {
         m34C2 = 10;
         mAcch.ClrWallNone();
         if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_BOXOPENLINK) {
-            sVar5 = 1;
+            sVar5 = TRUE;
         }
     } else if (mCurProc == daPyProc_DEMO_OPEN_SALVAGE_TREASURE_e) {
         m34C2 = 6;
-        sVar6 = 1;
+        sVar6 = TRUE;
     }
     int iVar2 = checkShipRideUseItem(0);
     commonProcInit(daPyProc_DEMO_GET_ITEM_e);

@@ -552,7 +552,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cc_d.cpp"),
             Object(Matching,    "d/d_cc_mass_s.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cc_s.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cc_uty.cpp"),
+            Object(Matching,    "d/d_cc_uty.cpp"),
             Object(NonMatching, "d/d_cam_param.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cam_type.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cam_style.cpp"),
@@ -904,20 +904,23 @@ config.libs = [
             Object(Matching,    "dolphin/gba/GBAXfer.c"),
         ],
     ),
-    JSystemLib(
-        "JAZelAudio",
-        [
+    {
+        "lib": "JAZelAudio",
+        "mw_version": "GC/1.3.2",
+        "cflags": cflags_dolzel,
+        "progress_category": "game",
+        "host": True,
+        "objects": [
             Object(NonMatching, "JAZelAudio/JAIZelBasic.cpp"),
             Object(NonMatching, "JAZelAudio/JAIZelAnime.cpp"),
             Object(NonMatching, "JAZelAudio/JAIZelAtmos.cpp"),
-            Object(NonMatching, "JAZelAudio/JAIZelInst.cpp"),
+            Object(Matching,    "JAZelAudio/JAIZelInst.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "JAZelAudio/JAIZelParam.cpp"),
             Object(NonMatching, "JAZelAudio/JAIZelCharVoiceTable.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "JAZelAudio/JAIZelScene.cpp"),
+            Object(Matching,    "JAZelAudio/JAIZelScene.cpp"),
             Object(Matching,    "JAZelAudio/JAIZelSound.cpp"),
         ],
-        progress_category="game",
-    ),
+    },
     DolphinLib(
         "gf",
         [

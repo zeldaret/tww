@@ -4558,7 +4558,7 @@ BOOL daPy_lk_c::checkIceSlipFall() {
             return procIceSlipFall_init();
         }
     } else {
-        m34D0 = 0x14;
+        m34D0 = 20;
     }
     return false;
 }
@@ -6084,7 +6084,7 @@ BOOL daPy_lk_c::procWait_init() {
     if (mDemo.getDemoMode() == daPy_demo_c::DEMO_KM_WAIT_e && m_tex_scroll_heap.field_0x6 == 0xFFFF) {
         changeTextureAnime(LKANM_BTP_TMABACC, LKANM_BTK_TEUR, -1);
         voiceStart(38);
-        m34D0 = 0x14;
+        m34D0 = 20;
     }
     if (mCurProc == daPyProc_WAIT_e) {
         return false;
@@ -6177,7 +6177,7 @@ BOOL daPy_lk_c::procWait() {
                 m34D0--;
             } else if (cM_rnd() < 0.05f) {
                 voiceStart(38);
-                m34D0 = 0x14;
+                m34D0 = 20;
             }
         }
         if (!dComIfGp_event_runCheck() && m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_WAITS &&
@@ -6249,7 +6249,7 @@ BOOL daPy_lk_c::procMove_init() {
     }
     commonProcInit(daPyProc_MOVE_e);
     setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
-    m34D0 = 0x14;
+    m34D0 = 20;
     return true;
 }
 
@@ -6279,7 +6279,7 @@ BOOL daPy_lk_c::procAtnMove_init() {
     }
     commonProcInit(daPyProc_ATN_MOVE_e);
     setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
-    m34D0 = 0x14;
+    m34D0 = 20;
     return true;
 }
 
@@ -6338,7 +6338,7 @@ BOOL daPy_lk_c::procAtnActorMove_init() {
     }
     commonProcInit(daPyProc_ATN_ACTOR_MOVE_e);
     setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
-    m34D0 = 0x14;
+    m34D0 = 20;
     return true;
 }
 

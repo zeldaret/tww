@@ -1696,7 +1696,7 @@ BOOL daPy_lk_c::procCutTurnMove_init() {
         pcVar4 = checkNormalSwordEquip() ? NULL : (cXyz*)&eff_scale;
         m32E4.makeEmitter(dPa_name::ID_AK_JN_CHARGEPOWER00, mpCLModel->getAnmMtx(8), &current.pos, pcVar4);
         m32F0.makeEmitter(dPa_name::ID_AK_JN_CHARGEPOWER01, mpCLModel->getAnmMtx(8), &current.pos, pcVar4);
-        m34D0 = 0x2f;
+        m34D0 = 47;
     } else {
         m34D0 = -1;
     }
