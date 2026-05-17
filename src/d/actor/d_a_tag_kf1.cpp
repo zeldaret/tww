@@ -24,8 +24,15 @@ void daTag_Kf1_c::createInit() {
 }
 
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
-void daTag_Kf1_c::setStt(signed char) {
+void daTag_Kf1_c::setStt(signed char param_1) {
     /* Nonmatching */
+    field_0x768 = param_1;
+
+    // I cannot get the instruction to compile to extsb for the life of me :(
+    // Cloest I've gotten is trying to cast s16 resulting in extsh
+    if ((s16)field_0x768 != 0x3) {
+        return;
+    }
 }
 
 /* 00000234-00000294       .text next_msgStatus__11daTag_Kf1_cFPUl */
@@ -73,8 +80,9 @@ void daTag_Kf1_c::partner_srch() {
 }
 
 /* 0000057C-00000604       .text checkPartner__11daTag_Kf1_cFv */
-void daTag_Kf1_c::checkPartner() {
+int daTag_Kf1_c::checkPartner() {
     /* Nonmatching */
+    return 1;
 }
 
 /* 00000604-00000650       .text goto_nextStage__11daTag_Kf1_cFv */
@@ -110,6 +118,10 @@ void daTag_Kf1_c::event_bensyo() {
 /* 000007C4-000007FC       .text event_cntTsubo__11daTag_Kf1_cFv */
 void daTag_Kf1_c::event_cntTsubo() {
     /* Nonmatching */
+    int sVar1;
+
+    sVar1 = checkPartner();
+    field_0x73E = field_0x764 - sVar1;
 }
 
 /* 000007FC-00000978       .text privateCut__11daTag_Kf1_cFv */
