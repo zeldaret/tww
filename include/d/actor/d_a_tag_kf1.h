@@ -1,13 +1,13 @@
 #ifndef D_A_TAG_KF1_H
 #define D_A_TAG_KF1_H
 
-#include "f_op/f_op_actor.h"
+#include "d/d_npc.h"
 
-class daTag_Kf1_c : public fopAc_ac_c {
+class daTag_Kf1_c : public fopNpc_npc_c {
 public:
     void createInit();
     void setStt(signed char);
-    void next_msgStatus(unsigned long*);
+    u16 next_msgStatus(unsigned long*);
     void eventOrder();
     void checkOrder();
     void chkAttention(cXyz);
@@ -32,8 +32,13 @@ public:
     cPhs_State _create();
 
 public:
-    /* Place member variables here */
-};
+/* 0x6C4 */ u8 field_0x6C4[0x6D0 - 0x6C4];
+/* 0x6D0 */ dNpc_EventCut_c field_0x6D0;
+/* 0x73C */ u8 field_0x73C[0x742 - 0x73C];
+/* 0x742 */ u16 mRupeeCount;
+/* 0x744 */ u8 field_0x744[0x76C - 0x744];
+};  // Size: 0x76C
+STATIC_ASSERT(sizeof(daTag_Kf1_c) == 0x76C);
 
 class daTag_Kf1_HIO_c {
 public:
