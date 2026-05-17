@@ -100,14 +100,14 @@ void JAIZelInst::reset() {
     field_0x1e = 0;
     field_0x34 = 0x37;
     field_0x48 = 0;
-    mDoAud_seStop(JA_SE_WTAKT_ARM_SWING, 0);
-    mDoAud_seStop(JA_SE_WTAKT_METRONOME, 0);
-    mDoAud_seStop(JA_SE_WTAKT_DRONE, 0);
-    mDoAud_seStop(JA_SE_WTAKT_DRONE_4, 0);
-    mDoAud_seStop(JA_SE_WTAKT_DRONE_6, 0);
-    mDoAud_seStop(JA_SE_WTAKT_PULSE_3, 0);
-    mDoAud_seStop(JA_SE_WTAKT_PULSE_4, 0);
-    mDoAud_seStop(JA_SE_WTAKT_PULSE_6, 0);
+    mDoAud_seStop(JA_SE_WTAKT_ARM_SWING);
+    mDoAud_seStop(JA_SE_WTAKT_METRONOME);
+    mDoAud_seStop(JA_SE_WTAKT_DRONE);
+    mDoAud_seStop(JA_SE_WTAKT_DRONE_4);
+    mDoAud_seStop(JA_SE_WTAKT_DRONE_6);
+    mDoAud_seStop(JA_SE_WTAKT_PULSE_3);
+    mDoAud_seStop(JA_SE_WTAKT_PULSE_4);
+    mDoAud_seStop(JA_SE_WTAKT_PULSE_6);
     field_0x38 = NULL;
     field_0x3c = NULL;
     field_0x40 = NULL;
@@ -125,7 +125,7 @@ void JAIZelInst::playArmSwing(s32 main_stick, s32 c_stick) {
 
 /* 802AE278-802AE2B8       .text stopArmSwing__10JAIZelInstFv */
 void JAIZelInst::stopArmSwing() {
-    mDoAud_seStop(JA_SE_LK_WTAKT_SWING, 0);
+    mDoAud_seStop(JA_SE_LK_WTAKT_SWING);
     field_0x14 = 0x2F;
 }
 
