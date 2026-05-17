@@ -101,7 +101,7 @@ public:
     fopAc_ac_c* convPId(fpc_ProcID);
     u8 getTactFreeMStick(int);
     u8 getTactFreeCStick(int);
-    bool giveItemCut(u8);
+    int giveItemCut(u8);
 
     u8 getTalkXYBtn() { return mTalkButton; }
     bool chkTalkXY() {

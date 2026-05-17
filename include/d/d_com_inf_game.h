@@ -3318,6 +3318,10 @@ inline u8 dComIfGp_event_getGtItm() {
     return g_dComIfG_gameInfo.play.getEvent()->getGtItm();
 }
 
+inline int dComIfGp_event_giveItemCut(u8 itemNo) {
+    return g_dComIfG_gameInfo.play.getEvent()->giveItemCut(itemNo);
+}
+
 inline s32 dComIfGp_event_moveApproval(void* actor) {
     return g_dComIfG_gameInfo.play.getEvent()->moveApproval(actor);
 }

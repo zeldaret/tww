@@ -774,12 +774,12 @@ char* dEvt_info_c::getEventName() {
 }
 
 /* 800716F8-80071778       .text giveItemCut__14dEvt_control_cFUc */
-bool dEvt_control_c::giveItemCut(u8 item) {
+int dEvt_control_c::giveItemCut(u8 item) {
     s32 staffIdx = dComIfGp_evmng_getMyStaffId("GIVEMAN");
     if (staffIdx == -1)
         return false;
 
     dComIfGp_evmng_cutEnd(staffIdx);
     mGetItemNo = item;
-    return true;
+    return 1;
 }
