@@ -23,7 +23,7 @@ void daTag_Kf1_c::createInit() {
 
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
 void daTag_Kf1_c::setStt(signed char param_1) {
-    
+
     field_0x768 = param_1;
     if ((s8)field_0x768 > 0x3) {
         return;
@@ -83,7 +83,8 @@ int daTag_Kf1_c::checkPartner() {
 
 /* 00000604-00000650       .text goto_nextStage__11daTag_Kf1_cFv */
 void daTag_Kf1_c::goto_nextStage() {
-    /* Nonmatching */
+    dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0, 0xff, 0xff,0.0,0,1,0);
+  return;
 }
 
 /* 00000650-000006DC       .text event_talkInit__11daTag_Kf1_cFi */
