@@ -372,8 +372,14 @@ static void st_part_draw(st_class* i_this) {
     local_24.set(actor->current.pos.x, actor->current.pos.y + 200.0f, actor->current.pos.z);
     local_28 = 0;
     for (s32 i = 0; i < 26; i++) {
-        // TODO: fakematch
-        if ((i_this->mParts[i].mPartState < 10) && ((i_this->m1DC8 == 0) || (((u32)(i - 5U) > 1U) && (i != 7))) && (i != 0xB)) {
+        if (
+            (i_this->mParts[i].mPartState < 10) &&
+            !(
+                (i_this->m1DC8 != 0) &&
+                ((i == 5) || (i == 6) || !(i != 7))
+            ) &&
+            (i != 0xB)
+        ) {
             J3DModel* model = i_this->mParts[i].mpPartModel;
             if (model != NULL) {
                 if (((i == 0xF) || (i == 0x10) || (i == 0x11)) && (i_this->m1DD8 == 2)) {
@@ -1638,11 +1644,13 @@ static void damage_check(st_class* i_this) {
                         }
                     } else if (i == 0) {
                         i_this->m1DE4 = REG6_S(7) + 10;
-                        if (i_this->mActionState != 0x20) {
-                            if ((i_this->mActionState == 0x1F) & (u8)(((s16)(i_this->m02C4 >> 5) & 0xFF) == 0xA)) {
-                                i_this->mActionState = 0x1F;
-                                i_this->m02C4 = 10;
-                            }
+                        if (
+                            (i_this->mActionState == 0x20) ||
+                            // @bug Typo: Bitwise & instead of logical &.
+                            ((i_this->mActionState == 0x1F) & (i_this->m02C4 >= 0xA))
+                        ) {
+                            i_this->mActionState = 0x1F;
+                            i_this->m02C4 = 10;
                         } else if (i_this->mActionState != 0x21) {
                             i_this->mActionState = 0x1F;
                             i_this->m02C4 = 0;
@@ -2709,8 +2717,13 @@ static BOOL daSt_Execute(st_class* i_this) {
     if (i_this->m1DDC != 0) {
         i_this->m1DDC--;
     }
+#if VERSION == VERSION_DEMO
+    damage_check(i_this);
+    St_move(i_this);
+#else
     St_move(i_this);
     damage_check(i_this);
+#endif
     cLib_addCalcAngleS2(&actor->shape_angle.y, actor->current.angle.y + i_this->m0302, 2, 0x1000);
     i_this->m0302 = 0;
     i_this->mpMorf->play(&actor->eyePos, 0, 0);

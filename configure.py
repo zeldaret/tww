@@ -1777,7 +1777,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_scene_change"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_shutter"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_shutter2"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_st"),
+    ActorRel(Matching,    "d_a_st"),
     ActorRel(Matching,    "d_a_steam_tag"),
     ActorRel(Matching,    "d_a_swattack"),
     ActorRel(Matching,    "d_a_switem"),

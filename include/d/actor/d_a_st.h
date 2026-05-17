@@ -144,8 +144,9 @@ struct st_class {
     /* 0x1F88 */ dPa_smokeEcallBack m1F88;
     /* 0x1FA8 */ enemyice mEnemyIce;
     /* 0x2360 */ u32 mShadowId;
+#if VERSION > VERSION_DEMO
     /* 0x2364 */ s8 m2364;
-    /* 0x2365 */ u8 m2365[0x2368 - 0x2365];
+#endif
 }; // Size: 0x2368
 
 class HIO_c : public JORReflexible {
