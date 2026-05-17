@@ -539,7 +539,7 @@ BOOL daPy_lk_c::procCrawlAutoMove_init(int param_0, cXyz* param_1) {
     m370C = *param_1;
     m35E4 = 1.0f;
     mProcVar0.m3570 = param_0;
-    m34D0 = 0x14;
+    m34D0 = 20;
     m34D6 = 300;
     dComIfGp_setPlayerStatus0(0, daPyStts0_CRAWL_e);
     setCrawlMoveDirectionArrow();

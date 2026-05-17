@@ -1304,7 +1304,7 @@ public:
     BOOL dProcOpenTreasure_init();
     BOOL dProcOpenTreasure();
 #if VERSION > VERSION_DEMO
-    void setGetItemSound(u16, int);
+    void setGetItemSound(u16, BOOL);
     BOOL setGetDemo();
 #endif
     BOOL dProcGetItem_init();
@@ -2156,12 +2156,12 @@ public:
     /* 0x34CC */ u8 m34CC;
     /* 0x34CD */ u8 m34CD;
     /* 0x34CE */ u8 m34CE;
-    /* 0x34D0 */ s16 m34D0;
-    /* 0x34D2 */ s16 m34D2;
-    /* 0x34D4 */ s16 m34D4;
-    /* 0x34D6 */ s16 m34D6;
-    /* 0x34D8 */ s16 m34D8;
-    /* 0x34DA */ s16 m34DA;
+    /* 0x34D0 */ s16 m34D0; // TODO: procvar
+    /* 0x34D2 */ s16 m34D2; // TODO: procvar
+    /* 0x34D4 */ s16 m34D4; // TODO: procvar
+    /* 0x34D6 */ s16 m34D6; // TODO: procvar
+    /* 0x34D8 */ s16 m34D8; // TODO: procvar
+    /* 0x34DA */ s16 m34DA; // TODO: procvar
     /* 0x34DC */ s16 m34DC;
     /* 0x34DE */ s16 m34DE;
     /* 0x34E0 */ s16 m34E0;
@@ -2241,7 +2241,7 @@ public:
         daPy_ANM mDamageAnm;
         int mBottleItem;
     } /* 0x3570  */ mProcVar0;
-    /* 0x3574 */ s32 m3574;
+    /* 0x3574 */ s32 m3574; // TODO: procvar
     /* 0x3578 */ int m3578;
     /* 0x357C */ int m357C;
     /* 0x3580 */ int m3580;

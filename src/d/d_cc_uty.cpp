@@ -86,7 +86,9 @@ void def_se_set_p(fopAc_ac_c* actor, cXyz* sePos, cCcD_Obj* obj, unsigned long r
 
 /* 800AEBCC-800AEEF8       .text at_power_check__FP8CcAtInfo */
 fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
+    fopAc_ac_c* player_actor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    
     if (atInfo->mpObj == NULL) {
         return NULL;
     }
@@ -185,6 +187,8 @@ fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
 
 /* 800AEEF8-800AF368       .text cc_at_check__FP10fopAc_ac_cP8CcAtInfo */
 fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    
     atInfo->mHitSoundId = 0;
     atInfo->mpActor = at_power_check(atInfo);
     

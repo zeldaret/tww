@@ -632,7 +632,7 @@ BOOL daPy_lk_c::procShipPaddle_init() {
     }
     setShipRidePos(1);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SHIP_RIDE_e);
-    m34D0 = (s16)(int)(300.0f + cM_rndF(150.0f));
+    m34D0 = 300.0f + cM_rndF(150.0f);
     return true;
 }
 

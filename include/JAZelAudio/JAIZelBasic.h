@@ -22,7 +22,7 @@ public:
     void gframeProcess();
     void resetProcess();
     void resetRecover();
-    void bgmStreamPrepare(u32);
+    void bgmStreamPrepare(u32 soundID);
     void bgmStreamPlay();
     void bgmStart(u32, u32, s32);
     void bgmStop(u32, s32);
@@ -60,7 +60,7 @@ public:
     void startLandingDemo();
     void endLandingDemo();
     void initSe();
-    void seStart(u32, Vec*, u32, s8, f32, f32, f32, f32, u8);
+    JAISound** seStart(u32, Vec* = NULL, u32 = 0 , s8 = 0, f32 = 1.0f, f32 = 1.0f, f32 = -1.0f, f32 = -1.0f, u8 = 0);
     void seStop(u32, s32);
     BOOL checkSePlaying(u32);
     void seStopActor(Vec*, u32);

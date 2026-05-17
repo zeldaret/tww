@@ -664,7 +664,7 @@ void dWood::Unit_c::set_mtx(dWood::Anm_c *anim) {
 
 /* 800BEA28-800BEA50       .text clear__Q25dWood6Unit_cFv */
 void dWood::Unit_c::clear() {
-    cLib_memSet(this, 0, 0x18c);
+    cLib_memSet(this, 0, sizeof(*this));
 }
 
 /* 800BEA50-800BEE9C       .text cc_hit_before_cut__Q25dWood6Unit_cFPQ25dWood8Packet_c */
@@ -701,7 +701,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
                 mAnimCooldown = 20;
 
                 // Play the cut sound
-                mDoAud_seStart(JA_SE_OBJ_TREE_SWING, &mPos, 0, 0);
+                mDoAud_seStart(JA_SE_OBJ_TREE_SWING, &mPos);
 
                 // If we are currently performing a basic animation, assign a
                 // new animation
@@ -731,7 +731,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
             inf.GetCoHitLen() >= 2.0f && mAnimCooldown == 0) {
 
             mAnimCooldown = 20;
-            mDoAud_seStart(JA_SE_OBJ_TREE_SWING, &mPos, 0, 0);
+            mDoAud_seStart(JA_SE_OBJ_TREE_SWING, &mPos);
 
             // If we are currently performing a basic animation, assign a new
             // animation
@@ -776,7 +776,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
                                       NULL, 0xff, NULL, -1, &mTevStr.mColorK0,
                                       NULL, NULL);
 
-                mDoAud_seStart(JA_SE_OBJ_CUT_L_TREE_DOWN, &mPos, 0, 0);
+                mDoAud_seStart(JA_SE_OBJ_CUT_L_TREE_DOWN, &mPos);
 
                 f32 newShadowScale = L_attr.kCutShadowScale / L_attr.kUncutShadowScale;
 

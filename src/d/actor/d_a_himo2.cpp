@@ -1401,7 +1401,7 @@ void new_himo2_move(himo2_class* i_this) {
     case 4: {
         dKy_custom_colset(0, 4, 1.0f);
         if (i_this->m029C == (s16)(REG0_S(2) + 57)) {
-            mDoAud_seStart(JA_SE_CV_DRG_SET_ROPE, 0, 0, 0);
+            mDoAud_seStart(JA_SE_CV_DRG_SET_ROPE, NULL, 0, 0);
         }
         if (i_this->m029C <= 1) {
             dKy_custom_colset(0, 4, 0.0f);
@@ -1446,11 +1446,11 @@ void new_himo2_move(himo2_class* i_this) {
     case 5: {
         if (i_this->m029C == 0) {
             if (i_this->m02E0 == 0) {
-                mDoAud_seStart(JA_SE_CV_DRG_ROCKFALL_1, 0, 0, 0);
+                mDoAud_seStart(JA_SE_CV_DRG_ROCKFALL_1, NULL, 0, 0);
             } else if (i_this->m02E0 == 1) {
-                mDoAud_seStart(JA_SE_CV_DRG_ROCKFALL_1_2, 0, 0, 0);
+                mDoAud_seStart(JA_SE_CV_DRG_ROCKFALL_1_2, NULL, 0, 0);
             } else if (i_this->m02E0 >= 2) {
-                mDoAud_seStart(JA_SE_CV_DRG_ROCKFALL_1_3, 0, 0, 0);
+                mDoAud_seStart(JA_SE_CV_DRG_ROCKFALL_1_3, NULL, 0, 0);
                 i_this->m02E0 = 2;
             }
             i_this->m02E0++;
@@ -1540,7 +1540,7 @@ void new_himo2_move(himo2_class* i_this) {
     case 8: {
         dr->unk_40A = 3;
         if (i_this->m029C == 200) {
-            mDoAud_seStart(JA_SE_CV_DRG_ROCKFALL_2, 0, 0, 0);
+            mDoAud_seStart(JA_SE_CV_DRG_ROCKFALL_2, NULL, 0, 0);
         }
         if (i_this->m029C == 170) {
             fopAcM_seStartCurrent((fopAc_ac_c*)dr, JA_SE_CM_BTD_BEF_ROCK_FALL, 0);

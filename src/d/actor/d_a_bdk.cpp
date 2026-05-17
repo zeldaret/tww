@@ -2992,7 +2992,7 @@ static void demo_camera(bdk_class* i_this) {
                     i_this->m6100[1] = dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_FUTATOJI_ROCK00, &center_pos2, NULL, NULL, 0xFF);
                 }
                 i_this->m25D4 = DEMO_SELECT(REG13_F(18), REG0_F(18)) + 1.5f;
-                mDoAud_seStart(JA_SE_ATM_MJT_JINARI, 0);
+                mDoAud_seStart(JA_SE_ATM_MJT_JINARI);
                 cLib_addCalc0(&i_this->m6320, 1.0f, DEMO_SELECT(REG13_F(0), REG0_F(0)) + 1.0f);
                 i_this->m631C += 0.003f + REG0_F(8);
                 r27 = 1;
@@ -3023,7 +3023,7 @@ static void demo_camera(bdk_class* i_this) {
 
             if (i_this->m25A6 < (s16)(DEMO_SELECT(REG13_S(6), REG0_S(6)) + 0x9B)) {
                 i_this->m25D4 = DEMO_SELECT(REG13_F(5), REG0_F(5)) + 5.0f;
-                mDoAud_seStart(JA_SE_ATM_MJT_JINARI, 0);
+                mDoAud_seStart(JA_SE_ATM_MJT_JINARI);
             }
             if (i_this->m25A6 == (s16)(DEMO_SELECT(REG13_S(6), REG0_S(6)) + 0x96)) {
                 i_this->m25D8 = 1;
