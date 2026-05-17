@@ -25,38 +25,36 @@ void daTag_Kf1_c::createInit() {
 
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
 void daTag_Kf1_c::setStt(signed char param_1) {
-    /* Nonmatching */
+    
     field_0x768 = param_1;
-
-    // I cannot get the instruction to compile to extsb for the life of me :(
-    // Cloest I've gotten is trying to cast s16 resulting in extsh
-    if ((s16)field_0x768 != 0x3) {
+    if ((s8)field_0x768 > 0x3) {
         return;
     }
 }
 
 /* 00000234-00000294       .text next_msgStatus__11daTag_Kf1_cFPUl */
-u16 daTag_Kf1_c::next_msgStatus(unsigned long* param_1) {
-    u16 uVar1 = 0xF;
+u16 daTag_Kf1_c::next_msgStatus(unsigned long* msgNo) {
+    u16 retStatus = 0xF;
 
-    switch (*param_1) {
+    switch (*msgNo) {
         case 0x1C30:
-            *param_1 = 0x1C35;
+            *msgNo = 0x1C35;
             break;
 
         case 0x1C35:
-            *param_1 = 0x1C31;
+            *msgNo = 0x1C31;
             break;
 
         case 0x1C2E:
             mRupeeCount = dComIfGs_getRupee();
+            // Doing a fallthrough since it seems to compile better than trying to define the retStatus here.
 
         default:
-            uVar1 = 0x10;
+            retStatus = 0x10;
             break;
     }
 
-    return uVar1;
+    return retStatus;
 }
 
 /* 00000294-00000314       .text eventOrder__11daTag_Kf1_cFv */
@@ -96,23 +94,31 @@ void daTag_Kf1_c::event_talkInit(int) {
 }
 
 /* 000006DC-0000071C       .text event_mesSet__11daTag_Kf1_cFv */
-void daTag_Kf1_c::event_mesSet() {
-    /* Nonmatching */
+BOOL daTag_Kf1_c::event_mesSet() {
+    talk(0);
+    return mCurrMsgBsPcId == -1 ? 0 : 1; // I suspect this -1 is an error enum or something?
 }
 
 /* 0000071C-00000750       .text event_mesEnd__11daTag_Kf1_cFv */
-void daTag_Kf1_c::event_mesEnd() {
-    /* Nonmatching */
+BOOL daTag_Kf1_c::event_mesEnd() {
+    return talk(0) == fopMsgStts_BOX_CLOSED_e ? 1 : 0;
 }
 
 /* 00000750-000007A4       .text bensyoInit__11daTag_Kf1_cFv */
 void daTag_Kf1_c::bensyoInit() {
-    /* Nonmatching */
+    dComIfGp_setItemRupeeCount(-(field_0x73E * 10));
+    mCurrMsgBsPcId = -1;
+    if (mRupeeCount > field_0x73E * 10) {
+        mCurrMsgNo = 0x1c2f;
+        return;
+    }
+    mCurrMsgNo = 0x1c30;
+    return;
 }
 
 /* 000007A4-000007C4       .text event_bensyo__11daTag_Kf1_cFv */
 void daTag_Kf1_c::event_bensyo() {
-    /* Nonmatching */
+    event_mesSet();
 }
 
 /* 000007C4-000007FC       .text event_cntTsubo__11daTag_Kf1_cFv */
@@ -140,13 +146,19 @@ void daTag_Kf1_c::set_action(int (daTag_Kf1_c::*)(void*), void*) {
 }
 
 /* 00000AB8-00000B14       .text wait01__11daTag_Kf1_cFv */
-void daTag_Kf1_c::wait01() {
-    /* Nonmatching */
+int daTag_Kf1_c::wait01() {
+    short sVar1;
+
+    field_0x767 = 0;
+    if ((field_0x73C != 0x0) && (sVar1 = checkPartner(), field_0x764 != sVar1)) { // This could be cleaned up I'm sure...
+        field_0x767 = 3;
+    }
+    return 1;
 }
 
 /* 00000B14-00000B1C       .text wait02__11daTag_Kf1_cFv */
-void daTag_Kf1_c::wait02() {
-    /* Nonmatching */
+int daTag_Kf1_c::wait02() {
+    return 1;
 }
 
 /* 00000B1C-00000BE8       .text wait_action1__11daTag_Kf1_cFPv */
@@ -156,7 +168,7 @@ void daTag_Kf1_c::wait_action1(void*) {
 
 /* 00000BE8-00000BF0       .text _draw__11daTag_Kf1_cFv */
 BOOL daTag_Kf1_c::_draw() {
-    /* Nonmatching */
+    return 1;
 }
 
 /* 00000BF0-00000C68       .text _execute__11daTag_Kf1_cFv */
@@ -166,7 +178,14 @@ BOOL daTag_Kf1_c::_execute() {
 
 /* 00000C68-00000CBC       .text _delete__11daTag_Kf1_cFv */
 BOOL daTag_Kf1_c::_delete() {
-    /* Nonmatching */
+    extern daTag_Kf1_HIO_c l_HIO;
+
+    if (l_HIO.mId >= 0) {
+        mDoHIO_deleteChild(l_HIO.mId);
+        l_HIO.mId = -1;
+    }
+
+    return 1;
 }
 
 /* 00000CBC-00000E98       .text _create__11daTag_Kf1_cFv */
