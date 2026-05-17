@@ -200,7 +200,7 @@ enum {
     /* 0xC0 */ DSNAP_TYPE_UNKC0,
     /* 0xC1 */ DSNAP_TYPE_UNKC1,
     /* 0xC2 */ DSNAP_TYPE_FGANON,
-    /* 0xC3 */ DSNAP_TYPE_UNKC3,
+    /* 0xC3 */ DSNAP_TYPE_ST,
     /* 0xC4 */ DSNAP_TYPE_UNKC4,
     /* 0xC5 */ DSNAP_TYPE_UNKC5,
     /* 0xC6 */ DSNAP_TYPE_DAIOCTA,

@@ -326,7 +326,7 @@ public:
     void loadTexture(u8, GXTexMapID) {}
     void setEmitterRotation(const JGeometry::TVec3<s16>&) {}
     void setGlobalParticleHeightScale(f32 y) { mGlobalParticleScale.y = y; }
-    void setGlobalParticleWidthScale(f32) {}
+    void setGlobalParticleWidthScale(f32 x) { mGlobalParticleScale.x = x; }
 
     static JPAEmitterInfo emtrInfo;
 
