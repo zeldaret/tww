@@ -1558,12 +1558,14 @@ static u8 hit_bit[] = {0x01, 0xFF, 0xFF, 0x02, 0x04, 0x08, 0x10};
 
 /* 00005950-000060B4       .text damage_check__FP8st_class */
 static void damage_check(st_class* i_this) {
-#if VERSION == VERSION_DEMO
     fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* heldWeapon;
     cXyz local_54;
     CcAtInfo atInfo;
 
+#if VERSION > VERSION_DEMO
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+#endif
     i_this->mStts.Move();
     if (i_this->m02F6 == 0) {
         for (s32 i = 0; i < 7; i++) {
@@ -1585,24 +1587,55 @@ static void damage_check(st_class* i_this) {
                     actor->stealItemLeft = 0;
                     cc_at_check(actor, &atInfo);
                     actor->stealItemLeft = bVar1;
-                    if (actor->health <= 0) {
+                    if (
+                        (actor->health <= 0)
+#if VERSION > VERSION_DEMO
+                        || (atInfo.mResultingAttackType == 9 || (atInfo.mResultingAttackType == 2))
+#endif
+                    ) {
                         head_anm_init(i_this, ST_BCK_HEADB_DEAD, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                         i_this->mParts[15].mPartState = 8;
-                        i_this->mParts[15].mPartRotAdd.x = cM_rndFX(9000.0f);
-                        i_this->mParts[15].mPartRotAdd.z = cM_rndFX(9000.0f);
-                        daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-                        cMtx_YrotS(*calc_mtx, fopAcM_searchActorAngleY(actor, player));
-                        local_54.x = 0.0f;
-                        local_54.y = 50.0f;
-                        local_54.z = -50.0f;
-                        MtxPosition(&local_54, &i_this->mParts[15].mPartVelocity);
-
+#if VERSION > VERSION_DEMO
+                        if ((atInfo.mResultingAttackType == 9) && (player->getCutType() != daPy_py_c::CUT_TYPE_HAMMER_SIDESWING)) {
+                            i_this->mParts[15].mPartVelocity.x = 0.0f;
+                            i_this->mParts[15].mPartVelocity.y = -5.0f;
+                            i_this->mParts[15].mPartVelocity.z = 0.0f;
+                            dScnPly_ply_c::setPauseTimer(6);
+                        } else
+#endif
+                        {
+                            i_this->mParts[15].mPartRotAdd.x = cM_rndFX(9000.0f);
+                            i_this->mParts[15].mPartRotAdd.z = cM_rndFX(9000.0f);
+#if VERSION == VERSION_DEMO
+                            cMtx_YrotS(*calc_mtx, fopAcM_searchPlayerAngleY(actor));
+                            local_54.x = 0.0f;
+                            local_54.y = 50.0f;
+                            local_54.z = -50.0f;
+#else
+                            cMtx_YrotS(*calc_mtx, player->shape_angle.y);
+                            if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
+                                local_54.x = REG8_F(4) + -100.0f;
+                                local_54.y = 30.0f;
+                                local_54.z = 0.0f;
+                                dScnPly_ply_c::setPauseTimer(6);
+                            } else {
+                                local_54.x = 0.0f;
+                                local_54.y = 50.0f;
+                                local_54.z = 50.0f;
+                            }
+#endif
+                            MtxPosition(&local_54, &i_this->mParts[15].mPartVelocity);
+                        }
                         i_this->mParts[15].mWaitTimer = 30;
                         fopAcM_monsSeStart(actor, JA_SE_CV_ST_DIE, 0);
                     } else {
                         head_anm_init(i_this, ST_BCK_HEADB_DAMAGE, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                         i_this->mParts[15].mPartState = 7;
                         i_this->mParts[15].mWaitTimer = 0x7f;
+#if VERSION > VERSION_DEMO
+                        i_this->m1E82 = REG8_S(2) + 0x14;
+                        fopAcM_monsSeStart(actor, JA_SE_CV_ST_HIT_BODY, 0);
+#endif
                     }
                 } else {
                     at_power_check(&atInfo);
@@ -1614,40 +1647,83 @@ static void damage_check(st_class* i_this) {
                         fopAcM_createStealItem(&actor->current.pos, actor->itemTableIdx, fopAcM_GetRoomNo(actor), 0, actor->stealItemBitNo);
                         actor->stealItemBitNo++;
                     }
-                    if (fopAcM_GetName(atInfo.mpActor) == PROC_PLAYER) {
+                    if (
+                        (fopAcM_GetName(atInfo.mpActor) == PROC_PLAYER)
+#if VERSION > VERSION_DEMO
+                        || (atInfo.mResultingAttackType == 2)
+#endif
+                    ) {
+#if VERSION > VERSION_DEMO
+                        if (atInfo.mResultingAttackType == 2) {
+                            i_this->m1E84 = 0;
+                        }
+#endif
                         def_se_set(actor, atInfo.mpObj, 0x34);
                         fopAcM_monsSeStart(actor, JA_SE_CV_ST_HIT_BODY, 0);
+#if VERSION == VERSION_DEMO
                         i_this->m1DE4 = REG6_S(6) + 20;
+#else
+                        if (atInfo.mResultingAttackType == 9) {
+                            i_this->m1DE4 = REG6_S(7) + 0x14;
+                        } else {
+                            i_this->m1DE4 = REG6_S(6) + 10;
+                        }
+#endif
                         i_this->m1E84 -= atInfo.mDamage;
                         mDoAud_bgmHitSound(atInfo.mHitSoundId);
                         if (i_this->m1E84 <= 0) {
+#if VERSION == VERSION_DEMO
                             i_this->m02C4 = 0;
+#endif
                             i_this->m1DC8 = 0;
                             if (((atInfo.mPlCutBit == 0x80) && (i_this->mActionState != 0x21)) && (i_this->mActionState != 0x20)) {
                                 i_this->mActionState = 0x21;
+#if VERSION > VERSION_DEMO
+                                i_this->m02C4 = 0;
+#endif
                                 i_this->m0ED3 = 10;
                                 i_this->mUpperBodyEntityId =
                                     fopAcM_create(PROC_ST, 0xe, &actor->current.pos, fopAcM_GetRoomNo(actor), &actor->home.angle, NULL, 0xff, NULL);
                                 i_this->m1E84 = 5;
+#if VERSION > VERSION_DEMO
+                                i_this->m1E86 = 0;
+#endif
                             } else {
+#if VERSION == VERSION_DEMO
                                 if (i_this->mActionState == 0x21) {
                                     i_this->m02C4 = 0x23;
                                 }
                                 if (i_this->mActionState == 0x20) {
                                     i_this->m02C4 = 0x14;
                                 }
+#else
+                                if (i_this->mActionState == 0x21) {
+                                    i_this->m02C4 = 0x23;
+                                } else if ((i_this->mActionState == 0x20) || ((i_this->mActionState == 0x1F) && (i_this->m02C4 >= 0xA))) {
+                                    i_this->m02C4 = 0x14;
+                                } else {
+                                    i_this->m02C4 = 0;
+                                }
+#endif
                                 i_this->mActionState = 0x1e;
                                 i_this->m0ED3 = 1;
+#if VERSION > VERSION_DEMO
+                                i_this->m02F8 = 0;
+#endif
                                 fopAcM_seStart(actor, JA_SE_CM_ST_BREAD_BODY, 0);
                                 fopAcM_monsSeStart(actor, JA_SE_CV_ST_BREAK, 0);
                             }
                         }
                     } else if (i == 0) {
-                        i_this->m1DE4 = REG6_S(7) + 10;
+                        i_this->m1DE4 = REG6_S(7) + DEMO_SELECT(10, 5);
                         if (
                             (i_this->mActionState == 0x20) ||
+#if VERSION == VERSION_DEMO
                             // @bug Typo: Bitwise & instead of logical &.
                             ((i_this->mActionState == 0x1F) & (i_this->m02C4 >= 0xA))
+#else
+                            ((i_this->mActionState == 0x1F) && (i_this->m02C4 >= 0xA))
+#endif
                         ) {
                             i_this->mActionState = 0x1F;
                             i_this->m02C4 = 10;
@@ -1660,7 +1736,7 @@ static void damage_check(st_class* i_this) {
                     } else {
                         def_se_set(actor, atInfo.mpObj, 0x34);
                         fopAcM_monsSeStart(actor, JA_SE_CV_ST_HIT_BODY, 0);
-                        i_this->m1DE4 = REG6_S(7) + 10;
+                        i_this->m1DE4 = REG6_S(7) + DEMO_SELECT(10, 8);
                         if ((i_this->mActionState != 0x21) && (i_this->mActionState != 0x20)) {
                             i_this->mActionState = 0;
                             wait_set(i_this);
@@ -1669,6 +1745,7 @@ static void damage_check(st_class* i_this) {
                         }
                     }
                 }
+#if VERSION == VERSION_DEMO
                 if (i_this->m1DE4 != 0) {
                     if ((i_this->mActionState == 0x21) || (i_this->mActionState == 0x20)) {
                         i_this->m1DE5 = -1;
@@ -1678,10 +1755,12 @@ static void damage_check(st_class* i_this) {
                         i_this->m1DE5 = hit_bit[i];
                     }
                 }
+#endif
                 break;
             }
         }
     }
+#if VERSION == VERSION_DEMO
     f32 var_f30 = i_this->m1DE4 * (180.0f + REG6_F(5));
     f32 temp_f0 = 1500.0f + REG6_F(6);
     if (var_f30 > temp_f0) {
@@ -1700,160 +1779,24 @@ static void damage_check(st_class* i_this) {
             i_this->m1DE6[i] = spC;
         }
     }
+#endif
     if (i_this->m1DE4 != 0) {
         i_this->m1DE4--;
+#if VERSION == VERSION_DEMO
         if (i_this->m1DE4 == 0) {
             i_this->m1DE5 = 0;
         }
-    }
-#else
-    fopAc_ac_c* actor = &i_this->actor;
-    fopAc_ac_c* heldWeapon;
-    cXyz local_54;
-    CcAtInfo atInfo;
-
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    i_this->mStts.Move();
-    if (i_this->m02F6 == 0) {
-        for (s32 i = 0; i < 7; i++) {
-            if (i_this->m054C[i].ChkTgHit()) {
-                atInfo.mpObj = i_this->m054C[i].GetTgHitObj();
-                atInfo.pParticlePos = i_this->m054C[i].GetTgHitPosP();
-                if (atInfo.mpObj->ChkAtType(AT_TYPE_LIGHT_ARROW)) {
-                    i_this->mEnemyIce.mLightShrinkTimer = 1;
-                    heldWeapon = fopAcM_SearchByID(i_this->mHeldWeaponEntityId);
-                    if (heldWeapon != NULL) {
-                        fopAcM_cancelCarryNow(heldWeapon);
-                    }
-                    i_this->m1DD0 = 0;
-                    return;
-                }
-                i_this->m02F6 = 5;
-                if ((i == 0) && (i_this->m1DD8 != 0)) {
-                    s8 bVar1 = actor->stealItemLeft;
-                    actor->stealItemLeft = 0;
-                    cc_at_check(actor, &atInfo);
-                    actor->stealItemLeft = bVar1;
-                    if ((actor->health <= 0) || (atInfo.mResultingAttackType == 9 || (atInfo.mResultingAttackType == 2))) {
-                        head_anm_init(i_this, ST_BCK_HEADB_DEAD, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                        i_this->mParts[15].mPartState = 8;
-                        if ((atInfo.mResultingAttackType == 9) && (player->getCutType() != daPy_py_c::CUT_TYPE_HAMMER_SIDESWING)) {
-                            i_this->mParts[15].mPartVelocity.x = 0.0f;
-                            i_this->mParts[15].mPartVelocity.y = -5.0f;
-                            i_this->mParts[15].mPartVelocity.z = 0.0f;
-                            dScnPly_ply_c::setPauseTimer(6);
-                        } else {
-                            i_this->mParts[15].mPartRotAdd.x = cM_rndFX(9000.0f);
-                            i_this->mParts[15].mPartRotAdd.z = cM_rndFX(9000.0f);
-                            cMtx_YrotS(*calc_mtx, player->shape_angle.y);
-                            if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
-                                local_54.x = REG8_F(4) + -100.0f;
-                                local_54.y = 30.0f;
-                                local_54.z = 0.0f;
-                                dScnPly_ply_c::setPauseTimer(6);
-                            } else {
-                                local_54.x = 0.0f;
-                                local_54.y = 50.0f;
-                                local_54.z = 50.0f;
-                            }
-                            MtxPosition(&local_54, &i_this->mParts[15].mPartVelocity);
-                        }
-                        i_this->mParts[15].mWaitTimer = 30;
-                        fopAcM_monsSeStart(actor, JA_SE_CV_ST_DIE, 0);
-                    } else {
-                        head_anm_init(i_this, ST_BCK_HEADB_DAMAGE, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                        i_this->mParts[15].mPartState = 7;
-                        i_this->mParts[15].mWaitTimer = 0x7f;
-                        i_this->m1E82 = REG8_S(2) + 0x14;
-                        fopAcM_monsSeStart(actor, JA_SE_CV_ST_HIT_BODY, 0);
-                    }
-                } else {
-                    at_power_check(&atInfo);
-                    if (atInfo.mDamage != 0) {
-                        mDoAud_onEnemyDamage();
-                    }
-                    if ((fopAcM_GetName(atInfo.mpActor) == PROC_HIMO2) && (actor->stealItemLeft != 0)) {
-                        actor->stealItemLeft--;
-                        fopAcM_createStealItem(&actor->current.pos, actor->itemTableIdx, fopAcM_GetRoomNo(actor), 0, actor->stealItemBitNo);
-                        actor->stealItemBitNo++;
-                    }
-                    if ((fopAcM_GetName(atInfo.mpActor) == PROC_PLAYER) || (atInfo.mResultingAttackType == 2)) {
-                        if (atInfo.mResultingAttackType == 2) {
-                            i_this->m1E84 = 0;
-                        }
-                        def_se_set(actor, atInfo.mpObj, 0x34);
-                        fopAcM_monsSeStart(actor, JA_SE_CV_ST_HIT_BODY, 0);
-                        if (atInfo.mResultingAttackType == 9) {
-                            i_this->m1DE4 = REG6_S(7) + 0x14;
-                        } else {
-                            i_this->m1DE4 = REG6_S(6) + 10;
-                        }
-                        i_this->m1E84 -= atInfo.mDamage;
-                        mDoAud_bgmHitSound(atInfo.mHitSoundId);
-                        if (i_this->m1E84 <= 0) {
-                            i_this->m1DC8 = 0;
-                            if (((atInfo.mPlCutBit == 0x80) && (i_this->mActionState != 0x21)) && (i_this->mActionState != 0x20)) {
-                                i_this->mActionState = 0x21;
-                                i_this->m02C4 = 0;
-                                i_this->m0ED3 = 10;
-                                i_this->mUpperBodyEntityId =
-                                    fopAcM_create(PROC_ST, 0xe, &actor->current.pos, fopAcM_GetRoomNo(actor), &actor->home.angle, NULL, 0xff, NULL);
-                                i_this->m1E84 = 5;
-                                i_this->m1E86 = 0;
-                            } else {
-                                if (i_this->mActionState == 0x21) {
-                                    i_this->m02C4 = 0x23;
-                                } else if ((i_this->mActionState == 0x20) || ((i_this->mActionState == 0x1F) && (i_this->m02C4 >= 0xA))) {
-                                    i_this->m02C4 = 0x14;
-                                } else {
-                                    i_this->m02C4 = 0;
-                                }
-                                i_this->mActionState = 0x1e;
-                                i_this->m0ED3 = 1;
-                                i_this->m02F8 = 0;
-                                fopAcM_seStart(actor, JA_SE_CM_ST_BREAD_BODY, 0);
-                                fopAcM_monsSeStart(actor, JA_SE_CV_ST_BREAK, 0);
-                            }
-                        }
-                    } else if (i == 0) {
-                        i_this->m1DE4 = REG6_S(7) + 5;
-                        if ((i_this->mActionState == 0x20) || ((i_this->mActionState == 0x1F) && (i_this->m02C4 >= 0xA))) {
-                            i_this->mActionState = 0x1F;
-                            i_this->m02C4 = 10;
-                        } else if (i_this->mActionState != 0x21) {
-                            i_this->mActionState = 0x1F;
-                            i_this->m02C4 = 0;
-                        }
-                        fopAcM_seStart(actor, JA_SE_CM_ST_HIT_HEAD_FLY, 0);
-                        fopAcM_monsSeStart(actor, JA_SE_CV_ST_HIT_HEAD_FLY, 0);
-                    } else {
-                        def_se_set(actor, atInfo.mpObj, 0x34);
-                        fopAcM_monsSeStart(actor, JA_SE_CV_ST_HIT_BODY, 0);
-                        i_this->m1DE4 = REG6_S(7) + 8;
-                        if ((i_this->mActionState != 0x21) && (i_this->mActionState != 0x20)) {
-                            i_this->mActionState = 0;
-                            wait_set(i_this);
-                            i_this->m02C4 = 1;
-                            i_this->mTimers[1] = 10;
-                        }
-                    }
-                }
-                break;
-            }
-        }
-    }
-    if (i_this->m1DE4 != 0) {
-        i_this->m1DE4--;
-    }
 #endif
+    }
 }
 
 /* 000060B4-0000665C       .text part_posmove__FP8st_classP4st_p */
 static f32 part_posmove(st_class* i_this, st_p* param_2) {
-#if VERSION == VERSION_DEMO
     fopAc_ac_c* actor = &i_this->actor;
+    f32 f31;
     cXyz local_b8;
     cXyz local_c4;
+#if VERSION == VERSION_DEMO
     dBgS_GndChk gndChk;
 
     param_2->mPartPrevPos = param_2->mPartPos;
@@ -1865,36 +1808,11 @@ static f32 part_posmove(st_class* i_this, st_p* param_2) {
     local_b8 = param_2->mPartPos;
     local_b8.y += 300.0f;
     gndChk.SetPos(&local_b8);
-    f32 f31 = dComIfG_Bgsp()->GroundCross(&gndChk);
+    f31 = dComIfG_Bgsp()->GroundCross(&gndChk);
     if (param_2->mPartPos.y <= f31) {
         param_2->mPartPos.y = f31;
     }
-    local_b8 = param_2->mPartPos - param_2->mPartPrevPos;
-    local_b8.y = 0.0f;
-    if (local_b8.abs() > 0.0f) {
-        dBgS_LinChk linChk;
-        cMtx_YrotS(*calc_mtx, cM_atan2s(local_b8.x, local_b8.z));
-        local_b8.x = 0.0f;
-        local_b8.y = 30.0f;
-        local_b8.z = param_2->mPartVelocity.abs() + 30.0f;
-        MtxPosition(&local_b8, &local_c4);
-        local_b8 = param_2->mPartPos;
-        local_b8.y += 30.0f;
-        local_c4 += param_2->mPartPos;
-        linChk.Set(&local_b8, &local_c4, actor);
-        if (dComIfG_Bgsp()->LineCross(&linChk)) {
-            param_2->mPartPos.x = param_2->mPartPrevPos.x;
-            param_2->mPartPos.z = param_2->mPartPrevPos.z;
-            param_2->mPartVelocity.x *= -0.3f;
-            param_2->mPartVelocity.z *= -0.3f;
-        }
-    }
-    return f31;
 #else
-    fopAc_ac_c* actor = &i_this->actor;
-    f32 dVar5;
-    cXyz local_b8;
-    cXyz local_c4;
     dBgS_LinChk linChk;
 
     param_2->mPartPrevPos = param_2->mPartPos;
@@ -1902,7 +1820,7 @@ static f32 part_posmove(st_class* i_this, st_p* param_2) {
     if (param_2->mPartVelocity.y >= -50.0f) {
         param_2->mPartVelocity.y -= 5.0f;
     }
-    dVar5 = (param_2->mPartPos.y - 100.0f);
+    f31 = (param_2->mPartPos.y - 100.0f);
     param_2->mPartRot += param_2->mPartRotAdd;
     if (param_2->mPartVelocity.y > 0.0f) {
         local_b8 = param_2->mPartPos;
@@ -1925,12 +1843,16 @@ static f32 part_posmove(st_class* i_this, st_p* param_2) {
         linChk.Set(&local_b8, &local_c4, actor);
         if (dComIfG_Bgsp()->LineCross(&linChk)) {
             local_c4 = *linChk.GetCrossP();
-            dVar5 = local_c4.y;
+            f31 = local_c4.y;
         }
     }
+#endif
     local_b8 = param_2->mPartPos - param_2->mPartPrevPos;
     local_b8.y = 0.0f;
     if (local_b8.abs() > 0.0f) {
+#if VERSION == VERSION_DEMO
+        dBgS_LinChk linChk;
+#endif
         cMtx_YrotS(*calc_mtx, cM_atan2s(local_b8.x, local_b8.z));
         local_b8.x = 0.0f;
         local_b8.y = 30.0f;
@@ -1947,8 +1869,7 @@ static f32 part_posmove(st_class* i_this, st_p* param_2) {
             param_2->mPartVelocity.z *= -0.3f;
         }
     }
-    return dVar5;
-#endif
+    return f31;
 }
 
 /* 0000665C-00007D38       .text part_move__FP8st_classi */
@@ -2162,11 +2083,22 @@ static void part_move(st_class* i_this, int jointIndex) {
                 }
                 break;
             case 6:
-#if VERSION == VERSION_DEMO
+#if VERSION > VERSION_DEMO
+                if ((i_this->m1DDC == 0) && (this_part->mPartVelocity.y <= 0.0f)) {
+                    this_part->m3E = cM_rndF(65536.0f);
+                    this_part->m44 = 0.0f;
+                    this_part->mPartState = 1;
+                    this_part->mWaitTimer = 0;
+                    break;
+                }
+#endif
                 dVar11 = part_posmove(i_this, this_part);
-                if (std::fabsf(dVar11 - this_part->mPartPos.y) > DEMO_SELECT(3000.0f, 2000.0f)) {
+                if (std::fabsf(DEMO_SELECT(dVar11, actor->home.pos.y) - this_part->mPartPos.y) > DEMO_SELECT(3000.0f, 2000.0f)) {
                     dVar11 = actor->current.pos.y;
                     this_part->mPartPos = actor->current.pos;
+#if VERSION > VERSION_DEMO
+                    this_part->mPartVelocity.y = 0.0f;
+#endif
                 }
                 if (this_part->mPartPos.y <= dVar11) {
                     this_part->mPartPos.y = dVar11;
@@ -2191,12 +2123,14 @@ static void part_move(st_class* i_this, int jointIndex) {
                     }
                     cLib_addCalcAngleS2(&this_part->mPartRot.x, 0, 2, 0xc00);
                     cLib_addCalcAngleS2(&this_part->mPartRot.y, i_this->m1DDA, 2, 0xc00);
+#if VERSION == VERSION_DEMO
                     if (i_this->m1DDC == 0) {
                         this_part->m3E = cM_rndF(65536.0f);
                         this_part->m44 = 0.0f;
                         this_part->mPartState = 1;
                         this_part->mWaitTimer = 0;
                     }
+#endif
                 } else {
                     frame = (int)i_this->mpMorf2->getFrame();
                     if (frame == 5) {
@@ -2206,53 +2140,6 @@ static void part_move(st_class* i_this, int jointIndex) {
                         }
                     }
                 }
-#else
-                if ((i_this->m1DDC == 0) && (this_part->mPartVelocity.y <= 0.0f)) {
-                    this_part->m3E = cM_rndF(65536.0f);
-                    this_part->m44 = 0.0f;
-                    this_part->mPartState = 1;
-                    this_part->mWaitTimer = 0;
-                } else {
-                    dVar11 = part_posmove(i_this, this_part);
-                    if (std::fabsf(DEMO_SELECT(dVar11, actor->home.pos.y) - this_part->mPartPos.y) > DEMO_SELECT(3000.0f, 2000.0f)) {
-                        dVar11 = actor->current.pos.y;
-                        this_part->mPartPos = actor->current.pos;
-                        this_part->mPartVelocity.y = 0.0f;
-                    }
-                    if (this_part->mPartPos.y <= dVar11) {
-                        this_part->mPartPos.y = dVar11;
-                        if (this_part->mPartVelocity.y < -10.0f) {
-                            this_part->mWaitTimer = cM_rndF(10.0f) + 2.0f;
-                            head_anm_init(i_this, ST_BCK_HEADB_JUMP2, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                            fopAcM_seStart(actor, JA_SE_CM_ST_JUMP_HEAD, 0);
-                        }
-                        if (this_part->mWaitTimer != 0) {
-                            this_part->mPartVelocity.setall(0.0f);
-                            if (this_part->mWaitTimer == 1) {
-                                local_50 = actor->current.pos - this_part->mPartPos;
-                                i_this->m1DDA = cM_atan2s(local_50.x, local_50.z) + (s16)cM_rndFX(20000.0f);
-                                cMtx_YrotS(*calc_mtx, i_this->m1DDA);
-                                local_50.x = 0.0f;
-                                local_50.y = REG13_F(0) + (cM_rndF(35.0f) + 20.0f);
-                                local_50.z = REG13_F(1) + 20.0f;
-                                MtxPosition(&local_50, &this_part->mPartVelocity);
-                                head_anm_init(i_this, ST_BCK_HEADB_JUMP1, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                                fopAcM_monsSeStart(actor, JA_SE_CV_ST_JUMP_HEAD, 0);
-                            }
-                        }
-                        cLib_addCalcAngleS2(&this_part->mPartRot.x, 0, 2, 0xc00);
-                        cLib_addCalcAngleS2(&this_part->mPartRot.y, i_this->m1DDA, 2, 0xc00);
-                    } else {
-                        frame = (int)i_this->mpMorf2->getFrame();
-                        if (frame == 5) {
-                            emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_STASE00, &this_part->mPartPos);
-                            if (emitter != NULL) {
-                                emitter->setGlobalRTMatrix(i_this->mpMorf2->getModel()->getAnmMtx(0x1));
-                            }
-                        }
-                    }
-                }
-#endif
                 break;
             case 7:
 #if VERSION == VERSION_DEMO
@@ -2302,7 +2189,6 @@ static void part_move(st_class* i_this, int jointIndex) {
 #endif
                 break;
             case 8:
-#if VERSION == VERSION_DEMO
                 i_this->m02F6 = 10;
                 dVar11 = DEMO_SELECT(part_posmove(i_this, this_part), part_posmove(i_this, this_part) + 20.0f);
                 if (std::fabsf(DEMO_SELECT(dVar11, actor->home.pos.y) - this_part->mPartPos.y) > 3000.0f) {
@@ -2310,11 +2196,19 @@ static void part_move(st_class* i_this, int jointIndex) {
                 }
                 if (this_part->mPartPos.y <= dVar11) {
                     this_part->mPartPos.y = dVar11;
+#if VERSION == VERSION_DEMO
                     i_this->mCountdownToDeath = 1;
+#endif
                 }
+#if VERSION > VERSION_DEMO
+                else {
+                    break;
+                }
+#else
                 if (!(this_part->mPartPos.y <= dVar11)) {
                     break;
                 }
+#endif
                 for (s32 i = 0; i < 26; i++) {
                     if ((i != 0xb) && (i_this->mParts[i].mpPartModel != NULL)) {
                         if (i == 0xf) {
@@ -2324,7 +2218,11 @@ static void part_move(st_class* i_this, int jointIndex) {
                         }
                     }
                 }
+#if VERSION == VERSION_DEMO
                 fopAcM_delete(actor);
+#else
+                i_this->mCountdownToDeath = 5;
+#endif
                 if (i_this->mDeathSwitch != 0) {
                     dComIfGs_onSwitch(i_this->mDeathSwitch, fopAcM_GetRoomNo(actor));
                 }
@@ -2335,36 +2233,6 @@ static void part_move(st_class* i_this, int jointIndex) {
                 }
                 fopAcM_cancelCarryNow(pfVar4);
                 return;
-#else
-                i_this->m02F6 = 10;
-                dVar11 = DEMO_SELECT(part_posmove(i_this, this_part), part_posmove(i_this, this_part) + 20.0f);
-                if (std::fabsf(DEMO_SELECT(dVar11, actor->home.pos.y) - this_part->mPartPos.y) > 3000.0f) {
-                    dVar11 = this_part->mPartPos.y;
-                }
-                if (this_part->mPartPos.y <= dVar11) {
-                    this_part->mPartPos.y = dVar11;
-                    for (s32 i = 0; i < 26; i++) {
-                        if ((i != 0xb) && (i_this->mParts[i].mpPartModel != NULL)) {
-                            if (i == 0xf) {
-                                fopAcM_createDisappear(actor, &i_this->mParts[i].mPartPos, 5, daDisItem_IBALL_e);
-                            } else {
-                                dComIfGp_particle_set(dPa_name::ID_AK_SN_STPARTSDEAD00, &i_this->mParts[i].mPartPos);
-                            }
-                        }
-                    }
-                    i_this->mCountdownToDeath = 5;
-                    if (i_this->mDeathSwitch != 0) {
-                        dComIfGs_onSwitch(i_this->mDeathSwitch, fopAcM_GetRoomNo(actor));
-                    }
-                    fopAcM_onActor(actor);
-                    pfVar4 = fopAcM_SearchByID(i_this->mHeldWeaponEntityId);
-                    if (pfVar4 == NULL) {
-                        return;
-                    }
-                    fopAcM_cancelCarryNow(pfVar4);
-                    return;
-                }
-#endif
                 break;
             case 10:
                 if (i_this->m0ED3 == 0xb) {
@@ -2390,6 +2258,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                 break;
         }
     }
+
     switch (this_part->m05) {
         case 0:
 #if VERSION == VERSION_DEMO
