@@ -961,58 +961,58 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
         }
         break;
     case dItem_SKULL_NECKLACE_e:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == dItem_SKULL_NECKLACE_e) {
-                get_item = dComIfGs_getBeastNum(0);
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getBeast(beastIdx) == dItem_SKULL_NECKLACE_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_SKULL_NECKLACE_e);
             }
         }
         break;
     case dItem_BOKOBABA_SEED_e:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == dItem_BOKOBABA_SEED_e) {
-                get_item = dComIfGs_getBeastNum(1);
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getBeast(beastIdx) == dItem_BOKOBABA_SEED_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_BOKOBABA_SEED_e);
             }
         }
         break;
     case dItem_GOLDEN_FEATHER_e:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == dItem_GOLDEN_FEATHER_e) {
-                get_item = dComIfGs_getBeastNum(2);
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getBeast(beastIdx) == dItem_GOLDEN_FEATHER_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_GOLDEN_FEATHER_e);
             }
         }
         break;
-    case BOKO_BELT:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == BOKO_BELT) {
-                get_item = dComIfGs_getBeastNum(3);
+    case dItem_KNIGHTS_CREST_e:
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getBeast(beastIdx) == dItem_KNIGHTS_CREST_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_KNIGHTS_CREST_e);
             }
         }
         break;
     case dItem_RED_JELLY_e:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == dItem_RED_JELLY_e) {
-                get_item = dComIfGs_getBeastNum(4);
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getBeast(beastIdx) == dItem_RED_JELLY_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_RED_JELLY_e);
             }
         }
         break;
     case dItem_GREEN_JELLY_e:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == dItem_GREEN_JELLY_e) {
-                get_item = dComIfGs_getBeastNum(5);
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getBeast(beastIdx) == dItem_GREEN_JELLY_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_GREEN_JELLY_e);
             }
         }
         break;
     case dItem_BLUE_JELLY_e:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == dItem_BLUE_JELLY_e) {
-                get_item = dComIfGs_getBeastNum(6);
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getBeast(beastIdx) == dItem_BLUE_JELLY_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_BLUE_JELLY_e);
             }
         }
         break;
     case dItem_JOY_PENDANT_e:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == dItem_JOY_PENDANT_e) {
-                get_item = dComIfGs_getBeastNum(7);
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getBeast(beastIdx) == dItem_JOY_PENDANT_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e);
             }
         }
         break;

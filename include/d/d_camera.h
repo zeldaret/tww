@@ -56,7 +56,6 @@ struct camSphChkdata {
         field_0x4 = i_radius;
     }
 
-    ~camSphChkdata(){}
     /* 0x00 */ cXyz* field_0x0;
     /* 0x04 */ f32 field_0x4;
     /* 0x08 */ cXyz field_0x8;
@@ -64,10 +63,7 @@ struct camSphChkdata {
 };
 
 class dCamera_monitoring_things {
-    public:
-    dCamera_monitoring_things(){}
-    ~dCamera_monitoring_things(){}
-
+public:
     /* 0x00 */ cXyz mPos;
     /* 0x0C */ cXyz field_0x0C;
     /* 0x18 */ int field_0x18;
@@ -75,10 +71,7 @@ class dCamera_monitoring_things {
 };
 
 class dCamera_DMC_system {
-    public:
-    dCamera_DMC_system(){}
-    ~dCamera_DMC_system(){}
-
+public:
     /* 0x0 */ u8 field_0x0;
     /* 0x1 */ u8 field_0x1;
     /* 0x2 */ cSAngle field_0x2;

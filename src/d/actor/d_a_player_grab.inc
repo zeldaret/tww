@@ -324,7 +324,7 @@ BOOL daPy_lk_c::procGrabReady_init() {
         setAnimeUnequip();
         mProcVar0.m3570 = 0;
     }
-    if ((dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e ||
+    if ((checkPowerGloveEquip() ||
          !fopAcM_CheckStatus(mpAttnActorA, fopAcStts_UNK10000_e)) &&
         !fopAcM_CheckStatus(mpAttnActorA, fopAcStts_CARRY_e))
     {

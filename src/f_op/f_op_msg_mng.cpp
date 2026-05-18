@@ -86,7 +86,7 @@ static struct {
     /* 0x18 */ {dItem_SKULL_NECKLACE_e, "beast_01.bti"},
     /* 0x19 */ {dItem_BOKOBABA_SEED_e, "beast_02.bti"},
     /* 0x1A */ {dItem_GOLDEN_FEATHER_e, "beast_03.bti"},
-    /* 0x1B */ {BOKO_BELT, "beast_04.bti"},
+    /* 0x1B */ {dItem_KNIGHTS_CREST_e, "beast_04.bti"},
     /* 0x1C */ {dItem_RED_JELLY_e, "beast_05.bti"},
     /* 0x1D */ {dItem_GREEN_JELLY_e, "beast_06.bti"},
     /* 0x1E */ {dItem_BLUE_JELLY_e, "beast_07.bti"},
@@ -3316,7 +3316,7 @@ void fopMsgM_msgDataProc_c::tag_len_point(int* param_1, f32* param_2, int* param
 void fopMsgM_msgDataProc_c::tag_len_get_pendant(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
     char buf[28];
 
-    int num = (u8)dComIfGs_getBeastNum(7);
+    int num = (u8)dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e);
     fopMsgM_int_to_char(buf, num, false);
 
 #if VERSION == VERSION_PAL
@@ -5118,7 +5118,7 @@ void fopMsgM_msgDataProc_c::tag_point() {
 void fopMsgM_msgDataProc_c::tag_get_pendant() {
     char buf[20];
 
-    int num = (u8)dComIfGs_getBeastNum(7);
+    int num = (u8)dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e);
     fopMsgM_int_to_char(buf, num, false);
 
     int i = 0;

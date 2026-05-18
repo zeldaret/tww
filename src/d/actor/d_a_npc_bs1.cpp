@@ -394,28 +394,28 @@ static u32 daNpc_Bs1_getBuyItemMax(int i_itemCost, int i_itemNo) {
     int beastIdx;
     switch (i_itemNo) {
     case dItem_BOKOBABA_SEED_e:
-        beastIdx = 1;
+        beastIdx = dBeastIdx_BOKOBABA_SEED_e;
         break;
     case dItem_SKULL_NECKLACE_e:
-        beastIdx = 0;
+        beastIdx = dBeastIdx_SKULL_NECKLACE_e;
         break;
     case dItem_RED_JELLY_e:
-        beastIdx = 4;
+        beastIdx = dBeastIdx_RED_JELLY_e;
         break;
     case dItem_GREEN_JELLY_e:
-        beastIdx = 5;
+        beastIdx = dBeastIdx_GREEN_JELLY_e;
         break;
     case dItem_BLUE_JELLY_e:
-        beastIdx = 6;
+        beastIdx = dBeastIdx_BLUE_JELLY_e;
         break;
     case dItem_JOY_PENDANT_e:
-        beastIdx = 7;
+        beastIdx = dBeastIdx_JOY_PENDANT_e;
         break;
     case dItem_GOLDEN_FEATHER_e:
-        beastIdx = 2;
+        beastIdx = dBeastIdx_GOLDEN_FEATHER_e;
         break;
     default:
-        beastIdx = 3;
+        beastIdx = dBeastIdx_KNIGHTS_CREST_e;
         break;
     }
     
@@ -580,35 +580,35 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             }
 
             if(l_msg->mSelectNum == 0) {
-                int idx;
+                int beastIdx;
                 switch(*pMsgNo) {
                     case 0xF7C:
-                        idx = 1;
+                        beastIdx = dBeastIdx_BOKOBABA_SEED_e;
                         break;
                     case 0xF84:
-                        idx = 0;
+                        beastIdx = dBeastIdx_SKULL_NECKLACE_e;
                         break;
                     case 0xF89:
-                        idx = 4;
+                        beastIdx = dBeastIdx_RED_JELLY_e;
                         break;
                     case 0xF8E:
-                        idx = 5;
+                        beastIdx = dBeastIdx_GREEN_JELLY_e;
                         break;
                     case 0xF93:
-                        idx = 6;
+                        beastIdx = dBeastIdx_BLUE_JELLY_e;
                         break;
                     case 0xF98:
-                        idx = 7;
+                        beastIdx = dBeastIdx_JOY_PENDANT_e;
                         break;
                     case 0xF9D:
-                        idx = 2;
+                        beastIdx = dBeastIdx_GOLDEN_FEATHER_e;
                         break;
                     case 0xFD3:
-                        idx = 3;
+                        beastIdx = dBeastIdx_KNIGHTS_CREST_e;
                         break;
                 }
                 dComIfGp_setItemRupeeCount(getPayRupee());
-                dComIfGp_setItemBeastNumCount(idx, -getBuyItem());
+                dComIfGp_setItemBeastNumCount(beastIdx, -getBuyItem());
                 
                 if(*pMsgNo == 0xFD3) {
                     u8 r3 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_7F0F);
@@ -1011,7 +1011,7 @@ u32 daNpc_Bs1_c::getMsg() {
         m740 = 0;
     }
     else if(dComIfGp_event_chkTalkXY()) {
-        u8 itemNo = dComIfGp_event_getPreItemNo();
+        u8 itemNo = (u8)dComIfGp_event_getPreItemNo();
 
         if(mType == 0) {
             if(isEmono(itemNo)) {

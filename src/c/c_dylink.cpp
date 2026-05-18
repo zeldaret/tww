@@ -25,7 +25,7 @@ bool DMC_initialized = false;
 volatile BOOL cDyl_Initialized = false;
 mDoDvdThd_callback_c * cDyl_DVD = NULL;
 
-const DynamicNameTableEntry DynamicNameTable[] = {
+const cDyl_DynamicName_t DynamicNameTable[] = {
     {PROC_ALLDIE,         "d_a_alldie"},
     {PROC_TAG_EVSW,       "d_a_tag_evsw"},
     {PROC_Obj_Swpush,     "d_a_obj_swpush"},
@@ -478,7 +478,7 @@ BOOL cCc_Init() {
     memset(DMC, 0, sizeof(DMC));
 
     for (int i = 0; i < ARRAY_SIZE(DynamicNameTable); i++) {
-        const DynamicNameTableEntry & d = DynamicNameTable[i];
+        const cDyl_DynamicName_t & d = DynamicNameTable[i];
         if (d.name == NULL)
             continue;
 

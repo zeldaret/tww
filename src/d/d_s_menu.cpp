@@ -183,15 +183,25 @@ static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
             i_this->startCode--;
     }
 
-    if (CPad_CHECK_TRIG_START(0)) {
+#if VERSION > VERSION_DEMO
+    if (CPad_CHECK_TRIG_START(0))
+#endif
+    {
         menu_of_scene_class::room_inf* room = &info->stage[l_cursolID].roomPtr[l_groupPoint[l_cursolID]];
+#if VERSION > VERSION_DEMO
         dComIfGp_offEnableNextStage();
-        s16 startCode = (i_this->startCode != 0) ? i_this->startCode - 1 : room->startCode;
+#endif
+        int startCode = (i_this->startCode != 0) ? i_this->startCode - 1 : room->startCode;
         dComIfGp_setNextStage(room->stageName, startCode, room->roomNo, room->layerNo);
+#if VERSION > VERSION_DEMO
         if (strcmp(dComIfGp_getNextStageName(), "ENDING") == 0) {
             fopScnM_ChangeReq(i_this, PROC_ENDING_SCENE, PROC_OVERLAP0, 5);
             mDoAud_bgmStop(30);
-        } else {
+        } else
+#else
+        if (CPad_CHECK_TRIG_START(0))
+#endif
+        {
             fopScnM_ChangeReq(i_this, PROC_PLAY_SCENE, PROC_OVERLAP0, 5);
             dComIfGs_setRestartRoomParam(0);
             mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(), dComIfGp_getNextStageLayer());

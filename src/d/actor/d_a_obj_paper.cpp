@@ -219,7 +219,7 @@ namespace daObjPaper {
 
     /* 000007A4-00000820       .text mode_talk0__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_talk0() {
-        if (mMsgId == fpcM_ERROR_PROCESS_ID_e && dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) {
+        if (mMsgId == fpcM_ERROR_PROCESS_ID_e && dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), dCamAttnStts_00000004_e)) {
             mMsgId = fopMsgM_messageSet(prm_get_msgNo(), &eyePos);
 
             mode_talk1_init();

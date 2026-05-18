@@ -20,8 +20,15 @@
 #include "m_Do/m_Do_graphic.h"
 #include "dolphin/os/OSMessage.h"
 #include "dolphin/base/PPCArch.h"
+#include "dolphin/ai/ai.h"
+#include "JSystem/JAudio/JASAiCtrl.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
 
-static u8 THPStatistics[0x460]; // TODO
+inline s32 daMP_NEXT_READ_SIZE(daMP_THPReadBuffer* readBuf) {
+    return *(s32*)readBuf->ptr;
+}
+
+static u8 THPStatistics[1120];
 
 static THPHuffmanTab* Ydchuff ALIGN_DECL(32);
 static THPHuffmanTab* Udchuff ALIGN_DECL(32);
@@ -89,7 +96,7 @@ OSMessage daMP_FreeAudioBufferMessage[3];
 OSMessage daMP_DecodedAudioBufferMessage[3];
 
 BOOL daMP_Initialized;
-u8 daMP_WorkBuffer[0x40];
+u32 daMP_WorkBuffer[16] ALIGN_DECL(32);
 OSMessageQueue daMP_PrepareReadyQueue;
 OSMessageQueue daMP_UsedTextureSetQueue;
 OSMessage daMP_PrepareReadyMessage;
@@ -101,14 +108,14 @@ u32 daMP_OldAIDCallback;
 
 void* daMP_LastAudioBuffer;
 void* daMP_CurAudioBuffer;
-void* daMP_AudioSystem;
-s16 daMP_SoundBuffer[0x460][2];
+s32 daMP_AudioSystem;
+s16 daMP_SoundBuffer[2][0x460] ALIGN_DECL(32);
 
 THPVideoInfo daMP_videoInfo;
 THPAudioInfo daMP_audioInfo;
 u32 daMP_DrawPosX;
 u32 daMP_DrawPosY;
-void** daMP_buffer;
+void* daMP_buffer;
 
 BOOL daMP_Fail_alloc;
 u16 daMP_backup_FrameRate;
@@ -122,7 +129,6 @@ extern "C" {
 
 /* 000000EC-00000584       .text THPAudioDecode */
 static u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag) {
-    /* Nonmatching */
     THPAudioRecordHeader* header;
     THPAudioDecodeInfo decInfo;
     u8 *left, *right;
@@ -164,13 +170,12 @@ static u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag) {
             yn += (sample << decInfo.scale) << 11;
             yn <<= 5;
 
-            if (sample > 0x8000) {
+            u16 temp = yn & 0xffff;
+            if (temp > 0x8000) {
                 yn += 0x10000;
-            } else if ((sample == 0x8000) && ((yn & 0x10000) != 0)) {
+            } else if (temp == 0x8000 && (yn & 0x10000)) {
                 yn += 0x10000;
             }
-
-            yn += 0x8000;
 
             if (yn > 2147483647LL) {
                 yn = 2147483647LL;
@@ -199,7 +204,13 @@ static u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag) {
             yn += header->lCoef[decInfo.predictor][0] * yn1;
             yn += (sample << decInfo.scale) << 11;
             yn <<= 5;
-            yn += 0x8000;
+            
+            u16 temp = yn & 0xffff;
+            if (temp > 0x8000) {
+                yn += 0x10000;
+            } else if (temp == 0x8000 && (yn & 0x10000)) {
+                yn += 0x10000;
+            }
 
             if (yn > 2147483647LL) {
                 yn = 2147483647LL;
@@ -227,7 +238,12 @@ static u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag) {
             yn += (sample << decInfo.scale) << 11;
             yn <<= 5;
 
-            yn += 0x8000;
+            u16 temp = yn & 0xffff;
+            if (temp > 0x8000) {
+                yn += 0x10000;
+            } else if (temp == 0x8000 && (yn & 0x10000)) {
+                yn += 0x10000;
+            }
 
             if (yn > 2147483647LL) {
                 yn = 2147483647LL;
@@ -2609,113 +2625,133 @@ static BOOL THPInit() {
 #endif
 
 /* 00003208-0000323C       .text daMP_PopReadedBuffer__Fv */
-void* daMP_PopReadedBuffer() {
+static void* daMP_PopReadedBuffer() {
     OSMessage msg;
     OSReceiveMessage(&daMP_ReadedBufferQueue, &msg, 1);
     return msg;
 }
 
 /* 0000323C-0000326C       .text daMP_PushReadedBuffer__FPv */
-void daMP_PushReadedBuffer(void* r3) {
+static void daMP_PushReadedBuffer(void* r3) {
     OSMessage msg = (OSMessage)r3;
     OSSendMessage(&daMP_ReadedBufferQueue, msg, 1);
 }
 
 /* 0000326C-000032A0       .text daMP_PopFreeReadBuffer__Fv */
-daMP_THPReadBuffer* daMP_PopFreeReadBuffer() {
+static daMP_THPReadBuffer* daMP_PopFreeReadBuffer() {
     OSMessage msg;
     OSReceiveMessage(&daMP_FreeReadBufferQueue, &msg, 1);
     return (daMP_THPReadBuffer*)msg;
 }
 
 /* 000032A0-000032D0       .text daMP_PushFreeReadBuffer__FPv */
-void daMP_PushFreeReadBuffer(void* r3) {
+static void daMP_PushFreeReadBuffer(void* r3) {
     OSMessage msg = (OSMessage)r3;
     OSSendMessage(&daMP_FreeReadBufferQueue, msg, 1);
 }
 
 /* 000032D0-00003304       .text daMP_PopReadedBuffer2__Fv */
-void* daMP_PopReadedBuffer2() {
+static void* daMP_PopReadedBuffer2() {
     OSMessage msg;
     OSReceiveMessage(&daMP_ReadedBufferQueue2, &msg, 1);
     return msg;
 }
 
 /* 00003304-00003334       .text daMP_PushReadedBuffer2__FPv */
-void daMP_PushReadedBuffer2(void* r3) {
+static void daMP_PushReadedBuffer2(void* r3) {
     OSMessage msg = (OSMessage)r3;
     OSSendMessage(&daMP_ReadedBufferQueue2, msg, 1);
 }
 
 /* 00003334-0000336C       .text daMP_ReadThreadStart__Fv */
-void daMP_ReadThreadStart() {
+static void daMP_ReadThreadStart() {
     if (daMP_ReadThreadCreated) {
         OSResumeThread(&daMP_ReadThread);
     }
 }
 
 /* 0000336C-000033B0       .text daMP_ReadThreadCancel__Fv */
-void daMP_ReadThreadCancel() {
+static void daMP_ReadThreadCancel() {
     if (daMP_ReadThreadCreated) {
         OSCancelThread(&daMP_ReadThread);
         daMP_ReadThreadCreated = FALSE;
     }
 }
 
+static void daMP_PrepareReady(int);
+
 /* 000033B0-00003494       .text daMP_Reader__FPv */
-void daMP_Reader(void*) {
-    /* Nonmatching - regalloc */
-    s32 r28 = 0;
-    s32 r30 = daMP_ActivePlayer.mB8;
-    s32 r29 = daMP_ActivePlayer.mBC;
-    while (true) {
-        daMP_THPReadBuffer* readBuf = daMP_PopFreeReadBuffer();
-        int readBytes = DVDReadPrio(&daMP_ActivePlayer.mFileInfo, readBuf->m00, r29, r30, 2);
-        if (readBytes != r29) {
-            if (readBytes == -1) {
-                daMP_ActivePlayer.mA8 = -1;
-            }
-            if (r28 == 0) {
-                daMP_PrepareReady(0);
-            }
+static void daMP_Reader(void*) {
+    daMP_THPReadBuffer* buf;
+    s32 curFrame;
+    s32 status;
+    s32 offset;
+    s32 initReadSize;
+    s32 frame = 0;
+
+    offset = daMP_ActivePlayer.initOffset;
+    initReadSize = daMP_ActivePlayer.initReadSize;
+
+    while (TRUE) {
+        buf = (daMP_THPReadBuffer*)daMP_PopFreeReadBuffer();
+        status = DVDReadPrio(&daMP_ActivePlayer.fileInfo, buf->ptr, initReadSize, offset, 2);
+        if (status != initReadSize) {
+            if (status == -1)
+                daMP_ActivePlayer.dvdError = -1;
+            if (frame == 0)
+                daMP_PrepareReady(FALSE);
+
             OSSuspendThread(&daMP_ReadThread);
         }
-        readBuf->m04 = r28;
-        daMP_PushReadedBuffer(readBuf);
-        r30 += r29;
-        r29 = daMP_NEXT_READ_SIZE(readBuf);
-        u32 r0 = (r28 + daMP_ActivePlayer.mC0) % daMP_ActivePlayer.m50;
-        if (r0 == daMP_ActivePlayer.m50 - 1) {
-            if (daMP_ActivePlayer.mA6 & 0x01) {
-                r30 = daMP_ActivePlayer.m64;
-            } else {
+
+        buf->frameNumber = frame;
+        daMP_PushReadedBuffer(buf);
+        offset += initReadSize;
+        initReadSize = daMP_NEXT_READ_SIZE(buf);
+
+        curFrame = (frame + daMP_ActivePlayer.initReadFrame) % daMP_ActivePlayer.header.numFrames;
+        if (curFrame == daMP_ActivePlayer.header.numFrames - 1) {
+            if (daMP_ActivePlayer.playFlag & 1)
+                offset = daMP_ActivePlayer.header.movieDataOffsets;
+            else
                 OSSuspendThread(&daMP_ReadThread);
-            }
         }
-        r28++;
+
+        frame++;
     }
 }
 
 /* 000034A0-00003550       .text daMP_CreateReadThread__Fl */
-void daMP_CreateReadThread(s32) {
-    /* Nonmatching */
+static BOOL daMP_CreateReadThread(s32 param_0) {
+    if (!OSCreateThread(&daMP_ReadThread, (void*)daMP_Reader, 0, daMP_ReadThreadStack + sizeof(daMP_ReadThreadStack), sizeof(daMP_ReadThreadStack), param_0, 1)) {
+#if VERSION > VERSION_DEMO
+        OSReport("Can't create read thread\n");
+#endif
+        return FALSE;
+    }
+
+    OSInitMessageQueue(&daMP_FreeReadBufferQueue, daMP_FreeReadBufferMessage, 10);
+    OSInitMessageQueue(&daMP_ReadedBufferQueue, daMP_ReadedBufferMessage, 10);
+    OSInitMessageQueue(&daMP_ReadedBufferQueue2, daMP_ReadedBufferMessage2, 10);
+    daMP_ReadThreadCreated = TRUE;
+    return TRUE;
 }
 
 /* 00003550-00003584       .text daMP_PopFreeTextureSet__Fv */
-OSMessage daMP_PopFreeTextureSet() {
+static OSMessage daMP_PopFreeTextureSet() {
     OSMessage msg;
     OSReceiveMessage(&daMP_FreeTextureSetQueue, &msg, 1);
     return msg;
 }
 
 /* 00003584-000035B4       .text daMP_PushFreeTextureSet__FPv */
-void daMP_PushFreeTextureSet(void* r3) {
+static void daMP_PushFreeTextureSet(void* r3) {
     OSMessage msg = (OSMessage)r3;
     OSSendMessage(&daMP_FreeTextureSetQueue, msg, 0);
 }
 
 /* 000035B4-000035F8       .text daMP_PopDecodedTextureSet__Fl */
-void* daMP_PopDecodedTextureSet(s32 r3) {
+static void* daMP_PopDecodedTextureSet(s32 r3) {
     OSMessage msg;
     if (OSReceiveMessage(&daMP_DecodedTextureSetQueue, &msg, r3) == TRUE) {
         return msg;
@@ -2725,40 +2761,175 @@ void* daMP_PopDecodedTextureSet(s32 r3) {
 }
 
 /* 000035F8-00003628       .text daMP_PushDecodedTextureSet__FPv */
-void daMP_PushDecodedTextureSet(void* r3) {
+static void daMP_PushDecodedTextureSet(void* r3) {
     OSMessage msg = (OSMessage)r3;
     OSSendMessage(&daMP_DecodedTextureSetQueue, msg, 1);
 }
 
 /* 00003628-00003760       .text daMP_VideoDecode__FP18daMP_THPReadBuffer */
-void daMP_VideoDecode(daMP_THPReadBuffer*) {
-    /* Nonmatching */
+static void daMP_VideoDecode(daMP_THPReadBuffer* readBuffer) {
+    THPTextureSet* textureSet;
+    s32 i;
+    u32* tileOffsets;
+    u8* tile;
+
+    tileOffsets = (u32*)(readBuffer->ptr + 8);
+    tile = &readBuffer->ptr[daMP_ActivePlayer.compInfo.numComponents * 4] + 8;
+    textureSet = (THPTextureSet*)daMP_PopFreeTextureSet();
+
+    for (i = 0; i < daMP_ActivePlayer.compInfo.numComponents; i++) {
+        switch (daMP_ActivePlayer.compInfo.frameComp[i]) {
+        case 0: {
+            if ((daMP_ActivePlayer.videoError = THPVideoDecode(
+                     tile, textureSet->ytexture, textureSet->utexture,
+                     textureSet->vtexture, daMP_ActivePlayer.thpWork))) {
+                if (daMP_First) {
+                    daMP_PrepareReady(FALSE);
+                    daMP_First = FALSE;
+                }
+                OSSuspendThread(&daMP_VideoDecodeThread);
+            }
+            textureSet->frameNumber = readBuffer->frameNumber;
+            daMP_PushDecodedTextureSet(textureSet);
+            BOOL enable = OSDisableInterrupts();
+            daMP_ActivePlayer.videoDecodeCount++;
+            OSRestoreInterrupts(enable);
+        }
+        }
+
+        tile += *tileOffsets;
+        tileOffsets++;
+    }
+
+    if (daMP_First) {
+        daMP_PrepareReady(1);
+        daMP_First = 0;
+    }
 }
 
 /* 00003760-00003828       .text daMP_VideoDecoder__FPv */
-void daMP_VideoDecoder(void*) {
-    /* Nonmatching */
+static void daMP_VideoDecoder(void*) {
+    daMP_THPReadBuffer* thpBuffer;
+
+    while (TRUE) {
+        if (daMP_ActivePlayer.audioExist) {
+            for (; daMP_ActivePlayer.videoDecodeCount < 0;) {
+                thpBuffer = (daMP_THPReadBuffer*)daMP_PopReadedBuffer2();
+                s32 remaining
+                    = ((thpBuffer->frameNumber + daMP_ActivePlayer.initReadFrame)
+                       % daMP_ActivePlayer.header.numFrames);
+                if (remaining == (daMP_ActivePlayer.header.numFrames - 1)
+                    && (daMP_ActivePlayer.playFlag & 1) == 0)
+                    daMP_VideoDecode(thpBuffer);
+
+                daMP_PushFreeReadBuffer(thpBuffer);
+                BOOL enable = OSDisableInterrupts();
+                daMP_ActivePlayer.videoDecodeCount++;
+                OSRestoreInterrupts(enable);
+            }
+        }
+
+        if (daMP_ActivePlayer.audioExist)
+            thpBuffer = (daMP_THPReadBuffer*)daMP_PopReadedBuffer2();
+        else
+            thpBuffer = (daMP_THPReadBuffer*)daMP_PopReadedBuffer();
+
+        daMP_VideoDecode(thpBuffer);
+        daMP_PushFreeReadBuffer(thpBuffer);
+    }
 }
 
 /* 00003828-0000395C       .text daMP_VideoDecoderForOnMemory__FPv */
-void daMP_VideoDecoderForOnMemory(void*) {
-    /* Nonmatching */
+static void daMP_VideoDecoderForOnMemory(void* param_0) {
+    daMP_THPReadBuffer readBuffer;
+    s32 readSize;
+    s32 frame;
+    s32 remaining;
+
+    readSize = daMP_ActivePlayer.initReadSize;
+    readBuffer.ptr = (u8*)param_0;
+    frame = 0;
+
+    while (TRUE) {
+        if (daMP_ActivePlayer.audioExist) {
+            while (daMP_ActivePlayer.videoDecodeCount < 0) {
+                BOOL enable = OSDisableInterrupts();
+                daMP_ActivePlayer.videoDecodeCount++;
+                OSRestoreInterrupts(enable);
+                remaining = (frame + daMP_ActivePlayer.initReadFrame)
+                            % daMP_ActivePlayer.header.numFrames;
+                if (remaining == daMP_ActivePlayer.header.numFrames - 1) {
+                    if ((daMP_ActivePlayer.playFlag & 1) == 0)
+                        break;
+
+                    readSize       = *(s32*)readBuffer.ptr;
+                    readBuffer.ptr = daMP_ActivePlayer.movieData;
+                } else {
+                    s32 size = *(s32*)readBuffer.ptr;
+                    readBuffer.ptr += readSize;
+                    readSize = size;
+                }
+                frame++;
+            }
+        }
+
+        readBuffer.frameNumber = frame;
+
+        daMP_VideoDecode(&readBuffer);
+
+        remaining = (frame + daMP_ActivePlayer.initReadFrame)
+                    % daMP_ActivePlayer.header.numFrames;
+        if (remaining == daMP_ActivePlayer.header.numFrames - 1) {
+            if ((daMP_ActivePlayer.playFlag & 1)) {
+                readSize = *(s32*)readBuffer.ptr;
+                readBuffer.ptr = daMP_ActivePlayer.movieData;
+            } else {
+                OSSuspendThread(&daMP_VideoDecodeThread);
+            }
+        } else {
+            s32 size = *(s32*)readBuffer.ptr;
+            readBuffer.ptr += readSize;
+            readSize = size;
+        }
+
+        frame++;
+    }
 }
 
 /* 0000395C-00003A74       .text daMP_CreateVideoDecodeThread__FlPUc */
-void daMP_CreateVideoDecodeThread(s32, u8*) {
-    /* Nonmatching */
+static BOOL daMP_CreateVideoDecodeThread(s32 prio, u8* param_1) {
+    if (param_1 != NULL) {
+        if (!OSCreateThread(&daMP_VideoDecodeThread, (void*)daMP_VideoDecoderForOnMemory, param_1, daMP_VideoDecodeThreadStack + sizeof(daMP_VideoDecodeThreadStack), sizeof(daMP_VideoDecodeThreadStack), prio, 1)) {
+#if VERSION > VERSION_DEMO
+            OSReport("Can't create video decode thread\n");
+#endif
+            return FALSE;
+        }
+    } else {
+        if (!OSCreateThread(&daMP_VideoDecodeThread, (void*)daMP_VideoDecoder, NULL, daMP_VideoDecodeThreadStack + sizeof(daMP_VideoDecodeThreadStack), sizeof(daMP_VideoDecodeThreadStack), prio, 1)) {
+#if VERSION > VERSION_DEMO
+            OSReport("Can't create video decode thread\n");
+#endif
+            return FALSE;
+        }
+    }
+
+    OSInitMessageQueue(&daMP_FreeTextureSetQueue, daMP_FreeTextureSetMessage, 3);
+    OSInitMessageQueue(&daMP_DecodedTextureSetQueue, daMP_DecodedTextureSetMessage, 3);
+
+    daMP_First = daMP_VideoDecodeThreadCreated = TRUE;
+    return TRUE;
 }
 
 /* 00003A74-00003AAC       .text daMP_VideoDecodeThreadStart__Fv */
-void daMP_VideoDecodeThreadStart() {
+static void daMP_VideoDecodeThreadStart() {
     if (daMP_VideoDecodeThreadCreated) {
         OSResumeThread(&daMP_VideoDecodeThread);
     }
 }
 
 /* 00003AAC-00003AF0       .text daMP_VideoDecodeThreadCancel__Fv */
-void daMP_VideoDecodeThreadCancel() {
+static void daMP_VideoDecodeThreadCancel() {
     if (daMP_VideoDecodeThreadCreated) {
         OSCancelThread(&daMP_VideoDecodeThread);
         daMP_VideoDecodeThreadCreated = FALSE;
@@ -2766,54 +2937,135 @@ void daMP_VideoDecodeThreadCancel() {
 }
 
 /* 00003AF0-00003B24       .text daMP_PopFreeAudioBuffer__Fv */
-void daMP_PopFreeAudioBuffer() {
-    /* Nonmatching */
+static void* daMP_PopFreeAudioBuffer() {
+    OSMessage buffer;
+    OSReceiveMessage(&daMP_FreeAudioBufferQueue, &buffer, OS_MESSAGE_BLOCK);
+    return buffer;
 }
 
 /* 00003B24-00003B54       .text daMP_PushFreeAudioBuffer__FPv */
-void daMP_PushFreeAudioBuffer(void*) {
-    /* Nonmatching */
+static void daMP_PushFreeAudioBuffer(void* buffer) {
+    OSSendMessage(&daMP_FreeAudioBufferQueue, buffer, OS_MESSAGE_NOBLOCK);
 }
 
 /* 00003B54-00003B98       .text daMP_PopDecodedAudioBuffer__Fl */
-void daMP_PopDecodedAudioBuffer(s32) {
-    /* Nonmatching */
+static void* daMP_PopDecodedAudioBuffer(s32 flags) {
+    OSMessage buffer;
+    if (OSReceiveMessage(&daMP_DecodedAudioBufferQueue, &buffer, flags) == 1) {
+        return buffer;
+    }
+
+    return NULL;
 }
 
 /* 00003B98-00003BC8       .text daMP_PushDecodedAudioBuffer__FPv */
-void daMP_PushDecodedAudioBuffer(void*) {
-    /* Nonmatching */
+static void daMP_PushDecodedAudioBuffer(void* buffer) {
+    OSSendMessage(&daMP_DecodedAudioBufferQueue, buffer, OS_MESSAGE_BLOCK);
 }
 
 /* 00003BC8-00003CA4       .text daMP_AudioDecode__FP18daMP_THPReadBuffer */
-void daMP_AudioDecode(daMP_THPReadBuffer*) {
-    /* Nonmatching */
+static void daMP_AudioDecode(daMP_THPReadBuffer* readBuffer) {
+    THPAudioBuffer* audioBuf;
+    s32 i;
+    u32* offsets;
+    u8* audioData;
+
+    offsets = (u32*)(readBuffer->ptr + 8);
+    audioData = &readBuffer->ptr[daMP_ActivePlayer.compInfo.numComponents * 4] + 8;
+    audioBuf = (THPAudioBuffer*)daMP_PopFreeAudioBuffer();
+
+    for (i = 0; i < daMP_ActivePlayer.compInfo.numComponents; i++) {
+        switch (daMP_ActivePlayer.compInfo.frameComp[i]) {
+        case 1: {
+            audioBuf->validSample = THPAudioDecode(
+                audioBuf->buffer,
+                (audioData + *offsets * daMP_ActivePlayer.curAudioTrack), 0);
+            audioBuf->curPtr = audioBuf->buffer;
+            daMP_PushDecodedAudioBuffer(audioBuf);
+            return;
+        }
+        }
+
+        audioData += *offsets;
+        offsets++;
+    }
 }
 
 /* 00003CA4-00003CCC       .text daMP_AudioDecoder__FPv */
-void daMP_AudioDecoder(void*) {
-    /* Nonmatching */
+static void daMP_AudioDecoder(void*) {
+    daMP_THPReadBuffer* buf;
+
+    while (TRUE) {
+        buf = (daMP_THPReadBuffer*)daMP_PopReadedBuffer();
+        daMP_AudioDecode(buf);
+        daMP_PushReadedBuffer2(buf);
+    }
 }
 
 /* 00003CCC-00003D74       .text daMP_AudioDecoderForOnMemory__FPv */
-void daMP_AudioDecoderForOnMemory(void*) {
-    /* Nonmatching */
+static void daMP_AudioDecoderForOnMemory(void* param_0) {
+    s32 size;
+    s32 readSize;
+    daMP_THPReadBuffer readBuffer;
+    s32 frame;
+    s32 remaining;
+
+    readSize = daMP_ActivePlayer.initReadSize;
+    readBuffer.ptr = (u8*)param_0;
+    frame = 0;
+
+    while (TRUE) {
+        readBuffer.frameNumber = frame;
+        daMP_AudioDecode(&readBuffer);
+
+        remaining = (frame + daMP_ActivePlayer.initReadFrame) % daMP_ActivePlayer.header.numFrames;
+        if (remaining == daMP_ActivePlayer.header.numFrames - 1) {
+            if ((daMP_ActivePlayer.playFlag & 1)) {
+                readSize = *(s32*)readBuffer.ptr;
+                readBuffer.ptr = daMP_ActivePlayer.movieData;
+            } else {
+                OSSuspendThread(&daMP_AudioDecodeThread);
+            }
+        } else {
+            size = *(s32*)readBuffer.ptr;
+            readBuffer.ptr += readSize;
+            readSize = size;
+        }
+        frame++;
+    }
 }
 
 /* 00003D74-00003E70       .text daMP_CreateAudioDecodeThread__FlPUc */
-void daMP_CreateAudioDecodeThread(s32, u8*) {
-    /* Nonmatching */
+static BOOL daMP_CreateAudioDecodeThread(s32 prio, u8* param_1) {
+    if (param_1 != NULL) {
+        if (!OSCreateThread(&daMP_AudioDecodeThread, (void*)daMP_AudioDecoderForOnMemory, param_1, daMP_AudioDecodeThreadStack + sizeof(daMP_AudioDecodeThreadStack), sizeof(daMP_AudioDecodeThreadStack), prio, 1)) {
+            return FALSE;
+        }
+    } else {
+        if (!OSCreateThread(&daMP_AudioDecodeThread, (void*)daMP_AudioDecoder, NULL, daMP_AudioDecodeThreadStack + sizeof(daMP_AudioDecodeThreadStack), sizeof(daMP_AudioDecodeThreadStack), prio, 1)) {
+#if VERSION > VERSION_DEMO
+            OSReport("Can't create audio decode thread\n");
+#endif
+            return FALSE;
+        }
+    }
+
+    OSInitMessageQueue(&daMP_FreeAudioBufferQueue, daMP_FreeAudioBufferMessage, 3);
+    OSInitMessageQueue(&daMP_DecodedAudioBufferQueue, daMP_DecodedAudioBufferMessage, 3);
+
+    daMP_AudioDecodeThreadCreated = TRUE;
+    return TRUE;
 }
 
 /* 00003E70-00003EA8       .text daMP_AudioDecodeThreadStart__Fv */
-void daMP_AudioDecodeThreadStart() {
+static void daMP_AudioDecodeThreadStart() {
     if (daMP_AudioDecodeThreadCreated) {
         OSResumeThread(&daMP_AudioDecodeThread);
     }
 }
 
 /* 00003EA8-00003EEC       .text daMP_AudioDecodeThreadCancel__Fv */
-void daMP_AudioDecodeThreadCancel() {
+static void daMP_AudioDecodeThreadCancel() {
     if (daMP_AudioDecodeThreadCreated) {
         OSCancelThread(&daMP_AudioDecodeThread);
         daMP_AudioDecodeThreadCreated = FALSE;
@@ -2821,192 +3073,1102 @@ void daMP_AudioDecodeThreadCancel() {
 }
 
 /* 00003EEC-00004004       .text daMP_THPGXRestore__Fv */
-void daMP_THPGXRestore() {
-    /* Nonmatching */
+static void daMP_THPGXRestore() {
+    GXSetZMode(GX_ENABLE, GX_ALWAYS, GX_DISABLE);
+    GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_SET);
+    GXSetNumTexGens(1);
+    GXSetNumChans(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE3, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
+    GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_RED, GX_CH_RED, GX_CH_ALPHA);
+    GXSetTevSwapModeTable(GX_TEV_SWAP2, GX_CH_GREEN, GX_CH_GREEN, GX_CH_GREEN, GX_CH_ALPHA);
+    GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_BLUE, GX_CH_BLUE, GX_CH_BLUE, GX_CH_ALPHA);
+}
+
+static f32 dummyLiteral() {
+    f32 temp = 100.0f;
+    temp += 60.0f;
+    return temp;
 }
 
 /* 00004004-000044BC       .text daMP_THPGXYuv2RgbSetup__FPC16_GXRenderModeObj */
-void daMP_THPGXYuv2RgbSetup(const GXRenderModeObj*) {
-    /* Nonmatching */
+static void daMP_THPGXYuv2RgbSetup(const GXRenderModeObj* rmode) {
+    s32 w, h;
+    Mtx44 m;
+    Mtx e_m;
+
+    w = rmode->fbWidth;
+    h = rmode->efbHeight;
+
+    GXSetPixelFmt(GX_PF_RGB8_Z24, GX_ZC_LINEAR);
+    C_MTXOrtho(m, 0.0f, h - 0.0f, 0.0f, w, 0.0f, -1.0f);
+    GXSetProjection(m, GX_ORTHOGRAPHIC);
+    GXSetViewport(0.0f, 0.0f, w, h, 0.0f, 1.0f);
+    GXSetScissor(0, 0, w, h);
+    MTXIdentity(e_m);
+    GXLoadPosMtxImm(e_m, GX_PNMTX0);
+    GXSetCurrentMtx(0);
+    GXSetZMode(GX_ENABLE, GX_ALWAYS, GX_DISABLE);
+    GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
+    GXSetColorUpdate(GX_ENABLE);
+    GXSetAlphaUpdate(GX_DISABLE);
+#if VERSION == VERSION_DEMO
+    GXSetDispCopyGamma(GX_GM_1_0);
+#endif
+    GXSetNumChans(0);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60);
+    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, 60);
+    GXInvalidateTexAll();
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT7, GX_VA_POS, GX_CLR_RGBA, GX_RGBA4, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT7, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBX8, 0);
+    GXSetNumTevStages(4);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_KONST, GX_CC_C0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_FALSE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, GX_FALSE, GX_TEVPREV);
+    GXSetTevKColorSel(GX_TEVSTAGE0, GX_TEV_KCSEL_K0);
+    GXSetTevKAlphaSel(GX_TEVSTAGE0, GX_TEV_KASEL_K0_A);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP2, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_KONST, GX_CC_CPREV);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_2, GX_FALSE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, GX_CA_APREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, GX_FALSE, GX_TEVPREV);
+    GXSetTevKColorSel(GX_TEVSTAGE1, GX_TEV_KCSEL_K1);
+    GXSetTevKAlphaSel(GX_TEVSTAGE1, GX_TEV_KASEL_K1_A);
+    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_TEXC, GX_CC_ONE, GX_CC_CPREV);
+    GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_TEXA, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE3, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE3, GX_CC_APREV, GX_CC_CPREV, GX_CC_KONST, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE3, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevSwapMode(GX_TEVSTAGE3, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevKColorSel(GX_TEVSTAGE3, GX_TEV_KCSEL_K2);
+
+#if VERSION == VERSION_DEMO
+    GXSetTevColorS10(GX_TEVREG0, (GXColorS10){-0x5A, 0x00, -0x72, 0x87});
+
+    GXSetTevKColor(GX_KCOLOR0, (GXColor){0x00, 0x00, 0xE2, 0x58});
+
+    GXSetTevKColor(GX_KCOLOR1, (GXColor){0xB3, 0x00, 0x00, 0xB6});
+
+    GXSetTevKColor(GX_KCOLOR2, (GXColor){0xFF, 0x00, 0xFF, 0x80});
+#else
+    GXColorS10 spA8 = {-0x5A, 0x00, -0x72, 0x87};
+    GXSetTevColorS10(GX_TEVREG0, spA8);
+
+    GXColor spB0 = {0x00, 0x00, 0xE2, 0x58};
+    GXSetTevKColor(GX_KCOLOR0, spB0);
+
+    GXColor spB4 = {0xB3, 0x00, 0x00, 0xB6};
+    GXSetTevKColor(GX_KCOLOR1, spB4);
+
+    GXColor spB8 = {0xFF, 0x00, 0xFF, 0x80};
+    GXSetTevKColor(GX_KCOLOR2, spB8);
+#endif
+
+    GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
 }
 
 /* 000044E4-000046F8       .text daMP_THPGXYuv2RgbDraw__FPUcPUcPUcssssss */
-void daMP_THPGXYuv2RgbDraw(u8*, u8*, u8*, s16, s16, s16, s16, s16, s16) {
-    /* Nonmatching */
+static void daMP_THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x,
+                                  s16 y, s16 textureWidth, s16 textureHeight, s16 polygonWidth,
+                                  s16 polygonHeight) {
+    GXTexObj tobj0;
+    GXTexObj tobj1;
+    GXTexObj tobj2;
+
+    GXInitTexObj(&tobj0, y_data, textureWidth, textureHeight, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&tobj0, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
+    GXLoadTexObj(&tobj0, GX_TEXMAP0);
+
+    GXInitTexObj(&tobj1, u_data, textureWidth >> 1, textureHeight >> 1, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&tobj1, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
+    GXLoadTexObj(&tobj1, GX_TEXMAP1);
+
+    GXInitTexObj(&tobj2, v_data, textureWidth >> 1, textureHeight >> 1, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&tobj2, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
+    GXLoadTexObj(&tobj2, GX_TEXMAP2);
+
+    GXBegin(GX_QUADS, GX_VTXFMT7, 4);
+    GXPosition3s16((int)x, (int)y, 0);
+    GXTexCoord2u16(0, 0);
+    GXPosition3s16((s16)x + polygonWidth, (int)y, 0);
+    GXTexCoord2u16(1, 0);
+    GXPosition3s16((s16)x + polygonWidth, (s16)y + polygonHeight, 0);
+    GXTexCoord2u16(1, 1);
+    GXPosition3s16((int)x, (s16)y + polygonHeight, 0);
+    GXTexCoord2u16(0, 1);
+    GXEnd();
 }
 
+static u16 daMP_VolumeTable[] = {
+    0x0000, 0x0002, 0x0008, 0x0012, 0x0020, 0x0032, 0x0049, 0x0063,
+    0x0082, 0x00A4, 0x00CB, 0x00F5, 0x0124, 0x0157, 0x018E, 0x01C9,
+    0x0208, 0x024B, 0x0292, 0x02DD, 0x032C, 0x037F, 0x03D7, 0x0432,
+    0x0492, 0x04F5, 0x055D, 0x05C9, 0x0638, 0x06AC, 0x0724, 0x07A0,
+    0x0820, 0x08A4, 0x092C, 0x09B8, 0x0A48, 0x0ADD, 0x0B75, 0x0C12,
+    0x0CB2, 0x0D57, 0x0DFF, 0x0EAC, 0x0F5D, 0x1012, 0x10CA, 0x1187,
+    0x1248, 0x130D, 0x13D7, 0x14A4, 0x1575, 0x164A, 0x1724, 0x1801,
+    0x18E3, 0x19C8, 0x1AB2, 0x1BA0, 0x1C91, 0x1D87, 0x1E81, 0x1F7F,
+    0x2081, 0x2187, 0x2291, 0x239F, 0x24B2, 0x25C8, 0x26E2, 0x2801,
+    0x2923, 0x2A4A, 0x2B75, 0x2CA3, 0x2DD6, 0x2F0D, 0x3048, 0x3187,
+    0x32CA, 0x3411, 0x355C, 0x36AB, 0x37FF, 0x3956, 0x3AB1, 0x3C11,
+    0x3D74, 0x3EDC, 0x4048, 0x41B7, 0x432B, 0x44A3, 0x461F, 0x479F,
+    0x4923, 0x4AAB, 0x4C37, 0x4DC7, 0x4F5C, 0x50F4, 0x5290, 0x5431,
+    0x55D6, 0x577E, 0x592B, 0x5ADC, 0x5C90, 0x5E49, 0x6006, 0x61C7,
+    0x638C, 0x6555, 0x6722, 0x68F4, 0x6AC9, 0x6CA2, 0x6E80, 0x7061,
+    0x7247, 0x7430, 0x761E, 0x7810, 0x7A06, 0x7C00, 0x7DFE, 0x8000,
+};
+
 /* 00004720-0000494C       .text daMP_MixAudio__FPsPsUl */
-void daMP_MixAudio(s16*, s16*, u32) {
-    /* Nonmatching */
+static void daMP_MixAudio(s16* destination, s16*, u32 sample) {
+    if (daMP_ActivePlayer.open && daMP_ActivePlayer.internalState == 2 && daMP_ActivePlayer.audioExist) {
+        u32 sampleNum;
+        u32 requestSample;
+        s32 i;
+        s16* dst;
+        s16* curPtr;
+        s32 l_mix, r_mix;
+        u16 attenuation;
+
+        requestSample = sample;
+        dst = destination;
+
+        do {
+            do {
+                if (daMP_ActivePlayer.playAudioBuffer == (THPAudioBuffer*)NULL) {
+                    if (!(daMP_ActivePlayer.playAudioBuffer = (THPAudioBuffer*)daMP_PopDecodedAudioBuffer(0))) {
+                        memset(dst, 0, requestSample * 4);
+                        return;
+                    }
+                    daMP_ActivePlayer.curAudioNumber++;
+                }
+            } while ((sampleNum = daMP_ActivePlayer.playAudioBuffer->validSample) == 0);
+
+            if (sampleNum >= requestSample) {
+                sampleNum = requestSample;
+            }
+
+            curPtr = daMP_ActivePlayer.playAudioBuffer->curPtr;
+
+            for (i = 0; i < sampleNum; i++) {
+                if (daMP_ActivePlayer.rampCount != 0) {
+                    daMP_ActivePlayer.rampCount--;
+                    daMP_ActivePlayer.curVolume += daMP_ActivePlayer.deltaVolume;
+                } else {
+                    daMP_ActivePlayer.curVolume = daMP_ActivePlayer.targetVolume;
+                }
+
+                attenuation = daMP_VolumeTable[(s32)daMP_ActivePlayer.curVolume];
+
+                l_mix = 0.7f * (attenuation * curPtr[0] >> 15);
+                // clamp volume
+                if (l_mix < -32768)
+                    l_mix = -32768;
+                if (l_mix > 32767)
+                    l_mix = 32767;
+
+                dst[0] = l_mix;
+
+                r_mix = 0.7f * (attenuation * curPtr[1] >> 15);
+                if (r_mix < -32768)
+                    r_mix = -32768;
+                if (r_mix > 32767)
+                    r_mix = 32767;
+
+                dst[1] = r_mix;
+
+                dst += 2;
+                curPtr += 2;
+            }
+
+            requestSample -= sampleNum;
+            daMP_ActivePlayer.playAudioBuffer->validSample -= sampleNum;
+            daMP_ActivePlayer.playAudioBuffer->curPtr = curPtr;
+
+            if ((daMP_ActivePlayer.playAudioBuffer)->validSample == 0) {
+                daMP_PushFreeAudioBuffer(daMP_ActivePlayer.playAudioBuffer);
+                daMP_ActivePlayer.playAudioBuffer = (THPAudioBuffer*)NULL;
+            }
+
+            if (requestSample == 0) {
+                break;
+            }
+
+        } while (TRUE);
+    } else {
+        memset(destination, 0, sample * 4);
+    }
 }
 
 /* 0000494C-00004A04       .text daMP_audioCallbackWithMSound__Fl */
-void daMP_audioCallbackWithMSound(s32) {
-    /* Nonmatching */
+static s16* daMP_audioCallbackWithMSound(s32 sample) {
+    if (daMP_ActivePlayer.open == 0 || daMP_ActivePlayer.internalState != 2 || daMP_ActivePlayer.audioExist == 0) {
+        return NULL;
+    }
+
+    BOOL enable = OSEnableInterrupts();
+    daMP_SoundBufferIndex ^= 1;
+    daMP_MixAudio((s16*)daMP_SoundBuffer[daMP_SoundBufferIndex], NULL, sample);
+    OSRestoreInterrupts(enable);
+    return (s16*)daMP_SoundBuffer[daMP_SoundBufferIndex];
 }
 
 /* 00004A04-00004A30       .text daMP_audioInitWithMSound__Fv */
-void daMP_audioInitWithMSound() {
-    /* Nonmatching */
+static void daMP_audioInitWithMSound() {
+    JASystem::Kernel::registerMixCallback(daMP_audioCallbackWithMSound, MIX_MODE_INTERLEAVE);
 }
 
 /* 00004A30-00004A58       .text daMP_audioQuitWithMSound__Fv */
-void daMP_audioQuitWithMSound() {
-    /* Nonmatching */
+static void daMP_audioQuitWithMSound() {
+    JASystem::Kernel::registerMixCallback(NULL, MIX_MODE_MONO);
 }
 
 /* 00004A58-00004A88       .text daMP_PushUsedTextureSet__FPv */
-void daMP_PushUsedTextureSet(void*) {
-    /* Nonmatching */
+static void daMP_PushUsedTextureSet(void* tex) {
+    OSSendMessage(&daMP_UsedTextureSetQueue, tex, OS_MESSAGE_NOBLOCK);
 }
 
 /* 00004A88-00004ACC       .text daMP_PopUsedTextureSet__Fv */
-void daMP_PopUsedTextureSet() {
-    /* Nonmatching */
+static void* daMP_PopUsedTextureSet() {
+    OSMessage tex;
+    if (OSReceiveMessage(&daMP_UsedTextureSetQueue, &tex, OS_MESSAGE_NOBLOCK) == 1) {
+        return tex;
+    }
+
+    return NULL;
 }
 
 /* 00004ACC-00004BA4       .text daMP_THPPlayerInit__Fl */
-void daMP_THPPlayerInit(s32) {
-    /* Nonmatching */
+static BOOL daMP_THPPlayerInit(s32 param_0) {
+    BOOL enable;
+
+    ASSERTMSGLINE(7593, param_0 >= 0 && param_0 <= 2, "audioSystem flag is invalid\n");
+
+    memset(&daMP_ActivePlayer, 0, sizeof(daMP_ActivePlayer));
+    LCEnable();
+
+    OSInitMessageQueue(&daMP_UsedTextureSetQueue, daMP_UsedTextureSetMessage, 3);
+
+    if (!THPInit()) {
+        return FALSE;
+    }
+
+    enable = OSDisableInterrupts();
+    daMP_AudioSystem = param_0;
+    daMP_SoundBufferIndex = 0;
+    daMP_LastAudioBuffer = NULL;
+    daMP_CurAudioBuffer = NULL;
+    daMP_audioInitWithMSound();
+    OSRestoreInterrupts(enable);
+
+    if (daMP_AudioSystem == 0) {
+        memset(daMP_SoundBuffer, 0, sizeof(daMP_SoundBuffer));
+#if VERSION <= VERSION_JPN
+        DCFlushRange(daMP_SoundBuffer, sizeof(daMP_SoundBuffer));
+#else
+        DCStoreRange(daMP_SoundBuffer, sizeof(daMP_SoundBuffer));
+#endif
+    }
+
+    daMP_Initialized = TRUE;
+    return TRUE;
 }
 
 /* 00004BA4-00004BD4       .text daMP_THPPlayerQuit__Fv */
-void daMP_THPPlayerQuit() {
-    /* Nonmatching */
+static void daMP_THPPlayerQuit() {
+    LCDisable();
+    daMP_audioQuitWithMSound();
+    daMP_Initialized = FALSE;
+#if VERSION == VERSION_PAL
+    daMP_ActivePlayer.dvdError = 0;
+    daMP_ActivePlayer.videoError = 0;
+#endif
 }
 
 /* 00004BD4-00004FB4       .text daMP_THPPlayerOpen__FPCci */
-void daMP_THPPlayerOpen(const char*, int) {
-    /* Nonmatching */
+static BOOL daMP_THPPlayerOpen(const char* filename, BOOL onMemory) {
+    /* Nonmatching - retail-only regalloc */
+    s32 offset;
+    s32 i;
+
+    if (!daMP_Initialized) {
+#if VERSION > VERSION_DEMO
+        OSReport("You must call daMP_THPPlayerInit before you call this function\n");
+#endif
+        return FALSE;
+    }
+
+    if (daMP_ActivePlayer.open) {
+#if VERSION > VERSION_DEMO
+        OSReport("Can't open %s. Because thp file have already opened.\n");
+#endif
+        return FALSE;
+    }
+
+    memset(&daMP_ActivePlayer.videoInfo, 0, sizeof(THPVideoInfo));
+    memset(&daMP_ActivePlayer.audioInfo, 0, sizeof(THPAudioInfo));
+
+    if (!DVDOpen(filename, &daMP_ActivePlayer.fileInfo)) {
+#if VERSION > VERSION_DEMO
+        OSReport("Can't open %s.\n", filename);
+#endif
+        return FALSE;
+    }
+
+    if (DVDReadPrio(&daMP_ActivePlayer.fileInfo, daMP_WorkBuffer, sizeof(daMP_WorkBuffer), 0, 2) < 0) {
+#if VERSION > VERSION_DEMO
+        OSReport("Fail to read the header from THP file.\n");
+#endif
+        DVDClose(&daMP_ActivePlayer.fileInfo);
+        return FALSE;
+    }
+
+    memcpy(&daMP_ActivePlayer.header, daMP_WorkBuffer, sizeof(THPHeader));
+
+    if (strcmp(daMP_ActivePlayer.header.magic, "THP") != 0) {
+#if VERSION > VERSION_DEMO
+        OSReport("This file is not THP file.\n");
+#endif
+        DVDClose(&daMP_ActivePlayer.fileInfo);
+        return FALSE;
+    }
+
+    if (daMP_ActivePlayer.header.version != 0x11000) {
+#if VERSION > VERSION_DEMO
+        OSReport("invalid version.\n");
+#endif
+        DVDClose(&daMP_ActivePlayer.fileInfo);
+        return FALSE;
+    }
+
+    offset = daMP_ActivePlayer.header.compInfoDataOffsets;
+
+    if (DVDReadPrio(&daMP_ActivePlayer.fileInfo, daMP_WorkBuffer, 0x20, offset, 2) < 0) {
+#if VERSION > VERSION_DEMO
+        OSReport("Fail to read the frame component infomation from THP file.\n");
+#endif
+        DVDClose(&daMP_ActivePlayer.fileInfo);
+        return FALSE;
+    }
+
+    memcpy(&daMP_ActivePlayer.compInfo, daMP_WorkBuffer, sizeof(THPFrameCompInfo));
+    offset += sizeof(THPFrameCompInfo);
+
+    daMP_ActivePlayer.audioExist = 0;
+
+    for (i = 0; i < daMP_ActivePlayer.compInfo.numComponents; i++) {
+        switch (daMP_ActivePlayer.compInfo.frameComp[i]) {
+        case 0:
+            if (DVDReadPrio(&daMP_ActivePlayer.fileInfo, daMP_WorkBuffer, 0x20, offset, 2) < 0) {
+#if VERSION > VERSION_DEMO
+                OSReport("Fail to read the video infomation from THP file.\n");
+#endif
+                DVDClose(&daMP_ActivePlayer.fileInfo);
+                return FALSE;
+            }
+
+            memcpy(&daMP_ActivePlayer.videoInfo, daMP_WorkBuffer, sizeof(THPVideoInfo));
+            offset += sizeof(THPVideoInfo);
+            break;
+        case 1:
+            if (DVDReadPrio(&daMP_ActivePlayer.fileInfo, daMP_WorkBuffer, 0x20, offset, 2) < 0) {
+#if VERSION > VERSION_DEMO
+                OSReport("Fail to read the video infomation from THP file.\n");
+#endif
+                DVDClose(&daMP_ActivePlayer.fileInfo);
+                return FALSE;
+            }
+
+            memcpy(&daMP_ActivePlayer.audioInfo, daMP_WorkBuffer, sizeof(THPAudioInfo));
+            daMP_ActivePlayer.audioExist = 1;
+            offset += sizeof(THPAudioInfo);
+            break;
+        default:
+#if VERSION > VERSION_DEMO
+            OSReport("Unknow frame components.\n");
+#endif
+            return FALSE;
+        }
+    }
+
+    daMP_ActivePlayer.internalState = 0;
+    daMP_ActivePlayer.state = 0;
+    daMP_ActivePlayer.playFlag = 0;
+    daMP_ActivePlayer.onMemory = onMemory;
+    daMP_ActivePlayer.open = 1;
+    daMP_ActivePlayer.curVolume = 127.0f;
+    daMP_ActivePlayer.targetVolume = 127.0f;
+    daMP_ActivePlayer.rampCount = 0;
+    return TRUE;
 }
 
 /* 00004FB4-00005008       .text daMP_THPPlayerClose__Fv */
-void daMP_THPPlayerClose() {
-    /* Nonmatching */
+static BOOL daMP_THPPlayerClose() {
+    if (daMP_ActivePlayer.open && daMP_ActivePlayer.state == 0) {
+        daMP_ActivePlayer.open = 0;
+        DVDClose(&daMP_ActivePlayer.fileInfo);
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00005008-000050B8       .text daMP_THPPlayerCalcNeedMemory__Fv */
-void daMP_THPPlayerCalcNeedMemory() {
-    /* Nonmatching */
+static u32 daMP_THPPlayerCalcNeedMemory() {
+    if (daMP_ActivePlayer.open) {
+        u32 size = daMP_ActivePlayer.onMemory
+                       ? ALIGN_NEXT(daMP_ActivePlayer.header.movieDataSize, 32)
+                       : ALIGN_NEXT(daMP_ActivePlayer.header.bufsize, 32) * 10;
+
+        size += ALIGN_NEXT(daMP_ActivePlayer.videoInfo.xSize * daMP_ActivePlayer.videoInfo.ySize, 32) * 3;
+        size += ALIGN_NEXT(daMP_ActivePlayer.videoInfo.xSize * daMP_ActivePlayer.videoInfo.ySize / 4, 32) * 3;
+        size += ALIGN_NEXT(daMP_ActivePlayer.videoInfo.xSize * daMP_ActivePlayer.videoInfo.ySize / 4, 32) * 3;
+
+        if (daMP_ActivePlayer.audioExist) {
+            size += ALIGN_NEXT(daMP_ActivePlayer.header.audioMaxSamples * 4, 32) * THP_AUDIO_BUFFER_COUNT;
+        }
+    
+        return size + 0x1000;
+    }
+
+    return 0;
 }
 
 /* 000050B8-000052D0       .text daMP_THPPlayerSetBuffer__FPUc */
-void daMP_THPPlayerSetBuffer(u8*) {
-    /* Nonmatching */
+static BOOL daMP_THPPlayerSetBuffer(u8* buffer) {
+    u32 i;
+    u8* ptr;
+    u32 ysize;
+    u32 uvsize;
+
+    ASSERTMSGLINE(7939, buffer != NULL, "buffer is NULL");
+
+    if (daMP_ActivePlayer.open && daMP_ActivePlayer.state == 0) {
+        ptr = buffer;
+        if (daMP_ActivePlayer.onMemory) {
+            daMP_ActivePlayer.movieData = ptr;
+            ptr += daMP_ActivePlayer.header.movieDataSize;
+        } else {
+            for (i = 0; i < ARRAY_SIZE(daMP_ActivePlayer.readBuffer); i++) {
+                daMP_ActivePlayer.readBuffer[i].ptr = ptr;
+                ptr += ALIGN_NEXT(daMP_ActivePlayer.header.bufsize, 32);
+            }
+        }
+
+        ysize = ALIGN_NEXT(daMP_ActivePlayer.videoInfo.xSize * daMP_ActivePlayer.videoInfo.ySize, 32);
+        uvsize = ALIGN_NEXT(daMP_ActivePlayer.videoInfo.xSize * daMP_ActivePlayer.videoInfo.ySize / 4, 32);
+
+        for (i = 0; i < ARRAY_SIZE(daMP_ActivePlayer.textureSet); i++) {
+            daMP_ActivePlayer.textureSet[i].ytexture = ptr;
+
+            DCInvalidateRange(ptr, ysize);
+            ptr += ysize;
+
+            daMP_ActivePlayer.textureSet[i].utexture = ptr;
+            DCInvalidateRange(ptr, uvsize);
+            ptr += uvsize;
+
+            daMP_ActivePlayer.textureSet[i].vtexture = ptr;
+            DCInvalidateRange(ptr, uvsize);
+            ptr += uvsize;
+        }
+
+        if (daMP_ActivePlayer.audioExist) {
+            for (i = 0; i < ARRAY_SIZE(daMP_ActivePlayer.audioBuffer); i++) {
+                daMP_ActivePlayer.audioBuffer[i].buffer = (s16*)ptr;
+                daMP_ActivePlayer.audioBuffer[i].curPtr = (s16*)ptr;
+                daMP_ActivePlayer.audioBuffer[i].validSample = 0;
+                ptr += ALIGN_NEXT(daMP_ActivePlayer.header.audioMaxSamples * 4, 32);
+            }
+        }
+
+        daMP_ActivePlayer.thpWork = ptr;
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 000052D0-000053A4       .text daMP_InitAllMessageQueue__Fv */
-void daMP_InitAllMessageQueue() {
-    /* Nonmatching */
+static void daMP_InitAllMessageQueue() {
+    int i;
+    if (daMP_ActivePlayer.onMemory == FALSE) {
+        for (i = 0; i < THP_READ_BUFFER_COUNT; i++) {
+            daMP_PushFreeReadBuffer(&daMP_ActivePlayer.readBuffer[i]);
+        }
+    }
+
+    for (i = 0; i < THP_TEXTURE_SET_COUNT; i++) {
+        daMP_PushFreeTextureSet(&daMP_ActivePlayer.textureSet[i]);
+    }
+
+    if (daMP_ActivePlayer.audioExist) {
+        for (i = 0; i < THP_AUDIO_BUFFER_COUNT; i++) {
+            daMP_PushFreeAudioBuffer(&daMP_ActivePlayer.audioBuffer[i]);
+        }
+    }
+
+    OSInitMessageQueue(&daMP_PrepareReadyQueue, &daMP_PrepareReadyMessage, 1);
 }
 
 /* 000053A4-00005410       .text daMP_ProperTimingForStart__Fv */
-void daMP_ProperTimingForStart() {
-    /* Nonmatching */
+static BOOL daMP_ProperTimingForStart() {
+    if (daMP_ActivePlayer.videoInfo.videoType & 1) {
+        if (VIGetNextField() == 0)
+            return TRUE;
+    } else if (daMP_ActivePlayer.videoInfo.videoType & 2) {
+        if (VIGetNextField() == 1)
+            return TRUE;
+    } else
+        return TRUE;
+
+    return FALSE;
 }
 
 /* 00005410-00005554       .text daMP_ProperTimingForGettingNextFrame__Fv */
-void daMP_ProperTimingForGettingNextFrame() {
-    /* Nonmatching */
+static BOOL daMP_ProperTimingForGettingNextFrame() {
+    if ((daMP_ActivePlayer.videoInfo.videoType & 1)) {
+        if (VIGetNextField() == 0) {
+            return TRUE;
+        }
+    } else if ((daMP_ActivePlayer.videoInfo.videoType & 2)) {
+        if (VIGetNextField() == 1) {
+            return TRUE;
+        }
+    } else {
+        s32 frameRate = daMP_ActivePlayer.header.frameRate * 100.0f;
+        if (VIGetTvFormat() == VI_PAL) {
+            daMP_ActivePlayer.curCount = daMP_ActivePlayer.retaceCount * frameRate / 5000;
+        } else {
+            daMP_ActivePlayer.curCount = daMP_ActivePlayer.retaceCount * frameRate / 5994;
+        }
+
+        if (daMP_ActivePlayer.prevCount != daMP_ActivePlayer.curCount) {
+            daMP_ActivePlayer.prevCount = daMP_ActivePlayer.curCount;
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }
 
 /* 00005554-00005810       .text daMP_PlayControl__FUl */
-void daMP_PlayControl(u32) {
-    /* Nonmatching */
+static void daMP_PlayControl(u32 retraceCnt) {
+    THPTextureSet* decodedTexture;
+
+    if (daMP_OldVIPostCallback != NULL)
+        daMP_OldVIPostCallback(retraceCnt);
+
+    decodedTexture = (THPTextureSet*)-1;
+    if (daMP_ActivePlayer.open && daMP_ActivePlayer.state == 2) {
+        if (daMP_ActivePlayer.dvdError || daMP_ActivePlayer.videoError) {
+            daMP_ActivePlayer.internalState = 5;
+            daMP_ActivePlayer.state = 5;
+            return;
+        }
+
+        ++daMP_ActivePlayer.retaceCount;
+
+        if (daMP_ActivePlayer.retaceCount == 0) {
+            if (daMP_ProperTimingForStart()) {
+                if (daMP_ActivePlayer.audioExist) {
+                    if (daMP_ActivePlayer.curVideoNumber - daMP_ActivePlayer.curAudioNumber <= 1) {
+                        decodedTexture = (THPTextureSet*)daMP_PopDecodedTextureSet(0);
+                        daMP_ActivePlayer.videoDecodeCount--;
+                        daMP_ActivePlayer.curVideoNumber++;
+                    } else {
+                        daMP_ActivePlayer.internalState = 2;
+                    }
+                } else {
+                    decodedTexture = (THPTextureSet*)daMP_PopDecodedTextureSet(0);
+                }
+            } else {
+                daMP_ActivePlayer.retaceCount = -1;
+            }
+        } else {
+            if (daMP_ActivePlayer.retaceCount == 1) {
+                daMP_ActivePlayer.internalState = 2;
+            }
+
+            if (daMP_ProperTimingForGettingNextFrame()) {
+                if (daMP_ActivePlayer.audioExist) {
+                    if (daMP_ActivePlayer.curVideoNumber - daMP_ActivePlayer.curAudioNumber <= 1) {
+                        decodedTexture = (THPTextureSet*)daMP_PopDecodedTextureSet(0);
+                        daMP_ActivePlayer.videoDecodeCount--;
+                        daMP_ActivePlayer.curVideoNumber++;
+                    }
+                } else {
+                    decodedTexture = (THPTextureSet*)daMP_PopDecodedTextureSet(0);
+                }
+            }
+        }
+
+        if (decodedTexture != NULL && decodedTexture != (THPTextureSet*)-1) {
+            if (daMP_ActivePlayer.dispTextureSet != NULL)
+                daMP_PushUsedTextureSet(daMP_ActivePlayer.dispTextureSet);
+            daMP_ActivePlayer.dispTextureSet = decodedTexture;
+        }
+
+        if ((daMP_ActivePlayer.playFlag & 1) == 0) {
+            if (daMP_ActivePlayer.audioExist) {
+                s32 audioFrame = daMP_ActivePlayer.curAudioNumber + daMP_ActivePlayer.initReadFrame;
+                if (audioFrame == daMP_ActivePlayer.header.numFrames && daMP_ActivePlayer.playAudioBuffer == NULL) {
+                    daMP_ActivePlayer.internalState = 3;
+                    daMP_ActivePlayer.state = 3;
+                }
+            } else {
+                s32 curFrame;
+                if (daMP_ActivePlayer.dispTextureSet != NULL)
+                    curFrame = daMP_ActivePlayer.dispTextureSet->frameNumber + daMP_ActivePlayer.initReadFrame;
+                else
+                    curFrame = daMP_ActivePlayer.initReadFrame - 1;
+
+                if (curFrame == daMP_ActivePlayer.header.numFrames - 1 && decodedTexture == NULL) {
+                    daMP_ActivePlayer.internalState = 3;
+                    daMP_ActivePlayer.state = 3;
+                }
+            }
+        }
+    }
 }
 
 /* 00005810-00005850       .text daMP_WaitUntilPrepare__Fv */
-s32 daMP_WaitUntilPrepare() {
+static s32 daMP_WaitUntilPrepare() {
     OSMessage msg;
     OSReceiveMessage(&daMP_PrepareReadyQueue, &msg, 1);
-    u32 temp = (s32)msg;
-    return (-temp | temp) >> 31; // fakematch? should be temp != 0;
+    
+    if ((u32)msg) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 00005850-00005880       .text daMP_PrepareReady__Fi */
-void daMP_PrepareReady(int r3) {
+static void daMP_PrepareReady(int r3) {
     OSMessage msg = (OSMessage)r3;
     OSSendMessage(&daMP_PrepareReadyQueue, msg, 1);
 }
 
 /* 00005880-00005B68       .text daMP_THPPlayerPrepare__Flll */
-void daMP_THPPlayerPrepare(s32, s32, s32) {
-    /* Nonmatching */
+static BOOL daMP_THPPlayerPrepare(s32 frame, s32 flag, s32 audioTrack) {
+    u8* threadData;
+    if (daMP_ActivePlayer.open && daMP_ActivePlayer.state == 0) {
+        if (frame > 0) {
+            if (daMP_ActivePlayer.header.offsetDataOffsets == 0) {
+#if VERSION > VERSION_DEMO
+                OSReport("This thp file doesn't have the offset data\n");
+#endif
+                return FALSE;
+            }
+
+            if (daMP_ActivePlayer.header.numFrames > frame) {
+                int offset = daMP_ActivePlayer.header.offsetDataOffsets + (frame - 1) * 4;
+                if (DVDReadPrio(&daMP_ActivePlayer.fileInfo, daMP_WorkBuffer, 0x20, offset, 2) < 0) {
+#if VERSION > VERSION_DEMO
+                    OSReport("Fail to read the offset data from THP file.\n");
+#endif
+                    return FALSE;
+                }
+
+                daMP_ActivePlayer.initOffset = daMP_ActivePlayer.header.movieDataOffsets + daMP_WorkBuffer[0];
+                daMP_ActivePlayer.initReadFrame = frame;
+                daMP_ActivePlayer.initReadSize = daMP_WorkBuffer[1] - daMP_WorkBuffer[0];
+            } else {
+#if VERSION > VERSION_DEMO
+                OSReport("Specified frame number is over total frame number\n");
+#endif
+                return FALSE;
+            }
+        } else {
+            daMP_ActivePlayer.initOffset = daMP_ActivePlayer.header.movieDataOffsets;
+            daMP_ActivePlayer.initReadSize = daMP_ActivePlayer.header.firstFrameSize;
+            daMP_ActivePlayer.initReadFrame = frame;
+        }
+
+        if (daMP_ActivePlayer.audioExist) {
+            if (audioTrack < 0 || audioTrack >= daMP_ActivePlayer.audioInfo.sndNumTracks) {
+#if VERSION > VERSION_DEMO
+                OSReport("Specified audio track number is invalid\n");
+#endif
+                return FALSE;
+            }
+            daMP_ActivePlayer.curAudioTrack = audioTrack;
+        }
+
+        flag &= 1;
+        daMP_ActivePlayer.playFlag = flag;
+        daMP_ActivePlayer.videoDecodeCount = 0;
+
+        if (daMP_ActivePlayer.onMemory) {
+            if (DVDReadPrio(&daMP_ActivePlayer.fileInfo, daMP_ActivePlayer.movieData, daMP_ActivePlayer.header.movieDataSize, daMP_ActivePlayer.header.movieDataOffsets, 2) < 0) {
+#if VERSION > VERSION_DEMO
+                OSReport("Fail to read all movie data from THP file\n");
+#endif
+                return FALSE;
+            }
+
+            threadData = daMP_ActivePlayer.movieData + daMP_ActivePlayer.initOffset - daMP_ActivePlayer.header.movieDataOffsets;
+            daMP_CreateVideoDecodeThread(20, threadData);
+
+            if (daMP_ActivePlayer.audioExist)
+                daMP_CreateAudioDecodeThread(12, threadData);
+        } else {
+            daMP_CreateVideoDecodeThread(20, 0);
+            if (daMP_ActivePlayer.audioExist)
+                daMP_CreateAudioDecodeThread(12, NULL);
+            daMP_CreateReadThread(8);
+        }
+
+        daMP_InitAllMessageQueue();
+        daMP_VideoDecodeThreadStart();
+
+        if (daMP_ActivePlayer.audioExist)
+            daMP_AudioDecodeThreadStart();
+        if (daMP_ActivePlayer.onMemory == 0)
+            daMP_ReadThreadStart();
+
+        if (!daMP_WaitUntilPrepare())
+            return FALSE;
+
+        daMP_ActivePlayer.state = 1;
+        daMP_ActivePlayer.internalState = 0;
+        daMP_ActivePlayer.dispTextureSet = (THPTextureSet*)NULL;
+        daMP_ActivePlayer.playAudioBuffer = (THPAudioBuffer*)NULL;
+        daMP_ActivePlayer.curVideoNumber = 0;
+        daMP_ActivePlayer.curAudioNumber = 0;
+
+        daMP_OldVIPostCallback = VISetPostRetraceCallback(daMP_PlayControl);
+
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00005B68-00005BAC       .text daMP_THPPlayerDrawDone__Fv */
-void daMP_THPPlayerDrawDone() {
-    /* Nonmatching */
+static void daMP_THPPlayerDrawDone() {
+    GXDrawDone();
+
+    if (daMP_Initialized) {
+        while (TRUE) {
+            void* tex = daMP_PopUsedTextureSet();
+            if (tex == NULL) {
+                break;
+            }
+            daMP_PushFreeTextureSet(tex);
+        }
+    }
 }
 
 /* 00005BAC-00005C0C       .text daMP_THPPlayerPlay__Fv */
-void daMP_THPPlayerPlay() {
-    /* Nonmatching */
+static BOOL daMP_THPPlayerPlay() {
+    if (daMP_ActivePlayer.open != 0 && (daMP_ActivePlayer.state == 1 || daMP_ActivePlayer.state == 4)) {
+        daMP_ActivePlayer.state = 2;
+        daMP_ActivePlayer.prevCount = 0;
+        daMP_ActivePlayer.curCount = 0;
+        daMP_ActivePlayer.retaceCount = -1;
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00005C0C-00005CCC       .text daMP_THPPlayerStop__Fv */
-void daMP_THPPlayerStop() {
-    /* Nonmatching */
+static void daMP_THPPlayerStop() {
+    if (daMP_ActivePlayer.open != 0 && daMP_ActivePlayer.state != 0) {
+        daMP_ActivePlayer.internalState = 0;
+        daMP_ActivePlayer.state = 0;
+
+        VISetPostRetraceCallback(daMP_OldVIPostCallback);
+
+        if (daMP_ActivePlayer.onMemory == 0) {
+            DVDCancel(&daMP_ActivePlayer.fileInfo.block);
+            daMP_ReadThreadCancel();
+        }
+
+        daMP_VideoDecodeThreadCancel();
+
+        if (daMP_ActivePlayer.audioExist != 0) {
+            daMP_AudioDecodeThreadCancel();
+            daMP_audioQuitWithMSound();
+        }
+
+        while (daMP_PopUsedTextureSet() != NULL) {}
+
+        daMP_ActivePlayer.curVolume = daMP_ActivePlayer.targetVolume;
+        daMP_ActivePlayer.rampCount = 0;
+#if VERSION < VERSION_PAL
+        daMP_ActivePlayer.dvdError = 0;
+        daMP_ActivePlayer.videoError = 0;
+#endif
+    }
 }
 
 /* 00005CCC-00005DAC       .text daMP_THPPlayerDrawCurrentFrame__FPC16_GXRenderModeObjUlUlUlUl */
-void daMP_THPPlayerDrawCurrentFrame(const GXRenderModeObj*, u32, u32, u32, u32) {
-    /* Nonmatching */
+static int daMP_THPPlayerDrawCurrentFrame(const GXRenderModeObj* rmode, u32 x, u32 y, u32 polygonW, u32 polygonH) {
+    s32 frame;
+    if (daMP_ActivePlayer.open && daMP_ActivePlayer.state != 0 && daMP_ActivePlayer.dispTextureSet != NULL) {
+        daMP_THPGXYuv2RgbSetup(rmode);
+        daMP_THPGXYuv2RgbDraw(daMP_ActivePlayer.dispTextureSet->ytexture,
+                         daMP_ActivePlayer.dispTextureSet->utexture,
+                         daMP_ActivePlayer.dispTextureSet->vtexture, x, y,
+                         daMP_ActivePlayer.videoInfo.xSize,
+                         daMP_ActivePlayer.videoInfo.ySize, polygonW, polygonH);
+        daMP_THPGXRestore();
+        frame = (daMP_ActivePlayer.dispTextureSet->frameNumber + daMP_ActivePlayer.initReadFrame) % daMP_ActivePlayer.header.numFrames;
+        
+        return frame;
+    }
+
+    return -1;
 }
 
 /* 00005DAC-00005DF4       .text daMP_THPPlayerGetVideoInfo__FP12THPVideoInfo */
-void daMP_THPPlayerGetVideoInfo(THPVideoInfo*) {
-    /* Nonmatching */
+static BOOL daMP_THPPlayerGetVideoInfo(THPVideoInfo* info) {
+    if (daMP_ActivePlayer.open != 0) {
+        memcpy(info, &daMP_ActivePlayer.videoInfo, sizeof(THPVideoInfo));
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00005DF4-00005E3C       .text daMP_THPPlayerGetAudioInfo__FP12THPAudioInfo */
-void daMP_THPPlayerGetAudioInfo(THPAudioInfo*) {
-    /* Nonmatching */
+static BOOL daMP_THPPlayerGetAudioInfo(THPAudioInfo* info) {
+    if (daMP_ActivePlayer.open != 0) {
+        memcpy(info, &daMP_ActivePlayer.audioInfo, sizeof(THPAudioInfo));
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00005E3C-00005E60       .text daMP_THPPlayerGetTotalFrame__Fv */
-void daMP_THPPlayerGetTotalFrame() {
-    /* Nonmatching */
+static u32 daMP_THPPlayerGetTotalFrame() {
+    if (daMP_ActivePlayer.open != 0) {
+        return daMP_ActivePlayer.header.numFrames;
+    }
+
+    return 0;
 }
 
 /* 00005E60-00005E70       .text daMP_THPPlayerGetState__Fv */
-void daMP_THPPlayerGetState() {
-    /* Nonmatching */
+static int daMP_THPPlayerGetState() {
+    return daMP_ActivePlayer.state;
 }
 
 /* 00005E70-00005F9C       .text daMP_THPPlayerSetVolume__Fll */
-void daMP_THPPlayerSetVolume(s32, s32) {
-    /* Nonmatching */
+static BOOL daMP_THPPlayerSetVolume(s32 vol, s32 duration) {
+    u32 numSamples;
+    BOOL interrupt;
+
+    if (daMP_ActivePlayer.open && daMP_ActivePlayer.audioExist) {
+        numSamples = AIGetDSPSampleRate() == 0 ? 32 : 48;
+
+        // clamp volume
+        if (vol > 127)
+            vol = 127;
+        if (vol < 0)
+            vol = 0;
+
+        // clamp duration
+        if (duration > 60000)
+            duration = 60000;
+        if (duration < 0)
+            duration = 0;
+
+        interrupt = OSDisableInterrupts();
+
+        daMP_ActivePlayer.targetVolume = vol;
+        if (duration != 0) {
+            daMP_ActivePlayer.rampCount = numSamples * duration;
+            daMP_ActivePlayer.deltaVolume = (daMP_ActivePlayer.targetVolume - daMP_ActivePlayer.curVolume) / daMP_ActivePlayer.rampCount;
+        } else {
+            daMP_ActivePlayer.rampCount = 0;
+            daMP_ActivePlayer.curVolume = daMP_ActivePlayer.targetVolume;
+        }
+        OSRestoreInterrupts(interrupt);
+
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00005F9C-00006104       .text daMP_ActivePlayer_Init__FPCc */
-BOOL daMP_ActivePlayer_Init(const char*) {
-    /* Nonmatching */
+#if VERSION == VERSION_DEMO
+static void daMP_ActivePlayer_Init(const char* moviePath)
+#else
+static BOOL daMP_ActivePlayer_Init(const char* moviePath)
+#endif
+{
+    daMP_THPPlayerInit(0);
+    
+    if (!daMP_THPPlayerOpen(moviePath, 0)) {
+        #if VERSION >= VERSION_JPN
+        OSReport("Fail to open the thp file\n");
+        #endif
+        #if VERSION <= VERSION_JPN
+        JUT_ASSERT(VERSION_SELECT(9103, 9113, 0, 0), FALSE);
+        #else
+        return FALSE;
+        #endif
+    }
+
+    daMP_THPPlayerGetVideoInfo(&daMP_videoInfo);
+    daMP_THPPlayerGetAudioInfo(&daMP_audioInfo);
+
+    daMP_DrawPosX = (JUTVideo::getManager()->getRenderMode()->fbWidth - daMP_videoInfo.xSize) >> 1;
+    daMP_DrawPosY = (JUTVideo::getManager()->getRenderMode()->efbHeight - daMP_videoInfo.ySize) >> 1;
+
+    daMP_buffer = mDoExt_getArchiveHeap()->alloc(daMP_THPPlayerCalcNeedMemory(), 0x20);
+    if (daMP_buffer == NULL) {
+        #if VERSION == VERSION_DEMO
+        JUT_ASSERT(9120, FALSE);
+        #else
+        OSReport("Can't allocate the memory");
+        return FALSE;
+        #endif
+    }
+
+    daMP_THPPlayerSetBuffer((u8*)daMP_buffer);
+
+    if (!daMP_THPPlayerPrepare(0, 0, daMP_audioInfo.sndNumTracks != 1 ? OSGetTick() % daMP_audioInfo.sndNumTracks : 0)) {
+        #if VERSION >= VERSION_JPN
+        OSReport("Fail to prepare\n");
+        #endif
+        #if VERSION <= VERSION_JPN
+        JUT_ASSERT(VERSION_SELECT(9144, 9162, 0, 0), FALSE);
+        #else
+        return FALSE;
+        #endif
+    }
+
+    daMP_THPPlayerPlay();
+
+#if VERSION > VERSION_DEMO
+    return TRUE;
+#endif
 }
 
 /* 0000611C-0000615C       .text daMP_ActivePlayer_Finish__Fv */
-void daMP_ActivePlayer_Finish() {
-    /* Nonmatching */
+static void daMP_ActivePlayer_Finish() {
+    daMP_THPPlayerStop();
+    daMP_THPPlayerClose();
+    daMP_THPPlayerQuit();
+
+#if VERSION > VERSION_DEMO
+    if (daMP_buffer != NULL)
+#endif
+    {
+        JKRFree(daMP_buffer);
+    }
 }
 
 /* 00006180-000061DC       .text daMP_ActivePlayer_Main__Fv */
-void daMP_ActivePlayer_Main() {
-    /* Nonmatching */
+static void daMP_ActivePlayer_Main() {
+    if (daMP_THPPlayerGetState() == 5) {
+        daMP_THPPlayerStop();
+        daMP_THPPlayerClose();
+
+#if VERSION > VERSION_DEMO
+        if (daMP_buffer != NULL)
+#endif
+        {
+            JKRFree(daMP_buffer);
+        }
+
+#if VERSION >= VERSION_JPN
+        OSReport("Error happen");
+#endif
+#if VERSION <= VERSION_JPN
+        JUT_ASSERT(VERSION_SELECT(9174, 9198, 0, 0), FALSE);
+#endif
+    }
 }
 
 /* 000061DC-00006230       .text daMP_ActivePlayer_Draw__Fv */
-void daMP_ActivePlayer_Draw() {
-    /* Nonmatching */
+static void daMP_ActivePlayer_Draw() {
+#if VERSION == VERSION_DEMO
+    GXSetDispCopyGamma(GX_GM_1_0);
+#endif
+    daMP_THPPlayerDrawCurrentFrame(JUTVideo::getManager()->getRenderMode(), daMP_DrawPosX, daMP_DrawPosY, daMP_videoInfo.xSize, daMP_videoInfo.ySize);
+    daMP_THPPlayerDrawDone();
 }
 
 /* 00006230-000062F0       .text daMP_Get_MovieRestFrame__Fv */
-u32 daMP_Get_MovieRestFrame() {
-    /* Nonmatching */
+static u32 daMP_Get_MovieRestFrame() {
+    int temp_r31;
+#if VERSION == VERSION_PAL
+    if (daMP_Fail_alloc != 0 || daMP_THPPlayerGetState() == 5) {
+        return 0;
+    }
+#elif VERSION > VERSION_DEMO
+    if (daMP_Fail_alloc != 0) {
+        return 0;
+    }
+#endif
+
+    if (daMP_ActivePlayer.open && daMP_ActivePlayer.dispTextureSet != NULL) {
+        temp_r31 = (daMP_ActivePlayer.dispTextureSet->frameNumber + daMP_ActivePlayer.initReadFrame) % daMP_ActivePlayer.header.numFrames;
+    } else {
+        return -1;
+    }
+
+    int temp_r3 = daMP_THPPlayerGetTotalFrame();
+    if ((u32)temp_r3 == 0) {
+        return 0;
+    }
+
+    if ((u32)temp_r3 <= 1) {
+        return 0;
+    }
+
+    if ((u32)temp_r3 - 1 <= temp_r31) {
+        return 0;
+    }
+
+    return (temp_r3 - 1) - temp_r31;
 }
 
 /* 000062F0-00006370       .text daMP_Set_PercentMovieVolume__Ff */
-u32 daMP_Set_PercentMovieVolume(f32) {
-    /* Nonmatching */
+static u32 daMP_Set_PercentMovieVolume(f32 volume) {
+    /* Nonmatching - regalloc */
+#if VERSION > VERSION_DEMO
+    if (!daMP_Fail_alloc)
+#endif
+    {
+        s32 player_vol;
+        if (volume >= 1.0f) {
+            player_vol = 127;
+        } else if (volume <= 0.0f) {
+            player_vol = 0;
+        } else {
+            player_vol = volume / 127.0f;
+        }
+
+        daMP_THPPlayerSetVolume(player_vol, 0);
+    }
 }
 
 /* 00006370-00006390       .text daMP_c_Get_arg_data__6daMP_cFv */
@@ -3016,7 +4178,24 @@ u32 daMP_c::daMP_c_Get_arg_data() {
 
 /* 00006390-00006500       .text daMP_c_Init__6daMP_cFv */
 cPhs_State daMP_c::daMP_c_Init() {
-    /* Nonmatching */
+#if VERSION == VERSION_DEMO
+    static const char* filename_table[2] = {
+        "/thpdemo/title_loop.thp",
+        "/thpdemo/end.thp",
+    };
+    
+    mpGetMovieRestFrame = daMP_Get_MovieRestFrame;
+    mpSetPercentMovieVol = daMP_Set_PercentMovieVolume;
+    
+    int r4 = daMP_c_Get_arg_data();
+    if (r4 >= 0 && r4 < ARRAY_SSIZE(filename_table) && filename_table[r4] != NULL) {
+        daMP_ActivePlayer_Init(filename_table[r4]);
+        return cPhs_COMPLEATE_e;
+    } else {
+        daMP_ActivePlayer_Init(filename_table[0]);
+    }
+    
+#else
     static u8 set_vfilter[7] = {
         0x00, 0x00, 0x15, 0x16, 0x15, 0x00, 0x00,
     };
@@ -3026,31 +4205,53 @@ cPhs_State daMP_c::daMP_c_Init() {
     };
     
     daMP_backup_FrameRate = mDoGph_gInf_c::getFrameRate();
+    
     mDoGph_gInf_c::setFrameRate(1);
+    
     GXRenderModeObj* renderMode = JUTVideo::getManager()->getRenderMode();
-    // daMP_backup_vfilter = renderMode->vfilter;
-    // renderMode->vfilter = set_vfilter;
+    for (int i = 0; i < 7; i++) {
+        daMP_backup_vfilter[i] = renderMode->vfilter[i];
+    }
+    for (int i = 0; i < 7; i++) {
+        renderMode->vfilter[i] = set_vfilter[i];
+    }
+    
     daMP_Fail_alloc = FALSE;
-    mpCallBack1 = daMP_Get_MovieRestFrame;
-    mpCallBack2 = daMP_Set_PercentMovieVolume;
+    
+    mpGetMovieRestFrame = daMP_Get_MovieRestFrame;
+    mpSetPercentMovieVol = daMP_Set_PercentMovieVolume;
+#if VERSION == VERSION_PAL
+    mpTHPGetTotalFrame = daMP_THPPlayerGetTotalFrame;
+#endif
+    
     int r4 = daMP_c_Get_arg_data();
-    if (r4 >= 0 && r4 < 2) {
-        if (filename_table[r4] == NULL || !daMP_ActivePlayer_Init(filename_table[r4])) {
+    if (r4 >= 0 && r4 < ARRAY_SSIZE(filename_table) && filename_table[r4] != NULL) {
+        if (!daMP_ActivePlayer_Init(filename_table[r4])) {
             daMP_Fail_alloc = TRUE;
-            return cPhs_COMPLEATE_e;
         }
+        return cPhs_COMPLEATE_e;
     } else {
         OSReport("\x1B[43;30mムービーの番号がおかしい %d %d\n\x1B[m", r4, 2);
         if (!daMP_ActivePlayer_Init(filename_table[0])) {
             daMP_Fail_alloc = TRUE;
         }
     }
+#endif
+    
     return cPhs_COMPLEATE_e;
 }
 
 /* 00006580-000065F8       .text daMP_c_Finish__6daMP_cFv */
 BOOL daMP_c::daMP_c_Finish() {
-    /* Nonmatching */
+#if VERSION > VERSION_DEMO
+    mDoGph_gInf_c::setFrameRate(daMP_backup_FrameRate);
+    GXRenderModeObj* renderMode = JUTVideo::getManager()->getRenderMode();
+    for (int i = 0; i < 7; i++) {
+        renderMode->vfilter[i] = daMP_backup_vfilter[i];
+    }
+#endif
+    daMP_ActivePlayer_Finish();
+    return TRUE;
 }
 
 /* 000065F8-0000661C       .text daMP_c_Main__6daMP_cFv */
@@ -3084,17 +4285,21 @@ BOOL daMP_c::daMP_c_Callback_Finish(daMP_c* i_this) {
 
 /* 00006748-00006780       .text daMP_c_Callback_Main__6daMP_cFP6daMP_c */
 BOOL daMP_c::daMP_c_Callback_Main(daMP_c* i_this) {
+#if VERSION > VERSION_DEMO
     if (daMP_Fail_alloc) {
         return TRUE;
     }
+#endif
     return i_this->daMP_c_Main();
 }
 
 /* 00006780-000067B8       .text daMP_c_Callback_Draw__6daMP_cFP6daMP_c */
 BOOL daMP_c::daMP_c_Callback_Draw(daMP_c* i_this) {
+#if VERSION > VERSION_DEMO
     if (daMP_Fail_alloc) {
         return TRUE;
     }
+#endif
     return i_this->daMP_c_Draw();
 }
 

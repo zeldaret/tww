@@ -263,7 +263,7 @@ BOOL daPy_lk_c::procBtRoll_init(fopEn_enemy_c* enemy) {
     m34D6 = cM_atan2s(local_2c.x, local_2c.z);
     shape_angle.y = fopAcM_searchActorAngleY(this, enemy);
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2_e);
-    m34BE = 4;
+    setFootEffectPosType(4);
     voiceStart(7);
     endFlameDamageEmitter();
     return true;

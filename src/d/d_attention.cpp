@@ -892,9 +892,9 @@ bool dAttention_c::Run(u32 interactMask) {
     runDrawProc();
     runDebugDisp();
     if (mLockOnState == LockState_LOCK) {
-        dComIfGp_onCameraAttentionStatus(mPadNo, 1);
+        dComIfGp_onCameraAttentionStatus(mPadNo, dCamAttnStts_00000001_e);
     } else {
-        dComIfGp_offCameraAttentionStatus(mPadNo, 1);
+        dComIfGp_offCameraAttentionStatus(mPadNo, dCamAttnStts_00000001_e);
     }
 
     mHint.proc();

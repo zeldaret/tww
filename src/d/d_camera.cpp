@@ -756,7 +756,7 @@ bool dCamera_c::Run() {
 
     Att();
 
-    dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 0x3400);
+    dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000400_e | dCamAttnStts_00001000_e | dCamAttnStts_00002000_e);
 
     if (!dComIfGp_evmng_cameraPlay() && !chkFlag(0x20000000)) {
         updatePad();
@@ -814,7 +814,7 @@ bool dCamera_c::Run() {
 
     clrFlag(0x80000000);
     
-    dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 0x80);
+    dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000080_e);
 
     if (mCamParam.CheckFlag(dCamPrmFlg_UNK004) && !check_owner_action(mPadId, daPyStts0_UNK4000000_e) && !check_owner_action1(mPadId, daPyStts1_UNK40000_e)) {
         m148 += (forwardCheckAngle() - m148) * mCamSetup.mBGChk.FwdCushion();
@@ -828,12 +828,12 @@ bool dCamera_c::Run() {
     mTrimTypeForce = -1;
     m068 = 9;
     
-    if (chkFlag(0x200000) && mCamParam.Algorythmn(mCurStyle) != 11) {
+    if (chkFlag(0x200000) && mCamParam.Algorythmn(mCurStyle) != dCamAlg_EVENT_CAMERA_e) {
         if (push_any_key(mPadId) || mMonitor.field_0x0C.x > 10.0f || !m360 || m31C) {
             clrFlag(0x200000);
         }
     }
-    else if (dComIfGp_demo_getCamera() && mCamParam.Algorythmn() != 11) {
+    else if (dComIfGp_demo_getCamera() && mCamParam.Algorythmn() != dCamAlg_EVENT_CAMERA_e) {
         res = demoCamera(0);
     }
     else {
@@ -875,7 +875,7 @@ bool dCamera_c::Run() {
         mCenter.x = mViewCache.mCenter.x;
         mCenter.z = mViewCache.mCenter.z;
         
-        if ((mCamParam.Algorythmn(mCurStyle) == 4) && chkFlag(0x10000800)) {
+        if ((mCamParam.Algorythmn(mCurStyle) == dCamAlg_SUBJECT_CAMERA_e) && chkFlag(0x10000800)) {
             m068 &= ~8;
             mCenter.y = mViewCache.mCenter.y;
         }
@@ -935,22 +935,22 @@ bool dCamera_c::Run() {
     }
 
     if (r3) {
-        dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x10);
+        dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000010_e);
     }
     else {
-        dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 0x10);
+        dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000010_e);
     }
 
     if (chkFlag(0x40000)) {
-        dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 2);
+        dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_SUBJECT_e);
     }
     else if (mDirection.R() < mCamSetup.m048) {
         if (chkFlag(0x800)) {
-            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 2);
+            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_SUBJECT_e);
         }
         
         if (chkFlag(0x10000000)) {
-            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x20);
+            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000020_e);
         }
     }
 
@@ -963,7 +963,7 @@ bool dCamera_c::NotRun() {
 
     checkGroundInfo();
 
-    dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 0x80);
+    dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000080_e);
 
     if (dComIfGp_evmng_cameraPlay() || chkFlag(0x20000000)) {
         if (mCurType != mCamTypeEvent) {
@@ -983,10 +983,10 @@ bool dCamera_c::NotRun() {
     }
     
     if (dComIfGp_event_runCheck()) {
-        dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 0x48);
+        dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_TELESCOPE_LOOK_e | dCamAttnStts_PICTO_BOX_AIM_e);
     }
 
-    dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x14);
+    dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000004_e | dCamAttnStts_00000010_e);
     
     clrFlag(0x90080);
 
@@ -996,7 +996,7 @@ bool dCamera_c::NotRun() {
 
     mPause = 0;
 
-    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 8)) {
+    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_TELESCOPE_LOOK_e)) {
         if (chkFlag(0x400000)) {
             setView(160.0f, 35.0f, 320.0f, 320.0f);
         }
@@ -1077,34 +1077,31 @@ int dCamera_c::nextMode(s32 i_curMode) {
                     m144 = 1;
                     m184 = 0;
                 }
-                else {
-                    if (mStickCPosYLast <= 0.0f && mStickCValueLast > mCamSetup.m09C) {
-                        m144 = 0;
-                    }
-                    else {
-                        if (i_curMode == 0 || i_curMode == 0x13) {
-                            positionOf(mpPlayerActor);
-                            if (
-                                !(
-                                    mStickMainValueLast >= 0.5f ||
-                                    attn.LockonTruth() ||
-                                    check_owner_action(mPadId, daPyStts0_SWIM_e)
-                                )
-                            ) {
-                                if (m184 == 1) {
-                                    if (mStickCPosYLast < mCamSetup.mCstick.m00) {
-                                        m184 = 0;
-                                    }
-                                }
-                                else if (mStickCPosYLast > mCamSetup.mCstick.m04) {
-                                    dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x1000);
-                                    m184 = 1;
-                                    dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x400);
-                                }
-                                else {
-                                    dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x400);
-                                }
+                else if (mStickCPosYLast <= 0.0f && mStickCValueLast > mCamSetup.m09C) {
+                    m144 = 0;
+                }
+                else if (i_curMode == 0 || i_curMode == 0x13) {
+                    positionOf(mpPlayerActor);
+                    if (
+                        !(
+                            mStickMainValueLast >= 0.5f ||
+                            attn.LockonTruth() ||
+                            check_owner_action(mPadId, daPyStts0_SWIM_e)
+                        )
+                    ) {
+                        if (m184 == 1) {
+                            if (mStickCPosYLast < mCamSetup.mCstick.m00) {
+                                m184 = 0;
                             }
+                        }
+                        else if (mStickCPosYLast > mCamSetup.mCstick.m04) {
+                            // C-stick up.
+                            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00001000_e);
+                            m184 = 1;
+                            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000400_e);
+                        }
+                        else {
+                            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000400_e);
                         }
                     }
                 }
@@ -1159,7 +1156,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
         else if (check_owner_action1(mPadId, daPyStts1_UNK10_e)) {
             next_mode = 0xf;
         }
-        else if (check_owner_action(mPadId, daPyStts0_UNK2000_e)) {
+        else if (check_owner_action(mPadId, daPyStts0_SUBJECT_e)) {
             next_mode = 4;
         }
         else if (check_owner_action(mPadId, daPyStts0_ROPE_AIM_e | daPyStts0_HOOKSHOT_AIM_e | daPyStts0_BOW_AIM_e) && !attn.Lockon()) {
@@ -1272,7 +1269,7 @@ bool dCamera_c::onModeChange(s32 i_curMode, s32 i_nextMode) {
     
     switch (i_curMode) {
     case 3:
-        dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 4);
+        dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000004_e);
         break;
     case 4:
     case 10:
@@ -1426,11 +1423,11 @@ bool dCamera_c::onTypeChange(s32 i_curType, s32 i_nextType) {
         s32 style = types[i_nextType].mStyles[0];
         if (style >= 0) {
             switch (mCamParam.Algorythmn(style)) {
-            case 5:
-            case 6:
-            case 11:
-            case 12:
-            case 13:
+            case dCamAlg_FIXED_POSITION_CAMERA_e:
+            case dCamAlg_FIXED_FRAME_CAMERA_e:
+            case dCamAlg_EVENT_CAMERA_e:
+            case dCamAlg_CRAWL_CAMERA_e:
+            case dCamAlg_HOOKSHOT_CAMERA_e:
                 mode = 0;
                 m144 = 1;
                 break;
@@ -1466,40 +1463,51 @@ bool dCamera_c::SetTypeForce(s32 param_0, fopAc_ac_c* param_1) {
 bool dCamera_c::onStyleChange(s32 i_style1, s32 i_style2) {
     m11C = 0;
 
+#if VERSION > VERSION_JPN
     bool bVar1 = false;
+#endif
 
     switch (mCamParam.Algorythmn(i_style1)) {
-    case 5:
-    case 6:
+    case dCamAlg_FIXED_POSITION_CAMERA_e:
+    case dCamAlg_FIXED_FRAME_CAMERA_e:
         if (mDMCSystem.field_0x0 == 0) {
             setDMCAngle();
         }
+#if VERSION > VERSION_JPN
         bVar1 = true;
+#endif
         break;
-    case 4:
+    case dCamAlg_SUBJECT_CAMERA_e:
         dComIfGp_setCameraZoomScale(mCameraInfoIdx, 1.0f);
-        dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 0x48);
+        dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_TELESCOPE_LOOK_e | dCamAttnStts_PICTO_BOX_AIM_e);
         break;
     }
 
     switch(mCamParam.Algorythmn(i_style2)) {
-    case 1:
-    case 8:
+    case dCamAlg_FOLLOW_CAMERA_e:
+    case dCamAlg_RIDE_CAMERA_e:
         if (mCamParam.Algorythmn(i_style1) == mCamParam.Algorythmn(i_style2)) {
             setFlag(0x8000);
         }
         break;
-    case 5:
-    case 6:
-        if (mDMCSystem.field_0x0 == 0 || bVar1) {
+    case dCamAlg_FIXED_POSITION_CAMERA_e:
+    case dCamAlg_FIXED_FRAME_CAMERA_e:
+        if (
+            mDMCSystem.field_0x0 == 0
+#if VERSION > VERSION_JPN
+            || bVar1
+#endif
+        ) {
             setDMCAngle();
         }
-    case 4:
-    case 12:
-    case 13:
+        // Fall-through
+    case dCamAlg_SUBJECT_CAMERA_e:
+    case dCamAlg_CRAWL_CAMERA_e:
+    case dCamAlg_HOOKSHOT_CAMERA_e:
         if (m144 == 0) {
             m144 = 1;
         }
+        break;
     }
 
     return TRUE;
@@ -2321,7 +2329,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
 
                 int engine_idx = mCamParam.Algorythmn();
 
-                if ((engine_idx == 1) || (engine_idx == 10)) {
+                if (engine_idx == dCamAlg_FOLLOW_CAMERA_e || engine_idx == dCamAlg_MANUAL_CAMERA_e) {
                     cXyz attn_pos = attentionPos(mpPlayerActor);
                     cSGlobe globe(mEye - attn_pos);
 
@@ -3841,7 +3849,7 @@ bool dCamera_c::CalcSubjectAngle(s16* param_1, s16* param_2) {
         else {
             dVar11 = dCamMath::rationalBezierRatio(f1, mCamSetup.CurveWeight());
             dVar12 = dCamMath::rationalBezierRatio(fVar5, mCamSetup.CurveWeight());
-            if (check_owner_action(mPadId, daPyStts0_UNK2000_e)) {
+            if (check_owner_action(mPadId, daPyStts0_SUBJECT_e)) {
                 mWork.subject.m384 = -dVar11 * fVar3;
                 mWork.subject.m388 += dVar12 * fVar3;
             }
@@ -3923,7 +3931,7 @@ bool dCamera_c::subjectCamera(s32 param_1) {
 
         if (dComIfGp_getMiniGameType() == 3) {
             mWork.subject.m3C0 = 2;
-        } else if (dComIfGp_checkPlayerStatus0(mPadId, daPyStts0_UNK2000_e) == 0 && (mCamParam.Flag(param_1, 0x10) == 0)) {
+        } else if (dComIfGp_checkPlayerStatus0(mPadId, daPyStts0_SUBJECT_e) == 0 && (mCamParam.Flag(param_1, dCamPrmFlg_UNK010) == 0)) {
             mWork.subject.m3C0 = 1;
         }
 
@@ -3947,15 +3955,15 @@ bool dCamera_c::subjectCamera(s32 param_1) {
 
     camRel.set(p1, p5, p0);
 
-    if (mCamParam.Flag(param_1, 0x80)) {
+    if (mCamParam.Flag(param_1, dCamPrmFlg_UNK080)) {
         setFlag(0x800);
     }
-    if (mCamParam.Flag(param_1, 0x100)) {
+    if (mCamParam.Flag(param_1, dCamPrmFlg_UNK100)) {
         setFlag(0x10000000);
     }
 
     if (!m100) {
-        if (check_owner_action(mPadId, daPyStts0_UNK2000_e)) {
+        if (check_owner_action(mPadId, daPyStts0_SUBJECT_e)) {
             end = 7;
         }
         else {
@@ -3997,15 +4005,15 @@ bool dCamera_c::subjectCamera(s32 param_1) {
 
         mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
 
-        if (!mCamParam.CheckFlag(0x10)) {
+        if (!mCamParam.CheckFlag(dCamPrmFlg_UNK010)) {
             mViewCache.mFovy += t * (p25 - mViewCache.mFovy);
         } else {
             if (m108 >= (u32)(end - 6)) {
                 if (check_owner_action(mPadId, daPyStts0_TELESCOPE_LOOK_e)) {
-                    setComStat(8);
+                    setComStat(dCamAttnStts_TELESCOPE_LOOK_e);
                 }
                 if (check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
-                    setComStat(0x40);
+                    setComStat(dCamAttnStts_PICTO_BOX_AIM_e);
                 }
 
                 setComZoomScale(1.0f);
@@ -4026,10 +4034,10 @@ bool dCamera_c::subjectCamera(s32 param_1) {
             } else {
                 if (m108 < (u32)(end - 7)) {
                     if (check_owner_action(mPadId, daPyStts0_TELESCOPE_LOOK_e)) {
-                        setComStat(8);
+                        setComStat(dCamAttnStts_TELESCOPE_LOOK_e);
                     }
                     if (check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
-                        setComStat(0x40);
+                        setComStat(dCamAttnStts_PICTO_BOX_AIM_e);
                     }
                     
                     setComZoomScale(1.0f);
@@ -4060,7 +4068,7 @@ bool dCamera_c::subjectCamera(s32 param_1) {
     }
 
     if (check_owner_action(mPadId, daPyStts0_CRAWL_e)) {
-        dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x80);
+        dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000080_e);
     }
 
     if (dComIfGs_getTime() || check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
@@ -4133,45 +4141,43 @@ bool dCamera_c::subjectCamera(s32 param_1) {
         mWork.subject.m388 = ax.Degree() / p19;
         mWork.subject.m3A8 = 0;
         mWork.subject.m37C = 0;
+    } else if (!mWork.subject.m3BC || ((mEventFlags & 0x2000000) == 0)) {
+        cSGlobe g;
+        g.Val(mExtendedPos - mViewCache.mCenter);
+
+        mViewCache.mDirection.R(mViewCache.mDirection.R() + (p10 - mViewCache.mDirection.R()) * 0.05f);
+        g.R(p10);
+
+        mViewCache.mDirection.U(mViewCache.mDirection.U() + (g.U() - mViewCache.mDirection.U()) * 0.05f);
+        mViewCache.mDirection.V(mViewCache.mDirection.V() + (g.V() - mViewCache.mDirection.V()) * 0.05f);
+
+        cSAngle dy;
+        cSAngle ax;
+        dy = mViewCache.mDirection.V() - baseYaw;
+        ax = mViewCache.mDirection.U();
+
+        mWork.subject.m384 = dy.Degree() / p24;
+        mWork.subject.m388 = ax.Degree() / p19;
+
+        mWork.subject.m3A8 = 0;
+        mWork.subject.m37C = 0;
     } else {
-        if (!mWork.subject.m3BC || ((mEventFlags & 0x2000000) == 0)) {
-            cSGlobe g;
-            g.Val(mExtendedPos - mViewCache.mCenter);
+        cSGlobe g;
+        g.Val(p10, angX, baseYaw + angY);
 
-            mViewCache.mDirection.R(mViewCache.mDirection.R() + (p10 - mViewCache.mDirection.R()) * 0.05f);
-            g.R(p10);
+        mViewCache.mDirection.R(mViewCache.mDirection.R() + (g.R() - mViewCache.mDirection.R()) * p20);
+        mViewCache.mDirection.U(mViewCache.mDirection.U() + (g.U() - mViewCache.mDirection.U()) * p20);
+        mViewCache.mDirection.V(mViewCache.mDirection.V() + (g.V() - mViewCache.mDirection.V()) * p20);
 
-            mViewCache.mDirection.U(mViewCache.mDirection.U() + (g.U() - mViewCache.mDirection.U()) * 0.05f);
-            mViewCache.mDirection.V(mViewCache.mDirection.V() + (g.V() - mViewCache.mDirection.V()) * 0.05f);
-
-            cSAngle dy;
-            cSAngle ax;
-            dy = mViewCache.mDirection.V() - baseYaw;
-            ax = mViewCache.mDirection.U();
-
-            mWork.subject.m384 = dy.Degree() / p24;
-            mWork.subject.m388 = ax.Degree() / p19;
-
-            mWork.subject.m3A8 = 0;
-            mWork.subject.m37C = 0;
-        } else {
-            cSGlobe g;
-            g.Val(p10, angX, baseYaw + angY);
-
-            mViewCache.mDirection.R(mViewCache.mDirection.R() + (g.R() - mViewCache.mDirection.R()) * p20);
-            mViewCache.mDirection.U(mViewCache.mDirection.U() + (g.U() - mViewCache.mDirection.U()) * p20);
-            mViewCache.mDirection.V(mViewCache.mDirection.V() + (g.V() - mViewCache.mDirection.V()) * p20);
-
-            if (mWork.subject.m3A8 < 10) {
-                mWork.subject.m3A8++;
-            }
-            mWork.subject.m37C = 1;
+        if (mWork.subject.m3A8 < 10) {
+            mWork.subject.m3A8++;
         }
+        mWork.subject.m37C = 1;
     }
 
     mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
 
-    if (mCamParam.CheckFlag(0x10)) {
+    if (mCamParam.CheckFlag(dCamPrmFlg_UNK010)) {
         // zoom control block
         f32 a = 0.0f;
         f32 stick = mStickCPosYLast;
@@ -4201,10 +4207,10 @@ bool dCamera_c::subjectCamera(s32 param_1) {
         dComIfGp_setCameraZoomScale(mCameraInfoIdx, scale);
 
         if (check_owner_action(mPadId, daPyStts0_TELESCOPE_LOOK_e)) {
-            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 8);
+            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_TELESCOPE_LOOK_e);
         }
         if (check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
-            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x40);
+            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_PICTO_BOX_AIM_e);
         }
 
         const f32 focus = 1.0f - (std::fabsf(a - b) * 511.0f);
@@ -4217,14 +4223,14 @@ bool dCamera_c::subjectCamera(s32 param_1) {
 
     mWork.subject.m37D = 1;
 
-    // “C-stick down” behavior block
-    if (check_owner_action(mPadId, daPyStts0_UNK2000_e)) {
+    // "C-stick down" behavior block
+    if (check_owner_action(mPadId, daPyStts0_SUBJECT_e)) {
         if (mWork.subject.m3C4 == 2 && mStickCPosYLast >= -0.001f) {
             mWork.subject.m3C4 = 0;
         }
         else if (mWork.subject.m3C4 == 1 && mStickCPosYLast < -0.74f) {
             mWork.subject.m3C4 = 2;
-            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x2000);
+            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00002000_e);
         }
         else if (mStickCPosYLast < -0.001f) {
             mWork.subject.m3C4 = 1;
@@ -4260,7 +4266,7 @@ bool dCamera_c::crawlCamera(s32 param_1) {
 
     if (m108 == 0) {
         mWork.crawl.m378 = 'CRWL';
-        mWork.crawl.m398 = mCamParam.Flag(param_1, 0x80) ? 1 : 0;
+        mWork.crawl.m398 = mCamParam.Flag(param_1, dCamPrmFlg_UNK080) ? 1 : 0;
 
         mWork.crawl.m399 = 0;
         mWork.crawl.m37C = 10;
@@ -4272,7 +4278,7 @@ bool dCamera_c::crawlCamera(s32 param_1) {
         mWork.crawl.m39C = 0x5;
         mWork.crawl.m380 = mWork.crawl.m37C * (mWork.crawl.m37C + 1) >> 1;
 
-        if (mCamParam.Flag(param_1, 0x40) == 0) {
+        if (mCamParam.Flag(param_1, dCamPrmFlg_UNK040) == 0) {
             mWork.crawl.m388 = 1;
         }
         else if (local_118 > cSAngle::_270 && local_118 < cSAngle::_90) {
@@ -4282,7 +4288,7 @@ bool dCamera_c::crawlCamera(s32 param_1) {
             mWork.crawl.m388 = 1;
         }
     }
-    else if (mCamParam.Flag(param_1, 0x40) == 0) {
+    else if (mCamParam.Flag(param_1, dCamPrmFlg_UNK040) == 0) {
         mWork.crawl.m388 = 1;
     }
     else if (local_118 > cSAngle(-75.0f) && local_118 < cSAngle(75.0f)) {
@@ -4294,10 +4300,10 @@ bool dCamera_c::crawlCamera(s32 param_1) {
     }
 
     if (m1AE) {
-        dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x80);
+        dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000080_e);
     }
 
-    if (mCamParam.Flag(param_1, 0x40) && mCurArrowIdx != 0xff && mCurRoomCamEntry.field_0x12 != 0xff) {
+    if (mCamParam.Flag(param_1, dCamPrmFlg_UNK040) && mCurArrowIdx != 0xff && mCurRoomCamEntry.field_0x12 != 0xff) {
         local_118 = mViewCache.mDirection.U() - mCurRoomArrowEntry.angle.y;
         if (local_118 > cSAngle::_270 && local_118 < cSAngle::_90) {
             mWork.crawl.m38C = mCurRoomArrowEntry.position;
@@ -4318,7 +4324,7 @@ bool dCamera_c::crawlCamera(s32 param_1) {
         sp128 = relationalPos(mpPlayerActor, &sp134);
         mViewCache.mCenter += (sp128 - mViewCache.mCenter) * f28;
 
-        if (mCamParam.Flag(param_1, 0x80)) {
+        if (mCamParam.Flag(param_1, dCamPrmFlg_UNK080)) {
             f30 = 2.0f;
         }
 
@@ -4606,7 +4612,7 @@ bool dCamera_c::fixedPositionCamera(s32 param_1) {
 
     mWork.fixedPos.m39C = 0;
 
-    if (mCamParam.Flag(param_1, 0x40) && mCurArrowIdx != 0xff) {
+    if (mCamParam.Flag(param_1, dCamPrmFlg_UNK040) && mCurArrowIdx != 0xff) {
         local_d0 = mCurRoomArrowEntry.position;
 
         if (mWork.fixedPos.m390 != local_d0) {
@@ -4916,13 +4922,12 @@ bool dCamera_c::eventCamera(s32) {
         bVar5 = true;
     }
     if (bVar5) {
-        dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 4);
+        dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000004_e);
     }
     else {
-        dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 4);
+        dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000004_e);
     }
 
-    //Runtime.PPCEABI.H::__ptmf_scall(&local_170 + (int)((ulonglong)lVar12 >> 0x20),this,pvVar8);
     if ((this->*l_func[lVar12])()) {
         dComIfGp_evmng_cutEnd(mEventData.mStaffIdx);
     }
@@ -5387,7 +5392,7 @@ void preparation(camera_process_class* i_this) {
 
     camera->SetWindow(viewport->mWidth, viewport->mHeight);
     fopCamM_SetAspect(a_this, aspect);
-    dComIfGp_offCameraAttentionStatus(camera_id, 0x23);
+    dComIfGp_offCameraAttentionStatus(camera_id, dCamAttnStts_00000001_e | dCamAttnStts_SUBJECT_e | dCamAttnStts_00000020_e);
 }
 
 /* 8017BEB0-8017BFAC       .text view_setup__FP20camera_process_class */
@@ -5474,7 +5479,7 @@ void store(camera_process_class* i_this) {
     fopCamM_SetBank(a_this, bank);
     fopCamM_SetFovy(a_this, fovy);
 
-    if (dComIfGp_checkCameraAttentionStatus(camera_id, 8)) {
+    if (dComIfGp_checkCameraAttentionStatus(camera_id, dCamAttnStts_TELESCOPE_LOOK_e)) {
         fopCamM_SetNear(a_this, 30.0f);
     }
     else {

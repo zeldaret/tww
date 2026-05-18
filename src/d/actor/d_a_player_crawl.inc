@@ -239,22 +239,22 @@ BOOL daPy_lk_c::checkCrawlSideWall(
 /* 801392BC-80139424       .text setDoStatusCrawl__9daPy_lk_cFv */
 void daPy_lk_c::setDoStatusCrawl() {
     dComIfGp_setRStatus(dActStts_CROUCH_e);
-    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x80)) {
+    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000080_e)) {
         dComIfGp_setAStatus(dActStts_RETURN_e);
-        if (checkSubjectEnd(1) || m35D0 > current.pos.y) {
-            dComIfGp_clearPlayerStatus0(0, daPyStts0_UNK2000_e);
+        if (checkSubjectEnd(TRUE) || mWaterY > current.pos.y) {
+            dComIfGp_clearPlayerStatus0(0, daPyStts0_SUBJECT_e);
         } else {
-            dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000_e);
+            dComIfGp_setPlayerStatus0(0, daPyStts0_SUBJECT_e);
         }
     } else if (dCam_getBody()->ChangeModeOK(4)) {
-        if (m35D0 <= current.pos.y) {
+        if (mWaterY <= current.pos.y) {
             onResetFlg0(daPyRFlg0_SUBJECT_ACCEPT);
-            if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000) && !dComIfGp_event_runCheck()) {
+            if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00001000_e) && !dComIfGp_event_runCheck()) {
                 setSubjectMode();
             }
         }
     }
-    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x80) &&
+    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000080_e) &&
         (mCurProc != daPyProc_CRAWL_MOVE_e || mProcVar0.m3570 == 0))
     {
         setBodyAngleToCamera();
@@ -297,7 +297,7 @@ BOOL daPy_lk_c::procCrawlStart() {
     local_20.y = 50.0f;
     mDoMtx_multVec(mpCLModel->getBaseTRMtx(), &local_20, &cStack_38);
     crawlBgCheck(&cStack_38, &cStack_38);
-    if (!spActionButton() || m35D0 > 15.0f + current.pos.y) {
+    if (!spActionButton() || checkCrawlWaterIn()) {
         procCrawlEnd_init(0, shape_angle.x, shape_angle.z);
     } else if (mStickDistance > 0.05f &&
                ((mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) ||
@@ -338,7 +338,7 @@ BOOL daPy_lk_c::procCrawlMove_init(s16 param_0, s16 param_1) {
         var_r29 = 1;
     }
     BOOL var_r27;
-    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000_e)) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SUBJECT_e)) {
         var_r27 = 1;
     } else {
         var_r27 = 0;
@@ -361,7 +361,7 @@ BOOL daPy_lk_c::procCrawlMove_init(s16 param_0, s16 param_1) {
     m35E4 = 1.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_CRAWL_e);
     if (var_r27 != 0) {
-        dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000_e);
+        dComIfGp_setPlayerStatus0(0, daPyStts0_SUBJECT_e);
     }
     return true;
 }
@@ -410,7 +410,7 @@ BOOL daPy_lk_c::procCrawlMove() {
         bVar5 = true;
         offModeFlg(ModeFlg_04000000);
     }
-    if ((bVar5 != false && !spActionButton()) || (getSlidePolygon() != NULL || m35D0 > current.pos.y + 15.0f)) {
+    if ((bVar5 != false && !spActionButton()) || getSlidePolygon() != NULL || checkCrawlWaterIn()) {
         procCrawlEnd_init(1, shape_angle.x, shape_angle.z);
     } else {
         bVar4 = false;
@@ -534,12 +534,12 @@ BOOL daPy_lk_c::procCrawlMove() {
 
 /* 8013A004-8013A0F0       .text procCrawlAutoMove_init__9daPy_lk_cFiP4cXyz */
 BOOL daPy_lk_c::procCrawlAutoMove_init(int param_0, cXyz* param_1) {
-    BOOL uVar1 = dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000_e) ? TRUE : FALSE;
+    BOOL uVar1 = dComIfGp_checkPlayerStatus0(0, daPyStts0_SUBJECT_e) ? TRUE : FALSE;
     commonProcInit(daPyProc_CRAWL_AUTO_MOVE_e);
     m370C = *param_1;
     m35E4 = 1.0f;
     mProcVar0.m3570 = param_0;
-    m34D0 = 0x14;
+    m34D0 = 20;
     m34D6 = 300;
     dComIfGp_setPlayerStatus0(0, daPyStts0_CRAWL_e);
     setCrawlMoveDirectionArrow();
@@ -549,7 +549,7 @@ BOOL daPy_lk_c::procCrawlAutoMove_init(int param_0, cXyz* param_1) {
         mAcchCir[i].SetWallR(9.99f);
     }
     if (uVar1) {
-        dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000_e);
+        dComIfGp_setPlayerStatus0(0, daPyStts0_SUBJECT_e);
     }
     return true;
 }

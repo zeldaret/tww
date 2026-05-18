@@ -2695,7 +2695,7 @@ s32 dMsg_initProc(sub_msg_class* i_Msg) {
     const char* pcVar3;
     char acStack_28[24];
 
-    if ((dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) || (fopMsgM_demoMsgFlagCheck())) {
+    if ((dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), dCamAttnStts_00000004_e)) || (fopMsgM_demoMsgFlagCheck())) {
         pcVar3 = i_Msg->mpMesgStr;
         if (((u8)pcVar3[0] == 0x1A) && ((u8)pcVar3[2] == 0x02)) {
             dComIfGp_setMesgCameraTagInfo((s32)(u16)((((u8)pcVar3[3] << 8) & ~0xFFFF00FF) | (((u8)pcVar3[4]) & ~0xFF00)));
@@ -2751,7 +2751,7 @@ s32 dMsg_outnowProc(sub_msg_class* i_Msg) {
     u32 iVar3;
 
     if (i_Msg->mMesgCameraTagInfo != dComIfGp_getMesgCameraTagInfo()) {
-        if ((dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) || (fopMsgM_demoMsgFlagCheck())) {
+        if ((dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), dCamAttnStts_00000004_e)) || (fopMsgM_demoMsgFlagCheck())) {
             dMsg_mesgOutPos(i_Msg);
             i_Msg->m10D8 = (int)i_Msg->m049C.mPosCenter.x;
             i_Msg->m10DC = (int)i_Msg->m049C.mPosCenter.y;

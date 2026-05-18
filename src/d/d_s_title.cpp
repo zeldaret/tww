@@ -67,11 +67,11 @@ static BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
             return TRUE;
 #endif
 
-        if (movie->mpCallBack1 == NULL || movie->mpCallBack2 == NULL)
+        if (movie->mpGetMovieRestFrame == NULL || movie->mpSetPercentMovieVol == NULL)
             return TRUE;
 
         if (fpcM_GetName(i_this) == PROC_ENDING_SCENE) {
-            if (movie->mpCallBack1() == 0) {
+            if (movie->mpGetMovieRestFrame() == 0) {
 #if VERSION == VERSION_DEMO
                 fopScnM_ChangeReq(i_this, PROC_NAMEEX_SCENE, PROC_OVERLAP0, 5);
 #else
@@ -81,12 +81,12 @@ static BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
                     dComIfG_changeOpeningScene(i_this, PROC_OPENING_SCENE);
                 }
 #endif
-                movie->mpCallBack2(0.0f);
+                movie->mpSetPercentMovieVol(0.0f);
             }
         } else {
-            if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0) || movie->mpCallBack1() == 0) {
+            if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0) || movie->mpGetMovieRestFrame() == 0) {
                 dComIfG_changeOpeningScene(i_this, PROC_OPENING_SCENE);
-                movie->mpCallBack2(0.0f);
+                movie->mpSetPercentMovieVol(0.0f);
             }
         }
     }

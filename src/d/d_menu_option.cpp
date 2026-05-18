@@ -256,7 +256,7 @@ void dMenu_Option_c::titleMove() {
     f32 f30 = rotate_angle * (1.0f - alpha);
 
     if (mC80[0].mUserArea == 8) {
-        mDoAud_seStart(JA_SE_ITM_MENU_OPT_STR, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_ITM_MENU_OPT_STR);
     }
 
     float y = 1.0f - alpha;
@@ -434,7 +434,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                 }
                 cursorMove();
                 noteSet();
-                mDoAud_seStart(JA_SE_ITM_MENU_CURSOR, NULL, 0, 0);
+                mDoAud_seStart(JA_SE_ITM_MENU_CURSOR);
             }
             break;
         }
@@ -446,7 +446,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                 }
                 cursorMove();
                 noteSet();
-                mDoAud_seStart(JA_SE_ITM_MENU_CURSOR, NULL, 0, 0);
+                mDoAud_seStart(JA_SE_ITM_MENU_CURSOR);
             }
             break;
         }
@@ -460,7 +460,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                         mE3C = 1;
                     }
                     m858[1].mUserArea = 6;
-                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW);
                     break;
                 }
                 case 1: {
@@ -471,7 +471,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                         mE3D = 1;
                     }
                     m858[1].mUserArea = 6;
-                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW);
                     ;
                     break;
                 }
@@ -483,7 +483,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                         mE3E = 0;
                     }
                     m858[1].mUserArea = 6;
-                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW);
                     mDoAud_setOutputMode(soundMode[mE3E]);
                     setSoundMode(soundMode[mE3E]);
                     break;
@@ -498,7 +498,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                             g_mDoCPd_gamePad[0]->mRumble.startPatternedRumble(&mE38, JUTGamePad::CRumble::LOOP_ONCE, 0x3c);
                         }
                         m858[1].mUserArea = 6;
-                        mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                        mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW);
                     }
                     break;
                 }
@@ -516,7 +516,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                         mE3C = 1;
                     }
                     m858[1].mUserArea = -6;
-                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW);
                     break;
                 }
                 case 1: {
@@ -527,7 +527,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                         mE3D = 1;
                     }
                     m858[1].mUserArea = -6;
-                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW);
                     break;
                 }
                 case 3: {
@@ -538,7 +538,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                         mE3E = 2;
                     }
                     m858[1].mUserArea = -6;
-                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW);
                     mDoAud_setOutputMode(soundMode[mE3E]);
                     setSoundMode(soundMode[mE3E]);
                     break;
@@ -553,7 +553,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                             g_mDoCPd_gamePad[0]->mRumble.startPatternedRumble(&mE38, JUTGamePad::CRumble::LOOP_ONCE, 0x3c);
                         }
                         m858[1].mUserArea = -6;
-                        mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                        mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW);
                     }
                     break;
                 }
@@ -818,7 +818,7 @@ void dMenu_Option_c::_move() {
 #endif
         dComIfGs_setOptSound(mE3E);
 
-        mDoAud_seStart(JA_SE_ITM_MENU_OPT_OUT, NULL, 0);
+        mDoAud_seStart(JA_SE_ITM_MENU_OPT_OUT);
     }
     else if (CPad_CHECK_TRIG_B(0) && 
             !CPad_CHECK_TRIG_START(0) && 
@@ -831,7 +831,7 @@ void dMenu_Option_c::_move() {
         mE40 = 3;
         mE41 = 1;
         mC80[0].mUserArea = 0;
-        mDoAud_seStart(JA_SE_ITM_MENU_OPT_OUT, NULL, 0);
+        mDoAud_seStart(JA_SE_ITM_MENU_OPT_OUT);
     }
     else {
         if (!check_trigger) {

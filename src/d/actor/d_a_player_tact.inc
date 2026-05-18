@@ -207,7 +207,7 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
         if (!dComIfGp_event_compulsory(this, NULL, -1)) {
             return FALSE;
         }
-        mDemo.setDemoType(5);
+        mDemo.setSpecialDemoType();
     }
 
     int r31 = checkShipRideUseItem(1);
@@ -683,7 +683,7 @@ BOOL daPy_lk_c::procTactPlayEnd_init(int r30) {
     if (r30 == -1) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
         fopAcM_orderChangeEvent(this, fopAcM_SearchByID(mTactZevPartnerId), m3494, 0, -1);
-        mDemo.setDemoType(2);
+        mDemo.setSystemDemoType();
     } else if (r30 == 0) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
         fopAcM_create(PROC_WBIRD, NULL, &current.pos, dComIfGp_roomControl_getStayNo());

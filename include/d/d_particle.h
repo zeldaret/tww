@@ -130,10 +130,16 @@ public:
     void setPitch(f32 pitch) { mVelFade2 = pitch; }
     void setMaxSpeed(f32 vel) { mMaxParticleVelocity = vel; }
     void setMaxDisSpeed(f32 vel) { mVelSpeed = vel; }
-    void setAnchor(const cXyz* anchorPos1, const cXyz* anchorPos2) { mCollapsePos[0].set(*anchorPos1); mCollapsePos[1].set(*anchorPos2); }
+    void setAnchor(const cXyz* anchorPos1, const cXyz* anchorPos2) {
+        mCollapsePos[0] = *anchorPos1;
+        mCollapsePos[1] = *anchorPos2;
+    }
+    void end() { remove(); }
+    void stop() { mState = 1; }
 
     virtual ~dPa_waveEcallBack() {}
 
+public:
     /* 0x04 */ s16 mState;
     /* 0x06 */ s16 mFadeTimer;
     /* 0x08 */ f32 mVelFade1;
@@ -157,9 +163,12 @@ public:
     JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
     void setSpeed (f32 vel) { mScaleTimer = vel; }
     void setMaxSpeed (f32 vel) { mMaxScaleTimer = vel; }
+    void end() { remove(); }
+    void stop() { mState = 1; }
 
     virtual ~dPa_splashEcallBack() {}
 
+private:
     /* 0x04 */ s16 mState;
     /* 0x08 */ f32 mScaleTimer;
     /* 0x0C */ f32 mMaxScaleTimer;
@@ -186,6 +195,7 @@ public:
 
     virtual ~dPa_trackEcallBack() {}
 
+private:
     /* 0x04 */ s16 mState;
     /* 0x08 */ f32 mBaseY;
     /* 0x0C */ f32 mMinY;

@@ -120,7 +120,7 @@ public:
     fopAc_ac_c* getPt1() { return convPId(mPt1); }
     void setPt2(void* i_actor) { mPt2 = getPId(i_actor); }
     fopAc_ac_c* getPt2() { return convPId(mPt2); }
-    int getPreItemNo() { return mItemNo; }
+    u8 getPreItemNo() { return mItemNo; }
     
     f32 getCullRate() { return mCullFarClipRatio; }
     void setCullRate(f32 ratio) { mCullFarClipRatio = ratio; }

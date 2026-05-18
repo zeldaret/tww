@@ -354,7 +354,10 @@ def MatchingFor(*versions):
     return config.version in versions
 
 def EquivalentFor(*versions):
-    return False
+    if config.non_matching:
+        return config.version in versions
+    else:
+        return False
 
 config.warn_missing_config = True
 config.warn_missing_source = False
@@ -549,7 +552,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cc_d.cpp"),
             Object(Matching,    "d/d_cc_mass_s.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cc_s.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cc_uty.cpp"),
+            Object(Matching,    "d/d_cc_uty.cpp"),
             Object(NonMatching, "d/d_cam_param.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cam_type.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cam_style.cpp"),
@@ -575,7 +578,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_bomb2.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/actor/d_a_boomerang.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_dai_item.cpp"),
-            Object(NonMatching, "d/actor/d_a_demo00.cpp"),
+            Object(Matching,    "d/actor/d_a_demo00.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_disappear.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_esa.cpp"),
             Object(NonMatching, "d/actor/d_a_grid.cpp"),
@@ -901,20 +904,23 @@ config.libs = [
             Object(Matching,    "dolphin/gba/GBAXfer.c"),
         ],
     ),
-    JSystemLib(
-        "JAZelAudio",
-        [
+    {
+        "lib": "JAZelAudio",
+        "mw_version": "GC/1.3.2",
+        "cflags": cflags_dolzel,
+        "progress_category": "game",
+        "host": True,
+        "objects": [
             Object(NonMatching, "JAZelAudio/JAIZelBasic.cpp"),
             Object(NonMatching, "JAZelAudio/JAIZelAnime.cpp"),
             Object(NonMatching, "JAZelAudio/JAIZelAtmos.cpp"),
-            Object(NonMatching, "JAZelAudio/JAIZelInst.cpp"),
+            Object(Matching,    "JAZelAudio/JAIZelInst.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "JAZelAudio/JAIZelParam.cpp"),
             Object(NonMatching, "JAZelAudio/JAIZelCharVoiceTable.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "JAZelAudio/JAIZelScene.cpp"),
+            Object(Matching,    "JAZelAudio/JAIZelScene.cpp"),
             Object(Matching,    "JAZelAudio/JAIZelSound.cpp"),
         ],
-        progress_category="game",
-    ),
+    },
     DolphinLib(
         "gf",
         [
@@ -1477,7 +1483,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_spotbox"),
     ActorRel(Matching,    "d_a_ssk"),
     ActorRel(Matching,    "d_a_stone"),
-    ActorRel(MatchingFor("D44J01"),  "d_a_stone2"),
+    ActorRel(Matching,    "d_a_stone2"),
     ActorRel(Matching,    "d_a_swc00"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_swhit0"),
     ActorRel(Matching,    "d_a_swtdoor"),
@@ -1528,7 +1534,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_ks"),
     ActorRel(NonMatching, "d_a_kt"), # regalloc
     ActorRel(Matching,    "d_a_mflft"),
-    ActorRel(NonMatching, "d_a_npc_cb1"),
+    ActorRel(MatchingFor("GZLE01", "GZLP01"),    "d_a_npc_cb1"),
     ActorRel(NonMatching, "d_a_npc_md"),
     ActorRel(NonMatching, "d_a_npc_so"),
     ActorRel(Matching,    "d_a_nzg"),
@@ -1557,11 +1563,11 @@ config.libs = [
     ActorRel(NonMatching, "d_a_ss"),
     ActorRel(NonMatching, "d_a_sss"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_syan"),
-    ActorRel(NonMatching, "d_a_tag_md_cb"),
+    ActorRel(Matching,    "d_a_tag_md_cb"),
     ActorRel(Matching,    "d_a_tag_mk"),
     ActorRel(Matching,    "d_a_tag_so"),
     ActorRel(Matching,    "d_a_tornado"),
-    ActorRel(NonMatching, "d_a_warpf"),
+    ActorRel(Matching,    "d_a_warpf"),
     ActorRel(Matching,    "d_a_wind_tag"),
     ActorRel(Matching,    "d_a_acorn_leaf"),
     ActorRel(Matching,    "d_a_atdoor"),
@@ -1569,9 +1575,9 @@ config.libs = [
     ActorRel(Matching,    "d_a_bb"),
     ActorRel(Matching,    "d_a_bdk"),
     ActorRel(Matching,    "d_a_bdkobj"),
-    ActorRel(NonMatching, "d_a_bgn"),
-    ActorRel(NonMatching, "d_a_bgn2"),
-    ActorRel(NonMatching, "d_a_bgn3"),
+    ActorRel(Matching,    "d_a_bgn"),
+    ActorRel(MatchingFor("D44J01"), "d_a_bgn2"),
+    ActorRel(Matching,    "d_a_bgn3"),
     ActorRel(NonMatching, "d_a_bigelf"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_bk"),
     ActorRel(NonMatching, "d_a_bl"),
@@ -1659,7 +1665,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_npc_os"),
     ActorRel(NonMatching, "d_a_npc_p1"),
     ActorRel(NonMatching, "d_a_npc_p2"),
-    ActorRel(NonMatching, "d_a_npc_people"), # regalloc
+    ActorRel(EquivalentFor("GZLJ01", "GZLE01", "GZLP01") or MatchingFor("D44J01"), "d_a_npc_people"), # regalloc 
     ActorRel(NonMatching, "d_a_npc_pf1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_npc_photo"),
     ActorRel(NonMatching, "d_a_npc_pm1"),
@@ -1771,7 +1777,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_scene_change"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_shutter"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_shutter2"),
-    ActorRel(NonMatching, "d_a_st"),
+    ActorRel(Matching,    "d_a_st"),
     ActorRel(Matching,    "d_a_steam_tag"),
     ActorRel(Matching,    "d_a_swattack"),
     ActorRel(Matching,    "d_a_switem"),

@@ -132,7 +132,7 @@ static BOOL daTag_Msg_actionEvent(daTag_Msg_c* a_this) {
     int message = a_this->getMessage();
     switch (msg_mode / 1) {
     case 0:
-        if (dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) {
+        if (dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), dCamAttnStts_00000004_e)) {
             msg_mode++;
         }
         break;

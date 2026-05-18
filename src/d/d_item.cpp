@@ -679,8 +679,8 @@ void item_func_triple_heart() {
 /* 800C3200-800C3258       .text item_func_pendant__Fv */
 void item_func_pendant() {
     dComIfGs_setBeastItem(dItem_JOY_PENDANT_e);
-    dComIfGs_onGetItemBeast(0x7);
-    dComIfGp_setItemBeastNumCount(0x7, 1);
+    dComIfGs_onGetItemBeast(dBeastIdx_JOY_PENDANT_e);
+    dComIfGp_setItemBeastNumCount(dBeastIdx_JOY_PENDANT_e, 1);
 }
 
 /* 800C3258-800C329C       .text item_func_telescope__Fv */
@@ -899,50 +899,50 @@ void item_func_grass_ball() {
 /* 800C3D00-800C3D58       .text item_func_skull_necklace__Fv */
 void item_func_skull_necklace() {
     dComIfGs_setBeastItem(dItem_SKULL_NECKLACE_e);
-    dComIfGs_onGetItemBeast(0x0);
-    dComIfGp_setItemBeastNumCount(0x0, 1);
+    dComIfGs_onGetItemBeast(dBeastIdx_SKULL_NECKLACE_e);
+    dComIfGp_setItemBeastNumCount(dBeastIdx_SKULL_NECKLACE_e, 1);
 }
 
 /* 800C3D58-800C3DB0       .text item_func_bokobaba_seed__Fv */
 void item_func_bokobaba_seed() {
     dComIfGs_setBeastItem(dItem_BOKOBABA_SEED_e);
-    dComIfGs_onGetItemBeast(0x1);
-    dComIfGp_setItemBeastNumCount(0x1, 1);
+    dComIfGs_onGetItemBeast(dBeastIdx_BOKOBABA_SEED_e);
+    dComIfGp_setItemBeastNumCount(dBeastIdx_BOKOBABA_SEED_e, 1);
 }
 
 /* 800C3DB0-800C3E08       .text item_func_golden_feather__Fv */
 void item_func_golden_feather() {
     dComIfGs_setBeastItem(dItem_GOLDEN_FEATHER_e);
-    dComIfGs_onGetItemBeast(0x2);
-    dComIfGp_setItemBeastNumCount(0x2, 1);
+    dComIfGs_onGetItemBeast(dBeastIdx_GOLDEN_FEATHER_e);
+    dComIfGp_setItemBeastNumCount(dBeastIdx_GOLDEN_FEATHER_e, 1);
 }
 
 /* 800C3E08-800C3E60       .text item_func_boko_belt__Fv */
 void item_func_boko_belt() {
-    dComIfGs_setBeastItem(BOKO_BELT);
-    dComIfGs_onGetItemBeast(0x3);
-    dComIfGp_setItemBeastNumCount(0x3, 1);
+    dComIfGs_setBeastItem(dItem_KNIGHTS_CREST_e);
+    dComIfGs_onGetItemBeast(dBeastIdx_KNIGHTS_CREST_e);
+    dComIfGp_setItemBeastNumCount(dBeastIdx_KNIGHTS_CREST_e, 1);
 }
 
 /* 800C3E60-800C3EB8       .text item_func_red_jerry__Fv */
 void item_func_red_jerry() {
     dComIfGs_setBeastItem(dItem_RED_JELLY_e);
-    dComIfGs_onGetItemBeast(0x4);
-    dComIfGp_setItemBeastNumCount(0x4, 1);
+    dComIfGs_onGetItemBeast(dBeastIdx_RED_JELLY_e);
+    dComIfGp_setItemBeastNumCount(dBeastIdx_RED_JELLY_e, 1);
 }
 
 /* 800C3EB8-800C3F10       .text item_func_green_jerry__Fv */
 void item_func_green_jerry() {
     dComIfGs_setBeastItem(dItem_GREEN_JELLY_e);
-    dComIfGs_onGetItemBeast(0x5);
-    dComIfGp_setItemBeastNumCount(0x5, 1);
+    dComIfGs_onGetItemBeast(dBeastIdx_GREEN_JELLY_e);
+    dComIfGp_setItemBeastNumCount(dBeastIdx_GREEN_JELLY_e, 1);
 }
 
 /* 800C3F10-800C3F68       .text item_func_blue_jerry__Fv */
 void item_func_blue_jerry() {
     dComIfGs_setBeastItem(dItem_BLUE_JELLY_e);
-    dComIfGs_onGetItemBeast(0x6);
-    dComIfGp_setItemBeastNumCount(0x6, 1);
+    dComIfGs_onGetItemBeast(dBeastIdx_BLUE_JELLY_e);
+    dComIfGp_setItemBeastNumCount(dBeastIdx_BLUE_JELLY_e, 1);
 }
 
 /* 800C3F68-800C3F98       .text item_func_map__Fv */
@@ -2012,7 +2012,7 @@ int item_getcheck_func_triple_heart() {
 
 /* 800C655C-800C658C       .text item_getcheck_func_pendant__Fv */
 int item_getcheck_func_pendant() {
-    return dComIfGs_isGetItemBeast(0x7);
+    return dComIfGs_isGetItemBeast(dBeastIdx_JOY_PENDANT_e);
 }
 
 /* 800C658C-800C65C0       .text item_getcheck_func_telescope__Fv */
@@ -2172,37 +2172,37 @@ int item_getcheck_func_grass_ball() {
 
 /* 800C6B28-800C6B58       .text item_getcheck_func_skull_necklace__Fv */
 int item_getcheck_func_skull_necklace() {
-    return dComIfGs_isGetItemBeast(0x0);
+    return dComIfGs_isGetItemBeast(dBeastIdx_SKULL_NECKLACE_e);
 }
 
 /* 800C6B58-800C6B88       .text item_getcheck_func_bokobaba_seed__Fv */
 int item_getcheck_func_bokobaba_seed() {
-    return dComIfGs_isGetItemBeast(0x1);
+    return dComIfGs_isGetItemBeast(dBeastIdx_BOKOBABA_SEED_e);
 }
 
 /* 800C6B88-800C6BB8       .text item_getcheck_func_golden_feather__Fv */
 int item_getcheck_func_golden_feather() {
-    return dComIfGs_isGetItemBeast(0x2);
+    return dComIfGs_isGetItemBeast(dBeastIdx_GOLDEN_FEATHER_e);
 }
 
 /* 800C6BB8-800C6BE8       .text item_getcheck_func_boko_belt__Fv */
 int item_getcheck_func_boko_belt() {
-    return dComIfGs_isGetItemBeast(0x3);
+    return dComIfGs_isGetItemBeast(dBeastIdx_KNIGHTS_CREST_e);
 }
 
 /* 800C6BE8-800C6C18       .text item_getcheck_func_red_jerry__Fv */
 int item_getcheck_func_red_jerry() {
-    return dComIfGs_isGetItemBeast(0x4);
+    return dComIfGs_isGetItemBeast(dBeastIdx_RED_JELLY_e);
 }
 
 /* 800C6C18-800C6C48       .text item_getcheck_func_green_jerry__Fv */
 int item_getcheck_func_green_jerry() {
-    return dComIfGs_isGetItemBeast(0x5);
+    return dComIfGs_isGetItemBeast(dBeastIdx_GREEN_JELLY_e);
 }
 
 /* 800C6C48-800C6C78       .text item_getcheck_func_blue_jerry__Fv */
 int item_getcheck_func_blue_jerry() {
-    return dComIfGs_isGetItemBeast(0x6);
+    return dComIfGs_isGetItemBeast(dBeastIdx_BLUE_JELLY_e);
 }
 
 /* 800C6C78-800C6CA8       .text item_getcheck_func_map__Fv */
@@ -2654,7 +2654,7 @@ BOOL isArrow(u8 itemNo) {
 BOOL isEmono(u8 itemNo) {
     BOOL isEmono = FALSE;
     if (itemNo == dItem_JOY_PENDANT_e || itemNo == dItem_SKULL_NECKLACE_e || itemNo == dItem_BOKOBABA_SEED_e || itemNo == dItem_GOLDEN_FEATHER_e ||
-        itemNo == BOKO_BELT || itemNo == dItem_RED_JELLY_e || itemNo == dItem_GREEN_JELLY_e || itemNo == dItem_BLUE_JELLY_e)
+        itemNo == dItem_KNIGHTS_CREST_e || itemNo == dItem_RED_JELLY_e || itemNo == dItem_GREEN_JELLY_e || itemNo == dItem_BLUE_JELLY_e)
     {
         isEmono = TRUE;
     }
@@ -2694,7 +2694,7 @@ BOOL isLimitedItem(u8 itemNo) {
 BOOL isNonSavedEmono(u8 itemNo) {
     BOOL isEmono = FALSE;
     if (itemNo == dItem_JOY_PENDANT_e || itemNo == dItem_SKULL_NECKLACE_e || itemNo == dItem_BOKOBABA_SEED_e || itemNo == dItem_GOLDEN_FEATHER_e ||
-        itemNo == BOKO_BELT || itemNo == dItem_RED_JELLY_e || itemNo == dItem_GREEN_JELLY_e) // No dItem_BLUE_JELLY_e
+        itemNo == dItem_KNIGHTS_CREST_e || itemNo == dItem_RED_JELLY_e || itemNo == dItem_GREEN_JELLY_e) // No dItem_BLUE_JELLY_e
     {
         isEmono = TRUE;
     }
