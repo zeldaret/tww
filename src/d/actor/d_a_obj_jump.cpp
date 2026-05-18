@@ -141,71 +141,71 @@ void daObjJump::Act_c::init_mtx() {
 
 /* 00000BB4-00000D9C       .text set_push_flag__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::set_push_flag() {
-    this->field_0x344[1] = 0;
-    if (this->field_0x344[0] != 0) {
-        if (this->field_0x344[3] < 0xff) {
-            this->field_0x344[3] += 1;
+    this->field_0x345 = 0;
+    if (this->field_0x344 != 0) {
+        if (this->field_0x347 < 0xff) {
+            this->field_0x347 += 1;
         }
-        if (this->field_0x344[3] == *(u8 *)(&attr().m[0x43])) {
-            this->field_0x344[1] = 1;
-        }
-    } else {
-        this->field_0x344[3] = 0;
-    }
-    this->field_0x344[2] = 0;
-    if (this->field_0x344[0] != 0) {
-        this->field_0x344[4] = 0;
-    } else {
-        if (this->field_0x344[4] < 0xff) {
-            this->field_0x344[4] += 1;
-        }
-        if (this->field_0x344[4] == *(u8 *)(&attr().m[0x44])) {
-            this->field_0x344[2] = 1;
-        }
-    }
-    this->field_0x344[6] = 0;
-    if (this->field_0x344[5] != 0 && dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK100_e)) {
-        if (this->field_0x344[7] < 0xff) {
-            this->field_0x344[7] += 1;
-        }
-        if (this->field_0x344[7] == *(u8 *)(&attr().m[0x45])) {
-            this->field_0x344[6] = 1;
+        if (this->field_0x347 == *(u8 *)(&attr().m[0x43])) {
+            this->field_0x345 = 1;
         }
     } else {
-        this->field_0x344[7] = 0;
+        this->field_0x347 = 0;
     }
-    this->field_0x344[9] = 0;
-    if (this->field_0x344[8] != 0) {
-        if (this->field_0x344[11] < 0xff) {
-            this->field_0x344[11] += 1;
+    this->field_0x346 = 0;
+    if (this->field_0x344 != 0) {
+        this->field_0x348 = 0;
+    } else {
+        if (this->field_0x348 < 0xff) {
+            this->field_0x348 += 1;
         }
-        if (this->field_0x344[11] == *(u8 *)(&attr().m[0x46])) {
-            this->field_0x344[9] = 1;
+        if (this->field_0x348 == *(u8 *)(&attr().m[0x44])) {
+            this->field_0x346 = 1;
+        }
+    }
+    this->field_0x34a = 0;
+    if (this->field_0x349 != 0 && dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK100_e)) {
+        if (this->field_0x34b < 0xff) {
+            this->field_0x34b += 1;
+        }
+        if (this->field_0x34b == *(u8 *)(&attr().m[0x45])) {
+            this->field_0x34a = 1;
         }
     } else {
-        this->field_0x344[11] = 0;
+        this->field_0x34b = 0;
     }
-    this->field_0x344[10] = 0;
-    if (this->field_0x344[8] != 0) {
-        this->field_0x344[12] = 0;
+    this->field_0x34d = 0;
+    if (this->field_0x34c != 0) {
+        if (this->field_0x34f < 0xff) {
+            this->field_0x34f += 1;
+        }
+        if (this->field_0x34f == *(u8 *)(&attr().m[0x46])) {
+            this->field_0x34d = 1;
+        }
+    } else {
+        this->field_0x34f = 0;
+    }
+    this->field_0x34e = 0;
+    if (this->field_0x34c != 0) {
+        this->field_0x350 = 0;
         return;
     }
-    if (this->field_0x344[12] < 0xff) {
-        this->field_0x344[12] += 1;
+    if (this->field_0x350 < 0xff) {
+        this->field_0x350 += 1;
     }
-    if (this->field_0x344[12] != *(u8 *)(&attr().m[0x47])) {
+    if (this->field_0x350 != *(u8 *)(&attr().m[0x47])) {
         return;
     }
-    this->field_0x344[10] = 1;
+    this->field_0x34e = 1;
     return;
 }
 
 /* 00000D9C-00000DB4       .text clear_push_flag__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::clear_push_flag() {
-    this->field_0x344[0] = 0;   // FIXME this->field_0x344 = 0;
-    this->field_0x344[8] = 0;   // FIXME this->field_0x34c = 0;
-    this->field_0x344[5] = 0;   // FIXME this->field_0x349 = 0;
-    this->field_0x354[0] = 0;   // FIXME this->field_0x354 = 0;
+    this->field_0x344 = 0;
+    this->field_0x34c = 0;
+    this->field_0x349 = 0;
+    this->field_0x354 = 0;
     return;
 }
 
@@ -219,17 +219,15 @@ void daObjJump::Act_c::calc_vib_pos() {
 
 /* 00000E1C-00000E74       .text rideCB__Q29daObjJump5Act_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daObjJump::Act_c::rideCB(dBgW*, fopAc_ac_c* param_2, fopAc_ac_c* param_3) {
-    /* Nonmatching */
-    // FIXME pointer offsets... and fopAc_ac_c is supposed to be 0x290 bytes only
     *((s8 *)param_2 + 0x344) = 1;
-    if (param_3->base.base.mProfName != 0xa9) {
+    if (fopAcM_GetProfName(param_3) != PROC_PLAYER) {
         return;
     }
     *((s8 *)param_2 + 0x349) = 1;
-    if ((*((uint *)((s8 *)param_3 + 0x29c)) & 0x2000000) != 0) {
+    if (((daPy_py_c*)param_3)->checkEquipHeavyBoots()) {
         *((s8 *)param_2 + 0x34c) = 1;
     }
-    if (param_3->speedF > *(float *)(&M_attr[*((int *)((s8 *)param_2 + 0x2d4))].m[0x4c])) {
+    if (fopAcM_GetSpeedF(param_3) > *(float *)(&M_attr[*((int *)((s8 *)param_2 + 0x2d4))].m[0x4c])) {
         *((s8 *)param_2 + 0x354) = 1;
     }
     return;
@@ -260,14 +258,14 @@ void daObjJump::Act_c::mode_wait_init() {
 
 /* 00000F64-0000108C       .text mode_wait__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::mode_wait() {
-    if (this->field_0x352 <= 0 && (this->field_0x344[1] != 0 || this->field_0x344[2] != 0 || this->field_0x344[6] != 0 || this->field_0x344[9] != 0)) {
+    if (this->field_0x352 <= 0 && (this->field_0x345 != 0 || this->field_0x346 != 0 || this->field_0x34a != 0 || this->field_0x34d != 0)) {
         this->field_0x340 += *(float *)(&attr().m[0x30]);
         this->field_0x352 = *(u8 *)(&attr().m[0x48]);
     }
     else if (this->field_0x352 > 0) {
         this->field_0x352 -= 1;
     }
-    if (this->field_0x344[11] > *(u8 *)(&attr().m[0x40])) {
+    if (this->field_0x34f > *(u8 *)(&attr().m[0x40])) {
         fopAcM_seStart(this, JA_SE_OBJ_JUMP_SPR_CLOSE, 0);
         this->mode_w_l_init();
     }
@@ -298,14 +296,14 @@ void daObjJump::Act_c::mode_lower_init() {
 
 /* 000010FC-00001200       .text mode_lower__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::mode_lower() {
-    if (this->field_0x352 <= 0 && this->field_0x344[10] != 0) {
+    if (this->field_0x352 <= 0 && this->field_0x34e != 0) {
         this->field_0x340 += *(float *)(&attr().m[0x30]);
         this->field_0x352 = *(u8 *)(&attr().m[0x48]);
     }
     else if (this->field_0x352 > 0) {
         this->field_0x352 -= 1;
     }
-    if (this->field_0x344[12] > *(u8 *)(&attr().m[0x41])) {
+    if (this->field_0x350 > *(u8 *)(&attr().m[0x41])) {
         fopAcM_seStart(this, JA_SE_OBJ_JUMP_SPR_OPEN, 0);
         this->mode_l_u_init();
     }
@@ -324,7 +322,7 @@ void daObjJump::Act_c::mode_l_u() {
     if (this->field_0x33C >= this->field_0x338) {
         this->field_0x33C = this->field_0x338;
         this->field_0x340 = 0.0f;
-        if (*(u8*)(&this->field_0x344[5]) != 0) {
+        if (*(u8*)(&this->field_0x349) != 0) {
             daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
             player->onForceVomitJump();
         }
@@ -383,7 +381,7 @@ BOOL daObjJump::Act_c::Execute(Mtx** param_1) {
 
     (this->*mode_proc[this->field_0x330])();
 
-    if ((this->field_0x330 == 0 || this->field_0x330 == 2) && this->field_0x354[0] != 0) {
+    if ((this->field_0x330 == 0 || this->field_0x330 == 2) && this->field_0x354 != 0) {
         this->field_0x340 += *(float *)(&attr().m[0x34]);
     }
     this->calc_vib_pos();
