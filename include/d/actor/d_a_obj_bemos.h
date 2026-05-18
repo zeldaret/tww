@@ -119,6 +119,8 @@ public:
     daBemos_HIO_c();
     virtual ~daBemos_HIO_c() {}
 
+    void genMessage(JORMContext* ctx) {}
+
 public:
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 m05[0x08 - 0x05];

@@ -2,6 +2,7 @@
 #define D_NAME_H
 
 #include "d/d_drawlist.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class dNm_HIO_c {
 public:

@@ -15,6 +15,8 @@ public:
     daYOUGAN_HIO_c();
     virtual ~daYOUGAN_HIO_c() {}
 
+    void genMessage(JORMContext* ctx) {}
+
 public:
     /* 0x04 */ s8 mNo;
     /* 0x06 */ s16 field_0x06;

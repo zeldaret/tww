@@ -182,7 +182,7 @@ class daBdk_HIO_c : public JORReflexible {
 public:
     daBdk_HIO_c();
     virtual ~daBdk_HIO_c() {}
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 public:
     /* 0x004 */ s8 mNo;
     /* 0x005 */ u8 m005;

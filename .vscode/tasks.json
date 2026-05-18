@@ -11,7 +11,7 @@
             "GZLJ01", // GCN JPN
             "GZLE01", // GCN USA
             "GZLP01", // GCN PAL
-            "D44J01 --debug --map",
+            "D44J01 --debug --map --non-matching",
         ],
         "default": "GZLE01",
         "description": "Game version to build."

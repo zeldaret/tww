@@ -170,6 +170,8 @@ class daDaiocta_HIO_c : public mDoHIO_entry_c {
 public:
     daDaiocta_HIO_c();
 
+    void genMessage(JORMContext* ctx) {}
+
 public:
     /* 0x004 */ u8 m004;
     /* 0x005 */ u8 m005;
