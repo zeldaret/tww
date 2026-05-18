@@ -1681,7 +1681,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_Itnak"),
     ActorRel(NonMatching, "d_a_obj_Vds"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_Vteng"),
-    ActorRel(NonMatching, "d_a_obj_YLzou"),
+    ActorRel(Equivalent, "d_a_obj_YLzou"), # all 49 fns byte-identical; extra std::sqrtf weak COMDAT from a header inline
     ActorRel(Matching,    "d_a_obj_Yboil"),
     ActorRel(Matching,    "d_a_obj_adnno"),
     ActorRel(Matching,    "d_a_obj_ajav"),
