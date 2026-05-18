@@ -11,17 +11,10 @@ public:
 
     enum HoFlags {
         HO_FLAG_00000001 = 0x00000001,
-        HO_FLAG_00000002 = 0x00000002,
         HO_FLAG_00000004 = 0x00000004,
         HO_FLAG_00000008 = 0x00000008,
         HO_FLAG_00000010 = 0x00000010,
         HO_FLAG_00000020 = 0x00000020,
-        HO_FLAG_00000040 = 0x00000040,
-        HO_FLAG_00000080 = 0x00000080,
-        HO_FLAG_00000100 = 0x00000100,
-        HO_FLAG_00000200 = 0x00000200,
-        HO_FLAG_00000400 = 0x00000400,
-        HO_FLAG_00000800 = 0x00000800,
     };
 
     enum HoStates {
@@ -29,6 +22,7 @@ public:
         HO_STATE_TALK_01 = 1,
         HO_STATE_TALK_02 = 2,
         HO_STATE_TALK_03 = 3,
+        HO_STATE_TALK_03_CONTINUE = 4,
         HO_STATE_GIVE_01 = 5,
         HO_STATE_GIVE_02 = 6,
         HO_STATE_PREACH = 7
@@ -144,24 +138,24 @@ public:
     /* 0x680 */ f32 mAnmTimer;
     /* 0x684 */ u32 mCurrMsgNo;
     /* 0x688 */ u16 mFlags;
-    /* 0x68A */ u8 field_0x68A;
+    /* 0x68A */ u8 mAttentionTimer;
     /* 0x68B */ u8 mMsgSelectNum;
     /* 0x68C */ u8 mMsgAnmIdx;
-    /* 0x68D */ u8 field_0x68D;
-    /* 0x68E */ u8 field_0x68E;
+    /* 0x68D */ u8 mAnmLoopCount;
+    /* 0x68E */ u8 mItemNum;
     /* 0x68F */ u8 field_0x68F[0x690 - 0x68F];
     /* 0x690 */ int mNextMessageId;
-    /* 0x694 */ f32 mCylinderCollisionRadius;
+    /* 0x694 */ f32 mCylCollisionRadius;
     /* 0x698 */ ActionFunc mCurrActionFunc;
     /* 0x6A4 */ s8 mTexPatternIdx;
     /* 0x6A5 */ s8 mCurrAnmIdx;
     /* 0x6A6 */ s8 mOrderFlags;
     /* 0x6A7 */ s8 mState;
-    /* 0x6A8 */ s8 field_0x6A8;
-    /* 0x6A9 */ u8 field_0x6A9;
+    /* 0x6A8 */ s8 mPrevState;
+    /* 0x6A9 */ u8 mType;
     /* 0x6AA */ s8 mActionStatus;
     /* 0x6AB */ s8 mTalkState;
-    /* 0x6AC */ int mCurrentFloorSoundId;
+    /* 0x6AC */ u32 mtrlSndId;
     /* 0x6B0 */ s8 mReverb;
     /* 0x6B1 */ u8 field_0x6B1[0x6B4 - 0x6B1];
 };  // Size: 0x6B4

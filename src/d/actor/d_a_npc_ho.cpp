@@ -136,8 +136,8 @@ bool daNpc_Ho_c::chkAttentionLocal() {
         return true;
     }
 
-    if (field_0x68A != 0) {
-        field_0x68A --;
+    if (mAttentionTimer != 0) {
+        mAttentionTimer--;
         return true;
     }
 
@@ -242,9 +242,9 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0x271E:
             mNextMessageId = 0x2748;
-            field_0x68E = 5;
+            mItemNum = dItem_PURPLE_RUPEE_e;
             *pMsgNo = *pMsgNo + 1;
-            mState = 3;
+            mState = HO_STATE_TALK_03;
             break;
         case 0x272B:
             switch(mMsgSelectNum) {
@@ -308,7 +308,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0x275C:
             mNextMessageId = 0x275D;
-            field_0x68E = 4;
+            mItemNum = dItem_RED_RUPEE_e;
             msgStatus = fopMsgStts_MSG_ENDS_e;
             break;
         case 0x2742:
@@ -317,7 +317,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0x2743:
             mNextMessageId = 0x2744;
-            field_0x68E = 0x9C;
+            mItemNum = COTTAGE_PAPER;
             msgStatus = fopMsgStts_MSG_ENDS_e;
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_1C08);
             dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0104);
@@ -338,20 +338,20 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0x2754:
             *pMsgNo = 0x2755;
-            int NumPendantsGiven = dComIfGs_getBeastNum(7); // rename this
-            receivePendant(NumPendantsGiven);
-            if (NumPendantsGiven < 3) {
-                field_0x68E = 4;
-            } else if (NumPendantsGiven < 5) {
-                field_0x68E = 5;
+            int numPendantsGiven = dComIfGs_getBeastNum(7); // rename this
+            receivePendant(numPendantsGiven);
+            if (numPendantsGiven < 3) {
+                mItemNum = dItem_RED_RUPEE_e;
+            } else if (numPendantsGiven < 5) {
+                mItemNum = dItem_PURPLE_RUPEE_e;
             } else {
-                field_0x68E = 6;
+                mItemNum = dItem_ORANGE_RUPEE_e;
             }
             mNextMessageId = 0x2757;
             break;
         case 0x2751:
             mNextMessageId = 0x2752;
-            field_0x68E = 0x43;
+            mItemNum = dItem_HEROS_CHARM_e;
             msgStatus = fopMsgStts_MSG_ENDS_e;
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_1C04);
             break;
@@ -388,7 +388,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
 /* 00000C0C-00000DA8       .text getMsg__10daNpc_Ho_cFv */
 u32 daNpc_Ho_c::getMsg() {
     switch(mState) {
-        case 1:
+        case HO_STATE_TALK_01:
             if (dKy_checkEventNightStop()) {
                 return 0x2722;
             }
@@ -400,7 +400,7 @@ u32 daNpc_Ho_c::getMsg() {
 
             return (dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF) == 0 ? 0 : 1) + 0x2712;
 
-        case 3:
+        case HO_STATE_TALK_03:
             if(dComIfGp_event_getPreItemNo() != dItem_JOY_PENDANT_e || !dComIfGs_isEventBit(DEMO_SELECT(dSv_event_flag_c::UNK_1E02, dSv_event_flag_c::UNK_1E04))) {
                 return 0x2739;
             } 
@@ -425,7 +425,7 @@ u32 daNpc_Ho_c::getMsg() {
             }
             return 0x2754;
                 
-        case 4: 
+        case HO_STATE_TALK_03_CONTINUE: 
             return mNextMessageId;
     }
     return 0;
@@ -433,12 +433,13 @@ u32 daNpc_Ho_c::getMsg() {
 
 /* 00000DA8-00000E4C       .text setCollision__10daNpc_Ho_cFv */
 void daNpc_Ho_c::setCollision() {
-    cXyz temp(0.0f, 0.0f, 0.0f);
-    cXyz temp2(current.pos);
-    f32 temp3 = mCylinderCollisionRadius;
+    cXyz temp(0.0f, 0.0f, 0.0f); // unused
+    
+    cXyz centerPos(current.pos);
+    f32 cylCollision = mCylCollisionRadius;
     f32 height = 140.0f;
-    mCyl.SetC(temp2);
-    mCyl.SetR(temp3);
+    mCyl.SetC(centerPos);
+    mCyl.SetR(cylCollision);
     mCyl.SetH(height);
     dComIfG_Ccsp()->Set(&mCyl);
 }
@@ -466,7 +467,7 @@ void daNpc_Ho_c::msgAnm(u8 param_1) {
         if (mMsgAnmIdx < 5) {
             setAnm(msg_anm_table[mMsgAnmIdx]);
         }
-        field_0x68D = 0;
+        mAnmLoopCount = 0;
     }
 }
 
@@ -534,13 +535,12 @@ BOOL daNpc_Ho_c::init() {
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x6F;
     gravity = -30.0f;
 
-    switch(field_0x6A9) {
+    switch(mType) {
         case 0:
             if(setAction(&daNpc_Ho_c::wait_action, NULL)) {
                 eventInfo.setXyCheckCB(daNpc_ho_XyCheckCB);
             }
             break;
-
     }
 
     mAttnBasePos.set(current.pos);
@@ -552,8 +552,8 @@ BOOL daNpc_Ho_c::init() {
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(dNpc_cyl_src);
     mCyl.SetStts(&mStts);
-    mCylinderCollisionRadius = 40.0f;
-    mCurrentFloorSoundId = 0;
+    mCylCollisionRadius = 40.0f;
+    mtrlSndId = 0;
     mReverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
     return TRUE;
 }
@@ -610,13 +610,13 @@ void daNpc_Ho_c::lookBack() {
 /* 00001498-0000157C       .text wait01__10daNpc_Ho_cFv */
 bool daNpc_Ho_c::wait01() {
     if (chkFlag(HO_FLAG_00000010)) {
-        field_0x6A8 = mState;
-        mState = 2;
+        mPrevState = mState;
+        mState = HO_STATE_TALK_02;
         setAnmStatus();
-        field_0x68E = 0xff;
+        mItemNum = dItem_NONE_e;
     } else if (chkFlag(HO_FLAG_00000001)) {
-        field_0x6A8 = mState;
-        mState = 1;
+        mPrevState = mState;
+        mState = HO_STATE_TALK_01;
         setAnmStatus();
     } else {
         SetOrder(HO_FLAG_00000001);
@@ -636,13 +636,13 @@ bool daNpc_Ho_c::talk01() {
             clrFlag(HO_FLAG_00000020);
 
         } else {
-            mState = field_0x6A8;
+            mState = mPrevState;
             setAnmStatus();
             dComIfGp_event_reset();
             clrFlag(HO_FLAG_00000001 | HO_FLAG_00000010);
 
-            field_0x68A = 5;
-            mCylinderCollisionRadius = 40.0f;
+            mAttentionTimer = 5;
+            mCylCollisionRadius = 40.0f;
         }
     }
     return mpMorf->isMorf();
@@ -653,8 +653,8 @@ bool daNpc_Ho_c::talk02() {
     if (dComIfGp_evmng_ChkPresentEnd()) {
         mState = HO_STATE_TALK_03;
     }
-    if (mCylinderCollisionRadius < 90.0f) {
-        mCylinderCollisionRadius += 5.0f;
+    if (mCylCollisionRadius < 90.0f) {
+        mCylCollisionRadius += 5.0f;
     }
     return false;
 }
@@ -662,16 +662,16 @@ bool daNpc_Ho_c::talk02() {
 /* 000016E8-000017D4       .text talk03__10daNpc_Ho_cFv */
 bool daNpc_Ho_c::talk03() {
     if (talk() == fopMsgStts_BOX_CLOSED_e) {
-        if (field_0x68E != 0xFF) {
+        if (mItemNum != dItem_NONE_e) {
             mState = HO_STATE_GIVE_01;
             fopAcM_orderChangeEvent(dComIfGp_getLinkPlayer(), this, "DEFAULT_GIVEITEM", 0, 0xFFFF);
         } else {
-            mState = field_0x6A8;
+            mState = mPrevState;
             setAnmStatus();
             dComIfGp_event_reset();
             clrFlag(HO_FLAG_00000001 | HO_FLAG_00000010);
-            field_0x68A = 5;
-            mCylinderCollisionRadius = 40.0f;
+            mAttentionTimer = 5;
+            mCylCollisionRadius = 40.0f;
         }
     }
 
@@ -680,7 +680,7 @@ bool daNpc_Ho_c::talk03() {
 
 /* 000017D4-00001884       .text give01__10daNpc_Ho_cFv */
 bool daNpc_Ho_c::give01() {
-    if (dComIfGp_event_giveItemCut(field_0x68E) != 0) {
+    if (dComIfGp_event_giveItemCut(mItemNum) != 0) {
         mState = HO_STATE_GIVE_02;
     } else {
         JUT_ASSERT(DEMO_SELECT(1220, 1233), NULL);
@@ -692,8 +692,8 @@ bool daNpc_Ho_c::give01() {
 bool daNpc_Ho_c::give02() {
     if (dComIfGp_evmng_endCheck("DEFAULT_GIVEITEM")) {
         fopAcM_orderChangeEvent(dComIfGp_getLinkPlayer(), this, "DEFAULT_TALK", 0, 0xFFFF);
-        mState = 4; // STATE_TALK_03
-        field_0x68E = 0xff;
+        mState = HO_STATE_TALK_03_CONTINUE;
+        mItemNum = dItem_NONE_e;
         talkInit();
     }
     return mpMorf->isMorf();
@@ -705,8 +705,8 @@ bool daNpc_Ho_c::preach() {
 
     if (dComIfGp_evmng_endCheck("HO_PREACH")) {
         fopAcM_orderChangeEvent(dComIfGp_getLinkPlayer(), this, "DEFAULT_TALK", 0, 0xFFFF);
-        field_0x68E = 0xff;
-        mState = 4; // STATE_TALK_03
+        mItemNum = dItem_NONE_e;
+        mState = HO_STATE_TALK_03_CONTINUE;
         talkInit();
     }
     return mpMorf->isMorf();
@@ -735,7 +735,7 @@ BOOL daNpc_Ho_c::wait_action(void*) {
             case HO_STATE_TALK_03:
                 temp = talk03();
                 break;
-            case 4: // also talk_03
+            case HO_STATE_TALK_03_CONTINUE: // also talk_03
                 temp = talk03();
                 break;
             case HO_STATE_GIVE_01:
@@ -801,7 +801,7 @@ BOOL daNpc_Ho_c::_execute() {
 
     playTexPatternAnm();
 
-    mAnmEnded = mpMorf->play(&eyePos, mCurrentFloorSoundId, mReverb);
+    mAnmEnded = mpMorf->play(&eyePos, mtrlSndId, mReverb);
     if(mpMorf->getFrame() < mAnmTimer) {
         mAnmEnded = 1;
     }
@@ -809,18 +809,18 @@ BOOL daNpc_Ho_c::_execute() {
     if (mAnmEnded != 0) {
         switch(mCurrAnmIdx) {
             case 3:
-                if (field_0x68D < 2) {
-                    field_0x68D++;
+                if (mAnmLoopCount < 2) {
+                    mAnmLoopCount++;
                 } else {
-                    field_0x68D = 0;
+                    mAnmLoopCount = 0;
                     setAnm(2);
                 }
                 break;
             case 4:
-                if (field_0x68D < 2) {
-                    field_0x68D++;
+                if (mAnmLoopCount < 2) {
+                    mAnmLoopCount++;
                 } else {
-                    field_0x68D = 0;
+                    mAnmLoopCount = 0;
                     setAnm(0);
                 }
                 break;
@@ -833,10 +833,10 @@ BOOL daNpc_Ho_c::_execute() {
     shape_angle.y = current.angle.y;
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
     mObjAcch.CrrPos(*dComIfG_Bgsp());
-    mCurrentFloorSoundId = 0;
+    mtrlSndId = 0;
 
     if (!mObjAcch.ChkGroundHit()) {
-        mCurrentFloorSoundId = dComIfG_Bgsp()->GetMtrlSndId(mObjAcch.m_gnd);
+        mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mObjAcch.m_gnd);
     }
 
     tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
@@ -849,7 +849,6 @@ BOOL daNpc_Ho_c::_execute() {
     mpMorf->calc();
     setCollision();
     return TRUE;
-
 }
 
 /* 00001EB0-00001EFC       .text _delete__10daNpc_Ho_cFv */
@@ -864,7 +863,6 @@ BOOL daNpc_Ho_c::_delete() {
 /* 00001EFC-00001F1C       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daNpc_Ho_c*)i_this)->CreateHeap();
-
 }
 
 /* 00001F1C-00002124       .text _create__10daNpc_Ho_cFv */
@@ -877,7 +875,7 @@ cPhs_State daNpc_Ho_c::_create() {
 
         switch(fopAcM_GetName(this)) {
             case PROC_NPC_HO:
-                field_0x6A9 = 0;
+                mType = 0;
                 break;
             default:
                 return cPhs_ERROR_e;
@@ -903,7 +901,6 @@ cPhs_State daNpc_Ho_c::_create() {
         }
     }
     return state;
-
 }
 
 /* 000023F0-00002784       .text CreateHeap__10daNpc_Ho_cFv */
