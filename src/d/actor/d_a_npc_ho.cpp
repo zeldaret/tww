@@ -72,17 +72,17 @@ s16 daNpc_Ho_c::XyCheckCB(int) {
 
 /* 00000254-000002F8       .text receivePendant__10daNpc_Ho_cFi */
 void daNpc_Ho_c::receivePendant(int numPendantsGiven) {
-    int temp = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF);
+    int totalGiven = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF);
     dComIfGp_setItemBeastNumCount(7, -numPendantsGiven);
-    temp += numPendantsGiven;
+    totalGiven += numPendantsGiven;
 
-    if(temp > 99) {
+    if(totalGiven > 99) {
 #if VERSION > VERSION_DEMO
-        dComIfGp_setItemBeastNumCount(7, temp - 99);
+        dComIfGp_setItemBeastNumCount(7, totalGiven - 99);
 #endif
-        temp = 99;
+        totalGiven = 99;
     }
-    dComIfGs_setEventReg(dSv_event_flag_c::UNK_C0FF, temp);
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_C0FF, totalGiven);
 }
 
 /* 000002F8-0000040C       .text initTexPatternAnm__10daNpc_Ho_cFb */
@@ -338,7 +338,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0x2754:
             *pMsgNo = 0x2755;
-            int numPendantsGiven = dComIfGs_getBeastNum(7); // rename this
+            int numPendantsGiven = dComIfGs_getBeastNum(7);
             receivePendant(numPendantsGiven);
             if (numPendantsGiven < 3) {
                 mItemNum = dItem_RED_RUPEE_e;
@@ -620,7 +620,7 @@ bool daNpc_Ho_c::wait01() {
         setAnmStatus();
     } else {
         SetOrder(HO_FLAG_00000001);
-        if (dComIfGs_isEventBit(DEMO_SELECT(dSv_event_flag_c::UNK_1E02, dSv_event_flag_c::UNK_1E04)) && !dKy_checkEventNightStop()) { // eventbit is different for demo and retail?
+        if (dComIfGs_isEventBit(DEMO_SELECT(dSv_event_flag_c::UNK_1E02, dSv_event_flag_c::UNK_1E04)) && !dKy_checkEventNightStop()) {
             SetOrder(HO_FLAG_00000004);
         }
     }
@@ -735,7 +735,7 @@ BOOL daNpc_Ho_c::wait_action(void*) {
             case HO_STATE_TALK_03:
                 temp = talk03();
                 break;
-            case HO_STATE_TALK_03_CONTINUE: // also talk_03
+            case HO_STATE_TALK_03_CONTINUE:
                 temp = talk03();
                 break;
             case HO_STATE_GIVE_01:
