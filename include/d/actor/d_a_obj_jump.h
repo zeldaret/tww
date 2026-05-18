@@ -8,9 +8,36 @@
 class J3DNode;
 
 namespace daObjJump {
-    // FIXME Attributes struct
     struct Attr_c {
-        /* 0x00 */ u8 m[0x50];
+        /* 0x00 */ u32 resSize;
+        /* 0x04 */ s16 resIndex;
+        /* 0x06 */ s16 field_0x006;
+        /* 0x08 */ SVec cullSizeBoxMin;
+        /* 0x0e */ SVec cullSizeBoxMax;
+        /* 0x14 */ u8 field_0x014;
+        /* 0x15 */ u8 field_0x015;
+        /* 0x16 */ u16 field_0x016;
+        /* 0x18 */ float field_0x018;
+        /* 0x1C */ float field_0x01C;
+        /* 0x20 */ float field_0x020;
+        /* 0x24 */ float field_0x024;
+        /* 0x28 */ float field_0x028;
+        /* 0x2C */ float field_0x02C;
+        /* 0x30 */ float field_0x030;
+        /* 0x34 */ float field_0x034;
+        /* 0x38 */ float field_0x038;
+        /* 0x3c */ float field_0x03C;
+        /* 0x40 */ u8 field_0x040;
+        /* 0x41 */ u8 field_0x041;
+        /* 0x42 */ u8 field_0x042;
+        /* 0x43 */ u8 field_0x043;
+        /* 0x44 */ u8 field_0x044;
+        /* 0x45 */ u8 field_0x045;
+        /* 0x46 */ u8 field_0x046;
+        /* 0x47 */ u8 field_0x047;
+        /* 0x48 */ u8 field_0x048;
+        /* 0x49 */ u8 field_0x049[0x4c - 0x49];
+        /* 0x4c */ float field_0x04C;
     };  // Size: 0x50
 
     class Act_c : public dBgS_MoveBgActor {
@@ -24,7 +51,7 @@ namespace daObjJump {
             m336 = 1;
         }
         const Attr_c& attr() const { return M_attr[field_0x2D4]; }
-        void prm_get_type() const {}
+        int prm_get_type() const { return daObj::PrmAbstract(this, 1, 0); }
     
         virtual BOOL CreateHeap();
         virtual BOOL Create();
