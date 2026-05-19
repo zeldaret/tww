@@ -1202,7 +1202,7 @@ void daDaiocta_c::modeDemo() {
             mDoAud_subBgmStop();
 #endif
             if (m575 == 0xFF) {
-                daPy_getPlayerLinkActorClass()->startRestartRoom(6, 0xC9, -1.0f, 1);
+                daPy_getPlayerLinkActorClass()->setDaiokutaEnd();
             } else {
                 dComIfGp_setNextStage(
                     dComIfGp_getStartStageName(), 

@@ -363,22 +363,22 @@ inline cXyz* fopAcM_getCullSizeBoxMin(fopAc_ac_c* actor) {
 inline void dComIfGs_onSwitch(int i_no, int i_roomNo);
 inline void dComIfGs_offSwitch(int i_no, int i_roomNo);
 inline BOOL dComIfGs_isSwitch(int i_no, int i_roomNo);
-inline void dComIfGs_revSwitch(int i_no, int i_roomNo);
+inline BOOL dComIfGs_revSwitch(int i_no, int i_roomNo);
 inline void dComIfGs_offActor(int i_no, int i_roomNo);
 
 inline void fopAcM_onSwitch(fopAc_ac_c* pActor, int sw) {
-    return dComIfGs_onSwitch(sw, fopAcM_GetHomeRoomNo(pActor));
+    dComIfGs_onSwitch(sw, fopAcM_GetHomeRoomNo(pActor));
 }
 
 inline void fopAcM_offSwitch(fopAc_ac_c* pActor, int sw) {
-    return dComIfGs_offSwitch(sw, fopAcM_GetHomeRoomNo(pActor));
+    dComIfGs_offSwitch(sw, fopAcM_GetHomeRoomNo(pActor));
 }
 
 inline BOOL fopAcM_isSwitch(fopAc_ac_c* pActor, int sw) {
     return dComIfGs_isSwitch(sw, fopAcM_GetHomeRoomNo(pActor));
 }
 
-inline void fopAcM_revSwitch(fopAc_ac_c* pActor, int sw) {
+inline BOOL fopAcM_revSwitch(fopAc_ac_c* pActor, int sw) {
     return dComIfGs_revSwitch(sw, fopAcM_GetHomeRoomNo(pActor));
 }
 

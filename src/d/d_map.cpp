@@ -905,7 +905,7 @@ void dMap_c::create() {
     mTboxNum = 0;
     mAGBMapSendStatus = 0;
     mSetCursorFlg = 0;
-    mIconDispMode = 0;
+    mIconDispMode = dMapIconDisp_NONE_e;
     mIconFreeAlpha = 0;
     mIconSelfAlpha = 0;
     mAGBMapSendStopFlg = 0;
@@ -1597,9 +1597,9 @@ void dMap_c::mapDrawAll(f32 param_1, f32 param_2, int param_3, f32 param_4) {
 
 /* 8004A760-8004A7B4       .text mapDrawIcon__6dMap_cFv */
 void dMap_c::mapDrawIcon() {
-    if (mIconDispMode == 2) {
+    if (mIconDispMode == dMapIconDisp_SELF_e) {
         mapDrawIconSelf(mIconFreePosX, mIconFreePosY, mIconSelfAlpha);
-    } else if (mIconDispMode == 1) {
+    } else if (mIconDispMode == dMapIconDisp_FREE_e) {
         mapDrawIconFree(mIconFreePosX, mIconFreePosY, mIconFreeAlpha);
     }
 }

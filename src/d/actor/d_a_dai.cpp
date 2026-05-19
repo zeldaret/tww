@@ -207,35 +207,33 @@ void daDai_c::checkOrder() {
 }
 
 /* 00000AFC-00000B1C       .text daDai_XyCheckCB__FPvi */
-static s16 daDai_XyCheckCB(void* v_this, int arg1) {
-    return ((daDai_c*)v_this)->XyCheckCB(arg1);
+static s16 daDai_XyCheckCB(void* i_this, int i_itemBtn) {
+    return ((daDai_c*)i_this)->XyCheckCB(i_itemBtn);
 }
 
 /* 00000B1C-00000BA8       .text XyCheckCB__7daDai_cFi */
-s16 daDai_c::XyCheckCB(int arg1) {
-    u8 item = dComIfGp_getSelectItem(arg1);
+s16 daDai_c::XyCheckCB(int i_itemBtn) {
+    u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
 
-    if (isDaizaItem(item) && !dComIfGs_getEventReg(m_savelabel[mSaveID])) {
-        m84A = item;
+    if (isDaizaItem(itemNo) && !dComIfGs_getEventReg(m_savelabel[mSaveID])) {
+        m84A = itemNo;
         return 1;
     }
     return 0;
 }
 
 /* 00000BA8-00000BC8       .text daDai_XyEventCB__FPvi */
-static s16 daDai_XyEventCB(void* v_this, int arg1) {
-    return ((daDai_c*)v_this)->XyEventCB(arg1);
+static s16 daDai_XyEventCB(void* i_this, int i_itemBtn) {
+    return ((daDai_c*)i_this)->XyEventCB(i_itemBtn);
 }
 
 /* 00000BC8-00000C18       .text XyEventCB__7daDai_cFi */
-s16 daDai_c::XyEventCB(int arg1) {
-    s16 sVar1;
-    if (isDaizaItem(dComIfGp_getSelectItem(arg1))) {
-        sVar1 = mEvtDaiItemIdx;
+s16 daDai_c::XyEventCB(int i_itemBtn) {
+    if (isDaizaItem(dComIfGp_getSelectItem(i_itemBtn))) {
+        return mEvtDaiItemIdx;
     } else {
-        sVar1 = mEvtDefaultTalkIdx;
+        return  mEvtDefaultTalkIdx;
     }
-    return sVar1;
 }
 
 /* 00000C18-00000C78       .text _execute__7daDai_cFv */

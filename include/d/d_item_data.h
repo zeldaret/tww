@@ -76,7 +76,7 @@ enum ItemTable {
     /* 0x45 */ dItem_SKULL_NECKLACE_e,
     /* 0x46 */ dItem_BOKOBABA_SEED_e,
     /* 0x47 */ dItem_GOLDEN_FEATHER_e,
-    /* 0x48 */ BOKO_BELT,
+    /* 0x48 */ dItem_KNIGHTS_CREST_e,
     /* 0x49 */ dItem_RED_JELLY_e,
     /* 0x4A */ dItem_GREEN_JELLY_e,
     /* 0x4B */ dItem_BLUE_JELLY_e,

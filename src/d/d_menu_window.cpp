@@ -737,19 +737,15 @@ void dMs_childHeap_freeAll(sub_ms_screen_class* i_Ms) {
 void dMs_telescopeMove(sub_ms_screen_class* i_Ms) {
     if (dComIfGp_isHeapLockFlag() == 0) {
         dComIfGp_event_photoCheck();
-        if (dComIfGp_checkCameraAttentionStatus(0, 8)) {
+        if (dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_TELESCOPE_LOOK_e)) {
             i_Ms->field_0x1B0 = 99;
-        } else {
-            if (dComIfGp_checkCameraAttentionStatus(0, 0x40)) {
-                i_Ms->field_0x1B0 = 89;
-            } else {
-                if (dComIfGp_getScopeType() == 2) {
-                    i_Ms->field_0x1B0 = 98;
-                } else if (dComIfGp_getPictureStatus() == 2 || dComIfGp_getPictureStatus() == 3) {
-                    i_Ms->field_0x1B0 = 89;
-                    dMenu_flagSet(1);
-                }
-            }
+        } else if (dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_PICTO_BOX_AIM_e)) {
+            i_Ms->field_0x1B0 = 89;
+        } else if (dComIfGp_getScopeType() == 2) {
+            i_Ms->field_0x1B0 = 98;
+        } else if (dComIfGp_getPictureStatus() == 2 || dComIfGp_getPictureStatus() == 3) {
+            i_Ms->field_0x1B0 = 89;
+            dMenu_flagSet(1);
         }
 
         if (i_Ms->field_0x1B0 == 99 || i_Ms->field_0x1B0 == 89 || i_Ms->field_0x1B0 == 98) {
@@ -936,13 +932,13 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
             } else if (dMenu_flag() == 0 && !fopOvlpM_IsDoingReq() && !(CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_Z(0))) {
 
-                if (event_wait_frame == 0 || daPy_getPlayerLinkActorClass()->getTactNormalWait() && CPad_CHECK_TRIG_START(0) ||
-                    dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
-                        dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908))
+                if (event_wait_frame == 0 || (daPy_getPlayerLinkActorClass()->getTactNormalWait() && CPad_CHECK_TRIG_START(0)) ||
+                    (dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
+                        dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)))
                 {
 
                     if (dComIfGp_getMesgStatus() == 0 && dComIfGp_getScopeMesgStatus() == 0) {
-                        if (!dComIfGp_checkCameraAttentionStatus(0, 8) && !dComIfGp_checkCameraAttentionStatus(0, 0x40) &&
+                        if (!dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_TELESCOPE_LOOK_e) && !dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_PICTO_BOX_AIM_e) &&
                             !dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK800000_e))
                         {
 

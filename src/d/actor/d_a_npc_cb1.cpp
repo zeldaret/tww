@@ -20,6 +20,76 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/res/res_cb.h"
 
+class daNpc_Cb1_HIO_c : public JORReflexible {
+public:
+    daNpc_Cb1_HIO_c();
+    virtual ~daNpc_Cb1_HIO_c() {}
+    void genMessage(JORMContext*) {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ dNpc_HIO_c mNpc;
+    /* 0x30 */ f32 field_0x30;
+    /* 0x34 */ f32 mPlayerChaseDistance; // distance from the player before Makar starts following him (while called)
+    /* 0x38 */ f32 mChaseDistScale; // scales the distance to the player to get a target speed
+    /* 0x3C */ f32 mMaxWalkSpeed;
+    /* 0x40 */ f32 mMinWalkSpeed;
+    /* 0x44 */ f32 mForwardAccel;
+    /* 0x48 */ f32 mDecelScale; // scales speed to get deceleration in daNpc_Cb1_c::breaking()
+    /* 0x4C */ f32 mMaxDecel;
+    /* 0x50 */ f32 mDecel;
+    /* 0x54 */ f32 mWalkAnmSpeedScale;
+    /* 0x58 */ f32 mMaxWalkAnmSpeed;
+    /* 0x5C */ f32 mNpcFlyLaunchSpeedF; // forward speed when Makar jumps to start flying
+    /* 0x60 */ f32 mNpcFlyLaunchSpeedY;
+    /* 0x64 */ f32 field_0x64;
+    /* 0x68 */ f32 mHitSpeedScaleF; // scales forward speed when Makar is hit
+    /* 0x6C */ f32 mHitSpeedScaleY; // scales forward speed to get y recoil speed when Makar is hit
+    /* 0x70 */ f32 field_0x70;
+    /* 0x74 */ f32 field_0x74;
+    /* 0x78 */ f32 field_0x78;
+    /* 0x7C */ f32 field_0x7C;
+    /* 0x80 */ f32 field_0x80;
+    /* 0x84 */ f32 field_0x84;
+    /* 0x88 */ f32 mStickWalkSpeedScale; // scales main stick value to get a target speed
+    /* 0x8C */ f32 field_0x8C;
+    /* 0x90 */ f32 field_0x90;
+    /* 0x94 */ u8 field_0x94[4];
+    /* 0x98 */ f32 field_0x98;
+    /* 0x9C */ f32 field_0x9C;
+    /* 0xA0 */ f32 field_0xA0;
+    /* 0xA4 */ f32 field_0xA4;
+    /* 0xA8 */ f32 field_0xA8;
+    /* 0xAC */ f32 mStickFlySpeedScale;
+    /* 0xB0 */ f32 field_0xB0;
+    /* 0xB4 */ f32 field_0xB4;
+    /* 0xB8 */ f32 field_0xB8;
+    /* 0xBC */ f32 mFlyLaunchSpeedY;
+    /* 0xC0 */ f32 field_0xC0;
+    /* 0xC4 */ f32 field_0xC4;
+    /* 0xC8 */ s16 field_0xC8;
+    /* 0xCA */ s16 mPlayerFlyTimer;
+    /* 0xCC */ s16 field_0xCC;
+    /* 0xCE */ s16 field_0xCE;
+    /* 0xD0 */ s16 field_0xD0;
+    /* 0xD2 */ s16 field_0xD2;
+    /* 0xD4 */ s16 field_0xD4;
+    /* 0xD6 */ s16 field_0xD6;
+    /* 0xD8 */ s16 field_0xD8;
+    /* 0xDA */ s16 field_0xDA;
+    /* 0xDC */ s16 mNpcFlyTimer;
+    /* 0xDE */ s16 field_0xDE;
+    /* 0xE0 */ s16 field_0xE0;
+    /* 0xE2 */ s16 field_0xE2;
+    /* 0xE4 */ s16 field_0xE4;
+    /* 0xE6 */ s16 field_0xE6;
+    /* 0xE8 */ s16 field_0xE8;
+    /* 0xEA */ s16 field_0xEA;
+    /* 0xEC */ s16 field_0xEC;
+    /* 0xEE */ u8 mDamageTimer;
+    /* 0xEF */ u8 field_0xEF;
+}; // Size: 0xF0
+
 daNpc_Cb1_HIO_c l_HIO;
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -245,8 +315,13 @@ cPhs_State daNpc_Cb1_c::create() {
                 dComIfGs_setRestartOption(&dComIfGs_getPlayerPriestPos(), dComIfGs_getPlayerPriestRotate(), dComIfGs_getPlayerPriestRoomNo(), 1);
             }
 
+#if VERSION > VERSION_DEMO
             checkRestart(1);
+#endif
         }
+#if VERSION == VERSION_DEMO
+        checkRestart(1);
+#endif
 
         if(dComIfGp_getCb1Player()) {
             return cPhs_ERROR_e;
@@ -860,7 +935,7 @@ BOOL daNpc_Cb1_c::isFlyAction() {
 /* 00002914-00002A2C       .text sowCheck__11daNpc_Cb1_cFv */
 BOOL daNpc_Cb1_c::sowCheck() {
 #if VERSION > VERSION_DEMO
-    if(!dComIfGp_event_runCheck() && (m4E4 & 1) == 0)
+    if(!dComIfGp_event_runCheck() && !isReturnLink())
 #endif
     {
         dAttList_c* list = dComIfGp_getAttention().getActionBtnB();
@@ -992,7 +1067,7 @@ static char* l_cutNameTbl[] = {
 
 /* 00002AD8-00002DC8       .text eventProc__11daNpc_Cb1_cFv */
 BOOL daNpc_Cb1_c::eventProc() {
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     mAcch.ClrWallNone();
 #endif
 
@@ -1005,7 +1080,7 @@ BOOL daNpc_Cb1_c::eventProc() {
             mDoAud_seStart(JA_SE_CTRL_NPC_TO_LINK);
         }
 
-        m4E4 |= 2;
+        onEventAccept();
         m8DD = -1;
     }
 
@@ -1030,20 +1105,20 @@ BOOL daNpc_Cb1_c::eventProc() {
             mPlayerAction = NULL;
             mNpcAction = NULL;
 
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
             mAcch.SetWallNone();
 #endif
         }
 
 
-        if(m4E4 & 2) {
+        if(isEventAccept()) {
             if(dComIfGp_evmng_endCheck(mEventIdx[m8E3])) {
                 dComIfGp_event_reset();
-                m4E4 &= ~2;
+                offEventAccept();
 
                 if(m8E3 == 1) {
                     returnLinkPlayer();
-                    m4E4 &= ~1;
+                    offReturnLink();
                 }
 
                 m8E3 = 0xFF;
@@ -1216,7 +1291,7 @@ BOOL daNpc_Cb1_c::evActWalk(int staffIdx) {
     f32* speed_p = dComIfGp_evmng_getMyFloatP(staffIdx, "Speed");
     f32* pDist = dComIfGp_evmng_getMyFloatP(staffIdx, "Dist");
 
-    JUT_ASSERT(DEMO_SELECT(2042, 2060), speed_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(2042, 2055, 2060, 2060), speed_p != NULL);
 
     cXyz* pPos = dComIfGp_evmng_getMyXyzP(staffIdx, "Pos");
     cXyz temp;
@@ -1230,7 +1305,7 @@ BOOL daNpc_Cb1_c::evActWalk(int staffIdx) {
         cXyz* pOffset = dComIfGp_evmng_getMyXyzP(staffIdx, "Offset");
         if(pOffset) {
             fopAc_ac_c* target = dComIfGp_event_getTalkPartner();
-            JUT_ASSERT(DEMO_SELECT(2059, 2077), target != NULL);
+            JUT_ASSERT(VERSION_SELECT(2059, 2072, 2077, 2077), target != NULL);
 
             cLib_offsetPos(&temp, &target->current.pos, fopAcM_searchActorAngleY(this, target), pOffset);
             temp4 = target->current.pos;
@@ -1291,7 +1366,7 @@ BOOL daNpc_Cb1_c::evActToLink(int staffIdx) {
     f32* speed_p = dComIfGp_evmng_getMyFloatP(staffIdx, "Speed");
     f32* dist_p = dComIfGp_evmng_getMyFloatP(staffIdx, "Dist");
 
-    JUT_ASSERT(DEMO_SELECT(2131, 2149), speed_p != NULL && dist_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(2131, 2144, 2149, 2149), speed_p != NULL && dist_p != NULL);
 
     if(fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0)) < *dist_p) {
         setAnm(ANM_00);
@@ -1390,7 +1465,7 @@ BOOL daNpc_Cb1_c::evActTurn(int staffIdx) {
             target = dComIfGp_event_getTalkPartner();
         }
 
-        JUT_ASSERT(DEMO_SELECT(2308, 2326), target != NULL);
+        JUT_ASSERT(VERSION_SELECT(2308, 2321, 2326, 2326), target != NULL);
 
         angle = fopAcM_searchActorAngleY(this, target);
     }
@@ -1415,7 +1490,7 @@ void daNpc_Cb1_c::evInitSow(int staffIdx) {
     onNut();
 
     int* timer_p = dComIfGp_evmng_getMyIntegerP(staffIdx, "Timer");
-    JUT_ASSERT(DEMO_SELECT(2353, 2371), timer_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(2353, 2366, 2371, 2371), timer_p != NULL);
 
     m8EE = *timer_p;
 }
@@ -1462,7 +1537,7 @@ void daNpc_Cb1_c::evInitSetGoal(int staffIdx) {
 
 /* 00003E74-00003E98       .text evActSetGoal__11daNpc_Cb1_cFi */
 BOOL daNpc_Cb1_c::evActSetGoal(int param_1) {
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     evInitSetGoal(param_1);
 #endif
 
@@ -1730,8 +1805,6 @@ BOOL daNpc_Cb1_c::talkNpcAction(void*) {
 
 /* 000047B0-00004B74       .text carryNpcAction__11daNpc_Cb1_cFPv */
 BOOL daNpc_Cb1_c::carryNpcAction(void*) {
-    /* Nonmatching - regswap */
-
     if(m8F0 == 0) {
         cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
         offNpcCallCommand();
@@ -1783,7 +1856,7 @@ BOOL daNpc_Cb1_c::carryNpcAction(void*) {
             cLib_chaseF(&m904.z, l_HIO.field_0x7C, 1.0f);
 
             cLib_chaseAngleS(&m8F4, 0, 0x800);
-            shape_angle.y += m8F4;
+            shape_angle.y = pPlayer->shape_angle.y + m8F4;
         }
 
         if(!fopAcM_checkCarryNow(this)) {
@@ -2076,7 +2149,7 @@ BOOL daNpc_Cb1_c::jumpNpcAction(void* param_1) {
 
 /* 00006518-00006574       .text rescueNpcAction__11daNpc_Cb1_cFPv */
 BOOL daNpc_Cb1_c::rescueNpcAction(void*) {
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     if(m8F0 == 0) {
         setAnm(ANM_00);
         fopDwTg_DrawQTo(&draw_tag);
@@ -2297,7 +2370,7 @@ BOOL daNpc_Cb1_c::hitPlayerAction(void*) {
         setAnm(ANM_02);
     }
     else if(m8F0 != -1 && mAcch.ChkGroundHit()) {
-        m4E4 |= 1;
+        returnLink();
         speedF = 0.0f;
     }
 
@@ -2802,7 +2875,34 @@ BOOL daNpc_Cb1_c::init() {
         }
         offMusic();
     }
-#else
+#elif VERSION == VERSION_JPN
+    onNpcNotChange();
+
+    if(isTypeKazeBoss() || isTypeForest() || isTypeWaterFall()) {
+        setNpcAction(&daNpc_Cb1_c::musicNpcAction, NULL);
+        home.roomNo = -1;
+        current.roomNo = -1;
+        gravity = -0.1f;
+    } else if(isTypeBossDie()) {
+        daNpc_Cb1_c::ActionFunc_t func =
+            dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_FW) ?
+                &daNpc_Cb1_c::waitNpcAction :
+                &daNpc_Cb1_c::rescueNpcAction;
+        setNpcAction(func, NULL);
+    } else if(!isTypeEkaze() && !isTypeKaze() && shipRideCheck()) {
+        attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAF;
+        attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAF;
+    } else {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610)) {
+            offNpcNotChange();
+        }
+        if(isTypeEkaze()) {
+            onNpcCallCommand();
+        }
+        setNpcAction(&daNpc_Cb1_c::waitNpcAction, NULL);
+        offMusic();
+    }
+#else // VERSION_USA or VERSION_PAL
     static const char* l_eventNameTbl[] = {
         "cb_rescue",
         "OPTION_CHAR_END",
@@ -2832,7 +2932,7 @@ BOOL daNpc_Cb1_c::init() {
         gravity = -0.1f;
     }
     else if(isTypeBossDie()) {
-        setNpcAction(dComIfGs_isStageBossEnemy(4) ? &daNpc_Cb1_c::waitNpcAction : &daNpc_Cb1_c::rescueNpcAction, NULL);
+        setNpcAction(dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_FW) ? &daNpc_Cb1_c::waitNpcAction : &daNpc_Cb1_c::rescueNpcAction, NULL);
     }
     else if(!isTypeEkaze() && !isTypeKaze() && shipRideCheck()) {
         attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAF;
@@ -2859,7 +2959,7 @@ BOOL daNpc_Cb1_c::init() {
     mWindCyl.Set(l_wind_cyl_src);
     mWindCyl.SetStts(&mStts);
 
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     static const char* l_eventNameTbl[] = {
         "cb_rescue",
         "OPTION_CHAR_END",
@@ -2873,6 +2973,9 @@ BOOL daNpc_Cb1_c::init() {
     }
 
     m8E3 = -1;
+#if VERSION == VERSION_JPN
+    m8DD = -1;
+#endif
 
     eventInfo.setXyCheckCB(&daNpc_Cb1_XyCheckCB);
     eventInfo.setXyEventCB(&daNpc_Cb1_XyEventCB);
@@ -3059,7 +3162,7 @@ BOOL daNpc_Cb1_c::execute() {
     f32 temp3 = 3.0f;
 
     if(!fopAcM_checkCarryNow(this) && !isShipRide()) {
-        if(checkNowPosMove("Cb1") && !(m4E4 & 1)) {
+        if(checkNowPosMove("Cb1") && !isReturnLink()) {
             f32 temp4 = current.pos.y;
             fopAcM_posMoveF(this, mStts.GetCCMoveP());
             m900 += temp4 - current.pos.y;
@@ -3134,7 +3237,9 @@ BOOL daNpc_Cb1_c::execute() {
     if(checkNowPosMove("Cb1")) {
         playAnm();
     }
+#endif
 
+#if VERSION > VERSION_JPN
     if(dComIfGp_getPlayer(0) == this) {
         dComIfGp_setDoStatus(dActStts_BLANK_e);
         dComIfGp_setAStatus(dActStts_HIDDEN_e);
@@ -3167,11 +3272,11 @@ BOOL daNpc_Cb1_c::execute() {
 
         cLib_addCalcPosXZ(&m88C, temp2, 0.5f, temp3, 0.5f);
         if(dComIfGp_getPlayer(0) == this) {
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
             int r4 = dActStts_BLANK_e;
             dComIfGp_setDoStatus(r4);
             dComIfGp_setAStatus(dActStts_HIDDEN_e);
-            if(mAcch.ChkGroundHit()) {
+            if(mAcch.ChkGroundHit() != false) {
                 r4 = dActStts_RETURN_e;
             }
             dComIfGp_setRStatusForce(r4);
@@ -3183,25 +3288,25 @@ BOOL daNpc_Cb1_c::execute() {
 
             fopAcM_SetStatusMap(this, 0x12);
 
-            if(m4E4 & 1) {
+            if(isReturnLink()) {
                 m8DD = 1;
             }
             else {
                 if(isNoCarryAction()) {
                     setPlayerAction(&daNpc_Cb1_c::carryPlayerAction, NULL);
-                    m4E4 |= 1;
+                    returnLink();
                 }
 
 #if VERSION == VERSION_DEMO
                 playerAction(NULL);
 
                 if(dComIfGp_getRStatusForce() == 7 && !dComIfGp_event_runCheck() && (CPad_CHECK_TRIG_R(0) || CPad_CHECK_TRIG_START(0))) {
-                    m4E4 |= 1;
+                    returnLink();
                 } else
 #else
 
                 if(!dComIfGp_event_runCheck() && dComIfGp_getRStatusForce() == 7 && !dComIfGp_event_runCheck() && (CPad_CHECK_TRIG_R(0) || CPad_CHECK_TRIG_START(0))) {
-                    m4E4 |= 1;
+                    returnLink();
                 }
 
                 playerAction(NULL);

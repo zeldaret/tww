@@ -33,7 +33,7 @@ void daNpc_Mk_Static_c::aroundWalk(fopAc_ac_c* param_1, fopAc_ac_c* param_2, u8 
 
 /* 800CB778-800CB88C       .text turnPath__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_cUc */
 u32 daNpc_Mk_Static_c::turnPath(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, u8 options) {
-    cXyz local_2c = param_2->getPoint(param_2->mCurrPointIndex);
+    cXyz local_2c = param_2->getPoint(param_2->getIdx());
 
     s16 local_48;
     dNpc_calc_DisXZ_AngY(param_1->current.pos, local_2c, NULL, &local_48);
@@ -64,7 +64,7 @@ BOOL daNpc_Mk_Static_c::chkPath(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, u8
         }
 
         mPointIndex2 = mPointIndex1;
-        mPointIndex1 = param_2->mCurrPointIndex;
+        mPointIndex1 = param_2->getIdx();
 
         return TRUE;
     } else {
@@ -109,7 +109,7 @@ void daNpc_Mk_Static_c::init(u8 param_1, u16 param_2) {
 u8 daNpc_Mk_Static_c::goFarLink_3(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2) {
     daPy_lk_c* link_actor = daPy_getPlayerLinkActorClass();
     dNpc_PathRun_c dStack_74;
-    dStack_74.setInfDrct(param_2->mPath);
+    dStack_74.setInfDrct(param_2->getPath());
 
     if (mPointIndex2 == mPointIndex1) {
         return m0;
@@ -148,14 +148,14 @@ u8 daNpc_Mk_Static_c::goFarLink_2(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2) 
     cXyz local_80;
     cXyz local_74;
     dNpc_PathRun_c dStack_94;
-    dStack_94.setInfDrct(param_2->mPath);
-    dStack_94.mCurrPointIndex = mPointIndex2;
-    local_8c = dStack_94.getPoint(dStack_94.mCurrPointIndex);
+    dStack_94.setInfDrct(param_2->getPath());
+    dStack_94.setIdx(mPointIndex2);
+    local_8c = dStack_94.getPoint(dStack_94.getIdx());
     dStack_94.incIdxLoop();
-    local_80 = dStack_94.getPoint(dStack_94.mCurrPointIndex);
+    local_80 = dStack_94.getPoint(dStack_94.getIdx());
     dStack_94.decIdxLoop();
     dStack_94.decIdxLoop();
-    local_74 = dStack_94.getPoint(dStack_94.mCurrPointIndex);
+    local_74 = dStack_94.getPoint(dStack_94.getIdx());
 
     s16 sVar5 = cLib_targetAngleY(&local_8c, &link_actor->current.pos);
     s16 sVar6 = cLib_targetAngleY(&local_8c, &local_80);
@@ -185,7 +185,7 @@ u8 daNpc_Mk_Static_c::goFarLink_2(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2) 
     }
 
     if (dStack_94.setNearPathIndxMk2(&link_actor->current.pos, mPointIndex2, 5)) {
-        int index_diff = dStack_94.mCurrPointIndex - mPointIndex2;
+        int index_diff = dStack_94.getIdx() - mPointIndex2;
         if ((index_diff > 0) == (abs(index_diff) <= 5)) {
             return 2;
         } else {
@@ -200,7 +200,7 @@ u8 daNpc_Mk_Static_c::goFarLink_2(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2) 
 
 /* 800CBE7C-800CBEE0       .text runaway_com2__17daNpc_Mk_Static_cFP14dNpc_PathRun_cUc */
 void daNpc_Mk_Static_c::runaway_com2(dNpc_PathRun_c* param_1, u8 param_2) {
-    param_1->mCurrPointIndex = mPointIndex2;
+    param_1->setIdx(mPointIndex2);
 
     if (param_2 == 1) {
         param_1->incIdxLoop();
@@ -208,7 +208,7 @@ void daNpc_Mk_Static_c::runaway_com2(dNpc_PathRun_c* param_1, u8 param_2) {
         param_1->decIdxLoop();
     }
 
-    mPointIndex1 = param_1->mCurrPointIndex;
+    mPointIndex1 = param_1->getIdx();
 }
 
 /* 800CBEE0-800CC374       .text runAwayProc__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_cP8dCcD_CylPs */
@@ -224,9 +224,9 @@ u8 daNpc_Mk_Static_c::runAwayProc(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, 
     }
 
     switch (m0) {
-        case 0:
+        case 0: {
             f32 dVar8 = param_2->setNearPathIndxMk(&param_1->current.pos);
-            mPointIndex1 = param_2->mCurrPointIndex;
+            mPointIndex1 = param_2->getIdx();
             mPointIndex2 = mPointIndex1;
 
             if (dVar8 >= 50.0f) {
@@ -234,8 +234,8 @@ u8 daNpc_Mk_Static_c::runAwayProc(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, 
             } else {
                 return 3;
             }
-
-        case 5:
+        }
+        case 5: {
             cXyz local_44 = param_2->getPoint(mPointIndex1);
 
             if ((local_44 - param_1->current.pos).absXZ() < 20.0f) {
@@ -243,7 +243,7 @@ u8 daNpc_Mk_Static_c::runAwayProc(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, 
             }
             turnPath(param_1, param_2, 2);
             break;
-
+        }
         case 3:
             if ((link_actor->current.pos - param_1->current.pos).absXZ() < 800.0f) {
                 me = 10;
@@ -314,7 +314,7 @@ bool daNpc_Mk_Static_c::chkGameSet() {
 /* 800CC400-800CC664       .text setRndPathPos__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_c */
 void daNpc_Mk_Static_c::setRndPathPos(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2) {
     dBgS_GndChk local_90;
-    if (param_2->mPath != NULL) {
+    if (param_2->isPath()) {
         param_1->current.pos = param_2->getPoint((int) cM_rndF((int) param_2->maxPoint()));
         local_90.OffWall();
 

@@ -280,7 +280,7 @@ void daArrow_Lighteff_c::brk_play() {
     mBtk.play();
 
     int cam = dComIfGp_getPlayerCameraID(0);
-    if(!dComIfGp_checkCameraAttentionStatus(cam, 0x20)) {
+    if(!dComIfGp_checkCameraAttentionStatus(cam, dCamAttnStts_00000020_e)) {
         if(field_0x2E0 < mBrk.getEndFrame()) {
             field_0x2E0 += 1.0f;
             if(field_0x2E0 > mBrk.getEndFrame()) {
@@ -372,13 +372,13 @@ bool daArrow_Lighteff_c::_execute() {
     int cam = dComIfGp_getPlayerCameraID(0);
     if(field_0x2E8 == 1) {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_FIRE_ARROW_AMB, 0);
-        if(!dComIfGp_checkCameraAttentionStatus(cam, 0x20)) {
+        if(!dComIfGp_checkCameraAttentionStatus(cam, dCamAttnStts_00000020_e)) {
             dComIfGp_particle_setSimple(dPa_name::ID_AK_JP_O_KAGEROU00, &field_0x29C);
         }
     }
     else if(field_0x2E8 == 2) {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_ICE_ARROW_AMB, 0);
-        if(dComIfGp_checkCameraAttentionStatus(cam, 0x20)) {
+        if(dComIfGp_checkCameraAttentionStatus(cam, dCamAttnStts_00000020_e)) {
             if(field_0x2F4.getEmitter()) {
                 field_0x2F4.getEmitter()->setGlobalAlpha(0x64);
             }

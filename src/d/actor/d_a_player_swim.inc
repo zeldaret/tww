@@ -121,7 +121,7 @@ BOOL daPy_lk_c::changeSwimProc() {
         !checkNoControll() &&
 #endif
         mDemo.getDemoMode() != daPy_demo_c::DEMO_PFALL_e &&
-        m35D0 - current.pos.y > m_HIO->mSwim.m.field_0x24
+        mWaterY - current.pos.y > m_HIO->mSwim.m.field_0x24
     ) {
         dComIfGp_setItemTimeCount(900);
         dComIfGp_setItemTimeMax(900);
@@ -162,7 +162,7 @@ BOOL daPy_lk_c::changeSwimProc() {
             }
 
             local_18.x = current.pos.x;
-            local_18.y = m35D0;
+            local_18.y = mWaterY;
             local_18.z = current.pos.z;
             fopKyM_createWpillar(&local_18, 1.0f, oldSpeedY, 0);
             seStartOnlyReverb(JA_SE_LK_INTO_WATER);
@@ -189,10 +189,10 @@ BOOL daPy_lk_c::changeSwimUpProc() {
             deleteEquipItem(TRUE);
         }
     }
-    if (m35D0 - current.pos.y < 40.1f + m_HIO->mSwim.m.field_0x28 && speed.y >= 0.0f) {
+    if (mWaterY - current.pos.y < 40.1f + m_HIO->mSwim.m.field_0x28 && speed.y >= 0.0f) {
         if (mCurProc == daPyProc_DEMO_DEAD_e) {
             onNoResetFlg0(daPyFlg0_UNK100);
-            current.pos.y = m35D0;
+            current.pos.y = mWaterY;
             return TRUE;
         }
         return procSwimUp_init(TRUE);
@@ -213,7 +213,7 @@ void daPy_lk_c::swimOutAfter(BOOL param_1) {
 
 /* 8013D314-8013D354       .text checkSwimFallCheck__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkSwimFallCheck() {
-    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (current.pos.y > m35D0 + 30.1f && !dPa_control_c::isStatus(1))) {
+    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (current.pos.y > mWaterY + 30.1f && !dPa_control_c::isStatus(1))) {
         return TRUE;
     }
     return FALSE;
@@ -240,8 +240,8 @@ BOOL daPy_lk_c::changeSwimOutProc() {
         return procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
     }
 
-    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (pcVar1 && cBgW_CheckBGround(pcVar1->GetNP()->y) && m35D0 - mAcch.GetGroundH() < m_HIO->mSwim.m.field_0x24 - 5.0f)) {
-        current.pos.y = m35D0;
+    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (pcVar1 && cBgW_CheckBGround(pcVar1->GetNP()->y) && mWaterY - mAcch.GetGroundH() < m_HIO->mSwim.m.field_0x24 - 5.0f)) {
+        current.pos.y = mWaterY;
 
         if (mCurProc == daPyProc_SWIM_MOVE_e && mDirection != DIR_FORWARD) {
             current.pos.y += m35C4;
@@ -297,7 +297,7 @@ f32 daPy_lk_c::getSwimTimerRate() {
 void daPy_lk_c::setSwimTimerStartStop() {
     f32 target = 0.0f;
 
-    if (mAcch.GetGroundH() <= m35D0 - 175.0f) {
+    if (mAcch.GetGroundH() <= mWaterY - 175.0f) {
         dComIfGp_startItemSwimTimer();
 
         if (checkNoResetFlg0(daPyFlg0_UNK100)) {
@@ -338,7 +338,7 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
     gravity = 0.0f;
     speed.y = 0.0f;
 
-    current.pos.y = m35D0;
+    current.pos.y = mWaterY;
 
     setSingleMoveAnime(ANM_SWIMP, m_HIO->mSwim.m.field_0x2C, m_HIO->mSwim.m.field_0x30, m_HIO->mSwim.m.field_0x0, m_HIO->mSwim.m.field_0x38);
 
@@ -393,7 +393,7 @@ BOOL daPy_lk_c::procSwimUp() {
                 }
                 else {
                     m35C4 = m_HIO->mSwim.m.field_0x3C;
-                    current.pos.y = m35D0;
+                    current.pos.y = mWaterY;
                 }
             }
         }
@@ -428,7 +428,7 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
         if (mEquipItem != daPyItem_NONE_e) {
             deleteEquipItem(TRUE);
         }
-        current.pos.y = m35D0;
+        current.pos.y = mWaterY;
         speed.y = 0.0f;
     }
 
@@ -454,7 +454,7 @@ BOOL daPy_lk_c::procSwimWait() {
         }
     }
     else {
-        current.pos.y = m35D0;
+        current.pos.y = mWaterY;
     }
 
     if (checkNextModeSwim()) {
@@ -505,7 +505,7 @@ BOOL daPy_lk_c::procSwimMove_init(BOOL param_1) {
             deleteEquipItem(TRUE);
         }
 
-        current.pos.y = m35D0;
+        current.pos.y = mWaterY;
         speed.y = 0.0f;
 
         setSwimTail();
@@ -592,7 +592,7 @@ BOOL daPy_lk_c::procSwimMove() {
         }
     }
     else {
-        current.pos.y = m35D0;
+        current.pos.y = mWaterY;
         setSwimTail();
     }
 

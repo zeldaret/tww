@@ -1690,18 +1690,18 @@ BOOL daNpcRoten_c::createHeap() {
     field_0x6D4 = field_0x6D8->getModel();
 
     m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
-    JUT_ASSERT(0x632, m_jnt.getHeadJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(1585, 1586), m_jnt.getHeadJntNum() >= 0);
     m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone1"));
-    JUT_ASSERT(0x637, m_jnt.getBackboneJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(1590, 1591), m_jnt.getBackboneJntNum() >= 0);
 
     if(!initTexPatternAnm(false)) {
         return false;
     }
 
     m_hand_L_jnt_num = modelData->getJointName()->getIndex("handL");
-    JUT_ASSERT(0x63E, m_hand_L_jnt_num >= 0);
+    JUT_ASSERT(DEMO_SELECT(1597, 1598), m_hand_L_jnt_num >= 0);
     m_bag_jnt_num = modelData->getJointName()->getIndex("Bag1");
-    JUT_ASSERT(0x642, m_bag_jnt_num >= 0);
+    JUT_ASSERT(DEMO_SELECT(1601, 1602), m_bag_jnt_num >= 0);
 
     for(u16 i = 0; i < modelData->getJointNum(); i++) {
         if(i == m_jnt.getHeadJntNum() || i == m_jnt.getBackboneJntNum()) {
@@ -1726,16 +1726,16 @@ cPhs_State daNpcRoten_c::createInit() {
     int weight = 0xFF;
     if(getPrmRailID() != 0xFF) {
         mPathRun.setInf(getPrmRailID(), fopAcM_GetRoomNo(this), true);
-        if(mPathRun.mPath == NULL) {
+        if(!mPathRun.isPath()) {
             return cPhs_ERROR_e;
         }
 
         fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
-        cXyz point = mPathRun.getPoint(mPathRun.mCurrPointIndex);
+        cXyz point = mPathRun.getPoint(mPathRun.getIdx());
         old.pos = point;
         current.pos = old.pos;
         mPathRun.incIdxLoop();
-        point = mPathRun.getPoint(mPathRun.mCurrPointIndex);
+        point = mPathRun.getPoint(mPathRun.getIdx());
         dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &current.angle.y);
         field_0x9A6 = 1;
         weight = 0xFE;
@@ -1762,9 +1762,14 @@ cPhs_State daNpcRoten_c::createInit() {
     fopAcM_setCullSizeBox(this, -200.0f, 0.0f, -200.0f, 200.0f, 300.0f, 200.0f);
 
     mObjAcch.CrrPos(*dComIfG_Bgsp());
+
+#if VERSION == VERSION_DEMO
+    current.pos.y = home.pos.y = mObjAcch.GetGroundH();
+#else
     if(-G_CM3D_F_INF != mObjAcch.GetGroundH()) {
         current.pos.y = home.pos.y = mObjAcch.GetGroundH();
     }
+#endif
 
     setMtx();
     mpMorf->getModel()->calc();
@@ -1784,8 +1789,18 @@ cPhs_State daNpcRoten_c::createInit() {
 
 /* 000011C8-0000122C       .text _delete__12daNpcRoten_cFv */
 bool daNpcRoten_c::_delete() {
-    dComIfG_resDeleteDemo(getPhaseP(), l_arcname_tbl[mNpcNo]);
-    if(heap && mpMorf) {
+#if VERSION == VERSION_DEMO
+    if (field_0x9BC)
+#endif
+    {
+        dComIfG_resDeleteDemo(getPhaseP(), l_arcname_tbl[mNpcNo]);
+    }
+    if (
+#if VERSION > VERSION_DEMO
+        heap &&
+#endif
+        mpMorf
+    ) {
         mpMorf->stopZelAnime();
     }
 
@@ -1916,7 +1931,7 @@ s32 daNpcRoten_c::executeWaitInit() {
 
 /* 00001790-00001808       .text executeWait__12daNpcRoten_cFv */
 void daNpcRoten_c::executeWait() {
-    if(!executeCommon() && mPathRun.mPath != NULL && field_0x9A6 && !field_0x9B5) {
+    if(!executeCommon() && mPathRun.isPath() && field_0x9A6 && !field_0x9B5) {
         field_0x9A6--;
         if(field_0x9A6 == 0) {
             executeSetMode(3);
@@ -1958,7 +1973,7 @@ s32 daNpcRoten_c::executeWalkInit() {
 void daNpcRoten_c::executeWalk() {
     if(!executeCommon()) {
         bool temp = false;
-        if(mPathRun.chkPointPass(current.pos, mPathRun.mbGoingForwards) && !mPathRun.nextIdxAuto()) {
+        if(mPathRun.chkPointPass(current.pos, mPathRun.getDir()) && !mPathRun.nextIdxAuto()) {
             temp = true;
         }
 
@@ -1966,7 +1981,7 @@ void daNpcRoten_c::executeWalk() {
             executeSetMode(0);
         }
         else if(!temp) {
-            cXyz point = mPathRun.getPoint(mPathRun.mCurrPointIndex);
+            cXyz point = mPathRun.getPoint(mPathRun.getIdx());
             s16 angle;
             dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
             field_0x9B0 = angle;
@@ -1983,7 +1998,7 @@ void daNpcRoten_c::executeWalk() {
             }
         }
         else {
-            mPathRun.mbGoingForwards ^= 1;
+            mPathRun.turnDir();
             executeSetMode(0);
         }
     }
@@ -1993,7 +2008,7 @@ void daNpcRoten_c::executeWalk() {
 s32 daNpcRoten_c::executeTurnInit() {
     int ret = 3;
 
-    cXyz point = mPathRun.getPoint(mPathRun.mCurrPointIndex);
+    cXyz point = mPathRun.getPoint(mPathRun.getIdx());
     s16 angle;
     dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
     if(angle == current.angle.y) {
@@ -2009,7 +2024,7 @@ s32 daNpcRoten_c::executeTurnInit() {
 /* 00001C98-00001D5C       .text executeTurn__12daNpcRoten_cFv */
 void daNpcRoten_c::executeTurn() {
     if(!executeCommon()) {
-        cXyz point = mPathRun.getPoint(mPathRun.mCurrPointIndex);
+        cXyz point = mPathRun.getPoint(mPathRun.getIdx());
         s16 angle;
         dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
         field_0x9B0 = angle;
@@ -2304,8 +2319,13 @@ bool daNpcRoten_c::eventMesSet() {
 void daNpcRoten_c::eventSetItemInit() {
     u8 itemIdx = l_item_dat[mNpcNo][field_0x9BE];
     cXyz pos(0.0f, 0.0f, 0.0f);
-    u8 itemNo = itemIdx + FLOWER_1;
-    field_0x6F8 = fopAcM_createItemForPresentDemo(&pos, itemNo, daDitem_c::FLAG_UNK01 | daDitem_c::FLAG_UNK08, -1, fopAcM_GetRoomNo(this));
+    field_0x6F8 = fopAcM_createItemForPresentDemo(
+        &pos,
+        (u8)(itemIdx + FLOWER_1),
+        daDitem_c::FLAG_UNK01 | daDitem_c::FLAG_UNK08,
+        -1,
+        fopAcM_GetRoomNo(this)
+    );
 }
 
 /* 000028C4-0000290C       .text eventSetItem__12daNpcRoten_cFv */
@@ -2475,7 +2495,7 @@ u32 daNpcRoten_c::getMsg() {
         msgNo = l_msg_xy_koukan_rupee[mNpcNo];
     }
     else if(dComIfGp_event_chkTalkXY()) {
-        int itemNo = dComIfGp_event_getPreItemNo();
+        u8 itemNo = dComIfGp_event_getPreItemNo();
         if(isGetMap(itemNo)) {
             field_0x98C = l_msg_try_force;
             dComIfGs_setReserveItemEmpty();
@@ -2653,7 +2673,7 @@ void daNpcRoten_c::chkAttention() {
             field_0x9B6 = 0;
             field_0x9C4 = 0;
 
-            if(mPathRun.mPath == NULL) {
+            if(!mPathRun.isPath()) {
                 if(field_0x9A8 != 0) {
                     field_0x9A8--;
                 }
@@ -2717,7 +2737,7 @@ BOOL daNpcRoten_c::initTexPatternAnm(bool modify) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
 
     m_head_tex_pattern = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_btp_ix_tbl[mNpcNo]));
-    JUT_ASSERT(0xBFF, m_head_tex_pattern != NULL);
+    JUT_ASSERT(DEMO_SELECT(3064, 3071), m_head_tex_pattern != NULL);
 
     if(!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::EMode_LOOP,  1.0f, 0, -1, modify, FALSE)) {
         return false;
@@ -2815,7 +2835,7 @@ BOOL daNpcRoten_c::isGetMap(u8 itemNo) {
 s16 daNpcRoten_c::XyEventCB(int i_itemBtn) {
     s16 eventIdx;
 
-    int itemNo = dComIfGp_getSelectItem(i_itemBtn);
+    u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
     field_0x9BE = itemNo - FLOWER_1;
     if(isKoukanItem(itemNo) && dComIfGs_getEventReg(l_save_dat[mNpcNo].field_0x02) < 3 && !isGetMap(itemNo)) {
         if(dComIfGp_event_getTalkXYBtn() == dTalkBtn_X_e) {
@@ -2868,7 +2888,8 @@ void daNpcRoten_c::setCollisionB() {
 
 /* 00003DD4-00003F08       .text setCollisionH__12daNpcRoten_cFv */
 void daNpcRoten_c::setCollisionH() {
-    cMtx_copy(mpMorf->getModel()->getAnmMtx(m_jnt.getHeadJntNum()), *calc_mtx);
+    MtxP mtx = mpMorf->getModel()->getAnmMtx(m_jnt.getHeadJntNum());
+    cMtx_copy(mtx, *calc_mtx);
     mDoMtx_stack_c::transS(l_npc_dat[mNpcNo].field_0x3C, 0.0f, 0.0f);
     cMtx_concat(*calc_mtx, mDoMtx_stack_c::get(), *calc_mtx);
 

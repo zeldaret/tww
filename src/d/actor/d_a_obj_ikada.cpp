@@ -238,14 +238,10 @@ void daObj_Ikada_c::setCollision() {
 
 /* 00000AA4-00000DFC       .text checkTgHit__13daObj_Ikada_cFv */
 bool daObj_Ikada_c::checkTgHit() {
-    cCcD_Obj* sp64;
-    cXyz sp58;
-    cXyz sp4C;
-    cXyz sp40;
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     if (player->checkHammerQuake()) {
-        sp58 = player->getSwordTopPos();
+        cXyz sp58 = player->getSwordTopPos();
         f32 abs = (sp58 - current.pos).absXZ();
         if (abs < 1000.0f && mbIsLinkRiding) {
             mLinkRideRockAmpl = 200;
@@ -255,10 +251,14 @@ bool daObj_Ikada_c::checkTgHit() {
     }
 
     mStts.Move();
+
+    cXyz sp4C;
+    cXyz sp40;
+    CcAtInfo atInfo;
     if (cLib_calcTimer(&m12E4) == 0) {
         cCcD_Obj* pcVar3 = mSph.GetTgHitObj();
         sp4C = *mSph.GetTgHitPosP();
-        sp64 = mSph.GetTgHitObj();
+        atInfo.mpObj = mSph.GetTgHitObj();
         if (pcVar3 == NULL) {
             return false;
         }
@@ -357,6 +357,7 @@ void daObj_Ikada_c::createWave() {
 
 /* 000012EC-00001528       .text setWave__13daObj_Ikada_cFv */
 void daObj_Ikada_c::setWave() {
+    /* Nonmatching */
     f32 fVar2 = l_HIO.mTrackVel;
     f32 fVar1 = l_HIO.mWaveVelFade;
     f32 target = l_HIO.mSplashScaleMax;
@@ -445,6 +446,7 @@ void daObj_Ikada_c::incRopeCnt(int arg1, int arg2) {
 void daObj_Ikada_c::setRopePos() {
     static cXyz ripple_scale(0.6f, 0.6f, 0.6f);
 
+    int i;
     cXyz spBC;
     cXyz spB0;
     cXyz spA4;
@@ -475,7 +477,7 @@ void daObj_Ikada_c::setRopePos() {
 
         pcVar6--;
         pcVar7--;
-        for (s32 i = m07D8 - 2; i >= 0; i--, pcVar6--, pcVar7--) {
+        for (i = m07D8 - 2; i >= 0; i--, pcVar6--, pcVar7--) {
             *pcVar6 = pcVar6[1] + spB0;
             *pcVar7 = cXyz::Zero;
         }
@@ -483,7 +485,7 @@ void daObj_Ikada_c::setRopePos() {
         pcVar6--;
         pcVar7--;
 
-        for (s32 i = m07D8 - 2; i >= 0; i--, pcVar6--, pcVar7--) {
+        for (i = m07D8 - 2; i >= 0; i--, pcVar6--, pcVar7--) {
             spBC = *pcVar6;
             if (pcVar6->y < dLib_getWaterY(*pcVar6, mObjAcch)) {
                 *pcVar7 *= 0.6f;
@@ -541,7 +543,7 @@ void daObj_Ikada_c::setRopePos() {
 
     if (fVar1 > pcVar7->y) {
         cXyz* ptr = pcVar7;
-        for (s32 i = m07D8; i > 0; i--, pcVar7++) {
+        for (i = m07D8; i > 0; i--, pcVar7++) {
             if (pcVar7->y <= fVar1) {
                 ptr = pcVar7;
             }
@@ -1156,9 +1158,9 @@ bool daObj_Ikada_c::_execute() {
         f32 s = scale.x;
         s32 uVar5 = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), s * -1000.0f, s * -50.0f, s * -1000.0f, s * 1000.0f, s * 1000.0f, s * 1000.0f);
         if (speedF <= 2.0f || uVar5 & 0xFF || fopAcM_searchPlayerDistanceXZ(this) > 18000.0f) {
-            mWaveRCallback.remove();
-            mWaveLCallback.remove();
-            mSplashCallBack.remove();
+            mWaveRCallback.end();
+            mWaveLCallback.end();
+            mSplashCallBack.end();
             mTrackCallBack.stop();
         } else {
             setWave();
@@ -1273,18 +1275,18 @@ bool daObj_Ikada_c::_draw() {
 
 /* 00003EE0-00003F34       .text getArg__13daObj_Ikada_cFv */
 void daObj_Ikada_c::getArg() {
-    u32 uVar2 = fopAcM_GetParam(this);
-    u32 sVar1 = home.angle.x;
+    u32 param = fopAcM_GetParam(this);
+    u32 prmX = home.angle.x;
 
-    mType = uVar2 & 0xF;
+    mType = fopAcM_GetParamBit(param, 0, 4);
     if (mType != 4) {
-        m0294 = (uVar2 >> 4) & 0x3F;
-        m0298 = (uVar2 >> 10) & 0xFF;
-        m02A0 = (uVar2 >> 18) & 0xFF;
-        m029C = (sVar1 >> 0) & 0xFF;
-        mPathId = (sVar1 >> 8) & 0xFF;
+        m0294 = fopAcM_GetParamBit(param, 4, 6);
+        m0298 = fopAcM_GetParamBit(param, 10, 8);
+        m02A0 = fopAcM_GetParamBit(param, 18, 8);
+        m029C = fopAcM_GetParamBit(prmX, 0, 8);
+        mPathId = fopAcM_GetParamBit(prmX, 8, 8);
     } else {
-        mPathId = (uVar2 >> 0x10) & 0xFF;
+        mPathId = fopAcM_GetParamBit(param, 16, 8);
     }
 }
 

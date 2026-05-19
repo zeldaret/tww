@@ -79,10 +79,10 @@ void daArrow_Iceeff_c::CreateInit() {
     field_0xA30 = 0;
     field_0xA34 = 0.0f;
     if(field_0xA38 == 0) {
-        field_0xA1C = daPy_getPlayerLinkActorClass()->mpGicer00Btk;
+        field_0xA1C = daPy_getPlayerLinkActorClass()->getIceParticleBtk();
     }
     else {
-        field_0xA1C = daPy_getPlayerLinkActorClass()->mpGicer01Btk;
+        field_0xA1C = daPy_getPlayerLinkActorClass()->getIceWaterParticleBtk();
     }
 
     field_0xA1C->setFrame(field_0xA34);

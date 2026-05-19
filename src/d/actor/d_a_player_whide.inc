@@ -248,8 +248,8 @@ int daPy_lk_c::changeWHideEndProc(cXyz* param_0) {
     dComIfGp_setDoStatus(dActStts_SIDLE_e);
     dComIfGp_setRStatus(dActStts_CROUCH_e);
 
-    if (((!doButton() && (!checkNoResetFlg0(daPyFlg0_UNK10000) || !mAcch.ChkRoofHit())) ||
-         (!checkUpperAnime(LKANM_BCK_REST) && swordTrigger())) ||
+    if ((!doButton() && (!checkNoResetFlg0(daPyFlg0_UNK10000) || !mAcch.ChkRoofHit())) ||
+        (!checkUpperAnime(LKANM_BCK_REST) && swordTrigger()) ||
         !checkWHideBackWall(param_0))
     {
         mVelocity = 0.7f * mMaxNormalSpeed;

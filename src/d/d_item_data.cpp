@@ -1752,7 +1752,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x2000
     },
     {
-        // 0x48: BOKO_BELT
+        // 0x48: dItem_KNIGHTS_CREST_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBELT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_04],
         /* mBmdIdx      */ VBELT_BDL_VBELT,
@@ -5732,7 +5732,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
 #endif
     },
     {
-        // 0x48: BOKO_BELT
+        // 0x48: dItem_KNIGHTS_CREST_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VBELL,
         /* mSrtIdx   */ ALWAYS_BTK_VBELL,
@@ -8680,7 +8680,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x48: BOKO_BELT
+        // 0x48: dItem_KNIGHTS_CREST_e
         0x32,
         0x46,
         0x28,
@@ -10332,7 +10332,7 @@ dItem_data_effect_info dItem_data::effect_info[] = {
         dPa_name::ID_AK_JN_HEARTVESSEL,
     },
     {
-        // 0x48: BOKO_BELT
+        // 0x48: dItem_KNIGHTS_CREST_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_AK_JN_HEARTVESSEL,
     },

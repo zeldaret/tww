@@ -548,10 +548,7 @@ BOOL daBoomerang_c::procWait() {
         if (dCam_getBody()->mCurMode != 0xB) {
             resetLockActor();
         } else {
-            bool isAiming = (pPlayer->mCurProc == daPy_lk_c::daPyProc_BOOMERANG_SUBJECT_e || pPlayer->mCurProc == daPy_lk_c::daPyProc_SHIP_BOOMERANG_e) &&
-                            pPlayer->mSightPacket.getDrawFlg();
-
-            if (isAiming) {
+            if (pPlayer->checkBoomerangRock()) {
                 camera_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
                 cXyz eyePos = *fopCamM_GetEye_p(pCamera);
                 cXyz topPos = pPlayer->getLineTopPos();

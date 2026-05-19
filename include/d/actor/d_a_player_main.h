@@ -298,15 +298,14 @@ public:
     static void setMabaTimer(u8 timer) { m_maba_timer = timer; }
     static void setMorfFrame(u8 frame) { m_morf_frame = frame; }
 
-    // TODO:
-    void getNowOffsetXP() {}
-    void getNowOffsetYP() {}
-    void setNowOffsetX(f32 x) { mEyePos.x = x; }
-    void setNowOffsetY(f32 y) { mEyePos.y = y; }
+    f32* getNowOffsetXP() { return &mNowOffset.x; }
+    f32* getNowOffsetYP() { return &mNowOffset.y; }
+    void setNowOffsetX(f32 x) { mNowOffset.x = x; }
+    void setNowOffsetY(f32 y) { mNowOffset.y = y; }
 
-public:
-    /* 0x6C */ cXy mEyePosOld;
-    /* 0x74 */ cXy mEyePos;
+private:
+    /* 0x6C */ mutable cXy mOldOffset;
+    /* 0x74 */ mutable cXy mNowOffset;
 };  // Size: 0x7C
 
 class daPy_swBlur_c : public J3DPacket {
@@ -1304,7 +1303,7 @@ public:
     BOOL dProcOpenTreasure_init();
     BOOL dProcOpenTreasure();
 #if VERSION > VERSION_DEMO
-    void setGetItemSound(u16, int);
+    void setGetItemSound(u16, BOOL);
     BOOL setGetDemo();
 #endif
     BOOL dProcGetItem_init();
@@ -1857,20 +1856,27 @@ public:
     cXyz getBoomerangCatchPos() const { return mBoomerangCatchPos; }
     cXyz getLineTopPos() { return mSightPacket.getPos(); }
     cXyz getHookshotRootPos() const { return mHookshotRootPos; }
-    void getIceParticleBtk() {}
-    void getIceWaterParticleBtk() {}
     void getShadowID() const {}
     void npcStartRestartRoom() { startRestartRoom(5, 0xC9, -1.0f, 0); }
-    void setDaiokutaEnd() {}
+    void setDaiokutaEnd() { startRestartRoom(6, 0xC9, -1.0f, 1); }
     void setWhirlId(fpc_ProcID id) { mWhirlId = id; }
     void decrementBombCnt() {
         if (mActivePlayerBombs != 0) {
             mActivePlayerBombs--;
         }
     }
+    
+    J3DAnmTextureSRTKey* getIceParticleBtk() { return mpGicer00Btk; }
+    J3DAnmTextureSRTKey* getIceWaterParticleBtk() { return mpGicer01Btk; }
+    void getBombWaterPillarBrk() {} // mpGwp00BrkData?
+    void getBombWaterPillarBtk() {} // mpGwp00BtkData?
+    
     BOOL checkSwordEquip() const {
         return dComIfGs_getSelectEquip(0) != dItem_NONE_e || checkSwordMiniGame();
     }
+    BOOL checkShieldEquip() const { return dComIfGs_getSelectEquip(1) != dItem_NONE_e; }
+    BOOL checkMirrorShieldEquip() const { return dComIfGs_getSelectEquip(1) == dItem_MIRROR_SHIELD_e; }
+    BOOL checkPowerGloveEquip() const { return dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e; }
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
     int getStartMode() { return (fopAcM_GetParam(this) >> 0x0C) & 0xF; }
@@ -1907,30 +1913,29 @@ public:
     BOOL allTrigger() const { return mItemTrigger & (BTN_A | BTN_B | BTN_X | BTN_Y | BTN_Z); }
     void otherWeaponTrigger() const {}
     
-    BOOL checkPlayerDemoMode() const { return mDemo.getDemoType() != 0; }
-    void checkSpecialDemoMode() const {}
+    BOOL checkPlayerDemoMode() const { return mDemo.getDemoType() != daPy_demo_c::TYPE_NONE_e; }
+    BOOL checkSpecialDemoMode() const { return mDemo.getDemoType() == daPy_demo_c::TYPE_SPECIAL_e; }
     
     f32 getAnmSpeedStickRate(f32 param_0, f32 param_1) {
         return param_0 + (mStickDistance * (param_1 - param_0));
     }
     void seStartSystem(u32 i_seNum) { mDoAud_seStart(i_seNum); }
     BOOL checkAttentionLock() { return mpAttention->Lockon(); }
-    void checkBoomerangRock() {}
+    BOOL checkBoomerangRock() {
+        return (mCurProc == daPy_lk_c::daPyProc_BOOMERANG_SUBJECT_e ||
+                mCurProc == daPy_lk_c::daPyProc_SHIP_BOOMERANG_e) &&
+            mSightPacket.getDrawFlg();
+    }
+    BOOL checkFaceTypeNot() const { return mFace == daPyFace_NONE; }
+    BOOL checkCrawlWaterIn() { return mWaterY > current.pos.y + 15.0f; }
+    void setFootEffectPosType(u8 type) { mFootEffectPosType = type; }
     
     void checkBothItemEquipAnime() const {}
-    void checkCrawlWaterIn() {}
     void checkDoubleItemEquipAnime() const {}
-    void checkFaceTypeNot() const {}
     void checkIsland() const {}
-    void checkMirrorShieldEquip() const {}
-    void checkPowerGloveEquip() const {}
     void checkRopeThrowAnime() const {}
-    void checkShieldEquip() const {}
     void checkSwordEquipAnime() const {}
-    void getBombWaterPillarBrk() {} // mpGwp00BrkData?
-    void getBombWaterPillarBtk() {} // mpGwp00BtkData?
     void getTactLeftHandPos() const {}
-    void setFootEffectPosType(u8) {}
     void setSpeedAndAngleBoomerang() {}
     void setSpeedAndAngleBow() {}
     void setSpeedAndAngleHookshot() {}
@@ -1975,7 +1980,7 @@ public:
     virtual fpc_ProcID getThrowBoomerangID() const { return mActorKeepThrow.getID(); }
     virtual fpc_ProcID getGrabActorID() const { return mActorKeepGrab.getID(); }
     virtual BOOL checkGrabBarrel() { return checkGrabBarrelSearch(1); }
-    virtual u32 checkPlayerNoDraw() { return dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 2) || checkNoResetFlg0(daPyFlg0_NO_DRAW); }
+    virtual u32 checkPlayerNoDraw() { return dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_SUBJECT_e) || checkNoResetFlg0(daPyFlg0_NO_DRAW); }
     virtual BOOL checkRopeTag() { return mActorKeepEquip.getActor() == NULL; }
     virtual BOOL checkRopeReadyAnime() const { return checkUpperAnime(LKANM_BCK_ROPETHROWWAIT); }
     virtual void voiceStart(u32);
@@ -2133,7 +2138,7 @@ public:
     /* 0x34BB */ u8 mCurrItemHeapIdx;
     /* 0x34BC */ u8 m34BC;
     /* 0x34BD */ u8 mReadyItemBtn; // Which of the three item buttons the player last used.
-    /* 0x34BE */ u8 m34BE;
+    /* 0x34BE */ u8 mFootEffectPosType;
     /* 0x34BF */ s8 mReverb;
     /* 0x34C0 */ u8 mLeftHandIdx;
     /* 0x34C1 */ u8 mRightHandIdx;
@@ -2150,12 +2155,12 @@ public:
     /* 0x34CC */ u8 m34CC;
     /* 0x34CD */ u8 m34CD;
     /* 0x34CE */ u8 m34CE;
-    /* 0x34D0 */ s16 m34D0;
-    /* 0x34D2 */ s16 m34D2;
-    /* 0x34D4 */ s16 m34D4;
-    /* 0x34D6 */ s16 m34D6;
-    /* 0x34D8 */ s16 m34D8;
-    /* 0x34DA */ s16 m34DA;
+    /* 0x34D0 */ s16 m34D0; // TODO: procvar
+    /* 0x34D2 */ s16 m34D2; // TODO: procvar
+    /* 0x34D4 */ s16 m34D4; // TODO: procvar
+    /* 0x34D6 */ s16 m34D6; // TODO: procvar
+    /* 0x34D8 */ s16 m34D8; // TODO: procvar
+    /* 0x34DA */ s16 m34DA; // TODO: procvar
     /* 0x34DC */ s16 m34DC;
     /* 0x34DE */ s16 m34DE;
     /* 0x34E0 */ s16 m34E0;
@@ -2224,9 +2229,7 @@ public:
     /* 0x355E */ s16 m355E;
     /* 0x3560 */ u16 mEquipItem; // The item Link is currently holding in his hand.
     /* 0x3562 */ u16 m3562;
-    /* 0x3564 */ s16 m3564;
-    /* 0x3566 */ s16 m3566;
-    /* 0x3568 */ s16 m3568;
+    /* 0x3564 */ csXyz m3564;
     /* 0x356C */ int mCameraInfoIdx;
     // `mProcVar`'s are variables that are context dependent for each `PROC` action.
     // (The exact setup may need to be simplified later)
@@ -2235,7 +2238,7 @@ public:
         daPy_ANM mDamageAnm;
         int mBottleItem;
     } /* 0x3570  */ mProcVar0;
-    /* 0x3574 */ s32 m3574;
+    /* 0x3574 */ s32 m3574; // TODO: procvar
     /* 0x3578 */ int m3578;
     /* 0x357C */ int m357C;
     /* 0x3580 */ int m3580;
@@ -2258,7 +2261,7 @@ public:
     /* 0x35C4 */ f32 m35C4;
     /* 0x35C8 */ f32 m35C8;
     /* 0x35CC */ f32 m35CC;
-    /* 0x35D0 */ f32 m35D0;
+    /* 0x35D0 */ f32 mWaterY;
     /* 0x35D4 */ f32 m35D4;
     /* 0x35D8 */ f32 m35D8;
     /* 0x35DC */ f32 mHangGroundH;

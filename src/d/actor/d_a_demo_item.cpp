@@ -91,7 +91,7 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x01, // dItem_SKULL_NECKLACE_e
     0x01, // dItem_BOKOBABA_SEED_e
     0x01, // dItem_GOLDEN_FEATHER_e
-    0x01, // BOKO_BELT
+    0x01, // dItem_KNIGHTS_CREST_e
     0x01, // dItem_RED_JELLY_e
     0x01, // dItem_GREEN_JELLY_e
     0x01, // dItem_BLUE_JELLY_e

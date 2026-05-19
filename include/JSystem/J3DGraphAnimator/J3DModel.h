@@ -136,6 +136,7 @@ public:
     void setUserArea(u32 area) { mUserArea = area; }
     u32 getUserArea() const { return mUserArea; }
     void setVisibilityManager(J3DVisibilityManager* manager) { mpVisibilityManager = manager; }
+    J3DSkinDeform* getSkinDeform() { return mpSkinDeform; }
 
 private:
     /* 0x000 */ /* vtable */

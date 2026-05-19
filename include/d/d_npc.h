@@ -157,47 +157,32 @@ public:
     void cutContinueTalkStart();
     void cutTalkMsgProc();
 
-    char* getActorName() {
-        return mpEvtStaffName;
-    }
+    char* getActorName() { return mpEvtStaffName; }
+    int getNowCut() { return mCurActIdx; }
+    bool getAttnFlag() { return mbAttention; }
+    void setAttnFlag(bool flag) { mbAttention = flag; }
+    bool getAttnNoTurnFlag() { return mbNoTurn; }
+    void setAttnNoTurnFlag(bool flag) { mbNoTurn = flag; }
+    f32 getMoveSpeed() { return mSpeed; }
+    cXyz getAttnPos() { return mPos; }
+    void setAttnPos(cXyz& pos) { mPos = pos; }
+    s16 getTurnSpeed() { return mTurnSpeed; }
+    void setJntCtrlPtr(dNpc_JntCtrl_c* ctrl) { mpJntCtrl = ctrl; }
 
-    int getNowCut() {
-        return mCurActIdx;
-    }
-
-    bool getAttnFlag() {
-        return mbAttention;
-    }
-
-    void setAttnFlag(bool flag) {
-        mbAttention = flag;
-    }
-
-    void setAttnNoTurnFlag(bool flag) {
-        mbNoTurn = flag;
-    }
-
-    f32 getMoveSpeed() {
-        return mSpeed;
-    }
-
-    cXyz getAttnPos() {
-        return mPos;
-    }
-
-    s16 getTurnSpeed() {
-        return mTurnSpeed;
-    }
-
-    void setJntCtrlPtr(dNpc_JntCtrl_c* ctrl) {
-        mpJntCtrl = ctrl;
-    }
-    
     static fopAc_ac_c* findActorCallBack(fopAc_ac_c*, void*);
 }; // Size: 0x6C
 
 class dNpc_PathRun_c {
 public:
+    dPath* getPath() { return mPath; }
+    bool isPath() { return mPath != NULL; }
+    u8 getIdx() { return mIdx; }
+    void setIdx(u8 idx) { mIdx = idx; }
+    void clrIdx() { mIdx = 0; }
+    u8 getDir() { return mbDir; }
+    void setDir(u8 dir) { mbDir = dir; }
+    void turnDir() { mbDir ^= 1; }
+
     bool setInfDrct(dPath* pPath);
     bool setInf(u8 pathIdx, s8 roomNo, u8 forwards);
     dPath* nextPath(s8 roomNo);
@@ -219,15 +204,18 @@ public:
     bool setNearPathIndxMk2(cXyz*, u8, u8);
     bool chkInside(cXyz*);
 
+private:
     /* 0x00 */ dPath* mPath;
     /* 0x04 */ u8 field_0x04;
-    /* 0x05 */ u8 mCurrPointIndex;
-    /* 0x06 */ u8 mbGoingForwards;
+    /* 0x05 */ u8 mIdx;
+    /* 0x06 */ u8 mbDir;
     /* 0x07 */ u8 field_0x07;
 }; // Size: 0x08
 
 class dNpc_HeadAnm_c {
 public:
+    typedef void (dNpc_HeadAnm_c::*SwingProc)(void);
+
     void swing_vertical_init(s16 param_1, s16 param_2, s16 param_3, int param_4);
     void swing_vertical();
     void swing_horizone_init(s16 param_1, s16 param_2, s16 param_3, int param_4);
@@ -237,20 +225,21 @@ public:
     dNpc_HeadAnm_c() {
         field_0x14 = 0.0f;
         field_0x18 = 0.0f;
-        field_0x1C = 0.0f;
+        field_0x1C = 0;
         field_0x1E = 0;
         field_0x20 = 0;
         field_0x00 = 0;
         field_0x02 = 0;
         field_0x04 = 0;
     }
-
-    typedef void (dNpc_HeadAnm_c::*swing_func)(void);
+    void defaultCalcX(s16) {}
+    void defaultCalcY(s16) {}
+    void setProc(SwingProc proc) { mProc = proc; }
 
     /* 0x00 */ s16 field_0x00;
     /* 0x02 */ s16 field_0x02;
     /* 0x04 */ s16 field_0x04;
-    /* 0x08 */ swing_func mFunc;
+    /* 0x08 */ SwingProc mProc;
     /* 0x14 */ f32 field_0x14;
     /* 0x18 */ f32 field_0x18;
     /* 0x1C */ s16 field_0x1C;
@@ -284,7 +273,7 @@ public:
     virtual u32 getMsg() { return 0; }
     virtual void anmAtr(u16 i_msgStatus) {}
 
-    void setCollision(float radius, float height);
+    void setCollision(f32 radius, f32 height);
     u16 talk(int);
 };  // Size: 0x6C4
 

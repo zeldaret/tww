@@ -394,7 +394,7 @@ void daWarphr_c::set_end_anim() {
 
 /* 000012F8-0000134C       .text get_return_count__10daWarphr_cFv */
 s32 daWarphr_c::get_return_count() {
-    if (!dComIfGs_isStageBossEnemy(2)) {
+    if (!dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_FF)) {
         return 0;
     }
 

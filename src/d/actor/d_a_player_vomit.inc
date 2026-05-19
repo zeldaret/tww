@@ -181,7 +181,7 @@ BOOL daPy_lk_c::procVomitJump_init(int param_0) {
     }
     if (param_0 == 1) {
         gravity = 0.0f;
-        m34D2 = 0x14;
+        m34D2 = 20;
     } else {
         voiceStart(0);
         if (param_0 == 3) {
@@ -261,7 +261,7 @@ BOOL daPy_lk_c::procVomitLand_init() {
     );
     m34D0 = m_HIO->mVomit.m.field_0x6;
     mProcVar0.m3570 = 0;
-    m34BE = 5;
+    setFootEffectPosType(5);
     return true;
 }
 

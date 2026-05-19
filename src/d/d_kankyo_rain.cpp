@@ -3621,7 +3621,7 @@ void dKyr_thunder_move() {
             cLib_addCalc(&pThunder->mFlashTimer, 1.0f, 0.3f, 0.2f, 0.001f);
             if (pThunder->mFlashTimer >= 1.0f) {
                 if (pThunder->mState < 10)
-                    mDoAud_seStart(JA_SE_OBJ_THUNDER_NEAR, NULL);
+                    mDoAud_seStart(JA_SE_OBJ_THUNDER_NEAR);
                 pThunder->mState++;
             }
 

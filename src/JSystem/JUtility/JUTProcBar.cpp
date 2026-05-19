@@ -125,7 +125,7 @@ void JUTProcBar::draw() {
 void JUTProcBar::drawProcessBar() {
     if (mVisible) {
         int frameDuration = 16666; // duration in miliseconds? for how long a frame takes,
-        if (JUTVideo::getManager() && ((JUTVideo::getManager()->getRenderMode()->vi_tv_mode >> 2) & 0x0f) == 1) // possibly a define
+        if (JUTVideo::getManager() && ((JUTVideo::getManager()->getRenderMode()->viTVmode >> 2) & 0x0f) == 1) // possibly a define
             frameDuration = 20000;                                                                            // duration for PAL
 
         static int cnt = 0;

@@ -842,7 +842,7 @@ static BOOL daKanban_Execute(kanban_class* i_this) {
             {
                 if (i_this->actor.eventInfo.checkCommandTalk()) {
                     if (l_msgId == fpcM_ERROR_PROCESS_ID_e) {
-                        if (dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) {
+                        if (dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), dCamAttnStts_00000004_e)) {
                             l_msgId = fopMsgM_messageSet(fopAcM_GetParam(&i_this->actor), &i_this->actor.eyePos);
                         }
                     } else {

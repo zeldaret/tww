@@ -712,14 +712,14 @@ cPhs_State daNpcPhoto_c::createInit() {
     u8 pathIndex = getPrmRailID();
     if(pathIndex != 0xFF) {
         mPathRun.setInf(pathIndex, fopAcM_GetRoomNo(this), true);
-        if(mPathRun.mPath == NULL) {
+        if(!mPathRun.isPath()) {
             return cPhs_ERROR_e;
         }
 
-        dPath_GetNextRoomPath(mPathRun.mPath, -1);
+        dPath_GetNextRoomPath(mPathRun.getPath(), -1);
         
         if(dComIfGs_isEventBit(l_save_dat.field_0x02)) {
-            cXyz point = mPathRun.getPoint(mPathRun.mCurrPointIndex);
+            cXyz point = mPathRun.getPoint(mPathRun.getIdx());
             old.pos = point;
             current.pos = old.pos;
             mPathRun.incIdxLoop();
@@ -939,7 +939,7 @@ void daNpcPhoto_c::executeSetMode(u8 param_1) {
             field_0x9A8 = l_npc_dat.field_0x4E + cM_rndF(l_npc_dat.field_0x50 - l_npc_dat.field_0x4E);
             break;
         case 3:
-            cXyz point = mPathRun.getPoint(mPathRun.mCurrPointIndex);
+            cXyz point = mPathRun.getPoint(mPathRun.getIdx());
             dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
     
             if (angle == current.angle.y) {
@@ -963,10 +963,7 @@ void daNpcPhoto_c::executeWait() {
         
         if(!dComIfGs_isEventBit(l_save_dat.field_0x02)){
             field_0x988 = 150.0f;
-            f32 zPos = l_npc_dat.field_0x34;
-            field_0x958.x = 0.0f;
-            field_0x958.y = 0.0f;
-            field_0x958.z = zPos;
+            field_0x958.set(0.0f, 0.0f, l_npc_dat.field_0x34);
 
             if(mCyl.ChkCoHit()) {
                 daNpcPhoto_c* pActor = (daNpcPhoto_c*)mCyl.GetCoHitAc();
@@ -1061,14 +1058,14 @@ void daNpcPhoto_c::executeTalk() {
 void daNpcPhoto_c::executeWalk() {
     if(!executeCommon()) {
         bool temp = false;
-        if(mPathRun.chkPointPass(current.pos, mPathRun.mbGoingForwards) && !mPathRun.nextIdxAuto()) {
+        if(mPathRun.chkPointPass(current.pos, mPathRun.getDir()) && !mPathRun.nextIdxAuto()) {
             temp = true;
         }
 
         if (field_0x9BD != 0) {
             executeSetMode(0);
         } else if (!temp) {
-            cXyz point = mPathRun.getPoint(mPathRun.mCurrPointIndex);
+            cXyz point = mPathRun.getPoint(mPathRun.getIdx());
             s16 angle;
             dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
             field_0x9BA = angle;
@@ -1078,9 +1075,9 @@ void daNpcPhoto_c::executeWalk() {
             m_jnt.setTrn(); 
             field_0x984 = l_npc_dat.field_0x3C;
 
-            u8 pointIndex = mPathRun.mCurrPointIndex;
+            u8 pointIndex = mPathRun.getIdx();
 
-            if (mPathRun.mbGoingForwards) {
+            if (mPathRun.getDir()) {
                 pointIndex--;
             } else {
                 pointIndex++;
@@ -1103,7 +1100,7 @@ void daNpcPhoto_c::executeWalk() {
 void daNpcPhoto_c::executeTurn() {
     if (!executeCommon()) {
         s16 angle;
-        cXyz point = mPathRun.getPoint(mPathRun.mCurrPointIndex);
+        cXyz point = mPathRun.getPoint(mPathRun.getIdx());
         dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle); // maybe not oldpos
         field_0x9BA = angle;
         field_0x994 = false;
@@ -1398,7 +1395,7 @@ void daNpcPhoto_c::eventPosSetInit() {
 
     if(ac){
         cXyz temp = ac->current.pos;
-        dPath* path = dPath_GetNextRoomPath(mPathRun.mPath, fopAcM_GetRoomNo(this));
+        dPath* path = dPath_GetNextRoomPath(mPathRun.getPath(), fopAcM_GetRoomNo(this));
         
         if(path != NULL){
             dPnt* pnt = dPath_GetPnt(path, ac->getTagNo());
@@ -1432,8 +1429,8 @@ void daNpcPhoto_c::eventPosSetInit() {
         shape_angle.y = current.angle.y = field_0x9AE = angle;
     }
     dComIfGp_event_setTalkPartner(this);
-    mPathRun.mCurrPointIndex = mPathRun.mPath->m_num - 2;
-    mPathRun.mbGoingForwards = false;
+    mPathRun.setIdx(mPathRun.getPath()->m_num - 2);
+    mPathRun.setDir(0);
 
     executeSetMode(0);
     field_0x9C1 = 1;

@@ -88,7 +88,7 @@ void JFWSystem::init() {
     systemConsoleManager = JUTConsoleManager::createManager(0);
     systemConsole = JUTConsole::create(0x3C, 200, 0);
     systemConsole->setFont(systemFont);
-    if(CSetUpParam::renderMode->efb_height < 300) {
+    if(CSetUpParam::renderMode->efbHeight < 300) {
         systemConsole->setFontSize(systemFont->getWidth() * 0.85f, systemFont->getHeight() * 0.5f);
         systemConsole->setPosition(20, 25);
     }

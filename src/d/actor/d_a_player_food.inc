@@ -97,7 +97,7 @@ BOOL daPy_lk_c::procFoodThrow_init() {
     );
     keepItemData();
 
-    if (mDemo.getDemoType() == 5) {
+    if (checkSpecialDemoMode()) {
         mProcVar0.m3570 = 6;
         dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar0.m3570, 0);
     }
@@ -113,7 +113,7 @@ BOOL daPy_lk_c::procFoodThrow() {
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
     setShipRidePosUseItem();
     if (frameCtrl.getRate() < 0.01f) {
-        if (mDemo.getDemoType() != 5) {
+        if (!checkSpecialDemoMode()) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
         } else {
             dComIfGp_event_reset();
@@ -126,7 +126,7 @@ BOOL daPy_lk_c::procFoodThrow() {
         void* esa = fopAcM_fastCreate(PROC_ESA, 0xFFFF0014, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
         if (esa) {
             m3630 = fopAcM_GetID(esa);
-            if (mDemo.getDemoType() != 5) {
+            if (!checkSpecialDemoMode()) {
                 u8 talkBtn = dComIfGp_event_getTalkXYBtn();
                 if (talkBtn == dTalkBtn_X_e) {
                     dComIfGs_setReserveBaitEmpty(dItemBtn_X_e);
@@ -169,7 +169,7 @@ BOOL daPy_lk_c::procFoodSet_init() {
         if (!dComIfGp_event_compulsory(this)) {
             return FALSE;
         }
-        mDemo.setDemoType(5);
+        mDemo.setSpecialDemoType();
     }
 
     int temp = checkShipRideUseItem(1);
@@ -187,7 +187,7 @@ BOOL daPy_lk_c::procFoodSet_init() {
     keepItemData();
     setHyoiModel();
 
-    if (mDemo.getDemoType() == 5) {
+    if (checkSpecialDemoMode()) {
         mProcVar0.m3570 = 1;
         dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar0.m3570, 0);
     }
@@ -209,7 +209,7 @@ BOOL daPy_lk_c::procFoodSet() {
     }
 
     if (std::abs(frameCtrl.getRate()) < 0.01f) {
-        if (mDemo.getDemoType() != 5) {
+        if (!checkSpecialDemoMode()) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
         } else if (m34D0 < 0) {
             dComIfGp_event_reset();

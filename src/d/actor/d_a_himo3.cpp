@@ -51,6 +51,7 @@ static himo3HIO_c l_HIO;
 
 /* 000000EC-00000C58       .text himo3_control__FP11himo3_classP7himo3_s */
 void himo3_control(himo3_class* i_this, himo3_s* r31) {
+    /* Nonmatching - regalloc */
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     int i = 1;
@@ -671,7 +672,6 @@ cPhs_State useHeapInit(himo3_class* i_this) {
 
 /* 00001DD4-00002128       .text daHimo3_Create__FP10fopAc_ac_c */
 static cPhs_State daHimo3_Create(fopAc_ac_c* a_this) {
-    /* Nonmatching */
     static dCcD_SrcCyl cc_cyl_src = {
         // dCcD_SrcGObjInf
         {
