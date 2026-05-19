@@ -52,7 +52,12 @@ namespace daObjJump {
             m336 = 1;
         }
         const Attr_c& attr() const { return M_attr[field_0x2D4]; }
-        int prm_get_type() const { return daObj::PrmAbstract(this, 1, 0); }
+
+        enum Prm_e {
+            PRM_JUMP_W = 0x01,
+            PRM_JUMP_S = 0x00,
+        };
+        int prm_get_type() const { return daObj::PrmAbstract<Prm_e>(this, PRM_JUMP_W, PRM_JUMP_S); }
     
         virtual BOOL CreateHeap();
         virtual BOOL Create();
