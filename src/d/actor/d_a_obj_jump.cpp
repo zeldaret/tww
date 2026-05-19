@@ -259,17 +259,19 @@ void daObjJump::Act_c::calc_vib_pos() {
 
 /* 00000E1C-00000E74       .text rideCB__Q29daObjJump5Act_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daObjJump::Act_c::rideCB(dBgW*, fopAc_ac_c* param_2, fopAc_ac_c* param_3) {
-    *((s8 *)param_2 + 0x344) = 1;
+    Act_c* pvVar4 = (Act_c *) param_2;
+    daPy_py_c* player = (daPy_py_c *) param_3;
+    pvVar4->field_0x344 = 1;
     if (fopAcM_GetProfName(param_3) != PROC_PLAYER) {
         return;
     }
-    *((s8 *)param_2 + 0x349) = 1;
-    if (((daPy_py_c*)param_3)->checkEquipHeavyBoots()) {
-        *((s8 *)param_2 + 0x34c) = 1;
+    pvVar4->field_0x349 = 1;
+    if (player->checkEquipHeavyBoots()) {
+        pvVar4->field_0x34c = 1;
     }
-    const Attr_c* a = &M_attr[*((int *)((s8 *)param_2 + 0x2d4))];
-    if (fopAcM_GetSpeedF(param_3) > a->field_0x04C) {
-        *((s8 *)param_2 + 0x354) = 1;
+    const Attr_c* a = &M_attr[pvVar4->field_0x2D4];
+    if (fopAcM_GetSpeedF(player) > a->field_0x04C) {
+        pvVar4->field_0x354 = 1;
     }
     return;
 }
