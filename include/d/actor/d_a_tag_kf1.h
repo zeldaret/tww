@@ -61,6 +61,7 @@ class daTag_Kf1_HIO_c {
 public:
     /* Place member variables here */
     /* 0x04 */ s8 mNo;
+    s8 field_0x08;
 };
 
 #endif /* D_A_TAG_KF1_H */
