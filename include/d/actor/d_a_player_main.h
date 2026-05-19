@@ -298,15 +298,14 @@ public:
     static void setMabaTimer(u8 timer) { m_maba_timer = timer; }
     static void setMorfFrame(u8 frame) { m_morf_frame = frame; }
 
-    // TODO:
-    void getNowOffsetXP() {}
-    void getNowOffsetYP() {}
-    void setNowOffsetX(f32 x) { mEyePos.x = x; }
-    void setNowOffsetY(f32 y) { mEyePos.y = y; }
+    f32* getNowOffsetXP() { return &mNowOffset.x; }
+    f32* getNowOffsetYP() { return &mNowOffset.y; }
+    void setNowOffsetX(f32 x) { mNowOffset.x = x; }
+    void setNowOffsetY(f32 y) { mNowOffset.y = y; }
 
-public:
-    /* 0x6C */ cXy mEyePosOld;
-    /* 0x74 */ cXy mEyePos;
+private:
+    /* 0x6C */ mutable cXy mOldOffset;
+    /* 0x74 */ mutable cXy mNowOffset;
 };  // Size: 0x7C
 
 class daPy_swBlur_c : public J3DPacket {
@@ -2230,9 +2229,7 @@ public:
     /* 0x355E */ s16 m355E;
     /* 0x3560 */ u16 mEquipItem; // The item Link is currently holding in his hand.
     /* 0x3562 */ u16 m3562;
-    /* 0x3564 */ s16 m3564;
-    /* 0x3566 */ s16 m3566;
-    /* 0x3568 */ s16 m3568;
+    /* 0x3564 */ csXyz m3564;
     /* 0x356C */ int mCameraInfoIdx;
     // `mProcVar`'s are variables that are context dependent for each `PROC` action.
     // (The exact setup may need to be simplified later)

@@ -591,7 +591,7 @@ config.libs = [
             Object(Matching,  "d/actor/d_a_npc_fa1.cpp"),
             Object(NonMatching, "d/actor/d_a_obj_search.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_player.cpp"),
-            Object(NonMatching, "d/actor/d_a_player_main.cpp"),
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_player_main.cpp"),
             Object(Matching,    "d/actor/d_a_player_npc.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_sea.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_spc_item01.cpp"),
