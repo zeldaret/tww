@@ -245,7 +245,9 @@ void daTag_Kf1_c::privateCut() {
                 // var_r3 = event_bensyo__11daTag_Kf1_cFv(this);
                 event_bensyo();
                 break;
-
+            default: /* switch 2 */
+                dComIfGp_evmng_cutEnd(temp_r3);
+                break;
         }
     }
 }
