@@ -15,11 +15,17 @@ static int l_check_wrk;
 /* 000000EC-00000120       .text __ct__15daTag_Kf1_HIO_cFv */
 daTag_Kf1_HIO_c::daTag_Kf1_HIO_c() {
     /* Nonmatching */
+    static const u8 a_prm_tbl[] = {
+        0x4316,
+        0x41F0,
+        0x0000,
+    };
+    field_0x08 = a_prm_tbl[1];
     return;
 }
 
 /* 00000120-000001B0       .text searchActor_Kutani__FPvPv */
-static BOOL searchActor_Kutani(fopAc_ac_c* param_1, void*) {
+BOOL searchActor_Kutani(fopAc_ac_c* param_1, void*) {
     if ((l_check_wrk < 100) && (fopAc_IsActor(param_1)) && (param_1->base.base.mProcName == 0x1cb) && (daObj::PrmAbstract(param_1, 0x04, 0x18) == 0xe)) {
         l_check_inf[l_check_wrk] = param_1;
         l_check_wrk = l_check_wrk + 1;
@@ -72,9 +78,7 @@ u16 daTag_Kf1_c::next_msgStatus(unsigned long* msgNo) {
 /* 00000294-00000314       .text eventOrder__11daTag_Kf1_cFv */
 void daTag_Kf1_c::eventOrder() {
     /* Nonmatching */
-    static char* a_demo_name_tbl[] = {
-    "BENSYO"
-};
+    static char* a_demo_name_tbl[] = {"BENSYO"};
 
     if (mEventId == 1 || mEventId == 2) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
@@ -198,51 +202,49 @@ void daTag_Kf1_c::privateCut() {
         // this->unk766 = getMyActIdx__16dEvent_manager_cFiPCPCciii(temp_r30, temp_r3, &cut_name_tbl$4236, 5, 1, 0);
         field_0x766 = dComIfGp_evmng_getMyActIdx(temp_r3, cut_name_tbl, 5, 1, 0);
         if (field_0x766 == -1) {
-            // cutEnd__16dEvent_manager_cFi(temp_r30, temp_r3);
+
             dComIfGp_evmng_cutEnd(temp_r3);
             return;
         }
-    }
 
-    // getIsAddvance__16dEvent_manager_cFi(temp_r30, temp_r3
-    if (dComIfGp_evmng_getIsAddvance(temp_r3) != 0) {
-        // temp_r0 = this->field_0x766;
-        switch (field_0x766) { /* switch 1; irregular */
-            case 0:            /* switch 1 */
-                // event_talkInit__11daTag_Kf1_cFi(this, temp_r3);
-                event_talkInit(temp_r3);
-                break;
-            case 2: /* switch 1 */
-                // bensyoInit__11daTag_Kf1_cFv(this);
-                bensyoInit();
-                break;
-            case 3: /* switch 1 */
-                // goto_nextStage__11daTag_Kf1_cFv(this);
-                goto_nextStage();
-                break;
-            case 4: /* switch 1 */
-                // event_cntTsubo__11daTag_Kf1_cFv(this);
-                event_cntTsubo();
-                break;
+        // getIsAddvance__16dEvent_manager_cFi(temp_r30, temp_r3
+        if (dComIfGp_evmng_getIsAddvance(temp_r3) != 0) {
+            // temp_r0 = this->field_0x766;
+            switch (field_0x766) { /* switch 1; irregular */
+                case 0:            /* switch 1 */
+                    // event_talkInit__11daTag_Kf1_cFi(this, temp_r3);
+                    event_talkInit(temp_r3);
+                    break;
+                case 2: /* switch 1 */
+                    // bensyoInit__11daTag_Kf1_cFv(this);
+                    bensyoInit();
+                    break;
+                case 3: /* switch 1 */
+                    // goto_nextStage__11daTag_Kf1_cFv(this);
+                    goto_nextStage();
+                    break;
+                case 4: /* switch 1 */
+                    // event_cntTsubo__11daTag_Kf1_cFv(this);
+                    event_cntTsubo();
+                    break;
+            }
         }
-    }
 
-    switch (field_0x766) { /* switch 2; irregular */
-        case 0:            /* switch 2 */
-            // var_r3 = event_mesSet__11daTag_Kf1_cFv(this);
-            event_mesSet();
-            break;
-        case 1: /* switch 2 */
-            // var_r3 = event_mesEnd__11daTag_Kf1_cFv(this);
-            event_mesEnd();
-            break;
-        case 2: /* switch 2 */
-            // var_r3 = event_bensyo__11daTag_Kf1_cFv(this);
-            event_bensyo();
-            break;
-        default: /* switch 2 */
-            dComIfGp_evmng_cutEnd(temp_r3);
-            break;
+        switch (field_0x766) { /* switch 2; irregular */
+            case 0:            /* switch 2 */
+                // var_r3 = event_mesSet__11daTag_Kf1_cFv(this);
+                event_mesSet();
+                break;
+            case 1: /* switch 2 */
+                // var_r3 = event_mesEnd__11daTag_Kf1_cFv(this);
+                event_mesEnd();
+                break;
+            case 2: /* switch 2 */
+                // var_r3 = event_bensyo__11daTag_Kf1_cFv(this);
+                event_bensyo();
+                break;
+
+        }
     }
 }
 
