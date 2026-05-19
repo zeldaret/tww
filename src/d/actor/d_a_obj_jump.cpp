@@ -94,7 +94,6 @@ BOOL daObjJump::Act_c::CreateHeap() {
 
 /* 00000184-0000033C       .text Create__Q29daObjJump5Act_cFv */
 BOOL daObjJump::Act_c::Create() {
-    /* Nonmatching */
     unsigned int uVar2;
     this->field_0x338 = 1.0f;
     this->field_0x33C = 1.0f;
@@ -110,10 +109,7 @@ BOOL daObjJump::Act_c::Create() {
         attr().cullSizeBoxMax.z
     );
     if (attr().field_0x014 != 0) {
-        Vec temp;
-        temp.z = current.pos.z;
-        temp.y = 50.0f + current.pos.y;
-        temp.x = current.pos.x;
+        cXyz temp(current.pos.x, current.pos.y + 50.0f, current.pos.z);
         this->field_0x2D8.SetPos(&temp);
         uVar2 = fopAcM_GetID(this);
         this->field_0x2D8.SetActorPid(uVar2);
