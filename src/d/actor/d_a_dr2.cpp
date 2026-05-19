@@ -58,7 +58,7 @@ static void anm_init(dr2_class*, int, float, unsigned char, float, int) {
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     J3DJoint* joint = (J3DJoint*)node;
     
-    if (calcTiming == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         dr2_class* i_this = (dr2_class*)model->getUserArea();

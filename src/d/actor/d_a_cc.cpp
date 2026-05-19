@@ -27,7 +27,7 @@ static int target_info_count;
 
 /* 00000078-000002AC       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
-    if (calcTiming == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 iVar4 = joint->getJntNo();
         J3DModel* pJVar2 = j3dSys.getModel();

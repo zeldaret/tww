@@ -52,7 +52,7 @@ static daBmd_HIO_c l_HIO;
 
 /* 00000134-00000240       .text core_nodeCallBack__FP7J3DNodei */
 static BOOL core_nodeCallBack(J3DNode* node, int calcTiming) {
-    if (calcTiming == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();

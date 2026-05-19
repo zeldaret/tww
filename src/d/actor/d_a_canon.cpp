@@ -153,7 +153,7 @@ BOOL daCanon_c::createCheck(int arg1, int arg2, int arg3) {
 
 /* 000005A0-00000628       .text daCanon_nodeCallBack__FP7J3DNodei */
 static BOOL daCanon_nodeCallBack(J3DNode* node, int calcTiming) {
-    if (calcTiming == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* pJVar2 = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         s32 uVar1 = joint->getJntNo();

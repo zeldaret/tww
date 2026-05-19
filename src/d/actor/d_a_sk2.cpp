@@ -19,7 +19,7 @@ static s32 sk2_bck[] = {SK2_BCK_KSYLF_00, SK2_BCK_KSYLF_01};
 
 /* 00000078-00000194       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
-    if (calcTiming == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 uVar2 = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();

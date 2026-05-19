@@ -15,11 +15,11 @@ Mtx daObjJump::Act_c::M_tmp_mtx;
 const char Act_c::M_arcname[] = "Hjump";
 const Attr_c Act_c::M_attr[2] = {
     {
-        /* resSize          */ 2112,
+        /* resSize          */ DEMO_SELECT(0x8000, 0x840),
         /* resIndex         */ 12,
         /* field_0x006      */ 6,
         /* cullSizeBoxMin   */ { -60, -1, -60 },
-        /* cullSizeBoxMax   */ { 60, 251, 60 },
+        /* cullSizeBoxMax   */ { 60, VERSION_SELECT(151, 151, 251, 251), 60 },
         /* field_0x014      */ 1,
         /* field_0x015      */ 0,
         /* field_0x016      */ 1,
@@ -46,11 +46,11 @@ const Attr_c Act_c::M_attr[2] = {
         /* field_0x04C      */ 2.0f
     },
     {
-        /* resSize          */ 2112,
+        /* resSize          */ DEMO_SELECT(0x8000, 0x840),
         /* resIndex         */ 11,
         /* field_0x006      */ 5,
         /* cullSizeBoxMin   */ { -90, -1, -90 },
-        /* cullSizeBoxMax   */ { 90, 401, 90 },
+        /* cullSizeBoxMax   */ { 90, VERSION_SELECT(301, 301, 401, 401), 90 },
         /* field_0x014      */ 0,
         /* field_0x015      */ 0,
         /* field_0x016      */ 1,
@@ -82,11 +82,11 @@ const Attr_c Act_c::M_attr[2] = {
 /* 00000078-00000184       .text CreateHeap__Q29daObjJump5Act_cFv */
 BOOL daObjJump::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, attr().field_0x006);
-    JUT_ASSERT(282, model_data != NULL);
+    JUT_ASSERT(DEMO_SELECT(277, 282), model_data != NULL);
     
     mModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
     if (mModel != NULL) {
-        model_data->getJointTree().getJointNodePointer(attr().field_0x016 & 0xffff)->setCallBack(jnodeCB_lower);
+        model_data->getJointTree().getJointNodePointer(attr().field_0x016)->setCallBack(jnodeCB_lower);
         mModel->setUserArea((u32)this);
     }
     return mModel != NULL;
@@ -115,10 +115,12 @@ BOOL daObjJump::Act_c::Create() {
         field_0x2D8.SetActorPid(uVar2);
         field_0x32C = dComIfG_Bgsp()->GroundCross(&field_0x2D8);
     }
+#if VERSION > VERSION_DEMO
     if (field_0x2D4 == 1) {
-        actor_status &= 0xffffffc0;
+        actor_status &= ~0x3F;
         gbaName = 0;
     }
+#endif
     mpBgW->SetRideCallback(rideCB);
     mode_wait_init();
     return TRUE;
@@ -136,7 +138,7 @@ cPhs_State daObjJump::Act_c::Mthd_Create() {
             dBgS_MoveBGProc_Typical,
             attr().resSize
         );
-        JUT_ASSERT(384, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+        JUT_ASSERT(DEMO_SELECT(373, 384), (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
 }
@@ -149,7 +151,7 @@ BOOL daObjJump::Act_c::Delete() {
 /* 00000A0C-00000A58       .text Mthd_Delete__Q29daObjJump5Act_cFv */
 BOOL daObjJump::Act_c::Mthd_Delete() {
     u32 result = MoveBGDelete();
-    dComIfG_resDelete(&mPhase, M_arcname);
+    dComIfG_resDeleteDemo(&mPhase, M_arcname);
     return result;
 }
 
@@ -244,42 +246,42 @@ void daObjJump::Act_c::clear_push_flag() {
 
 /* 00000DB4-00000E1C       .text calc_vib_pos__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::calc_vib_pos() {
-    field_0x340 = field_0x340 - (field_0x33C - field_0x338) * attr().field_0x02C;
+    f32 f2 = field_0x33C - field_0x338;
+    field_0x340 = field_0x340 - f2 * attr().field_0x02C;
     field_0x340 = field_0x340 - field_0x340 * attr().field_0x028;
     field_0x33C = field_0x33C + field_0x340;
 }
 
 /* 00000E1C-00000E74       .text rideCB__Q29daObjJump5Act_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daObjJump::Act_c::rideCB(dBgW*, fopAc_ac_c* param_2, fopAc_ac_c* param_3) {
-    Act_c* pvVar4 = (Act_c *) param_2;
+    Act_c* i_this = (Act_c *) param_2;
     daPy_py_c* player = (daPy_py_c *) param_3;
-    pvVar4->field_0x344 = 1;
+    i_this->field_0x344 = 1;
     if (fopAcM_GetProfName(param_3) != PROC_PLAYER) {
         return;
     }
-    pvVar4->field_0x349 = 1;
+    i_this->field_0x349 = 1;
     if (player->checkEquipHeavyBoots()) {
-        pvVar4->field_0x34c = 1;
+        i_this->field_0x34c = 1;
     }
-    const Attr_c* a = &M_attr[pvVar4->field_0x2D4];
-    if (fopAcM_GetSpeedF(player) > a->field_0x04C) {
-        pvVar4->field_0x354 = 1;
+    if (fopAcM_GetSpeedF(player) > i_this->attr().field_0x04C) {
+        i_this->field_0x354 = 1;
     }
 }
 
 /* 00000E74-00000F48       .text jnodeCB_lower__Q29daObjJump5Act_cFP7J3DNodei */
-BOOL daObjJump::Act_c::jnodeCB_lower(J3DNode* param_1, int param_2) {
-    /* Nonmatching */
-    if (param_2 == 0) {
-        J3DModel* model = j3dSys.getModel();
-        Act_c* pvVar4 = (Act_c *) model->getUserArea();
-        J3DJoint* joint = (J3DJoint*) param_1;
-        s32 jntNo = joint->getJntNo();
+BOOL daObjJump::Act_c::jnodeCB_lower(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DModel* model = (J3DModel*)j3dSys.getModel();
+        Act_c* i_this = (Act_c *) model->getUserArea();
+        J3DJoint* joint = (J3DJoint*) node;
+        u16 jntNo = joint->getJntNo();
         PSMTXCopy(model->getAnmMtx(jntNo), mDoMtx_stack_c::get());
-        mDoMtx_stack_c::scaleM(pvVar4->field_0x33C,1.0f,1.0f);
+        mDoMtx_stack_c::scaleM(i_this->field_0x33C,1.0f,1.0f);
         model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
-        float fVar1 = M_attr[pvVar4->field_0x2D4].field_0x01C - M_attr[pvVar4->field_0x2D4].field_0x018;
-        j3dSys.mCurrentMtx[1][3] += fVar1 * (pvVar4->field_0x33C - 1.0f);
+        f32 f2 = i_this->attr().field_0x01C - i_this->attr().field_0x018;
+        f32 f1 = f2 * (i_this->field_0x33C - 1.0f);
+        j3dSys.mCurrentMtx[1][3] += f1;
     }
     return TRUE;
 }
@@ -351,7 +353,7 @@ void daObjJump::Act_c::mode_l_u() {
     if (field_0x33C >= field_0x338) {
         field_0x33C = field_0x338;
         field_0x340 = 0.0f;
-        if (*(u8*)(&field_0x349) != 0) {
+        if (field_0x349 != 0) {
             daPy_py_c* player = daPy_getPlayerActorClass();
             player->onForceVomitJump();
         }
@@ -417,12 +419,11 @@ BOOL daObjJump::Act_c::Execute(Mtx** param_1) {
 
 /* 000014B0-00001594       .text Draw__Q29daObjJump5Act_cFv */
 BOOL daObjJump::Act_c::Draw() {
-    /* Nonmatching */
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mModel, &tevStr);
-    dComIfGd_setList();
+    dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mModel);
-    dComIfGd_setListInvisisble();
+    dComIfGd_setList();
     if (attr().field_0x014 != 0) {
         dComIfGd_setSimpleShadow2(
             &current.pos,
@@ -456,7 +457,7 @@ BOOL Mthd_Execute(void* i_this) {
 
 /* 000015F4-00001620       .text Mthd_Draw__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
 BOOL Mthd_Draw(void* i_this) {
-    return ((daObjJump::Act_c*)i_this)->Draw();
+    return ((daObjJump::Act_c*)i_this)->MoveBGDraw();
 }
 
 /* 00001620-0000164C       .text Mthd_IsDelete__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */

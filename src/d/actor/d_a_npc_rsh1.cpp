@@ -1633,8 +1633,8 @@ BOOL daNpc_Rsh1_c::event_action(void* i_unusedP) {
     } else if (mActionStatus != -1) {
         privateCut();
         if (dComIfGp_evmng_endCheck(mShopOutEventIdx)) {
-            if (cLib_checkBit<u32>(actor_status, 0x4000)) {
-                cLib_offBit<u32>(actor_status, 0x4000);
+            if (cLib_checkBit<u32>(actor_status, fopAcStts_UNK4000_e)) {
+                cLib_offBit<u32>(actor_status, fopAcStts_UNK4000_e);
             }
             dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
             setAction(&daNpc_Rsh1_c::wait_action, NULL);
