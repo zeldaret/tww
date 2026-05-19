@@ -11,9 +11,6 @@
 static daTag_Kf1_HIO_c l_HIO;
 static fopAc_ac_c* l_check_inf[20];
 static int l_check_wrk;
-static char* a_demo_name_tbl[] = {
-    "TagKf1", "BENSYO", "MsgNo", "MES_SET", "MES_END", "TSUBO_BENSYO", "GO_NEXT", "CNT_TSUBO", "\203N\203^\203j\217\304\202\253\212\304\216\213\203^\203O"
-};
 
 /* 000000EC-00000120       .text __ct__15daTag_Kf1_HIO_cFv */
 daTag_Kf1_HIO_c::daTag_Kf1_HIO_c() {
@@ -23,11 +20,7 @@ daTag_Kf1_HIO_c::daTag_Kf1_HIO_c() {
 
 /* 00000120-000001B0       .text searchActor_Kutani__FPvPv */
 static BOOL searchActor_Kutani(fopAc_ac_c* param_1, void*) {
-    if ((l_check_wrk < 100) 
-    && (fopAc_IsActor(param_1))
-    && (param_1->base.base.mProcName == 0x1cb)
-    && (daObj::PrmAbstract(param_1, 0x04, 0x18) == 0xe))
-    {
+    if ((l_check_wrk < 100) && (fopAc_IsActor(param_1)) && (param_1->base.base.mProcName == 0x1cb) && (daObj::PrmAbstract(param_1, 0x04, 0x18) == 0xe)) {
         l_check_inf[l_check_wrk] = param_1;
         l_check_wrk = l_check_wrk + 1;
     }
@@ -79,6 +72,10 @@ u16 daTag_Kf1_c::next_msgStatus(unsigned long* msgNo) {
 /* 00000294-00000314       .text eventOrder__11daTag_Kf1_cFv */
 void daTag_Kf1_c::eventOrder() {
     /* Nonmatching */
+    static char* a_demo_name_tbl[] = {
+    "BENSYO"
+};
+
     if (mEventId == 1 || mEventId == 2) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
         if (mEventId == 1) {
@@ -179,8 +176,8 @@ void daTag_Kf1_c::bensyoInit() {
 }
 
 /* 000007A4-000007C4       .text event_bensyo__11daTag_Kf1_cFv */
-void daTag_Kf1_c::event_bensyo() {
-    event_mesSet();
+BOOL daTag_Kf1_c::event_bensyo() {
+    return event_mesSet();
 }
 
 /* 000007C4-000007FC       .text event_cntTsubo__11daTag_Kf1_cFv */
@@ -191,6 +188,62 @@ void daTag_Kf1_c::event_cntTsubo() {
 /* 000007FC-00000978       .text privateCut__11daTag_Kf1_cFv */
 void daTag_Kf1_c::privateCut() {
     /* Nonmatching */
+    static char* cut_name_tbl[] = {"MES_SET", "MES_END", "TSUBO_BENSYO", "GO_NEXT", "CNT_TSUBO"};
+    int temp_r3;
+
+    // temp_r3 = getMyStaffId__16dEvent_manager_cFPCcP10fopAc_ac_ci(temp_r30, &@stringBase0, NULL, 0);
+    temp_r3 = dComIfGp_evmng_getMyStaffId("TagKf1", NULL, 0);
+
+    if (temp_r3 != -1) {
+        // this->unk766 = getMyActIdx__16dEvent_manager_cFiPCPCciii(temp_r30, temp_r3, &cut_name_tbl$4236, 5, 1, 0);
+        field_0x766 = dComIfGp_evmng_getMyActIdx(temp_r3, cut_name_tbl, 5, 1, 0);
+        if (field_0x766 == -1) {
+            // cutEnd__16dEvent_manager_cFi(temp_r30, temp_r3);
+            dComIfGp_evmng_cutEnd(temp_r3);
+            return;
+        }
+    }
+
+    // getIsAddvance__16dEvent_manager_cFi(temp_r30, temp_r3
+    if (dComIfGp_evmng_getIsAddvance(temp_r3) != 0) {
+        // temp_r0 = this->field_0x766;
+        switch (field_0x766) { /* switch 1; irregular */
+            case 0:            /* switch 1 */
+                // event_talkInit__11daTag_Kf1_cFi(this, temp_r3);
+                event_talkInit(temp_r3);
+                break;
+            case 2: /* switch 1 */
+                // bensyoInit__11daTag_Kf1_cFv(this);
+                bensyoInit();
+                break;
+            case 3: /* switch 1 */
+                // goto_nextStage__11daTag_Kf1_cFv(this);
+                goto_nextStage();
+                break;
+            case 4: /* switch 1 */
+                // event_cntTsubo__11daTag_Kf1_cFv(this);
+                event_cntTsubo();
+                break;
+        }
+    }
+
+    switch (field_0x766) { /* switch 2; irregular */
+        case 0:            /* switch 2 */
+            // var_r3 = event_mesSet__11daTag_Kf1_cFv(this);
+            event_mesSet();
+            break;
+        case 1: /* switch 2 */
+            // var_r3 = event_mesEnd__11daTag_Kf1_cFv(this);
+            event_mesEnd();
+            break;
+        case 2: /* switch 2 */
+            // var_r3 = event_bensyo__11daTag_Kf1_cFv(this);
+            event_bensyo();
+            break;
+        default: /* switch 2 */
+            dComIfGp_evmng_cutEnd(temp_r3);
+            break;
+    }
 }
 
 /* 00000978-00000A0C       .text event_proc__11daTag_Kf1_cFv */

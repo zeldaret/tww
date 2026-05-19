@@ -19,7 +19,7 @@ public:
     BOOL event_mesSet();
     BOOL event_mesEnd();
     void bensyoInit();
-    void event_bensyo();
+    BOOL event_bensyo();
     void event_cntTsubo();
     void privateCut();
     void event_proc();
@@ -44,7 +44,7 @@ public:
     /* 0x742 */ u16 mRupeeCount;
     /* 0x744 */ fpc_ProcID mPartnerProcs[8];
     /* 0x764 */ s16 mNumOfPartners;
-    /* 0x766 */ u8 field_0x766;
+    /* 0x766 */ s8 field_0x766;
     /* 0x767 */ s8 mEventId;
     /* 0x768 */ s8 mState; // This is used in setStt so I suspect this may be dCcD_Stts?
     /* 0x769 */ u8 field_0x769;
