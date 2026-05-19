@@ -4,6 +4,7 @@
 #include "d/d_bg_s_movebg_actor.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_w.h"
+#include "d/d_bg_s_gnd_chk.h"
 
 class J3DNode;
 
@@ -87,15 +88,7 @@ namespace daObjJump {
         /* 0x2C8 */ request_of_phase_process_class mPhase;
         /* 0x2D0 */ J3DModel* mModel;
         /* 0x2D4 */ int field_0x2D4;
-        /* 0x2D8 */ cBgS_GndChk* field_0x2D8;
-        /* 0x2DC */ int field_0x2DC;
-        /* 0x2E0 */ fpc_ProcID field_0x2E0;
-        /* 0x2E4 */ u8 field_0x2E4[0x2EC - 0x2E4];
-        /* 0x2EC */ cBgS_PolyInfo field_0x2EC;
-        /* 0x2FC */ f32 field_0x2FC;
-        /* 0x300 */ f32 field_0x300;
-        /* 0x304 */ f32 field_0x304;
-        /* 0x308 */ u8 field_0x308[0x32C - 0x308];
+        /* 0x2D8 */ dBgS_ObjGndChk field_0x2D8;
         /* 0x32C */ f32 field_0x32C;
         /* 0x330 */ int field_0x330;
         /* 0x334 */ s16 field_0x334;

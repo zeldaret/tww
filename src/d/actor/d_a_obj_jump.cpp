@@ -13,7 +13,6 @@ namespace daObjJump {
 
 Mtx daObjJump::Act_c::M_tmp_mtx;
 const char Act_c::M_arcname[] = "Hjump";
-// FIXME Attributes struct
 const Attr_c Act_c::M_attr[2] = {
     {
         /* resSize          */ 2112,
@@ -111,19 +110,14 @@ BOOL daObjJump::Act_c::Create() {
         attr().cullSizeBoxMax.z
     );
     if (attr().field_0x014 != 0) {
-        float z = current.pos.z;
-        float y = 50.0f + current.pos.y;
-        float x = current.pos.x;
-        this->field_0x2FC = x;
-        this->field_0x300 = y;
-        this->field_0x304 = z;
-        if (this != NULL) {
-            uVar2 = this->base.base.mBsPcId;
-        } else {
-            uVar2 = 0xffffffff;
-        }
-        this->field_0x2E0 = uVar2;
-        this->field_0x32C = dComIfG_Bgsp()->GroundCross(this->field_0x2D8);
+        Vec temp;
+        temp.z = current.pos.z;
+        temp.y = 50.0f + current.pos.y;
+        temp.x = current.pos.x;
+        this->field_0x2D8.SetPos(&temp);
+        uVar2 = fopAcM_GetID(this);
+        this->field_0x2D8.SetActorPid(uVar2);
+        this->field_0x32C = dComIfG_Bgsp()->GroundCross(&this->field_0x2D8);
     }
     if (this->field_0x2D4 == 1) {
         this->actor_status &= 0xffffffc0;
@@ -136,7 +130,6 @@ BOOL daObjJump::Act_c::Create() {
 
 /* 0000033C-00000544       .text Mthd_Create__Q29daObjJump5Act_cFv */
 cPhs_State daObjJump::Act_c::Mthd_Create() {
-    /* Nonmatching */
     fopAcM_ct(this, daObjJump::Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&this->mPhase, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
@@ -285,11 +278,13 @@ void daObjJump::Act_c::rideCB(dBgW*, fopAc_ac_c* param_2, fopAc_ac_c* param_3) {
 BOOL daObjJump::Act_c::jnodeCB_lower(J3DNode* param_1, int param_2) {
     /* Nonmatching */
     if (param_2 == 0) {
-        Act_c *pvVar4 = (Act_c *) j3dSys.getModel()->getUserArea();
-        u16 uVar1 = *(u16 *)&pvVar4->base.base.mLyTg;
-        PSMTXCopy(j3dSys.getModel()->getAnmMtx(uVar1), mDoMtx_stack_c::get());
+        J3DModel* model = j3dSys.getModel();
+        Act_c* pvVar4 = (Act_c *) model->getUserArea();
+        J3DJoint* joint = (J3DJoint*) param_1;
+        s32 jntNo = joint->getJntNo();
+        PSMTXCopy(model->getAnmMtx(jntNo), mDoMtx_stack_c::get());
         mDoMtx_stack_c::scaleM(pvVar4->field_0x33C,1.0f,1.0f);
-        j3dSys.getModel()->setAnmMtx(uVar1, mDoMtx_stack_c::get());
+        model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
         float fVar1 = M_attr[pvVar4->field_0x2D4].field_0x01C - M_attr[pvVar4->field_0x2D4].field_0x018;
         j3dSys.mCurrentMtx[1][3] += fVar1 * (pvVar4->field_0x33C - 1.0f);
     }
@@ -452,7 +447,7 @@ BOOL daObjJump::Act_c::Draw() {
             &current.pos,
             this->field_0x32C,
             70.0f,
-            this->field_0x2EC,
+            this->field_0x2D8,
             this->shape_angle.y,
             1.0f,
             NULL
