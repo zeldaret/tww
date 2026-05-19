@@ -118,10 +118,10 @@ static BOOL daPy_createHeap(fopAc_ac_c* i_this) {
 
 /* 80102EAC-80102F1C       .text __ct__13daPy_matAnm_cFv */
 daPy_matAnm_c::daPy_matAnm_c() {
-    mEyePosOld.x = 0.0f;
-    mEyePosOld.y = 0.0f;
-    mEyePos.x = 0.0f;
-    mEyePos.y = 0.0f;
+    mOldOffset.x = 0.0f;
+    mOldOffset.y = 0.0f;
+    mNowOffset.x = 0.0f;
+    mNowOffset.y = 0.0f;
     
     m_maba_flg = 0;
     m_eye_move_flg = 0;
@@ -131,9 +131,6 @@ daPy_matAnm_c::daPy_matAnm_c() {
 
 /* 80102F64-80103074       .text calc__13daPy_matAnm_cCFP11J3DMaterial */
 void daPy_matAnm_c::calc(J3DMaterial* mat) const {
-    // Fakematch?
-    daPy_matAnm_c* i_this = const_cast<daPy_matAnm_c*>(this);
-    
     J3DMaterialAnm::calc(mat);
     
     for (u32 i = 0; i < 8; i++) {
@@ -141,14 +138,14 @@ void daPy_matAnm_c::calc(J3DMaterial* mat) const {
             J3DTextureSRTInfo& srt = mat->getTexMtx(i)->getTexMtxInfo().mSRT;
             if (getMorfFrame() != 0) {
                 f32 temp = 1.0f / (m_morf_frame + 1);
-                srt.mTranslationX = mEyePosOld.x * (1.0f - temp) + (srt.mTranslationX * temp);
-                srt.mTranslationY = mEyePosOld.y * (1.0f - temp) + (srt.mTranslationY * temp);
+                srt.mTranslationX = mOldOffset.x * (1.0f - temp) + (srt.mTranslationX * temp);
+                srt.mTranslationY = mOldOffset.y * (1.0f - temp) + (srt.mTranslationY * temp);
             } else if (getEyeMoveFlg() != 0) {
-                srt.mTranslationX = mEyePos.x;
-                srt.mTranslationY = mEyePos.y;
+                srt.mTranslationX = mNowOffset.x;
+                srt.mTranslationY = mNowOffset.y;
             }
-            i_this->mEyePosOld.x = srt.mTranslationX;
-            i_this->mEyePosOld.y = srt.mTranslationY;
+            mOldOffset.x = srt.mTranslationX;
+            mOldOffset.y = srt.mTranslationY;
         }
     }
 }
@@ -270,7 +267,7 @@ BOOL daPy_lk_c::jointBeforeCB(int jnt_no, J3DTransformInfo* param_2, Quaternion*
 
     csXyz local_38(0, 0, 0);
     if (jnt_no == 0xF) {
-        local_38.set(m3566, m3568, m3564);
+        local_38.set(m3564.y, m3564.z, m3564.x);
     } else if (jnt_no == 0x1F) {
         m34C6 = 2;
         m3668.mScale = param_2->mScale;
@@ -6181,7 +6178,7 @@ BOOL daPy_lk_c::procWait() {
             }
         }
         if (!dComIfGp_event_runCheck() && m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_WAITS &&
-            checkNoUpperAnime() && daPy_matAnm_c::m_eye_move_flg == 0 && m3566 == 0 && m3568 == 0 && m3564 == 0)
+            checkNoUpperAnime() && daPy_matAnm_c::getEyeMoveFlg() == 0 && m3564.y == 0 && m3564.z == 0 && m3564.x == 0)
         {
             m34D2--;
             if (m34D2 == 0) {
@@ -7635,7 +7632,7 @@ BOOL daPy_lk_c::procDamage() {
     f32 dVar6;
 
     dVar6 = (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() - m_HIO->mDam.mDamage.m.field_0x28);
-    cLib_addCalcAngleS(&m3566, 0, 4, 0x800, 0x100);
+    cLib_addCalcAngleS(&m3564.y, 0, 4, 0x800, 0x100);
     if (dVar6 < 0.0f) {
         uVar4 = ((16384.0f * mFrameCtrlUnder[UNDER_MOVE0_e].getFrame()) /
                  m_HIO->mDam.mDamage.m.field_0x28);
@@ -7652,9 +7649,9 @@ BOOL daPy_lk_c::procDamage() {
         fVar1 = 1.0f - cM_scos(uVar4);
         fVar2 = 1.0f - cM_scos(uVar4 < 0x2000 ? 0 : (s16)((uVar4 - 0x2000) * 2));
     }
-    m3564 = m34D4 * fVar1;
-    m3566 = 0;
-    m3568 = m34D6 * fVar1;
+    m3564.x = m34D4 * fVar1;
+    m3564.y = 0;
+    m3564.z = m34D6 * fVar1;
     mBodyAngle.x = m34D4 * fVar2;
     mBodyAngle.z = m34D6 * fVar2;
     mBodyAngle.y = 0;
@@ -8991,7 +8988,6 @@ BOOL daPy_lk_c::checkAttentionPosAngle(fopAc_ac_c* actor, cXyz** pOutPos) {
 
 /* 8011AE20-8011BE08       .text setNeckAngle__9daPy_lk_cFv */
 void daPy_lk_c::setNeckAngle() {
-    /* Nonmatching - regalloc */
     cXyz spC4;
     cXyz spB8;
     cXyz spAC;
@@ -9127,19 +9123,23 @@ void daPy_lk_c::setNeckAngle() {
     spAC = sp88 - spC4;
 
     s16 r23_3;
-    s16 r24_2;
+    s16 r24_4;
     s16 r27;
-    s16 r25_2;
-    s16 r23;
+    s16 r25_3;
+    s16 r24_2 = cM_atan2s(-spAC.y, spAC.absXZ());
+    r24_4 = (r24_2 - m3564.x);
+    s16 r25_2 = (cM_atan2s(spAC.x, spAC.z));
+    r25_3 = r25_2;
+    r25_3 -= m34DE;
+    r25_3 = r25_3 - m3564.y;
     s16 r4;
-    r24_2 = cM_atan2s(-spAC.y, spAC.absXZ()) - m3564;
-    r25_2 = (cM_atan2s(spAC.x, spAC.z) - m34DE) - m3566;
+    s16 r23;
     if (checkModeFlg(ModeFlg_00000080 | ModeFlg_08000000) && sp18 != NULL && !checkUpperAnime(LKANM_BCK_DAMDASH)) {
         spB8 = *sp18 - spC4;
         r27 = cM_atan2s(-spB8.y, spB8.absXZ());
         r23_3 = cM_atan2s(spB8.x, spB8.z) - m34DE;
         if (spB8.absXZ() < 30.0f) {
-            r23_3 = m3566;
+            r23_3 = m3564.y;
         }
         if (r27 > 8000) {
             r27 = 8000;
@@ -9155,25 +9155,25 @@ void daPy_lk_c::setNeckAngle() {
             m_anm_heap_upper[UPPER_MOVE1_e].mIdx != LKANM_BCK_DASHKAZE)
         {
             if (r28) {
-                r30 = (r27 >> 1) - r24_2;
-                r29 = (r23_3 >> 1) - r25_2;
+                r30 = (r27 >> 1) - r24_4;
+                r29 = (r23_3 >> 1) - r25_3;
                 r4 = r30;
                 r23 = r29;
             } else {
-                r4 = r27 - r24_2;
-                r23 = r23_3 - r25_2;
+                r4 = r27 - r24_4;
+                r23 = r23_3 - r25_3;
             }
         } else {
             if (r28) {
-                r30 = r27 - r24_2;
-                r29 = r23_3 - r25_2;
+                r30 = r27 - r24_4;
+                r29 = r23_3 - r25_3;
             }
             r4 = 0;
             r23 = 0;
         }
     } else if (mCurProc == daPyProc_DAMAGE_e) {
-        r4 = m3564;
-        r23 = m3566;
+        r4 = m3564.x;
+        r23 = m3564.y;
     } else if ((mCurProc == daPyProc_LADDER_MOVE_e || mCurProc == daPyProc_CLIMB_MOVE_UP_DOWN_e) &&
                mDirection == DIR_FORWARD)
     {
@@ -9205,18 +9205,18 @@ void daPy_lk_c::setNeckAngle() {
         r29 = 0;
     }
 
-    cLib_addCalcAngleS(&m3564, r4, 3, 0x1000, 0x100);
-    cLib_addCalcAngleS(&m3566, r23, 3, 0x1000, 0x100);
+    cLib_addCalcAngleS(&m3564.x, r4, 3, 0x1000, 0x100);
+    cLib_addCalcAngleS(&m3564.y, r23, 3, 0x1000, 0x100);
     if (checkModeFlg(ModeFlg_00000080)) {
-        s16 r4 = r25_2 + m3566;
+        s16 r4 = r25_3 + m3564.y;
         if (r4 > m_HIO->mShip.m.field_0x0) {
-            m3566 = m_HIO->mShip.m.field_0x0 - r25_2;
+            m3564.y = m_HIO->mShip.m.field_0x0 - r25_3;
         } else if (r4 < -m_HIO->mShip.m.field_0x0) {
-            m3566 = -(m_HIO->mShip.m.field_0x0 + r25_2);
+            m3564.y = -(m_HIO->mShip.m.field_0x0 + r25_3);
         }
     }
     if (mCurProc != daPyProc_DAMAGE_e) {
-        cLib_addCalcAngleS(&m3568, 0, 3, 0x1000, 0x100);
+        cLib_addCalcAngleS(&m3564.z, 0, 3, 0x1000, 0x100);
     }
 
     f32 f31;
@@ -9306,10 +9306,10 @@ void daPy_lk_c::setNeckAngle() {
         f29 = 0.0f;
     }
     if (daPy_matAnm_c::getEyeMoveFlg() != 0) {
-        cLib_addCalc(&m_tex_eye_scroll[0]->mEyePos.x, f31, 0.5f, 0.1f, 0.03f);
-        cLib_addCalc(&m_tex_eye_scroll[1]->mEyePos.x, f30, 0.5f, 0.1f, 0.03f);
-        cLib_addCalc(&m_tex_eye_scroll[0]->mEyePos.y, f29, 0.5f, 0.08f, 0.02f);
-        m_tex_eye_scroll[1]->mEyePos.y = m_tex_eye_scroll[0]->mEyePos.y;
+        cLib_addCalc(m_tex_eye_scroll[0]->getNowOffsetXP(), f31, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(m_tex_eye_scroll[1]->getNowOffsetXP(), f30, 0.5f, 0.1f, 0.03f);
+        cLib_addCalc(m_tex_eye_scroll[0]->getNowOffsetYP(), f29, 0.5f, 0.08f, 0.02f);
+        m_tex_eye_scroll[1]->setNowOffsetY(*m_tex_eye_scroll[0]->getNowOffsetYP());
     }
 }
 
