@@ -1931,13 +1931,13 @@ public:
     BOOL checkFaceTypeNot() const { return mFace == daPyFace_NONE; }
     BOOL checkCrawlWaterIn() { return mWaterY > current.pos.y + 15.0f; }
     void setFootEffectPosType(u8 type) { mFootEffectPosType = type; }
+    int checkIsland() const { return mRestartPoint; }
+    const s16 getTactLeftHandPos() const { return mProcVar3.m34D6; }
     
     void checkBothItemEquipAnime() const {}
     void checkDoubleItemEquipAnime() const {}
-    void checkIsland() const {}
     void checkRopeThrowAnime() const {}
     void checkSwordEquipAnime() const {}
-    void getTactLeftHandPos() const {}
     void setSpeedAndAngleBoomerang() {}
     void setSpeedAndAngleBow() {}
     void setSpeedAndAngleHookshot() {}
@@ -1994,7 +1994,7 @@ public:
     virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && mProcVar6.m3570 != 0; }
     virtual void cancelChangeTextureAnime() { resetDemoTextureAnime(); }
 
-public:
+private:
     /* 0x0320 */ request_of_phase_process_class mPhase;
     /* 0x0328 */ J3DModelData* mpCLModelData;
     /* 0x032C */ J3DModel* mpCLModel;

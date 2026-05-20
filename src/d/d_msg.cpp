@@ -1624,7 +1624,7 @@ void dMsg_tactInput(sub_msg_class* i_Msg) {
             dMsg_tactGuideShow(i_Msg, mBeatNum[melody_no]);
         }
         if (daPy_getPlayerActorClass()->checkTactInput()) {
-            sVar1 = daPy_getPlayerLinkActorClass()->mProcVar3.m34D6;
+            sVar1 = daPy_getPlayerLinkActorClass()->getTactLeftHandPos();
             mDoAud_tact_getMelodyPattern(melody_no, i_Msg->m1100, &local_38);
             i_Msg->m1100++;
             if ((sVar1 == local_38) && (mBeatNum[melody_no] == mDoAud_tact_getBeat())) {

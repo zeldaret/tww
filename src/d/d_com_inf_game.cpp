@@ -1181,7 +1181,7 @@ void dComIfGs_setGameStartStage() {
             dKy_set_nexttime(120.0f);
         } else if (stage_type == dStageType_SEA_e) {
             daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
-            point = player_p->mRestartPoint;
+            point = player_p->checkIsland();
 
             room_no = fopAcM_GetRoomNo(player_p);
 
