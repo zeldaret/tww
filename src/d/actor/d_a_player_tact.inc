@@ -28,7 +28,7 @@ u32 daPy_lk_c::getDayNightParamData() {
     u32 spawnType = dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) ? 2 : 0;
     u32 eventIdx = 0xCC;
     u32 extraParams = dComIfGp_getShipActor() != NULL ? 0x140 : 0x40;
-    return setParamData(current.roomNo, spawnType, eventIdx, extraParams);
+    return setParamData(fopAcM_GetRoomNo(this), spawnType, eventIdx, extraParams);
 }
 
 /* 8014D7D4-8014D8AC       .text setTactModel__9daPy_lk_cFv */
@@ -53,9 +53,8 @@ void daPy_lk_c::setTactModel() {
 
 /* 8014D8AC-8014D8F4       .text checkNpcStatus__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkNpcStatus() {
-    daPy_py_c* partner = (daPy_py_c*)dComIfGp_getCb1Player();
-    if (partner) {
-        if (!partner->checkNpcNotChange() && partner->current.roomNo == fopAcM_GetRoomNo(this)) {
+    if (dComIfGp_getCb1Player()) {
+        if (!((daPy_py_c*)dComIfGp_getCb1Player())->checkNpcNotChange() && fopAcM_GetRoomNo(dComIfGp_getCb1Player()) == fopAcM_GetRoomNo(this)) {
             return TRUE;
         }
     }
@@ -255,7 +254,7 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
     mAnmRatioUpper[UPPER_MOVE1_e].setRatio(0.0f);
     setActAnimeUpper(LKANM_BCK_WAITTAKT, UPPER_MOVE2_e, m_HIO->mItem.mTact.m.mAnmRate, 0.0f, -1, -1.0f);
     mAnmRatioUpper[UPPER_MOVE2_e].setRatio(0.0f);
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     m34D4 = 0;
     m34D6 = 0;
     dComIfGp_setPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e);
@@ -643,8 +642,7 @@ BOOL daPy_lk_c::procTactPlay() {
                 if (dKy_daynighttact_stop_chk()) {
                     m3624 = 0x14A7;
                 } else {
-                    dStage_FileList_dt_c* fili_p =
-                        dComIfGp_roomControl_getStatusRoomDt(current.roomNo)->getFileListInfo();
+                    dStage_FileList_dt_c* fili_p = dComIfGp_roomControl_getStatusRoomDt(fopAcM_GetRoomNo(this))->getFileListInfo();
                     if (dStage_FileList_dt_GetSongOk(fili_p)) {
                         m3624 = 0x14AA;
                     } else {
@@ -677,7 +675,7 @@ BOOL daPy_lk_c::procTactPlayEnd_init(int r30) {
     dComIfGp_setPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e);
     initShipRideUseItem(r28, 2);
     mProcVar0.m3570 = r30;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
 
     if (r30 == -1) {

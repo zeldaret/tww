@@ -13,6 +13,7 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
+#include "d/d_s_play.h"
 
 /* 80135B50-80135B74       .text getClimbMoveAnmSpeed__9daPy_lk_cFv */
 f32 daPy_lk_c::getClimbMoveAnmSpeed() {
@@ -220,7 +221,7 @@ BOOL daPy_lk_c::procClimbUpStart_init() {
     commonProcInit(daPyProc_CLIMB_UP_START_e);
     gravity = 0.0f;
     speed.y = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speedF = 0.0f;
     if (mEquipItem == daPyItem_NONE_e) {
         if (checkEquipAnime()) {
@@ -281,7 +282,7 @@ BOOL daPy_lk_c::procClimbDownStart_init(s16 param_0) {
     commonProcInit(daPyProc_CLIMB_DOWN_START_e);
     gravity = 0.0f;
     speed.y = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speedF = 0.0f;
     deleteEquipItem(TRUE);
     setSingleMoveAnime(ANM_LADDERDWST, m_HIO->mLadder.m.field_0x14, 30.0f, -1, 3.0f);
@@ -289,9 +290,9 @@ BOOL daPy_lk_c::procClimbDownStart_init(s16 param_0) {
     setOldRootQuaternion(0, -0x8000, 0);
     shape_angle.y = param_0 + 0x8000;
     current.angle.y = shape_angle.y;
-    current.pos.x = current.pos.x - 35.0f * cM_ssin(param_0);
-    current.pos.y = current.pos.y - 20.0f;
-    current.pos.z = current.pos.z - 35.0f * cM_scos(param_0);
+    current.pos.x -= (35.0f + DEMO_SELECT(REG4_F(11), 0.0f)) * cM_ssin(param_0);
+    current.pos.y -= (20.0f + DEMO_SELECT(REG4_F(10), 0.0f));
+    current.pos.z -= (35.0f + DEMO_SELECT(REG4_F(11), 0.0f)) * cM_scos(param_0);
     m35E0 = 43.67353f;
     mProcVar0.m3570 = 1;
     return true;
@@ -355,7 +356,7 @@ BOOL daPy_lk_c::procClimbMoveUpDown_init(int param_0) {
     m34C2 = 7;
     gravity = 0.0f;
     speed.y = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speedF = 0.0f;
     m34D0 = 1;
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK10000_e);
@@ -421,7 +422,7 @@ BOOL daPy_lk_c::procClimbMoveSide_init(int param_0) {
     );
     gravity = 0.0f;
     speed.y = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speedF = 0.0f;
     m34D0 = 1;
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK10000_e);

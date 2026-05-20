@@ -4772,9 +4772,6 @@ void dMeter_rupyInit(sub_meter_class* i_Meter) {
 
 /* 801FC2FC-801FC624       .text dMeter_rupyMove__FP15sub_meter_class */
 void dMeter_rupyMove(sub_meter_class* i_Meter) {
-    int maxRupees;
-    int iVar2;
-    int uVar3;
     int local_28[4];
     char acStack_38[16];
 
@@ -4783,21 +4780,22 @@ void dMeter_rupyMove(sub_meter_class* i_Meter) {
         i_Meter->field_0x19f0[1].mUserArea = dComIfGs_getWalletSize();
     }
     if (dComIfGp_getItemRupeeCount() != 0) {
-        maxRupees = (dComIfGs_getRupee() + dComIfGp_getItemRupeeCount());
+        int targetRupees = (dComIfGs_getRupee() + dComIfGp_getItemRupeeCount());
+        int maxRupees;
         if (dComIfGs_getWalletSize() == 0) {
-            iVar2 = 200;
+            maxRupees = 200;
         } else if (dComIfGs_getWalletSize() == 1) {
-            iVar2 = 1000;
+            maxRupees = 1000;
         } else {
-            iVar2 = 5000;
+            maxRupees = 5000;
         }
-        if (maxRupees > iVar2) {
-            maxRupees = iVar2;
-        } else if (maxRupees < 0) {
-            maxRupees = 0;
+        if (targetRupees > maxRupees) {
+            targetRupees = maxRupees;
+        } else if (targetRupees < 0) {
+            targetRupees = 0;
         }
-        i_Meter->mAdjustRupy = maxRupees - i_Meter->mRupyCount;
-        dComIfGs_setRupee(maxRupees);
+        i_Meter->mAdjustRupy = targetRupees - i_Meter->mRupyCount;
+        dComIfGs_setRupee(targetRupees);
         g_dComIfG_gameInfo.play.mItemRupeeCount = 0;
         if (labs(i_Meter->mAdjustRupy) >= 5) {
             rupy_soundOnFlag = 1;
@@ -4841,7 +4839,7 @@ void dMeter_rupyMove(sub_meter_class* i_Meter) {
                 }
             }
         }
-        uVar3 = i_Meter->mRupyCount;
+        int uVar3 = i_Meter->mRupyCount;
         local_28[0] = uVar3 / 1000;
         local_28[1] = (uVar3 % 1000) / 100;
         local_28[2] = (uVar3 % 100) / 10;

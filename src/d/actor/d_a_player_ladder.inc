@@ -104,7 +104,7 @@ BOOL daPy_lk_c::procLadderUpStart_init() {
     commonProcInit(daPyProc_LADDER_UP_START_e);
     gravity = 0.0f;
     speed.y = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speedF = 0.0f;
     if (mEquipItem == daPyItem_NONE_e) {
         if (checkEquipAnime()) {
@@ -179,7 +179,7 @@ BOOL daPy_lk_c::procLadderUpEnd_init(int param_0) {
     m34C2 = 7;
     gravity = 0.0f;
     speed.y = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speedF = 0.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000000_e);
     return true;
@@ -220,7 +220,7 @@ BOOL daPy_lk_c::procLadderDownStart_init() {
     commonProcInit(daPyProc_LADDER_DOWN_START_e);
     gravity = 0.0f;
     speed.y = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speedF = 0.0f;
     shape_angle.y = m352C + 0x8000;
     current.angle.y = m352C;
@@ -360,7 +360,7 @@ BOOL daPy_lk_c::procLadderMove_init(int param_0, int direction, cXyz* param_2) {
     m34C2 = 7;
     gravity = 0.0f;
     speed.y = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speedF = 0.0f;
     m34D0 = 1;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000000_e);

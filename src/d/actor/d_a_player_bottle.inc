@@ -102,7 +102,7 @@ BOOL daPy_lk_c::procBottleDrink_init(u16 param_0) {
     int iVar1 = checkShipRideUseItem(1);
     commonProcInit(daPyProc_BOTTLE_DRINK_e);
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     setSingleMoveAnime(
         ANM_BINDRINKPRE,
         1.0f,
@@ -220,7 +220,7 @@ BOOL daPy_lk_c::procBottleOpen_init(u16 param_0) {
     int iVar1 = checkShipRideUseItem(1);
     commonProcInit(daPyProc_BOTTLE_OPEN_e);
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     setSingleMoveAnime(
         ANM_BINOPENPRE,
         1.0f,
@@ -427,7 +427,7 @@ BOOL daPy_lk_c::procBottleSwing_init(int param_0) {
         setBottleModel(dItem_EMPTY_BOTTLE_e);
     }
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     fopAc_ac_c* catch_target = dComIfGp_att_getCatghTarget();
     BOOL bVar1;
     if (catch_target != 0) {

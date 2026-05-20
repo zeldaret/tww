@@ -960,14 +960,14 @@ int daNpc_Fa1_c::CreateHeap() {
             0x11020203);
     if (mpMorf == NULL) {
         return false;
-    } else if (mpMorf->getModel() == NULL) {
+    }
+    if (mpMorf->getModel() == NULL) {
         mpMorf = NULL;
         return false;
-    } else {
-        mMcaMorfCallback1.setNeckJoint(pModelData->getJointName()->getIndex("neck"));
-        mMcaMorfCallback1.setNeckAngle(0);
-        return true;
     }
+    mMcaMorfCallback1.setNeckJoint(pModelData->getJointName()->getIndex("neck"));
+    mMcaMorfCallback1.setNeckAngle(0);
+    return true;
 }
 
 /* 800FD61C-800FD6DC       .text setMtx__11daNpc_Fa1_cFv */

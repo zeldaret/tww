@@ -479,15 +479,24 @@ void dComIfG_inf_c::ct() {
 
 /* 800531A8-8005326C       .text dComIfG_changeOpeningScene__FP11scene_classs */
 int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
+#if VERSION == VERSION_DEMO
+    if (!fopScnM_ChangeReq(i_scene, i_procName, PROC_OVERLAP0, 30)) {
+        return FALSE;
+    }
+#endif
+
     dComIfGp_offEnableNextStage();
 
     dComIfGp_setNextStage("sea_T", 0, 44, 0);
-    mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(),
-                        dComIfGp_getNextStageLayer());
+    mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(), dComIfGp_getNextStageLayer());
+
+#if VERSION > VERSION_DEMO
     dComIfGs_setRestartRoomParam(0);
 
     fopScnM_ChangeReq(i_scene, i_procName, PROC_OVERLAP0, 30);
     fopScnM_ReRequest(i_procName, 0);
+#endif
+
     return 1;
 }
 
@@ -498,7 +507,9 @@ BOOL dComIfG_resetToOpening(scene_class* i_scene) {
     }
 
     dComIfG_changeOpeningScene(i_scene, 8);
+#if VERSION > VERSION_DEMO
     mDoAud_bgmStop(30);
+#endif
     mDoAud_resetProcess();
     return TRUE;
 }
@@ -547,7 +558,7 @@ cPhs_State dComIfG_resLoad(request_of_phase_process_class* i_phase, const char* 
 
 /* 800533D0-8005347C       .text dComIfG_resDelete__FP30request_of_phase_process_classPCc */
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, const char* i_resName) {
-    JUT_ASSERT(VERSION_SELECT(1045, 1045, 1048, 1048), i_phase->id != 1);
+    JUT_ASSERT(VERSION_SELECT(1033, 1045, 1048, 1048), i_phase->id != 1);
 
     if (i_phase->id == 2) {
         dComIfG_deleteObjectRes(i_resName);
@@ -565,7 +576,7 @@ s8 dComIfGp_getReverb(int param_0) {
 /* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj */
 int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 scaleXZ, cBgS_PolyInfo& i_floorPoly,
                               s16 i_angle, f32 scaleZ, GXTexObj* i_tex) {
-    if (i_floorPoly.ChkSetInfo() && -G_CM3D_F_INF != groundY) {
+    if (i_floorPoly.ChkSetInfo() && groundY != -G_CM3D_F_INF) {
         cM3dGPla* plane_p =
             dComIfG_Bgsp()->GetTriPla(i_floorPoly);
 
@@ -1285,18 +1296,22 @@ void dComIfGs_setPlayerRecollectionData() {
         tbl = 3;
         dComIfGp_setPlayerInfoBufferStageNo(4);
     } else {
+#if VERSION > VERSION_DEMO
         dComIfGs_setSelectItem(dItemBtn_X_e, dInvSlot_NONE_e);
         dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_NONE_e);
         dComIfGs_setSelectItem(dItemBtn_Z_e, dInvSlot_NONE_e);
+#endif
         return;
     }
 
+#if VERSION > VERSION_DEMO
     if (dComIfGs_getpPlayerStatusC(tbl)->mRecollectItem.mItems[dInvSlot_TELESCOPE_e] != dItem_TELESCOPE_e) {
         dComIfGs_setSelectItem(dItemBtn_X_e, dInvSlot_NONE_e);
         dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_NONE_e);
         dComIfGs_setSelectItem(dItemBtn_Z_e, dInvSlot_NONE_e);
         return;
     }
+#endif
 
     dSv_player_status_a_c tmp_sttsA;
     dSv_player_item_max_c tmp_max;
@@ -1391,7 +1406,9 @@ void dComIfGs_setPlayerRecollectionData() {
     dComIfGs_setItem(dInvSlot_BOTTLE1_e, tmp_item.mItems[dInvSlot_BOTTLE1_e]);
     dComIfGs_setItem(dInvSlot_BOTTLE2_e, tmp_item.mItems[dInvSlot_BOTTLE2_e]);
     dComIfGs_setItem(dInvSlot_BOTTLE3_e, tmp_item.mItems[dInvSlot_BOTTLE3_e]);
+#if VERSION > VERSION_DEMO
     dComIfGs_setItem(dInvSlot_CAMERA_e,  tmp_item.mItems[dInvSlot_CAMERA_e]);
+#endif
 
     dComIfGs_setSelectItem(dItemBtn_X_e, dInvSlot_NONE_e);
     dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_NONE_e);
@@ -1490,7 +1507,9 @@ void dComIfGs_revPlayerRecollectionData() {
     dComIfGs_setItem(dInvSlot_BOTTLE1_e, tmp_item.mItems[dInvSlot_BOTTLE1_e]);
     dComIfGs_setItem(dInvSlot_BOTTLE2_e, tmp_item.mItems[dInvSlot_BOTTLE2_e]);
     dComIfGs_setItem(dInvSlot_BOTTLE3_e, tmp_item.mItems[dInvSlot_BOTTLE3_e]);
+#if VERSION > VERSION_DEMO
     dComIfGs_setItem(dInvSlot_CAMERA_e,  tmp_item.mItems[dInvSlot_CAMERA_e]);
+#endif
 
     dComIfGs_setSelectItem(dItemBtn_X_e, dInvSlot_NONE_e);
     dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_NONE_e);
@@ -1598,7 +1617,9 @@ void dComIfGs_exchangePlayerRecollectionData() {
     dComIfGs_setItem(dInvSlot_BOTTLE1_e, tmp_item.mItems[dInvSlot_BOTTLE1_e]);
     dComIfGs_setItem(dInvSlot_BOTTLE2_e, tmp_item.mItems[dInvSlot_BOTTLE2_e]);
     dComIfGs_setItem(dInvSlot_BOTTLE3_e, tmp_item.mItems[dInvSlot_BOTTLE3_e]);
+#if VERSION > VERSION_DEMO
     dComIfGs_setItem(dInvSlot_CAMERA_e,  tmp_item.mItems[dInvSlot_CAMERA_e]);
+#endif
 }
 
 /* 8005586C-800559E8       .text dComIfGs_setSelectEquip__FiUc */

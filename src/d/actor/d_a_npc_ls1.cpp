@@ -589,20 +589,21 @@ void daNpc_Ls1_c::play_btk_anm() {
 void daNpc_Ls1_c::setAnm_anm(daNpc_Ls1_c::anm_prm_c* i_anmPrmP) {
     if (i_anmPrmP->mBckResIndex < 0 || mBckResIndex == i_anmPrmP->mBckResIndex) {
         return;
-    } else {
-        int id = bckResID(i_anmPrmP->mBckResIndex);
-        dNpc_setAnmIDRes(
-            mpMorf, 
-            i_anmPrmP->mLoopMode, 
-            i_anmPrmP->mMorf, i_anmPrmP->mSpeed, 
-            id, -1, 
-            mArcName
-        );
-        mBckResIndex = i_anmPrmP->mBckResIndex;
-        mbMorfAnimStopped = false;
-        m831 = 0;
-        mPrevMorfFrame = 0.0f;
     }
+
+    dNpc_setAnmIDRes(
+        mpMorf, 
+        i_anmPrmP->mLoopMode, 
+        i_anmPrmP->mMorf,
+        i_anmPrmP->mSpeed, 
+        bckResID(i_anmPrmP->mBckResIndex),
+        -1, 
+        mArcName
+    );
+    mBckResIndex = i_anmPrmP->mBckResIndex;
+    mbMorfAnimStopped = false;
+    m831 = 0;
+    mPrevMorfFrame = 0.0f;
 }
 
 /* 00001584-000015F4       .text setAnm_NUM__11daNpc_Ls1_cFii */
@@ -2139,46 +2140,46 @@ BOOL daNpc_Ls1_c::_execute() {
 
     if (m83A && demoActorID == 0) {
         return TRUE;
-    } else {
-        partner_search();
-        checkOrder();
-        if (!demo()) {
-            int staff_id = -1;
-            if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk() == false) {
-                staff_id = isEventEntry();
-            }
+    }
 
-            if (staff_id >= 0 || m834) {
-                event_proc(staff_id);
-            } else {
-                (this->*mCurrProcFunc)(NULL);
-            }
+    partner_search();
+    checkOrder();
+    if (!demo()) {
+        int staff_id = -1;
+        if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk() == false) {
+            staff_id = isEventEntry();
+        }
 
-            lookBack();
-
-            if (mType != 0) {
-                fopAcM_posMoveF(this, mStts.GetCCMoveP());
-                mObjAcch.CrrPos(*dComIfG_Bgsp());
-            }
-
-            play_animation();
+        if (staff_id >= 0 || m834) {
+            event_proc(staff_id);
         } else {
-            m83A = false;
+            (this->*mCurrProcFunc)(NULL);
         }
 
-        eventOrder();
-        mAngle = current.angle;
-        if (!m83B) {
-            shape_angle = current.angle;
+        lookBack();
+
+        if (mType != 0) {
+            fopAcM_posMoveF(this, mStts.GetCCMoveP());
+            mObjAcch.CrrPos(*dComIfG_Bgsp());
         }
 
-        tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
-        tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
-        setMtx(false);
+        play_animation();
+    } else {
+        m83A = false;
+    }
 
-        if (!m841) {
-            setCollision(40.0f, 100.0f);
-        }
+    eventOrder();
+    mAngle = current.angle;
+    if (!m83B) {
+        shape_angle = current.angle;
+    }
+
+    tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
+    tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
+    setMtx(false);
+
+    if (!m841) {
+        setCollision(40.0f, 100.0f);
     }
 
     return TRUE;

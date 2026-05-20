@@ -178,7 +178,7 @@ BOOL daPy_lk_c::procHammerSideSwing_init() {
         m_HIO->mItem.mHam.m.field_0x14
     );
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     voiceStart(1);
     m34D4 = shape_angle.y;
     setBlurPosResource(LKANM__HAMMERSIDE_POS);
@@ -192,20 +192,20 @@ BOOL daPy_lk_c::procHammerSideSwing_init() {
 BOOL daPy_lk_c::procHammerSideSwing() {
     m35EC = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-        mVelocity = 0.0f;
+        mNormalSpeed = 0.0f;
         mDirection = DIR_RIGHT;
         checkNextMode(0);
         return true;
     }
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mItem.mHam.m.field_0x10) {
-        f32 dVar4 = mVelocity;
+        f32 dVar4 = mNormalSpeed;
         u8 orig_direction = mDirection;
-        mVelocity = 0.0f;
+        mNormalSpeed = 0.0f;
         mDirection = DIR_RIGHT;
         if (checkNextMode(1)) {
             return true;
         }
-        mVelocity = dVar4;
+        mNormalSpeed = dVar4;
         mDirection = orig_direction;
     }
     if (changeCutReverseProc(ANM_CUTREL)) {
@@ -248,7 +248,7 @@ BOOL daPy_lk_c::procHammerFrontSwingReady_init() {
         m_HIO->mItem.mHam.m.field_0x28
     );
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     if (checkAttentionLock() || mStickDistance <= 0.05f) {
         m34D4 = shape_angle.y;
     } else {
@@ -295,7 +295,7 @@ BOOL daPy_lk_c::procHammerFrontSwing_init() {
         0.0f
     );
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     voiceStart(1);
     if (checkAttentionLock() || mStickDistance <= 0.05f) {
         m34D4 = shape_angle.y;
@@ -395,7 +395,7 @@ BOOL daPy_lk_c::procHammerFrontSwingEnd_init() {
         m_HIO->mItem.mHam.m.field_0x40
     );
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     mCutType = CUT_TYPE_HAMMER_FRONTSWING;
     offResetFlg0(daPyRFlg0_NOT_ATTACKING);
     return true;

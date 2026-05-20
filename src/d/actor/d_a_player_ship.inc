@@ -265,8 +265,7 @@ void daPy_lk_c::setShipAttnetionBodyAngle() {
             if (direction == DIR_LEFT) {
                 s16 r5 = 512.0f * mStickDistance;
                 if (r5 > m34DA) {
-                    s16 r0 = 64.0f * mStickDistance;
-                    m34DA += r0;
+                    m34DA += (s16)(64.0f * mStickDistance);
                     if (m34DA > r5) {
                         m34DA = r5;
                     }
@@ -277,8 +276,7 @@ void daPy_lk_c::setShipAttnetionBodyAngle() {
             } else if (direction == DIR_RIGHT) {
                 s16 r5 = -512.0f * mStickDistance;
                 if (r5 < m34DA) {
-                    s16 r0 = 64.0f * mStickDistance;
-                    m34DA -= r0;
+                    m34DA -= (s16)(64.0f * mStickDistance);
                     if (m34DA < r5) {
                         m34DA = r5;
                     }
@@ -402,19 +400,23 @@ BOOL daPy_lk_c::changeShipEndProc() {
         }
         if (checkSetItemTrigger(dItem_TINGLE_TUNER_e, 1)) {
             fopAcM_orderTalkEvent(this, (fopAc_ac_c*)dComIfGp_getAgb());
+#if VERSION > VERSION_DEMO
             if (checkShipNotNormalMode()) {
                 setShipRidePos(0);
             } else {
                 setShipRidePos(1);
             }
+#endif
             return true;
         }
         if (checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 1)) {
+#if VERSION > VERSION_DEMO
             if (checkShipNotNormalMode()) {
                 setShipRidePos(0);
             } else {
                 setShipRidePos(1);
             }
+#endif
             return changeDragonShield(1);
         }
         if (checkSetItemTrigger(daPyItem_DRINK_BOTTLE_e, 0)) {
@@ -481,7 +483,7 @@ BOOL daPy_lk_c::procShipReady_init() {
         m_HIO->mWallCatch.m.field_0x28
     );
     gravity = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     s16 sVar3 = fopAcM_searchActorAngleY(ship, this);
     if ((s16)(sVar3 - ship->shape_angle.y) > 0) {
         mDoMtx_multVec(ship->getBodyMtx(), &l_ship_ledge, &current.pos);
@@ -523,7 +525,7 @@ BOOL daPy_lk_c::procShipReady() {
         }
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
             mProcVar0.m3570 = 1;
-            mVelocity = 6.0f;
+            mNormalSpeed = 6.0f;
             setSingleMoveAnime(ANM_WALK, m_HIO->mMove.m.field_0x40, 0.0f, -1, 5.0f);
             m34C2 = 10;
             offModeFlg(ModeFlg_HANG | ModeFlg_00000400);
@@ -554,7 +556,7 @@ BOOL daPy_lk_c::procShipJumpRide_init() {
     deleteEquipItem(TRUE);
     gravity = 0.0f;
     speed.y = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     ship->setPaddleMove();
     ship->onJumpRideFlg();
     setSingleMoveAnime(ANM_SLIPICE, 1.0f, 0.0f, -1, 5.0f);
@@ -587,7 +589,7 @@ BOOL daPy_lk_c::procShipSteer_init() {
     commonProcInit(daPyProc_SHIP_STEER_e);
     deleteEquipItem(TRUE);
     gravity = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speed.y = 0.0f;
     ship->setSteerMove();
     initShipBaseAnime();
@@ -624,7 +626,7 @@ BOOL daPy_lk_c::procShipPaddle_init() {
     deleteEquipItem(TRUE);
     gravity = 0.0f;
     speed.y = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     ship->setPaddleMove();
     initShipBaseAnime();
     if (!bVar1) {
@@ -974,7 +976,7 @@ BOOL daPy_lk_c::procShipCannon_init() {
     commonProcInit(daPyProc_SHIP_CANNON_e);
     deleteEquipItem(TRUE);
     gravity = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     ship->setCannon();
     initShipBaseAnime();
     setShipRidePos(1);
@@ -1007,7 +1009,7 @@ BOOL daPy_lk_c::procShipCrane_init() {
     commonProcInit(daPyProc_SHIP_CRANE_e);
     deleteEquipItem(TRUE);
     gravity = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     ship->setCrane();
     if (ship->getRopeCnt() != 0) {
         initShipCraneAnime();
@@ -1163,7 +1165,7 @@ BOOL daPy_lk_c::procShipGetOff_init() {
     commonProcInit(daPyProc_SHIP_GET_OFF_e);
     deleteEquipItem(TRUE);
     setSingleMoveAnime(ANM_DASH, m_HIO->mMove.m.field_0x40, 0.0f, -1, 5.0f);
-    mVelocity = 8.0f;
+    mNormalSpeed = 8.0f;
     gravity = 0.0f;
     shape_angle.y = ship->shape_angle.y + -0x4000;
     current.angle.y = shape_angle.y;
@@ -1197,7 +1199,7 @@ BOOL daPy_lk_c::procShipGetOff() {
                 m_HIO->mAutoJump.m.field_0x30
             );
             gravity = m_HIO->mAutoJump.m.field_0xC;
-            mVelocity = m_HIO->mShip.m.field_0x10;
+            mNormalSpeed = m_HIO->mShip.m.field_0x10;
             speed.y = m_HIO->mShip.m.field_0x14;
             mProcVar0.m3570 = 1;
             m34C2 = 1;

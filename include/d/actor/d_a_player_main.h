@@ -1257,10 +1257,10 @@ public:
     void setSeAnime(daPy_anmHeap_c const*, J3DFrameCtrl*);
     void initSeAnime();
     void resetSeAnime();
-    int setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32);
-    BOOL setSingleMoveAnime(daPy_ANM, f32, f32, s16, f32);
-    BOOL setActAnimeUpper(u16, daPy_UPPER, f32, f32, s16, f32);
-    BOOL resetActAnimeUpper(daPy_UPPER, f32);
+    int setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32 i_morf);
+    BOOL setSingleMoveAnime(daPy_ANM, f32, f32, s16, f32 i_morf);
+    BOOL setActAnimeUpper(u16, daPy_UPPER, f32, f32, s16, f32 i_morf);
+    BOOL resetActAnimeUpper(daPy_UPPER, f32 i_morf);
     void animeUpdate();
     void simpleAnmPlay(J3DAnmBase*);
     void setHandModel(daPy_ANM);
@@ -1584,7 +1584,9 @@ public:
     f32 checkRopeRoofHit(s16);
     int changeRopeSwingProc();
     int changeRopeEndProc(int);
+#if VERSION > VERSION_DEMO
     BOOL checkSpecialRope();
+#endif
     int changeRopeToHangProc();
     BOOL checkRopeSwingWall(cXyz*, cXyz*, s16*, f32*);
     void setBlendRopeMoveAnime(int);
@@ -1782,7 +1784,7 @@ public:
     BOOL procCutExA();
     BOOL procCutExB_init();
     BOOL procCutExB();
-    BOOL procCutTurn_init(int);
+    BOOL procCutTurn_init(BOOL);
     BOOL procCutTurn();
     BOOL procCutRoll_init();
     BOOL procCutRoll();
@@ -2256,7 +2258,7 @@ public:
     /* 0x35B0 */ f32 mStickDistance;
     /* 0x35B4 */ f32 m35B4;
     /* 0x35B8 */ f32 m35B8;
-    /* 0x35BC */ f32 mVelocity;
+    /* 0x35BC */ f32 mNormalSpeed;
     /* 0x35C0 */ u8 m35C0[0x35C4 - 0x35C0];
     /* 0x35C4 */ f32 m35C4;
     /* 0x35C8 */ f32 m35C8;

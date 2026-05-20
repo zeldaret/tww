@@ -246,7 +246,7 @@ BOOL daPy_lk_c::procBowSubject_init() {
     }
     setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
 
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_BOW_AIM_e);
 
@@ -301,7 +301,7 @@ BOOL daPy_lk_c::procBowMove() {
     }
     if (!checkNextMode(0)) {
         f32 fVar1 = -1.0f;
-        if (std::fabsf(mVelocity) < 0.001f) {
+        if (std::fabsf(mNormalSpeed) < 0.001f) {
             onModeFlg(ModeFlg_00000001);
             if (mDirection != DIR_RIGHT) {
                 mDirection = DIR_RIGHT;

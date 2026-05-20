@@ -85,7 +85,7 @@ BOOL daPy_lk_c::procFoodThrow_init() {
         }
     }
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
 
     daPy_matAnm_c::offMabaFlg();
     setSingleMoveAnime(
@@ -176,7 +176,7 @@ BOOL daPy_lk_c::procFoodSet_init() {
     commonProcInit(daPyProc_FOOD_SET_e);
     current.angle.y = shape_angle.y;
 
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     setSingleMoveAnime(
         ANM_SETHYOINOMI,
         m_HIO->mItem.mFood.m.field_0x10,

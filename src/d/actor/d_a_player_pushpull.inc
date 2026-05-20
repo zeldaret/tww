@@ -52,7 +52,7 @@ BOOL daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel pp_label) {
 BOOL daPy_lk_c::procPushPullWait_init(int param_0) {
     commonProcInit(daPyProc_PUSH_PULL_WAIT_e);
     mProcVar0.m3570 = param_0;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     if (param_0 == 0 || mEquipItem == daPyItem_NONE_e) {
         if (checkEquipAnime()) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);

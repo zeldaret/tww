@@ -306,7 +306,7 @@ void daPy_lk_c::initGrabNextMode() {
 /* 8013B56C-8013B6F4       .text procGrabReady_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procGrabReady_init() {
     commonProcInit(daPyProc_GRAB_READY_e);
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     if (mEquipItem == daPyItem_NONE_e) {
         if (checkEquipAnime()) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
@@ -517,7 +517,9 @@ BOOL daPy_lk_c::procGrabThrow_init(int param_0) {
     if (mCurProc == daPyProc_GRAB_THROW_e) {
         return false;
     }
+
     commonProcInit(daPyProc_GRAB_THROW_e);
+
     if (fopAcM_CheckStatus(mActorKeepGrab.getActor(), fopAcStts_UNK10000_e)) {
         setSingleMoveAnime(
             ANM_GRABRE,
@@ -537,7 +539,8 @@ BOOL daPy_lk_c::procGrabThrow_init(int param_0) {
         );
         m3574 = 1;
     }
-    m35A0 = mVelocity;
+
+    m35A0 = mNormalSpeed;
     dComIfGp_clearPlayerStatus1(0, daPyStts1_UNK40000_e);
     mProcVar0.m3570 = param_0;
     return true;
@@ -549,7 +552,7 @@ BOOL daPy_lk_c::procGrabThrow() {
     fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
 
     cLib_addCalc(
-        &mVelocity, 0.0f, m_HIO->mMove.m.field_0x24, m_HIO->mMove.m.field_0x1C, m_HIO->mMove.m.field_0x20
+        &mNormalSpeed, 0.0f, m_HIO->mMove.m.field_0x24, m_HIO->mMove.m.field_0x1C, m_HIO->mMove.m.field_0x20
     );
     if (m3574 == 0) {
         if (frameCtrl.getRate() < 0.01f) {
@@ -616,7 +619,7 @@ BOOL daPy_lk_c::procGrabPut_init() {
             m_HIO->mGrab.m.field_0x74
         );
     }
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
     if (grab_actor != NULL) {
         m370C = grab_actor->current.pos;
@@ -719,7 +722,7 @@ BOOL daPy_lk_c::procGrabWait_init() {
     }
     m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     m35A0 = 0.0f;
     if (m35D8 <= -29.0f) {
         mProcVar0.m3570 = 1;
@@ -789,7 +792,7 @@ BOOL daPy_lk_c::procGrabHeavyWait_init() {
     setActAnimeUpper(LKANM_BCK_GRABWAITB, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
     m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     m35A0 = 0.0f;
     return true;
 }

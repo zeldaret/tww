@@ -582,7 +582,7 @@ void daPy_lk_c::setAuraEffect() {
                 var_f28 = 1.5f;
             }
         } else {
-            var_f31 = std::fabsf(mVelocity) / m_HIO->mMove.m.field_0x18;
+            var_f31 = std::fabsf(mNormalSpeed) / m_HIO->mMove.m.field_0x18;
             if (var_f31 > 1.0f) {
                 var_f31 = 1.0f;
             }
@@ -678,11 +678,11 @@ void daPy_lk_c::setWaterRipple() {
 
     if (checkModeFlg(ModeFlg_SWIM)) {
         if (!mSwimTailEcallBack[0].getEnd()) {
-            mSwimTailEcallBack[0].setSpeedRate(std::fabsf(mVelocity / mMaxNormalSpeed));
+            mSwimTailEcallBack[0].setSpeedRate(std::fabsf(mNormalSpeed / mMaxNormalSpeed));
         }
 
         if (!mSwimTailEcallBack[1].getEnd()) {
-            mSwimTailEcallBack[1].setSpeedRate(std::fabsf(mVelocity / mMaxNormalSpeed));
+            mSwimTailEcallBack[1].setSpeedRate(std::fabsf(mNormalSpeed / mMaxNormalSpeed));
         }
         cXyz local_1c;
         cMtx_multVec(mpCLModel->getAnmMtx(15), &wave_offset, &local_1c);

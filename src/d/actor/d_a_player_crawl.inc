@@ -89,7 +89,6 @@ BOOL daPy_lk_c::changeCrawlAutoMoveProc(cXyz* param_1) {
     cXyz sp40;
     cXyz sp34;
     cXyz sp28;
-    f32 spC;
     s16 spA;
     s16 sp8;
     f32 temp_f31 = cM_ssin(current.angle.y);
@@ -142,6 +141,7 @@ BOOL daPy_lk_c::changeCrawlAutoMoveProc(cXyz* param_1) {
     }
     f32 x1 = param_1->x - (75.0f * temp_f31);
     f32 y1 = param_1->z - (75.0f * temp_f30);
+    f32 spC;
     if (cM3d_Len2dSqPntAndSegLine(
             0.5f * (sp34.x + sp28.x),
             0.5f * (sp34.z + sp28.z),
@@ -208,24 +208,22 @@ void daPy_lk_c::crawlBgCheck(cXyz* param_0, cXyz* param_1) {
 }
 
 /* 801390B8-801392BC       .text checkCrawlSideWall__9daPy_lk_cFP4cXyzP4cXyzP4cXyzP4cXyzPsPs */
-BOOL daPy_lk_c::checkCrawlSideWall(
-    cXyz* param_1, cXyz* param_2, cXyz* param_3, cXyz* param_4, s16* param_5, s16* param_6
-) {
+BOOL daPy_lk_c::checkCrawlSideWall(cXyz* param_1, cXyz* param_2, cXyz* param_3, cXyz* param_4, s16* param_5, s16* param_6) {
     cXyz local_78;
     cXyz local_90;
 
     mLinkLinChk.Set(param_1, param_2, this);
     if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
         *param_3 = mLinkLinChk.GetCross();
-        cM3dGPla* pfVar1 = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
-        *param_5 = cM_atan2s(pfVar1->GetNP()->x, pfVar1->GetNP()->z);
-        local_90 = *param_3 + (pfVar1->mNormal * 75.0f);
+        cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
+        *param_5 = cM_atan2s(plane->GetNP()->x, plane->GetNP()->z);
+        local_90 = *param_3 + (plane->mNormal * 75.0f);
         local_78 = (local_90 + *param_3) * 0.5f;
         mLinkLinChk.Set(&local_78, &local_90, this);
         if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
             *param_4 = mLinkLinChk.GetCross();
-            pfVar1 = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
-            *param_6 = cM_atan2s(pfVar1->GetNP()->x, pfVar1->GetNP()->z);
+            plane = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
+            *param_6 = cM_atan2s(plane->GetNP()->x, plane->GetNP()->z);
             cXyz local_9c = *param_3 - *param_4;
             f32 temp_f31 = local_9c.abs2XZ();
             if (cLib_distanceAngleS(*param_5, *param_6) > 0x7F00 && temp_f31 < 5625.0f && temp_f31 > 3600.0f) {
@@ -278,7 +276,7 @@ BOOL daPy_lk_c::procCrawlStart_init() {
         m_HIO->mCrouch.m.field_0x6,
         m_HIO->mCrouch.m.field_0x2C
     );
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     current.angle.y = shape_angle.y;
     m35A0 = 1.0f / (m_HIO->mCrouch.m.field_0x28 - m_HIO->mCrouch.m.field_0x24);
     m35E4 = 0.0f;
@@ -518,9 +516,9 @@ BOOL daPy_lk_c::procCrawlMove() {
             }
         }
         dVar11 = getCrawlMoveSpeed();
-        mVelocity = dVar11;
-        if (mVelocity < 0.0f) {
-            mVelocity *= -1.0f;
+        mNormalSpeed = dVar11;
+        if (mNormalSpeed < 0.0f) {
+            mNormalSpeed *= -1.0f;
             current.angle.y = shape_angle.y + 0x8000;
             mDoMtx_multVec(mpCLModel->getBaseTRMtx(), &l_crawl_back_offset, &sp88);
             crawlBgCheck(&sp88, &sp10C);
@@ -543,7 +541,7 @@ BOOL daPy_lk_c::procCrawlAutoMove_init(int param_0, cXyz* param_1) {
     m34D6 = 300;
     dComIfGp_setPlayerStatus0(0, daPyStts0_CRAWL_e);
     setCrawlMoveDirectionArrow();
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     onResetFlg0(daPyRFlg0_CRAWL_AUTO_MOVE);
     for (int i = 0; i < 3; i++) {
         mAcchCir[i].SetWallR(9.99f);
@@ -572,9 +570,9 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
             frameCtrl.setRate(0.0f);
             frameCtrl.setFrame(fVar2);
             mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(fVar2);
-            mVelocity = 0.0f;
+            mNormalSpeed = 0.0f;
         } else if (std::fabsf(frameCtrl.getRate()) < 0.01f) {
-            mVelocity = 0.0f;
+            mNormalSpeed = 0.0f;
             m34D0--;
         }
         setCrawlMoveDirectionArrow();
@@ -662,9 +660,9 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
         if (cLib_distanceAngleS(cM_atan2s(local_28.x, local_28.z), current.angle.y) < 0x6000) {
             bVar1 = false;
         }
-        mVelocity = getCrawlMoveSpeed();
-        if (mVelocity < 0.0f) {
-            mVelocity *= -1.0f;
+        mNormalSpeed = getCrawlMoveSpeed();
+        if (mNormalSpeed < 0.0f) {
+            mNormalSpeed *= -1.0f;
             current.angle.y = shape_angle.y + 0x8000;
         }
         if (bVar1 != 0 || m34D6 == 0) {
@@ -711,7 +709,7 @@ BOOL daPy_lk_c::procCrawlEnd_init(int param_1, s16 param_2, s16 param_3) {
     m3700.x = auStack_58.mTranslate.x;
     m3700.y = auStack_58.mTranslate.y;
     m3700.z = auStack_58.mTranslate.z;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     shape_angle.x = param_2;
     shape_angle.z = param_3;
     m35A0 = 1.0f / (m_HIO->mCrouch.m.field_0xE - m_HIO->mCrouch.m.field_0x48);

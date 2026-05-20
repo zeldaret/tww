@@ -104,7 +104,7 @@ BOOL daPy_lk_c::procBtJump_init(fopEn_enemy_c* enemy) {
     m370C.z = enemy->current.pos.z - enemy->getBtBodyR() * cM_scos(enemy->shape_angle.y);
     if (m_HIO->mBattle.mBJump.m.field_0x18 <= 0.0f) {
         speed.y = m35A0;
-        mVelocity = m35A4;
+        mNormalSpeed = m35A4;
         mProcVar0.m3570 = 1;
     } else {
         mProcVar0.m3570 = 0;
@@ -120,7 +120,7 @@ BOOL daPy_lk_c::procBtJump() {
     if (mProcVar0.m3570 == 0) {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= m_HIO->mBattle.mBJump.m.field_0x18) {
             speed.y = m35A0;
-            mVelocity = m35A4;
+            mNormalSpeed = m35A4;
             mProcVar0.m3570 = 1;
         }
     } else {
@@ -133,7 +133,7 @@ BOOL daPy_lk_c::procBtJump() {
                 return procBtJumpCut_init(&m370C);
             }
         } else {
-            u32 uVar2 = cM_atan2s(mVelocity, -speed.y);
+            u32 uVar2 = cM_atan2s(mNormalSpeed, -speed.y);
             f32 temp = cM_ssin(uVar2 * 2);
             m34F2 = -m_HIO->mBattle.mBJump.m.field_0x6 * temp;
             setFallVoice();
@@ -158,7 +158,7 @@ BOOL daPy_lk_c::procBtJumpCut_init(cXyz* param_0) {
         mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_MJMPCMS));
     }
     m35EC = m_HIO->mBattle.mBJump.m.field_0x30;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     gravity = 0.0f;
     speed.y = 0.0f;
     m370C = *param_0;
@@ -175,7 +175,7 @@ BOOL daPy_lk_c::procBtJumpCut_init(cXyz* param_0) {
 BOOL daPy_lk_c::procBtJumpCut() {
     m35EC = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     if (speed.y < 0.0f && m_HIO->mBattle.mBJump.m.field_0x0 == 1) {
-        u32 uVar2 = cM_atan2s(mVelocity, -speed.y);
+        u32 uVar2 = cM_atan2s(mNormalSpeed, -speed.y);
         f32 temp = cM_ssin(uVar2 * 2);
         m34F2 = -m_HIO->mBattle.mBJump.m.field_0x6 * temp;
     }
@@ -198,7 +198,7 @@ BOOL daPy_lk_c::procBtJumpCut() {
     if (mProcVar0.m3570 == 0 && mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         gravity = m_HIO->mBattle.mBJump.m.field_0x3C;
         speed.y = m_HIO->mBattle.mBJump.m.field_0x34;
-        mVelocity = m_HIO->mBattle.mBJump.m.field_0x38;
+        mNormalSpeed = m_HIO->mBattle.mBJump.m.field_0x38;
         mProcVar0.m3570 = 1;
     } else if (mProcVar0.m3570 == 1 && speed.y < -gravity && m_HIO->mBattle.mBJump.m.field_0x0 == 1) {
         mProcVar0.m3570 = 2;
@@ -216,7 +216,7 @@ BOOL daPy_lk_c::procBtJumpCut() {
 /* 8013EBD0-8013EC50       .text procBtSlide__9daPy_lk_cFv */
 BOOL daPy_lk_c::procBtSlide() {
     f32 dVar1 = cLib_addCalc(
-        &mVelocity,
+        &mNormalSpeed,
         0.0f,
         m_HIO->mBattle.mBSlide.m.field_0x4,
         m_HIO->mBattle.mBSlide.m.field_0x8,
@@ -225,7 +225,7 @@ BOOL daPy_lk_c::procBtSlide() {
     if (dVar1 <= 0.001f) {
         checkNextMode(0);
     }
-    if (mVelocity < 2.5f) {
+    if (mNormalSpeed < 2.5f) {
         resetFootEffect();
     }
     return true;
@@ -234,7 +234,7 @@ BOOL daPy_lk_c::procBtSlide() {
 /* 8013EC50-8013EE64       .text procBtRoll_init__9daPy_lk_cFP13fopEn_enemy_c */
 BOOL daPy_lk_c::procBtRoll_init(fopEn_enemy_c* enemy) {
     commonProcInit(daPyProc_BT_ROLL_e);
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
 
     cXyz local_38;
     local_38.x = 0.5f * (current.pos.x + (enemy->current.pos.x - enemy->getBtBodyR() * cM_ssin(enemy->shape_angle.y)));
@@ -291,7 +291,7 @@ BOOL daPy_lk_c::procBtRoll() {
     current.pos.x = local_28.x + m35A0 * cM_ssin(m34D6);
     current.pos.z = local_28.z + m35A0 * cM_scos(m34D6);
     shape_angle.y = m34D6 + 0x8000;
-    if (abs((int)sVar3) < m_HIO->mBattle.mBRoll.m.field_0x2) {
+    if (abs(sVar3) < m_HIO->mBattle.mBRoll.m.field_0x2) {
         resetFootEffect();
     }
 
@@ -341,7 +341,7 @@ BOOL daPy_lk_c::procBtRollCut_init(cXyz* param_0) {
     m35EC = m_HIO->mBattle.mBRoll.m.field_0x20;
     m370C = *param_0;
     m34D4 = 0;
-    mVelocity = m_HIO->mBattle.mBRoll.m.field_0x28;
+    mNormalSpeed = m_HIO->mBattle.mBRoll.m.field_0x28;
     speed.y = m_HIO->mBattle.mBRoll.m.field_0x2C;
     gravity = m_HIO->mBattle.mBRoll.m.field_0x30;
     voiceStart(1);
@@ -405,7 +405,7 @@ BOOL daPy_lk_c::procBtVerticalJump_init(fopEn_enemy_c* enemy) {
         m_HIO->mBattle.mBVerJump.m.field_0x0,
         m_HIO->mBattle.mBVerJump.m.field_0x10
     );
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     gravity = m_HIO->mBattle.mBVerJump.m.field_0x14;
     speed.y = m_HIO->mBattle.mBVerJump.m.field_0x18;
     offNoResetFlg0(daPyFlg0_NO_FALL_VOICE);
@@ -503,7 +503,7 @@ BOOL daPy_lk_c::procBtVerticalJumpLand_init() {
 BOOL daPy_lk_c::procBtVerticalJumpLand() {
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         procBackJump_init();
-        mVelocity = m_HIO->mBattle.mBVerJump.m.field_0x3C;
+        mNormalSpeed = m_HIO->mBattle.mBVerJump.m.field_0x3C;
         speed.y = m_HIO->mBattle.mBVerJump.m.field_0x40;
     }
     return true;

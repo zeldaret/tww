@@ -691,58 +691,58 @@ int himo2_bg_check(himo2_class* i_this) {
 
     if (i_this->m02A2 != 0) {
         return FALSE;
-    } else {
-        i_this->m2574.CrrPos(g_dComIfG_gameInfo.play.mBgS);
-        if ((i_this->m2574.ChkWallHit() || i_this->m2574.ChkRoofHit()) || i_this->m2574.ChkGroundHit()) {
-            i_this->m02DC = 9;
-            actor->speedF *= -1.0f;
-            i_this->m0308 = 30;
-            cBgS_PolyInfo local_24;
-            flag = i_this->m2574.GetOnePolyInfo(&local_24);
-            JUT_ASSERT(DEMO_SELECT(1534, 1569), flag == NULL);
-            uVar3 = dComIfG_Bgsp()->GetMtrlSndId(local_24);
-            mDoAud_seStart(JA_SE_LK_SW_HIT_S, &actor->current.pos, uVar3, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-            iVar4 = dComIfG_Bgsp()->GetAttributeCode(local_24);
-            if ((iVar4 == dBgS_Attr_WOOD_e) || (iVar4 == dBgS_Attr_STONE_e)) {
-                local_38.x = actor->current.angle.x;
-                local_38.y = actor->current.angle.y;
-                local_38.z = actor->current.angle.z;
-                local_38.y = actor->current.angle.y + 0x8000;
-                mDoAud_seStart(JA_SE_LK_MS_WEP_HIT, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-                if (iVar4 == dBgS_Attr_WOOD_e) {
-                    pJVar5 = dComIfGp_particle_set(
-                        dPa_name::ID_AK_JN_ELEMENTKIKUZU00,
-                        &actor->current.pos,
-                        &local_38,
-                        NULL,
-                        0xFF,
-                        NULL,
-                        -1,
-                        &actor->tevStr.mColorK0,
-                        &actor->tevStr.mColorK0,
-                        NULL
-                    );
-                    if (pJVar5 != NULL) {
-                        pJVar5->mSpread = 0.2f;
-                        pJVar5->mVolumeSweep = 0.15f;
-                    }
-                } else {
-                    local_38.x = local_38.x + 0x4000;
-                    pJVar5 = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTHIBANA00, &actor->current.pos, &local_38);
-                    if (pJVar5 != NULL) {
-                        pJVar5->mInitialVelAxis = 15.0f;
-                    }
-                    dKy_Sound_set(actor->current.pos, 100, fopAcM_GetID(actor), 5);
-                }
+    }
+
+    i_this->m2574.CrrPos(g_dComIfG_gameInfo.play.mBgS);
+    if ((i_this->m2574.ChkWallHit() || i_this->m2574.ChkRoofHit()) || i_this->m2574.ChkGroundHit()) {
+        i_this->m02DC = 9;
+        actor->speedF *= -1.0f;
+        i_this->m0308 = 30;
+        cBgS_PolyInfo local_24;
+        flag = i_this->m2574.GetOnePolyInfo(&local_24);
+        JUT_ASSERT(DEMO_SELECT(1534, 1569), flag == NULL);
+        uVar3 = dComIfG_Bgsp()->GetMtrlSndId(local_24);
+        mDoAud_seStart(JA_SE_LK_SW_HIT_S, &actor->current.pos, uVar3, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        iVar4 = dComIfG_Bgsp()->GetAttributeCode(local_24);
+        if ((iVar4 == dBgS_Attr_WOOD_e) || (iVar4 == dBgS_Attr_STONE_e)) {
+            local_38.x = actor->current.angle.x;
+            local_38.y = actor->current.angle.y;
+            local_38.z = actor->current.angle.z;
+            local_38.y = actor->current.angle.y + 0x8000;
+            mDoAud_seStart(JA_SE_LK_MS_WEP_HIT, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            if (iVar4 == dBgS_Attr_WOOD_e) {
+                pJVar5 = dComIfGp_particle_set(
+                    dPa_name::ID_AK_JN_ELEMENTKIKUZU00,
+                    &actor->current.pos,
+                    &local_38,
+                    NULL,
+                    0xFF,
+                    NULL,
+                    -1,
+                    &actor->tevStr.mColorK0,
+                    &actor->tevStr.mColorK0,
+                    NULL
+                );
                 if (pJVar5 != NULL) {
-                    pJVar5->mRate = 8.0f;
-                    pJVar5->mMaxFrame = 1;
+                    pJVar5->mSpread = 0.2f;
+                    pJVar5->mVolumeSweep = 0.15f;
                 }
+            } else {
+                local_38.x = local_38.x + 0x4000;
+                pJVar5 = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTHIBANA00, &actor->current.pos, &local_38);
+                if (pJVar5 != NULL) {
+                    pJVar5->mInitialVelAxis = 15.0f;
+                }
+                dKy_Sound_set(actor->current.pos, 100, fopAcM_GetID(actor), 5);
             }
-            return true;
-        } else {
-            return false;
+            if (pJVar5 != NULL) {
+                pJVar5->mRate = 8.0f;
+                pJVar5->mMaxFrame = 1;
+            }
         }
+        return true;
+    } else {
+        return false;
     }
 }
 

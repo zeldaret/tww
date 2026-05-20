@@ -728,68 +728,66 @@ cXyz daGoal_Flag_c::get_cloth_anim_factor(cXyz* i_posArr, cXyz* i_nrmArr, cXyz* 
     f32 dot = i_windVecP->getDotProduct(i_nrmArr[index]);
     if ((i_row == 0 || i_row == 4) && (i_col == 0 || i_col == 8)) {
         return cXyz::Zero;
-    } else {
-        cXyz anim_factor = i_nrmArr[index] * dot;
-        anim_factor.y += l_HIO.mFlagSagFactor * ((float)i_row * 0.25f);
-        if (i_col != 0) {
+    }
+    cXyz anim_factor = i_nrmArr[index] * dot;
+    anim_factor.y += l_HIO.mFlagSagFactor * ((float)i_row * 0.25f);
+    if (i_col != 0) {
+        get_cloth_anim_sub_factor(
+            &pos, &i_posArr[(i_col - 1) + (i_row * 9)],
+            &anim_factor, 250.0f);
+        if (i_row != 0) {
             get_cloth_anim_sub_factor(
-                &pos, &i_posArr[(i_col - 1) + (i_row * 9)],
+                &pos, &i_posArr[i_col + (i_row - 1) * 9],
+                &anim_factor, 120.0f);
+            get_cloth_anim_sub_factor(
+                &pos, &i_posArr[(i_col - 1) + (i_row - 1) * 9],
+                &anim_factor, 277.3085f);
+        }
+        if (i_row != 4) {
+            get_cloth_anim_sub_factor(
+                &pos, &i_posArr[i_col + (i_row + 1) * 9],
+                &anim_factor, 120.0f);
+            get_cloth_anim_sub_factor(
+                &pos, &i_posArr[(i_col - 1) + (i_row + 1) * 9],
+                &anim_factor, 277.3085f);
+        }
+        if (i_col != 8) {
+            get_cloth_anim_sub_factor(
+                &pos, &i_posArr[(i_col + 1) + i_row * 9],
                 &anim_factor, 250.0f);
             if (i_row != 0) {
-                get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[i_col + (i_row - 1) * 9],
-                    &anim_factor, 120.0f);
-                get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[(i_col - 1) + (i_row - 1) * 9],
-                    &anim_factor, 277.3085f);
-            }
-            if (i_row != 4) {
-                get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[i_col + (i_row + 1) * 9],
-                    &anim_factor, 120.0f);
-                get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[(i_col - 1) + (i_row + 1) * 9],
-                    &anim_factor, 277.3085f);
-            }
-            if (i_col != 8) {
-                get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[(i_col + 1) + i_row * 9],
-                    &anim_factor, 250.0f);
-                if (i_row != 0) {
-                    get_cloth_anim_sub_factor(
-                        &pos, &i_posArr[(i_col + 1) + (i_row - 1) * 9],
-                        &anim_factor, 277.3085f);
-                }
-                if (i_row != 4) {
-                    get_cloth_anim_sub_factor(
-                        &pos, &i_posArr[(i_col + 1) + (i_row + 1) * 9],
-                        &anim_factor, 277.3085f);
-                }
-            }
-            return anim_factor;
-        } else {
-            get_cloth_anim_sub_factor(
-                &pos, &i_posArr[(i_col + 1) + (i_row * 9)],
-                &anim_factor, 250.0f);
-            if (i_row != 0) {
-                get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[i_col + (i_row - 1) * 9],
-                    &anim_factor, 120.0f);
                 get_cloth_anim_sub_factor(
                     &pos, &i_posArr[(i_col + 1) + (i_row - 1) * 9],
                     &anim_factor, 277.3085f);
             }
             if (i_row != 4) {
                 get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[i_col + (i_row + 1) * 9],
-                    &anim_factor, 120.0f);
-                get_cloth_anim_sub_factor(
                     &pos, &i_posArr[(i_col + 1) + (i_row + 1) * 9],
                     &anim_factor, 277.3085f);
             }
-            return anim_factor;
         }
+        return anim_factor;
     }
+    get_cloth_anim_sub_factor(
+        &pos, &i_posArr[(i_col + 1) + (i_row * 9)],
+        &anim_factor, 250.0f);
+    if (i_row != 0) {
+        get_cloth_anim_sub_factor(
+            &pos, &i_posArr[i_col + (i_row - 1) * 9],
+            &anim_factor, 120.0f);
+        get_cloth_anim_sub_factor(
+            &pos, &i_posArr[(i_col + 1) + (i_row - 1) * 9],
+            &anim_factor, 277.3085f);
+    }
+    if (i_row != 4) {
+        get_cloth_anim_sub_factor(
+            &pos, &i_posArr[i_col + (i_row + 1) * 9],
+            &anim_factor, 120.0f);
+        get_cloth_anim_sub_factor(
+            &pos, &i_posArr[(i_col + 1) + (i_row + 1) * 9],
+            &anim_factor, 277.3085f);
+    }
+    return anim_factor;
 }
 
 /* 00001CC0-00001CE0       .text checkCreateHeap__FP10fopAc_ac_c */

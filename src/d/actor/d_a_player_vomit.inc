@@ -47,10 +47,10 @@ BOOL daPy_lk_c::procVomitReady_init(s16 param_0, f32 param_1) {
         m_HIO->mVomit.m.field_0x14
     );
     speed.y = m_HIO->mVomit.m.field_0x18;
-    mVelocity = (param_1 * -gravity) / (2.0f * m_HIO->mVomit.m.field_0x18);
+    mNormalSpeed = (param_1 * -gravity) / (2.0f * m_HIO->mVomit.m.field_0x18);
     if (checkHeavyStateOn()) {
         speed.y *= 1.5f;
-        mVelocity *= 1.5f;
+        mNormalSpeed *= 1.5f;
     }
     shape_angle.y = param_0;
     current.angle.y = shape_angle.y;
@@ -85,7 +85,7 @@ BOOL daPy_lk_c::procVomitWait_init() {
     old.pos = current.pos;
     m34C2 = 11;
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     m34D4 = 0;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK80_e);
 #if VERSION == VERSION_PAL
@@ -117,8 +117,7 @@ BOOL daPy_lk_c::procVomitWait() {
             if (direction == DIR_LEFT) {
                 s16 r5 = 512.0f * mStickDistance;
                 if (r5 > m34D4) {
-                    s16 r0 = 64.0f * mStickDistance;
-                    m34D4 += r0;
+                    m34D4 += (s16)(64.0f * mStickDistance);
                     if (m34D4 > r5) {
                         m34D4 = r5;
                     }
@@ -129,8 +128,7 @@ BOOL daPy_lk_c::procVomitWait() {
             } else if (direction == DIR_RIGHT) {
                 s16 r5 = -512.0f * mStickDistance;
                 if (r5 < m34D4) {
-                    s16 r0 = 64.0f * mStickDistance;
-                    m34D4 -= r0;
+                    m34D4 -= (s16)(64.0f * mStickDistance);
                     if (m34D4 < r5) {
                         m34D4 = r5;
                     }
@@ -222,7 +220,7 @@ BOOL daPy_lk_c::procVomitJump() {
                 seStartOnlyReverb(JA_SE_LK_JUMP_FLOWER_OUT);
             }
             if (mProcVar0.m3570 == 1) {
-                cLib_addCalc(&mVelocity, m_HIO->mVomit.m.field_0x20, 0.5f, 2.0f, 0.1f);
+                cLib_addCalc(&mNormalSpeed, m_HIO->mVomit.m.field_0x20, 0.5f, 2.0f, 0.1f);
             } else {
                 f32 fVar2;
                 if (!checkFanGlideProc(1)) {
@@ -239,7 +237,7 @@ BOOL daPy_lk_c::procVomitJump() {
                         fVar2 = 0.0f;
                     }
                     cLib_addCalc(
-                        &mVelocity, (m_HIO->mVomit.m.field_0x20 * mStickDistance * fVar2), 0.5f, 2.0f, 0.1f
+                        &mNormalSpeed, (m_HIO->mVomit.m.field_0x20 * mStickDistance * fVar2), 0.5f, 2.0f, 0.1f
                     );
                 }
             }
@@ -251,7 +249,7 @@ BOOL daPy_lk_c::procVomitJump() {
 /* 801500E4-80150164       .text procVomitLand_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procVomitLand_init() {
     commonProcInit(daPyProc_VOMIT_LAND_e);
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     setSingleMoveAnime(
         ANM_LANDDAMA,
         m_HIO->mVomit.m.field_0x24,

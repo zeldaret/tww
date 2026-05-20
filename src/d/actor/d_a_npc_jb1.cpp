@@ -618,19 +618,20 @@ J3DModelData* daNpc_Jb1_c::create_Anm() {
     } else if(mpMorf->getModel() == NULL) {
         mpMorf = NULL;
         return NULL;
-    } else {
-        m_lmp_brk = (J3DAnmTevRegKey*)dComIfG_getObjectIDRes("Jb", JB_BRK_JB_LAMP);
-        JUT_ASSERT(VERSION_SELECT(0x464, 0x46E, 0x473, 0x473), m_lmp_brk != NULL);
-        bool temp = mBrkAnm.init(mpMorf->getModel()->getModelData(), m_lmp_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
-        if(temp == false) {
-            mpMorf = NULL;
-            return NULL;
-        } else {
-            field_0x834 = 0;
-            m_cse_jnt_num = mpMorf->getModel()->getModelData()->getJointName()->getIndex("jb_case");
-            JUT_ASSERT(VERSION_SELECT(0x46F, 0x479, 0x47E, 0x47E), m_cse_jnt_num >= 0);
-        }
     }
+
+    m_lmp_brk = (J3DAnmTevRegKey*)dComIfG_getObjectIDRes("Jb", JB_BRK_JB_LAMP);
+    JUT_ASSERT(VERSION_SELECT(0x464, 0x46E, 0x473, 0x473), m_lmp_brk != NULL);
+    bool temp = mBrkAnm.init(mpMorf->getModel()->getModelData(), m_lmp_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    if(temp == false) {
+        mpMorf = NULL;
+        return NULL;
+    } else {
+        field_0x834 = 0;
+        m_cse_jnt_num = mpMorf->getModel()->getModelData()->getJointName()->getIndex("jb_case");
+        JUT_ASSERT(VERSION_SELECT(0x46F, 0x479, 0x47E, 0x47E), m_cse_jnt_num >= 0);
+    }
+
     return a_mdl_dat;
 }
 
