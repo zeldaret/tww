@@ -307,12 +307,12 @@ void daPy_lk_c::setSwimTimerStartStop() {
                 target = cM_fcos((1.0f - swimTimerRate) * M_PI) * -m_HIO->mSwim.m.field_0x78;
 
                 if (mFrameCtrlUnder[UNDER_MOVE0_e].checkPass(0.0f) && mCurProc != daPyProc_SWIM_UP_e) {
-                    if (mProcVar0.m3570 && !checkNoResetFlg0(daPyFlg0_UNK4000)) {
+                    if (mProcVar6.m3570 && !checkNoResetFlg0(daPyFlg0_UNK4000)) {
                         voiceStart(0x22);
-                        mProcVar0.m3570 = 0;
+                        mProcVar6.m3570 = 0;
                     }
                     else {
-                        mProcVar0.m3570 = 1;
+                        mProcVar6.m3570 = 1;
                     }
                 }
             }
@@ -365,7 +365,7 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
         }
     }
 
-    mProcVar0.m3570 = 0;
+    mProcVar6.m3570 = 0;
     return TRUE;
 }
 
@@ -433,16 +433,16 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
     }
 
     m35C4 = m_HIO->mSwim.m.field_0x48;
-    m34D4 = 0;
-    mProcVar0.m3570 = 0;
+    mProcVar2.m34D4 = 0;
+    mProcVar6.m3570 = 0;
     return TRUE;
 }
 
 /* 8013DCDC-8013DE8C       .text procSwimWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSwimWait() {
     setSpeedAndAngleSwim();
-    m34D4 += (s16)((cM_rndF(0.3f) + 0.85f) * m_HIO->mSwim.m.field_0x2);
-    m35C4 = cM_ssin(m34D4) * m_HIO->mSwim.m.field_0x4C + m_HIO->mSwim.m.field_0x48;
+    mProcVar2.m34D4 += (s16)((cM_rndF(0.3f) + 0.85f) * m_HIO->mSwim.m.field_0x2);
+    m35C4 = cM_ssin(mProcVar2.m34D4) * m_HIO->mSwim.m.field_0x4C + m_HIO->mSwim.m.field_0x48;
 
     if (changeSwimOutProc()) {
         return TRUE;
@@ -514,7 +514,7 @@ BOOL daPy_lk_c::procSwimMove_init(BOOL param_1) {
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
     m35C4 = m_HIO->mSwim.m.field_0x5C;
-    mProcVar0.m3570 = 0;
+    mProcVar6.m3570 = 0;
 
     return TRUE;
 }

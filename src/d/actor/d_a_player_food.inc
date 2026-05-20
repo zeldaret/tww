@@ -98,8 +98,8 @@ BOOL daPy_lk_c::procFoodThrow_init() {
     keepItemData();
 
     if (checkSpecialDemoMode()) {
-        mProcVar0.m3570 = 6;
-        dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar0.m3570, 0);
+        mProcVar6.m3570 = 6;
+        dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar6.m3570, 0);
     }
 
     initShipRideUseItem(temp, 2);
@@ -188,12 +188,12 @@ BOOL daPy_lk_c::procFoodSet_init() {
     setHyoiModel();
 
     if (checkSpecialDemoMode()) {
-        mProcVar0.m3570 = 1;
-        dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar0.m3570, 0);
+        mProcVar6.m3570 = 1;
+        dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar6.m3570, 0);
     }
 
     initShipRideUseItem(temp, 2);
-    m34D0 = 1 * 30;
+    mProcVar0.m34D0 = 1 * 30;
 
     return TRUE;
 }
@@ -211,17 +211,17 @@ BOOL daPy_lk_c::procFoodSet() {
     if (std::abs(frameCtrl.getRate()) < 0.01f) {
         if (!checkSpecialDemoMode()) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
-        } else if (m34D0 < 0) {
+        } else if (mProcVar0.m34D0 < 0) {
             dComIfGp_event_reset();
             deleteEquipItem(FALSE);
             fpc_ProcID playerPID = fopAcM_GetID(this);
             dCam_getBody()->EndEventCamera(playerPID);
             endDemoMode();
-        } else if (m34D0 == 0) {
-            m34D0 = -1;
+        } else if (mProcVar0.m34D0 == 0) {
+            mProcVar0.m34D0 = -1;
             frameCtrl.setRate(-m_HIO->mItem.mFood.m.field_0x10);
-        } else if (m34D0 > 0) {
-            m34D0--;
+        } else if (mProcVar0.m34D0 > 0) {
+            mProcVar0.m34D0--;
         }
     }
 

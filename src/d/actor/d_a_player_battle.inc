@@ -98,16 +98,16 @@ BOOL daPy_lk_c::procBtJump_init(fopEn_enemy_c* enemy) {
     current.angle.y = fopAcM_searchActorAngleY(this, enemy);
     shape_angle.y = current.angle.y;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2_e);
-    m34D0 = 0;
+    mProcVar0.m34D0 = 0;
     m370C.x = enemy->current.pos.x - enemy->getBtBodyR() * cM_ssin(enemy->shape_angle.y);
     m370C.y = enemy->current.pos.y;
     m370C.z = enemy->current.pos.z - enemy->getBtBodyR() * cM_scos(enemy->shape_angle.y);
     if (m_HIO->mBattle.mBJump.m.field_0x18 <= 0.0f) {
         speed.y = m35A0;
         mNormalSpeed = m35A4;
-        mProcVar0.m3570 = 1;
+        mProcVar6.m3570 = 1;
     } else {
-        mProcVar0.m3570 = 0;
+        mProcVar6.m3570 = 0;
     }
     voiceStart(6);
     offNoResetFlg0(daPyFlg0_NO_FALL_VOICE);
@@ -117,18 +117,18 @@ BOOL daPy_lk_c::procBtJump_init(fopEn_enemy_c* enemy) {
 
 /* 8013E72C-8013E860       .text procBtJump__9daPy_lk_cFv */
 BOOL daPy_lk_c::procBtJump() {
-    if (mProcVar0.m3570 == 0) {
+    if (mProcVar6.m3570 == 0) {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= m_HIO->mBattle.mBJump.m.field_0x18) {
             speed.y = m35A0;
             mNormalSpeed = m35A4;
-            mProcVar0.m3570 = 1;
+            mProcVar6.m3570 = 1;
         }
     } else {
         if (mAcch.ChkGroundHit()) {
             return changeLandProc(m_HIO->mBattle.mBJump.m.field_0xC);
         }
-        if (mProcVar0.m3570 == 1) {
-            m34D0++;
+        if (mProcVar6.m3570 == 1) {
+            mProcVar0.m34D0++;
             if (speed.y < -gravity) {
                 return procBtJumpCut_init(&m370C);
             }
@@ -162,7 +162,7 @@ BOOL daPy_lk_c::procBtJumpCut_init(cXyz* param_0) {
     gravity = 0.0f;
     speed.y = 0.0f;
     m370C = *param_0;
-    mProcVar0.m3570 = 0;
+    mProcVar6.m3570 = 0;
     dComIfGp_setPlayerStatus0(0, (daPyStts0_UNK2_e | daPyStts0_UNK400_e));
     voiceStart(1);
     setBlurPosResource(LKANM__BTJUMPCUT_POS);
@@ -195,13 +195,13 @@ BOOL daPy_lk_c::procBtJumpCut() {
         return changeLandProc(m_HIO->mBattle.mBJump.m.field_0xC);
     }
 
-    if (mProcVar0.m3570 == 0 && mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
+    if (mProcVar6.m3570 == 0 && mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         gravity = m_HIO->mBattle.mBJump.m.field_0x3C;
         speed.y = m_HIO->mBattle.mBJump.m.field_0x34;
         mNormalSpeed = m_HIO->mBattle.mBJump.m.field_0x38;
-        mProcVar0.m3570 = 1;
-    } else if (mProcVar0.m3570 == 1 && speed.y < -gravity && m_HIO->mBattle.mBJump.m.field_0x0 == 1) {
-        mProcVar0.m3570 = 2;
+        mProcVar6.m3570 = 1;
+    } else if (mProcVar6.m3570 == 1 && speed.y < -gravity && m_HIO->mBattle.mBJump.m.field_0x0 == 1) {
+        mProcVar6.m3570 = 2;
         setSingleMoveAnime(ANM_JMPEDS, 0.0f, 0.0f, -1, m_HIO->mBattle.mBJump.m.field_0x40);
         offModeFlg(ModeFlg_00000400);
         setTextureAnime(0x37, 0);
@@ -243,10 +243,10 @@ BOOL daPy_lk_c::procBtRoll_init(fopEn_enemy_c* enemy) {
 
     daPy_ANM anm;
     if (mDirection == DIR_LEFT) {
-        m34D4 = -0x7FF0;
+        mProcVar2.m34D4 = -0x7FF0;
         anm = ANM_MROLLL;
     } else {
-        m34D4 = 0x7FF0;
+        mProcVar2.m34D4 = 0x7FF0;
         anm = ANM_MROLLR;
     }
     setSingleMoveAnime(
@@ -260,7 +260,7 @@ BOOL daPy_lk_c::procBtRoll_init(fopEn_enemy_c* enemy) {
     cXyz local_2c = current.pos - local_38;
     f32 dVar5 = local_2c.absXZ();
     m35A0 = dVar5;
-    m34D6 = cM_atan2s(local_2c.x, local_2c.z);
+    mProcVar3.m34D6 = cM_atan2s(local_2c.x, local_2c.z);
     shape_angle.y = fopAcM_searchActorAngleY(this, enemy);
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2_e);
     setFootEffectPosType(4);
@@ -271,26 +271,26 @@ BOOL daPy_lk_c::procBtRoll_init(fopEn_enemy_c* enemy) {
 
 /* 8013EE64-8013F010       .text procBtRoll__9daPy_lk_cFv */
 BOOL daPy_lk_c::procBtRoll() {
-    s16 sVar1 = m34D4;
+    s16 sVar1 = mProcVar2.m34D4;
     cLib_addCalcAngleS(
-        &m34D4, 0, m_HIO->mBattle.mBRoll.m.field_0x4, m_HIO->mBattle.mBRoll.m.field_0x0, m_HIO->mBattle.mBRoll.m.field_0x2
+        &mProcVar2.m34D4, 0, m_HIO->mBattle.mBRoll.m.field_0x4, m_HIO->mBattle.mBRoll.m.field_0x0, m_HIO->mBattle.mBRoll.m.field_0x2
     );
 
-    s16 sVar3 = sVar1 - m34D4;
+    s16 sVar3 = sVar1 - mProcVar2.m34D4;
     if (sVar1 > 0) {
-        current.angle.y = m34D6 + 0x4000;
+        current.angle.y = mProcVar3.m34D6 + 0x4000;
     } else {
-        current.angle.y = m34D6 + -0x4000;
+        current.angle.y = mProcVar3.m34D6 + -0x4000;
     }
 
     cXyz local_28;
-    local_28.x = current.pos.x - m35A0 * cM_ssin(m34D6);
+    local_28.x = current.pos.x - m35A0 * cM_ssin(mProcVar3.m34D6);
     local_28.y = current.pos.y;
-    local_28.z = current.pos.z - m35A0 * cM_scos(m34D6);
-    m34D6 += sVar3;
-    current.pos.x = local_28.x + m35A0 * cM_ssin(m34D6);
-    current.pos.z = local_28.z + m35A0 * cM_scos(m34D6);
-    shape_angle.y = m34D6 + 0x8000;
+    local_28.z = current.pos.z - m35A0 * cM_scos(mProcVar3.m34D6);
+    mProcVar3.m34D6 += sVar3;
+    current.pos.x = local_28.x + m35A0 * cM_ssin(mProcVar3.m34D6);
+    current.pos.z = local_28.z + m35A0 * cM_scos(mProcVar3.m34D6);
+    shape_angle.y = mProcVar3.m34D6 + 0x8000;
     if (abs(sVar3) < m_HIO->mBattle.mBRoll.m.field_0x2) {
         resetFootEffect();
     }
@@ -314,12 +314,12 @@ BOOL daPy_lk_c::procBtRollCut_init(cXyz* param_0) {
     s16 angle_y_delta = current.angle.y - shape_angle.y;
     if (angle_y_delta > 0) {
         dVar4 = ANM_MROLLLC;
-        mProcVar0.m3570 = 1;
+        mProcVar6.m3570 = 1;
         m34EC = 1;
         setBlurPosResource(LKANM__BTROTATECUTL_POS);
     } else {
         dVar4 = ANM_MROLLRC;
-        mProcVar0.m3570 = -1;
+        mProcVar6.m3570 = -1;
         m34EC = -1;
         setBlurPosResource(LKANM__BTROTATECUTR_POS);
     }
@@ -340,7 +340,7 @@ BOOL daPy_lk_c::procBtRollCut_init(cXyz* param_0) {
 
     m35EC = m_HIO->mBattle.mBRoll.m.field_0x20;
     m370C = *param_0;
-    m34D4 = 0;
+    mProcVar2.m34D4 = 0;
     mNormalSpeed = m_HIO->mBattle.mBRoll.m.field_0x28;
     speed.y = m_HIO->mBattle.mBRoll.m.field_0x2C;
     gravity = m_HIO->mBattle.mBRoll.m.field_0x30;
@@ -360,20 +360,20 @@ BOOL daPy_lk_c::procBtRollCut() {
     m35EC = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     s16 sVar2 = cLib_targetAngleY(&current.pos, &m370C);
     cLib_addCalcAngleS(&shape_angle.y, sVar2, 5, 0x5e8, 0x13c);
-    current.angle.y = shape_angle.y + mProcVar0.m3570 * 0x4000;
+    current.angle.y = shape_angle.y + mProcVar6.m3570 * 0x4000;
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-        if (m34D4 == 0) {
-            m34D4 = 1;
+        if (mProcVar2.m34D4 == 0) {
+            mProcVar2.m34D4 = 1;
             onResetFlg0(daPyRFlg0_UNK2);
-        } else if (m34D4 == 1) {
+        } else if (mProcVar2.m34D4 == 1) {
             setSingleMoveAnime(ANM_JMPEDS, 0.0f, 0.0f, -1, m_HIO->mBattle.mBRoll.m.field_0x38);
             offModeFlg(ModeFlg_00000400);
             setTextureAnime(0x37, 0);
             resetSeAnime();
-            m34D4 = 2;
+            mProcVar2.m34D4 = 2;
         }
-        if (m34D4 > 1) {
-            int iVar3 = mProcVar0.m3570;
+        if (mProcVar2.m34D4 > 1) {
+            int iVar3 = mProcVar6.m3570;
             if ((iVar3 > 0 && m34EC < 0) || (iVar3 < 0 && m34EC > 0)) {
                 cLib_addCalcAngleS(&m34EC, -iVar3, 4, m_HIO->mBattle.mBRoll.m.field_0xA, 0x200);
             } else {

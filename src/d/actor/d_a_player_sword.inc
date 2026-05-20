@@ -256,7 +256,7 @@ BOOL daPy_lk_c::checkDemoShieldNoDraw() {
 /* 801554C8-80155544       .text checkDemoSwordNoDraw__9daPy_lk_cFi */
 BOOL daPy_lk_c::checkDemoSwordNoDraw(BOOL param_0) {
     if ((mEquipItem == daPyItem_SWORD_e || param_0) &&
-        (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F40) || (mCurProc == daPyProc_DEMO_TOOL_e && m34D6 == 1)))
+        (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F40) || (mCurProc == daPyProc_DEMO_TOOL_e && mProcVar3.m34D6 == 1)))
     {
         return true;
     } else {
@@ -275,7 +275,7 @@ BOOL daPy_lk_c::checkChanceMode() {
 
 /* 80155574-8015559C       .text checkCutRollChange__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkCutRollChange() const {
-    if (mCurProc == daPyProc_CUT_TURN_MOVE_e && m34D0 >= 0) {
+    if (mCurProc == daPyProc_CUT_TURN_MOVE_e && mProcVar0.m34D0 >= 0) {
         return true;
     }
     return false;
@@ -575,7 +575,7 @@ BOOL daPy_lk_c::procCutA_init(s16 param_0) {
     m3700 = cXyz::Zero;
     m34C2 = 1;
     voiceStart(0);
-    m34D4 = param_0;
+    mProcVar2.m34D4 = param_0;
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
     m3522 = m_HIO->mCut.mCutA.m.field_0x0;
     m351E = m34DC;
@@ -628,11 +628,11 @@ BOOL daPy_lk_c::procCutA() {
     m34C2 = 1;
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
+            mProcVar2.m34D4,
             m_HIO->mTurn.m.field_0x4,
             m_HIO->mTurn.m.field_0x0,
             m_HIO->mTurn.m.field_0x2
@@ -678,7 +678,7 @@ BOOL daPy_lk_c::procCutF_init(s16 param_0) {
     m3700 = cXyz::Zero;
     m34C2 = 1;
     voiceStart(0);
-    m34D4 = param_0;
+    mProcVar2.m34D4 = param_0;
     m351E = m34DC;
     m3522 = m_HIO->mCut.mCutF.m.field_0x0;
     onNoResetFlg0(daPyFlg0_UNK4);
@@ -731,11 +731,11 @@ BOOL daPy_lk_c::procCutF() {
     m34C2 = 1;
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
+            mProcVar2.m34D4,
             m_HIO->mTurn.m.field_0x4,
             m_HIO->mTurn.m.field_0x0,
             m_HIO->mTurn.m.field_0x2
@@ -778,7 +778,7 @@ BOOL daPy_lk_c::procCutR_init(s16 param_0) {
     m3700 = cXyz::Zero;
     m34C2 = 1;
     voiceStart(0);
-    m34D4 = param_0;
+    mProcVar2.m34D4 = param_0;
     m351E = m34DC;
     m3522 = m_HIO->mCut.mCutR.m.field_0x0;
     onNoResetFlg0(daPyFlg0_UNK4);
@@ -832,11 +832,11 @@ BOOL daPy_lk_c::procCutR() {
     m34C2 = 1;
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
+            mProcVar2.m34D4,
             m_HIO->mTurn.m.field_0x4,
             m_HIO->mTurn.m.field_0x0,
             m_HIO->mTurn.m.field_0x2
@@ -879,7 +879,7 @@ BOOL daPy_lk_c::procCutL_init(s16 param_0) {
     m3700 = cXyz::Zero;
     m34C2 = 1;
     voiceStart(0);
-    m34D4 = param_0;
+    mProcVar2.m34D4 = param_0;
     m351E = m34DC;
     m3522 = m_HIO->mCut.mCutL.m.field_0x0;
     onNoResetFlg0(daPyFlg0_UNK4);
@@ -931,11 +931,11 @@ BOOL daPy_lk_c::procCutL() {
     m34C2 = 1;
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
+            mProcVar2.m34D4,
             m_HIO->mTurn.m.field_0x4,
             m_HIO->mTurn.m.field_0x0,
             m_HIO->mTurn.m.field_0x2
@@ -977,7 +977,7 @@ BOOL daPy_lk_c::procCutEA_init() {
     m35EC = m_HIO->mCut.mCutEA.m.field_0x8;
     m3700 = cXyz::Zero;
     m34C2 = 1;
-    m34D0 = m_HIO->mCut.mCutEA.m.field_0x2;
+    mProcVar0.m34D0 = m_HIO->mCut.mCutEA.m.field_0x2;
     onNoResetFlg0(daPyFlg0_UNK4);
     voiceStart(1);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
@@ -998,8 +998,8 @@ BOOL daPy_lk_c::procCutEA() {
         offNoResetFlg0(daPyFlg0_UNK4);
     }
     if (frameCtrl.getRate() < 0.01f) {
-        if (m34D0 > 0) {
-            m34D0--;
+        if (mProcVar0.m34D0 > 0) {
+            mProcVar0.m34D0--;
         } else {
             mNormalSpeed = 0.0f;
             mDirection = DIR_RIGHT;
@@ -1061,7 +1061,7 @@ BOOL daPy_lk_c::procCutEB_init() {
     m35EC = m_HIO->mCut.mCutEB.m.field_0x8;
     m3700 = cXyz::Zero;
     m34C2 = 1;
-    m34D0 = m_HIO->mCut.mCutEB.m.field_0x2;
+    mProcVar0.m34D0 = m_HIO->mCut.mCutEB.m.field_0x2;
     onNoResetFlg0(daPyFlg0_UNK4);
     voiceStart(1);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
@@ -1082,8 +1082,8 @@ BOOL daPy_lk_c::procCutEB() {
         offNoResetFlg0(daPyFlg0_UNK4);
     }
     if (frameCtrl.getRate() < 0.01f) {
-        if (m34D0 > 0) {
-            m34D0--;
+        if (mProcVar0.m34D0 > 0) {
+            mProcVar0.m34D0--;
         } else {
             mNormalSpeed = 0.0f;
             mDirection = DIR_LEFT;
@@ -1142,7 +1142,7 @@ BOOL daPy_lk_c::procCutExA_init() {
     m35EC = m_HIO->mCut.mCutExA.m.field_0xC;
     m3700 = cXyz::Zero;
     m34C2 = 1;
-    m34D0 = m_HIO->mCut.mCutExA.m.field_0x2;
+    mProcVar0.m34D0 = m_HIO->mCut.mCutExA.m.field_0x2;
     onNoResetFlg0(daPyFlg0_UNK4);
     voiceStart(1);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
@@ -1235,7 +1235,7 @@ BOOL daPy_lk_c::procCutExB_init() {
     m35EC = m_HIO->mCut.mCutExB.m.field_0x8;
     m3700 = cXyz::Zero;
     m34C2 = 1;
-    m34D0 = m_HIO->mCut.mCutExB.m.field_0x2;
+    mProcVar0.m34D0 = m_HIO->mCut.mCutExB.m.field_0x2;
     onNoResetFlg0(daPyFlg0_UNK4);
     voiceStart(1);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
@@ -1257,8 +1257,8 @@ BOOL daPy_lk_c::procCutExB() {
     }
 
     if (frameCtrl.getRate() < 0.01f) {
-        if (m34D0 > 0) {
-            m34D0--;
+        if (mProcVar0.m34D0 > 0) {
+            mProcVar0.m34D0--;
         } else {
             mNormalSpeed = 0.0f;
             checkNextMode(0);
@@ -1396,7 +1396,7 @@ BOOL daPy_lk_c::procCutTurn_init(BOOL param_0) {
     m35EC = fVar1;
     m3700 = cXyz::Zero;
     m34C2 = 1;
-    m34D0 = m_HIO->mCut.mCutTurn.m.field_0x2;
+    mProcVar0.m34D0 = m_HIO->mCut.mCutTurn.m.field_0x2;
     current.angle.y = shape_angle.y;
     m3578 = 0;
     voiceStart(1);
@@ -1433,10 +1433,10 @@ BOOL daPy_lk_c::procCutTurn_init(BOOL param_0) {
             m35A0 = 21.0f;
         }
     }
-    mProcVar0.m3570 = 0;
+    mProcVar6.m3570 = 0;
     if (m34C4 == 6) {
         onNoResetFlg0(daPyFlg0_UNK4);
-        mProcVar0.m3570 = 1;
+        mProcVar6.m3570 = 1;
     } else {
         mCutCount = 0;
     }
@@ -1450,15 +1450,15 @@ BOOL daPy_lk_c::procCutTurn_init(BOOL param_0) {
 BOOL daPy_lk_c::procCutTurn() {
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
     m35EC = frameCtrl.getFrame();
-    if ((mProcVar0.m3570 != 0 && swordButton()) && m34C5 == 0) {
+    if ((mProcVar6.m3570 != 0 && swordButton()) && m34C5 == 0) {
         onNoResetFlg0(daPyFlg0_UNK4);
     } else {
         offNoResetFlg0(daPyFlg0_UNK4);
     }
 
     if (frameCtrl.getRate() < 0.01f) {
-        if (m34D0 > 0) {
-            m34D0--;
+        if (mProcVar0.m34D0 > 0) {
+            mProcVar0.m34D0--;
         } else {
             mDirection = DIR_RIGHT;
             checkNextMode(0);
@@ -1548,7 +1548,7 @@ BOOL daPy_lk_c::procCutRoll_init() {
 #endif
     }
     mAtCyl.SetR(m35A4 * 0.5f);
-    m34D0 = m_HIO->mCut.mCutRoll.m.field_0x2;
+    mProcVar0.m34D0 = m_HIO->mCut.mCutRoll.m.field_0x2;
     current.angle.y = shape_angle.y;
     setFootEffectPosType(4);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SPIN_ATTACK_e);
@@ -1594,13 +1594,13 @@ BOOL daPy_lk_c::procCutRoll() {
         sVar3 = current.angle.y - uVar1;
         if (dComIfGp_event_runCheck()) {
             if (mDemo.getDemoMode() != daPy_demo_c::DEMO_CUT_ROLL_e) {
-                m34D0 = 0;
+                mProcVar0.m34D0 = 0;
             } else {
-                m34D0 = 5;
+                mProcVar0.m34D0 = 5;
             }
         }
-        if (m34D0 > 0) {
-            m34D0--;
+        if (mProcVar0.m34D0 > 0) {
+            mProcVar0.m34D0--;
             mNormalSpeed = m_HIO->mCut.mCutRoll.m.field_0x14;
             m34EC -= m_HIO->mCut.mCutRoll.m.field_0x4 + sVar3;
             if (!checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
@@ -1632,7 +1632,7 @@ BOOL daPy_lk_c::procCutRollEnd_init() {
     setSingleMoveAnime(ANM_WAITQ, m_HIO->mMove.m.field_0x84, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
     mNormalSpeed = 0.0f;
     current.angle.y = shape_angle.y;
-    m34D0 = m_HIO->mCut.mCutRoll.m.field_0x6;
+    mProcVar0.m34D0 = m_HIO->mCut.mCutRoll.m.field_0x6;
     static JGeometry::TVec3<f32> emitter_trans(0.0f, 55.0f, 0.0f);
     static JGeometry::TVec3<f32> particle_scale(0.76f, 0.76f, 0.76f);
     JPABaseEmitter* emitter =
@@ -1650,8 +1650,8 @@ BOOL daPy_lk_c::procCutRollEnd_init() {
 /* 80158A40-80158A98       .text procCutRollEnd__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCutRollEnd() {
     seStartOnlyReverb(JA_SE_CM_MD_PIYO);
-    if (m34D0 > 0) {
-        m34D0--;
+    if (mProcVar0.m34D0 > 0) {
+        mProcVar0.m34D0--;
     } else {
         checkNextMode(0);
     }
@@ -1712,9 +1712,9 @@ BOOL daPy_lk_c::procCutTurnMove_init() {
         pcVar4 = checkNormalSwordEquip() ? NULL : (cXyz*)&eff_scale;
         m32E4.makeEmitter(dPa_name::ID_AK_JN_CHARGEPOWER00, mpCLModel->getAnmMtx(8), &current.pos, pcVar4);
         m32F0.makeEmitter(dPa_name::ID_AK_JN_CHARGEPOWER01, mpCLModel->getAnmMtx(8), &current.pos, pcVar4);
-        m34D0 = 47;
+        mProcVar0.m34D0 = 47;
     } else {
-        m34D0 = -1;
+        mProcVar0.m34D0 = -1;
     }
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_SPIN_ATTACK_e);
@@ -1725,13 +1725,13 @@ BOOL daPy_lk_c::procCutTurnMove_init() {
 BOOL daPy_lk_c::procCutTurnMove() {
     setShapeAngleToAtnActor();
     m34E6 = shape_angle.y;
-    if (0 < m34D0) {
-        m34D0--;
-        if (m34D0 == 0) {
+    if (0 < mProcVar0.m34D0) {
+        mProcVar0.m34D0--;
+        if (mProcVar0.m34D0 == 0) {
             dComIfGp_setPlayerStatus1(0, daPyStts1_UNK20000_e);
         }
     }
-    if (m34D0 != -1) {
+    if (mProcVar0.m34D0 != -1) {
         seStartSystem(JA_SE_LK_SWORD_CHARGE);
     }
     if (changeSlideProc()) {
@@ -1801,7 +1801,7 @@ BOOL daPy_lk_c::procCutTurnMove() {
             mFrameCtrlUpper[UPPER_MOVE0_e].setFrame(mFrameCtrlUpper[UPPER_MOVE0_e].getEnd() - 0.001f);
             mAnmRatioUpper[UPPER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrlUpper[UPPER_MOVE0_e].getFrame());
         }
-    } else if (m34D0 == 0) {
+    } else if (mProcVar0.m34D0 == 0) {
         procCutRoll_init();
     } else {
         mNormalSpeed = speedF;
@@ -1900,7 +1900,7 @@ BOOL daPy_lk_c::procJumpCut_init(int param_0) {
         gravity = m_HIO->mCut.mCutJump.m.field_0x1C;
     }
     current.angle.y = shape_angle.y;
-    mProcVar0.m3570 = 0;
+    mProcVar6.m3570 = 0;
     voiceStart(1);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
     if (mEquipItem == daPyItem_BOKO_e) {
@@ -1962,7 +1962,7 @@ BOOL daPy_lk_c::procJumpCutLand_init() {
         m_HIO->mCut.mCutJump.m.field_0x40
     );
     if (mEquipItem == daPyItem_NONE_e) {
-        mProcVar0.m3570 = 0;
+        mProcVar6.m3570 = 0;
     } else {
         onResetFlg0(daPyRFlg0_UNK2);
         if (!checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
@@ -1976,9 +1976,9 @@ BOOL daPy_lk_c::procJumpCutLand_init() {
             onNoResetFlg0(daPyFlg0_CUT_AT_FLG);
         }
         setJumpCutAtParam();
-        mProcVar0.m3570 = 1;
+        mProcVar6.m3570 = 1;
     }
-    m34D0 = m_HIO->mCut.mCutJump.m.field_0x4;
+    mProcVar0.m34D0 = m_HIO->mCut.mCutJump.m.field_0x4;
     current.angle.y = shape_angle.y + 0x8000;
     setFootEffectPosType(3);
     onResetFlg0(daPyRFlg0_RIGHT_FOOT_ON_GROUND);
@@ -1995,21 +1995,21 @@ BOOL daPy_lk_c::procJumpCutLand_init() {
 BOOL daPy_lk_c::procJumpCutLand() {
     current.angle.y = shape_angle.y;
     resetFootEffect();
-    if (mProcVar0.m3570 != 0 && changeCutReverseProc(ANM_CUTRER)) {
+    if (mProcVar6.m3570 != 0 && changeCutReverseProc(ANM_CUTRER)) {
         return true;
     }
 
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-        if (m34D0 > 0) {
-            m34D0--;
+        if (mProcVar0.m34D0 > 0) {
+            mProcVar0.m34D0--;
             checkNextMode(1);
         } else {
             checkNextMode(0);
         }
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mCut.mCutJump.m.field_0x44) {
         checkNextMode(1);
-    } else if (mProcVar0.m3570 != 0) {
-        mProcVar0.m3570 = 0;
+    } else if (mProcVar6.m3570 != 0) {
+        mProcVar6.m3570 = 0;
         if (
             abs(m3578) > 0xf800 &&
 #if VERSION > VERSION_DEMO
@@ -2037,12 +2037,12 @@ BOOL daPy_lk_c::procCutExMJ_init(int param_0) {
     commonProcInit(daPyProc_CUT_EX_MJ_e);
     if (param_0 != 0) {
         dVar3 = ANM_MROLLRC;
-        m34D6 = 0x71;
+        mProcVar3.m34D6 = 0x71;
         setBlurPosResource(LKANM__BTROTATECUTR_POS);
         m35A0 = m_HIO->mCut.mCutExMJ.m.field_0x20;
     } else {
         dVar3 = ANM_MROLLLC;
-        m34D6 = 0x70;
+        mProcVar3.m34D6 = 0x70;
         setBlurPosResource(LKANM__BTROTATECUTL_POS);
         m35A0 = m_HIO->mCut.mCutExMJ.m.field_0x24;
     }
@@ -2072,7 +2072,7 @@ BOOL daPy_lk_c::procCutExMJ_init(int param_0) {
     }
     speed.y = m_HIO->mCut.mCutExMJ.m.field_0x10;
     gravity = m_HIO->mCut.mCutExMJ.m.field_0x14;
-    m34D4 = 0;
+    mProcVar2.m34D4 = 0;
     offNoResetFlg0(daPyFlg0_NO_FALL_VOICE);
     offNoResetFlg0(daPyFlg0_CUT_AT_FLG);
     mNormalSpeed = 7.5f;
@@ -2091,16 +2091,16 @@ BOOL daPy_lk_c::procCutExMJ() {
         m3522 = m_HIO->mCut.mCutExMJ.m.field_0x2;
     }
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-        if (m34D4 == 0) {
-            m34D4 = 1;
-        } else if (m34D4 == 1) {
+        if (mProcVar2.m34D4 == 0) {
+            mProcVar2.m34D4 = 1;
+        } else if (mProcVar2.m34D4 == 1) {
             setSingleMoveAnime(ANM_JMPEDS, 0.0f, 0.0f, -1, m_HIO->mCut.mCutExMJ.m.field_0x1C);
             offModeFlg(ModeFlg_00000400);
             setTextureAnime(0x37, 0);
             resetSeAnime();
-            m34D4 = 2;
+            mProcVar2.m34D4 = 2;
         }
-        if (m34D6 == 0x71) {
+        if (mProcVar3.m34D6 == 0x71) {
             if (!(m34EC > 0) || m34EC > 0x4000) {
                 m34EC -= 0x1800;
             } else {
@@ -2131,7 +2131,7 @@ BOOL daPy_lk_c::procCutExMJ() {
         gravity = m_HIO->mCut.mCutExMJ.m.field_0x18;
     }
     setFallVoice();
-    if (m34D4 != 2 && (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= m35A0)) {
+    if (mProcVar2.m34D4 != 2 && (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= m35A0)) {
         if (!checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
             onResetFlg0(daPyRFlg0_UNK1);
             seStartSwordCut(JA_SE_LK_SW_KAZEKIRI_S);

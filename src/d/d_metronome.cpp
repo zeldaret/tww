@@ -324,7 +324,7 @@ void dMetronome_c::melodyShow() {
         pos.y = 0.0f;
         pos.z = 0.0f;
 
-        s32 note = daPy_getPlayerLinkActorClass()->m34D6;
+        s32 note = daPy_getPlayerLinkActorClass()->mProcVar3.m34D6;
         if (pane_wn[0].mUserArea < mBeat) {
             mNote[pane_wn[0].mUserArea] = note;
             melodyGuideShow(note, pane_wn[0].mUserArea);

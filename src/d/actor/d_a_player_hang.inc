@@ -215,7 +215,7 @@ BOOL daPy_lk_c::procHangStart_init() {
     }
     commonProcInit(daPyProc_HANG_START_e);
 #if VERSION > VERSION_DEMO
-    mProcVar0.m3570 = sVar3;
+    mProcVar6.m3570 = sVar3;
 #endif
     setSingleMoveAnime(
         ANM_VJMPCHA,
@@ -245,7 +245,7 @@ BOOL daPy_lk_c::procHangStart() {
         (
             mStickDistance > 0.05f
 #if VERSION > VERSION_DEMO
-            || mProcVar0.m3570 != 0
+            || mProcVar6.m3570 != 0
 #endif
         )
     )
@@ -253,7 +253,7 @@ BOOL daPy_lk_c::procHangStart() {
         if (
             getDirectionFromShapeAngle() == DIR_FORWARD
 #if VERSION > VERSION_DEMO
-            || mProcVar0.m3570 != 0
+            || mProcVar6.m3570 != 0
 #endif
         ) {
             procHangClimb_init(m_HIO->mWallCatch.m.field_0x2C);
@@ -390,7 +390,7 @@ BOOL daPy_lk_c::procHangUp_init(int param_0) {
         m_HIO->mHang.m.field_0x20
     );
     dComIfGp_setPlayerStatus0(0, daPyStts0_HANG_e);
-    mProcVar0.m3570 = param_0;
+    mProcVar6.m3570 = param_0;
     mNormalSpeed = 0.0f;
     return true;
 }
@@ -408,10 +408,10 @@ BOOL daPy_lk_c::procHangUp() {
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f ||
         mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mHang.m.field_0x1C)
     {
-        if (mProcVar0.m3570 == 0) {
+        if (mProcVar6.m3570 == 0) {
             procHangClimb_init(m_HIO->mWallCatch.m.field_0x2C);
-        } else if (changeHangMoveProc(mProcVar0.m3570)) {
-            procHangMove_init(mProcVar0.m3570);
+        } else if (changeHangMoveProc(mProcVar6.m3570)) {
+            procHangMove_init(mProcVar6.m3570);
         } else {
             procHangWait_init();
         }

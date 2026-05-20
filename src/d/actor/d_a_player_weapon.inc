@@ -59,15 +59,15 @@ BOOL daPy_lk_c::procWeaponNormalSwing_init() {
     m34C2 = 1;
     voiceStart(1);
     if (checkAttentionLock() || mStickDistance <= 0.05f) {
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
-        m34D4 = m34E8;
+        mProcVar2.m34D4 = m34E8;
     }
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
     m351E = m34DC;
     setBlurPosResource(LKANM__CUTBOKO_POS);
     setEnemyWeaponAtParam(FALSE);
-    m34D0 = m_HIO->mCut.mCutBoko.m.field_0x4;
+    mProcVar0.m34D0 = m_HIO->mCut.mCutBoko.m.field_0x4;
 
     return true;
 }
@@ -83,11 +83,11 @@ BOOL daPy_lk_c::procWeaponNormalSwing() {
     }
     if (frameCtrl.getRate() < 0.01f || mActorKeepEquip.getActor() == NULL) {
         if (mActorKeepEquip.getActor() == NULL) {
-            m34D0 = 0;
+            mProcVar0.m34D0 = 0;
             offNoResetFlg0(daPyFlg0_UNK4);
         }
-        if (m34D0 > 0) {
-            m34D0--;
+        if (mProcVar0.m34D0 > 0) {
+            mProcVar0.m34D0--;
         } else {
             mNormalSpeed = 0.0f;
             mDirection = DIR_RIGHT;
@@ -113,11 +113,11 @@ BOOL daPy_lk_c::procWeaponNormalSwing() {
     m34C2 = 1;
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
+            mProcVar2.m34D4,
             m_HIO->mTurn.m.field_0x4,
             m_HIO->mTurn.m.field_0x0,
             m_HIO->mTurn.m.field_0x2
@@ -164,7 +164,7 @@ BOOL daPy_lk_c::procWeaponSideSwing_init() {
     current.angle.y = shape_angle.y;
     mNormalSpeed = 0.0f;
     voiceStart(1);
-    m34D4 = shape_angle.y;
+    mProcVar2.m34D4 = shape_angle.y;
     setBlurPosResource(LKANM__HAMMERSIDE_POS);
     setEnemyWeaponAtParam(FALSE);
     return true;
@@ -203,11 +203,11 @@ BOOL daPy_lk_c::procWeaponSideSwing() {
 
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
+            mProcVar2.m34D4,
             m_HIO->mTurn.m.field_0x4,
             m_HIO->mTurn.m.field_0x0,
             m_HIO->mTurn.m.field_0x2
@@ -240,9 +240,9 @@ BOOL daPy_lk_c::procWeaponFrontSwingReady_init() {
     current.angle.y = shape_angle.y;
     mNormalSpeed = 0.0f;
     if (checkAttentionLock() || mStickDistance <= 0.05f) {
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
-        m34D4 = m34E8;
+        mProcVar2.m34D4 = m34E8;
     }
     setEnemyWeaponAtParam(FALSE);
     voiceStart(7);
@@ -266,11 +266,11 @@ BOOL daPy_lk_c::procWeaponFrontSwingReady() {
 
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
+            mProcVar2.m34D4,
             m_HIO->mTurn.m.field_0x4,
             m_HIO->mTurn.m.field_0x0,
             m_HIO->mTurn.m.field_0x2
@@ -295,15 +295,15 @@ BOOL daPy_lk_c::procWeaponFrontSwing_init() {
     mNormalSpeed = 0.0f;
     voiceStart(1);
     if (checkAttentionLock() || mStickDistance <= 0.05f) {
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
-        m34D4 = m34E8;
+        mProcVar2.m34D4 = m34E8;
     }
-    m34D4 = shape_angle.y;
+    mProcVar2.m34D4 = shape_angle.y;
     setBlurPosResource(LKANM__HAMMERFRONT_POS);
     setEnemyWeaponAtParam(FALSE);
     onResetFlg0(daPy_RFLG0(daPyRFlg0_UNK1 | daPyRFlg0_UNK2));
-    m34D0 = 0;
+    mProcVar0.m34D0 = 0;
     return true;
 }
 
@@ -327,11 +327,11 @@ BOOL daPy_lk_c::procWeaponFrontSwing() {
 
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
+            mProcVar2.m34D4,
             m_HIO->mTurn.m.field_0x4,
             m_HIO->mTurn.m.field_0x0,
             m_HIO->mTurn.m.field_0x2

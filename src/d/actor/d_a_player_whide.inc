@@ -273,11 +273,11 @@ BOOL daPy_lk_c::procWHideReady_init(cM3dGPla* param_0, cXyz* param_1) {
     m370C.y = param_1->y;
     m370C.z = param_1->z;
     if (param_0 != NULL) {
-        m34D4 = cM_atan2s(param_0->mNormal.x, param_0->mNormal.z);
+        mProcVar2.m34D4 = cM_atan2s(param_0->mNormal.x, param_0->mNormal.z);
         m370C.x += param_0->mNormal.x * m_HIO->mWall.m.field_0x50;
         m370C.z += param_0->mNormal.z * m_HIO->mWall.m.field_0x50;
     } else {
-        m34D4 = m352C;
+        mProcVar2.m34D4 = m352C;
         m370C.x += cM_ssin(m352C) * m_HIO->mWall.m.field_0x50;
         m370C.z += cM_scos(m352C) * m_HIO->mWall.m.field_0x50;
     }
@@ -286,11 +286,11 @@ BOOL daPy_lk_c::procWHideReady_init(cM3dGPla* param_0, cXyz* param_1) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         }
         setSingleMoveAnime(ANM_WALL, 0.0f, m_HIO->mWall.m.field_0x24, -1, m_HIO->mWall.m.field_0x34);
-        mProcVar0.m3570 = 1;
+        mProcVar6.m3570 = 1;
     } else {
         setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
         setAnimeUnequip();
-        mProcVar0.m3570 = 0;
+        mProcVar6.m3570 = 0;
     }
     if (uVar1 != 0) {
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK1_e);
@@ -303,16 +303,16 @@ BOOL daPy_lk_c::procWHideReady() {
     if (changeWHideEndProc(NULL)) {
         return true;
     }
-    if (mProcVar0.m3570 == 0) {
+    if (mProcVar6.m3570 == 0) {
         if (checkNoUpperAnime()) {
             setSingleMoveAnime(ANM_WALL, 0.0f, m_HIO->mWall.m.field_0x24, -1, m_HIO->mWall.m.field_0x34);
-            mProcVar0.m3570 = 1;
+            mProcVar6.m3570 = 1;
         }
         return true;
     }
     cLib_addCalc(&current.pos.x, m370C.x, 0.25f, 10.0f, 4.0f);
     cLib_addCalc(&current.pos.z, m370C.z, 0.25f, 10.0f, 4.0f);
-    if (!cLib_addCalcAngleS(&shape_angle.y, m34D4, 2, 0x2000, 0x800)) {
+    if (!cLib_addCalcAngleS(&shape_angle.y, mProcVar2.m34D4, 2, 0x2000, 0x800)) {
         daPy_matAnm_c::offMabaFlg();
         procWHideWait_init();
     }

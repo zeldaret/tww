@@ -634,7 +634,7 @@ void daPy_lk_c::setWaterRipple() {
     }
 
     // Probably fakematch (May use inlines?)
-    if ((var_r3 && m34D6 != 0) ||
+    if ((var_r3 && mProcVar3.m34D6 != 0) ||
         (
             mCurProc != daPyProc_VOMIT_WAIT_e &&
             !var_r3 &&
@@ -1018,9 +1018,9 @@ void daPy_lk_c::setFootEffect() {
         cXyz sp44 = m370C;
         mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x1), &m370C);
 
-        if (mProcVar0.m3570 != 0) {
+        if (mProcVar6.m3570 != 0) {
             current.angle.y = shape_angle.y - 0x4000;
-            mProcVar0.m3570 = 0;
+            mProcVar6.m3570 = 0;
         } else {
             cXyz sp38 = m370C - sp44;
             current.angle.y = cM_atan2s(sp38.x, sp38.z);

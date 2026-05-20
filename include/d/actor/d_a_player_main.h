@@ -1991,7 +1991,7 @@ public:
     virtual MtxP getModelJointMtx(u16 idx) { return mpCLModel->getAnmMtx(idx); }
     virtual f32 getOldSpeedY() { return mOldSpeed.y; }
     virtual BOOL setHookshotCarryOffset(fpc_ProcID, const cXyz*);
-    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && mProcVar0.m3570 != 0; }
+    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && mProcVar6.m3570 != 0; }
     virtual void cancelChangeTextureAnime() { resetDemoTextureAnime(); }
 
 public:
@@ -2157,12 +2157,26 @@ public:
     /* 0x34CC */ u8 m34CC;
     /* 0x34CD */ u8 m34CD;
     /* 0x34CE */ u8 m34CE;
-    /* 0x34D0 */ s16 m34D0; // TODO: procvar
-    /* 0x34D2 */ s16 m34D2; // TODO: procvar
-    /* 0x34D4 */ s16 m34D4; // TODO: procvar
-    /* 0x34D6 */ s16 m34D6; // TODO: procvar
-    /* 0x34D8 */ s16 m34D8; // TODO: procvar
-    /* 0x34DA */ s16 m34DA; // TODO: procvar
+    // `mProcVar`'s are variables that are context dependent for each `PROC` action.
+    // (The exact setup may need to be simplified later)
+    /* 0x34D0 */ union {
+        s16 m34D0;
+    } mProcVar0;
+    /* 0x34D2 */ union {
+        s16 m34D2;
+    } mProcVar1;
+    /* 0x34D4 */ union {
+        s16 m34D4;
+    } mProcVar2;
+    /* 0x34D6 */ union {
+        s16 m34D6;
+    } mProcVar3;
+    /* 0x34D8 */ union {
+        s16 m34D8;
+    } mProcVar4;
+    /* 0x34DA */ union {
+        s16 m34DA;
+    } mProcVar5;
     /* 0x34DC */ s16 m34DC;
     /* 0x34DE */ s16 m34DE;
     /* 0x34E0 */ s16 m34E0;
@@ -2235,12 +2249,14 @@ public:
     /* 0x356C */ int mCameraInfoIdx;
     // `mProcVar`'s are variables that are context dependent for each `PROC` action.
     // (The exact setup may need to be simplified later)
-    union {
+    /* 0x3570 */ union {
         s32 m3570;
         daPy_ANM mDamageAnm;
         int mBottleItem;
-    } /* 0x3570  */ mProcVar0;
-    /* 0x3574 */ s32 m3574; // TODO: procvar
+    } mProcVar6;
+    /* 0x3574 */ union {
+        s32 m3574;
+    } mProcVar7;
     /* 0x3578 */ int m3578;
     /* 0x357C */ int m357C;
     /* 0x3580 */ int m3580;
