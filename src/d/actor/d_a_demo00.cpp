@@ -645,7 +645,7 @@ BOOL daDemo00_c::execute() {
         if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_ANM_e)) {
             mNextID.mBckID = demo_actor->getAnmId();
         }
-        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_UNK_e)) {
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_DATA_e)) {
 #if VERSION > VERSION_DEMO
             u8 r29 = field_0x29c;
 #endif
@@ -703,7 +703,7 @@ BOOL daDemo00_c::execute() {
                     -1,
                     dSv_event_flag_c::COLORS_IN_HYRULE,
                 };
-                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                const void* data = demo_actor->getPrm()->getData();
                 JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > spCC(data);
                 if (!spCC.isEnd() && spCC.isValid()) {
                     TValueIterator_raw<u8> it = spCC.begin();
@@ -726,7 +726,7 @@ BOOL daDemo00_c::execute() {
                     dItem_MAGIC_ARROW_e,
                     dItem_NONE_e,
                 };
-                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                const void* data = demo_actor->getPrm()->getData();
                 JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > spB8(data);
                 if (!spB8.isEnd() && spB8.isValid()) {
                     TValueIterator_raw<u8> it = spB8.begin();
@@ -737,7 +737,7 @@ BOOL daDemo00_c::execute() {
                     }
                 }
             } else if (field_0x29c == 6) {
-                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                const void* data = demo_actor->getPrm()->getData();
                 JStudio::stb::TParseData_fixed<33, TValueIterator_misaligned<s8> > spA4(data);
                 if (!spA4.isEnd() && spA4.isValid()) {
                     TValueIterator_misaligned<s8> it = spA4.begin();
@@ -745,7 +745,7 @@ BOOL daDemo00_c::execute() {
                     mDoGph_gInf_c::setMonotoneRateSpeed(argID);
                 }
             } else if (field_0x29c == 7) {
-                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                const void* data = demo_actor->getPrm()->getData();
                 JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > sp90(data);
                 if (!sp90.isEnd() && sp90.isValid()) {
                     TValueIterator_raw<u8> it = sp90.begin();
@@ -759,7 +759,7 @@ BOOL daDemo00_c::execute() {
                     }
                 }
             } else if (field_0x29c == 9 || field_0x29c == 10) {
-                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                const void* data = demo_actor->getPrm()->getData();
                 JStudio::stb::TParseData_fixed<33, TValueIterator_raw<s8> > sp7C(data);
                 if (!sp7C.isEnd() && sp7C.isValid()) {
                     TValueIterator_raw<s8> it = sp7C.begin();
@@ -786,7 +786,7 @@ BOOL daDemo00_c::execute() {
                     }
                 }
             } else {
-                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                const void* data = demo_actor->getPrm()->getData();
                 JStudio::stb::TParseData_fixed<51, TValueIterator_misaligned<u32> > sp68(data);
                 if (!sp68.isEnd() && sp68.isValid()) {
                     int r5 = -1;

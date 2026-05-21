@@ -26,33 +26,20 @@
 class fopAc_ac_c;
 class dMesg_tControl;
 
-// TODO: made up, figure out what this is
-struct dDemo_prm_data {
-    /* 0x0 */ u8 field_0x0[0x4 - 0x0];
-    /* 0x4 */ s8 field_0x4;
-    /* 0x5 */ u8 field_0x5[0x6 - 0x5];
-    /* 0x6 */ s8 field_0x6;
-    /* 0x7 */ s8 field_0x7;
-    /* 0x8 */ u8 field_0x8[0xB - 0x8];
-    /* 0xB */ s8 field_0xb;
-    /* 0xC */ u8 field_0xc[0xF - 0xC];
-    /* 0xF */ s8 field_0xf;
-};
-
 class dDemo_prm_c {
 public:
     u32 getId() { return mId; }
-    dDemo_prm_data* getData() { return mData; }
+    const void* getData() { return mData; }
 
 public:
     /* 0x0 */ u32 mId;
-    /* 0x4 */ dDemo_prm_data* mData;
+    /* 0x4 */ const void* mData;
 };
 
 class dDemo_actor_c : public JStage::TActor {
 public:
     enum Enable_e {
-        /* 0x001 */ ENABLE_UNK_e = (1 << 0),
+        /* 0x001 */ ENABLE_DATA_e = (1 << 0),
         /* 0x002 */ ENABLE_TRANS_e = (1 << 1),
         /* 0x004 */ ENABLE_SCALE_e = (1 << 2),
         /* 0x008 */ ENABLE_ROTATE_e = (1 << 3),

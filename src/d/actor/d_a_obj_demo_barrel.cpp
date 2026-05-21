@@ -98,7 +98,7 @@ bool daObj_Demo_Barrel_c::_execute() {
     if (demoActorID != 0) {
         dDemo_actor_c* ac = dComIfGp_demo_getActor(demoActorID);
 
-        if (ac->checkEnable(dDemo_actor_c::ENABLE_UNK_e)) {
+        if (ac->checkEnable(dDemo_actor_c::ENABLE_DATA_e)) {
             if ((m2DC == 1) && (ac->getPrm()->getId() == 1)) {
                 m2DC = 0;
                 dComIfGs_onCollect(3, 0);

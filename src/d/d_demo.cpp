@@ -52,20 +52,123 @@ void dDemo_actor_c::setActor(fopAc_ac_c* ac) {
 }
 
 /* 80069434-80069550       .text getP_BtpData__13dDemo_actor_cFPCc */
-J3DAnmTexPattern* dDemo_actor_c::getP_BtpData(const char* name) {
-    /* Nonmatching */
-    if (!checkEnable(ENABLE_UNK_e))
+J3DAnmTexPattern* dDemo_actor_c::getP_BtpData(const char* param_1) {
+    const char* name;
+
+    u32 id;
+    if (checkEnable(ENABLE_TEX_ANM)) {
+        id = this->mTexAnimation;
+    } else {
+        if (!checkEnable(ENABLE_DATA_e))
+            return NULL;
+
+        const void* prm = mPrm.mData;
+        name = param_1;
+
+        switch(mPrm.getId()) {
+            case ID_UNK_1:
+                // Get the s16 at offset 0x1 of prm
+                id = *(s16*)((u8*)prm + 0x1);
+                break;
+            case ID_UNK_2:
+                // Get the s16 at offset 0x2 of prm
+                id = *(s16*)((u8*)prm + 0x2);
+                break;
+            case ID_UNK_4:
+                // Get the u32 at offset 0x1 of prm
+                id = *(u32*)((u8*)prm + 0x1);
+                break;
+            case ID_UNK_5:
+            case ID_UNK_6:
+                // Get the u32 at offset 0x2 of prm
+                id = *(u32*)((u8*)prm + 0x2);
+                break;
+            default:
+                return NULL;
+        }
+    }
+
+    if (id == this->mBtpId) {
         return NULL;
+    }
+
+    this->mBtpId = id;
+
+    if ((id & 0x10000) != 0) {
+        name = dStage_roomControl_c::getDemoArcName();
+    }
+
+    J3DAnmTexPattern* pattern = (J3DAnmTexPattern *) dComIfG_getObjectIDRes(name, (u16)id);
+    if (pattern != NULL) {
+        this->mTexAnimationFrameMax = (float) pattern->getFrameMax();
+    }
+
+    return pattern;
 }
 
 /* 80069550-800695E8       .text getP_BrkData__13dDemo_actor_cFPCc */
-void* dDemo_actor_c::getP_BrkData(const char*) {
-    /* Nonmatching */
+void* dDemo_actor_c::getP_BrkData(const char* param_1) {
+    if (!checkEnable(ENABLE_DATA_e)) {
+        return NULL;
+    }
+
+    const void* prm = mPrm.mData;
+
+    u32 id;
+    switch(mPrm.getId()) {
+        case ID_UNK_6:
+                // Get the u32 at offset 0xa of prm
+                id = *(u32*)((u8*)prm + 0xa);
+            break;
+        default:
+            return NULL;
+    }
+
+    if (id == mBrkId) {
+        return NULL;
+    }
+
+    mBrkId = id;
+    if ((id & 0x10000) != 0) {
+        param_1 = dStage_roomControl_c::getDemoArcName();
+    }
+
+    return dComIfG_getObjectIDRes(param_1, (u16)id);
 }
 
 /* 800695E8-8006969C       .text getP_BtkData__13dDemo_actor_cFPCc */
-J3DAnmTextureSRTKey* dDemo_actor_c::getP_BtkData(const char*) {
-    /* Nonmatching */
+J3DAnmTextureSRTKey* dDemo_actor_c::getP_BtkData(const char* param_1) {
+    if (!checkEnable(ENABLE_DATA_e)) {
+        return NULL;
+    }
+
+    const void* prm = mPrm.mData;
+
+    u32 id;
+    switch(mPrm.getId()) {
+        case ID_UNK_2:
+                // Get the s16 at offset 0x4 of prm
+                id = *(s16*)((u8*)prm + 0x4);
+            break;
+        case ID_UNK_5:
+        case ID_UNK_6:
+                // Get the s16 at offset 0x6 of prm
+                id = *(u32*)((u8*)prm + 0x6);
+            break;
+        default:
+            return NULL;
+    }
+
+    if (id == mBtkId) {
+        return NULL;
+    }
+
+    mBtkId = id;
+    if ((id & 0x10000) != 0) {
+        param_1 = dStage_roomControl_c::getDemoArcName();
+    }
+
+    return (J3DAnmTextureSRTKey*) dComIfG_getObjectIDRes(param_1, (u16)id);
 }
 
 /* 8006969C-80069838       .text getPrm_Morf__13dDemo_actor_cFv */
@@ -74,38 +177,48 @@ f32 dDemo_actor_c::getPrm_Morf() {
         return mAnmTransition;
     }
 
-    if (!checkEnable(ENABLE_UNK_e)) {
+    if (!checkEnable(ENABLE_DATA_e)) {
         return 0.0f;
     }
 
-    dDemo_prm_data* prm = mPrm.mData;
+    const void* prm = mPrm.mData;
 
     switch (mPrm.mId) {
     case ID_UNK_1:
         if (field_0x54 < 4) {
             return 0.0f;
         }
-        return prm->field_0x4;
+
+        // Get the s8 at offset 0x4 of prm
+        return *(s8*)((u8*)prm + 0x4);
     case ID_UNK_2:
         if (field_0x54 < 7) {
             return 0.0f;
         }
-        return prm->field_0x7;
+
+        // Get the s8 at offset 0x7 of prm
+        return *(s8*)((u8*)prm + 0x7);
     case ID_UNK_4:
         if (field_0x54 < 6) {
             return 0.0f;
         }
-        return prm->field_0x6;
+
+        // Get the s8 at offset 0x6 of prm
+        return *(s8*)((u8*)prm + 0x6);
     case ID_UNK_5:
         if (field_0x54 < 0xB) {
             return 0.0f;
         }
-        return prm->field_0xb;
+
+        // Get the s8 at offset 0xb of prm
+        return *(s8*)((u8*)prm + 0xb);
     case ID_UNK_6:
         if (field_0x54 < 0xF) {
             return 0.0f;
         }
-        return prm->field_0xf;
+
+        // Get the s8 at offset 0xf of prm
+        return *(s8*)((u8*)prm + 0xf);
     default:
         return 0.0f;
     }
@@ -204,9 +317,9 @@ BOOL dDemo_setDemoData(fopAc_ac_c* i_actor, u8 i_flags, mDoExt_McaMorf* i_morf, 
 /* 80069BC0-80069BDC       .text JSGSetData__13dDemo_actor_cFUlPCvUl */
 void dDemo_actor_c::JSGSetData(u32 p0, const void* p1, u32 p2) {
     mPrm.mId = p0;
-    mPrm.mData = (dDemo_prm_data*)p1;
+    mPrm.mData = p1;
     field_0x54 = p2;
-    onEnable(ENABLE_UNK_e);
+    onEnable(ENABLE_DATA_e);
 }
 
 /* 80069BDC-80069C04       .text JSGSetTranslation__13dDemo_actor_cFRC3Vec */
