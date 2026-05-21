@@ -138,21 +138,11 @@ static BOOL da_Npc_Ah_nodeCallBack(J3DNode* node, int calcTiming) {
 
         if(jointNo == i_this->m_jnt.getHeadJntNum()){
             mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getHead_y());
-#if VERSION > VERSION_DEMO
-            mDoMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getHead_x());
-#else
-            s16 headX = -i_this->m_jnt.getHead_x();
-            mDoMtx_ZrotM(*calc_mtx, headX);
-#endif
+            cMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getHead_x());
         }
         else if(jointNo == i_this->m_jnt.getBackboneJntNum()){
             mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getBackbone_y());
-#if VERSION > VERSION_DEMO
-            mDoMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getBackbone_x());
-#else
-            s16 backboneX = -i_this->m_jnt.getBackbone_x();
-            mDoMtx_ZrotM(*calc_mtx, backboneX);
-#endif
+            cMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getBackbone_x());
         }
 #if VERSION > VERSION_DEMO
         MTXCopy(*calc_mtx, model->getAnmMtx(jointNo));
@@ -293,7 +283,7 @@ cPhs_State daNpcAh_c::createInit() {
     fopAcM_setCullSizeBox(this, -70.0f,0.0f,-70.0f,70.0f,200.0f,70.0f);
     attention_info.distances[fopAc_Attn_TYPE_TALK_e]=0xA7;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e]=0xA9;
-    attention_info.flags = 0x100000a;
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_UNK1000000_e;;
     m_jnt.setParam( l_npc_dat.mMax_backbone_x, l_npc_dat.mMax_backbone_y,
                     l_npc_dat.mMin_backbone_x, l_npc_dat.mMin_backbone_y,
                     l_npc_dat.mMax_head_x, l_npc_dat.mMax_head_y,
@@ -319,11 +309,7 @@ cPhs_State daNpcAh_c::createInit() {
 bool daNpcAh_c::_delete() {
     getPrmArg0();
     if(field_0x747 != 0){
-        #if VERSION > VERSION_DEMO
-        dComIfG_resDelete(&mPhs, l_arcname_tbl[0]);
-        #else
-        dComIfG_deleteObjectRes(l_arcname_tbl[0]);
-        #endif
+        dComIfG_resDeleteDemo(&mPhs, l_arcname_tbl[0]);
     }
 #if VERSION > VERSION_DEMO
     if(heap != NULL && mpMorf != NULL){
@@ -401,12 +387,7 @@ bool daNpcAh_c::_execute() {
 
     cXyz attnInfoPos;
     attnInfoPos.set(l_npc_dat.field_0x18, l_npc_dat.field_0x1C, l_npc_dat.field_0x20);
-#if VERSION > VERSION_DEMO
-    mDoMtx_YrotS(mDoMtx_stack_c::get(), current.angle.y);
-#else
-    s16 ang = current.angle.y;
-    mDoMtx_YrotS(mDoMtx_stack_c::get(), ang);
-#endif
+    cMtx_YrotS(mDoMtx_stack_c::get(), current.angle.y);
     cMtx_multVec(mDoMtx_stack_c::get(), &attnInfoPos, &attnInfoPos);
     attnInfoPos += current.pos;
     attention_info.position.set(attnInfoPos);
@@ -585,7 +566,7 @@ bool daNpcAh_c::eventMesSet() {
 /* 000016C0-00001718       .text eventGetItemInit__9daNpcAh_cFv */
 void daNpcAh_c::eventGetItemInit() {
     fpc_ProcID procItem = fopAcM_createItemForPresentDemo(&current.pos, mItemNo);
-    if(procItem != -1){
+    if(procItem != fpcM_ERROR_PROCESS_ID_e){
         dComIfGp_event_setItemPartnerId(procItem);
     }
 }
@@ -701,12 +682,7 @@ void daNpcAh_c::setMtx() {
     J3DModel* mcaMorf = mpMorf->getModel();
     mcaMorf->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
-#if VERSION > VERSION_DEMO
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
-#else
-    s16 ang = current.angle.y;
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), ang);
-#endif
+    cMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
@@ -869,7 +845,7 @@ void daNpcAh_c::playAnm() {
                     }
                 }
                 else{
-                    setAnm(mpAnmDat->mBckIdx, 0, 0);
+                    setAnm(mpAnmDat->mBckIdx, J3DFrameCtrl::EMode_NONE, 0.0f);
                 }
             }
         }
@@ -896,9 +872,9 @@ bool daNpcAh_c::setAnmTbl(sAhAnmDat* i_anmDat) {
     }else{
         mpAnmDat = i_anmDat;
         field_0x74B = mpAnmDat->field_0x02;
-        int loopMode = 2;
-        if(field_0x74B > 0) loopMode = 0;
-        if(mBckIdx != mpAnmDat->mBckIdx || loopMode == 0){
+        int loopMode = J3DFrameCtrl::EMode_LOOP;
+        if(field_0x74B > 0) loopMode = J3DFrameCtrl::EMode_NONE;
+        if(mBckIdx != mpAnmDat->mBckIdx || loopMode == J3DFrameCtrl::EMode_NONE){
             setAnm(mpAnmDat->mBckIdx, loopMode, mpAnmDat->mMorf);
         }
         return FALSE;
