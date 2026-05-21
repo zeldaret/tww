@@ -1626,7 +1626,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_mozo"),
     ActorRel(NonMatching, "d_a_mt"),
     ActorRel(NonMatching, "d_a_npc_ac1"),
-    ActorRel(NonMatching, "d_a_npc_ah"),
+    ActorRel(Matching,    "d_a_npc_ah"),
     ActorRel(NonMatching, "d_a_npc_aj1"),
     ActorRel(NonMatching, "d_a_npc_auction"),
     ActorRel(NonMatching, "d_a_npc_ba1"),
