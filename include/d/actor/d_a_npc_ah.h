@@ -10,14 +10,7 @@ struct sAhAnmDat {
     /* 0x00 */ u8 mBckIdx;
     /* 0x01 */ u8 mMorf;
     /* 0x02 */ s8 field_0x02;
-}; // Size: 0x04
-
-struct sAhAnmDat2 {
-    /* 0x00 */ u8 field_0x00;
-    /* 0x01 */ u8 field_0x01;
-    /* 0x02 */ s8 field_0x02;
-    /* 0x02 */ s8 field_0x03;
-}; // Size: 0x04
+}; // Size: 0x03
 
 struct NpcDatStruct {
     /* 0x00 */ s16 mMax_head_x;
