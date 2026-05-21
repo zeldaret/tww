@@ -1134,7 +1134,7 @@ BOOL daNpc_Os_c::searchNpcAction(void*) {
         s16 angle, adjustedAngle;
         angle = adjustedAngle = fopAcM_searchPlayerAngleY(this);
         BOOL temp3 = routeCheck(dist_sq, &adjustedAngle) && cLib_distanceAngleS(angle, adjustedAngle) <= 0x2000;
-        if(door || !temp3 || (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e | daPyStts0_UNK1_e) || player->checkAttentionLock())) {
+        if(door || !temp3 || (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000000_e | daPyStts0_HANG_e | daPyStts0_UNK1_e) || player->checkAttentionLock())) {
             temp = 0.0f;
             offNpcCallCommand();
         }

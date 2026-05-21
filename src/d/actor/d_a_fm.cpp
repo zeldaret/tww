@@ -1121,7 +1121,7 @@ bool daFm_c::isGrab() {
         return false;
     }
     
-    if(isLink(mpActorTarget) && (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK100_e) || checkPlayerGrabBomb())) {
+    if(isLink(mpActorTarget) && (dComIfGp_checkPlayerStatus0(0, daPyStts0_HANG_e) || checkPlayerGrabBomb())) {
         return false;
     }
 
@@ -2819,7 +2819,7 @@ void daFm_c::searchTarget() {
         if(mpActorTarget == NULL && field_0x2DC != 2) {
             fopAc_ac_c* link_actor = dComIfGp_getLinkPlayer();
             daPy_lk_c* link_player = (daPy_lk_c*)link_actor;
-            if(dComIfGp_getLinkPlayer() != NULL && !dComIfGp_checkPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e | daPyStts0_UNK100_e)) {
+            if(dComIfGp_getLinkPlayer() != NULL && !dComIfGp_checkPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e | daPyStts0_HANG_e)) {
                 if(!checkPlayerGrabBomb()) {
                     if(!checkPlayerGrabNpc() && !isLinkControl()) {
                         if(!((daPy_lk_c*)dComIfGp_getLinkPlayer())->checkCarryActionNow() && link_player->getGrabActorID() == -1) {

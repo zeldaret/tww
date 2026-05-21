@@ -825,7 +825,7 @@ void dMeter_statusCheck(sub_meter_class* i_Meter) {
             }
         } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e)) {
             i_Meter->mStatusFlags |= dMtrStts_UNK2000_e;
-        } else if (dComIfGp_checkPlayerStatus0(0, (daPyStts0_UNK100_e | daPyStts0_UNK2000000_e))) {
+        } else if (dComIfGp_checkPlayerStatus0(0, (daPyStts0_HANG_e | daPyStts0_UNK2000000_e))) {
             i_Meter->mStatusFlags |= dMtrStts_UNK8000_e;
         } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK4000000_e)) {
             i_Meter->mStatusFlags |= dMtrStts_UNK10000_e;

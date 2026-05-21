@@ -2063,7 +2063,7 @@ BOOL daNpc_Cb1_c::searchNpcAction(void*) {
                 }
 
                 temp = fopAcM_searchPlayerAngleY(this);
-                if(door || !routeCheck(dist_xz_sq, &temp) || dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e | daPyStts0_UNK1_e) || ((daPy_py_c*)pPlayer)->checkAttentionLock()) {
+                if(door || !routeCheck(dist_xz_sq, &temp) || dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000000_e | daPyStts0_HANG_e | daPyStts0_UNK1_e) || ((daPy_py_c*)pPlayer)->checkAttentionLock()) {
                     temp2 = 0.0f;
 
                     if(speedF == 0.0f) {
