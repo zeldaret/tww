@@ -17,9 +17,16 @@ namespace daObjHlift {
         /* 0x20 */ f32 field_0x20;
         /* 0x24 */ u8 field_0x24[0x2C - 0x24];
     };
+    static const Attr_c L_attr = { 30.0f, 50.0f, 10.0f, 2.0f, 0.3f, 1.2f, 250.0f, 10, 16384, 2.5f, 0x00, 0x02, 0x0a, 0x08, 0x07, 0x00, 0x00, 0x00 };
     
     class Act_c : public dBgS_MoveBgActor {
     public:
+        struct size_data {
+            /* 0x00 */ s16 field_0x00;
+            /* 0x01 */ s16 field_0x01;
+            /* 0x02 */ int field_0x02;
+        };
+
         enum Mode_e {
             // FIXME names
             Mode_L_U = 0x01,
@@ -37,7 +44,7 @@ namespace daObjHlift {
             PRM_HLIFT_16 = 0x10,
         };
         int prm_get_dist() const { return daObj::PrmAbstract<Prm_e>(this, PRM_HLIFT_3, PRM_HLIFT_0); }
-        int prm_get_evId() const { return daObj::PrmAbstract<Prm_e>(this, PRM_HLIFT_8, PRM_HLIFT_16); }
+        u8 prm_get_evId() const { return daObj::PrmAbstract<Prm_e>(this, PRM_HLIFT_8, PRM_HLIFT_16); }
         int prm_get_size() const { return daObj::PrmAbstract<Prm_e>(this, PRM_HLIFT_1, PRM_HLIFT_4); }
         int prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_HLIFT_8, PRM_HLIFT_8); }
     
@@ -66,15 +73,13 @@ namespace daObjHlift {
         virtual BOOL Execute(Mtx**);
         virtual BOOL Draw();
     
-        static int L_time_lag_num;
         static Mtx M_tmp_mtx;
         static u8 M_lift_move_flag;
         static int M_control_id;
-        static const Attr_c L_attr;
         static const char M_arcname[];
         static const char M_evname[];
         static const s16 M_up_dist[8];
-        static const s16 M_data_size[8];
+        static const size_data M_data_size[2];
     
     public:
         /* 0x2C8 */ request_of_phase_process_class mPhase;
@@ -88,7 +93,7 @@ namespace daObjHlift {
         /* 0x2EA */ s16 field_0x2EA;
         /* 0x2EC */ f32 field_0x2EC;
         /* 0x2F0 */ f32 field_0x2F0;
-        /* 0x2F4 */ u16 field_0x2F4;
+        /* 0x2F4 */ s16 field_0x2F4;
         /* 0x2F6 */ u8 field_0x2F6;
         /* 0x2F7 */ u8 field_0x2F7[0x2F8 - 0x2F7];
         /* 0x2F8 */ s16 mEventId;

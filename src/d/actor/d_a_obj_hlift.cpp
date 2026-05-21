@@ -8,23 +8,26 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+int L_time_lag_num;
+
 namespace daObjHlift {
 
-int L_time_lag_num;
 Mtx Act_c::M_tmp_mtx;
 u8 M_lift_move_flag;
 int Act_c::M_control_id = -1;
-const Attr_c L_attr = { 30.0f, 50.0f, 10.0f, 2.0f, 0.3f, 1.2f, 250.0f, 10, 16384, 2.5f, 0x00, 0x02, 0x0a, 0x08, 0x07, 0x00, 0x00, 0x00 };
 const char Act_c::M_arcname[] = "Hlift";
 const char Act_c::M_evname[] = "Hlift_up";
 const s16 Act_c::M_up_dist[] = { 125, 250, 375, 500, 625, 750, 875, 1000 };
-const s16 Act_c::M_data_size[] = { 4, 9, 0, 5888, 5, 10, 0, 5888 };
+const Act_c::size_data Act_c::M_data_size[2] = {
+    { 4, 9, 5888 },
+    { 5, 10, 5888 }
+};
 
 }
 
 /* 00000078-000001BC       .text CreateHeap__Q210daObjHlift5Act_cFv */
 BOOL daObjHlift::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, M_data_size[field_0x2DC * 4]);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, M_data_size[field_0x2DC].field_0x00);
     JUT_ASSERT(288, model_data != NULL);
     mModel1 = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
     J3DModelData* model_data_c = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 6);
@@ -35,7 +38,6 @@ BOOL daObjHlift::Act_c::CreateHeap() {
 
 /* 000001BC-000002D0       .text Create__Q210daObjHlift5Act_cFv */
 BOOL daObjHlift::Act_c::Create() {
-    /* Nonmatching */
     field_0x2EC = 0.0f;
     int switchIndex = prm_get_swSave();
     if (fopAcM_isSwitch(const_cast<Act_c*>(this), switchIndex)) {
@@ -65,17 +67,16 @@ BOOL daObjHlift::Act_c::Create() {
 
 /* 000002D0-00000408       .text Mthd_Create__Q210daObjHlift5Act_cFv */
 cPhs_State daObjHlift::Act_c::Mthd_Create() {
-    /* Nonmatching */
     fopAcM_ct(this, daObjHlift::Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        field_0x2D8 = prm_get_dist();   // FIXME which param ?
-        field_0x2DC = prm_get_size();   // FIXME which param ?
+        field_0x2D8 = prm_get_dist();
+        field_0x2DC = prm_get_size();
         phase_state = MoveBGCreate(
             M_arcname,
-            *(s16*) &M_data_size[2],    // FIXME type cast
+            M_data_size[field_0x2DC].field_0x01,
             dBgS_MoveBGProc_TypicalRotY,
-            *(int*) &M_data_size[4] // FIXME type cast
+            *(int*)&M_data_size[field_0x2DC].field_0x02
         );
         JUT_ASSERT(366, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
@@ -113,7 +114,6 @@ void daObjHlift::Act_c::mode_lower() {
 
 /* 000004F0-000005B8       .text mode_l_u_init__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::mode_l_u_init() {
-    /* Nonmatching */
     vib_set();
     field_0x2F0 = 0.0f;
     field_0x2E0 = 1;
@@ -164,7 +164,6 @@ void daObjHlift::Act_c::mode_upper() {
 
 /* 000007D8-000008A0       .text mode_u_l_init__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::mode_u_l_init() {
-    /* Nonmatching */
     vib_set();
     field_0x2F0 = 0.0f;
     fopAcM_seStart(this, JA_SE_OBJ_PRT_LIFT_UD, 0);
@@ -201,7 +200,6 @@ void daObjHlift::Act_c::mode_u_l() {
 
 /* 000009DC-00000AB0       .text mode_demoreq_init__Q210daObjHlift5Act_cFQ310daObjHlift5Act_c6Mode_e */
 void daObjHlift::Act_c::mode_demoreq_init(daObjHlift::Act_c::Mode_e next) {
-    /* Nonmatching */
     JUT_ASSERT(575, (next == Mode_U_L) || (next == Mode_L_U));
     field_0x2E4 = next;
     field_0x2F6 = 0;
@@ -224,8 +222,8 @@ void daObjHlift::Act_c::mode_demoreq() {
 
 /* 00000B28-00000BE8       .text set_mtx__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::set_mtx() {
-    /* Nonmatching */
-    mDoMtx_stack_c::transS(current.pos.x, current.pos.y + L_attr.field_0x00 + field_0x2EC, current.pos.z);
+    float fVar1 = current.pos.y + field_0x2EC;
+    mDoMtx_stack_c::transS(current.pos.x, fVar1 + L_attr.field_0x00, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mModel1->setBaseTRMtx(mDoMtx_stack_c::get());
     cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
@@ -242,7 +240,6 @@ void daObjHlift::Act_c::init_mtx() {
 
 /* 00000C40-00000C8C       .text rot_set__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::rot_set() {
-    /* Nonmatching */
     float fVar1 = current.pos.y - home.pos.y;
     float fVar2 = (65536.0f/L_attr.field_0x18);
     shape_angle.y = -(s16)(int)(fVar1 * fVar2);
@@ -250,16 +247,15 @@ void daObjHlift::Act_c::rot_set() {
 
 /* 00000C8C-00000CA8       .text vib_set__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::vib_set() {
-    /* Nonmatching */
     field_0x2E8 = L_attr.field_0x1C;
     field_0x2EA = 16384;
 }
 
 /* 00000CA8-00000D70       .text vib_proc__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::vib_proc() {
-    /* Nonmatching */
     if (field_0x2E8 > 0) {
-        field_0x2EC = L_attr.field_0x20 * (0.5f + ((f32) (L_attr.field_0x1C - field_0x2E8) * (0.5f / (f32) L_attr.field_0x1C))) * cM_ssin(field_0x2EA) * 4;
+        float fVar1 = (L_attr.field_0x1C - field_0x2E8);
+        field_0x2EC = (L_attr.field_0x20 * (0.5f + fVar1 * (0.5f / L_attr.field_0x1C))) * cM_ssin(field_0x2EA);
         field_0x2EA += L_attr.field_0x1E;
         field_0x2E8--;
     } else {
@@ -300,7 +296,7 @@ BOOL daObjHlift::Act_c::Execute(Mtx** param_1) {
 
     (this->*mode_proc[field_0x2E0])();
 
-    if (field_0x2E0 == 1 || field_0x2E0 == 2 || field_0x2E0 == 4) {
+    if (field_0x2E0 == 1 || field_0x2E0 == 3 || field_0x2E0 == 4) {
         M_lift_move_flag = 1;
     }
     rot_set();
