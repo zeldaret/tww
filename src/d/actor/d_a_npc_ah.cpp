@@ -138,13 +138,28 @@ static BOOL da_Npc_Ah_nodeCallBack(J3DNode* node, int calcTiming) {
 
         if(jointNo == i_this->m_jnt.getHeadJntNum()){
             mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getHead_y());
+#if VERSION > VERSION_DEMO
             mDoMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getHead_x());
+#else
+            s16 headX = -i_this->m_jnt.getHead_x();
+            mDoMtx_ZrotM(*calc_mtx, headX);
+#endif
         }
         else if(jointNo == i_this->m_jnt.getBackboneJntNum()){
             mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getBackbone_y());
+#if VERSION > VERSION_DEMO
             mDoMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getBackbone_x());
+#else
+            s16 backboneX = -i_this->m_jnt.getBackbone_x();
+            mDoMtx_ZrotM(*calc_mtx, backboneX);
+#endif
         }
+#if VERSION > VERSION_DEMO
         MTXCopy(*calc_mtx, model->getAnmMtx(jointNo));
+#else
+        Mtx* src = calc_mtx;
+        MTXCopy(*src, model->getAnmMtx(jointNo));
+#endif
         MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
     }
     return TRUE;
@@ -193,7 +208,9 @@ static cPhs_State phase_2(daNpcAh_c* i_this) {
         }
         else {            
             i_this->getPrmArg0();
+#if VERSION > VERSION_DEMO
             i_this->mpMorf = NULL;
+#endif
             return cPhs_ERROR_e;
         }
         
@@ -232,12 +249,13 @@ BOOL daNpcAh_c::createHeap() {
         0x80000, 
         0x11020022
     );
+#if VERSION > VERSION_DEMO
     if(mpMorf == NULL || mpMorf->getModel() == NULL) return FALSE;
-
+#endif
     m_jnt.setHeadJntNum(modelData->getJointTree().getJointName()->getIndex("head"));
-    JUT_ASSERT(0x2B8, m_jnt.getHeadJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(0x2B4, 0x2B8), m_jnt.getHeadJntNum() >= 0);
     m_jnt.setBackboneJntNum(modelData->getJointTree().getJointName()->getIndex("backbone"));
-    JUT_ASSERT(700, m_jnt.getBackboneJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(0x2B8, 0x2BC), m_jnt.getBackboneJntNum() >= 0);
 
     if(initTexPatternAnm(false) == FALSE) return FALSE;
 
@@ -255,9 +273,18 @@ BOOL daNpcAh_c::createHeap() {
 /* 00000BA4-00000D60       .text createInit__9daNpcAh_cFv */
 cPhs_State daNpcAh_c::createInit() {
     getPrmArg0();
+#if VERSION == VERSION_DEMO
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(dNpc_cyl_src);
+    mCyl.SetStts(&mStts);
+    setCollision(&mCyl, current.pos, l_npc_dat.field_0x38, 150.0f);
+#endif
     gravity = -9.0f;
     setAnmTbl(&l_npc_anm_wait);
     mEventCut.setActorInfo2(l_npc_staff_id[0], this);
+#if VERSION == VERSION_DEMO
+    setMtx();
+#endif
     mLookAtMaxVel = 0;
     field_0x742 = 0;
     field_0x743 = 0;
@@ -277,12 +304,14 @@ cPhs_State daNpcAh_c::createInit() {
     field_0x720 = l_npc_dat.field_0x28;
     field_0x730 = l_npc_dat.field_0x30;
     mObjAcch.CrrPos(*dComIfG_Bgsp());
+#if VERSION > VERSION_DEMO
     setMtx();
     mpMorf->getModel()->calc();
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(dNpc_cyl_src);
     mCyl.SetStts(&mStts);
     setCollision(&mCyl, current.pos, l_npc_dat.field_0x38, 150.0f);
+#endif
     return cPhs_COMPLEATE_e;
 }
 
@@ -291,9 +320,17 @@ bool daNpcAh_c::_delete() {
     /* inlines not matching */
     getPrmArg0();
     if(field_0x747 != 0){
+        #if VERSION > VERSION_DEMO
         dComIfG_resDelete(&mPhs, l_arcname_tbl[0]);
+        #else
+        dComIfG_deleteObjectRes(l_arcname_tbl[0]);
+        #endif
     }
+#if VERSION > VERSION_DEMO
     if(heap != NULL && mpMorf != NULL){
+#else
+    if(mpMorf != NULL){
+#endif
         mpMorf->stopZelAnime();
     }
     return true;
@@ -365,7 +402,12 @@ bool daNpcAh_c::_execute() {
 
     cXyz attnInfoPos;
     attnInfoPos.set(l_npc_dat.field_0x18, l_npc_dat.field_0x1C, l_npc_dat.field_0x20);
+#if VERSION > VERSION_DEMO
     mDoMtx_YrotS(mDoMtx_stack_c::get(), current.angle.y);
+#else
+    s16 ang = current.angle.y;
+    mDoMtx_YrotS(mDoMtx_stack_c::get(), ang);
+#endif
     cMtx_multVec(mDoMtx_stack_c::get(), &attnInfoPos, &attnInfoPos);
     attnInfoPos += current.pos;
     attention_info.position.set(attnInfoPos);
@@ -660,7 +702,12 @@ void daNpcAh_c::setMtx() {
     J3DModel* mcaMorf = mpMorf->getModel();
     mcaMorf->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
+#if VERSION > VERSION_DEMO
     mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
+#else
+    s16 ang = current.angle.y;
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), ang);
+#endif
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
@@ -785,7 +832,7 @@ void daNpcAh_c::lookBack() {
 BOOL daNpcAh_c::initTexPatternAnm(bool modify) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(l_arcname_tbl[0], l_btp_ix_tbl[0]);
-    JUT_ASSERT(0x66B, m_head_tex_pattern != NULL);
+    JUT_ASSERT(DEMO_SELECT(0x65C, 0x66B), m_head_tex_pattern != NULL);
     BOOL ret = mBtpAnm.init(modelData, m_head_tex_pattern, 1, 2, 1.0, 0, -1, modify, FALSE);
     if(ret == FALSE)
         return FALSE;
