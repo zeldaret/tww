@@ -8,21 +8,21 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/res/res_hjump.h"
 
 namespace daObjJump {
 
 Mtx daObjJump::Act_c::M_tmp_mtx;
 const char Act_c::M_arcname[] = "Hjump";
 const Attr_c Act_c::M_attr[2] = {
-    {
-        /* resSize          */ DEMO_SELECT(0x8000, 0x840),
-        /* resIndex         */ 12,
-        /* field_0x006      */ 6,
+    { // Type_SPRING_e
+        /* heapSize         */ DEMO_SELECT(0x8000, 0x840),
+        /* dzbResIndex      */ HJUMP_DZB_HJUMP2,
+        /* bdlResIndex      */ HJUMP_BDL_HJUMP2,
         /* cullSizeBoxMin   */ { -60, -1, -60 },
         /* cullSizeBoxMax   */ { 60, VERSION_SELECT(151, 151, 251, 251), 60 },
-        /* field_0x014      */ 1,
-        /* field_0x015      */ 0,
-        /* field_0x016      */ 1,
+        /* hasShadow        */ true,
+        /* springJntNum     */ 1,
         /* field_0x018      */ 40.0f,
         /* field_0x01C      */ 125.0f,
         /* field_0x020      */ 150.0f,
@@ -42,18 +42,16 @@ const Attr_c Act_c::M_attr[2] = {
         /* field_0x046      */ 0x04,
         /* field_0x047      */ 0x04,
         /* field_0x048      */ 0x01,
-        /* field_0x049      */ { 0, 0, 0 },
         /* field_0x04C      */ 2.0f
     },
-    {
-        /* resSize          */ DEMO_SELECT(0x8000, 0x840),
-        /* resIndex         */ 11,
-        /* field_0x006      */ 5,
+    { // Type_SPRING_ON_BOX_e
+        /* heapSize         */ DEMO_SELECT(0x8000, 0x840),
+        /* dzbResIndex      */ HJUMP_DZB_HJUMP1B,
+        /* bdlResIndex      */ HJUMP_BDL_HJUMP1,
         /* cullSizeBoxMin   */ { -90, -1, -90 },
         /* cullSizeBoxMax   */ { 90, VERSION_SELECT(301, 301, 401, 401), 90 },
-        /* field_0x014      */ 0,
-        /* field_0x015      */ 0,
-        /* field_0x016      */ 1,
+        /* hasShadow        */ false,
+        /* springJntNum     */ 1,
         /* field_0x018      */ 160.0f,
         /* field_0x01C      */ 270.0f,
         /* field_0x020      */ 300.0f,
@@ -73,7 +71,6 @@ const Attr_c Act_c::M_attr[2] = {
         /* field_0x046      */ 0x04,
         /* field_0x047      */ 0x04,
         /* field_0x048      */ 0x01,
-        /* field_0x049      */ { 0, 0, 0 },
         /* field_0x04C      */ 2.0f
     }
 };
@@ -81,12 +78,12 @@ const Attr_c Act_c::M_attr[2] = {
 
 /* 00000078-00000184       .text CreateHeap__Q29daObjJump5Act_cFv */
 BOOL daObjJump::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, attr().field_0x006);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, attr().bdlResIndex);
     JUT_ASSERT(DEMO_SELECT(277, 282), model_data != NULL);
     
     mModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
     if (mModel != NULL) {
-        model_data->getJointTree().getJointNodePointer(attr().field_0x016)->setCallBack(jnodeCB_lower);
+        model_data->getJointTree().getJointNodePointer(attr().springJntNum)->setCallBack(jnodeCB_lower);
         mModel->setUserArea((u32)this);
     }
     return mModel != NULL;
@@ -94,10 +91,9 @@ BOOL daObjJump::Act_c::CreateHeap() {
 
 /* 00000184-0000033C       .text Create__Q29daObjJump5Act_cFv */
 BOOL daObjJump::Act_c::Create() {
-    unsigned int uVar2;
     field_0x338 = 1.0f;
     field_0x33C = 1.0f;
-    cullMtx = mModel->getBaseTRMtx();
+    fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     init_mtx();
     fopAcM_setCullSizeBox(
         this,
@@ -108,15 +104,14 @@ BOOL daObjJump::Act_c::Create() {
         attr().cullSizeBoxMax.y,
         attr().cullSizeBoxMax.z
     );
-    if (attr().field_0x014 != 0) {
-        cXyz temp(current.pos.x, current.pos.y + 50.0f, current.pos.z);
-        field_0x2D8.SetPos(&temp);
-        uVar2 = fopAcM_GetID(this);
-        field_0x2D8.SetActorPid(uVar2);
-        field_0x32C = dComIfG_Bgsp()->GroundCross(&field_0x2D8);
+    if (attr().hasShadow) {
+        cXyz pos(current.pos.x, current.pos.y + 50.0f, current.pos.z);
+        mGndChk.SetPos(&pos);
+        mGndChk.SetActorPid(fopAcM_GetID(this));
+        mGroundY = dComIfG_Bgsp()->GroundCross(&mGndChk);
     }
 #if VERSION > VERSION_DEMO
-    if (field_0x2D4 == 1) {
+    if (mType == Type_SPRING_ON_BOX_e) {
         actor_status &= ~0x3F;
         gbaName = 0;
     }
@@ -131,12 +126,12 @@ cPhs_State daObjJump::Act_c::Mthd_Create() {
     fopAcM_ct(this, daObjJump::Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        field_0x2D4 = prm_get_type();
+        mType = prm_get_type();
         phase_state = MoveBGCreate(
             M_arcname,
-            attr().resIndex,
+            attr().dzbResIndex,
             dBgS_MoveBGProc_Typical,
-            attr().resSize
+            attr().heapSize
         );
         JUT_ASSERT(DEMO_SELECT(373, 384), (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
@@ -160,10 +155,10 @@ void daObjJump::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    float fVar1 = attr().field_0x020 - attr().field_0x024;
-    float fVar2 = attr().field_0x01C - attr().field_0x018;
-    float fVar3 = (field_0x33C - 1.0f);
-    float fVar4 = (fVar1 + fVar2 * fVar3) / fVar1;
+    f32 fVar1 = attr().field_0x020 - attr().field_0x024;
+    f32 fVar2 = attr().field_0x01C - attr().field_0x018;
+    f32 fVar3 = (field_0x33C - 1.0f);
+    f32 fVar4 = (fVar1 + fVar2 * fVar3) / fVar1;
     mDoMtx_stack_c::transM(0.0f, attr().field_0x024, 0.0f);
     mDoMtx_stack_c::scaleM(1.0f, fVar4,1.0f);
     mDoMtx_stack_c::transM(0.0f, -attr().field_0x024, 0.0f);
@@ -179,7 +174,7 @@ void daObjJump::Act_c::init_mtx() {
 /* 00000BB4-00000D9C       .text set_push_flag__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::set_push_flag() {
     field_0x345 = 0;
-    if (field_0x344 != 0) {
+    if (mIsRide) {
         if (field_0x347 < 0xff) {
             field_0x347 += 1;
         }
@@ -190,7 +185,7 @@ void daObjJump::Act_c::set_push_flag() {
         field_0x347 = 0;
     }
     field_0x346 = 0;
-    if (field_0x344 != 0) {
+    if (mIsRide) {
         field_0x348 = 0;
     } else {
         if (field_0x348 < 0xff) {
@@ -201,7 +196,7 @@ void daObjJump::Act_c::set_push_flag() {
         }
     }
     field_0x34a = 0;
-    if (field_0x349 != 0 && dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK100_e)) {
+    if (mIsPlayerRide && dComIfGp_checkPlayerStatus0(0, daPyStts0_HANG_e)) {
         if (field_0x34b < 0xff) {
             field_0x34b += 1;
         }
@@ -212,7 +207,7 @@ void daObjJump::Act_c::set_push_flag() {
         field_0x34b = 0;
     }
     field_0x34d = 0;
-    if (field_0x34c != 0) {
+    if (mIsHeavyRide) {
         if (field_0x34f < 0xff) {
             field_0x34f += 1;
         }
@@ -223,7 +218,7 @@ void daObjJump::Act_c::set_push_flag() {
         field_0x34f = 0;
     }
     field_0x34e = 0;
-    if (field_0x34c != 0) {
+    if (mIsHeavyRide) {
         field_0x350 = 0;
         return;
     }
@@ -238,34 +233,33 @@ void daObjJump::Act_c::set_push_flag() {
 
 /* 00000D9C-00000DB4       .text clear_push_flag__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::clear_push_flag() {
-    field_0x344 = 0;
-    field_0x34c = 0;
-    field_0x349 = 0;
+    mIsRide = false;
+    mIsHeavyRide = false;
+    mIsPlayerRide = false;
     field_0x354 = 0;
 }
 
 /* 00000DB4-00000E1C       .text calc_vib_pos__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::calc_vib_pos() {
     f32 f2 = field_0x33C - field_0x338;
-    field_0x340 = field_0x340 - f2 * attr().field_0x02C;
-    field_0x340 = field_0x340 - field_0x340 * attr().field_0x028;
-    field_0x33C = field_0x33C + field_0x340;
+    field_0x340 -= f2 * attr().field_0x02C;
+    field_0x340 -= field_0x340 * attr().field_0x028;
+    field_0x33C += field_0x340;
 }
 
 /* 00000E1C-00000E74       .text rideCB__Q29daObjJump5Act_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daObjJump::Act_c::rideCB(dBgW*, fopAc_ac_c* param_2, fopAc_ac_c* param_3) {
     Act_c* i_this = (Act_c *) param_2;
     daPy_py_c* player = (daPy_py_c *) param_3;
-    i_this->field_0x344 = 1;
-    if (fopAcM_GetProfName(param_3) != PROC_PLAYER) {
-        return;
-    }
-    i_this->field_0x349 = 1;
-    if (player->checkEquipHeavyBoots()) {
-        i_this->field_0x34c = 1;
-    }
-    if (fopAcM_GetSpeedF(player) > i_this->attr().field_0x04C) {
-        i_this->field_0x354 = 1;
+    i_this->mIsRide = true;
+    if (fopAcM_GetProfName(param_3) == PROC_PLAYER) {
+        i_this->mIsPlayerRide = true;
+        if (player->checkEquipHeavyBoots()) {
+            i_this->mIsHeavyRide = true;
+        }
+        if (fopAcM_GetSpeedF(player) > i_this->attr().field_0x04C) {
+            i_this->field_0x354 = true;
+        }
     }
 }
 
@@ -276,7 +270,7 @@ BOOL daObjJump::Act_c::jnodeCB_lower(J3DNode* node, int calcTiming) {
         Act_c* i_this = (Act_c *) model->getUserArea();
         J3DJoint* joint = (J3DJoint*) node;
         u16 jntNo = joint->getJntNo();
-        PSMTXCopy(model->getAnmMtx(jntNo), mDoMtx_stack_c::get());
+        MTXCopy(model->getAnmMtx(jntNo), mDoMtx_stack_c::get());
         mDoMtx_stack_c::scaleM(i_this->field_0x33C,1.0f,1.0f);
         model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
         f32 f2 = i_this->attr().field_0x01C - i_this->attr().field_0x018;
@@ -288,7 +282,7 @@ BOOL daObjJump::Act_c::jnodeCB_lower(J3DNode* node, int calcTiming) {
 
 /* 00000F48-00000F64       .text mode_wait_init__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::mode_wait_init() {
-    field_0x330 = 0;
+    mMode = Mode_WAIT_e;
     field_0x338 = 1.0f;
     field_0x352 = 0;
 }
@@ -310,7 +304,7 @@ void daObjJump::Act_c::mode_wait() {
 
 /* 0000108C-000010B4       .text mode_w_l_init__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::mode_w_l_init() {
-    field_0x330 = 1;
+    mMode = Mode_WAIT_LOWER_e;
     field_0x338 = attr().field_0x038;
 }
 
@@ -323,7 +317,7 @@ void daObjJump::Act_c::mode_w_l() {
 
 /* 000010E8-000010FC       .text mode_lower_init__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::mode_lower_init() {
-    field_0x330 = 2;
+    mMode = Mode_LOWER_e;
     field_0x352 = 0;
 }
 
@@ -344,7 +338,7 @@ void daObjJump::Act_c::mode_lower() {
 
 /* 00001200-00001228       .text mode_l_u_init__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::mode_l_u_init() {
-    field_0x330 = 3;
+    mMode = Mode_LOWER_UPPER_e;
     field_0x338 = attr().field_0x03C;
 }
 
@@ -353,7 +347,7 @@ void daObjJump::Act_c::mode_l_u() {
     if (field_0x33C >= field_0x338) {
         field_0x33C = field_0x338;
         field_0x340 = 0.0f;
-        if (field_0x349 != 0) {
+        if (mIsPlayerRide) {
             daPy_py_c* player = daPy_getPlayerActorClass();
             player->onForceVomitJump();
         }
@@ -363,22 +357,20 @@ void daObjJump::Act_c::mode_l_u() {
 
 /* 00001290-000012B8       .text mode_upper_init__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::mode_upper_init() {
-    field_0x330 = 4;
-    field_0x334 = attr().field_0x042;
+    mMode = Mode_UPPER_e;
+    mTimer = attr().field_0x042;
 }
 
 /* 000012B8-000012EC       .text mode_upper__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::mode_upper() {
-    s16 var = field_0x334;
-    field_0x334 = var - 1;
-    if ((s16)(var - 1) <= 0) {
+    if (--mTimer <= 0) {
         mode_u_w_init();
     }
 }
 
 /* 000012EC-00001304       .text mode_u_w_init__Q29daObjJump5Act_cFv */
 void daObjJump::Act_c::mode_u_w_init() {
-    field_0x330 = 5;
+    mMode = Mode_UPPER_WAIT_e;
     field_0x338 = 1.0f;
 }
 
@@ -405,9 +397,9 @@ BOOL daObjJump::Act_c::Execute(Mtx** param_1) {
         &daObjJump::Act_c::mode_u_w
     };
 
-    (this->*mode_proc[field_0x330])();
+    (this->*mode_proc[mMode])();
 
-    if ((field_0x330 == 0 || field_0x330 == 2) && field_0x354 != 0) {
+    if ((mMode == Mode_WAIT_e || mMode == Mode_LOWER_e) && field_0x354) {
         field_0x340 += attr().field_0x034;
     }
     calc_vib_pos();
@@ -424,12 +416,12 @@ BOOL daObjJump::Act_c::Draw() {
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mModel);
     dComIfGd_setList();
-    if (attr().field_0x014 != 0) {
+    if (attr().hasShadow != 0) {
         dComIfGd_setSimpleShadow2(
             &current.pos,
-            field_0x32C,
+            mGroundY,
             70.0f,
-            field_0x2D8,
+            mGndChk,
             shape_angle.y,
             1.0f,
             NULL

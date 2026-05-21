@@ -229,7 +229,7 @@ BOOL daPy_lk_c::procHangStart_init() {
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
     speed.y = 0.0f;
-    dComIfGp_setPlayerStatus0(0, daPyStts0_UNK100_e);
+    dComIfGp_setPlayerStatus0(0, daPyStts0_HANG_e);
     mHangGroundH = mAcch.GetGroundH();
     return true;
 }
@@ -332,7 +332,7 @@ BOOL daPy_lk_c::procHangFallStart_init(cM3dGPla* param_0) {
     );
     mVelocity = 0.0f;
     speed.y = 0.0f;
-    dComIfGp_setPlayerStatus0(0, daPyStts0_UNK100_e);
+    dComIfGp_setPlayerStatus0(0, daPyStts0_HANG_e);
     voiceStart(11);
     return true;
 }
@@ -378,7 +378,7 @@ BOOL daPy_lk_c::procHangUp_init(int param_0) {
         m_HIO->mHang.m.field_0x2,
         m_HIO->mHang.m.field_0x20
     );
-    dComIfGp_setPlayerStatus0(0, daPyStts0_UNK100_e);
+    dComIfGp_setPlayerStatus0(0, daPyStts0_HANG_e);
     mProcVar0.m3570 = param_0;
     mVelocity = 0.0f;
     return true;
@@ -416,7 +416,7 @@ BOOL daPy_lk_c::procHangWait_init() {
     mpSeAnmFrameCtrl = NULL;
     mVelocity = 0.0f;
     speed.y = 0.0f;
-    dComIfGp_setPlayerStatus0(0, daPyStts0_UNK100_e);
+    dComIfGp_setPlayerStatus0(0, daPyStts0_HANG_e);
     return true;
 }
 
@@ -456,7 +456,7 @@ BOOL daPy_lk_c::procHangMove_init(int param_0) {
         current.angle.y = shape_angle.y + -0x4000;
     }
     setSingleMoveAnime(anm, getHangMoveAnmSpeed(), 0.0f, -1, m_HIO->mHang.m.field_0x2C);
-    dComIfGp_setPlayerStatus0(0, daPyStts0_UNK100_e);
+    dComIfGp_setPlayerStatus0(0, daPyStts0_HANG_e);
     mVelocity = 0.0f;
     cXyz local_1c = mLeftHandPos - mRightHandPos;
     m35A0 = local_1c.absXZ();
@@ -604,7 +604,7 @@ BOOL daPy_lk_c::procHangWallCatch_init() {
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
     speed.y = 0.0f;
-    dComIfGp_setPlayerStatus0(0, daPyStts0_UNK100_e);
+    dComIfGp_setPlayerStatus0(0, daPyStts0_HANG_e);
     return true;
 }
 

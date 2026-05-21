@@ -2752,7 +2752,7 @@ bool dCamera_c::followCamera(s32 param_1) {
         }
     }
 
-    if (check_owner_action(mPadId, daPyStts0_UNK200_e | daPyStts0_UNK100_e) && !check_owner_action(mPadId, daPyStts0_UNK2000000_e)) {
+    if (check_owner_action(mPadId, daPyStts0_UNK200_e | daPyStts0_HANG_e) && !check_owner_action(mPadId, daPyStts0_UNK2000000_e)) {
         if (dVar21 > -10.0f) {
             mWork.follow.m3B0 = -10.0f;
         }
@@ -2982,7 +2982,7 @@ bool dCamera_c::followCamera(s32 param_1) {
         setDMCAngle();
     }
 
-    if ((check_owner_action(mPadId, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e | daPyStts0_UNK40_e | daPyStts0_UNK20_e | daPyStts0_UNK1_e) && check_owner_action1(mPadId, daPyStts1_UNK10000_e)) || (cSAngle::_270 < local_4ac && local_4ac < cSAngle::_90)) {
+    if ((check_owner_action(mPadId, daPyStts0_UNK2000000_e | daPyStts0_HANG_e | daPyStts0_UNK40_e | daPyStts0_UNK20_e | daPyStts0_UNK1_e) && check_owner_action1(mPadId, daPyStts1_UNK10000_e)) || (cSAngle::_270 < local_4ac && local_4ac < cSAngle::_90)) {
         mWork.follow.m3EC = dVar23;
     }
     else {
@@ -3033,7 +3033,7 @@ bool dCamera_c::followCamera(s32 param_1) {
     
     if (m780) {
         cXyz attn_pos = attentionPos(mpPlayerActor);
-        if (check_owner_action(mPadId, daPyStts0_CRAWL_e | daPyStts0_SWIM_e | daPyStts0_UNK100_e)) {
+        if (check_owner_action(mPadId, daPyStts0_CRAWL_e | daPyStts0_SWIM_e | daPyStts0_HANG_e)) {
             attn_pos.y = eyePos(mpPlayerActor).y + 30.0f;
         }
         else {
@@ -3097,7 +3097,7 @@ bool dCamera_c::followCamera(s32 param_1) {
         }
 
         if (
-            check_owner_action(mPadId, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e) ||
+            check_owner_action(mPadId, daPyStts0_UNK2000000_e | daPyStts0_HANG_e) ||
             check_owner_action1(mPadId, check_owner_action1(mPadId, daPyStts1_UNK10000_e))
         ) {
             if (mWork.follow.m38C == 0) {
@@ -3249,7 +3249,7 @@ bool dCamera_c::followCamera(s32 param_1) {
     
     mWork.follow.m3A4 = positionOf(mpPlayerActor).y;
     
-    if (check_owner_action(mPadId, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e | daPyStts0_UNK40_e | daPyStts0_UNK20_e | daPyStts0_UNK1_e || check_owner_action1(mPadId, daPyStts1_UNK10000_e))) {
+    if (check_owner_action(mPadId, daPyStts0_UNK2000000_e | daPyStts0_HANG_e | daPyStts0_UNK40_e | daPyStts0_UNK20_e | daPyStts0_UNK1_e || check_owner_action1(mPadId, daPyStts1_UNK10000_e))) {
         mWork.follow.m3B4 = 1;
     }
     else {
