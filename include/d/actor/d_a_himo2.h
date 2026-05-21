@@ -17,7 +17,7 @@ struct himo2_s {
 }; // Size: 0x24
 
 struct himo2_class {
-    BOOL setTargetPos(cXyz*, float*, float*);
+    BOOL setTargetPos(cXyz*, f32*, f32*);
 
     /* 0x0000 */ fopAc_ac_c actor;
     /* 0x0290 */ u8 m0290[0x029C - 0x0290];

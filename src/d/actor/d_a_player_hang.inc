@@ -215,7 +215,7 @@ BOOL daPy_lk_c::procHangStart_init() {
     }
     commonProcInit(daPyProc_HANG_START_e);
 #if VERSION > VERSION_DEMO
-    mProcVar0.m3570 = sVar3;
+    mProcVar6.m3570 = sVar3;
 #endif
     setSingleMoveAnime(
         ANM_VJMPCHA,
@@ -227,7 +227,7 @@ BOOL daPy_lk_c::procHangStart_init() {
     current.pos = local_1c;
     shape_angle.y = m352C + 0x8000;
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speed.y = 0.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_HANG_e);
     mHangGroundH = mAcch.GetGroundH();
@@ -240,11 +240,22 @@ BOOL daPy_lk_c::procHangStart() {
         return true;
     }
 
-    if (((mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) ||
-         (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mWallCatch.m.field_0x50)) &&
-        (mStickDistance > 0.05f || mProcVar0.m3570 != 0))
+    if (
+        (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f || (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mWallCatch.m.field_0x50)) &&
+        (
+            mStickDistance > 0.05f
+#if VERSION > VERSION_DEMO
+            || mProcVar6.m3570 != 0
+#endif
+        )
+    )
     {
-        if (getDirectionFromShapeAngle() == DIR_FORWARD || mProcVar0.m3570 != 0) {
+        if (
+            getDirectionFromShapeAngle() == DIR_FORWARD
+#if VERSION > VERSION_DEMO
+            || mProcVar6.m3570 != 0
+#endif
+        ) {
             procHangClimb_init(m_HIO->mWallCatch.m.field_0x2C);
         }
     } else {
@@ -330,7 +341,7 @@ BOOL daPy_lk_c::procHangFallStart_init(cM3dGPla* param_0) {
     setSingleMoveAnime(
         ANM_HANGING, m_HIO->mHang.m.field_0x4, m_HIO->mHang.m.field_0x8, m_HIO->mHang.m.field_0x0, morf
     );
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speed.y = 0.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_HANG_e);
     voiceStart(11);
@@ -379,8 +390,8 @@ BOOL daPy_lk_c::procHangUp_init(int param_0) {
         m_HIO->mHang.m.field_0x20
     );
     dComIfGp_setPlayerStatus0(0, daPyStts0_HANG_e);
-    mProcVar0.m3570 = param_0;
-    mVelocity = 0.0f;
+    mProcVar6.m3570 = param_0;
+    mNormalSpeed = 0.0f;
     return true;
 }
 
@@ -394,13 +405,13 @@ BOOL daPy_lk_c::procHangUp() {
         return true;
     }
 
-    if ((mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) ||
-        (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mHang.m.field_0x1C))
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f ||
+        mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mHang.m.field_0x1C)
     {
-        if (mProcVar0.m3570 == 0) {
+        if (mProcVar6.m3570 == 0) {
             procHangClimb_init(m_HIO->mWallCatch.m.field_0x2C);
-        } else if (changeHangMoveProc(mProcVar0.m3570)) {
-            procHangMove_init(mProcVar0.m3570);
+        } else if (changeHangMoveProc(mProcVar6.m3570)) {
+            procHangMove_init(mProcVar6.m3570);
         } else {
             procHangWait_init();
         }
@@ -414,7 +425,7 @@ BOOL daPy_lk_c::procHangWait_init() {
     setSingleMoveAnime(ANM_VJMPCHA, 0.0f, m_HIO->mWallCatch.m.field_0x2, -1, 5.0f);
     setTextureAnime(9, 0);
     mpSeAnmFrameCtrl = NULL;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speed.y = 0.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_HANG_e);
     return true;
@@ -457,7 +468,7 @@ BOOL daPy_lk_c::procHangMove_init(int param_0) {
     }
     setSingleMoveAnime(anm, getHangMoveAnmSpeed(), 0.0f, -1, m_HIO->mHang.m.field_0x2C);
     dComIfGp_setPlayerStatus0(0, daPyStts0_HANG_e);
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     cXyz local_1c = mLeftHandPos - mRightHandPos;
     m35A0 = local_1c.absXZ();
     return true;
@@ -483,24 +494,24 @@ BOOL daPy_lk_c::procHangMove() {
                 m34EC = sVar3;
             } else {
                 cXyz local_64 = mRightHandPos - mLeftHandPos;
-                float dVar12 = local_64.absXZ();
+                f32 dVar12 = local_64.absXZ();
                 if (changeHangMoveProc(4)) {
-                    mVelocity = std::fabsf(dVar12 - m35A0) * m_HIO->mHang.m.field_0x30;
-                    float fVar1 = cM_ssin(shape_angle.y);
-                    float fVar2 = cM_scos(shape_angle.y);
-                    float dVar13 = cM_ssin(current.angle.y);
-                    float dVar11 = cM_scos(current.angle.y);
+                    mNormalSpeed = std::fabsf(dVar12 - m35A0) * m_HIO->mHang.m.field_0x30;
+                    f32 fVar1 = cM_ssin(shape_angle.y);
+                    f32 fVar2 = cM_scos(shape_angle.y);
+                    f32 dVar13 = cM_ssin(current.angle.y);
+                    f32 dVar11 = cM_scos(current.angle.y);
                     cXyz local_70;
                     local_70.set(
-                        current.pos.x + (mVelocity * dVar13) - 30.0f * fVar1,
+                        current.pos.x + (mNormalSpeed * dVar13) - 30.0f * fVar1,
                         current.pos.y - 5.0f,
-                        current.pos.z + (mVelocity * dVar11) - 30.0f * fVar2
+                        current.pos.z + (mNormalSpeed * dVar11) - 30.0f * fVar2
                     );
                     cXyz local_7c;
                     local_7c.set(local_70.x + 60.0f * fVar1, local_70.y, local_70.z + 60.0f * fVar2);
                     mLinkLinChk.Set(&local_70, &local_7c, this);
                     if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
-                        mVelocity = 0.0f;
+                        mNormalSpeed = 0.0f;
                     } else {
                         cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
                         s16 sVar6 = cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z) + 0x8000;
@@ -524,13 +535,13 @@ BOOL daPy_lk_c::procHangMove() {
                             }
                         } else {
                             current.pos.x = (mLinkLinChk.GetLinP()->GetEndP()->x - 1.5f * triPla->GetNP()->x) -
-                                            (mVelocity * dVar13);
+                                            (mNormalSpeed * dVar13);
                             current.pos.z = (mLinkLinChk.GetLinP()->GetEndP()->z - 1.5f * triPla->GetNP()->z) -
-                                            (mVelocity * dVar11);
+                                            (mNormalSpeed * dVar11);
                         }
                     }
                 } else {
-                    mVelocity = 0.0f;
+                    mNormalSpeed = 0.0f;
                 }
                 m35A0 = dVar12;
             }
@@ -557,7 +568,7 @@ BOOL daPy_lk_c::procHangClimb_init(f32 param_0) {
         m_HIO->mWallCatch.m.field_0x28
     );
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK200_e);
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     voiceStart(32);
     return true;
 }
@@ -602,7 +613,7 @@ BOOL daPy_lk_c::procHangWallCatch_init() {
     current.pos = local_1c;
     shape_angle.y = m352C + 0x8000;
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speed.y = 0.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_HANG_e);
     return true;

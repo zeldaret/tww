@@ -1726,48 +1726,48 @@ BOOL daNpc_Rsh1_c::_execute() {
 
     if (lookat_dist > REG10_F(10) + 5000.0f) {
         return TRUE;
-    } else {
-        mJntCtrl.setParam(
-            l_HIO.mNpcHIO.mMaxBackboneX,
-            l_HIO.mNpcHIO.mMaxBackboneY,
-            l_HIO.mNpcHIO.mMinBackboneX,
-            l_HIO.mNpcHIO.mMinBackboneY,
-            l_HIO.mNpcHIO.mMaxHeadX,
-            l_HIO.mNpcHIO.mMaxHeadY,
-            l_HIO.mNpcHIO.mMinHeadX,
-            l_HIO.mNpcHIO.mMinHeadY,
-            l_HIO.mNpcHIO.mMaxTurnStep
-        );
-
-        playTexPatternAnm();
-        
-        mMorfIsStop = mpMorf->play(&eyePos, 0, 0);
-        if (mpMorf->getFrame() < mMorfPrevFrame) {
-            mMorfIsStop = true;
-        }
-        mMorfPrevFrame = mpMorf->getFrame();
-        
-        checkOrder();
-
-        (this->*mCurrProc)(NULL);
-
-        mShopCamAct.move();
-        if (mpShopItems) {
-            mpShopItems->Item_Move();
-        }
-
-        eventOrder();
-        lookBack();
-        setAttention();
-        fopAcM_posMoveF(this, mStts.GetCCMoveP());
-        
-        mAcch.CrrPos(*dComIfG_Bgsp());
-        tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
-        tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
-        
-        set_mtx();
-        setCollision();
     }
+
+    mJntCtrl.setParam(
+        l_HIO.mNpcHIO.mMaxBackboneX,
+        l_HIO.mNpcHIO.mMaxBackboneY,
+        l_HIO.mNpcHIO.mMinBackboneX,
+        l_HIO.mNpcHIO.mMinBackboneY,
+        l_HIO.mNpcHIO.mMaxHeadX,
+        l_HIO.mNpcHIO.mMaxHeadY,
+        l_HIO.mNpcHIO.mMinHeadX,
+        l_HIO.mNpcHIO.mMinHeadY,
+        l_HIO.mNpcHIO.mMaxTurnStep
+    );
+
+    playTexPatternAnm();
+    
+    mMorfIsStop = mpMorf->play(&eyePos, 0, 0);
+    if (mpMorf->getFrame() < mMorfPrevFrame) {
+        mMorfIsStop = true;
+    }
+    mMorfPrevFrame = mpMorf->getFrame();
+    
+    checkOrder();
+
+    (this->*mCurrProc)(NULL);
+
+    mShopCamAct.move();
+    if (mpShopItems) {
+        mpShopItems->Item_Move();
+    }
+
+    eventOrder();
+    lookBack();
+    setAttention();
+    fopAcM_posMoveF(this, mStts.GetCCMoveP());
+    
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
+    tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
+    
+    set_mtx();
+    setCollision();
 
     return TRUE;
 }

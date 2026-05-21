@@ -421,21 +421,7 @@ static u32 daNpc_Bs1_getBuyItemMax(int i_itemCost, int i_itemNo) {
     
     int beastNum = dComIfGs_getBeastNum(beastIdx);
     int currRupee = dComIfGs_getRupee();
-    u8 walletSize = dComIfGs_getWalletSize();
-    
-    u16 maxRupees;
-    switch (walletSize) {
-    case 0:
-        maxRupees = 200;
-        break;
-    case 1:
-        maxRupees = 1000;
-        break;
-    case 2:
-    default:
-        maxRupees = 5000;
-        break;
-    }
+    u16 maxRupees = dComIfGs_getRupeeMax();
     
     int r4 = maxRupees - currRupee;
     int r5 = r4 / i_itemCost;
@@ -449,20 +435,7 @@ static u32 daNpc_Bs1_getBuyItemMax(int i_itemCost, int i_itemNo) {
 /* 00001088-000010EC       .text daNpc_Bs1_setPayRupee__Fii */
 static void daNpc_Bs1_setPayRupee(int unknownParam1, int unknownParam2) {
     int rupee = dComIfGs_getRupee();
-    u16 maxRupees;
-    switch (dComIfGs_getWalletSize()) {
-        case 0:
-            maxRupees = 200;
-            break;
-        case 1:
-            maxRupees = 1000;
-            break;
-        case 2:
-        default:
-            maxRupees = 5000;
-            break;
-    }
-
+    u16 maxRupees = dComIfGs_getRupeeMax();
     int r5 = maxRupees - rupee;
     int paymentTotal = cLib_maxLimit(unknownParam1 * unknownParam2, r5);
 

@@ -138,7 +138,7 @@ BOOL daPy_lk_c::checkNextActionHookshotReady() {
         } else if (!itemButton() && m355E != 0) {
             m355E = 0;
             hookshot->setShot();
-            mVelocity = 0.0f;
+            mNormalSpeed = 0.0f;
             daPy_matAnm_c::offMabaFlg();
             seStartOnlyReverb(JA_SE_LK_HS_SHOOT);
             voiceStart(41);
@@ -202,7 +202,7 @@ BOOL daPy_lk_c::procHookshotSubject_init() {
 
     commonProcInit(daPyProc_HOOKSHOT_SUBJECT_e);
 
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
 
     setActAnimeUpper(LKANM_BCK_HOOKSHOTWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
     setSingleMoveAnime(ANM_ATNLS, 0.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
@@ -283,7 +283,7 @@ BOOL daPy_lk_c::procHookshotMove() {
     }
     if (!checkNextMode(0)) {
         f32 fVar1 = -1.0f;
-        if (std::fabsf(mVelocity) < 0.001f) {
+        if (std::fabsf(mNormalSpeed) < 0.001f) {
             onModeFlg(ModeFlg_00000001);
             if (mDirection != DIR_LEFT) {
                 mDirection = DIR_LEFT;
@@ -314,7 +314,7 @@ BOOL daPy_lk_c::procHookshotFly_init() {
     setSingleMoveAnime(ANM_HOOKSHOTJMP, 1.0f, 0.0f, -1, 0.0f);
     mBodyAngle.x = 0;
     gravity = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     m34C2 = 11;
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK10_e);
     voiceStart(6);

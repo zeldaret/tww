@@ -888,60 +888,61 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
 
     if (!i_this->mpMorf || !i_this->mpMorf->getModel()) {
         return FALSE;
-    } else {
-        for (s32 i = 0; i < 0xd; i++) {
-            modelData = (J3DModelData*)dComIfG_getObjectRes("Bwds", body_bdl[i]);
-            model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-            i_this->mp02BC[i] = model;
-            if (i_this->mp02BC[i] == NULL) {
-                return FALSE;
-            }
-        }
+    }
 
-        for (s32 i = 0; i < 0x2; i++) {
-            i_this->mp18B0[i] = new mDoExt_McaMorf(
-                (J3DModelData*)dComIfG_getObjectRes("Bwd", s_bdl[i]),
-                NULL,
-                NULL,
-                (J3DAnmTransformKey*)dComIfG_getObjectRes("Bwd", s_bck[i]),
-                J3DFrameCtrl::EMode_LOOP,
-                1.0f,
-                0,
-                -1,
-                0,
-                NULL,
-                0,
-                0x11020203
-            );
-
-            if (!i_this->mp18B0[i] || !i_this->mp18B0[i]->getModel()) {
-                return FALSE;
-            }
-            modelData = i_this->mp18B0[i]->getModel()->getModelData();
-            i_this->mp18B8[i] = new mDoExt_btkAnm();
-            if (!i_this->mp18B8[i]) {
-                return FALSE;
-            }
-
-            int ret = i_this->mp18B8[i]->init(
-                modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", s_btk[i]), TRUE, J3DFrameCtrl::EMode_LOOP
-            );
-
-            if (!ret) {
-                return FALSE;
-            }
-
-            i_this->mp18C0[i] = new mDoExt_brkAnm();
-
-            ret = i_this->mp18C0[i]->init(
-                modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bwd", s_brk[i]), TRUE, J3DFrameCtrl::EMode_LOOP
-            );
-
-            if (!ret) {
-                return FALSE;
-            }
+    for (s32 i = 0; i < 0xd; i++) {
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Bwds", body_bdl[i]);
+        model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        i_this->mp02BC[i] = model;
+        if (i_this->mp02BC[i] == NULL) {
+            return FALSE;
         }
     }
+
+    for (s32 i = 0; i < 0x2; i++) {
+        i_this->mp18B0[i] = new mDoExt_McaMorf(
+            (J3DModelData*)dComIfG_getObjectRes("Bwd", s_bdl[i]),
+            NULL,
+            NULL,
+            (J3DAnmTransformKey*)dComIfG_getObjectRes("Bwd", s_bck[i]),
+            J3DFrameCtrl::EMode_LOOP,
+            1.0f,
+            0,
+            -1,
+            0,
+            NULL,
+            0,
+            0x11020203
+        );
+
+        if (!i_this->mp18B0[i] || !i_this->mp18B0[i]->getModel()) {
+            return FALSE;
+        }
+        modelData = i_this->mp18B0[i]->getModel()->getModelData();
+        i_this->mp18B8[i] = new mDoExt_btkAnm();
+        if (!i_this->mp18B8[i]) {
+            return FALSE;
+        }
+
+        int ret = i_this->mp18B8[i]->init(
+            modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", s_btk[i]), TRUE, J3DFrameCtrl::EMode_LOOP
+        );
+
+        if (!ret) {
+            return FALSE;
+        }
+
+        i_this->mp18C0[i] = new mDoExt_brkAnm();
+
+        ret = i_this->mp18C0[i]->init(
+            modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bwd", s_brk[i]), TRUE, J3DFrameCtrl::EMode_LOOP
+        );
+
+        if (!ret) {
+            return FALSE;
+        }
+    }
+
     return TRUE;
 }
 

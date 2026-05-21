@@ -349,7 +349,7 @@ void dPa_smokeEcallBack::setup(JPABaseEmitter* param_1, const cXyz* param_2, con
     static dPa_smokePcallBack l_smokePcallBack;
     dPa_followEcallBack::setup(param_1, param_2, param_3, param_4);
     field_0x14 = param_4;
-    param_1->mpParticleCallBack = &dPa_control_c::mSmokePcallback;
+    param_1->setParticleCallBackPtr(dPa_control_c::getSmokePcallback());
     param_1->mUserData = mWindOff;
 }
 
@@ -431,7 +431,7 @@ void dPa_smokeEcallBack::end() {
 
     mpEmitter->becomeInvalidEmitter();
     mpEmitter->quitImmortalEmitter();
-    mpEmitter->setEmitterCallBackPtr(&dPa_control_c::mSmokeEcallback);
+    mpEmitter->setEmitterCallBackPtr(dPa_control_c::getSmokeEcallback());
     mFlag |= 1;
     mpEmitter = NULL;
 }
@@ -522,7 +522,7 @@ JPABaseEmitter* dPa_simpleEcallBack::create(JPAEmitterManager* manager, u16 effe
     if (createEmitter(manager)) {
         if (effectID == dPa_name::ID_AK_ST_O_BKMSATTACKSMOKE00 || effectID == dPa_name::ID_AK_ST_O_KGTT2JUMPHANDSMOKE00) {
             mbIsSmoke = true;
-            mpBaseEmitter->mpParticleCallBack = &dPa_control_c::mSmokePcallback;
+            mpBaseEmitter->setParticleCallBackPtr(dPa_control_c::getSmokePcallback());
         } else {
             mbIsSmoke = false;
         }
@@ -770,7 +770,7 @@ JPABaseEmitter* dPa_control_c::set(u8 groupID, u16 userID, const cXyz* pos, cons
         emtr->setEmitterCallBackPtr(pCallBack);
         pCallBack->setup(emtr, pos, angle, setupInfo);
     } else if (userID & 0x4000) {
-        emtr->setEmitterCallBackPtr(&mKagero);
+        emtr->setEmitterCallBackPtr(getKageroEcallBack());
     }
 
     if (prm != NULL)
@@ -929,7 +929,7 @@ dPa_simpleEcallBack* dPa_control_c::getSimple(u16 id) {
 
 /* 8007DC6C-8007DC94       .text setup__19dPa_rippleEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void dPa_rippleEcallBack::setup(JPABaseEmitter* param_1, const cXyz* param_2, const csXyz* param_3, s8 param_4) {
-    param_1->setParticleCallBackPtr(&dPa_control_c::mRipplePcallBack);
+    param_1->setParticleCallBackPtr(dPa_control_c::getRipplePcallBack());
     mPos = param_2;
     mRate = 1.0f;
     mFlags |= 1;
@@ -968,7 +968,7 @@ void dPa_rippleEcallBack::draw(JPABaseEmitter*) {
 
 /* 8007DDA8-8007DDB4       .text setup__25dPa_singleRippleEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void dPa_singleRippleEcallBack::setup(JPABaseEmitter* param_1, const cXyz*, const csXyz*, s8) {
-    param_1->setParticleCallBackPtr(&dPa_control_c::mRipplePcallBack);
+    param_1->setParticleCallBackPtr(dPa_control_c::getRipplePcallBack());
 }
 
 /* 8007DDB4-8007DE00       .text execute__25dPa_singleRippleEcallBackFP14JPABaseEmitter */

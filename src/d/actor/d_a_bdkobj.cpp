@@ -585,25 +585,30 @@ static cPhs_State daBdkobj_Create(fopAc_ac_c* a_this) {
     fopAcM_SetMtx(i_this, i_this->model->getBaseTRMtx());
 
     if (i_this->m298 == 2) {
-        return (dComIfG_Bgsp()->Regist(i_this->pm_bgw, i_this) != 0) ? cPhs_ERROR_e : (cPhs_ERROR_e - 1);
-    } else {
-        i_this->mStts.Init(0xFF, 0xFF, a_this);
-        i_this->mCyl.Set(cc_cyl_src);
-        i_this->mCyl.SetStts(&i_this->mStts);
-        if (i_this->m298 == 0) {
-            i_this->mCyl.SetH(REG6_F(0) + 300.0f);
-            i_this->mCyl.SetR(REG6_F(1) + 200.0f);
+        if (dComIfG_Bgsp()->Regist(i_this->pm_bgw, i_this)) {
+            return cPhs_ERROR_e;
         } else {
-            i_this->mCyl.SetH(REG6_F(2) + 300.0f);
-            i_this->mCyl.SetR(REG6_F(3) + 200.0f);
-        }
-
-        for (s32 i = 0; i < 3; i++) {
-            i_this->mEffs[i].mStts.Init(0xC8, 0xFF, a_this);
-            i_this->mEffs[i].mSph.Set(hahen_sph_src);
-            i_this->mEffs[i].mSph.SetStts(&i_this->mEffs[i].mStts);
+            return cPhs_COMPLEATE_e;
         }
     }
+    
+    i_this->mStts.Init(0xFF, 0xFF, a_this);
+    i_this->mCyl.Set(cc_cyl_src);
+    i_this->mCyl.SetStts(&i_this->mStts);
+    if (i_this->m298 == 0) {
+        i_this->mCyl.SetH(REG6_F(0) + 300.0f);
+        i_this->mCyl.SetR(REG6_F(1) + 200.0f);
+    } else {
+        i_this->mCyl.SetH(REG6_F(2) + 300.0f);
+        i_this->mCyl.SetR(REG6_F(3) + 200.0f);
+    }
+
+    for (s32 i = 0; i < 3; i++) {
+        i_this->mEffs[i].mStts.Init(0xC8, 0xFF, a_this);
+        i_this->mEffs[i].mSph.Set(hahen_sph_src);
+        i_this->mEffs[i].mSph.SetStts(&i_this->mEffs[i].mStts);
+    }
+
     return cPhs_COMPLEATE_e;
 }
 

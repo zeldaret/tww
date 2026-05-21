@@ -17,7 +17,17 @@ public:
     void setWalletSize(u8 size) { mWalletSize = size; }
     int getRupee() { return mRupee; }
     void setRupee(u16 rupee) { mRupee = rupee; }
-    u16 getRupeeMax() { return 0; } // TODO
+    u16 getRupeeMax() {
+        switch (mWalletSize) {
+        case 0:
+            return 200;
+        case 1:
+            return 1000;
+        case 2:
+        default:
+            return 5000;
+        }
+    }
     u8 getMagic() { return mMagic; }
     void setMagic(u8 magic) { mMagic = magic; }
     u8 getMaxMagic() { return mMaxMagic; }

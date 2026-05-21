@@ -491,8 +491,8 @@ public:
         return set(dPtclGroup_ShipTail_e, particleID, pos, angle, scale, alpha, &mSingleRippleEcallBack, -1, NULL, NULL, NULL);
     }
 
-    void draw(JPADrawInfo* inf) { draw(inf, dPtclGroup_Normal_e); }
-    void drawP1(JPADrawInfo* inf) { draw(inf, dPtclGroup_NormalP1_e); }
+    void drawNormal(JPADrawInfo* inf) { draw(inf, dPtclGroup_Normal_e); }
+    void drawNormalP1(JPADrawInfo* inf) { draw(inf, dPtclGroup_NormalP1_e); }
     void drawToon(JPADrawInfo* inf) { draw(inf, dPtclGroup_Toon_e); }
     void drawToonP1(JPADrawInfo* inf) { draw(inf, dPtclGroup_ToonP1_e); }
     void drawProjection(JPADrawInfo* inf) { draw(inf, dPtclGroup_Projection_e); }
@@ -503,39 +503,51 @@ public:
     void draw2DmenuFore(JPADrawInfo* inf) { draw(inf, dPtclGroup_2DmenuFore_e); }
     void draw2DmenuBack(JPADrawInfo* inf) { draw(inf, dPtclGroup_2DmenuBack_e); }
 
-    u32 getParticleNum() { return mEmitterMng->getParticleNumber(); }
-    u32 getEmitterNum() { return mEmitterMng->getEmitterNumber(); }
-
     int addModelEmitter(dPa_modelEmitter_c *emitter) { return mModelControl->add(emitter); }
     void drawModelParticle() { mModelControl->draw(); }
-    JKRHeap * getHeap() { return mHeap; }
 
+    JKRHeap * getHeap() { return mHeap; }
+    void getHeapSize() {}
+    void getSceneHeap() {}
+    void getSceneHeapSize() {}
+
+    static dPa_selectTexEcallBack* getTsuboSelectTexEcallBack(int index) { return &mTsubo[index]; }
     static dPa_selectTexEcallBack mTsubo[4];
 
     static dPa_setColorEcallBack* getLifeBallSetColorEcallBack(int idx) { return &mLifeBall[idx]; }
     static dPa_setColorEcallBack mLifeBall[3];
 
-    static bool isStatus(u8 status) { return mStatus & status; }
-    static void onStatus(u8 status) { mStatus |= status; }
-    static void offStatus(u8 status) { mStatus &= ~status; }
-    static u8 mStatus;
-
     static JPAEmitterManager* getEmitterManager() { return mEmitterMng; }
     static void forceDeleteEmitter(JPABaseEmitter* emitter) { mEmitterMng->forceDeleteEmitter(emitter); }
+    u32 getParticleNum() { return mEmitterMng->getParticleNumber(); }
+    u32 getEmitterNum() { return mEmitterMng->getEmitterNumber(); }
     static JPAEmitterManager* mEmitterMng;
 
     static dPa_stripesEcallBack mStripes;
+
+    static dPa_kageroEcallBack* getKageroEcallBack() { return &mKagero; }
     static dPa_kageroEcallBack mKagero;
+
+    static dPa_smokeEcallBack* getSmokeEcallback() { return &mSmokeEcallback; }
     static dPa_smokeEcallBack mSmokeEcallback;
+
+    static dPa_smokePcallBack* getSmokePcallback() { return &mSmokePcallback; }
     static dPa_smokePcallBack mSmokePcallback;
+
     static dPa_singleRippleEcallBack mSingleRippleEcallBack;
+
+    static dPa_ripplePcallBack* getRipplePcallBack() { return &mRipplePcallBack; }
     static dPa_ripplePcallBack mRipplePcallBack;
+
     static dPa_bombSmokeEcallBack mBombSmokeEcallBack;
 
     static MtxP getWindViewMatrix() { return mWindViewMatrix; }
     static Mtx mWindViewMatrix;
 
-    static dPa_selectTexEcallBack* getTsuboSelectTexEcallBack(int index) { return &mTsubo[index]; }
+    static bool isStatus(u8 status) { return mStatus & status; }
+    static void onStatus(u8 status) { mStatus |= status; }
+    static void offStatus(u8 status) { mStatus &= ~status; }
+    static u8 mStatus;
 
     /* 0x0000 */ JKRSolidHeap* mHeap;
     /* 0x0004 */ JPAResourceManager* mCommonResMng;

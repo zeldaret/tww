@@ -1257,10 +1257,10 @@ public:
     void setSeAnime(daPy_anmHeap_c const*, J3DFrameCtrl*);
     void initSeAnime();
     void resetSeAnime();
-    int setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32);
-    BOOL setSingleMoveAnime(daPy_ANM, f32, f32, s16, f32);
-    BOOL setActAnimeUpper(u16, daPy_UPPER, f32, f32, s16, f32);
-    BOOL resetActAnimeUpper(daPy_UPPER, f32);
+    int setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32 i_morf);
+    BOOL setSingleMoveAnime(daPy_ANM, f32, f32, s16, f32 i_morf);
+    BOOL setActAnimeUpper(u16, daPy_UPPER, f32, f32, s16, f32 i_morf);
+    BOOL resetActAnimeUpper(daPy_UPPER, f32 i_morf);
     void animeUpdate();
     void simpleAnmPlay(J3DAnmBase*);
     void setHandModel(daPy_ANM);
@@ -1584,7 +1584,9 @@ public:
     f32 checkRopeRoofHit(s16);
     int changeRopeSwingProc();
     int changeRopeEndProc(int);
+#if VERSION > VERSION_DEMO
     BOOL checkSpecialRope();
+#endif
     int changeRopeToHangProc();
     BOOL checkRopeSwingWall(cXyz*, cXyz*, s16*, f32*);
     void setBlendRopeMoveAnime(int);
@@ -1782,7 +1784,7 @@ public:
     BOOL procCutExA();
     BOOL procCutExB_init();
     BOOL procCutExB();
-    BOOL procCutTurn_init(int);
+    BOOL procCutTurn_init(BOOL);
     BOOL procCutTurn();
     BOOL procCutRoll_init();
     BOOL procCutRoll();
@@ -1929,13 +1931,13 @@ public:
     BOOL checkFaceTypeNot() const { return mFace == daPyFace_NONE; }
     BOOL checkCrawlWaterIn() { return mWaterY > current.pos.y + 15.0f; }
     void setFootEffectPosType(u8 type) { mFootEffectPosType = type; }
+    int checkIsland() const { return mRestartPoint; }
+    const s16 getTactLeftHandPos() const { return mProcVar3.m34D6; }
     
     void checkBothItemEquipAnime() const {}
     void checkDoubleItemEquipAnime() const {}
-    void checkIsland() const {}
     void checkRopeThrowAnime() const {}
     void checkSwordEquipAnime() const {}
-    void getTactLeftHandPos() const {}
     void setSpeedAndAngleBoomerang() {}
     void setSpeedAndAngleBow() {}
     void setSpeedAndAngleHookshot() {}
@@ -1989,10 +1991,10 @@ public:
     virtual MtxP getModelJointMtx(u16 idx) { return mpCLModel->getAnmMtx(idx); }
     virtual f32 getOldSpeedY() { return mOldSpeed.y; }
     virtual BOOL setHookshotCarryOffset(fpc_ProcID, const cXyz*);
-    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && mProcVar0.m3570 != 0; }
+    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && mProcVar6.m3570 != 0; }
     virtual void cancelChangeTextureAnime() { resetDemoTextureAnime(); }
 
-public:
+private:
     /* 0x0320 */ request_of_phase_process_class mPhase;
     /* 0x0328 */ J3DModelData* mpCLModelData;
     /* 0x032C */ J3DModel* mpCLModel;
@@ -2155,12 +2157,26 @@ public:
     /* 0x34CC */ u8 m34CC;
     /* 0x34CD */ u8 m34CD;
     /* 0x34CE */ u8 m34CE;
-    /* 0x34D0 */ s16 m34D0; // TODO: procvar
-    /* 0x34D2 */ s16 m34D2; // TODO: procvar
-    /* 0x34D4 */ s16 m34D4; // TODO: procvar
-    /* 0x34D6 */ s16 m34D6; // TODO: procvar
-    /* 0x34D8 */ s16 m34D8; // TODO: procvar
-    /* 0x34DA */ s16 m34DA; // TODO: procvar
+    // `mProcVar`'s are variables that are context dependent for each `PROC` action.
+    // (The exact setup may need to be simplified later)
+    /* 0x34D0 */ union {
+        s16 m34D0;
+    } mProcVar0;
+    /* 0x34D2 */ union {
+        s16 m34D2;
+    } mProcVar1;
+    /* 0x34D4 */ union {
+        s16 m34D4;
+    } mProcVar2;
+    /* 0x34D6 */ union {
+        s16 m34D6;
+    } mProcVar3;
+    /* 0x34D8 */ union {
+        s16 m34D8;
+    } mProcVar4;
+    /* 0x34DA */ union {
+        s16 m34DA;
+    } mProcVar5;
     /* 0x34DC */ s16 m34DC;
     /* 0x34DE */ s16 m34DE;
     /* 0x34E0 */ s16 m34E0;
@@ -2233,12 +2249,14 @@ public:
     /* 0x356C */ int mCameraInfoIdx;
     // `mProcVar`'s are variables that are context dependent for each `PROC` action.
     // (The exact setup may need to be simplified later)
-    union {
+    /* 0x3570 */ union {
         s32 m3570;
         daPy_ANM mDamageAnm;
         int mBottleItem;
-    } /* 0x3570  */ mProcVar0;
-    /* 0x3574 */ s32 m3574; // TODO: procvar
+    } mProcVar6;
+    /* 0x3574 */ union {
+        s32 m3574;
+    } mProcVar7;
     /* 0x3578 */ int m3578;
     /* 0x357C */ int m357C;
     /* 0x3580 */ int m3580;
@@ -2256,7 +2274,7 @@ public:
     /* 0x35B0 */ f32 mStickDistance;
     /* 0x35B4 */ f32 m35B4;
     /* 0x35B8 */ f32 m35B8;
-    /* 0x35BC */ f32 mVelocity;
+    /* 0x35BC */ f32 mNormalSpeed;
     /* 0x35C0 */ u8 m35C0[0x35C4 - 0x35C0];
     /* 0x35C4 */ f32 m35C4;
     /* 0x35C8 */ f32 m35C8;
