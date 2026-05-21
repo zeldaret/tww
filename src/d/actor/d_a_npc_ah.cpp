@@ -317,7 +317,6 @@ cPhs_State daNpcAh_c::createInit() {
 
 /* 00000D60-00000DCC       .text _delete__9daNpcAh_cFv */
 bool daNpcAh_c::_delete() {
-    /* inlines not matching */
     getPrmArg0();
     if(field_0x747 != 0){
         #if VERSION > VERSION_DEMO
