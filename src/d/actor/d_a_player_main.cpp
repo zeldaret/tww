@@ -111,6 +111,8 @@ u8 daPy_matAnm_c::m_morf_frame;
 
 #include "d/actor/d_a_player_sword.inc"
 
+#include "d/actor/d_a_player_HIO.inc"
+
 /* 80102E8C-80102EAC       .text daPy_createHeap__FP10fopAc_ac_c */
 static BOOL daPy_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daPy_lk_c*>(i_this)->createHeap();
@@ -12419,15 +12421,6 @@ cPhs_State phase_2(daPy_lk_c* i_this) {
     return result;
 }
 
-/* 80125DB4-80126F00       .text __ct__9daPy_lk_cFv */
-daPy_lk_c::daPy_lk_c() {}
-
-/* 80126F00-8012704C       .text __dt__15daPy_footData_cFv */
-daPy_footData_c::~daPy_footData_c() {}
-
-/* 8012704C-80127160       .text __ct__15daPy_footData_cFv */
-daPy_footData_c::daPy_footData_c() {}
-
 /* 80127160-80127B50       .text makeBgWait__9daPy_lk_cFv */
 cPhs_State daPy_lk_c::makeBgWait() {
 #if VERSION > VERSION_DEMO
@@ -13155,8 +13148,6 @@ BOOL daPy_lk_c::getBokoFlamePos(cXyz* outPos) {
     }
     return FALSE;
 }
-
-#include "d/actor/d_a_player_HIO.inc"
 
 static actor_method_class2 l_daPy_Method = {
     (process_method_func)daPy_Create,

@@ -35,6 +35,7 @@ public:
 
 class dPa_levelEcallBack : public JPACallBackBase<JPABaseEmitter*> {
 public:
+    dPa_levelEcallBack() {}
     virtual ~dPa_levelEcallBack() {}
     virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8) = 0;
 };  // Size: 0x04

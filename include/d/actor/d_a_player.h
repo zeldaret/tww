@@ -12,6 +12,8 @@ inline u8 dComIfGp_getMiniGameType();
 
 class daPy_mtxFollowEcallBack_c : public dPa_levelEcallBack {
 public:
+    ~daPy_mtxFollowEcallBack_c() {}
+
     void execute(JPABaseEmitter*);
     void end();
     JPABaseEmitter* makeEmitter(u16, MtxP, const cXyz*, const cXyz*);

@@ -335,10 +335,6 @@ public:
 
 class daPy_footData_c {
 public:
-    ~daPy_footData_c();
-    daPy_footData_c();
-
-public:
     /* 0x000 */ u8 field_0x000;
     /* 0x001 */ u8 field_0x001;
     /* 0x002 */ s16 field_0x002;
@@ -1252,7 +1248,6 @@ public:
     J3DAnmTextureSRTKey* entryBtk(J3DModelData*, int);
     J3DAnmTevRegKey* entryBrk(J3DModelData*, int);
     void playerInit();
-    daPy_lk_c();
     int makeBgWait();
     void setSeAnime(daPy_anmHeap_c const*, J3DFrameCtrl*);
     void initSeAnime();
