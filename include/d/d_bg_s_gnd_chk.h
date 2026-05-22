@@ -6,7 +6,7 @@
 
 class dBgS_GndChk : public cBgS_GndChk, public dBgS_Chk {
 public:
-    dBgS_GndChk() {
+    dBgS_GndChk() : cBgS_GndChk(), dBgS_Chk() {
         SetPolyPassChk(GetPolyPassChkInfo());
         SetGrpPassChk(GetGrpPassChkInfo());
     }
