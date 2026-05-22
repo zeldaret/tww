@@ -57,7 +57,7 @@ template <>
 struct TVec3<s16> : public SVec {
     TVec3() {}
     TVec3(const SVec& b) { set(b); }
-    TVec3(const s16 x, const s16 y, const s16 z) { set(x, y, z); }
+    TVec3(s16 x, s16 y, s16 z) { set(x, y, z); }
 
     void set(const SVec& vec) {
         x = vec.x;
@@ -82,7 +82,7 @@ template <>
 struct TVec3<f32> : public Vec {
     TVec3() {}
 
-    TVec3(const f32 x, const f32 y, const f32 z) { set((f32)x, (f32)y, (f32)z); }
+    TVec3(f32 x, f32 y, f32 z) { set(x, y, z); }
 
     TVec3(const Vec& b) { set(b); }
 
@@ -91,9 +91,9 @@ struct TVec3<f32> : public Vec {
 
     template<typename f32>
     void set(const TVec3<f32>& other) {
-        x = (f32)other.x;
-        y = (f32)other.y;
-        z = (f32)other.z;
+        x = other.x;
+        y = other.y;
+        z = other.z;
     }
 
     void set(const Vec& vec) {
