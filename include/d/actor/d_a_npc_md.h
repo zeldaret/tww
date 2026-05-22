@@ -66,6 +66,8 @@ public:
     void setBitStatus(u32 status) { cLib_onBit<u32>(m30F0, status); }
     void clearStatus(u32 status) { cLib_offBit<u32>(m30F0, status); }
     bool checkStatus(u32 status) { return cLib_checkBit<u32>(m30F0, status); }
+    void setStatus(u32 status) { m30F0 = status; }
+    void clearStatus() { m30F0 = 0; }
     bool checkStatusFly() { return cLib_checkBit<u32>(m30F0, daMdStts_FLY); }
     void onBitCamTagIn() { cLib_onBit<u32>(m30F0, daMdStts_CAM_TAG_IN); }
     void offBitCamTagIn() { cLib_offBit<u32>(m30F0, daMdStts_CAM_TAG_IN); }
@@ -85,12 +87,12 @@ public:
     void onLightBodyHit() { cLib_onBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
     void offLightBodyHit() { cLib_offBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
     bool isLightBodyHit() { return cLib_checkBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
-    bool isOldLightBodyHit() { return cLib_checkBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
     void onDefaultTalkXY() { cLib_onBit<u32>(m30F0, daMdStts_DEFAULT_TALK_XY); }
     void offDefaultTalkXY() { cLib_offBit<u32>(m30F0, daMdStts_DEFAULT_TALK_XY); }
     bool isDefaultTalkXY() { return cLib_checkBit<u32>(m30F0, daMdStts_DEFAULT_TALK_XY); }
     
-    void setOldLightBodyHit() { m3140 = isLightBodyHit(); }
+    bool isOldLightBodyHit() { return mOldLightBodyHit; }
+    void setOldLightBodyHit() { mOldLightBodyHit = isLightBodyHit(); }
     
     void setTypeEdaichi() { mType = 4; }
     void setTypeM_Dai() { mType = 5; }
@@ -105,12 +107,18 @@ public:
     BOOL isTypeM_DaiB() { return mType == 6; }
     BOOL isTypeShipRide() { return mType == 7; }
     
-    s16 getHead_x() { return mJntCtrl.getHead_x(); }
-    s16 getHead_y() { return mJntCtrl.getHead_y(); }
-    s16 getBackbone_x() { return mJntCtrl.getBackbone_x(); }
-    s16 getBackbone_y() { return mJntCtrl.getBackbone_y(); }
+    s16 getHead_x() { return mJntCtrl.mAngles[0][0]; }
+    s16 getHead_y() { return mJntCtrl.mAngles[0][1]; }
+    s16 getBackbone_x() { return mJntCtrl.mAngles[1][0]; }
+    s16 getBackbone_y() { return mJntCtrl.mAngles[1][1]; }
     s16 getWaistRotX() { return m3114; }
     s16 getWaistRotY() { return m3116; }
+    void clearJntAng() {     
+        mJntCtrl.mAngles[0][1] = 0; // Head_y
+        mJntCtrl.mAngles[0][0] = 0; // Head_x
+        mJntCtrl.mAngles[1][1] = 0; // BackBone_y
+        mJntCtrl.mAngles[1][0] = 0; // BackBone_x
+    }
     
     s8 getArmRJntNum() { return m_armR_jnt_num; }
     s8 getArmRlocJntNum() { return m_armRloc_jnt_num; }
@@ -149,18 +157,10 @@ public:
         mpArmMorf->setAnmRate(mRunRate);
     }
     
-    void setStatus(u32 status) { m30F0 = status; }
     s16 getFlyingTimer() { return m_flyingTimer; }
     void setFlyingTimer(s16 value) {  m_flyingTimer = value; }
     void calcFlyingTimer() { cLib_calcTimer(&m_flyingTimer); }
     u8 checkBitEffectStatus(u8 bit) { return m3135 & bit; }
-    void clearJntAng() {     
-        mJntCtrl.setHead_y(0);
-        mJntCtrl.setHead_x(0);
-        mJntCtrl.setBackBone_y(0);
-        mJntCtrl.setBackBone_x(0);
-    }
-    void clearStatus() { setStatus(0); }
     u8 getTalkType() { return mType; }
     void setTalkType(u8 type) { mType = type; }
     void setBitEffectStatus(u8 bit) { cLib_onBit<u8>(m3135, bit); }
@@ -424,7 +424,7 @@ public:
     /* 0x313D */ u8 m313D;
     /* 0x313E */ u8 m313E;
     /* 0x313F */ s8 m313F;
-    /* 0x3140 */ bool m3140;
+    /* 0x3140 */ bool mOldLightBodyHit;
     /* 0x3141 */ u8 m3141[0x3144 - 0x3141];
     /* 0x3144 */ s16 m3144;
     /* 0x3146 */ s16 m3146;

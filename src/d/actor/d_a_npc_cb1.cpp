@@ -973,7 +973,7 @@ BOOL daNpc_Cb1_c::shipRideCheck() {
     if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1604) && dComIfGp_getShipActor()) {
         setNpcAction(&daNpc_Cb1_c::shipNpcAction, NULL);
         onShipRide();
-        fopDwTg_DrawQTo(&draw_tag);
+        fopAcM_offDraw(this);
 
         return TRUE;
     }
@@ -1149,7 +1149,7 @@ void daNpc_Cb1_c::evCheckDisp(int staffIdx) {
             fopAcM_onDraw(this);
         }
         else {
-            fopDwTg_DrawQTo(&draw_tag);
+            fopAcM_offDraw(this);
         }
     }
     else {
@@ -2152,7 +2152,7 @@ BOOL daNpc_Cb1_c::rescueNpcAction(void*) {
 #if VERSION <= VERSION_JPN
     if(m8F0 == 0) {
         setAnm(ANM_00);
-        fopDwTg_DrawQTo(&draw_tag);
+        fopAcM_offDraw(this);
     } else if(m8F0 != -1) {
         m8DD = 0;
     }
@@ -2160,7 +2160,7 @@ BOOL daNpc_Cb1_c::rescueNpcAction(void*) {
     if(m8F0 != -1) {
         if(m8F0 == 0) {
             setAnm(ANM_00);
-            fopDwTg_DrawQTo(&draw_tag);
+            fopAcM_offDraw(this);
         }
 
         m8DD = 0;

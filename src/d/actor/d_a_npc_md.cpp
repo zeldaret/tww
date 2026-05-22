@@ -19,10 +19,12 @@
 #include "d/d_camera.h"
 #include "d/d_detect.h"
 
-class daNpc_Md_HIO2_c {
+class daNpc_Md_HIO2_c : public JORReflexible {
 public:
     daNpc_Md_HIO2_c();
     virtual ~daNpc_Md_HIO2_c() {}
+
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ f32 m04;
@@ -42,10 +44,12 @@ public:
 #endif
 };
 
-class daNpc_Md_HIO3_c {
+class daNpc_Md_HIO3_c : public JORReflexible {
 public:
     daNpc_Md_HIO3_c();
     virtual ~daNpc_Md_HIO3_c() {}
+
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ f32 m04;
@@ -63,10 +67,12 @@ public:
     /* 0x26 */ u8 field_26[0x28 - 0x26];
 };
 
-class daNpc_Md_HIO4_c {
+class daNpc_Md_HIO4_c : public JORReflexible {
 public:
     daNpc_Md_HIO4_c();
     virtual ~daNpc_Md_HIO4_c() {}
+
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x4 */ f32 m4;
@@ -74,20 +80,24 @@ public:
     /* 0xA */ u8 field_A[0xC - 0xA];
 };
 
-class daNpc_Md_HIO5_c {
+class daNpc_Md_HIO5_c : public JORReflexible {
 public:
     daNpc_Md_HIO5_c();
     virtual ~daNpc_Md_HIO5_c() {}
+
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x4 */ f32 m4;
     /* 0x8 */ f32 m8;
 };
 
-class daNpc_Md_HIO6_c {
+class daNpc_Md_HIO6_c : public JORReflexible {
 public:
     daNpc_Md_HIO6_c();
     virtual ~daNpc_Md_HIO6_c() {}
+
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ f32 m04;
@@ -731,9 +741,7 @@ static BOOL armNodeCallBack(J3DNode* node, int calcTiming) {
 static BOOL hairCross(cXyz* i_r3, cXyz* i_r4, cXyz* i_r5) {
     cM3dGTri r1_198(&i_r3[0], &i_r3[1], &i_r3[2]);
     cM3dGTri r1_160(&i_r3[1], &i_r3[3], &i_r3[2]);
-
-    cM3dGLin r1_144;
-    r1_144.SetStartEnd(*i_r4, *i_r5);
+    cM3dGLin r1_144(*i_r4, *i_r5);
 
     cXyz r1_138;
     if (r1_198.cross(&r1_144, &r1_138, true, false)) {
@@ -1137,9 +1145,9 @@ void daNpc_Md_c::playerAction(void* arg) {
     }
 
 #if VERSION == VERSION_DEMO
-    if (isOldLightBodyHit())
+    if (isLightBodyHit())
 #else
-    if (mAcch.ChkGroundHit() && isOldLightBodyHit())
+    if (mAcch.ChkGroundHit() && isLightBodyHit())
 #endif
     {
         dComIfGp_setRStatusForce(dActStts_RETURN_e);
@@ -1149,7 +1157,7 @@ void daNpc_Md_c::playerAction(void* arg) {
         } else {
             dComIfGp_setDoStatus(dActStts_ba_motu__dupe_2E);
             dComIfGp_setAStatus(dActStts_HIDDEN_e);
-            if (!m3140) {
+            if (!isOldLightBodyHit()) {
                 dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
             }
         }
@@ -1378,7 +1386,7 @@ void daNpc_Md_c::NpcCall(int* r31) {
     f32 dist_sq = fopAcM_searchPlayerDistance2(this);
     if (!checkNpcCallCommand()) {
         if (dist_sq < SQUARE(l_HIO.m0C8)) {
-            daPy_getPlayerLinkActorClass()->onNpcCallCommand();
+            daPy_getPlayerLinkActorClass()->onNpcCall();
             *r31 = 1;
         }
     } else {
@@ -1464,7 +1472,7 @@ void daNpc_Md_c::waitGroundCheck() {
             }
         }
     } else {
-        if (daPy_getPlayerActorClass() != this) {
+        if (dComIfGp_getPlayer(0) != this) {
             setNpcAction(&daNpc_Md_c::fallNpcAction);
         }
     }
@@ -1847,7 +1855,7 @@ BOOL daNpc_Md_c::shipNpcAction(void*) {
         daShip_c* ship = dComIfGp_getShipActor();
         if (ship != NULL) {
             onShipRide();
-            if (std::fabsf(ship->speedF) < 0.001f) {
+            if (std::fabsf(fopAcM_GetSpeedF(ship)) < 0.001f) {
                 setAnm(0x2a);
                 if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
                     s16 angle = shape_angle.y + getHead_y() + getBackbone_y();
@@ -1897,7 +1905,7 @@ BOOL daNpc_Md_c::mwaitNpcAction(void*) {
                 f32 dVar3 = fopAcM_searchPlayerDistance2(this);
                 if (!checkNpcCallCommand()) {
                     if (dVar3 < (l_HIO.m0C8 * l_HIO.m0C8)) {
-                        daPy_getPlayerLinkActorClass()->onNpcCallCommand();
+                        daPy_getPlayerLinkActorClass()->onNpcCall();
                     }
                 } else {
                     mActionStatus++;
@@ -1999,7 +2007,7 @@ BOOL daNpc_Md_c::carryNpcAction(void*) {
 #endif
         cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
         offNpcCallCommand();
-        m3144 = shape_angle.y - dComIfGp_getPlayer(0)->shape_angle.y;
+        m3144 = fopAcM_toPlayerShapeAngleY(this);
         clearStatus(daMdStts_UNK1 | daMdStts_UNK2 | daMdStts_UNK4 | daMdStts_FLY);
         if (isNoCarryAction()) {
             setAnm(0x24);
@@ -2054,7 +2062,7 @@ BOOL daNpc_Md_c::carryNpcAction(void*) {
 #endif
                 } else if (m3104 == 5) {
                     dVar9 = mpMorf->getPlaySpeed();
-                    if ((fopAcM_GetSpeedF(player) == 0.0f) && (player->getBaseAnimeFrame() <= mpMorf->getEndFrame())) {
+                    if ((player->getSpeedF() == 0.0f) && (player->getBaseAnimeFrame() <= mpMorf->getEndFrame())) {
                         mpMorf->setFrame(player->getBaseAnimeFrame());
                         mpMorf->setPlaySpeed(0.0f);
                         mpArmMorf->setFrame(player->getBaseAnimeFrame());
@@ -2097,14 +2105,8 @@ BOOL daNpc_Md_c::carryNpcAction(void*) {
                     setNpcAction(&daNpc_Md_c::land03NpcAction);
                 }
             } else if ((checkStatus(daMdStts_UNK1)) || (bVar1)) {
-#if VERSION == VERSION_DEMO
-                if (current.pos.y - mAcch.GetGroundH() >= l_HIO.m1AC)
-#else
                 f32 f1 = mAcch.GetGroundH();
-                f32 f0 = current.pos.y;
-                if (f0 - f1 >= l_HIO.m1AC)
-#endif
-                {
+                if (current.pos.y - f1 >= l_HIO.m1AC) {
                     setNpcAction(&daNpc_Md_c::fall02NpcAction);
                 } else {
                     setNpcAction(&daNpc_Md_c::fallNpcAction);
@@ -2741,7 +2743,7 @@ BOOL daNpc_Md_c::searchNpcAction(void*) {
             }
         } else {
             m312C = 1;
-            daPy_py_c* player = daPy_getPlayerActorClass();
+            daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
             BOOL door = player->eventInfo.checkCommandDoor();
             f32 dist_sq = fopAcM_searchPlayerDistanceXZ2(this);
             f32 temp;
@@ -3509,7 +3511,7 @@ void daNpc_Md_c::initialWaitEvent(int staffIdx) {
         if (*pDisp) {
             fopAcM_onDraw(this);
         } else {
-            fopDwTg_DrawQTo(&draw_tag);
+            fopAcM_offDraw(this);
         }
     } else {
         fopAcM_onDraw(this);
@@ -3655,7 +3657,7 @@ void daNpc_Md_c::initialMovePosEvent(int staffIdx) {
                         current.angle.y = angle;
                         shape_angle.y = angle;
                     }
-                    cXyz* pPos = dComIfGp_evmng_getMyXyzP(staffIdx, "Pos");
+                    Vec* pPos = dComIfGp_evmng_getMyVec3dP(staffIdx, "Pos");
                     if (pPos != NULL) {
                         current.pos.set(link->current.pos.x + pPos->x, link->current.pos.y + pPos->y, link->current.pos.z + pPos->z);
                     }
@@ -3669,7 +3671,7 @@ void daNpc_Md_c::initialMovePosEvent(int staffIdx) {
             current.angle.y = angle;
             shape_angle.y = angle;
         }
-        cXyz* pPos = dComIfGp_evmng_getMyXyzP(staffIdx, "Pos");
+        Vec* pPos = dComIfGp_evmng_getMyVec3dP(staffIdx, "Pos");
         if (pPos != NULL) {
             current.pos = *pPos;
         }
@@ -3794,7 +3796,7 @@ BOOL daNpc_Md_c::actionWalkEvent(int staffIdx) {
     cXyz local_24;
     cXyz local_3c;
 
-    cXyz* pfVar2 = dComIfGp_evmng_getMyXyzP(staffIdx, "Pos");
+    Vec* pfVar2 = dComIfGp_evmng_getMyVec3dP(staffIdx, "Pos");
     f32* pfVar3 = dComIfGp_evmng_getMyFloatP(staffIdx, "Speed");
     f32* pfVar4 = dComIfGp_evmng_getMyFloatP(staffIdx, "RunRate");
     if (pfVar2 != NULL) {
@@ -3852,7 +3854,7 @@ BOOL daNpc_Md_c::actionDashEvent(int staffIdx) {
     cXyz local_24;
     cXyz local_3c;
 
-    cXyz* pfVar2 = dComIfGp_evmng_getMyXyzP(staffIdx, "Pos");
+    Vec* pfVar2 = dComIfGp_evmng_getMyVec3dP(staffIdx, "Pos");
     if (pfVar2 != NULL) {
         local_24 = *pfVar2;
         local_3c = local_24 - current.pos;
@@ -3949,7 +3951,8 @@ BOOL daNpc_Md_c::actionTactEvent(int staffIdx) {
     if (pPrm0 != NULL) {
         prm = *pPrm0;
     }
-    s32 song = daPy_getPlayerActorClass()->getTactMusic();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    s32 song = player->getTactMusic();
     if (song >= 0) {
         setBitStatus(daMdStts_UNK400);
     }
@@ -4087,7 +4090,7 @@ void daNpc_Md_c::initialTurnEvent(int staffIdx) {
     } else {
         m3118 = 0;
     }
-    cXyz* pfVar2 = dComIfGp_evmng_getMyXyzP(staffIdx, "Pos");
+    Vec* pfVar2 = dComIfGp_evmng_getMyVec3dP(staffIdx, "Pos");
     if (pfVar2 != NULL) {
         m30B8 = *pfVar2;
     } else {
@@ -5429,7 +5432,7 @@ void daNpc_Md_c::setCollision() {
         local_50 = local_44 + local_38;
         mLinChk.Set(&local_44, &local_50, this);
         if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
-            local_50 = *mLinChk.GetCrossP();
+            local_50 = mLinChk.GetCross();
             local_38 = local_50 - local_44;
         }
         mCps.SetStartEnd(local_44, local_50);
@@ -5454,7 +5457,7 @@ void daNpc_Md_c::setAttention(bool param_1) {
     f32 fVar1;
     if (isFlying()) {
         fVar1 = 70.0f;
-    } else if (daPy_getPlayerActorClass() == this) {
+    } else if (dComIfGp_getPlayer(0) == this) {
         fVar1 = 110.0f;
     } else {
         fVar1 = l_HIO.mNpc.mAttnYOffset;
@@ -5547,11 +5550,11 @@ void daNpc_Md_c::setBaseMtx() {
     model = getModel();
     if (fopAcM_CheckStatus(this, fopAcStts_CARRY_e)) {
         if (isNoCarryAction()) {
-            mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-            mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+            mDoMtx_stack_c::transS(current.pos);
+            mDoMtx_stack_c::ZXYrotM(shape_angle);
             mDoMtx_stack_c::transM(0.0f, -l_HIO.m05C.m4, 0.0f);
         } else {
-            mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+            mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::YrotM(shape_angle.y);
             mDoMtx_stack_c::transM(m3298.x, m3298.y, m3298.z);
             mDoMtx_stack_c::XrotM(shape_angle.x);
@@ -5605,10 +5608,10 @@ void daNpc_Md_c::deletePiyoPiyo() {
     }
     emitter->quitImmortalEmitter();
     m0508[1]->becomeInvalidEmitter();
-    JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
-    while (link != 0) {
-        JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
-        ptcl->setDeleteParticleFlag();
+    JSUList<JPABaseParticle>* list = emitter->getParticleList();
+    JSULink<JPABaseParticle>* link = list->getFirst();
+    while (link != list->getEnd()) {
+        link->getObject()->setDeleteParticleFlag();
         link = link->getNext();
     }
     m0508[1] = NULL;
@@ -5693,8 +5696,8 @@ BOOL daNpc_Md_c::init() {
     for (s32 i = 0; i < 10; i++) {
         mEventIdxTable[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i], 0xFF);
     }
-    eventInfo.mpCheckCB = daNpc_Md_XyCheckCB;
-    eventInfo.mpEventCB = daNpc_Md_XyEventCB;
+    eventInfo.setXyCheckCB(daNpc_Md_XyCheckCB);
+    eventInfo.setXyEventCB(daNpc_Md_XyEventCB);
     return TRUE;
 }
 
@@ -6029,21 +6032,14 @@ BOOL daNpc_Md_c::execute() {
         if ((mAcch.ChkGroundHit()) && (m3131 == 0)) {
             dComIfGp_particle_setSimpleLand(mAcch.m_gnd, &current.pos, &shape_angle, 1.25f, 1.5f, 1.0f, &tevStr, &iStack_88, 7);
         }
-#if VERSION == VERSION_DEMO
         m3131 = mAcch.ChkGroundHit();
-#else
-        m3131 = (mAcch.ChkGroundHit()) ? TRUE : FALSE;
-#endif
         if ((mAcch.GetGroundH() == -G_CM3D_F_INF) || (dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4)) {
             if (!isFallAction()) {
                 m4E8 = 0;
             } else if (m4E8 < 30) {
                 m4E8++;
             } else if (!(dComIfGp_roomControl_checkStatusFlag(fopAcM_GetHomeRoomNo(this), 0x10))) {
-                current.pos = home.pos;
-                current.angle = home.angle;
-                current.roomNo = home.roomNo;
-                current.field_0x13 = home.field_0x13;
+                current = home;
                 shape_angle = home.angle;
                 speedF = 0.0f;
                 m4E8 = 0;
@@ -6060,7 +6056,7 @@ BOOL daNpc_Md_c::execute() {
         animationPlay();
     }
     if (!eventProc()) {
-        if (daPy_getPlayerActorClass() == this) {
+        if (dComIfGp_getPlayer(0) == this) {
             fopAcM_SetStatusMap(this, 0x11);
             if (isReturnLink()) {
                 mCurEventMode = 0xc;

@@ -43,7 +43,7 @@ inline void mDoMtx_multVec(const Mtx m, const Vec* src, Vec* dst) {
     MTXMultVec(m, src, dst);
 }
 
-inline void mDoMtx_multVecArray(Mtx m, const Vec* src, Vec* dst, u32 count) {
+inline void mDoMtx_multVecArray(const Mtx m, const Vec* src, Vec* dst, u32 count) {
     MTXMultVecArray(m, src, dst, count);
 }
 

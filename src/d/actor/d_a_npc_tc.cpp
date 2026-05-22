@@ -219,7 +219,7 @@ void daNpc_Tc_c::playTexPatternAnm() {
 
 /* 000007D0-00000948       .text smoke_set__10daNpc_Tc_cFfffff */
 void daNpc_Tc_c::smoke_set(f32 i_rate, f32 i_spread, f32 i_initialVelOmni, f32 i_initialVelAxis, f32 i_initialVelDir) {
-    static JGeometry::TVec3<f32> smoke_scale(1.0f, 1.0f, 1.0);
+    static JGeometry::TVec3<f32> smoke_scale(1.0f, 1.0f, 1.0f);
     if(mSmokeCallBack.getEmitter() == NULL) {
         dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &mSmokePos, &mSmokeAngle, NULL, 0xB9, &mSmokeCallBack, fopAcM_GetRoomNo(this));
     }

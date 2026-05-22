@@ -288,7 +288,7 @@ cPhs_State daObjEff::Act_c::_create() {
     int phase = cPhs_COMPLEATE_e;
     if (fopAcM_entrySolidHeap(this, &solidHeapCB, heap_size[mType])) {
         if ((u8) eff_set() != 0) {
-            fopDwTg_DrawQTo(&draw_tag);
+            fopAcM_offDraw(this);
         } else {
             phase = cPhs_ERROR_e;
         }

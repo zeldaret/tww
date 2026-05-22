@@ -224,8 +224,8 @@ void daOship_c::changeModeByRange() {
 
 /* 00000990-00000C08       .text createWave__9daOship_cFv */
 void daOship_c::createWave() {
-    static const JGeometry::TVec3<f32> wave_l_direction(0.5, 1.0f, -0.3f);
-    static const JGeometry::TVec3<f32> wave_r_direction(-0.5, 1.0f, -0.3f);
+    static const JGeometry::TVec3<f32> wave_l_direction(0.5f, 1.0f, -0.3f);
+    static const JGeometry::TVec3<f32> wave_r_direction(-0.5f, 1.0f, -0.3f);
 
     if (!mWaveCallback1.getEmitter()) {
         dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWAVE00, &mWavePos, &mWaveRot, NULL, 0xFF, &mWaveCallback1);

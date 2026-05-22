@@ -50,7 +50,7 @@ JGeometry::TVec3<f32> l_hammer_splash_particle_scale(0.67f, 0.67f, 0.67f);
 
 #include "d/actor/d_a_player_HIO_data.inc"
 
-#if VERSION > VERSION_DEMO
+#if DEBUG || VERSION > VERSION_DEMO
 cXyz l_debug_keep_pos;
 csXyz l_debug_current_angle;
 csXyz l_debug_shape_angle;
@@ -11265,7 +11265,7 @@ BOOL daPy_lk_c::execute() {
         }
     }
     
-#if VERSION > VERSION_DEMO
+#if DEBUG || VERSION > VERSION_DEMO
     current.pos = l_debug_keep_pos;
     shape_angle = l_debug_shape_angle;
     current.angle = l_debug_current_angle;
@@ -11729,7 +11729,7 @@ BOOL daPy_lk_c::execute() {
     
     mWhirlId = fpcM_ERROR_PROCESS_ID_e;
     
-#if VERSION > VERSION_DEMO
+#if DEBUG || VERSION > VERSION_DEMO
     l_debug_keep_pos = current.pos;
     l_debug_shape_angle = shape_angle;
     l_debug_current_angle = current.angle;
@@ -12647,7 +12647,9 @@ cPhs_State daPy_lk_c::makeBgWait() {
     if ((dComIfGs_getLastSceneMode() & 0x4000) != 0) {
         onNoResetFlg1(daPyFlg1_SOUP_POWER_UP);
     }
+#endif
 
+#if DEBUG || VERSION > VERSION_DEMO
     l_debug_keep_pos = current.pos;
     l_debug_shape_angle = shape_angle;
     l_debug_current_angle = current.angle;
@@ -13031,7 +13033,7 @@ void daPy_lk_c::setPlayerPosAndAngle(cXyz* param_1, s16 param_2) {
     shape_angle.y = param_2;
     current.angle.y = param_2;
     m34DE = shape_angle.y;
-#if VERSION > VERSION_DEMO
+#if DEBUG || VERSION > VERSION_DEMO
     l_debug_keep_pos = current.pos;
     l_debug_shape_angle = shape_angle;
     l_debug_current_angle = current.angle;
@@ -13052,7 +13054,7 @@ void daPy_lk_c::setPlayerPosAndAngle(cXyz* param_1, csXyz* param_2) {
         current.angle.y = shape_angle.y;
         m34DE = shape_angle.y;
     }
-#if VERSION > VERSION_DEMO
+#if DEBUG || VERSION > VERSION_DEMO
     l_debug_keep_pos = current.pos;
     l_debug_shape_angle = shape_angle;
     l_debug_current_angle = current.angle;
@@ -13069,7 +13071,7 @@ void daPy_lk_c::setPlayerPosAndAngle(MtxP param_1) {
         mDoMtx_MtxToRot(param_1, &shape_angle);
         current.angle.y = shape_angle.y;
         m34DE = shape_angle.y;
-#if VERSION > VERSION_DEMO
+#if DEBUG || VERSION > VERSION_DEMO
         l_debug_keep_pos = current.pos;
         l_debug_shape_angle = shape_angle;
         l_debug_current_angle = current.angle;
