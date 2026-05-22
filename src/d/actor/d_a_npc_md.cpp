@@ -2069,7 +2069,6 @@ static void unused_7570_7575_7612() {
 
 /* 00006764-00006B24       .text windProc__10daNpc_Md_cFv */
 s16 daNpc_Md_c::windProc() {
-    /* Nonmatching */
     f32 fVar1;
     cCcD_Obj* pcVar3;
     s16 sVar4;
@@ -2101,7 +2100,7 @@ s16 daNpc_Md_c::windProc() {
     //f32 sin = cM_ssin(shape_angle.y);
     cStack_70.set(cM_ssin(shape_angle.y), 0.0f, cM_scos(shape_angle.y));
     dVar6 = l_HIO.m134;
-    if (!(std::fabsf(cStack_70.abs2XZ()) < G_CM3D_F_ABS_MIN)) {
+    if (!(std::fabsf(cStack_64.abs2XZ()) < G_CM3D_F_ABS_MIN)) {
         cStack_64.normalizeZP();
         if (!(cStack_70.inprodXZ(cStack_64) > 0.7071f)) {
             sVar5 = 0;
@@ -5438,12 +5437,11 @@ void daNpc_Md_c::deletePiyoPiyo() {
 
 /* 0000F160-0000F4E0       .text init__10daNpc_Md_cFv */
 BOOL daNpc_Md_c::init() {
-    /* Nonmatching */
     cXyz local_30;
 
     local_30.setall(0.0f);
-    u8 uVar1 = (fopAcM_GetParam(this) >> 0x10) & 0xFF;
-    m3100 = uVar1;
+    u8 uVar1 = fopAcM_GetParam(this) & 0xFF;
+    m3100 = (fopAcM_GetParam(this) >> 0x10) & 0xFF;
     m313E = 0;
     m30F4 = JA_SE_CM_MD_HARP_CN4;
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
