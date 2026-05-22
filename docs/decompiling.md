@@ -32,7 +32,7 @@ Once you've chosen which object you want to decompile, you'll usually want to se
 > [!NOTE]
 > Some actors that aren't decompiled may have already had their struct defined in our Ghidra server by someone else in the past, in which case you may be able to skip this step. But this is not the case for most actors.
 
-In objdiff, pick one of the actor's functions (one with "create" in the name would be good to start with). Then open the `main` program in Ghidra, press `G` and type the function name (e.g. `daWall_c::CreateInit`) to go to that function in Ghidra. If the struct hasn't been properly defined for Ghidra, the function may look something like this at first:
+In objdiff, pick one of the actor's functions (one with "create" in the name would be good to start with). Then in Ghidra, open the local copy of the `main` program you made earlier (do not open `main` itself or you won't be able to save your changes), press `G` and type the function name (e.g. `daWall_c::CreateInit`) to go to that function in Ghidra. If the struct hasn't been properly defined for Ghidra, the function may look something like this at first:
 
 ![Ghidra function before defining the struct](images/ghidra_createinit_1.png)
 
