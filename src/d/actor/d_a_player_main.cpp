@@ -373,7 +373,7 @@ BOOL daPy_lk_c::jointBeforeCB(int jnt_no, J3DTransformInfo* param_2, Quaternion*
             m3648 = *param_3;
         } else if (jnt_no == 1) {
             mDoMtx_copy(J3DSys::mCurrentMtx, root_mtx);
-            mDoMtx_quat(mDoMtx_stack_c::now, &m3648);
+            mDoMtx_stack_c::quatS(&m3648);
             mDoMtx_stack_c::inverse();
             mDoMtx_concat(J3DSys::mCurrentMtx, mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
         } else if (jnt_no == 0x1D) {

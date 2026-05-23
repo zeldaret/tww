@@ -2448,7 +2448,7 @@ BOOL daNpc_Md_c::land01NpcAction(void* param_1) {
         }
     } else if (mActionStatus != ACTION_ENDING) {
         if (m3144 != 0) {
-            if ((!chkAdanmaeDemoOrder()) && (m312A != 0)) {
+            if (!chkAdanmaeDemoOrder() && m312A != 0) {
                 setNpcAction(&daNpc_Md_c::waitNpcAction);
             }
         } else if (m312A != 0) {
@@ -2934,9 +2934,6 @@ BOOL daNpc_Md_c::jumpNpcAction(void* param_1) {
 
 /* 000092E0-000095C8       .text escapeNpcAction__10daNpc_Md_cFPv */
 BOOL daNpc_Md_c::escapeNpcAction(void*) {
-    s16 sVar5;
-    s16 local_38;
-
     if (mActionStatus == ACTION_STARTING) {
         setBitStatus(daMdStts_UNK4);
         cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
@@ -2975,14 +2972,14 @@ BOOL daNpc_Md_c::escapeNpcAction(void*) {
             f32 f31 = 250000.0f;
             f32 f30 = 1.0f;
             if (m313F != 0) {
-                sVar5 = (m313F < 0) ? DEMO_SELECT(-0x4000, (s16)-0x4000) : DEMO_SELECT(0x4000, (s16)0x4000);
+                s16 sVar5 = (m313F < 0) ? DEMO_SELECT(-0x4000, (s16)-0x4000) : DEMO_SELECT(0x4000, (s16)0x4000);
                 m3144 = DEMO_SELECT(sVar5, (s16)sVar5) + cM_atan2s(m30C4.x, m30C4.z);
             } else if (m3146 == 0) {
                 setNpcAction(&daNpc_Md_c::waitNpcAction);
                 return TRUE;
             }
-            local_38 = m3144;
-            sVar5 = local_38;
+            s16 local_38 = m3144;
+            s16 sVar5 = local_38;
             if (routeCheck(f31, &local_38)) {
                 cLib_distanceAngleS(sVar5, local_38);
             }
@@ -4146,7 +4143,8 @@ BOOL daNpc_Md_c::actionTurnEvent(int staffIdx) {
 void daNpc_Md_c::initialSetAnmEvent(int staffIdx) {
     int* puVar1 = dComIfGp_evmng_getMyIntegerP(staffIdx, "Number");
     if (puVar1 != NULL) {
-        int iVar1 = setAnm(getAnmType(*puVar1));
+        u8 r4 = *puVar1;
+        int iVar1 = setAnm(getAnmType(r4));
         if (iVar1 != 0) {
             setBitStatus(daMdStts_UNK1);
         } else {
@@ -4190,19 +4188,19 @@ void daNpc_Md_c::initialLookUp(int) {
 
 /* 0000CAA4-0000CB8C       .text actionLookDown__10daNpc_Md_cFi */
 BOOL daNpc_Md_c::actionLookDown(int) {
-    s16 desiredYRot;
     cXyz local_14;
     cXyz cStack_20;
-
     m30AC.y = -50.0f;
     cXyz local_38(0.0f, 0.0f, 0.0f);
-    desiredYRot = shape_angle.y;
+    cXyz* temp;
+    s16 desiredYRot = shape_angle.y;
     local_38.set(current.pos.x, eyePos.y, current.pos.z);
     local_14 = local_38;
+    temp = &local_14;
     mDoMtx_stack_c::YrotS(desiredYRot);
     mDoMtx_stack_c::multVec(&m30AC, &cStack_20);
     local_14 += cStack_20;
-    mJntCtrl.lookAtTarget(&shape_angle.y, &local_14, local_38, desiredYRot, m3110, false);
+    mJntCtrl.lookAtTarget(&shape_angle.y, temp, local_38, desiredYRot, m3110, false);
     return TRUE;
 }
 
@@ -5345,7 +5343,8 @@ u32 daNpc_Md_c::getMsg() {
                     0x1803,
                     0x1804,
                 };
-                msgNo = l_msg_num[getPiyo2TalkCNT()];
+                u8 count = getPiyo2TalkCNT();
+                msgNo = l_msg_num[count];
                 countPiyo2TalkCNT();
             } else {
                 msgNo = 0x17F6;
@@ -5406,9 +5405,10 @@ void daNpc_Md_c::setCollision() {
 
     local_20.setall(0.0f);
     local_2c = current.pos;
+    f32 radius = 30.0f;
     if ((!isShipRide()) && (!fopAcM_CheckStatus(this, fopAcStts_CARRY_e))) {
         mCyl1.SetC(local_2c);
-        mCyl1.SetR(30.0f);
+        mCyl1.SetR(radius);
         mCyl1.SetH(m30F8);
         dComIfG_Ccsp()->Set(&mCyl1);
     } else {
@@ -5416,11 +5416,11 @@ void daNpc_Md_c::setCollision() {
         mCyl1.ClrTgHit();
     }
     mCyl2.SetC(local_2c);
-    mCyl2.SetR(30.0f);
+    mCyl2.SetR(radius);
     mCyl2.SetH(m30F8);
     dComIfG_Ccsp()->Set(&mCyl2);
     mCyl3.SetC(local_2c);
-    mCyl3.SetR(30.0f);
+    mCyl3.SetR(radius);
     mCyl3.SetH(m30F8);
     dComIfG_Ccsp()->Set(&mCyl3);
     if (isLightHit()) {
@@ -5450,7 +5450,7 @@ void daNpc_Md_c::setCollision() {
 
 /* 0000E95C-0000E9F0       .text setAttention__10daNpc_Md_cFb */
 void daNpc_Md_c::setAttention(bool param_1) {
-    if ((!param_1) && (m312B >= 2)) {
+    if (!param_1 && m312B >= 2) {
         return;
     }
     eyePos.set(getEyePos().x, getEyePos().y, getEyePos().z);
@@ -5533,6 +5533,9 @@ s32 daNpc_Md_c::lookBackWaist(s16 param_1, f32 param_2) {
     } else {
         sVar3 = l_HIO.m034.m1E * fVar1;
     }
+#if VERSION == VERSION_DEMO
+    m3114 = sVar3;
+#endif
     sVar3 = cLib_addCalcAngleS(&m3114, sVar3, 4, 0xc00, 0x180);
     sVar4 = cLib_addCalcAngleS(&m3116, l_HIO.m034.m22 * dVar6, 4, 0xc00, 0x180);
     uVar5 = false;
@@ -5588,11 +5591,13 @@ void daNpc_Md_c::setBaseMtx() {
     }
     mpArmMorf->calc();
     if (checkStatus(daMdStts_UNK80)) {
-        cMtx_copy(mpArmMorf->getModel()->getAnmMtx(m_handL_jnt_num), mDoMtx_stack_c::now);
+        J3DModel* model = mpArmMorf->getModel();
+        cMtx_copy(model->getAnmMtx(m_handL_jnt_num), mDoMtx_stack_c::now);
         mDoMtx_stack_c::transM(0.37f, 3.81f, -11.13f);
         mDoMtx_stack_c::XYZrotM(0x1b24, -0x2913, -0x1982);
     } else {
-        cMtx_copy(getModel()->getAnmMtx(m_backbone2_jnt_num), mDoMtx_stack_c::now);
+        J3DModel* model = getModel();
+        cMtx_copy(model->getAnmMtx(m_backbone2_jnt_num), mDoMtx_stack_c::now);
         mDoMtx_stack_c::transM(2.2f, -11.681f, 1.3f);
         mDoMtx_stack_c::XYZrotM(0x3f11, 0x2894, 0x7f7e);
     }
@@ -5726,19 +5731,20 @@ BOOL daNpc_Md_c::draw() {
     mpMorf->entryDL();
     m0520.remove(modelData);
 
+    J3DModel* limbModel;
     if (!isTypeShipRide()) {
         if (checkStatus(daMdStts_UNK1)) {
-            model = mpWingMorf->getModel();
-            g_env_light.setLightTevColorType(model, &tevStr);
+            limbModel = mpWingMorf->getModel();
+            g_env_light.setLightTevColorType(limbModel, &tevStr);
             mpWingMorf->entryDL();
         } else {
-            model = mpArmMorf->getModel();
-            g_env_light.setLightTevColorType(model, &tevStr);
+            limbModel = mpArmMorf->getModel();
+            g_env_light.setLightTevColorType(limbModel, &tevStr);
             mpArmMorf->entryDL();
         }
     } else {
-        model = mpArmMorf->getModel();
-        g_env_light.setLightTevColorType(model, &tevStr);
+        limbModel = mpArmMorf->getModel();
+        g_env_light.setLightTevColorType(limbModel, &tevStr);
         mpArmMorf->entryDL();
     }
 
@@ -5777,7 +5783,7 @@ BOOL daNpc_Md_c::draw() {
         mShadowId = dComIfGd_setShadow(mShadowId, 0, getModel(), &shadowPos, 800.0f, 20.0f, current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr);
 
         if (mShadowId != 0) {
-            dComIfGd_addRealShadow(mShadowId, model);
+            dComIfGd_addRealShadow(mShadowId, limbModel);
             dComIfGd_addRealShadow(mShadowId, mpHarpModel);
         }
     }

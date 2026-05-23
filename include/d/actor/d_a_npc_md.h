@@ -65,31 +65,31 @@ public:
     
     void setBitStatus(u32 status) { cLib_onBit<u32>(m30F0, status); }
     void clearStatus(u32 status) { cLib_offBit<u32>(m30F0, status); }
-    bool checkStatus(u32 status) { return cLib_checkBit<u32>(m30F0, status); }
+    BOOL checkStatus(u32 status) { return cLib_checkBit<u32>(m30F0, status); }
     void setStatus(u32 status) { m30F0 = status; }
     void clearStatus() { m30F0 = 0; }
-    bool checkStatusFly() { return cLib_checkBit<u32>(m30F0, daMdStts_FLY); }
+    BOOL checkStatusFly() { return cLib_checkBit<u32>(m30F0, daMdStts_FLY); }
     void onBitCamTagIn() { cLib_onBit<u32>(m30F0, daMdStts_CAM_TAG_IN); }
     void offBitCamTagIn() { cLib_offBit<u32>(m30F0, daMdStts_CAM_TAG_IN); }
-    bool checkStatusCamTagIn() { return cLib_checkBit<u32>(m30F0, daMdStts_CAM_TAG_IN); }
+    BOOL checkStatusCamTagIn() { return cLib_checkBit<u32>(m30F0, daMdStts_CAM_TAG_IN); }
     void onXYTalk() { cLib_onBit<u32>(m30F0, daMdStts_XY_TALK); }
     void offXYTalk() { cLib_offBit<u32>(m30F0, daMdStts_XY_TALK); }
-    bool isXYTalk() { return cLib_checkBit<u32>(m30F0, daMdStts_XY_TALK); }
+    BOOL isXYTalk() { return cLib_checkBit<u32>(m30F0, daMdStts_XY_TALK); }
     void noCarryAction() { cLib_onBit<u32>(m30F0, daMdStts_CARRY_ACTION); }
     void offNoCarryAction() { cLib_offBit<u32>(m30F0, daMdStts_CARRY_ACTION); }
-    bool isNoCarryAction() { return cLib_checkBit<u32>(m30F0, daMdStts_CARRY_ACTION); }
+    BOOL isNoCarryAction() { return cLib_checkBit<u32>(m30F0, daMdStts_CARRY_ACTION); }
     void onShipRide() { cLib_onBit<u32>(m30F0, daMdStts_SHIP_RIDE); }
     void offShipRide() { cLib_offBit<u32>(m30F0, daMdStts_SHIP_RIDE); }
-    bool isShipRide() { return cLib_checkBit<u32>(m30F0, daMdStts_SHIP_RIDE); }
+    BOOL isShipRide() { return cLib_checkBit<u32>(m30F0, daMdStts_SHIP_RIDE); }
     void onLightHit() { cLib_onBit<u32>(m30F0, daMdStts_LIGHT_HIT); }
     void offLightHit() { cLib_offBit<u32>(m30F0, daMdStts_LIGHT_HIT); }
-    bool isLightHit() { return cLib_checkBit<u32>(m30F0, daMdStts_LIGHT_HIT); }
+    BOOL isLightHit() { return cLib_checkBit<u32>(m30F0, daMdStts_LIGHT_HIT); }
     void onLightBodyHit() { cLib_onBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
     void offLightBodyHit() { cLib_offBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
-    bool isLightBodyHit() { return cLib_checkBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
+    BOOL isLightBodyHit() { return cLib_checkBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
     void onDefaultTalkXY() { cLib_onBit<u32>(m30F0, daMdStts_DEFAULT_TALK_XY); }
     void offDefaultTalkXY() { cLib_offBit<u32>(m30F0, daMdStts_DEFAULT_TALK_XY); }
-    bool isDefaultTalkXY() { return cLib_checkBit<u32>(m30F0, daMdStts_DEFAULT_TALK_XY); }
+    BOOL isDefaultTalkXY() { return cLib_checkBit<u32>(m30F0, daMdStts_DEFAULT_TALK_XY); }
     
     bool isOldLightBodyHit() { return mOldLightBodyHit; }
     void setOldLightBodyHit() { mOldLightBodyHit = isLightBodyHit(); }
@@ -140,10 +140,11 @@ public:
         }
     }
     
-    u8 checkBitHairMode(u8 bit) { return m3134 & bit; }
-    void setBitHairMode(u8 bit) { m3134 |= bit; }
+    u8 checkBitHairMode(u8 bit) { return cLib_checkBit<u8>(m3134, bit); }
+    void setBitHairMode(u8 bit) { cLib_onBit<u8>(m3134, bit); }
     
-    u8 getPiyo2TalkCNT() { return m313C & 0xFF; } // TODO: fakematch?
+    u8 getPiyo2TalkCNT() { return m313C; }
+    void setPiyo2TalkCNT(u8 cnt) { m313C = cnt; }
     void countPiyo2TalkCNT() {
         m313C++;
         if (m313C >= 3) {
@@ -165,7 +166,6 @@ public:
     void setTalkType(u8 type) { mType = type; }
     void setBitEffectStatus(u8 bit) { cLib_onBit<u8>(m3135, bit); }
     void setEffectStatus(u8 status) { m3135 = status; }
-    void setPiyo2TalkCNT(u8 cnt) { m313C = cnt; }
     
     ~daNpc_Md_c();
     
