@@ -93,6 +93,10 @@ cPhs_State daSTBox_c::_create() {
 /* 00000BFC-00000C7C       .text set_mtx__9daSTBox_cFv */
 void daSTBox_c::set_mtx() {
     /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
 }
 
 /* 00000C7C-00000EB8       .text _execute__9daSTBox_cFv */
