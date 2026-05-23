@@ -8,6 +8,20 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+const char daSTBox_c::m_arc_name[] = "Salvage";
+const u16 daSTBox_c::m_heapsize[] = {0x5000, 0x5000, 0x5000};
+const s16 daSTBox_c::m_bdlidx[3] = { 4, 3, 3 };
+const f32 daSTBox_c::m_rope_max_length = 2500.0f;
+const u8 daSTBox_c::m_shadow_alpha = 0x78;
+const f32 daSTBox_c::m_shadow_depth = 2000.0f;
+const f32 daSTBox_c::m_shadow_scroll = -0.1f;
+const f32 daSTBox_c::m_shadow_scale = 4.0f;
+
+const f32 daSTBox_c::crane_offset[] = {80.0f, 125.0f, 125.0f};
+
+
+
+
 /* 00000078-00000128       .text getMaxWaterY__25daSTBox_shadowEcallBack_cFPQ29JGeometry8TVec3<f> */
 void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>*) {
     /* Nonmatching */
@@ -46,6 +60,21 @@ void daSTBox_c::CreateHeap() {
 /* 000007D4-00000ADC       .text CreateInit__9daSTBox_cFv */
 void daSTBox_c::CreateInit() {
     /* Nonmatching */
+    // for (int i = 0; i < 3; i++) {
+    // JPABaseEmitter *emitter = this->field_0x29c[i];
+    // if (emitter != nullptr) {
+    //     emitter->mFlags    |= 0x40;
+    //     emitter->field_0x1f0 = 1.5f;
+    //     emitter->field_0x1f4 = 1.5f;
+    //     emitter->field_0x1f8 = 1.0f;
+    //     emitter->field_0x0c  = 3.0f;
+    //     emitter->field_0x10  = 1.0f;
+    //     emitter->field_0x14  = 3.0f;
+    //     emitter->field_0x18  = 0.0f;
+    //     emitter->field_0x1c  = 20.0f;
+    //     emitter->field_0x20  = 0.0f;
+    // }
+// }
 }
 
 /* 00000ADC-00000BFC       .text _create__9daSTBox_cFv */
@@ -65,27 +94,36 @@ bool daSTBox_c::_execute() {
 
 /* 00000EB8-00000EBC       .text initWait__9daSTBox_cFi */
 void daSTBox_c::initWait(int) {
-    /* Nonmatching */
+    return;
 }
 
 /* 00000EBC-00000EC8       .text initWait02__9daSTBox_cFi */
 void daSTBox_c::initWait02(int) {
-    /* Nonmatching */
+    this->field_0x332 = 20;
 }
 
 /* 00000EC8-00000F50       .text initWaitGetItem__9daSTBox_cFi */
 void daSTBox_c::initWaitGetItem(int) {
     /* Nonmatching */
+    fopDwTg_DrawQTo(&this->draw_tag);
+    for(int i = 0; i < 3; i++) {
+        JPABaseEmitter *emitter = this->field_0x29C[i];
+        if (emitter != NULL) {
+            
+        }
+    }
+    this->mRippleCallBack->end();
 }
 
 /* 00000F50-00000F54       .text initWaitDummy__9daSTBox_cFi */
 void daSTBox_c::initWaitDummy(int) {
-    /* Nonmatching */
+    return;
 }
 
 /* 00000F54-00000F64       .text initDrop__9daSTBox_cFi */
 void daSTBox_c::initDrop(int) {
     /* Nonmatching */
+    this->gravity = -4.0f;
 }
 
 /* 00000F64-00001218       .text actWait__9daSTBox_cFi */
@@ -99,18 +137,30 @@ void daSTBox_c::actDrop(int) {
 }
 
 /* 00001344-000013AC       .text actWait02__9daSTBox_cFi */
-void daSTBox_c::actWait02(int) {
+s32 daSTBox_c::actWait02(int) {
     /* Nonmatching */
+    cXyz* pos = &(g_dComIfG_gameInfo.play.getStage().getShip()->m_entries->m_pos);
+    if (pos != NULL) {
+        f32 y = pos->y;
+        f32 z = pos->z;
+        f32 offset = this->crane_offset[this->field_0x331];
+        // f32 offset = 2;
+        // cXyz* newPos = new cXyz(pos->x, y - offset, z);
+        this->current.pos.x = pos->x;
+        this->current.pos.y = y - offset;
+        this->current.pos.z = z;
+    }
+    return 0;
 }
 
 /* 000013AC-000013B4       .text actWaitGetItem__9daSTBox_cFi */
-void daSTBox_c::actWaitGetItem(int) {
-    /* Nonmatching */
+s32 daSTBox_c::actWaitGetItem(int) {
+    return 1;
 }
 
 /* 000013B4-000013BC       .text actWaitDummy__9daSTBox_cFi */
-void daSTBox_c::actWaitDummy(int) {
-    /* Nonmatching */
+s32 daSTBox_c::actWaitDummy(int) {
+    return 1;
 }
 
 /* 000013BC-000013DC       .text daSTBox_Create__FPv */

@@ -37,12 +37,59 @@ public:
     void initDrop(int);
     void actWait(int);
     void actDrop(int);
-    void actWait02(int);
-    void actWaitGetItem(int);
-    void actWaitDummy(int);
+    s32 actWait02(int);
+    s32 actWaitGetItem(int);
+    s32 actWaitDummy(int);
 
+    // static const dCcD_SrcSph m_sph_src;
+    static const u16 m_heapsize[3];
+    static const char m_arc_name[];
+    static const f32 m_rope_max_length;
+    static const s16 m_bdlidx[3];
+    static const u8 m_shadow_alpha;
+    static const f32 m_shadow_depth;
+    static const f32 m_shadow_scroll;
+    static const f32 m_shadow_scale;
+    
+    static const f32 crane_offset[3];
 public:
-    /* Place member variables here */
-};
+    /* 0x290 */ request_of_phase_process_class field_0x290;
+    /* 0x298 */ s32 field_0x298;
+    /* 0x29C */ JPABaseEmitter* field_0x29C[2];
+    /* 0x2A4 */ JPABaseEmitter* field_0x2A4;
+    /* 0x2A8 */ u8 field_0x2A8[0x2AC - 0x2A8];
+    /* 0x2AC */ dPa_rippleEcallBack* mRippleCallBack;
+    /* 0x2B0 */ uint field_0x2B0;
+    /* 0x2B4 */ u8 field_0x2B4[0x2BC - 0x2B4];
+    /* 0x2BC */ f32 field_0x2BC;
+    /* 0x2C0 */ daSTBox_shadowEcallBack_c* field_0x2C0;
+    /* 0x2C4 */ u8 field_0x2C4[0x2C8 - 0x2C4];
+    /* 0x2C8 */ f32 field_0x2C8;
+    /* 0x2CC */ f32 field_0x2CC;
+    /* 0x2D0 */ f32 field_0x2D0;
+    /* 0x2D4 */ u8 field_0x2D4[0x2F8 - 0x2D4];
+    /* 0x2F8 */ f32 field_0x2F8;
+    /* 0x2FC */ f32 field_0x2FC;
+    /* 0x300 */ f32 field_0x300;
+    /* 0x304 */ u8 field_0x304[0x308 - 0x304];
+    /* 0x308 */ f32 field_0x308;
+    /* 0x30C */ f32 field_0x30C;
+    /* 0x310 */ u8 field_0x310[0x314 - 0x310];
+    /* 0x314 */ s32 field_0x314;
+    /* 0x318 */ f32 field_0x318;
+    /* 0x31C */ f32 field_0x31C;
+    /* 0x320 */ f32 field_0x320;
+    /* 0x324 */ f32 field_0x324;
+    /* 0x328 */ f32 field_0x328;
+    /* 0x32C */ f32 field_0x32C;
+    /* 0x330 */ u8 field_0x330;
+    /* 0x331 */ u8 field_0x331;
+    /* 0x332 */ s16 field_0x332;
+    /* 0x334 */ u8 field_0x334;
+    /* 0x335 */ u8 field_0x335;
+    /* 0x336 */ u8 field_0x336;
+    /* 0x337 */ u8 field_0x337[0x338 - 0x337];
+    /* 0x338 */ s32 field_0x338;
+};  // Size: 0x33C
 
 #endif /* D_A_SALVAGE_TBOX_H */
