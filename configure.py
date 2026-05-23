@@ -1587,7 +1587,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_bo"),
     ActorRel(Matching,    "d_a_boss_item"),
     ActorRel(NonMatching, "d_a_bpw"),
-    ActorRel(NonMatching, "d_a_bst"),
+    ActorRel(MatchingFor("GZLE01"), "d_a_bst"),
     ActorRel(Matching,    "d_a_btd"),
     ActorRel(Matching,    "d_a_bwd"),
     ActorRel(Matching,    "d_a_bwdg"),

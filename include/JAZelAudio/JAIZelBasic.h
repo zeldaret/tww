@@ -157,9 +157,10 @@ public:
     f32 calcMainBgmVol() { return field_0x0080 * field_0x0084 * field_0x0088 * field_0x008c * field_0x0090 * field_0x0094 * field_0x0098 * field_0x009c * field_0x00ac; }
     f32 calcSubBgmVol() { return field_0x00a0 * field_0x00a4 * field_0x00a8; }
 
+    void bstHoriOn() { field_0x1dd4 = 1; }
+    void bstHoriOff() { field_0x1dd4 = 0; }
+
     // TODO
-    void bstHoriOff() {}
-    void bstHoriOn() {}
     void checkSeMute() {}
     void checkTBoxDemo() {}
     void getCurCamera(u32) {}
