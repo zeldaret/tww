@@ -7,20 +7,23 @@
 #include "d/actor/d_a_obj_hlift.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
-int L_time_lag_num;
+#include "d/res/res_hlift.h"
 
 namespace daObjHlift {
 
+namespace {
+    int L_time_lag_num;
+    static const Attr_c L_attr = { 30.0f, 50.0f, 10.0f, 2.0f, 0.3f, 1.2f, 250.0f, 10, 16384, 2.5f, 0x00, 0x02, 0x0a, 0x08, 0x07, 0x00, 0x00, 0x00 };
+}
 Mtx Act_c::M_tmp_mtx;
-u8 M_lift_move_flag;
+u8 Act_c::M_lift_move_flag;
 int Act_c::M_control_id = -1;
 const char Act_c::M_arcname[] = "Hlift";
 const char Act_c::M_evname[] = "Hlift_up";
 const s16 Act_c::M_up_dist[] = { 125, 250, 375, 500, 625, 750, 875, 1000 };
 const Act_c::size_data Act_c::M_data_size[2] = {
-    { 4, 9, 5888 },
-    { 5, 10, 5888 }
+    { HLIFT_BDL_HLIFT, HLIFT_DZB_HLIFT, VERSION_SELECT(32768, 5888, 5888, 5888) },
+    { HLIFT_BDL_HLIFTB, HLIFT_DZB_HLIFTB, VERSION_SELECT(32768, 5888, 5888, 5888) }
 };
 
 }
@@ -30,7 +33,7 @@ BOOL daObjHlift::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, M_data_size[field_0x2DC].field_0x00);
     JUT_ASSERT(288, model_data != NULL);
     mModel1 = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
-    J3DModelData* model_data_c = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 6);
+    J3DModelData* model_data_c = (J3DModelData*)dComIfG_getObjectRes(M_arcname, HLIFT_BDL_HLIFTC);
     JUT_ASSERT(298, model_data_c != NULL);
     mModel2 = mDoExt_J3DModel__create(model_data_c, 0x80000, 0x11000022);
     return mModel1 != NULL && mModel2 != NULL;

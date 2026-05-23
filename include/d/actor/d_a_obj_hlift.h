@@ -17,7 +17,6 @@ namespace daObjHlift {
         /* 0x20 */ f32 field_0x20;
         /* 0x24 */ u8 field_0x24[0x2C - 0x24];
     };
-    static const Attr_c L_attr = { 30.0f, 50.0f, 10.0f, 2.0f, 0.3f, 1.2f, 250.0f, 10, 16384, 2.5f, 0x00, 0x02, 0x0a, 0x08, 0x07, 0x00, 0x00, 0x00 };
     
     class Act_c : public dBgS_MoveBgActor {
     public:
