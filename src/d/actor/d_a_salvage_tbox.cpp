@@ -48,13 +48,21 @@ bool daSTBox_c::_delete() {
 }
 
 /* 000006E8-00000708       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
+    daSTBox_c* i_this = (daSTBox_c*)i_actor;
+    return i_this->CreateHeap();
 }
 
 /* 00000708-000007D4       .text CreateHeap__9daSTBox_cFv */
-void daSTBox_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daSTBox_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, m_bdlidx[this->field_0x331]);
+    JUT_ASSERT(0x1cd, modelData != NULL);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (mpModel == NULL) {
+        return FALSE;
+    } else {
+        return TRUE;
+    }
 }
 
 /* 000007D4-00000ADC       .text CreateInit__9daSTBox_cFv */

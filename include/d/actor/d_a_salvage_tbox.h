@@ -25,7 +25,7 @@ public:
     inline bool _draw();
 
     bool _delete();
-    void CreateHeap();
+    BOOL CreateHeap();
     void CreateInit();
     cPhs_State _create();
     void set_mtx();
@@ -54,7 +54,7 @@ public:
     static const f32 crane_offset[3];
 public:
     /* 0x290 */ request_of_phase_process_class field_0x290;
-    /* 0x298 */ s32 field_0x298;
+    /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ JPABaseEmitter* field_0x29C[2];
     /* 0x2A4 */ JPABaseEmitter* field_0x2A4;
     /* 0x2A8 */ u8 field_0x2A8[0x2AC - 0x2A8];
