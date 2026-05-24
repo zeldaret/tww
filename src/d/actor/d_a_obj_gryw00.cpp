@@ -180,7 +180,7 @@ void daObjGryw00_c::switch_wait_act_proc() {
     if (mActivationSwitch == 0xff) {
         return;
     }
-    if (!(fopAcM_isSwitch(this, mActivationSwitch) == TRUE)) {
+    if (fopAcM_isSwitch(this, mActivationSwitch) != TRUE) {
         return;
     }
     mBtk.setPlaySpeed(1.0f);

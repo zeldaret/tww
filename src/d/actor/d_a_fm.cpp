@@ -2644,22 +2644,23 @@ void daFm_c::cancelGrab() {
 }
 
 /* 00006EA4-0000702C       .text calcInvKine__6daFm_cFP10fopAc_ac_c */
-void daFm_c::calcInvKine(fopAc_ac_c* i_this) {
-    if (isBodyAppear() && i_this != NULL) {
-        if (!(fopAcM_searchActorDistanceXZ(this, i_this) <= l_HIO.field_0x0DC)) {
-            for(int i = 5; i >= 0; i--) {
-                field_0x390 = i;
-                cXyz temp(field_0x2E8[i]);
-                if(l_HIO.field_0x00F[field_0x390] == 1) {
-                    cXyz diff = mGrabPos - temp;
-                    cXyz diff2 = field_0x61C - temp;
-                    Quaternion quat;
-                    
-                    daObj::quat_rotVec(&quat, diff2, diff);
-                    mDoMtx_quatSlerp(&field_0x330[i], &quat, &field_0x330[i], 0.75f - REG12_F(0x19));
-                }
-                mpMorf->calc();
+void daFm_c::calcInvKine(fopAc_ac_c* i_target) {
+    if (isBodyAppear() && i_target != NULL) {
+        if (fopAcM_searchActorDistanceXZ(this, i_target) <= l_HIO.field_0x0DC) {
+            return;
+        }
+        for(int i = 5; i >= 0; i--) {
+            field_0x390 = i;
+            cXyz temp(field_0x2E8[i]);
+            if(l_HIO.field_0x00F[field_0x390] == 1) {
+                cXyz diff = mGrabPos - temp;
+                cXyz diff2 = field_0x61C - temp;
+                Quaternion quat;
+                
+                daObj::quat_rotVec(&quat, diff2, diff);
+                mDoMtx_quatSlerp(&field_0x330[i], &quat, &field_0x330[i], 0.75f - REG12_F(0x19));
             }
+            mpMorf->calc();
         }
     }
 }

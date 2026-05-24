@@ -515,8 +515,7 @@ BOOL daBoomerang_c::procWait() {
 
         cXyz diff = mTargetPos - current.pos;
 
-        s16 angle = cM_atan2s(-diff.y, diff.absXZ());
-        current.angle.x = angle;
+        current.angle.x = cM_atan2s(-diff.y, diff.absXZ());
         if (mLockCnt == 0) {
             current.angle.y = cM_atan2s(diff.x, diff.z) + 0x3000;
             if (mThirdPerson) {
@@ -662,8 +661,7 @@ BOOL daBoomerang_c::procMove() {
             current.angle.y += currentAngle;
         }
 
-        angle = cM_atan2s(-norm.y, norm.absXZ());
-        current.angle.x = angle;
+        current.angle.x = cM_atan2s(-norm.y, norm.absXZ());
 
         current.pos.x += speedF * cM_scos(current.angle.x) * cM_ssin(current.angle.y);
         current.pos.y -= speedF * cM_ssin(current.angle.x);

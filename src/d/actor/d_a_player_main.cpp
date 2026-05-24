@@ -8912,7 +8912,7 @@ void daPy_lk_c::autoGroundHit() {
     if (!checkNoResetFlg0(daPyFlg0_HOVER_BOOTS)) {
         return;
     }
-    if (!(mTinkleHoverTimer > 0)) {
+    if (mTinkleHoverTimer <= 0) {
         return;
     }
     if (dComIfGp_event_runCheck() && !checkSpecialDemoMode()) {

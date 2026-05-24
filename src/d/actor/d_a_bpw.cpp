@@ -2463,9 +2463,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         player->changeDemoMode(daPy_demo_c::DEMO_S_SURP_e);
         cLib_addCalc2(&actor->scale.x, 1.0f, 1.0f, 0.1f);
         cLib_addCalcAngleS2(&i_this->m47E, i_this->m480, 1, 0xf);
-        fVar9 = actor->scale.x;
-        actor->scale.z = fVar9;
-        actor->scale.y = fVar9;
+        actor->scale.y = actor->scale.z = actor->scale.x;
         if (REG20_S(1) == 0) {
             REG20_S(0) = 1;
         }
@@ -3121,9 +3119,7 @@ void action_start_demo(bpw_class* i_this) {
     case 0xcf:
         cLib_addCalcAngleS2(&i_this->m47E, i_this->m480, 1, 5);
         cLib_addCalc2(&actor->scale.x, 1.0f, 1.0f, 0.1f);
-        fVar1 = actor->scale.x;
-        actor->scale.z = fVar1;
-        actor->scale.y = fVar1;
+        actor->scale.y = actor->scale.z = actor->scale.x;
         if (i_this->mSomeCountdownTimers[0] != 0) {
             break;
         }
@@ -3628,8 +3624,7 @@ void action_kantera_dousa(bpw_class* i_this) {
     case 5:
         pfVar2 = fopAcM_SearchByID(i_this->m404);
         if (pfVar2 != NULL) {
-            sVar4 = fopAcM_searchActorAngleY(actor, pfVar2);
-            actor->current.angle.y = sVar4;
+            actor->current.angle.y = fopAcM_searchActorAngleY(actor, pfVar2);
         }
         cLib_addCalc0(&actor->speedF, 1.0f, 3.0f);
         if (actor->speedF < 1.0f) {
@@ -3990,9 +3985,7 @@ void torituki_execute(bpw_class* i_this) {
         // fallthrough
     case 1:
         cLib_addCalc2(&actor->scale.x, 0.4f, 1.0f, 0.1f);
-        fVar1 = actor->scale.x;
-        actor->scale.z = fVar1;
-        actor->scale.y = fVar1;
+        actor->scale.y = actor->scale.z = actor->scale.x;
         if (!(actor->scale.x < 0.3f)) {
             anm_init(i_this, BPW_BCK_TORITUKI1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->mSomeCountdownTimers[8] = DEMO_SELECT(0xD2, 0x96);
@@ -4021,9 +4014,7 @@ void torituki_execute(bpw_class* i_this) {
         break;
     case 3:
         cLib_addCalc0(&actor->scale.x, 1.0f, 0.1f);
-        fVar1 = actor->scale.x;
-        actor->scale.z = fVar1;
-        actor->scale.y = fVar1;
+        actor->scale.y = actor->scale.z = actor->scale.x;
         if (actor->scale.x < 0.1f) {
             fopAcM_delete(actor);
         }

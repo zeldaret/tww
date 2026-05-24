@@ -962,9 +962,7 @@ void daAuction_c::eventMainKai() {
                 }
 
                 if (m81F == 4) {
-                    u8 tmp = m828;
-                    m829 = tmp;
-                    m827 = tmp;
+                    m827 = m829 = m828;
                     dComIfGp_setMessageCountNumber(m800);
                     dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m827)].field_0x00);
                 }
@@ -1072,9 +1070,7 @@ void daAuction_c::eventMainUri() {
                 }
 
                 if (m81F == 4) {
-                    u8 m828_val = m828;
-                    m829 = m828_val;
-                    m827 = m828_val;
+                    m827 = m829 = m828;
                     dComIfGp_setMessageCountNumber(m800);
                     dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m827)].field_0x00);
                 }
@@ -1147,9 +1143,7 @@ void daAuction_c::eventMainMsgEnd() {
 
 /* 0000294C-00002B90       .text eventMainMsgBikonC__11daAuction_cFv */
 void daAuction_c::eventMainMsgBikonC() {
-    u8 tmp = m828;
-    m829 = tmp;
-    m827 = tmp;
+    m827 = m829 = m828;
 
     dComIfGp_setMessageCountNumber(m800);
     dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m827)].field_0x00);
@@ -1335,9 +1329,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         }
 
         m825 = m824;
-        u8 tmp = m827;
-        m826 = tmp;
-        m824 = tmp;
+        m824 = m826 = m827;
         if (m826 != 0) {
             setLinkAnm(daPy_demo_c::DEMO_N_WAIT_e);
         }
@@ -1363,9 +1355,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
             if (msgSetNo == 999) {
                 *pMsgNo = 0x1D24;
                 m825 = m824;
-                u8 tmp = m827;
-                m826 = tmp;
-                m824 = tmp;
+                m824 = m826 = m827;
             } else {
                 *pMsgNo = 0x1CF9;
                 m82C = 4;  // ?

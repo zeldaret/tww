@@ -3838,7 +3838,7 @@ BOOL daShip_c::execute() {
                 
                 m040C += m0408;
 
-                BOOL r23; // BUG: this var is never initialized to FALSE
+                BOOL r23; // @bug: this var is never initialized to FALSE
                 if (mTornadoActor) {
                     current.pos.x = mTornadoActor->current.pos.x + (m0400 * cM_fsin(m040C));
                     current.pos.z = mTornadoActor->current.pos.z + (m0400 * cM_fcos(m040C));

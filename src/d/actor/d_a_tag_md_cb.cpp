@@ -215,7 +215,7 @@ BOOL daTag_MdCb_c::messageAction(void*) {
                     m2B4 = 2;
                 } else {
                     if (fopAcM_checkCarryNow(md)) {
-                        if (!(md->isNoCarryAction())) {
+                        if (!md->isNoCarryAction()) {
                             m2B4 = 1;
                         }
                     } else {

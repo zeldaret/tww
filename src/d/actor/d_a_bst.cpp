@@ -571,8 +571,7 @@ static void paa_attack(bst_class* i_this) {
         if (i_this->m10FC[0] == 0) {
             i_this->mDamage++;
             i_this->mTargetPos = player->current.pos;
-            sVar6 = fopAcM_searchPlayerAngleY(actor);
-            actor->current.angle.y = sVar6;
+            actor->current.angle.y = fopAcM_searchPlayerAngleY(actor);
         }
         break;
     case 2:
@@ -707,8 +706,7 @@ static void kumi_attack(bst_class* i_this) {
             i_this->mDamage++;
             i_this->mTargetPos = player->current.pos;
             i_this->mTargetPos.y += REG0_F(3) + 500.0f;
-            sVar5 = fopAcM_searchPlayerAngleY(actor);
-            actor->current.angle.y = sVar5;
+            actor->current.angle.y = fopAcM_searchPlayerAngleY(actor);
         }
         break;
     case 2:
@@ -837,8 +835,7 @@ static void harai_attack(bst_class* i_this) {
         i_this->m10EC.y = 0.0f;
         actor->speedF = 0.0f;
         i_this->m10FC[0] = REG0_S(5) + 20;
-        sVar2 = fopAcM_searchPlayerAngleY(actor);
-        actor->current.angle.y = sVar2;
+        actor->current.angle.y = fopAcM_searchPlayerAngleY(actor);
         anm_init(i_this, fly_bck_d[i_this->mBstPartType], 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         // fallthrough
     case 1:
@@ -2036,18 +2033,14 @@ static void end_brkbtk_set(bst_class* i_this) {
 
 /* 0000815C-00009FCC       .text demo_camera__FP9bst_class */
 void demo_camera(bst_class* i_this) {
-    /* Nonmatching */
     fopAc_ac_c* actor = &i_this->actor;
-    bst_class* pbVar5;
-    int iVar13;
-    int iVar14;
     J3DAnmTevRegKey* pJVar7;
     J3DAnmTextureSRTKey* pJVar8;
-    JPABaseEmitter* pJVar9;
     cXyz spB0; // offset
     cXyz spA4;
     daPy_py_c* player = daPy_getPlayerActorClass();
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+
     s8 bVar2 = true;
     switch (i_this->m2E9A) {
     case 1:
@@ -2244,8 +2237,7 @@ void demo_camera(bst_class* i_this) {
             if (i_this->msFrameCount == 30) {
                 boss->m02D4 = 1;
                 boss->m02C4 = 1;
-                pbVar5 = boss;
-                fopAcM_seStartCurrent(&pbVar5->actor, JA_SE_CM_BST_HEAD_LIGHT, 0);
+                fopAcM_seStartCurrent(&boss->actor, JA_SE_CM_BST_HEAD_LIGHT, 0);
             }
             if (i_this->msFrameCount == 59) {
                 i_this->mRoomState = 1;
@@ -2253,13 +2245,11 @@ void demo_camera(bst_class* i_this) {
             }
             if (i_this->msFrameCount == 60) {
                 boss->mDamage = 2;
-                pbVar5 = boss;
-                fopAcM_seStartCurrent(&pbVar5->actor, JA_SE_CM_BST_HEAD_EYE_OPEN, 0);
+                fopAcM_seStartCurrent(&boss->actor, JA_SE_CM_BST_HEAD_EYE_OPEN, 0);
             }
             if (i_this->msFrameCount == 90) {
                 boss->mDamage = 4;
-                pbVar5 = boss;
-                fopAcM_seStartCurrent(&pbVar5->actor, JA_SE_CM_BST_HEAD_OUT_WALL, 0);
+                fopAcM_seStartCurrent(&boss->actor, JA_SE_CM_BST_HEAD_OUT_WALL, 0);
             }
             if (i_this->msFrameCount == 150) {
                 i_this->m2E9A = 0xf;
@@ -2301,8 +2291,7 @@ void demo_camera(bst_class* i_this) {
         cLib_addCalc2(&i_this->m2EC8, 55.0f, 0.1f, 0.4f);
         if (i_this->msFrameCount == 200) {
             cXyz sp98(0.0f, 0.0f, 0.0f);
-            pJVar9 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTSTAGEEFFECT00, &sp98);
-            i_this->m2EF8 = pJVar9;
+            i_this->m2EF8 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTSTAGEEFFECT00, &sp98);
             JAIZelBasic::getInterface()->bstHoriOn();
         }
         if (i_this->msFrameCount == 300) {
@@ -2336,9 +2325,8 @@ void demo_camera(bst_class* i_this) {
         i_this->m2EA0.x = (REG0_F(2) + -500.0f) - 800.0f;
         player->changeOriginalDemo();
         end_brkbtk_set(i_this);
-        pJVar9 = i_this->m2EF8;
-        if (pJVar9 != NULL) {
-            pJVar9->becomeInvalidEmitter();
+        if (i_this->m2EF8 != NULL) {
+            i_this->m2EF8->becomeInvalidEmitter();
             i_this->m2EF8 = NULL;
             JAIZelBasic::getInterface()->bstHoriOff();
         }
@@ -2557,7 +2545,8 @@ void demo_camera(bst_class* i_this) {
         break;
     }
     }
-    if ((i_this->m2E9A != 0) && bVar2) {
+
+    if (i_this->m2E9A != 0 && bVar2) {
         f32 x = i_this->m2ECC * cM_ssin(i_this->msFrameCount * 0x3300);
         f32 y = i_this->m2ECC * cM_scos(i_this->msFrameCount * 0x3000);
         f32 z = i_this->m2ECC * cM_scos(i_this->msFrameCount * 0x3500);
@@ -3192,8 +3181,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             actor->max_health = 4;
         }
     }
-    f32 fVar = cM_rndFX(32768.0f);
-    i_this->mUpdateLastFacingDirIfMultipleOf32 = fVar;
+    i_this->mUpdateLastFacingDirIfMultipleOf32 = cM_rndFX(32768.0f);
 #if VERSION > VERSION_DEMO
     i_this->mEnvLight = actor->tevStr;
     i_this->m2F20 = actor->tevStr;
