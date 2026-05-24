@@ -97,8 +97,8 @@ void daWfall_c::CreateInit() {
     mParticlePos2 = current.pos;
     mParticleAngle1 = current.angle;
     mParticleAngle2 = current.angle;
-    dComIfGp_particle_set(dPa_name::ID_SCENE_810D, &mParticlePos1, &mParticleAngle1, NULL, 0xff, &mPCallBack, -1, NULL, NULL, NULL);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_810E, &mParticlePos2, &mParticleAngle2, NULL, 0xff, &mPCallBack2, -1, NULL, NULL, NULL);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_SIRENSUIRYU00, &mParticlePos1, &mParticleAngle1, NULL, 0xff, &mPCallBack, -1, NULL, NULL, NULL);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_SIRENSUIRYU01, &mParticlePos2, &mParticleAngle2, NULL, 0xff, &mPCallBack2, -1, NULL, NULL, NULL);
     mWtrSwitch = fpcM_GetParam(this) & 0xff;
     if (dComIfGs_isSwitch(mWtrSwitch, home.roomNo)) {
         mode_wtr_off_init();
@@ -166,29 +166,29 @@ void daWfall_c::set_minamo_mtx() {
 /* 00000AD0-00000C94       .text _execute__9daWfall_cFv */
 bool daWfall_c::_execute() {
     switch (mSomeCounter) {
-    case 0:
-        if (eventInfo.checkCommandDemoAccrpt() || dComIfGp_evmng_startCheck(mEvtIdx)) {
-            mSomeCounter += 1;
-        } else if (dComIfGs_isSwitch(mWtrSwitch, home.roomNo)) {
-            fopAcM_orderOtherEventId(this, mEvtIdx, 0xff, 0xffff, 0, 1);
-            eventInfo.onCondition(2);
-        }
-        break;
-    case 1:
-        if (dComIfGp_evmng_startCheck(mEvtIdx)) {
-            mode_wtr_off_init();
-            mSomeCounter += 1;
-        }
-        break;
-    case 2:
-        if (dComIfGp_evmng_endCheck(mEvtIdx)) {
-            dComIfGp_event_onEventFlag(8);
-            mSomeCounter = 10;
-        }
-        break;
-    case 10:
-        mSomeState = 0;
-        break;
+        case 0:
+            if (eventInfo.checkCommandDemoAccrpt() || dComIfGp_evmng_startCheck(mEvtIdx)) {
+                mSomeCounter += 1;
+            } else if (dComIfGs_isSwitch(mWtrSwitch, home.roomNo)) {
+                fopAcM_orderOtherEventId(this, mEvtIdx, 0xff, 0xffff, 0, 1);
+                eventInfo.onCondition(2);
+            }
+            break;
+        case 1:
+            if (dComIfGp_evmng_startCheck(mEvtIdx)) {
+                mode_wtr_off_init();
+                mSomeCounter += 1;
+            }
+            break;
+        case 2:
+            if (dComIfGp_evmng_endCheck(mEvtIdx)) {
+                dComIfGp_event_onEventFlag(8);
+                mSomeCounter = 10;
+            }
+            break;
+        case 10:
+            mSomeState = 0;
+            break;
     }
 
     if (!dComIfGs_isSwitch(mWtrSwitch, home.roomNo)) {
@@ -329,7 +329,7 @@ BOOL daWfall_c::setEmitter01Pos() {
 /* 00001098-000010D8       .text getWaterScaleFromGatePos__9daWfall_cFv */
 float daWfall_c::getWaterScaleFromGatePos() {
     /* Nonmatching */
-    
+
     float waterScale = mSePos.y - current.pos.y;
     if (waterScale < 0.0f) {
         waterScale = 0.0f;
