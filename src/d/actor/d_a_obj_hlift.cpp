@@ -264,8 +264,19 @@ void daObjHlift::Act_c::vib_set() {
 /* 00000CA8-00000D70       .text vib_proc__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::vib_proc() {
     if (field_0x2E8 > 0) {
+#if VERSION == VERSION_DEMO
+        float fVar4 = L_attr.field_0x20;
+        float fVar2 = 0.5f;
         float fVar1 = (L_attr.field_0x1C - field_0x2E8);
-        field_0x2EC = (L_attr.field_0x20 * (0.5f + fVar1 * (0.5f / L_attr.field_0x1C))) * cM_ssin(field_0x2EA);
+        float fVar3 = (fVar2 / L_attr.field_0x1C);
+#else
+        float fVar1 = (L_attr.field_0x1C - field_0x2E8);
+        float fVar2 = 0.5f;
+        float fVar3 = (fVar2 / L_attr.field_0x1C);
+        float fVar4 = L_attr.field_0x20;
+#endif
+        float fVar5 = (fVar4 * (0.5f + fVar1 * fVar3));
+        field_0x2EC = fVar5 * cM_ssin(field_0x2EA);
         field_0x2EA += L_attr.field_0x1E;
         field_0x2E8--;
     } else {
