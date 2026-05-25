@@ -54,7 +54,7 @@ public:
     /* 0x352 */ s16 mSomeState;
     /* 0x354 */ u8 field_0x354[0x355 - 0x354];
     /* 0x355 */ u8 mSomeCounter;
-    /* 0x356 */ u8 mSomeFlag;
+    /* 0x356 */ u8 mType;
     /* 0x357 */ u8 field_0x357[0x358 - 0x357];
 }; // Size: 0x358
 

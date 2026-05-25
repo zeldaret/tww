@@ -3,10 +3,6 @@
 // Translation Unit: d_a_waterfall.cpp
 //
 
-/*
-* Likely: Entrance waterfall in Tower of the Gods.
-*/
-
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_waterfall.h"
 #include "d/d_bg_s_func.h"
@@ -22,7 +18,6 @@ const s16 daWfall_c::m_heapsize[] = {0x35a0, 0x4870};
 
 /* 00000078-000000F0       .text _delete__9daWfall_cFv */
 bool daWfall_c::_delete() {
-    /* Nonmatching */
     mPCallBack.end();
     mPCallBack2.end();
     dComIfG_resDelete(&mPhs, m_arcname);
@@ -58,7 +53,7 @@ BOOL daWfall_c::CreateHeap() {
         return FALSE;
     }
 
-    if (mSomeFlag == true) {
+    if (mType == true) {
         modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, WFALL_BDL_YSMNM00);
         JUT_ASSERT(0x129, modelData != NULL);
         mModelMinamo = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
@@ -86,7 +81,7 @@ BOOL daWfall_c::CreateHeap() {
 /* 0000048C-00000708       .text CreateInit__9daWfall_cFv */
 void daWfall_c::CreateInit() {
     cullMtx = mModelWater->getBaseTRMtx();
-    if (mSomeFlag == true) {
+    if (mType == true) {
         fopAcM_setCullSizeBox(this, -1000.0f, 0.0f, -200.0f, 1200.0f, 1000.0f, 3800.0f);
     } else {
         fopAcM_setCullSizeBox(this, -250.0f, 0.0f, 0.0f, 250.0f, 1000.0f, 800.0f);
@@ -104,14 +99,14 @@ void daWfall_c::CreateInit() {
         mode_wtr_off_init();
         mSePos = current.pos;
         mSomeCounter = 10;
-        if (mSomeFlag == true) {
+        if (mType == true) {
             mBrkAnm.setFrame(mBrkAnm.getEndFrame());
         }
     } else {
         mode_wtr_on_init();
         mSePos = current.pos;
         mSePos.y += 863.0f;
-        if (mSomeFlag == true) {
+        if (mType == true) {
             mBrkAnm.setFrame(0.0f);
         }
     }
@@ -124,8 +119,8 @@ cPhs_State daWfall_c::_create() {
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, m_arcname);
     if (ret == cPhs_COMPLEATE_e) {
-        mSomeFlag = (fopAcM_GetParam(this) >> 8) & 0xf;
-        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mSomeFlag])) {
+        mType = (fopAcM_GetParam(this) >> 8) & 0xf;
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])) {
             return cPhs_ERROR_e;
         }
         CreateInit();
@@ -196,7 +191,7 @@ bool daWfall_c::_execute() {
         mSomeCounter = 0;
     }
 
-    if (mSomeFlag == true) {
+    if (mType == true) {
         mBrkAnm.play();
         mBtkAnm2.play();
         set_minamo_mtx();
@@ -209,7 +204,6 @@ bool daWfall_c::_execute() {
 
 /* 00000C94-00000D20       .text mode_proc_call__9daWfall_cFv */
 void daWfall_c::mode_proc_call() {
-    /* Nonmatching */
     typedef void (daWfall_c::*ProcFunc)(void);
     static const ProcFunc mode_proc[] = {
         &daWfall_c::mode_wtr_on,
@@ -222,7 +216,7 @@ void daWfall_c::mode_proc_call() {
 /* 00000D20-00000D48       .text mode_wtr_on_init__9daWfall_cFv */
 void daWfall_c::mode_wtr_on_init() {
     mModeProc = 0;
-    if (mSomeFlag == true) {
+    if (mType == true) {
         mBrkAnm.setPlaySpeed(-1.0f);
     }
 }
@@ -247,7 +241,7 @@ void daWfall_c::mode_wtr_on() {
 /* 00000DEC-00000E14       .text mode_wtr_off_init__9daWfall_cFv */
 void daWfall_c::mode_wtr_off_init() {
     mModeProc = 1;
-    if (mSomeFlag == true) {
+    if (mType == true) {
         mBrkAnm.setPlaySpeed(1.0f);
     }
 }
@@ -285,11 +279,11 @@ BOOL daWfall_c::setEmitter00Pos() {
     float waterHeight = getWaterHeight();
     if (waterHeight > mSePos.y) {
         if (mPCallBack.getEmitter() != NULL) {
-            mPCallBack.getEmitter()->setStatus(1);
+            mPCallBack.getEmitter()->stopCreateParticle();
         }
     } else {
         if (mPCallBack.getEmitter() != NULL) {
-            mPCallBack.getEmitter()->clearStatus(1);
+            mPCallBack.getEmitter()->playCreateParticle();
         }
         ret = TRUE;
     }
@@ -328,8 +322,6 @@ BOOL daWfall_c::setEmitter01Pos() {
 
 /* 00001098-000010D8       .text getWaterScaleFromGatePos__9daWfall_cFv */
 float daWfall_c::getWaterScaleFromGatePos() {
-    /* Nonmatching */
-
     float waterScale = mSePos.y - current.pos.y;
     if (waterScale < 0.0f) {
         waterScale = 0.0f;
@@ -361,7 +353,7 @@ float daWfall_c::getWaterHeight() {
 
 /* 00001370-000013E0       .text set_se__9daWfall_cFv */
 void daWfall_c::set_se() {
-    mDoAud_seStart(0x701f, &mSePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+    mDoAud_seStart(JA_SE_ATM_WATER_GATE, &mSePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 }
 
 bool daWfall_c::_draw() {
@@ -374,7 +366,7 @@ bool daWfall_c::_draw() {
     g_env_light.setLightTevColorType(mModelGate, &tevStr);
     mDoExt_modelUpdateDL(mModelGate);
 
-    if (mSomeFlag == true) {
+    if (mType == true) {
         g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(mModelMinamo, &tevStr);
         mBtkAnm2.entry(mModelMinamo->getModelData());
