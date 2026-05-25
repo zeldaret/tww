@@ -38,7 +38,7 @@ public:
     /* 0x29C */ J3DModel* mModelGate;
     /* 0x2A0 */ J3DModel* mModelMinamo; // water surface model
     /* 0x2A4 */ int mModeProc;
-    /* 0x2A8 */ int mWtrSwitch;
+    /* 0x2A8 */ int mSwitchNo;
     /* 0x2AC */ mDoExt_btkAnm mBtkAnm;
     /* 0x2C0 */ mDoExt_brkAnm mBrkAnm;
     /* 0x2D8 */ mDoExt_btkAnm mBtkAnm2;
