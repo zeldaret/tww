@@ -136,7 +136,7 @@ void daObjHlift::Act_c::mode_l_u() {
         if (fVar1 < L_attr.field_0x04) {
             cLib_chaseF(&field_0x2F0, L_attr.field_0x08, L_attr.field_0x10);
         } else {
-            if (M_up_dist[field_0x2D8] - L_attr.field_0x04 > fVar1) {
+            if (fVar1 < M_up_dist[field_0x2D8] - L_attr.field_0x04) {
                 field_0x2F0 = L_attr.field_0x08;
             } else {
                 cLib_chaseF(&field_0x2F0, L_attr.field_0x0C, L_attr.field_0x14);
@@ -186,7 +186,7 @@ void daObjHlift::Act_c::mode_u_l() {
         if (fVar1 < L_attr.field_0x04) {
             cLib_chaseF(&field_0x2F0, L_attr.field_0x0C, L_attr.field_0x14);
         } else {
-            if (M_up_dist[field_0x2D8] - L_attr.field_0x04 > fVar1) {
+            if (fVar1 < M_up_dist[field_0x2D8] - L_attr.field_0x04) {
                 field_0x2F0 = L_attr.field_0x08;
             } else {
                 cLib_chaseF(&field_0x2F0, L_attr.field_0x08, L_attr.field_0x10);
