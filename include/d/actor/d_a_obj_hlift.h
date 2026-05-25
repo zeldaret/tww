@@ -70,7 +70,7 @@ namespace daObjHlift {
         void rot_set();
         void vib_set();
         void vib_proc();
-        BOOL chk_demo_end();
+        bool chk_demo_end();
         void se_whole();
         virtual BOOL Execute(Mtx**);
         virtual BOOL Draw();

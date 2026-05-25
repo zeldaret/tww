@@ -14,7 +14,8 @@ namespace daObjHlift {
 namespace {
     int L_time_lag_num;
     static const Attr_c L_attr = { 30.0f, 50.0f, 10.0f, 2.0f, 0.3f, 1.2f, 250.0f, 10, 16384, 2.5f, 0x00, 0x02, 0x0a, 0x08, 0x07, 0x00, 0x00, 0x00 };
-}
+} // namespace
+
 Mtx Act_c::M_tmp_mtx;
 u8 Act_c::M_lift_move_flag;
 fpc_ProcID Act_c::M_control_id = fpcM_ERROR_PROCESS_ID_e;
@@ -26,7 +27,7 @@ const Act_c::size_data Act_c::M_data_size[2] = {
     { HLIFT_BDL_HLIFTB, HLIFT_DZB_HLIFTB, DEMO_SELECT(0x8000, 0x1700) }
 };
 
-}
+} // namespace daObjHlift
 
 /* 00000078-000001BC       .text CreateHeap__Q210daObjHlift5Act_cFv */
 BOOL daObjHlift::Act_c::CreateHeap() {
@@ -128,11 +129,10 @@ void daObjHlift::Act_c::mode_l_u_init() {
 
 /* 000005B8-00000724       .text mode_l_u__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::mode_l_u() {
-    /* Nonmatching */
     if (field_0x2F4 > 0) {
         field_0x2F4--;
     } else {
-        float fVar1 = current.pos.y - home.pos.y;
+        f32 fVar1 = current.pos.y - home.pos.y;
         if (fVar1 < L_attr.field_0x04) {
             cLib_chaseF(&field_0x2F0, L_attr.field_0x08, L_attr.field_0x10);
         } else {
@@ -178,11 +178,10 @@ void daObjHlift::Act_c::mode_u_l_init() {
 
 /* 000008A0-000009DC       .text mode_u_l__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::mode_u_l() {
-    /* Nonmatching */
     if (field_0x2F4 > 0) {
         field_0x2F4--;
     } else {
-        float fVar1 = current.pos.y - home.pos.y;
+        f32 fVar1 = current.pos.y - home.pos.y;
         if (fVar1 < L_attr.field_0x04) {
             cLib_chaseF(&field_0x2F0, L_attr.field_0x0C, L_attr.field_0x14);
         } else {
@@ -225,9 +224,9 @@ void daObjHlift::Act_c::mode_demoreq() {
 
 /* 00000B28-00000BE8       .text set_mtx__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::set_mtx() {
-    float z = current.pos.z;
-    float y1 = current.pos.y + field_0x2EC;
-    float y2 = y1 + L_attr.field_0x00;
+    f32 z = current.pos.z;
+    f32 y1 = current.pos.y + field_0x2EC;
+    f32 y2 = y1 + L_attr.field_0x00;
     mDoMtx_stack_c::transS(current.pos.x, y2, z);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mModel1->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -245,8 +244,8 @@ void daObjHlift::Act_c::init_mtx() {
 
 /* 00000C40-00000C8C       .text rot_set__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::rot_set() {
-    float fVar1 = current.pos.y - home.pos.y;
-    float fVar2 = (65536.0f/L_attr.field_0x18);
+    f32 fVar1 = current.pos.y - home.pos.y;
+    f32 fVar2 = (65536.0f/L_attr.field_0x18);
     shape_angle.y = -(s16)(int)(fVar1 * fVar2);
 }
 
@@ -258,12 +257,12 @@ void daObjHlift::Act_c::vib_set() {
 
 /* 00000CA8-00000D70       .text vib_proc__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::vib_proc() {
-    if (field_0x2E8 > 0) {
-        float fVar4 = L_attr.field_0x20;
-        float fVar2 = 0.5f;
-        float fVar1 = (L_attr.field_0x1C - field_0x2E8);
-        float fVar3 = (fVar2 / L_attr.field_0x1C);
-        float fVar5 = (fVar4 * (0.5f + fVar1 * fVar3));
+    s16 temp = field_0x2E8;
+    if (temp > 0) {
+        f32 fVar2;
+        f32 fVar4 = L_attr.field_0x20;
+        fVar2 = 0.5f;
+        f32 fVar5 = (fVar4 * (fVar2 + (L_attr.field_0x1C - temp) * (fVar2 / L_attr.field_0x1C)));
         field_0x2EC = fVar5 * cM_ssin(field_0x2EA);
         field_0x2EA += L_attr.field_0x1E;
         field_0x2E8--;
@@ -273,8 +272,7 @@ void daObjHlift::Act_c::vib_proc() {
 }
 
 /* 00000D70-00000DE8       .text chk_demo_end__Q210daObjHlift5Act_cFv */
-BOOL daObjHlift::Act_c::chk_demo_end() {
-    /* Nonmatching */
+bool daObjHlift::Act_c::chk_demo_end() {
     if (field_0x2F6 != 0 && dComIfGp_evmng_endCheck(mEventId)) {
         dComIfGp_event_reset();
         field_0x2F6 = 0;
@@ -292,7 +290,6 @@ void daObjHlift::Act_c::se_whole() {
 
 /* 00000E74-00000FD4       .text Execute__Q210daObjHlift5Act_cFPPA3_A4_f */
 BOOL daObjHlift::Act_c::Execute(Mtx** param_1) {
-    /* Nonmatching */
     typedef void (daObjHlift::Act_c::*procFunc)();
     static procFunc mode_proc[] = {
         &daObjHlift::Act_c::mode_lower,
