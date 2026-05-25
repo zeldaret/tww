@@ -225,8 +225,15 @@ void daObjHlift::Act_c::mode_demoreq() {
 
 /* 00000B28-00000BE8       .text set_mtx__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::set_mtx() {
-    float fVar1 = current.pos.y + field_0x2EC;
-    mDoMtx_stack_c::transS(current.pos.x, fVar1 + L_attr.field_0x00, current.pos.z);
+#if VERSION == VERSION_DEMO
+    float z = current.pos.z;
+#endif    
+    float y1 = current.pos.y + field_0x2EC;
+    float y2 = y1 + L_attr.field_0x00;
+#if VERSION > VERSION_DEMO
+    float z = current.pos.z;
+#endif
+    mDoMtx_stack_c::transS(current.pos.x, y2, z);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mModel1->setBaseTRMtx(mDoMtx_stack_c::get());
     cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
