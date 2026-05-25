@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_salvage_tbox.h"
+#include "d/actor/d_a_ship.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
@@ -17,7 +18,7 @@ const f32 daSTBox_c::m_shadow_depth = 2000.0f;
 const f32 daSTBox_c::m_shadow_scroll = -0.1f;
 const f32 daSTBox_c::m_shadow_scale = 4.0f;
 
-const f32 daSTBox_c::crane_offset[] = {80.0f, 125.0f, 125.0f};
+const f32 crane_offset[] = {80.0f, 125.0f, 125.0f};
 
 
 
@@ -96,7 +97,7 @@ void daSTBox_c::set_mtx() {
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
-    mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000C7C-00000EB8       .text _execute__9daSTBox_cFv */
@@ -151,14 +152,16 @@ void daSTBox_c::actDrop(int) {
 /* 00001344-000013AC       .text actWait02__9daSTBox_cFi */
 s32 daSTBox_c::actWait02(int) {
     /* Nonmatching */
-    cXyz* pos = &(g_dComIfG_gameInfo.play.getStage().getShip()->m_entries->m_pos);
+    cXyz* pos = dComIfGp_getShipActor()->getCraneTop();
+    // daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
+    // cXyz* pos = ship->getCraneTop();
+    // cXyz* pos = ((daShip_c*)(g_dComIfG_gameInfo.play.mpPlayerPtr[2]))->getCraneTop();
     if (pos != NULL) {
+        f32 x = pos->x;
         f32 y = pos->y;
         f32 z = pos->z;
-        f32 offset = this->crane_offset[this->field_0x331];
-        // f32 offset = 2;
-        // cXyz* newPos = new cXyz(pos->x, y - offset, z);
-        this->current.pos.x = pos->x;
+        f32 offset = crane_offset[this->field_0x331];
+        this->current.pos.x = x;
         this->current.pos.y = y - offset;
         this->current.pos.z = z;
     }

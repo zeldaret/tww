@@ -51,7 +51,6 @@ public:
     static const f32 m_shadow_scroll;
     static const f32 m_shadow_scale;
     
-    static const f32 crane_offset[3];
 public:
     /* 0x290 */ request_of_phase_process_class field_0x290;
     /* 0x298 */ J3DModel* mpModel;
