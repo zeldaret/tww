@@ -94,8 +94,8 @@ void daWfall_c::CreateInit() {
     mParticleAngle2 = current.angle;
     dComIfGp_particle_set(dPa_name::ID_AK_SN_SIRENSUIRYU00, &mParticlePos1, &mParticleAngle1, NULL, 0xff, &mPCallBack, -1, NULL, NULL, NULL);
     dComIfGp_particle_set(dPa_name::ID_AK_SN_SIRENSUIRYU01, &mParticlePos2, &mParticleAngle2, NULL, 0xff, &mPCallBack2, -1, NULL, NULL, NULL);
-    mWtrSwitch = fpcM_GetParam(this) & 0xff;
-    if (dComIfGs_isSwitch(mWtrSwitch, home.roomNo)) {
+    mSwitchNo = fpcM_GetParam(this) & 0xff;
+    if (dComIfGs_isSwitch(mSwitchNo, home.roomNo)) {
         mode_wtr_off_init();
         mSePos = current.pos;
         mSomeCounter = 10;
@@ -164,7 +164,7 @@ bool daWfall_c::_execute() {
         case 0:
             if (eventInfo.checkCommandDemoAccrpt() || dComIfGp_evmng_startCheck(mEvtIdx)) {
                 mSomeCounter += 1;
-            } else if (dComIfGs_isSwitch(mWtrSwitch, home.roomNo)) {
+            } else if (dComIfGs_isSwitch(mSwitchNo, home.roomNo)) {
                 fopAcM_orderOtherEventId(this, mEvtIdx, 0xff, 0xffff, 0, 1);
                 eventInfo.onCondition(2);
             }
@@ -186,7 +186,7 @@ bool daWfall_c::_execute() {
             break;
     }
 
-    if (!dComIfGs_isSwitch(mWtrSwitch, home.roomNo)) {
+    if (!dComIfGs_isSwitch(mSwitchNo, home.roomNo)) {
         mode_wtr_on_init();
         mSomeCounter = 0;
     }
