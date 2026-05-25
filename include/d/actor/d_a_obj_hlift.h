@@ -27,25 +27,28 @@ namespace daObjHlift {
         };
 
         enum Mode_e {
-            // FIXME names
             Mode_L_U = 0x01,
             Mode_U_L = 0x03,
             Mode_UNK = 0x05,
         };
     
         enum Prm_e {
-            // FIXME names
-            PRM_HLIFT_0 = 0x00,
-            PRM_HLIFT_1 = 0x01,
-            PRM_HLIFT_3 = 0x03,
-            PRM_HLIFT_4 = 0x04,
-            PRM_HLIFT_8 = 0x08,
-            PRM_HLIFT_16 = 0x10,
+            PRM_DIST_W = 3,
+            PRM_DIST_S = 0,
+
+            PRM_EVENTID_W = 8,
+            PRM_EVENTID_S = 0x10,
+
+            PRM_SIZE_W = 1,
+            PRM_SIZE_S = 4,
+        
+            PRM_SWSAVE_W = 8,
+            PRM_SWSAVE_S = 8,
         };
-        int prm_get_dist() const { return daObj::PrmAbstract<Prm_e>(this, PRM_HLIFT_3, PRM_HLIFT_0); }
-        u8 prm_get_evId() const { return daObj::PrmAbstract<Prm_e>(this, PRM_HLIFT_8, PRM_HLIFT_16); }
-        int prm_get_size() const { return daObj::PrmAbstract<Prm_e>(this, PRM_HLIFT_1, PRM_HLIFT_4); }
-        int prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_HLIFT_8, PRM_HLIFT_8); }
+        int prm_get_dist() const { return daObj::PrmAbstract<Prm_e>(this, PRM_DIST_W, PRM_DIST_S); }
+        u8 prm_get_evId() const { return daObj::PrmAbstract<Prm_e>(this, PRM_EVENTID_W, PRM_EVENTID_S); }
+        int prm_get_size() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SIZE_W, PRM_SIZE_S); }
+        int prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
     
         virtual BOOL CreateHeap();
         virtual BOOL Create();
