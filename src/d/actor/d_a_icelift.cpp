@@ -5,73 +5,328 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_icelift.h"
+#include "d/actor/d_a_player_main.h"
 #include "d/d_bg_w.h"
+#include "d/d_lib.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_bg_s_movebg_actor.h"
+#include "d/res/res_ylsic.h"
+#include "d/res/res_yllic.h"
+
+const char* daIlift_c::m_arcname[2] = {
+    "Ylsic",
+    "Yllic",
+};
+
+const int daIlift_c::m_bmdidx[2] = {
+    YLSIC_BDL_YLSIC,
+    YLLIC_BDL_YLLIC,
+};
+
+const int daIlift_c::m_dzbidx[2] = {
+    YLSIC_DZB_YLSIC,
+    YLLIC_DZB_YLLIC,
+};
+
+const int daIlift_c::m_heapsize[2] = {
+    0x0AE0,
+    0x1B80,
+};
+
+const float daIlift_c::m_down_param[1] = {4.0f};
+const float daIlift_c::m_max_speed[1] = {4.0f};
 
 /* 00000078-000000E0       .text _delete__9daIlift_cFv */
 bool daIlift_c::_delete() {
-    /* Nonmatching */
+    #if VERSION>VERSION_DEMO
+    if(heap != NULL)
+    #endif
+    {
+        dComIfG_Bgsp()->Release(mpBgW);
+    }
+    dComIfG_resDeleteDemo(&mPhase, m_arcname[mType]);
+    return true;
+
 }
 
 /* 000000E0-00000100       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
-}
-
-/* 00000100-00000284       .text CreateHeap__9daIlift_cFv */
-void daIlift_c::CreateHeap() {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daIlift_c*)i_this)->CreateHeap();
 }
 
 /* 00000284-00000480       .text rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
+void rideCallBack(dBgW*, fopAc_ac_c* ac1, fopAc_ac_c* ac2);
+
+/* 00000100-00000284       .text CreateHeap__9daIlift_cFv */
+BOOL daIlift_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mType], m_bmdidx[mType]);
+    JUT_ASSERT(DEMO_SELECT(0xe9, 0xeb), modelData != NULL);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if(mpModel == NULL) return FALSE;
+
+    mpBgW = new dBgW();
+    if(mpBgW != NULL){
+        cBgD_t* data = (cBgD_t*) dComIfG_getObjectRes(m_arcname[mType], m_dzbidx[mType]);
+        if(mpBgW->Set(data, dBgW::MOVE_BG_e, &mMtx) == 1) {
+            return FALSE;
+        }
+        else{
+            mpBgW->SetCrrFunc(dBgS_MoveBGProc_TypicalRotY);
+            mpBgW->SetRideCallback(rideCallBack);
+        }
+    }
+    else{
+        return FALSE;
+    }
+    return TRUE;
+    
 }
+
+void rideCallBack(dBgW*, fopAc_ac_c* ac1, fopAc_ac_c* ac2) {
+    daIlift_c* i_this = (daIlift_c*)ac1;
+    cXyz vec1 = ac2->current.pos - i_this->current.pos;
+    i_this->field_0x4FC = vec1;
+
+    if(fopAcM_GetName(ac2) == PROC_PLAYER){
+        i_this->field_0x4D4 = 1;
+        i_this->field_0x510 = 0;
+        cXyz prod;
+        prod.set(0, 1, 0);
+        vec1 = vec1.outprod(prod);
+
+        f32 f4 = vec1.getSquareMag();
+        f4 = std::sqrtf(f4);
+        i_this->field_0x54C = f4;
+        if(vec1.normalizeRS()){
+            f32 temp = -i_this->field_0x54C;
+            i_this->field_0x4D8 = temp *= 4.0f;
+
+            cLib_addCalcAngleS2(&i_this->field_0x4D6, i_this->field_0x4D8, 8, 0x200);
+            f4 = cM_ssin(i_this->field_0x4D6);
+            i_this->mQuat1.x = vec1.x * f4;
+            i_this->mQuat1.y = vec1.y * f4;
+            i_this->mQuat1.z = vec1.z * f4;
+            i_this->mQuat1.w = cM_scos(i_this->field_0x4D6);;
+            i_this->field_0x508 = 10.0f;
+        }
+    }
+    return;
+}
+
 
 /* 00000480-00000680       .text CreateInit__9daIlift_cFv */
 void daIlift_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -200.0f, -250.0f, -200.0f, 200.0f, 250.0f, 200.0f);
+    fopAcM_setCullSizeFar(this, 1.0f);
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), NULL, NULL);
+    mObjAcch.ClrWaterNone();
+    mObjAcch.ClrRoofNone();
+
+    fopAcM_SetGravity(this, -5.0f);
+    mQuat1 = ZeroQuat;
+    mQuat2.x = mQuat1.x;
+    mQuat2.y = mQuat1.y;
+    mQuat2.z = mQuat1.z;
+    mQuat2.w = mQuat1.w;
+
+    mPathId = fopAcM_GetParamBit(fopAcM_GetParam(this), 4, 20);
+    if(daIlift_prm::getPathId(this) != 0xff){
+        mpPath = dPath_GetRoomPath(daIlift_prm::getPathId(this), fopAcM_GetRoomNo(this));
+        if(mpPath != NULL) {
+            mPathPointDir = 1;
+            mCurPathPoint = 1;
+
+            dPnt* pnt = mpPath->m_points;
+            pnt += mCurPathPoint;
+            mTargetPos.set(pnt->m_position);
+
+            field_0x528.set(mTargetPos);
+
+            current.pos.x = (mpPath->m_points[0].m_position.x);
+            current.pos.y = (mpPath->m_points[0].m_position.y);
+            current.pos.z = (mpPath->m_points[0].m_position.z);
+        }else{
+            mPathId = 0xff;
+        }
+    }
+    field_0x554 = daIlift_prm::getSwNo(this);
+    dComIfG_Bgsp()->Regist(mpBgW, this);
+    set_mtx();
+    mpBgW->Move();
 }
 
 /* 00000680-00000794       .text _create__9daIlift_cFv */
 cPhs_State daIlift_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daIlift_c);
+    mType = daIlift_prm::getType(this);
+    cPhs_State state;
+    if(mType>=2){
+        return state=cPhs_ERROR_e;
+    }
+    else{
+        state = dComIfG_resLoad(&mPhase, m_arcname[mType]);
+        if(state == cPhs_COMPLEATE_e){
+            if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])){
+                return state = cPhs_ERROR_e;
+            }
+            else CreateInit();
+        }
+    }
+    return state;
+
 }
 
 /* 00000804-0000089C       .text set_mtx__9daIlift_cFv */
 void daIlift_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::quatM(&mQuat2);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.x);
+    PSMTXCopy(mDoMtx_stack_c::get(), mMtx);
 }
 
 /* 0000089C-000009C8       .text _execute__9daIlift_cFv */
 bool daIlift_c::_execute() {
-    /* Nonmatching */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    field_0x538 = 4.0f;
+    field_0x50C++;
+    field_0x510++;
+    path_move();
+    lift_wave();
+    mDoMtx_quatSlerp(&mQuat2, &mQuat1, &mQuat2, 0.25f);
+    field_0x4D5=field_0x4D4;
+    field_0x4D4=0;
+
+    if(field_0x554 != 0xff){
+        if(!fopAcM_isSwitch(this, field_0x554)){
+            mpBgW->ChangeAttributeCodeByPathPntNo(0x40, 0x15);
+            mpBgW->ChangeAttributeCodeByPathPntNo(0x41, 0x9);
+        }
+        else{
+            mpBgW->ChangeAttributeCodeByPathPntNo(0x40, 0xf);
+            mpBgW->ChangeAttributeCodeByPathPntNo(0x41, 0x0);
+        }
+    }
+    set_mtx();
+    mpBgW->Move();
+    field_0x558 = player->current.pos;
+    return true;
+
 }
 
 /* 000009C8-00000C8C       .text lift_wave__9daIlift_cFv */
 void daIlift_c::lift_wave() {
-    /* Nonmatching */
+    cXyz prod;
+    prod.set(0.0f, 1.0f, 0.0f);
+    daPy_py_c* player = daPy_getPlayerActorClass();
+
+    if(field_0x4D4 == 0 && field_0x4D5 != 0){
+        f32 f4 = (field_0x558 - player->current.pos).absXZ();
+        field_0x4D8 = (f4/18.0f)*(-field_0x54C*4.0f*10.0f);
+        field_0x54C = 0;
+    }
+    if(field_0x4D4 == 0){
+        f32 cos = cM_scos(field_0x510<<10);
+        s16 target = field_0x4D8*cos/field_0x510;
+        cLib_addCalcAngleS(&field_0x4D6, target, 4, 0x800, 0x400);
+        f32 f4 = cM_ssin(field_0x4D6);
+        cXyz tester = field_0x4FC.outprod(prod);
+        tester = tester.normZP();
+        if(tester != cXyz::Zero){
+            mQuat1.x = tester.x * f4;
+            mQuat1.y = tester.y * f4;
+            mQuat1.z = tester.z * f4;
+            mQuat1.w = cM_scos(field_0x4D6);;
+        }
+        if(field_0x510 > 0x78){
+            field_0x4D8 = 0;
+        }
+    }
 }
 
 /* 00000C8C-00000CB8       .text path_move__9daIlift_cFv */
 void daIlift_c::path_move() {
-    /* Nonmatching */
+    if(daIlift_prm::getPathId(this) != 0xff) lift_normal_move();
 }
 
 /* 00000CB8-00000E5C       .text lift_normal_move__9daIlift_cFv */
 void daIlift_c::lift_normal_move() {
-    /* Nonmatching */
+    f32 f3;
+    switch (field_0x545) {
+        case 0:
+            field_0x545 = 1;
+            field_0x540 = 0;
+            set_next_pnt();
+        case 1:
+            field_0x540++;
+            f3 = cLib_addCalc(&field_0x53C, field_0x538, 0.25f, 1.0f, 1.0f);
+            if(f3 == 0.0f){
+                field_0x545 = 2;
+            }
+            break;
+        case 2:
+            field_0x540 = 0;
+            f3 = (current.pos - mTargetPos).getSquareMag();
+            f3 = std::sqrtf(f3);
+            if(f3 < 50.0f){
+                field_0x545 = 3;
+            }
+            break;
+        case 3:
+            field_0x540++;
+            f3 = cLib_addCalc(&field_0x53C, field_0x538 / 2.2f, 0.25f, 1.0f, 1.0f);
+            if(f3 == 0.0f){
+                field_0x545 = 0;
+            }
+            break;
+        default:
+            break;
+    }
+
+    cLib_addCalcPos2(&current.pos, mTargetPos, 1.0f, field_0x53C);
 }
 
 /* 00000E5C-00000F58       .text set_next_pnt__9daIlift_cFv */
 void daIlift_c::set_next_pnt() {
-    /* Nonmatching */
+    if(daIlift_prm::getPathId(this) == 0xff) return;
+    mCurPathPoint += mPathPointDir;
+
+    if(dPath_ChkClose(mpPath)){
+        if (mCurPathPoint >(s8)mpPath->m_num - 1){
+            mCurPathPoint = 0;
+        }
+        else if(mCurPathPoint < 0){
+            mCurPathPoint = mpPath->m_num - 1;
+        }
+    } else{
+        if (mCurPathPoint > mpPath->m_num - 1){
+            mPathPointDir = -1;
+            mCurPathPoint = mpPath->m_num - 2;
+        }
+        else if(mCurPathPoint < 0){
+            mPathPointDir = 1;
+            mCurPathPoint = 1;
+        }
+    }
+    field_0x528 = mTargetPos;
+    dPnt* pnt = &mpPath->m_points[mCurPathPoint];
+    mTargetPos = pnt->m_position;
+
+
 }
 
 /* 00000F58-00000FF8       .text _draw__9daIlift_cFv */
 bool daIlift_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+    return true;
 }
 
 /* 00000FF8-00001018       .text daIlift_Create__FPv */
