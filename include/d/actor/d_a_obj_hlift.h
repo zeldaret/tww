@@ -77,7 +77,7 @@ namespace daObjHlift {
     
         static Mtx M_tmp_mtx;
         static u8 M_lift_move_flag;
-        static int M_control_id;
+        static fpc_ProcID M_control_id;
         static const char M_arcname[];
         static const char M_evname[];
         static const s16 M_up_dist[8];

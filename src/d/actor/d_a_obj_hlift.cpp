@@ -17,13 +17,13 @@ namespace {
 }
 Mtx Act_c::M_tmp_mtx;
 u8 Act_c::M_lift_move_flag;
-int Act_c::M_control_id = -1;
+fpc_ProcID Act_c::M_control_id = fpcM_ERROR_PROCESS_ID_e;
 const char Act_c::M_arcname[] = "Hlift";
 const char Act_c::M_evname[] = "Hlift_up";
 const s16 Act_c::M_up_dist[] = { 125, 250, 375, 500, 625, 750, 875, 1000 };
 const Act_c::size_data Act_c::M_data_size[2] = {
-    { HLIFT_BDL_HLIFT, HLIFT_DZB_HLIFT, VERSION_SELECT(32768, 5888, 5888, 5888) },
-    { HLIFT_BDL_HLIFTB, HLIFT_DZB_HLIFTB, VERSION_SELECT(32768, 5888, 5888, 5888) }
+    { HLIFT_BDL_HLIFT, HLIFT_DZB_HLIFT, DEMO_SELECT(0x8000, 0x1700) },
+    { HLIFT_BDL_HLIFTB, HLIFT_DZB_HLIFTB, DEMO_SELECT(0x8000, 0x1700) }
 };
 
 }
@@ -62,7 +62,7 @@ BOOL daObjHlift::Act_c::Create() {
         1.0f,
         151.0f
     );
-    if (M_control_id == 0xffffffff) {
+    if (M_control_id == fpcM_ERROR_PROCESS_ID_e) {
         M_control_id = base.base.mBsPcId;
     }
     return TRUE;
@@ -89,7 +89,7 @@ cPhs_State daObjHlift::Act_c::Mthd_Create() {
 /* 00000408-00000430       .text Delete__Q210daObjHlift5Act_cFv */
 BOOL daObjHlift::Act_c::Delete() {
     if (M_control_id == base.base.mBsPcId) {
-        M_control_id = -1;
+        M_control_id = fpcM_ERROR_PROCESS_ID_e;
     }
     return TRUE;
 }
@@ -203,7 +203,7 @@ void daObjHlift::Act_c::mode_u_l() {
 
 /* 000009DC-00000AB0       .text mode_demoreq_init__Q210daObjHlift5Act_cFQ310daObjHlift5Act_c6Mode_e */
 void daObjHlift::Act_c::mode_demoreq_init(daObjHlift::Act_c::Mode_e next) {
-    JUT_ASSERT(VERSION_SELECT(573, 575, 575, 575), (next == Mode_U_L) || (next == Mode_L_U));
+    JUT_ASSERT(DEMO_SELECT(573, 575), (next == Mode_U_L) || (next == Mode_L_U));
     field_0x2E4 = next;
     field_0x2F6 = 0;
     fopAcM_orderOtherEventId(this, mEventId, prm_get_evId());
@@ -225,14 +225,9 @@ void daObjHlift::Act_c::mode_demoreq() {
 
 /* 00000B28-00000BE8       .text set_mtx__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::set_mtx() {
-#if VERSION == VERSION_DEMO
     float z = current.pos.z;
-#endif    
     float y1 = current.pos.y + field_0x2EC;
     float y2 = y1 + L_attr.field_0x00;
-#if VERSION > VERSION_DEMO
-    float z = current.pos.z;
-#endif
     mDoMtx_stack_c::transS(current.pos.x, y2, z);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mModel1->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -264,17 +259,10 @@ void daObjHlift::Act_c::vib_set() {
 /* 00000CA8-00000D70       .text vib_proc__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::vib_proc() {
     if (field_0x2E8 > 0) {
-#if VERSION == VERSION_DEMO
         float fVar4 = L_attr.field_0x20;
         float fVar2 = 0.5f;
         float fVar1 = (L_attr.field_0x1C - field_0x2E8);
         float fVar3 = (fVar2 / L_attr.field_0x1C);
-#else
-        float fVar1 = (L_attr.field_0x1C - field_0x2E8);
-        float fVar2 = 0.5f;
-        float fVar3 = (fVar2 / L_attr.field_0x1C);
-        float fVar4 = L_attr.field_0x20;
-#endif
         float fVar5 = (fVar4 * (0.5f + fVar1 * fVar3));
         field_0x2EC = fVar5 * cM_ssin(field_0x2EA);
         field_0x2EA += L_attr.field_0x1E;
