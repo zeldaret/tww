@@ -203,7 +203,7 @@ void daObjHlift::Act_c::mode_u_l() {
 
 /* 000009DC-00000AB0       .text mode_demoreq_init__Q210daObjHlift5Act_cFQ310daObjHlift5Act_c6Mode_e */
 void daObjHlift::Act_c::mode_demoreq_init(daObjHlift::Act_c::Mode_e next) {
-    JUT_ASSERT(575, (next == Mode_U_L) || (next == Mode_L_U));
+    JUT_ASSERT(VERSION_SELECT(573, 575, 575, 575), (next == Mode_U_L) || (next == Mode_L_U));
     field_0x2E4 = next;
     field_0x2F6 = 0;
     fopAcM_orderOtherEventId(this, mEventId, prm_get_evId());
