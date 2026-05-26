@@ -88,7 +88,7 @@ public:
     /* 0xEF */ u8 field_0xEF;
 }; // Size: 0xF0
 
-static daNpc_Cb1_HIO_c l_HIO;
+daNpc_Cb1_HIO_c l_HIO;
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
