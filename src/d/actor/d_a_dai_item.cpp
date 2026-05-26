@@ -232,16 +232,16 @@ BOOL daStandItem_c::CreateHeap() {
         mpBckAnm = new mDoExt_bckAnm();
 
         static const u32 playmode[] = {
-            /* dItemNo_TOWN_FLOWER_e         */ J3DFrameCtrl::EMode_LOOP,
-            /* dItemNo_SEA_FLOWER_e         */ J3DFrameCtrl::EMode_LOOP,
-            /* dItemNo_EXOTIC_FLOWER_e         */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_TOWN_FLOWER_e      */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_SEA_FLOWER_e       */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_EXOTIC_FLOWER_e    */ J3DFrameCtrl::EMode_LOOP,
             /* dItemNo_HEROS_FLAG_e       */ -1,
-            /* dItemNo_BIG_CATCH_FLAG_e      */ -1,
-            /* dItemNo_BIG_SALE_FLAG_e       */ J3DFrameCtrl::EMode_LOOP,
-            /* dItemNo_PINWHEEL_e        */ J3DFrameCtrl::EMode_LOOP,
-            /* dItemNo_SICKLE_MOON_FLAG_e         */ J3DFrameCtrl::EMode_LOOP,
-            /* dItemNo_SKULL_TOWER_IDOL_e      */ J3DFrameCtrl::EMode_LOOP,
-            /* dItemNo_FOUNTAIN_IDOL_e     */ J3DFrameCtrl::EMode_NONE,
+            /* dItemNo_BIG_CATCH_FLAG_e   */ -1,
+            /* dItemNo_BIG_SALE_FLAG_e    */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_PINWHEEL_e         */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_SICKLE_MOON_FLAG_e */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_SKULL_TOWER_IDOL_e */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_FOUNTAIN_IDOL_e    */ J3DFrameCtrl::EMode_NONE,
             /* dItemNo_POSTMAN_STATUE_e   */ J3DFrameCtrl::EMode_LOOP,
             /* dItemNo_SHOP_GURU_STATUE_e */ J3DFrameCtrl::EMode_LOOP,
         };
