@@ -5,102 +5,376 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_waterfall.h"
+#include "d/d_bg_s_func.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/res/res_wfall.h"
+#include "d/d_particle_name.h"
+#include "f_op/f_op_actor.h"
+
+const char daWfall_c::m_arcname[] = "Wfall";
+const u8 daWfall_c::m_wait_timer = 0x32;
+const s16 daWfall_c::m_heapsize[] = {0x35a0, 0x4870};
 
 /* 00000078-000000F0       .text _delete__9daWfall_cFv */
 bool daWfall_c::_delete() {
-    /* Nonmatching */
+    mPCallBack.end();
+    mPCallBack2.end();
+    dComIfG_resDelete(&mPhs, m_arcname);
+    mDoAud_seDeleteObject(&mSePos);
+    return true;
 }
 
 /* 000000F0-00000110       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
+    return ((daWfall_c*)i_actor)->CreateHeap();
 }
 
 /* 00000110-0000048C       .text CreateHeap__9daWfall_cFv */
-void daWfall_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daWfall_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, WFALL_BDL_YSWTR00);
+    JUT_ASSERT(0xfd, modelData != NULL);
+    mModelWater = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
+    if (mModelWater == NULL) {
+        return FALSE;
+    }
+
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, WFALL_BTK_YSWTR00);
+    JUT_ASSERT(0x10d, pbtk != NULL);
+    if (mBtkAnm.init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
+        return FALSE;
+    }
+    mBtkAnm.setPlaySpeed(1.0f);
+
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, WFALL_BDL_HSUI1);
+    JUT_ASSERT(0x119, modelData != NULL);
+    mModelGate = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (mModelGate == NULL) {
+        return FALSE;
+    }
+
+    if (mType == true) {
+        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, WFALL_BDL_YSMNM00);
+        JUT_ASSERT(0x129, modelData != NULL);
+        mModelMinamo = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
+        if (mModelMinamo == NULL) {
+            return FALSE;
+        }
+
+        pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, WFALL_BTK_YSMNM00);
+        JUT_ASSERT(0x138, pbtk != NULL);
+        if (mBtkAnm2.init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
+            return FALSE;
+        }
+
+        J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, WFALL_BRK_YSMNM00);
+        JUT_ASSERT(0x143, pbrk != NULL);
+        if (mBrkAnm.init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
+            return FALSE;
+        }
+        mBrkAnm.setPlaySpeed(0.0f);
+    }
+
+    return TRUE;
 }
 
 /* 0000048C-00000708       .text CreateInit__9daWfall_cFv */
 void daWfall_c::CreateInit() {
-    /* Nonmatching */
-}
+    cullMtx = mModelWater->getBaseTRMtx();
+    if (mType == true) {
+        fopAcM_setCullSizeBox(this, -1000.0f, 0.0f, -200.0f, 1200.0f, 1000.0f, 3800.0f);
+    } else {
+        fopAcM_setCullSizeBox(this, -250.0f, 0.0f, 0.0f, 250.0f, 1000.0f, 800.0f);
+    }
+    cullSizeFar = 2.5f;
+    set_mtx();
+    mParticlePos1 = current.pos;
+    mParticlePos2 = current.pos;
+    mParticleAngle1 = current.angle;
+    mParticleAngle2 = current.angle;
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_SIRENSUIRYU00, &mParticlePos1, &mParticleAngle1, NULL, 0xff, &mPCallBack, -1, NULL, NULL, NULL);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_SIRENSUIRYU01, &mParticlePos2, &mParticleAngle2, NULL, 0xff, &mPCallBack2, -1, NULL, NULL, NULL);
+    mSwitchNo = fpcM_GetParam(this) & 0xff;
+    if (dComIfGs_isSwitch(mSwitchNo, home.roomNo)) {
+        mode_wtr_off_init();
+        mSePos = current.pos;
+        mSomeCounter = 10;
+        if (mType == true) {
+            mBrkAnm.setFrame(mBrkAnm.getEndFrame());
+        }
+    } else {
+        mode_wtr_on_init();
+        mSePos = current.pos;
+        mSePos.y += 863.0f;
+        if (mType == true) {
+            mBrkAnm.setFrame(0.0f);
+        }
+    }
 
+    mEvtIdx = dComIfGp_evmng_getEventIdx("GATECLOSE", 0xff);
+}
 /* 00000708-00000838       .text _create__9daWfall_cFv */
 cPhs_State daWfall_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daWfall_c);
+
+    cPhs_State ret = dComIfG_resLoad(&mPhs, m_arcname);
+    if (ret == cPhs_COMPLEATE_e) {
+        mType = (fopAcM_GetParam(this) >> 8) & 0xf;
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])) {
+            return cPhs_ERROR_e;
+        }
+        CreateInit();
+    }
+    return ret;
 }
 
 /* 00000938-000009B8       .text set_mtx__9daWfall_cFv */
 void daWfall_c::set_mtx() {
-    /* Nonmatching */
+    mModelWater->setBaseScale(scale);
+    mDoMtx_trans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
+    mModelWater->setBaseTRMtx(mDoMtx_stack_c::now);
 }
 
 /* 000009B8-00000A1C       .text set_gate_mtx__9daWfall_cFv */
 void daWfall_c::set_gate_mtx() {
-    /* Nonmatching */
+    mDoMtx_trans(mDoMtx_stack_c::get(), mSePos.x, mSePos.y, mSePos.z);
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
+    mModelGate->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000A1C-00000AD0       .text set_minamo_mtx__9daWfall_cFv */
 void daWfall_c::set_minamo_mtx() {
-    /* Nonmatching */
+    getWaterHeight();
+    cXyz baseScale;
+    baseScale.setall(1.0f);
+
+    cXyz wtrCheckPos;
+    wtrCheckPos.setall(0.0f);
+
+    wtrCheckPos.y = dBgS_ObjGndChk_Wtr_Func(wtrCheckPos) + 1.0f;
+    mModelMinamo->setBaseScale(baseScale);
+    mDoMtx_trans(mDoMtx_stack_c::get(), wtrCheckPos.x, wtrCheckPos.y, wtrCheckPos.z);
+    mModelMinamo->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000AD0-00000C94       .text _execute__9daWfall_cFv */
 bool daWfall_c::_execute() {
-    /* Nonmatching */
+    switch (mSomeCounter) {
+        case 0:
+            if (eventInfo.checkCommandDemoAccrpt() || dComIfGp_evmng_startCheck(mEvtIdx)) {
+                mSomeCounter += 1;
+            } else if (dComIfGs_isSwitch(mSwitchNo, home.roomNo)) {
+                fopAcM_orderOtherEventId(this, mEvtIdx, 0xff, 0xffff, 0, 1);
+                eventInfo.onCondition(2);
+            }
+            break;
+        case 1:
+            if (dComIfGp_evmng_startCheck(mEvtIdx)) {
+                mode_wtr_off_init();
+                mSomeCounter += 1;
+            }
+            break;
+        case 2:
+            if (dComIfGp_evmng_endCheck(mEvtIdx)) {
+                dComIfGp_event_onEventFlag(8);
+                mSomeCounter = 10;
+            }
+            break;
+        case 10:
+            mSomeState = 0;
+            break;
+    }
+
+    if (!dComIfGs_isSwitch(mSwitchNo, home.roomNo)) {
+        mode_wtr_on_init();
+        mSomeCounter = 0;
+    }
+
+    if (mType == true) {
+        mBrkAnm.play();
+        mBtkAnm2.play();
+        set_minamo_mtx();
+    }
+    mode_proc_call();
+    set_mtx();
+    set_gate_mtx();
+    return true;
 }
 
 /* 00000C94-00000D20       .text mode_proc_call__9daWfall_cFv */
 void daWfall_c::mode_proc_call() {
-    /* Nonmatching */
+    typedef void (daWfall_c::*ProcFunc)(void);
+    static const ProcFunc mode_proc[] = {
+        &daWfall_c::mode_wtr_on,
+        &daWfall_c::mode_wtr_off,
+    };
+
+    (this->*mode_proc[mModeProc])();
 }
 
 /* 00000D20-00000D48       .text mode_wtr_on_init__9daWfall_cFv */
 void daWfall_c::mode_wtr_on_init() {
-    /* Nonmatching */
+    mModeProc = 0;
+    if (mType == true) {
+        mBrkAnm.setPlaySpeed(-1.0f);
+    }
 }
 
 /* 00000D48-00000DEC       .text mode_wtr_on__9daWfall_cFv */
 void daWfall_c::mode_wtr_on() {
-    /* Nonmatching */
+    BOOL emitterPosSet = FALSE;
+
+    cLib_addCalc(&mSePos.y, current.pos.y + 760.0f + 100.0f, 0.1f, 10.0f, 5.0f);
+    scale.y = getWaterScaleFromGatePos();
+    mBtkAnm.setPlaySpeed(1.0f);
+    mBtkAnm.play();
+
+    emitterPosSet |= setEmitter00Pos();
+    emitterPosSet |= setEmitter01Pos();
+    if (emitterPosSet) {
+        set_se();
+    }
+    return;
 }
 
 /* 00000DEC-00000E14       .text mode_wtr_off_init__9daWfall_cFv */
 void daWfall_c::mode_wtr_off_init() {
-    /* Nonmatching */
+    mModeProc = 1;
+    if (mType == true) {
+        mBrkAnm.setPlaySpeed(1.0f);
+    }
 }
 
 /* 00000E14-00000EE8       .text mode_wtr_off__9daWfall_cFv */
 void daWfall_c::mode_wtr_off() {
-    /* Nonmatching */
+    BOOL emitterPosSet = FALSE;
+
+    cLib_addCalc(&mSePos.y, current.pos.y, 0.1f, 10.0f, 5.0f);
+    float waterScale = getWaterScaleFromGatePos();
+    scale.y = waterScale;
+    if (waterScale > 0.0f) {
+        mBtkAnm.setPlaySpeed(1.0f);
+        mBtkAnm.play();
+        emitterPosSet |= setEmitter00Pos();
+        emitterPosSet |= setEmitter01Pos();
+        if (emitterPosSet) {
+            set_se();
+        }
+        return;
+    }
+    if (mPCallBack.getEmitter() != NULL) {
+        mPCallBack.getEmitter()->setStatus(1);
+    }
+    if (mPCallBack2.getEmitter() != NULL) {
+        mPCallBack2.getEmitter()->setStatus(1);
+    }
+    return;
 }
 
 /* 00000EE8-00000FF0       .text setEmitter00Pos__9daWfall_cFv */
-void daWfall_c::setEmitter00Pos() {
-    /* Nonmatching */
+BOOL daWfall_c::setEmitter00Pos() {
+    BOOL ret = FALSE;
+    mParticlePos1 = current.pos;
+    float waterHeight = getWaterHeight();
+    if (waterHeight > mSePos.y) {
+        if (mPCallBack.getEmitter() != NULL) {
+            mPCallBack.getEmitter()->stopCreateParticle();
+        }
+    } else {
+        if (mPCallBack.getEmitter() != NULL) {
+            mPCallBack.getEmitter()->playCreateParticle();
+        }
+        ret = TRUE;
+    }
+    mParticlePos1.y = waterHeight;
+    waterHeight = fabs(waterHeight - current.pos.y) / (scale.y * 760.0f);
+    if (waterHeight > 1.0f) {
+        waterHeight = 1.0f;
+    }
+    if (waterHeight < -1.0f) {
+        waterHeight = -1.0f;
+    }
+
+    waterHeight = asin(waterHeight);
+    mParticlePos1.x += scale.y * 250.0f * waterHeight;
+    return ret;
 }
 
 /* 00000FF0-00001098       .text setEmitter01Pos__9daWfall_cFv */
-void daWfall_c::setEmitter01Pos() {
-    /* Nonmatching */
+BOOL daWfall_c::setEmitter01Pos() {
+    BOOL ret = FALSE;
+    float waterHeight = getWaterHeight();
+    if (waterHeight > mSePos.y) {
+        if (mPCallBack2.getEmitter() != NULL) {
+            mPCallBack2.getEmitter()->setStatus(1);
+        }
+    } else {
+        if (mPCallBack2.getEmitter() != NULL) {
+            mPCallBack2.getEmitter()->clearStatus(1);
+        }
+        ret = TRUE;
+    }
+
+    mParticlePos2.y = current.pos.y - (1.0f - scale.y) * 760.0f;
+    return ret;
 }
 
 /* 00001098-000010D8       .text getWaterScaleFromGatePos__9daWfall_cFv */
-void daWfall_c::getWaterScaleFromGatePos() {
-    /* Nonmatching */
+float daWfall_c::getWaterScaleFromGatePos() {
+    float waterScale = mSePos.y - current.pos.y;
+    if (waterScale < 0.0f) {
+        waterScale = 0.0f;
+    }
+    waterScale /= 760.0f;
+    if (!(waterScale > 1.0f)) {
+        return waterScale;
+    }
+    return 1.0f;
 }
 
 /* 000010D8-0000124C       .text getWaterHeight__9daWfall_cFv */
-void daWfall_c::getWaterHeight() {
-    /* Nonmatching */
+float daWfall_c::getWaterHeight() {
+    dBgS_WtrChk splGrpChk;
+
+    cXyz posGround = current.pos;
+    float waterHeight = current.pos.y;
+
+    posGround.x -= 400.0f;
+    float roof = posGround.y + 1500.0f;
+
+    splGrpChk.Set(posGround, roof);
+    if (dComIfG_Bgsp()->SplGrpChk(&splGrpChk)) {
+        waterHeight = splGrpChk.GetHeight();
+    }
+
+    return waterHeight;
 }
 
 /* 00001370-000013E0       .text set_se__9daWfall_cFv */
 void daWfall_c::set_se() {
-    /* Nonmatching */
+    mDoAud_seStart(JA_SE_ATM_WATER_GATE, &mSePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+}
+
+bool daWfall_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mModelWater, &tevStr);
+    mBtkAnm.entry(mModelWater->getModelData());
+    mDoExt_modelUpdateDL(mModelWater);
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mModelGate, &tevStr);
+    mDoExt_modelUpdateDL(mModelGate);
+
+    if (mType == true) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mModelMinamo, &tevStr);
+        mBtkAnm2.entry(mModelMinamo->getModelData());
+        mBrkAnm.entry(mModelMinamo->getModelData());
+        mDoExt_modelUpdateDL(mModelMinamo);
+    }
+
+    return true;
 }
 
 /* 000013E0-00001400       .text daWfall_Create__FPv */
@@ -114,8 +388,8 @@ static BOOL daWfall_Delete(void* i_this) {
 }
 
 /* 00001424-00001550       .text daWfall_Draw__FPv */
-static BOOL daWfall_Draw(void*) {
-    /* Nonmatching */
+static BOOL daWfall_Draw(void* i_this) {
+    return ((daWfall_c*)i_this)->_draw();
 }
 
 /* 00001550-00001574       .text daWfall_Execute__FPv */
