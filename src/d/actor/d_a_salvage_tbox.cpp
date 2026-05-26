@@ -120,9 +120,11 @@ void daSTBox_c::initWaitGetItem(int) {
     /* Nonmatching */
     fopDwTg_DrawQTo(&this->draw_tag);
     for(int i = 0; i < 3; i++) {
-        JPABaseEmitter *emitter = this->field_0x29C[i];
-        if (emitter != NULL) {
-            
+        if (this->field_0x29C[i] != NULL) {
+            this->field_0x29C[i]->mFlags = this->field_0x29C[i]->mFlags & 0xffffffbf;
+            this->field_0x29C[i]->setMaxFrame(0xffffffff);
+            this->field_0x29C[i]->mFlags = this->field_0x29C[i]->mFlags | 1;
+            this->field_0x29C[i] = NULL;
         }
     }
     this->mRippleCallBack->end();
@@ -153,6 +155,8 @@ void daSTBox_c::actDrop(int) {
 s32 daSTBox_c::actWait02(int) {
     /* Nonmatching */
     cXyz* pos = dComIfGp_getShipActor()->getCraneTop();
+    // cXyz* pos = ((daShip_c*)(*(fopAc_ac_c**)(((u8*)&g_dComIfG_gameInfo) + 0x5b54)))->getCraneTop();
+    // cXyz* pos = (cXyz*)*(u32*)(*(u32*)&(g_dComIfG_gameInfo) + 0x5b54) + 0x434;
     // daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
     // cXyz* pos = ship->getCraneTop();
     // cXyz* pos = ((daShip_c*)(g_dComIfG_gameInfo.play.mpPlayerPtr[2]))->getCraneTop();
