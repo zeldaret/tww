@@ -246,7 +246,7 @@ void daObjBarrier_c::break_start_wait_proc() {
             case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
                 dComIfGs_onEventBit(dSv_event_flag_c::BARRIER_BREAK);
                 mEventID = dComIfGp_evmng_getEventIdx("seal");
-                mBarrierProc = PROC_BREAK_ORDER;
+                mBarrierProc = PROC_BREAK_ORDER_e;
                 break;
             }
         }
@@ -256,7 +256,7 @@ void daObjBarrier_c::break_start_wait_proc() {
 /* 000009F0-00000A58       .text break_order_proc__14daObjBarrier_cFv */
 void daObjBarrier_c::break_order_proc() {
     if (eventInfo.checkCommandDemoAccrpt()) {
-        mBarrierProc = PROC_BREAK_END_WAIT;
+        mBarrierProc = PROC_BREAK_END_WAIT_e;
     } else {
         fopAcM_orderOtherEventId(this, mEventID);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
@@ -291,14 +291,14 @@ bool daObjBarrier_c::break_check() {
 #else
     if (mMoya == 0) {
         switch (mBarrierProc) {
-        case PROC_BREAK_START_WAIT:
+        case PROC_BREAK_START_WAIT_e:
             break_start_wait_proc();
             break;
-        case PROC_BREAK_ORDER:
+        case PROC_BREAK_ORDER_e:
             break_order_proc();
             chk = true;
             break;
-        case PROC_BREAK_END_WAIT:
+        case PROC_BREAK_END_WAIT_e:
             break_end_wait_proc();
             chk = true;
             break;
