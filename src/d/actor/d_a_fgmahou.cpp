@@ -23,7 +23,7 @@ static BOOL daFgmahou_Draw(fgmahou_class* i_this) {
 
 /* 000000E4-00000130       .text boss_s_sub__FPvPv */
 static void* boss_s_sub(void* param_1, void*) {
-    if(fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_FGANON) {
+    if(fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_FGANON_e) {
         return param_1;
     }
 
@@ -436,7 +436,7 @@ actor_process_profile_definition g_profile_FGMAHOU = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_FGMAHOU,
+    /* ProcName     */ fpcNm_FGMAHOU_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(fgmahou_class),
     /* SizeOther    */ 0,

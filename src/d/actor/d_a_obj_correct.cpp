@@ -80,7 +80,7 @@ bool daObjCorrect::Act_c::_delete() {
 
 /* 000001B8-00000204       .text chk_try_actor0__Q212daObjCorrect5Act_cFP10fopAc_ac_c */
 daObjTry::Act_c* daObjCorrect::Act_c::chk_try_actor0(fopAc_ac_c* actor) {
-    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_Obj_Try) {
+    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Try_e) {
         return (daObjTry::Act_c*) actor;
     }
     return NULL;
@@ -127,7 +127,7 @@ void* daObjCorrect::Act_c::search_movebox(void* actor, void* user_data) {
 
     fpc_ProcID proc_id = fpcM_GetID(actor);
     if (!fpcM_IsCreating(proc_id)) {
-        if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_Obj_Movebox) {
+        if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Movebox_e) {
             daObjMovebox::Act_c* movebox = (daObjMovebox::Act_c*) actor;
             if (ac_actor->current.pos.abs2(correct->current.pos) < correct->field_0x2A4) {
                 if (movebox->prm_get_swSave() == correct->prm_get_swSave() && movebox->prm_get_dmy() == 0) {
@@ -138,7 +138,7 @@ void* daObjCorrect::Act_c::search_movebox(void* actor, void* user_data) {
             correct->field_0x290 = 0;
         }
     } else {
-        if (actor != NULL && fopAcM_GetName(actor) == PROC_Obj_Movebox) {
+        if (actor != NULL && fopAcM_GetName(actor) == fpcNm_Obj_Movebox_e) {
             correct->field_0x290 = 0;
             return NULL;
         }
@@ -190,7 +190,7 @@ void* daObjCorrect::Act_c::search_tryKeyGate(void* actor, void* user_data) {
 
     void* return_val = NULL;
     if (fpcM_IsCreating(proc_id)) {
-        if (actor != NULL && fopAcM_GetName(actor) == PROC_Obj_Try) {
+        if (actor != NULL && fopAcM_GetName(actor) == fpcNm_Obj_Try_e) {
             correct->field_0x290 = 0;
         }
     } else {
@@ -213,7 +213,7 @@ void* daObjCorrect::Act_c::search_tryKeyDoor(void* actor, void* user_data) {
 
     void* return_val = NULL;
     if (fpcM_IsCreating(proc_id)) {
-        if (actor != NULL && fopAcM_GetName(actor) == PROC_Obj_Try) {
+        if (actor != NULL && fopAcM_GetName(actor) == fpcNm_Obj_Try_e) {
             correct->field_0x290 = 0;
         }
     } else {
@@ -429,7 +429,7 @@ actor_process_profile_definition g_profile_Obj_Correct = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0009,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Correct,
+    /* ProcName     */ fpcNm_Obj_Correct_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjCorrect::Act_c),
     /* SizeOther    */ 0,

@@ -194,14 +194,14 @@ static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
         dComIfGp_setNextStage(room->stageName, startCode, room->roomNo, room->layerNo);
 #if VERSION > VERSION_DEMO
         if (strcmp(dComIfGp_getNextStageName(), "ENDING") == 0) {
-            fopScnM_ChangeReq(i_this, PROC_ENDING_SCENE, PROC_OVERLAP0, 5);
+            fopScnM_ChangeReq(i_this, fpcNm_ENDING_SCENE_e, fpcNm_OVERLAP0_e, 5);
             mDoAud_bgmStop(30);
         } else
 #else
         if (CPad_CHECK_TRIG_START(0))
 #endif
         {
-            fopScnM_ChangeReq(i_this, PROC_PLAY_SCENE, PROC_OVERLAP0, 5);
+            fopScnM_ChangeReq(i_this, fpcNm_PLAY_SCENE_e, fpcNm_OVERLAP0_e, 5);
             dComIfGs_setRestartRoomParam(0);
             mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(), dComIfGp_getNextStageLayer());
         }
@@ -385,7 +385,7 @@ scene_process_profile_definition g_profile_MENU_SCENE = {
     /* LayerID      */ fpcLy_ROOT_e,
     /* ListID       */ 1,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MENU_SCENE,
+    /* ProcName     */ fpcNm_MENU_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(menu_of_scene_class),
     /* SizeOther    */ 0,

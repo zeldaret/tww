@@ -675,7 +675,7 @@ bool daObjDoguu_c::_execute() {
                 cCcD_Obj* hitObj = mCyl.GetCoHitObj();
                 if (hitObj != NULL) {
                     fopAc_ac_c *ac = hitObj->GetAc();
-                    if ((ac != NULL) && (fopAcM_GetName(ac) == PROC_PLAYER)) {
+                    if ((ac != NULL) && (fopAcM_GetName(ac) == fpcNm_PLAYER_e)) {
                         mCyl.SetR(50.0f);
                         fopAcM_orderOtherEventId(this, mDoguuDemo1EventIdx);
                         field_0x8AC = 1;
@@ -816,7 +816,7 @@ actor_process_profile_definition g_profile_Obj_Doguu = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Doguu,
+    /* ProcName     */ fpcNm_Obj_Doguu_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjDoguu_c),
     /* SizeOther    */ 0,

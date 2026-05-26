@@ -5285,7 +5285,7 @@ void daNpcPeople_c::executeFurue() {
 /* 00002EC4-00002F80       .text executeKyoroInit__13daNpcPeople_cFv */
 s32 daNpcPeople_c::executeKyoroInit() {
     fopAc_ac_c* mailbox;
-    if (fopAcM_SearchByName(PROC_OBJ_TORIPOST, &mailbox) == true && mailbox != NULL) {
+    if (fopAcM_SearchByName(fpcNm_OBJ_TORIPOST_e, &mailbox) == true && mailbox != NULL) {
         dNpc_calc_DisXZ_AngY(current.pos, mailbox->current.pos, NULL, &m77A);
     }
 
@@ -5489,7 +5489,7 @@ void daNpcPeople_c::executeUgWalk() {
 
                 if(mCyl.ChkCoHit()) {
                     daNpcPeople_c* pActor = (daNpcPeople_c*)mCyl.GetCoHitAc();
-                    if(pActor && fopAcM_GetProfName(pActor) == PROC_NPC_PEOPLE) {
+                    if(pActor && fopAcM_GetProfName(pActor) == fpcNm_NPC_PEOPLE_e) {
                         u8 type = pActor->getNpcNo();
                         if((mNpcType == 0x11 && type == 0x12) || (mNpcType == 0x12 && type == 0x11)) {
                             pActor->setEtcFlag(0x60000);
@@ -5502,7 +5502,7 @@ void daNpcPeople_c::executeUgWalk() {
             else {
                 if(mCyl.ChkCoHit()) {
                     fopAc_ac_c* pActor = mCyl.GetCoHitAc();
-                    if(pActor && fopAcM_GetProfName(pActor) == PROC_PLAYER) {
+                    if(pActor && fopAcM_GetProfName(pActor) == fpcNm_PLAYER_e) {
                         diff = (pActor->current.pos - home.pos);
                         diff.y = 0.0f;
                         if(temp2 > diff.abs()) {
@@ -8472,7 +8472,7 @@ actor_process_profile_definition g_profile_NPC_PEOPLE = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_PEOPLE,
+    /* ProcName     */ fpcNm_NPC_PEOPLE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpcPeople_c),
     /* SizeOther    */ 0,

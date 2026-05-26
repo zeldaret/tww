@@ -274,7 +274,7 @@ actor_process_profile_definition g_profile_Sie_Flag = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Sie_Flag,
+    /* ProcName     */ fpcNm_Sie_Flag_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSie_Flag_c),
     /* SizeOther    */ 0,

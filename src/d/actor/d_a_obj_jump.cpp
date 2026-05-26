@@ -250,7 +250,7 @@ void daObjJump::Act_c::rideCB(dBgW*, fopAc_ac_c* param_2, fopAc_ac_c* param_3) {
     Act_c* i_this = (Act_c *) param_2;
     daPy_py_c* player = (daPy_py_c *) param_3;
     i_this->mIsRide = true;
-    if (fopAcM_GetProfName(param_3) == PROC_PLAYER) {
+    if (fopAcM_GetProfName(param_3) == fpcNm_PLAYER_e) {
         i_this->mIsPlayerRide = true;
         if (player->checkEquipHeavyBoots()) {
             i_this->mIsHeavyRide = true;
@@ -469,7 +469,7 @@ actor_process_profile_definition g_profile_Obj_Jump = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0004,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Jump,
+    /* ProcName     */ fpcNm_Obj_Jump_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjJump::Act_c),
     /* SizeOther    */ 0,

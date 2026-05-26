@@ -37,7 +37,7 @@ BOOL daPy_lk_c::shipSpecialDemoStart() {
 BOOL daPy_lk_c::checkJumpRideShip() {
     if (mCyl.ChkCoHit()) {
         fopAc_ac_c* hit_ac = mCyl.GetCoHitAc();
-        if (hit_ac != NULL && fopAcM_GetName(hit_ac) == PROC_SHIP) {
+        if (hit_ac != NULL && fopAcM_GetName(hit_ac) == fpcNm_SHIP_e) {
             daShip_c* ship = (daShip_c*)hit_ac;
             cXyz sp20;
             mDoMtx_multVec(ship->getBodyMtx(), &l_ship_offset, &sp20);

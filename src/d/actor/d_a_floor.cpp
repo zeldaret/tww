@@ -18,9 +18,9 @@ const char daFloor_c::m_arcname[6] = "Hhyu1";
 
 /* 00000078-000000DC       .text rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void rideCallBack(dBgW*, fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
-    if (fopAcM_GetName(i_other) == PROC_PLAYER && !((daPy_py_c*)i_other)->checkEquipHeavyBoots()) {
+    if (fopAcM_GetName(i_other) == fpcNm_PLAYER_e && !((daPy_py_c*)i_other)->checkEquipHeavyBoots()) {
         ((daFloor_c*)i_this)->field_0x2d9 = 1;
-    } else if (fopAcM_GetName(i_other) == PROC_PLAYER && ((daFloor_c*)i_this)->field_0x2d9 && ((daPy_py_c*)i_other)->checkEquipHeavyBoots() && !((daFloor_c*)i_this)->field_0x2d8) {
+    } else if (fopAcM_GetName(i_other) == fpcNm_PLAYER_e && ((daFloor_c*)i_this)->field_0x2d9 && ((daPy_py_c*)i_other)->checkEquipHeavyBoots() && !((daFloor_c*)i_this)->field_0x2d8) {
         ((daFloor_c*)i_this)->field_0x2d8 = 1;
         ((daFloor_c*)i_this)->field_0x2da = 6;
     }
@@ -153,7 +153,7 @@ actor_process_profile_definition g_profile_FLOOR = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_FLOOR,
+    /* ProcName     */ fpcNm_FLOOR_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daFloor_c),
     /* SizeOther    */ 0,

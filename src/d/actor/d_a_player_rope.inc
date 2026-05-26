@@ -31,11 +31,11 @@ void daPy_lk_c::freeRopeItem() {
             onResetFlg0(daPyRFlg0_ROPE_FORCE_END);
         }
         if (rope != NULL) {
-            if (fopAcM_GetName(rope) == PROC_HIMO2) {
+            if (fopAcM_GetName(rope) == fpcNm_HIMO2_e) {
                 fopAcM_SetParam(rope, 4);
                 mActorKeepRope.clearData();
                 onResetFlg0(daPyRFlg0_ROPE_FORCE_END);
-            } else if (fopAcM_GetName(rope) == PROC_HIMO3) {
+            } else if (fopAcM_GetName(rope) == fpcNm_HIMO3_e) {
                 mEquipItem = daPyItem_NONE_e;
                 fopAcM_SetParam(rope, 3);
                 mActorKeepRope.clearData();
@@ -57,7 +57,7 @@ f32 daPy_lk_c::checkRopeRoofHit(s16 param_0) {
 int daPy_lk_c::changeRopeSwingProc() {
     if (mCyl.ChkCoHit() != 0) {
         fopAc_ac_c* pfVar2 = mCyl.GetCoHitAc();
-        if ((pfVar2 != NULL) && (fopAcM_GetName(pfVar2) == PROC_HIMO3)) {
+        if ((pfVar2 != NULL) && (fopAcM_GetName(pfVar2) == fpcNm_HIMO3_e)) {
             cXyz local_24 = pfVar2->current.pos - current.pos;
             if ((local_24.abs() - 95.0f >= 100.0f) && (pfVar2->current.pos.y > current.pos.y)) {
                 return procRopeSwing_init(pfVar2, 0x1800);
@@ -535,7 +535,7 @@ BOOL daPy_lk_c::procRopeSwing_init(fopAc_ac_c* param_0, s16 param_1) {
     cXyz local_84;
     if (param_0 != NULL) {
         mActorKeepRope.setData(param_0);
-        if (fopAcM_GetName(param_0) == PROC_HIMO3) {
+        if (fopAcM_GetName(param_0) == fpcNm_HIMO3_e) {
             fopAcM_SetParam(param_0, 1);
             deleteEquipItem(TRUE);
             mEquipItem = dItem_GRAPPLING_HOOK_e;
@@ -953,7 +953,7 @@ BOOL daPy_lk_c::procRopeUp_init() {
         dVar5 = dVar5 - 60.0f;
         if (dVar5 < dVar4) {
             dVar4 = dVar5;
-        } else if (fopAcM_GetName(rope) == PROC_HIMO2 || DEMO_SELECT(!strcmp(dComIfGp_getStartStageName(), "GanonK"), checkSpecialRope())) {
+        } else if (fopAcM_GetName(rope) == fpcNm_HIMO2_e || DEMO_SELECT(!strcmp(dComIfGp_getStartStageName(), "GanonK"), checkSpecialRope())) {
             mProcVar6.m3570 = 1;
         }
     }

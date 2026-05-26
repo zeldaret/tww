@@ -1149,7 +1149,7 @@ BOOL daAgbsw0_c::ExeSubT() {
     else {
         if(mDoGaC_GbaLink()) {
             if(mDoGac_SendStatusCheck(0xF)) {
-                if(mCyl.ChkTgHit() && mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == PROC_BOMB && ((daBomb_c*)mCyl.GetTgHitAc())->chk_state(daBomb_c::STATE_8)) {
+                if(mCyl.ChkTgHit() && mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == fpcNm_BOMB_e && ((daBomb_c*)mCyl.GetTgHitAc())->chk_state(daBomb_c::STATE_8)) {
                     mSE = BigLittleChange(0x12);
                     mDoGac_SendDataSet(&mSE, 4, 0xF, 0);
                     fopAcM_onSwitch(this, sw0);
@@ -2124,49 +2124,49 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             return FALSE;
         case 0x44:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_OS) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == fpcNm_NPC_OS_e) {
                 return FALSE;
             }
 
             break;
         case 0x45:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_OS) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != fpcNm_NPC_OS_e) {
                 return FALSE;
             }
 
             break;
         case 0x46:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_MD) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == fpcNm_NPC_MD_e) {
                 return FALSE;
             }
 
             break;
         case 0x47:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_MD) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != fpcNm_NPC_MD_e) {
                 return FALSE;
             }
 
             break;
         case 0x48:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_CB1) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == fpcNm_NPC_CB1_e) {
                 return FALSE;
             }
 
             break;
         case 0x49:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_CB1) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != fpcNm_NPC_CB1_e) {
                 return FALSE;
             }
 
             break;
         case 0x4A:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_KAM) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == fpcNm_NPC_KAM_e) {
                 return FALSE;
             }
 
             break;
         case 0x4B:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_KAM) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != fpcNm_NPC_KAM_e) {
                 return FALSE;
             }
 
@@ -2462,27 +2462,27 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x7B:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_MD  && daNpc_Md_c::isFlying()) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == fpcNm_NPC_MD_e  && daNpc_Md_c::isFlying()) {
                 return FALSE;
             }
 
             break;
         case 0x7C:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_MD || !daNpc_Md_c::isFlying()) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != fpcNm_NPC_MD_e || !daNpc_Md_c::isFlying()) {
                 return FALSE;
             }
 
             break;
         case 0x7F:
             // Potential bug: This seems to check if the current player is Medli, but that Makar is flying?
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_MD && daNpc_Cb1_c::isFlying()) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == fpcNm_NPC_MD_e && daNpc_Cb1_c::isFlying()) {
                 return FALSE;
             }
 
             break;
         case 0x80:
             // Potential bug: This seems to check if the current player is Medli, but that Makar is flying?
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_MD || !daNpc_Cb1_c::isFlying()) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != fpcNm_NPC_MD_e || !daNpc_Cb1_c::isFlying()) {
                 return FALSE;
             }
 
@@ -2586,7 +2586,7 @@ actor_process_profile_definition g_profile_AGBSW0 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_AGBSW0,
+    /* ProcName     */ fpcNm_AGBSW0_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daAgbsw0_c),
     /* SizeOther    */ 0,

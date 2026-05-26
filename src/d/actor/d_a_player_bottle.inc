@@ -88,7 +88,7 @@ void daPy_lk_c::setBottleModel(u16 param_0) {
 fopAc_ac_c* daPy_lk_c::makeFairy(cXyz* param_0, u32 param_1) {
     onResetFlg0(daPyRFlg0_FAIRY_USE);
     resetCurse();
-    return (fopAc_ac_c*)fopAcM_fastCreate(PROC_NPC_FA1, param_1, param_0, fopAcM_GetRoomNo(this), &shape_angle);
+    return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_NPC_FA1_e, param_1, param_0, fopAcM_GetRoomNo(this), &shape_angle);
 }
 
 /* 801521A0-80152300       .text procBottleDrink_init__9daPy_lk_cFUs */
@@ -393,7 +393,7 @@ BOOL daPy_lk_c::procBottleOpen() {
                     onModeFlg(ModeFlg_08000000);
                     mActorKeepRope.setData(makeFairy(&mLeftHandPos, 2));
                 } else if (mEquipItem == dItem_FIREFLY_BOTTLE_e) {
-                    fopAcM_create(PROC_NH, 1, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
+                    fopAcM_create(fpcNm_NH_e, 1, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
                 }
             }
         } else if (frameCtrl.getFrame() > 40.0f) {
@@ -409,7 +409,7 @@ BOOL daPy_lk_c::procBottleOpen() {
                 m370C.y,
                 m370C.z + cM_rndFX(45.0f)
             );
-            fopKyM_create(PROC_WATER_MARK, 1, &sp28);
+            fopKyM_create(fpcNm_WATER_MARK_e, 1, &sp28);
             mProcVar0.m34D0 = 3;
         }
     }

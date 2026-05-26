@@ -23,7 +23,7 @@ static cXyz non_pos(10000.0f, -10000.0f, 20000.0f);
 
 /* 000000EC-00000104       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 static void ride_call_back(dBgW* param1, fopAc_ac_c* param2, fopAc_ac_c* param3) {
-    if (fopAcM_GetName(param3) != PROC_PLAYER) {
+    if (fopAcM_GetName(param3) != fpcNm_PLAYER_e) {
         return;
     }
     param2->health = 0xA;
@@ -622,7 +622,7 @@ actor_process_profile_definition g_profile_BDKOBJ = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BDKOBJ,
+    /* ProcName     */ fpcNm_BDKOBJ_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bdkobj_class),
     /* SizeOther    */ 0,

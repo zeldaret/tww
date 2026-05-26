@@ -806,7 +806,7 @@ actor_process_profile_definition g_profile_STANDITEM = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0008,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_STANDITEM,
+    /* ProcName     */ fpcNm_STANDITEM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daStandItem_c),
     /* SizeOther    */ 0,

@@ -872,7 +872,7 @@ cPhs_State daNpc_Ho_c::_create() {
         fopAcM_ct_Demo(this, daNpc_Ho_c);
 
         switch(fopAcM_GetName(this)) {
-            case PROC_NPC_HO:
+            case fpcNm_NPC_HO_e:
                 mType = 0;
                 break;
             default:
@@ -1002,7 +1002,7 @@ actor_process_profile_definition g_profile_NPC_HO = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_HO,
+    /* ProcName     */ fpcNm_NPC_HO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Ho_c),
     /* SizeOther    */ 0,

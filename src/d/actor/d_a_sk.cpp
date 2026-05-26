@@ -354,7 +354,7 @@ actor_process_profile_definition g_profile_SK = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SK,
+    /* ProcName     */ fpcNm_SK_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sk_class),
     /* SizeOther    */ 0,

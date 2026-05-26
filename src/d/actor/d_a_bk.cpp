@@ -668,7 +668,7 @@ static s32 target_info_count;
 
 /* 00002C4C-00002CD4       .text s_w_sub__FPvPv */
 static void* s_w_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BOKO) {
+    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BOKO_e) {
         daBoko_c* boko = (daBoko_c*)param_1;
         if (fopAcM_GetParam(boko) != daBoko_c::Type_MOBLIN_SPEAR_e && !fopAcM_checkCarryNow(boko)) {
             if (target_info_count < (s32)ARRAY_SIZE(target_info)) {
@@ -739,7 +739,7 @@ static fpc_ProcID search_wepon(bk_class* i_this) {
 
 /* 00002FB0-0000302C       .text s_b_sub__FPvPv */
 static void* s_b_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BOMB) {
+    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BOMB_e) {
         daBomb_c* bomb = (daBomb_c*)param_1;
         // TODO: why is it checking the bomb's params as a single field instead of just one param? bug?
         if (fopAcM_GetParam(bomb) != 0) {
@@ -1192,7 +1192,7 @@ static void jyunkai(bk_class* i_this) {
 
 /* 0000488C-000048E4       .text ken_s_sub__FPvPv */
 static void* ken_s_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_ITEM) {
+    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_ITEM_e) {
         daItem_c* item = (daItem_c*)param_1;
         if (item->getItemNo() == dItem_DROPPED_SWORD_e) {
             return param_1;
@@ -1428,7 +1428,7 @@ static void stand(bk_class* i_this) {
 /* 000053E0-000054E0       .text s_s_sub__FPvPv */
 static void* s_s_sub(void* r29, void* r30) {
     bk_class* i_this = (bk_class*)r30;
-    if (fopAc_IsActor(r29) && fopAcM_GetName(r29) == PROC_OBJ_SEARCH) {
+    if (fopAc_IsActor(r29) && fopAcM_GetName(r29) == fpcNm_OBJ_SEARCH_e) {
         daObj_Search::Act_c* search = (daObj_Search::Act_c*)r29;
         cXyz sp18 = i_this->home.pos - search->current.pos;
         if (sp18.abs() < 600.0f) {
@@ -1767,7 +1767,7 @@ u16 learn_check;
 
 /* 0000647C-000064D8       .text shot_s_sub__FPvPv */
 static void* shot_s_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && (learn_check & 0x400) && fopAcM_GetName(param_1) == PROC_HIMO2) {
+    if (fopAc_IsActor(param_1) && (learn_check & 0x400) && fopAcM_GetName(param_1) == fpcNm_HIMO2_e) {
         return param_1;
     }
     return NULL;
@@ -2247,7 +2247,7 @@ temp_1B8:
         
         fopAc_ac_c* hitActor = yari_hit_check(i_this);
         if (hitActor != NULL) {
-            if (fopAcM_GetName(hitActor) == PROC_PLAYER) {
+            if (fopAcM_GetName(hitActor) == fpcNm_PLAYER_e) {
                 // Note: The code seems to assume that the hit actor and the controlled player are the same actor.
                 // This isn't necessarily correct, but likely doesn't cause any bugs in practice as checkPlayerGuard always
                 // returns false for non-Link player actors.
@@ -2267,7 +2267,7 @@ temp_1B8:
                         i_this->m0300[1] = 100;
                     }
                 }
-            } else if (fopAcM_GetName(hitActor) == PROC_BK) {
+            } else if (fopAcM_GetName(hitActor) == fpcNm_BK_e) {
                 i_this->m11FC = fopAcM_GetID(hitActor);
             }
         } else {
@@ -3781,7 +3781,7 @@ static void damage_check(bk_class* i_this) {
 
 /* 0000BCD4-0000BD30       .text s_s2_sub__FPvPv */
 static void* s_s2_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_OBJ_SEARCH) {
+    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_OBJ_SEARCH_e) {
         if (daObj_Search::Act_c::getFindFlag()) {
             return param_1;
         }
@@ -3903,7 +3903,7 @@ static void waki_set(bk_class* i_this) {
             params->base.parameters = (i_this->m02B6 << 0x10) | 0xFF00FF39; // TODO clean up parameters
         }
         params->room_no = fopAcM_GetRoomNo(actor);
-        fopAcM_Create(PROC_BK, NULL, params);
+        fopAcM_Create(fpcNm_BK_e, NULL, params);
         i_this->m1212++;
     }
 }
@@ -5083,7 +5083,7 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
             } else {
                 weaponType = 0;
             }
-            i_this->m1200 = fopAcM_create(PROC_BOKO, weaponType, &i_actor->current.pos, fopAcM_GetRoomNo(i_actor));
+            i_this->m1200 = fopAcM_create(fpcNm_BOKO_e, weaponType, &i_actor->current.pos, fopAcM_GetRoomNo(i_actor));
             i_this->m1214 = 1;
             i_this->m02D5 &= 0x40;
         }
@@ -5323,7 +5323,7 @@ actor_process_profile_definition g_profile_BK = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BK,
+    /* ProcName     */ fpcNm_BK_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bk_class),
     /* SizeOther    */ 0,

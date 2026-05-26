@@ -95,7 +95,7 @@ static cPhs_State dWpotWater_Create(kankyo_class* i_this) {
             f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
             if (lavaChk.ChkSetInfo() && dComIfG_Bgsp()->GetAttributeCode(lavaChk) == dBgS_Attr_LAVA_e && lavaY > groundY) {
                 cXyz spawnPos(pos.x, lavaY + 25.0f, pos.z);
-                fopAcM_create(PROC_Obj_Magmarock, 0, &spawnPos, i_this->mParam);
+                fopAcM_create(fpcNm_Obj_Magmarock_e, 0, &spawnPos, i_this->mParam);
                 break;
             }
         }
@@ -111,7 +111,7 @@ static cPhs_State dWpotWater_Create(kankyo_class* i_this) {
     i_this->mPos.y = groundY;
     if (groundY != -G_CM3D_F_INF) {
         cXyz sp18(i_this->mPos.x, i_this->mPos.y, i_this->mPos.z);
-        fopAcM_create(PROC_HITOBJ, 0, &sp18, i_this->mParam);
+        fopAcM_create(fpcNm_HITOBJ_e, 0, &sp18, i_this->mParam);
         return a_this->create();
     }
     
@@ -130,7 +130,7 @@ kankyo_process_profile_definition g_profile_WPOT_WATER = {
     /* LayerID       */ fpcLy_CURRENT_e,
     /* ListID        */ 0x0002,
     /* ListPrio      */ fpcPi_CURRENT_e,
-    /* ProcName      */ PROC_WPOT_WATER,
+    /* ProcName      */ fpcNm_WPOT_WATER_e,
     /* Proc SubMtd   */ &g_fpcLf_Method.base,
     /* Size          */ sizeof(dWpotWater_c),
     /* SizeOther     */ 0,

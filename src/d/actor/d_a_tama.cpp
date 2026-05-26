@@ -77,7 +77,7 @@ BOOL daTama_c::_execute() {
                     fopAc_ac_c* hitac = hitobj->GetAc();
                     if (hitac != NULL) {
                         if (hitac != partner) {
-                            if (fopAcM_GetName(hitac) == PROC_PLAYER) {
+                            if (fopAcM_GetName(hitac) == fpcNm_PLAYER_e) {
                                 partner->field_0x6ba = 1;
                             }
                         } else {
@@ -149,7 +149,7 @@ actor_process_profile_definition g_profile_TAMA = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0009,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAMA,
+    /* ProcName     */ fpcNm_TAMA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTama_c),
     /* SizeOther    */ 0,

@@ -409,7 +409,7 @@ actor_process_profile_definition g_profile_DK = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DK,
+    /* ProcName     */ fpcNm_DK_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(dk_class),
     /* SizeOther    */ 0,

@@ -180,7 +180,7 @@ static void* searchTower_CB(void* i_actor, void* i_this) {
 
 /* 000005C8-00000630       .text _searchTower__10daNpc_Tc_cFP10fopAc_ac_c */
 fopAc_ac_c* daNpc_Tc_c::_searchTower(fopAc_ac_c* i_actor) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_Smplbg && ((daObjSmplbg::Act_c*)i_actor)->prm_get_type() == 0) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_Obj_Smplbg_e && ((daObjSmplbg::Act_c*)i_actor)->prm_get_type() == 0) {
         return i_actor;
     }
     return NULL;
@@ -1949,7 +1949,7 @@ actor_process_profile_definition g_profile_NPC_TC = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_TC,
+    /* ProcName     */ fpcNm_NPC_TC_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Tc_c),
     /* SizeOther    */ 0,

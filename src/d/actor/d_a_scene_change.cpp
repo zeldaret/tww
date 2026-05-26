@@ -63,7 +63,7 @@ actor_process_profile_definition g_profile_SCENECHG = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SCENECHG,
+    /* ProcName     */ fpcNm_SCENECHG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(d_a_scene_change_c),
     /* SizeOther    */ 0,

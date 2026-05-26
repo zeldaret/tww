@@ -174,7 +174,7 @@ kankyo_process_profile_definition g_profile_KYEFF = {
     /* LayerID       */ fpcLy_CURRENT_e,
     /* ListID        */ 0x000C,
     /* ListPrio      */ fpcPi_CURRENT_e,
-    /* ProcName      */ PROC_KYEFF,
+    /* ProcName      */ fpcNm_KYEFF_e,
     /* Proc SubMtd   */ &g_fpcLf_Method.base,
     /* Size          */ sizeof(dKyeff_c),
     /* SizeOther     */ 0,

@@ -514,7 +514,7 @@ actor_process_profile_definition g_profile_Obj_Volcano = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Volcano,
+    /* ProcName     */ fpcNm_Obj_Volcano_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjVolcano::Act_c),
     /* SizeOther    */ 0,

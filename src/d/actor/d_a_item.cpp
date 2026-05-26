@@ -207,7 +207,7 @@ void daItem_c::CreateInit() {
     set_mtx();
     animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
     
-    if (fopAcM_SearchByName(PROC_BST)) { // Gohdan
+    if (fopAcM_SearchByName(fpcNm_BST_e)) { // Gohdan
         mpParticleEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTKIRAKIRAARROW00, &current.pos);
     }
 }
@@ -322,7 +322,7 @@ void daItem_c::mode_proc_call() {
     }
     
     if (checkFlag(FLAG_BOOMERANG)) {
-        fopAc_ac_c* boomerang = (fopAc_ac_c*)fopAcM_SearchByName(PROC_BOOMERANG);
+        fopAc_ac_c* boomerang = (fopAc_ac_c*)fopAcM_SearchByName(fpcNm_BOOMERANG_e);
         if (boomerang) {
             current.pos = boomerang->current.pos;
         } else {
@@ -331,7 +331,7 @@ void daItem_c::mode_proc_call() {
     }
     
     if (checkFlag(FLAG_HOOK)) {
-        fopAc_ac_c* grappling_hook = (fopAc_ac_c*)fopAcM_SearchByName(PROC_HIMO2);
+        fopAc_ac_c* grappling_hook = (fopAc_ac_c*)fopAcM_SearchByName(fpcNm_HIMO2_e);
         if (grappling_hook) {
             current.pos = grappling_hook->current.pos;
         } else {
@@ -664,7 +664,7 @@ void daItem_c::itemGetExecute() {
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     case dItem_SWORD_e: {
-        daItem_c* item = (daItem_c*)fopAcM_SearchByName(PROC_ITEM);
+        daItem_c* item = (daItem_c*)fopAcM_SearchByName(fpcNm_ITEM_e);
         if (item && item->m_itemNo == dItem_SHIELD_e) {
             item->itemGetExecute();
         }
@@ -672,7 +672,7 @@ void daItem_c::itemGetExecute() {
         break;
     }
     case dItem_SHIELD_e: {
-        daItem_c* item = (daItem_c*)fopAcM_SearchByName(PROC_ITEM);
+        daItem_c* item = (daItem_c*)fopAcM_SearchByName(fpcNm_ITEM_e);
         if (item && item->m_itemNo == dItem_SWORD_e) {
             item->itemGetExecute();
         }
@@ -1046,7 +1046,7 @@ BOOL daItem_c::itemActionForSword() {
 BOOL daItem_c::itemActionForArrow() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     
-    if (mOnGroundTimer == 0 && mpParticleEmitter && fopAcM_SearchByName(PROC_BST)) { // Gohdan
+    if (mOnGroundTimer == 0 && mpParticleEmitter && fopAcM_SearchByName(fpcNm_BST_e)) { // Gohdan
         mpParticleEmitter->setGlobalTranslation(current.pos);
     }
     
@@ -1061,7 +1061,7 @@ BOOL daItem_c::itemActionForArrow() {
         
         mOnGroundTimer++;
         
-        if (mOnGroundTimer == 1 && fopAcM_SearchByName(PROC_BST)) { // Gohdan
+        if (mOnGroundTimer == 1 && fopAcM_SearchByName(fpcNm_BST_e)) { // Gohdan
             JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_ST_BSTDROPARROWSMOKE00, &current.pos, NULL, NULL, 0xFF, &mPtclSmokeCb, fopAcM_GetRoomNo(this));
             if (emitter) {
                 emitter->setMaxFrame(1);
@@ -1524,7 +1524,7 @@ actor_process_profile_definition g_profile_ITEM = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ITEM,
+    /* ProcName     */ fpcNm_ITEM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daItem_c),
     /* SizeOther    */ 0,

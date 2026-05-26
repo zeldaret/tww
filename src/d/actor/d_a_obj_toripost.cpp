@@ -1030,7 +1030,7 @@ actor_process_profile_definition g_profile_OBJ_TORIPOST = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_TORIPOST,
+    /* ProcName     */ fpcNm_OBJ_TORIPOST_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjTpost_c),
     /* SizeOther    */ 0,

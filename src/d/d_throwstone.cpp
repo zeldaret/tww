@@ -123,7 +123,7 @@ actor_process_profile_definition g_profile_THROWSTONE = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0002,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_THROWSTONE,
+    /* ProcName     */ fpcNm_THROWSTONE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daThrowstone_c),
     /* SizeOther    */ 0,

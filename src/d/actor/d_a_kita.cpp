@@ -28,7 +28,7 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
         MtxPosition(&delta_pos,&local_44);
         delta_pos = i_pt->old.pos - pActor->current.pos;
         MtxPosition(&delta_pos, &local_50);
-        if (fopAcM_GetName(i_pt) == PROC_PLAYER) {
+        if (fopAcM_GetName(i_pt) == fpcNm_PLAYER_e) {
             pActor->mExecuteCount = 10;
         }
         s16 xAngle_target = local_44.z * ((REG0_F(0) + 10.0f) / pActor->scale.z);
@@ -258,7 +258,7 @@ BOOL himo_create(kita_class* i_this)
                 param->base.angle.y = yad[i];
                 param->base.parameters = 0xFFFFFF35;
                 param->room_no = i_this->current.roomNo;
-                i_this->field_2D4[i] = fopAcM_Create(PROC_SHAND, NULL, param);
+                i_this->field_2D4[i] = fopAcM_Create(fpcNm_SHAND_e, NULL, param);
                 i_this->field_2E4[i]++;
 
             case 1:
@@ -497,7 +497,7 @@ actor_process_profile_definition g_profile_KITA = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KITA,
+    /* ProcName     */ fpcNm_KITA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kita_class),
     /* SizeOther    */ 0,

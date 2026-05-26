@@ -479,7 +479,7 @@ void dComIfG_inf_c::ct() {
 /* 800531A8-8005326C       .text dComIfG_changeOpeningScene__FP11scene_classs */
 int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
 #if VERSION == VERSION_DEMO
-    if (!fopScnM_ChangeReq(i_scene, i_procName, PROC_OVERLAP0, 30)) {
+    if (!fopScnM_ChangeReq(i_scene, i_procName, fpcNm_OVERLAP0_e, 30)) {
         return FALSE;
     }
 #endif
@@ -492,7 +492,7 @@ int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
 #if VERSION > VERSION_DEMO
     dComIfGs_setRestartRoomParam(0);
 
-    fopScnM_ChangeReq(i_scene, i_procName, PROC_OVERLAP0, 30);
+    fopScnM_ChangeReq(i_scene, i_procName, fpcNm_OVERLAP0_e, 30);
     fopScnM_ReRequest(i_procName, 0);
 #endif
 

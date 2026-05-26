@@ -435,7 +435,7 @@ void daNpc_Km1_c::setAttention() {
 bool daNpc_Km1_c::decideType(int param_1) {
     field_0x7D3 = 0xFF;
     switch(fopAcM_GetName(this)){
-        case PROC_NPC_KM1:
+        case fpcNm_NPC_KM1_e:
             field_0x7D3 = 0;
             field_0x7D4 = 0;  
             break;
@@ -821,7 +821,7 @@ actor_process_profile_definition g_profile_NPC_KM1 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_KM1,
+    /* ProcName     */ fpcNm_NPC_KM1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Km1_c),
     /* SizeOther    */ 0,

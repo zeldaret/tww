@@ -1120,7 +1120,7 @@ actor_process_profile_definition g_profile_Obj_Apzl = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Apzl,
+    /* ProcName     */ fpcNm_Obj_Apzl_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjApzl_c),
     /* SizeOther    */ 0,

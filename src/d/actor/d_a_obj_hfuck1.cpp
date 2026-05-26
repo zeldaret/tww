@@ -203,7 +203,7 @@ bool daObjHfuck1_c::_execute() {
 #endif
 
     if (mpHookshotActor != NULL) {
-        if (fopAcM_IsActor(mpHookshotActor) == TRUE && fopAcM_GetName(mpHookshotActor) == PROC_HOOKSHOT) {
+        if (fopAcM_IsActor(mpHookshotActor) == TRUE && fopAcM_GetName(mpHookshotActor) == fpcNm_HOOKSHOT_e) {
             daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
             if (player != NULL) {
                 player->setHookshotCarryOffset(fopAcM_GetID(this), (const cXyz*)&l_hook_offset);
@@ -263,7 +263,7 @@ actor_process_profile_definition g_profile_Obj_Hfuck1 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Hfuck1,
+    /* ProcName     */ fpcNm_Obj_Hfuck1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjHfuck1_c),
     /* SizeOther    */ 0,

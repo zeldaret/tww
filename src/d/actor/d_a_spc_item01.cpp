@@ -280,7 +280,7 @@ actor_process_profile_definition g_profile_SPC_ITEM01 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SPC_ITEM01,
+    /* ProcName     */ fpcNm_SPC_ITEM01_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSpcItem01_c),
     /* SizeOther    */ 0,

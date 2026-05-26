@@ -145,7 +145,7 @@ static void* searchNeadDeadRd_CB(void* i_actor, void* i_this) {
 
 /* 000002A8-0000030C       .text _searchNearDeadRd__6daRd_cFP10fopAc_ac_c */
 fopAc_ac_c* daRd_c::_searchNearDeadRd(fopAc_ac_c* i_actor) {
-    if (fopAcM_GetName(i_actor) == PROC_RD) {
+    if (fopAcM_GetName(i_actor) == fpcNm_RD_e) {
         daRd_c* other = static_cast<daRd_c*>(i_actor);
         if (other->mMode == MODE_DEATH) {
             if (fopAcM_searchActorDistanceXZ(this, i_actor) < l_HIO.m34) {
@@ -1948,7 +1948,7 @@ actor_process_profile_definition g_profile_RD = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_RD,
+    /* ProcName     */ fpcNm_RD_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daRd_c),
     /* SizeOther    */ 0,

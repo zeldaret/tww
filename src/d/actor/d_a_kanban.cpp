@@ -246,12 +246,12 @@ void* bom_search_sub(void* ac, void*) {
         bool bVar2 = false;
         s16 proc = fopAcM_GetName(ac);
 
-        if (proc == PROC_BOMB) {
+        if (proc == fpcNm_BOMB_e) {
             daBomb_c* bomb = (daBomb_c*)ac;
             if (bomb->chk_state(daBomb_c::STATE_0)) {
                 bVar2 = true;
             }
-        } else if (proc == PROC_Bomb2) {
+        } else if (proc == fpcNm_Bomb2_e) {
             daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)ac;
             if (bomb2->chk_explode()) {
                 bVar2 = true;
@@ -355,7 +355,7 @@ void cut_point_check(kanban_class* i_this) {
         dScnPly_ply_c::setPauseTimer(1);
         a_this->current.angle.z = i_this->m2C4;
         
-        fpc_ProcID fVar6 = fopAcM_createChild(PROC_KANBAN, fopAcM_GetID(a_this), parameters, &a_this->current.pos, fopAcM_GetRoomNo(a_this), &a_this->current.angle, &a_this->scale, 0, NULL);
+        fpc_ProcID fVar6 = fopAcM_createChild(fpcNm_KANBAN_e, fopAcM_GetID(a_this), parameters, &a_this->current.pos, fopAcM_GetRoomNo(a_this), &a_this->current.angle, &a_this->scale, 0, NULL);
         if (fVar6 != fpcM_ERROR_PROCESS_ID_e) {
             fopAcM_seStart(a_this, JA_SE_OBJ_BREAK_BOARD, 0);
             
@@ -1175,7 +1175,7 @@ actor_process_profile_definition g_profile_KANBAN = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KANBAN,
+    /* ProcName     */ fpcNm_KANBAN_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kanban_class),
     /* SizeOther    */ 0,

@@ -343,7 +343,7 @@ BOOL daBFlower_c::actLive() {
             cCcD_Obj* tg = mSph.GetTgHitObj();
             if (tg != NULL) {
                 if (tg->ChkAtType(AT_TYPE_BOMB)) {
-                    mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, daBomb2::Act_c::prm_make(daBomb2::Start_UNK0_e, true), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+                    mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(fpcNm_Bomb2_e, daBomb2::Act_c::prm_make(daBomb2::Start_UNK0_e, true), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
                     m58C = 0;
                 } else if (tg->ChkAtType(~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT))) {
                     // TODO: simplify
@@ -353,7 +353,7 @@ BOOL daBFlower_c::actLive() {
                     }
                     u32 prm = daBomb2::Act_c::prm_make(daBomb2::Start_UNK1_e, b);
 
-                    mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, prm, &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+                    mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(fpcNm_Bomb2_e, prm, &current.pos, fopAcM_GetRoomNo(this), &current.angle));
                     m58C = 0;
                 }
             }
@@ -364,7 +364,7 @@ BOOL daBFlower_c::actLive() {
 
     if (fopAcM_checkCarryNow(this) && m58D != 0) {
         m58C = 0;
-        mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, daBomb2::Act_c::prm_make(daBomb2::Start_UNK2_e, false), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+        mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(fpcNm_Bomb2_e, daBomb2::Act_c::prm_make(daBomb2::Start_UNK2_e, false), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
 
         fopAcM_cancelCarryNow(this);
         if (mpBombActor != NULL) {
@@ -523,7 +523,7 @@ actor_process_profile_definition g_profile_BOMB_FLOWER = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BOMB_FLOWER,
+    /* ProcName     */ fpcNm_BOMB_FLOWER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daBFlower_c),
     /* SizeOther    */ 0,

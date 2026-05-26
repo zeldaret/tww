@@ -157,7 +157,7 @@ static void wave_cont(bwdg_class* i_this, u8 r4) {
 /* 00000734-00000780       .text boss_a_d_sub__FPvPv */
 static void* boss_a_d_sub(void* param_1, void* param_2) {
     UNUSED(param_2);
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BWD) {
+    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BWD_e) {
         return param_1;
     }
     return NULL;
@@ -255,7 +255,7 @@ actor_process_profile_definition g_profile_BWDG = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BWDG,
+    /* ProcName     */ fpcNm_BWDG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bwdg_class),
     /* SizeOther    */ 0,

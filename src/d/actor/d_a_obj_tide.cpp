@@ -545,19 +545,19 @@ void Act_c::se_set_gmtw() {
 /* 000018B0-00001934       .text se_start_gopo__Q29daObjTide5Act_cFv */
 void Act_c::se_start_gopo() {
     JUT_ASSERT(VERSION_SELECT(1084, 1099, 1110, 1110), M_id_gopo == fpcM_ERROR_PROCESS_ID_e);
-    M_id_gopo = fopKyM_create(PROC_LEVEL_SE, JA_SE_ATM_MJ_WATER_GOPO, &home.pos, 0, 0);
+    M_id_gopo = fopKyM_create(fpcNm_LEVEL_SE_e, JA_SE_ATM_MJ_WATER_GOPO, &home.pos, 0, 0);
 }
 
 /* 00001934-000019B8       .text se_start_out__Q29daObjTide5Act_cFv */
 void Act_c::se_start_out() {
     JUT_ASSERT(VERSION_SELECT(1102, 1117, 1128, 1128), M_id_out == fpcM_ERROR_PROCESS_ID_e);
-    M_id_out = fopKyM_create(PROC_LEVEL_SE, JA_SE_ATM_MJ_WATER_OUT, &home.pos, 0, 0);
+    M_id_out = fopKyM_create(fpcNm_LEVEL_SE_e, JA_SE_ATM_MJ_WATER_OUT, &home.pos, 0, 0);
 }
 
 /* 000019B8-00001A3C       .text se_start_up__Q29daObjTide5Act_cFv */
 void Act_c::se_start_up() {
     JUT_ASSERT(VERSION_SELECT(1120, 1135, 1146, 1146), M_id_up == fpcM_ERROR_PROCESS_ID_e);
-    M_id_up = fopKyM_create(PROC_LEVEL_SE, JA_SE_ATM_MJ_WATER_UP, &current.pos, 0, 0);
+    M_id_up = fopKyM_create(fpcNm_LEVEL_SE_e, JA_SE_ATM_MJ_WATER_UP, &current.pos, 0, 0);
 }
 
 /* 00001A3C-00001A8C       .text se_stop_gopo__Q29daObjTide5Act_cFv */
@@ -703,7 +703,7 @@ actor_process_profile_definition g_profile_Obj_Tide = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0002,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Tide,
+    /* ProcName     */ fpcNm_Obj_Tide_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjTide::Act_c),
     /* SizeOther    */ 0,

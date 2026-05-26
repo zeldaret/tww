@@ -361,7 +361,7 @@ void daObjSwpush::Act_c::rideCB(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
                     i_this->mRidingMode = 1;
                 }
 
-                bool is_player = fopAcM_GetProfName(i_pt) == PROC_PLAYER;
+                bool is_player = fopAcM_GetProfName(i_pt) == fpcNm_PLAYER_e;
                 if (is_player) {
                     i_this->mVibTimer = 4;
                 }
@@ -814,7 +814,7 @@ actor_process_profile_definition g_profile_Obj_Swpush = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0002,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Swpush,
+    /* ProcName     */ fpcNm_Obj_Swpush_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjSwpush::Act_c),
     /* SizeOther    */ 0,

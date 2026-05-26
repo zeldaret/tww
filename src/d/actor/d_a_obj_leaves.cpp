@@ -257,7 +257,7 @@ void daObjLeaves_c::birthEffect(int arg1, cXyz* arg2, csXyz* arg3, GXColor* arg4
 void rideCallBack(dBgW*, fopAc_ac_c* a_this, fopAc_ac_c* a_player) {
     daObjLeaves_c* i_this = (daObjLeaves_c*)a_this;
 
-    if (fopAcM_GetName(a_player) == PROC_PLAYER) {
+    if (fopAcM_GetName(a_player) == fpcNm_PLAYER_e) {
         daPy_py_c* player = (daPy_py_c*)a_player;
 #if VERSION == VERSION_DEMO
         if (player->speedF >= l_HIO.m14) {
@@ -792,7 +792,7 @@ actor_process_profile_definition g_profile_Obj_Leaves = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Leaves,
+    /* ProcName     */ fpcNm_Obj_Leaves_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjLeaves_c),
     /* SizeOther    */ 0,

@@ -3625,7 +3625,7 @@ void dKyr_thunder_move() {
             }
 
             if (cM_rndF(1.0f) < 0.18f)
-                fopKyM_create(PROC_KY_THUNDER, -1);
+                fopKyM_create(fpcNm_KY_THUNDER_e, -1);
         }
         break;
     case 2:

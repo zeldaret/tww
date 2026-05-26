@@ -730,7 +730,7 @@ void daNpc_Fa1_c::bottle_baba_wait() {
 /* 800FC848-800FC8E4       .text init_bottle_baba_move__11daNpc_Fa1_cFv */
 void daNpc_Fa1_c::init_bottle_baba_move() {
     setMode(Mode_BOTTLE_BABA_MOVE_e);
-    fopAcM_SearchByName(PROC_NPC_BA1, &m764);
+    fopAcM_SearchByName(fpcNm_NPC_BA1_e, &m764);
     mTimer = l_HIO.m50.prm.m22;
     speedF = l_HIO.m50.prm.m08;
     m798 = 1;
@@ -1017,7 +1017,7 @@ actor_process_profile_definition g_profile_NPC_FA1 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_FA1,
+    /* ProcName     */ fpcNm_NPC_FA1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Fa1_c),
     /* SizeOther    */ 0,

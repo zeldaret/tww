@@ -577,7 +577,7 @@ actor_process_profile_definition g_profile_HOOKSHOT = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0006,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_HOOKSHOT,
+    /* ProcName     */ fpcNm_HOOKSHOT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daHookshot_c),
     /* SizeOther    */ 0,

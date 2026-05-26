@@ -186,7 +186,7 @@ actor_process_profile_definition g_profile_NPC_KG1 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_KG1,
+    /* ProcName     */ fpcNm_NPC_KG1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Kg1_c),
     /* SizeOther    */ 0,

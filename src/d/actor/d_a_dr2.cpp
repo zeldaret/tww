@@ -185,7 +185,7 @@ static BOOL daDr2_Draw(dr2_class* i_this) {
 /* 000006D4-00000720       .text s_a_d_sub__FPvPv */
 void* s_a_d_sub(void* ac1, void* ac2) {
     UNUSED(ac2);
-    if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == PROC_BTD) {
+    if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == fpcNm_BTD_e) {
         return ac1;
     }
     return NULL;
@@ -802,7 +802,7 @@ static cPhs_State daDr2_Create(fopAc_ac_c* a_this) {
         params->base.parameters = 0x511;
         params->room_no = a_this->current.roomNo;
 
-        i_this->unk_3FC = fopAcM_Create(PROC_KUI, NULL, params);
+        i_this->unk_3FC = fopAcM_Create(fpcNm_KUI_e, NULL, params);
         i_this->unk_4A8.x = a_this->home.pos.x;
         i_this->unk_4A8.y = a_this->home.pos.y + REG0_F(7) - 50.0f;
         i_this->unk_4A8.z = a_this->home.pos.z;
@@ -822,7 +822,7 @@ actor_process_profile_definition g_profile_DR2 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DR2,
+    /* ProcName     */ fpcNm_DR2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(dr2_class),
     /* SizeOther    */ 0,

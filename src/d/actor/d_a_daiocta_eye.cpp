@@ -182,7 +182,7 @@ void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* i_actor, dCcD_GObjI
 
 /* 00000510-000005D0       .text _coHit__15daDaiocta_Eye_cFP10fopAc_ac_c */
 void daDaiocta_Eye_c::_coHit(fopAc_ac_c* i_actor) {
-    if (fpcM_GetName(i_actor) == PROC_BOMB) {
+    if (fpcM_GetName(i_actor) == fpcNm_BOMB_e) {
         daBomb_c* bomb_p = (daBomb_c *) i_actor;
         if (bomb_p->chk_state(daBomb_c::STATE_4)) {
             if (!mbIsDead) {
@@ -459,7 +459,7 @@ void daDaiocta_Eye_c::createInit() {
     mEyeScale.setall(1.0f);
     if (parentActorID != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* parent_p = fopAcM_SearchByID(parentActorID);
-        if (parent_p && fopAc_IsActor(parent_p) && fpcM_GetName(parent_p) == PROC_DAIOCTA) {
+        if (parent_p && fopAc_IsActor(parent_p) && fpcM_GetName(parent_p) == fpcNm_DAIOCTA_e) {
             mpParentActor = (daDaiocta_c *) parent_p;
         }
     }
@@ -522,7 +522,7 @@ actor_process_profile_definition g_profile_DAIOCTA_EYE = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DAIOCTA_EYE,
+    /* ProcName     */ fpcNm_DAIOCTA_EYE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daDaiocta_Eye_c),
     /* SizeOther    */ 0,

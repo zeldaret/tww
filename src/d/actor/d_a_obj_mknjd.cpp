@@ -565,7 +565,7 @@ void daObjMknjD::Act_c::privateCut() {
 
 /* 00001348-00001400       .text manage_friend_draw__10daObjMknjDFi */
 void daObjMknjD::manage_friend_draw(int i_param1) {
-    fopAc_ac_c* judgeResult = fopAcM_SearchByName(PROC_NPC_MD);
+    fopAc_ac_c* judgeResult = fopAcM_SearchByName(fpcNm_NPC_MD_e);
 
     if (judgeResult != NULL) {
         if (i_param1 == 1) {
@@ -575,7 +575,7 @@ void daObjMknjD::manage_friend_draw(int i_param1) {
         }
     }
 
-    judgeResult = fopAcM_SearchByName(PROC_NPC_CB1);
+    judgeResult = fopAcM_SearchByName(fpcNm_NPC_CB1_e);
     
     if (judgeResult != NULL) {
         if (i_param1 == 1) {
@@ -771,7 +771,7 @@ BOOL daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                         fopAcM_orderChangeEventId(this, mDemoEventIdx, 0, 0xFFFF);
                         dComIfGs_onEventBit(m0430);
 
-                        s16 procMedli = PROC_NPC_MD;
+                        s16 procMedli = fpcNm_NPC_MD_e;
                         void* judgeResult = fopAcIt_Judge(fpcSch_JudgeForPName, &procMedli);
 
                         if (judgeResult != NULL) {
@@ -1052,7 +1052,7 @@ actor_process_profile_definition g_profile_Obj_MknjD = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_MknjD,
+    /* ProcName     */ fpcNm_Obj_MknjD_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMknjD::Act_c),
     /* SizeOther    */ 0,

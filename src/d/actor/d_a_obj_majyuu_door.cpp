@@ -160,7 +160,7 @@ actor_process_profile_definition g_profile_OBJ_MJDOOR = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_MJDOOR,
+    /* ProcName     */ fpcNm_OBJ_MJDOOR_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_MjDoor_c),
     /* SizeOther    */ 0,

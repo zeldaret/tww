@@ -1085,7 +1085,7 @@ static BOOL bom_eat_check(bst_class* i_this) {
         if (hit_obj != NULL) {
             fopAc_ac_c* hit_actor = (fopAc_ac_c*)hit_obj->GetAc();
             daBomb_c* bomb = (daBomb_c*)hit_actor;
-            if (hit_actor != NULL && fopAcM_GetName(hit_actor) == PROC_BOMB && bomb->getBombCheck_Flag() == 0 && bomb->getBombRestTime() > 1) {
+            if (hit_actor != NULL && fopAcM_GetName(hit_actor) == fpcNm_BOMB_e && bomb->getBombCheck_Flag() == 0 && bomb->getBombRestTime() > 1) {
                 i_this->mBombId = fopAcM_GetID(bomb);
                 bomb->setBombCheck_Flag();
                 bomb->change_state(daBomb_c::STATE_2);
@@ -3164,7 +3164,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             i_this->mEyeHealth[1] = 2;
             i_this->mEyeHealth[0] = 2;
             for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m2E90); i++) {
-                i_this->m2E90[i] = fopAcM_create(PROC_ATT, 100, &actor->current.pos, fopAcM_GetRoomNo(actor));
+                i_this->m2E90[i] = fopAcM_create(fpcNm_ATT_e, 100, &actor->current.pos, fopAcM_GetRoomNo(actor));
             }
             for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->mCcD_beams); i++) {
                 i_this->mCcD_beams[i].Set(beam_sph_src);
@@ -3199,7 +3199,7 @@ actor_process_profile_definition g_profile_BST = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BST,
+    /* ProcName     */ fpcNm_BST_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bst_class),
     /* SizeOther    */ 0,

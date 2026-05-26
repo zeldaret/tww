@@ -50,7 +50,7 @@ void dMagma_ballBoss_c::update() {
 
 /* 80076D50-80076D9C       .text b_a_sub__FPvPv */
 void* b_a_sub(void* param_1, void* param_2) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BTD) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BTD_e) {
         return param_1;
     }
     return NULL;

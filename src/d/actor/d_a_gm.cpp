@@ -260,7 +260,7 @@ actor_process_profile_definition g_profile_GM = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_GM,
+    /* ProcName     */ fpcNm_GM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(gm_class),
     /* SizeOther    */ 0,

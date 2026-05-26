@@ -1788,7 +1788,7 @@ static void move(btd_class* i_this) {
 /* 00005BCC-00005C24       .text k_a_d_sub__FPvPv */
 static void* k_a_d_sub(void* i_this, void* param_2) {
     UNUSED(param_2);
-    if (((fopAcM_IsActor(i_this)) && (fopAcM_GetName(i_this) == PROC_KUI)) && (fopAcM_GetParam(i_this) == 0x511)) {
+    if (((fopAcM_IsActor(i_this)) && (fopAcM_GetName(i_this) == fpcNm_KUI_e)) && (fopAcM_GetParam(i_this) == 0x511)) {
         return i_this;
     }
     return NULL;
@@ -1797,7 +1797,7 @@ static void* k_a_d_sub(void* i_this, void* param_2) {
 /* 00005C24-00005C70       .text dr2_a_d_sub__FPvPv */
 static void* dr2_a_d_sub(void* i_this, void* param_2) {
     UNUSED(param_2);
-    if ((fopAcM_IsActor(i_this)) && (fopAcM_GetName(i_this) == PROC_DR2)) {
+    if ((fopAcM_IsActor(i_this)) && (fopAcM_GetName(i_this) == fpcNm_DR2_e)) {
         return i_this;
     } else {
         return NULL;
@@ -1807,7 +1807,7 @@ static void* dr2_a_d_sub(void* i_this, void* param_2) {
 /* 00005C70-00005CC8       .text wepon_s_sub__FPvPv */
 static void* wepon_s_sub(void* i_this, void* param_2) {
     UNUSED(param_2);
-    if (((fopAcM_IsActor(i_this)) && (fopAcM_GetName(i_this) == PROC_HIMO2)) || (fopAcM_GetName(i_this) == PROC_BOOMERANG)) {
+    if (((fopAcM_IsActor(i_this)) && (fopAcM_GetName(i_this) == fpcNm_HIMO2_e)) || (fopAcM_GetName(i_this) == fpcNm_BOOMERANG_e)) {
         return i_this;
     }
     return NULL;
@@ -2980,7 +2980,7 @@ static cPhs_State daBtd_Create(fopAc_ac_c* a_this) {
         i_this->floor = dComIfGp_getMagma()->newFloor(local_48, actor->scale, fopAcM_GetRoomNo(actor), -0xFA);
         JUT_ASSERT(DEMO_SELECT(6003, 6096), i_this->floor != NULL);
     }
-    fopAcM_create(PROC_Ykgr, 0x10FF00, &actor->current.pos);
+    fopAcM_create(fpcNm_Ykgr_e, 0x10FF00, &actor->current.pos);
     dKy_custom_timeset(l_HIO.m30);
     return cPhs_COMPLEATE_e;
 }
@@ -2997,7 +2997,7 @@ actor_process_profile_definition g_profile_BTD = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BTD,
+    /* ProcName     */ fpcNm_BTD_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(btd_class),
     /* SizeOther    */ 0,

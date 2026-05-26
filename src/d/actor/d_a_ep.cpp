@@ -269,7 +269,7 @@ void ep_move(ep_class* i_this) {
                         if (hitObj != NULL && hitObj->ChkAtType(0x600000)) {
                             fopAc_ac_c* ac = hitObj->GetAc();
 
-                            if (fopAcM_GetName(ac) == PROC_BDK) {
+                            if (fopAcM_GetName(ac) == fpcNm_BDK_e) {
                                 i_this->m7DC = ac->shape_angle.y;
                             } else {
                                 i_this->m7DC = player->shape_angle.y;
@@ -712,7 +712,7 @@ actor_process_profile_definition g_profile_EP = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_EP,
+    /* ProcName     */ fpcNm_EP_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(ep_class),
     /* SizeOther    */ 0,

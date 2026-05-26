@@ -217,14 +217,14 @@ void daObjPirateship::Act_c::partsCreate() {
     m_sail_id = fopAcM_createChild("Psail", fopAcM_GetID(this), 0, &current.pos, tevStr.mRoomNo, &current.angle);
     JUT_ASSERT(282, (m_sail_id != fpcM_ERROR_PROCESS_ID_e));
 
-    m2F0 = fopAcM_createChild(PROC_PIRATE_FLAG, fopAcM_GetID(this), 0, &current.pos, tevStr.mRoomNo, &current.angle);
+    m2F0 = fopAcM_createChild(fpcNm_PIRATE_FLAG_e, fopAcM_GetID(this), 0, &current.pos, tevStr.mRoomNo, &current.angle);
 
     if (uVar2 != 3) {
         cXyz sp30 = current.pos;
         sp30.y += 700.0f;
         sp30.x += cM_ssin(current.angle.y) * 850.0f;
         sp30.z += cM_scos(current.angle.y) * 850.0f;
-        m2F8 = fopAcM_createChild(PROC_Obj_Tousekiki, fopAcM_GetID(this), 0, &sp30, tevStr.mRoomNo, &current.angle);
+        m2F8 = fopAcM_createChild(fpcNm_Obj_Tousekiki_e, fopAcM_GetID(this), 0, &sp30, tevStr.mRoomNo, &current.angle);
     }
 
     if (uVar2 != 3) {
@@ -233,7 +233,7 @@ void daObjPirateship::Act_c::partsCreate() {
         sp24.x += cM_ssin(current.angle.y) * -788.0f;
         sp24.z += cM_scos(current.angle.y) * -788.0f;
 
-        m300 = fopAcM_createChild(PROC_Kaji, fopAcM_GetID(this), 0, &sp24, tevStr.mRoomNo, &current.angle);
+        m300 = fopAcM_createChild(fpcNm_Kaji_e, fopAcM_GetID(this), 0, &sp24, tevStr.mRoomNo, &current.angle);
     }
 
     cXyz sp18 = current.pos;
@@ -250,7 +250,7 @@ void daObjPirateship::Act_c::partsCreate() {
     sp18.x += cM_ssin(current.angle.y) * 475.0f;
     sp18.z += cM_scos(current.angle.y) * 475.0f;
 
-    m308 = fopAcM_createChild(PROC_KNOB00, fopAcM_GetID(this), dr_prm[uVar3], &sp18, tevStr.mRoomNo, &sp10);
+    m308 = fopAcM_createChild(fpcNm_KNOB00_e, fopAcM_GetID(this), dr_prm[uVar3], &sp18, tevStr.mRoomNo, &sp10);
     m304 = NULL;
 }
 
@@ -596,7 +596,7 @@ actor_process_profile_definition g_profile_Obj_Pirateship = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Pirateship,
+    /* ProcName     */ fpcNm_Obj_Pirateship_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjPirateship::Act_c),
     /* SizeOther    */ 0,

@@ -521,7 +521,7 @@ BOOL daTitle_c::execute() {
             scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
             JUT_ASSERT(VERSION_SELECT(0x2B1, 0x2B1, 0x2EF, 0x2EF), stageProc != NULL);
 
-            if (!m29C && fopScnM_ChangeReq(stageProc, PROC_NAME_SCENE, 0, 5)) {
+            if (!m29C && fopScnM_ChangeReq(stageProc, fpcNm_NAME_SCENE_e, 0, 5)) {
                 mDoAud_seStart(JA_SE_OP_ENTER_GAME);
                 m29C = true;
             }
@@ -535,7 +535,7 @@ BOOL daTitle_c::execute() {
             JUT_ASSERT(VERSION_SELECT(0x2BD, 0x2BD, 0x2FC, 0x2FC), stageProc != NULL);
 
             if (!m29C) {
-                s16 procName = fpcM_GetName(stageProc) == PROC_OPENING_SCENE ? PROC_OPEN2_SCENE : PROC_TITLE_SCENE;
+                s16 procName = fpcM_GetName(stageProc) == fpcNm_OPENING_SCENE_e ? fpcNm_OPEN2_SCENE_e : fpcNm_TITLE_SCENE_e;
                 fopScnM_ChangeReq(stageProc, procName, 1, 5);
                 m29C = true;
             }
@@ -590,7 +590,7 @@ actor_process_profile_definition g_profile_TITLE = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TITLE,
+    /* ProcName     */ fpcNm_TITLE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTitle_c),
     /* SizeOther    */ 0,

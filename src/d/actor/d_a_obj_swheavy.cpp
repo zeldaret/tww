@@ -208,7 +208,7 @@ void daObjSwheavy::Act_c::rideCB(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) 
     if (fopAcM_CheckStatus(i_pt, fopAcStts_FREEZE_e)) {
         i_this->mRiding = true;
 
-        if (fopAcM_GetProfName(i_pt) == PROC_PLAYER && ((daPy_py_c*)i_pt)->checkEquipHeavyBoots()) {
+        if (fopAcM_GetProfName(i_pt) == fpcNm_PLAYER_e && ((daPy_py_c*)i_pt)->checkEquipHeavyBoots()) {
             i_this->mHeavyRiding = true;
         }
     }
@@ -471,7 +471,7 @@ actor_process_profile_definition g_profile_Obj_Swheavy = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0002,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Swheavy,
+    /* ProcName     */ fpcNm_Obj_Swheavy_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjSwheavy::Act_c),
     /* SizeOther    */ 0,

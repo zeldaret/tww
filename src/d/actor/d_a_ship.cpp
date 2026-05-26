@@ -2691,7 +2691,7 @@ BOOL daShip_c::procStartModeWarp_init() {
     camera->mCamera.Set(current.pos, local_38);
     m037A = 0;
 #if VERSION == VERSION_DEMO
-    mTactWarpID = fopAcM_create(PROC_TORNADO, 2, &current.pos, fopAcM_GetRoomNo(this));
+    mTactWarpID = fopAcM_create(fpcNm_TORNADO_e, 2, &current.pos, fopAcM_GetRoomNo(this));
 #endif
     fopAcM_seStartCurrent(this, 0x186D, 0);
     return TRUE;
@@ -4026,7 +4026,7 @@ BOOL daShip_c::execute() {
                 csXyz sp1C;
                 sp1C.set(getCannonAngleX(), getCannonAngleY(), shape_angle.z);
 
-                daBomb_c* bomb = (daBomb_c *)fopAcM_fastCreate(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_4, FALSE, TRUE), &spE4, tevStr.mRoomNo, &sp1C);
+                daBomb_c* bomb = (daBomb_c *)fopAcM_fastCreate(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_4, FALSE, TRUE), &spE4, tevStr.mRoomNo, &sp1C);
 
                 if (bomb) {
                     dCam_getBody()->ForceLockOn(fpcM_GetID(bomb));
@@ -4694,7 +4694,7 @@ cPhs_State daShip_c::create() {
 
         gravity = -2.5f;
         maxFallSpeed = -150.0f;
-        mGridID = fopAcM_create(PROC_GRID, 1, &current.pos, -1, &current.angle);
+        mGridID = fopAcM_create(fpcNm_GRID_e, 1, &current.pos, -1, &current.angle);
 
         if (mGridID == fpcM_ERROR_PROCESS_ID_e) {
             return cPhs_ERROR_e;
@@ -4721,7 +4721,7 @@ cPhs_State daShip_c::create() {
         cull.box.max.y = 570.0f;
         cull.box.max.z = 240.0f;
         
-        fopKyM_create(PROC_WIND_ARROW, (s32)this, 0, 0, 0);
+        fopKyM_create(fpcNm_WIND_ARROW_e, (s32)this, 0, 0, 0);
 
         offStateFlg(daSFLG_UNK2_e);
         mAcch.CrrPos(*dComIfG_Bgsp());
@@ -4758,7 +4758,7 @@ cPhs_State daShip_c::create() {
         m19C0.mRate = 0.0f;
 
         if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e) {
-            fopAcM_createChild(PROC_Coming2, fopAcM_GetID(this), 0, &current.pos, -1, NULL);
+            fopAcM_createChild(fpcNm_Coming2_e, fopAcM_GetID(this), 0, &current.pos, -1, NULL);
         }
     }
     return res;
@@ -4781,7 +4781,7 @@ actor_process_profile_definition g_profile_SHIP = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0004,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SHIP,
+    /* ProcName     */ fpcNm_SHIP_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daShip_c),
     /* SizeOther    */ 0,

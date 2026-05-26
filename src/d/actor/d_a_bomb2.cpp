@@ -654,7 +654,7 @@ namespace daBomb2 {
             hitNormal *= attr().field_0x44;
             mWindVec.abs2();
             fopAc_ac_c* hitActor = mSph.GetTgHitAc();
-            if (hitActor && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
+            if (hitActor && fopAcM_GetProfName(hitActor) == fpcNm_PLAYER_e) {
                 s16 hitObjAngleY = cM_atan2s(hitNormal.x, hitNormal.z);
                 f32 f2 = cM_scos(hitActor->shape_angle.y - hitObjAngleY);
                 if (f2 > 0.0f) {
@@ -1340,7 +1340,7 @@ actor_process_profile_definition g_profile_Bomb2 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Bomb2,
+    /* ProcName     */ fpcNm_Bomb2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daBomb2::Act_c),
     /* SizeOther    */ 0,

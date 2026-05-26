@@ -266,7 +266,7 @@ static cPhs_State daEsa_Create(fopAc_ac_c* i_actor) {
                 params->base.angle.y = i_this->current.angle.y;
                 params->base.angle.z = cM_rndF(65536.0f);
                 params->base.parameters = 0x000000FF;
-                fpcM_Create(PROC_ESA, 0, params);
+                fpcM_Create(fpcNm_ESA_e, 0, params);
             }
         }
     }
@@ -292,7 +292,7 @@ actor_process_profile_definition g_profile_ESA = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ESA,
+    /* ProcName     */ fpcNm_ESA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(esa_class),
     /* SizeOther    */ 0,

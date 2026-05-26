@@ -248,7 +248,7 @@ bool daFire_c::_execute() {
 
 /* 00000A70-00000AD8       .text search_wind__8daFire_cFv */
 void daFire_c::search_wind() {
-    fopAc_ac_c* pActor = fopAcM_SearchByName(PROC_WindTag);
+    fopAc_ac_c* pActor = fopAcM_SearchByName(fpcNm_WindTag_e);
     if (pActor) {
         field_0x8F0 = fopAcM_GetID(pActor);
     } else {
@@ -540,7 +540,7 @@ actor_process_profile_definition g_profile_Fire = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Fire,
+    /* ProcName     */ fpcNm_Fire_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daFire_c),
     /* SizeOther    */ 0,

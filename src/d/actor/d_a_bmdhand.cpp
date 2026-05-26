@@ -660,7 +660,7 @@ void hand_move(bmdhand_class* i_this) {
 /* 00002E74-00002EC0       .text s_a_d_sub__FPvPv */
 void* s_a_d_sub(void* param_1, void* param_2) {
     UNUSED(param_2);
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BMD)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BMD_e)) {
         return param_1;
     } else {
         return NULL;
@@ -833,7 +833,7 @@ actor_process_profile_definition g_profile_BMDHAND = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BMDHAND,
+    /* ProcName     */ fpcNm_BMDHAND_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bmdhand_class),
     /* SizeOther    */ 0,

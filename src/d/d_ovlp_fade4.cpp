@@ -185,7 +185,7 @@ dOvlpFd4_c::dOvlpFd4_c() {
     first = true;
     setExecute(&dOvlpFd4_c::execFirstSnap);
     setDraw(&dOvlpFd4_c::drawFadeOut);
-    if (fopOvlpM_GetName(this) == PROC_OVERLAP4) {
+    if (fopOvlpM_GetName(this) == fpcNm_OVERLAP4_e) {
         fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_saftyWhiteColor);
     } else {
         fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, (GXColor){ 0x00, 0x00, 0x00, 0x00 });
@@ -379,7 +379,7 @@ overlap_process_profile_definition g_profile_OVERLAP4 = {
     /* Layer ID    */ fpcLy_ROOT_e,
     /* List ID     */ 2,
     /* List Prio   */ fpcPi_CURRENT_e,
-    /* Proc Name   */ PROC_OVERLAP4,
+    /* Proc Name   */ fpcNm_OVERLAP4_e,
     /* Proc SubMtd */ &g_fpcLf_Method.base,
     /* Size        */ sizeof(dOvlpFd4_c),
     /* Size Other  */ 0,
@@ -393,7 +393,7 @@ overlap_process_profile_definition g_profile_OVERLAP5 = {
     /* Layer ID    */ fpcLy_ROOT_e,
     /* List ID     */ 2,
     /* List Prio   */ fpcPi_CURRENT_e,
-    /* Proc Name   */ PROC_OVERLAP5,
+    /* Proc Name   */ fpcNm_OVERLAP5_e,
     /* Proc SubMtd */ &g_fpcLf_Method.base,
     /* Size        */ sizeof(dOvlpFd4_c),
     /* Size Other  */ 0,

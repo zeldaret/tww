@@ -242,7 +242,7 @@ actor_process_profile_definition g_profile_Hys = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0008,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Hys,
+    /* ProcName     */ fpcNm_Hys_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daHys_c),
     /* SizeOther    */ 0,

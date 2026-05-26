@@ -357,10 +357,10 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* pa
 
     fpc_ProcID pcId;
     if(*param_3 >> 0x10 == 0x63) {
-        pcId = fopMsgM_create(PROC_SCP, param_1, param_2, param_3, param_4, NULL);
+        pcId = fopMsgM_create(fpcNm_SCP_e, param_1, param_2, param_3, param_4, NULL);
     }
     else if(*param_3 >> 0x10 == 0x59) {
-        pcId = fopMsgM_create(PROC_PB, param_1, param_2, param_3, param_4, NULL);
+        pcId = fopMsgM_create(fpcNm_PB_e, param_1, param_2, param_3, param_4, NULL);
     }
     else {
         mesg_header* header = msgGet.getMesgHeader(*param_3);
@@ -374,22 +374,22 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* pa
                 dComIfGp_setMessageRupee(price);
 
                 if(type == 2 || type == 6 || type == 7) {
-                    pcId = fopMsgM_create(PROC_MSG2, param_1, param_2, param_3, param_4, NULL);
+                    pcId = fopMsgM_create(fpcNm_MSG2_e, param_1, param_2, param_3, param_4, NULL);
                 }
                 else {
-                    pcId = fopMsgM_create(PROC_MSG, param_1, param_2, param_3, param_4, NULL);
+                    pcId = fopMsgM_create(fpcNm_MSG_e, param_1, param_2, param_3, param_4, NULL);
                 }
             }
             else {
                 *param_3 = 1;
                 *param_4 = *param_3;
-                pcId = fopMsgM_create(PROC_MSG, param_1, param_2, param_3, param_4, NULL);
+                pcId = fopMsgM_create(fpcNm_MSG_e, param_1, param_2, param_3, param_4, NULL);
             }
         }
         else {
             *param_3 = 1;
             *param_4 = *param_3;
-            pcId = fopMsgM_create(PROC_MSG, param_1, param_2, param_3, param_4, NULL);
+            pcId = fopMsgM_create(fpcNm_MSG_e, param_1, param_2, param_3, param_4, NULL);
         }
 
         JKRFileLoader::removeResource(header, NULL);
@@ -440,7 +440,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, fopAc_ac_c* pActor) {
         else {
             pMsg->mMsgNo = msgNo;
             pMsg->field_0xf0 = msgNo;
-            if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
+            if(fopMsgM_SearchByName(fpcNm_SCP_e) || fopMsgM_SearchByName(fpcNm_PB_e)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
             }
@@ -473,7 +473,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, cXyz* lookAtPos) {
         else {
             pMsg->mMsgNo = msgNo;
             pMsg->field_0xf0 = msgNo;
-            if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
+            if(fopMsgM_SearchByName(fpcNm_SCP_e) || fopMsgM_SearchByName(fpcNm_PB_e)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
             }
@@ -505,7 +505,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo) {
         else {
             pMsg->mMsgNo = msgNo;
             pMsg->field_0xf0 = msgNo;
-            if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
+            if(fopMsgM_SearchByName(fpcNm_SCP_e) || fopMsgM_SearchByName(fpcNm_PB_e)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
             }
@@ -559,7 +559,7 @@ u32 fopMsgM_tactMessageSet() {
         else {
             pMsg->mMsgNo = msgNoTemp;
             pMsg->field_0xf0 = msgNoTemp;
-            if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
+            if(fopMsgM_SearchByName(fpcNm_SCP_e) || fopMsgM_SearchByName(fpcNm_PB_e)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
             }

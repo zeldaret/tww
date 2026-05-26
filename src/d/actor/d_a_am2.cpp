@@ -1497,7 +1497,7 @@ actor_process_profile_definition g_profile_AM2 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_AM2,
+    /* ProcName     */ fpcNm_AM2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(am2_class),
     /* SizeOther    */ 0,

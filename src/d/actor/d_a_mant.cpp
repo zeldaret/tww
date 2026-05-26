@@ -125,7 +125,7 @@ actor_process_profile_definition g_profile_MANT = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MANT,
+    /* ProcName     */ fpcNm_MANT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(mant_class),
     /* SizeOther    */ 0,

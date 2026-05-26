@@ -6273,7 +6273,7 @@ actor_process_profile_definition g_profile_NPC_MD = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_MD,
+    /* ProcName     */ fpcNm_NPC_MD_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Md_c),
     /* SizeOther    */ 0,

@@ -241,7 +241,7 @@ actor_process_profile_definition g_profile_Ygcwp = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Ygcwp,
+    /* ProcName     */ fpcNm_Ygcwp_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daYgcwp_c),
     /* SizeOther    */ 0,

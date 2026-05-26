@@ -187,7 +187,7 @@ BOOL himo_create(kokiie_class* i_this) {
             pfVar3->base.angle.y = actor->current.angle.y + i * 0x3333 + -13000;
             pfVar3->base.parameters = 0xffffff01;
             pfVar3->room_no = actor->current.roomNo;
-            i_this->m2D4[i] = fopAcM_create(PROC_SHAND, NULL, pfVar3);
+            i_this->m2D4[i] = fopAcM_create(fpcNm_SHAND_e, NULL, pfVar3);
             i_this->m2E8[i]++;
 
         case 1:
@@ -467,7 +467,7 @@ actor_process_profile_definition g_profile_KOKIIE = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KOKIIE,
+    /* ProcName     */ fpcNm_KOKIIE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kokiie_class),
     /* SizeOther    */ 0,

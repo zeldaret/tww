@@ -25,7 +25,7 @@ static u32 ita_Ef[]     = { BITA_BRK_EF_BTDITA0, BITA_BRK_EF_BTDITA1 };
 /* 00000078-000000C4       .text b_a_sub__FPvPv */
 static void* b_a_sub(void* search, void* user) {
     UNUSED(user);
-    if (fopAc_IsActor(search) && fopAcM_GetName(search) == PROC_BTD)
+    if (fopAc_IsActor(search) && fopAcM_GetName(search) == fpcNm_BTD_e)
         return search;
     return NULL;
 }
@@ -283,7 +283,7 @@ actor_process_profile_definition g_profile_BITA = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BITA,
+    /* ProcName     */ fpcNm_BITA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bita_class),
     /* SizeOther    */ 0,

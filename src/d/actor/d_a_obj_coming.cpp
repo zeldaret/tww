@@ -332,7 +332,7 @@ void* daObjComing::Act_c::chk_make_pos_act(void* actor, void* data) {
 
     if (fopAc_IsActor(i_this)) {
         s16 proc = fopAcM_GetName(i_this);
-        if (proc != PROC_SHIP && proc != PROC_PLAYER && (std::fabsf(i_this->current.pos.y - tmp->m0C.y) < tmp->m1C + 100.0f)) {
+        if (proc != fpcNm_SHIP_e && proc != fpcNm_PLAYER_e && (std::fabsf(i_this->current.pos.y - tmp->m0C.y) < tmp->m1C + 100.0f)) {
             if (i_this->current.pos.absXZ(tmp->m0C) < tmp->m18 + 100.0f) {
                 return i_this;
             }
@@ -572,7 +572,7 @@ actor_process_profile_definition g_profile_Obj_Coming = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Coming,
+    /* ProcName     */ fpcNm_Obj_Coming_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjComing::Act_c),
     /* SizeOther    */ 0,

@@ -208,7 +208,7 @@ actor_process_profile_definition g_profile_Obj_Hami4 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Hami4,
+    /* ProcName     */ fpcNm_Obj_Hami4_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjHami4_c),
     /* SizeOther    */ 0,

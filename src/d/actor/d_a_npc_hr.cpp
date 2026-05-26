@@ -2086,7 +2086,7 @@ cPhs_State daNpc_Hr_c::_create() {
     if (state == cPhs_COMPLEATE_e) {
     fopAcM_ct_Demo(this, daNpc_Hr_c);
         switch(fopAcM_GetName(this)) {
-            case PROC_NPC_HR:
+            case fpcNm_NPC_HR_e:
                 switch (getShapeType()) {
                     case 1:
                         mType = 1;
@@ -2257,7 +2257,7 @@ actor_process_profile_definition g_profile_NPC_HR = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_HR,
+    /* ProcName     */ fpcNm_NPC_HR_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Hr_c),
     /* SizeOther    */ 0,

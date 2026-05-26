@@ -346,7 +346,7 @@ static void bomb_move_set(am_class* i_this, u8 alwaysMoveY) {
     swallowedActor->current.angle.y = actor->shape_angle.y;
     swallowedActor->shape_angle.y = actor->shape_angle.y;
 
-    if (fpcM_GetName(swallowedActor) == PROC_BOMB) {
+    if (fpcM_GetName(swallowedActor) == fpcNm_BOMB_e) {
         daBomb_c* bomb = (daBomb_c*)swallowedActor;
         if (i_this->mCountDownTimers[1] == 1) {
             bomb->scale.setall(0.0f);
@@ -355,7 +355,7 @@ static void bomb_move_set(am_class* i_this, u8 alwaysMoveY) {
             bomb->scale.setall(1.0f);
         }
         bomb->setBombRestTime(100);
-    } else if (fpcM_GetName(swallowedActor) == PROC_Bomb2) {
+    } else if (fpcM_GetName(swallowedActor) == fpcNm_Bomb2_e) {
         daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)swallowedActor;
         if (i_this->mCountDownTimers[1] == 1) {
             bomb2->scale.setall(0.0f);
@@ -390,7 +390,7 @@ static BOOL bomb_nomi_check(am_class* i_this) {
         if (hitObj) {
             fopAc_ac_c* hitActor = hitObj->GetAc();
             if (hitActor) {
-                if (fpcM_GetName(hitActor) == PROC_BOMB) {
+                if (fpcM_GetName(hitActor) == fpcNm_BOMB_e) {
                     daBomb_c* bomb = (daBomb_c*)hitActor;
                     if (!bomb->getBombCheck_Flag() && bomb->getBombRestTime() > 1) {
                         if (i_this->mMouthPos.y - (20.0f + REG8_F(1)) < bomb->current.pos.y) {
@@ -405,7 +405,7 @@ static BOOL bomb_nomi_check(am_class* i_this) {
                             return TRUE;
                         }
                     }
-                } else if (fpcM_GetName(hitActor) == PROC_Bomb2) {
+                } else if (fpcM_GetName(hitActor) == fpcNm_Bomb2_e) {
                     daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)hitActor;
                     if (!bomb2->chk_eat() && bomb2->get_time() > 1) {
                         if (i_this->mMouthPos.y - (20.0f + REG8_F(1)) < bomb2->current.pos.y) {
@@ -936,10 +936,10 @@ static void action_itai_move(am_class* i_this) {
             fopAc_ac_c* swallowedActor = fopAcM_SearchByID(i_this->mSwallowedActorPID);
             if (swallowedActor) {
                 swallowedActor->scale.setall(1.0f);
-                if (fpcM_GetName(swallowedActor) == PROC_BOMB) {
+                if (fpcM_GetName(swallowedActor) == fpcNm_BOMB_e) {
                     daBomb_c* bomb = (daBomb_c*)swallowedActor;
                     bomb->setBombRestTime(1);
-                } else if (fpcM_GetName(swallowedActor) == PROC_Bomb2) {
+                } else if (fpcM_GetName(swallowedActor) == fpcNm_Bomb2_e) {
                     daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)swallowedActor;
                     bomb2->set_time(1);
                 }
@@ -1383,7 +1383,7 @@ actor_process_profile_definition g_profile_AM = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_AM,
+    /* ProcName     */ fpcNm_AM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(am_class),
     /* SizeOther    */ 0,

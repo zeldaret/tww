@@ -83,7 +83,7 @@ cPhs_State daTag_Kk1_c::_create() {
     fopAcM_ct(this, daTag_Kk1_c);
 
     switch(fopAcM_GetName(this)){
-        case PROC_TAG_KK1:
+        case fpcNm_TAG_KK1_e:
             mNameIsWrong = false;
             break;
         default:
@@ -140,7 +140,7 @@ actor_process_profile_definition g_profile_TAG_KK1 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_KK1,
+    /* ProcName     */ fpcNm_TAG_KK1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Kk1_c),
     /* SizeOther    */ 0,

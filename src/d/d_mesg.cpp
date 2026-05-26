@@ -2246,7 +2246,7 @@ msg_process_profile_definition g_profile_MESG = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 12,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MESG,
+    /* ProcName     */ fpcNm_MESG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sub_mesg_class),
     /* SizeOther    */ 0,

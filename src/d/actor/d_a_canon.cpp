@@ -188,7 +188,7 @@ void* daCanon_BreakTarget(void* arg1, void* arg2) {
     if (fopAcM_IsActor(arg1) && fopAcM_GetName(arg1) == tk_Obj_Barrel2_e) {
         fopAc_ac_c* ac1 = (fopAc_ac_c*)arg1;
         if (fopAcM_GetID(arg2) == fopAcM_GetLinkId(ac1)) {
-            fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_0, false, false), &ac1->current.pos, -1, NULL, NULL, -1, dEv_extra_createCB);
+            fopAcM_create(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_0, false, false), &ac1->current.pos, -1, NULL, NULL, -1, dEv_extra_createCB);
         }
     }
     return NULL;
@@ -707,7 +707,7 @@ actor_process_profile_definition g_profile_Canon = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Canon,
+    /* ProcName     */ fpcNm_Canon_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daCanon_c),
     /* SizeOther    */ 0,

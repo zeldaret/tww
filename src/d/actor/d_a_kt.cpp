@@ -341,7 +341,7 @@ static cPhs_State daKt_Create(fopAc_ac_c* i_ac) {
                     params->base.position = i_this->current.pos;
                     params->base.angle.set(0, 0, 0);
                     params->base.parameters = 1001 + i;
-                    fpcM_Create(PROC_KT, NULL, params);
+                    fpcM_Create(fpcNm_KT_e, NULL, params);
                 }
             }
 
@@ -370,7 +370,7 @@ actor_process_profile_definition g_profile_KT = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KT,
+    /* ProcName     */ fpcNm_KT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kt_class),
     /* SizeOther    */ 0,

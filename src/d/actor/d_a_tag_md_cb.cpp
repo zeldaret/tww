@@ -206,7 +206,7 @@ BOOL daTag_MdCb_c::messageAction(void*) {
         if (npc != NULL && npc->isTagCheckOK()) {
             s16 sVar2 = fopAcM_GetName(npc);
 
-            if (sVar2 == PROC_NPC_MD) {
+            if (sVar2 == fpcNm_NPC_MD_e) {
                 daNpc_Md_c* md = (daNpc_Md_c*)npc;
 
                 if (argument == 5) {
@@ -220,7 +220,7 @@ BOOL daTag_MdCb_c::messageAction(void*) {
                         m2B4 = 0;
                     }
                 }
-            } else if (sVar2 == PROC_NPC_CB1) {
+            } else if (sVar2 == fpcNm_NPC_CB1_e) {
                 daNpc_Cb1_c* cb1 = (daNpc_Cb1_c*)npc;
 
                 if (argument == 9) {
@@ -721,7 +721,7 @@ actor_process_profile_definition g_profile_TAG_MDCB = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_MDCB,
+    /* ProcName     */ fpcNm_TAG_MDCB_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_MdCb_c),
     /* SizeOther    */ 0,

@@ -860,7 +860,7 @@ actor_process_profile_definition g_profile_HIMO3 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0008,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_HIMO3,
+    /* ProcName     */ fpcNm_HIMO3_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(himo3_class),
     /* SizeOther    */ 0,

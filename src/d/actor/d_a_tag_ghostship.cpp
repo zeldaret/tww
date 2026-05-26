@@ -172,7 +172,7 @@ actor_process_profile_definition g_profile_TAG_GSHIP = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0008,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_GSHIP,
+    /* ProcName     */ fpcNm_TAG_GSHIP_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Gship_c),
     /* SizeOther    */ 0,

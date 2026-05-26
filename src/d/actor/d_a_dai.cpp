@@ -100,9 +100,9 @@ void daDai_c::CreateInit() {
 
     if (dComIfGs_getEventReg(m_savelabel[mSaveID])) {
 #if VERSION <= VERSION_JPN
-        void* pfVar3 = fopAcM_fastCreate(PROC_STANDITEM, dComIfGs_getEventReg(m_savelabel[mSaveID]), &current.pos, -1, &current.angle);
+        void* pfVar3 = fopAcM_fastCreate(fpcNm_STANDITEM_e, dComIfGs_getEventReg(m_savelabel[mSaveID]), &current.pos, -1, &current.angle);
 #else
-        void* pfVar3 = fopAcM_fastCreate(PROC_STANDITEM, dComIfGs_getEventReg(m_savelabel[mSaveID]), &current.pos, fopAcM_GetRoomNo(this), &current.angle);
+        void* pfVar3 = fopAcM_fastCreate(fpcNm_STANDITEM_e, dComIfGs_getEventReg(m_savelabel[mSaveID]), &current.pos, fopAcM_GetRoomNo(this), &current.angle);
 #endif
         m850 = fopAcM_GetID(pfVar3);
         incNowItemNum();
@@ -376,7 +376,7 @@ actor_process_profile_definition g_profile_DAI = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DAI,
+    /* ProcName     */ fpcNm_DAI_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daDai_c),
     /* SizeOther    */ 0,

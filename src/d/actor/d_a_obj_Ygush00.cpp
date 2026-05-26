@@ -125,7 +125,7 @@ bool daObjYgush00_c::_execute() {
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_SPRING, 0);
             }
         } else {
-            mpGryw00 = (daObjGryw00_c*)fopAcM_SearchByName(PROC_Obj_Gryw00);
+            mpGryw00 = (daObjGryw00_c*)fopAcM_SearchByName(fpcNm_Obj_Gryw00_e);
         }
     } else {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_SPRING, 0);
@@ -189,7 +189,7 @@ actor_process_profile_definition g_profile_Obj_Ygush00 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ygush00,
+    /* ProcName     */ fpcNm_Obj_Ygush00_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjYgush00_c),
     /* SizeOther    */ 0,

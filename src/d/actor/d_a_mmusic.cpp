@@ -188,7 +188,7 @@ actor_process_profile_definition g_profile_Mmusic = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Mmusic,
+    /* ProcName     */ fpcNm_Mmusic_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMmusic::Act_c),
     /* SizeOther    */ 0,

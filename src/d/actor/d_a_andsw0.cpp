@@ -143,7 +143,7 @@ static s32 check_count;
 
 /* 000003C4-0000044C       .text bk_s_sub1__FPvPv */
 static void* bk_s_sub1(void* i_this, void*) {
-    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BK && (fopAcM_GetParam(i_this) & 0xF) == 7)  {
+    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == fpcNm_BK_e && (fopAcM_GetParam(i_this) & 0xF) == 7)  {
         s32 count = check_count; //regswaps without this
         if(count < 2) {
             ac[check_count] = i_this;
@@ -158,7 +158,7 @@ static void* bk_s_sub1(void* i_this, void*) {
 
 /* 0000044C-000004D4       .text bk_s_sub2__FPvPv */
 static void* bk_s_sub2(void* i_this, void*) {
-    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BK && (fopAcM_GetParam(i_this) & 0xF) == 4)  {
+    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == fpcNm_BK_e && (fopAcM_GetParam(i_this) & 0xF) == 4)  {
         s32 count = check_count; //regswaps without this
         if(count == 2) {
             ac[check_count] = i_this;
@@ -173,7 +173,7 @@ static void* bk_s_sub2(void* i_this, void*) {
 
 /* 000004D4-0000055C       .text bk_s_sub3__FPvPv */
 static void* bk_s_sub3(void* i_this, void*) {
-    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BK && (fopAcM_GetParam(i_this) & 0xF) == 5)  {
+    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == fpcNm_BK_e && (fopAcM_GetParam(i_this) & 0xF) == 5)  {
         s32 count = check_count; //regswaps without this
         if(count < 5) {
             ac[check_count] = i_this;
@@ -188,7 +188,7 @@ static void* bk_s_sub3(void* i_this, void*) {
 
 /* 0000055C-000005D4       .text bb_s_sub__FPvPv */
 static void* bb_s_sub(void* search, void*) {
-    if(fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_BB)  {
+    if(fopAcM_IsActor(search) && fopAcM_GetName(search) == fpcNm_BB_e)  {
         s32 count = check_count; //regswaps without this
         if(count < 7) {
             ac[check_count] = search;
@@ -350,7 +350,7 @@ actor_process_profile_definition g_profile_ANDSW0 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ANDSW0,
+    /* ProcName     */ fpcNm_ANDSW0_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(andsw0_class),
     /* SizeOther    */ 0,

@@ -371,7 +371,7 @@ void oya_kn_move(kn_class* i_this) {
         }
         puVar1->base.parameters = 2;
         puVar1->room_no = fopAcM_GetRoomNo(&i_this->actor);
-        fopAcM_Create(PROC_KN, NULL, puVar1);
+        fopAcM_Create(fpcNm_KN_e, NULL, puVar1);
         i_this->m2C2[0] = 10;
         i_this->m2D4--;
         if (i_this->m2D4 <= 0) {
@@ -587,7 +587,7 @@ actor_process_profile_definition g_profile_KN = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KN,
+    /* ProcName     */ fpcNm_KN_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kn_class),
     /* SizeOther    */ 0,

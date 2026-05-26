@@ -90,7 +90,7 @@ void daPy_lk_c::setShapeAngleToTalkActor() {
     if (partner_p != NULL) {
         s16 partner_name = fopAcM_GetName(partner_p);
         s16 target;
-        if (partner_name == PROC_AGB) {
+        if (partner_name == fpcNm_AGB_e) {
             target = cLib_targetAngleY(&current.pos, &partner_p->eyePos);
         } else {
             target = fopAcM_searchActorAngleY(this, partner_p);
@@ -606,7 +606,7 @@ BOOL daPy_lk_c::setGetDemo() {
                 if (r0 == 0xB) {
                     fopAc_ac_c* itemPartner = fopAcM_getItemEventPartner(this);
                     if (itemPartner != NULL &&
-                        (fopAcM_GetName(itemPartner) == PROC_ITEM || fopAcM_GetName(itemPartner) == PROC_Demo_Item))
+                        (fopAcM_GetName(itemPartner) == fpcNm_ITEM_e || fopAcM_GetName(itemPartner) == fpcNm_Demo_Item_e))
                     {
                         daItemBase_c* item = (daItemBase_c*)itemPartner;
                         item->hide();
@@ -780,12 +780,12 @@ BOOL daPy_lk_c::dProcGetItem() {
             mProcVar6.m3570 = 0;
             onModeFlg(ModeFlg_00000400);
         }
-        if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || (fopAcM_GetName(item) == PROC_Demo_Item))) {
+        if (item != NULL && (fopAcM_GetName(item) == fpcNm_ITEM_e || (fopAcM_GetName(item) == fpcNm_Demo_Item_e))) {
             item->hide();
         }
     } else {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-            if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
+            if (item != NULL && (fopAcM_GetName(item) == fpcNm_ITEM_e || fopAcM_GetName(item) == fpcNm_Demo_Item_e)) {
                 item->show();
                 if (m3624 == 0 && mProcVar2.m34D4 != -1) {
                     if (mProcVar2.m34D4 == 7 && (dComIfGs_getMaxLife() % 4)) {
@@ -808,7 +808,7 @@ BOOL daPy_lk_c::dProcGetItem() {
                     setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
                 }
             }
-        } else if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || (fopAcM_GetName(item) == PROC_Demo_Item))) {
+        } else if (item != NULL && (fopAcM_GetName(item) == fpcNm_ITEM_e || (fopAcM_GetName(item) == fpcNm_Demo_Item_e))) {
             item->hide();
         }
     }
@@ -950,7 +950,7 @@ BOOL daPy_lk_c::dProcFreezeDamage() {
 void daPy_lk_c::dProcDead_init_sub() {
     mProcVar6.m3570 = 0;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK20000000_e);
-    m3628 = fopMsgM_create(PROC_GAMEOVER);
+    m3628 = fopMsgM_create(fpcNm_GAMEOVER_e);
     mDemo.setSpecialDemoType();
     daPy_py_c::changePlayer(this);
 }
@@ -1672,7 +1672,7 @@ BOOL daPy_lk_c::dProcPresent() {
                 }
             } else {
                 daItemBase_c* item = (daItemBase_c*)fopAcM_getItemEventPartner(this);
-                if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
+                if (item != NULL && (fopAcM_GetName(item) == fpcNm_ITEM_e || fopAcM_GetName(item) == fpcNm_Demo_Item_e)) {
                     item->show();
                 }
             }
@@ -1744,7 +1744,7 @@ BOOL daPy_lk_c::dProcStandItemPut_init() {
     }
     mProcVar6.m3570 = 1;
     setSingleMoveAnime(ANM_GRABWAIT, m_HIO->mGrab.m.field_0x78, 0.0f, -1, -1.0f);
-    pfVar2 = (fopAc_ac_c*)fopAcM_fastCreate(PROC_STANDITEM, dComIfGp_event_getPreItemNo(), &current.pos, -1, angle);
+    pfVar2 = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_STANDITEM_e, dComIfGp_event_getPreItemNo(), &current.pos, -1, angle);
     if (pfVar2 != NULL) {
         mActorKeepGrab.setData(pfVar2);
         fopAcM_setCarryNow(pfVar2, FALSE);
@@ -2204,7 +2204,7 @@ BOOL daPy_lk_c::dProcBottleOpenFairy() {
                 } else {
                     dComIfGs_setEquipBottleItemEmpty(dItemBtn_Z_e);
                 }
-                fopAcM_fastCreate(PROC_NPC_FA1, daNpc_Fa1_c::Type_BABA_e, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
+                fopAcM_fastCreate(fpcNm_NPC_FA1_e, daNpc_Fa1_c::Type_BABA_e, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
             }
         }
     }

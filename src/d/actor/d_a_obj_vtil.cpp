@@ -210,7 +210,7 @@ actor_process_profile_definition g_profile_Obj_Vtil = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0008,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Vtil,
+    /* ProcName     */ fpcNm_Obj_Vtil_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjVtil_c),
     /* SizeOther    */ 0,

@@ -304,7 +304,7 @@ actor_process_profile_definition g_profile_ARROW_ICEEFF = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0009,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ARROW_ICEEFF,
+    /* ProcName     */ fpcNm_ARROW_ICEEFF_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daArrow_Iceeff_c),
     /* SizeOther    */ 0,

@@ -224,7 +224,7 @@ void daToge_c::set_collision() {
 
 /* 00000A78-00000AE0       .text search_wind__8daToge_cFv */
 void daToge_c::search_wind() {
-    fopAc_ac_c* pActor = fopAcM_SearchByName(PROC_WindTag);
+    fopAc_ac_c* pActor = fopAcM_SearchByName(fpcNm_WindTag_e);
 
     if (pActor != NULL) {
         mWindTagId = fopAcM_GetID(pActor);
@@ -332,7 +332,7 @@ actor_process_profile_definition g_profile_TOGE = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TOGE,
+    /* ProcName     */ fpcNm_TOGE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daToge_c),
     /* SizeOther    */ 0,

@@ -232,7 +232,7 @@ void ride_CB(dBgW*, fopAc_ac_c* a_this, fopAc_ac_c* arg2) {
 
 /* 00000648-00000750       .text _ride__13daObj_Warpt_cFP10fopAc_ac_c */
 void daObj_Warpt_c::_ride(fopAc_ac_c* arg1) {
-    if (fpcM_GetName(arg1) == PROC_PLAYER) {
+    if (fpcM_GetName(arg1) == fpcNm_PLAYER_e) {
         daPy_py_c* player = (daPy_py_c*)arg1;
 
         fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
@@ -884,7 +884,7 @@ actor_process_profile_definition g_profile_OBJ_WARPT = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_WARPT,
+    /* ProcName     */ fpcNm_OBJ_WARPT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Warpt_c),
     /* SizeOther    */ 0,

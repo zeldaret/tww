@@ -259,7 +259,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000608-00000670       .text search_wind__12daWindMill_cFv */
 void daWindMill_c::search_wind() {
-    fopAc_ac_c* windTag = fopAcM_SearchByName(PROC_WindTag);
+    fopAc_ac_c* windTag = fopAcM_SearchByName(fpcNm_WindTag_e);
     if (windTag != NULL)
         mWindTagId = fopAcM_GetID(windTag);
     else
@@ -501,7 +501,7 @@ actor_process_profile_definition g_profile_WINDMILL = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WINDMILL,
+    /* ProcName     */ fpcNm_WINDMILL_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWindMill_c),
     /* SizeOther    */ 0,

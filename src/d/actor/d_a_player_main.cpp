@@ -2259,7 +2259,7 @@ void daPy_lk_c::setDoStatus() {
             }
         } else if (mpAttnEntryA->mType == fopAc_Attn_TYPE_CARRY_e) {
             if (!fopAcM_CheckStatus(mpAttnActorA, fopAcStts_CARRY_e)) {
-                if (fopAcM_GetName(mpAttnActorA) == PROC_BOKO) {
+                if (fopAcM_GetName(mpAttnActorA) == fpcNm_BOKO_e) {
                     dComIfGp_setDoStatus(dActStts_PICK_UP_e);
                 } else {
                     dComIfGp_setDoStatus(dActStts_LIFT_e);
@@ -2953,7 +2953,7 @@ BOOL daPy_lk_c::checkAtnWaitAnime() {
             mpAttnActorLockOn != NULL &&
             (
                 fopAcM_GetGroup(mpAttnActorLockOn) == fopAc_ENEMY_e ||
-                fopAcM_GetName(mpAttnActorLockOn) == PROC_BOOMERANG
+                fopAcM_GetName(mpAttnActorLockOn) == fpcNm_BOOMERANG_e
             )
         ) ||
         mDemo.getDemoMode() == daPy_demo_c::DEMO_A_WAIT_e
@@ -3679,17 +3679,17 @@ void daPy_lk_c::returnKeepItemData() {
 /* 8010C8D4-8010CB70       .text makeItemType__9daPy_lk_cFv */
 void daPy_lk_c::makeItemType() {
     if (mEquipItem == dItem_GRAPPLING_HOOK_e) {
-        fopAc_ac_c* rope = (fopAc_ac_c*)fopAcM_fastCreate(PROC_HIMO2, 0, &current.pos);
+        fopAc_ac_c* rope = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_HIMO2_e, 0, &current.pos);
         mActorKeepEquip.setData(rope);
     } else if (mEquipItem == dItem_HOOKSHOT_e) {
-        fopAc_ac_c* hookshot = (fopAc_ac_c*)fopAcM_fastCreate(PROC_HOOKSHOT, 0, &current.pos);
+        fopAc_ac_c* hookshot = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_HOOKSHOT_e, 0, &current.pos);
         mActorKeepEquip.setData(hookshot);
         setHookshotModel();
     } else if (mEquipItem == dItem_BOOMERANG_e) {
-        fopAc_ac_c* boomerang = (fopAc_ac_c*)fopAcM_fastCreate(PROC_BOOMERANG, 0, &current.pos);
+        fopAc_ac_c* boomerang = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_BOOMERANG_e, 0, &current.pos);
         mActorKeepEquip.setData(boomerang);
     } else if (mEquipItem == dItem_BOMB_BAG_e) {
-        fopAc_ac_c* bomb = (fopAc_ac_c*)fopAcM_fastCreate(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_3, false, false), &current.pos);
+        fopAc_ac_c* bomb = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_3, false, false), &current.pos);
         mActorKeepGrab.setData(bomb);
         mEquipItem = daPyItem_NONE_e;
         if (mActorKeepGrab.getActor() != NULL) {
@@ -5233,7 +5233,7 @@ BOOL daPy_lk_c::changeDamageProc() {
                 }
                 
                 if (checkGrabWear() &&
-                    mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == PROC_NZ &&
+                    mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == fpcNm_NZ_e &&
                     grab_actor != NULL
                 ) {
                     cXyz* damage_vec = getDamageVec(&mCyl);
@@ -5766,7 +5766,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
         }
     } else if (mCurProc == daPyProc_DEMO_PRESENT_e || mCurProc == daPyProc_NOT_USE_e) {
         daItemBase_c* item = (daItemBase_c*)fopAcM_getItemEventPartner(this);
-        if (item && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
+        if (item && (fopAcM_GetName(item) == fpcNm_ITEM_e || fopAcM_GetName(item) == fpcNm_Demo_Item_e)) {
             item->dead();
         }
     } else if (mCurProc == daPyProc_DEMO_LETTER_READ_e) {
@@ -6909,7 +6909,7 @@ BOOL daPy_lk_c::procFrontRollCrash_init() {
     dKy_Sound_set(current.pos, 100, fopAcM_GetID(this), 5);
     if (mAcch.ChkWallHit() && mAcchCir[0].ChkWallHit()) {
         fopAc_ac_c* actor = dComIfG_Bgsp()->GetActorPointer(mAcchCir[0]);
-        if (actor != 0 && fopAcM_GetName(actor) == PROC_Obj_Movebox) {
+        if (actor != 0 && fopAcM_GetName(actor) == fpcNm_Obj_Movebox_e) {
             daObjMovebox::Act_c* movebox = (daObjMovebox::Act_c*)actor;
             movebox->set_rollCrash();
         }
@@ -7191,7 +7191,7 @@ BOOL daPy_lk_c::procAutoJump() {
             }
         }
     } else if (speed.y < -gravity && mProcVar6.m3570 != 2) {
-        if (mActorKeepGrab.getActor() != NULL && fopAcM_GetName(mActorKeepGrab.getActor()) == PROC_NPC_MD &&
+        if (mActorKeepGrab.getActor() != NULL && fopAcM_GetName(mActorKeepGrab.getActor()) == fpcNm_NPC_MD_e &&
             dComIfGs_isEventBit(dSv_event_flag_c::UNK_1620))
         {
             speed.y = 5.0f;
@@ -8565,7 +8565,7 @@ BOOL daPy_lk_c::procNotUse() {
     }
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         daItemBase_c* item = (daItemBase_c*)fopAcM_getItemEventPartner(this);
-        if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
+        if (item != NULL && (fopAcM_GetName(item) == fpcNm_ITEM_e || fopAcM_GetName(item) == fpcNm_Demo_Item_e)) {
             item->show();
         }
         if (mProcVar2.m34D4 == 0 && checkBottleItem((u16)mProcVar6.mBottleItem)) {
@@ -8588,7 +8588,7 @@ BOOL daPy_lk_c::procNotUse() {
                     }
                 } else if (msg_p->mStatus == fopMsgStts_BOX_CLOSED_e) {
                     msg_p->mStatus = fopMsgStts_MSG_DESTROYED_e;
-                    if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
+                    if (item != NULL && (fopAcM_GetName(item) == fpcNm_ITEM_e || fopAcM_GetName(item) == fpcNm_Demo_Item_e)) {
                         item->dead();
                     }
                     dComIfGp_event_reset();
@@ -9658,7 +9658,7 @@ void daPy_lk_c::checkLightHit() {
             m3438.setAngle(cM_atan2s(-lightVec.y, lightVec.absXZ()), angleY, 0);
             if (m3438.getEmitter() != NULL) {
                 if (mFanLightCps.GetAtHitAc() != 0 &&
-                    (fopAcM_GetName(mFanLightCps.GetAtHitAc()) == PROC_BPW))
+                    (fopAcM_GetName(mFanLightCps.GetAtHitAc()) == fpcNm_BPW_e))
                 {
                     m3438.getEmitter()->setGlobalScale(boss_scale);
                 } else {
@@ -11154,7 +11154,7 @@ void daPy_lk_c::checkRoofRestart() {
 #if VERSION > VERSION_DEMO
     if (
         dComIfG_Bgsp()->ChkMoveBG(mAcch.m_roof) &&
-        fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_roof)) == PROC_BRIDGE
+        fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_roof)) == fpcNm_BRIDGE_e
     ) {
         return;
     }
@@ -12434,7 +12434,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
     #if VERSION > VERSION_DEMO
         || (
             m352E != 0 && dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd) &&
-            fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) == PROC_TBOX
+            fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) == fpcNm_TBOX_e
         )
 #endif
     ) {
@@ -12446,7 +12446,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
         m352E--;
         if (m352E != 0) {
             if (!dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd) ||
-                fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) != PROC_OBJ_IKADA)
+                fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) != fpcNm_OBJ_IKADA_e)
             {
                 return cPhs_INIT_e;
             }
@@ -12456,7 +12456,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
 #else
     if (((fopAcM_GetParam(this) & 0x80) != 0) && m352E != 0) {
         if (!dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd) ||
-            fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) != PROC_OBJ_IKADA)
+            fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) != fpcNm_OBJ_IKADA_e)
         {
             return cPhs_INIT_e;
         }
@@ -12523,7 +12523,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
                 ship->setStartModeWarp();
 #if VERSION > VERSION_DEMO
                 cXyz local_38(current.pos.x, current.pos.y + 1500.0f, current.pos.z);
-                fpc_ProcID uVar8 = fopAcM_create(PROC_TORNADO, 2, &local_38, fopAcM_GetRoomNo(this));
+                fpc_ProcID uVar8 = fopAcM_create(fpcNm_TORNADO_e, 2, &local_38, fopAcM_GetRoomNo(this));
                 ship->setTactWarpID(uVar8);
 #endif
             }
@@ -12596,7 +12596,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
         mDemo.setDemoMode(daPy_demo_c::DEMO_N_WAIT_e);
         procWait_init();
         csXyz auStack_58(0, 0, 0);
-        fpc_ProcID fVar11 = fopAcM_createChild(PROC_FM, fopAcM_GetID(this), 0, &current.pos,
+        fpc_ProcID fVar11 = fopAcM_createChild(fpcNm_FM_e, fopAcM_GetID(this), 0, &current.pos,
                                                fopAcM_GetRoomNo(this), &auStack_58, NULL, 0xFF, 0);
         if (fVar11 != fpcM_ERROR_PROCESS_ID_e) {
             onNoResetFlg0(daPyFlg0_NO_DRAW);
@@ -13161,7 +13161,7 @@ actor_process_profile_definition2 g_profile_PLAYER = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 5,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_PLAYER,
+    /* ProcName     */ fpcNm_PLAYER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daPy_lk_c),
     /* SizeOther    */ 0,

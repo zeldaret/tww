@@ -175,7 +175,7 @@ void daWindTag_c::CreateInit() {
     if (checkSizeSpecialBig()) {
         seNum = JA_SE_OBJ_WIND_TAG_L;
     }
-    mLevelSeID = fopKyM_create(PROC_LEVEL_SE, seNum, &eyePos);
+    mLevelSeID = fopKyM_create(fpcNm_LEVEL_SE_e, seNum, &eyePos);
     mpEmitter = NULL;
     cXyz efScale(scale.x, scale.x, scale.x);
     if (field_0x57f) {
@@ -496,7 +496,7 @@ actor_process_profile_definition g_profile_WindTag = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WindTag,
+    /* ProcName     */ fpcNm_WindTag_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWindTag::daWindTag_c),
     /* SizeOther    */ 0,

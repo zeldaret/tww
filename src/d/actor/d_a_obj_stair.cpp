@@ -71,7 +71,7 @@ daobj_stairHIO_c::daobj_stairHIO_c() {
 /* 00000130-000001D8       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void ride_call_back(dBgW* i_arg0, fopAc_ac_c* i_arg1, fopAc_ac_c* i_arg2) {
     daObj_Stair_c* i_this = (daObj_Stair_c*)i_arg1;
-    if (fopAcM_GetProfName(i_arg2) == PROC_PLAYER && i_this->field_0x2E0 < l_HIO.m18){
+    if (fopAcM_GetProfName(i_arg2) == fpcNm_PLAYER_e && i_this->field_0x2E0 < l_HIO.m18){
         i_this->field_0x2E4 = 1;
         i_this->field_0x2C8.set(i_arg2->current.pos - i_arg1->current.pos);
         i_this->field_0x2D4.set(0.0f, -1.0f, 0.0f);
@@ -268,7 +268,7 @@ bool daObj_Stair_c::_execute() {
         if(mCps.ChkTgHit()) {
             fopAc_ac_c* ac = mCps.GetTgHitAc();
             if(ac) {
-                if(fopAcM_IsActor(ac) && fopAcM_GetProfName(ac) == PROC_BOMB){
+                if(fopAcM_IsActor(ac) && fopAcM_GetProfName(ac) == fpcNm_BOMB_e){
                     sin = cM_ssin(current.angle.y);
                     cos = cM_scos(current.angle.y);
                     field_0x2E4 = 1;
@@ -358,7 +358,7 @@ actor_process_profile_definition g_profile_Obj_Stair = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Stair,
+    /* ProcName     */ fpcNm_Obj_Stair_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Stair_c),
     /* SizeOther    */ 0,

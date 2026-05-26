@@ -183,7 +183,7 @@ actor_process_profile_definition g_profile_Obj_TnTrap = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_TnTrap,
+    /* ProcName     */ fpcNm_Obj_TnTrap_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjTnTrap_c),
     /* SizeOther    */ 0,

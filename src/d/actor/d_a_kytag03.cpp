@@ -158,7 +158,7 @@ actor_process_profile_definition g_profile_KYTAG03 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KYTAG03,
+    /* ProcName     */ fpcNm_KYTAG03_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kytag03_class),
     /* SizeOther    */ 0,

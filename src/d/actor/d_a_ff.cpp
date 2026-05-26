@@ -304,7 +304,7 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
                     pfVar4->base.angle.y = 0;
                     pfVar4->base.angle.x = 0;
                     pfVar4->base.parameters = fopAcM_GetParam(a_this);
-                    fopAcM_create(PROC_FF, NULL, pfVar4);
+                    fopAcM_create(fpcNm_FF_e, NULL, pfVar4);
                 }
             }
             a_this->mbNoUseGroundY = fopAcM_GetParam(a_this) >> 8;
@@ -364,7 +364,7 @@ actor_process_profile_definition g_profile_FF = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_FF,
+    /* ProcName     */ fpcNm_FF_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(ff_class),
     /* SizeOther    */ 0,

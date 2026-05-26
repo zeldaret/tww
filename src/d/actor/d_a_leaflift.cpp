@@ -193,7 +193,7 @@ static void rideCallBack(dBgW* param1, fopAc_ac_c* i_act, fopAc_ac_c* i_other) {
 
     cXyz posOffset = i_other->current.pos - i_this->current.pos;
     tiltFactor = 2.0f;
-    if (fopAcM_GetName(i_other) == PROC_PLAYER) {
+    if (fopAcM_GetName(i_other) == fpcNm_PLAYER_e) {
         i_this->m43C = TRUE;
         i_this->m43E = TRUE;
         posOffset = posOffset.outprod(up_vec);
@@ -364,7 +364,7 @@ actor_process_profile_definition g_profile_LEAF_LIFT = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_LEAF_LIFT,
+    /* ProcName     */ fpcNm_LEAF_LIFT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daLlift_c),
     /* SizeOther    */ 0,

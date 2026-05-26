@@ -212,7 +212,7 @@ actor_process_profile_definition g_profile_WZ = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WZ,
+    /* ProcName     */ fpcNm_WZ_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(wz_class),
     /* SizeOther    */ 0,

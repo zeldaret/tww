@@ -113,7 +113,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 000001B4-0000023C       .text ki_a_d_sub__FPvPv */
 void* ki_a_d_sub(void* ac1, void*) {
-    if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == PROC_KI) {
+    if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == fpcNm_KI_e) {
         ki_class* ki = (ki_class*)ac1;
         ki_all_count++;
         if (ki->mAction == ki_class::ACT_ATTACK_MOVE_INDEX_e && ki->mBehaviorType < 10) {
@@ -815,7 +815,7 @@ void ki_damage_move(ki_class* i_this) {
 }
 
 void* bgn_s_sub(void* ac1, void*) {
-    if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == PROC_BGN) {
+    if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == fpcNm_BGN_e) {
         return ac1;
     }
     return NULL;
@@ -1124,7 +1124,7 @@ static BOOL daKi_Execute(ki_class* i_this) {
             atInfo.mpActor = cc_at_check(&i_this->actor, &atInfo);
 
             if (atInfo.mpActor != NULL) {
-                if (fpcM_GetName(atInfo.mpActor) == PROC_BGN || fpcM_GetName(atInfo.mpActor) == PROC_BGN2 || fpcM_GetName(atInfo.mpActor) == PROC_BGN3) {
+                if (fpcM_GetName(atInfo.mpActor) == fpcNm_BGN_e || fpcM_GetName(atInfo.mpActor) == fpcNm_BGN2_e || fpcM_GetName(atInfo.mpActor) == fpcNm_BGN3_e) {
                     i_this->actor.health = -10;
                 }
             }
@@ -1493,7 +1493,7 @@ actor_process_profile_definition g_profile_KI = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KI,
+    /* ProcName     */ fpcNm_KI_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(ki_class),
     /* SizeOther    */ 0,

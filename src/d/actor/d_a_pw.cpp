@@ -220,7 +220,7 @@ void action_dousa(pw_class* i_this) {
         if (i_this->mBehaviorType == InvisibleAtStart) {
             i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
         }
-        i_this->mKanteraID = fopAcM_create(PROC_KANTERA, 0xFF000001, &i_this->m2CC, i_this->current.roomNo);
+        i_this->mKanteraID = fopAcM_create(fpcNm_KANTERA_e, 0xFF000001, &i_this->m2CC, i_this->current.roomNo);
         if (i_this->mKanteraID != fpcM_ERROR_PROCESS_ID_e) {
             i_this->m382 = 5;
             switch (i_this->mBehaviorType) {
@@ -246,7 +246,7 @@ void action_dousa(pw_class* i_this) {
         fopAc_ac_c* kantera;
         if (i_this->mKanteraID != fpcM_ERROR_PROCESS_ID_e &&
             fopAcM_SearchByID(i_this->mKanteraID, &kantera) && kantera != NULL &&
-            fopAcM_GetName(kantera) == PROC_KANTERA)
+            fopAcM_GetName(kantera) == fpcNm_KANTERA_e)
         {
             kantera->current.pos = i_this->m2CC;
             kantera->current.angle.y = i_this->shape_angle.y;
@@ -557,7 +557,7 @@ actor_process_profile_definition g_profile_PW = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_PW,
+    /* ProcName     */ fpcNm_PW_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(pw_class),
     /* SizeOther    */ 0,

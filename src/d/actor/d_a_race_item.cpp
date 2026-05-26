@@ -231,7 +231,7 @@ BOOL daRaceItem_c::execute() {
     }
 
     if(cLib_checkBit(field_0x645, (u8)0x01)) {
-        fopAc_ac_c* boomerang = (fopAc_ac_c*)fopAcM_SearchByName(PROC_BOOMERANG);
+        fopAc_ac_c* boomerang = (fopAc_ac_c*)fopAcM_SearchByName(fpcNm_BOOMERANG_e);
         if(boomerang) {
             current.pos = boomerang->current.pos;
         }
@@ -276,7 +276,7 @@ actor_process_profile_definition g_profile_RACEITEM = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_RACEITEM,
+    /* ProcName     */ fpcNm_RACEITEM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daRaceItem_c),
     /* SizeOther    */ 0,

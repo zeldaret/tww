@@ -377,7 +377,7 @@ void daTag_Hint_c::deleteLight() {
 void* findObjectCallBack(fopAc_ac_c* actor, void* v_this) {
     daTag_Hint_c* i_this = (daTag_Hint_c*)v_this;
 
-    if (fopAcM_GetProfName(actor) == PROC_Obj_Movebox && i_this->rangeCheck_local(&actor->home.pos)) {
+    if (fopAcM_GetProfName(actor) == fpcNm_Obj_Movebox_e && i_this->rangeCheck_local(&actor->home.pos)) {
         cXyz sp14 = actor->current.pos - actor->home.pos;
         if (sp14.abs2XZ() > 0.0f) {
             return actor;
@@ -782,7 +782,7 @@ actor_process_profile_definition g_profile_TAG_HINT = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_HINT,
+    /* ProcName     */ fpcNm_TAG_HINT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Hint_c),
     /* SizeOther    */ 0,

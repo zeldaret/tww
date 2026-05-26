@@ -224,7 +224,7 @@ msg_process_profile_definition g_profile_SCP = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x000C,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SCP,
+    /* ProcName     */ fpcNm_SCP_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sub_scp_class),
     /* SizeOther    */ 0,

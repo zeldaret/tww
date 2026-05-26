@@ -185,7 +185,7 @@ void daSalvage_c::checkOrder() {
             uVar2 = 0;
             m301 = false;
         } else {
-            m304 = fopAcM_create(PROC_SBOX, 0, pPos, getSRoomNo(), &current.angle, NULL, 0xff, salvage_createCB);
+            m304 = fopAcM_create(fpcNm_SBOX_e, 0, pPos, getSRoomNo(), &current.angle, NULL, 0xff, salvage_createCB);
             m301 = true;
             if (uVar7 == 0) {
                 uVar2 = 2;
@@ -194,7 +194,7 @@ void daSalvage_c::checkOrder() {
 
         u8 itemNo = getItemNo(getSalvageId());
         u32 params = (uVar2 << 8) | itemNo;
-        m2EC = fopAcM_create(PROC_SALVAGE_TBOX, params, pPos, getSRoomNo(), &current.angle, &scale, 0xff, salvage_createCB);
+        m2EC = fopAcM_create(fpcNm_SALVAGE_TBOX_e, params, pPos, getSRoomNo(), &current.angle, &scale, 0xff, salvage_createCB);
         m2E9 = 0;
         if (m2EC == fpcM_ERROR_PROCESS_ID_e || (m304 == fpcM_ERROR_PROCESS_ID_e && m301)) {
             dComIfGp_event_reset();
@@ -290,7 +290,7 @@ bool daSalvage_c::proc_wait() {
                 }
 
                 if (roomNo != 0xff && switchIndex != 0xff && !dComIfGs_isSwitch(switchIndex, roomNo) && !dComIfGs_isOceanSvBit(roomNo, uVar2)) {
-                    daDaiocta_c* bigOcto = (daDaiocta_c*)fopAcM_SearchByName(PROC_DAIOCTA);
+                    daDaiocta_c* bigOcto = (daDaiocta_c*)fopAcM_SearchByName(fpcNm_DAIOCTA_e);
 
                     if (bigOcto != NULL && switchIndex == bigOcto->getSw()) {
                         cXyz sp40 = getPos(i);
@@ -466,7 +466,7 @@ BOOL daSalvage_c::checkArea(cXyz crane_pos, int salvage_id) {
 void daSalvage_c::createEnemy() {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
-    fopAcM_create(PROC_OQ, 2, &player->current.pos);
+    fopAcM_create(fpcNm_OQ_e, 2, &player->current.pos);
 }
 
 /* 00001860-000019FC       .text onSalvageForOship__11daSalvage_cFP9daOship_c */
@@ -757,7 +757,7 @@ actor_process_profile_definition g_profile_Salvage = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Salvage,
+    /* ProcName     */ fpcNm_Salvage_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSalvage_c),
     /* SizeOther    */ 0,

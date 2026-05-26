@@ -306,7 +306,7 @@ cPhs_State daWarpf_c::_create() {
             seNum = JA_SE_OBJ_BOSS_TF_WARP_SUS;
         }
 
-        m2E8 = (dLevelSe_c*)fopKyM_fastCreate(PROC_LEVEL_SE, seNum, &current.pos, NULL, NULL);
+        m2E8 = (dLevelSe_c*)fopKyM_fastCreate(fpcNm_LEVEL_SE_e, seNum, &current.pos, NULL, NULL);
         if (m2E8 != NULL) {
             m2E8->seStop();
             m2E8->setReverb(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -877,7 +877,7 @@ actor_process_profile_definition g_profile_WARPFLOWER = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WARPFLOWER,
+    /* ProcName     */ fpcNm_WARPFLOWER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWarpf_c),
     /* SizeOther    */ 0,

@@ -121,14 +121,14 @@ void daObjOspbox::Act_c::init_mtx() {
 /* 00000CC0-00000D7C       .text make_item__Q211daObjOspbox5Act_cFv */
 void daObjOspbox::Act_c::make_item() {
     static const s16 pf_name[] = {
-        PROC_Obj_Ospbox,
-        PROC_KB,
-        PROC_KB,
-        PROC_KB,
-        PROC_Obj_Ospbox,
-        PROC_Obj_Ospbox,
-        PROC_Obj_Ospbox,
-        PROC_Obj_Ospbox
+        fpcNm_Obj_Ospbox_e,
+        fpcNm_KB_e,
+        fpcNm_KB_e,
+        fpcNm_KB_e,
+        fpcNm_Obj_Ospbox_e,
+        fpcNm_Obj_Ospbox_e,
+        fpcNm_Obj_Ospbox_e,
+        fpcNm_Obj_Ospbox_e
     };
     static const u32 prm[] = {
         0x00000000,
@@ -138,7 +138,7 @@ void daObjOspbox::Act_c::make_item() {
     };
 
     int prm_index = prm_get_spec();
-    if (pf_name[prm_index] == PROC_Obj_Ospbox) {
+    if (pf_name[prm_index] == fpcNm_Obj_Ospbox_e) {
         int item_no = prm_get_itemNo();
         fopAcM_createItemFromTable(&current.pos,
             item_no, 0x7F,
@@ -285,7 +285,7 @@ actor_process_profile_definition g_profile_Obj_Ospbox = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ospbox,
+    /* ProcName     */ fpcNm_Obj_Ospbox_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjOspbox::Act_c),
     /* SizeOther    */ 0,

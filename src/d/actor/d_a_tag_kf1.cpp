@@ -178,7 +178,7 @@ actor_process_profile_definition g_profile_TAG_KF1 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_KF1,
+    /* ProcName     */ fpcNm_TAG_KF1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Kf1_c),
     /* SizeOther    */ 0,

@@ -118,7 +118,7 @@ fpc_ProcID daAleaf_c::create_acorn_sub(bool arg1) {
     cXyz sp10;
     mDoMtx_stack_c::multVec(&acorn_offset, &sp10);
 
-    unk_424 = fopAcM_createChildFromOffset(PROC_TSUBO, fpcM_GetID(this), params, &sp10, fopAcM_GetRoomNo(this), NULL, NULL, -1, NULL);
+    unk_424 = fopAcM_createChildFromOffset(fpcNm_TSUBO_e, fpcM_GetID(this), params, &sp10, fopAcM_GetRoomNo(this), NULL, NULL, -1, NULL);
     unk_41B = false;
     unk_41C = false;
 
@@ -265,7 +265,7 @@ actor_process_profile_definition g_profile_ACORN_LEAF = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ACORN_LEAF,
+    /* ProcName     */ fpcNm_ACORN_LEAF_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daAleaf_c),
     /* SizeOther    */ 0,

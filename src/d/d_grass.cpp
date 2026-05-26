@@ -262,7 +262,7 @@ void dGrass_data_c::hitCheck(int roomNo) {
     dCcMassS_HitInf hitInf;
     fopAc_ac_c* actor;
     u32 ret = dComIfG_Ccsp()->ChkMass(&mPos, &actor, &hitInf);
-    bool checkAt = (ret & 1) && (actor != NULL && fopAcM_GetName(actor) != PROC_TSUBO && fopAcM_GetName(actor) != PROC_STONE);
+    bool checkAt = (ret & 1) && (actor != NULL && fopAcM_GetName(actor) != fpcNm_TSUBO_e && fopAcM_GetName(actor) != fpcNm_STONE_e);
 
     if ((ret & 2) == 0 && !checkAt) {
         if (mAnimIdx >= 8) {

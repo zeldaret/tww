@@ -238,7 +238,7 @@ bool daObj_Canon_c::checkTgHit() {
 void daObj_Canon_c::attackCannon() {
     csXyz angle;
     angle.set(shape_angle.x - field_0x2CA, shape_angle.y + field_0x2C6, shape_angle.z);
-    daBomb_c* bomb = (daBomb_c*)fopAcM_fastCreate(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_4, true, true), &field_0x450, tevStr.mRoomNo, &angle);
+    daBomb_c* bomb = (daBomb_c*)fopAcM_fastCreate(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_4, true, true), &field_0x450, tevStr.mRoomNo, &angle);
     bomb->setNoGravityTime(l_HIO.field_0x28);
     bomb->speedF = l_HIO.field_0x20 * cM_scos(angle.x);
     bomb->speed.y = -(l_HIO.field_0x20 * cM_ssin(angle.x));
@@ -647,7 +647,7 @@ actor_process_profile_definition g_profile_OBJ_CANON = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_CANON,
+    /* ProcName     */ fpcNm_OBJ_CANON_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Canon_c),
     /* SizeOther    */ 0,

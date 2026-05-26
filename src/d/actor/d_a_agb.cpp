@@ -740,7 +740,7 @@ void daAgb_c::resetCursor(bool param_0) {
     setFollowTarget(false);
     setTargetID(fpcM_ERROR_PROCESS_ID_e);
 
-    if (fopAcM_GetName(player_p) != PROC_NPC_KAM) {
+    if (fopAcM_GetName(player_p) != fpcNm_NPC_KAM_e) {
         current.pos = player_p->current.pos;
         home.pos = player_p->current.pos;
     } else {
@@ -940,7 +940,7 @@ void daAgb_c::GbaItemUse() {
                 temp_r29 = 15;
             }
 
-            fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
+            fopAcM_create(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
             field_0x65c = 120;
         } else {
             temp_r29 = 0xe;
@@ -951,7 +951,7 @@ void daAgb_c::GbaItemUse() {
         break;
     case 0x15:
         resetCursor(false);
-        fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
+        fopAcM_create(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
         field_0x65c = 120;
         break;
     case 0x11:
@@ -1397,7 +1397,7 @@ void daAgb_c::modeMove() {
             
             if (field_0x66b == 0xE) {
                 if (field_0x65c == 120) {
-                    fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
+                    fopAcM_create(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
                 } else if (field_0x65c == 0) {
                     resetCursor(false);
                 }
@@ -1471,7 +1471,7 @@ void daAgb_c::modeMove() {
         mDoGac_SendDataSet((u32*)&mItemBuy, 4, 0xD, mItemBuy.U32);
     }
     
-    if ((g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags == 0 && fopAcM_GetName(player) != PROC_NPC_KAM) &&
+    if ((g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags == 0 && fopAcM_GetName(player) != fpcNm_NPC_KAM_e) &&
         ((isActive() && !field_0x675 && CPad_CHECK_TRIG_R(mDoGaC_getPortNo())) ||
         (mFlags.field_0x3_5 != 0 && (CPad_CHECK_TRIG_R(mDoGaC_getPortNo()) || CPad_CHECK_TRIG_A(mDoGaC_getPortNo())))))
     {
@@ -1485,7 +1485,7 @@ void daAgb_c::modeMove() {
             if (attList) {
                 fopAc_ac_c* r3 = attList->getActor();
                 if (r3) {
-                    if (fopAcM_CheckStatusMap(r3, 0) && !fopAcM_CheckStatus(r3, fopAcStts_BOSS_e) && fopAcM_GetName(r3) != PROC_FGANON) {
+                    if (fopAcM_CheckStatusMap(r3, 0) && !fopAcM_CheckStatus(r3, fopAcStts_BOSS_e) && fopAcM_GetName(r3) != fpcNm_FGANON_e) {
                         current.pos = r3->current.pos;
                         home.pos = r3->current.pos;
                         setTargetID(attList->getPid());
@@ -1506,7 +1506,7 @@ void daAgb_c::modeMove() {
         }
         
         if (getFollowTarget() == 0) {
-            if (fopAcM_GetName(player) == PROC_NPC_KAM) {
+            if (fopAcM_GetName(player) == fpcNm_NPC_KAM_e) {
                 onFree();
             } else {
                 current.pos = player->current.pos;
@@ -1622,9 +1622,9 @@ static BOOL daAgb_Execute(daAgb_c* i_this) {
         } else {
             daPy_lk_c* player_p2 = daPy_getPlayerLinkActorClass();
             if ((dComIfGp_getPlayer(0) == player_p2 && !player->checkPlayerFly()) ||
-                ((fopAcM_GetName(player) == PROC_NPC_MD && !daNpc_Md_c::isFlying()) ||
-                 (fopAcM_GetName(player) == PROC_NPC_CB1 && !daNpc_Cb1_c::isFlying()) ||
-                 fopAcM_GetName(player) == PROC_NPC_OS))
+                ((fopAcM_GetName(player) == fpcNm_NPC_MD_e && !daNpc_Md_c::isFlying()) ||
+                 (fopAcM_GetName(player) == fpcNm_NPC_CB1_e && !daNpc_Cb1_c::isFlying()) ||
+                 fopAcM_GetName(player) == fpcNm_NPC_OS_e))
             {
                 f32 speedF = fabs(player->speedF);
 
@@ -1825,7 +1825,7 @@ actor_process_profile_definition g_profile_AGB = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_AGB,
+    /* ProcName     */ fpcNm_AGB_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daAgb_c),
     /* SizeOther    */ 0,

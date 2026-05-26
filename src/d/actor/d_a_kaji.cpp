@@ -135,7 +135,7 @@ actor_process_profile_definition g_profile_Kaji = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Kaji,
+    /* ProcName     */ fpcNm_Kaji_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daKaji_c),
     /* SizeOther    */ 0,

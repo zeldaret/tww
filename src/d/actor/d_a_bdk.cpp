@@ -135,7 +135,7 @@ daBdk_HIO_c::daBdk_HIO_c() {
 
 /* 0000015C-000001A8       .text kamome_delete_sub__FPvPv */
 static void* kamome_delete_sub(void* param_1, void*) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_KAMOME) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_KAMOME_e) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -143,7 +143,7 @@ static void* kamome_delete_sub(void* param_1, void*) {
 
 /* 000001A8-000001F4       .text kui_delete_sub__FPvPv */
 static void* kui_delete_sub(void* param_1, void*) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_KUI) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_KUI_e) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -151,7 +151,7 @@ static void* kui_delete_sub(void* param_1, void*) {
 
 /* 000001F4-00000240       .text ep_delete_sub__FPvPv */
 static void* ep_delete_sub(void* param_1, void*) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_EP) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_EP_e) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -159,7 +159,7 @@ static void* ep_delete_sub(void* param_1, void*) {
 
 /* 00000240-0000028C       .text dk_delete_sub__FPvPv */
 static void* dk_delete_sub(void* param_1, void*) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_DK) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_DK_e) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -168,7 +168,7 @@ static void* dk_delete_sub(void* param_1, void*) {
 /* 0000028C-000002E8       .text obj_delete_sub__FPvPv */
 static void* obj_delete_sub(void* param_1, void*) {
     fopAc_ac_c* actor = static_cast<fopAc_ac_c*>(param_1);
-    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_BDKOBJ && (fopAcM_GetParam(actor) & 0xF) >= 2) {
+    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_BDKOBJ_e && (fopAcM_GetParam(actor) & 0xF) >= 2) {
         fopAcM_delete(actor);
     }
     return NULL;
@@ -176,7 +176,7 @@ static void* obj_delete_sub(void* param_1, void*) {
 
 /* 000002E8-00000334       .text sea_delete_sub__FPvPv */
 static void* sea_delete_sub(void* param_1, void*) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_Obj_Tide) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_Obj_Tide_e) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -184,7 +184,7 @@ static void* sea_delete_sub(void* param_1, void*) {
 
 /* 00000334-00000380       .text bk_delete_sub__FPvPv */
 static void* bk_delete_sub(void* param_1, void*) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BK) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BK_e) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -192,7 +192,7 @@ static void* bk_delete_sub(void* param_1, void*) {
 
 /* 00000380-000003CC       .text boko_delete_sub__FPvPv */
 static void* boko_delete_sub(void* param_1, void*) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BOKO) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BOKO_e) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -201,7 +201,7 @@ static void* boko_delete_sub(void* param_1, void*) {
 /* 000003CC-00000424       .text obj2_delete_sub__FPvPv */
 static void* obj2_delete_sub(void* param_1, void*) {
     fopAc_ac_c* actor = static_cast<fopAc_ac_c*>(param_1);
-    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_BDKOBJ && actor->model == NULL) {
+    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_BDKOBJ_e && actor->model == NULL) {
         fopAcM_delete(actor);
     }
     return NULL;
@@ -2114,7 +2114,7 @@ static void end(bdk_class* i_this) {
 /* 00005EA0-00005F08       .text obj_s_sub__FPvPv */
 static void* obj_s_sub(void* param_1, void*) {
     fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
-    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_BDKOBJ && (fpcM_GetParam(actor) & 0xF) != 0xF && actor->health != 0) {
+    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_BDKOBJ_e && (fpcM_GetParam(actor) & 0xF) != 0xF && actor->health != 0) {
         return param_1;
     }
     return NULL;
@@ -4354,7 +4354,7 @@ actor_process_profile_definition g_profile_BDK = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BDK,
+    /* ProcName     */ fpcNm_BDK_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bdk_class),
     /* SizeOther    */ 0,

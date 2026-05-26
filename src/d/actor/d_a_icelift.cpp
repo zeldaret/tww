@@ -109,7 +109,7 @@ actor_process_profile_definition g_profile_ICE_LIFT = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ICE_LIFT,
+    /* ProcName     */ fpcNm_ICE_LIFT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daIlift_c),
     /* SizeOther    */ 0,

@@ -228,7 +228,7 @@ void daMachine_c::set_next_pnt() {
 
 /* 00000700-00000734       .text search_wind_mill__11daMachine_cFv */
 daWindMill_c* daMachine_c::search_wind_mill() {
-    return (daWindMill_c*)fopAcM_SearchByName(PROC_WINDMILL);
+    return (daWindMill_c*)fopAcM_SearchByName(fpcNm_WINDMILL_e);
 }
 
 /* 00000734-000007F8       .text set_speed__11daMachine_cFv */
@@ -434,7 +434,7 @@ actor_process_profile_definition g_profile_MACHINE = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MACHINE,
+    /* ProcName     */ fpcNm_MACHINE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMachine_c),
     /* SizeOther    */ 0,

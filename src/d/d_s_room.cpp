@@ -71,7 +71,7 @@ void objectSetCheck(room_of_scene_class* i_this) {
 
     if (!i_this->mbReLoaded) {
         if (!hiddenFlag) {
-            fopAcM_create(PROC_BG, roomNo);
+            fopAcM_create(fpcNm_BG_e, roomNo);
             dStage_dt_c_roomReLoader(i_this->mpRoomData, i_this->mpRoomDt, roomNo);
             i_this->mbReLoaded = true;
         }
@@ -299,7 +299,7 @@ scene_process_profile_definition g_profile_ROOM_SCENE = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ROOM_SCENE,
+    /* ProcName     */ fpcNm_ROOM_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(room_of_scene_class),
     /* SizeOther    */ 0,

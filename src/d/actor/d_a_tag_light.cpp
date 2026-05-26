@@ -556,7 +556,7 @@ actor_process_profile_definition g_profile_Tag_Light = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0009,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Tag_Light,
+    /* ProcName     */ fpcNm_Tag_Light_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTagLight::Act_c),
     /* SizeOther    */ 0,

@@ -29,7 +29,7 @@ void daObjGaship::Act_c::birth_flag() {
             cXyz offset;
             mDoMtx_multVec(mtx, &flag_offset[i], &offset);
             csXyz angle(flag_angle[i]);
-            fpc_ProcID pid = fopAcM_create(PROC_MAJUU_FLAG, 0x01, &offset, fopAcM_GetRoomNo(this), &angle);
+            fpc_ProcID pid = fopAcM_create(fpcNm_MAJUU_FLAG_e, 0x01, &offset, fopAcM_GetRoomNo(this), &angle);
             if (pid != fpcM_ERROR_PROCESS_ID_e)
                 birthFlag[i] = true;
         }
@@ -149,7 +149,7 @@ actor_process_profile_definition g_profile_Obj_Gaship = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Gaship,
+    /* ProcName     */ fpcNm_Obj_Gaship_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjGaship::Act_c),
     /* SizeOther    */ 0,

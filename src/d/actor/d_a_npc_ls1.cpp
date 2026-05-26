@@ -221,7 +221,7 @@ void* searchActor_Bm1(void* i_actorP, void* i_unusedP) {
     if (
         l_check_wrk < ARRAY_SSIZE(l_check_inf) && 
         fopAc_IsActor(i_actorP) && 
-        fpcM_GetName(i_actorP) == PROC_NPC_BM1
+        fpcM_GetName(i_actorP) == fpcNm_NPC_BM1_e
     ) {
         l_check_inf[l_check_wrk] = (fopAc_ac_c*)i_actorP;
         l_check_wrk++;
@@ -234,7 +234,7 @@ void* searchActor_Bm1(void* i_actorP, void* i_unusedP) {
 void* searchActor_kamome_Set_NOSTOP_DEMO(void* i_actorP, void* i_unusedP) {
     UNUSED(i_unusedP);
 
-    if (fopAc_IsActor(i_actorP) && fpcM_GetName(i_actorP) == PROC_KAMOME) {
+    if (fopAc_IsActor(i_actorP) && fpcM_GetName(i_actorP) == fpcNm_KAMOME_e) {
         fopAcM_OnStatus((fopAc_ac_c*)i_actorP, fopAcStts_UNK4000_e);
     }
 
@@ -245,7 +245,7 @@ void* searchActor_kamome_Set_NOSTOP_DEMO(void* i_actorP, void* i_unusedP) {
 void* searchActor_kamome_Clr_NOSTOP_DEMO(void* i_actorP, void* i_unused) {
     UNUSED(i_unused);
 
-    if (fopAc_IsActor(i_actorP) && fpcM_GetName(i_actorP) == PROC_KAMOME) {
+    if (fopAc_IsActor(i_actorP) && fpcM_GetName(i_actorP) == fpcNm_KAMOME_e) {
         fopAcM_OffStatus((fopAc_ac_c*) i_actorP, fopAcStts_UNK4000_e);
     }
     
@@ -2420,7 +2420,7 @@ actor_process_profile_definition g_profile_NPC_LS1 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_LS1,
+    /* ProcName     */ fpcNm_NPC_LS1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Ls1_c),
     /* SizeOther    */ 0,

@@ -408,17 +408,17 @@ void Act_c::make_enemy() {
         /* 0x04 */ u32 param;
     };  // Size: 0x08
     static const enemy_dat_s make_enemy_dat[] = {
-        /* 0x0 */ { PROC_BK, 0xFFFF0000 },
-        /* 0x1 */ { PROC_BK, 0xFFFF0020 },
-        /* 0x2 */ { PROC_BK, 0xFFFF0040 },
-        /* 0x3 */ { PROC_BK, 0xFFFF0060 },
-        /* 0x4 */ { PROC_BK, 0xFFFF0080 },
-        /* 0x5 */ { PROC_BK, 0xFFFF00A0 },
-        /* 0x6 */ { PROC_CC, 0xFF000000 },
-        /* 0x7 */ { PROC_CC, 0xFF000100 },
-        /* 0x8 */ { PROC_CC, 0xFF000200 },
-        /* 0x9 */ { PROC_CC, 0xFF000300 },
-        /* 0xA */ { PROC_CC, 0xFF000400 },
+        /* 0x0 */ { fpcNm_BK_e, 0xFFFF0000 },
+        /* 0x1 */ { fpcNm_BK_e, 0xFFFF0020 },
+        /* 0x2 */ { fpcNm_BK_e, 0xFFFF0040 },
+        /* 0x3 */ { fpcNm_BK_e, 0xFFFF0060 },
+        /* 0x4 */ { fpcNm_BK_e, 0xFFFF0080 },
+        /* 0x5 */ { fpcNm_BK_e, 0xFFFF00A0 },
+        /* 0x6 */ { fpcNm_CC_e, 0xFF000000 },
+        /* 0x7 */ { fpcNm_CC_e, 0xFF000100 },
+        /* 0x8 */ { fpcNm_CC_e, 0xFF000200 },
+        /* 0x9 */ { fpcNm_CC_e, 0xFF000300 },
+        /* 0xA */ { fpcNm_CC_e, 0xFF000400 },
     };
     
     int enemy_idx = param_get_enemy();
@@ -624,7 +624,7 @@ void Act_c::process_falldown_main() {
     
     if (sp34.y < mGroundY) {
         fpc_ProcID smoke_id = fopAcM_createChild(
-            PROC_Obj_Homensmk,
+            fpcNm_Obj_Homensmk_e,
             fopAcM_GetID(this),
             field_0x7EC << 1 | mType,
             &current.pos,
@@ -896,7 +896,7 @@ actor_process_profile_definition g_profile_Obj_Homen = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Homen,
+    /* ProcName     */ fpcNm_Obj_Homen_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjHomen::Act_c),
     /* SizeOther    */ 0,

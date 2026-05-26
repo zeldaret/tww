@@ -27,7 +27,7 @@ static BOOL fopKy_Execute(void* i_ky) {
     BOOL ret;
     kankyo_class* i_this = (kankyo_class*)i_ky;
 
-    if (!dScnPly_ply_c::isPause() && (!dMenu_flag() || fpcM_GetName(i_ky) == PROC_ENVSE || fpcM_GetName(i_ky) == PROC_LEVEL_SE)) {
+    if (!dScnPly_ply_c::isPause() && (!dMenu_flag() || fpcM_GetName(i_ky) == fpcNm_ENVSE_e || fpcM_GetName(i_ky) == fpcNm_LEVEL_SE_e)) {
         ret = fpcMtd_Execute((process_method_class*)i_this->sub_method, i_ky);
     }
 

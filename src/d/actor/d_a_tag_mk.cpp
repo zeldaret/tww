@@ -549,7 +549,7 @@ actor_process_profile_definition g_profile_TAG_MK = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_MK,
+    /* ProcName     */ fpcNm_TAG_MK_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Mk_c),
     /* SizeOther    */ 0,

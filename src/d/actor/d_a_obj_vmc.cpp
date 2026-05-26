@@ -284,7 +284,7 @@ void daObjVmc::Act_c::daObjVmc_tree_main() {
         cCcD_Obj* hitObj = mCyl.GetTgHitObj();
         if (hitObj != NULL) {
             fopAc_ac_c* at = hitObj->GetAc();
-            if (at != NULL && fopAcM_GetName(at) == PROC_HOOKSHOT)
+            if (at != NULL && fopAcM_GetName(at) == fpcNm_HOOKSHOT_e)
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_3420);
         }
     }
@@ -334,11 +334,11 @@ bool daObjVmc::Act_c::_execute() {
             mLinkRangeCheck = false;
     }
 
-    if (mLinkRangeCheck == true && dComIfGp_getCb1Player() != NULL && fopAcM_GetName(dComIfGp_getCb1Player()) == PROC_NPC_CB1) {
+    if (mLinkRangeCheck == true && dComIfGp_getCb1Player() != NULL && fopAcM_GetName(dComIfGp_getCb1Player()) == fpcNm_NPC_CB1_e) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
     }
 
-    if (mLinkRangeCheck == true && !mHasTree && fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_CB1) {
+    if (mLinkRangeCheck == true && !mHasTree && fopAcM_GetName(dComIfGp_getPlayer(0)) == fpcNm_NPC_CB1_e) {
         cLib_onBit<u32>(attention_info.flags, fopAc_Attn_UNK10000000_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e);
     } else {
         cLib_offBit<u32>(attention_info.flags, fopAc_Attn_UNK10000000_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e);
@@ -408,7 +408,7 @@ actor_process_profile_definition g_profile_Obj_Vmc = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Vmc,
+    /* ProcName     */ fpcNm_Obj_Vmc_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjVmc::Act_c),
     /* SizeOther    */ 0,

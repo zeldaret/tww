@@ -30,7 +30,7 @@ BOOL daObjOjtree::Act_c::Create() {
     fopAcM_setCullSizeBox(this, -500.0f, -1.0f, -300.0f, 251.0f, 5001.0f, 251.0f);
     pos.set(current.pos);
     pos.y += 5000.0f;
-    fopAcM_create(PROC_JBO, daJbo_Type_NORMAL_e, &pos, fopAcM_GetHomeRoomNo(this), &shape_angle, NULL, 0xff, NULL);
+    fopAcM_create(fpcNm_JBO_e, daJbo_Type_NORMAL_e, &pos, fopAcM_GetHomeRoomNo(this), &shape_angle, NULL, 0xff, NULL);
     mLockTimer = 2;
     return TRUE;
 }
@@ -134,7 +134,7 @@ actor_process_profile_definition g_profile_Obj_Ojtree = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ojtree,
+    /* ProcName     */ fpcNm_Obj_Ojtree_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjOjtree::Act_c),
     /* SizeOther    */ 0,

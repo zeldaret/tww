@@ -639,7 +639,7 @@ actor_process_profile_definition g_profile_Obj_Barrier = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Barrier,
+    /* ProcName     */ fpcNm_Obj_Barrier_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjBarrier_c),
     /* SizeOther    */ 0,

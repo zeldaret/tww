@@ -325,7 +325,7 @@ void daObjBarrel2::Act_c::tg_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf* arg2, fopAc
 void daObjBarrel2::Act_c::co_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_c* a_ship, dCcD_GObjInf*) {
     daObjBarrel2::Act_c* i_this = (daObjBarrel2::Act_c*)a_this;
 
-    if (fopAcM_GetProfName(a_ship) == PROC_SHIP) {
+    if (fopAcM_GetProfName(a_ship) == fpcNm_SHIP_e) {
         daShip_c* ship = (daShip_c*)a_ship;
         const s32 index = i_this->m410;
 
@@ -1143,7 +1143,7 @@ actor_process_profile_definition g_profile_Obj_Barrel2 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0008,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Barrel2,
+    /* ProcName     */ fpcNm_Obj_Barrel2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjBarrel2::Act_c),
     /* SizeOther    */ 0,

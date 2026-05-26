@@ -70,7 +70,7 @@ kankyo_process_profile_definition g_profile_WATER_MARK = {
     /* LayerID       */ fpcLy_CURRENT_e,
     /* ListID        */ 0x0009,
     /* ListPrio      */ fpcPi_CURRENT_e,
-    /* ProcName      */ PROC_WATER_MARK,
+    /* ProcName      */ fpcNm_WATER_MARK_e,
     /* Proc SubMtd   */ &g_fpcLf_Method.base,
     /* Size          */ sizeof(dWaterMark_c),
     /* SizeOther     */ 0,

@@ -66,7 +66,7 @@ actor_process_profile_definition g_profile_Obj_Wood = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Wood,
+    /* ProcName     */ fpcNm_Obj_Wood_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjWood::Act_c),
     /* SizeOther    */ 0,

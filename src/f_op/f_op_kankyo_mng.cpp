@@ -88,7 +88,7 @@ fpc_ProcID fopKyM_createWpillar(cXyz const* i_pos, f32 scaleXZ, f32 scaleY, int 
     params->mScale.z = scaleXZ;
     params->mParam = i_param;
 
-    return fopKyM_Create(PROC_WPILLAR, NULL, params);
+    return fopKyM_Create(fpcNm_WPILLAR_e, NULL, params);
 }
 
 /* 8002AB40-8002ABB4       .text fopKyM_createMpillar__FPC4cXyzf */

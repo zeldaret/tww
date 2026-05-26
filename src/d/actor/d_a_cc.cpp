@@ -272,12 +272,12 @@ void* s_b_sub(void* arg0, void* arg1) {
     UNUSED(arg1);
     if (fopAcM_IsActor(arg0)) {
         bool bVar2 = false;
-        if (fopAcM_GetName(arg0) == PROC_BOMB) {
+        if (fopAcM_GetName(arg0) == fpcNm_BOMB_e) {
             daBomb_c* bomb = (daBomb_c*)arg0;
             if (bomb->chk_state(daBomb_c::STATE_0)) {
                 bVar2 = true;
             }
-        } else if (fopAcM_GetName(arg0) == PROC_Bomb2) {
+        } else if (fopAcM_GetName(arg0) == fpcNm_Bomb2_e) {
             daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)arg0;
             if (bomb2->chk_explode() != false) {
                 bVar2 = true;
@@ -2004,7 +2004,7 @@ void* tsubo_search(void* arg1, void* arg2) {
     if (tmp < 100)
 #endif
     {
-        if (fopAcM_IsActor(actor1) && fopAcM_GetName(actor1) == PROC_TSUBO && actor1->current.pos.x == i_this->actor.current.pos.x &&
+        if (fopAcM_IsActor(actor1) && fopAcM_GetName(actor1) == fpcNm_TSUBO_e && actor1->current.pos.x == i_this->actor.current.pos.x &&
             std::fabsf(actor1->current.pos.y - i_this->actor.current.pos.y) < 10.0f && actor1->current.pos.z == i_this->actor.current.pos.z)
         {
             i_this->m30C = fopAcM_GetID(actor1);
@@ -2758,7 +2758,7 @@ actor_process_profile_definition g_profile_CC = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_CC,
+    /* ProcName     */ fpcNm_CC_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(cc_class),
     /* SizeOther    */ 0,

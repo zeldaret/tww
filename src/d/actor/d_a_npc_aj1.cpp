@@ -488,7 +488,7 @@ actor_process_profile_definition g_profile_NPC_AJ1 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_AJ1,
+    /* ProcName     */ fpcNm_NPC_AJ1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Aj1_c),
     /* SizeOther    */ 0,

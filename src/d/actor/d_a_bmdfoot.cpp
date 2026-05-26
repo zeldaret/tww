@@ -588,7 +588,7 @@ void move(bmdfoot_class* i_this) {
 /* 000021B8-00002204       .text s_a_d_sub__FPvPv */
 void* s_a_d_sub(void* search, void* param_2) {
     UNUSED(param_2);
-    if ((fopAcM_IsActor(search)) && (fopAcM_GetName(search) == PROC_BMD)) {
+    if ((fopAcM_IsActor(search)) && (fopAcM_GetName(search) == fpcNm_BMD_e)) {
         return search;
     } else {
         return NULL;
@@ -830,7 +830,7 @@ actor_process_profile_definition g_profile_BMDFOOT = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BMDFOOT,
+    /* ProcName     */ fpcNm_BMDFOOT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bmdfoot_class),
     /* SizeOther    */ 0,

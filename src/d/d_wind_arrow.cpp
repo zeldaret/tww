@@ -154,7 +154,7 @@ kankyo_process_profile_definition g_profile_WIND_ARROW = {
     /* LayerID       */ fpcLy_CURRENT_e,
     /* ListID        */ 0x0002,
     /* ListPrio      */ fpcPi_CURRENT_e,
-    /* ProcName      */ PROC_WIND_ARROW,
+    /* ProcName      */ fpcNm_WIND_ARROW_e,
     /* Proc SubMtd   */ &g_fpcLf_Method.base,
     /* Size          */ sizeof(dWindArrow_c),
     /* SizeOther     */ 0,

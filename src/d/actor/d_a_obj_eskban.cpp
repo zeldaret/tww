@@ -272,7 +272,7 @@ BOOL daObjEskban::Act_c::Execute(Mtx** pMtx) {
         cCcD_Obj* hitObj = mCheckSph.GetCoHitObj();
         if (hitObj) {
             fopAc_ac_c* hitAct = hitObj->GetAc();
-            if (hitAct && fopAcM_GetName(hitAct) == PROC_NPC_MD) {
+            if (hitAct && fopAcM_GetName(hitAct) == fpcNm_NPC_MD_e) {
                 cXyz dist = hitAct->current.pos - current.pos;
                 dist.y = 0;
                 if (dist.normalizeRS()) {
@@ -295,7 +295,7 @@ BOOL daObjEskban::Act_c::Execute(Mtx** pMtx) {
             break;
         }
         fopAc_ac_c* hitAct = hitObj->GetAc();
-        if (hitAct && fopAcM_GetName(hitAct) == PROC_Bomb2) {
+        if (hitAct && fopAcM_GetName(hitAct) == fpcNm_Bomb2_e) {
             mActorID = fopAcM_GetID(hitAct);
             fopAcM_orderOtherEvent(this, "Eskban");
             mActorState = ST_DESTROYED;
@@ -424,7 +424,7 @@ actor_process_profile_definition g_profile_Obj_Eskban = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Eskban,
+    /* ProcName     */ fpcNm_Obj_Eskban_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjEskban::Act_c),
     /* SizeOther    */ 0,

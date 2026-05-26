@@ -62,7 +62,7 @@ actor_process_profile_definition g_profile_Obj_Msdan2 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Msdan2,
+    /* ProcName     */ fpcNm_Obj_Msdan2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMsdan2::Act_c),
     /* SizeOther    */ 0,

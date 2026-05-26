@@ -220,7 +220,7 @@ actor_process_profile_definition g_profile_Tag_Volcano = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0002,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Tag_Volcano,
+    /* ProcName     */ fpcNm_Tag_Volcano_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTagvolcano::Act_c),
     /* SizeOther    */ 0,

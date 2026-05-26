@@ -152,7 +152,7 @@ actor_process_profile_definition g_profile_Obj_Eayogn = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Eayogn,
+    /* ProcName     */ fpcNm_Obj_Eayogn_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjEayogn_c),
     /* SizeOther    */ 0,

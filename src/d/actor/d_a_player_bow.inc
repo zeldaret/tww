@@ -69,10 +69,10 @@ BOOL daPy_lk_c::checkBowAnime() const {
 void daPy_lk_c::makeArrow() {
     if ((!checkBowMiniGame() && dComIfGs_getArrowNum() != 0) ||
         (checkBowMiniGame() && dComIfGp_event_getPt1() &&
-         fopAcM_GetName(dComIfGp_event_getPt1()) == PROC_NPC_SO &&
+         fopAcM_GetName(dComIfGp_event_getPt1()) == fpcNm_NPC_SO_e &&
          ((daNpc_So_c*)dComIfGp_event_getPt1())->getMiniGameRestArrow() > 0))
     {
-        fopAc_ac_c* arrow_p = (fopAc_ac_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos, fopAcM_GetRoomNo(this));
+        fopAc_ac_c* arrow_p = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_ARROW_e, 0, &current.pos, fopAcM_GetRoomNo(this));
         mActorKeepEquip.setData(arrow_p);
     }
     m355C = 0;
@@ -82,7 +82,7 @@ void daPy_lk_c::makeArrow() {
 void daPy_lk_c::deleteArrow() {
     fopAc_ac_c* equip_actor = mActorKeepEquip.getActor();
 
-    if (equip_actor != NULL && fopAcM_GetName(equip_actor) == PROC_ARROW) {
+    if (equip_actor != NULL && fopAcM_GetName(equip_actor) == fpcNm_ARROW_e) {
         fopAcM_delete(equip_actor);
         mActorKeepEquip.clearData();
     }

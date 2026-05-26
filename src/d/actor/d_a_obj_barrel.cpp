@@ -583,7 +583,7 @@ bool daObjBarrel::Act_c::damage_cc_proc() {
                     hitNormal *= l_shape_vec;
                     mMove.abs2();
                     fopAc_ac_c* hitActor = mCyl.GetTgHitAc();
-                    if (hitActor != NULL && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
+                    if (hitActor != NULL && fopAcM_GetProfName(hitActor) == fpcNm_PLAYER_e) {
                         s16 hitObjAngleY = cM_atan2s(hitNormal.x, hitNormal.z);
                         f32 f2 = cM_scos(hitActor->shape_angle.y - hitObjAngleY);
                         if (f2 > 0.0f) {
@@ -768,7 +768,7 @@ actor_process_profile_definition g_profile_Obj_Barrel = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0008,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Barrel,
+    /* ProcName     */ fpcNm_Obj_Barrel_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjBarrel::Act_c),
     /* SizeOther    */ 0,

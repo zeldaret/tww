@@ -545,7 +545,7 @@ BOOL daPy_lk_c::procTactPlay_init(s32 r27, int r30, int r31) {
         stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
         if (dStage_stagInfo_GetSTType(stag_info) == dStageType_SEA_e && m34CC != 1 && r30 != 0) {
             daShip_c* ship = dComIfGp_getShipActor();
-            fpc_ProcID warpID = fopAcM_create(PROC_TORNADO, 1, &current.pos, fopAcM_GetRoomNo(this));
+            fpc_ProcID warpID = fopAcM_create(fpcNm_TORNADO_e, 1, &current.pos, fopAcM_GetRoomNo(this));
             ship->setTactWarpID(warpID);
         }
     }
@@ -683,7 +683,7 @@ BOOL daPy_lk_c::procTactPlayEnd_init(int r30) {
         mDemo.setSystemDemoType();
     } else if (r30 == 0) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
-        fopAcM_create(PROC_WBIRD, NULL, &current.pos, dComIfGp_roomControl_getStayNo());
+        fopAcM_create(fpcNm_WBIRD_e, NULL, &current.pos, dComIfGp_roomControl_getStayNo());
     } else if (r30 == 2) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
         dComIfGp_event_setTalkPartner(dComIfGp_getCb1Player());

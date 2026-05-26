@@ -156,7 +156,7 @@ void daBeam_AtHitCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c* arg2
     daBeam_c* i_this = (daBeam_c*)arg0;
 
     if (fopAcM_IsActor(arg2)) {
-        if (fopAcM_GetName(arg2) == PROC_PLAYER) {
+        if (fopAcM_GetName(arg2) == fpcNm_PLAYER_e) {
             fopAcM_seStartCurrent(arg2, JA_SE_LK_BEAM_HIT, 0);
 
             if (i_this->m54C != 0) {
@@ -171,7 +171,7 @@ void daBeam_AtHitCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c* arg2
                 arg1->SetAtVec(sp20);
                 arg3->SetTgRVec(sp20);
             }
-        } else if (fopAcM_GetName(arg2) == PROC_AM2) {
+        } else if (fopAcM_GetName(arg2) == fpcNm_AM2_e) {
             arg3->ClrTgHit();
         }
 
@@ -187,7 +187,7 @@ void daBeam_AtHitDummyCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c*
     daBeam_c* i_this = (daBeam_c*)arg0;
 
     if (fopAcM_IsActor(arg2)) {
-        if (fopAcM_GetName(arg2) == PROC_PLAYER) {
+        if (fopAcM_GetName(arg2) == fpcNm_PLAYER_e) {
             fopAcM_seStartCurrent(arg2, JA_SE_LK_BEAM_HIT, 0);
 
             if (i_this->m54C != 0) {
@@ -201,7 +201,7 @@ void daBeam_AtHitDummyCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c*
                 arg1->SetAtVec(sp20);
                 arg3->SetTgRVec(sp20);
             }
-        } else if (fopAcM_GetName(arg2) == PROC_AM2) {
+        } else if (fopAcM_GetName(arg2) == fpcNm_AM2_e) {
             arg3->ClrTgHit();
         }
     }
@@ -210,7 +210,7 @@ void daBeam_AtHitDummyCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c*
 /* 00000A00-00000AA0       .text daBeam_checkHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 void daBeam_checkHitCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c* arg2, dCcD_GObjInf* arg3) {
     if (fopAcM_IsActor(arg2) && arg0->parentActorID != fopAcM_GetID(arg2)) {
-        if (fopAcM_GetName(arg2) != PROC_PLAYER || arg1->ChkAtShieldHit()) {
+        if (fopAcM_GetName(arg2) != fpcNm_PLAYER_e || arg1->ChkAtShieldHit()) {
             daBeam_c* i_this = (daBeam_c*)arg0;
             i_this->m540 = *i_this->mCps2.GetAtHitPosP();
             i_this->m53C = true;
@@ -401,7 +401,7 @@ bool daBeam_c::_execute() {
                     parameters |= 2;
                 }
 
-                m684 = fopAcM_create(PROC_Hot_Floor, parameters, &m668);
+                m684 = fopAcM_create(fpcNm_Hot_Floor_e, parameters, &m668);
             }
             m688 = 1.0f;
         } else {
@@ -659,7 +659,7 @@ actor_process_profile_definition g_profile_Beam = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Beam,
+    /* ProcName     */ fpcNm_Beam_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daBeam_c),
     /* SizeOther    */ 0,

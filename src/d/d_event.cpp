@@ -288,7 +288,7 @@ BOOL dEvt_control_c::talkEnd() {
         mEventId = -1;
     }
     fopAc_ac_c* itemPartner = fopAcM_getItemEventPartner(NULL);
-    if (itemPartner != NULL && (fopAcM_GetName(itemPartner) == PROC_ITEM || fopAcM_GetName(itemPartner) == PROC_Demo_Item))
+    if (itemPartner != NULL && (fopAcM_GetName(itemPartner) == fpcNm_ITEM_e || fopAcM_GetName(itemPartner) == fpcNm_Demo_Item_e))
         ((daItemBase_c*)itemPartner)->dead();
     return TRUE;
 }

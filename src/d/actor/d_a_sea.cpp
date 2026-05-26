@@ -480,7 +480,7 @@ void daSea_packet_c::CheckRoomChange() {
     dStage_roomDt_c * room = dComIfGp_roomControl_getStatusRoomDt(dComIfGp_roomControl_getStayNo());
     if (room != NULL) {
         mRoomNo = dComIfGp_roomControl_getStayNo();
-        daDaiocta_c* octa = (daDaiocta_c *)fopAcM_SearchByName(PROC_DAIOCTA);
+        daDaiocta_c* octa = (daDaiocta_c *)fopAcM_SearchByName(fpcNm_DAIOCTA_e);
         if (octa == NULL) {
             if (mFlags & 0x01) {
                 ClrFlat();
@@ -1189,7 +1189,7 @@ actor_process_profile_definition g_profile_SEA = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0002,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SEA,
+    /* ProcName     */ fpcNm_SEA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sea_class),
     /* SizeOther    */ 0,

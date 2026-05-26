@@ -192,7 +192,7 @@ kankyo_process_profile_definition g_profile_ENVSE = {
     /* LayerID       */ fpcLy_CURRENT_e,
     /* ListID        */ 0x0002,
     /* ListPrio      */ fpcPi_CURRENT_e,
-    /* ProcName      */ PROC_ENVSE,
+    /* ProcName      */ fpcNm_ENVSE_e,
     /* Proc SubMtd   */ &g_fpcLf_Method.base,
     /* Size          */ sizeof(dEnvSe_c),
     /* SizeOther     */ 0,

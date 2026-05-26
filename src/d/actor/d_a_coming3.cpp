@@ -513,7 +513,7 @@ actor_process_profile_definition g_profile_Coming3 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Coming3,
+    /* ProcName     */ fpcNm_Coming3_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daComing3::Act_c),
     /* SizeOther    */ 0,

@@ -190,7 +190,7 @@ void daObj_Ikada_c::_ride(fopAc_ac_c* actor) {
             mbIsLinkRiding = true;
         }
 
-        if (fopAcM_GetName(actor) == PROC_BOMB) {
+        if (fopAcM_GetName(actor) == fpcNm_BOMB_e) {
             daBomb_c* bomb = (daBomb_c*)actor;
 
             if (bomb->getBombRestTime() <= 1) {
@@ -1369,7 +1369,7 @@ void daObj_Ikada_c::createInit() {
         static const u32 params[] = {4, 4, 4, 4, 0x2000000};
         static const f32 flag_scale[] = {0.2f, 0.0f, 0.0f, 0.0f, 0.12f};
 
-        mFlagPcId = fopAcM_create(PROC_MAJUU_FLAG, params[mType], &current.pos, tevStr.mRoomNo, &current.angle);
+        mFlagPcId = fopAcM_create(fpcNm_MAJUU_FLAG_e, params[mType], &current.pos, tevStr.mRoomNo, &current.angle);
         mFlagOffset = flag_offset[mType];
         mFlagScale = flag_scale[mType];
     }
@@ -1577,7 +1577,7 @@ actor_process_profile_definition g_profile_OBJ_IKADA = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_IKADA,
+    /* ProcName     */ fpcNm_OBJ_IKADA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Ikada_c),
     /* SizeOther    */ 0,

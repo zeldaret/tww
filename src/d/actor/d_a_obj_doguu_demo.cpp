@@ -142,7 +142,7 @@ actor_process_profile_definition g_profile_Obj_DoguuD = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_DoguuD,
+    /* ProcName     */ fpcNm_Obj_DoguuD_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjDoguuD_c),
     /* SizeOther    */ 0,

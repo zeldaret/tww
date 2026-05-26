@@ -106,7 +106,7 @@ actor_process_profile_definition g_profile_KYTAG07 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KYTAG07,
+    /* ProcName     */ fpcNm_KYTAG07_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kytag07_class),
     /* SizeOther    */ 0,

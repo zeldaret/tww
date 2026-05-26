@@ -301,7 +301,7 @@ actor_process_profile_definition g_profile_FallRock = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_FallRock,
+    /* ProcName     */ fpcNm_FallRock_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daFallRock_c),
     /* SizeOther    */ 0,

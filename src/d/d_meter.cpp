@@ -2405,7 +2405,7 @@ void dMeter_actionAlpha(sub_meter_class* i_Meter) {
     }
     dVar2 = fopMsgM_valueIncrease(5, (int)alphaNowFrame, 0);
     if (dComIfGp_getMiniGameType() == 8) {
-        pfVar2 = (daNpc_So_c*)fopAcM_SearchByName(PROC_NPC_SO);
+        pfVar2 = (daNpc_So_c*)fopAcM_SearchByName(fpcNm_NPC_SO_e);
         if (pfVar2 != NULL) {
             iVar1 = pfVar2->getMiniGameRestArrow();
             if (iVar1 < 10) {
@@ -3458,14 +3458,14 @@ void dMeter_enemyMove(sub_meter_class* i_Meter) {
         if (((!dMenu_flag()) && (!dComIfGp_event_runCheck())) && (attention->LockonTarget(0) != NULL) &&
             ((((((attention->LockonTarget(0)->max_health > 0.0f) && (dComIfGs_isCollect(4, 1) != 0)) &&
                 ((attention->LockonTruth() & 0xff) != 0 &&
-                 (attention->LockonTarget(0)->group == fopAc_ENEMY_e && (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BTD)))) &&
-               (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BMD)) &&
-              (((fopAcM_GetName(attention->LockonTarget(0)) != PROC_BDK && (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BPW)) &&
-                (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BGN)) &&
-               (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BGN2 && (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BGN3)))) &&
-             ((fopAcM_GetName(attention->LockonTarget(0)) != PROC_GND &&
-               (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BST || ((fopAcM_GetParam(attention->LockonTarget(0)) & 0xfU) != 0))) &&
-              (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BWD))))
+                 (attention->LockonTarget(0)->group == fopAc_ENEMY_e && (fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BTD_e)))) &&
+               (fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BMD_e)) &&
+              (((fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BDK_e && (fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BPW_e)) &&
+                (fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BGN_e)) &&
+               (fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BGN2_e && (fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BGN3_e)))) &&
+             ((fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_GND_e &&
+               (fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BST_e || ((fopAcM_GetParam(attention->LockonTarget(0)) & 0xfU) != 0))) &&
+              (fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BWD_e))))
         {
             dMeter_zakoEnemyMove(i_Meter);
         } else {
@@ -3474,7 +3474,7 @@ void dMeter_enemyMove(sub_meter_class* i_Meter) {
     }
     if ((((!dMenu_flag()) && (dComIfGs_isCollect(4, 1) != 0)) && (!dComIfGp_event_runCheck())) &&
         ((!(i_Meter->mStatusFlags & dMtrStts_UNK80_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK20000_e))) &&
-        ((dStage_stagInfo_GetSTType(stage_info) == dStageType_BOSS_e) || (fopAcM_SearchByName(PROC_BDK) != NULL)))
+        ((dStage_stagInfo_GetSTType(stage_info) == dStageType_BOSS_e) || (fopAcM_SearchByName(fpcNm_BDK_e) != NULL)))
     {
         if (((dComIfGs_isStageBossDemo() != 0) && (dComIfGs_isStageBossEnemy() == 0)) ||
             (strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0 ||
@@ -3482,18 +3482,18 @@ void dMeter_enemyMove(sub_meter_class* i_Meter) {
               (strcmp(dComIfGp_getStartStageName(), "Xboss3") == 0))))
         {
             fopAc_ac_c* pfVar3;
-            if (fopAcM_SearchByName(PROC_BTD) != NULL) {
-                pfVar3 = fopAcM_SearchByName(PROC_BTD);
-            } else if (fopAcM_SearchByName(PROC_BMD) != NULL) {
-                pfVar3 = fopAcM_SearchByName(PROC_BMD);
-            } else if (fopAcM_SearchByName(PROC_BDK) != NULL) {
-                pfVar3 = fopAcM_SearchByName(PROC_BDK);
-            } else if (fopAcM_SearchByName(PROC_BST) != NULL) {
-                pfVar3 = fopAcM_SearchByName(PROC_BST);
-            } else if (fopAcM_SearchByName(PROC_BWD) != NULL) {
-                pfVar3 = fopAcM_SearchByName(PROC_BWD);
-            } else if (fopAcM_SearchByName(PROC_BPW) != NULL) {
-                pfVar3 = fopAcM_SearchByName(PROC_BPW);
+            if (fopAcM_SearchByName(fpcNm_BTD_e) != NULL) {
+                pfVar3 = fopAcM_SearchByName(fpcNm_BTD_e);
+            } else if (fopAcM_SearchByName(fpcNm_BMD_e) != NULL) {
+                pfVar3 = fopAcM_SearchByName(fpcNm_BMD_e);
+            } else if (fopAcM_SearchByName(fpcNm_BDK_e) != NULL) {
+                pfVar3 = fopAcM_SearchByName(fpcNm_BDK_e);
+            } else if (fopAcM_SearchByName(fpcNm_BST_e) != NULL) {
+                pfVar3 = fopAcM_SearchByName(fpcNm_BST_e);
+            } else if (fopAcM_SearchByName(fpcNm_BWD_e) != NULL) {
+                pfVar3 = fopAcM_SearchByName(fpcNm_BWD_e);
+            } else if (fopAcM_SearchByName(fpcNm_BPW_e) != NULL) {
+                pfVar3 = fopAcM_SearchByName(fpcNm_BPW_e);
             } else {
                 pfVar3 = NULL;
             }
@@ -3808,12 +3808,12 @@ void dMeter_magicInit(sub_meter_class* i_Meter) {
 /* 801F8F28-801F9048       .text dMeter_magicMove__FP15sub_meter_class */
 void dMeter_magicMove(sub_meter_class* i_Meter) {
     if (i_Meter->mStatusFlags & dMtrStts_UNK40000_e) {
-        if (dComIfGp_getCb1Player() == fopAcM_SearchByName(PROC_NPC_CB1)) {
+        if (dComIfGp_getCb1Player() == fopAcM_SearchByName(fpcNm_NPC_CB1_e)) {
             int iVar4 = daNpc_Cb1_c::m_flyingTimer;
             u8 uVar2 = daNpc_Cb1_c::m_flying;
             s16 uVar3 = daNpc_Cb1_c::getMaxFlyingTimer();
             dMeter_flyGaugeMove(i_Meter, uVar2, uVar3, iVar4);
-        } else if (dComIfGp_getCb1Player() == fopAcM_SearchByName(PROC_NPC_MD)) {
+        } else if (dComIfGp_getCb1Player() == fopAcM_SearchByName(fpcNm_NPC_MD_e)) {
             int iVar4 = daNpc_Md_c::m_flyingTimer;
             u8 uVar2 = daNpc_Md_c::m_flying;
             s16 uVar3 = daNpc_Md_c::getMaxFlyingTimer();
@@ -4663,7 +4663,7 @@ void dMeter_metronomeInit(sub_meter_class* i_Meter) {
 void dMeter_windMove(sub_meter_class* i_Meter) {
     if (dMeter_windStatus != dComIfGp_getOperateWind()) {
         if (dComIfGp_getOperateWind() == 2) {
-            dMeter_windID = fopMsgM_Create(PROC_OPERATE_WIND, NULL, NULL);
+            dMeter_windID = fopMsgM_Create(fpcNm_OPERATE_WIND_e, NULL, NULL);
         }
         dMeter_windStatus = dComIfGp_getOperateWind();
     } else {
@@ -5098,7 +5098,7 @@ void dMeter_compassGetOnProc(sub_meter_class* i_Meter) {
         dMeter_compassAnimeMove(i_Meter);
         break;
     }
-    f32 dVar3 = (-(s16)(fopAcM_SearchByName(PROC_SHIP)->shape_angle.y + 0x8000) * 180.0f) / 32768.0f;
+    f32 dVar3 = (-(s16)(fopAcM_SearchByName(fpcNm_SHIP_e)->shape_angle.y + 0x8000) * 180.0f) / 32768.0f;
     dMeter_compassRotate(&i_Meter->field_0x1670, &i_Meter->field_0x16a8, (-dComIfGs_getTime() - 90.0f));
     dMeter_compassRotate(&i_Meter->field_0x1248, &i_Meter->field_0x12f0, dVar3);
     dMeter_compassRotate(&i_Meter->field_0x1280, &i_Meter->field_0x12f0, dVar3);
@@ -6583,7 +6583,7 @@ void dMeter_swimLightAnime(sub_meter_class* i_Meter, s16 param_2) {
 void dMeter_placeNameMove() {
     if (!dMeter_place_name) {
         if (dComIfGp_checkStageName() == 2) {
-            fopMsgM_create(PROC_PLACE_NAME);
+            fopMsgM_create(fpcNm_PLACE_NAME_e);
             dMeter_place_name = true;
         }
     } else {
@@ -7318,14 +7318,14 @@ static cPhs_State dMeter_Create(msg_class* i_this) {
     }
 
 #if VERSION == VERSION_DEMO
-    fopMsgM_Create(PROC_MENUWINDOW, NULL, NULL);
+    fopMsgM_Create(fpcNm_MENUWINDOW_e, NULL, NULL);
 #else
     if (strcmp(dComIfGp_getStartStageName(), "sea_T") != 0) {
-        fopMsgM_Create(PROC_MENUWINDOW, NULL, NULL);
+        fopMsgM_Create(fpcNm_MENUWINDOW_e, NULL, NULL);
     }
 #endif
 
-    fopMsgM_Create(PROC_MESG, NULL, NULL);
+    fopMsgM_Create(fpcNm_MESG_e, NULL, NULL);
 
     dComIfGp_setDoStatusForce(dActStts_BLANK_e);
     dComIfGp_setRStatusForce(dActStts_BLANK_e);
@@ -7499,7 +7499,7 @@ msg_process_profile_definition g_profile_METER = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 12,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_METER,
+    /* ProcName     */ fpcNm_METER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sub_meter_class),
     /* SizeOther    */ 0,

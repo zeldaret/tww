@@ -570,7 +570,7 @@ void tama_set(fganon_class* i_this) {
 void mahou_set(fganon_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     for (int i = 0; i < 8; i++) {
-        fopAcM_create(PROC_FGMAHOU, i, &i_this->m664, fopAcM_GetRoomNo(a_this));
+        fopAcM_create(fpcNm_FGMAHOU_e, i, &i_this->m664, fopAcM_GetRoomNo(a_this));
     }
     i_this->m670 = 0;
 }
@@ -697,7 +697,7 @@ void spinattack2(fganon_class* i_this) {
             i_this->mMode = 1;
             if (i_this->m68F == 0) {
                 for (int i = 1; i < 5; i++) {
-                    fopAcM_create(PROC_FGANON, (i * 16) | 3, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
+                    fopAcM_create(fpcNm_FGANON_e, (i * 16) | 3, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
                 }
             }
         }
@@ -1031,7 +1031,7 @@ void fail(fganon_class* i_this) {
                 kieru_brk(i_this, 2);
                 i_this->m3A4[0] = 10;
                 i_this->mMode = 4;
-                i_this->mBokoID = fopAcM_create(PROC_BOKO, daBoko_c::Type_PGANON_SWORD_e, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
+                i_this->mBokoID = fopAcM_create(fpcNm_BOKO_e, daBoko_c::Type_PGANON_SWORD_e, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
             }
             break;
         }
@@ -1271,7 +1271,7 @@ void last_end(fganon_class* i_this) {
         case 4: {
             if (i_this->m3A4[1] <= 4) {
                 if (i_this->m3A4[1] == 4) {
-                    i_this->mBokoID = fopAcM_create(PROC_BOKO, daBoko_c::Type_PGANON_SWORD_e, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
+                    i_this->mBokoID = fopAcM_create(fpcNm_BOKO_e, daBoko_c::Type_PGANON_SWORD_e, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
                 }
                 daBoko_c* boko = (daBoko_c*)fopAcM_SearchByID(i_this->mBokoID);
                 if (boko != NULL) {
@@ -1394,7 +1394,7 @@ void damage_check(fganon_class* i_this) {
 
                 return;
             }
-            if (atInfo.mpActor && (fopAcM_GetName(atInfo.mpActor) == PROC_FGMAHOU)) {
+            if (atInfo.mpActor && (fopAcM_GetName(atInfo.mpActor) == fpcNm_FGMAHOU_e)) {
                 i_this->m670++;
 
                 anm_init(i_this, FGANON_BCK_DAMAGE1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
@@ -2338,7 +2338,7 @@ void energy_ball_move(fganon_class* i_this) {
 
             if (i_this->mBallAtSph.ChkAtHit() != 0) {
                 atInfo.mpActor = i_this->mBallAtSph.GetAtHitObj()->GetAc();
-                if ((atInfo.mpActor && (fopAcM_GetName(atInfo.mpActor) == PROC_PLAYER)) && (i_this->mAction != 22)) {
+                if ((atInfo.mpActor && (fopAcM_GetName(atInfo.mpActor) == fpcNm_PLAYER_e)) && (i_this->mAction != 22)) {
                     i_this->m68B = 1;
                     i_this->mAction = 5;
                     i_this->mMode = 1;
@@ -2359,7 +2359,7 @@ void energy_ball_move(fganon_class* i_this) {
 void* mahou_se_set(void* i_act, void* i_other) {
     fganon_class* i_this = (fganon_class*)i_act;
     fopAc_ac_c* a_this = &i_this->actor;
-    if ((fopAc_IsActor(i_this)) && fopAcM_GetName(a_this) == PROC_FGMAHOU) {
+    if ((fopAc_IsActor(i_this)) && fopAcM_GetName(a_this) == fpcNm_FGMAHOU_e) {
         if (a_this->health == 0) {
             fopAcM_seStartCurrent(a_this, JA_SE_OBJ_PG_EBALL_FLY_L, 0);
         }
@@ -2742,7 +2742,7 @@ static cPhs_State daFganon_Create(fopAc_ac_c* a_this) {
     
     if ((i_this->mSwitchNo != 0xFF) && (dComIfGs_isSwitch(i_this->mSwitchNo, dComIfGp_roomControl_getStayNo()) != 0)) {
         if (((fopAcM_GetParam(a_this) & 0xF) == 2) && !(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A08))) { // Probably a flag to do with beating FF1 so PG spawns?
-            fopAcM_create(PROC_BOKO, daBoko_c::Type_PGANON_SWORD_e, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
+            fopAcM_create(fpcNm_BOKO_e, daBoko_c::Type_PGANON_SWORD_e, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
         }
         return cPhs_ERROR_e;
     }
@@ -2945,7 +2945,7 @@ static cPhs_State daFganon_Create(fopAc_ac_c* a_this) {
             deru_brk(i_this);
         }
         e_this->initBt(REG8_F(8) + 300.0f, 300.0f);
-        i_this->mCapeID = fopAcM_create(PROC_MANT, 1, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
+        i_this->mCapeID = fopAcM_create(fpcNm_MANT_e, 1, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
         daFganon_Execute(i_this);
     }
     return res2;
@@ -2964,7 +2964,7 @@ actor_process_profile_definition g_profile_FGANON = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_FGANON,
+    /* ProcName     */ fpcNm_FGANON_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(fganon_class),
     /* SizeOther    */ 0,

@@ -130,7 +130,7 @@ BOOL daFan_c::Create() {
     }
 
     mModel->calc();
-    mWindSePId = fopKyM_create(PROC_LEVEL_SE, JA_SE_OBJ_WIND_TAG, &eyePos);
+    mWindSePId = fopKyM_create(fpcNm_LEVEL_SE_e, JA_SE_OBJ_WIND_TAG, &eyePos);
     return TRUE;
 }
 
@@ -297,7 +297,7 @@ actor_process_profile_definition g_profile_FAN = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_FAN,
+    /* ProcName     */ fpcNm_FAN_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daFan_c),
     /* SizeOther    */ 0,

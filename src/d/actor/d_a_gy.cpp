@@ -345,7 +345,7 @@ actor_process_profile_definition g_profile_GY = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_GY,
+    /* ProcName     */ fpcNm_GY_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daGy_c),
     /* SizeOther    */ 0,

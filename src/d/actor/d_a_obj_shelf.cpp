@@ -98,7 +98,7 @@ BOOL daObjShelf::Act_c::Mthd_Delete() {
 /* 000002F0-00000334       .text hold_event__Q210daObjShelf5Act_cCFv */
 void daObjShelf::Act_c::hold_event() const {
     fopAc_ac_c* npc;
-    if (fopAcM_SearchByName(PROC_NPC_BA1, &npc) && npc) {
+    if (fopAcM_SearchByName(fpcNm_NPC_BA1_e, &npc) && npc) {
         ((daNpc_Ba1_c *) npc)->holdEventOn();
     }
 }
@@ -304,7 +304,7 @@ actor_process_profile_definition g_profile_Obj_Shelf = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Shelf,
+    /* ProcName     */ fpcNm_Obj_Shelf_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjShelf::Act_c),
     /* SizeOther    */ 0,

@@ -1282,7 +1282,7 @@ bool daNpc_Rsh1_c::wait01() {
     } else {
         if (mCyl.ChkCoHit()) {
             fopAc_ac_c* actor_p = mCyl.GetCoHitAc();
-            if (actor_p && fpcM_GetName(actor_p) == PROC_PLAYER) {
+            if (actor_p && fpcM_GetName(actor_p) == fpcNm_PLAYER_e) {
                 m95B = 2;
                 m793 = true;
                 m780 = 0x2883;
@@ -1941,7 +1941,7 @@ actor_process_profile_definition g_profile_NPC_RSH1 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_RSH1,
+    /* ProcName     */ fpcNm_NPC_RSH1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Rsh1_c),
     /* SizeOther    */ 0,

@@ -404,7 +404,7 @@ void daTagKbItem_c::dig_main() {
     if (!fopAcM_IsActor(mpActor)) {
         return;
     }
-    if (fopAcM_GetName(mpActor) != PROC_KB) {
+    if (fopAcM_GetName(mpActor) != fpcNm_KB_e) {
         // Not a pig.
         return;
     }
@@ -463,7 +463,7 @@ BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int calcTiming) {
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         void* userArea = (void*)model->getUserArea();
-        if (userArea && fopAcM_IsActor(userArea) && fopAcM_GetName(userArea) == PROC_STANDITEM) {
+        if (userArea && fopAcM_IsActor(userArea) && fopAcM_GetName(userArea) == fpcNm_STANDITEM_e) {
             daStandItem_c* i_this = (daStandItem_c*)userArea;
             mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
             switch (i_this->getItemNo()) {

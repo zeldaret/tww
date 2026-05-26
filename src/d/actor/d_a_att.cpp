@@ -19,7 +19,7 @@ static BOOL daAtt_Draw(att_class* i_this) {
 
 /* 000000F4-00000140       .text boss_s_sub__FPvPv */
 static void* boss_s_sub(void* search, void*) {
-    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_BGN) {
+    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == fpcNm_BGN_e) {
         return search;
     }
     return NULL;
@@ -240,7 +240,7 @@ actor_process_profile_definition g_profile_ATT = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0008,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ATT,
+    /* ProcName     */ fpcNm_ATT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(att_class),
     /* SizeOther    */ 0,

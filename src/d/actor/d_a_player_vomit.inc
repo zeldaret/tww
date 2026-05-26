@@ -20,7 +20,7 @@ BOOL daPy_lk_c::checkJumpFlower() {
     short sVar3;
 
     iVar1 = mCyl.GetCoHitAc();
-    if (mCyl.ChkCoHit() && iVar1 != 0 && fopAcM_GetName(iVar1) == PROC_JBO) {
+    if (mCyl.ChkCoHit() && iVar1 != 0 && fopAcM_GetName(iVar1) == fpcNm_JBO_e) {
         if (checkModeFlg(ModeFlg_MIDAIR)) {
             if (speed.y <= 0.0f && current.pos.y > iVar1->current.pos.y - 50.0f) {
                 return procVomitWait_init();

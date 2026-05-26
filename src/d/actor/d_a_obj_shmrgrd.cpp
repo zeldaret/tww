@@ -385,7 +385,7 @@ void daObjShmrgrd_c::set_damage() {
     if (mCylTg.ChkTgHit()) {
         cCcD_Obj *hitObj = mCylTg.GetTgHitObj();
         fopAc_ac_c* hitActor = mCylTg.GetTgHitAc();
-        if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
+        if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == fpcNm_PLAYER_e) {
             if (check_player_angle(hitActor) && (cutType == daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING || cutType == daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER)) {
                 M_damage = 1;
             } else if (cutType == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
@@ -637,7 +637,7 @@ actor_process_profile_definition g_profile_Obj_Shmrgrd = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Shmrgrd,
+    /* ProcName     */ fpcNm_Obj_Shmrgrd_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjShmrgrd_c),
     /* SizeOther    */ 0,

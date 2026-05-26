@@ -287,31 +287,31 @@ static BOOL dScnPly_Draw(dScnPly_ply_c* i_this) {
     dComIfG_Ccsp()->Move();
     dComIfG_Bgsp()->ClrMoveFlag();
 
-    if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(i_this) && fpcM_GetName(i_this) == PROC_PLAY_SCENE) {
+    if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(i_this) && fpcM_GetName(i_this) == fpcNm_PLAY_SCENE_e) {
         if (dComIfGp_isEnableNextStage()) {
             static s16 l_wipeType[] = {
-                PROC_OVERLAP0,
-                PROC_OVERLAP0,
-                PROC_OVERLAP2,
-                PROC_OVERLAP3,
-                PROC_OVERLAP4,
-                PROC_OVERLAP1,
-                PROC_OVERLAP6,
-                PROC_OVERLAP1,
-                PROC_OVERLAP7,
-                PROC_OVERLAP7,
-                PROC_OVERLAP8,
-                PROC_OVERLAP8,
+                fpcNm_OVERLAP0_e,
+                fpcNm_OVERLAP0_e,
+                fpcNm_OVERLAP2_e,
+                fpcNm_OVERLAP3_e,
+                fpcNm_OVERLAP4_e,
+                fpcNm_OVERLAP1_e,
+                fpcNm_OVERLAP6_e,
+                fpcNm_OVERLAP1_e,
+                fpcNm_OVERLAP7_e,
+                fpcNm_OVERLAP7_e,
+                fpcNm_OVERLAP8_e,
+                fpcNm_OVERLAP8_e,
             };
 
             JUT_ASSERT(VERSION_SELECT(997, 997, 1001, 1001),
                        dComIfGp_getNextStageWipe() < ARRAY_SIZE(l_wipeType));
 
             if (strcmp(dComIfGp_getNextStageName(), "ENDING") == 0) {
-                fopScnM_ChangeReq(i_this, PROC_ENDING_SCENE, PROC_OVERLAP0, 5);
+                fopScnM_ChangeReq(i_this, fpcNm_ENDING_SCENE_e, fpcNm_OVERLAP0_e, 5);
                 mDoAud_bgmStop(30);
             } else {
-                fopScnM_ChangeReq(i_this, PROC_PLAY_SCENE, l_wipeType[dComIfGp_getNextStageWipe()], 5);
+                fopScnM_ChangeReq(i_this, fpcNm_PLAY_SCENE_e, l_wipeType[dComIfGp_getNextStageWipe()], 5);
 
                 int hour = dKy_getdaytime_hour();
                 BOOL isNight = FALSE;
@@ -430,23 +430,23 @@ const char* M_Dai_resName[] = {
 STATIC_ASSERT(ARRAY_SIZE(M_Dai_resName) <= PRELOAD_RES_MAX);
 
 const s16 majroom_dylKeyTbl[] = {
-    PROC_DOOR10,
-    PROC_EP,
-    PROC_HIMO3,
-    PROC_KNOB00,
-    PROC_KYTAG02,
-    PROC_MO2,
-    PROC_NPC_NZ,
-    PROC_NZ,
-    PROC_NZG,
-    PROC_Obj_Barrel,
-    PROC_Obj_Mshokki,
-    PROC_OBJ_OTBLE,
-    PROC_Tag_Attention,
-    PROC_TAG_EVENT,
-    PROC_TAG_HINT,
-    PROC_TBOX,
-    PROC_TSUBO,
+    fpcNm_DOOR10_e,
+    fpcNm_EP_e,
+    fpcNm_HIMO3_e,
+    fpcNm_KNOB00_e,
+    fpcNm_KYTAG02_e,
+    fpcNm_MO2_e,
+    fpcNm_NPC_NZ_e,
+    fpcNm_NZ_e,
+    fpcNm_NZG_e,
+    fpcNm_Obj_Barrel_e,
+    fpcNm_Obj_Mshokki_e,
+    fpcNm_OBJ_OTBLE_e,
+    fpcNm_Tag_Attention_e,
+    fpcNm_TAG_EVENT_e,
+    fpcNm_TAG_HINT_e,
+    fpcNm_TBOX_e,
+    fpcNm_TSUBO_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(majroom_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
@@ -476,20 +476,20 @@ const char* majroom_resName[] = {
 STATIC_ASSERT(ARRAY_SIZE(majroom_resName) <= PRELOAD_RES_MAX);
 
 const s16 ma2room_dylKeyTbl[] = {
-    PROC_AGBSW0,
-    PROC_BK,
-    PROC_DOOR10,
-    PROC_EP,
-    PROC_KNOB00,
-    PROC_MO2,
-    PROC_NZ,
-    PROC_NZG,
-    PROC_Obj_Mshokki,
-    PROC_OBJ_OTBLE,
-    PROC_Tag_Attention,
-    PROC_TAG_EVENT,
-    PROC_TBOX,
-    PROC_TSUBO,
+    fpcNm_AGBSW0_e,
+    fpcNm_BK_e,
+    fpcNm_DOOR10_e,
+    fpcNm_EP_e,
+    fpcNm_KNOB00_e,
+    fpcNm_MO2_e,
+    fpcNm_NZ_e,
+    fpcNm_NZG_e,
+    fpcNm_Obj_Mshokki_e,
+    fpcNm_OBJ_OTBLE_e,
+    fpcNm_Tag_Attention_e,
+    fpcNm_TAG_EVENT_e,
+    fpcNm_TBOX_e,
+    fpcNm_TSUBO_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(ma2room_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
@@ -522,19 +522,19 @@ const char* ma2room_resName[] = {
 STATIC_ASSERT(ARRAY_SIZE(ma2room_resName) <= PRELOAD_RES_MAX);
 
 const s16 ma3room_dylKeyTbl[] = {
-    PROC_DOOR10,
-    PROC_EP,
-    PROC_KI,
-    PROC_KNOB00,
-    PROC_MO2,
-    PROC_NZ,
-    PROC_NZG,
-    PROC_Obj_Mshokki,
-    PROC_OBJ_OTBLE,
-    PROC_Tag_Attention,
-    PROC_TAG_EVENT,
-    PROC_TBOX,
-    PROC_TSUBO,
+    fpcNm_DOOR10_e,
+    fpcNm_EP_e,
+    fpcNm_KI_e,
+    fpcNm_KNOB00_e,
+    fpcNm_MO2_e,
+    fpcNm_NZ_e,
+    fpcNm_NZG_e,
+    fpcNm_Obj_Mshokki_e,
+    fpcNm_OBJ_OTBLE_e,
+    fpcNm_Tag_Attention_e,
+    fpcNm_TAG_EVENT_e,
+    fpcNm_TBOX_e,
+    fpcNm_TSUBO_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(ma3room_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
@@ -560,18 +560,18 @@ const char* ma3room_resName[] = {
 STATIC_ASSERT(ARRAY_SIZE(ma3room_resName) <= PRELOAD_RES_MAX);
 
 const s16 M_NewD2_dylKeyTbl[] = {
-    PROC_TBOX,
-    PROC_TAG_EVENT,
-    PROC_DOOR10,
-    PROC_AGBSW0,
-    PROC_Ykgr,
-    PROC_TSUBO,
-    PROC_BK,
-    PROC_SteamTag,
-    PROC_MT,
-    PROC_CC,
-    PROC_NPC_NZ,
-    PROC_Fire,
+    fpcNm_TBOX_e,
+    fpcNm_TAG_EVENT_e,
+    fpcNm_DOOR10_e,
+    fpcNm_AGBSW0_e,
+    fpcNm_Ykgr_e,
+    fpcNm_TSUBO_e,
+    fpcNm_BK_e,
+    fpcNm_SteamTag_e,
+    fpcNm_MT_e,
+    fpcNm_CC_e,
+    fpcNm_NPC_NZ_e,
+    fpcNm_Fire_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(M_NewD2_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
@@ -615,19 +615,19 @@ const char* M_NewD2_resName[] = {
 STATIC_ASSERT(ARRAY_SIZE(M_NewD2_resName) <= PRELOAD_RES_MAX);
 
 const s16 kindan_dylKeyTbl[] = {
-    PROC_TBOX,
-    PROC_TAG_EVENT,
-    PROC_SWC00,
-    PROC_DOOR10,
-    PROC_AGBSW0,
-    PROC_Tag_Attention,
-    PROC_TSUBO,
-    PROC_CC,
-    PROC_PH,
-    PROC_KLFT,
-    PROC_SITEM,
-    PROC_KITA,
-    PROC_Obj_Mtest,
+    fpcNm_TBOX_e,
+    fpcNm_TAG_EVENT_e,
+    fpcNm_SWC00_e,
+    fpcNm_DOOR10_e,
+    fpcNm_AGBSW0_e,
+    fpcNm_Tag_Attention_e,
+    fpcNm_TSUBO_e,
+    fpcNm_CC_e,
+    fpcNm_PH_e,
+    fpcNm_KLFT_e,
+    fpcNm_SITEM_e,
+    fpcNm_KITA_e,
+    fpcNm_Obj_Mtest_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(kindan_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
@@ -671,72 +671,72 @@ const char* kindan_resName[] = {
 STATIC_ASSERT(ARRAY_SIZE(kindan_resName) <= PRELOAD_RES_MAX);
 
 const s16 M_Dai_dylKeyTbl[] = {
-    PROC_ALLDIE,
-    PROC_Obj_Msdan2,
-    PROC_Obj_Msdan,
-    PROC_Obj_MsdanSub2,
-    PROC_Obj_MsdanSub,
-    PROC_SW_ATTACK,
-    PROC_Obj_Correct,
-    PROC_Obj_Mkiek,
-    PROC_Obj_Vds,
-    PROC_Obj_Ladder,
-    PROC_DOOR12,
-    PROC_Obj_MknjD,
-    PROC_Obj_Swhammer,
-    PROC_Obj_Swlight,
-    PROC_Obj_Mkie,
-    PROC_KANTERA,
-    PROC_Obj_Mmrr,
-    PROC_Obj_Kanoke,
-    PROC_BOKO,
-    PROC_BL,
-    PROC_PW,
-    PROC_CC,
-    PROC_Obj_Tapestry,
-    PROC_ST,
-    PROC_FM,
-    PROC_MO2,
-    PROC_TN,
+    fpcNm_ALLDIE_e,
+    fpcNm_Obj_Msdan2_e,
+    fpcNm_Obj_Msdan_e,
+    fpcNm_Obj_MsdanSub2_e,
+    fpcNm_Obj_MsdanSub_e,
+    fpcNm_SW_ATTACK_e,
+    fpcNm_Obj_Correct_e,
+    fpcNm_Obj_Mkiek_e,
+    fpcNm_Obj_Vds_e,
+    fpcNm_Obj_Ladder_e,
+    fpcNm_DOOR12_e,
+    fpcNm_Obj_MknjD_e,
+    fpcNm_Obj_Swhammer_e,
+    fpcNm_Obj_Swlight_e,
+    fpcNm_Obj_Mkie_e,
+    fpcNm_KANTERA_e,
+    fpcNm_Obj_Mmrr_e,
+    fpcNm_Obj_Kanoke_e,
+    fpcNm_BOKO_e,
+    fpcNm_BL_e,
+    fpcNm_PW_e,
+    fpcNm_CC_e,
+    fpcNm_Obj_Tapestry_e,
+    fpcNm_ST_e,
+    fpcNm_FM_e,
+    fpcNm_MO2_e,
+    fpcNm_TN_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(M_Dai_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
 const s16 sea_dylKeyTbl[] = {
-    PROC_TAG_SO,
-    PROC_Salvage,
-    PROC_Obj_Coming,
-    PROC_LODBG,
-    PROC_Coming2,
-    PROC_SHIP,
-    PROC_NPC_SO,
+    fpcNm_TAG_SO_e,
+    fpcNm_Salvage_e,
+    fpcNm_Obj_Coming_e,
+    fpcNm_LODBG_e,
+    fpcNm_Coming2_e,
+    fpcNm_SHIP_e,
+    fpcNm_NPC_SO_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(sea_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
 const s16 kaze_dylKeyTbl[] = {
-    PROC_GRASS,
-    PROC_PH,
-    PROC_FM,
-    PROC_TAG_MDCB,
-    PROC_Obj_Hfuck1,
-    PROC_Obj_Eff,
-    PROC_WindTag,
-    PROC_Obj_Homen,
-    PROC_TSUBO,
-    PROC_EP,
-    PROC_Obj_Jump,
-    PROC_Obj_Hami3,
-    PROC_WINDMILL,
-    PROC_Obj_Hbrf1,
-    PROC_Obj_Hami4,
-    PROC_Obj_Hami2,
-    PROC_MACHINE,
-    PROC_Obj_Vmc,
-    PROC_Obj_MknjD,
-    PROC_NPC_CB1,
-    PROC_Obj_Trap,
-    PROC_SW_PROPELLER,
-    PROC_TOGE,
-    PROC_SHUTTER2,
+    fpcNm_GRASS_e,
+    fpcNm_PH_e,
+    fpcNm_FM_e,
+    fpcNm_TAG_MDCB_e,
+    fpcNm_Obj_Hfuck1_e,
+    fpcNm_Obj_Eff_e,
+    fpcNm_WindTag_e,
+    fpcNm_Obj_Homen_e,
+    fpcNm_TSUBO_e,
+    fpcNm_EP_e,
+    fpcNm_Obj_Jump_e,
+    fpcNm_Obj_Hami3_e,
+    fpcNm_WINDMILL_e,
+    fpcNm_Obj_Hbrf1_e,
+    fpcNm_Obj_Hami4_e,
+    fpcNm_Obj_Hami2_e,
+    fpcNm_MACHINE_e,
+    fpcNm_Obj_Vmc_e,
+    fpcNm_Obj_MknjD_e,
+    fpcNm_NPC_CB1_e,
+    fpcNm_Obj_Trap_e,
+    fpcNm_SW_PROPELLER_e,
+    fpcNm_TOGE_e,
+    fpcNm_SHUTTER2_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(kaze_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
@@ -770,13 +770,13 @@ const char* kaze_resName[] = {
 STATIC_ASSERT(ARRAY_SIZE(kaze_resName) <= PRELOAD_RES_MAX);
 
 s16 Siren_dylKeyTbl[] = {
-    PROC_Obj_Hha,
-    PROC_Obj_Htetu1,
-    PROC_NPC_OS,
-    PROC_LIGHTSTAIR,
-    PROC_WALL,
-    PROC_Obj_Try,
-    PROC_Obj_Correct,
+    fpcNm_Obj_Hha_e,
+    fpcNm_Obj_Htetu1_e,
+    fpcNm_NPC_OS_e,
+    fpcNm_LIGHTSTAIR_e,
+    fpcNm_WALL_e,
+    fpcNm_Obj_Try_e,
+    fpcNm_Obj_Correct_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(Siren_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
@@ -795,17 +795,17 @@ const char* Siren_resName[] = {
 STATIC_ASSERT(ARRAY_SIZE(Siren_resName) <= PRELOAD_RES_MAX);
 
 s16 GanonJ_dylKeyTbl[] = {
-    PROC_TBOX,
-    PROC_DOOR10,
-    PROC_MANT,
-    PROC_FGANON,
-    PROC_TSUBO,
-    PROC_MO2,
-    PROC_BK,
-    PROC_TN,
-    PROC_PT,
-    PROC_Obj_Hcbh,
-    PROC_ANDSW0,
+    fpcNm_TBOX_e,
+    fpcNm_DOOR10_e,
+    fpcNm_MANT_e,
+    fpcNm_FGANON_e,
+    fpcNm_TSUBO_e,
+    fpcNm_MO2_e,
+    fpcNm_BK_e,
+    fpcNm_TN_e,
+    fpcNm_PT_e,
+    fpcNm_Obj_Hcbh_e,
+    fpcNm_ANDSW0_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(GanonJ_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
@@ -828,19 +828,19 @@ const char* GanonJ_resName[] = {
 STATIC_ASSERT(ARRAY_SIZE(GanonJ_resName) <= PRELOAD_RES_MAX);
 
 s16 GanonK_dylKeyTbl[] = {
-    PROC_TSUBO,
-    PROC_Obj_Vteng,
-    PROC_KUI,
-    PROC_KS,
-    PROC_EP,
-    PROC_BGN,
-    PROC_TAG_EVENT,
-    PROC_Tag_Attention,
-    PROC_PZ,
-    PROC_Obj_Gbed,
-    PROC_BGN3,
-    PROC_BGN2,
-    PROC_ATT,
+    fpcNm_TSUBO_e,
+    fpcNm_Obj_Vteng_e,
+    fpcNm_KUI_e,
+    fpcNm_KS_e,
+    fpcNm_EP_e,
+    fpcNm_BGN_e,
+    fpcNm_TAG_EVENT_e,
+    fpcNm_Tag_Attention_e,
+    fpcNm_PZ_e,
+    fpcNm_Obj_Gbed_e,
+    fpcNm_BGN3_e,
+    fpcNm_BGN2_e,
+    fpcNm_ATT_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(GanonK_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
@@ -857,11 +857,11 @@ const char* GanonK_resName[] = {
 STATIC_ASSERT(ARRAY_SIZE(GanonK_resName) <= PRELOAD_RES_MAX);
 
 s16 GanonM_dylKeyTbl[] = {
-    PROC_FGANON,
-    PROC_MANT,
-    PROC_Ygcwp,
-    PROC_Obj_Vfan,
-    PROC_WARPGANON,
+    fpcNm_FGANON_e,
+    fpcNm_MANT_e,
+    fpcNm_Ygcwp_e,
+    fpcNm_Obj_Vfan_e,
+    fpcNm_WARPGANON_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(GanonM_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
@@ -875,7 +875,7 @@ const char* GanonM_resName[] = {
 STATIC_ASSERT(ARRAY_SIZE(GanonM_resName) <= PRELOAD_RES_MAX);
 
 const s16 M_DragB_dylKeyTbl[] = {
-    PROC_WARPFLOWER,
+    fpcNm_WARPFLOWER_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(M_DragB_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
@@ -885,8 +885,8 @@ const char* M_DragB_resName[] = {
 STATIC_ASSERT(ARRAY_SIZE(M_DragB_resName) <= PRELOAD_RES_MAX);
 
 const s16 kinBOSS_dylKeyTbl[] = {
-    PROC_NPC_CB1,
-    PROC_WARPFLOWER,
+    fpcNm_NPC_CB1_e,
+    fpcNm_WARPFLOWER_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(kinBOSS_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
@@ -897,7 +897,7 @@ const char* kinBOSS_resName[] = {
 STATIC_ASSERT(ARRAY_SIZE(kinBOSS_resName) <= PRELOAD_RES_MAX);
 
 const s16 M_DaiB_dylKeyTbl[] = {
-    PROC_WARPFLOWER,
+    fpcNm_WARPFLOWER_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(M_DaiB_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
@@ -907,7 +907,7 @@ const char* M_DaiB_resName[] = {
 STATIC_ASSERT(ARRAY_SIZE(M_DaiB_resName) <= PRELOAD_RES_MAX);
 
 const s16 SirenB_dylKeyTbl[] = {
-    PROC_WARPFLOWER,
+    fpcNm_WARPFLOWER_e,
 };
 STATIC_ASSERT(ARRAY_SIZE(SirenB_dylKeyTbl) <= PRELOAD_DYL_MAX);
 
@@ -1179,7 +1179,7 @@ BOOL heapSizeCheck() {
 /* 802355A8-802356B0       .text phase_00__FP13dScnPly_ply_c */
 cPhs_State phase_00(dScnPly_ply_c* i_this) {
 #if VERSION == VERSION_DEMO
-    if (fpcM_GetName(i_this) == PROC_OPENING_SCENE) {
+    if (fpcM_GetName(i_this) == fpcNm_OPENING_SCENE_e) {
         if (mDoRst::isReset()) {
             mDoRst_reset(0, 0, 0);
         }
@@ -1192,7 +1192,7 @@ cPhs_State phase_00(dScnPly_ply_c* i_this) {
 
     mDoGph_gInf_c::offBlure();
 
-    if (fpcM_GetName(i_this) != PROC_PLAY_SCENE) {
+    if (fpcM_GetName(i_this) != fpcNm_PLAY_SCENE_e) {
         if (!heapSizeCheck()) {
             mDoRst_reset(0, 0x80000000, 0);
         }
@@ -1401,7 +1401,7 @@ cPhs_State phase_4(dScnPly_ply_c* i_this) {
 
     mDoAud_monsSeInit();
 
-    if (fpcM_GetName(i_this) == PROC_PLAY_SCENE) {
+    if (fpcM_GetName(i_this) == fpcNm_PLAY_SCENE_e) {
         mDoAud_zelAudio_c::onBgmSet();
     } else {
         mDoAud_zelAudio_c::offBgmSet();
@@ -1530,7 +1530,7 @@ scene_process_profile_definition g_profile_PLAY_SCENE = {
     /* LayerID      */ fpcLy_ROOT_e,
     /* ListID       */ 1,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_PLAY_SCENE,
+    /* ProcName     */ fpcNm_PLAY_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(dScnPly_ply_c),
     /* SizeOther    */ 0,
@@ -1543,7 +1543,7 @@ scene_process_profile_definition g_profile_OPENING_SCENE = {
     /* LayerID      */ fpcLy_ROOT_e,
     /* ListID       */ 1,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OPENING_SCENE,
+    /* ProcName     */ fpcNm_OPENING_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(dScnPly_ply_c),
     /* SizeOther    */ 0,
@@ -1556,7 +1556,7 @@ scene_process_profile_definition g_profile_OPENING2_SCENE = {
     /* LayerID      */ fpcLy_ROOT_e,
     /* ListID       */ 1,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OPENING2_SCENE,
+    /* ProcName     */ fpcNm_OPENING2_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(dScnPly_ply_c),
     /* SizeOther    */ 0,

@@ -265,7 +265,7 @@ fopAc_ac_c* daMozo_c::getBeamActor(fpc_ProcID apid) {
     fopAc_ac_c* ac = fopAcM_SearchByID(apid);
     if (ac == NULL)
         return NULL;
-    if (fopAc_IsActor(ac) && fopAcM_GetProfName(ac) == PROC_Beam)
+    if (fopAc_IsActor(ac) && fopAcM_GetProfName(ac) == fpcNm_Beam_e)
         return ac;
     return NULL;
 }
@@ -337,7 +337,7 @@ actor_process_profile_definition g_profile_MOZO = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MOZO,
+    /* ProcName     */ fpcNm_MOZO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMozo_c),
     /* SizeOther    */ 0,

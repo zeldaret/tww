@@ -101,7 +101,7 @@ actor_process_profile_definition g_profile_TAG_SO = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0002,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_SO,
+    /* ProcName     */ fpcNm_TAG_SO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_So_c),
     /* SizeOther    */ 0,

@@ -1140,7 +1140,7 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
         cLib_addCalc2(&i_pt->current.pos.y, i_ac->current.pos.y, 1.0f, REG0_F(2) + 400.0f);
         cLib_addCalc2(&i_pt->current.pos.z, i_ac->current.pos.z, 1.0f, REG0_F(2) + 400.0f);
         i_pt->old.pos = i_pt->current.pos;
-        if (fopAcM_GetName(i_pt) == PROC_PLAYER) {
+        if (fopAcM_GetName(i_pt) == fpcNm_PLAYER_e) {
             i_this->m942 = 5;
         }
     }
@@ -1487,7 +1487,7 @@ void demo_camera(bmd_class* i_this) {
         i_this->mB70 = 1;
         csXyz cStack_b8(0, 0, 0);
         cStack_b8.y = actor->shape_angle.y + 0x8BB8;
-        fopAcM_create(PROC_NPC_CB1, 0, &i_this->m2E0, fopAcM_GetRoomNo(actor), &cStack_b8);
+        fopAcM_create(fpcNm_NPC_CB1_e, 0, &i_this->m2E0, fopAcM_GetRoomNo(actor), &cStack_b8);
         i_this->m2DC = 0;
         // Fall-through
     }
@@ -1974,7 +1974,7 @@ static cPhs_State daBmd_Create(fopAc_ac_c* a_this) {
             local_30.x = 100.0f;
             local_30.y = 0.0f;
             local_30.z = 800.0f;
-            fopAcM_create(PROC_NPC_CB1, 0, &local_30, fopAcM_GetRoomNo(a_this));
+            fopAcM_create(fpcNm_NPC_CB1_e, 0, &local_30, fopAcM_GetRoomNo(a_this));
         }
         res = cPhs_ERROR_e;
     } else if (!fopAcM_entrySolidHeap(a_this, solidHeapCB, 0x96000)) {
@@ -1993,12 +1993,12 @@ static cPhs_State daBmd_Create(fopAc_ac_c* a_this) {
         for (s32 i = 0; i < 20; i++) {
             fopAcM_prm_class* params = fopAcM_CreateAppend();
             params->base.parameters = i;
-            fopAcM_create(PROC_BMDHAND, 0, params);
+            fopAcM_create(fpcNm_BMDHAND_e, 0, params);
         }
         for (s32 i = 0; i < 8; i++) {
             fopAcM_prm_class* params = fopAcM_CreateAppend();
             params->base.parameters = i;
-            fopAcM_create(PROC_BMDFOOT, 0, params);
+            fopAcM_create(fpcNm_BMDFOOT_e, 0, params);
         }
         a_this->home.pos.y += REG0_F(2) + 20.0f;
         a_this->current.pos.y = a_this->home.pos.y;
@@ -2046,7 +2046,7 @@ actor_process_profile_definition g_profile_BMD = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BMD,
+    /* ProcName     */ fpcNm_BMD_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bmd_class),
     /* SizeOther    */ 0,

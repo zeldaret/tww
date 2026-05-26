@@ -240,7 +240,7 @@ actor_process_profile_definition g_profile_SYAN = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SYAN,
+    /* ProcName     */ fpcNm_SYAN_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(syan_class),
     /* SizeOther    */ 0,

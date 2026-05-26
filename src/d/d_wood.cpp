@@ -726,7 +726,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
         inf.GetCoHitObj()->GetStts()) {
         animIdx = packet->search_anm(Anm_c::Mode_PushInto);
 
-        if (fopAcM_GetProfName(actor) == PROC_PLAYER &&
+        if (fopAcM_GetProfName(actor) == fpcNm_PLAYER_e &&
             inf.GetCoHitLen() >= 2.0f && mAnimCooldown == 0) {
 
             mAnimCooldown = 20;

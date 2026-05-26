@@ -965,7 +965,7 @@ void daNpcPhoto_c::executeWait() {
 
             if(mCyl.ChkCoHit()) {
                 daNpcPhoto_c* pActor = (daNpcPhoto_c*)mCyl.GetCoHitAc();
-                if(pActor && fopAcM_GetProfName(pActor) == PROC_PLAYER) {
+                if(pActor && fopAcM_GetProfName(pActor) == fpcNm_PLAYER_e) {
                     field_0x9BE = 2;
                 }
 
@@ -992,7 +992,7 @@ void daNpcPhoto_c::executeWait() {
                 for (int i = 0; i < 2; i++) {
                     if (field_0x6F8[i].ChkCoHit()) {
                         daNpcPhoto_c* pActor = (daNpcPhoto_c*)field_0x6F8[i].GetCoHitAc();
-                        if(pActor != NULL && fopAcM_GetProfName(pActor) == PROC_PLAYER) {
+                        if(pActor != NULL && fopAcM_GetProfName(pActor) == fpcNm_PLAYER_e) {
                             field_0x9CD = true;
                             break;
                         }
@@ -2274,7 +2274,7 @@ actor_process_profile_definition g_profile_NPC_PHOTO = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_PHOTO,
+    /* ProcName     */ fpcNm_NPC_PHOTO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpcPhoto_c),
     /* SizeOther    */ 0,

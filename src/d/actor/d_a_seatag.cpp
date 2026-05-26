@@ -43,7 +43,7 @@ actor_process_profile_definition g_profile_SEATAG = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0002,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SEATAG,
+    /* ProcName     */ fpcNm_SEATAG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSeatag_c),
     /* SizeOther    */ 0,

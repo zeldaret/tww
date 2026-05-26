@@ -22,7 +22,7 @@
 BOOL daPy_lk_c::checkGrabSpecialHeavyState() {
     fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
     if (grab_actor != NULL) {
-        if (fopAcM_GetName(grab_actor) == PROC_KB && ((fopAcM_GetParam(grab_actor) & 8) != 0)) {
+        if (fopAcM_GetName(grab_actor) == fpcNm_KB_e && ((fopAcM_GetParam(grab_actor) & 8) != 0)) {
             return true;
         }
     }
@@ -57,7 +57,7 @@ BOOL daPy_lk_c::checkGrabBarrelSearch(int param_0) {
         grab_actor = mActorKeepGrab.getActor();
     }
 
-    if (grab_actor != NULL && fopAcM_GetName(grab_actor) == PROC_Obj_Barrel) {
+    if (grab_actor != NULL && fopAcM_GetName(grab_actor) == fpcNm_Obj_Barrel_e) {
         return true;
     } else {
         return false;
@@ -154,10 +154,10 @@ void daPy_lk_c::setGrabItemPos() {
                         return;
                     }
                 }
-                if (fopAcM_GetName(grab_actor) == PROC_MT) {
+                if (fopAcM_GetName(grab_actor) == fpcNm_MT_e) {
                     grab_actor->current.pos.y += magtail_offset * (1.0f - dVar10);
                 }
-            } else if (fopAcM_GetName(grab_actor) == PROC_MT) {
+            } else if (fopAcM_GetName(grab_actor) == fpcNm_MT_e) {
                 fVar1 = -magtail_offset * cM_ssin(m351C);
                 grab_actor->current.pos.x += fVar1 * cM_scos(shape_angle.y);
                 grab_actor->current.pos.y += magtail_offset * cM_scos(m351C);
@@ -247,7 +247,7 @@ BOOL daPy_lk_c::checkNextActionGrab() {
         (checkEquipHeavyBoots() && checkSetItemTrigger(dItem_IRON_BOOTS_e, 0)))
     {
         return procBootsEquip_init(dItem_IRON_BOOTS_e);
-    } else if (fopAcM_GetName(grab_actor) == PROC_BOMB && checkSetItemTrigger(dItem_BOMB_BAG_e, 0)) {
+    } else if (fopAcM_GetName(grab_actor) == fpcNm_BOMB_e && checkSetItemTrigger(dItem_BOMB_BAG_e, 0)) {
         return procGrabThrow_init(0);
     }
 #endif
@@ -334,7 +334,7 @@ BOOL daPy_lk_c::procGrabReady_init() {
         mActorKeepRope.setData(mpAttnActorA);
         freeGrabItem();
     }
-    if (fopAcM_GetName(mpAttnActorA) == PROC_BOKO) {
+    if (fopAcM_GetName(mpAttnActorA) == fpcNm_BOKO_e) {
         daBoko_c* boko = static_cast<daBoko_c*>(mpAttnActorA);
         boko->setNowMode(daBoko_c::Mode_PLAYER_CARRY_e);
     }
@@ -356,7 +356,7 @@ BOOL daPy_lk_c::procGrabReady() {
         procGrabUp_init();
     } else if (mProcVar6.m3570 == 1 && (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f)) {
         if (grab_actor != NULL) {
-            if (fopAcM_GetName(grab_actor) == PROC_BOKO) {
+            if (fopAcM_GetName(grab_actor) == fpcNm_BOKO_e) {
                 mEquipItem = daPyItem_BOKO_e;
                 mActorKeepEquip = mActorKeepGrab;
                 mActorKeepGrab.clearData();
@@ -424,7 +424,7 @@ BOOL daPy_lk_c::procGrabUp_init() {
     }
     fopAcM_setStageLayer(mActorKeepGrab.getActor());
     onResetFlg0(daPyRFlg0_GRAB_UP_START);
-    if (fopAcM_GetName(mActorKeepGrab.getActor()) == PROC_Stone2) {
+    if (fopAcM_GetName(mActorKeepGrab.getActor()) == fpcNm_Stone2_e) {
         dComIfGp_setPlayerStatus1(0, daPyStts1_UNK40000_e);
     }
     return true;
@@ -574,7 +574,7 @@ BOOL daPy_lk_c::procGrabThrow() {
         dComIfGp_getCamera(mCameraInfoIdx)->mCamera.ForceLockOn(mActorKeepGrab.getID());
         if (fopAcM_CheckStatus(grab_actor, fopAcStts_UNK10000_e)) {
             voiceStart(18);
-        } else if (fopAcM_GetName(grab_actor) == PROC_BOMB || fopAcM_GetName(grab_actor) == PROC_Bomb2) {
+        } else if (fopAcM_GetName(grab_actor) == fpcNm_BOMB_e || fopAcM_GetName(grab_actor) == fpcNm_Bomb2_e) {
             voiceStart(0);
         } else {
             voiceStart(17);

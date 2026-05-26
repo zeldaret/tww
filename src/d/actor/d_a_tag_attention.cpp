@@ -111,7 +111,7 @@ actor_process_profile_definition g_profile_Tag_Attention = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0009,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Tag_Attention,
+    /* ProcName     */ fpcNm_Tag_Attention_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTagAttention::Act_c),
     /* SizeOther    */ 0,

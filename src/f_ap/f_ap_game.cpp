@@ -98,7 +98,7 @@ void fapGm_Create() {
     fopOvlpM_Init();
     fopCamM_Init();
     fopDwTg_CreateQueue();
-    fopScnM_CreateReq(PROC_LOGO_SCENE, PROC_INVALID_e, 0, 0);
+    fopScnM_CreateReq(fpcNm_LOGO_SCENE_e, fpcNm_INVALID_e, 0, 0);
 
     g_HIO.mNo = mDoHIO_createChild("ゲームシステム", &g_HIO); // "Game System"
 }

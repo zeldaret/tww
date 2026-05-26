@@ -22,7 +22,7 @@ class J3DModelData;
 
 /* 00000078-000000C4       .text s_a_i_sub__FPvPv */
 static void* s_a_i_sub(void* search, void*) {
-    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_DR2) {
+    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == fpcNm_DR2_e) {
         return search;
     }
     return NULL;
@@ -35,7 +35,7 @@ static dr2_class* search_dragontail(kui_class* i_this) {
 
 /* 000000F0-0000013C       .text b_a_i_sub__FPvPv */
 static void* b_a_i_sub(void* search, void*) {
-    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_BTD) {
+    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == fpcNm_BTD_e) {
         return search;
     }
     return NULL;
@@ -551,7 +551,7 @@ actor_process_profile_definition g_profile_KUI = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KUI,
+    /* ProcName     */ fpcNm_KUI_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kui_class),
     /* SizeOther    */ 0,

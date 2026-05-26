@@ -798,7 +798,7 @@ actor_process_profile_definition g_profile_Stone2 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0008,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Stone2,
+    /* ProcName     */ fpcNm_Stone2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daStone2::Act_c),
     /* SizeOther    */ 0,

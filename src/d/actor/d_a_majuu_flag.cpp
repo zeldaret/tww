@@ -1071,7 +1071,7 @@ actor_process_profile_definition g_profile_MAJUU_FLAG = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MAJUU_FLAG,
+    /* ProcName     */ fpcNm_MAJUU_FLAG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMajuu_Flag_c),
     /* SizeOther    */ 0,

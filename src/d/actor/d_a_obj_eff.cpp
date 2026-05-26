@@ -461,7 +461,7 @@ actor_process_profile_definition g_profile_Obj_Eff = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0009,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Eff,
+    /* ProcName     */ fpcNm_Obj_Eff_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjEff::Act_c),
     /* SizeOther    */ 0,

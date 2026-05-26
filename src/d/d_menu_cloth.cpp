@@ -980,7 +980,7 @@ msg_process_profile_definition g_profile_Menu_Cloth = {
     /* LayerID      */ (uint)fpcLy_CURRENT_e,
     /* ListID       */ 0x000C,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Menu_Cloth,
+    /* ProcName     */ fpcNm_Menu_Cloth_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(menu_cloth_class),
     /* SizeOther    */ 0,

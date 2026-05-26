@@ -443,7 +443,7 @@ BOOL dvdWaitDraw(dScnLogo_c* i_this) {
 #endif
     ) {
 
-        dComIfG_changeOpeningScene(i_this, PROC_OPENING_SCENE);
+        dComIfG_changeOpeningScene(i_this, fpcNm_OPENING_SCENE_e);
     }
     return TRUE;
 }
@@ -473,7 +473,7 @@ static BOOL dScnLogo_Draw(dScnLogo_c* i_this) {
 /* 8022D1DC-8022D21C       .text dScnLogo_Execute__FP10dScnLogo_c */
 static BOOL dScnLogo_Execute(dScnLogo_c* i_this) {
     if (mDoRst::isReset())
-        fopScnM_ChangeReq(i_this, PROC_LOGO_SCENE, PROC_OVERLAP0, 5);
+        fopScnM_ChangeReq(i_this, fpcNm_LOGO_SCENE_e, fpcNm_OVERLAP0_e, 5);
     return TRUE;
 }
 
@@ -948,7 +948,7 @@ scene_process_profile_definition g_profile_LOGO_SCENE = {
     /* LayerID      */ fpcLy_ROOT_e,
     /* ListID       */ 1,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_LOGO_SCENE,
+    /* ProcName     */ fpcNm_LOGO_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(dScnLogo_c),
     /* SizeOther    */ 0,

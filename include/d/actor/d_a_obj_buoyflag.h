@@ -52,7 +52,7 @@ namespace daObjBuoyflag {
     public:
         static fpc_ProcID make_norm(fpc_ProcID parentPId, cXyz* pos, int roomNo, csXyz* angle) {
             u32 params = prm_make(Type_UNK0_e, Texture_00_e, false);
-            return fopAcM_createChild(PROC_Obj_Buoyflag, parentPId, params, pos, roomNo, angle);
+            return fopAcM_createChild(fpcNm_Obj_Buoyflag_e, parentPId, params, pos, roomNo, angle);
         }
         static u32 prm_make(Type_e type, Texture_e texture, bool arg2) {
             s32 b = arg2 ? 1 : 0;
@@ -67,11 +67,11 @@ namespace daObjBuoyflag {
         void jump_to_sea(float, float, short) {}
         static fpc_ProcID make_barrel2_mine(fpc_ProcID parent, cXyz* pos, int room, csXyz* angle, Texture_e texture, bool arg5) {
             u32 params = prm_make(Type_UNK2_e, texture, arg5);
-            return fopAcM_createChild(PROC_Obj_Buoyflag, parent, params, pos, room, angle);
+            return fopAcM_createChild(fpcNm_Obj_Buoyflag_e, parent, params, pos, room, angle);
         }
         static fpc_ProcID make_barrel2_norm(fpc_ProcID parent, cXyz* pos, int room, csXyz* angle, Texture_e texture) {
             u32 params = prm_make(Type_UNK1_e, texture, false);
-            return fopAcM_createChild(PROC_Obj_Buoyflag, parent, params, pos, room, angle);
+            return fopAcM_createChild(fpcNm_Obj_Buoyflag_e, parent, params, pos, room, angle);
         }
         void attr_type() const; // weak but not inlined?
         void prm_get_noCull() const {}
