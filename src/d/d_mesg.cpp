@@ -2243,15 +2243,15 @@ static msg_method_class l_dMesg_Method = {
 };
 
 msg_process_profile_definition g_profile_MESG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 12,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_MESG_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MESG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sub_mesg_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ fpcDwPi_MESG_e,
+    /* Draw Prio    */ fpcDwPi_MESG_e,
     /* Msg SubMtd   */ &l_dMesg_Method,
 };

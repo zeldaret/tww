@@ -135,26 +135,26 @@ static scene_method_class l_dScnOpen_Method = {
 };
 
 scene_process_profile_definition g_profile_OPEN_SCENE = {
-    /* LayerID      */ fpcLy_ROOT_e,
-    /* ListID       */ 1,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_OPEN_SCENE_e,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OPEN_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(dScnOpen_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnOpen_Method,
 };
 
 scene_process_profile_definition g_profile_OPEN2_SCENE = {
-    /* LayerID      */ fpcLy_ROOT_e,
-    /* ListID       */ 1,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_OPEN2_SCENE_e,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OPEN2_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(dScnOpen_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnOpen_Method,

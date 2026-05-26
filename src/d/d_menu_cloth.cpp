@@ -977,15 +977,15 @@ static msg_method_class dMenu_ClothMethodTable = {
 };
 
 msg_process_profile_definition g_profile_Menu_Cloth = {
-    /* LayerID      */ (uint)fpcLy_CURRENT_e,
-    /* ListID       */ 0x000C,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_Menu_Cloth_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x000C,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Menu_Cloth_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(menu_cloth_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ fpcDwPi_Menu_Cloth_e,
+    /* Draw Prio    */ fpcDwPi_Menu_Cloth_e,
     /* Msg SubMtd   */ &dMenu_ClothMethodTable,
 };

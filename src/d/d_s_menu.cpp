@@ -382,13 +382,13 @@ static scene_method_class l_dScnMenu_Method = {
 };
 
 scene_process_profile_definition g_profile_MENU_SCENE = {
-    /* LayerID      */ fpcLy_ROOT_e,
-    /* ListID       */ 1,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_MENU_SCENE_e,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MENU_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(menu_of_scene_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnMenu_Method,

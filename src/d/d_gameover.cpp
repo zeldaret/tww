@@ -449,15 +449,15 @@ static msg_method_class l_dGameover_Method = {
 };
 
 msg_process_profile_definition g_profile_GAMEOVER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 12,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_GAMEOVER_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_GAMEOVER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(dGameover_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ fpcDwPi_GAMEOVER_e,
+    /* Draw Prio    */ fpcDwPi_GAMEOVER_e,
     /* Msg SubMtd   */ &l_dGameover_Method,
 };

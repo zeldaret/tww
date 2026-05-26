@@ -297,15 +297,15 @@ static msg_method_class l_dPb_Method = {
 };
 
 msg_process_profile_definition g_profile_PB = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x000C,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_PB_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x000C,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_PB_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sub_pb_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ fpcDwPi_PB_e,
+    /* Draw Prio    */ fpcDwPi_PB_e,
     /* Msg SubMtd   */ &l_dPb_Method,
 };

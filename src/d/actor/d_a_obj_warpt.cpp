@@ -881,16 +881,16 @@ static actor_method_class daObj_WarptMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_WARPT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_OBJ_WARPT_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_WARPT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Warpt_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ fpcDwPi_OBJ_WARPT_e,
+    /* Draw Prio    */ fpcDwPi_OBJ_WARPT_e,
     /* Actor SubMtd */ &daObj_WarptMethodTable,
 #if VERSION == VERSION_DEMO
     /* Status       */ 0x17 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
@@ -898,5 +898,5 @@ actor_process_profile_definition g_profile_OBJ_WARPT = {
     /* Status       */ 0x17 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
 #endif
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

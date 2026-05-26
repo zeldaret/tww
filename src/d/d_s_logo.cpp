@@ -945,13 +945,13 @@ static scene_method_class l_dScnLogo_Method = {
 };
 
 scene_process_profile_definition g_profile_LOGO_SCENE = {
-    /* LayerID      */ fpcLy_ROOT_e,
-    /* ListID       */ 1,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_LOGO_SCENE_e,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_LOGO_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(dScnLogo_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnLogo_Method,

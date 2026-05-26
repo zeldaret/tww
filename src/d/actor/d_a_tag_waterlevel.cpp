@@ -144,18 +144,18 @@ namespace daTagWaterlevel {
 };
 
 actor_process_profile_definition g_profile_Tag_Waterlevel = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0009,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_Tag_Waterlevel_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0009,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Waterlevel_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTagWaterlevel::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ fpcDwPi_Tag_Waterlevel_e,
+    /* Draw Prio    */ fpcDwPi_Tag_Waterlevel_e,
     /* Actor SubMtd */ &daTagWaterlevel::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

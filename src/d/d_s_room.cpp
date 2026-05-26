@@ -296,13 +296,13 @@ static scene_method_class l_dScnRoom_Method = {
 };
 
 scene_process_profile_definition g_profile_ROOM_SCENE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_ROOM_SCENE_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ROOM_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(room_of_scene_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnRoom_Method,

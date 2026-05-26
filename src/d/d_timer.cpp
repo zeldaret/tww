@@ -776,15 +776,15 @@ static msg_method_class l_dTimer_Method = {
 };
 
 msg_process_profile_definition g_profile_TIMER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 12,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_TIMER_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TIMER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(dTimer_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ fpcDwPi_TIMER_e,
+    /* Draw Prio    */ fpcDwPi_TIMER_e,
     /* Msg SubMtd   */ &l_dTimer_Method,
 };

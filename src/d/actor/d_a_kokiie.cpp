@@ -464,18 +464,18 @@ static actor_method_class l_daKokiie_Method = {
 };
 
 actor_process_profile_definition g_profile_KOKIIE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_KOKIIE_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KOKIIE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kokiie_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ fpcDwPi_KOKIIE_e,
+    /* Draw Prio    */ fpcDwPi_KOKIIE_e,
     /* Actor SubMtd */ &l_daKokiie_Method,
     /* Status       */ fopAcStts_CULL_e | DEMO_SELECT(0, fopAcStts_UNK4000_e) | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

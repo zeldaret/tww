@@ -1938,18 +1938,18 @@ static actor_method_class l_daNpc_Rsh1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_RSH1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_NPC_RSH1_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_RSH1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Rsh1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ fpcDwPi_NPC_RSH1_e,
+    /* Draw Prio    */ fpcDwPi_NPC_RSH1_e,
     /* Actor SubMtd */ &l_daNpc_Rsh1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_12_e,
+    /* Cull Type    */ fopAc_CULLBOX_12_e,
 };

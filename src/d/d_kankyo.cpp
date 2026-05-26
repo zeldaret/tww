@@ -2446,16 +2446,16 @@ static kankyo_method_class l_dKy_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KANKYO = {
-    /* LayerID       */ fpcLy_CURRENT_e,
-    /* ListID        */ 0x0001,
-    /* ListPrio      */ fpcPi_CURRENT_e,
-    /* ProcName      */ fpcNm_KANKYO_e,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x0001,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_KANKYO_e,
     /* Proc SubMtd   */ &g_fpcLf_Method.base,
     /* Size          */ sizeof(sub_kankyo__class),
-    /* SizeOther     */ 0,
+    /* Size Other    */ 0,
     /* Parameters    */ 0,
     /* Leaf SubMtd   */ &g_fopKy_Method,
-    /* Priority      */ fpcDwPi_KANKYO_e,
+    /* Draw Prio     */ fpcDwPi_KANKYO_e,
     /* Kankyo SubMtd */ &l_dKy_Method,
 };
 

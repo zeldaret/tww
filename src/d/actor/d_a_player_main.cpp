@@ -13158,19 +13158,19 @@ static actor_method_class2 l_daPy_Method = {
 };
 
 actor_process_profile_definition2 g_profile_PLAYER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 5,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_PLAYER_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 5,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_PLAYER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daPy_lk_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ fpcDwPi_PLAYER_e,
+    /* Draw Prio    */ fpcDwPi_PLAYER_e,
     /* Actor SubMtd */ (actor_method_class*)&l_daPy_Method,
     /* Status       */ fopAcStts_FREEZE_e,
     /* Group        */ fopAc_PLAYER_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
     /* field_0x30   */ 2,
 };

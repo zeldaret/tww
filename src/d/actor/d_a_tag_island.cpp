@@ -528,18 +528,18 @@ static actor_method_class l_daTag_Island_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_ISLAND = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ fpcNm_TAG_ISLAND_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_ISLAND_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Island_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ fpcDwPi_TAG_ISLAND_e,
+    /* Draw Prio    */ fpcDwPi_TAG_ISLAND_e,
     /* Actor SubMtd */ &l_daTag_Island_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };
