@@ -616,7 +616,7 @@ config.libs = [
             Object(NonMatching, "d/d_menu_fmap.cpp"),
             Object(NonMatching, "d/d_menu_fmap2.cpp"),
             Object(NonMatching, "d/d_menu_item.cpp"),
-            Object(NonMatching, "d/d_menu_option.cpp"),
+            Object(Matching,    "d/d_menu_option.cpp"),
             Object(NonMatching, "d/d_menu_save.cpp"),
             Object(MatchingFor("GZLE01"), "d/d_menu_window.cpp"),
             Object(NonMatching, "d/d_mesg.cpp"),
