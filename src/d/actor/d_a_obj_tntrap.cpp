@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_tntrap.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-000002AC       .text chk_appear__13daObjTnTrap_cFv */
 void daObjTnTrap_c::chk_appear() {
@@ -182,18 +180,18 @@ static actor_method_class l_daObjTnTrap_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_TnTrap = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_TnTrap,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_TnTrap_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjTnTrap_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_TnTrap,
+    /* Draw Prio    */ fpcDwPi_Obj_TnTrap_e,
     /* Actor SubMtd */ &l_daObjTnTrap_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

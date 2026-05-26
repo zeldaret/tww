@@ -9,8 +9,6 @@
 #include "d/res/res_ktaru_01.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 
 const char daObjBarrel::Act_c::M_arcname[] = "Ktaru_01";
@@ -585,7 +583,7 @@ bool daObjBarrel::Act_c::damage_cc_proc() {
                     hitNormal *= l_shape_vec;
                     mMove.abs2();
                     fopAc_ac_c* hitActor = mCyl.GetTgHitAc();
-                    if (hitActor != NULL && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
+                    if (hitActor != NULL && fopAcM_GetProfName(hitActor) == fpcNm_PLAYER_e) {
                         s16 hitObjAngleY = cM_atan2s(hitNormal.x, hitNormal.z);
                         f32 f2 = cM_scos(hitActor->shape_angle.y - hitObjAngleY);
                         if (f2 > 0.0f) {
@@ -767,18 +765,18 @@ actor_method_class daObjBarrel::Method::Table = {
 };
 
 actor_process_profile_definition g_profile_Obj_Barrel = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Barrel,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Barrel_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjBarrel::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Barrel,
+    /* Draw Prio    */ fpcDwPi_Obj_Barrel_e,
     /* Actor SubMtd */ &daObjBarrel::Method::Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e | fopAcStts_UNK8000000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

@@ -14,8 +14,6 @@
 #include "d/res/res_link.h"
 #include "d/res/res_ls.h"
 #include "SSystem/SComponent/c_counter.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_snap.h"
 #include "m_Do/m_Do_lib.h"
 
@@ -223,7 +221,7 @@ void* searchActor_Bm1(void* i_actorP, void* i_unusedP) {
     if (
         l_check_wrk < ARRAY_SSIZE(l_check_inf) && 
         fopAc_IsActor(i_actorP) && 
-        fpcM_GetName(i_actorP) == PROC_NPC_BM1
+        fpcM_GetName(i_actorP) == fpcNm_NPC_BM1_e
     ) {
         l_check_inf[l_check_wrk] = (fopAc_ac_c*)i_actorP;
         l_check_wrk++;
@@ -236,7 +234,7 @@ void* searchActor_Bm1(void* i_actorP, void* i_unusedP) {
 void* searchActor_kamome_Set_NOSTOP_DEMO(void* i_actorP, void* i_unusedP) {
     UNUSED(i_unusedP);
 
-    if (fopAc_IsActor(i_actorP) && fpcM_GetName(i_actorP) == PROC_KAMOME) {
+    if (fopAc_IsActor(i_actorP) && fpcM_GetName(i_actorP) == fpcNm_KAMOME_e) {
         fopAcM_OnStatus((fopAc_ac_c*)i_actorP, fopAcStts_UNK4000_e);
     }
 
@@ -247,7 +245,7 @@ void* searchActor_kamome_Set_NOSTOP_DEMO(void* i_actorP, void* i_unusedP) {
 void* searchActor_kamome_Clr_NOSTOP_DEMO(void* i_actorP, void* i_unused) {
     UNUSED(i_unused);
 
-    if (fopAc_IsActor(i_actorP) && fpcM_GetName(i_actorP) == PROC_KAMOME) {
+    if (fopAc_IsActor(i_actorP) && fpcM_GetName(i_actorP) == fpcNm_KAMOME_e) {
         fopAcM_OffStatus((fopAc_ac_c*) i_actorP, fopAcStts_UNK4000_e);
     }
     
@@ -917,15 +915,15 @@ u32 daNpc_Ls1_c::getMsg_LS1_0() {
     }
 
 
-    if (dComIfGp_getSelectItem(dItemBtn_X_e) == dItem_TELESCOPE_e) {
+    if (dComIfGp_getSelectItem(dItemBtn_X_e) == dItemNo_TELESCOPE_e) {
         return 0xBCB;
     } 
     
-    if (dComIfGp_getSelectItem(dItemBtn_Y_e) == dItem_TELESCOPE_e) {
+    if (dComIfGp_getSelectItem(dItemBtn_Y_e) == dItemNo_TELESCOPE_e) {
         return 0xBCC;
     } 
 
-    if (dComIfGp_getSelectItem(dItemBtn_Z_e) == dItem_TELESCOPE_e) {
+    if (dComIfGp_getSelectItem(dItemBtn_Z_e) == dItemNo_TELESCOPE_e) {
         return 0xBCD;
     }
     
@@ -1896,7 +1894,7 @@ BOOL daNpc_Ls1_c::wait_action1(void* param_1) {
                 if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
                     setStt(3);
                 } else {
-                    if (dComIfGs_checkGetItem(dItem_TELESCOPE_e)) {
+                    if (dComIfGs_checkGetItem(dItemNo_TELESCOPE_e)) {
                         m7A0.y = current.angle.y;
                         setStt(2);
                     } else {
@@ -2419,18 +2417,18 @@ static actor_method_class l_daNpc_Ls1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_LS1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_LS1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_LS1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Ls1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_LS1,
+    /* Draw Prio    */ fpcDwPi_NPC_LS1_e,
     /* Actor SubMtd */ &l_daNpc_Ls1_Method,
     /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

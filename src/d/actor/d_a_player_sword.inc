@@ -374,7 +374,7 @@ void daPy_lk_c::setJumpCutAtParam() {
             m35FC = m_HIO->mCut.m.field_0x58;
         }
         setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK1, dCcG_SE_UNK1, dCcG_AtHitMark_Big_e, CUT_TYPE_JUMPCUT_SWORD, radius);
-    } else if (mEquipItem == dItem_SKULL_HAMMER_e) {
+    } else if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
         setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK1, dCcG_SE_METAL, dCcG_AtHitMark_Nrm_e, CUT_TYPE_JUMPCUT_HAMMER, 50.0f);
     } else if (mActorKeepEquip.getActor()) {
         setEnemyWeaponAtParam(TRUE);
@@ -468,7 +468,7 @@ int daPy_lk_c::changeCutProc() {
 
 /* 80155C3C-80156034       .text changeCutReverseProc__9daPy_lk_cFQ29daPy_lk_c8daPy_ANM */
 int daPy_lk_c::changeCutReverseProc(daPy_ANM param_0) {
-    if (mEquipItem != dItem_SKULL_HAMMER_e) {
+    if (mEquipItem != dItemNo_SKULL_HAMMER_e) {
         if (mAtCps[0].ChkAtShieldHit() || mAtCps[1].ChkAtShieldHit() || mAtCps[2].ChkAtShieldHit()) {
             return procCutReverse_init(param_0);
         }
@@ -485,7 +485,7 @@ int daPy_lk_c::changeCutReverseProc(daPy_ANM param_0) {
             if (!cBgW_CheckBGround(triPla->GetNP()->y) ||
                 (mCurProc == daPyProc_HAMMER_FRONT_SWING_e && triPla->GetNP()->y < 0.64278764f))
             {
-                if (mEquipItem != dItem_DEKU_LEAF_e) {
+                if (mEquipItem != dItemNo_DEKU_LEAF_e) {
                     u32 uVar7 = dComIfG_Bgsp()->GetMtrlSndId(mLinkLinChk);
                     u32 uVar12;
                     if (mAtCps[0].GetAtType() == AT_TYPE_BOKO_STICK) {
@@ -1983,7 +1983,7 @@ BOOL daPy_lk_c::procJumpCutLand_init() {
     setFootEffectPosType(3);
     onResetFlg0(daPyRFlg0_RIGHT_FOOT_ON_GROUND);
     onResetFlg0(daPyRFlg0_LEFT_FOOT_ON_GROUND);
-    if (mEquipItem == dItem_SKULL_HAMMER_e) {
+    if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
         setHammerQuake(NULL, NULL, -1);
     } else if (checkHeavyStateOn()) {
         dComIfGp_getVibration().StartShock(5, -0x31, cXyz(0.0f, 1.0f, 0.0f));

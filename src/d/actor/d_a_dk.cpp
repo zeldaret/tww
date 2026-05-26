@@ -9,11 +9,9 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
-daDk_HIO_c l_HIO;
+static daDk_HIO_c l_HIO;
 
 /* 000000EC-00000130       .text __ct__10daDk_HIO_cFv */
 daDk_HIO_c::daDk_HIO_c() {
@@ -408,18 +406,18 @@ static actor_method_class l_daDk_Method = {
 };
 
 actor_process_profile_definition g_profile_DK = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DK,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DK_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(dk_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DK,
+    /* Draw Prio    */ fpcDwPi_DK_e,
     /* Actor SubMtd */ &l_daDk_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

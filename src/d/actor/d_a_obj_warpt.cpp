@@ -10,8 +10,6 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_a_obj.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "f_op/f_op_actor_mng.h"
@@ -234,7 +232,7 @@ void ride_CB(dBgW*, fopAc_ac_c* a_this, fopAc_ac_c* arg2) {
 
 /* 00000648-00000750       .text _ride__13daObj_Warpt_cFP10fopAc_ac_c */
 void daObj_Warpt_c::_ride(fopAc_ac_c* arg1) {
-    if (fpcM_GetName(arg1) == PROC_PLAYER) {
+    if (fpcM_GetName(arg1) == fpcNm_PLAYER_e) {
         daPy_py_c* player = (daPy_py_c*)arg1;
 
         fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
@@ -883,16 +881,16 @@ static actor_method_class daObj_WarptMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_WARPT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_WARPT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_WARPT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Warpt_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_WARPT,
+    /* Draw Prio    */ fpcDwPi_OBJ_WARPT_e,
     /* Actor SubMtd */ &daObj_WarptMethodTable,
 #if VERSION == VERSION_DEMO
     /* Status       */ 0x17 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
@@ -900,5 +898,5 @@ actor_process_profile_definition g_profile_OBJ_WARPT = {
     /* Status       */ 0x17 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
 #endif
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

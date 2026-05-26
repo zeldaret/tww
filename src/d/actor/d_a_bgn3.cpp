@@ -8,8 +8,6 @@
 #include "d/actor/d_a_bgn.h"
 #include "d/actor/d_a_esa.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include "d/res/res_bgn.h"
@@ -109,7 +107,7 @@ daBgn3_HIO_c::daBgn3_HIO_c() {
 #if VERSION > VERSION_DEMO
 /* 000001F4-00000240       .text bgn_s_sub__FPvPv */
 static void* bgn_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BGN)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
         return param_1;
     } else {
         return NULL;
@@ -222,7 +220,7 @@ static void drop_eff_set(bgn3_class* i_this) {
 
 /* 0000101C-00001068       .text esa_s_sub__FPvPv */
 static void* esa_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_ESA)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_ESA_e)) {
         return param_1;
     } else {
         return NULL;
@@ -619,7 +617,7 @@ static void damage_check(bgn3_class* i_this) {
                     i_this->m100A8 = 0xf;
                     sVar7 = l_HIO.m2A;
                 }
-            } else if (fopAcM_GetName(atInfo.mpActor) == PROC_ARROW) {
+            } else if (fopAcM_GetName(atInfo.mpActor) == fpcNm_ARROW_e) {
                 bVar10 = 2;
                 i_this->m100A8 = 10;
                 sVar7 = l_HIO.m28;
@@ -1045,7 +1043,7 @@ static void move(bgn3_class* i_this) {
 #if VERSION == VERSION_DEMO
 /* 000001F4-00000240       .text bgn_s_sub__FPvPv */
 static void* bgn_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BGN)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
         return param_1;
     } else {
         return NULL;
@@ -1055,7 +1053,7 @@ static void* bgn_s_sub(void* param_1, void*) {
 
 /* 00004058-000040B0       .text ki_c_sub__FPvPv */
 static void* ki_c_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_KS)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KS_e)) {
         ki_all_count++;
     }
     return NULL;
@@ -1126,7 +1124,7 @@ static BOOL daBgn3_Execute(bgn3_class* i_this) {
             local_28.x = cM_rndFX(2500.0f);
             local_28.y = cM_rndF(500.0f) + 3500.0f;
             local_28.z = cM_rndFX(2500.0f);
-            fopAcM_create(PROC_KS, 3, &local_28, fopAcM_GetRoomNo(actor));
+            fopAcM_create(fpcNm_KS_e, 3, &local_28, fopAcM_GetRoomNo(actor));
         }
     }
     return TRUE;
@@ -1348,18 +1346,18 @@ static actor_method_class l_daBgn3_Method = {
 };
 
 actor_process_profile_definition g_profile_BGN3 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BGN3,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BGN3_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bgn3_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BGN3,
+    /* Draw Prio    */ fpcDwPi_BGN3_e,
     /* Actor SubMtd */ &l_daBgn3_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

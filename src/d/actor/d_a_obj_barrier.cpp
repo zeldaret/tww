@@ -10,8 +10,6 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_mtx.h"
@@ -233,7 +231,7 @@ void daObjBarrier_c::break_start_wait_proc() {
         daPy_py_c* player_p = (daPy_py_c*)daPy_getPlayerActorClass();
 
         if ((player_p->current.pos - current.pos).absXZ() >= 8800.0f &&
-            dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e)
+            dComIfGs_getSelectEquip(0) == dItemNo_MASTER_SWORD_3_e)
         {
             switch (player_p->getCutType()) {
             case daPy_py_c::CUT_TYPE_CUT_A:
@@ -248,7 +246,7 @@ void daObjBarrier_c::break_start_wait_proc() {
             case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
                 dComIfGs_onEventBit(dSv_event_flag_c::BARRIER_BREAK);
                 mEventID = dComIfGp_evmng_getEventIdx("seal");
-                mBarrierProc = PROC_BREAK_ORDER;
+                mBarrierProc = PROC_BREAK_ORDER_e;
                 break;
             }
         }
@@ -258,7 +256,7 @@ void daObjBarrier_c::break_start_wait_proc() {
 /* 000009F0-00000A58       .text break_order_proc__14daObjBarrier_cFv */
 void daObjBarrier_c::break_order_proc() {
     if (eventInfo.checkCommandDemoAccrpt()) {
-        mBarrierProc = PROC_BREAK_END_WAIT;
+        mBarrierProc = PROC_BREAK_END_WAIT_e;
     } else {
         fopAcM_orderOtherEventId(this, mEventID);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
@@ -293,14 +291,14 @@ bool daObjBarrier_c::break_check() {
 #else
     if (mMoya == 0) {
         switch (mBarrierProc) {
-        case PROC_BREAK_START_WAIT:
+        case PROC_BREAK_START_WAIT_e:
             break_start_wait_proc();
             break;
-        case PROC_BREAK_ORDER:
+        case PROC_BREAK_ORDER_e:
             break_order_proc();
             chk = true;
             break;
-        case PROC_BREAK_END_WAIT:
+        case PROC_BREAK_END_WAIT_e:
             break_end_wait_proc();
             chk = true;
             break;
@@ -638,18 +636,18 @@ static actor_method_class l_daObjBarrier_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Barrier = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Barrier,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Barrier_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjBarrier_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Barrier,
+    /* Draw Prio    */ fpcDwPi_Obj_Barrier_e,
     /* Actor SubMtd */ &l_daObjBarrier_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

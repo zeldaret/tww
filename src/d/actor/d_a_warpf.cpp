@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_warpf.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_level_se.h"
 #include "d/d_item.h"
 #include "d/d_bg_s_func.h"
@@ -218,13 +216,13 @@ BOOL daWarpf_c::checkEndDemo() {
             break;
 
         case dSv_save_c::STAGE_DRC:
-            if (checkItemGet(dItem_PEARL_DIN_e, TRUE)) {
+            if (checkItemGet(dItemNo_PEARL_DIN_e, TRUE)) {
                 ret = TRUE;
             }
             break;
 
         case dSv_save_c::STAGE_FW:
-            if (checkItemGet(dItem_PEARL_FARORE_e, TRUE)) {
+            if (checkItemGet(dItemNo_PEARL_FARORE_e, TRUE)) {
                 ret = TRUE;
             }
             break;
@@ -237,16 +235,16 @@ BOOL daWarpf_c::checkEndDemo() {
 
         case dSv_save_c::STAGE_ET:
 #if VERSION == VERSION_DEMO
-            if (dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e)) {
+            if (dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_2_e)) {
 #else
-            if (checkItemGet(dItem_MASTER_SWORD_2_e, TRUE)) {
+            if (checkItemGet(dItemNo_MASTER_SWORD_2_e, TRUE)) {
 #endif
                 ret = TRUE;
             }
             break;
 
         case dSv_save_c::STAGE_WT:
-            if (dComIfGs_checkGetItem(dItem_MASTER_SWORD_3_e)) {
+            if (dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_3_e)) {
                 ret = TRUE;
             }
             break;
@@ -308,7 +306,7 @@ cPhs_State daWarpf_c::_create() {
             seNum = JA_SE_OBJ_BOSS_TF_WARP_SUS;
         }
 
-        m2E8 = (dLevelSe_c*)fopKyM_fastCreate(PROC_LEVEL_SE, seNum, &current.pos, NULL, NULL);
+        m2E8 = (dLevelSe_c*)fopKyM_fastCreate(fpcNm_LEVEL_SE_e, seNum, &current.pos, NULL, NULL);
         if (m2E8 != NULL) {
             m2E8->seStop();
             m2E8->setReverb(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -876,18 +874,18 @@ static actor_method_class daWarpfMethodTable = {
 };
 
 actor_process_profile_definition g_profile_WARPFLOWER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WARPFLOWER,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_WARPFLOWER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWarpf_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_WARPFLOWER,
+    /* Draw Prio    */ fpcDwPi_WARPFLOWER_e,
     /* Actor SubMtd */ &daWarpfMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

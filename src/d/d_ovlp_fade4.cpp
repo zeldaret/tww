@@ -6,8 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_ovlp_fade4.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_overlap.h"
 #include "m_Do/m_Do_graphic.h"
 
@@ -187,7 +185,7 @@ dOvlpFd4_c::dOvlpFd4_c() {
     first = true;
     setExecute(&dOvlpFd4_c::execFirstSnap);
     setDraw(&dOvlpFd4_c::drawFadeOut);
-    if (fopOvlpM_GetName(this) == PROC_OVERLAP4) {
+    if (fopOvlpM_GetName(this) == fpcNm_OVERLAP4_e) {
         fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_saftyWhiteColor);
     } else {
         fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, (GXColor){ 0x00, 0x00, 0x00, 0x00 });
@@ -369,7 +367,7 @@ cPhs_State dOvlpFd4_Create(void* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-overlap_method_class l_dOvlpFd4_Method = {
+static overlap_method_class l_dOvlpFd4_Method = {
     (process_method_func)dOvlpFd4_Create,
     (process_method_func)dOvlpFd4_Delete,
     (process_method_func)dOvlpFd4_Execute,
@@ -378,29 +376,29 @@ overlap_method_class l_dOvlpFd4_Method = {
 };
 
 overlap_process_profile_definition g_profile_OVERLAP4 = {
-    fpcLy_ROOT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_OVERLAP4,
-    &g_fpcLf_Method.base,
-    sizeof(dOvlpFd4_c),
-    0,
-    0,
-    &g_fopOvlp_Method,
-    PRIO_OVERLAP4,
-    &l_dOvlpFd4_Method,
+    /* Layer ID    */ fpcLy_ROOT_e,
+    /* List ID     */ 2,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_OVERLAP4_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(dOvlpFd4_c),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopOvlp_Method,
+    /* Draw Prio   */ fpcDwPi_OVERLAP4_e,
+    /* Ovlp SubMtd */ &l_dOvlpFd4_Method,
 };
 
 overlap_process_profile_definition g_profile_OVERLAP5 = {
-    fpcLy_ROOT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_OVERLAP5,
-    &g_fpcLf_Method.base,
-    sizeof(dOvlpFd4_c),
-    0,
-    0,
-    &g_fopOvlp_Method,
-    PRIO_OVERLAP5,
-    &l_dOvlpFd4_Method,
+    /* Layer ID    */ fpcLy_ROOT_e,
+    /* List ID     */ 2,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_OVERLAP5_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(dOvlpFd4_c),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopOvlp_Method,
+    /* Draw Prio   */ fpcDwPi_OVERLAP5_e,
+    /* Ovlp SubMtd */ &l_dOvlpFd4_Method,
 };

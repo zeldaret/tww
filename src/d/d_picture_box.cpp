@@ -5,8 +5,6 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_picture_box.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_msg.h"
 
 /* 802258C8-80225954       .text dPb_erasePicture__Fv */
@@ -290,7 +288,7 @@ static cPhs_State dPb_Create(msg_class* i_this) {
     /* Nonmatching */
 }
 
-msg_method_class l_dPb_Method = {
+static msg_method_class l_dPb_Method = {
     (process_method_func)dPb_Create,
     (process_method_func)dPb_Delete,
     (process_method_func)dPb_Execute,
@@ -299,15 +297,15 @@ msg_method_class l_dPb_Method = {
 };
 
 msg_process_profile_definition g_profile_PB = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x000C,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_PB,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x000C,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_PB_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sub_pb_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_PB,
-    /* Actor SubMtd */ &l_dPb_Method,
+    /* Draw Prio    */ fpcDwPi_PB_e,
+    /* Msg SubMtd   */ &l_dPb_Method,
 };

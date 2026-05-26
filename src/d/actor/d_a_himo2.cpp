@@ -12,8 +12,6 @@
 #include "d/actor/d_a_dr2.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include "d/res/res_link.h"
@@ -53,7 +51,7 @@ public:
     /* 0x20 */ f32 m20;
 };
 
-himo2HIO_c l_himo2HIO;
+static himo2HIO_c l_himo2HIO;
 f32 rope_scale;
 #if VERSION > VERSION_DEMO
 static btd_class* btd;
@@ -514,7 +512,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
 
 /* 800ECBE8-800ECC54       .text s_a_d_sub__FPvPv */
 void* s_a_d_sub(void* param_1, void* param_2) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_KUI)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KUI_e)) {
         himo2_class* rope = (himo2_class*)param_2;
         rope->m218C[rope->m24AC] = (fopAc_ac_c*)param_1;
         rope->m24AC++;
@@ -658,7 +656,7 @@ BOOL himo2_class::setTargetPos(cXyz* param_1, f32* param_2, f32* param_3) {
 
 /* 800ED2E0-800ED32C       .text dr_a_sub__FPvPv */
 void* dr_a_sub(void* param_1, void* param_2) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_DR2)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_DR2_e)) {
         return param_1;
     } else {
         return param_2 = NULL;
@@ -667,7 +665,7 @@ void* dr_a_sub(void* param_1, void* param_2) {
 
 /* 800ED32C-800ED378       .text b_a_sub__FPvPv */
 void* b_a_sub(void* param_1, void* param_2) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BTD)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BTD_e)) {
         return param_1;
     } else {
         return param_2 = NULL;
@@ -850,7 +848,7 @@ void new_himo2_move(himo2_class* i_this) {
             } else {
                 i_this->m02DC = 9;
             }
-            if ((i_this->m217C != NULL) && (fopAcM_GetName(i_this->m217C) == PROC_KUI)) {
+            if ((i_this->m217C != NULL) && (fopAcM_GetName(i_this->m217C) == fpcNm_KUI_e)) {
                 i_this->m217C->health = 0;
             }
 #endif
@@ -1110,7 +1108,7 @@ void new_himo2_move(himo2_class* i_this) {
             }
             if ((CPad_CHECK_TRIG_X(0) || CPad_CHECK_TRIG_Y(0)) || CPad_CHECK_TRIG_Z(0)) {
                 i_this->m02DC = 5;
-                if (fopAcM_GetName(r4_r27) == PROC_BK) {
+                if (fopAcM_GetName(r4_r27) == fpcNm_BK_e) {
                     bk_class* bk = (bk_class*)r4_r27;
                     bk->dr.mAction = 0;
                     bk->dr.mMode = 0;
@@ -1859,18 +1857,18 @@ static actor_method_class l_daHimo2_Method = {
 };
 
 actor_process_profile_definition g_profile_HIMO2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_HIMO2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_HIMO2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(himo2_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_HIMO2,
+    /* Draw Prio    */ fpcDwPi_HIMO2_e,
     /* Actor SubMtd */ &l_daHimo2_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

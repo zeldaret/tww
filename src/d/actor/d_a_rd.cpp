@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_rd.h"
 #include "d/res/res_rd.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
@@ -147,7 +145,7 @@ static void* searchNeadDeadRd_CB(void* i_actor, void* i_this) {
 
 /* 000002A8-0000030C       .text _searchNearDeadRd__6daRd_cFP10fopAc_ac_c */
 fopAc_ac_c* daRd_c::_searchNearDeadRd(fopAc_ac_c* i_actor) {
-    if (fopAcM_GetName(i_actor) == PROC_RD) {
+    if (fopAcM_GetName(i_actor) == fpcNm_RD_e) {
         daRd_c* other = static_cast<daRd_c*>(i_actor);
         if (other->mMode == MODE_DEATH) {
             if (fopAcM_searchActorDistanceXZ(this, i_actor) < l_HIO.m34) {
@@ -1631,7 +1629,7 @@ bool daRd_c::_execute() {
         return true;
     }
     
-    fopAcM_setGbaName(this, dItem_MIRROR_SHIELD_e, 0x12, 0x30);
+    fopAcM_setGbaName(this, dItemNo_MIRROR_SHIELD_e, 0x12, 0x30);
     setIceCollision();
     if (mMode != MODE_SILENT_PRAY && mMode != MODE_DEATH && mMode != MODE_DAMAGE &&
         mMode != MODE_ATTACK && mMode != MODE_CRY && mMode != MODE_CRY_WAIT)
@@ -1947,18 +1945,18 @@ static actor_method_class daRdMethodTable = {
 };
 
 actor_process_profile_definition g_profile_RD = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_RD,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_RD_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daRd_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_RD,
+    /* Draw Prio    */ fpcDwPi_RD_e,
     /* Actor SubMtd */ &daRdMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

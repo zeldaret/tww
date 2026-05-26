@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_tc.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_tc.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
@@ -182,7 +180,7 @@ static void* searchTower_CB(void* i_actor, void* i_this) {
 
 /* 000005C8-00000630       .text _searchTower__10daNpc_Tc_cFP10fopAc_ac_c */
 fopAc_ac_c* daNpc_Tc_c::_searchTower(fopAc_ac_c* i_actor) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_Smplbg && ((daObjSmplbg::Act_c*)i_actor)->prm_get_type() == 0) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_Obj_Smplbg_e && ((daObjSmplbg::Act_c*)i_actor)->prm_get_type() == 0) {
         return i_actor;
     }
     return NULL;
@@ -1948,18 +1946,18 @@ static actor_method_class l_daNpc_Tc_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_TC = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_TC,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_TC_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Tc_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_TC,
+    /* Draw Prio    */ fpcDwPi_NPC_TC_e,
     /* Actor SubMtd */ &l_daNpc_Tc_Method,
     /* Status       */ DEMO_SELECT(fopAcStts_UNK4000_e, 0) | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_12_e,
+    /* Cull Type    */ fopAc_CULLBOX_12_e,
 };

@@ -15,8 +15,6 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_msg_mng.h"
 #include "d/actor/d_a_npc_bs1.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "dolphin/types.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_lib.h"
@@ -3176,15 +3174,15 @@ static msg_method_class l_dMsg_Method = {
 };
 
 msg_process_profile_definition g_profile_MSG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 12,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MSG,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MSG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sub_msg_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_MSG,
+    /* Draw Prio    */ fpcDwPi_MSG_e,
     /* Msg SubMtd   */ &l_dMsg_Method,
 };

@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kokiie.h"
 #include "d/actor/d_a_shand.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
@@ -88,7 +86,7 @@ void kokiie_move(kokiie_class* i_this) {
         sVar1 = himo_off_ya[uVar6];
         target = himo_off_xa[uVar6];
         cLib_addCalc2(&i_this->m2D0, REG8_F(4) - himo_off_yp[uVar6], 0.1f, i_this->m338 * 50.0f);
-        if ((uVar6 == 0x1f) && dComIfGs_checkGetItem(dItem_BOOMERANG_e)) {
+        if ((uVar6 == 0x1f) && dComIfGs_checkGetItem(dItemNo_BOOMERANG_e)) {
             i_this->m29A = 1;
             actor->health = 0;
             i_this->m378 = 1;
@@ -189,7 +187,7 @@ BOOL himo_create(kokiie_class* i_this) {
             pfVar3->base.angle.y = actor->current.angle.y + i * 0x3333 + -13000;
             pfVar3->base.parameters = 0xffffff01;
             pfVar3->room_no = actor->current.roomNo;
-            i_this->m2D4[i] = fopAcM_create(PROC_SHAND, NULL, pfVar3);
+            i_this->m2D4[i] = fopAcM_create(fpcNm_SHAND_e, NULL, pfVar3);
             i_this->m2E8[i]++;
 
         case 1:
@@ -466,18 +464,18 @@ static actor_method_class l_daKokiie_Method = {
 };
 
 actor_process_profile_definition g_profile_KOKIIE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KOKIIE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KOKIIE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kokiie_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KOKIIE,
+    /* Draw Prio    */ fpcDwPi_KOKIIE_e,
     /* Actor SubMtd */ &l_daKokiie_Method,
     /* Status       */ fopAcStts_CULL_e | DEMO_SELECT(0, fopAcStts_UNK4000_e) | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

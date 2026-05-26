@@ -8,8 +8,6 @@
 #include "d/res/res_mbdoor.h"
 #include "d/res/res_gbdoor.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
@@ -596,18 +594,18 @@ static actor_method_class l_daMbdoor_Method = {
 };
 
 actor_process_profile_definition g_profile_MBDOOR = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MBDOOR,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MBDOOR_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMbdoor_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MBDOOR,
+    /* Draw Prio    */ fpcDwPi_MBDOOR_e,
     /* Actor SubMtd */ &l_daMbdoor_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

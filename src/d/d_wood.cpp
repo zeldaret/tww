@@ -12,7 +12,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
 #include "d/d_tree.h"
 #include "d/d_cc_d.h"
 #include "dolphin/gf/GF.h"
@@ -75,7 +74,7 @@ namespace {
 const u16 l_Txa_swood_bTEX__width = 64;
 const u16 l_Txa_swood_bTEX__height = 64;
 
-Vec l_pos[] = {
+static Vec l_pos[] = {
     {0.000022f, 14.922843f, -89.982368f},
     {-77.927017f, 14.922843f, -44.991203f},
     {-77.927025f, 14.922843f, 44.991173f},
@@ -140,7 +139,7 @@ Vec l_pos[] = {
     {5.656257f, 22.025139f, -3.749505f},
 };
 
-GXColor l_color[] = {
+static GXColor l_color[] = {
     {0x7F, 0x7F, 0x7F, 0xFF},
     {0x98, 0x98, 0x99, 0xFF},
     {0x99, 0x99, 0x99, 0xFF},
@@ -163,7 +162,7 @@ GXColor l_color[] = {
     {0x9A, 0x9A, 0x9A, 0xFF},
 };
 
-cXy l_texCoord[] = {
+static cXy l_texCoord[] = {
     {0.5f, 1.0f},
     {1.0f, 0.0f},
     {0.0f, 0.0f},
@@ -727,7 +726,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
         inf.GetCoHitObj()->GetStts()) {
         animIdx = packet->search_anm(Anm_c::Mode_PushInto);
 
-        if (fopAcM_GetProfName(actor) == PROC_PLAYER &&
+        if (fopAcM_GetProfName(actor) == fpcNm_PLAYER_e &&
             inf.GetCoHitLen() >= 2.0f && mAnimCooldown == 0) {
 
             mAnimCooldown = 20;

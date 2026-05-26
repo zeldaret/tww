@@ -6,9 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_mk.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_priority.h"
 
 static fpc_ProcID l_msgId;
 static msg_class* l_msg;
@@ -80,7 +78,7 @@ u16 daTag_Mk_c::next_msgStatus(unsigned long* arg1) {
 u32 daTag_Mk_c::getMsg() {
     u32 msg;
 
-    if (dComIfGp_event_getPreItemNo() == COTTAGE_PAPER) {
+    if (dComIfGp_event_getPreItemNo() == dItemNo_CABANA_DEED_e) {
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_2D80);
         msg = 0x1bC0;
     } else {
@@ -134,7 +132,7 @@ u16 daTag_Mk_c::talk() {
 
 /* 000003BC-00000470       .text setTagWpEvId__10daTag_Mk_cFv */
 void daTag_Mk_c::setTagWpEvId() {
-    if (dComIfGs_getSelectEquip(0) != dItem_MASTER_SWORD_3_e) {
+    if (dComIfGs_getSelectEquip(0) != dItemNo_MASTER_SWORD_3_e) {
         mEventIdx = dComIfGp_evmng_getEventIdx("tagwp2");
     } else if (dComIfGs_getTriforceNum() < 8) {
         mEventIdx = dComIfGp_evmng_getEventIdx("tagwp");
@@ -167,7 +165,7 @@ void daTag_Mk_c::demoInitMake() {
     csXyz local_28;
     local_28.set(0, 0x4000, 0);
 
-    fopAc_ac_c* a_item = fopAcM_createItemForKP2(&local_20, dItem_JOY_PENDANT_e, fopAcM_GetRoomNo(this), &local_28, NULL, 10.0f, 10.0f, -2.1f, 0);
+    fopAc_ac_c* a_item = fopAcM_createItemForKP2(&local_20, dItemNo_JOY_PENDANT_e, fopAcM_GetRoomNo(this), &local_28, NULL, 10.0f, 10.0f, -2.1f, 0);
     JUT_ASSERT(360, a_item);
 
     m2B4 = fpcM_GetID(a_item);
@@ -548,18 +546,18 @@ static actor_method_class l_daTag_Mk_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_MK = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_MK,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_MK_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Mk_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_MK,
+    /* Draw Prio    */ fpcDwPi_TAG_MK_e,
     /* Actor SubMtd */ &l_daTag_Mk_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

@@ -16,7 +16,6 @@
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_ship.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_lib.h"
 #include "SSystem/SComponent/c_math.h"
@@ -372,7 +371,7 @@ void daPy_waterDropPcallBack_c::execute(JPABaseEmitter* emitter, JPABaseParticle
         pos.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
 
         if (pos.y > ptclPos.y) {
-            fopKyM_create(PROC_WATER_MARK, 1, &pos);
+            fopKyM_create(fpcNm_WATER_MARK_e, 1, &pos);
         }
     }
 }
@@ -912,11 +911,11 @@ void daPy_lk_c::setFootMark(cXyz* i_pos) {
 
     pos.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
     if (pos.y != -G_CM3D_F_INF && dComIfG_Bgsp()->GetAttributeCode(mGndChk) == dBgS_Attr_SAND_e) {
-        fopKyM_create(PROC_WATER_MARK, (shape_angle.y << 16) | 2, &pos, &scale, NULL);
+        fopKyM_create(fpcNm_WATER_MARK_e, (shape_angle.y << 16) | 2, &pos, &scale, NULL);
     }
 
     if (m336C.getEmitter() != NULL) {
-        fopKyM_create(PROC_WATER_MARK, shape_angle.y << 16, i_pos, &scale);
+        fopKyM_create(fpcNm_WATER_MARK_e, shape_angle.y << 16, i_pos, &scale);
     }
 }
 

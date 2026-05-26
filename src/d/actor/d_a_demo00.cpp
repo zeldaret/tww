@@ -15,8 +15,6 @@
 #include "d/d_item.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_demo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_graphic.h"
@@ -715,16 +713,16 @@ BOOL daDemo00_c::execute() {
                 }
             } else if (field_0x29c == 5) {
                 static const u8 l_itemNo[] = {
-                    dItem_MASTER_SWORD_1_e,
-                    dItem_MASTER_SWORD_2_e,
-                    dItem_MASTER_SWORD_3_e,
-                    dItem_PEARL_DIN_e,
-                    dItem_PEARL_FARORE_e,
-                    dItem_PEARL_NAYRU_e,
-                    dItem_DELIVERY_BAG_e,
-                    dItem_SHIELD_e,
-                    dItem_MAGIC_ARROW_e,
-                    dItem_NONE_e,
+                    dItemNo_MASTER_SWORD_1_e,
+                    dItemNo_MASTER_SWORD_2_e,
+                    dItemNo_MASTER_SWORD_3_e,
+                    dItemNo_PEARL_DIN_e,
+                    dItemNo_PEARL_FARORE_e,
+                    dItemNo_PEARL_NAYRU_e,
+                    dItemNo_DELIVERY_BAG_e,
+                    dItemNo_SHIELD_e,
+                    dItemNo_MAGIC_ARROW_e,
+                    dItemNo_NONE_e,
                 };
                 dDemo_prm_data* data = demo_actor->getPrm()->getData();
                 JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > spB8(data);
@@ -732,7 +730,7 @@ BOOL daDemo00_c::execute() {
                     TValueIterator_raw<u8> it = spB8.begin();
                     int argID = *it;
                     JUT_ASSERT(VERSION_SELECT(797, 844, 858, 858), argID < (sizeof(l_itemNo)/sizeof(u8)));
-                    if (l_itemNo[argID] != dItem_NONE_e) {
+                    if (l_itemNo[argID] != dItemNo_NONE_e) {
                         execItemGet(l_itemNo[argID]);
                     }
                 }
@@ -849,18 +847,18 @@ static actor_method_class l_daDemo00_Method = {
 };
 
 actor_process_profile_definition g_profile_DEMO00 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DEMO00,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DEMO00_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daDemo00_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DEMO00,
+    /* Draw Prio    */ fpcDwPi_DEMO00_e,
     /* Actor SubMtd */ &l_daDemo00_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

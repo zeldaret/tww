@@ -8,8 +8,6 @@
 #include "d/actor/d_a_bgn.h"
 #include "d/actor/d_a_bgn3.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include "d/res/res_bgn.h"
@@ -89,7 +87,7 @@ static void anm_init(bgn2_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, 
 
 /* 000002BC-00000308       .text bgn_s_sub__FPvPv */
 static void* bgn_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BGN)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
         return param_1;
     } else {
         return NULL;
@@ -98,7 +96,7 @@ static void* bgn_s_sub(void* param_1, void*) {
 
 /* 00000308-00000354       .text bgn3_s_sub__FPvPv */
 static void* bgn3_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BGN3)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
         return param_1;
     } else {
         return NULL;
@@ -810,7 +808,7 @@ static void damage_check(bgn2_class* i_this) {
 
 /* 00002C88-00002CE0       .text ki_c_sub__FPvPv */
 static void* ki_c_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_KI)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
         ki_all_count++;
     }
     return NULL;
@@ -1051,7 +1049,7 @@ static BOOL daBgn2_Execute(bgn2_class* i_this) {
             local_b8.x = cM_rndFX(2500.0f);
             local_b8.y = cM_rndF(500.0f) + 3500.0f;
             local_b8.z = cM_rndFX(2500.0f);
-            fopAcM_create(PROC_KI, 0xFFFF0003, &local_b8, fopAcM_GetRoomNo(actor));
+            fopAcM_create(fpcNm_KI_e, 0xFFFF0003, &local_b8, fopAcM_GetRoomNo(actor));
         }
     }
     i_this->mAcch.CrrPos(*dComIfG_Bgsp());
@@ -1270,18 +1268,18 @@ static actor_method_class l_daBgn2_Method = {
 };
 
 actor_process_profile_definition g_profile_BGN2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BGN2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BGN2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bgn2_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BGN2,
+    /* Draw Prio    */ fpcDwPi_BGN2_e,
     /* Actor SubMtd */ &l_daBgn2_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -1869,11 +1869,11 @@ public:
     void getBombWaterPillarBtk() {} // mpGwp00BtkData?
     
     BOOL checkSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) != dItem_NONE_e || checkSwordMiniGame();
+        return dComIfGs_getSelectEquip(0) != dItemNo_NONE_e || checkSwordMiniGame();
     }
-    BOOL checkShieldEquip() const { return dComIfGs_getSelectEquip(1) != dItem_NONE_e; }
-    BOOL checkMirrorShieldEquip() const { return dComIfGs_getSelectEquip(1) == dItem_MIRROR_SHIELD_e; }
-    BOOL checkPowerGloveEquip() const { return dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e; }
+    BOOL checkShieldEquip() const { return dComIfGs_getSelectEquip(1) != dItemNo_NONE_e; }
+    BOOL checkMirrorShieldEquip() const { return dComIfGs_getSelectEquip(1) == dItemNo_MIRROR_SHIELD_e; }
+    BOOL checkPowerGloveEquip() const { return dComIfGs_getSelectEquip(2) == dItemNo_POWER_BRACELETS_e; }
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
     int getStartMode() { return (fopAcM_GetParam(this) >> 0x0C) & 0xF; }

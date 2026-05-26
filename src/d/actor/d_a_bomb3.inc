@@ -7,8 +7,6 @@
 #include "SSystem/SComponent/c_counter.h"
 #include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_sea.h"
 #include "d/d_kankyo_wether.h"
@@ -1173,7 +1171,7 @@ void daBomb_c::set_wind_vec() {
         hitNormal *= 50.0f;
         mWindVec.abs2();
         fopAc_ac_c* hitActor = mSph.GetTgHitAc();
-        if (hitActor && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
+        if (hitActor && fopAcM_GetProfName(hitActor) == fpcNm_PLAYER_e) {
             s16 hitObjAngleY = cM_atan2s(hitNormal.x, hitNormal.z);
             f32 f2 = cM_scos(hitActor->shape_angle.y - hitObjAngleY);
             if (f2 > 0.0f) {
@@ -1520,18 +1518,18 @@ static actor_method_class l_daBomb_Method = {
 };
 
 actor_process_profile_definition g_profile_BOMB = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BOMB,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BOMB_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daBomb_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BOMB,
+    /* Draw Prio    */ fpcDwPi_BOMB_e,
     /* Actor SubMtd */ &l_daBomb_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

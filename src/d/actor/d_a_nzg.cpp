@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_nzg.h"
 #include "d/d_path.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/res/res_nzg.h"
 
@@ -54,7 +52,7 @@ void nzg_00_move(nzg_class* i_this) {
         fopAc_ac_c* hit_actor = i_this->mCyl.GetCoHitAc();
         if (hit_actor != NULL) {
             s16 hitAC_name = fopAcM_GetName(hit_actor);
-            if (hitAC_name != PROC_NZ && hitAC_name != PROC_BOMB && hitAC_name != PROC_Bomb2 && hitAC_name != PROC_ITEM && hitAC_name != PROC_ESA) {
+            if (hitAC_name != fpcNm_NZ_e && hitAC_name != fpcNm_BOMB_e && hitAC_name != fpcNm_Bomb2_e && hitAC_name != fpcNm_ITEM_e && hitAC_name != fpcNm_ESA_e) {
                 i_this->m2D4 = fopAcM_GetID(hit_actor);
                 i_this->m2BB = 1;
                 return;
@@ -76,7 +74,7 @@ void nzg_00_move(nzg_class* i_this) {
             csXyz child_angle = actor->current.angle;
 
             child_angle.y += cM_rndFX(8192.0f);
-            fpc_ProcID childProcID = fopAcM_createChild(PROC_NZ, fopAcM_GetID(actor), parameters, &actor->current.pos, fopAcM_GetRoomNo(actor), &child_angle, &actor->scale, NULL);
+            fpc_ProcID childProcID = fopAcM_createChild(fpcNm_NZ_e, fopAcM_GetID(actor), parameters, &actor->current.pos, fopAcM_GetRoomNo(actor), &child_angle, &actor->scale, NULL);
 
             if (childProcID != fpcM_ERROR_PROCESS_ID_e) {
                 i_this->m2C2[0] = (childProcID & 3) * 10 + 20;
@@ -234,18 +232,18 @@ static actor_method_class l_daNZG_Method = {
 };
 
 actor_process_profile_definition g_profile_NZG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NZG,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NZG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(nzg_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NZG,
+    /* Draw Prio    */ fpcDwPi_NZG_e,
     /* Actor SubMtd */ &l_daNZG_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -11,11 +11,9 @@
 #include "d/actor/d_a_sea.h"
 #include "d/res/res_bomber.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
 #include "d/d_2dnumber.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -190,7 +188,7 @@ void* daCanon_BreakTarget(void* arg1, void* arg2) {
     if (fopAcM_IsActor(arg1) && fopAcM_GetName(arg1) == tk_Obj_Barrel2_e) {
         fopAc_ac_c* ac1 = (fopAc_ac_c*)arg1;
         if (fopAcM_GetID(arg2) == fopAcM_GetLinkId(ac1)) {
-            fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_0, false, false), &ac1->current.pos, -1, NULL, NULL, -1, dEv_extra_createCB);
+            fopAcM_create(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_0, false, false), &ac1->current.pos, -1, NULL, NULL, -1, dEv_extra_createCB);
         }
     }
     return NULL;
@@ -706,18 +704,18 @@ static actor_method_class daCanonMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Canon = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Canon,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Canon_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daCanon_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Canon,
+    /* Draw Prio    */ fpcDwPi_Canon_e,
     /* Actor SubMtd */ &daCanonMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

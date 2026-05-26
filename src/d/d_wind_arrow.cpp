@@ -6,8 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_wind_arrow.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "d/res/res_always.h"
 #include "m_Do/m_Do_graphic.h"
 #include "f_op/f_op_kankyo_mng.h"
@@ -144,7 +142,7 @@ static cPhs_State dWindArrow_Create(kankyo_class* i_k) {
     return phase_state;
 }
 
-kankyo_method_class l_dWindArrow_Method = {
+static kankyo_method_class l_dWindArrow_Method = {
     (process_method_func)dWindArrow_Create,
     (process_method_func)dWindArrow_Delete,
     (process_method_func)dWindArrow_Execute,
@@ -153,15 +151,15 @@ kankyo_method_class l_dWindArrow_Method = {
 };
 
 kankyo_process_profile_definition g_profile_WIND_ARROW = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WIND_ARROW,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dWindArrow_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_WIND_ARROW,
-    /* Actor SubMtd */ &l_dWindArrow_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x0002,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_WIND_ARROW_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dWindArrow_c),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_WIND_ARROW_e,
+    /* Kankyo SubMtd */ &l_dWindArrow_Method,
 };

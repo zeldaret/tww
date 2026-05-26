@@ -15,7 +15,6 @@
 #include "d/actor/d_a_player_main_data.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 #include "d/d_camera.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_ship.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -33,11 +32,11 @@ u32 daPy_lk_c::getDayNightParamData() {
 
 /* 8014D7D4-8014D8AC       .text setTactModel__9daPy_lk_cFv */
 void daPy_lk_c::setTactModel() {
-    if (mEquipItem == dItem_WIND_WAKER_e)
+    if (mEquipItem == dItemNo_WIND_WAKER_e)
         return;
 
     deleteEquipItem(FALSE);
-    mEquipItem = dItem_WIND_WAKER_e;
+    mEquipItem = dItemNo_WIND_WAKER_e;
     JKRHeap* oldHeap = setItemHeap();
 
     J3DModelData* modelData = initModel(&mpEquipItemModel, LINK_BDL_TAKT, 0x37221222);
@@ -131,7 +130,7 @@ void daPy_lk_c::setTactZev(fpc_ProcID tactZevPartnerId, int r30, char* r31) {
 
 /* 8014DA78-8014DACC       .text getTactTopPos__9daPy_lk_cFP4cXyz */
 BOOL daPy_lk_c::getTactTopPos(cXyz* out) {
-    if (mEquipItem != dItem_WIND_WAKER_e || mpEquipItemModel == NULL) {
+    if (mEquipItem != dItemNo_WIND_WAKER_e || mpEquipItemModel == NULL) {
         return FALSE;
     } else {
         MTXMultVec(mpEquipItemModel->getBaseTRMtx(), &l_tact_top, out);
@@ -546,7 +545,7 @@ BOOL daPy_lk_c::procTactPlay_init(s32 r27, int r30, int r31) {
         stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
         if (dStage_stagInfo_GetSTType(stag_info) == dStageType_SEA_e && m34CC != 1 && r30 != 0) {
             daShip_c* ship = dComIfGp_getShipActor();
-            fpc_ProcID warpID = fopAcM_create(PROC_TORNADO, 1, &current.pos, fopAcM_GetRoomNo(this));
+            fpc_ProcID warpID = fopAcM_create(fpcNm_TORNADO_e, 1, &current.pos, fopAcM_GetRoomNo(this));
             ship->setTactWarpID(warpID);
         }
     }
@@ -684,7 +683,7 @@ BOOL daPy_lk_c::procTactPlayEnd_init(int r30) {
         mDemo.setSystemDemoType();
     } else if (r30 == 0) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
-        fopAcM_create(PROC_WBIRD, NULL, &current.pos, dComIfGp_roomControl_getStayNo());
+        fopAcM_create(fpcNm_WBIRD_e, NULL, &current.pos, dComIfGp_roomControl_getStayNo());
     } else if (r30 == 2) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
         dComIfGp_event_setTalkPartner(dComIfGp_getCb1Player());

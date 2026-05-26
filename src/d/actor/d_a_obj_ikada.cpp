@@ -12,8 +12,6 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
 #include "d/res/res_always.h"
@@ -192,7 +190,7 @@ void daObj_Ikada_c::_ride(fopAc_ac_c* actor) {
             mbIsLinkRiding = true;
         }
 
-        if (fopAcM_GetName(actor) == PROC_BOMB) {
+        if (fopAcM_GetName(actor) == fpcNm_BOMB_e) {
             daBomb_c* bomb = (daBomb_c*)actor;
 
             if (bomb->getBombRestTime() <= 1) {
@@ -1371,7 +1369,7 @@ void daObj_Ikada_c::createInit() {
         static const u32 params[] = {4, 4, 4, 4, 0x2000000};
         static const f32 flag_scale[] = {0.2f, 0.0f, 0.0f, 0.0f, 0.12f};
 
-        mFlagPcId = fopAcM_create(PROC_MAJUU_FLAG, params[mType], &current.pos, tevStr.mRoomNo, &current.angle);
+        mFlagPcId = fopAcM_create(fpcNm_MAJUU_FLAG_e, params[mType], &current.pos, tevStr.mRoomNo, &current.angle);
         mFlagOffset = flag_offset[mType];
         mFlagScale = flag_scale[mType];
     }
@@ -1576,18 +1574,18 @@ static actor_method_class daObj_IkadaMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_IKADA = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_IKADA,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_IKADA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Ikada_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_IKADA,
+    /* Draw Prio    */ fpcDwPi_OBJ_IKADA_e,
     /* Actor SubMtd */ &daObj_IkadaMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

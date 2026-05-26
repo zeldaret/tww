@@ -5,13 +5,11 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_ky_thunder.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
-#include "d/d_procname.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "SSystem/SComponent/c_phase.h"
@@ -195,7 +193,7 @@ cPhs_State dThunder_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-kankyo_method_class l_dThunder_Method = {
+static kankyo_method_class l_dThunder_Method = {
     (process_method_func)dThunder_Create,
     (process_method_func)dThunder_Delete,
     (process_method_func)dThunder_Execute,
@@ -204,15 +202,15 @@ kankyo_method_class l_dThunder_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KY_THUNDER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KY_THUNDER,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dThunder_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_KY_THUNDER,
-    /* Actor SubMtd */ &l_dThunder_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x0007,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_KY_THUNDER_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dThunder_c),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_KY_THUNDER_e,
+    /* Kankyo SubMtd */ &l_dThunder_Method,
 };

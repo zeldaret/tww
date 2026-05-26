@@ -8,9 +8,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/res/res_vochi.h"
 #include "d/d_bg_w.h"
-#include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_priority.h"
 #include "d/d_bg_w.h"
 
 #if VERSION == VERSION_DEMO
@@ -259,7 +257,7 @@ void daObjLeaves_c::birthEffect(int arg1, cXyz* arg2, csXyz* arg3, GXColor* arg4
 void rideCallBack(dBgW*, fopAc_ac_c* a_this, fopAc_ac_c* a_player) {
     daObjLeaves_c* i_this = (daObjLeaves_c*)a_this;
 
-    if (fopAcM_GetName(a_player) == PROC_PLAYER) {
+    if (fopAcM_GetName(a_player) == fpcNm_PLAYER_e) {
         daPy_py_c* player = (daPy_py_c*)a_player;
 #if VERSION == VERSION_DEMO
         if (player->speedF >= l_HIO.m14) {
@@ -791,18 +789,18 @@ static actor_method_class l_daObjLeaves_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Leaves = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Leaves,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Leaves_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjLeaves_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Leaves,
+    /* Draw Prio    */ fpcDwPi_Obj_Leaves_e,
     /* Actor SubMtd */ &l_daObjLeaves_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_3_e,
+    /* Cull Type    */ fopAc_CULLBOX_3_e,
 };

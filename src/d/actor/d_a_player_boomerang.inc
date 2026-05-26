@@ -61,7 +61,7 @@ BOOL daPy_lk_c::returnBoomerang() {
     {
         mActorKeepEquip = mActorKeepThrow;
         mActorKeepThrow.clearData();
-        mEquipItem = dItem_BOOMERANG_e;
+        mEquipItem = dItemNo_BOOMERANG_e;
         onNoResetFlg0(daPyFlg0_UNK20);
         return true;
     }

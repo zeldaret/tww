@@ -14,8 +14,6 @@
 #include "d/res/res_osiblk.h"
 #include "d/d_path.h"
 #include "d/d_cc_d.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
@@ -132,7 +130,7 @@ namespace daObjMovebox {
             mGroundY[i] = dComIfG_Bgsp()->GroundCross(&M_gnd_work[i]);
             if (mGroundY[i] > maxGroundY) {
                 fopAc_ac_c* groundActor = dComIfG_Bgsp()->GetActorPointer(M_gnd_work[i]);
-                if (!(groundActor && fopAcM_GetName(groundActor) == PROC_Obj_Movebox && ((Act_c*)groundActor)->mMode == Act_c::MODE_AFLOAT)) {
+                if (!(groundActor && fopAcM_GetName(groundActor) == fpcNm_Obj_Movebox_e && ((Act_c*)groundActor)->mMode == Act_c::MODE_AFLOAT)) {
                     maxGroundY = mGroundY[i];
                     mMaxGroundIdx = i;
                 }
@@ -1234,7 +1232,7 @@ namespace daObjMovebox {
         f32 deltaZ = actor2->current.pos.z - actor1->current.pos.z;
         f32 f3;
         f32 f4;
-        if (fopAcM_GetProfName(actor2) == PROC_PLAYER) {
+        if (fopAcM_GetProfName(actor2) == fpcNm_PLAYER_e) {
             f3 = movebox->attr()->m2C;
             f4 = movebox->attr()->m74 * movebox->attr()->m44;
         } else {
@@ -1354,13 +1352,13 @@ namespace daObjMovebox {
         } else if (mType == TYPE_METAL_BOX_WITH_SPRING) {
             u32 jumpParams = daObjJump::Act_c::prm_make_b();
             mChildPID = fopAcM_createChild(
-                PROC_Obj_Jump, fopAcM_GetID(this),
+                fpcNm_Obj_Jump_e, fopAcM_GetID(this),
                 jumpParams, &current.pos,
                 fopAcM_GetRoomNo(this), &shape_angle
             );
         } else if (mType == TYPE_MIRROR) {
             mChildPID = fopAcM_createChild(
-                PROC_Obj_Mmrr, fopAcM_GetID(this),
+                fpcNm_Obj_Mmrr_e, fopAcM_GetID(this),
                 0, &current.pos,
                 fopAcM_GetRoomNo(this), &shape_angle
             );
@@ -1368,7 +1366,7 @@ namespace daObjMovebox {
             cXyz mkiePos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
             u32 mkieParams = daObjMkie::Act_c::prm_make(prmX_get_evId(), prmZ_get_swSave2_MkieB());
             mChildPID = fopAcM_createChild(
-                PROC_Obj_Mkie, fopAcM_GetID(this),
+                fpcNm_Obj_Mkie_e, fopAcM_GetID(this),
                 mkieParams, &mkiePos,
                 fopAcM_GetRoomNo(this), &shape_angle
             );
@@ -1791,7 +1789,7 @@ namespace daObjMovebox {
         cXyz smokeScale;
         smokeScale.setall(attr()->mLandSmokeScale);
         smokeScale *= 5.0f/3.0f;
-        fopAcM_create(PROC_Obj_Eff, 0x3, &current.pos, -1, NULL, &smokeScale);
+        fopAcM_create(fpcNm_Obj_Eff_e, 0x3, &current.pos, -1, NULL, &smokeScale);
         // TODO daObjEff::Act_c::make_land_smoke(cXyz*, float)
     }
     
@@ -1926,18 +1924,18 @@ namespace daObjMovebox {
 }
 
 actor_process_profile_definition g_profile_Obj_Movebox = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Movebox,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Movebox_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMovebox::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Movebox,
+    /* Draw Prio    */ fpcDwPi_Obj_Movebox_e,
     /* Actor SubMtd */ &daObjMovebox::Mthd_Table,
     /* Status       */ 0x04 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ship.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h" // IWYU pragma: keep
 #include "m_Do/m_Do_mtx.h"
@@ -355,7 +353,7 @@ BOOL daShip_c::checkForceMessage() {
     else if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A01)) {
         mNextMessageNo = 0x607;
     }
-    else if (dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F02)) {
+    else if (dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F02)) {
         mNextMessageNo = 0x624;
     }
     else if (dComIfGs_isSymbol(0) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
@@ -388,7 +386,7 @@ void daShip_c::setInitMessage() {
         return;
     }
 #if VERSION > VERSION_DEMO
-    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2110) && !dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2110) && !dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) {
         mNextMessageNo = 0x623;
     }
 #endif
@@ -523,7 +521,7 @@ void daShip_c::setInitMessage() {
             mNextMessageNo = 0x621;
         }
         else {
-            if (dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+            if (dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) {
                 mNextMessageNo = 0x624;
             }
             else {
@@ -737,7 +735,7 @@ BOOL daShip_c::setNextMessage(msg_class* msg) {
                 }
                 else if (currMessageNo == 0x1683) {
                     dComIfGs_onEventBit(dSv_event_flag_c::UNK_3E20);
-                    if (dComIfGs_getItem(12) != dItem_NONE_e) {
+                    if (dComIfGs_getItem(12) != dItemNo_NONE_e) {
                         mNextMessageNo = 0x1685;
                     }
                     else {
@@ -1805,9 +1803,9 @@ BOOL daShip_c::procCannon() {
         }
         
         if (m037A == 0 && 
-            ((CPad_CHECK_TRIG_X(0) && dComIfGp_getSelectItem(dItemBtn_X_e) == dItem_BOMB_BAG_e) ||
-             (CPad_CHECK_TRIG_Y(0) && dComIfGp_getSelectItem(dItemBtn_Y_e) == dItem_BOMB_BAG_e) ||
-             (CPad_CHECK_TRIG_Z(0) && dComIfGp_getSelectItem(dItemBtn_Z_e) == dItem_BOMB_BAG_e))) {
+            ((CPad_CHECK_TRIG_X(0) && dComIfGp_getSelectItem(dItemBtn_X_e) == dItemNo_BOMB_BAG_e) ||
+             (CPad_CHECK_TRIG_Y(0) && dComIfGp_getSelectItem(dItemBtn_Y_e) == dItemNo_BOMB_BAG_e) ||
+             (CPad_CHECK_TRIG_Z(0) && dComIfGp_getSelectItem(dItemBtn_Z_e) == dItemNo_BOMB_BAG_e))) {
             m037A = 30;
             if (dComIfGs_getBombNum() == 0) {
                 mDoAud_seStart(JA_SE_ITEM_TARGET_OUT);
@@ -1903,9 +1901,9 @@ BOOL daShip_c::procCrane() {
     if (!dComIfGp_event_runCheck() && !daPy_getPlayerLinkActorClass()->checkNoControll()) {
         if (m0398 == mCraneBaseAngle) {
             if(std::fabsf(speedF) < 3.0f &&
-              ((CPad_CHECK_HOLD_X(0) && dComIfGp_getSelectItem(dItemBtn_X_e) == dItem_GRAPPLING_HOOK_e) ||
-               (CPad_CHECK_HOLD_Y(0) && dComIfGp_getSelectItem(dItemBtn_Y_e) == dItem_GRAPPLING_HOOK_e) ||
-               (CPad_CHECK_HOLD_Z(0) && dComIfGp_getSelectItem(dItemBtn_Z_e) == dItem_GRAPPLING_HOOK_e))) {
+              ((CPad_CHECK_HOLD_X(0) && dComIfGp_getSelectItem(dItemBtn_X_e) == dItemNo_GRAPPLING_HOOK_e) ||
+               (CPad_CHECK_HOLD_Y(0) && dComIfGp_getSelectItem(dItemBtn_Y_e) == dItemNo_GRAPPLING_HOOK_e) ||
+               (CPad_CHECK_HOLD_Z(0) && dComIfGp_getSelectItem(dItemBtn_Z_e) == dItemNo_GRAPPLING_HOOK_e))) {
                 sVar1 = mRopeCnt;
                 incRopeCnt(2, 0);
                 if (mRopeCnt == 250) {
@@ -2693,7 +2691,7 @@ BOOL daShip_c::procStartModeWarp_init() {
     camera->mCamera.Set(current.pos, local_38);
     m037A = 0;
 #if VERSION == VERSION_DEMO
-    mTactWarpID = fopAcM_create(PROC_TORNADO, 2, &current.pos, fopAcM_GetRoomNo(this));
+    mTactWarpID = fopAcM_create(fpcNm_TORNADO_e, 2, &current.pos, fopAcM_GetRoomNo(this));
 #endif
     fopAcM_seStartCurrent(this, 0x186D, 0);
     return TRUE;
@@ -4028,7 +4026,7 @@ BOOL daShip_c::execute() {
                 csXyz sp1C;
                 sp1C.set(getCannonAngleX(), getCannonAngleY(), shape_angle.z);
 
-                daBomb_c* bomb = (daBomb_c *)fopAcM_fastCreate(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_4, FALSE, TRUE), &spE4, tevStr.mRoomNo, &sp1C);
+                daBomb_c* bomb = (daBomb_c *)fopAcM_fastCreate(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_4, FALSE, TRUE), &spE4, tevStr.mRoomNo, &sp1C);
 
                 if (bomb) {
                     dCam_getBody()->ForceLockOn(fpcM_GetID(bomb));
@@ -4696,7 +4694,7 @@ cPhs_State daShip_c::create() {
 
         gravity = -2.5f;
         maxFallSpeed = -150.0f;
-        mGridID = fopAcM_create(PROC_GRID, 1, &current.pos, -1, &current.angle);
+        mGridID = fopAcM_create(fpcNm_GRID_e, 1, &current.pos, -1, &current.angle);
 
         if (mGridID == fpcM_ERROR_PROCESS_ID_e) {
             return cPhs_ERROR_e;
@@ -4723,7 +4721,7 @@ cPhs_State daShip_c::create() {
         cull.box.max.y = 570.0f;
         cull.box.max.z = 240.0f;
         
-        fopKyM_create(PROC_WIND_ARROW, (s32)this, 0, 0, 0);
+        fopKyM_create(fpcNm_WIND_ARROW_e, (s32)this, 0, 0, 0);
 
         offStateFlg(daSFLG_UNK2_e);
         mAcch.CrrPos(*dComIfG_Bgsp());
@@ -4760,7 +4758,7 @@ cPhs_State daShip_c::create() {
         m19C0.mRate = 0.0f;
 
         if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e) {
-            fopAcM_createChild(PROC_Coming2, fopAcM_GetID(this), 0, &current.pos, -1, NULL);
+            fopAcM_createChild(fpcNm_Coming2_e, fopAcM_GetID(this), 0, &current.pos, -1, NULL);
         }
     }
     return res;
@@ -4780,18 +4778,18 @@ static actor_method_class l_daShip_Method = {
 };
 
 actor_process_profile_definition g_profile_SHIP = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0004,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SHIP,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0004,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SHIP_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daShip_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SHIP,
+    /* Draw Prio    */ fpcDwPi_SHIP_e,
     /* Actor SubMtd */ &l_daShip_Method,
     /* Status       */ 0x02 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

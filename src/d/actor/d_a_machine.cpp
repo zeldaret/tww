@@ -9,8 +9,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_hkikai1.h"
 
 static dCcD_SrcSph l_sph_src_at = {
@@ -230,7 +228,7 @@ void daMachine_c::set_next_pnt() {
 
 /* 00000700-00000734       .text search_wind_mill__11daMachine_cFv */
 daWindMill_c* daMachine_c::search_wind_mill() {
-    return (daWindMill_c*)fopAcM_SearchByName(PROC_WINDMILL);
+    return (daWindMill_c*)fopAcM_SearchByName(fpcNm_WINDMILL_e);
 }
 
 /* 00000734-000007F8       .text set_speed__11daMachine_cFv */
@@ -433,18 +431,18 @@ static actor_method_class daMachineMethodTable = {
 };
 
 actor_process_profile_definition g_profile_MACHINE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MACHINE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MACHINE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMachine_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MACHINE,
+    /* Draw Prio    */ fpcDwPi_MACHINE_e,
     /* Actor SubMtd */ &daMachineMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -9,8 +9,6 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_camera.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_pspl.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/d_auction_screen.h"
@@ -50,20 +48,20 @@ static daAuction_HIO_c l_HIO;
 
 
 static daAuction_c::ItemData l_item_dat[] = {
-    {dItem_JOY_PENDANT_e, 0x1D10, 40, dSv_event_flag_c::UNK_0F01},
-    {dItem_COLLECT_MAP_27_e, 0x1D11, 5, dSv_event_flag_c::UNK_1080},
-    {dItem_COLLECT_MAP_18_e, 0x1D12, 60, dSv_event_flag_c::UNK_1040},
-    {dItem_HEART_PIECE_e, 0x1D13, 80, dSv_event_flag_c::UNK_1020},
+    {dItemNo_JOY_PENDANT_e, 0x1D10, 40, dSv_event_flag_c::UNK_0F01},
+    {dItemNo_COLLECT_MAP_27_e, 0x1D11, 5, dSv_event_flag_c::UNK_1080},
+    {dItemNo_COLLECT_MAP_18_e, 0x1D12, 60, dSv_event_flag_c::UNK_1040},
+    {dItemNo_HEART_PIECE_e, 0x1D13, 80, dSv_event_flag_c::UNK_1020},
 };
 
 static daAuction_c::ItemData l_item_dat2[] = {
-    {POSTMAN_STATUE, 0x1D14, 30, dSv_event_flag_c::UNK_1008},
-    {PRESIDENT_STATUE, 0x1D15, 40, dSv_event_flag_c::UNK_1004},
+    {dItemNo_POSTMAN_STATUE_e, 0x1D14, 30, dSv_event_flag_c::UNK_1008},
+    {dItemNo_SHOP_GURU_STATUE_e, 0x1D15, 40, dSv_event_flag_c::UNK_1004},
 };
 
 static s16 l_item_dat22[] = {
-    dItem_MAGIC_ARMOR_e,
-    dItem_COLLECT_MAP_06_e,
+    dItemNo_MAGIC_ARMOR_e,
+    dItemNo_COLLECT_MAP_06_e,
 };
 
 static NpcDatStruct l_npc_dat[7] = {
@@ -667,7 +665,7 @@ void daAuction_c::eventStartInit() {
     dAuction_screen_gaugeHide();
     dAuction_screen_talkEnd();
 
-    mCurrAuctionItemPID = fopAcM_create(PROC_ShopItem, l_item_dat[mCurrAuctionItemIndex].mItemID, &current.pos);
+    mCurrAuctionItemPID = fopAcM_create(fpcNm_ShopItem_e, l_item_dat[mCurrAuctionItemIndex].mItemID, &current.pos);
     dKy_custom_colset(0, 4, 1.0f);
 
     mLight.mPos.x = 0.0f;
@@ -1640,18 +1638,18 @@ static actor_method_class daAuctionMethodTable = {
 };
 
 actor_process_profile_definition g_profile_AUCTION = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_AUCTION,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_AUCTION_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daAuction_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_AUCTION,
+    /* Draw Prio    */ fpcDwPi_AUCTION_e,
     /* Actor SubMtd */ &daAuctionMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

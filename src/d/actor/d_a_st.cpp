@@ -8,8 +8,6 @@
 #include "d/actor/d_a_boko.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_s_play.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_snap.h"
 #include "d/res/res_st.h"
@@ -1642,13 +1640,13 @@ static void damage_check(st_class* i_this) {
                     if (atInfo.mDamage != 0) {
                         mDoAud_onEnemyDamage();
                     }
-                    if ((fopAcM_GetName(atInfo.mpActor) == PROC_HIMO2) && (actor->stealItemLeft != 0)) {
+                    if ((fopAcM_GetName(atInfo.mpActor) == fpcNm_HIMO2_e) && (actor->stealItemLeft != 0)) {
                         actor->stealItemLeft--;
                         fopAcM_createStealItem(&actor->current.pos, actor->itemTableIdx, fopAcM_GetRoomNo(actor), 0, actor->stealItemBitNo);
                         actor->stealItemBitNo++;
                     }
                     if (
-                        (fopAcM_GetName(atInfo.mpActor) == PROC_PLAYER)
+                        (fopAcM_GetName(atInfo.mpActor) == fpcNm_PLAYER_e)
 #if VERSION > VERSION_DEMO
                         || (atInfo.mResultingAttackType == 2)
 #endif
@@ -1683,7 +1681,7 @@ static void damage_check(st_class* i_this) {
 #endif
                                 i_this->m0ED3 = 10;
                                 i_this->mUpperBodyEntityId =
-                                    fopAcM_create(PROC_ST, 0xe, &actor->current.pos, fopAcM_GetRoomNo(actor), &actor->home.angle, NULL, 0xff, NULL);
+                                    fopAcM_create(fpcNm_ST_e, 0xe, &actor->current.pos, fopAcM_GetRoomNo(actor), &actor->home.angle, NULL, 0xff, NULL);
                                 i_this->m1E84 = 5;
 #if VERSION > VERSION_DEMO
                                 i_this->m1E86 = 0;
@@ -2904,7 +2902,7 @@ static cPhs_State daSt_Create(fopAc_ac_c* a_this) {
         i_this->m0D80.Set(wepon_sph_src);
         i_this->m0D80.SetStts(&i_this->mStts);
         if (i_this->mBehaviorType != BEHAVIOR_UPPER_BODY_ONLY) {
-            i_this->mHeldWeaponEntityId = fopAcM_create(PROC_BOKO, daBoko_c::Type_STALFOS_MACE_e, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
+            i_this->mHeldWeaponEntityId = fopAcM_create(fpcNm_BOKO_e, daBoko_c::Type_STALFOS_MACE_e, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
             i_this->m1DD0 = 1;
             a_this->health = 16;
             a_this->max_health = 16;
@@ -2938,18 +2936,18 @@ static actor_method_class l_daSt_Method = {
 };
 
 actor_process_profile_definition g_profile_ST = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ST,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ST_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(st_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ST,
+    /* Draw Prio    */ fpcDwPi_ST_e,
     /* Actor SubMtd */ &l_daSt_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

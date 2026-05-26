@@ -15,8 +15,6 @@
 #include "d/res/res_gflag.h"
 #include "d/res/res_tgflag.h"
 #include "d/d_path.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 #include "assets/l_txa_dummy_hataTEX.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -436,7 +434,7 @@ BOOL daGoal_Flag_c::CreateBuoyRaces() {
                 rope_points_p->m_position.z
             );
             fopAcM_createChild(
-                PROC_Obj_Buoyrace,
+                fpcNm_Obj_Buoyrace_e,
                 fopAcM_GetID(this),
                 j | (i << 8), &rope_point_pos,
                 fopAcM_GetRoomNo(this),
@@ -662,7 +660,7 @@ cPhs_State daGoal_Flag_c::_create() {
             u16 time_limit_modifier = (u16)dComIfGs_getEventReg(dSv_event_flag_c::UNK_AAFF) * 10;
             time_limit -= time_limit_modifier;
             mTimerProcID = fopMsgM_Timer_create(
-                PROC_TIMER,
+                fpcNm_TIMER_e,
                 2,
                 time_limit,
                 3,
@@ -675,7 +673,7 @@ cPhs_State daGoal_Flag_c::_create() {
             );
 
             mMgameStartProcID = fopMsgM_MiniGameStarter_create(
-                PROC_MINIGAME_STARTER,
+                fpcNm_MINIGAME_STARTER_e,
                 0,
                 0x200,
                 NULL
@@ -935,7 +933,7 @@ BOOL daGoal_Flag_c::TimerExecute() {
             rupees_collected = dComIfGp_getMiniGameRupee();
             remaining_time = timer_p->getRestTimeMs() / 10;
             mMgameTermProcID = fopMsgM_MiniGameTerminater_create(
-                PROC_MINIGAME_TERMINATER,
+                fpcNm_MINIGAME_TERMINATER_e,
                 0,
                 finish_type,
                 remaining_time,
@@ -1063,18 +1061,18 @@ static actor_method_class daGoal_FlagMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Goal_Flag = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Goal_Flag,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Goal_Flag_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daGoal_Flag_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Goal_Flag,
+    /* Draw Prio    */ fpcDwPi_Goal_Flag_e,
     /* Actor SubMtd */ &daGoal_FlagMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

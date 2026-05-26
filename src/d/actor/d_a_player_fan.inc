@@ -107,7 +107,7 @@ int daPy_lk_c::setShapeFanLeaf() {
 
 /* 8014BE50-8014BEEC       .text checkFanGlideProc__9daPy_lk_cFi */
 BOOL daPy_lk_c::checkFanGlideProc(int param_0) {
-    if (checkSetItemTrigger(dItem_DEKU_LEAF_e, 1)) {
+    if (checkSetItemTrigger(dItemNo_DEKU_LEAF_e, 1)) {
         if (dComIfGs_getMagic() >= 1) {
             return procFanGlide_init(param_0);
         }
@@ -444,7 +444,7 @@ BOOL daPy_lk_c::procFanGlide() {
                 gravity = m_HIO->mItem.mFan.m.field_0x3C;
                 maxFallSpeed = m_HIO->mItem.mFan.m.field_0x38;
             }
-            if (checkSetItemTrigger(dItem_DEKU_LEAF_e, 1) && frameCtrl.getRate() < 0.01f && mProcVar6.m3570 == 0) {
+            if (checkSetItemTrigger(dItemNo_DEKU_LEAF_e, 1) && frameCtrl.getRate() < 0.01f && mProcVar6.m3570 == 0) {
                 // Using the Deku Leaf while gliding to create a burst of air around you.
                 setSingleMoveAnime(
                     ANM_USEFANB,

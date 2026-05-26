@@ -10,8 +10,6 @@
 #include "d/actor/d_a_bmd.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 class daBmdfoot_HIO_c : public JORReflexible {
@@ -590,7 +588,7 @@ void move(bmdfoot_class* i_this) {
 /* 000021B8-00002204       .text s_a_d_sub__FPvPv */
 void* s_a_d_sub(void* search, void* param_2) {
     UNUSED(param_2);
-    if ((fopAcM_IsActor(search)) && (fopAcM_GetName(search) == PROC_BMD)) {
+    if ((fopAcM_IsActor(search)) && (fopAcM_GetName(search) == fpcNm_BMD_e)) {
         return search;
     } else {
         return NULL;
@@ -829,18 +827,18 @@ static actor_method_class l_daBmdfoot_Method = {
 };
 
 actor_process_profile_definition g_profile_BMDFOOT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BMDFOOT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BMDFOOT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bmdfoot_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BMDFOOT,
+    /* Draw Prio    */ fpcDwPi_BMDFOOT_e,
     /* Actor SubMtd */ &l_daBmdfoot_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -5,8 +5,6 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_wpillar.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_kankyo.h"
 
 class J3DNode;
@@ -67,7 +65,7 @@ static cPhs_State dWpillar_Create(kankyo_class* i_this) {
     return a_this->create();
 }
 
-kankyo_method_class l_dWpillar_Method = {
+static kankyo_method_class l_dWpillar_Method = {
     (process_method_func)dWpillar_Create,
     (process_method_func)dWpillar_Delete,
     (process_method_func)dWpillar_Execute,
@@ -76,15 +74,15 @@ kankyo_method_class l_dWpillar_Method = {
 };
 
 kankyo_process_profile_definition g_profile_WPILLAR = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WPILLAR,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dWpillar_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_WPILLAR,
-    /* Actor SubMtd */ &l_dWpillar_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x0008,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_WPILLAR_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dWpillar_c),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_WPILLAR_e,
+    /* Kankyo SubMtd */ &l_dWpillar_Method,
 };

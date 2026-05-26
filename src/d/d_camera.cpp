@@ -21,7 +21,6 @@
 #include "f_ap/f_ap_game.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_npc_kamome.h"
-#include "d/d_procname.h"
 #include "d/d_demo.h"
 #include "d/actor/d_a_sea.h"
 #include "m_Do/m_Do_lib.h"
@@ -43,7 +42,7 @@ namespace {
     }
     
     inline static bool is_player(fopAc_ac_c* actor) {
-        return fopAcM_GetName(actor) == PROC_PLAYER;
+        return fopAcM_GetName(actor) == fpcNm_PLAYER_e;
     }
 
     inline static bool isPlayerGuarding(u32 param_0) {
@@ -1131,7 +1130,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
             clrFlag(0x4000000);
         }
 
-        if (mLockOnActorId != fpcM_ERROR_PROCESS_ID_e && mpLockonActor && fopAcM_GetName(mpLockonActor) == PROC_NPC_MD) {
+        if (mLockOnActorId != fpcM_ERROR_PROCESS_ID_e && mpLockonActor && fopAcM_GetName(mpLockonActor) == fpcNm_NPC_MD_e) {
             m144 = 1;
             i_curMode = 0;
         }
@@ -2121,7 +2120,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
             fopAc_ac_c* grab_actor = fopAcM_SearchByID(grab_actor_id);
             if (grab_actor != NULL) {
                 s16 proc_name = fopAcM_GetName(grab_actor);
-                if (proc_name == PROC_TSUBO) {
+                if (proc_name == fpcNm_TSUBO_e) {
                     switch (daObj::PrmAbstract(grab_actor, daTsubo::Act_c::PRM_TYPE_W, daTsubo::Act_c::PRM_TYPE_S)) {
                         case 1:
                         case 2:
@@ -2140,10 +2139,10 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                             break;
                       }
                 }
-                else if (proc_name == PROC_NPC_MD) {
+                else if (proc_name == fpcNm_NPC_MD_e) {
                     wall_up_distance = 130.0f;
                 }
-                else if (proc_name == PROC_Obj_Try) {
+                else if (proc_name == fpcNm_Obj_Try_e) {
                     wall_up_distance = 200.0f;
                 }
                 else {
@@ -2538,7 +2537,7 @@ void dCamera_c::checkGroundInfo() {
                 m320 = m32C - pos;
                 m338 = m33A - angle;
 
-                if (fopAcM_GetName(m33C) == PROC_Obj_Pirateship) {
+                if (fopAcM_GetName(m33C) == fpcNm_Obj_Pirateship_e) {
                     mViewCache.mCenter.y += m320.y * mCamSetup.mManualStartCThreshold;
                 }
             }
@@ -3425,7 +3424,7 @@ bool dCamera_c::lockonCamera(s32 param_1) {
             cXyz local_f0 = attentionPos(mpLockonTarget);
             cXyz local_fc = attentionPos(mpPlayerActor);
 
-            if (fopAcM_GetName(mpLockonTarget) == PROC_BDK) {
+            if (fopAcM_GetName(mpLockonTarget) == fpcNm_BDK_e) {
                 local_f0.x = positionOf(mpLockonTarget).x;
                 local_f0.z = positionOf(mpLockonTarget).z;
             }

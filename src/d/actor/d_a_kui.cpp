@@ -11,8 +11,6 @@
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/res/res_kui.h"
 #include "f_op/f_op_camera.h"
@@ -24,7 +22,7 @@ class J3DModelData;
 
 /* 00000078-000000C4       .text s_a_i_sub__FPvPv */
 static void* s_a_i_sub(void* search, void*) {
-    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_DR2) {
+    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == fpcNm_DR2_e) {
         return search;
     }
     return NULL;
@@ -37,7 +35,7 @@ static dr2_class* search_dragontail(kui_class* i_this) {
 
 /* 000000F0-0000013C       .text b_a_i_sub__FPvPv */
 static void* b_a_i_sub(void* search, void*) {
-    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_BTD) {
+    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == fpcNm_BTD_e) {
         return search;
     }
     return NULL;
@@ -550,18 +548,18 @@ static actor_method_class l_daKui_Method = {
 };
 
 actor_process_profile_definition g_profile_KUI = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KUI,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KUI_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kui_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KUI,
+    /* Draw Prio    */ fpcDwPi_KUI_e,
     /* Actor SubMtd */ &l_daKui_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -8,8 +8,6 @@
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_skanran.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
@@ -576,18 +574,18 @@ namespace daObjFerris {
 }
 
 actor_process_profile_definition g_profile_Obj_Ferris = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ferris,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ferris_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjFerris::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ferris,
+    /* Draw Prio    */ fpcDwPi_Obj_Ferris_e,
     /* Actor SubMtd */ &daObjFerris::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

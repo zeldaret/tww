@@ -14,8 +14,6 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_meter.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #if VERSION == VERSION_DEMO
 #include "d/d_s_play.h"
 #endif
@@ -2245,15 +2243,15 @@ static msg_method_class l_dMesg_Method = {
 };
 
 msg_process_profile_definition g_profile_MESG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 12,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MESG,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MESG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sub_mesg_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_MESG,
+    /* Draw Prio    */ fpcDwPi_MESG_e,
     /* Msg SubMtd   */ &l_dMesg_Method,
 };

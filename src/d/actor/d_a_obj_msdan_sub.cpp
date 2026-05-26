@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_msdan_sub.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_msdan.h"
 
 const char daObjMsdanSub::Act_c::M_arcname[] = "Msdan";
@@ -233,18 +231,18 @@ static actor_method_class Mthd_MsdanSub = {
 }; // namespace daObjMsdanSub
 
 actor_process_profile_definition g_profile_Obj_MsdanSub = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_MsdanSub,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_MsdanSub_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMsdanSub::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_MsdanSub,
+    /* Draw Prio    */ fpcDwPi_Obj_MsdanSub_e,
     /* Actor SubMtd */ &daObjMsdanSub::Mthd_MsdanSub,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

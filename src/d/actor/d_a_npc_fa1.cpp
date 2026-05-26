@@ -8,8 +8,6 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_actor_mng.h"
 
@@ -339,7 +337,7 @@ BOOL daNpc_Fa1_c::checkBinCatch() {
     }
     
     dComIfGp_att_CatchRequest(
-        this, dItem_FAIRY_BOTTLE_e,
+        this, dItemNo_FAIRY_BOTTLE_e,
         l_HIO.prm.m1C, l_HIO.prm.m20,
         l_HIO.prm.m24, l_HIO.prm.m48,
         1
@@ -549,7 +547,7 @@ void daNpc_Fa1_c::get_player_move() {
     current.pos = player->current.pos + *local_18;
     BGCheck();
     if (mTimer == 0) {
-        execItemGet(dItem_RECOVER_FAIRY_e);
+        execItemGet(dItemNo_RECOVER_FAIRY_e);
         fopAcM_delete(this);
     }
 }
@@ -615,7 +613,7 @@ void daNpc_Fa1_c::init_bottle_appear_move() {
     setMode(Mode_BOTTLE_APPEAR_MOVE_e);
     init_up1();
     if (isTypeLinkDown()) {
-        execItemGet(dItem_RECOVER_FAIRY_e);
+        execItemGet(dItemNo_RECOVER_FAIRY_e);
     }
 }
 
@@ -657,7 +655,7 @@ void daNpc_Fa1_c::bottle_appear_move() {
     (this->*bottleMoveSubProc[getSubMode()])();
     if (mTimer == 0) {
         if (!isTypeLinkDown()) {
-            execItemGet(dItem_RECOVER_FAIRY_e);
+            execItemGet(dItemNo_RECOVER_FAIRY_e);
         }
         fopAcM_delete(this);
     }
@@ -732,7 +730,7 @@ void daNpc_Fa1_c::bottle_baba_wait() {
 /* 800FC848-800FC8E4       .text init_bottle_baba_move__11daNpc_Fa1_cFv */
 void daNpc_Fa1_c::init_bottle_baba_move() {
     setMode(Mode_BOTTLE_BABA_MOVE_e);
-    fopAcM_SearchByName(PROC_NPC_BA1, &m764);
+    fopAcM_SearchByName(fpcNm_NPC_BA1_e, &m764);
     mTimer = l_HIO.m50.prm.m22;
     speedF = l_HIO.m50.prm.m08;
     m798 = 1;
@@ -1016,18 +1014,18 @@ static actor_method_class l_daNpc_Fa1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_FA1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_FA1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_FA1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Fa1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_FA1,
+    /* Draw Prio    */ fpcDwPi_NPC_FA1_e,
     /* Actor SubMtd */ &l_daNpc_Fa1_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

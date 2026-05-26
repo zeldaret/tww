@@ -20,7 +20,7 @@
 /* 8014AB5C-8014ABA0       .text checkHookshotReturn__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkHookshotReturn() {
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
-    if (mEquipItem != dItem_HOOKSHOT_e || hookshot == NULL) {
+    if (mEquipItem != dItemNo_HOOKSHOT_e || hookshot == NULL) {
         return false;
     }
 
@@ -30,7 +30,7 @@ BOOL daPy_lk_c::checkHookshotReturn() {
 /* 8014ABA0-8014ABF4       .text setHookshotCarryOffset__9daPy_lk_cFUiPC4cXyz */
 BOOL daPy_lk_c::setHookshotCarryOffset(fpc_ProcID carryActorID, const cXyz* offset) {
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
-    if (mEquipItem != dItem_HOOKSHOT_e || hookshot == NULL) {
+    if (mEquipItem != dItemNo_HOOKSHOT_e || hookshot == NULL) {
         return false;
     }
     if (carryActorID != hookshot->getCarryActorID()) {
@@ -112,7 +112,7 @@ void daPy_lk_c::setHookshotSight() {
 
 /* 8014B02C-8014B05C       .text freeHookshotItem__9daPy_lk_cFv */
 void daPy_lk_c::freeHookshotItem() {
-    if (mEquipItem != dItem_HOOKSHOT_e) {
+    if (mEquipItem != dItemNo_HOOKSHOT_e) {
         return;
     }
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();

@@ -5,8 +5,6 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
@@ -136,11 +134,11 @@ BOOL daIball_c::createItem() {
             itemBitNo = daIball_prm::getItemBitNo(this);
             if ((itemBitNo == 0x1F || itemBitNo == 0xFF || itemBitNo == -1) || fopAcM_isItemForIb(itemBitNo, items[i], current.roomNo)) {
                 itemBitNo = -1;
-                items[i] = dItem_YELLOW_RUPEE_e;
+                items[i] = dItemNo_YELLOW_RUPEE_e;
             }
         } else if (isNonSavedEmono(items[i])) {
             if (daIball_prm::getItemBitNo(this) != 0) {
-                items[i] = dItem_YELLOW_RUPEE_e;
+                items[i] = dItemNo_YELLOW_RUPEE_e;
             }
             itemBitNo = -1;
         }
@@ -520,18 +518,18 @@ static actor_method_class l_daIball_Method = {
 };
 
 actor_process_profile_definition g_profile_Iball = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Iball,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Iball_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daIball_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Iball,
+    /* Draw Prio    */ fpcDwPi_Iball_e,
     /* Actor SubMtd */ &l_daIball_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

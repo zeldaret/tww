@@ -8,8 +8,6 @@
 #include "d/d_s_play.h"
 #include "d/res/res_bmdhand.h"
 #include "d/actor/d_a_bmd.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 class daBmdhand_HIO_c : public JORReflexible {
@@ -662,7 +660,7 @@ void hand_move(bmdhand_class* i_this) {
 /* 00002E74-00002EC0       .text s_a_d_sub__FPvPv */
 void* s_a_d_sub(void* param_1, void* param_2) {
     UNUSED(param_2);
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BMD)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BMD_e)) {
         return param_1;
     } else {
         return NULL;
@@ -832,18 +830,18 @@ static actor_method_class l_daBmdhand_Method = {
 };
 
 actor_process_profile_definition g_profile_BMDHAND = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BMDHAND,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BMDHAND_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bmdhand_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BMDHAND,
+    /* Draw Prio    */ fpcDwPi_BMDHAND_e,
     /* Actor SubMtd */ &l_daBmdhand_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

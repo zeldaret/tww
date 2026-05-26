@@ -11,8 +11,6 @@
 #include "d/actor/d_a_salvage.h"
 #include "d/actor/d_a_ship.h"
 #include "d/res/res_oship.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 const s32 daOship_c::m_heapsize = 0x1280;
@@ -447,7 +445,7 @@ void daOship_c::attackCannon(int i_index) {
     
     int bomb_prm = daBomb_c::prm_make(daBomb_c::STATE_4, true, true);
     daBomb_c* bomb_p = (daBomb_c *) fopAcM_fastCreate(
-        PROC_BOMB, bomb_prm, 
+        fpcNm_BOMB_e, bomb_prm, 
         &mBombSpawnPos, tevStr.mRoomNo, 
         &rot
     );
@@ -724,7 +722,7 @@ void daOship_c::modeDelete() {
             
             if (s16(std::abs(temp)) <= 0x100 && std::fabsf(temp2 - water_height) < 500.0f && mSwitchA != 0xFF) {
                 dComIfGs_onSwitch(mSwitchA, fopAcM_GetRoomNo(this));
-                daSalvage_c* salvage_p = (daSalvage_c *) fopAcM_SearchByName(PROC_Salvage);
+                daSalvage_c* salvage_p = (daSalvage_c *) fopAcM_SearchByName(fpcNm_Salvage_e);
                 salvage_p->onSalvageForOship(this);
                 mDoAud_seStart(JA_SE_READ_RIDDLE_1);
             }
@@ -751,7 +749,7 @@ void daOship_c::modeDelete() {
         if (s16(std::abs(temp)) <= 0x100 && std::fabsf(temp2 - water_height) < 500.0f) {
             if (mSwitchA != 0xFF) {
                 dComIfGs_onSwitch(mSwitchA, fopAcM_GetRoomNo(this));
-                daSalvage_c* salvage_p = (daSalvage_c *) fopAcM_SearchByName(PROC_Salvage);
+                daSalvage_c* salvage_p = (daSalvage_c *) fopAcM_SearchByName(fpcNm_Salvage_e);
                 salvage_p->onSalvageForOship(this);
             }
 
@@ -932,7 +930,7 @@ void daOship_c::createInit() {
 
     if (!isSpecial()) {
         mFlagPcId = fopAcM_create(
-            PROC_MAJUU_FLAG, 4, 
+            fpcNm_MAJUU_FLAG_e, 4, 
             &current.pos, tevStr.mRoomNo, 
             &current.angle
         );
@@ -1100,18 +1098,18 @@ static actor_method_class daOshipMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OSHIP = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OSHIP,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OSHIP_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daOship_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OSHIP,
+    /* Draw Prio    */ fpcDwPi_OSHIP_e,
     /* Actor SubMtd */ &daOshipMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

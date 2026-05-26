@@ -8,8 +8,6 @@
 #include "d/res/res_kt.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/actor/d_a_player.h"
 #include "f_op/f_op_actor_mng.h"
@@ -343,7 +341,7 @@ static cPhs_State daKt_Create(fopAc_ac_c* i_ac) {
                     params->base.position = i_this->current.pos;
                     params->base.angle.set(0, 0, 0);
                     params->base.parameters = 1001 + i;
-                    fpcM_Create(PROC_KT, NULL, params);
+                    fpcM_Create(fpcNm_KT_e, NULL, params);
                 }
             }
 
@@ -369,18 +367,18 @@ static actor_method_class l_daKt_Method = {
 };
 
 actor_process_profile_definition g_profile_KT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kt_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KT,
+    /* Draw Prio    */ fpcDwPi_KT_e,
     /* Actor SubMtd */ &l_daKt_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

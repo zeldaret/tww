@@ -14,8 +14,6 @@
 #endif
 #include "d/actor/d_a_player.h"
 #include "d/d_meter.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
 #include "d/res/res_bgn.h"
@@ -916,7 +914,7 @@ static void room_disp(bgn_class* i_this) {
 /* 00001898-0000192C       .text ten_a_d_sub__FPvPv */
 static void* ten_a_d_sub(void* param_1, void*) {
     fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_Obj_Vteng)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_Obj_Vteng_e)) {
         if ((actor->model != NULL) && (bgn != NULL)) {
             bgn->mCC24.setModel(actor->model);
             bgn->mCC24.update();
@@ -930,7 +928,7 @@ static void* ten_a_d_sub(void* param_1, void*) {
 /* 0000192C-00001998       .text ki_a_d_sub__FPvPv */
 static void* ki_a_d_sub(void* param_1, void*) {
     ki_class* keese = (ki_class*)param_1;
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_KI)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
         if (keese->actor.model != NULL) {
             keese->m2B8.setModel(keese->actor.model);
             keese->m2B8.update();
@@ -950,7 +948,7 @@ static void obj_disp(bgn_class* i_this) {
 #if VERSION > VERSION_DEMO
 /* 000019F4-00001A40       .text bgn2_s_sub__FPvPv */
 static void* bgn2_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BGN2)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN2_e)) {
         return param_1;
     } else {
         return NULL;
@@ -959,7 +957,7 @@ static void* bgn2_s_sub(void* param_1, void*) {
 
 /* 00001A40-00001A8C       .text bgn3_s_sub__FPvPv */
 static void* bgn3_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BGN3)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
         return param_1;
     } else {
         return NULL;
@@ -1030,7 +1028,7 @@ static BOOL daBgn_Draw(bgn_class* i_this) {
 /* 00001C40-00001C8C       .text ki_del_sub__FPvPv */
 static void* ki_del_sub(void* param_1, void*) {
     ki_class* keese = (ki_class*)param_1;
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_KI)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
         fopAcM_delete(&keese->actor);
     }
     return NULL;
@@ -1040,7 +1038,7 @@ static void* ki_del_sub(void* param_1, void*) {
 /* 00001C8C-00001CD8       .text ks_del_sub__FPvPv */
 static void* ks_del_sub(void* param_1, void*) {
     ks_class* morth = (ks_class*)param_1;
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_KS)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KS_e)) {
         fopAcM_delete(&morth->actor);
     }
     return NULL;
@@ -1049,7 +1047,7 @@ static void* ks_del_sub(void* param_1, void*) {
 
 /* 00001CD8-00001D30       .text ki_c_sub__FPvPv */
 static void* ki_c_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_KI)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
         ki_all_count++;
     }
     return NULL;
@@ -1109,7 +1107,7 @@ static s32 gr_check(bgn_class* i_this, cXyz* param_2) {
 static void* s_b_sub(void* param_1, void* param_2) {
     bgn_class* bgn = (bgn_class*)param_2;
     daBomb_c* bomb = (daBomb_c*)param_1;
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BOMB) && bomb->get_explode_instant()) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BOMB_e) && bomb->get_explode_instant()) {
         cXyz local_18 = bomb->current.pos;
         if (!gr_check(bgn, &local_18)) {
             dComIfGp_particle_set(dPa_name::ID_AK_SN_KGTT1PUNCHSPLASH00, &local_18);
@@ -3294,7 +3292,7 @@ static void demo_camera(bgn_class* i_this) {
 #if VERSION == VERSION_DEMO
 /* 000019F4-00001A40       .text bgn2_s_sub__FPvPv */
 static void* bgn2_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BGN2)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN2_e)) {
         return param_1;
     } else {
         return NULL;
@@ -3303,7 +3301,7 @@ static void* bgn2_s_sub(void* param_1, void*) {
 
 /* 00001A40-00001A8C       .text bgn3_s_sub__FPvPv */
 static void* bgn3_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BGN3)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
         return param_1;
     } else {
         return NULL;
@@ -3375,7 +3373,7 @@ static BOOL daBgn_Execute(bgn_class* i_this) {
             local_28.x = cM_rndFX(2500.0f);
             local_28.y = cM_rndF(500.0f) + 3500.0f;
             local_28.x = cM_rndFX(2500.0f);
-            fopAcM_create(PROC_KI, 0xFFFF0003, &local_28, fopAcM_GetRoomNo(actor));
+            fopAcM_create(fpcNm_KI_e, 0xFFFF0003, &local_28, fopAcM_GetRoomNo(actor));
         }
     }
     i_this->m02B5 = l_HIO.m024;
@@ -3694,17 +3692,17 @@ static cPhs_State daBgn_Create(fopAc_ac_c* a_this) {
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F10)) {
                 i_this->m02B4 = 0xFF;
                 local_50.set(375.17f, REG8_F(4) + 4441.46f, REG8_F(3) + -15.0f);
-                fopAcM_create(PROC_HIMO3, 0xf, &local_50, fopAcM_GetRoomNo(a_this));
+                fopAcM_create(fpcNm_HIMO3_e, 0xf, &local_50, fopAcM_GetRoomNo(a_this));
                 local_50.set(375.17f, REG8_F(4) + 4453.96f, 0.0f);
                 csXyz cStack_58(0, 0x4000, 0);
-                fopAcM_create(PROC_KUI, 0xffff0400, &local_50, fopAcM_GetRoomNo(a_this), &cStack_58, NULL, 0xFF, NULL);
+                fopAcM_create(fpcNm_KUI_e, 0xffff0400, &local_50, fopAcM_GetRoomNo(a_this), &cStack_58, NULL, 0xFF, NULL);
             } else {
                 for (s32 parameters = 0, i = 0; parameters < 8; i++, parameters++) {
-                    fopAcM_create(PROC_ATT, parameters, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
+                    fopAcM_create(fpcNm_ATT_e, parameters, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
                     i_this->mAAA8[i].m308 = 3;
                 }
-                fopAcM_create(PROC_BGN2, 0, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
-                fopAcM_create(PROC_BGN3, 0, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
+                fopAcM_create(fpcNm_BGN2_e, 0, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
+                fopAcM_create(fpcNm_BGN3_e, 0, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
                 mDoAud_bgmStart(JA_BGM_BGN_KUGUTSU);
                 a_this->health = 3;
                 a_this->max_health = 3;
@@ -3732,18 +3730,18 @@ static actor_method_class l_daBgn_Method = {
 };
 
 actor_process_profile_definition g_profile_BGN = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BGN,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BGN_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bgn_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BGN,
+    /* Draw Prio    */ fpcDwPi_BGN_e,
     /* Actor SubMtd */ &l_daBgn_Method,
     /* Status       */ DEMO_SELECT(fopAcStts_UNK4000_e | fopAcStts_UNK40000_e, fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e),
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -7,8 +7,6 @@
 #include "d/actor/d_a_nh.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_s_gnd_chk.h"
@@ -214,7 +212,7 @@ BOOL daNh_c::checkBinCatch() {
     }
     
     dComIfGp_att_CatchRequest(
-        this, dItem_FIREFLY_BOTTLE_e,
+        this, dItemNo_FIREFLY_BOTTLE_e,
         l_HIO.prm.field_0x08, l_HIO.prm.field_0x0c,
         l_HIO.prm.field_0x10, l_HIO.prm.field_0x3c,
         1
@@ -519,18 +517,18 @@ static actor_method_class l_daNh_Method = {
 };
 
 actor_process_profile_definition g_profile_NH = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NH,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NH_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNh_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NH,
+    /* Draw Prio    */ fpcDwPi_NH_e,
     /* Actor SubMtd */ &l_daNh_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

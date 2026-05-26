@@ -5,8 +5,6 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_water_mark.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_kankyo.h"
 
 BOOL dWaterMark_c::draw() {
@@ -60,7 +58,7 @@ cPhs_State dWaterMark_c::create() {
     /* Nonmatching */
 }
 
-kankyo_method_class l_dWaterMark_Method = {
+static kankyo_method_class l_dWaterMark_Method = {
     (process_method_func)dWaterMark_Create,
     (process_method_func)dWaterMark_Delete,
     (process_method_func)dWaterMark_Execute,
@@ -69,15 +67,15 @@ kankyo_method_class l_dWaterMark_Method = {
 };
 
 kankyo_process_profile_definition g_profile_WATER_MARK = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0009,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WATER_MARK,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dWaterMark_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_WATER_MARK,
-    /* Actor SubMtd */ &l_dWaterMark_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x0009,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_WATER_MARK_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dWaterMark_c),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_WATER_MARK_e,
+    /* Kankyo SubMtd */ &l_dWaterMark_Method,
 };

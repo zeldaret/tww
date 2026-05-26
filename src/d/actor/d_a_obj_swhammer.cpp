@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_swhammer.h"
 #include "d/res/res_mhmrsw.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 
@@ -213,7 +211,7 @@ void daObjSwhammer::Act_c::set_damage() {
     if (mCylTg.ChkTgHit()) {
         cCcD_Obj *hitObj = mCylTg.GetTgHitObj();
         fopAc_ac_c* hitActor = mCylTg.GetTgHitAc();
-        if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
+        if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == fpcNm_PLAYER_e) {
             if (cutType == daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING || cutType == daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER) {
                 M_damage = 1;
             } else if (cutType == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
@@ -476,18 +474,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjSwhammer
 
 actor_process_profile_definition g_profile_Obj_Swhammer = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Swhammer,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Swhammer_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjSwhammer::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Swhammer,
+    /* Draw Prio    */ fpcDwPi_Obj_Swhammer_e,
     /* Actor SubMtd */ &daObjSwhammer::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

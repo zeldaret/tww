@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_title.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "f_op/f_op_scene_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -523,7 +521,7 @@ BOOL daTitle_c::execute() {
             scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
             JUT_ASSERT(VERSION_SELECT(0x2B1, 0x2B1, 0x2EF, 0x2EF), stageProc != NULL);
 
-            if (!m29C && fopScnM_ChangeReq(stageProc, PROC_NAME_SCENE, 0, 5)) {
+            if (!m29C && fopScnM_ChangeReq(stageProc, fpcNm_NAME_SCENE_e, 0, 5)) {
                 mDoAud_seStart(JA_SE_OP_ENTER_GAME);
                 m29C = true;
             }
@@ -537,7 +535,7 @@ BOOL daTitle_c::execute() {
             JUT_ASSERT(VERSION_SELECT(0x2BD, 0x2BD, 0x2FC, 0x2FC), stageProc != NULL);
 
             if (!m29C) {
-                s16 procName = fpcM_GetName(stageProc) == PROC_OPENING_SCENE ? PROC_OPEN2_SCENE : PROC_TITLE_SCENE;
+                s16 procName = fpcM_GetName(stageProc) == fpcNm_OPENING_SCENE_e ? fpcNm_OPEN2_SCENE_e : fpcNm_TITLE_SCENE_e;
                 fopScnM_ChangeReq(stageProc, procName, 1, 5);
                 m29C = true;
             }
@@ -589,18 +587,18 @@ static actor_method_class l_daTitle_Method = {
 };
 
 actor_process_profile_definition g_profile_TITLE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TITLE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TITLE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTitle_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TITLE,
+    /* Draw Prio    */ fpcDwPi_TITLE_e,
     /* Actor SubMtd */ &l_daTitle_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

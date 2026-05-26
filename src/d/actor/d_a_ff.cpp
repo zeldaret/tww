@@ -8,8 +8,6 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_lib.h"
 #include "d/res/res_ff.h"
@@ -306,7 +304,7 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
                     pfVar4->base.angle.y = 0;
                     pfVar4->base.angle.x = 0;
                     pfVar4->base.parameters = fopAcM_GetParam(a_this);
-                    fopAcM_create(PROC_FF, NULL, pfVar4);
+                    fopAcM_create(fpcNm_FF_e, NULL, pfVar4);
                 }
             }
             a_this->mbNoUseGroundY = fopAcM_GetParam(a_this) >> 8;
@@ -363,18 +361,18 @@ static actor_method_class l_daFf_Method = {
 };
 
 actor_process_profile_definition g_profile_FF = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_FF,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_FF_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(ff_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_FF,
+    /* Draw Prio    */ fpcDwPi_FF_e,
     /* Actor SubMtd */ &l_daFf_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

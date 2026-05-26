@@ -9,8 +9,6 @@
 #include "d/actor/d_a_obj_ojtree.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 Mtx daObjOjtree::Act_c::M_tmp_mtx;
 const char daObjOjtree::Act_c::M_arcname[] = "Ojtree";
@@ -32,7 +30,7 @@ BOOL daObjOjtree::Act_c::Create() {
     fopAcM_setCullSizeBox(this, -500.0f, -1.0f, -300.0f, 251.0f, 5001.0f, 251.0f);
     pos.set(current.pos);
     pos.y += 5000.0f;
-    fopAcM_create(PROC_JBO, daJbo_Type_NORMAL_e, &pos, fopAcM_GetHomeRoomNo(this), &shape_angle, NULL, 0xff, NULL);
+    fopAcM_create(fpcNm_JBO_e, daJbo_Type_NORMAL_e, &pos, fopAcM_GetHomeRoomNo(this), &shape_angle, NULL, 0xff, NULL);
     mLockTimer = 2;
     return TRUE;
 }
@@ -133,18 +131,18 @@ namespace daObjOjtree {
 }
 
 actor_process_profile_definition g_profile_Obj_Ojtree = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ojtree,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ojtree_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjOjtree::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ojtree,
+    /* Draw Prio    */ fpcDwPi_Obj_Ojtree_e,
     /* Actor SubMtd */ &daObjOjtree::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

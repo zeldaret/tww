@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_doguu.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
 #include "d/res/res_doguu.h"
@@ -199,11 +197,11 @@ void daObjDoguu_c::CreateInit() {
     fopAcM_setCullSizeFar(this, 1.0f);
 
     if (field_0x894 == 0){
-        mItemNo = dItem_PEARL_DIN_e;
+        mItemNo = dItemNo_PEARL_DIN_e;
     } else if(field_0x894 == 1) {
-        mItemNo = dItem_PEARL_FARORE_e;
+        mItemNo = dItemNo_PEARL_FARORE_e;
     } else{
-        mItemNo = dItem_PEARL_NAYRU_e;
+        mItemNo = dItemNo_PEARL_NAYRU_e;
     }
 
     mStts.Init(0xff, 0xff, this);
@@ -677,7 +675,7 @@ bool daObjDoguu_c::_execute() {
                 cCcD_Obj* hitObj = mCyl.GetCoHitObj();
                 if (hitObj != NULL) {
                     fopAc_ac_c *ac = hitObj->GetAc();
-                    if ((ac != NULL) && (fopAcM_GetName(ac) == PROC_PLAYER)) {
+                    if ((ac != NULL) && (fopAcM_GetName(ac) == fpcNm_PLAYER_e)) {
                         mCyl.SetR(50.0f);
                         fopAcM_orderOtherEventId(this, mDoguuDemo1EventIdx);
                         field_0x8AC = 1;
@@ -815,18 +813,18 @@ static actor_method_class daObj_DoguuMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Doguu = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Doguu,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Doguu_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjDoguu_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Doguu,
+    /* Draw Prio    */ fpcDwPi_Obj_Doguu_e,
     /* Actor SubMtd */ &daObj_DoguuMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

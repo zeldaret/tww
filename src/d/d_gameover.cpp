@@ -6,8 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_gameover.h"
 #include "d/d_meter.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_Reset.h"
@@ -442,7 +440,7 @@ static cPhs_State dGameover_Create(msg_class* i_this) {
     return ((dGameover_c*)i_this)->_create();
 }
 
-msg_method_class l_dGameover_Method = {
+static msg_method_class l_dGameover_Method = {
     (process_method_func)dGameover_Create,
     (process_method_func)dGameover_Delete,
     (process_method_func)dGameover_Execute,
@@ -451,15 +449,15 @@ msg_method_class l_dGameover_Method = {
 };
 
 msg_process_profile_definition g_profile_GAMEOVER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 12,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_GAMEOVER,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_GAMEOVER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(dGameover_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_GAMEOVER,
+    /* Draw Prio    */ fpcDwPi_GAMEOVER_e,
     /* Msg SubMtd   */ &l_dGameover_Method,
 };

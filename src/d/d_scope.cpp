@@ -5,8 +5,6 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_scope.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_msg.h"
 
 /* 80237568-802375E8       .text draw__13dDlst_2DSCP_cFv */
@@ -214,7 +212,7 @@ static cPhs_State dScp_Create(msg_class* i_this) {
     /* Nonmatching */
 }
 
-msg_method_class l_dPb_Method = {
+static msg_method_class l_dPb_Method = {
     (process_method_func)dScp_Create,
     (process_method_func)dScp_Delete,
     (process_method_func)dScp_Execute,
@@ -223,15 +221,15 @@ msg_method_class l_dPb_Method = {
 };
 
 msg_process_profile_definition g_profile_SCP = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x000C,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SCP,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x000C,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SCP_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sub_scp_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_SCP,
-    /* Actor SubMtd */ &l_dPb_Method,
+    /* Draw Prio    */ fpcDwPi_SCP_e,
+    /* Msg SubMtd   */ &l_dPb_Method,
 };
