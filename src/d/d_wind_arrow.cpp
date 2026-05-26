@@ -153,15 +153,15 @@ kankyo_method_class l_dWindArrow_Method = {
 };
 
 kankyo_process_profile_definition g_profile_WIND_ARROW = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WIND_ARROW,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dWindArrow_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_WIND_ARROW,
-    /* Actor SubMtd */ &l_dWindArrow_Method,
+    /* LayerID       */ fpcLy_CURRENT_e,
+    /* ListID        */ 0x0002,
+    /* ListPrio      */ fpcPi_CURRENT_e,
+    /* ProcName      */ PROC_WIND_ARROW,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dWindArrow_c),
+    /* SizeOther     */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Priority      */ PRIO_WIND_ARROW,
+    /* Kankyo SubMtd */ &l_dWindArrow_Method,
 };

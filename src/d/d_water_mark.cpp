@@ -69,15 +69,15 @@ kankyo_method_class l_dWaterMark_Method = {
 };
 
 kankyo_process_profile_definition g_profile_WATER_MARK = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0009,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WATER_MARK,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dWaterMark_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_WATER_MARK,
-    /* Actor SubMtd */ &l_dWaterMark_Method,
+    /* LayerID       */ fpcLy_CURRENT_e,
+    /* ListID        */ 0x0009,
+    /* ListPrio      */ fpcPi_CURRENT_e,
+    /* ProcName      */ PROC_WATER_MARK,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dWaterMark_c),
+    /* SizeOther     */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Priority      */ PRIO_WATER_MARK,
+    /* Kankyo SubMtd */ &l_dWaterMark_Method,
 };

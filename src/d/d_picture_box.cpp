@@ -309,5 +309,5 @@ msg_process_profile_definition g_profile_PB = {
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
     /* Priority     */ PRIO_PB,
-    /* Actor SubMtd */ &l_dPb_Method,
+    /* Msg SubMtd   */ &l_dPb_Method,
 };

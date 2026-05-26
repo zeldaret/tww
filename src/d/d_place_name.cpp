@@ -254,15 +254,15 @@ msg_method_class l_dPlace_name_Method = {
 };
 
 msg_process_profile_definition g_profile_PLACE_NAME = {
-    fpcLy_CURRENT_e,
-    12,
-    fpcPi_CURRENT_e,
-    PROC_PLACE_NAME,
-    &g_fpcLf_Method.base,
-    sizeof(dPn_c),
-    0,
-    0,
-    &g_fopMsg_Method,
-    PRIO_PLACE_NAME,
-    &l_dPlace_name_Method,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 12,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_PLACE_NAME,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dPn_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopMsg_Method,
+    /* Priority     */ PRIO_PLACE_NAME,
+    /* Msg SubMtd   */ &l_dPlace_name_Method,
 };

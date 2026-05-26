@@ -54,15 +54,15 @@ kankyo_method_class l_dKyeff2_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KYEFF2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x000C,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KYEFF2,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dKyeff2_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_KYEFF2,
-    /* Actor SubMtd */ &l_dKyeff2_Method,
+    /* LayerID       */ fpcLy_CURRENT_e,
+    /* ListID        */ 0x000C,
+    /* ListPrio      */ fpcPi_CURRENT_e,
+    /* ProcName      */ PROC_KYEFF2,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dKyeff2_c),
+    /* SizeOther     */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Priority      */ PRIO_KYEFF2,
+    /* Kankyo SubMtd */ &l_dKyeff2_Method,
 };

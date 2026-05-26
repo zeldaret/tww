@@ -76,15 +76,15 @@ kankyo_method_class l_dWpillar_Method = {
 };
 
 kankyo_process_profile_definition g_profile_WPILLAR = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WPILLAR,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dWpillar_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_WPILLAR,
-    /* Actor SubMtd */ &l_dWpillar_Method,
+    /* LayerID       */ fpcLy_CURRENT_e,
+    /* ListID        */ 0x0008,
+    /* ListPrio      */ fpcPi_CURRENT_e,
+    /* ProcName      */ PROC_WPILLAR,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dWpillar_c),
+    /* SizeOther     */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Priority      */ PRIO_WPILLAR,
+    /* Kankyo SubMtd */ &l_dWpillar_Method,
 };

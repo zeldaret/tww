@@ -204,15 +204,15 @@ kankyo_method_class l_dThunder_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KY_THUNDER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KY_THUNDER,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dThunder_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_KY_THUNDER,
-    /* Actor SubMtd */ &l_dThunder_Method,
+    /* LayerID       */ fpcLy_CURRENT_e,
+    /* ListID        */ 0x0007,
+    /* ListPrio      */ fpcPi_CURRENT_e,
+    /* ProcName      */ PROC_KY_THUNDER,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dThunder_c),
+    /* SizeOther     */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Priority      */ PRIO_KY_THUNDER,
+    /* Kankyo SubMtd */ &l_dThunder_Method,
 };

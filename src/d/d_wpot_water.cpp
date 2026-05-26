@@ -129,15 +129,15 @@ kankyo_method_class l_dWpotWater_Method = {
 };
 
 kankyo_process_profile_definition g_profile_WPOT_WATER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WPOT_WATER,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dWpotWater_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_WPOT_WATER,
-    /* Actor SubMtd */ &l_dWpotWater_Method,
+    /* LayerID       */ fpcLy_CURRENT_e,
+    /* ListID        */ 0x0002,
+    /* ListPrio      */ fpcPi_CURRENT_e,
+    /* ProcName      */ PROC_WPOT_WATER,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dWpotWater_c),
+    /* SizeOther     */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Priority      */ PRIO_WPOT_WATER,
+    /* Kankyo SubMtd */ &l_dWpotWater_Method,
 };
