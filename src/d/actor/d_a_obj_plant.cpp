@@ -235,7 +235,7 @@ actor_process_profile_definition g_profile_Obj_Plant = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Plant,
+    /* Priority     */ fpcDwPi_Obj_Plant_e,
     /* Actor SubMtd */ &daObj_PlantMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

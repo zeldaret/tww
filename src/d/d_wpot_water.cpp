@@ -136,6 +136,6 @@ kankyo_process_profile_definition g_profile_WPOT_WATER = {
     /* SizeOther     */ 0,
     /* Parameters    */ 0,
     /* Leaf SubMtd   */ &g_fopKy_Method,
-    /* Priority      */ PRIO_WPOT_WATER,
+    /* Priority      */ fpcDwPi_WPOT_WATER_e,
     /* Kankyo SubMtd */ &l_dWpotWater_Method,
 };

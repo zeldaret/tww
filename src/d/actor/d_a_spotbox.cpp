@@ -82,7 +82,7 @@ actor_process_profile_definition g_profile_SPOTBOX = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SPOTBOX,
+    /* Priority     */ fpcDwPi_SPOTBOX_e,
     /* Actor SubMtd */ &l_daSpotbox_Method,
 #if VERSION == VERSION_DEMO
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,

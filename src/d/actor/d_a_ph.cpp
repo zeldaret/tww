@@ -276,7 +276,7 @@ actor_process_profile_definition g_profile_PH = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_PH,
+    /* Priority     */ fpcDwPi_PH_e,
     /* Actor SubMtd */ &l_daPH_Method,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,

@@ -240,7 +240,7 @@ actor_process_profile_definition g_profile_BO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BO,
+    /* Priority     */ fpcDwPi_BO_e,
     /* Actor SubMtd */ &l_daBO_Method,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

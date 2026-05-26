@@ -856,7 +856,7 @@ actor_process_profile_definition g_profile_DEMO00 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DEMO00,
+    /* Priority     */ fpcDwPi_DEMO00_e,
     /* Actor SubMtd */ &l_daDemo00_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

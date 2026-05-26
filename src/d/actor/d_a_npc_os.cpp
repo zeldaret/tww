@@ -2498,7 +2498,7 @@ actor_process_profile_definition g_profile_NPC_OS = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_OS,
+    /* Priority     */ fpcDwPi_NPC_OS_e,
     /* Actor SubMtd */ &l_daNpc_Os_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK2000000_e | fopAcStts_UNK8000000_e,
     /* Group        */ fopAc_ACTOR_e,

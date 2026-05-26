@@ -530,7 +530,7 @@ actor_process_profile_definition g_profile_MO2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MO2,
+    /* Priority     */ fpcDwPi_MO2_e,
     /* Actor SubMtd */ &l_daMo2_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ENEMY_e,

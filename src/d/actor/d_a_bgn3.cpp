@@ -1355,7 +1355,7 @@ actor_process_profile_definition g_profile_BGN3 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BGN3,
+    /* Priority     */ fpcDwPi_BGN3_e,
     /* Actor SubMtd */ &l_daBgn3_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,

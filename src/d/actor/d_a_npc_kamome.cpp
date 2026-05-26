@@ -1499,7 +1499,7 @@ actor_process_profile_definition g_profile_NPC_KAM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_KAM,
+    /* Priority     */ fpcDwPi_NPC_KAM_e,
     /* Actor SubMtd */ &l_daNpc_kam_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

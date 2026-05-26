@@ -1107,7 +1107,7 @@ actor_process_profile_definition g_profile_OSHIP = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OSHIP,
+    /* Priority     */ fpcDwPi_OSHIP_e,
     /* Actor SubMtd */ &daOshipMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

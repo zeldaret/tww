@@ -1575,6 +1575,6 @@ msg_process_profile_definition g_profile_MENUWINDOW = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_MENUWINDOW,
+    /* Priority     */ fpcDwPi_MENUWINDOW_e,
     /* Msg SubMtd   */ &l_dMs_Method,
 };

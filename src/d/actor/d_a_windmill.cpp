@@ -507,7 +507,7 @@ actor_process_profile_definition g_profile_WINDMILL = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_WINDMILL,
+    /* Priority     */ fpcDwPi_WINDMILL_e,
     /* Actor SubMtd */ &daWindMillMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

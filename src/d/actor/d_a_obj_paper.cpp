@@ -365,7 +365,7 @@ actor_process_profile_definition g_profile_Obj_Paper = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Paper,
+    /* Priority     */ fpcDwPi_Obj_Paper_e,
     /* Actor SubMtd */ &daObjPaper::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

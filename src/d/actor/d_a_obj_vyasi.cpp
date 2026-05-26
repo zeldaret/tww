@@ -188,7 +188,7 @@ actor_process_profile_definition g_profile_Obj_Vyasi = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Vyasi,
+    /* Priority     */ fpcDwPi_Obj_Vyasi_e,
     /* Actor SubMtd */ &daObjVyasi::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,

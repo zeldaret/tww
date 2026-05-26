@@ -812,7 +812,7 @@ actor_process_profile_definition g_profile_STANDITEM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_STANDITEM,
+    /* Priority     */ fpcDwPi_STANDITEM_e,
     /* Actor SubMtd */ &daStandItemMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

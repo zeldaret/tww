@@ -3637,7 +3637,7 @@ actor_process_profile_definition g_profile_TSUBO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TSUBO,
+    /* Priority     */ fpcDwPi_TSUBO_e,
     /* Actor SubMtd */ &daTsubo::Method::Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

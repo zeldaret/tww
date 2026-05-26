@@ -102,7 +102,7 @@ actor_process_profile_definition g_profile_TAG_KB_ITEM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_KB_ITEM,
+    /* Priority     */ fpcDwPi_TAG_KB_ITEM_e,
     /* Actor SubMtd */ &daTagKbItemMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

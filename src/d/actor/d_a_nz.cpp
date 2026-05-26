@@ -225,7 +225,7 @@ actor_process_profile_definition g_profile_NZ = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NZ,
+    /* Priority     */ fpcDwPi_NZ_e,
     /* Actor SubMtd */ &l_daNZ_Method,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,

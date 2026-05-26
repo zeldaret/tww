@@ -2455,7 +2455,7 @@ kankyo_process_profile_definition g_profile_KANKYO = {
     /* SizeOther     */ 0,
     /* Parameters    */ 0,
     /* Leaf SubMtd   */ &g_fopKy_Method,
-    /* Priority      */ PRIO_KANKYO,
+    /* Priority      */ fpcDwPi_KANKYO_e,
     /* Kankyo SubMtd */ &l_dKy_Method,
 };
 

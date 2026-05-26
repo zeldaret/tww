@@ -117,7 +117,7 @@ overlap_process_profile_definition g_profile_OVERLAP0 = {
     /* Size Other  */ 0,
     /* Parameters  */ 0,
     /* Leaf SubMtd */ &g_fopOvlp_Method,
-    /* Draw Prio   */ PRIO_OVERLAP0,
+    /* Draw Prio   */ fpcDwPi_OVERLAP0_e,
     /* Ovlp SubMtd */ &l_dOvlpFd_Method,
 };
 
@@ -131,7 +131,7 @@ overlap_process_profile_definition g_profile_OVERLAP1 = {
     /* Size Other  */ 0,
     /* Parameters  */ 0,
     /* Leaf SubMtd */ &g_fopOvlp_Method,
-    /* Draw Prio   */ PRIO_OVERLAP1,
+    /* Draw Prio   */ fpcDwPi_OVERLAP1_e,
     /* Ovlp SubMtd */ &l_dOvlpFd_Method,
 };
 
@@ -145,7 +145,7 @@ overlap_process_profile_definition g_profile_OVERLAP6 = {
     /* Size Other  */ 0,
     /* Parameters  */ 0,
     /* Leaf SubMtd */ &g_fopOvlp_Method,
-    /* Draw Prio   */ PRIO_OVERLAP6,
+    /* Draw Prio   */ fpcDwPi_OVERLAP6_e,
     /* Ovlp SubMtd */ &l_dOvlpFd_Method,
 };
 
@@ -159,7 +159,7 @@ overlap_process_profile_definition g_profile_OVERLAP7 = {
     /* Size Other  */ 0,
     /* Parameters  */ 0,
     /* Leaf SubMtd */ &g_fopOvlp_Method,
-    /* Draw Prio   */ PRIO_OVERLAP7,
+    /* Draw Prio   */ fpcDwPi_OVERLAP7_e,
     /* Ovlp SubMtd */ &l_dOvlpFd_Method,
 };
 
@@ -173,6 +173,6 @@ overlap_process_profile_definition g_profile_OVERLAP8 = {
     /* Size Other  */ 0,
     /* Parameters  */ 0,
     /* Leaf SubMtd */ &g_fopOvlp_Method,
-    /* Draw Prio   */ PRIO_OVERLAP8,
+    /* Draw Prio   */ fpcDwPi_OVERLAP8_e,
     /* Ovlp SubMtd */ &l_dOvlpFd_Method,
 };

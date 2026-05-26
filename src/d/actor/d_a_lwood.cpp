@@ -191,7 +191,7 @@ actor_process_profile_definition g_profile_Lwood = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Lwood,
+    /* Priority     */ fpcDwPi_Lwood_e,
     /* Actor SubMtd */ &daLwoodMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

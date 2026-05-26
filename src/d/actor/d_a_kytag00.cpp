@@ -417,7 +417,7 @@ actor_process_profile_definition g_profile_KYTAG00 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KYTAG00,
+    /* Priority     */ fpcDwPi_KYTAG00_e,
     /* Actor SubMtd */ &l_daKytag00_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

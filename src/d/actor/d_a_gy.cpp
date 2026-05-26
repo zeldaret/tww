@@ -351,7 +351,7 @@ actor_process_profile_definition g_profile_GY = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_GY,
+    /* Priority     */ fpcDwPi_GY_e,
     /* Actor SubMtd */ &daGyMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

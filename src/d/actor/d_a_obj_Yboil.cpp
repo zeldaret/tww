@@ -213,7 +213,7 @@ actor_process_profile_definition g_profile_Obj_Yboil = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Yboil,
+    /* Priority     */ fpcDwPi_Obj_Yboil_e,
     /* Actor SubMtd */ &daObj_YboilMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

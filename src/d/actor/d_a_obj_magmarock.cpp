@@ -159,7 +159,7 @@ actor_process_profile_definition g_profile_Obj_Magmarock = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Magmarock,
+    /* Priority     */ fpcDwPi_Obj_Magmarock_e,
     /* Actor SubMtd */ &daObjMagmarock::Method::Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

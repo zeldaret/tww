@@ -251,7 +251,7 @@ actor_process_profile_definition g_profile_YOUGAN = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_YOUGAN,
+    /* Priority     */ fpcDwPi_YOUGAN_e,
     /* Actor SubMtd */ &l_daYougan_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -298,7 +298,7 @@ actor_process_profile_definition g_profile_ESA = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ESA,
+    /* Priority     */ fpcDwPi_ESA_e,
     /* Actor SubMtd */ &l_daEsa_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

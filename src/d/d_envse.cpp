@@ -198,6 +198,6 @@ kankyo_process_profile_definition g_profile_ENVSE = {
     /* SizeOther     */ 0,
     /* Parameters    */ 0,
     /* Leaf SubMtd   */ &g_fopKy_Method,
-    /* Priority      */ PRIO_ENVSE,
+    /* Priority      */ fpcDwPi_ENVSE_e,
     /* Kankyo SubMtd */ &l_dEnvSe_Method,
 };

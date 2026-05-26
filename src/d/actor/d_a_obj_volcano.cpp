@@ -520,7 +520,7 @@ actor_process_profile_definition g_profile_Obj_Volcano = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Volcano,
+    /* Priority     */ fpcDwPi_Obj_Volcano_e,
     /* Actor SubMtd */ &daObjVolcano::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

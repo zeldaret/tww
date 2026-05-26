@@ -302,13 +302,13 @@ s32 daTag_Hint_c::getPriority() {
     switch (getType()) {
     case 2:
 #if VERSION == VERSION_DEMO
-        uVar2 = PRIO_OVERLAP8;
+        uVar2 = fpcDwPi_OVERLAP8_e;
 #else
-        uVar2 = PRIO_1EA;
+        uVar2 = fpcDwPi_1EA_e;
 #endif
         break;
     default:
-        uVar2 = PRIO_1FF;
+        uVar2 = fpcDwPi_1FF_e;
         break;
     }
     return uVar2;
@@ -788,7 +788,7 @@ actor_process_profile_definition g_profile_TAG_HINT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_HINT,
+    /* Priority     */ fpcDwPi_TAG_HINT_e,
     /* Actor SubMtd */ &l_daTag_Hint_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

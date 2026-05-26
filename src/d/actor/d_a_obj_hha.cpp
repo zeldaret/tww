@@ -721,7 +721,7 @@ actor_process_profile_definition g_profile_Obj_Hha = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Hha,
+    /* Priority     */ fpcDwPi_Obj_Hha_e,
     /* Actor SubMtd */ &Hha_Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

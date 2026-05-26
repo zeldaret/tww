@@ -210,7 +210,7 @@ actor_process_profile_definition g_profile_GRASS = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_GRASS,
+    /* Priority     */ fpcDwPi_GRASS_e,
     /* Actor SubMtd */ &daGrass_METHODS,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

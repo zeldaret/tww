@@ -253,7 +253,7 @@ overlap_process_profile_definition g_profile_OVERLAP2 = {
     /* Size Other  */ 0,
     /* Parameters  */ 0,
     /* Leaf SubMtd */ &g_fopOvlp_Method,
-    /* Draw Prio   */ PRIO_OVERLAP2,
+    /* Draw Prio   */ fpcDwPi_OVERLAP2_e,
     /* Ovlp SubMtd */ &l_dOvlpFd2_Method,
 };
 
@@ -268,7 +268,7 @@ overlap_process_profile_definition g_profile_OVERLAP3 = {
     /* Size Other  */ 0,
     /* Parameters  */ 0,
     /* Leaf SubMtd */ &g_fopOvlp_Method,
-    /* Draw Prio   */ PRIO_OVERLAP3,
+    /* Draw Prio   */ fpcDwPi_OVERLAP3_e,
     /* Ovlp SubMtd */ &l_dOvlpFd2_Method,
 };
 #endif

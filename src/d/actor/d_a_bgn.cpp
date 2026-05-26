@@ -3739,7 +3739,7 @@ actor_process_profile_definition g_profile_BGN = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BGN,
+    /* Priority     */ fpcDwPi_BGN_e,
     /* Actor SubMtd */ &l_daBgn_Method,
     /* Status       */ DEMO_SELECT(fopAcStts_UNK4000_e | fopAcStts_UNK40000_e, fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e),
     /* Group        */ fopAc_ENEMY_e,

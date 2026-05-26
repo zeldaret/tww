@@ -232,7 +232,7 @@ actor_process_profile_definition g_profile_WBIRD = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_WBIRD,
+    /* Priority     */ fpcDwPi_WBIRD_e,
     /* Actor SubMtd */ &l_daWbird_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

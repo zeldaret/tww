@@ -282,7 +282,7 @@ actor_process_profile_definition g_profile_RACEITEM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_RACEITEM,
+    /* Priority     */ fpcDwPi_RACEITEM_e,
     /* Actor SubMtd */ &l_daRaceItem_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ACTOR_e,

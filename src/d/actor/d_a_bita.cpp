@@ -289,7 +289,7 @@ actor_process_profile_definition g_profile_BITA = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BITA,
+    /* Priority     */ fpcDwPi_BITA_e,
     /* Actor SubMtd */ &l_daBita_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENV_e,

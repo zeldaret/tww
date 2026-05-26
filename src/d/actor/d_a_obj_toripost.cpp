@@ -1036,7 +1036,7 @@ actor_process_profile_definition g_profile_OBJ_TORIPOST = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_TORIPOST,
+    /* Priority     */ fpcDwPi_OBJ_TORIPOST_e,
     /* Actor SubMtd */ &daObjTpostMethodTable,
     /* Status       */ 0x18 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,

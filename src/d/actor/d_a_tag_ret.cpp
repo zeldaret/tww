@@ -141,7 +141,7 @@ actor_process_profile_definition g_profile_Tag_Ret = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Tag_Ret,
+    /* Priority     */ fpcDwPi_Tag_Ret_e,
     /* Actor SubMtd */ &daTagRet::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -155,7 +155,7 @@ actor_process_profile_definition g_profile_Obj_Gaship = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Gaship,
+    /* Priority     */ fpcDwPi_Obj_Gaship_e,
     /* Actor SubMtd */ &daObjGaship::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

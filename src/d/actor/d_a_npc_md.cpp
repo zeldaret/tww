@@ -6279,7 +6279,7 @@ actor_process_profile_definition g_profile_NPC_MD = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_MD,
+    /* Priority     */ fpcDwPi_NPC_MD_e,
     /* Actor SubMtd */ &l_daNpc_Md_Method,
     /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK2000000_e,
     /* Group        */ fopAc_ACTOR_e,

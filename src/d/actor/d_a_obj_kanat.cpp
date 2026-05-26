@@ -162,7 +162,7 @@ actor_process_profile_definition g_profile_Obj_Kanat = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Kanat,
+    /* Priority     */ fpcDwPi_Obj_Kanat_e,
     /* Actor SubMtd */ &daObjKanat::Mthd_Kanat,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -331,7 +331,7 @@ actor_process_profile_definition g_profile_Obj_Auzu = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Auzu,
+    /* Priority     */ fpcDwPi_Obj_Auzu_e,
     /* Actor SubMtd */ &daObjAuzu::Mthd_Table,
     /* Status       */ 0x06 | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

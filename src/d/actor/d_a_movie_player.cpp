@@ -4324,7 +4324,7 @@ actor_process_profile_definition g_profile_MP = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MP,
+    /* Priority     */ fpcDwPi_MP_e,
     /* Actor SubMtd */ &daMP_METHODS,
     /* Status       */ fopAcStts_NOPAUSE_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

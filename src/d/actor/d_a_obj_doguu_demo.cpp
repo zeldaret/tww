@@ -148,7 +148,7 @@ actor_process_profile_definition g_profile_Obj_DoguuD = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_DoguuD,
+    /* Priority     */ fpcDwPi_Obj_DoguuD_e,
     /* Actor SubMtd */ &daObj_DoguuDMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -247,7 +247,7 @@ actor_process_profile_definition g_profile_Ygcwp = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Ygcwp,
+    /* Priority     */ fpcDwPi_Ygcwp_e,
     /* Actor SubMtd */ &Ygcwp_Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

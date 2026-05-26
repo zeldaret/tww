@@ -13167,7 +13167,7 @@ actor_process_profile_definition2 g_profile_PLAYER = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_PLAYER,
+    /* Priority     */ fpcDwPi_PLAYER_e,
     /* Actor SubMtd */ (actor_method_class*)&l_daPy_Method,
     /* Status       */ fopAcStts_FREEZE_e,
     /* Group        */ fopAc_PLAYER_e,

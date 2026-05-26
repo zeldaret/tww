@@ -335,7 +335,7 @@ actor_process_profile_definition g_profile_NPC_MT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_MT,
+    /* Priority     */ fpcDwPi_NPC_MT_e,
     /* Actor SubMtd */ &daNpc_MtMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

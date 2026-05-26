@@ -76,6 +76,6 @@ kankyo_process_profile_definition g_profile_WATER_MARK = {
     /* SizeOther     */ 0,
     /* Parameters    */ 0,
     /* Leaf SubMtd   */ &g_fopKy_Method,
-    /* Priority      */ PRIO_WATER_MARK,
+    /* Priority      */ fpcDwPi_WATER_MARK_e,
     /* Kankyo SubMtd */ &l_dWaterMark_Method,
 };

@@ -7505,6 +7505,6 @@ msg_process_profile_definition g_profile_METER = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_METER,
+    /* Priority     */ fpcDwPi_METER_e,
     /* Msg SubMtd   */ &l_dMeter_Method,
 };

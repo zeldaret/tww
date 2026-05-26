@@ -425,7 +425,7 @@ actor_process_profile_definition g_profile_ARROW_LIGHTEFF = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ARROW_LIGHTEFF,
+    /* Priority     */ fpcDwPi_ARROW_LIGHTEFF_e,
     /* Actor SubMtd */ &daArrow_LighteffMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

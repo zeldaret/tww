@@ -232,7 +232,7 @@ actor_process_profile_definition g_profile_Obj_Quake = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Quake,
+    /* Priority     */ fpcDwPi_Obj_Quake_e,
     /* Actor SubMtd */ &daObjQuakeMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

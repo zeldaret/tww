@@ -61,6 +61,6 @@ kankyo_process_profile_definition g_profile_KYEFF2 = {
     /* SizeOther     */ 0,
     /* Parameters    */ 0,
     /* Leaf SubMtd   */ &g_fopKy_Method,
-    /* Priority      */ PRIO_KYEFF2,
+    /* Priority      */ fpcDwPi_KYEFF2_e,
     /* Kankyo SubMtd */ &l_dKyeff2_Method,
 };

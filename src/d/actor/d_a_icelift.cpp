@@ -115,7 +115,7 @@ actor_process_profile_definition g_profile_ICE_LIFT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ICE_LIFT,
+    /* Priority     */ fpcDwPi_ICE_LIFT_e,
     /* Actor SubMtd */ &daIliftMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

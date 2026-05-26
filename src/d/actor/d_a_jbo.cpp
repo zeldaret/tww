@@ -272,7 +272,7 @@ actor_process_profile_definition g_profile_JBO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_JBO,
+    /* Priority     */ fpcDwPi_JBO_e,
     /* Actor SubMtd */ &l_daJBO_Method,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENV_e,

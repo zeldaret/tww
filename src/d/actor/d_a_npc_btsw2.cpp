@@ -677,7 +677,7 @@ actor_process_profile_definition g_profile_NPC_BTSW2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_BTSW2,
+    /* Priority     */ fpcDwPi_NPC_BTSW2_e,
     /* Actor SubMtd */ &l_daNpc_Btsw2_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

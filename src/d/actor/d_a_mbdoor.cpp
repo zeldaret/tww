@@ -603,7 +603,7 @@ actor_process_profile_definition g_profile_MBDOOR = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MBDOOR,
+    /* Priority     */ fpcDwPi_MBDOOR_e,
     /* Actor SubMtd */ &l_daMbdoor_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

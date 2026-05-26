@@ -820,7 +820,7 @@ actor_process_profile_definition g_profile_Obj_Swpush = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Swpush,
+    /* Priority     */ fpcDwPi_Obj_Swpush_e,
     /* Actor SubMtd */ &daObjSwpush::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

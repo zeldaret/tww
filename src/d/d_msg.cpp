@@ -3183,6 +3183,6 @@ msg_process_profile_definition g_profile_MSG = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_MSG,
+    /* Priority     */ fpcDwPi_MSG_e,
     /* Msg SubMtd   */ &l_dMsg_Method,
 };

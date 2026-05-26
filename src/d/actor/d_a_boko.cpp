@@ -1064,7 +1064,7 @@ actor_process_profile_definition g_profile_BOKO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BOKO,
+    /* Priority     */ fpcDwPi_BOKO_e,
     /* Actor SubMtd */ &l_daBoko_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

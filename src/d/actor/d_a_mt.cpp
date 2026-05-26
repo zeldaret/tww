@@ -209,7 +209,7 @@ actor_process_profile_definition g_profile_MT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MT,
+    /* Priority     */ fpcDwPi_MT_e,
     /* Actor SubMtd */ &l_daMt_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e | fopAcStts_UNK8000000_e,
     /* Group        */ fopAc_ENEMY_e,

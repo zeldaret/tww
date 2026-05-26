@@ -4787,7 +4787,7 @@ actor_process_profile_definition g_profile_SHIP = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SHIP,
+    /* Priority     */ fpcDwPi_SHIP_e,
     /* Actor SubMtd */ &l_daShip_Method,
     /* Status       */ 0x02 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,

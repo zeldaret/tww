@@ -2252,6 +2252,6 @@ msg_process_profile_definition g_profile_MESG = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_MESG,
+    /* Priority     */ fpcDwPi_MESG_e,
     /* Msg SubMtd   */ &l_dMesg_Method,
 };

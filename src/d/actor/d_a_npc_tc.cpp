@@ -1955,7 +1955,7 @@ actor_process_profile_definition g_profile_NPC_TC = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_TC,
+    /* Priority     */ fpcDwPi_NPC_TC_e,
     /* Actor SubMtd */ &l_daNpc_Tc_Method,
     /* Status       */ DEMO_SELECT(fopAcStts_UNK4000_e, 0) | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -58,6 +58,6 @@ kankyo_process_profile_definition g_profile_LEVEL_SE = {
     /* SizeOther     */ 0,
     /* Parameters    */ 0,
     /* Leaf SubMtd   */ &g_fopKy_Method,
-    /* Priority      */ PRIO_LEVEL_SE,
+    /* Priority      */ fpcDwPi_LEVEL_SE_e,
     /* Kankyo SubMtd */ &l_dLevelSe_Method,
 };

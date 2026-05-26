@@ -1070,7 +1070,7 @@ actor_process_profile_definition g_profile_Goal_Flag = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Goal_Flag,
+    /* Priority     */ fpcDwPi_Goal_Flag_e,
     /* Actor SubMtd */ &daGoal_FlagMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -129,7 +129,7 @@ actor_process_profile_definition g_profile_SS = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SS,
+    /* Priority     */ fpcDwPi_SS_e,
     /* Actor SubMtd */ &l_daSs_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

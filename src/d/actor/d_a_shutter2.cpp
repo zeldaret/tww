@@ -257,7 +257,7 @@ actor_process_profile_definition g_profile_SHUTTER2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SHUTTER2,
+    /* Priority     */ fpcDwPi_SHUTTER2_e,
     /* Actor SubMtd */ &daShutter2MethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

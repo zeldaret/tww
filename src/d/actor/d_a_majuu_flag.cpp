@@ -1077,7 +1077,7 @@ actor_process_profile_definition g_profile_MAJUU_FLAG = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MAJUU_FLAG,
+    /* Priority     */ fpcDwPi_MAJUU_FLAG_e,
     /* Actor SubMtd */ &l_daMajuu_Flag_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

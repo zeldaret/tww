@@ -230,6 +230,6 @@ msg_process_profile_definition g_profile_SCP = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_SCP,
+    /* Priority     */ fpcDwPi_SCP_e,
     /* Msg SubMtd   */ &l_dPb_Method,
 };

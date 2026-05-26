@@ -393,7 +393,7 @@ actor_process_profile_definition g_profile_Obj_Ftree = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ftree,
+    /* Priority     */ fpcDwPi_Obj_Ftree_e,
     /* Actor SubMtd */ &daObjFtree::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

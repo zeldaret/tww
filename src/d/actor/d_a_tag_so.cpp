@@ -107,7 +107,7 @@ actor_process_profile_definition g_profile_TAG_SO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_SO,
+    /* Priority     */ fpcDwPi_TAG_SO_e,
     /* Actor SubMtd */ &daTag_SoMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

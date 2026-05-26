@@ -370,7 +370,7 @@ actor_process_profile_definition g_profile_LEAF_LIFT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_LEAF_LIFT,
+    /* Priority     */ fpcDwPi_LEAF_LIFT_e,
     /* Actor SubMtd */ &daLliftMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

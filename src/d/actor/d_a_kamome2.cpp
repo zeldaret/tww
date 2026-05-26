@@ -372,7 +372,7 @@ actor_process_profile_definition g_profile_KAMOME2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KAMOME2,
+    /* Priority     */ fpcDwPi_KAMOME2_e,
     /* Actor SubMtd */ &l_daKamome2_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

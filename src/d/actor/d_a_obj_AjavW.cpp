@@ -144,7 +144,7 @@ actor_process_profile_definition g_profile_Obj_AjavW = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_AjavW,
+    /* Priority     */ fpcDwPi_Obj_AjavW_e,
     /* Actor SubMtd */ &l_daObjAjavW_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

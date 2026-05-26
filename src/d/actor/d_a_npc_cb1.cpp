@@ -3451,7 +3451,7 @@ actor_process_profile_definition g_profile_NPC_CB1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_CB1,
+    /* Priority     */ fpcDwPi_NPC_CB1_e,
     /* Actor SubMtd */ &l_daNpc_Cb1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK2000000_e,
     /* Group        */ fopAc_NPC_e,

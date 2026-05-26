@@ -290,7 +290,7 @@ actor_process_profile_definition g_profile_DEKU_ITEM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DEKU_ITEM,
+    /* Priority     */ fpcDwPi_DEKU_ITEM_e,
     /* Actor SubMtd */ &daDekuItemMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

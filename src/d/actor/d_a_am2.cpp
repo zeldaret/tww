@@ -1503,7 +1503,7 @@ actor_process_profile_definition g_profile_AM2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_AM2,
+    /* Priority     */ fpcDwPi_AM2_e,
     /* Actor SubMtd */ &l_daAM2_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

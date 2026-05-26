@@ -140,7 +140,7 @@ actor_process_profile_definition g_profile_Obj_Gnntakis = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Gnntakis,
+    /* Priority     */ fpcDwPi_Obj_Gnntakis_e,
     /* Actor SubMtd */ &Gnntakis_Mthd_Table,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

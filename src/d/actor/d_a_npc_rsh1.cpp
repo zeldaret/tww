@@ -1947,7 +1947,7 @@ actor_process_profile_definition g_profile_NPC_RSH1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_RSH1,
+    /* Priority     */ fpcDwPi_NPC_RSH1_e,
     /* Actor SubMtd */ &l_daNpc_Rsh1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

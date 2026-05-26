@@ -252,7 +252,7 @@ actor_process_profile_definition g_profile_BRANCH = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BRANCH,
+    /* Priority     */ fpcDwPi_BRANCH_e,
     /* Actor SubMtd */ &l_daBranch_Method,
 #if VERSION == VERSION_DEMO
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,

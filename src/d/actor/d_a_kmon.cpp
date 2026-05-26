@@ -173,7 +173,7 @@ actor_process_profile_definition g_profile_Kmon = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Kmon,
+    /* Priority     */ fpcDwPi_Kmon_e,
     /* Actor SubMtd */ &daKmonMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -135,7 +135,7 @@ actor_process_profile_definition g_profile_Komore = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Komore,
+    /* Priority     */ fpcDwPi_Komore_e,
     /* Actor SubMtd */ &daKomore::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

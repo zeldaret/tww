@@ -356,7 +356,7 @@ actor_process_profile_definition g_profile_ANDSW0 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ANDSW0,
+    /* Priority     */ fpcDwPi_ANDSW0_e,
     /* Actor SubMtd */ &l_daAndsw0_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

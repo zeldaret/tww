@@ -117,7 +117,7 @@ actor_process_profile_definition g_profile_Tag_Attention = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Tag_Attention,
+    /* Priority     */ fpcDwPi_Tag_Attention_e,
     /* Actor SubMtd */ &daTagAttention::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -94,7 +94,7 @@ actor_process_profile_definition g_profile_Dummy = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Dummy,
+    /* Priority     */ fpcDwPi_Dummy_e,
     /* Actor SubMtd */ &daDummy::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

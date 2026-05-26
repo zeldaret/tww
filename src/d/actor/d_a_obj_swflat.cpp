@@ -142,7 +142,7 @@ actor_process_profile_definition g_profile_Obj_Swflat = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Swflat,
+    /* Priority     */ fpcDwPi_Obj_Swflat_e,
     /* Actor SubMtd */ &daObjSwflat::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -99,7 +99,7 @@ actor_process_profile_definition g_profile_TAG_EVSW = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_EVSW,
+    /* Priority     */ fpcDwPi_TAG_EVSW_e,
     /* Actor SubMtd */ &daTagEvsw::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

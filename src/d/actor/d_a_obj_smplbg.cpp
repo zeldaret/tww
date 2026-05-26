@@ -182,7 +182,7 @@ actor_process_profile_definition g_profile_Obj_Smplbg = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Smplbg,
+    /* Priority     */ fpcDwPi_Obj_Smplbg_e,
     /* Actor SubMtd */ &daObjSmplbg::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | DEMO_SELECT(fopAcStts_UNK4000_e, 0) | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

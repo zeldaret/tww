@@ -458,6 +458,6 @@ msg_process_profile_definition g_profile_GAMEOVER = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_GAMEOVER,
+    /* Priority     */ fpcDwPi_GAMEOVER_e,
     /* Msg SubMtd   */ &l_dGameover_Method,
 };

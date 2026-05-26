@@ -529,7 +529,7 @@ actor_process_profile_definition g_profile_BOMB_FLOWER = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BOMB_FLOWER,
+    /* Priority     */ fpcDwPi_BOMB_FLOWER_e,
     /* Actor SubMtd */ &daBFlowerMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

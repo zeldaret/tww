@@ -913,7 +913,7 @@ actor_process_profile_definition g_profile_Obj_Ajav = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ajav,
+    /* Priority     */ fpcDwPi_Obj_Ajav_e,
     /* Actor SubMtd */ &daObjAjav::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

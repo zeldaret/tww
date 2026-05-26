@@ -307,7 +307,7 @@ actor_process_profile_definition g_profile_FallRock = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_FallRock,
+    /* Priority     */ fpcDwPi_FallRock_e,
     /* Actor SubMtd */ &l_daFallRock_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
