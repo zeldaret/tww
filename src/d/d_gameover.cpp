@@ -442,7 +442,7 @@ static cPhs_State dGameover_Create(msg_class* i_this) {
     return ((dGameover_c*)i_this)->_create();
 }
 
-msg_method_class l_dGameover_Method = {
+static msg_method_class l_dGameover_Method = {
     (process_method_func)dGameover_Create,
     (process_method_func)dGameover_Delete,
     (process_method_func)dGameover_Execute,

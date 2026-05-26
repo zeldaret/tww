@@ -67,7 +67,7 @@ static cPhs_State dWpillar_Create(kankyo_class* i_this) {
     return a_this->create();
 }
 
-kankyo_method_class l_dWpillar_Method = {
+static kankyo_method_class l_dWpillar_Method = {
     (process_method_func)dWpillar_Create,
     (process_method_func)dWpillar_Delete,
     (process_method_func)dWpillar_Execute,

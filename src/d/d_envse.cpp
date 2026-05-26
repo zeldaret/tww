@@ -182,7 +182,7 @@ static cPhs_State dEnvSe_Create(kankyo_class*) {
     return cPhs_COMPLEATE_e;
 }
 
-kankyo_method_class l_dEnvSe_Method = {
+static kankyo_method_class l_dEnvSe_Method = {
     (process_method_func)dEnvSe_Create,
     (process_method_func)dEnvSe_Delete,
     (process_method_func)dEnvSe_Execute,

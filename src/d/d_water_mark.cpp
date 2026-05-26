@@ -60,7 +60,7 @@ cPhs_State dWaterMark_c::create() {
     /* Nonmatching */
 }
 
-kankyo_method_class l_dWaterMark_Method = {
+static kankyo_method_class l_dWaterMark_Method = {
     (process_method_func)dWaterMark_Create,
     (process_method_func)dWaterMark_Delete,
     (process_method_func)dWaterMark_Execute,

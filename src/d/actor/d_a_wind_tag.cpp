@@ -20,7 +20,7 @@
 
 namespace daWindTag {
 
-dCcD_SrcCps l_cps_src = {
+static dCcD_SrcCps l_cps_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,

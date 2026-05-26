@@ -45,7 +45,7 @@ public:
     /* 0x54 */ f32 field_0x54;
 };  // Size: 0x58
 
-daNpc_Bmsw_HIO_c l_HIO;
+static daNpc_Bmsw_HIO_c l_HIO;
 
 
 static dCcD_SrcCyl l_cyl_src = {

@@ -107,8 +107,8 @@ void mDoAud_setupStreamBuffer() {
     JAInter::StreamLib::setDeallocBufferCallback(mDoAud_deallocStreamBuffer);
 }
 
-mDoDvdThd_toMainRam_c* l_affCommand;
-mDoDvdThd_mountArchive_c* l_arcCommand;
+static mDoDvdThd_toMainRam_c* l_affCommand;
+static mDoDvdThd_mountArchive_c* l_arcCommand;
 
 /* 80007090-80007224       .text mDoAud_Create__Fv */
 void mDoAud_Create() {

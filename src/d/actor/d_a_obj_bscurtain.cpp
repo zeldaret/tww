@@ -15,7 +15,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
-daObj_Bscurtain_HIO_c l_HIO;
+static daObj_Bscurtain_HIO_c l_HIO;
 
 /* 000000EC-00000118       .text __ct__21daObj_Bscurtain_HIO_cFv */
 daObj_Bscurtain_HIO_c::daObj_Bscurtain_HIO_c() {

@@ -12,7 +12,7 @@
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_mtx.h"
 
-daObjIkariHIO_c l_HIO;
+static daObjIkariHIO_c l_HIO;
 
 const char daIkari_c::M_arcname[6] = "Ikari";
 

@@ -22,7 +22,7 @@
 const u32 l_K_kusa_00TEX__width = 64;
 const u32 l_K_kusa_00TEX__height = 128;
 
-Vec l_Vmori_pos[] = {
+static Vec l_Vmori_pos[] = {
     {0.0f, -0.0f, 0.0f},
     {-20.232309f, 2.398434f, -12.457211f},
     {-22.421972f, 96.708992f, -32.329994f},
@@ -52,7 +52,7 @@ Vec l_Vmori_pos[] = {
     {11.278254f, 12.157036f, 6.079209f},
 };
 
-GXColor l_Vmori_color[] = {
+static GXColor l_Vmori_color[] = {
     {0xFF, 0xFF, 0xFF, 0xFF},
     {0x41, 0x41, 0x41, 0xFF},
     {0xDD, 0xCF, 0x71, 0xFF},
@@ -60,7 +60,7 @@ GXColor l_Vmori_color[] = {
     {0xAE, 0xA4, 0x57, 0xFF},
 };
 
-cXy l_Vmori_texCoord[] = {
+static cXy l_Vmori_texCoord[] = {
     {0.006063f, 0.998037f},
     {0.659757f, 0.0f},
     {0.974817f, 1.0f},
@@ -81,7 +81,7 @@ l_Vmori_matDL(l_K_kusa_00TEX);
 const u32 l_Txa_ob_kusa_aTEX__width = 64;
 const u32 l_Txa_ob_kusa_aTEX__height = 64;
 
-Vec l_pos[] = {
+static Vec l_pos[] = {
     {0.0f, -0.0f, 0.0f},
     {-20.232309f, 7.048814f, -12.457211f},
     {-22.421972f, 96.708992f, -32.329994f},
@@ -111,7 +111,7 @@ Vec l_pos[] = {
     {11.278254f, 12.157036f, 6.079209f},
 };
 
-GXColor l_color[] = {
+static GXColor l_color[] = {
     {0x87, 0x87, 0x87, 0xFF},
     {0xFF, 0xFF, 0xFF, 0xFF},
     {0x6E, 0x6E, 0x6E, 0xFF},
@@ -122,7 +122,7 @@ GXColor l_color[] = {
     {0xCC, 0xCC, 0xCC, 0xFF},
 };
 
-cXy l_texCoord[] = {
+static cXy l_texCoord[] = {
     {0.375f, 0.625f},
     {1.0f, 0.0f},
     {1.0f, 1.0f},

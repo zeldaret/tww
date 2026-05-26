@@ -245,7 +245,7 @@ static cPhs_State dPn_Create(msg_class* i_msg) {
     return i_this->_create();
 }
 
-msg_method_class l_dPlace_name_Method = {
+static msg_method_class l_dPlace_name_Method = {
     (process_method_func)dPn_Create,
     (process_method_func)dPn_Delete,
     (process_method_func)dPn_Execute,

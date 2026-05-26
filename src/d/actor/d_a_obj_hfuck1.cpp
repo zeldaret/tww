@@ -59,7 +59,7 @@ namespace {
 };
 
 #if VERSION == VERSION_DEMO
-daObjHfuck1_HIO_c l_HIO;
+static daObjHfuck1_HIO_c l_HIO;
 
 daObjHfuck1_HIO_c::daObjHfuck1_HIO_c() {
     mNo = -1;

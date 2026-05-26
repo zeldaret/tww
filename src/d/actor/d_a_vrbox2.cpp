@@ -86,7 +86,7 @@ static BOOL daVrbox2_Draw(vrbox2_class* i_this) {
     return TRUE;
 }
 
-J3DZModeInfo l_zmodeInfo = { GX_FALSE, GX_LEQUAL, GX_FALSE };
+static J3DZModeInfo l_zmodeInfo = { GX_FALSE, GX_LEQUAL, GX_FALSE };
 
 /* 8015EC30-8015F368       .text daVrbox2_color_set__FP12vrbox2_class */
 BOOL daVrbox2_color_set(vrbox2_class* i_this) {

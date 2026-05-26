@@ -195,7 +195,7 @@ cPhs_State dThunder_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-kankyo_method_class l_dThunder_Method = {
+static kankyo_method_class l_dThunder_Method = {
     (process_method_func)dThunder_Create,
     (process_method_func)dThunder_Delete,
     (process_method_func)dThunder_Execute,

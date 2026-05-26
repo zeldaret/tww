@@ -23,7 +23,7 @@
 
 fganon_class* master;
 u8 hio_set;
-daFganon_HIO_c l_HIO;
+static daFganon_HIO_c l_HIO;
 
 /* 000000EC-000001A0       .text __ct__14daFganon_HIO_cFv */
 daFganon_HIO_c::daFganon_HIO_c() {

@@ -13,7 +13,7 @@
 #include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
-daDk_HIO_c l_HIO;
+static daDk_HIO_c l_HIO;
 
 /* 000000EC-00000130       .text __ct__10daDk_HIO_cFv */
 daDk_HIO_c::daDk_HIO_c() {

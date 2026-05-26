@@ -53,7 +53,7 @@ public:
     /* 0x20 */ f32 m20;
 };
 
-himo2HIO_c l_himo2HIO;
+static himo2HIO_c l_himo2HIO;
 f32 rope_scale;
 #if VERSION > VERSION_DEMO
 static btd_class* btd;

@@ -14,7 +14,7 @@
 #include "d/res/res_hha.h"
 
 #if VERSION == VERSION_DEMO
-dCcD_SrcCyl l_daObjHha_cyl_data =
+static dCcD_SrcCyl l_daObjHha_cyl_data =
 #else
 const dCcD_SrcCyl daObjHha_c::M_cyl_data =
 #endif

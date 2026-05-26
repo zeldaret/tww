@@ -15,7 +15,7 @@
 #include "d/d_s_play.h"
 
 bool hio_set;
-daShand_HIO_c l_HIO;
+static daShand_HIO_c l_HIO;
 
 /* 000000EC-00000114       .text __ct__13daShand_HIO_cFv */
 daShand_HIO_c::daShand_HIO_c() {

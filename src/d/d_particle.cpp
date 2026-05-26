@@ -569,7 +569,7 @@ void dPa_windPcallBack::execute(JPABaseEmitter* emtr, JPABaseParticle* ptcl) {
     dPa_setWindPower(ptcl);
 }
 
-GXColor l_lifeBallColor[] = {
+static GXColor l_lifeBallColor[] = {
     0xeb, 0x20, 0x78, 0xff,
     0x20, 0xf1, 0x9b, 0xff,
     0xeb, 0xd7, 0x2f, 0xff

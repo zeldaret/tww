@@ -20,7 +20,7 @@
 #include "d/d_s_play.h"
 #include "d/res/res_wallbom.h"
 
-daObj_Canon_HIO_c l_HIO;
+static daObj_Canon_HIO_c l_HIO;
 
 const u32 daObj_Canon_c::m_heapsize = 0x8C0;
 const char daObj_Canon_c::m_arc_name[] = "WallBom";

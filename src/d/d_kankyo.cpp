@@ -2439,7 +2439,7 @@ static cPhs_State dKy_Create(void*) {
     return cPhs_COMPLEATE_e;
 }
 
-kankyo_method_class l_dKy_Method = {
+static kankyo_method_class l_dKy_Method = {
     (process_method_func)dKy_Create,
     (process_method_func)dKy_Delete,
     (process_method_func)dKy_Execute,

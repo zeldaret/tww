@@ -7489,7 +7489,7 @@ void mapCtrlDisp_c::moveMapCtrlDisp() {
 dMeter_map_HIO_c::~dMeter_map_HIO_c() {
 }
 
-msg_method_class l_dMeter_Method = {
+static msg_method_class l_dMeter_Method = {
     (process_method_func)dMeter_Create,
     (process_method_func)dMeter_Delete,
     (process_method_func)dMeter_Execute,

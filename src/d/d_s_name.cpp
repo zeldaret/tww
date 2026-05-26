@@ -964,7 +964,7 @@ void dDlst_FLSEL_CLOTH_c::draw() {
     dComIfGp_getCurrentGrafPort()->setPort();
 }
 
-scene_method_class l_dScnName_Method = {
+static scene_method_class l_dScnName_Method = {
     (process_method_func)dScnName_Create,
     (process_method_func)dScnName_Delete,
     (process_method_func)dScnName_Execute,

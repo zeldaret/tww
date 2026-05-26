@@ -12,7 +12,7 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
-daObj_Roten_HIO_c l_HIO;
+static daObj_Roten_HIO_c l_HIO;
 
 /* 000000EC-00000118       .text __ct__17daObj_Roten_HIO_cFv */
 daObj_Roten_HIO_c::daObj_Roten_HIO_c() {

@@ -120,7 +120,7 @@ static cPhs_State dWpotWater_Create(kankyo_class* i_this) {
     return cPhs_ERROR_e;
 }
 
-kankyo_method_class l_dWpotWater_Method = {
+static kankyo_method_class l_dWpotWater_Method = {
     (process_method_func)dWpotWater_Create,
     (process_method_func)dWpotWater_Delete,
     (process_method_func)dWpotWater_Execute,

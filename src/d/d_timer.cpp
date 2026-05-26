@@ -769,7 +769,7 @@ fpc_ProcID dTimer_createStockTimer() {
 dDlst_TimerScrnDraw_c::~dDlst_TimerScrnDraw_c() {
 }
 
-msg_method_class l_dTimer_Method = {
+static msg_method_class l_dTimer_Method = {
     (process_method_func)dTimer_Create,
     (process_method_func)dTimer_Delete,
     (process_method_func)dTimer_Execute,

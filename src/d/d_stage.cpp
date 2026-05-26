@@ -435,7 +435,7 @@ int dStage_roomInit(int i_roomNo) {
         name, proc, sub, gba                                                                       \
     }
 
-dStage_objectNameInf l_objectName[] = {
+static dStage_objectNameInf l_objectName[] = {
     OBJNAME("kusax1", PROC_GRASS, 255, 0),
     OBJNAME("kusax7", PROC_GRASS, 255, 0),
     OBJNAME("kusax21", PROC_GRASS, 255, 0),

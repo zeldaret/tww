@@ -43,7 +43,7 @@ static cPhs_State dLevelSe_Create(kankyo_class*) {
     return cPhs_COMPLEATE_e;
 }
 
-kankyo_method_class l_dLevelSe_Method = {
+static kankyo_method_class l_dLevelSe_Method = {
     (process_method_func)dLevelSe_Create,
     (process_method_func)dLevelSe_Delete,
     (process_method_func)dLevelSe_Execute,

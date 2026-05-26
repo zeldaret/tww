@@ -937,7 +937,7 @@ static cPhs_State dScnLogo_Create(scene_class* i_scn) {
     return dComLbG_PhaseHandler(&i_this->mPhs, l_method, i_this);
 }
 
-scene_method_class l_dScnLogo_Method = {
+static scene_method_class l_dScnLogo_Method = {
     (process_method_func)dScnLogo_Create,
     (process_method_func)dScnLogo_Delete,
     (process_method_func)dScnLogo_Execute,

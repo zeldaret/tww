@@ -237,7 +237,7 @@ static cPhs_State dOvlpFd2_Create(void* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-overlap_method_class l_dOvlpFd2_Method = {
+static overlap_method_class l_dOvlpFd2_Method = {
     (process_method_func)dOvlpFd2_Create,
     (process_method_func)dOvlpFd2_Delete,
     (process_method_func)dOvlpFd2_Execute,

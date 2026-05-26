@@ -144,7 +144,7 @@ static cPhs_State dWindArrow_Create(kankyo_class* i_k) {
     return phase_state;
 }
 
-kankyo_method_class l_dWindArrow_Method = {
+static kankyo_method_class l_dWindArrow_Method = {
     (process_method_func)dWindArrow_Create,
     (process_method_func)dWindArrow_Delete,
     (process_method_func)dWindArrow_Execute,

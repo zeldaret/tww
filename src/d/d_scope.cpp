@@ -214,7 +214,7 @@ static cPhs_State dScp_Create(msg_class* i_this) {
     /* Nonmatching */
 }
 
-msg_method_class l_dPb_Method = {
+static msg_method_class l_dPb_Method = {
     (process_method_func)dScp_Create,
     (process_method_func)dScp_Delete,
     (process_method_func)dScp_Execute,

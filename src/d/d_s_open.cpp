@@ -127,7 +127,7 @@ static cPhs_State dScnOpen_Create(scene_class* i_scn) {
     return i_this->create();
 }
 
-scene_method_class l_dScnOpen_Method = {
+static scene_method_class l_dScnOpen_Method = {
     (process_method_func)dScnOpen_Create,
     (process_method_func)dScnOpen_Delete,
     (process_method_func)dScnOpen_Execute,

@@ -1559,7 +1559,7 @@ static cPhs_State dMs_Create(msg_class* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-msg_method_class l_dMs_Method = {
+static msg_method_class l_dMs_Method = {
     /* Create   */ (process_method_func)dMs_Create,
     /* Delete   */ (process_method_func)dMs_Delete,
     /* Execute  */ (process_method_func)dMs_Execute,

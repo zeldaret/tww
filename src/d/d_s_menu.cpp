@@ -26,13 +26,13 @@
 #include "stdio.h"
 #endif
 
-s32 l_startID;
-s32 l_cursolID;
-int l_timepat;
-s16 l_weekpat;
-s16 l_demo23;
-s8* l_groupPoint;
-u8 l_languageType;
+static s32 l_startID;
+static s32 l_cursolID;
+static int l_timepat;
+static s16 l_weekpat;
+static s16 l_demo23;
+static s8* l_groupPoint;
+static u8 l_languageType;
 
 #if VERSION == VERSION_PAL
 static mDoDvdThd_mountXArchive_c* l_bmgData2;
@@ -374,7 +374,7 @@ f32 myFontClass::drawChar_scale(f32 param_1, f32 param_2, f32 param_3, f32 param
     return JUTResFont::drawChar_scale(param_1, param_2, 12.0f, param_4, param_5, param_6);
 }
 
-scene_method_class l_dScnMenu_Method = {
+static scene_method_class l_dScnMenu_Method = {
     (process_method_func)dScnMenu_Create,
     (process_method_func)dScnMenu_Delete,
     (process_method_func)dScnMenu_Execute,

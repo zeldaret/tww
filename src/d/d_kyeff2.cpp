@@ -45,7 +45,7 @@ static cPhs_State dKyeff2_Create(kankyo_class*) {
     return cPhs_COMPLEATE_e;
 }
 
-kankyo_method_class l_dKyeff2_Method = {
+static kankyo_method_class l_dKyeff2_Method = {
     (process_method_func)dKyeff2_Create,
     (process_method_func)dKyeff2_Delete,
     (process_method_func)dKyeff2_Execute,

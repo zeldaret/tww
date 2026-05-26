@@ -57,7 +57,7 @@ public:
 static daObjPirateship::Act_c* l_p_ship;
 static daSail_HIO_c l_HIO;
 
-Vec l_pos[] = {
+static Vec l_pos[] = {
     {-840.0f, 0.0f, 0.0f},
     {-560.0f, 0.0f, 0.0f},
     {-280.0f, 0.0f, 0.0f},
@@ -144,7 +144,7 @@ Vec l_pos[] = {
     {840.0f, -1100.0f, 0.0f},
 };
 
-cXy l_texCoord[] = {
+static cXy l_texCoord[] = {
     {0.0f, 0.0f},
     {0.165f, 0.0f},
     {0.33f, 0.0f},
@@ -235,7 +235,7 @@ cXy l_texCoord[] = {
 #include "assets/l_sail_matDL.h"
 #include "assets/l_Txa_kizoku_mastTEX.h"
 
-Vec l_mast_pos[] = {
+static Vec l_mast_pos[] = {
     {900.0f, 9.676933f, -16.760941f},
     {900.0f, -9.676933f, -16.760941f},
     {900.0f, -19.353867f, -0.000004f},
@@ -258,7 +258,7 @@ Vec l_mast_pos[] = {
     {0.0f, 22.42897f, 0.0f},
 };
 
-GXColor l_mast_color[] = {
+static GXColor l_mast_color[] = {
     {0xA8, 0xA8, 0xA8, 0xFF},
     {0x5D, 0x5D, 0x5D, 0xFF},
     {0xF3, 0xF3, 0xF3, 0xFF},
@@ -269,7 +269,7 @@ GXColor l_mast_color[] = {
     {0xA1, 0xA1, 0xA1, 0xFF},
 };
 
-cXy l_mast_texCoord[] = {
+static cXy l_mast_texCoord[] = {
     {1.0f, 0.0f},
     {1.0f, 1.0f},
     {0.0f, 1.0f},

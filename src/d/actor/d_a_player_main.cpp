@@ -44,19 +44,19 @@
 #include "SSystem/SComponent/c_counter.h"
 #include "m_Do/m_Do_graphic.h"
 
-JGeometry::TVec3<f32> l_hammer_splash_particle_scale(0.67f, 0.67f, 0.67f);
+static JGeometry::TVec3<f32> l_hammer_splash_particle_scale(0.67f, 0.67f, 0.67f);
 
 #include "d/actor/d_a_player_main_data.inc"
 
 #include "d/actor/d_a_player_HIO_data.inc"
 
 #if DEBUG || VERSION > VERSION_DEMO
-cXyz l_debug_keep_pos;
-csXyz l_debug_current_angle;
-csXyz l_debug_shape_angle;
+static cXyz l_debug_keep_pos;
+static csXyz l_debug_current_angle;
+static csXyz l_debug_shape_angle;
 #endif
 
-GXColor l_freeze_fade_color = {0xFF, 0xFF, 0xFF, 0xFF};
+static GXColor l_freeze_fade_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
 u8 daPy_matAnm_c::m_maba_timer;
 u8 daPy_matAnm_c::m_maba_flg;

@@ -288,7 +288,7 @@ static cPhs_State dScnRoom_Create(scene_class* i_scn) {
     return dComLbG_PhaseHandler(&i_this->mPhs, l_method, i_this);
 }
 
-scene_method_class l_dScnRoom_Method = {
+static scene_method_class l_dScnRoom_Method = {
     (process_method_func)dScnRoom_Create,
     (process_method_func)dScnRoom_Delete,
     (process_method_func)dScnRoom_Execute,

@@ -20,7 +20,7 @@
 #define GRID_CELLS 65
 #define GRID_INDEX(x, z) (x + GRID_CELLS * z)
 
-daSea_packet_c l_cloth;
+static daSea_packet_c l_cloth;
 
 f32 daSea_packet_c::BASE_HEIGHT = 1.0f;
 

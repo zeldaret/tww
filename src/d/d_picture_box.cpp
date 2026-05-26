@@ -290,7 +290,7 @@ static cPhs_State dPb_Create(msg_class* i_this) {
     /* Nonmatching */
 }
 
-msg_method_class l_dPb_Method = {
+static msg_method_class l_dPb_Method = {
     (process_method_func)dPb_Create,
     (process_method_func)dPb_Delete,
     (process_method_func)dPb_Execute,
