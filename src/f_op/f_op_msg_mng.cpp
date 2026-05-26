@@ -40,7 +40,7 @@ struct mesg_info : JUTDataBlockHeader {
     /* 0x0A */ u16 mEntrySize;
     /* 0x0C */ u16 mGroupID;
     /* 0x10 */ u8 mColor;
-    /* 0x14 */ mesg_entry mEntries[];
+    /* 0x14 */ JMSMesgEntry_c mEntries[];
 };
 
 struct mesg_data : JUTDataBlockHeader {
@@ -367,7 +367,7 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* pa
         mesg_header* header = msgGet.getMesgHeader(*param_3);
         if(header != NULL) {
             if(msgGet.getMessage(header) != NULL) {
-                const mesg_entry& entry = msgGet.getMesgEntry(header);
+                const JMSMesgEntry_c& entry = msgGet.getMesgEntry(header);
                 u16 price = entry.mItemPrice;
                 u16 type = entry.mTextboxType;
                 dComIfGp_setMesgAnimeAttrInfo(entry.mInitialAnimation);
@@ -577,9 +577,6 @@ u32 fopMsgM_tactMessageSet() {
 /* 8002BB78-8002BDBC       .text fopMsgM_messageGet__FPcUl */
 char* fopMsgM_messageGet(char* dst, u32 msgNo) {
     fopMsgM_itemMsgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(VERSION_SELECT(0x690, 0x690, 0x6BD, 0x6BD), head_p);
@@ -661,9 +658,6 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
 /* 8002BE04-8002C02C       .text fopMsgM_passwordGet__FPcUl */
 char* fopMsgM_passwordGet(char* dst, u32 msgNo) {
     fopMsgM_itemMsgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(VERSION_SELECT(0x6F6, 0x6F6, 0x735, 0x739), head_p);
@@ -743,9 +737,6 @@ void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3,
     /* Nonmatching */
     fopMsgM_msgDataProc_c temp;
     fopMsgM_itemMsgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
     strcpy(param_3, "\x1B""CC[000000FF]\x1B""GM[0]");
     strcpy(param_4, "");
@@ -761,7 +752,8 @@ void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3,
     JUT_ASSERT(0x79B, head_p);
 
     const char* src = (char*)msgGet.getMessage(head_p);
-    mesg_entry entry = msgGet.getMesgEntry(head_p);
+    JMSMesgEntry_c entry;
+    entry = msgGet.getMesgEntry(head_p);
     temp.dataInit();
     temp.font[0] = ((J2DTextBox*)param_1)->getFont();
     temp.font[1] = ((J2DTextBox*)param_2)->getFont();
@@ -1464,7 +1456,7 @@ mesg_data* fopMsgM_msgGet_c::getMesgData(mesg_header* msg) {
 }
 
 /* 8002E308-8002E378       .text getMesgEntry__16fopMsgM_msgGet_cFP11mesg_header */
-mesg_entry fopMsgM_msgGet_c::getMesgEntry(mesg_header* msg) {
+JMSMesgEntry_c fopMsgM_msgGet_c::getMesgEntry(mesg_header* msg) {
     mesg_info* info = getMesgInfo(msg);
     return info->mEntries[mMsgIdx];
 }
@@ -1482,7 +1474,7 @@ const char* fopMsgM_msgGet_c::getMessage(mesg_header* msg) {
 
         mMsgIdx = i;
         if (mMsgNo == info->mEntries[i].mMsgNo) {
-            mesg_entry* entry = &info->mEntries[mMsgIdx];
+            JMSMesgEntry_c* entry = &info->mEntries[mMsgIdx];
             mResMsgNo = entry->mMsgNo;
             ret = &data[entry->mDataOffs];
             break;
@@ -1530,7 +1522,7 @@ mesg_data* fopMsgM_itemMsgGet_c::getMesgData(mesg_header* msg) {
 }
 
 /* 8002E4DC-8002E54C       .text getMesgEntry__20fopMsgM_itemMsgGet_cFP11mesg_header */
-mesg_entry fopMsgM_itemMsgGet_c::getMesgEntry(mesg_header* msg) {
+JMSMesgEntry_c fopMsgM_itemMsgGet_c::getMesgEntry(mesg_header* msg) {
     mesg_info* info = getMesgInfo(msg);
     return info->mEntries[mMsgIdx];
 }
@@ -1554,6 +1546,94 @@ const char* fopMsgM_itemMsgGet_c::getMessage(mesg_header* msg) {
     mResMsgNo = info->mEntries[mMsgIdx].mMsgNo;
     return result;
 }
+
+/* 8002E5FC-8002E794       .text __ct__21fopMsgM_msgDataProc_cFv */
+fopMsgM_msgDataProc_c::fopMsgM_msgDataProc_c() {
+    field_0x14 = 0.0f;
+    field_0x18 = 0.0f;
+    field_0x1C = 0.0f;
+    field_0x20 = 0.0f;
+    field_0x24 = 0.0f;
+    field_0x28 = 0.0f;
+    
+    for (int i = 0; i < 4; i++) {
+        field_0xD8[i] = 0;
+        field_0xF8[i] = 0;
+        field_0x108[i] = 0;
+        field_0xE8[i] = 0;
+    }
+    
+    field_0x21C = 0;
+    field_0xD4[2] = 0;
+    field_0xD4[1] = 0;
+    field_0xD4[0] = 0;
+    field_0x2C = 0;
+    field_0x30 = 0;
+    field_0x34 = 0;
+    field_0x38 = 0;
+    field_0x118 = 0;
+    field_0x11C = 0;
+    field_0x124 = 0;
+    field_0x120 = 0;
+    field_0x128 = 0;
+    field_0x12C = 0;
+    field_0x130 = 0;
+    field_0x134 = 0;
+    field_0x138 = 0;
+    field_0x13C = 0;
+    field_0x140 = 0;
+    field_0x144 = 0;
+    field_0x148 = 0;
+    field_0x14C = 0;
+    field_0x150 = 0;
+    field_0x154 = 0;
+    field_0x158 = 0;
+    field_0x15C = 1;
+    field_0x160 = 1;
+    field_0x164 = 0;
+    field_0x25C = -1;
+    field_0x29D = 0;
+    field_0x260 = 0;
+    field_0x264 = 0.0f;
+    field_0x268 = 0.0f;
+    field_0x26C = 0.0f;
+    field_0x270 = 0.0f;
+    field_0x278 = 0.0f;
+    field_0x274 = 0.0f;
+    field_0x293 = 0;
+    field_0x292 = 0;
+    field_0x291 = 0;
+    field_0x290 = 0;
+    field_0x27C = 6;
+    field_0x27D = 0;
+    field_0x27E = 0;
+    field_0x27F = 0;
+    field_0x280 = 0;
+    
+    for (int i = 0; i < 0xF; i++) {
+        field_0x168[i] = 0;
+        field_0x1A4[i] = 0;
+        field_0x1E0[i] = 0;
+        field_0x281[i] = 0xFF;
+        field_0x220[i] = 0;
+    }
+    
+    field_0x10 = 0;
+    field_0x299 = 0;
+    field_0x29A = 0;
+    field_0x294 = 0;
+    field_0x29B = 0;
+    field_0x297 = 0;
+    field_0x298 = 0;
+    field_0x29C = 0;
+    field_0x295 = 0;
+#if VERSION > VERSION_DEMO
+    field_0x296 = 0;
+#endif
+}
+
+/* 8002E794-8002E7DC       .text __dt__21fopMsgM_msgDataProc_cFv */
+fopMsgM_msgDataProc_c::~fopMsgM_msgDataProc_c() {}
 
 /* 8002E7DC-8002E95C       .text dataInit__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::dataInit() {
@@ -1629,7 +1709,9 @@ void fopMsgM_msgDataProc_c::dataInit() {
     field_0x298 = 0;
     field_0x29C = 0;
     field_0x295 = 0;
+#if VERSION > VERSION_DEMO
     field_0x296 = 0;
+#endif
 }
 
 /* 8002E95C-8002EA58       .text charLength__21fopMsgM_msgDataProc_cFiib */

@@ -1607,7 +1607,7 @@ static void end_set(bdk_class* i_this) {
     }
     i_this->m25A0 = 100;
     fopAcM_OnStatus(actor, fopAcStts_UNK4000_e);
-    mDoAud_bgmStop(0x1E);
+    mDoAud_bgmStop(30);
 }
 
 /* 000049C0-00005018       .text damage_check__FP9bdk_class */
@@ -1648,7 +1648,7 @@ static void damage_check(bdk_class* i_this) {
 
                     fopAcM_monsSeStart(actor, JA_SE_CV_DK_LAST_DAMAGE, 0);
                     dScnPly_ply_c::setPauseTimer(8);
-                    mDoAud_bgmStop(0x1E);
+                    mDoAud_bgmStop(30);
                 } else {
                     dComIfGs_onEventBit(dSv_event_flag_c::UNK_3C01);
 #if VERSION > VERSION_DEMO

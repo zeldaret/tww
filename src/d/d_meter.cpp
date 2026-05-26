@@ -4258,7 +4258,7 @@ void dMeter_gaugeAlpha(sub_meter_class* i_Meter) {
         fopMsgM_setNowAlpha(&i_Meter->mHeartShadow[i], dVar4);
     }
     i_Meter->field_0x0f00.mNowAlpha = i_Meter->field_0x0f00.mNowAlpha * dVar4;
-    i_Meter->field_0x0f00.pane->mAlpha = i_Meter->field_0x0f00.mNowAlpha * dVar4;
+    i_Meter->field_0x0f00.pane->setAlpha(i_Meter->field_0x0f00.mNowAlpha * dVar4);
     for (s32 i = 0; i < 8; i++) {
         fopMsgM_setNowAlpha(&i_Meter->field_0x0f38[i], dVar3);
     }
