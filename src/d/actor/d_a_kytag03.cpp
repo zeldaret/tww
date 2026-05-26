@@ -7,8 +7,6 @@
 #include "d/actor/d_a_kytag03.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_m_door.h"
 
 /* 00000078-0000015C       .text useHeapInit__FP10fopAc_ac_c */

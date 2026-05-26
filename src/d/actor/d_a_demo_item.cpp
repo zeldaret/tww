@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_demo_item.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_drawlist.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_actor_mng.h"

@@ -16,8 +16,6 @@
 #include "d/d_snap.h"
 #include "d/d_s_play.h"
 #include "d/d_particle_name.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "JSystem/JUtility/JUTReport.h"

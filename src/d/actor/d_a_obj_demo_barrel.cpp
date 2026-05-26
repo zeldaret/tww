@@ -7,8 +7,6 @@
 #include "d/actor/d_a_obj_demo_barrel.h"
 #include "d/d_bg_s_func.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "d/res/res_dbarrel.h"
 #include "f_op/f_op_actor_mng.h"
 

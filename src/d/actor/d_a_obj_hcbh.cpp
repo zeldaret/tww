@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hcbh.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-000000D8       .text chk_appear__11daObjHcbh_cFv */
 void daObjHcbh_c::chk_appear() {

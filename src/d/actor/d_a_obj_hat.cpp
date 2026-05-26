@@ -9,8 +9,6 @@
 #include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_ro.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 

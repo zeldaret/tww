@@ -3,8 +3,6 @@
  */
 #include "d/actor/d_a_seatag.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daSeatag_Draw__FP10daSeatag_c */
 static BOOL daSeatag_Draw(daSeatag_c*) {

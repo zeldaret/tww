@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mkie.h"
 #include "d/res/res_mkieb.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 Mtx daObjMkie::Act_c::M_tmp_mtx;
 const char daObjMkie::Act_c::M_arcname[] = "MkieB";

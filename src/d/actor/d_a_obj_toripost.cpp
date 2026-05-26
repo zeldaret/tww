@@ -15,8 +15,6 @@
 #include "d/d_item_data.h"
 #include "d/d_s_play.h"
 #include "d/d_a_obj.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 

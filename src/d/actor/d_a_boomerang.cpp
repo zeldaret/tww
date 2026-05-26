@@ -6,8 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_boomerang.h"
 #include "d/d_camera.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_material.h"
 #include "d/actor/d_a_player_main.h"

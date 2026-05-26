@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_drift.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-000001A0       .text CreateHeap__Q210daObjDrift5Act_cFv */
 BOOL daObjDrift::Act_c::CreateHeap() {

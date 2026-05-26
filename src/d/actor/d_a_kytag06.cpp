@@ -10,8 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daKytag06_Draw__FP13kytag06_class */
 static BOOL daKytag06_Draw(kytag06_class*) {

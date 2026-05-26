@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_lstair.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-000000D4       .text _delete__10daLStair_cFv */
 bool daLStair_c::_delete() {

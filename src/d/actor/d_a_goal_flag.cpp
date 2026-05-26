@@ -15,8 +15,6 @@
 #include "d/res/res_gflag.h"
 #include "d/res/res_tgflag.h"
 #include "d/d_path.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 #include "assets/l_txa_dummy_hataTEX.h"
 #include "m_Do/m_Do_controller_pad.h"

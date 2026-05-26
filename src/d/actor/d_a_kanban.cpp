@@ -10,8 +10,6 @@
 #include "d/actor/d_a_bomb2.h"
 #include "d/actor/d_a_sea.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor_mng.h"

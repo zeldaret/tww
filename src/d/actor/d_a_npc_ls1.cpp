@@ -14,8 +14,6 @@
 #include "d/res/res_link.h"
 #include "d/res/res_ls.h"
 #include "SSystem/SComponent/c_counter.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_snap.h"
 #include "m_Do/m_Do_lib.h"
 

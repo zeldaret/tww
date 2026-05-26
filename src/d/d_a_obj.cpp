@@ -10,7 +10,6 @@
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_path.h"
 #include "JSystem/JParticle/JPAEmitter.h"

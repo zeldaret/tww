@@ -7,8 +7,6 @@
 #include "d/actor/d_a_deku_item.h"
 #include "d/res/res_deku.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 const char daDekuItem_c::m_arcname[] = "Deku";
 

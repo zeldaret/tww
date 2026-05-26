@@ -26,7 +26,6 @@
 #include "d/d_kankyo_rain.h"
 #include "d/d_material.h"
 #include "d/d_meter.h"
-#include "d/d_procname.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_draw_iter.h"
 #include "f_op/f_op_msg_mng.h"

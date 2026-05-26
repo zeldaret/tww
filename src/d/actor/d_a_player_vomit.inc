@@ -13,7 +13,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
-#include "d/d_procname.h"
 
 /* 8014F8A0-8014F994       .text checkJumpFlower__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkJumpFlower() {

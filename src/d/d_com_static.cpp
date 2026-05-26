@@ -7,7 +7,6 @@
 #include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_salvage.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_lod_bg.h"
 #include "d/actor/d_a_agb.h"
 #include "d/actor/d_a_agbsw0.h"

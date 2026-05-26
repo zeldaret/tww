@@ -9,8 +9,6 @@
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_olift.h"
 #include "m_Do/m_Do_ext.h"
 

@@ -5,11 +5,9 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_ovlp_fade.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_overlap.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "f_pc/f_pc_manager.h"
-#include "d/d_procname.h"
 #include "m_Do/m_Do_graphic.h"
 
 BOOL (*dOvlpFd_execute_f)(overlap1_class*);

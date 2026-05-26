@@ -16,7 +16,6 @@
 #include "d/d_item_data.h"
 #include "d/d_magma.h"
 #include "d/d_particle.h"
-#include "d/d_procname.h"
 #include "d/d_tree.h"
 #include "d/d_wood.h"
 #include "f_op/f_op_scene_mng.h"

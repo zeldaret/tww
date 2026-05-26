@@ -6,7 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_event.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_itembase.h"
 #include "f_op/f_op_actor.h" // dEvt_info_c
 #include "f_op/f_op_actor_mng.h"

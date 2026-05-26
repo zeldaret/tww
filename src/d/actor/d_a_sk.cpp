@@ -7,8 +7,6 @@
 #include "d/actor/d_a_sk.h"
 #include "d/res/res_sk.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_jnt_hit.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"

@@ -9,7 +9,6 @@
 #include "d/d_com_lib_game.h"
 #include "d/d_file_error.h"
 #include "d/d_file_select.h"
-#include "d/d_procname.h"
 #include "d/d_menu_cloth.h"
 #include "d/d_menu_save.h"
 #include "d/d_name.h"

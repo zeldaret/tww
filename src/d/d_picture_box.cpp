@@ -5,8 +5,6 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_picture_box.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_msg.h"
 
 /* 802258C8-80225954       .text dPb_erasePicture__Fv */

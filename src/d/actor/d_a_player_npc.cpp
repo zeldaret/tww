@@ -8,7 +8,6 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_lib.h"
 #include "SSystem/SComponent/c_counter.h"
-#include "d/d_procname.h"
 
 /* 8015A37C-8015A448       .text check_initialRoom__10daPy_npc_cFv */
 int daPy_npc_c::check_initialRoom() {

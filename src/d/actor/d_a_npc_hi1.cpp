@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_hi1.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_hi.h"
 
 class daNpc_Hi1_HIO_c : public mDoHIO_entry_c{

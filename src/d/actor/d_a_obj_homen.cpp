@@ -7,8 +7,6 @@
 #include "d/actor/d_a_obj_homen.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_homen.h"
 #include "f_op/f_op_actor_mng.h"
 

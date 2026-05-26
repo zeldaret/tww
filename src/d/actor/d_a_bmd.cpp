@@ -11,8 +11,6 @@
 #include "d/d_kankyo_wether.h"
 #include "d/d_lib.h"
 #include "d/res/res_bmd.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"

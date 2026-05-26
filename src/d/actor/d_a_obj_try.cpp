@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_try.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000090       .text prm_set_swSave__Q28daObjTry5Act_cFi */
 void daObjTry::Act_c::prm_set_swSave(int) {

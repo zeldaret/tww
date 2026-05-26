@@ -8,8 +8,6 @@
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_a_obj.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_com_inf_game.h"
 #include "d/res/res_vbakh.h"

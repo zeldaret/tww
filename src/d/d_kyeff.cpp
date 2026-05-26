@@ -5,14 +5,12 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_kyeff.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_data.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
 #include "d/d_stage.h"
 #include "m_Do/m_Do_audio.h"
 #include "dolphin/os/OS.h"

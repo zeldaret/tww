@@ -5,8 +5,6 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_wpillar.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_kankyo.h"
 
 class J3DNode;

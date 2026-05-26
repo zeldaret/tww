@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_hr.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_hr.h"
 #include "d/d_snap.h"
 #include "d/d_kankyo_wether.h"

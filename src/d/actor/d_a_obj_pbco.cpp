@@ -8,8 +8,6 @@
 #include "d/res/res_pbco.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 static daObj_Pbco_HIO_c l_HIO;
 const char daObj_Pbco_c::M_arcname[] = "Pbco";

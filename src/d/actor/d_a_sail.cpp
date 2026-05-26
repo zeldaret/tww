@@ -10,8 +10,6 @@
 #endif
 #include "d/res/res_kaizokusen.h"
 #include "d/res/res_cloth.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "d/actor/d_a_obj_pirateship.h"

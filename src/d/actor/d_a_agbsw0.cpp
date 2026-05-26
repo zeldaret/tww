@@ -5,12 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "global.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_agbsw0.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "d/d_item_data.h"
 #include "d/d_map.h"
 #include "d/d_kankyo_wether.h"

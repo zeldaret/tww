@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bmcon1.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-000002A4       .text __ct__12daNpcBmcon_cFv */
 daNpcBmcon_c::daNpcBmcon_c() {

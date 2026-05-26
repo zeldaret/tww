@@ -12,8 +12,6 @@
 #include "d/actor/d_a_ykgr.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_audio.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daKytag05_Draw__FP13kytag05_class */
 static BOOL daKytag05_Draw(kytag05_class*) {

@@ -19,8 +19,6 @@
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_graphic.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "JSystem/JUtility/JUTReport.h"
 

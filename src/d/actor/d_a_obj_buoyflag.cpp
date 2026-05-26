@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_buoyflag.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-000001BC       .text hasi_nrm_init__Q213daObjBuoyflag8Packet_cFv */
 void daObjBuoyflag::Packet_c::hasi_nrm_init() {

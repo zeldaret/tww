@@ -8,8 +8,6 @@
 #include "d/actor/d_a_obj_ikada.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 static fpc_ProcID l_msgId;
 static msg_class* l_msg;

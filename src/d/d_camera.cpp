@@ -21,7 +21,6 @@
 #include "f_ap/f_ap_game.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_npc_kamome.h"
-#include "d/d_procname.h"
 #include "d/d_demo.h"
 #include "d/actor/d_a_sea.h"
 #include "m_Do/m_Do_lib.h"

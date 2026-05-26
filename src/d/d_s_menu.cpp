@@ -12,7 +12,6 @@
 #include "JSystem/JUtility/JUTReport.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
-#include "d/d_procname.h"
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_scene_mng.h"
 #if VERSION == VERSION_PAL

@@ -16,7 +16,6 @@
 #include "f_pc/f_pc_layer_iter.h"
 #include "f_pc/f_pc_searcher.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_npc_bs1.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J2DGraph/J2DPicture.h"

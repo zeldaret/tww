@@ -15,7 +15,6 @@
 #include "d/actor/d_a_player_main_data.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 #include "d/d_camera.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_ship.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "JSystem/JKernel/JKRHeap.h"

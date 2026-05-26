@@ -11,8 +11,6 @@
 #include "d/actor/d_a_salvage.h"
 #include "d/actor/d_a_ship.h"
 #include "d/res/res_oship.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 const s32 daOship_c::m_heapsize = 0x1280;

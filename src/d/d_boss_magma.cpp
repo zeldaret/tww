@@ -7,7 +7,6 @@
 #include "d/d_magma.h"
 #include "d/actor/d_a_btd.h"
 #include "d/d_s_play.h"
-#include "d/d_procname.h"
 
 static btd_class* btd = NULL;
 

@@ -9,8 +9,6 @@
 #include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
 static u32 l_msg_talk[] = {

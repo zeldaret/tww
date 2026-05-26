@@ -8,8 +8,6 @@
 #include "d/actor/d_a_player.h"
 #include "d/res/res_ygcwp.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 enum {
     EVENT_WARP_START,

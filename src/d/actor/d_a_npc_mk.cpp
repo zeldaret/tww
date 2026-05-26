@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_mk.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000230       .text nodeCallBack_Mk__FP7J3DNodei */
 static BOOL nodeCallBack_Mk(J3DNode*, int) {

@@ -8,8 +8,6 @@
 #include "d/res/res_htoge1.h"
 #include "d/actor/d_a_wind_tag.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 
 const char daToge_c::m_arcname[] = "Htoge1";

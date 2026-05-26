@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_salvage_tbox.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000128       .text getMaxWaterY__25daSTBox_shadowEcallBack_cFPQ29JGeometry8TVec3<f> */
 void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>*) {

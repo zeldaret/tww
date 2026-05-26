@@ -7,8 +7,6 @@
 #include "d/actor/d_a_dr2.h"
 #include "d/res/res_dr2.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_bg_w.h"
 #include "d/d_s_play.h"
 #include "d/actor/d_a_player.h"

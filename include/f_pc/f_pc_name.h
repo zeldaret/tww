@@ -1,5 +1,6 @@
-#ifndef D_PROCNAME_H
-#define D_PROCNAME_H
+
+#ifndef F_PC_NAME_H
+#define F_PC_NAME_H
 
 enum {
     /* 0x0000 */ PROC_OVERLAP0,
@@ -513,4 +514,4 @@ enum {
     PROC_INVALID_e = 0x7FFF,
 };
 
-#endif /* D_PROCNAME_H */
+#endif /* F_PC_NAME_H */

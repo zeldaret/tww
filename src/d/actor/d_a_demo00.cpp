@@ -15,8 +15,6 @@
 #include "d/d_item.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_demo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_graphic.h"

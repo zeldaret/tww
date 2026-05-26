@@ -15,7 +15,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_cc_uty.h"
 #include "d/d_bg_s_lin_chk.h"
-#include "d/d_procname.h"
 
 cXyz non_pos(-20000.0f, -20000.0f, 20000.0f);
 

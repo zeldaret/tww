@@ -7,7 +7,6 @@
 #include "d/actor/d_a_obj_barrel.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 
 /* 000032BC-000032E8       .text searchEsa_CB__FPvPv */
 static BOOL searchEsa_CB(void* param_1, void* i_this) {

@@ -10,7 +10,6 @@
 #include "f_op/f_op_scene_mng.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"

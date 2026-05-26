@@ -8,8 +8,6 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_arrow.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_lib.h"

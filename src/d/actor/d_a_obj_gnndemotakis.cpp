@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/res/res_gnndemotakis.h"
 #include "d/actor/d_a_obj_gnndemotakis.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 const char daObjGnntakis_c::M_arcname[] = "Gnndemotakis";
 

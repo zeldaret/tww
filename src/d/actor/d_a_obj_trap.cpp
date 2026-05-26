@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_trap.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-0000010C       .text solidHeapCB__11daObjTrap_cFP10fopAc_ac_c */
 void daObjTrap_c::solidHeapCB(fopAc_ac_c*) {

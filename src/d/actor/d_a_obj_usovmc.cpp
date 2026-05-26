@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_usovmc.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_usovmc.h"
 
 const char daObjUsovmc::Act_c::M_arcname[7] = "Usovmc";

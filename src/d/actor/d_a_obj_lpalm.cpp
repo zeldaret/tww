@@ -7,8 +7,6 @@
 #include "d/actor/d_a_obj_lpalm.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_oyashi.h"
 #include "m_Do/m_Do_ext.h"
 

@@ -13,7 +13,6 @@
 #include "f_op/f_op_scene_mng.h"
 #include "f_pc/f_pc_leaf.h"
 #include "f_pc/f_pc_manager.h"
-#include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_meter.h"
 #include "m_Do/m_Do_controller_pad.h"

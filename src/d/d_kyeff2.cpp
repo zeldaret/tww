@@ -5,11 +5,9 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_kyeff2.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
 
 /* 80198758-8019877C       .text dKyeff2_Draw__FP9dKyeff2_c */
 static BOOL dKyeff2_Draw(dKyeff2_c* i_this) {

@@ -9,8 +9,6 @@
 #include "d/res/res_ktaru_01.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 
 const char daObjBarrel::Act_c::M_arcname[] = "Ktaru_01";

@@ -8,8 +8,6 @@
 #include "d/actor/d_a_kytag01.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ship.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_auzu.h"
 
 namespace daObjAuzu {

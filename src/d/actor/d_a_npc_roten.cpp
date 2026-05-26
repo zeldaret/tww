@@ -9,8 +9,6 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_demo_item.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_a_obj.h"

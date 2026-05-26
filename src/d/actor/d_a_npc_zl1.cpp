@@ -10,8 +10,6 @@
 #include "d/d_bg_s_func.h"
 #include "d/d_bg_s_roof_chk.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "d/actor/d_a_player.h"
 #include "d/res/res_zl.h"

@@ -21,8 +21,6 @@
 #include "d/res/res_hseki.h"
 #include "d/res/res_ptubo.h"
 #include "d/res/res_kkiba_00.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_camera.h"
 #include "d/d_lib.h"
 #include "d/d_com_inf_game.h"

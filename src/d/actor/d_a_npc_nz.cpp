@@ -11,8 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
 #include "d/d_item.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 class daNpc_Nz_HIO_c : public JORReflexible {
 public:

@@ -8,8 +8,6 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_gmjwp.h"
 
 const char daWarpgn_c::m_arcname[] = "Gmjwp";

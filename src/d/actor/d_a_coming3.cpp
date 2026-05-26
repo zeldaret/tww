@@ -8,8 +8,6 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_obj_barrel2.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_always.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_wtr_chk.h"

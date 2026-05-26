@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_zk1.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-00000150       .text __ct__15daNpc_Zk1_HIO_cFv */
 daNpc_Zk1_HIO_c::daNpc_Zk1_HIO_c() {

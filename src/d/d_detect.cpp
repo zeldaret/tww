@@ -8,7 +8,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tag_light.h"
-#include "d/d_procname.h"
 
 const dDetect_c::Attr_c dDetect_c::M_attr = {
     /* maxDistXZ */ 500.0f,

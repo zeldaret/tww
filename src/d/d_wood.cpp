@@ -12,7 +12,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
 #include "d/d_tree.h"
 #include "d/d_cc_d.h"
 #include "dolphin/gf/GF.h"

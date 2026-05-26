@@ -9,8 +9,6 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/res/res_ebomzo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 typedef enum {
     /*0*/ Ebomzo_Mode_Check = 0,

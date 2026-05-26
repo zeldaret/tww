@@ -8,8 +8,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_kankyo_wether.h"
 #include "m_Do/m_Do_mtx.h"

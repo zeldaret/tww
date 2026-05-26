@@ -7,8 +7,6 @@
 #include "d/actor/d_a_obj_buoyrace.h"
 #include "d/actor/d_a_goal_flag.h"
 #include "d/actor/d_a_sea.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_khasi_00.h"
 #include "d/res/res_kkiba_00.h"
 

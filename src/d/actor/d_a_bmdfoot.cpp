@@ -10,8 +10,6 @@
 #include "d/actor/d_a_bmd.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 class daBmdfoot_HIO_c : public JORReflexible {

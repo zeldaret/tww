@@ -9,8 +9,6 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_camera.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_pspl.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/d_auction_screen.h"

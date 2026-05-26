@@ -11,8 +11,6 @@
 #include "d/d_cc_d.h"
 #include "d/d_lib.h"
 #include "d/d_particle.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_a_obj.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"

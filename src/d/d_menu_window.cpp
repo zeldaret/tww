@@ -18,8 +18,6 @@
 #include "d/d_menu_save.h"
 #include "d/d_meter.h"
 #include "d/d_name.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_player_main.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_controller_pad.h"

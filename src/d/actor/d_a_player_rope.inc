@@ -15,7 +15,6 @@
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_himo2.h"
 #include "d/d_attention.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_audio.h"
 

@@ -7,8 +7,6 @@
 #include "d/actor/d_a_npc_sv.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/actor/d_a_obj_ikada.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-0000021C       .text __ct__9daNpcSv_cFv */
 daNpcSv_c::daNpcSv_c() {

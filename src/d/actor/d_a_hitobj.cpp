@@ -9,8 +9,6 @@
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daHitobj_Draw__FP12hitobj_class */
 static BOOL daHitobj_Draw(hitobj_class* i_this) {

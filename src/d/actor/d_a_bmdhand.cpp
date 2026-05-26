@@ -8,8 +8,6 @@
 #include "d/d_s_play.h"
 #include "d/res/res_bmdhand.h"
 #include "d/actor/d_a_bmd.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 class daBmdhand_HIO_c : public JORReflexible {

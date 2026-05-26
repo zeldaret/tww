@@ -6,8 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_wind_arrow.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "d/res/res_always.h"
 #include "m_Do/m_Do_graphic.h"
 #include "f_op/f_op_kankyo_mng.h"

@@ -5,8 +5,6 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_scope.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_msg.h"
 
 /* 80237568-802375E8       .text draw__13dDlst_2DSCP_cFv */

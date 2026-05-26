@@ -9,8 +9,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
 static daDk_HIO_c l_HIO;

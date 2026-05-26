@@ -8,8 +8,6 @@
 #include "d/res/res_rflw.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 static dCcD_SrcCyl l_cyl_src = {

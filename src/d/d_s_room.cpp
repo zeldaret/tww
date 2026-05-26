@@ -13,7 +13,6 @@
 #include "d/d_com_lib_game.h"
 #include "d/d_item_data.h"
 #include "d/d_map.h"
-#include "d/d_procname.h"
 #include "d/d_stage.h"
 #include "d/actor/d_a_salvage.h"
 #include "d/actor/d_a_npc_md.h"

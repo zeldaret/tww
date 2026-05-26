@@ -12,7 +12,6 @@
 #include "c/c_dylink.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
-#include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_MemCardRWmng.h"
 #include "m_Do/m_Do_audio.h"

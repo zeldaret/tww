@@ -7,8 +7,6 @@
 #include "d/d_cc_uty.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/actor/d_a_bwds.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_mtx.h"

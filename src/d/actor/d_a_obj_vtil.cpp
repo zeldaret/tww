@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vtil.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000098       .text solidHeapCB__11daObjVtil_cFP10fopAc_ac_c */
 void daObjVtil_c::solidHeapCB(fopAc_ac_c*) {

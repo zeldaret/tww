@@ -15,8 +15,6 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_msg_mng.h"
 #include "d/actor/d_a_npc_bs1.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "dolphin/types.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_lib.h"

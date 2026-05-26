@@ -8,8 +8,6 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_npc_cb1.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
 static daTag_MdCb_HIO_c l_HIO;

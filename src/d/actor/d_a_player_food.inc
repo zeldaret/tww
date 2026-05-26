@@ -16,7 +16,6 @@
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
-#include "d/d_procname.h"
 
 /* 80154334-801543A0       .text setHyoiModel__9daPy_lk_cFv */
 void daPy_lk_c::setHyoiModel() {

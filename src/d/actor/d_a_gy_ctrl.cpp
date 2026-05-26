@@ -9,8 +9,6 @@
 #if VERSION > VERSION_DEMO
 #include "d/actor/d_a_gy.h"
 #endif
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #if VERSION > VERSION_DEMO
 #include "d/d_s_play.h"
 #endif

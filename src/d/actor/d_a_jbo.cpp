@@ -9,10 +9,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_s_play.h"
-#include "d/d_procname.h"
 #include "d/res/res_jbo.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_priority.h"
 
 #define JUMP_ANIMATION_TIME 70
 

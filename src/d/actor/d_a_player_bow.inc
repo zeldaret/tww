@@ -15,7 +15,6 @@
 #include "d/actor/d_a_npc_so.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
-#include "d/d_procname.h"
 
 /* 80149ECC-80149F88       .text bowJointCB__9daPy_lk_cFi */
 BOOL daPy_lk_c::bowJointCB(int param_0) {

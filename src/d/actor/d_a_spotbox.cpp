@@ -8,8 +8,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 cPhs_State daSpotbox_c::create() {
     fopAcM_ct(this, daSpotbox_c);

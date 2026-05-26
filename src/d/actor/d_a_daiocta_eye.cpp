@@ -11,8 +11,6 @@
 #include "d/d_bg_s_func.h"
 #include "d/d_cc_d.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_daiocta.h"
 
 const s32 daDaiocta_Eye_c::m_heapsize = 2848;

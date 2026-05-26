@@ -8,9 +8,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/res/res_vochi.h"
 #include "d/d_bg_w.h"
-#include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_priority.h"
 #include "d/d_bg_w.h"
 
 #if VERSION == VERSION_DEMO

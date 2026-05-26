@@ -8,8 +8,6 @@
 #include "d/res/res_mtest.h"
 #include "d/res/res_owater.h"
 #include "d/res/res_astop.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"

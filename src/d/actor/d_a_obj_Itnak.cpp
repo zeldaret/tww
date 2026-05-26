@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Itnak.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q210daObjItnak5Act_cFP10fopAc_ac_c */
 void daObjItnak::Act_c::solidHeapCB(fopAc_ac_c*) {

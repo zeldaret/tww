@@ -8,8 +8,6 @@
 #include "d/res/res_hmlif.h"
 #include "d/res/res_hyuf1.h"
 #include "d/res/res_hyuf2.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_path.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"

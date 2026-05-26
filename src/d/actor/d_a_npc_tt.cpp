@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_tt.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000098       .text daNpc_tt_XyCheckCB__FPvi */
 static s16 daNpc_tt_XyCheckCB(void*, int) {

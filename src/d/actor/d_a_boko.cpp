@@ -13,8 +13,6 @@
 #include "d/res/res_spear.h"
 #include "d/res/res_pgsw.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_s_play.h"
 #include "SSystem/SComponent/c_counter.h"

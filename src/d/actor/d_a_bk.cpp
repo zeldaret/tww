@@ -9,8 +9,6 @@
 #include "d/res/res_bk.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_obj_search.h"
 #include "d/actor/d_a_bridge.h"

@@ -8,7 +8,6 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "d/d_meter.h"
-#include "d/d_procname.h"
 #include "d/d_s_play.h"
 
 /* 8002A454-8002A4A4       .text fopKy_Draw__FPv */

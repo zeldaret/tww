@@ -9,7 +9,6 @@
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_tsubo.h"
 #include "d/actor/d_a_mt.h"
-#include "d/d_procname.h"
 #include "d/d_s_play.h"
 
 /* 800AE938-800AE9E8       .text cc_pl_cut_bit_get__Fv */

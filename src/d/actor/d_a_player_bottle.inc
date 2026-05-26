@@ -14,7 +14,6 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/d_camera.h"
-#include "d/d_procname.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 #include "f_op/f_op_kankyo_mng.h"
 

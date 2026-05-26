@@ -7,8 +7,6 @@
 #include "d/actor/d_a_tag_waterlevel.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "SSystem/SComponent/c_lib.h"
 
 namespace daTagWaterlevel {

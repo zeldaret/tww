@@ -5,8 +5,6 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_cloth.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 #include "assets/l_matDL__d_menu_cloth.h"
 

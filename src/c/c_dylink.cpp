@@ -5,7 +5,7 @@
 
 #include "c/c_dylink.h"
 #include "d/d_com_lib_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_printf.h"
