@@ -151,7 +151,7 @@ static s16 daObjMknjD_XyEventCB(void* i_this, int i_param2) {
 
 /* 000002F0-00000314       .text XyCheckCB__Q210daObjMknjD5Act_cFi */
 s16 daObjMknjD::Act_c::XyCheckCB(int i_itemBtn) {
-    if (dComIfGp_getSelectItem(i_itemBtn) == dItem_WIND_WAKER_e) {
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_WIND_WAKER_e) {
         return TRUE;
     } else {
         return FALSE;
@@ -257,7 +257,7 @@ BOOL daObjMknjD::Act_c::Create() {
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[7]);
 
         mMelodyNum = 4;
-        mGiveItemNo = TACT_SONG5;
+        mGiveItemNo = dItemNo_WIND_GODS_ARIA_e;
         eventInfo.setEventName("MKNJD_K_TALK");
         m0430 = dSv_event_flag_c::UNK_2910;
     }
@@ -268,7 +268,7 @@ BOOL daObjMknjD::Act_c::Create() {
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[6]);
 
         mMelodyNum = 3;
-        mGiveItemNo = TACT_SONG4;
+        mGiveItemNo = dItemNo_EARTH_GODS_LYRIC_e;
         eventInfo.setEventName("MKNJD_D_TALK");
         m0430 = dSv_event_flag_c::UNK_2920;
     }

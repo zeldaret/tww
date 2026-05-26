@@ -237,17 +237,17 @@ BOOL daPy_lk_c::checkNextActionGrab() {
         return true;
     }
 #if VERSION > VERSION_JPN
-    if (checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 1) ||
-        (checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD) && checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 0)))
+    if (checkSetItemTrigger(dItemNo_MAGIC_ARMOR_e, 1) ||
+        (checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD) && checkSetItemTrigger(dItemNo_MAGIC_ARMOR_e, 0)))
     {
         changeDragonShield(1);
         return true;
     }
-    if (checkSetItemTrigger(dItem_IRON_BOOTS_e, 1) ||
-        (checkEquipHeavyBoots() && checkSetItemTrigger(dItem_IRON_BOOTS_e, 0)))
+    if (checkSetItemTrigger(dItemNo_IRON_BOOTS_e, 1) ||
+        (checkEquipHeavyBoots() && checkSetItemTrigger(dItemNo_IRON_BOOTS_e, 0)))
     {
-        return procBootsEquip_init(dItem_IRON_BOOTS_e);
-    } else if (fopAcM_GetName(grab_actor) == fpcNm_BOMB_e && checkSetItemTrigger(dItem_BOMB_BAG_e, 0)) {
+        return procBootsEquip_init(dItemNo_IRON_BOOTS_e);
+    } else if (fopAcM_GetName(grab_actor) == fpcNm_BOMB_e && checkSetItemTrigger(dItemNo_BOMB_BAG_e, 0)) {
         return procGrabThrow_init(0);
     }
 #endif

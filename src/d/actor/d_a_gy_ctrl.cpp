@@ -537,7 +537,7 @@ cPhs_State daGy_Ctrl_c::_create() {
         return cPhs_ERROR_e;
     }
 
-    if (!dComIfGs_checkGetItem(dItem_BOOMERANG_e)) {
+    if (!dComIfGs_checkGetItem(dItemNo_BOOMERANG_e)) {
         return cPhs_ERROR_e;
     }
 

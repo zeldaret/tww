@@ -1486,7 +1486,7 @@ bool daBemos_c::_execute() {
         guard_proc();
     }
 
-    fopAcM_setGbaName(this, dItem_BOW_e, 0x23, 0x2c);
+    fopAcM_setGbaName(this, dItemNo_BOW_e, 0x23, 0x2c);
     return false;
 }
 

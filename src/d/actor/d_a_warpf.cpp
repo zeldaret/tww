@@ -216,13 +216,13 @@ BOOL daWarpf_c::checkEndDemo() {
             break;
 
         case dSv_save_c::STAGE_DRC:
-            if (checkItemGet(dItem_PEARL_DIN_e, TRUE)) {
+            if (checkItemGet(dItemNo_PEARL_DIN_e, TRUE)) {
                 ret = TRUE;
             }
             break;
 
         case dSv_save_c::STAGE_FW:
-            if (checkItemGet(dItem_PEARL_FARORE_e, TRUE)) {
+            if (checkItemGet(dItemNo_PEARL_FARORE_e, TRUE)) {
                 ret = TRUE;
             }
             break;
@@ -235,16 +235,16 @@ BOOL daWarpf_c::checkEndDemo() {
 
         case dSv_save_c::STAGE_ET:
 #if VERSION == VERSION_DEMO
-            if (dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e)) {
+            if (dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_2_e)) {
 #else
-            if (checkItemGet(dItem_MASTER_SWORD_2_e, TRUE)) {
+            if (checkItemGet(dItemNo_MASTER_SWORD_2_e, TRUE)) {
 #endif
                 ret = TRUE;
             }
             break;
 
         case dSv_save_c::STAGE_WT:
-            if (dComIfGs_checkGetItem(dItem_MASTER_SWORD_3_e)) {
+            if (dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_3_e)) {
                 ret = TRUE;
             }
             break;

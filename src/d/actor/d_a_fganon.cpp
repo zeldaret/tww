@@ -1063,12 +1063,12 @@ void standby(fganon_class* i_this) {
     switch(i_this->mMode) {
         case -1: {
             if (i_this->m2BC == 2) {
-                if (!dComIfGs_checkGetItem(dItem_LIGHT_ARROW_e)) {
+                if (!dComIfGs_checkGetItem(dItemNo_LIGHT_ARROW_e)) {
                     a_this->current.pos.y = -20000.0f;
                     break;
                 }
             }
-            else if ((i_this->m2BC == 1) && dComIfGs_checkGetItem(dItem_LIGHT_ARROW_e)) {
+            else if ((i_this->m2BC == 1) && dComIfGs_checkGetItem(dItemNo_LIGHT_ARROW_e)) {
                 a_this->current.pos.y = -20000.0f;
                 break;
             }
@@ -1455,9 +1455,9 @@ void damage_check(fganon_class* i_this) {
                     pPos = i_this->mCyl.GetTgHitPosP();
                     atInfo.pParticlePos = pPos;
                     atInfo.mpActor = at_power_check(&atInfo);
-                    if((atInfo.mpObj != NULL) && (atInfo.mpObj->ChkAtType(AT_TYPE_SWORD)) && (dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_1_e ||
-                                                                                              dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e ||
-                                                                                              dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e)) {
+                    if((atInfo.mpObj != NULL) && (atInfo.mpObj->ChkAtType(AT_TYPE_SWORD)) && (dComIfGs_getSelectEquip(0) == dItemNo_MASTER_SWORD_1_e ||
+                                                                                              dComIfGs_getSelectEquip(0) == dItemNo_MASTER_SWORD_3_e ||
+                                                                                              dComIfGs_getSelectEquip(0) == dItemNo_MASTER_SWORD_2_e)) {
                         atInfo.mpActor = cc_at_check(a_this, &atInfo);
                         if (atInfo.mbDead) {
                             dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &a_this->eyePos, NULL);
@@ -2202,9 +2202,9 @@ void energy_ball_move(fganon_class* i_this) {
                 atInfo.mpObj = NULL;
             }
             if ((atInfo.mpObj && atInfo.mResultingAttackType == 1 && atInfo.mpObj->ChkAtType(AT_TYPE_SWORD) &&
-                 (dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_1_e ||
-                  dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e ||
-                  dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e)) ||
+                 (dComIfGs_getSelectEquip(0) == dItemNo_MASTER_SWORD_1_e ||
+                  dComIfGs_getSelectEquip(0) == dItemNo_MASTER_SWORD_3_e ||
+                  dComIfGs_getSelectEquip(0) == dItemNo_MASTER_SWORD_2_e)) ||
                 bVar3)
             {
                 local_5c = a_this->eyePos - i_this->m3E0;

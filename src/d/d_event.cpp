@@ -180,7 +180,7 @@ BOOL dEvt_control_c::talkXyCheck(dEvt_order_c* order) {
         break;
     }
 
-    if (dComIfGp_getSelectItem(itemBtn) == dItem_NONE_e) {
+    if (dComIfGp_getSelectItem(itemBtn) == dItemNo_NONE_e) {
         return FALSE;
     }
 
@@ -591,7 +591,7 @@ BOOL dEvt_control_c::photoCheck() {
         }
 
         if (itemBtn != -1 &&
-            (dComIfGp_getSelectItem(itemBtn) == CAMERA || dComIfGp_getSelectItem(itemBtn) == CAMERA2) &&
+            (dComIfGp_getSelectItem(itemBtn) == dItemNo_PICTO_BOX_e || dComIfGp_getSelectItem(itemBtn) == dItemNo_DELUXE_PICTO_BOX_e) &&
             dComIfGs_getPictureNum() != 0
         ) {
             actor2 = order->mActor2;

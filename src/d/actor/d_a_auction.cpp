@@ -48,20 +48,20 @@ static daAuction_HIO_c l_HIO;
 
 
 static daAuction_c::ItemData l_item_dat[] = {
-    {dItem_JOY_PENDANT_e, 0x1D10, 40, dSv_event_flag_c::UNK_0F01},
-    {dItem_COLLECT_MAP_27_e, 0x1D11, 5, dSv_event_flag_c::UNK_1080},
-    {dItem_COLLECT_MAP_18_e, 0x1D12, 60, dSv_event_flag_c::UNK_1040},
-    {dItem_HEART_PIECE_e, 0x1D13, 80, dSv_event_flag_c::UNK_1020},
+    {dItemNo_JOY_PENDANT_e, 0x1D10, 40, dSv_event_flag_c::UNK_0F01},
+    {dItemNo_COLLECT_MAP_27_e, 0x1D11, 5, dSv_event_flag_c::UNK_1080},
+    {dItemNo_COLLECT_MAP_18_e, 0x1D12, 60, dSv_event_flag_c::UNK_1040},
+    {dItemNo_HEART_PIECE_e, 0x1D13, 80, dSv_event_flag_c::UNK_1020},
 };
 
 static daAuction_c::ItemData l_item_dat2[] = {
-    {POSTMAN_STATUE, 0x1D14, 30, dSv_event_flag_c::UNK_1008},
-    {PRESIDENT_STATUE, 0x1D15, 40, dSv_event_flag_c::UNK_1004},
+    {dItemNo_POSTMAN_STATUE_e, 0x1D14, 30, dSv_event_flag_c::UNK_1008},
+    {dItemNo_SHOP_GURU_STATUE_e, 0x1D15, 40, dSv_event_flag_c::UNK_1004},
 };
 
 static s16 l_item_dat22[] = {
-    dItem_MAGIC_ARMOR_e,
-    dItem_COLLECT_MAP_06_e,
+    dItemNo_MAGIC_ARMOR_e,
+    dItemNo_COLLECT_MAP_06_e,
 };
 
 static NpcDatStruct l_npc_dat[7] = {

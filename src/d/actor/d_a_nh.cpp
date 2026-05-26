@@ -212,7 +212,7 @@ BOOL daNh_c::checkBinCatch() {
     }
     
     dComIfGp_att_CatchRequest(
-        this, dItem_FIREFLY_BOTTLE_e,
+        this, dItemNo_FIREFLY_BOTTLE_e,
         l_HIO.prm.field_0x08, l_HIO.prm.field_0x0c,
         l_HIO.prm.field_0x10, l_HIO.prm.field_0x3c,
         1

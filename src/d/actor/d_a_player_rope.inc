@@ -25,7 +25,7 @@ BOOL daPy_lk_c::checkRopeAnime() const {
 
 /* 80142D68-80142E0C       .text freeRopeItem__9daPy_lk_cFv */
 void daPy_lk_c::freeRopeItem() {
-    if (mEquipItem == dItem_GRAPPLING_HOOK_e) {
+    if (mEquipItem == dItemNo_GRAPPLING_HOOK_e) {
         fopAc_ac_c* rope = mActorKeepRope.getActor();
         if (mActorKeepEquip.getActor() != NULL) {
             onResetFlg0(daPyRFlg0_ROPE_FORCE_END);
@@ -538,7 +538,7 @@ BOOL daPy_lk_c::procRopeSwing_init(fopAc_ac_c* param_0, s16 param_1) {
         if (fopAcM_GetName(param_0) == fpcNm_HIMO3_e) {
             fopAcM_SetParam(param_0, 1);
             deleteEquipItem(TRUE);
-            mEquipItem = dItem_GRAPPLING_HOOK_e;
+            mEquipItem = dItemNo_GRAPPLING_HOOK_e;
             local_84 = param_0->current.pos - current.pos;
             f32 dVar8 = (local_84.abs() - 95.0f);
             cXyz* temp = &((himo2_class*)param_0)->m1120[34].m10;

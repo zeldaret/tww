@@ -930,9 +930,9 @@ void daAgb_c::GbaItemUse() {
                 fopAc_ac_c* actor_p = fopAcM_SearchByID(getTargetID());
 
                 if (cM_rndF(5.0f) < 4.0) {
-                    field_0x640 = dItem_YELLOW_RUPEE_e;
+                    field_0x640 = dItemNo_YELLOW_RUPEE_e;
                 } else {
-                    field_0x640 = dItem_RED_RUPEE_e;
+                    field_0x640 = dItemNo_RED_RUPEE_e;
                 }
 
                 field_0x634 = actor_p->current.pos;
@@ -1024,16 +1024,16 @@ void daAgb_c::GbaItemUse() {
         field_0x65c = 30;
         break;
     case 7:
-        if (dComIfGs_checkGetItem(dItem_BAIT_BAG_e)) {
+        if (dComIfGs_checkGetItem(dItemNo_BAIT_BAG_e)) {
             if (dComIfGs_checkBaitItemEmpty()) {
                 temp_r29 |= 0x1000000;
             }
 
-            if (dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
+            if (dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
                 temp_r29 |= 0x10000;
             }
 
-            if (dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e && dComIfGs_getArrowNum() < dComIfGs_getArrowMax()) {
+            if (dComIfGs_getItem(dInvSlot_BOW_e) != dItemNo_NONE_e && dComIfGs_getArrowNum() < dComIfGs_getArrowMax()) {
                 temp_r29 |= 0x100;
             }
         }
@@ -1094,7 +1094,7 @@ void daAgb_c::Shopping() {
             }
         } else {
             if (dComIfGs_checkBaitItemEmpty()) {
-                dComIfGs_setBaitItem(dItem_BIRD_BAIT_5_e);
+                dComIfGs_setBaitItem(dItemNo_BIRD_BAIT_5_e);
             } else {
                 itemBuy.U8.field_0x1 = 2;
                 return;
@@ -1217,7 +1217,7 @@ void daAgb_c::FlagsSend(u32 stage_type) {
         mFlags.field_0xb_0 = 0;
     }
     mFlags.field_0x5_2 = field_0x675;
-    mFlags.field_0x5_1 = dComIfGs_checkGetItem(COTTAGE_PAPER) != FALSE;
+    mFlags.field_0x5_1 = dComIfGs_checkGetItem(dItemNo_CABANA_DEED_e) != FALSE;
     mDoGac_SendDataSet((u32*)&mFlags, 0xC, 9, 0);
 }
 

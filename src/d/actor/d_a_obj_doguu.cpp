@@ -197,11 +197,11 @@ void daObjDoguu_c::CreateInit() {
     fopAcM_setCullSizeFar(this, 1.0f);
 
     if (field_0x894 == 0){
-        mItemNo = dItem_PEARL_DIN_e;
+        mItemNo = dItemNo_PEARL_DIN_e;
     } else if(field_0x894 == 1) {
-        mItemNo = dItem_PEARL_FARORE_e;
+        mItemNo = dItemNo_PEARL_FARORE_e;
     } else{
-        mItemNo = dItem_PEARL_NAYRU_e;
+        mItemNo = dItemNo_PEARL_NAYRU_e;
     }
 
     mStts.Init(0xff, 0xff, this);

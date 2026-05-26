@@ -1970,7 +1970,7 @@ static cPhs_State daBmd_Create(fopAc_ac_c* a_this) {
         i_this->mSmokeCb[i].setFollowOff();
     }
     if (dComIfGs_isStageBossEnemy() && (dComIfGp_getStartStageName()[0] != 'X')) {
-        if ((!dComIfGs_checkGetItem(dItem_PEARL_FARORE_e)) || (REG0_S(6) != 0)) {
+        if ((!dComIfGs_checkGetItem(dItemNo_PEARL_FARORE_e)) || (REG0_S(6) != 0)) {
             local_30.x = 100.0f;
             local_30.y = 0.0f;
             local_30.z = 800.0f;

@@ -229,7 +229,7 @@ static int daNpc_Rsh1_countShop() {
         if (dComIfGs_isGetItemReserve(i)) {
             result++;
         } else {
-            if (i == 0 && dComIfGs_checkGetItem(dItem_DELIVERY_BAG_e)) {
+            if (i == 0 && dComIfGs_checkGetItem(dItemNo_DELIVERY_BAG_e)) {
                 result++;
             }
         }
@@ -704,11 +704,11 @@ u32 daNpc_Rsh1_c::getMsg() {
         msg_no = m780;
         m780 = 0;
     } else {
-        if (!checkItemGet(dItem_MAGIC_ARMOR_e, TRUE) && daNpc_Rsh1_countShop() >= 3) {
+        if (!checkItemGet(dItemNo_MAGIC_ARMOR_e, TRUE) && daNpc_Rsh1_countShop() >= 3) {
             return 0x285D;
         }
 
-        if (!dComIfGs_checkGetItem(NORMAL_SAIL)) {
+        if (!dComIfGs_checkGetItem(dItemNo_SAIL_e)) {
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2420)) {
                 return 0x288C;
             }
@@ -716,7 +716,7 @@ u32 daNpc_Rsh1_c::getMsg() {
             return 0x2886;
         }
 
-        if (!dComIfGs_checkGetItem(dItem_DELIVERY_BAG_e)) {
+        if (!dComIfGs_checkGetItem(dItemNo_DELIVERY_BAG_e)) {
             return 0x2890;
         }
 
@@ -1008,7 +1008,7 @@ static BOOL daNpc_Rsh1_checkRotenItemGet(int i_itemNo) {
     if (i_itemNo != 0) {
         roten_item_get_check = dComIfGs_isGetItemReserve(i_itemNo);
     } else {
-        roten_item_get_check = dComIfGs_checkGetItem(dItem_DELIVERY_BAG_e) ? TRUE : FALSE;
+        roten_item_get_check = dComIfGs_checkGetItem(dItemNo_DELIVERY_BAG_e) ? TRUE : FALSE;
     }
     return roten_item_get_check;
 }
@@ -1325,13 +1325,13 @@ bool daNpc_Rsh1_c::talk01() {
 
         if (m778 == 0x2856) {
             m95B = 4;
-            mItemNo = FLOWER_1;
+            mItemNo = dItemNo_TOWN_FLOWER_e;
         } else if (m778 == 0x288E) {
             m95B = 4;
-            mItemNo = NORMAL_SAIL;
+            mItemNo = dItemNo_SAIL_e;
         } else if (m778 == 0x285F) {
             m95B = 4;
-            mItemNo = dItem_MAGIC_ARMOR_e;
+            mItemNo = dItemNo_MAGIC_ARMOR_e;
         } else if (m778 == 0x2883 && m793 == true) {
             setAction(&daNpc_Rsh1_c::pl_shop_out_action, NULL);
         } 
@@ -1371,11 +1371,11 @@ BOOL daNpc_Rsh1_c::getdemo_action(void* i_unusedP) {
             m95B = 1;
             dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
 
-            if (mItemNo == FLOWER_1) {
+            if (mItemNo == dItemNo_TOWN_FLOWER_e) {
                 m780 = 0x2857;
-            } else if (mItemNo == NORMAL_SAIL) {
+            } else if (mItemNo == dItemNo_SAIL_e) {
                 m780 = 0x288F;
-            } else if (mItemNo == dItem_MAGIC_ARMOR_e) {
+            } else if (mItemNo == dItemNo_MAGIC_ARMOR_e) {
                 m780 = 0x2860;
             }
 

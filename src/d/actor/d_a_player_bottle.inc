@@ -19,7 +19,7 @@
 
 /* 80151E40-80151E60       .text changeBottleDrinkFace__9daPy_lk_cFi */
 int daPy_lk_c::changeBottleDrinkFace(int param_0) {
-    if (param_0 == dItem_SOUP_BOTTLE_e || param_0 == dItem_HALF_SOUP_BOTTLE_e) {
+    if (param_0 == dItemNo_SOUP_BOTTLE_e || param_0 == dItemNo_HALF_SOUP_BOTTLE_e) {
         return true;
     }
     return false;
@@ -36,12 +36,12 @@ void daPy_lk_c::setBottleModel(u16 param_0) {
     mpEquipItemBtk->setFrame(0.0f);
     mpEquipItemBtk->searchUpdateMaterialID(tmp_modelData);
     tmp_modelData->entryTexMtxAnimator(mpEquipItemBtk);
-    if (param_0 == dItem_RED_POTION_e || param_0 == dItem_GREEN_POTION_e || param_0 == dItem_BLUE_POTION_e ||
-        param_0 == dItem_HALF_SOUP_BOTTLE_e || param_0 == dItem_SOUP_BOTTLE_e || param_0 == dItem_WATER_BOTTLE_e ||
-        param_0 == dItem_FOREST_WATER_e)
+    if (param_0 == dItemNo_RED_POTION_e || param_0 == dItemNo_GREEN_POTION_e || param_0 == dItemNo_BLUE_POTION_e ||
+        param_0 == dItemNo_HALF_SOUP_BOTTLE_e || param_0 == dItemNo_SOUP_BOTTLE_e || param_0 == dItemNo_WATER_BOTTLE_e ||
+        param_0 == dItemNo_FOREST_WATER_e)
     {
         u16 bdl;
-        if (param_0 == dItem_HALF_SOUP_BOTTLE_e) {
+        if (param_0 == dItemNo_HALF_SOUP_BOTTLE_e) {
             bdl = LINK_BDL_BINLIQUIDH;
         } else {
             bdl = LINK_BDL_BINLIQUID;
@@ -50,22 +50,22 @@ void daPy_lk_c::setBottleModel(u16 param_0) {
         buffer = new (0x20) u8[0x400];
         JKRReadIdxResource(buffer, 0x400, LKANM_BRK_TBINLIQUID, dComIfGp_getAnmArchive());
         mpEquipItemBrk = static_cast<J3DAnmTevRegKey*>(J3DAnmLoaderDataBase::load(buffer));
-        if (param_0 == dItem_RED_POTION_e) {
+        if (param_0 == dItemNo_RED_POTION_e) {
             mpEquipItemBrk->setFrame(0.0f);
-        } else if (param_0 == dItem_GREEN_POTION_e) {
+        } else if (param_0 == dItemNo_GREEN_POTION_e) {
             mpEquipItemBrk->setFrame(1.0f);
-        } else if (param_0 == dItem_BLUE_POTION_e) {
+        } else if (param_0 == dItemNo_BLUE_POTION_e) {
             mpEquipItemBrk->setFrame(2.0f);
-        } else if (param_0 == dItem_SOUP_BOTTLE_e || param_0 == dItem_HALF_SOUP_BOTTLE_e) {
+        } else if (param_0 == dItemNo_SOUP_BOTTLE_e || param_0 == dItemNo_HALF_SOUP_BOTTLE_e) {
             mpEquipItemBrk->setFrame(4.0f);
         } else {
             mpEquipItemBrk->setFrame(3.0f);
         }
         mpEquipItemBrk->searchUpdateMaterialID(tmp_modelData);
         tmp_modelData->entryTevRegAnimator(mpEquipItemBrk);
-    } else if (param_0 == dItem_FAIRY_BOTTLE_e) {
+    } else if (param_0 == dItemNo_FAIRY_BOTTLE_e) {
         tmp_modelData = initModel(&mpBottleContentsModel, LINK_BDL_BINFAIRY, 0x13000022);
-    } else if (param_0 == dItem_FIREFLY_BOTTLE_e) {
+    } else if (param_0 == dItemNo_FIREFLY_BOTTLE_e) {
         tmp_modelData = initModel(&mpBottleContentsModel, LINK_BDL_BINHO, 0x13000022);
         buffer = new (0x20) u8[0x400];
         JKRReadIdxResource(buffer, 0x400, LKANM_BRK_TBINHO, dComIfGp_getAnmArchive());
@@ -74,12 +74,12 @@ void daPy_lk_c::setBottleModel(u16 param_0) {
         tmp_modelData->entryTevRegAnimator(mpEquipItemBrk);
         m3600 = 0.0f;
     }
-    if (param_0 != dItem_EMPTY_BOTTLE_e && mCurProc != daPyProc_BOTTLE_DRINK_e) {
+    if (param_0 != dItemNo_EMPTY_BOTTLE_e && mCurProc != daPyProc_BOTTLE_DRINK_e) {
         tmp_modelData = initModel(&mpBottleCapModel, LINK_BDL_BOTTLECAP, 0x13000022);
         m355E = 1;
     }
     mDoExt_setCurrentHeap(oldHeap);
-    if (param_0 == dItem_FOREST_WATER_e) {
+    if (param_0 == dItemNo_FOREST_WATER_e) {
         m32F0.makeEmitter(dPa_name::ID_AK_JN_FORESTWATER00, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
     }
 }
@@ -136,13 +136,13 @@ BOOL daPy_lk_c::procBottleDrink() {
             if (changeBottleDrinkFace(mEquipItem)) {
                 setTextureAnime(0x86, 0);
             }
-            if (mEquipItem != dItem_GREEN_POTION_e) {
+            if (mEquipItem != dItemNo_GREEN_POTION_e) {
                 dComIfGp_setItemLifeCount(dComIfGs_getMaxLife());
             }
-            if (mEquipItem != dItem_RED_POTION_e) {
+            if (mEquipItem != dItemNo_RED_POTION_e) {
                 dComIfGp_setItemMagicCount(dComIfGs_getMaxMagic());
             }
-            if (mEquipItem == dItem_SOUP_BOTTLE_e || mEquipItem == dItem_HALF_SOUP_BOTTLE_e) {
+            if (mEquipItem == dItemNo_SOUP_BOTTLE_e || mEquipItem == dItemNo_HALF_SOUP_BOTTLE_e) {
                 onNoResetFlg1(daPyFlg1_SOUP_POWER_UP);
             }
             resetCurse();
@@ -165,18 +165,18 @@ BOOL daPy_lk_c::procBottleDrink() {
             if (changeBottleDrinkFace(mEquipItem)) {
                 setTextureAnime(0x87, 0);
             }
-            if (mEquipItem == dItem_SOUP_BOTTLE_e) {
-                setBottleModel(dItem_HALF_SOUP_BOTTLE_e);
-                dComIfGs_setEquipBottleItemIn(mReadyItemBtn, dItem_HALF_SOUP_BOTTLE_e);
+            if (mEquipItem == dItemNo_SOUP_BOTTLE_e) {
+                setBottleModel(dItemNo_HALF_SOUP_BOTTLE_e);
+                dComIfGs_setEquipBottleItemIn(mReadyItemBtn, dItemNo_HALF_SOUP_BOTTLE_e);
             } else {
                 mpBottleContentsModel = NULL;
                 dComIfGs_setEquipBottleItemEmpty(mReadyItemBtn);
             }
             const GXColor* p_Var3;
-            if (mEquipItem != dItem_SOUP_BOTTLE_e && mEquipItem != dItem_HALF_SOUP_BOTTLE_e) {
-                if (mEquipItem == dItem_RED_POTION_e) {
+            if (mEquipItem != dItemNo_SOUP_BOTTLE_e && mEquipItem != dItemNo_HALF_SOUP_BOTTLE_e) {
+                if (mEquipItem == dItemNo_RED_POTION_e) {
                     p_Var3 = &red;
-                } else if (mEquipItem == dItem_GREEN_POTION_e) {
+                } else if (mEquipItem == dItemNo_GREEN_POTION_e) {
                     p_Var3 = &green;
                 } else {
                     p_Var3 = &blue;
@@ -230,7 +230,7 @@ BOOL daPy_lk_c::procBottleOpen_init(u16 param_0) {
     keepItemData();
     setBottleModel(param_0);
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK4000_e);
-    if (mEquipItem == dItem_FAIRY_BOTTLE_e) {
+    if (mEquipItem == dItemNo_FAIRY_BOTTLE_e) {
         mProcVar6.m3570 = 3;
     } else {
         mProcVar6.m3570 = 2;
@@ -254,7 +254,7 @@ BOOL daPy_lk_c::procBottleOpen() {
     
     if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_BINOPENPRE) {
         if (frameCtrl.getRate() < 0.01f) {
-            if (mEquipItem == dItem_FAIRY_BOTTLE_e) {
+            if (mEquipItem == dItemNo_FAIRY_BOTTLE_e) {
                 setSingleMoveAnime(
                     ANM_BINOPENB,
                     1.0f,
@@ -360,23 +360,23 @@ BOOL daPy_lk_c::procBottleOpen() {
             }
         } else if (mProcVar4.m34D8 == 0) {
             if (
-                (mEquipItem == dItem_WATER_BOTTLE_e || mEquipItem == dItem_FOREST_WATER_e) &&
+                (mEquipItem == dItemNo_WATER_BOTTLE_e || mEquipItem == dItemNo_FOREST_WATER_e) &&
                 (frameCtrl.checkPass(9.0f))
             ) {
                 seStartOnlyReverb(JA_SE_LK_SPRINKLE_WATER);
                 m32E4.makeEmitterColor(dPa_name::ID_AK_JN_SPILLWATER00, mpCLModel->getAnmMtx(0x08), &current.pos, &tevStr.mColorK0, &tevStr.mColorK0);
                 dCcG_At_Spl spl;
-                if (mEquipItem == dItem_WATER_BOTTLE_e) {
+                if (mEquipItem == dItemNo_WATER_BOTTLE_e) {
                     spl = dCcG_At_Spl_UNK0;
-                } else { // dItem_FOREST_WATER_e
+                } else { // dItemNo_FOREST_WATER_e
                     spl = dCcG_At_Spl_UNK4;
                     onNoResetFlg1(daPyFlg1_FOREST_WATER_USE);
                     m3554 = 3;
                 }
                 setAtParam(AT_TYPE_WATER, 0, spl, 0, dCcG_AtHitMark_None_e, CUT_TYPE_NONE, 5.0f);
             } else if (
-                (mEquipItem == dItem_FAIRY_BOTTLE_e && frameCtrl.getFrame() >= m_HIO->mItem.mBottle.m.field_0x58) ||
-                (mEquipItem != dItem_FAIRY_BOTTLE_e && mEquipItem != dItem_FOREST_WATER_e && frameCtrl.getFrame() >= m_HIO->mItem.mBottle.m.field_0x4C)
+                (mEquipItem == dItemNo_FAIRY_BOTTLE_e && frameCtrl.getFrame() >= m_HIO->mItem.mBottle.m.field_0x58) ||
+                (mEquipItem != dItemNo_FAIRY_BOTTLE_e && mEquipItem != dItemNo_FOREST_WATER_e && frameCtrl.getFrame() >= m_HIO->mItem.mBottle.m.field_0x4C)
             ) {
                 mpBottleContentsModel = NULL;
                 mProcVar4.m34D8 = 1;
@@ -389,10 +389,10 @@ BOOL daPy_lk_c::procBottleOpen() {
                 } else { // dTalkBtn_Z_e
                     dComIfGs_setEquipBottleItemEmpty(dItemBtn_Z_e);
                 }
-                if (mEquipItem == dItem_FAIRY_BOTTLE_e) {
+                if (mEquipItem == dItemNo_FAIRY_BOTTLE_e) {
                     onModeFlg(ModeFlg_08000000);
                     mActorKeepRope.setData(makeFairy(&mLeftHandPos, 2));
-                } else if (mEquipItem == dItem_FIREFLY_BOTTLE_e) {
+                } else if (mEquipItem == dItemNo_FIREFLY_BOTTLE_e) {
                     fopAcM_create(fpcNm_NH_e, 1, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
                 }
             }
@@ -423,7 +423,7 @@ BOOL daPy_lk_c::procBottleSwing_init(int param_0) {
     commonProcInit(daPyProc_BOTTLE_SWING_e);
     if (param_0 != 0) {
         deleteEquipItem(FALSE);
-        setBottleModel(dItem_EMPTY_BOTTLE_e);
+        setBottleModel(dItemNo_EMPTY_BOTTLE_e);
     }
     current.angle.y = shape_angle.y;
     mNormalSpeed = 0.0f;
@@ -475,11 +475,11 @@ BOOL daPy_lk_c::procBottleSwing() {
         if (eventInfo.checkCommandCatch()) {
             mProcVar6.m3570 = 1;
             u8 bVar5 = dComIfGp_event_getPreItemNo();
-            if (bVar5 == dItem_WATER_BOTTLE_e) {
+            if (bVar5 == dItemNo_WATER_BOTTLE_e) {
                 seStartOnlyReverb(JA_SE_LK_SCOOP_WATER);
                 if (!strcmp(dComIfGp_getStartStageName(), "Omori")) {
-                    bVar5 = dItem_FOREST_WATER_e;
-                    if (dComIfGs_checkBottle(dItem_FOREST_WATER_e)) {
+                    bVar5 = dItemNo_FOREST_WATER_e;
+                    if (dComIfGs_checkBottle(dItemNo_FOREST_WATER_e)) {
                         m3628 = fpcM_ERROR_PROCESS_ID_e;
                         mProcVar7.m3574 = 1;
                     } else {
@@ -495,7 +495,7 @@ BOOL daPy_lk_c::procBottleSwing() {
             mDemo.setSpecialDemoType();
         } else {
             if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= 1.0f &&
-                mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() <= 4.0f && getReadyItem() == dItem_EMPTY_BOTTLE_e &&
+                mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() <= 4.0f && getReadyItem() == dItemNo_EMPTY_BOTTLE_e &&
                 (dComIfGp_att_getCatghTarget() != NULL || mWaterY > current.pos.y + 10.0f))
             {
                 fopAcM_orderCatchEvent(this, dComIfGp_att_getCatghTarget());
@@ -548,7 +548,7 @@ BOOL daPy_lk_c::procBottleGet_init() {
     m3628 = fpcM_ERROR_PROCESS_ID_e;
     mProcVar6.m3570 = 0;
     dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar6.m3570, 0);
-    if (mEquipItem == dItem_FOREST_WATER_e) {
+    if (mEquipItem == dItemNo_FOREST_WATER_e) {
         m32F0.makeEmitter(dPa_name::ID_AK_JN_FORESTWATER00, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
     }
     initShipRideUseItem(iVar1, 2);

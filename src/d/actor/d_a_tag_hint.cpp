@@ -189,7 +189,7 @@ s32 daTag_Hint_c::waitTerms() {
         break;
 
     case 0xb:
-        if (dComIfGs_getItem(dItem_BOMB_10_e) != dItem_NONE_e) {
+        if (dComIfGs_getItem(dItemNo_BOMB_10_e) != dItemNo_NONE_e) {
             return 1;
         }
         break;
@@ -209,7 +209,7 @@ s32 daTag_Hint_c::waitTerms() {
         }
         break;
     case 0x11:
-        if (dComIfGs_checkGetItem(dItem_POWER_BRACELETS_e)) {
+        if (dComIfGs_checkGetItem(dItemNo_POWER_BRACELETS_e)) {
             return 1;
         }
         break;

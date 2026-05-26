@@ -86,7 +86,7 @@ void kokiie_move(kokiie_class* i_this) {
         sVar1 = himo_off_ya[uVar6];
         target = himo_off_xa[uVar6];
         cLib_addCalc2(&i_this->m2D0, REG8_F(4) - himo_off_yp[uVar6], 0.1f, i_this->m338 * 50.0f);
-        if ((uVar6 == 0x1f) && dComIfGs_checkGetItem(dItem_BOOMERANG_e)) {
+        if ((uVar6 == 0x1f) && dComIfGs_checkGetItem(dItemNo_BOOMERANG_e)) {
             i_this->m29A = 1;
             actor->health = 0;
             i_this->m378 = 1;

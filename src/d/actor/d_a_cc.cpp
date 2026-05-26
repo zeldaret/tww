@@ -2093,15 +2093,15 @@ static BOOL daCC_Execute(cc_class* i_this) {
     i_this->actor.model = NULL;
     switch (i_this->mColorType) {
     case 2:
-        fopAcM_setGbaName(&i_this->actor, dItem_BOW_e, 30, 0x2b);
+        fopAcM_setGbaName(&i_this->actor, dItemNo_BOW_e, 30, 0x2b);
         break;
 
     case 3:
-        fopAcM_setGbaName(&i_this->actor, dItem_MIRROR_SHIELD_e, 16, 0x2e);
+        fopAcM_setGbaName(&i_this->actor, dItemNo_MIRROR_SHIELD_e, 16, 0x2e);
         break;
 
     case 4:
-        fopAcM_setGbaName(&i_this->actor, dItem_BOW_e, 10, 0x28);
+        fopAcM_setGbaName(&i_this->actor, dItemNo_BOW_e, 10, 0x28);
         break;
     }
 

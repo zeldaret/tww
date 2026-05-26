@@ -41,7 +41,7 @@ BOOL daMmusic::Act_c::Macore_is_playing() {
         dComIfGs_isEventBit(dSv_event_flag_c::UNK_2910) ||
         dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E02) ||
         dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610) ||
-        !dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e))
+        !dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_2_e))
         return FALSE;
 
     return TRUE;

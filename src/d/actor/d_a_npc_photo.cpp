@@ -617,11 +617,11 @@ static cPhs_State phase_1(daNpcPhoto_c* i_this) {
     s16 arg0 = i_this->getPrmArg0();
     if(arg0 != 255){
         if(arg0 == 0){
-            if(!dComIfGs_checkGetItem(dItem_COLLECT_MAP_20_e) && arg0 != dComIfGp_getStartStagePoint()){
+            if(!dComIfGs_checkGetItem(dItemNo_COLLECT_MAP_20_e) && arg0 != dComIfGp_getStartStagePoint()){
                 return cPhs_STOP_e;
             }
         } else{
-            if(dComIfGs_checkGetItem(dItem_COLLECT_MAP_20_e) || arg0 != dComIfGp_getStartStagePoint()) {
+            if(dComIfGs_checkGetItem(dItemNo_COLLECT_MAP_20_e) || arg0 != dComIfGp_getStartStagePoint()) {
                 return cPhs_STOP_e;
             }
             i_this->field_0x9C1 = 4;
@@ -1744,19 +1744,19 @@ u32 daNpcPhoto_c::getMsg() {
     } else if(dComIfGp_event_chkTalkXY()) {
         u32 itemNo = dComIfGp_event_getPreItemNo();
 
-        if(itemNo == CAMERA2 && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0302)) {
+        if(itemNo == dItemNo_DELUXE_PICTO_BOX_e && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0302)) {
             if (dComIfGs_getPictureNum() < 3) {
                 field_0x980 = l_msg_xy_buy_photo;
-                mItemNo = SALVAGE_ITEM1;
+                mItemNo = dItemNo_LEGENDARY_PICTOGRAPH_e;
             } else {
                 msgNo = 0x3787;
             }
-        } else if(itemNo == dItem_FIREFLY_BOTTLE_e) {
-            if(eventReg >= 6 && !dComIfGs_checkGetItem(CAMERA2)) {
+        } else if(itemNo == dItemNo_FIREFLY_BOTTLE_e) {
+            if(eventReg >= 6 && !dComIfGs_checkGetItem(dItemNo_DELUXE_PICTO_BOX_e)) {
                 field_0x980 = l_msg_color_xy;
                 field_0x9D0 = 0;
                 dComIfGs_setEquipBottleItemEmpty();
-                mItemNo = CAMERA2;
+                mItemNo = dItemNo_DELUXE_PICTO_BOX_e;
             } else{
                 msgNo = 0x2A57;
             }
@@ -1773,7 +1773,7 @@ u32 daNpcPhoto_c::getMsg() {
         if(field_0x9C1 == 1) {
             msgNo = mMsgNno;
         } else {
-            if(dComIfGs_checkGetItem(CAMERA2)) {
+            if(dComIfGs_checkGetItem(dItemNo_DELUXE_PICTO_BOX_e)) {
                 if(dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0301)) {
                     field_0x980 = (u32*)l_msg_buy_photo;
                     field_0x9D0 = 0;
@@ -1829,7 +1829,7 @@ u32 daNpcPhoto_c::getMsg() {
                 }
             }
         } 
-    } else if(dComIfGs_checkGetItem(CAMERA) || dComIfGs_checkGetItem(CAMERA2)) {
+    } else if(dComIfGs_checkGetItem(dItemNo_PICTO_BOX_e) || dComIfGs_checkGetItem(dItemNo_DELUXE_PICTO_BOX_e)) {
         if(!dComIfGs_isEventBit(l_save_dat.field_0x02)) {
             field_0x980 = l_msg_1st_photo;
             field_0x9D0 = 0;
@@ -2144,7 +2144,7 @@ s16 daNpcPhoto_c::XyCheckCB(int i_itemBtn) {
 s16 daNpcPhoto_c::XyEventCB(int i_itemBtn) {
     s16 eventIdx;
     u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
-    if(itemNo == CAMERA2 && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0302)){
+    if(itemNo == dItemNo_DELUXE_PICTO_BOX_e && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0302)){
         if(dComIfGs_getPictureNum() < 3){
             eventIdx = mPhotoGetPhotoEventIdx;
             field_0x9C7 = false;
@@ -2152,7 +2152,7 @@ s16 daNpcPhoto_c::XyEventCB(int i_itemBtn) {
             return dComIfGp_evmng_getEventIdx("DEFAULT_TALK_XY",0xff);
         }
     } else {
-        if(itemNo == dItem_FIREFLY_BOTTLE_e && dComIfGs_getEventReg(l_save_dat.field_0x06) >= 6 && !dComIfGs_checkGetItem(CAMERA2)){
+        if(itemNo == dItemNo_FIREFLY_BOTTLE_e && dComIfGs_getEventReg(l_save_dat.field_0x06) >= 6 && !dComIfGs_checkGetItem(dItemNo_DELUXE_PICTO_BOX_e)){
             eventIdx = mPhotoGetItem2EventIdx;
             field_0x9C7 = false;
         } else {

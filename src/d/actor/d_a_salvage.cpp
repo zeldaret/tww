@@ -604,7 +604,7 @@ BOOL daSalvage_c::getDistance(int salvageId, float* outDist) {
 /* 00001E48-00001FA8       .text send_agb__11daSalvage_cFv */
 void daSalvage_c::send_agb() {
     u8 bVar5 = 0;
-    fopAcM_setGbaName(this, dItem_GRAPPLING_HOOK_e, 0x40, 0x3f);
+    fopAcM_setGbaName(this, dItemNo_GRAPPLING_HOOK_e, 0x40, 0x3f);
     for (s32 i = 0; i < 160; i++) {
         if (getKind(i) != 5 && getKind(i) && checkRegist(i) && checkUsed(i) && getRoomNo(i) == dComIfGp_roomControl_getStayNo()) {
             cXyz sp14 = getPos(i);

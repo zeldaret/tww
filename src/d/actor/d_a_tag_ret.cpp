@@ -48,7 +48,7 @@ cPhs_State Act_c::_create() {
     fopAcM_ct(this, daTagRet::Act_c);
 
     #if VERSION > VERSION_DEMO
-    if (checkItemGet(dItem_PEARL_FARORE_e, TRUE)) {
+    if (checkItemGet(dItemNo_PEARL_FARORE_e, TRUE)) {
         return cPhs_STOP_e;
     }
     #endif

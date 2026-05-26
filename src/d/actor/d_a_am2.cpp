@@ -1099,7 +1099,7 @@ static BOOL daAM2_Execute(am2_class* i_this) {
         }
     }
 
-    fopAcM_setGbaName(actor, dItem_BOW_e, 0xB, 0x29);
+    fopAcM_setGbaName(actor, dItemNo_BOW_e, 0xB, 0x29);
 
     if (enemy_ice(&i_this->mEnemyIce)) {
         i_this->mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());

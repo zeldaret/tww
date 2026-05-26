@@ -608,7 +608,7 @@ BOOL daTag_MdCb_c::checkCondition() {
             uVar3 = TRUE;
         }
     } else if (argument == 10) {
-        if (dComIfGs_checkGetItem(dItem_HOOKSHOT_e)) {
+        if (dComIfGs_checkGetItem(dItemNo_HOOKSHOT_e)) {
             BOOL bVar5 = FALSE;
             u32 i;
             u32 iVar2;

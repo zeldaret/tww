@@ -353,7 +353,7 @@ BOOL daShip_c::checkForceMessage() {
     else if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A01)) {
         mNextMessageNo = 0x607;
     }
-    else if (dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F02)) {
+    else if (dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F02)) {
         mNextMessageNo = 0x624;
     }
     else if (dComIfGs_isSymbol(0) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
@@ -386,7 +386,7 @@ void daShip_c::setInitMessage() {
         return;
     }
 #if VERSION > VERSION_DEMO
-    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2110) && !dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2110) && !dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) {
         mNextMessageNo = 0x623;
     }
 #endif
@@ -521,7 +521,7 @@ void daShip_c::setInitMessage() {
             mNextMessageNo = 0x621;
         }
         else {
-            if (dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+            if (dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) {
                 mNextMessageNo = 0x624;
             }
             else {
@@ -735,7 +735,7 @@ BOOL daShip_c::setNextMessage(msg_class* msg) {
                 }
                 else if (currMessageNo == 0x1683) {
                     dComIfGs_onEventBit(dSv_event_flag_c::UNK_3E20);
-                    if (dComIfGs_getItem(12) != dItem_NONE_e) {
+                    if (dComIfGs_getItem(12) != dItemNo_NONE_e) {
                         mNextMessageNo = 0x1685;
                     }
                     else {
@@ -1803,9 +1803,9 @@ BOOL daShip_c::procCannon() {
         }
         
         if (m037A == 0 && 
-            ((CPad_CHECK_TRIG_X(0) && dComIfGp_getSelectItem(dItemBtn_X_e) == dItem_BOMB_BAG_e) ||
-             (CPad_CHECK_TRIG_Y(0) && dComIfGp_getSelectItem(dItemBtn_Y_e) == dItem_BOMB_BAG_e) ||
-             (CPad_CHECK_TRIG_Z(0) && dComIfGp_getSelectItem(dItemBtn_Z_e) == dItem_BOMB_BAG_e))) {
+            ((CPad_CHECK_TRIG_X(0) && dComIfGp_getSelectItem(dItemBtn_X_e) == dItemNo_BOMB_BAG_e) ||
+             (CPad_CHECK_TRIG_Y(0) && dComIfGp_getSelectItem(dItemBtn_Y_e) == dItemNo_BOMB_BAG_e) ||
+             (CPad_CHECK_TRIG_Z(0) && dComIfGp_getSelectItem(dItemBtn_Z_e) == dItemNo_BOMB_BAG_e))) {
             m037A = 30;
             if (dComIfGs_getBombNum() == 0) {
                 mDoAud_seStart(JA_SE_ITEM_TARGET_OUT);
@@ -1901,9 +1901,9 @@ BOOL daShip_c::procCrane() {
     if (!dComIfGp_event_runCheck() && !daPy_getPlayerLinkActorClass()->checkNoControll()) {
         if (m0398 == mCraneBaseAngle) {
             if(std::fabsf(speedF) < 3.0f &&
-              ((CPad_CHECK_HOLD_X(0) && dComIfGp_getSelectItem(dItemBtn_X_e) == dItem_GRAPPLING_HOOK_e) ||
-               (CPad_CHECK_HOLD_Y(0) && dComIfGp_getSelectItem(dItemBtn_Y_e) == dItem_GRAPPLING_HOOK_e) ||
-               (CPad_CHECK_HOLD_Z(0) && dComIfGp_getSelectItem(dItemBtn_Z_e) == dItem_GRAPPLING_HOOK_e))) {
+              ((CPad_CHECK_HOLD_X(0) && dComIfGp_getSelectItem(dItemBtn_X_e) == dItemNo_GRAPPLING_HOOK_e) ||
+               (CPad_CHECK_HOLD_Y(0) && dComIfGp_getSelectItem(dItemBtn_Y_e) == dItemNo_GRAPPLING_HOOK_e) ||
+               (CPad_CHECK_HOLD_Z(0) && dComIfGp_getSelectItem(dItemBtn_Z_e) == dItemNo_GRAPPLING_HOOK_e))) {
                 sVar1 = mRopeCnt;
                 incRopeCnt(2, 0);
                 if (mRopeCnt == 250) {

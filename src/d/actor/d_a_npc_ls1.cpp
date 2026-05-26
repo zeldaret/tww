@@ -915,15 +915,15 @@ u32 daNpc_Ls1_c::getMsg_LS1_0() {
     }
 
 
-    if (dComIfGp_getSelectItem(dItemBtn_X_e) == dItem_TELESCOPE_e) {
+    if (dComIfGp_getSelectItem(dItemBtn_X_e) == dItemNo_TELESCOPE_e) {
         return 0xBCB;
     } 
     
-    if (dComIfGp_getSelectItem(dItemBtn_Y_e) == dItem_TELESCOPE_e) {
+    if (dComIfGp_getSelectItem(dItemBtn_Y_e) == dItemNo_TELESCOPE_e) {
         return 0xBCC;
     } 
 
-    if (dComIfGp_getSelectItem(dItemBtn_Z_e) == dItem_TELESCOPE_e) {
+    if (dComIfGp_getSelectItem(dItemBtn_Z_e) == dItemNo_TELESCOPE_e) {
         return 0xBCD;
     }
     
@@ -1894,7 +1894,7 @@ BOOL daNpc_Ls1_c::wait_action1(void* param_1) {
                 if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
                     setStt(3);
                 } else {
-                    if (dComIfGs_checkGetItem(dItem_TELESCOPE_e)) {
+                    if (dComIfGs_checkGetItem(dItemNo_TELESCOPE_e)) {
                         m7A0.y = current.angle.y;
                         setStt(2);
                     } else {

@@ -337,7 +337,7 @@ BOOL daNpc_Fa1_c::checkBinCatch() {
     }
     
     dComIfGp_att_CatchRequest(
-        this, dItem_FAIRY_BOTTLE_e,
+        this, dItemNo_FAIRY_BOTTLE_e,
         l_HIO.prm.m1C, l_HIO.prm.m20,
         l_HIO.prm.m24, l_HIO.prm.m48,
         1
@@ -547,7 +547,7 @@ void daNpc_Fa1_c::get_player_move() {
     current.pos = player->current.pos + *local_18;
     BGCheck();
     if (mTimer == 0) {
-        execItemGet(dItem_RECOVER_FAIRY_e);
+        execItemGet(dItemNo_RECOVER_FAIRY_e);
         fopAcM_delete(this);
     }
 }
@@ -613,7 +613,7 @@ void daNpc_Fa1_c::init_bottle_appear_move() {
     setMode(Mode_BOTTLE_APPEAR_MOVE_e);
     init_up1();
     if (isTypeLinkDown()) {
-        execItemGet(dItem_RECOVER_FAIRY_e);
+        execItemGet(dItemNo_RECOVER_FAIRY_e);
     }
 }
 
@@ -655,7 +655,7 @@ void daNpc_Fa1_c::bottle_appear_move() {
     (this->*bottleMoveSubProc[getSubMode()])();
     if (mTimer == 0) {
         if (!isTypeLinkDown()) {
-            execItemGet(dItem_RECOVER_FAIRY_e);
+            execItemGet(dItemNo_RECOVER_FAIRY_e);
         }
         fopAcM_delete(this);
     }

@@ -200,7 +200,7 @@ cPhs_State daSteamTag_c::create() {
     cPhs_State phase_state;
     if ((strcmp(dComIfGp_getStartStageName(),"Adanmae") == 0) &&
         (current.roomNo == 0) &&
-        (checkItemGet(dItem_PEARL_DIN_e, TRUE))) {
+        (checkItemGet(dItemNo_PEARL_DIN_e, TRUE))) {
         phase_state = cPhs_ERROR_e;
     } else {
         phase_state = cPhs_COMPLEATE_e;

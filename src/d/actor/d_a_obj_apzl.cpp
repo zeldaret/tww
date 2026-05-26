@@ -685,38 +685,38 @@ void daObjApzl_c::privateCut() {
                                 if(mPuzzleNo == 15) {
                                     f32 temp2 = cM_rndF(1000.0f);
                                     if(temp2 < 900.0) {
-                                        itemNo = dItem_GREEN_RUPEE_e;
+                                        itemNo = dItemNo_GREEN_RUPEE_e;
                                     } else if (temp2 < 980.0) {
-                                        itemNo = dItem_BLUE_RUPEE_e;
+                                        itemNo = dItemNo_BLUE_RUPEE_e;
                                     } else if (temp2 < 995.0) {
-                                        itemNo = dItem_YELLOW_RUPEE_e;
+                                        itemNo = dItemNo_YELLOW_RUPEE_e;
                                     } else if (temp2 < 999.0) {
-                                        itemNo = dItem_RED_RUPEE_e;
+                                        itemNo = dItemNo_RED_RUPEE_e;
                                     } else {
-                                        itemNo = dItem_PURPLE_RUPEE_e;
+                                        itemNo = dItemNo_PURPLE_RUPEE_e;
                                     }
                                 } else {
-                                    itemNo = dItem_GREEN_RUPEE_e;
+                                    itemNo = dItemNo_GREEN_RUPEE_e;
                                 }
 #else
 
                             if (mPuzzleNo == 15) {
                                 u8 rupeeType = daObjApzl_Rupee_Table[mGivenRupeeCount];
                                 if (rupeeType == 0) {
-                                    itemNo = dItem_GREEN_RUPEE_e;
+                                    itemNo = dItemNo_GREEN_RUPEE_e;
                                 } else if (rupeeType == 1) {
-                                    itemNo = dItem_BLUE_RUPEE_e;
+                                    itemNo = dItemNo_BLUE_RUPEE_e;
                                 } else if (rupeeType == 2) {
-                                    itemNo = dItem_YELLOW_RUPEE_e;
+                                    itemNo = dItemNo_YELLOW_RUPEE_e;
                                 } else if (rupeeType == 3) { 
-                                    itemNo = dItem_RED_RUPEE_e;
+                                    itemNo = dItemNo_RED_RUPEE_e;
                                 } else {
-                                    itemNo = dItem_PURPLE_RUPEE_e;
+                                    itemNo = dItemNo_PURPLE_RUPEE_e;
                                 }
                             } else if (mGivenRupeeCount % 6 == 0) {
-                                itemNo = dItem_BLUE_RUPEE_e;
+                                itemNo = dItemNo_BLUE_RUPEE_e;
                             } else {
-                                itemNo = dItem_GREEN_RUPEE_e;
+                                itemNo = dItemNo_GREEN_RUPEE_e;
                             }
 #endif
 

@@ -1574,12 +1574,12 @@ static void hana_demo(bst_class* i_this) {
         if ((s32)i_this->m02B8->getFrame() == 26) {
             int itemNo;
             if (dComIfGs_getArrowNum() == 0) {
-                itemNo = dItem_ARROW_10_e;
+                itemNo = dItemNo_ARROW_10_e;
                 MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(6);
                 cMtx_copy(mtx, *calc_mtx);
                 i_this->m2E9E = 0;
             } else {
-                itemNo = dItem_BOMB_5_e;
+                itemNo = dItemNo_BOMB_5_e;
                 MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(7);
                 cMtx_copy(mtx, *calc_mtx);
                 i_this->m2E9E = 1;

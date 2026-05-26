@@ -101,7 +101,7 @@ bool daObj_Demo_Barrel_c::_execute() {
                 m2DC = 0;
                 dComIfGs_onCollect(3, 0);
                 dComIfGs_offCollect(0, 0);
-                dComIfGs_setSelectEquip(0, dItem_NONE_e);
+                dComIfGs_setSelectEquip(0, dItemNo_NONE_e);
                 setParticleHahen();
             }
 

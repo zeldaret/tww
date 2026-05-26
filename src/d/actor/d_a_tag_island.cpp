@@ -121,7 +121,7 @@ BOOL daTag_Island_c::arrivalTerms() {
     case 7:
         if (!dKy_checkEventNightStop())
             return FALSE;
-        if (!dComIfGs_checkGetItem(dItem_BOMB_BAG_e))
+        if (!dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e))
             return FALSE;
         break;
     }

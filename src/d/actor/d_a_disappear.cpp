@@ -31,9 +31,9 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
                     // Special type for Keese (ki) spawned in the Puppet Ganon fight.
                     // This also seems to be used by several other enemies, such as Molgera's spawn.
                     static u32 ki_item_d[] = {
-                        dItem_HEART_e,
-                        dItem_LARGE_MAGIC_e,
-                        dItem_ARROW_10_e,
+                        dItemNo_HEART_e,
+                        dItemNo_LARGE_MAGIC_e,
+                        dItemNo_ARROW_10_e,
                     };
                     if (dropType < daDisItem_HEART_e + (int)ARRAY_SIZE(ki_item_d)) {
                         fopAcM_createItem(&i_this->current.pos, ki_item_d[dropType - daDisItem_HEART_e], -1, -1, daItemType_0_e, NULL, daItemAct_4_e);

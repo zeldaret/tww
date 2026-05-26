@@ -971,7 +971,7 @@ static void action_itai_move(am_class* i_this) {
 static BOOL daAM_Execute(am_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
-    fopAcM_setGbaName(actor, dItem_BOW_e, 0xC, 0x2A);
+    fopAcM_setGbaName(actor, dItemNo_BOW_e, 0xC, 0x2A);
 
     if (enemy_ice(&i_this->mEnemyIce)) {
         J3DModel* model = i_this->mpMorf->getModel();

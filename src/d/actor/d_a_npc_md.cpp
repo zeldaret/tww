@@ -509,20 +509,20 @@ static s16 daNpc_Md_XyCheckCB(void* i_this, int param_1) {
 s16 daNpc_Md_c::XyCheckCB(int i_itemBtn) {
     u8 selectItemNo = dComIfGp_getSelectItem(i_itemBtn);
     if (isTypeSea()) {
-        if (selectItemNo == dItem_WIND_WAKER_e) {
+        if (selectItemNo == dItemNo_WIND_WAKER_e) {
             return TRUE;
         }
-        if (selectItemNo == dItem_GOLDEN_FEATHER_e) {
+        if (selectItemNo == dItemNo_GOLDEN_FEATHER_e) {
             if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E40) || (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E40) && isSeaTalk())) {
                 return TRUE;
             }
         }
     } else if (isTypeM_Dai() || isTypeEdaichi()) {
-        if (selectItemNo == dItem_GOLDEN_FEATHER_e && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3B80)) {
+        if (selectItemNo == dItemNo_GOLDEN_FEATHER_e && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3B80)) {
             return TRUE;
         }
     }
-    if (selectItemNo == dItem_GOLDEN_FEATHER_e) {
+    if (selectItemNo == dItemNo_GOLDEN_FEATHER_e) {
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_2C08);
     }
     return FALSE;
@@ -536,10 +536,10 @@ static s16 daNpc_Md_XyEventCB(void* i_this, int param_1) {
 /* 0000081C-00000864       .text XyEventCB__10daNpc_Md_cFi */
 s16 daNpc_Md_c::XyEventCB(int i_itemBtn) {
     u8 selectItemNo = dComIfGp_getSelectItem(i_itemBtn);
-    if (selectItemNo == dItem_WIND_WAKER_e) {
+    if (selectItemNo == dItemNo_WIND_WAKER_e) {
         offDefaultTalkXY();
         return mEventIdxTable[5];
-    } else if (selectItemNo == dItem_GOLDEN_FEATHER_e) {
+    } else if (selectItemNo == dItemNo_GOLDEN_FEATHER_e) {
         onDefaultTalkXY();
     }
     return -1;

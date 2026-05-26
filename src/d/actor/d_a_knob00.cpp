@@ -714,7 +714,7 @@ BOOL daKnob00_c::actionInit() {
             return TRUE;
         }
 
-        if (dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+        if (dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) {
             setAction(11);
             return TRUE;
         }

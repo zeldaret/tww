@@ -450,7 +450,7 @@ void daNpc_Btsw_c::anmAtr(u16 i_msgStatus) {
 
 /* 00000F0C-00000F30       .text daNpc_Btsw_XyCheckCB__FPvi */
 static s16 daNpc_Btsw_XyCheckCB(void*, int i_itemBtn) {
-    if (dComIfGp_getSelectItem(i_itemBtn) == dItem_NOTE_TO_MOM_e) {
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_NOTE_TO_MOM_e) {
         return TRUE;
     }
     return FALSE;

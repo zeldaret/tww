@@ -81,16 +81,16 @@ BOOL daShopItem_c::clothCreate() {
         };
 
         switch(m_itemNo) {
-            case HEROS_FLAG:
+            case dItemNo_HEROS_FLAG_e:
                 field_0x648 = 0;
                 break;
-            case TAIRYO_FLAG:
+            case dItemNo_BIG_CATCH_FLAG_e:
                 field_0x648 = 1;
                 break;
-            case SALES_FLAG:
+            case dItemNo_BIG_SALE_FLAG_e:
                 field_0x648 = 2;
                 break;
-            case RED_FLAG:
+            case dItemNo_SICKLE_MOON_FLAG_e:
             default:
                 field_0x648 = 3;
         }
@@ -156,7 +156,7 @@ bool daShopItem_c::_execute() {
 bool daShopItem_c::_draw() {
     if(!chkDraw()) return true;
 
-    if(m_itemNo == WATER_STATUE || m_itemNo == POSTMAN_STATUE) {
+    if(m_itemNo == dItemNo_FOUNTAIN_IDOL_e || m_itemNo == dItemNo_POSTMAN_STATUE_e) {
         mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(0);
     }
     DrawBase();
@@ -168,7 +168,7 @@ bool daShopItem_c::_draw() {
 
 /* 00000694-0000070C       .text settingBeforeDraw__12daShopItem_cFv */
 void daShopItem_c::settingBeforeDraw() {
-    if(isBomb(m_itemNo) || (m_itemNo == dItem_BOMB_BAG_e) || (m_itemNo == dItem_SKULL_HAMMER_e) || m_itemNo == dItem_SMALL_KEY_e || m_itemNo == PRESIDENT_STATUE) {
+    if(isBomb(m_itemNo) || (m_itemNo == dItemNo_BOMB_BAG_e) || (m_itemNo == dItemNo_SKULL_HAMMER_e) || m_itemNo == dItemNo_SMALL_KEY_e || m_itemNo == dItemNo_SHOP_GURU_STATUE_e) {
         dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), 1.0f);
     }
 }
@@ -198,7 +198,7 @@ cPhs_State daShopItem_c::_create() {
     
     const char* arcName = getShopArcname();
     if (getShopBmdIdx() == -1 || arcName == 0) {
-        m_itemNo = dItem_GREEN_RUPEE_e;
+        m_itemNo = dItemNo_GREEN_RUPEE_e;
     }
 
     arcName = getShopArcname();

@@ -1367,28 +1367,28 @@ cPhs_State phase_4(dScnPly_ply_c* i_this) {
 
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
     if (stag_info != NULL && dStage_stagInfo_GetSTType(stag_info) == dStageType_FF1_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0801)) {
-        dComIfGs_setSelectEquip(0, dItem_NONE_e);
-        dComIfGp_setSelectEquip(0, dItem_NONE_e);
+        dComIfGs_setSelectEquip(0, dItemNo_NONE_e);
+        dComIfGp_setSelectEquip(0, dItemNo_NONE_e);
         dComIfGs_offCollect(0, 0);
     }
 
     if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
-        dComIfGs_setItem(dInvSlot_BOW_e, dItem_NONE_e); // take away the bow
+        dComIfGs_setItem(dInvSlot_BOW_e, dItemNo_NONE_e); // take away the bow
         for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
             u32 itemno = dComIfGp_getSelectItem(itemBtn);
-            if (itemno == dItem_BOW_e || itemno == dItem_MAGIC_ARROW_e || itemno == dItem_LIGHT_ARROW_e) {
+            if (itemno == dItemNo_BOW_e || itemno == dItemNo_MAGIC_ARROW_e || itemno == dItemNo_LIGHT_ARROW_e) {
                 dComIfGs_setSelectItem(itemBtn, dInvSlot_NONE_e);
                 dComIfGp_setSelectItem(itemBtn);
             }
         }
-    } else if (dComIfGs_getItem(dInvSlot_BOW_e) == dItem_NONE_e) {
+    } else if (dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_NONE_e) {
         // give the bow back
         if (dComIfGs_isGetItem(dInvSlot_BOW_e, 2))
-            dComIfGs_setItem(dInvSlot_BOW_e, dItem_LIGHT_ARROW_e);
+            dComIfGs_setItem(dInvSlot_BOW_e, dItemNo_LIGHT_ARROW_e);
         else if (dComIfGs_isGetItem(dInvSlot_BOW_e, 1))
-            dComIfGs_setItem(dInvSlot_BOW_e, dItem_MAGIC_ARROW_e);
+            dComIfGs_setItem(dInvSlot_BOW_e, dItemNo_MAGIC_ARROW_e);
         else if (dComIfGs_isGetItem(dInvSlot_BOW_e, 0))
-            dComIfGs_setItem(dInvSlot_BOW_e, dItem_BOW_e);
+            dComIfGs_setItem(dInvSlot_BOW_e, dItemNo_BOW_e);
     }
 
     if (strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0 ||

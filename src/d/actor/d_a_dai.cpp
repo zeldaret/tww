@@ -114,7 +114,7 @@ void daDai_c::CreateInit() {
 cPhs_State daDai_c::_create() {
     fopAcM_ct(this, daDai_c);
 
-    if (!checkItemGet(dItem_DELIVERY_BAG_e, TRUE)) {
+    if (!checkItemGet(dItemNo_DELIVERY_BAG_e, TRUE)) {
         return cPhs_ERROR_e;
     }
 

@@ -194,7 +194,7 @@ void daComing3::Act_c::coming_start_main() {
 
             if (unk_400 == fpcM_ERROR_PROCESS_ID_e) {
                 static s32 make_item_table[] = {
-                    dItem_BLUE_RUPEE_e, dItem_YELLOW_RUPEE_e,
+                    dItemNo_BLUE_RUPEE_e, dItemNo_YELLOW_RUPEE_e,
                 };
                 unk_400 = daObjBarrel2::Act_c::make_coming(
                     &sp18,

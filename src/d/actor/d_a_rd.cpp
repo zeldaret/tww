@@ -1629,7 +1629,7 @@ bool daRd_c::_execute() {
         return true;
     }
     
-    fopAcM_setGbaName(this, dItem_MIRROR_SHIELD_e, 0x12, 0x30);
+    fopAcM_setGbaName(this, dItemNo_MIRROR_SHIELD_e, 0x12, 0x30);
     setIceCollision();
     if (mMode != MODE_SILENT_PRAY && mMode != MODE_DEATH && mMode != MODE_DAMAGE &&
         mMode != MODE_ATTACK && mMode != MODE_CRY && mMode != MODE_CRY_WAIT)

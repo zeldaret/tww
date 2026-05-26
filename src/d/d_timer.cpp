@@ -596,7 +596,7 @@ void dDlst_TimerScrnDraw_c::setIconType(void* tex, u8 type) {
         itemNo = dComIfGs_getSelectEquip(0);
         break;
     case 4:
-        itemNo = dItem_FATHER_LETTER_e;
+        itemNo = dItemNo_FATHER_LETTER_e;
         break;
     }
 

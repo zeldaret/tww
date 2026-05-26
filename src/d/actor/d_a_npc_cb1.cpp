@@ -266,7 +266,7 @@ cPhs_State daNpc_Cb1_c::create() {
 #if VERSION == VERSION_DEMO
         if(dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_WT))
 #else
-        if(dComIfGs_checkGetItem(dItem_MASTER_SWORD_3_e))
+        if(dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_3_e))
 #endif
         {
             if(!isTypeKazeBoss()) {
@@ -288,7 +288,7 @@ cPhs_State daNpc_Cb1_c::create() {
                 return cPhs_ERROR_e;
             }
         }
-        else if(dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e)) {
+        else if(dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_2_e)) {
             if(!isTypeWaterFall()) {
                 return cPhs_ERROR_e;
             }
@@ -296,7 +296,7 @@ cPhs_State daNpc_Cb1_c::create() {
         else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
             return cPhs_ERROR_e;
         }
-        else if(dComIfGs_checkGetItem(dItem_PEARL_FARORE_e)) {
+        else if(dComIfGs_checkGetItem(dItemNo_PEARL_FARORE_e)) {
             if(!isTypeForest()) {
                 return cPhs_ERROR_e;
             }

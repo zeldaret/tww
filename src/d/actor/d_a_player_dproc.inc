@@ -259,17 +259,17 @@ BOOL daPy_lk_c::dProcTool() {
 #endif
             }
             
-            u8 itemNo = dItem_NONE_e;
+            u8 itemNo = dItemNo_NONE_e;
             if (mLeftHandIdx == 0xC8) {
-                itemNo = dItem_SWORD_e;
+                itemNo = dItemNo_SWORD_e;
             } else if (mLeftHandIdx == 0xC9) {
-                itemNo = dItem_MASTER_SWORD_1_e;
+                itemNo = dItemNo_MASTER_SWORD_1_e;
             } else if (mLeftHandIdx == 0xCA) {
-                itemNo = dItem_MASTER_SWORD_2_e;
+                itemNo = dItemNo_MASTER_SWORD_2_e;
             } else if (mLeftHandIdx == 0xCB) {
-                itemNo = dItem_MASTER_SWORD_3_e;
+                itemNo = dItemNo_MASTER_SWORD_3_e;
             }
-            if (itemNo != dItem_NONE_e) {
+            if (itemNo != dItemNo_NONE_e) {
                 mLeftHandIdx = 3;
                 if (mEquipItem != daPyItem_SWORD_e || itemNo != dComIfGs_getSelectEquip(0)) {
                     dComIfGs_setSelectEquip(0, itemNo);
@@ -282,7 +282,7 @@ BOOL daPy_lk_c::dProcTool() {
                 }
             } else {
                 if (mLeftHandIdx == 0xCC) {
-                    if (mEquipItem != dItem_WIND_WAKER_e) {
+                    if (mEquipItem != dItemNo_WIND_WAKER_e) {
                         deleteEquipItem(FALSE);
                     }
                     mLeftHandIdx = 5;
@@ -295,9 +295,9 @@ BOOL daPy_lk_c::dProcTool() {
             if (mRightHandIdx == 0xC8 || mRightHandIdx == 0xC9) {
                 mProcVar2.m34D4 = 1;
                 if (mRightHandIdx == 0xC8) {
-                    dComIfGs_setSelectEquip(1, dItem_SHIELD_e);
+                    dComIfGs_setSelectEquip(1, dItemNo_SHIELD_e);
                 } else {
-                    dComIfGs_setSelectEquip(1, dItem_MIRROR_SHIELD_e);
+                    dComIfGs_setSelectEquip(1, dItemNo_MIRROR_SHIELD_e);
                 }
                 mRightHandIdx = 0x08;
             } else {
@@ -555,18 +555,18 @@ BOOL daPy_lk_c::dProcOpenTreasure() {
 #if VERSION > VERSION_DEMO
 /* 8012E28C-8012E418       .text setGetItemSound__9daPy_lk_cFUsi */
 void daPy_lk_c::setGetItemSound(u16 param_1, BOOL param_2) {
-    if (param_1 == dItem_GREEN_RUPEE_e || param_1 == dItem_BLUE_RUPEE_e || param_1 == dItem_YELLOW_RUPEE_e ||
-        param_1 == dItem_RED_RUPEE_e || param_1 == dItem_PURPLE_RUPEE_e || param_1 == TINCLE_RUPEE1)
+    if (param_1 == dItemNo_GREEN_RUPEE_e || param_1 == dItemNo_BLUE_RUPEE_e || param_1 == dItemNo_YELLOW_RUPEE_e ||
+        param_1 == dItemNo_RED_RUPEE_e || param_1 == dItemNo_PURPLE_RUPEE_e || param_1 == dItemNo_TINGLE_RUPEE_1_e)
     {
         seStartSystem(JA_SE_ME_ITEM_GET_S);
         dComIfGp_setMesgBgmOn2();
-    } else if (param_1 == dItem_HEART_CONTAINER_e ||
-               (param_1 == dItem_HEART_PIECE_e && ((dComIfGs_getMaxLife() % 4) == 3)))
+    } else if (param_1 == dItemNo_HEART_CONTAINER_e ||
+               (param_1 == dItemNo_HEART_PIECE_e && ((dComIfGs_getMaxLife() % 4) == 3)))
     {
         mDoAud_subBgmStart(JA_BGM_GET_HEART);
         dComIfGp_setMesgBgmOn();
-    } else if (param_1 == dItem_HEART_PIECE_e || param_1 == dItem_JOY_PENDANT_e || param_1 == dItem_SMALL_KEY_e ||
-               param_1 == dItem_SILVER_RUPEE_e || param_1 == dItem_ORANGE_RUPEE_e)
+    } else if (param_1 == dItemNo_HEART_PIECE_e || param_1 == dItemNo_JOY_PENDANT_e || param_1 == dItemNo_SMALL_KEY_e ||
+               param_1 == dItemNo_SILVER_RUPEE_e || param_1 == dItemNo_ORANGE_RUPEE_e)
     {
         mDoAud_subBgmStart(JA_BGM_ITEM_GET_S);
         dComIfGp_setMesgBgmOn();
@@ -617,8 +617,8 @@ BOOL daPy_lk_c::setGetDemo() {
                         }
 
                         u32 itemGetMsgNo;
-                        if (itemNo == dItem_HEART_PIECE_e && (dComIfGs_getMaxLife() % 4) != 0) {
-                            itemGetMsgNo = MSG_NO_FOR_ITEM(dItem_HEART_PIECE_2_e + (dComIfGs_getMaxLife() % 4) - 1);
+                        if (itemNo == dItemNo_HEART_PIECE_e && (dComIfGs_getMaxLife() % 4) != 0) {
+                            itemGetMsgNo = MSG_NO_FOR_ITEM(dItemNo_HEART_PIECE_2_e + (dComIfGs_getMaxLife() % 4) - 1);
                         } else {
                             itemGetMsgNo = MSG_NO_FOR_ITEM(itemNo);
                         }
@@ -735,22 +735,22 @@ BOOL daPy_lk_c::dProcGetItem() {
         if (mProcVar0.m34D0 == 0 && mProcVar2.m34D4 != -1) {
             mProcVar0.m34D0 = 1;
 #if VERSION == VERSION_DEMO
-            if (mProcVar2.m34D4 == dItem_GREEN_RUPEE_e || mProcVar2.m34D4 == dItem_BLUE_RUPEE_e || mProcVar2.m34D4 == dItem_YELLOW_RUPEE_e ||
-                mProcVar2.m34D4 == dItem_RED_RUPEE_e || mProcVar2.m34D4 == dItem_PURPLE_RUPEE_e || mProcVar2.m34D4 == TINCLE_RUPEE1)
+            if (mProcVar2.m34D4 == dItemNo_GREEN_RUPEE_e || mProcVar2.m34D4 == dItemNo_BLUE_RUPEE_e || mProcVar2.m34D4 == dItemNo_YELLOW_RUPEE_e ||
+                mProcVar2.m34D4 == dItemNo_RED_RUPEE_e || mProcVar2.m34D4 == dItemNo_PURPLE_RUPEE_e || mProcVar2.m34D4 == dItemNo_TINGLE_RUPEE_1_e)
             {
                 seStartSystem(JA_SE_ME_ITEM_GET_S);
                 dComIfGp_setMesgBgmOn2();
-            } else if (mProcVar2.m34D4 == dItem_HEART_CONTAINER_e ||
-                    (mProcVar2.m34D4 == dItem_HEART_PIECE_e && ((dComIfGs_getMaxLife() % 4) == 3)))
+            } else if (mProcVar2.m34D4 == dItemNo_HEART_CONTAINER_e ||
+                    (mProcVar2.m34D4 == dItemNo_HEART_PIECE_e && ((dComIfGs_getMaxLife() % 4) == 3)))
             {
                 mDoAud_subBgmStart(JA_BGM_GET_HEART);
                 dComIfGp_setMesgBgmOn();
-            } else if (mProcVar2.m34D4 == dItem_HEART_PIECE_e || mProcVar2.m34D4 == dItem_JOY_PENDANT_e || mProcVar2.m34D4 == dItem_SMALL_KEY_e ||
-                    mProcVar2.m34D4 == dItem_SILVER_RUPEE_e || mProcVar2.m34D4 == dItem_ORANGE_RUPEE_e)
+            } else if (mProcVar2.m34D4 == dItemNo_HEART_PIECE_e || mProcVar2.m34D4 == dItemNo_JOY_PENDANT_e || mProcVar2.m34D4 == dItemNo_SMALL_KEY_e ||
+                    mProcVar2.m34D4 == dItemNo_SILVER_RUPEE_e || mProcVar2.m34D4 == dItemNo_ORANGE_RUPEE_e)
             {
                 mDoAud_subBgmStart(JA_BGM_ITEM_GET_S);
                 dComIfGp_setMesgBgmOn();
-            } else if (mProcVar5.m34DA != dItem_HEART_e) {
+            } else if (mProcVar5.m34DA != dItemNo_HEART_e) {
                 seStartSystem(JA_SE_ME_ITEM_GET_S);
                 dComIfGp_setMesgBgmOn2();
             } else {
@@ -2168,7 +2168,7 @@ BOOL daPy_lk_c::dProcBottleOpenFairy_init() {
         m_HIO->mItem.mBottle.m.field_0x40
     );
     keepItemData();
-    setBottleModel(dItem_FAIRY_BOTTLE_e);
+    setBottleModel(dItemNo_FAIRY_BOTTLE_e);
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK4000_e);
     mProcVar6.m3570 = 0;
     return true;

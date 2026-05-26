@@ -200,7 +200,7 @@ void daDekuItem_c::mode_getdemo_init() {
 /* 00000CB8-00000D34       .text mode_getdemo_wait__12daDekuItem_cFv */
 void daDekuItem_c::mode_getdemo_wait() {
     if (!unk630) {
-        mItemPID = fopAcM_createItemForTrBoxDemo(&current.pos, dItem_DEKU_LEAF_e, -1, fopAcM_GetRoomNo(this));
+        mItemPID = fopAcM_createItemForTrBoxDemo(&current.pos, dItemNo_DEKU_LEAF_e, -1, fopAcM_GetRoomNo(this));
 
         if (mItemPID != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(mItemPID);

@@ -14,21 +14,21 @@
 #include "d/actor/d_a_obj_barrel2.h"
 
 s32 daComing2::coming_make_item_no_table[] = {
-    dItem_GREEN_RUPEE_e,
-    dItem_GREEN_RUPEE_e,
-    dItem_GREEN_RUPEE_e,
-    dItem_GREEN_RUPEE_e,
-    dItem_GREEN_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
 };
 
 static void dummy() {
@@ -229,7 +229,7 @@ BOOL daComing2::Act_c::make_coming_param(cXyz* outPos, daObjBarrel2::Type_e* out
         *outType = daObjBarrel2::Type_01_e;
         *outHasFlag = false;
 
-        *outDroppedItem = (unk_2A4 < 0xFu) ? coming_make_item_no_table[unk_2A4] : dItem_RECOVER_FAIRY_e;
+        *outDroppedItem = (unk_2A4 < 0xFu) ? coming_make_item_no_table[unk_2A4] : dItemNo_RECOVER_FAIRY_e;
         return TRUE;
     }
     return FALSE;

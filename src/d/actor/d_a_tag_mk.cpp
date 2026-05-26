@@ -78,7 +78,7 @@ u16 daTag_Mk_c::next_msgStatus(unsigned long* arg1) {
 u32 daTag_Mk_c::getMsg() {
     u32 msg;
 
-    if (dComIfGp_event_getPreItemNo() == COTTAGE_PAPER) {
+    if (dComIfGp_event_getPreItemNo() == dItemNo_CABANA_DEED_e) {
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_2D80);
         msg = 0x1bC0;
     } else {
@@ -132,7 +132,7 @@ u16 daTag_Mk_c::talk() {
 
 /* 000003BC-00000470       .text setTagWpEvId__10daTag_Mk_cFv */
 void daTag_Mk_c::setTagWpEvId() {
-    if (dComIfGs_getSelectEquip(0) != dItem_MASTER_SWORD_3_e) {
+    if (dComIfGs_getSelectEquip(0) != dItemNo_MASTER_SWORD_3_e) {
         mEventIdx = dComIfGp_evmng_getEventIdx("tagwp2");
     } else if (dComIfGs_getTriforceNum() < 8) {
         mEventIdx = dComIfGp_evmng_getEventIdx("tagwp");
@@ -165,7 +165,7 @@ void daTag_Mk_c::demoInitMake() {
     csXyz local_28;
     local_28.set(0, 0x4000, 0);
 
-    fopAc_ac_c* a_item = fopAcM_createItemForKP2(&local_20, dItem_JOY_PENDANT_e, fopAcM_GetRoomNo(this), &local_28, NULL, 10.0f, 10.0f, -2.1f, 0);
+    fopAc_ac_c* a_item = fopAcM_createItemForKP2(&local_20, dItemNo_JOY_PENDANT_e, fopAcM_GetRoomNo(this), &local_28, NULL, 10.0f, 10.0f, -2.1f, 0);
     JUT_ASSERT(360, a_item);
 
     m2B4 = fpcM_GetID(a_item);

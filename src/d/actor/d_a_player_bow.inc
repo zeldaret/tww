@@ -150,7 +150,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
             }
             m355C = 1;
         } else if (daArrow_c::changeArrowMp()) {
-            if (mEquipItem != dItem_BOW_e) {
+            if (mEquipItem != dItemNo_BOW_e) {
                 dComIfGp_setRStatus(dActStts_SWAP_MODES_e);
                 if (spActionTrigger() && arrow != NULL) {
                     mActorKeepEquip.setData(arrow->changeArrowType());
@@ -177,7 +177,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
                     seStartSystem(JA_SE_ITEM_TARGET_OUT);
                 }
             } else if (daArrow_c::changeArrowMp()) {
-                if (mEquipItem != dItem_BOW_e) {
+                if (mEquipItem != dItemNo_BOW_e) {
                     dComIfGp_setRStatus(dActStts_SWAP_MODES_e);
                     if (spActionTrigger()) {
                         daArrow_c::changeArrowTypeNotReady();

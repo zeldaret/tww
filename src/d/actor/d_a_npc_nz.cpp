@@ -230,7 +230,7 @@ daNpc_Nz_HIO_c::daNpc_Nz_HIO_c() {
 static s16 daNpc_Nz_XyCheckCB(void* i_actor, int i_itemBtn) {
     daNpc_Nz_c* i_this = static_cast<daNpc_Nz_c*>(i_actor);
 
-    if(dComIfGp_getSelectItem(i_itemBtn) == dItem_BIRD_BAIT_5_e) {
+    if(dComIfGp_getSelectItem(i_itemBtn) == dItemNo_BIRD_BAIT_5_e) {
         f32 temp2 = l_HIO.field_0x20;
         daPy_py_c* player = daPy_getPlayerActorClass();
         cXyz temp(player->current.pos);
@@ -418,22 +418,22 @@ void daNpc_Nz_c::setMtx() {
         cXyz temp3 = temp + temp2;
 
         switch(field_0x908) {
-            case dItem_BIRD_BAIT_5_e:
+            case dItemNo_BIRD_BAIT_5_e:
                 temp4 = -15.0f;
                 break;
-            case dItem_HYOI_PEAR_e:
+            case dItemNo_HYOI_PEAR_e:
                 temp4 = -5.0f;
                 break;
-            case dItem_RED_POTION_e:
-            case dItem_BLUE_POTION_e:
+            case dItemNo_RED_POTION_e:
+            case dItemNo_BLUE_POTION_e:
                 temp4 = -5.0f;
                 break;
-            case dItem_BOMB_10_e:
-            case dItem_BOMB_30_e:
+            case dItemNo_BOMB_10_e:
+            case dItemNo_BOMB_30_e:
                 temp4 = -15.0f;
                 break;
-            case dItem_ARROW_10_e:
-            case dItem_ARROW_30_e:
+            case dItemNo_ARROW_10_e:
+            case dItemNo_ARROW_30_e:
                 temp4 = -10.0f;
                 break;
         }
@@ -520,7 +520,7 @@ static u32 daNpcNz_getShopBoughtMsg(u8 itemNo) {
         return 0x3405;
     }
 
-    if((itemNo == dItem_RED_POTION_e || itemNo == dItem_BLUE_POTION_e) && !dComIfGs_checkEmptyBottle()) {
+    if((itemNo == dItemNo_RED_POTION_e || itemNo == dItemNo_BLUE_POTION_e) && !dComIfGs_checkEmptyBottle()) {
         return 0x3406;
     }
 
@@ -532,7 +532,7 @@ static u32 daNpcNz_getShopBoughtMsg(u8 itemNo) {
         return 0x3407;
     }
 
-    if((itemNo == dItem_BIRD_BAIT_5_e || itemNo == dItem_HYOI_PEAR_e) && !dComIfGs_checkBaitItemEmpty()) {
+    if((itemNo == dItemNo_BIRD_BAIT_5_e || itemNo == dItemNo_HYOI_PEAR_e) && !dComIfGs_checkBaitItemEmpty()) {
         return 0x3407;
     }
 
@@ -618,20 +618,20 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
 
     const u8 itemArr1[4][2] = {
         {
-            dItem_BIRD_BAIT_5_e,
-            dItem_HYOI_PEAR_e,
+            dItemNo_BIRD_BAIT_5_e,
+            dItemNo_HYOI_PEAR_e,
         },
         {
-            dItem_RED_POTION_e,
-            dItem_BLUE_POTION_e,
+            dItemNo_RED_POTION_e,
+            dItemNo_BLUE_POTION_e,
         },
         {
-            dItem_BOMB_10_e,
-            dItem_BOMB_30_e,
+            dItemNo_BOMB_10_e,
+            dItemNo_BOMB_30_e,
         },
         {
-            dItem_ARROW_10_e,
-            dItem_ARROW_30_e,
+            dItemNo_ARROW_10_e,
+            dItemNo_ARROW_30_e,
         },
     };
 
@@ -644,10 +644,10 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
             if(dComIfGs_checkGetBottle()) {
                 temp += 1;
             }
-            if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+            if(dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) {
                 temp += 1;
             }
-            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e) {
+            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItemNo_NONE_e) {
                 temp += 1;
             }
 

@@ -247,7 +247,7 @@ static s16 daNpc_hr_XyCheckCB(void* i_this, int i_itemBtn) {
 
 /* 00000838-0000085C       .text XyCheckCB__10daNpc_Hr_cFi */
 s16 daNpc_Hr_c::XyCheckCB(int i_itemBtn) {
-    return dComIfGp_getSelectItem(i_itemBtn) == dItem_WIND_WAKER_e ? TRUE : FALSE;
+    return dComIfGp_getSelectItem(i_itemBtn) == dItemNo_WIND_WAKER_e ? TRUE : FALSE;
 }
 
 /* 0000085C-000008AC       .text daNpc_hr_XyEventCB__FPvi */
@@ -461,7 +461,7 @@ BOOL daNpc_Hr_c::demoProcTact0() {
             if (dComIfGp_checkMesgCancelButton()) {
                 setFlag(HR_FLAG_00000200);
             } else {
-                execItemGet(TACT_SONG1);
+                execItemGet(dItemNo_WINDS_REQUIEM_e);
             }
             dComIfGp_evmng_cutEnd(mStaffIdx);
             clrFlag(HR_FLAG_00000002);

@@ -2542,9 +2542,9 @@ void dMeter_xyMove(sub_meter_class* i_Meter) {
             dMeter_xyItemChange(i_Meter, itemBtn);
             bVar2 = false;
 #if VERSION == VERSION_DEMO
-            if ((i_Meter->field_0x3021[itemBtn] == dItem_MAGIC_ARROW_e) || (i_Meter->field_0x3021[itemBtn] == dItem_LIGHT_ARROW_e))
+            if ((i_Meter->field_0x3021[itemBtn] == dItemNo_MAGIC_ARROW_e) || (i_Meter->field_0x3021[itemBtn] == dItemNo_LIGHT_ARROW_e))
 #else
-            if ((dComIfGp_getSelectItem(itemBtn) != dItem_MAGIC_ARROW_e) && (dComIfGp_getSelectItem(itemBtn) != dItem_LIGHT_ARROW_e))
+            if ((dComIfGp_getSelectItem(itemBtn) != dItemNo_MAGIC_ARROW_e) && (dComIfGp_getSelectItem(itemBtn) != dItemNo_LIGHT_ARROW_e))
 #endif
             {
                 i_Meter->field_0x2320[itemBtn].pane->hide();
@@ -2561,9 +2561,9 @@ void dMeter_xyMove(sub_meter_class* i_Meter) {
     dMeter_xyTrans(i_Meter);
     for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
         dVar1 = dComIfGp_getSelectItem(itemBtn);
-        if ((dVar1 == dItem_MAGIC_ARROW_e) || (dVar1 == dItem_LIGHT_ARROW_e)) {
+        if ((dVar1 == dItemNo_MAGIC_ARROW_e) || (dVar1 == dItemNo_LIGHT_ARROW_e)) {
             dMeter_xyBowLightAnime(i_Meter, itemBtn);
-        } else if (dVar1 == dItem_FOREST_WATER_e) {
+        } else if (dVar1 == dItemNo_FOREST_WATER_e) {
             bVar3 = true;
             local_38.set(i_Meter->field_0x2080[itemBtn].mPosCenter.x - 320.0f, i_Meter->field_0x2080[itemBtn].mPosCenter.y - 240.0f, 0.0f);
             for (s32 j = 0; j < 2; j++) {
@@ -2614,28 +2614,28 @@ int dMeter_xyEquipItem(int i_itemBtn) {
     u8 itemNo = dComIfGs_getItem(invIdx);
     u8 beastIdx = 0;
     switch (itemNo) {
-    case dItem_SKULL_NECKLACE_e:
+    case dItemNo_SKULL_NECKLACE_e:
         beastIdx = dBeastIdx_SKULL_NECKLACE_e;
         break;
-    case dItem_BOKOBABA_SEED_e:
+    case dItemNo_BOKOBABA_SEED_e:
         beastIdx = dBeastIdx_BOKOBABA_SEED_e;
         break;
-    case dItem_GOLDEN_FEATHER_e:
+    case dItemNo_GOLDEN_FEATHER_e:
         beastIdx = dBeastIdx_GOLDEN_FEATHER_e;
         break;
-    case dItem_KNIGHTS_CREST_e:
+    case dItemNo_KNIGHTS_CREST_e:
         beastIdx = dBeastIdx_KNIGHTS_CREST_e;
         break;
-    case dItem_RED_JELLY_e:
+    case dItemNo_RED_JELLY_e:
         beastIdx = dBeastIdx_RED_JELLY_e;
         break;
-    case dItem_GREEN_JELLY_e:
+    case dItemNo_GREEN_JELLY_e:
         beastIdx = dBeastIdx_GREEN_JELLY_e;
         break;
-    case dItem_BLUE_JELLY_e:
+    case dItemNo_BLUE_JELLY_e:
         beastIdx = dBeastIdx_BLUE_JELLY_e;
         break;
-    case dItem_JOY_PENDANT_e:
+    case dItemNo_JOY_PENDANT_e:
         beastIdx = dBeastIdx_JOY_PENDANT_e;
         break;
     }
@@ -2644,13 +2644,13 @@ int dMeter_xyEquipItem(int i_itemBtn) {
 
 /* 801F543C-801F57B0       .text dMeter_xyItemNumberSet__FP15sub_meter_classi */
 void dMeter_xyItemNumberSet(sub_meter_class* i_Meter, int i_itemBtn) {
-    if ((dComIfGp_getSelectItem(i_itemBtn) == CAMERA) || (dComIfGp_getSelectItem(i_itemBtn) == CAMERA2)) {
+    if ((dComIfGp_getSelectItem(i_itemBtn) == dItemNo_PICTO_BOX_e) || (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_DELUXE_PICTO_BOX_e)) {
         dMeter_PaneHide(&i_Meter->field_0x1f30[i_itemBtn]);
         dMeter_PaneShow(&i_Meter->field_0x1fd8[i_itemBtn]);
         dMeter_numberSet(i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getPictureNum());
         dMeter_numberColor((J2DPicture*)i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getPictureNum(), 3);
-    } else if ((dComIfGp_getSelectItem(i_itemBtn) == dItem_BOW_e) ||
-               (dComIfGp_getSelectItem(i_itemBtn) == dItem_MAGIC_ARROW_e || (dComIfGp_getSelectItem(i_itemBtn) == dItem_LIGHT_ARROW_e)))
+    } else if ((dComIfGp_getSelectItem(i_itemBtn) == dItemNo_BOW_e) ||
+               (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_MAGIC_ARROW_e || (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_LIGHT_ARROW_e)))
     {
         dMeter_PaneShow(&i_Meter->field_0x1f30[i_itemBtn]);
         dMeter_PaneShow(&i_Meter->field_0x1fd8[i_itemBtn]);
@@ -2662,7 +2662,7 @@ void dMeter_xyItemNumberSet(sub_meter_class* i_Meter, int i_itemBtn) {
         }
         dMeter_numberSet(i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getArrowNum() % 10);
         dMeter_numberColor((J2DPicture*)i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getArrowNum(), dComIfGs_getArrowMax());
-    } else if (dComIfGp_getSelectItem(i_itemBtn) == dItem_BOMB_BAG_e) {
+    } else if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_BOMB_BAG_e) {
         dMeter_PaneShow(&i_Meter->field_0x1f30[i_itemBtn]);
         dMeter_PaneShow(&i_Meter->field_0x1fd8[i_itemBtn]);
         if (dComIfGs_getBombNum() < 10) {
@@ -2687,7 +2687,7 @@ void dMeter_xyItemNumberSet(sub_meter_class* i_Meter, int i_itemBtn) {
         dMeter_numberColor((J2DPicture*)i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getBeastNum(beastIdx), 99);
     } else {
         if ((dComIfGs_getSelectItem(i_itemBtn) >= dInvSlot_BaitFirst_e) && (dComIfGs_getSelectItem(i_itemBtn) <= dInvSlot_BaitLast_e - 1)) {
-            if (dComIfGp_getSelectItem(i_itemBtn) == dItem_HYOI_PEAR_e) {
+            if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_HYOI_PEAR_e) {
                 dMeter_PaneHide(&i_Meter->field_0x1f30[i_itemBtn]);
                 dMeter_PaneHide(&i_Meter->field_0x1fd8[i_itemBtn]);
             } else {
@@ -2753,7 +2753,7 @@ void dMeter_xyItemCountUp(sub_meter_class* i_Meter) {
         dComIfGs_setPictureNum(sVar4);
         bVar3 = true;
     }
-    if ((((dComIfGs_checkGetItem(dItem_BOW_e)) || (dComIfGs_checkGetItem(dItem_MAGIC_ARROW_e)) || (dComIfGs_checkGetItem(dItem_LIGHT_ARROW_e))) &&
+    if ((((dComIfGs_checkGetItem(dItemNo_BOW_e)) || (dComIfGs_checkGetItem(dItemNo_MAGIC_ARROW_e)) || (dComIfGs_checkGetItem(dItemNo_LIGHT_ARROW_e))) &&
          (dComIfGp_getItemArrowNumCount() != 0)) ||
         (arrowMax != dComIfGs_getArrowMax()))
     {
@@ -2772,7 +2772,7 @@ void dMeter_xyItemCountUp(sub_meter_class* i_Meter) {
         arrowMax = dComIfGs_getArrowMax();
         bVar3 = 1;
     }
-    if (((dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) && (dComIfGp_getItemBombNumCount() != 0)) || (bombMax != dComIfGs_getBombMax())) {
+    if (((dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) && (dComIfGp_getItemBombNumCount() != 0)) || (bombMax != dComIfGs_getBombMax())) {
         if (g_meterHIO.field_0x63 != 0) {
             g_dComIfG_gameInfo.play.mItemBombNumCount = 0;
         }
@@ -2820,7 +2820,7 @@ void dMeter_xyItemCountUp(sub_meter_class* i_Meter) {
     }
 #if VERSION > VERSION_DEMO
     for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
-        if (dComIfGp_getSelectItem(itemBtn) == dItem_BIRD_BAIT_5_e) {
+        if (dComIfGp_getSelectItem(itemBtn) == dItemNo_BIRD_BAIT_5_e) {
             bVar3 = true;
         }
     }
@@ -2837,7 +2837,7 @@ void dMeter_xyItemChange(sub_meter_class* i_Meter, int i_itemBtn) {
     JKRArchive* pArc;
     const char* pFilename;
 
-    if (dComIfGp_getSelectItem(i_itemBtn) != dItem_NONE_e) {
+    if (dComIfGp_getSelectItem(i_itemBtn) != dItemNo_NONE_e) {
         if (dComIfGs_getSelectItem(i_itemBtn) >= dInvSlot_ReserveFirst_e) {
             dMeter_PaneShow(&i_Meter->field_0x2080[i_itemBtn]);
             dMeter_PaneShow(&i_Meter->field_0x2128[i_itemBtn]);
@@ -2870,19 +2870,19 @@ void dMeter_xyItemChange(sub_meter_class* i_Meter, int i_itemBtn) {
             dMeter_PaneShow(&i_Meter->field_0x2128[i_itemBtn]);
             u8 uVar2 = dComIfGp_getSelectItem(i_itemBtn);
             u8 var_r4 = uVar2;
-            if (uVar2 == dItem_MAGIC_ARROW_e) {
+            if (uVar2 == dItemNo_MAGIC_ARROW_e) {
                 i_Meter->field_0x2320[i_itemBtn].pane->show();
                 i_Meter->field_0x23c8[i_itemBtn].pane->show();
                 i_Meter->field_0x2470[i_itemBtn].pane->hide();
-                var_r4 = dItem_BOW_e;
-            } else if (uVar2 == dItem_LIGHT_ARROW_e) {
+                var_r4 = dItemNo_BOW_e;
+            } else if (uVar2 == dItemNo_LIGHT_ARROW_e) {
                 i_Meter->field_0x2320[i_itemBtn].pane->show();
                 i_Meter->field_0x23c8[i_itemBtn].pane->show();
                 i_Meter->field_0x2470[i_itemBtn].pane->show();
-                var_r4 = dItem_BOW_e;
+                var_r4 = dItemNo_BOW_e;
             }
-            if ((var_r4 == dItem_MAGIC_ARROW_e) || (var_r4 == dItem_LIGHT_ARROW_e)) {
-                var_r4 = dItem_BOW_e;
+            if ((var_r4 == dItemNo_MAGIC_ARROW_e) || (var_r4 == dItemNo_LIGHT_ARROW_e)) {
+                var_r4 = dItemNo_BOW_e;
             }
             pArc = dComIfGp_getItemIconArchive();
             pFilename = dItem_data::getTexture(var_r4);
@@ -2965,42 +2965,42 @@ void dMeter_xyAlpha(sub_meter_class* i_Meter) {
                     }
                 } else {
                     for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
-                        if (((i_Meter->mStatusFlags & dMtrStts_UNK1000_e) && (dComIfGp_getSelectItem(itemBtn) != dItem_GRAPPLING_HOOK_e)) ||
-                            ((i_Meter->mStatusFlags & dMtrStts_UNK80_e) && (dComIfGp_getSelectItem(itemBtn) != dItem_TELESCOPE_e)) ||
+                        if (((i_Meter->mStatusFlags & dMtrStts_UNK1000_e) && (dComIfGp_getSelectItem(itemBtn) != dItemNo_GRAPPLING_HOOK_e)) ||
+                            ((i_Meter->mStatusFlags & dMtrStts_UNK80_e) && (dComIfGp_getSelectItem(itemBtn) != dItemNo_TELESCOPE_e)) ||
                             ((i_Meter->mStatusFlags & dMtrStts_UNK20000_e) &&
-                             ((dVar2 = dComIfGp_getSelectItem(itemBtn), ((dVar2 == CAMERA) == 0)) || (dVar2 != CAMERA2))) ||
+                             ((dVar2 = dComIfGp_getSelectItem(itemBtn), ((dVar2 == dItemNo_PICTO_BOX_e) == 0)) || (dVar2 != dItemNo_DELUXE_PICTO_BOX_e))) ||
                             ((i_Meter->mStatusFlags & dMtrStts_UNK400_e) && (dComIfGp_getMiniGameType() != 1) &&
-                             (dVar2 = dComIfGp_getSelectItem(itemBtn), ((dVar2 == NORMAL_SAIL) == 0)) && (dVar2 != dItem_TELESCOPE_e) &&
-                             (dVar2 != dItem_WIND_WAKER_e) && (dVar2 != dItem_GRAPPLING_HOOK_e) && (dVar2 != dItem_BOOMERANG_e) &&
-                             (dVar2 != dItem_TINGLE_TUNER_e) && (dVar2 != CAMERA) && (dVar2 != CAMERA2) && (dVar2 != dItem_MAGIC_ARMOR_e) &&
-                             (dVar2 != dItem_BAIT_BAG_e) && (dVar2 != dItem_HYOI_PEAR_e) && (dVar2 != dItem_BIRD_BAIT_5_e) && (dVar2 != dItem_BOW_e) &&
-                             (dVar2 != dItem_MAGIC_ARROW_e) && (dVar2 != dItem_LIGHT_ARROW_e) && (dVar2 != dItem_BOMB_BAG_e) && (dVar2 != dItem_HOOKSHOT_e) &&
-                             (dVar2 != dItem_EMPTY_BOTTLE_e) && (dVar2 != dItem_RED_POTION_e) && (dVar2 != dItem_GREEN_POTION_e) &&
-                             (dVar2 != dItem_BLUE_POTION_e) && (dVar2 != dItem_HALF_SOUP_BOTTLE_e) && (dVar2 != dItem_SOUP_BOTTLE_e) &&
-                             (dVar2 != dItem_WATER_BOTTLE_e) && (dVar2 != dItem_FAIRY_BOTTLE_e) && (dVar2 != dItem_FIREFLY_BOTTLE_e) &&
-                             (dVar2 != dItem_FOREST_WATER_e)) ||
-                            ((dComIfGp_getMiniGameType() == 1) && (dVar2 = dComIfGp_getSelectItem(itemBtn), ((dVar2 == NORMAL_SAIL) == 0)) &&
-                             (dVar2 != dItem_TELESCOPE_e)) ||
+                             (dVar2 = dComIfGp_getSelectItem(itemBtn), ((dVar2 == dItemNo_SAIL_e) == 0)) && (dVar2 != dItemNo_TELESCOPE_e) &&
+                             (dVar2 != dItemNo_WIND_WAKER_e) && (dVar2 != dItemNo_GRAPPLING_HOOK_e) && (dVar2 != dItemNo_BOOMERANG_e) &&
+                             (dVar2 != dItemNo_TINGLE_TUNER_e) && (dVar2 != dItemNo_PICTO_BOX_e) && (dVar2 != dItemNo_DELUXE_PICTO_BOX_e) && (dVar2 != dItemNo_MAGIC_ARMOR_e) &&
+                             (dVar2 != dItemNo_BAIT_BAG_e) && (dVar2 != dItemNo_HYOI_PEAR_e) && (dVar2 != dItemNo_BIRD_BAIT_5_e) && (dVar2 != dItemNo_BOW_e) &&
+                             (dVar2 != dItemNo_MAGIC_ARROW_e) && (dVar2 != dItemNo_LIGHT_ARROW_e) && (dVar2 != dItemNo_BOMB_BAG_e) && (dVar2 != dItemNo_HOOKSHOT_e) &&
+                             (dVar2 != dItemNo_EMPTY_BOTTLE_e) && (dVar2 != dItemNo_RED_POTION_e) && (dVar2 != dItemNo_GREEN_POTION_e) &&
+                             (dVar2 != dItemNo_BLUE_POTION_e) && (dVar2 != dItemNo_HALF_SOUP_BOTTLE_e) && (dVar2 != dItemNo_SOUP_BOTTLE_e) &&
+                             (dVar2 != dItemNo_WATER_BOTTLE_e) && (dVar2 != dItemNo_FAIRY_BOTTLE_e) && (dVar2 != dItemNo_FIREFLY_BOTTLE_e) &&
+                             (dVar2 != dItemNo_FOREST_WATER_e)) ||
+                            ((dComIfGp_getMiniGameType() == 1) && (dVar2 = dComIfGp_getSelectItem(itemBtn), ((dVar2 == dItemNo_SAIL_e) == 0)) &&
+                             (dVar2 != dItemNo_TELESCOPE_e)) ||
                             ((dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_BOSS_e) &&
                              ((strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0) || (strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0) ||
                               (strcmp(dComIfGp_getStartStageName(), "Xboss2") == 0) || (strcmp(dComIfGp_getStartStageName(), "Xboss3") == 0)) &&
-                             ((dVar2 = dComIfGp_getSelectItem(itemBtn), (dVar2 == dItem_WATER_BOTTLE_e)) || ((u8)dVar2 == dItem_FIREFLY_BOTTLE_e) ||
-                              (dVar2 == dItem_FOREST_WATER_e))) ||
-                            ((i_Meter->mStatusFlags & dMtrStts_UNK2_e) && (dVar2 = dComIfGp_getSelectItem(itemBtn), (dVar2 == dItem_TINGLE_TUNER_e) == 0) &&
-                             ((dVar2 != dItem_WIND_WAKER_e) || (strcmp(dComIfGp_getStartStageName(), "Otkura") != 0)) &&
-                             ((dComIfGp_getSelectItem(itemBtn) != dItem_GRAPPLING_HOOK_e) || (strcmp(dComIfGp_getStartStageName(), "Abesso") != 0)) &&
-                             (dVar2 = dComIfGp_getSelectItem(itemBtn), ((dVar2 == CAMERA) == 0)) && (dVar2 != CAMERA2) && (dVar2 != dItem_SPOILS_BAG_e) &&
-                             (dVar2 != dItem_SKULL_NECKLACE_e) && (dVar2 != dItem_BOKOBABA_SEED_e) && (dVar2 != dItem_GOLDEN_FEATHER_e) &&
-                             (dVar2 != dItem_KNIGHTS_CREST_e) && (dVar2 != dItem_RED_JELLY_e) && (dVar2 != dItem_GREEN_JELLY_e) && (dVar2 != dItem_BLUE_JELLY_e) &&
-                             (dVar2 != dItem_JOY_PENDANT_e) && (dVar2 != dItem_BAIT_BAG_e) && (dVar2 != dItem_BIRD_BAIT_5_e) && (dVar2 != dItem_HYOI_PEAR_e) &&
-                             (dVar2 != dItem_EMPTY_BOTTLE_e) && (dVar2 != dItem_RED_POTION_e) && (dVar2 != dItem_GREEN_POTION_e) &&
-                             (dVar2 != dItem_BLUE_POTION_e) && (dVar2 != dItem_HALF_SOUP_BOTTLE_e) && (dVar2 != dItem_SOUP_BOTTLE_e) &&
-                             (dVar2 != dItem_WATER_BOTTLE_e) && (dVar2 != dItem_FAIRY_BOTTLE_e) && (dVar2 != dItem_FIREFLY_BOTTLE_e) &&
-                             (dVar2 != dItem_FOREST_WATER_e) && (dVar2 != dItem_DELIVERY_BAG_e) && (dVar2 != FLOWER_1) && (dVar2 != FLOWER_2) &&
-                             (dVar2 != FLOWER_3) && (dVar2 != HEROS_FLAG) && (dVar2 != TAIRYO_FLAG) && (dVar2 != SALES_FLAG) && (dVar2 != WIND_FLAG) &&
-                             (dVar2 != RED_FLAG) && (dVar2 != FOSSIL_HEAD) && (dVar2 != WATER_STATUE) && (dVar2 != POSTMAN_STATUE) &&
-                             (dVar2 != PRESIDENT_STATUE) && (dVar2 != dItem_FATHER_LETTER_e) && (dVar2 != dItem_NOTE_TO_MOM_e) && (dVar2 != MAGYS_LETTER) &&
-                             (dVar2 != MO_LETTER) && (dVar2 != COTTAGE_PAPER) && (dVar2 != KAISEN_PRESENT1) && (dVar2 != KAISEN_PRESENT2)))
+                             ((dVar2 = dComIfGp_getSelectItem(itemBtn), (dVar2 == dItemNo_WATER_BOTTLE_e)) || ((u8)dVar2 == dItemNo_FIREFLY_BOTTLE_e) ||
+                              (dVar2 == dItemNo_FOREST_WATER_e))) ||
+                            ((i_Meter->mStatusFlags & dMtrStts_UNK2_e) && (dVar2 = dComIfGp_getSelectItem(itemBtn), (dVar2 == dItemNo_TINGLE_TUNER_e) == 0) &&
+                             ((dVar2 != dItemNo_WIND_WAKER_e) || (strcmp(dComIfGp_getStartStageName(), "Otkura") != 0)) &&
+                             ((dComIfGp_getSelectItem(itemBtn) != dItemNo_GRAPPLING_HOOK_e) || (strcmp(dComIfGp_getStartStageName(), "Abesso") != 0)) &&
+                             (dVar2 = dComIfGp_getSelectItem(itemBtn), ((dVar2 == dItemNo_PICTO_BOX_e) == 0)) && (dVar2 != dItemNo_DELUXE_PICTO_BOX_e) && (dVar2 != dItemNo_SPOILS_BAG_e) &&
+                             (dVar2 != dItemNo_SKULL_NECKLACE_e) && (dVar2 != dItemNo_BOKOBABA_SEED_e) && (dVar2 != dItemNo_GOLDEN_FEATHER_e) &&
+                             (dVar2 != dItemNo_KNIGHTS_CREST_e) && (dVar2 != dItemNo_RED_JELLY_e) && (dVar2 != dItemNo_GREEN_JELLY_e) && (dVar2 != dItemNo_BLUE_JELLY_e) &&
+                             (dVar2 != dItemNo_JOY_PENDANT_e) && (dVar2 != dItemNo_BAIT_BAG_e) && (dVar2 != dItemNo_BIRD_BAIT_5_e) && (dVar2 != dItemNo_HYOI_PEAR_e) &&
+                             (dVar2 != dItemNo_EMPTY_BOTTLE_e) && (dVar2 != dItemNo_RED_POTION_e) && (dVar2 != dItemNo_GREEN_POTION_e) &&
+                             (dVar2 != dItemNo_BLUE_POTION_e) && (dVar2 != dItemNo_HALF_SOUP_BOTTLE_e) && (dVar2 != dItemNo_SOUP_BOTTLE_e) &&
+                             (dVar2 != dItemNo_WATER_BOTTLE_e) && (dVar2 != dItemNo_FAIRY_BOTTLE_e) && (dVar2 != dItemNo_FIREFLY_BOTTLE_e) &&
+                             (dVar2 != dItemNo_FOREST_WATER_e) && (dVar2 != dItemNo_DELIVERY_BAG_e) && (dVar2 != dItemNo_TOWN_FLOWER_e) && (dVar2 != dItemNo_SEA_FLOWER_e) &&
+                             (dVar2 != dItemNo_EXOTIC_FLOWER_e) && (dVar2 != dItemNo_HEROS_FLAG_e) && (dVar2 != dItemNo_BIG_CATCH_FLAG_e) && (dVar2 != dItemNo_BIG_SALE_FLAG_e) && (dVar2 != dItemNo_PINWHEEL_e) &&
+                             (dVar2 != dItemNo_SICKLE_MOON_FLAG_e) && (dVar2 != dItemNo_SKULL_TOWER_IDOL_e) && (dVar2 != dItemNo_FOUNTAIN_IDOL_e) && (dVar2 != dItemNo_POSTMAN_STATUE_e) &&
+                             (dVar2 != dItemNo_SHOP_GURU_STATUE_e) && (dVar2 != dItemNo_FATHER_LETTER_e) && (dVar2 != dItemNo_NOTE_TO_MOM_e) && (dVar2 != dItemNo_MAGGIES_LETTER_e) &&
+                             (dVar2 != dItemNo_MOBLINS_LETTER_e) && (dVar2 != dItemNo_CABANA_DEED_e) && (dVar2 != dItemNo_COMPLIMENTARY_ID_e) && (dVar2 != dItemNo_FILL_UP_COUPON_e)))
                         {
                             if (alphaNowFrame[itemBtn] > 3) {
                                 alphaNowFrame[itemBtn]--;

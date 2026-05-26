@@ -54,7 +54,7 @@ void daSpcItem01_c::set_mtx() {
     cXyz scaleVec = scale;
     f32 offsetY = 0.0f;
     switch (m_itemNo) {
-    case dItem_KNIGHTS_CREST_e:
+    case dItemNo_KNIGHTS_CREST_e:
         offsetY = -24.0f;
         break;
     }
@@ -76,7 +76,7 @@ cPhs_State daSpcItem01_c::_create() {
     fopAcM_ct(this, daSpcItem01_c);
 
     m_itemNo = daSpcItem01_prm::getItemNo(this);
-    if (m_itemNo == dItem_SHIELD_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E20)) {
+    if (m_itemNo == dItemNo_SHIELD_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E20)) {
         setLoadError();
         return cPhs_ERROR_e;
     }
@@ -115,7 +115,7 @@ BOOL daSpcItem01_c::CreateInit() {
     field_0x644 = daSpcItem01_prm::getFlag(this);
     fopAcM_SetGravity(this, -4.0f);
     switch ((s8)m_itemNo) {
-    case dItem_SHIELD_e:
+    case dItemNo_SHIELD_e:
         scale.x = 1.5f;
         scale.y = 1.5f;
         scale.z = 1.5f;
@@ -146,7 +146,7 @@ BOOL daSpcItem01_c::_execute() {
 
 /* 8015DFE8-8015E070       .text set_effect__13daSpcItem01_cFv */
 void daSpcItem01_c::set_effect() {
-    if (cLib_checkBit(field_0x644, (u16)0x01) && dItem_data::checkAppearEffect(m_itemNo) && !field_0x642 && m_itemNo != dItem_KNIGHTS_CREST_e) {
+    if (cLib_checkBit(field_0x644, (u16)0x01) && dItem_data::checkAppearEffect(m_itemNo) && !field_0x642 && m_itemNo != dItemNo_KNIGHTS_CREST_e) {
         dComIfGp_particle_setSimple(dItem_data::getAppearEffect(m_itemNo), &current.pos);
     }
 }
@@ -163,7 +163,7 @@ void daSpcItem01_c::scale_anim() {
 /* 8015E0D8-8015E11C       .text anim_play__13daSpcItem01_cFv */
 void daSpcItem01_c::anim_play() {
     f32 animPlayParam = 1.0f;
-    if (m_itemNo == dItem_KNIGHTS_CREST_e) {
+    if (m_itemNo == dItemNo_KNIGHTS_CREST_e) {
         animPlayParam = 0.0f;
     }
     animPlay(1.0f, 1.0f, 1.0f, 1.0f, animPlayParam);
@@ -174,9 +174,9 @@ void daSpcItem01_c::move() {
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
     mAcch.CrrPos(*dComIfG_Bgsp());
     switch (m_itemNo) {
-    case dItem_SHIELD_e:
+    case dItemNo_SHIELD_e:
         break;
-    case dItem_JOY_PENDANT_e:
+    case dItemNo_JOY_PENDANT_e:
         if (mAcch.ChkGroundLanding()) {
             speed.x = 0.0f;
             speed.y = 0.0f;
@@ -228,7 +228,7 @@ BOOL daSpcItem01_c::_draw() {
 
 /* 8015E2A8-8015E368       .text setTevStr__13daSpcItem01_cFv */
 void daSpcItem01_c::setTevStr() {
-    if (m_itemNo == dItem_KNIGHTS_CREST_e) {
+    if (m_itemNo == dItemNo_KNIGHTS_CREST_e) {
         dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
     } else {
         dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);

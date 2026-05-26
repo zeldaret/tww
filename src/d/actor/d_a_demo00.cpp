@@ -713,16 +713,16 @@ BOOL daDemo00_c::execute() {
                 }
             } else if (field_0x29c == 5) {
                 static const u8 l_itemNo[] = {
-                    dItem_MASTER_SWORD_1_e,
-                    dItem_MASTER_SWORD_2_e,
-                    dItem_MASTER_SWORD_3_e,
-                    dItem_PEARL_DIN_e,
-                    dItem_PEARL_FARORE_e,
-                    dItem_PEARL_NAYRU_e,
-                    dItem_DELIVERY_BAG_e,
-                    dItem_SHIELD_e,
-                    dItem_MAGIC_ARROW_e,
-                    dItem_NONE_e,
+                    dItemNo_MASTER_SWORD_1_e,
+                    dItemNo_MASTER_SWORD_2_e,
+                    dItemNo_MASTER_SWORD_3_e,
+                    dItemNo_PEARL_DIN_e,
+                    dItemNo_PEARL_FARORE_e,
+                    dItemNo_PEARL_NAYRU_e,
+                    dItemNo_DELIVERY_BAG_e,
+                    dItemNo_SHIELD_e,
+                    dItemNo_MAGIC_ARROW_e,
+                    dItemNo_NONE_e,
                 };
                 dDemo_prm_data* data = demo_actor->getPrm()->getData();
                 JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > spB8(data);
@@ -730,7 +730,7 @@ BOOL daDemo00_c::execute() {
                     TValueIterator_raw<u8> it = spB8.begin();
                     int argID = *it;
                     JUT_ASSERT(VERSION_SELECT(797, 844, 858, 858), argID < (sizeof(l_itemNo)/sizeof(u8)));
-                    if (l_itemNo[argID] != dItem_NONE_e) {
+                    if (l_itemNo[argID] != dItemNo_NONE_e) {
                         execItemGet(l_itemNo[argID]);
                     }
                 }

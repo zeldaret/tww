@@ -467,10 +467,10 @@ BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int calcTiming) {
             daStandItem_c* i_this = (daStandItem_c*)userArea;
             mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
             switch (i_this->getItemNo()) {
-            case WIND_FLAG:
+            case dItemNo_PINWHEEL_e:
                 mDoMtx_stack_c::XrotM(i_this->m6B4);
                 break;
-            case WATER_STATUE:
+            case dItemNo_FOUNTAIN_IDOL_e:
                 if (jntNo == 0) {
                     mDoMtx_copy(mDoMtx_stack_c::get(), i_this->m630);
                 } else if (jntNo == 1) {
