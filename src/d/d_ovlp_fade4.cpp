@@ -10,14 +10,22 @@
 #include "m_Do/m_Do_graphic.h"
 
 /* 80224390-80224484       .text init__15dDlst_2DtEff1_cF8_GXColor */
-void dDlst_2DtEff1_c::init(GXColor color) {
-    /* Nonmatching */
+#if VERSION <= VERSION_JPN
+void dDlst_2DtEff1_c::init()
+#else
+void dDlst_2DtEff1_c::init(GXColor color)
+#endif
+{
     snap_dlst.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
-    redraw_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
+    redraw_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f);
     save_dlst.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
-    blur0_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
+    blur0_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f);
     blur0Snap_dlst.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
+#if VERSION <= VERSION_JPN
+    composite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f);
+#else
     composite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, color);
+#endif
 }
 
 /* 80224484-802246CC       .text draw__15dDlst_2DtEff1_cFv */
@@ -33,7 +41,10 @@ void dDlst_2DtEff1_c::draw() {
         composite_dlst.draw();
         first = false;
     } else {
-        if (dComIfGp_getWindowNum() == 0) {
+#if VERSION > VERSION_JPN
+        if (dComIfGp_getWindowNum() == 0)
+#endif
+        {
             s32 w = 320;
             s32 h = 240;
 
@@ -84,7 +95,7 @@ void dDlst_snapShot2_c::draw() {
 /* 80224748-80224884       .text dDlst_setResTimgObj__FPC7ResTIMGP9_GXTexObjPvUlUl */
 bool dDlst_setResTimgObj(const ResTIMG* timg, GXTexObj* texObj, void* imagePtr, u32 w, u32 h) {
     if (timg->indexTexture) {
-        JUT_ASSERT(0xd9, FALSE);
+        JUT_ASSERT(VERSION_SELECT(226, 226, 217, 217), FALSE);
     } else {
         GXInitTexObj(texObj, imagePtr, w, h, (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT, (GXBool)((int)timg->mipmapCount > 1));
     }
@@ -98,10 +109,17 @@ bool dDlst_setResTimgObj(const ResTIMG* timg, GXTexObj* texObj, void* imagePtr, 
 
 /* 80224884-802249C4       .text cnvAddress__FffPfPf */
 void cnvAddress(f32 x1, f32 y1, f32* x2, f32* y2) {
-    JUT_ASSERT(0x11a, x2 != NULL);
-    JUT_ASSERT(0x11b, y2 != NULL);
-    *x2 = 320.0f + (s32)((x1 - 320.0f) * 1.0296875f);
-    *y2 = 240.0f + (s32)((y1 - 240.0f) * 1.0926074f);
+    JUT_ASSERT(VERSION_SELECT(274, 274, 282, 282), x2 != NULL);
+    JUT_ASSERT(VERSION_SELECT(275, 275, 283, 283), y2 != NULL);
+#if VERSION <= VERSION_JPN
+    f32 f2 = 1.03125f;
+    f32 f3 = 1.0946907f;
+#else
+    f32 f2 = 1.0296875f;
+    f32 f3 = 1.0926074f;
+#endif
+    *x2 = 320.0f + (s32)(f2 * (x1 - 320.0f));
+    *y2 = 240.0f + (s32)(f3 * (y1 - 240.0f));
 }
 
 /* 802249C4-80224CC4       .text draw__14dDlst_2Dt_Sp_cFv */
@@ -145,11 +163,15 @@ void dDlst_2Dt_Sp_c::draw() {
     f32 x2, y2;
     cnvAddress(mPosX, mPosY, &x1, &y1);
 
-    // lol
+#if VERSION <= VERSION_JPN
+    x2 = x1 + (mWidth * 1.03125f);
+    y2 = y1 + (mHeight * 1.0946907f);
+#else
     x1 = -9.0f;
     y1 = -21.0f;
     x2 = x1 + (mWidth * 1.0296875f);
     y2 = y1 + (mHeight * 1.0916667f);
+#endif
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition2f32(x1, y1);
@@ -186,14 +208,22 @@ dOvlpFd4_c::dOvlpFd4_c() {
     setExecute(&dOvlpFd4_c::execFirstSnap);
     setDraw(&dOvlpFd4_c::drawFadeOut);
     if (fopOvlpM_GetName(this) == fpcNm_OVERLAP4_e) {
+#if VERSION <= VERSION_JPN
+        fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+#else
         fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_saftyWhiteColor);
+#endif
     } else {
         fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, (GXColor){ 0x00, 0x00, 0x00, 0x00 });
     }
     fadeOutBlur1_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
     fadeOutBlur0_dlst.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
     fadeOutSnap_dlst.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
+#if VERSION <= VERSION_JPN
+    fadeIn_dlst.init();
+#else
     fadeIn_dlst.init(g_saftyWhiteColor);
+#endif
     dComIfGp_2dShowOff();
     timer = 2;
     totalTime = 39;
@@ -272,8 +302,10 @@ void dOvlpFd4_c::execFadeOut() {
         }
 
         fadeOutComposite_dlst.setPer(percent);
-        fadeOutBlur1_dlst.setWidth(wd);
-        fadeOutBlur1_dlst.setHeight(ht);
+        f32 f2 = wd;
+        f32 f0 = ht;
+        fadeOutBlur1_dlst.setWidth(f2);
+        fadeOutBlur1_dlst.setHeight(f0);
         fadeOutBlur0_dlst.setWd(wd);
         fadeOutBlur0_dlst.setHt(ht);
         fadeOutComposite_dlst.setImageWidth(wd / 2);
@@ -315,6 +347,23 @@ void dOvlpFd4_c::execNextSnap() {
     timerStep = -1.0f / timer;
 }
 
+#if VERSION <= VERSION_JPN
+void dOvlpFd4_c::execFadeIn() {
+    fopOvlpM_SceneIsStop();
+    dComIfGp_setWindowNum(0);
+    if (cLib_calcTimer(&timer) == 0 && fadeIn_dlst.timer <= 0.0f) {
+        setDraw(NULL);
+        fopOvlpM_Done(this);
+        dComIfGp_setWindowNum(1);
+        dComIfGp_2dShowOn();
+    } else {
+        fadeIn_dlst.composite_dlst.setPer(fadeIn_dlst.timer * fadeIn_dlst.timer);
+        fadeIn_dlst.timer += timerStep;
+        if (fadeIn_dlst.timer < 0.0f)
+            fadeIn_dlst.timer = 0.0f;
+    }
+}
+#else
 /* 80225528-802255F4       .text execFadeIn__10dOvlpFd4_cFv */
 void dOvlpFd4_c::execFadeIn() {
     if (cLib_calcTimer(&timer) == 0 && fadeIn_dlst.timer <= 0.0f) {
@@ -335,6 +384,7 @@ void dOvlpFd4_c::execFadeIn() {
             fadeIn_dlst.timer = 0.0f;
     }
 }
+#endif
 
 /* 802255F4-80225658       .text dOvlpFd4_Draw__FP10dOvlpFd4_c */
 BOOL dOvlpFd4_Draw(dOvlpFd4_c* i_this) {
@@ -363,7 +413,8 @@ BOOL dOvlpFd4_Delete(dOvlpFd4_c*) {
 
 /* 80225694-802256C0       .text dOvlpFd4_Create__FPv */
 cPhs_State dOvlpFd4_Create(void* i_this) {
-    new (i_this) dOvlpFd4_c();
+    overlap_task_class* ovlp = (overlap_task_class*)i_this;
+    new (ovlp) dOvlpFd4_c();
     return cPhs_COMPLEATE_e;
 }
 
