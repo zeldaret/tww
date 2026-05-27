@@ -8,12 +8,12 @@
 
 /* 000000EC-00000110       .text solidHeapCB__Q210daObjLight5Act_cFP10fopAc_ac_c */
 void daObjLight::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+    create_heap();
 }
 
 /* 00000110-00000344       .text create_heap__Q210daObjLight5Act_cFv */
-void daObjLight::Act_c::create_heap() {
-    /* Nonmatching */
+BOOL daObjLight::Act_c::create_heap() {
+    return;
 }
 
 /* 00000344-000003C0       .text init_collision__Q210daObjLight5Act_cFv */
@@ -57,18 +57,45 @@ void daObjLight::Act_c::delete_fire() {
 }
 
 /* 00000C60-00000C8C       .text now_event__Q210daObjLight5Act_cFs */
-void daObjLight::Act_c::now_event(short) {
-    /* Nonmatching */
+BOOL daObjLight::Act_c::now_event(short event) {
+    BOOL ret = FALSE;
+    if (mEventFlag != 0 && mEvent == event) {
+        ret = TRUE;
+    }
+    return ret;
 }
 
 /* 00000C8C-00000CB4       .text set_event__Q210daObjLight5Act_cFs */
-void daObjLight::Act_c::set_event(short) {
-    /* Nonmatching */
+BOOL daObjLight::Act_c::set_event(short event) {
+    if (mEventFlag == 0) {
+        mEvent = event;
+        mEventFlag = 1;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00000CB4-00000D84       .text exe_event__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::exe_event() {
-    /* Nonmatching */
+    switch (mEventFlag) {
+    case 1:
+        if (eventInfo.checkCommandDemoAccrpt()) {
+            mEventFlag = 2;
+        } else {
+            fopAcM_orderOtherEventId(this, mEvent, 0xff, 0xffff, 0, 1);
+            eventInfo.onCondition(dEvtCnd_UNK2_e);
+        }
+        break;
+
+    case 2:
+        if (dComIfGp_evmng_endCheck(mEvent)) {
+            // pendiente: g_dComIfG_gameInfo + 0x52c0 |= 0x8;
+            mEvent = -1;
+            mEventFlag = 0;
+            field_0x2DE = 20;
+        }
+        break;
+    }
 }
 
 /* 00000D84-00001084       .text set_mtx__Q210daObjLight5Act_cFv */
@@ -93,7 +120,18 @@ void daObjLight::Act_c::control_treasure() {
 
 /* 00001398-00001400       .text _execute__Q210daObjLight5Act_cFv */
 bool daObjLight::Act_c::_execute() {
-    /* Nonmatching */
+    exe_fire();
+    exe_event();
+    renew_angle();
+    set_mtx();
+    set_collision();
+
+    mpBgW->Move();
+
+    control_light();
+    control_treasure();
+
+    return true;
 }
 
 /* 00001400-00001528       .text _draw__Q210daObjLight5Act_cFv */

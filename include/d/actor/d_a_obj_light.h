@@ -7,7 +7,7 @@ namespace daObjLight {
     class Act_c : public fopAc_ac_c {
     public:
         void solidHeapCB(fopAc_ac_c*);
-        void create_heap();
+        BOOL create_heap();
         void init_collision();
         void set_collision();
         cPhs_State _create();
@@ -16,8 +16,8 @@ namespace daObjLight {
         void draw_fire();
         void exe_fire();
         void delete_fire();
-        void now_event(s16);
-        void set_event(s16);
+        BOOL now_event(s16);
+        BOOL set_event(s16);
         void exe_event();
         void set_mtx();
         void renew_angle();
@@ -38,7 +38,13 @@ namespace daObjLight {
         static u8 M_S_lod_access;
 
 public:
-        /* Place member variables here */
+    /* 0x290 */ u8 field_0x290[0x14];
+    /* 0x2A4 */ dBgW* mpBgW;
+    /* 0x2A8 */ u8 field_0x2A8[0x36];
+    /* 0x2DE */ s16 field_0x2DE;
+    /* 0x2E0 */ u8 field_0x2E0[0x1BC];
+    /* 0x49C */ s16 mEvent;
+    /* 0x49E */ s16 mEventFlag;
     };
 };
 
