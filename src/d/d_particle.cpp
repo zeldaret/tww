@@ -350,7 +350,7 @@ void dPa_smokeEcallBack::setup(JPABaseEmitter* param_1, const cXyz* param_2, con
     dPa_followEcallBack::setup(param_1, param_2, param_3, param_4);
     field_0x14 = param_4;
     param_1->setParticleCallBackPtr(dPa_control_c::getSmokePcallback());
-    param_1->mUserData = mWindOff;
+    param_1->setUserWork(mWindOff);
 }
 
 /* 8007B73C-8007B804       .text initiateLighting__FR11_GXColorS10R8_GXColorR8_GXColor */
@@ -395,11 +395,11 @@ void smokeEcallBack(JPABaseEmitter* emtr, dKy_tevstr_c* tevStr, s8, GXColor colo
         } else {
             initiateLighting(tevStr->mColorC0, tevStr->mColorK0, color);
         }
-        color.a = emtr->mGlobalPrmColor.a;
+        color.a = emtr->getGlobalAlpha();
         GXSetNumTexGens(2);
         GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
         GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY);
-        emtr->mDraw.loadTexture(1, GX_TEXMAP1);
+        emtr->loadTexture(1, GX_TEXMAP1);
         GXSetNumTevStages(3);                             
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_KONST, GX_CC_TEXC, GX_CC_ZERO);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
@@ -449,7 +449,7 @@ void dPa_setWindPower(JPABaseParticle* ptcl) {
 
 /* 8007BC84-8007BCB4       .text execute__18dPa_smokePcallBackFP14JPABaseEmitterP15JPABaseParticle */
 void dPa_smokePcallBack::execute(JPABaseEmitter* emtr, JPABaseParticle* ptcl) {
-    if (emtr->mUserData == 0)
+    if (emtr->getUserWork() == 0)
         dPa_setWindPower(ptcl);
 }
 
@@ -460,7 +460,7 @@ void dPa_smokePcallBack::draw(JPABaseEmitter* emtr, JPABaseParticle* ptcl) {
 
 /* 8007C380-8007C3B0       .text draw__22dPa_selectTexEcallBackFP14JPABaseEmitter */
 void dPa_selectTexEcallBack::draw(JPABaseEmitter* emtr) {
-    emtr->mDraw.loadTexture(mTexNo, GX_TEXMAP0);
+    emtr->loadTexture(mTexNo, GX_TEXMAP0);
 }
 
 /* 8007C3B0-8007C420       .text __ct__19dPa_simpleEcallBackFv */
@@ -474,7 +474,7 @@ dPa_simpleData_c::dPa_simpleData_c() {}
 
 /* 8007C460-8007C618       .text executeAfter__19dPa_simpleEcallBackFP14JPABaseEmitter */
 void dPa_simpleEcallBack::executeAfter(JPABaseEmitter* param_1) {
-    s32 r28 = JPABaseEmitter::emtrInfo.mVolumeEmitCount;
+    s32 r28 = param_1->getCurrentCreateNumber();
     if (r28 <= 0) {
         mCount = 0;
     } else {
@@ -510,7 +510,7 @@ void dPa_simpleEcallBack::draw(JPABaseEmitter* emtr) {
     if (mbIsSmoke)
         smokeEcallBack(emtr, NULL, -1, (GXColor){ 0xA0, 0xA0, 0x80, 0xFF });
 
-    if (emtr->mGroupID == dPa_control_c::dPtclGroup_Projection_e)
+    if (emtr->getGroupID() == dPa_control_c::dPtclGroup_Projection_e)
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
 }
 
@@ -538,8 +538,8 @@ JPABaseEmitter* dPa_simpleEcallBack::createEmitter(JPAEmitterManager* manager) {
         if (!mpBaseEmitter) {
             return mpBaseEmitter;
         }
-        mpBaseEmitter->mpEmitterCallBack = this;
-        mpBaseEmitter->mMaxFrame = 0;
+        mpBaseEmitter->setEmitterCallBackPtr(this);
+        mpBaseEmitter->setMaxFrame(0);
         mpBaseEmitter->stopCreateParticle();
     }
     return mpBaseEmitter;
@@ -765,7 +765,7 @@ JPABaseEmitter* dPa_control_c::set(u8 groupID, u16 userID, const cXyz* pos, cons
         emtr->setGlobalScale(tmp2);
     }
 
-    emtr->mGlobalPrmColor.a = alpha;
+    emtr->setGlobalAlpha(alpha);
     if (pCallBack != NULL) {
         emtr->setEmitterCallBackPtr(pCallBack);
         pCallBack->setup(emtr, pos, angle, setupInfo);

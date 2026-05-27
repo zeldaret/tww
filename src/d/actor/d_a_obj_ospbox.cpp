@@ -169,8 +169,8 @@ void daObjOspbox::Act_c::eff_break() {
         NULL,
         -1, &tevStr.mColorK0, &tevStr.mColorK0, &particle_scale);
     if (emitter != NULL) {
-      emitter->mLifeTime = 0x1E;
-      emitter->mInitialVelAxis = 30.0f;
+      emitter->setLifeTime(30);
+      emitter->setAwayFromAxisSpeed(30.0f);
     }
 }
 

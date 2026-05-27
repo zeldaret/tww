@@ -307,6 +307,7 @@ public:
     bool isZDraw() { return mDraw.isZDraw(); }
     bool isChildDraw() { return mDraw.isChildDraw(); }
     MtxP getCamMtxPtr() { return mDraw.getCamMtxPtr(); }
+    void loadTexture(u8 texNo, GXTexMapID map) { mDraw.loadTexture(texNo, map); }
 
     f32 getRandomF() { return mRandomSeed.get_ufloat_1(); }
     f32 getRandomRF() { f32 x = mRandomSeed.get_ufloat_1(); return x + x - 1.0f; }
@@ -316,15 +317,14 @@ public:
     u32 getUserWork() { return mUserData; }
     void setUserWork(u32 work) { mUserData = work; }
 
+    f32 getFrame() { return mTick.getFrame(); }
+
     // TODO
     void calcEmitterGlobalTranslation(JGeometry::TVec3<f32>&) {}
     void drawCB() {}
     void drawEmitterCallBack() {}
-    void getCurrentCreateNumber() const {}
-    f32 getFrame() { return mTick.getFrame(); }
     void getgReRDirection(JGeometry::TVec3<f32>&) {}
     void isContinuousParticle() {}
-    void loadTexture(u8, GXTexMapID) {}
     void setEmitterRotation(const JGeometry::TVec3<s16>&) {}
 
     static JPAEmitterInfo emtrInfo;
@@ -340,6 +340,9 @@ public:
     void getAxisYVec(JGeometry::TVec3<f32>& vec) const {
         // Same as above comment, this implementation could be fake.
         vec.set(emtrInfo.mEmitterGlobalRot[0][1], emtrInfo.mEmitterGlobalRot[1][1], emtrInfo.mEmitterGlobalRot[2][1]);
+    }
+    s32 getCurrentCreateNumber() const {
+        return emtrInfo.mVolumeEmitCount;
     }
 
     static f32 getAspect() { return emtrInfo.mAspect; }

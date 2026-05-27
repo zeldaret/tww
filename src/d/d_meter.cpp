@@ -5949,7 +5949,7 @@ void dMeter_arwMove(sub_meter_class* i_Meter) {
             f32 x = i_Meter->field_0x29b0[1].mPosCenter.x - 320.0f;
             f32 y = i_Meter->field_0x29b0[1].mPosCenter.y - 240.0f;
             i_Meter->field_0x2f24[i]->setGlobalTranslation(x, y, 0.0f);
-            i_Meter->field_0x2f24[i]->mGlobalPrmColor.a = i_Meter->field_0x2940[i].mNowAlpha;
+            i_Meter->field_0x2f24[i]->setGlobalAlpha(i_Meter->field_0x2940[i].mNowAlpha);
         }
     }
 }

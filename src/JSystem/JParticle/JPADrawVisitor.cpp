@@ -80,7 +80,7 @@ void JPADrawExecGenPrjTexMtx::exec(const JPADrawContext* pDC) {
     f32 fovy = JPABaseEmitter::getFovy();
     C_MTXLightPerspective(projMtx, fovy, aspect, 0.5f, -0.5f, 0.5f, 0.5f);
 
-    f32 tick = pDC->pbe->mTick.getFrame();
+    f32 tick = pDC->pbe->getFrame();
     f32 transX = tick * pDC->pbsp->getTexScrollTransX() + pDC->pbsp->getTexStaticTransX();
     f32 transY = tick * pDC->pbsp->getTexScrollTransY() + pDC->pbsp->getTexStaticTransY();
     f32 scaleX = tick * pDC->pbsp->getTexScrollScaleX() + pDC->pbsp->getTexStaticScaleX();
@@ -126,7 +126,7 @@ void JPADrawExecGenIdtMtx::exec(const JPADrawContext* pDC) {
 
 /* 8025FFB0-802602F0       .text exec__20JPADrawExecSetTexMtxFPC14JPADrawContext */
 void JPADrawExecSetTexMtx::exec(const JPADrawContext* pDC) {
-    s32 tick = pDC->pbe->mTick.getFrame();
+    s32 tick = pDC->pbe->getFrame();
     f32 tilingX = 0.5f * pDC->pbsp->getTilingX();
     f32 tilingY = 0.5f * pDC->pbsp->getTilingY();
     f32 transX = tick * pDC->pbsp->getTexScrollTransX() + pDC->pbsp->getTexStaticTransX();
@@ -747,21 +747,21 @@ void JPADrawCalcColorEnv::calc(const JPADrawContext* pDC) {
 
 /* 802647E0-8026486C       .text calc__30JPADrawCalcColorAnmFrameNormalFPC14JPADrawContext */
 void JPADrawCalcColorAnmFrameNormal::calc(const JPADrawContext* pDC) {
-    s32 tick = pDC->pbe->mTick.getFrame();
+    s32 tick = pDC->pbe->getFrame();
     s32 frame = (tick < pDC->pbsp->getColorRegAnmMaxFrm()) ? tick : pDC->pbsp->getColorRegAnmMaxFrm();
     JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 8026486C-802648E0       .text calc__30JPADrawCalcColorAnmFrameRepeatFPC14JPADrawContext */
 void JPADrawCalcColorAnmFrameRepeat::calc(const JPADrawContext* pDC) {
-    f32 tick = pDC->pbe->mTick.getFrame();
+    f32 tick = pDC->pbe->getFrame();
     s32 frame = ((u32)tick) % (pDC->pbsp->getColorRegAnmMaxFrm() + 1);
     JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 802648E0-8026495C       .text calc__31JPADrawCalcColorAnmFrameReverseFPC14JPADrawContext */
 void JPADrawCalcColorAnmFrameReverse::calc(const JPADrawContext* pDC) {
-    s32 tick = pDC->pbe->mTick.getFrame();
+    s32 tick = pDC->pbe->getFrame();
     s32 maxFrame = pDC->pbsp->getColorRegAnmMaxFrm();
     s32 odd = (tick / maxFrame) & 1; // whether we're on an even or odd loop
     s32 frame = tick % maxFrame;
@@ -780,20 +780,20 @@ void JPADrawCalcColorAnmFrameRandom::calc(const JPADrawContext* pDC) {
 
 /* 8026497C-80264A34       .text calc__32JPADrawCalcTextureAnmIndexNormalFPC14JPADrawContext */
 void JPADrawCalcTextureAnmIndexNormal::calc(const JPADrawContext* pDC) {
-    s32 tick = pDC->pbe->mTick.getFrame();
+    s32 tick = pDC->pbe->getFrame();
     s32 idx = ((pDC->pbsp->getTextureAnmKeyNum() - 1) < tick) ? pDC->pbsp->getTextureAnmKeyNum() - 1 : tick;
     pDC->mpDraw->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(idx)];
 }
 
 /* 80264A34-80264AD0       .text calc__32JPADrawCalcTextureAnmIndexRepeatFPC14JPADrawContext */
 void JPADrawCalcTextureAnmIndexRepeat::calc(const JPADrawContext* pDC) {
-    s32 tick = pDC->pbe->mTick.getFrame();
+    s32 tick = pDC->pbe->getFrame();
     pDC->mpDraw->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(tick % pDC->pbsp->getTextureAnmKeyNum())];
 }
 
 /* 80264AD0-80264B80       .text calc__33JPADrawCalcTextureAnmIndexReverseFPC14JPADrawContext */
 void JPADrawCalcTextureAnmIndexReverse::calc(const JPADrawContext* pDC) {
-    s32 tick = pDC->pbe->mTick.getFrame();
+    s32 tick = pDC->pbe->getFrame();
     s32 maxFrame = pDC->pbsp->getTextureAnmKeyNum() - 1;
     s32 odd = (tick / maxFrame) & 1; // whether we're on an even or odd loop
     s32 frame = tick % maxFrame;

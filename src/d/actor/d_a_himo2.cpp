@@ -716,20 +716,20 @@ BOOL himo2_bg_check(himo2_class* i_this) {
                     NULL
                 );
                 if (pJVar5 != NULL) {
-                    pJVar5->mSpread = 0.2f;
-                    pJVar5->mVolumeSweep = 0.15f;
+                    pJVar5->setSpread(0.2f);
+                    pJVar5->setVolumeSweep(0.15f);
                 }
             } else {
                 local_38.x = local_38.x + 0x4000;
                 pJVar5 = dComIfGp_particle_set(dPa_name::ID_AK_JN_ELEMENTHIBANA00, &actor->current.pos, &local_38);
                 if (pJVar5 != NULL) {
-                    pJVar5->mInitialVelAxis = 15.0f;
+                    pJVar5->setAwayFromAxisSpeed(15.0f);
                 }
                 dKy_Sound_set(actor->current.pos, 100, fopAcM_GetID(actor), 5);
             }
             if (pJVar5 != NULL) {
-                pJVar5->mRate = 8.0f;
-                pJVar5->mMaxFrame = 1;
+                pJVar5->setRate(8.0f);
+                pJVar5->setMaxFrame(1);
             }
         }
         return true;

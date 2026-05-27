@@ -656,10 +656,13 @@ void daPy_lk_c::setWaterRipple() {
         simpleAnmPlay(mpSuimenMunyaBtk);
 
         JPABaseEmitter* emitter = m3280.getEmitter();
-        if (emitter != NULL && ((emitter->mGlobalParticleScale.x < 0.8f && checkNoResetFlg0(daPyFlg0_UNK80)) || (emitter->mGlobalParticleScale.x > 0.8f && !checkNoResetFlg0(daPyFlg0_UNK80)))) {
-            m3280.remove();
-
-            emitter = dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &current.pos, NULL, NULL, 0xFF, &m3280);
+        if (emitter != NULL) {
+            JGeometry::TVec3<f32> ptcl_scale;
+            emitter->getGlobalParticleScale(ptcl_scale);
+            if ((ptcl_scale.x < 0.8f && checkNoResetFlg0(daPyFlg0_UNK80)) || (ptcl_scale.x > 0.8f && !checkNoResetFlg0(daPyFlg0_UNK80))) {
+                m3280.remove();
+                emitter = dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &current.pos, NULL, NULL, 0xFF, &m3280);
+            }
         }
 
         if (emitter != NULL) {

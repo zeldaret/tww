@@ -323,7 +323,7 @@ BOOL daNpc_Fa1_c::_execute() {
         setPointLightParam();
     }
     if (isLinkMode() && mpEmitter != NULL) {
-        mpEmitter->mRate = 1.0f;
+        mpEmitter->setRate(1.0f);
     }
     dComIfGp_att_LookRequest(this, 400.0f, 300.0f, -300.0f, 0x6000, 1);
     return TRUE;

@@ -9976,13 +9976,13 @@ void daPy_lk_c::setCollision() {
                         NULL
                     );
                     if (emitter1 != NULL) {
-                        emitter1->mGlobalParticleScale.x = dVar27;
+                        emitter1->setGlobalParticleWidthScale(dVar27);
                     }
                     if (emitter2 != NULL) {
-                        emitter2->mGlobalParticleScale.x = dVar27;
+                        emitter2->setGlobalParticleWidthScale(dVar27);
                     }
                     if (emitter3 != NULL) {
-                        emitter3->mGlobalParticleScale.x = dVar27;
+                        emitter3->setGlobalParticleWidthScale(dVar27);
                     }
                 }
             }
