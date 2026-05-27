@@ -21,6 +21,7 @@ is_rel: bool
 if object_name.startswith("main/"):
   is_rel = False
   object_name = object_name.split("/", 1)[1]
+  object_name = object_name.split(".", 1)[0]
   target_map_path = debug_maps_root_path / "frameworkD.map"
   base_map_path = decomp_root_path / "build/D44J01/framework.elf.MAP"
 else:
@@ -36,7 +37,7 @@ assert retcode == 0, "Ninja build call failed"
 
 def get_main_symbols(framework_map_contents: str, valid_obj_names = None):
   symbols = {}
-  matches = re.findall(r"^  [0-9a-f]{8} ([0-9a-f]{6}) (?:[0-9a-f]{8})(?: +\d+)? (.+?)(?: \(entry of [^)]+\))? \t(\S+)", framework_map_contents, re.IGNORECASE | re.MULTILINE)
+  matches = re.findall(r"^  [0-9a-f]{8} ([0-9a-f]{6}) (?:[0-9a-f]{8})(?: +\d+)? (.+?)(?: \(entry of [^)]+\))? \t(?:\S+\.a )?([^\s\.]+)\.\S+ ?$", framework_map_contents, re.IGNORECASE | re.MULTILINE)
   for match in matches:
     size, name, obj_name = match
     size = int(size, 16)
@@ -51,6 +52,8 @@ def get_main_symbols(framework_map_contents: str, valid_obj_names = None):
       continue
     
     symbols[name] = size
+  if len(symbols) == 0:
+    raise Exception("Failed to find object matching the given name")
   return symbols
 
 def get_rel_symbols(rel_map_data: str):
@@ -101,7 +104,7 @@ if is_rel:
   target_symbols = get_rel_symbols(target_map_path.read_text())
   base_symbols = get_rel_symbols(base_map_path.read_text())
 else:
-  obj_names = [f"{object_name}.o"]
+  obj_names = [object_name]
   target_symbols = get_main_symbols(target_map_path.read_text(), valid_obj_names=obj_names)
   base_symbols = get_main_symbols(base_map_path.read_text(), valid_obj_names=obj_names)
 
