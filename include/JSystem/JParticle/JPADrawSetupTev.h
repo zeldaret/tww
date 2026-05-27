@@ -8,6 +8,7 @@ class JPAExTexShape;
 
 class JPADrawSetupTev {
 public:
+    JPADrawSetupTev() {}
     ~JPADrawSetupTev() {}
     void setupTev(JPABaseShape* param_1, JPAExTexShape* param_2);
 
