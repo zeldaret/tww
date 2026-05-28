@@ -1794,7 +1794,7 @@ static fopAc_ac_c* yari_hit_check(mo2_class* i_this) {
             } else {
                 pcVar2 = i_this->mWeapon2Sph.GetAtHitObj();
             }
-            return pcVar2->GetAc();
+            return dCc_GetAc(pcVar2->GetAc());
         }
     }
     return NULL;
@@ -1809,7 +1809,7 @@ static void AtHitCallback(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_c* actor, 
     if (fopAcM_GetName(actor) != fpcNm_PLAYER_e) {
         return;
     }
-    if (!daPy_getPlayerActorClass()->checkGrabWear()) {
+    if (!((daPy_py_c*)dComIfGp_getPlayer(0))->checkGrabWear()) {
         return;
     }
     i_this->m2A48 = 1;
@@ -1833,7 +1833,7 @@ static void fight(mo2_class* i_this) {
             i_this->mDamageReaction.mMode = 1;
             i_this->m05A4[2] = 8;
             // Fall-through
-        case 1:
+        case 1: {
             i_this->mWeaponSph.SetAtAtp(mo2_attack_AP[i_this->m2060]);
             i_this->mWeapon2Sph.SetAtAtp(mo2_attack_AP[i_this->m2060]);
             attack_info_s* info = attack_info[i_this->m2060];
@@ -1907,7 +1907,7 @@ static void fight(mo2_class* i_this) {
             fopAc_ac_c* hitActor = yari_hit_check(i_this);
             if (hitActor != NULL) {
                 if (fopAcM_GetName(hitActor) == fpcNm_PLAYER_e) {
-                    if (player->checkPlayerGuard() && (i_this->m2060 != 3)) {
+                    if (player->checkPlayerGuard() && i_this->m2060 != 3) {
                         i_this->mpMorf->setPlaySpeed(-1.0f);
                         if (i_this->m05F0 != 0) {
                             i_this->m05F0 = l_mo2HIO.m024 + 6;
@@ -1944,9 +1944,10 @@ static void fight(mo2_class* i_this) {
                 }
             }
             if (i_this->mpMorf->isStop()) {
-                if (((((i_this->m2064 == 2) && (i_this->m207E > 0)) || (i_this->m2060 == 4 && (i_this->m2064 == 0))) ||
-                     (i_this->m207E < 0 && (i_this->m2064 == 0))) ||
-                    (i_this->m2060 == 5 && (i_this->m207E < 0 && (i_this->m2064 == 1))))
+                if ((i_this->m2064 == 2 && i_this->m207E > 0) ||
+                    (i_this->m2060 == 4 && i_this->m2064 == 0) ||
+                    (i_this->m207E < 0 && i_this->m2064 == 0) ||
+                    (i_this->m2060 == 5 && i_this->m207E < 0 && i_this->m2064 == 1))
                 {
                     if (i_this->m2060 == 3) {
                         attack_set(i_this, 1);
@@ -1995,6 +1996,7 @@ static void fight(mo2_class* i_this) {
                     anm_init(i_this, info[i_this->m2064].bckFileIdx, 0.0f, J3DFrameCtrl::EMode_NONE, fVar11, info[i_this->m2064].soundFileIdx);
                 }
             }
+        }
     }
 }
 
@@ -3345,7 +3347,7 @@ static s32 kantera_get_init(mo2_class* i_this) {
         params->base.angle.y = actor->current.angle.y;
         params->base.parameters = (fopAcM_GetParam(actor) & 0xFF000000U) | 0xFFFF23; // TODO clean up parameters
         params->room_no = fopAcM_GetRoomNo(actor);
-        i_this->m02E8 = fopAcM_create(fpcNm_KANTERA_e, NULL, params);
+        i_this->m02E8 = fopAcM_Create(fpcNm_KANTERA_e, NULL, params);
         i_this->m2A08++;
     } else if (i_this->m2A08 != 100) {
         kantera_class* kantera = (kantera_class*)fopAcM_SearchByID(i_this->m02E8);
@@ -3380,7 +3382,8 @@ static BOOL daMo2_Execute(mo2_class* i_this) {
         i_this->mpMorf->setPlayMode(J3DFrameCtrl::EMode_NONE);
         i_this->mpMorf->setPlaySpeed(3.0f);
         i_this->mpMorf->play(&actor->eyePos, 0, 0);
-        i_this->mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::now);
+        J3DModel* model = i_this->mpMorf->getModel();
+        model->setBaseTRMtx(mDoMtx_stack_c::get());
         i_this->mpMorf->calc();
         return TRUE;
     }

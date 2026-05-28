@@ -1305,7 +1305,7 @@ void dStage_actorCreate(stage_actor_data_class* i_actorData, fopAcM_prm_class* i
     } else {
         i_actorPrm->argument = nameinf_p->argument;
         i_actorPrm->gbaName = nameinf_p->gbaName;
-        fopAcM_create(nameinf_p->procname, NULL, i_actorPrm);
+        fopAcM_Create(nameinf_p->procname, NULL, i_actorPrm);
     }
 }
 

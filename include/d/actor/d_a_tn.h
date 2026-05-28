@@ -40,7 +40,7 @@ struct tn_class {
     /* 0x02C4 */ mDoExt_McaMorf* mpBodyMorf;
     /* 0x02C8 */ mDoExt_McaMorf* mpShieldMorf;
     /* 0x02CC */ mDoExt_McaMorf* mpArmorMorf;
-    /* 0x02D0 */ u8 mRemainingEquipmentPieces;
+    /* 0x02D0 */ s8 mRemainingEquipmentPieces;
     /* 0x02D1 */ u8 m02D1[0x02D4 - 0x02D1];
     /* 0x02D4 */ u32 mShadowId;
     /* 0x02D8 */ mDoExt_brkAnm* mpBrkAnm;

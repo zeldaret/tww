@@ -257,7 +257,6 @@ static void ground_smoke_set(tn_class* i_this) {
 
 /* 00001244-0000149C       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
-    /* Nonmatching - retail-only regalloc */
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
@@ -708,7 +707,7 @@ static fopAc_ac_c* search_bomb(tn_class* i_this, int r26) {
             sp28.y = 50.0f + r24->current.pos.y - actor->eyePos.y;
             sp28.z = r24->current.pos.z - actor->current.pos.z;
             f32 f0 = std::sqrtf(sp28.x * sp28.x + sp28.z * sp28.z);
-            if (f0 < f29 && !(f0 > 30.0f + i_this->mPlayerDistance) && !(daTn_other_bg_check(i_this, r24) && r26)) {
+            if (f0 < f29 && !(f0 > 30.0f + i_this->mPlayerDistance) && (!daTn_other_bg_check(i_this, r24) || !r26)) {
                 if (r26) {
                     if (std::fabsf(r24->current.pos.y + 50.0f - actor->eyePos.y) <= l_tnHIO.m038) {
                         s16 angleDiff = i_this->m0414 - cM_atan2s(sp28.x, sp28.z);
@@ -1074,7 +1073,7 @@ static void jyunkai(tn_class* i_this) {
             break;
     }
     s32 r3 = fopAcM_otoCheck(actor, 1000.0f);
-    if (i_this->mMantPcId != (u16)fpcM_ERROR_PROCESS_ID_e) {
+    if (i_this->mMantPcId != 0xFFFF) {
         mant_class* mant_actor = (mant_class*)fopAcM_SearchByID(i_this->mMantPcId);
         if ((mant_actor != NULL) && (mant_actor->m1C0E != 0)) {
             r3 |= 2;
@@ -1376,11 +1375,11 @@ static fopAc_ac_c* wepon_hit_check(tn_class* i_this) {
     i_this->mWepon2Sph.SetAtAtp(atp);
     if (i_this->m0C48 == 3) {
         MTXCopy(i_this->mpBodyMorf->getModel()->getAnmMtx(0x05), *calc_mtx);
-        local_28.setall(0.0f);
+        local_28.set(0.0f, 0.0f, 0.0f);
     } else {
         MTXCopy(i_this->mpBodyMorf->getModel()->getAnmMtx(0x17), *calc_mtx);
         if (i_this->m0C48 == 2) {
-            local_28.setall(0.0f);
+            local_28.set(0.0f, 0.0f, 0.0f);
         } else {
             local_28.set(0.0f, 0.0f, 150.0f);
         }
@@ -1419,7 +1418,7 @@ static fopAc_ac_c* wepon_hit_check(tn_class* i_this) {
                 hitObj = i_this->mWepon2Sph.GetAtHitObj();
             }
             if (hitObj != NULL) {
-                return hitObj->GetAc();
+                return dCc_GetAc(hitObj->GetAc());
             }
             JUTReport(440, 220, "TN AT HITOBJ NON");
         }
@@ -1572,8 +1571,10 @@ static void fight(tn_class* i_this) {
                 actor->setBtMaxDis(l_tnHIO.m0D4);
                 actor->setBtNowFrame(i_this->mpBodyMorf->getFrame());
                 fopAc_ac_c* wepon_hit_actor = wepon_hit_check(i_this);
-                if ((((wepon_hit_actor != NULL) && (fopAcM_GetName(wepon_hit_actor) == fpcNm_PLAYER_e)) && (player->checkPlayerGuard())) &&
-                    (i_this->m0C48 == 0 || (i_this->m0C48 == 1)))
+                if (wepon_hit_actor != NULL &&
+                    fopAcM_GetName(wepon_hit_actor) == fpcNm_PLAYER_e &&
+                    player->checkPlayerGuard() &&
+                    (i_this->m0C48 == 0 || i_this->m0C48 == 1))
                 {
                     i_this->mpBodyMorf->setPlaySpeed(-1.0f);
                     i_this->m0C66 = -1;
@@ -1670,7 +1671,7 @@ static void fight(tn_class* i_this) {
                 yoroi_anm_init(i_this, TN_BCK_YAT_KAITEN4, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
                 fopAcM_monsSeStart(actor, JA_SE_CV_TN_ATTACK_L, 0);
             }
-            if (i_this->mMantPcId != (u16)fpcM_ERROR_PROCESS_ID_e) {
+            if (i_this->mMantPcId != 0xFFFF) {
                 mant_class* mant_actor = (mant_class*)fopAcM_SearchByID(i_this->mMantPcId);
                 if (mant_actor != NULL) {
                     cLib_addCalc2(&mant_actor->m1BF8, REG0_F(6) + 50.0f, 1.0f, 20.0f);
@@ -2189,7 +2190,7 @@ static void stand(tn_class* i_this) {
 
     i_this->mDamageReaction.m710 = 0;
     s32 r30 = fopAcM_otoCheck(actor, 1000.0f);
-    if (i_this->mMantPcId != (u16)fpcM_ERROR_PROCESS_ID_e) {
+    if (i_this->mMantPcId != 0xFFFF) {
         mant_class* mant_actor = (mant_class*)fopAcM_SearchByID(i_this->mMantPcId);
         if ((mant_actor != NULL) && (mant_actor->m1C0E != 0)) {
             r30 |= 2;
@@ -2776,19 +2777,19 @@ static void yoroi_break(tn_class* i_this, cXyz* particlePos, u8 param_3) {
     dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUFLASH, particlePos, NULL, &particle_scale);
 
     GXColor prmColor;
-    f32 tmp = (i_this->actor.tevStr.mColorK0.r / 255.0f);
+    f32 tmp = (actor->tevStr.mColorK0.r / 255.0f);
     prmColor.r = tmp * prim[i_this->mArmorColorIndex].r;
-    tmp = (i_this->actor.tevStr.mColorK0.g / 255.0f);
+    tmp = (actor->tevStr.mColorK0.g / 255.0f);
     prmColor.g = tmp * prim[i_this->mArmorColorIndex].g;
-    tmp = (i_this->actor.tevStr.mColorK0.b / 255.0f);
+    tmp = (actor->tevStr.mColorK0.b / 255.0f);
     prmColor.b = tmp * prim[i_this->mArmorColorIndex].b;
 
     GXColor envColor;
-    tmp = (i_this->actor.tevStr.mColorK0.r / 255.0f);
+    tmp = (actor->tevStr.mColorK0.r / 255.0f);
     envColor.r = tmp * env[i_this->mArmorColorIndex].r;
-    tmp = (i_this->actor.tevStr.mColorK0.g / 255.0f);
+    tmp = (actor->tevStr.mColorK0.g / 255.0f);
     envColor.g = tmp * env[i_this->mArmorColorIndex].g;
-    tmp = (i_this->actor.tevStr.mColorK0.b / 255.0f);
+    tmp = (actor->tevStr.mColorK0.b / 255.0f);
     envColor.b = tmp * env[i_this->mArmorColorIndex].b;
 
     if (param_3 == 0) {
@@ -2807,10 +2808,9 @@ static void yoroi_break(tn_class* i_this, cXyz* particlePos, u8 param_3) {
 
 /* 00008F9C-00009E2C       .text damage_check__FP8tn_class */
 static u8 damage_check(tn_class* i_this) {
-    /* Nonmatching */
     fopAc_ac_c* actor = &i_this->actor;
-    s8 r26_2;
     s16 r3;
+    s8 r26_2;
     mant_class* mant_actor;
     csXyz local_a0;
     csXyz local_a8;
@@ -2905,12 +2905,12 @@ static u8 damage_check(tn_class* i_this) {
                 if (i_this->m0C34 != 0) {
                     i_this->m0C38 = 2;
                 }
-                if (i_this->mMantPcId != (u16)fpcM_ERROR_PROCESS_ID_e) {
+                if (i_this->mMantPcId != 0xFFFF) {
                     mant_actor = (mant_class*)fopAcM_SearchByID(i_this->mMantPcId);
                     if (mant_actor != NULL) {
                         fopAcM_delete(mant_actor);
                     }
-                    i_this->mMantPcId = (u16)fpcM_ERROR_PROCESS_ID_e;
+                    i_this->mMantPcId = 0xFFFF;
                 }
                 return 0;
             }
@@ -2939,9 +2939,8 @@ static u8 damage_check(tn_class* i_this) {
                         dScnPly_ply_c::setPauseTimer(REG0_S(7) + 6);
                         fopAcM_seStart(actor, JA_SE_CM_TN_HELMET_OUT, 0);
                         cXyz* particlePos = i_this->mTgCyl.GetTgHitPosP();
-                        local_74.setall(2.0f);
-                        local_a0.z = 0;
-                        local_a0.x = 0;
+                        local_74.set(2.0f, 2.0f, 2.0f);
+                        local_a0.x = local_a0.z = 0;
                         local_a0.y = fopAcM_searchPlayerAngleY(actor);
                         dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, particlePos, &local_a0, &local_74);
                         dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, particlePos);
@@ -2954,12 +2953,11 @@ static u8 damage_check(tn_class* i_this) {
                         r3 = -r3;
                     }
                     cXyz* particlePos = i_this->mTgCyl.GetTgHitPosP();
-                    local_80.setall(2.0f);
-                    local_a8.z = 0;
-                    local_a8.x = 0;
+                    local_80.set(2.0f, 2.0f, 2.0f);
+                    local_a8.x = local_a8.z = 0;
                     local_a8.y = fopAcM_searchPlayerAngleY(actor);
                     r26_2 = false;
-                    if (i_this->mMantPcId != (u16)fpcM_ERROR_PROCESS_ID_e) {
+                    if (i_this->mMantPcId != 0xFFFF) {
                         mant_actor = (mant_class*)fopAcM_SearchByID(i_this->mMantPcId);
                         if ((mant_actor != NULL) && (mant_actor->m2834 != 0 || (mant_actor->m2836 != 0))) {
                             r26_2 = true;
@@ -2976,12 +2974,12 @@ static u8 damage_check(tn_class* i_this) {
                         mDoAud_bgmHitSound(atInfo.mHitSoundId);
                         dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, particlePos, &local_a8, &local_80);
                         dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, particlePos);
-                        if (i_this->mMantPcId != (u16)fpcM_ERROR_PROCESS_ID_e) {
+                        if (i_this->mMantPcId != 0xFFFF) {
                             mant_actor = (mant_class*)fopAcM_SearchByID(i_this->mMantPcId);
                             if (mant_actor != NULL) {
                                 fopAcM_delete(mant_actor);
                             }
-                            i_this->mMantPcId = (u16)fpcM_ERROR_PROCESS_ID_e;
+                            i_this->mMantPcId = 0xFFFF;
                         }
                         def_se_set(actor, atInfo.mpObj, 0x21);
                         fopAcM_monsSeStart(actor, JA_SE_CV_TN_NO_DAMAGE, 0);
@@ -3004,12 +3002,12 @@ static u8 damage_check(tn_class* i_this) {
                             } else {
                                 actor->health = 10;
                             }
-                            if (i_this->mMantPcId != (u16)fpcM_ERROR_PROCESS_ID_e) {
+                            if (i_this->mMantPcId != 0xFFFF) {
                                 mant_actor = (mant_class*)fopAcM_SearchByID(i_this->mMantPcId);
                                 if (mant_actor != NULL) {
                                     fopAcM_delete(mant_actor);
                                 }
-                                i_this->mMantPcId = (u16)fpcM_ERROR_PROCESS_ID_e;
+                                i_this->mMantPcId = 0xFFFF;
                             }
                         }
                     }
@@ -3153,7 +3151,6 @@ static s32 j_dt[] = {0x0000000A, 0x0000001C, 0x0000000F};
 
 /* 00009E68-0000AC54       .text part_move__FP8tn_classi */
 static void part_move(tn_class* i_this, int partIndex) {
-    /* Nonmatching */
     fopAc_ac_c* actor = &i_this->actor;
     mant_class* mant_actor;
     J3DModel* model;
@@ -3167,7 +3164,7 @@ static void part_move(tn_class* i_this, int partIndex) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     part = &i_this->mParts[partIndex];
     dBgS_GndChk gndChk;
-    local_134.setall(0.0f);
+    local_134.set(0.0f, 0.0f, 0.0f);
     part->m42++;
     iVar12 = j_dt[partIndex];
     if (part->m44 != 0) {
@@ -3177,8 +3174,9 @@ static void part_move(tn_class* i_this, int partIndex) {
         case 0:
             MTXCopy(i_this->mpBodyMorf->getModel()->getAnmMtx(iVar12), *calc_mtx);
             MtxPosition(&local_134, &part->m0C);
-            if (((((i_this->m02DD & 1) != 0) && (partIndex == 0)) || ((i_this->m02DD & 2) != 0 && (partIndex == 1))) ||
-                ((i_this->m02DD & 4) != 0 && (partIndex == 2)))
+            if (((i_this->m02DD & 1) != 0 && partIndex == 0) ||
+                ((i_this->m02DD & 2) != 0 && partIndex == 1) ||
+                ((i_this->m02DD & 4) != 0 && partIndex == 2))
             {
                 part->m08 = 1;
                 if (partIndex == 0) {
@@ -3276,12 +3274,8 @@ static void part_move(tn_class* i_this, int partIndex) {
                     }
                     part->m44 = 0x14;
                 } else {
-                    part->m24.z = 0.0f;
-                    part->m24.y = 0.0f;
-                    part->m24.x = 0.0f;
-                    part->m36.z = 0;
-                    part->m36.y = 0;
-                    part->m36.x = 0;
+                    part->m24.x = part->m24.y = part->m24.z = 0.0f;
+                    part->m36.x = part->m36.y = part->m36.z = 0;
                     cLib_addCalcAngleS2(&part->m30.x, 0, 1, 0xc00);
                     cLib_addCalcAngleS2(&part->m30.z, 0x4000, 1, 0xc00);
                 }
@@ -3289,12 +3283,12 @@ static void part_move(tn_class* i_this, int partIndex) {
             if (part->m44 == 1) {
                 part->m08 = -1;
                 yoroi_break(i_this, &part->m0C, partIndex);
-                if ((partIndex == 0) && (i_this->mMantPcId != (u16)fpcM_ERROR_PROCESS_ID_e)) {
+                if ((partIndex == 0) && (i_this->mMantPcId != 0xFFFF)) {
                     mant_actor = (mant_class*)fopAcM_SearchByID(i_this->mMantPcId);
                     if (mant_actor != NULL) {
                         fopAcM_delete(mant_actor);
                     }
-                    i_this->mMantPcId = (u16)fpcM_ERROR_PROCESS_ID_e;
+                    i_this->mMantPcId = 0xFFFF;
                 }
             }
             break;
@@ -3331,7 +3325,7 @@ static void part_move(tn_class* i_this, int partIndex) {
     }
     if (partIndex == 0) {
         i_this->mpArmorMorf->calc();
-        if (i_this->mMantPcId != (u16)fpcM_ERROR_PROCESS_ID_e) {
+        if (i_this->mMantPcId != 0xFFFF) {
             mant_actor = (mant_class*)fopAcM_SearchByID(i_this->mMantPcId);
             if (mant_actor != NULL) {
                 MTXCopy(i_this->mpArmorMorf->getModel()->getAnmMtx(REG6_S(5) + 6), *calc_mtx);
@@ -3433,13 +3427,9 @@ static void spin_blur_set(tn_class* i_this) {
 /* 0000AEA8-0000BCE4       .text daTn_Execute__FP8tn_class */
 static BOOL daTn_Execute(tn_class* i_this) {
     /* Nonmatching - retail-only regalloc */
-    fopEn_enemy_c* actor = &i_this->actor;
+    fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
     mant_class* mant_actor;
     daBoko_c* boko_actor;
-    cXyz local_a8;
-    cXyz cStack_b4;
-    cXyz local_c0;
-    cXyz local_cc;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 #if VERSION > VERSION_DEMO
@@ -3526,7 +3516,7 @@ static BOOL daTn_Execute(tn_class* i_this) {
                     MtxTrans(-10000.0f, -10000.0f, 0.0f, false);
                     boko_actor->setMatrix(*calc_mtx);
                 }
-                if (i_this->mMantPcId != (u16)fpcM_ERROR_PROCESS_ID_e) {
+                if (i_this->mMantPcId != 0xFFFF) {
                     mant_actor = (mant_class*)fopAcM_SearchByID(i_this->mMantPcId);
                     if (mant_actor != NULL) {
                         mant_actor->m1BE0.x = -10000.0f;
@@ -3632,15 +3622,17 @@ static BOOL daTn_Execute(tn_class* i_this) {
     enemy_fire(&i_this->mEnemyFire);
     MtxTrans(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z, false);
     cMtx_YrotM(*calc_mtx, actor->current.angle.y);
+    cXyz local_a8;
     local_a8.x = 0.0f;
     local_a8.y = 0.0f;
     local_a8.z = 35.0f;
+    cXyz cStack_b4;
     MtxPosition(&local_a8, &cStack_b4);
     i_this->mCoCyl.SetC(cStack_b4);
     dComIfG_Ccsp()->Set(&i_this->mCoCyl);
     dComIfG_Ccsp()->SetMass(&i_this->mCoCyl, 3);
-    local_c0 = i_this->m1384;
-    local_cc = actor->current.pos;
+    cXyz local_c0 = i_this->m1384;
+    cXyz local_cc = actor->current.pos;
     if (i_this->m03F0 != 0) {
         local_c0.y -= 20000.0f;
         local_cc.y -= 20000.0f;
@@ -3779,7 +3771,7 @@ static BOOL daTn_Delete(tn_class* i_this) {
         i_this->mpBodyMorf->stopZelAnime();
     }
 #endif
-    if (i_this->mMantPcId != (u16)fpcM_ERROR_PROCESS_ID_e) {
+    if (i_this->mMantPcId != 0xFFFF) {
         fopAc_ac_c* mant_actor = fopAcM_SearchByID(i_this->mMantPcId);
         if (mant_actor != NULL) {
             fopAcM_delete(mant_actor);
@@ -4239,8 +4231,7 @@ static cPhs_State daTn_Create(fopAc_ac_c* a_this) {
 #endif
     }
     i_this->mEquipmentType = (a_this->current.angle.x >> 5) & 7;
-    a_this->current.angle.z = 0;
-    a_this->current.angle.x = 0;
+    a_this->current.angle.x = a_this->current.angle.z = 0;
     if (i_this->mArmorColorIndex > 5) {
         i_this->mArmorColorIndex = 5;
     }
@@ -4342,7 +4333,7 @@ static cPhs_State daTn_Create(fopAc_ac_c* a_this) {
     i_this->m140C = 1;
     i_this->m0C34 = 1;
     if (i_this->mEquipmentType < EQUIPMENT_SHIELD_AND_CAPE) {
-        i_this->mMantPcId = (u16)fpcM_ERROR_PROCESS_ID_e;
+        i_this->mMantPcId = 0xFFFF;
     } else {
         i_this->mMantPcId = fopAcM_create(fpcNm_MANT_e, mant_class::Type_DARKNUT_e, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
     }

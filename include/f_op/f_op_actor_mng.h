@@ -127,7 +127,7 @@ inline MtxP fopAcM_GetMtx(fopAc_ac_c* pActor) {
     return pActor->cullMtx;
 }
 
-inline bool fopAcM_CheckStatus(fopAc_ac_c* pActor, u32 status) {
+inline u32 fopAcM_CheckStatus(fopAc_ac_c* pActor, u32 status) {
     return pActor->actor_status & status;
 }
 
@@ -155,8 +155,8 @@ inline void fopAcM_SetParam(void* p_actor, u32 param) {
     fpcM_SetParam(p_actor, param);
 }
 
-inline void fopAcM_SetJntHit(fopAc_ac_c* i_actorP, JntHit_c* i_jntHitP) {
-    i_actorP->jntHit = i_jntHitP;
+inline void fopAcM_SetJntHit(fopAc_ac_c* i_actorP, void* i_jntHitP) {
+    i_actorP->jntHit = (JntHit_c*)i_jntHitP;
 }
 
 inline s16 fopAcM_GetProfName(void* pActor) {
@@ -475,12 +475,8 @@ fpc_ProcID fopAcM_create(char*, u32 i_parameter, cXyz* i_pos = NULL, int i_roomN
                    csXyz* i_angle = NULL, cXyz* i_scale = NULL,
                    createFunc i_createFunc = NULL);
 
-inline fpc_ProcID fopAcM_create(s16 i_procName, createFunc i_createFunc, void* params) {
-    return fpcM_Create(i_procName, i_createFunc, params);
-}
-
 inline fpc_ProcID fopAcM_Create(s16 i_procName, createFunc i_createFunc, void* params) {
-    return fpcM_Create(i_procName, i_createFunc,params);
+    return fpcM_Create(i_procName, i_createFunc, params);
 }
 
 void* fopAcM_fastCreate(s16 procName, u32 parameter, cXyz* p_pos = NULL, int roomNo = -1,
