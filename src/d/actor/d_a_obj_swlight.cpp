@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_swlight.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_mmirror.h"
 
 namespace daObjSwlight {
@@ -502,18 +500,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjSwlight
 
 actor_process_profile_definition g_profile_Obj_Swlight = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Swlight,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Swlight_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjSwlight::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Swlight,
+    /* Draw Prio    */ fpcDwPi_Obj_Swlight_e,
     /* Actor SubMtd */ &daObjSwlight::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

@@ -7,8 +7,6 @@
 #include "d/actor/d_a_mmusic.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 
 namespace daMmusic {
@@ -43,7 +41,7 @@ BOOL daMmusic::Act_c::Macore_is_playing() {
         dComIfGs_isEventBit(dSv_event_flag_c::UNK_2910) ||
         dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E02) ||
         dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610) ||
-        !dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e))
+        !dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_2_e))
         return FALSE;
 
     return TRUE;
@@ -187,18 +185,18 @@ namespace daMmusic {
 }
 
 actor_process_profile_definition g_profile_Mmusic = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Mmusic,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Mmusic_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMmusic::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Mmusic,
+    /* Draw Prio    */ fpcDwPi_Mmusic_e,
     /* Actor SubMtd */ &daMmusic::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

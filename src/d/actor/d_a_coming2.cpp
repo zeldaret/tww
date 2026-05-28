@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_coming2.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_bg_s_wtr_chk.h"
 #include "d/d_bg_s_gnd_chk.h"
@@ -16,21 +14,21 @@
 #include "d/actor/d_a_obj_barrel2.h"
 
 s32 daComing2::coming_make_item_no_table[] = {
-    dItem_GREEN_RUPEE_e,
-    dItem_GREEN_RUPEE_e,
-    dItem_GREEN_RUPEE_e,
-    dItem_GREEN_RUPEE_e,
-    dItem_GREEN_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
 };
 
 static void dummy() {
@@ -231,7 +229,7 @@ BOOL daComing2::Act_c::make_coming_param(cXyz* outPos, daObjBarrel2::Type_e* out
         *outType = daObjBarrel2::Type_01_e;
         *outHasFlag = false;
 
-        *outDroppedItem = (unk_2A4 < 0xFu) ? coming_make_item_no_table[unk_2A4] : dItem_RECOVER_FAIRY_e;
+        *outDroppedItem = (unk_2A4 < 0xFu) ? coming_make_item_no_table[unk_2A4] : dItemNo_RECOVER_FAIRY_e;
         return TRUE;
     }
     return FALSE;
@@ -676,18 +674,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daComing2
 
 actor_process_profile_definition g_profile_Coming2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Coming2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Coming2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daComing2::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Coming2,
+    /* Draw Prio    */ fpcDwPi_Coming2_e,
     /* Actor SubMtd */ &daComing2::Mthd_Table,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

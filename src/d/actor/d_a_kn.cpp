@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kn.h"
 #include "d/res/res_kn.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
 #include "d/d_com_inf_game.h"
@@ -373,7 +371,7 @@ void oya_kn_move(kn_class* i_this) {
         }
         puVar1->base.parameters = 2;
         puVar1->room_no = fopAcM_GetRoomNo(&i_this->actor);
-        fopAcM_Create(PROC_KN, NULL, puVar1);
+        fopAcM_Create(fpcNm_KN_e, NULL, puVar1);
         i_this->m2C2[0] = 10;
         i_this->m2D4--;
         if (i_this->m2D4 <= 0) {
@@ -586,18 +584,18 @@ static actor_method_class l_daKN_Method = {
 };
 
 actor_process_profile_definition g_profile_KN = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KN,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KN_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kn_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KN,
+    /* Draw Prio    */ fpcDwPi_KN_e,
     /* Actor SubMtd */ &l_daKN_Method,
     /* Status       */ DEMO_SELECT(fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_NOCULLEXEC_e, fopAcStts_CULL_e | fopAcStts_UNK40000_e),
     /* Group        */ fopAc_ENV_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

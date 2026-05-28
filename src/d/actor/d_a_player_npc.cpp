@@ -8,7 +8,6 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_lib.h"
 #include "SSystem/SComponent/c_counter.h"
-#include "d/d_procname.h"
 
 /* 8015A37C-8015A448       .text check_initialRoom__10daPy_npc_cFv */
 int daPy_npc_c::check_initialRoom() {
@@ -186,7 +185,7 @@ void daPy_npc_c::drawDamageFog() {
 /* 8015AD20-8015AEF8       .text chkMoveBlock__10daPy_npc_cFP4cXyz */
 int daPy_npc_c::chkMoveBlock(cXyz* outBlockVel) {
     cXyz blockRelPos;
-    fopAc_ac_c* block = daPy_npc_SearchAreaByName(this, PROC_Obj_Movebox, 300.0f, &blockRelPos);
+    fopAc_ac_c* block = daPy_npc_SearchAreaByName(this, fpcNm_Obj_Movebox_e, 300.0f, &blockRelPos);
     if (block) {
         cXyz blockVel = block->current.pos - block->old.pos;
         if (blockVel.abs() > 0.001f) {

@@ -61,7 +61,7 @@ BOOL daPy_lk_c::returnBoomerang() {
     {
         mActorKeepEquip = mActorKeepThrow;
         mActorKeepThrow.clearData();
-        mEquipItem = dItem_BOOMERANG_e;
+        mEquipItem = dItemNo_BOOMERANG_e;
         onNoResetFlg0(daPyFlg0_UNK20);
         return true;
     }
@@ -143,7 +143,7 @@ BOOL daPy_lk_c::procBoomerangSubject_init() {
 
     commonProcInit(daPyProc_BOOMERANG_SUBJECT_e);
 
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
 
     setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
     setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
@@ -221,7 +221,7 @@ BOOL daPy_lk_c::procBoomerangMove() {
 
     if (!checkNextMode(0)) {
         f32 fVar1 = -1.0f;
-        if (std::fabsf(mVelocity) < 0.001f) {
+        if (std::fabsf(mNormalSpeed) < 0.001f) {
             onModeFlg(ModeFlg_00000001);
             if (mDirection != DIR_RIGHT) {
                 mDirection = DIR_RIGHT;

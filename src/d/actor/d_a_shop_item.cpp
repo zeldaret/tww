@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_shop_item.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/d_item.h"
@@ -83,16 +81,16 @@ BOOL daShopItem_c::clothCreate() {
         };
 
         switch(m_itemNo) {
-            case HEROS_FLAG:
+            case dItemNo_HEROS_FLAG_e:
                 field_0x648 = 0;
                 break;
-            case TAIRYO_FLAG:
+            case dItemNo_BIG_CATCH_FLAG_e:
                 field_0x648 = 1;
                 break;
-            case SALES_FLAG:
+            case dItemNo_BIG_SALE_FLAG_e:
                 field_0x648 = 2;
                 break;
-            case RED_FLAG:
+            case dItemNo_SICKLE_MOON_FLAG_e:
             default:
                 field_0x648 = 3;
         }
@@ -158,7 +156,7 @@ bool daShopItem_c::_execute() {
 bool daShopItem_c::_draw() {
     if(!chkDraw()) return true;
 
-    if(m_itemNo == WATER_STATUE || m_itemNo == POSTMAN_STATUE) {
+    if(m_itemNo == dItemNo_FOUNTAIN_IDOL_e || m_itemNo == dItemNo_POSTMAN_STATUE_e) {
         mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(0);
     }
     DrawBase();
@@ -170,7 +168,7 @@ bool daShopItem_c::_draw() {
 
 /* 00000694-0000070C       .text settingBeforeDraw__12daShopItem_cFv */
 void daShopItem_c::settingBeforeDraw() {
-    if(isBomb(m_itemNo) || (m_itemNo == dItem_BOMB_BAG_e) || (m_itemNo == dItem_SKULL_HAMMER_e) || m_itemNo == dItem_SMALL_KEY_e || m_itemNo == PRESIDENT_STATUE) {
+    if(isBomb(m_itemNo) || (m_itemNo == dItemNo_BOMB_BAG_e) || (m_itemNo == dItemNo_SKULL_HAMMER_e) || m_itemNo == dItemNo_SMALL_KEY_e || m_itemNo == dItemNo_SHOP_GURU_STATUE_e) {
         dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), 1.0f);
     }
 }
@@ -200,7 +198,7 @@ cPhs_State daShopItem_c::_create() {
     
     const char* arcName = getShopArcname();
     if (getShopBmdIdx() == -1 || arcName == 0) {
-        m_itemNo = dItem_GREEN_RUPEE_e;
+        m_itemNo = dItemNo_GREEN_RUPEE_e;
     }
 
     arcName = getShopArcname();
@@ -278,18 +276,18 @@ static actor_method_class daShopItemMethodTable = {
 };
 
 actor_process_profile_definition g_profile_ShopItem = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ShopItem,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ShopItem_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daShopItem_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ShopItem,
+    /* Draw Prio    */ fpcDwPi_ShopItem_e,
     /* Actor SubMtd */ &daShopItemMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

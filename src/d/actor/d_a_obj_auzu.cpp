@@ -8,8 +8,6 @@
 #include "d/actor/d_a_kytag01.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ship.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_auzu.h"
 
 namespace daObjAuzu {
@@ -153,7 +151,7 @@ void daObjAuzu::Act_c::set_state_map() {
 /* 00000624-00000788       .text ship_whirl__Q29daObjAuzu5Act_cFv */
 void daObjAuzu::Act_c::ship_whirl() {
     daShip_c* ship_p = dComIfGp_getShipActor();
-    if (ship_p && fopAcM_GetName(ship_p) == PROC_SHIP) {
+    if (ship_p && fopAcM_GetName(ship_p) == fpcNm_SHIP_e) {
         f32 sqr_mag_xz = fopAcM_searchActorDistanceXZ2(this, ship_p);
 #if VERSION > VERSION_DEMO
         f32 inner_activation = (daObjAuzu::L_radius * attr().mInnerActivationMult) * 
@@ -238,7 +236,7 @@ bool daObjAuzu::Act_c::_execute() {
         scaleXZ.x = (mScaleAnimFactor * (daObjAuzu::L_radius * attr().mRadiusMult)) / 5000.0f;
         scaleXZ.z = (mScaleAnimFactor * ((daObjAuzu::L_radius + 500.0f) * attr().mRadiusMult)) / 5000.0f;
         mKytagPcId = fopAcM_create(
-            PROC_KYTAG01, -1, &current.pos, 
+            fpcNm_KYTAG01_e, -1, &current.pos, 
             tevStr.mRoomNo, &current.angle, &scaleXZ
         );
     } else if (mScaleAnimFactor > 0.0f && fpcM_IsErrorID(mKytagPcId) == FALSE) {
@@ -324,18 +322,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjAuzu
 
 actor_process_profile_definition g_profile_Obj_Auzu = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Auzu,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Auzu_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjAuzu::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Auzu,
+    /* Draw Prio    */ fpcDwPi_Obj_Auzu_e,
     /* Actor SubMtd */ &daObjAuzu::Mthd_Table,
     /* Status       */ 0x06 | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

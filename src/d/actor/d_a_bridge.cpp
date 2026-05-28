@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bridge.h"
 #include "d/d_bg_w.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_path.h"
 #include "d/d_com_inf_game.h"
@@ -54,15 +52,15 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     i_pt->speed.y = -5.0f;
 
     f32 fVar7;
-    if (fpcM_GetName(i_pt) == PROC_PLAYER) {
+    if (fpcM_GetName(i_pt) == fpcNm_PLAYER_e) {
         fVar7 = 100.0f;
         pBr->m3F4 = -31.0f;
         i_this->m033C = 5;
-    } else if (fpcM_GetName(i_pt) == PROC_MO2) {
+    } else if (fpcM_GetName(i_pt) == fpcNm_MO2_e) {
         fVar7 = 150.0f;
         pBr->m3F4 = -40.0f;
         i_pt->speed.y = -20.0f;
-    } else if (fpcM_GetName(i_pt) == PROC_BK) {
+    } else if (fpcM_GetName(i_pt) == fpcNm_BK_e) {
         bk_class* bk = (bk_class*)i_pt;
         bk->speed.y = -20.0f;
         fVar7 = 100.0f;
@@ -84,7 +82,7 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     } else {
         fVar7 = 50.0f;
         pBr->m3F4 = -10.0f;
-        if (fpcM_GetName(i_pt) == PROC_BOMB) {
+        if (fpcM_GetName(i_pt) == fpcNm_BOMB_e) {
             daBomb_c* bomb = (daBomb_c*)i_pt;
 
             if (bomb->getBombRestTime() <= 1) {
@@ -840,7 +838,7 @@ void bridge_move(bridge_class* i_this) {
 
 /* 00002A1C-00002A8C       .text s_a_b_sub__FPvPv */
 void* s_a_b_sub(void* ac1, void* ac2) {
-    if (fopAc_IsActor(ac1) && fpcM_GetName(ac1) == PROC_BRIDGE && ac1 != ac2) {
+    if (fopAc_IsActor(ac1) && fpcM_GetName(ac1) == fpcNm_BRIDGE_e && ac1 != ac2) {
         bridge_class* bridge = (bridge_class*)ac1;
         if ((bridge->mTypeBits & 0x82) == 2) {
             return ac1;
@@ -1530,18 +1528,18 @@ static actor_method_class l_daBridge_Method = {
 };
 
 actor_process_profile_definition g_profile_BRIDGE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BRIDGE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BRIDGE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bridge_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BRIDGE,
+    /* Draw Prio    */ fpcDwPi_BRIDGE_e,
     /* Actor SubMtd */ &l_daBridge_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

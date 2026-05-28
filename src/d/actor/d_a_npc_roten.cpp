@@ -9,8 +9,6 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_demo_item.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_a_obj.h"
@@ -1369,7 +1367,7 @@ static u32 l_msg_try_force[] = {
 };
 
 static u32 l_get_item_no[] = {
-    dItem_HEART_PIECE_e,
+    dItemNo_HEART_PIECE_e,
 };
 
 static dCcD_SrcSph l_sph_src = {
@@ -2321,7 +2319,7 @@ void daNpcRoten_c::eventSetItemInit() {
     cXyz pos(0.0f, 0.0f, 0.0f);
     field_0x6F8 = fopAcM_createItemForPresentDemo(
         &pos,
-        (u8)(itemIdx + FLOWER_1),
+        (u8)(itemIdx + dItemNo_TOWN_FLOWER_e),
         daDitem_c::FLAG_UNK01 | daDitem_c::FLAG_UNK08,
         -1,
         fopAcM_GetRoomNo(this)
@@ -2369,7 +2367,7 @@ void daNpcRoten_c::eventGetItemInit(int staffIdx) {
         u32 itemIdx = temp; // fakematch?
         dComIfGs_onGetItemReserve(temp);
 
-        u8 itemNo = FLOWER_1;
+        u8 itemNo = dItemNo_TOWN_FLOWER_e;
         itemNo += itemIdx; // fakematch?
         pcId = fopAcM_createItemForPresentDemo(&current.pos, itemNo, daDitem_c::FLAG_UNK01, -1, fopAcM_GetRoomNo(this));
     }
@@ -2445,7 +2443,7 @@ u16 daNpcRoten_c::next_msgStatus(u32* pMsgNo) {
                                 *pMsgNo = l_msg_xy_koukan_first[mNpcNo];
                             }
 
-                            dComIfGs_setReserveItemChange(mShownItemBtn, temp + FLOWER_1);
+                            dComIfGs_setReserveItemChange(mShownItemBtn, temp + dItemNo_TOWN_FLOWER_e);
                             field_0x98C = NULL;
                             break;
                         }
@@ -2511,7 +2509,7 @@ u32 daNpcRoten_c::getMsg() {
             field_0x98C = l_msg_xy_invalid_item[mNpcNo];
         }
         else {
-            field_0x9BE = itemNo - FLOWER_1;
+            field_0x9BE = itemNo - dItemNo_TOWN_FLOWER_e;
             field_0x98C = l_msg_xy_koukan_item[mNpcNo][field_0x9BE];
             dComIfGs_onEventBit(l_save_dat[mNpcNo].field_0x06);
         }
@@ -2814,17 +2812,17 @@ bool daNpcRoten_c::setAnmTbl(sRotenAnmDat* param_1) {
 
 /* 00003A80-00003AA4       .text isHaitatuItem__12daNpcRoten_cFUc */
 BOOL daNpcRoten_c::isHaitatuItem(u8 itemNo) {
-    return FLOWER_1 <= itemNo && itemNo <= XXX_039;
+    return dItemNo_TOWN_FLOWER_e <= itemNo && itemNo <= dItemNo_XXX_039_e;
 }
 
 /* 00003AA4-00003AC8       .text isKoukanItem__12daNpcRoten_cFUc */
 BOOL daNpcRoten_c::isKoukanItem(u8 itemNo) {
-    return FLOWER_1 <= itemNo && itemNo <= PRESIDENT_STATUE;
+    return dItemNo_TOWN_FLOWER_e <= itemNo && itemNo <= dItemNo_SHOP_GURU_STATUE_e;
 }
 
 /* 00003AC8-00003B30       .text isGetMap__12daNpcRoten_cFUc */
 BOOL daNpcRoten_c::isGetMap(u8 itemNo) {
-    if(mNpcNo == 1 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E04) && itemNo == PRESIDENT_STATUE) {
+    if(mNpcNo == 1 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E04) && itemNo == dItemNo_SHOP_GURU_STATUE_e) {
         return true;
     }
 
@@ -2836,7 +2834,7 @@ s16 daNpcRoten_c::XyEventCB(int i_itemBtn) {
     s16 eventIdx;
 
     u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
-    field_0x9BE = itemNo - FLOWER_1;
+    field_0x9BE = itemNo - dItemNo_TOWN_FLOWER_e;
     if(isKoukanItem(itemNo) && dComIfGs_getEventReg(l_save_dat[mNpcNo].field_0x02) < 3 && !isGetMap(itemNo)) {
         if(dComIfGp_event_getTalkXYBtn() == dTalkBtn_X_e) {
             mShownItemBtn = dItemBtn_X_e;
@@ -2939,18 +2937,18 @@ static actor_method_class daNpc_RotenMethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_ROTEN = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_ROTEN,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_ROTEN_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpcRoten_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_ROTEN,
+    /* Draw Prio    */ fpcDwPi_NPC_ROTEN_e,
     /* Actor SubMtd */ &daNpc_RotenMethodTable,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

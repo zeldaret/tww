@@ -10,8 +10,6 @@
 #include "d/d_lib.h"
 #include "d/d_snap.h"
 #include "d/res/res_bpw.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera.h"
@@ -699,7 +697,7 @@ void noroi_check(bpw_class* i_this) {
                 dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &i_this->mFire1DousaPos);
                 r31 |= ACTOR_TYPE_TORITUKI;
                 local_28.y = fopCamM_GetAngleY(camera);
-                fopAcM_create(PROC_BPW, r31, &i_this->mFire1DousaPos, fopAcM_GetRoomNo(actor), &local_28);
+                fopAcM_create(fpcNm_BPW_e, r31, &i_this->mFire1DousaPos, fopAcM_GetRoomNo(actor), &local_28);
             }
         }
     }
@@ -905,7 +903,7 @@ void* skull_search_sub(void* param_1, void* param_2) {
     fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
 
     if ((get_check_count < 100) && (fopAcM_IsActor(actor))) {
-        if ((fopAcM_GetName(actor) == PROC_BL) && (actor->health > 0)) {
+        if ((fopAcM_GetName(actor) == fpcNm_BL_e) && (actor->health > 0)) {
             check_info[get_check_count] = actor;
             get_check_count++;
         }
@@ -1474,7 +1472,7 @@ void action_kougeki(bpw_class* i_this) {
             if (pfVar6 != NULL) {
                 u32 params = ACTOR_TYPE_DAMAGE_BALL;
                 params |= DAMAGE_ACTION_LINE << 8;
-                i_this->m400 = fopAcM_create(PROC_BPW, params, &pfVar6->m358, fopAcM_GetRoomNo(actor), &actor->current.angle);
+                i_this->m400 = fopAcM_create(fpcNm_BPW_e, params, &pfVar6->m358, fopAcM_GetRoomNo(actor), &actor->current.angle);
                 i_this->mSomeCountdownTimers[0] = 0x46;
                 i_this->mSomeCountdownTimers[0] += (int)cM_rndF(i_this->mSomeCountdownTimers[0]);
                 i_this->m47A = 0x300;
@@ -1551,7 +1549,7 @@ void action_kougeki(bpw_class* i_this) {
                 cXyz cStack_44;
                 MtxPosition(&local_38, &cStack_44);
                 cStack_44 += pfVar7->m358;
-                i_this->m400 = fopAcM_create(PROC_BPW, params, &cStack_44, fopAcM_GetRoomNo(actor), &actor->current.angle);
+                i_this->m400 = fopAcM_create(fpcNm_BPW_e, params, &cStack_44, fopAcM_GetRoomNo(actor), &actor->current.angle);
                 i_this->mSomeCountdownTimers[1] = REG12_S(4) + 7;
                 if (player->checkConfuse()) {
                     i_this->mSomeCountdownTimers[1] = REG12_S(4) + 9;
@@ -2034,7 +2032,7 @@ void action_damage(bpw_class* i_this) {
             u32 uVar2 = uVar14 << 9 | 0xFF000003;
             for (i = 0; i < actor->health; i++) {
                 f32 maxPoeSpread = ((s16)pwSpreadAmount * 0.25f);
-                i_this->mChildPoeIds[i] = fopAcM_createChild(PROC_PW, fopAcM_GetID(i_this), uVar2, &local_58, fopAcM_GetRoomNo(actor), &pwAngle);
+                i_this->mChildPoeIds[i] = fopAcM_createChild(fpcNm_PW_e, fopAcM_GetID(i_this), uVar2, &local_58, fopAcM_GetRoomNo(actor), &pwAngle);
                 currRandomAngle += pwSpreadAmount;
                 pwAngle.y = (s16)currRandomAngle;
                 pwAngle.y += (int)cM_rndFX((f32)maxPoeSpread);
@@ -2098,7 +2096,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         u32 uVar2 = uVar14 << 9 | 0xFF000003;
         for (i = 0; i < actor->health; i++) {
             f32 maxPoeSpread = ((s16)pwSpreadAmount * 0.25f);
-            i_this->mChildPoeIds[i] = fopAcM_createChild(PROC_PW, fopAcM_GetID(i_this), uVar2, &local_58, fopAcM_GetRoomNo(actor), &pwAngle);
+            i_this->mChildPoeIds[i] = fopAcM_createChild(fpcNm_PW_e, fopAcM_GetID(i_this), uVar2, &local_58, fopAcM_GetRoomNo(actor), &pwAngle);
             currRandomAngle += pwSpreadAmount;
             pwAngle.y = (s16)currRandomAngle;
             pwAngle.y += (int)cM_rndFX((f32)maxPoeSpread);
@@ -2463,9 +2461,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         player->changeDemoMode(daPy_demo_c::DEMO_S_SURP_e);
         cLib_addCalc2(&actor->scale.x, 1.0f, 1.0f, 0.1f);
         cLib_addCalcAngleS2(&i_this->m47E, i_this->m480, 1, 0xf);
-        fVar9 = actor->scale.x;
-        actor->scale.z = fVar9;
-        actor->scale.y = fVar9;
+        actor->scale.y = actor->scale.z = actor->scale.x;
         if (REG20_S(1) == 0) {
             REG20_S(0) = 1;
         }
@@ -3121,9 +3117,7 @@ void action_start_demo(bpw_class* i_this) {
     case 0xcf:
         cLib_addCalcAngleS2(&i_this->m47E, i_this->m480, 1, 5);
         cLib_addCalc2(&actor->scale.x, 1.0f, 1.0f, 0.1f);
-        fVar1 = actor->scale.x;
-        actor->scale.z = fVar1;
-        actor->scale.y = fVar1;
+        actor->scale.y = actor->scale.z = actor->scale.x;
         if (i_this->mSomeCountdownTimers[0] != 0) {
             break;
         }
@@ -3628,8 +3622,7 @@ void action_kantera_dousa(bpw_class* i_this) {
     case 5:
         pfVar2 = fopAcM_SearchByID(i_this->m404);
         if (pfVar2 != NULL) {
-            sVar4 = fopAcM_searchActorAngleY(actor, pfVar2);
-            actor->current.angle.y = sVar4;
+            actor->current.angle.y = fopAcM_searchActorAngleY(actor, pfVar2);
         }
         cLib_addCalc0(&actor->speedF, 1.0f, 3.0f);
         if (actor->speedF < 1.0f) {
@@ -3990,9 +3983,7 @@ void torituki_execute(bpw_class* i_this) {
         // fallthrough
     case 1:
         cLib_addCalc2(&actor->scale.x, 0.4f, 1.0f, 0.1f);
-        fVar1 = actor->scale.x;
-        actor->scale.z = fVar1;
-        actor->scale.y = fVar1;
+        actor->scale.y = actor->scale.z = actor->scale.x;
         if (!(actor->scale.x < 0.3f)) {
             anm_init(i_this, BPW_BCK_TORITUKI1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->mSomeCountdownTimers[8] = DEMO_SELECT(0xD2, 0x96);
@@ -4021,9 +4012,7 @@ void torituki_execute(bpw_class* i_this) {
         break;
     case 3:
         cLib_addCalc0(&actor->scale.x, 1.0f, 0.1f);
-        fVar1 = actor->scale.x;
-        actor->scale.z = fVar1;
-        actor->scale.y = fVar1;
+        actor->scale.y = actor->scale.z = actor->scale.x;
         if (actor->scale.x < 0.1f) {
             fopAcM_delete(actor);
         }
@@ -4613,7 +4602,7 @@ static cPhs_State daBPW_Create(fopAc_ac_c* a_this) {
             BG_check(i_this);
             draw_SUB(i_this);
             sp18.y += 0x4000;
-            i_this->m3FC = fopAcM_createChild(PROC_BPW, fopAcM_GetID(i_this), ACTOR_TYPE_KANTERA, &i_this->mChildActorPos, fopAcM_GetRoomNo(a_this), &sp18);
+            i_this->m3FC = fopAcM_createChild(fpcNm_BPW_e, fopAcM_GetID(i_this), ACTOR_TYPE_KANTERA, &i_this->mChildActorPos, fopAcM_GetRoomNo(a_this), &sp18);
             i_this->mAttWaitTimer = 1;
             kantera_calc(i_this);
             if ((dComIfGp_getStartStageName()[0] != 'X') && (REG0_S(9) != 0 || (!dComIfGs_isStageBossDemo()))) {
@@ -4629,7 +4618,7 @@ static cPhs_State daBPW_Create(fopAc_ac_c* a_this) {
                 uVar14 = (s16)cM_rndF(4.99f);
                 u32 uVar2 = uVar14 << 9 | 0xFF000004;
                 for (s32 i = 0; i < 15; i++) {
-                    i_this->mChildPoeIds[i] = fopAcM_createChild(PROC_PW, fopAcM_GetID(i_this), uVar2, &local_58, fopAcM_GetRoomNo(a_this), &pwAngle);
+                    i_this->mChildPoeIds[i] = fopAcM_createChild(fpcNm_PW_e, fopAcM_GetID(i_this), uVar2, &local_58, fopAcM_GetRoomNo(a_this), &pwAngle);
                     currRandomAngle += pwSpreadAmount;
                     pwAngle.y = (s16)currRandomAngle;
                     pwAngle.y += (int)cM_rndFX((s16)pwSpreadAmount * 0.25f);
@@ -4721,18 +4710,18 @@ static actor_method_class l_daBPW_Method = {
 };
 
 actor_process_profile_definition g_profile_BPW = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BPW,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BPW_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bpw_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BPW,
+    /* Draw Prio    */ fpcDwPi_BPW_e,
     /* Actor SubMtd */ &l_daBPW_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

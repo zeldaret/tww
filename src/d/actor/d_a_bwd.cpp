@@ -9,8 +9,6 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include "d/d_bg_s_movebg_actor.h"
@@ -115,7 +113,7 @@ void* ko_s_sub(void* param_1, void* param_2) {
     UNUSED(param_2);
     fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
 
-    if ((fopAcM_IsActor(actor)) && (fopAcM_GetName(actor) == PROC_BWDS)) {
+    if ((fopAcM_IsActor(actor)) && (fopAcM_GetName(actor) == fpcNm_BWDS_e)) {
         if (ko_count < l_HIO.m26) {
             ko_ac[ko_count] = actor;
             ko_count++;
@@ -130,7 +128,7 @@ void* ko_delete_sub(void* param_1, void* param_2) {
     UNUSED(param_2);
     bwds_class* actor = (bwds_class*)param_1;
 
-    if ((fopAcM_IsActor(actor)) && (fopAcM_GetName(actor) == PROC_BWDS)) {
+    if ((fopAcM_IsActor(actor)) && (fopAcM_GetName(actor) == fpcNm_BWDS_e)) {
         actor->m04F4 = 1;
     }
     return FALSE;
@@ -613,7 +611,7 @@ void sita_hit(bwd_class* i_this) {
         {
             local_2c = i_this->mTongueSegments[0].m04;
             local_2c.y = REG0_F(9) + -600.0f + l_HIO.m28;
-            fopAcM_create(PROC_BWDS, 0x23, &local_2c, fopAcM_GetRoomNo(actor));
+            fopAcM_create(fpcNm_BWDS_e, 0x23, &local_2c, fopAcM_GetRoomNo(actor));
             if (i_this->m1710 == 0) {
                 if (dComIfGp_getStartStageName()[0] == 'X') {
                     mDoAud_bgmStart(JA_BGM_UNK_152);
@@ -2166,7 +2164,7 @@ static BOOL daBwd_Execute(bwd_class* i_this) {
     }
     if (i_this->m18D8 == 0) {
         i_this->m18D8 = 1;
-        fopAcM_create(PROC_BWDG, 0, &actor->home.pos, fopAcM_GetRoomNo(actor), NULL, NULL, 0xff, NULL);
+        fopAcM_create(fpcNm_BWDG_e, 0, &actor->home.pos, fopAcM_GetRoomNo(actor), NULL, NULL, 0xff, NULL);
     }
     if (i_this->m17C4 != 0) {
         if (i_this->m17C4 == 0xFF) {
@@ -2575,7 +2573,7 @@ static cPhs_State daBwd_Create(fopAc_ac_c* a_this) {
     i_this->m1714 = a_this->tevStr;
 #endif
 #if VERSION == VERSION_USA
-    i_this->m1BC0 = fopAcM_create(PROC_ATT, 0x65, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
+    i_this->m1BC0 = fopAcM_create(fpcNm_ATT_e, 0x65, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
 #endif
     return cPhs_COMPLEATE_e;
 }
@@ -2589,18 +2587,18 @@ static actor_method_class l_daBwd_Method = {
 };
 
 actor_process_profile_definition g_profile_BWD = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BWD,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BWD_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bwd_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BWD,
+    /* Draw Prio    */ fpcDwPi_BWD_e,
     /* Actor SubMtd */ &l_daBwd_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

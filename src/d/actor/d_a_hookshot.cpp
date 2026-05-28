@@ -10,8 +10,6 @@
 #include "SSystem/SComponent/c_counter.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ship.h" // IWYU pragma: keep
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 #include "assets/l_chainS3TCTEX__d_hookshot.h"
 const u16 l_chainS3TCTEX__width = 32;
@@ -576,18 +574,18 @@ static actor_method_class l_daHookshot_Method = {
 };
 
 actor_process_profile_definition g_profile_HOOKSHOT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0006,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_HOOKSHOT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0006,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_HOOKSHOT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daHookshot_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_HOOKSHOT,
+    /* Draw Prio    */ fpcDwPi_HOOKSHOT_e,
     /* Actor SubMtd */ &l_daHookshot_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

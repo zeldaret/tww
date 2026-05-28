@@ -7,8 +7,6 @@
 #include "d/actor/d_a_npc_kamome.h"
 #include "d/res/res_kamome.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_player_main.h"
@@ -123,7 +121,7 @@ static s16 daNpc_kam_XyCheckCB(void* i_this, int i_itemBtn) {
 
 /* 00000260-000002A4       .text XyCheckCB__11daNpc_kam_cFi */
 s16 daNpc_kam_c::XyCheckCB(int i_itemBtn) {
-    if (dComIfGp_getSelectItem(i_itemBtn) == dItem_HYOI_PEAR_e) {
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_HYOI_PEAR_e) {
         return callDemoStartCheck();
     } else {
         return FALSE;
@@ -1492,18 +1490,18 @@ static actor_method_class l_daNpc_kam_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_KAM = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_KAM,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_KAM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_kam_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_KAM,
+    /* Draw Prio    */ fpcDwPi_NPC_KAM_e,
     /* Actor SubMtd */ &l_daNpc_kam_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_2_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_2_e,
 };

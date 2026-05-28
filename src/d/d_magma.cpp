@@ -11,10 +11,10 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 
-Mtx l_kuroOrthoMtx;
-Mtx l_colOrthoMtx;
+static Mtx l_kuroOrthoMtx;
+static Mtx l_colOrthoMtx;
 
-Vec l_YfloorPos[] = {
+static Vec l_YfloorPos[] = {
     { -500.0f, -0.0f, 500.0f },
     { 500.0f, -0.0f, 500.0f },
     { -500.0f, 0.0f, -500.0f },
@@ -24,7 +24,7 @@ Vec l_YfloorPos[] = {
 #include "assets/l_YfloorDL.h"
 #include "assets/l_YfloorMatDL.h"
 
-Vec l_YballPos[] = {
+static Vec l_YballPos[] = {
     {172.280487f, -7.398514f, -167.445663f},
     {0.000006f, -7.398514f, -236.803879f},
     {-172.280487f, -7.398515f, -167.445648f},

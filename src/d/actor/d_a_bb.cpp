@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bb.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
@@ -372,7 +370,7 @@ void* s_a_d_sub(void* ac1, void* ac2) {
     cXyz sp14;
     cXyz sp8;
 
-    if (esa_check_count < 100 && fopAc_IsActor(ac1) && fpcM_GetName(ac1) == PROC_ESA) {
+    if (esa_check_count < 100 && fopAc_IsActor(ac1) && fpcM_GetName(ac1) == fpcNm_ESA_e) {
         esa_class* esa1 = (esa_class*)ac1;
         esa_class* esa2 = (esa_class*)ac2;
 
@@ -1248,7 +1246,7 @@ void bb_water_check(bb_class* i_this) {
 
 /* 00004000-0000404C       .text pl_name_check__FPvPv */
 void* pl_name_check(void* ac1, void* ac2) {
-    if (fopAc_IsActor(ac1) && fopAcM_GetName(ac1) == PROC_NPC_KAM) {
+    if (fopAc_IsActor(ac1) && fopAcM_GetName(ac1) == fpcNm_NPC_KAM_e) {
         return ac1;
     }
     return NULL;
@@ -2362,14 +2360,14 @@ static BOOL daBb_Execute(bb_class* i_this) {
                     ac->current.angle = i_this->actor.current.angle;
                     ac->shape_angle = i_this->actor.current.angle;
 
-                    if (i_this->unk_2EC == PROC_MO2 || i_this->unk_2EC == PROC_BK) {
+                    if (i_this->unk_2EC == fpcNm_MO2_e || i_this->unk_2EC == fpcNm_BK_e) {
                         damagereaction* dr;
 
-                        if (i_this->unk_2EC == PROC_MO2) {
+                        if (i_this->unk_2EC == fpcNm_MO2_e) {
                             dr = &((mo2_class*)ac)->mDamageReaction;
                             dr->m468 = REG0_F(8) * 10.0f + -110.0f;
                             dr->m46C = REG0_F(9) * 10.0f + 10.0f;
-                        } else if (i_this->unk_2EC == PROC_BK) {
+                        } else if (i_this->unk_2EC == fpcNm_BK_e) {
                             dr = &((bk_class*)ac)->dr;
                             dr->m468 = REG0_F(8) * 10.0f + -100.0f;
                             dr->m46C = REG0_F(9) * 10.0f;
@@ -2748,11 +2746,11 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
             ac->base.parameters = (fopAcM_GetParam(i_this) & 0xFF000000) | 0xFFFF05;
 
             if (i_this->unk_2DD == 5) {
-                i_this->unk_2E8 = fpcM_Create(PROC_MO2, NULL, ac);
-                i_this->unk_2EC = PROC_MO2;
+                i_this->unk_2E8 = fpcM_Create(fpcNm_MO2_e, NULL, ac);
+                i_this->unk_2EC = fpcNm_MO2_e;
             } else {
-                i_this->unk_2E8 = fpcM_Create(PROC_BK, NULL, ac);
-                i_this->unk_2EC = PROC_BK;
+                i_this->unk_2E8 = fpcM_Create(fpcNm_BK_e, NULL, ac);
+                i_this->unk_2EC = fpcNm_BK_e;
             }
         } else if (i_this->unk_2D8 == 3) {
             i_this->unk_2DD = 3;
@@ -2820,18 +2818,18 @@ static actor_method_class l_daBb_Method = {
 };
 
 actor_process_profile_definition g_profile_BB = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BB,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BB_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bb_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BB,
+    /* Draw Prio    */ fpcDwPi_BB_e,
     /* Actor SubMtd */ &l_daBb_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

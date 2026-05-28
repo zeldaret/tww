@@ -14,8 +14,6 @@
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JAZelAudio/JAIZelBasic.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_bg_w.h"
@@ -153,7 +151,7 @@ static s16 daObjMknjD_XyEventCB(void* i_this, int i_param2) {
 
 /* 000002F0-00000314       .text XyCheckCB__Q210daObjMknjD5Act_cFi */
 s16 daObjMknjD::Act_c::XyCheckCB(int i_itemBtn) {
-    if (dComIfGp_getSelectItem(i_itemBtn) == dItem_WIND_WAKER_e) {
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_WIND_WAKER_e) {
         return TRUE;
     } else {
         return FALSE;
@@ -259,7 +257,7 @@ BOOL daObjMknjD::Act_c::Create() {
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[7]);
 
         mMelodyNum = 4;
-        mGiveItemNo = TACT_SONG5;
+        mGiveItemNo = dItemNo_WIND_GODS_ARIA_e;
         eventInfo.setEventName("MKNJD_K_TALK");
         m0430 = dSv_event_flag_c::UNK_2910;
     }
@@ -270,7 +268,7 @@ BOOL daObjMknjD::Act_c::Create() {
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[6]);
 
         mMelodyNum = 3;
-        mGiveItemNo = TACT_SONG4;
+        mGiveItemNo = dItemNo_EARTH_GODS_LYRIC_e;
         eventInfo.setEventName("MKNJD_D_TALK");
         m0430 = dSv_event_flag_c::UNK_2920;
     }
@@ -567,7 +565,7 @@ void daObjMknjD::Act_c::privateCut() {
 
 /* 00001348-00001400       .text manage_friend_draw__10daObjMknjDFi */
 void daObjMknjD::manage_friend_draw(int i_param1) {
-    fopAc_ac_c* judgeResult = fopAcM_SearchByName(PROC_NPC_MD);
+    fopAc_ac_c* judgeResult = fopAcM_SearchByName(fpcNm_NPC_MD_e);
 
     if (judgeResult != NULL) {
         if (i_param1 == 1) {
@@ -577,7 +575,7 @@ void daObjMknjD::manage_friend_draw(int i_param1) {
         }
     }
 
-    judgeResult = fopAcM_SearchByName(PROC_NPC_CB1);
+    judgeResult = fopAcM_SearchByName(fpcNm_NPC_CB1_e);
     
     if (judgeResult != NULL) {
         if (i_param1 == 1) {
@@ -773,7 +771,7 @@ BOOL daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                         fopAcM_orderChangeEventId(this, mDemoEventIdx, 0, 0xFFFF);
                         dComIfGs_onEventBit(m0430);
 
-                        s16 procMedli = PROC_NPC_MD;
+                        s16 procMedli = fpcNm_NPC_MD_e;
                         void* judgeResult = fopAcIt_Judge(fpcSch_JudgeForPName, &procMedli);
 
                         if (judgeResult != NULL) {
@@ -1051,18 +1049,18 @@ namespace daObjMknjD {
 }
 
 actor_process_profile_definition g_profile_Obj_MknjD = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_MknjD,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_MknjD_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMknjD::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_MknjD,
+    /* Draw Prio    */ fpcDwPi_Obj_MknjD_e,
     /* Actor SubMtd */ &daObjMknjD::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

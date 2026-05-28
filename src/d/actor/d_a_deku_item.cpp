@@ -7,8 +7,6 @@
 #include "d/actor/d_a_deku_item.h"
 #include "d/res/res_deku.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 const char daDekuItem_c::m_arcname[] = "Deku";
 
@@ -202,7 +200,7 @@ void daDekuItem_c::mode_getdemo_init() {
 /* 00000CB8-00000D34       .text mode_getdemo_wait__12daDekuItem_cFv */
 void daDekuItem_c::mode_getdemo_wait() {
     if (!unk630) {
-        mItemPID = fopAcM_createItemForTrBoxDemo(&current.pos, dItem_DEKU_LEAF_e, -1, fopAcM_GetRoomNo(this));
+        mItemPID = fopAcM_createItemForTrBoxDemo(&current.pos, dItemNo_DEKU_LEAF_e, -1, fopAcM_GetRoomNo(this));
 
         if (mItemPID != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(mItemPID);
@@ -283,18 +281,18 @@ static actor_method_class daDekuItemMethodTable = {
 };
 
 actor_process_profile_definition g_profile_DEKU_ITEM = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DEKU_ITEM,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DEKU_ITEM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daDekuItem_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DEKU_ITEM,
+    /* Draw Prio    */ fpcDwPi_DEKU_ITEM_e,
     /* Actor SubMtd */ &daDekuItemMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

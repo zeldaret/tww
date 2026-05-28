@@ -7,9 +7,7 @@
 #include "d/actor/d_a_ki.h"
 #include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include "d/d_path.h"
@@ -96,7 +94,7 @@ static u8 ki_tex_loop[] = { 0, 0, 0, 0 };
 
 /* 000000EC-000001B4       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
-    if (calcTiming == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
@@ -115,7 +113,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 000001B4-0000023C       .text ki_a_d_sub__FPvPv */
 void* ki_a_d_sub(void* ac1, void*) {
-    if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == PROC_KI) {
+    if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == fpcNm_KI_e) {
         ki_class* ki = (ki_class*)ac1;
         ki_all_count++;
         if (ki->mAction == ki_class::ACT_ATTACK_MOVE_INDEX_e && ki->mBehaviorType < 10) {
@@ -817,7 +815,7 @@ void ki_damage_move(ki_class* i_this) {
 }
 
 void* bgn_s_sub(void* ac1, void*) {
-    if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == PROC_BGN) {
+    if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == fpcNm_BGN_e) {
         return ac1;
     }
     return NULL;
@@ -1126,7 +1124,7 @@ static BOOL daKi_Execute(ki_class* i_this) {
             atInfo.mpActor = cc_at_check(&i_this->actor, &atInfo);
 
             if (atInfo.mpActor != NULL) {
-                if (fpcM_GetName(atInfo.mpActor) == PROC_BGN || fpcM_GetName(atInfo.mpActor) == PROC_BGN2 || fpcM_GetName(atInfo.mpActor) == PROC_BGN3) {
+                if (fpcM_GetName(atInfo.mpActor) == fpcNm_BGN_e || fpcM_GetName(atInfo.mpActor) == fpcNm_BGN2_e || fpcM_GetName(atInfo.mpActor) == fpcNm_BGN3_e) {
                     i_this->actor.health = -10;
                 }
             }
@@ -1492,18 +1490,18 @@ static actor_method_class l_daKi_Method = {
 };
 
 actor_process_profile_definition g_profile_KI = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KI,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KI_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(ki_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KI,
+    /* Draw Prio    */ fpcDwPi_KI_e,
     /* Actor SubMtd */ &l_daKi_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

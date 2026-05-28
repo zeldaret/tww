@@ -10,8 +10,6 @@
 #include "d/d_bg_s_func.h"
 #include "d/d_bg_s_roof_chk.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "d/actor/d_a_player.h"
 #include "d/res/res_zl.h"
@@ -212,7 +210,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* ac) {
 
 /* 00000548-000005C0       .text searchActor_Branch__FPvPv */
 void* searchActor_Branch(void* i_param1, void*) {
-    if(l_check_wrk < 20 && fopAcM_IsActor(i_param1) && fopAcM_GetName(i_param1) == PROC_BRANCH) {
+    if(l_check_wrk < 20 && fopAcM_IsActor(i_param1) && fopAcM_GetName(i_param1) == fpcNm_BRANCH_e) {
         l_check_inf[l_check_wrk] = (fopAc_ac_c*)i_param1;
         l_check_wrk++;
     }
@@ -221,7 +219,7 @@ void* searchActor_Branch(void* i_param1, void*) {
 
 /* 000005C0-00000638       .text searchActor_Bm1__FPvPv */
 void* searchActor_Bm1(void* i_param1, void*) {
-    if(l_check_wrk < 20 && fopAcM_IsActor(i_param1) && fopAcM_GetName(i_param1) == PROC_NPC_BM1) {
+    if(l_check_wrk < 20 && fopAcM_IsActor(i_param1) && fopAcM_GetName(i_param1) == fpcNm_NPC_BM1_e) {
         l_check_inf[l_check_wrk] = (fopAc_ac_c*)i_param1;
         l_check_wrk++;
     }
@@ -3060,18 +3058,18 @@ static actor_method_class l_daNpc_Zl1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_ZL1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_ZL1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_ZL1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Zl1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_ZL1,
+    /* Draw Prio    */ fpcDwPi_NPC_ZL1_e,
     /* Actor SubMtd */ &l_daNpc_Zl1_Method,
     /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

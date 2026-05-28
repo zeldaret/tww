@@ -182,7 +182,7 @@ class cCcD_SphAttr : public cCcD_ShapeAttr, public cM3dGSph {
 public:
     cCcD_SphAttr() {}
 
-    inline void Set(const cCcD_SrcSphAttr& src) {
+    void Set(const cCcD_SrcSphAttr& src) {
         cM3dGSph::Set(src.mSph);
     }
 
@@ -216,7 +216,7 @@ STATIC_ASSERT(0x34 == sizeof(cCcD_SphAttr));
 class cCcD_CylAttr : public cCcD_ShapeAttr, public cM3dGCyl {
 public:
     cCcD_CylAttr() {}
-    inline void Set(const cCcD_SrcCylAttr& src) {
+    void Set(const cCcD_SrcCylAttr& src) {
         cM3dGCyl::Set(src.mCyl);
     }
 

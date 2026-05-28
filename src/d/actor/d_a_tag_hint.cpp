@@ -7,9 +7,7 @@
 #include "d/actor/d_a_tag_hint.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_npc_os.h"
-#include "d/d_procname.h"
 #include "d/d_kankyo.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "f_op/f_op_actor_mng.h"
@@ -191,7 +189,7 @@ s32 daTag_Hint_c::waitTerms() {
         break;
 
     case 0xb:
-        if (dComIfGs_getItem(dItem_BOMB_10_e) != dItem_NONE_e) {
+        if (dComIfGs_getItem(dItemNo_BOMB_10_e) != dItemNo_NONE_e) {
             return 1;
         }
         break;
@@ -211,7 +209,7 @@ s32 daTag_Hint_c::waitTerms() {
         }
         break;
     case 0x11:
-        if (dComIfGs_checkGetItem(dItem_POWER_BRACELETS_e)) {
+        if (dComIfGs_checkGetItem(dItemNo_POWER_BRACELETS_e)) {
             return 1;
         }
         break;
@@ -304,13 +302,13 @@ s32 daTag_Hint_c::getPriority() {
     switch (getType()) {
     case 2:
 #if VERSION == VERSION_DEMO
-        uVar2 = PRIO_OVERLAP8;
+        uVar2 = fpcDwPi_OVERLAP8_e;
 #else
-        uVar2 = PRIO_1EA;
+        uVar2 = fpcDwPi_1EA_e;
 #endif
         break;
     default:
-        uVar2 = PRIO_1FF;
+        uVar2 = fpcDwPi_1FF_e;
         break;
     }
     return uVar2;
@@ -379,7 +377,7 @@ void daTag_Hint_c::deleteLight() {
 void* findObjectCallBack(fopAc_ac_c* actor, void* v_this) {
     daTag_Hint_c* i_this = (daTag_Hint_c*)v_this;
 
-    if (fopAcM_GetProfName(actor) == PROC_Obj_Movebox && i_this->rangeCheck_local(&actor->home.pos)) {
+    if (fopAcM_GetProfName(actor) == fpcNm_Obj_Movebox_e && i_this->rangeCheck_local(&actor->home.pos)) {
         cXyz sp14 = actor->current.pos - actor->home.pos;
         if (sp14.abs2XZ() > 0.0f) {
             return actor;
@@ -781,18 +779,18 @@ static actor_method_class l_daTag_Hint_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_HINT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_HINT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_HINT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Hint_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_HINT,
+    /* Draw Prio    */ fpcDwPi_TAG_HINT_e,
     /* Actor SubMtd */ &l_daTag_Hint_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

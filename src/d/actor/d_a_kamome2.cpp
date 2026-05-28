@@ -2,9 +2,7 @@
 #include "d/actor/d_a_kamome2.h"
 #include "d/res/res_kamome.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
 #include "d/d_camera.h"
-#include "d/d_priority.h"
 #include "d/d_meter.h"
 #include "d/d_snap.h"
 #include "d/d_s_play.h"
@@ -365,19 +363,19 @@ static actor_method_class l_daKamome2_Method = {
 
 #if VERSION == VERSION_DEMO
 actor_process_profile_definition g_profile_KAMOME2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KAMOME2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KAMOME2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kamome2_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KAMOME2,
+    /* Draw Prio    */ fpcDwPi_KAMOME2_e,
     /* Actor SubMtd */ &l_daKamome2_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };
 #endif

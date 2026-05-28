@@ -21,3 +21,4 @@ IncludeCategories:
     Priority: -1000
 IndentCaseBlocks: true
 IndentCaseLabels: true
+AllowAllArgumentsOnNextLine: false

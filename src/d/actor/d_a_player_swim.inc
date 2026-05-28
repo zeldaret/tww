@@ -80,12 +80,12 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
 
     setNormalSpeedF(fVar1, m_HIO->mSwim.m.field_0x18, m_HIO->mSwim.m.field_0x1C, m_HIO->mSwim.m.field_0x20);
 
-    if (bVar3 && mVelocity < 5.0f) {
+    if (bVar3 && mNormalSpeed < 5.0f) {
         current.angle.y = m34E8;
-        mVelocity = 0.0f;
+        mNormalSpeed = 0.0f;
     }
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)) {
-        mVelocity = 0.0f;
+        mNormalSpeed = 0.0f;
     }
 }
 
@@ -134,10 +134,10 @@ BOOL daPy_lk_c::changeSwimProc() {
         offNoResetFlg0(daPyFlg0_UNK100);
 
         mMaxNormalSpeed = m_HIO->mSwim.m.field_0xC;
-        mVelocity *= 0.75f;
+        mNormalSpeed *= 0.75f;
 
-        if (mVelocity >= mMaxNormalSpeed) {
-          mVelocity = mMaxNormalSpeed;
+        if (mNormalSpeed >= mMaxNormalSpeed) {
+          mNormalSpeed = mMaxNormalSpeed;
         }
 
         m35C4 = 0.0f;
@@ -265,7 +265,7 @@ void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
     f32 endFrame = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() * mFrameCtrlUnder[UNDER_MOVE0_e].getEnd();
     setSingleMoveAnime(
         swimMoveAnm,
-        (std::fabsf(mVelocity) * (m_HIO->mSwim.m.field_0x54 - m_HIO->mSwim.m.field_0x50) / mMaxNormalSpeed) +
+        (std::fabsf(mNormalSpeed) * (m_HIO->mSwim.m.field_0x54 - m_HIO->mSwim.m.field_0x50) / mMaxNormalSpeed) +
             m_HIO->mSwim.m.field_0x50 +
             (getSwimTimerRate() * m_HIO->mSwim.m.field_0x74),
         0.0f,
@@ -307,12 +307,12 @@ void daPy_lk_c::setSwimTimerStartStop() {
                 target = cM_fcos((1.0f - swimTimerRate) * M_PI) * -m_HIO->mSwim.m.field_0x78;
 
                 if (mFrameCtrlUnder[UNDER_MOVE0_e].checkPass(0.0f) && mCurProc != daPyProc_SWIM_UP_e) {
-                    if (mProcVar0.m3570 && !checkNoResetFlg0(daPyFlg0_UNK4000)) {
+                    if (mProcVar6.m3570 && !checkNoResetFlg0(daPyFlg0_UNK4000)) {
                         voiceStart(0x22);
-                        mProcVar0.m3570 = 0;
+                        mProcVar6.m3570 = 0;
                     }
                     else {
-                        mProcVar0.m3570 = 1;
+                        mProcVar6.m3570 = 1;
                     }
                 }
             }
@@ -365,7 +365,7 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
         }
     }
 
-    mProcVar0.m3570 = 0;
+    mProcVar6.m3570 = 0;
     return TRUE;
 }
 
@@ -412,7 +412,7 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
 
     if (param_1) {
         fVar2 = frameCtrl.getFrame() / (f32)frameCtrl.getEnd();
-        mVelocity = speedF * (1.0f - m_HIO->mSwim.m.field_0x60) + speedF * std::fabsf(cM_fcos(fVar2 * M_PI)) * m_HIO->mSwim.m.field_0x60;
+        mNormalSpeed = speedF * (1.0f - m_HIO->mSwim.m.field_0x60) + speedF * std::fabsf(cM_fcos(fVar2 * M_PI)) * m_HIO->mSwim.m.field_0x60;
     }
     else {
         fVar2 = 0.0f;
@@ -433,16 +433,16 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
     }
 
     m35C4 = m_HIO->mSwim.m.field_0x48;
-    m34D4 = 0;
-    mProcVar0.m3570 = 0;
+    mProcVar2.m34D4 = 0;
+    mProcVar6.m3570 = 0;
     return TRUE;
 }
 
 /* 8013DCDC-8013DE8C       .text procSwimWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSwimWait() {
     setSpeedAndAngleSwim();
-    m34D4 += (s16)((cM_rndF(0.3f) + 0.85f) * m_HIO->mSwim.m.field_0x2);
-    m35C4 = cM_ssin(m34D4) * m_HIO->mSwim.m.field_0x4C + m_HIO->mSwim.m.field_0x48;
+    mProcVar2.m34D4 += (s16)((cM_rndF(0.3f) + 0.85f) * m_HIO->mSwim.m.field_0x2);
+    m35C4 = cM_ssin(mProcVar2.m34D4) * m_HIO->mSwim.m.field_0x4C + m_HIO->mSwim.m.field_0x48;
 
     if (changeSwimOutProc()) {
         return TRUE;
@@ -514,7 +514,7 @@ BOOL daPy_lk_c::procSwimMove_init(BOOL param_1) {
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
     m35C4 = m_HIO->mSwim.m.field_0x5C;
-    mProcVar0.m3570 = 0;
+    mProcVar6.m3570 = 0;
 
     return TRUE;
 }
@@ -575,7 +575,7 @@ BOOL daPy_lk_c::procSwimMove() {
         }
     }
     else {
-        frameCtrl.setRate((std::fabsf(mVelocity) * (m_HIO->mSwim.m.field_0x54 - m_HIO->mSwim.m.field_0x50)) / mMaxNormalSpeed + m_HIO->mSwim.m.field_0x50 + (f32)(getSwimTimerRate() * m_HIO->mSwim.m.field_0x74));
+        frameCtrl.setRate((std::fabsf(mNormalSpeed) * (m_HIO->mSwim.m.field_0x54 - m_HIO->mSwim.m.field_0x50)) / mMaxNormalSpeed + m_HIO->mSwim.m.field_0x50 + (f32)(getSwimTimerRate() * m_HIO->mSwim.m.field_0x74));
     }
 
     if (mDirection == DIR_BACKWARD) {

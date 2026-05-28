@@ -8,8 +8,6 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_beam.h"
 #include "d/actor/d_a_npc_os.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_a_obj.h"
 #include "d/d_s_play.h"
 #include "d/d_path.h"
@@ -282,7 +280,7 @@ BOOL daBemos_c::CreateInit1() {
     m6A0 = dComIfG_Bgsp()->GroundCross(&mGndChk);
 
     cXyz pos(2.0f, 2.0f, 10.0f);
-    parentActorID = fopAcM_createChild(PROC_Beam, fopAcM_GetID(this), 0x1000000, &m2A4, tevStr.mRoomNo, &current.angle, &pos);
+    parentActorID = fopAcM_createChild(fpcNm_Beam_e, fopAcM_GetID(this), 0x1000000, &m2A4, tevStr.mRoomNo, &current.angle, &pos);
 
     m6BF = shape_angle.z & 0x3f;
     m6C0 = (shape_angle.z >> 6) & 0x7f;
@@ -333,7 +331,7 @@ BOOL daBemos_c::CreateInit2() {
     m6A0 = dComIfG_Bgsp()->GroundCross(&mGndChk);
 
     cXyz pos(2.0f, 2.0f, 10.0f);
-    parentActorID = fopAcM_createChild(PROC_Beam, fopAcM_GetID(this), 0, &m2A4, tevStr.mRoomNo, &current.angle, &pos);
+    parentActorID = fopAcM_createChild(fpcNm_Beam_e, fopAcM_GetID(this), 0, &m2A4, tevStr.mRoomNo, &current.angle, &pos);
 
     m6BF = shape_angle.z & 0x3f;
     m6C0 = (shape_angle.z >> 6) & 0x7f;
@@ -364,7 +362,7 @@ BOOL daBemos_c::CreateInit3() {
         current.angle = shape_angle;
         cXyz local_3C = pdVar3->m_points[1].m_position;
 
-        fopAcM_createChild(PROC_Bemos, fopAcM_GetID(this), m6A8 | 0x2fff0000 | m6B9 << 8, &local_3C, tevStr.mRoomNo, NULL, NULL, 2);
+        fopAcM_createChild(fpcNm_Bemos_e, fopAcM_GetID(this), m6A8 | 0x2fff0000 | m6B9 << 8, &local_3C, tevStr.mRoomNo, NULL, NULL, 2);
         m29C.y = cLib_targetAngleY(&current.pos, &local_3C);
         m29C.x = cLib_targetAngleX(&current.pos, &local_3C);
         current.angle.y = m29C.y;
@@ -420,7 +418,7 @@ BOOL daBemos_c::CreateInit3() {
     } else {
         uVar2 |= 0x40000000;
     }
-    parentActorID = fopAcM_createChild(PROC_Beam, fopAcM_GetID(this), uVar2, &local_90, tevStr.mRoomNo, &m29C, &local_9C);
+    parentActorID = fopAcM_createChild(fpcNm_Beam_e, fopAcM_GetID(this), uVar2, &local_90, tevStr.mRoomNo, &m29C, &local_9C);
     current.angle.y = m29C.y;
     m6BB = 0;
 
@@ -1416,7 +1414,7 @@ daBeam_c* daBemos_c::getBeamActor() {
         return NULL;
     }
 
-    if (fopAcM_IsActor(ac) && fopAcM_GetProfName(ac) == PROC_Beam) {
+    if (fopAcM_IsActor(ac) && fopAcM_GetProfName(ac) == fpcNm_Beam_e) {
         return static_cast<daBeam_c*>(ac);
     }
     return NULL;
@@ -1488,7 +1486,7 @@ bool daBemos_c::_execute() {
         guard_proc();
     }
 
-    fopAcM_setGbaName(this, dItem_BOW_e, 0x23, 0x2c);
+    fopAcM_setGbaName(this, dItemNo_BOW_e, 0x23, 0x2c);
     return false;
 }
 
@@ -1538,18 +1536,18 @@ static actor_method_class daBemosMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Bemos = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Bemos,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Bemos_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daBemos_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Bemos,
+    /* Draw Prio    */ fpcDwPi_Bemos_e,
     /* Actor SubMtd */ &daBemosMethodTable,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

@@ -11,8 +11,6 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_level_se.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
@@ -132,7 +130,7 @@ BOOL daFan_c::Create() {
     }
 
     mModel->calc();
-    mWindSePId = fopKyM_create(PROC_LEVEL_SE, JA_SE_OBJ_WIND_TAG, &eyePos);
+    mWindSePId = fopKyM_create(fpcNm_LEVEL_SE_e, JA_SE_OBJ_WIND_TAG, &eyePos);
     return TRUE;
 }
 
@@ -296,18 +294,18 @@ static actor_method_class daFanMethodTable = {
 };
 
 actor_process_profile_definition g_profile_FAN = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_FAN,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_FAN_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daFan_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_FAN,
+    /* Draw Prio    */ fpcDwPi_FAN_e,
     /* Actor SubMtd */ &daFanMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

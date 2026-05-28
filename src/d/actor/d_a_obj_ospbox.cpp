@@ -8,8 +8,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_particle_name.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/res/res_ospbox.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
@@ -123,14 +121,14 @@ void daObjOspbox::Act_c::init_mtx() {
 /* 00000CC0-00000D7C       .text make_item__Q211daObjOspbox5Act_cFv */
 void daObjOspbox::Act_c::make_item() {
     static const s16 pf_name[] = {
-        PROC_Obj_Ospbox,
-        PROC_KB,
-        PROC_KB,
-        PROC_KB,
-        PROC_Obj_Ospbox,
-        PROC_Obj_Ospbox,
-        PROC_Obj_Ospbox,
-        PROC_Obj_Ospbox
+        fpcNm_Obj_Ospbox_e,
+        fpcNm_KB_e,
+        fpcNm_KB_e,
+        fpcNm_KB_e,
+        fpcNm_Obj_Ospbox_e,
+        fpcNm_Obj_Ospbox_e,
+        fpcNm_Obj_Ospbox_e,
+        fpcNm_Obj_Ospbox_e
     };
     static const u32 prm[] = {
         0x00000000,
@@ -140,7 +138,7 @@ void daObjOspbox::Act_c::make_item() {
     };
 
     int prm_index = prm_get_spec();
-    if (pf_name[prm_index] == PROC_Obj_Ospbox) {
+    if (pf_name[prm_index] == fpcNm_Obj_Ospbox_e) {
         int item_no = prm_get_itemNo();
         fopAcM_createItemFromTable(&current.pos,
             item_no, 0x7F,
@@ -171,8 +169,8 @@ void daObjOspbox::Act_c::eff_break() {
         NULL,
         -1, &tevStr.mColorK0, &tevStr.mColorK0, &particle_scale);
     if (emitter != NULL) {
-      emitter->mLifeTime = 0x1E;
-      emitter->mInitialVelAxis = 30.0f;
+      emitter->setLifeTime(30);
+      emitter->setAwayFromAxisSpeed(30.0f);
     }
 }
 
@@ -284,18 +282,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjOspbox
 
 actor_process_profile_definition g_profile_Obj_Ospbox = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ospbox,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ospbox_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjOspbox::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ospbox,
+    /* Draw Prio    */ fpcDwPi_Obj_Ospbox_e,
     /* Actor SubMtd */ &daObjOspbox::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

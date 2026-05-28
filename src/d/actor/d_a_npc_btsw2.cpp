@@ -8,8 +8,6 @@
 #include "d/res/res_btsw.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
@@ -544,7 +542,7 @@ BOOL daNpc_Btsw2_c::wait_action(void*) {
 cPhs_State daNpc_Btsw2_c::_create() {
     fopAcM_ct(this, daNpc_Btsw2_c);
     
-    if (dComIfGs_getEventReg(dSv_event_flag_c::UNK_C203) == 3 || !checkItemGet(dItem_PEARL_DIN_e, TRUE)) {
+    if (dComIfGs_getEventReg(dSv_event_flag_c::UNK_C203) == 3 || !checkItemGet(dItemNo_PEARL_DIN_e, TRUE)) {
         return cPhs_ERROR_e;
     }
     
@@ -670,18 +668,18 @@ static actor_method_class l_daNpc_Btsw2_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_BTSW2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_BTSW2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_BTSW2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Btsw2_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_BTSW2,
+    /* Draw Prio    */ fpcDwPi_NPC_BTSW2_e,
     /* Actor SubMtd */ &l_daNpc_Btsw2_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_12_e,
+    /* Cull Type    */ fopAc_CULLBOX_12_e,
 };

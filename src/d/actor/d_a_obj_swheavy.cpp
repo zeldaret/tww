@@ -7,8 +7,6 @@
 #include "d/actor/d_a_obj_swheavy.h"
 #include "d/res/res_hhbot.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_player.h"
 
 const char daObjSwheavy::Act_c::M_arcname[] = "Hhbot";
@@ -210,7 +208,7 @@ void daObjSwheavy::Act_c::rideCB(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) 
     if (fopAcM_CheckStatus(i_pt, fopAcStts_FREEZE_e)) {
         i_this->mRiding = true;
 
-        if (fopAcM_GetProfName(i_pt) == PROC_PLAYER && ((daPy_py_c*)i_pt)->checkEquipHeavyBoots()) {
+        if (fopAcM_GetProfName(i_pt) == fpcNm_PLAYER_e && ((daPy_py_c*)i_pt)->checkEquipHeavyBoots()) {
             i_this->mHeavyRiding = true;
         }
     }
@@ -470,18 +468,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjSwheavy
 
 actor_process_profile_definition g_profile_Obj_Swheavy = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Swheavy,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Swheavy_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjSwheavy::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Swheavy,
+    /* Draw Prio    */ fpcDwPi_Obj_Swheavy_e,
     /* Actor SubMtd */ &daObjSwheavy::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

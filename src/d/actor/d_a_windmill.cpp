@@ -10,8 +10,6 @@
 #include "d/res/res_hpu2.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_movebg_actor.h"
 
@@ -261,7 +259,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000608-00000670       .text search_wind__12daWindMill_cFv */
 void daWindMill_c::search_wind() {
-    fopAc_ac_c* windTag = fopAcM_SearchByName(PROC_WindTag);
+    fopAc_ac_c* windTag = fopAcM_SearchByName(fpcNm_WindTag_e);
     if (windTag != NULL)
         mWindTagId = fopAcM_GetID(windTag);
     else
@@ -500,18 +498,18 @@ static actor_method_class daWindMillMethodTable = {
 };
 
 actor_process_profile_definition g_profile_WINDMILL = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WINDMILL,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_WINDMILL_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWindMill_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_WINDMILL,
+    /* Draw Prio    */ fpcDwPi_WINDMILL_e,
     /* Actor SubMtd */ &daWindMillMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

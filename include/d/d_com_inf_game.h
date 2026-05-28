@@ -41,7 +41,7 @@ enum daPy__PlayerStatus0 {
     daPyStts0_UNK20_e          = 0x00000020,
     daPyStts0_UNK40_e          = 0x00000040,
     daPyStts0_UNK80_e          = 0x00000080, // Maybe inside a Baba Bud before being spat out?
-    daPyStts0_UNK100_e         = 0x00000100,
+    daPyStts0_HANG_e           = 0x00000100,
     daPyStts0_UNK200_e         = 0x00000200,
     daPyStts0_UNK400_e         = 0x00000400,
     daPyStts0_UNK800_e         = 0x00000800,
@@ -68,7 +68,7 @@ enum daPy__PlayerStatus0 {
 
     // This is some combination of flags which is seemingly related to "judgement", used in dAttention_c
     daPyStts0_UNK37a02371_e    = daPyStts0_UNK1_e | daPyStts0_UNK10_e | daPyStts0_UNK20_e
-                                 | daPyStts0_UNK40_e | daPyStts0_UNK100_e | daPyStts0_UNK200_e
+                                 | daPyStts0_UNK40_e | daPyStts0_HANG_e | daPyStts0_UNK200_e
                                  | daPyStts0_SUBJECT_e| daPyStts0_TELESCOPE_LOOK_e
                                  | daPyStts0_UNK800000_e | daPyStts0_UNK1000000_e
                                  | daPyStts0_UNK2000000_e | daPyStts0_UNK4000000_e
@@ -1860,7 +1860,7 @@ inline BOOL dComIfGs_checkEmptyBottle() {
 inline BOOL dComIfGs_checkGetBottle() {
     u8 bottleCount = 0;
     for (int i = 0; i < 4; i++) {
-        if (dComIfGs_getItem(dInvSlot_BOTTLE0_e + i) != dItem_NONE_e) {
+        if (dComIfGs_getItem(dInvSlot_BOTTLE0_e + i) != dItemNo_NONE_e) {
             bottleCount++;
         }
     }
@@ -2772,11 +2772,11 @@ inline void dComIfGp_setSelectItem(int i_itemBtn) {
 
         invIdx = dComIfGs_getSelectItem(i_itemBtn);
         itemNo = dComIfGs_getItem(invIdx);
-        if (itemNo == dItem_NONE_e) {
+        if (itemNo == dItemNo_NONE_e) {
             dComIfGs_setSelectItem(i_itemBtn, dInvSlot_NONE_e);
         }
     } else {
-        g_dComIfG_gameInfo.play.setSelectItem(i_itemBtn, dItem_NONE_e);
+        g_dComIfG_gameInfo.play.setSelectItem(i_itemBtn, dItemNo_NONE_e);
     }
 }
 
@@ -4109,8 +4109,8 @@ inline void dComIfGp_particle_swapFrameBufferTexture() {
     g_dComIfG_gameInfo.play.getParticle()->swapFrameBufferTexture();
 }
 
-inline void dComIfGp_particle_draw(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->draw(inf); }
-inline void dComIfGp_particle_drawP1(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->drawP1(inf); }
+inline void dComIfGp_particle_draw(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->drawNormal(inf); }
+inline void dComIfGp_particle_drawP1(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->drawNormalP1(inf); }
 inline void dComIfGp_particle_drawToon(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->drawToon(inf); }
 inline void dComIfGp_particle_drawToonP1(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->drawToonP1(inf); }
 inline void dComIfGp_particle_drawProjection(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->drawProjection(inf); }

@@ -13,8 +13,6 @@
 #include "d/d_cc_d.h"
 #include "d/d_jnt_hit.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
 #include "d/res/res_daiocta.h"
@@ -168,7 +166,7 @@ static void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* i_actor, dCc
 
 /* 00000358-000003DC       .text _coHit__11daDaiocta_cFP10fopAc_ac_c */
 void daDaiocta_c::_coHit(fopAc_ac_c* i_actor) {
-    if (i_actor != NULL && fpcM_GetName(i_actor) == PROC_BOMB) {
+    if (i_actor != NULL && fpcM_GetName(i_actor) == fpcNm_BOMB_e) {
         daBomb_c* bomb_p = (daBomb_c *) i_actor;
         if ((mMode == MODE_WAIT || mMode == MODE_DAMAGE_BOMB || 
             mMode == MODE_APPEAR || mMode == MODE_DAMAGE) && 
@@ -908,7 +906,7 @@ void daDaiocta_c::modeAppearInit() {
     }
 #else 
     int auzu_parameters = 0x1100FF;
-    mAuzuId = fopAcM_create(PROC_Obj_Auzu, auzu_parameters, &auzu_pos, tevStr.mRoomNo);
+    mAuzuId = fopAcM_create(fpcNm_Obj_Auzu_e, auzu_parameters, &auzu_pos, tevStr.mRoomNo);
 #endif
 
     setEffect(dPa_name::ID_IT_SN_DO_APPSHIBUKI00);
@@ -1092,7 +1090,7 @@ void daDaiocta_c::modeDemoInit() {
 /* 000028FC-00003150       .text modeDemo__11daDaiocta_cFv */
 void daDaiocta_c::modeDemo() {
     current.pos.y = mWaterY;
-    daShip_c* ship_p_1 = (daShip_c *) fopAcM_SearchByName(PROC_SHIP);
+    daShip_c* ship_p_1 = (daShip_c *) fopAcM_SearchByName(fpcNm_SHIP_e);
     m21F4 = ship_p_1->current.pos;
     m2200 = ship_p_1->current.angle;
 
@@ -1145,7 +1143,7 @@ void daDaiocta_c::modeDemo() {
                 m21F4.x += (dist / (REG12_F(1) + 60.0f)) * cM_ssin(target_angle_y);
             }
 
-            daShip_c* ship_p_2 = (daShip_c *) fopAcM_SearchByName(PROC_SHIP);
+            daShip_c* ship_p_2 = (daShip_c *) fopAcM_SearchByName(fpcNm_SHIP_e);
             ship_p_2->initStartPos(&m21F4, m2200.y);
         }
 
@@ -1159,7 +1157,7 @@ void daDaiocta_c::modeDemo() {
             cLib_chasePosXZ(&m21F4, current.pos, m2208);
             cLib_addCalcAngleS2(&m2200.y, target_angle_y + 0x8000, 4, 0x800);
             
-            daShip_c* ship_p_2 = (daShip_c *) fopAcM_SearchByName(PROC_SHIP);
+            daShip_c* ship_p_2 = (daShip_c *) fopAcM_SearchByName(fpcNm_SHIP_e);
             ship_p_2->initStartPos(&m21F4, m2200.y);
 
             if ((current.pos - m21F4).absXZ() < 10.0f && (mpMorf->isStop() || mPrmIdx == 2)) {
@@ -1653,7 +1651,7 @@ void daDaiocta_c::createInit() {
     for (int i = 0; i < ARRAY_SSIZE(mDaioctaEyePcId); i++) {
         if (mEyeAlloc[i] == true) {
             mDaioctaEyePcId[i] = fopAcM_createChild(
-                PROC_DAIOCTA_EYE, fpcM_GetID(this), 
+                fpcNm_DAIOCTA_EYE_e, fpcM_GetID(this), 
                 -1, &current.pos, 
                 tevStr.mRoomNo, NULL
             );
@@ -1662,7 +1660,7 @@ void daDaiocta_c::createInit() {
 
 #if VERSION > VERSION_JPN
     mAuzuId = fopAcM_create(
-        PROC_Obj_Auzu, 
+        fpcNm_Obj_Auzu_e, 
         0x1100FF, 
         &current.pos, 
         tevStr.mRoomNo
@@ -1760,18 +1758,18 @@ static actor_method_class daDaioctaMethodTable = {
 };
 
 actor_process_profile_definition g_profile_DAIOCTA = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DAIOCTA,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DAIOCTA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daDaiocta_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DAIOCTA,
+    /* Draw Prio    */ fpcDwPi_DAIOCTA_e,
     /* Actor SubMtd */ &daDaioctaMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -10,8 +10,6 @@
 #include "d/d_kankyo_data.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "d/d_stage.h"
 #include "dolphin/gf/GF.h"
@@ -2439,7 +2437,7 @@ static cPhs_State dKy_Create(void*) {
     return cPhs_COMPLEATE_e;
 }
 
-kankyo_method_class l_dKy_Method = {
+static kankyo_method_class l_dKy_Method = {
     (process_method_func)dKy_Create,
     (process_method_func)dKy_Delete,
     (process_method_func)dKy_Execute,
@@ -2448,17 +2446,17 @@ kankyo_method_class l_dKy_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KANKYO = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0001,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KANKYO,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(sub_kankyo__class),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_KANKYO,
-    /* Actor SubMtd */ &l_dKy_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x0001,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_KANKYO_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(sub_kankyo__class),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_KANKYO_e,
+    /* Kankyo SubMtd */ &l_dKy_Method,
 };
 
 /* 80194974-80194BDC       .text dKy_setLight_init__Fv */

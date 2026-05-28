@@ -9,8 +9,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/J3DGraphAnimator/J3DNode.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_s_lin_chk.h"
@@ -348,7 +346,7 @@ static void bomb_move_set(am_class* i_this, u8 alwaysMoveY) {
     swallowedActor->current.angle.y = actor->shape_angle.y;
     swallowedActor->shape_angle.y = actor->shape_angle.y;
 
-    if (fpcM_GetName(swallowedActor) == PROC_BOMB) {
+    if (fpcM_GetName(swallowedActor) == fpcNm_BOMB_e) {
         daBomb_c* bomb = (daBomb_c*)swallowedActor;
         if (i_this->mCountDownTimers[1] == 1) {
             bomb->scale.setall(0.0f);
@@ -357,7 +355,7 @@ static void bomb_move_set(am_class* i_this, u8 alwaysMoveY) {
             bomb->scale.setall(1.0f);
         }
         bomb->setBombRestTime(100);
-    } else if (fpcM_GetName(swallowedActor) == PROC_Bomb2) {
+    } else if (fpcM_GetName(swallowedActor) == fpcNm_Bomb2_e) {
         daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)swallowedActor;
         if (i_this->mCountDownTimers[1] == 1) {
             bomb2->scale.setall(0.0f);
@@ -392,7 +390,7 @@ static BOOL bomb_nomi_check(am_class* i_this) {
         if (hitObj) {
             fopAc_ac_c* hitActor = hitObj->GetAc();
             if (hitActor) {
-                if (fpcM_GetName(hitActor) == PROC_BOMB) {
+                if (fpcM_GetName(hitActor) == fpcNm_BOMB_e) {
                     daBomb_c* bomb = (daBomb_c*)hitActor;
                     if (!bomb->getBombCheck_Flag() && bomb->getBombRestTime() > 1) {
                         if (i_this->mMouthPos.y - (20.0f + REG8_F(1)) < bomb->current.pos.y) {
@@ -407,7 +405,7 @@ static BOOL bomb_nomi_check(am_class* i_this) {
                             return TRUE;
                         }
                     }
-                } else if (fpcM_GetName(hitActor) == PROC_Bomb2) {
+                } else if (fpcM_GetName(hitActor) == fpcNm_Bomb2_e) {
                     daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)hitActor;
                     if (!bomb2->chk_eat() && bomb2->get_time() > 1) {
                         if (i_this->mMouthPos.y - (20.0f + REG8_F(1)) < bomb2->current.pos.y) {
@@ -938,10 +936,10 @@ static void action_itai_move(am_class* i_this) {
             fopAc_ac_c* swallowedActor = fopAcM_SearchByID(i_this->mSwallowedActorPID);
             if (swallowedActor) {
                 swallowedActor->scale.setall(1.0f);
-                if (fpcM_GetName(swallowedActor) == PROC_BOMB) {
+                if (fpcM_GetName(swallowedActor) == fpcNm_BOMB_e) {
                     daBomb_c* bomb = (daBomb_c*)swallowedActor;
                     bomb->setBombRestTime(1);
-                } else if (fpcM_GetName(swallowedActor) == PROC_Bomb2) {
+                } else if (fpcM_GetName(swallowedActor) == fpcNm_Bomb2_e) {
                     daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)swallowedActor;
                     bomb2->set_time(1);
                 }
@@ -973,7 +971,7 @@ static void action_itai_move(am_class* i_this) {
 static BOOL daAM_Execute(am_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
-    fopAcM_setGbaName(actor, dItem_BOW_e, 0xC, 0x2A);
+    fopAcM_setGbaName(actor, dItemNo_BOW_e, 0xC, 0x2A);
 
     if (enemy_ice(&i_this->mEnemyIce)) {
         J3DModel* model = i_this->mpMorf->getModel();
@@ -1382,18 +1380,18 @@ static actor_method_class l_daAM_Method = {
 };
 
 actor_process_profile_definition g_profile_AM = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_AM,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_AM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(am_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_AM,
+    /* Draw Prio    */ fpcDwPi_AM_e,
     /* Actor SubMtd */ &l_daAM_Method,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

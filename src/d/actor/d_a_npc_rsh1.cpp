@@ -13,8 +13,6 @@
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 class daNpc_Rsh1_HIO_c : public JORReflexible {
@@ -231,7 +229,7 @@ static int daNpc_Rsh1_countShop() {
         if (dComIfGs_isGetItemReserve(i)) {
             result++;
         } else {
-            if (i == 0 && dComIfGs_checkGetItem(dItem_DELIVERY_BAG_e)) {
+            if (i == 0 && dComIfGs_checkGetItem(dItemNo_DELIVERY_BAG_e)) {
                 result++;
             }
         }
@@ -706,11 +704,11 @@ u32 daNpc_Rsh1_c::getMsg() {
         msg_no = m780;
         m780 = 0;
     } else {
-        if (!checkItemGet(dItem_MAGIC_ARMOR_e, TRUE) && daNpc_Rsh1_countShop() >= 3) {
+        if (!checkItemGet(dItemNo_MAGIC_ARMOR_e, TRUE) && daNpc_Rsh1_countShop() >= 3) {
             return 0x285D;
         }
 
-        if (!dComIfGs_checkGetItem(NORMAL_SAIL)) {
+        if (!dComIfGs_checkGetItem(dItemNo_SAIL_e)) {
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2420)) {
                 return 0x288C;
             }
@@ -718,7 +716,7 @@ u32 daNpc_Rsh1_c::getMsg() {
             return 0x2886;
         }
 
-        if (!dComIfGs_checkGetItem(dItem_DELIVERY_BAG_e)) {
+        if (!dComIfGs_checkGetItem(dItemNo_DELIVERY_BAG_e)) {
             return 0x2890;
         }
 
@@ -1010,7 +1008,7 @@ static BOOL daNpc_Rsh1_checkRotenItemGet(int i_itemNo) {
     if (i_itemNo != 0) {
         roten_item_get_check = dComIfGs_isGetItemReserve(i_itemNo);
     } else {
-        roten_item_get_check = dComIfGs_checkGetItem(dItem_DELIVERY_BAG_e) ? TRUE : FALSE;
+        roten_item_get_check = dComIfGs_checkGetItem(dItemNo_DELIVERY_BAG_e) ? TRUE : FALSE;
     }
     return roten_item_get_check;
 }
@@ -1284,7 +1282,7 @@ bool daNpc_Rsh1_c::wait01() {
     } else {
         if (mCyl.ChkCoHit()) {
             fopAc_ac_c* actor_p = mCyl.GetCoHitAc();
-            if (actor_p && fpcM_GetName(actor_p) == PROC_PLAYER) {
+            if (actor_p && fpcM_GetName(actor_p) == fpcNm_PLAYER_e) {
                 m95B = 2;
                 m793 = true;
                 m780 = 0x2883;
@@ -1327,13 +1325,13 @@ bool daNpc_Rsh1_c::talk01() {
 
         if (m778 == 0x2856) {
             m95B = 4;
-            mItemNo = FLOWER_1;
+            mItemNo = dItemNo_TOWN_FLOWER_e;
         } else if (m778 == 0x288E) {
             m95B = 4;
-            mItemNo = NORMAL_SAIL;
+            mItemNo = dItemNo_SAIL_e;
         } else if (m778 == 0x285F) {
             m95B = 4;
-            mItemNo = dItem_MAGIC_ARMOR_e;
+            mItemNo = dItemNo_MAGIC_ARMOR_e;
         } else if (m778 == 0x2883 && m793 == true) {
             setAction(&daNpc_Rsh1_c::pl_shop_out_action, NULL);
         } 
@@ -1373,11 +1371,11 @@ BOOL daNpc_Rsh1_c::getdemo_action(void* i_unusedP) {
             m95B = 1;
             dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
 
-            if (mItemNo == FLOWER_1) {
+            if (mItemNo == dItemNo_TOWN_FLOWER_e) {
                 m780 = 0x2857;
-            } else if (mItemNo == NORMAL_SAIL) {
+            } else if (mItemNo == dItemNo_SAIL_e) {
                 m780 = 0x288F;
-            } else if (mItemNo == dItem_MAGIC_ARMOR_e) {
+            } else if (mItemNo == dItemNo_MAGIC_ARMOR_e) {
                 m780 = 0x2860;
             }
 
@@ -1633,8 +1631,8 @@ BOOL daNpc_Rsh1_c::event_action(void* i_unusedP) {
     } else if (mActionStatus != -1) {
         privateCut();
         if (dComIfGp_evmng_endCheck(mShopOutEventIdx)) {
-            if (cLib_checkBit<u32>(actor_status, 0x4000)) {
-                cLib_offBit<u32>(actor_status, 0x4000);
+            if (cLib_checkBit<u32>(actor_status, fopAcStts_UNK4000_e)) {
+                cLib_offBit<u32>(actor_status, fopAcStts_UNK4000_e);
             }
             dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
             setAction(&daNpc_Rsh1_c::wait_action, NULL);
@@ -1726,48 +1724,48 @@ BOOL daNpc_Rsh1_c::_execute() {
 
     if (lookat_dist > REG10_F(10) + 5000.0f) {
         return TRUE;
-    } else {
-        mJntCtrl.setParam(
-            l_HIO.mNpcHIO.mMaxBackboneX,
-            l_HIO.mNpcHIO.mMaxBackboneY,
-            l_HIO.mNpcHIO.mMinBackboneX,
-            l_HIO.mNpcHIO.mMinBackboneY,
-            l_HIO.mNpcHIO.mMaxHeadX,
-            l_HIO.mNpcHIO.mMaxHeadY,
-            l_HIO.mNpcHIO.mMinHeadX,
-            l_HIO.mNpcHIO.mMinHeadY,
-            l_HIO.mNpcHIO.mMaxTurnStep
-        );
-
-        playTexPatternAnm();
-        
-        mMorfIsStop = mpMorf->play(&eyePos, 0, 0);
-        if (mpMorf->getFrame() < mMorfPrevFrame) {
-            mMorfIsStop = true;
-        }
-        mMorfPrevFrame = mpMorf->getFrame();
-        
-        checkOrder();
-
-        (this->*mCurrProc)(NULL);
-
-        mShopCamAct.move();
-        if (mpShopItems) {
-            mpShopItems->Item_Move();
-        }
-
-        eventOrder();
-        lookBack();
-        setAttention();
-        fopAcM_posMoveF(this, mStts.GetCCMoveP());
-        
-        mAcch.CrrPos(*dComIfG_Bgsp());
-        tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
-        tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
-        
-        set_mtx();
-        setCollision();
     }
+
+    mJntCtrl.setParam(
+        l_HIO.mNpcHIO.mMaxBackboneX,
+        l_HIO.mNpcHIO.mMaxBackboneY,
+        l_HIO.mNpcHIO.mMinBackboneX,
+        l_HIO.mNpcHIO.mMinBackboneY,
+        l_HIO.mNpcHIO.mMaxHeadX,
+        l_HIO.mNpcHIO.mMaxHeadY,
+        l_HIO.mNpcHIO.mMinHeadX,
+        l_HIO.mNpcHIO.mMinHeadY,
+        l_HIO.mNpcHIO.mMaxTurnStep
+    );
+
+    playTexPatternAnm();
+    
+    mMorfIsStop = mpMorf->play(&eyePos, 0, 0);
+    if (mpMorf->getFrame() < mMorfPrevFrame) {
+        mMorfIsStop = true;
+    }
+    mMorfPrevFrame = mpMorf->getFrame();
+    
+    checkOrder();
+
+    (this->*mCurrProc)(NULL);
+
+    mShopCamAct.move();
+    if (mpShopItems) {
+        mpShopItems->Item_Move();
+    }
+
+    eventOrder();
+    lookBack();
+    setAttention();
+    fopAcM_posMoveF(this, mStts.GetCCMoveP());
+    
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
+    tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
+    
+    set_mtx();
+    setCollision();
 
     return TRUE;
 }
@@ -1940,18 +1938,18 @@ static actor_method_class l_daNpc_Rsh1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_RSH1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_RSH1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_RSH1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Rsh1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_RSH1,
+    /* Draw Prio    */ fpcDwPi_NPC_RSH1_e,
     /* Actor SubMtd */ &l_daNpc_Rsh1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_12_e,
+    /* Cull Type    */ fopAc_CULLBOX_12_e,
 };

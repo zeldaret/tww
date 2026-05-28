@@ -10,8 +10,6 @@
 #endif
 #include "d/res/res_kaizokusen.h"
 #include "d/res/res_cloth.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "d/actor/d_a_obj_pirateship.h"
@@ -57,7 +55,7 @@ public:
 static daObjPirateship::Act_c* l_p_ship;
 static daSail_HIO_c l_HIO;
 
-Vec l_pos[] = {
+static Vec l_pos[] = {
     {-840.0f, 0.0f, 0.0f},
     {-560.0f, 0.0f, 0.0f},
     {-280.0f, 0.0f, 0.0f},
@@ -144,7 +142,7 @@ Vec l_pos[] = {
     {840.0f, -1100.0f, 0.0f},
 };
 
-cXy l_texCoord[] = {
+static cXy l_texCoord[] = {
     {0.0f, 0.0f},
     {0.165f, 0.0f},
     {0.33f, 0.0f},
@@ -235,7 +233,7 @@ cXy l_texCoord[] = {
 #include "assets/l_sail_matDL.h"
 #include "assets/l_Txa_kizoku_mastTEX.h"
 
-Vec l_mast_pos[] = {
+static Vec l_mast_pos[] = {
     {900.0f, 9.676933f, -16.760941f},
     {900.0f, -9.676933f, -16.760941f},
     {900.0f, -19.353867f, -0.000004f},
@@ -258,7 +256,7 @@ Vec l_mast_pos[] = {
     {0.0f, 22.42897f, 0.0f},
 };
 
-GXColor l_mast_color[] = {
+static GXColor l_mast_color[] = {
     {0xA8, 0xA8, 0xA8, 0xFF},
     {0x5D, 0x5D, 0x5D, 0xFF},
     {0xF3, 0xF3, 0xF3, 0xFF},
@@ -269,7 +267,7 @@ GXColor l_mast_color[] = {
     {0xA1, 0xA1, 0xA1, 0xFF},
 };
 
-cXy l_mast_texCoord[] = {
+static cXy l_mast_texCoord[] = {
     {1.0f, 0.0f},
     {1.0f, 1.0f},
     {0.0f, 1.0f},
@@ -873,18 +871,18 @@ static actor_method_class l_daSail_Method = {
 };
 
 actor_process_profile_definition g_profile_SAIL = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SAIL,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SAIL_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sail_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SAIL,
+    /* Draw Prio    */ fpcDwPi_SAIL_e,
     /* Actor SubMtd */ &l_daSail_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -18,8 +18,6 @@
 #include "d/d_menu_save.h"
 #include "d/d_meter.h"
 #include "d/d_name.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_player_main.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -1559,7 +1557,7 @@ static cPhs_State dMs_Create(msg_class* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-msg_method_class l_dMs_Method = {
+static msg_method_class l_dMs_Method = {
     /* Create   */ (process_method_func)dMs_Create,
     /* Delete   */ (process_method_func)dMs_Delete,
     /* Execute  */ (process_method_func)dMs_Execute,
@@ -1568,15 +1566,15 @@ msg_method_class l_dMs_Method = {
 };
 
 msg_process_profile_definition g_profile_MENUWINDOW = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x000C,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MENUWINDOW,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x000C,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MENUWINDOW_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sub_ms_screen_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_MENUWINDOW,
+    /* Draw Prio    */ fpcDwPi_MENUWINDOW_e,
     /* Msg SubMtd   */ &l_dMs_Method,
 };

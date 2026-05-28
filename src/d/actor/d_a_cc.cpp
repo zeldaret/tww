@@ -9,8 +9,6 @@
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_bomb2.h"
 #include "d/res/res_cc.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
 #include "d/d_com_inf_game.h"
@@ -27,7 +25,7 @@ static int target_info_count;
 
 /* 00000078-000002AC       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
-    if (calcTiming == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 iVar4 = joint->getJntNo();
         J3DModel* pJVar2 = j3dSys.getModel();
@@ -274,12 +272,12 @@ void* s_b_sub(void* arg0, void* arg1) {
     UNUSED(arg1);
     if (fopAcM_IsActor(arg0)) {
         bool bVar2 = false;
-        if (fopAcM_GetName(arg0) == PROC_BOMB) {
+        if (fopAcM_GetName(arg0) == fpcNm_BOMB_e) {
             daBomb_c* bomb = (daBomb_c*)arg0;
             if (bomb->chk_state(daBomb_c::STATE_0)) {
                 bVar2 = true;
             }
-        } else if (fopAcM_GetName(arg0) == PROC_Bomb2) {
+        } else if (fopAcM_GetName(arg0) == fpcNm_Bomb2_e) {
             daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)arg0;
             if (bomb2->chk_explode() != false) {
                 bVar2 = true;
@@ -2006,7 +2004,7 @@ void* tsubo_search(void* arg1, void* arg2) {
     if (tmp < 100)
 #endif
     {
-        if (fopAcM_IsActor(actor1) && fopAcM_GetName(actor1) == PROC_TSUBO && actor1->current.pos.x == i_this->actor.current.pos.x &&
+        if (fopAcM_IsActor(actor1) && fopAcM_GetName(actor1) == fpcNm_TSUBO_e && actor1->current.pos.x == i_this->actor.current.pos.x &&
             std::fabsf(actor1->current.pos.y - i_this->actor.current.pos.y) < 10.0f && actor1->current.pos.z == i_this->actor.current.pos.z)
         {
             i_this->m30C = fopAcM_GetID(actor1);
@@ -2095,15 +2093,15 @@ static BOOL daCC_Execute(cc_class* i_this) {
     i_this->actor.model = NULL;
     switch (i_this->mColorType) {
     case 2:
-        fopAcM_setGbaName(&i_this->actor, dItem_BOW_e, 30, 0x2b);
+        fopAcM_setGbaName(&i_this->actor, dItemNo_BOW_e, 30, 0x2b);
         break;
 
     case 3:
-        fopAcM_setGbaName(&i_this->actor, dItem_MIRROR_SHIELD_e, 16, 0x2e);
+        fopAcM_setGbaName(&i_this->actor, dItemNo_MIRROR_SHIELD_e, 16, 0x2e);
         break;
 
     case 4:
-        fopAcM_setGbaName(&i_this->actor, dItem_BOW_e, 10, 0x28);
+        fopAcM_setGbaName(&i_this->actor, dItemNo_BOW_e, 10, 0x28);
         break;
     }
 
@@ -2757,18 +2755,18 @@ static actor_method_class l_daCC_Method = {
 };
 
 actor_process_profile_definition g_profile_CC = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_CC,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_CC_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(cc_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_CC,
+    /* Draw Prio    */ fpcDwPi_CC_e,
     /* Actor SubMtd */ &l_daCC_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -5,7 +5,6 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_attention.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_s_play.h"
 #include "SSystem/SComponent/c_angle.h"
@@ -613,7 +612,7 @@ f32 dAttention_c::EnemyDistance(fopAc_ac_c* actor) {
     if (actor == mpPlayer || mpPlayer == NULL)
         return -1.0f;
 
-    if (fopAcM_GetProfName(actor) == PROC_PLAYER)
+    if (fopAcM_GetProfName(actor) == fpcNm_PLAYER_e)
         return -1.0f;
 
     if (!(actor->attention_info.flags & fopAc_Attn_LOCKON_BATTLE_e) && !(actor->attention_info.flags & fopAc_Attn_ENEMYFLAG_NOLOCKON_e))
@@ -1105,7 +1104,7 @@ fopAc_ac_c* dAttCatch_c::convPId(fpc_ProcID i_procID) {
 
 /* 8009FBBC-8009FBDC       .text init__11dAttCatch_cFv */
 void dAttCatch_c::init() {
-    mCatchItemNo = dItem_WATER_BOTTLE_e;
+    mCatchItemNo = dItemNo_WATER_BOTTLE_e;
     mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     mCatghTargetID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
@@ -1117,7 +1116,7 @@ void dAttCatch_c::proc() {
     mChangeItem = mCatchItemNo;
     mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
-    mCatchItemNo = dItem_WATER_BOTTLE_e;
+    mCatchItemNo = dItemNo_WATER_BOTTLE_e;
 }
 
 

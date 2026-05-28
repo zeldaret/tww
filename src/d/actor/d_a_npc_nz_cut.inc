@@ -7,7 +7,6 @@
 #include "d/actor/d_a_obj_barrel.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 
 /* 000032BC-000032E8       .text searchEsa_CB__FPvPv */
 static BOOL searchEsa_CB(void* param_1, void* i_this) {
@@ -16,7 +15,7 @@ static BOOL searchEsa_CB(void* param_1, void* i_this) {
 
 /* 000032E8-000034F0       .text _searchEsa__10daNpc_Nz_cFP10fopAc_ac_c */
 BOOL daNpc_Nz_c::_searchEsa(fopAc_ac_c* pActor) {
-    if(fopAcM_GetName(pActor) == PROC_ESA) {
+    if(fopAcM_GetName(pActor) == fpcNm_ESA_e) {
         esa_class* pBait = static_cast<esa_class*>(pActor);
         if(pBait->field_0x298 == 0) {
             cXyz delta = pBait->current.pos - current.pos;
@@ -41,7 +40,7 @@ BOOL daNpc_Nz_c::_searchEsa(fopAc_ac_c* pActor) {
 static BOOL searchNzAndBomb_CB(void* param_1, void*) {
     fopAc_ac_c* pActor = static_cast<fopAc_ac_c*>(param_1);
 
-    if(fopAcM_GetName(pActor) == PROC_NZ || fopAcM_GetName(pActor) == PROC_BOMB) {
+    if(fopAcM_GetName(pActor) == fpcNm_NZ_e || fopAcM_GetName(pActor) == fpcNm_BOMB_e) {
         fopAcM_delete(pActor);
     }
 
@@ -53,15 +52,15 @@ static BOOL searchTsuboAndBarrel_CB(void* param_1, void* param_2) {
     fopAc_ac_c* pActor1 = static_cast<fopAc_ac_c*>(param_1);
     daNpc_Nz_c* i_this = static_cast<daNpc_Nz_c*>(param_2);
 
-    if(fopAcM_GetName(param_1) == PROC_TSUBO || fopAcM_GetName(param_1) == PROC_Obj_Barrel) {
+    if(fopAcM_GetName(param_1) == fpcNm_TSUBO_e || fopAcM_GetName(param_1) == fpcNm_Obj_Barrel_e) {
         cXyz delta = i_this->field_0x6C4 - pActor1->current.pos;
 
         if(delta.absXZ() < 300.0f) {
             bool success = false;
-            if(fopAcM_GetName(pActor1) == PROC_TSUBO) {
+            if(fopAcM_GetName(pActor1) == fpcNm_TSUBO_e) {
                 success = static_cast<daTsubo::Act_c*>(pActor1)->pos_init();
             }
-            else if(fopAcM_GetName(pActor1) == PROC_TSUBO) {
+            else if(fopAcM_GetName(pActor1) == fpcNm_TSUBO_e) {
                 success = static_cast<daObjBarrel::Act_c*>(pActor1)->pos_init();
             }
 
@@ -76,7 +75,7 @@ static BOOL searchTsuboAndBarrel_CB(void* param_1, void* param_2) {
 
 /* 0000377C-00003908       .text searchEsaInit_CB__FPvPv */
 static BOOL searchEsaInit_CB(void* pActor1, void* pActor2) {
-    if(fopAcM_GetName(pActor1) == PROC_ESA) {
+    if(fopAcM_GetName(pActor1) == fpcNm_ESA_e) {
         esa_class* pBait = static_cast<esa_class*>(pActor1);
         daNpc_Nz_c* pNz = static_cast<daNpc_Nz_c*>(pActor2);
 

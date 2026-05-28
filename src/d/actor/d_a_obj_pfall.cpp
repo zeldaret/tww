@@ -5,12 +5,10 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_pfall.h"
-#include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/res/res_pfall.h"
 #include "d/d_lib.h"
 #include "d/actor/d_a_player_main.h"
-#include "d/d_priority.h"
 
 static const int l_bck_ix_tbl[] = {
     PFALL_BCK_NZ_WAIT,
@@ -485,18 +483,18 @@ static actor_method_class daObj_PfallMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_PFALL = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_PFALL,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_PFALL_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Pfall_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_PFALL,
+    /* Draw Prio    */ fpcDwPi_OBJ_PFALL_e,
     /* Actor SubMtd */ &daObj_PfallMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

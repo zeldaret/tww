@@ -12,7 +12,6 @@
 #include "c/c_dylink.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
-#include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_MemCardRWmng.h"
 #include "m_Do/m_Do_audio.h"
@@ -444,7 +443,7 @@ BOOL dvdWaitDraw(dScnLogo_c* i_this) {
 #endif
     ) {
 
-        dComIfG_changeOpeningScene(i_this, PROC_OPENING_SCENE);
+        dComIfG_changeOpeningScene(i_this, fpcNm_OPENING_SCENE_e);
     }
     return TRUE;
 }
@@ -474,7 +473,7 @@ static BOOL dScnLogo_Draw(dScnLogo_c* i_this) {
 /* 8022D1DC-8022D21C       .text dScnLogo_Execute__FP10dScnLogo_c */
 static BOOL dScnLogo_Execute(dScnLogo_c* i_this) {
     if (mDoRst::isReset())
-        fopScnM_ChangeReq(i_this, PROC_LOGO_SCENE, PROC_OVERLAP0, 5);
+        fopScnM_ChangeReq(i_this, fpcNm_LOGO_SCENE_e, fpcNm_OVERLAP0_e, 5);
     return TRUE;
 }
 
@@ -937,7 +936,7 @@ static cPhs_State dScnLogo_Create(scene_class* i_scn) {
     return dComLbG_PhaseHandler(&i_this->mPhs, l_method, i_this);
 }
 
-scene_method_class l_dScnLogo_Method = {
+static scene_method_class l_dScnLogo_Method = {
     (process_method_func)dScnLogo_Create,
     (process_method_func)dScnLogo_Delete,
     (process_method_func)dScnLogo_Execute,
@@ -946,13 +945,13 @@ scene_method_class l_dScnLogo_Method = {
 };
 
 scene_process_profile_definition g_profile_LOGO_SCENE = {
-    /* LayerID      */ fpcLy_ROOT_e,
-    /* ListID       */ 1,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_LOGO_SCENE,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_LOGO_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(dScnLogo_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnLogo_Method,

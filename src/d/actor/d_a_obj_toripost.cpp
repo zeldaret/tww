@@ -15,8 +15,6 @@
 #include "d/d_item_data.h"
 #include "d/d_s_play.h"
 #include "d/d_a_obj.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -39,19 +37,19 @@ public:
 const char daObjTpost_c::m_arc_name[] = "Toripost";
 
 const daObjTpost_c__letter_data daObjTpost_c::m_letter[] = {
-    {false, 0x1AAF, dItem_HEART_PIECE_e,    dSv_event_flag_c::LETTER_BAITOS_MOM},
-    {false, 0x0CF9, dItem_HEART_PIECE_e,    dSv_event_flag_c::LETTER_KOMALIS_FATHER},
-    {false, 0x0CFA, dItem_COLLECT_MAP_60_e, dSv_event_flag_c::LETTER_BOMBS_AD},
-    {false, 0x0CFC, dItem_RED_RUPEE_e,      dSv_event_flag_c::LETTER_ORCA},
-    {false, 0x0805, dItem_RED_RUPEE_e,      dSv_event_flag_c::LETTER_GRANDMA},
-    {false, 0x0CFD, dItem_GREEN_RUPEE_e,    dSv_event_flag_c::LETTER_ROCK_SPIRE_SHOP_AD},
-    {true,  0x0DB6, dItem_COLLECT_MAP_52_e, dSv_event_flag_c::LETTER_TINGLE},
-    {false, 0x1148, dItem_RED_RUPEE_e,      dSv_event_flag_c::LETTER_ARYLL},
-    {false, 0x1AAF, dItem_HEART_PIECE_e,    dSv_event_flag_c::LETTER_BAITOS_MOM},
-    {true,  0x0F76, KAISEN_PRESENT1,        dSv_event_flag_c::LETTER_SILVER_MEMBERSHIP},
-    {false, 0x19A6, KAKERA_HEART2,          dSv_event_flag_c::LETTER_HOSKITS_GIRLFRIEND},
-    {true,  0x0CFB, dItem_RED_RUPEE_e,      dSv_event_flag_c::LETTER_BAITO},
-    {true,  0x0F77, KAISEN_PRESENT2,        dSv_event_flag_c::LETTER_GOLD_MEMBERSHIP},
+    {false, 0x1AAF, dItemNo_HEART_PIECE_e,    dSv_event_flag_c::LETTER_BAITOS_MOM},
+    {false, 0x0CF9, dItemNo_HEART_PIECE_e,    dSv_event_flag_c::LETTER_KOMALIS_FATHER},
+    {false, 0x0CFA, dItemNo_COLLECT_MAP_60_e, dSv_event_flag_c::LETTER_BOMBS_AD},
+    {false, 0x0CFC, dItemNo_RED_RUPEE_e,      dSv_event_flag_c::LETTER_ORCA},
+    {false, 0x0805, dItemNo_RED_RUPEE_e,      dSv_event_flag_c::LETTER_GRANDMA},
+    {false, 0x0CFD, dItemNo_GREEN_RUPEE_e,    dSv_event_flag_c::LETTER_ROCK_SPIRE_SHOP_AD},
+    {true,  0x0DB6, dItemNo_COLLECT_MAP_52_e, dSv_event_flag_c::LETTER_TINGLE},
+    {false, 0x1148, dItemNo_RED_RUPEE_e,      dSv_event_flag_c::LETTER_ARYLL},
+    {false, 0x1AAF, dItemNo_HEART_PIECE_e,    dSv_event_flag_c::LETTER_BAITOS_MOM},
+    {true,  0x0F76, dItemNo_COMPLIMENTARY_ID_e,        dSv_event_flag_c::LETTER_SILVER_MEMBERSHIP},
+    {false, 0x19A6, dItemNo_HEART_PIECE_ALT_e,          dSv_event_flag_c::LETTER_HOSKITS_GIRLFRIEND},
+    {true,  0x0CFB, dItemNo_RED_RUPEE_e,      dSv_event_flag_c::LETTER_BAITO},
+    {true,  0x0F77, dItemNo_FILL_UP_COUPON_e,        dSv_event_flag_c::LETTER_GOLD_MEMBERSHIP},
 };
 
 const dCcD_SrcCyl daObjTpost_c::m_cyl_src = {
@@ -236,10 +234,10 @@ void daObjTpost_c::cutDispLetterProc(int staffIdx) {
 /* 000005F4-00000650       .text deliverLetter__12daObjTpost_cFv */
 void daObjTpost_c::deliverLetter() {
     switch(mPreItemNo) {
-        case MAGYS_LETTER:
+        case dItemNo_MAGGIES_LETTER_e:
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_1220);
             break;
-        case dItem_NOTE_TO_MOM_e:
+        case dItemNo_NOTE_TO_MOM_e:
             dLetter_send(dSv_event_flag_c::LETTER_BAITOS_MOM);
             break;
     }
@@ -347,8 +345,8 @@ int daObjTpost_c::getMsgXY() {
     cXyz scale(2.0f, 2.0f, 2.0f);
 
     switch(mPreItemNo) {
-        case dItem_NOTE_TO_MOM_e:
-        case MAGYS_LETTER:
+        case dItemNo_NOTE_TO_MOM_e:
+        case dItemNo_MAGGIES_LETTER_e:
             msgId = 0xCE8;
             col.r = REG12_S(0) + 0x80;
             col.g = REG12_S(1) + 0x80;
@@ -358,8 +356,8 @@ int daObjTpost_c::getMsgXY() {
             dComIfGp_particle_set(dPa_name::ID_IT_JN_LK_GEPPU00, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
             
             break;
-        case dItem_FATHER_LETTER_e:
-        case MO_LETTER:
+        case dItemNo_FATHER_LETTER_e:
+        case dItemNo_MOBLINS_LETTER_e:
             setAnm(AnmPrm_POST_PUTOUT, false);
             field_0x8EA = 1;
             msgId = 0xCEA;
@@ -920,7 +918,7 @@ void daObjTpost_c::createInit() {
         dLetter_autoStock(dSv_event_flag_c::LETTER_KOMALIS_FATHER);
     }
 
-    if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+    if(dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) {
         dLetter_autoStock(dSv_event_flag_c::LETTER_BOMBS_AD);
     }
 
@@ -1029,18 +1027,18 @@ static actor_method_class daObjTpostMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_TORIPOST = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_TORIPOST,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_TORIPOST_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjTpost_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_TORIPOST,
+    /* Draw Prio    */ fpcDwPi_OBJ_TORIPOST_e,
     /* Actor SubMtd */ &daObjTpostMethodTable,
     /* Status       */ 0x18 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

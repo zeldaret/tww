@@ -11,8 +11,6 @@
 #include "d/d_s_play.h"
 #include "d/res/res_ji.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_snap.h"
 #include "d/d_lib.h"
 #include "f_op/f_op_msg.h"
@@ -233,7 +231,7 @@ daNpc_Ji1_HIO_c::daNpc_Ji1_HIO_c() {
 
 /* 000003C0-000003E4       .text daNpc_Ji1_XyCheckCB__FPvi */
 static s16 daNpc_Ji1_XyCheckCB(void*, int i_itemBtn) {
-    return dComIfGp_getSelectItem(i_itemBtn) == dItem_KNIGHTS_CREST_e ? TRUE : FALSE;
+    return dComIfGp_getSelectItem(i_itemBtn) == dItemNo_KNIGHTS_CREST_e ? TRUE : FALSE;
 }
 
 /* 000003E4-00000404       .text daJi1_CoHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
@@ -254,7 +252,7 @@ static void daJi1_TgHitCallback(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* a
 /* 00000424-000004A0       .text daJi1_AtHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void daJi1_AtHitCallback(fopAc_ac_c* i_this, dCcD_GObjInf* param_2, fopAc_ac_c* actor, dCcD_GObjInf*) {
     if(fopAc_IsActor(actor)) {
-        if(fpcM_GetName(actor) == PROC_PLAYER) {
+        if(fpcM_GetName(actor) == fpcNm_PLAYER_e) {
             if(!param_2->ChkAtShieldHit()) {
                 static_cast<daNpc_Ji1_c*>(i_this)->field_0xC3C++;
             }
@@ -1388,7 +1386,7 @@ BOOL daNpc_Ji1_c::speakBadAction(void*) {
 
 /* 00003F54-00004050       .text initPosObject__11daNpc_Ji1_cFPvPv */
 void* daNpc_Ji1_c::initPosObject(void* pActor, void* pData) {
-    if(fopAc_IsActor(pActor) && fopAcM_GetName(pActor) == PROC_TSUBO) {
+    if(fopAc_IsActor(pActor) && fopAcM_GetName(pActor) == fpcNm_TSUBO_e) {
         ((daTsubo::Act_c*)pActor)->pos_init();
     }
 
@@ -1412,22 +1410,22 @@ void daNpc_Ji1_c::createItem() {
     u8 itemNo;
 
     if(field_0xD7C) {
-        itemNo = dItem_SWORD_e;
+        itemNo = dItemNo_SWORD_e;
     }
     else if(field_0xD7B == 1) {
-        itemNo = dItem_HURRICANE_SPIN_e;
+        itemNo = dItemNo_HURRICANE_SPIN_e;
     }
     else if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_D003) == 1) {
-        itemNo = dItem_PURPLE_RUPEE_e;
+        itemNo = dItemNo_PURPLE_RUPEE_e;
     }
     else if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_D003) == 2) {
-        itemNo = dItem_ORANGE_RUPEE_e;
+        itemNo = dItemNo_ORANGE_RUPEE_e;
     }
     else if(field_0xD70 >= l_HIO.field_0x60[3] && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0F10)) {
-        itemNo = dItem_SILVER_RUPEE_e;
+        itemNo = dItemNo_SILVER_RUPEE_e;
     }
     else {
-        itemNo = dItem_HEART_PIECE_e;
+        itemNo = dItemNo_HEART_PIECE_e;
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_0F10);
     }
 
@@ -3993,15 +3991,15 @@ BOOL daNpc_Ji1_c::battleAction(void*) {
     if(field_0xC78 == 0) {
         u8 icon;
         switch(dComIfGs_getSelectEquip(0)) {
-            case dItem_SWORD_e:
+            case dItemNo_SWORD_e:
                 icon = 1;
                 break;
                 icon = 2;
                 break;
-            case dItem_MASTER_SWORD_2_e:
+            case dItemNo_MASTER_SWORD_2_e:
                 icon = 2;
                 break;
-            case dItem_MASTER_SWORD_1_e:
+            case dItemNo_MASTER_SWORD_1_e:
             default:
                 icon = 2;
                 break;
@@ -5431,18 +5429,18 @@ static actor_method_class l_daNpc_Ji1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_JI1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_JI1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_JI1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Ji1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_JI1,
+    /* Draw Prio    */ fpcDwPi_NPC_JI1_e,
     /* Actor SubMtd */ &l_daNpc_Ji1_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

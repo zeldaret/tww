@@ -10,8 +10,6 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_obj_gryw00.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
@@ -127,7 +125,7 @@ bool daObjYgush00_c::_execute() {
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_SPRING, 0);
             }
         } else {
-            mpGryw00 = (daObjGryw00_c*)fopAcM_SearchByName(PROC_Obj_Gryw00);
+            mpGryw00 = (daObjGryw00_c*)fopAcM_SearchByName(fpcNm_Obj_Gryw00_e);
         }
     } else {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_SPRING, 0);
@@ -188,18 +186,18 @@ static actor_method_class l_daObjYgush00_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Ygush00 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ygush00,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ygush00_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjYgush00_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ygush00,
+    /* Draw Prio    */ fpcDwPi_Obj_Ygush00_e,
     /* Actor SubMtd */ &l_daObjYgush00_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

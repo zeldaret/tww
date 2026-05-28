@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_apzl.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_item.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/res/res_apzl.h"
@@ -687,38 +685,38 @@ void daObjApzl_c::privateCut() {
                                 if(mPuzzleNo == 15) {
                                     f32 temp2 = cM_rndF(1000.0f);
                                     if(temp2 < 900.0) {
-                                        itemNo = dItem_GREEN_RUPEE_e;
+                                        itemNo = dItemNo_GREEN_RUPEE_e;
                                     } else if (temp2 < 980.0) {
-                                        itemNo = dItem_BLUE_RUPEE_e;
+                                        itemNo = dItemNo_BLUE_RUPEE_e;
                                     } else if (temp2 < 995.0) {
-                                        itemNo = dItem_YELLOW_RUPEE_e;
+                                        itemNo = dItemNo_YELLOW_RUPEE_e;
                                     } else if (temp2 < 999.0) {
-                                        itemNo = dItem_RED_RUPEE_e;
+                                        itemNo = dItemNo_RED_RUPEE_e;
                                     } else {
-                                        itemNo = dItem_PURPLE_RUPEE_e;
+                                        itemNo = dItemNo_PURPLE_RUPEE_e;
                                     }
                                 } else {
-                                    itemNo = dItem_GREEN_RUPEE_e;
+                                    itemNo = dItemNo_GREEN_RUPEE_e;
                                 }
 #else
 
                             if (mPuzzleNo == 15) {
                                 u8 rupeeType = daObjApzl_Rupee_Table[mGivenRupeeCount];
                                 if (rupeeType == 0) {
-                                    itemNo = dItem_GREEN_RUPEE_e;
+                                    itemNo = dItemNo_GREEN_RUPEE_e;
                                 } else if (rupeeType == 1) {
-                                    itemNo = dItem_BLUE_RUPEE_e;
+                                    itemNo = dItemNo_BLUE_RUPEE_e;
                                 } else if (rupeeType == 2) {
-                                    itemNo = dItem_YELLOW_RUPEE_e;
+                                    itemNo = dItemNo_YELLOW_RUPEE_e;
                                 } else if (rupeeType == 3) { 
-                                    itemNo = dItem_RED_RUPEE_e;
+                                    itemNo = dItemNo_RED_RUPEE_e;
                                 } else {
-                                    itemNo = dItem_PURPLE_RUPEE_e;
+                                    itemNo = dItemNo_PURPLE_RUPEE_e;
                                 }
                             } else if (mGivenRupeeCount % 6 == 0) {
-                                itemNo = dItem_BLUE_RUPEE_e;
+                                itemNo = dItemNo_BLUE_RUPEE_e;
                             } else {
-                                itemNo = dItem_GREEN_RUPEE_e;
+                                itemNo = dItemNo_GREEN_RUPEE_e;
                             }
 #endif
 
@@ -1119,18 +1117,18 @@ static actor_method_class daObj_ApzlMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Apzl = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Apzl,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Apzl_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjApzl_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Apzl,
+    /* Draw Prio    */ fpcDwPi_Obj_Apzl_e,
     /* Actor SubMtd */ &daObj_ApzlMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -16,7 +16,6 @@
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_ship.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_lib.h"
 #include "SSystem/SComponent/c_math.h"
@@ -77,8 +76,7 @@ void daPy_swimTailEcallBack_c::execute(JPABaseEmitter* emitter) {
 
     if (field_0x20 != NULL) {
         emitter->setGlobalTranslation(mPos.x, mPos.y, mPos.z);
-        JGeometry::TVec3<s16> rot(0, 0, 0);
-        rot.y = field_0x20->y;
+        JGeometry::TVec3<s16> rot(0, field_0x20->y, 0);
         emitter->setGlobalRotation(rot);
     }else {
         JGeometry::TVec3<f32> sp20;
@@ -373,7 +371,7 @@ void daPy_waterDropPcallBack_c::execute(JPABaseEmitter* emitter, JPABaseParticle
         pos.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
 
         if (pos.y > ptclPos.y) {
-            fopKyM_create(PROC_WATER_MARK, 1, &pos);
+            fopKyM_create(fpcNm_WATER_MARK_e, 1, &pos);
         }
     }
 }
@@ -381,8 +379,7 @@ void daPy_waterDropPcallBack_c::execute(JPABaseEmitter* emitter, JPABaseParticle
 /* 80129F48-80129F98       .text execute__22daPy_followEcallBack_cFP14JPABaseEmitter */
 void daPy_followEcallBack_c::execute(JPABaseEmitter* emitter) {
     emitter->setGlobalTranslation(mPos.x, mPos.y, mPos.z);
-    JGeometry::TVec3<s16> rot;
-    rot.set(mAngle.x, mAngle.y, mAngle.z);
+    JGeometry::TVec3<s16> rot(mAngle.x, mAngle.y, mAngle.z);
     emitter->setGlobalRotation(rot);
 }
 
@@ -582,7 +579,7 @@ void daPy_lk_c::setAuraEffect() {
                 var_f28 = 1.5f;
             }
         } else {
-            var_f31 = std::fabsf(mVelocity) / m_HIO->mMove.m.field_0x18;
+            var_f31 = std::fabsf(mNormalSpeed) / m_HIO->mMove.m.field_0x18;
             if (var_f31 > 1.0f) {
                 var_f31 = 1.0f;
             }
@@ -634,7 +631,7 @@ void daPy_lk_c::setWaterRipple() {
     }
 
     // Probably fakematch (May use inlines?)
-    if ((var_r3 && m34D6 != 0) ||
+    if ((var_r3 && mProcVar3.m34D6 != 0) ||
         (
             mCurProc != daPyProc_VOMIT_WAIT_e &&
             !var_r3 &&
@@ -659,10 +656,13 @@ void daPy_lk_c::setWaterRipple() {
         simpleAnmPlay(mpSuimenMunyaBtk);
 
         JPABaseEmitter* emitter = m3280.getEmitter();
-        if (emitter != NULL && ((emitter->mGlobalParticleScale.x < 0.8f && checkNoResetFlg0(daPyFlg0_UNK80)) || (emitter->mGlobalParticleScale.x > 0.8f && !checkNoResetFlg0(daPyFlg0_UNK80)))) {
-            m3280.remove();
-
-            emitter = dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &current.pos, NULL, NULL, 0xFF, &m3280);
+        if (emitter != NULL) {
+            JGeometry::TVec3<f32> ptcl_scale;
+            emitter->getGlobalParticleScale(ptcl_scale);
+            if ((ptcl_scale.x < 0.8f && checkNoResetFlg0(daPyFlg0_UNK80)) || (ptcl_scale.x > 0.8f && !checkNoResetFlg0(daPyFlg0_UNK80))) {
+                m3280.remove();
+                emitter = dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &current.pos, NULL, NULL, 0xFF, &m3280);
+            }
         }
 
         if (emitter != NULL) {
@@ -678,11 +678,11 @@ void daPy_lk_c::setWaterRipple() {
 
     if (checkModeFlg(ModeFlg_SWIM)) {
         if (!mSwimTailEcallBack[0].getEnd()) {
-            mSwimTailEcallBack[0].setSpeedRate(std::fabsf(mVelocity / mMaxNormalSpeed));
+            mSwimTailEcallBack[0].setSpeedRate(std::fabsf(mNormalSpeed / mMaxNormalSpeed));
         }
 
         if (!mSwimTailEcallBack[1].getEnd()) {
-            mSwimTailEcallBack[1].setSpeedRate(std::fabsf(mVelocity / mMaxNormalSpeed));
+            mSwimTailEcallBack[1].setSpeedRate(std::fabsf(mNormalSpeed / mMaxNormalSpeed));
         }
         cXyz local_1c;
         cMtx_multVec(mpCLModel->getAnmMtx(15), &wave_offset, &local_1c);
@@ -914,11 +914,11 @@ void daPy_lk_c::setFootMark(cXyz* i_pos) {
 
     pos.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
     if (pos.y != -G_CM3D_F_INF && dComIfG_Bgsp()->GetAttributeCode(mGndChk) == dBgS_Attr_SAND_e) {
-        fopKyM_create(PROC_WATER_MARK, (shape_angle.y << 16) | 2, &pos, &scale, NULL);
+        fopKyM_create(fpcNm_WATER_MARK_e, (shape_angle.y << 16) | 2, &pos, &scale, NULL);
     }
 
     if (m336C.getEmitter() != NULL) {
-        fopKyM_create(PROC_WATER_MARK, shape_angle.y << 16, i_pos, &scale);
+        fopKyM_create(fpcNm_WATER_MARK_e, shape_angle.y << 16, i_pos, &scale);
     }
 }
 
@@ -1018,9 +1018,9 @@ void daPy_lk_c::setFootEffect() {
         cXyz sp44 = m370C;
         mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x1), &m370C);
 
-        if (mProcVar0.m3570 != 0) {
+        if (mProcVar6.m3570 != 0) {
             current.angle.y = shape_angle.y - 0x4000;
-            mProcVar0.m3570 = 0;
+            mProcVar6.m3570 = 0;
         } else {
             cXyz sp38 = m370C - sp44;
             current.angle.y = cM_atan2s(sp38.x, sp38.z);

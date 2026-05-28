@@ -12,8 +12,6 @@
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 class daNpc_Btsw_HIO_c : public JORReflexible {
@@ -47,7 +45,7 @@ public:
     /* 0x5C */ f32 field_0x5C;
 };  // Size: 0x60
 
-daNpc_Btsw_HIO_c l_HIO;
+static daNpc_Btsw_HIO_c l_HIO;
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -452,7 +450,7 @@ void daNpc_Btsw_c::anmAtr(u16 i_msgStatus) {
 
 /* 00000F0C-00000F30       .text daNpc_Btsw_XyCheckCB__FPvi */
 static s16 daNpc_Btsw_XyCheckCB(void*, int i_itemBtn) {
-    if (dComIfGp_getSelectItem(i_itemBtn) == dItem_NOTE_TO_MOM_e) {
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_NOTE_TO_MOM_e) {
         return TRUE;
     }
     return FALSE;
@@ -1482,18 +1480,18 @@ static actor_method_class l_daNpc_Btsw_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_BTSW = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_BTSW,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_BTSW_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Btsw_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_BTSW,
+    /* Draw Prio    */ fpcDwPi_NPC_BTSW_e,
     /* Actor SubMtd */ &l_daNpc_Btsw_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_12_e,
+    /* Cull Type    */ fopAc_CULLBOX_12_e,
 };

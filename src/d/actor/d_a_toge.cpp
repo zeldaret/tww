@@ -8,8 +8,6 @@
 #include "d/res/res_htoge1.h"
 #include "d/actor/d_a_wind_tag.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 
 const char daToge_c::m_arcname[] = "Htoge1";
@@ -226,7 +224,7 @@ void daToge_c::set_collision() {
 
 /* 00000A78-00000AE0       .text search_wind__8daToge_cFv */
 void daToge_c::search_wind() {
-    fopAc_ac_c* pActor = fopAcM_SearchByName(PROC_WindTag);
+    fopAc_ac_c* pActor = fopAcM_SearchByName(fpcNm_WindTag_e);
 
     if (pActor != NULL) {
         mWindTagId = fopAcM_GetID(pActor);
@@ -331,18 +329,18 @@ static actor_method_class daTogeMethodTable = {
 };
 
 actor_process_profile_definition g_profile_TOGE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TOGE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TOGE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daToge_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TOGE,
+    /* Draw Prio    */ fpcDwPi_TOGE_e,
     /* Actor SubMtd */ &daTogeMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

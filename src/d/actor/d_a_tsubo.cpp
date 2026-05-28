@@ -21,8 +21,6 @@
 #include "d/res/res_hseki.h"
 #include "d/res/res_ptubo.h"
 #include "d/res/res_kkiba_00.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_camera.h"
 #include "d/d_lib.h"
 #include "d/d_com_inf_game.h"
@@ -1421,7 +1419,7 @@ bool Act_c::_delete() {
 void Act_c::spec_make_boko(int arg1) {
     M7A0* ptr = &m7A0[0];
     for (s32 i = 0; i < arg1; i++, ptr++) {
-        ptr->m00 = fopAcM_create(PROC_BOKO, daBoko_c::Type_BOKO_STICK_e, &current.pos, fopAcM_GetHomeRoomNo(this));
+        ptr->m00 = fopAcM_create(fpcNm_BOKO_e, daBoko_c::Type_BOKO_STICK_e, &current.pos, fopAcM_GetHomeRoomNo(this));
         ptr->m06 = data_spec_boko(i).m00;
         ptr->m08 = ptr->m06;
         ptr->m10 = data_spec_boko(i).m04;
@@ -2301,7 +2299,7 @@ bool Act_c::damage_tg_acc() {
             cXyz sp28 = cXyz::Zero;
             if (shapeAttr->GetNVec(current.pos, &sp28)) {
                 fopAc_ac_c* pfVar7 = mCyl.GetTgHitAc();
-                if (pfVar7 != NULL && fopAcM_GetProfName(pfVar7) == PROC_PLAYER) {
+                if (pfVar7 != NULL && fopAcM_GetProfName(pfVar7) == fpcNm_PLAYER_e) {
                     s16 atan = cM_atan2s(sp28.x, sp28.z);
                     if (cM_scos(pfVar7->shape_angle.y - atan) > 0.866f) {
                         m814 = sp28 * 1.5f;
@@ -2856,7 +2854,7 @@ void Act_c::set_wind_vec() {
             sp3C *= 45.0f;
             m7F4.getSquareMag();
             fopAc_ac_c* pfVar4 = mCyl.GetTgHitAc();
-            if (pfVar4 != NULL && fopAcM_GetProfName(pfVar4) == PROC_PLAYER) {
+            if (pfVar4 != NULL && fopAcM_GetProfName(pfVar4) == fpcNm_PLAYER_e) {
                 s16 iVar5 = cM_atan2s(sp3C.x, sp3C.z);
                 f32 cos = cM_scos(pfVar4->shape_angle.y - iVar5);
                 if (cos > 0.866f) {
@@ -3630,18 +3628,18 @@ actor_method_class Method::Table = {
 } // namespace daTsubo
 
 actor_process_profile_definition g_profile_TSUBO = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TSUBO,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TSUBO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTsubo::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TSUBO,
+    /* Draw Prio    */ fpcDwPi_TSUBO_e,
     /* Actor SubMtd */ &daTsubo::Method::Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

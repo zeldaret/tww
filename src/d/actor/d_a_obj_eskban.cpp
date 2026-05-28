@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_eskban.h"
 #include "d/res/res_eskban.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
@@ -274,7 +272,7 @@ BOOL daObjEskban::Act_c::Execute(Mtx** pMtx) {
         cCcD_Obj* hitObj = mCheckSph.GetCoHitObj();
         if (hitObj) {
             fopAc_ac_c* hitAct = hitObj->GetAc();
-            if (hitAct && fopAcM_GetName(hitAct) == PROC_NPC_MD) {
+            if (hitAct && fopAcM_GetName(hitAct) == fpcNm_NPC_MD_e) {
                 cXyz dist = hitAct->current.pos - current.pos;
                 dist.y = 0;
                 if (dist.normalizeRS()) {
@@ -297,7 +295,7 @@ BOOL daObjEskban::Act_c::Execute(Mtx** pMtx) {
             break;
         }
         fopAc_ac_c* hitAct = hitObj->GetAc();
-        if (hitAct && fopAcM_GetName(hitAct) == PROC_Bomb2) {
+        if (hitAct && fopAcM_GetName(hitAct) == fpcNm_Bomb2_e) {
             mActorID = fopAcM_GetID(hitAct);
             fopAcM_orderOtherEvent(this, "Eskban");
             mActorState = ST_DESTROYED;
@@ -423,18 +421,18 @@ static actor_method_class Mthd_Eskban = {
 }; // namespace daObjEskban
 
 actor_process_profile_definition g_profile_Obj_Eskban = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Eskban,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Eskban_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjEskban::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Eskban,
+    /* Draw Prio    */ fpcDwPi_Obj_Eskban_e,
     /* Actor SubMtd */ &daObjEskban::Mthd_Eskban,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

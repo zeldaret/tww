@@ -6,8 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_boomerang.h"
 #include "d/d_camera.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_material.h"
 #include "d/actor/d_a_player_main.h"
@@ -515,8 +513,7 @@ BOOL daBoomerang_c::procWait() {
 
         cXyz diff = mTargetPos - current.pos;
 
-        s16 angle = cM_atan2s(-diff.y, diff.absXZ());
-        current.angle.x = angle;
+        current.angle.x = cM_atan2s(-diff.y, diff.absXZ());
         if (mLockCnt == 0) {
             current.angle.y = cM_atan2s(diff.x, diff.z) + 0x3000;
             if (mThirdPerson) {
@@ -662,8 +659,7 @@ BOOL daBoomerang_c::procMove() {
             current.angle.y += currentAngle;
         }
 
-        angle = cM_atan2s(-norm.y, norm.absXZ());
-        current.angle.x = angle;
+        current.angle.x = cM_atan2s(-norm.y, norm.absXZ());
 
         current.pos.x += speedF * cM_scos(current.angle.x) * cM_ssin(current.angle.y);
         current.pos.y -= speedF * cM_ssin(current.angle.x);
@@ -856,18 +852,18 @@ static actor_method_class l_daBoomerang_Method = {
 };
 
 actor_process_profile_definition g_profile_BOOMERANG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BOOMERANG,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BOOMERANG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daBoomerang_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BOOMERANG,
+    /* Draw Prio    */ fpcDwPi_BOOMERANG_e,
     /* Actor SubMtd */ &l_daBoomerang_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

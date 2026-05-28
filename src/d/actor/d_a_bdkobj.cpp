@@ -11,8 +11,6 @@
 #include "d/d_cc_d.h"
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/res/res_bdkobj.h"
 #include "f_op/f_op_actor_mng.h"
@@ -25,7 +23,7 @@ static cXyz non_pos(10000.0f, -10000.0f, 20000.0f);
 
 /* 000000EC-00000104       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 static void ride_call_back(dBgW* param1, fopAc_ac_c* param2, fopAc_ac_c* param3) {
-    if (fopAcM_GetName(param3) != PROC_PLAYER) {
+    if (fopAcM_GetName(param3) != fpcNm_PLAYER_e) {
         return;
     }
     param2->health = 0xA;
@@ -585,25 +583,30 @@ static cPhs_State daBdkobj_Create(fopAc_ac_c* a_this) {
     fopAcM_SetMtx(i_this, i_this->model->getBaseTRMtx());
 
     if (i_this->m298 == 2) {
-        return (dComIfG_Bgsp()->Regist(i_this->pm_bgw, i_this) != 0) ? cPhs_ERROR_e : (cPhs_ERROR_e - 1);
-    } else {
-        i_this->mStts.Init(0xFF, 0xFF, a_this);
-        i_this->mCyl.Set(cc_cyl_src);
-        i_this->mCyl.SetStts(&i_this->mStts);
-        if (i_this->m298 == 0) {
-            i_this->mCyl.SetH(REG6_F(0) + 300.0f);
-            i_this->mCyl.SetR(REG6_F(1) + 200.0f);
+        if (dComIfG_Bgsp()->Regist(i_this->pm_bgw, i_this)) {
+            return cPhs_ERROR_e;
         } else {
-            i_this->mCyl.SetH(REG6_F(2) + 300.0f);
-            i_this->mCyl.SetR(REG6_F(3) + 200.0f);
-        }
-
-        for (s32 i = 0; i < 3; i++) {
-            i_this->mEffs[i].mStts.Init(0xC8, 0xFF, a_this);
-            i_this->mEffs[i].mSph.Set(hahen_sph_src);
-            i_this->mEffs[i].mSph.SetStts(&i_this->mEffs[i].mStts);
+            return cPhs_COMPLEATE_e;
         }
     }
+    
+    i_this->mStts.Init(0xFF, 0xFF, a_this);
+    i_this->mCyl.Set(cc_cyl_src);
+    i_this->mCyl.SetStts(&i_this->mStts);
+    if (i_this->m298 == 0) {
+        i_this->mCyl.SetH(REG6_F(0) + 300.0f);
+        i_this->mCyl.SetR(REG6_F(1) + 200.0f);
+    } else {
+        i_this->mCyl.SetH(REG6_F(2) + 300.0f);
+        i_this->mCyl.SetR(REG6_F(3) + 200.0f);
+    }
+
+    for (s32 i = 0; i < 3; i++) {
+        i_this->mEffs[i].mStts.Init(0xC8, 0xFF, a_this);
+        i_this->mEffs[i].mSph.Set(hahen_sph_src);
+        i_this->mEffs[i].mSph.SetStts(&i_this->mEffs[i].mStts);
+    }
+
     return cPhs_COMPLEATE_e;
 }
 
@@ -616,18 +619,18 @@ static actor_method_class l_daBdkobj_Method = {
 };
 
 actor_process_profile_definition g_profile_BDKOBJ = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BDKOBJ,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BDKOBJ_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bdkobj_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BDKOBJ,
+    /* Draw Prio    */ fpcDwPi_BDKOBJ_e,
     /* Actor SubMtd */ &l_daBdkobj_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

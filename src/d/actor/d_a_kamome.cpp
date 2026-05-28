@@ -9,9 +9,7 @@
 #include "d/actor/d_a_sea.h"
 #include "d/res/res_kamome.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
 #include "d/d_snap.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/d_kankyo.h"
@@ -62,7 +60,7 @@ void* s_a_d_sub(void* ac1, void* ac2) {
     dBgS_LinChk linChk;
     fopAc_ac_c* actor2 = (fopAc_ac_c*)ac2;
 
-    if ((esa_check_count < 100) && fopAc_IsActor(ac1) && fpcM_GetName(ac1) == PROC_ESA) {
+    if ((esa_check_count < 100) && fopAc_IsActor(ac1) && fpcM_GetName(ac1) == fpcNm_ESA_e) {
         esa_class* esa = (esa_class*)ac1;
         if (esa->field_0x298 == 0) {
             cXyz sp14;
@@ -115,7 +113,7 @@ fopAc_ac_c* search_esa(kamome_class* i_this) {
 /* 00000A44-00000A90       .text s_a_i_sub__FPvPv */
 void* s_a_i_sub(void* ac1, void* ac2) {
     UNUSED(ac2);
-    if (fopAc_IsActor(ac1) && fpcM_GetName(ac1) == PROC_NPC_LS1) {
+    if (fopAc_IsActor(ac1) && fpcM_GetName(ac1) == fpcNm_NPC_LS1_e) {
         return ac1;
     }
     return NULL;
@@ -128,7 +126,7 @@ fopAc_ac_c* search_imouto(kamome_class* i_this) {
 
 /* 00000ABC-00000B84       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
-    if (calcTiming == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 uVar1 = joint->getJntNo();
         J3DModel* pJVar2 = j3dSys.getModel();
@@ -260,7 +258,7 @@ void kamome_ground_pos_move(kamome_class* i_this) {
 void* ko_s_sub(void* ac1, void* ac2) {
     UNUSED(ac2);
     kamome_class* i_this = (kamome_class*)ac1;
-    if (fopAcM_IsActor(&i_this->actor) && fopAcM_GetName(&i_this->actor) == PROC_KAMOME && (fopAcM_GetParam(&i_this->actor) & 0xf) == 7) {
+    if (fopAcM_IsActor(&i_this->actor) && fopAcM_GetName(&i_this->actor) == fpcNm_KAMOME_e && (fopAcM_GetParam(&i_this->actor) & 0xf) == 7) {
         ko_count++;
     }
     return NULL;
@@ -286,7 +284,7 @@ void heisou_control(kamome_class* i_this) {
             if (ko < i_this->mKoMaxCount) {
                 cXyz sp08 = player->current.pos;
                 sp08.y += 4000.0f;
-                fopAcM_create(PROC_KAMOME, ko << 8 | 0xffff0007, &sp08, fopAcM_GetRoomNo(&i_this->actor));
+                fopAcM_create(fpcNm_KAMOME_e, ko << 8 | 0xffff0007, &sp08, fopAcM_GetRoomNo(&i_this->actor));
             }
         }
     }
@@ -296,7 +294,7 @@ void heisou_control(kamome_class* i_this) {
 void* h_s_sub(void* ac1, void* ac2) {
     UNUSED(ac2);
     kamome_class* i_this = (kamome_class*)ac1;
-    if (fopAcM_IsActor(&i_this->actor) && fopAcM_GetName(&i_this->actor) == PROC_KAMOME && (fopAcM_GetParam(&i_this->actor) & 0xf) == 6) {
+    if (fopAcM_IsActor(&i_this->actor) && fopAcM_GetName(&i_this->actor) == fpcNm_KAMOME_e && (fopAcM_GetParam(&i_this->actor) & 0xf) == 6) {
         return &i_this->actor;
     }
     return NULL;
@@ -1567,18 +1565,18 @@ static actor_method_class l_daKamome_Method = {
 };
 
 actor_process_profile_definition g_profile_KAMOME = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KAMOME,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KAMOME_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kamome_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KAMOME,
+    /* Draw Prio    */ fpcDwPi_KAMOME_e,
     /* Actor SubMtd */ &l_daKamome_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

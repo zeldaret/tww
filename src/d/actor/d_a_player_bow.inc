@@ -15,7 +15,6 @@
 #include "d/actor/d_a_npc_so.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
-#include "d/d_procname.h"
 
 /* 80149ECC-80149F88       .text bowJointCB__9daPy_lk_cFi */
 BOOL daPy_lk_c::bowJointCB(int param_0) {
@@ -70,10 +69,10 @@ BOOL daPy_lk_c::checkBowAnime() const {
 void daPy_lk_c::makeArrow() {
     if ((!checkBowMiniGame() && dComIfGs_getArrowNum() != 0) ||
         (checkBowMiniGame() && dComIfGp_event_getPt1() &&
-         fopAcM_GetName(dComIfGp_event_getPt1()) == PROC_NPC_SO &&
+         fopAcM_GetName(dComIfGp_event_getPt1()) == fpcNm_NPC_SO_e &&
          ((daNpc_So_c*)dComIfGp_event_getPt1())->getMiniGameRestArrow() > 0))
     {
-        fopAc_ac_c* arrow_p = (fopAc_ac_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos, fopAcM_GetRoomNo(this));
+        fopAc_ac_c* arrow_p = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_ARROW_e, 0, &current.pos, fopAcM_GetRoomNo(this));
         mActorKeepEquip.setData(arrow_p);
     }
     m355C = 0;
@@ -83,7 +82,7 @@ void daPy_lk_c::makeArrow() {
 void daPy_lk_c::deleteArrow() {
     fopAc_ac_c* equip_actor = mActorKeepEquip.getActor();
 
-    if (equip_actor != NULL && fopAcM_GetName(equip_actor) == PROC_ARROW) {
+    if (equip_actor != NULL && fopAcM_GetName(equip_actor) == fpcNm_ARROW_e) {
         fopAcM_delete(equip_actor);
         mActorKeepEquip.clearData();
     }
@@ -151,7 +150,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
             }
             m355C = 1;
         } else if (daArrow_c::changeArrowMp()) {
-            if (mEquipItem != dItem_BOW_e) {
+            if (mEquipItem != dItemNo_BOW_e) {
                 dComIfGp_setRStatus(dActStts_SWAP_MODES_e);
                 if (spActionTrigger() && arrow != NULL) {
                     mActorKeepEquip.setData(arrow->changeArrowType());
@@ -178,7 +177,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
                     seStartSystem(JA_SE_ITEM_TARGET_OUT);
                 }
             } else if (daArrow_c::changeArrowMp()) {
-                if (mEquipItem != dItem_BOW_e) {
+                if (mEquipItem != dItemNo_BOW_e) {
                     dComIfGp_setRStatus(dActStts_SWAP_MODES_e);
                     if (spActionTrigger()) {
                         daArrow_c::changeArrowTypeNotReady();
@@ -246,7 +245,7 @@ BOOL daPy_lk_c::procBowSubject_init() {
     }
     setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
 
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_BOW_AIM_e);
 
@@ -301,7 +300,7 @@ BOOL daPy_lk_c::procBowMove() {
     }
     if (!checkNextMode(0)) {
         f32 fVar1 = -1.0f;
-        if (std::fabsf(mVelocity) < 0.001f) {
+        if (std::fabsf(mNormalSpeed) < 0.001f) {
             onModeFlg(ModeFlg_00000001);
             if (mDirection != DIR_RIGHT) {
                 mDirection = DIR_RIGHT;

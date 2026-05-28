@@ -7,8 +7,6 @@
 #include "d/actor/d_a_obj_swpush.h"
 #include "d/res/res_kbota_00.h"
 #include "d/res/res_hhbot.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w_sv.h"
 #include "d/actor/d_a_player.h"
@@ -363,7 +361,7 @@ void daObjSwpush::Act_c::rideCB(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
                     i_this->mRidingMode = 1;
                 }
 
-                bool is_player = fopAcM_GetProfName(i_pt) == PROC_PLAYER;
+                bool is_player = fopAcM_GetProfName(i_pt) == fpcNm_PLAYER_e;
                 if (is_player) {
                     i_this->mVibTimer = 4;
                 }
@@ -813,18 +811,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjSwpush
 
 actor_process_profile_definition g_profile_Obj_Swpush = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Swpush,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Swpush_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjSwpush::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Swpush,
+    /* Draw Prio    */ fpcDwPi_Obj_Swpush_e,
     /* Actor SubMtd */ &daObjSwpush::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
