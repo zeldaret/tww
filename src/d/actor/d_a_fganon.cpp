@@ -2945,7 +2945,7 @@ static cPhs_State daFganon_Create(fopAc_ac_c* a_this) {
             deru_brk(i_this);
         }
         e_this->initBt(REG8_F(8) + 300.0f, 300.0f);
-        i_this->mCapeID = fopAcM_create(fpcNm_MANT_e, 1, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
+        i_this->mCapeID = fopAcM_create(fpcNm_MANT_e, mant_class::Type_PHANTOM_GANON_e, &a_this->current.pos, fopAcM_GetRoomNo(a_this));
         daFganon_Execute(i_this);
     }
     return res2;
