@@ -6,6 +6,9 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_water_mark.h"
 #include "f_op/f_op_kankyo.h"
+#include "m_Do/m_Do_lib.h"
+
+const float MyConstant = 50.0;
 
 BOOL dWaterMark_c::draw() {
     /* Nonmatching */
@@ -13,8 +16,18 @@ BOOL dWaterMark_c::draw() {
 
 /* 8023DB48-8023DBF8       .text dWaterMark_Draw__FP12dWaterMark_c */
 static BOOL dWaterMark_Draw(dWaterMark_c* i_this) {
-    /* Nonmatching */
-    return i_this->draw();
+    f32 scaled_x = i_this->mScale.x * MyConstant;
+
+    if (mDoLib_clipper::mClipper.clip(j3dSys.mViewMtx, i_this->mPos, scaled_x)) {
+        return TRUE;
+    }
+
+    J3DModelData *data = i_this->mModelInfo.mpModel->getModelData();
+    i_this->mModelInfo.mBrkAnm.entry(data, i_this->mModelInfo.mBrkAnm.getFrameCtrl()->getFrame());
+    i_this->mModelInfo.mBtpAnm.entry(i_this->mModelInfo.mpModel->getModelData(), i_this->mParam);
+    mDoExt_modelUpdateDL(i_this->mModelInfo.mpModel);
+
+    return TRUE;
 }
 
 /* 8023DBF8-8023DE2C       .text setMatrix__12dWaterMark_cFv */
@@ -43,8 +56,13 @@ BOOL dWaterMark_c::wm_delete() {
 
 /* 8023DF2C-8023DF80       .text dWaterMark_Delete__FP12dWaterMark_c */
 static BOOL dWaterMark_Delete(dWaterMark_c* i_this) {
-    /* Nonmatching */
-    return i_this->wm_delete();
+    if (i_this->heap != NULL) {
+        mDoExt_destroySolidHeap(i_this->heap);
+    }
+    if ((int)(i_this->mParam) == 0x1) {
+        dWaterMark_c::m_circle_cnt -= 1;
+    }
+    return TRUE;
 }
 
 /* 8023DF80-8023DFA0       .text dWaterMark_Create__FP12kankyo_class */
@@ -56,6 +74,7 @@ static cPhs_State dWaterMark_Create(kankyo_class* i_this) {
 /* 8023DFA0-8023E29C       .text create__12dWaterMark_cFv */
 cPhs_State dWaterMark_c::create() {
     /* Nonmatching */
+    return cPhs_ERROR_e;
 }
 
 static kankyo_method_class l_dWaterMark_Method = {
