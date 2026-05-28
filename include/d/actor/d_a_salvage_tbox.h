@@ -57,7 +57,7 @@ public:
     /* 0x29C */ JPABaseEmitter* field_0x29C[2];
     /* 0x2A4 */ JPABaseEmitter* field_0x2A4;
     /* 0x2A8 */ u8 field_0x2A8[0x2AC - 0x2A8];
-    /* 0x2AC */ dPa_rippleEcallBack* mRippleCallBack;
+    /* 0x2AC */ dPa_rippleEcallBack mRippleCallBack;
     /* 0x2B0 */ uint field_0x2B0;
     /* 0x2B4 */ u8 field_0x2B4[0x2BC - 0x2B4];
     /* 0x2BC */ f32 field_0x2BC;

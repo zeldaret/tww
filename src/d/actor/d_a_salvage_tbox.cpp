@@ -120,14 +120,20 @@ void daSTBox_c::initWaitGetItem(int) {
     /* Nonmatching */
     fopDwTg_DrawQTo(&this->draw_tag);
     for(int i = 0; i < 3; i++) {
-        if (this->field_0x29C[i] != NULL) {
-            this->field_0x29C[i]->mFlags = this->field_0x29C[i]->mFlags & 0xffffffbf;
-            this->field_0x29C[i]->setMaxFrame(0xffffffff);
-            this->field_0x29C[i]->mFlags = this->field_0x29C[i]->mFlags | 1;
+        JPABaseEmitter* emitter = this->field_0x29C[i];
+        if (emitter != NULL) {
+            // emitter->becomeImmortalEmitter();
+            // emitter->mFlags &= ~0x40;
+            // emitter->clearStatus(0x40);
+            emitter->quitImmortalEmitter();
+            // emitter->becomeInvalidEmitter();
+            emitter = this->field_0x29C[i];
+            emitter->setMaxFrame(-1);
+            emitter->stopCreateParticle();
             this->field_0x29C[i] = NULL;
         }
     }
-    this->mRippleCallBack->end();
+    this->mRippleCallBack.end();
 }
 
 /* 00000F50-00000F54       .text initWaitDummy__9daSTBox_cFi */
