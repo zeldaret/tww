@@ -5,10 +5,11 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_water_mark.h"
-#include "f_op/f_op_kankyo.h"
+#include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_lib.h"
 
 const float MyConstant = 50.0;
+const float SomeSpeed = 0.0;
 
 BOOL dWaterMark_c::draw() {
     /* Nonmatching */
@@ -31,8 +32,45 @@ static BOOL dWaterMark_Draw(dWaterMark_c* i_this) {
 }
 
 /* 8023DBF8-8023DE2C       .text setMatrix__12dWaterMark_cFv */
-void dWaterMark_c::setMatrix() {
-    /* Nonmatching */
+int dWaterMark_c::setMatrix() {
+    short sVar1;
+    short sVar5;
+    
+    cXyz pos(this->mPos.x, this->mPos.y + 10.0f, this->mPos.z);
+    m_ground_check.m_pos.x = pos.x;
+    m_ground_check.m_pos.y = pos.y;
+    m_ground_check.m_pos.z = pos.z;
+    
+    this->mPos.y = ((cBgS *)&g_dComIfG_gameInfo.play)->GroundCross(&m_ground_check);
+    if (this->mPos.y != -1e+09f) {
+        cM3dGPla* pcVar4 = ((cBgS *)&g_dComIfG_gameInfo.play)->GetTriPla(m_ground_check.GetBgIndex(), m_ground_check.GetPolyIndex());
+        short sVar2 = cM_atan2s(pcVar4->mNormal.x, pcVar4->mNormal.z) - this->sh2;
+        
+        cXyz local_54(pcVar4->mNormal.x, 0.0f, pcVar4->mNormal.z);
+        
+        float mag = std::sqrtf(PSVECSquareMag(&local_54));
+
+        PSMTXTrans(mDoMtx_stack_c::now, this->mPos.x, this->mPos.y + 0.1f, this->mPos.z);
+        
+        sVar5 = cM_atan2s(mag * -jmaSinTable[((u16) sVar2 >> jmaSinShift)], pcVar4->mNormal.y);
+        sVar1 = this->sh2;
+        short sVar6 = cM_atan2s(mag * jmaCosTable[(u16) sVar2 >> jmaSinShift], pcVar4->mNormal.y);
+        
+        mDoMtx_ZXYrotM(mDoMtx_stack_c::now, sVar6, sVar1, sVar5);
+        
+        J3DModel* model = this->mModelInfo.mpModel;
+        PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+
+        bool bVar8 = g_dComIfG_gameInfo.play.mBgS.ChkMoveBG(m_ground_check);
+        if (bVar8) {
+            this->sh1 = 1;
+        } else {
+            this->sh1 = 0;
+        }
+    } else {
+        return 0;
+    }
+    return 1;
 }
 
 BOOL dWaterMark_c::execute() {
@@ -41,8 +79,45 @@ BOOL dWaterMark_c::execute() {
 
 /* 8023DE2C-8023DF24       .text dWaterMark_Execute__FP12dWaterMark_c */
 static BOOL dWaterMark_Execute(dWaterMark_c* i_this) {
-    /* Nonmatching */
-    return i_this->execute();
+    /* Nonmatching */ 
+    if (i_this->sh5 != -1) {
+        short v1 = i_this->sh3;
+        short v2 = i_this->sh4;
+        short id;
+
+        if (v1 < v2) {
+            id = i_this->m_player_foot_now_id;
+            if ((v1 <= id) && (id < v2)) {
+                i_this->sh5 = -1;
+            }
+        } else {
+            id = i_this->m_player_foot_now_id;
+            if ((v1 <= id) || (id < v2)) {
+                i_this->sh5 = -1;
+            }
+        }
+    }
+    if (i_this->sh5 == -1) {
+        i_this->mModelInfo.mBrkAnm.play();
+    }
+
+    bool bVar3 = true;
+    const J3DFrameCtrl *frame_ctl = i_this->mModelInfo.mBrkAnm.getFrameCtrl();
+    const char state = frame_ctl->getState();
+
+    if (!(state & 1)) {
+        float rate = frame_ctl->getRate();
+        if (rate != SomeSpeed) {
+            bVar3 = false;
+        }
+    }
+    
+    if (bVar3) {
+        fopKyM_Delete(i_this);
+    } else if ((i_this->sh1 == 0x1) && (!i_this->setMatrix())) {
+        fopKyM_Delete(i_this);
+    }
+    return TRUE;
 }
 
 /* 8023DF24-8023DF2C       .text dWaterMark_IsDelete__FP12dWaterMark_c */
