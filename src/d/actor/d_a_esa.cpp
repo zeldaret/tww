@@ -76,7 +76,7 @@ void bg_check(esa_class* i_this) {
             sp6C.x = 0.0f;
             sp6C.y = 0.0f;
             sp6C.z = i_this->speedF;
-            mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+            cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
             MtxPosition(&sp6C, &sp60);
             i_this->speed.x = sp60.x;
             i_this->speed.z = sp60.z;
@@ -98,7 +98,7 @@ void esa_1_move(esa_class* i_this) {
             sp24.y = cM_rndF(8.0f) + 15.0f;
             sp24.z = cM_rndF(5.0f) + 10.0f;
             i_this->speedF = sp24.z;
-            mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+            cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
             MtxPosition(&sp24, &i_this->speed);
 
             i_this->mActionState = 1;
@@ -126,7 +126,7 @@ void esa_1_move(esa_class* i_this) {
                     sp24.x = 0.0f;
                     sp24.y = 0.0f;
                     sp24.z = i_this->speedF;
-                    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+                    cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
                     cXyz sp18;
                     MtxPosition(&sp24, &sp18);
                     i_this->speed.x = sp18.x;
@@ -200,9 +200,9 @@ static BOOL daEsa_Execute(esa_class* i_this) {
     esa_1_move(i_this);
 
     MtxTrans(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z, false);
-    mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
-    mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-    mDoMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
+    cMtx_YrotM(*calc_mtx, i_this->current.angle.y);
+    cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    cMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
     i_this->mpModel->setBaseTRMtx(*calc_mtx);
 
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
@@ -271,8 +271,9 @@ static cPhs_State daEsa_Create(fopAc_ac_c* i_actor) {
         }
     }
 
+    f32 f2 = REG0_F(5) + 1.0f;
     f32 temp = REG0_F(6) + 0.65f;
-    f32 scaleF = temp + cM_rndF(REG0_F(5) + 1.0f - temp);
+    f32 scaleF = temp + cM_rndF(f2 - temp);
     cXyz scale(scaleF, scaleF, scaleF);
     i_this->mpModel->setBaseScale(scale);
     fopAcM_SetMtx(i_this, i_this->mpModel->getBaseTRMtx());

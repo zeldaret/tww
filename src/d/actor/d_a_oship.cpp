@@ -851,10 +851,10 @@ bool daOship_c::_execute() {
     setCollision();
     setMtx();
 
-    s32 cull_box_check = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), -300.0f, -100.0f, -650.0f, 300.0f, 700.0f, 800.0f);
+    bool cull_box_check = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), -300.0f, -100.0f, -650.0f, 300.0f, 700.0f, 800.0f);
 
     if (fopAcM_GetSpeedF(this) <= 2.0f || 
-        (cull_box_check & 0xFF) || 
+        cull_box_check || 
         fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0)) > 18000.0f) {
         mWaveCallback2.remove();
         mWaveCallback1.remove();

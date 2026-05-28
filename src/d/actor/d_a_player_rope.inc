@@ -1044,7 +1044,8 @@ BOOL daPy_lk_c::procRopeDown_init() {
     } else {
         himo2_class* rope = (himo2_class*)mActorKeepRope.getActor();
         cXyz* temp = &rope->m1120[34].m10;
-        m35A4 = mRopePos.y - DEMO_SELECT(temp->z, temp->y);
+        f32 temp2 = DEMO_SELECT(temp->z, temp->y);
+        m35A4 = mRopePos.y - temp2;
     }
     
     if (current.pos.y <= m35A4) {

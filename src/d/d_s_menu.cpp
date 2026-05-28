@@ -311,9 +311,9 @@ static BOOL dScnMenu_Delete(menu_of_scene_class* i_this) {
 
 /* 8022F3C4-8022F4B0       .text phase_1__FP19menu_of_scene_class */
 cPhs_State phase_1(menu_of_scene_class* i_this) {
-    i_this->command = mDoDvdThd_toMainRam_c::create("/res/Menu/Menu1.dat", 0, NULL);
+    i_this->command = mDoDvdThd_toMainRam_c::create("/res/Menu/Menu1.dat", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(616, 616, 732, 732), i_this->command != NULL);
-    i_this->fontCommand = mDoDvdThd_toMainRam_c::create("/res/Menu/kanfont_fix16.bfn", 0, NULL);
+    i_this->fontCommand = mDoDvdThd_toMainRam_c::create("/res/Menu/kanfont_fix16.bfn", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(619, 619, 735, 735), i_this->fontCommand != NULL);
     return cPhs_NEXT_e;
 }

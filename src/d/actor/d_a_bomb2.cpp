@@ -1251,12 +1251,7 @@ namespace daBomb2 {
     }
 
     bool Act_c::is_draw() {
-        bool draw = false;
-        if(mState != 2 && !field_0x743 && ! field_0x742) {
-            draw = true;
-        }
-
-        return draw;
+        return mState != 2 && !field_0x743 && ! field_0x742;
     }
 
     void Act_c::draw_nut() {

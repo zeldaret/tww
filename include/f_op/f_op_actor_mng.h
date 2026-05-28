@@ -545,8 +545,8 @@ f32 fopAcM_searchActorDistanceXZ(fopAc_ac_c* p_actorA, fopAc_ac_c* p_actorB);
 f32 fopAcM_searchActorDistanceXZ2(fopAc_ac_c* p_actorA, fopAc_ac_c* p_actorB);
 
 s32 fopAcM_rollPlayerCrash(fopAc_ac_c* i_this, f32 distAdjust, u32 flag);
-s32 fopAcM_checkCullingBox(Mtx, f32, f32, f32, f32, f32, f32);
-s32 fopAcM_cullingCheck(fopAc_ac_c*);
+bool fopAcM_checkCullingBox(Mtx, f32, f32, f32, f32, f32, f32);
+BOOL fopAcM_cullingCheck(fopAc_ac_c*);
 s32 fopAcM_orderTalkEvent(fopAc_ac_c*, fopAc_ac_c*);
 s32 fopAcM_orderTalkXBtnEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner);
 s32 fopAcM_orderTalkYBtnEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner);
