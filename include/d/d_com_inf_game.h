@@ -1,6 +1,7 @@
 #ifndef D_COM_D_COM_INF_GAME_H
 #define D_COM_D_COM_INF_GAME_H
 
+#include "d/actor/d_a_ship.h"
 #include "d/d_attention.h"
 #include "d/d_bg_s.h"
 #include "d/d_cc_s.h"
@@ -2307,6 +2308,12 @@ inline daShip_c* dComIfGp_getShipActor() {
 
 inline void dComIfGp_setShipActor(fopAc_ac_c* player) {
     g_dComIfG_gameInfo.play.setPlayerPtr(2, player);
+}
+
+inline cXyz* dComIfGp_getShipCraneTop() {
+    return ((daShip_c*)(*(fopAc_ac_c**)(((u8*)&g_dComIfG_gameInfo) + 0x5b54)))->getCraneTop();
+    // return (cXyz*)*(u32*)(*(u32*)&(g_dComIfG_gameInfo) + 0x5b54) + 0x434;
+    // return ((daShip_c*)g_dComIfG_gameInfo.play.mpPlayerPtr[2])->getCraneTop();
 }
 
 inline void dComIfGp_getIkadaShipBeforePos(Vec* o_pos) {

@@ -146,6 +146,7 @@ void daSTBox_c::initDrop(int) {
 /* 00000F64-00001218       .text actWait__9daSTBox_cFi */
 void daSTBox_c::actWait(int) {
     /* Nonmatching */
+    this->mRippleCallBack.setRate(12.0f);
 }
 
 /* 00001218-00001344       .text actDrop__9daSTBox_cFi */
@@ -156,7 +157,8 @@ void daSTBox_c::actDrop(int) {
 /* 00001344-000013AC       .text actWait02__9daSTBox_cFi */
 s32 daSTBox_c::actWait02(int) {
     /* Nonmatching */
-    cXyz* pos = dComIfGp_getShipActor()->getCraneTop();
+    // cXyz* pos = dComIfGp_getShipActor()->getCraneTop();
+    cXyz* pos = dComIfGp_getShipCraneTop();
     // cXyz* pos = ((daShip_c*)(*(fopAc_ac_c**)(((u8*)&g_dComIfG_gameInfo) + 0x5b54)))->getCraneTop();
     // cXyz* pos = (cXyz*)*(u32*)(*(u32*)&(g_dComIfG_gameInfo) + 0x5b54) + 0x434;
     // daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
@@ -167,6 +169,7 @@ s32 daSTBox_c::actWait02(int) {
         f32 y = pos->y;
         f32 z = pos->z;
         f32 offset = crane_offset[this->field_0x331];
+        pos->y -= offset;
         this->current.pos.x = x;
         this->current.pos.y = y - offset;
         this->current.pos.z = z;
