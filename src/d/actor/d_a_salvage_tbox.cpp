@@ -122,11 +122,7 @@ void daSTBox_c::initWaitGetItem(int) {
     for(int i = 0; i < 3; i++) {
         JPABaseEmitter* emitter = this->field_0x29C[i];
         if (emitter != NULL) {
-            // emitter->becomeImmortalEmitter();
-            // emitter->mFlags &= ~0x40;
-            // emitter->clearStatus(0x40);
             emitter->quitImmortalEmitter();
-            // emitter->becomeInvalidEmitter();
             emitter = this->field_0x29C[i];
             emitter->setMaxFrame(-1);
             emitter->stopCreateParticle();
