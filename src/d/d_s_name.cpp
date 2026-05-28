@@ -842,7 +842,7 @@ void dScnName_c::NameInDraw() {
 
 /* 80232074-802320C0       .text ShopDemoDataLoad__10dScnName_cFv */
 void dScnName_c::ShopDemoDataLoad() {
-    field_0x410 = mDoDvdThd_toMainRam_c::create("/res/ShopDemo/zelda_save.bin", 0, NULL);
+    field_0x410 = mDoDvdThd_toMainRam_c::create("/res/ShopDemo/zelda_save.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     mMainProc = 15;
 }
 

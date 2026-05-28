@@ -539,12 +539,16 @@ s32 fopAcM_rollPlayerCrash(fopAc_ac_c* i_this, f32 distAdjust, u32 flag) {
 }
 
 /* 800255B4-80025660       .text fopAcM_checkCullingBox__FPA4_fffffff */
-s32 fopAcM_checkCullingBox(Mtx m, f32 x0, f32 y0, f32 z0, f32 x1, f32 y1, f32 z1) {
+bool fopAcM_checkCullingBox(Mtx m, f32 x0, f32 y0, f32 z0, f32 x1, f32 y1, f32 z1) {
     Vec p0 = { x0, y0, z0 };
     Vec p1 = { x1, y1, z1 };
     Mtx viewMtx;
     cMtx_concat(j3dSys.getViewMtx(), m, viewMtx);
-    return mDoLib_clipper::clip(viewMtx, &p1, &p0) != 0;
+    if (mDoLib_clipper::clip(viewMtx, &p1, &p0)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 static l_HIO l_hio;
@@ -584,7 +588,7 @@ static void dummy() {
 }
 
 /* 80025660-800259A8       .text fopAcM_cullingCheck__FP10fopAc_ac_c */
-s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
+BOOL fopAcM_cullingCheck(fopAc_ac_c* i_this) {
     MtxP pMtx;
     if (fopAcM_GetMtx(i_this) == NULL) {
         pMtx = j3dSys.getViewMtx();
@@ -603,7 +607,7 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
         if (fopAcM_GetCullSize(i_this) == fopAc_CULLBOX_CUSTOM_e) {
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
-                s32 ret = mDoLib_clipper::clip(pMtx, fopAcM_getCullSizeBoxMax(i_this), fopAcM_getCullSizeBoxMin(i_this));
+                BOOL ret = mDoLib_clipper::clip(pMtx, fopAcM_getCullSizeBoxMax(i_this), fopAcM_getCullSizeBoxMin(i_this));
                 mDoLib_clipper::resetFar();
                 return ret;
             } else {
@@ -613,7 +617,7 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
             fopAc_cullSizeBox* box = &l_cullSizeBox[fopAcM_CULLSIZE_IDX(fopAcM_GetCullSize(i_this))];
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
-                s32 ret = mDoLib_clipper::clip(pMtx, &box->max, &box->min);
+                BOOL ret = mDoLib_clipper::clip(pMtx, &box->max, &box->min);
                 mDoLib_clipper::resetFar();
                 return ret;
             } else {
@@ -624,7 +628,7 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
         if (fopAcM_GetCullSize(i_this) == fopAc_CULLSPHERE_CUSTOM_e) {
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
-                s32 ret = mDoLib_clipper::clip(pMtx, *fopAcM_getCullSizeSphereCenter(i_this), fopAcM_getCullSizeSphereR(i_this));
+                BOOL ret = mDoLib_clipper::clip(pMtx, *fopAcM_getCullSizeSphereCenter(i_this), fopAcM_getCullSizeSphereR(i_this));
                 mDoLib_clipper::resetFar();
                 return ret;
             } else {
@@ -635,7 +639,7 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
             fopAc_cullSizeSphere* sphere = &l_cullSizeSphere[fopAcM_CULLSIZE_Q_IDX(fopAcM_GetCullSize(i_this))];
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
-                s32 ret = mDoLib_clipper::clip(pMtx, sphere->center, sphere->radius);
+                BOOL ret = mDoLib_clipper::clip(pMtx, sphere->center, sphere->radius);
                 mDoLib_clipper::resetFar();
                 return ret;
             } else {
@@ -1260,7 +1264,8 @@ fpc_ProcID fopAcM_createIball(cXyz* p_pos, int itemTableIdx, int i_roomNo, csXyz
 
 /* 800278D8-80027920       .text fopAcM_createWarpFlower__FP4cXyzP5csXyziUc */
 void fopAcM_createWarpFlower(cXyz* p_pos, csXyz* p_angle, int i_roomNo, u8 param_4) {
-    u32 params = param_4;
+    u32 mask = 0x0FFFFFFF;
+    u32 params = mask & param_4;
     fopAcM_create(fpcNm_WARPFLOWER_e, params, p_pos, i_roomNo, p_angle);
 }
 

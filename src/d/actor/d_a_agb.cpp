@@ -395,9 +395,9 @@ int daAgb_c::uploadSelect() {
             mUploadAction  = UpAct_UNK3;
 
 #if VERSION <= VERSION_JPN
-            l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/client.bin", 0, dMsg_getAgbWorkArea());
+            l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/client.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, dMsg_getAgbWorkArea());
 #elif VERSION == VERSION_USA
-            l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/client_u.bin", 0, dMsg_getAgbWorkArea());
+            l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/client_u.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, dMsg_getAgbWorkArea());
 #elif VERSION == VERSION_PAL
             char path[28];
             char pathNum[4];
@@ -405,7 +405,7 @@ int daAgb_c::uploadSelect() {
             sprintf(pathNum, "%d", dComIfGs_getPalLanguage());
             strcat(path, pathNum);
             strcat(path, ".bin");
-            l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, 0, dMsg_getAgbWorkArea());
+            l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, JKRArchive::DEFAULT_MOUNT_DIRECTION, dMsg_getAgbWorkArea());
 #endif
             JUT_ASSERT(VERSION_SELECT(591, 591, 860, 861), l_gbaCommand != NULL);
 
@@ -473,7 +473,7 @@ int daAgb_c::uploadMessageLoad() {
     field_0x664--;
     if (field_0x664 == 0) {
 #if VERSION != VERSION_PAL
-        l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/msg_LZ.bin", 0, NULL);
+        l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/msg_LZ.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
 #else
         char path[28];
         char pathNum[4];
@@ -481,7 +481,7 @@ int daAgb_c::uploadMessageLoad() {
         sprintf(pathNum, "%d", dComIfGs_getPalLanguage());
         strcat(path, pathNum);
         strcat(path, ".bin");
-        l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, 0, NULL);
+        l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
 #endif
         JUT_ASSERT(VERSION_SELECT(715, 715, 1000, 1001), l_gbaCommand != NULL);
 

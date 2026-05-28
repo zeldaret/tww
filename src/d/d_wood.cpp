@@ -413,12 +413,13 @@ void dWood::Anm_c::mode_push_into(dWood::Packet_c *packet) {
         f32 rotY = 0.0f;
         f32 rotX = rotY;
         for (s32 i = 0; i < 2; i++) {
+            s32 phaseVelY = attr_sway(SWAY_PUSH, i).phaseVelY;
             s32 phaseVelX = attr_sway(SWAY_PUSH, i).phaseVelX;
             s32 ampY = attr_sway(SWAY_PUSH, i).ampY;
             s32 ampX = attr_sway(SWAY_PUSH, i).ampX;
             f32 phaseBiasX = attr_sway(SWAY_PUSH, i).phaseBiasX;
 
-            mPhaseY[i] += attr_sway(SWAY_PUSH, i).phaseVelY;
+            mPhaseY[i] += phaseVelY;
             cLib_chaseAngleS(&mPhaseX[i], 0, phaseVelX);
             cLib_chaseS(&mAmpY[i], ampY/4, 0x14);
             cLib_addCalcAngleS(&mAmpX[i], ampX, 8, 0x14, 5);
@@ -427,9 +428,9 @@ void dWood::Anm_c::mode_push_into(dWood::Packet_c *packet) {
             rotX +=  mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
         }
 
-        mDoMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
-        mDoMtx_XrotM(mModelMtx, (s32)rotX);
-        mDoMtx_YrotM(mModelMtx, -mForceDir);
+        cMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
+        cMtx_XrotM(mModelMtx, (s32)rotX);
+        cMtx_YrotM(mModelMtx, -mForceDir);
     }
 }
 
@@ -466,9 +467,9 @@ void dWood::Anm_c::mode_push_back(dWood::Packet_c *packet) {
             rotX +=  mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
         }
 
-        mDoMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
-        mDoMtx_XrotM(mModelMtx, (s32)rotX);
-        mDoMtx_YrotM(mModelMtx, -mForceDir);
+        cMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
+        cMtx_XrotM(mModelMtx, (s32)rotX);
+        cMtx_YrotM(mModelMtx, -mForceDir);
     }
 }
 
@@ -508,12 +509,13 @@ void dWood::Anm_c::mode_norm(dWood::Packet_c *packet) {
     f32 rotY = 0.0f;
     f32 rotX = rotY;
     for (s32 i = 0; i < 2; i++) {
+        s32 phaseVelY = attr_sway(swayID, i).phaseVelY;
         s32 phaseVelX = attr_sway(swayID, i).phaseVelX;
         s16 ampY = attr_sway(swayID, i).ampY;
         s16 ampX = attr_sway(swayID, i).ampX;
         f32 phaseBiasX = attr_sway(swayID, i).phaseBiasX;
 
-        mPhaseY[i] += attr_sway(swayID, i).phaseVelY;
+        mPhaseY[i] += phaseVelY;
         mPhaseX[i] += phaseVelX;
         cLib_chaseS(&mAmpY[i], ampY, 2);
         cLib_chaseS(&mAmpX[i], ampX, 2);
@@ -522,9 +524,9 @@ void dWood::Anm_c::mode_norm(dWood::Packet_c *packet) {
         rotX += mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
     }
 
-    mDoMtx_YrotS(mModelMtx, (s16)rotY + mForceDir); // Y Rotation (Yaw)
-    mDoMtx_XrotM(mModelMtx, rotX);                  // X Rotation
-    mDoMtx_YrotM(mModelMtx, -mForceDir);            // Y Rotation
+    cMtx_YrotS(mModelMtx, (s16)rotY + mForceDir); // Y Rotation (Yaw)
+    cMtx_XrotM(mModelMtx, rotX);                  // X Rotation
+    cMtx_YrotM(mModelMtx, -mForceDir);            // Y Rotation
 }
 
 /* 800BE148-800BE154       .text mode_norm_set_wind__Q25dWood5Anm_cFfs */
@@ -576,9 +578,9 @@ void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
         rotX += mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
     }
 
-    mDoMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
-    mDoMtx_XrotM(mModelMtx, rotX);
-    mDoMtx_YrotM(mModelMtx, -mForceDir);
+    cMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
+    cMtx_XrotM(mModelMtx, rotX);
+    cMtx_YrotM(mModelMtx, -mForceDir);
 
     if (mCountdown > 0) {
         mCountdown -= 1;
@@ -650,15 +652,15 @@ void dWood::Unit_c::set_mtx(dWood::Anm_c *anim) {
     mtx[0][3] += mPos.x;
     mtx[1][3] += mPos.y;
     mtx[2][3] += mPos.z;
-    mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mModelViewMtx);
+    cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mModelViewMtx);
 
     mDoMtx_stack_c::copy(anim[anmIdx].mTrunkModelMtx);
     mtx[0][3] = mPos.x;
     mtx[1][3] = mPos.y;
     mtx[2][3] = mPos.z;
-    mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mTrunkModelViewMtx);
+    cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mTrunkModelViewMtx);
 
-    mDoMtx_concat(j3dSys.getViewMtx(), mShadowModelMtx, mShadowModelViewMtx);
+    cMtx_concat(j3dSys.getViewMtx(), mShadowModelMtx, mShadowModelViewMtx);
 }
 
 /* 800BEA28-800BEA50       .text clear__Q25dWood6Unit_cFv */
@@ -779,9 +781,9 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
 
                 f32 newShadowScale = L_attr.kCutShadowScale / L_attr.kUncutShadowScale;
 
-                mDoMtx_copy(mShadowModelMtx, mDoMtx_stack_c::get());
+                cMtx_copy(mShadowModelMtx, mDoMtx_stack_c::get());
                 mDoMtx_stack_c::scaleM(newShadowScale, 1.0f, newShadowScale);
-                mDoMtx_copy(mDoMtx_stack_c::get(), mShadowModelMtx);
+                cMtx_copy(mDoMtx_stack_c::get(), mShadowModelMtx);
             }
         }
     }
@@ -835,7 +837,9 @@ void dWood::Room_c::delete_all_unit() {
     Unit_c *unit;
     while (unit = mpUnit, unit != NULL) {
         mpUnit = unit->mpNext;
-        mDoAud_zelAudio_c::getInterface()->seDeleteObject((Vec *)unit);
+#if VERSION > VERSION_DEMO
+        mDoAud_zelAudio_c::getInterface()->seDeleteObject(&unit->mPos);
+#endif
         unit->clear();
     }
 }
@@ -930,10 +934,13 @@ void dWood::Packet_c::update() {
     s32 i = 0;
     for (Unit_c *unit = mUnit; i < (s32)ARRAY_SIZE(mUnit); i++, unit++) {
         if (cLib_checkBit(unit->mFlags, Unit_c::STATE_ACTIVE)) {
-            cXyz clipPos(unit->mPos.x, unit->mPos.y + L_attr.kClipCenterYOffset, unit->mPos.z);
-            s32 res = mDoLib_clipper::clip(j3dSys.getViewMtx(), clipPos, L_attr.kClipRadius);
+            BOOL clip = mDoLib_clipper::clip(
+                j3dSys.getViewMtx(),
+                cXyz(unit->mPos.x, unit->mPos.y + L_attr.kClipCenterYOffset, unit->mPos.z),
+                L_attr.kClipRadius
+            );
 
-            if (res != 0) {
+            if (clip) {
                 cLib_onBit(unit->mFlags, Unit_c::STATE_FRUSTUM_CULLED);
             } else {
                 cLib_offBit(unit->mFlags, Unit_c::STATE_FRUSTUM_CULLED);

@@ -10,6 +10,9 @@
 #include "d/d_kankyo_rain.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_audio.h"
+#if VERSION == VERSION_DEMO
+#include "m_Do/m_Do_controller_pad.h"
+#endif
 
 /* 80086F74-80086FC4       .text dKyw_setDrawPacketList__FP9J3DPacketi */
 J3DPacket* dKyw_setDrawPacketList(J3DPacket* i_packet, int) {
@@ -772,7 +775,11 @@ void wether_move_vrkumo() {
             {
                 cLib_addCalc(&g_env_light.mVrkumoStrength, 1.0f, 0.1f, 0.003f, 0.0000001f);
             } else {
+#if VERSION == VERSION_DEMO
+                cLib_addCalc(&g_env_light.mVrkumoStrength, 0.0f, 0.1f, 0.003f, 0.0000001f);
+#else
                 cLib_addCalc(&g_env_light.mVrkumoStrength, 0.0f, 0.08f, 0.002f, 0.00000001f);
+#endif
             }
 
             if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 &&
@@ -1030,6 +1037,26 @@ void dKyw_wind_set() {
             strength = 0.0f;
             break;
         }
+
+#if VERSION == VERSION_DEMO
+        if (strcmp(dComIfGp_getStartStageName(), "sea_E") == 0) {
+            static u8 button_ositankaina = false;
+            if (CPad_CHECK_HOLD_A(3)) {
+                button_ositankaina = true;
+            }
+            if (button_ositankaina) {
+                wind_vec.x = 0.0f;
+                wind_vec.y = 0.0f;
+                wind_vec.z = -1.0f;
+                strength = 1.0f;
+            } else {
+                wind_vec.x = 0.0f;
+                wind_vec.y = 0.0f;
+                wind_vec.z = -1.0f;
+                strength = 0.0f;
+            }
+        }
+#endif
     }
 
     if (g_env_light.mWind.mCustomWindPower > 0.0f) {
@@ -1049,10 +1076,11 @@ void dKyw_wind_set() {
         g_env_light.mWind.mWindVec = wind_vec;
         g_env_light.mWind.mWindPower = strength;
     } else {
-        cLib_addCalc(&g_env_light.mWind.mWindVec.x, wind_vec.x, 0.1f, 2.0f, 0.001f);
-        cLib_addCalc(&g_env_light.mWind.mWindVec.y, wind_vec.y, 0.1f, 2.0f, 0.001f);
-        cLib_addCalc(&g_env_light.mWind.mWindVec.z, wind_vec.z, 0.1f, 2.0f, 0.001f);
-        cLib_addCalc(&g_env_light.mWind.mWindPower, strength, 0.1f, 1.0f, 0.005f);
+        f32 scale = 0.1f;
+        cLib_addCalc(&g_env_light.mWind.mWindVec.x, wind_vec.x, scale, 2.0f, 0.001f);
+        cLib_addCalc(&g_env_light.mWind.mWindVec.y, wind_vec.y, scale, 2.0f, 0.001f);
+        cLib_addCalc(&g_env_light.mWind.mWindVec.z, wind_vec.z, scale, 2.0f, 0.001f);
+        cLib_addCalc(&g_env_light.mWind.mWindPower, strength, scale, 1.0f, 0.005f);
     }
 }
 
@@ -1261,7 +1289,8 @@ void dKyw_get_AllWind_vec(cXyz* param_0, cXyz* i_direction, f32* i_power) {
     cXyz sp30;
     cXyz sp24;
 
-    sp30 = env_light.mWind.mWindVec * (env_light.mWind.mWindPower * (1.0f - *i_power));
+    f32 f1 = env_light.mWind.mWindPower * (1.0f - *i_power);
+    sp30 = env_light.mWind.mWindVec * f1;
     sp24 = *i_direction * (*i_power * 5.0f);
     sp54 = sp30 + sp24;
     *i_power = sp54.abs();
@@ -1285,9 +1314,11 @@ cXyz dKyw_get_AllWind_vecpow(cXyz* param_0) {
     cXyz sp18;
     cXyz direction;
     f32 power;
+    dScnKy_env_light_c& env_light = dKy_getEnvlight();
     dKyw_pntwind_get_info(param_0, &direction, &power);
 
-    sp24 = g_env_light.mWind.mWindVec * (g_env_light.mWind.mWindPower * (1.0f - power));
+    f32 f1 = env_light.mWind.mWindPower * (1.0f - power);
+    sp24 = env_light.mWind.mWindVec * f1;
     sp18 = direction * (power * 5.0f);
     vecpow = sp24 + sp18;
 

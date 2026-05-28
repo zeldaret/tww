@@ -216,7 +216,12 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
                 return layer | 2;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "Hyrule") == 0) {
-            if (dComIfGs_getTriforceNum() == 8) {
+            if (
+                dComIfGs_getTriforceNum() == 8
+#if VERSION == VERSION_DEMO
+                && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2C01)
+#endif
+            ) {
                 return layer | 4;
             } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3280)) {
                 return layer | 2;
@@ -267,14 +272,14 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
 void dComIfG_play_c::createParticle() {
     mParticle = new dPa_control_c();
 
-    JUT_ASSERT(VERSION_SELECT(358, 358, 360, 360), mParticle != NULL);
+    JUT_ASSERT(VERSION_SELECT(350, 358, 360, 360), mParticle != NULL);
 }
 
 /* 800528F4-8005297C       .text createDemo__14dComIfG_play_cFv */
 void dComIfG_play_c::createDemo() {
     mDemo = new dDemo_manager_c();
 
-    JUT_ASSERT(VERSION_SELECT(388, 388, 390, 390), mDemo != NULL);
+    JUT_ASSERT(VERSION_SELECT(380, 388, 390, 390), mDemo != NULL);
 }
 
 /* 8005297C-800529B8       .text removeDemo__14dComIfG_play_cFv */
@@ -482,9 +487,11 @@ int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
     if (!fopScnM_ChangeReq(i_scene, i_procName, fpcNm_OVERLAP0_e, 30)) {
         return FALSE;
     }
-#endif
 
+    dComIfGs_setRestartRoomParam(0);
+#else
     dComIfGp_offEnableNextStage();
+#endif
 
     dComIfGp_setNextStage("sea_T", 0, 44, 0);
     mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(), dComIfGp_getNextStageLayer());
@@ -670,9 +677,11 @@ void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8
 
         i_lastMode |= link->checkTinkleShield() << 0x10;
 
+#if VERSION > VERSION_DEMO
         if (link->checkNoResetFlg1(daPy_lk_c::daPyFlg1_SOUP_POWER_UP)) {
             i_lastMode |= 0x4000;
         }
+#endif
     }
 
     g_dComIfG_gameInfo.save.getRestart().setLastSceneInfo(i_lastSpeed, i_lastMode);
@@ -703,6 +712,116 @@ BOOL dComIfGs_isStageTbox(int i_stageNo, int i_no) {
     }
 }
 
+void dComIfGs_onDungeonItemMap(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_onDungeonItemMap();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onDungeonItemMap();
+}
+
+void dComIfGs_offDungeonItemMap(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_offDungeonItemMap();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().offDungeonItemMap();
+}
+
+BOOL dComIfGs_isDungeonItemMap(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        return dComIfGs_isDungeonItemMap();
+    } else {
+        return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isDungeonItemMap();
+    }
+}
+
+void dComIfGs_onDungeonItemCompass(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_onDungeonItemCompass();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onDungeonItemCompass();
+}
+
+void dComIfGs_offDungeonItemCompass(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_offDungeonItemCompass();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().offDungeonItemCompass();
+}
+
+BOOL dComIfGs_isDungeonItemCompass(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        return dComIfGs_isDungeonItemCompass();
+    } else {
+        return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isDungeonItemCompass();
+    }
+}
+
+void dComIfGs_onDungeonItemBossKey(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_onDungeonItemBossKey();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onDungeonItemBossKey();
+}
+
+void dComIfGs_offDungeonItemBossKey(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_offDungeonItemBossKey();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().offDungeonItemBossKey();
+}
+
+BOOL dComIfGs_isDungeonItemBossKey(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        return dComIfGs_isDungeonItemBossKey();
+    } else {
+        return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isDungeonItemBossKey();
+    }
+}
+
+void dComIfGs_onStageBossEnemy(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_onStageBossEnemy();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onStageBossEnemy();
+}
+
+void dComIfGs_offStageBossEnemy(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_offStageBossEnemy();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().offStageBossEnemy();
+}
+
 /* 800539A8-80053A2C       .text dComIfGs_isStageBossEnemy__Fi */
 BOOL dComIfGs_isStageBossEnemy(int i_stageNo) {
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
@@ -725,6 +844,16 @@ void dComIfGs_onStageLife(int i_stageNo) {
     g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onStageLife();
 }
 
+void dComIfGs_offStageLife(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_offStageLife();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().offStageLife();
+}
+
 /* 80053AAC-80053B30       .text dComIfGs_isStageLife__Fi */
 BOOL dComIfGs_isStageLife(int i_stageNo) {
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
@@ -733,6 +862,36 @@ BOOL dComIfGs_isStageLife(int i_stageNo) {
         return dComIfGs_isStageLife();
     } else {
         return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isStageLife();
+    }
+}
+
+void dComIfGs_onStageBossDemo(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_onStageBossDemo();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onStageBossDemo();
+}
+
+void dComIfGs_offStageBossDemo(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_offStageBossDemo();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().offStageBossDemo();
+}
+
+BOOL dComIfGs_isStageBossDemo(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        return dComIfGs_isStageBossDemo();
+    } else {
+        return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isStageBossDemo();
     }
 }
 
@@ -1076,12 +1235,12 @@ static void dummy() {
 /* 8005468C-800547BC       .text getSceneList__Fi */
 stage_scls_info_class* getSceneList(int i_no) {
     stage_scls_info_dummy_class* sclsInfo = dComIfGp_getStage().getSclsInfo();
-    JUT_ASSERT(VERSION_SELECT(2129, 2129, 2132, 2132), sclsInfo != NULL);
+    JUT_ASSERT(VERSION_SELECT(2114, 2129, 2132, 2132), sclsInfo != NULL);
 
-    JUT_ASSERT(VERSION_SELECT(2131, 2131, 2134, 2134), 0 <= i_no && i_no < sclsInfo->num);
+    JUT_ASSERT(VERSION_SELECT(2116, 2131, 2134, 2134), 0 <= i_no && i_no < sclsInfo->num);
 
     stage_scls_info_class* sclsData = sclsInfo->m_entries;
-    JUT_ASSERT(VERSION_SELECT(2133, 2133, 2136, 2136), sclsData != NULL);
+    JUT_ASSERT(VERSION_SELECT(2118, 2133, 2136, 2136), sclsData != NULL);
 
     return &sclsData[i_no];
 }
@@ -1220,7 +1379,7 @@ void dComIfGs_setGameStartStage() {
             strcpy(stage_name, "sea");
 
             stage_map_info_class* mapInfo = dComIfGp_getStage().getMapInfo();
-            JUT_ASSERT(VERSION_SELECT(2359, 2359, 2362, 2362), mapInfo != NULL);
+            JUT_ASSERT(VERSION_SELECT(2344, 2359, 2362, 2362), mapInfo != NULL);
 
             room_no = 4 + dStage_mapInfo_GetOceanX(mapInfo) + ((dStage_mapInfo_GetOceanZ(mapInfo) + 3) * 7);
             point = 0;
@@ -1236,7 +1395,9 @@ void dComIfGs_setGameStartStage() {
 
 /* 80054C70-80054CC0       .text dComIfGs_gameStart__Fv */
 void dComIfGs_gameStart() {
+#if VERSION > VERSION_DEMO
     dComIfGp_offEnableNextStage();
+#endif
 
     s8 roomNo = g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().getRoomNo();
     s16 point = g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().getPoint();

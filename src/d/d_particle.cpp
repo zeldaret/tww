@@ -481,7 +481,7 @@ void dPa_simpleEcallBack::executeAfter(JPABaseEmitter* param_1) {
         dPa_simpleData_c* simpleData = mSimpleData;
         param_1->playCreateParticle();
         while (mCount != 0) {
-            if (mDoLib_clipper::clip(j3dSys.getViewMtx(), simpleData->mPos, 200.0f) == 0) {
+            if (!mDoLib_clipper::clip(j3dSys.getViewMtx(), simpleData->mPos, 200.0f)) {
                 param_1->setGlobalTranslation(simpleData->mPos.x, simpleData->mPos.y, simpleData->mPos.z);
                 param_1->setGlobalPrmColor(simpleData->mPrmColor.r, simpleData->mPrmColor.g, simpleData->mPrmColor.b);
                 param_1->setGlobalAlpha(simpleData->mPrmColor.a);
@@ -682,7 +682,7 @@ bool dPa_control_c::readScene(u8 i_no, mDoDvdThd_toMainRam_c** param_2) {
     mSceneNo = i_no;
     static char jpcName[32];
     sprintf(jpcName, "/res/Particle/Pscene%03d.jpc", i_no);
-    *param_2 = mDoDvdThd_toMainRam_c::create(jpcName, 0, NULL);
+    *param_2 = mDoDvdThd_toMainRam_c::create(jpcName, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     return true;
 }
 
