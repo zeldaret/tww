@@ -28,8 +28,8 @@ public:
     inline cPhs_State create();
 
 public:
-    static s16 m_circle_cnt;
-    static s16 m_player_foot_now_id;
+    static short m_circle_cnt;
+    static short m_player_foot_now_id;
     static cBgS_GndChk m_ground_check;
     
 public:

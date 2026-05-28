@@ -76,15 +76,10 @@ BOOL dWaterMark_c::execute() {
 /* 8023DE2C-8023DF24       .text dWaterMark_Execute__FP12dWaterMark_c */
 static BOOL dWaterMark_Execute(dWaterMark_c* i_this) {
     /* Nonmatching */ 
-    short start;
-    bool bVar3;
-
-    short end;
-    float rate;  
-
+      
     if (i_this->sh5 != -1) {
-        start = i_this->sh3;
-        end = i_this->sh4;
+        short start = i_this->sh3;
+        short end = i_this->sh4;
 
         if (start < end) {
             if ((start <= i_this->m_player_foot_now_id) && (end > i_this->m_player_foot_now_id)) {
@@ -99,15 +94,10 @@ static BOOL dWaterMark_Execute(dWaterMark_c* i_this) {
 
     if (i_this->sh5 == -1) i_this->mModelInfo.mBrkAnm.play();
 
-    bVar3 = TRUE;
-    if (!(i_this->mModelInfo.mBrkAnm.getFrameCtrl()->getState() & 1)) {
-        rate = i_this->mModelInfo.mBrkAnm.getFrameCtrl()->getRate();
-        if (rate != 0.0f) {
-            bVar3 = FALSE;
-        }
-    }
+    bool stopped = (i_this->mModelInfo.mBrkAnm.getFrameCtrl()->getState() & 1) || 
+            (i_this->mModelInfo.mBrkAnm.getFrameCtrl()->getRate() == 0.0f);
     
-    if (bVar3) {
+    if (stopped) {
         fopKyM_Delete(i_this);
     } else if ((i_this->sh1 == 0x1) && (!i_this->setMatrix())) {
         fopKyM_Delete(i_this);
@@ -143,7 +133,62 @@ static cPhs_State dWaterMark_Create(kankyo_class* i_this) {
 
 /* 8023DFA0-8023E29C       .text create__12dWaterMark_cFv */
 cPhs_State dWaterMark_c::create() {
-    /* Nonmatching */
+    /* Nonmatching */    
+    new (this) dWaterMark_c();
+
+    this->sh2 = this->mParam >> 0x10;
+    this->mParam = this->mParam & 0xffff;
+
+    int iVar1 = this->mParam;
+    if (iVar1 == 0 || iVar1 == 1 || iVar1 == 2) {
+        if (iVar1 != 1 || ++m_circle_cnt <= 10){
+            JKRSolidHeap* heap = mDoExt_createSolidHeapFromGameToCurrent(0x12a0, 0x20);
+            this->heap = heap;
+            if (this->heap != NULL) {
+                J3DModelData* data = (J3DModelData*) dRes_control_c::getRes("Always", 0x2f, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+                if (data == NULL) {
+                    long device = JUTAssertion::getSDevice();
+                    JUTAssertion::showAssert(device, "d_water_mark.cpp", 0x130, "modelData != 0");
+                    OSPanic("d_water_mark.cpp", 0x130, "Halt");
+                }
+                J3DModel* model = mDoExt_J3DModel__create(data, 0x80000, 0x11020022);
+                this->mModelInfo.mpModel = model;
+
+                J3DAnmTevRegKey* reg_key = (J3DAnmTevRegKey*) dRes_control_c::getRes("Always", 0x4d, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+                int uVar7 = this->mModelInfo.mBrkAnm.init(data, reg_key, TRUE, 0, 1.0, 0, -1, false, FALSE);
+                J3DAnmTexPattern* tex_pattern = (J3DAnmTexPattern*) dRes_control_c::getRes("Always", 99, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+                int uVar9 = this->mModelInfo.mBtpAnm.init(data, tex_pattern, FALSE, 0, 1.0, 0, -1, false, FALSE);
+
+                mDoExt_restoreCurrentHeap();
+                mDoExt_adjustSolidHeap(this->heap);
+                model = this->mModelInfo.mpModel;
+                if (model != NULL && uVar7 & uVar9) {
+                    model->setBaseScale(this->mScale);
+                    iVar1 = this->setMatrix();
+                    if (iVar1) {
+                        if (this->mParam == 2) {
+                            this->sh5 = m_player_foot_now_id++;
+                            if (m_player_foot_now_id == 0x28) {
+                                m_player_foot_now_id = 0;
+                            }
+                            this->sh3 = this->sh5 + 0x14;
+                            if (this->sh3 > 0x27) {
+                                this->sh3 -= 0x28;
+                            }
+                            this->sh4 = this->sh3 + 0x14;
+                            if (this->sh4 > 0x27) {
+                                this->sh4 -= 0x28;
+                            }
+                            this->mParam = 0;
+                        } else {
+                            this->sh5 = -1;
+                        }
+                        return cPhs_COMPLEATE_e;
+                    }
+                }
+            }   
+        }
+    }
     return cPhs_ERROR_e;
 }
 
