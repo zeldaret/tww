@@ -8,16 +8,13 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_lib.h"
 
-const float MyConstant = 50.0;
-const float SomeSpeed = 0.0;
-
 BOOL dWaterMark_c::draw() {
     /* Nonmatching */
 }
 
 /* 8023DB48-8023DBF8       .text dWaterMark_Draw__FP12dWaterMark_c */
 static BOOL dWaterMark_Draw(dWaterMark_c* i_this) {
-    f32 scaled_x = i_this->mScale.x * MyConstant;
+    f32 scaled_x = i_this->mScale.x * 50.0f;
 
     if (mDoLib_clipper::mClipper.clip(j3dSys.mViewMtx, i_this->mPos, scaled_x)) {
         return TRUE;
@@ -47,7 +44,6 @@ int dWaterMark_c::setMatrix() {
         short sVar2 = cM_atan2s(pcVar4->mNormal.x, pcVar4->mNormal.z) - this->sh2;
         
         cXyz local_54(pcVar4->mNormal.x, 0.0f, pcVar4->mNormal.z);
-        
         float mag = std::sqrtf(PSVECSquareMag(&local_54));
 
         PSMTXTrans(mDoMtx_stack_c::now, this->mPos.x, this->mPos.y + 0.1f, this->mPos.z);
@@ -80,35 +76,34 @@ BOOL dWaterMark_c::execute() {
 /* 8023DE2C-8023DF24       .text dWaterMark_Execute__FP12dWaterMark_c */
 static BOOL dWaterMark_Execute(dWaterMark_c* i_this) {
     /* Nonmatching */ 
-    if (i_this->sh5 != -1) {
-        short v1 = i_this->sh3;
-        short v2 = i_this->sh4;
-        short id;
+    short start;
+    bool bVar3;
 
-        if (v1 < v2) {
-            id = i_this->m_player_foot_now_id;
-            if ((v1 <= id) && (id < v2)) {
+    short end;
+    float rate;  
+
+    if (i_this->sh5 != -1) {
+        start = i_this->sh3;
+        end = i_this->sh4;
+
+        if (start < end) {
+            if ((start <= i_this->m_player_foot_now_id) && (end > i_this->m_player_foot_now_id)) {
                 i_this->sh5 = -1;
             }
         } else {
-            id = i_this->m_player_foot_now_id;
-            if ((v1 <= id) || (id < v2)) {
+            if ((start <= i_this->m_player_foot_now_id) || (end > i_this->m_player_foot_now_id)) {
                 i_this->sh5 = -1;
             }
         }
     }
-    if (i_this->sh5 == -1) {
-        i_this->mModelInfo.mBrkAnm.play();
-    }
 
-    bool bVar3 = true;
-    const J3DFrameCtrl *frame_ctl = i_this->mModelInfo.mBrkAnm.getFrameCtrl();
-    const char state = frame_ctl->getState();
+    if (i_this->sh5 == -1) i_this->mModelInfo.mBrkAnm.play();
 
-    if (!(state & 1)) {
-        float rate = frame_ctl->getRate();
-        if (rate != SomeSpeed) {
-            bVar3 = false;
+    bVar3 = TRUE;
+    if (!(i_this->mModelInfo.mBrkAnm.getFrameCtrl()->getState() & 1)) {
+        rate = i_this->mModelInfo.mBrkAnm.getFrameCtrl()->getRate();
+        if (rate != 0.0f) {
+            bVar3 = FALSE;
         }
     }
     

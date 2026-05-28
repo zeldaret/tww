@@ -29,8 +29,10 @@ public:
 
 public:
     static s16 m_circle_cnt;
-    static cBgS_GndChk m_ground_check;
     static s16 m_player_foot_now_id;
+    static cBgS_GndChk m_ground_check;
+    
+public:
     /* 0x0F8 */ JKRSolidHeap* heap;
     /* 0x0FC */ dWaterMark_modelInfo_c mModelInfo;
     /* 0x12C */ short sh1;
