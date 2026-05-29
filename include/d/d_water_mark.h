@@ -33,7 +33,7 @@ public:
     static cBgS_GndChk m_ground_check;
     
 public:
-    /* 0x0F8 */ JKRSolidHeap* heap;
+    /* 0x0F8 */ JKRSolidHeap* mpHeap;
     /* 0x0FC */ dWaterMark_modelInfo_c mModelInfo;
     /* 0x12C */ short sh1;
     /* 0x12E */ short sh2;

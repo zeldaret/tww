@@ -116,8 +116,8 @@ BOOL dWaterMark_c::wm_delete() {
 
 /* 8023DF2C-8023DF80       .text dWaterMark_Delete__FP12dWaterMark_c */
 static BOOL dWaterMark_Delete(dWaterMark_c* i_this) {
-    if (i_this->heap != NULL) {
-        mDoExt_destroySolidHeap(i_this->heap);
+    if (i_this->mpHeap != NULL) {
+        mDoExt_destroySolidHeap(i_this->mpHeap);
     }
     if ((int)(i_this->mParam) == 0x1) {
         dWaterMark_c::m_circle_cnt -= 1;
@@ -134,17 +134,21 @@ static cPhs_State dWaterMark_Create(kankyo_class* i_this) {
 /* 8023DFA0-8023E29C       .text create__12dWaterMark_cFv */
 cPhs_State dWaterMark_c::create() {
     /* Nonmatching */    
+    int err;
     new (this) dWaterMark_c();
 
     this->sh2 = this->mParam >> 0x10;
     this->mParam = this->mParam & 0xffff;
 
-    int iVar1 = this->mParam;
-    if (iVar1 == 0 || iVar1 == 1 || iVar1 == 2) {
-        if (iVar1 != 1 || ++m_circle_cnt <= 10){
+    if ((int) this->mParam != 0x0 && (int) this->mParam != 0x1 && (int) this->mParam != 0x2) {
+        return cPhs_ERROR_e;
+    } else {
+        if ((int) this->mParam == 1 && ++m_circle_cnt > 10) {
+            return cPhs_ERROR_e;
+        } else {
             JKRSolidHeap* heap = mDoExt_createSolidHeapFromGameToCurrent(0x12a0, 0x20);
-            this->heap = heap;
-            if (this->heap != NULL) {
+            this->mpHeap = heap;
+            if (this->mpHeap == NULL) {
                 J3DModelData* data = (J3DModelData*) dRes_control_c::getRes("Always", 0x2f, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
                 if (data == NULL) {
                     long device = JUTAssertion::getSDevice();
@@ -155,28 +159,35 @@ cPhs_State dWaterMark_c::create() {
                 this->mModelInfo.mpModel = model;
 
                 J3DAnmTevRegKey* reg_key = (J3DAnmTevRegKey*) dRes_control_c::getRes("Always", 0x4d, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
-                int uVar7 = this->mModelInfo.mBrkAnm.init(data, reg_key, TRUE, 0, 1.0, 0, -1, false, FALSE);
+                int uVar7 = this->mModelInfo.mBrkAnm.init(data, reg_key, TRUE, 0, 1.0f, 0, -1, false, FALSE);
                 J3DAnmTexPattern* tex_pattern = (J3DAnmTexPattern*) dRes_control_c::getRes("Always", 99, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
-                int uVar9 = this->mModelInfo.mBtpAnm.init(data, tex_pattern, FALSE, 0, 1.0, 0, -1, false, FALSE);
+                int uVar9 = this->mModelInfo.mBtpAnm.init(data, tex_pattern, FALSE, 0, 1.0f, 0, -1, false, FALSE);
+                int bVar = (uVar7 & uVar9);
 
                 mDoExt_restoreCurrentHeap();
-                mDoExt_adjustSolidHeap(this->heap);
-                model = this->mModelInfo.mpModel;
-                if (model != NULL && uVar7 & uVar9) {
-                    model->setBaseScale(this->mScale);
-                    iVar1 = this->setMatrix();
-                    if (iVar1) {
-                        if (this->mParam == 2) {
-                            this->sh5 = m_player_foot_now_id++;
+                mDoExt_adjustSolidHeap(this->mpHeap);
+
+
+                if (this->mModelInfo.mpModel == NULL || (bVar == 0)) {
+                    return cPhs_ERROR_e;
+                } else {
+                    this->mModelInfo.mpModel->setBaseScale(this->mScale);
+                    int iVar1 = this->setMatrix();
+                    if (!iVar1) {
+                        return cPhs_ERROR_e;
+                    } else {
+                        if ((int) this->mParam == 0x2) {
+                            this->sh5 = m_player_foot_now_id;
+                            m_player_foot_now_id++;
                             if (m_player_foot_now_id == 0x28) {
                                 m_player_foot_now_id = 0;
                             }
                             this->sh3 = this->sh5 + 0x14;
-                            if (this->sh3 > 0x27) {
+                            if (this->sh3 >= 0x28) {
                                 this->sh3 -= 0x28;
                             }
                             this->sh4 = this->sh3 + 0x14;
-                            if (this->sh4 > 0x27) {
+                            if (this->sh4 >= 0x28) {
                                 this->sh4 -= 0x28;
                             }
                             this->mParam = 0;
@@ -186,10 +197,9 @@ cPhs_State dWaterMark_c::create() {
                         return cPhs_COMPLEATE_e;
                     }
                 }
-            }   
+            }
         }
     }
-    return cPhs_ERROR_e;
 }
 
 static kankyo_method_class l_dWaterMark_Method = {
