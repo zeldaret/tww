@@ -5,7 +5,16 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_light.h"
-
+class daObjLightFireDummy {
+public:
+    virtual void vfunc00();
+    virtual void vfunc04();
+    virtual void vfunc08();
+    virtual void vfunc0C();
+    virtual void vfunc10();
+    virtual void vfunc14();
+    virtual void vfunc18();// TODO: Identify real type at 0x44C. Virtual call at vtable offset 0x18.
+};
 /* 000000EC-00000110       .text solidHeapCB__Q210daObjLight5Act_cFP10fopAc_ac_c */
 void daObjLight::Act_c::solidHeapCB(fopAc_ac_c*) {
     create_heap();
@@ -18,12 +27,28 @@ BOOL daObjLight::Act_c::create_heap() {
 
 /* 00000344-000003C0       .text init_collision__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::init_collision() {
-    /* Nonmatching */
+    dCcD_Stts* stts = (dCcD_Stts*)((u8*)this + 0x2E0);
+    dCcD_Cyl* cyl = (dCcD_Cyl*)((u8*)this + 0x310);
+
+    stts->Init(0xff, 0xff, (fopAc_ac_c*)this);
+    cyl->Set(M_cyl_src);
+
+    *(dCcD_Stts**)((u8*)this + 0x360) = stts;
+
+    *(cXyz*)((u8*)this + 0x3D0) = cXyz::Zero;
+
+    *(u32*)((u8*)this + 0x3B0) |= 0x4;
 }
 
 /* 000003C0-00000468       .text set_collision__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::set_collision() {
-    /* Nonmatching */
+    
+    switch (home.roomNo) {
+    case 0:
+        
+        
+    break;
+    }
 }
 
 /* 000004A4-0000070C       .text _create__Q210daObjLight5Act_cFv */
@@ -33,27 +58,163 @@ cPhs_State daObjLight::Act_c::_create() {
 
 /* 000008C4-00000964       .text _delete__Q210daObjLight5Act_cFv */
 bool daObjLight::Act_c::_delete() {
-    /* Nonmatching */
+    M_S_lod_access = 0;
+
+    if (*(void**)((u8*)this + 0xF0) != NULL) {
+        dBgW* bgw = *(dBgW**)((u8*)this + 0x2A4);
+
+        if (bgw != NULL) {
+            s32 bgw_state = *(s32*)bgw;
+            BOOL used;
+
+            if (bgw_state < 0 || bgw_state >= 0x100) {
+                used = TRUE;
+            } else {
+                used = FALSE;
+            }
+
+            if (used) {
+                dComIfG_Bgsp()->Release(bgw);
+            }
+        }
+    }
+
+    delete_fire();
+
+    dComIfG_resDelete((request_of_phase_process_class*)((u8*)this + 0x290), M_arcname);
+
+    return true;
 }
 
 /* 00000964-00000A9C       .text set_fire__Q210daObjLight5Act_cFi */
-void daObjLight::Act_c::set_fire(int) {
-    /* Nonmatching */
+BOOL daObjLight::Act_c::set_fire(int i_event) {
+    struct L_attr_t {
+        f32 field_0x00;
+        f32 field_0x04;
+        f32 field_0x08;
+        f32 field_0x0C;
+        f32 field_0x10;
+    };
+
+    static const L_attr_t L_attr = {
+        0.0f,
+        0.0f,
+        0.0f,
+        1.0f,
+        1.0f,
+    };
+
+    const L_attr_t* attr = &L_attr;
+
+    if (*(JPABaseEmitter**)((u8*)&mFirePa + 0x04) == NULL) {
+        cXyz scale;
+
+        scale.x = attr->field_0x00;
+        scale.y = attr->field_0x04;
+        scale.z = attr->field_0x08;
+
+        dPa_control_c* particle =
+            *(dPa_control_c**)((u8*)&g_dComIfG_gameInfo + 0x5AC4);
+
+        particle->set(
+            0,
+            0x1EA,
+            &current.pos,
+            NULL,
+            &scale,
+            0xFF,
+            &mFirePa,
+            -1,
+            NULL,
+            0,
+            NULL
+        );
+
+        mFireAngle = 0;
+    }
+
+    exe_fire();
+
+    if (i_event == 1) {
+        JAIZelBasic::zel_basic->seStart(
+            0x1B9,
+            NULL,
+            0,
+            0,
+            attr->field_0x00,
+            attr->field_0x00,
+            attr->field_0x10,
+            attr->field_0x10,
+            0
+        );
+
+        cXyz shockPos;
+        shockPos.x = attr->field_0x00;
+        shockPos.y = attr->field_0x00;
+        shockPos.z = attr->field_0x00;
+
+        ((dVibration_c*)((u8*)&g_dComIfG_gameInfo + 0x59A0))->StartShock(
+            2,
+            -0x11,
+            shockPos
+        );
+
+        return TRUE;
+    }
+
+    if (*(JPABaseEmitter**)((u8*)&mFirePa + 0x04) != NULL) {
+        mFirePa.remove();
+    }
+
+    return FALSE;
 }
 
 /* 00000A9C-00000B04       .text draw_fire__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::draw_fire() {
-    /* Nonmatching */
+    if (*(JPABaseEmitter**)((u8*)&mFirePa + 0x04) != NULL) {
+        dDlst_alphaModel_c* alphaModel =
+            *(dDlst_alphaModel_c**)((u8*)&g_dComIfG_gameInfo + 0x5F60);
+
+        *(u8*)((u8*)alphaModel + 0x00) = 0xEB;
+        *(u8*)((u8*)alphaModel + 0x01) = 0x7D;
+        *(u8*)((u8*)alphaModel + 0x02) = 0;
+        *(u8*)((u8*)alphaModel + 0x03) = 0;
+
+        (*(dDlst_alphaModel_c**)((u8*)&g_dComIfG_gameInfo + 0x5F60))
+            ->set(1, mFireMtx, mFireAlpha);
+    }
 }
 
 /* 00000B04-00000C28       .text exe_fire__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::exe_fire() {
-    /* Nonmatching */
+    if (*(JPABaseEmitter**)((u8*)&mFirePa + 0x04) != NULL) {
+        cXyz pos = current.pos;
+
+        f32 sin = cM_ssin(mFireAngle);
+
+        pos.y += 50.0f;
+
+        mFireAlpha = (u8)((f32)140.0f * sin + 0.0f);
+        mFireScale = 1.0f + (0.1f * sin);
+
+        mFireRotX += 0x2D0;
+
+        mDoMtx_stack_c::transS(pos);
+        mDoMtx_stack_c::YrotM(shape_angle.y + home.angle.y);
+        mDoMtx_stack_c::XrotM(mFireRotX);
+        mDoMtx_stack_c::scaleM(mFireScale, mFireScale, mFireScale);
+
+        PSMTXCopy(mDoMtx_stack_c::now, mFireMtx);
+
+        mFireAngle += 0x1194;
+    }
 }
 
 /* 00000C28-00000C60       .text delete_fire__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::delete_fire() {
-    /* Nonmatching */
+    if (*(void**)((u8*)&mFirePa + 0x04) != NULL) {
+        mFirePa.remove();
+    }
 }
 
 /* 00000C60-00000C8C       .text now_event__Q210daObjLight5Act_cFs */
@@ -87,14 +248,18 @@ void daObjLight::Act_c::exe_event() {
         }
         break;
 
-    case 2:
-        if (dComIfGp_evmng_endCheck(mEvent)) {
-            // pendiente: g_dComIfG_gameInfo + 0x52c0 |= 0x8;
+    case 2: {
+        u8* gameInfo = (u8*)&g_dComIfG_gameInfo;
+
+        if (((dEvent_manager_c*)(gameInfo + 0x52cc))->endCheck(mEvent)) {
+            g_dComIfG_gameInfo.mBrightness |= 0x8;
+
             mEvent = -1;
             mEventFlag = 0;
             field_0x2DE = 20;
         }
         break;
+    }
     }
 }
 
@@ -115,7 +280,14 @@ void daObjLight::Act_c::control_light() {
 
 /* 00001330-00001398       .text control_treasure__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::control_treasure() {
-    /* Nonmatching */
+    if (field_0x2DE > 1) {
+        field_0x2DE--;
+    }
+
+    if (field_0x2DE == 1) {
+        dComIfGs_onSwitch(93, home.roomNo);
+        field_0x2DE = 0;
+    }
 }
 
 /* 00001398-00001400       .text _execute__Q210daObjLight5Act_cFv */
@@ -136,7 +308,23 @@ bool daObjLight::Act_c::_execute() {
 
 /* 00001400-00001528       .text _draw__Q210daObjLight5Act_cFv */
 bool daObjLight::Act_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(1, &current.pos, &tevStr);
+
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdateDL(mpModel);
+
+    if (dKy_daynight_check() == 1) {
+        if (!dComIfGs_isEventBit(0x102) && M_S_lod_access == 0) {
+            g_env_light.setLightTevColorType(mpModel, &tevStr);
+            mDoExt_modelUpdateDL(mpModel);
+        }
+    }
+
+    draw_fire();
+
+    M_S_lod_access = 1;
+
+    return true;
 }
 
 namespace daObjLight {

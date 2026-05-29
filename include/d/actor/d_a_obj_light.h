@@ -2,9 +2,20 @@
 #define D_A_OBJ_LIGHT_H
 
 #include "f_op/f_op_actor.h"
-
+#include "d/d_cc_d.h"
+#include "SSystem/SComponent/c_xyz.h"
+#include "d/d_drawlist.h"
+#include "d/d_particle.h"
+#include "d/d_com_inf_game.h"
+#include "JSystem/JGeometry.h"
+#include "dolphin/mtx/mtx.h"
+#include "d/d_kankyo.h"
+#include "m_Do/m_Do_ext.h"
+#include "JSystem/J3DGraphBase/J3DMaterial.h"
 namespace daObjLight {
     class Act_c : public fopAc_ac_c {
+    static const dCcD_SrcCyl M_cyl_src;
+    static const char M_arcname[];
     public:
         void solidHeapCB(fopAc_ac_c*);
         BOOL create_heap();
@@ -12,7 +23,7 @@ namespace daObjLight {
         void set_collision();
         cPhs_State _create();
         bool _delete();
-        void set_fire(int);
+        BOOL set_fire(int);
         void draw_fire();
         void exe_fire();
         void delete_fire();
@@ -38,13 +49,23 @@ namespace daObjLight {
         static u8 M_S_lod_access;
 
 public:
+    /* 0x10C */ dKy_tevstr_c tevStr;
     /* 0x290 */ u8 field_0x290[0x14];
     /* 0x2A4 */ dBgW* mpBgW;
     /* 0x2A8 */ u8 field_0x2A8[0x36];
     /* 0x2DE */ s16 field_0x2DE;
-    /* 0x2E0 */ u8 field_0x2E0[0x1BC];
+    /* 0x2E0 */ u8 field_0x2E0[0x16C];
+    /* 0x298 */ J3DModel* mpModel;
+    /* 0x44C */ dPa_followEcallBack mFirePa;
+    /* 0x460 */ s16 mFireAngle;
+    /* 0x462 */ s16 mFireRotX;
+    /* 0x464 */ u8 mFireAlpha;
+    /* 0x465 */ u8 field_0x465[0x3];
+    /* 0x468 */ f32 mFireScale;
+    /* 0x46C */ Mtx mFireMtx;
     /* 0x49C */ s16 mEvent;
     /* 0x49E */ s16 mEventFlag;
+    /* 0x4A0 */ cXyz mLightPos;
     };
 };
 
