@@ -7,7 +7,7 @@
 
 from binary_funcs import read_bytes_until_null, read_u32, read_u16, read_u8, skip_bytes
 import subprocess
-from os import walk, makedirs
+import os
 from pathlib import Path
 from typing import NamedTuple, DefaultDict
 import re
@@ -16,7 +16,13 @@ import argparse
 
 debug_print = lambda *args, **kwargs : None
 
-DTK_PATH = str(Path("./build/tools/dtk.exe"))
+def is_windows() -> bool:
+    return os.name == "nt"
+
+# Native executable extension
+EXE = ".exe" if is_windows() else ""
+
+DTK_PATH = str(Path(f"./build/tools/dtk{EXE}"))
 OUT_PATH = "assets"
 INDENT = " " * 4
 ADD_EXT_TO_ENUM = False
@@ -48,7 +54,7 @@ class JointParsedEnums(NamedTuple):
     enums:list[ArcEnum]
     
 def ensure_dir(path:Path)->None:
-    makedirs(path, exist_ok=True)
+    os.makedirs(path, exist_ok=True)
 
 def bin_make_str(b:bytes)->str:
     s = b.replace(b"\x82\x98", b"x")
@@ -323,7 +329,7 @@ def main() -> None:
         extract_enum_from_file(Path(args.input), Path(args.output))
         exit()
 
-    for dir, dirnames, filenames in walk("./orig/"):
+    for dir, dirnames, filenames in os.walk("./orig/"):
         dirpath = Path(dir)
         if "res" not in dirpath.parts: continue
 
