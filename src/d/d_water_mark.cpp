@@ -133,8 +133,7 @@ static cPhs_State dWaterMark_Create(kankyo_class* i_this) {
 
 /* 8023DFA0-8023E29C       .text create__12dWaterMark_cFv */
 cPhs_State dWaterMark_c::create() {
-    /* Nonmatching */    
-    int err;
+    /* Nonmatching */
     new (this) dWaterMark_c();
 
     this->sh2 = this->mParam >> 0x10;
@@ -148,7 +147,8 @@ cPhs_State dWaterMark_c::create() {
         } else {
             JKRSolidHeap* heap = mDoExt_createSolidHeapFromGameToCurrent(0x12a0, 0x20);
             this->mpHeap = heap;
-            if (this->mpHeap == NULL) {
+            int bVar;
+            if (this->mpHeap) {
                 J3DModelData* data = (J3DModelData*) dRes_control_c::getRes("Always", 0x2f, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
                 if (data == NULL) {
                     long device = JUTAssertion::getSDevice();
@@ -162,42 +162,44 @@ cPhs_State dWaterMark_c::create() {
                 int uVar7 = this->mModelInfo.mBrkAnm.init(data, reg_key, TRUE, 0, 1.0f, 0, -1, false, FALSE);
                 J3DAnmTexPattern* tex_pattern = (J3DAnmTexPattern*) dRes_control_c::getRes("Always", 99, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
                 int uVar9 = this->mModelInfo.mBtpAnm.init(data, tex_pattern, FALSE, 0, 1.0f, 0, -1, false, FALSE);
-                int bVar = (uVar7 & uVar9);
+                bVar = (uVar7 & uVar9);
 
                 mDoExt_restoreCurrentHeap();
                 mDoExt_adjustSolidHeap(this->mpHeap);
-
-
-                if (this->mModelInfo.mpModel == NULL || (bVar == 0)) {
+            } else {
+                return cPhs_ERROR_e;
+            }
+                
+            J3DModel* model2 = this->mModelInfo.mpModel;
+            if (!model2 || !bVar) {
+                return cPhs_ERROR_e;
+            } else {
+                this->mModelInfo.mpModel->setBaseScale(this->mScale);
+                if (!this->setMatrix()) {
                     return cPhs_ERROR_e;
                 } else {
-                    this->mModelInfo.mpModel->setBaseScale(this->mScale);
-                    int iVar1 = this->setMatrix();
-                    if (!iVar1) {
-                        return cPhs_ERROR_e;
-                    } else {
-                        if ((int) this->mParam == 0x2) {
-                            this->sh5 = m_player_foot_now_id;
-                            m_player_foot_now_id++;
-                            if (m_player_foot_now_id == 0x28) {
-                                m_player_foot_now_id = 0;
-                            }
-                            this->sh3 = this->sh5 + 0x14;
-                            if (this->sh3 >= 0x28) {
-                                this->sh3 -= 0x28;
-                            }
-                            this->sh4 = this->sh3 + 0x14;
-                            if (this->sh4 >= 0x28) {
-                                this->sh4 -= 0x28;
-                            }
-                            this->mParam = 0;
-                        } else {
-                            this->sh5 = -1;
+                    if ((int) this->mParam == 0x2) {
+                        this->sh5 = m_player_foot_now_id;
+                        m_player_foot_now_id++;
+                        if (m_player_foot_now_id == 0x28) {
+                            m_player_foot_now_id = 0;
                         }
-                        return cPhs_COMPLEATE_e;
+                        this->sh3 = this->sh5 + 0x14;
+                        if (this->sh3 >= 0x28) {
+                            this->sh3 -= 0x28;
+                        }
+                        this->sh4 = this->sh3 + 0x14;
+                        if (this->sh4 >= 0x28) {
+                            this->sh4 -= 0x28;
+                        }
+                        this->mParam = 0;
+                    } else {
+                        this->sh5 = -1;
                     }
+                    return cPhs_COMPLEATE_e;
                 }
             }
+            
         }
     }
 }
