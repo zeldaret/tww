@@ -89,6 +89,7 @@ void daSTBox_c::CreateInit() {
 /* 00000ADC-00000BFC       .text _create__9daSTBox_cFv */
 cPhs_State daSTBox_c::_create() {
     /* Nonmatching */
+    fopAcM_ct(this, daSTBox_c);
 }
 
 /* 00000BFC-00000C7C       .text set_mtx__9daSTBox_cFv */
