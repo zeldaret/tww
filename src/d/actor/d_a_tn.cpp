@@ -107,7 +107,7 @@ static void tate_anm_init(tn_class* i_this, int bckFileIdx, f32 morf, u8 loopMod
 
 /* 000002D4-00000398       .text yoroi_anm_init__FP8tn_classifUcf */
 static void yoroi_anm_init(tn_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed) {
-    if ((i_this->m03EC != 0) || (!(i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_BODY_ARMOR))) {
+    if (i_this->m03EC != 0 || !(i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_BODY_ARMOR)) {
         return;
     }
     i_this->mpArmorMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Tn", bckFileIdx), loopMode, morf, speed, 0.0f, -1.0f, NULL);
@@ -266,11 +266,11 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         fopAc_ac_c* actor = &i_this->actor;
         if (i_this != NULL) {
             if (
-                ((jntNo >= 0xB) && (jntNo < 0x12) && (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_SHIELD))
+                (jntNo >= 0xB && jntNo < 0x12 && (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_SHIELD))
 #if VERSION == VERSION_DEMO
-                && (i_this->mEnemyIce.mFreezeTimer == 0) && ((i_this->mDamageReaction.mAction != ACTION_S_DEMO) || (i_this->m0414_demo == 0))
+                && i_this->mEnemyIce.mFreezeTimer == 0 && (i_this->mDamageReaction.mAction != ACTION_S_DEMO || i_this->m0414_demo == 0)
 #else
-                && (i_this->mEnemyIce.mFreezeTimer == 0)
+                && i_this->mEnemyIce.mFreezeTimer == 0
 #endif
             )
             {
@@ -289,7 +289,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
             offset.y = 0.0f;
             offset.z = 0.0f;
             cXyz local_38;
-            if (((u32)r28 <= 6) || (r28 == 7)) {
+            if ((u32)r28 <= 6 || r28 == 7) {
                 offset.x = 0.0f;
             } else if (r28 == 0x12) {
                 offset.x = 0.0f;
@@ -327,11 +327,11 @@ static BOOL nodeCallBack_P(J3DNode* node, int calcTiming) {
         tn_class* i_this = (tn_class*)model->getUserArea();
         if (i_this != NULL) {
             if (
-                ((jntNo >= 0xB) && (jntNo < 0x12) && (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_SHIELD))
+                (jntNo >= 0xB && jntNo < 0x12 && (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_SHIELD))
 #if VERSION == VERSION_DEMO
-                && (i_this->mEnemyIce.mFreezeTimer == 0) && ((i_this->mDamageReaction.mAction != ACTION_S_DEMO) || (i_this->m0414_demo == 0))
+                && i_this->mEnemyIce.mFreezeTimer == 0 && (i_this->mDamageReaction.mAction != ACTION_S_DEMO || i_this->m0414_demo == 0)
 #else
-                && (i_this->mEnemyIce.mFreezeTimer == 0)
+                && i_this->mEnemyIce.mFreezeTimer == 0
 #endif
             )
             {
@@ -373,7 +373,7 @@ static BOOL nodeCallBack_mimi(J3DNode* node, int calcTiming) {
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         tn_class* i_this = (tn_class*)model->getUserArea();
-        if ((i_this != NULL) && (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_HELMET)) {
+        if (i_this != NULL && (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_HELMET)) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             cMtx_YrotM(*calc_mtx, -0x8000);
             model->setAnmMtx(jntNo, *calc_mtx);
@@ -412,7 +412,7 @@ static void part_draw(tn_class* i_this, s8 param_2) {
                     g_env_light.setLightTevColorType(model, &actor->tevStr);
                     i_this->mpArmorMorf->entryDL();
                 }
-            } else if ((i != 2) || (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_SHIELD)) {
+            } else if (i != 2 || (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_SHIELD)) {
                 model = i_this->mParts[i].mpPartModel;
                 if (param_2 != 0) {
                     dMat_control_c::iceUpdateDL(model, -1, NULL);
@@ -434,7 +434,7 @@ static BOOL daTn_Draw(tn_class* i_this) {
     cXyz local_24;
 
     J3DModel* model = i_this->mpBodyMorf->getModel();
-    if ((i_this->m1518 != 0) || (i_this->m02C1 != 0)) {
+    if (i_this->m1518 != 0 || i_this->m02C1 != 0) {
         return TRUE;
     }
     if (i_this->mEnemyIce.mFreezeTimer > 20) {
@@ -452,7 +452,7 @@ static BOOL daTn_Draw(tn_class* i_this) {
     g_env_light.setLightTevColorType(model, &actor->tevStr);
     i_this->mpBrkAnm->entry(model->getModelData());
     J3DShape* shape = model->getModelData()->getMaterialNodePointer(0)->getShape();
-    if ((DEMO_SELECT(REG17_S(1), REG0_S(1)) != 0) || (i_this->m1400 != 0)) {
+    if ((DEMO_SELECT(REG17_S(1), REG0_S(1)) != 0) || i_this->m1400 != 0) {
         shape->hide();
     } else {
         shape->show();
@@ -477,7 +477,7 @@ static BOOL daTn_Draw(tn_class* i_this) {
     if (i_this->mShadowId != 0) {
         if (i_this->m0C34 != 0) {
             fopAc_ac_c* boko_actor = fopAcM_SearchByID(i_this->mBokoPcId);
-            if ((boko_actor != NULL) && (boko_actor->model != NULL)) {
+            if (boko_actor != NULL && boko_actor->model != NULL) {
                 dComIfGd_addRealShadow(i_this->mShadowId, boko_actor->model);
             }
         }
@@ -883,7 +883,7 @@ static void path_check(tn_class* i_this) {
     cXyz local_c8;
     cXyz local_d4;
 
-    if ((i_this->ppd != NULL) && (i_this->m0C34 != 0 || (i_this->m13FF != 0))) {
+    if (i_this->ppd != NULL && (i_this->m0C34 != 0 || i_this->m13FF != 0)) {
         dBgS_LinChk chk;
         local_c8 = actor->current.pos;
         local_c8.y += 100.0f;
@@ -973,7 +973,7 @@ static void jyunkai(tn_class* i_this) {
         // Fall-through
         case -1:
             i_this->mDamageReaction.mMode = 1;
-            if ((i_this->m0C34 != 0) || (i_this->m13FF != 0)) {
+            if (i_this->m0C34 != 0 || i_this->m13FF != 0) {
                 if (i_this->m1424 != 0) {
                     i_this->m1425 += i_this->m1426;
                     if (i_this->m1425 >= (s8)i_this->ppd->m_num) {
@@ -1003,7 +1003,7 @@ static void jyunkai(tn_class* i_this) {
             i_this->mCountDownTimers[2] = 30;
         // Fall-through
         case 1:
-            if ((i_this->m0C34 != 0) || (i_this->m13FF != 0)) {
+            if (i_this->m0C34 != 0 || i_this->m13FF != 0) {
                 maxSpeed = 0x400;
                 f31 = l_tnHIO.m04C;
             } else {
@@ -1013,11 +1013,11 @@ static void jyunkai(tn_class* i_this) {
             local_3c.x = i_this->mPathXyz.x - actor->current.pos.x;
             local_3c.z = i_this->mPathXyz.z - actor->current.pos.z;
             i_this->mDamageReaction.m4D0 = cM_atan2s(local_3c.x, local_3c.z);
-            if ((i_this->m1424 != 0) && (i_this->m0C34 != 0 || (i_this->m13FF != 0))) {
+            if (i_this->m1424 != 0 && (i_this->m0C34 != 0 || i_this->m13FF != 0)) {
                 if (std::sqrtf(SQUARE(local_3c.x) + SQUARE(local_3c.z)) < (f31 * 0.25f) * 15.0f) {
                     dPnt* point = i_this->ppd->m_points;
                     point = &point[i_this->m1425];
-                    if (((point->mArg3 == 3) || (point->mArg3 == 7)) || (point->mArg3 == 8)) {
+                    if (point->mArg3 == 3 || point->mArg3 == 7 || point->mArg3 == 8) {
                         wait_set(i_this);
                         if (point->mArg3 >= 7) {
                             i_this->mCountDownTimers[1] = cM_rndF(80.0f) + 70.0f;
@@ -1029,8 +1029,8 @@ static void jyunkai(tn_class* i_this) {
                 }
             } else {
                 if ((std::sqrtf(SQUARE(local_3c.x) + SQUARE(local_3c.z)) < (f31 * 0.25f) * 2.0f) ||
-                    ((i_this->mCountDownTimers[2] == 0) &&
-                     ((i_this->mDamageReaction.mAcch.ChkWallHit()) || (ground_4_check(i_this, 1, actor->current.angle.y, 200.0f)))))
+                    (i_this->mCountDownTimers[2] == 0 &&
+                    (i_this->mDamageReaction.mAcch.ChkWallHit() || ground_4_check(i_this, 1, actor->current.angle.y, 200.0f))))
                 {
                     wait_set(i_this);
                     i_this->mDamageReaction.mMode = 2;
@@ -1042,10 +1042,10 @@ static void jyunkai(tn_class* i_this) {
         case 2:
             actor->speedF = 0.0f;
             if (i_this->mCountDownTimers[1] == 0) {
-                if ((i_this->m1424 != 0) && (i_this->m0C34 != 0 || (i_this->m13FF != 0))) {
+                if (i_this->m1424 != 0 && (i_this->m0C34 != 0 || i_this->m13FF != 0)) {
                     dPnt* point = i_this->ppd->m_points;
                     point = &point[i_this->m1425];
-                    if ((point->mArg3 == 7) || (point->mArg3 == 8)) {
+                    if (point->mArg3 == 7 || point->mArg3 == 8) {
                         i_this->mDamageReaction.mMode = 4;
                         i_this->mCountDownTimers[1] = cM_rndF(100.0f) + 100.0f;
                         if (point->mArg3 == 7) {
@@ -1057,7 +1057,7 @@ static void jyunkai(tn_class* i_this) {
                     }
                 }
                 i_this->mDamageReaction.mMode = 0;
-                if (((i_this->m0C34 == 0) && (i_this->m13FF == 0)) && (i_this->m03EA == 0)) {
+                if (i_this->m0C34 == 0 && i_this->m13FF == 0 && i_this->m03EA == 0) {
                     i_this->m13FF = 1;
                 }
             }
@@ -1075,12 +1075,12 @@ static void jyunkai(tn_class* i_this) {
     s32 r3 = fopAcM_otoCheck(actor, 1000.0f);
     if (i_this->mMantPcId != 0xFFFF) {
         mant_class* mant_actor = (mant_class*)fopAcM_SearchByID(i_this->mMantPcId);
-        if ((mant_actor != NULL) && (mant_actor->m1C0E != 0)) {
+        if (mant_actor != NULL && mant_actor->m1C0E != 0) {
             r3 |= 2;
         }
     }
     r3 += search_sp;
-    if ((i_this->m0C34 != 0) || (i_this->m13FF != 0)) {
+    if (i_this->m0C34 != 0 || i_this->m13FF != 0) {
         if (r3 != 0 || (i_this->mPlayerDistance < l_tnHIO.m028 &&
                         daTn_player_view_check(i_this, &i_this->mDamageReaction.m714->current.pos, i_this->mTargetAngle, get_view_H(i_this))))
         {
@@ -1089,7 +1089,7 @@ static void jyunkai(tn_class* i_this) {
             fopAcM_monsSeStart(actor, JA_SE_CV_TN_FOUND, 0);
         }
     }
-    if ((i_this->m0C34 == 0) && (daTn_wepon_view_check(i_this))) {
+    if (i_this->m0C34 == 0 && daTn_wepon_view_check(i_this)) {
         i_this->mDamageReaction.mAction = ACTION_WEPON_SEARCH;
         i_this->mDamageReaction.mMode = -1;
     }
@@ -1117,7 +1117,7 @@ static void fight_run(tn_class* i_this) {
     f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
     i_this->mDamageReaction.m710 = 1;
     i_this->mDamageReaction.m4D0 = i_this->mTargetAngle;
-    if ((i_this->m03EC == 0) && (i_this->mDamageReaction.mMode != 0)) {
+    if (i_this->m03EC == 0 && i_this->mDamageReaction.mMode != 0) {
         maxSpeed = 0x400;
         if (i_this->mDamageReaction.mMode == 1) {
             maxSpeed = 0x800;
@@ -1249,12 +1249,12 @@ static void fight_run(tn_class* i_this) {
             i_this->mDamageReaction.mMode = 0;
             return;
         }
-        if ((i_this->m0C34 != 0) && (player->checkCutCharge())) {
+        if (i_this->m0C34 != 0 && player->checkCutCharge()) {
             i_this->mDamageReaction.mAction = ACTION_FIGHT;
             i_this->mDamageReaction.mMode = 10;
             return;
         }
-        if (((i_this->mPlayerDistance < l_tnHIO.m030 + 62.5f) && (i_this->mPlayerDistance > l_tnHIO.m030 - 62.5f)) && (i_this->mCountDownTimers[3] == 0)) {
+        if (((i_this->mPlayerDistance < l_tnHIO.m030 + 62.5f) && (i_this->mPlayerDistance > l_tnHIO.m030 - 62.5f)) && i_this->mCountDownTimers[3] == 0) {
             i_this->mCountDownTimers[3] = l_tnHIO.m06C;
             if (cM_rndF(100.0f) < l_tnHIO.m070) {
                 i_this->mDamageReaction.mAction = ACTION_FIGHT;
@@ -1265,7 +1265,7 @@ static void fight_run(tn_class* i_this) {
         if (i_this->m03F2 == 0) {
             bool r27 = false;
             fopAc_ac_c* r28 = (fopAc_ac_c*)fpcM_Search(shot_s_sub, i_this);
-            if ((r28 != NULL) && (r28->speedF > 10.0f)) {
+            if (r28 != NULL && r28->speedF > 10.0f) {
                 local_54 = r28->current.pos - actor->eyePos;
                 if (local_54.abs() < r28->speedF * 10.0f) {
                     r27 = true;
@@ -1275,7 +1275,7 @@ static void fight_run(tn_class* i_this) {
             if (daTn_player_way_check(i_this) &&
                 (r27 || (player->getCutType() != daPy_py_c::CUT_TYPE_NONE && attention.Lockon() && actor == attention.LockonTarget(0))))
             {
-                if (!(i_this->m03D8 & 3) && ((i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_SHIELD) && (cM_rndF(1.0f) <= 0.8f))) {
+                if (!(i_this->m03D8 & 3) && ((i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_SHIELD) && cM_rndF(1.0f) <= 0.8f)) {
                     i_this->mDamageReaction.mAction = ACTION_DEFENCE;
                     i_this->mDamageReaction.mMode = 0;
                     if (player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SWORD) {
@@ -1309,7 +1309,7 @@ static void fight_run(tn_class* i_this) {
         wait_set(i_this);
         i_this->mDamageReaction.mMode = -10;
     } else {
-        if ((i_this->m0C34 == 0) && (daTn_wepon_view_check(i_this))) {
+        if (i_this->m0C34 == 0 && daTn_wepon_view_check(i_this)) {
             i_this->mDamageReaction.mAction = ACTION_WEPON_SEARCH;
             i_this->mDamageReaction.mMode = -1;
         }
@@ -1360,7 +1360,7 @@ static fopAc_ac_c* wepon_hit_check(tn_class* i_this) {
         r5 = 0;
         r6 = 1000;
     }
-    if ((frame < r5) || (frame > r6)) {
+    if (frame < r5 || frame > r6) {
         return NULL;
     }
     if (i_this->m0C66 < 0) {
@@ -1401,7 +1401,7 @@ static fopAc_ac_c* wepon_hit_check(tn_class* i_this) {
         if (i_this->m0C48 <= 1) {
             i_this->mWeponSph.SetAtSpl(dCcG_At_Spl_UNK6);
             i_this->mWepon2Sph.SetAtSpl(dCcG_At_Spl_UNK6);
-        } else if ((i_this->m0C48 == 4) || (i_this->m0C48 == 5)) {
+        } else if (i_this->m0C48 == 4 || i_this->m0C48 == 5) {
             i_this->mWeponSph.SetAtSpl(dCcG_At_Spl_UNK7);
             i_this->mWepon2Sph.SetAtSpl(dCcG_At_Spl_UNK7);
         } else {
@@ -1410,7 +1410,7 @@ static fopAc_ac_c* wepon_hit_check(tn_class* i_this) {
         }
         dComIfG_Ccsp()->Set(&i_this->mWeponSph);
         dComIfG_Ccsp()->Set(&i_this->mWepon2Sph);
-        if ((i_this->mWeponSph.ChkAtHit()) || (i_this->mWepon2Sph.ChkAtHit())) {
+        if (i_this->mWeponSph.ChkAtHit() || i_this->mWepon2Sph.ChkAtHit()) {
             cCcD_Obj* hitObj;
             if (i_this->mWeponSph.ChkAtHit()) {
                 hitObj = i_this->mWeponSph.GetAtHitObj();
@@ -1488,7 +1488,7 @@ static void fight(tn_class* i_this) {
                     fopAcM_monsSeStart(actor, JA_SE_CV_TN_KAMAE_S, 0);
                 }
             } else {
-                if ((cM_rndF(100.0f) < l_tnHIO.m07C) || (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_BODY_ARMOR)) {
+                if (cM_rndF(100.0f) < l_tnHIO.m07C || (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_BODY_ARMOR)) {
                     anm_init(i_this, TN_BCK_BAT_SYOUTEI_S1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_BAT_SYOUTEI_S1);
                     i_this->m0C48 = 2;
                     fopAcM_monsSeStart(actor, JA_SE_CV_TN_PUNCH_S, 0);
@@ -1505,13 +1505,13 @@ static void fight(tn_class* i_this) {
             i_this->m0C67 = 0;
         case 1:
             {
-                if (((i_this->m0C48 == 3) && (i_this->mpBodyMorf->getFrame() >= 12.0f)) && (i_this->mpBodyMorf->getFrame() <= 30.0f)) {
+                if ((i_this->m0C48 == 3 && (i_this->mpBodyMorf->getFrame() >= 12.0f)) && (i_this->mpBodyMorf->getFrame() <= 30.0f)) {
                     if (i_this->m0C67 != 0) {
                         actor->speedF = REG0_F(10) + 80.0f;
                     } else {
                         actor->speedF = REG0_F(9) + 50.0f;
                     }
-                } else if (((i_this->m0C48 == 4) && (i_this->mpBodyMorf->getFrame() >= 4.0f)) && (i_this->mpBodyMorf->getFrame() <= 21.0f)) {
+                } else if ((i_this->m0C48 == 4 && (i_this->mpBodyMorf->getFrame() >= 4.0f)) && (i_this->mpBodyMorf->getFrame() <= 21.0f)) {
                     actor->speedF = REG0_F(16) + 50.0f;
                     frame = (int)i_this->mpBodyMorf->getFrame();
                     if (frame == 20) {
@@ -1548,8 +1548,8 @@ static void fight(tn_class* i_this) {
                             }
                         }
                     }
-                    if ((i_this->m0C48 == 0) || (i_this->m0C48 == 4)) {
-                        if ((i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_BODY_ARMOR) || (i_this->m0C48 == 4)) {
+                    if (i_this->m0C48 == 0 || i_this->m0C48 == 4) {
+                        if ((i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_BODY_ARMOR) || i_this->m0C48 == 4) {
                             frame = 21;
                         } else {
                             frame = 19;
@@ -1747,7 +1747,7 @@ static void wepon_search(tn_class* i_this) {
     cXyz local_30;
 
     fopAc_ac_c* boko_actor = fopAcM_SearchByID(i_this->mBokoPcId);
-    if (i_this->mDamageReaction.mMode < 2 && (boko_actor == NULL || (boko_actor != NULL && (fopAcM_checkCarryNow(boko_actor))))) {
+    if (i_this->mDamageReaction.mMode < 2 && (boko_actor == NULL || (boko_actor != NULL && fopAcM_checkCarryNow(boko_actor)))) {
         i_this->mDamageReaction.mAction = ACTION_JYUNKAI;
         path_check(i_this);
         wait_set(i_this);
@@ -1777,7 +1777,7 @@ static void wepon_search(tn_class* i_this) {
                 actor->speedF = 0.0f;
                 if (i_this->m03EE == 0) {
                     cLib_addCalcAngleS2(&actor->current.angle.y, i_this->mDamageReaction.m4D0, 2, 0x3000);
-                    if ((i_this->mpBodyMorf->isStop()) || (i_this->mCountDownTimers[1] == 0)) {
+                    if (i_this->mpBodyMorf->isStop() || i_this->mCountDownTimers[1] == 0) {
                         i_this->mDamageReaction.mMode = 1;
                         i_this->m03EA = l_tnHIO.m082;
                         fight_run_set(i_this);
@@ -1795,7 +1795,7 @@ static void wepon_search(tn_class* i_this) {
                     i_this->mDamageReaction.mAction = ACTION_FIGHT_RUN;
                     i_this->mCountDownTimers[1] = 0;
                     i_this->m13FF = 1;
-                } else if ((i_this->mDamageReaction.mAcch.ChkGroundHit()) && (i_this->mDamageReaction.mAcch.ChkWallHit())) {
+                } else if (i_this->mDamageReaction.mAcch.ChkGroundHit() && i_this->mDamageReaction.mAcch.ChkWallHit()) {
                     i_this->mDamageReaction.mAction = ACTION_JYUNKAI;
                     path_check(i_this);
                     wait_set(i_this);
@@ -1806,7 +1806,7 @@ static void wepon_search(tn_class* i_this) {
             case 2:
                 actor->speedF = 0.0f;
                 if (i_this->mCountDownTimers[1] == (s16)(REG0_S(7) + 0x12)) {
-                    if ((boko_actor != NULL) && (!fopAcM_checkCarryNow(boko_actor))) {
+                    if (boko_actor != NULL && !fopAcM_checkCarryNow(boko_actor)) {
                         i_this->m0C34 = 2;
                         fopAcM_setCarryNow(boko_actor, 0);
                     } else {
@@ -1932,7 +1932,7 @@ static void defence(tn_class* i_this) {
         case 1:
             actor->speedF = 0.0f;
             i_this->m1444 = 1;
-            if ((i_this->mCountDownTimers[1] == 0) && (player->getCutType() == daPy_py_c::CUT_TYPE_NONE)) {
+            if (i_this->mCountDownTimers[1] == 0 && player->getCutType() == daPy_py_c::CUT_TYPE_NONE) {
                 i_this->mDamageReaction.mAction = ACTION_FIGHT_RUN;
                 i_this->mCountDownTimers[1] = 0;
                 i_this->mDamageReaction.mMode = 0;
@@ -1987,7 +1987,7 @@ static void hukki(tn_class* i_this) {
                 }
             }
             if (i_this->mpBodyMorf->isStop()) {
-                if (!(player->checkGrabWear()) && (i_this->mPlayerDistance < l_tnHIO.m02C)) {
+                if (!player->checkGrabWear() && i_this->mPlayerDistance < l_tnHIO.m02C) {
                     i_this->mDamageReaction.mMode = 0xE;
                     i_this->mCountDownTimers[1] = 10;
                 } else {
@@ -2127,7 +2127,7 @@ static void d_mahi(tn_class* i_this) {
             i_this->mCountDownTimers[0] = 60;
         // Fall-through
         case 1:
-            if ((i_this->mCountDownTimers[0] <= 40) && (i_this->mCountDownTimers[0] >= 10)) {
+            if (i_this->mCountDownTimers[0] <= 40 && i_this->mCountDownTimers[0] >= 10) {
                 if (i_this->mCountDownTimers[0] == 40) {
                     enemy_piyo_set(actor);
                 }
@@ -2192,7 +2192,7 @@ static void stand(tn_class* i_this) {
     s32 r30 = fopAcM_otoCheck(actor, 1000.0f);
     if (i_this->mMantPcId != 0xFFFF) {
         mant_class* mant_actor = (mant_class*)fopAcM_SearchByID(i_this->mMantPcId);
-        if ((mant_actor != NULL) && (mant_actor->m1C0E != 0)) {
+        if (mant_actor != NULL && mant_actor->m1C0E != 0) {
             r30 |= 2;
         }
     }
@@ -2261,11 +2261,11 @@ static void stand(tn_class* i_this) {
             cLib_addCalc2(&actor->speedF, l_tnHIO.m054, 1.0f, 5.0f);
             break;
     }
-    if ((i_this->mDamageReaction.mMode < 10) && (r30 != 0)) {
+    if (i_this->mDamageReaction.mMode < 10 && r30 != 0) {
         i_this->mDamageReaction.mMode = 10;
         i_this->mCountDownTimers[1] = cM_rndF(10.0f) + 45.0f;
     }
-    if ((i_this->mCountDownTimers[2] == 0) && (i_this->mDamageReaction.mMode != 0x14)) {
+    if (i_this->mCountDownTimers[2] == 0 && i_this->mDamageReaction.mMode != 0x14) {
         f32 fVar8;
         if (i_this->mRangeOrFrozenAnim != 0xFF) {
             fVar8 = i_this->mRangeOrFrozenAnim * 10.0f;
@@ -2291,7 +2291,7 @@ static void stand(tn_class* i_this) {
             i_this->mDamageReaction.mMode = 0;
         }
     }
-    if ((i_this->m0C34 == 0) && (daTn_wepon_view_check(i_this))) {
+    if (i_this->m0C34 == 0 && daTn_wepon_view_check(i_this)) {
         i_this->mDamageReaction.mAction = ACTION_WEPON_SEARCH;
         i_this->mDamageReaction.mMode = -1;
     }
@@ -2368,7 +2368,7 @@ static void s_demo(tn_class* i_this) {
             if (r29 == 0xc1) {
                 fopAcM_monsSeStart(actor, JA_SE_CV_TN_KAMAE_L, 0);
             }
-            if ((r29 == 0xe7) || (r29 == 0x106)) {
+            if (r29 == 0xe7 || r29 == 0x106) {
                 fopAcM_monsSeStart(actor, JA_SE_CV_TN_ATTACK_L, 0);
             }
             if (i_this->mpBodyMorf->isStop()) {
@@ -2383,19 +2383,19 @@ static void s_demo(tn_class* i_this) {
                 actor->speed.y = 0.0f;
 #if VERSION == VERSION_DEMO
                 i_this->m0414_demo = REG0_S(8) + 0x4000;
-                if (!(dComIfGp_evmng_existence("btl_of_swroom")) && (s_check == 0)) {
+                if (!dComIfGp_evmng_existence("btl_of_swroom") && s_check == 0) {
                     return;
                 }
 
 #else
                 if (!dComIfGp_evmng_existence("btl_of_swroom")) {
-                    if (!(dComIfGp_evmng_existence("btl_of_swroom2")) && (s_check == 0)) {
+                    if (!dComIfGp_evmng_existence("btl_of_swroom2") && s_check == 0) {
                         return;
                     }
                 }
 #endif
                 int staffIdx = dComIfGp_evmng_getMyStaffId("Tn", NULL, 0);
-                if ((staffIdx != -1) || (s_check != 0)) {
+                if (staffIdx != -1 || s_check != 0) {
                     if (s_check == 0) {
                         if (strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx), "Appear")) {
                             return;
@@ -2440,10 +2440,10 @@ static void s_demo(tn_class* i_this) {
             }
         case 0xb:
 #if VERSION > VERSION_DEMO
-            if ((dComIfGp_evmng_existence("btl_of_swroom")) || (dComIfGp_evmng_existence("btl_of_swroom2"))) {
+            if (dComIfGp_evmng_existence("btl_of_swroom") || dComIfGp_evmng_existence("btl_of_swroom2")) {
                 int staffIdx = dComIfGp_evmng_getMyStaffId("Tn", NULL, 0);
                 if (staffIdx != -1) {
-                    if (!(strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx), "Appear2"))) {
+                    if (!strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx), "Appear2")) {
                         actor->current.pos.x = actor->home.pos.x;
                         daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
                         if (player != NULL) {
@@ -2606,7 +2606,7 @@ static void Tn_move(tn_class* i_this) {
     cLib_addCalcAngleS2(&i_this->m1404, 0, 2, 0x800);
     if (i_this->mDamageReaction.mMode <= -100) {
         i_this->m03F0 = 5;
-        if ((std::fabsf(i_this->mDamageReaction.m478) > 40.0f) && (!(i_this->mDamageReaction.mAcch.ChkGroundHit()))) {
+        if (std::fabsf(i_this->mDamageReaction.m478) > 40.0f && !i_this->mDamageReaction.mAcch.ChkGroundHit()) {
             i_this->mWeponSph.SetC(i_this->mDamageReaction.m100[12]);
             i_this->mWeponSph.SetR(60.0f);
             i_this->mWeponSph.OffAtVsPlayerBit();
@@ -2614,7 +2614,7 @@ static void Tn_move(tn_class* i_this) {
             i_this->mWeponSph.SetAtSpl(dCcG_At_Spl_UNK1);
             dComIfG_Ccsp()->Set(&i_this->mWeponSph);
             dComIfG_Ccsp()->SetMass(&i_this->mWeponSph, 3);
-            if ((i_this->mWeponSph.ChkAtHit()) && (actor->speed.y < -50.0f)) {
+            if (i_this->mWeponSph.ChkAtHit() && actor->speed.y < -50.0f) {
                 actor->speed.y = 0.0f;
                 i_this->mDamageReaction.m474 = 8000.0f;
             }
@@ -2623,7 +2623,7 @@ static void Tn_move(tn_class* i_this) {
     } else {
         i_this->mWeponSph.OnAtVsPlayerBit();
         i_this->mCoCyl.OnCoSetBit();
-        if ((i_this->mDamageReaction.m48A != 0) && (i_this->mDamageReaction.m488 == 0)) {
+        if (i_this->mDamageReaction.m48A != 0 && i_this->mDamageReaction.m488 == 0) {
             if (i_this->mDamageReaction.m48A == 1) {
                 i_this->mDamageReaction.mAction = ACTION_FIGHT_RUN;
                 i_this->mDamageReaction.mMode = 0;
@@ -2709,7 +2709,7 @@ static void Tn_move(tn_class* i_this) {
             }
 #endif
         }
-        if ((i_this->mBehaviorType == BEHAVIOR_GUARDS_AREA) && (i_this->mDamageReaction.mAction == ACTION_FIGHT_RUN)) {
+        if (i_this->mBehaviorType == BEHAVIOR_GUARDS_AREA && i_this->mDamageReaction.mAction == ACTION_FIGHT_RUN) {
             local_40 = actor->home.pos - actor->current.pos;
             if (i_this->mRangeOrFrozenAnim != 0xFF) {
                 fVar9 = (i_this->mRangeOrFrozenAnim * 10.0f) * 1.5f;
@@ -2728,7 +2728,7 @@ static void Tn_move(tn_class* i_this) {
         local_40.x = 0.0f;
         local_40.y = 0.0f;
         local_40.z = actor->speedF;
-        if (((i_this->mDamageReaction.mAction != ACTION_HUKKI) && (i_this->mDamageReaction.mAction != ACTION_FAIL)) && (i_this->mDamageReaction.m48A == 0)) {
+        if (i_this->mDamageReaction.mAction != ACTION_HUKKI && i_this->mDamageReaction.mAction != ACTION_FAIL && i_this->mDamageReaction.m48A == 0) {
             i_this->mDamageReaction.m482 = actor->current.angle.y;
             cMtx_YrotS(*calc_mtx, actor->current.angle.y + i_this->m0418);
         } else {
@@ -2814,12 +2814,6 @@ static u8 damage_check(tn_class* i_this) {
     mant_class* mant_actor;
     csXyz local_a0;
     csXyz local_a8;
-    cXyz local_50;
-    cXyz local_5c;
-    cXyz local_68;
-    cXyz local_74;
-    cXyz local_80;
-    cXyz local_8c;
     CcAtInfo atInfo;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -2831,14 +2825,12 @@ static u8 damage_check(tn_class* i_this) {
     if (i_this->m1444 != 0) {
         i_this->m1444--;
         MTXCopy(i_this->mpBodyMorf->getModel()->getAnmMtx(0xF), *calc_mtx);
-        local_50.x = 0.0f;
-        local_50.y = 0.0f;
-        local_50.z = 0.0f;
+        cXyz local_50(0.0f, 0.0f, 0.0f);
         MtxPosition(&local_50, &i_this->m13E4);
         i_this->mDefenceSph.SetR(70.0f);
         i_this->mDefenceSph.SetC(i_this->m13E4);
     } else {
-        local_5c = actor->current.pos;
+        cXyz local_5c = actor->current.pos;
         local_5c.y = -20000.0f;
         i_this->mDefenceSph.SetC(local_5c);
     }
@@ -2846,14 +2838,12 @@ static u8 damage_check(tn_class* i_this) {
     if (i_this->mDefenceSph.ChkTgHit()) {
         def_se_set(actor, i_this->mDefenceSph.GetTgHitObj(), 0x40);
         cMtx_YrotS(*calc_mtx, actor->shape_angle.y);
-        local_68.x = 0.0f;
-        local_68.y = 0.0f;
-        local_68.z = -10.0f;
+        cXyz local_68(0.0f, 0.0f, -10.0f);
         MtxPosition(&local_68, &i_this->mDamageReaction.m42C);
         i_this->mDamageReaction.m4D4 = -10.0f;
         return 0;
     }
-    if ((i_this->m03F0 == 0) && (i_this->mHeadSph.ChkTgHit() || (i_this->mTgCyl.ChkTgHit()))) {
+    if (i_this->m03F0 == 0 && (i_this->mHeadSph.ChkTgHit() || i_this->mTgCyl.ChkTgHit())) {
         i_this->m03F0 = REG0_S(7) + 5;
         if (i_this->mHeadSph.ChkTgHit()) {
             r26 = 1;
@@ -2868,8 +2858,8 @@ static u8 damage_check(tn_class* i_this) {
         if (hitObj->ChkAtType(AT_TYPE_ICE_ARROW | AT_TYPE_LIGHT_ARROW)) {
             s8 r25 = 0;
             if (hitObj->ChkAtType(AT_TYPE_ICE_ARROW)) {
-                if (((r26 == 2) && (!(i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_BODY_ARMOR))) ||
-                    (r26 == 1 && (!(i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_HELMET))))
+                if ((r26 == 2 && !(i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_BODY_ARMOR)) ||
+                    (r26 == 1 && !(i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_HELMET)))
                 {
                     i_this->mEnemyIce.mFreezeDuration = REG0_S(4) + 60;
                     i_this->mEnemyIce.m00C = 1;
@@ -2888,7 +2878,7 @@ static u8 damage_check(tn_class* i_this) {
             if (r25 != 0) {
                 if (r25 == 2) {
                     for (s32 i = 0; i < ARRAY_SSIZE(i_this->mParts); i++) {
-                        if ((i <= 1) && (i_this->mParts[i].m08 >= 0)) {
+                        if (i <= 1 && i_this->mParts[i].m08 >= 0) {
                             yoroi_break(i_this, &i_this->mParts[i].m0C, (u8)i);
                         }
                         i_this->mParts[i].m08 = -1;
@@ -2922,11 +2912,11 @@ static u8 damage_check(tn_class* i_this) {
                 i_this->mEnemyFire.mFireDuration = REG0_S(2) + 100;
             }
         }
-        if (((r26 == 2) && (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_BODY_ARMOR)) ||
+        if ((r26 == 2 && (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_BODY_ARMOR)) ||
             (r26 == 1 && (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_HELMET)))
         {
-            fopAc_ac_c* hitActor = atInfo.mpObj->GetAc();
-            if ((hitActor != NULL) && (fopAcM_GetName(hitActor) == fpcNm_PLAYER_e)) {
+            fopAc_ac_c* hitActor = dCc_GetAc(atInfo.mpObj->GetAc());
+            if (hitActor != NULL && fopAcM_GetName(hitActor) == fpcNm_PLAYER_e) {
                 if (r26 == 1) {
                     if (player->getCutType() == daPy_py_c::CUT_TYPE_BT_JUMPCUT) {
                         at_power_check(&atInfo);
@@ -2939,7 +2929,7 @@ static u8 damage_check(tn_class* i_this) {
                         dScnPly_ply_c::setPauseTimer(REG0_S(7) + 6);
                         fopAcM_seStart(actor, JA_SE_CM_TN_HELMET_OUT, 0);
                         cXyz* particlePos = i_this->mTgCyl.GetTgHitPosP();
-                        local_74.set(2.0f, 2.0f, 2.0f);
+                        cXyz local_74(2.0f, 2.0f, 2.0f);
                         local_a0.x = local_a0.z = 0;
                         local_a0.y = fopAcM_searchPlayerAngleY(actor);
                         dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, particlePos, &local_a0, &local_74);
@@ -2953,17 +2943,17 @@ static u8 damage_check(tn_class* i_this) {
                         r3 = -r3;
                     }
                     cXyz* particlePos = i_this->mTgCyl.GetTgHitPosP();
-                    local_80.set(2.0f, 2.0f, 2.0f);
+                    cXyz local_80(2.0f, 2.0f, 2.0f);
                     local_a8.x = local_a8.z = 0;
                     local_a8.y = fopAcM_searchPlayerAngleY(actor);
                     r26_2 = false;
                     if (i_this->mMantPcId != 0xFFFF) {
                         mant_actor = (mant_class*)fopAcM_SearchByID(i_this->mMantPcId);
-                        if ((mant_actor != NULL) && (mant_actor->m2834 != 0 || (mant_actor->m2836 != 0))) {
+                        if (mant_actor != NULL && (mant_actor->m2834 != 0 || mant_actor->m2836 != 0)) {
                             r26_2 = true;
                         }
                     }
-                    if (((u16)r3 > 0x4000) && (!r26_2)) {
+                    if ((u16)r3 > 0x4000 && !r26_2) {
                         i_this->m02DD |= 1;
                         fopAcM_OffStatus(actor, fopAcStts_CULL_e);
                         i_this->mDamageReaction.mAction = ACTION_D_SIT;
@@ -3021,14 +3011,14 @@ static u8 damage_check(tn_class* i_this) {
         }
         s8 r25 = actor->health;
         at_power_check(&atInfo);
-        if ((atInfo.mResultingAttackType == 10) || (atInfo.mResultingAttackType == 0xe)) {
+        if (atInfo.mResultingAttackType == 10 || atInfo.mResultingAttackType == 0xe) {
             actor->health = 20;
         }
         actor->stealItemBitNo = i_this->m1400;
         atInfo.mpActor = cc_at_check(actor, &atInfo);
-        if ((atInfo.mResultingAttackType == 10) || (atInfo.mResultingAttackType == 0xe)) {
+        if (atInfo.mResultingAttackType == 10 || atInfo.mResultingAttackType == 0xe) {
             actor->health = r25;
-            if ((atInfo.mResultingAttackType == 0xe) && (i_this->m1400 == 0)) {
+            if (atInfo.mResultingAttackType == 0xe && i_this->m1400 == 0) {
                 i_this->m1400 = 1;
             }
         }
@@ -3119,9 +3109,7 @@ static u8 damage_check(tn_class* i_this) {
             i_this->mDamageReaction.m428 = 26.0f;
     }
     if (i_this->mDamageReaction.m424 != 0) {
-        local_8c.x = 0.0f;
-        local_8c.y = 0.0f;
-        local_8c.z = -10.0f;
+        cXyz local_8c(0.0f, 0.0f, -10.0f);
         MtxPosition(&local_8c, &i_this->mDamageReaction.m42C);
         if (i_this->mDamageReaction.m428 < 25.0f) {
             i_this->mDamageReaction.m4D4 = -l_tnHIO.m0D0;
@@ -3130,7 +3118,7 @@ static u8 damage_check(tn_class* i_this) {
         }
     }
     if (r30 != 0) {
-        if ((actor->health <= 0) && (atInfo.mbDead != 0)) {
+        if (actor->health <= 0 && atInfo.mbDead != 0) {
             fopAcM_monsSeStart(actor, JA_SE_CV_TN_DIE, 0);
             if (fopAcM_CheckStatus(actor, fopAcStts_BOSS_e)) {
                 if (s_check == 0) {
@@ -3158,13 +3146,11 @@ static void part_move(tn_class* i_this, int partIndex) {
     tn_p* part;
     f32 dVar14;
     f32 fVar15;
-    cXyz local_134;
-    cXyz cStack_140;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     part = &i_this->mParts[partIndex];
     dBgS_GndChk gndChk;
-    local_134.set(0.0f, 0.0f, 0.0f);
+    cXyz local_134(0.0f, 0.0f, 0.0f);
     part->m42++;
     iVar12 = j_dt[partIndex];
     if (part->m44 != 0) {
@@ -3231,6 +3217,7 @@ static void part_move(tn_class* i_this, int partIndex) {
                 local_134.x = 0.0f;
                 local_134.y = 30.0f;
                 local_134.z = 20.0f;
+                cXyz cStack_140;
                 MtxPosition(&local_134, &cStack_140);
                 local_134 = part->m0C;
                 local_134.y += 30.0f;
@@ -3283,7 +3270,7 @@ static void part_move(tn_class* i_this, int partIndex) {
             if (part->m44 == 1) {
                 part->m08 = -1;
                 yoroi_break(i_this, &part->m0C, partIndex);
-                if ((partIndex == 0) && (i_this->mMantPcId != 0xFFFF)) {
+                if (partIndex == 0 && i_this->mMantPcId != 0xFFFF) {
                     mant_actor = (mant_class*)fopAcM_SearchByID(i_this->mMantPcId);
                     if (mant_actor != NULL) {
                         fopAcM_delete(mant_actor);
@@ -3301,7 +3288,7 @@ static void part_move(tn_class* i_this, int partIndex) {
     switch (part->m09) {
         case 0:
             MTXCopy(i_this->mpBodyMorf->getModel()->getAnmMtx(iVar12), *calc_mtx);
-            if ((partIndex == 0) && (i_this->m1402 != 0)) {
+            if (partIndex == 0 && i_this->m1402 != 0) {
                 fVar15 = (i_this->m1402 * cM_scos(i_this->m1402 * 0x5100) * -0.0033f) + 1.0f;
                 MtxScale(fVar15, fVar15, fVar15, true);
                 dVar14 = (i_this->m1402 * (REG0_F(16) + 0.01f));
@@ -3428,10 +3415,10 @@ static void spin_blur_set(tn_class* i_this) {
 static BOOL daTn_Execute(tn_class* i_this) {
     /* Nonmatching - retail-only regalloc */
     fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     mant_class* mant_actor;
     daBoko_c* boko_actor;
 
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 #if VERSION > VERSION_DEMO
     if (i_this->m1520 != 0) {
         i_this->m1520--;
@@ -3440,6 +3427,7 @@ static BOOL daTn_Execute(tn_class* i_this) {
         }
     }
 #endif
+
     if (enemy_ice(&i_this->mEnemyIce)) {
         if (i_this->mEnemyIce.mLightShrinkTimer == 0) {
             if (i_this->mEnemyIce.mFreezeTimer == 23) {
@@ -3452,7 +3440,8 @@ static BOOL daTn_Execute(tn_class* i_this) {
             i_this->mpArmorMorf->play(NULL, 0, 0);
             i_this->mpShieldMorf->play(NULL, 0, 0);
         }
-        i_this->mpBodyMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::now);
+        J3DModel* model = i_this->mpBodyMorf->getModel();
+        model->setBaseTRMtx(mDoMtx_stack_c::get());
         i_this->mpBodyMorf->calc();
         i_this->mpShieldMorf->calc();
         for (s32 i = 0; i < ARRAY_SSIZE(i_this->mParts); i++) {
@@ -3473,7 +3462,7 @@ static BOOL daTn_Execute(tn_class* i_this) {
         return TRUE;
     }
     u8 r25 = 0;
-    if (((l_tnHIO.m006 == 0) || (CPad_CHECK_TRIG_B(0))) || (CPad_CHECK_HOLD_Y(0))) {
+    if (l_tnHIO.m006 == 0 || CPad_CHECK_TRIG_B(0) || CPad_CHECK_HOLD_Y(0)) {
         i_this->m03D8++;
         for (s32 i = 0; i < ARRAY_SSIZE(i_this->mCountDownTimers); i++) {
             if (i_this->mCountDownTimers[i] != 0) {
@@ -3565,7 +3554,7 @@ static BOOL daTn_Execute(tn_class* i_this) {
         switch (r3) {
             case 1:
                 anm_init(i_this, TN_BCK_BDOWN_A1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                if ((i_this->m0C34 != 0) && ((actor->health <= 0) || (r25 >= 4) || (cM_rndF(1.0f) < 0.5f))) {
+                if (i_this->m0C34 != 0 && (actor->health <= 0 || r25 >= 4 || cM_rndF(1.0f) < 0.5f)) {
                     i_this->m0C38 = 1;
                 }
                 i_this->mDamageReaction.mAction = ACTION_JYUNKAI;
@@ -3574,7 +3563,7 @@ static BOOL daTn_Execute(tn_class* i_this) {
                 anm_init(i_this, TN_BCK_BDOWN_U1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 break;
             case 5:
-                if ((i_this->mDamageReaction.mAction != ACTION_FIGHT_RUN) && (i_this->mDamageReaction.mAction != ACTION_HUKKI)) {
+                if (i_this->mDamageReaction.mAction != ACTION_FIGHT_RUN && i_this->mDamageReaction.mAction != ACTION_HUKKI) {
                     wait_set(i_this);
                     i_this->mDamageReaction.mAction = ACTION_FIGHT_RUN;
                     i_this->mDamageReaction.mMode = 0;
@@ -3689,7 +3678,7 @@ static BOOL daTn_Execute(tn_class* i_this) {
                 f32 f1 = dComIfG_Bgsp()->GroundCross(&gndChk);
                 if (f1 != -G_CM3D_F_INF) {
                     r22 = (s16)-cM_atan2s(f1 - pos.y, tmp.z - pos.z);
-                    if ((r22 > 0x2000) || (r22 < -0x2000)) {
+                    if (r22 > 0x2000 || r22 < -0x2000) {
                         r22 = 0;
                     }
                 }
@@ -3700,7 +3689,7 @@ static BOOL daTn_Execute(tn_class* i_this) {
                 f1 = dComIfG_Bgsp()->GroundCross(&gndChk);
                 if (f1 != -G_CM3D_F_INF) {
                     r23 = (s16)cM_atan2s(f1 - pos.y, tmp.x - pos.x);
-                    if ((r23 > 0x2000) || (r23 < -0x2000)) {
+                    if (r23 > 0x2000 || r23 < -0x2000) {
                         r23 = 0;
                     }
                 }
@@ -3967,7 +3956,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             );
             i_this->mParts[i].mpPartModel = i_this->mpArmorMorf->getModel();
         } else {
-            if ((i == 1) && (i_this->mEquipmentType & EQUIPMENT_HELMET)) {
+            if (i == 1 && (i_this->mEquipmentType & EQUIPMENT_HELMET)) {
                 modelData = (J3DModelData*)dComIfG_getObjectRes("Tn", TN_BMD_TN_KABUTO2); // Mighty Darknut helmet
             } else {
                 modelData = (J3DModelData*)dComIfG_getObjectRes("Tn", part_bmd[i]);
@@ -3982,7 +3971,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             if (i_this->mParts[i].mpPartBrkAnm == 0) {
                 return FALSE;
             }
-            if ((i == 1) && (i_this->mEquipmentType & EQUIPMENT_HELMET)) {
+            if (i == 1 && (i_this->mEquipmentType & EQUIPMENT_HELMET)) {
                 if (!i_this->mParts[i].mpPartBrkAnm->init(
                         i_this->mParts[i].mpPartModel->getModelData(),
                         (J3DAnmTevRegKey*)dComIfG_getObjectRes("Tn", TN_BRK_TN_KABUTO2),
@@ -4219,7 +4208,7 @@ static cPhs_State daTn_Create(fopAc_ac_c* a_this) {
     i_this->mPathIndex = (fopAcM_GetParam(a_this) >> 16) & 0xFF;
     i_this->mEnableSpawnSwitch = (fopAcM_GetParam(a_this) >> 24) & 0xFF;
     i_this->mDisableSpawnOnDeathSwitch = a_this->current.angle.z;
-    if ((REG0_S(0) != 0) || (i_this->mDisableSpawnOnDeathSwitch != 0 && (i_this->mDisableSpawnOnDeathSwitch <= 0x7F))) {
+    if (REG0_S(0) != 0 || (i_this->mDisableSpawnOnDeathSwitch != 0 && i_this->mDisableSpawnOnDeathSwitch <= 0x7F)) {
         fopAcM_OnStatus(a_this, fopAcStts_BOSS_e);
         search_sp = 1;
     }
@@ -4246,11 +4235,11 @@ static cPhs_State daTn_Create(fopAc_ac_c* a_this) {
     if (i_this->mDisableSpawnOnDeathSwitch == 0xFF) {
         i_this->mDisableSpawnOnDeathSwitch = 0;
     }
-    if ((i_this->mDisableSpawnOnDeathSwitch != 0) && (dComIfGs_isSwitch(i_this->mDisableSpawnOnDeathSwitch, fopAcM_GetRoomNo(a_this)))) {
+    if (i_this->mDisableSpawnOnDeathSwitch != 0 && (dComIfGs_isSwitch(i_this->mDisableSpawnOnDeathSwitch, fopAcM_GetRoomNo(a_this)))) {
         return cPhs_ERROR_e;
     }
     s_check = 0;
-    if ((i_this->mBehaviorType == BEHAVIOR_MINIBOSS) || (i_this->mBehaviorType == BEHAVIOR_MSWORD_CHAMBER_AMBUSH)) {
+    if (i_this->mBehaviorType == BEHAVIOR_MINIBOSS || i_this->mBehaviorType == BEHAVIOR_MSWORD_CHAMBER_AMBUSH) {
         fopAcM_OnStatus(a_this, fopAcStts_BOSS_e);
 #if VERSION > VERSION_DEMO
         search_sp = 1;

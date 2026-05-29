@@ -1219,6 +1219,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 #if VERSION == VERSION_DEMO
         model = i_this->mpMorf->getModel();
 #else
+        // Fakematch?
         if (i_this->mpMorf == NULL || (model = i_this->mpMorf->getModel()) == NULL) {
             return FALSE;
         }
