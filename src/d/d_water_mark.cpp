@@ -78,20 +78,17 @@ static BOOL dWaterMark_Execute(dWaterMark_c* i_this) {
     /* Nonmatching */ 
       
     if (i_this->sh5 != -1) {
-        short start = i_this->sh3;
-        short end = i_this->sh4;
-
-        if (start < end) {
-            if ((start <= i_this->m_player_foot_now_id) && (end > i_this->m_player_foot_now_id)) {
+        if (i_this->sh3 < i_this->sh4) {
+            if (i_this->sh3 <= i_this->m_player_foot_now_id && i_this->sh4 > i_this->m_player_foot_now_id) {
                 i_this->sh5 = -1;
             }
         } else {
-            if ((start <= i_this->m_player_foot_now_id) || (end > i_this->m_player_foot_now_id)) {
+            if (i_this->sh3 <= i_this->m_player_foot_now_id || i_this->sh4 > i_this->m_player_foot_now_id) {
                 i_this->sh5 = -1;
             }
         }
     }
-
+    // Everything below here is fine
     if (i_this->sh5 == -1) i_this->mModelInfo.mBrkAnm.play();
 
     bool stopped = (i_this->mModelInfo.mBrkAnm.getFrameCtrl()->getState() & 1) || 
