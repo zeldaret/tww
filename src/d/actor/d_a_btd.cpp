@@ -2714,9 +2714,10 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     i_this->mpDeadHeadMorf = new mDoExt_McaMorf(
         (J3DModelData*)dComIfG_getObjectRes("Btd", BTD_BMD_NAMAKUBI), NULL, NULL, NULL, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203
     );
-    if ((i_this->mpDeadHeadMorf == NULL) || (pModel = i_this->mpDeadHeadMorf->getModel(), pModel == NULL)) {
+    if ((i_this->mpDeadHeadMorf == NULL) || (i_this->mpDeadHeadMorf->getModel() == NULL)) {
         return FALSE;
     }
+    pModel = i_this->mpDeadHeadMorf->getModel();
     i_this->mpDeadHeadBtkAnm = new mDoExt_btkAnm();
     if (i_this->mpDeadHeadBtkAnm == NULL) {
         return FALSE;

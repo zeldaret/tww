@@ -1993,12 +1993,12 @@ static cPhs_State daBmd_Create(fopAc_ac_c* a_this) {
         for (s32 i = 0; i < 20; i++) {
             fopAcM_prm_class* params = fopAcM_CreateAppend();
             params->base.parameters = i;
-            fopAcM_create(fpcNm_BMDHAND_e, 0, params);
+            fopAcM_Create(fpcNm_BMDHAND_e, NULL, params);
         }
         for (s32 i = 0; i < 8; i++) {
             fopAcM_prm_class* params = fopAcM_CreateAppend();
             params->base.parameters = i;
-            fopAcM_create(fpcNm_BMDFOOT_e, 0, params);
+            fopAcM_Create(fpcNm_BMDFOOT_e, NULL, params);
         }
         a_this->home.pos.y += REG0_F(2) + 20.0f;
         a_this->current.pos.y = a_this->home.pos.y;

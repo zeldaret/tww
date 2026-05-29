@@ -304,7 +304,7 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
                     pfVar4->base.angle.y = 0;
                     pfVar4->base.angle.x = 0;
                     pfVar4->base.parameters = fopAcM_GetParam(a_this);
-                    fopAcM_create(fpcNm_FF_e, NULL, pfVar4);
+                    fopAcM_Create(fpcNm_FF_e, NULL, pfVar4);
                 }
             }
             a_this->mbNoUseGroundY = fopAcM_GetParam(a_this) >> 8;

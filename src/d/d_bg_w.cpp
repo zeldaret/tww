@@ -35,8 +35,8 @@ void dBgW::positionWallCorrect(dBgS_Acch* acch, f32 dist, cM3dGPla& plane, cXyz*
     f32 move = speed * dist;
     pupper_pos->x += move * plane.mNormal.x;
     pupper_pos->z += move * plane.mNormal.z;
-    JUT_ASSERT(0xd0, !isnan(pupper_pos->x));
-    JUT_ASSERT(0xd1, !isnan(pupper_pos->z));
+    JUT_ASSERT(208, !isnan(pupper_pos->x));
+    JUT_ASSERT(209, !isnan(pupper_pos->z));
 }
 
 /* 800A5E64-800A6DF8       .text RwgWallCorrect__4dBgWFP9dBgS_AcchUs */
@@ -195,7 +195,7 @@ bool dBgW::RwgWallCorrect(dBgS_Acch* pwi, u16 i_poly_idx) {
                             f32 onx = -tri->m_plane.GetNP()->x;
                             f32 ony = -tri->m_plane.GetNP()->z;
 
-                            JUT_ASSERT(463, !(cM3d_IsZero(onx) && cM3d_IsZero(ony)));
+                            JUT_ASSERT(DEMO_SELECT(444, 463), !(cM3d_IsZero(onx) && cM3d_IsZero(ony)));
 
                             if (spE0 < spE4) {
                                 if ((spE0 > spDC) || (std::fabsf(spE0 - spDC) < 0.008f)) {
@@ -207,8 +207,8 @@ bool dBgW::RwgWallCorrect(dBgS_Acch* pwi, u16 i_poly_idx) {
                                 pwi->GetPos()->x += cx0 - spF0;
                                 pwi->GetPos()->z += cy0 - spF4;
 
-                                JUT_ASSERT(484, !isnan(pwi->GetPos()->x));
-                                JUT_ASSERT(485, !isnan(pwi->GetPos()->z));
+                                JUT_ASSERT(DEMO_SELECT(465, 484), !isnan(pwi->GetPos()->x));
+                                JUT_ASSERT(DEMO_SELECT(466, 485), !isnan(pwi->GetPos()->z));
 
                                 pwi->CalcMovePosWork();
                                 pwi->SetWallCirHit(cir_index);
@@ -229,8 +229,8 @@ bool dBgW::RwgWallCorrect(dBgS_Acch* pwi, u16 i_poly_idx) {
                                 pwi->GetPos()->x += cx1 - spF8;
                                 pwi->GetPos()->z += cy1 - spFC;
 
-                                JUT_ASSERT(524, !isnan(pwi->GetPos()->x));
-                                JUT_ASSERT(525, !isnan(pwi->GetPos()->z));
+                                JUT_ASSERT(DEMO_SELECT(505, 524), !isnan(pwi->GetPos()->x));
+                                JUT_ASSERT(DEMO_SELECT(506, 525), !isnan(pwi->GetPos()->z));
 
                                 pwi->CalcMovePosWork();
                                 pwi->SetWallCirHit(cir_index);
@@ -298,9 +298,7 @@ bool dBgW::WallCorrectGrpRp(dBgS_Acch* acch, int grp_id, int depth) {
     if (ChkGrpThrough(grp_id, acch->GetGrpPassChk(), depth))
         return false;
 
-    cBgW_GrpElm* grp = &pm_grp[grp_id];
-
-    if (!grp->aab.Cross(acch->GetWallBmdCylP()))
+    if (!pm_grp[grp_id].aab.Cross(acch->GetWallBmdCylP()))
         return false;
 
     bool ret = false;
@@ -308,11 +306,12 @@ bool dBgW::WallCorrectGrpRp(dBgS_Acch* acch, int grp_id, int depth) {
     if (tree_idx != 0xFFFF && WallCorrectRp(acch, tree_idx))
         ret = true;
 
+    depth++;
     s32 child_idx = pm_bgd->m_g_tbl[grp_id].m_first_child;
     while (true) {
         if (child_idx == 0xFFFF)
             break;
-        if (WallCorrectGrpRp(acch, child_idx, depth + 1))
+        if (WallCorrectGrpRp(acch, child_idx, depth))
             ret = true;
         child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
     }
@@ -347,8 +346,7 @@ bool dBgW::RwgRoofChk(u16 poly_index, dBgS_RoofChk* chk) {
 /* 800A72E0-800A7514       .text RoofChkRp__4dBgWFP12dBgS_RoofChki */
 bool dBgW::RoofChkRp(dBgS_RoofChk* chk, int i) {
     cBgW_NodeTree* node = &m_nt_tbl[i];
-    // if (!node->CrossY(chk->GetPosP()) || !node->UnderPlaneYUnder(chk->GetNowY()) || node->TopPlaneYUnder(chk->GetPosP()->y))
-    if (!node->CrossY(chk->GetPosP()) || !(node->GetMinY() < chk->GetNowY()) || node->TopPlaneYUnder(chk->GetPosP()->y))
+    if (!node->CrossY(chk->GetPosP()) || !node->UnderPlaneYUnder(chk->GetNowY()) || node->TopPlaneYUnder(chk->GetPosP()->y))
         return false;
 
     cBgD_Tree_t* tree = &pm_bgd->m_tree_tbl[i];
@@ -385,8 +383,7 @@ bool dBgW::RoofChkGrpRp(dBgS_RoofChk* chk, int grp_id, int depth) {
 
     cBgW_GrpElm* grp = &pm_grp[grp_id];
 
-    // if (!grp->aab.CrossY(chk->GetPosP()) || !grp->aab.UnderPlaneYUnder(chk->GetNowY()) || grp->aab.TopPlaneYUnder(chk->GetPosP()->y))
-    if (!grp->aab.CrossY(chk->GetPosP()) || !(grp->aab.GetMinY() < chk->GetNowY()) || grp->aab.TopPlaneYUnder(chk->GetPosP()->y))
+    if (!grp->aab.CrossY(chk->GetPosP()) || !grp->aab.UnderPlaneYUnder(chk->GetNowY()) || grp->aab.TopPlaneYUnder(chk->GetPosP()->y))
         return false;
 
     bool ret = false;
@@ -395,11 +392,12 @@ bool dBgW::RoofChkGrpRp(dBgS_RoofChk* chk, int grp_id, int depth) {
     if (tree_idx != 0xFFFF && RoofChkRp(chk, tree_idx))
         ret = true;
 
+    depth++;
     s32 child_idx = grpd->m_first_child;
     while (true) {
         if (child_idx == 0xFFFF)
             break;
-        if (RoofChkGrpRp(chk, child_idx, depth + 1))
+        if (RoofChkGrpRp(chk, child_idx, depth))
             ret = true;
         child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
     }
@@ -434,8 +432,7 @@ bool dBgW::RwgSplGrpChk(u16 poly_index, dBgS_SplGrpChk* chk) {
 /* 800A783C-800A7A74       .text SplGrpChkRp__4dBgWFP14dBgS_SplGrpChki */
 bool dBgW::SplGrpChkRp(dBgS_SplGrpChk* chk, int i) {
     cBgW_NodeTree* node = &m_nt_tbl[i];
-    // if (!node->CrossY(chk->GetPosP()) || !node->UnderPlaneYUnder(chk->GetRoof()) || node->TopPlaneYUnder(chk->GetHeight()))
-    if (!node->CrossY(chk->GetPosP()) || !(node->GetMinY() < chk->GetRoof()) || node->GetMaxY() < chk->GetHeight())
+    if (!node->CrossY(chk->GetPosP()) || !node->UnderPlaneYUnder(chk->GetRoof()) || node->TopPlaneYUnder(chk->GetHeight()))
         return false;
 
     cBgD_Tree_t* tree = &pm_bgd->m_tree_tbl[i];
@@ -472,8 +469,7 @@ bool dBgW::SplGrpChkGrpRp(dBgS_SplGrpChk* chk, int grp_id, int depth) {
 
     cBgW_GrpElm* grp = &pm_grp[grp_id];
 
-    // if (!grp->aab.CrossY(chk->GetPosP()) || !grp->aab.UnderPlaneYUnder(chk->GetRoof()) || grp->aab.TopPlaneYUnder(chk->GetHeight()))
-    if (!grp->aab.CrossY(chk->GetPosP()) || !(grp->aab.GetMinY() < chk->GetRoof()) || grp->aab.GetMaxY() < chk->GetHeight())
+    if (!grp->aab.CrossY(chk->GetPosP()) || !grp->aab.UnderPlaneYUnder(chk->GetRoof()) || grp->aab.TopPlaneYUnder(chk->GetHeight()))
         return false;
 
     bool ret = false;
@@ -482,11 +478,12 @@ bool dBgW::SplGrpChkGrpRp(dBgS_SplGrpChk* chk, int grp_id, int depth) {
     if (tree_idx != 0xFFFF && SplGrpChkRp(chk, tree_idx))
         ret = true;
 
+    depth++;
     s32 child_idx = grpd->m_first_child;
     while (true) {
         if (child_idx == 0xFFFF)
             break;
-        if (SplGrpChkGrpRp(chk, child_idx, depth + 1))
+        if (SplGrpChkGrpRp(chk, child_idx, depth))
             ret = true;
         child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
     }
@@ -579,11 +576,12 @@ bool dBgW::SphChkGrpRp(dBgS_SphChk* chk, void* user, int grp_id, int depth) {
     if (tree_idx != 0xFFFF && SphChkRp(chk, user, tree_idx))
         ret = true;
 
+    depth++;
     s32 child_idx = grpd->m_first_child;
     while (true) {
         if (child_idx == 0xFFFF)
             break;
-        if (SphChkGrpRp(chk, user, child_idx, depth + 1))
+        if (SphChkGrpRp(chk, user, child_idx, depth))
             ret = true;
         child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
     }
@@ -601,15 +599,15 @@ void dBgW::positionWallCrrPos(cM3dGTri& plane, dBgS_CrrPos* crr, cXyz* pos, f32 
 
 /* 800A819C-800A8964       .text RwgWallCrrPos__4dBgWFUsP11dBgS_CrrPos */
 bool dBgW::RwgWallCrrPos(u16 i_poly_index, dBgS_CrrPos* crr) {
-    cBgW_RwgElm* rwg_elm;
-    cBgD_Tri_t* tri_t;
-    cM3dGPla* plane;
     bool ret = false;
     cM3dGTri tri;
     cXyz wall_top_pos = *crr->GetPos();
     wall_top_pos.y += crr->GetWallH();
     cXyz old_wall_top_pos = *crr->GetOldPos();
     old_wall_top_pos.y += crr->GetWallH();
+    cBgW_RwgElm* rwg_elm;
+    cBgD_Tri_t* tri_t;
+    cM3dGPla* plane;
     u32 poly_index_z = i_poly_index;
     u32 poly_index_x = i_poly_index;
 
@@ -797,7 +795,7 @@ void dBgW::dummyfunc() {
     // TODO: find where this assert actually comes from
     // cBgW::RwgShdwDraw ?
     int index = 0;
-    JUT_ASSERT(0, 0 <= index && index < pm_bgd->m_t_num);
+    JUT_ASSERT(DEMO_SELECT(0, 0), 0 <= index && index < pm_bgd->m_t_num);
 }
 
 /* 800A8964-800A8B70       .text WallCrrPosRp__4dBgWFP11dBgS_CrrPosi */
@@ -840,9 +838,7 @@ bool dBgW::WallCrrPosGrpRp(dBgS_CrrPos* crr, int grp_id, int depth) {
     if (ChkGrpThrough(grp_id, crr->GetGrpPassChk(), depth))
         return false;
 
-    cBgW_GrpElm* grp = &pm_grp[grp_id];
-
-    if (!grp->aab.Cross(crr->GetCylP()))
+    if (!pm_grp[grp_id].aab.Cross(crr->GetCylP()))
         return false;
 
     bool ret = false;
@@ -850,11 +846,12 @@ bool dBgW::WallCrrPosGrpRp(dBgS_CrrPos* crr, int grp_id, int depth) {
     if (tree_idx != 0xFFFF && WallCrrPosRp(crr, tree_idx))
         ret = true;
 
+    depth++;
     s32 child_idx = pm_bgd->m_g_tbl[grp_id].m_first_child;
     while (true) {
         if (child_idx == 0xFFFF)
             break;
-        if (WallCrrPosGrpRp(crr, child_idx, depth + 1))
+        if (WallCrrPosGrpRp(crr, child_idx, depth))
             ret = true;
         child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
     }

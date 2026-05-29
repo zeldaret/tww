@@ -187,7 +187,7 @@ BOOL himo_create(kokiie_class* i_this) {
             pfVar3->base.angle.y = actor->current.angle.y + i * 0x3333 + -13000;
             pfVar3->base.parameters = 0xffffff01;
             pfVar3->room_no = actor->current.roomNo;
-            i_this->m2D4[i] = fopAcM_create(fpcNm_SHAND_e, NULL, pfVar3);
+            i_this->m2D4[i] = fopAcM_Create(fpcNm_SHAND_e, NULL, pfVar3);
             i_this->m2E8[i]++;
 
         case 1:

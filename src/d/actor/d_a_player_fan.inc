@@ -147,9 +147,10 @@ void daPy_lk_c::setSmallFanModel() {
 
 /* 8014C0C0-8014C254       .text setParachuteFanModel__9daPy_lk_cFf */
 void daPy_lk_c::setParachuteFanModel(f32 f31) {
+    J3DModelData* modelData;
     J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_FANBA);
     JKRHeap* oldHeap = setItemHeap();
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_FANB));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_FANB));
 
     mpParachuteFanMorf = new mDoExt_McaMorf(
         modelData,

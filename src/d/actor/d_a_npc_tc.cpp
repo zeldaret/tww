@@ -729,7 +729,7 @@ void daNpc_Tc_c::anmAtr(u16 i_msgStatus) {
 
 /* 0000156C-00001618       .text stopTower__10daNpc_Tc_cFv */
 void daNpc_Tc_c::stopTower() {
-    JUT_ASSERT(VERSION_SELECT(0x3F5, 0x3F4, 0x3F4, 0x3F4), m_tower_actor != NULL);
+    JUT_ASSERT(DEMO_SELECT(0x3F5, 0x3F4), m_tower_actor != NULL);
 
     daObjSmplbg::Act_c* tower = m_tower_actor;
     switch (mType) {
@@ -747,7 +747,7 @@ void daNpc_Tc_c::stopTower() {
 
 /* 00001618-000017A4       .text startTower__10daNpc_Tc_cFv */
 void daNpc_Tc_c::startTower() {
-    JUT_ASSERT(VERSION_SELECT(0x408, 0x407, 0x407, 0x407), m_tower_actor != NULL);
+    JUT_ASSERT(DEMO_SELECT(0x408, 0x407), m_tower_actor != NULL);
     daObjSmplbg::Act_c* tower = m_tower_actor;
 
     cXyz temp;
@@ -1142,7 +1142,7 @@ void daNpc_Tc_c::lookBack() {
 /* 000024C4-00002594       .text statusWait__10daNpc_Tc_cFv */
 void daNpc_Tc_c::statusWait() {
     if (mType == TYPE_WHITE || mType == TYPE_RED) {
-        JUT_ASSERT(VERSION_SELECT(0x5FE, 0x601, 0x601, 0x601), m_tower_actor != NULL);
+        JUT_ASSERT(DEMO_SELECT(0x5FE, 0x601), m_tower_actor != NULL);
 
         if (m_tower_actor->isStop()) {
             mAnmPrmIdx = ANM_PRM_IDX_WAIT04;
@@ -1875,7 +1875,7 @@ daNpc_Tc_c::daNpc_Tc_c() {}
 /* 000045D0-000047DC       .text _createHeap__10daNpc_Tc_cFv */
 BOOL daNpc_Tc_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Tc", TC_BDL_TC));
-    JUT_ASSERT(VERSION_SELECT(0xA26, 0xA30, 0xA30, 0xA30), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(0xA26, 0xA30), modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -1891,10 +1891,10 @@ BOOL daNpc_Tc_c::_createHeap() {
     }
     m_jnt.setHeadJntNum(2);
 
-    JUT_ASSERT(VERSION_SELECT(0xA36, 0xA40, 0xA40, 0xA40), m_jnt.getHeadJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(0xA36, 0xA40), m_jnt.getHeadJntNum() >= 0);
 
     m_jnt.setBackboneJntNum(1);
-    JUT_ASSERT(VERSION_SELECT(0xA38, 0xA42, 0xA42, 0xA42), m_jnt.getBackboneJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(0xA38, 0xA42), m_jnt.getBackboneJntNum() >= 0);
     modelData->getJointNodePointer(2)->setCallBack(nodeCallBack);
     modelData->getJointNodePointer(1)->setCallBack(nodeCallBack);
     mpMorf->getModel()->setUserArea(reinterpret_cast<u32>(this));

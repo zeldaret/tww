@@ -1154,8 +1154,8 @@ bool daObj_Ikada_c::_execute() {
 
     if (isWave()) {
         f32 s = scale.x;
-        s32 uVar5 = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), s * -1000.0f, s * -50.0f, s * -1000.0f, s * 1000.0f, s * 1000.0f, s * 1000.0f);
-        if (speedF <= 2.0f || uVar5 & 0xFF || fopAcM_searchPlayerDistanceXZ(this) > 18000.0f) {
+        bool uVar5 = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), s * -1000.0f, s * -50.0f, s * -1000.0f, s * 1000.0f, s * 1000.0f, s * 1000.0f);
+        if (speedF <= 2.0f || uVar5 || fopAcM_searchPlayerDistanceXZ(this) > 18000.0f) {
             mWaveRCallback.end();
             mWaveLCallback.end();
             mSplashCallBack.end();

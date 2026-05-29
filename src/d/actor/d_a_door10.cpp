@@ -511,16 +511,25 @@ cPhs_State daDoor10_c::create() {
     }
 
     cPhs_State ret;
-    if (m364 != 0 && (ret = dComIfG_resLoad(&mPhase, "DoorBs")) != cPhs_COMPLEATE_e) {
-        return ret;
+    if (m364 != 0) {
+        ret = dComIfG_resLoad(&mPhase, "DoorBs");
+        if (ret != cPhs_COMPLEATE_e) {
+            return ret;
+        }
     }
 
-    if (chkMakeKey() && (ret = mKeyLock.keyResLoad()) != cPhs_COMPLEATE_e) {
-        return ret;
+    if (chkMakeKey()) {
+        ret = mKeyLock.keyResLoad();
+        if (ret != cPhs_COMPLEATE_e) {
+            return ret;
+        }
     }
 
-    if (mHkyo.chkUse() && (ret = mHkyo.resLoad()) != cPhs_COMPLEATE_e) {
-        return ret;
+    if (mHkyo.chkUse()) {
+        ret = mHkyo.resLoad();
+        if (ret != cPhs_COMPLEATE_e) {
+            return ret;
+        }
     }
 
     fopAcM_SetRoomNo(this, getFRoomNo());

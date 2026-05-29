@@ -493,21 +493,25 @@ BOOL daPy_lk_c::jointCB1() {
     Quaternion* quaternion;
     trans_info = m_old_fdata->getOldFrameTransInfo(0x21);
     quaternion = m_old_fdata->getOldFrameQuaternion(0x21);
+    
     mDoMtx_stack_c::ZrotS(mFootData[1].field_0x008);
     mDoMtx_stack_c::revConcat(mpCLModel->getAnmMtx(0x20));
     mpCLModel->setAnmMtx(0x20, mDoMtx_stack_c::get());
+    
     mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
     mDoMtx_stack_c::quatM(quaternion);
-    trans_info++;
-    quaternion++;
     mDoMtx_stack_c::ZrotM(mFootData[1].field_0x00A);
     mpCLModel->setAnmMtx(0x21, mDoMtx_stack_c::get());
-    mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
-    mDoMtx_stack_c::quatM(quaternion);
     trans_info++;
     quaternion++;
+    
+    mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
+    mDoMtx_stack_c::quatM(quaternion);
     mDoMtx_stack_c::ZrotM(mFootData[1].field_0x002);
     mpCLModel->setAnmMtx(0x22, mDoMtx_stack_c::get());
+    trans_info++;
+    quaternion++;
+    
     mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
     mDoMtx_stack_c::quatM(quaternion);
     mpCLModel->setAnmMtx(0x23, mDoMtx_stack_c::get());
@@ -517,18 +521,21 @@ BOOL daPy_lk_c::jointCB1() {
     mDoMtx_stack_c::ZrotS(mFootData[0].field_0x008);
     mDoMtx_stack_c::revConcat(mpCLModel->getAnmMtx(0x25));
     mpCLModel->setAnmMtx(0x25, mDoMtx_stack_c::get());
+    
     mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
     mDoMtx_stack_c::quatM(quaternion);
-    trans_info++;
-    quaternion++;
     mDoMtx_stack_c::ZrotM(mFootData[0].field_0x00A);
     mpCLModel->setAnmMtx(0x26, mDoMtx_stack_c::get());
-    mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
-    mDoMtx_stack_c::quatM(quaternion);
     trans_info++;
     quaternion++;
+    
+    mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
+    mDoMtx_stack_c::quatM(quaternion);
     mDoMtx_stack_c::ZrotM(mFootData[0].field_0x002);
     mpCLModel->setAnmMtx(0x27, mDoMtx_stack_c::get());
+    trans_info++;
+    quaternion++;
+    
     mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
     mDoMtx_stack_c::quatM(quaternion);
     mpCLModel->setAnmMtx(0x28, mDoMtx_stack_c::get());
@@ -1033,17 +1040,17 @@ BOOL daPy_lk_c::checkPlayerGuard() const {
 
 /* 8010558C-801056E4       .text setOutPower__9daPy_lk_cFfsi */
 void daPy_lk_c::setOutPower(f32 param_1, s16 param_2, int param_3) {
-    f32 fVar1 = m3644;
-    if (fVar1 < 0.1f) {
+    if (m3644 < 0.1f) {
         m3640 = param_2;
         m3644 = param_1;
     } else {
-        f32 dVar5 = fVar1 * cM_ssin(m3640) + param_1 * cM_ssin(param_2);
-        f32 dVar4 = fVar1 * cM_scos(m3640) + param_1 * cM_scos(param_2);
+        f32 dVar5 = m3644 * cM_ssin(m3640) + param_1 * cM_ssin(param_2);
+        f32 dVar4 = m3644 * cM_scos(m3640) + param_1 * cM_scos(param_2);
         m3640 = cM_atan2s(dVar5, dVar4);
         dVar4 = std::sqrtf(dVar5 * dVar5 + dVar4 * dVar4);
         m3644 = dVar4;
     }
+
     if (param_3 != 0) {
         onNoResetFlg1(daPyFlg1_UNK10000000);
     }
@@ -6220,17 +6227,8 @@ BOOL daPy_lk_c::procMove() {
     setSpeedAndAngleNormal(m_HIO->mMove.m.field_0x0);
     if (!checkNextMode(0) && !changeFrontWallTypeProc() && !checkIceSlipFall()) {
         if (mDemo.getDemoMode() == daPy_demo_c::DEMO_N_WALK_e) {
-            // Fakematch. Retail regalloc doesn't match unless all three of these vars are given temps.
-            // But demo only matches with this:
-            // if (mNormalSpeed > mMaxNormalSpeed * m_HIO->mMove.m.field_0x2C) {
-            //     mNormalSpeed = mMaxNormalSpeed * m_HIO->mMove.m.field_0x2C;
-            // }
-            f32 vel = mNormalSpeed;
-            f32 temp1 = mMaxNormalSpeed;
-            f32 temp2 = m_HIO->mMove.m.field_0x2C;
-            if (vel > temp1 * temp2) {
-                vel = temp1 * temp2;
-                mNormalSpeed = vel;
+            if (mNormalSpeed > mMaxNormalSpeed * m_HIO->mMove.m.field_0x2C) {
+                mNormalSpeed = m_HIO->mMove.m.field_0x2C * mMaxNormalSpeed;
             }
         }
         setBlendMoveAnime(-1.0f);
@@ -8639,6 +8637,7 @@ int daPy_lk_c::setLegAngle(f32 param_1, int param_2, s16* param_3, s16* param_4)
     if (dVar9 > 10.0f) {
         dVar9 = 10.0f;
     }
+
     mDoMtx_concat(m37B4, mFootData[param_2].field_0x088[0], mDoMtx_stack_c::get());
     spE8.set(0.0f, mDoMtx_stack_c::get()[1][3], mDoMtx_stack_c::get()[2][3]);
 
@@ -8647,6 +8646,7 @@ int daPy_lk_c::setLegAngle(f32 param_1, int param_2, s16* param_3, s16* param_4)
 
     mDoMtx_concat(m37B4, mFootData[param_2].field_0x088[2], mDoMtx_stack_c::get());
     spD0.set(0.0f, mDoMtx_stack_c::get()[1][3] + 3.25f, mDoMtx_stack_c::get()[2][3]);
+
     spAC = spDC - spE8;
     spA0 = spD0 - spDC;
     spB8.x = spD0.x;
@@ -8689,8 +8689,10 @@ int daPy_lk_c::setLegAngle(f32 param_1, int param_2, s16* param_3, s16* param_4)
     spC4.z = sp58.z + f2 * sp70.z;
     sp94 = spC4 - spE8;
     sp88 = spB8 - spC4;
+
     mDoMtx_concat(m37B4, mpCLModel->getAnmMtx(0), mDoMtx_stack_c::get());
     sp64.set(0.0f, mDoMtx_stack_c::get()[1][3], mDoMtx_stack_c::get()[2][3]);
+
     s16 r29 = cM_atan2s(-sp64.y, -sp64.z);
     s16 r27 = cM_atan2s(sp94.y, sp94.z);
     s16 r26 = cM_atan2s(sp88.y, sp88.z);
@@ -10908,6 +10910,8 @@ BOOL daPy_lk_c::startRestartRoom(u32 mode, int eventInfoIdx, f32 param_3, int i_
                     pos = &current.pos;
                 }
 
+                int subsector_x;
+                int subsector_z;
                 int quad_x = (1.0f / 50000.0f) * (350000.0f + pos->x);
                 int quad_z = (1.0f / 50000.0f) * (350000.0f + pos->z);
                 if (quad_x < 0) {
@@ -10920,9 +10924,8 @@ BOOL daPy_lk_c::startRestartRoom(u32 mode, int eventInfoIdx, f32 param_3, int i_
                 } else if (quad_z > 13) {
                     quad_z = 13;
                 }
-
-                int subsector_z = (quad_z & 1) << 1;
-                int subsector_x = quad_x & 1;
+                subsector_z = (quad_z & 1) << 1;
+                subsector_x = quad_x & 1;
                 int sector_num = (quad_z >> 1) * 7 + (quad_x >> 1);
                 int scls_idx = subsector_x + (sector_num << 2) + subsector_z;
 
@@ -12352,9 +12355,10 @@ void daPy_lk_c::playerInit() {
     int num_linktex_headers_seen = 0;
     J3DTexture* texture = mpCLModelData->getTexture();
     JUT_ASSERT(VERSION_SELECT(21577, 21684, 21764, 21764), texture != NULL);
+    u16 tex_no;
     JUTNameTab* textureName = mpCLModelData->getTextureName();
     JUT_ASSERT(VERSION_SELECT(21579, 21686, 21766, 21766), textureName != NULL);
-    for (u16 tex_no = 0; tex_no < texture->getNum(); tex_no++) {
+    for (tex_no = 0; tex_no < texture->getNum(); tex_no++) {
         const char* texName = textureName->getName(tex_no);
         if (strcmp(texName, "linktexS3TC") != 0) {
             continue;

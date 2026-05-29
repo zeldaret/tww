@@ -1459,7 +1459,7 @@ BOOL realPolygonCheck(cXyz* param_0, f32 casterRadius, f32 heightAgl, cXyz* ligh
     bbMax.z += casterRadius;
 
     mDoLib_clipper::changeFar(mDoLib_clipper::getFovyRate() * 3000.0f);
-    s32 clip = mDoLib_clipper::clip(j3dSys.getViewMtx(), &bbMax, &bbMin);
+    BOOL clip = mDoLib_clipper::clip(j3dSys.getViewMtx(), &bbMax, &bbMin);
     mDoLib_clipper::resetFar();
     if (clip) {
         return FALSE;

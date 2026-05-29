@@ -46,7 +46,7 @@ u32 fopScnM_ReRequest(s16 procName, u32 user) {
 
 void fopScnM_Management() {
     if (!fopScnRq_Handler())
-        JUT_ASSERT(326, FALSE);
+        JUT_ASSERT(DEMO_SELECT(284, 326), FALSE);
 }
 
 void fopScnM_Init() {

@@ -87,7 +87,8 @@ f32 daNpc_Mk_Static_c::getSpeedF(f32 param_1, f32 param_2) {
     } else if (m8 >= (ma >> 1)) {
         fVar2 = param_2;
     } else {
-        fVar2 = m8 * ((2.0f / ma) * (param_2 - param_1)) + param_1;
+        f32 f4 = (2.0f / ma);
+        fVar2 = m8 * (f4 * (param_2 - param_1)) + param_1;
     }
 
     f32 result = fVar2 * m4;
@@ -117,7 +118,7 @@ u8 daNpc_Mk_Static_c::goFarLink_3(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2) 
 
     cXyz local_60 = dStack_74.getPoint(mPointIndex2);
     cXyz local_6c = dStack_74.getPoint(mPointIndex1);
-    s16 sVar4 = cLib_targetAngleY(fopAcM_GetPosition_p(param_1), fopAcM_GetPosition_p(link_actor));
+    s16 sVar4 = cLib_targetAngleY(&param_1->current.pos, &link_actor->current.pos);
     s16 sVar5 = cLib_targetAngleY(&local_60, &local_6c);
 
     cM3dGLin unusedLine;
@@ -244,8 +245,9 @@ u8 daNpc_Mk_Static_c::runAwayProc(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, 
             turnPath(param_1, param_2, 2);
             break;
         }
-        case 3:
-            if ((link_actor->current.pos - param_1->current.pos).absXZ() < 800.0f) {
+        case 3: {
+            f32 temp = (link_actor->current.pos - param_1->current.pos).absXZ();
+            if (temp < 800.0f) {
                 me = 10;
                 u8 uVar6 = goFarLink_2(param_1, param_2);
                 runaway_com2(param_2, uVar6);
@@ -256,13 +258,12 @@ u8 daNpc_Mk_Static_c::runAwayProc(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, 
                 m8 += 3;
             }
             break;
-
+        }
         case 1:
         case 2:
             f32 fVar9 = (link_actor->current.pos - param_1->current.pos).absXZ();
 
-            u8 options = (m0 == 1) ? (u8)2 : (u8)3;
-            if (walkPath(param_1, param_2, options)) {
+            if (walkPath(param_1, param_2, (m0 == 1) ? (u8)2 : (u8)3)) {
                 if (fVar9 > 900.0f) {
                     return 3;
                 } else {

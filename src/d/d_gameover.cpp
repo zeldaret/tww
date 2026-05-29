@@ -176,7 +176,7 @@ BOOL dGameover_c::_delete() {
     mpHeap->freeAll();
     dComIfGp_offHeapLockFlag();
     mDoExt_setCurrentHeap(oldHeap);
-    dComIfG_resDelete(&mPhs, "Gover");
+    dComIfG_resDeleteDemo(&mPhs, "Gover");
     return TRUE;
 }
 
@@ -342,16 +342,13 @@ BOOL dDlst_GameOverScrnDraw_c::anime1(int idx) {
             fopMsgM_setInitAlpha(&letter[idx]);
 
         letter[idx].mUserArea++;
-        f32 y = (1.0f - acc(5, letter[idx].mUserArea, 0)) * -288.0f;
-        fopMsgM_paneTrans(&letter[idx], 0.0f, y);
+        fopMsgM_paneTrans(&letter[idx], 0.0f, (1.0f - acc(5, letter[idx].mUserArea, 0)) * -288.0f);
     } else if (letter[idx].mUserArea < 7) {
         letter[idx].mUserArea++;
-        f32 y = acc(2, letter[idx].mUserArea - 5, 0) * -9.0f;
-        fopMsgM_paneTrans(&letter[idx], 0.0f, y);
+        fopMsgM_paneTrans(&letter[idx], 0.0f, acc(2, letter[idx].mUserArea - 5, 0) * -9.0f);
     } else if (letter[idx].mUserArea < 9) {
         letter[idx].mUserArea++;
-        f32 y = (1.0f - acc(2, letter[idx].mUserArea - 7, 0)) * -9.0f;
-        fopMsgM_paneTrans(&letter[idx], 0.0f, y);
+        fopMsgM_paneTrans(&letter[idx], 0.0f, (1.0f - acc(2, letter[idx].mUserArea - 7, 0)) * -9.0f);
         if (letter[idx].mUserArea == 9)
             mDoAud_seStart(JA_SE_EXIT_GAME_OVER);
     }
