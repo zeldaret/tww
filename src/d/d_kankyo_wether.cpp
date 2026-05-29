@@ -480,15 +480,15 @@ void wether_move_sun() {
 
             if (g_env_light.mpSunPacket != NULL && g_env_light.mpSunlenzPacket != NULL) {
                 g_env_light.mpSunPacket->mpTextureData[0] =
-                    (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_TUKI_AS);
+                    (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TXA_TUKI_AS_e);
                 g_env_light.mpSunPacket->mpTextureData[1] =
-                    (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_TUKI_BS);
+                    (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TXA_TUKI_BS_e);
                 g_env_light.mpSunPacket->mpTextureData[2] =
-                    (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_TUKI_CS);
+                    (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TXA_TUKI_CS_e);
                 g_env_light.mpSunPacket->mpTextureData[3] =
-                    (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_TUKI_DS);
+                    (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TXA_TUKI_DS_e);
                 g_env_light.mpSunPacket->mpTextureData[4] =
-                    (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_TAIYO);
+                    (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TXA_TAIYO_e);
                 g_env_light.mpSunPacket->field_0x3c = 0;
                 g_env_light.mpSunPacket->field_0x3d = 0;
                 g_env_light.mpSunPacket->mVisibility = 0.0f;
@@ -500,11 +500,11 @@ void wether_move_sun() {
                 g_env_light.mpSunPacket->mVizChkData[3] = 0;
 
                 g_env_light.mpSunlenzPacket->mpTexSnow01 =
-                    (u8*)dComIfG_getObjectRes("Always", ALWAYS_I8_TX_SNOW01);
+                    (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_I8_TX_SNOW01_e);
                 g_env_light.mpSunlenzPacket->mpTexLensHalf =
-                    (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_LENS_32HALF);
+                    (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TXA_LENS_32HALF_e);
                 g_env_light.mpSunlenzPacket->mpTexRingHalf =
-                    (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_RING_A_32HAFE);
+                    (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TXA_RING_A_32HAFE_e);
                 g_env_light.mpSunlenzPacket->field_0x88 = 1000000000.0f; // This is not G_CM3D_F_INF
                 g_env_light.mpSunlenzPacket->field_0x8c = 0.0f;
                 g_env_light.mpSunlenzPacket->mDistFalloff = 0.0f;
@@ -689,7 +689,7 @@ void wether_move_housi() {
                 return;
             }
 
-            g_env_light.mpHousiPacket->mpTex = (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_AK_HOUSHI00);
+            g_env_light.mpHousiPacket->mpTex = (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_AK_HOUSHI00_e);
             g_env_light.mpHousiPacket->field_0x5ddc = 0.0f;
 
             for (int i = 0; i < 300; i++) {
@@ -722,7 +722,7 @@ void wether_move_moya() {
                 return;
             }
 
-            g_env_light.mpMoyaPacket->mpTexture = (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_MOYA_B_64);
+            g_env_light.mpMoyaPacket->mpTexture = (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TXA_MOYA_B_64_e);
 
             for (int i = 0; i < 100; i++) {
                 g_env_light.mpMoyaPacket->mEff[i].mStatus = 0;
@@ -855,8 +855,8 @@ void wether_move_wave() {
                 return;
             }
 
-            g_env_light.mpWavePacket->mpTexUsonami = (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_USONAMI_256_64MIP);
-            g_env_light.mpWavePacket->mpTexUsonamiM = (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_USONAMI_M_256_64MIP);
+            g_env_light.mpWavePacket->mpTexUsonami = (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TXA_USONAMI_256_64MIP_e);
+            g_env_light.mpWavePacket->mpTexUsonamiM = (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TXA_USONAMI_M_256_64MIP_e);
 
             for (int i = 0; i < 300; i++) {
                 g_env_light.mpWavePacket->mEff[i].mStatus = 0;

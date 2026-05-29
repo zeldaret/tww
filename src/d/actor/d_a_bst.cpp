@@ -12,7 +12,7 @@
 #include "d/d_cc_uty.h"
 #include "d/d_meter.h"
 #include "d/d_snap.h"
-#include "d/res/res_bst.h"
+#include "res/Object/Bst.h"
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_camera.h"
@@ -47,12 +47,12 @@ static fpc_ProcID msg;
 static s8 msg_end;
 static u8 hio_set;
 static daBst_HIO_c l_HIO;
-static u16 set_bdl_d[3] = {BST_BDL_BST, BST_BDL_LHAND, BST_BDL_RHAND};
-static u16 set_za_bdl[3] = {BST_BDL_MUNE, BST_BDL_UDEL, BST_BDL_UDER};
-static u16 set_bck_d[3] = {BST_BCK_BST_SLEEP, BST_BCK_LH_SLEEP, BST_BCK_RH_SLEEP};
-static u16 fly_bck_d[] = {BST_BCK_BST_FLY, BST_BCK_LH_FLY, BST_BCK_RH_FLY};
-static u16 damage_bck_d[] = {BST_BCK_BST_FLY, BST_BCK_LH_DAMAGE, BST_BCK_RH_DAMAGE};
-static u16 down_bck_d[] = {BST_BCK_BST_FLY, BST_BCK_LH_DOWN, BST_BCK_RH_DOWN};
+static u16 set_bdl_d[3] = {dRes_INDEX_BST_BDL_BST_e, dRes_INDEX_BST_BDL_LHAND_e, dRes_INDEX_BST_BDL_RHAND_e};
+static u16 set_za_bdl[3] = {dRes_INDEX_BST_BDL_MUNE_e, dRes_INDEX_BST_BDL_UDEL_e, dRes_INDEX_BST_BDL_UDER_e};
+static u16 set_bck_d[3] = {dRes_INDEX_BST_BCK_BST_SLEEP_e, dRes_INDEX_BST_BCK_LH_SLEEP_e, dRes_INDEX_BST_BCK_RH_SLEEP_e};
+static u16 fly_bck_d[] = {dRes_INDEX_BST_BCK_BST_FLY_e, dRes_INDEX_BST_BCK_LH_FLY_e, dRes_INDEX_BST_BCK_RH_FLY_e};
+static u16 damage_bck_d[] = {dRes_INDEX_BST_BCK_BST_FLY_e, dRes_INDEX_BST_BCK_LH_DAMAGE_e, dRes_INDEX_BST_BCK_RH_DAMAGE_e};
+static u16 down_bck_d[] = {dRes_INDEX_BST_BCK_BST_FLY_e, dRes_INDEX_BST_BCK_LH_DOWN_e, dRes_INDEX_BST_BCK_RH_DOWN_e};
 
 /* 00000110-00000174       .text message_set__FP9bst_classUl */
 static BOOL message_set(bst_class* i_this, unsigned long msg_no) {
@@ -243,8 +243,8 @@ static void pos_move(bst_class* i_this, u8 param_2) {
     actor->current.pos += actor->speed;
 }
 
-static u16 start_bck_d[] = {BST_BCK_BST_START, BST_BCK_LH_START, BST_BCK_RH_START};
-static u16 start2_bck_d[] = {0, BST_BCK_LH_START2, BST_BCK_RH_START2};
+static u16 start_bck_d[] = {dRes_INDEX_BST_BCK_BST_START_e, dRes_INDEX_BST_BCK_LH_START_e, dRes_INDEX_BST_BCK_RH_START_e};
+static u16 start2_bck_d[] = {0, dRes_INDEX_BST_BCK_LH_START2_e, dRes_INDEX_BST_BCK_RH_START2_e};
 static u16 start_smoke_name[] = {dPa_name::ID_AK_ST_BSTSTARTSMOKEHEAD00, dPa_name::ID_AK_ST_BSTSTARTSMOKELHAND00, dPa_name::ID_AK_ST_BSTSTARTSMOKERHAND00};
 
 /* 00000B1C-00000E58       .text stay__FP9bst_class */
@@ -307,10 +307,10 @@ static void stay(bst_class* i_this) {
     }
 }
 
-static u16 fly_btk_d[] = {BST_BTK_BST, BST_BTK_LHAND, BST_BTK_RHAND};
-static u16 fly_brk_d[] = {BST_BRK_BST, BST_BRK_LHAND, BST_BRK_RHAND};
-static u16 damage_btk_d[] = {BST_BTK_BST_DAMAGE, BST_BTK_LH_DAMAGE, BST_BTK_RH_DAMAGE};
-static u16 damage_brk_d[] = {BST_BRK_BST_DAMAGE, BST_BRK_LH_DAMAGE, BST_BRK_RH_DAMAGE};
+static u16 fly_btk_d[] = {dRes_INDEX_BST_BTK_BST_e, dRes_INDEX_BST_BTK_LHAND_e, dRes_INDEX_BST_BTK_RHAND_e};
+static u16 fly_brk_d[] = {dRes_INDEX_BST_BRK_BST_e, dRes_INDEX_BST_BRK_LHAND_e, dRes_INDEX_BST_BRK_RHAND_e};
+static u16 damage_btk_d[] = {dRes_INDEX_BST_BTK_BST_DAMAGE_e, dRes_INDEX_BST_BTK_LH_DAMAGE_e, dRes_INDEX_BST_BTK_RH_DAMAGE_e};
+static u16 damage_brk_d[] = {dRes_INDEX_BST_BRK_BST_DAMAGE_e, dRes_INDEX_BST_BRK_LH_DAMAGE_e, dRes_INDEX_BST_BRK_RH_DAMAGE_e};
 
 /* 00000E58-000014E8       .text fly__FP9bst_class */
 static void fly(bst_class* i_this) {
@@ -409,7 +409,7 @@ static void fly(bst_class* i_this) {
     }
 }
 
-static u16 downa_bck_d[] = {BST_BCK_BST_FLY, BST_BCK_LH_GOO, BST_BCK_RH_GOO};
+static u16 downa_bck_d[] = {dRes_INDEX_BST_BCK_BST_FLY_e, dRes_INDEX_BST_BCK_LH_GOO_e, dRes_INDEX_BST_BCK_RH_GOO_e};
 
 /* 000014E8-00001C14       .text down_attack__FP9bst_class */
 static void down_attack(bst_class* i_this) {
@@ -520,7 +520,7 @@ static void down_attack(bst_class* i_this) {
     }
 }
 
-static u16 paa_bck_d[] = {0, BST_BCK_LH_PAA, BST_BCK_RH_PAA};
+static u16 paa_bck_d[] = {0, dRes_INDEX_BST_BCK_LH_PAA_e, dRes_INDEX_BST_BCK_RH_PAA_e};
 
 /* 00001C14-000023C8       .text paa_attack__FP9bst_class */
 static void paa_attack(bst_class* i_this) {
@@ -652,7 +652,7 @@ static void paa_attack(bst_class* i_this) {
     }
 }
 
-static u16 awasu_bck_d[] = {0, BST_BCK_LH_AWASE, BST_BCK_RH_AWASU};
+static u16 awasu_bck_d[] = {0, dRes_INDEX_BST_BCK_LH_AWASE_e, dRes_INDEX_BST_BCK_RH_AWASU_e};
 
 /* 00002404-00002E08       .text kumi_attack__FP9bst_class */
 static void kumi_attack(bst_class* i_this) {
@@ -875,8 +875,8 @@ static void harai_attack(bst_class* i_this) {
     pos_move(i_this, cVar3);
 }
 
-static u16 sleep_btk_d[] = {BST_BCK_BST_SLEEP, BST_BTK_LH_END, BST_BTK_RH_END};
-static u16 sleep_brk_d[] = {BST_BRK_BST, BST_BRK_LH_END, BST_BRK_RH_END};
+static u16 sleep_btk_d[] = {dRes_INDEX_BST_BCK_BST_SLEEP_e, dRes_INDEX_BST_BTK_LH_END_e, dRes_INDEX_BST_BTK_RH_END_e};
+static u16 sleep_brk_d[] = {dRes_INDEX_BST_BRK_BST_e, dRes_INDEX_BST_BRK_LH_END_e, dRes_INDEX_BST_BRK_RH_END_e};
 
 /* 0000318C-00003470       .text sleep__FP9bst_class */
 static void sleep(bst_class* i_this) {
@@ -964,13 +964,13 @@ static void beam_attack(bst_class* i_this) {
     switch (i_this->mDamage) {
     case 0:
         i_this->mDamage++;
-        anm_init(i_this, BST_BCK_BEAM_MAE, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BST_BCK_BEAM_MAE_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         fopAcM_seStart(actor, JA_SE_CM_BST_MOUTH_OPEN, 0);
         break;
     case 1:
         if (i_this->m02B8->isStop()) {
             i_this->mDamage++;
-            anm_init(i_this, BST_BCK_BEAM_TAME, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BST_BCK_BEAM_TAME_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m10FC[0] = 0x2d;
             for (s32 i = 0; i < 2; i++) {
                 i_this->m2ED8[i] = dComIfGp_particle_set(charge_e_name[i], &actor->current.pos);
@@ -988,7 +988,7 @@ static void beam_attack(bst_class* i_this) {
                 }
             }
             i_this->mDamage++;
-            anm_init(i_this, BST_BCK_BEAM, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BST_BCK_BEAM_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m10FC[0] = REG0_S(4) + 50;
         }
         break;
@@ -1122,9 +1122,9 @@ static void head_damage(bst_class* i_this) {
         i_this->m10FC[0] = 40;
         actor->speedF = 0.0f;
         actor->speed.y = 0.0f;
-        J3DAnmTevRegKey* key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_BST_END);
+        J3DAnmTevRegKey* key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_BST_END_e);
         i_this->mpTevRegAnimator->init(i_this->m02B8->getModel()->getModelData(), key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-        J3DAnmTextureSRTKey* srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_BST_END);
+        J3DAnmTextureSRTKey* srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_BST_END_e);
         i_this->mpTexMtxAnimator->init(i_this->m02B8->getModel()->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
         fopAcM_seStart(actor, JA_SE_CM_BST_HEAD_EYE_CLOSE, 0);
         mDoAud_bgmStart(JA_BGM_UNK_123);
@@ -1151,7 +1151,7 @@ static void head_damage(bst_class* i_this) {
                 i_this->m112A = REG0_S(7) + 4;
                 mDoAud_seStart(JA_SE_CM_BST_HEAD_FALL, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
                 mDoAud_seStart(JA_SE_CM_BST_MOUTH_OPEN, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-                anm_init(i_this, BST_BCK_KUTI_OPEN, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BST_BCK_KUTI_OPEN_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->mDamage++;
                 actor->speed.y = 0.0f;
             }
@@ -1159,7 +1159,7 @@ static void head_damage(bst_class* i_this) {
         break;
     case 2:
         if (i_this->m02B8->isStop()) {
-            anm_init(i_this, BST_BCK_KUTI_OPEN_LOOP, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BST_BCK_KUTI_OPEN_LOOP_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m10FC[0] = 300;
             i_this->mDamage++;
         }
@@ -1192,7 +1192,7 @@ static void head_damage(bst_class* i_this) {
         if (i_this->m10FC[0] != 0) {
             break;
         }
-        anm_init(i_this, BST_BCK_BOM_NOMI, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BST_BCK_BOM_NOMI_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->mDamage++;
         i_this->m2EE0[0] = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTBOMBFLASH00, &actor->current.pos);
         fopAcM_seStart(actor, JA_SE_CM_BST_MOUTH_CLOSE, 0);
@@ -1220,7 +1220,7 @@ static void head_damage(bst_class* i_this) {
                 i_this->m2E9A = 50;
                 i_this->mActionType = bst_class::ACTION_END_DEMO_e;
                 i_this->mDamage = 0;
-                anm_init(i_this, BST_BCK_BST_DEAD, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BST_BCK_BST_DEAD_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 hand[0]->mActionType = bst_class::ACTION_END_DEMO_e;
                 hand[0]->mDamage = 10;
                 hand[1]->mActionType = bst_class::ACTION_END_DEMO_e;
@@ -1229,7 +1229,7 @@ static void head_damage(bst_class* i_this) {
                 mDoAud_bgmStop(30);
                 mDoAud_bgmStreamPrepare(JA_STRM_BST_CLEAR);
             } else {
-                anm_init(i_this, BST_BCK_BOM_BAKUHATU, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BST_BCK_BOM_BAKUHATU_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->mDamage++;
             }
             fopAcM_seStart(actor, JA_SE_CM_BST_EXPLODE, 0);
@@ -1552,7 +1552,7 @@ static void hana_demo(bst_class* i_this) {
         i_this->m10FC[0] = 40;
         actor->speedF = 0.0f;
         actor->speed.y = 0.0f;
-        anm_init(i_this, BST_BCK_HANA_DEMO, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BST_BCK_HANA_DEMO_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->m2E9A = 1;
         fopAcM_seStartCurrent(actor, JA_SE_CM_BST_HAND_STRAIN, 0);
         // fallthrough
@@ -1620,7 +1620,7 @@ static void end_demo(bst_class* i_this) {
         }
         break;
     case 2:
-        anm_init(i_this, BST_BCK_BST_HIRAKU, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BST_BCK_BST_HIRAKU_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->mDamage++;
         i_this->m2EF4 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTHALO00, &actor->current.pos);
         if (i_this->m2EF4 != NULL) {
@@ -1789,17 +1789,17 @@ static void main_cont(bst_class* i_this) {
                     hand[1]->mDamage = 0;
                     hand[0]->mDamage = 0;
                     i_this->m2E7C = 10;
-                    J3DAnmTevRegKey* key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_UDEL);
+                    J3DAnmTevRegKey* key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_UDEL_e);
                     hand[0]->mpBrkAnm->init(hand[0]->m02C8->getModelData(), key, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                    J3DAnmTextureSRTKey* srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_UDEL);
+                    J3DAnmTextureSRTKey* srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_UDEL_e);
                     hand[0]->mpBtkAnm->init(hand[0]->m02C8->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                    key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_UDER);
+                    key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_UDER_e);
                     hand[1]->mpBrkAnm->init(hand[1]->m02C8->getModelData(), key, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_UDER);
+                    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_UDER_e);
                     hand[1]->mpBtkAnm->init(hand[1]->m02C8->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                    key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_MUNE);
+                    key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_MUNE_e);
                     boss->mpBrkAnm->init(boss->m02C8->getModelData(), key, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_MUNE);
+                    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_MUNE_e);
                     boss->mpBtkAnm->init(boss->m02C8->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
                     i_this->mBombArrowDropTimer = 400;
                     i_this->m2FE0->setPlaySpeed(1.0f);
@@ -2003,29 +2003,29 @@ static void beam_move(bst_class* i_this) {
 
 /* 00007CF0-0000815C       .text end_brkbtk_set__FP9bst_class */
 static void end_brkbtk_set(bst_class* i_this) {
-    J3DAnmTevRegKey* tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_LH_END);
+    J3DAnmTevRegKey* tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_LH_END_e);
     hand[0]->mpTevRegAnimator->init(hand[0]->m02B8->getModel()->getModelData(), tev_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    J3DAnmTextureSRTKey* srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_LH_END);
+    J3DAnmTextureSRTKey* srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_LH_END_e);
     hand[0]->mpTexMtxAnimator->init(hand[0]->m02B8->getModel()->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_RH_END);
+    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_RH_END_e);
     hand[1]->mpTevRegAnimator->init(hand[1]->m02B8->getModel()->getModelData(), tev_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_RH_END);
+    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_RH_END_e);
     hand[1]->mpTexMtxAnimator->init(hand[1]->m02B8->getModel()->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_BST_END);
+    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_BST_END_e);
     boss->mpTevRegAnimator->init(boss->m02B8->getModel()->getModelData(), tev_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_BST_END);
+    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_BST_END_e);
     boss->mpTexMtxAnimator->init(boss->m02B8->getModel()->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_UDEL_END);
+    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_UDEL_END_e);
     hand[0]->mpBrkAnm->init(hand[0]->m02C8->getModelData(), tev_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_UDEL_END);
+    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_UDEL_END_e);
     hand[0]->mpBtkAnm->init(hand[0]->m02C8->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_UDER_END);
+    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_UDER_END_e);
     hand[1]->mpBrkAnm->init(hand[1]->m02C8->getModelData(), tev_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_UDER_END);
+    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_UDER_END_e);
     hand[1]->mpBtkAnm->init(hand[1]->m02C8->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_MUNE_END);
+    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_MUNE_END_e);
     boss->mpBrkAnm->init(boss->m02C8->getModelData(), tev_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_MUNE_END);
+    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_MUNE_END_e);
     boss->mpBtkAnm->init(boss->m02C8->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
 }
 
@@ -2263,17 +2263,17 @@ void demo_camera(bst_class* i_this) {
                 i_this->m2EA0.x -= REG0_F(1) + 500.0f;
                 i_this->m2EA0.y += REG0_F(2) + 100.0f;
                 i_this->m2EC8 = REG0_F(4) + 75.0f;
-                pJVar7 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_UDEL);
+                pJVar7 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_UDEL_e);
                 hand[0]->mpBrkAnm->init(hand[0]->m02C8->getModelData(), pJVar7, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                pJVar8 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_UDEL);
+                pJVar8 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_UDEL_e);
                 hand[0]->mpBtkAnm->init(hand[0]->m02C8->getModelData(), pJVar8, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                pJVar7 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_UDER);
+                pJVar7 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_UDER_e);
                 hand[1]->mpBrkAnm->init(hand[1]->m02C8->getModelData(), pJVar7, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                pJVar8 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_UDER);
+                pJVar8 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_UDER_e);
                 hand[1]->mpBtkAnm->init(hand[1]->m02C8->getModelData(), pJVar8, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                pJVar7 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_MUNE);
+                pJVar7 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_MUNE_e);
                 boss->mpBrkAnm->init(boss->m02C8->getModelData(), pJVar7, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                pJVar8 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_MUNE);
+                pJVar8 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_MUNE_e);
                 boss->mpBtkAnm->init(boss->m02C8->getModelData(), pJVar8, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
                 i_this->mBombArrowDropTimer = 500;
             }
@@ -2490,7 +2490,7 @@ void demo_camera(bst_class* i_this) {
         break;
     case 56:
         if (i_this->msFrameCount == REG0_S(4) + 50) {
-            anm_init(i_this, BST_BCK_HANA_DEMO, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BST_BCK_HANA_DEMO_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             mDoAud_seStart(JA_SE_CM_BST_HAND_STRAIN, &actor->current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 #if VERSION > VERSION_DEMO
             i_this->m2E98 = 1;
@@ -2817,10 +2817,10 @@ static BOOL daBst_Delete(bst_class* i_this) {
     return TRUE;
 }
 
-static u16 set_btk_d[3] = {BST_BTK_BST_START, BST_BTK_LH_START, BST_BTK_RH_START};
-static u16 set_brk_d[3] = {BST_BRK_BST_START, BST_BRK_LH_START, BST_BRK_RH_START};
-static u16 set_za_btk_d[3] = {BST_BTK_MUNE_START, BST_BTK_UDEL_START, BST_BTK_UDER_START};
-static u16 set_za_brk_d[3] = {BST_BRK_MUNE_START, BST_BRK_UDEL_START, BST_BRK_UDER_START};
+static u16 set_btk_d[3] = {dRes_INDEX_BST_BTK_BST_START_e, dRes_INDEX_BST_BTK_LH_START_e, dRes_INDEX_BST_BTK_RH_START_e};
+static u16 set_brk_d[3] = {dRes_INDEX_BST_BRK_BST_START_e, dRes_INDEX_BST_BRK_LH_START_e, dRes_INDEX_BST_BRK_RH_START_e};
+static u16 set_za_btk_d[3] = {dRes_INDEX_BST_BTK_MUNE_START_e, dRes_INDEX_BST_BTK_UDEL_START_e, dRes_INDEX_BST_BTK_UDER_START_e};
+static u16 set_za_brk_d[3] = {dRes_INDEX_BST_BRK_MUNE_START_e, dRes_INDEX_BST_BRK_UDEL_START_e, dRes_INDEX_BST_BRK_UDER_START_e};
 
 /* 0000AADC-0000B2D0       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
@@ -2883,14 +2883,14 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
     J3DModelData* modelData;
     if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Bst", BST_BDL_TAMA);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BDL_TAMA_e);
         for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m0390); i++) {
             i_this->m0390[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
             if (i_this->m0390[i] == NULL) {
                 return FALSE;
             }
         }
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Bst", BST_BDL_HBSITA1);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BDL_HBSITA1_e);
         i_this->m2FD0 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if (i_this->m2FD0 == NULL) {
             return FALSE;
@@ -2899,7 +2899,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         if (i_this->m2FD4 == NULL) {
             return FALSE;
         }
-        res = i_this->m2FD4->init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_HBSITA1), TRUE, J3DFrameCtrl::EMode_LOOP);
+        res = i_this->m2FD4->init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_HBSITA1_e), TRUE, J3DFrameCtrl::EMode_LOOP);
         if (res == 0) {
             return FALSE;
         }
@@ -2908,12 +2908,12 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             return FALSE;
         }
         res = i_this->m2FD8->init(
-            modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_HBSITA1), TRUE, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, false, FALSE
+            modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_HBSITA1_e), TRUE, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, false, FALSE
         );
         if (res == 0) {
             return FALSE;
         }
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Bst", BST_BDL_HBYOKO1);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BDL_HBYOKO1_e);
         i_this->m2FDC = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if (i_this->m2FDC == NULL) {
             return FALSE;
@@ -2923,7 +2923,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             return FALSE;
         }
         res = i_this->m2FE0->init(
-            modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_HBYOKO1), TRUE, J3DFrameCtrl::EMode_LOOP, 0.0f, 0, -1, false, FALSE
+            modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_HBYOKO1_e), TRUE, J3DFrameCtrl::EMode_LOOP, 0.0f, 0, -1, false, FALSE
         );
         if (res == 0) {
             return FALSE;

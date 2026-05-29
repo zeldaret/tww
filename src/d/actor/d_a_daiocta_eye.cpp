@@ -11,7 +11,7 @@
 #include "d/d_bg_s_func.h"
 #include "d/d_cc_d.h"
 #include "d/d_lib.h"
-#include "d/res/res_daiocta.h"
+#include "res/Object/Daiocta.h"
 
 const s32 daDaiocta_Eye_c::m_heapsize = 2848;
 const char daDaiocta_Eye_c::m_arc_name[] = "daiocta";
@@ -115,7 +115,7 @@ BOOL daDaiocta_Eye_c::_createHeap() {
         }
     };
 
-    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_DO_EYE1));
+    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BDL_DO_EYE1_e));
     JUT_ASSERT(0xE9, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
@@ -126,7 +126,7 @@ BOOL daDaiocta_Eye_c::_createHeap() {
     
     mpModel->setUserArea((u32)this);
 
-    mpBrk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_DAMAGE_EYE_A1));
+    mpBrk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BRK_DAMAGE_EYE_A1_e));
 
     if (!mpBrk) {
         return FALSE;
@@ -142,7 +142,7 @@ BOOL daDaiocta_Eye_c::_createHeap() {
         return FALSE;
     }
 
-    mpBtk = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_DAMAGE_EYE_A1));
+    mpBtk = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BTK_DAMAGE_EYE_A1_e));
     
     if (!mpBtk) {
         return FALSE;
@@ -291,13 +291,13 @@ void daDaiocta_Eye_c::modeDamageInit() {
     mbIsDamaged = true;
 
     J3DModelData* model_data_p = mpModel->getModelData();
-    mpBrk = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_DAMAGE_EYE_A1);
+    mpBrk = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BRK_DAMAGE_EYE_A1_e);
     mBrkAnm.init(
         model_data_p, mpBrk, TRUE, 
         J3DFrameCtrl::EMode_NONE, 1.0f, 
         0, -1, true, FALSE
     );
-    mpBtk = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_DAMAGE_EYE_A1);
+    mpBtk = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BTK_DAMAGE_EYE_A1_e);
     mBtkAnm.init(
         model_data_p, mpBtk, TRUE, 
         J3DFrameCtrl::EMode_NONE, 1.0f, 
@@ -336,13 +336,13 @@ void daDaiocta_Eye_c::modeDeathInit() {
     mMode = MODE_DEATH;
     mbIsDamaged = true;
     mEyeScale.setall(1.0f);
-    mpBrk = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_DAMAGE_EYE_B1);
+    mpBrk = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BRK_DAMAGE_EYE_B1_e);
     mBrkAnm.init(
         mpModel->getModelData(), mpBrk, TRUE, 
         J3DFrameCtrl::EMode_NONE, 1.0f, 
         0, -1, true, FALSE
     );
-    mpBtk = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_DAMAGE_EYE_B1);
+    mpBtk = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BTK_DAMAGE_EYE_B1_e);
     mBtkAnm.init(
         mpModel->getModelData(), mpBtk, TRUE, 
         J3DFrameCtrl::EMode_NONE, 1.0f, 

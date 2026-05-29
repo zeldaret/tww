@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_komore.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_frlt.h"
+#include "res/Object/frLt.h"
 
 const char daKomore::Act_c::M_arcname[] = "frLt";
 
@@ -20,7 +20,7 @@ bool daKomore::Act_c::create_heap() {
     J3DModelData* mdl_data;
     J3DAnmTextureSRTKey* btk_data;
 
-    mdl_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, FRLT_BDL_YFRLT00));
+    mdl_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, dRes_INDEX_FRLT_BDL_YFRLT00_e));
 
     JUT_ASSERT(0x66, mdl_data != NULL);
 
@@ -28,7 +28,7 @@ bool daKomore::Act_c::create_heap() {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
     }
 
-    btk_data = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes(M_arcname, FRLT_BTK_YFRLT00));
+    btk_data = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes(M_arcname, dRes_INDEX_FRLT_BTK_YFRLT00_e));
 
     JUT_ASSERT(0x6d, btk_data != NULL);
 

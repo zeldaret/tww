@@ -8,7 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_particle_name.h"
-#include "d/res/res_ospbox.h"
+#include "res/Object/Ospbox.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "m_Do/m_Do_mtx.h"
@@ -46,7 +46,7 @@ const dCcD_SrcCyl daObjOspbox::Act_c::M_cyl_src = {
 
 /* 000000EC-000001A0       .text CreateHeap__Q211daObjOspbox5Act_cFv */
 BOOL daObjOspbox::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, OSPBOX_BDL_OSPBOX);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_OSPBOX_BDL_OSPBOX_e);
     JUT_ASSERT(0x86, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data,0x80000,0x11000022);
     return mpModel != NULL;
@@ -86,7 +86,7 @@ cPhs_State daObjOspbox::Act_c::Mthd_Create() {
         #else
         const u32 heapSize = 0x8A0;
         #endif
-        phase_state = MoveBGCreate(M_arcname, OSPBOX_DZB_OSPBOX, NULL, heapSize);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_OSPBOX_DZB_OSPBOX_e, NULL, heapSize);
         JUT_ASSERT(0xc3, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;

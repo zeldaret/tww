@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_nest.h"
-#include "d/res/res_mtorisu.h"
+#include "res/Object/MtoriSU.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w.h"
 namespace daObjNest{
@@ -51,7 +51,7 @@ const char daObjNest::Act_c::M_arcname[] = "MtoriSU";
 
 /* 00000078-0000012C       .text CreateHeap__Q29daObjNest5Act_cFv */
 BOOL daObjNest::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MTORISU_BDL_MTORISU);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTORISU_BDL_MTORISU_e);
     JUT_ASSERT(281, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000,0x11000022);
     return mpModel != NULL;
@@ -77,7 +77,7 @@ cPhs_State daObjNest::Act_c::Mthd_Create() {
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(
             M_arcname,
-            MTORISU_DZB_MTORISU,
+            dRes_INDEX_MTORISU_DZB_MTORISU_e,
             NULL,
             DEMO_SELECT(0x1820, 0xAA0)
         );

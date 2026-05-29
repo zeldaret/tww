@@ -8,8 +8,8 @@
 #if VERSION == VERSION_DEMO
 #include "d/d_s_play.h"
 #endif
-#include "d/res/res_kaizokusen.h"
-#include "d/res/res_cloth.h"
+#include "res/Object/Kaizokusen.h"
+#include "res/Object/Cloth.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "d/actor/d_a_obj_pirateship.h"
@@ -397,7 +397,7 @@ void daSail_packet_c::draw() {
 
     GXTexObj texObj;
 
-    ResTIMG* kaizokusen = (ResTIMG*)dComIfG_getObjectRes("Kaizokusen", KAIZOKUSEN_INDEX_BTI_TXA_KAIZOKU_HO);
+    ResTIMG* kaizokusen = (ResTIMG*)dComIfG_getObjectRes("Kaizokusen", dRes_INDEX_KAIZOKUSEN_BTI_TXA_KAIZOKU_HO_e);
     GXInitTexObj(&texObj, (u8*)kaizokusen + kaizokusen->imageOffset, kaizokusen->width, kaizokusen->height,
         (GXTexFmt)kaizokusen->format, (GXTexWrapMode)kaizokusen->wrapS, (GXTexWrapMode)kaizokusen->wrapT,
         kaizokusen->mipmapCount > 1);
@@ -406,7 +406,7 @@ void daSail_packet_c::draw() {
         kaizokusen->biasClamp, kaizokusen->doEdgeLOD, (GXAnisotropy)kaizokusen->maxAnisotropy);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
 
-    ResTIMG* cloth = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+    ResTIMG* cloth = (ResTIMG*)dComIfG_getObjectRes("Cloth", dRes_INDEX_CLOTH_BTI_CLOTHTOON_e);
     GXInitTexObj(&texObj, (u8*)cloth + cloth->imageOffset, cloth->width, cloth->height,
         (GXTexFmt)cloth->format, (GXTexWrapMode)cloth->wrapS, (GXTexWrapMode)cloth->wrapT,
         cloth->mipmapCount > 1);
@@ -791,7 +791,7 @@ static BOOL daSail_Delete(sail_class* i_this) {
 /* 000021D8-00002254       .text daSail_checkCreateHeap__FP10fopAc_ac_c */
 static BOOL daSail_checkCreateHeap(fopAc_ac_c* i_actor) {
     sail_class* i_this = (sail_class*)i_actor;
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kaizokusen", KAIZOKUSEN_INDEX_BDL_AMAST);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kaizokusen", dRes_INDEX_KAIZOKUSEN_BDL_AMAST_e);
     if (modelData == NULL) {
         return FALSE;
     }

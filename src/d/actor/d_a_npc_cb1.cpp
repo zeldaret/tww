@@ -16,7 +16,7 @@
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/actor/d_a_player_main.h"
-#include "d/res/res_cb.h"
+#include "res/Object/Cb.h"
 
 class daNpc_Cb1_HIO_c : public JORReflexible {
 public:
@@ -459,7 +459,7 @@ static BOOL ppNodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000D9C-00001458       .text createHeap__11daNpc_Cb1_cFv */
 BOOL daNpc_Cb1_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_CB_e);
     JUT_ASSERT(DEMO_SELECT(937, 936), modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
@@ -489,13 +489,13 @@ BOOL daNpc_Cb1_c::createHeap() {
 
     mpMorf->getModel()->setUserArea((u32)this);
 
-    mpFaceModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB_FACE), 0x00080000, 0x11000022);
+    mpFaceModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_CB_FACE_e), 0x00080000, 0x11000022);
     if(mpFaceModel == NULL) {
         return FALSE;
     }
 
     if(isMusic()) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB_STICK);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_CB_STICK_e);
         JUT_ASSERT(DEMO_SELECT(973, 972), modelData != NULL);
         mpStickModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
         if(mpStickModel == NULL) {
@@ -508,7 +508,7 @@ BOOL daNpc_Cb1_c::createHeap() {
 
         mpStickModel->setUserArea((u32)this);
 
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB_CELLO);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_CB_CELLO_e);
         JUT_ASSERT(DEMO_SELECT(990, 989), modelData != NULL);
         mpCelloModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
         if(mpCelloModel == NULL) {
@@ -516,7 +516,7 @@ BOOL daNpc_Cb1_c::createHeap() {
         }
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_PP);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_PP_e);
     JUT_ASSERT(DEMO_SELECT(1002, 1001), modelData != NULL);
     mpPropellerModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
     if(mpPropellerModel == NULL) {
@@ -528,18 +528,18 @@ BOOL daNpc_Cb1_c::createHeap() {
 
     mpPropellerModel->setUserArea((u32)this);
 
-    if(!mPropellerBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", CB_BCK_M_OPEN), FALSE, J3DFrameCtrl::EMode_NONE)) {
+    if(!mPropellerBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BCK_M_OPEN_e), FALSE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB_NUT);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_CB_NUT_e);
     JUT_ASSERT(DEMO_SELECT(1026, 1025), modelData != NULL);
     mpNutModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
     if(mpNutModel == NULL) {
         return FALSE;
     }
 
-    if(!mNutBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", CB_BCK_NUT_SOW), TRUE, J3DFrameCtrl::EMode_NONE)) {
+    if(!mNutBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BCK_NUT_SOW_e), TRUE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 

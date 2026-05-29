@@ -12,7 +12,7 @@
 #include "dolphin/types.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
-#include "d/res/res_table.h"
+#include "res/Object/Table.h"
 
 Mtx daObjTable::Act_c::M_tmp_mtx;
 const char daObjTable::Act_c::M_arcname[6] = "Table";
@@ -23,13 +23,13 @@ BOOL daObjTable::Act_c::CreateHeap() {
     J3DModel *model;
 
     if (prm_get_mdl() == 0) {
-        model_data = (J3DModelData*) dComIfG_getObjectRes(M_arcname, TABLE_BDL_YTBLE);
+        model_data = (J3DModelData*) dComIfG_getObjectRes(M_arcname, dRes_INDEX_TABLE_BDL_YTBLE_e);
         JUT_ASSERT(0x51, model_data != NULL);
         
         model = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
         mpModel = model;
     } else {
-        model_data = (J3DModelData *) dComIfG_getObjectRes(M_arcname, TABLE_BDL_QCFIS);
+        model_data = (J3DModelData *) dComIfG_getObjectRes(M_arcname, dRes_INDEX_TABLE_BDL_QCFIS_e);
         
         JUT_ASSERT(0x57, model_data != NULL);
         
@@ -60,9 +60,9 @@ cPhs_State daObjTable::Act_c::Mthd_Create() {
     phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (prm_get_mdl() == 0) {
-            phase_state = MoveBGCreate(M_arcname, TABLE_DZB_YTBLE, NULL, -1);
+            phase_state = MoveBGCreate(M_arcname, dRes_INDEX_TABLE_DZB_YTBLE_e, NULL, -1);
         } else {
-            phase_state = MoveBGCreate(M_arcname, TABLE_DZB_QCFIS, NULL, -1);
+            phase_state = MoveBGCreate(M_arcname, dRes_INDEX_TABLE_DZB_QCFIS_e, NULL, -1);
         }
         
        JUT_ASSERT(0x8c, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));

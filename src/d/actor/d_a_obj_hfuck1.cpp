@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hfuck1.h"
-#include "d/res/res_hfuck1.h"
+#include "res/Object/Hfuck1.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_cc_d.h"
@@ -85,14 +85,14 @@ BOOL daObjHfuck1_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjHfuck1_c::create_heap() {
     bool ret = true;
 
-    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, HFUCK1_BDL_HFUCK1));
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_HFUCK1_BDL_HFUCK1_e));
 
     if (!pModelData) {
         JUT_ASSERT(DEMO_SELECT(241, 245), FALSE);
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000022);
-        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, HFUCK1_DZB_HFUCK1), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_HFUCK1_DZB_HFUCK1_e), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
 
         if (!mpModel || !mpBgW)
             ret = false;

@@ -14,9 +14,9 @@
 #include "d/d_lib.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
-#include "d/res/res_always.h"
-#include "d/res/res_ikadah.h"
-#include "d/res/res_link.h"
+#include "res/Object/Always.h"
+#include "res/Object/IkadaH.h"
+#include "res/Object/Link.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 
@@ -1427,8 +1427,8 @@ void daObj_Ikada_c::createInit() {
 
 /* 00004838-00004B60       .text _createHeap__13daObj_Ikada_cFv */
 BOOL daObj_Ikada_c::_createHeap() {
-    static const s32 bdl[] = {IKADAH_BDL_VIKAE, IKADAH_BDL_VTSP, IKADAH_BDL_VIKAH, IKADAH_BDL_VTSP2, IKADAH_BDL_VSVSP};
-    static const s32 dzb[] = {IKADAH_DZB_VIKAE, IKADAH_DZB_VTSP, IKADAH_DZB_VIKAH, IKADAH_DZB_VTSP, IKADAH_DZB_VSVSP};
+    static const s32 bdl[] = {dRes_INDEX_IKADAH_BDL_VIKAE_e, dRes_INDEX_IKADAH_BDL_VTSP_e, dRes_INDEX_IKADAH_BDL_VIKAH_e, dRes_INDEX_IKADAH_BDL_VTSP2_e, dRes_INDEX_IKADAH_BDL_VSVSP_e};
+    static const s32 dzb[] = {dRes_INDEX_IKADAH_DZB_VIKAE_e, dRes_INDEX_IKADAH_DZB_VTSP_e, dRes_INDEX_IKADAH_DZB_VIKAH_e, dRes_INDEX_IKADAH_DZB_VTSP_e, dRes_INDEX_IKADAH_DZB_VSVSP_e};
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, bdl[mType]);
     JUT_ASSERT(2170, modelData != NULL);
@@ -1439,7 +1439,7 @@ BOOL daObj_Ikada_c::_createHeap() {
     }
 
     if (mType == 4) {
-        J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arc_name, IKADAH_BCK_SVSHIP_KAITEN);
+        J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_IKADAH_BCK_SVSHIP_KAITEN_e);
         JUT_ASSERT(2180, bck != NULL);
 
         if (!mBckAnm.init(modelData, bck, true, J3DFrameCtrl::EMode_LOOP)) {
@@ -1474,7 +1474,7 @@ BOOL daObj_Ikada_c::_createHeap() {
     }
 
     if (mType == 4) {
-        ResTIMG* pImg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE);
+        ResTIMG* pImg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_ROPE_e);
         if (!mRopeLine.init(1, 200, pImg, 0)) {
             return FALSE;
         }
@@ -1482,7 +1482,7 @@ BOOL daObj_Ikada_c::_createHeap() {
 #if VERSION > VERSION_DEMO
         J3DModelData*
 #endif
-            modelData = (J3DModelData*)dComIfG_getObjectRes("Link", LINK_BDL_ROPEEND);
+            modelData = (J3DModelData*)dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_ROPEEND_e);
         JUT_ASSERT(2228, modelData != NULL);
 
         mpRopeEnd = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);

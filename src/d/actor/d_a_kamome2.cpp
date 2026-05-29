@@ -1,6 +1,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kamome2.h"
-#include "d/res/res_kamome.h"
+#include "res/Object/Kamome.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_camera.h"
 #include "d/d_meter.h"
@@ -86,7 +86,7 @@ static void key_move(kamome2_class* i_this) {
         i_this->m2C0 = unused_4207[0];
         if (!CPad_CHECK_HOLD_A(0) && iVar1 == REG0_S(0) + 9) {
             i_this->m2AC = 1;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT1, REG0_F(0) + 12.0f, 2, 1.0f, KAMOME_BAS_KA_WAIT1);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT1_e, REG0_F(0) + 12.0f, 2, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT1_e);
         }
         break;
 
@@ -101,7 +101,7 @@ static void key_move(kamome2_class* i_this) {
 
         if (CPad_CHECK_HOLD_A(0)) {
             i_this->m2AC = 0;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 5.0f, 2, 1.0f, KAMOME_BAS_KA_WAIT2);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 5.0f, 2, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
             fopAcM_seStart(&i_this->actor, JA_SE_CV_KAMOME, 0);
         }
         break;
@@ -263,16 +263,16 @@ static BOOL daKamome2_Delete(kamome2_class* i_this) {
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
     kamome2_class* i_this = (kamome2_class*)a_this;
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Kamome", KAMOME_BDL_KA),
+        (J3DModelData*)dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BDL_KA_e),
         NULL,
         NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes("Kamome", KAMOME_BCK_KA_WAIT1),
+        (J3DAnmTransform*)dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BCK_KA_WAIT1_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
         -1,
         0x1,
-        (void*)dComIfG_getObjectRes("Kamome", KAMOME_BAS_KA_WAIT1),
+        (void*)dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BAS_KA_WAIT1_e),
         0x80000,
         0x11000002
     );

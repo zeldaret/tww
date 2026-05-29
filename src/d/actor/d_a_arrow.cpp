@@ -13,7 +13,7 @@
 #include "d/actor/d_a_pz.h"
 #include "d/d_jnt_hit.h"
 #include "d/d_s_play.h"
-#include "d/res/res_link.h"
+#include "res/Object/Link.h"
 
 s16 daArrow_c::m_count;
 
@@ -87,9 +87,9 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 BOOL daArrow_c::_createHeap() {
     u16 modelFileIndex;
     if (mArrowType == TYPE_LIGHT) {
-        modelFileIndex = LINK_BDL_ARROWGLITTER;
+        modelFileIndex = dRes_INDEX_LINK_BDL_ARROWGLITTER_e;
     } else {
-        modelFileIndex = LINK_BDL_ARROW;
+        modelFileIndex = dRes_INDEX_LINK_BDL_ARROW_e;
     }
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, modelFileIndex);
     JUT_ASSERT(190, modelData != NULL);

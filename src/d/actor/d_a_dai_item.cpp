@@ -8,37 +8,37 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_s_play.h"
-#include "d/res/res_fdai.h"
-#include "d/res/res_cloth.h"
+#include "res/Object/Fdai.h"
+#include "res/Object/Cloth.h"
 
 const char daStandItem_c::m_arcname[] = "Fdai";
 const s16 daStandItem_c::m_bmdidx[] = {
-    FDAI_BDL_FOBJ00, /* dItemNo_TOWN_FLOWER_e */
-    FDAI_BDL_FOBJ01, /* dItemNo_SEA_FLOWER_e */
-    FDAI_BDL_FOBJ02, /* dItemNo_EXOTIC_FLOWER_e */
-    FDAI_BDL_FOBJ03, /* dItemNo_HEROS_FLAG_e */
-    FDAI_BDL_FOBJ04, /* dItemNo_BIG_CATCH_FLAG_e */
-    FDAI_BDL_FOBJ05, /* dItemNo_BIG_SALE_FLAG_e */
-    FDAI_BDL_FOBJ06, /* dItemNo_PINWHEEL_e */
-    FDAI_BDL_FOBJ07, /* dItemNo_SICKLE_MOON_FLAG_e */
-    FDAI_BDL_FOBJ08, /* dItemNo_SKULL_TOWER_IDOL_e */
-    FDAI_BDL_FOBJ09, /* dItemNo_FOUNTAIN_IDOL_e */
-    FDAI_BDL_FOBJ10, /* dItemNo_POSTMAN_STATUE_e */
-    FDAI_BDL_FOBJ11, /* dItemNo_SHOP_GURU_STATUE_e */
+    dRes_INDEX_FDAI_BDL_FOBJ00_e, /* dItemNo_TOWN_FLOWER_e */
+    dRes_INDEX_FDAI_BDL_FOBJ01_e, /* dItemNo_SEA_FLOWER_e */
+    dRes_INDEX_FDAI_BDL_FOBJ02_e, /* dItemNo_EXOTIC_FLOWER_e */
+    dRes_INDEX_FDAI_BDL_FOBJ03_e, /* dItemNo_HEROS_FLAG_e */
+    dRes_INDEX_FDAI_BDL_FOBJ04_e, /* dItemNo_BIG_CATCH_FLAG_e */
+    dRes_INDEX_FDAI_BDL_FOBJ05_e, /* dItemNo_BIG_SALE_FLAG_e */
+    dRes_INDEX_FDAI_BDL_FOBJ06_e, /* dItemNo_PINWHEEL_e */
+    dRes_INDEX_FDAI_BDL_FOBJ07_e, /* dItemNo_SICKLE_MOON_FLAG_e */
+    dRes_INDEX_FDAI_BDL_FOBJ08_e, /* dItemNo_SKULL_TOWER_IDOL_e */
+    dRes_INDEX_FDAI_BDL_FOBJ09_e, /* dItemNo_FOUNTAIN_IDOL_e */
+    dRes_INDEX_FDAI_BDL_FOBJ10_e, /* dItemNo_POSTMAN_STATUE_e */
+    dRes_INDEX_FDAI_BDL_FOBJ11_e, /* dItemNo_SHOP_GURU_STATUE_e */
 };
 const s16 daStandItem_c::m_bckidx[] = {
-    FDAI_BCK_FOBJ00,  /* dItemNo_TOWN_FLOWER_e */
-    FDAI_BCK_FOBJ01,  /* dItemNo_SEA_FLOWER_e */
-    FDAI_BCK_FOBJ02,  /* dItemNo_EXOTIC_FLOWER_e */
+    dRes_INDEX_FDAI_BCK_FOBJ00_e,  /* dItemNo_TOWN_FLOWER_e */
+    dRes_INDEX_FDAI_BCK_FOBJ01_e,  /* dItemNo_SEA_FLOWER_e */
+    dRes_INDEX_FDAI_BCK_FOBJ02_e,  /* dItemNo_EXOTIC_FLOWER_e */
     -1,               /* dItemNo_HEROS_FLAG_e */
     -1,               /* dItemNo_BIG_CATCH_FLAG_e */
-    FDAI_BCK_FOBJ05,  /* dItemNo_BIG_SALE_FLAG_e */
+    dRes_INDEX_FDAI_BCK_FOBJ05_e,  /* dItemNo_BIG_SALE_FLAG_e */
     -1,               /* dItemNo_PINWHEEL_e */
-    FDAI_BCK_FOBJ07,  /* dItemNo_SICKLE_MOON_FLAG_e */
-    FDAI_BCK_FOBJ08,  /* dItemNo_SKULL_TOWER_IDOL_e */
-    FDAI_BCK_FOBJ09,  /* dItemNo_FOUNTAIN_IDOL_e */
-    FDAI_BCK_FOBJ10,  /* dItemNo_POSTMAN_STATUE_e */
-    FDAI_BCK_FOBJ11,  /* dItemNo_SHOP_GURU_STATUE_e */
+    dRes_INDEX_FDAI_BCK_FOBJ07_e,  /* dItemNo_SICKLE_MOON_FLAG_e */
+    dRes_INDEX_FDAI_BCK_FOBJ08_e,  /* dItemNo_SKULL_TOWER_IDOL_e */
+    dRes_INDEX_FDAI_BCK_FOBJ09_e,  /* dItemNo_FOUNTAIN_IDOL_e */
+    dRes_INDEX_FDAI_BCK_FOBJ10_e,  /* dItemNo_POSTMAN_STATUE_e */
+    dRes_INDEX_FDAI_BCK_FOBJ11_e,  /* dItemNo_SHOP_GURU_STATUE_e */
 };
 const u16 daStandItem_c::m_heapsize[] = {
     0x2000, /* dItemNo_TOWN_FLOWER_e */
@@ -263,10 +263,10 @@ BOOL daStandItem_c::CreateHeap() {
         };
 
         u32 clothTimgRes[] = {
-            FDAI_BTI_FTEX03,
-            FDAI_BTI_FTEX04,
-            FDAI_BTI_FTEX05,
-            FDAI_BTI_FTEX07,
+            dRes_INDEX_FDAI_BTI_FTEX03_e,
+            dRes_INDEX_FDAI_BTI_FTEX04_e,
+            dRes_INDEX_FDAI_BTI_FTEX05_e,
+            dRes_INDEX_FDAI_BTI_FTEX07_e,
         };
 
         switch (mItemNo) {
@@ -286,7 +286,7 @@ BOOL daStandItem_c::CreateHeap() {
         }
 
         ResTIMG* clothTimg = (ResTIMG*)dComIfG_getObjectRes(m_arcname, clothTimgRes[mClothType]);
-        ResTIMG* clothToonTimg = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+        ResTIMG* clothToonTimg = (ResTIMG*)dComIfG_getObjectRes("Cloth", dRes_INDEX_CLOTH_BTI_CLOTHTOON_e);
         mpCloth = clothFunc[mClothType](clothTimg, clothToonTimg, &tevStr, VobjFlagPosTbl[mClothType]);
         if (mpCloth == NULL)
             return FALSE;

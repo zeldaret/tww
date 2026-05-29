@@ -8,7 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-#include "d/res/res_gaship.h"
+#include "res/Object/GaShip.h"
 
 const char daObjGaship::Act_c::M_arcname[7] = "GaShip";
 
@@ -43,7 +43,7 @@ BOOL daObjGaship::Act_c::solidHeapCB(fopAc_ac_c* i_ac) {
 
 /* 00000378-00000448       .text create_heap__Q211daObjGaship5Act_cFv */
 bool daObjGaship::Act_c::create_heap() {
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GASHIP_BDL_GASHIP));
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_GASHIP_BDL_GASHIP_e));
     JUT_ASSERT(140, mdl_data != NULL);
 #if VERSION > VERSION_DEMO
     if (mdl_data != NULL)

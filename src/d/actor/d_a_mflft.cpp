@@ -5,8 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mflft.h"
-#include "d/res/res_mflft.h"
-#include "d/res/res_always.h"
+#include "res/Object/Mflft.h"
+#include "res/Object/Always.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
@@ -543,7 +543,7 @@ static BOOL daMflft_Delete(mflft_class* i_this) {
 static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
     mflft_class* actor = (mflft_class*)a_this;
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Mflft", MFLFT_BDL_MFLFT);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Mflft", dRes_INDEX_MFLFT_BDL_MFLFT_e);
     actor->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (actor->mpModel == NULL) {
         return FALSE;
@@ -554,10 +554,10 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
     actor->pm_bgw = new dBgW();
     JUT_ASSERT(DEMO_SELECT(1047, 1058), actor->pm_bgw != NULL);
 
-    actor->pm_bgw->Set((cBgD_t*)dComIfG_getObjectRes("Mflft", MFLFT_DZB_MFLFT), dBgW::MOVE_BG_e, &actor->m700);
+    actor->pm_bgw->Set((cBgD_t*)dComIfG_getObjectRes("Mflft", dRes_INDEX_MFLFT_DZB_MFLFT_e), dBgW::MOVE_BG_e, &actor->m700);
     actor->pm_bgw->SetCrrFunc(dBgS_MoveBGProc_Typical);
     actor->pm_bgw->SetRideCallback(ride_call_back);
-    if (!actor->mLineMat.init(6, 10, (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE), 1)) {
+    if (!actor->mLineMat.init(6, 10, (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_ROPE_e), 1)) {
         return FALSE;
     }
     return TRUE;

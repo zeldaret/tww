@@ -12,7 +12,7 @@
 #include "d/d_s_play.h"
 #include "d/d_path.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/res/res_hmos.h"
+#include "res/Object/Hmos.h"
 
 static daBemos_HIO_c l_HIO;
 
@@ -168,7 +168,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000035C-00000498       .text CreateHeap1__9daBemos_cFv */
 BOOL daBemos_c::CreateHeap1() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, HMOS_BDL_HMOS1));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_HMOS_BDL_HMOS1_e));
     JUT_ASSERT(417, modelData != NULL);
 
     m2B8 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -176,7 +176,7 @@ BOOL daBemos_c::CreateHeap1() {
         return FALSE;
     }
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, HMOS_BDL_HMOSUP1));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_HMOS_BDL_HMOSUP1_e));
     JUT_ASSERT(426, modelData != NULL);
 
     m2BC = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -188,7 +188,7 @@ BOOL daBemos_c::CreateHeap1() {
 
 /* 00000498-000006EC       .text CreateHeap2__9daBemos_cFv */
 BOOL daBemos_c::CreateHeap2() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, HMOS_BDL_HMOS2));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_HMOS_BDL_HMOS2_e));
     JUT_ASSERT(448, modelData != NULL);
 
     m2B8 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -196,7 +196,7 @@ BOOL daBemos_c::CreateHeap2() {
         return FALSE;
     }
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, HMOS_BDL_HMOSUP2));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_HMOS_BDL_HMOSUP2_e));
     JUT_ASSERT(457, modelData != NULL);
 
     m2BC = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -204,7 +204,7 @@ BOOL daBemos_c::CreateHeap2() {
         return FALSE;
     }
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, HMOS_BDL_HMOS2T));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_HMOS_BDL_HMOS2T_e));
     JUT_ASSERT(475, modelData != NULL);
 
     m2C0 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -212,7 +212,7 @@ BOOL daBemos_c::CreateHeap2() {
         return FALSE;
     }
 
-    m_sch_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, HMOS_BRK_HMOS2T));
+    m_sch_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_HMOS_BRK_HMOS2T_e));
     JUT_ASSERT(483, m_sch_brk != NULL);
 
     if (!mBrkAnm2.init(modelData, m_sch_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
@@ -223,7 +223,7 @@ BOOL daBemos_c::CreateHeap2() {
 
 /* 000006EC-000007A8       .text CreateHeap3__9daBemos_cFv */
 BOOL daBemos_c::CreateHeap3() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, HMOS_BDL_HMOS3));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_HMOS_BDL_HMOS3_e));
     JUT_ASSERT(496, modelData != NULL);
 
     m2B8 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);

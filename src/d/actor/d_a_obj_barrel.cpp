@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_barrel.h"
 #include "d/actor/d_a_obj_eff.h"
-#include "d/res/res_ktaru_01.h"
+#include "res/Object/Ktaru_01.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/d_com_inf_game.h"
@@ -56,7 +56,7 @@ const dCcD_SrcCyl daObjBarrel::Act_c::M_cyl_src = {
 };
 
 const daObjBarrel::Act_c::Attr_c daObjBarrel::Act_c::M_attr = {
-    /* mBdlIdx         */ KTARU_01_BDL_KTARU_01,
+    /* mBdlIdx         */ dRes_INDEX_KTARU_01_BDL_KTARU_01_e,
     /* mShadowSize     */ 60,
     /* mEnableCutoff   */ false,
     /* mAttnH          */ 50.0f,

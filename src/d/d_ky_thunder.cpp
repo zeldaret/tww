@@ -112,7 +112,7 @@ cPhs_State dThunder_c::create() {
     camera_class *pCamera = (camera_class*)dComIfGp_getCamera(0);
 
     new (this) dThunder_c();
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YTHDR00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_YTHDR00_e);
     JUT_ASSERT(DEMO_SELECT(111, 110), modelData != NULL);
 
     mModelInfo.mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x01000200);
@@ -122,12 +122,12 @@ cPhs_State dThunder_c::create() {
     if (!mModelInfo.mInvisModel.create(mModelInfo.mpModel))
         return cPhs_ERROR_e;
 
-    J3DAnmTextureSRTKey * anm = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("Always", ALWAYS_BTK_YTHDR00);
+    J3DAnmTextureSRTKey * anm = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTK_YTHDR00_e);
     JUT_ASSERT(DEMO_SELECT(126, 125), anm != NULL);
     if (!mModelInfo.mBtk.init(modelData, anm, false, J3DFrameCtrl::EMode_LOOP))
         return cPhs_ERROR_e;
 
-    J3DAnmTevRegKey * canm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Always", ALWAYS_BRK_YTHDR00);
+    J3DAnmTevRegKey * canm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BRK_YTHDR00_e);
     JUT_ASSERT(DEMO_SELECT(141, 140), canm != NULL);
     if (!mModelInfo.mBrk.init(modelData, canm, true, J3DFrameCtrl::EMode_NONE))
         return cPhs_ERROR_e;

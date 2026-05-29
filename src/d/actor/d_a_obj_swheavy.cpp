@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_swheavy.h"
-#include "d/res/res_hhbot.h"
+#include "res/Object/Hhbot.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 
@@ -60,18 +60,18 @@ BOOL daObjSwheavy::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 0000009C-0000032C       .text create_heap__Q212daObjSwheavy5Act_cFv */
 u8 daObjSwheavy::Act_c::create_heap() {
-    J3DModelData* mdl_1_data = (J3DModelData*) dComIfG_getObjectRes(M_arcname, HHBOT_BDL_HHBOT1);
+    J3DModelData* mdl_1_data = (J3DModelData*) dComIfG_getObjectRes(M_arcname, dRes_INDEX_HHBOT_BDL_HHBOT1_e);
     JUT_ASSERT(0x116, mdl_1_data != NULL);
     mpModel1 = mDoExt_J3DModel__create(mdl_1_data, 0x80000, 0x11000022);
 
-    J3DModelData* mdl_2_data = (J3DModelData*) dComIfG_getObjectRes(M_arcname, HHBOT_BDL_HHBOT2);
+    J3DModelData* mdl_2_data = (J3DModelData*) dComIfG_getObjectRes(M_arcname, dRes_INDEX_HHBOT_BDL_HHBOT2_e);
     JUT_ASSERT(0x11F, mdl_2_data != NULL);
     mpModel2 = mDoExt_J3DModel__create(mdl_2_data, 0x80000, 0x11000022);
 
     bool b1 = false;
     mpBgW1 = new dBgW();
     if (mpBgW1 != NULL) {
-        cBgD_t* bgw_1_data = (cBgD_t*) dComIfG_getObjectRes(M_arcname, HHBOT_DZB_HHBOT1);
+        cBgD_t* bgw_1_data = (cBgD_t*) dComIfG_getObjectRes(M_arcname, dRes_INDEX_HHBOT_DZB_HHBOT1_e);
         JUT_ASSERT(0x137, bgw_1_data != NULL);
         if (!mpBgW1->Set(bgw_1_data, dBgW::MOVE_BG_e, &mMtx1)) {
             b1 = true;
@@ -81,7 +81,7 @@ u8 daObjSwheavy::Act_c::create_heap() {
     bool b2 = false;
     mpBgW2 = new dBgW();
     if (mpBgW2 != NULL) {
-        cBgD_t* bgw_2_data = (cBgD_t*) dComIfG_getObjectRes(M_arcname, HHBOT_DZB_HHBOT2);
+        cBgD_t* bgw_2_data = (cBgD_t*) dComIfG_getObjectRes(M_arcname, dRes_INDEX_HHBOT_DZB_HHBOT2_e);
         JUT_ASSERT(0x146, bgw_2_data != NULL);
         if (!mpBgW2->Set(bgw_2_data, dBgW::MOVE_BG_e, &mMtx2)) {
             b2 = true;

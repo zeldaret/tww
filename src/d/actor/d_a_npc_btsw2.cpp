@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_btsw2.h"
-#include "d/res/res_btsw.h"
+#include "res/Object/Btsw.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
 #include "d/d_snap.h"
@@ -91,21 +91,21 @@ daNpc_Btsw2_HIO_c::daNpc_Btsw2_HIO_c() {
 const char daNpc_Btsw2_c::m_arc_name[] = "Btsw";
 
 static const int l_bck_ix_tbl[] = {
-    BTSW_INDEX_BCK_BN_WAIT01,
-    BTSW_INDEX_BCK_BN_WAIT02,
-    BTSW_INDEX_BCK_BN_TALK01,
-    BTSW_INDEX_BCK_BN_TALK02,
-    BTSW_INDEX_BCK_BN_ONEGAI,
-    BTSW_INDEX_BCK_BN_SUGOI,
-    BTSW_INDEX_BCK_BN_SUGOI,
-    BTSW_INDEX_BCK_BN_WALK,
-    BTSW_INDEX_BCK_BN_KASIGE,
-    BTSW_INDEX_BCK_BN_SIWAKE01,
-    BTSW_INDEX_BCK_BN_SIWAKE02,
+    dRes_INDEX_BTSW_BCK_BN_WAIT01_e,
+    dRes_INDEX_BTSW_BCK_BN_WAIT02_e,
+    dRes_INDEX_BTSW_BCK_BN_TALK01_e,
+    dRes_INDEX_BTSW_BCK_BN_TALK02_e,
+    dRes_INDEX_BTSW_BCK_BN_ONEGAI_e,
+    dRes_INDEX_BTSW_BCK_BN_SUGOI_e,
+    dRes_INDEX_BTSW_BCK_BN_SUGOI_e,
+    dRes_INDEX_BTSW_BCK_BN_WALK_e,
+    dRes_INDEX_BTSW_BCK_BN_KASIGE_e,
+    dRes_INDEX_BTSW_BCK_BN_SIWAKE01_e,
+    dRes_INDEX_BTSW_BCK_BN_SIWAKE02_e,
 };
 
 static const int l_btp_ix_tbl[] = {
-    BTSW_INDEX_BTP_BN_MABA,
+    dRes_INDEX_BTSW_BTP_BN_MABA_e,
 };
 
 /* 000001A8-000003E0       .text nodeCallBack__FP7J3DNodei */
@@ -353,12 +353,12 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000BB4-00000EFC       .text CreateHeap__13daNpc_Btsw2_cFv */
 BOOL daNpc_Btsw2_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, BTSW_INDEX_BDL_BN));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_BTSW_BDL_BN_e));
     JUT_ASSERT(616, modelData != NULL);
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arc_name, BTSW_INDEX_BCK_BN_WAIT01)),
+        static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_BTSW_BCK_BN_WAIT01_e)),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0x80000, 0x15020022
     );
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
@@ -372,12 +372,12 @@ BOOL daNpc_Btsw2_c::CreateHeap() {
     m_handL_jnt_num = modelData->getJointName()->getIndex("handL");
     m_handR_jnt_num = modelData->getJointName()->getIndex("handR");
     
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Btsw", BTSW_INDEX_BDL_BN_KABAN));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Btsw", dRes_INDEX_BTSW_BDL_BN_KABAN_e));
     mpKabanModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpKabanModel == NULL) {
         return FALSE;
     }
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Btsw", BTSW_INDEX_BDL_BN_TIRASI));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Btsw", dRes_INDEX_BTSW_BDL_BN_TIRASI_e));
     mpTirasiModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpTirasiModel == NULL) {
         return FALSE;

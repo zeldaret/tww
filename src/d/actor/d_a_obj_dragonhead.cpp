@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_dragonhead.h"
-#include "d/res/res_qdghd.h"
+#include "res/Object/Qdghd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
@@ -54,7 +54,7 @@ namespace daObjDragonhead_prm {
 
 /* 00000098-00000228       .text CreateHeap__17daObjDragonhead_cFv */
 BOOL daObjDragonhead_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)(dComIfG_getObjectRes("Qdghd", QDGHD_BDL_QDGHD));
+    J3DModelData* model_data = (J3DModelData*)(dComIfG_getObjectRes("Qdghd", dRes_INDEX_QDGHD_BDL_QDGHD_e));
     JUT_ASSERT(DEMO_SELECT(158, 160), model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x00, 0x11020203);
     if (!mpModel)
@@ -68,7 +68,7 @@ BOOL daObjDragonhead_c::CreateHeap() {
     mDoMtx_copy(mDoMtx_stack_c::get(), mtx);
 
     mpBgW = new dBgW();
-    if (!mpBgW || mpBgW->Set((cBgD_t*)dComIfG_getObjectRes("Qdghd", QDGHD_DZB_QDGHD), cBgW::MOVE_BG_e, &mtx))
+    if (!mpBgW || mpBgW->Set((cBgD_t*)dComIfG_getObjectRes("Qdghd", dRes_INDEX_QDGHD_DZB_QDGHD_e), cBgW::MOVE_BG_e, &mtx))
         ret = 0;
 
     if (ret != 1)

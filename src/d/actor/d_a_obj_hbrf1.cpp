@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hbrf1.h"
-#include "d/res/res_hbrf1.h"
+#include "res/Object/Hbrf1.h"
 #include "d/d_com_inf_game.h"
 
 Mtx daObjHbrf1::Act_c::M_tmp_mtx;
@@ -15,7 +15,7 @@ const char daObjHbrf1::Act_c::M_evname[] = "ami_cam";
 
 /* 00000078-0000012C       .text CreateHeap__Q210daObjHbrf15Act_cFv */
 BOOL daObjHbrf1::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, HBRF1_BDL_HBRF1);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_HBRF1_BDL_HBRF1_e);
     JUT_ASSERT(0x5E, model_data != NULL);
 
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
@@ -54,7 +54,7 @@ cPhs_State daObjHbrf1::Act_c::Mthd_Create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, HBRF1_DZB_HBRF1, dBgS_MoveBGProc_Trans, 0);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_HBRF1_DZB_HBRF1_e, dBgS_MoveBGProc_Trans, 0);
         JUT_ASSERT(0x94, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
 

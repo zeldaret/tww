@@ -4,7 +4,7 @@
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
-#include "d/res/res_ojtree.h"
+#include "res/Object/Ojtree.h"
 #include "d/actor/d_a_jbo.h"
 #include "d/actor/d_a_obj_ojtree.h"
 #include "d/d_com_inf_game.h"
@@ -15,7 +15,7 @@ const char daObjOjtree::Act_c::M_arcname[] = "Ojtree";
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjOjtree5Act_cFv */
 BOOL daObjOjtree::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, OJTREE_BDL_OJTREE);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_OJTREE_BDL_OJTREE_e);
     JUT_ASSERT(67, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
     return !!mpModel;
@@ -41,7 +41,7 @@ cPhs_State daObjOjtree::Act_c::Mthd_Create() {
        
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, OJTREE_DZB_OJTREE, NULL, DEMO_SELECT(0x34A0, 0x26A0));
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_OJTREE_DZB_OJTREE_e, NULL, DEMO_SELECT(0x34A0, 0x26A0));
         JUT_ASSERT(123, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     

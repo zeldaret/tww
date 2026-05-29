@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_ho.h"
-#include "d/res/res_ho.h"
+#include "res/Object/Ho.h"
 #include "d/d_snap.h"
 #include "m_Do/m_Do_controller_pad.h"
 
@@ -13,15 +13,15 @@ static fpc_ProcID l_msgId;
 static msg_class* l_msg;
 
 static const int l_bck_ix_tbl[] = {
-    HO_BCK_HO_WAIT01,
-    HO_BCK_HO_TALK01,
-    HO_BCK_HO_TALK02,
-    HO_BCK_HO_GLAD,
-    HO_BCK_HO_TALK02,
+    dRes_INDEX_HO_BCK_HO_WAIT01_e,
+    dRes_INDEX_HO_BCK_HO_TALK01_e,
+    dRes_INDEX_HO_BCK_HO_TALK02_e,
+    dRes_INDEX_HO_BCK_HO_GLAD_e,
+    dRes_INDEX_HO_BCK_HO_TALK02_e,
 };
 
 static const int l_btp_ix_tbl[] = {
-    HO_BTP_HO_MABA01
+    dRes_INDEX_HO_BTP_HO_MABA01_e
 };
 
 /* 00000078-0000022C       .text nodeCallBack_Ho__FP7J3DNodei */
@@ -334,7 +334,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
                 msgStatus = fopMsgStts_MSG_ENDS_e;
             }
             break;
-        case 0x2754:
+        case 0x2754: {
             *pMsgNo = 0x2755;
             int numPendantsGiven = dComIfGs_getBeastNum(7);
             receivePendant(numPendantsGiven);
@@ -347,6 +347,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             }
             mNextMessageId = 0x2757;
             break;
+        }
         case 0x2751:
             mNextMessageId = 0x2752;
             mItemNum = dItemNo_HEROS_CHARM_e;
@@ -903,13 +904,13 @@ cPhs_State daNpc_Ho_c::_create() {
 
 /* 000023F0-00002784       .text CreateHeap__10daNpc_Ho_cFv */
 BOOL daNpc_Ho_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Ho", HO_BDL_HO);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Ho", dRes_INDEX_HO_BDL_HO_e);
     JUT_ASSERT(DEMO_SELECT(1566, 1581), modelData);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Ho", HO_BCK_HO_WAIT01),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Ho", dRes_INDEX_HO_BCK_HO_WAIT01_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x80000,
@@ -932,7 +933,7 @@ BOOL daNpc_Ho_c::CreateHeap() {
     m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
     JUT_ASSERT(DEMO_SELECT(1606, 1621), m_jnt.getBackboneJntNum() >= 0);
 
-    J3DModelData* penModelData = (J3DModelData*)dComIfG_getObjectRes("Ho", HO_BDL_HO_PEND);
+    J3DModelData* penModelData = (J3DModelData*)dComIfG_getObjectRes("Ho", dRes_INDEX_HO_BDL_HO_PEND_e);
     JUT_ASSERT(DEMO_SELECT(1612, 1627), penModelData);
 
     mpJoyPendentModel = mDoExt_J3DModel__create(penModelData, 0, 0x11020203);

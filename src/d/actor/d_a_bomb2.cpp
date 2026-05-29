@@ -10,7 +10,7 @@
 #include "d/d_a_obj.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_vbakh.h"
+#include "res/Object/VbakH.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_mtx.h"
@@ -263,15 +263,15 @@ namespace daBomb2 {
     bool Act_c::create_heap_nut() {
         const char* resName = attr().resName;
 
-        J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(attr().resName, VBAKH_BDL_VBAKM));
+        J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(attr().resName, dRes_INDEX_VBAKH_BDL_VBAKM_e));
         JUT_ASSERT(0x303, mdl_data != NULL);
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
 
-        J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(resName, VBAKH_BCK_VBAKM));
+        J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(resName, dRes_INDEX_VBAKH_BCK_VBAKM_e));
         JUT_ASSERT(0x30D, bck_data != NULL);
         int temp = mBck0.init(mdl_data, bck_data, true, J3DFrameCtrl::EMode_NONE);
 
-        J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(resName, VBAKH_BRK_VBAKM));
+        J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(resName, dRes_INDEX_VBAKH_BRK_VBAKM_e));
         JUT_ASSERT(0x314, brk_data != NULL);
         int temp3 = mBrk0.init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE);
 

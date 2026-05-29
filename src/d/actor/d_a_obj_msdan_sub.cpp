@@ -5,14 +5,14 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_msdan_sub.h"
-#include "d/res/res_msdan.h"
+#include "res/Object/Msdan.h"
 
 const char daObjMsdanSub::Act_c::M_arcname[] = "Msdan";
 Mtx daObjMsdanSub::Act_c::M_tmp_mtx;
 
 /* 00000078-0000012C       .text CreateHeap__Q213daObjMsdanSub5Act_cFv */
 BOOL daObjMsdanSub::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MSDAN_BDL_MSDAN);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MSDAN_BDL_MSDAN_e);
     JUT_ASSERT(93, model_data != NULL);
     mModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
     return mModel != NULL;
@@ -53,7 +53,7 @@ cPhs_State daObjMsdanSub::Act_c::Mthd_Create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, MSDAN_DZB_MSDAN, dBgS_MoveBGProc_Trans, 0x9A0);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MSDAN_DZB_MSDAN_e, dBgS_MoveBGProc_Trans, 0x9A0);
         JUT_ASSERT(155, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;

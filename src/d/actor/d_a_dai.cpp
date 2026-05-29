@@ -7,7 +7,7 @@
 #include "d/actor/d_a_dai.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_dai_item.h"
-#include "d/res/res_fdai.h"
+#include "res/Object/Fdai.h"
 #include "d/d_item.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -63,7 +63,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
 
 /* 000000E4-000001A0       .text CreateHeap__7daDai_cFv */
 BOOL daDai_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, FDAI_BDL_FDAI);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_FDAI_BDL_FDAI_e);
     JUT_ASSERT(415, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);

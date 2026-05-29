@@ -11,9 +11,9 @@
 #if VERSION == VERSION_DEMO
 #include "d/d_s_play.h"
 #endif
-#include "d/res/res_cloth.h"
-#include "d/res/res_gflag.h"
-#include "d/res/res_tgflag.h"
+#include "res/Object/Cloth.h"
+#include "res/Object/Gflag.h"
+#include "res/Object/Tgflag.h"
 #include "d/d_path.h"
 
 #include "assets/l_txa_dummy_hataTEX.h"
@@ -138,8 +138,8 @@ void daGFlag_packet_c::setTexObj(u8 i_arcIdx) {
         "Tgflag"
     };
     static const int index_tbl[] = {
-        GFLAG_BTI_B_FRAGGAIKOT,
-        TGFLAG_BTI_B_FRAGTORI
+        dRes_INDEX_GFLAG_BTI_B_FRAGGAIKOT_e,
+        dRes_INDEX_TGFLAG_BTI_B_FRAGTORI_e
     };
     // index_tbl likely existed in this function but passing
     // an element of it into getObjectRes breaks the match
@@ -170,7 +170,7 @@ void daGFlag_packet_c::setTexObj(u8 i_arcIdx) {
 
 /* 00000210-00000330       .text setToonTexObj__16daGFlag_packet_cFv */
 void daGFlag_packet_c::setToonTexObj() {
-    ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+    ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectRes("Cloth", dRes_INDEX_CLOTH_BTI_CLOTHTOON_e);
     GXBool mipmap_cnt_over_one = GXBool(tex_info_p->mipmapCount > 1);
     GXInitTexObj(
         &mToonTexObj,

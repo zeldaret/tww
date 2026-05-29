@@ -17,7 +17,7 @@
 #include "d/actor/d_a_npc_md.h"
 #include "d/d_s_play.h"
 #include "d/d_a_obj.h"
-#include "d/res/res_fm.h"
+#include "res/Object/fm.h"
 #include "d/actor/d_a_player_main_data.h"
 
 
@@ -366,7 +366,7 @@ BOOL daFm_c::_createHeap() {
 /* 00000718-0000086C       .text holeCreateHeap__6daFm_cFv */
 bool daFm_c::holeCreateHeap() {
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, FM_BDL_YPIT00));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_FM_BDL_YPIT00_e));
     JUT_ASSERT(0x2C7, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x19001222);
@@ -374,7 +374,7 @@ bool daFm_c::holeCreateHeap() {
         return false;
     }
 
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, FM_BTK_YPIT00));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_FM_BTK_YPIT00_e));
     JUT_ASSERT(0x2D0, btk != NULL);
 
     if(!mBtkAnm.init(modelData, btk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
@@ -386,7 +386,7 @@ bool daFm_c::holeCreateHeap() {
 
 /* 0000086C-000009CC       .text bodyCreateHeap__6daFm_cFv */
 bool daFm_c::bodyCreateHeap() {
-    J3DModelData* fmModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, FM_BDL_FM));
+    J3DModelData* fmModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_FM_BDL_FM_e));
     JUT_ASSERT(0x2DD, fmModelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
@@ -397,7 +397,7 @@ bool daFm_c::bodyCreateHeap() {
         NULL,
         J3DFrameCtrl::EMode_NULL, 
 #else
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(m_arc_name, FM_BCK_MODORU)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_FM_BCK_MODORU_e)),
         J3DFrameCtrl::EMode_LOOP, 
 #endif
 
@@ -2478,19 +2478,19 @@ void daFm_c::modeProc(daFm_c::Proc_e proc, int newMode) {
 /* 00006D8C-00006DE8       .text setAnm__6daFm_cFScb */
 void daFm_c::setAnm(s8 anmPrmIdx, bool param_2) {
     static const int a_anm_bcks_tbl[] = {
-        FM_BCK_WAIT,
-        FM_BCK_DERU,
-        FM_BCK_MODORU,
-        FM_BCK_TUKAMU,
-        FM_BCK_TUKAMU2WAIT,
-        FM_BCK_HIKIKOMU,
-        FM_BCK_DAMAGE,
-        FM_BCK_TUMAMIWAIT,
-        FM_BCK_ASITUKAMI,
-        FM_BCK_NAGERU,
-        FM_BCK_YAYU,
-        FM_BCK_MAHI,
-        FM_BCK_KUSIZASI
+        dRes_INDEX_FM_BCK_WAIT_e,
+        dRes_INDEX_FM_BCK_DERU_e,
+        dRes_INDEX_FM_BCK_MODORU_e,
+        dRes_INDEX_FM_BCK_TUKAMU_e,
+        dRes_INDEX_FM_BCK_TUKAMU2WAIT_e,
+        dRes_INDEX_FM_BCK_HIKIKOMU_e,
+        dRes_INDEX_FM_BCK_DAMAGE_e,
+        dRes_INDEX_FM_BCK_TUMAMIWAIT_e,
+        dRes_INDEX_FM_BCK_ASITUKAMI_e,
+        dRes_INDEX_FM_BCK_NAGERU_e,
+        dRes_INDEX_FM_BCK_YAYU_e,
+        dRes_INDEX_FM_BCK_MAHI_e,
+        dRes_INDEX_FM_BCK_KUSIZASI_e
     };
 
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {

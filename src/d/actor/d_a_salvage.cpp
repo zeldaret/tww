@@ -9,7 +9,7 @@
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_daiocta.h"
-#include "d/res/res_yslvg00.h"
+#include "res/Object/Yslvg00.h"
 #include "d/d_bg_s_func.h"
 #include "d/d_map.h"
 #include "d/d_kankyo.h"
@@ -38,7 +38,7 @@ BOOL daSalvage_c::CreateHeap() {
     }
     mTagData_p->init();
 
-    mModelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, YSLVG00_BDL_YSLVG00);
+    mModelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_YSLVG00_BDL_YSLVG00_e);
     JUT_ASSERT(326, mModelData != NULL);
 
     for (s32 i = 0; i < 16; i++) {
@@ -48,7 +48,7 @@ BOOL daSalvage_c::CreateHeap() {
         }
     }
 
-    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, YSLVG00_BRK_YSLVG00);
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_YSLVG00_BRK_YSLVG00_e);
     JUT_ASSERT(347, pbrk != NULL);
 
     mpBrk = new mDoExt_brkAnm();
@@ -56,7 +56,7 @@ BOOL daSalvage_c::CreateHeap() {
         return false;
     }
 
-    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, YSLVG00_BTK_YSLVG00);
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_YSLVG00_BTK_YSLVG00_e);
     JUT_ASSERT(361, pbtk != NULL);
 
     mpBtk = new mDoExt_btkAnm();

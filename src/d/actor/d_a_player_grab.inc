@@ -131,7 +131,7 @@ void daPy_lk_c::setGrabItemPos() {
             grab_actor->current.pos = ((mLeftHandPos + mRightHandPos) * 0.5f);
             grab_actor->current.pos.y += field_0x2b0;
             f32 fVar1;
-            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_GRABUP) {
+            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_GRABUP_e) {
                 dVar10 =
                     1.0f - ((mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() - mFrameCtrlUnder[UNDER_MOVE0_e].getStart()) /
                             (mFrameCtrlUnder[UNDER_MOVE0_e].getEnd() - mFrameCtrlUnder[UNDER_MOVE0_e].getStart()));
@@ -288,14 +288,14 @@ void daPy_lk_c::initGrabNextMode() {
             procGrabHeavyWait_init();
         } else {
             if (!checkGrabAnime()) {
-                setActAnimeUpper(LKANM_BCK_GRABWAITB, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+                setActAnimeUpper(dRes_INDEX_LKANM_BCK_GRABWAITB_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
             }
             m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
             checkNextMode(0);
         }
     } else {
         if (!checkGrabAnime()) {
-            setActAnimeUpper(LKANM_BCK_GRABWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+            setActAnimeUpper(dRes_INDEX_LKANM_BCK_GRABWAIT_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
         }
         m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
         checkNextMode(0);
@@ -452,7 +452,7 @@ BOOL daPy_lk_c::procGrabUp() {
             }
         } else {
             if (!checkGrabAnime()) {
-                setActAnimeUpper(LKANM_BCK_GRABWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+                setActAnimeUpper(dRes_INDEX_LKANM_BCK_GRABWAIT_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
                 m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
             }
             if (checkNextMode(1)) {
@@ -711,12 +711,12 @@ BOOL daPy_lk_c::procGrabWait_init() {
     if (checkGrabSpecialHeavyState()) {
         setSingleMoveAnime(ANM_GRABWAITB, m_HIO->mGrab.m.field_0x90, 0.0f, -1, m_HIO->mGrab.m.field_0x7C);
         if (!checkGrabAnime()) {
-            setActAnimeUpper(LKANM_BCK_GRABWAITB, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+            setActAnimeUpper(dRes_INDEX_LKANM_BCK_GRABWAITB_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
         }
     } else {
         setSingleMoveAnime(ANM_GRABWAIT, m_HIO->mGrab.m.field_0x78, 0.0f, -1, m_HIO->mGrab.m.field_0x7C);
         if (!checkGrabAnime()) {
-            setActAnimeUpper(LKANM_BCK_GRABWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+            setActAnimeUpper(dRes_INDEX_LKANM_BCK_GRABWAIT_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
         }
     }
     m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
@@ -748,7 +748,7 @@ BOOL daPy_lk_c::procGrabWait() {
     if (m35D8 <= -29.0f) {
         if ((mFrameCtrlUnder[UNDER_MOVE0_e].getRate() > 0.0f) && mProcVar6.m3570 == 0) {
             mProcVar6.m3570 = 1;
-            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_GRABWAIT) {
+            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_GRABWAIT_e) {
                 seStartMapInfo(JA_SE_LK_BARREL_PUT_ON);
             }
         }
@@ -788,7 +788,7 @@ BOOL daPy_lk_c::procGrabWait() {
 BOOL daPy_lk_c::procGrabHeavyWait_init() {
     commonProcInit(daPyProc_GRAB_HEAVY_WAIT_e);
     setSingleMoveAnime(ANM_GRABWAITB, m_HIO->mGrab.m.field_0x90, 0.0f, -1, m_HIO->mGrab.m.field_0x7C);
-    setActAnimeUpper(LKANM_BCK_GRABWAITB, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_GRABWAITB_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
     m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
     current.angle.y = shape_angle.y;
     mNormalSpeed = 0.0f;

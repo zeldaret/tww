@@ -6,7 +6,7 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_wind_arrow.h"
 #include "d/d_kankyo_wether.h"
-#include "d/res/res_always.h"
+#include "res/Object/Always.h"
 #include "m_Do/m_Do_graphic.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
@@ -110,7 +110,7 @@ static BOOL dWindArrow_Delete(dWindArrow_c* i_this) {
 cPhs_State dWindArrow_c::create() {
     new (this) dWindArrow_c();
     
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YA);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_YA_e);
     JUT_ASSERT(0x56, modelData != NULL);
 
     mModelInfo.mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x200);
@@ -122,7 +122,7 @@ cPhs_State dWindArrow_c::create() {
         return cPhs_ERROR_e;
     }
 
-    J3DAnmTextureSRTKey* anm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", ALWAYS_BTK_YA);
+    J3DAnmTextureSRTKey* anm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTK_YA_e);
     JUT_ASSERT(0x65, anm != NULL);
 
     if (!mModelInfo.mBtkAnm.init(modelData, anm, TRUE, J3DFrameCtrl::EMode_LOOP)) {

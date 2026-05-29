@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_warpt.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_ltubw.h"
+#include "res/Object/ltubw.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
@@ -158,7 +158,7 @@ BOOL daObj_Warpt_c::_createHeap() {
 
 /* 00000270-00000488       .text createHutaHeap__13daObj_Warpt_cFv */
 bool daObj_Warpt_c::createHutaHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, LTUBW_BDL_ITUHU);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_LTUBW_BDL_ITUHU_e);
     JUT_ASSERT(264, modelData);
 
     mpLidModel1 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -171,11 +171,11 @@ bool daObj_Warpt_c::createHutaHeap() {
         return false;
     }
 
-    if (mpLidBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, LTUBW_DZB_ITUHT), cBgW::MOVE_BG_e, &m344) == TRUE) {
+    if (mpLidBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_LTUBW_DZB_ITUHT_e), cBgW::MOVE_BG_e, &m344) == TRUE) {
         return false;
     }
 
-    J3DModelData* modelData2 = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, LTUBW_BDL_YWPFM00);
+    J3DModelData* modelData2 = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_LTUBW_BDL_YWPFM00_e);
     modelData = modelData2;
     if (modelData == NULL) {
         return false;
@@ -186,7 +186,7 @@ bool daObj_Warpt_c::createHutaHeap() {
         return false;
     }
 
-    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arc_name, LTUBW_BRK_YWPFM00);
+    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_LTUBW_BRK_YWPFM00_e);
     JUT_ASSERT(291, brk);
 
     if (!mLidBrk.init(modelData, brk, true, J3DFrameCtrl::EMode_LOOP)) {
@@ -197,7 +197,7 @@ bool daObj_Warpt_c::createHutaHeap() {
 
 /* 00000488-00000620       .text createBodyHeap__13daObj_Warpt_cFv */
 bool daObj_Warpt_c::createBodyHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, LTUBW_BDL_ITUBW);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_LTUBW_BDL_ITUBW_e);
     JUT_ASSERT(305, modelData);
 
     mpBodyModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -210,7 +210,7 @@ bool daObj_Warpt_c::createBodyHeap() {
         return false;
     }
 
-    if (mpBodyBgW2->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, LTUBW_DZB_ITUBW), cBgW::MOVE_BG_e, &m310) == TRUE) {
+    if (mpBodyBgW2->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_LTUBW_DZB_ITUBW_e), cBgW::MOVE_BG_e, &m310) == TRUE) {
         return false;
     }
 
@@ -219,7 +219,7 @@ bool daObj_Warpt_c::createBodyHeap() {
         return false;
     }
 
-    if (mpBodyBgW1->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, LTUBW_DZB_ITUSO), cBgW::MOVE_BG_e, &m2DC) == TRUE) {
+    if (mpBodyBgW1->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_LTUBW_DZB_ITUSO_e), cBgW::MOVE_BG_e, &m2DC) == TRUE) {
         return false;
     }
     return true;

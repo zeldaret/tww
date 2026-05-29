@@ -7,113 +7,113 @@
 #include "d/d_item_data.h"
 #include "d/d_particle_name.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "d/res/res_always.h"
-#include "d/res/res_vhutu.h"
-#include "d/res/res_vhkak.h"
-#include "d/res/res_vkeyn.h"
-#include "d/res/res_key_01.h"
-#include "d/res/res_tele_00.h"
-#include "d/res/res_bomb_00.h"
-#include "d/res/res_link.h"
-#include "d/res/res_vhane.h"
-#include "d/res/res_vboko.h"
-#include "d/res/res_vchuj.h"
-#include "d/res/res_vmapc.h"
-#include "d/res/res_vsaim.h"
-#include "d/res/res_vsail.h"
-#include "d/res/res_vyatm.h"
-#include "d/res/res_vyatl.h"
-// #include "d/res/res_ball.h"
-#include "d/res/res_bin.h"
-#include "d/res/res_vbomm.h"
-#include "d/res/res_boom.h"
-#include "d/res/res_vboot.h"
-#include "d/res/res_vboml.h"
-// #include "d/res/res_bottle.h"
-// #include "d/res/res_bottle_e.h"
-#include "d/res/res_vboxn.h"
-#include "d/res/res_vdunc.h"
-#include "d/res/res_vdunm.h"
-#include "d/res/res_vleaf.h"
-#include "d/res/res_vbagh.h"
-#include "d/res/res_vbage.h"
-#include "d/res/res_vbagf.h"
-#include "d/res/res_vhyoi.h"
-#include "d/res/res_vesa.h"
-#include "d/res/res_vobj07.h"
-#include "d/res/res_vobj06.h"
-#include "d/res/res_vobj05.h"
-#include "d/res/res_vobj04.h"
-#include "d/res/res_vobj03.h"
-#include "d/res/res_vobj00.h"
-#include "d/res/res_vobj01.h"
-#include "d/res/res_vobj02.h"
-#include "d/res/res_vhook.h"
-#include "d/res/res_vpowr.h"
-#include "d/res/res_vho.h"
-#include "d/res/res_vmant.h"
-#include "d/res/res_vohom.h"
-#include "d/res/res_vchin.h"
-#include "d/res/res_vhamm.h"
-#include "d/res/res_vamuk.h"
-#include "d/res/res_vamuy.h"
-#include "d/res/res_med_b.h"
-#include "d/res/res_med_g.h"
-#include "d/res/res_med_r.h"
-#include "d/res/res_vobj08.h"
-#include "d/res/res_vobj09.h"
-#include "d/res/res_vobj11.h"
-#include "d/res/res_vobj10.h"
-#include "d/res/res_vhapp.h"
-#include "d/res/res_vrope.h"
-#include "d/res/res_vmags.h"
-#include "d/res/res_shinju_n.h"
-// #include "d/res/res_sord_m.h"
-// #include "d/res/res_sord_mvu.h"
-#include "d/res/res_vswon.h"
-#include "d/res/res_vshim.h"
-#include "d/res/res_vshin.h"
-#include "d/res/res_vtri1.h"
-#include "d/res/res_vtact.h"
-#include "d/res/res_varfi.h"
-#include "d/res/res_vmapq.h"
-#include "d/res/res_varrl.h"
-#include "d/res/res_vbow.h"
-// #include "d/res/res_fa.h"
-#include "d/res/res_shinju_d.h"
-#include "d/res/res_shinju_f.h"
-#include "d/res/res_fwbin.h"
-#include "d/res/res_vbiny.h"
-#include "d/res/res_vbinh.h"
-#include "d/res/res_vbins.h"
-#include "d/res/res_vbinw.h"
-#include "d/res/res_vfuku.h"
-#include "d/res/res_vdoku.h"
-#include "d/res/res_vbelt.h"
-#include "d/res/res_vlupy.h"
-#include "d/res/res_vlett.h"
-#include "d/res/res_vleof.h"
-#include "d/res/res_vlemg.h"
-#include "d/res/res_vlemo.h"
-#include "d/res/res_fdai.h"
-#include "d/res/res_vtri2.h"
-#include "d/res/res_vtri3.h"
-#include "d/res/res_vtri4.h"
-#include "d/res/res_vtri5.h"
-#include "d/res/res_vtri6.h"
-#include "d/res/res_vtri7.h"
-#include "d/res/res_vtri8.h"
-#include "d/res/res_vmapt.h"
-#include "d/res/res_vmapr.h"
-#include "d/res/res_vmaph.h"
-#include "d/res/res_vmapg.h"
-#include "d/res/res_vboxa.h"
-#include "d/res/res_vtin1.h"
-#include "d/res/res_vtin2.h"
-#include "d/res/res_vtin3.h"
-#include "d/res/res_vtin4.h"
-#include "d/res/res_vtin5.h"
-#include "d/res/res_vbeso.h"
+#include "res/Object/Always.h"
+#include "res/Object/Vhutu.h"
+#include "res/Object/Vhkak.h"
+#include "res/Object/VkeyN.h"
+#include "res/Object/key_01.h"
+#include "res/Object/tele_00.h"
+#include "res/Object/Bomb_00.h"
+#include "res/Object/Link.h"
+#include "res/Object/Vhane.h"
+#include "res/Object/Vboko.h"
+#include "res/Object/Vchuj.h"
+#include "res/Object/VmapC.h"
+#include "res/Object/VsaiM.h"
+#include "res/Object/VsaiL.h"
+#include "res/Object/VyatM.h"
+#include "res/Object/VyatL.h"
+// #include "res/Object/Ball.h"
+#include "res/Object/Bin.h"
+#include "res/Object/VbomM.h"
+#include "res/Object/Boom.h"
+#include "res/Object/Vboot.h"
+#include "res/Object/VbomL.h"
+// #include "res/Object/Bottle.h"
+// #include "res/Object/Bottle_e.h"
+#include "res/Object/VboxN.h"
+#include "res/Object/VdunC.h"
+#include "res/Object/VdunM.h"
+#include "res/Object/Vleaf.h"
+#include "res/Object/VbagH.h"
+#include "res/Object/VbagE.h"
+#include "res/Object/VbagF.h"
+#include "res/Object/Vhyoi.h"
+#include "res/Object/Vesa.h"
+#include "res/Object/Vobj07.h"
+#include "res/Object/Vobj06.h"
+#include "res/Object/Vobj05.h"
+#include "res/Object/Vobj04.h"
+#include "res/Object/Vobj03.h"
+#include "res/Object/Vobj00.h"
+#include "res/Object/Vobj01.h"
+#include "res/Object/Vobj02.h"
+#include "res/Object/Vhook.h"
+#include "res/Object/Vpowr.h"
+#include "res/Object/Vho.h"
+#include "res/Object/Vmant.h"
+#include "res/Object/Vohom.h"
+#include "res/Object/Vchin.h"
+#include "res/Object/Vhamm.h"
+#include "res/Object/Vamuk.h"
+#include "res/Object/VamuY.h"
+#include "res/Object/Med_b.h"
+#include "res/Object/Med_g.h"
+#include "res/Object/Med_r.h"
+#include "res/Object/Vobj08.h"
+#include "res/Object/Vobj09.h"
+#include "res/Object/Vobj11.h"
+#include "res/Object/Vobj10.h"
+#include "res/Object/Vhapp.h"
+#include "res/Object/Vrope.h"
+#include "res/Object/VmagS.h"
+#include "res/Object/Shinju_n.h"
+// #include "res/Object/Sord_m.h"
+// #include "res/Object/Sord_mvu.h"
+#include "res/Object/VswoN.h"
+#include "res/Object/VshiM.h"
+#include "res/Object/VshiN.h"
+#include "res/Object/Vtri1.h"
+#include "res/Object/Vtact.h"
+#include "res/Object/Varfi.h"
+#include "res/Object/VmapQ.h"
+#include "res/Object/Varrl.h"
+#include "res/Object/Vbow.h"
+// #include "res/Object/Fa.h"
+#include "res/Object/Shinju_d.h"
+#include "res/Object/Shinju_f.h"
+#include "res/Object/FwBin.h"
+#include "res/Object/VBinY.h"
+#include "res/Object/VbinH.h"
+#include "res/Object/VbinS.h"
+#include "res/Object/VbinW.h"
+#include "res/Object/Vfuku.h"
+#include "res/Object/Vdoku.h"
+#include "res/Object/Vbelt.h"
+#include "res/Object/Vlupy.h"
+#include "res/Object/VleTT.h"
+#include "res/Object/VleOF.h"
+#include "res/Object/VleMG.h"
+#include "res/Object/VleMO.h"
+#include "res/Object/Fdai.h"
+#include "res/Object/Vtri2.h"
+#include "res/Object/Vtri3.h"
+#include "res/Object/Vtri4.h"
+#include "res/Object/Vtri5.h"
+#include "res/Object/Vtri6.h"
+#include "res/Object/Vtri7.h"
+#include "res/Object/Vtri8.h"
+#include "res/Object/VmapT.h"
+#include "res/Object/VmapR.h"
+#include "res/Object/VmapH.h"
+#include "res/Object/VmapG.h"
+#include "res/Object/VboxA.h"
+#include "res/Object/Vtin1.h"
+#include "res/Object/Vtin2.h"
+#include "res/Object/Vtin3.h"
+#include "res/Object/Vtin4.h"
+#include "res/Object/Vtin5.h"
+#include "res/Object/Vbeso.h"
 
 /* 80383F20-803840E0       .data item_arcname_tbl__10dItem_data */
 char* dItem_data::item_arcname_tbl[0x70] = {
@@ -591,7 +591,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x00: dItemNo_HEART_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
-        /* mBmdIdx      */ ALWAYS_BDL_VHRTL,
+        /* mBmdIdx      */ dRes_INDEX_ALWAYS_BDL_VHRTL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -607,10 +607,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x01: dItemNo_GREEN_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -623,10 +623,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x02: dItemNo_BLUE_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x01,
@@ -639,10 +639,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x03: dItemNo_YELLOW_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x02,
@@ -655,10 +655,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x04: dItemNo_RED_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x03,
@@ -671,10 +671,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x05: dItemNo_PURPLE_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x04,
@@ -687,10 +687,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x06: dItemNo_ORANGE_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x05,
@@ -703,8 +703,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x07: dItemNo_HEART_PIECE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHKAK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_02],
-        /* mBmdIdx      */ VHKAK_BDL_VHKAK,
-        /* mSrtIdx      */ VHKAK_BTK_VHKAK,
+        /* mBmdIdx      */ dRes_INDEX_VHKAK_BDL_VHKAK_e,
+        /* mSrtIdx      */ dRes_INDEX_VHKAK_BTK_VHKAK_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -719,8 +719,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x08: dItemNo_HEART_CONTAINER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHUTU],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_01],
-        /* mBmdIdx      */ VHUTU_BDL_VHUTU,
-        /* mSrtIdx      */ VHUTU_BTK_VHUTU,
+        /* mBmdIdx      */ dRes_INDEX_VHUTU_BDL_VHUTU_e,
+        /* mSrtIdx      */ dRes_INDEX_VHUTU_BTK_VHUTU_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -735,7 +735,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x09: dItemNo_SMALL_MAGIC_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
-        /* mBmdIdx      */ ALWAYS_BDL_MPODA,
+        /* mBmdIdx      */ dRes_INDEX_ALWAYS_BDL_MPODA_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -751,7 +751,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x0A: dItemNo_LARGE_MAGIC_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
-        /* mBmdIdx      */ ALWAYS_BDL_MPODB,
+        /* mBmdIdx      */ dRes_INDEX_ALWAYS_BDL_MPODB_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -767,7 +767,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x0B: dItemNo_BOMB_5_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
-        /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
+        /* mBmdIdx      */ dRes_INDEX_BOMB_00_BDL_VBOMB_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -783,7 +783,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x0C: dItemNo_BOMB_10_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
-        /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
+        /* mBmdIdx      */ dRes_INDEX_BOMB_00_BDL_VBOMB_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -799,7 +799,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x0D: dItemNo_BOMB_20_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
-        /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
+        /* mBmdIdx      */ dRes_INDEX_BOMB_00_BDL_VBOMB_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -815,7 +815,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x0E: dItemNo_BOMB_30_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
-        /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
+        /* mBmdIdx      */ dRes_INDEX_BOMB_00_BDL_VBOMB_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -831,10 +831,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x0F: dItemNo_SILVER_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x06,
@@ -847,7 +847,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x10: dItemNo_ARROW_10_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
-        /* mBmdIdx      */ ALWAYS_BDL_ARROWITEM,
+        /* mBmdIdx      */ dRes_INDEX_ALWAYS_BDL_ARROWITEM_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -863,7 +863,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x11: dItemNo_ARROW_20_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
-        /* mBmdIdx      */ ALWAYS_BDL_ARROWITEM,
+        /* mBmdIdx      */ dRes_INDEX_ALWAYS_BDL_ARROWITEM_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -879,7 +879,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x12: dItemNo_ARROW_30_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
-        /* mBmdIdx      */ ALWAYS_BDL_ARROWITEM,
+        /* mBmdIdx      */ dRes_INDEX_ALWAYS_BDL_ARROWITEM_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -927,7 +927,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x15: dItemNo_SMALL_KEY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VKEYN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_KEY],
-        /* mBmdIdx      */ VKEYN_BDL_VKEYN,
+        /* mBmdIdx      */ dRes_INDEX_VKEYN_BDL_VKEYN_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -943,12 +943,12 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x16: dItemNo_RECOVER_FAIRY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_FA],
         /* mTexture     */ NULL,
-        /* mBmdIdx      */ ALWAYS_BDL_FA, // Note: This file index is for the wrong RARC.
+        /* mBmdIdx      */ dRes_INDEX_ALWAYS_BDL_FA_e, // Note: This file index is for the wrong RARC.
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
-        /* mBckIdx      */ ALWAYS_BCK_FA, // Note: This file index is for the wrong RARC.
+        /* mBckIdx      */ dRes_INDEX_ALWAYS_BCK_FA_e, // Note: This file index is for the wrong RARC.
         /* mTevFrm      */ -1,
         /* mItemMesgNum */ 0x0000,
         /* mUnused      */ 0x00000000,
@@ -1019,10 +1019,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x1A: dItemNo_SUB_DUN_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x02,
@@ -1083,7 +1083,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x1E: dItemNo_TRIPLE_HEART_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
-        /* mBmdIdx      */ ALWAYS_BDL_VHRTL,
+        /* mBmdIdx      */ dRes_INDEX_ALWAYS_BDL_VHRTL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1099,7 +1099,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x1F: dItemNo_JOY_PENDANT_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHAPP],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_08],
-        /* mBmdIdx      */ VHAPP_BDL_VHAPP,
+        /* mBmdIdx      */ dRes_INDEX_VHAPP_BDL_VHAPP_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1115,8 +1115,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x20: dItemNo_TELESCOPE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_TELE_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TELESCOPE],
-        /* mBmdIdx      */ TELE_00_BDL_VTELE,
-        /* mSrtIdx      */ TELE_00_BTK_VTELE,
+        /* mBmdIdx      */ dRes_INDEX_TELE_00_BDL_VTELE_e,
+        /* mSrtIdx      */ dRes_INDEX_TELE_00_BTK_VTELE_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1131,7 +1131,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x21: dItemNo_TINGLE_TUNER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHIN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_WHISTLE],
-        /* mBmdIdx      */ VCHIN_BDL_VCHIN,
+        /* mBmdIdx      */ dRes_INDEX_VCHIN_BDL_VCHIN_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1147,7 +1147,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x22: dItemNo_WIND_WAKER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTACT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
-        /* mBmdIdx      */ VTACT_BDL_VTACT,
+        /* mBmdIdx      */ dRes_INDEX_VTACT_BDL_VTACT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1163,8 +1163,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x23: dItemNo_PICTO_BOX_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOXN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CAMERA],
-        /* mBmdIdx      */ VBOXN_BDL_VBOXN,
-        /* mSrtIdx      */ VBOXN_BTK_VBOXN,
+        /* mBmdIdx      */ dRes_INDEX_VBOXN_BDL_VBOXN_e,
+        /* mSrtIdx      */ dRes_INDEX_VBOXN_BTK_VBOXN_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1179,7 +1179,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x24: dItemNo_SPOILS_BAG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBAGE],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_COVEROFBEAST],
-        /* mBmdIdx      */ VBAGE_BDL_VBAGE,
+        /* mBmdIdx      */ dRes_INDEX_VBAGE_BDL_VBAGE_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1195,8 +1195,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x25: dItemNo_GRAPPLING_HOOK_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VROPE],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ROPE],
-        /* mBmdIdx      */ VROPE_BDL_VROPE,
-        /* mSrtIdx      */ VROPE_BTK_VROPE,
+        /* mBmdIdx      */ dRes_INDEX_VROPE_BDL_VROPE_e,
+        /* mSrtIdx      */ dRes_INDEX_VROPE_BTK_VROPE_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1211,8 +1211,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x26: dItemNo_DELUXE_PICTO_BOX_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOXA],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CAMERA_2],
-        /* mBmdIdx      */ VBOXA_BDL_VBOXP,
-        /* mSrtIdx      */ VBOXA_BTK_VBOXA,
+        /* mBmdIdx      */ dRes_INDEX_VBOXA_BDL_VBOXP_e,
+        /* mSrtIdx      */ dRes_INDEX_VBOXA_BTK_VBOXA_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1227,8 +1227,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x27: dItemNo_BOW_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOW],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
-        /* mBmdIdx      */ VBOW_BDL_VBOW,
-        /* mSrtIdx      */ VBOW_BTK_VBOW,
+        /* mBmdIdx      */ dRes_INDEX_VBOW_BDL_VBOW_e,
+        /* mSrtIdx      */ dRes_INDEX_VBOW_BTK_VBOW_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1243,8 +1243,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x28: dItemNo_POWER_BRACELETS_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VPOWR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GLOVES_00_0x35],
-        /* mBmdIdx      */ VPOWR_BDL_VPOWR,
-        /* mSrtIdx      */ VPOWR_BTK_VPOWR,
+        /* mBmdIdx      */ dRes_INDEX_VPOWR_BDL_VPOWR_e,
+        /* mSrtIdx      */ dRes_INDEX_VPOWR_BTK_VPOWR_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1259,8 +1259,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x29: dItemNo_IRON_BOOTS_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOOT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOOTS_00],
-        /* mBmdIdx      */ VBOOT_BDL_VBOOT,
-        /* mSrtIdx      */ VBOOT_BTK_VBOOT,
+        /* mBmdIdx      */ dRes_INDEX_VBOOT_BDL_VBOOT_e,
+        /* mSrtIdx      */ dRes_INDEX_VBOOT_BTK_VBOOT_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1275,10 +1275,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x2A: dItemNo_MAGIC_ARMOR_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAGS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SHIELD_02],
-        /* mBmdIdx      */ VMAGS_BDL_VMAGS,
-        /* mSrtIdx      */ VMAGS_BTK_VMAGS,
+        /* mBmdIdx      */ dRes_INDEX_VMAGS_BDL_VMAGS_e,
+        /* mSrtIdx      */ dRes_INDEX_VMAGS_BTK_VMAGS_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VMAGS_BRK_VMAGS,
+        /* mTevIdx      */ dRes_INDEX_VMAGS_BRK_VMAGS_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ -1,
@@ -1307,7 +1307,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x2C: dItemNo_BAIT_BAG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBAGF],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_COVEROFBAIT],
-        /* mBmdIdx      */ VBAGF_BDL_VBAGF,
+        /* mBmdIdx      */ dRes_INDEX_VBAGF_BDL_VBAGF_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1323,7 +1323,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x2D: dItemNo_BOOMERANG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOOM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOOMERANG],
-        /* mBmdIdx      */ BOOM_BDL_VBOOM,
+        /* mBmdIdx      */ dRes_INDEX_BOOM_BDL_VBOOM_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1339,7 +1339,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x2E: dItemNo_BARE_HAND_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VFUKU],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GLOVES_00_0x34],
-        /* mBmdIdx      */ VFUKU_BDL_VFUKU,
+        /* mBmdIdx      */ dRes_INDEX_VFUKU_BDL_VFUKU_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1355,8 +1355,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x2F: dItemNo_HOOKSHOT_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHOOK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HOOKSHOT],
-        /* mBmdIdx      */ VHOOK_BDL_VHOOK,
-        /* mSrtIdx      */ VHOOK_BTK_VHOOK,
+        /* mBmdIdx      */ dRes_INDEX_VHOOK_BDL_VHOOK_e,
+        /* mSrtIdx      */ dRes_INDEX_VHOOK_BTK_VHOOK_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1371,7 +1371,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x30: dItemNo_DELIVERY_BAG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBAGH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY],
-        /* mBmdIdx      */ VBAGH_BDL_VBAGH,
+        /* mBmdIdx      */ dRes_INDEX_VBAGH_BDL_VBAGH_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1387,7 +1387,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x31: dItemNo_BOMB_BAG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
-        /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
+        /* mBmdIdx      */ dRes_INDEX_BOMB_00_BDL_VBOMB_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1403,7 +1403,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x32: dItemNo_FUKU_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VFUKU],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CLOTHES],
-        /* mBmdIdx      */ VFUKU_BDL_VFUKU,
+        /* mBmdIdx      */ dRes_INDEX_VFUKU_BDL_VFUKU_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1419,7 +1419,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x33: dItemNo_SKULL_HAMMER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHAMM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HAMMER_01],
-        /* mBmdIdx      */ VHAMM_BDL_VHAMM,
+        /* mBmdIdx      */ dRes_INDEX_VHAMM_BDL_VHAMM_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1435,7 +1435,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x34: dItemNo_DEKU_LEAF_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLEAF],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_FAN],
-        /* mBmdIdx      */ VLEAF_BDL_VLEAF,
+        /* mBmdIdx      */ dRes_INDEX_VLEAF_BDL_VLEAF_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1451,8 +1451,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x35: dItemNo_MAGIC_ARROW_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VARFI],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROW_POWER_01],
-        /* mBmdIdx      */ VARFI_BDL_VARFI,
-        /* mSrtIdx      */ VARFI_BTK_VARFI,
+        /* mBmdIdx      */ dRes_INDEX_VARFI_BDL_VARFI_e,
+        /* mSrtIdx      */ dRes_INDEX_VARFI_BTK_VARFI_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1467,8 +1467,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x36: dItemNo_LIGHT_ARROW_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VARRL],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROW_POWER_02],
-        /* mBmdIdx      */ VARRL_BDL_VARRL,
-        /* mSrtIdx      */ VARRL_BTK_VARRL,
+        /* mBmdIdx      */ dRes_INDEX_VARRL_BDL_VARRL_e,
+        /* mSrtIdx      */ dRes_INDEX_VARRL_BTK_VARRL_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1499,7 +1499,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x38: dItemNo_SWORD_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SWORD_00],
-        /* mBmdIdx      */ VSWON_BDL_VSWON,
+        /* mBmdIdx      */ dRes_INDEX_VSWON_BDL_VSWON_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1547,7 +1547,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x3B: dItemNo_SHIELD_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSHIN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SHIELD_00],
-        /* mBmdIdx      */ VSHIN_BDL_VSHIN,
+        /* mBmdIdx      */ dRes_INDEX_VSHIN_BDL_VSHIN_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1563,8 +1563,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x3C: dItemNo_MIRROR_SHIELD_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSHIM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SHIELD_01],
-        /* mBmdIdx      */ VSHIM_BDL_VSHIM,
-        /* mSrtIdx      */ VSHIM_BTK_VSHIM,
+        /* mBmdIdx      */ dRes_INDEX_VSHIM_BDL_VSHIM_e,
+        /* mSrtIdx      */ dRes_INDEX_VSHIM_BTK_VSHIM_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1579,7 +1579,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x3D: dItemNo_DROPPED_SWORD_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SWORD_00],
-        /* mBmdIdx      */ VSWON_BDL_VSWON,
+        /* mBmdIdx      */ dRes_INDEX_VSWON_BDL_VSWON_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1611,8 +1611,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x3F: dItemNo_HEART_PIECE_ALT_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHKAK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_02],
-        /* mBmdIdx      */ VHKAK_BDL_VHKAK,
-        /* mSrtIdx      */ VHKAK_BTK_VHKAK,
+        /* mBmdIdx      */ dRes_INDEX_VHKAK_BDL_VHKAK_e,
+        /* mSrtIdx      */ dRes_INDEX_VHKAK_BTK_VHKAK_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1659,8 +1659,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x42: dItemNo_PIRATES_CHARM_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
-        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
-        /* mSrtIdx      */ VAMUK_BTK_VAMUK,
+        /* mBmdIdx      */ dRes_INDEX_VAMUK_BDL_VAMUK_e,
+        /* mSrtIdx      */ dRes_INDEX_VAMUK_BTK_VAMUK_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1675,8 +1675,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x43: dItemNo_HEROS_CHARM_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_01],
-        /* mBmdIdx      */ VAMUY_BDL_VAMUY,
-        /* mSrtIdx      */ VAMUY_BTK_VAMUY,
+        /* mBmdIdx      */ dRes_INDEX_VAMUY_BDL_VAMUY_e,
+        /* mSrtIdx      */ dRes_INDEX_VAMUY_BTK_VAMUY_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1707,8 +1707,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x45: dItemNo_SKULL_NECKLACE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VDOKU],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_01],
-        /* mBmdIdx      */ VDOKU_BDL_VDOKU,
-        /* mSrtIdx      */ VDOKU_BTK_VDOKU,
+        /* mBmdIdx      */ dRes_INDEX_VDOKU_BDL_VDOKU_e,
+        /* mSrtIdx      */ dRes_INDEX_VDOKU_BTK_VDOKU_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1723,7 +1723,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x46: dItemNo_BOKOBABA_SEED_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOKO],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_02],
-        /* mBmdIdx      */ VBOKO_BDL_VBOKO,
+        /* mBmdIdx      */ dRes_INDEX_VBOKO_BDL_VBOKO_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1739,10 +1739,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x47: dItemNo_GOLDEN_FEATHER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHANE],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_03],
-        /* mBmdIdx      */ VHANE_BDL_VHANE,
-        /* mSrtIdx      */ VHANE_BTK_VHANE,
+        /* mBmdIdx      */ dRes_INDEX_VHANE_BDL_VHANE_e,
+        /* mSrtIdx      */ dRes_INDEX_VHANE_BTK_VHANE_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VHANE_BRK_VHANE,
+        /* mTevIdx      */ dRes_INDEX_VHANE_BRK_VHANE_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ -1,
@@ -1755,8 +1755,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x48: dItemNo_KNIGHTS_CREST_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBELT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_04],
-        /* mBmdIdx      */ VBELT_BDL_VBELT,
-        /* mSrtIdx      */ VBELT_BTK_VBELT,
+        /* mBmdIdx      */ dRes_INDEX_VBELT_BDL_VBELT_e,
+        /* mSrtIdx      */ dRes_INDEX_VBELT_BTK_VBELT_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1771,10 +1771,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x49: dItemNo_RED_JELLY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHUJ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_05],
-        /* mBmdIdx      */ VCHUJ_BDL_VCHUJ,
+        /* mBmdIdx      */ dRes_INDEX_VCHUJ_BDL_VCHUJ_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VCHUJ_BRK_VCHUJ,
+        /* mTevIdx      */ dRes_INDEX_VCHUJ_BRK_VCHUJ_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x01,
@@ -1787,10 +1787,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x4A: dItemNo_GREEN_JELLY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHUJ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_06],
-        /* mBmdIdx      */ VCHUJ_BDL_VCHUJ,
+        /* mBmdIdx      */ dRes_INDEX_VCHUJ_BDL_VCHUJ_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VCHUJ_BRK_VCHUJ,
+        /* mTevIdx      */ dRes_INDEX_VCHUJ_BRK_VCHUJ_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -1803,10 +1803,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x4B: dItemNo_BLUE_JELLY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHUJ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_07],
-        /* mBmdIdx      */ VCHUJ_BDL_VCHUJ,
+        /* mBmdIdx      */ dRes_INDEX_VCHUJ_BDL_VCHUJ_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VCHUJ_BRK_VCHUJ,
+        /* mTevIdx      */ dRes_INDEX_VCHUJ_BRK_VCHUJ_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x02,
@@ -1819,7 +1819,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x4C: dItemNo_MAP_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VDUNM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DUNGEON_MAP],
-        /* mBmdIdx      */ VDUNM_BDL_VDUNM,
+        /* mBmdIdx      */ dRes_INDEX_VDUNM_BDL_VDUNM_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1835,8 +1835,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x4D: dItemNo_COMPASS_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VDUNC],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_COMPASS],
-        /* mBmdIdx      */ VDUNC_BDL_VDUNC,
-        /* mSrtIdx      */ VDUNC_BTK_VDUNC,
+        /* mBmdIdx      */ dRes_INDEX_VDUNC_BDL_VDUNC_e,
+        /* mSrtIdx      */ dRes_INDEX_VDUNC_BTK_VDUNC_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1851,8 +1851,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x4E: dItemNo_BOSS_KEY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_KEY_01],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOSS_KEY],
-        /* mBmdIdx      */ KEY_01_BDL_VKEYB,
-        /* mSrtIdx      */ KEY_01_BTK_VKEYB,
+        /* mBmdIdx      */ dRes_INDEX_KEY_01_BDL_VKEYB_e,
+        /* mSrtIdx      */ dRes_INDEX_KEY_01_BTK_VKEYB_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1883,8 +1883,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x50: dItemNo_EMPTY_BOTTLE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BIN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
-        /* mBmdIdx      */ BIN_BDL_VBINX,
-        /* mSrtIdx      */ BIN_BTK_VBINA_X,
+        /* mBmdIdx      */ dRes_INDEX_BIN_BDL_VBINX_e,
+        /* mSrtIdx      */ dRes_INDEX_BIN_BTK_VBINA_X_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1899,8 +1899,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x51: dItemNo_RED_POTION_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_MED_R],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_01],
-        /* mBmdIdx      */ MED_R_BDL_VBINR,
-        /* mSrtIdx      */ MED_R_BTK_VBINA_R,
+        /* mBmdIdx      */ dRes_INDEX_MED_R_BDL_VBINR_e,
+        /* mSrtIdx      */ dRes_INDEX_MED_R_BTK_VBINA_R_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1915,8 +1915,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x52: dItemNo_GREEN_POTION_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_MED_G],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_02],
-        /* mBmdIdx      */ MED_G_BDL_VBING,
-        /* mSrtIdx      */ MED_G_BTK_VBINA_G,
+        /* mBmdIdx      */ dRes_INDEX_MED_G_BDL_VBING_e,
+        /* mSrtIdx      */ dRes_INDEX_MED_G_BTK_VBINA_G_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1931,8 +1931,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x53: dItemNo_BLUE_POTION_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_MED_B],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_03],
-        /* mBmdIdx      */ MED_B_BDL_VBINB,
-        /* mSrtIdx      */ MED_B_BTK_VBINA_B,
+        /* mBmdIdx      */ dRes_INDEX_MED_B_BDL_VBINB_e,
+        /* mSrtIdx      */ dRes_INDEX_MED_B_BTK_VBINA_B_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1947,8 +1947,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x54: dItemNo_HALF_SOUP_BOTTLE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_09],
-        /* mBmdIdx      */ VBINS_BDL_VBINS,
-        /* mSrtIdx      */ VBINS_BTK_VBINA_S,
+        /* mBmdIdx      */ dRes_INDEX_VBINS_BDL_VBINS_e,
+        /* mSrtIdx      */ dRes_INDEX_VBINS_BTK_VBINA_S_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1963,8 +1963,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x55: dItemNo_SOUP_BOTTLE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_04],
-        /* mBmdIdx      */ VBINS_BDL_VBINS,
-        /* mSrtIdx      */ VBINS_BTK_VBINA_S,
+        /* mBmdIdx      */ dRes_INDEX_VBINS_BDL_VBINS_e,
+        /* mSrtIdx      */ dRes_INDEX_VBINS_BTK_VBINA_S_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1979,8 +1979,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x56: dItemNo_WATER_BOTTLE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINW],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_05],
-        /* mBmdIdx      */ VBINW_BDL_VBINW,
-        /* mSrtIdx      */ VBINW_BTK_VBINA_W,
+        /* mBmdIdx      */ dRes_INDEX_VBINW_BDL_VBINW_e,
+        /* mSrtIdx      */ dRes_INDEX_VBINW_BTK_VBINA_W_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1995,8 +1995,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x57: dItemNo_FAIRY_BOTTLE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_06],
-        /* mBmdIdx      */ VBINY_BDL_VBINY,
-        /* mSrtIdx      */ VBINY_BTK_VBINA_Y,
+        /* mBmdIdx      */ dRes_INDEX_VBINY_BDL_VBINY_e,
+        /* mSrtIdx      */ dRes_INDEX_VBINY_BTK_VBINA_Y_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2011,10 +2011,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x58: dItemNo_FIREFLY_BOTTLE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_07],
-        /* mBmdIdx      */ VBINH_BDL_VBINH,
-        /* mSrtIdx      */ VBINH_BTK_VBINA_H,
+        /* mBmdIdx      */ dRes_INDEX_VBINH_BDL_VBINH_e,
+        /* mSrtIdx      */ dRes_INDEX_VBINH_BTK_VBINA_H_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VBINH_BRK_VBINH,
+        /* mTevIdx      */ dRes_INDEX_VBINH_BRK_VBINH_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ -1,
@@ -2027,8 +2027,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x59: dItemNo_FOREST_WATER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_FWBIN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_08],
-        /* mBmdIdx      */ FWBIN_BDL_VBINW_F,
-        /* mSrtIdx      */ FWBIN_BTK_VBINA_F,
+        /* mBmdIdx      */ dRes_INDEX_FWBIN_BDL_VBINW_F_e,
+        /* mSrtIdx      */ dRes_INDEX_FWBIN_BTK_VBINA_F_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2155,8 +2155,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x61: dItemNo_TRIFORCE1_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI1],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_00],
-        /* mBmdIdx      */ VTRI1_BDL_VTRI1,
-        /* mSrtIdx      */ VTRI1_BTK_VTRI1A,
+        /* mBmdIdx      */ dRes_INDEX_VTRI1_BDL_VTRI1_e,
+        /* mSrtIdx      */ dRes_INDEX_VTRI1_BTK_VTRI1A_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2171,8 +2171,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x62: dItemNo_TRIFORCE2_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI2],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_01],
-        /* mBmdIdx      */ VTRI2_BDL_VTRI2,
-        /* mSrtIdx      */ VTRI2_BTK_VTRI2A,
+        /* mBmdIdx      */ dRes_INDEX_VTRI2_BDL_VTRI2_e,
+        /* mSrtIdx      */ dRes_INDEX_VTRI2_BTK_VTRI2A_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2187,8 +2187,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x63: dItemNo_TRIFORCE3_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI3],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_02],
-        /* mBmdIdx      */ VTRI3_BDL_VTRI3,
-        /* mSrtIdx      */ VTRI3_BTK_VTRI3A,
+        /* mBmdIdx      */ dRes_INDEX_VTRI3_BDL_VTRI3_e,
+        /* mSrtIdx      */ dRes_INDEX_VTRI3_BTK_VTRI3A_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2203,8 +2203,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x64: dItemNo_TRIFORCE4_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI4],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_03],
-        /* mBmdIdx      */ VTRI4_BDL_VTRI4,
-        /* mSrtIdx      */ VTRI4_BTK_VTRI4A,
+        /* mBmdIdx      */ dRes_INDEX_VTRI4_BDL_VTRI4_e,
+        /* mSrtIdx      */ dRes_INDEX_VTRI4_BTK_VTRI4A_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2219,8 +2219,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x65: dItemNo_TRIFORCE5_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI5],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_04],
-        /* mBmdIdx      */ VTRI5_BDL_VTRI5,
-        /* mSrtIdx      */ VTRI5_BTK_VTRI5A,
+        /* mBmdIdx      */ dRes_INDEX_VTRI5_BDL_VTRI5_e,
+        /* mSrtIdx      */ dRes_INDEX_VTRI5_BTK_VTRI5A_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2235,8 +2235,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x66: dItemNo_TRIFORCE6_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI6],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_05],
-        /* mBmdIdx      */ VTRI6_BDL_VTRI6,
-        /* mSrtIdx      */ VTRI6_BTK_VTRI6A,
+        /* mBmdIdx      */ dRes_INDEX_VTRI6_BDL_VTRI6_e,
+        /* mSrtIdx      */ dRes_INDEX_VTRI6_BTK_VTRI6A_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2251,8 +2251,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x67: dItemNo_TRIFORCE7_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI7],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_06],
-        /* mBmdIdx      */ VTRI7_BDL_VTRI7,
-        /* mSrtIdx      */ VTRI7_BTK_VTRI7A,
+        /* mBmdIdx      */ dRes_INDEX_VTRI7_BDL_VTRI7_e,
+        /* mSrtIdx      */ dRes_INDEX_VTRI7_BTK_VTRI7A_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2267,8 +2267,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x68: dItemNo_TRIFORCE8_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI8],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_07],
-        /* mBmdIdx      */ VTRI8_BDL_VTRI8,
-        /* mSrtIdx      */ VTRI8_BTK_VTRI8A,
+        /* mBmdIdx      */ dRes_INDEX_VTRI8_BDL_VTRI8_e,
+        /* mSrtIdx      */ dRes_INDEX_VTRI8_BTK_VTRI8A_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2283,8 +2283,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x69: dItemNo_PEARL_NAYRU_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_SHINJU_N],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GOD_SYMBOL_02],
-        /* mBmdIdx      */ SHINJU_N_BDL_VPEAN,
-        /* mSrtIdx      */ SHINJU_N_BTK_VPEAA_N,
+        /* mBmdIdx      */ dRes_INDEX_SHINJU_N_BDL_VPEAN_e,
+        /* mSrtIdx      */ dRes_INDEX_SHINJU_N_BTK_VPEAA_N_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2299,8 +2299,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x6A: dItemNo_PEARL_DIN_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_SHINJU_D],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GOD_SYMBOL_00],
-        /* mBmdIdx      */ SHINJU_D_BDL_VPEAD,
-        /* mSrtIdx      */ SHINJU_D_BTK_VPEAA_D,
+        /* mBmdIdx      */ dRes_INDEX_SHINJU_D_BDL_VPEAD_e,
+        /* mSrtIdx      */ dRes_INDEX_SHINJU_D_BTK_VPEAA_D_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2315,8 +2315,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x6B: dItemNo_PEARL_FARORE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_SHINJU_F],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GOD_SYMBOL_01],
-        /* mBmdIdx      */ SHINJU_F_BDL_VPEAF,
-        /* mSrtIdx      */ SHINJU_F_BTK_VPEAA_F,
+        /* mBmdIdx      */ dRes_INDEX_SHINJU_F_BDL_VPEAF_e,
+        /* mSrtIdx      */ dRes_INDEX_SHINJU_F_BTK_VPEAA_F_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2331,7 +2331,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x6C: dItemNo_KNOWLEDGE_TF_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
-        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
+        /* mBmdIdx      */ dRes_INDEX_VAMUK_BDL_VAMUK_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2347,7 +2347,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x6D: dItemNo_WINDS_REQUIEM_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
-        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
+        /* mBmdIdx      */ dRes_INDEX_VAMUK_BDL_VAMUK_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2363,7 +2363,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x6E: dItemNo_BALLAD_OF_GALES_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
-        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
+        /* mBmdIdx      */ dRes_INDEX_VAMUK_BDL_VAMUK_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2379,7 +2379,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x6F: dItemNo_COMMAND_MELODY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
-        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
+        /* mBmdIdx      */ dRes_INDEX_VAMUK_BDL_VAMUK_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2395,7 +2395,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x70: dItemNo_EARTH_GODS_LYRIC_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
-        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
+        /* mBmdIdx      */ dRes_INDEX_VAMUK_BDL_VAMUK_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2411,7 +2411,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x71: dItemNo_WIND_GODS_ARIA_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
-        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
+        /* mBmdIdx      */ dRes_INDEX_VAMUK_BDL_VAMUK_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2427,7 +2427,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x72: dItemNo_SONG_OF_PASSING_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
-        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
+        /* mBmdIdx      */ dRes_INDEX_VAMUK_BDL_VAMUK_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2523,7 +2523,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x78: dItemNo_SAIL_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHO],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SAIL_00],
-        /* mBmdIdx      */ VHO_BDL_VHO,
+        /* mBmdIdx      */ dRes_INDEX_VHO_BDL_VHO_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2539,7 +2539,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x79: dItemNo_TRIFORCE_MAP_1_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2555,7 +2555,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x7A: dItemNo_TRIFORCE_MAP_2_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2571,7 +2571,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x7B: dItemNo_TRIFORCE_MAP_3_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2587,7 +2587,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x7C: dItemNo_TRIFORCE_MAP_4_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2603,7 +2603,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x7D: dItemNo_TRIFORCE_MAP_5_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2619,7 +2619,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x7E: dItemNo_TRIFORCE_MAP_6_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2635,7 +2635,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x7F: dItemNo_TRIFORCE_MAP_7_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2651,7 +2651,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x80: dItemNo_TRIFORCE_MAP_8_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2683,7 +2683,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x82: dItemNo_BIRD_BAIT_5_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VESA],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BAIT_01],
-        /* mBmdIdx      */ VESA_BDL_VESA,
+        /* mBmdIdx      */ dRes_INDEX_VESA_BDL_VESA_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2699,7 +2699,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x83: dItemNo_HYOI_PEAR_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHYOI],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BAIT_02],
-        /* mBmdIdx      */ VHYOI_BDL_VHYOI,
+        /* mBmdIdx      */ dRes_INDEX_VHYOI_BDL_VHYOI_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2843,7 +2843,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x8C: dItemNo_TOWN_FLOWER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_01],
-        /* mBmdIdx      */ VOBJ00_BDL_VOBJ00,
+        /* mBmdIdx      */ dRes_INDEX_VOBJ00_BDL_VOBJ00_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2859,7 +2859,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x8D: dItemNo_SEA_FLOWER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ01],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_02],
-        /* mBmdIdx      */ VOBJ01_BDL_VOBJ01,
+        /* mBmdIdx      */ dRes_INDEX_VOBJ01_BDL_VOBJ01_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2875,7 +2875,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x8E: dItemNo_EXOTIC_FLOWER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ02],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_03],
-        /* mBmdIdx      */ VOBJ02_BDL_VOBJ02,
+        /* mBmdIdx      */ dRes_INDEX_VOBJ02_BDL_VOBJ02_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2891,7 +2891,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x8F: dItemNo_HEROS_FLAG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ03],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_04],
-        /* mBmdIdx      */ VOBJ03_BDL_VOBJ03,
+        /* mBmdIdx      */ dRes_INDEX_VOBJ03_BDL_VOBJ03_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2907,7 +2907,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x90: dItemNo_BIG_CATCH_FLAG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ04],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_05],
-        /* mBmdIdx      */ VOBJ04_BDL_VOBJ04,
+        /* mBmdIdx      */ dRes_INDEX_VOBJ04_BDL_VOBJ04_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2923,7 +2923,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x91: dItemNo_BIG_SALE_FLAG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ05],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_06],
-        /* mBmdIdx      */ VOBJ05_BDL_VOBJ05,
+        /* mBmdIdx      */ dRes_INDEX_VOBJ05_BDL_VOBJ05_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2939,7 +2939,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x92: dItemNo_PINWHEEL_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ06],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_07],
-        /* mBmdIdx      */ VOBJ06_BDL_VOBJ06,
+        /* mBmdIdx      */ dRes_INDEX_VOBJ06_BDL_VOBJ06_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2955,7 +2955,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x93: dItemNo_SICKLE_MOON_FLAG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ07],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_08],
-        /* mBmdIdx      */ VOBJ07_BDL_VOBJ07,
+        /* mBmdIdx      */ dRes_INDEX_VOBJ07_BDL_VOBJ07_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2971,7 +2971,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x94: dItemNo_SKULL_TOWER_IDOL_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ08],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_09],
-        /* mBmdIdx      */ VOBJ08_BDL_VOBJ08,
+        /* mBmdIdx      */ dRes_INDEX_VOBJ08_BDL_VOBJ08_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2987,7 +2987,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x95: dItemNo_FOUNTAIN_IDOL_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ09],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_10],
-        /* mBmdIdx      */ VOBJ09_BDL_VOBJ09,
+        /* mBmdIdx      */ dRes_INDEX_VOBJ09_BDL_VOBJ09_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3003,7 +3003,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x96: dItemNo_POSTMAN_STATUE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ10],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_11],
-        /* mBmdIdx      */ VOBJ10_BDL_VOBJ10,
+        /* mBmdIdx      */ dRes_INDEX_VOBJ10_BDL_VOBJ10_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3019,7 +3019,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x97: dItemNo_SHOP_GURU_STATUE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ11],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_12],
-        /* mBmdIdx      */ VOBJ11_BDL_VOBJ11,
+        /* mBmdIdx      */ dRes_INDEX_VOBJ11_BDL_VOBJ11_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3035,7 +3035,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x98: dItemNo_FATHER_LETTER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLETT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_13],
-        /* mBmdIdx      */ VLETT_BDL_VLETT,
+        /* mBmdIdx      */ dRes_INDEX_VLETT_BDL_VLETT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3051,7 +3051,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x99: dItemNo_NOTE_TO_MOM_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLEOF],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_14],
-        /* mBmdIdx      */ VLEOF_BDL_VLEOF,
+        /* mBmdIdx      */ dRes_INDEX_VLEOF_BDL_VLEOF_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3067,7 +3067,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x9A: dItemNo_MAGGIES_LETTER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLEMG],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_15],
-        /* mBmdIdx      */ VLEMG_BDL_VLEMG,
+        /* mBmdIdx      */ dRes_INDEX_VLEMG_BDL_VLEMG_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3083,7 +3083,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x9B: dItemNo_MOBLINS_LETTER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLEMO],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_16],
-        /* mBmdIdx      */ VLEMO_BDL_VLEMO,
+        /* mBmdIdx      */ dRes_INDEX_VLEMO_BDL_VLEMO_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3099,7 +3099,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x9C: dItemNo_CABANA_DEED_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBESO],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_17],
-        /* mBmdIdx      */ VBESO_BDL_VBESO,
+        /* mBmdIdx      */ dRes_INDEX_VBESO_BDL_VBESO_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3115,7 +3115,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x9D: dItemNo_COMPLIMENTARY_ID_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOHOM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_18],
-        /* mBmdIdx      */ VOHOM_BDL_VOHOM,
+        /* mBmdIdx      */ dRes_INDEX_VOHOM_BDL_VOHOM_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3131,7 +3131,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x9E: dItemNo_FILL_UP_COUPON_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMANT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_19],
-        /* mBmdIdx      */ VMANT_BDL_VMANT,
+        /* mBmdIdx      */ dRes_INDEX_VMANT_BDL_VMANT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3147,8 +3147,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x9F: dItemNo_LEGENDARY_PICTOGRAPH_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOXA],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CAMERA],
-        /* mBmdIdx      */ VBOXA_BDL_VBOXP,
-        /* mSrtIdx      */ VBOXA_BTK_VBOXA,
+        /* mBmdIdx      */ dRes_INDEX_VBOXA_BDL_VBOXP_e,
+        /* mSrtIdx      */ dRes_INDEX_VBOXA_BTK_VBOXA_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -3163,7 +3163,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA0: dItemNo_SALVAGE_ITEM_2_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
-        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
+        /* mBmdIdx      */ dRes_INDEX_VAMUK_BDL_VAMUK_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3179,7 +3179,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA1: dItemNo_SALVAGE_ITEM_3_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
-        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
+        /* mBmdIdx      */ dRes_INDEX_VAMUK_BDL_VAMUK_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3195,7 +3195,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA2: dItemNo_XXX_039_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
-        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
+        /* mBmdIdx      */ dRes_INDEX_VAMUK_BDL_VAMUK_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3211,7 +3211,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA3: dItemNo_TINGLE_STATUE_1_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN1],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
-        /* mBmdIdx      */ VTIN1_BDL_VTIN1,
+        /* mBmdIdx      */ dRes_INDEX_VTIN1_BDL_VTIN1_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3227,7 +3227,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA4: dItemNo_TINGLE_STATUE_2_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN2],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
-        /* mBmdIdx      */ VTIN2_BDL_VTIN2,
+        /* mBmdIdx      */ dRes_INDEX_VTIN2_BDL_VTIN2_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3243,7 +3243,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA5: dItemNo_TINGLE_STATUE_3_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN3],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
-        /* mBmdIdx      */ VTIN3_BDL_VTIN3,
+        /* mBmdIdx      */ dRes_INDEX_VTIN3_BDL_VTIN3_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3259,7 +3259,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA6: dItemNo_TINGLE_STATUE_4_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN4],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
-        /* mBmdIdx      */ VTIN4_BDL_VTIN4,
+        /* mBmdIdx      */ dRes_INDEX_VTIN4_BDL_VTIN4_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3275,7 +3275,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA7: dItemNo_TINGLE_STATUE_5_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN5],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
-        /* mBmdIdx      */ VTIN5_BDL_VTIN5,
+        /* mBmdIdx      */ dRes_INDEX_VTIN5_BDL_VTIN5_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3323,7 +3323,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xAA: dItemNo_HURRICANE_SPIN_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mTexture     */ NULL,
-        /* mBmdIdx      */ VSWON_BDL_VSWON,
+        /* mBmdIdx      */ dRes_INDEX_VSWON_BDL_VSWON_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3339,8 +3339,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xAB: dItemNo_MAX_RUPEE_UP1_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSAIM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BIG_PURSE],
-        /* mBmdIdx      */ VSAIM_BDL_VSAIM,
-        /* mSrtIdx      */ VSAIM_BTK_VSAIM,
+        /* mBmdIdx      */ dRes_INDEX_VSAIM_BDL_VSAIM_e,
+        /* mSrtIdx      */ dRes_INDEX_VSAIM_BTK_VSAIM_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -3355,8 +3355,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xAC: dItemNo_MAX_RUPEE_UP2_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSAIL],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_MAX_PURSE],
-        /* mBmdIdx      */ VSAIL_BDL_VSAIL,
-        /* mSrtIdx      */ VSAIL_BTK_VSAIL,
+        /* mBmdIdx      */ dRes_INDEX_VSAIL_BDL_VSAIL_e,
+        /* mSrtIdx      */ dRes_INDEX_VSAIL_BTK_VSAIL_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -3371,8 +3371,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xAD: dItemNo_MAX_BOMB_UP1_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOMM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMBPOUCH_1],
-        /* mBmdIdx      */ VBOMM_BDL_VBOMM,
-        /* mSrtIdx      */ VBOMM_BTK_VBOMM,
+        /* mBmdIdx      */ dRes_INDEX_VBOMM_BDL_VBOMM_e,
+        /* mSrtIdx      */ dRes_INDEX_VBOMM_BTK_VBOMM_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -3387,8 +3387,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xAE: dItemNo_MAX_BOMB_UP2_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOML],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMBPOUCH_2],
-        /* mBmdIdx      */ VBOML_BDL_VBOML,
-        /* mSrtIdx      */ VBOML_BTK_VBOML,
+        /* mBmdIdx      */ dRes_INDEX_VBOML_BDL_VBOML_e,
+        /* mSrtIdx      */ dRes_INDEX_VBOML_BTK_VBOML_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -3403,8 +3403,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xAF: dItemNo_MAX_ARROW_UP1_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VYATM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROWCASE_1],
-        /* mBmdIdx      */ VYATM_BDL_VYATM,
-        /* mSrtIdx      */ VYATM_BTK_VYATM,
+        /* mBmdIdx      */ dRes_INDEX_VYATM_BDL_VYATM_e,
+        /* mSrtIdx      */ dRes_INDEX_VYATM_BTK_VYATM_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -3419,8 +3419,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB0: dItemNo_MAX_ARROW_UP2_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VYATL],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROWCASE_2],
-        /* mBmdIdx      */ VYATL_BDL_VYATL,
-        /* mSrtIdx      */ VYATL_BTK_VYATL,
+        /* mBmdIdx      */ dRes_INDEX_VYATL_BDL_VYATL_e,
+        /* mSrtIdx      */ dRes_INDEX_VYATL_BTK_VYATL_e,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -3467,10 +3467,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB3: dItemNo_TINGLE_RUPEE_1_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x04,
@@ -3483,10 +3483,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB4: dItemNo_TINGLE_RUPEE_2_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x04,
@@ -3499,10 +3499,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB5: dItemNo_TINGLE_RUPEE_3_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x04,
@@ -3515,10 +3515,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB6: dItemNo_TINGLE_RUPEE_4_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x04,
@@ -3531,10 +3531,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB7: dItemNo_TINGLE_RUPEE_5_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x04,
@@ -3547,10 +3547,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB8: dItemNo_TINGLE_RUPEE_6_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x05,
@@ -3563,10 +3563,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB9: dItemNo_LITHOGRAPH_1_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3579,10 +3579,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xBA: dItemNo_LITHOGRAPH_2_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3595,10 +3595,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xBB: dItemNo_LITHOGRAPH_3_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3611,10 +3611,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xBC: dItemNo_LITHOGRAPH_4_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3627,10 +3627,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xBD: dItemNo_LITHOGRAPH_5_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3643,10 +3643,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xBE: dItemNo_LITHOGRAPH_6_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3659,10 +3659,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xBF: dItemNo_COLLECT_MAP_64_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3675,10 +3675,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC0: dItemNo_COLLECT_MAP_63_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3691,10 +3691,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC1: dItemNo_COLLECT_MAP_62_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
-        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
+        /* mBmdIdx      */ dRes_INDEX_VLUPY_BDL_VLUPY_e,
+        /* mSrtIdx      */ dRes_INDEX_VLUPY_BTK_VLUPY_e,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ VLUPY_BRK_VLUPY,
+        /* mTevIdx      */ dRes_INDEX_VLUPY_BRK_VLUPY_e,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3707,7 +3707,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC2: dItemNo_COLLECT_MAP_61_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
+        /* mBmdIdx      */ dRes_INDEX_VMAPQ_BDL_VMAPQ_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3723,7 +3723,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC3: dItemNo_COLLECT_MAP_60_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
+        /* mBmdIdx      */ dRes_INDEX_VMAPQ_BDL_VMAPQ_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3739,7 +3739,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC4: dItemNo_COLLECT_MAP_59_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
+        /* mBmdIdx      */ dRes_INDEX_VMAPQ_BDL_VMAPQ_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3755,7 +3755,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC5: dItemNo_COLLECT_MAP_58_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
+        /* mBmdIdx      */ dRes_INDEX_VMAPQ_BDL_VMAPQ_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3771,7 +3771,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC6: dItemNo_COLLECT_MAP_57_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
+        /* mBmdIdx      */ dRes_INDEX_VMAPQ_BDL_VMAPQ_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3787,7 +3787,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC7: dItemNo_COLLECT_MAP_56_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
+        /* mBmdIdx      */ dRes_INDEX_VMAPQ_BDL_VMAPQ_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3803,7 +3803,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC8: dItemNo_COLLECT_MAP_55_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
+        /* mBmdIdx      */ dRes_INDEX_VMAPQ_BDL_VMAPQ_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3819,7 +3819,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC9: dItemNo_COLLECT_MAP_54_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
+        /* mBmdIdx      */ dRes_INDEX_VMAPQ_BDL_VMAPQ_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3835,7 +3835,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xCA: dItemNo_COLLECT_MAP_53_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
+        /* mBmdIdx      */ dRes_INDEX_VMAPQ_BDL_VMAPQ_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3851,7 +3851,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xCB: dItemNo_COLLECT_MAP_52_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPC],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TINGLE2],
-        /* mBmdIdx      */ VMAPC_BDL_VMAPC,
+        /* mBmdIdx      */ dRes_INDEX_VMAPC_BDL_VMAPC_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3867,7 +3867,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xCC: dItemNo_COLLECT_MAP_51_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3883,7 +3883,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xCD: dItemNo_COLLECT_MAP_50_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3899,7 +3899,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xCE: dItemNo_COLLECT_MAP_49_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3915,7 +3915,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xCF: dItemNo_COLLECT_MAP_48_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3931,7 +3931,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD0: dItemNo_COLLECT_MAP_47_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3947,7 +3947,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD1: dItemNo_COLLECT_MAP_46_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3963,7 +3963,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD2: dItemNo_COLLECT_MAP_45_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3979,7 +3979,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD3: dItemNo_COLLECT_MAP_44_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3995,7 +3995,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD4: dItemNo_COLLECT_MAP_43_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4011,7 +4011,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD5: dItemNo_COLLECT_MAP_42_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4027,7 +4027,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD6: dItemNo_COLLECT_MAP_41_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4043,7 +4043,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD7: dItemNo_COLLECT_MAP_40_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4059,7 +4059,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD8: dItemNo_COLLECT_MAP_39_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4075,7 +4075,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD9: dItemNo_COLLECT_MAP_38_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4091,7 +4091,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xDA: dItemNo_COLLECT_MAP_37_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4107,7 +4107,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xDB: dItemNo_COLLECT_MAP_36_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPG],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_PHANTOMSHIP2],
-        /* mBmdIdx      */ VMAPG_BDL_VMAPG,
+        /* mBmdIdx      */ dRes_INDEX_VMAPG_BDL_VMAPG_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4123,7 +4123,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xDC: dItemNo_COLLECT_MAP_35_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPC],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TINGLE2],
-        /* mBmdIdx      */ VMAPC_BDL_VMAPC,
+        /* mBmdIdx      */ dRes_INDEX_VMAPC_BDL_VMAPC_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4139,7 +4139,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xDD: dItemNo_COLLECT_MAP_34_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4155,7 +4155,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xDE: dItemNo_COLLECT_MAP_33_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4171,7 +4171,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xDF: dItemNo_COLLECT_MAP_32_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4187,7 +4187,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE0: dItemNo_COLLECT_MAP_31_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4203,7 +4203,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE1: dItemNo_COLLECT_MAP_30_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4219,7 +4219,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE2: dItemNo_COLLECT_MAP_29_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4235,7 +4235,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE3: dItemNo_COLLECT_MAP_28_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4251,7 +4251,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE4: dItemNo_COLLECT_MAP_27_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4267,7 +4267,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE5: dItemNo_COLLECT_MAP_26_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4283,7 +4283,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE6: dItemNo_COLLECT_MAP_25_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4299,7 +4299,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE7: dItemNo_COLLECT_MAP_24_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4315,7 +4315,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE8: dItemNo_COLLECT_MAP_23_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4331,7 +4331,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE9: dItemNo_COLLECT_MAP_22_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4347,7 +4347,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xEA: dItemNo_COLLECT_MAP_21_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4363,7 +4363,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xEB: dItemNo_COLLECT_MAP_20_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4379,7 +4379,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xEC: dItemNo_COLLECT_MAP_19_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
+        /* mBmdIdx      */ dRes_INDEX_VMAPR_BDL_VMAPL_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4395,7 +4395,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xED: dItemNo_COLLECT_MAP_18_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
+        /* mBmdIdx      */ dRes_INDEX_VMAPH_BDL_VMAPH_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4411,7 +4411,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xEE: dItemNo_COLLECT_MAP_17_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
+        /* mBmdIdx      */ dRes_INDEX_VMAPH_BDL_VMAPH_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4427,7 +4427,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xEF: dItemNo_COLLECT_MAP_16_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
+        /* mBmdIdx      */ dRes_INDEX_VMAPH_BDL_VMAPH_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4443,7 +4443,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF0: dItemNo_COLLECT_MAP_15_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
+        /* mBmdIdx      */ dRes_INDEX_VMAPH_BDL_VMAPH_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4459,7 +4459,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF1: dItemNo_COLLECT_MAP_14_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
+        /* mBmdIdx      */ dRes_INDEX_VMAPH_BDL_VMAPH_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4475,7 +4475,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF2: dItemNo_COLLECT_MAP_13_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
+        /* mBmdIdx      */ dRes_INDEX_VMAPH_BDL_VMAPH_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4491,7 +4491,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF3: dItemNo_COLLECT_MAP_12_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
+        /* mBmdIdx      */ dRes_INDEX_VMAPH_BDL_VMAPH_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4507,7 +4507,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF4: dItemNo_COLLECT_MAP_11_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
+        /* mBmdIdx      */ dRes_INDEX_VMAPH_BDL_VMAPH_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4523,7 +4523,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF5: dItemNo_COLLECT_MAP_10_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
+        /* mBmdIdx      */ dRes_INDEX_VMAPH_BDL_VMAPH_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4539,7 +4539,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF6: dItemNo_COLLECT_MAP_09_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
+        /* mBmdIdx      */ dRes_INDEX_VMAPH_BDL_VMAPH_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4555,7 +4555,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF7: dItemNo_COLLECT_MAP_08_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4571,7 +4571,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF8: dItemNo_COLLECT_MAP_07_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4587,7 +4587,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF9: dItemNo_COLLECT_MAP_06_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4603,7 +4603,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xFA: dItemNo_COLLECT_MAP_05_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4619,7 +4619,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xFB: dItemNo_COLLECT_MAP_04_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4635,7 +4635,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xFC: dItemNo_COLLECT_MAP_03_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4651,7 +4651,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xFD: dItemNo_COLLECT_MAP_02_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4667,7 +4667,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xFE: dItemNo_COLLECT_MAP_01_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
+        /* mBmdIdx      */ dRes_INDEX_VMAPT_BDL_VMAPT_e,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4702,7 +4702,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x00: dItemNo_HEART_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VHRTL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VHRTL_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4719,10 +4719,10 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x01: dItemNo_GREEN_RUPEE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
-        /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VLUPL_e,
+        /* mSrtIdx   */ dRes_INDEX_ALWAYS_BTK_VLUPL_e,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ ALWAYS_BRK_VLUPL,
+        /* mTevIdx   */ dRes_INDEX_ALWAYS_BRK_VLUPL_e,
         /* mTevIdx2  */ -1,
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x00,
@@ -4736,10 +4736,10 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x02: dItemNo_BLUE_RUPEE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
-        /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VLUPL_e,
+        /* mSrtIdx   */ dRes_INDEX_ALWAYS_BTK_VLUPL_e,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ ALWAYS_BRK_VLUPL,
+        /* mTevIdx   */ dRes_INDEX_ALWAYS_BRK_VLUPL_e,
         /* mTevIdx2  */ -1,
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x01,
@@ -4753,10 +4753,10 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x03: dItemNo_YELLOW_RUPEE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
-        /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VLUPL_e,
+        /* mSrtIdx   */ dRes_INDEX_ALWAYS_BTK_VLUPL_e,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ ALWAYS_BRK_VLUPL,
+        /* mTevIdx   */ dRes_INDEX_ALWAYS_BRK_VLUPL_e,
         /* mTevIdx2  */ -1,
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x02,
@@ -4770,10 +4770,10 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x04: dItemNo_RED_RUPEE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
-        /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VLUPL_e,
+        /* mSrtIdx   */ dRes_INDEX_ALWAYS_BTK_VLUPL_e,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ ALWAYS_BRK_VLUPL,
+        /* mTevIdx   */ dRes_INDEX_ALWAYS_BRK_VLUPL_e,
         /* mTevIdx2  */ -1,
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x03,
@@ -4787,10 +4787,10 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x05: dItemNo_PURPLE_RUPEE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
-        /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VLUPL_e,
+        /* mSrtIdx   */ dRes_INDEX_ALWAYS_BTK_VLUPL_e,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ ALWAYS_BRK_VLUPL,
+        /* mTevIdx   */ dRes_INDEX_ALWAYS_BRK_VLUPL_e,
         /* mTevIdx2  */ -1,
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x04,
@@ -4804,10 +4804,10 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x06: dItemNo_ORANGE_RUPEE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
-        /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VLUPL_e,
+        /* mSrtIdx   */ dRes_INDEX_ALWAYS_BTK_VLUPL_e,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ ALWAYS_BRK_VLUPL,
+        /* mTevIdx   */ dRes_INDEX_ALWAYS_BRK_VLUPL_e,
         /* mTevIdx2  */ -1,
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x05,
@@ -4821,8 +4821,8 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x07: dItemNo_HEART_PIECE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VHKAL,
-        /* mSrtIdx   */ ALWAYS_BTK_VHKAL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VHKAL_e,
+        /* mSrtIdx   */ dRes_INDEX_ALWAYS_BTK_VHKAL_e,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
@@ -4838,8 +4838,8 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x08: dItemNo_HEART_CONTAINER_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VHUTL,
-        /* mSrtIdx   */ ALWAYS_BTK_VHUTL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VHUTL_e,
+        /* mSrtIdx   */ dRes_INDEX_ALWAYS_BTK_VHUTL_e,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
@@ -4855,7 +4855,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x09: dItemNo_SMALL_MAGIC_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_MPODA,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_MPODA_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4872,7 +4872,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x0A: dItemNo_LARGE_MAGIC_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_MPODB,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_MPODB_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4889,7 +4889,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x0B: dItemNo_BOMB_5_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
-        /* mBmdIdx   */ LINK_BDL_BOMB,
+        /* mBmdIdx   */ dRes_INDEX_LINK_BDL_BOMB_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4906,7 +4906,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x0C: dItemNo_BOMB_10_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
-        /* mBmdIdx   */ LINK_BDL_BOMB,
+        /* mBmdIdx   */ dRes_INDEX_LINK_BDL_BOMB_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4923,7 +4923,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x0D: dItemNo_BOMB_20_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
-        /* mBmdIdx   */ LINK_BDL_BOMB,
+        /* mBmdIdx   */ dRes_INDEX_LINK_BDL_BOMB_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4940,7 +4940,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x0E: dItemNo_BOMB_30_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
-        /* mBmdIdx   */ LINK_BDL_BOMB,
+        /* mBmdIdx   */ dRes_INDEX_LINK_BDL_BOMB_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4957,10 +4957,10 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x0F: dItemNo_SILVER_RUPEE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
-        /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VLUPL_e,
+        /* mSrtIdx   */ dRes_INDEX_ALWAYS_BTK_VLUPL_e,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ ALWAYS_BRK_VLUPL,
+        /* mTevIdx   */ dRes_INDEX_ALWAYS_BRK_VLUPL_e,
         /* mTevIdx2  */ -1,
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x06,
@@ -4974,7 +4974,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x10: dItemNo_ARROW_10_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_ARROWITEM,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_ARROWITEM_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4991,7 +4991,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x11: dItemNo_ARROW_20_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_ARROWITEM,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_ARROWITEM_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5008,7 +5008,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x12: dItemNo_ARROW_30_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_ARROWITEM,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_ARROWITEM_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5051,7 +5051,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x15: dItemNo_SMALL_KEY_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VKEYL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VKEYL_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5068,12 +5068,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x16: dItemNo_RECOVER_FAIRY_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_FA,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_FA_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ ALWAYS_BCK_FA,
+        /* mBckIdx   */ dRes_INDEX_ALWAYS_BCK_FA_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x4000
@@ -5172,7 +5172,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x1E: dItemNo_TRIPLE_HEART_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VHRTL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VHRTL_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5185,12 +5185,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x1F: dItemNo_JOY_PENDANT_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VHAPL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VHAPL_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ ALWAYS_BCK_VHAPL,
+        /* mBckIdx   */ dRes_INDEX_ALWAYS_BCK_VHAPL_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
 #if VERSION == VERSION_DEMO
@@ -5462,7 +5462,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x34: dItemNo_DEKU_LEAF_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VLEAF],
-        /* mBmdIdx   */ VLEAF_BDL_VLEAF,
+        /* mBmdIdx   */ dRes_INDEX_VLEAF_BDL_VLEAF_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5475,7 +5475,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x35: dItemNo_MAGIC_ARROW_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
-        /* mBmdIdx   */ LINK_BDL_ARROW,
+        /* mBmdIdx   */ dRes_INDEX_LINK_BDL_ARROW_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5488,7 +5488,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x36: dItemNo_LIGHT_ARROW_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
-        /* mBmdIdx   */ LINK_BDL_ARROW,
+        /* mBmdIdx   */ dRes_INDEX_LINK_BDL_ARROW_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5514,7 +5514,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x38: dItemNo_SWORD_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VSWON],
-        /* mBmdIdx   */ VSWON_BDL_VSWON,
+        /* mBmdIdx   */ dRes_INDEX_VSWON_BDL_VSWON_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5553,7 +5553,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x3B: dItemNo_SHIELD_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VSHIN],
-        /* mBmdIdx   */ VSHIN_BDL_VSHIN,
+        /* mBmdIdx   */ dRes_INDEX_VSHIN_BDL_VSHIN_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5579,7 +5579,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x3D: dItemNo_DROPPED_SWORD_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VSWON],
-        /* mBmdIdx   */ VSWON_BDL_VSWON,
+        /* mBmdIdx   */ dRes_INDEX_VSWON_BDL_VSWON_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5683,12 +5683,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x45: dItemNo_SKULL_NECKLACE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VDOKL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VDOKL_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ ALWAYS_BCK_VDOKL,
+        /* mBckIdx   */ dRes_INDEX_ALWAYS_BCK_VDOKL_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
 #if VERSION == VERSION_DEMO
@@ -5700,12 +5700,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x46: dItemNo_BOKOBABA_SEED_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VBOKL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VBOKL_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ ALWAYS_BCK_VBOKL,
+        /* mBckIdx   */ dRes_INDEX_ALWAYS_BCK_VBOKL_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
 #if VERSION == VERSION_DEMO
@@ -5717,12 +5717,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x47: dItemNo_GOLDEN_FEATHER_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VHANL,
-        /* mSrtIdx   */ ALWAYS_BTK_VHANL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VHANL_e,
+        /* mSrtIdx   */ dRes_INDEX_ALWAYS_BTK_VHANL_e,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ ALWAYS_BRK_VHANL,
+        /* mTevIdx   */ dRes_INDEX_ALWAYS_BRK_VHANL_e,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ ALWAYS_BCK_VHANL,
+        /* mBckIdx   */ dRes_INDEX_ALWAYS_BCK_VHANL_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000222,
 #if VERSION == VERSION_DEMO
@@ -5734,12 +5734,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x48: dItemNo_KNIGHTS_CREST_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VBELL,
-        /* mSrtIdx   */ ALWAYS_BTK_VBELL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VBELL_e,
+        /* mSrtIdx   */ dRes_INDEX_ALWAYS_BTK_VBELL_e,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ ALWAYS_BCK_VBELL,
+        /* mBckIdx   */ dRes_INDEX_ALWAYS_BCK_VBELL_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000222,
 #if VERSION == VERSION_DEMO
@@ -5751,12 +5751,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x49: dItemNo_RED_JELLY_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VCHUL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VCHUL_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ ALWAYS_BRK_VCHUL,
+        /* mTevIdx   */ dRes_INDEX_ALWAYS_BRK_VCHUL_e,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ ALWAYS_BCK_VCHUL,
+        /* mBckIdx   */ dRes_INDEX_ALWAYS_BCK_VCHUL_e,
         /* mTevFrm   */ 0x01,
         /* mUnknown  */ 0x11000022,
 #if VERSION == VERSION_DEMO
@@ -5768,12 +5768,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x4A: dItemNo_GREEN_JELLY_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VCHUL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VCHUL_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ ALWAYS_BRK_VCHUL,
+        /* mTevIdx   */ dRes_INDEX_ALWAYS_BRK_VCHUL_e,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ ALWAYS_BCK_VCHUL,
+        /* mBckIdx   */ dRes_INDEX_ALWAYS_BCK_VCHUL_e,
         /* mTevFrm   */ 0x00,
         /* mUnknown  */ 0x11000022,
 #if VERSION == VERSION_DEMO
@@ -5785,12 +5785,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x4B: dItemNo_BLUE_JELLY_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VCHUL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VCHUL_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ ALWAYS_BRK_VCHUL,
+        /* mTevIdx   */ dRes_INDEX_ALWAYS_BRK_VCHUL_e,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ ALWAYS_BCK_VCHUL,
+        /* mBckIdx   */ dRes_INDEX_ALWAYS_BCK_VCHUL_e,
         /* mTevFrm   */ 0x02,
         /* mUnknown  */ 0x11000022,
 #if VERSION == VERSION_DEMO
@@ -6504,12 +6504,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x82: dItemNo_BIRD_BAIT_5_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ ALWAYS_BDL_VESAL,
+        /* mBmdIdx   */ dRes_INDEX_ALWAYS_BDL_VESAL_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ ALWAYS_BCK_VESAL,
+        /* mBckIdx   */ dRes_INDEX_ALWAYS_BCK_VESAL_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
 #if VERSION == VERSION_DEMO
@@ -6521,7 +6521,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x83: dItemNo_HYOI_PEAR_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VHYOI],
-        /* mBmdIdx   */ VHYOI_BDL_VHYOI,
+        /* mBmdIdx   */ dRes_INDEX_VHYOI_BDL_VHYOI_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -6642,12 +6642,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x8C: dItemNo_TOWN_FLOWER_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x58],
-        /* mBmdIdx   */ FDAI_BDL_FOBJ00,
+        /* mBmdIdx   */ dRes_INDEX_FDAI_BDL_FOBJ00_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ FDAI_BCK_FOBJ00,
+        /* mBckIdx   */ dRes_INDEX_FDAI_BCK_FOBJ00_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
 #if VERSION == VERSION_DEMO
@@ -6659,12 +6659,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x8D: dItemNo_SEA_FLOWER_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x59],
-        /* mBmdIdx   */ FDAI_BDL_FOBJ01,
+        /* mBmdIdx   */ dRes_INDEX_FDAI_BDL_FOBJ01_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ FDAI_BCK_FOBJ01,
+        /* mBckIdx   */ dRes_INDEX_FDAI_BCK_FOBJ01_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
 #if VERSION == VERSION_DEMO
@@ -6676,12 +6676,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x8E: dItemNo_EXOTIC_FLOWER_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
-        /* mBmdIdx   */ FDAI_BDL_FOBJ02,
+        /* mBmdIdx   */ dRes_INDEX_FDAI_BDL_FOBJ02_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ FDAI_BCK_FOBJ02,
+        /* mBckIdx   */ dRes_INDEX_FDAI_BCK_FOBJ02_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
 #if VERSION == VERSION_DEMO
@@ -6693,7 +6693,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x8F: dItemNo_HEROS_FLAG_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
-        /* mBmdIdx   */ FDAI_BDL_FOBJ03,
+        /* mBmdIdx   */ dRes_INDEX_FDAI_BDL_FOBJ03_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -6710,7 +6710,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x90: dItemNo_BIG_CATCH_FLAG_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
-        /* mBmdIdx   */ FDAI_BDL_FOBJ04,
+        /* mBmdIdx   */ dRes_INDEX_FDAI_BDL_FOBJ04_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -6727,12 +6727,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x91: dItemNo_BIG_SALE_FLAG_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
-        /* mBmdIdx   */ FDAI_BDL_FOBJ05,
+        /* mBmdIdx   */ dRes_INDEX_FDAI_BDL_FOBJ05_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ FDAI_BCK_FOBJ05,
+        /* mBckIdx   */ dRes_INDEX_FDAI_BCK_FOBJ05_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x1200
@@ -6740,12 +6740,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x92: dItemNo_PINWHEEL_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5A],
-        /* mBmdIdx   */ FDAI_BDL_FOBJ06,
+        /* mBmdIdx   */ dRes_INDEX_FDAI_BDL_FOBJ06_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ FDAI_BCK_FOBJ06,
+        /* mBckIdx   */ dRes_INDEX_FDAI_BCK_FOBJ06_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
 #if VERSION == VERSION_DEMO
@@ -6757,12 +6757,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x93: dItemNo_SICKLE_MOON_FLAG_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
-        /* mBmdIdx   */ FDAI_BDL_FOBJ07,
+        /* mBmdIdx   */ dRes_INDEX_FDAI_BDL_FOBJ07_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ FDAI_BCK_FOBJ07,
+        /* mBckIdx   */ dRes_INDEX_FDAI_BCK_FOBJ07_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x1200
@@ -6770,12 +6770,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x94: dItemNo_SKULL_TOWER_IDOL_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5C],
-        /* mBmdIdx   */ FDAI_BDL_FOBJ08,
+        /* mBmdIdx   */ dRes_INDEX_FDAI_BDL_FOBJ08_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ FDAI_BCK_FOBJ08,
+        /* mBckIdx   */ dRes_INDEX_FDAI_BCK_FOBJ08_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x1000
@@ -6783,7 +6783,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x95: dItemNo_FOUNTAIN_IDOL_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x64],
-        /* mBmdIdx   */ FDAI_BDL_FOBJ09,
+        /* mBmdIdx   */ dRes_INDEX_FDAI_BDL_FOBJ09_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -6796,7 +6796,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x96: dItemNo_POSTMAN_STATUE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5A],
-        /* mBmdIdx   */ FDAI_BDL_FOBJ10,
+        /* mBmdIdx   */ dRes_INDEX_FDAI_BDL_FOBJ10_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -6809,12 +6809,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x97: dItemNo_SHOP_GURU_STATUE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5A],
-        /* mBmdIdx   */ FDAI_BDL_FOBJ11,
+        /* mBmdIdx   */ dRes_INDEX_FDAI_BDL_FOBJ11_e,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ FDAI_BCK_FOBJ11,
+        /* mBckIdx   */ dRes_INDEX_FDAI_BCK_FOBJ11_e,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x1000

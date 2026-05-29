@@ -7,7 +7,7 @@
 #include "d/actor/d_a_nzg.h"
 #include "d/d_path.h"
 #include "d/d_s_play.h"
-#include "d/res/res_nzg.h"
+#include "res/Object/Nzg.h"
 
 /* 00000078-000000E4       .text daNZG_Draw__FP9nzg_class */
 static BOOL daNZG_Draw(nzg_class* i_this) {
@@ -141,7 +141,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     mDoMtx_stack_c::transS(nzg_this->actor.current.pos.x,  nzg_this->actor.current.pos.y,  nzg_this->actor.current.pos.z);
     mDoMtx_stack_c::YrotM(nzg_this->actor.shape_angle.y);
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("NZG",  NZG_BDL_KANA_00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("NZG",  dRes_INDEX_NZG_BDL_KANA_00_e);
     JUT_ASSERT(630, modelData != NULL);
     J3DModel* model = mDoExt_J3DModel__create(modelData, 0,0x11020203);
 

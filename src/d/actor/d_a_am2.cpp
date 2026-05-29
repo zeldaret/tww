@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_am2.h"
-#include "d/res/res_am2.h"
+#include "res/Object/Am2.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_s_play.h"
@@ -149,7 +149,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
             cXyz hitPos = *i_this->mEyeSph.GetTgHitPosP();
 
             if (hitObj->ChkAtType(AT_TYPE_GRAPPLING_HOOK)) {
-                if (i_this->mCurrBckIdx != AM2_BCK_SLEEP) {
+                if (i_this->mCurrBckIdx != dRes_INDEX_AM2_BCK_SLEEP_e) {
                     if (actor->stealItemLeft > 0) {
                         s8 origHealth = actor->health;
                         actor->health = 10;
@@ -177,8 +177,8 @@ static BOOL medama_atari_check(am2_class* i_this) {
             
             if (hitObj->ChkAtType(AT_TYPE_NORMAL_ARROW | AT_TYPE_FIRE_ARROW | AT_TYPE_ICE_ARROW)) {
                 ret = true;
-                if (i_this->mCurrBckIdx == AM2_BCK_SLEEP) {
-                    anm_init(i_this, AM2_BCK_WAIT, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                if (i_this->mCurrBckIdx == dRes_INDEX_AM2_BCK_SLEEP_e) {
+                    anm_init(i_this, dRes_INDEX_AM2_BCK_WAIT_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                     actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
                     fopAcM_OnStatus(actor, fopAcStts_SHOWMAP_e);
                     i_this->mNeedleCyl.OnAtSetBit();
@@ -483,8 +483,8 @@ static void action_dousa(am2_class* i_this) {
             i_this->mCountUpTimers[i] = 0;
         }
         i_this->mAcchRadius = 80.0f + REG8_F(11);
-        if (i_this->mCurrBckIdx != AM2_BCK_WAIT) {
-            anm_init(i_this, AM2_BCK_WAIT, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        if (i_this->mCurrBckIdx != dRes_INDEX_AM2_BCK_WAIT_e) {
+            anm_init(i_this, dRes_INDEX_AM2_BCK_WAIT_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         }
         i_this->mMode++;
         // Fall-through
@@ -496,7 +496,7 @@ static void action_dousa(am2_class* i_this) {
             if (Line_check(i_this, centerPos)) {
                 actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
                 fopAcM_OnStatus(actor, fopAcStts_SHOWMAP_e);
-                anm_init(i_this, AM2_BCK_START, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_AM2_BCK_START_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 fopAcM_monsSeStart(actor, JA_SE_CV_AM2_AWAKE, 0);
                 i_this->mEyeSph.OnTgSetBit();
                 i_this->mWeakSph.OnTgSetBit();
@@ -530,8 +530,8 @@ static void action_dousa(am2_class* i_this) {
             i_this->mTargetAngleY = fopAcM_searchPlayerAngleY(actor);
             actor->gravity = -3.0f;
             actor->speed.y = 12.0f;
-            if (i_this->mCurrBckIdx != AM2_BCK_JUMP) {
-                anm_init(i_this, AM2_BCK_JUMP, 2.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            if (i_this->mCurrBckIdx != dRes_INDEX_AM2_BCK_JUMP_e) {
+                anm_init(i_this, dRes_INDEX_AM2_BCK_JUMP_e, 2.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
             i_this->mMode++;
         }
@@ -585,7 +585,7 @@ static void action_dousa(am2_class* i_this) {
         }
         break;
     case 6:
-        anm_init(i_this, AM2_BCK_SLEEP, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_AM2_BCK_SLEEP_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         fopAcM_seStart(actor, JA_SE_CM_AM2_SPIKE_IN, 0);
         i_this->mWeakSph.OffTgSetBit();
         i_this->mWeakSph.ClrTgHit();
@@ -648,7 +648,7 @@ static void action_mahi(am2_class* i_this) {
         actor->speedF = 20.0f;
         
         fopAcM_seStart(actor, JA_SE_CM_AM2_SPIKE_IN, 0);
-        anm_init(i_this, AM2_BCK_DAMAGE, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_AM2_BCK_DAMAGE_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         
         i_this->mMode++;
         break;
@@ -658,7 +658,7 @@ static void action_mahi(am2_class* i_this) {
             if (i_this->mpMorf->isStop()) {
                 actor->speedF = 0.0f;
                 i_this->mCountDownTimers[2] = 20*30;
-                anm_init(i_this, AM2_BCK_MAHI, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_AM2_BCK_MAHI_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->mMode++;
             }
         }
@@ -813,8 +813,8 @@ static void action_mahi(am2_class* i_this) {
         }
         
         if (i_this->mCountDownTimers[2] == 0) {
-            if (i_this->mCurrBckIdx != AM2_BCK_BURUBURU) {
-                anm_init(i_this, AM2_BCK_BURUBURU, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            if (i_this->mCurrBckIdx != dRes_INDEX_AM2_BCK_BURUBURU_e) {
+                anm_init(i_this, dRes_INDEX_AM2_BCK_BURUBURU_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->mCountDownTimers[3] = 20*30;
                 cLib_offBit<u32>(actor->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
                 fopAcM_seStart(actor, JA_SE_CM_AM2_RECOVER, 0);
@@ -861,7 +861,7 @@ static void action_itai(am2_class* i_this) {
         dComIfGp_particle_set(dPa_name::ID_AK_SN_AMOTH2WEAKPOINT00, &i_this->mWeakPos, &actor->shape_angle);
         
         if (actor->health > 0) {
-            anm_init(i_this, AM2_BCK_DAMAGE, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_AM2_BCK_DAMAGE_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             if (i_this->mCountDownTimers[2] > 5) {
                 actor->speedF = 5.0f;
             }
@@ -879,7 +879,7 @@ static void action_itai(am2_class* i_this) {
                 i_this->mAction = ACTION_DOUSA;
                 i_this->mMode = 3;
             } else {
-                anm_init(i_this, AM2_BCK_MAHI, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_AM2_BCK_MAHI_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->mAction = ACTION_MAHI;
                 i_this->mMode = 12;
             }
@@ -890,7 +890,7 @@ static void action_itai(am2_class* i_this) {
         i_this->mWeakSph.OffTgSetBit();
         i_this->mEyeSph.ClrTgHit();
         i_this->mWeakSph.ClrTgHit();
-        anm_init(i_this, AM2_BCK_DEAD1, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_AM2_BCK_DEAD1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->mMode++;
         break;
     case 23:
@@ -904,7 +904,7 @@ static void action_itai(am2_class* i_this) {
         actor->speedF = 10.0f;
         i_this->mCountDownTimers[0] = 100;
         actor->current.angle.y = fopAcM_searchPlayerAngleY(actor);
-        anm_init(i_this, AM2_BCK_DEAD2, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_AM2_BCK_DEAD2_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->mMode++;
         // Fall-through
     case 24:
@@ -934,7 +934,7 @@ static void action_itai(am2_class* i_this) {
         }
         
         if (i_this->mCountDownTimers[0] == 0) {
-            anm_init(i_this, AM2_BCK_DEAD3, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_AM2_BCK_DEAD3_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             fopAcM_seStart(actor, JA_SE_CM_AM2_BEF_EXPLODE, 0);
             
             actor->speedF = 0.0f;
@@ -961,7 +961,7 @@ static void action_itai(am2_class* i_this) {
     if (naraku_check(i_this)) {
         if (i_this->mbNotInHomeRoom || actor->health <= 0) {
             if (i_this->mMode != 25) {
-                anm_init(i_this, AM2_BCK_DEAD3, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_AM2_BCK_DEAD3_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 fopAcM_seStart(actor, JA_SE_CM_AM2_BEF_EXPLODE, 0);
                 actor->speedF = 0.0f;
                 i_this->mMode = 25;
@@ -1031,7 +1031,7 @@ static void action_modoru_move(am2_class* i_this) {
         i_this->mInAbyssTimer = 0;
         i_this->mbMadeWaterSplash = false;
         i_this->mRippleCb.remove();
-        anm_init(i_this, AM2_BCK_WAIT, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_AM2_BCK_WAIT_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         fopAcM_seStart(actor, JA_SE_CM_AM2_WTR_RECOVER, 0);
         i_this->mMode++;
         // Fall-through
@@ -1204,9 +1204,9 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     am2_class* a_this = (am2_class*)i_this;
 
     a_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("AM2", AM2_BDL_AM2),
+        (J3DModelData*)dComIfG_getObjectRes("AM2", dRes_INDEX_AM2_BDL_AM2_e),
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("AM2", AM2_BCK_WAIT),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("AM2", dRes_INDEX_AM2_BCK_WAIT_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00000000,
@@ -1219,14 +1219,14 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     
     a_this->mpBtkAnm = new mDoExt_btkAnm();
     if (!a_this->mpBtkAnm) { return FALSE; }
-    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("AM2", AM2_BTK_AM2);
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("AM2", dRes_INDEX_AM2_BTK_AM2_e);
     int ret = a_this->mpBtkAnm->init(model->getModelData(), pbtk, TRUE, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { return FALSE; }
     if (!a_this->mpBtkAnm) { return FALSE; }
     
     a_this->mpBrkAnm = new mDoExt_brkAnm();
     if (!a_this->mpBrkAnm) { return FALSE; }
-    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("AM2", AM2_BRK_AM2);
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("AM2", dRes_INDEX_AM2_BRK_AM2_e);
     ret = a_this->mpBrkAnm->init(model->getModelData(), pbrk, TRUE, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { return FALSE; }
     if (!a_this->mpBrkAnm) { return FALSE; }

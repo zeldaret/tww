@@ -35,29 +35,29 @@ void daPy_lk_c::setSwordModel(BOOL r28)
     };
     static const sword_model_tbl_s sword_model_tbl[] = {
         {
-            LINK_BDL_SWA,
-            LINK_BDL_YHSLS00,
-            LKANM_BTK_YHSLS00,
-            LKANM_BRK_YHSLS00,
-            LINK_BDL_CUTFH,
-            LKANM_BPK_CUTFH,
-            LKANM_BTK_CUTFH,
-            LKANM_BRK_CUTFH,
+            dRes_INDEX_LINK_BDL_SWA_e,
+            dRes_INDEX_LINK_BDL_YHSLS00_e,
+            dRes_INDEX_LKANM_BTK_YHSLS00_e,
+            dRes_INDEX_LKANM_BRK_YHSLS00_e,
+            dRes_INDEX_LINK_BDL_CUTFH_e,
+            dRes_INDEX_LKANM_BPK_CUTFH_e,
+            dRes_INDEX_LKANM_BTK_CUTFH_e,
+            dRes_INDEX_LKANM_BRK_CUTFH_e,
         },
         {
-            LINK_BDL_SWMS,
-            LINK_BDL_YMSLI00,
-            LKANM_BTK_YMSLI00,
-            LKANM_BRK_YMSLI00,
-            LINK_BDL_CUTFM,
-            LKANM_BPK_CUTFM,
-            LKANM_BTK_CUTFM,
-            LKANM_BRK_CUTFM,
+            dRes_INDEX_LINK_BDL_SWMS_e,
+            dRes_INDEX_LINK_BDL_YMSLI00_e,
+            dRes_INDEX_LKANM_BTK_YMSLI00_e,
+            dRes_INDEX_LKANM_BRK_YMSLI00_e,
+            dRes_INDEX_LINK_BDL_CUTFM_e,
+            dRes_INDEX_LKANM_BPK_CUTFM_e,
+            dRes_INDEX_LKANM_BTK_CUTFM_e,
+            dRes_INDEX_LKANM_BRK_CUTFM_e,
         },
     };
 
     J3DModelData* modelData;
-    J3DAnmTransform* bck = checkNormalSwordEquip() ? getItemAnimeResource(LKANM_BCK_CUTAA) : getItemAnimeResource(LKANM_BCK_CUTAMS);
+    J3DAnmTransform* bck = checkNormalSwordEquip() ? getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTAA_e) : getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTAMS_e);
 
     mEquipItem = daPyItem_SWORD_e;
     JKRHeap* oldHeap = setItemHeap();
@@ -72,7 +72,7 @@ void daPy_lk_c::setSwordModel(BOOL r28)
     u8* buffer;
     if (!checkNormalSwordEquip()) {
         buffer = new (0x20) u8[0x400];
-        JKRReadIdxResource(buffer, 0x400, LKANM_BTK_TSWMS, dComIfGp_getAnmArchive());
+        JKRReadIdxResource(buffer, 0x400, dRes_INDEX_LKANM_BTK_TSWMS_e, dComIfGp_getAnmArchive());
         mpEquipItemBtk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(buffer));
         mpEquipItemBtk->setFrame(0.0f);
         mpEquipItemBtk->searchUpdateMaterialID(modelData);
@@ -566,9 +566,9 @@ BOOL daPy_lk_c::procCutA_init(s16 param_0) {
         m_HIO->mCut.mCutA.m.field_0x24
     );
     if (checkNormalSwordEquip()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTAA));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTAA_e));
     } else {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTAMS));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTAMS_e));
     }
     m35EC = m_HIO->mCut.mCutA.m.field_0x8;
     current.angle.y = shape_angle.y;
@@ -580,7 +580,7 @@ BOOL daPy_lk_c::procCutA_init(s16 param_0) {
     m3522 = m_HIO->mCut.mCutA.m.field_0x0;
     m351E = m34DC;
     onNoResetFlg0(daPyFlg0_UNK4);
-    setBlurPosResource(LKANM__CUTA_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__CUTA_POS_e);
     setNormalCutAtParam(CUT_TYPE_CUT_A);
     return true;
 }
@@ -668,9 +668,9 @@ BOOL daPy_lk_c::procCutF_init(s16 param_0) {
         m_HIO->mCut.mCutF.m.field_0x24
     );
     if (checkNormalSwordEquip()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTFA));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTFA_e));
     } else {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTFMS));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTFMS_e));
     }
     m35EC = m_HIO->mCut.mCutF.m.field_0x8;
     mpCutfBpk->setFrame(m_HIO->mCut.mCutF.m.field_0x8);
@@ -770,9 +770,9 @@ BOOL daPy_lk_c::procCutR_init(s16 param_0) {
         m_HIO->mCut.mCutR.m.field_0x24
     );
     if (checkNormalSwordEquip()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTRA));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTRA_e));
     } else {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTRMS));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTRMS_e));
     }
     m35EC = m_HIO->mCut.mCutR.m.field_0x8;
     m3700 = cXyz::Zero;
@@ -782,7 +782,7 @@ BOOL daPy_lk_c::procCutR_init(s16 param_0) {
     m351E = m34DC;
     m3522 = m_HIO->mCut.mCutR.m.field_0x0;
     onNoResetFlg0(daPyFlg0_UNK4);
-    setBlurPosResource(LKANM__CUTR_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__CUTR_POS_e);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
     setNormalCutAtParam(CUT_TYPE_CUT_R);
     return true;
@@ -871,9 +871,9 @@ BOOL daPy_lk_c::procCutL_init(s16 param_0) {
         m_HIO->mCut.mCutL.m.field_0x24
     );
     if (checkNormalSwordEquip()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTLA));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTLA_e));
     } else {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTLMS));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTLMS_e));
     }
     m35EC = m_HIO->mCut.mCutL.m.field_0x8;
     m3700 = cXyz::Zero;
@@ -884,7 +884,7 @@ BOOL daPy_lk_c::procCutL_init(s16 param_0) {
     m3522 = m_HIO->mCut.mCutL.m.field_0x0;
     onNoResetFlg0(daPyFlg0_UNK4);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
-    setBlurPosResource(LKANM__CUTL_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__CUTL_POS_e);
     setNormalCutAtParam(CUT_TYPE_CUT_L);
     return true;
 }
@@ -970,9 +970,9 @@ BOOL daPy_lk_c::procCutEA_init() {
         m_HIO->mCut.mCutEA.m.field_0x20
     );
     if (checkNormalSwordEquip()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTEAA));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTEAA_e));
     } else {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTEAMS));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTEAMS_e));
     }
     m35EC = m_HIO->mCut.mCutEA.m.field_0x8;
     m3700 = cXyz::Zero;
@@ -981,7 +981,7 @@ BOOL daPy_lk_c::procCutEA_init() {
     onNoResetFlg0(daPyFlg0_UNK4);
     voiceStart(1);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
-    setBlurPosResource(LKANM__CUTEA_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__CUTEA_POS_e);
     setFinishCutAtParam(CUT_TYPE_CUT_EA);
     m34C4 = 0;
     m3522 = 0;
@@ -1054,9 +1054,9 @@ BOOL daPy_lk_c::procCutEB_init() {
         m_HIO->mCut.mCutEB.m.field_0x20
     );
     if (checkNormalSwordEquip()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTEBA));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTEBA_e));
     } else {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTEBMS));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTEBMS_e));
     }
     m35EC = m_HIO->mCut.mCutEB.m.field_0x8;
     m3700 = cXyz::Zero;
@@ -1065,7 +1065,7 @@ BOOL daPy_lk_c::procCutEB_init() {
     onNoResetFlg0(daPyFlg0_UNK4);
     voiceStart(1);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
-    setBlurPosResource(LKANM__CUTEB_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__CUTEB_POS_e);
     setFinishCutAtParam(CUT_TYPE_CUT_EB);
     m34C4 = 0;
     m3522 = 0;
@@ -1135,9 +1135,9 @@ BOOL daPy_lk_c::procCutExA_init() {
         m_HIO->mCut.mCutExA.m.field_0x10
     );
     if (checkNormalSwordEquip()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_EXCA1A));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_EXCA1A_e));
     } else {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_EXCA1MS));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_EXCA1MS_e));
     }
     m35EC = m_HIO->mCut.mCutExA.m.field_0xC;
     m3700 = cXyz::Zero;
@@ -1146,7 +1146,7 @@ BOOL daPy_lk_c::procCutExA_init() {
     onNoResetFlg0(daPyFlg0_UNK4);
     voiceStart(1);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
-    setBlurPosResource(LKANM__CUTEXA_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__CUTEXA_POS_e);
     setExtraCutAtParam(CUT_TYPE_CUT_EXA);
     m3522 = m_HIO->mCut.mCutExA.m.field_0x4;
     return true;
@@ -1228,9 +1228,9 @@ BOOL daPy_lk_c::procCutExB_init() {
         m_HIO->mCut.mCutExB.m.field_0xC
     );
     if (checkNormalSwordEquip()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_EXCB1A));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_EXCB1A_e));
     } else {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_EXCB1MS));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_EXCB1MS_e));
     }
     m35EC = m_HIO->mCut.mCutExB.m.field_0x8;
     m3700 = cXyz::Zero;
@@ -1239,7 +1239,7 @@ BOOL daPy_lk_c::procCutExB_init() {
     onNoResetFlg0(daPyFlg0_UNK4);
     voiceStart(1);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
-    setBlurPosResource(LKANM__CUTEXB_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__CUTEXB_POS_e);
     setExtraFinishCutAtParam(CUT_TYPE_CUT_EXB);
     m34C4 = 0;
     m3522 = 0;
@@ -1335,9 +1335,9 @@ BOOL daPy_lk_c::procCutTurn_init(BOOL param_0) {
     }
     if (mEquipItem == daPyItem_SWORD_e) {
         if (checkNormalSwordEquip()) {
-            mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTTURNA));
+            mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTTURNA_e));
         } else {
-            mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTTURNMS));
+            mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_CUTTURNMS_e));
         }
         if (checkNormalSwordEquip()) {
             m35A4 = m_HIO->mCut.mCutTurn.m.field_0x40;
@@ -1362,7 +1362,7 @@ BOOL daPy_lk_c::procCutTurn_init(BOOL param_0) {
             }
 #endif
         }
-        setBlurPosResource(LKANM__CUTTURN_POS);
+        setBlurPosResource(dRes_INDEX_LKANM__CUTTURN_POS_e);
     } else {
         daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
         u32 boko_type;
@@ -1390,7 +1390,7 @@ BOOL daPy_lk_c::procCutTurn_init(BOOL param_0) {
         } else {
             m35A4 = m_HIO->mCut.mCutTurn.m.field_0x74;
         }
-        setBlurPosResource(LKANM__WEAPONTURN_POS);
+        setBlurPosResource(dRes_INDEX_LKANM__WEAPONTURN_POS_e);
     }
     mAtCyl.SetR(m35A4 * 0.5f);
     m35EC = fVar1;
@@ -1904,9 +1904,9 @@ BOOL daPy_lk_c::procJumpCut_init(int param_0) {
     voiceStart(1);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
     if (mEquipItem == daPyItem_BOKO_e) {
-        setBlurPosResource(LKANM__WEAPONJUMP_POS);
+        setBlurPosResource(dRes_INDEX_LKANM__WEAPONJUMP_POS_e);
     } else {
-        setBlurPosResource(LKANM__CUTJUMP_POS);
+        setBlurPosResource(dRes_INDEX_LKANM__CUTJUMP_POS_e);
     }
     setJumpCutAtParam();
     return true;
@@ -2038,12 +2038,12 @@ BOOL daPy_lk_c::procCutExMJ_init(int param_0) {
     if (param_0 != 0) {
         dVar3 = ANM_MROLLRC;
         mProcVar3.m34D6 = 0x71;
-        setBlurPosResource(LKANM__BTROTATECUTR_POS);
+        setBlurPosResource(dRes_INDEX_LKANM__BTROTATECUTR_POS_e);
         m35A0 = m_HIO->mCut.mCutExMJ.m.field_0x20;
     } else {
         dVar3 = ANM_MROLLLC;
         mProcVar3.m34D6 = 0x70;
-        setBlurPosResource(LKANM__BTROTATECUTL_POS);
+        setBlurPosResource(dRes_INDEX_LKANM__BTROTATECUTL_POS_e);
         m35A0 = m_HIO->mCut.mCutExMJ.m.field_0x24;
     }
     setSingleMoveAnime(
@@ -2054,9 +2054,9 @@ BOOL daPy_lk_c::procCutExMJ_init(int param_0) {
         m_HIO->mCut.mCutExMJ.m.field_0xC
     );
     if (checkNormalSwordEquip()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_MROLLCA));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_MROLLCA_e));
     } else {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_MROLLCMS));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_MROLLCMS_e));
     }
     m35EC = m_HIO->mCut.mCutExMJ.m.field_0x8;
     onNoResetFlg0(daPyFlg0_UNK4);
@@ -2155,9 +2155,9 @@ BOOL daPy_lk_c::procCutKesa_init() {
         m_HIO->mCut.mCutKesa.m.field_0xC
     );
     if (checkNormalSwordEquip()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_EXCA1A));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_EXCA1A_e));
     } else {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_EXCA1MS));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_EXCA1MS_e));
     }
     m35EC = m_HIO->mCut.mCutKesa.m.field_0x8;
     m3700 = cXyz::Zero;
@@ -2165,7 +2165,7 @@ BOOL daPy_lk_c::procCutKesa_init() {
     onNoResetFlg0(daPyFlg0_UNK4);
     voiceStart(1);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
-    setBlurPosResource(LKANM__CUTKESA_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__CUTKESA_POS_e);
     setExtraCutAtParam(CUT_TYPE_CUT_KESA);
     m3522 = m_HIO->mCut.mCutKesa.m.field_0x2;
     return true;

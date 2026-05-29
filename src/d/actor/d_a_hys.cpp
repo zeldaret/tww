@@ -5,18 +5,18 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_hys.h"
-#include "d/res/res_hys.h"
+#include "res/Object/Hys.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 
 const char* daHys_c::m_arcname[2] = {"Hys", "Hys"};
 
 /* Model file indexes. */
-const s16 daHys_c::m_bdlidx[2] = {HYS_BDL_HYS, HYS_BDL_HYS};
+const s16 daHys_c::m_bdlidx[2] = {dRes_INDEX_HYS_BDL_HYS_e, dRes_INDEX_HYS_BDL_HYS_e};
 /* Texture animation file indexes. */
-const s16 daHys_c::m_btpidx[2] = {HYS_BTP_HYS, HYS_BTP_HYS};
+const s16 daHys_c::m_btpidx[2] = {dRes_INDEX_HYS_BTP_HYS_e, dRes_INDEX_HYS_BTP_HYS_e};
 /* Collision mesh file indexes. */
-const s16 daHys_c::m_dzbidx[2] = {HYS_DZB_HYS, HYS_DZB_HYS};
+const s16 daHys_c::m_dzbidx[2] = {dRes_INDEX_HYS_DZB_HYS_e, dRes_INDEX_HYS_DZB_HYS_e};
 const u32 daHys_c::m_heapsize[2] = {0xA00, 0xA00};
 const f32 daHys_c::m_tg_r[2] = {35.0f, 70.0f};
 

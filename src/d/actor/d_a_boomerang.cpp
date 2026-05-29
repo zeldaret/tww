@@ -9,7 +9,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_material.h"
 #include "d/actor/d_a_player_main.h"
-#include "d/res/res_link.h"
+#include "res/Object/Link.h"
 #include "dolphin/gf/GF.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_camera_mng.h"
@@ -743,7 +743,7 @@ static BOOL daBoomerang_Delete(daBoomerang_c*) {
 
 /* 800E2C00-800E2CC8       .text createHeap__13daBoomerang_cFv */
 BOOL daBoomerang_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Link", LINK_BDL_BOOMERANG);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_BOOMERANG_e);
 
     JUT_ASSERT(VERSION_SELECT(1543, 1539, 1546, 1546), modelData != NULL);
 
@@ -812,7 +812,7 @@ cPhs_State daBoomerang_c::create() {
     }
 
     {
-        ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", LINK_BTI_BLUR);
+        ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BTI_BLUR_e);
 
         JUT_ASSERT(VERSION_SELECT(1626, 1622, 1629, 1629), tmp_img != NULL);
 
@@ -820,7 +820,7 @@ cPhs_State daBoomerang_c::create() {
     }
 
     {
-        ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", LINK_BTI_ROCK_MARK);
+        ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BTI_ROCK_MARK_e);
 
         JUT_ASSERT(VERSION_SELECT(1634, 1630, 1637, 1637), tmp_img != NULL);
 

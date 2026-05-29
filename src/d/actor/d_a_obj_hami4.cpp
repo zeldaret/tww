@@ -7,7 +7,7 @@
 #include "d/actor/d_a_obj_hami4.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_hami4.h"
+#include "res/Object/Hami4.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
@@ -16,7 +16,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 
 /* 00000098-00000374       .text CreateHeap__12daObjHami4_cFv */
 BOOL daObjHami4_c::CreateHeap() {
-    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Hami4", HAMI4_BDL_HAMI4);
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Hami4", dRes_INDEX_HAMI4_BDL_HAMI4_e);
     JUT_ASSERT(0x5f, modelData != NULL);
 
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
@@ -41,7 +41,7 @@ BOOL daObjHami4_c::CreateHeap() {
         mpModels[i]->setBaseTRMtx(mDoMtx_stack_c::get());
         mdBgW[i] = new dBgW();
         if (mdBgW[i] != NULL) {
-            cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes("Hami4", HAMI4_DZB_HAMI4);
+            cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes("Hami4", dRes_INDEX_HAMI4_DZB_HAMI4_e);
             if(!mdBgW[i]->Set(bgp, dBgW::MOVE_BG_e, &field_0x2B8[i])){
                 continue;
             }

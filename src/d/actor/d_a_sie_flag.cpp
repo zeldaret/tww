@@ -11,8 +11,8 @@
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_s_play.h"
-#include "d/res/res_cloth.h"
-#include "d/res/res_eshata.h"
+#include "res/Object/Cloth.h"
+#include "res/Object/Eshata.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 
@@ -79,15 +79,15 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 000001E4-0000030C       .text CreateHeap__12daSie_Flag_cFv */
 BOOL daSie_Flag_c::CreateHeap() {
-    J3DModelData *modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, ESHATA_BDL_ESHATA);
+    J3DModelData *modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_ESHATA_BDL_ESHATA_e);
     JUT_ASSERT(0x109, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpModel == NULL) {
         return FALSE;
     } else {
-        ResTIMG* eshata_timg = (ResTIMG*)dComIfG_getObjectRes(M_arcname, ESHATA_BTI_ESHATA);
-        ResTIMG* cloth_timg = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+        ResTIMG* eshata_timg = (ResTIMG*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_ESHATA_BTI_ESHATA_e);
+        ResTIMG* cloth_timg = (ResTIMG*)dComIfG_getObjectRes("Cloth", dRes_INDEX_CLOTH_BTI_CLOTHTOON_e);
         mpClothPacket = dCloth_packet_create(
             eshata_timg, cloth_timg,
 #if VERSION == VERSION_DEMO

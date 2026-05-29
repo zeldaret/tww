@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_shmrgrd.h"
-#include "d/res/res_shmrgrd.h"
+#include "res/Object/Shmrgrd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
@@ -177,14 +177,14 @@ BOOL daObjShmrgrd_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 000005C8-000006E0       .text create_heap__14daObjShmrgrd_cFv */
 BOOL daObjShmrgrd_c::create_heap() {
     BOOL rt = FALSE;
-    J3DModelData* mdl_data = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, SHMRGRD_BDL_SHMRGRD));
+    J3DModelData* mdl_data = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SHMRGRD_BDL_SHMRGRD_e));
     JUT_ASSERT(0x21A, mdl_data != NULL);
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mpModel) {
             mdl_data->getJointNodePointer(2)->setCallBack(jnodeCB);
             mpModel->setUserArea((u32) this);
-            mpBgW = dBgW_NewSet((cBgD_t *)dComIfG_getObjectRes(M_arcname, SHMRGRD_DZB_HGBASE), cBgW::MOVE_BG_e, &mMtx);
+            mpBgW = dBgW_NewSet((cBgD_t *)dComIfG_getObjectRes(M_arcname, dRes_INDEX_SHMRGRD_DZB_HGBASE_e), cBgW::MOVE_BG_e, &mMtx);
             if (mpBgW) {
                 rt = TRUE;
             }

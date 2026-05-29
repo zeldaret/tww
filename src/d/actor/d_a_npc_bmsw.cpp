@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bmsw.h"
-#include "d/res/res_bmsw.h"
+#include "res/Object/Bmsw.h"
 #include "d/d_shop.h"
 #include "d/d_snap.h"
 #include "d/d_com_inf_game.h"
@@ -113,15 +113,15 @@ daNpc_Bmsw_HIO_c::daNpc_Bmsw_HIO_c() {
 
 
 static const s32 l_bck_ix_tbl[] = {
-    BMSW_BCK_BM_WAIT01, BMSW_BCK_BM_WAIT02, BMSW_BCK_BM_TALK01, BMSW_BCK_BM_TALK02,
-    BMSW_BCK_BM_TALK03, BMSW_BCK_BM_SHIWAKE01, BMSW_BCK_BM_SHIWAKE02,
+    dRes_ID_BMSW_BCK_BM_WAIT01_e, dRes_ID_BMSW_BCK_BM_WAIT02_e, dRes_ID_BMSW_BCK_BM_TALK01_e, dRes_ID_BMSW_BCK_BM_TALK02_e,
+    dRes_ID_BMSW_BCK_BM_TALK03_e, dRes_ID_BMSW_BCK_BM_SHIWAKE01_e, dRes_ID_BMSW_BCK_BM_SHIWAKE02_e,
 };
 static const s32 l_arm_bck_ix_tbl[] = {
-    BMSW_BCK_BMARM_WAIT01, BMSW_BCK_BMARM_WAIT02, BMSW_BCK_BMARM_TALK01, BMSW_BCK_BMARM_TALK02,
-    BMSW_BCK_BMARM_TALK03, BMSW_BCK_BMARM_SHIWAKE01, BMSW_BCK_BMARM_SHIWAKE02,
+    dRes_ID_BMSW_BCK_BMARM_WAIT01_e, dRes_ID_BMSW_BCK_BMARM_WAIT02_e, dRes_ID_BMSW_BCK_BMARM_TALK01_e, dRes_ID_BMSW_BCK_BMARM_TALK02_e,
+    dRes_ID_BMSW_BCK_BMARM_TALK03_e, dRes_ID_BMSW_BCK_BMARM_SHIWAKE01_e, dRes_ID_BMSW_BCK_BMARM_SHIWAKE02_e,
 };
 
-static const u32 l_btp_ix_tbl[] = {BMSW_BTP_BMHEAD11, BMSW_BTP_BMHEAD11};
+static const u32 l_btp_ix_tbl[] = {dRes_ID_BMSW_BTP_BMHEAD11_e, dRes_ID_BMSW_BTP_BMHEAD11_e};
 
 
 /* 000001E4-000003FC       .text nodeCallBack__FP7J3DNodei */
@@ -1163,14 +1163,14 @@ cPhs_State daNpc_Bmsw_c::_create() {
 
 /* 00003524-00003CB0       .text CreateHeap__12daNpc_Bmsw_cFv */
 BOOL daNpc_Bmsw_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", BMSW_BDL_BM);
+    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", dRes_ID_BMSW_BDL_BM_e);
     JUT_ASSERT(1499, modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL,
         NULL,
-        (J3DAnmTransform*) dComIfG_getObjectIDRes("Bmsw", BMSW_BCK_BM_TALK01),
+        (J3DAnmTransform*) dComIfG_getObjectIDRes("Bmsw", dRes_ID_BMSW_BCK_BM_TALK01_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -1193,18 +1193,18 @@ BOOL daNpc_Bmsw_c::CreateHeap() {
     m_body_ArmR = modelData->getJointName()->getIndex("armR");
     JUT_ASSERT(1519, m_body_ArmL >= 0 || m_body_ArmR >= 0);
 
-    J3DModelData* headModelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", BMSW_BDL_BMHEAD11);
+    J3DModelData* headModelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", dRes_ID_BMSW_BDL_BMHEAD11_e);
     field_0x6D4 = mDoExt_J3DModel__create(headModelData, 0x80000,0x11020022);
     if (field_0x6D4 == NULL) {
         return FALSE;
     }
 
-    J3DModelData* armModelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", BMSW_BDL_BMARM);
+    J3DModelData* armModelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", dRes_ID_BMSW_BDL_BMARM_e);
     mpMorfHand = new mDoExt_McaMorf(
         armModelData,
         NULL,
         NULL,
-        (J3DAnmTransform*) dComIfG_getObjectIDRes("Bmsw", BMSW_BCK_BMARM_TALK01),
+        (J3DAnmTransform*) dComIfG_getObjectIDRes("Bmsw", dRes_ID_BMSW_BCK_BMARM_TALK01_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -1225,13 +1225,13 @@ BOOL daNpc_Bmsw_c::CreateHeap() {
     JUT_ASSERT(1555, m_ArmL >= 0 || m_ArmR >= 0);
     JUT_ASSERT(1556, m_handL >= 0 || m_handR >= 0);
 
-    J3DModelData* bagModelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", BMSW_BDL_BM_BAG);
+    J3DModelData* bagModelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", dRes_ID_BMSW_BDL_BM_BAG_e);
     field_0x6D8 = mDoExt_J3DModel__create(bagModelData, 0, 0x11020203);
     if (field_0x6D8 == NULL) {
         return FALSE;
     }
 
-    J3DModelData* letterModelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", BMSW_BDL_BM_LETTER);
+    J3DModelData* letterModelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", dRes_ID_BMSW_BDL_BM_LETTER_e);
     field_0x6DC = mDoExt_J3DModel__create(letterModelData, 0,0x11020203);
     if (field_0x6DC == NULL) {
         return FALSE;
@@ -1273,8 +1273,8 @@ BOOL daNpc_Bmsw_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTevRegKey* tevRegKey = (J3DAnmTevRegKey*) dComIfG_getObjectIDRes("Bmsw", BMSW_BRK_SHOP_CURSOR01);
-    J3DModelData* cursorModelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", BMSW_BMD_SHOP_CURSOR01);
+    J3DAnmTevRegKey* tevRegKey = (J3DAnmTevRegKey*) dComIfG_getObjectIDRes("Bmsw", dRes_ID_BMSW_BRK_SHOP_CURSOR01_e);
+    J3DModelData* cursorModelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", dRes_ID_BMSW_BMD_SHOP_CURSOR01_e);
 
     mpShopCursor = ShopCursor_create(cursorModelData, tevRegKey, 0.65f);
     if (mpShopCursor == NULL) {
@@ -1299,13 +1299,13 @@ BOOL daNpc_Bmsw_c::CreateHeap() {
 
 /* 00003CB0-00003DBC       .text MailCreateInit__8SwMail_cFP4cXyzP4cXyz */
 BOOL SwMail_c::MailCreateInit(cXyz* param_1, cXyz* param_2) {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Bmsw", BMSW_BDL_QMAIL));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Bmsw", dRes_ID_BMSW_BDL_QMAIL_e));
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020002);
     if (mpModel == NULL) {
         return FALSE;
     }
 
-    J3DAnmTexPattern* texPattern = (J3DAnmTexPattern*) dComIfG_getObjectIDRes("Bmsw", BMSW_BTP_QMAIL);
+    J3DAnmTexPattern* texPattern = (J3DAnmTexPattern*) dComIfG_getObjectIDRes("Bmsw", dRes_ID_BMSW_BTP_QMAIL_e);
     if (!field_0x10.init(modelData, texPattern, TRUE, J3DFrameCtrl::EMode_LOOP, 0.0f, 0, -1, false, FALSE)) {
         return FALSE;
     }

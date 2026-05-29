@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bmdhand.h"
 #include "d/d_s_play.h"
-#include "d/res/res_bmdhand.h"
+#include "res/Object/Bmdhand.h"
 #include "d/actor/d_a_bmd.h"
 #include "d/d_cc_d.h"
 
@@ -317,7 +317,7 @@ void start_control2(bmdhand_class* i_this) {
 void hand_close(bmdhand_class* i_this) {
     J3DAnmTransform* pAnimRes;
 
-    pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdhand", BMDHAND_BCK_FOOK_TOJIRU);
+    pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdhand", dRes_INDEX_BMDHAND_BCK_FOOK_TOJIRU_e);
     i_this->mpMorf->setAnm(pAnimRes, 0, REG0_F(6) + 5.0f, 1.0f, 0.0f, -1.0f, NULL);
 }
 
@@ -325,7 +325,7 @@ void hand_close(bmdhand_class* i_this) {
 void hand_open(bmdhand_class* i_this) {
     J3DAnmTransform* pAnimRes;
 
-    pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdhand", BMDHAND_BCK_FOOK_HIRAKU);
+    pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdhand", dRes_INDEX_BMDHAND_BCK_FOOK_HIRAKU_e);
     i_this->mpMorf->setAnm(pAnimRes, 0, REG0_F(6) + 5.0f, 1.0f, 0.0f, -1.0f, NULL);
 }
 
@@ -723,10 +723,10 @@ static BOOL daBmdhand_Delete(bmdhand_class* i_this) {
 /* 000030C4-00003210       .text useHeapInit__FP13bmdhand_class */
 static BOOL useHeapInit(bmdhand_class* i_this) {
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Bmdhand", BMDHAND_BMD_BKM_FOOK),
+        (J3DModelData*)dComIfG_getObjectRes("Bmdhand", dRes_INDEX_BMDHAND_BMD_BKM_FOOK_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bmdhand", BMDHAND_BCK_FOOK_HIRAKU),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bmdhand", dRes_INDEX_BMDHAND_BCK_FOOK_HIRAKU_e),
         J3DFrameCtrl::EMode_NONE,
         1.0f,
         0,
@@ -744,7 +744,7 @@ static BOOL useHeapInit(bmdhand_class* i_this) {
         return FALSE;
     }
 #endif
-    ResTIMG* pBti = (ResTIMG*)dComIfG_getObjectRes("Bmdhand", BMDHAND_BTI_SYOKUSYU_UE);
+    ResTIMG* pBti = (ResTIMG*)dComIfG_getObjectRes("Bmdhand", dRes_INDEX_BMDHAND_BTI_SYOKUSYU_UE_e);
     if (!i_this->mLineMat.init(1, 20, pBti, 1)) {
         return FALSE;
     }

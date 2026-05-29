@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_pbka.h"
-#include "d/res/res_pbka.h"
+#include "res/Object/Pbka.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
@@ -18,7 +18,7 @@ static int CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-0000015C       .text CreateHeap__11daObjPbka_cFv */
 BOOL daObjPbka_c::CreateHeap() {
-    J3DModelData *modelData = (J3DModelData *)dComIfG_getObjectRes("Pbka", PBKA_BDL_PBKA);
+    J3DModelData *modelData = (J3DModelData *)dComIfG_getObjectRes("Pbka", dRes_INDEX_PBKA_BDL_PBKA_e);
     JUT_ASSERT(0x51, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData,0,0x11020203);
     if(mpModel == NULL) {

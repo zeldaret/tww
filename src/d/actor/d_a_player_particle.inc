@@ -515,15 +515,15 @@ void daPy_lk_c::setAuraEffect() {
                 }
             }
 
-            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_R));
-            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_MS));
+            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YAURA00_R_e));
+            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YMGCS00_MS_e));
         } else {
             if (!dComIfGp_event_runCheck()) {
                 mTinkleShieldTimer -= 1;
             }
 
-            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_G));
-            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_TS));
+            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YAURA00_G_e));
+            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YMGCS00_TS_e));
         }
 
         if (pYaura00Brk != curYaura00Brk) {

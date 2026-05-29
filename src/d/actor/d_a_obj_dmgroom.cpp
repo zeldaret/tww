@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_dmgroom.h"
-#include "d/res/res_dmgroom.h"
+#include "res/Object/dmgroom.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
@@ -20,13 +20,13 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-000001FC       .text CreateHeap__14daObjDmgroom_cFv */
 BOOL daObjDmgroom_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Dmgroom", DMGROOM_BDL_DMGROOM));
+    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Dmgroom", dRes_INDEX_DMGROOM_BDL_DMGROOM_e));
     JUT_ASSERT(DEMO_SELECT(81, 82), modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x00, 0x11020203);
     if (!mpModel)
         return FALSE;
 
-    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Dmgroom", DMGROOM_BRK_DMGROOM));
+    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Dmgroom", dRes_INDEX_DMGROOM_BRK_DMGROOM_e));
     JUT_ASSERT(DEMO_SELECT(91, 92), brk != NULL);
     if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE))
         return FALSE;

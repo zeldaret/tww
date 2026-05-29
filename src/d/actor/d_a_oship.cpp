@@ -10,7 +10,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_salvage.h"
 #include "d/actor/d_a_ship.h"
-#include "d/res/res_oship.h"
+#include "res/Object/Oship.h"
 #include "d/d_cc_d.h"
 
 const s32 daOship_c::m_heapsize = 0x1280;
@@ -960,9 +960,9 @@ void daOship_c::createInit() {
 BOOL daOship_c::_createHeap() {
     int file_index;
 
-    file_index = OSHIP_BDL_VBTSP;
+    file_index = dRes_INDEX_OSHIP_BDL_VBTSP_e;
     if (isSpecial()) {
-        file_index = OSHIP_BDL_VBTST;
+        file_index = dRes_INDEX_OSHIP_BDL_VBTST_e;
     }
 
     J3DModelData* modelData = (J3DModelData *) dComIfG_getObjectRes(m_arc_name, file_index);

@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_jump.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_hjump.h"
+#include "res/Object/Hjump.h"
 
 namespace daObjJump {
 
@@ -15,8 +15,8 @@ const char Act_c::M_arcname[] = "Hjump";
 const Attr_c Act_c::M_attr[2] = {
     { // Type_SPRING_e
         /* heapSize         */ DEMO_SELECT(0x8000, 0x840),
-        /* dzbResIndex      */ HJUMP_DZB_HJUMP2,
-        /* bdlResIndex      */ HJUMP_BDL_HJUMP2,
+        /* dzbResIndex      */ dRes_INDEX_HJUMP_DZB_HJUMP2_e,
+        /* bdlResIndex      */ dRes_INDEX_HJUMP_BDL_HJUMP2_e,
         /* cullSizeBoxMin   */ { -60, -1, -60 },
         /* cullSizeBoxMax   */ { 60, VERSION_SELECT(151, 151, 251, 251), 60 },
         /* hasShadow        */ true,
@@ -44,8 +44,8 @@ const Attr_c Act_c::M_attr[2] = {
     },
     { // Type_SPRING_ON_BOX_e
         /* heapSize         */ DEMO_SELECT(0x8000, 0x840),
-        /* dzbResIndex      */ HJUMP_DZB_HJUMP1B,
-        /* bdlResIndex      */ HJUMP_BDL_HJUMP1,
+        /* dzbResIndex      */ dRes_INDEX_HJUMP_DZB_HJUMP1B_e,
+        /* bdlResIndex      */ dRes_INDEX_HJUMP_BDL_HJUMP1_e,
         /* cullSizeBoxMin   */ { -90, -1, -90 },
         /* cullSizeBoxMax   */ { 90, VERSION_SELECT(301, 301, 401, 401), 90 },
         /* hasShadow        */ false,

@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_deku_item.h"
-#include "d/res/res_deku.h"
+#include "res/Object/Deku.h"
 #include "d/d_com_inf_game.h"
 
 const char daDekuItem_c::m_arcname[] = "Deku";
@@ -59,7 +59,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000000F0-000002C8       .text CreateHeap__12daDekuItem_cFv */
 BOOL daDekuItem_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, DEKU_BDL_VLFDM);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_DEKU_BDL_VLFDM_e);
     JUT_ASSERT(0xF4, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203U);
@@ -68,14 +68,14 @@ BOOL daDekuItem_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, DEKU_BCK_VLFDK);
+    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_DEKU_BCK_VLFDK_e);
     JUT_ASSERT(0x103, pbck != NULL);
 
     if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
 
-    pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, DEKU_BCK_VLFDM);
+    pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_DEKU_BCK_VLFDM_e);
     JUT_ASSERT(0x110, pbck != NULL);
 
     if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE)) {

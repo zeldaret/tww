@@ -6,13 +6,13 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_pfall.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_pfall.h"
+#include "res/Object/Pfall.h"
 #include "d/d_lib.h"
 #include "d/actor/d_a_player_main.h"
 
 static const int l_bck_ix_tbl[] = {
-    PFALL_BCK_NZ_WAIT,
-    PFALL_BCK_HIKU,
+    dRes_INDEX_PFALL_BCK_NZ_WAIT_e,
+    dRes_INDEX_PFALL_BCK_HIKU_e,
 };
 
 static daObj_PfallHIO_c l_HIO;
@@ -34,8 +34,8 @@ daObj_PfallHIO_c::daObj_PfallHIO_c() {
 /* 00000140-00000190       .text setAnm__13daObj_Pfall_cFv */
 void daObj_Pfall_c::setAnm() {
     static const int a_anm_bcks_tbl[] = {
-        PFALL_BCK_NZ_WAIT,
-        PFALL_BCK_HIKU,
+        dRes_INDEX_PFALL_BCK_NZ_WAIT_e,
+        dRes_INDEX_PFALL_BCK_HIKU_e,
     };
 
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
@@ -111,7 +111,7 @@ void daObj_Pfall_c::set_mtx() {
 
 /* 00000518-00000858       .text CreateHeap__13daObj_Pfall_cFv */
 BOOL daObj_Pfall_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Pfall", PFALL_BDL_AOTSI);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Pfall", dRes_INDEX_PFALL_BDL_AOTSI_e);
     JUT_ASSERT(0xD1, modelData != NULL);
     field_0x3C4 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     field_0x3FC = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -120,7 +120,7 @@ BOOL daObj_Pfall_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DModelData* himoModelData = (J3DModelData*)dComIfG_getObjectRes("Pfall", PFALL_BDL_PSUZU);
+    J3DModelData* himoModelData = (J3DModelData*)dComIfG_getObjectRes("Pfall", dRes_INDEX_PFALL_BDL_PSUZU_e);
     JUT_ASSERT(0xD9, himoModelData != NULL);
     mpHimoModel = mDoExt_J3DModel__create(himoModelData, 0, 0x11020203);
 
@@ -128,7 +128,7 @@ BOOL daObj_Pfall_c::CreateHeap() {
         return FALSE;  
     }
 
-    J3DModelData* nzModelData = (J3DModelData*)dComIfG_getObjectRes("Pfall", PFALL_BDL_NZ);
+    J3DModelData* nzModelData = (J3DModelData*)dComIfG_getObjectRes("Pfall", dRes_INDEX_PFALL_BDL_NZ_e);
     JUT_ASSERT(0xE0, nzModelData != NULL);
     mpMorf = new mDoExt_McaMorf(
         nzModelData,
@@ -151,7 +151,7 @@ BOOL daObj_Pfall_c::CreateHeap() {
     if(mpBgW == NULL) {
         return FALSE;
     }
-    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes("Pfall", PFALL_DZB_AOTOSI);
+    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes("Pfall", dRes_INDEX_PFALL_DZB_AOTOSI_e);
 
     if (mpBgW->Set(pData, cBgW::MOVE_BG_e, &field_0x3CC) == true) {
         return FALSE;
@@ -162,7 +162,7 @@ BOOL daObj_Pfall_c::CreateHeap() {
         return FALSE;
     }
     
-    pData = (cBgD_t*)dComIfG_getObjectRes("Pfall", PFALL_DZB_AOTOSI);
+    pData = (cBgD_t*)dComIfG_getObjectRes("Pfall", dRes_INDEX_PFALL_DZB_AOTOSI_e);
     
     if (mpBgW2->Set(pData, cBgW::MOVE_BG_e, &field_0x404) == true) {
         return FALSE;
