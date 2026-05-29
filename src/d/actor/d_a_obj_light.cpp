@@ -16,44 +16,166 @@ public:
     virtual void vfunc18();// TODO: Identify real type at 0x44C. Virtual call at vtable offset 0x18.
 };
 /* 000000EC-00000110       .text solidHeapCB__Q210daObjLight5Act_cFP10fopAc_ac_c */
-void daObjLight::Act_c::solidHeapCB(fopAc_ac_c*) {
-    create_heap();
+BOOL daObjLight::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return (u8)((daObjLight::Act_c*)i_this)->create_heap();
 }
 
 /* 00000110-00000344       .text create_heap__Q210daObjLight5Act_cFv */
 BOOL daObjLight::Act_c::create_heap() {
-    return;
+    dRes_info_c* resInfo = (dRes_info_c*)((u8*)&g_dComIfG_gameInfo + 0x1BFC0);
+
+    J3DModelData* modelDataA =
+        (J3DModelData*)dRes_control_c::getRes(M_arcname, 7, resInfo, 0x40);
+
+    if (modelDataA == NULL) {
+        JUT_ASSERT(0x10B, modelDataA != NULL);
+    }
+
+    if (modelDataA != NULL) {
+        mpModel = mDoExt_J3DModel__create(modelDataA, 0, 0x11020203);
+    }
+
+    J3DModelData* modelDataB =
+        (J3DModelData*)dRes_control_c::getRes(M_arcname, 5, resInfo, 0x40);
+
+    if (modelDataB == NULL) {
+        JUT_ASSERT(0x112, modelDataB != NULL);
+    }
+
+    if (modelDataB != NULL) {
+        mpModel2 = mDoExt_J3DModel__create(modelDataB, 0, 0x11020203);
+        mpModel3 = mDoExt_J3DModel__create(modelDataB, 0, 0x11020203);
+    }
+
+    set_mtx();
+
+    cBgD_t* bgData =
+        (cBgD_t*)dRes_control_c::getRes(M_arcname, 0xC, resInfo, 0x40);
+
+    if (bgData == NULL) {
+        JUT_ASSERT(0x11C, bgData != NULL);
+    }
+
+    if (bgData != NULL) {
+        mpBgW = new dBgW();
+
+        if (mpBgW != NULL) {
+            if (mpBgW->Set(bgData, 1, &mBgMtx) == 1) {
+                return FALSE;
+            }
+        }
+    }
+
+    if (modelDataA != NULL &&
+        mpModel != NULL &&
+        modelDataB != NULL &&
+        mpModel2 != NULL &&
+        mpModel3 != NULL &&
+        bgData != NULL &&
+        mpBgW != NULL) {
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00000344-000003C0       .text init_collision__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::init_collision() {
-    dCcD_Stts* stts = (dCcD_Stts*)((u8*)this + 0x2E0);
-    dCcD_Cyl* cyl = (dCcD_Cyl*)((u8*)this + 0x310);
+    u8* base = (u8*)this;
 
-    stts->Init(0xff, 0xff, (fopAc_ac_c*)this);
-    cyl->Set(M_cyl_src);
+    ((dCcD_Stts*)(base + 0x2E0))->Init(0xff, 0xff, (fopAc_ac_c*)this);
 
-    *(dCcD_Stts**)((u8*)this + 0x360) = stts;
+    ((dCcD_Cyl*)(base + 0x31C))->Set(M_cyl_src);
 
-    *(cXyz*)((u8*)this + 0x3D0) = cXyz::Zero;
+    *(dCcD_Stts**)(base + 0x360) = (dCcD_Stts*)(base + 0x2E0);
 
-    *(u32*)((u8*)this + 0x3B0) |= 0x4;
+    *(cXyz*)(base + 0x3D0) = cXyz::Zero;
+
+    *(u32*)(base + 0x3B0) |= 0x4;
 }
 
 /* 000003C0-00000468       .text set_collision__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::set_collision() {
-    
-    switch (home.roomNo) {
-    case 0:
-        
-        
-    break;
+    u8* base = (u8*)this;
+
+    if (dKy_daynight_check() != 1) {
+        return;
     }
+
+    if (((dCcD_GObjInf*)(base + 0x31C))->ChkTgHit()) {
+        if (*(s16*)(base + 0x2DC) == 0) {
+            *(s16*)(base + 0x2DA) = 1;
+            *(s16*)(base + 0x2DC) = 1;
+        }
+
+        return;
+    }
+
+    cXyz pos;
+    pos.x = current.pos.x;
+    pos.y = current.pos.y;
+    pos.z = current.pos.z;
+
+    pos.y -= 50.0f;
+
+    ((cM3dGCyl*)(base + 0x434))->SetC(pos);
+
+    ((cCcS*)((u8*)&g_dComIfG_gameInfo + 0x26A4))->Set(
+        (cCcD_Obj*)(base + 0x31C)
+    );
 }
 
 /* 000004A4-0000070C       .text _create__Q210daObjLight5Act_cFv */
 cPhs_State daObjLight::Act_c::_create() {
-    /* Nonmatching */
+    cPhs_State phase = dComIfG_resLoad(&mPhase, M_arcname);
+
+    if (phase == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, solidHeapCB, 0x3840)) {
+            phase = cPhs_ERROR_e;
+        } else {
+            if (dKy_daynight_check() == 1) {
+                if (dComIfGs_isEventBit(0x1C02)) {
+                    field_0x2D8 = get_light_dif_angle();
+                }
+            } else {
+                field_0x2D8 = 0x4000;
+                M_S_light_angle = field_0x2D8;
+                M_S_pre_set_frame_FRRS = g_Counter.mTimer;
+            }
+
+            *(void**)((u8*)this + 0x22C) = (void*)((u8*)mpModel2 + 0x24);
+
+            fopAcM_setCullSizeBox(
+                this,
+                -100.0f, -100.0f, -100.0f,
+                 100.0f,  100.0f,  100.0f
+            );
+
+            *(f32*)((u8*)this + 0x248) = 30.0f;
+
+            dComIfG_Bgsp()->Regist(mpBgW, this);
+
+            *(void**)((u8*)mpBgW + 0xA8) = (void*)dBgS_MoveBGProc_Typical;
+
+            init_collision();
+
+            field_0x2DC = dComIfGs_isEventBit(0x1C02) != 0;
+
+            if (dKy_daynight_check() == 1) {
+                if (field_0x2DC == 1) {
+                    set_fire(0);
+                }
+            }
+
+            mEvent = ((dEvent_manager_c*)((u8*)&g_dComIfG_gameInfo + 0x52CC))
+                ->getEventIdx("DEFAULT_LIGHT", 0xFF);
+
+            field_0x2DA = 0;
+            field_0x2DE = 0;
+        }
+    }
+
+    return phase;
 }
 
 /* 000008C4-00000964       .text _delete__Q210daObjLight5Act_cFv */
@@ -61,13 +183,13 @@ bool daObjLight::Act_c::_delete() {
     M_S_lod_access = 0;
 
     if (*(void**)((u8*)this + 0xF0) != NULL) {
-        dBgW* bgw = *(dBgW**)((u8*)this + 0x2A4);
+        dBgW* bgw = mpBgW;
 
         if (bgw != NULL) {
             s32 bgw_state = *(s32*)bgw;
-            BOOL used;
+            u8 used;
 
-            if (bgw_state < 0 || bgw_state >= 0x100) {
+            if (bgw_state >= 0 && bgw_state < 0x100) {
                 used = TRUE;
             } else {
                 used = FALSE;
@@ -81,7 +203,7 @@ bool daObjLight::Act_c::_delete() {
 
     delete_fire();
 
-    dComIfG_resDelete((request_of_phase_process_class*)((u8*)this + 0x290), M_arcname);
+    dComIfG_resDelete(&mPhase, M_arcname);
 
     return true;
 }
@@ -240,19 +362,20 @@ BOOL daObjLight::Act_c::set_event(short event) {
 void daObjLight::Act_c::exe_event() {
     switch (mEventFlag) {
     case 1:
-        if (eventInfo.checkCommandDemoAccrpt()) {
+        if (*(u16*)((u8*)this + 0xF8) == 2) {
             mEventFlag = 2;
         } else {
-            fopAcM_orderOtherEventId(this, mEvent, 0xff, 0xffff, 0, 1);
-            eventInfo.onCondition(dEvtCnd_UNK2_e);
+            fopAcM_orderOtherEventId(this, mEvent, 0xFF, 0xFFFF, 0, 1);
+
+            *(u16*)((u8*)this + 0xFA) |= 0x2;
         }
         break;
 
     case 2: {
         u8* gameInfo = (u8*)&g_dComIfG_gameInfo;
 
-        if (((dEvent_manager_c*)(gameInfo + 0x52cc))->endCheck(mEvent)) {
-            g_dComIfG_gameInfo.mBrightness |= 0x8;
+        if (((dEvent_manager_c*)(gameInfo + 0x52CC))->endCheck(mEvent)) {
+            *(u16*)(gameInfo + 0x52C0) |= 0x8;
 
             mEvent = -1;
             mEventFlag = 0;
@@ -260,22 +383,152 @@ void daObjLight::Act_c::exe_event() {
         }
         break;
     }
+
+    default:
+        break;
     }
 }
 
 /* 00000D84-00001084       .text set_mtx__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::set_mtx() {
-    /* Nonmatching */
+    static cXyz i_offset[3] = {
+        cXyz(0.0f, 0.0f, 0.0f),
+        cXyz(0.0f, 0.0f, 0.0f), // aquí va @4466 en z
+        cXyz(0.0f, 0.0f, 0.0f), // aquí va @4467 en z
+    };
+
+    for (int i = 0; i < 3; i++) {
+        J3DModel* model = *(J3DModel**)((u8*)this + 0x298 + (i * 4));
+
+        *(f32*)((u8*)model + 0x18) = current.pos.x;
+        *(f32*)((u8*)model + 0x1C) = current.pos.y;
+        *(f32*)((u8*)model + 0x20) = current.pos.z;
+
+        cXyz offset = i_offset[i];
+
+        if (i == 0) {
+            PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
+            mDoMtx_YrotM(mDoMtx_stack_c::now, shape_angle.y);
+
+            PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+            PSMTXCopy(mDoMtx_stack_c::now, mBgMtx);
+        } else if (i == 1) {
+            PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
+            mDoMtx_YrotM(mDoMtx_stack_c::now, shape_angle.y + field_0x2D8);
+            mDoMtx_stack_c::transM(offset.x, offset.y, offset.z);
+
+            PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+        } else if (i == 2) {
+            offset.z += 0.0f; // aquí va @4468
+
+            PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
+            mDoMtx_YrotM(mDoMtx_stack_c::now, shape_angle.y + field_0x2D8 + 0x8000);
+            mDoMtx_stack_c::transM(offset.x, offset.y, offset.z);
+
+            PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+        }
+
+        model->calc();
+    }
 }
 
 /* 00001084-000011C4       .text renew_angle__Q210daObjLight5Act_cFv */
-void daObjLight::Act_c::renew_angle() {
-    /* Nonmatching */
+BOOL daObjLight::Act_c::renew_angle() {
+    if (now_event(field_0x4A0)) {
+        if (field_0x2DA == 0) {
+            field_0x2D8 += 0x40;
+
+            JAIZelBasic::zel_basic->seStart(
+                0x303B,
+                &current.pos,
+                0,
+                0,
+                1.0f,
+                1.0f,
+                -1.0f,
+                -1.0f,
+                0
+            );
+        } else {
+            field_0x2D8 = 0;
+        }
+    } else {
+        if (dKy_daynight_check() == 1) {
+            if (dComIfGs_isEventBit(0x102)) {
+                field_0x2D8 += 0x40;
+
+                if (!set_light_dif_angle_FRRS(field_0x2D8)) {
+                    field_0x2D8 = get_light_dif_angle();
+                }
+            } else {
+                field_0x2D8 += 0x80;
+            }
+
+            JAIZelBasic::zel_basic->seStart(
+                0x303B,
+                &current.pos,
+                0,
+                0,
+                1.0f,
+                1.0f,
+                -1.0f,
+                -1.0f,
+                0
+            );
+        } else {
+            field_0x2D8 = 0x4000;
+        }
+    }
+
+    return TRUE;
 }
 
 /* 000011C4-00001330       .text control_light__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::control_light() {
-    /* Nonmatching */
+    if (field_0x2DA == 1) {
+        if (set_event(field_0x4A0) == 1) {
+            field_0x2DA++;
+        }
+    } else if (field_0x2DA != 0) {
+        field_0x2DA++;
+
+        if (field_0x2DA == 0xA) {
+            set_fire(1);
+        }
+
+        if (field_0x2DA == 0x4B) {
+            if (dComIfGs_isEventBit(0x1C2)) {
+                JAIZelBasic::zel_basic->seStart(
+                    0x303D,
+                    &current.pos,
+                    0,
+                    0,
+                    0,
+                    0.0f,
+                    0.0f,
+                    1.0f,
+                    1.0f
+                );
+            }
+        }
+
+        if (field_0x2DA == 0x4C) {
+            dComIfGs_offEventBit(0x1C2);
+        }
+
+        if (field_0x2DA == 0x4D) {
+            dComIfGs_onEventBit(0x1C2);
+        }
+
+        if (field_0x2DA == 0x4F) {
+            dComIfGs_offEventBit(0x1C2);
+        }
+
+        if (field_0x2DA == 0x50) {
+            dComIfGs_onEventBit(0x1C2);
+            field_0x2DA = 0;
+        }
+    }
 }
 
 /* 00001330-00001398       .text control_treasure__Q210daObjLight5Act_cFv */
@@ -309,20 +562,50 @@ bool daObjLight::Act_c::_execute() {
 /* 00001400-00001528       .text _draw__Q210daObjLight5Act_cFv */
 bool daObjLight::Act_c::_draw() {
     g_env_light.settingTevStruct(1, &current.pos, &tevStr);
+    daObjLight::Act_c* self = this;
+    int i = 0;
+    int modelOffset = 0;
 
-    g_env_light.setLightTevColorType(mpModel, &tevStr);
-    mDoExt_modelUpdateDL(mpModel);
+    do {
+        if (i == 0) {
+            *(u32*)((u8*)&j3dSys + 0x48) = *(u32*)((u8*)&g_dComIfG_gameInfo + 0x5D30);
+            *(u32*)((u8*)&j3dSys + 0x4C) = *(u32*)((u8*)&g_dComIfG_gameInfo + 0x5D34);
 
-    if (dKy_daynight_check() == 1) {
-        if (!dComIfGs_isEventBit(0x102) && M_S_lod_access == 0) {
-            g_env_light.setLightTevColorType(mpModel, &tevStr);
-            mDoExt_modelUpdateDL(mpModel);
+            g_env_light.setLightTevColorType(
+                *(J3DModel**)((u8*)this + 0x298 + modelOffset),
+                &tevStr
+            );
+
+            mDoExt_modelUpdateDL(
+                *(J3DModel**)((u8*)this + 0x298 + modelOffset)
+            );
+
+            *(u32*)((u8*)&j3dSys + 0x48) = *(u32*)((u8*)&g_dComIfG_gameInfo + 0x5D38);
+            *(u32*)((u8*)&j3dSys + 0x4C) = *(u32*)((u8*)&g_dComIfG_gameInfo + 0x5D3C);
+        } else {
+            if (dKy_daynight_check() == 1) {
+                if (dComIfGs_isEventBit(0x1C02)) {
+                    if (M_S_lod_access == 0) {
+                        g_env_light.setLightTevColorType(
+                            *(J3DModel**)((u8*)this + 0x298 + modelOffset),
+                            &tevStr
+                        );
+
+                        mDoExt_modelUpdateDL(
+                            *(J3DModel**)((u8*)this + 0x298 + modelOffset)
+                        );
+                    }
+                }
+            }
         }
-    }
+
+        i++;
+        modelOffset += 4;
+    } while (i < 3);
 
     draw_fire();
 
-    M_S_lod_access = 1;
+    M_S_lod_access = 0;
 
     return true;
 }
@@ -370,7 +653,7 @@ actor_process_profile_definition g_profile_Obj_Light = {
     /* List Prio    */ fpcPi_CURRENT_e,
     /* Proc Name    */ fpcNm_Obj_Light_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(daObjLight::Act_c),
+    /* Size         */ sizeof(daObjLight::Act_c) ,
     /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
