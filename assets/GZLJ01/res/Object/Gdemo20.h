@@ -1,0 +1,49 @@
+#ifndef RES_GDEMO20_H
+#define RES_GDEMO20_H
+
+enum dRes_INDEX_GDEMO20 {
+    /* BCK  */
+    dRes_INDEX_GDEMO20_BCK_GDEMO20_1_e=0x6,
+    dRes_INDEX_GDEMO20_BCK_GDEMO20_1A_e=0x7,
+    /* BDLM */
+    dRes_INDEX_GDEMO20_BDL_GDEMO20_1_e=0xA,
+    dRes_INDEX_GDEMO20_BDL_GDEMO20_2_e=0xB,
+    /* BRK  */
+    dRes_INDEX_GDEMO20_BRK_GDEMO20_1_e=0xE,
+    dRes_INDEX_GDEMO20_BRK_GDEMO20_2_e=0xF,
+    /* BTK  */
+    dRes_INDEX_GDEMO20_BTK_GDEMO20_1_e=0x12,
+};
+
+enum dRes_ID_GDEMO20 {
+    /* BCK  */
+    dRes_ID_GDEMO20_BCK_GDEMO20_1_e=0x6,
+    dRes_ID_GDEMO20_BCK_GDEMO20_1A_e=0x7,
+    /* BDLM */
+    dRes_ID_GDEMO20_BDL_GDEMO20_1_e=0xA,
+    dRes_ID_GDEMO20_BDL_GDEMO20_2_e=0xB,
+    /* BRK  */
+    dRes_ID_GDEMO20_BRK_GDEMO20_1_e=0xE,
+    dRes_ID_GDEMO20_BRK_GDEMO20_2_e=0xF,
+    /* BTK  */
+    dRes_ID_GDEMO20_BTK_GDEMO20_1_e=0x12,
+};
+
+enum GDEMO20_1_JNT {
+    GDEMO20_1_JNT_ROOTA_e=0x0,
+    GDEMO20_1_JNT_GHRWPA00_e=0x1,
+    GDEMO20_1_JNT_A_e=0x2,
+    GDEMO20_1_JNT_AOMOTE_e=0x3,
+    GDEMO20_1_JNT_AURA_e=0x4,
+    GDEMO20_1_JNT_B_e=0x5,
+    GDEMO20_1_JNT_BOMOTE_e=0x6,
+    GDEMO20_1_JNT_BURA_e=0x7,
+};
+
+enum GDEMO20_2_JNT {
+    GDEMO20_2_JNT_ROOT01_e=0x0,
+    GDEMO20_2_JNT_OMOTE_e=0x1,
+    GDEMO20_2_JNT_URA_e=0x2,
+};
+
+#endif /* !RES_GDEMO20_H */

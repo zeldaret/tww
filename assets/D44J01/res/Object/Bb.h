@@ -1,0 +1,126 @@
+#ifndef RES_BB_H
+#define RES_BB_H
+
+enum dRes_INDEX_BB {
+    /* BAS  */
+    dRes_INDEX_BB_BAS_ATACK01_e=0x6,
+    dRes_INDEX_BB_BAS_EAT_e=0x7,
+    dRes_INDEX_BB_BAS_FLY01_e=0x8,
+    dRes_INDEX_BB_BAS_FLY02_e=0x9,
+    dRes_INDEX_BB_BAS_FLY03_e=0xA,
+    dRes_INDEX_BB_BAS_FLYB01_e=0xB,
+    dRes_INDEX_BB_BAS_FLYC_e=0xC,
+    dRes_INDEX_BB_BAS_FURA01_e=0xD,
+    dRes_INDEX_BB_BAS_GUSYA01_e=0xE,
+    dRes_INDEX_BB_BAS_LAND01_e=0xF,
+    dRes_INDEX_BB_BAS_LAND02_e=0x10,
+    dRes_INDEX_BB_BAS_WAIT_e=0x11,
+    dRes_INDEX_BB_BAS_WALK_e=0x12,
+    /* BCK  */
+    dRes_INDEX_BB_BCK_ATACK01_e=0x15,
+    dRes_INDEX_BB_BCK_DAMAGEP_e=0x16,
+    dRes_INDEX_BB_BCK_EAT_e=0x17,
+    dRes_INDEX_BB_BCK_FLY01_e=0x18,
+    dRes_INDEX_BB_BCK_FLY02_e=0x19,
+    dRes_INDEX_BB_BCK_FLY03_e=0x1A,
+    dRes_INDEX_BB_BCK_FLYB01_e=0x1B,
+    dRes_INDEX_BB_BCK_FLYC_e=0x1C,
+    dRes_INDEX_BB_BCK_FURA01_e=0x1D,
+    dRes_INDEX_BB_BCK_GUSYA01_e=0x1E,
+    dRes_INDEX_BB_BCK_LAND01_e=0x1F,
+    dRes_INDEX_BB_BCK_LAND02_e=0x20,
+    dRes_INDEX_BB_BCK_WAIT_e=0x21,
+    dRes_INDEX_BB_BCK_WALK_e=0x22,
+    /* BDLM */
+    dRes_INDEX_BB_BDL_BB_e=0x25,
+    dRes_INDEX_BB_BDL_BB_TAIL_e=0x26,
+    /* BTP  */
+    dRes_INDEX_BB_BTP_TATACK_e=0x29,
+    dRes_INDEX_BB_BTP_TCLOSE_e=0x2A,
+    dRes_INDEX_BB_BTP_TDAMAGE_e=0x2B,
+    dRes_INDEX_BB_BTP_TKAIJO_e=0x2C,
+    dRes_INDEX_BB_BTP_TMABATAKI_e=0x2D,
+    dRes_INDEX_BB_BTP_TOPEN_e=0x2E,
+};
+
+enum dRes_ID_BB {
+    /* BAS  */
+    dRes_ID_BB_BAS_ATACK01_e=0x6,
+    dRes_ID_BB_BAS_EAT_e=0x7,
+    dRes_ID_BB_BAS_FLY01_e=0x8,
+    dRes_ID_BB_BAS_FLY02_e=0x9,
+    dRes_ID_BB_BAS_FLY03_e=0xA,
+    dRes_ID_BB_BAS_FLYB01_e=0xB,
+    dRes_ID_BB_BAS_FLYC_e=0xC,
+    dRes_ID_BB_BAS_FURA01_e=0xD,
+    dRes_ID_BB_BAS_GUSYA01_e=0xE,
+    dRes_ID_BB_BAS_LAND01_e=0xF,
+    dRes_ID_BB_BAS_LAND02_e=0x10,
+    dRes_ID_BB_BAS_WAIT_e=0x11,
+    dRes_ID_BB_BAS_WALK_e=0x12,
+    /* BCK  */
+    dRes_ID_BB_BCK_ATACK01_e=0x15,
+    dRes_ID_BB_BCK_DAMAGEP_e=0x16,
+    dRes_ID_BB_BCK_EAT_e=0x17,
+    dRes_ID_BB_BCK_FLY01_e=0x18,
+    dRes_ID_BB_BCK_FLY02_e=0x19,
+    dRes_ID_BB_BCK_FLY03_e=0x1A,
+    dRes_ID_BB_BCK_FLYB01_e=0x1B,
+    dRes_ID_BB_BCK_FLYC_e=0x1C,
+    dRes_ID_BB_BCK_FURA01_e=0x1D,
+    dRes_ID_BB_BCK_GUSYA01_e=0x1E,
+    dRes_ID_BB_BCK_LAND01_e=0x1F,
+    dRes_ID_BB_BCK_LAND02_e=0x20,
+    dRes_ID_BB_BCK_WAIT_e=0x21,
+    dRes_ID_BB_BCK_WALK_e=0x22,
+    /* BDLM */
+    dRes_ID_BB_BDL_BB_e=0x25,
+    dRes_ID_BB_BDL_BB_TAIL_e=0x26,
+    /* BTP  */
+    dRes_ID_BB_BTP_TATACK_e=0x29,
+    dRes_ID_BB_BTP_TCLOSE_e=0x2A,
+    dRes_ID_BB_BTP_TDAMAGE_e=0x2B,
+    dRes_ID_BB_BTP_TKAIJO_e=0x2C,
+    dRes_ID_BB_BTP_TMABATAKI_e=0x2D,
+    dRes_ID_BB_BTP_TOPEN_e=0x2E,
+};
+
+enum BB_JNT {
+    BB_JNT_HARA_e=0x0,
+    BB_JNT_ASHIAL_e=0x1,
+    BB_JNT_ASHIBL_e=0x2,
+    BB_JNT_FOOTL_e=0x3,
+    BB_JNT_TUMEAL_e=0x4,
+    BB_JNT_TUMEBL_e=0x5,
+    BB_JNT_ASHIAR_e=0x6,
+    BB_JNT_ASHIBR_e=0x7,
+    BB_JNT_FOOTR_e=0x8,
+    BB_JNT_TUMEAR_e=0x9,
+    BB_JNT_TUMEBR_e=0xA,
+    BB_JNT_KATAL_e=0xB,
+    BB_JNT_KANEAL_e=0xC,
+    BB_JNT_HANEBL_e=0xD,
+    BB_JNT_HANECL_e=0xE,
+    BB_JNT_KATAR_e=0xF,
+    BB_JNT_HANEAR_e=0x10,
+    BB_JNT_HANEBR_e=0x11,
+    BB_JNT_HANECR_e=0x12,
+    BB_JNT_KUBIA_e=0x13,
+    BB_JNT_KUBIB_e=0x14,
+    BB_JNT_KUBIC_e=0x15,
+    BB_JNT_ATAMA_e=0x16,
+    BB_JNT_KUCHIA_e=0x17,
+    BB_JNT_KUCHIB_e=0x18,
+    BB_JNT_TUNOAL_e=0x19,
+    BB_JNT_TUNOBL_e=0x1A,
+    BB_JNT_TUNOAR_e=0x1B,
+    BB_JNT_TUNOBR_e=0x1C,
+    BB_JNT_OA_e=0x1D,
+    BB_JNT_OB_e=0x1E,
+};
+
+enum BB_TAIL_JNT {
+    BB_TAIL_JNT_POLYSURFACE18_e=0x0,
+};
+
+#endif /* !RES_BB_H */

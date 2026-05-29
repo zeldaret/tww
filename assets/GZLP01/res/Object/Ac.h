@@ -1,0 +1,110 @@
+#ifndef RES_AC_H
+#define RES_AC_H
+
+enum dRes_INDEX_AC {
+    /* BCKS */
+    dRes_INDEX_AC_BCK_ACARM_WAIT01_e=0x6,
+    dRes_INDEX_AC_BCK_AC_WAIT01_e=0x7,
+    dRes_INDEX_AC_BCK_ACARM_TALK01_e=0x8,
+    dRes_INDEX_AC_BCK_ACARM_TALK02_e=0x9,
+    dRes_INDEX_AC_BCK_ACARM_WAIT02_e=0xA,
+    dRes_INDEX_AC_BCK_AC_TALK01_e=0xB,
+    dRes_INDEX_AC_BCK_AC_TALK02_e=0xC,
+    dRes_INDEX_AC_BCK_AC_WAIT02_e=0xD,
+    /* BDL  */
+    dRes_INDEX_AC_BDL_ACARM_e=0x10,
+    dRes_INDEX_AC_BDL_ACWING_e=0x11,
+    dRes_INDEX_AC_BDL_AC_FLOWER_e=0x12,
+    dRes_INDEX_AC_BDL_AC_FLOWER02_e=0x13,
+    /* BDLM */
+    dRes_INDEX_AC_BDL_AC_e=0x16,
+    /* BTP  */
+    dRes_INDEX_AC_BTP_KOMARI_e=0x19,
+    dRes_INDEX_AC_BTP_MABA_e=0x1A,
+    dRes_INDEX_AC_BTP_WARAI_e=0x1B,
+};
+
+enum dRes_ID_AC {
+    /* BCKS */
+    dRes_ID_AC_BCK_ACARM_WAIT01_e=0x0,
+    dRes_ID_AC_BCK_AC_WAIT01_e=0x1,
+    dRes_ID_AC_BCK_ACARM_TALK01_e=0x9,
+    dRes_ID_AC_BCK_ACARM_TALK02_e=0xA,
+    dRes_ID_AC_BCK_ACARM_WAIT02_e=0xB,
+    dRes_ID_AC_BCK_AC_TALK01_e=0xC,
+    dRes_ID_AC_BCK_AC_TALK02_e=0xD,
+    dRes_ID_AC_BCK_AC_WAIT02_e=0xE,
+    /* BDL  */
+    dRes_ID_AC_BDL_ACARM_e=0x2,
+    dRes_ID_AC_BDL_ACWING_e=0x3,
+    dRes_ID_AC_BDL_AC_FLOWER_e=0x4,
+    dRes_ID_AC_BDL_AC_FLOWER02_e=0xF,
+    /* BDLM */
+    dRes_ID_AC_BDL_AC_e=0x5,
+    /* BTP  */
+    dRes_ID_AC_BTP_KOMARI_e=0x6,
+    dRes_ID_AC_BTP_MABA_e=0x7,
+    dRes_ID_AC_BTP_WARAI_e=0x8,
+};
+
+enum ACARM_JNT {
+    ACARM_JNT_WORLD_ROOT_e=0x0,
+    ACARM_JNT_ARML_LOC_e=0x1,
+    ACARM_JNT_ARML1_e=0x2,
+    ACARM_JNT_ARML2_e=0x3,
+    ACARM_JNT_HANDL_e=0x4,
+    ACARM_JNT_SLEEVEL1_e=0x5,
+    ACARM_JNT_SLEEVEL2_e=0x6,
+    ACARM_JNT_SLEEVEL3_e=0x7,
+    ACARM_JNT_ARMR_LOC_e=0x8,
+    ACARM_JNT_ARMR1_e=0x9,
+    ACARM_JNT_ARMR2_e=0xA,
+    ACARM_JNT_HANDR_e=0xB,
+    ACARM_JNT_SLEEVER1_e=0xC,
+    ACARM_JNT_SLEEVER2_e=0xD,
+    ACARM_JNT_SLEEVER3_e=0xE,
+};
+
+enum ACWING_JNT {
+    ACWING_JNT_WORLD_ROOT_e=0x0,
+    ACWING_JNT_WINGL_LOC_e=0x1,
+    ACWING_JNT_WINGL1_e=0x2,
+    ACWING_JNT_WINGL2_e=0x3,
+    ACWING_JNT_WINGL3_e=0x4,
+    ACWING_JNT_WINGR_LOC_e=0x5,
+    ACWING_JNT_WINGR1_e=0x6,
+    ACWING_JNT_WINGR2_e=0x7,
+    ACWING_JNT_WINGR3_e=0x8,
+};
+
+enum AC_FLOWER_JNT {
+    AC_FLOWER_JNT_AC_FLOWER_e=0x0,
+};
+
+enum AC_FLOWER02_JNT {
+    AC_FLOWER02_JNT_AC_FLOWER02_e=0x0,
+};
+
+enum AC_JNT {
+    AC_JNT_CENTER_e=0x0,
+    AC_JNT_BACKBONE_e=0x1,
+    AC_JNT_NECK_e=0x2,
+    AC_JNT_HEAD_e=0x3,
+    AC_JNT_HAIR1_e=0x4,
+    AC_JNT_HAIR2_e=0x5,
+    AC_JNT_SHAIRL_e=0x6,
+    AC_JNT_SHAIRR_e=0x7,
+    AC_JNT_SHOULDERL_e=0x8,
+    AC_JNT_ARML_e=0x9,
+    AC_JNT_SHOULDERR_e=0xA,
+    AC_JNT_ARMR_e=0xB,
+    AC_JNT_WAIST_e=0xC,
+    AC_JNT_LEGL1_e=0xD,
+    AC_JNT_LEGL2_e=0xE,
+    AC_JNT_FOOTL_e=0xF,
+    AC_JNT_LEGR1_e=0x10,
+    AC_JNT_LEGR2_e=0x11,
+    AC_JNT_FOOTR_e=0x12,
+};
+
+#endif /* !RES_AC_H */

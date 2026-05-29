@@ -1,0 +1,22 @@
+#ifndef RES_ECUBE_H
+#define RES_ECUBE_H
+
+enum dRes_INDEX_ECUBE {
+    /* BDL  */
+    dRes_INDEX_ECUBE_BDL_ECUBE_e=0x4,
+    /* DZB  */
+    dRes_INDEX_ECUBE_DZB_ECUBE_e=0x7,
+};
+
+enum dRes_ID_ECUBE {
+    /* BDL  */
+    dRes_ID_ECUBE_BDL_ECUBE_e=0x4,
+    /* DZB  */
+    dRes_ID_ECUBE_DZB_ECUBE_e=0x7,
+};
+
+enum ECUBE_JNT {
+    ECUBE_JNT_ECUBE_e=0x0,
+};
+
+#endif /* !RES_ECUBE_H */

@@ -1,0 +1,75 @@
+#ifndef RES_FM_H
+#define RES_FM_H
+
+enum dRes_INDEX_FM {
+    /* BCKS */
+    dRes_INDEX_FM_BCK_ASITUKAMI_e=0x6,
+    dRes_INDEX_FM_BCK_DAMAGE_e=0x7,
+    dRes_INDEX_FM_BCK_DERU_e=0x8,
+    dRes_INDEX_FM_BCK_HIKIKOMU_e=0x9,
+    dRes_INDEX_FM_BCK_KUSIZASI_e=0xA,
+    dRes_INDEX_FM_BCK_MAHI_e=0xB,
+    dRes_INDEX_FM_BCK_MODORU_e=0xC,
+    dRes_INDEX_FM_BCK_NAGERU_e=0xD,
+    dRes_INDEX_FM_BCK_TUKAMU_e=0xE,
+    dRes_INDEX_FM_BCK_TUKAMU2WAIT_e=0xF,
+    dRes_INDEX_FM_BCK_TUMAMIWAIT_e=0x10,
+    dRes_INDEX_FM_BCK_WAIT_e=0x11,
+    dRes_INDEX_FM_BCK_YAYU_e=0x12,
+    /* BDL  */
+    dRes_INDEX_FM_BDL_FM_e=0x15,
+    /* BDLM */
+    dRes_INDEX_FM_BDL_YPIT00_e=0x18,
+    /* BTK  */
+    dRes_INDEX_FM_BTK_YPIT00_e=0x1B,
+};
+
+enum dRes_ID_FM {
+    /* BCKS */
+    dRes_ID_FM_BCK_ASITUKAMI_e=0x6,
+    dRes_ID_FM_BCK_DAMAGE_e=0x7,
+    dRes_ID_FM_BCK_DERU_e=0x8,
+    dRes_ID_FM_BCK_HIKIKOMU_e=0x9,
+    dRes_ID_FM_BCK_KUSIZASI_e=0xA,
+    dRes_ID_FM_BCK_MAHI_e=0xB,
+    dRes_ID_FM_BCK_MODORU_e=0xC,
+    dRes_ID_FM_BCK_NAGERU_e=0xD,
+    dRes_ID_FM_BCK_TUKAMU_e=0xE,
+    dRes_ID_FM_BCK_TUKAMU2WAIT_e=0xF,
+    dRes_ID_FM_BCK_TUMAMIWAIT_e=0x10,
+    dRes_ID_FM_BCK_WAIT_e=0x11,
+    dRes_ID_FM_BCK_YAYU_e=0x12,
+    /* BDL  */
+    dRes_ID_FM_BDL_FM_e=0x15,
+    /* BDLM */
+    dRes_ID_FM_BDL_YPIT00_e=0x18,
+    /* BTK  */
+    dRes_ID_FM_BTK_YPIT00_e=0x1B,
+};
+
+enum FM_JNT {
+    FM_JNT_CENTER_e=0x0,
+    FM_JNT_UDEA_e=0x1,
+    FM_JNT_UDEB_e=0x2,
+    FM_JNT_UDEC_e=0x3,
+    FM_JNT_UDED_e=0x4,
+    FM_JNT_TE_e=0x5,
+    FM_JNT_CYUBIA_e=0x6,
+    FM_JNT_CYUBIB_e=0x7,
+    FM_JNT_HYUBIA_e=0x8,
+    FM_JNT_HYUBIB_e=0x9,
+    FM_JNT_KYUBIA_e=0xA,
+    FM_JNT_KYUBIB_e=0xB,
+    FM_JNT_NYUBIA_e=0xC,
+    FM_JNT_NYUBIB_e=0xD,
+    FM_JNT_OYUBIA_e=0xE,
+    FM_JNT_OYUBIB_e=0xF,
+};
+
+enum YPIT00_JNT {
+    YPIT00_JNT_YPIT00_e=0x0,
+    YPIT00_JNT_A00_e=0x1,
+    YPIT00_JNT_PITFALL1_e=0x2,
+};
+
+#endif /* !RES_FM_H */

@@ -1,0 +1,22 @@
+#ifndef RES_HBW2_H
+#define RES_HBW2_H
+
+enum dRes_INDEX_HBW2 {
+    /* BDL  */
+    dRes_INDEX_HBW2_BDL_HBW2_e=0x4,
+    /* DZB  */
+    dRes_INDEX_HBW2_DZB_HBW2_e=0x7,
+};
+
+enum dRes_ID_HBW2 {
+    /* BDL  */
+    dRes_ID_HBW2_BDL_HBW2_e=0x4,
+    /* DZB  */
+    dRes_ID_HBW2_DZB_HBW2_e=0x7,
+};
+
+enum HBW2_JNT {
+    HBW2_JNT_POLYSURFACE1963_e=0x0,
+};
+
+#endif /* !RES_HBW2_H */

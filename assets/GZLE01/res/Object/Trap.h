@@ -1,0 +1,28 @@
+#ifndef RES_TRAP_H
+#define RES_TRAP_H
+
+enum dRes_INDEX_TRAP {
+    /* BDLM */
+    dRes_INDEX_TRAP_BDL_HTORA1_e=0x5,
+    /* BTK  */
+    dRes_INDEX_TRAP_BTK_HTORA1_e=0x8,
+    /* DZB  */
+    dRes_INDEX_TRAP_DZB_HTORA1_e=0xB,
+};
+
+enum dRes_ID_TRAP {
+    /* BDLM */
+    dRes_ID_TRAP_BDL_HTORA1_e=0x5,
+    /* BTK  */
+    dRes_ID_TRAP_BTK_HTORA1_e=0x8,
+    /* DZB  */
+    dRes_ID_TRAP_DZB_HTORA1_e=0xB,
+};
+
+enum HTORA1_JNT {
+    HTORA1_JNT_HTORA1_00_e=0x0,
+    HTORA1_JNT_A00_e=0x1,
+    HTORA1_JNT_POLYSURFACE1_e=0x2,
+};
+
+#endif /* !RES_TRAP_H */

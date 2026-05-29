@@ -1,0 +1,23 @@
+#ifndef RES_SHINJU_N_H
+#define RES_SHINJU_N_H
+
+enum dRes_INDEX_SHINJU_N {
+    /* BDLM */
+    dRes_INDEX_SHINJU_N_BDL_VPEAN_e=0x4,
+    /* BTK  */
+    dRes_INDEX_SHINJU_N_BTK_VPEAA_N_e=0x7,
+};
+
+enum dRes_ID_SHINJU_N {
+    /* BDLM */
+    dRes_ID_SHINJU_N_BDL_VPEAN_e=0x4,
+    /* BTK  */
+    dRes_ID_SHINJU_N_BTK_VPEAA_N_e=0x7,
+};
+
+enum VPEAN_JNT {
+    VPEAN_JNT_ROOT_VPEAN_e=0x0,
+    VPEAN_JNT_V_MARK_N_e=0x1,
+};
+
+#endif /* !RES_SHINJU_N_H */

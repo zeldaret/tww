@@ -1,0 +1,19 @@
+#ifndef RES_VHAMM_H
+#define RES_VHAMM_H
+
+enum dRes_INDEX_VHAMM {
+    /* BDL  */
+    dRes_INDEX_VHAMM_BDL_VHAMM_e=0x3,
+};
+
+enum dRes_ID_VHAMM {
+    /* BDL  */
+    dRes_ID_VHAMM_BDL_VHAMM_e=0x3,
+};
+
+enum VHAMM_JNT {
+    VHAMM_JNT_ROOT_VHAMM_e=0x0,
+    VHAMM_JNT_VHAMM_MODEL_e=0x1,
+};
+
+#endif /* !RES_VHAMM_H */

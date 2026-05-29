@@ -1,0 +1,27 @@
+#ifndef RES_HAMI2_H
+#define RES_HAMI2_H
+
+enum dRes_INDEX_HAMI2 {
+    /* BDL  */
+    dRes_INDEX_HAMI2_BDL_HAMI2_e=0x4,
+    /* DZB  */
+    dRes_INDEX_HAMI2_DZB_HAMI2_e=0x7,
+    dRes_INDEX_HAMI2_DZB_HAMI2B_e=0x8,
+};
+
+enum dRes_ID_HAMI2 {
+    /* BDL  */
+    dRes_ID_HAMI2_BDL_HAMI2_e=0x4,
+    /* DZB  */
+    dRes_ID_HAMI2_DZB_HAMI2_e=0x7,
+    dRes_ID_HAMI2_DZB_HAMI2B_e=0x8,
+};
+
+enum HAMI2_JNT {
+    HAMI2_JNT_HAMI2_00_e=0x0,
+    HAMI2_JNT_MONO1_e=0x1,
+    HAMI2_JNT_MONO2_e=0x2,
+    HAMI2_JNT_NAKA_e=0x3,
+};
+
+#endif /* !RES_HAMI2_H */

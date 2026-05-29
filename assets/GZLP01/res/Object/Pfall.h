@@ -1,0 +1,61 @@
+#ifndef RES_PFALL_H
+#define RES_PFALL_H
+
+enum dRes_INDEX_PFALL {
+    /* BCKS */
+    dRes_INDEX_PFALL_BCK_HIKU_e=0x5,
+    dRes_INDEX_PFALL_BCK_NZ_WAIT_e=0x6,
+    /* BDL  */
+    dRes_INDEX_PFALL_BDL_AOTSI_e=0x9,
+    dRes_INDEX_PFALL_BDL_NZ_e=0xA,
+    dRes_INDEX_PFALL_BDL_PSUZU_e=0xB,
+    /* DZB  */
+    dRes_INDEX_PFALL_DZB_AOTOSI_e=0xE,
+};
+
+enum dRes_ID_PFALL {
+    /* BCKS */
+    dRes_ID_PFALL_BCK_HIKU_e=0x5,
+    dRes_ID_PFALL_BCK_NZ_WAIT_e=0x6,
+    /* BDL  */
+    dRes_ID_PFALL_BDL_AOTSI_e=0x9,
+    dRes_ID_PFALL_BDL_NZ_e=0xA,
+    dRes_ID_PFALL_BDL_PSUZU_e=0xB,
+    /* DZB  */
+    dRes_ID_PFALL_DZB_AOTOSI_e=0xE,
+};
+
+enum AOTSI_JNT {
+    AOTSI_JNT_AOTSI_e=0x0,
+};
+
+enum NZ_JNT {
+    NZ_JNT_KOSI_e=0x0,
+    NZ_JNT_HIP_e=0x1,
+    NZ_JNT_HIP2_e=0x2,
+    NZ_JNT_MOMOL_e=0x3,
+    NZ_JNT_SUNEL_e=0x4,
+    NZ_JNT_ASHIL_e=0x5,
+    NZ_JNT_MOMOR_e=0x6,
+    NZ_JNT_SUNER_e=0x7,
+    NZ_JNT_ASHIR_e=0x8,
+    NZ_JNT_SHIPPO_e=0x9,
+    NZ_JNT_MUNE_e=0xA,
+    NZ_JNT_HEAD_e=0xB,
+    NZ_JNT_HANA_e=0xC,
+    NZ_JNT_KUTI_e=0xD,
+    NZ_JNT_MIMIL_e=0xE,
+    NZ_JNT_MIMIR_e=0xF,
+    NZ_JNT_UDEL_e=0x10,
+    NZ_JNT_UDEL2_e=0x11,
+    NZ_JNT_UDEL3_e=0x12,
+    NZ_JNT_UDER_e=0x13,
+    NZ_JNT_UDER2_e=0x14,
+    NZ_JNT_UDER3_e=0x15,
+};
+
+enum PSUZU_JNT {
+    PSUZU_JNT_PSUZU_e=0x0,
+};
+
+#endif /* !RES_PFALL_H */

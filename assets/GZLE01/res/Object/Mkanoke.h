@@ -1,0 +1,30 @@
+#ifndef RES_MKANOKE_H
+#define RES_MKANOKE_H
+
+enum dRes_INDEX_MKANOKE {
+    /* BDL  */
+    dRes_INDEX_MKANOKE_BDL_MOKE1_e=0x4,
+    dRes_INDEX_MKANOKE_BDL_MOKE2_e=0x5,
+    /* DZB  */
+    dRes_INDEX_MKANOKE_DZB_MOKE1_e=0x8,
+    dRes_INDEX_MKANOKE_DZB_MOKE2_e=0x9,
+};
+
+enum dRes_ID_MKANOKE {
+    /* BDL  */
+    dRes_ID_MKANOKE_BDL_MOKE1_e=0x4,
+    dRes_ID_MKANOKE_BDL_MOKE2_e=0x5,
+    /* DZB  */
+    dRes_ID_MKANOKE_DZB_MOKE1_e=0x8,
+    dRes_ID_MKANOKE_DZB_MOKE2_e=0x9,
+};
+
+enum MOKE1_JNT {
+    MOKE1_JNT_MOKE1_e=0x0,
+};
+
+enum MOKE2_JNT {
+    MOKE2_JNT_MOKE2_e=0x0,
+};
+
+#endif /* !RES_MKANOKE_H */

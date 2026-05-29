@@ -1,0 +1,45 @@
+#ifndef RES_YLESR00_H
+#define RES_YLESR00_H
+
+enum dRes_INDEX_YLESR00 {
+    /* BCK  */
+    dRes_INDEX_YLESR00_BCK_YLESR00_e=0x6,
+    /* BMDM */
+    dRes_INDEX_YLESR00_BMD_YHTFR00_e=0x9,
+    dRes_INDEX_YLESR00_BMD_YLESR00_e=0xA,
+    /* BRK  */
+    dRes_INDEX_YLESR00_BRK_YHTFR00_e=0xD,
+    dRes_INDEX_YLESR00_BRK_YLESR00_e=0xE,
+    /* BTK  */
+    dRes_INDEX_YLESR00_BTK_YHTFR00_e=0x11,
+    dRes_INDEX_YLESR00_BTK_YLESR00_e=0x12,
+};
+
+enum dRes_ID_YLESR00 {
+    /* BCK  */
+    dRes_ID_YLESR00_BCK_YLESR00_e=0x6,
+    /* BMDM */
+    dRes_ID_YLESR00_BMD_YHTFR00_e=0x9,
+    dRes_ID_YLESR00_BMD_YLESR00_e=0xA,
+    /* BRK  */
+    dRes_ID_YLESR00_BRK_YHTFR00_e=0xD,
+    dRes_ID_YLESR00_BRK_YLESR00_e=0xE,
+    /* BTK  */
+    dRes_ID_YLESR00_BTK_YHTFR00_e=0x11,
+    dRes_ID_YLESR00_BTK_YLESR00_e=0x12,
+};
+
+enum YHTFR00_JNT {
+    YHTFR00_JNT_YHTFR00_e=0x0,
+    YHTFR00_JNT_A00_e=0x1,
+    YHTFR00_JNT_HEATFLOOR_e=0x2,
+};
+
+enum YLESR00_JNT {
+    YLESR00_JNT_YLESR00_e=0x0,
+    YLESR00_JNT_A00_e=0x1,
+    YLESR00_JNT_CORE_e=0x2,
+    YLESR00_JNT_OUT_e=0x3,
+};
+
+#endif /* !RES_YLESR00_H */
