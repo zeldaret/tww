@@ -155,10 +155,10 @@ void daSTBox_c::actDrop(int) {
 }
 
 /* 00001344-000013AC       .text actWait02__9daSTBox_cFi */
-s32 daSTBox_c::actWait02(int) {
+BOOL daSTBox_c::actWait02(int) {
     /* Nonmatching */
-    // cXyz* pos = dComIfGp_getShipActor()->getCraneTop();
-    cXyz* pos = dComIfGp_getShipCraneTop();
+    cXyz* pos = dComIfGp_getShipActor()->getCraneTop();
+    // cXyz* pos = dComIfGp_getShipCraneTop();
     // cXyz* pos = ((daShip_c*)(*(fopAc_ac_c**)(((u8*)&g_dComIfG_gameInfo) + 0x5b54)))->getCraneTop();
     // cXyz* pos = (cXyz*)*(u32*)(*(u32*)&(g_dComIfG_gameInfo) + 0x5b54) + 0x434;
     // daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
@@ -197,9 +197,16 @@ static BOOL daSTBox_Delete(void* i_this) {
     return ((daSTBox_c*)i_this)->_delete();
 }
 
+bool daSTBox_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdateDL(mpModel);
+    return 1;
+}
+
 /* 00001400-0000146C       .text daSTBox_Draw__FPv */
-static BOOL daSTBox_Draw(void*) {
-    /* Nonmatching */
+static BOOL daSTBox_Draw(void* ptr) {
+    return ((daSTBox_c*)ptr)->_draw();
 }
 
 /* 0000146C-00001490       .text daSTBox_Execute__FPv */
