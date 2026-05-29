@@ -32,7 +32,7 @@ class ArcFile(NamedTuple):
     id:int
 
 class ArcNode(NamedTuple):
-    node_type:bytes
+    node_type:str
     name:str
     inds:range
 
@@ -47,11 +47,11 @@ class ArcEnum(NamedTuple):
 class JointParsedEnums(NamedTuple):
     enums:list[ArcEnum]
     
-def ensure_dir(path:str)->None:
+def ensure_dir(path:Path)->None:
     makedirs(path, exist_ok=True)
 
-def bin_make_str(s:bytes)->str:
-    s = s.replace(b"\x82\x98", b"x")
+def bin_make_str(b:bytes)->str:
+    s = b.replace(b"\x82\x98", b"x")
     try:
         s = s.decode("ascii")
     except Exception as e:
@@ -146,6 +146,7 @@ def extract_joint_enums(src_path:Path):
             subprocess.run([DTK_PATH, "vfs", "cp", f"{src_path}:{internal_file}", internal_file_path], stdout=subprocess.PIPE)
         
         out_enums = parse_bmd(internal_file_path)
+        assert out_enums is not None
 
         out_jnt_enums.append(out_enums)
     
@@ -201,7 +202,7 @@ def convert_binary_to_resource_enum(src_path: Path, dest_path: Path) -> None:
             binf.seek(string_list_offset + this_node_name_offs)
             this_node_name = read_str(binf)
             this_node = ArcNode(this_node_type, this_node_name, this_node_inds)
-            found_nodes.append((this_node, [index_file_lookup.get(x) for x in this_node.inds if x in index_file_lookup]))
+            found_nodes.append((this_node, [index_file_lookup[x] for x in this_node.inds if x in index_file_lookup]))
         
     out_lines:list[str] = []
     file_stem = src_path.name.split(".")[0]
