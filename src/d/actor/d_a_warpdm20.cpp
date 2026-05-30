@@ -8,7 +8,7 @@
 #include "d/actor/d_a_ship.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_sea.h"
-#include "d/res/res_gdemo20.h"
+#include "res/Object/Gdemo20.h"
 #include "d/d_bg_s_func.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -34,7 +34,7 @@ static EventActionFunc event_action_tbl[] = {
 };
 
 const char daWarpdm20_c::m_arcname[] = "Gdemo20";
-const s16 daWarpdm20_c::m_residxA[] = {GDEMO20_BDL_GDEMO20_1, GDEMO20_BCK_GDEMO20_1, GDEMO20_BTK_GDEMO20_1, GDEMO20_BRK_GDEMO20_1};
+const s16 daWarpdm20_c::m_residxA[] = {dRes_INDEX_GDEMO20_BDL_GDEMO20_1_e, dRes_INDEX_GDEMO20_BCK_GDEMO20_1_e, dRes_INDEX_GDEMO20_BTK_GDEMO20_1_e, dRes_INDEX_GDEMO20_BRK_GDEMO20_1_e};
 const s16 daWarpdm20_c::m_residxB[] = {-1, -1, -1, -1};
 const u32 daWarpdm20_c::m_heapsize = 0x3000;
 const f32 daWarpdm20_c::m_warp_distance = 500.0f;
@@ -296,7 +296,7 @@ void daWarpdm20_c::initWaitDead(int) {
     sp08.z += 1000.0f;
     dComIfGp_evmng_setGoal(&sp08);
     m2CC = 1;
-    init_bck_anm(GDEMO20_BCK_GDEMO20_1A);
+    init_bck_anm(dRes_INDEX_GDEMO20_BCK_GDEMO20_1A_e);
 
     if (mpBrkAnm != NULL) {
         mpBrkAnm->setFrame(mpBrkAnm->getEndFrame());

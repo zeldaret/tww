@@ -5,13 +5,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_movebox.h"
-#include "d/res/res_ecube.h"
-#include "d/res/res_hbox2.h"
-#include "d/res/res_hjump.h"
-#include "d/res/res_kkiba_00.h"
-#include "d/res/res_mmirror.h"
-#include "d/res/res_mpwrb.h"
-#include "d/res/res_osiblk.h"
+#include "res/Object/Ecube.h"
+#include "res/Object/Hbox2.h"
+#include "res/Object/Hjump.h"
+#include "res/Object/Kkiba_00.h"
+#include "res/Object/Mmirror.h"
+#include "res/Object/MpwrB.h"
+#include "res/Object/Osiblk.h"
 #include "d/d_path.h"
 #include "d/d_cc_d.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -365,8 +365,8 @@ namespace daObjMovebox {
             /* m4C             */ 0.1f,
             /* m50             */ 0.06f,
             /* m54             */ 0.075f,
-            /* mModelFileIndex */ KKIBA_00_BDL_KKIBA_00,
-            /* mDZBFileIndex   */ KKIBA_00_DZB_KKIBA_00,
+            /* mModelFileIndex */ dRes_INDEX_KKIBA_00_BDL_KKIBA_00_e,
+            /* mDZBFileIndex   */ dRes_INDEX_KKIBA_00_DZB_KKIBA_00_e,
             /* mDZBHeapSize    */ DEMO_SELECT(0x1620, 0x8A0),
             /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
@@ -416,8 +416,8 @@ namespace daObjMovebox {
             /* m4C             */ 0.1f,
             /* m50             */ 0.06f,
             /* m54             */ 0.075f,
-            /* mModelFileIndex */ OSIBLK_BDL_OBM_OSIHIKIBLK1,
-            /* mDZBFileIndex   */ OSIBLK_DZB_OBM_OSIHIKIBLK1,
+            /* mModelFileIndex */ dRes_INDEX_OSIBLK_BDL_OBM_OSIHIKIBLK1_e,
+            /* mDZBFileIndex   */ dRes_INDEX_OSIBLK_DZB_OBM_OSIHIKIBLK1_e,
             /* mDZBHeapSize    */ DEMO_SELECT(0x1620, 0x8A0),
             /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
@@ -468,8 +468,8 @@ namespace daObjMovebox {
             /* m4C             */ 0.1f,
             /* m50             */ 0.06f,
             /* m54             */ 0.075f,
-            /* mModelFileIndex */ OSIBLK_BDL_OBM_OSIHIKIBLK2,
-            /* mDZBFileIndex   */ OSIBLK_DZB_OBM_OSIHIKIBLK2,
+            /* mModelFileIndex */ dRes_INDEX_OSIBLK_BDL_OBM_OSIHIKIBLK2_e,
+            /* mDZBFileIndex   */ dRes_INDEX_OSIBLK_DZB_OBM_OSIHIKIBLK2_e,
             /* mDZBHeapSize    */ DEMO_SELECT(0x8000, 0x1560),
             /* mScaleY         */ 150.0f,
             /* m68             */ 300.0f,
@@ -519,8 +519,8 @@ namespace daObjMovebox {
             /* m4C             */ 0.1f,
             /* m50             */ 0.06f,
             /* m54             */ 0.075f,
-            /* mModelFileIndex */ MPWRB_BDL_MPWRB,
-            /* mDZBFileIndex   */ MPWRB_DZB_MPWRB,
+            /* mModelFileIndex */ dRes_INDEX_MPWRB_BDL_MPWRB_e,
+            /* mDZBFileIndex   */ dRes_INDEX_MPWRB_DZB_MPWRB_e,
             /* mDZBHeapSize    */ DEMO_SELECT(0x8000, 0x8A0),
             /* mScaleY         */ 300.0f,
             /* m68             */ 300.0f,
@@ -570,8 +570,8 @@ namespace daObjMovebox {
             /* m4C             */ 0.1f,
             /* m50             */ 0.06f,
             /* m54             */ 0.075f,
-            /* mModelFileIndex */ KKIBA_00_BDL_KKIBA_00,
-            /* mDZBFileIndex   */ KKIBA_00_DZB_KKIBA_00,
+            /* mModelFileIndex */ dRes_INDEX_KKIBA_00_BDL_KKIBA_00_e,
+            /* mDZBFileIndex   */ dRes_INDEX_KKIBA_00_DZB_KKIBA_00_e,
             /* mDZBHeapSize    */ 0x1620,
             /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
@@ -621,8 +621,8 @@ namespace daObjMovebox {
             /* m4C             */ 0.1f,
             /* m50             */ 0.06f,
             /* m54             */ 0.075f,
-            /* mModelFileIndex */ HBOX2_BDL_HBOX2,
-            /* mDZBFileIndex   */ HBOX2_DZB_HBOX2,
+            /* mModelFileIndex */ dRes_INDEX_HBOX2_BDL_HBOX2_e,
+            /* mDZBFileIndex   */ dRes_INDEX_HBOX2_DZB_HBOX2_e,
             /* mDZBHeapSize    */ DEMO_SELECT(0x8000, 0x8A0),
             /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
@@ -672,8 +672,8 @@ namespace daObjMovebox {
             /* m4C             */ 0.1f,
             /* m50             */ 0.06f,
             /* m54             */ 0.075f,
-            /* mModelFileIndex */ HJUMP_BDL_HBOX1,
-            /* mDZBFileIndex   */ HJUMP_DZB_HBOX1,
+            /* mModelFileIndex */ dRes_INDEX_HJUMP_BDL_HBOX1_e,
+            /* mDZBFileIndex   */ dRes_INDEX_HJUMP_DZB_HBOX1_e,
             /* mDZBHeapSize    */ DEMO_SELECT(0x8000, 0x7E0),
             /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
@@ -724,7 +724,7 @@ namespace daObjMovebox {
             /* m50             */ 0.06f,
             /* m54             */ 0.075f,
             /* mModelFileIndex */ -1,
-            /* mDZBFileIndex   */ HJUMP_DZB_HJUMP1A,
+            /* mDZBFileIndex   */ dRes_INDEX_HJUMP_DZB_HJUMP1A_e,
             /* mDZBHeapSize    */ DEMO_SELECT(0x8000, 0x320),
             /* mScaleY         */ 150.0f,
             /* m68             */ 300.0f,
@@ -774,8 +774,8 @@ namespace daObjMovebox {
             /* m4C             */ 0.1f,
             /* m50             */ 0.06f,
             /* m54             */ 0.075f,
-            /* mModelFileIndex */ KKIBA_00_BDL_KKIBA_00,
-            /* mDZBFileIndex   */ KKIBA_00_DZB_KKIBA_00,
+            /* mModelFileIndex */ dRes_INDEX_KKIBA_00_BDL_KKIBA_00_e,
+            /* mDZBFileIndex   */ dRes_INDEX_KKIBA_00_DZB_KKIBA_00_e,
             /* mDZBHeapSize    */ 0x1620,
             /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
@@ -825,8 +825,8 @@ namespace daObjMovebox {
             /* m4C             */ 0.1f,
             /* m50             */ 0.06f,
             /* m54             */ 0.075f,
-            /* mModelFileIndex */ KKIBA_00_BDL_KKIBA_00,
-            /* mDZBFileIndex   */ KKIBA_00_DZB_KKIBA_00,
+            /* mModelFileIndex */ dRes_INDEX_KKIBA_00_BDL_KKIBA_00_e,
+            /* mDZBFileIndex   */ dRes_INDEX_KKIBA_00_DZB_KKIBA_00_e,
             /* mDZBHeapSize    */ 0x1620,
             /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
@@ -877,7 +877,7 @@ namespace daObjMovebox {
             /* m50             */ 0.06f,
             /* m54             */ 0.075f,
             /* mModelFileIndex */ -1,
-            /* mDZBFileIndex   */ MMIRROR_DZB_MMRR,
+            /* mDZBFileIndex   */ dRes_INDEX_MMIRROR_DZB_MMRR_e,
             /* mDZBHeapSize    */ DEMO_SELECT(0x8000, 0xD40),
             /* mScaleY         */ 300.0f,
             /* m68             */ 450.0f,
@@ -927,8 +927,8 @@ namespace daObjMovebox {
             /* m4C             */ 0.1f,
             /* m50             */ 0.06f,
             /* m54             */ 0.075f,
-            /* mModelFileIndex */ OSIBLK_BDL_OBM_OSIHIKIBLK1,
-            /* mDZBFileIndex   */ OSIBLK_DZB_OBM_OSIHIKIBLK1,
+            /* mModelFileIndex */ dRes_INDEX_OSIBLK_BDL_OBM_OSIHIKIBLK1_e,
+            /* mDZBFileIndex   */ dRes_INDEX_OSIBLK_DZB_OBM_OSIHIKIBLK1_e,
             /* mDZBHeapSize    */ DEMO_SELECT(0x1620, 0x8A0),
             /* mScaleY         */ 150.0f,
             /* m68             */ 350.0f,
@@ -978,8 +978,8 @@ namespace daObjMovebox {
             /* m4C             */ 0.1f,
             /* m50             */ 0.06f,
             /* m54             */ 0.075f,
-            /* mModelFileIndex */ ECUBE_BDL_ECUBE,
-            /* mDZBFileIndex   */ ECUBE_DZB_ECUBE,
+            /* mModelFileIndex */ dRes_INDEX_ECUBE_BDL_ECUBE_e,
+            /* mDZBFileIndex   */ dRes_INDEX_ECUBE_DZB_ECUBE_e,
             /* mDZBHeapSize    */ DEMO_SELECT(0x8000, 0x8A0),
             /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,

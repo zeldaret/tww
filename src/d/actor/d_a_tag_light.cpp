@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_light.h"
-#include "d/res/res_mspot.h"
+#include "res/Object/Mspot.h"
 #include "d/d_s_play.h"
 #include "d/d_kankyo.h"
 #include "d/d_bg_s_lin_chk.h"
@@ -94,11 +94,11 @@ bool Act_c::create_heap() {
     s16 sVar8;
 
     if (ratio < tmp) {
-        sVar2 = MSPOT_BDL_MSPOCN;
-        sVar8 = MSPOT_BTK_MSPOCN;
+        sVar2 = dRes_INDEX_MSPOT_BDL_MSPOCN_e;
+        sVar8 = dRes_INDEX_MSPOT_BTK_MSPOCN_e;
     } else {
-        sVar2 = MSPOT_BDL_MSPOT;
-        sVar8 = MSPOT_BTK_MSPOT;
+        sVar2 = dRes_INDEX_MSPOT_BDL_MSPOT_e;
+        sVar8 = dRes_INDEX_MSPOT_BTK_MSPOT_e;
     }
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, sVar2));

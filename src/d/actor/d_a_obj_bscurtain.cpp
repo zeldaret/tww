@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_bscurtain.h"
-#include "d/res/res_ptc.h"
+#include "res/Object/Ptc.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
@@ -40,9 +40,9 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daObj_Bscurtain_c::CreateHeap() {
     J3DModelData* modelData;
     if ((fpcM_GetParam(this) & 0xFF) != 1 || dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F08) != 0) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, PTC_INDEX_BDL_PTCO);
+        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_PTC_BDL_PTCO_e);
     } else {
-        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, PTC_INDEX_BDL_PTCU);
+        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_PTC_BDL_PTCU_e);
     }
 
     JUT_ASSERT(0xa9, modelData != NULL);

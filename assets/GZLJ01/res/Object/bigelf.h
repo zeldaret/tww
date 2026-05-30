@@ -1,0 +1,74 @@
+#ifndef RES_BIGELF_H
+#define RES_BIGELF_H
+
+enum dRes_INDEX_BIGELF {
+    /* BCKS */
+    dRes_INDEX_BIGELF_BCK_ENTER_e=0x6,
+    dRes_INDEX_BIGELF_BCK_FL_DEMO_e=0x7,
+    dRes_INDEX_BIGELF_BCK_WAIT01_e=0x8,
+    /* BDLM */
+    dRes_INDEX_BIGELF_BDL_DY_e=0xB,
+    dRes_INDEX_BIGELF_BDL_DY_FL_e=0xC,
+    /* BRK  */
+    dRes_INDEX_BIGELF_BRK_DY_BODY_e=0xF,
+    dRes_INDEX_BIGELF_BRK_DY_FL_e=0x10,
+    /* BTK  */
+    dRes_INDEX_BIGELF_BTK_DY_BODY_e=0x13,
+};
+
+enum dRes_ID_BIGELF {
+    /* BCKS */
+    dRes_ID_BIGELF_BCK_ENTER_e=0x6,
+    dRes_ID_BIGELF_BCK_FL_DEMO_e=0x7,
+    dRes_ID_BIGELF_BCK_WAIT01_e=0x8,
+    /* BDLM */
+    dRes_ID_BIGELF_BDL_DY_e=0xB,
+    dRes_ID_BIGELF_BDL_DY_FL_e=0xC,
+    /* BRK  */
+    dRes_ID_BIGELF_BRK_DY_BODY_e=0xF,
+    dRes_ID_BIGELF_BRK_DY_FL_e=0x10,
+    /* BTK  */
+    dRes_ID_BIGELF_BTK_DY_BODY_e=0x13,
+};
+
+enum DY_JNT {
+    DY_JNT_WORLD_ROOT_e=0x0,
+    DY_JNT_BACKBONE_e=0x1,
+    DY_JNT_BACKBONE2_e=0x2,
+    DY_JNT_NECK_e=0x3,
+    DY_JNT_HEAD_e=0x4,
+    DY_JNT_HAIR1_e=0x5,
+    DY_JNT_HAIR2_e=0x6,
+    DY_JNT_HAIR3_e=0x7,
+    DY_JNT_JAW_e=0x8,
+    DY_JNT_MOMIL1_e=0x9,
+    DY_JNT_MOMIL2_e=0xA,
+    DY_JNT_MOMIL3_e=0xB,
+    DY_JNT_MOMIR1_e=0xC,
+    DY_JNT_MOMIR2_e=0xD,
+    DY_JNT_MOMIR3_e=0xE,
+    DY_JNT_SHOULDERLA_e=0xF,
+    DY_JNT_ARMLA1_e=0x10,
+    DY_JNT_ARMLA2_e=0x11,
+    DY_JNT_HANDLA_e=0x12,
+    DY_JNT_SHOULDERLB_e=0x13,
+    DY_JNT_ARMLB1_e=0x14,
+    DY_JNT_ARMLB2_e=0x15,
+    DY_JNT_HANDLB_e=0x16,
+    DY_JNT_SHOULDERRA_e=0x17,
+    DY_JNT_ARMRA1_e=0x18,
+    DY_JNT_ARMRA2_e=0x19,
+    DY_JNT_HANDRA_e=0x1A,
+    DY_JNT_SHOULDERRB_e=0x1B,
+    DY_JNT_ARMRB1_e=0x1C,
+    DY_JNT_ARMRB2_e=0x1D,
+    DY_JNT_HANDRB_e=0x1E,
+    DY_JNT_WAIST1_e=0x1F,
+    DY_JNT_WAIST2_e=0x20,
+};
+
+enum DY_FL_JNT {
+    DY_FL_JNT_DY_FLOWER_e=0x0,
+};
+
+#endif /* !RES_BIGELF_H */

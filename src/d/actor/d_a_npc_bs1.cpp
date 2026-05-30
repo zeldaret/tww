@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bs1.h"
-#include "d/res/res_bs.h"
+#include "res/Object/Bs.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/actor/d_a_player.h"
@@ -162,23 +162,23 @@ s16 daNpc_Bs1_c::XyEventCB(int i_itemBtn) {
 }
 
 static const int l_bck_ix_tbl[] = {
-    BS_INDEX_BCK_BS_WAIT01,
-    BS_INDEX_BCK_BS_TALK01,
-    BS_INDEX_BCK_BS_TALK02,
-    BS_INDEX_BCK_BS_TALK03,
-    BS_INDEX_BCK_BS_TALK04,
-    BS_INDEX_BCK_BS_LAUGH,
-    BS_INDEX_BCK_BS_PRAISE,
-    BS_INDEX_BCK_BS_ANGRY,
-    BS_INDEX_BCK_BS_MANTAN,
-    BS_INDEX_BCK_BS_TALK04,
+    dRes_INDEX_BS_BCK_BS_WAIT01_e,
+    dRes_INDEX_BS_BCK_BS_TALK01_e,
+    dRes_INDEX_BS_BCK_BS_TALK02_e,
+    dRes_INDEX_BS_BCK_BS_TALK03_e,
+    dRes_INDEX_BS_BCK_BS_TALK04_e,
+    dRes_INDEX_BS_BCK_BS_LAUGH_e,
+    dRes_INDEX_BS_BCK_BS_PRAISE_e,
+    dRes_INDEX_BS_BCK_BS_ANGRY_e,
+    dRes_INDEX_BS_BCK_BS_MANTAN_e,
+    dRes_INDEX_BS_BCK_BS_TALK04_e,
 };
 
 static const int l_btp_ix_tbl[] = {
-    BS_INDEX_BTP_BS,
-    BS_INDEX_BTP_MABA,
-    BS_INDEX_BTP_LOOK,
-    BS_INDEX_BTP_BS_PRAISE,
+    dRes_INDEX_BS_BTP_BS_e,
+    dRes_INDEX_BS_BTP_MABA_e,
+    dRes_INDEX_BS_BTP_LOOK_e,
+    dRes_INDEX_BS_BTP_BS_PRAISE_e,
 };
 
 /* 00000490-00000658       .text nodeCallBack_Bs__FP7J3DNodei */
@@ -2170,11 +2170,11 @@ cPhs_State daNpc_Bs1_c::_create() {
 
 /* 000050A8-00005470       .text CreateHeap__11daNpc_Bs1_cFv */
 BOOL daNpc_Bs1_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BDL_BS);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BDL_BS_e);
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes("Bs", BS_INDEX_BCK_BS_WAIT01),
+        (J3DAnmTransform*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BCK_BS_WAIT01_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL,
         0, 0x11020203
     );
@@ -2205,13 +2205,13 @@ BOOL daNpc_Bs1_c::CreateHeap() {
 #endif
     }
     
-    mpHelmetModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BDL_BS_MET), 0, 0x11020203);
+    mpHelmetModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BDL_BS_MET_e), 0, 0x11020203);
     if (!mpHelmetModel) {
         return FALSE;
     }
     
     for (int i = 0; i < 3; i++) {
-        mpSoldSignModels[i] = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BDL_VSOLD), 0, 0x11020203);
+        mpSoldSignModels[i] = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BDL_VSOLD_e), 0, 0x11020203);
         if (mpSoldSignModels[i] == NULL) {
             return false;
         }
@@ -2225,8 +2225,8 @@ BOOL daNpc_Bs1_c::CreateHeap() {
     mpMorf->getModel()->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 0.0f);
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
-    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bs", BS_INDEX_BRK_SHOP_CURSOR01);
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BMD_SHOP_CURSOR01);
+    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BRK_SHOP_CURSOR01_e);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BMD_SHOP_CURSOR01_e);
     mpShopCursor = ShopCursor_create(modelData, brk, l_HIO.mChild[mType].m30);
     
     if (mpShopCursor != NULL) {

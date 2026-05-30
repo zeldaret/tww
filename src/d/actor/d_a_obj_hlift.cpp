@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hlift.h"
-#include "d/res/res_hlift.h"
+#include "res/Object/Hlift.h"
 
 namespace daObjHlift {
 
@@ -21,8 +21,8 @@ const char Act_c::M_arcname[] = "Hlift";
 const char Act_c::M_evname[] = "Hlift_up";
 const s16 Act_c::M_up_dist[] = { 125, 250, 375, 500, 625, 750, 875, 1000 };
 const Act_c::size_data Act_c::M_data_size[2] = {
-    { HLIFT_BDL_HLIFT, HLIFT_DZB_HLIFT, DEMO_SELECT(0x8000, 0x1700) },
-    { HLIFT_BDL_HLIFTB, HLIFT_DZB_HLIFTB, DEMO_SELECT(0x8000, 0x1700) }
+    { dRes_INDEX_HLIFT_BDL_HLIFT_e, dRes_INDEX_HLIFT_DZB_HLIFT_e, DEMO_SELECT(0x8000, 0x1700) },
+    { dRes_INDEX_HLIFT_BDL_HLIFTB_e, dRes_INDEX_HLIFT_DZB_HLIFTB_e, DEMO_SELECT(0x8000, 0x1700) }
 };
 
 } // namespace daObjHlift
@@ -32,7 +32,7 @@ BOOL daObjHlift::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, M_data_size[field_0x2DC].field_0x00);
     JUT_ASSERT(288, model_data != NULL);
     mModel1 = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
-    J3DModelData* model_data_c = (J3DModelData*)dComIfG_getObjectRes(M_arcname, HLIFT_BDL_HLIFTC);
+    J3DModelData* model_data_c = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_HLIFT_BDL_HLIFTC_e);
     JUT_ASSERT(298, model_data_c != NULL);
     mModel2 = mDoExt_J3DModel__create(model_data_c, 0x80000, 0x11000022);
     return mModel1 != NULL && mModel2 != NULL;

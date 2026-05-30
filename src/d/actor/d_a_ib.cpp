@@ -422,24 +422,24 @@ cPhs_State daIball_c::_daIball_create() {
 
 /* 800F489C-800F4B40       .text CreateHeap__9daIball_cFv */
 BOOL daIball_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, ALWAYS_BDL_IB);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_ALWAYS_BDL_IB_e);
     JUT_ASSERT(DEMO_SELECT(1133, 1135), modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
     if (!mpModel) { return FALSE; }
     
-    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, ALWAYS_BCK_START);
+    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_ALWAYS_BCK_START_e);
     JUT_ASSERT(DEMO_SELECT(1150, 1152), pbck != NULL);
     int ret = mBckAnm.init(modelData, pbck, 1, J3DFrameCtrl::EMode_NONE);
     if (!ret) { return FALSE; }
     
-    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, ALWAYS_BTK_IB);
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_ALWAYS_BTK_IB_e);
     JUT_ASSERT(DEMO_SELECT(1162, 1164), pbtk != NULL);
     ret = mBtkAnm.init(modelData, pbtk, 1, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { return FALSE; }
     
     int brkIds[ARRAY_SIZE(mBrkAnm)] = {
-        ALWAYS_BRK_IB_01,
-        ALWAYS_BRK_IB_02,
+        dRes_INDEX_ALWAYS_BRK_IB_01_e,
+        dRes_INDEX_ALWAYS_BRK_IB_02_e,
     };
     J3DAnmTevRegKey* pbrk;
     for (int i = 0; i < (int)ARRAY_SIZE(mBrkAnm); i++) {

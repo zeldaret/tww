@@ -6,16 +6,16 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_shutter.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_htobi1.h"
-#include "d/res/res_htobi2.h"
+#include "res/Object/Htobi1.h"
+#include "res/Object/Htobi2.h"
 
 const float daShutter_c::m_max_speed[2] = {3.0f, 3.0f};
 const float daShutter_c::m_min_speed[2] = {1.0f, 1.0f};
 const float daShutter_c::m_move_len[2] = {200.0f, 84.0f};
 const float daShutter_c::m_width[2] = {220.0f, 82.0f};
 const float daShutter_c::m_height[2] = {200.0f, 100.0f};
-const s16 daShutter_c::m_bdlidx[2] = {HTOBI1_BDL_HTOBI1, HTOBI2_BDL_HTOBI2};
-const s16 daShutter_c::m_dzbidx[2] = {HTOBI1_DZB_HTOBI1, HTOBI2_DZB_HTOBI2};
+const s16 daShutter_c::m_bdlidx[2] = {dRes_INDEX_HTOBI1_BDL_HTOBI1_e, dRes_INDEX_HTOBI2_BDL_HTOBI2_e};
+const s16 daShutter_c::m_dzbidx[2] = {dRes_INDEX_HTOBI1_DZB_HTOBI1_e, dRes_INDEX_HTOBI2_DZB_HTOBI2_e};
 const s32 daShutter_c::m_heapsize[2] = {0x1140, 0x3000};
 const Vec daShutter_c::m_cull_min[2] = {{-500.0f, -100.0f, -50.0f}, {-150.0f, -100.0f, -50.0f}};
 const Vec daShutter_c::m_cull_max[2] = {{500.0f, 250.0f, 50.0f}, {150.0f, 250.0f, 50.0f}};

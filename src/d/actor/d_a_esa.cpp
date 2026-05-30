@@ -12,7 +12,7 @@
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_func.h"
-#include "d/res/res_link.h"
+#include "res/Object/Link.h"
 #include "f_op/f_op_actor_mng.h"
 
 /* 800E7E60-800E7EA8       .text daEsa_Draw__FP9esa_class */
@@ -226,7 +226,7 @@ static BOOL daEsa_Delete(esa_class* i_this) {
 static BOOL daEsa_CreateHeap(fopAc_ac_c* i_actor) {
     esa_class* i_this = static_cast<esa_class*>(i_actor);
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_ESA));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_ESA_e));
     JUT_ASSERT(0x1E8, modelData != NULL);
     i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
 

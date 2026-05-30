@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_floor.h"
-#include "d/res/res_hhyu1.h"
+#include "res/Object/Hhyu1.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_mtx.h"
@@ -35,7 +35,7 @@ BOOL daFloor_c::Delete() {
 
 /* 0000012C-000001E8       .text CreateHeap__9daFloor_cFv */
 BOOL daFloor_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, HHYU1_BDL_HHYU1);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HHYU1_BDL_HHYU1_e);
     JUT_ASSERT(0xc1, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel == NULL)
@@ -62,7 +62,7 @@ cPhs_State daFloor_c::_create() {
 
     cPhs_State rt = dComIfG_resLoad(&mPhs, m_arcname);
     if (rt == cPhs_COMPLEATE_e) {
-        if (!MoveBGCreate(m_arcname, HHYU1_DZB_HHYU1, NULL, 0x8A0))
+        if (!MoveBGCreate(m_arcname, dRes_INDEX_HHYU1_DZB_HHYU1_e, NULL, 0x8A0))
             return cPhs_ERROR_e;
     }
     return rt;

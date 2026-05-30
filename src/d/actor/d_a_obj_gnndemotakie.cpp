@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gnndemotakie.h"
-#include "d/res/res_gnndemotakie.h"
+#include "res/Object/Gnndemotakie.h"
 
 const char daObjGnntakie_c::M_arcname[] = "Gnndemotakie";
 
@@ -19,13 +19,13 @@ BOOL daObjGnntakie_c::create_heap() {
     J3DModelData* mdl_data;
     J3DAnmTextureSRTKey* btk_data;
     BOOL ret = FALSE;
-    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIE_BDL_GNN_DEMO_TAKI_E));
+    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_GNNDEMOTAKIE_BDL_GNN_DEMO_TAKI_E_e));
     JUT_ASSERT(90, mdl_data != NULL);
 
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mpModel != NULL) {
-            btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIE_BTK_GNN_DEMO_TAKI_E));
+            btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_GNNDEMOTAKIE_BTK_GNN_DEMO_TAKI_E_e));
             JUT_ASSERT(97, btk_data != NULL);
             if (btk_data != NULL && mpBtkAnm.init(mdl_data, btk_data, true, J3DFrameCtrl::EMode_LOOP)) {
                 ret = TRUE;

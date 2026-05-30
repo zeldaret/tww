@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sk.h"
-#include "d/res/res_sk.h"
+#include "res/Object/Sk.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_jnt_hit.h"
 #include "d/d_cc_d.h"
@@ -205,7 +205,7 @@ static BOOL daSk_Delete(sk_class* i_this) {
 /* 0000090C-00000A6C       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
     sk_class* i_this = (sk_class*)a_this;
-    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk", SK_BDL_TURU_00);
+    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk", dRes_INDEX_SK_BDL_TURU_00_e);
 
     i_this->mpMorf = new mDoExt_McaMorf(pModelData, NULL, NULL, NULL, J3DFrameCtrl::EMode_NULL, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022);
     if (i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL) {

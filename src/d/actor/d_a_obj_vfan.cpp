@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vfan.h"
-#include "d/res/res_vfan.h"
+#include "res/Object/Vfan.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -48,7 +48,7 @@ static dCcD_SrcCyl cyl_check_src = {
 
 /* 00000078-00000134       .text CreateHeap__Q29daObjVfan5Act_cFv */
 BOOL daObjVfan::Act_c::CreateHeap() {
-    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, VFAN_BDL_V_FAN_00));
+    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_VFAN_BDL_V_FAN_00_e));
 
     JUT_ASSERT(0x8c, model_data != NULL);
 
@@ -92,7 +92,7 @@ cPhs_State daObjVfan::Act_c::Mthd_Create() {
     } else {
         phase_state = dComIfG_resLoad(&mPhs, M_arcname);
         if (phase_state == cPhs_COMPLEATE_e) {
-            phase_state = MoveBGCreate(M_arcname, VFAN_DZB_V_FAN_00, NULL, 0xa60);
+            phase_state = MoveBGCreate(M_arcname, dRes_INDEX_VFAN_DZB_V_FAN_00_e, NULL, 0xa60);
 
             JUT_ASSERT(0xc6, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
         }

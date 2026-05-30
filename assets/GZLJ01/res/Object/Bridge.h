@@ -1,0 +1,36 @@
+#ifndef RES_BRIDGE_H
+#define RES_BRIDGE_H
+
+enum dRes_INDEX_BRIDGE {
+    /* BDL  */
+    dRes_INDEX_BRIDGE_BDL_OBM_BRIDGE_e=0x4,
+    dRes_INDEX_BRIDGE_BDL_OBM_BRIDGE2_e=0x5,
+    dRes_INDEX_BRIDGE_BDL_OBM_CHAIN1_e=0x6,
+    /* DZB  */
+    dRes_INDEX_BRIDGE_DZB_MBRDG_e=0x9,
+    dRes_INDEX_BRIDGE_DZB_MBRDG2_e=0xA,
+};
+
+enum dRes_ID_BRIDGE {
+    /* BDL  */
+    dRes_ID_BRIDGE_BDL_OBM_BRIDGE_e=0x4,
+    dRes_ID_BRIDGE_BDL_OBM_BRIDGE2_e=0x5,
+    dRes_ID_BRIDGE_BDL_OBM_CHAIN1_e=0x6,
+    /* DZB  */
+    dRes_ID_BRIDGE_DZB_MBRDG_e=0x9,
+    dRes_ID_BRIDGE_DZB_MBRDG2_e=0xA,
+};
+
+enum OBM_BRIDGE_JNT {
+    OBM_BRIDGE_JNT_OBM_BRIDGE_e=0x0,
+};
+
+enum OBM_BRIDGE2_JNT {
+    OBM_BRIDGE2_JNT_OBM_BRIDGE2_e=0x0,
+};
+
+enum OBM_CHAIN1_JNT {
+    OBM_CHAIN1_JNT_OBM_CHAIN1_e=0x0,
+};
+
+#endif /* !RES_BRIDGE_H */

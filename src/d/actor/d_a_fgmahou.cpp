@@ -9,7 +9,7 @@
 #include "d/d_s_play.h"
 #include "d/d_particle_name.h"
 #include "d/actor/d_a_fganon.h"
-#include "d/res/res_fganon.h"
+#include "res/Object/Fganon.h"
 
 /* 00000078-000000E4       .text daFgmahou_Draw__FP13fgmahou_class */
 static BOOL daFgmahou_Draw(fgmahou_class* i_this) {
@@ -302,7 +302,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     fgmahou_class* i_this = static_cast<fgmahou_class*>(a_this);
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Fganon", FGANON_BDL_YDKSP00),
+        (J3DModelData*)dComIfG_getObjectRes("Fganon", dRes_INDEX_FGANON_BDL_YDKSP00_e),
         NULL, NULL,
         NULL,
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
@@ -321,7 +321,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     if(i_this->mpBtk == NULL) {
         return FALSE;
     }
-    if(!i_this->mpBtk->init(pModelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Fganon", FGANON_BTK_YDKSP00), true, J3DFrameCtrl::EMode_LOOP)) {
+    if(!i_this->mpBtk->init(pModelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Fganon", dRes_INDEX_FGANON_BTK_YDKSP00_e), true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
 
@@ -329,7 +329,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     if(i_this->mpBrk == NULL) {
         return FALSE;
     }
-    if(!i_this->mpBrk->init(pModelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Fganon", FGANON_BRK_YDKSP00), true, J3DFrameCtrl::EMode_NONE)) {
+    if(!i_this->mpBrk->init(pModelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Fganon", dRes_INDEX_FGANON_BRK_YDKSP00_e), true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
     i_this->mpBrk->setFrame(6.999f);

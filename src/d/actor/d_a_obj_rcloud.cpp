@@ -7,7 +7,7 @@
 #include "d/actor/d_a_obj_rcloud.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_hostIO.h"
-#include "d/res/res_bvkumo.h"
+#include "res/Object/BVkumo.h"
 
 namespace {
 const char l_arcname[] = "BVkumo";
@@ -61,8 +61,8 @@ BOOL daObjRcloud_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 0000010C-00000238       .text create_heap__13daObjRcloud_cFv */
 bool daObjRcloud_c::create_heap() {
     bool result = true;;
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, BVKUMO_BDL_BVKUMO));
-    J3DAnmTextureSRTKey* pAnm = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, BVKUMO_BTK_BVKUMO));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_BVKUMO_BDL_BVKUMO_e));
+    J3DAnmTextureSRTKey* pAnm = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_BVKUMO_BTK_BVKUMO_e));
 
     if (modelData == NULL || pAnm == FALSE) {
         JUT_ASSERT(DEMO_SELECT(216, 220), FALSE);

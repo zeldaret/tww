@@ -1,0 +1,18 @@
+#ifndef RES_KHASI_00_H
+#define RES_KHASI_00_H
+
+enum dRes_INDEX_KHASI_00 {
+    /* BDL  */
+    dRes_INDEX_KHASI_00_BDL_KHASI_00_e=0x3,
+};
+
+enum dRes_ID_KHASI_00 {
+    /* BDL  */
+    dRes_ID_KHASI_00_BDL_KHASI_00_e=0x3,
+};
+
+enum KHASI_00_JNT {
+    KHASI_00_JNT_KHASI_00_e=0x0,
+};
+
+#endif /* !RES_KHASI_00_H */

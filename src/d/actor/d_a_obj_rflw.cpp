@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_rflw.h"
-#include "d/res/res_rflw.h"
+#include "res/Object/Rflw.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_cc_d.h"
@@ -49,7 +49,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-000001E0       .text CreateHeap__11daObjRflw_cFv */
 BOOL daObjRflw_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Rflw", RFLW_BDL_PHANA);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Rflw", dRes_INDEX_RFLW_BDL_PHANA_e);
     JUT_ASSERT(0xAA, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);

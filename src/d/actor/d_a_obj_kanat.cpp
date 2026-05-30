@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_kanat.h"
-#include "d/res/res_kanat.h"
+#include "res/Object/Kanat.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 
@@ -14,7 +14,7 @@ const char daObjKanat::Act_c::M_arcname[] = "Kanat";
 
 /* 00000078-0000012C       .text CreateHeap__Q210daObjKanat5Act_cFv */
 BOOL daObjKanat::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, KANAT_BDL_KANAT);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_KANAT_BDL_KANAT_e);
     JUT_ASSERT(79, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
     return !!mpModel;
@@ -41,7 +41,7 @@ cPhs_State daObjKanat::Act_c::Mthd_Create() {
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, KANAT_DZB_KANAT, NULL, 0x6440);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_KANAT_DZB_KANAT_e, NULL, 0x6440);
         JUT_ASSERT(126, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     

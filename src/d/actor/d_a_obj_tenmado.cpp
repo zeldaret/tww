@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_tenmado.h"
-#include "d/res/res_tenmado.h"
+#include "res/Object/Tenmado.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
@@ -14,7 +14,7 @@ const char daObjTenmado::Act_c::M_arcname[] = "Tenmado";
 
 /* 00000078-000001B4       .text CreateHeap__Q212daObjTenmado5Act_cFv */
 BOOL daObjTenmado::Act_c::CreateHeap() {
-    J3DModelData* model_data_l = (J3DModelData*)dComIfG_getObjectRes(M_arcname, TENMADO_BDL_MMADOL);
+    J3DModelData* model_data_l = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_TENMADO_BDL_MMADOL_e);
     JUT_ASSERT(85, model_data_l != NULL);
 
     mModel1 = mDoExt_J3DModel__create(model_data_l, 0, 0x11020203);
@@ -22,7 +22,7 @@ BOOL daObjTenmado::Act_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DModelData* model_data_r = (J3DModelData*)dComIfG_getObjectRes(M_arcname, TENMADO_BDL_MMADOR);
+    J3DModelData* model_data_r = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_TENMADO_BDL_MMADOR_e);
     JUT_ASSERT(94, model_data_r != NULL);
 
     mModel2 = mDoExt_J3DModel__create(model_data_r, 0, 0x11020203);
@@ -56,7 +56,7 @@ cPhs_State daObjTenmado::Act_c::Mthd_Create() {
 
     phase_state = dComIfG_resLoad(&mPhase, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, TENMADO_DZB_MMADO, NULL, 0xF00);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_TENMADO_DZB_MMADO_e, NULL, 0xF00);
         JUT_ASSERT(146, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e))
     }
     return phase_state;

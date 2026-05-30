@@ -1,0 +1,25 @@
+#ifndef RES_BIN_H
+#define RES_BIN_H
+
+enum dRes_INDEX_BIN {
+    /* BDLM */
+    dRes_INDEX_BIN_BDL_VBINX_e=0x4,
+    /* BTK  */
+    dRes_INDEX_BIN_BTK_VBINA_X_e=0x7,
+};
+
+enum dRes_ID_BIN {
+    /* BDLM */
+    dRes_ID_BIN_BDL_VBINX_e=0x4,
+    /* BTK  */
+    dRes_ID_BIN_BTK_VBINA_X_e=0x7,
+};
+
+enum VBINX_JNT {
+    VBINX_JNT_V_BINX_e=0x0,
+    VBINX_JNT_BIN_0_OUTSIDE_e=0x1,
+    VBINX_JNT_BIN_1_CAP_MODEL_e=0x2,
+    VBINX_JNT_BIN_2_INSIDE_e=0x3,
+};
+
+#endif /* !RES_BIN_H */

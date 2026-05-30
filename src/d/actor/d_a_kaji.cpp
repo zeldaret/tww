@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kaji.h"
-#include "d/res/res_kaji.h"
+#include "res/Object/Kaji.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "m_Do/m_Do_mtx.h"
@@ -24,15 +24,15 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-000001F4       .text CreateHeap__8daKaji_cFv */
 BOOL daKaji_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, KAJI_INDEX_BDL_ASODA);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_KAJI_BDL_ASODA_e);
     JUT_ASSERT(0x55, modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Kaji", KAJI_INDEX_BCK_KJ_WAIT),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Kaji", dRes_INDEX_KAJI_BCK_KJ_WAIT_e),
         J3DFrameCtrl::EMode_LOOP, 0.0f, 0, -1, 1,
-        dComIfG_getObjectRes("Kaji", KAJI_INDEX_BAS_KJ_WAIT),
+        dComIfG_getObjectRes("Kaji", dRes_INDEX_KAJI_BAS_KJ_WAIT_e),
         0x00080000,
         0x11000002
     );

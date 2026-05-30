@@ -153,9 +153,9 @@ BOOL daPy_lk_c::procBtJumpCut_init(cXyz* param_0) {
         m_HIO->mBattle.mBJump.m.field_0x2C
     );
     if (checkNormalSwordEquip()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_MJMPCA));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_MJMPCA_e));
     } else {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_MJMPCMS));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_MJMPCMS_e));
     }
     m35EC = m_HIO->mBattle.mBJump.m.field_0x30;
     mNormalSpeed = 0.0f;
@@ -165,7 +165,7 @@ BOOL daPy_lk_c::procBtJumpCut_init(cXyz* param_0) {
     mProcVar6.m3570 = 0;
     dComIfGp_setPlayerStatus0(0, (daPyStts0_UNK2_e | daPyStts0_UNK400_e));
     voiceStart(1);
-    setBlurPosResource(LKANM__BTJUMPCUT_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__BTJUMPCUT_POS_e);
     setExtraFinishCutAtParam(CUT_TYPE_BT_JUMPCUT);
     dComIfGp_getVibration().StartShock(6, -0x21, cXyz(0.0f, 1.0f, 0.0f));
     return true;
@@ -316,12 +316,12 @@ BOOL daPy_lk_c::procBtRollCut_init(cXyz* param_0) {
         dVar4 = ANM_MROLLLC;
         mProcVar6.m3570 = 1;
         m34EC = 1;
-        setBlurPosResource(LKANM__BTROTATECUTL_POS);
+        setBlurPosResource(dRes_INDEX_LKANM__BTROTATECUTL_POS_e);
     } else {
         dVar4 = ANM_MROLLRC;
         mProcVar6.m3570 = -1;
         m34EC = -1;
-        setBlurPosResource(LKANM__BTROTATECUTR_POS);
+        setBlurPosResource(dRes_INDEX_LKANM__BTROTATECUTR_POS_e);
     }
 
     setSingleMoveAnime(
@@ -333,9 +333,9 @@ BOOL daPy_lk_c::procBtRollCut_init(cXyz* param_0) {
     );
 
     if (checkNormalSwordEquip()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_MROLLCA));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_MROLLCA_e));
     } else {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_MROLLCMS));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_MROLLCMS_e));
     }
 
     m35EC = m_HIO->mBattle.mBRoll.m.field_0x20;

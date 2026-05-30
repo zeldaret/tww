@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_eayogn.h"
-#include "d/res/res_eayogn.h"
+#include "res/Object/Eayogn.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
@@ -24,13 +24,13 @@ BOOL daObjEayogn_c::solidHeapCB(fopAc_ac_c* i_this) {
 BOOL daObjEayogn_c::create_heap() {
     BOOL ret = FALSE;
 
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, EAYOGN_BDL_EAYOGN));
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_EAYOGN_BDL_EAYOGN_e));
     JUT_ASSERT(0x5c, mdl_data != NULL);
 
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x00, 0x11020203);
         if (mpModel != NULL) {
-            mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, EAYOGN_DZB_EAYOGN), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+            mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_EAYOGN_DZB_EAYOGN_e), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
             if (mpBgW != NULL)
                 ret = TRUE;
         }

@@ -1,0 +1,28 @@
+#ifndef RES_OSHIP_H
+#define RES_OSHIP_H
+
+enum dRes_INDEX_OSHIP {
+    /* BDL  */
+    dRes_INDEX_OSHIP_BDL_VBTSP_e=0x3,
+    dRes_INDEX_OSHIP_BDL_VBTST_e=0x4,
+};
+
+enum dRes_ID_OSHIP {
+    /* BDL  */
+    dRes_ID_OSHIP_BDL_VBTSP_e=0x3,
+    dRes_ID_OSHIP_BDL_VBTST_e=0x4,
+};
+
+enum VBTSP_JNT {
+    VBTSP_JNT_ROOT_VBTSP_e=0x0,
+    VBTSP_JNT_HEAD_e=0x1,
+    VBTSP_JNT_CANON_e=0x2,
+};
+
+enum VBTST_JNT {
+    VBTST_JNT_ROOT_VBTST_e=0x0,
+    VBTST_JNT_HEAD_e=0x1,
+    VBTST_JNT_CANON_e=0x2,
+};
+
+#endif /* !RES_OSHIP_H */

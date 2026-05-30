@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vmc.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_vmc.h"
+#include "res/Object/Vmc.h"
 
 enum {
     STATE_BASE_MAIN,
@@ -87,20 +87,20 @@ BOOL daObjVmc::Act_c::solidHeapCB(fopAc_ac_c* i_ac) {
 /* 0000009C-00000400       .text create_heap__Q28daObjVmc5Act_cFv */
 bool daObjVmc::Act_c::create_heap() {
     /* Nonmatching */
-    J3DModelData* mdl_bs_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, VMC_BDL_VMCBS);
+    J3DModelData* mdl_bs_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_BDL_VMCBS_e);
     JUT_ASSERT(200, mdl_bs_data != NULL);
     mModelBase = mDoExt_J3DModel__create(mdl_bs_data, 0, 0x11020203);
     if (mModelBase == NULL)
         return false;
 
-    J3DModelData* mdl_wd_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, VMC_BDL_VMCWD);
+    J3DModelData* mdl_wd_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_BDL_VMCWD_e);
     JUT_ASSERT(207, mdl_wd_data != NULL);
     mModelTree = mDoExt_J3DModel__create(mdl_wd_data, 0, 0x11020203);
     if (mModelTree == NULL)
         return false;
 
     {
-        J3DAnmTransform* bck_wg = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, VMC_BCK_VMCWG);
+        J3DAnmTransform* bck_wg = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_BCK_VMCWG_e);
         JUT_ASSERT(215, bck_wg != NULL);
         BOOL ret = mBckAnmGrow.init(mdl_wd_data, bck_wg, TRUE, J3DFrameCtrl::EMode_NONE);
         mBckAnmGrow.setPlaySpeed(0.75f);
@@ -109,7 +109,7 @@ bool daObjVmc::Act_c::create_heap() {
     }
 
     {
-        J3DAnmTransform* bck_wh = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, VMC_BCK_VMCWH);
+        J3DAnmTransform* bck_wh = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_BCK_VMCWH_e);
         JUT_ASSERT(226, bck_wh != NULL);
         if (!mBckAnmHookshot.init(mdl_wd_data, bck_wh, TRUE, J3DFrameCtrl::EMode_NONE))
             return false;
@@ -123,11 +123,11 @@ bool daObjVmc::Act_c::create_heap() {
     mDoMtx_copy(mDoMtx_stack_c::get(), mMtxTree);
 
     mpBgBase = new dBgW();
-    if (mpBgBase == NULL || mpBgBase->Set((cBgD_t*)dComIfG_getObjectRes(M_arcname, VMC_DZB_VMCBS), dBgW::MOVE_BG_e, &mMtxBase))
+    if (mpBgBase == NULL || mpBgBase->Set((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_DZB_VMCBS_e), dBgW::MOVE_BG_e, &mMtxBase))
         ret = false;
 
     mpBgTree = new dBgW();
-    if (mpBgTree == NULL || mpBgTree->Set((cBgD_t*)dComIfG_getObjectRes(M_arcname, VMC_DZB_VMCWD), dBgW::MOVE_BG_e, &mMtxTree))
+    if (mpBgTree == NULL || mpBgTree->Set((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_DZB_VMCWD_e), dBgW::MOVE_BG_e, &mMtxTree))
         ret = false;
 
     if (ret != true)
@@ -267,7 +267,7 @@ void daObjVmc::Act_c::daObjVmc_tree_demo_main() {
 void daObjVmc::Act_c::daObjVmc_tree_main() {
     if (!mHookshotAnim) {
         if (mCyl.ChkCoHit()) {
-            J3DAnmTransform* bck_wh = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, VMC_BCK_VMCWH);
+            J3DAnmTransform* bck_wh = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_BCK_VMCWH_e);
             JUT_ASSERT(DEMO_SELECT(430, 429), bck_wh != NULL);
             mBckAnmHookshot.init(mModelTree->getModelData(), bck_wh, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true);
             mHookshotAnim = true;

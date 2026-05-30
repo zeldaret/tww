@@ -6,7 +6,7 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_agb.h"
 #include "d/d_msg.h"
-#include "d/res/res_agb.h"
+#include "res/Object/Agb.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTGba.h"
@@ -1745,7 +1745,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 800D396C-800D3B58       .text createHeap__7daAgb_cFv */
 BOOL daAgb_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Agb", AGB_BDL_AGBCURSOR);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Agb", dRes_INDEX_AGB_BDL_AGBCURSOR_e);
     JUT_ASSERT(VERSION_SELECT(2960, 2960, 3277, 3286), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
@@ -1753,7 +1753,7 @@ BOOL daAgb_c::createHeap() {
         return FALSE;
     }
 
-    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Agb", AGB_BRK_AGBCURSOR);
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Agb", dRes_INDEX_AGB_BRK_AGBCURSOR_e);
     if (!mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, TRUE)) {
         return FALSE;
     }

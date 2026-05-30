@@ -1,0 +1,42 @@
+#ifndef RES_SS_H
+#define RES_SS_H
+
+enum dRes_INDEX_SS {
+    /* BCK  */
+    dRes_INDEX_SS_BCK_CLOSE_e=0x4,
+    dRes_INDEX_SS_BCK_DAMAGE_e=0x5,
+    dRes_INDEX_SS_BCK_NO_DAMAGE_e=0x6,
+    dRes_INDEX_SS_BCK_OPEN_e=0x7,
+    dRes_INDEX_SS_BCK_WAIT_CLOSE_e=0x8,
+    dRes_INDEX_SS_BCK_WAIT_OPEN_e=0x9,
+    /* BDL  */
+    dRes_INDEX_SS_BDL_SW_e=0xC,
+};
+
+enum dRes_ID_SS {
+    /* BCK  */
+    dRes_ID_SS_BCK_CLOSE_e=0x4,
+    dRes_ID_SS_BCK_DAMAGE_e=0x5,
+    dRes_ID_SS_BCK_NO_DAMAGE_e=0x6,
+    dRes_ID_SS_BCK_OPEN_e=0x7,
+    dRes_ID_SS_BCK_WAIT_CLOSE_e=0x8,
+    dRes_ID_SS_BCK_WAIT_OPEN_e=0x9,
+    /* BDL  */
+    dRes_ID_SS_BDL_SW_e=0xC,
+};
+
+enum SW_JNT {
+    SW_JNT_DODAI_e=0x0,
+    SW_JNT_EYE_e=0x1,
+    SW_JNT_GAKU_e=0x2,
+    SW_JNT_TUBOMIBA_e=0x3,
+    SW_JNT_TUBONIBB_e=0x4,
+    SW_JNT_TUBOMIFA_e=0x5,
+    SW_JNT_TUBONIFB_e=0x6,
+    SW_JNT_TUBOMILA_e=0x7,
+    SW_JNT_TUBONILB_e=0x8,
+    SW_JNT_TUBOMIRA_e=0x9,
+    SW_JNT_TUBONIRB_e=0xA,
+};
+
+#endif /* !RES_SS_H */

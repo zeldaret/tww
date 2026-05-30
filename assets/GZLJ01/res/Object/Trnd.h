@@ -1,0 +1,55 @@
+#ifndef RES_TRND_H
+#define RES_TRND_H
+
+enum dRes_INDEX_TRND {
+    /* BCK  */
+    dRes_INDEX_TRND_BCK_YTRND00_e=0x6,
+    dRes_INDEX_TRND_BCK_YWUWT00_e=0x7,
+    /* BDLM */
+    dRes_INDEX_TRND_BDL_YTRND00_e=0xA,
+    dRes_INDEX_TRND_BDL_YWUWT00_e=0xB,
+    /* BRK  */
+    dRes_INDEX_TRND_BRK_YTRND00_e=0xE,
+    dRes_INDEX_TRND_BRK_YWUWT00_e=0xF,
+    /* BTK  */
+    dRes_INDEX_TRND_BTK_YTRND00_e=0x12,
+    dRes_INDEX_TRND_BTK_YWUWT00_e=0x13,
+};
+
+enum dRes_ID_TRND {
+    /* BCK  */
+    dRes_ID_TRND_BCK_YTRND00_e=0x6,
+    dRes_ID_TRND_BCK_YWUWT00_e=0x7,
+    /* BDLM */
+    dRes_ID_TRND_BDL_YTRND00_e=0xA,
+    dRes_ID_TRND_BDL_YWUWT00_e=0xB,
+    /* BRK  */
+    dRes_ID_TRND_BRK_YTRND00_e=0xE,
+    dRes_ID_TRND_BRK_YWUWT00_e=0xF,
+    /* BTK  */
+    dRes_ID_TRND_BTK_YTRND00_e=0x12,
+    dRes_ID_TRND_BTK_YWUWT00_e=0x13,
+};
+
+enum YTRND00_JNT {
+    YTRND00_JNT_ROOT_e=0x0,
+    YTRND00_JNT_JOINT1_e=0x1,
+    YTRND00_JNT_JOINT2_e=0x2,
+    YTRND00_JNT_JOINT3_e=0x3,
+    YTRND00_JNT_JOINT4_e=0x4,
+    YTRND00_JNT_JOINT5_e=0x5,
+    YTRND00_JNT_JOINT6_e=0x6,
+    YTRND00_JNT_JOINT7_e=0x7,
+    YTRND00_JNT_JOINT8_e=0x8,
+    YTRND00_JNT_JOINT9_e=0x9,
+    YTRND00_JNT_JOINT10_e=0xA,
+    YTRND00_JNT_JOINT11_e=0xB,
+};
+
+enum YWUWT00_JNT {
+    YWUWT00_JNT_YWUWT00_e=0x0,
+    YWUWT00_JNT_A00_e=0x1,
+    YWUWT00_JNT_WINDUPSHAPE_e=0x2,
+};
+
+#endif /* !RES_TRND_H */

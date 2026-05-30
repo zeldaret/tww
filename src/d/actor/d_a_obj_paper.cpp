@@ -5,9 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_paper.h"
-#include "d/res/res_opaper.h"
-#include "d/res/res_ppos.h"
-#include "d/res/res_piwa.h"
+#include "res/Object/Opaper.h"
+#include "res/Object/Ppos.h"
+#include "res/Object/Piwa.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
@@ -41,7 +41,7 @@ namespace daObjPaper {
             {
                 /* mResName           */ "Opaper",
                 /* mHeapSize          */ 0x04C0,
-                /* mModelId           */ OPAPER_BDL_OPAPER,
+                /* mModelId           */ dRes_INDEX_OPAPER_BDL_OPAPER_e,
                 /* mEyeOffset         */ 0x00,
                 /* mAttentionOffset   */ 0x28,
                 /* mCullSphereRadius  */ 0x28,
@@ -55,7 +55,7 @@ namespace daObjPaper {
             {
                 /* mResName           */ "Ppos",
                 /* mHeapSize          */ DEMO_SELECT(0x1000, 0x04C0),
-                /* mModelId           */ PPOS_BDL_PPOS,
+                /* mModelId           */ dRes_INDEX_PPOS_BDL_PPOS_e,
                 /* mEyeOffset         */ 0x00,
                 /* mAttentionOffset   */ 0x32,
                 /* mCullSphereRadius  */ 0x3C,
@@ -69,7 +69,7 @@ namespace daObjPaper {
             {
                 /* mResName           */ "Piwa",
                 /* mHeapSize          */ DEMO_SELECT(0x8000, 0x04C0),
-                /* mModelId           */ PIWA_BDL_PIWA,
+                /* mModelId           */ dRes_INDEX_PIWA_BDL_PIWA_e,
                 /* mEyeOffset         */ 0x3C,
                 /* mAttentionOffset   */ 0x82,
                 /* mCullSphereRadius  */ 0x50,

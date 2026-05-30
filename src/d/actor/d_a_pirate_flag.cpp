@@ -5,8 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_pirate_flag.h"
-#include "d/res/res_kaizokusen.h"
-#include "d/res/res_cloth.h"
+#include "res/Object/Kaizokusen.h"
+#include "res/Object/Cloth.h"
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/d_kankyo_wether.h"
 
@@ -240,7 +240,7 @@ void daPirate_Flag_packet_c::draw() {
     GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(*l_texCoord));
 
     GXTexObj texObj;
-    ResTIMG* timg = static_cast<ResTIMG*>(dComIfG_getObjectRes("Kaizokusen", KAIZOKUSEN_INDEX_BTI_TXA_KAIZOKU_HATA));
+    ResTIMG* timg = static_cast<ResTIMG*>(dComIfG_getObjectRes("Kaizokusen", dRes_INDEX_KAIZOKUSEN_BTI_TXA_KAIZOKU_HATA_e));
     GXInitTexObj(&texObj, (char*)timg + timg->imageOffset, timg->width, timg->height,
         (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT,
         (GXBool)(timg->mipmapCount > 1));
@@ -250,7 +250,7 @@ void daPirate_Flag_packet_c::draw() {
                     (GXAnisotropy)timg->maxAnisotropy);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
 
-    timg = static_cast<ResTIMG*>(dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON));
+    timg = static_cast<ResTIMG*>(dComIfG_getObjectRes("Cloth", dRes_INDEX_CLOTH_BTI_CLOTHTOON_e));
     GXInitTexObj(&texObj, (char*)timg + timg->imageOffset, timg->width, timg->height,
                  (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT,
                  (GXBool)(timg->mipmapCount > 1));

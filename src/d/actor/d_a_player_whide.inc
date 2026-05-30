@@ -245,7 +245,7 @@ int daPy_lk_c::changeWHideEndProc(cXyz* param_0) {
     dComIfGp_setRStatus(dActStts_CROUCH_e);
 
     if ((!doButton() && (!checkNoResetFlg0(daPyFlg0_UNK10000) || !mAcch.ChkRoofHit())) ||
-        (!checkUpperAnime(LKANM_BCK_REST) && swordTrigger()) ||
+        (!checkUpperAnime(dRes_INDEX_LKANM_BCK_REST_e) && swordTrigger()) ||
         !checkWHideBackWall(param_0))
     {
         mNormalSpeed = 0.7f * mMaxNormalSpeed;

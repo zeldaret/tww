@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ep.h"
-#include "d/res/res_ep.h"
+#include "res/Object/Ep.h"
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
@@ -508,9 +508,9 @@ static BOOL daEp_CreateHeap(fopAc_ac_c* a_this) {
     J3DModelData* modelData;
 
     if (i_this->mbHasObm == 0) {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ep", EP_BDL_VKTSD));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ep", dRes_INDEX_EP_BDL_VKTSD_e));
     } else {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ep", EP_BDL_OBM_SHOKUDAI1));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ep", dRes_INDEX_EP_BDL_OBM_SHOKUDAI1_e));
     }
     JUT_ASSERT(DEMO_SELECT(996, 997), modelData != NULL);
 
@@ -524,7 +524,7 @@ static BOOL daEp_CreateHeap(fopAc_ac_c* a_this) {
     }
 
     if (i_this->mbHasGa != 0) {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ep", EP_BDL_EP_GA));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ep", dRes_INDEX_EP_BDL_EP_GA_e));
         JUT_ASSERT(DEMO_SELECT(1007, 1010), modelData != NULL);
         
         for (s32 i = 0; i < 2; i++) {

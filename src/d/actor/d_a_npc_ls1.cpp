@@ -11,8 +11,8 @@
 #include "d/d_bg_s_func.h"
 #endif
 #include "f_op/f_op_camera.h"
-#include "d/res/res_link.h"
-#include "d/res/res_ls.h"
+#include "res/Object/Link.h"
+#include "res/Object/Ls.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "d/d_snap.h"
 #include "m_Do/m_Do_lib.h"
@@ -401,20 +401,20 @@ void daNpc_Ls1_c::setMtx(bool i_setEyePos) {
 /* 00000EF0-00000F04       .text bckResID__11daNpc_Ls1_cFi */
 int daNpc_Ls1_c::bckResID(int i_bckResIDIndex) {
     static const int a_resID_tbl[] = {
-        LS_BCK_LS_WAIT01,
-        LS_BCK_LS_WAIT02,
-        LS_BCK_LS_WAIT03,
-        LS_BCK_LS_WAIT04,
-        LS_BCK_LS_WAIT05,
-        LS_BCK_LS_WAIT06,
-        LS_BCK_LS_WATASU,
-        LS_BCK_LS_FURIMUKI,
-        LS_BCK_LS_NOZOKU,
-        LS_BCK_LS_GET,
-        LS_BCK_LS_WAIT07,
-        LS_BCK_LS_TALK01,
-        LS_BCK_LS_DEMOWAIT,
-        LS_BCK_LS_DEMOLOOK
+        dRes_ID_LS_BCK_LS_WAIT01_e,
+        dRes_ID_LS_BCK_LS_WAIT02_e,
+        dRes_ID_LS_BCK_LS_WAIT03_e,
+        dRes_ID_LS_BCK_LS_WAIT04_e,
+        dRes_ID_LS_BCK_LS_WAIT05_e,
+        dRes_ID_LS_BCK_LS_WAIT06_e,
+        dRes_ID_LS_BCK_LS_WATASU_e,
+        dRes_ID_LS_BCK_LS_FURIMUKI_e,
+        dRes_ID_LS_BCK_LS_NOZOKU_e,
+        dRes_ID_LS_BCK_LS_GET_e,
+        dRes_ID_LS_BCK_LS_WAIT07_e,
+        dRes_ID_LS_BCK_LS_TALK01_e,
+        dRes_ID_LS_BCK_LS_DEMOWAIT_e,
+        dRes_ID_LS_BCK_LS_DEMOLOOK_e
     };
     return a_resID_tbl[i_bckResIDIndex];
 }
@@ -422,17 +422,17 @@ int daNpc_Ls1_c::bckResID(int i_bckResIDIndex) {
 /* 00000F04-00000F18       .text btpResID__11daNpc_Ls1_cFi */
 int daNpc_Ls1_c::btpResID(int i_btpResIDIndex) {  
     static const int a_resID_tbl[] = {
-        LS_BTP_FUAN,
-        LS_BTP_MABA,
-        LS_BTP_FUAN02,
-        LS_BTP_KIZUKU,
-        LS_BTP_LS_GET,
-        LS_BTP_NGWARAI,
-        LS_BTP_NOZOKU,
-        LS_BTP_OKORI,
-        LS_BTP_WARAI,
-        LS_BTP_LS_DEMOLOOK,
-        LS_BTP_LS_DEMOWAIT
+        dRes_ID_LS_BTP_FUAN_e,
+        dRes_ID_LS_BTP_MABA_e,
+        dRes_ID_LS_BTP_FUAN02_e,
+        dRes_ID_LS_BTP_KIZUKU_e,
+        dRes_ID_LS_BTP_LS_GET_e,
+        dRes_ID_LS_BTP_NGWARAI_e,
+        dRes_ID_LS_BTP_NOZOKU_e,
+        dRes_ID_LS_BTP_OKORI_e,
+        dRes_ID_LS_BTP_WARAI_e,
+        dRes_ID_LS_BTP_LS_DEMOLOOK_e,
+        dRes_ID_LS_BTP_LS_DEMOWAIT_e
     };
     return a_resID_tbl[i_btpResIDIndex];
 }
@@ -440,9 +440,9 @@ int daNpc_Ls1_c::btpResID(int i_btpResIDIndex) {
 /* 00000F18-00000F2C       .text btkResID__11daNpc_Ls1_cFi */
 int daNpc_Ls1_c::btkResID(int i_btkResIDIndex) {
     static const int a_resID_tbl[] = {
-        LS_BTK_LS,
-        LS_BTK_LS_DEMOLOOK,
-        LS_BTK_LS_DEMOWAIT
+        dRes_ID_LS_BTK_LS_e,
+        dRes_ID_LS_BTK_LS_DEMOLOOK_e,
+        dRes_ID_LS_BTK_LS_DEMOWAIT_e
     };
     return a_resID_tbl[i_btkResIDIndex];
 }
@@ -2244,7 +2244,7 @@ daNpc_Ls1_c::daNpc_Ls1_c() {}
 
 /* 00004C98-00005250       .text bodyCreateHeap__11daNpc_Ls1_cFv */
 BOOL daNpc_Ls1_c::bodyCreateHeap() {
-    J3DModelData* a_mdl_dat = (J3DModelData*) dComIfG_getObjectIDRes(mArcName, LS_BDL_LS);
+    J3DModelData* a_mdl_dat = (J3DModelData*) dComIfG_getObjectIDRes(mArcName, dRes_ID_LS_BDL_LS_e);
     JUT_ASSERT(DEMO_SELECT(0xBB3, 0xBC9), a_mdl_dat != NULL);
 
     for (u16 i = 0; i < a_mdl_dat->getMaterialNum(); i++) {
@@ -2271,7 +2271,7 @@ BOOL daNpc_Ls1_c::bodyCreateHeap() {
     }
 
     if (mType == 4 || dComIfGs_getClearCount() != 0) {
-        ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectIDRes(mArcName, LS_BTI_LSBODY02);
+        ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectIDRes(mArcName, dRes_ID_LS_BTI_LSBODY02_e);
         
         J3DTexture* a_texture = a_mdl_dat->getTexture();
         JUT_ASSERT(DEMO_SELECT(0xBD1, 0xBE7), a_texture != NULL);
@@ -2316,7 +2316,7 @@ BOOL daNpc_Ls1_c::bodyCreateHeap() {
 /* 00005250-00005428       .text handCreateHeap__11daNpc_Ls1_cFv */
 BOOL daNpc_Ls1_c::handCreateHeap() {
     mpLsHandModel = NULL;
-    J3DModelData* a_mdl_dat = (J3DModelData*) dComIfG_getObjectIDRes(mArcName, LS_BDL_LSHAND);
+    J3DModelData* a_mdl_dat = (J3DModelData*) dComIfG_getObjectIDRes(mArcName, dRes_ID_LS_BDL_LSHAND_e);
     JUT_ASSERT(DEMO_SELECT(0xC09, 0xC1F), a_mdl_dat != NULL);
     mpLsHandModel = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
 
@@ -2342,9 +2342,9 @@ BOOL daNpc_Ls1_c::itemCreateHeap() {
 
     J3DModelData* a_mdl_dat = (J3DModelData *) 
 #if VERSION > VERSION_DEMO
-        dComIfG_getObjectRes("Link", LINK_BDL_TELESCOPE);
+    dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_TELESCOPE_e);
 #else
-        dComIfG_getObjectIDRes("Link", LINK_BDL_TELESCOPE);
+    dComIfG_getObjectIDRes("Link", dRes_ID_LINK_BDL_TELESCOPE_e);
 #endif
 
     JUT_ASSERT(DEMO_SELECT(0xC2D, 0xC43), a_mdl_dat != NULL);

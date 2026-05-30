@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_lamp.h"
-#include "d/res/res_lamp.h"
+#include "res/Object/Lamp.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -123,7 +123,7 @@ static BOOL daLamp_Delete(lamp_class* i_this) {
 
 /* 00000678-0000073C       .text useHeapInit__FP10lamp_class */
 static BOOL useHeapInit(lamp_class* i_this) {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Lamp", LAMP_BMD_LAMP_00));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Lamp", dRes_INDEX_LAMP_BMD_LAMP_00_e));
     JUT_ASSERT(0x170, modelData != NULL);
 
     i_this->mModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);

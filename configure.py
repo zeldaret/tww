@@ -179,6 +179,7 @@ config.asflags = [
     "--strip-local-absolute",
     "-I include",
     f"-I build/{config.version}/include",
+    f"-I assets/{config.version}",
     f"--defsym version={version_num}",
 ]
 config.ldflags = [
@@ -227,6 +228,7 @@ cflags_base = [
     "-multibyte",  # For Wii compilers, replace with `-enc SJIS`
     "-i include",
     f"-i build/{config.version}/include",
+    f"-i assets/{config.version}",
     "-i src",
     "-i src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Include",
     "-i src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Include",

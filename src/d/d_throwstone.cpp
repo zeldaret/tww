@@ -5,7 +5,7 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_throwstone.h"
-#include "d/res/res_aisi.h"
+#include "res/Object/Aisi.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
@@ -22,7 +22,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 8023B564-8023B5DC       .text CreateHeap__14daThrowstone_cFv */
 BOOL daThrowstone_c::CreateHeap() {
-    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, AISI_INDEX_BDL_AISI);
+    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_AISI_BDL_AISI_e);
     if (pModelData == NULL)
         return FALSE;
 

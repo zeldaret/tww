@@ -6,15 +6,15 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_shutter2.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_htobi3.h"
+#include "res/Object/Htobi3.h"
 
 const float daShutter2_c::m_max_speed[1] = {3.0f};
 const float daShutter2_c::m_min_speed[1] = {1.0f};
 const float daShutter2_c::m_move_len[1] = {350.0f};
 const float daShutter2_c::m_width[1] = {500.0f};
 const float daShutter2_c::m_height[1] = {400.0f};
-const s16 daShutter2_c::m_bdlidx[1] = {HTOBI3_BDL_HTOBI3};
-const s16 daShutter2_c::m_dzbidx[1] = {HTOBI3_DZB_HTOBI3};
+const s16 daShutter2_c::m_bdlidx[1] = {dRes_INDEX_HTOBI3_BDL_HTOBI3_e};
+const s16 daShutter2_c::m_dzbidx[1] = {dRes_INDEX_HTOBI3_DZB_HTOBI3_e};
 const s32 daShutter2_c::m_heapsize[1] = {0x0C00};
 const Vec daShutter2_c::m_cull_min[1] = {{-300.0f, -10.0f, -40.0f}};
 const Vec daShutter2_c::m_cull_max[1] = {{300.0f, 400.0f, 40.0f}};

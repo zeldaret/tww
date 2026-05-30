@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_iceisland.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_gicel.h"
+#include "res/Object/GiceL.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -18,19 +18,19 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daObjIceisland_c::CreateHeap() {
     mDoExt_getGameHeap()->check();
     
-    J3DModelData* model_data = (J3DModelData*)(dComIfG_getObjectRes("GiceL", GICEL_BDL_GICEL00));
+    J3DModelData* model_data = (J3DModelData*)(dComIfG_getObjectRes("GiceL", dRes_INDEX_GICEL_BDL_GICEL00_e));
     JUT_ASSERT(0x66, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
 
-    J3DAnmTextureSRTKey* btk1 = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("GiceL", GICEL_BTK_GICEL00_01));
+    J3DAnmTextureSRTKey* btk1 = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("GiceL", dRes_INDEX_GICEL_BTK_GICEL00_01_e));
     JUT_ASSERT(0x6D, btk1 != NULL);
     int result1 = mBtkAnm1.init(model_data, btk1, true, J3DFrameCtrl::EMode_LOOP);
 
-    J3DAnmTextureSRTKey* btk2 = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("GiceL", GICEL_BTK_GICEL00_02));
+    J3DAnmTextureSRTKey* btk2 = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("GiceL", dRes_INDEX_GICEL_BTK_GICEL00_02_e));
     JUT_ASSERT(0x73, btk2 != NULL);
     int result2 = mBtkAnm2.init(model_data, btk2, true, J3DFrameCtrl::EMode_LOOP);
 
-    J3DAnmTevRegKey * brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("GiceL", GICEL_BRK_GICEL00));
+    J3DAnmTevRegKey * brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("GiceL", dRes_INDEX_GICEL_BRK_GICEL00_e));
     JUT_ASSERT(0x7A, brk != NULL);
     int result3 = mBrkAnm.init(model_data, brk, true, J3DFrameCtrl::EMode_NONE);
     return((mpModel != NULL) && (result1 != 0) && (result2 != 0) && (result3 != 0));  

@@ -16,7 +16,7 @@
 #include "d/d_s_play.h"
 #include "d/d_material.h"
 #include "d/d_snap.h"
-#include "d/res/res_mo2.h"
+#include "res/Object/Mo2.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 
@@ -70,39 +70,39 @@ struct attack_info_s {
 };
 
 static attack_info_s Atsuki_info[] = {
-    {MO2_BCK_ATSUKI01, 1.0f, MO2_BAS_ATSUKI01},
-    {MO2_BCK_ATSUKI02, 1.0f, MO2_BAS_ATSUKI02},
-    {MO2_BCK_ATSUKI03, 1.0f, MO2_BAS_ATSUKI03},
+    {dRes_INDEX_MO2_BCK_ATSUKI01_e, 1.0f, dRes_INDEX_MO2_BAS_ATSUKI01_e},
+    {dRes_INDEX_MO2_BCK_ATSUKI02_e, 1.0f, dRes_INDEX_MO2_BAS_ATSUKI02_e},
+    {dRes_INDEX_MO2_BCK_ATSUKI03_e, 1.0f, dRes_INDEX_MO2_BAS_ATSUKI03_e},
 };
 
 static attack_info_s Atate_info[] = {
-    {MO2_BCK_ATATE01, 1.0f, MO2_BAS_ATATE01},
-    {MO2_BCK_ATATE02, 1.0f, MO2_BAS_ATATE02},
-    {MO2_BCK_ATATE03, 1.0f, MO2_BAS_ATATE03},
+    {dRes_INDEX_MO2_BCK_ATATE01_e, 1.0f, dRes_INDEX_MO2_BAS_ATATE01_e},
+    {dRes_INDEX_MO2_BCK_ATATE02_e, 1.0f, dRes_INDEX_MO2_BAS_ATATE02_e},
+    {dRes_INDEX_MO2_BCK_ATATE03_e, 1.0f, dRes_INDEX_MO2_BAS_ATATE03_e},
 };
 
 static attack_info_s Akaiten_info[] = {
-    {MO2_BCK_AKAITEN01, 1.0f, MO2_BAS_AKAITEN01},
-    {MO2_BCK_AKAITEN02, 1.0f, MO2_BAS_AKAITEN02},
-    {MO2_BCK_AKAITEN03, 1.0f, MO2_BAS_AKAITEN03},
+    {dRes_INDEX_MO2_BCK_AKAITEN01_e, 1.0f, dRes_INDEX_MO2_BAS_AKAITEN01_e},
+    {dRes_INDEX_MO2_BCK_AKAITEN02_e, 1.0f, dRes_INDEX_MO2_BAS_AKAITEN02_e},
+    {dRes_INDEX_MO2_BCK_AKAITEN03_e, 1.0f, dRes_INDEX_MO2_BAS_AKAITEN03_e},
 };
 
 static attack_info_s Ahazushi_info[] = {
-    {MO2_BCK_AHAZUSHI01, 1.0f, MO2_BAS_AHAZUSHI01},
-    {MO2_BCK_AHAZUSHI02, 1.0f, MO2_BAS_AHAZUSHI02},
-    {MO2_BCK_AHAZUSHI03, 1.0f, MO2_BAS_AHAZUSHI03},
+    {dRes_INDEX_MO2_BCK_AHAZUSHI01_e, 1.0f, dRes_INDEX_MO2_BAS_AHAZUSHI01_e},
+    {dRes_INDEX_MO2_BCK_AHAZUSHI02_e, 1.0f, dRes_INDEX_MO2_BAS_AHAZUSHI02_e},
+    {dRes_INDEX_MO2_BCK_AHAZUSHI03_e, 1.0f, dRes_INDEX_MO2_BAS_AHAZUSHI03_e},
 };
 
 static attack_info_s Najab_info[] = {
-    {MO2_BCK_NAJAB, 1.0f, MO2_BAS_NAJAB},
-    {MO2_BCK_NAJAB, 1.0f, MO2_BAS_NAJAB},
-    {MO2_BCK_NAJAB, 1.0f, MO2_BAS_NAJAB},
+    {dRes_INDEX_MO2_BCK_NAJAB_e, 1.0f, dRes_INDEX_MO2_BAS_NAJAB_e},
+    {dRes_INDEX_MO2_BCK_NAJAB_e, 1.0f, dRes_INDEX_MO2_BAS_NAJAB_e},
+    {dRes_INDEX_MO2_BCK_NAJAB_e, 1.0f, dRes_INDEX_MO2_BAS_NAJAB_e},
 };
 
 static attack_info_s Nabigpunch_info[] = {
-    {MO2_BCK_NABIGPUNCH01, 1.0f, MO2_BAS_NABIGPUNCH01},
-    {MO2_BCK_NABIGPUNCH02, 1.0f, MO2_BAS_NABIGPUNCH02},
-    {MO2_BCK_NABIGPUNCH03, 1.0f, MO2_BAS_NABIGPUNCH03},
+    {dRes_INDEX_MO2_BCK_NABIGPUNCH01_e, 1.0f, dRes_INDEX_MO2_BAS_NABIGPUNCH01_e},
+    {dRes_INDEX_MO2_BCK_NABIGPUNCH02_e, 1.0f, dRes_INDEX_MO2_BAS_NABIGPUNCH02_e},
+    {dRes_INDEX_MO2_BCK_NABIGPUNCH03_e, 1.0f, dRes_INDEX_MO2_BAS_NABIGPUNCH03_e},
 };
 
 static attack_info_s* attack_info[] = {
@@ -1064,18 +1064,18 @@ static s32 daMo2_player_way_check(mo2_class* i_this) {
 static void wait_set(mo2_class* i_this) {
     if (i_this->mbHasInnateWeapon != 0 || i_this->m2943 != 0) {
         if (i_this->mMode == 1) {
-            anm_init(i_this, MO2_BCK_KWAIT, 15.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_KWAIT);
+            anm_init(i_this, dRes_INDEX_MO2_BCK_KWAIT_e, 15.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_KWAIT_e);
             i_this->m05A4[1] = cM_rndF(100.0f) + 100.0f;
             return;
         }
-        anm_init(i_this, MO2_BCK_WAIT, 15.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_WAIT);
+        anm_init(i_this, dRes_INDEX_MO2_BCK_WAIT_e, 15.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_WAIT_e);
         i_this->m05A4[1] = cM_rndF(60.0f) + 40.0f;
         return;
     }
     if (i_this->mDamageReaction.mAction >= ACTION_FIGHT_RUN) {
-        anm_init(i_this, MO2_BCK_NBWAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_NBWAIT);
+        anm_init(i_this, dRes_INDEX_MO2_BCK_NBWAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_NBWAIT_e);
     } else {
-        anm_init(i_this, MO2_BCK_SKYORO, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_SKYORO);
+        anm_init(i_this, dRes_INDEX_MO2_BCK_SKYORO_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_SKYORO_e);
     }
     i_this->m05A4[1] = cM_rndF(30.0f) + 50.0f;
 }
@@ -1084,25 +1084,25 @@ static void wait_set(mo2_class* i_this) {
 static void walk_set(mo2_class* i_this) {
     if (i_this->mbHasInnateWeapon != 0) {
         if (i_this->mMode == 1) {
-            anm_init(i_this, MO2_BCK_KWALK, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_KWALK);
+            anm_init(i_this, dRes_INDEX_MO2_BCK_KWALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_KWALK_e);
             return;
         }
-        anm_init(i_this, MO2_BCK_WALK, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_WALK);
+        anm_init(i_this, dRes_INDEX_MO2_BCK_WALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_WALK_e);
         return;
     }
     if (i_this->m2943 == 0) {
-        anm_init(i_this, MO2_BCK_NWALK, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_NWALK);
+        anm_init(i_this, dRes_INDEX_MO2_BCK_NWALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_NWALK_e);
     } else {
-        anm_init(i_this, MO2_BCK_NYWALK, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_NYWALK);
+        anm_init(i_this, dRes_INDEX_MO2_BCK_NYWALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_NYWALK_e);
     }
 }
 
 /* 0000410C-00004170       .text fight_run_set__FP9mo2_class */
 static void fight_run_set(mo2_class* i_this) {
     if (i_this->mbHasInnateWeapon != 0) {
-        anm_init(i_this, MO2_BCK_WALK, 10.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, MO2_BAS_WALK);
+        anm_init(i_this, dRes_INDEX_MO2_BCK_WALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, dRes_INDEX_MO2_BAS_WALK_e);
     } else {
-        anm_init(i_this, MO2_BCK_SWALK, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_SWALK);
+        anm_init(i_this, dRes_INDEX_MO2_BCK_SWALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_SWALK_e);
     }
 }
 
@@ -1416,7 +1416,7 @@ static void jyunkai(mo2_class* i_this) {
                         if (point->mArg3 == 7 || point->mArg3 == 8) {
                             i_this->mDamageReaction.mMode = 4;
                             i_this->m05A4[1] = cM_rndF(100.0f) + 100.0f;
-                            anm_init(i_this, MO2_BCK_KKEIKAI, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_KKEIKAI);
+                            anm_init(i_this, dRes_INDEX_MO2_BCK_KKEIKAI_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_KKEIKAI_e);
                             if (point->mArg3 == 7) {
                                 i_this->mDamageReaction.m4D0 += -0x4000;
                             } else {
@@ -1541,7 +1541,7 @@ static void fight_run(mo2_class* i_this) {
             if (daMo2_player_way_check(i_this)) {
                 if (i_this->m2964 > 0x14) {
                     i_this->m2964 = 0;
-                    anm_init(i_this, MO2_BCK_GAKEDEMO, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                    anm_init(i_this, dRes_INDEX_MO2_BCK_GAKEDEMO_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                     i_this->m05B0 = cM_rndF(10.0f) + 15.0f;
                 }
                 if (i_this->m05B0 == 1) {
@@ -1555,7 +1555,7 @@ static void fight_run(mo2_class* i_this) {
             } else {
                 if (i_this->m2964 == 0 && i_this->mbHasInnateWeapon != 0) {
                     i_this->m2964 = 1;
-                    anm_init(i_this, MO2_BCK_DASH, 5.0f, J3DFrameCtrl::EMode_LOOP, l_mo2HIO.m070, MO2_BAS_DASH);
+                    anm_init(i_this, dRes_INDEX_MO2_BCK_DASH_e, 5.0f, J3DFrameCtrl::EMode_LOOP, l_mo2HIO.m070, dRes_INDEX_MO2_BAS_DASH_e);
                 }
                 if (i_this->m2964 != 0) {
                     i_this->m2964 = i_this->m2964 + 1;
@@ -1576,9 +1576,9 @@ static void fight_run(mo2_class* i_this) {
             } else {
                 if (std::fabsf(dVar9) > 0.1f) {
                     if (i_this->mbHasInnateWeapon != 0 || i_this->m2943 != 0) {
-                        anm_init(i_this, MO2_BCK_BWALKLR, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_BWALKLR);
+                        anm_init(i_this, dRes_INDEX_MO2_BCK_BWALKLR_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_BWALKLR_e);
                     } else {
-                        anm_init(i_this, MO2_BCK_NBWALKLR, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_NBWALKLR);
+                        anm_init(i_this, dRes_INDEX_MO2_BCK_NBWALKLR_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_NBWALKLR_e);
                     }
                     if (dVar9 > 0.0f) {
                         i_this->mDamageReaction.mMode = 5;
@@ -1588,16 +1588,16 @@ static void fight_run(mo2_class* i_this) {
                 } else {
                     if (i_this->m05C0 < l_mo2HIO.m034) {
                         if (i_this->mbHasInnateWeapon != 0 || i_this->m2943 != 0) {
-                            anm_init(i_this, MO2_BCK_BWALKFB, 10.0f, J3DFrameCtrl::EMode_LOOP, -1.0f, MO2_BAS_BWALKFB);
+                            anm_init(i_this, dRes_INDEX_MO2_BCK_BWALKFB_e, 10.0f, J3DFrameCtrl::EMode_LOOP, -1.0f, dRes_INDEX_MO2_BAS_BWALKFB_e);
                         } else {
-                            anm_init(i_this, MO2_BCK_NBWALKFB, 10.0f, J3DFrameCtrl::EMode_LOOP, -1.0f, MO2_BAS_NBWALKFB);
+                            anm_init(i_this, dRes_INDEX_MO2_BCK_NBWALKFB_e, 10.0f, J3DFrameCtrl::EMode_LOOP, -1.0f, dRes_INDEX_MO2_BAS_NBWALKFB_e);
                         }
                         i_this->mDamageReaction.mMode = 4;
                     } else {
                         if (i_this->mbHasInnateWeapon != 0 || i_this->m2943 != 0) {
-                            anm_init(i_this, MO2_BCK_BWALKFB, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_BWALKFB);
+                            anm_init(i_this, dRes_INDEX_MO2_BCK_BWALKFB_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_BWALKFB_e);
                         } else {
-                            anm_init(i_this, MO2_BCK_NBWALKFB, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_NBWALKFB);
+                            anm_init(i_this, dRes_INDEX_MO2_BCK_NBWALKFB_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_NBWALKFB_e);
                         }
                         i_this->mDamageReaction.mMode = 3;
                     }
@@ -1620,9 +1620,9 @@ static void fight_run(mo2_class* i_this) {
             } else {
                 i_this->mDamageReaction.mMode = 3;
                 if (i_this->mbHasInnateWeapon != 0 || i_this->m2943 != 0) {
-                    anm_init(i_this, MO2_BCK_BWALKFB, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_BWALKFB);
+                    anm_init(i_this, dRes_INDEX_MO2_BCK_BWALKFB_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_BWALKFB_e);
                 } else {
-                    anm_init(i_this, MO2_BCK_NBWALKFB, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_NBWALKFB);
+                    anm_init(i_this, dRes_INDEX_MO2_BCK_NBWALKFB_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_NBWALKFB_e);
                 }
             }
             break;
@@ -2029,7 +2029,7 @@ static void nage(mo2_class* i_this) {
             {
                 i_this->m05A4[1] = l_mo2HIO.m00A + l_mo2HIO.m00C;
                 i_this->m05A4[2] = l_mo2HIO.m00C;
-                anm_init(i_this, MO2_BCK_KKEIKAI, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_KKEIKAI);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_KKEIKAI_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_KKEIKAI_e);
                 i_this->mDamageReaction.mMode = -9;
                 i_this->mDamageReaction.m713 = 0;
                 i_this->m05A4[0] = REG0_S(7) + 0xf;
@@ -2062,7 +2062,7 @@ static void nage(mo2_class* i_this) {
             maxSpeed = 0;
             if (i_this->m05A4[1] == 0) {
                 i_this->mDamageReaction.mMode = 1;
-                anm_init(i_this, MO2_BCK_KWALK, 10.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, MO2_BAS_KWALK);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_KWALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, dRes_INDEX_MO2_BAS_KWALK_e);
             }
             actor->speedF = 0.0f;
             break;
@@ -2070,7 +2070,7 @@ static void nage(mo2_class* i_this) {
             cLib_addCalc2(&actor->speedF, l_mo2HIO.m058, 1.0f, 20.0f);
             if (i_this->m05C0 < l_mo2HIO.m030) {
                 i_this->mDamageReaction.mMode = 2;
-                anm_init(i_this, MO2_BCK_KNAGE, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_KNAGE);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_KNAGE_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_KNAGE_e);
             }
             break;
         case 2:
@@ -2112,7 +2112,7 @@ static void p_lost(mo2_class* i_this) {
     switch (i_this->mDamageReaction.mMode) {
         case -10:
             if (i_this->mDamageReaction.m470 < 200.0f) {
-                anm_init(i_this, MO2_BCK_UKYADEMO, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_UKYADEMO_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->mDamageReaction.mMode = -9;
                 tex_anm_set(i_this, 4);
                 i_this->m05A4[1] = 0x23;
@@ -2131,7 +2131,7 @@ static void p_lost(mo2_class* i_this) {
         case 0:
             i_this->mDamageReaction.mMode = 1;
             tex_anm_set(i_this, 4);
-            anm_init(i_this, MO2_BCK_BKYORO, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_BKYORO);
+            anm_init(i_this, dRes_INDEX_MO2_BCK_BKYORO_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_BKYORO_e);
             break;
         case 1:
             actor->speedF = 0.0f;
@@ -2172,7 +2172,7 @@ static void b_nige(mo2_class* i_this) {
         switch (i_this->mDamageReaction.mMode) {
             case 0:
                 i_this->mDamageReaction.mMode = 1;
-                anm_init(i_this, MO2_BCK_SHAKKEN, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_SHAKKEN);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_SHAKKEN_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_SHAKKEN_e);
                 i_this->m05A4[1] = 0x14;
             // Fall-through
             case 1:
@@ -2180,7 +2180,7 @@ static void b_nige(mo2_class* i_this) {
                 cLib_addCalcAngleS2(&actor->current.angle.y, i_this->mDamageReaction.m4D0 + 0x8000, 2, 0x3000);
                 if (i_this->m05A4[1] == 0) {
                     i_this->mDamageReaction.mMode = 2;
-                    anm_init(i_this, MO2_BCK_NWALK, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_NWALK);
+                    anm_init(i_this, dRes_INDEX_MO2_BCK_NWALK_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_NWALK_e);
                 }
                 break;
             case 2:
@@ -2190,7 +2190,7 @@ static void b_nige(mo2_class* i_this) {
                 cLib_addCalcAngleS2(&actor->current.angle.y, i_this->mDamageReaction.m4D0, 4, 0x1000);
                 if (std::sqrtf(SQUARE(local_10.x) + SQUARE(local_10.z)) > 800.0f) {
                     i_this->mDamageReaction.mMode = 3;
-                    anm_init(i_this, MO2_BCK_NBWAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_NBWAIT);
+                    anm_init(i_this, dRes_INDEX_MO2_BCK_NBWAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_NBWAIT_e);
                 }
                 break;
             case 3:
@@ -2216,7 +2216,7 @@ static void defence(mo2_class* i_this) {
     switch (i_this->mDamageReaction.mMode) {
         case 0:
             i_this->mDamageReaction.mMode = 1;
-            anm_init(i_this, MO2_BCK_BWALKFB, 5.0f, J3DFrameCtrl::EMode_NONE, -1.0f, MO2_BAS_BWALKFB);
+            anm_init(i_this, dRes_INDEX_MO2_BCK_BWALKFB_e, 5.0f, J3DFrameCtrl::EMode_NONE, -1.0f, dRes_INDEX_MO2_BAS_BWALKFB_e);
             i_this->m05A4[1] = REG6_S(3) + 0x1e;
             tex_anm_set(i_this, 4);
             actor->speedF = -20.0f;
@@ -2246,7 +2246,7 @@ static void oshi(mo2_class* i_this) {
     switch (i_this->mDamageReaction.mMode) {
         case 0:
             i_this->mDamageReaction.mMode = 1;
-            anm_init(i_this, MO2_BCK_ADOTSUKI, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_ADOTSUKI);
+            anm_init(i_this, dRes_INDEX_MO2_BCK_ADOTSUKI_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_ADOTSUKI_e);
             tex_anm_set(i_this, 4);
             actor->speedF = 0.0f;
             // Fall-through
@@ -2277,11 +2277,11 @@ static void hukki(mo2_class* i_this) {
     i_this->m05B4 = 2;
     switch (i_this->mDamageReaction.mMode) {
         case 10:
-            anm_init(i_this, MO2_BCK_OKIRUA, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_OKIRUA);
+            anm_init(i_this, dRes_INDEX_MO2_BCK_OKIRUA_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_OKIRUA_e);
             i_this->m05A4[2] = 0xF;
             goto LAB_806ae194;
         case 12:
-            anm_init(i_this, MO2_BCK_OKIRUU, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_OKIRUU);
+            anm_init(i_this, dRes_INDEX_MO2_BCK_OKIRUU_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_OKIRUU_e);
             i_this->m05A4[2] = REG0_S(5) + 0xF;
         LAB_806ae194:
             tex_anm_set(i_this, 5);
@@ -2432,7 +2432,7 @@ static void yogan_fail(mo2_class* i_this) {
     actor->speedF = 0.0f;
     switch (i_this->mDamageReaction.mMode) {
         case 0:
-            anm_init(i_this, MO2_BCK_AWATEDEMO, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_MO2_BCK_AWATEDEMO_e, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->mDamageReaction.mMode = 1;
             actor->speed.y = REG0_F(0x13) + 190.0f;
             fopAcM_monsSeStart(actor, JA_SE_CV_MO_ALERT, 0);
@@ -2485,7 +2485,7 @@ static void wepon_search(mo2_class* i_this) {
         case -1:
             i_this->mDamageReaction.mMode = 0;
             i_this->m2943 = 0;
-            anm_init(i_this, MO2_BCK_SHAKKEN, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_SHAKKEN);
+            anm_init(i_this, dRes_INDEX_MO2_BCK_SHAKKEN_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_SHAKKEN_e);
             if (dVar9 < 900.0f) {
                 i_this->m05A4[1] = 0x14;
             } else {
@@ -2502,7 +2502,7 @@ static void wepon_search(mo2_class* i_this) {
                 if (i_this->mpMorf->isStop() || i_this->m05A4[1] == 0) {
                     i_this->mDamageReaction.mMode = 1;
                     i_this->m05AE = l_mo2HIO.m08A;
-                    anm_init(i_this, MO2_BCK_SWALK, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_SWALK);
+                    anm_init(i_this, dRes_INDEX_MO2_BCK_SWALK_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_SWALK_e);
                 }
             }
             break;
@@ -2512,14 +2512,14 @@ static void wepon_search(mo2_class* i_this) {
             i_this->m05F2 = 4;
             cLib_addCalcAngleS2(&actor->current.angle.y, i_this->mDamageReaction.m4D0, 4, 0x1000);
             if (ground_4_check(i_this, 1, actor->current.angle.y, 300.0f)) {
-                anm_init(i_this, MO2_BCK_GAKEDEMO, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_GAKEDEMO_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->mDamageReaction.mMode = 3;
                 i_this->m05A4[1] = 0x1e;
                 i_this->m2943 = 1;
             } else {
                 if (dVar9 < 300.0f) {
                     i_this->mDamageReaction.mMode = 2;
-                    anm_init(i_this, MO2_BCK_SCATCH, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_SCATCH);
+                    anm_init(i_this, dRes_INDEX_MO2_BCK_SCATCH_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_SCATCH_e);
                     i_this->m05A4[1] = 0x1d;
                 } else {
                     if (i_this->m05AE == 0 || i_this->mDamageReaction.mAcch.ChkWallHit()) {
@@ -2607,7 +2607,7 @@ static void hip_damage(mo2_class* i_this) {
     switch (i_this->mDamageReaction.mMode) {
         case 0:
             i_this->mDamageReaction.mMode = 1;
-            anm_init(i_this, MO2_BCK_HIPDMG01, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_HIPDMG01);
+            anm_init(i_this, dRes_INDEX_MO2_BCK_HIPDMG01_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_HIPDMG01_e);
             actor->speedF = REG6_F(0) + 100.0f;
             i_this->m05A4[0] = 0xF;
             i_this->m05F0 = l_mo2HIO.m024 + 3;
@@ -2617,7 +2617,7 @@ static void hip_damage(mo2_class* i_this) {
             cLib_addCalc2(&actor->speedF, 0.0f, 1.0f, REG6_F(1) + 10.0f);
             if (i_this->m05A4[0] == 0) {
                 i_this->mDamageReaction.mMode = 2;
-                anm_init(i_this, MO2_BCK_HIPDMG02, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_HIPDMG02);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_HIPDMG02_e, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_HIPDMG02_e);
                 i_this->m05A4[0] = 0x3c;
                 i_this->mDamageReaction.m4D0 = actor->current.angle.y + 0x8000;
             }
@@ -2649,7 +2649,7 @@ static void d_mahi(mo2_class* i_this) {
     switch (i_this->mDamageReaction.mMode) {
         case 0:
             i_this->mDamageReaction.mMode = 1;
-            anm_init(i_this, MO2_BCK_KOKERUF, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_KOKERUF);
+            anm_init(i_this, dRes_INDEX_MO2_BCK_KOKERUF_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_KOKERUF_e);
             i_this->m05A4[0] = 100;
             // Fall-through
         case 1:
@@ -2679,7 +2679,7 @@ static void d_sit(mo2_class* i_this) {
     switch (i_this->mDamageReaction.mMode) {
         case 0:
             i_this->mDamageReaction.mMode = 1;
-            anm_init(i_this, MO2_BCK_KOKERUF, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_KOKERUF);
+            anm_init(i_this, dRes_INDEX_MO2_BCK_KOKERUF_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_KOKERUF_e);
             i_this->m05A4[0] = 0x32;
             // Fall-through
         case 1:
@@ -2706,10 +2706,10 @@ static void d_dozou(mo2_class* i_this) {
             i_this->mDamageReaction.mMode = 1;
             i_this->mDamageReaction.mStts.Init(0xFF, 0xFF, actor);
             if (i_this->mFrozenInTimePose == 0) {
-                anm_init(i_this, MO2_BCK_TACKLEDEMO, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, -1);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_TACKLEDEMO_e, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, -1);
                 i_this->mpMorf->setFrame(3.0f);
             } else {
-                anm_init(i_this, MO2_BCK_WALK, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, MO2_BAS_WALK);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_WALK_e, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, dRes_INDEX_MO2_BAS_WALK_e);
                 i_this->mpMorf->setFrame(37.0f);
             }
             // Fall-through
@@ -2750,10 +2750,10 @@ static void carry_drop(mo2_class* i_this) {
     switch (i_this->mDamageReaction.mMode) {
         case 0:
             i_this->mDamageReaction.mMode = 1;
-            anm_init(i_this, MO2_BCK_JSTART, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_JSTART);
+            anm_init(i_this, dRes_INDEX_MO2_BCK_JSTART_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_JSTART_e);
         case 1:
             if (i_this->mDamageReaction.mAcch.ChkGroundHit()) {
-                anm_init(i_this, MO2_BCK_JEND, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_JEND);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_JEND_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_JEND_e);
                 i_this->mDamageReaction.mMode = 2;
                 i_this->m05F0 = l_mo2HIO.m024 + 6;
                 i_this->m05F2 = 3;
@@ -2788,14 +2788,14 @@ static void e3_demo(mo2_class* i_this) {
     camera->mCamera.SetTrimSize(2);
     switch (i_this->mDamageReaction.mMode) {
         case 0:
-            anm_init(i_this, MO2_BCK_UKYADEMO, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_MO2_BCK_UKYADEMO_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m05A4[1] = 0x19;
             i_this->mDamageReaction.mMode = 1;
             dMeter_mtrHide();
             i_this->m2A4C = 200;
         case 1:
             if (i_this->m05A4[1] == 0) {
-                anm_init(i_this, MO2_BCK_SWALK, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_SWALK);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_SWALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_SWALK_e);
                 i_this->mDamageReaction.mMode = 2;
                 if (alerm_set == 0) {
                     mDoAud_seStart(JA_SE_MAJUTOU_ALERM);
@@ -2809,7 +2809,7 @@ static void e3_demo(mo2_class* i_this) {
             cLib_addCalc2(&actor->speedF, l_mo2HIO.m058, 1.0f, 20.0f);
             if (i_this->m05C0 < l_mo2HIO.m030 || ground_4_check(i_this, 1, actor->current.angle.y, 100.0f)) {
                 i_this->mDamageReaction.mMode = 3;
-                anm_init(i_this, MO2_BCK_KNAGE, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_KNAGE);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_KNAGE_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_KNAGE_e);
             }
             break;
         case 3:
@@ -2821,7 +2821,7 @@ static void e3_demo(mo2_class* i_this) {
                 }
                 if (i_this->mpMorf->isStop()) {
                     i_this->mDamageReaction.mMode = 4;
-                    anm_init(i_this, MO2_BCK_SWALK, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_SWALK);
+                    anm_init(i_this, dRes_INDEX_MO2_BCK_SWALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_SWALK_e);
                 }
                 break;
             }
@@ -2829,7 +2829,7 @@ static void e3_demo(mo2_class* i_this) {
             cLib_addCalc2(&actor->speedF, l_mo2HIO.m058, 1.0f, 20.0f);
             if (fopAcM_searchPlayerDistance(actor) < 250.0f || ground_4_check(i_this, 1, actor->current.angle.y, 100.0f)) {
                 i_this->mDamageReaction.mMode = 5;
-                anm_init(i_this, MO2_BCK_WAITDEMO, 15.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_WAITDEMO_e, 15.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->m05A4[1] = 0x1E;
                 mDoAud_seStop(JA_SE_MAJUTOU_ALERM, 30);
                 player->changeOriginalDemo();
@@ -3215,7 +3215,7 @@ static u8 damage_check(mo2_class* i_this) {
                 i_this->mDamageReaction.m424 |= 0x20;
                 i_this->mDamageReaction.m428 = 23.0f;
                 cMtx_YrotS(*calc_mtx, i_this->m05D6);
-                anm_init(i_this, MO2_BCK_PAOMUKE, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_PAOMUKE);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_PAOMUKE_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_PAOMUKE_e);
                 i_this->mDamageReaction.m48A = 10;
                 i_this->mDamageReaction.m474 = 5000.0f;
                 i_this->mDamageReaction.m70E = 7;
@@ -3515,14 +3515,14 @@ static BOOL daMo2_Execute(mo2_class* i_this) {
         i_this->m2954 = fpcM_ERROR_PROCESS_ID_e;
         switch (r3) {
             case 1:
-                anm_init(i_this, MO2_BCK_PAOMUKE, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_PAOMUKE);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_PAOMUKE_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_PAOMUKE_e);
                 if (i_this->mbHasInnateWeapon != 0 && (actor->health <= 0 || r23 >= 4 || cM_rndF(1.0f) < 0.5f)) {
                     i_this->mSpawnWeaponActor = 1;
                 }
                 i_this->mDamageReaction.mAction = ACTION_JYUNKAI;
                 break;
             case 2:
-                anm_init(i_this, MO2_BCK_PUTSUBUSE, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_PUTSUBUSE);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_PUTSUBUSE_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_PUTSUBUSE_e);
                 break;
             case 5:
                 if ((i_this->mMode != 1 || rouya_mode == 0) &&
@@ -3557,7 +3557,7 @@ static BOOL daMo2_Execute(mo2_class* i_this) {
                 i_this->mDamageReaction.m4C8[2] = l_mo2HIO.m088;
                 break;
             case 0x1E:
-                anm_init(i_this, MO2_BCK_PAOMUKE, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, MO2_BAS_PAOMUKE);
+                anm_init(i_this, dRes_INDEX_MO2_BCK_PAOMUKE_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_MO2_BAS_PAOMUKE_e);
                 if (i_this->mbHasInnateWeapon != 0) {
                     i_this->mSpawnWeaponActor = 1;
                 }
@@ -3847,16 +3847,16 @@ static BOOL createHeap(fopAc_ac_c* a_this) {
     mo2_class* i_this = (mo2_class*)a_this;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Mo2", MO2_BDL_MO),
+        (J3DModelData*)dComIfG_getObjectRes("Mo2", dRes_INDEX_MO2_BDL_MO_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Mo2", MO2_BCK_WAIT),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Mo2", dRes_INDEX_MO2_BCK_WAIT_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
         -1,
         1,
-        dComIfG_getObjectRes("Mo2", MO2_BAS_WAIT),
+        dComIfG_getObjectRes("Mo2", dRes_INDEX_MO2_BAS_WAIT_e),
         0x00080000,
         0x37441422
     );
@@ -3876,7 +3876,7 @@ static BOOL createHeap(fopAc_ac_c* a_this) {
         }
     }
     if (i_this->mMode != 1) {
-        i_this->m2A50 = (J3DMaterialTable*)dComIfG_getObjectRes("Mo2", MO2_BMT_MO_GREEN);
+        i_this->m2A50 = (J3DMaterialTable*)dComIfG_getObjectRes("Mo2", dRes_INDEX_MO2_BMT_MO_GREEN_e);
     }
     J3DAnmTexPattern* btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Mo2", mo2_tex_anm_idx[3]));
     JUT_ASSERT(DEMO_SELECT(8843, 8863), btp);
@@ -3884,9 +3884,9 @@ static BOOL createHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
     i_this->m3Dline.init(16, 10, 0);
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Mo2", MO2_BMD_KB);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Mo2", dRes_INDEX_MO2_BMD_KB_e);
     JUT_ASSERT(DEMO_SELECT(8881, 8901), modelData != NULL);
-    J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Mo2", MO2_BMT_MO_BLUR);
+    J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Mo2", dRes_INDEX_MO2_BMT_MO_BLUR_e);
     modelData->setMaterialTable(bmt, J3DMatCopyFlag_Material);
     i_this->m058C = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (i_this->m058C == NULL) {
@@ -4153,7 +4153,7 @@ static cPhs_State daMo2_Create(fopAc_ac_c* a_this) {
         a_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
     }
     if (i_this->mMode == 5) {
-        anm_init(i_this, MO2_BCK_BB_FLY, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, MO2_BAS_BB_FLY);
+        anm_init(i_this, dRes_INDEX_MO2_BCK_BB_FLY_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_MO2_BAS_BB_FLY_e);
         i_this->mDamageReaction.mAction = ACTION_CARRY;
         i_this->mDamageReaction.mMaxFallDistance = 100000.0f;
     }

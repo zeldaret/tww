@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_shand.h"
-#include "d/res/res_shand.h"
+#include "res/Object/Shand.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_cc_uty.h"
@@ -393,9 +393,9 @@ static BOOL daShand_Delete(shand_class* i_this) {
 static BOOL useHeapInit(shand_class* i_this) {
     int bti_idx;
     if ((fopAcM_GetParam(i_this) & 0xff) == 53) {
-        bti_idx = SHAND_BTI_VHLIF_VINE;
+        bti_idx = dRes_INDEX_SHAND_BTI_VHLIF_VINE_e;
     } else {
-        bti_idx = SHAND_BTI_SHAND;
+        bti_idx = dRes_INDEX_SHAND_BTI_SHAND_e;
     }
     ResTIMG* img = static_cast<ResTIMG*>(dComIfG_getObjectRes("Shand", bti_idx));
     

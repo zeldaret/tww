@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_swhammer.h"
-#include "d/res/res_mhmrsw.h"
+#include "res/Object/MhmrSW.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 
@@ -113,7 +113,7 @@ daObjSwhammer::Act_c::Act_c() {
 
 /* 000004B0-0000058C       .text CreateHeap__Q213daObjSwhammer5Act_cFv */
 BOOL daObjSwhammer::Act_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, MHMRSW_BDL_MHMRSW));
+    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_MHMRSW_BDL_MHMRSW_e));
     JUT_ASSERT(0x18b, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel) {
@@ -170,7 +170,7 @@ cPhs_State daObjSwhammer::Act_c::_create() {
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, MHMRSW_DZB_MHMRSW, NULL, 0xa80);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MHMRSW_DZB_MHMRSW_e, NULL, 0xa80);
         JUT_ASSERT(0x1e9, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;

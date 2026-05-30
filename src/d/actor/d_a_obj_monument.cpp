@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_monument.h"
-#include "d/res/res_esekh.h"
+#include "res/Object/Esekh.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
@@ -16,8 +16,8 @@
 namespace daObjMonument {
     namespace {
         static Attr_c L_attr[] = {
-            { ESEKH_BDL_ESEKH,  ESEKH_DZB_ESEKH },
-            { ESEKH_BDL_ESEKH2, ESEKH_DZB_ESEKH2 },
+            { dRes_INDEX_ESEKH_BDL_ESEKH_e,  dRes_INDEX_ESEKH_DZB_ESEKH_e },
+            { dRes_INDEX_ESEKH_BDL_ESEKH2_e, dRes_INDEX_ESEKH_DZB_ESEKH2_e },
         };
 
         inline const Attr_c & attr(Type_e type) { return L_attr[type]; }

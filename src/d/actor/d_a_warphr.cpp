@@ -7,7 +7,7 @@
 #include "d/actor/d_a_warphr.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_ship.h"
-#include "d/res/res_ghrwp.h"
+#include "res/Object/Ghrwp.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_graphic.h"
@@ -19,8 +19,8 @@ static inline u8 getType(daWarphr_c* i_this) {
 } // namespace daWarphr_prm
 
 const char daWarphr_c::m_arcname[] = "Ghrwp";
-const s16 daWarphr_c::m_residxA[] = {GHRWP_BDL_GHRWPA00, GHRWP_BTK_GHRWPA00, -1};
-const s16 daWarphr_c::m_residxB[] = {GHRWP_BDL_GHRWPB00, GHRWP_BTK_GHRWPB00, GHRWP_BRK_GHRWPB00};
+const s16 daWarphr_c::m_residxA[] = {dRes_INDEX_GHRWP_BDL_GHRWPA00_e, dRes_INDEX_GHRWP_BTK_GHRWPA00_e, -1};
+const s16 daWarphr_c::m_residxB[] = {dRes_INDEX_GHRWP_BDL_GHRWPB00_e, dRes_INDEX_GHRWP_BTK_GHRWPB00_e, dRes_INDEX_GHRWP_BRK_GHRWPB00_e};
 const u32 daWarphr_c::m_heapsize = 0x3000;
 
 typedef void (daWarphr_c::*EventInitFunc)(int);

@@ -12,6 +12,7 @@ public:
 };
 
 class dDlst_NameIN_c : public dDlst_base_c {
+public:
     virtual ~dDlst_NameIN_c() {}
     void draw();
 };

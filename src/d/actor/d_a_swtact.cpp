@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_swtact.h"
-#include "d/res/res_itact.h"
+#include "res/Object/Itact.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
@@ -31,7 +31,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
 
 /* 000000CC-00000194       .text CreateHeap__10daSwTact_cFv */
 BOOL daSwTact_c::CreateHeap() {
-    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, ITACT_BDL_ITACT);
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, dRes_INDEX_ITACT_BDL_ITACT_e);
     JUT_ASSERT(0xe1, modelData != NULL);
     model = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (model == NULL)

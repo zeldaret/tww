@@ -23,7 +23,7 @@ void daPy_lk_c::setHyoiModel() {
         return;
     }
     JKRHeap* oldHeap = setItemHeap();
-    initModel(&mpEquipItemModel, LINK_BDL_HYOINOMI, 0x13000022);
+    initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_HYOINOMI_e, 0x13000022);
     mDoExt_setCurrentHeap(oldHeap);
     mEquipItem = dItemNo_HYOI_PEAR_e;
 }

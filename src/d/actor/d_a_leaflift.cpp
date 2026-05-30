@@ -9,7 +9,7 @@
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
-#include "d/res/res_olift.h"
+#include "res/Object/Olift.h"
 #include "m_Do/m_Do_ext.h"
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -79,7 +79,7 @@ static void rideCallBack(dBgW* param1, fopAc_ac_c* i_this, fopAc_ac_c* i_other);
 
 /* 000001E0-00000338       .text CreateHeap__9daLlift_cFv */
 BOOL daLlift_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, OLIFT_BDL_OLIFT);
+    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, dRes_INDEX_OLIFT_BDL_OLIFT_e);
     JUT_ASSERT(DEMO_SELECT(327, 334), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -90,7 +90,7 @@ BOOL daLlift_c::CreateHeap() {
     mpModel->setUserArea((u32)this);
     mpBgW = new dBgW();
     if (mpBgW) {
-        cBgD_t* pData = (cBgD_t *)dComIfG_getObjectRes(m_arcname, OLIFT_DZB_OLIFT);
+        cBgD_t* pData = (cBgD_t *)dComIfG_getObjectRes(m_arcname, dRes_INDEX_OLIFT_DZB_OLIFT_e);
         if (mpBgW->Set(pData, cBgW::MOVE_BG_e, &mMtx) == 1) {
             return FALSE; 
         }

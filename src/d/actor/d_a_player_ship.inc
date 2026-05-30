@@ -52,9 +52,9 @@ BOOL daPy_lk_c::checkJumpRideShip() {
 
 /* 8013F984-8013F9B0       .text checkShipNotNormalMode__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkShipNotNormalMode() {
-    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_SHIP_JUMP2 &&
-        m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_VOYAGE1 &&
-        m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_SHIP_JUMP1)
+    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_SHIP_JUMP2_e &&
+        m_anm_heap_under[UNDER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_VOYAGE1_e &&
+        m_anm_heap_under[UNDER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_SHIP_JUMP1_e)
     {
         return true;
     }
@@ -216,7 +216,7 @@ void daPy_lk_c::setShipRidePos(int param_0) {
             if (ship->getLandFlg()) {
                 setSingleMoveAnime(ANM_SHIP_JUMP2, 1.0f, 3.0f, -1, 3.0f);
             }
-            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_SHIP_JUMP2) {
+            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_SHIP_JUMP2_e) {
                 if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
                     if (ship->getFlyFlg()) {
                         setSingleMoveAnime(ANM_SHIP_JUMP1, 1.0f, 0.0f, -1, 20.0f);
@@ -228,7 +228,7 @@ void daPy_lk_c::setShipRidePos(int param_0) {
                 }
             }
             s16 sVar4;
-            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_VOYAGE1) {
+            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_VOYAGE1_e) {
                 sVar4 = -m_HIO->mShip.m.field_0x4 * ship->getTillerAngleRate();
             } else {
                 sVar4 = 0;
@@ -315,9 +315,9 @@ BOOL daPy_lk_c::changeShipEndProc() {
     }
     if (dComIfGp_getMiniGameType() != 1 && ship->speedF < 3.0f) {
         if (ship->getBeltSpeed() < 3.0f) {
-            if (((!checkShipNotNormalMode() || m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_FREEA) ||
-                 m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_FREEB) ||
-                m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_FREED)
+            if (((!checkShipNotNormalMode() || m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_FREEA_e) ||
+                 m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_FREEB_e) ||
+                m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_FREED_e)
             {
                 if ((!dComIfGp_checkPlayerStatus0(0, daPyStts0_SUBJECT_e) && !spActionButton()) &&
                     (dComIfGp_getDoStatus() == dActStts_BLANK_e && mCurProc == daPyProc_SHIP_PADDLE_e))
@@ -445,10 +445,10 @@ BOOL daPy_lk_c::changeShipEndProc() {
 
 /* 80140C88-80140D04       .text initShipBaseAnime__9daPy_lk_cFv */
 void daPy_lk_c::initShipBaseAnime() {
-    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_SHIP_JUMP2) {
+    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_SHIP_JUMP2_e) {
         setSingleMoveAnime(ANM_VOYAGE1, 1.0f, 0.0f, -1, 5.0f);
     }
-    setActAnimeUpper(LKANM_BCK_FN_HAIR1, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_FN_HAIR1_e, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
     m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
 }
 
@@ -755,7 +755,7 @@ BOOL daPy_lk_c::procShipBoomerang_init() {
     ship->setPaddleMove();
     mEquipItem = dItemNo_BOOMERANG_e;
     setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, 5.0f);
-    setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_BOOMWAIT_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
     setTextureAnime(0, 0);
     makeItemType();
     dComIfGp_setPlayerStatus0(0, daPyStts0_SHIP_RIDE_e | daPyStts0_BOOMERANG_AIM_e);
@@ -773,7 +773,7 @@ BOOL daPy_lk_c::procShipBoomerang() {
     }
     setShipRidePos(0);
     if (mActorKeepThrow.getActor() == NULL) {
-        if (!checkUpperAnime(LKANM_BCK_BOOMCATCH)) {
+        if (!checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMCATCH_e)) {
             dComIfGp_setDoStatus(dActStts_RETURN_e);
             if (doTrigger()) {
                 procShipPaddle_init();
@@ -784,9 +784,9 @@ BOOL daPy_lk_c::procShipBoomerang() {
     }
     mSightPacket.offDrawFlg();
     daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
-    if (!checkUpperAnime(LKANM_BCK_BOOMCATCH)) {
+    if (!checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMCATCH_e)) {
         if (mEquipItem == dItemNo_BOOMERANG_e) {
-            if (checkUpperAnime(LKANM_BCK_BOOMWAIT)) {
+            if (checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMWAIT_e)) {
                 setShipAttentionAnmSpeed(m_HIO->mItem.mBoom.m.field_0x18);
                 checkNextActionBoomerangReady();
                 if (checkAttentionLock()) {
@@ -833,7 +833,7 @@ BOOL daPy_lk_c::procShipHookshot_init() {
     mEquipItem = dItemNo_HOOKSHOT_e;
     m355C = 10;
     setSingleMoveAnime(ANM_ATNLS, 0.0f, 0.0f, -1, 5.0f);
-    setActAnimeUpper(LKANM_BCK_HOOKSHOTWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_HOOKSHOTWAIT_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
     setTextureAnime(0, 0);
     makeItemType();
     dComIfGp_setPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e | daPyStts0_SHIP_RIDE_e);

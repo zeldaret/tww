@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_hr.h"
-#include "d/res/res_hr.h"
+#include "res/Object/Hr.h"
 #include "d/d_snap.h"
 #include "d/d_kankyo_wether.h"
 #include "d/actor/d_a_player_main.h"
@@ -931,25 +931,25 @@ bool daNpc_Hr_c::demoProc() {
 }
 
 static const int l_bck_ix_tbl[] = {
-    HR_BCK_H_WAIT01,
-    HR_BCK_R_WAIT01,
-    HR_BCK_R_WAIT02,
-    HR_BCK_LOOK,
-    HR_BCK_TALK01,
-    HR_BCK_TALK01,
-    HR_BCK_TALK01,
-    HR_BCK_TALK02,
-    HR_BCK_TALK02,
-    HR_BCK_TALK03,
-    HR_BCK_TALK03,
-    HR_BCK_DAMAGE,
-    HR_BCK_TALK03,
+    dRes_INDEX_HR_BCK_H_WAIT01_e,
+    dRes_INDEX_HR_BCK_R_WAIT01_e,
+    dRes_INDEX_HR_BCK_R_WAIT02_e,
+    dRes_INDEX_HR_BCK_LOOK_e,
+    dRes_INDEX_HR_BCK_TALK01_e,
+    dRes_INDEX_HR_BCK_TALK01_e,
+    dRes_INDEX_HR_BCK_TALK01_e,
+    dRes_INDEX_HR_BCK_TALK02_e,
+    dRes_INDEX_HR_BCK_TALK02_e,
+    dRes_INDEX_HR_BCK_TALK03_e,
+    dRes_INDEX_HR_BCK_TALK03_e,
+    dRes_INDEX_HR_BCK_DAMAGE_e,
+    dRes_INDEX_HR_BCK_TALK03_e,
 };
 
 static const int l_btp_ix_tbl[] = {
-    HR_BTP_MABA_H,
-    HR_BTP_MABA_R01,
-    HR_BTP_MABA_R02,
+    dRes_INDEX_HR_BTP_MABA_H_e,
+    dRes_INDEX_HR_BTP_MABA_R01_e,
+    dRes_INDEX_HR_BTP_MABA_R02_e,
 };
 
 /* 0000232C-00002550       .text nodeCallBack_Hr__FP7J3DNodei */
@@ -1963,7 +1963,7 @@ BOOL daNpc_Hr_c::_draw() {
     mBtpAnm.entry(modelData, mBlinkFrame);
 
     if(getShapeType() == 1) {
-        J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Hr", HR_BMT_R_BODY);
+        J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Hr", dRes_INDEX_HR_BMT_R_BODY_e);
         modelData->setMaterialTable(bmt, J3DMatCopyFlag_Texture);
         mpHrMorf->entryDL(bmt);
     } else {
@@ -2123,27 +2123,27 @@ daNpc_Hr_c::daNpc_Hr_c() {}
 /* 000057E4-00005CE8       .text CreateHeap__10daNpc_Hr_cFv */
 BOOL daNpc_Hr_c::CreateHeap() {
     static int brow_bdl_table[] = {
-        HR_BDL_H_BROW,
-        HR_BDL_R_BROW
+        dRes_INDEX_HR_BDL_H_BROW_e,
+        dRes_INDEX_HR_BDL_R_BROW_e
     };
 
     static int ant_bdl_table[] = {
-        HR_BDL_H_ANT,
-        HR_BDL_R_ANT
+        dRes_INDEX_HR_BDL_H_ANT_e,
+        dRes_INDEX_HR_BDL_R_ANT_e
     };
 
     static u32 ant_bck_table[] = {
-        HR_BCK_H_ANT,
-        HR_BCK_R_ANT
+        dRes_INDEX_HR_BCK_H_ANT_e,
+        dRes_INDEX_HR_BCK_R_ANT_e
     };
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hr", HR_BDL_HR);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hr", dRes_INDEX_HR_BDL_HR_e);
     JUT_ASSERT(DEMO_SELECT(3341, 3392), modelData);
 
     mpHrMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Hr", HR_BCK_H_WAIT01),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Hr", dRes_INDEX_HR_BCK_H_WAIT01_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x80000,

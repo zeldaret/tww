@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/actor/d_a_knob00.h"
-#include "d/res/res_kaizokusen.h"
+#include "res/Object/Kaizokusen.h"
 #include "d/d_particle.h"
 #include "d/d_path.h"
 #include "d/d_lib.h"
@@ -274,7 +274,7 @@ void daObjPirateship::Act_c::sound_proc() {
 
 /* 0000095C-00000A50       .text CreateHeap__Q215daObjPirateship5Act_cFv */
 BOOL daObjPirateship::Act_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(mArcname, KAIZOKUSEN_INDEX_BDL_OBA_KAIZOKU_A);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(mArcname, dRes_INDEX_KAIZOKUSEN_BDL_OBA_KAIZOKU_A_e);
     JUT_ASSERT(374, modelData != NULL);
 
     mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
@@ -464,9 +464,9 @@ cPhs_State daObjPirateship::Act_c::_create() {
 
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, mArcname);
     if (PVar1 == cPhs_COMPLEATE_e) {
-        s32 dzbFileIndex = KAIZOKUSEN_INDEX_DZB_ROOM1A;
+        s32 dzbFileIndex = dRes_INDEX_KAIZOKUSEN_DZB_ROOM1A_e;
         if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
-            dzbFileIndex = KAIZOKUSEN_INDEX_DZB_ROOM1B;
+            dzbFileIndex = dRes_INDEX_KAIZOKUSEN_DZB_ROOM1B_e;
         }
         PVar1 = MoveBGCreate(mArcname, dzbFileIndex, dBgS_MoveBGProc_TypicalRotY, 0x7500);
         mpBgW->SetRideCallback(ride_call_back);

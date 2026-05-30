@@ -1,0 +1,24 @@
+#ifndef RES_OHATCH_H
+#define RES_OHATCH_H
+
+enum dRes_INDEX_OHATCH {
+    /* BDL  */
+    dRes_INDEX_OHATCH_BDL_OHATCH_e=0x4,
+    /* DZB  */
+    dRes_INDEX_OHATCH_DZB_OH_CLS_e=0x7,
+    dRes_INDEX_OHATCH_DZB_OH_OPN_e=0x8,
+};
+
+enum dRes_ID_OHATCH {
+    /* BDL  */
+    dRes_ID_OHATCH_BDL_OHATCH_e=0x4,
+    /* DZB  */
+    dRes_ID_OHATCH_DZB_OH_CLS_e=0x7,
+    dRes_ID_OHATCH_DZB_OH_OPN_e=0x8,
+};
+
+enum OHATCH_JNT {
+    OHATCH_JNT_HATCH_UP_e=0x0,
+};
+
+#endif /* !RES_OHATCH_H */

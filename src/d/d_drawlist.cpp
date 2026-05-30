@@ -1910,7 +1910,7 @@ void dDlst_mirrorPacket::draw() {
 /* 800855B4-80085624       .text init__18dDlst_mirrorPacketFP7ResTIMG */
 void dDlst_mirrorPacket::init(ResTIMG* pImg) {
     if (pImg == NULL)
-        pImg = (ResTIMG*) dComIfG_getObjectRes("Always", ALWAYS_BTI_SHMREF);
+        pImg = (ResTIMG*) dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_SHMREF_e);
 
     mDoLib_setResTimgObj(pImg, &mTexObj, 0, NULL);
 }

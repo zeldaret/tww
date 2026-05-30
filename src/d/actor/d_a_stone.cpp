@@ -7,7 +7,7 @@
 #include "d/actor/d_a_stone.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_always.h"
+#include "res/Object/Always.h"
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -723,8 +723,8 @@ void Act_c::eff_break() {
 
     dComIfGp_particle_set(dPa_name::ID_IT_JN_STS_HAHEN, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
 
-    J3DModelData* pJVar1 = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPI_KOISHI);
-    J3DAnmTexPattern* pJVar2 = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", ALWAYS_BTP_MPI_KOISHI);
+    J3DModelData* pJVar1 = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_MPI_KOISHI_e);
+    J3DAnmTexPattern* pJVar2 = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTP_MPI_KOISHI_e);
     JPABaseEmitter* pJVar3 = (JPABaseEmitter*)dComIfGp_particle_set(dPa_name::ID_IT_JN_M_STS_HAHEN, &sp18);
 
     if (pJVar3 != NULL) {

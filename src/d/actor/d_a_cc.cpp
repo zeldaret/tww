@@ -8,7 +8,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_bomb2.h"
-#include "d/res/res_cc.h"
+#include "res/Object/Cc.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
 #include "d/d_com_inf_game.h"
@@ -182,7 +182,7 @@ static BOOL daCC_Draw(cc_class* i_this) {
 
     if (i_this->m2F9 == 0) {
         f32 fVar2 = 36.0f;
-        if ((i_this->m320 == CC_BCK_TACHI2HUSE) || (i_this->m320 == CC_BCK_HUSE_WALK)) {
+        if ((i_this->m320 == dRes_INDEX_CC_BCK_TACHI2HUSE_e) || (i_this->m320 == dRes_INDEX_CC_BCK_HUSE_WALK_e)) {
             fVar2 = 50.0f;
         }
 
@@ -763,9 +763,9 @@ void action_nomal_move(cc_class* i_this) {
         i_this->mCyl.OffTgSetBit();
         i_this->mCyl.ClrCoSet();
         i_this->mCyl.ClrTgHit();
-        anm_init(i_this, CC_BCK_START, 0.0f, 0, 0.0f, -1);
+        anm_init(i_this, dRes_INDEX_CC_BCK_START_e, 0.0f, 0, 0.0f, -1);
         if (i_this->mBehaviorType == 0) {
-            anm_init(i_this, CC_BCK_TSTART01, 0.0f, 0, 0.0f, -1);
+            anm_init(i_this, dRes_INDEX_CC_BCK_TSTART01_e, 0.0f, 0, 0.0f, -1);
         }
         i_this->m2F5++;
 
@@ -773,11 +773,11 @@ void action_nomal_move(cc_class* i_this) {
         if (fopAcM_searchPlayerDistance(&i_this->actor) < i_this->mNoticeRange) {
             fopAcM_OnStatus(&i_this->actor, fopAcStts_SHOWMAP_e);
             if (i_this->mBehaviorType == 1) {
-                anm_init(i_this, CC_BCK_TSTART01, 0.0f, 0, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_CC_BCK_TSTART01_e, 0.0f, 0, 1.0f, -1);
                 i_this->m2F5 = 2;
             } else {
                 fopAcM_seStart(&i_this->actor, JA_SE_CM_CC_ENTER_GND, 0);
-                anm_init(i_this, CC_BCK_START, 0.0f, 0, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_CC_BCK_START_e, 0.0f, 0, 1.0f, -1);
                 i_this->m2F9 = 0;
                 i_this->actor.gravity = -3.0f;
                 i_this->m2F5 = 3;
@@ -802,7 +802,7 @@ void action_nomal_move(cc_class* i_this) {
             cc_eff_set(i_this, 1);
             i_this->actor.shape_angle.x = 0;
             i_this->actor.speed.y = 0.0f;
-            anm_init(i_this, CC_BCK_TSTART02, 0.0f, 0, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_CC_BCK_TSTART02_e, 0.0f, 0, 1.0f, -1);
             i_this->m2F5 = 3;
             i_this->mCyl.OnTgSetBit();
             i_this->actor.attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
@@ -831,8 +831,8 @@ void action_nomal_move(cc_class* i_this) {
         i_this->m34E[0] += i_this->m34E[1];
         denki_start(i_this);
 
-        if (i_this->m320 != CC_BCK_TACHI_WALK) {
-            anm_init(i_this, CC_BCK_TACHI_WALK, 2.0f, 2, 1.0f, -1);
+        if (i_this->m320 != dRes_INDEX_CC_BCK_TACHI_WALK_e) {
+            anm_init(i_this, dRes_INDEX_CC_BCK_TACHI_WALK_e, 2.0f, 2, 1.0f, -1);
         }
 
         fopAcM_seStart(&i_this->actor, JA_SE_CM_CC_MOVE_STAND, 0);
@@ -873,7 +873,7 @@ void action_nomal_move(cc_class* i_this) {
             AT_TYPE_LIGHT_ARROW | AT_TYPE_LIGHT | AT_TYPE_GRAPPLING_HOOK
         );
         i_this->mCyl.OffCoSetBit();
-        anm_init(i_this, CC_BCK_TACHI2HUSE, 2.0f, 0, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_CC_BCK_TACHI2HUSE_e, 2.0f, 0, 1.0f, -1);
         i_this->m2F5++;
         break;
 
@@ -888,7 +888,7 @@ void action_nomal_move(cc_class* i_this) {
             break;
         }
 
-        anm_init(i_this, CC_BCK_HUSE_WALK, 0.0f, 2, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_CC_BCK_HUSE_WALK_e, 0.0f, 2, 1.0f, -1);
         i_this->m2F5++;
 
     case 8:
@@ -911,7 +911,7 @@ void action_nomal_move(cc_class* i_this) {
 
     case 10:
         i_this->mCyl.SetTgType(~(AT_TYPE_UNK400000 | AT_TYPE_UNK20000 | AT_TYPE_WATER));
-        anm_init(i_this, CC_BCK_HUSE2TACHI, 0.0f, 0, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_CC_BCK_HUSE2TACHI_e, 0.0f, 0, 1.0f, -1);
         fopAcM_seStart(&i_this->actor, JA_SE_CM_CC_LIE_TO_STAND, 0);
         i_this->m2F5++;
         break;
@@ -969,8 +969,8 @@ void action_oyogu(cc_class* i_this) {
 
         fopAcM_seStart(a_this, JA_SE_CM_CC_STAND_TO_LIE, 0);
 
-        if (i_this->m320 != CC_BCK_TACHI2HUSE) {
-            anm_init(i_this, CC_BCK_TACHI2HUSE, 2.0f, 0, 1.0f, -1);
+        if (i_this->m320 != dRes_INDEX_CC_BCK_TACHI2HUSE_e) {
+            anm_init(i_this, dRes_INDEX_CC_BCK_TACHI2HUSE_e, 2.0f, 0, 1.0f, -1);
         }
 
         a_this->speedF = 0.0f;
@@ -983,9 +983,9 @@ void action_oyogu(cc_class* i_this) {
         i_this->m2F5++;
 
     case 0x15:
-        if (i_this->m320 == CC_BCK_TACHI2HUSE) {
+        if (i_this->m320 == dRes_INDEX_CC_BCK_TACHI2HUSE_e) {
             if (i_this->m2B4->isStop()) {
-                anm_init(i_this, CC_BCK_HUSE_WALK, 0.0, 2, 1.0, -1);
+                anm_init(i_this, dRes_INDEX_CC_BCK_HUSE_WALK_e, 0.0, 2, 1.0, -1);
             }
         }
 
@@ -1056,7 +1056,7 @@ void action_attack_move(cc_class* i_this) {
         i_this->mCyl.OnCoSetBit();
         fopAcM_monsSeStart(&i_this->actor, JA_SE_CV_CC_ATTACK, 0);
         i_this->m306 = 0;
-        anm_init(i_this, CC_BCK_ATACK01, 0.0f, 0, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_CC_BCK_ATACK01_e, 0.0f, 0, 1.0f, -1);
         i_this->m2F5++;
 
     case 0x1F:
@@ -1071,7 +1071,7 @@ void action_attack_move(cc_class* i_this) {
             i_this->actor.current.angle.y = fopAcM_searchPlayerAngleY(&i_this->actor);
             i_this->mCyl.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
             i_this->mCyl.OnAtHitBit();
-            anm_init(i_this, CC_BCK_ATACK02, 0.0f, 0, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_CC_BCK_ATACK02_e, 0.0f, 0, 1.0f, -1);
             fopAcM_seStart(&i_this->actor, JA_SE_CM_CC_ATTACK, 0);
             i_this->actor.speedF = 18.0f;
             i_this->actor.gravity = -3.0f;
@@ -1097,7 +1097,7 @@ void action_attack_move(cc_class* i_this) {
 
             cc_eff_set(i_this, 1);
             i_this->actor.speedF = 0.0f;
-            anm_init(i_this, CC_BCK_ATACK03, 0.0f, 0, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_CC_BCK_ATACK03_e, 0.0f, 0, 1.0f, -1);
             i_this->m2F5++;
         }
         break;
@@ -1165,7 +1165,7 @@ void action_damage_move(cc_class* i_this) {
         }
 
         denki_end(i_this);
-        anm_init(i_this, CC_BCK_TACHI2HUSE, 0.0f, 0, 0.0f, -1);
+        anm_init(i_this, dRes_INDEX_CC_BCK_TACHI2HUSE_e, 0.0f, 0, 0.0f, -1);
 
         i_this->mCyl.SetTgType(~(AT_TYPE_UNK400000 | AT_TYPE_UNK20000 | AT_TYPE_WATER));
 
@@ -1199,7 +1199,7 @@ void action_damage_move(cc_class* i_this) {
 
         case 4:
         case 9:
-            anm_init(i_this, CC_BCK_MAHI, 0.0f, 0, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_CC_BCK_MAHI_e, 0.0f, 0, 1.0f, -1);
             dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &a_this->attention_info.position);
             i_this->m32C = 0.0f;
             i_this->m330 = 0.0f;
@@ -1291,7 +1291,7 @@ void action_damage_move(cc_class* i_this) {
 
     case 0x2b:
         if (i_this->m34E[4] <= 1) {
-            anm_init(i_this, CC_BCK_HUKKATSU, 0.0f, 2, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_CC_BCK_HUKKATSU_e, 0.0f, 2, 1.0f, -1);
             i_this->m34E[4] = 0x3c;
             i_this->m34E[4] += REG8_S(6);
             i_this->m2F5++;
@@ -1310,7 +1310,7 @@ void action_damage_move(cc_class* i_this) {
 
     case 0x2d:
         i_this->m301 = 1;
-        i_this->m2D8->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("CC", CC_BCK_CC_PTCL), 0, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
+        i_this->m2D8->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("CC", dRes_INDEX_CC_BCK_CC_PTCL_e), 0, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
 
         pJVar6 = dComIfGp_particle_set(dPa_name::ID_AK_SN_CCSPLIT00, &a_this->attention_info.position, &a_this->current.angle);
         if (pJVar6 != NULL) {
@@ -1338,7 +1338,7 @@ void action_damage_move(cc_class* i_this) {
             i_this->m301 = 0;
             i_this->mStts.SetWeight(0x32);
             i_this->mCyl.SetTgType(~(AT_TYPE_UNK400000 | AT_TYPE_UNK20000 | AT_TYPE_WATER));
-            anm_init(i_this, CC_BCK_HUSE2TACHI, 0.0f, 0, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_CC_BCK_HUSE2TACHI_e, 0.0f, 0, 1.0f, -1);
             fopAcM_seStart(a_this, JA_SE_CM_CC_LIE_TO_STAND, 0);
 
             a_this->shape_angle.y = fopAcM_searchPlayerAngleY(a_this);
@@ -1409,7 +1409,7 @@ void action_dead_move(cc_class* i_this) {
         fopAcM_seStart(a_this, JA_SE_CM_CC_DIE_SWING, 0);
         fopAcM_monsSeStart(a_this, JA_SE_CV_CC_DIE, 0);
 
-        i_this->m2BC->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("CC", CC_BCK_CC_BETA), 0, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
+        i_this->m2BC->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("CC", dRes_INDEX_CC_BCK_CC_BETA_e), 0, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
         a_this->speedF = 0.0f;
         a_this->speed.x = 0.0f;
         a_this->speed.y = 0.0f;
@@ -1536,7 +1536,7 @@ void deku_ret_demo(cc_class* i_this) {
 
     case 3:
         if (i_this->m34E[5] == 0) {
-            anm_init(i_this, CC_BCK_START, 0.0f, 0, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_CC_BCK_START_e, 0.0f, 0, 1.0f, -1);
             DEMO_RET_START_FLAG = 2;
             i_this->m34E[5] = 0x50;
             if (DEMO_SHORT_CUT_FLAG != 0) {
@@ -1585,13 +1585,13 @@ void action_noboru(cc_class* i_this) {
         i_this->m3BA = -0x4000;
         i_this->m2FB = 0;
         a_this->attention_info.flags = 0;
-        anm_init(i_this, CC_BCK_DEKU_START, 0.0f, 0, 0.0f, -1);
+        anm_init(i_this, dRes_INDEX_CC_BCK_DEKU_START_e, 0.0f, 0, 0.0f, -1);
         i_this->m2F5++;
 
     case 0x3d:
         if (i_this->m2FB >= 1) {
             fopAcM_seStart(a_this, JA_SE_CM_CC_ENTER_GND, 0);
-            anm_init(i_this, CC_BCK_DEKU_START, 0.0, 0, 1.0, -1);
+            anm_init(i_this, dRes_INDEX_CC_BCK_DEKU_START_e, 0.0, 0, 1.0, -1);
             i_this->m2F5++;
         }
         break;
@@ -1601,7 +1601,7 @@ void action_noboru(cc_class* i_this) {
             break;
         }
         i_this->m344 = cM_rndF(43.0f);
-        anm_init(i_this, CC_BCK_TACHI_WALK, 1.0f, 2, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_CC_BCK_TACHI_WALK_e, 1.0f, 2, 1.0f, -1);
         i_this->m2F5++;
 
     case 0x3f:
@@ -1613,7 +1613,7 @@ void action_noboru(cc_class* i_this) {
             break;
         }
 
-        anm_init(i_this, CC_BCK_ATACK01, 0.0, 0, 1.0, -1);
+        anm_init(i_this, dRes_INDEX_CC_BCK_ATACK01_e, 0.0, 0, 1.0, -1);
         i_this->m2F5 = i_this->m2F5 + 1;
 
     case 0x40:
@@ -1627,7 +1627,7 @@ void action_noboru(cc_class* i_this) {
 
     case 0x41:
         fopAcM_monsSeStart(a_this, JA_SE_CV_CC_ATTACK, 0);
-        anm_init(i_this, CC_BCK_ATACK02, 0.0f, 0, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_CC_BCK_ATACK02_e, 0.0f, 0, 1.0f, -1);
         i_this->m3BA = 0;
         a_this->current.angle.x = 0;
         a_this->current.angle.y = 0;
@@ -1638,7 +1638,7 @@ void action_noboru(cc_class* i_this) {
         a_this->shape_angle.z = a_this->current.angle.z;
         i_this->m2FB = 3;
 
-        anm_init(i_this, CC_BCK_ATACK02, 0.0f, 0, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_CC_BCK_ATACK02_e, 0.0f, 0, 1.0f, -1);
         fopAcM_seStart(a_this, JA_SE_CM_CC_ATTACK, 0);
 
         a_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
@@ -1656,7 +1656,7 @@ void action_noboru(cc_class* i_this) {
 
     case 0x42:
         if (i_this->mAcch.ChkGroundHit()) {
-            anm_init(i_this, CC_BCK_ATACK03, 0.0f, 0, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_CC_BCK_ATACK03_e, 0.0f, 0, 1.0f, -1);
             fopAcM_seStart(a_this, JA_SE_CM_CC_LANDING, dComIfG_Bgsp()->GetMtrlSndId(i_this->mAcch.m_gnd));
 
             cc_eff_set(i_this, 1);
@@ -1687,8 +1687,8 @@ void action_noboru(cc_class* i_this) {
         DEMO_SELECT(i_this->m368, i_this->m390).remove();
         a_this->attention_info.flags = 0;
 
-        if (i_this->m320 != CC_BCK_TACHI_WALK) {
-            anm_init(i_this, CC_BCK_TACHI2HUSE, 0.0f, 0, 0.0f, -1);
+        if (i_this->m320 != dRes_INDEX_CC_BCK_TACHI_WALK_e) {
+            anm_init(i_this, dRes_INDEX_CC_BCK_TACHI2HUSE_e, 0.0f, 0, 0.0f, -1);
         }
 
         fopAcM_seStart(a_this, JA_SE_CM_CC_STAND_TO_LIE, 0);
@@ -1725,7 +1725,7 @@ void action_noboru(cc_class* i_this) {
         if (i_this->m2FD != 0) {
             i_this->m34E[0] = 0x3c;
         }
-        anm_init(i_this, CC_BCK_START, 0.0f, 0, 0.0f, -1);
+        anm_init(i_this, dRes_INDEX_CC_BCK_START_e, 0.0f, 0, 0.0f, -1);
         i_this->m2FB = 4;
         i_this->m3BA = -0x4000;
         i_this->m2F5++;
@@ -1734,7 +1734,7 @@ void action_noboru(cc_class* i_this) {
         if (DEMO_RET_START_FLAG == 2) {
             fopAcM_seStart(a_this, JA_SE_CM_CC_LIE_TO_STAND, 0);
             i_this->m334 = 1.0;
-            anm_init(i_this, CC_BCK_START, 0.0f, 0, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_CC_BCK_START_e, 0.0f, 0, 1.0f, -1);
             i_this->m2F5 = 0x3e;
         }
 
@@ -1748,8 +1748,8 @@ void action_noboru(cc_class* i_this) {
 
     case 0x47:
         deku_ret_demo(i_this);
-        if (DEMO_RET_START_FLAG >= 2 && i_this->m320 == CC_BCK_START && i_this->m2B4->isStop()) {
-            anm_init(i_this, CC_BCK_TACHI_WALK, 1.0f, 2, 1.0f, -1);
+        if (DEMO_RET_START_FLAG >= 2 && i_this->m320 == dRes_INDEX_CC_BCK_START_e && i_this->m2B4->isStop()) {
+            anm_init(i_this, dRes_INDEX_CC_BCK_TACHI_WALK_e, 1.0f, 2, 1.0f, -1);
         }
     }
 
@@ -1770,7 +1770,7 @@ void action_up_check(cc_class* i_this) {
         i_this->mCyl.OnTgShield();
         i_this->mCyl.OnTgSetBit();
         i_this->mCyl.SetTgType(~(AT_TYPE_UNK400000 | AT_TYPE_UNK20000 | AT_TYPE_WATER));
-        anm_init(i_this, CC_BCK_MAHI, 0.0f, 0, 0.0f, -1);
+        anm_init(i_this, dRes_INDEX_CC_BCK_MAHI_e, 0.0f, 0, 0.0f, -1);
 #if VERSION > VERSION_DEMO
         i_this->m2F9 = 0;
 #endif
@@ -2055,7 +2055,7 @@ void action_tubo_search(cc_class* i_this) {
         i_this->mCyl.OnAtVsBitSet(cCcD_TgSPrm_IsOther_e);
         i_this->mCyl.OffAtVsBitSet(cCcD_TgSPrm_IsPlayer_e);
 
-        anm_init(i_this, CC_BCK_HUSE2TACHI, 0.0, 0, 1.0, -1);
+        anm_init(i_this, dRes_INDEX_CC_BCK_HUSE2TACHI_e, 0.0, 0, 1.0, -1);
         fopAcM_seStart(&i_this->actor, JA_SE_CM_CC_LIE_TO_STAND, 0);
         denki_start(i_this);
         i_this->actor.gravity = -3.0;
@@ -2316,7 +2316,7 @@ static BOOL daCC_Execute(cc_class* i_this) {
 
     i_this->mCyl.SetC(i_this->actor.current.pos);
     f32 fVar8 = 100.0f;
-    if (i_this->m320 == CC_BCK_HUSE_WALK) {
+    if (i_this->m320 == dRes_INDEX_CC_BCK_HUSE_WALK_e) {
         fVar8 = 30.0f;
     }
     i_this->mCyl.SetH(fVar8);
@@ -2365,15 +2365,15 @@ static BOOL daCC_Delete(cc_class* i_this) {
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
     cc_class* i_this = (cc_class*)a_this;
 
-    s32 fileIndex = CC_BCK_START;
+    s32 fileIndex = dRes_INDEX_CC_BCK_START_e;
     if (i_this->mBehaviorType == 1) {
-        fileIndex = CC_BCK_TSTART01;
+        fileIndex = dRes_INDEX_CC_BCK_TSTART01_e;
     } else if (i_this->mBehaviorType == 2) {
-        fileIndex = CC_BCK_HUSE2TACHI;
+        fileIndex = dRes_INDEX_CC_BCK_HUSE2TACHI_e;
     }
 
     i_this->m2B4 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("CC", CC_BMD_CC),
+        (J3DModelData*)dComIfG_getObjectRes("CC", dRes_INDEX_CC_BMD_CC_e),
         NULL,
         NULL,
         (J3DAnmTransform*)dComIfG_getObjectRes("CC", fileIndex),
@@ -2406,14 +2406,14 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2B8->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC), true, J3DFrameCtrl::EMode_NONE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", dRes_INDEX_CC_BRK_CC_e), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
     }
 
     i_this->m2C4 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("CC", CC_BDL_CC_IWA), NULL, NULL, NULL, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, 1, NULL, 0, 0x11020203
+        (J3DModelData*)dComIfG_getObjectRes("CC", dRes_INDEX_CC_BDL_CC_IWA_e), NULL, NULL, NULL, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, 1, NULL, 0, 0x11020203
     );
 
     if (i_this->m2C4 == NULL || i_this->m2C4->getModel() == NULL) {
@@ -2427,7 +2427,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2C8->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_IWA01), true, J3DFrameCtrl::EMode_NONE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", dRes_INDEX_CC_BRK_CC_IWA01_e), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2439,7 +2439,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2CC->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_IWA02), true, J3DFrameCtrl::EMode_NONE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", dRes_INDEX_CC_BRK_CC_IWA02_e), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2451,7 +2451,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2D0->init(
-            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", CC_BTK_CC_IWA01), true, J3DFrameCtrl::EMode_NONE
+            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", dRes_INDEX_CC_BTK_CC_IWA01_e), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
@@ -2463,14 +2463,14 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2D4->init(
-            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", CC_BTK_CC_IWA02), true, J3DFrameCtrl::EMode_NONE
+            model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("CC", dRes_INDEX_CC_BTK_CC_IWA02_e), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
     }
 
     i_this->m2BC = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("CC", CC_BDL_CC_BETA), NULL, NULL, NULL, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, 1, NULL, 0, 0x11020203
+        (J3DModelData*)dComIfG_getObjectRes("CC", dRes_INDEX_CC_BDL_CC_BETA_e), NULL, NULL, NULL, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, 1, NULL, 0, 0x11020203
     );
 
     if (i_this->m2BC == NULL || i_this->m2BC->getModel() == NULL) {
@@ -2484,17 +2484,17 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     if (!i_this->m2C0->init(
-            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", CC_BRK_CC_BETA), true, J3DFrameCtrl::EMode_NONE
+            model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("CC", dRes_INDEX_CC_BRK_CC_BETA_e), true, J3DFrameCtrl::EMode_NONE
         ))
     {
         return FALSE;
     }
 
     i_this->m2D8 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("CC", CC_BDL_CC_PTCL),
+        (J3DModelData*)dComIfG_getObjectRes("CC", dRes_INDEX_CC_BDL_CC_PTCL_e),
         NULL,
         NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes("CC", CC_BCK_CC_PTCL),
+        (J3DAnmTransform*)dComIfG_getObjectRes("CC", dRes_INDEX_CC_BCK_CC_PTCL_e),
         J3DFrameCtrl::EMode_NONE,
         1.0f,
         1,

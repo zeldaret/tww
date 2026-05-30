@@ -5,9 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_hmlif.h"
-#include "d/res/res_hmlif.h"
-#include "d/res/res_hyuf1.h"
-#include "d/res/res_hyuf2.h"
+#include "res/Object/Hmlif.h"
+#include "res/Object/Hyuf1.h"
+#include "res/Object/Hyuf2.h"
 #include "d/d_path.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -31,10 +31,10 @@ const f32 daHmlif_c::m_speed[] = {
     25.0f,
     26.666666f,
 };
-const s16 daHmlif_c::m_bmdidx[] = {HMLIF_BDL_HMLIF, HYUF1_BDL_HYUF1, HYUF2_BDL_HYUF2};
-const s16 daHmlif_c::m_dzbidx[] = {HMLIF_DZB_HMLIF, HYUF1_DZB_HYUF1, HYUF2_DZB_HYUF2};
-const s16 daHmlif_c::m_btpidx[] = {-1, HYUF1_BTP_HYUF1, HYUF2_BTP_HYUF2};
-const s16 daHmlif_c::m_brkidx[] = {HMLIF_BRK_HMLIF, HYUF1_BRK_HYUF1, -1};
+const s16 daHmlif_c::m_bmdidx[] = {dRes_INDEX_HMLIF_BDL_HMLIF_e, dRes_INDEX_HYUF1_BDL_HYUF1_e, dRes_INDEX_HYUF2_BDL_HYUF2_e};
+const s16 daHmlif_c::m_dzbidx[] = {dRes_INDEX_HMLIF_DZB_HMLIF_e, dRes_INDEX_HYUF1_DZB_HYUF1_e, dRes_INDEX_HYUF2_DZB_HYUF2_e};
+const s16 daHmlif_c::m_btpidx[] = {-1, dRes_INDEX_HYUF1_BTP_HYUF1_e, dRes_INDEX_HYUF2_BTP_HYUF2_e};
+const s16 daHmlif_c::m_brkidx[] = {dRes_INDEX_HMLIF_BRK_HMLIF_e, dRes_INDEX_HYUF1_BRK_HYUF1_e, -1};
 
 const f32 daHmlif_c::m_cull_box[][6] = {
     {-200.0f, -100.0f, -200.0f, 200.0f, 50.0f, 200.0f},

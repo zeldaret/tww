@@ -1283,8 +1283,8 @@ cPhs_State phase_1(dScnPly_ply_c* i_this) {
     int rt = dComIfG_setStageRes("Stage", NULL);
     JUT_ASSERT(VERSION_SELECT(3443, 3443, 3458, 3458), rt == 1);
 
-    dMat_control_c::create((J3DMaterialTable*)dComIfG_getObjectRes("Always", ALWAYS_BMT_ICE),
-                           (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", ALWAYS_BTK_ICE));
+    dMat_control_c::create((J3DMaterialTable*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BMT_ICE_e),
+                           (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTK_ICE_e));
 
     return cPhs_NEXT_e;
 }

@@ -1,0 +1,20 @@
+#ifndef RES_TMSGRES_H
+#define RES_TMSGRES_H
+
+enum dRes_INDEX_TMSGRES {
+    /* SCRN */
+    dRes_INDEX_TMSGRES_BLO_BATON_INPUT_e=0x4,
+    /* TIMG */
+    dRes_INDEX_TMSGRES_BTI_BATON_INPUT_FRAME3_e=0x7,
+    dRes_INDEX_TMSGRES_BTI_WHITE_BLACK3_e=0x8,
+};
+
+enum dRes_ID_TMSGRES {
+    /* SCRN */
+    dRes_ID_TMSGRES_BLO_BATON_INPUT_e=0x4,
+    /* TIMG */
+    dRes_ID_TMSGRES_BTI_BATON_INPUT_FRAME3_e=0x7,
+    dRes_ID_TMSGRES_BTI_WHITE_BLACK3_e=0x8,
+};
+
+#endif /* !RES_TMSGRES_H */

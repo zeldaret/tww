@@ -5,8 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_swpush.h"
-#include "d/res/res_kbota_00.h"
-#include "d/res/res_hhbot.h"
+#include "res/Object/Kbota_00.h"
+#include "res/Object/Hhbot.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w_sv.h"
 #include "d/actor/d_a_player.h"
@@ -24,8 +24,8 @@ const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[] = {
         /* mBgArcName       */ daObjSwpush::Act_c::M_arcname_kbota,
         /* mModelArcName    */ daObjSwpush::Act_c::M_arcname_kbota,
         /* mBtpArcName      */ NULL,
-        /* mBgResIndex      */ KBOTA_00_DZB_KBOTA_00,
-        /* mModelResIndices */ { KBOTA_00_BDL_KBOTA_00, KBOTA_00_BDL_KBOTA_00 },
+        /* mBgResIndex      */ dRes_INDEX_KBOTA_00_DZB_KBOTA_00_e,
+        /* mModelResIndices */ { dRes_INDEX_KBOTA_00_BDL_KBOTA_00_e, dRes_INDEX_KBOTA_00_BDL_KBOTA_00_e },
         /* mBtpResIndex     */ -1,
         /* mSpring          */ 0.9f,
         /* mSpeedDecay      */ 0.6f,
@@ -48,8 +48,8 @@ const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[] = {
         /* mBgArcName       */ daObjSwpush::Act_c::M_arcname_kbota,
         /* mModelArcName    */ daObjSwpush::Act_c::M_arcname_kbota,
         /* mBtpArcName      */ NULL,
-        /* mBgResIndex      */ KBOTA_00_DZB_KBOTA_00,
-        /* mModelResIndices */ { KBOTA_00_BDL_KBOTA_00, KBOTA_00_BDL_KBOTA_00 },
+        /* mBgResIndex      */ dRes_INDEX_KBOTA_00_DZB_KBOTA_00_e,
+        /* mModelResIndices */ { dRes_INDEX_KBOTA_00_BDL_KBOTA_00_e, dRes_INDEX_KBOTA_00_BDL_KBOTA_00_e },
         /* mBtpResIndex     */ -1,
         /* mSpring          */ 0.9f,
         /* mSpeedDecay      */ 0.6f,
@@ -72,8 +72,8 @@ const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[] = {
         /* mBgArcName       */ daObjSwpush::Act_c::M_arcname_kbota,
         /* mModelArcName    */ daObjSwpush::Act_c::M_arcname_kbota,
         /* mBtpArcName      */ NULL,
-        /* mBgResIndex      */ KBOTA_00_DZB_KBOTA_00,
-        /* mModelResIndices */ { KBOTA_00_BDL_KBOTA_00, KBOTA_00_BDL_KBOTA_00 },
+        /* mBgResIndex      */ dRes_INDEX_KBOTA_00_DZB_KBOTA_00_e,
+        /* mModelResIndices */ { dRes_INDEX_KBOTA_00_BDL_KBOTA_00_e, dRes_INDEX_KBOTA_00_BDL_KBOTA_00_e },
         /* mBtpResIndex     */ -1,
         /* mSpring          */ 0.9f,
         /* mSpeedDecay      */ 0.6f,
@@ -96,8 +96,8 @@ const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[] = {
         /* mBgArcName       */ daObjSwpush::Act_c::M_arcname_kbota,
         /* mModelArcName    */ daObjSwpush::Act_c::M_arcname_hhbot,
         /* mBtpArcName      */ NULL,
-        /* mBgResIndex      */ KBOTA_00_DZB_KBOTA_00,
-        /* mModelResIndices */ { HHBOT_BDL_HHBOT1, HHBOT_BDL_HHBOT1 },
+        /* mBgResIndex      */ dRes_INDEX_KBOTA_00_DZB_KBOTA_00_e,
+        /* mModelResIndices */ { dRes_INDEX_HHBOT_BDL_HHBOT1_e, dRes_INDEX_HHBOT_BDL_HHBOT1_e },
         /* mBtpResIndex     */ 0xFFFF,
         /* mSpring          */ 0.93f,
         /* mSpeedDecay      */ 0.42f,

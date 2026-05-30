@@ -11,7 +11,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
-#include "d/res/res_kita.h"
+#include "res/Object/kita.h"
 #include "dolphin/types.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
@@ -367,7 +367,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
     BOOL ret;
     kita_class* actor = static_cast<kita_class*>(i_this);
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kita", KITA_BDL_VHLIF_00));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kita", dRes_INDEX_KITA_BDL_VHLIF_00_e));
     actor->mModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
 
     if(actor->mModel == NULL){
@@ -377,7 +377,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
         JUT_ASSERT(DEMO_SELECT(928, 946), modelData != NULL);
         actor->pm_bgw = new dBgW();
         JUT_ASSERT(DEMO_SELECT(933, 951), actor->pm_bgw != NULL);
-        actor->pm_bgw->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Kita", KITA_DZB_HLIF_00)), cBgW::MOVE_BG_e, &actor->mBgwMtx);
+        actor->pm_bgw->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Kita", dRes_INDEX_KITA_DZB_HLIF_00_e)), cBgW::MOVE_BG_e, &actor->mBgwMtx);
         actor->pm_bgw->SetCrrFunc(dBgS_MoveBGProc_Typical);
         actor->pm_bgw->SetRideCallback(ride_call_back);
         ret = TRUE;

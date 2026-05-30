@@ -1,0 +1,38 @@
+#ifndef RES_MGST_H
+#define RES_MGST_H
+
+enum dRes_INDEX_MGST {
+    /* ROOT */
+    dRes_INDEX_MGST_ARC_MGST_e=0x0,
+    /* SCRN */
+    dRes_INDEX_MGST_BLO_SHIP_RACE1_e=0x5,
+    /* TIMG */
+    dRes_INDEX_MGST_BTI_SHIPFONT_1_e=0x8,
+    dRes_INDEX_MGST_BTI_SHIPFONT_1_2_e=0x9,
+    dRes_INDEX_MGST_BTI_SHIPFONT_2_e=0xA,
+    dRes_INDEX_MGST_BTI_SHIPFONT_2_2_e=0xB,
+    dRes_INDEX_MGST_BTI_SHIPFONT_3_e=0xC,
+    dRes_INDEX_MGST_BTI_SHIPFONT_3_2_e=0xD,
+    dRes_INDEX_MGST_BTI_SHIPFONT_EX_e=0xE,
+    dRes_INDEX_MGST_BTI_SHIPFONT_G_BIG_e=0xF,
+    dRes_INDEX_MGST_BTI_SHIPFONT_O_e=0x10,
+};
+
+enum dRes_ID_MGST {
+    /* ROOT */
+    dRes_ID_MGST_ARC_MGST_e=0x0,
+    /* SCRN */
+    dRes_ID_MGST_BLO_SHIP_RACE1_e=0x5,
+    /* TIMG */
+    dRes_ID_MGST_BTI_SHIPFONT_1_e=0x8,
+    dRes_ID_MGST_BTI_SHIPFONT_1_2_e=0x9,
+    dRes_ID_MGST_BTI_SHIPFONT_2_e=0xA,
+    dRes_ID_MGST_BTI_SHIPFONT_2_2_e=0xB,
+    dRes_ID_MGST_BTI_SHIPFONT_3_e=0xC,
+    dRes_ID_MGST_BTI_SHIPFONT_3_2_e=0xD,
+    dRes_ID_MGST_BTI_SHIPFONT_EX_e=0xE,
+    dRes_ID_MGST_BTI_SHIPFONT_G_BIG_e=0xF,
+    dRes_ID_MGST_BTI_SHIPFONT_O_e=0x10,
+};
+
+#endif /* !RES_MGST_H */

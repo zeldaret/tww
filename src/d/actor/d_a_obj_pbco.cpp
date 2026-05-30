@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_pbco.h"
-#include "d/res/res_pbco.h"
+#include "res/Object/Pbco.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
 
@@ -34,16 +34,16 @@ static int CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daObj_Pbco_c::CreateHeap() {
     J3DModelData* modelData;
     if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !checkItemGet(dItemNo_PEARL_NAYRU_e, TRUE)) {
-        modelData = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, PBCO_INDEX_BDL_PBCO));
+        modelData = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, dRes_INDEX_PBCO_BDL_PBCO_e));
     } else {
-        modelData = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, PBCO_INDEX_BDL_PBC2));
+        modelData = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, dRes_INDEX_PBCO_BDL_PBC2_e));
     }
     JUT_ASSERT(0xa9, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !checkItemGet(dItemNo_PEARL_NAYRU_e, TRUE)) {
         mpBgW = NULL;
     } else {
-        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, PBCO_INDEX_DZB_PBCO), cBgW::MOVE_BG_e,
+        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_PBCO_DZB_PBCO_e), cBgW::MOVE_BG_e,
                             &mpModel->getBaseTRMtx());
         if (mpBgW == NULL) {
             return FALSE;

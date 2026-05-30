@@ -1,0 +1,41 @@
+#ifndef RES_VMR_H
+#define RES_VMR_H
+
+enum dRes_INDEX_VMR {
+    /* BCK  */
+    dRes_INDEX_VMR_BCK_VMRMZ_e=0x5,
+    dRes_INDEX_VMR_BCK_VMRTY_e=0x6,
+    /* BDLM */
+    dRes_INDEX_VMR_BDL_VMRTO_e=0x9,
+    dRes_INDEX_VMR_BDL_VMRTY_e=0xA,
+    /* BRK  */
+    dRes_INDEX_VMR_BRK_VMRMZ_e=0xD,
+};
+
+enum dRes_ID_VMR {
+    /* BCK  */
+    dRes_ID_VMR_BCK_VMRMZ_e=0x5,
+    dRes_ID_VMR_BCK_VMRTY_e=0x6,
+    /* BDLM */
+    dRes_ID_VMR_BDL_VMRTO_e=0x9,
+    dRes_ID_VMR_BDL_VMRTY_e=0xA,
+    /* BRK  */
+    dRes_ID_VMR_BRK_VMRMZ_e=0xD,
+};
+
+enum VMRTO_JNT {
+    VMRTO_JNT_ROOT_e=0x0,
+    VMRTO_JNT_HEAD_e=0x1,
+};
+
+enum VMRTY_JNT {
+    VMRTY_JNT_ROOT_VMRKK_1_e=0x0,
+    VMRTY_JNT_WAIST_e=0x1,
+    VMRTY_JNT_SPIN_e=0x2,
+    VMRTY_JNT_ARML_e=0x3,
+    VMRTY_JNT_ARMR_e=0x4,
+    VMRTY_JNT_NECK_e=0x5,
+    VMRTY_JNT_HEAD_e=0x6,
+};
+
+#endif /* !RES_VMR_H */

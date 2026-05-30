@@ -8,7 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_pedestal.h"
-#include "d/res/res_os.h"
+#include "res/Object/Os.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -291,13 +291,13 @@ static BOOL tunoNodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000988-00000C94       .text createHeap__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Os", OS_BDL_OS));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Os", dRes_INDEX_OS_BDL_OS_e));
     JUT_ASSERT(0x2F9, modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Os", OS_BCK_OS_MOVE01)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Os", dRes_INDEX_OS_BCK_OS_MOVE01_e)),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
@@ -1659,9 +1659,9 @@ void daNpc_Os_c::setAnm(int param_1) {
     };
 
     static s8 l_anmTbl[] = {
-        OS_BCK_OS_MOVE01,
-        OS_BCK_OS_MOVE01,
-        OS_BCK_OS_AWAKE,
+        dRes_INDEX_OS_BCK_OS_MOVE01_e,
+        dRes_INDEX_OS_BCK_OS_MOVE01_e,
+        dRes_INDEX_OS_BCK_OS_AWAKE_e,
     };
 
     static anmPrm_c l_anmPrm[] = {
@@ -1741,15 +1741,15 @@ BOOL daNpc_Os_c::initBrkAnm(u8 param_1, bool param_2) {
     };  // Size: 0x10
 
     static AnmTableEntry brkAnmTbl[] = {
-        {OS_BRK_TURN_OFF, J3DFrameCtrl::EMode_NONE,   1.0f,  0},
-        {OS_BRK_TURN_OFF, J3DFrameCtrl::EMode_NONE,   1.0f,  -1},
-        {OS_BRK_OS_AWAKE, J3DFrameCtrl::EMode_NONE,   1.0f,  0},
-        {OS_BRK_OS_AWAKE, J3DFrameCtrl::EMode_NONE,   -1.0f, 0},
-        {OS_BRK_TURN_ON,  J3DFrameCtrl::EMode_NONE,   1.0f,  0},
-        {OS_BRK_TURN_ON,  J3DFrameCtrl::EMode_NONE,   0.0f,  0},
-        {OS_BRK_TENMETU,  J3DFrameCtrl::EMode_LOOP, 1.0f,  0},
-        {OS_BRK_OS_AWAKE, J3DFrameCtrl::EMode_NONE,   0.0f,  -1},
-        {OS_BRK_LINK,     J3DFrameCtrl::EMode_LOOP, 1.0f,  0},
+        {dRes_INDEX_OS_BRK_TURN_OFF_e, J3DFrameCtrl::EMode_NONE,   1.0f,  0},
+        {dRes_INDEX_OS_BRK_TURN_OFF_e, J3DFrameCtrl::EMode_NONE,   1.0f,  -1},
+        {dRes_INDEX_OS_BRK_OS_AWAKE_e, J3DFrameCtrl::EMode_NONE,   1.0f,  0},
+        {dRes_INDEX_OS_BRK_OS_AWAKE_e, J3DFrameCtrl::EMode_NONE,   -1.0f, 0},
+        {dRes_INDEX_OS_BRK_TURN_ON_e,  J3DFrameCtrl::EMode_NONE,   1.0f,  0},
+        {dRes_INDEX_OS_BRK_TURN_ON_e,  J3DFrameCtrl::EMode_NONE,   0.0f,  0},
+        {dRes_INDEX_OS_BRK_TENMETU_e,  J3DFrameCtrl::EMode_LOOP, 1.0f,  0},
+        {dRes_INDEX_OS_BRK_OS_AWAKE_e, J3DFrameCtrl::EMode_NONE,   0.0f,  -1},
+        {dRes_INDEX_OS_BRK_LINK_e,     J3DFrameCtrl::EMode_LOOP, 1.0f,  0},
     };
 
     J3DModelData* modelData = mpMorf->getModel()->getModelData();

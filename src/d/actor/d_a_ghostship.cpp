@@ -5,13 +5,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ghostship.h"
-#include "d/res/res_ayush.h"
+#include "res/Object/Ayush.h"
 #include "SSystem/SComponent/c_math.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/d_kankyo_wether.h"
-#include "d/res/res_cloth.h"
+#include "res/Object/Cloth.h"
 
 const u32 daGhostship_c::m_heapsize = 0x1EA0;
 const char daGhostship_c::m_arc_name[] = "Ayush";
@@ -31,7 +31,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 00000118-0000032C .text _createHeap__13daGhostship_cFv */
 BOOL daGhostship_c::_createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BDL_AYUSH));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_AYUSH_BDL_AYUSH_e));
     JUT_ASSERT(DEMO_SELECT(80, 88), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -39,16 +39,16 @@ BOOL daGhostship_c::_createHeap() {
         return false;
     }
 
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BTK_AYUSH));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_AYUSH_BTK_AYUSH_e));
     JUT_ASSERT(DEMO_SELECT(87, 95), btk != NULL);
 
     if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
 
-    ResTIMG* res1 = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BTI_B_GSHIP_HATA));
-    ResTIMG* res2 = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BTI_B_GSHIP_HO));
-    ResTIMG* res3 = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_cloth_arc_name, CLOTH_BTI_CLOTHTOON));
+    ResTIMG* res1 = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_AYUSH_BTI_B_GSHIP_HATA_e));
+    ResTIMG* res2 = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_AYUSH_BTI_B_GSHIP_HO_e));
+    ResTIMG* res3 = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_cloth_arc_name, dRes_INDEX_CLOTH_BTI_CLOTHTOON_e));
 
     mpCloth = dCloth_packetXlu_create(res1, res3, 5, 5, 700.0f, 350.0f, &tevStr, 0);
     mpCloth2 = dCloth_packetXlu_create(res2, res3, 6, 6, 1800.0f, 1000.0f, &tevStr, 0);

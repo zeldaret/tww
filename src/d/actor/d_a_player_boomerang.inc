@@ -74,7 +74,7 @@ BOOL daPy_lk_c::returnBoomerang() {
 BOOL daPy_lk_c::checkNextActionBoomerangReady() {
     if (!itemButton() && (mpAttnActorLockOn != NULL || dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000010_e))) {
         setActAnimeUpper(
-            LKANM_BCK_BOOMTHROW,
+            dRes_INDEX_LKANM_BCK_BOOMTHROW_e,
             UPPER_MOVE2_e,
             m_HIO->mItem.mBoom.m.field_0x4,
             m_HIO->mItem.mBoom.m.field_0x8,
@@ -93,7 +93,7 @@ void daPy_lk_c::checkNextActionBoomerangFly() {
         checkNextActionBoomerangReady();
     } else if (itemTrigger() && mEquipItem == getReadyItem()) {
         setActAnimeUpper(
-            LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, m_HIO->mItem.mBoom.m.field_0x18, 0.0f, -1, m_HIO->mBasic.m.field_0xC
+            dRes_INDEX_LKANM_BCK_BOOMWAIT_e, UPPER_MOVE2_e, m_HIO->mItem.mBoom.m.field_0x18, 0.0f, -1, m_HIO->mBasic.m.field_0xC
         );
     }
 }
@@ -117,7 +117,7 @@ BOOL daPy_lk_c::changeBoomerangCatchProc() {
             (checkNoUpperAnime() || checkBoomerangThrowAnime()))
         {
             setActAnimeUpper(
-                LKANM_BCK_BOOMCATCH,
+                dRes_INDEX_LKANM_BCK_BOOMCATCH_e,
                 UPPER_MOVE2_e,
                 m_HIO->mItem.mBoom.m.field_0x20,
                 m_HIO->mItem.mBoom.m.field_0x24,
@@ -145,7 +145,7 @@ BOOL daPy_lk_c::procBoomerangSubject_init() {
 
     mNormalSpeed = 0.0f;
 
-    setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_BOOMWAIT_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
     setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_BOOMERANG_AIM_e);
@@ -201,7 +201,7 @@ BOOL daPy_lk_c::procBoomerangMove_init() {
         mDirection = DIR_RIGHT;
         current.angle.y = shape_angle.y + -0x4000;
     }
-    setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, m_HIO->mItem.mBoom.m.field_0x18, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_BOOMWAIT_e, UPPER_MOVE2_e, m_HIO->mItem.mBoom.m.field_0x18, 0.0f, -1, -1.0f);
     setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
     dComIfGp_setPlayerStatus0(0, daPyStts0_BOOMERANG_AIM_e);
     return true;

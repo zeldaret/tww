@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ikari.h"
-#include "d/res/res_ikari.h"
+#include "res/Object/Ikari.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_mtx.h"
@@ -36,17 +36,17 @@ void daIkari_c::setMtx() {
 BOOL daIkari_c::_createHeap() {
     static int ikari_bdl[5] = {
 #if VERSION == VERSION_DEMO
-        IKARI_BMD_S_IKARI2,
-        IKARI_BMD_S_IKARI2,
-        IKARI_BMD_S_IKARI2,
-        IKARI_BMD_S_IKARI3,
-        IKARI_BMD_S_IKARI4,
+        dRes_INDEX_IKARI_BMD_S_IKARI2_e,
+        dRes_INDEX_IKARI_BMD_S_IKARI2_e,
+        dRes_INDEX_IKARI_BMD_S_IKARI2_e,
+        dRes_INDEX_IKARI_BMD_S_IKARI3_e,
+        dRes_INDEX_IKARI_BMD_S_IKARI4_e,
 #else
-        IKARI_BDL_S_IKARI2,
-        IKARI_BDL_S_IKARI2,
-        IKARI_BDL_S_IKARI2,
-        IKARI_BDL_S_IKARI3,
-        IKARI_BDL_S_IKARI4,
+        dRes_INDEX_IKARI_BDL_S_IKARI2_e,
+        dRes_INDEX_IKARI_BDL_S_IKARI2_e,
+        dRes_INDEX_IKARI_BDL_S_IKARI2_e,
+        dRes_INDEX_IKARI_BDL_S_IKARI3_e,
+        dRes_INDEX_IKARI_BDL_S_IKARI4_e,
 #endif
     };
 

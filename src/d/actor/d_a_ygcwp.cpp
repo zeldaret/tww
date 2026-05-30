@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ygcwp.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_ygcwp.h"
+#include "res/Object/Ygcwp.h"
 #include "d/d_com_inf_game.h"
 
 enum {
@@ -16,8 +16,8 @@ enum {
 };
 
 const u32 daYgcwp_c::M_brk_table[] = {
-    YGCWP_BRK_YGCWP00_COMMON,
-    YGCWP_BRK_YGCWP00_WARP,
+    dRes_INDEX_YGCWP_BRK_YGCWP00_COMMON_e,
+    dRes_INDEX_YGCWP_BRK_YGCWP00_WARP_e,
 };
 
 const u32 daYgcwp_c::M_brk_mode_table[] = {
@@ -50,7 +50,7 @@ BOOL daYgcwp_c::create_heap() {
     J3DAnmTevRegKey* brk_p;
     s32 i;
     BOOL ret = FALSE;
-    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YGCWP_BDL_YGCWP00));
+    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YGCWP_BDL_YGCWP00_e));
     JUT_ASSERT(0xBE, mdl_data != NULL);
 
     if (mdl_data != NULL) {

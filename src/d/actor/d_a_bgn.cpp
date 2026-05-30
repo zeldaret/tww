@@ -16,7 +16,7 @@
 #include "d/d_meter.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
-#include "d/res/res_bgn.h"
+#include "res/Object/Bgn.h"
 #include "dolphin/gf/GFGeometry.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_cc_d.h"
@@ -3426,10 +3426,10 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     bgn_class* i_this = (bgn_class*)a_this;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Bgn", BGN_BDL_BGN_HEAD1),
+        (J3DModelData*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BDL_BGN_HEAD1_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bgn", BGN_BCK_BGN_HEAD1),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BCK_BGN_HEAD1_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -3444,12 +3444,12 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
     i_this->mHeadParts[0].mpPartModel = i_this->mpMorf->getModel();
     i_this->mHeadParts[0].m0D2 = 16;
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", BGN_BDL_BGN_MAIN1);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BDL_BGN_MAIN1_e);
     i_this->mpChestModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (i_this->mpChestModel == NULL) {
         return FALSE;
     }
-    bodyModelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", BGN_BDL_BGN_BODY1);
+    bodyModelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BDL_BGN_BODY1_e);
     if (!part_init(&i_this->mPelvisParts[0], bodyModelData)) {
         return FALSE;
     }
@@ -3480,12 +3480,12 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         }
         i_this->mTailParts[i].m0D2 = 11 - i;
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", BGN_BDL_BGN_JYAKUTENA);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BDL_BGN_JYAKUTENA_e);
     i_this->mpJyakutenAModel = mDoExt_J3DModel__create(modelData, DEMO_SELECT(0x80000, 0), DEMO_SELECT(0x11000022, 0x11020203));
     if (i_this->mpJyakutenAModel == NULL) {
         return FALSE;
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", BGN_BDL_BGN_JYAKUTENB);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BDL_BGN_JYAKUTENB_e);
     i_this->mpJyakutenBModel = mDoExt_J3DModel__create(modelData, DEMO_SELECT(0x80000, 0), DEMO_SELECT(0x11000022, 0x11020203));
     if (i_this->mpJyakutenBModel == NULL) {
         return FALSE;
@@ -3496,11 +3496,11 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 #endif
-    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(BGN_BRK_BGN_JYAKUTENBC, BGN_BRK_BGN_JYAKUTENB));
+    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(dRes_INDEX_BGN_BRK_BGN_JYAKUTENBC_e, dRes_INDEX_BGN_BRK_BGN_JYAKUTENB_e));
     if (!i_this->mJyakutenBBrkAnm->init(modelData, pBrk, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", BGN_BDL_BGN_JYAKUTENC);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BDL_BGN_JYAKUTENC_e);
     i_this->mpJyakutenCModel = mDoExt_J3DModel__create(modelData, DEMO_SELECT(0x80000, 0), DEMO_SELECT(0x11000022, 0x11020203));
     if (i_this->mpJyakutenCModel == NULL) {
         return FALSE;
@@ -3511,25 +3511,25 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 #endif
-    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(BGN_BRK_BGN_JYAKUTENBC, BGN_BRK_BGN_JYAKUTENC));
+    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(dRes_INDEX_BGN_BRK_BGN_JYAKUTENBC_e, dRes_INDEX_BGN_BRK_BGN_JYAKUTENC_e));
     if (!i_this->mJyakutenCBrkAnm->init(modelData, pBrk, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
-    pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", BGN_BTI_NOT_CUT1);
+    pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BTI_NOT_CUT1_e);
     if (!i_this->mRedRopeMat.init(1, 0x3C, pBti, 1)) {
         return FALSE;
     }
-    pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", BGN_BTI_HIMO);
+    pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BTI_HIMO_e);
     if (!i_this->mBlueRopeMat.init(8, 0x3C, pBti, 1)) {
         return FALSE;
     }
 #if VERSION > VERSION_DEMO
-    pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", BGN_BTI_NOT_CUT1);
+    pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BTI_NOT_CUT1_e);
     if (!i_this->mDefeatCSRopeMat.init(1, 0x3C, pBti, 1)) {
         return FALSE;
     }
 #endif
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", BGN_BDL_R0E_A);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BDL_R0E_A_e);
     JUT_ASSERT(DEMO_SELECT(6628, 7026), modelData != NULL);
     i_this->mpWater0Model = mDoExt_J3DModel__create(modelData, 0x80000, 0x31000000);
     if (i_this->mpWater0Model == NULL) {
@@ -3539,7 +3539,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     if (i_this->mpWater1Model == NULL) {
         return FALSE;
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", BGN_BDL_R00);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BDL_R00_e);
     i_this->mpRoomReflectionModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     JUT_ASSERT(DEMO_SELECT(6654, 7052), modelData != NULL);
     if (i_this->mpRoomReflectionModel == NULL) {

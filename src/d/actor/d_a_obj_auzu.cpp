@@ -8,7 +8,7 @@
 #include "d/actor/d_a_kytag01.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ship.h"
-#include "d/res/res_auzu.h"
+#include "res/Object/Auzu.h"
 
 namespace daObjAuzu {
 namespace {
@@ -40,11 +40,11 @@ BOOL daObjAuzu::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 0000009C-000001F8       .text create_heap__Q29daObjAuzu5Act_cFv */
 bool daObjAuzu::Act_c::create_heap() {
     bool create_result = false;
-    J3DModelData* mdl_data = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, AUZU_BDL_AUZU));
+    J3DModelData* mdl_data = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_AUZU_BDL_AUZU_e));
     JUT_ASSERT(226, mdl_data != NULL);
     mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
 
-    J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(M_arcname, AUZU_BTK_AUZU));
+    J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_AUZU_BTK_AUZU_e));
     JUT_ASSERT(236, btk_data != NULL);
 
     int init_result = mBtkAnm.init(

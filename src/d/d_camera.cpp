@@ -5054,7 +5054,7 @@ bool dCamera_c::Chtyp(s32 nextType) {
     }
 }
 
-/* 8017B51C-8017B524       .text U2__9dCamera_cFv */
+/* 8017B51C-8017B524       .text dRes_INDEX_U2__9dCamera_cFv_e */
 s16 dCamera_c::U2() {
     return mAngleY.Val();
 }

@@ -12,7 +12,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_zl.h"
+#include "res/Object/Zl.h"
 #include "d/d_snap.h"
 
 class daNpc_Zl1_HIO_c : public mDoHIO_entry_c{

@@ -1,0 +1,26 @@
+#ifndef RES_SALVAGE_H
+#define RES_SALVAGE_H
+
+enum dRes_INDEX_SALVAGE {
+    /* BDL  */
+    dRes_INDEX_SALVAGE_BDL_BOXSEA_e=0x3,
+    dRes_INDEX_SALVAGE_BDL_VTBHZ_e=0x4,
+};
+
+enum dRes_ID_SALVAGE {
+    /* BDL  */
+    dRes_ID_SALVAGE_BDL_BOXSEA_e=0x3,
+    dRes_ID_SALVAGE_BDL_VTBHZ_e=0x4,
+};
+
+enum BOXSEA_JNT {
+    BOXSEA_JNT_BOXSEA_e=0x0,
+    BOXSEA_JNT_COVER_JNT_e=0x1,
+    BOXSEA_JNT_COVERSEA_e=0x2,
+};
+
+enum VTBHZ_JNT {
+    VTBHZ_JNT_VTBHZ_MODEL_e=0x0,
+};
+
+#endif /* !RES_SALVAGE_H */

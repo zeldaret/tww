@@ -1,0 +1,25 @@
+#ifndef RES_VSAIM_H
+#define RES_VSAIM_H
+
+enum dRes_INDEX_VSAIM {
+    /* BDLM */
+    dRes_INDEX_VSAIM_BDL_VSAIM_e=0x4,
+    /* BTK  */
+    dRes_INDEX_VSAIM_BTK_VSAIM_e=0x7,
+};
+
+enum dRes_ID_VSAIM {
+    /* BDLM */
+    dRes_ID_VSAIM_BDL_VSAIM_e=0x4,
+    /* BTK  */
+    dRes_ID_VSAIM_BTK_VSAIM_e=0x7,
+};
+
+enum VSAIM_JNT {
+    VSAIM_JNT_ROOT_VSAIM1_e=0x0,
+    VSAIM_JNT_VSAIM_BODY_e=0x1,
+    VSAIM_JNT_VUPY1_OUTSIDE_e=0x2,
+    VSAIM_JNT_VUPY2_INSIDE_e=0x3,
+};
+
+#endif /* !RES_VSAIM_H */

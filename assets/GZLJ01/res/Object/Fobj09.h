@@ -1,0 +1,23 @@
+#ifndef RES_FOBJ09_H
+#define RES_FOBJ09_H
+
+enum dRes_INDEX_FOBJ09 {
+    /* BCK  */
+    dRes_INDEX_FOBJ09_BCK_FOBJ09_e=0x4,
+    /* BDL  */
+    dRes_INDEX_FOBJ09_BDL_FOBJ09_e=0x7,
+};
+
+enum dRes_ID_FOBJ09 {
+    /* BCK  */
+    dRes_ID_FOBJ09_BCK_FOBJ09_e=0x4,
+    /* BDL  */
+    dRes_ID_FOBJ09_BDL_FOBJ09_e=0x7,
+};
+
+enum FOBJ09_JNT {
+    FOBJ09_JNT_TUBOKO_BASE_e=0x0,
+    FOBJ09_JNT_TUBOKO_HEAD_e=0x1,
+};
+
+#endif /* !RES_FOBJ09_H */

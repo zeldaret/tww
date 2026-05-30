@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vmsms.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_vmsms.h"
+#include "res/Object/VmsMS.h"
 
 const char daObjVmsms_c::M_arcname[6] = "VmsMS";
 
@@ -20,7 +20,7 @@ BOOL daObjVmsms_c::create_heap() {
     J3DModelData* mdl_data;
     BOOL ret = FALSE;
 
-    mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, VMSMS_BDL_VMSMS);
+    mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMSMS_BDL_VMSMS_e);
     JUT_ASSERT(0x5b, mdl_data != NULL);
 
     if (mdl_data != NULL) {

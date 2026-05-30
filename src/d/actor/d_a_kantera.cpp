@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kantera.h"
-#include "d/res/res_kantera.h"
+#include "res/Object/Kantera.h"
 #include "d/d_kankyo.h"
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
@@ -285,7 +285,7 @@ static BOOL daKantera_Delete(kantera_class* i_this) {
 static BOOL daKantera_CreateHeap(fopAc_ac_c* a_this) {
     kantera_class* i_this = (kantera_class*)a_this;
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", KANTERA_BMD_MK_KANTERA));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", dRes_INDEX_KANTERA_BMD_MK_KANTERA_e));
     JUT_ASSERT(1014, modelData != NULL);
 
     i_this->mpModel1 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -293,7 +293,7 @@ static BOOL daKantera_CreateHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    J3DAnmTevRegKey* anm_res_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Kantera", KANTERA_BRK_MK_KANTERA));
+    J3DAnmTevRegKey* anm_res_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Kantera", dRes_INDEX_KANTERA_BRK_MK_KANTERA_e));
     JUT_ASSERT(1036, anm_res_brk != NULL);
 
     i_this->mpBrkAnm1 = new mDoExt_brkAnm();
@@ -305,7 +305,7 @@ static BOOL daKantera_CreateHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", KANTERA_BMD_LF));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", dRes_INDEX_KANTERA_BMD_LF_e));
     JUT_ASSERT(1048, modelData != NULL);
 
     i_this->mpModel2 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -313,7 +313,7 @@ static BOOL daKantera_CreateHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    anm_res_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Kantera", KANTERA_BRK_LF));
+    anm_res_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Kantera", dRes_INDEX_KANTERA_BRK_LF_e));
     JUT_ASSERT(1058, anm_res_brk != NULL);
 
     i_this->mpBrkAnm2 = new mDoExt_brkAnm();
@@ -325,7 +325,7 @@ static BOOL daKantera_CreateHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", KANTERA_BMD_GA));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", dRes_INDEX_KANTERA_BMD_GA_e));
     JUT_ASSERT(1125, modelData != NULL);
 
     for (s32 i = 0; i < ARRAY_SSIZE(i_this->mGa); i++) {
