@@ -26,6 +26,7 @@ static int CheckCreateHeap(fopAc_ac_c* i_this) {
     return static_cast<daLStair_c*>(i_this)->CreateHeap();
 }
 
+/* 000000F4-000004F8       .text CreateHeap__10daLStair_cFv */
 BOOL daLStair_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, GKAI00_BDL_GKAI00);
     JUT_ASSERT(0xD8, modelData != NULL);
