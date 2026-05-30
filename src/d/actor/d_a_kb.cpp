@@ -158,7 +158,7 @@ BOOL carry_check(kb_class* i_this) {
         i_this->m438 = 0;
         i_this->m44A = 0;
 
-        anm_init(i_this, 0x14, 5.0f, 2, 1.0f, 9);
+        anm_init(i_this, dRes_INDEX_KB_BCK_JITA2_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KB_BAS_JITA2_e);
 
         if(i_this->mShapeType >= 8) {
             fopAcM_monsSeStart(actor, JA_SE_CV_PG_L_CATCH, 0);
@@ -345,7 +345,7 @@ void pl_attack_hit_check(kb_class* i_this) {
 
         if(ALL_ANGER) {
             if(i_this->m50C != 0x16) {
-                anm_init(i_this, 0x16, 5.0f, 2, 2.0f, 0xB);
+                anm_init(i_this, dRes_INDEX_KB_BCK_RUN1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, dRes_INDEX_KB_BAS_RUN1_e);
             }
 
             cLib_onBit<u32>(actor->attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
@@ -681,7 +681,7 @@ void normal_move(kb_class* i_this) {
             actor->shape_angle.z = 0;
 
             if(i_this->m50C != 0x17) {
-                anm_init(i_this, 0x17, 5.0f, 2, 1.0f, 0xC);
+                anm_init(i_this, dRes_INDEX_KB_BCK_WAIT1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KB_BAS_WAIT1_e);
             }
 
             i_this->m4B4 = 0.0f;
@@ -711,7 +711,7 @@ void normal_move(kb_class* i_this) {
             i_this->m4B4 = 3.0f;
 
             if(i_this->m50C != 0x18) {
-                anm_init(i_this, 0x18, 5.0f, 2, 1.0f, 0xD);
+                anm_init(i_this, dRes_INDEX_KB_BCK_WALK1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KB_BAS_WALK1_e);
             }
 
             i_this->m4B8 = 2.0f;
@@ -767,7 +767,7 @@ void normal_move(kb_class* i_this) {
             }
 
             if(i_this->m50C != 0x16) {
-                anm_init(i_this, 0x16, 5.0f, 2, 1.5f, 0xB);
+                anm_init(i_this, dRes_INDEX_KB_BCK_RUN1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.5f, dRes_INDEX_KB_BAS_RUN1_e);
             }
 
             i_this->m4B8 = 2.0f;
@@ -872,7 +872,7 @@ void carry_move(kb_class* i_this) {
                 i_this->m438 += 1;
                 
                 if(i_this->m438 == 4) {
-                    dComIfGp_particle_set(0xe, &actor->current.pos, &actor->shape_angle);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBA00, &actor->current.pos, &actor->shape_angle);
                 }
 
                 cLib_addCalcAngleS2(&actor->shape_angle.x, -0x7FFF, 1, 0x1000);
@@ -889,9 +889,9 @@ void carry_move(kb_class* i_this) {
                 i_this->m426[2] = 0;
                 i_this->m4C8 = 1.8f;
                 
-                dComIfGp_particle_set(0xE, &actor->current.pos, &actor->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBA00, &actor->current.pos, &actor->shape_angle);
 
-                anm_init(i_this, 0x14, 5.0f, 0, i_this->m4C8, 9);
+                anm_init(i_this, dRes_INDEX_KB_BCK_JITA2_e, 5.0f, J3DFrameCtrl::EMode_NONE, i_this->m4C8, dRes_INDEX_KB_BAS_JITA2_e);
 
                 if(i_this->mShapeType >= 8) {
                     fopAcM_monsSeStart(actor, JA_SE_CV_PG_L_CATCH, 0);
@@ -918,7 +918,7 @@ void carry_move(kb_class* i_this) {
                     i_this->m44A -= 1;
 
                     if(i_this->m44A <= 0) {
-                        anm_init(i_this, 0x13, 5.0f, 2, 1.0f, 8);
+                        anm_init(i_this, dRes_INDEX_KB_BCK_JITA1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KB_BAS_JITA1_e);
 
                         i_this->m426[2] = cM_rndF(300.0f) + 600.0f;
                         i_this->m44A = 0;
@@ -938,7 +938,7 @@ void carry_move(kb_class* i_this) {
                             }
                         }
 
-                        anm_init(i_this, 0x14, 0.0f, 0, i_this->m4C8, 9);
+                        anm_init(i_this, dRes_INDEX_KB_BCK_JITA2_e, 0.0f, J3DFrameCtrl::EMode_NONE, i_this->m4C8, dRes_INDEX_KB_BAS_JITA2_e);
                     }
                 }
             }
@@ -947,7 +947,7 @@ void carry_move(kb_class* i_this) {
                     i_this->m44A = 3;
                     i_this->m4C8 = 1.8f;
                     
-                    anm_init(i_this, 0x14, 5.0f, 0, i_this->m4C8, 9);
+                    anm_init(i_this, dRes_INDEX_KB_BCK_JITA2_e, 5.0f, J3DFrameCtrl::EMode_NONE, i_this->m4C8, dRes_INDEX_KB_BAS_JITA2_e);
 
                     if(i_this->mShapeType >= 8) {
                         fopAcM_monsSeStart(actor, JA_SE_CV_PG_L_CATCH, 0);
@@ -956,10 +956,10 @@ void carry_move(kb_class* i_this) {
                         fopAcM_monsSeStart(actor, JA_SE_CV_PG_CATCH, 0);
                     }
 
-                    dComIfGp_particle_set(0xE, &actor->current.pos, &actor->shape_angle);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBA00, &actor->current.pos, &actor->shape_angle);
                 }
                 else if(pPlayer->getFootOnGround()) {
-                    fopAcM_monsSeStart(actor, 0x4823, 0);
+                    fopAcM_monsSeStart(actor, JA_SE_CV_PG_CARRY, 0);
                 }
             }
 
@@ -1008,10 +1008,10 @@ void carry_move(kb_class* i_this) {
 
             if(i_this->mShapeType >= 8) {
                 dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
-                fopAcM_monsSeStart(actor, 0x593e, 0);
+                fopAcM_monsSeStart(actor, JA_SE_CM_PG_L_JUMP, 0);
 
                 if(strcmp(dComIfGp_getStartStageName(), "sea") == 0 && fopAcM_GetRoomNo(actor) == dIsleRoom_OutsetIsland_e && i_this->mAcch.GetGroundH() != -G_CM3D_F_INF && dComIfG_Bgsp()->GetSpecialCode(i_this->mAcch.m_gnd) != 4 && !dKy_daynight_check()) {
-                    dComIfGs_onEventBit(0x3402);
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_3402);
                 }
             }
 
@@ -1033,7 +1033,7 @@ void carry_move(kb_class* i_this) {
 
             cLib_addCalc0(&actor->speedF, 1.0f, 4.0f);
 
-            dComIfGp_particle_set(0xE, &actor->current.pos, &actor->shape_angle);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBA00, &actor->current.pos, &actor->shape_angle);
 
             if(i_this->mShapeType >= 8) {
                 fopAcM_monsSeStart(actor, JA_SE_CV_PG_L_CATCH, 0);
@@ -1057,7 +1057,7 @@ void carry_move(kb_class* i_this) {
                 dComIfGp_getCamera(0)->mCamera.ForceLockOff(fopAcM_GetID(actor));
 
                 if(i_this->m50C != 0x17) {
-                    anm_init(i_this, 0x17, 5.0f, 2, 1.0f, 0xC);
+                    anm_init(i_this, dRes_INDEX_KB_BCK_WAIT1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KB_BAS_WAIT1_e);
                 }
 
                 i_this->mSph.OnCoSetBit();
@@ -1094,7 +1094,7 @@ void carry_move(kb_class* i_this) {
                 actor->shape_angle.x = 0;
                 i_this->mSph.OnCoSetBit();
                 
-                anm_init(i_this, 0x15, 5.0f, 0, 1.0f, 10);
+                anm_init(i_this, dRes_INDEX_KB_BCK_NAKU1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_KB_BAS_NAKU1_e);
 
                 actor->speedF = 0.0f;
                 i_this->m4B4 = 0.0f;
@@ -1157,7 +1157,7 @@ void carry_move(kb_class* i_this) {
                 i_this->m594.end();
             }
 
-            anm_init(i_this, 0x14, 5.0f, 2, 1.0f, 9);
+            anm_init(i_this, dRes_INDEX_KB_BCK_JITA2_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KB_BAS_JITA2_e);
 
             actor->shape_angle.x = 0x8000;
             actor->speedF = 20.0f;
@@ -1191,7 +1191,7 @@ void swim_move(kb_class* i_this) {
             cLib_offBit<u32>(actor->attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
             cLib_offBit<u32>(actor->attention_info.flags, fopAc_Attn_LOCKON_MISC_e);
             i_this->mSph.OnCoSetBit();
-            anm_init(i_this, 0x13, 5.0f, 2, 1.0f, 8);
+            anm_init(i_this, dRes_INDEX_KB_BCK_JITA1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KB_BAS_JITA1_e);
             actor->speedF = 1.5f;
             actor->speed.x = 0.0f;
             actor->speed.z = 0.0f;
@@ -1241,7 +1241,7 @@ void swim_move(kb_class* i_this) {
                 }
 
                 if(i_this->m50C != 0x18) {
-                    anm_init(i_this, 0x18, 5.0f, 2, 1.0f, 0xD);
+                    anm_init(i_this, dRes_INDEX_KB_BCK_WALK1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KB_BAS_WALK1_e);
                 }
 
                 actor->gravity = -3.0f;
@@ -1278,7 +1278,7 @@ void swim_move(kb_class* i_this) {
 
             break;
         case 0x18:
-            anm_init(i_this, 0x11, 5.0f, 0, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_KB_BCK_DASSUI_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
 
             i_this->m436 = 0;
             actor->speedF = 0.0f;
@@ -1293,7 +1293,7 @@ void swim_move(kb_class* i_this) {
                 }
 
                 if(i_this->m5A8[temp3].getEmitter() == NULL) {
-                    dComIfGp_particle_set(0x80b6, &actor->current.pos, &temp, NULL, 0xFF, &i_this->m5A8[temp3], fopAcM_GetRoomNo(actor));
+                    dComIfGp_particle_set(dPa_name::ID_AK_SN_PIGDASSUI, &actor->current.pos, &temp, NULL, 0xFF, &i_this->m5A8[temp3], fopAcM_GetRoomNo(actor));
                 }
 
                 JPABaseEmitter* pEmtr = i_this->m5A8[temp3].getEmitter();
@@ -1375,7 +1375,7 @@ void attack_move(kb_class* i_this) {
     switch(i_this->m420) {
         case 0x1E:
         {
-            anm_init(i_this, 0x10, 5.0f, 2, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_KB_BCK_DAMAGE1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
 
             cLib_offBit<u32>(actor->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
 
@@ -1421,7 +1421,7 @@ void attack_move(kb_class* i_this) {
         case 0x21:
         {
             if(i_this->m50C != 0x16) {
-                anm_init(i_this, 0x16, 5.0f, 2, 2.0f, 0xB);
+                anm_init(i_this, dRes_INDEX_KB_BCK_RUN1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, dRes_INDEX_KB_BAS_RUN1_e);
             }
 
             cLib_offBit<u32>(actor->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
@@ -1493,7 +1493,7 @@ void attack_move(kb_class* i_this) {
             }
             if(i_this->mSph.ChkAtShieldHit() || temp) {
                 if(i_this->m50C != 0x16) {
-                    anm_init(i_this, 0x16, 5.0f, 2, 2.0f, 0xB);
+                    anm_init(i_this, dRes_INDEX_KB_BCK_RUN1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, dRes_INDEX_KB_BAS_RUN1_e);
                 }
 
                 actor->current.angle.y = actor->shape_angle.y + 0x8000;
@@ -1577,10 +1577,10 @@ void money_drop(kb_class* i_this) {
     int i = 0;
 
     static u32 gold_rate_dt[] = {
-        1, 2, 3
+        dItemNo_GREEN_RUPEE_e, dItemNo_BLUE_RUPEE_e, dItemNo_YELLOW_RUPEE_e
     };
     static u32 item_rate_dt[] = {
-        0x10, 0xB, 0x9
+        dItemNo_ARROW_10_e, dItemNo_BOMB_5_e, dItemNo_SMALL_MAGIC_e
     };
 
     csXyz temp = actor->current.angle;
@@ -1649,7 +1649,7 @@ void esa_demo_move(kb_class* i_this) {
     switch(i_this->m420) {
         case 0x28:
             if(i_this->m50C != 0x18) {
-                anm_init(i_this, 0x18, 5.0f, 2, 1.5f, 0xD);
+                anm_init(i_this, dRes_INDEX_KB_BCK_WALK1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.5f, dRes_INDEX_KB_BAS_WALK1_e);
             }
 
             i_this->mSph.OffCoSPrmBit(cCcD_CoSPrm_VsGrpAll_e);
@@ -1708,7 +1708,7 @@ void esa_demo_move(kb_class* i_this) {
                 actor->speedF = 0.0f;
                 actor->speed.setall(0.0f);
                 
-                anm_init(i_this, 0x12, 5.0f, 0, 2.0f, 7);
+                anm_init(i_this, dRes_INDEX_KB_BCK_EAT1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 2.0f, dRes_INDEX_KB_BAS_EAT1_e);
 
                 i_this->m44A = 1;
                 i_this->m420 += 1;
@@ -1732,7 +1732,7 @@ void esa_demo_move(kb_class* i_this) {
                         i_this->m4D8 = fpcM_ERROR_PROCESS_ID_e;
                     }
 
-                    anm_init(i_this, 0x15, 5.0f, 0, 1.0f, 0xA);
+                    anm_init(i_this, dRes_INDEX_KB_BCK_NAKU1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_KB_BAS_NAKU1_e);
 
                     if(i_this->mShapeType >= 8) {
                         fopAcM_monsSeStart(actor, JA_SE_CV_PG_L_TURN, 0);
@@ -1753,7 +1753,7 @@ void esa_demo_move(kb_class* i_this) {
                 if(i_this->mAcch.GetGroundH() != -G_CM3D_F_INF) {
                     if(dComIfG_Bgsp()->GetSpecialCode(i_this->mAcch.m_gnd) == 5) {
                         if(i_this->mShapeType >= 8) {
-                            anm_init(i_this, 0x16, 5.0f, 2, 2.0f, 0xB);
+                            anm_init(i_this, dRes_INDEX_KB_BCK_RUN1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, dRes_INDEX_KB_BAS_RUN1_e);
 
                             i_this->m409 = 1;
                             i_this->m5D4[0] = actor->current.pos;
@@ -1776,7 +1776,7 @@ void esa_demo_move(kb_class* i_this) {
                         break;
                     }
 
-                    if(dComIfG_Bgsp()->GetAttributeCode(i_this->mAcch.m_gnd) == 1 || dComIfG_Bgsp()->GetAttributeCode(i_this->mAcch.m_gnd) == 4 || dComIfG_Bgsp()->GetAttributeCode(i_this->mAcch.m_gnd) == 0xB || dComIfG_Bgsp()->GetAttributeCode(i_this->mAcch.m_gnd) == 0x13) {
+                    if(dComIfG_Bgsp()->GetAttributeCode(i_this->mAcch.m_gnd) == dBgS_Attr_DIRT_e || dComIfG_Bgsp()->GetAttributeCode(i_this->mAcch.m_gnd) == dBgS_Attr_GRASS_e || dComIfG_Bgsp()->GetAttributeCode(i_this->mAcch.m_gnd) == dBgS_Attr_SAND_e || dComIfG_Bgsp()->GetAttributeCode(i_this->mAcch.m_gnd) == dBgS_Attr_WATER_e) {
                         i_this->m5D4[0] = actor->current.pos;
                         i_this->m5EC[0] = actor->current.angle;
 
@@ -1787,7 +1787,7 @@ void esa_demo_move(kb_class* i_this) {
                         i_this->m5EC[1] = actor->current.angle;
 
                         smoke_set3(i_this);
-                        anm_init(i_this, 0x16, 5.0f, 2, 2.0f, 0xB);
+                        anm_init(i_this, dRes_INDEX_KB_BCK_RUN1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, dRes_INDEX_KB_BAS_RUN1_e);
 
                         i_this->m420 += 1;
 
@@ -1916,7 +1916,7 @@ void esa_demo_move(kb_class* i_this) {
                 i_this->m4C0 = 30.0f;
                 actor->speedF = 0.0f;
 
-                anm_init(i_this, 0x15, 5.0f, 0, 1.0f, 0xA);
+                anm_init(i_this, dRes_INDEX_KB_BCK_NAKU1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_KB_BAS_NAKU1_e);
 
                 i_this->m420 += 1;
             }
@@ -2001,9 +2001,9 @@ static BOOL daKb_Execute(kb_class* i_this) {
                 if(i_this->mShapeType < 8 && strcmp(dComIfGp_getStartStageName(), "sea") == 0 && fopAcM_GetRoomNo(actor) == dIsleRoom_OutsetIsland_e) {
                     if(i_this->mAcch.GetGroundH() != -G_CM3D_F_INF && dComIfG_Bgsp()->GetSpecialCode(i_this->mAcch.m_gnd) == 4) {
                         u8 temp = 1 << (i_this->mShapeType & 3);
-                        u8 temp2 = dComIfGs_getEventReg(0xBFFF);
+                        u8 temp2 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BFFF);
                         temp2 |= temp;
-                        dComIfGs_setEventReg(0xBFFF, temp2);
+                        dComIfGs_setEventReg(dSv_event_flag_c::UNK_BFFF, temp2);
                         i_this->m405 = temp;
                     }
                     else {
@@ -2019,7 +2019,7 @@ static BOOL daKb_Execute(kb_class* i_this) {
                         i_this->mStts.SetWeight(0x32);
                     }
 
-                    dComIfGs_onEventBit(0x3402);
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_3402);
                 }
             }
 
@@ -2104,7 +2104,7 @@ static BOOL daKb_Execute(kb_class* i_this) {
         if(i_this->m41E != 1 && i_this->mAcch.GetGroundH() != -G_CM3D_F_INF) {
             i_this->m404 = 0;
 
-            if(dComIfG_Bgsp()->GetAttributeCode(i_this->mAcch.m_gnd) == 0x13) {
+            if(dComIfG_Bgsp()->GetAttributeCode(i_this->mAcch.m_gnd) == dBgS_Attr_WATER_e) {
                 i_this->m404 = 1;
             }
         }
@@ -2185,18 +2185,18 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
 
     J3DModelData* pModelData;
     if(i_this->mShapeType >= 8) {
-        pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kb", 0x1C));
+        pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kb", dRes_INDEX_KB_BDL_PG_BIG_e));
     }
     else {
-        pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kb", 0x1B));
+        pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kb", dRes_INDEX_KB_BDL_PG_e));
     }
 
     i_this->mpMorf = new mDoExt_McaMorf(
         pModelData,
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Kb", 0x17)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Kb", dRes_INDEX_KB_BCK_WAIT1_e)),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
-        dComIfG_getObjectRes("Kb", 0xC),
+        dComIfG_getObjectRes("Kb", dRes_INDEX_KB_BAS_WAIT1_e),
         0x00080000,
         0x11020022
     );
@@ -2300,15 +2300,15 @@ static cPhs_State daKb_Create(fopAc_ac_c* i_actor) {
 
         if(i_this->mbCanBeBigPig != 0xFF) {
             if(strcmp(dComIfGp_getStartStageName(), "sea") == 0 && fopAcM_GetRoomNo(i_actor) == dIsleRoom_OutsetIsland_e) {
-                u8 reg = dComIfGs_getEventReg(0xBFFF);
+                u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BFFF);
                 u8 temp = 1 << (i_this->mShapeType & 3);
 
                 if(REG8_S(8)) {
-                    dComIfGs_setEventReg(0xBFFF, 0);
+                    dComIfGs_setEventReg(dSv_event_flag_c::UNK_BFFF, 0);
                     REG8_S(8) = 0;
                 }
 
-                if(REG8_S(9) || dComIfGs_isEventBit(0x520)) {
+                if(REG8_S(9) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
                     if(i_this->mbCanBeBigPig == 0) {
                         return cPhs_ERROR_e;
                     }
