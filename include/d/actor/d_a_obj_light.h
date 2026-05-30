@@ -34,7 +34,7 @@ namespace daObjLight {
         BOOL set_event(s16);
         void exe_event();
         void set_mtx();
-        BOOL renew_angle();
+        void renew_angle();
         void control_light();
         void control_treasure();
         bool _execute();
@@ -66,7 +66,8 @@ namespace daObjLight {
         /* 0x2DC */ s16 field_0x2DC;
         /* 0x2DE */ s16 field_0x2DE;
 
-        /* 0x2E0 */ u8 field_0x2E0[0x16C];
+        /* 0x2E0 */ dCcD_Stts mStts;
+        /* 0x31C */ dCcD_Cyl mCyl;
 
         /* 0x44C */ dPa_followEcallBack mFirePa;
         /* 0x460 */ s16 mFireAngle;
@@ -79,7 +80,7 @@ namespace daObjLight {
         /* 0x49C */ s16 mEvent;
         /* 0x49E */ s16 mEventFlag;
         /* 0x4A0 */ s16 field_0x4A0;
-        /* 0x4A2 */ u8 field_0x4A2[0xA];
+        /* 0x4A2 */ u8 field_0x4A2[0x2];
     };
 };
 

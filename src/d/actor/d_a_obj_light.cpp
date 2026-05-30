@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_light.h"
+
 class daObjLightFireDummy {
 public:
     virtual void vfunc00();
@@ -15,6 +16,50 @@ public:
     virtual void vfunc14();
     virtual void vfunc18();// TODO: Identify real type at 0x44C. Virtual call at vtable offset 0x18.
 };
+
+#pragma push
+#pragma pool_data off
+
+namespace daObjLight {
+namespace {
+static const u8 L_attr[6] = {
+    0x00, 0x80, 0x00, 0x02, 0x00, 0x14,
+};
+}
+
+const char Act_c::M_arcname[8] = "Skanran";
+
+const dCcD_SrcCyl Act_c::M_cyl_src = {
+    {
+        0,
+        0,
+        0,
+        0,
+        0x00040000,
+        cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+    },
+    {{
+        {0.0f, 0.0f, 0.0f},
+        80.0f,
+        130.0f,
+    }},
+};
+}; // namespace daObjLight
+
+#pragma pop
+
 /* 000000EC-00000110       .text solidHeapCB__Q210daObjLight5Act_cFP10fopAc_ac_c */
 BOOL daObjLight::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
     return (u8)((daObjLight::Act_c*)i_this)->create_heap();
@@ -22,61 +67,63 @@ BOOL daObjLight::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 00000110-00000344       .text create_heap__Q210daObjLight5Act_cFv */
 BOOL daObjLight::Act_c::create_heap() {
-    dRes_info_c* resInfo = (dRes_info_c*)((u8*)&g_dComIfG_gameInfo + 0x1BFC0);
+    J3DModelData* mdl_data_lighthouse;
+    J3DModelData* mdl_data_light;
+    dRes_info_c* resInfo;
 
-    J3DModelData* modelDataA =
-        (J3DModelData*)dRes_control_c::getRes(M_arcname, 7, resInfo, 0x40);
+    mdl_data_lighthouse = (J3DModelData*)dRes_control_c::getRes(
+        M_arcname,
+        7,
+        resInfo = (dRes_info_c*)((u8*)&g_dComIfG_gameInfo + 0x1BFC0),
+        0x40
+    );
 
-    if (modelDataA == NULL) {
-        JUT_ASSERT(0x10B, modelDataA != NULL);
+    JUT_ASSERT(0x10B, mdl_data_lighthouse != NULL);
+
+    if (mdl_data_lighthouse != NULL) {
+        mpModel = mDoExt_J3DModel__create(mdl_data_lighthouse, 0, 0x11020203);
     }
 
-    if (modelDataA != NULL) {
-        mpModel = mDoExt_J3DModel__create(modelDataA, 0, 0x11020203);
-    }
-
-    J3DModelData* modelDataB =
+    mdl_data_light =
         (J3DModelData*)dRes_control_c::getRes(M_arcname, 5, resInfo, 0x40);
 
-    if (modelDataB == NULL) {
-        JUT_ASSERT(0x112, modelDataB != NULL);
-    }
+    JUT_ASSERT(0x112, mdl_data_light != NULL);
 
-    if (modelDataB != NULL) {
-        mpModel2 = mDoExt_J3DModel__create(modelDataB, 0, 0x11020203);
-        mpModel3 = mDoExt_J3DModel__create(modelDataB, 0, 0x11020203);
+    if (mdl_data_light != NULL) {
+        mpModel2 = mDoExt_J3DModel__create(mdl_data_light, 0, 0x11020203);
+        mpModel3 = mDoExt_J3DModel__create(mdl_data_light, 0, 0x11020203);
     }
 
     set_mtx();
 
-    cBgD_t* bgData =
+    cBgD_t* bgw_data =
         (cBgD_t*)dRes_control_c::getRes(M_arcname, 0xC, resInfo, 0x40);
 
-    if (bgData == NULL) {
-        JUT_ASSERT(0x11C, bgData != NULL);
-    }
+    JUT_ASSERT(0x11C, bgw_data != NULL);
 
-    if (bgData != NULL) {
+    if (bgw_data != NULL) {
         mpBgW = new dBgW();
 
         if (mpBgW != NULL) {
-            if (mpBgW->Set(bgData, 1, &mBgMtx) == 1) {
+            if (mpBgW->Set(bgw_data, 1, &mBgMtx) == 1) {
                 return FALSE;
             }
         }
     }
 
-    if (modelDataA != NULL &&
+    BOOL ret = FALSE;
+
+    if (mdl_data_lighthouse != NULL &&
         mpModel != NULL &&
-        modelDataB != NULL &&
+        mdl_data_light != NULL &&
         mpModel2 != NULL &&
         mpModel3 != NULL &&
-        bgData != NULL &&
+        bgw_data != NULL &&
         mpBgW != NULL) {
-        return TRUE;
+        ret = TRUE;
     }
 
-    return FALSE;
+    return ret;
 }
 
 /* 00000344-000003C0       .text init_collision__Q210daObjLight5Act_cFv */
@@ -116,7 +163,7 @@ void daObjLight::Act_c::set_collision() {
     pos.y = current.pos.y;
     pos.z = current.pos.z;
 
-    pos.y -= 50.0f;
+    pos.y -= 75.0f;
 
     ((cM3dGCyl*)(base + 0x434))->SetC(pos);
 
@@ -127,12 +174,16 @@ void daObjLight::Act_c::set_collision() {
 
 /* 000004A4-0000070C       .text _create__Q210daObjLight5Act_cFv */
 cPhs_State daObjLight::Act_c::_create() {
+    if ((*(u32*)((u8*)this + 0x1C8) & 0x8) == 0) {
+        Act_c* self = this;
+        new (self) Act_c();
+        *(u32*)((u8*)this + 0x1C8) |= 0x8;
+    }
+
     cPhs_State phase = dComIfG_resLoad(&mPhase, M_arcname);
 
     if (phase == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(this, solidHeapCB, 0x3840)) {
-            phase = cPhs_ERROR_e;
-        } else {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x3840)) {
             if (dKy_daynight_check() == 1) {
                 if (dComIfGs_isEventBit(0x1C02)) {
                     field_0x2D8 = get_light_dif_angle();
@@ -140,20 +191,21 @@ cPhs_State daObjLight::Act_c::_create() {
             } else {
                 field_0x2D8 = 0x4000;
                 M_S_light_angle = field_0x2D8;
-                M_S_pre_set_frame_FRRS = g_Counter.mTimer;
+                M_S_pre_set_frame_FRRS = g_Counter.mCounter0;
             }
 
             *(void**)((u8*)this + 0x22C) = (void*)((u8*)mpModel2 + 0x24);
 
             fopAcM_setCullSizeBox(
                 this,
-                -100.0f, -100.0f, -100.0f,
-                 100.0f,  100.0f,  100.0f
+                -300.0f, -300.0f, -10000.0f,
+                 300.0f,  300.0f,  10000.0f
             );
 
-            *(f32*)((u8*)this + 0x248) = 30.0f;
+            *(f32*)((u8*)this + 0x248) = 10.0f;
 
-            dComIfG_Bgsp()->Regist(mpBgW, this);
+            dBgS* bgsp = dComIfG_Bgsp();
+            bgsp->Regist(mpBgW, this);
 
             *(void**)((u8*)mpBgW + 0xA8) = (void*)dBgS_MoveBGProc_Typical;
 
@@ -167,11 +219,13 @@ cPhs_State daObjLight::Act_c::_create() {
                 }
             }
 
-            mEvent = ((dEvent_manager_c*)((u8*)&g_dComIfG_gameInfo + 0x52CC))
-                ->getEventIdx("DEFAULT_LIGHT", 0xFF);
+            field_0x4A0 = ((dEvent_manager_c*)((u8*)bgsp + 0x402C))
+                ->getEventIdx("light_start", 0xFF);
 
             field_0x2DA = 0;
             field_0x2DE = 0;
+        } else {
+            phase = cPhs_ERROR_e;
         }
     }
 
@@ -208,35 +262,16 @@ bool daObjLight::Act_c::_delete() {
     return true;
 }
 
-/* 00000964-00000A9C       .text set_fire__Q210daObjLight5Act_cFi */
 BOOL daObjLight::Act_c::set_fire(int i_event) {
-    struct L_attr_t {
-        f32 field_0x00;
-        f32 field_0x04;
-        f32 field_0x08;
-        f32 field_0x0C;
-        f32 field_0x10;
-    };
-
-    static const L_attr_t L_attr = {
-        0.0f,
-        0.0f,
-        0.0f,
-        1.0f,
-        1.0f,
-    };
-
-    const L_attr_t* attr = &L_attr;
-
     if (*(JPABaseEmitter**)((u8*)&mFirePa + 0x04) == NULL) {
         cXyz scale;
 
-        scale.x = attr->field_0x00;
-        scale.y = attr->field_0x04;
-        scale.z = attr->field_0x08;
+        scale.x = 1.45f;
+        scale.y = 1.45f;
+        scale.z = 1.45f;
 
         dPa_control_c* particle =
-            *(dPa_control_c**)((u8*)&g_dComIfG_gameInfo + 0x5AC4);
+            *(dPa_control_c* volatile*)((u8*)&g_dComIfG_gameInfo + 0x5AC4);
 
         particle->set(
             0,
@@ -253,40 +288,33 @@ BOOL daObjLight::Act_c::set_fire(int i_event) {
         );
 
         mFireAngle = 0;
-    }
 
-    exe_fire();
+        exe_fire();
 
-    if (i_event == 1) {
-        JAIZelBasic::zel_basic->seStart(
-            0x1B9,
-            NULL,
-            0,
-            0,
-            attr->field_0x00,
-            attr->field_0x00,
-            attr->field_0x10,
-            attr->field_0x10,
-            0
-        );
+        if (i_event == 1) {
+            JAIZelBasic::zel_basic->seStart(
+                0x6A03,
+                &current.pos,
+                0,
+                0,
+                1.0f,
+                1.0f,
+                -1.0f,
+                -1.0f,
+                0
+            );
 
-        cXyz shockPos;
-        shockPos.x = attr->field_0x00;
-        shockPos.y = attr->field_0x00;
-        shockPos.z = attr->field_0x00;
-
-        ((dVibration_c*)((u8*)&g_dComIfG_gameInfo + 0x59A0))->StartShock(
-            2,
-            -0x11,
-            shockPos
-        );
+            ((dVibration_c*)((u8*)&g_dComIfG_gameInfo + 0x59A0))->StartShock(
+                2,
+                -0x11,
+                cXyz(0.0f, 1.0f, 0.0f)
+            );
+        }
 
         return TRUE;
     }
 
-    if (*(JPABaseEmitter**)((u8*)&mFirePa + 0x04) != NULL) {
-        mFirePa.remove();
-    }
+    mFirePa.remove();
 
     return FALSE;
 }
@@ -310,20 +338,21 @@ void daObjLight::Act_c::draw_fire() {
 /* 00000B04-00000C28       .text exe_fire__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::exe_fire() {
     if (*(JPABaseEmitter**)((u8*)&mFirePa + 0x04) != NULL) {
-        cXyz pos = current.pos;
-
         f32 sin = cM_ssin(mFireAngle);
 
-        pos.y += 50.0f;
+        cXyz pos = current.pos;
 
-        mFireAlpha = (u8)((f32)140.0f * sin + 0.0f);
-        mFireScale = 1.0f + (0.1f * sin);
+        pos.y += 24.0f;
+
+        mFireAlpha = (s32)(10.0f * sin) + 0x8C;
+        mFireScale = 0.45f + (0.05f * sin);
 
         mFireRotX += 0x2D0;
 
-        mDoMtx_stack_c::transS(pos);
-        mDoMtx_stack_c::YrotM(shape_angle.y + home.angle.y);
-        mDoMtx_stack_c::XrotM(mFireRotX);
+        PSMTXTrans(mDoMtx_stack_c::now, pos.x, pos.y, pos.z);
+        mDoMtx_YrotM(mDoMtx_stack_c::now, shape_angle.y + field_0x2D8);
+        mDoMtx_XrotM(mDoMtx_stack_c::now, mFireRotX);
+
         mDoMtx_stack_c::scaleM(mFireScale, mFireScale, mFireScale);
 
         PSMTXCopy(mDoMtx_stack_c::now, mFireMtx);
@@ -391,50 +420,86 @@ void daObjLight::Act_c::exe_event() {
 
 /* 00000D84-00001084       .text set_mtx__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::set_mtx() {
-    static cXyz i_offset[3] = {
-        cXyz(0.0f, 0.0f, 0.0f),
-        cXyz(0.0f, 0.0f, 0.0f), // aquí va @4466 en z
-        cXyz(0.0f, 0.0f, 0.0f), // aquí va @4467 en z
-    };
+    for (int i = 0, bgMtxOffset = 0, offsetIdx = 0, modelOffset = 0;
+         i < 3;
+         i++, bgMtxOffset += 0x30, offsetIdx += 0xC, modelOffset += 4) {
+        int modelPtrOffset = modelOffset + 0x298;
 
-    for (int i = 0; i < 3; i++) {
-        J3DModel* model = *(J3DModel**)((u8*)this + 0x298 + (i * 4));
-
-        *(f32*)((u8*)model + 0x18) = current.pos.x;
-        *(f32*)((u8*)model + 0x1C) = current.pos.y;
-        *(f32*)((u8*)model + 0x20) = current.pos.z;
-
-        cXyz offset = i_offset[i];
-
-        if (i == 0) {
-            PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-            mDoMtx_YrotM(mDoMtx_stack_c::now, shape_angle.y);
-
-            PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
-            PSMTXCopy(mDoMtx_stack_c::now, mBgMtx);
-        } else if (i == 1) {
-            PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-            mDoMtx_YrotM(mDoMtx_stack_c::now, shape_angle.y + field_0x2D8);
-            mDoMtx_stack_c::transM(offset.x, offset.y, offset.z);
-
-            PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
-        } else if (i == 2) {
-            offset.z += 0.0f; // aquí va @4468
-
-            PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-            mDoMtx_YrotM(mDoMtx_stack_c::now, shape_angle.y + field_0x2D8 + 0x8000);
-            mDoMtx_stack_c::transM(offset.x, offset.y, offset.z);
-
-            PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+        {
+            J3DModel* model = *(J3DModel**)((u8*)this + modelPtrOffset);
+            *(f32*)((u8*)model + 0x18) = scale.x;
+            *(f32*)((u8*)model + 0x1C) = scale.y;
+            *(f32*)((u8*)model + 0x20) = scale.z;
         }
 
-        model->calc();
+        static cXyz i_offset[3] = {
+            cXyz(0.0f, 0.0f, 0.0f),
+            cXyz(0.0f, 0.0f, 377.73999f),
+            cXyz(0.0f, 0.0f, -377.73999f),
+        };
+
+        if (i == 0) {
+            cXyz pos = current.pos;
+            PSVECAdd(&pos, (cXyz*)((u8*)i_offset + offsetIdx), &pos);
+
+            PSMTXTrans(mDoMtx_stack_c::now, pos.x, pos.y, pos.z);
+            mDoMtx_YrotM(mDoMtx_stack_c::now, shape_angle.y + field_0x2D8);
+
+            PSMTXCopy(
+                mDoMtx_stack_c::now,
+                (MtxP)((u8*)*(J3DModel**)((u8*)this + modelPtrOffset) + 0x24)
+            );
+            PSMTXCopy(mDoMtx_stack_c::now, *(Mtx*)((u8*)this + 0x2A8 + bgMtxOffset));
+        } else if (i == 1) {
+            cXyz offset = *(cXyz*)((u8*)i_offset + offsetIdx);
+
+            PSMTXTrans(
+                mDoMtx_stack_c::now,
+                current.pos.x,
+                current.pos.y,
+                current.pos.z
+            );
+
+            mDoMtx_YrotM(mDoMtx_stack_c::now, shape_angle.y + field_0x2D8);
+
+            mDoMtx_stack_c::transM(offset.x, offset.y, offset.z);
+
+            PSMTXCopy(
+                mDoMtx_stack_c::now,
+                (MtxP)((u8*)*(J3DModel**)((u8*)this + modelPtrOffset) + 0x24)
+            );
+        } else if (i == 2) {
+            cXyz offset = *(cXyz*)((u8*)i_offset + offsetIdx);
+
+            offset.z += 700.0f;
+
+            PSMTXTrans(
+                mDoMtx_stack_c::now,
+                current.pos.x,
+                current.pos.y,
+                current.pos.z
+            );
+
+            mDoMtx_YrotM(
+                mDoMtx_stack_c::now,
+                shape_angle.y + field_0x2D8 + 0x8000
+            );
+
+            mDoMtx_stack_c::transM(offset.x, offset.y, offset.z);
+
+            PSMTXCopy(
+                mDoMtx_stack_c::now,
+                (MtxP)((u8*)*(J3DModel**)((u8*)this + modelPtrOffset) + 0x24)
+            );
+        }
+
+        (*(J3DModel**)((u8*)this + modelPtrOffset))->calc();
     }
 }
 
 /* 00001084-000011C4       .text renew_angle__Q210daObjLight5Act_cFv */
-BOOL daObjLight::Act_c::renew_angle() {
-    if (now_event(field_0x4A0)) {
+void daObjLight::Act_c::renew_angle() {
+    if ((u8)now_event(field_0x4A0)) {
         if (field_0x2DA == 0) {
             field_0x2D8 += 0x40;
 
@@ -454,10 +519,10 @@ BOOL daObjLight::Act_c::renew_angle() {
         }
     } else {
         if (dKy_daynight_check() == 1) {
-            if (dComIfGs_isEventBit(0x102)) {
+            if (dComIfGs_isEventBit(0x1C02)) {
                 field_0x2D8 += 0x40;
 
-                if (!set_light_dif_angle_FRRS(field_0x2D8)) {
+                if (!(u8)set_light_dif_angle_FRRS(field_0x2D8)) {
                     field_0x2D8 = get_light_dif_angle();
                 }
             } else {
@@ -480,54 +545,67 @@ BOOL daObjLight::Act_c::renew_angle() {
         }
     }
 
-    return TRUE;
 }
 
 /* 000011C4-00001330       .text control_light__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::control_light() {
-    if (field_0x2DA == 1) {
-        if (set_event(field_0x4A0) == 1) {
+    switch (field_0x2DA) {
+    case 0:
+        break;
+
+    case 1:
+        if (set_event(field_0x4A0) == TRUE) {
             field_0x2DA++;
         }
-    } else if (field_0x2DA != 0) {
+        break;
+
+    default:
         field_0x2DA++;
 
         if (field_0x2DA == 0xA) {
             set_fire(1);
+            break;
         }
 
         if (field_0x2DA == 0x4B) {
-            if (dComIfGs_isEventBit(0x1C2)) {
-                JAIZelBasic::zel_basic->seStart(
-                    0x303D,
-                    &current.pos,
-                    0,
-                    0,
-                    0,
-                    0.0f,
-                    0.0f,
-                    1.0f,
-                    1.0f
-                );
-            }
+            dComIfGs_onEventBit(0x1C02);
+
+            JAIZelBasic::zel_basic->seStart(
+                0x6A04,
+                &current.pos,
+                0,
+                0,
+                0.0f,
+                0.0f,
+                1.0f,
+                1.0f,
+                0
+            );
+            break;
         }
 
         if (field_0x2DA == 0x4C) {
-            dComIfGs_offEventBit(0x1C2);
+            dComIfGs_offEventBit(0x1C02);
+            break;
         }
 
         if (field_0x2DA == 0x4D) {
-            dComIfGs_onEventBit(0x1C2);
+            dComIfGs_onEventBit(0x1C02);
+            break;
         }
 
         if (field_0x2DA == 0x4F) {
-            dComIfGs_offEventBit(0x1C2);
+            dComIfGs_offEventBit(0x1C02);
+            break;
         }
 
         if (field_0x2DA == 0x50) {
-            dComIfGs_onEventBit(0x1C2);
+            dComIfGs_onEventBit(0x1C02);
             field_0x2DA = 0;
+            break;
         }
+
+        break;
     }
 }
 
@@ -561,10 +639,14 @@ bool daObjLight::Act_c::_execute() {
 
 /* 00001400-00001528       .text _draw__Q210daObjLight5Act_cFv */
 bool daObjLight::Act_c::_draw() {
-    g_env_light.settingTevStruct(1, &current.pos, &tevStr);
     daObjLight::Act_c* self = this;
-    int i = 0;
-    int modelOffset = 0;
+    int i;
+    int modelOffset;
+
+    g_env_light.settingTevStruct(1, &current.pos, &tevStr);
+
+    i = 0;
+    modelOffset = 0;
 
     do {
         if (i == 0) {
@@ -598,7 +680,6 @@ bool daObjLight::Act_c::_draw() {
                 }
             }
         }
-
         i++;
         modelOffset += 4;
     } while (i < 3);
