@@ -1652,8 +1652,7 @@ void esa_demo_move(kb_class* i_this) {
                 anm_init(i_this, dRes_INDEX_KB_BCK_WALK1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.5f, dRes_INDEX_KB_BAS_WALK1_e);
             }
 
-            i_this->mSph.OffCoSPrmBit(cCcD_CoSPrm_VsGrpAll_e);
-            i_this->mSph.OnCoSPrmBit(cCcD_CoSPrm_VsEnemy_e);
+            i_this->mSph.SetCoVsGrp(cCcD_CoSPrm_VsEnemy_e);
             fopAcM_OnStatus(actor, fopAcStts_UNK4000_e);
             i_this->m420 += 1;
         case 0x29:
@@ -1946,8 +1945,7 @@ void esa_demo_move(kb_class* i_this) {
             dComIfGp_event_reset();
 
             fopAcM_OffStatus(actor, fopAcStts_UNK4000_e);
-            i_this->mSph.OffCoSPrmBit(cCcD_CoSPrm_VsGrpAll_e);
-            i_this->mSph.OnCoSPrmBit(cCcD_CoSPrm_VsGrpAll_e);
+            i_this->mSph.SetCoVsGrp(cCcD_CoSPrm_VsGrpAll_e);
 
             DEMO_START = false;
 
