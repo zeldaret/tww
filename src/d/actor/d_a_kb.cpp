@@ -374,7 +374,7 @@ void he_set(kb_class* i_this) {
     }
 
     if(i_this->m594.getEmitter()) {
-        i_this->m594.getEmitter()->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0xC));
+        i_this->m594.getEmitter()->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(PG_JNT_J_PG_TAIL_e)); // PG_JNT_J_PG_TAIL_e MUST match the value of PG_BIG_JNT_J_PG_TAIL_e, otherwise this will break
     }
 }
 
@@ -449,7 +449,7 @@ static BOOL nodeCallBack(J3DNode* i_node, int calcTiming) {
         J3DModel* pModel = j3dSys.getModel();
         kb_class* i_kb = (kb_class*)pModel->getUserArea();
 
-        if(i_kb && jntNo == 0xC) {
+        if(i_kb && jntNo == PG_JNT_J_PG_TAIL_e) { // PG_JNT_J_PG_TAIL_e MUST match the value of PG_BIG_JNT_J_PG_TAIL_e, otherwise this will break
             cMtx_copy(pModel->getAnmMtx(jntNo), *calc_mtx);
             cXyz temp(0.0f, 0.0f, 0.0f);
             MtxPosition(&temp, &i_kb->m4A4);
