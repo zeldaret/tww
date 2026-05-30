@@ -12,7 +12,7 @@ public:
     void eventOrder();
     void checkOrder();
     BOOL chkAttention(cXyz);
-    void partner_srch();
+    BOOL partner_srch();
     s16 checkPartner();
     void goto_nextStage();
     void event_talkInit(int);
@@ -59,9 +59,11 @@ class daTag_Kf1_HIO_c {
     virtual ~daTag_Kf1_HIO_c();
     
 public:
-    /* Place member variables here */
     /* 0x04 */ s8 mNo;
-    s8 field_0x08;
+    /* 0x05 */ u8 field_0x05[3];
+    /* 0x08 */ float field_0x08;
+    /* 0x0C */ float field_0x0c;
+    /* 0x10 */ u8 field_0x10;
 };
 
 #endif /* D_A_TAG_KF1_H */

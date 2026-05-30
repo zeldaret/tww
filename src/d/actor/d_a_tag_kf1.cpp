@@ -15,19 +15,27 @@ static int l_check_wrk;
 /* 000000EC-00000120       .text __ct__15daTag_Kf1_HIO_cFv */
 daTag_Kf1_HIO_c::daTag_Kf1_HIO_c() {
     /* Nonmatching */
-    static const u8 a_prm_tbl[] = {
-        0x4316,
-        0x41F0,
-        0x0000,
+    static const struct {
+        float field_0x08;
+        float field_0x0c;
+        u8 field_0x10;
+    } a_prm_tbl = {
+        150.0f,
+        30.0f,
+        0,
     };
-    field_0x08 = a_prm_tbl[1];
-    return;
+
+    field_0x08 = a_prm_tbl.field_0x08;
+    field_0x0c = a_prm_tbl.field_0x0c;
+    field_0x10 = a_prm_tbl.field_0x10;
+    mNo = -1;
 }
 
 /* 00000120-000001B0       .text searchActor_Kutani__FPvPv */
-BOOL searchActor_Kutani(fopAc_ac_c* param_1, void*) {
-    if ((l_check_wrk < 100) && (fopAc_IsActor(param_1)) && (param_1->base.base.mProcName == 0x1cb) && (daObj::PrmAbstract(param_1, 0x04, 0x18) == 0xe)) {
-        l_check_inf[l_check_wrk] = param_1;
+static void* searchActor_Kutani(void* param_1, void*) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
+    if ((l_check_wrk < 100) && (fopAc_IsActor(actor)) && (actor->base.base.mProcName == 0x1cb) && (daObj::PrmAbstract(actor, 0x04, 0x18) == 0xe)) {
+        l_check_inf[l_check_wrk] = actor;
         l_check_wrk = l_check_wrk + 1;
     }
     return 0;
@@ -106,8 +114,40 @@ BOOL daTag_Kf1_c::chkAttention(cXyz param_1) {
 }
 
 /* 00000470-0000057C       .text partner_srch__11daTag_Kf1_cFv */
-void daTag_Kf1_c::partner_srch() {
-    /* Nonmatching */
+BOOL daTag_Kf1_c::partner_srch() {
+    BOOL uVar2 = 0;
+    int iVar3;
+    fpc_ProcID procId;
+
+    for (iVar3 = 0; iVar3 < 8; iVar3++) {
+        this->mPartnerProcs[iVar3] = 0xffffffff;
+    }
+
+    l_check_wrk = 0;
+
+    for (iVar3 = 0; iVar3 < 100; iVar3++) {
+        l_check_inf[iVar3] = 0;
+    }
+
+    fpcEx_Search(searchActor_Kutani, this);
+
+    if (l_check_wrk <= 8 && l_check_wrk != 0) {
+        this->mNumOfPartners = 0;
+
+        for (iVar3 = 0; iVar3 < l_check_wrk; iVar3 = iVar3 + 1) {
+            if (l_check_inf[iVar3] != 0) {
+                procId = l_check_inf[iVar3]->base.base.mBsPcId;
+            } else {
+                procId = 0xffffffff;
+            }
+            this->mPartnerProcs[iVar3] = procId;
+            this->mNumOfPartners = this->mNumOfPartners + 1;
+        }
+
+        uVar2 = 1;
+    }
+
+    return uVar2;
 }
 
 /* 0000057C-00000604       .text checkPartner__11daTag_Kf1_cFv */
@@ -132,8 +172,8 @@ s16 daTag_Kf1_c::checkPartner() {
 
 /* 00000604-00000650       .text goto_nextStage__11daTag_Kf1_cFv */
 void daTag_Kf1_c::goto_nextStage() {
+    /* Nonmatching */
     dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0, 0xff, 0xff, 0.0, 0, 1, 0);
-    return;
 }
 
 /* 00000650-000006DC       .text event_talkInit__11daTag_Kf1_cFi */
