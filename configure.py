@@ -1616,7 +1616,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_komore"),
     ActorRel(Matching,    "d_a_lbridge"),
     ActorRel(Matching,    "d_a_leaflift"),
-    ActorRel(NonMatching, "d_a_lstair"),
+    ActorRel(MatchingFor("GZLE01"), "d_a_lstair"),
     ActorRel(Matching,    "d_a_machine"),
     ActorRel(NonMatching, "d_a_mant"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_mbdoor"),
