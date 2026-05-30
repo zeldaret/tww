@@ -176,7 +176,7 @@ enum {
     /* 0xA8 */ DSNAP_TYPE_UNKA8,
     /* 0xA9 */ DSNAP_TYPE_UNKA9,
     /* 0xAA */ DSNAP_TYPE_BK,
-    /* 0xAB */ DSNAP_TYPE_UNKAB,
+    /* 0xAB */ DSNAP_TYPE_PT,
     /* 0xAC */ DSNAP_TYPE_CC,
     /* 0xAD */ DSNAP_TYPE_UNKAD,
     /* 0xAE */ DSNAP_TYPE_KI,
