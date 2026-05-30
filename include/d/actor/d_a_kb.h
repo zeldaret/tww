@@ -12,7 +12,7 @@ class mDoExt_McaMorf;
 class J3DTexNoAnm;
 class J3DMaterialTable;
 
-class kb_class : public fopAc_ac_c {
+class kb_class {
 public:
     void taura_pos_set(cXyz pos) {
         m450 = pos;
@@ -20,6 +20,7 @@ public:
     }
 
 public:
+    /* 0x000 */ fopAc_ac_c actor;
     /* 0x290 */ dKy_tevstr_c mTevStr;
     /* 0x340 */ dKy_tevstr_c m340;
     /* 0x3F0 */ u32 mShadowId;
