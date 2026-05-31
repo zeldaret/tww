@@ -90,6 +90,16 @@ void daSTBox_c::CreateInit() {
 cPhs_State daSTBox_c::_create() {
     /* Nonmatching */
     fopAcM_ct(this, daSTBox_c);
+    this->field_0x331 = this->base.base.mParameters >> 8 & 0xf;
+    cPhs_State phs_state = dComIfG_resLoad(&field_0x290, m_arc_name);
+    if (phs_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, this->m_heapsize[this->field_0x331])) {
+            return cPhs_ERROR_e;
+        } else {
+            CreateInit();
+        }
+        return cPhs_COMPLEATE_e;
+    }
 }
 
 /* 00000BFC-00000C7C       .text set_mtx__9daSTBox_cFv */

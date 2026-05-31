@@ -15,7 +15,7 @@ public:
     void setWaterY(float) {}
     void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {}
 
-    void getMaxWaterY(JGeometry::TVec3<float>*);
+    void getMaxWaterY(JGeometry::TVec3<f32>*);
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
 };
@@ -58,12 +58,13 @@ public:
     /* 0x2A4 */ JPABaseEmitter* field_0x2A4;
     /* 0x2A8 */ u8 field_0x2A8[0x2AC - 0x2A8];
     /* 0x2AC */ dPa_rippleEcallBack mRippleCallBack;
-    /* 0x2C0 */ daSTBox_shadowEcallBack_c* field_0x2C0;
-    /* 0x2C4 */ u8 field_0x2C4[0x2C8 - 0x2C4];
+    /* 0x2C0 */ daSTBox_shadowEcallBack_c field_0x2C0;
+    /* 0x2C1 */ u8 field_0x2C1[0x2C8 - 0x2C1];
     /* 0x2C8 */ f32 field_0x2C8;
     /* 0x2CC */ f32 field_0x2CC;
     /* 0x2D0 */ f32 field_0x2D0;
-    /* 0x2D4 */ u8 field_0x2D4[0x2F8 - 0x2D4];
+    /* 0x2D4 */ JGeometry::TVec3<f32> mpVec;
+    /* 0x2E0 */ u8 field_0x2E0[0x2F8 - 0x2E0];
     /* 0x2F8 */ f32 field_0x2F8;
     /* 0x2FC */ f32 field_0x2FC;
     /* 0x300 */ f32 field_0x300;
