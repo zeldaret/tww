@@ -6,12 +6,12 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_lstair.h"
 #include "d/d_stage.h"
-#include "d/res/res_gkai00.h"
+#include "res/Object/Gkai00.h"
 
 const char daLStair_c::m_arcname[] = "Gkai00";
 
 /* 00000078-000000D4       .text _delete__10daLStair_cFv */
-BOOL daLStair_c::_delete() {
+bool daLStair_c::_delete() {
     if (heap != NULL) {
         dComIfG_Bgsp()->Release(mpBgW);
     }
@@ -22,13 +22,13 @@ BOOL daLStair_c::_delete() {
 }
 
 /* 000000D4-000000F4       .text CheckCreateHeap__FP10fopAc_ac_c */
-static int CheckCreateHeap(fopAc_ac_c* i_this) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return static_cast<daLStair_c*>(i_this)->CreateHeap();
 }
 
 /* 000000F4-000004F8       .text CreateHeap__10daLStair_cFv */
 BOOL daLStair_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, GKAI00_BDL_GKAI00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GKAI00_BDL_GKAI00_e);
     JUT_ASSERT(0xD8, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000223);
@@ -36,44 +36,44 @@ BOOL daLStair_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, GKAI00_BCK_GKAI00);
+    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GKAI00_BCK_GKAI00_e);
     JUT_ASSERT(0xE9, pbck != NULL);
 
-    if (!mBckAnm.init(modelData, pbck, true, 0, 1.0f, 0, -1, false)) {
+    if (!mBckAnm.init(modelData, pbck, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
         return FALSE;
     }
 
-    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GKAI00_BTK_GKAI00);
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GKAI00_BTK_GKAI00_e);
     JUT_ASSERT(0xF4, pbtk != NULL);
 
-    if (!mBtkAnm.init(modelData, pbtk, true, 2, 1.0f, 0, -1, false, 0)) {
+    if (!mBtkAnm.init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
-    void* pbpk = dComIfG_getObjectRes(m_arcname, GKAI00_BPK_GKAI00_01);
+    J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GKAI00_BPK_GKAI00_01_e);
     JUT_ASSERT(0xFF, pbpk != NULL);
 
-    if (!mBpkAnm0.init(modelData, (J3DAnmColor*)pbpk, true, 2, 1.0f, 0, -1, false, 0)) {
+    if (!mBpkAnm0.init(modelData, pbpk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
-    pbpk = dComIfG_getObjectRes(m_arcname, GKAI00_BPK_GKAI00_02);
+    pbpk = (J3DAnmColor*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GKAI00_BPK_GKAI00_02_e);
     JUT_ASSERT(0x10A, pbpk != NULL);
 
-    if (!mBpkAnm1.init(modelData, (J3DAnmColor*)pbpk, true, 2, 1.0f, 0, -1, false, 0)) {
+    if (!mBpkAnm1.init(modelData, pbpk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
-    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, GKAI00_BRK_GKAI00);
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GKAI00_BRK_GKAI00_e);
     JUT_ASSERT(0x116, pbrk != NULL);
 
-    if (!mBrkAnm.init(modelData, pbrk, true, 2, 1.0f, 0, -1, false, 0)) {
+    if (!mBrkAnm.init(modelData, pbrk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
     mpBgW = new dBgW();
     if (mpBgW != NULL) {
-        cBgD_t* bgd_data = (cBgD_t*)dComIfG_getObjectRes(m_arcname, GKAI00_DZB_GKAI00);
+        cBgD_t* bgd_data = (cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GKAI00_DZB_GKAI00_e);
 
         if (mpBgW->Set(bgd_data, cBgW::MOVE_BG_e, &mBgMtx) == true) {
             return FALSE;
@@ -102,17 +102,14 @@ void daLStair_c::CreateInit() {
     }
 
     setMoveBGMtx();
-    g_dComIfG_gameInfo.play.mBgS.Regist(mpBgW, this);
+    dComIfG_Bgsp()->Regist(mpBgW, this);
     mpBgW->Move();
     set_mtx();
 }
 
 /* 00000638-00000758       .text _create__10daLStair_cFv */
 cPhs_State daLStair_c::_create() {
-    if ((actor_condition & fopAcCnd_INIT_e) == 0) {
-        new (this) daLStair_c();
-        actor_condition |= fopAcCnd_INIT_e;
-    }
+    fopAcM_ct(this, daLStair_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, m_arcname);
     
@@ -159,7 +156,7 @@ void daLStair_c::setMoveBGMtx() {
 }
 
 /* 00000A1C-00000ACC       .text _execute__10daLStair_cFv */
-int daLStair_c::_execute() {
+bool daLStair_c::_execute() {
     bool switch_status = dComIfGs_isSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this));
     bool enemy_gone = fopAcM_myRoomSearchEnemy(fopAcM_GetRoomNo(this)) == NULL;
 
@@ -328,8 +325,28 @@ static cPhs_State daLStair_Create(void* i_this) {
 }
 
 /* 00001164-00001188       .text daLStair_Delete__FPv */
-static u8 daLStair_Delete(void* i_this) {
+static BOOL daLStair_Delete(void* i_this) {
     return static_cast<daLStair_c*>(i_this)->_delete();
+}
+
+inline BOOL daLStair_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    J3DModelData* modelData = mpModel->getModelData();
+    mBtkAnm.entry(modelData, mBtkAnm.getFrame());
+    modelData = mpModel->getModelData();
+    mBpkAnm0.entry(modelData, mBpkAnm0.getFrame());
+    modelData = mpModel->getModelData();
+    mBpkAnm1.entry(modelData, mBpkAnm1.getFrame());
+    modelData = mpModel->getModelData();
+    mBrkAnm.entry(modelData, mBrkAnm.getFrame());
+
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+
+    return TRUE;
 }
 
 /* 00001188-0000128C       .text daLStair_Draw__FPv */
@@ -338,7 +355,7 @@ static BOOL daLStair_Draw(void* i_this) {
 }
 
 /* 0000128C-000012B0       .text daLStair_Execute__FPv */
-static u8 daLStair_Execute(void* i_this) {
+static BOOL daLStair_Execute(void* i_this) {
     return static_cast<daLStair_c*>(i_this)->_execute();
 }
 

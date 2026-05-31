@@ -9,13 +9,13 @@
 class daLStair_c : public fopAc_ac_c {
 public:
     inline BOOL _draw();
-    BOOL _delete();
+    bool _delete();
     BOOL CreateHeap();
     void CreateInit();
     cPhs_State _create();
     void set_mtx();
     void setMoveBGMtx();
-    int _execute();
+    bool _execute();
     void demoMove();
     void checkAppear();
     void moveBG();
@@ -44,25 +44,5 @@ public:
     /* 0x342 */ bool mSwitchStatus;
     /* 0x343 */ bool mEnemyGone;
 };
-
-inline BOOL daLStair_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
-    g_env_light.setLightTevColorType(mpModel, &tevStr);
-
-    J3DModelData* modelData = mpModel->getModelData();
-    mBtkAnm.entry(modelData, mBtkAnm.getFrame());
-    modelData = mpModel->getModelData();
-    mBpkAnm0.entry(modelData, mBpkAnm0.getFrame());
-    modelData = mpModel->getModelData();
-    mBpkAnm1.entry(modelData, mBpkAnm1.getFrame());
-    modelData = mpModel->getModelData();
-    mBrkAnm.entry(modelData, mBrkAnm.getFrame());
-
-    dComIfGd_setListBG();
-    mDoExt_modelUpdateDL(mpModel);
-    dComIfGd_setList();
-
-    return TRUE;
-}
 
 #endif /* D_A_LSTAIR_H */
