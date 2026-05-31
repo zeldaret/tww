@@ -5,10 +5,10 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_akabe.h"
-#include "d/res/res_akabe.h"
-#include "d/res/res_akabed.h"
-#include "d/res/res_akabek.h"
-#include "d/res/res_nbox.h"
+#include "res/Object/Akabe.h"
+#include "res/Object/AkabeD.h"
+#include "res/Object/AkabeK.h"
+#include "res/Object/NBOX.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -31,7 +31,7 @@ namespace daObjAkabe {
 
         mpBgW = new dBgW();
         if (mpBgW != NULL) {
-            static const s16 dzb[4] = { AKABE_DZB_AKABE, AKABED_DZB_AKABED, AKABEK_DZB_AKABEK, NBOX_DZB_NBOX, };
+            static const s16 dzb[4] = { dRes_INDEX_AKABE_DZB_AKABE_e, dRes_INDEX_AKABED_DZB_AKABED_e, dRes_INDEX_AKABEK_DZB_AKABEK_e, dRes_INDEX_NBOX_DZB_NBOX_e, };
             cBgD_t * bgw_data = (cBgD_t*)dComIfG_getObjectRes(M_arcname[mType], dzb[mType]);
             JUT_ASSERT(0x82, bgw_data != NULL);
             if (!mpBgW->Set(bgw_data, cBgW::MOVE_BG_e, &mMtx))

@@ -1,0 +1,32 @@
+#ifndef RES_OPENING_H
+#define RES_OPENING_H
+
+enum dRes_INDEX_OPENING {
+    /* SCRN */
+    dRes_INDEX_OPENING_BLO_OPENING_e=0x4,
+    /* TIMG */
+    dRes_INDEX_OPENING_BTI_BLACK_e=0x7,
+    dRes_INDEX_OPENING_BTI_DEMO_1_e=0x8,
+    dRes_INDEX_OPENING_BTI_DEMO_2_e=0x9,
+    dRes_INDEX_OPENING_BTI_DEMO_3_e=0xA,
+    dRes_INDEX_OPENING_BTI_DEMO_4_e=0xB,
+    dRes_INDEX_OPENING_BTI_DEMO_4_2_e=0xC,
+    dRes_INDEX_OPENING_BTI_DEMO_5_e=0xD,
+    dRes_INDEX_OPENING_BTI_DEMO_6_e=0xE,
+};
+
+enum dRes_ID_OPENING {
+    /* SCRN */
+    dRes_ID_OPENING_BLO_OPENING_e=0x4,
+    /* TIMG */
+    dRes_ID_OPENING_BTI_BLACK_e=0x7,
+    dRes_ID_OPENING_BTI_DEMO_1_e=0x8,
+    dRes_ID_OPENING_BTI_DEMO_2_e=0x9,
+    dRes_ID_OPENING_BTI_DEMO_3_e=0xA,
+    dRes_ID_OPENING_BTI_DEMO_4_e=0xB,
+    dRes_ID_OPENING_BTI_DEMO_4_2_e=0xC,
+    dRes_ID_OPENING_BTI_DEMO_5_e=0xD,
+    dRes_ID_OPENING_BTI_DEMO_6_e=0xE,
+};
+
+#endif /* !RES_OPENING_H */

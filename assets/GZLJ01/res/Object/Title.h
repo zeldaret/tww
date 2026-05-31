@@ -1,0 +1,46 @@
+#ifndef RES_TITLE_H
+#define RES_TITLE_H
+
+enum dRes_INDEX_TITLE {
+    /* BMD  */
+    dRes_INDEX_TITLE_BMD_VRBOX_e=0x6,
+    /* BMDM */
+    dRes_INDEX_TITLE_BMD_MODEL_e=0x9,
+    /* BTK  */
+    dRes_INDEX_TITLE_BTK_MODEL_e=0xC,
+    /* TEX  */
+    dRes_INDEX_TITLE_BTI_LOGO_01_e=0xF,
+};
+
+enum dRes_ID_TITLE {
+    /* BMD  */
+    dRes_ID_TITLE_BMD_VRBOX_e=0x6,
+    /* BMDM */
+    dRes_ID_TITLE_BMD_MODEL_e=0x9,
+    /* BTK  */
+    dRes_ID_TITLE_BTK_MODEL_e=0xC,
+    /* TEX  */
+    dRes_ID_TITLE_BTI_LOGO_01_e=0xF,
+};
+
+enum VRBOX_JNT {
+    VRBOX_JNT_ALL_e=0x0,
+};
+
+enum MODEL_JNT {
+    MODEL_JNT_A00_e=0x0,
+    MODEL_JNT_KABE_e=0x1,
+    MODEL_JNT_KUSA_e=0x2,
+    MODEL_JNT_SUNA_e=0x3,
+    MODEL_JNT_UMI10_SIBU01_e=0x4,
+    MODEL_JNT_UMI10_SUNAHAMA_e=0x5,
+    MODEL_JNT_UMI20_KIWA1_e=0x6,
+    MODEL_JNT_UMI20_NAMIHAMA_e=0x7,
+    MODEL_JNT_UMI30_NAMI_e=0x8,
+    MODEL_JNT_UMI40_KAGE_e=0x9,
+    MODEL_JNT_UMI50_SUNATI_e=0xA,
+    MODEL_JNT_UMI60_ASASE_e=0xB,
+    MODEL_JNT_UMI70_OKI_e=0xC,
+};
+
+#endif /* !RES_TITLE_H */

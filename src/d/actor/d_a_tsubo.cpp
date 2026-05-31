@@ -9,18 +9,20 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_obj_eff.h"
-#include "d/res/res_always.h"
-#include "d/res/res_kmtub_00.h"
-#include "d/res/res_ktaru_01.h"
-#include "d/res/res_okmono.h"
-#include "d/res/res_odokuro.h"
-#include "d/res/res_okioke.h"
-#include "d/res/res_sitem.h"
-#include "d/res/res_kmi00x.h"
-#include "d/res/res_hbox2.h"
-#include "d/res/res_hseki.h"
-#include "d/res/res_ptubo.h"
-#include "d/res/res_kkiba_00.h"
+#include "res/Object/Always.h"
+#include "res/Object/Kmtub_00.h"
+#include "res/Object/Ktaru_01.h"
+#include "res/Object/Okmono.h"
+#include "res/Object/Odokuro.h"
+#include "res/Object/Okioke.h"
+#include "res/Object/Sitem.h"
+#if VERSION > VERSION_DEMO
+#include "res/Object/Kmi00x.h"
+#endif
+#include "res/Object/Hbox2.h"
+#include "res/Object/Hseki.h"
+#include "res/Object/Ptubo.h"
+#include "res/Object/Kkiba_00.h"
 #include "d/d_camera.h"
 #include "d/d_lib.h"
 #include "d/d_com_inf_game.h"
@@ -122,7 +124,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_1_e | DATA_FLAG_2_e),
-        ALWAYS_BDL_OBM_KOTUBO1,
+        dRes_INDEX_ALWAYS_BDL_OBM_KOTUBO1_e,
         0x28,
         0x1E,
         0x3C,
@@ -187,7 +189,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_1_e | DATA_FLAG_2_e | DATA_FLAG_20_e),
-        ALWAYS_BDL_OBM_OOTUBO1,
+        dRes_INDEX_ALWAYS_BDL_OBM_OOTUBO1_e,
         0x32,
         0x32,
         0x64,
@@ -254,7 +256,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_20_e),
-        KMTUB_00_BDL_KMTUB_00,
+        dRes_INDEX_KMTUB_00_BDL_KMTUB_00_e,
         0x41,
         0x32,
         0x64,
@@ -321,7 +323,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_4_e | DATA_FLAG_10_e | DATA_FLAG_20_e),
-        KTARU_01_BDL_KTARU_01,
+        dRes_INDEX_KTARU_01_BDL_KTARU_01_e,
         0x3C,
         0x32,
         0x64,
@@ -388,7 +390,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_4_e | DATA_FLAG_10_e),
-        OKMONO_BDL_OSTOOL,
+        dRes_INDEX_OKMONO_BDL_OSTOOL_e,
         0x30,
         0x28,
         0x50,
@@ -453,7 +455,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         DATA_FLAG_2_e,
-        ODOKURO_BDL_ODOKURO,
+        dRes_INDEX_ODOKURO_BDL_ODOKURO_e,
         0x27,
         0x1C,
         0x3C,
@@ -518,7 +520,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_10_e),
-        OKIOKE_BDL_OKIOKE,
+        dRes_INDEX_OKIOKE_BDL_OKIOKE_e,
         0x26,
         0x1A,
         0x49,
@@ -583,7 +585,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_10_e | DATA_FLAG_20_e),
-        DEMO_SELECT(SITEM_BDL_KMI_00, KMI00X_BDL_KMI_00X),
+        DEMO_SELECT(dRes_INDEX_SITEM_BDL_KMI_00_e, dRes_INDEX_KMI00X_BDL_KMI_00X_e),
         0x32,
         0x32,
         0x64,
@@ -648,7 +650,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_8_e | DATA_FLAG_10_e),
-        HBOX2_BDL_HBOX2,
+        dRes_INDEX_HBOX2_BDL_HBOX2_e,
         0x30,
         0x2D,
         0x4B,
@@ -713,7 +715,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_4_e),
-        HSEKI_BDL_HMON1,
+        dRes_INDEX_HSEKI_BDL_HMON1_e,
         0x48,
         0x38,
         0x96,
@@ -778,7 +780,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_4_e),
-        HSEKI_BDL_HMON1,
+        dRes_INDEX_HSEKI_BDL_HMON1_e,
         0x48,
         0x38,
         0x96,
@@ -843,7 +845,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_4_e),
-        HSEKI_BDL_HMON1,
+        dRes_INDEX_HSEKI_BDL_HMON1_e,
         0x48,
         0x38,
         0x96,
@@ -908,7 +910,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_4_e),
-        HSEKI_BDL_HMON1,
+        dRes_INDEX_HSEKI_BDL_HMON1_e,
         0x48,
         0x38,
         0x96,
@@ -973,7 +975,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_10_e),
-        SITEM_BDL_KMI_02,
+        dRes_INDEX_SITEM_BDL_KMI_02_e,
         0x2D,
         0x32,
         0x64,
@@ -1038,7 +1040,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_20_e),
-        PTUBO_BDL_PTUBO,
+        dRes_INDEX_PTUBO_BDL_PTUBO_e,
         0x2F,
         0x32,
         0x64,
@@ -1105,7 +1107,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_8_e | DATA_FLAG_10_e),
-        KKIBA_00_BDL_KKIBA_00,
+        dRes_INDEX_KKIBA_00_BDL_KKIBA_00_e,
         0x30,
         0x2D,
         0x4B,
@@ -1203,7 +1205,7 @@ bool Act_c::create_heap() {
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, modelFlag);
     bool ret = false;
     if (mType == 7) {
-        J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname[mType], DEMO_SELECT(SITEM_BRK_KMI_00, KMI00X_BRK_KMI_00X)));
+        J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname[mType], DEMO_SELECT(dRes_INDEX_SITEM_BRK_KMI_00_e, dRes_INDEX_KMI00X_BRK_KMI_00X_e)));
         JUT_ASSERT(DEMO_SELECT(1885, 1887), brk_data != NULL);
 
         mpBrk = new mDoExt_brkAnm();
@@ -3091,8 +3093,8 @@ void Act_c::eff_break_barrel() {
 /* 00006888-00006A48       .text eff_break_tsubo__Q27daTsubo5Act_cFv */
 void Act_c::eff_break_tsubo() {
     u16 uVar1 = data().m80;
-    J3DModelData* pJVar2 = (J3DModelData*)(dComIfG_getObjectRes("Always", ALWAYS_BDL_MPM_TUBO));
-    J3DAnmTexPattern* pJVar3 = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Always", ALWAYS_BTP_MPM_TUBO));
+    J3DModelData* pJVar2 = (J3DModelData*)(dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_MPM_TUBO_e));
+    J3DAnmTexPattern* pJVar3 = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTP_MPM_TUBO_e));
     JPABaseEmitter* pJVar4 =
         static_cast<JPABaseEmitter*>(dComIfGp_particle_set(dPa_name::ID_AK_JN_M_TUBOHAHEN, &current.pos, NULL, (cXyz*)data().get_particle_scale()));
     if (pJVar4 != NULL) {

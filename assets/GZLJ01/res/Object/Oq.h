@@ -1,0 +1,106 @@
+#ifndef RES_OQ_H
+#define RES_OQ_H
+
+enum dRes_INDEX_OQ {
+    /* BCK  */
+    dRes_INDEX_OQ_BCK_AATTACK1_e=0x6,
+    dRes_INDEX_OQ_BCK_AATTACK2_FUKU_e=0x7,
+    dRes_INDEX_OQ_BCK_AATTACK3_e=0x8,
+    dRes_INDEX_OQ_BCK_DEAD1_e=0x9,
+    dRes_INDEX_OQ_BCK_DEAD2_e=0xA,
+    dRes_INDEX_OQ_BCK_DEAD3_e=0xB,
+    dRes_INDEX_OQ_BCK_IKAKU_e=0xC,
+    dRes_INDEX_OQ_BCK_JET_ATTACK_e=0xD,
+    dRes_INDEX_OQ_BCK_JET_LOOP_e=0xE,
+    dRes_INDEX_OQ_BCK_JUMP_e=0xF,
+    dRes_INDEX_OQ_BCK_MOGURU_e=0x10,
+    dRes_INDEX_OQ_BCK_NOM_WAIT_e=0x11,
+    dRes_INDEX_OQ_BCK_SHIP_HIT_e=0x12,
+    dRes_INDEX_OQ_BCK_START_e=0x13,
+    dRes_INDEX_OQ_BCK_UMI_NEW_WAIT_e=0x14,
+    /* BDLM */
+    dRes_INDEX_OQ_BDL_ISI_e=0x17,
+    /* BMDM */
+    dRes_INDEX_OQ_BMD_OQ_e=0x1A,
+    dRes_INDEX_OQ_BMD_RED_OQ_e=0x1B,
+    /* BRK  */
+    dRes_INDEX_OQ_BRK_RED_OQ_e=0x1E,
+};
+
+enum dRes_ID_OQ {
+    /* BCK  */
+    dRes_ID_OQ_BCK_AATTACK1_e=0x6,
+    dRes_ID_OQ_BCK_AATTACK2_FUKU_e=0x7,
+    dRes_ID_OQ_BCK_AATTACK3_e=0x8,
+    dRes_ID_OQ_BCK_DEAD1_e=0x9,
+    dRes_ID_OQ_BCK_DEAD2_e=0xA,
+    dRes_ID_OQ_BCK_DEAD3_e=0xB,
+    dRes_ID_OQ_BCK_IKAKU_e=0xC,
+    dRes_ID_OQ_BCK_JET_ATTACK_e=0xD,
+    dRes_ID_OQ_BCK_JET_LOOP_e=0xE,
+    dRes_ID_OQ_BCK_JUMP_e=0xF,
+    dRes_ID_OQ_BCK_MOGURU_e=0x10,
+    dRes_ID_OQ_BCK_NOM_WAIT_e=0x11,
+    dRes_ID_OQ_BCK_SHIP_HIT_e=0x12,
+    dRes_ID_OQ_BCK_START_e=0x13,
+    dRes_ID_OQ_BCK_UMI_NEW_WAIT_e=0x14,
+    /* BDLM */
+    dRes_ID_OQ_BDL_ISI_e=0x17,
+    /* BMDM */
+    dRes_ID_OQ_BMD_OQ_e=0x1A,
+    dRes_ID_OQ_BMD_RED_OQ_e=0x1B,
+    /* BRK  */
+    dRes_ID_OQ_BRK_RED_OQ_e=0x1E,
+};
+
+enum ISI_JNT {
+    ISI_JNT_PCUBE4_e=0x0,
+};
+
+enum OQ_JNT {
+    OQ_JNT_KOSI_e=0x0,
+    OQ_JNT_ASI1_e=0x1,
+    OQ_JNT_ASI2_e=0x2,
+    OQ_JNT_FACE1_e=0x3,
+    OQ_JNT_FACE2_e=0x4,
+    OQ_JNT_HEAD_e=0x5,
+    OQ_JNT_HEAD2_e=0x6,
+    OQ_JNT_KUTI_e=0x7,
+    OQ_JNT_KUTI2_e=0x8,
+    OQ_JNT_JET_e=0x9,
+    OQ_JNT_KATAL_e=0xA,
+    OQ_JNT_UDEL_e=0xB,
+    OQ_JNT_UDEL2_e=0xC,
+    OQ_JNT_UDEL3_e=0xD,
+    OQ_JNT_HANDL_e=0xE,
+    OQ_JNT_KATAR_e=0xF,
+    OQ_JNT_UDER_e=0x10,
+    OQ_JNT_UDER2_e=0x11,
+    OQ_JNT_UDER3_e=0x12,
+    OQ_JNT_HANDR_e=0x13,
+};
+
+enum RED_OQ_JNT {
+    RED_OQ_JNT_KOSI_e=0x0,
+    RED_OQ_JNT_ASI1_e=0x1,
+    RED_OQ_JNT_ASI2_e=0x2,
+    RED_OQ_JNT_FACE1_e=0x3,
+    RED_OQ_JNT_FACE2_e=0x4,
+    RED_OQ_JNT_HEAD_e=0x5,
+    RED_OQ_JNT_HEAD2_e=0x6,
+    RED_OQ_JNT_KUTI_e=0x7,
+    RED_OQ_JNT_KUTI2_e=0x8,
+    RED_OQ_JNT_JET_e=0x9,
+    RED_OQ_JNT_KATAL_e=0xA,
+    RED_OQ_JNT_UDEL_e=0xB,
+    RED_OQ_JNT_UDEL2_e=0xC,
+    RED_OQ_JNT_UDEL3_e=0xD,
+    RED_OQ_JNT_HANDL_e=0xE,
+    RED_OQ_JNT_KATAR_e=0xF,
+    RED_OQ_JNT_UDER_e=0x10,
+    RED_OQ_JNT_UDER2_e=0x11,
+    RED_OQ_JNT_UDER3_e=0x12,
+    RED_OQ_JNT_HANDR_e=0x13,
+};
+
+#endif /* !RES_OQ_H */

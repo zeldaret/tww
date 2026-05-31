@@ -9,7 +9,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_path.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_bridge.h"
+#include "res/Object/Bridge.h"
 #include "d/d_bg_w_sv.h"
 #include "d/d_s_play.h"
 #include "d/d_cc_uty.h"
@@ -1314,7 +1314,7 @@ void CreateInit(fopAc_ac_c* a_this) {
 
 /* 00003E00-00004310       .text CallbackCreateHeap__FP10fopAc_ac_c */
 static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
-    static const s32 bridge_bmd[] = { BRIDGE_BDL_OBM_BRIDGE, BRIDGE_BDL_OBM_BRIDGE2 };
+    static const s32 bridge_bmd[] = { dRes_INDEX_BRIDGE_BDL_OBM_BRIDGE_e, dRes_INDEX_BRIDGE_BDL_OBM_BRIDGE2_e };
     
     bridge_class* i_this = (bridge_class*)a_this;
 
@@ -1328,7 +1328,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
 
     J3DModelData* modelData2;
     if (modelNum == 1) {
-        modelData2 = (J3DModelData*)dComIfG_getObjectRes("Bridge", BRIDGE_BDL_OBM_CHAIN1);
+        modelData2 = (J3DModelData*)dComIfG_getObjectRes("Bridge", dRes_INDEX_BRIDGE_BDL_OBM_CHAIN1_e);
         JUT_ASSERT(DEMO_SELECT(2340, 2342), modelData2 != NULL);
     }
 
@@ -1360,9 +1360,9 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
 
                     BOOL res;
                     if (i_this->mTypeBits & 8) {
-                        res = pBr->mLineMat1.init(4, 5, (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXM_ROPE1), 1);
+                        res = pBr->mLineMat1.init(4, 5, (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TXM_ROPE1_e), 1);
                     } else {
-                        res = pBr->mLineMat1.init(4, 5, (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE), 1);
+                        res = pBr->mLineMat1.init(4, 5, (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_ROPE_e), 1);
                     }
 
                     if (!res) {
@@ -1374,9 +1374,9 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
             if (i == 0) {
                 BOOL res;
                 if (i_this->mTypeBits & 8) {
-                    res = i_this->mLineMat.init(2, 14, (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXM_ROPE1), 0);
+                    res = i_this->mLineMat.init(2, 14, (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TXM_ROPE1_e), 0);
                 } else {
-                    res = i_this->mLineMat.init(2, 14, (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE), 0);
+                    res = i_this->mLineMat.init(2, 14, (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_ROPE_e), 0);
                 }
 
                 if (!res) {
@@ -1411,7 +1411,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
     }
 
     if ((i_this->mTypeBits & 1) == 1) {
-        cBgD_t* cBgD = (cBgD_t*)dComIfG_getObjectRes("Bridge", BRIDGE_DZB_MBRDG2);
+        cBgD_t* cBgD = (cBgD_t*)dComIfG_getObjectRes("Bridge", dRes_INDEX_BRIDGE_DZB_MBRDG2_e);
 #if VERSION == VERSION_DEMO
         i_this->mpBgW->Set(cBgD, 0);
 #else
@@ -1420,7 +1420,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
         }
 #endif
     } else {
-        cBgD_t* cBgD = (cBgD_t*)dComIfG_getObjectRes("Bridge", BRIDGE_DZB_MBRDG);
+        cBgD_t* cBgD = (cBgD_t*)dComIfG_getObjectRes("Bridge", dRes_INDEX_BRIDGE_DZB_MBRDG_e);
 #if VERSION == VERSION_DEMO
         i_this->mpBgW->Set(cBgD, 0);
 #else

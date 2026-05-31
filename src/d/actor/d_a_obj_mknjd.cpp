@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mknjd.h"
 #include "d/d_s_play.h" // IWYU pragma: keep
-#include "d/res/res_mknjd.h"
+#include "res/Object/MknjD.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_op/f_op_msg.h"
@@ -167,13 +167,13 @@ s16 daObjMknjD::Act_c::XyEventCB(int) {
 BOOL daObjMknjD::Act_c::CreateHeap() {
     J3DModelData* model_data_d;
     if (m043E == true) {
-        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKNJD_BDL_MKNJK);
+        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKNJD_BDL_MKNJK_e);
     }
     else {
-        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKNJD_BDL_MKNJD);
+        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKNJD_BDL_MKNJD_e);
     }
 
-    J3DModelData* model_data_h = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKNJD_BDL_MKNJH);
+    J3DModelData* model_data_h = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKNJD_BDL_MKNJH_e);
 
     JUT_ASSERT(0x123, model_data_d != NULL)
     JUT_ASSERT(0x124, model_data_h != NULL)
@@ -309,7 +309,7 @@ cPhs_State daObjMknjD::Act_c::Mthd_Create() {
     else {
         phase_state = dComIfG_resLoad(&mPhs, M_arcname);
         if (phase_state == cPhs_COMPLEATE_e) {
-            phase_state = MoveBGCreate(M_arcname, MKNJD_DZB_MKNJD, NULL, 0x65A0);
+            phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MKNJD_DZB_MKNJD_e, NULL, 0x65A0);
 
             JUT_ASSERT(0x1CA, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e))
         }

@@ -5,14 +5,14 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_toge.h"
-#include "d/res/res_htoge1.h"
+#include "res/Object/Htoge1.h"
 #include "d/actor/d_a_wind_tag.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
 
 const char daToge_c::m_arcname[] = "Htoge1";
-const s16 daToge_c::m_dzbidx = HTOGE1_DZB_HTOGE1A;
-const s16 daToge_c::m_bdlidx = HTOGE1_BDL_HTOGE1;
+const s16 daToge_c::m_dzbidx = dRes_INDEX_HTOGE1_DZB_HTOGE1A_e;
+const s16 daToge_c::m_bdlidx = dRes_INDEX_HTOGE1_BDL_HTOGE1_e;
 const u32 daToge_c::m_heapsize = 0x5000;
 const f32 daToge_c::m_y_min = -150.0f;
 
@@ -68,7 +68,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000015C-00000290       .text CreateHeap__8daToge_cFv */
 BOOL daToge_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, HTOGE1_BDL_HTOGE1);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HTOGE1_BDL_HTOGE1_e);
     JUT_ASSERT(0x11A, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000002U);
@@ -79,8 +79,8 @@ BOOL daToge_c::CreateHeap() {
 
     mpModel->setUserArea((u32)this);
 
-    mpBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, HTOGE1_DZB_HTOGE1A), cBgW::MOVE_BG_e, &mtx1);
-    mpBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, HTOGE1_DZB_HTOGE1B), cBgW::MOVE_BG_e, &mtx2);
+    mpBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HTOGE1_DZB_HTOGE1A_e), cBgW::MOVE_BG_e, &mtx1);
+    mpBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HTOGE1_DZB_HTOGE1B_e), cBgW::MOVE_BG_e, &mtx2);
 
     if (mpBgW1 == NULL || mpBgW2 == NULL) {
         return FALSE;

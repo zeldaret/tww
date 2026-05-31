@@ -10,7 +10,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
-#include "d/res/res_bgn.h"
+#include "res/Object/Bgn.h"
 
 class daBgn3_HIO_c : public JORReflexible {
 public:
@@ -1154,10 +1154,10 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     bgn3_class* i_this = (bgn3_class*)a_this;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Bgn", BGN_BDL_BGN_HEAD1),
+        (J3DModelData*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BDL_BGN_HEAD1_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bgn", BGN_BCK_BGN_HEAD1),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BCK_BGN_HEAD1_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -1170,7 +1170,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     if ((i_this->mpMorf == NULL) || (i_this->mpMorf->getModel() == NULL)) {
         return FALSE;
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", BGN_BDL_BGN_DEKU1);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BDL_BGN_DEKU1_e);
     i_this->m002CC = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (i_this->m002CC == NULL) {
         return FALSE;
@@ -1187,12 +1187,12 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             return false;
         }
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(BGN_BDL_BGN_JYAKUTENA, BGN_BDL_BGN_JYAKUTENA3));
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(dRes_INDEX_BGN_BDL_BGN_JYAKUTENA_e, dRes_INDEX_BGN_BDL_BGN_JYAKUTENA3_e));
     i_this->mpJyakutenAModel = mDoExt_J3DModel__create(modelData, DEMO_SELECT(0x80000, 0), DEMO_SELECT(0x11000022, 0x11020203));
     if (i_this->mpJyakutenAModel == NULL) {
         return FALSE;
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(BGN_BDL_BGN_JYAKUTENB, BGN_BDL_BGN_JYAKUTENB3));
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(dRes_INDEX_BGN_BDL_BGN_JYAKUTENB_e, dRes_INDEX_BGN_BDL_BGN_JYAKUTENB3_e));
     i_this->mpJyakutenBModel = mDoExt_J3DModel__create(modelData, DEMO_SELECT(0x80000, 0), DEMO_SELECT(0x11000022, 0x11020203));
     if (i_this->mpJyakutenBModel == NULL) {
         return FALSE;
@@ -1203,11 +1203,11 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 #endif
-    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(BGN_BRK_BGN_JYAKUTENBC, BGN_BRK_BGN_JYAKUTENB3));
+    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(dRes_INDEX_BGN_BRK_BGN_JYAKUTENBC_e, dRes_INDEX_BGN_BRK_BGN_JYAKUTENB3_e));
     if (!i_this->mJyakutenBBrkAnm->init(modelData, pBrk, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(BGN_BDL_BGN_JYAKUTENC, BGN_BDL_BGN_JYAKUTENC3));
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(dRes_INDEX_BGN_BDL_BGN_JYAKUTENC_e, dRes_INDEX_BGN_BDL_BGN_JYAKUTENC3_e));
     i_this->mpJyakutenCModel = mDoExt_J3DModel__create(modelData, DEMO_SELECT(0x80000, 0), DEMO_SELECT(0x11000022, 0x11020203));
     if (i_this->mpJyakutenCModel == NULL) {
         return FALSE;
@@ -1218,11 +1218,11 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 #endif
-    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(BGN_BRK_BGN_JYAKUTENBC, BGN_BRK_BGN_JYAKUTENC3));
+    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(dRes_INDEX_BGN_BRK_BGN_JYAKUTENBC_e, dRes_INDEX_BGN_BRK_BGN_JYAKUTENC3_e));
     if (!i_this->mJyakutenCBrkAnm->init(modelData, pBrk, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
-    pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", BGN_BTI_NOT_CUT1);
+    pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BTI_NOT_CUT1_e);
     if (!i_this->mRedRopeMat.init(1, 0x3c, pBti, 1)) {
         return FALSE;
     }

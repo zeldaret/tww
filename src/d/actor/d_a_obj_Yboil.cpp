@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Yboil.h"
-#include "d/res/res_yboil.h"
+#include "res/Object/Yboil.h"
 #include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
@@ -19,13 +19,13 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-00000368       .text CreateHeap__12daObjYboil_cFv */
 BOOL daObjYboil_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Yboil", YBOIL_BDL_YBOIL00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Yboil", dRes_INDEX_YBOIL_BDL_YBOIL00_e);
     JUT_ASSERT(92, modelData != NULL);
-    J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Yboil", YBOIL_BCK_YBOIL00));
+    J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Yboil", dRes_INDEX_YBOIL_BCK_YBOIL00_e));
     JUT_ASSERT(96, bck != NULL);
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Yboil", YBOIL_BTK_YBOIL00));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Yboil", dRes_INDEX_YBOIL_BTK_YBOIL00_e));
     JUT_ASSERT(100, btk != NULL);
-    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Yboil", YBOIL_BRK_YBOIL00));
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Yboil", dRes_INDEX_YBOIL_BRK_YBOIL00_e));
     JUT_ASSERT(104, brk != NULL);
 
     for (s32 i = 0; i < 50; i++) {

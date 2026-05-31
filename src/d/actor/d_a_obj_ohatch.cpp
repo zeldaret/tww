@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ohatch.h"
-#include "d/res/res_ohatch.h"
+#include "res/Object/Ohatch.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -111,14 +111,14 @@ BOOL daObjOhatch_c::solidHeapCB(fopAc_ac_c* a_this) {
 /* 000002A0-000003CC       .text create_heap__13daObjOhatch_cFv */
 bool daObjOhatch_c::create_heap() {
     bool uVar5 = true;
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, OHATCH_BDL_OHATCH);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_OHATCH_BDL_OHATCH_e);
     if (modelData == NULL) {
         JUT_ASSERT(DEMO_SELECT(308, 311), FALSE);
         uVar5 = false;
     } else {
         mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
-        mBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, OHATCH_DZB_OH_CLS), cBgW::MOVE_BG_e, &m2A8);
-        mBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, OHATCH_DZB_OH_OPN), cBgW::MOVE_BG_e, &m2A8);
+        mBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_OHATCH_DZB_OH_CLS_e), cBgW::MOVE_BG_e, &m2A8);
+        mBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_OHATCH_DZB_OH_OPN_e), cBgW::MOVE_BG_e, &m2A8);
         if (mModel == NULL || mBgW1 == NULL || mBgW2 == NULL) {
             uVar5 = false;
         }

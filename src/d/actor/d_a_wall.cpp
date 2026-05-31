@@ -5,9 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_wall.h"
-#include "d/res/res_hbw1.h"
-#include "d/res/res_htw1.h"
-#include "d/res/res_hbw2.h"
+#include "res/Object/Hbw1.h"
+#include "res/Object/Htw1.h"
+#include "res/Object/Hbw2.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -19,8 +19,8 @@ const s16 daWall_c::m_heapsize[3] = {
     0x2000,
 };
 
-const s16 daWall_c::m_bmdname[3] = {HBW1_BDL_HBW1, HTW1_BDL_HTW1, HBW2_BDL_HBW2};
-const s16 daWall_c::m_dzbname[3] = {HBW1_DZB_HBW1, HTW1_DZB_HTW1, HBW2_DZB_HBW2};
+const s16 daWall_c::m_bmdname[3] = {dRes_INDEX_HBW1_BDL_HBW1_e, dRes_INDEX_HTW1_BDL_HTW1_e, dRes_INDEX_HBW2_BDL_HBW2_e};
+const s16 daWall_c::m_dzbname[3] = {dRes_INDEX_HBW1_DZB_HBW1_e, dRes_INDEX_HTW1_DZB_HTW1_e, dRes_INDEX_HBW2_DZB_HBW2_e};
 
 const Vec daWall_c::m_tri_vtx[3][4] = {
     {{150.0f, -120.0f, 0.0f},

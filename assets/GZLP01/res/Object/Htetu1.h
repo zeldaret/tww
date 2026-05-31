@@ -1,0 +1,24 @@
+#ifndef RES_HTETU1_H
+#define RES_HTETU1_H
+
+enum dRes_INDEX_HTETU1 {
+    /* BDL  */
+    dRes_INDEX_HTETU1_BDL_HTETU1_e=0x4,
+    /* DZB  */
+    dRes_INDEX_HTETU1_DZB_HTETU1_e=0x7,
+};
+
+enum dRes_ID_HTETU1 {
+    /* BDL  */
+    dRes_ID_HTETU1_BDL_HTETU1_e=0x4,
+    /* DZB  */
+    dRes_ID_HTETU1_DZB_HTETU1_e=0x7,
+};
+
+enum HTETU1_JNT {
+    HTETU1_JNT_HTETU1_00_e=0x0,
+    HTETU1_JNT_A00_e=0x1,
+    HTETU1_JNT_POLYSURFACE2342_e=0x2,
+};
+
+#endif /* !RES_HTETU1_H */

@@ -11,7 +11,7 @@
 #include "d/d_path.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_camera.h"
-#include "d/res/res_po.h"
+#include "res/Object/Po.h"
 #include "d/d_snap.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_picture_box.h"
@@ -504,16 +504,16 @@ static char* l_npc_staff_id = {
 };
 
 static const int l_bck_ix_tbl[] = {
-    PO_BCK_WAIT01,
-    PO_BCK_TALK01,
-    PO_BCK_TALK02,
-    PO_BCK_WALK01,
-    PO_BCK_SPIT,
+    dRes_ID_PO_BCK_WAIT01_e,
+    dRes_ID_PO_BCK_TALK01_e,
+    dRes_ID_PO_BCK_TALK02_e,
+    dRes_ID_PO_BCK_WALK01_e,
+    dRes_ID_PO_BCK_SPIT_e,
 };
 
 static const int l_btp_ix_tbl[] = {
-    PO_BTP_MABA01,
-    PO_BTP_MABA02
+    dRes_ID_PO_BTP_MABA01_e,
+    dRes_ID_PO_BTP_MABA02_e
 };
 
 struct SaveDatStruct {
@@ -657,13 +657,13 @@ cPhs_State daNpcPhoto_c::_create() {
 
 /* 00000A04-00000CA0       .text createHeap__12daNpcPhoto_cFv */
 BOOL daNpcPhoto_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectIDRes(l_arcname_tbl[0], PO_BDL_PO);
+    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectIDRes(l_arcname_tbl[0], dRes_ID_PO_BDL_PO_e);
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
         (J3DAnmTransform*)dComIfG_getObjectIDRes(l_arcname_tbl[0], l_bck_ix_tbl[field_0x9C8]),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL,
-        0x80000,0x11020022
+        0x80000, 0x11020022
     );
 
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {

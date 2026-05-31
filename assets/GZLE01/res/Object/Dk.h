@@ -1,0 +1,100 @@
+#ifndef RES_DK_H
+#define RES_DK_H
+
+enum dRes_INDEX_DK {
+    /* BCKS */
+    dRes_INDEX_DK_BCK_DK_MAJYUTO_DEMO1_e=0x4,
+    dRes_INDEX_DK_BCK_FLY1_e=0x5,
+    /* BDL  */
+    dRes_INDEX_DK_BDL_DK_e=0x8,
+    dRes_INDEX_DK_BDL_DK_KAMEN_e=0x9,
+    dRes_INDEX_DK_BDL_DK_TAIL_e=0xA,
+};
+
+enum dRes_ID_DK {
+    /* BCKS */
+    dRes_ID_DK_BCK_DK_MAJYUTO_DEMO1_e=0x10,
+    dRes_ID_DK_BCK_FLY1_e=0x11,
+    /* BDL  */
+    dRes_ID_DK_BDL_DK_e=0x12,
+    dRes_ID_DK_BDL_DK_KAMEN_e=0x13,
+    dRes_ID_DK_BDL_DK_TAIL_e=0x14,
+};
+
+enum DK_JNT {
+    DK_JNT_DK_ALLROOT_e=0x0,
+    DK_JNT_DK_SKLROOT_e=0x1,
+    DK_JNT_J_DK_KOSI_e=0x2,
+    DK_JNT_J_DK_ASHI_L1_e=0x3,
+    DK_JNT_J_DK_ASHI_L2_e=0x4,
+    DK_JNT_J_DK_ASHI_L3_e=0x5,
+    DK_JNT_J_DK_YUBI_LA1_e=0x6,
+    DK_JNT_J_DK_YUBI_LA2_e=0x7,
+    DK_JNT_J_DK_YUBI_LB1_e=0x8,
+    DK_JNT_J_DK_YUBI_LB2_e=0x9,
+    DK_JNT_J_DK_YUBI_LC1_e=0xA,
+    DK_JNT_J_DK_YUBI_LC2_e=0xB,
+    DK_JNT_J_DK_ASHI_R1_e=0xC,
+    DK_JNT_J_DK_ASHI_R2_e=0xD,
+    DK_JNT_J_DK_ASHI_R3_e=0xE,
+    DK_JNT_J_DK_YUBI_RA1_e=0xF,
+    DK_JNT_J_DK_YUBI_RA2_e=0x10,
+    DK_JNT_J_DK_YUBI_RB1_e=0x11,
+    DK_JNT_J_DK_YUBI_RB2_e=0x12,
+    DK_JNT_J_DK_YUBI_RC1_e=0x13,
+    DK_JNT_J_DK_YUBI_RC2_e=0x14,
+    DK_JNT_J_DK_MUNE1_e=0x15,
+    DK_JNT_J_DK_MUNE2_e=0x16,
+    DK_JNT_J_DK_KUBI1_e=0x17,
+    DK_JNT_J_DK_ATAMA1_e=0x18,
+    DK_JNT_J_DK_AGO_e=0x19,
+    DK_JNT_J_DK_KAMINOKE_e=0x1A,
+    DK_JNT_J_DK_KUTIBASI_e=0x1B,
+    DK_JNT_J_DK_MABUTA_e=0x1C,
+    DK_JNT_J_DK_ODEKO_e=0x1D,
+    DK_JNT_J_DK_SITA_e=0x1E,
+    DK_JNT_J_DK_TOSAKA_A1_e=0x1F,
+    DK_JNT_J_DK_TOSAKA_A2_e=0x20,
+    DK_JNT_J_DK_TOSAKA_A3_e=0x21,
+    DK_JNT_J_DK_TOSAKA_A4_e=0x22,
+    DK_JNT_J_DK_TOSAKA_B1_e=0x23,
+    DK_JNT_J_DK_TOSAKA_B2_e=0x24,
+    DK_JNT_J_DK_TUBASA_L1_e=0x25,
+    DK_JNT_J_DK_TUBASA_L2_e=0x26,
+    DK_JNT_J_DK_HANE_L1_e=0x27,
+    DK_JNT_J_DK_HANE_L2_e=0x28,
+    DK_JNT_J_DK_HANE_L3_e=0x29,
+    DK_JNT_J_DK_HANE_L4_e=0x2A,
+    DK_JNT_J_DK_HANE_L5_e=0x2B,
+    DK_JNT_J_DK_HANE_L6_e=0x2C,
+    DK_JNT_J_DK_PIKO_LA_e=0x2D,
+    DK_JNT_J_DK_PIKO_LB_e=0x2E,
+    DK_JNT_J_DK_TUBASA_R1_e=0x2F,
+    DK_JNT_J_DK_TUBASA_R2_e=0x30,
+    DK_JNT_J_DK_HANE_R1_e=0x31,
+    DK_JNT_J_DK_HANE_R2_e=0x32,
+    DK_JNT_J_DK_HANE_R3_e=0x33,
+    DK_JNT_J_DK_HANE_R4_e=0x34,
+    DK_JNT_J_DK_HANE_R5_e=0x35,
+    DK_JNT_J_DK_HANE_R6_e=0x36,
+    DK_JNT_J_DK_PIKO_RA_e=0x37,
+    DK_JNT_J_DK_PIKO_RB_e=0x38,
+    DK_JNT_J_DK_O_LA1_e=0x39,
+    DK_JNT_J_DK_O_LA2_e=0x3A,
+    DK_JNT_J_DK_O_LB1_e=0x3B,
+    DK_JNT_J_DK_O_LB2_e=0x3C,
+    DK_JNT_J_DK_O_RA1_e=0x3D,
+    DK_JNT_J_DK_O_RA2_e=0x3E,
+    DK_JNT_J_DK_O_RB1_e=0x3F,
+    DK_JNT_J_DK_O_RB2_e=0x40,
+};
+
+enum DK_KAMEN_JNT {
+    DK_KAMEN_JNT_TEKKAMEN_e=0x0,
+};
+
+enum DK_TAIL_JNT {
+    DK_TAIL_JNT_DK_TAIL_e=0x0,
+};
+
+#endif /* !RES_DK_H */

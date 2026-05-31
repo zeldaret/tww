@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mshokki.h"
-#include "d/res/res_mshokki.h"
+#include "res/Object/Mshokki.h"
 #include "d/d_kankyo.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -141,7 +141,7 @@ BOOL daObjMshokki_c::solidHeapCB(fopAc_ac_c* a_this) {
 
 /* 0000012C-000001FC       .text create_heap__14daObjMshokki_cFv */
 bool daObjMshokki_c::create_heap() {
-    static s32 bdl_idx[] = {MSHOKKI_BDL_POT, MSHOKKI_BDL_OSARA, MSHOKKI_BDL_KOPPU};
+    static s32 bdl_idx[] = {dRes_INDEX_MSHOKKI_BDL_POT_e, dRes_INDEX_MSHOKKI_BDL_OSARA_e, dRes_INDEX_MSHOKKI_BDL_KOPPU_e};
 
     bool uVar3 = true;
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, bdl_idx[m60C]);

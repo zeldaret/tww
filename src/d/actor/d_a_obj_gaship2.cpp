@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gaship2.h"
-#include "d/res/res_yakerom.h"
+#include "res/Object/YakeRom.h"
 #include "SSystem/SComponent/c_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
@@ -23,12 +23,12 @@ bool daObjGaship2::Act_c::create_heap() {
     J3DModelData *mdl_data;
     cBgD_t *bgw_data;
 
-    mdl_data = (J3DModelData *) (dComIfG_getObjectRes(M_arcname, YAKEROM_BDL_YAKEROM));
+    mdl_data = (J3DModelData *) (dComIfG_getObjectRes(M_arcname, dRes_INDEX_YAKEROM_BDL_YAKEROM_e));
     JUT_ASSERT(90, mdl_data != NULL);
 
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
     set_mtx();
-    bgw_data = (cBgD_t *) (dComIfG_getObjectRes(M_arcname, YAKEROM_DZB_YAKEROM));
+    bgw_data = (cBgD_t *) (dComIfG_getObjectRes(M_arcname, dRes_INDEX_YAKEROM_DZB_YAKEROM_e));
     JUT_ASSERT(103, bgw_data != NULL);
 #if VERSION > VERSION_DEMO
     if (bgw_data != NULL)

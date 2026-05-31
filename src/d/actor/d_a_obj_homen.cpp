@@ -7,7 +7,7 @@
 #include "d/actor/d_a_obj_homen.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_homen.h"
+#include "res/Object/Homen.h"
 #include "f_op/f_op_actor_mng.h"
 
 namespace daObjHomen {
@@ -209,12 +209,12 @@ BOOL Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 00000110-000002B4       .text create_heap__Q210daObjHomen5Act_cFv */
 bool Act_c::create_heap() {
     static int bdl_idx[] = {
-        HOMEN_BDL_HOMEN1,
-        HOMEN_BDL_HOMEN2,
+        dRes_INDEX_HOMEN_BDL_HOMEN1_e,
+        dRes_INDEX_HOMEN_BDL_HOMEN2_e,
     };
     static int dzb_idx[] = {
-        HOMEN_DZB_HOMEN1,
-        HOMEN_DZB_HOMEN2,
+        dRes_INDEX_HOMEN_DZB_HOMEN1_e,
+        dRes_INDEX_HOMEN_DZB_HOMEN2_e,
     };
     
     J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, bdl_idx[mType]);

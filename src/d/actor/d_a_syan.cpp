@@ -8,7 +8,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
-#include "d/res/res_syan.h"
+#include "res/Object/Syan.h"
 
 static f32 b_pos_x[6] = { 870.0f, 420.0f, -420.0f, -880.0f, -400.0f, 440.0f };
 static f32 b_pos_y[6] = { -560.0f, -760.0f, -630.0f, -710.0f, -670.0f, -690.0f };
@@ -193,9 +193,9 @@ static BOOL daSyan_Delete(syan_class* i_this) {
 static BOOL daSyan_solidHeapCB(fopAc_ac_c* i_ac) {
     syan_class* i_this = (syan_class*)i_ac;
     i_this->morf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Syan", SYAN_BDL_SYAN),
+        (J3DModelData*)dComIfG_getObjectRes("Syan", dRes_INDEX_SYAN_BDL_SYAN_e),
         NULL, NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes("Syan", SYAN_BCK_SYAN),
+        (J3DAnmTransform*)dComIfG_getObjectRes("Syan", dRes_INDEX_SYAN_BCK_SYAN_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000002
     );
     return i_this->morf != NULL;

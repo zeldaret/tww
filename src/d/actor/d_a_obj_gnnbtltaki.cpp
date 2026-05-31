@@ -4,7 +4,7 @@
  */
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gnnbtltaki.h"
-#include "d/res/res_gnnbtltaki.h"
+#include "res/Object/Gnnbtltaki.h"
 
 const char daObjGnnbtaki_c::M_arcname[] = "Gnnbtltaki";
 
@@ -19,12 +19,12 @@ BOOL daObjGnnbtaki_c::create_heap() {
     J3DModelData* mdl_data;
     J3DAnmTextureSRTKey* btk_data;
     BOOL ret = FALSE;
-    mdl_data =  static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GNNBTLTAKI_BDL_GNN_BTL_TAKI));
+    mdl_data =  static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_GNNBTLTAKI_BDL_GNN_BTL_TAKI_e));
     JUT_ASSERT(90, mdl_data != NULL);
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mpModel != NULL) {
-            btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, GNNBTLTAKI_BTK_GNN_BTL_TAKI));
+            btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_GNNBTLTAKI_BTK_GNN_BTL_TAKI_e));
             JUT_ASSERT(97, btk_data != NULL);
             if (btk_data != NULL && mBtkAnm.init(mdl_data, btk_data, TRUE, J3DFrameCtrl::EMode_LOOP)) {
                 ret = TRUE;

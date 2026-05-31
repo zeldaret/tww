@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ajav.h"
-#include "d/res/res_ajav.h"
+#include "res/Object/Ajav.h"
 
 static cXyz l_daObjAjav_co_offset[3] = {
     cXyz(0.0f, 2550.0f, 200.0f),
@@ -444,7 +444,7 @@ BOOL daObjAjav::Act_c::create_heap() {
     }
 
     if (res != FALSE) {
-        cBgD_t* cbgd_res = (cBgD_t*)dComIfG_getObjectRes(M_arcname, AJAV_DZB_AJAV);
+        cBgD_t* cbgd_res = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_AJAV_DZB_AJAV_e);
         mpBgW = dBgW_NewSet(cbgd_res, cBgW::MOVE_BG_e, &mMtx);
         if (mpBgW == NULL) {
             res = FALSE;

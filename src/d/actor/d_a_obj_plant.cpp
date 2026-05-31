@@ -7,7 +7,7 @@
 #include "d/actor/d_a_obj_plant.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_cc_d.h"
-#include "d/res/res_plant.h"
+#include "res/Object/Plant.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -129,7 +129,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-000001E0       .text CreateHeap__12daObjPlant_cFv */
 BOOL daObjPlant_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Plant", PLANT_BDL_YRMWD);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Plant", dRes_INDEX_PLANT_BDL_YRMWD_e);
     JUT_ASSERT(0xAA, modelData != NULL);
     
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);

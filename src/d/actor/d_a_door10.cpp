@@ -7,7 +7,7 @@
 #include "d/actor/d_a_door10.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_doorbs.h"
+#include "res/Object/DoorBs.h"
 
 /* 00000078-000000C8       .text chkMakeKey__10daDoor10_cFv */
 s32 daDoor10_c::chkMakeKey() {
@@ -302,9 +302,9 @@ BOOL daDoor10_c::CreateHeap() {
     cBgD_t* cBgD;
     if (m364 != 0) {
         if (m364 == 4) {
-            cBgD = (cBgD_t*)dComIfG_getObjectRes("DoorBs", DOORBS_DZB_DOOR20_D);
+            cBgD = (cBgD_t*)dComIfG_getObjectRes("DoorBs", dRes_INDEX_DOORBS_DZB_DOOR20_D_e);
         } else {
-            cBgD = (cBgD_t*)dComIfG_getObjectRes("DoorBs", DOORBS_DZB_DOOR20_K);
+            cBgD = (cBgD_t*)dComIfG_getObjectRes("DoorBs", dRes_INDEX_DOORBS_DZB_DOOR20_K_e);
         }
     } else {
         cBgD = (cBgD_t*)dComIfG_getStageRes("Stage", getDzbName());

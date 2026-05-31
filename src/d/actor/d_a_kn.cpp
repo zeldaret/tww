@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kn.h"
-#include "d/res/res_kn.h"
+#include "res/Object/Kn.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
 #include "d/d_com_inf_game.h"
@@ -139,7 +139,7 @@ void kn_move(kn_class* i_this) {
     switch (i_this->m2BD) {
 #if VERSION == VERSION_DEMO
     case Mode_0_e:
-        anm_init(i_this, KN_BCK_WALK, 5.0f, 2, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_KN_BCK_WALK_e, 5.0f, 2, 1.0f, -1);
         i_this->m2CC = -25.0f;
         i_this->actor.current.angle.z = -0x2000;
         i_this->m2BD++;
@@ -160,9 +160,9 @@ void kn_move(kn_class* i_this) {
 #endif
     case Mode_10_e:
         if (cM_rnd() < 0.5f) {
-            anm_init(i_this, KN_BCK_WAIT01, 5.0f, 2, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_KN_BCK_WAIT01_e, 5.0f, 2, 1.0f, -1);
         } else {
-            anm_init(i_this, KN_BCK_WAIT02, 5.0f, 2, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_KN_BCK_WAIT02_e, 5.0f, 2, 1.0f, -1);
         }
         i_this->m2D2 = 0x800;
         i_this->m2CA = cM_rndF(2.0f) + 1.0f;
@@ -183,7 +183,7 @@ void kn_move(kn_class* i_this) {
         break;
 
     case Mode_12_e:
-        anm_init(i_this, KN_BCK_WALK, 5.0f, 2, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_KN_BCK_WALK_e, 5.0f, 2, 1.0f, -1);
         i_this->m2D0 = i_this->actor.current.angle.y + cM_rndFX(10752.0f);
         i_this->m2E8 = f26;
         if (cM_rnd() < 0.5f) {
@@ -246,7 +246,7 @@ void kn_move(kn_class* i_this) {
         i_this->m2E4 = 0.0;
         i_this->m2C0 = 0;
         i_this->m2C2[0] = 0x14;
-        anm_init(i_this, KN_BCK_PATA, 5.0f, 2, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_KN_BCK_PATA_e, 5.0f, 2, 1.0f, -1);
         i_this->m2BD++;
 
     case Mode_16_e:
@@ -277,7 +277,7 @@ void kn_move(kn_class* i_this) {
                 } else {
                     shibuki_set(i_this);
                 }
-                anm_init(i_this, KN_BCK_PATA, 5.0f, 2, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_KN_BCK_PATA_e, 5.0f, 2, 1.0f, -1);
                 i_this->m2BD = Mode_17_e;
             }
         }
@@ -296,7 +296,7 @@ void kn_move(kn_class* i_this) {
         break;
 
     case Mode_18_e:
-        anm_init(i_this, KN_BCK_WALK, 5.0f, 2, 2.0f, -1);
+        anm_init(i_this, dRes_INDEX_KN_BCK_WALK_e, 5.0f, 2, 2.0f, -1);
         i_this->m2E8 = 40.0;
         i_this->m2C2[0] = 0;
         i_this->m2C2[1] = 0;
@@ -490,10 +490,10 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     kn_class* i_this = (kn_class*)a_this;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("KN", KN_BDL_KN),
+        (J3DModelData*)dComIfG_getObjectRes("KN", dRes_INDEX_KN_BDL_KN_e),
         NULL,
         NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes("KN", KN_BCK_PATA),
+        (J3DAnmTransform*)dComIfG_getObjectRes("KN", dRes_INDEX_KN_BCK_PATA_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,

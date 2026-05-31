@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ssk.h"
-#include "d/res/res_ssk.h"
+#include "res/Object/Ssk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_jnt_hit.h"
 #include "f_op/f_op_actor_mng.h"
@@ -271,7 +271,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     ssk_class* i_this = (ssk_class*)a_this;
 
     i_this->mpMorf1 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Ssk", SSK_BDL_TURU_02), NULL, NULL, NULL, ~J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022
+        (J3DModelData*)dComIfG_getObjectRes("Ssk", dRes_INDEX_SSK_BDL_TURU_02_e), NULL, NULL, NULL, ~J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022
     );
 
     if (i_this->mpMorf1 == NULL || i_this->mpMorf1->getModel() == NULL) {
@@ -279,7 +279,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     i_this->mpMorf2 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Ssk", SSK_BDL_KTANA_00),
+        (J3DModelData*)dComIfG_getObjectRes("Ssk", dRes_INDEX_SSK_BDL_KTANA_00_e),
         NULL, NULL, NULL,
         DEMO_SELECT(J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_NULL),
         1.0f, 0, -1,

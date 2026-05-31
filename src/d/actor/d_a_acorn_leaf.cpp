@@ -11,7 +11,7 @@
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "d/actor/d_a_tsubo.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_vigah.h"
+#include "res/Object/VigaH.h"
 
 static cXyz acorn_offset(0.0f, 15.0f, 0.0f);
 
@@ -64,7 +64,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 0000010C-00000258       .text CreateHeap__9daAleaf_cFv */
 BOOL daAleaf_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(daAleaf_c::m_arcname, VIGAH_BDL_VIGAH);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(daAleaf_c::m_arcname, dRes_INDEX_VIGAH_BDL_VIGAH_e);
     JUT_ASSERT(DEMO_SELECT(258, 262), modelData != NULL);
 
     unk_298 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -72,7 +72,7 @@ BOOL daAleaf_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(daAleaf_c::m_arcname, VIGAH_BCK_VIGAH);
+    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(daAleaf_c::m_arcname, dRes_INDEX_VIGAH_BCK_VIGAH_e);
     JUT_ASSERT(DEMO_SELECT(273, 277), pbck != NULL);
 
     if (!unk_408.init(modelData, pbck, true, J3DFrameCtrl::EMode_RESET)) {

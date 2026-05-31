@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_otble.h"
-#include "d/res/res_okmono.h"
+#include "res/Object/Okmono.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -65,8 +65,8 @@ BOOL daObj_Otble::Act_c::_draw() {
 
 /* 000002E8-00000470       .text _createHeap__Q211daObj_Otble5Act_cFv */
 BOOL daObj_Otble::Act_c::_createHeap() {
-    static const s32 bdl[] = {OKMONO_BDL_OTABLE, OKMONO_BDL_OTABLEL};
-    static const s32 dzb[] = {OKMONO_DZB_OTBLE, OKMONO_DZB_OTBLE_L};
+    static const s32 bdl[] = {dRes_INDEX_OKMONO_BDL_OTABLE_e, dRes_INDEX_OKMONO_BDL_OTABLEL_e};
+    static const s32 dzb[] = {dRes_INDEX_OKMONO_DZB_OTBLE_e, dRes_INDEX_OKMONO_DZB_OTBLE_L_e};
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Okmono", bdl[m294]);
     JUT_ASSERT(191, modelData != NULL);

@@ -1,0 +1,39 @@
+#ifndef RES_JBO_H
+#define RES_JBO_H
+
+enum dRes_INDEX_JBO {
+    /* BCK  */
+    dRes_INDEX_JBO_BCK_IN1_e=0x4,
+    dRes_INDEX_JBO_BCK_OUT1_e=0x5,
+    dRes_INDEX_JBO_BCK_UMARERU1_e=0x6,
+    /* BMDM */
+    dRes_INDEX_JBO_BMD_JH_e=0x9,
+};
+
+enum dRes_ID_JBO {
+    /* BCK  */
+    dRes_ID_JBO_BCK_IN1_e=0x4,
+    dRes_ID_JBO_BCK_OUT1_e=0x5,
+    dRes_ID_JBO_BCK_UMARERU1_e=0x6,
+    /* BMDM */
+    dRes_ID_JBO_BMD_JH_e=0x9,
+};
+
+enum JH_JNT {
+    JH_JNT_JH_ALLROOT_e=0x0,
+    JH_JNT_JH_SKLROOT_e=0x1,
+    JH_JNT_J_JH_HA1_e=0x2,
+    JH_JNT_J_JH_HA2_e=0x3,
+    JH_JNT_J_JH_HA3_e=0x4,
+    JH_JNT_J_JH_HA4_e=0x5,
+    JH_JNT_J_JH_MAIN1_e=0x6,
+    JH_JNT_J_JH_MAIN2_e=0x7,
+    JH_JNT_J_JH_ME1_e=0x8,
+    JH_JNT_J_JH_ME_E_e=0x9,
+    JH_JNT_J_JH_SAKI1_e=0xA,
+    JH_JNT_J_JH_SAKI2_e=0xB,
+    JH_JNT_J_JH_SAKI3_e=0xC,
+    JH_JNT_J_JH_SAKI4_e=0xD,
+};
+
+#endif /* !RES_JBO_H */

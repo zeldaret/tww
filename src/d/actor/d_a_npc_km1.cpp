@@ -8,7 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_snap.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/res/res_km.h"
+#include "res/Object/Km.h"
 
 class daNpc_Km1_HIO_c : public JORReflexible{
 public:
@@ -134,9 +134,9 @@ void daNpc_Km1_c::setMtx() {
 
 /* 0000054C-00000654       .text anmResID__11daNpc_Km1_cFiPiPi */
 bool daNpc_Km1_c::anmResID(int i_num, int* o_bck_num, int* o_bas_num) {
-    static const int a_anm_idx_tbl[1][2] = {KM_BCK_KM_WAIT01,KM_BAS_KM_WAIT01};
-    JUT_ASSERT(0x11A,0 <= i_num && i_num < ANM_END);
-    JUT_ASSERT(0x11B,o_bck_num && o_bas_num);
+    static const int a_anm_idx_tbl[1][2] = { dRes_ID_KM_BCK_KM_WAIT01_e, dRes_ID_KM_BAS_KM_WAIT01_e};
+    JUT_ASSERT(282, 0 <= i_num && i_num < ANM_END);
+    JUT_ASSERT(283, o_bck_num && o_bas_num);
     *o_bck_num = a_anm_idx_tbl[i_num][0];
     *o_bas_num = a_anm_idx_tbl[i_num][1];
     return true;
@@ -146,7 +146,7 @@ bool daNpc_Km1_c::anmResID(int i_num, int* o_bck_num, int* o_bas_num) {
 
 /* 00000654-000006F0       .text BtpNum2ResID__11daNpc_Km1_cFiPi */
 void daNpc_Km1_c::BtpNum2ResID(int i_num, int* o_btp_num){
-    static const int a_btp_arc_ix_tbl[1] = {KM_BTP_MABA};
+    static const int a_btp_arc_ix_tbl[1] = {dRes_ID_KM_BTP_MABA_e};
     JUT_ASSERT(0x130,0 <= i_num && i_num < TEXPATTERN_END);
     *o_btp_num = a_btp_arc_ix_tbl[i_num];
 }
@@ -161,14 +161,14 @@ void daNpc_Km1_c::setAnm_tex(signed char i_param_1) {
 
 /* 00000734-00000850       .text init_btp__11daNpc_Km1_cFbi */
 bool daNpc_Km1_c::init_btp(bool param_1, int param_2) {
-    int btp_num;
     int iVar3;
     J3DModelData *pJVar4;
 
     pJVar4 = mpMorf->getModel()->getModelData();
     if (param_2 >= 0) {
-        BtpNum2ResID(param_2,&btp_num);
-        J3DAnmTexPattern* pVVar1 = (J3DAnmTexPattern*)dComIfG_getObjectIDRes("Km",btp_num);
+        int btpId;
+        BtpNum2ResID(param_2, &btpId);
+        J3DAnmTexPattern* pVVar1 = (J3DAnmTexPattern*)dComIfG_getObjectIDRes("Km", btpId);
         m_head_tex_pattern = pVVar1;
         JUT_ASSERT(0x151,m_head_tex_pattern != NULL);
         iVar3 = mBtpAnm.init(pJVar4,m_head_tex_pattern,TRUE,J3DFrameCtrl::EMode_LOOP,1.0f,0,-1,param_1,FALSE);
@@ -748,12 +748,12 @@ BOOL daNpc_Km1_c::CreateHeap() {
     J3DModelData *a_mdl_data;
 
  
-    a_mdl_data = (J3DModelData*)dComIfG_getObjectIDRes("Km",KM_BDL_KM);
+    a_mdl_data = (J3DModelData*)dComIfG_getObjectIDRes("Km", dRes_ID_KM_BDL_KM_e);
     JUT_ASSERT(DEMO_SELECT(1316, 1325) ,a_mdl_data != NULL);
     mpMorf = new mDoExt_McaMorf(
         a_mdl_data,
         NULL, NULL,
-        (J3DAnmTransform*)dComIfG_getObjectIDRes("Km", KM_BCK_KM_WAIT01),
+        (J3DAnmTransform*)dComIfG_getObjectIDRes("Km", dRes_ID_KM_BCK_KM_WAIT01_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL,
         0x80000, 0x11020002
     );

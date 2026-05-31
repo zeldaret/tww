@@ -43,9 +43,9 @@ BOOL daPy_lk_c::setHookshotCarryOffset(fpc_ProcID carryActorID, const cXyz* offs
 
 /* 8014ABF4-8014ACCC       .text setHookshotModel__9daPy_lk_cFv */
 void daPy_lk_c::setHookshotModel() {
-    J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_HOOKSHOTA);
+    J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_HOOKSHOTA_e);
     JKRHeap* oldHeap = setItemHeap();
-    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_HOOKSHOT, 0x37221222);
+    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_HOOKSHOT_e, 0x37221222);
     int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(100, FALSE);
@@ -204,7 +204,7 @@ BOOL daPy_lk_c::procHookshotSubject_init() {
 
     mNormalSpeed = 0.0f;
 
-    setActAnimeUpper(LKANM_BCK_HOOKSHOTWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_HOOKSHOTWAIT_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
     setSingleMoveAnime(ANM_ATNLS, 0.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e);
@@ -257,7 +257,7 @@ BOOL daPy_lk_c::procHookshotMove_init() {
     }
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
     if (hookshot->checkWait()) {
-        setActAnimeUpper(LKANM_BCK_HOOKSHOTWAIT, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
+        setActAnimeUpper(dRes_INDEX_LKANM_BCK_HOOKSHOTWAIT_e, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
         setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
     }
     dComIfGp_setPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e);

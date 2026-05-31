@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_xfuta.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_x_futa.h"
+#include "res/Object/X_futa.h"
 #include "dolphin/types.h"
 
 namespace daObjXfuta {
@@ -39,7 +39,7 @@ BOOL Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool Act_c::create_heap() {
     J3DModelData* mdl_data;
 
-    mdl_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, X_FUTA_BDL_X_FUTA));
+    mdl_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, dRes_INDEX_X_FUTA_BDL_X_FUTA_e));
 
     JUT_ASSERT(0x105, mdl_data != NULL);
 

@@ -9,7 +9,7 @@
 #include "d/actor/d_a_pw.h"
 #include "d/d_lib.h"
 #include "d/d_snap.h"
-#include "d/res/res_bpw.h"
+#include "res/Object/Bpw.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera.h"
@@ -463,15 +463,15 @@ BOOL body_atari_check(bpw_class* i_this) {
             player->getCutType() == daPy_py_c::CUT_TYPE_CUT_KESA)
         {
             i_this->mHitType = 2;
-            anm_init(i_this, BPW_BCK_BOYON_L1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_BOYON_L1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         } else {
-            anm_init(i_this, BPW_BCK_BOYON_S1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_BOYON_S1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         }
         break;
     case AT_TYPE_HOOKSHOT:
         fopAcM_seStart(actor, JA_SE_LK_MS_WEP_HIT, 0x44);
         i_this->mHitType = 0xc;
-        anm_init(i_this, BPW_BCK_BOYON_S1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_BOYON_S1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         break;
     case AT_TYPE_WIND:
         bVar2 = true;
@@ -487,7 +487,7 @@ BOOL body_atari_check(bpw_class* i_this) {
     case AT_TYPE_STALFOS_MACE:
     case AT_TYPE_BOKO_STICK:
         fopAcM_seStart(actor, JA_SE_LK_W_WEP_HIT, 0x44);
-        anm_init(i_this, BPW_BCK_BOYON_S1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_BOYON_S1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         break;
     case AT_TYPE_SKULL_HAMMER:
         fopAcM_seStart(actor, JA_SE_LK_HAMMER_HIT, 0x44);
@@ -495,21 +495,21 @@ BOOL body_atari_check(bpw_class* i_this) {
         if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
             i_this->mHitType = 9;
         }
-        anm_init(i_this, BPW_BCK_BOYON_L1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_BOYON_L1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         break;
     case AT_TYPE_BOMB:
         i_this->mHitType = 7;
-        anm_init(i_this, BPW_BCK_BOYON_L1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_BOYON_L1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         break;
     case AT_TYPE_ICE_ARROW:
         i_this->mHitType = 6;
         fopAcM_seStart(actor, JA_SE_LK_MS_WEP_HIT, 0x44);
-        anm_init(i_this, BPW_BCK_BOYON_S1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_BOYON_S1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         break;
     case AT_TYPE_LIGHT_ARROW:
         i_this->mHitType = 11;
         fopAcM_seStart(actor, JA_SE_LK_MS_WEP_HIT, 0x44);
-        anm_init(i_this, BPW_BCK_BOYON_S1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_BOYON_S1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         break;
     case AT_TYPE_FIRE_ARROW:
     case AT_TYPE_FIRE:
@@ -519,7 +519,7 @@ BOOL body_atari_check(bpw_class* i_this) {
     default:
         i_this->mHitType = 0;
         fopAcM_seStart(actor, JA_SE_LK_MS_WEP_HIT, 0x44);
-        anm_init(i_this, BPW_BCK_BOYON_S1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_BOYON_S1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         break;
     }
     if (!bVar2) {
@@ -762,20 +762,20 @@ void noroi_brk_check(bpw_class* i_this, u8 param_2) {
     case 0:
         if (i_this->m3E2 != 2) {
             i_this->m3E2 = 2;
-            pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_NOROI_S1);
+            pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BRK_NOROI_S1_e);
             i_this->mpCurseStartBrkAnm->init(model->getModelData(), pBrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
         }
         break;
     case 1:
         if (i_this->m3E2 == 2) {
             i_this->m3E2 = 1;
-            pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_NOROI_E1);
+            pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BRK_NOROI_E1_e);
             i_this->mpCurseEndBrkAnm->init(model->getModelData(), pBrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
         }
         break;
     case 2:
         i_this->m3E2 = 0;
-        pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_DEFAULT);
+        pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BRK_DEFAULT_e);
         i_this->mpDefaultBrkAnm->init(model->getModelData(), pBrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
         break;
     }
@@ -819,7 +819,7 @@ void next_status_clear(bpw_class* i_this, u8 param_2) {
     if (i_this->m3E1 != 0) {
         J3DModel* model = i_this->mpMorf->getModel();
         i_this->m3E1 = 0;
-        J3DAnmTevRegKey* pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_DEFAULT);
+        J3DAnmTevRegKey* pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BRK_DEFAULT_e);
         i_this->mpDefaultBrkAnm->init(model->getModelData(), pBrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
     }
     if (i_this->mAttWaitTimer == 0) {
@@ -1069,7 +1069,7 @@ void action_dousa(bpw_class* i_this) {
             i_this->mSomeCountdownTimers[i + 10] = 0;
         }
         if (i_this->m3F8 != 0x2a) {
-            anm_init(i_this, BPW_BCK_WAIT1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_WAIT1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         i_this->mSomeCountdownTimers[0] = 10;
         i_this->mSomeCountdownTimers[0] += (int)cM_rndF(i_this->mSomeCountdownTimers[0]);
@@ -1100,7 +1100,7 @@ void action_dousa(bpw_class* i_this) {
                 i_this->m488 = 5.0f;
             }
             if (i_this->m3F8 != 0x1d) {
-                anm_init(i_this, BPW_BCK_MOVEF1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BPW_BCK_MOVEF1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
             i_this->mActionState++;
         case 3:
@@ -1134,7 +1134,7 @@ void action_dousa(bpw_class* i_this) {
                 }
                 break;
             case 4:
-                anm_init(i_this, BPW_BCK_MOVEB1, REG12_F(0) + 15.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BPW_BCK_MOVEB1_e, REG12_F(0) + 15.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->mSomeCountdownTimers[0] = (s16)(int)(REG12_F(1) + 40.0f);
                 noroi_brk_check(i_this, 0);
                 fopAcM_monsSeStart(actor, JA_SE_CV_BPW_CURSE, 0);
@@ -1146,7 +1146,7 @@ void action_dousa(bpw_class* i_this) {
                     actor->speedF = REG8_F(12) + 75.0f;
                     i_this->m488 = REG8_F(13) + 2.0f;
                     i_this->m490 = 0.0f;
-                    anm_init(i_this, BPW_BCK_MOVES1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                    anm_init(i_this, dRes_INDEX_BPW_BCK_MOVES1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                     i_this->mActionState++;
 
                     // fallthrough
@@ -1189,7 +1189,7 @@ void action_dousa(bpw_class* i_this) {
                         i_this->mSomeCountdownTimers[i + 10] = 0;
                     }
                     if (i_this->m3F8 != 0x2a) {
-                        anm_init(i_this, BPW_BCK_WAIT1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                        anm_init(i_this, dRes_INDEX_BPW_BCK_WAIT1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                     }
                     i_this->mActionState++;
                 case 0xb:
@@ -1206,7 +1206,7 @@ void action_dousa(bpw_class* i_this) {
                     if (i_this->m47E >= 0x95) {
                         i_this->m47E = 0x96;
                         i_this->m480 = 0x96;
-                        anm_init(i_this, BPW_BCK_HIROU1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                        anm_init(i_this, dRes_INDEX_BPW_BCK_HIROU1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                         kantera_pos_search(i_this);
                         i_this->mActionState++;
                     }
@@ -1273,7 +1273,7 @@ void action_kougeki(bpw_class* i_this) {
             i_this->mSomeCountdownTimers[i + 10] = 0;
         }
         if (i_this->m3F8 != 0x2b) {
-            anm_init(i_this, BPW_BCK_WARAU1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_WARAU1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         i_this->m47A = 0x500;
         i_this->m4A0 = 0.0f;
@@ -1310,7 +1310,7 @@ void action_kougeki(bpw_class* i_this) {
     case 0x28:
         if (i_this->mSomeCountdownTimers[2] != 0)
             break;
-        anm_init(i_this, BPW_BCK_SUIKOMU1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_SUIKOMU1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->mSomeCountdownTimers[0] = 30;
         i_this->mSomeCountdownTimers[0] += (int)cM_rndF(i_this->mSomeCountdownTimers[0]);
 #if VERSION == VERSION_DEMO
@@ -1362,7 +1362,7 @@ void action_kougeki(bpw_class* i_this) {
 #else
             i_this->m540.remove();
 #endif
-            anm_init(i_this, BPW_BCK_IKI1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_IKI1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mActionState++;
         }
         break;
@@ -1395,7 +1395,7 @@ void action_kougeki(bpw_class* i_this) {
                 );
             }
 #endif
-            anm_init(i_this, BPW_BCK_IKI_WAIT1, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_IKI_WAIT1_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->mActionState++;
         }
         break;
@@ -1433,7 +1433,7 @@ void action_kougeki(bpw_class* i_this) {
         break;
     }
     case 0x32:
-        anm_init(i_this, BPW_BCK_SUIKOMU1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_SUIKOMU1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->mSomeCountdownTimers[0] = 0x4b;
         i_this->mSomeCountdownTimers[1] = (s16)(int)(REG8_F(2) + 20.0f);
         i_this->mKankyouHendouState = 2;
@@ -1458,7 +1458,7 @@ void action_kougeki(bpw_class* i_this) {
                 player->setOutPower(10.0f, fopAcM_searchPlayerAngleY(actor) + 0x8000, 1);
             }
         } else {
-            anm_init(i_this, BPW_BCK_HONOO1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_HONOO1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mActionState++;
         }
         break;
@@ -1478,7 +1478,7 @@ void action_kougeki(bpw_class* i_this) {
                 i_this->m47A = 0x300;
                 i_this->mSomeCountdownTimers[5] = 0;
                 GOUEN_FIRE_HIT = 0;
-                anm_init(i_this, BPW_BCK_HONOO_WAIT1, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BPW_BCK_HONOO_WAIT1_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->mActionState++;
             }
         }
@@ -1526,7 +1526,7 @@ void action_kougeki(bpw_class* i_this) {
         i_this->mSomeCountdownTimers[5] = 0;
         i_this->mAttWaitTimer = 2;
         if (i_this->m3F8 != 5) {
-            anm_init(i_this, BPW_BCK_ATTACK_KAN1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_ATTACK_KAN1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             fopAcM_monsSeStart(actor, JA_SE_CV_BPW_ATTACK, 0);
         }
         i_this->mActionState++;
@@ -1586,7 +1586,7 @@ void action_karada_taore(bpw_class* i_this) {
             i_this->mSomeCountdownTimers[i + 10] = 0;
         }
         if (i_this->m3F8 != 0x28) {
-            anm_init(i_this, BPW_BCK_TAME1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_TAME1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         }
         fopAcM_monsSeStart(actor, JA_SE_CV_BPW_CURSE, 0);
         noroi_brk_check(i_this, 0);
@@ -1618,7 +1618,7 @@ void action_karada_taore(bpw_class* i_this) {
         break;
     case 0x48:
         if ((i_this->mpMorf->isStop()) && (i_this->m3F8 != 0x19)) {
-            anm_init(i_this, BPW_BCK_JUMP1, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_JUMP1_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->mAttWaitTimer = 0;
             i_this->mActionState++;
         }
@@ -1637,7 +1637,7 @@ void action_karada_taore(bpw_class* i_this) {
         i_this->m4A4 = 100.0f;
         search_get_skull(i_this, 2);
         actor->gravity = -3.0f;
-        anm_init(i_this, BPW_BCK_PRESS1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_PRESS1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->m3E8 = 2;
         i_this->mSomeCountdownTimers[6] = (s16)(int)(REG21_F(0) + 20.0f);
         i_this->mFire1DousaPos = actor->current.pos;
@@ -1693,7 +1693,7 @@ void action_karada_taore(bpw_class* i_this) {
         actor->speed.setall(0.0f);
         actor->speedF = 0.0f;
         noroi_brk_check(i_this, 0);
-        anm_init(i_this, BPW_BCK_SONOBA_PRESS1, REG12_F(2) + 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_SONOBA_PRESS1_e, REG12_F(2) + 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         fopAcM_monsSeStart(actor, JA_SE_CV_BPW_CURSE, 0);
         actor->speedF = DEMO_SELECT(REG11_F(12) + 14.75f, 14.75f);
         i_this->mAttWaitTimer = 0;
@@ -1735,7 +1735,7 @@ void action_karada_taore(bpw_class* i_this) {
         break;
     case 0x4f:
         if (i_this->mSomeCountdownTimers[0] == 0) {
-            anm_init(i_this, BPW_BCK_SONOBA_PRESS2, REG12_F(2) + 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_SONOBA_PRESS2_e, REG12_F(2) + 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mActionState = 0x4c;
         }
         // fallthrough
@@ -1777,7 +1777,7 @@ void action_damage(bpw_class* i_this) {
         i_this->m480 = 200;
         actor->speedF = 0.0f;
         i_this->m490 = 0.0f;
-        anm_init(i_this, BPW_BCK_HIT1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_HIT1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->mSomeCountdownTimers[9] = 0;
         i_this->m476 = fopAcM_searchPlayerAngleY(actor);
         actor->current.angle.y = i_this->m476;
@@ -1798,7 +1798,7 @@ void action_damage(bpw_class* i_this) {
                 if (i_this->m3E1 == 0) {
                     i_this->m3E1 = 1;
                     i_this->m3E2 = 0;
-                    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_HIT);
+                    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BRK_HIT_e);
                     i_this->mpLightStunBrkAnm->init(model->getModelData(), pBrk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, 0);
                 }
             }
@@ -1811,9 +1811,9 @@ void action_damage(bpw_class* i_this) {
                 if (((i_this->mAttWaitTimer == 1) || (i_this->mAttWaitTimer == 2)) || (i_this->mAttWaitTimer == 0)) {
                     i_this->mAttWaitTimer = 3;
                 }
-                pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_HIRARU1);
+                pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BRK_HIRARU1_e);
                 i_this->mpLightFreezeBrkAnm->init(model->getModelData(), pBrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
-                anm_init(i_this, BPW_BCK_DOSUN1, 0.0f, J3DFrameCtrl::EMode_NONE, 0.0f, -1);
+                anm_init(i_this, dRes_INDEX_BPW_BCK_DOSUN1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 0.0f, -1);
                 i_this->m4A0 = 50.0f;
                 i_this->mBodyAtSph.ClrAtSet();
                 i_this->mBodyAtSph.ClrAtSet();
@@ -1826,11 +1826,11 @@ void action_damage(bpw_class* i_this) {
                 i_this->mActionState = 0x14;
             }
             if (i_this->m3F8 != 0x2a) {
-                anm_init(i_this, BPW_BCK_WAIT1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BPW_BCK_WAIT1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
             if (i_this->m3E1 != 0) {
                 i_this->m3E1 = 0;
-                pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_DEFAULT);
+                pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BRK_DEFAULT_e);
                 i_this->mpDefaultBrkAnm->init(model->getModelData(), pBrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
             }
         }
@@ -1856,7 +1856,7 @@ void action_damage(bpw_class* i_this) {
 #if VERSION > VERSION_DEMO
                 i_this->mSomeCountdownTimers[1] = 0;
 #endif
-                anm_init(i_this, BPW_BCK_DOSUN1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BPW_BCK_DOSUN1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 actor->gravity = 0.0f;
             }
         }
@@ -1864,14 +1864,14 @@ void action_damage(bpw_class* i_this) {
     case 0x53:
         if (i_this->m3F8 != 0xc) {
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, BPW_BCK_DOSUN_WAIT1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BPW_BCK_DOSUN_WAIT1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->mSomeCountdownTimers[1] = DEMO_SELECT(240, 450);
                 cLib_onBit<u32>(actor->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
                 i_this->m684 = actor->shape_angle.y;
             }
         }
         if (fopAcM_checkCarryNow(actor)) {
-            anm_init(i_this, BPW_BCK_JITA1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_JITA1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->mBodyCoSph.ClrCoSet();
             i_this->m3AC.y = 300.0f;
             actor->current.angle.y = player->shape_angle.y;
@@ -1919,7 +1919,7 @@ void action_damage(bpw_class* i_this) {
             i_this->m49C = 300.0f;
             i_this->mBodyCoSph.OnCoSetBit();
             fopAcM_monsSeStart(actor, JA_SE_CV_BPW_THROWN, 0);
-            anm_init(i_this, BPW_BCK_TAMA1, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_TAMA1_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->mActionState = ACTION_STATE_DAMAGE_THROWN;
         } else if (i_this->mSomeCountdownTimers[1] == 1) {
             fopAcM_cancelCarryNow(actor);
@@ -1965,7 +1965,7 @@ void action_damage(bpw_class* i_this) {
         actor->speedF = REG12_F(6) + 20.0f;
         i_this->m490 = REG12_F(6) + 20.0f;
         i_this->m47A = 0;
-        anm_init(i_this, BPW_BCK_DOSUN1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_DOSUN1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->mActionState++;
         break;
     case 0x5b:
@@ -1990,7 +1990,7 @@ void action_damage(bpw_class* i_this) {
         i_this->m47A = 0;
         actor->gravity = -3.0f;
         actor->speed.y = 70.0f;
-        anm_init(i_this, BPW_BCK_DAMAGE1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_DAMAGE1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->mActionState++;
         break;
     case ACTION_STATE_DAMAGE_HIT:
@@ -2108,7 +2108,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         }
         i_this->m47C = 0;
 #endif
-        anm_init(i_this, BPW_BCK_CORE1, DEMO_SELECT(REG11_F(0), 0.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_CORE1_e, DEMO_SELECT(REG11_F(0), 0.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->mBodyAtSph.OffAtSPrmBit(cCcD_TgSPrm_Set_e);
         i_this->mBodyAtSph.ClrAtSet();
         i_this->mBodyCoSph.OffTgSetBit();
@@ -2180,7 +2180,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         }
         player->changeOriginalDemo();
         player->changeDemoMode(daPy_demo_c::DEMO_N_WAIT_e);
-        anm_init(i_this, BPW_BCK_CORE1, DEMO_SELECT(REG11_F(0), 0.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_CORE1_e, DEMO_SELECT(REG11_F(0), 0.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         camera->mCamera.Stop();
         camera->mCamera.SetTrimSize(2);
         i_this->m440 = 50.0f;
@@ -2230,7 +2230,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         }
         if (i_this->m3F8 == 9) {
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, BPW_BCK_CORE1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BPW_BCK_CORE1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
             fopAcM_seStart(actor, JA_SE_OBJ_BPW_MASK_LAUGH, 0);
         }
@@ -2239,11 +2239,11 @@ void action_bunri_dousa(bpw_class* i_this) {
         sp70.z = 1625.0f;
         player->setPlayerPosAndAngle(&sp70, fopAcM_searchActorAngleY(player, actor));
         if (i_this->m464 != 0) {
-            anm_init(i_this, BPW_BCK_CORE_NIGE1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_CORE_NIGE1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m464 = 0;
         }
         if ((i_this->mSomeCountdownTimers[1] == 1) || (i_this->m462 >= actor->health)) {
-            anm_init(i_this, BPW_BCK_CORE_NIGE1, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_CORE_NIGE1_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->mSomeCountdownTimers[0] = 30;
             i_this->mActionState++;
         }
@@ -2259,7 +2259,7 @@ void action_bunri_dousa(bpw_class* i_this) {
                 break;
             }
             REG20_S(0) = 0;
-            anm_init(i_this, BPW_BCK_HUKKATU1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_HUKKATU1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             fopAcM_seStart(actor, JA_SE_CM_BPW_MASK_TO_BPW, 0);
             i_this->mActionState++;
 #if VERSION > VERSION_DEMO
@@ -2299,7 +2299,7 @@ void action_bunri_dousa(bpw_class* i_this) {
                 break;
             }
             REG20_S(0) = 0;
-            anm_init(i_this, BPW_BCK_WAIT1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_WAIT1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->mSomeCountdownTimers[0] = DEMO_SELECT(REG11_F(10) + 20.0f, 0x14);
             i_this->mActionState++;
         }
@@ -2351,7 +2351,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         i_this->m3E6 = 0;
         i_this->m3E5 = 0;
         actor->scale.setall(0.0f);
-        anm_init(i_this, BPW_BCK_CORE1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_CORE1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         if (i_this->m3FC != fpcM_ERROR_PROCESS_ID_e) {
             fopAc_ac_c* i_actor = fopAcM_SearchByID(i_this->m3FC);
             fopAcM_createDisappear(i_actor, &i_actor->current.pos, 5, daDisItem_NONE3_e, 0xFF);
@@ -2521,7 +2521,7 @@ void action_bunri_dousa(bpw_class* i_this) {
             }
         }
         if (i_this->mSomeCountdownTimers[4] == 1) {
-            anm_init(i_this, BPW_BCK_KYORO_GARN1, 8.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_KYORO_GARN1_e, 8.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         }
         if (i_this->mSomeCountdownTimers[1] != 0) {
             break;
@@ -2571,7 +2571,7 @@ void action_bunri_dousa(bpw_class* i_this) {
             break;
         }
         REG20_S(0) = 0;
-        anm_init(i_this, BPW_BCK_CORE_NIGE1, 8.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_CORE_NIGE1_e, 8.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->mSomeCountdownTimers[0] = 4;
         i_this->mActionState++;
 #if VERSION > VERSION_DEMO
@@ -2666,7 +2666,7 @@ void action_bunri_dousa(bpw_class* i_this) {
             fopAcM_seStart(actor, JA_SE_OBJ_BPW_LIGHT_ON, 0);
             i_this->mKankyouHendouState = 3;
             i_this->mSomeCountdownTimers[5] = 0;
-            anm_init(i_this, BPW_BCK_GATAGATA1, REG12_F(10) + 8.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_GATAGATA1_e, REG12_F(10) + 8.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         if (actor->current.pos.y > 2000.0f) {
             actor->speedF = 0.0f;
@@ -2977,7 +2977,7 @@ void action_start_demo(bpw_class* i_this) {
             camera->mCamera.SetTrimSize(2);
             i_this->m440 = REG6_F(0) + 55.0f;
             i_this->mSomeCountdownTimers[0] = (s16)(int)(REG9_F(0) + 40.0f);
-            anm_init(i_this, BPW_BCK_CORE1, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_CORE1_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->mActionState++;
         }
         // Fall-through
@@ -3135,7 +3135,7 @@ void action_start_demo(bpw_class* i_this) {
     case 0xd0:
         if (i_this->m3F8 == 9) {
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, BPW_BCK_CORE1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BPW_BCK_CORE1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
             cLib_addCalc2(&i_this->m3AC.y, REG18_F(12) + 100.0f, 1.0f, REG18_F(13) + 10.0f);
             fopAcM_seStart(actor, JA_SE_OBJ_BPW_MASK_LAUGH, 0);
@@ -3143,7 +3143,7 @@ void action_start_demo(bpw_class* i_this) {
             cLib_addCalc2(&i_this->m3AC.y, 140.0f, 1.0f, REG18_F(13) + 10.0f);
         }
         if (i_this->m464 != 0) {
-            anm_init(i_this, BPW_BCK_CORE_NIGE1, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_CORE_NIGE1_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m464 = 0;
         }
         if (i_this->m462 < 0xf)
@@ -3199,10 +3199,10 @@ void action_start_demo(bpw_class* i_this) {
         if (i_this->mSomeCountdownTimers[0] != 0) {
             break;
         }
-        anm_init(i_this, BPW_BCK_OPENING1, REG18_F(7) + 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_OPENING1_e, REG18_F(7) + 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         bpw_class* lantern = (bpw_class*)fopAcM_SearchByID(i_this->m3FC);
         if (lantern != NULL) {
-            anm_init(lantern, BPW_BCK_OPENING_KAN1, REG18_F(7) + 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(lantern, dRes_INDEX_BPW_BCK_OPENING_KAN1_e, REG18_F(7) + 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         }
         i_this->mFire1DousaPos = i_this->m3B8;
         i_this->mFire1DousaRot = actor->shape_angle;
@@ -3269,10 +3269,10 @@ void action_start_demo(bpw_class* i_this) {
         i_this->m554.remove();
 #endif
         i_this->mSomeCountdownTimers[0] = (s16)(int)(REG6_F(5) + 40.0f);
-        anm_init(i_this, BPW_BCK_OPENING2, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BPW_BCK_OPENING2_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         bpw_class* lantern = (bpw_class*)fopAcM_SearchByID(i_this->m3FC);
         if (lantern != NULL) {
-            anm_init(lantern, BPW_BCK_OPENING_KAN2, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(lantern, dRes_INDEX_BPW_BCK_OPENING_KAN2_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         i_this->mActionState++;
         // Fall-through
@@ -3295,7 +3295,7 @@ void action_start_demo(bpw_class* i_this) {
             dComIfGp_getVibration().StopQuake(0x20);
             bpw_class* lantern = (bpw_class*)fopAcM_SearchByID(i_this->m3FC);
             if (lantern != NULL) {
-                anm_init(lantern, BPW_BCK_KAN_DEFAULT1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(lantern, dRes_INDEX_BPW_BCK_KAN_DEFAULT1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             }
             i_this->mSomeCountdownTimers[1] = 0;
             i_this->m3F6 = 4;
@@ -3985,7 +3985,7 @@ void torituki_execute(bpw_class* i_this) {
         cLib_addCalc2(&actor->scale.x, 0.4f, 1.0f, 0.1f);
         actor->scale.y = actor->scale.z = actor->scale.x;
         if (!(actor->scale.x < 0.3f)) {
-            anm_init(i_this, BPW_BCK_TORITUKI1, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BPW_BCK_TORITUKI1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->mSomeCountdownTimers[8] = DEMO_SELECT(0xD2, 0x96);
             actor->scale.setall(0.4f);
             i_this->mActionState++;
@@ -4237,10 +4237,10 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
     bpw_class* i_this = (bpw_class*)a_this;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("BPW", BPW_BDL_BPW),
+        (J3DModelData*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BDL_BPW_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("BPW", BPW_BCK_WAIT1),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BCK_WAIT1_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -4262,7 +4262,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
     if (i_this->mpLightFreezeBrkAnm == NULL) {
         return FALSE;
     }
-    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_HIRARU1);
+    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BRK_HIRARU1_e);
     if (!i_this->mpLightFreezeBrkAnm->init(model->getModelData(), pBrk, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
@@ -4270,7 +4270,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
     if (i_this->mpLightStunBrkAnm == NULL) {
         return FALSE;
     }
-    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_HIT);
+    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BRK_HIT_e);
     if (!i_this->mpLightStunBrkAnm->init(model->getModelData(), pBrk, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
@@ -4278,7 +4278,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
     if (i_this->mpCurseStartBrkAnm == NULL) {
         return FALSE;
     }
-    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_NOROI_S1);
+    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BRK_NOROI_S1_e);
     if (!i_this->mpCurseStartBrkAnm->init(model->getModelData(), pBrk, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
@@ -4286,7 +4286,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
     if (i_this->mpCurseEndBrkAnm == NULL) {
         return FALSE;
     }
-    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_NOROI_E1);
+    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BRK_NOROI_E1_e);
     if (!i_this->mpCurseEndBrkAnm->init(model->getModelData(), pBrk, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
@@ -4294,7 +4294,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
     if (i_this->mpDefaultBrkAnm == NULL) {
         return FALSE;
     }
-    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_DEFAULT);
+    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BRK_DEFAULT_e);
     if (!i_this->mpDefaultBrkAnm->init(model->getModelData(), pBrk, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
@@ -4395,7 +4395,7 @@ static BOOL kantera_useHeapInit(fopAc_ac_c* a_this) {
     bpw_class* i_this = (bpw_class*)a_this;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("BPW", BPW_BDL_BPW_KAN1), NULL, NULL, NULL, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, 1, NULL, 0x80000, 0x37441422
+        (J3DModelData*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BDL_BPW_KAN1_e), NULL, NULL, NULL, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, 1, NULL, 0x80000, 0x37441422
     );
     if ((i_this->mpMorf == NULL) || (i_this->mpMorf->getModel() == NULL)) {
         return FALSE;
@@ -4409,7 +4409,7 @@ static BOOL kantera_useHeapInit(fopAc_ac_c* a_this) {
     if (i_this->mpLanternGlowBrkAnm == NULL) {
         return FALSE;
     }
-    J3DAnmTevRegKey* pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", BPW_BRK_BPW_KAN1);
+    J3DAnmTevRegKey* pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BRK_BPW_KAN1_e);
     if (!i_this->mpLanternGlowBrkAnm->init(model->getModelData(), pBrk, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
@@ -4468,7 +4468,7 @@ static BOOL fire_useHeapInit(fopAc_ac_c* a_this) {
     bpw_class* i_this = (bpw_class*)a_this;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("BPW", BPW_BDL_BPW_KAN1), NULL, NULL, NULL, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, 1, NULL, 0x80000, 0x37441422
+        (J3DModelData*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BDL_BPW_KAN1_e), NULL, NULL, NULL, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, 1, NULL, 0x80000, 0x37441422
     );
     if ((i_this->mpMorf == NULL) || (i_this->mpMorf->getModel() == NULL)) {
         return FALSE;
@@ -4522,10 +4522,10 @@ static BOOL tori_useHeapInit(fopAc_ac_c* a_this) {
     bpw_class* i_this = (bpw_class*)a_this;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("BPW", BPW_BDL_BPW),
+        (J3DModelData*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BDL_BPW_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("BPW", BPW_BCK_TORITUKI1),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("BPW", dRes_INDEX_BPW_BCK_TORITUKI1_e),
         J3DFrameCtrl::EMode_RESET,
         1.0f,
         0,
@@ -4657,7 +4657,7 @@ static cPhs_State daBPW_Create(fopAc_ac_c* a_this) {
             fopAcM_OnStatus(a_this, fopAcStts_UNK4000_e);
             if ((dComIfGp_getStartStageName()[0] != 'X') && (REG0_S(9) != 0 || (!dComIfGs_isStageBossDemo()))) {
                 i_this->m3E7 = 1;
-                anm_init(i_this, BPW_BCK_OPENING_KAN1, REG18_F(4), J3DFrameCtrl::EMode_NONE, 0.0f, -1);
+                anm_init(i_this, dRes_INDEX_BPW_BCK_OPENING_KAN1_e, REG18_F(4), J3DFrameCtrl::EMode_NONE, 0.0f, -1);
             }
             i_this->m498 = 0.0f;
             i_this->m49C = 200.0f;

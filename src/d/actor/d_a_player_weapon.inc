@@ -65,7 +65,7 @@ BOOL daPy_lk_c::procWeaponNormalSwing_init() {
     }
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
     m351E = m34DC;
-    setBlurPosResource(LKANM__CUTBOKO_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__CUTBOKO_POS_e);
     setEnemyWeaponAtParam(FALSE);
     mProcVar0.m34D0 = m_HIO->mCut.mCutBoko.m.field_0x4;
 
@@ -165,7 +165,7 @@ BOOL daPy_lk_c::procWeaponSideSwing_init() {
     mNormalSpeed = 0.0f;
     voiceStart(1);
     mProcVar2.m34D4 = shape_angle.y;
-    setBlurPosResource(LKANM__HAMMERSIDE_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__HAMMERSIDE_POS_e);
     setEnemyWeaponAtParam(FALSE);
     return true;
 }
@@ -300,7 +300,7 @@ BOOL daPy_lk_c::procWeaponFrontSwing_init() {
         mProcVar2.m34D4 = m34E8;
     }
     mProcVar2.m34D4 = shape_angle.y;
-    setBlurPosResource(LKANM__HAMMERFRONT_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__HAMMERFRONT_POS_e);
     setEnemyWeaponAtParam(FALSE);
     onResetFlg0(daPy_RFLG0(daPyRFlg0_UNK1 | daPyRFlg0_UNK2));
     mProcVar0.m34D0 = 0;

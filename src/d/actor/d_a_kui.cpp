@@ -12,7 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_s_play.h"
-#include "d/res/res_kui.h"
+#include "res/Object/Kui.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_executor.h"
@@ -409,7 +409,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
 
     if (i_this->type == 3) {
         // Bell body
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_HKANE1);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_BDL_HKANE1_e);
         JUT_ASSERT(0x353, modelData != NULL);
 
         i_this->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -418,7 +418,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
         }
 
         // Bell handle
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_HKANE2);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_BDL_HKANE2_e);
         JUT_ASSERT(0x35F, modelData != NULL);
 
         i_this->mpModel2 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -427,7 +427,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
         }
     } else {
         // Rope
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_OBI_ROPETAG);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_BDL_OBI_ROPETAG_e);
         JUT_ASSERT(0x36B, modelData != NULL);
 
         i_this->mpModel2 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
@@ -437,7 +437,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
 
         if (i_this->type == 2 || i_this->type == 4) {
             // Rope swing attachment
-            modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_MROPESW);
+            modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_BDL_MROPESW_e);
             JUT_ASSERT(0x377, modelData != NULL);
 
             i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
@@ -453,7 +453,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes("Kui", KUI_DZB_OBI_ROPETAG);
+    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_DZB_OBI_ROPETAG_e);
     if (i_this->field_0x2D8->Set(pData, cBgW::MOVE_BG_e, &i_this->field_0x2A8) == true) {
         return FALSE;
     }

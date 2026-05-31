@@ -1,0 +1,22 @@
+#ifndef RES_VBOML_H
+#define RES_VBOML_H
+
+enum dRes_INDEX_VBOML {
+    /* BDLM */
+    dRes_INDEX_VBOML_BDL_VBOML_e=0x4,
+    /* BTK  */
+    dRes_INDEX_VBOML_BTK_VBOML_e=0x7,
+};
+
+enum dRes_ID_VBOML {
+    /* BDLM */
+    dRes_ID_VBOML_BDL_VBOML_e=0x4,
+    /* BTK  */
+    dRes_ID_VBOML_BTK_VBOML_e=0x7,
+};
+
+enum VBOML_JNT {
+    VBOML_JNT_VBOML_MODEL_e=0x0,
+};
+
+#endif /* !RES_VBOML_H */

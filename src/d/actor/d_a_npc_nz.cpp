@@ -5,12 +5,16 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_nz.h"
-#include "d/res/res_nz.h"
-#include "d/res/res_npcnz.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
 #include "d/d_item.h"
+
+#include "res/Object/Npcnz.h"
+// Namespace hack to fix both of these res headers having a duplicated NZ_JNT enum that causes a name collision.
+namespace ResNz {
+#include "res/Object/Nz.h"
+} // namespace ResNz
 
 class daNpc_Nz_HIO_c : public JORReflexible {
 public:
@@ -165,7 +169,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 00000D18-00000F98       .text _createHeap__10daNpc_Nz_cFv */
 BOOL daNpc_Nz_c::_createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_bdl_arc_name, NPCNZ_BDL_NZ));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_bdl_arc_name, dRes_INDEX_NPCNZ_BDL_NZ_e));
     JUT_ASSERT(0xD0, modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
@@ -199,7 +203,7 @@ BOOL daNpc_Nz_c::_createHeap() {
         }
     }
 
-    ResTIMG* img = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, NZ_BTI_SIPPO));
+    ResTIMG* img = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, ResNz::dRes_INDEX_NZ_BTI_SIPPO_e));
     if (field_0x934.init(1, 10, img, FALSE)) {
         return TRUE;
     } else {

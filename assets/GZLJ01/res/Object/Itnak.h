@@ -1,0 +1,24 @@
+#ifndef RES_ITNAK_H
+#define RES_ITNAK_H
+
+enum dRes_INDEX_ITNAK {
+    /* BDL  */
+    dRes_INDEX_ITNAK_BDL_ITNAK_e=0x3,
+};
+
+enum dRes_ID_ITNAK {
+    /* BDL  */
+    dRes_ID_ITNAK_BDL_ITNAK_e=0x3,
+};
+
+enum ITNAK_JNT {
+    ITNAK_JNT_ITNAK_00_e=0x0,
+    ITNAK_JNT_A00_e=0x1,
+    ITNAK_JNT_TN_KABUTO1_e=0x2,
+    ITNAK_JNT_TN_KEN1_e=0x3,
+    ITNAK_JNT_TN_MAIN1_e=0x4,
+    ITNAK_JNT_TN_TATE1_e=0x5,
+    ITNAK_JNT_TN_YOROI1_e=0x6,
+};
+
+#endif /* !RES_ITNAK_H */

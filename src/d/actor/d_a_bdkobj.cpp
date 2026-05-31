@@ -12,7 +12,7 @@
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
-#include "d/res/res_bdkobj.h"
+#include "res/Object/Bdkobj.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_mtx.h"
@@ -454,14 +454,14 @@ static BOOL daBdkobj_Delete(bdkobj_class* i_this) {
     return TRUE;
 }
 static u16 bdl_data[] = {
-    BDKOBJ_BDL_S_TBLOCK,
-    BDKOBJ_BDL_S_TPOLE,
-    BDKOBJ_BDL_S_TOWER_BRIDGE,
+    dRes_INDEX_BDKOBJ_BDL_S_TBLOCK_e,
+    dRes_INDEX_BDKOBJ_BDL_S_TPOLE_e,
+    dRes_INDEX_BDKOBJ_BDL_S_TOWER_BRIDGE_e,
 };
 static u16 hahen_bdl_data[] = {
-    BDKOBJ_BDL_SHAHENS,
-    BDKOBJ_BDL_SHAHENL,
-    BDKOBJ_BDL_GWOOD00,
+    dRes_INDEX_BDKOBJ_BDL_SHAHENS_e,
+    dRes_INDEX_BDKOBJ_BDL_SHAHENL_e,
+    dRes_INDEX_BDKOBJ_BDL_GWOOD00_e,
 };
 
 /* 000022E8-000024C8       .text useHeapInit__FP10fopAc_ac_c */
@@ -480,7 +480,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         i_this->pm_bgw = new dBgW();
 
         JUT_ASSERT(DEMO_SELECT(781, 801), i_this->pm_bgw != NULL);
-        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes("Bdkobj", BDKOBJ_DZB_S_TOWER_BRIDGE);
+        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes("Bdkobj", dRes_INDEX_BDKOBJ_DZB_S_TOWER_BRIDGE_e);
         if (i_this->pm_bgw->Set(dzb, cBgW::MOVE_BG_e, &i_this->mMtx) == TRUE) {
             return FALSE;
         }

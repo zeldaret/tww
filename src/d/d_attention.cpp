@@ -8,7 +8,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/d_s_play.h"
 #include "SSystem/SComponent/c_angle.h"
-#include "d/res/res_always.h"
+#include "res/Object/Always.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 
@@ -67,13 +67,13 @@ dAttention_c::dAttention_c(fopAc_ac_c* i_player, u32 i_padNo) {
     heap = mDoExt_createSolidHeapFromGameToCurrent(0x3600, 0);
     JUT_ASSERT(0xb9, heap != NULL);
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YAZIRUSHI_01);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_YAZIRUSHI_01_e);
     JUT_ASSERT(0xbe, modelData != NULL);
 
     int anmColNum = 0;
     for (u32 i = 0; i < 5; i++) {
         static u16 l_bpkIdx[] = {
-            ALWAYS_BPK_YJ_IN, ALWAYS_BPK_YJ_OUT, ALWAYS_BPK_YJ_SCALE, ALWAYS_BPK_YJ_LOOP, ALWAYS_BPK_YJ_DELETE,
+            dRes_INDEX_ALWAYS_BPK_YJ_IN_e, dRes_INDEX_ALWAYS_BPK_YJ_OUT_e, dRes_INDEX_ALWAYS_BPK_YJ_SCALE_e, dRes_INDEX_ALWAYS_BPK_YJ_LOOP_e, dRes_INDEX_ALWAYS_BPK_YJ_DELETE_e,
         };
         J3DAnmColor* anmCol = (J3DAnmColor*)dComIfG_getObjectRes("Always", l_bpkIdx[i]);
         JUT_ASSERT(0xcc, anmCol != NULL);
@@ -87,7 +87,7 @@ dAttention_c::dAttention_c(fopAc_ac_c* i_player, u32 i_padNo) {
         draw[i].anm = new mDoExt_McaMorf(
             modelData,
             &mCallBack, NULL,
-            (J3DAnmTransformKey*)dComIfG_getObjectRes("Always", ALWAYS_BCK_YJ_LOOP),
+            (J3DAnmTransformKey*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BCK_YJ_LOOP_e),
             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
             NULL,
             0x00080000,
@@ -653,13 +653,13 @@ void dAttention_c::runSoundProc() {
 /* 8009EB38-8009EDB8       .text runDrawProc__12dAttention_cFv */
 void dAttention_c::runDrawProc() {
     if (chkFlag(AttnFlag_00000008)) {
-        draw[0].setAnm(ALWAYS_BCK_YJ_SCALE, ALWAYS_BPK_YJ_SCALE, J3DFrameCtrl::EMode_NONE);
+        draw[0].setAnm(dRes_INDEX_ALWAYS_BCK_YJ_SCALE_e, dRes_INDEX_ALWAYS_BPK_YJ_SCALE_e, J3DFrameCtrl::EMode_NONE);
         if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK37a02371_e)
             || dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e | daPyStts1_UNK10_e)) {
             mDoAud_seStart(JA_SE_L_FOCUS_SET);
         }
     } else if (chkFlag(AttnFlag_00000010)) {
-        draw[0].setAnm(ALWAYS_BCK_YJ_DELETE, ALWAYS_BPK_YJ_DELETE, J3DFrameCtrl::EMode_NONE);
+        draw[0].setAnm(dRes_INDEX_ALWAYS_BCK_YJ_DELETE_e, dRes_INDEX_ALWAYS_BPK_YJ_DELETE_e, J3DFrameCtrl::EMode_NONE);
         if (field_0x028 >= 0) {
             field_0x028 = 1;
             setFlag(AttnFlag_40000000);
@@ -670,14 +670,14 @@ void dAttention_c::runDrawProc() {
             mDoAud_seStart(JA_SE_L_FOCUS_RESET);
         }
     } else if (chkFlag(AttnFlag_00000001)) {
-        draw[0].setAnm(ALWAYS_BCK_YJ_IN, ALWAYS_BPK_YJ_IN, J3DFrameCtrl::EMode_NONE);
+        draw[0].setAnm(dRes_INDEX_ALWAYS_BCK_YJ_IN_e, dRes_INDEX_ALWAYS_BPK_YJ_IN_e, J3DFrameCtrl::EMode_NONE);
         setFlag(AttnFlag_40000000);
     } else if (chkFlag(AttnFlag_00000002)) {
-        draw[0].setAnm(ALWAYS_BCK_YJ_IN, ALWAYS_BPK_YJ_IN, J3DFrameCtrl::EMode_NONE);
-        draw[1].setAnm(ALWAYS_BCK_YJ_OUT, ALWAYS_BPK_YJ_OUT, J3DFrameCtrl::EMode_NONE);
+        draw[0].setAnm(dRes_INDEX_ALWAYS_BCK_YJ_IN_e, dRes_INDEX_ALWAYS_BPK_YJ_IN_e, J3DFrameCtrl::EMode_NONE);
+        draw[1].setAnm(dRes_INDEX_ALWAYS_BCK_YJ_OUT_e, dRes_INDEX_ALWAYS_BPK_YJ_OUT_e, J3DFrameCtrl::EMode_NONE);
         setFlag(AttnFlag_40000000);
     } else if (mLockonCount <= 0 && field_0x028 == 0) {
-        draw[0].setAnm(ALWAYS_BCK_YJ_OUT, ALWAYS_BPK_YJ_OUT, J3DFrameCtrl::EMode_NONE);
+        draw[0].setAnm(dRes_INDEX_ALWAYS_BCK_YJ_OUT_e, dRes_INDEX_ALWAYS_BPK_YJ_OUT_e, J3DFrameCtrl::EMode_NONE);
         field_0x028 = 1;
         setFlag(AttnFlag_40000000);
     }
@@ -686,7 +686,7 @@ void dAttention_c::runDrawProc() {
     if (mLockOnState == LockState_LOCK) {
         result = draw[0].anm->play(NULL, 0, 0);
         if (result) {
-            draw[0].setAnm(ALWAYS_BCK_YJ_LOOP, -1, J3DFrameCtrl::EMode_LOOP);
+            draw[0].setAnm(dRes_INDEX_ALWAYS_BCK_YJ_LOOP_e, -1, J3DFrameCtrl::EMode_LOOP);
             clrFlag(AttnFlag_40000000);
         }
     } else {
@@ -969,7 +969,7 @@ void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
 
     J3DModelData *modeldata = model->getModelData();
     if (mpAnmClr == NULL) {
-        J3DAnmColor *color = (J3DAnmColor*)dComIfG_getObjectRes("Always", ALWAYS_BPK_YJ_IN);
+        J3DAnmColor *color = (J3DAnmColor*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BPK_YJ_IN_e);
         modeldata->removeMatColorAnimator(color);
     } else {
         mpAnmClr->setFrame(anm->getFrame());

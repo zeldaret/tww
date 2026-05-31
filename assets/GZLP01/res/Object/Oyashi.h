@@ -1,0 +1,25 @@
+#ifndef RES_OYASHI_H
+#define RES_OYASHI_H
+
+enum dRes_INDEX_OYASHI {
+    /* BDL  */
+    dRes_INDEX_OYASHI_BDL_OYASHI_e=0x4,
+    /* DZB  */
+    dRes_INDEX_OYASHI_DZB_OYASHI_e=0x7,
+};
+
+enum dRes_ID_OYASHI {
+    /* BDL  */
+    dRes_ID_OYASHI_BDL_OYASHI_e=0x4,
+    /* DZB  */
+    dRes_ID_OYASHI_DZB_OYASHI_e=0x7,
+};
+
+enum OYASHI_JNT {
+    OYASHI_JNT_OYASHI_e=0x0,
+    OYASHI_JNT_J_MIKI_e=0x1,
+    OYASHI_JNT_J_HAPPA1_e=0x2,
+    OYASHI_JNT_J_HAPPA2_e=0x3,
+};
+
+#endif /* !RES_OYASHI_H */

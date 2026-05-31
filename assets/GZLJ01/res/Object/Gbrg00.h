@@ -1,0 +1,37 @@
+#ifndef RES_GBRG00_H
+#define RES_GBRG00_H
+
+enum dRes_INDEX_GBRG00 {
+    /* BDLM */
+    dRes_INDEX_GBRG00_BDL_GBRG00_e=0x7,
+    /* BPK  */
+    dRes_INDEX_GBRG00_BPK_GBRG00_e=0xA,
+    /* BRK  */
+    dRes_INDEX_GBRG00_BRK_GBRG00_e=0xD,
+    /* BTK  */
+    dRes_INDEX_GBRG00_BTK_GBRG00_e=0x10,
+    /* DZB  */
+    dRes_INDEX_GBRG00_DZB_HHASHI1_e=0x13,
+};
+
+enum dRes_ID_GBRG00 {
+    /* BDLM */
+    dRes_ID_GBRG00_BDL_GBRG00_e=0x7,
+    /* BPK  */
+    dRes_ID_GBRG00_BPK_GBRG00_e=0xA,
+    /* BRK  */
+    dRes_ID_GBRG00_BRK_GBRG00_e=0xD,
+    /* BTK  */
+    dRes_ID_GBRG00_BTK_GBRG00_e=0x10,
+    /* DZB  */
+    dRes_ID_GBRG00_DZB_HHASHI1_e=0x13,
+};
+
+enum GBRG00_JNT {
+    GBRG00_JNT_BRIDGE_e=0x0,
+    GBRG00_JNT_OMOTE_e=0x1,
+    GBRG00_JNT_URA_e=0x2,
+    GBRG00_JNT_V_MOYOU_e=0x3,
+};
+
+#endif /* !RES_GBRG00_H */

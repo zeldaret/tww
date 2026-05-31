@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_volcano.h"
 #include "d/d_particle_name.h"
-#include "d/res/res_ykzyg.h"
+#include "res/Object/Ykzyg.h"
 #include "d/d_cc_d.h"
 
 static dCcD_SrcCyl cyl_check_src = {
@@ -114,24 +114,24 @@ void daObjVolcano::Act_c::StopFire() {
 
 /* 00000470-00000758       .text CreateHeap__Q212daObjVolcano5Act_cFv */
 BOOL daObjVolcano::Act_c::CreateHeap() {
-    J3DModelData * model_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, YKZYG_BDL_QKZYG));
+    J3DModelData * model_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YKZYG_BDL_QKZYG_e));
     JUT_ASSERT(0xbf, model_data != NULL);
 
     field_0x2F8 = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000222);
-    J3DAnmTextureSRTKey * btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, YKZYG_BTK_QKZYG));
+    J3DAnmTextureSRTKey * btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YKZYG_BTK_QKZYG_e));
     JUT_ASSERT(0xca, btk != NULL);
 
     s32 btkRet = field_0x2FC.init(model_data, btk, TRUE, J3DFrameCtrl::EMode_LOOP);
-    J3DModelData * model_data_fire = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YKZYG_BDL_YMNKZ00));
+    J3DModelData * model_data_fire = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YKZYG_BDL_YMNKZ00_e));
     JUT_ASSERT(0xe1, model_data_fire != NULL);
 
     field_0x310 = mDoExt_J3DModel__create(model_data_fire, 0x80000, 0x11000222);
-    J3DAnmTextureSRTKey * btk_f = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, YKZYG_BTK_YMNKZ00));
+    J3DAnmTextureSRTKey * btk_f = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YKZYG_BTK_YMNKZ00_e));
     JUT_ASSERT(0xec, btk_f != NULL);
     
     s32 btkFRet = field_0x314.init(model_data_fire, btk_f, TRUE, J3DFrameCtrl::EMode_LOOP);
     
-    J3DAnmTevRegKey * brk_f = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, YKZYG_BRK_YMNKZ00));
+    J3DAnmTevRegKey * brk_f = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YKZYG_BRK_YMNKZ00_e));
     JUT_ASSERT(0xf3, brk_f != NULL);
     s32 brkRet = field_0x328.init(model_data_fire, brk_f, TRUE, J3DFrameCtrl::EMode_NONE);
 

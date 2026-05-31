@@ -18,7 +18,7 @@
 #include "d/d_demo.h"
 #include "d/d_timer.h"
 
-#include "d/res/res_always.h" // IWYU pragma: export
+#include "res/Object/Always.h" // IWYU pragma: export
 
 class JKRArchive;
 class JKRAramBlock;

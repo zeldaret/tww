@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bwdg.h"
-#include "d/res/res_bwdg.h"
+#include "res/Object/Bwdg.h"
 #include "d/d_bg_w_hf.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_bwd.h"
@@ -207,8 +207,8 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     }
     
     if (!i_this->mpBgW->Set(
-        (cBgD_t*)dComIfG_getObjectRes("Bwdg", BWDG_DZB_HSAND1),
-        (u16*)dComIfG_getObjectRes("Bwdg", BWDG_DAT_GRIDIDX),
+        (cBgD_t*)dComIfG_getObjectRes("Bwdg", dRes_INDEX_BWDG_DZB_HSAND1_e),
+        (u16*)dComIfG_getObjectRes("Bwdg", dRes_INDEX_BWDG_DAT_GRIDIDX_e),
         130.0f, 0x40, 0x40, 0
     )) {
         return TRUE;

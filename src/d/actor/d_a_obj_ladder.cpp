@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ladder.h"
-#include "d/res/res_mhsg.h"
+#include "res/Object/Mhsg.h"
 #include "d/d_com_inf_game.h"
 
 Mtx daObjLadder::Act_c::M_tmp_mtx;
@@ -45,11 +45,11 @@ namespace daObjLadder {
         };
 
         static AttrType L_attr_type[] = {
-            {MHSG_BDL_MHSG6, MHSG_DZB_MHSG6, 600.0f},
-            {MHSG_BDL_MHSG9, MHSG_DZB_MHSG9, 900.0f},
-            {MHSG_BDL_MHSG12, MHSG_DZB_MHSG12, 1200.0f},
-            {MHSG_BDL_MHSG15, MHSG_DZB_MHSG15, 1500.0f},
-            {MHSG_BDL_MHSG4H, MHSG_DZB_MHSG4H, 450.0f},
+            {dRes_INDEX_MHSG_BDL_MHSG6_e, dRes_INDEX_MHSG_DZB_MHSG6_e, 600.0f},
+            {dRes_INDEX_MHSG_BDL_MHSG9_e, dRes_INDEX_MHSG_DZB_MHSG9_e, 900.0f},
+            {dRes_INDEX_MHSG_BDL_MHSG12_e, dRes_INDEX_MHSG_DZB_MHSG12_e, 1200.0f},
+            {dRes_INDEX_MHSG_BDL_MHSG15_e, dRes_INDEX_MHSG_DZB_MHSG15_e, 1500.0f},
+            {dRes_INDEX_MHSG_BDL_MHSG4H_e, dRes_INDEX_MHSG_DZB_MHSG4H_e, 450.0f},
         };
 
         inline const AttrType& attr_type(Type_e type) { return L_attr_type[type]; }

@@ -11,8 +11,8 @@
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "d/d_cloth_packet.h"
-#include "d/res/res_fdai.h"
-#include "d/res/res_cloth.h"
+#include "res/Object/Fdai.h"
+#include "res/Object/Cloth.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 
@@ -74,10 +74,10 @@ BOOL daShopItem_c::clothCreate() {
             (dCloth_packet_c::CreateFunc)dClothVobj07_0_create
         };
         u32 clothRes[4] = {
-            FDAI_BTI_FTEX03,
-            FDAI_BTI_FTEX04,
-            FDAI_BTI_FTEX05,
-            FDAI_BTI_FTEX07
+            dRes_INDEX_FDAI_BTI_FTEX03_e,
+            dRes_INDEX_FDAI_BTI_FTEX04_e,
+            dRes_INDEX_FDAI_BTI_FTEX05_e,
+            dRes_INDEX_FDAI_BTI_FTEX07_e
         };
 
         switch(m_itemNo) {
@@ -96,7 +96,7 @@ BOOL daShopItem_c::clothCreate() {
         }
 
         ResTIMG* shopArc = (ResTIMG*)dComIfG_getObjectRes(getShopArcname(), clothRes[field_0x648]);
-        ResTIMG* clothArc = (ResTIMG*)dComIfG_getObjectRes(m_cloth_arcname, CLOTH_BTI_CLOTHTOON);
+        ResTIMG* clothArc = (ResTIMG*)dComIfG_getObjectRes(m_cloth_arcname, dRes_INDEX_CLOTH_BTI_CLOTHTOON_e);
 
         field_0x644 = (*clothFunc[field_0x648])(shopArc, clothArc, &tevStr, 0);
         if (field_0x644 == 0) {

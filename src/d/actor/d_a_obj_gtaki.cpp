@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gtaki.h"
 #include "d/d_cc_d.h"
-#include "d/res/res_gtaki.h"
+#include "res/Object/Gtaki.h"
 #include "m_Do/m_Do_graphic.h"
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -63,12 +63,12 @@ void daObjGtaki_c::setDummyTexture() {
 
 /* 00000280-00000484       .text CreateHeap__12daObjGtaki_cFv */
 BOOL daObjGtaki_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Gtaki", GTAKI_BDL_GTAKI);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Gtaki", dRes_INDEX_GTAKI_BDL_GTAKI_e);
     JUT_ASSERT(DEMO_SELECT(265, 267), modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if(mpModel == NULL) return FALSE;
 
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Gtaki", GTAKI_BTK_GTAKI));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Gtaki", dRes_INDEX_GTAKI_BTK_GTAKI_e));
     JUT_ASSERT(DEMO_SELECT(275, 277), btk != NULL);
     mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0, 0, -1, false, 0);
     setDummyTexture();
@@ -80,7 +80,7 @@ BOOL daObjGtaki_c::CreateHeap() {
 
     mpBgW = new dBgW();
     
-    if(!mpBgW || mpBgW->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Gtaki", GTAKI_DZB_ITAKI)), cBgW::MOVE_BG_e, &mMtx)){
+    if(!mpBgW || mpBgW->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Gtaki", dRes_INDEX_GTAKI_DZB_ITAKI_e)), cBgW::MOVE_BG_e, &mMtx)){
         return FALSE;
     }
 

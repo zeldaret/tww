@@ -43,15 +43,15 @@ fopAc_ac_c* daPy_lk_c::getDemoLookActor() {
 /* 8012CDD4-8012CE2C       .text setTinkleCeiverModel__9daPy_lk_cFv */
 void daPy_lk_c::setTinkleCeiverModel() {
     JKRHeap* oldHeap = setItemHeap();
-    initModel(&mpEquipItemModel, LINK_BDL_TCEIVER, 0x13000022);
+    initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_TCEIVER_e, 0x13000022);
     mDoExt_setCurrentHeap(oldHeap);
 }
 
 /* 8012CE2C-8012CEFC       .text setTalismanModel__9daPy_lk_cFv */
 void daPy_lk_c::setTalismanModel() {
-    J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_TETOLACH);
+    J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_TETOLACH_e);
     JKRHeap* oldHeap = setItemHeap();
-    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_TETOLACH, 0x13000022);
+    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_TETOLACH_e, 0x13000022);
     int ret = mSwordAnim.init(tmp_modelData, bck, true, J3DFrameCtrl::EMode_LOOP, 0.2f, 0, -1, false);
     if (!ret) {
         JUT_ASSERT(82, FALSE);
@@ -62,9 +62,9 @@ void daPy_lk_c::setTalismanModel() {
 /* 8012CEFC-8012CFE8       .text setLetterModel__9daPy_lk_cFv */
 void daPy_lk_c::setLetterModel() {
     if (mEquipItem != daPyItem_UNK104_e) {
-        J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_GETLETTERA);
+        J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_GETLETTERA_e);
         JKRHeap* oldHeap = setItemHeap();
-        J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_LETTER, 0x13000022);
+        J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_LETTER_e, 0x13000022);
         int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
         if (!ret) {
             JUT_ASSERT(120, FALSE);
@@ -664,7 +664,7 @@ BOOL daPy_lk_c::dProcGetItem_init() {
     if (mCurProc == daPyProc_DEMO_OPEN_TREASURE_e) {
         m34C2 = 10;
         mAcch.ClrWallNone();
-        if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_BOXOPENLINK) {
+        if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_BOXOPENLINK_e) {
             sVar5 = TRUE;
         }
     } else if (mCurProc == daPyProc_DEMO_OPEN_SALVAGE_TREASURE_e) {
@@ -2026,20 +2026,20 @@ BOOL daPy_lk_c::dProcLetterRead() {
     setShipRidePosUseItem();
     if (checkNoResetFlg1(daPyFlg1_LETTER_READ_EYE_MOVE)) {
         offNoResetFlg1(daPyFlg1_LETTER_READ_EYE_MOVE);
-        m_tex_scroll_heap.mIdx = LKANM_BTK_TEDL;
-        setTextureScrollResource(loadTextureScrollResource(LKANM_BTK_TEDL, 0), 0);
+        m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEDL_e;
+        setTextureScrollResource(loadTextureScrollResource(dRes_INDEX_LKANM_BTK_TEDL_e, 0), 0);
         mProcVar0.m34D0 = 4;
     } else {
         if (0 < mProcVar0.m34D0) {
             mProcVar0.m34D0--;
             if (mProcVar0.m34D0 == 0) {
-                if (m_tex_scroll_heap.mIdx == LKANM_BTK_TEDL) {
+                if (m_tex_scroll_heap.mIdx == dRes_INDEX_LKANM_BTK_TEDL_e) {
                     mProcVar0.m34D0 = 4;
-                    m_tex_scroll_heap.mIdx = LKANM_BTK_TEDR;
-                    setTextureScrollResource(loadTextureScrollResource(LKANM_BTK_TEDR, 0), 0);
+                    m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEDR_e;
+                    setTextureScrollResource(loadTextureScrollResource(dRes_INDEX_LKANM_BTK_TEDR_e, 0), 0);
                 } else {
-                    m_tex_scroll_heap.mIdx = LKANM_BTK_TEDW;
-                    setTextureScrollResource(loadTextureScrollResource(LKANM_BTK_TEDW, 0), 0);
+                    m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEDW_e;
+                    setTextureScrollResource(loadTextureScrollResource(dRes_INDEX_LKANM_BTK_TEDW_e, 0), 0);
                 }
             }
         }
@@ -2178,7 +2178,7 @@ BOOL daPy_lk_c::dProcBottleOpenFairy_init() {
 BOOL daPy_lk_c::dProcBottleOpenFairy() {
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
 
-    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_BINOPENPRE) {
+    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_BINOPENPRE_e) {
         if (frameCtrl.getRate() < 0.01f) {
             setSingleMoveAnime(
                 ANM_BINOPENB,
@@ -2413,14 +2413,14 @@ BOOL daPy_lk_c::dProcLastCombo_init() {
         setSwordModel(FALSE);
 #endif
     }
-    bck = getItemAnimeResource(LKANM_BCK_COMBO_KEN);
+    bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_COMBO_KEN_e);
     mSwordAnim.changeBckOnly(bck);
     m35E8 = m35EC = 0.0f;
-    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_COMBO_TATE);
+    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BCK_COMBO_TATE_e);
     mAtngshaBck.init(mpShmsModel->getModelData(), bck, false, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, true);
     setFootEffectPosType(4);
     offNoResetFlg1(daPyFlg1_LAST_COMBO_WAIT);
-    setBlurPosResource(LKANM__LASTCOMBO_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__LASTCOMBO_POS_e);
     mProcVar6.m3570 = 1;
     mProcVar7.m3574 = 0;
     seStartOnlyReverb(JA_SE_LK_V_TURN_INTO_GN);

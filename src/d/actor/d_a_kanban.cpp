@@ -15,7 +15,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_kanban.h"
+#include "res/Object/Kanban.h"
 
 class daKanban_HIO_c : public mDoHIO_entry_c {
 public:
@@ -1008,17 +1008,17 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     for (s32 i = 0; i < 11; i++, uVar5 >>= 1) {
         if (!i_this->m290 || (uVar5 & 1)) {
             static s32 kanban_bdl[] = {
-                KANBAN_BDL_KANBAN, 
-                KANBAN_BDL_KANBAN_01,
-                KANBAN_BDL_KANBAN_02,
-                KANBAN_BDL_KANBAN_03,
-                KANBAN_BDL_KANBAN_04,
-                KANBAN_BDL_KANBAN_05,
-                KANBAN_BDL_KANBAN_06,
-                KANBAN_BDL_KANBAN_07,
-                KANBAN_BDL_KANBAN_08,
-                KANBAN_BDL_KANBAN_09,
-                KANBAN_BDL_KANBAN_10,
+                dRes_INDEX_KANBAN_BDL_KANBAN_e, 
+                dRes_INDEX_KANBAN_BDL_KANBAN_01_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_02_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_03_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_04_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_05_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_06_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_07_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_08_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_09_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_10_e,
             };
 
             J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kanban", kanban_bdl[i]);

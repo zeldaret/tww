@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_toripost.h"
-#include "d/res/res_toripost.h"
+#include "res/Object/Toripost.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_player.h"
@@ -100,7 +100,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 0000010C-0000022C       .text _createHeap__12daObjTpost_cFv */
 BOOL daObjTpost_c::_createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, TORIPOST_BDL_VPOST);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_TORIPOST_BDL_VPOST_e);
     JUT_ASSERT(132, modelData != NULL);
 
     mMorf = new mDoExt_McaMorf(
@@ -581,9 +581,9 @@ void daObjTpost_c::setAttention() {
 /* 00000EA4-0000100C       .text setAnm__12daObjTpost_cFScb */
 void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
     static const int a_anm_bcks_tbl[] = {
-        TORIPOST_BCK_POST_GET,
-        TORIPOST_BCK_POST_PUTOUT,
-        TORIPOST_BCK_POST_WAIT,
+        dRes_INDEX_TORIPOST_BCK_POST_GET_e,
+        dRes_INDEX_TORIPOST_BCK_POST_PUTOUT_e,
+        dRes_INDEX_TORIPOST_BCK_POST_WAIT_e,
     };
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
         {

@@ -8,7 +8,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_pw.h"
+#include "res/Object/Pw.h"
 #include "d/d_kankyo_rain.h"
 #include "f_op/f_op_camera.h"
 #include "f_pc/f_pc_manager.h"
@@ -177,13 +177,13 @@ void action_dousa(pw_class* i_this) {
     cXyz camfwd;
     switch (i_this->mMode) {
     case 0:
-        anm_init(i_this, PW_BCK_WAIT1, 7.0, J3DFrameCtrl::EMode_LOOP, 1.0, -1);
+        anm_init(i_this, dRes_INDEX_PW_BCK_WAIT1_e, 7.0, J3DFrameCtrl::EMode_LOOP, 1.0, -1);
         i_this->m346 = 0;
         i_this->mMode += 1;
         break;
     case 1:
         if (fopAcM_searchPlayerDistance(i_this) < 500.0f) {
-            anm_init(i_this, PW_BCK_DERUA1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_PW_BCK_DERUA1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
             i_this->current.angle.y = i_this->m38C;
             i_this->shape_angle.y = i_this->m38C;
@@ -278,7 +278,7 @@ void action_dousa(pw_class* i_this) {
             i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
             i_this->current.angle.y = i_this->m38C;
             i_this->shape_angle.y = i_this->m38C;
-            anm_init(i_this, PW_BCK_DERUB2, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_PW_BCK_DERUB2_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mMode = 6;
         }
         break;
@@ -286,7 +286,7 @@ void action_dousa(pw_class* i_this) {
         i_this->m380 = 2;
         i_this->m346 = 1;
         if (fopAcM_searchPlayerDistance(i_this) < i_this->m3AC) {
-            anm_init(i_this, PW_BCK_DERUB1, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_PW_BCK_DERUB1_e, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->mMode = 7;
         }
         break;
@@ -297,10 +297,10 @@ void action_dousa(pw_class* i_this) {
         i_this->m340 = 0;
         i_this->m341 = 0;
         i_this->m378 = cM_rndF(60.0f) + 60.0f;
-        if (i_this->m346 && i_this->mBckIdx != PW_BCK_WAIT1) {
-            anm_init(i_this, PW_BCK_WAIT1, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-        } else if (i_this->mBckIdx != PW_BCK_WAIT2) {
-            anm_init(i_this, PW_BCK_WAIT2, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        if (i_this->m346 && i_this->mBckIdx != dRes_INDEX_PW_BCK_WAIT1_e) {
+            anm_init(i_this, dRes_INDEX_PW_BCK_WAIT1_e, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        } else if (i_this->mBckIdx != dRes_INDEX_PW_BCK_WAIT2_e) {
+            anm_init(i_this, dRes_INDEX_PW_BCK_WAIT2_e, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         i_this->mMode += 1;
         // Fall-through
@@ -314,12 +314,12 @@ void action_dousa(pw_class* i_this) {
     case 15:
         i_this->m378 = cM_rndF(120.0f) + 120.0f;
         if (i_this->m346 == 1) {
-            if (i_this->mBckIdx != PW_BCK_IDOU1) {
-                anm_init(i_this, PW_BCK_IDOU1, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            if (i_this->mBckIdx != dRes_INDEX_PW_BCK_IDOU1_e) {
+                anm_init(i_this, dRes_INDEX_PW_BCK_IDOU1_e, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
         } else {
-            if (i_this->mBckIdx != PW_BCK_IDOU2) {
-                anm_init(i_this, PW_BCK_IDOU2, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            if (i_this->mBckIdx != dRes_INDEX_PW_BCK_IDOU2_e) {
+                anm_init(i_this, dRes_INDEX_PW_BCK_IDOU2_e, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
         }
         i_this->m38C += (s16)cM_rndFX(16384.0f);
@@ -360,7 +360,7 @@ void action_dousa(pw_class* i_this) {
         break;
     case 25:
         i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
-        anm_init(i_this, PW_BCK_DAMAGE_K1, 9.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_PW_BCK_DAMAGE_K1_e, 9.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->speedF = -2.0f;
         i_this->mMode += 1;
         break;
@@ -385,11 +385,11 @@ void action_dousa(pw_class* i_this) {
     case 92:
         break;
     case 100:
-        anm_init(i_this, PW_BCK_JITTAIKA1, 6.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_PW_BCK_JITTAIKA1_e, 6.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->mMode += 1;
         break;
     case 110:
-        anm_init(i_this, PW_BCK_ATTACK1, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_PW_BCK_ATTACK1_e, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         // TODO
         i_this->mMode += 1;
         break;
@@ -404,7 +404,7 @@ void action_dousa(pw_class* i_this) {
         i_this->speedF = 0.0f;
         i_this->speed.setall(0.0f);
         i_this->gravity = 0.0f;
-        anm_init(i_this, PW_BCK_SIRIMOTI1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_PW_BCK_SIRIMOTI1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->mMode += 1;
     case 112:
         // Fall-through

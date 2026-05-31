@@ -13,7 +13,7 @@
 #include "d/d_s_play.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_snap.h"
-#include "d/res/res_bwd.h"
+#include "res/Object/Bwd.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_graphic.h"
 #include "JSystem/JUtility/JUTReport.h"
@@ -439,7 +439,7 @@ void wait(bwd_class* i_this) {
         i_this->m18B0++;
     case 1:
         if (i_this->m18CC[0] == 0) {
-            anm_init(i_this, BWD_BCK_BWD_WAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_WAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m18B0++;
             mDoAud_seStart(JA_SE_CM_BWD_OUT_SAND_2, &i_this->m3954, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         } else {
@@ -512,7 +512,7 @@ void sita_hit(bwd_class* i_this) {
     i_this->m17C4 = 200;
     switch (i_this->m18B0) {
     case 0:
-        anm_init(i_this, BWD_BCK_BWD_NUKARERU, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_NUKARERU_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->m18B0++;
         i_this->m1BAC = 1.0f;
         // fallthrough
@@ -520,7 +520,7 @@ void sita_hit(bwd_class* i_this) {
         if (!i_this->mpHeadMorf->isStop()) {
             break;
         }
-        anm_init(i_this, BWD_BCK_BWD_NUKARERU_LOOP, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_NUKARERU_LOOP_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->m18B0++;
         break;
     case 2:
@@ -558,7 +558,7 @@ void sita_hit(bwd_class* i_this) {
 #if VERSION > VERSION_DEMO
         dScnPly_ply_c::setPauseTimer(4);
 #endif
-        anm_init(i_this, BWD_BCK_BWD_DAMAGE1, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_DAMAGE1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->m18B0++;
         i_this->m1BB1 = 0;
         i_this->m1BB4 = 0;
@@ -569,7 +569,7 @@ void sita_hit(bwd_class* i_this) {
         if (!i_this->mpHeadMorf->isStop()) {
             break;
         }
-        anm_init(i_this, BWD_BCK_BWD_DAMAGE2, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_DAMAGE2_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->m18B0++;
         i_this->m18CC[0] = 300;
         i_this->m3954.x = actor->current.pos.x;
@@ -681,7 +681,7 @@ void eat_attack(bwd_class* i_this) {
     bVar2 = false;
     switch (i_this->m18B0) {
     case 0:
-        anm_init(i_this, BWD_BCK_BWD_ATTACK, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_ATTACK_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->m18B0++;
         i_this->m3954.x = actor->current.pos.x;
         i_this->m3954.z = actor->current.pos.z;
@@ -711,7 +711,7 @@ void eat_attack(bwd_class* i_this) {
             }
         }
         if (bVar2) {
-            anm_init(i_this, BWD_BCK_BWD_ATTACK_EAT, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_ATTACK_EAT_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m18B0 = 5;
             i_this->m18CC[0] = 0x96;
             i_this->m3C1E++;
@@ -731,7 +731,7 @@ void eat_attack(bwd_class* i_this) {
             mDoAud_seStart(JA_SE_CM_BWD_MOUTH_CLOSE_2, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         } else {
             if (i_this->mpHeadMorf->isStop()) {
-                anm_init(i_this, BWD_BCK_BWD_ATTACK_SHIPPAI, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_ATTACK_SHIPPAI_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 mDoAud_seStart(JA_SE_CM_BWD_MOUTH_CLOSE_2, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
                 i_this->m18B0++;
             }
@@ -813,7 +813,7 @@ void fly(bwd_class* i_this) {
     switch (i_this->m18B0) {
     case 0:
         if (i_this->m18CC[1] == 0) {
-            anm_init(i_this, BWD_BCK_BWD_FLY, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_FLY_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m18B0 = 1;
             i_this->m18B4.x = actor->current.pos.x;
             i_this->m18B4.y = l_HIO.m28 + (cM_rndFX(800.0f) + 2000.0f);
@@ -859,14 +859,14 @@ void fly(bwd_class* i_this) {
         if (i_this->m18CC[1] == 0) {
             i_this->m18B0 = 2;
             i_this->m18CC[0] = 0x96;
-            anm_init(i_this, BWD_BCK_BWD_JATTACK1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_JATTACK1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             mDoAud_seStart(JA_SE_CV_BWD_GO_UNDER_G, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         break;
     case 2:
         mDoAud_seStart(JA_SE_CM_BWD_FLYING, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         if (i_this->mpHeadMorf->isStop()) {
-            anm_init(i_this, BWD_BCK_BWD_JATTACK2, 2.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_JATTACK2_e, 2.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         i_this->m18B4 = player->eyePos;
         local_48 = i_this->m18B4 - actor->current.pos;
@@ -874,7 +874,7 @@ void fly(bwd_class* i_this) {
             i_this->m18B0 = 3;
             i_this->m18B4.y -= 10000.0f;
             i_this->m18CC[0] = 200;
-            anm_init(i_this, BWD_BCK_BWD_JATTACK3, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_JATTACK3_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         }
         cLib_addCalc2(&i_this->m18C4, REG0_F(15) + 800.0f, 1.0f, 10.0f);
         break;
@@ -912,7 +912,7 @@ void s_fly(bwd_class* i_this) {
     switch (i_this->m18B0) {
     case 0:
         if (i_this->m18CC[1] == 0) {
-            anm_init(i_this, BWD_BCK_BWD_FLY, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_FLY_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m18B0 = 1;
             i_this->m18B4.x = 0.0f;
             i_this->m18B4.y = l_HIO.m28 + 3000.0f;
@@ -949,7 +949,7 @@ void s_fly(bwd_class* i_this) {
             if (i_this->m3C24 == 3) {
                 i_this->m18B0 = 2;
                 i_this->m18CC[0] = 0x96;
-                anm_init(i_this, BWD_BCK_BWD_JATTACK1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_JATTACK1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 mDoAud_seStart(JA_SE_CV_BWD_GO_UNDER_G, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
             } else {
                 i_this->m18B4.x = target_x[i_this->m3C24];
@@ -965,7 +965,7 @@ void s_fly(bwd_class* i_this) {
     case 2:
         mDoAud_seStart(JA_SE_CM_BWD_FLYING, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         if (i_this->mpHeadMorf->isStop()) {
-            anm_init(i_this, BWD_BCK_BWD_JATTACK2, 2.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_JATTACK2_e, 2.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         i_this->m18B4.x = 0.0f;
         i_this->m18B4.y = 800.0f;
@@ -975,7 +975,7 @@ void s_fly(bwd_class* i_this) {
             i_this->m18B0 = 3;
             i_this->m18B4.y -= 10000.0f;
             i_this->m18CC[0] = 200;
-            anm_init(i_this, BWD_BCK_BWD_JATTACK3, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_JATTACK3_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         }
         cLib_addCalc2(&i_this->m18C4, REG0_F(15) + 800.0f, 1.0f, 10.0f);
         break;
@@ -1033,7 +1033,7 @@ void end(bwd_class* i_this) {
 #if VERSION != VERSION_DEMO && VERSION != VERSION_USA
         mDoAud_bgmStreamPrepare(JA_STRM_BWD_CLEAR);
 #endif
-        anm_init(i_this, BWD_BCK_BWD_DEAD1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_DEAD1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->m18B0 = 1;
         i_this->m3C1E = 100;
         actor->current.angle.y = 0;
@@ -1073,7 +1073,7 @@ void end(bwd_class* i_this) {
 #if VERSION == VERSION_USA
             mDoAud_bgmStreamPrepare(JA_STRM_BWD_CLEAR);
 #endif
-            anm_init(i_this, BWD_BCK_BWD_DEAD2, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_DEAD2_e, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             actor->current.pos.y = -2000.0f;
             for (int i = 0; i < ARRAY_SSIZE(i_this->m0508); i++) {
                 i_this->m0508[i] = actor->current.pos;
@@ -1125,7 +1125,7 @@ void end(bwd_class* i_this) {
     case 23:
         i_this->m1BB6 = 2;
         if (i_this->m18CC[0] == 0x14) {
-            anm_init(i_this, BWD_BCK_BWD_DEAD3, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BWD_BCK_BWD_DEAD3_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m02C8 = 1.0f;
         }
         if (((i_this->m18CC[0] == 0) && ((i_this->m18AC & 3) == 0)) && (i_this->m0414 < 0x14)) {
@@ -2077,13 +2077,13 @@ static BOOL daBwd_Execute(bwd_class* i_this) {
                     }
                 }
                 if (i_this->m17E6[i] == 0xb4) {
-                    pBtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", BWD_BTK_TAKI_WAIT);
+                    pBtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", dRes_INDEX_BWD_BTK_TAKI_WAIT_e);
                     i_this->m17F4[i]->init(i_this->m17EC[i]->getModelData(), pBtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, 0);
                     i_this->m17E4[i] = 3;
                 }
                 break;
             case 4:
-                pBtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", BWD_BTK_TAKI_END);
+                pBtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", dRes_INDEX_BWD_BTK_TAKI_END_e);
                 if (i_this->m17F4[i]->init(i_this->m17EC[i]->getModelData(), pBtk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0) == 1) {
                     i_this->m17E4[i] = 5;
                     i_this->m17E6[i] = 0;
@@ -2233,20 +2233,20 @@ static BOOL daBwd_Delete(bwd_class* i_this) {
 
 /* 00008E0C-000096D8       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
-    static int taki_bdl[] = {BWD_BDL_HTAKI1, BWD_BDL_HTAKI2};
-    static int s_bdl[] = {BWD_BDL_GSP00, BWD_BDL_GSP01};
-    static int s_btk[] = {BWD_BTK_GSP00, BWD_BTK_GSP01};
-    static int s_brk[] = {BWD_BRK_GSP00, BWD_BRK_GSP01};
-    static int s_bck[] = {BWD_BCK_GSP00, BWD_BCK_GSP01};
+    static int taki_bdl[] = {dRes_INDEX_BWD_BDL_HTAKI1_e, dRes_INDEX_BWD_BDL_HTAKI2_e};
+    static int s_bdl[] = {dRes_INDEX_BWD_BDL_GSP00_e, dRes_INDEX_BWD_BDL_GSP01_e};
+    static int s_btk[] = {dRes_INDEX_BWD_BTK_GSP00_e, dRes_INDEX_BWD_BTK_GSP01_e};
+    static int s_brk[] = {dRes_INDEX_BWD_BRK_GSP00_e, dRes_INDEX_BWD_BRK_GSP01_e};
+    static int s_bck[] = {dRes_INDEX_BWD_BCK_GSP00_e, dRes_INDEX_BWD_BCK_GSP01_e};
     bwd_class* i_this = (bwd_class*)a_this;
     J3DModelData* modelData;
     u16 fileIndex;
 
     i_this->mpHeadMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Bwd", BWD_BDL_BWD),
+        (J3DModelData*)dComIfG_getObjectRes("Bwd", dRes_INDEX_BWD_BDL_BWD_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bwd", BWD_BCK_BWD_WAIT),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bwd", dRes_INDEX_BWD_BCK_BWD_WAIT_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -2266,7 +2266,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     i_this->mpHeadBrkAnm = new mDoExt_brkAnm();
     if (!i_this->mpHeadBrkAnm->init(
             i_this->mpHeadMorf->getModel()->getModelData(),
-            (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bwd", BWD_BRK_BWD),
+            (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bwd", dRes_INDEX_BWD_BRK_BWD_e),
             true,
             J3DFrameCtrl::EMode_NONE,
             1.0f,
@@ -2278,22 +2278,22 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     {
         return FALSE;
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bwd", BWD_BDL_BERO);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bwd", dRes_INDEX_BWD_BDL_BERO_e);
     for (int i = 0; i < 30; i++) {
         if (i == 29) {
-            modelData = (J3DModelData*)dComIfG_getObjectRes("Bwd", BWD_BDL_BERO_SAKI);
+            modelData = (J3DModelData*)dComIfG_getObjectRes("Bwd", dRes_INDEX_BWD_BDL_BERO_SAKI_e);
         }
         i_this->mTongueSegments[i].m00 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if (i_this->mTongueSegments[i].m00 == 0) {
             return FALSE;
         }
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bwd", BWD_BDL_BWD_SHIPPOA);
-    fileIndex = BWD_BRK_BWD_SHIPPOA;
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bwd", dRes_INDEX_BWD_BDL_BWD_SHIPPOA_e);
+    fileIndex = dRes_INDEX_BWD_BRK_BWD_SHIPPOA_e;
     for (int i = 0; i < 20; i++) {
         if (i == 0x13) {
-            modelData = (J3DModelData*)dComIfG_getObjectRes("Bwd", BWD_BDL_BWD_SHIPPOB);
-            fileIndex = BWD_BRK_BWD_SHIPPOB;
+            modelData = (J3DModelData*)dComIfG_getObjectRes("Bwd", dRes_INDEX_BWD_BDL_BWD_SHIPPOB_e);
+            fileIndex = dRes_INDEX_BWD_BRK_BWD_SHIPPOB_e;
         }
         i_this->mpBodyModel[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if (i_this->mpBodyModel[i] == 0) {
@@ -2308,7 +2308,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             return FALSE;
         }
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bwd", BWD_BDL_HTRYF1);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bwd", dRes_INDEX_BWD_BDL_HTRYF1_e);
     JUT_ASSERT(VERSION_SELECT(4466, 4524, 4548, 4548), modelData != NULL);
     i_this->mpTriforcePlatformModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (i_this->mpTriforcePlatformModel == NULL) {
@@ -2318,7 +2318,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     if (i_this->mpBgW2 == NULL) {
         return FALSE;
     }
-    if (i_this->mpBgW2->Set((cBgD_t*)dComIfG_getObjectRes("Bwd", BWD_DZB_HTRYF1), dBgW::MOVE_BG_e, &i_this->mBgwMtx2) == 1) {
+    if (i_this->mpBgW2->Set((cBgD_t*)dComIfG_getObjectRes("Bwd", dRes_INDEX_BWD_DZB_HTRYF1_e), dBgW::MOVE_BG_e, &i_this->mBgwMtx2) == 1) {
         return FALSE;
     }
     i_this->mpBgW2->SetCrrFunc(dBgS_MoveBGProc_Typical);
@@ -2327,7 +2327,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         if (i_this->mpBgW1[i] == 0) {
             return FALSE;
         }
-        if (i_this->mpBgW1[i]->Set((cBgD_t*)dComIfG_getObjectRes("Bwd", BWD_DZB_HTAKI1), dBgW::MOVE_BG_e, &i_this->mBgwMtx1[i]) == 1) {
+        if (i_this->mpBgW1[i]->Set((cBgD_t*)dComIfG_getObjectRes("Bwd", dRes_INDEX_BWD_DZB_HTAKI1_e), dBgW::MOVE_BG_e, &i_this->mBgwMtx1[i]) == 1) {
             return FALSE;
         }
         i_this->mpBgW1[i]->SetCrrFunc(dBgS_MoveBGProc_Typical);
@@ -2341,7 +2341,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         if (i_this->m17F4[i] == 0) {
             return FALSE;
         }
-        if (!i_this->m17F4[i]->init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", BWD_BTK_TAKI_START), true, J3DFrameCtrl::EMode_NONE)) {
+        if (!i_this->m17F4[i]->init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", dRes_INDEX_BWD_BTK_TAKI_START_e), true, J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
     }

@@ -1,0 +1,23 @@
+#ifndef RES_VPOWR_H
+#define RES_VPOWR_H
+
+enum dRes_INDEX_VPOWR {
+    /* BDLM */
+    dRes_INDEX_VPOWR_BDL_VPOWR_e=0x4,
+    /* BTK  */
+    dRes_INDEX_VPOWR_BTK_VPOWR_e=0x7,
+};
+
+enum dRes_ID_VPOWR {
+    /* BDLM */
+    dRes_ID_VPOWR_BDL_VPOWR_e=0x4,
+    /* BTK  */
+    dRes_ID_VPOWR_BTK_VPOWR_e=0x7,
+};
+
+enum VPOWR_JNT {
+    VPOWR_JNT_ROOT_VPOWR_e=0x0,
+    VPOWR_JNT_VPOWR_MODEL_e=0x1,
+};
+
+#endif /* !RES_VPOWR_H */

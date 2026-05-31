@@ -1,0 +1,33 @@
+#ifndef RES_KN_H
+#define RES_KN_H
+
+enum dRes_INDEX_KN {
+    /* BCK  */
+    dRes_INDEX_KN_BCK_PATA_e=0x4,
+    dRes_INDEX_KN_BCK_WAIT01_e=0x5,
+    dRes_INDEX_KN_BCK_WAIT02_e=0x6,
+    dRes_INDEX_KN_BCK_WALK_e=0x7,
+    /* BDL  */
+    dRes_INDEX_KN_BDL_KN_e=0xA,
+};
+
+enum dRes_ID_KN {
+    /* BCK  */
+    dRes_ID_KN_BCK_PATA_e=0x4,
+    dRes_ID_KN_BCK_WAIT01_e=0x5,
+    dRes_ID_KN_BCK_WAIT02_e=0x6,
+    dRes_ID_KN_BCK_WALK_e=0x7,
+    /* BDL  */
+    dRes_ID_KN_BDL_KN_e=0xA,
+};
+
+enum KN_JNT {
+    KN_JNT_KARADA_e=0x0,
+    KN_JNT_ASHIL_e=0x1,
+    KN_JNT_ASHIR_e=0x2,
+    KN_JNT_UDEL_e=0x3,
+    KN_JNT_UDER_e=0x4,
+    KN_JNT_TSUME_e=0x5,
+};
+
+#endif /* !RES_KN_H */

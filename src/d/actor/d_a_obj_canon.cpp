@@ -16,7 +16,7 @@
 #include "d/d_cc_d.h"
 #include "d/actor/d_a_bomb.h"
 #include "d/d_s_play.h"
-#include "d/res/res_wallbom.h"
+#include "res/Object/WallBom.h"
 
 static daObj_Canon_HIO_c l_HIO;
 
@@ -124,7 +124,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 000003F8-000004CC       .text _createHeap__13daObj_Canon_cFv */
 BOOL daObj_Canon_c::_createHeap() {
-    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arc_name, WALLBOM_BDL_WALLBOM);
+    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_WALLBOM_BDL_WALLBOM_e);
     JUT_ASSERT(0x115, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);

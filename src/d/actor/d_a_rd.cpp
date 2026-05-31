@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_rd.h"
-#include "d/res/res_rd.h"
+#include "res/Object/Rd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
@@ -234,13 +234,13 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 000006C0-0000096C       .text _createHeap__6daRd_cFv */
 BOOL daRd_c::_createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, RD_BDL_RD));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_RD_BDL_RD_e));
     JUT_ASSERT(DEMO_SELECT(502, 504), modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(m_arc_name, RD_BCK_SUWARIP)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_RD_BCK_SUWARIP_e)),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
@@ -255,7 +255,7 @@ BOOL daRd_c::_createHeap() {
         return FALSE;
     }
     
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, RD_BTK_RD_CLOSE));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_RD_BTK_RD_CLOSE_e));
     JUT_ASSERT(DEMO_SELECT(528, 525), btk != NULL);
     if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
@@ -263,7 +263,7 @@ BOOL daRd_c::_createHeap() {
     
     modelData->getJointNodePointer(0x0C)->setCallBack(nodeHeadControl_CB); // ree_atama_1
     
-    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_RD_BRK_NML_e));
     JUT_ASSERT(DEMO_SELECT(553, 550), brk != NULL);
     if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
@@ -1378,10 +1378,10 @@ void daRd_c::modeProc(daRd_c::Proc_e proc, int newMode) {
 /* 000038D4-000039AC       .text setBrkAnm__6daRd_cFSc */
 void daRd_c::setBrkAnm(s8 idx) {
     static const int a_anm_idx_tbl[] = {
-        RD_BRK_NML,
-        RD_BRK_BEAM_HIT,
-        RD_BRK_BEAM,
-        RD_BRK_BEAM_END,
+        dRes_INDEX_RD_BRK_NML_e,
+        dRes_INDEX_RD_BRK_BEAM_HIT_e,
+        dRes_INDEX_RD_BRK_BEAM_e,
+        dRes_INDEX_RD_BRK_BEAM_END_e,
     };
     static const int a_play_mod_tbl[] = {
         J3DFrameCtrl::EMode_NONE,
@@ -1399,10 +1399,10 @@ void daRd_c::setBrkAnm(s8 idx) {
 /* 000039AC-00003B3C       .text setBtkAnm__6daRd_cFSc */
 void daRd_c::setBtkAnm(s8 idx) {
     static const int a_anm_idx_tbl[] = {
-        RD_BTK_RD_IKARI,
-        RD_BTK_RD_NML,
-        RD_BTK_RD_OPEN,
-        RD_BTK_RD_CLOSE,
+        dRes_INDEX_RD_BTK_RD_IKARI_e,
+        dRes_INDEX_RD_BTK_RD_NML_e,
+        dRes_INDEX_RD_BTK_RD_OPEN_e,
+        dRes_INDEX_RD_BTK_RD_CLOSE_e,
     };
     struct anm_prm_struct {
         s8 m00;
@@ -1441,20 +1441,20 @@ void daRd_c::setBtkAnm(s8 idx) {
 /* 00003B3C-00003C48       .text setAnm__6daRd_cFScb */
 void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
     static const int a_anm_bcks_tbl[] = {
-        RD_BCK_TACHIP,
-        RD_BCK_SUWARIP,
-        RD_BCK_WALK2ATACK,
-        RD_BCK_ATACK,
-        RD_BCK_ATACK2WALK,
-        RD_BCK_WALK,
-        RD_BCK_DAMAGE,
-        RD_BCK_DEAD,
-        RD_BCK_TATSU,
-        RD_BCK_SUWARU,
-        RD_BCK_KANOKEP,
-        RD_BCK_BEAM_HIT,
-        RD_BCK_BEAM,
-        RD_BCK_BEAM_END,
+        dRes_INDEX_RD_BCK_TACHIP_e,
+        dRes_INDEX_RD_BCK_SUWARIP_e,
+        dRes_INDEX_RD_BCK_WALK2ATACK_e,
+        dRes_INDEX_RD_BCK_ATACK_e,
+        dRes_INDEX_RD_BCK_ATACK2WALK_e,
+        dRes_INDEX_RD_BCK_WALK_e,
+        dRes_INDEX_RD_BCK_DAMAGE_e,
+        dRes_INDEX_RD_BCK_DEAD_e,
+        dRes_INDEX_RD_BCK_TATSU_e,
+        dRes_INDEX_RD_BCK_SUWARU_e,
+        dRes_INDEX_RD_BCK_KANOKEP_e,
+        dRes_INDEX_RD_BCK_BEAM_HIT_e,
+        dRes_INDEX_RD_BCK_BEAM_e,
+        dRes_INDEX_RD_BCK_BEAM_END_e,
     };
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
         {

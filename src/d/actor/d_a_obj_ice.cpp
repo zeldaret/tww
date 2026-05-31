@@ -8,7 +8,7 @@
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
-#include "d/res/res_ikori.h"
+#include "res/Object/Ikori.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -139,7 +139,7 @@ BOOL daObjIce_c::solidHeapCB(fopAc_ac_c* a_this) {
 /* 000001EC-000002E4       .text create_heap__10daObjIce_cFv */
 bool daObjIce_c::create_heap() {
     bool uVar5 = true;
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, IKORI_BDL_VICE);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_IKORI_BDL_VICE_e);
 
     if (modelData == NULL) {
         JUT_ASSERT(DEMO_SELECT(392, 395), FALSE);
@@ -147,7 +147,7 @@ bool daObjIce_c::create_heap() {
     } else {
         mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
 
-        cBgD_t* pcVar3 = (cBgD_t*)dComIfG_getObjectRes(l_arcname, IKORI_DZB_VICE);
+        cBgD_t* pcVar3 = (cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_IKORI_DZB_VICE_e);
         mBgw = dBgW_NewSet(pcVar3, cBgW::MOVE_BG_e, &m40C);
 
         if (mModel == NULL || mBgw == NULL) {

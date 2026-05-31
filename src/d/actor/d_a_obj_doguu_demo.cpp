@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_doguu_demo.h"
-#include "d/res/res_doguud.h"
+#include "res/Object/DoguuD.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor.h"
@@ -21,7 +21,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daObjDoguuD_c::CreateHeap() {
     mUnusedParam = fopAcM_GetParam(this) & 0xFF;
 
-    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("DoguuD", DOGUUD_BDL_ESKZTO));
+    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("DoguuD", dRes_INDEX_DOGUUD_BDL_ESKZTO_e));
     JUT_ASSERT(0x65, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x00, 0x11020203);
     if (mpModel == NULL)
@@ -38,7 +38,7 @@ BOOL daObjDoguuD_c::CreateHeap() {
         return FALSE;
     }
 
-    if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes("DoguuD", DOGUUD_DZB_ESKZTO), cBgW::MOVE_BG_e, &mMtx))
+    if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes("DoguuD", dRes_INDEX_DOGUUD_DZB_ESKZTO_e), cBgW::MOVE_BG_e, &mMtx))
         return FALSE;
 
     return TRUE;

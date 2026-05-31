@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_dr.h"
-#include "d/res/res_dr.h"
+#include "res/Object/Dr.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
@@ -71,14 +71,14 @@ static void move(dr_class* i_this) {
     switch (i_this->mMode) {
     case 0:
         isIdle = true;
-        anm_init(i_this, DR_BCK_DR_WAIT1, l_HIO.mWait1Morf, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_DR_BCK_DR_WAIT1_e, l_HIO.mWait1Morf, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->mMode++;
         i_this->mCountDownTimers[0] = (s16)(200.0f + cM_rndF(200.0f));
         break;
     case 1:
         isIdle = true;
         if (i_this->mCountDownTimers[0] == 0) {
-            anm_init(i_this, DR_BCK_DR_AKUBI1, l_HIO.mAkubi1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, DR_BAS_AKUBI1);
+            anm_init(i_this, dRes_INDEX_DR_BCK_DR_AKUBI1_e, l_HIO.mAkubi1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_DR_BAS_AKUBI1_e);
             i_this->mMode++;
         }
         break;
@@ -89,7 +89,7 @@ static void move(dr_class* i_this) {
         }
         break;
     case 10:
-        anm_init(i_this, DR_BCK_DR_BIKU1, l_HIO.mBiku1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, DR_BAS_BIKU1);
+        anm_init(i_this, dRes_INDEX_DR_BCK_DR_BIKU1_e, l_HIO.mBiku1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_DR_BAS_BIKU1_e);
         i_this->mMode++;
         i_this->mCountDownTimers[0] = l_HIO.m0E;
         i_this->mpBreathEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRPAINBIKU00, &i_this->current.pos);
@@ -109,11 +109,11 @@ static void move(dr_class* i_this) {
             
             if (i_this->mCountDownTimers[0] != 0) {
                 if (cM_rndF(1.0f) < 0.5f) {
-                    anm_init(i_this, DR_BCK_DR_ABARE1, l_HIO.mAbare1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, DR_BAS_ABARE1);
+                    anm_init(i_this, dRes_INDEX_DR_BCK_DR_ABARE1_e, l_HIO.mAbare1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_DR_BAS_ABARE1_e);
                     i_this->mpBreathEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRPAINABARE00, &i_this->current.pos);
                     i_this->mCountDownTimers[1] = 500;
                 } else {
-                    anm_init(i_this, DR_BCK_DR_ABARE2, l_HIO.mAbare2Morf, J3DFrameCtrl::EMode_NONE, 1.0f, DR_BAS_ABARE2);
+                    anm_init(i_this, dRes_INDEX_DR_BCK_DR_ABARE2_e, l_HIO.mAbare2Morf, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_DR_BAS_ABARE2_e);
                     
                     cXyz rootPos;
                     cXyz offset(0.0f, 0.0f, 0.0f);
@@ -126,7 +126,7 @@ static void move(dr_class* i_this) {
                     i_this->mCountDownTimers[1] = 0;
                 }
             } else {
-                anm_init(i_this, DR_BCK_DR_HO1, l_HIO.mHo1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_DR_BCK_DR_HO1_e, l_HIO.mHo1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->mpBreathEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRPAINHO00, &i_this->current.pos);
                 i_this->mMode++;
             }
@@ -226,11 +226,11 @@ static BOOL createHeap(fopAc_ac_c* i_actor) {
     dr_class* i_this = (dr_class*)i_actor;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Dr", DR_BMD_DR1),
+        (J3DModelData*)dComIfG_getObjectRes("Dr", dRes_INDEX_DR_BMD_DR1_e),
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Dr", DR_BCK_DR_BIKU1),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Dr", dRes_INDEX_DR_BCK_DR_BIKU1_e),
         J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1,
-        dComIfG_getObjectRes("Dr", DR_BAS_BIKU1),
+        dComIfG_getObjectRes("Dr", dRes_INDEX_DR_BAS_BIKU1_e),
         0x00000000,
         0x11020203
     );

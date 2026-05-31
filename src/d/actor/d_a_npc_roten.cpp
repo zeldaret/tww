@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_roten.h"
-#include "d/res/res_ro.h"
+#include "res/Object/Ro.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_demo_item.h"
@@ -1408,72 +1408,72 @@ static char* l_npc_staff_id[] = {
 const char daNpcRoten_c::m_arcname[] = "Ro";
 
 static const int l_bmd_ix_tbl[] = {
-    RO_BDL_RO,
-    RO_BDL_RO,
-    RO_BDL_RO,
+    dRes_ID_RO_BDL_RO_e,
+    dRes_ID_RO_BDL_RO_e,
+    dRes_ID_RO_BDL_RO_e,
 };
 
 static const int l_bck_ix_tbl[][10] = {
     {
-        RO_BCK_RO_WAIT01,
-        RO_BCK_RO_TALK01,
-        RO_BCK_RO_WALK,
-        RO_BCK_RO_TALK02,
-        RO_BCK_RO_TALK03,
-        RO_BCK_RO_TALK04,
-        RO_BCK_RO_TALK05,
-        RO_BCK_RO_WATASU,
-        RO_BCK_RO_ITEMWAIT,
-        RO_BCK_RO_WIND,
+        dRes_ID_RO_BCK_RO_WAIT01_e,
+        dRes_ID_RO_BCK_RO_TALK01_e,
+        dRes_ID_RO_BCK_RO_WALK_e,
+        dRes_ID_RO_BCK_RO_TALK02_e,
+        dRes_ID_RO_BCK_RO_TALK03_e,
+        dRes_ID_RO_BCK_RO_TALK04_e,
+        dRes_ID_RO_BCK_RO_TALK05_e,
+        dRes_ID_RO_BCK_RO_WATASU_e,
+        dRes_ID_RO_BCK_RO_ITEMWAIT_e,
+        dRes_ID_RO_BCK_RO_WIND_e,
     },
     {
-        RO_BCK_RO_WAIT01,
-        RO_BCK_RO_TALK01,
-        RO_BCK_RO_WALK,
-        RO_BCK_RO_TALK02,
-        RO_BCK_RO_TALK03,
-        RO_BCK_RO_TALK04,
-        RO_BCK_RO_TALK05,
-        RO_BCK_RO_WATASU,
-        RO_BCK_RO_ITEMWAIT,
-        RO_BCK_RO_WIND,
+        dRes_ID_RO_BCK_RO_WAIT01_e,
+        dRes_ID_RO_BCK_RO_TALK01_e,
+        dRes_ID_RO_BCK_RO_WALK_e,
+        dRes_ID_RO_BCK_RO_TALK02_e,
+        dRes_ID_RO_BCK_RO_TALK03_e,
+        dRes_ID_RO_BCK_RO_TALK04_e,
+        dRes_ID_RO_BCK_RO_TALK05_e,
+        dRes_ID_RO_BCK_RO_WATASU_e,
+        dRes_ID_RO_BCK_RO_ITEMWAIT_e,
+        dRes_ID_RO_BCK_RO_WIND_e,
     },
     {
-        RO_BCK_RO_WAIT01,
-        RO_BCK_RO_TALK01,
-        RO_BCK_RO_WALK,
-        RO_BCK_RO_TALK02,
-        RO_BCK_RO_TALK03,
-        RO_BCK_RO_TALK04,
-        RO_BCK_RO_TALK05,
-        RO_BCK_RO_WATASU,
-        RO_BCK_RO_ITEMWAIT,
-        RO_BCK_RO_WIND,
+        dRes_ID_RO_BCK_RO_WAIT01_e,
+        dRes_ID_RO_BCK_RO_TALK01_e,
+        dRes_ID_RO_BCK_RO_WALK_e,
+        dRes_ID_RO_BCK_RO_TALK02_e,
+        dRes_ID_RO_BCK_RO_TALK03_e,
+        dRes_ID_RO_BCK_RO_TALK04_e,
+        dRes_ID_RO_BCK_RO_TALK05_e,
+        dRes_ID_RO_BCK_RO_WATASU_e,
+        dRes_ID_RO_BCK_RO_ITEMWAIT_e,
+        dRes_ID_RO_BCK_RO_WIND_e,
     },
 };
 
 static const int l_head_bmd_ix_tbl[] = {
-    RO_BDL_RO_HAT,
-    RO_BDL_RO_HAT2,
-    RO_BDL_RO_HAT3,
+    dRes_ID_RO_BDL_RO_HAT_e,
+    dRes_ID_RO_BDL_RO_HAT2_e,
+    dRes_ID_RO_BDL_RO_HAT3_e,
 };
 
 static const int l_head_bck_ix_tbl[] = {
-    RO_BCK_HAT_WID,
-    RO_BCK_HAT2_WIND,
-    RO_BCK_HAT3_WID,
+    dRes_ID_RO_BCK_HAT_WID_e,
+    dRes_ID_RO_BCK_HAT2_WIND_e,
+    dRes_ID_RO_BCK_HAT3_WID_e,
 };
 
 static const int l_btp_ix_tbl[] = {
-    RO_BTP_RO,
-    RO_BTP_RO,
-    RO_BTP_RO,
+    dRes_ID_RO_BTP_RO_e,
+    dRes_ID_RO_BTP_RO_e,
+    dRes_ID_RO_BTP_RO_e,
 };
 
 static const int l_bmt_ix_tbl[] = {
     -1,
-    RO_BMT_RO2,
-    RO_BMT_RO3,
+    dRes_ID_RO_BMT_RO2_e,
+    dRes_ID_RO_BMT_RO3_e,
 };
 
 static const int l_diff_flag_tbl[] = {

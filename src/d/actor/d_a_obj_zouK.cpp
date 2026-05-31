@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_zouK.h"
-#include "d/res/res_vzouk.h"
+#include "res/Object/VzouK.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
@@ -65,9 +65,9 @@ BOOL daObjZouk::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 0000009C-00000468       .text create_heap__Q29daObjZouk5Act_cFv */
 bool daObjZouk::Act_c::create_heap() {
-    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, VZOUK_INDEX_BDL_VZOUK);
+    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VZOUK_BDL_VZOUK_e);
     JUT_ASSERT(369, mdl_data != NULL);
-    M_bck_data = (J3DAnmTransformKey*)dComIfG_getObjectRes(M_arcname, VZOUK_INDEX_BCK_VZOUK);
+    M_bck_data = (J3DAnmTransformKey*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VZOUK_BCK_VZOUK_e);
     JUT_ASSERT(373, M_bck_data != NULL);
 
 #if VERSION > VERSION_DEMO
@@ -96,7 +96,7 @@ bool daObjZouk::Act_c::create_heap() {
     }
     set_mtx();
 
-    cBgD_t* bgw_data_before = (cBgD_t*)dComIfG_getObjectRes(M_arcname, VZOUK_INDEX_DZB_MAEKISI);
+    cBgD_t* bgw_data_before = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VZOUK_DZB_MAEKISI_e);
     JUT_ASSERT(DEMO_SELECT(404, 406), bgw_data_before != NULL);
 #if VERSION > VERSION_DEMO
     if (bgw_data_before != NULL)
@@ -112,7 +112,7 @@ bool daObjZouk::Act_c::create_heap() {
         }
     }
 
-    cBgD_t* bgw_data_after = (cBgD_t*)dComIfG_getObjectRes(M_arcname, VZOUK_INDEX_DZB_ATOKISI);
+    cBgD_t* bgw_data_after = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VZOUK_DZB_ATOKISI_e);
     JUT_ASSERT(DEMO_SELECT(414, 420), bgw_data_after != NULL);
 #if VERSION > VERSION_DEMO
     if (bgw_data_after != NULL)

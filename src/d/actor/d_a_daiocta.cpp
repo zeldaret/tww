@@ -15,7 +15,7 @@
 #include "d/d_lib.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
-#include "d/res/res_daiocta.h"
+#include "res/Object/Daiocta.h"
 
 static daDaiocta_HIO_c l_HIO;
 
@@ -268,16 +268,16 @@ BOOL daDaiocta_c::createAwaHeap() {
     J3DAnmTextureSRTKey* btk;
     J3DAnmTevRegKey* brk;
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_GAWA00));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BDL_GAWA00_e));
     JUT_ASSERT(516, modelData != NULL);
 
-    bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BCK_GAWA00));
+    bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BCK_GAWA00_e));
     JUT_ASSERT(520, bck != NULL);
 
-    btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_GAWA00));
+    btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BTK_GAWA00_e));
     JUT_ASSERT(524, btk != NULL);
 
-    brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_GAWA00));
+    brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BRK_GAWA00_e));
     JUT_ASSERT(528, brk != NULL);
 
 
@@ -309,7 +309,7 @@ BOOL daDaiocta_c::createAwaHeap() {
 
 /* 000009B8-00000ABC       .text createSuikomiHeap__11daDaiocta_cFv */
 BOOL daDaiocta_c::createSuikomiHeap() {
-    J3DModelData* modelData = (J3DModelData * ) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_GDO_SUI00);
+    J3DModelData* modelData = (J3DModelData * ) dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BDL_GDO_SUI00_e);
     JUT_ASSERT(551, modelData != NULL);
 
     // "suikomi" translates to suction
@@ -319,8 +319,8 @@ BOOL daDaiocta_c::createSuikomiHeap() {
         return FALSE;
     }
 
-    if (!dLib_brkInit(modelData, &mBrkAnm2, m_arc_name, DAIOCTA_BRK_GDO_SUI00) || 
-        !dLib_btkInit(modelData, &mBtkAnm, m_arc_name, DAIOCTA_BTK_GDO_SUI00)) {
+    if (!dLib_brkInit(modelData, &mBrkAnm2, m_arc_name, dRes_INDEX_DAIOCTA_BRK_GDO_SUI00_e) || 
+        !dLib_btkInit(modelData, &mBtkAnm, m_arc_name, dRes_INDEX_DAIOCTA_BTK_GDO_SUI00_e)) {
         return FALSE;
     }
 
@@ -329,10 +329,10 @@ BOOL daDaiocta_c::createSuikomiHeap() {
 
 /* 00000ABC-00000C04       .text createBodyHeap__11daDaiocta_cFv */
 BOOL daDaiocta_c::createBodyHeap() {
-    J3DModelData* modelData = (J3DModelData *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_DO_MAIN1);
+    J3DModelData* modelData = (J3DModelData *) dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BDL_DO_MAIN1_e);
     JUT_ASSERT(579, modelData != NULL);
 
-    if (!dLib_brkInit(modelData, &mBrkAnm1, m_arc_name, DAIOCTA_BRK_WAIT1)) {
+    if (!dLib_brkInit(modelData, &mBrkAnm1, m_arc_name, dRes_INDEX_DAIOCTA_BRK_WAIT1_e)) {
         return FALSE;
     }
 
@@ -1069,10 +1069,10 @@ void daDaiocta_c::modeDemoInit() {
     setEffect(dPa_name::ID_IT_SN_DO_SUIKOMIC00);
     J3DModelData* model_data_p = mpSuikomiModel->getModelData();
     
-    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_GDO_SUI00));
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BRK_GDO_SUI00_e));
     JUT_ASSERT(VERSION_SELECT(1334, 1340, 1350, 1350), brk != NULL);
     
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_GDO_SUI00));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BTK_GDO_SUI00_e));
     JUT_ASSERT(VERSION_SELECT(1337, 1343, 1353, 1353), btk != NULL);
 
     mBrkAnm2.init(
@@ -1349,13 +1349,13 @@ void daDaiocta_c::setAnm() {
     }
 
     static const s32 a_brk_anm_idx_tbl[] = {
-        DAIOCTA_BRK_WAIT1, 
-        DAIOCTA_BRK_DAMAGE1, 
-        DAIOCTA_BRK_DAMAGE2, 
-        DAIOCTA_BRK_DEATH1, 
-        DAIOCTA_BRK_SUIKOMU1, 
-        DAIOCTA_BRK_DEATH2, 
-        DAIOCTA_BRK_HAKIDASU1
+        dRes_INDEX_DAIOCTA_BRK_WAIT1_e, 
+        dRes_INDEX_DAIOCTA_BRK_DAMAGE1_e, 
+        dRes_INDEX_DAIOCTA_BRK_DAMAGE2_e, 
+        dRes_INDEX_DAIOCTA_BRK_DEATH1_e, 
+        dRes_INDEX_DAIOCTA_BRK_SUIKOMU1_e, 
+        dRes_INDEX_DAIOCTA_BRK_DEATH2_e, 
+        dRes_INDEX_DAIOCTA_BRK_HAKIDASU1_e
     };
     
     static const s32 a_brk_anm_prm_tbl[] = {

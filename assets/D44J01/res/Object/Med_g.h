@@ -1,0 +1,25 @@
+#ifndef RES_MED_G_H
+#define RES_MED_G_H
+
+enum dRes_INDEX_MED_G {
+    /* BDLM */
+    dRes_INDEX_MED_G_BDL_VBING_e=0x4,
+    /* BTK  */
+    dRes_INDEX_MED_G_BTK_VBINA_G_e=0x7,
+};
+
+enum dRes_ID_MED_G {
+    /* BDLM */
+    dRes_ID_MED_G_BDL_VBING_e=0x4,
+    /* BTK  */
+    dRes_ID_MED_G_BTK_VBINA_G_e=0x7,
+};
+
+enum VBING_JNT {
+    VBING_JNT_V_BINRGB_e=0x0,
+    VBING_JNT_BIN_0_OUTSIDE_e=0x1,
+    VBING_JNT_BIN_1_CAP_MODEL_e=0x2,
+    VBING_JNT_BIN_2_INSIDE_e=0x3,
+};
+
+#endif /* !RES_MED_G_H */

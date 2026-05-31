@@ -9,7 +9,7 @@
 #include "d/d_item.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
-#include "d/res/res_rsh.h"
+#include "res/Object/Rsh.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_ext.h"
@@ -265,28 +265,28 @@ static BOOL daNpc_Rsh1_shopStickMoveMsgCheck(u32 param_1) {
 }
 
 static const int l_bck_ix_tbl[] = {
-    DEMO_SELECT(RSH_INDEX_BCK_RS_WAIT01, RSH_BCK_RS_WAIT01), 
-    DEMO_SELECT(RSH_INDEX_BCK_RS_WAIT02, RSH_BCK_RS_WAIT02), 
-    DEMO_SELECT(RSH_INDEX_BCK_RS_TALK01, RSH_BCK_RS_TALK01), 
-    DEMO_SELECT(RSH_INDEX_BCK_RS_TALK02, RSH_BCK_RS_TALK02),
-    DEMO_SELECT(RSH_INDEX_BCK_RS_TALK02, RSH_BCK_RS_TALK02), 
-    DEMO_SELECT(RSH_INDEX_BCK_RS_WALK, RSH_BCK_RS_WALK), 
-    DEMO_SELECT(RSH_INDEX_BCK_RS_PUSH, RSH_BCK_RS_PUSH)
+    DEMO_SELECT(dRes_INDEX_RSH_BCK_RS_WAIT01_e, dRes_INDEX_RSH_BCK_RS_WAIT01_e), 
+    DEMO_SELECT(dRes_INDEX_RSH_BCK_RS_WAIT02_e, dRes_INDEX_RSH_BCK_RS_WAIT02_e), 
+    DEMO_SELECT(dRes_INDEX_RSH_BCK_RS_TALK01_e, dRes_INDEX_RSH_BCK_RS_TALK01_e), 
+    DEMO_SELECT(dRes_INDEX_RSH_BCK_RS_TALK02_e, dRes_INDEX_RSH_BCK_RS_TALK02_e),
+    DEMO_SELECT(dRes_INDEX_RSH_BCK_RS_TALK02_e, dRes_INDEX_RSH_BCK_RS_TALK02_e), 
+    DEMO_SELECT(dRes_INDEX_RSH_BCK_RS_WALK_e, dRes_INDEX_RSH_BCK_RS_WALK_e), 
+    DEMO_SELECT(dRes_INDEX_RSH_BCK_RS_PUSH_e, dRes_INDEX_RSH_BCK_RS_PUSH_e)
 };
 
 static const int l_bas_ix_tbl[] = {
-    DEMO_SELECT(RSH_INDEX_BAS_RS_WAIT01, RSH_BAS_RS_WAIT01), 
-    DEMO_SELECT(RSH_INDEX_BAS_RS_WAIT02, RSH_BAS_RS_WAIT02), 
-    DEMO_SELECT(RSH_INDEX_BAS_RS_TALK01, RSH_BAS_RS_TALK01), 
-    DEMO_SELECT(RSH_INDEX_BAS_RS_TALK02, RSH_BAS_RS_TALK02), 
-    DEMO_SELECT(RSH_INDEX_BAS_RS_TALK02, RSH_BAS_RS_TALK02), 
-    DEMO_SELECT(RSH_INDEX_BAS_RS_WALK, RSH_BAS_RS_WALK), 
-    DEMO_SELECT(RSH_INDEX_BAS_RS_PUSH, RSH_BAS_RS_PUSH)
+    DEMO_SELECT(dRes_INDEX_RSH_BAS_RS_WAIT01_e, dRes_INDEX_RSH_BAS_RS_WAIT01_e), 
+    DEMO_SELECT(dRes_INDEX_RSH_BAS_RS_WAIT02_e, dRes_INDEX_RSH_BAS_RS_WAIT02_e), 
+    DEMO_SELECT(dRes_INDEX_RSH_BAS_RS_TALK01_e, dRes_INDEX_RSH_BAS_RS_TALK01_e), 
+    DEMO_SELECT(dRes_INDEX_RSH_BAS_RS_TALK02_e, dRes_INDEX_RSH_BAS_RS_TALK02_e), 
+    DEMO_SELECT(dRes_INDEX_RSH_BAS_RS_TALK02_e, dRes_INDEX_RSH_BAS_RS_TALK02_e), 
+    DEMO_SELECT(dRes_INDEX_RSH_BAS_RS_WALK_e, dRes_INDEX_RSH_BAS_RS_WALK_e), 
+    DEMO_SELECT(dRes_INDEX_RSH_BAS_RS_PUSH_e, dRes_INDEX_RSH_BAS_RS_PUSH_e)
 };
 
 static const int l_btp_ix_tbl[] = {
-    DEMO_SELECT(RSH_INDEX_BTP_RS_MABA01, RSH_BTP_RS_MABA01), 
-    DEMO_SELECT(RSH_INDEX_BTP_RS_MABA01, RSH_BTP_RS_MABA01)
+    DEMO_SELECT(dRes_INDEX_RSH_BTP_RS_MABA01_e, dRes_INDEX_RSH_BTP_RS_MABA01_e), 
+    DEMO_SELECT(dRes_INDEX_RSH_BTP_RS_MABA01_e, dRes_INDEX_RSH_BTP_RS_MABA01_e)
 };
 
 /* 0000087C-00000A44       .text nodeCallBack_Rsh__FP7J3DNodei */
@@ -1317,7 +1317,7 @@ bool daNpc_Rsh1_c::talk01() {
     if (result == fopMsgStts_BOX_CLOSED_e) {
         daPy_lk_c* link_p = DEMO_SELECT((daPy_lk_c *) dComIfGp_getPlayer(0), daPy_getPlayerLinkActorClass());
         m95C = m95D;
-        dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+        dComIfGp_event_reset();
         mShopCamAct.Reset();
         link_p->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
         m771 = false;
@@ -1369,7 +1369,7 @@ BOOL daNpc_Rsh1_c::getdemo_action(void* i_unusedP) {
         dComIfGp_evmng_cutEnd(staff_idx);
         if (dComIfGp_evmng_endCheck("RSH_GET_DEMO")) {
             m95B = 1;
-            dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+            dComIfGp_event_reset();
 
             if (mItemNo == dItemNo_TOWN_FLOWER_e) {
                 m780 = 0x2857;
@@ -1634,7 +1634,7 @@ BOOL daNpc_Rsh1_c::event_action(void* i_unusedP) {
             if (cLib_checkBit<u32>(actor_status, fopAcStts_UNK4000_e)) {
                 cLib_offBit<u32>(actor_status, fopAcStts_UNK4000_e);
             }
-            dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+            dComIfGp_event_reset();
             setAction(&daNpc_Rsh1_c::wait_action, NULL);
         }
         lookBack();
@@ -1833,13 +1833,13 @@ cPhs_State daNpc_Rsh1_c::_create() {
 
 /* 00004698-000049A0       .text CreateHeap__12daNpc_Rsh1_cFv */
 BOOL daNpc_Rsh1_c::CreateHeap() {
-    J3DModelData* model_p = (J3DModelData *) dComIfG_getObjectRes(m_arcname, DEMO_SELECT(RSH_INDEX_BDL_RS, RSH_BDL_RS));
+    J3DModelData* model_p = (J3DModelData *) dComIfG_getObjectRes(m_arcname, DEMO_SELECT(dRes_INDEX_RSH_BDL_RS_e, dRes_INDEX_RSH_BDL_RS_e));
     mpMorf = new mDoExt_McaMorf(
         model_p, 
         NULL, NULL, 
-        (J3DAnmTransform *) dComIfG_getObjectRes(m_arcname, DEMO_SELECT(RSH_INDEX_BCK_RS_WAIT01, RSH_BCK_RS_WAIT01)), 
+        (J3DAnmTransform *) dComIfG_getObjectRes(m_arcname, DEMO_SELECT(dRes_INDEX_RSH_BCK_RS_WAIT01_e, dRes_INDEX_RSH_BCK_RS_WAIT01_e)), 
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, 
-        dComIfG_getObjectRes(m_arcname, DEMO_SELECT(RSH_INDEX_BAS_RS_WAIT01, RSH_BAS_RS_WAIT01)), 
+        dComIfG_getObjectRes(m_arcname, DEMO_SELECT(dRes_INDEX_RSH_BAS_RS_WAIT01_e, dRes_INDEX_RSH_BAS_RS_WAIT01_e)), 
         0, 0x11020203
     );
 
@@ -1884,8 +1884,8 @@ BOOL daNpc_Rsh1_c::CreateHeap() {
     mAcch.Set(current_pos_p, old_pos_p, this, 1, &mAcchCir, speed_p);
 
     mpShopCursor = ShopCursor_create(
-        (J3DModelData *) dComIfG_getObjectRes(m_arcname, DEMO_SELECT(RSH_INDEX_BMD_SHOP_CURSOR01, RSH_BMD_SHOP_CURSOR01)),
-        (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arcname, DEMO_SELECT(RSH_INDEX_BRK_SHOP_CURSOR01, RSH_BRK_SHOP_CURSOR01)),
+        (J3DModelData *) dComIfG_getObjectRes(m_arcname, DEMO_SELECT(dRes_INDEX_RSH_BMD_SHOP_CURSOR01_e, dRes_INDEX_RSH_BMD_SHOP_CURSOR01_e)),
+        (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arcname, DEMO_SELECT(dRes_INDEX_RSH_BRK_SHOP_CURSOR01_e, dRes_INDEX_RSH_BRK_SHOP_CURSOR01_e)),
         l_HIO.m34
     );
 

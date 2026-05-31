@@ -18,9 +18,9 @@ extern JGeometry::TVec3<f32> l_hammer_splash_particle_scale;
 
 /* 8015023C-80150324       .text setHammerModel__9daPy_lk_cFv */
 void daPy_lk_c::setHammerModel() {
-    J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_HAMMERDAM);
+    J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_HAMMERDAM_e);
     JKRHeap* oldHeap = setItemHeap();
-    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_HAMMER, 0x37221222);
+    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_HAMMER_e, 0x37221222);
     int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(32, FALSE);
@@ -181,9 +181,9 @@ BOOL daPy_lk_c::procHammerSideSwing_init() {
     mNormalSpeed = 0.0f;
     voiceStart(1);
     mProcVar2.m34D4 = shape_angle.y;
-    setBlurPosResource(LKANM__HAMMERSIDE_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__HAMMERSIDE_POS_e);
     setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK0, dCcG_SE_METAL, dCcG_AtHitMark_Nrm_e, CUT_TYPE_HAMMER_SIDESWING, 50.0f);
-    mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMSWINGAA));
+    mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_HAMSWINGAA_e));
     m35EC = m_HIO->mItem.mHam.m.field_0xC;
     return true;
 }
@@ -256,7 +256,7 @@ BOOL daPy_lk_c::procHammerFrontSwingReady_init() {
     }
     setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK0, dCcG_SE_METAL, dCcG_AtHitMark_Nrm_e, CUT_TYPE_HAMMER_FRONTSWING, 50.0f);
     voiceStart(7);
-    mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMSWINGBPREA));
+    mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_HAMSWINGBPREA_e));
     m35EC = m_HIO->mItem.mHam.m.field_0x24;
     m355C = 0;
     return true;
@@ -303,12 +303,12 @@ BOOL daPy_lk_c::procHammerFrontSwing_init() {
         mProcVar2.m34D4 = m34E8;
     }
     mProcVar2.m34D4 = shape_angle.y;
-    setBlurPosResource(LKANM__HAMMERFRONT_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__HAMMERFRONT_POS_e);
     mCutType = CUT_TYPE_HAMMER_FRONTSWING;
     offResetFlg0(daPyRFlg0_NOT_ATTACKING);
     onResetFlg0(daPy_RFLG0(daPyRFlg0_UNK1 | daPyRFlg0_UNK2));
     mProcVar0.m34D0 = 0;
-    mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMSWINGBHITA));
+    mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_HAMSWINGBHITA_e));
     m35EC = m_HIO->mItem.mHam.m.field_0x30;
     return true;
 }

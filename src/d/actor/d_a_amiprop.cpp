@@ -11,7 +11,7 @@
 #if VERSION > VERSION_DEMO
 #include "d/d_vibration.h"
 #endif
-#include "d/res/res_hami1.h"
+#include "res/Object/Hami1.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -74,7 +74,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000000F4-00000244       .text CreateHeap__11daAmiProp_cFv */
 BOOL daAmiProp_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(daAmiProp_c::m_arcname, HAMI1_BDL_HAMI1);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(daAmiProp_c::m_arcname, dRes_INDEX_HAMI1_BDL_HAMI1_e);
     JUT_ASSERT(DEMO_SELECT(250, 255), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -87,7 +87,7 @@ BOOL daAmiProp_c::CreateHeap() {
 
     mpBgW = new dBgW();
     if (mpBgW != NULL) {
-        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(daAmiProp_c::m_arcname, HAMI1_DZB_HAMI1);
+        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(daAmiProp_c::m_arcname, dRes_INDEX_HAMI1_DZB_HAMI1_e);
         if (mpBgW->Set(dzb, cBgW::MOVE_BG_e, &unk_40C) == true) {
             return FALSE;
         }

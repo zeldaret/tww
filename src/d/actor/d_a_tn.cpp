@@ -19,7 +19,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/d_cc_d.h"
 #include "d/d_material.h"
-#include "d/res/res_tn.h"
+#include "res/Object/Tn.h"
 #include "JSystem/JUtility/JUTReport.h"
 
 enum Action {
@@ -850,29 +850,29 @@ static BOOL daTn_player_way_check(tn_class* i_this) {
 
 /* 000035DC-00003664       .text wait_set__FP8tn_class */
 static void wait_set(tn_class* i_this) {
-    anm_init(i_this, TN_BCK_AKYORO1, 15.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-    yoroi_anm_init(i_this, TN_BCK_YKYORO1, 15.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
+    anm_init(i_this, dRes_INDEX_TN_BCK_AKYORO1_e, 15.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+    yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YKYORO1_e, 15.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
     i_this->mCountDownTimers[1] = cM_rndF(30.0f) + 50.0f;
 }
 
 /* 00003664-000036CC       .text walk_set__FP8tn_class */
 static void walk_set(tn_class* i_this) {
-    anm_init(i_this, TN_BCK_AWALK1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, TN_BAS_AWALK1);
-    yoroi_anm_init(i_this, TN_BCK_YWALK1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
+    anm_init(i_this, dRes_INDEX_TN_BCK_AWALK1_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_TN_BAS_AWALK1_e);
+    yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YWALK1_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
 }
 
 /* 000036CC-0000379C       .text fight_run_set__FP8tn_class */
 static void fight_run_set(tn_class* i_this) {
     if (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_BODY_ARMOR) {
-        anm_init(i_this, TN_BCK_AWALK1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.5f, TN_BAS_AWALK1);
-        yoroi_anm_init(i_this, TN_BCK_YWALK1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.5f);
+        anm_init(i_this, dRes_INDEX_TN_BCK_AWALK1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.5f, dRes_INDEX_TN_BAS_AWALK1_e);
+        yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YWALK1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.5f);
     } else {
         if (i_this->m0C34 != 0) {
-            anm_init(i_this, TN_BCK_BRUN1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, TN_BAS_BRUN1);
+            anm_init(i_this, dRes_INDEX_TN_BCK_BRUN1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_TN_BAS_BRUN1_e);
         } else {
-            anm_init(i_this, TN_BCK_BRUN2, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, TN_BAS_BRUN2);
+            anm_init(i_this, dRes_INDEX_TN_BCK_BRUN2_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_TN_BAS_BRUN2_e);
         }
-        yoroi_anm_init(i_this, TN_BCK_YKIHON1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+        yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YKIHON1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
     }
 }
 
@@ -1127,8 +1127,8 @@ static void fight_run(tn_class* i_this) {
     switch (i_this->mDamageReaction.mMode) {
         case -10:
             if (i_this->mCountDownTimers[4] == 0) {
-                anm_init(i_this, TN_BCK_AKIDUKU1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                yoroi_anm_init(i_this, TN_BCK_YKIDUKU1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AKIDUKU1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YKIDUKU1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
                 i_this->mDamageReaction.mMode = -9;
             } else {
                 i_this->mDamageReaction.mMode = 0;
@@ -1173,9 +1173,9 @@ static void fight_run(tn_class* i_this) {
         case 2:
             if (std::fabsf(stickPosX) > 0.1f) {
                 if (i_this->m0C34 != 0) {
-                    anm_init(i_this, TN_BCK_ASURI_LR1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, TN_BAS_ASURI_LR1);
+                    anm_init(i_this, dRes_INDEX_TN_BCK_ASURI_LR1_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_TN_BAS_ASURI_LR1_e);
                 } else {
-                    anm_init(i_this, TN_BCK_BSURI_SLR1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, TN_BAS_BSURI_SLR1);
+                    anm_init(i_this, dRes_INDEX_TN_BCK_BSURI_SLR1_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_TN_BAS_BSURI_SLR1_e);
                 }
                 if (stickPosX > 0.0f) {
                     i_this->mDamageReaction.mMode = 5;
@@ -1184,9 +1184,9 @@ static void fight_run(tn_class* i_this) {
                 }
             } else {
                 if (i_this->m0C34 != 0) {
-                    anm_init(i_this, TN_BCK_ASURI_FB1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, TN_BAS_ASURI_FB1);
+                    anm_init(i_this, dRes_INDEX_TN_BCK_ASURI_FB1_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_TN_BAS_ASURI_FB1_e);
                 } else {
-                    anm_init(i_this, TN_BCK_BSURI_SFB1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, TN_BAS_BSURI_SFB1);
+                    anm_init(i_this, dRes_INDEX_TN_BCK_BSURI_SFB1_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_TN_BAS_BSURI_SFB1_e);
                 }
                 if (i_this->mPlayerDistance < l_tnHIO.m030) {
                     i_this->mDamageReaction.mMode = 4;
@@ -1210,7 +1210,7 @@ static void fight_run(tn_class* i_this) {
                 }
             } else {
                 i_this->mDamageReaction.mMode = 3;
-                anm_init(i_this, TN_BCK_AWALK1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, TN_BAS_AWALK1);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AWALK1_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_TN_BAS_AWALK1_e);
             }
             break;
         case 5:
@@ -1291,9 +1291,9 @@ static void fight_run(tn_class* i_this) {
                     i_this->mDamageReaction.mMode = -0x14;
                     i_this->m03F0 = 10;
                     if (i_this->m0C34 != 0) {
-                        anm_init(i_this, TN_BCK_BBACK1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_BBACK1);
+                        anm_init(i_this, dRes_INDEX_TN_BCK_BBACK1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_BBACK1_e);
                     } else {
-                        anm_init(i_this, TN_BCK_BBACK_S1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_BBACK_S1);
+                        anm_init(i_this, dRes_INDEX_TN_BCK_BBACK_S1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_BBACK_S1_e);
                     }
                     actor->speedF = REG0_F(3) + -60.0f;
                     actor->speed.y = REG0_F(4) + 80.0f;
@@ -1447,11 +1447,11 @@ static void fight(tn_class* i_this) {
             if (i_this->mpBodyMorf->isStop()) {
                 if (cM_rndF(1.0f) < 0.5f) {
                     if (i_this->m0C34 != 0) {
-                        anm_init(i_this, TN_BCK_BAT_JUMP1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_BAT_JUMP1);
+                        anm_init(i_this, dRes_INDEX_TN_BCK_BAT_JUMP1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_BAT_JUMP1_e);
                         i_this->m0C48 = 4;
                         fopAcM_monsSeStart(actor, JA_SE_CV_TN_JUMP, 0);
                     } else {
-                        anm_init(i_this, TN_BCK_BAT_KERI1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_BAT_KERI1);
+                        anm_init(i_this, dRes_INDEX_TN_BCK_BAT_KERI1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_BAT_KERI1_e);
                         i_this->m0C48 = 3;
                         i_this->m0C67 = 1;
                     }
@@ -1471,29 +1471,29 @@ static void fight(tn_class* i_this) {
             if (i_this->m0C34 != 0) {
                 if (cM_rndF(100.0f) < l_tnHIO.m078) {
                     if (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_BODY_ARMOR) {
-                        anm_init(i_this, TN_BCK_AAT_TATE1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_AAT_TATE1);
+                        anm_init(i_this, dRes_INDEX_TN_BCK_AAT_TATE1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_AAT_TATE1_e);
                     } else {
-                        anm_init(i_this, TN_BCK_BAT_TATE1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_BAT_TATE1);
+                        anm_init(i_this, dRes_INDEX_TN_BCK_BAT_TATE1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_BAT_TATE1_e);
                     }
-                    yoroi_anm_init(i_this, TN_BCK_YAT_TATE1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+                    yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YAT_TATE1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
                     i_this->m0C48 = 0;
                 } else {
                     if (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_BODY_ARMOR) {
-                        anm_init(i_this, TN_BCK_AAT_YOKO1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_AAT_YOKO1);
+                        anm_init(i_this, dRes_INDEX_TN_BCK_AAT_YOKO1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_AAT_YOKO1_e);
                     } else {
-                        anm_init(i_this, TN_BCK_BAT_YOKO1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_BAT_YOKO1);
+                        anm_init(i_this, dRes_INDEX_TN_BCK_BAT_YOKO1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_BAT_YOKO1_e);
                     }
-                    yoroi_anm_init(i_this, TN_BCK_YAT_YOKO1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+                    yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YAT_YOKO1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
                     i_this->m0C48 = 1;
                     fopAcM_monsSeStart(actor, JA_SE_CV_TN_KAMAE_S, 0);
                 }
             } else {
                 if (cM_rndF(100.0f) < l_tnHIO.m07C || (i_this->mRemainingEquipmentPieces & EQUIPMENT_PIECE_BODY_ARMOR)) {
-                    anm_init(i_this, TN_BCK_BAT_SYOUTEI_S1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_BAT_SYOUTEI_S1);
+                    anm_init(i_this, dRes_INDEX_TN_BCK_BAT_SYOUTEI_S1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_BAT_SYOUTEI_S1_e);
                     i_this->m0C48 = 2;
                     fopAcM_monsSeStart(actor, JA_SE_CV_TN_PUNCH_S, 0);
                 } else {
-                    anm_init(i_this, TN_BCK_BAT_KERI1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_BAT_KERI1);
+                    anm_init(i_this, dRes_INDEX_TN_BCK_BAT_KERI1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_BAT_KERI1_e);
                     i_this->m0C48 = 3;
                     fopAcM_monsSeStart(actor, JA_SE_CV_TN_KICK, 0);
                 }
@@ -1579,8 +1579,8 @@ static void fight(tn_class* i_this) {
                     i_this->mpBodyMorf->setPlaySpeed(-1.0f);
                     i_this->m0C66 = -1;
                     i_this->mpBodyMorf->play(&actor->eyePos, 0, 0);
-                    anm_init(i_this, TN_BCK_AHAJIKI1, REG0_F(4) + 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_AHAJIKI1);
-                    yoroi_anm_init(i_this, TN_BCK_YHAJIKI1, REG0_F(4) + 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+                    anm_init(i_this, dRes_INDEX_TN_BCK_AHAJIKI1_e, REG0_F(4) + 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_AHAJIKI1_e);
+                    yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YHAJIKI1_e, REG0_F(4) + 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
                 }
                 if (i_this->mpBodyMorf->getFrame() < 10.0f) {
                     i_this->mDamageReaction.m4D0 = i_this->mTargetAngle;
@@ -1597,7 +1597,7 @@ static void fight(tn_class* i_this) {
             fopAcM_monsSeStart(actor, JA_SE_CV_TN_KAMAE_L, 0);
         case 12:
             if (std::fabsf(f31) > 0.1f) {
-                anm_init(i_this, TN_BCK_AAT_KAITEN_LR1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, TN_BAS_AAT_KAITEN_LR1);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AAT_KAITEN_LR1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_TN_BAS_AAT_KAITEN_LR1_e);
                 if (f31 > 0.0f) {
                     i_this->mDamageReaction.mMode = 0xf;
                 } else {
@@ -1605,7 +1605,7 @@ static void fight(tn_class* i_this) {
                 }
             } else {
                 if ((i_this->mPlayerDistance < l_tnHIO.m030 + 25.0f) && (i_this->mPlayerDistance > l_tnHIO.m030 - 25.0f)) {
-                    anm_init(i_this, TN_BCK_AAT_KAITEN1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                    anm_init(i_this, dRes_INDEX_TN_BCK_AAT_KAITEN1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                     i_this->mDamageReaction.mMode = 0x12;
                 } else {
                     if (i_this->mPlayerDistance < l_tnHIO.m030) {
@@ -1613,10 +1613,10 @@ static void fight(tn_class* i_this) {
                     } else {
                         i_this->mDamageReaction.mMode = 0xd;
                     }
-                    anm_init(i_this, TN_BCK_AAT_KAITEN_FB1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, TN_BAS_AAT_KAITEN_FB1);
+                    anm_init(i_this, dRes_INDEX_TN_BCK_AAT_KAITEN_FB1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_TN_BAS_AAT_KAITEN_FB1_e);
                 }
             }
-            yoroi_anm_init(i_this, TN_BCK_YAT_KAITEN1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
+            yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YAT_KAITEN1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
             i_this->mCountDownTimers[1] = cM_rndF(20.0f) + 20.0f;
         case 13:
             cLib_addCalc2(&actor->speedF, l_tnHIO.m05C, 1.0f, 20.0f);
@@ -1644,8 +1644,8 @@ static void fight(tn_class* i_this) {
             if (r27) {
                 r29 = false;
                 i_this->mDamageReaction.mMode = 0x14;
-                anm_init(i_this, TN_BCK_AAT_KAITEN2, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_AAT_KAITEN2);
-                yoroi_anm_init(i_this, TN_BCK_YAT_KAITEN2, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AAT_KAITEN2_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_AAT_KAITEN2_e);
+                yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YAT_KAITEN2_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
                 fopAcM_monsSeStart(actor, JA_SE_CV_TN_ATTACK_L, 0);
             }
             break;
@@ -1654,8 +1654,8 @@ static void fight(tn_class* i_this) {
                 break;
             }
             i_this->mDamageReaction.mMode = 0x15;
-            anm_init(i_this, TN_BCK_AAT_KAITEN3, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, TN_BAS_AAT_KAITEN3);
-            yoroi_anm_init(i_this, TN_BCK_YAT_KAITEN3, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
+            anm_init(i_this, dRes_INDEX_TN_BCK_AAT_KAITEN3_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_TN_BAS_AAT_KAITEN3_e);
+            yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YAT_KAITEN3_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
             i_this->m14F4 = 1;
         case 21:
             actor->speedF = 0.0f;
@@ -1667,8 +1667,8 @@ static void fight(tn_class* i_this) {
             wepon_hit_check(i_this);
             if (!r27) {
                 i_this->mDamageReaction.mMode = 0x16;
-                anm_init(i_this, TN_BCK_AAT_KAITEN4, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_AAT_KAITEN4);
-                yoroi_anm_init(i_this, TN_BCK_YAT_KAITEN4, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AAT_KAITEN4_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_AAT_KAITEN4_e);
+                yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YAT_KAITEN4_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
                 fopAcM_monsSeStart(actor, JA_SE_CV_TN_ATTACK_L, 0);
             }
             if (i_this->mMantPcId != 0xFFFF) {
@@ -1717,8 +1717,8 @@ static void p_lost(tn_class* i_this) {
     switch (i_this->mDamageReaction.mMode) {
         case 0:
             i_this->mDamageReaction.mMode = 1;
-            anm_init(i_this, TN_BCK_AKYORO1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-            yoroi_anm_init(i_this, TN_BCK_YKYORO1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+            anm_init(i_this, dRes_INDEX_TN_BCK_AKYORO1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YKYORO1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
             actor->speedF = 0.0f;
             break;
         case 1:
@@ -1764,8 +1764,8 @@ static void wepon_search(tn_class* i_this) {
             case -1:
                 i_this->mDamageReaction.mMode = 0;
                 i_this->m13FF = 0;
-                anm_init(i_this, TN_BCK_AKIDUKU1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                yoroi_anm_init(i_this, TN_BCK_YKIDUKU1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AKIDUKU1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YKIDUKU1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
                 if (f31 < 900.0f) {
                     i_this->mCountDownTimers[1] = 20;
                 } else {
@@ -1789,7 +1789,7 @@ static void wepon_search(tn_class* i_this) {
                 cLib_addCalcAngleS2(&actor->current.angle.y, i_this->mDamageReaction.m4D0, 4, 0x1000);
                 if (f31 < REG8_F(2) + 150.0f) {
                     i_this->mDamageReaction.mMode = 2;
-                    anm_init(i_this, TN_BCK_BHIROU_K1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_BHIROU_K1);
+                    anm_init(i_this, dRes_INDEX_TN_BCK_BHIROU_K1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_BHIROU_K1_e);
                     i_this->mCountDownTimers[1] = 29;
                 } else if (i_this->m03EA == 0) {
                     i_this->mDamageReaction.mAction = ACTION_FIGHT_RUN;
@@ -1849,7 +1849,7 @@ static void b_nige(tn_class* i_this) {
         switch (i_this->mDamageReaction.mMode) {
             case 0:
                 i_this->mDamageReaction.mMode = 1;
-                anm_init(i_this, TN_BCK_AKIDUKU1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AKIDUKU1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 fopAcM_monsSeStart(actor, JA_SE_CV_TN_FOUND, 0);
                 i_this->mCountDownTimers[1] = 10;
             case 1:
@@ -1858,9 +1858,9 @@ static void b_nige(tn_class* i_this) {
                 if (i_this->mCountDownTimers[1] == 0) {
                     i_this->mDamageReaction.mMode = 2;
                     if (i_this->m0C34 != 0) {
-                        anm_init(i_this, TN_BCK_BBACK1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_BBACK1);
+                        anm_init(i_this, dRes_INDEX_TN_BCK_BBACK1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_BBACK1_e);
                     } else {
-                        anm_init(i_this, TN_BCK_BBACK_S1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_BBACK_S1);
+                        anm_init(i_this, dRes_INDEX_TN_BCK_BBACK_S1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_BBACK_S1_e);
                     }
                     actor->speedF = REG0_F(3) + -60.0f;
                     actor->speed.y = REG0_F(4) + 80.0f;
@@ -1874,9 +1874,9 @@ static void b_nige(tn_class* i_this) {
                         if (std::sqrtf(SQUARE(local_14.x) + SQUARE(local_14.z)) > 800.0f) {
                             i_this->mDamageReaction.mMode = 4;
                             if (i_this->m0C34 != 0) {
-                                anm_init(i_this, TN_BCK_AKAMAE1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                                anm_init(i_this, dRes_INDEX_TN_BCK_AKAMAE1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                             } else {
-                                anm_init(i_this, TN_BCK_BKAMAE_S1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                                anm_init(i_this, dRes_INDEX_TN_BCK_BKAMAE_S1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                             }
                         } else {
                             i_this->mDamageReaction.mMode = 3;
@@ -1891,9 +1891,9 @@ static void b_nige(tn_class* i_this) {
                 if (std::sqrtf(SQUARE(local_14.x) + SQUARE(local_14.z)) > 800.0f) {
                     i_this->mDamageReaction.mMode = 4;
                     if (i_this->m0C34 != 0) {
-                        anm_init(i_this, TN_BCK_AKAMAE1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                        anm_init(i_this, dRes_INDEX_TN_BCK_AKAMAE1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                     } else {
-                        anm_init(i_this, TN_BCK_BKAMAE_S1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                        anm_init(i_this, dRes_INDEX_TN_BCK_BKAMAE_S1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                     }
                 }
                 break;
@@ -1921,13 +1921,13 @@ static void defence(tn_class* i_this) {
         case 0:
             i_this->mDamageReaction.mMode = 1;
             if (i_this->m0C34 != 0) {
-                anm_init(i_this, TN_BCK_AGUARD1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                tate_anm_init(i_this, TN_BCK_AGUARD1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AGUARD1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                tate_anm_init(i_this, dRes_INDEX_TN_BCK_AGUARD1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
             } else {
-                anm_init(i_this, TN_BCK_AGUARD2, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                tate_anm_init(i_this, TN_BCK_AGUARD2, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AGUARD2_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                tate_anm_init(i_this, dRes_INDEX_TN_BCK_AGUARD2_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
             }
-            yoroi_anm_init(i_this, TN_BCK_YGUARD1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+            yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YGUARD1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
         // Fall-through
         case 1:
             actor->speedF = 0.0f;
@@ -1936,7 +1936,7 @@ static void defence(tn_class* i_this) {
                 i_this->mDamageReaction.mAction = ACTION_FIGHT_RUN;
                 i_this->mCountDownTimers[1] = 0;
                 i_this->mDamageReaction.mMode = 0;
-                tate_anm_init(i_this, TN_BCK_ATATE_ON1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
+                tate_anm_init(i_this, dRes_INDEX_TN_BCK_ATATE_ON1_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
             }
             break;
     }
@@ -1957,13 +1957,13 @@ static void hukki(tn_class* i_this) {
     i_this->m03F0 = 2;
     switch (i_this->mDamageReaction.mMode) {
         case 10:
-            anm_init(i_this, TN_BCK_BOKIRU_A1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_BOKIRU_A1);
-            yoroi_anm_init(i_this, TN_BCK_YKIHON1, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+            anm_init(i_this, dRes_INDEX_TN_BCK_BOKIRU_A1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_BOKIRU_A1_e);
+            yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YKIHON1_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
             i_this->mCountDownTimers[2] = 15;
             goto temp_124;
         case 12:
-            anm_init(i_this, TN_BCK_BOKIRU_U1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_BOKIRU_U1);
-            yoroi_anm_init(i_this, TN_BCK_YKIHON1, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+            anm_init(i_this, dRes_INDEX_TN_BCK_BOKIRU_U1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_BOKIRU_U1_e);
+            yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YKIHON1_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
             i_this->mCountDownTimers[2] = REG0_S(5) + 15;
         temp_124:
             actor->speedF = 0.0f;
@@ -2122,8 +2122,8 @@ static void d_mahi(tn_class* i_this) {
     switch (i_this->mDamageReaction.mMode) {
         case 0:
             i_this->mDamageReaction.mMode = 1;
-            anm_init(i_this, TN_BCK_AMAHI1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-            yoroi_anm_init(i_this, TN_BCK_YMAHI1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+            anm_init(i_this, dRes_INDEX_TN_BCK_AMAHI1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YMAHI1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
             i_this->mCountDownTimers[0] = 60;
         // Fall-through
         case 1:
@@ -2152,8 +2152,8 @@ static void d_sit(tn_class* i_this) {
     switch (i_this->mDamageReaction.mMode) {
         case 0:
             i_this->mDamageReaction.mMode = 1;
-            anm_init(i_this, TN_BCK_AHAZURE1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_AHAZURE1);
-            yoroi_anm_init(i_this, TN_BCK_YHAZURE1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+            anm_init(i_this, dRes_INDEX_TN_BCK_AHAZURE1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_AHAZURE1_e);
+            yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YHAZURE1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
         // Fall-through
         case 1:
             actor->speedF = 0.0f;
@@ -2167,8 +2167,8 @@ static void d_sit(tn_class* i_this) {
             break;
         case 10:
             i_this->mDamageReaction.mMode = 0xb;
-            anm_init(i_this, TN_BCK_AKYORO1, 5.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, -1);
-            yoroi_anm_init(i_this, TN_BCK_YKYORO1, 5.0f, J3DFrameCtrl::EMode_LOOP, 2.0f);
+            anm_init(i_this, dRes_INDEX_TN_BCK_AKYORO1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, -1);
+            yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YKYORO1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 2.0f);
             i_this->mCountDownTimers[0] = 55;
         // Fall-through
         case 11:
@@ -2200,11 +2200,11 @@ static void stand(tn_class* i_this) {
         case 0:
             i_this->mDamageReaction.mMode = 1;
             if (i_this->m0C34 != 0) {
-                anm_init(i_this, TN_BCK_ANIOU1, i_this->m151C, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_TN_BCK_ANIOU1_e, i_this->m151C, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             } else {
-                anm_init(i_this, TN_BCK_AWAIT1, i_this->m151C, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AWAIT1_e, i_this->m151C, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
-            yoroi_anm_init(i_this, TN_BCK_YKIHON1, i_this->m151C, J3DFrameCtrl::EMode_NONE, 1.0f);
+            yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YKIHON1_e, i_this->m151C, J3DFrameCtrl::EMode_NONE, 1.0f);
         // Fall-through
         case 1:
             cLib_addCalc2(&actor->current.pos.x, actor->home.pos.x, 0.5f, actor->speed.x * 0.25f);
@@ -2214,10 +2214,10 @@ static void stand(tn_class* i_this) {
             break;
         case 10:
             if (i_this->mCountDownTimers[1] == 30) {
-                anm_init(i_this, TN_BCK_AKIDUKU1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AKIDUKU1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             }
             if (i_this->mCountDownTimers[1] == 0) {
-                anm_init(i_this, TN_BCK_AKYORO1, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AKYORO1_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->mDamageReaction.mMode = 0xb;
                 i_this->mCountDownTimers[3] = cM_rndF(30.0f) + 30.0f;
             }
@@ -2239,7 +2239,7 @@ static void stand(tn_class* i_this) {
             i_this->mDamageReaction.mMode = 0;
             return;
         case 50:
-            anm_init(i_this, TN_BCK_AKYORO1, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_TN_BCK_AKYORO1_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mDamageReaction.mMode++;
             i_this->mCountDownTimers[1] = 50;
         // Fall-through
@@ -2280,7 +2280,7 @@ static void stand(tn_class* i_this) {
                     i_this->mDamageReaction.mMode = 0;
                 } else {
                     i_this->mDamageReaction.mMode = 0x14;
-                    anm_init(i_this, TN_BCK_AKIDUKU1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                    anm_init(i_this, dRes_INDEX_TN_BCK_AKIDUKU1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                     i_this->mCountDownTimers[1] = 30;
                     fopAcM_monsSeStart(actor, JA_SE_CV_TN_FOUND, 0);
                 }
@@ -2309,13 +2309,13 @@ static void d_dozou(tn_class* i_this) {
             i_this->mDamageReaction.mMode = 1;
             i_this->mDamageReaction.mStts.Init(0xFF, 0xFF, actor);
             if (i_this->mRangeOrFrozenAnim == 0) {
-                anm_init(i_this, TN_BCK_AKYORO1, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, -1);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AKYORO1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, -1);
                 i_this->mpBodyMorf->setFrame(41.0f);
             } else {
-                anm_init(i_this, TN_BCK_AAT_YOKO1, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, TN_BAS_AAT_YOKO1);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AAT_YOKO1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, dRes_INDEX_TN_BAS_AAT_YOKO1_e);
                 i_this->mpBodyMorf->setFrame(27.0f);
             }
-            yoroi_anm_init(i_this, TN_BCK_YKIHON1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+            yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YKIHON1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
         // Fall-through
         case 1:
             if ((i_this->mEnableSpawnSwitch != 0xFF && dComIfGs_isSwitch(i_this->mEnableSpawnSwitch, fopAcM_GetRoomNo(actor))) ||
@@ -2348,13 +2348,13 @@ static void s_demo(tn_class* i_this) {
     switch (i_this->mDamageReaction.mMode) {
         case 0:
             i_this->mDamageReaction.mMode = 1;
-            anm_init(i_this, TN_BCK_ANIOU1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-            yoroi_anm_init(i_this, TN_BCK_YKIHON1, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+            anm_init(i_this, dRes_INDEX_TN_BCK_ANIOU1_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YKIHON1_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
         case 1:
             if ((DEMO_SELECT(REG17_S(0), REG0_S(0)) != 0) || (dComIfGs_isSwitch(i_this->mEnableSpawnSwitch, fopAcM_GetRoomNo(actor)))) {
                 mDoAud_bgmAllMute(30);
-                anm_init(i_this, TN_BCK_S_DEMO_M1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, TN_BAS_S_DEMO_M1);
-                yoroi_anm_init(i_this, TN_BCK_S_DEMO_Y1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+                anm_init(i_this, dRes_INDEX_TN_BCK_S_DEMO_M1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_TN_BAS_S_DEMO_M1_e);
+                yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_S_DEMO_Y1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
                 i_this->mDamageReaction.mMode = 2;
             }
             break;
@@ -2431,9 +2431,9 @@ static void s_demo(tn_class* i_this) {
 #else
                     s_check++;
 #endif
-                    anm_init(i_this, TN_BCK_S_DEMO_M2, 3.0f, J3DFrameCtrl::EMode_NONE, 0.0f, TN_BAS_S_DEMO_M2);
-                    yoroi_anm_init(i_this, TN_BCK_S_DEMO_Y2, 3.0f, J3DFrameCtrl::EMode_NONE, 0.0f);
-                    tate_anm_init(i_this, DEMO_SELECT(TN_BCK_ATATE_ON1, TN_BCK_S_DEMO_M2), 3.0f, J3DFrameCtrl::EMode_LOOP, 0.0f);
+                    anm_init(i_this, dRes_INDEX_TN_BCK_S_DEMO_M2_e, 3.0f, J3DFrameCtrl::EMode_NONE, 0.0f, dRes_INDEX_TN_BAS_S_DEMO_M2_e);
+                    yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_S_DEMO_Y2_e, 3.0f, J3DFrameCtrl::EMode_NONE, 0.0f);
+                    tate_anm_init(i_this, DEMO_SELECT(dRes_INDEX_TN_BCK_ATATE_ON1_e, dRes_INDEX_TN_BCK_S_DEMO_M2_e), 3.0f, J3DFrameCtrl::EMode_LOOP, 0.0f);
                     i_this->mDamageReaction.mMode = 0xb;
                 }
                 break;
@@ -2508,7 +2508,7 @@ static void s_demo(tn_class* i_this) {
 #if VERSION == VERSION_DEMO
                 i_this->m0414_demo = 0;
 #else
-                tate_anm_init(i_this, TN_BCK_ATATE_ON1, 20.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
+                tate_anm_init(i_this, dRes_INDEX_TN_BCK_ATATE_ON1_e, 20.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
 #endif
             }
             if (i_this->mpBodyMorf->isStop()) {
@@ -2520,12 +2520,12 @@ static void s_demo(tn_class* i_this) {
             break;
         case 0x14:
             i_this->mDamageReaction.mMode = 0x15;
-            anm_init(i_this, TN_BCK_ANIOU1, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-            yoroi_anm_init(i_this, TN_BCK_YKIHON1, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+            anm_init(i_this, dRes_INDEX_TN_BCK_ANIOU1_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YKIHON1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
             i_this->mCountDownTimers[0] = 30;
         case 0x15:
             if (i_this->mCountDownTimers[0] == 0) {
-                anm_init(i_this, TN_BCK_AKAMAE1, 15.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_TN_BCK_AKAMAE1_e, 15.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->mCountDownTimers[0] = 30;
                 i_this->mDamageReaction.mMode = 0x16;
                 fopAcM_monsSeStart(actor, JA_SE_CV_TN_KAMAE_L, 0);
@@ -2867,9 +2867,9 @@ static u8 damage_check(tn_class* i_this) {
                     i_this->mDamageReaction.mAction = ACTION_JYUNKAI;
                     i_this->mDamageReaction.mMode = -10;
                     r25 = 1;
-                    anm_init(i_this, TN_BCK_AHAKAI1, 5.0f, J3DFrameCtrl::EMode_NONE, 0.0f, -1);
-                    tate_anm_init(i_this, TN_BCK_AHAKAI1, 5.0f, J3DFrameCtrl::EMode_NONE, 0.0f);
-                    yoroi_anm_init(i_this, TN_BCK_YHAKAI1, 5.0f, J3DFrameCtrl::EMode_NONE, 0.0f);
+                    anm_init(i_this, dRes_INDEX_TN_BCK_AHAKAI1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 0.0f, -1);
+                    tate_anm_init(i_this, dRes_INDEX_TN_BCK_AHAKAI1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 0.0f);
+                    yoroi_anm_init(i_this, dRes_INDEX_TN_BCK_YHAKAI1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 0.0f);
                 }
             } else {
                 i_this->mEnemyIce.mLightShrinkTimer = 1;
@@ -3095,7 +3095,7 @@ static u8 damage_check(tn_class* i_this) {
             i_this->mDamageReaction.m424 |= 0x20;
             i_this->mDamageReaction.m428 = 23.0f;
             cMtx_YrotS(*calc_mtx, i_this->mTargetAngle);
-            anm_init(i_this, TN_BCK_BDOWN_A1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_TN_BCK_BDOWN_A1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mDamageReaction.m48A = 10;
             i_this->mDamageReaction.m474 = 5000.0f;
             i_this->mDamageReaction.m70E = 7;
@@ -3453,7 +3453,7 @@ static BOOL daTn_Execute(tn_class* i_this) {
         if (i_this->mEnemyIce.mFreezeTimer == 1) {
             path_check(i_this);
             wait_set(i_this);
-            tate_anm_init(i_this, TN_BCK_ATATE_ON1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
+            tate_anm_init(i_this, dRes_INDEX_TN_BCK_ATATE_ON1_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
         }
         return TRUE;
     }
@@ -3553,14 +3553,14 @@ static BOOL daTn_Execute(tn_class* i_this) {
         i_this->m1408 = fpcM_ERROR_PROCESS_ID_e;
         switch (r3) {
             case 1:
-                anm_init(i_this, TN_BCK_BDOWN_A1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_TN_BCK_BDOWN_A1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 if (i_this->m0C34 != 0 && (actor->health <= 0 || r25 >= 4 || cM_rndF(1.0f) < 0.5f)) {
                     i_this->m0C38 = 1;
                 }
                 i_this->mDamageReaction.mAction = ACTION_JYUNKAI;
                 break;
             case 2:
-                anm_init(i_this, TN_BCK_BDOWN_U1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_TN_BCK_BDOWN_U1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 break;
             case 5:
                 if (i_this->mDamageReaction.mAction != ACTION_FIGHT_RUN && i_this->mDamageReaction.mAction != ACTION_HUKKI) {
@@ -3591,7 +3591,7 @@ static BOOL daTn_Execute(tn_class* i_this) {
                 i_this->mDamageReaction.m4C8[2] = l_tnHIO.m080;
                 break;
             case 0x1e:
-                anm_init(i_this, TN_BCK_BDOWN_U1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_TN_BCK_BDOWN_U1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 if (i_this->m0C34 != 0) {
                     i_this->m0C38 = 1;
                 }
@@ -3870,20 +3870,20 @@ static BOOL useArrowHeapInit(fopAc_ac_c* a_this) {
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
     static u16 part_bmd[] = {
         0,
-        TN_BMD_TN_KABUTO1, // Regular Darknut helmet
-        TN_BMD_TN_TATE1    // Shield
+        dRes_INDEX_TN_BMD_TN_KABUTO1_e, // Regular Darknut helmet
+        dRes_INDEX_TN_BMD_TN_TATE1_e    // Shield
     };
-    static u16 part_brk[] = {TN_BRK_TN_YOROI1, TN_BRK_TN_KABUTO1, TN_BRK_TN_TATE1};
+    static u16 part_brk[] = {dRes_INDEX_TN_BRK_TN_YOROI1_e, dRes_INDEX_TN_BRK_TN_KABUTO1_e, dRes_INDEX_TN_BRK_TN_TATE1_e};
 
     tn_class* i_this = (tn_class*)a_this;
     J3DModelData* modelData;
     J3DModel* model;
 
     i_this->mpBodyMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Tn", TN_BMD_TN_MAIN),
+        (J3DModelData*)dComIfG_getObjectRes("Tn", dRes_INDEX_TN_BMD_TN_MAIN_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Tn", TN_BCK_ANIOU1),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Tn", dRes_INDEX_TN_BCK_ANIOU1_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -3909,10 +3909,10 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         }
     }
     i_this->mpShieldMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Tn", TN_BMD_TN_MAIN),
+        (J3DModelData*)dComIfG_getObjectRes("Tn", dRes_INDEX_TN_BMD_TN_MAIN_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Tn", TN_BCK_ATATE_ON1),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Tn", dRes_INDEX_TN_BCK_ATATE_ON1_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -3931,7 +3931,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
     if (!i_this->mpBrkAnm->init(
             i_this->mpBodyMorf->getModel()->getModelData(),
-            (J3DAnmTevRegKey*)dComIfG_getObjectRes("Tn", TN_BRK_TN_MAIN),
+            (J3DAnmTevRegKey*)dComIfG_getObjectRes("Tn", dRes_INDEX_TN_BRK_TN_MAIN_e),
             true,
             J3DFrameCtrl::EMode_LOOP
         ))
@@ -3941,10 +3941,10 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     for (s32 i = 0; i < ARRAY_SSIZE(i_this->mParts); i++) {
         if (i == 0) {
             i_this->mpArmorMorf = new mDoExt_McaMorf(
-                (J3DModelData*)dComIfG_getObjectRes("Tn", TN_BMD_TN_YOROI1), // Body armor
+                (J3DModelData*)dComIfG_getObjectRes("Tn", dRes_INDEX_TN_BMD_TN_YOROI1_e), // Body armor
                 NULL,
                 NULL,
-                (J3DAnmTransformKey*)dComIfG_getObjectRes("Tn", TN_BCK_YKIHON1),
+                (J3DAnmTransformKey*)dComIfG_getObjectRes("Tn", dRes_INDEX_TN_BCK_YKIHON1_e),
                 J3DFrameCtrl::EMode_LOOP,
                 1.0f,
                 0,
@@ -3957,7 +3957,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             i_this->mParts[i].mpPartModel = i_this->mpArmorMorf->getModel();
         } else {
             if (i == 1 && (i_this->mEquipmentType & EQUIPMENT_HELMET)) {
-                modelData = (J3DModelData*)dComIfG_getObjectRes("Tn", TN_BMD_TN_KABUTO2); // Mighty Darknut helmet
+                modelData = (J3DModelData*)dComIfG_getObjectRes("Tn", dRes_INDEX_TN_BMD_TN_KABUTO2_e); // Mighty Darknut helmet
             } else {
                 modelData = (J3DModelData*)dComIfG_getObjectRes("Tn", part_bmd[i]);
             }
@@ -3974,7 +3974,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             if (i == 1 && (i_this->mEquipmentType & EQUIPMENT_HELMET)) {
                 if (!i_this->mParts[i].mpPartBrkAnm->init(
                         i_this->mParts[i].mpPartModel->getModelData(),
-                        (J3DAnmTevRegKey*)dComIfG_getObjectRes("Tn", TN_BRK_TN_KABUTO2),
+                        (J3DAnmTevRegKey*)dComIfG_getObjectRes("Tn", dRes_INDEX_TN_BRK_TN_KABUTO2_e),
                         true,
                         J3DFrameCtrl::EMode_NONE
                     ))

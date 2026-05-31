@@ -1,0 +1,22 @@
+#ifndef RES_HAMI1_H
+#define RES_HAMI1_H
+
+enum dRes_INDEX_HAMI1 {
+    /* BDL  */
+    dRes_INDEX_HAMI1_BDL_HAMI1_e=0x4,
+    /* DZB  */
+    dRes_INDEX_HAMI1_DZB_HAMI1_e=0x7,
+};
+
+enum dRes_ID_HAMI1 {
+    /* BDL  */
+    dRes_ID_HAMI1_BDL_HAMI1_e=0x4,
+    /* DZB  */
+    dRes_ID_HAMI1_DZB_HAMI1_e=0x7,
+};
+
+enum HAMI1_JNT {
+    HAMI1_JNT_POLYSURFACE1928_e=0x0,
+};
+
+#endif /* !RES_HAMI1_H */

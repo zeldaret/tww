@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bita.h"
-#include "d/res/res_bita.h"
+#include "res/Object/Bita.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_bg_s_movebg_actor.h"
@@ -17,10 +17,10 @@
 
 static btd_class* btd = NULL;
 
-static u32 ita_bmd[]    = { BITA_BDL_MBIT1, BITA_BDL_MBIT2 };
-static u32 ita_dzb[]    = { BITA_DZB_MBIT1, BITA_DZB_MBIT2 };
-static u32 ita_Ef_bmd[] = { BITA_BDL_EF_BTDITA0, BITA_BDL_EF_BTDITA1 };
-static u32 ita_Ef[]     = { BITA_BRK_EF_BTDITA0, BITA_BRK_EF_BTDITA1 };
+static u32 ita_bmd[]    = { dRes_INDEX_BITA_BDL_MBIT1_e, dRes_INDEX_BITA_BDL_MBIT2_e };
+static u32 ita_dzb[]    = { dRes_INDEX_BITA_DZB_MBIT1_e, dRes_INDEX_BITA_DZB_MBIT2_e };
+static u32 ita_Ef_bmd[] = { dRes_INDEX_BITA_BDL_EF_BTDITA0_e, dRes_INDEX_BITA_BDL_EF_BTDITA1_e };
+static u32 ita_Ef[]     = { dRes_INDEX_BITA_BRK_EF_BTDITA0_e, dRes_INDEX_BITA_BRK_EF_BTDITA1_e };
 
 /* 00000078-000000C4       .text b_a_sub__FPvPv */
 static void* b_a_sub(void* search, void* user) {

@@ -8,7 +8,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_obj_barrel2.h"
-#include "d/res/res_always.h"
+#include "res/Object/Always.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_wtr_chk.h"
 
@@ -334,8 +334,8 @@ void daComing3::Act_c::eff_break_tsubo() {
 
     J3DAnmTexPattern* texPattern;
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPM_TUBO);
-    texPattern = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", ALWAYS_BTP_MPM_TUBO);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_MPM_TUBO_e);
+    texPattern = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTP_MPM_TUBO_e);
     
     JPABaseEmitter* baseEmitter = (JPABaseEmitter*)dComIfGp_particle_set(dPa_name::ID_AK_JN_M_TUBOHAHEN, &sp1C, NULL, &sp34);
     if (baseEmitter != NULL) {
@@ -422,7 +422,7 @@ BOOL daComing3::Act_c::solidHeapCB(fopAc_ac_c* a_this) {
 
 /* 00001804-000018CC       .text create_heap__Q29daComing35Act_cFv */
 bool daComing3::Act_c::create_heap() {
-    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, ALWAYS_BDL_OBM_KOTUBO1);
+    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_ALWAYS_BDL_OBM_KOTUBO1_e);
     JUT_ASSERT(846, mdl_data != NULL);
 
     unk_440 = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
