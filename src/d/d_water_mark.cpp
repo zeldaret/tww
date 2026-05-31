@@ -148,16 +148,16 @@ cPhs_State dWaterMark_c::create() {
             this->mpHeap = heap;
             
             if (this->mpHeap) {
-                J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Always", ALWAYS_BDL_MPA_SIMI));
+                J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_MPA_SIMI_e));
                 JUT_ASSERT(0x130, modelData != NULL);
                 
                 J3DModel* model = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020022);
                 this->mpModel = model;
 
-                J3DAnmTevRegKey* reg_key = (J3DAnmTevRegKey*) dComIfG_getObjectRes("Always", ALWAYS_BRK_MPA_SIMI);
+                J3DAnmTevRegKey* reg_key = (J3DAnmTevRegKey*) dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BRK_MPA_SIMI_e);
                 s32 uVar7 = this->mBrkAnm.init(modelData, reg_key, TRUE, J3DFrameCtrl::EMode_NONE);
 
-                J3DAnmTexPattern* tex_pattern = (J3DAnmTexPattern*) dComIfG_getObjectRes("Always", ALWAYS_BTP_MPA_SIMI);
+                J3DAnmTexPattern* tex_pattern = (J3DAnmTexPattern*) dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTP_MPA_SIMI_e);
                 s32 uVar9 = this->mBtpAnm.init(modelData, tex_pattern, FALSE, J3DFrameCtrl::EMode_NONE);
                 
                 bVar = (uVar7 & uVar9);
