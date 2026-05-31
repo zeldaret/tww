@@ -10,7 +10,7 @@
 #include "d/d_priority.h"
 
 const char daSTBox_c::m_arc_name[] = "Salvage";
-const u16 daSTBox_c::m_heapsize[] = {0x5000, 0x5000, 0x5000};
+const s16 daSTBox_c::m_heapsize[3] = {0x5000, 0x5000, 0x5000};
 const s16 daSTBox_c::m_bdlidx[3] = { 4, 3, 3 };
 const f32 daSTBox_c::m_rope_max_length = 2500.0f;
 const u8 daSTBox_c::m_shadow_alpha = 0x78;
@@ -98,8 +98,8 @@ cPhs_State daSTBox_c::_create() {
         } else {
             CreateInit();
         }
-        return cPhs_COMPLEATE_e;
     }
+    return phs_state;
 }
 
 /* 00000BFC-00000C7C       .text set_mtx__9daSTBox_cFv */

@@ -41,8 +41,7 @@ public:
     s32 actWaitGetItem(int);
     s32 actWaitDummy(int);
 
-    // static const dCcD_SrcSph m_sph_src;
-    static const u16 m_heapsize[3];
+    static const s16 m_heapsize[3];
     static const char m_arc_name[];
     static const f32 m_rope_max_length;
     static const s16 m_bdlidx[3];
@@ -63,8 +62,7 @@ public:
     /* 0x2C8 */ f32 field_0x2C8;
     /* 0x2CC */ f32 field_0x2CC;
     /* 0x2D0 */ f32 field_0x2D0;
-    /* 0x2D4 */ JGeometry::TVec3<f32> mpVec;
-    /* 0x2E0 */ u8 field_0x2E0[0x2F8 - 0x2E0];
+    /* 0x2D4 */ JGeometry::TVec3<f32> field_0x2D4[3];
     /* 0x2F8 */ f32 field_0x2F8;
     /* 0x2FC */ f32 field_0x2FC;
     /* 0x300 */ f32 field_0x300;
@@ -88,5 +86,4 @@ public:
     /* 0x337 */ u8 field_0x337[0x338 - 0x337];
     /* 0x338 */ s32 field_0x338;
 };  // Size: 0x33C
-
 #endif /* D_A_SALVAGE_TBOX_H */
