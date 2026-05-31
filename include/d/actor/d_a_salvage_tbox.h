@@ -7,17 +7,52 @@
 class daSTBox_shadowEcallBack_c : public dPa_levelEcallBack {
 public:
     void deleteCallBack() {}
-    void getEmitter() {}
-    void setDepth(float) {}
-    void setIndirectTexData(float, float) {}
-    void setPos(cXyz&) {}
-    void setWaterFlatY(float) {}
-    void setWaterY(float) {}
-    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {}
+    JPABaseEmitter* getEmitter() { return mpEmitter; }
+    void setDepth(float depth) { mpDepth = depth; }
+    void setIndirectTexData(f32 exTransY, f32 exScaleY) { mExTransY = exTransY; mExScaleY = exScaleY; }
+    void setPos(cXyz& pos) { mpPos = &pos; }
+    void setWaterFlatY(float waterFlatY) { mpWaterFlatY = waterFlatY; }
+    void setWaterY(float waterY) { mpWaterY = waterY; }
+    void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz* angle, signed char) { 
+        mpWaterFlatY = 0;
+        mpAngle = angle;
+        mpEmitter = emitter; 
+    }
 
     void getMaxWaterY(JGeometry::TVec3<f32>*);
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
+
+    // TODO: Fields below are a nudge in the right direction
+    // /* 0x2C1 */ u8 field_0x2C1[0x2C8 - 0x2C1];
+    // /* 0x2C8 */ f32 field_0x2C8;
+    // /* 0x2CC */ f32 field_0x2CC;
+    // /* 0x2D0 */ f32 field_0x2D0;
+    // /* 0x2D4 */ JGeometry::TVec3<f32> field_0x2D4[3];
+    // /* 0x2F8 */ f32 field_0x2F8;
+    // /* 0x2FC */ f32 field_0x2FC;
+    // /* 0x300 */ f32 field_0x300;
+    // /* 0x304 */ u8 field_0x304[0x308 - 0x304];
+    // /* 0x308 */ f32 field_0x308;
+    // /* 0x30C */ f32 field_0x30C;
+    // /* 0x310 */ u8 field_0x310[0x314 - 0x310];
+    // /* 0x314 */ s32 field_0x314;
+
+    private:
+    /* 0x04 */ s16 mpWaterFlatY;
+    /* 0x08 */ f32 mpWaterY;
+    /* 0x0C */ JGeometry::TVec3<f32> mPos[3];
+    /* 0x18 */ const cXyz* mpPos;
+    f32 mExTransY;
+    f32 mExScaleY;
+    f32 mVel;
+    f32 mMinVel;
+    /* 0x44 */ const csXyz* mpAngle;
+    f32 mpDepth;
+    f32 bliz;
+    f32 blaz;
+    /* 0x54 */ JPABaseEmitter* mpEmitter;
+
 };
 
 class daSTBox_c : public fopAc_ac_c {
@@ -58,19 +93,22 @@ public:
     /* 0x2A8 */ u8 field_0x2A8[0x2AC - 0x2A8];
     /* 0x2AC */ dPa_rippleEcallBack mRippleCallBack;
     /* 0x2C0 */ daSTBox_shadowEcallBack_c field_0x2C0;
-    /* 0x2C1 */ u8 field_0x2C1[0x2C8 - 0x2C1];
-    /* 0x2C8 */ f32 field_0x2C8;
-    /* 0x2CC */ f32 field_0x2CC;
-    /* 0x2D0 */ f32 field_0x2D0;
-    /* 0x2D4 */ JGeometry::TVec3<f32> field_0x2D4[3];
-    /* 0x2F8 */ f32 field_0x2F8;
-    /* 0x2FC */ f32 field_0x2FC;
-    /* 0x300 */ f32 field_0x300;
-    /* 0x304 */ u8 field_0x304[0x308 - 0x304];
-    /* 0x308 */ f32 field_0x308;
-    /* 0x30C */ f32 field_0x30C;
-    /* 0x310 */ u8 field_0x310[0x314 - 0x310];
-    /* 0x314 */ s32 field_0x314;
+
+    // Moved to shadowEcallBack
+    // /* 0x2C1 */ u8 field_0x2C1[0x2C8 - 0x2C1];
+    // /* 0x2C8 */ f32 field_0x2C8;
+    // /* 0x2CC */ f32 field_0x2CC;
+    // /* 0x2D0 */ f32 field_0x2D0;
+    // /* 0x2D4 */ JGeometry::TVec3<f32> field_0x2D4[3];
+    // /* 0x2F8 */ f32 field_0x2F8;
+    // /* 0x2FC */ f32 field_0x2FC;
+    // /* 0x300 */ f32 field_0x300;
+    // /* 0x304 */ u8 field_0x304[0x308 - 0x304];
+    // /* 0x308 */ f32 field_0x308;
+    // /* 0x30C */ f32 field_0x30C;
+    // /* 0x310 */ u8 field_0x310[0x314 - 0x310];
+    // /* 0x314 */ s32 field_0x314;
+
     /* 0x318 */ f32 field_0x318;
     /* 0x31C */ f32 field_0x31C;
     /* 0x320 */ f32 field_0x320;

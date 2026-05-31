@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_salvage_tbox.h"
+#include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -24,8 +25,22 @@ const f32 crane_offset[] = {80.0f, 125.0f, 125.0f};
 
 
 /* 00000078-00000128       .text getMaxWaterY__25daSTBox_shadowEcallBack_cFPQ29JGeometry8TVec3<f> */
-void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>*) {
+void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>* shipPos) {
     /* Nonmatching */
+    if (daSea_ChkArea(shipPos->x, shipPos->z)) {
+        shipPos->y = daSea_calcWave(shipPos->x, shipPos->z);
+        if (mpWaterY > shipPos->y) {
+            shipPos->y = mpWaterY;
+        }
+    }
+    else {
+        if (mpWaterY != -G_CM3D_F_INF) {
+            shipPos->y = mpWaterY;
+        }
+        else {
+            shipPos->y = mpWaterY;
+        }
+    }
 }
 
 /* 00000128-000002F4       .text execute__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
