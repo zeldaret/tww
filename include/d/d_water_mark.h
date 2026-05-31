@@ -30,11 +30,11 @@ public:
     /* 0x0FC */ J3DModel* mpModel;
     /* 0x100 */ mDoExt_brkAnm mBrkAnm;
     /* 0x118 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x12C */ s16 sh1;
-    /* 0x12E */ s16 sh2;
-    /* 0x130 */ s16 sh3;
-    /* 0x132 */ s16 sh4;
-    /* 0x134 */ s16 sh5;
+    /* 0x12C */ s16 field5_0x12c;
+    /* 0x12E */ s16 field6_0x12e;
+    /* 0x130 */ s16 field7_0x130;
+    /* 0x132 */ s16 field8_0x132;
+    /* 0x134 */ s16 field9_0x134;
 };
 
 #endif /* D_WATER_MARK_H */

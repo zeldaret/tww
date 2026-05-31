@@ -44,7 +44,7 @@ BOOL dWaterMark_c::setMatrix() {
     this->mPos.y = ((cBgS *)&g_dComIfG_gameInfo.play)->GroundCross(&m_ground_check);
     if (this->mPos.y != -1e+09f) {
         cM3dGPla* pcVar4 = ((cBgS *)&g_dComIfG_gameInfo.play)->GetTriPla(m_ground_check.GetBgIndex(), m_ground_check.GetPolyIndex());
-        s16 sVar2 = cM_atan2s(pcVar4->mNormal.x, pcVar4->mNormal.z) - this->sh2;
+        s16 sVar2 = cM_atan2s(pcVar4->mNormal.x, pcVar4->mNormal.z) - this->field6_0x12e;
         
         cXyz local_54(pcVar4->mNormal.x, 0.0f, pcVar4->mNormal.z);
         f32 mag = std::sqrtf(PSVECSquareMag(&local_54));
@@ -52,7 +52,7 @@ BOOL dWaterMark_c::setMatrix() {
         PSMTXTrans(mDoMtx_stack_c::now, this->mPos.x, this->mPos.y + 0.1f, this->mPos.z);
         
         sVar5 = cM_atan2s(mag * -jmaSinTable[((u16) sVar2 >> jmaSinShift)], pcVar4->mNormal.y);
-        sVar1 = this->sh2;
+        sVar1 = this->field6_0x12e;
         s16 sVar6 = cM_atan2s(mag * jmaCosTable[(u16) sVar2 >> jmaSinShift], pcVar4->mNormal.y);
         
         mDoMtx_ZXYrotM(mDoMtx_stack_c::now, sVar6, sVar1, sVar5);
@@ -62,9 +62,9 @@ BOOL dWaterMark_c::setMatrix() {
 
         bool bVar8 = dComIfG_Bgsp()->ChkMoveBG(m_ground_check);
         if (bVar8) {
-            this->sh1 = 1;
+            this->field5_0x12c = 1;
         } else {
-            this->sh1 = 0;
+            this->field5_0x12c = 0;
         }
     } else {
         return 0;
@@ -78,26 +78,26 @@ BOOL dWaterMark_c::execute() {
 
 /* 8023DE2C-8023DF24       .text dWaterMark_Execute__FP12dWaterMark_c */
 static BOOL dWaterMark_Execute(dWaterMark_c* i_this) {   
-    if (i_this->sh5 != -1) {
-        if (i_this->sh3 < i_this->sh4) {
-            if (i_this->sh3 <= dWaterMark_c::m_player_foot_now_id && i_this->sh4 > dWaterMark_c::m_player_foot_now_id) {
-                i_this->sh5 = -1;
+    if (i_this->field9_0x134 != -1) {
+        if (i_this->field7_0x130 < i_this->field8_0x132) {
+            if (i_this->field7_0x130 <= dWaterMark_c::m_player_foot_now_id && i_this->field8_0x132 > dWaterMark_c::m_player_foot_now_id) {
+                i_this->field9_0x134 = -1;
             }
         } else {
-            if (i_this->sh3 <= dWaterMark_c::m_player_foot_now_id || i_this->sh4 > dWaterMark_c::m_player_foot_now_id) {
-                i_this->sh5 = -1;
+            if (i_this->field7_0x130 <= dWaterMark_c::m_player_foot_now_id || i_this->field8_0x132 > dWaterMark_c::m_player_foot_now_id) {
+                i_this->field9_0x134 = -1;
             }
         }
     }
 
-    if (i_this->sh5 == -1) i_this->mBrkAnm.play();
+    if (i_this->field9_0x134 == -1) i_this->mBrkAnm.play();
 
     bool stopped = (i_this->mBrkAnm.getFrameCtrl()->getState() & 1) || 
             (i_this->mBrkAnm.getFrameCtrl()->getRate() == 0.0f);
     
     if (stopped) {
         fopKyM_Delete(i_this);
-    } else if ((i_this->sh1 == 0x1) && (!i_this->setMatrix())) {
+    } else if ((i_this->field5_0x12c == 0x1) && (!i_this->setMatrix())) {
         fopKyM_Delete(i_this);
     }
     return TRUE;
@@ -135,7 +135,7 @@ cPhs_State dWaterMark_c::create() {
 
     s32 bVar;
     
-    this->sh2 = this->mParam >> 0x10;
+    this->field6_0x12e = this->mParam >> 0x10;
     this->mParam = this->mParam & 0xffff;
 
     if ((int) this->mParam != 0x0 && (int) this->mParam != 0x1 && (int) this->mParam != 0x2) {
@@ -177,22 +177,22 @@ cPhs_State dWaterMark_c::create() {
                     return cPhs_ERROR_e;
                 } else {
                     if ((int) this->mParam == 0x2) {
-                        this->sh5 = m_player_foot_now_id;
+                        this->field9_0x134 = m_player_foot_now_id;
                         m_player_foot_now_id++;
                         if (m_player_foot_now_id == 0x28) {
                             m_player_foot_now_id = 0;
                         }
-                        this->sh3 = this->sh5 + 0x14;
-                        if (this->sh3 >= 0x28) {
-                            this->sh3 -= 0x28;
+                        this->field7_0x130 = this->field9_0x134 + 0x14;
+                        if (this->field7_0x130 >= 0x28) {
+                            this->field7_0x130 -= 0x28;
                         }
-                        this->sh4 = this->sh3 + 0x14;
-                        if (this->sh4 >= 0x28) {
-                            this->sh4 -= 0x28;
+                        this->field8_0x132 = this->field7_0x130 + 0x14;
+                        if (this->field8_0x132 >= 0x28) {
+                            this->field8_0x132 -= 0x28;
                         }
                         this->mParam = 0;
                     } else {
-                        this->sh5 = -1;
+                        this->field9_0x134 = -1;
                     }
                     return cPhs_COMPLEATE_e;
                 }
