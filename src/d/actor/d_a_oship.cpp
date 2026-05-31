@@ -731,7 +731,7 @@ void daOship_c::modeDelete() {
 #if VERSION > VERSION_DEMO
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_3E80);
 #endif
-                dComIfGp_event_onEventFlag(8);
+                dComIfGp_event_reset();
                 fopAcM_delete(this);
             }
         } else {
