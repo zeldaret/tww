@@ -5,8 +5,11 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_water_mark.h"
-#include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_lib.h"
+
+dBgS_ObjGndChk dWaterMark_c::m_ground_check;
+s16 dWaterMark_c::m_circle_cnt;
+s16 dWaterMark_c::m_player_foot_now_id;
 
 BOOL dWaterMark_c::draw() {
     /* Nonmatching */
@@ -20,18 +23,18 @@ static BOOL dWaterMark_Draw(dWaterMark_c* i_this) {
         return TRUE;
     }
 
-    J3DModelData *data = i_this->mModelInfo.mpModel->getModelData();
-    i_this->mModelInfo.mBrkAnm.entry(data, i_this->mModelInfo.mBrkAnm.getFrameCtrl()->getFrame());
-    i_this->mModelInfo.mBtpAnm.entry(i_this->mModelInfo.mpModel->getModelData(), i_this->mParam);
-    mDoExt_modelUpdateDL(i_this->mModelInfo.mpModel);
+    J3DModelData *data = i_this->mpModel->getModelData();
+    i_this->mBrkAnm.entry(data, i_this->mBrkAnm.getFrameCtrl()->getFrame());
+    i_this->mBtpAnm.entry(i_this->mpModel->getModelData(), i_this->mParam);
+    mDoExt_modelUpdateDL(i_this->mpModel);
 
     return TRUE;
 }
 
 /* 8023DBF8-8023DE2C       .text setMatrix__12dWaterMark_cFv */
-int dWaterMark_c::setMatrix() {
-    short sVar1;
-    short sVar5;
+s32 dWaterMark_c::setMatrix() {
+    s16 sVar1;
+    s16 sVar5;
     
     cXyz pos(this->mPos.x, this->mPos.y + 10.0f, this->mPos.z);
     m_ground_check.m_pos.x = pos.x;
@@ -41,20 +44,20 @@ int dWaterMark_c::setMatrix() {
     this->mPos.y = ((cBgS *)&g_dComIfG_gameInfo.play)->GroundCross(&m_ground_check);
     if (this->mPos.y != -1e+09f) {
         cM3dGPla* pcVar4 = ((cBgS *)&g_dComIfG_gameInfo.play)->GetTriPla(m_ground_check.GetBgIndex(), m_ground_check.GetPolyIndex());
-        short sVar2 = cM_atan2s(pcVar4->mNormal.x, pcVar4->mNormal.z) - this->sh2;
+        s16 sVar2 = cM_atan2s(pcVar4->mNormal.x, pcVar4->mNormal.z) - this->sh2;
         
         cXyz local_54(pcVar4->mNormal.x, 0.0f, pcVar4->mNormal.z);
-        float mag = std::sqrtf(PSVECSquareMag(&local_54));
+        f32 mag = std::sqrtf(PSVECSquareMag(&local_54));
 
         PSMTXTrans(mDoMtx_stack_c::now, this->mPos.x, this->mPos.y + 0.1f, this->mPos.z);
         
         sVar5 = cM_atan2s(mag * -jmaSinTable[((u16) sVar2 >> jmaSinShift)], pcVar4->mNormal.y);
         sVar1 = this->sh2;
-        short sVar6 = cM_atan2s(mag * jmaCosTable[(u16) sVar2 >> jmaSinShift], pcVar4->mNormal.y);
+        s16 sVar6 = cM_atan2s(mag * jmaCosTable[(u16) sVar2 >> jmaSinShift], pcVar4->mNormal.y);
         
         mDoMtx_ZXYrotM(mDoMtx_stack_c::now, sVar6, sVar1, sVar5);
         
-        J3DModel* model = this->mModelInfo.mpModel;
+        J3DModel* model = this->mpModel;
         PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
 
         bool bVar8 = g_dComIfG_gameInfo.play.mBgS.ChkMoveBG(m_ground_check);
@@ -74,25 +77,23 @@ BOOL dWaterMark_c::execute() {
 }
 
 /* 8023DE2C-8023DF24       .text dWaterMark_Execute__FP12dWaterMark_c */
-static BOOL dWaterMark_Execute(dWaterMark_c* i_this) {
-    /* Nonmatching */ 
-      
+static BOOL dWaterMark_Execute(dWaterMark_c* i_this) {   
     if (i_this->sh5 != -1) {
         if (i_this->sh3 < i_this->sh4) {
-            if (i_this->sh3 <= i_this->m_player_foot_now_id && i_this->sh4 > i_this->m_player_foot_now_id) {
+            if (i_this->sh3 <= dWaterMark_c::m_player_foot_now_id && i_this->sh4 > dWaterMark_c::m_player_foot_now_id) {
                 i_this->sh5 = -1;
             }
         } else {
-            if (i_this->sh3 <= i_this->m_player_foot_now_id || i_this->sh4 > i_this->m_player_foot_now_id) {
+            if (i_this->sh3 <= dWaterMark_c::m_player_foot_now_id || i_this->sh4 > dWaterMark_c::m_player_foot_now_id) {
                 i_this->sh5 = -1;
             }
         }
     }
-    // Everything below here is fine
-    if (i_this->sh5 == -1) i_this->mModelInfo.mBrkAnm.play();
 
-    bool stopped = (i_this->mModelInfo.mBrkAnm.getFrameCtrl()->getState() & 1) || 
-            (i_this->mModelInfo.mBrkAnm.getFrameCtrl()->getRate() == 0.0f);
+    if (i_this->sh5 == -1) i_this->mBrkAnm.play();
+
+    bool stopped = (i_this->mBrkAnm.getFrameCtrl()->getState() & 1) || 
+            (i_this->mBrkAnm.getFrameCtrl()->getRate() == 0.0f);
     
     if (stopped) {
         fopKyM_Delete(i_this);
@@ -130,9 +131,10 @@ static cPhs_State dWaterMark_Create(kankyo_class* i_this) {
 
 /* 8023DFA0-8023E29C       .text create__12dWaterMark_cFv */
 cPhs_State dWaterMark_c::create() {
-    /* Nonmatching */
     new (this) dWaterMark_c();
 
+    s32 bVar;
+    
     this->sh2 = this->mParam >> 0x10;
     this->mParam = this->mParam & 0xffff;
 
@@ -144,21 +146,20 @@ cPhs_State dWaterMark_c::create() {
         } else {
             JKRSolidHeap* heap = mDoExt_createSolidHeapFromGameToCurrent(0x12a0, 0x20);
             this->mpHeap = heap;
-            int bVar;
+            
             if (this->mpHeap) {
-                J3DModelData* data = (J3DModelData*) dRes_control_c::getRes("Always", 0x2f, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
-                if (data == NULL) {
-                    long device = JUTAssertion::getSDevice();
-                    JUTAssertion::showAssert(device, "d_water_mark.cpp", 0x130, "modelData != 0");
-                    OSPanic("d_water_mark.cpp", 0x130, "Halt");
-                }
-                J3DModel* model = mDoExt_J3DModel__create(data, 0x80000, 0x11020022);
-                this->mModelInfo.mpModel = model;
+                J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Always", ALWAYS_BDL_MPA_SIMI));
+                JUT_ASSERT(0x130, modelData != NULL);
+                
+                J3DModel* model = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020022);
+                this->mpModel = model;
 
-                J3DAnmTevRegKey* reg_key = (J3DAnmTevRegKey*) dRes_control_c::getRes("Always", 0x4d, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
-                int uVar7 = this->mModelInfo.mBrkAnm.init(data, reg_key, TRUE, 0, 1.0f, 0, -1, false, FALSE);
-                J3DAnmTexPattern* tex_pattern = (J3DAnmTexPattern*) dRes_control_c::getRes("Always", 99, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
-                int uVar9 = this->mModelInfo.mBtpAnm.init(data, tex_pattern, FALSE, 0, 1.0f, 0, -1, false, FALSE);
+                J3DAnmTevRegKey* reg_key = (J3DAnmTevRegKey*) dComIfG_getObjectRes("Always", ALWAYS_BRK_MPA_SIMI);
+                s32 uVar7 = this->mBrkAnm.init(modelData, reg_key, TRUE, 0);
+
+                J3DAnmTexPattern* tex_pattern = (J3DAnmTexPattern*) dComIfG_getObjectRes("Always", ALWAYS_BTP_MPA_SIMI);
+                s32 uVar9 = this->mBtpAnm.init(modelData, tex_pattern, FALSE, 0);
+                
                 bVar = (uVar7 & uVar9);
 
                 mDoExt_restoreCurrentHeap();
@@ -167,11 +168,11 @@ cPhs_State dWaterMark_c::create() {
                 return cPhs_ERROR_e;
             }
                 
-            J3DModel* model2 = this->mModelInfo.mpModel;
+            J3DModel* model2 = this->mpModel;
             if (!model2 || !bVar) {
                 return cPhs_ERROR_e;
             } else {
-                this->mModelInfo.mpModel->setBaseScale(this->mScale);
+                this->mpModel->setBaseScale(this->mScale);
                 if (!this->setMatrix()) {
                     return cPhs_ERROR_e;
                 } else {
