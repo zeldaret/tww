@@ -16,17 +16,16 @@
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
-#include "d/d_procname.h"
 
 /* 80154334-801543A0       .text setHyoiModel__9daPy_lk_cFv */
 void daPy_lk_c::setHyoiModel() {
-    if (mEquipItem == dItem_HYOI_PEAR_e) {
+    if (mEquipItem == dItemNo_HYOI_PEAR_e) {
         return;
     }
     JKRHeap* oldHeap = setItemHeap();
-    initModel(&mpEquipItemModel, LINK_BDL_HYOINOMI, 0x13000022);
+    initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_HYOINOMI_e, 0x13000022);
     mDoExt_setCurrentHeap(oldHeap);
-    mEquipItem = dItem_HYOI_PEAR_e;
+    mEquipItem = dItemNo_HYOI_PEAR_e;
 }
 
 /* 801543A0-801546F4       .text procFoodThrow_init__9daPy_lk_cFv */
@@ -85,7 +84,7 @@ BOOL daPy_lk_c::procFoodThrow_init() {
         }
     }
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
 
     daPy_matAnm_c::offMabaFlg();
     setSingleMoveAnime(
@@ -97,9 +96,9 @@ BOOL daPy_lk_c::procFoodThrow_init() {
     );
     keepItemData();
 
-    if (mDemo.getDemoType() == 5) {
-        mProcVar0.m3570 = 6;
-        dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar0.m3570, 0);
+    if (checkSpecialDemoMode()) {
+        mProcVar6.m3570 = 6;
+        dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar6.m3570, 0);
     }
 
     initShipRideUseItem(temp, 2);
@@ -113,7 +112,7 @@ BOOL daPy_lk_c::procFoodThrow() {
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
     setShipRidePosUseItem();
     if (frameCtrl.getRate() < 0.01f) {
-        if (mDemo.getDemoType() != 5) {
+        if (!checkSpecialDemoMode()) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
         } else {
             dComIfGp_event_reset();
@@ -123,10 +122,10 @@ BOOL daPy_lk_c::procFoodThrow() {
         }
     } else if (frameCtrl.checkPass(8.0f)) {
         seStartOnlyReverb(JA_SE_LK_ESA_THROW);
-        void* esa = fopAcM_fastCreate(PROC_ESA, 0xFFFF0014, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
+        void* esa = fopAcM_fastCreate(fpcNm_ESA_e, 0xFFFF0014, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
         if (esa) {
             m3630 = fopAcM_GetID(esa);
-            if (mDemo.getDemoType() != 5) {
+            if (!checkSpecialDemoMode()) {
                 u8 talkBtn = dComIfGp_event_getTalkXYBtn();
                 if (talkBtn == dTalkBtn_X_e) {
                     dComIfGs_setReserveBaitEmpty(dItemBtn_X_e);
@@ -147,7 +146,7 @@ BOOL daPy_lk_c::procFoodThrow() {
 BOOL daPy_lk_c::procFoodSet_init() {
     if (mCurProc == daPyProc_FOOD_SET_e) {
         if (mDemo.getParam0() == 1) {
-            if (mEquipItem == dItem_HYOI_PEAR_e) {
+            if (mEquipItem == dItemNo_HYOI_PEAR_e) {
                 u8 talkBtn = dComIfGp_event_getTalkXYBtn();
                 if (talkBtn == dTalkBtn_X_e) {
                     dComIfGs_setEquipBottleItemEmpty(dItemBtn_X_e);
@@ -169,14 +168,14 @@ BOOL daPy_lk_c::procFoodSet_init() {
         if (!dComIfGp_event_compulsory(this)) {
             return FALSE;
         }
-        mDemo.setDemoType(5);
+        mDemo.setSpecialDemoType();
     }
 
     int temp = checkShipRideUseItem(1);
     commonProcInit(daPyProc_FOOD_SET_e);
     current.angle.y = shape_angle.y;
 
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     setSingleMoveAnime(
         ANM_SETHYOINOMI,
         m_HIO->mItem.mFood.m.field_0x10,
@@ -187,13 +186,13 @@ BOOL daPy_lk_c::procFoodSet_init() {
     keepItemData();
     setHyoiModel();
 
-    if (mDemo.getDemoType() == 5) {
-        mProcVar0.m3570 = 1;
-        dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar0.m3570, 0);
+    if (checkSpecialDemoMode()) {
+        mProcVar6.m3570 = 1;
+        dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar6.m3570, 0);
     }
 
     initShipRideUseItem(temp, 2);
-    m34D0 = 1 * 30;
+    mProcVar0.m34D0 = 1 * 30;
 
     return TRUE;
 }
@@ -209,19 +208,19 @@ BOOL daPy_lk_c::procFoodSet() {
     }
 
     if (std::abs(frameCtrl.getRate()) < 0.01f) {
-        if (mDemo.getDemoType() != 5) {
+        if (!checkSpecialDemoMode()) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
-        } else if (m34D0 < 0) {
+        } else if (mProcVar0.m34D0 < 0) {
             dComIfGp_event_reset();
             deleteEquipItem(FALSE);
             fpc_ProcID playerPID = fopAcM_GetID(this);
             dCam_getBody()->EndEventCamera(playerPID);
             endDemoMode();
-        } else if (m34D0 == 0) {
-            m34D0 = -1;
+        } else if (mProcVar0.m34D0 == 0) {
+            mProcVar0.m34D0 = -1;
             frameCtrl.setRate(-m_HIO->mItem.mFood.m.field_0x10);
-        } else if (m34D0 > 0) {
-            m34D0--;
+        } else if (mProcVar0.m34D0 > 0) {
+            mProcVar0.m34D0--;
         }
     }
 

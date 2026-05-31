@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mknjd.h"
 #include "d/d_s_play.h" // IWYU pragma: keep
-#include "d/res/res_mknjd.h"
+#include "res/Object/MknjD.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_op/f_op_msg.h"
@@ -14,8 +14,6 @@
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JAZelAudio/JAIZelBasic.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_bg_w.h"
@@ -142,8 +140,8 @@ static BOOL nodeCallBack_Hahen(J3DNode* i_node, int calcTiming) {
 }
 
 /* 000002B0-000002D0       .text daObjMknjD_XyCheckCB__FPvi */
-static s16 daObjMknjD_XyCheckCB(void* i_this, int i_param2) {
-    return static_cast<daObjMknjD::Act_c*>(i_this)->XyCheckCB(i_param2);
+static s16 daObjMknjD_XyCheckCB(void* i_this, int i_itemBtn) {
+    return static_cast<daObjMknjD::Act_c*>(i_this)->XyCheckCB(i_itemBtn);
 }
 
 /* 000002D0-000002F0       .text daObjMknjD_XyEventCB__FPvi */
@@ -153,7 +151,7 @@ static s16 daObjMknjD_XyEventCB(void* i_this, int i_param2) {
 
 /* 000002F0-00000314       .text XyCheckCB__Q210daObjMknjD5Act_cFi */
 s16 daObjMknjD::Act_c::XyCheckCB(int i_itemBtn) {
-    if (dComIfGp_getSelectItem(i_itemBtn) == dItem_WIND_WAKER_e) {
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_WIND_WAKER_e) {
         return TRUE;
     } else {
         return FALSE;
@@ -169,13 +167,13 @@ s16 daObjMknjD::Act_c::XyEventCB(int) {
 BOOL daObjMknjD::Act_c::CreateHeap() {
     J3DModelData* model_data_d;
     if (m043E == true) {
-        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKNJD_BDL_MKNJK);
+        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKNJD_BDL_MKNJK_e);
     }
     else {
-        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKNJD_BDL_MKNJD);
+        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKNJD_BDL_MKNJD_e);
     }
 
-    J3DModelData* model_data_h = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKNJD_BDL_MKNJH);
+    J3DModelData* model_data_h = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKNJD_BDL_MKNJH_e);
 
     JUT_ASSERT(0x123, model_data_d != NULL)
     JUT_ASSERT(0x124, model_data_h != NULL)
@@ -259,7 +257,7 @@ BOOL daObjMknjD::Act_c::Create() {
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[7]);
 
         mMelodyNum = 4;
-        mGiveItemNo = TACT_SONG5;
+        mGiveItemNo = dItemNo_WIND_GODS_ARIA_e;
         eventInfo.setEventName("MKNJD_K_TALK");
         m0430 = dSv_event_flag_c::UNK_2910;
     }
@@ -270,7 +268,7 @@ BOOL daObjMknjD::Act_c::Create() {
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[6]);
 
         mMelodyNum = 3;
-        mGiveItemNo = TACT_SONG4;
+        mGiveItemNo = dItemNo_EARTH_GODS_LYRIC_e;
         eventInfo.setEventName("MKNJD_D_TALK");
         m0430 = dSv_event_flag_c::UNK_2920;
     }
@@ -297,7 +295,7 @@ BOOL daObjMknjD::Act_c::Create() {
 
 /* 000008E8-00000A84       .text Mthd_Create__Q210daObjMknjD5Act_cFv */
 cPhs_State daObjMknjD::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjMknjD::Act_c);
+    fopAcM_ct(this, daObjMknjD::Act_c);
 
     m043E = prm_get_Type();
 
@@ -311,7 +309,7 @@ cPhs_State daObjMknjD::Act_c::Mthd_Create() {
     else {
         phase_state = dComIfG_resLoad(&mPhs, M_arcname);
         if (phase_state == cPhs_COMPLEATE_e) {
-            phase_state = MoveBGCreate(M_arcname, MKNJD_DZB_MKNJD, NULL, 0x65A0);
+            phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MKNJD_DZB_MKNJD_e, NULL, 0x65A0);
 
             JUT_ASSERT(0x1CA, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e))
         }
@@ -567,7 +565,7 @@ void daObjMknjD::Act_c::privateCut() {
 
 /* 00001348-00001400       .text manage_friend_draw__10daObjMknjDFi */
 void daObjMknjD::manage_friend_draw(int i_param1) {
-    fopAc_ac_c* judgeResult = fopAcM_SearchByName(PROC_NPC_MD);
+    fopAc_ac_c* judgeResult = fopAcM_SearchByName(fpcNm_NPC_MD_e);
 
     if (judgeResult != NULL) {
         if (i_param1 == 1) {
@@ -577,7 +575,7 @@ void daObjMknjD::manage_friend_draw(int i_param1) {
         }
     }
 
-    judgeResult = fopAcM_SearchByName(PROC_NPC_CB1);
+    judgeResult = fopAcM_SearchByName(fpcNm_NPC_CB1_e);
     
     if (judgeResult != NULL) {
         if (i_param1 == 1) {
@@ -773,7 +771,7 @@ BOOL daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                         fopAcM_orderChangeEventId(this, mDemoEventIdx, 0, 0xFFFF);
                         dComIfGs_onEventBit(m0430);
 
-                        s16 procMedli = PROC_NPC_MD;
+                        s16 procMedli = fpcNm_NPC_MD_e;
                         void* judgeResult = fopAcIt_Judge(fpcSch_JudgeForPName, &procMedli);
 
                         if (judgeResult != NULL) {
@@ -1051,18 +1049,18 @@ namespace daObjMknjD {
 }
 
 actor_process_profile_definition g_profile_Obj_MknjD = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_MknjD,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_MknjD_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMknjD::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_MknjD,
+    /* Draw Prio    */ fpcDwPi_Obj_MknjD_e,
     /* Actor SubMtd */ &daObjMknjD::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

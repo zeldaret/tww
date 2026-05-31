@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_lod_bg.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_obj_light.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_lib.h"
@@ -96,6 +94,7 @@ void daLodbg_c::deleteModelData() {
     }
 }
 
+#if VERSION > VERSION_DEMO
 /* 0000046C-00000738       .text loadModelData__9daLodbg_cFPCcRP12J3DModelDataRP12JKRSolidHeapRUl */
 BOOL daLodbg_c::loadModelData(const char* filename, J3DModelData*& mModelData, JKRSolidHeap*& mDataHeap, u32& mDataSize) {
     /* Nonmatching - regalloc */
@@ -150,7 +149,9 @@ BOOL daLodbg_c::loadModelData(const char* filename, J3DModelData*& mModelData, J
     else
         return FALSE;
 }
+#endif
 
+#if VERSION > VERSION_DEMO
 /* 00000738-000008B8       .text createModelData__9daLodbg_cFv */
 BOOL daLodbg_c::createModelData() {
     static char resPath[32];
@@ -173,6 +174,7 @@ BOOL daLodbg_c::createModelData() {
 
     return TRUE;
 }
+#endif
 
 /* 000008B8-00000A38       .text createHeap__9daLodbg_cFv */
 BOOL daLodbg_c::createHeap() {
@@ -231,25 +233,31 @@ BOOL daLodbg_c::execReadWait() {
     if (!mMountCommand->sync())
         return TRUE;
 
+#if VERSION > VERSION_DEMO
     JUT_ASSERT(VERSION_SELECT(506, 506, 535, 535), mArchive == NULL);
     mArchive = mMountCommand->getArchive();
     delete mMountCommand;
     mMountCommand = NULL;
+#endif
 
     if (mArchive == NULL) {
         setExecute(&daLodbg_c::execDeleteWait);
         return TRUE;
     }
 
+#if VERSION > VERSION_DEMO
     createModelData();
     JUT_ASSERT(VERSION_SELECT(542, 542, 571, 571), mModel == NULL);
     JUT_ASSERT(VERSION_SELECT(543, 543, 572, 572), mModel2[0] == NULL);
     JUT_ASSERT(VERSION_SELECT(544, 544, 573, 573), mModel2[1] == NULL);
+#endif
 
     if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0)) {
+#if VERSION > VERSION_DEMO
         mModel = NULL;
         mModel2[0] = NULL;
         mModel2[1] = NULL;
+#endif
         setExecute(&daLodbg_c::execDeleteWait);
         return TRUE;
     }
@@ -400,7 +408,7 @@ static BOOL daLodbg_Delete(daLodbg_c* i_this) {
 /* 000012EC-0000133C       .text daLodbg_Create__FP10fopAc_ac_c */
 static cPhs_State daLodbg_Create(fopAc_ac_c* i_ac) {
     daLodbg_c* i_this = (daLodbg_c*)i_ac;
-    fopAcM_SetupActor(i_this, daLodbg_c);
+    fopAcM_ct(i_this, daLodbg_c);
     return cPhs_COMPLEATE_e;
 }
 
@@ -413,18 +421,18 @@ static actor_method_class l_daLodbg_Method = {
 };
 
 actor_process_profile_definition g_profile_LODBG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_LODBG,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_LODBG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daLodbg_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_LODBG,
+    /* Draw Prio    */ fpcDwPi_LODBG_e,
     /* Actor SubMtd */ &l_daLodbg_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

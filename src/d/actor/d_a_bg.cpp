@@ -7,7 +7,6 @@
 #include "d/actor/d_a_bg.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "d/d_magma.h"
 #include "d/d_grass.h"
 #include "d/d_tree.h"
@@ -341,7 +340,7 @@ static cPhs_State daBg_Create(fopAc_ac_c* i_ac) {
 
 /* 800D9094-800D9318       .text create__6daBg_cFv */
 cPhs_State daBg_c::create() {
-    fopAcM_SetupActor(this, daBg_c);
+    fopAcM_ct(this, daBg_c);
 
     s32 roomNo = fopAcM_GetParam(this);
     JKRExpHeap * roomHeap = dStage_roomControl_c::getMemoryBlock(roomNo);
@@ -405,19 +404,19 @@ static actor_method_class l_daBg_Method = {
 };
 
 actor_process_profile_definition2 g_profile_BG = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_BG,
-    &g_fpcLf_Method.base,
-    sizeof(daBg_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x01C2,
-    &l_daBg_Method,
-    fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
-    0,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BG_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBg_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_BG_e,
+    /* Actor SubMtd */ &l_daBg_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
+    /* field_0x30   */ 0,
 };

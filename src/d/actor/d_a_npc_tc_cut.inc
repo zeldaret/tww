@@ -134,61 +134,61 @@ void daNpc_Tc_c::cutPresentProc(int i_staffIdx) {
     int itemNo;
     switch(temp) {
         case 0:
-            itemNo = dItem_TINGLE_TUNER_e;
+            itemNo = dItemNo_TINGLE_TUNER_e;
             break;
 
         case 1:
-            itemNo = dItem_COLLECT_MAP_35_e;
+            itemNo = dItemNo_COLLECT_MAP_35_e;
             break;
 
         case 2:
             if (mType == TYPE_RED) {
                 if (checkAllMonumentFee()) {
-                    itemNo = TINCLE_RUPEE6;
+                    itemNo = dItemNo_TINGLE_RUPEE_6_e;
                 } else {
                     switch (checkAllMonumentPay()) {
                         case 1:
-                            itemNo = TINCLE_RUPEE1;
+                            itemNo = dItemNo_TINGLE_RUPEE_1_e;
                             break;
                         case 2:
-                            itemNo = TINCLE_RUPEE2;
+                            itemNo = dItemNo_TINGLE_RUPEE_2_e;
                             break;
                         case 3:
-                            itemNo = TINCLE_RUPEE3;
+                            itemNo = dItemNo_TINGLE_RUPEE_3_e;
                             break;
                         case 4:
-                            itemNo = TINCLE_RUPEE4;
+                            itemNo = dItemNo_TINGLE_RUPEE_4_e;
                             break;
                         case 5:
-                            itemNo = TINCLE_RUPEE5;
+                            itemNo = dItemNo_TINGLE_RUPEE_5_e;
                             break;
                     }
                 }
             } else if (mType == TYPE_NORMAL2) {
                 switch (analysisCollectMap()) {
                     case 1:
-                        itemNo = TRIFORCE_MAP1;
+                        itemNo = dItemNo_TRIFORCE_MAP_1_e;
                         break;
                     case 2:
-                        itemNo = TRIFORCE_MAP2;
+                        itemNo = dItemNo_TRIFORCE_MAP_2_e;
                         break;
                     case 3:
-                        itemNo = TRIFORCE_MAP3;
+                        itemNo = dItemNo_TRIFORCE_MAP_3_e;
                         break;
                     case 4:
-                        itemNo = TRIFORCE_MAP4;
+                        itemNo = dItemNo_TRIFORCE_MAP_4_e;
                         break;
                     case 5:
-                        itemNo = TRIFORCE_MAP5;
+                        itemNo = dItemNo_TRIFORCE_MAP_5_e;
                         break;
                     case 6:
-                        itemNo = TRIFORCE_MAP6;
+                        itemNo = dItemNo_TRIFORCE_MAP_6_e;
                         break;
                     case 7:
-                        itemNo = TRIFORCE_MAP7;
+                        itemNo = dItemNo_TRIFORCE_MAP_7_e;
                         break;
                     case 8:
-                        itemNo = TRIFORCE_MAP8;
+                        itemNo = dItemNo_TRIFORCE_MAP_8_e;
                         break;
                 }
             }
@@ -252,7 +252,6 @@ void daNpc_Tc_c::cutBackJumpProc(int i_staffIdx) {
 
 /* 000063BC-000064C8       .text cutEffectStart__10daNpc_Tc_cFi */
 void daNpc_Tc_c::cutEffectStart(int) {
-    // regswap for demo daNpc_Tc_c::setAnm also has a regswap with identical code
     cXyz pos;
     pos.x = current.pos.x;
     pos.y = current.pos.y;
@@ -266,7 +265,6 @@ void daNpc_Tc_c::cutEffectStart(int) {
     JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_IT_SN_PF_BIKON00, &pos, NULL, &particleScale);
     pEmitter->setGlobalParticleScale(0.62f, 0.6f);
     fopAcM_seStart(this, JA_SE_CM_CMN_NOTICE, 0);
-    /* Nonmatching */
 }
 
 /* 000064C8-000064F4       .text cutEffectProc__10daNpc_Tc_cFi */

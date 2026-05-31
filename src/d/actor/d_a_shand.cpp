@@ -5,17 +5,15 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_shand.h"
-#include "d/res/res_shand.h"
+#include "res/Object/Shand.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 
 bool hio_set;
-daShand_HIO_c l_HIO;
+static daShand_HIO_c l_HIO;
 
 /* 000000EC-00000114       .text __ct__13daShand_HIO_cFv */
 daShand_HIO_c::daShand_HIO_c() {
@@ -395,9 +393,9 @@ static BOOL daShand_Delete(shand_class* i_this) {
 static BOOL useHeapInit(shand_class* i_this) {
     int bti_idx;
     if ((fopAcM_GetParam(i_this) & 0xff) == 53) {
-        bti_idx = SHAND_BTI_VHLIF_VINE;
+        bti_idx = dRes_INDEX_SHAND_BTI_VHLIF_VINE_e;
     } else {
-        bti_idx = SHAND_BTI_SHAND;
+        bti_idx = dRes_INDEX_SHAND_BTI_SHAND_e;
     }
     ResTIMG* img = static_cast<ResTIMG*>(dComIfG_getObjectRes("Shand", bti_idx));
     
@@ -476,7 +474,7 @@ static cPhs_State daShand_Create(fopAc_ac_c* i_this) {
     };
 
     shand_class* s_this = static_cast<shand_class*>(i_this);
-    fopAcM_SetupActor(i_this, shand_class);
+    fopAcM_ct(i_this, shand_class);
 
     cPhs_State ret = dComIfG_resLoad(&s_this->mPhs, "Shand");
     if(ret == cPhs_COMPLEATE_e){
@@ -525,18 +523,18 @@ static actor_method_class l_daShand_Method = {
 };
 
 actor_process_profile_definition g_profile_SHAND = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SHAND,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SHAND_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(shand_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SHAND,
+    /* Draw Prio    */ fpcDwPi_SHAND_e,
     /* Actor SubMtd */ &l_daShand_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

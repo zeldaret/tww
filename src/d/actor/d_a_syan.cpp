@@ -6,11 +6,9 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_syan.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
-#include "d/res/res_syan.h"
+#include "res/Object/Syan.h"
 
 static f32 b_pos_x[6] = { 870.0f, 420.0f, -420.0f, -880.0f, -400.0f, 440.0f };
 static f32 b_pos_y[6] = { -560.0f, -760.0f, -630.0f, -710.0f, -670.0f, -690.0f };
@@ -195,9 +193,9 @@ static BOOL daSyan_Delete(syan_class* i_this) {
 static BOOL daSyan_solidHeapCB(fopAc_ac_c* i_ac) {
     syan_class* i_this = (syan_class*)i_ac;
     i_this->morf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Syan", SYAN_BDL_SYAN),
+        (J3DModelData*)dComIfG_getObjectRes("Syan", dRes_INDEX_SYAN_BDL_SYAN_e),
         NULL, NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes("Syan", SYAN_BCK_SYAN),
+        (J3DAnmTransform*)dComIfG_getObjectRes("Syan", dRes_INDEX_SYAN_BCK_SYAN_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000002
     );
     return i_this->morf != NULL;
@@ -205,7 +203,7 @@ static BOOL daSyan_solidHeapCB(fopAc_ac_c* i_ac) {
 
 /* 00000E10-00000FE0       .text daSyan_Create__FP10fopAc_ac_c */
 static cPhs_State daSyan_Create(fopAc_ac_c* i_ac) {
-    fopAcM_SetupActor(i_ac, syan_class);
+    fopAcM_ct(i_ac, syan_class);
     syan_class* i_this = (syan_class*)i_ac;
     cPhs_State rt = dComIfG_resLoad(&i_this->mPhs, "Syan");
     if (rt == cPhs_COMPLEATE_e) {
@@ -239,18 +237,18 @@ static actor_method_class l_daSyan_Method = {
 };
 
 actor_process_profile_definition g_profile_SYAN = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SYAN,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SYAN_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(syan_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SYAN,
+    /* Draw Prio    */ fpcDwPi_SYAN_e,
     /* Actor SubMtd */ &l_daSyan_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

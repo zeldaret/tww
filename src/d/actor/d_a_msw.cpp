@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_msw.h"
-#include "d/res/res_msw.h"
+#include "res/Object/Msw.h"
 #include "d/d_bg_s_movebg_actor.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
@@ -212,14 +210,14 @@ static BOOL daMsw_Delete(msw_class* i_this) {
 BOOL daMsw_CreateInit(fopAc_ac_c* i_this) {
     msw_class* pActor = static_cast<msw_class*>(i_this);
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Msw", MSW_BDL_MSWNG));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Msw", dRes_INDEX_MSW_BDL_MSWNG_e));
     pActor->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
 
     if (pActor->mpModel == NULL) {
         return FALSE;
     }
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Msw", MSW_BDL_OBM_CHAIN1));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Msw", dRes_INDEX_MSW_BDL_OBM_CHAIN1_e));
     JUT_ASSERT(DEMO_SELECT(519, 523), modelData != NULL);
 
     for (int chainIdx = 0; chainIdx < 4; chainIdx++) {
@@ -235,7 +233,7 @@ BOOL daMsw_CreateInit(fopAc_ac_c* i_this) {
         return FALSE;
     }
 
-    cBgD_t* pBgd = static_cast<cBgD_t*>(dComIfG_getObjectRes("Msw", MSW_DZB_MSWING));
+    cBgD_t* pBgd = static_cast<cBgD_t*>(dComIfG_getObjectRes("Msw", dRes_INDEX_MSW_DZB_MSWING_e));
 
     BOOL error = pActor->mpBgW->Set(pBgd, cBgW::MOVE_BG_e, &pActor->mMtx);
     if (error == TRUE) {
@@ -280,7 +278,7 @@ static cPhs_State daMsw_Create(fopAc_ac_c* i_this) {
         }},
     };
 
-    fopAcM_SetupActor(i_this, msw_class);
+    fopAcM_ct(i_this, msw_class);
     msw_class* a_this = static_cast<msw_class*>(i_this);
 
     cPhs_State phase_state = dComIfG_resLoad(&a_this->mPhs, "Msw");
@@ -351,18 +349,18 @@ static actor_method_class l_daMsw_Method = {
 };
 
 actor_process_profile_definition g_profile_MSW = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MSW,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MSW_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(msw_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MSW,
+    /* Draw Prio    */ fpcDwPi_MSW_e,
     /* Actor SubMtd */ &l_daMsw_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

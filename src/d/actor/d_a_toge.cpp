@@ -5,16 +5,14 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_toge.h"
-#include "d/res/res_htoge1.h"
+#include "res/Object/Htoge1.h"
 #include "d/actor/d_a_wind_tag.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 
 const char daToge_c::m_arcname[] = "Htoge1";
-const s16 daToge_c::m_dzbidx = HTOGE1_DZB_HTOGE1A;
-const s16 daToge_c::m_bdlidx = HTOGE1_BDL_HTOGE1;
+const s16 daToge_c::m_dzbidx = dRes_INDEX_HTOGE1_DZB_HTOGE1A_e;
+const s16 daToge_c::m_bdlidx = dRes_INDEX_HTOGE1_BDL_HTOGE1_e;
 const u32 daToge_c::m_heapsize = 0x5000;
 const f32 daToge_c::m_y_min = -150.0f;
 
@@ -70,7 +68,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000015C-00000290       .text CreateHeap__8daToge_cFv */
 BOOL daToge_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, HTOGE1_BDL_HTOGE1);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HTOGE1_BDL_HTOGE1_e);
     JUT_ASSERT(0x11A, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000002U);
@@ -81,8 +79,8 @@ BOOL daToge_c::CreateHeap() {
 
     mpModel->setUserArea((u32)this);
 
-    mpBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, HTOGE1_DZB_HTOGE1A), cBgW::MOVE_BG_e, &mtx1);
-    mpBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, HTOGE1_DZB_HTOGE1B), cBgW::MOVE_BG_e, &mtx2);
+    mpBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HTOGE1_DZB_HTOGE1A_e), cBgW::MOVE_BG_e, &mtx1);
+    mpBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HTOGE1_DZB_HTOGE1B_e), cBgW::MOVE_BG_e, &mtx2);
 
     if (mpBgW1 == NULL || mpBgW2 == NULL) {
         return FALSE;
@@ -151,7 +149,7 @@ BOOL daToge_c::Create() {
 
 /* 000004F4-00000620       .text _create__8daToge_cFv */
 cPhs_State daToge_c::_create() {
-    fopAcM_SetupActor(this, daToge_c);
+    fopAcM_ct(this, daToge_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&m_Phs, m_arcname);
 
@@ -226,7 +224,7 @@ void daToge_c::set_collision() {
 
 /* 00000A78-00000AE0       .text search_wind__8daToge_cFv */
 void daToge_c::search_wind() {
-    fopAc_ac_c* pActor = fopAcM_SearchByName(PROC_WindTag);
+    fopAc_ac_c* pActor = fopAcM_SearchByName(fpcNm_WindTag_e);
 
     if (pActor != NULL) {
         mWindTagId = fopAcM_GetID(pActor);
@@ -331,18 +329,18 @@ static actor_method_class daTogeMethodTable = {
 };
 
 actor_process_profile_definition g_profile_TOGE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TOGE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TOGE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daToge_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TOGE,
+    /* Draw Prio    */ fpcDwPi_TOGE_e,
     /* Actor SubMtd */ &daTogeMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

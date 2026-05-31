@@ -7,15 +7,13 @@
 #include "d/actor/d_a_kytag03.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_m_door.h"
+#include "res/Object/M_door.h"
 
 /* 00000078-0000015C       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_ac) {
     kytag03_class* i_this = (kytag03_class*)i_ac;
     i_this->mpModel = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("M_DOOR", M_DOOR_BDL_MYAMIF),
+        (J3DModelData*)dComIfG_getObjectRes("M_DOOR", dRes_INDEX_M_DOOR_BDL_MYAMIF_e),
         NULL, NULL, NULL, J3DFrameCtrl::EMode_LOOP, 0.0f, 0, -1, 1, NULL, 0x0, 0x11020203
     );
 
@@ -128,15 +126,11 @@ static BOOL daKytag03_Delete(kytag03_class* i_this) {
 static cPhs_State daKytag03_Create(fopAc_ac_c* i_ac) {
     kytag03_class* i_this = (kytag03_class*)i_ac;
 
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_ac, kytag03_class);
-#endif
+    fopAcM_ct_Retail(i_ac, kytag03_class);
 
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhs, "M_DOOR");
     if (ret == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(i_ac, kytag03_class);
-#endif
+        fopAcM_ct_Demo(i_ac, kytag03_class);
 
         if (!fopAcM_entrySolidHeap(&i_this->actor, useHeapInit, 0x4c30)) {
             return cPhs_ERROR_e;
@@ -161,18 +155,18 @@ static actor_method_class l_daKytag03_Method = {
 };
 
 actor_process_profile_definition g_profile_KYTAG03 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KYTAG03,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KYTAG03_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kytag03_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KYTAG03,
+    /* Draw Prio    */ fpcDwPi_KYTAG03_e,
     /* Actor SubMtd */ &l_daKytag03_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -1,0 +1,20 @@
+#ifndef RES_HPBOT1_H
+#define RES_HPBOT1_H
+
+enum dRes_INDEX_HPBOT1 {
+    /* BDL  */
+    dRes_INDEX_HPBOT1_BDL_HPBOT1_e=0x3,
+};
+
+enum dRes_ID_HPBOT1 {
+    /* BDL  */
+    dRes_ID_HPBOT1_BDL_HPBOT1_e=0x3,
+};
+
+enum HPBOT1_JNT {
+    HPBOT1_JNT_HPBOT1_00_e=0x0,
+    HPBOT1_JNT_DAI_e=0x1,
+    HPBOT1_JNT_KAITEN_e=0x2,
+};
+
+#endif /* !RES_HPBOT1_H */

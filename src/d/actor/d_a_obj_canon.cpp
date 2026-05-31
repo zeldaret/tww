@@ -13,14 +13,12 @@
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_path.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/actor/d_a_bomb.h"
 #include "d/d_s_play.h"
-#include "d/res/res_wallbom.h"
+#include "res/Object/WallBom.h"
 
-daObj_Canon_HIO_c l_HIO;
+static daObj_Canon_HIO_c l_HIO;
 
 const u32 daObj_Canon_c::m_heapsize = 0x8C0;
 const char daObj_Canon_c::m_arc_name[] = "WallBom";
@@ -126,7 +124,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 000003F8-000004CC       .text _createHeap__13daObj_Canon_cFv */
 BOOL daObj_Canon_c::_createHeap() {
-    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arc_name, WALLBOM_BDL_WALLBOM);
+    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_WALLBOM_BDL_WALLBOM_e);
     JUT_ASSERT(0x115, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -240,7 +238,7 @@ bool daObj_Canon_c::checkTgHit() {
 void daObj_Canon_c::attackCannon() {
     csXyz angle;
     angle.set(shape_angle.x - field_0x2CA, shape_angle.y + field_0x2C6, shape_angle.z);
-    daBomb_c* bomb = (daBomb_c*)fopAcM_fastCreate(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_4, true, true), &field_0x450, tevStr.mRoomNo, &angle);
+    daBomb_c* bomb = (daBomb_c*)fopAcM_fastCreate(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_4, true, true), &field_0x450, tevStr.mRoomNo, &angle);
     bomb->setNoGravityTime(l_HIO.field_0x28);
     bomb->speedF = l_HIO.field_0x20 * cM_scos(angle.x);
     bomb->speed.y = -(l_HIO.field_0x20 * cM_ssin(angle.x));
@@ -579,7 +577,7 @@ void daObj_Canon_c::getArg() {
 
 /* 00001880-000019D8       .text _create__13daObj_Canon_cFv */
 cPhs_State daObj_Canon_c::_create() {
-    fopAcM_SetupActor(this, daObj_Canon_c);
+    fopAcM_ct(this, daObj_Canon_c);
 
     int result = dComIfG_resLoad(&mPhs, m_arc_name);
     if(result == cPhs_COMPLEATE_e) {
@@ -646,18 +644,18 @@ static actor_method_class daObj_CanonMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_CANON = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_CANON,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_CANON_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Canon_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_CANON,
+    /* Draw Prio    */ fpcDwPi_OBJ_CANON_e,
     /* Actor SubMtd */ &daObj_CanonMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

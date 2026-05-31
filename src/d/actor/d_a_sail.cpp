@@ -8,10 +8,8 @@
 #if VERSION == VERSION_DEMO
 #include "d/d_s_play.h"
 #endif
-#include "d/res/res_kaizokusen.h"
-#include "d/res/res_cloth.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Kaizokusen.h"
+#include "res/Object/Cloth.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "d/actor/d_a_obj_pirateship.h"
@@ -57,7 +55,7 @@ public:
 static daObjPirateship::Act_c* l_p_ship;
 static daSail_HIO_c l_HIO;
 
-Vec l_pos[] = {
+static Vec l_pos[] = {
     {-840.0f, 0.0f, 0.0f},
     {-560.0f, 0.0f, 0.0f},
     {-280.0f, 0.0f, 0.0f},
@@ -144,7 +142,7 @@ Vec l_pos[] = {
     {840.0f, -1100.0f, 0.0f},
 };
 
-cXy l_texCoord[] = {
+static cXy l_texCoord[] = {
     {0.0f, 0.0f},
     {0.165f, 0.0f},
     {0.33f, 0.0f},
@@ -235,7 +233,7 @@ cXy l_texCoord[] = {
 #include "assets/l_sail_matDL.h"
 #include "assets/l_Txa_kizoku_mastTEX.h"
 
-Vec l_mast_pos[] = {
+static Vec l_mast_pos[] = {
     {900.0f, 9.676933f, -16.760941f},
     {900.0f, -9.676933f, -16.760941f},
     {900.0f, -19.353867f, -0.000004f},
@@ -258,7 +256,7 @@ Vec l_mast_pos[] = {
     {0.0f, 22.42897f, 0.0f},
 };
 
-GXColor l_mast_color[] = {
+static GXColor l_mast_color[] = {
     {0xA8, 0xA8, 0xA8, 0xFF},
     {0x5D, 0x5D, 0x5D, 0xFF},
     {0xF3, 0xF3, 0xF3, 0xFF},
@@ -269,7 +267,7 @@ GXColor l_mast_color[] = {
     {0xA1, 0xA1, 0xA1, 0xFF},
 };
 
-cXy l_mast_texCoord[] = {
+static cXy l_mast_texCoord[] = {
     {1.0f, 0.0f},
     {1.0f, 1.0f},
     {0.0f, 1.0f},
@@ -399,7 +397,7 @@ void daSail_packet_c::draw() {
 
     GXTexObj texObj;
 
-    ResTIMG* kaizokusen = (ResTIMG*)dComIfG_getObjectRes("Kaizokusen", KAIZOKUSEN_INDEX_BTI_TXA_KAIZOKU_HO);
+    ResTIMG* kaizokusen = (ResTIMG*)dComIfG_getObjectRes("Kaizokusen", dRes_INDEX_KAIZOKUSEN_BTI_TXA_KAIZOKU_HO_e);
     GXInitTexObj(&texObj, (u8*)kaizokusen + kaizokusen->imageOffset, kaizokusen->width, kaizokusen->height,
         (GXTexFmt)kaizokusen->format, (GXTexWrapMode)kaizokusen->wrapS, (GXTexWrapMode)kaizokusen->wrapT,
         kaizokusen->mipmapCount > 1);
@@ -408,7 +406,7 @@ void daSail_packet_c::draw() {
         kaizokusen->biasClamp, kaizokusen->doEdgeLOD, (GXAnisotropy)kaizokusen->maxAnisotropy);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
 
-    ResTIMG* cloth = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+    ResTIMG* cloth = (ResTIMG*)dComIfG_getObjectRes("Cloth", dRes_INDEX_CLOTH_BTI_CLOTHTOON_e);
     GXInitTexObj(&texObj, (u8*)cloth + cloth->imageOffset, cloth->width, cloth->height,
         (GXTexFmt)cloth->format, (GXTexWrapMode)cloth->wrapS, (GXTexWrapMode)cloth->wrapT,
         cloth->mipmapCount > 1);
@@ -793,7 +791,7 @@ static BOOL daSail_Delete(sail_class* i_this) {
 /* 000021D8-00002254       .text daSail_checkCreateHeap__FP10fopAc_ac_c */
 static BOOL daSail_checkCreateHeap(fopAc_ac_c* i_actor) {
     sail_class* i_this = (sail_class*)i_actor;
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kaizokusen", KAIZOKUSEN_INDEX_BDL_AMAST);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kaizokusen", dRes_INDEX_KAIZOKUSEN_BDL_AMAST_e);
     if (modelData == NULL) {
         return FALSE;
     }
@@ -807,7 +805,7 @@ static BOOL daSail_checkCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 00002254-000024E4       .text daSail_Create__FP10fopAc_ac_c */
 static cPhs_State daSail_Create(fopAc_ac_c* i_actor) {
-    fopAcM_SetupActor(i_actor, sail_class);
+    fopAcM_ct(i_actor, sail_class);
     sail_class* i_this = (sail_class*)i_actor;
     
     {
@@ -873,18 +871,18 @@ static actor_method_class l_daSail_Method = {
 };
 
 actor_process_profile_definition g_profile_SAIL = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SAIL,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SAIL_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sail_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SAIL,
+    /* Draw Prio    */ fpcDwPi_SAIL_e,
     /* Actor SubMtd */ &l_daSail_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

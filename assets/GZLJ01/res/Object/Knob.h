@@ -1,0 +1,82 @@
+#ifndef RES_KNOB_H
+#define RES_KNOB_H
+
+enum dRes_INDEX_KNOB {
+    /* BCK  */
+    dRes_INDEX_KNOB_BCK_DOOROPENADOOR_e=0x5,
+    dRes_INDEX_KNOB_BCK_DOOROPENBDOOR_e=0x6,
+    /* BDL  */
+    dRes_INDEX_KNOB_BDL_DOOR_e=0x9,
+    dRes_INDEX_KNOB_BDL_DOOR_A_e=0xA,
+    dRes_INDEX_KNOB_BDL_DOOR_B_e=0xB,
+    dRes_INDEX_KNOB_BDL_DOOR_C_e=0xC,
+    dRes_INDEX_KNOB_BDL_DOOR_D_e=0xD,
+    dRes_INDEX_KNOB_BDL_DOOR_E_e=0xE,
+    dRes_INDEX_KNOB_BDL_DOOR_F_e=0xF,
+    dRes_INDEX_KNOB_BDL_DOOR_G_e=0x10,
+    dRes_INDEX_KNOB_BDL_DOOR_H_e=0x11,
+    /* DZB  */
+    dRes_INDEX_KNOB_DZB_DOOR_e=0x14,
+};
+
+enum dRes_ID_KNOB {
+    /* BCK  */
+    dRes_ID_KNOB_BCK_DOOROPENADOOR_e=0x5,
+    dRes_ID_KNOB_BCK_DOOROPENBDOOR_e=0x6,
+    /* BDL  */
+    dRes_ID_KNOB_BDL_DOOR_e=0x9,
+    dRes_ID_KNOB_BDL_DOOR_A_e=0xA,
+    dRes_ID_KNOB_BDL_DOOR_B_e=0xB,
+    dRes_ID_KNOB_BDL_DOOR_C_e=0xC,
+    dRes_ID_KNOB_BDL_DOOR_D_e=0xD,
+    dRes_ID_KNOB_BDL_DOOR_E_e=0xE,
+    dRes_ID_KNOB_BDL_DOOR_F_e=0xF,
+    dRes_ID_KNOB_BDL_DOOR_G_e=0x10,
+    dRes_ID_KNOB_BDL_DOOR_H_e=0x11,
+    /* DZB  */
+    dRes_ID_KNOB_DZB_DOOR_e=0x14,
+};
+
+enum DOOR_JNT {
+    DOOR_JNT_DOORDUMMY_e=0x0,
+};
+
+enum DOOR_A_JNT {
+    DOOR_A_JNT_DOOR_A_e=0x0,
+};
+
+enum DOOR_B_JNT {
+    DOOR_B_JNT_DOOR_B_e=0x0,
+};
+
+enum DOOR_C_JNT {
+    DOOR_C_JNT_DOOR_C_e=0x0,
+    DOOR_C_JNT_LOCATOR2_e=0x1,
+    DOOR_C_JNT_POLYSURFACE12_e=0x2,
+};
+
+enum DOOR_D_JNT {
+    DOOR_D_JNT_DOOR_D_e=0x0,
+};
+
+enum DOOR_E_JNT {
+    DOOR_E_JNT_DOOR_E_e=0x0,
+};
+
+enum DOOR_F_JNT {
+    DOOR_F_JNT_DOOR_F_e=0x0,
+    DOOR_F_JNT_LOCATOR2_e=0x1,
+    DOOR_F_JNT_POLYSURFACE13_e=0x2,
+};
+
+enum DOOR_G_JNT {
+    DOOR_G_JNT_DOOR_G_e=0x0,
+};
+
+enum DOOR_H_JNT {
+    DOOR_H_JNT_DOOR_H_e=0x0,
+    DOOR_H_JNT_LOCATOR2_e=0x1,
+    DOOR_H_JNT_RICHDOOR_e=0x2,
+};
+
+#endif /* !RES_KNOB_H */

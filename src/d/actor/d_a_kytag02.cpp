@@ -7,8 +7,6 @@
 #include "d/actor/d_a_kytag02.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
 /* 00000078-000000C0       .text set_path_info__FP10fopAc_ac_c */
@@ -49,7 +47,7 @@ dPath* get_nearpos_rail(kytag02_class* i_this, dPath* i_path, cXyz* pos, int* i_
 
     bestIdx = 0;
     path = i_path;
-    best = 1000000000.0f;
+    best = 1000000000.0f; // This is not G_CM3D_F_INF
     bestPath = i_path;
 
     while (true) {
@@ -114,7 +112,7 @@ static BOOL daKytag02_Delete(kytag02_class* i_this) {
 /* 00000420-0000047C       .text daKytag02_Create__FP10fopAc_ac_c */
 static cPhs_State daKytag02_Create(fopAc_ac_c* i_this) {
     kytag02_class* a_this = (kytag02_class*)i_this;
-    fopAcM_SetupActor(i_this, kytag02_class);
+    fopAcM_ct(i_this, kytag02_class);
     a_this->mpPath = set_path_info(i_this);
     return cPhs_COMPLEATE_e;
 }
@@ -128,18 +126,18 @@ static actor_method_class l_daKytag02_Method = {
 };
 
 actor_process_profile_definition g_profile_KYTAG02 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KYTAG02,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KYTAG02_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kytag02_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KYTAG02,
+    /* Draw Prio    */ fpcDwPi_KYTAG02_e,
     /* Actor SubMtd */ &l_daKytag02_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

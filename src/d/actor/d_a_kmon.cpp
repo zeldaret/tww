@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kmon.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 const char daKmon_c::m_arcname[] = "Always";
 
@@ -27,21 +25,21 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000138-00000324       .text CreateHeap__8daKmon_cFv */
 BOOL daKmon_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(daKmon_c::m_arcname, ALWAYS_BDL_VBELL));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(daKmon_c::m_arcname, dRes_INDEX_ALWAYS_BDL_VBELL_e));
     JUT_ASSERT(166, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpModel == NULL) {
         return FALSE;
     }
 
-    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(daKmon_c::m_arcname, ALWAYS_BTK_VBELL));
+    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(daKmon_c::m_arcname, dRes_INDEX_ALWAYS_BTK_VBELL_e));
     JUT_ASSERT(176, pbtk != NULL);
     if (!mBtkAnm.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
     mBtkAnm.setPlaySpeed(1.0);
 
-    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(daKmon_c::m_arcname, ALWAYS_BCK_VBELL));
+    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(daKmon_c::m_arcname, dRes_INDEX_ALWAYS_BCK_VBELL_e));
     JUT_ASSERT(188, pbck != NULL);
     if (!mBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
@@ -95,7 +93,7 @@ void daKmon_c::checkTalk() {
 }
 
 cPhs_State daKmon_c::_create() {
-    fopAcM_SetupActor(this, daKmon_c);
+    fopAcM_ct(this, daKmon_c);
 
     cPhs_State state = dComIfG_resLoad(&mPhase, daKmon_c::m_arcname);
     if(state == cPhs_COMPLEATE_e) {
@@ -166,18 +164,18 @@ static actor_method_class daKmonMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Kmon = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Kmon,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Kmon_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daKmon_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Kmon,
+    /* Draw Prio    */ fpcDwPi_Kmon_e,
     /* Actor SubMtd */ &daKmonMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

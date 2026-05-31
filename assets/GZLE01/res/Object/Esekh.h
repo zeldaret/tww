@@ -1,0 +1,30 @@
+#ifndef RES_ESEKH_H
+#define RES_ESEKH_H
+
+enum dRes_INDEX_ESEKH {
+    /* BDL  */
+    dRes_INDEX_ESEKH_BDL_ESEKH_e=0x4,
+    dRes_INDEX_ESEKH_BDL_ESEKH2_e=0x5,
+    /* DZB  */
+    dRes_INDEX_ESEKH_DZB_ESEKH_e=0x8,
+    dRes_INDEX_ESEKH_DZB_ESEKH2_e=0x9,
+};
+
+enum dRes_ID_ESEKH {
+    /* BDL  */
+    dRes_ID_ESEKH_BDL_ESEKH_e=0x4,
+    dRes_ID_ESEKH_BDL_ESEKH2_e=0x5,
+    /* DZB  */
+    dRes_ID_ESEKH_DZB_ESEKH_e=0x8,
+    dRes_ID_ESEKH_DZB_ESEKH2_e=0x9,
+};
+
+enum ESEKH_JNT {
+    ESEKH_JNT_ESEKH_e=0x0,
+};
+
+enum ESEKH2_JNT {
+    ESEKH2_JNT_ESEKH2_e=0x0,
+};
+
+#endif /* !RES_ESEKH_H */

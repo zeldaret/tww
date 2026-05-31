@@ -5,10 +5,8 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_level_se.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_kankyo_mng.h"
-#include "d/d_procname.h"
 #include "m_Do/m_Do_audio.h"
 
 /* 80199308-801993CC       .text dLevelSe_Execute__FP10dLevelSe_c */
@@ -43,7 +41,7 @@ static cPhs_State dLevelSe_Create(kankyo_class*) {
     return cPhs_COMPLEATE_e;
 }
 
-kankyo_method_class l_dLevelSe_Method = {
+static kankyo_method_class l_dLevelSe_Method = {
     (process_method_func)dLevelSe_Create,
     (process_method_func)dLevelSe_Delete,
     (process_method_func)dLevelSe_Execute,
@@ -51,15 +49,15 @@ kankyo_method_class l_dLevelSe_Method = {
 };
 
 kankyo_process_profile_definition g_profile_LEVEL_SE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_LEVEL_SE,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dLevelSe_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_LEVEL_SE,
-    /* Actor SubMtd */ &l_dLevelSe_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x0002,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_LEVEL_SE_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dLevelSe_c),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_LEVEL_SE_e,
+    /* Kankyo SubMtd */ &l_dLevelSe_Method,
 };

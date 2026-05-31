@@ -1,0 +1,22 @@
+#ifndef RES_VBOXA_H
+#define RES_VBOXA_H
+
+enum dRes_INDEX_VBOXA {
+    /* BDLM */
+    dRes_INDEX_VBOXA_BDL_VBOXP_e=0x4,
+    /* BTK  */
+    dRes_INDEX_VBOXA_BTK_VBOXA_e=0x7,
+};
+
+enum dRes_ID_VBOXA {
+    /* BDLM */
+    dRes_ID_VBOXA_BDL_VBOXP_e=0x4,
+    /* BTK  */
+    dRes_ID_VBOXA_BTK_VBOXA_e=0x7,
+};
+
+enum VBOXP_JNT {
+    VBOXP_JNT_VBOXP_MODEL_e=0x0,
+};
+
+#endif /* !RES_VBOXA_H */

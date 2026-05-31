@@ -6,9 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_pedestal.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_hdai1.h"
+#include "res/Object/Hdai1.h"
 
 namespace daPedestal {
 
@@ -33,7 +31,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000000FC-00000244       .text CreateHeap__Q210daPedestal7daPds_cFv */
 BOOL daPds_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, HDAI1_BDL_HDAI1);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HDAI1_BDL_HDAI1_e);
     JUT_ASSERT(0xC1, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203U);
@@ -48,7 +46,7 @@ BOOL daPds_c::CreateHeap() {
     mpBgW = new dBgW();
 
     if (mpBgW != NULL) {
-        if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, HDAI1_DZB_HDAI), cBgW::MOVE_BG_e, &mMtx) == true) {
+        if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HDAI1_DZB_HDAI_e), cBgW::MOVE_BG_e, &mMtx) == true) {
             return FALSE;
         } else {
             return TRUE;
@@ -96,7 +94,7 @@ void daPds_c::CreateInit() {
 
 /* 00000380-00000474       .text _create__Q210daPedestal7daPds_cFv */
 cPhs_State daPds_c::_create() {
-    fopAcM_SetupActor(this, daPds_c);
+    fopAcM_ct(this, daPds_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, m_arcname);
 
@@ -347,7 +345,7 @@ BOOL daPds_c::initBrkAnm(u8 param_1, bool param_2) {
     J3DModelData* modelData = mpModel->getModelData();
     bool ret = false;
 
-    J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, HDAI1_BRK_HDAI1);
+    J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HDAI1_BRK_HDAI1_e);
     JUT_ASSERT(0x28C, a_brk != NULL);
 
     if (mBrk.init(modelData, a_brk, TRUE, brkAnmTbl[param_1].loopMode, brkAnmTbl[param_1].speed, 0, -1, param_2, 0)) {
@@ -475,18 +473,18 @@ static actor_method_class daActMethodTable = {
 }; // namespace daPedestal
 
 actor_process_profile_definition g_profile_PEDESTAL = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_PEDESTAL,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_PEDESTAL_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daPedestal::daPds_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_PEDESTAL,
+    /* Draw Prio    */ fpcDwPi_PEDESTAL_e,
     /* Actor SubMtd */ &daPedestal::daActMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

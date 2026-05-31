@@ -18,6 +18,8 @@ public:
 
     virtual ~dFe_HIO_c() {}
 
+    void genMessage(JORMContext* ctx) {}
+
     /* 0x004 */ s8 mNo;
     /* 0x005 */ u8 m5;
     /* 0x006 */ s16 m6;

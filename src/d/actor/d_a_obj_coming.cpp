@@ -10,8 +10,6 @@
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 
 dBgS_ObjGndChk daObjComing::Act_c::M_gnd_work;
@@ -210,7 +208,7 @@ bool daObjComing::Act_c::chk_switch() {
 
 /* 000003B0-000004B0       .text _create__Q211daObjComing5Act_cFv */
 cPhs_State daObjComing::Act_c::_create() {
-    fopAcM_SetupActor(this, daObjComing::Act_c);
+    fopAcM_ct(this, daObjComing::Act_c);
 
     m290 = prm_get_type();
     fopAcM_offDraw(this);
@@ -334,7 +332,7 @@ void* daObjComing::Act_c::chk_make_pos_act(void* actor, void* data) {
 
     if (fopAc_IsActor(i_this)) {
         s16 proc = fopAcM_GetName(i_this);
-        if (proc != PROC_SHIP && proc != PROC_PLAYER && (std::fabsf(i_this->current.pos.y - tmp->m0C.y) < tmp->m1C + 100.0f)) {
+        if (proc != fpcNm_SHIP_e && proc != fpcNm_PLAYER_e && (std::fabsf(i_this->current.pos.y - tmp->m0C.y) < tmp->m1C + 100.0f)) {
             if (i_this->current.pos.absXZ(tmp->m0C) < tmp->m18 + 100.0f) {
                 return i_this;
             }
@@ -441,7 +439,7 @@ void daObjComing::Act_c::mode_barrel2_wait(daObjComing::Ctrl_c* ctrl) {
                     barrel2.mItem,
                     barrel2.m14,
                     barrel2.mAngleY,
-                    daObjBuoyflag::Texture_01_e
+                    daObjBuoyflag::Texture_00_e
                 );
                 ctrl->set_appear_timer(this);
                 ctrl->m00 = 1;
@@ -463,7 +461,7 @@ void daObjComing::Act_c::mode_barrel2_appear(daObjComing::Ctrl_c* ctrl) {
                 if (ac != NULL) {
                     daObjBarrel2::Act_c* barrel2_act = (daObjBarrel2::Act_c*)ac;
                     JUT_ASSERT(1119, fopAcM_GetName(barrel2_act) == tk_Obj_Barrel2_e);
-                    barrel2_act->m474 = 1;
+                    barrel2_act->exit_req();
                 }
             } else {
                 ctrl->m08 = fpcM_ERROR_PROCESS_ID_e;
@@ -487,7 +485,7 @@ void daObjComing::Act_c::mode_barrel2_leave(daObjComing::Ctrl_c* ctrl) {
             if (ac != NULL) {
                 daObjBarrel2::Act_c* barrel2_act = (daObjBarrel2::Act_c*)ac;
                 JUT_ASSERT(1145, fopAcM_GetName(barrel2_act) == tk_Obj_Barrel2_e);
-                barrel2_act->m474 = 1;
+                barrel2_act->exit_req();
             }
         } else {
             ctrl->m08 = fpcM_ERROR_PROCESS_ID_e;
@@ -571,18 +569,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjComing
 
 actor_process_profile_definition g_profile_Obj_Coming = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Coming,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Coming_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjComing::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Coming,
+    /* Draw Prio    */ fpcDwPi_Obj_Coming_e,
     /* Actor SubMtd */ &daObjComing::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -7,9 +7,7 @@
 #include "d/actor/d_a_obj_hami4.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_hami4.h"
+#include "res/Object/Hami4.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
@@ -18,7 +16,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 
 /* 00000098-00000374       .text CreateHeap__12daObjHami4_cFv */
 BOOL daObjHami4_c::CreateHeap() {
-    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Hami4", HAMI4_BDL_HAMI4);
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Hami4", dRes_INDEX_HAMI4_BDL_HAMI4_e);
     JUT_ASSERT(0x5f, modelData != NULL);
 
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
@@ -43,7 +41,7 @@ BOOL daObjHami4_c::CreateHeap() {
         mpModels[i]->setBaseTRMtx(mDoMtx_stack_c::get());
         mdBgW[i] = new dBgW();
         if (mdBgW[i] != NULL) {
-            cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes("Hami4", HAMI4_DZB_HAMI4);
+            cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes("Hami4", dRes_INDEX_HAMI4_DZB_HAMI4_e);
             if(!mdBgW[i]->Set(bgp, dBgW::MOVE_BG_e, &field_0x2B8[i])){
                 continue;
             }
@@ -116,7 +114,7 @@ void daObjHami4_c::daObjHami4_open_demo() {
 void daObjHami4_c::daObjHami4_open_stop() {}
 
 cPhs_State daObjHami4_c::_create() {
-    fopAcM_SetupActor(this, daObjHami4_c);
+    fopAcM_ct(this, daObjHami4_c);
     for (int i = 0; i < 4; i++){
         mdBgW[i] = NULL;
     }
@@ -207,18 +205,18 @@ static actor_method_class daObj_Hami4MethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Hami4 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Hami4,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Hami4_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjHami4_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Hami4,
+    /* Draw Prio    */ fpcDwPi_Obj_Hami4_e,
     /* Actor SubMtd */ &daObj_Hami4MethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -6,9 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_lbridge.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_gbrg00.h"
+#include "res/Object/Gbrg00.h"
 
 const char daLbridge_c::m_arcname[] = "Gbrg00";
 
@@ -19,7 +17,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-00000384       .text CreateHeap__11daLbridge_cFv */
 BOOL daLbridge_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, GBRG00_BDL_GBRG00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GBRG00_BDL_GBRG00_e);
     JUT_ASSERT(DEMO_SELECT(213, 214), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000223U);
@@ -28,14 +26,14 @@ BOOL daLbridge_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BTK_GBRG00);
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GBRG00_BTK_GBRG00_e);
     JUT_ASSERT(DEMO_SELECT(231, 232), pbtk != NULL);
 
     if (!mBtkAnm.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
 
-    J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(m_arcname, GBRG00_BPK_GBRG00);
+    J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GBRG00_BPK_GBRG00_e);
     JUT_ASSERT(DEMO_SELECT(245, 246), pbpk != NULL);
 
     if (!mBpkAnm.init(modelData, pbpk, TRUE, J3DFrameCtrl::EMode_NONE)) {
@@ -45,7 +43,7 @@ BOOL daLbridge_c::CreateHeap() {
     mBpkAnm.setFrame(0.0f);
     mBpkAnm.setPlaySpeed(1.0f);
 
-    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BRK_GBRG00);
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GBRG00_BRK_GBRG00_e);
     JUT_ASSERT(DEMO_SELECT(261, 262), pbrk != NULL);
 
     if (!mBrkAnm.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
@@ -57,7 +55,7 @@ BOOL daLbridge_c::CreateHeap() {
     mpBgW = new dBgW();
 
     if (mpBgW != NULL) {
-        if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, GBRG00_DZB_HHASHI1), cBgW::MOVE_BG_e, &mMtx) == true) {
+        if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GBRG00_DZB_HHASHI1_e), cBgW::MOVE_BG_e, &mMtx) == true) {
             return FALSE;
         } else {
             return TRUE;
@@ -103,7 +101,7 @@ void daLbridge_c::CreateInit() {
 
 /* 00000544-0000063C       .text _create__11daLbridge_cFv */
 cPhs_State daLbridge_c::_create() {
-    fopAcM_SetupActor(this, daLbridge_c);
+    fopAcM_ct(this, daLbridge_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, m_arcname);
 
@@ -348,18 +346,18 @@ static actor_method_class daLbridgeMethodTable = {
 };
 
 actor_process_profile_definition g_profile_LIGHTBRIDGE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_LIGHTBRIDGE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_LIGHTBRIDGE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daLbridge_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_LIGHTBRIDGE,
+    /* Draw Prio    */ fpcDwPi_LIGHTBRIDGE_e,
     /* Actor SubMtd */ &daLbridgeMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

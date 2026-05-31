@@ -19,16 +19,14 @@ u8* JAInter::SoundTable::mAddress;
 
 /* 8029B570-8029B6FC       .text init__Q27JAInter10SoundTableFPUcUl */
 void JAInter::SoundTable::init(u8* param_1, u32 param_2) {
-    /* Nonmatching - operand swap */
     mAddress = param_1;
     mDatasize = param_2;
-    mVersion = param_1[3];
+    mVersion = mAddress[3];
     mSoundMax = new (JAIBasic::getCurrentJAIHeap(), 4) u16[18];
     mPointerCategory = new (JAIBasic::getCurrentJAIHeap(), 4) SoundInfo*[18];
     for (u8 i = 0; i < 18; i++) {
-        mSoundMax[i] = reinterpret_cast<u16*>(&mAddress[6])[i*2];
-        u32 temp = reinterpret_cast<u16*>(&mAddress[8])[i*2];
-        mPointerCategory[i] = &(reinterpret_cast<SoundInfo*>(&mAddress[0x50])[temp]);
+        mSoundMax[i] = *(u16*)(&mAddress[6 + i*4]);
+        mPointerCategory[i] = &((SoundInfo*)&mAddress[0x50])[*(u16*)(&mAddress[8 + i*4])];
         
         if (i < 16 && mSoundMax[i] != 0) {
             mCategotyMax = i + 1;
@@ -74,7 +72,7 @@ u8 JAInter::SoundTable::getInfoFormat(u32 param_1) {
         r31 = mAddress[1];
         break;
     case JAISoundID_Type_Stream:
-        r31 =  mAddress[2];
+        r31 = mAddress[2];
         break;
     default:
         JUT_ASSERT_MSG(101, 0, "getInfoFormat サウンドカテゴリービットが異常です。\n");

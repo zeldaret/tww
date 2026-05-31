@@ -5,15 +5,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ghostship.h"
-#include "d/res/res_ayush.h"
+#include "res/Object/Ayush.h"
 #include "SSystem/SComponent/c_math.h"
 #include "m_Do/m_Do_mtx.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/d_kankyo_wether.h"
-#include "d/res/res_cloth.h"
+#include "res/Object/Cloth.h"
 
 const u32 daGhostship_c::m_heapsize = 0x1EA0;
 const char daGhostship_c::m_arc_name[] = "Ayush";
@@ -33,7 +31,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 00000118-0000032C .text _createHeap__13daGhostship_cFv */
 BOOL daGhostship_c::_createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BDL_AYUSH));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_AYUSH_BDL_AYUSH_e));
     JUT_ASSERT(DEMO_SELECT(80, 88), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -41,16 +39,16 @@ BOOL daGhostship_c::_createHeap() {
         return false;
     }
 
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BTK_AYUSH));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_AYUSH_BTK_AYUSH_e));
     JUT_ASSERT(DEMO_SELECT(87, 95), btk != NULL);
 
     if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
 
-    ResTIMG* res1 = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BTI_B_GSHIP_HATA));
-    ResTIMG* res2 = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BTI_B_GSHIP_HO));
-    ResTIMG* res3 = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_cloth_arc_name, CLOTH_BTI_CLOTHTOON));
+    ResTIMG* res1 = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_AYUSH_BTI_B_GSHIP_HATA_e));
+    ResTIMG* res2 = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_AYUSH_BTI_B_GSHIP_HO_e));
+    ResTIMG* res3 = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_cloth_arc_name, dRes_INDEX_CLOTH_BTI_CLOTHTOON_e));
 
     mpCloth = dCloth_packetXlu_create(res1, res3, 5, 5, 700.0f, 350.0f, &tevStr, 0);
     mpCloth2 = dCloth_packetXlu_create(res2, res3, 6, 6, 1800.0f, 1000.0f, &tevStr, 0);
@@ -236,7 +234,7 @@ void daGhostship_c::getArg() {
 }
 
 cPhs_State daGhostship_c::_create() {
-    fopAcM_SetupActor(this, daGhostship_c);
+    fopAcM_ct(this, daGhostship_c);
 
     cPhs_State result = dComIfG_resLoad(&mPhs, m_arc_name);
     if(result != cPhs_COMPLEATE_e) {
@@ -286,16 +284,12 @@ static BOOL daGhostshipExecute(void* i_this) {
 /* 00001048-0000182C .text _execute__13daGhostship_cFv */
 bool daGhostship_c::_execute() {
     f32 time = dComIfGs_getTime();
-    f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    // Fakematch, debug map says fopAcM_searchPlayerDistanceXZ was used
+    f32 dist = fopAcM_searchActorDistanceXZ(this, player);
 
     mbCanEnterShip = false;
-    if(moonPhase != dKy_moon_type_chk() ||
-#if VERSION == VERSION_DEMO
-        (time > 90.0f && time < 330.0f)
-#else
-        (time > 90.0f && time < 285.0f)
-#endif
-    ) {
+    if(moonPhase != dKy_moon_type_chk() || (time > 90.0f && time < DEMO_SELECT(330.0f, 285.0f))) {
         dKy_pship_existense_cut();
         mAlpha = 0.0f;
     }
@@ -482,18 +476,18 @@ static actor_method_class daGhostshipMethodTable = {
 };
 
 actor_process_profile_definition g_profile_AYUSH = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_AYUSH,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_AYUSH_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daGhostship_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_AYUSH,
+    /* Draw Prio    */ fpcDwPi_AYUSH_e,
     /* Actor SubMtd */ &daGhostshipMethodTable,
     /* Status       */ 0x03 | fopAcStts_SHOWMAP_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

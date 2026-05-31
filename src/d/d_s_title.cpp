@@ -13,7 +13,6 @@
 #include "f_op/f_op_scene_mng.h"
 #include "f_pc/f_pc_leaf.h"
 #include "f_pc/f_pc_manager.h"
-#include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_meter.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -67,22 +66,26 @@ static BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
             return TRUE;
 #endif
 
-        if (movie->mpCallBack1 == NULL || movie->mpCallBack2 == NULL)
+        if (movie->mpGetMovieRestFrame == NULL || movie->mpSetPercentMovieVol == NULL)
             return TRUE;
 
-        if (fpcM_GetName(i_this) == PROC_ENDING_SCENE) {
-            if (movie->mpCallBack1() == 0) {
+        if (fpcM_GetName(i_this) == fpcNm_ENDING_SCENE_e) {
+            if (movie->mpGetMovieRestFrame() == 0) {
+#if VERSION == VERSION_DEMO
+                fopScnM_ChangeReq(i_this, fpcNm_NAMEEX_SCENE_e, fpcNm_OVERLAP0_e, 5);
+#else
                 if (dComIfGs_getClearCount() == 0) {
-                    fopScnM_ChangeReq(i_this, PROC_NAMEEX_SCENE, PROC_OVERLAP0, 5);
+                    fopScnM_ChangeReq(i_this, fpcNm_NAMEEX_SCENE_e, fpcNm_OVERLAP0_e, 5);
                 } else {
-                    dComIfG_changeOpeningScene(i_this, PROC_OPENING_SCENE);
+                    dComIfG_changeOpeningScene(i_this, fpcNm_OPENING_SCENE_e);
                 }
-                movie->mpCallBack2(0.0f);
+#endif
+                movie->mpSetPercentMovieVol(0.0f);
             }
         } else {
-            if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0) || movie->mpCallBack1() == 0) {
-                dComIfG_changeOpeningScene(i_this, PROC_OPENING_SCENE);
-                movie->mpCallBack2(0.0f);
+            if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0) || movie->mpGetMovieRestFrame() == 0) {
+                dComIfG_changeOpeningScene(i_this, fpcNm_OPENING_SCENE_e);
+                movie->mpSetPercentMovieVol(0.0f);
             }
         }
     }
@@ -111,15 +114,16 @@ static cPhs_State dScnTitle_Create(scene_class* i_scn) {
 
     dMenu_flagSet(0);
     fopAc_ac_c::setStopStatus(0);
+#if VERSION > VERSION_DEMO
     dComIfGp_offEnableNextStage();
-    u32 parameter = fpcM_GetName(i_this) == PROC_TITLE_SCENE ? 0 : 1;
+#endif
 
-    i_this->mMoviePId = fopAcM_create(PROC_MP, parameter);
+    i_this->mMoviePId = fopAcM_create(fpcNm_MP_e, fpcM_GetName(i_this) == fpcNm_TITLE_SCENE_e ? 0 : 1);
 
 #if VERSION == VERSION_PAL
     dScnTitle_c::mMp = NULL;
-    if (fpcM_GetName(i_this) == PROC_ENDING_SCENE) {
-        fopMsgM_Create(PROC_MESG, NULL, NULL);
+    if (fpcM_GetName(i_this) == fpcNm_ENDING_SCENE_e) {
+        fopMsgM_Create(fpcNm_MESG_e, NULL, NULL);
     }
 #endif
 
@@ -135,26 +139,26 @@ static scene_method_class l_dScnTitle_Method = {
 };
 
 scene_process_profile_definition g_profile_TITLE_SCENE = {
-    /* LayerID      */ fpcLy_ROOT_e,
-    /* ListID       */ 1,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TITLE_SCENE,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TITLE_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(title_of_scene_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnTitle_Method,
 };
 
 scene_process_profile_definition g_profile_ENDING_SCENE = {
-    /* LayerID      */ fpcLy_ROOT_e,
-    /* ListID       */ 1,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ENDING_SCENE,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ENDING_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(title_of_scene_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnTitle_Method,

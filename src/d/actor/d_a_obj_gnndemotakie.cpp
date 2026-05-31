@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gnndemotakie.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_gnndemotakie.h"
+#include "res/Object/Gnndemotakie.h"
 
 const char daObjGnntakie_c::M_arcname[] = "Gnndemotakie";
 
@@ -21,12 +19,13 @@ BOOL daObjGnntakie_c::create_heap() {
     J3DModelData* mdl_data;
     J3DAnmTextureSRTKey* btk_data;
     BOOL ret = FALSE;
-    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIE_BDL_GNN_DEMO_TAKI_E));
+    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_GNNDEMOTAKIE_BDL_GNN_DEMO_TAKI_E_e));
     JUT_ASSERT(90, mdl_data != NULL);
+
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mpModel != NULL) {
-            btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIE_BTK_GNN_DEMO_TAKI_E));
+            btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_GNNDEMOTAKIE_BTK_GNN_DEMO_TAKI_E_e));
             JUT_ASSERT(97, btk_data != NULL);
             if (btk_data != NULL && mpBtkAnm.init(mdl_data, btk_data, true, J3DFrameCtrl::EMode_LOOP)) {
                 ret = TRUE;
@@ -38,7 +37,7 @@ BOOL daObjGnntakie_c::create_heap() {
 
 /* 000001F4-00000300       .text _create__15daObjGnntakie_cFv */
 cPhs_State daObjGnntakie_c::_create() {
-    fopAcM_SetupActor(this, daObjGnntakie_c);
+    fopAcM_ct(this, daObjGnntakie_c);
     cPhs_State state = dComIfG_resLoad(&mPhase, M_arcname);
     if (state == cPhs_COMPLEATE_e) {
         state = cPhs_ERROR_e;
@@ -115,18 +114,18 @@ static actor_method_class Gnntakie_Mthd_Table = {
 }; // namespace
 
 actor_process_profile_definition g_profile_Obj_Gnntakie = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Gnntakie,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Gnntakie_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjGnntakie_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Gnntakie,
+    /* Draw Prio    */ fpcDwPi_Obj_Gnntakie_e,
     /* Actor SubMtd */ &Gnntakie_Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

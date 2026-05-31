@@ -5,13 +5,11 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_barrier.h"
-#include "d/res/res_ycage.h"
+#include "res/Object/Ycage.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_mtx.h"
@@ -101,9 +99,9 @@ int daObjBarrier_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 000001B0-00000340       .text init__18daObjBarrier_anm_cFv */
 bool daObjBarrier_anm_c::init() {
     bool rt = true;
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, YCAGE_BDL_YCAGE00));
-    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BTK_YCAGE00));
-    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BRK_YCAGE00));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_YCAGE_BDL_YCAGE00_e));
+    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_YCAGE_BTK_YCAGE00_e));
+    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_YCAGE_BRK_YCAGE00_e));
 
     if (modelData == NULL || pbtk == NULL || pbrk == NULL) {
         JUT_ASSERT(VERSION_SELECT(406, 406, 407, 407), FALSE);
@@ -132,7 +130,7 @@ bool daObjBarrier_c::create_heap() {
     if (!anm_init || !eff_init) {
         rt = false;
     } else {
-        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(l_arcname, YCAGE_DZB_KEKKAI);
+        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_YCAGE_DZB_KEKKAI_e);
         mpBgW = dBgW_NewSet(dzb, cBgW::MOVE_BG_e, &mBgMtx);
         if (mpBgW == NULL) {
             rt = false;
@@ -233,22 +231,22 @@ void daObjBarrier_c::break_start_wait_proc() {
         daPy_py_c* player_p = (daPy_py_c*)daPy_getPlayerActorClass();
 
         if ((player_p->current.pos - current.pos).absXZ() >= 8800.0f &&
-            dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e)
+            dComIfGs_getSelectEquip(0) == dItemNo_MASTER_SWORD_3_e)
         {
             switch (player_p->getCutType()) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
+            case daPy_py_c::CUT_TYPE_CUT_A:
+            case daPy_py_c::CUT_TYPE_CUT_F:
+            case daPy_py_c::CUT_TYPE_CUT_R:
+            case daPy_py_c::CUT_TYPE_CUT_L:
+            case daPy_py_c::CUT_TYPE_BT_JUMPCUT: // ???
+            case daPy_py_c::CUT_TYPE_CUT_EA:
+            case daPy_py_c::CUT_TYPE_CUT_EB:
+            case daPy_py_c::CUT_TYPE_CUT_TURN:
+            case daPy_py_c::CUT_TYPE_CUT_ROLL:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
                 dComIfGs_onEventBit(dSv_event_flag_c::BARRIER_BREAK);
                 mEventID = dComIfGp_evmng_getEventIdx("seal");
-                mBarrierProc = PROC_BREAK_ORDER;
+                mBarrierProc = PROC_BREAK_ORDER_e;
                 break;
             }
         }
@@ -258,7 +256,7 @@ void daObjBarrier_c::break_start_wait_proc() {
 /* 000009F0-00000A58       .text break_order_proc__14daObjBarrier_cFv */
 void daObjBarrier_c::break_order_proc() {
     if (eventInfo.checkCommandDemoAccrpt()) {
-        mBarrierProc = PROC_BREAK_END_WAIT;
+        mBarrierProc = PROC_BREAK_END_WAIT_e;
     } else {
         fopAcM_orderOtherEventId(this, mEventID);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
@@ -293,14 +291,14 @@ bool daObjBarrier_c::break_check() {
 #else
     if (mMoya == 0) {
         switch (mBarrierProc) {
-        case PROC_BREAK_START_WAIT:
+        case PROC_BREAK_START_WAIT_e:
             break_start_wait_proc();
             break;
-        case PROC_BREAK_ORDER:
+        case PROC_BREAK_ORDER_e:
             break_order_proc();
             chk = true;
             break;
-        case PROC_BREAK_END_WAIT:
+        case PROC_BREAK_END_WAIT_e:
             break_end_wait_proc();
             chk = true;
             break;
@@ -392,13 +390,13 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
 
         J3DModelData* modelData = mpModel[effect_idx]->getModelData();
 
-        J3DAnmTextureSRTKey* btk_anm_p = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BTK_YHRBR00));
+        J3DAnmTextureSRTKey* btk_anm_p = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_YCAGE_BTK_YHRBR00_e));
         JUT_ASSERT(VERSION_SELECT(839, 839, 937, 937), btk_anm_p != NULL);
 
-        J3DAnmTransform* bck_anm_p = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, YCAGE_BCK_YHRBR00));
+        J3DAnmTransform* bck_anm_p = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_YCAGE_BCK_YHRBR00_e));
         JUT_ASSERT(VERSION_SELECT(844, 844, 942, 942), bck_anm_p != NULL);
 
-        J3DAnmTevRegKey* brk_anm_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BRK_YHRBR00));
+        J3DAnmTevRegKey* brk_anm_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_YCAGE_BRK_YHRBR00_e));
         JUT_ASSERT(VERSION_SELECT(849, 849, 947, 947), brk_anm_p != NULL);
 
         mBtk[effect_idx].init(modelData, btk_anm_p, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1,
@@ -419,10 +417,10 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
 /* 000011B8-000013E0       .text init__17daObjBarrier_ef_cFv */
 bool daObjBarrier_ef_c::init() {
     bool rt = true;
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, YCAGE_BDL_YHRBR00));
-    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BTK_YHRBR00));
-    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, YCAGE_BCK_YHRBR00));
-    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BRK_YHRBR00));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_YCAGE_BDL_YHRBR00_e));
+    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_YCAGE_BTK_YHRBR00_e));
+    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_YCAGE_BCK_YHRBR00_e));
+    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_YCAGE_BRK_YHRBR00_e));
 
     if (modelData == NULL || pbtk == NULL || pbck == NULL || pbrk == NULL) {
         JUT_ASSERT(VERSION_SELECT(918, 918, 1016, 1016), FALSE);
@@ -497,7 +495,7 @@ void daObjBarrier_ef_c::draw() {
 /* 00001638-0000182C       .text _create__14daObjBarrier_cFv */
 cPhs_State daObjBarrier_c::_create() {
     cPhs_State phase = cPhs_ERROR_e;
-    fopAcM_SetupActor(this, daObjBarrier_c);
+    fopAcM_ct(this, daObjBarrier_c);
 
     if (fopAcM_IsFirstCreating(this)) {
         mMoya = param_get_moya();
@@ -638,18 +636,18 @@ static actor_method_class l_daObjBarrier_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Barrier = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Barrier,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Barrier_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjBarrier_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Barrier,
+    /* Draw Prio    */ fpcDwPi_Obj_Barrier_e,
     /* Actor SubMtd */ &l_daObjBarrier_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

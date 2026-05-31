@@ -7,9 +7,7 @@
 #include "d/actor/d_a_lwood.h"
 #include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_lwood.h"
+#include "res/Object/Lwood.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_graphic.h"
 
@@ -22,7 +20,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-00000194       .text CreateHeap__9daLwood_cFv */
 BOOL daLwood_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, LWOOD_BDL_ALWD);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_LWOOD_BDL_ALWD_e);
     JUT_ASSERT(0xb9, modelData != NULL);
     mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mModel == NULL)
@@ -30,7 +28,7 @@ BOOL daLwood_c::CreateHeap() {
 
     mModel->setUserArea((u32)this);
     setMoveBGMtx();
-    cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes(m_arcname, LWOOD_DZB_ALWD);
+    cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_LWOOD_DZB_ALWD_e);
     mpBgW = dBgW_NewSet(bgp, dBgW::MOVE_BG_e, &mtx);
     if (mpBgW == NULL)
         return FALSE;
@@ -113,7 +111,7 @@ void daLwood_c::setMoveBGMtx() {
 }
 
 cPhs_State daLwood_c::_create() {
-    fopAcM_SetupActor(this, daLwood_c);
+    fopAcM_ct(this, daLwood_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, m_arcname);
 
@@ -184,18 +182,18 @@ static actor_method_class daLwoodMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Lwood = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Lwood,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Lwood_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daLwood_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Lwood,
+    /* Draw Prio    */ fpcDwPi_Lwood_e,
     /* Actor SubMtd */ &daLwoodMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

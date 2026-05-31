@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ohatch.h"
-#include "d/res/res_ohatch.h"
-#include "d/d_procname.h"
+#include "res/Object/Ohatch.h"
 #include "d/d_bg_w.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -113,14 +111,14 @@ BOOL daObjOhatch_c::solidHeapCB(fopAc_ac_c* a_this) {
 /* 000002A0-000003CC       .text create_heap__13daObjOhatch_cFv */
 bool daObjOhatch_c::create_heap() {
     bool uVar5 = true;
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, OHATCH_BDL_OHATCH);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_OHATCH_BDL_OHATCH_e);
     if (modelData == NULL) {
         JUT_ASSERT(DEMO_SELECT(308, 311), FALSE);
         uVar5 = false;
     } else {
         mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
-        mBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, OHATCH_DZB_OH_CLS), cBgW::MOVE_BG_e, &m2A8);
-        mBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, OHATCH_DZB_OH_OPN), cBgW::MOVE_BG_e, &m2A8);
+        mBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_OHATCH_DZB_OH_CLS_e), cBgW::MOVE_BG_e, &m2A8);
+        mBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_OHATCH_DZB_OH_OPN_e), cBgW::MOVE_BG_e, &m2A8);
         if (mModel == NULL || mBgW1 == NULL || mBgW2 == NULL) {
             uVar5 = false;
         }
@@ -130,7 +128,7 @@ bool daObjOhatch_c::create_heap() {
 
 /* 000003CC-00000548       .text _create__13daObjOhatch_cFv */
 cPhs_State daObjOhatch_c::_create() {
-    fopAcM_SetupActor(this, daObjOhatch_c);
+    fopAcM_ct(this, daObjOhatch_c);
     cPhs_State ret = dComIfG_resLoad(&mPhase, l_arcname);
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0xB90)) {
@@ -354,18 +352,18 @@ static actor_method_class l_daObjOhatch_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Ohatch = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ohatch,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ohatch_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjOhatch_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ohatch,
+    /* Draw Prio    */ fpcDwPi_Obj_Ohatch_e,
     /* Actor SubMtd */ &l_daObjOhatch_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_5_e,
+    /* Cull Type    */ fopAc_CULLBOX_5_e,
 };

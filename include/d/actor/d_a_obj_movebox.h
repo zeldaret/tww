@@ -166,17 +166,17 @@ namespace daObjMovebox {
         inline cPhs_State Mthd_Create();
         inline BOOL Mthd_Delete();
         
-        s32 prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
-        s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
-        s32 prm_get_swSave1() const;
-        s32 prmZ_get_swSave2() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? 0xFF : (u8)(mPrmZ >> 8); }
-        s32 prmZ_get_swSave2_MkieB() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? (u8)(mPrmZ >> 8) : 0xFF; }
-        s32 prmZ_get_pathId() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? 0xFF : (mPrmZ & 0x00FF) >> 0; }
-        s32 prmX_get_evId() const { return (mPrmX & 0x00FF) >> 0; }
-        s32 prm_get_itemNo() const { return daObj::PrmAbstract(this, PRM_ITEMNO_W, PRM_ITEMNO_S); }
-        s32 prm_get_itemSave() const { return daObj::PrmAbstract(this, PRM_ITEMSAVE_W, PRM_ITEMSAVE_S); }
-        s32 prm_get_dmy() const { return daObj::PrmAbstract(this, PRM_DMY_W, PRM_DMY_S); }
-        s32 prm_get_buoy() const { return daObj::PrmAbstract(this, PRM_BUOY_W, PRM_BUOY_S); }
+        int prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
+        int prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+        int prm_get_swSave1() const;
+        int prmZ_get_swSave2() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? 0xFF : (u8)(mPrmZ >> 8); }
+        int prmZ_get_swSave2_MkieB() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? (u8)(mPrmZ >> 8) : 0xFF; }
+        int prmZ_get_pathId() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? 0xFF : (mPrmZ & 0x00FF) >> 0; }
+        int prmX_get_evId() const { return (mPrmX & 0x00FF) >> 0; }
+        int prm_get_itemNo() const { return daObj::PrmAbstract(this, PRM_ITEMNO_W, PRM_ITEMNO_S); }
+        int prm_get_itemSave() const { return daObj::PrmAbstract(this, PRM_ITEMSAVE_W, PRM_ITEMSAVE_S); }
+        int prm_get_dmy() const { return daObj::PrmAbstract(this, PRM_DMY_W, PRM_DMY_S); }
+        int prm_get_buoy() const { return daObj::PrmAbstract(this, PRM_BUOY_W, PRM_BUOY_S); }
         
         BOOL is_switch1() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), prm_get_swSave1()); };
         BOOL is_switch2() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), prmZ_get_swSave2()); };

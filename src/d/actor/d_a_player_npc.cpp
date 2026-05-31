@@ -8,7 +8,6 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_lib.h"
 #include "SSystem/SComponent/c_counter.h"
-#include "d/d_procname.h"
 
 /* 8015A37C-8015A448       .text check_initialRoom__10daPy_npc_cFv */
 int daPy_npc_c::check_initialRoom() {
@@ -17,12 +16,17 @@ int daPy_npc_c::check_initialRoom() {
         if (mAcch.GetGroundH() == -G_CM3D_F_INF || dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4) {
             return 0;
         }
+#if VERSION == VERSION_DEMO
+        fopAcM_SetHomeRoomNo(this, dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd));
+        fopAcM_SetRoomNo(this, dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd));
+#else
         int roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
         if (roomNo < 0 || !dComIfGp_roomControl_checkStatusFlag(roomNo, 0x10)) {
             return 0;
         }
         fopAcM_SetHomeRoomNo(this, roomNo);
         fopAcM_SetRoomNo(this, roomNo);
+#endif
         return -1;
     }
     return 1;
@@ -30,7 +34,7 @@ int daPy_npc_c::check_initialRoom() {
 
 /* 8015A448-8015A524       .text check_moveStop__10daPy_npc_cFv */
 BOOL daPy_npc_c::check_moveStop() {
-    int roomNo = current.roomNo;
+    int roomNo = fopAcM_GetRoomNo(this);
     BOOL hasBgW = dComIfGp_roomControl_checkStatusFlag(roomNo, 0x10);
     if ((roomNo < 0 || !hasBgW)) {
         if (!hasBgW || m4E8 >= 30) {
@@ -50,10 +54,10 @@ BOOL daPy_npc_c::check_moveStop() {
 /* 8015A524-8015A590       .text setRestart__10daPy_npc_cFSc */
 void daPy_npc_c::setRestart(s8 option) {
     if (option == dComIfGs_getRestartOption()) {
-        bool playerInDoor = dComIfGp_getPlayer(0)->eventInfo.checkCommandDoor();
+        BOOL playerInDoor = dComIfGp_getPlayer(0)->eventInfo.checkCommandDoor();
         s8 roomNo = current.roomNo;
         s8 optionRoomNo = dComIfGs_getRestartOptionRoomNo();
-        if (!playerInDoor && roomNo != optionRoomNo) {
+        if (playerInDoor == FALSE && roomNo != optionRoomNo) {
             unconditionalSetRestart(option);
         }
     }
@@ -76,13 +80,13 @@ void daPy_npc_c::setOffsetHomePos() {
 
 /* 8015A6A4-8015AA0C       .text setPointRestart__10daPy_npc_cFsSc */
 void daPy_npc_c::setPointRestart(s16 i_point, s8 option) {
-    JUT_ASSERT(157, dComIfGp_getStagePlayer() != NULL);
+    JUT_ASSERT(DEMO_SELECT(152, 157), dComIfGp_getStagePlayer() != NULL);
     stage_scls_info_dummy_class* sclsinfo = dComIfGp_getStageSclsInfo();
-    JUT_ASSERT(159, sclsinfo != NULL);
+    JUT_ASSERT(DEMO_SELECT(154, 159), sclsinfo != NULL);
     
-    JUT_ASSERT(161, 0 <= i_point && i_point < sclsinfo->num);
+    JUT_ASSERT(DEMO_SELECT(156, 161), 0 <= i_point && i_point < sclsinfo->num);
     stage_scls_info_class* scls_data = sclsinfo->m_entries;
-    JUT_ASSERT(163, scls_data != NULL);
+    JUT_ASSERT(DEMO_SELECT(158, 163), scls_data != NULL);
     
     stage_actor_data_class* player_data = dComIfGp_getStagePlayer()->m_entries;
     int scls_start_code = scls_data[i_point].mStart;
@@ -94,7 +98,7 @@ void daPy_npc_c::setPointRestart(s16 i_point, s8 option) {
         }
         player_data++;
     }
-    JUT_ASSERT(174, i != dComIfGp_getStagePlayerNum());
+    JUT_ASSERT(DEMO_SELECT(169, 174), i != dComIfGp_getStagePlayerNum());
     
     home.pos = player_data->base.position;
     home.angle.y = player_data->base.angle.y;
@@ -134,10 +138,7 @@ BOOL daPy_npc_c::initialRestartOption(s8 option, BOOL save) {
     if (!partner) {
         dComIfGp_setCb1Player(this);
         if (save && option != dComIfGs_getRestartOption()) {
-            s16 rotY;
-            s8 roomNo = current.roomNo;
-            rotY = home.angle.y;
-            dComIfGs_setRestartOption(&home.pos, rotY, roomNo, option);
+            dComIfGs_setRestartOption(&home.pos, home.angle.y, current.roomNo, option);
         }
         return TRUE;
     }
@@ -161,7 +162,11 @@ BOOL daPy_npc_c::checkNowPosMove(const char* pName) {
         return TRUE;
     }
     
-    return fopAcM_CheckStatus(this, fopAcStts_UNK800_e);
+    if (fopAcM_CheckStatus(this, fopAcStts_UNK800_e)) {
+        return TRUE;
+    }
+    
+    return FALSE;
 }
 
 /* 8015AC74-8015AD20       .text drawDamageFog__10daPy_npc_cFv */
@@ -184,7 +189,7 @@ void daPy_npc_c::drawDamageFog() {
 /* 8015AD20-8015AEF8       .text chkMoveBlock__10daPy_npc_cFP4cXyz */
 int daPy_npc_c::chkMoveBlock(cXyz* outBlockVel) {
     cXyz blockRelPos;
-    fopAc_ac_c* block = daPy_npc_SearchAreaByName(this, PROC_Obj_Movebox, 300.0f, &blockRelPos);
+    fopAc_ac_c* block = daPy_npc_SearchAreaByName(this, fpcNm_Obj_Movebox_e, 300.0f, &blockRelPos);
     if (block) {
         cXyz blockVel = block->current.pos - block->old.pos;
         if (blockVel.abs() > 0.001f) {

@@ -19,9 +19,7 @@ struct mesg_data;
 struct mesg_info;
 
 // BMG INF1 messageEntry
-struct mesg_entry {
-    // mesg_entry() {} // fixes fopMsgM_selectMessageGet, but messes up getMesgEntry
-
+struct JMSMesgEntry_c {
     /* 0x00 */ u32 mDataOffs;
     /* 0x04 */ u16 mMsgNo;
     /* 0x06 */ s16 mItemPrice;
@@ -82,7 +80,7 @@ struct fopMsgM_pane_class {
     /* 0x34 */ u8 mInitAlpha;
     /* 0x35 */ u8 mNowAlpha;
     /* 0x36 */ s16 mUserArea;
-};
+};  // Size: 0x38
 
 struct fopMsgM_pane_alpha_class {
     /* 0x00 */ J2DPane * pane;
@@ -96,7 +94,7 @@ public:
     mesg_header* getMesgHeader(u32);
     mesg_info* getMesgInfo(mesg_header*);
     mesg_data* getMesgData(mesg_header*);
-    mesg_entry getMesgEntry(mesg_header*);
+    JMSMesgEntry_c getMesgEntry(mesg_header*);
     const char* getMessage(mesg_header*);
 
 public:
@@ -108,11 +106,16 @@ public:
 
 class fopMsgM_itemMsgGet_c {
 public:
+    fopMsgM_itemMsgGet_c() {
+        mMsgIdx = 0;
+        mMsgNo = 0;
+        mResMsgNo = 0;
+    }
     virtual ~fopMsgM_itemMsgGet_c() {}
     mesg_header* getMesgHeader(u32);
     mesg_info* getMesgInfo(mesg_header*);
     mesg_data* getMesgData(mesg_header*);
-    mesg_entry getMesgEntry(mesg_header*);
+    JMSMesgEntry_c getMesgEntry(mesg_header*);
     const char* getMessage(mesg_header*);
 
 public:
@@ -143,7 +146,7 @@ public:
 class fopMsgM_msgDataProc_c {
 public:
     fopMsgM_msgDataProc_c();
-    virtual ~fopMsgM_msgDataProc_c() {}
+    virtual ~fopMsgM_msgDataProc_c();
     void dataInit();
     f32 charLength(int, int, bool);
     f32 rubyLength(int, bool);
@@ -168,6 +171,7 @@ public:
     void getString(char*, u32);
     void getString(char*, char*, char*, char*, u32, f32*, f32*, int*);
     void getRubyString(char*, char*, char*, char*, char*, char*, f32*, f32*, int*);
+#if VERSION >= VERSION_USA
     void tag_len_kaisen_game(int*, f32*, int*, int*, int*);
     void tag_len_rupee(int*, f32*, int*, int*, int*);
     void tag_len_num_input(int*, f32*, int*, int*, int*);
@@ -230,10 +234,75 @@ public:
     void tag_input_pendant();
     void tag_input_hane();
     void tag_input_kenshi();
+#endif
+
+    void getIconColor(int) {}
+    void getIconNum(int) {}
+    void getIconPosX(int) {}
+    void getIconPosY(int) {}
+    void getIconScale(int) {}
+
+    void setCharSpace(int) {}
+    void setRubyCharSpace(int) {}
+    void setLineSpace(int) {}
+
+    void setOutMessage(char* param_0, char* param_1, char* param_2, char* param_3) {
+        field_0x60 = param_0;
+        field_0x40 = param_0;
+        field_0x64 = param_1;
+        field_0x44 = param_1;
+        field_0x68 = param_2;
+        field_0x48 = param_2;
+        field_0x6C = param_3;
+        field_0x4C = param_3;
+    }
+    void setSelectMessage(char*, char*, char*, char*) {}
+
+    void setMesgEntry(JMSMesgEntry_c*) {}
+
+    void dec_keyWaitTimer() {}
+    void dec_waitTimer() {}
+    void getCharAlpha() {}
+    void getGradAlpha() {}
+    void getLineCount() {}
+    void getMesgStatus() {}
+    void getNowCursorPos() {}
+    void getRCharAlpha() {}
+    void getRGradAlpha() {}
+    void getSelectFlag() {}
+    void getSelectLength() {}
+    void getStringColor() {}
+    void get_waitTimer() {}
+    void resetNowLine() {}
+    void selectArrow(J2DPicture*) {}
+    void setActorPosition(cXyz*) {}
+    void setAimLine(int) {}
+    void setAutoSendFlagOff() {}
+    void setBmgData(char*) {}
+    void setCenterLineWidth(int) {}
+    void setCharAlpha(u8, u8, u8, u8) {}
+    void setCount(int) {}
+    void setFont(JUTFont*) {}
+    void setFontSize(int) {}
+    void setHandSendFlagOff() {}
+    void setLineCount(int) {}
+    void setLineWidth(int) {}
+    void setRubyFont(JUTFont*) {}
+    void setRubyFontSize(int) {}
+    void setSelectFlagOff() {}
+    void setSelectNum(u8) {}
+    void setSendSpeed(int) {}
+    void setSpaceFlagOff() {}
+    void setSpaceFlagOn() {}
+    void setSpaceTimer(int) {}
+    void setStringColor(u32) {}
+    void set_waitTimer(int) {}
+    void set_waitTimerZero() {}
+    void shortCut() {}
 
 public:
     /* 0x004 */ JUTFont* font[2];
-    /* 0x00C */ mesg_entry* field_0x0C;
+    /* 0x00C */ JMSMesgEntry_c* field_0x0C;
     /* 0x010 */ u32 field_0x10;
     /* 0x014 */ f32 field_0x14;
     /* 0x018 */ f32 field_0x18;
@@ -245,7 +314,7 @@ public:
     /* 0x030 */ u32 field_0x30;
     /* 0x034 */ u32 field_0x34;
     /* 0x038 */ u32 field_0x38;
-    /* 0x03C */ char* field_0x3C;
+    /* 0x03C */ const char* field_0x3C;
     /* 0x040 */ char* field_0x40;
     /* 0x044 */ char* field_0x44;
     /* 0x048 */ char* field_0x48;
@@ -257,8 +326,8 @@ public:
     /* 0x06C */ char* field_0x6C;
     /* 0x070 */ char field_0x70[0x64]; // no idea how big this array is
     /* 0x0D4 */ char field_0xD4[4];
-    /* 0x0D4 */ s32 field_0xD8[4];
-    /* 0x0D4 */ s32 field_0xE8[4];
+    /* 0x0D8 */ s32 field_0xD8[4];
+    /* 0x0E8 */ s32 field_0xE8[4];
     /* 0x0F8 */ s32 field_0xF8[4];
     /* 0x108 */ s32 field_0x108[4];
     /* 0x118 */ u32 field_0x118;
@@ -284,7 +353,7 @@ public:
     /* 0x168 */ s32 field_0x168[0xF];
     /* 0x1A4 */ u32 field_0x1A4[0xF];
     /* 0x1A4 */ u32 field_0x1E0[0xF];
-    /* 0x21C */ u32 field_0x21C;
+    /* 0x21C */ int field_0x21C;
     /* 0x21C */ u32 field_0x220[0xF];
     /* 0x25C */ u32 field_0x25C;
     /* 0x260 */ s16 field_0x260;
@@ -299,14 +368,16 @@ public:
     /* 0x27E */ u8 field_0x27E;
     /* 0x27F */ u8 field_0x27F;
     /* 0x280 */ u8 field_0x280;
-    /* 0x281 */ u8 field_0x281[0xF];
+    /* 0x281 */ u8 field_0x281[0xF]; // IconNum?
     /* 0x290 */ u8 field_0x290;
     /* 0x291 */ u8 field_0x291;
     /* 0x292 */ u8 field_0x292;
     /* 0x293 */ u8 field_0x293;
     /* 0x294 */ u8 field_0x294;
     /* 0x295 */ u8 field_0x295;
+#if VERSION > VERSION_DEMO
     /* 0x296 */ u8 field_0x296;
+#endif
     /* 0x297 */ u8 field_0x297;
     /* 0x298 */ u8 field_0x298;
     /* 0x299 */ u8 field_0x299;
@@ -336,7 +407,9 @@ void fopMsgM_Delete(void* process);
 fopMsg_prm_class* fopMsgM_GetAppend(void* msg);
 void fopMsgM_destroyExpHeap(JKRExpHeap*);
 f32 fopMsgM_valueIncrease(int param_0, int param_1, u8 param_2);
+#if VERSION >= VERSION_USA
 bool fopMsgM_hyrule_language_check(u32 msgNo);
+#endif
 s32 fopMsgM_setStageLayer(void*);
 fpc_ProcID fopMsgM_messageSet(u32 i_msgNo, fopAc_ac_c* i_actorP);
 fpc_ProcID fopMsgM_messageSet(u32 param_0, cXyz*);
@@ -344,8 +417,8 @@ fpc_ProcID fopMsgM_messageSet(u32 param_0);
 fpc_ProcID fopMsgM_scopeMessageSet(u32 param_0);
 int fopMsgM_messageSetDemo(u32 param_0);
 msg_class* fopMsgM_SearchByID(fpc_ProcID param_0);
-char* fopMsgM_messageGet(char* msg, u32 string_id);
-void fopMsgM_passwordGet(char*, u32);
+char* fopMsgM_messageGet(char* dst, u32 msgNo);
+char* fopMsgM_passwordGet(char* dst, u32 msgNo);
 fpc_ProcID fop_Timer_create(s16 param_0, u8 param_1, u16 param_2, u8 param_3, u8 param_4, f32 param_5,
                      f32 param_6, f32 param_7, f32 param_8, fopMsgCreateFunc createFunc);
 inline fpc_ProcID fopMsgM_Timer_create(s16 param_0, u8 param_1, u16 param_2, u8 param_3, u8 param_4,

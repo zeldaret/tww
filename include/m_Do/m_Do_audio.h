@@ -71,8 +71,8 @@ inline void mDoAud_changeSubBgmStatus(s32 status) {
     mDoAud_zelAudio_c::getInterface()->changeSubBgmStatus(status);
 }
 
-inline void mDoAud_bgmStreamPrepare(u32 id) {
-    mDoAud_zelAudio_c::getInterface()->bgmStreamPrepare(id);
+inline void mDoAud_bgmStreamPrepare(u32 soundID) {
+    mDoAud_zelAudio_c::getInterface()->bgmStreamPrepare(soundID);
 }
 
 inline void mDoAud_bgmStreamPlay() {
@@ -158,8 +158,8 @@ inline void mDoAud_seStart(u32 i_seNum, Vec* i_sePos) {
     mDoAud_zelAudio_c::getInterface()->seStart(i_seNum, i_sePos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
-inline void mDoAud_seStart(u32 i_seNum) {
-    mDoAud_zelAudio_c::getInterface()->seStart(i_seNum, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+inline JAISound** mDoAud_seStart(u32 i_seNum) {
+    return mDoAud_zelAudio_c::getInterface()->seStart(i_seNum, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
 inline void mDoAud_messageSePlay(u16 i_seNum, Vec* i_sePos = NULL, s8 i_reverb = 0) {
@@ -343,15 +343,15 @@ inline s32 mDoAud_tact_judge(s32 param_1, s32 param_2) {
 }
 
 inline void mDoAud_tact_armSoundPlay(s32 param_1) {
-    return mDoAud_zelAudio_c::getTact().armSoundPlay(param_1);
+    mDoAud_zelAudio_c::getTact().armSoundPlay(param_1);
 }
 
-inline void mDoAud_tact_metronomePlay(s32 param_1, s32 param_2) {
-    return mDoAud_zelAudio_c::getTact().metronomePlay(param_1, param_2);
+inline s32 mDoAud_tact_metronomePlay(s32 now_beat, s32 c_pos) {
+    return mDoAud_zelAudio_c::getTact().metronomePlay(now_beat, c_pos);
 }
 
 inline void mDoAud_tact_melodyPlay(s32 param_1) {
-    return mDoAud_zelAudio_c::getTact().melodyPlay(param_1);
+    mDoAud_zelAudio_c::getTact().melodyPlay(param_1);
 }
 
 inline void mDoAud_tact_melodyStop() {}

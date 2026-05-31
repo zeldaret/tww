@@ -10,8 +10,6 @@
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 
@@ -213,7 +211,7 @@ bool daObjBarrel2::Act_c::create_heap() {
 
 /* 00000308-0000089C       .text _create__Q212daObjBarrel25Act_cFv */
 cPhs_State daObjBarrel2::Act_c::_create() {
-    fopAcM_SetupActor(this, daObjBarrel2::Act_c);
+    fopAcM_ct(this, daObjBarrel2::Act_c);
 
     m410 = prm_get_type();
 
@@ -272,8 +270,15 @@ cPhs_State daObjBarrel2::Act_c::_create() {
             csXyz sp10(0, home.angle.y, 0);
             sp24.setall(attr()->m28 * attr()->m2C);
 
-            m458 =
-                fopAcM_createRaceItemFromTable(&sp30, prm_get_itemNo(), prm_get_itemSave(), fopAcM_GetHomeRoomNo(this), &sp10, &sp24, prm_get_coming() ? 1 : 0);
+            mItemId = fopAcM_createRaceItemFromTable(
+                &sp30,
+                prm_get_itemNo(),
+                prm_get_itemSave(),
+                fopAcM_GetHomeRoomNo(this),
+                &sp10,
+                &sp24,
+                prm_get_coming() ? 1 : 0
+            );
             m45C = 3.4028235e+38f;
             m468 = 0;
             m470 = 0;
@@ -320,7 +325,7 @@ void daObjBarrel2::Act_c::tg_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf* arg2, fopAc
 void daObjBarrel2::Act_c::co_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_c* a_ship, dCcD_GObjInf*) {
     daObjBarrel2::Act_c* i_this = (daObjBarrel2::Act_c*)a_this;
 
-    if (fopAcM_GetProfName(a_ship) == PROC_SHIP) {
+    if (fopAcM_GetProfName(a_ship) == fpcNm_SHIP_e) {
         daShip_c* ship = (daShip_c*)a_ship;
         const s32 index = i_this->m410;
 
@@ -796,7 +801,7 @@ void daObjBarrel2::Act_c::item_delete() {
 void daObjBarrel2::Act_c::item_give() {
     if (M_tmp_item_actor != NULL) {
         M_tmp_item_actor->raceItemForceGet();
-        m458 = fpcM_ERROR_PROCESS_ID_e;
+        mItemId = fpcM_ERROR_PROCESS_ID_e;
         m476 = 1;
         M_tmp_item_actor = NULL;
     }
@@ -805,19 +810,19 @@ void daObjBarrel2::Act_c::item_give() {
 /* 000022A4-0000233C       .text item_connect_check__Q212daObjBarrel25Act_cFv */
 void daObjBarrel2::Act_c::item_connect_check() {
     M_tmp_item_actor = NULL;
-    if (m458 != fpcM_ERROR_PROCESS_ID_e) {
+    if (mItemId != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* pRaceitem;
-        if (fopAcM_SearchByID(m458, &pRaceitem)) {
+        if (fopAcM_SearchByID(mItemId, &pRaceitem)) {
             daRaceItem_c* raceitem = (daRaceItem_c*)pRaceitem;
             if (raceitem != NULL) {
                 if (raceitem->checkOffsetPos()) {
                     M_tmp_item_actor = raceitem;
                 } else {
-                    m458 = fpcM_ERROR_PROCESS_ID_e;
+                    mItemId = fpcM_ERROR_PROCESS_ID_e;
                 }
             }
         } else {
-            m458 = fpcM_ERROR_PROCESS_ID_e;
+            mItemId = fpcM_ERROR_PROCESS_ID_e;
         }
     }
 }
@@ -1135,18 +1140,18 @@ actor_method_class daObjBarrel2::Method::Table = {
 };
 
 actor_process_profile_definition g_profile_Obj_Barrel2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Barrel2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Barrel2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjBarrel2::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Barrel2,
+    /* Draw Prio    */ fpcDwPi_Obj_Barrel2_e,
     /* Actor SubMtd */ &daObjBarrel2::Method::Table,
     /* Status       */ 0x05 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

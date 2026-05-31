@@ -6,10 +6,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_stair.h"
 #include "d/d_bg_w.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
-#include "d/res/res_mkdan.h"
+#include "res/Object/Mkdan.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_meter.h"
 
@@ -73,7 +71,7 @@ daobj_stairHIO_c::daobj_stairHIO_c() {
 /* 00000130-000001D8       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void ride_call_back(dBgW* i_arg0, fopAc_ac_c* i_arg1, fopAc_ac_c* i_arg2) {
     daObj_Stair_c* i_this = (daObj_Stair_c*)i_arg1;
-    if (fopAcM_GetProfName(i_arg2) == PROC_PLAYER && i_this->field_0x2E0 < l_HIO.m18){
+    if (fopAcM_GetProfName(i_arg2) == fpcNm_PLAYER_e && i_this->field_0x2E0 < l_HIO.m18){
         i_this->field_0x2E4 = 1;
         i_this->field_0x2C8.set(i_arg2->current.pos - i_arg1->current.pos);
         i_this->field_0x2D4.set(0.0f, -1.0f, 0.0f);
@@ -83,7 +81,7 @@ void ride_call_back(dBgW* i_arg0, fopAc_ac_c* i_arg1, fopAc_ac_c* i_arg2) {
 
 /* 000001D8-000002C4       .text CreateHeap__13daObj_Stair_cFv */
 BOOL daObj_Stair_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKDAN_BDL_MKDAN1);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKDAN_BDL_MKDAN1_e);
     JUT_ASSERT(0xcc, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if(l_HIO.mNo < 0){
@@ -146,7 +144,7 @@ static cPhs_State daObj_StairCreate(void* i_this) {
 /* 000004D8-00000854       .text _create__13daObj_Stair_cFv */
 cPhs_State daObj_Stair_c::_create() {
     cPhs_State phase_state;
-    fopAcM_SetupActor(this, daObj_Stair_c);
+    fopAcM_ct(this, daObj_Stair_c);
     u32 switchIdx = fopAcM_GetParam(this) & 0xFF;
 
     if(switchIdx != 0xff && fopAcM_isSwitch(this, switchIdx)) {
@@ -158,7 +156,7 @@ cPhs_State daObj_Stair_c::_create() {
             Quaternion quat = {0.0f, 0.0f, 0.0f, 1.0f};
             f32 sin = cM_ssin(current.angle.y >> 1);
             f32 cos = cM_scos(current.angle.y >> 1);
-            phase_state = MoveBGCreate(M_arcname, MKDAN_DZB_MKDAN1, NULL, 0x8A0);
+            phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MKDAN_DZB_MKDAN1_e, NULL, 0x8A0);
             JUT_ASSERT(0x10f, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
 
             field_0x4A0.x = 0.0f;
@@ -270,7 +268,7 @@ bool daObj_Stair_c::_execute() {
         if(mCps.ChkTgHit()) {
             fopAc_ac_c* ac = mCps.GetTgHitAc();
             if(ac) {
-                if(fopAcM_IsActor(ac) && fopAcM_GetProfName(ac) == PROC_BOMB){
+                if(fopAcM_IsActor(ac) && fopAcM_GetProfName(ac) == fpcNm_BOMB_e){
                     sin = cM_ssin(current.angle.y);
                     cos = cM_scos(current.angle.y);
                     field_0x2E4 = 1;
@@ -357,18 +355,18 @@ static actor_method_class daObj_StairMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Stair = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Stair,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Stair_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Stair_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Stair,
+    /* Draw Prio    */ fpcDwPi_Obj_Stair_e,
     /* Actor SubMtd */ &daObj_StairMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENV_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

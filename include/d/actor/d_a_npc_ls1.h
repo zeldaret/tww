@@ -242,6 +242,9 @@ public:
     };  // Size: 0x38
     daNpc_Ls1_HIO_c();
     inline virtual ~daNpc_Ls1_HIO_c();
+
+    void genMessage(JORMContext* ctx) {}
+
 public:
     /* 0x04 */ s8 m04;
     /* 0x08 */ s32 m08;

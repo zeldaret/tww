@@ -1,0 +1,22 @@
+#ifndef RES_OTANA_H
+#define RES_OTANA_H
+
+enum dRes_INDEX_OTANA {
+    /* BDL  */
+    dRes_INDEX_OTANA_BDL_OTANA_e=0x4,
+    /* DZB  */
+    dRes_INDEX_OTANA_DZB_OTANA_e=0x7,
+};
+
+enum dRes_ID_OTANA {
+    /* BDL  */
+    dRes_ID_OTANA_BDL_OTANA_e=0x4,
+    /* DZB  */
+    dRes_ID_OTANA_DZB_OTANA_e=0x7,
+};
+
+enum OTANA_JNT {
+    OTANA_JNT_OTANA_e=0x0,
+};
+
+#endif /* !RES_OTANA_H */

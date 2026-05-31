@@ -4,262 +4,262 @@
 #include "global.h"
 
 enum ItemTable {
-    /* 0x00 */ dItem_HEART_e,
-    /* 0x01 */ dItem_GREEN_RUPEE_e,
-    /* 0x02 */ dItem_BLUE_RUPEE_e,
-    /* 0x03 */ dItem_YELLOW_RUPEE_e,
-    /* 0x04 */ dItem_RED_RUPEE_e,
-    /* 0x05 */ dItem_PURPLE_RUPEE_e,
-    /* 0x06 */ dItem_ORANGE_RUPEE_e,
-    /* 0x07 */ dItem_HEART_PIECE_e,
-    /* 0x08 */ dItem_HEART_CONTAINER_e,
-    /* 0x09 */ dItem_SMALL_MAGIC_e,
-    /* 0x0A */ dItem_LARGE_MAGIC_e,
-    /* 0x0B */ dItem_BOMB_5_e,
-    /* 0x0C */ dItem_BOMB_10_e,
-    /* 0x0D */ dItem_BOMB_20_e,
-    /* 0x0E */ dItem_BOMB_30_e,
-    /* 0x0F */ dItem_SILVER_RUPEE_e,
-    /* 0x10 */ dItem_ARROW_10_e,
-    /* 0x11 */ dItem_ARROW_20_e,
-    /* 0x12 */ dItem_ARROW_30_e,
-    /* 0x13 */ noentry19, // Unused
-    /* 0x14 */ noentry20, // Unused
-    /* 0x15 */ dItem_SMALL_KEY_e,
-    /* 0x16 */ dItem_RECOVER_FAIRY_e,
-    /* 0x17 */ dItem_HEART_PIECE_2_e, // Not an item, used only for its msg no
-    /* 0x18 */ dItem_HEART_PIECE_3_e, // Not an item, used only for its msg no
-    /* 0x19 */ dItem_HEART_PIECE_4_e, // Not an item, used only for its msg no
-    /* 0x1A */ dItem_SUB_DUN_RUPEE_e, // Used in VERSION_JPN only
-    /* 0x1B */ noentry27, // Unused
-    /* 0x1C */ noentry28, // Unused
-    /* 0x1D */ noentry29, // Unused
-    /* 0x1E */ dItem_TRIPLE_HEART_e,
-    /* 0x1F */ dItem_JOY_PENDANT_e,
-    /* 0x20 */ dItem_TELESCOPE_e,
-    /* 0x21 */ dItem_TINGLE_TUNER_e,
-    /* 0x22 */ dItem_WIND_WAKER_e,
-    /* 0x23 */ CAMERA,
-    /* 0x24 */ dItem_SPOILS_BAG_e,
-    /* 0x25 */ dItem_GRAPPLING_HOOK_e,
-    /* 0x26 */ CAMERA2,
-    /* 0x27 */ dItem_BOW_e,
-    /* 0x28 */ dItem_POWER_BRACELETS_e,
-    /* 0x29 */ dItem_IRON_BOOTS_e,
-    /* 0x2A */ dItem_MAGIC_ARMOR_e,
-    /* 0x2B */ WATER_BOOTS, // Unused
-    /* 0x2C */ dItem_BAIT_BAG_e,
-    /* 0x2D */ dItem_BOOMERANG_e,
-    /* 0x2E */ BARE_HAND, // Unused
-    /* 0x2F */ dItem_HOOKSHOT_e,
-    /* 0x30 */ dItem_DELIVERY_BAG_e,
-    /* 0x31 */ dItem_BOMB_BAG_e,
-    /* 0x32 */ dItem_FUKU_e,
-    /* 0x33 */ dItem_SKULL_HAMMER_e,
-    /* 0x34 */ dItem_DEKU_LEAF_e,
-    /* 0x35 */ dItem_MAGIC_ARROW_e,
-    /* 0x36 */ dItem_LIGHT_ARROW_e,
-    /* 0x37 */ dItem_NEW_FUKU_e,
-    /* 0x38 */ dItem_SWORD_e,
-    /* 0x39 */ dItem_MASTER_SWORD_1_e,
-    /* 0x3A */ dItem_MASTER_SWORD_2_e,
-    /* 0x3B */ dItem_SHIELD_e,
-    /* 0x3C */ dItem_MIRROR_SHIELD_e,
-    /* 0x3D */ dItem_DROPPED_SWORD_e,
-    /* 0x3E */ dItem_MASTER_SWORD_3_e,
-    /* 0x3F */ KAKERA_HEART2,
-    /* 0x40 */ noentry64, // Unused
-    /* 0x41 */ noentry65, // Unused
-    /* 0x42 */ dItem_PIRATES_CHARM_e,
-    /* 0x43 */ dItem_HEROS_CHARM_e,
-    /* 0x44 */ GRASS_BALL, // Unused
-    /* 0x45 */ dItem_SKULL_NECKLACE_e,
-    /* 0x46 */ dItem_BOKOBABA_SEED_e,
-    /* 0x47 */ dItem_GOLDEN_FEATHER_e,
-    /* 0x48 */ BOKO_BELT,
-    /* 0x49 */ dItem_RED_JELLY_e,
-    /* 0x4A */ dItem_GREEN_JELLY_e,
-    /* 0x4B */ dItem_BLUE_JELLY_e,
-    /* 0x4C */ dItem_MAP_e,
-    /* 0x4D */ dItem_COMPASS_e,
-    /* 0x4E */ dItem_BOSS_KEY_e,
-    /* 0x4F */ EMPTY_BSHIP, // Unused
-    /* 0x50 */ dItem_EMPTY_BOTTLE_e,
-    /* 0x51 */ dItem_RED_POTION_e,
-    /* 0x52 */ dItem_GREEN_POTION_e,
-    /* 0x53 */ dItem_BLUE_POTION_e,
-    /* 0x54 */ dItem_HALF_SOUP_BOTTLE_e,
-    /* 0x55 */ dItem_SOUP_BOTTLE_e,
-    /* 0x56 */ dItem_WATER_BOTTLE_e,
-    /* 0x57 */ dItem_FAIRY_BOTTLE_e,
-    /* 0x58 */ dItem_FIREFLY_BOTTLE_e,
-    /* 0x59 */ dItem_FOREST_WATER_e,
-    /* 0x5A */ UNK_BOTTLE_5A, // Unused
-    /* 0x5B */ UNK_BOTTLE_5B, // Unused
-    /* 0x5C */ UNK_BOTTLE_5C, // Unused
-    /* 0x5D */ UNK_BOTTLE_5D, // Unused
-    /* 0x5E */ UNK_BOTTLE_5E, // Unused
-    /* 0x5F */ UNK_BOTTLE_5F, // Unused
-    /* 0x60 */ UNK_BOTTLE_60, // Unused
-    /* 0x61 */ dItem_TRIFORCE1_e,
-    /* 0x62 */ dItem_TRIFORCE2_e,
-    /* 0x63 */ dItem_TRIFORCE3_e,
-    /* 0x64 */ dItem_TRIFORCE4_e,
-    /* 0x65 */ dItem_TRIFORCE5_e,
-    /* 0x66 */ dItem_TRIFORCE6_e,
-    /* 0x67 */ dItem_TRIFORCE7_e,
-    /* 0x68 */ dItem_TRIFORCE8_e,
-    /* 0x69 */ dItem_PEARL_NAYRU_e,
-    /* 0x6A */ dItem_PEARL_DIN_e,
-    /* 0x6B */ dItem_PEARL_FARORE_e,
-    /* 0x6C */ KNOWLEDGE_TF, // Unused
-    /* 0x6D */ TACT_SONG1,
-    /* 0x6E */ TACT_SONG2,
-    /* 0x6F */ TACT_SONG3,
-    /* 0x70 */ TACT_SONG4,
-    /* 0x71 */ TACT_SONG5,
-    /* 0x72 */ TACT_SONG6,
-    /* 0x73 */ noentry115, // Unused
-    /* 0x74 */ noentry116, // Unused
-    /* 0x75 */ noentry117, // Unused
-    /* 0x76 */ noentry118, // Unused
-    /* 0x77 */ noentry119, // Unused
-    /* 0x78 */ NORMAL_SAIL,
-    /* 0x79 */ TRIFORCE_MAP1,
-    /* 0x7A */ TRIFORCE_MAP2,
-    /* 0x7B */ TRIFORCE_MAP3,
-    /* 0x7C */ TRIFORCE_MAP4,
-    /* 0x7D */ TRIFORCE_MAP5,
-    /* 0x7E */ TRIFORCE_MAP6,
-    /* 0x7F */ TRIFORCE_MAP7,
-    /* 0x80 */ TRIFORCE_MAP8,
-    /* 0x81 */ noentry129, // Unused
-    /* 0x82 */ dItem_BIRD_BAIT_5_e,
-    /* 0x83 */ dItem_HYOI_PEAR_e,
-    /* 0x84 */ ESA1, // Unused
-    /* 0x85 */ ESA2, // Unused
-    /* 0x86 */ ESA3, // Unused
-    /* 0x87 */ ESA4, // Unused
-    /* 0x88 */ ESA5, // Unused
-    /* 0x89 */ MAGIC_BEAN, // Unused
-    /* 0x8A */ BIRD_ESA_10, // Unused
-    /* 0x8B */ noentry139, // Unused
-    /* 0x8C */ FLOWER_1,
-    /* 0x8D */ FLOWER_2,
-    /* 0x8E */ FLOWER_3,
-    /* 0x8F */ HEROS_FLAG,
-    /* 0x90 */ TAIRYO_FLAG,
-    /* 0x91 */ SALES_FLAG,
-    /* 0x92 */ WIND_FLAG,
-    /* 0x93 */ RED_FLAG,
-    /* 0x94 */ FOSSIL_HEAD,
-    /* 0x95 */ WATER_STATUE,
-    /* 0x96 */ POSTMAN_STATUE,
-    /* 0x97 */ PRESIDENT_STATUE,
-    /* 0x98 */ dItem_FATHER_LETTER_e,
-    /* 0x99 */ dItem_NOTE_TO_MOM_e,
-    /* 0x9A */ MAGYS_LETTER,
-    /* 0x9B */ MO_LETTER,
-    /* 0x9C */ COTTAGE_PAPER,
-    /* 0x9D */ KAISEN_PRESENT1,
-    /* 0x9E */ KAISEN_PRESENT2,
-    /* 0x9F */ SALVAGE_ITEM1,
-    /* 0xA0 */ SALVAGE_ITEM2, // Unused
-    /* 0xA1 */ SALVAGE_ITEM3, // Unused
-    /* 0xA2 */ XXX_039, // Unused
-    /* 0xA3 */ TINGLE_STATUE1,
-    /* 0xA4 */ TINGLE_STATUE2,
-    /* 0xA5 */ TINGLE_STATUE3,
-    /* 0xA6 */ TINGLE_STATUE4,
-    /* 0xA7 */ TINGLE_STATUE5,
-    /* 0xA8 */ TINGLE_STATUE6, // Unused
-    /* 0xA9 */ noentry169, // Unused
-    /* 0xAA */ dItem_HURRICANE_SPIN_e,
-    /* 0xAB */ dItem_MAX_RUPEE_UP1_e,
-    /* 0xAC */ dItem_MAX_RUPEE_UP2_e,
-    /* 0xAD */ dItem_MAX_BOMB_UP1_e,
-    /* 0xAE */ dItem_MAX_BOMB_UP2_e,
-    /* 0xAF */ dItem_MAX_ARROW_UP1_e,
-    /* 0xB0 */ dItem_MAX_ARROW_UP2_e,
-    /* 0xB1 */ dItem_MAGIC_POWER_e,
-    /* 0xB2 */ dItem_MAX_MP_UP1_e,
-    /* 0xB3 */ TINCLE_RUPEE1,
-    /* 0xB4 */ TINCLE_RUPEE2,
-    /* 0xB5 */ TINCLE_RUPEE3,
-    /* 0xB6 */ TINCLE_RUPEE4,
-    /* 0xB7 */ TINCLE_RUPEE5,
-    /* 0xB8 */ TINCLE_RUPEE6,
-    /* 0xB9 */ LITHOGRAPH1, // Unused
-    /* 0xBA */ LITHOGRAPH2, // Unused
-    /* 0xBB */ LITHOGRAPH3, // Unused
-    /* 0xBC */ LITHOGRAPH4, // Unused
-    /* 0xBD */ LITHOGRAPH5, // Unused
-    /* 0xBE */ LITHOGRAPH6, // Unused
-    /* 0xBF */ dItem_COLLECT_MAP_64_e, // Unused
-    /* 0xC0 */ dItem_COLLECT_MAP_63_e, // Unused
-    /* 0xC1 */ dItem_COLLECT_MAP_62_e, // Unused
-    /* 0xC2 */ dItem_COLLECT_MAP_61_e,
-    /* 0xC3 */ dItem_COLLECT_MAP_60_e,
-    /* 0xC4 */ dItem_COLLECT_MAP_59_e,
-    /* 0xC5 */ dItem_COLLECT_MAP_58_e,
-    /* 0xC6 */ dItem_COLLECT_MAP_57_e,
-    /* 0xC7 */ dItem_COLLECT_MAP_56_e,
-    /* 0xC8 */ dItem_COLLECT_MAP_55_e,
-    /* 0xC9 */ dItem_COLLECT_MAP_54_e,
-    /* 0xCA */ dItem_COLLECT_MAP_53_e,
-    /* 0xCB */ dItem_COLLECT_MAP_52_e,
-    /* 0xCC */ dItem_COLLECT_MAP_51_e,
-    /* 0xCD */ dItem_COLLECT_MAP_50_e,
-    /* 0xCE */ dItem_COLLECT_MAP_49_e,
-    /* 0xCF */ dItem_COLLECT_MAP_48_e,
-    /* 0xD0 */ dItem_COLLECT_MAP_47_e,
-    /* 0xD1 */ dItem_COLLECT_MAP_46_e,
-    /* 0xD2 */ dItem_COLLECT_MAP_45_e,
-    /* 0xD3 */ dItem_COLLECT_MAP_44_e,
-    /* 0xD4 */ dItem_COLLECT_MAP_43_e,
-    /* 0xD5 */ dItem_COLLECT_MAP_42_e,
-    /* 0xD6 */ dItem_COLLECT_MAP_41_e,
-    /* 0xD7 */ dItem_COLLECT_MAP_40_e,
-    /* 0xD8 */ dItem_COLLECT_MAP_39_e,
-    /* 0xD9 */ dItem_COLLECT_MAP_38_e,
-    /* 0xDA */ dItem_COLLECT_MAP_37_e,
-    /* 0xDB */ dItem_COLLECT_MAP_36_e,
-    /* 0xDC */ dItem_COLLECT_MAP_35_e,
-    /* 0xDD */ dItem_COLLECT_MAP_34_e,
-    /* 0xDE */ dItem_COLLECT_MAP_33_e,
-    /* 0xDF */ dItem_COLLECT_MAP_32_e,
-    /* 0xE0 */ dItem_COLLECT_MAP_31_e,
-    /* 0xE1 */ dItem_COLLECT_MAP_30_e,
-    /* 0xE2 */ dItem_COLLECT_MAP_29_e,
-    /* 0xE3 */ dItem_COLLECT_MAP_28_e,
-    /* 0xE4 */ dItem_COLLECT_MAP_27_e,
-    /* 0xE5 */ dItem_COLLECT_MAP_26_e,
-    /* 0xE6 */ dItem_COLLECT_MAP_25_e,
-    /* 0xE7 */ dItem_COLLECT_MAP_24_e,
-    /* 0xE8 */ dItem_COLLECT_MAP_23_e,
-    /* 0xE9 */ dItem_COLLECT_MAP_22_e,
-    /* 0xEA */ dItem_COLLECT_MAP_21_e,
-    /* 0xEB */ dItem_COLLECT_MAP_20_e,
-    /* 0xEC */ dItem_COLLECT_MAP_19_e,
-    /* 0xED */ dItem_COLLECT_MAP_18_e,
-    /* 0xEE */ dItem_COLLECT_MAP_17_e,
-    /* 0xEF */ dItem_COLLECT_MAP_16_e,
-    /* 0xF0 */ dItem_COLLECT_MAP_15_e,
-    /* 0xF1 */ dItem_COLLECT_MAP_14_e,
-    /* 0xF2 */ dItem_COLLECT_MAP_13_e,
-    /* 0xF3 */ dItem_COLLECT_MAP_12_e,
-    /* 0xF4 */ dItem_COLLECT_MAP_11_e,
-    /* 0xF5 */ dItem_COLLECT_MAP_10_e,
-    /* 0xF6 */ dItem_COLLECT_MAP_09_e,
-    /* 0xF7 */ dItem_COLLECT_MAP_08_e,
-    /* 0xF8 */ dItem_COLLECT_MAP_07_e,
-    /* 0xF9 */ dItem_COLLECT_MAP_06_e,
-    /* 0xFA */ dItem_COLLECT_MAP_05_e,
-    /* 0xFB */ dItem_COLLECT_MAP_04_e,
-    /* 0xFC */ dItem_COLLECT_MAP_03_e,
-    /* 0xFD */ dItem_COLLECT_MAP_02_e,
-    /* 0xFE */ dItem_COLLECT_MAP_01_e,
-    /* 0xFF */ dItem_NONE_e,
+    /* 0x00 */ dItemNo_HEART_e,
+    /* 0x01 */ dItemNo_GREEN_RUPEE_e,
+    /* 0x02 */ dItemNo_BLUE_RUPEE_e,
+    /* 0x03 */ dItemNo_YELLOW_RUPEE_e,
+    /* 0x04 */ dItemNo_RED_RUPEE_e,
+    /* 0x05 */ dItemNo_PURPLE_RUPEE_e,
+    /* 0x06 */ dItemNo_ORANGE_RUPEE_e,
+    /* 0x07 */ dItemNo_HEART_PIECE_e,
+    /* 0x08 */ dItemNo_HEART_CONTAINER_e,
+    /* 0x09 */ dItemNo_SMALL_MAGIC_e,
+    /* 0x0A */ dItemNo_LARGE_MAGIC_e,
+    /* 0x0B */ dItemNo_BOMB_5_e,
+    /* 0x0C */ dItemNo_BOMB_10_e,
+    /* 0x0D */ dItemNo_BOMB_20_e,
+    /* 0x0E */ dItemNo_BOMB_30_e,
+    /* 0x0F */ dItemNo_SILVER_RUPEE_e,
+    /* 0x10 */ dItemNo_ARROW_10_e,
+    /* 0x11 */ dItemNo_ARROW_20_e,
+    /* 0x12 */ dItemNo_ARROW_30_e,
+    /* 0x13 */ dItemNo_NOENTRY_19_e, // Unused
+    /* 0x14 */ dItemNo_NOENTRY_20_e, // Unused
+    /* 0x15 */ dItemNo_SMALL_KEY_e,
+    /* 0x16 */ dItemNo_RECOVER_FAIRY_e,
+    /* 0x17 */ dItemNo_HEART_PIECE_2_e, // Not an item, used only for its msg no
+    /* 0x18 */ dItemNo_HEART_PIECE_3_e, // Not an item, used only for its msg no
+    /* 0x19 */ dItemNo_HEART_PIECE_4_e, // Not an item, used only for its msg no
+    /* 0x1A */ dItemNo_SUB_DUN_RUPEE_e, // Used in VERSION_JPN only
+    /* 0x1B */ dItemNo_NOENTRY_27_e, // Unused
+    /* 0x1C */ dItemNo_NOENTRY_28_e, // Unused
+    /* 0x1D */ dItemNo_NOENTRY_29_e, // Unused
+    /* 0x1E */ dItemNo_TRIPLE_HEART_e,
+    /* 0x1F */ dItemNo_JOY_PENDANT_e,
+    /* 0x20 */ dItemNo_TELESCOPE_e,
+    /* 0x21 */ dItemNo_TINGLE_TUNER_e,
+    /* 0x22 */ dItemNo_WIND_WAKER_e,
+    /* 0x23 */ dItemNo_PICTO_BOX_e,
+    /* 0x24 */ dItemNo_SPOILS_BAG_e,
+    /* 0x25 */ dItemNo_GRAPPLING_HOOK_e,
+    /* 0x26 */ dItemNo_DELUXE_PICTO_BOX_e,
+    /* 0x27 */ dItemNo_BOW_e,
+    /* 0x28 */ dItemNo_POWER_BRACELETS_e,
+    /* 0x29 */ dItemNo_IRON_BOOTS_e,
+    /* 0x2A */ dItemNo_MAGIC_ARMOR_e,
+    /* 0x2B */ dItemNo_WATER_BOOTS_e, // Unused
+    /* 0x2C */ dItemNo_BAIT_BAG_e,
+    /* 0x2D */ dItemNo_BOOMERANG_e,
+    /* 0x2E */ dItemNo_BARE_HAND_e, // Unused
+    /* 0x2F */ dItemNo_HOOKSHOT_e,
+    /* 0x30 */ dItemNo_DELIVERY_BAG_e,
+    /* 0x31 */ dItemNo_BOMB_BAG_e,
+    /* 0x32 */ dItemNo_FUKU_e,
+    /* 0x33 */ dItemNo_SKULL_HAMMER_e,
+    /* 0x34 */ dItemNo_DEKU_LEAF_e,
+    /* 0x35 */ dItemNo_MAGIC_ARROW_e,
+    /* 0x36 */ dItemNo_LIGHT_ARROW_e,
+    /* 0x37 */ dItemNo_NEW_FUKU_e,
+    /* 0x38 */ dItemNo_SWORD_e,
+    /* 0x39 */ dItemNo_MASTER_SWORD_1_e,
+    /* 0x3A */ dItemNo_MASTER_SWORD_2_e,
+    /* 0x3B */ dItemNo_SHIELD_e,
+    /* 0x3C */ dItemNo_MIRROR_SHIELD_e,
+    /* 0x3D */ dItemNo_DROPPED_SWORD_e,
+    /* 0x3E */ dItemNo_MASTER_SWORD_3_e,
+    /* 0x3F */ dItemNo_HEART_PIECE_ALT_e,
+    /* 0x40 */ dItemNo_NOENTRY_64_e, // Unused
+    /* 0x41 */ dItemNo_NOENTRY_65_e, // Unused
+    /* 0x42 */ dItemNo_PIRATES_CHARM_e,
+    /* 0x43 */ dItemNo_HEROS_CHARM_e,
+    /* 0x44 */ dItemNo_GRASS_BALL_e, // Unused
+    /* 0x45 */ dItemNo_SKULL_NECKLACE_e,
+    /* 0x46 */ dItemNo_BOKOBABA_SEED_e,
+    /* 0x47 */ dItemNo_GOLDEN_FEATHER_e,
+    /* 0x48 */ dItemNo_KNIGHTS_CREST_e,
+    /* 0x49 */ dItemNo_RED_JELLY_e,
+    /* 0x4A */ dItemNo_GREEN_JELLY_e,
+    /* 0x4B */ dItemNo_BLUE_JELLY_e,
+    /* 0x4C */ dItemNo_MAP_e,
+    /* 0x4D */ dItemNo_COMPASS_e,
+    /* 0x4E */ dItemNo_BOSS_KEY_e,
+    /* 0x4F */ dItemNo_EMPTY_BSHIP_e, // Unused
+    /* 0x50 */ dItemNo_EMPTY_BOTTLE_e,
+    /* 0x51 */ dItemNo_RED_POTION_e,
+    /* 0x52 */ dItemNo_GREEN_POTION_e,
+    /* 0x53 */ dItemNo_BLUE_POTION_e,
+    /* 0x54 */ dItemNo_HALF_SOUP_BOTTLE_e,
+    /* 0x55 */ dItemNo_SOUP_BOTTLE_e,
+    /* 0x56 */ dItemNo_WATER_BOTTLE_e,
+    /* 0x57 */ dItemNo_FAIRY_BOTTLE_e,
+    /* 0x58 */ dItemNo_FIREFLY_BOTTLE_e,
+    /* 0x59 */ dItemNo_FOREST_WATER_e,
+    /* 0x5A */ dItemNo_UNK_BOTTLE_5A_e, // Unused
+    /* 0x5B */ dItemNo_UNK_BOTTLE_5B_e, // Unused
+    /* 0x5C */ dItemNo_UNK_BOTTLE_5C_e, // Unused
+    /* 0x5D */ dItemNo_UNK_BOTTLE_5D_e, // Unused
+    /* 0x5E */ dItemNo_UNK_BOTTLE_5E_e, // Unused
+    /* 0x5F */ dItemNo_UNK_BOTTLE_5F_e, // Unused
+    /* 0x60 */ dItemNo_UNK_BOTTLE_60_e, // Unused
+    /* 0x61 */ dItemNo_TRIFORCE1_e,
+    /* 0x62 */ dItemNo_TRIFORCE2_e,
+    /* 0x63 */ dItemNo_TRIFORCE3_e,
+    /* 0x64 */ dItemNo_TRIFORCE4_e,
+    /* 0x65 */ dItemNo_TRIFORCE5_e,
+    /* 0x66 */ dItemNo_TRIFORCE6_e,
+    /* 0x67 */ dItemNo_TRIFORCE7_e,
+    /* 0x68 */ dItemNo_TRIFORCE8_e,
+    /* 0x69 */ dItemNo_PEARL_NAYRU_e,
+    /* 0x6A */ dItemNo_PEARL_DIN_e,
+    /* 0x6B */ dItemNo_PEARL_FARORE_e,
+    /* 0x6C */ dItemNo_KNOWLEDGE_TF_e, // Unused
+    /* 0x6D */ dItemNo_WINDS_REQUIEM_e,
+    /* 0x6E */ dItemNo_BALLAD_OF_GALES_e,
+    /* 0x6F */ dItemNo_COMMAND_MELODY_e,
+    /* 0x70 */ dItemNo_EARTH_GODS_LYRIC_e,
+    /* 0x71 */ dItemNo_WIND_GODS_ARIA_e,
+    /* 0x72 */ dItemNo_SONG_OF_PASSING_e,
+    /* 0x73 */ dItemNo_NOENTRY_115_e, // Unused
+    /* 0x74 */ dItemNo_NOENTRY_116_e, // Unused
+    /* 0x75 */ dItemNo_NOENTRY_117_e, // Unused
+    /* 0x76 */ dItemNo_NOENTRY_118_e, // Unused
+    /* 0x77 */ dItemNo_NOENTRY_119_e, // Unused
+    /* 0x78 */ dItemNo_SAIL_e,
+    /* 0x79 */ dItemNo_TRIFORCE_MAP_1_e,
+    /* 0x7A */ dItemNo_TRIFORCE_MAP_2_e,
+    /* 0x7B */ dItemNo_TRIFORCE_MAP_3_e,
+    /* 0x7C */ dItemNo_TRIFORCE_MAP_4_e,
+    /* 0x7D */ dItemNo_TRIFORCE_MAP_5_e,
+    /* 0x7E */ dItemNo_TRIFORCE_MAP_6_e,
+    /* 0x7F */ dItemNo_TRIFORCE_MAP_7_e,
+    /* 0x80 */ dItemNo_TRIFORCE_MAP_8_e,
+    /* 0x81 */ dItemNo_NOENTRY_129_e, // Unused
+    /* 0x82 */ dItemNo_BIRD_BAIT_5_e,
+    /* 0x83 */ dItemNo_HYOI_PEAR_e,
+    /* 0x84 */ dItemNo_ESA_1_e, // Unused
+    /* 0x85 */ dItemNo_ESA_2_e, // Unused
+    /* 0x86 */ dItemNo_ESA_3_e, // Unused
+    /* 0x87 */ dItemNo_ESA_4_e, // Unused
+    /* 0x88 */ dItemNo_ESA_5_e, // Unused
+    /* 0x89 */ dItemNo_MAGIC_BEAN_e, // Unused
+    /* 0x8A */ dItemNo_BIRD_ESA_10_e, // Unused
+    /* 0x8B */ dItemNo_NOENTRY_139_e, // Unused
+    /* 0x8C */ dItemNo_TOWN_FLOWER_e,
+    /* 0x8D */ dItemNo_SEA_FLOWER_e,
+    /* 0x8E */ dItemNo_EXOTIC_FLOWER_e,
+    /* 0x8F */ dItemNo_HEROS_FLAG_e,
+    /* 0x90 */ dItemNo_BIG_CATCH_FLAG_e,
+    /* 0x91 */ dItemNo_BIG_SALE_FLAG_e,
+    /* 0x92 */ dItemNo_PINWHEEL_e,
+    /* 0x93 */ dItemNo_SICKLE_MOON_FLAG_e,
+    /* 0x94 */ dItemNo_SKULL_TOWER_IDOL_e,
+    /* 0x95 */ dItemNo_FOUNTAIN_IDOL_e,
+    /* 0x96 */ dItemNo_POSTMAN_STATUE_e,
+    /* 0x97 */ dItemNo_SHOP_GURU_STATUE_e,
+    /* 0x98 */ dItemNo_FATHER_LETTER_e,
+    /* 0x99 */ dItemNo_NOTE_TO_MOM_e,
+    /* 0x9A */ dItemNo_MAGGIES_LETTER_e,
+    /* 0x9B */ dItemNo_MOBLINS_LETTER_e,
+    /* 0x9C */ dItemNo_CABANA_DEED_e,
+    /* 0x9D */ dItemNo_COMPLIMENTARY_ID_e,
+    /* 0x9E */ dItemNo_FILL_UP_COUPON_e,
+    /* 0x9F */ dItemNo_LEGENDARY_PICTOGRAPH_e, // Originally "salvage item 1", but was repurposed
+    /* 0xA0 */ dItemNo_SALVAGE_ITEM_2_e, // Unused
+    /* 0xA1 */ dItemNo_SALVAGE_ITEM_3_e, // Unused
+    /* 0xA2 */ dItemNo_XXX_039_e, // Unused
+    /* 0xA3 */ dItemNo_TINGLE_STATUE_1_e,
+    /* 0xA4 */ dItemNo_TINGLE_STATUE_2_e,
+    /* 0xA5 */ dItemNo_TINGLE_STATUE_3_e,
+    /* 0xA6 */ dItemNo_TINGLE_STATUE_4_e,
+    /* 0xA7 */ dItemNo_TINGLE_STATUE_5_e,
+    /* 0xA8 */ dItemNo_TINGLE_STATUE_6_e, // Unused
+    /* 0xA9 */ dItemNo_NOENTRY_169_e, // Unused
+    /* 0xAA */ dItemNo_HURRICANE_SPIN_e,
+    /* 0xAB */ dItemNo_MAX_RUPEE_UP1_e,
+    /* 0xAC */ dItemNo_MAX_RUPEE_UP2_e,
+    /* 0xAD */ dItemNo_MAX_BOMB_UP1_e,
+    /* 0xAE */ dItemNo_MAX_BOMB_UP2_e,
+    /* 0xAF */ dItemNo_MAX_ARROW_UP1_e,
+    /* 0xB0 */ dItemNo_MAX_ARROW_UP2_e,
+    /* 0xB1 */ dItemNo_MAGIC_POWER_e,
+    /* 0xB2 */ dItemNo_MAX_MP_UP1_e,
+    /* 0xB3 */ dItemNo_TINGLE_RUPEE_1_e,
+    /* 0xB4 */ dItemNo_TINGLE_RUPEE_2_e,
+    /* 0xB5 */ dItemNo_TINGLE_RUPEE_3_e,
+    /* 0xB6 */ dItemNo_TINGLE_RUPEE_4_e,
+    /* 0xB7 */ dItemNo_TINGLE_RUPEE_5_e,
+    /* 0xB8 */ dItemNo_TINGLE_RUPEE_6_e,
+    /* 0xB9 */ dItemNo_LITHOGRAPH_1_e, // Unused
+    /* 0xBA */ dItemNo_LITHOGRAPH_2_e, // Unused
+    /* 0xBB */ dItemNo_LITHOGRAPH_3_e, // Unused
+    /* 0xBC */ dItemNo_LITHOGRAPH_4_e, // Unused
+    /* 0xBD */ dItemNo_LITHOGRAPH_5_e, // Unused
+    /* 0xBE */ dItemNo_LITHOGRAPH_6_e, // Unused
+    /* 0xBF */ dItemNo_COLLECT_MAP_64_e, // Unused
+    /* 0xC0 */ dItemNo_COLLECT_MAP_63_e, // Unused
+    /* 0xC1 */ dItemNo_COLLECT_MAP_62_e, // Unused
+    /* 0xC2 */ dItemNo_COLLECT_MAP_61_e,
+    /* 0xC3 */ dItemNo_COLLECT_MAP_60_e,
+    /* 0xC4 */ dItemNo_COLLECT_MAP_59_e,
+    /* 0xC5 */ dItemNo_COLLECT_MAP_58_e,
+    /* 0xC6 */ dItemNo_COLLECT_MAP_57_e,
+    /* 0xC7 */ dItemNo_COLLECT_MAP_56_e,
+    /* 0xC8 */ dItemNo_COLLECT_MAP_55_e,
+    /* 0xC9 */ dItemNo_COLLECT_MAP_54_e,
+    /* 0xCA */ dItemNo_COLLECT_MAP_53_e,
+    /* 0xCB */ dItemNo_COLLECT_MAP_52_e,
+    /* 0xCC */ dItemNo_COLLECT_MAP_51_e,
+    /* 0xCD */ dItemNo_COLLECT_MAP_50_e,
+    /* 0xCE */ dItemNo_COLLECT_MAP_49_e,
+    /* 0xCF */ dItemNo_COLLECT_MAP_48_e,
+    /* 0xD0 */ dItemNo_COLLECT_MAP_47_e,
+    /* 0xD1 */ dItemNo_COLLECT_MAP_46_e,
+    /* 0xD2 */ dItemNo_COLLECT_MAP_45_e,
+    /* 0xD3 */ dItemNo_COLLECT_MAP_44_e,
+    /* 0xD4 */ dItemNo_COLLECT_MAP_43_e,
+    /* 0xD5 */ dItemNo_COLLECT_MAP_42_e,
+    /* 0xD6 */ dItemNo_COLLECT_MAP_41_e,
+    /* 0xD7 */ dItemNo_COLLECT_MAP_40_e,
+    /* 0xD8 */ dItemNo_COLLECT_MAP_39_e,
+    /* 0xD9 */ dItemNo_COLLECT_MAP_38_e,
+    /* 0xDA */ dItemNo_COLLECT_MAP_37_e,
+    /* 0xDB */ dItemNo_COLLECT_MAP_36_e,
+    /* 0xDC */ dItemNo_COLLECT_MAP_35_e,
+    /* 0xDD */ dItemNo_COLLECT_MAP_34_e,
+    /* 0xDE */ dItemNo_COLLECT_MAP_33_e,
+    /* 0xDF */ dItemNo_COLLECT_MAP_32_e,
+    /* 0xE0 */ dItemNo_COLLECT_MAP_31_e,
+    /* 0xE1 */ dItemNo_COLLECT_MAP_30_e,
+    /* 0xE2 */ dItemNo_COLLECT_MAP_29_e,
+    /* 0xE3 */ dItemNo_COLLECT_MAP_28_e,
+    /* 0xE4 */ dItemNo_COLLECT_MAP_27_e,
+    /* 0xE5 */ dItemNo_COLLECT_MAP_26_e,
+    /* 0xE6 */ dItemNo_COLLECT_MAP_25_e,
+    /* 0xE7 */ dItemNo_COLLECT_MAP_24_e,
+    /* 0xE8 */ dItemNo_COLLECT_MAP_23_e,
+    /* 0xE9 */ dItemNo_COLLECT_MAP_22_e,
+    /* 0xEA */ dItemNo_COLLECT_MAP_21_e,
+    /* 0xEB */ dItemNo_COLLECT_MAP_20_e,
+    /* 0xEC */ dItemNo_COLLECT_MAP_19_e,
+    /* 0xED */ dItemNo_COLLECT_MAP_18_e,
+    /* 0xEE */ dItemNo_COLLECT_MAP_17_e,
+    /* 0xEF */ dItemNo_COLLECT_MAP_16_e,
+    /* 0xF0 */ dItemNo_COLLECT_MAP_15_e,
+    /* 0xF1 */ dItemNo_COLLECT_MAP_14_e,
+    /* 0xF2 */ dItemNo_COLLECT_MAP_13_e,
+    /* 0xF3 */ dItemNo_COLLECT_MAP_12_e,
+    /* 0xF4 */ dItemNo_COLLECT_MAP_11_e,
+    /* 0xF5 */ dItemNo_COLLECT_MAP_10_e,
+    /* 0xF6 */ dItemNo_COLLECT_MAP_09_e,
+    /* 0xF7 */ dItemNo_COLLECT_MAP_08_e,
+    /* 0xF8 */ dItemNo_COLLECT_MAP_07_e,
+    /* 0xF9 */ dItemNo_COLLECT_MAP_06_e,
+    /* 0xFA */ dItemNo_COLLECT_MAP_05_e,
+    /* 0xFB */ dItemNo_COLLECT_MAP_04_e,
+    /* 0xFC */ dItemNo_COLLECT_MAP_03_e,
+    /* 0xFD */ dItemNo_COLLECT_MAP_02_e,
+    /* 0xFE */ dItemNo_COLLECT_MAP_01_e,
+    /* 0xFF */ dItemNo_NONE_e,
 };
 
 #define MSG_NO_FOR_ITEM(item_no) item_no + 101

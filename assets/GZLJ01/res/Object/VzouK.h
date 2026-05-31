@@ -1,0 +1,34 @@
+#ifndef RES_VZOUK_H
+#define RES_VZOUK_H
+
+enum dRes_INDEX_VZOUK {
+    /* BCK  */
+    dRes_INDEX_VZOUK_BCK_VZOUK_e=0x5,
+    /* BDL  */
+    dRes_INDEX_VZOUK_BDL_VZOUK_e=0x8,
+    /* DZB  */
+    dRes_INDEX_VZOUK_DZB_MAEKISI_e=0xB,
+    dRes_INDEX_VZOUK_DZB_ATOKISI_e=0xC,
+};
+
+enum dRes_ID_VZOUK {
+    /* BCK  */
+    dRes_ID_VZOUK_BCK_VZOUK_e=0x4,
+    /* BDL  */
+    dRes_ID_VZOUK_BDL_VZOUK_e=0x7,
+    /* DZB  */
+    dRes_ID_VZOUK_DZB_MAEKISI_e=0xA,
+    dRes_ID_VZOUK_DZB_ATOKISI_e=0xB,
+};
+
+enum VZOUK_JNT {
+    VZOUK_JNT_ROOT_VZOUK_e=0x0,
+    VZOUK_JNT_ARM_L1_e=0x1,
+    VZOUK_JNT_ARM_L2_e=0x2,
+    VZOUK_JNT_ARM_L3_e=0x3,
+    VZOUK_JNT_ARM_R1_e=0x4,
+    VZOUK_JNT_ARM_R2_e=0x5,
+    VZOUK_JNT_ARM_R3_e=0x6,
+};
+
+#endif /* !RES_VZOUK_H */

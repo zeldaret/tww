@@ -154,6 +154,9 @@ class daOship_HIO_c : public mDoHIO_entry_c {
 public:
     daOship_HIO_c();
     virtual ~daOship_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
+
 public:
     /* 0x04 */ u8 m04;
     /* 0x05 */ bool m05;

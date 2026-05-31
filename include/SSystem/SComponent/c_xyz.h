@@ -69,6 +69,10 @@ struct cXyz : Vec {
         return this;
     }
     void operator*=(f32 scale) { VECScale(this, this, scale); }
+    cXyz* operator/=(f32 scale) {
+        VECScale(this, this, 1.0f / std::sqrtf(scale));
+        return this;
+    }
     cXyz getCrossProduct(const Vec&) const;
     cXyz outprod(const Vec&) const;
     cXyz norm() const;

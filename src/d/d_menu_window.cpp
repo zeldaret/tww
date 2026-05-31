@@ -18,8 +18,6 @@
 #include "d/d_menu_save.h"
 #include "d/d_meter.h"
 #include "d/d_name.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_player_main.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -737,19 +735,15 @@ void dMs_childHeap_freeAll(sub_ms_screen_class* i_Ms) {
 void dMs_telescopeMove(sub_ms_screen_class* i_Ms) {
     if (dComIfGp_isHeapLockFlag() == 0) {
         dComIfGp_event_photoCheck();
-        if (dComIfGp_checkCameraAttentionStatus(0, 8)) {
+        if (dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_TELESCOPE_LOOK_e)) {
             i_Ms->field_0x1B0 = 99;
-        } else {
-            if (dComIfGp_checkCameraAttentionStatus(0, 0x40)) {
-                i_Ms->field_0x1B0 = 89;
-            } else {
-                if (dComIfGp_getScopeType() == 2) {
-                    i_Ms->field_0x1B0 = 98;
-                } else if (dComIfGp_getPictureStatus() == 2 || dComIfGp_getPictureStatus() == 3) {
-                    i_Ms->field_0x1B0 = 89;
-                    dMenu_flagSet(1);
-                }
-            }
+        } else if (dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_PICTO_BOX_AIM_e)) {
+            i_Ms->field_0x1B0 = 89;
+        } else if (dComIfGp_getScopeType() == 2) {
+            i_Ms->field_0x1B0 = 98;
+        } else if (dComIfGp_getPictureStatus() == 2 || dComIfGp_getPictureStatus() == 3) {
+            i_Ms->field_0x1B0 = 89;
+            dMenu_flagSet(1);
         }
 
         if (i_Ms->field_0x1B0 == 99 || i_Ms->field_0x1B0 == 89 || i_Ms->field_0x1B0 == 98) {
@@ -936,13 +930,13 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
             } else if (dMenu_flag() == 0 && !fopOvlpM_IsDoingReq() && !(CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_Z(0))) {
 
-                if (event_wait_frame == 0 || daPy_getPlayerLinkActorClass()->getTactNormalWait() && CPad_CHECK_TRIG_START(0) ||
-                    dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
-                        dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908))
+                if (event_wait_frame == 0 || (daPy_getPlayerLinkActorClass()->getTactNormalWait() && CPad_CHECK_TRIG_START(0)) ||
+                    (dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
+                        dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)))
                 {
 
                     if (dComIfGp_getMesgStatus() == 0 && dComIfGp_getScopeMesgStatus() == 0) {
-                        if (!dComIfGp_checkCameraAttentionStatus(0, 8) && !dComIfGp_checkCameraAttentionStatus(0, 0x40) &&
+                        if (!dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_TELESCOPE_LOOK_e) && !dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_PICTO_BOX_AIM_e) &&
                             !dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK800000_e))
                         {
 
@@ -1563,7 +1557,7 @@ static cPhs_State dMs_Create(msg_class* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-msg_method_class l_dMs_Method = {
+static msg_method_class l_dMs_Method = {
     /* Create   */ (process_method_func)dMs_Create,
     /* Delete   */ (process_method_func)dMs_Delete,
     /* Execute  */ (process_method_func)dMs_Execute,
@@ -1572,15 +1566,15 @@ msg_method_class l_dMs_Method = {
 };
 
 msg_process_profile_definition g_profile_MENUWINDOW = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x000C,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MENUWINDOW,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x000C,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MENUWINDOW_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sub_ms_screen_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_MENUWINDOW,
+    /* Draw Prio    */ fpcDwPi_MENUWINDOW_e,
     /* Msg SubMtd   */ &l_dMs_Method,
 };

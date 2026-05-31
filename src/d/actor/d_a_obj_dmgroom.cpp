@@ -5,13 +5,11 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_dmgroom.h"
-#include "d/res/res_dmgroom.h"
+#include "res/Object/dmgroom.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -22,14 +20,14 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-000001FC       .text CreateHeap__14daObjDmgroom_cFv */
 BOOL daObjDmgroom_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Dmgroom", DMGROOM_BDL_DMGROOM));
-    JUT_ASSERT(0x52, modelData != NULL);
+    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Dmgroom", dRes_INDEX_DMGROOM_BDL_DMGROOM_e));
+    JUT_ASSERT(DEMO_SELECT(81, 82), modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x00, 0x11020203);
     if (!mpModel)
         return FALSE;
 
-    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Dmgroom", DMGROOM_BRK_DMGROOM));
-    JUT_ASSERT(0x5c, brk != NULL);
+    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Dmgroom", dRes_INDEX_DMGROOM_BRK_DMGROOM_e));
+    JUT_ASSERT(DEMO_SELECT(91, 92), brk != NULL);
     if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE))
         return FALSE;
 
@@ -53,7 +51,7 @@ void daObjDmgroom_c::set_mtx() {
 }
 
 cPhs_State daObjDmgroom_c::_create() {
-    fopAcM_SetupActor(this, daObjDmgroom_c);
+    fopAcM_ct(this, daObjDmgroom_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, "Dmgroom");
 
@@ -69,15 +67,26 @@ cPhs_State daObjDmgroom_c::_create() {
 }
 
 bool daObjDmgroom_c::_delete() {
-    dComIfG_resDelete(&mPhs, "Dmgroom");
+    dComIfG_resDeleteDemo(&mPhs, "Dmgroom");
     return true;
 }
 
 bool daObjDmgroom_c::_execute() {
     if (demoActorID != 0) {
         dDemo_actor_c * demoAc = dComIfGp_demo_getActor(demoActorID);
-        if (demoAc != NULL && demoAc->checkEnable(dDemo_actor_c::ENABLE_ANM_FRAME_e))
-            mBrkAnm.setFrame(demoAc->getAnmFrame());
+        if (demoAc != NULL) {
+#if VERSION == VERSION_DEMO
+            if (demoAc->checkEnable(dDemo_actor_c::ENABLE_ROTATE_e)) {
+                current.angle = *demoAc->getRatate();
+            }
+            if (demoAc->checkEnable(dDemo_actor_c::ENABLE_TRANS_e)) {
+                current.pos = *demoAc->getTrans();
+            }
+#endif
+            if (demoAc->checkEnable(dDemo_actor_c::ENABLE_ANM_FRAME_e)) {
+                mBrkAnm.setFrame(demoAc->getAnmFrame());
+            }
+        }
     }
     set_mtx();
     return true;
@@ -128,18 +137,18 @@ static actor_method_class daObj_DmgroomMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Dmgroom = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Dmgroom,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Dmgroom_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjDmgroom_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Dmgroom,
+    /* Draw Prio    */ fpcDwPi_Obj_Dmgroom_e,
     /* Actor SubMtd */ &daObj_DmgroomMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

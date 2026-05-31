@@ -6,10 +6,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_rcloud.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_hostIO.h"
-#include "d/res/res_bvkumo.h"
+#include "res/Object/BVkumo.h"
 
 namespace {
 const char l_arcname[] = "BVkumo";
@@ -63,8 +61,8 @@ BOOL daObjRcloud_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 0000010C-00000238       .text create_heap__13daObjRcloud_cFv */
 bool daObjRcloud_c::create_heap() {
     bool result = true;;
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, BVKUMO_BDL_BVKUMO));
-    J3DAnmTextureSRTKey* pAnm = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, BVKUMO_BTK_BVKUMO));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_BVKUMO_BDL_BVKUMO_e));
+    J3DAnmTextureSRTKey* pAnm = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_BVKUMO_BTK_BVKUMO_e));
 
     if (modelData == NULL || pAnm == FALSE) {
         JUT_ASSERT(DEMO_SELECT(216, 220), FALSE);
@@ -83,13 +81,9 @@ bool daObjRcloud_c::create_heap() {
 
 /* 00000238-000003B4       .text _create__13daObjRcloud_cFv */
 cPhs_State daObjRcloud_c::_create() {
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daObjRcloud_c);
     cPhs_State phase = cPhs_ERROR_e;
-    fopAcM_SetupActor(this, daObjRcloud_c);
-#else
-    fopAcM_SetupActor(this, daObjRcloud_c);
-    cPhs_State phase = cPhs_ERROR_e;
-#endif
+    fopAcM_ct_Demo(this, daObjRcloud_c);
 
     if (fopAcM_IsFirstCreating(this)) {
         mDemoNameIndex = param_get_arg();
@@ -264,16 +258,16 @@ static actor_method_class l_daObjRcloud_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Rcloud = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Rcloud,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Rcloud_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjRcloud_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Rcloud,
+    /* Draw Prio    */ fpcDwPi_Obj_Rcloud_e,
     /* Actor SubMtd */ &l_daObjRcloud_Method,
 #if VERSION == VERSION_DEMO
     /* Status       */ fopAcStts_UNK40000_e,
@@ -281,5 +275,5 @@ actor_process_profile_definition g_profile_Obj_Rcloud = {
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
 #endif
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

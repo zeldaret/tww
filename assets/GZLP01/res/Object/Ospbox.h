@@ -1,0 +1,22 @@
+#ifndef RES_OSPBOX_H
+#define RES_OSPBOX_H
+
+enum dRes_INDEX_OSPBOX {
+    /* BDL  */
+    dRes_INDEX_OSPBOX_BDL_OSPBOX_e=0x4,
+    /* DZB  */
+    dRes_INDEX_OSPBOX_DZB_OSPBOX_e=0x7,
+};
+
+enum dRes_ID_OSPBOX {
+    /* BDL  */
+    dRes_ID_OSPBOX_BDL_OSPBOX_e=0x4,
+    /* DZB  */
+    dRes_ID_OSPBOX_DZB_OSPBOX_e=0x7,
+};
+
+enum OSPBOX_JNT {
+    OSPBOX_JNT_OSPBOX_e=0x0,
+};
+
+#endif /* !RES_OSPBOX_H */

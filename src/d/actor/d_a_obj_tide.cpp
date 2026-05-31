@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_tide.h"
 #include "d/actor/d_a_tag_waterlevel.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo.h"
@@ -148,7 +146,7 @@ BOOL Act_c::Create() {
 
 /* 000007BC-00000998       .text Mthd_Create__Q29daObjTide5Act_cFv */
 cPhs_State Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     M_type = prm_get_type();
     se_init_gmtw();
@@ -275,6 +273,7 @@ void Act_c::mode_norm_init() {
 
 /* 00000DD8-00000FAC       .text mode_norm__Q29daObjTide5Act_cFv */
 void Act_c::mode_norm() {
+    /* Compiler bug: Nondeterministically nonmatching? */
     bool uVar1;
     f32 fVar2;
     daTagWaterlevel::State_e uVar3;
@@ -546,19 +545,19 @@ void Act_c::se_set_gmtw() {
 /* 000018B0-00001934       .text se_start_gopo__Q29daObjTide5Act_cFv */
 void Act_c::se_start_gopo() {
     JUT_ASSERT(VERSION_SELECT(1084, 1099, 1110, 1110), M_id_gopo == fpcM_ERROR_PROCESS_ID_e);
-    M_id_gopo = fopKyM_create(PROC_LEVEL_SE, JA_SE_ATM_MJ_WATER_GOPO, &home.pos, 0, 0);
+    M_id_gopo = fopKyM_create(fpcNm_LEVEL_SE_e, JA_SE_ATM_MJ_WATER_GOPO, &home.pos, 0, 0);
 }
 
 /* 00001934-000019B8       .text se_start_out__Q29daObjTide5Act_cFv */
 void Act_c::se_start_out() {
     JUT_ASSERT(VERSION_SELECT(1102, 1117, 1128, 1128), M_id_out == fpcM_ERROR_PROCESS_ID_e);
-    M_id_out = fopKyM_create(PROC_LEVEL_SE, JA_SE_ATM_MJ_WATER_OUT, &home.pos, 0, 0);
+    M_id_out = fopKyM_create(fpcNm_LEVEL_SE_e, JA_SE_ATM_MJ_WATER_OUT, &home.pos, 0, 0);
 }
 
 /* 000019B8-00001A3C       .text se_start_up__Q29daObjTide5Act_cFv */
 void Act_c::se_start_up() {
     JUT_ASSERT(VERSION_SELECT(1120, 1135, 1146, 1146), M_id_up == fpcM_ERROR_PROCESS_ID_e);
-    M_id_up = fopKyM_create(PROC_LEVEL_SE, JA_SE_ATM_MJ_WATER_UP, &current.pos, 0, 0);
+    M_id_up = fopKyM_create(fpcNm_LEVEL_SE_e, JA_SE_ATM_MJ_WATER_UP, &current.pos, 0, 0);
 }
 
 /* 00001A3C-00001A8C       .text se_stop_gopo__Q29daObjTide5Act_cFv */
@@ -701,18 +700,18 @@ static actor_method_class Mthd_Table = {
 } // namespace daObjTide
 
 actor_process_profile_definition g_profile_Obj_Tide = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Tide,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Tide_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjTide::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Tide,
+    /* Draw Prio    */ fpcDwPi_Obj_Tide_e,
     /* Actor SubMtd */ &daObjTide::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

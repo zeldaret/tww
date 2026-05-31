@@ -66,6 +66,8 @@ public:
     daBwds_HIO_c();
     virtual ~daBwds_HIO_c() {}
 
+    void genMessage(JORMContext* ctx) {}
+
 public:
     /* 0x004 */ s8 mNo;
     /* 0x005 */ u8 m005;

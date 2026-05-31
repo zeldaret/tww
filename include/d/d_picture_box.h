@@ -2,12 +2,16 @@
 #define D_PICTURE_BOX_H
 
 #include "dolphin/types.h"
+#include "f_op/f_op_msg.h"
 
 class JKRExpHeap;
 struct fopMsgM_pane_class;
 struct fopMsgM_pane_alpha_class;
 
-class sub_pb_class;
+class sub_pb_class : public msg_class {
+public:
+    /* Place member variables here */
+};
 
 class dJle_Pb_c {
     void alphaChange(fopMsgM_pane_alpha_class*, f32) {}

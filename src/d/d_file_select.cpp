@@ -425,7 +425,7 @@ int dFile_select_c::closeErrCopy() {
 void dFile_select_c::dataSelect() {
     stick2->checkTrigger();
     if(CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_START(0)) {
-        mDoAud_seStart(JA_SE_MSEL_OK_1, NULL);
+        mDoAud_seStart(JA_SE_MSEL_OK_1);
         mIconMode = 4;
         field_0x2fc0[0].pane->hide();
         if(field_0x3917[saveSlot]) {
@@ -437,7 +437,7 @@ void dFile_select_c::dataSelect() {
     }
     else if(stick2->checkUpTrigger()) {
         if(saveSlot != 0) {
-            mDoAud_seStart(JA_SE_MSEL_CURSOR, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CURSOR);
             saveSlot--;
             field_0x3948 = 0.0f;
             field_0x3923 = 0xFF;
@@ -448,7 +448,7 @@ void dFile_select_c::dataSelect() {
     }
     else if(stick2->checkDownTrigger()) {
         if(saveSlot != 2) {
-            mDoAud_seStart(JA_SE_MSEL_CURSOR, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CURSOR);
             saveSlot++;
             field_0x3948 = 0.0f;
             field_0x3923 = 0x1;
@@ -773,18 +773,18 @@ void dFile_select_c::menuSelect() {
     if(CPad_CHECK_TRIG_A(0)) {
         if(field_0x3928 == 0) {
             if(field_0x3914[saveSlot]) {
-                mDoAud_seStart(JA_SE_MSEL_OK_1, NULL);
+                mDoAud_seStart(JA_SE_MSEL_OK_1);
             }
             else if(saveStatus[saveSlot]) {
                 if(field_0x391D[saveSlot]) {
-                    mDoAud_seStart(JA_SE_MSEL_OK_1, NULL);
+                    mDoAud_seStart(JA_SE_MSEL_OK_1);
                 }
                 else {
-                    mDoAud_seStart(JA_SE_MSEL_ENTER_GAME, NULL);
+                    mDoAud_seStart(JA_SE_MSEL_ENTER_GAME);
                 }
             }
             else {
-                mDoAud_seStart(JA_SE_MSEL_ENTER_GAME, NULL);
+                mDoAud_seStart(JA_SE_MSEL_ENTER_GAME);
             }
             field_0x3930 = 0;
             field_0x30d8.pane->hide();
@@ -793,7 +793,7 @@ void dFile_select_c::menuSelect() {
             field_0x392b = 0x26;
         }
         else if(field_0x3928 == 1) {
-            mDoAud_seStart(JA_SE_MSEL_OK_1, NULL);
+            mDoAud_seStart(JA_SE_MSEL_OK_1);
             field_0x3930 = 0;
             field_0x30d8.pane->hide();
             field_0x3924 = saveSlot;
@@ -804,7 +804,7 @@ void dFile_select_c::menuSelect() {
             field_0x392a = 3;
         }
         else if(field_0x3928 == 2) {
-            mDoAud_seStart(JA_SE_MSEL_OK_1, NULL);
+            mDoAud_seStart(JA_SE_MSEL_OK_1);
             field_0x3930 = 0;
             field_0x30d8.pane->hide();
             field_0x3944 = 0.0f;
@@ -813,34 +813,26 @@ void dFile_select_c::menuSelect() {
             field_0x392a = 4;
         }
         else if(field_0x3928 == 3) {
-            mDoAud_seStart(JA_SE_MSEL_CANCEL_1, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CANCEL_1);
             field_0x3930 = 0;
             field_0x30d8.pane->hide();
             field_0x3944 = 0.0f;
             mIconMode = 5;
             field_0x392b = 6;
-#if VERSION == VERSION_DEMO
-            field_0x392a = 7;
-#else
-            field_0x392a = 8;
-#endif
+            field_0x392a = DEMO_SELECT(7, 8);
         }
     }
     else if(CPad_CHECK_TRIG_B(0)){
-        mDoAud_seStart(JA_SE_MSEL_CANCEL_1, NULL);
+        mDoAud_seStart(JA_SE_MSEL_CANCEL_1);
         field_0x3930 = 0;
         field_0x30d8.pane->hide();
         mIconMode = 5;
         field_0x392b = 6;
-#if VERSION == VERSION_DEMO
-        field_0x392a = 7;
-#else
-        field_0x392a = 8;
-#endif
+        field_0x392a = DEMO_SELECT(7, 8);
     }
     else if(stick->checkRightTrigger()) {
         if(field_0x3928 != 3) {
-            mDoAud_seStart(JA_SE_MSEL_CURSOR, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CURSOR);
             field_0x3928++;
             if(
 #if VERSION > VERSION_DEMO
@@ -857,7 +849,7 @@ void dFile_select_c::menuSelect() {
     }
     else if(stick->checkLeftTrigger()) {
         if(field_0x3928 != 0) {
-            mDoAud_seStart(JA_SE_MSEL_CURSOR, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CURSOR);
             field_0x3928--;
             if(
 #if VERSION > VERSION_DEMO
@@ -975,7 +967,7 @@ void dFile_select_c::ToBackPaneMove() {
 void dFile_select_c::copyDataToSelect() {
     stick->checkTrigger();
     if(CPad_CHECK_TRIG_A(0)) {
-        mDoAud_seStart(JA_SE_MSEL_OK_1, NULL);
+        mDoAud_seStart(JA_SE_MSEL_OK_1);
 
         switch(field_0x3924) {
             case 0:
@@ -1002,7 +994,7 @@ void dFile_select_c::copyDataToSelect() {
         field_0x392b = 0xA;
     }
     else if(CPad_CHECK_TRIG_B(0)){
-        mDoAud_seStart(JA_SE_MSEL_CANCEL_1, NULL);
+        mDoAud_seStart(JA_SE_MSEL_CANCEL_1);
         field_0x2fc0[0].pane->hide();
         fopMsgM_messageGet(field_0x38e8[field_0x392d ^ 1], 0x1B);
         mIconMode = 5;
@@ -1010,7 +1002,7 @@ void dFile_select_c::copyDataToSelect() {
     }
     else if(stick->checkUpTrigger()) {
         if(field_0x3925) {
-            mDoAud_seStart(JA_SE_MSEL_CURSOR, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CURSOR);
             field_0x3948 = 0.0f;
             field_0x3923 = -1;
             field_0x3930 = 0;
@@ -1021,7 +1013,7 @@ void dFile_select_c::copyDataToSelect() {
     }
     else if(stick->checkDownTrigger()) {
         if(field_0x3925 != 1) {
-            mDoAud_seStart(JA_SE_MSEL_CURSOR, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CURSOR);
             field_0x3948 = 0.0f;
             field_0x3923 = 1;
             field_0x3930 = 0;
@@ -1678,13 +1670,13 @@ void dFile_select_c::YesNoSelect() {
     stick->checkTrigger();
     if(CPad_CHECK_TRIG_A(0)) {
         if(field_0x3928 == 0) {
-            mDoAud_seStart(JA_SE_MSEL_DATA_MANAGE_S, NULL);
+            mDoAud_seStart(JA_SE_MSEL_DATA_MANAGE_S);
 #if VERSION > VERSION_DEMO
             field_0x3941 = 1;
 #endif
         }
         else {
-            mDoAud_seStart(JA_SE_MSEL_CANCEL_1, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CANCEL_1);
             mIconMode = 5;
         }
 
@@ -1693,7 +1685,7 @@ void dFile_select_c::YesNoSelect() {
         field_0x392b = 0xC;
     }
     else if(CPad_CHECK_TRIG_B(0)) {
-        mDoAud_seStart(JA_SE_MSEL_CANCEL_1, NULL);
+        mDoAud_seStart(JA_SE_MSEL_CANCEL_1);
         mIconMode = 5;
         field_0x30d8.pane->hide();
         field_0x3928 = 1;
@@ -1702,7 +1694,7 @@ void dFile_select_c::YesNoSelect() {
     }
     else if(stick->checkRightTrigger()) {
         if(field_0x3928 != 1) {
-            mDoAud_seStart(JA_SE_MSEL_CURSOR, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CURSOR);
             field_0x3928 = 1;
             field_0x3930 = 0;
             yesNoCursorMove();
@@ -1710,7 +1702,7 @@ void dFile_select_c::YesNoSelect() {
     }
     else if(stick->checkLeftTrigger()) {
         if(field_0x3928 != 0) {
-            mDoAud_seStart(JA_SE_MSEL_CURSOR, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CURSOR);
             field_0x3928 = 0;
             field_0x3930 = 0;
             yesNoCursorMove();
@@ -1824,7 +1816,7 @@ void dFile_select_c::CommandExec() {
 void dFile_select_c::DataEraseWait() {
     int temp = mDoMemCd_SaveSync();
     if(temp) {
-        mDoAud_seStart(JA_SE_MSEL_DATA_MANAGE_E, NULL);
+        mDoAud_seStart(JA_SE_MSEL_DATA_MANAGE_E);
 
         if(temp == 2) {
             field_0x3930 = 0;
@@ -1850,7 +1842,7 @@ void dFile_select_c::DataEraseWait() {
 void dFile_select_c::DataCopyWait() {
     int temp = mDoMemCd_SaveSync();
     if(temp) {
-        mDoAud_seStart(JA_SE_MSEL_DATA_MANAGE_E, NULL);
+        mDoAud_seStart(JA_SE_MSEL_DATA_MANAGE_E);
 
         if(temp == 2) {
             field_0x3929 = 1;
@@ -3488,7 +3480,7 @@ void dDlst_FileSel_c::draw() {
 void dFile_select_c::dataSelectEx() {
     stick2->checkTrigger();
     if(CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_START(0)) {
-        mDoAud_seStart(JA_SE_MSEL_OK_1, NULL);
+        mDoAud_seStart(JA_SE_MSEL_OK_1);
         mIconMode = 4;
         field_0x2fc0[0].pane->hide();
         fopMsgM_messageGet(field_0x38e8[field_0x392d ^ 1], 0x4F);
@@ -3496,7 +3488,7 @@ void dFile_select_c::dataSelectEx() {
         field_0x392b = 0x1B;
     }
     else if(CPad_CHECK_TRIG_B(0)) {
-        mDoAud_seStart(JA_SE_MSEL_CANCEL_1, NULL);
+        mDoAud_seStart(JA_SE_MSEL_CANCEL_1);
         field_0x2fc0[0].pane->hide();
         field_0x3930 = 0;
         field_0x392e = 0;
@@ -3506,7 +3498,7 @@ void dFile_select_c::dataSelectEx() {
     }
     else if(stick2->checkUpTrigger()) {
         if(saveSlot != 0) {
-            mDoAud_seStart(JA_SE_MSEL_CURSOR, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CURSOR);
             saveSlot--;
             field_0x3948 = 0.0f;
             field_0x3923 = 0xFF;
@@ -3517,7 +3509,7 @@ void dFile_select_c::dataSelectEx() {
     }
     else if(stick2->checkDownTrigger()) {
         if(saveSlot != 2) {
-            mDoAud_seStart(JA_SE_MSEL_CURSOR, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CURSOR);
             saveSlot++;
             field_0x3948 = 0.0f;
             field_0x3923 = 0x1;
@@ -3560,7 +3552,7 @@ void dFile_select_c::YesNoSelectEx() {
     stick->checkTrigger();
     if(CPad_CHECK_TRIG_A(0)) {
         if(field_0x3928 == 0) {
-            mDoAud_seStart(JA_SE_MSEL_DATA_MANAGE_S, NULL);
+            mDoAud_seStart(JA_SE_MSEL_DATA_MANAGE_S);
             int result = ExCardCheck();
             if(result) {
                 field_0x392e = 1;
@@ -3575,7 +3567,7 @@ void dFile_select_c::YesNoSelectEx() {
             }
         }
         else {
-            mDoAud_seStart(JA_SE_MSEL_CANCEL_1, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CANCEL_1);
             mIconMode = 5;
             field_0x392b = 0x1D;
         }
@@ -3584,7 +3576,7 @@ void dFile_select_c::YesNoSelectEx() {
         field_0x38e8[field_0x392d ^ 1][0] = '\0';
     }
     else if(CPad_CHECK_TRIG_B(0)) {
-        mDoAud_seStart(JA_SE_MSEL_CANCEL_1, NULL);
+        mDoAud_seStart(JA_SE_MSEL_CANCEL_1);
         mIconMode = 4;
         field_0x30d8.pane->hide();
         field_0x3928 = 1;
@@ -3593,7 +3585,7 @@ void dFile_select_c::YesNoSelectEx() {
     }
     else if(stick->checkRightTrigger()) {
         if(field_0x3928 != 1) {
-            mDoAud_seStart(JA_SE_MSEL_CURSOR, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CURSOR);
             field_0x3928 = 1;
             field_0x3930 = 0;
             yesNoCursorMove();
@@ -3601,7 +3593,7 @@ void dFile_select_c::YesNoSelectEx() {
     }
     else if(stick->checkLeftTrigger()) {
         if(field_0x3928 != 0) {
-            mDoAud_seStart(JA_SE_MSEL_CURSOR, NULL);
+            mDoAud_seStart(JA_SE_MSEL_CURSOR);
             field_0x3928 = 0;
             field_0x3930 = 0;
             yesNoCursorMove();
@@ -3723,7 +3715,7 @@ void dFile_select_c::ExDataSaveWait() {
     int temp = mDoMemCd_SaveSync();
     if(temp) {
         if(temp == 2) {
-            mDoAud_seStart(JA_SE_ALERT_DATA, NULL);
+            mDoAud_seStart(JA_SE_ALERT_DATA);
 
             field_0x3930 = 0;
             field_0x3929 = 1;
@@ -3732,7 +3724,7 @@ void dFile_select_c::ExDataSaveWait() {
             field_0x392b = 0x24;
         }
         else if(temp == 1) {
-            mDoAud_seStart(JA_SE_SAVE_FINISH, NULL);
+            mDoAud_seStart(JA_SE_SAVE_FINISH);
 
             field_0x3930 = 0;
             field_0x3929 = 0;

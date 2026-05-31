@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_hi1.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_hi.h"
+#include "res/Object/Hi.h"
 
 class daNpc_Hi1_HIO_c : public mDoHIO_entry_c{
 public:
@@ -198,8 +196,8 @@ void daNpc_Hi1_c::setMtx(bool param_1) {
 /* 00000778-0000078C       .text bckResID__11daNpc_Hi1_cFi */
 int daNpc_Hi1_c::bckResID(int idx) {
     static const int a_resID_tbl[] = {
-        1,
-        0
+        dRes_ID_HI_BCK_HI_WAIT01_e,
+        dRes_ID_HI_BCK_HI_POSE_e,
     };
     return a_resID_tbl[idx];
 }
@@ -207,7 +205,7 @@ int daNpc_Hi1_c::bckResID(int idx) {
 /* 0000078C-000007A0       .text btpResID__11daNpc_Hi1_cFi */
 int daNpc_Hi1_c::btpResID(int idx) {
     static const int a_resID_tbl[] = {
-        3
+        dRes_ID_HI_BTP_MABA_e,
     };
     return a_resID_tbl[idx];
 }
@@ -215,7 +213,7 @@ int daNpc_Hi1_c::btpResID(int idx) {
 /* 000007A0-000007B4       .text btkResID__11daNpc_Hi1_cFi */
 int daNpc_Hi1_c::btkResID(int idx) {
     static const int a_resID_tbl[] = {
-        4
+        dRes_ID_HI_BTK_HI_e,
     };
     return a_resID_tbl[idx];
 }
@@ -775,7 +773,7 @@ u8 daNpc_Hi1_c::demo() {
             field_0x7BF = 1;
             mBtkAnmFrame = 0;
         }
-        dDemo_setDemoData(this, 0x6a, mpMorf, mArcName);
+        dDemo_setDemoData(this, dDemo_actor_c::ENABLE_TRANS_e | dDemo_actor_c::ENABLE_ROTATE_e | dDemo_actor_c::ENABLE_ANM_e | dDemo_actor_c::ENABLE_ANM_FRAME_e, mpMorf, mArcName);
     }
     return field_0x7BA;
 }
@@ -893,7 +891,7 @@ cPhs_State daNpc_Hi1_c::_create() {
     };
 
     cPhs_State state;
-    fopAcM_SetupActor(this, daNpc_Hi1_c);
+    fopAcM_ct(this, daNpc_Hi1_c);
     if(!decideType(fopAcM_GetParam(this) & 0xFF)) {
         return cPhs_ERROR_e;
     }
@@ -918,7 +916,7 @@ cPhs_State daNpc_Hi1_c::_create() {
 
 /* 000024F4-00002768       .text bodyCreateHeap__11daNpc_Hi1_cFv */
 BOOL daNpc_Hi1_c::bodyCreateHeap() {
-    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(mArcName, HI_BDL_HI);
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(mArcName, dRes_ID_HI_BDL_HI_e);
     JUT_ASSERT(0x5BB, a_mdl_dat != NULL);
     mpMorf = new mDoExt_McaMorf(
         a_mdl_dat,
@@ -994,18 +992,18 @@ static actor_method_class l_daNpc_Hi1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_HI1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_HI1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_HI1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Hi1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_HI1,
+    /* Draw Prio    */ fpcDwPi_NPC_HI1_e,
     /* Actor SubMtd */ &l_daNpc_Hi1_Method,
     /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

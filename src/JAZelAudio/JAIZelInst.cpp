@@ -4,14 +4,79 @@
 //
 
 #include "JAZelAudio/JAIZelInst.h"
+#include "JAZelAudio/JAZelAudio_SE.h"
 #include "dolphin/types.h"
+#include "m_Do/m_Do_audio.h"
+
+#define MELODY_COUNT (8)
+
+u16 JAIZelInst::m_note_pattern[][6] = {
+    {0x0078, 0x080C, 0x090C, 0x0A0C, 0xFFFF, 0xFFFF},
+    {0x0078, 0x0B0C, 0x050C, 0x0C0C, 0x060C, 0xFFFF},
+    {0x0078, 0x060C, 0x080C, 0x0518, 0xFFFF, 0xFFFF},
+    {0x0078, 0x0E0C, 0x060C, 0x100C, 0x060C, 0xFFFF},
+    {0x0078, 0x100C, 0x0D0C, 0x0F0C, 0x0E0C, 0x0618},
+    {0x0078, 0x040C, 0x030C, 0x0806, 0x0706, 0x060C},
+};
+
+u8 JAIZelInst::m_stick_to_note_table[] = {
+    0x00,
+    0x04,
+    0x18,
+    0x02,
+    0x16,
+    0x03,
+    0x06,
+    0x12,
+    0x0A,
+    0x0E,
+    0x17,
+    0x10,
+    0x0C,
+    0x14,
+    0x08,
+    0x01,
+    0x09,
+    0x0D,
+    0x05,
+    0x11,
+    0x15,
+    0x13,
+    0x07,
+    0x0F,
+    0x0B,
+};
+
+u8 JAIZelInst::mMelodyPattern[MELODY_COUNT][7] = {
+    {0x03, 0x01, 0x04, 0x02, 0xFF, 0xFF, 0xFF},
+    {0x04, 0x03, 0x02, 0x04, 0x01, 0xFF, 0xFF},
+    {0x04, 0x04, 0x00, 0x02, 0x00, 0xFF, 0xFF},
+    {0x06, 0x03, 0x03, 0x00, 0x02, 0x04, 0x00},
+    {0x06, 0x01, 0x01, 0x03, 0x02, 0x04, 0x02},
+    {0x03, 0x02, 0x04, 0x03, 0xFF, 0xFF, 0xFF},
+    {0x03, 0x01, 0x03, 0x02, 0xFF, 0xFF, 0xFF},
+    {0x04, 0x01, 0x02, 0x04, 0x03, 0xFF, 0xFF},
+};
+
+u8 JAIZelInst::mCPosToNote3[5] = {
+    0x30, 0x3C, 0x39, 0x3E, 0x35,
+};
+u8 JAIZelInst::mCPosToNote4[5] = {
+    0x3B, 0x3C, 0x39, 0x3E, 0x35,
+};
+u8 JAIZelInst::mCPosToNote61[5] = {
+    0x3E, 0x45, 0x42, 0x39, 0x40,
+};
+u8 JAIZelInst::mCPosToNote62[5] = {
+    0x3E, 0x45, 0x42, 0x43, 0x40,
+};
 
 /* 802AE04C-802AE0B4       .text __ct__10JAIZelInstFv */
 JAIZelInst::JAIZelInst() {
-    field_0x0 = 0;
+    field_0x0 = NULL;
     field_0xc = 0;
     field_0x10 = -1;
-    field_0x14 = 0x2f;
+    field_0x14 = 0x2F;
     mBeat = 3;
     field_0x20 = 0.6f;
     field_0x24 = 3.0f;
@@ -25,80 +90,403 @@ JAIZelInst::JAIZelInst() {
 
 /* 802AE0B4-802AE1C0       .text reset__10JAIZelInstFv */
 void JAIZelInst::reset() {
-    /* Nonmatching */
+    field_0xc = 0;
+    mBeat = 3;
+    field_0x20 = 0.6f;
+    field_0x24 = 3.0f;
+    field_0x28 = 60.f;
+    field_0x2c = 1.0f;
+    mBeatFrames = field_0x2c * 30.0f;
+    field_0x1e = 0;
+    field_0x34 = 0x37;
+    field_0x48 = 0;
+    mDoAud_seStop(JA_SE_WTAKT_ARM_SWING);
+    mDoAud_seStop(JA_SE_WTAKT_METRONOME);
+    mDoAud_seStop(JA_SE_WTAKT_DRONE);
+    mDoAud_seStop(JA_SE_WTAKT_DRONE_4);
+    mDoAud_seStop(JA_SE_WTAKT_DRONE_6);
+    mDoAud_seStop(JA_SE_WTAKT_PULSE_3);
+    mDoAud_seStop(JA_SE_WTAKT_PULSE_4);
+    mDoAud_seStop(JA_SE_WTAKT_PULSE_6);
+    field_0x38 = NULL;
+    field_0x3c = NULL;
+    field_0x40 = NULL;
+    field_0x44 = NULL;
 }
 
 /* 802AE1C0-802AE278       .text playArmSwing__10JAIZelInstFll */
-void JAIZelInst::playArmSwing(s32, s32) {
-    /* Nonmatching */
+void JAIZelInst::playArmSwing(s32 main_stick, s32 c_stick) {
+    int pos = (main_stick * 5) + c_stick;
+    JUT_ASSERT(93, pos < 25);
+    u32 r31 = 0x2F + m_stick_to_note_table[pos];
+    mDoAud_seStart(JA_SE_LK_WTAKT_SWING, NULL, (field_0x14 << 16) + r31);
+    field_0x14 = r31;
 }
 
 /* 802AE278-802AE2B8       .text stopArmSwing__10JAIZelInstFv */
 void JAIZelInst::stopArmSwing() {
-    /* Nonmatching */
+    mDoAud_seStop(JA_SE_LK_WTAKT_SWING);
+    field_0x14 = 0x2F;
 }
 
 /* 802AE2B8-802AE444       .text setStickPos__10JAIZelInstFll */
-void JAIZelInst::setStickPos(s32, s32) {
-    /* Nonmatching */
+s32 JAIZelInst::setStickPos(s32 main_stick, s32 c_stick) {
+    int pos = (main_stick * 5) + c_stick;
+    JUT_ASSERT(128, pos < 25);
+    u8 note = m_stick_to_note_table[pos];
+    field_0x10 = 0x2F + note;
+    if (field_0xc >= 5) {
+        for (int i = 0; i < 5; i++) {
+            field_0x4[i] = field_0x4[i+1];
+        }
+        field_0xc = 4;
+    }
+    field_0x4[field_0xc] = note;
+    field_0xc++;
+    if (field_0xc <= 1) {
+        return -1;
+    }
+    for (int r12 = 0 ; r12 < field_0xc; r12++) {
+        for (int r3 = 0; r3 < 6; r3++) {
+            int r30 = 0;
+            for (; r30 < (field_0xc - r12); r30++) {
+                if (field_0x4[r12 + r30] != ((m_note_pattern[r3][r30 + 1] >> 8) & 0xFF)) {
+                    break;
+                }
+            }
+            if (r30 != (field_0xc - r12)) {
+                continue;
+            }
+            if (r30 >= 5 || m_note_pattern[r3][r30 + 1] == 0xFFFF) {
+                return r3;
+            }
+        }
+    }
+    return -1;
+}
+
+static f32 dummy() {
+    OSReport("[JAIZelInst::playMelody] melody number too large (%d)\n");
+    OSReport("[JAIZelInst::getPlayingPattern] too large melody number : %d\n");
+    OSReport("[JAIZelInst::getPlayingPattern] too large step : %d\n");
+    return 0.0f;
 }
 
 /* 802AE444-802AE4B4       .text play__10JAIZelInstFv */
 void JAIZelInst::play() {
-    /* Nonmatching */
+    if (field_0x10 >= 0) {
+        mDoAud_zelAudio_c::getInterface()->startSoundVec(JA_SE_WINDTAKT_PLAY, &field_0x0, NULL, 0, 0, 4);
+        if (field_0x0) {
+            field_0x0->setPortData(8, field_0x10);
+        }
+    }
 }
 
 /* 802AE4B4-802AE590       .text setBeat__10JAIZelInstFl */
-void JAIZelInst::setBeat(s32) {
-    /* Nonmatching */
+void JAIZelInst::setBeat(s32 r4) {
+    switch (r4) {
+    case 0:
+        mBeat = 3;
+        break;
+    case 2:
+        mBeat = 6;
+        break;
+    case 4:
+        mBeat = 4;
+        break;
+    default:
+        return;
+    }
+    
+    switch (mBeat) {
+    case 3:
+        field_0x24 = 3.0f;
+        field_0x28 = 60.0f;
+        field_0x2c = 1.0f;
+        break;
+    case 4:
+        field_0x24 = 3.42857f;
+        field_0x28 = 70.0f;
+        field_0x2c = 0.85714f; // 6/7
+        break;
+    case 6:
+        field_0x24 = 4.5f;
+        field_0x28 = 80.0f;
+        field_0x2c = 0.75f; // 3/4
+        break;
+    }
+    mBeatFrames = field_0x2c * 30.0f;
 }
 
 /* 802AE590-802AE5D0       .text setVolume__10JAIZelInstFf */
-void JAIZelInst::setVolume(f32) {
-    /* Nonmatching */
+void JAIZelInst::setVolume(f32 f1) {
+    f32 f2 = f1 / 0.7071f;
+    if (f2 > 1.0f) {
+        f2 = 1.0f;
+    }
+    if (f2 < -1.0f) {
+        f2 = -1.0f;
+    }
+    field_0x20 = f2 * 0.45f + 0.55f;
 }
 
 /* 802AE5D0-802AE864       .text metronomePlay__10JAIZelInstFll */
-void JAIZelInst::metronomePlay(s32, s32) {
-    /* Nonmatching */
+s32 JAIZelInst::metronomePlay(s32 now_beat, s32 c_pos) {
+    if (c_pos < 0 || c_pos > 4) {
+        OSReport("[JAIZelInst::metronomePlay] WARNING : c_pos over range!\n");
+        return -2;
+    }
+    
+    if (now_beat == 0) {
+        switch (mBeat) {
+        case 3:
+            field_0x40 = mDoAud_zelAudio_c::getInterface()->seStart(JA_SE_WTAKT_DRONE, NULL, 0, 0, 1.0f, field_0x20);
+            break;
+        case 4:
+            field_0x40 = mDoAud_zelAudio_c::getInterface()->seStart(JA_SE_WTAKT_DRONE_4, NULL, 0, 0, 1.0f, field_0x20);
+            break;
+        case 6:
+            field_0x40 = mDoAud_zelAudio_c::getInterface()->seStart(JA_SE_WTAKT_DRONE_6, NULL, 0, 0, 1.0f, field_0x20);
+            break;
+        }
+    } else {
+        switch (mBeat) {
+        case 3:
+            switch (now_beat) {
+            case 1:
+                break;
+            case 2:
+                field_0x40 = mDoAud_zelAudio_c::getInterface()->seStart(JA_SE_WTAKT_AUFTAKT, NULL, 0, 0, 1.0f, field_0x20);
+                break;
+            default:
+                OSReport("[JAIZelInst::metronomePlay] WARNING : now_beat over range!\n");
+                return -2;
+            }
+            break;
+        case 4:
+            switch (now_beat) {
+            case 1:
+            case 2:
+                break;
+            case 3:
+                field_0x40 = mDoAud_zelAudio_c::getInterface()->seStart(JA_SE_WTAKT_AUFTAKT_4, NULL, 0, 0, 1.0f, field_0x20);
+                break;
+            default:
+                OSReport("[JAIZelInst::metronomePlay] WARNING : now_beat over range!\n");
+                return -2;
+            }
+            break;
+        case 6:
+            switch (now_beat) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                break;
+            case 5:
+                field_0x40 = mDoAud_zelAudio_c::getInterface()->seStart(JA_SE_WTAKT_AUFTAKT_6, NULL, 0, 0, 1.0f, field_0x20);
+                break;
+            default:
+                OSReport("[JAIZelInst::metronomePlay] WARNING : now_beat over range!\n");
+                return -2;
+            }
+            break;
+        default:
+            return -2;
+        }
+    }
+    
+    return -1;
 }
 
 /* 802AE864-802AEB5C       .text judge__10JAIZelInstFll */
-s32 JAIZelInst::judge(s32, s32) {
-    /* Nonmatching */
+s32 JAIZelInst::judge(s32 now_beat, s32 c_pos) {
+    u16 r28 = 100;
+    if (c_pos < 0 || c_pos > 4) {
+        OSReport("[JAIZelInst::metronomePlay] WARNING : c_pos over range!\n");
+        return -2;
+    }
+    
+    u16 r29 = 0;
+    switch (mBeat) {
+    case 3:
+        r29 = mCPosToNote3[c_pos];
+        break;
+    case 4:
+        r29 = mCPosToNote4[c_pos];
+        break;
+    case 6:
+        if (field_0x48 != 0) {
+            r29 = mCPosToNote62[c_pos];
+        } else {
+            r29 = mCPosToNote61[c_pos];
+        }
+        break;
+    }
+    
+    switch (mBeat) {
+    case 3:
+        field_0x44 = mDoAud_zelAudio_c::getInterface()->seStart(JA_SE_WTAKT_PULSE_3, NULL, r29, 0, 1.0f, field_0x20);
+        break;
+    case 4:
+        field_0x44 = mDoAud_zelAudio_c::getInterface()->seStart(JA_SE_WTAKT_PULSE_4, NULL, r29, 0, 1.0f, field_0x20);
+        break;
+    case 6:
+        field_0x44 = mDoAud_zelAudio_c::getInterface()->seStart(JA_SE_WTAKT_PULSE_6, NULL, r29, 0, 1.0f, field_0x20);
+        break;
+    }
+    
+    if (now_beat == 0) {
+        field_0x1e = 0;
+        field_0x48 = 0;
+        if (mBeat == 6 && c_pos == 1) {
+            field_0x48 = 1;
+        }
+    }
+    
+    r29 += (r28 << 8);
+    field_0x3c = mDoAud_zelAudio_c::getInterface()->seStart(JA_SE_WTAKT_METRONOME, NULL, r29, 0, 1.0f, field_0x20);
+    
+    if (now_beat == 5) {
+        field_0x48 = 0;
+    }
+    
+    if (field_0x1e < 6) {
+        field_0x1e++;
+    } else {
+        field_0x1e = 6;
+        for (int i = 0; i < 5; i++) {
+            field_0x18[i] = field_0x18[i + 1];
+        }
+    }
+    field_0x18[field_0x1e - 1] = c_pos;
+    
+    if (field_0x1e < mBeat) {
+        return -1;
+    }
+    
+    int r10 = 0;
+    while (true) {
+        if (mBeat == mMelodyPattern[r10][0]) {
+            int r11 = field_0x1e - mBeat;
+            int r12 = 1;
+            for (; r11 < field_0x1e; r11++, r12++) {
+                if (field_0x18[r11] != mMelodyPattern[r10][r12]) {
+                    break;
+                }
+            }
+            if (r12 == 7 || mMelodyPattern[r10][r12] == 0xFF) {
+                break;
+            }
+        }
+        r10++;
+        if (r10 < MELODY_COUNT) {
+            continue;
+        } else {
+            r10 = -1;
+            break;
+        }
+    }
+    if (r10 < 0) {
+        return -1;
+    } else {
+        return r10;
+    }
 }
 
 /* 802AEB5C-802AEC50       .text ambientPlay__10JAIZelInstFv */
 void JAIZelInst::ambientPlay() {
-    /* Nonmatching */
+    mDoAud_zelAudio_c::getInterface()->seStart(JA_SE_WTAKT_AMBIENT, NULL, 0, 0, 1.0f, field_0x20);
+    
+    if (field_0x38 && *field_0x38) {
+        (*field_0x38)->setVolume(field_0x20, 3, SOUNDPARAM_Unk0);
+    }
+    if (field_0x3c && *field_0x3c) {
+        (*field_0x3c)->setVolume(field_0x20, 3, SOUNDPARAM_Unk0);
+    }
+    if (field_0x40 && *field_0x40) {
+        (*field_0x40)->setVolume(field_0x20, 3, SOUNDPARAM_Unk0);
+    }
+    if (field_0x44 && *field_0x44) {
+        (*field_0x44)->setVolume(field_0x20, 3, SOUNDPARAM_Unk0);
+    }
 }
 
 /* 802AEC50-802AECC0       .text armSoundPlay__10JAIZelInstFl */
-void JAIZelInst::armSoundPlay(s32) {
-    /* Nonmatching */
+void JAIZelInst::armSoundPlay(s32 c_pos) {
+    u8 r5 = 0;
+    switch (mBeat) {
+    case 3:
+        r5 = mCPosToNote3[c_pos];
+        break;
+    case 4:
+        r5 = mCPosToNote4[c_pos];
+        break;
+    case 6:
+        if (field_0x48 != 0) {
+            r5 = mCPosToNote62[c_pos];
+        } else {
+            r5 = mCPosToNote61[c_pos];
+        }
+        break;
+    }
+    field_0x34 = r5;
 }
 
 /* 802AECC0-802AED48       .text getMelodyPattern__10JAIZelInstFllPl */
-f32 JAIZelInst::getMelodyPattern(s32, s32, s32*) {
-    /* Nonmatching */
+f32 JAIZelInst::getMelodyPattern(s32 melody_num, s32 r5, s32* r6) {
+    if (r5 >= getMelodyBeat(melody_num)) {
+        return 0.0f;
+    }
+    u8 r0 = mMelodyPattern[melody_num][r5 + 1];
+    if (r0 == 0xFF) {
+        return 0.0f;
+    }
+    *r6 = r0;
+    return getMelodyGFrames(melody_num);
 }
 
 /* 802AED48-802AEDB8       .text getMelodyBeat__10JAIZelInstFl */
-void JAIZelInst::getMelodyBeat(s32) {
-    /* Nonmatching */
+s32 JAIZelInst::getMelodyBeat(s32 melody_num) {
+    JUT_ASSERT(830, melody_num < MELODY_COUNT);
+    return mMelodyPattern[melody_num][0];
 }
 
 /* 802AEDB8-802AEE1C       .text getMelodyGFrames__10JAIZelInstFl */
-void JAIZelInst::getMelodyGFrames(s32) {
-    /* Nonmatching */
+f32 JAIZelInst::getMelodyGFrames(s32 r4) {
+    s32 beat = getMelodyBeat(r4);
+    f32 f1 = 1.0f;
+    switch (beat) {
+    case 3:
+        f1 = 1.0f;
+        break;
+    case 4:
+        f1 = 0.85714f; // 6/7
+        break;
+    case 6:
+        f1 = 0.75f; // 3/4
+        break;
+    }
+    return f1 * 30.0f;
 }
 
 /* 802AEE1C-802AEEA8       .text melodyPlay__10JAIZelInstFl */
-void JAIZelInst::melodyPlay(s32) {
-    /* Nonmatching */
+void JAIZelInst::melodyPlay(s32 melody_num) {
+    JUT_ASSERT(870, melody_num < MELODY_COUNT);
+    u32 seNum = JA_SE_WTAKT_DANCE01 + melody_num;
+    mDoAud_seStart(seNum);
 }
 
 /* 802AEEA8-802AEF64       .text melodyStop__10JAIZelInstFv */
 void JAIZelInst::melodyStop() {
-    /* Nonmatching */
+    mDoAud_seStop(JA_SE_WTAKT_DANCE01);
+    mDoAud_seStop(JA_SE_WTAKT_DANCE02);
+    mDoAud_seStop(JA_SE_WTAKT_DANCE03);
+    mDoAud_seStop(JA_SE_WTAKT_DANCE04);
+    mDoAud_seStop(JA_SE_WTAKT_DANCE05);
+    mDoAud_seStop(JA_SE_WTAKT_DANCE06);
+    mDoAud_seStop(JA_SE_WTAKT_DANCE07);
+    mDoAud_seStop(JA_SE_WTAKT_DANCE08);
+    mDoAud_seStop(JA_SE_WTAKT_DANCE09);
+    mDoAud_seStop(JA_SE_WTAKT_DANCE10);
 }

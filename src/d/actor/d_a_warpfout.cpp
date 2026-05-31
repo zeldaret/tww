@@ -7,8 +7,6 @@
 #include "d/actor/d_a_warpfout.h"
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 static daWarpfout_c::EventActionInitFunc event_init_tbl[] = {
     &daWarpfout_c::initWarp1, &daWarpfout_c::initWarp2, &daWarpfout_c::initWarp3,
@@ -36,7 +34,7 @@ void daWarpfout_c::CreateInit() {
 
 /* 0000008C-000000E4       .text _create__12daWarpfout_cFv */
 cPhs_State daWarpfout_c::_create() {
-    fopAcM_SetupActor(this, daWarpfout_c);
+    fopAcM_ct(this, daWarpfout_c);
     CreateInit();
 
     return cPhs_COMPLEATE_e;
@@ -218,18 +216,18 @@ static actor_method_class daWarpfoutMethodTable = {
 };
 
 actor_process_profile_definition g_profile_WARPFOUT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WARPFOUT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_WARPFOUT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWarpfout_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_WARPFOUT,
+    /* Draw Prio    */ fpcDwPi_WARPFOUT_e,
     /* Actor SubMtd */ &daWarpfoutMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

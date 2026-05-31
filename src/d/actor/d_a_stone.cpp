@@ -7,9 +7,7 @@
 #include "d/actor/d_a_stone.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_always.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Always.h"
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -189,7 +187,7 @@ bool Act_c::chk_appear() {
 
 /* 0000033C-00000744       .text _create__Q27daStone5Act_cFv */
 cPhs_State Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     m670 = prm_get_type();
     m68C = chk_appear();
 
@@ -725,8 +723,8 @@ void Act_c::eff_break() {
 
     dComIfGp_particle_set(dPa_name::ID_IT_JN_STS_HAHEN, &sp18, NULL, NULL, 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
 
-    J3DModelData* pJVar1 = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPI_KOISHI);
-    J3DAnmTexPattern* pJVar2 = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", ALWAYS_BTP_MPI_KOISHI);
+    J3DModelData* pJVar1 = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_MPI_KOISHI_e);
+    J3DAnmTexPattern* pJVar2 = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTP_MPI_KOISHI_e);
     JPABaseEmitter* pJVar3 = (JPABaseEmitter*)dComIfGp_particle_set(dPa_name::ID_IT_JN_M_STS_HAHEN, &sp18);
 
     if (pJVar3 != NULL) {
@@ -913,7 +911,7 @@ void Act_c::set_senv(int arg1, int arg2) const {
 /* 00003124-0000315C       .text cam_lockoff__Q27daStone5Act_cCFv */
 void Act_c::cam_lockoff() const {
     camera_class* camera = dComIfGp_getCamera(0);
-    camera->mCamera.ForceLockOff(((base_process_class*)this)->mBsPcId);
+    camera->mCamera.ForceLockOff(base.base.mBsPcId);
 }
 
 /* 0000315C-00003358       .text _execute__Q27daStone5Act_cFv */
@@ -1011,18 +1009,18 @@ actor_method_class Method::Table = {
 } // namespace daStone
 
 actor_process_profile_definition g_profile_STONE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_STONE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_STONE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daStone::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_STONE,
+    /* Draw Prio    */ fpcDwPi_STONE_e,
     /* Actor SubMtd */ &daStone::Method::Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

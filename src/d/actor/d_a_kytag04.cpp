@@ -7,8 +7,6 @@
 #include "d/actor/d_a_kytag04.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daKytag04_Draw__FP13kytag04_class */
 static BOOL daKytag04_Draw(kytag04_class*) {
@@ -48,7 +46,7 @@ static BOOL daKytag04_Delete(kytag04_class*) {
 
 /* 00000168-00000208       .text daKytag04_Create__FP10fopAc_ac_c */
 static cPhs_State daKytag04_Create(fopAc_ac_c* i_this)  {
-    fopAcM_SetupActor(i_this, kytag04_class);
+    fopAcM_ct(i_this, kytag04_class);
     kytag04_class* a_this = (kytag04_class*)i_this;
     a_this->mState = 0;
     a_this->mOffColPat = fopAcM_GetParam(a_this) & 0xFF;
@@ -70,18 +68,18 @@ static actor_method_class l_daKytag04_Method = {
 };
 
 actor_process_profile_definition g_profile_KYTAG04 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KYTAG04,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KYTAG04_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kytag04_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KYTAG04,
+    /* Draw Prio    */ fpcDwPi_KYTAG04_e,
     /* Actor SubMtd */ &l_daKytag04_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

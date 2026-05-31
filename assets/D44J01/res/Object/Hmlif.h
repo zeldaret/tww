@@ -1,0 +1,26 @@
+#ifndef RES_HMLIF_H
+#define RES_HMLIF_H
+
+enum dRes_INDEX_HMLIF {
+    /* BDLM */
+    dRes_INDEX_HMLIF_BDL_HMLIF_e=0x5,
+    /* BRK  */
+    dRes_INDEX_HMLIF_BRK_HMLIF_e=0x8,
+    /* DZB  */
+    dRes_INDEX_HMLIF_DZB_HMLIF_e=0xB,
+};
+
+enum dRes_ID_HMLIF {
+    /* BDLM */
+    dRes_ID_HMLIF_BDL_HMLIF_e=0x5,
+    /* BRK  */
+    dRes_ID_HMLIF_BRK_HMLIF_e=0x8,
+    /* DZB  */
+    dRes_ID_HMLIF_DZB_HMLIF_e=0xB,
+};
+
+enum HMLIF_JNT {
+    HMLIF_JNT_MONO_e=0x0,
+};
+
+#endif /* !RES_HMLIF_H */

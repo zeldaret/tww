@@ -1,0 +1,24 @@
+#ifndef RES_QTKHD_H
+#define RES_QTKHD_H
+
+enum dRes_INDEX_QTKHD {
+    /* BDL  */
+    dRes_INDEX_QTKHD_BDL_QTKHD_e=0x4,
+    /* DZB  */
+    dRes_INDEX_QTKHD_DZB_QTKHD_e=0x7,
+};
+
+enum dRes_ID_QTKHD {
+    /* BDL  */
+    dRes_ID_QTKHD_BDL_QTKHD_e=0x4,
+    /* DZB  */
+    dRes_ID_QTKHD_DZB_QTKHD_e=0x7,
+};
+
+enum QTKHD_JNT {
+    QTKHD_JNT_R11_HEAD_DISP_e=0x0,
+    QTKHD_JNT_A00_e=0x1,
+    QTKHD_JNT_POLYSURFACE11_e=0x2,
+};
+
+#endif /* !RES_QTKHD_H */

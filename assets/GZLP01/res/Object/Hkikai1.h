@@ -1,0 +1,26 @@
+#ifndef RES_HKIKAI1_H
+#define RES_HKIKAI1_H
+
+enum dRes_INDEX_HKIKAI1 {
+    /* BCK  */
+    dRes_INDEX_HKIKAI1_BCK_HKIKAI1_e=0x4,
+    /* BDLM */
+    dRes_INDEX_HKIKAI1_BDL_HKIKAI1_e=0x7,
+};
+
+enum dRes_ID_HKIKAI1 {
+    /* BCK  */
+    dRes_ID_HKIKAI1_BCK_HKIKAI1_e=0x4,
+    /* BDLM */
+    dRes_ID_HKIKAI1_BDL_HKIKAI1_e=0x7,
+};
+
+enum HKIKAI1_JNT {
+    HKIKAI1_JNT_JOINT1_e=0x0,
+    HKIKAI1_JNT_JOINT2_e=0x1,
+    HKIKAI1_JNT_JOINT3_e=0x2,
+    HKIKAI1_JNT_JOINT4_e=0x3,
+    HKIKAI1_JNT_JOINT6_e=0x4,
+};
+
+#endif /* !RES_HKIKAI1_H */

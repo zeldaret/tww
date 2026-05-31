@@ -1,0 +1,22 @@
+#ifndef RES_MFLFT_H
+#define RES_MFLFT_H
+
+enum dRes_INDEX_MFLFT {
+    /* BDL  */
+    dRes_INDEX_MFLFT_BDL_MFLFT_e=0x4,
+    /* DZB  */
+    dRes_INDEX_MFLFT_DZB_MFLFT_e=0x7,
+};
+
+enum dRes_ID_MFLFT {
+    /* BDL  */
+    dRes_ID_MFLFT_BDL_MFLFT_e=0x4,
+    /* DZB  */
+    dRes_ID_MFLFT_DZB_MFLFT_e=0x7,
+};
+
+enum MFLFT_JNT {
+    MFLFT_JNT_MFLFT_e=0x0,
+};
+
+#endif /* !RES_MFLFT_H */

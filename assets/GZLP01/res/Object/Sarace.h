@@ -1,0 +1,64 @@
+#ifndef RES_SARACE_H
+#define RES_SARACE_H
+
+enum dRes_INDEX_SARACE {
+    /* BCKS */
+    dRes_INDEX_SARACE_BCK_SA01HEAD_TALK01_e=0x6,
+    dRes_INDEX_SARACE_BCK_SA01HEAD_WAIT01_e=0x7,
+    dRes_INDEX_SARACE_BCK_SA_TALK01_e=0x8,
+    dRes_INDEX_SARACE_BCK_SA_WAIT01_e=0x9,
+    dRes_INDEX_SARACE_BCK_SA01HEAD_TALK02_e=0xA,
+    dRes_INDEX_SARACE_BCK_SA_TALK02_e=0xB,
+    /* BDL  */
+    dRes_INDEX_SARACE_BDL_SA_e=0xE,
+    /* BDLM */
+    dRes_INDEX_SARACE_BDL_SA01_HEAD_e=0x11,
+    /* BTP  */
+    dRes_INDEX_SARACE_BTP_SA01_MABA_e=0x14,
+};
+
+enum dRes_ID_SARACE {
+    /* BCKS */
+    dRes_ID_SARACE_BCK_SA01HEAD_TALK01_e=0x0,
+    dRes_ID_SARACE_BCK_SA01HEAD_WAIT01_e=0x1,
+    dRes_ID_SARACE_BCK_SA_TALK01_e=0x2,
+    dRes_ID_SARACE_BCK_SA_WAIT01_e=0x3,
+    dRes_ID_SARACE_BCK_SA01HEAD_TALK02_e=0x7,
+    dRes_ID_SARACE_BCK_SA_TALK02_e=0x8,
+    /* BDL  */
+    dRes_ID_SARACE_BDL_SA_e=0x4,
+    /* BDLM */
+    dRes_ID_SARACE_BDL_SA01_HEAD_e=0x5,
+    /* BTP  */
+    dRes_ID_SARACE_BTP_SA01_MABA_e=0x6,
+};
+
+enum SA_JNT {
+    SA_JNT_WORLD_ROOT_e=0x0,
+    SA_JNT_BACKBONE_e=0x1,
+    SA_JNT_NECK_e=0x2,
+    SA_JNT_HEAD_e=0x3,
+    SA_JNT_SHOULDERL_e=0x4,
+    SA_JNT_ARML1_e=0x5,
+    SA_JNT_ARML2_e=0x6,
+    SA_JNT_HANDL_e=0x7,
+    SA_JNT_SHOULDERR_e=0x8,
+    SA_JNT_ARMR1_e=0x9,
+    SA_JNT_ARMR2_e=0xA,
+    SA_JNT_HANDR_e=0xB,
+    SA_JNT_WAIST_e=0xC,
+    SA_JNT_LEGL1_e=0xD,
+    SA_JNT_LEGL2_e=0xE,
+    SA_JNT_FOOTL_e=0xF,
+    SA_JNT_LEGR1_e=0x10,
+    SA_JNT_LEGR2_e=0x11,
+    SA_JNT_FOOTR_e=0x12,
+};
+
+enum SA01_HEAD_JNT {
+    SA01_HEAD_JNT_HEAD2_e=0x0,
+    SA01_HEAD_JNT_HAIR1_e=0x1,
+    SA01_HEAD_JNT_HAIR2_e=0x2,
+};
+
+#endif /* !RES_SARACE_H */

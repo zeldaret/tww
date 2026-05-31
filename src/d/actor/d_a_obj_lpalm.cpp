@@ -7,9 +7,7 @@
 #include "d/actor/d_a_obj_lpalm.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_oyashi.h"
+#include "res/Object/Oyashi.h"
 #include "m_Do/m_Do_ext.h"
 
 const char daObjLpalm_c::M_arcname[7] = "Oyashi";
@@ -42,7 +40,7 @@ static BOOL nodeCallBack(J3DNode* joint, int calcTiming) {
 
 /* 00000164-00000268       .text CreateHeap__12daObjLpalm_cFv */
 BOOL daObjLpalm_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, OYASHI_BDL_OYASHI);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_OYASHI_BDL_OYASHI_e);
     for (u16 i = 0; i < modelData->getJointNum(); i++)
         modelData->getJointNodePointer(i)->setCallBack(nodeCallBack);
     if (modelData == NULL)
@@ -53,7 +51,7 @@ BOOL daObjLpalm_c::CreateHeap() {
         return false;
 
     mModel->setUserArea((u32)this);
-    mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, OYASHI_DZB_OYASHI), dBgW::MOVE_BG_e, &mModel->getBaseTRMtx());
+    mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_OYASHI_DZB_OYASHI_e), dBgW::MOVE_BG_e, &mModel->getBaseTRMtx());
     if (mpBgW == NULL)
         return false;
 
@@ -81,15 +79,10 @@ void daObjLpalm_c::CreateInit() {
 }
 
 cPhs_State daObjLpalm_c::_create() {
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daObjLpalm_c);
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     if (ret == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daObjLpalm_c);
-#else
-    fopAcM_SetupActor(this, daObjLpalm_c);
-    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
-    if (ret == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(this, daObjLpalm_c);
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xf00) == 0) {
             ret = cPhs_ERROR_e;
         } else {
@@ -207,18 +200,18 @@ static actor_method_class daObjLpalmMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lpalm = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Lpalm,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lpalm_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjLpalm_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Lpalm,
+    /* Draw Prio    */ fpcDwPi_Obj_Lpalm_e,
     /* Actor SubMtd */ &daObjLpalmMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

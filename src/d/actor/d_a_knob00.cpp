@@ -9,10 +9,8 @@
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/actor/d_a_npc_mt.h"
 #include "d/d_kankyo.h"
-#include "d/res/res_knob.h"
-#include "d/d_procname.h"
+#include "res/Object/Knob.h"
 #include "m_Do/m_Do_graphic.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "ctype.h"
 
@@ -34,7 +32,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
 
 /* 000000D4-000003B8       .text CreateHeap__10daKnob00_cFv */
 BOOL daKnob00_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, KNOB_BDL_DOOR);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_KNOB_BDL_DOOR_e);
     JUT_ASSERT(VERSION_SELECT(145, 145, 163, 163), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -53,7 +51,7 @@ BOOL daKnob00_c::CreateHeap() {
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
-    J3DAnmTransform* anmTransform = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, KNOB_BCK_DOOROPENADOOR);
+    J3DAnmTransform* anmTransform = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_KNOB_BCK_DOOROPENADOOR_e);
     if (!mBckAnm.init(modelData, anmTransform, true, J3DFrameCtrl::EMode_NONE)) {
 #if VERSION == VERSION_DEMO
         return cPhs_ERROR_e;
@@ -68,35 +66,35 @@ BOOL daKnob00_c::CreateHeap() {
     s32 fileIndex;
     switch (getShapeType()) {
         case 1:
-            fileIndex = KNOB_BDL_DOOR_B;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_B_e;
             break;
 
         case 2:
-            fileIndex = KNOB_BDL_DOOR_C;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_C_e;
             break;
 
         case 3:
-            fileIndex = KNOB_BDL_DOOR_D;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_D_e;
             break;
 
         case 4:
-            fileIndex = KNOB_BDL_DOOR_E;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_E_e;
             break;
 
         case 5:
-            fileIndex = KNOB_BDL_DOOR_F;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_F_e;
             break;
 
         case 6:
-            fileIndex = KNOB_BDL_DOOR_G;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_G_e;
             break;
 
         case 7:
-            fileIndex = KNOB_BDL_DOOR_H;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_H_e;
             break;
             
         default:
-            fileIndex = KNOB_BDL_DOOR_A;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_A_e;
             break;
     }
 
@@ -115,7 +113,7 @@ BOOL daKnob00_c::CreateHeap() {
         return FALSE;
     }
 
-    cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(M_arcname, KNOB_DZB_DOOR);
+    cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_KNOB_DZB_DOOR_e);
 
     if (bgd == NULL) {
         return FALSE;
@@ -210,7 +208,7 @@ BOOL daKnob00_c::msgDoor() {
 
 /* 000005DC-000006F0       .text openInit__10daKnob00_cFi */
 void daKnob00_c::openInit(int arg1) {
-    static s32 bck_table[] = { KNOB_BCK_DOOROPENADOOR, KNOB_BCK_DOOROPENBDOOR, KNOB_BCK_DOOROPENADOOR, KNOB_BCK_DOOROPENBDOOR };
+    static s32 bck_table[] = { dRes_INDEX_KNOB_BCK_DOOROPENADOOR_e, dRes_INDEX_KNOB_BCK_DOOROPENBDOOR_e, dRes_INDEX_KNOB_BCK_DOOROPENADOOR_e, dRes_INDEX_KNOB_BCK_DOOROPENBDOOR_e };
 
     J3DModelData* modelData = mpModel->getModelData();
     s32 iVar2 = mBckAnm.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, bck_table[arg1]), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true);
@@ -356,7 +354,7 @@ BOOL daKnob00_c::CreateInit() {
     mDoorType = getType();
     if (getShapeType() == 4 && mDoorType == 1) {
         mDoorType = 5;
-        fopAcM_create(PROC_TAG_MK, 0xffffff03, &current.pos, fopAcM_GetRoomNo(this), &current.angle, NULL, 0, NULL);
+        fopAcM_create(fpcNm_TAG_MK_e, 0xffffff03, &current.pos, fopAcM_GetRoomNo(this), &current.angle, NULL, 0, NULL);
         attention_info.position.y += 60.0f;
         eyePos.y += 60.0f;
     }
@@ -371,17 +369,11 @@ BOOL daKnob00_c::CreateInit() {
 /* 00000D84-00000E70       .text create__10daKnob00_cFv */
 cPhs_State daKnob00_c::create() {
     cPhs_State ret = dComIfG_resLoad(&mPhase, M_arcname);
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daKnob00_c);
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
     }
-    fopAcM_SetupActor(this, daKnob00_c);
-#else
-    fopAcM_SetupActor(this, daKnob00_c);
-    if (ret != cPhs_COMPLEATE_e) {
-        return ret;
-    }
-#endif
+    fopAcM_ct_Demo(this, daKnob00_c);
 
     if (fopAcM_GetRoomNo(this) == -1) {
         fopAcM_SetRoomNo(this, getFRoomNo());
@@ -722,7 +714,7 @@ BOOL daKnob00_c::actionInit() {
             return TRUE;
         }
 
-        if (dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+        if (dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) {
             setAction(11);
             return TRUE;
         }
@@ -786,7 +778,7 @@ BOOL daKnob00_c::draw() {
     fpc_ProcID iVar1 = fopAcM_GetLinkId(this);
     if (iVar1 != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* ac = fopAcM_SearchByID(iVar1);
-        if (fopAcM_IsActor(ac) && fopAcM_GetName(ac) == PROC_Obj_Pirateship) {
+        if (fopAcM_IsActor(ac) && fopAcM_GetName(ac) == fpcNm_Obj_Pirateship_e) {
             daObjPirateship::Act_c* pirateShip = (daObjPirateship::Act_c*)ac;
             if (pirateShip->m2CC == 0) {
                 return TRUE;
@@ -935,18 +927,18 @@ static actor_method_class l_daKnob00_Method = {
 };
 
 actor_process_profile_definition g_profile_KNOB00 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KNOB00,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KNOB00_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daKnob00_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KNOB00,
+    /* Draw Prio    */ fpcDwPi_KNOB00_e,
     /* Actor SubMtd */ &l_daKnob00_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

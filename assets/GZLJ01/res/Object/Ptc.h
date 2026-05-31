@@ -1,0 +1,24 @@
+#ifndef RES_PTC_H
+#define RES_PTC_H
+
+enum dRes_INDEX_PTC {
+    /* BDL  */
+    dRes_INDEX_PTC_BDL_PTCO_e=0x3,
+    dRes_INDEX_PTC_BDL_PTCU_e=0x4,
+};
+
+enum dRes_ID_PTC {
+    /* BDL  */
+    dRes_ID_PTC_BDL_PTCO_e=0x0,
+    dRes_ID_PTC_BDL_PTCU_e=0x1,
+};
+
+enum PTCO_JNT {
+    PTCO_JNT_PTCO_e=0x0,
+};
+
+enum PTCU_JNT {
+    PTCU_JNT_PTCU_e=0x0,
+};
+
+#endif /* !RES_PTC_H */

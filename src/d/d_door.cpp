@@ -7,8 +7,8 @@
 #include "d/d_door.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_vibration.h"
-#include "d/res/res_key.h"
-#include "d/res/res_hkyo.h"
+#include "res/Object/Key.h"
+#include "res/Object/Hkyo.h"
 #include "d/actor/d_a_player.h"
 #include "SSystem/SComponent/c_angle.h"
 
@@ -464,14 +464,14 @@ BOOL dDoor_key2_c::keyProc() {
 
 /* 8006C650-8006C764       .text keyCreate_Nkey__12dDoor_key2_cFv */
 BOOL dDoor_key2_c::keyCreate_Nkey() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Key", KEY_BDL_VLOCN);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Key", dRes_INDEX_KEY_BDL_VLOCN_e);
     JUT_ASSERT(DEMO_SELECT(713, 716), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpModel == NULL)
         return FALSE;
 
-    J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Key", KEY_BCK_VLOCN);
+    J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Key", dRes_INDEX_KEY_BCK_VLOCN_e);
     if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE))
         return FALSE;
 
@@ -480,14 +480,14 @@ BOOL dDoor_key2_c::keyCreate_Nkey() {
 
 /* 8006C764-8006C910       .text keyCreate_Bkey__12dDoor_key2_cFv */
 BOOL dDoor_key2_c::keyCreate_Bkey() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Key", KEY_BDL_VLOCB);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Key", dRes_INDEX_KEY_BDL_VLOCB_e);
     JUT_ASSERT(DEMO_SELECT(737, 740), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpModel == NULL)
         return FALSE;
 
-    J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Key", KEY_BCK_VLOCB);
+    J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Key", dRes_INDEX_KEY_BCK_VLOCB_e);
     if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE))
         return FALSE;
 
@@ -707,7 +707,7 @@ BOOL dDoor_hkyo_c::create() {
     if (m11 == 0)
         return TRUE;
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hkyo", HKYO_BDL_HKYO1);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hkyo", dRes_INDEX_HKYO_BDL_HKYO1_e);
     JUT_ASSERT(DEMO_SELECT(1049, 1052), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
@@ -718,7 +718,7 @@ BOOL dDoor_hkyo_c::create() {
     if (mpBrkAnm == NULL)
         return FALSE;
 
-    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Hkyo", HKYO_BRK_HKYO1B);
+    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Hkyo", dRes_INDEX_HKYO_BRK_HKYO1B_e);
     if (!mpBrkAnm->init(modelData, brk, TRUE, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
 
@@ -736,9 +736,9 @@ void dDoor_hkyo_c::setAnm(u8 idx) {
 
     u32 fileIndex;
     switch (idx) {
-    case 1: fileIndex = HKYO_BRK_HKYO1A; break;
-    case 2: fileIndex = HKYO_BRK_HKYO1B; break;
-    default: fileIndex = HKYO_BRK_HKYO1C; break;
+    case 1: fileIndex = dRes_INDEX_HKYO_BRK_HKYO1A_e; break;
+    case 2: fileIndex = dRes_INDEX_HKYO_BRK_HKYO1B_e; break;
+    default: fileIndex = dRes_INDEX_HKYO_BRK_HKYO1C_e; break;
     }
 
     J3DModelData* modelData = mpModel->getModelData();

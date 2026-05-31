@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_kk1.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 class daTag_Kk1_HIO_c : public JORReflexible {
 public:
@@ -82,10 +80,10 @@ cPhs_State daTag_Kk1_c::_create() {
     u32 name_int = 0;
     s32 o_phsState = cPhs_COMPLEATE_e;
 
-    fopAcM_SetupActor(this, daTag_Kk1_c);
+    fopAcM_ct(this, daTag_Kk1_c);
 
     switch(fopAcM_GetName(this)){
-        case PROC_TAG_KK1:
+        case fpcNm_TAG_KK1_e:
             mNameIsWrong = false;
             break;
         default:
@@ -139,18 +137,18 @@ static actor_method_class l_daTag_Kk1_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_KK1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_KK1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_KK1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Kk1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_KK1,
+    /* Draw Prio    */ fpcDwPi_TAG_KK1_e,
     /* Actor SubMtd */ &l_daTag_Kk1_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

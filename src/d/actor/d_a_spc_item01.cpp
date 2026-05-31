@@ -5,11 +5,8 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_spc_item01.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "d/d_item.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
@@ -57,7 +54,7 @@ void daSpcItem01_c::set_mtx() {
     cXyz scaleVec = scale;
     f32 offsetY = 0.0f;
     switch (m_itemNo) {
-    case BOKO_BELT:
+    case dItemNo_KNIGHTS_CREST_e:
         offsetY = -24.0f;
         break;
     }
@@ -76,10 +73,10 @@ BOOL daSpcItem01_c::_delete() {
 
 /* 8015DBF4-8015DDD0       .text _create__13daSpcItem01_cFv */
 cPhs_State daSpcItem01_c::_create() {
-    fopAcM_SetupActor(this, daSpcItem01_c);
+    fopAcM_ct(this, daSpcItem01_c);
 
     m_itemNo = daSpcItem01_prm::getItemNo(this);
-    if (m_itemNo == dItem_SHIELD_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E20)) {
+    if (m_itemNo == dItemNo_SHIELD_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E20)) {
         setLoadError();
         return cPhs_ERROR_e;
     }
@@ -118,7 +115,7 @@ BOOL daSpcItem01_c::CreateInit() {
     field_0x644 = daSpcItem01_prm::getFlag(this);
     fopAcM_SetGravity(this, -4.0f);
     switch ((s8)m_itemNo) {
-    case dItem_SHIELD_e:
+    case dItemNo_SHIELD_e:
         scale.x = 1.5f;
         scale.y = 1.5f;
         scale.z = 1.5f;
@@ -149,7 +146,7 @@ BOOL daSpcItem01_c::_execute() {
 
 /* 8015DFE8-8015E070       .text set_effect__13daSpcItem01_cFv */
 void daSpcItem01_c::set_effect() {
-    if (cLib_checkBit(field_0x644, (u16)0x01) && dItem_data::checkAppearEffect(m_itemNo) && !field_0x642 && m_itemNo != BOKO_BELT) {
+    if (cLib_checkBit(field_0x644, (u16)0x01) && dItem_data::checkAppearEffect(m_itemNo) && !field_0x642 && m_itemNo != dItemNo_KNIGHTS_CREST_e) {
         dComIfGp_particle_setSimple(dItem_data::getAppearEffect(m_itemNo), &current.pos);
     }
 }
@@ -166,7 +163,7 @@ void daSpcItem01_c::scale_anim() {
 /* 8015E0D8-8015E11C       .text anim_play__13daSpcItem01_cFv */
 void daSpcItem01_c::anim_play() {
     f32 animPlayParam = 1.0f;
-    if (m_itemNo == BOKO_BELT) {
+    if (m_itemNo == dItemNo_KNIGHTS_CREST_e) {
         animPlayParam = 0.0f;
     }
     animPlay(1.0f, 1.0f, 1.0f, 1.0f, animPlayParam);
@@ -177,9 +174,9 @@ void daSpcItem01_c::move() {
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
     mAcch.CrrPos(*dComIfG_Bgsp());
     switch (m_itemNo) {
-    case dItem_SHIELD_e:
+    case dItemNo_SHIELD_e:
         break;
-    case dItem_JOY_PENDANT_e:
+    case dItemNo_JOY_PENDANT_e:
         if (mAcch.ChkGroundLanding()) {
             speed.x = 0.0f;
             speed.y = 0.0f;
@@ -231,7 +228,7 @@ BOOL daSpcItem01_c::_draw() {
 
 /* 8015E2A8-8015E368       .text setTevStr__13daSpcItem01_cFv */
 void daSpcItem01_c::setTevStr() {
-    if (m_itemNo == BOKO_BELT) {
+    if (m_itemNo == dItemNo_KNIGHTS_CREST_e) {
         dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
     } else {
         dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
@@ -280,18 +277,18 @@ static actor_method_class l_daSpcItem01_Method = {
 };
 
 actor_process_profile_definition g_profile_SPC_ITEM01 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SPC_ITEM01,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SPC_ITEM01_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSpcItem01_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SPC_ITEM01,
+    /* Draw Prio    */ fpcDwPi_SPC_ITEM01_e,
     /* Actor SubMtd */ &l_daSpcItem01_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

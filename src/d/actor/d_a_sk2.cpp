@@ -5,21 +5,19 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sk2.h"
-#include "d/res/res_sk2.h"
+#include "res/Object/Sk2.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_bg_w_deform.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"
 
-static s32 sk2_dzb[] = {SK2_DZB_KSYLF_00, SK2_DZB_KSYLF_01};
-static s32 sk2_bck[] = {SK2_BCK_KSYLF_00, SK2_BCK_KSYLF_01};
+static s32 sk2_dzb[] = {dRes_INDEX_SK2_DZB_KSYLF_00_e, dRes_INDEX_SK2_DZB_KSYLF_01_e};
+static s32 sk2_bck[] = {dRes_INDEX_SK2_BCK_KSYLF_00_e, dRes_INDEX_SK2_BCK_KSYLF_01_e};
 
 /* 00000078-00000194       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
-    if (calcTiming == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 uVar2 = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
@@ -143,9 +141,9 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 
     J3DModelData* pModelData;
     if (i_this->m2B4 == 0) {
-        pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk2", SK2_BDL_KSYLF_00);
+        pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk2", dRes_INDEX_SK2_BDL_KSYLF_00_e);
     } else {
-        pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk2", SK2_BDL_KSYLF_01);
+        pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk2", dRes_INDEX_SK2_BDL_KSYLF_01_e);
     }
 
     i_this->mpMorf = new mDoExt_McaMorf(
@@ -188,15 +186,10 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 /* 00000918-00000BC4       .text daSk2_Create__FP10fopAc_ac_c */
 static cPhs_State daSk2_Create(fopAc_ac_c* a_this) {
     sk2_class* i_this = (sk2_class*)a_this;
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(a_this, sk2_class);
     cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Sk2");
     if (PVar1 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, sk2_class);
-#else
-    fopAcM_SetupActor(a_this, sk2_class);
-    cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Sk2");
-    if (PVar1 == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(a_this, sk2_class);
         i_this->m2B4 = fopAcM_GetParam(a_this);
         i_this->m2B5 = fopAcM_GetParam(a_this) >> 8;
 
@@ -251,18 +244,18 @@ static actor_method_class l_daSk2_Method = {
 };
 
 actor_process_profile_definition g_profile_SK2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SK2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SK2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sk2_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SK2,
+    /* Draw Prio    */ fpcDwPi_SK2_e,
     /* Actor SubMtd */ &l_daSk2_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

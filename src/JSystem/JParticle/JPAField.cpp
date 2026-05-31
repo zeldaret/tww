@@ -260,59 +260,29 @@ void JPAConvectionField::preCalc(JPAFieldData* data) {
 
 /* 8025B114-8025B3CC       .text calc__18JPAConvectionFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPAConvectionField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
-    /* Nonmatching - regalloc, maybe related to cross_hack fake inline? */
+    /* Nonmatching - fpr regalloc */
 
-    JGeometry::TVec3<f32> axisX, axisZ;
-
-    // axisX.scale(data->mWork0.dot(ptcl->mLocalPosition), data->mWork0);
-    // axisZ.scale(data->mWork2.dot(ptcl->mLocalPosition), data->mWork2);
+    JGeometry::TVec3<f32> axisX;
+    JGeometry::TVec3<f32> axisZ;
 
     f32 dot0 = data->mWork0.dot(ptcl->mLocalPosition);
-
-    // f32 f3 = data->mWork0.x * dot0;
-    // f32 f4 = data->mWork0.y * dot0;
-    // f32 f5 = data->mWork0.z * dot0;
-    // axisX.set(f3, f4, f5);
-
-    // axisX.set(data->mWork0.x * dot0, data->mWork0.y * dot0, data->mWork0.z * dot0);
-
     axisX.set(data->mWork0);
-    // axisX.set(data->mWork0.x, data->mWork0.y, data->mWork0.z);
     axisX.scale(dot0);
 
-    // axisX.scale(dot0, data->mWork0);
-
-    // axisX.scale(data->mWork0.dot(ptcl->mLocalPosition), data->mWork0);
-
     f32 dot2 = data->mWork2.dot(ptcl->mLocalPosition);
-
-    f32 f1 = data->mWork2.x * dot2;
-    f32 f2 = data->mWork2.y * dot2;
-    f32 f0 = data->mWork2.z * dot2;
-    axisZ.set(f1, f2, f0);
-
-    // axisZ.set(data->mWork2.x * dot2, data->mWork2.y * dot2, data->mWork2.z * dot2);
-
-    // axisZ.set(data->mWork2);
-    // axisZ.scale(dot2);
-
-    // axisZ.scale(dot2, data->mWork2);
-
-    // axisZ.scale(data->mWork2.dot(ptcl->mLocalPosition), data->mWork2);
+    axisZ.set(data->mWork2);
+    axisZ.scale(dot2);
 
     JGeometry::TVec3<f32> newPos;
+    JGeometry::TVec3<f32> newPos2;
     newPos.add(axisX, axisZ);
+    newPos2.setLength(newPos, data->mVal1);
 
-    newPos.setLength(newPos, data->mVal1);
-
-    JGeometry::TVec3<f32> delta, axisY;
-    delta.sub(ptcl->mLocalPosition, newPos);
-    axisY.cross_hack(data->mWork1, newPos); // fake inline
-    // axisY.cross(data->mWork1, newPos);
-    // axisY.cross(newPos, data->mWork1);
-    // data->mVel.cross_hack(axisY, delta); // fake inline
+    JGeometry::TVec3<f32> delta;
+    JGeometry::TVec3<f32> axisY;
+    delta.sub(ptcl->mLocalPosition, newPos2);
+    axisY.cross(data->mWork1, newPos2);
     data->mVel.cross(axisY, delta);
-    // data->mVel.cross(delta, axisY);
     data->mVel.setLength(data->mMag);
 
     if (data->mVal2 != 0.0f) {

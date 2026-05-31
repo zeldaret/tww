@@ -31,7 +31,7 @@ int (dSnap_packet::*dSnap_packet::m_judge_tbl[])() = {
     &dSnap_packet::JudgeTestM,
 };
 
-dSnap_packet l_snap;
+static dSnap_packet l_snap;
 
 struct CharaData {
     /* 0x00 */ SVec offset;
@@ -1448,7 +1448,7 @@ int dSnap_PhotoIndex2TableIndex(int photoIndex) {
 
 /* 800CCFE4-800CD00C       .text dSnap_GetFigRoomId__Fi */
 int dSnap_GetFigRoomId(int tableIndex) {
-    if (tableIndex >= (int)ARRAY_SIZE(l_CharaData)) {
+    if (tableIndex >= CharaDataTblSize) {
         return 0xFF;
     }
     return l_CharaData[tableIndex].figRoom;
@@ -1703,8 +1703,8 @@ void dSnap_Obj::SetGeoSph(const Vec& center, f32 radius) {
 }
 
 /* 800CDB68-800CDB94       .text SetInf__9dSnap_ObjFUcPC10fopAc_ac_cUcUcs */
-void dSnap_Obj::SetInf(u8 r4, const fopAc_ac_c* r5, u8 r6, u8 r7, s16 cullAngle) {
-    mPhoto = r4;
+void dSnap_Obj::SetInf(u8 photoIndex, const fopAc_ac_c* r5, u8 r6, u8 r7, s16 cullAngle) {
+    mPhoto = photoIndex;
     mActorPID = fopAcM_GetID(const_cast<fopAc_ac_c*>(r5));
     field_0x1a = r6;
     field_0x19 = r7;
@@ -2210,20 +2210,20 @@ void dSnap_RegistSnapObj(dSnap_Obj& obj) {
 }
 
 /* 800CEDD0-800CEDF8       .text dSnap_RegistFig__FUcP10fopAc_ac_cfff */
-void dSnap_RegistFig(u8 r3, fopAc_ac_c* actor, f32 f1, f32 f2, f32 f3) {
-    dSnap_RegistFig(r3, actor, actor->current.pos, actor->shape_angle.y, f1, f2, f3);
+void dSnap_RegistFig(u8 photoIndex, fopAc_ac_c* actor, f32 f1, f32 f2, f32 f3) {
+    dSnap_RegistFig(photoIndex, actor, actor->current.pos, actor->shape_angle.y, f1, f2, f3);
 }
 
 /* 800CEDF8-800CEFD4       .text dSnap_RegistFig__FUcP10fopAc_ac_cRC3Vecsfff */
-void dSnap_RegistFig(u8 r3, fopAc_ac_c* actor, const Vec& pos, s16 angleY, f32 f1, f32 f2, f32 f3) {
+void dSnap_RegistFig(u8 photoIndex, fopAc_ac_c* actor, const Vec& pos, s16 angleY, f32 f1, f32 f2, f32 f3) {
     if (!l_snap.ChkReleaseShutter()) {
         return;
     }
-    if (r3 >= 0xCF) {
+    if (photoIndex >= 0xCF) {
         return;
     }
     
-    int tableIndex = dSnap_PhotoIndex2TableIndex(r3);
+    int tableIndex = dSnap_PhotoIndex2TableIndex(photoIndex);
     const CharaData& chara = l_CharaData[tableIndex];
     mDoMtx_stack_c::YrotS(angleY);
     cXyz sp14;
@@ -2240,7 +2240,7 @@ void dSnap_RegistFig(u8 r3, fopAc_ac_c* actor, const Vec& pos, s16 angleY, f32 f
     int angY = angleY;
     dSnap_Obj sp20;
     sp20.SetGeo(sp14, chara.radius*f2, chara.height*f1, angY);
-    sp20.SetInf(r3, actor, 0, 4, chara.cullAngle);
+    sp20.SetInf(photoIndex, actor, 0, 4, chara.cullAngle);
     dSnap_RegistSnapObj(sp20);
 }
 

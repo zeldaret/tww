@@ -1,0 +1,22 @@
+#ifndef RES_VDUNC_H
+#define RES_VDUNC_H
+
+enum dRes_INDEX_VDUNC {
+    /* BDLM */
+    dRes_INDEX_VDUNC_BDL_VDUNC_e=0x4,
+    /* BTK  */
+    dRes_INDEX_VDUNC_BTK_VDUNC_e=0x7,
+};
+
+enum dRes_ID_VDUNC {
+    /* BDLM */
+    dRes_ID_VDUNC_BDL_VDUNC_e=0x4,
+    /* BTK  */
+    dRes_ID_VDUNC_BTK_VDUNC_e=0x7,
+};
+
+enum VDUNC_JNT {
+    VDUNC_JNT_VDUNC_MODEL_e=0x0,
+};
+
+#endif /* !RES_VDUNC_H */

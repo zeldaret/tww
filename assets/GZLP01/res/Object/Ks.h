@@ -1,0 +1,46 @@
+#ifndef RES_KS_H
+#define RES_KS_H
+
+enum dRes_INDEX_KS {
+    /* BAS  */
+    dRes_INDEX_KS_BAS_CLOSE_e=0x7,
+    dRes_INDEX_KS_BAS_MABATAKI_e=0x8,
+    dRes_INDEX_KS_BAS_OPEN_e=0x9,
+    /* BCK  */
+    dRes_INDEX_KS_BCK_MABATAKI_e=0xC,
+    /* BDLM */
+    dRes_INDEX_KS_BDL_KS_BODY_e=0xF,
+    dRes_INDEX_KS_BDL_KS_EYE_e=0x10,
+    /* BRK  */
+    dRes_INDEX_KS_BRK_KS_BODY_e=0x13,
+    dRes_INDEX_KS_BRK_KS_EYE_e=0x14,
+    /* BTK  */
+    dRes_INDEX_KS_BTK_KS_EYE_e=0x17,
+};
+
+enum dRes_ID_KS {
+    /* BAS  */
+    dRes_ID_KS_BAS_CLOSE_e=0x7,
+    dRes_ID_KS_BAS_MABATAKI_e=0x8,
+    dRes_ID_KS_BAS_OPEN_e=0x9,
+    /* BCK  */
+    dRes_ID_KS_BCK_MABATAKI_e=0xC,
+    /* BDLM */
+    dRes_ID_KS_BDL_KS_BODY_e=0xF,
+    dRes_ID_KS_BDL_KS_EYE_e=0x10,
+    /* BRK  */
+    dRes_ID_KS_BRK_KS_BODY_e=0x13,
+    dRes_ID_KS_BRK_KS_EYE_e=0x14,
+    /* BTK  */
+    dRes_ID_KS_BTK_KS_EYE_e=0x17,
+};
+
+enum KS_BODY_JNT {
+    KS_BODY_JNT_KARADA_e=0x0,
+};
+
+enum KS_EYE_JNT {
+    KS_EYE_JNT_EYE_e=0x0,
+};
+
+#endif /* !RES_KS_H */

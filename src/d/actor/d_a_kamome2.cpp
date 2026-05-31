@@ -1,10 +1,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kamome2.h"
-#include "d/res/res_kamome.h"
+#include "res/Object/Kamome.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
 #include "d/d_camera.h"
-#include "d/d_priority.h"
 #include "d/d_meter.h"
 #include "d/d_snap.h"
 #include "d/d_s_play.h"
@@ -59,7 +57,7 @@ static BOOL daKamome2_Draw(kamome2_class* i_this) {
     cXyz sp08;
     sp08.set(i_this->actor.current.pos.x, i_this->actor.current.pos.y + REG0_F(1) * 10.0f, i_this->actor.current.pos.z);
     i_this->m2A0 = dComIfGd_setRealShadow(i_this->m2A0, 1, i_this->mpModel, &sp08, REG0_F(2) * 10.0f + 500.0f, 0.0f, &i_this->actor.tevStr);
-    dSnap_RegistFig(0x55, &i_this->actor, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_KAMOME, &i_this->actor, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 
@@ -88,7 +86,7 @@ static void key_move(kamome2_class* i_this) {
         i_this->m2C0 = unused_4207[0];
         if (!CPad_CHECK_HOLD_A(0) && iVar1 == REG0_S(0) + 9) {
             i_this->m2AC = 1;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT1, REG0_F(0) + 12.0f, 2, 1.0f, KAMOME_BAS_KA_WAIT1);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT1_e, REG0_F(0) + 12.0f, 2, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT1_e);
         }
         break;
 
@@ -103,7 +101,7 @@ static void key_move(kamome2_class* i_this) {
 
         if (CPad_CHECK_HOLD_A(0)) {
             i_this->m2AC = 0;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 5.0f, 2, 1.0f, KAMOME_BAS_KA_WAIT2);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 5.0f, 2, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
             fopAcM_seStart(&i_this->actor, JA_SE_CV_KAMOME, 0);
         }
         break;
@@ -265,16 +263,16 @@ static BOOL daKamome2_Delete(kamome2_class* i_this) {
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
     kamome2_class* i_this = (kamome2_class*)a_this;
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Kamome", KAMOME_BDL_KA),
+        (J3DModelData*)dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BDL_KA_e),
         NULL,
         NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes("Kamome", KAMOME_BCK_KA_WAIT1),
+        (J3DAnmTransform*)dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BCK_KA_WAIT1_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
         -1,
         0x1,
-        (void*)dComIfG_getObjectRes("Kamome", KAMOME_BAS_KA_WAIT1),
+        (void*)dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BAS_KA_WAIT1_e),
         0x80000,
         0x11000002
     );
@@ -324,7 +322,7 @@ static cPhs_State daKamome2_Create(fopAc_ac_c* a_this) {
 
     cPhs_State iVar1 = dComIfG_resLoad(&i_this->mPhase, "Kamome");
     if (iVar1 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, kamome2_class);
+        fopAcM_ct(a_this, kamome2_class);
 
         i_this->m2A4 = fopAcM_GetParam(a_this);
         if (!fopAcM_entrySolidHeap(a_this, useHeapInit, 0x59A0)) {
@@ -365,19 +363,19 @@ static actor_method_class l_daKamome2_Method = {
 
 #if VERSION == VERSION_DEMO
 actor_process_profile_definition g_profile_KAMOME2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KAMOME2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KAMOME2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kamome2_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KAMOME2,
+    /* Draw Prio    */ fpcDwPi_KAMOME2_e,
     /* Actor SubMtd */ &l_daKamome2_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };
 #endif

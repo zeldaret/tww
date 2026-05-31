@@ -10,14 +10,12 @@
 #include "d/actor/d_a_bomb2.h"
 #include "d/actor/d_a_sea.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_kanban.h"
+#include "res/Object/Kanban.h"
 
 class daKanban_HIO_c : public mDoHIO_entry_c {
 public:
@@ -37,19 +35,55 @@ static daKanban_HIO_c l_HIO;
 static fopAc_ac_c* target_info[10];
 static s32 target_info_count;
 
-static s16 pl_cut_real_no_dt[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
+static s16 pl_cut_real_no_dt[] = {
+    daPy_py_c::CUT_TYPE_NONE,
+    daPy_py_c::CUT_TYPE_CUT_A,
+    daPy_py_c::CUT_TYPE_CUT_F,
+    daPy_py_c::CUT_TYPE_CUT_R,
+    daPy_py_c::CUT_TYPE_CUT_L,
+    daPy_py_c::CUT_TYPE_BT_JUMPCUT,
+    daPy_py_c::CUT_TYPE_CUT_EA,
+    daPy_py_c::CUT_TYPE_CUT_EB,
+    daPy_py_c::CUT_TYPE_CUT_TURN,
+    daPy_py_c::CUT_TYPE_CUT_ROLL,
+    daPy_py_c::CUT_TYPE_JUMPCUT_SWORD,
+    daPy_py_c::CUT_TYPE_STICK,
+    daPy_py_c::CUT_TYPE_JUMPCUT_STICK,
+    daPy_py_c::CUT_TYPE_MACHETE,
+    daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE,
+    daPy_py_c::CUT_TYPE_BT_ROLLCUT,
+    daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT,
+    daPy_py_c::CUT_TYPE_HAMMER_SIDESWING,
+    daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING,
+    daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER,
+    daPy_py_c::CUT_TYPE_CLUB,
+    daPy_py_c::CUT_TYPE_JUMPCUT_CLUB,
+    daPy_py_c::CUT_TYPE_DN_SWORD,
+    daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD,
+    daPy_py_c::CUT_TYPE_SPEAR,
+    daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR,
+    daPy_py_c::CUT_TYPE_CUT_EXA,
+    daPy_py_c::CUT_TYPE_CUT_EXB,
+    daPy_py_c::CUT_TYPE_PG_SWORD,
+    daPy_py_c::CUT_TYPE_JUMPCUT_PG_SWORD,
+    daPy_py_c::CUT_TYPE_CUT_EXMJ,
+    daPy_py_c::CUT_TYPE_CUT_KESA,
+};
+
+// TODO: enum for this
 static s16 pl_cut_no_dt[] = {255, 0, 4, 3, 3, 1, 0, 4, 4, 4, 1, 3, 1, 3, 1, 1, 1, 3, 1, 1, 0, 1, 0, 1, 0, 1, 1, 4, 0, 1, 1, 1};
+
 static u32 cut_parts_arg_data[] = {
-        0x2000000, 0x4000000, 0x800000, 0x1000000,
-        0x7FE00000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
-        0x4000000, 0x800000, 0x1000000, 0x10000000,
-        0x40000000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
-        0x400000, 0x200000, 0x2000000, 0x4000000,
-        0x7FE00000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
-        0x200000, 0x2000000, 0x4000000, 0x800000,
-        0x7FE00000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
-        0x8000000, 0x400000, 0x200000, 0x2000000,
-        0x4000000, 0x800000, 0x1000000, 0x10000000,
+    0x02000000, 0x04000000, 0x00800000, 0x01000000,
+    0x7FE00000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
+    0x04000000, 0x00800000, 0x01000000, 0x10000000,
+    0x40000000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
+    0x00400000, 0x00200000, 0x02000000, 0x04000000,
+    0x7FE00000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
+    0x00200000, 0x02000000, 0x04000000, 0x00800000,
+    0x7FE00000, 0x7FE00000, 0x7FE00000, 0x7FE00000,
+    0x08000000, 0x00400000, 0x00200000, 0x02000000,
+    0x04000000, 0x00800000, 0x01000000, 0x10000000,
 };
 
 /* 000000EC-0000012C       .text __ct__14daKanban_HIO_cFv */
@@ -212,12 +246,12 @@ void* bom_search_sub(void* ac, void*) {
         bool bVar2 = false;
         s16 proc = fopAcM_GetName(ac);
 
-        if (proc == PROC_BOMB) {
+        if (proc == fpcNm_BOMB_e) {
             daBomb_c* bomb = (daBomb_c*)ac;
             if (bomb->chk_state(daBomb_c::STATE_0)) {
                 bVar2 = true;
             }
-        } else if (proc == PROC_Bomb2) {
+        } else if (proc == fpcNm_Bomb2_e) {
             daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)ac;
             if (bomb2->chk_explode()) {
                 bVar2 = true;
@@ -321,7 +355,7 @@ void cut_point_check(kanban_class* i_this) {
         dScnPly_ply_c::setPauseTimer(1);
         a_this->current.angle.z = i_this->m2C4;
         
-        fpc_ProcID fVar6 = fopAcM_createChild(PROC_KANBAN, fopAcM_GetID(a_this), parameters, &a_this->current.pos, fopAcM_GetRoomNo(a_this), &a_this->current.angle, &a_this->scale, 0, NULL);
+        fpc_ProcID fVar6 = fopAcM_createChild(fpcNm_KANBAN_e, fopAcM_GetID(a_this), parameters, &a_this->current.pos, fopAcM_GetRoomNo(a_this), &a_this->current.angle, &a_this->scale, 0, NULL);
         if (fVar6 != fpcM_ERROR_PROCESS_ID_e) {
             fopAcM_seStart(a_this, JA_SE_OBJ_BREAK_BOARD, 0);
             
@@ -363,7 +397,7 @@ void mother_move(kanban_class* i_this) {
                     switch (hitObj->GetAtType()) {
                         case AT_TYPE_SKULL_HAMMER:
                             i_this->m29A = 2;
-                            if (player->getCutType() != 17) {
+                            if (player->getCutType() != daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                                 i_this->m29B = 0;
                                 i_this->m2A4 = 0.0f;
                                 i_this->m2A8 = 0.0f;
@@ -377,13 +411,13 @@ void mother_move(kanban_class* i_this) {
 
                         case AT_TYPE_SWORD: {
                             s32 i = 0;
-                            for (; i < 32; i++) {
+                            for (; i < ARRAY_SSIZE(pl_cut_real_no_dt); i++) {
                                 if (pl_cut_real_no_dt[i] == player->getCutType()) {
                                     break;
                                 }
                             }
 
-                            if (i < 32 && pl_cut_no_dt[i] != 0xFF) {
+                            if (i < ARRAY_SSIZE(pl_cut_real_no_dt) && pl_cut_no_dt[i] != 0xFF) {
                                 i_this->m2C4 = pl_cut_no_dt[i];
                                 cut_point_check(i_this);
                             }
@@ -806,7 +840,7 @@ static BOOL daKanban_Execute(kanban_class* i_this) {
             {
                 if (i_this->actor.eventInfo.checkCommandTalk()) {
                     if (l_msgId == fpcM_ERROR_PROCESS_ID_e) {
-                        if (dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) {
+                        if (dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), dCamAttnStts_00000004_e)) {
                             l_msgId = fopMsgM_messageSet(fopAcM_GetParam(&i_this->actor), &i_this->actor.eyePos);
                         }
                     } else {
@@ -974,17 +1008,17 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     for (s32 i = 0; i < 11; i++, uVar5 >>= 1) {
         if (!i_this->m290 || (uVar5 & 1)) {
             static s32 kanban_bdl[] = {
-                KANBAN_BDL_KANBAN, 
-                KANBAN_BDL_KANBAN_01,
-                KANBAN_BDL_KANBAN_02,
-                KANBAN_BDL_KANBAN_03,
-                KANBAN_BDL_KANBAN_04,
-                KANBAN_BDL_KANBAN_05,
-                KANBAN_BDL_KANBAN_06,
-                KANBAN_BDL_KANBAN_07,
-                KANBAN_BDL_KANBAN_08,
-                KANBAN_BDL_KANBAN_09,
-                KANBAN_BDL_KANBAN_10,
+                dRes_INDEX_KANBAN_BDL_KANBAN_e, 
+                dRes_INDEX_KANBAN_BDL_KANBAN_01_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_02_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_03_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_04_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_05_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_06_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_07_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_08_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_09_e,
+                dRes_INDEX_KANBAN_BDL_KANBAN_10_e,
             };
 
             J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kanban", kanban_bdl[i]);
@@ -1046,7 +1080,7 @@ static cPhs_State daKanban_Create(fopAc_ac_c* a_this) {
     u32 maxHeapSize = 0;
     kanban_class* i_this = (kanban_class*)a_this;
 
-    fopAcM_SetupActor(&i_this->actor, kanban_class);
+    fopAcM_ct(&i_this->actor, kanban_class);
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Kanban");
 
     if (ret == cPhs_COMPLEATE_e) {
@@ -1138,18 +1172,18 @@ static actor_method_class l_daKanban_Method = {
 };
 
 actor_process_profile_definition g_profile_KANBAN = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KANBAN,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KANBAN_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kanban_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KANBAN,
+    /* Draw Prio    */ fpcDwPi_KANBAN_e,
     /* Actor SubMtd */ &l_daKanban_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

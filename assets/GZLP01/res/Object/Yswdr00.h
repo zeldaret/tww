@@ -1,0 +1,30 @@
+#ifndef RES_YSWDR00_H
+#define RES_YSWDR00_H
+
+enum dRes_INDEX_YSWDR00 {
+    /* BDLM */
+    dRes_INDEX_YSWDR00_BDL_YSWDR00_e=0x6,
+    /* BRK  */
+    dRes_INDEX_YSWDR00_BRK_YSWDR00_e=0x9,
+    /* BTK  */
+    dRes_INDEX_YSWDR00_BTK_YSWDR00_e=0xC,
+    /* DZB  */
+    dRes_INDEX_YSWDR00_DZB_FWALL_e=0xF,
+};
+
+enum dRes_ID_YSWDR00 {
+    /* BDLM */
+    dRes_ID_YSWDR00_BDL_YSWDR00_e=0x6,
+    /* BRK  */
+    dRes_ID_YSWDR00_BRK_YSWDR00_e=0x9,
+    /* BTK  */
+    dRes_ID_YSWDR00_BTK_YSWDR00_e=0xC,
+    /* DZB  */
+    dRes_ID_YSWDR00_DZB_FWALL_e=0xF,
+};
+
+enum YSWDR00_JNT {
+    YSWDR00_JNT_YSWDR00_e=0x0,
+};
+
+#endif /* !RES_YSWDR00_H */

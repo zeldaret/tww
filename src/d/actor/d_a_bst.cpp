@@ -12,15 +12,13 @@
 #include "d/d_cc_uty.h"
 #include "d/d_meter.h"
 #include "d/d_snap.h"
-#include "d/res/res_bst.h"
+#include "res/Object/Bst.h"
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_graphic.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "JSystem/JUtility/JUTReport.h"
 
@@ -49,12 +47,12 @@ static fpc_ProcID msg;
 static s8 msg_end;
 static u8 hio_set;
 static daBst_HIO_c l_HIO;
-static u16 set_bdl_d[3] = {BST_BDL_BST, BST_BDL_LHAND, BST_BDL_RHAND};
-static u16 set_za_bdl[3] = {BST_BDL_MUNE, BST_BDL_UDEL, BST_BDL_UDER};
-static u16 set_bck_d[3] = {BST_BCK_BST_SLEEP, BST_BCK_LH_SLEEP, BST_BCK_RH_SLEEP};
-static u16 fly_bck_d[] = {BST_BCK_BST_FLY, BST_BCK_LH_FLY, BST_BCK_RH_FLY};
-static u16 damage_bck_d[] = {BST_BCK_BST_FLY, BST_BCK_LH_DAMAGE, BST_BCK_RH_DAMAGE};
-static u16 down_bck_d[] = {BST_BCK_BST_FLY, BST_BCK_LH_DOWN, BST_BCK_RH_DOWN};
+static u16 set_bdl_d[3] = {dRes_INDEX_BST_BDL_BST_e, dRes_INDEX_BST_BDL_LHAND_e, dRes_INDEX_BST_BDL_RHAND_e};
+static u16 set_za_bdl[3] = {dRes_INDEX_BST_BDL_MUNE_e, dRes_INDEX_BST_BDL_UDEL_e, dRes_INDEX_BST_BDL_UDER_e};
+static u16 set_bck_d[3] = {dRes_INDEX_BST_BCK_BST_SLEEP_e, dRes_INDEX_BST_BCK_LH_SLEEP_e, dRes_INDEX_BST_BCK_RH_SLEEP_e};
+static u16 fly_bck_d[] = {dRes_INDEX_BST_BCK_BST_FLY_e, dRes_INDEX_BST_BCK_LH_FLY_e, dRes_INDEX_BST_BCK_RH_FLY_e};
+static u16 damage_bck_d[] = {dRes_INDEX_BST_BCK_BST_FLY_e, dRes_INDEX_BST_BCK_LH_DAMAGE_e, dRes_INDEX_BST_BCK_RH_DAMAGE_e};
+static u16 down_bck_d[] = {dRes_INDEX_BST_BCK_BST_FLY_e, dRes_INDEX_BST_BCK_LH_DOWN_e, dRes_INDEX_BST_BCK_RH_DOWN_e};
 
 /* 00000110-00000174       .text message_set__FP9bst_classUl */
 static BOOL message_set(bst_class* i_this, unsigned long msg_no) {
@@ -129,7 +127,8 @@ static BOOL nodeCallBackHead(J3DNode* node, int calcTiming) {
         J3DModel* model = j3dSys.getModel();
         bst_class* i_this = (bst_class*)model->getUserArea();
         if (i_this != NULL) {
-            cMtx_copy(model->getAnmMtx(jnt_no), *calc_mtx);
+            MtxP mtx = model->getAnmMtx(jnt_no);
+            cMtx_copy(mtx, *calc_mtx);
             if (jnt_no == 9) {
                 cMtx_YrotM(*calc_mtx, -i_this->m2E78[1]);
             } else if (jnt_no == 12) {
@@ -145,6 +144,13 @@ static BOOL nodeCallBackHead(J3DNode* node, int calcTiming) {
     }
     return TRUE;
 }
+
+// Fakematch? Fixes ~cXyz dtor ordering.
+static void dummy() {
+    cXyz temp;
+    temp.~cXyz();
+}
+
 /* 00000550-000005B4       .text beam_draw__FP9bst_class */
 static void beam_draw(bst_class* i_this) {
     for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m0390); i++) {
@@ -178,7 +184,8 @@ static BOOL daBst_Draw(bst_class* i_this) {
     for (u16 i = 0; i < model_2B8->getModelData()->getWEvlpMtxNum(); i++) {
         model_388->setWeightAnmMtx(i, model_2B8->getWeightAnmMtx(i));
     }
-    cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(0), *calc_mtx);
+    MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(0);
+    cMtx_copy(mtx, *calc_mtx);
     temp.setall(0.0f);
     MtxPosition(&temp, &shadow_pos);
     shadow_pos.y += REG0_F(1) * 10.0f;
@@ -190,6 +197,7 @@ static BOOL daBst_Draw(bst_class* i_this) {
     g_env_light.setLightTevColorType(model_2C8, &i_this->mEnvLight);
     mDoExt_modelUpdateDL(model_2C8);
     if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
+#if VERSION > VERSION_DEMO
         if (i_this->m2E98 > 1) {
             mDoGph_gInf_c::setBlureRate(i_this->m2E98);
             mDoGph_gInf_c::onBlure();
@@ -197,8 +205,8 @@ static BOOL daBst_Draw(bst_class* i_this) {
             i_this->m2E98 = 0;
             mDoGph_gInf_c::offBlure();
         }
+#endif
         beam_draw(i_this);
-        // yup, this is a static var.
         static cXyz center_pos(0.0f, 0.0f, 0.0f);
         g_env_light.settingTevStruct(TEV_TYPE_BG0, &center_pos, &i_this->m2F20);
         g_env_light.setLightTevColorType(i_this->m2FDC, &i_this->m2F20);
@@ -235,8 +243,8 @@ static void pos_move(bst_class* i_this, u8 param_2) {
     actor->current.pos += actor->speed;
 }
 
-static u16 start_bck_d[] = {BST_BCK_BST_START, BST_BCK_LH_START, BST_BCK_RH_START};
-static u16 start2_bck_d[] = {0, BST_BCK_LH_START2, BST_BCK_RH_START2};
+static u16 start_bck_d[] = {dRes_INDEX_BST_BCK_BST_START_e, dRes_INDEX_BST_BCK_LH_START_e, dRes_INDEX_BST_BCK_RH_START_e};
+static u16 start2_bck_d[] = {0, dRes_INDEX_BST_BCK_LH_START2_e, dRes_INDEX_BST_BCK_RH_START2_e};
 static u16 start_smoke_name[] = {dPa_name::ID_AK_ST_BSTSTARTSMOKEHEAD00, dPa_name::ID_AK_ST_BSTSTARTSMOKELHAND00, dPa_name::ID_AK_ST_BSTSTARTSMOKERHAND00};
 
 /* 00000B1C-00000E58       .text stay__FP9bst_class */
@@ -244,7 +252,9 @@ static void stay(bst_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     fopAcM_OffStatus(actor, 0);
     actor->attention_info.flags = 0;
+#if VERSION > VERSION_DEMO
     i_this->mState = 10;
+#endif
     switch (i_this->mDamage) {
     case 0:
         anm_init(i_this, set_bck_d[i_this->mBstPartType], 2.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
@@ -280,7 +290,8 @@ static void stay(bst_class* i_this) {
     case 5:
         if (i_this->mBstPartType != bst_class::Type_HEAD_e && i_this->m10FC[3] != 0) {
             for (s32 i = 2; i <= 16; i++) {
-                cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(i), *calc_mtx);
+                MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(i);
+                cMtx_copy(mtx, *calc_mtx);
                 cXyz pos_vec;
                 cXyz vec(0.0f, 0.0f, 0.0f);
                 MtxPosition(&vec, &pos_vec);
@@ -296,10 +307,10 @@ static void stay(bst_class* i_this) {
     }
 }
 
-static u16 fly_btk_d[] = {BST_BTK_BST, BST_BTK_LHAND, BST_BTK_RHAND};
-static u16 fly_brk_d[] = {BST_BRK_BST, BST_BRK_LHAND, BST_BRK_RHAND};
-static u16 damage_btk_d[] = {BST_BTK_BST_DAMAGE, BST_BTK_LH_DAMAGE, BST_BTK_RH_DAMAGE};
-static u16 damage_brk_d[] = {BST_BRK_BST_DAMAGE, BST_BRK_LH_DAMAGE, BST_BRK_RH_DAMAGE};
+static u16 fly_btk_d[] = {dRes_INDEX_BST_BTK_BST_e, dRes_INDEX_BST_BTK_LHAND_e, dRes_INDEX_BST_BTK_RHAND_e};
+static u16 fly_brk_d[] = {dRes_INDEX_BST_BRK_BST_e, dRes_INDEX_BST_BRK_LHAND_e, dRes_INDEX_BST_BRK_RHAND_e};
+static u16 damage_btk_d[] = {dRes_INDEX_BST_BTK_BST_DAMAGE_e, dRes_INDEX_BST_BTK_LH_DAMAGE_e, dRes_INDEX_BST_BTK_RH_DAMAGE_e};
+static u16 damage_brk_d[] = {dRes_INDEX_BST_BRK_BST_DAMAGE_e, dRes_INDEX_BST_BRK_LH_DAMAGE_e, dRes_INDEX_BST_BRK_RH_DAMAGE_e};
 
 /* 00000E58-000014E8       .text fly__FP9bst_class */
 static void fly(bst_class* i_this) {
@@ -320,7 +331,7 @@ static void fly(bst_class* i_this) {
         anm_init(i_this, fly_bck_d[i_this->mBstPartType], 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         J3DAnmTevRegKey* reg_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", damage_brk_d[i_this->mBstPartType]);
         i_this->mpTevRegAnimator->init(i_this->m02B8->getModel()->getModelData(), reg_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-        i_this->mpTevRegAnimator->setFrame(REG0_S(8) + 0x1D);
+        i_this->mpTevRegAnimator->setFrame(REG0_S(8) + 29);
         i_this->m02D4 = 1;
         i_this->m02C4 = 1;
         i_this->mDamage++;
@@ -398,7 +409,7 @@ static void fly(bst_class* i_this) {
     }
 }
 
-static u16 downa_bck_d[] = {BST_BCK_BST_FLY, BST_BCK_LH_GOO, BST_BCK_RH_GOO};
+static u16 downa_bck_d[] = {dRes_INDEX_BST_BCK_BST_FLY_e, dRes_INDEX_BST_BCK_LH_GOO_e, dRes_INDEX_BST_BCK_RH_GOO_e};
 
 /* 000014E8-00001C14       .text down_attack__FP9bst_class */
 static void down_attack(bst_class* i_this) {
@@ -475,7 +486,9 @@ static void down_attack(bst_class* i_this) {
                 particle_pos = actor->current.pos;
                 particle_pos.y = 1.0f;
                 dComIfGp_particle_setProjection(dPa_name::ID_AK_SP_BSTSHOCKWAVEH00, &particle_pos);
-                dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BSTATTACK1HSMOKE00, &particle_pos, NULL, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
+                dComIfGp_particle_setToon(
+                    dPa_name::ID_AK_ST_BSTATTACK1HSMOKE00, &particle_pos, NULL, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor)
+                );
             }
         } else {
             actor->speed.y += REG0_F(14) + 0.5f;
@@ -507,7 +520,7 @@ static void down_attack(bst_class* i_this) {
     }
 }
 
-static u16 paa_bck_d[] = {0, BST_BCK_LH_PAA, BST_BCK_RH_PAA};
+static u16 paa_bck_d[] = {0, dRes_INDEX_BST_BCK_LH_PAA_e, dRes_INDEX_BST_BCK_RH_PAA_e};
 
 /* 00001C14-000023C8       .text paa_attack__FP9bst_class */
 static void paa_attack(bst_class* i_this) {
@@ -530,17 +543,17 @@ static void paa_attack(bst_class* i_this) {
         i_this->m10EC.y = 0.0f;
         i_this->m111C = player->shape_angle.y;
         anm_init(i_this, paa_bck_d[i_this->mBstPartType], 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-        i_this->m10FC[0] = REG0_S(1) + 0x50;
+        i_this->m10FC[0] = REG0_S(1) + 80;
         // fallthrough
     case 1:
         local_38 = i_this->mTargetPos - actor->current.pos;
         if (local_38.abs() > REG0_F(0xc) + 200.0f) {
             cLib_addCalc2(&actor->speedF, 40.0f, 1.0f, REG0_F(0xd) + 2.0f);
         } else {
-            cLib_addCalc0(&actor->speedF, 1.0f, (REG0_F(0xd) + 2.0f));
+            cLib_addCalc0(&actor->speedF, 1.0f, REG0_F(0xd) + 2.0f);
         }
         i_this->m10EC.x = REG0_F(5) + 8000.0f;
-        cMtx_YrotS(*calc_mtx, (int)i_this->m111C);
+        cMtx_YrotS(*calc_mtx, i_this->m111C);
         if (i_this->mBstPartType == bst_class::Type_LEFT_HAND_e) {
             local_38.x = -(REG0_F(2) + 700.0f);
             sVar6 = 0x4000;
@@ -556,8 +569,7 @@ static void paa_attack(bst_class* i_this) {
         if (i_this->m10FC[0] == 0) {
             i_this->mDamage++;
             i_this->mTargetPos = player->current.pos;
-            sVar6 = fopAcM_searchPlayerAngleY(actor);
-            actor->current.angle.y = sVar6;
+            actor->current.angle.y = fopAcM_searchPlayerAngleY(actor);
         }
         break;
     case 2:
@@ -599,7 +611,7 @@ static void paa_attack(bst_class* i_this) {
             actor->speedF = 0.0f;
             i_this->m10FC[0] = REG0_S(3) + 0x1e;
             actor->current.angle.y += 0x8000;
-            cMtx_YrotS(*calc_mtx, (int)i_this->m111C);
+            cMtx_YrotS(*calc_mtx, i_this->m111C);
             if (i_this->mBstPartType == bst_class::Type_LEFT_HAND_e) {
                 local_38.x = -(REG0_F(2) + 4000.0f);
             } else {
@@ -628,19 +640,19 @@ static void paa_attack(bst_class* i_this) {
     if ((r26) || (i_this->mAcch.ChkWallHit())) {
         i_this->mActionType = bst_class::ACTION_FLY_e;
         i_this->mDamage = 0;
-        i_this->mStateTimer = (s16)(int)(cM_rndF(100.0f) + 100.0f);
+        i_this->mStateTimer = (s16)(cM_rndF(100.0f) + 100.0f);
         if (!r26) {
             s32 hand_index = 2 - i_this->mBstPartType;
             if (hand[hand_index]->mActionType == bst_class::ACTION_PAA_ATTACK_e) {
                 hand[hand_index]->mActionType = bst_class::ACTION_FLY_e;
                 hand[hand_index]->mDamage = 0;
-                hand[hand_index]->mStateTimer = (s16)(int)(cM_rndF(100.0f) + 100.0f);
+                hand[hand_index]->mStateTimer = (s16)(cM_rndF(100.0f) + 100.0f);
             }
         }
     }
 }
 
-static u16 awasu_bck_d[] = {0, BST_BCK_LH_AWASE, BST_BCK_RH_AWASU};
+static u16 awasu_bck_d[] = {0, dRes_INDEX_BST_BCK_LH_AWASE_e, dRes_INDEX_BST_BCK_RH_AWASU_e};
 
 /* 00002404-00002E08       .text kumi_attack__FP9bst_class */
 static void kumi_attack(bst_class* i_this) {
@@ -672,10 +684,10 @@ static void kumi_attack(bst_class* i_this) {
         if (local_38.abs() > REG0_F(0xc) + 200.0f) {
             cLib_addCalc2(&actor->speedF, 40.0f, 1.0f, REG0_F(0xd) + 2.0f);
         } else {
-            cLib_addCalc0(&actor->speedF, 1.0f, (REG0_F(0xd) + 2.0f));
+            cLib_addCalc0(&actor->speedF, 1.0f, REG0_F(0xd) + 2.0f);
         }
         i_this->m10EC.x = REG0_F(5) + 8000.0f;
-        cMtx_YrotS(*calc_mtx, (int)i_this->m111C);
+        cMtx_YrotS(*calc_mtx, i_this->m111C);
         if (i_this->mBstPartType == bst_class::Type_LEFT_HAND_e) {
             local_38.x = -(REG0_F(2) + 500.0f);
             sVar5 = 0x4000;
@@ -692,8 +704,7 @@ static void kumi_attack(bst_class* i_this) {
             i_this->mDamage++;
             i_this->mTargetPos = player->current.pos;
             i_this->mTargetPos.y += REG0_F(3) + 500.0f;
-            sVar5 = fopAcM_searchPlayerAngleY(actor);
-            actor->current.angle.y = sVar5;
+            actor->current.angle.y = fopAcM_searchPlayerAngleY(actor);
         }
         break;
     case 2:
@@ -742,7 +753,9 @@ static void kumi_attack(bst_class* i_this) {
                     local_50 = i_this->mTargetPos;
                     local_50.y = 1.0f;
                     dComIfGp_particle_setProjection(dPa_name::ID_AK_SP_BSTSHOCKWAVEH00, &local_50);
-                    dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BSTATTACK2HSMOKE00, &local_50, NULL, NULL, 0xb9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
+                    dComIfGp_particle_setToon(
+                        dPa_name::ID_AK_ST_BSTATTACK2HSMOKE00, &local_50, NULL, NULL, 0xb9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor)
+                    );
                     dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                     fopAcM_seStartCurrent(actor, JA_SE_CM_BST_2_HAND_ATTACK, 0);
                 }
@@ -775,7 +788,7 @@ static void kumi_attack(bst_class* i_this) {
         i_this->mDamage = 0;
         actor->speedF = 0.0f;
         actor->current.angle.y = actor->current.angle.y + 0x8000;
-        i_this->mStateTimer = (s16)(int)(cM_rndF(100.0f) + 100.0f);
+        i_this->mStateTimer = (s16)(cM_rndF(100.0f) + 100.0f);
         i_this->mState = 0x28;
         fopAcM_seStartCurrent(actor, JA_SE_CM_BST_HAND_RELEASE, 0);
         if (!r26) {
@@ -785,7 +798,7 @@ static void kumi_attack(bst_class* i_this) {
                 hand[hand_index]->mDamage = 0;
                 hand[hand_index]->actor.speedF = 0.0f;
                 hand[hand_index]->actor.current.angle.y += 0x8000;
-                hand[hand_index]->mStateTimer = (s16)(int)(cM_rndF(100.0f) + 100.0f);
+                hand[hand_index]->mStateTimer = (s16)(cM_rndF(100.0f) + 100.0f);
                 hand[hand_index]->mState = 0x28;
                 fopAcM_seStartCurrent(&hand[hand_index]->actor, JA_SE_CM_BST_HAND_RELEASE, 0);
             }
@@ -796,6 +809,7 @@ static void kumi_attack(bst_class* i_this) {
 /* 00002E08-0000318C       .text harai_attack__FP9bst_class */
 static void harai_attack(bst_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
     short sVar2;
     f32 dVar4;
     cXyz local_34;
@@ -818,9 +832,8 @@ static void harai_attack(bst_class* i_this) {
         i_this->mDamage++;
         i_this->m10EC.y = 0.0f;
         actor->speedF = 0.0f;
-        i_this->m10FC[0] = REG0_S(5) + 0x14;
-        sVar2 = fopAcM_searchPlayerAngleY(actor);
-        actor->current.angle.y = sVar2;
+        i_this->m10FC[0] = REG0_S(5) + 20;
+        actor->current.angle.y = fopAcM_searchPlayerAngleY(actor);
         anm_init(i_this, fly_bck_d[i_this->mBstPartType], 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         // fallthrough
     case 1:
@@ -829,12 +842,12 @@ static void harai_attack(bst_class* i_this) {
         i_this->m10EC.x = REG0_F(5) + 2000.0f;
         if (i_this->m10FC[0] == 0) {
             i_this->mDamage++;
-            i_this->m10FC[0] = REG0_S(6) + 0x3c;
+            i_this->m10FC[0] = REG0_S(6) + 60;
         }
         break;
     case 2:
         cVar3 = 1;
-        sVar2 = (REG0_S(4) + 0x15e);
+        sVar2 = (REG0_S(4) + 350);
         if (i_this->mBstPartType == bst_class::Type_RIGHT_HAND_e) {
             actor->current.angle.y = actor->current.angle.y + sVar2;
         } else {
@@ -842,21 +855,18 @@ static void harai_attack(bst_class* i_this) {
         }
         local_34 = actor->current.pos;
         local_34.y = 0.0f;
-        if (i_this->m10FC[0] != 0) {
-            if (!(local_34.abs() > 1700.0f)) {
-                break;
-            }
+        if (i_this->m10FC[0] == 0 || local_34.abs() > 1700.0f) {
+            i_this->m10FC[0] = 30;
+            i_this->mDamage++;
         }
-        i_this->m10FC[0] = 0x1e;
-        i_this->mDamage++;
         break;
     case 3:
         cVar3 = 1;
-        cLib_addCalc0(&actor->speedF, 1.0f, (REG0_F(0xd) + 3.0f));
+        cLib_addCalc0(&actor->speedF, 1.0f, REG0_F(0xd) + 3.0f);
         if (i_this->m10FC[0] == 0) {
             i_this->mActionType = bst_class::ACTION_FLY_e;
             i_this->mDamage = 0;
-            i_this->mStateTimer = (s16)(int)(cM_rndF(60.0f) + 60.0f);
+            i_this->mStateTimer = (s16)(cM_rndF(60.0f) + 60.0f);
         }
         break;
     }
@@ -865,8 +875,8 @@ static void harai_attack(bst_class* i_this) {
     pos_move(i_this, cVar3);
 }
 
-static u16 sleep_btk_d[] = {BST_BCK_BST_SLEEP, BST_BTK_LH_END, BST_BTK_RH_END};
-static u16 sleep_brk_d[] = {BST_BRK_BST, BST_BRK_LH_END, BST_BRK_RH_END};
+static u16 sleep_btk_d[] = {dRes_INDEX_BST_BCK_BST_SLEEP_e, dRes_INDEX_BST_BTK_LH_END_e, dRes_INDEX_BST_BTK_RH_END_e};
+static u16 sleep_brk_d[] = {dRes_INDEX_BST_BRK_BST_e, dRes_INDEX_BST_BRK_LH_END_e, dRes_INDEX_BST_BRK_RH_END_e};
 
 /* 0000318C-00003470       .text sleep__FP9bst_class */
 static void sleep(bst_class* i_this) {
@@ -918,7 +928,8 @@ static void beam_set(bst_class* i_this) {
             continue;
         }
         i_this->m04E4[i] = 1;
-        cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(REG0_S(5) + 3), *calc_mtx);
+        MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(REG0_S(5) + 3);
+        cMtx_copy(mtx, *calc_mtx);
         cXyz vec(0.0f, 0.0f, 0.0f);
         MtxPosition(&vec, &i_this->m03B8[i]);
         i_this->m04A8[i] = actor->shape_angle;
@@ -953,13 +964,13 @@ static void beam_attack(bst_class* i_this) {
     switch (i_this->mDamage) {
     case 0:
         i_this->mDamage++;
-        anm_init(i_this, BST_BCK_BEAM_MAE, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BST_BCK_BEAM_MAE_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         fopAcM_seStart(actor, JA_SE_CM_BST_MOUTH_OPEN, 0);
         break;
     case 1:
         if (i_this->m02B8->isStop()) {
             i_this->mDamage++;
-            anm_init(i_this, BST_BCK_BEAM_TAME, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BST_BCK_BEAM_TAME_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m10FC[0] = 0x2d;
             for (s32 i = 0; i < 2; i++) {
                 i_this->m2ED8[i] = dComIfGp_particle_set(charge_e_name[i], &actor->current.pos);
@@ -977,8 +988,8 @@ static void beam_attack(bst_class* i_this) {
                 }
             }
             i_this->mDamage++;
-            anm_init(i_this, BST_BCK_BEAM, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-            i_this->m10FC[0] = REG0_S(4) + 0x32;
+            anm_init(i_this, dRes_INDEX_BST_BCK_BEAM_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            i_this->m10FC[0] = REG0_S(4) + 50;
         }
         break;
     case 3:
@@ -1025,7 +1036,9 @@ static void beam_attack(bst_class* i_this) {
 /* 00003B94-00003DD8       .text damage__FP9bst_class */
 static void damage(bst_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
+
     i_this->mState = 10;
+
     switch (i_this->mDamage) {
     default:
         return;
@@ -1044,6 +1057,7 @@ static void damage(bst_class* i_this) {
     case 1:
         break;
     }
+
     if (i_this->m10FC[0] == 0) {
         if (i_this->mBstPartType != bst_class::Type_HEAD_e && actor->health <= 0) {
             i_this->mActionType = bst_class::ACTION_SLEEP_e;
@@ -1069,9 +1083,9 @@ static BOOL bom_eat_check(bst_class* i_this) {
 
         cCcD_Obj* hit_obj = i_this->mHandHurtCyl.GetCoHitObj();
         if (hit_obj != NULL) {
-            fopAc_ac_c* actor = (fopAc_ac_c*)hit_obj->GetAc();
-            daBomb_c* bomb = (daBomb_c*)actor;
-            if (actor != NULL && fopAcM_GetName(actor) == PROC_BOMB && bomb->getBombCheck_Flag() == 0 && bomb->getBombRestTime() > 1) {
+            fopAc_ac_c* hit_actor = (fopAc_ac_c*)hit_obj->GetAc();
+            daBomb_c* bomb = (daBomb_c*)hit_actor;
+            if (hit_actor != NULL && fopAcM_GetName(hit_actor) == fpcNm_BOMB_e && bomb->getBombCheck_Flag() == 0 && bomb->getBombRestTime() > 1) {
                 i_this->mBombId = fopAcM_GetID(bomb);
                 bomb->setBombCheck_Flag();
                 bomb->change_state(daBomb_c::STATE_2);
@@ -1089,7 +1103,12 @@ static void head_damage(bst_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz v;
     f32 dist;
-    static u16 bomb_eff_name[] = {dPa_name::ID_AK_SN_BSTBOMBNOSTRILSMOKEL00, dPa_name::ID_AK_SN_BSTBOMBNOSTRILSMOKER00, dPa_name::ID_AK_SN_BSTBOMBEARSMOKEL00, dPa_name::ID_AK_SN_BSTBOMBEARSMOKER00};
+    static u16 bomb_eff_name[] = {
+        dPa_name::ID_AK_SN_BSTBOMBNOSTRILSMOKEL00,
+        dPa_name::ID_AK_SN_BSTBOMBNOSTRILSMOKER00,
+        dPa_name::ID_AK_SN_BSTBOMBEARSMOKEL00,
+        dPa_name::ID_AK_SN_BSTBOMBEARSMOKER00
+    };
 
     i_this->mState = 10;
     i_this->m2E74[0] = 10;
@@ -1103,9 +1122,9 @@ static void head_damage(bst_class* i_this) {
         i_this->m10FC[0] = 40;
         actor->speedF = 0.0f;
         actor->speed.y = 0.0f;
-        J3DAnmTevRegKey* key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_BST_END);
+        J3DAnmTevRegKey* key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_BST_END_e);
         i_this->mpTevRegAnimator->init(i_this->m02B8->getModel()->getModelData(), key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-        J3DAnmTextureSRTKey* srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_BST_END);
+        J3DAnmTextureSRTKey* srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_BST_END_e);
         i_this->mpTexMtxAnimator->init(i_this->m02B8->getModel()->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
         fopAcM_seStart(actor, JA_SE_CM_BST_HEAD_EYE_CLOSE, 0);
         mDoAud_bgmStart(JA_BGM_UNK_123);
@@ -1126,11 +1145,13 @@ static void head_damage(bst_class* i_this) {
             if (actor->current.pos.y <= REG0_F(14)) {
                 actor->current.pos.y = REG0_F(14);
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
-                dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BSTDROPHEADSMOKE00, &actor->current.pos, NULL, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
+                dComIfGp_particle_setToon(
+                    dPa_name::ID_AK_ST_BSTDROPHEADSMOKE00, &actor->current.pos, NULL, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor)
+                );
                 i_this->m112A = REG0_S(7) + 4;
                 mDoAud_seStart(JA_SE_CM_BST_HEAD_FALL, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
                 mDoAud_seStart(JA_SE_CM_BST_MOUTH_OPEN, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-                anm_init(i_this, BST_BCK_KUTI_OPEN, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BST_BCK_KUTI_OPEN_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->mDamage++;
                 actor->speed.y = 0.0f;
             }
@@ -1138,7 +1159,7 @@ static void head_damage(bst_class* i_this) {
         break;
     case 2:
         if (i_this->m02B8->isStop()) {
-            anm_init(i_this, BST_BCK_KUTI_OPEN_LOOP, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BST_BCK_KUTI_OPEN_LOOP_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m10FC[0] = 300;
             i_this->mDamage++;
         }
@@ -1171,15 +1192,15 @@ static void head_damage(bst_class* i_this) {
         if (i_this->m10FC[0] != 0) {
             break;
         }
-        anm_init(i_this, BST_BCK_BOM_NOMI, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BST_BCK_BOM_NOMI_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->mDamage++;
         i_this->m2EE0[0] = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTBOMBFLASH00, &actor->current.pos);
         fopAcM_seStart(actor, JA_SE_CM_BST_MOUTH_CLOSE, 0);
-        i_this->m10FC[0] = 0x3c;
+        i_this->m10FC[0] = 60;
         // fallthrough
     }
     case 5:
-        if (i_this->m10FC[0] == 0x32) {
+        if (i_this->m10FC[0] == 50) {
             fopAcM_seStart(actor, JA_SE_CM_BST_BOMB_EAT, 0);
         }
         if (i_this->m10FC[0] == 0x1e) {
@@ -1196,10 +1217,10 @@ static void head_damage(bst_class* i_this) {
             }
             actor->health--;
             if ((actor->health <= 0) || (l_HIO.m6 != 0)) {
-                i_this->m2E9A = 0x32;
+                i_this->m2E9A = 50;
                 i_this->mActionType = bst_class::ACTION_END_DEMO_e;
                 i_this->mDamage = 0;
-                anm_init(i_this, BST_BCK_BST_DEAD, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BST_BCK_BST_DEAD_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 hand[0]->mActionType = bst_class::ACTION_END_DEMO_e;
                 hand[0]->mDamage = 10;
                 hand[1]->mActionType = bst_class::ACTION_END_DEMO_e;
@@ -1208,7 +1229,7 @@ static void head_damage(bst_class* i_this) {
                 mDoAud_bgmStop(30);
                 mDoAud_bgmStreamPrepare(JA_STRM_BST_CLEAR);
             } else {
-                anm_init(i_this, BST_BCK_BOM_BAKUHATU, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BST_BCK_BOM_BAKUHATU_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->mDamage++;
             }
             fopAcM_seStart(actor, JA_SE_CM_BST_EXPLODE, 0);
@@ -1289,15 +1310,20 @@ static void col_set(bst_class* i_this) {
     cXyz vec;
     cXyz pos_vec;
     if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
-        cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(8), *calc_mtx);
-        vec.set(REG0_F(0) + (-30.0f), REG0_F(1), REG0_F(2) + (-100.0f));
+        MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(8);
+        cMtx_copy(mtx, *calc_mtx);
+        vec.x = REG0_F(0) + (-30.0f);
+        vec.y = REG0_F(1);
+        vec.z = REG0_F(2) + (-100.0f);
         MtxPosition(&vec, &pos_vec);
         i_this->mHeadHurtCyl.SetC(pos_vec);
         i_this->mHeadHurtCyl.SetH(REG0_F(3) + 600.0f);
         i_this->mHeadHurtCyl.SetR(REG0_F(4) + 180.0f);
         dComIfG_Ccsp()->Set(&i_this->mHeadHurtCyl);
         i_this->mHandHurtCyl.OffTgSetBit();
-        vec.set(REG0_F(5) + 150.0f, REG0_F(6), REG0_F(7) + 70.0f);
+        vec.x = REG0_F(5) + 150.0f;
+        vec.y = REG0_F(6);
+        vec.z = REG0_F(7) + 70.0f;
         MtxPosition(&vec, &pos_vec);
         i_this->mHandHurtCyl.SetC(pos_vec);
         i_this->mHandHurtCyl.SetH(REG0_F(8) + 100.0f);
@@ -1307,11 +1333,11 @@ static void col_set(bst_class* i_this) {
         MtxPosition(&vec, &actor->eyePos);
         vec.setall(0.0f);
         for (s32 i = 0; i < 2; i++) {
-            cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(i + 4), *calc_mtx);
+            MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(i + 4);
+            cMtx_copy(mtx, *calc_mtx);
             MtxPosition(&vec, &pos_vec);
-            s16 unk = i_this->m2E74[i];
-            if (unk != 0 || i_this->mEyeHealth[i] <= 0) {
-                if (unk != 0) {
+            if (i_this->m2E74[i] != 0 || i_this->mEyeHealth[i] <= 0) {
+                if (i_this->m2E74[i] != 0) {
                     i_this->m2E74[i]--;
                 }
                 pos_vec.y += 10000.0f;
@@ -1330,13 +1356,15 @@ static void col_set(bst_class* i_this) {
             radius = REG0_F(16) + 50.0f;
         }
         for (s32 i = 0; i < 15; i++) {
-            cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(i + 2), *calc_mtx);
+            MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(i + 2);
+            cMtx_copy(mtx, *calc_mtx);
             MtxPosition(&vec, &pos_vec);
             i_this->mFingerSphs[i].SetC(pos_vec);
             i_this->mFingerSphs[i].SetR(REG0_F(14) + 50.0f + radius);
             dComIfG_Ccsp()->Set(&i_this->mFingerSphs[i]);
         }
-        cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(17), *calc_mtx);
+        MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(17);
+        cMtx_copy(mtx, *calc_mtx);
         static f32 te_x[4] = {70.0f, 70.0f, 70.0f, 70.0f};
         static f32 te_y[4] = {70.0f, -70.0f, 70.0f, -70.0f};
         static f32 te_z[4] = {90.0f, 90.0f, -30.0f, -30.0f};
@@ -1353,14 +1381,22 @@ static void col_set(bst_class* i_this) {
             dComIfG_Ccsp()->Set(&i_this->mFingerSphs[i + 15]);
         }
         if (i_this->mBstPartType == bst_class::Type_RIGHT_HAND_e) {
-            vec.set(-(REG0_F(15) + 100.0f), REG0_F(16), -(REG0_F(17) + 40.0f));
+            vec.x = -(REG0_F(15) + 100.0f);
+            vec.y = REG0_F(16);
+            vec.z = -(REG0_F(17) + 40.0f);
             MtxPosition(&vec, &pos_vec);
-            vec.set(-(REG0_F(15) + 100.0f), REG0_F(16), REG0_F(18) + 10.0f);
+            vec.x = -(REG0_F(15) + 100.0f);
+            vec.y = REG0_F(16);
+            vec.z = REG0_F(18) + 10.0f;
             MtxPosition(&vec, &actor->eyePos);
         } else {
-            vec.set(REG0_F(15) + 100.0f, REG0_F(16), REG0_F(17) + 40.0f);
+            vec.x = REG0_F(15) + 100.0f;
+            vec.y = REG0_F(16);
+            vec.z = REG0_F(17) + 40.0f;
             MtxPosition(&vec, &pos_vec);
-            vec.set(REG0_F(15) + 100.0f, REG0_F(16), -(REG0_F(18) + 10.0f));
+            vec.x = REG0_F(15) + 100.0f;
+            vec.y = REG0_F(16);
+            vec.z = -(REG0_F(18) + 10.0f);
             MtxPosition(&vec, &actor->eyePos);
         }
         i_this->mHandHurtCyl.SetC(pos_vec);
@@ -1516,7 +1552,7 @@ static void hana_demo(bst_class* i_this) {
         i_this->m10FC[0] = 40;
         actor->speedF = 0.0f;
         actor->speed.y = 0.0f;
-        anm_init(i_this, BST_BCK_HANA_DEMO, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BST_BCK_HANA_DEMO_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->m2E9A = 1;
         fopAcM_seStartCurrent(actor, JA_SE_CM_BST_HAND_STRAIN, 0);
         // fallthrough
@@ -1538,12 +1574,14 @@ static void hana_demo(bst_class* i_this) {
         if ((s32)i_this->m02B8->getFrame() == 26) {
             int itemNo;
             if (dComIfGs_getArrowNum() == 0) {
-                itemNo = dItem_ARROW_10_e;
-                cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(6), *calc_mtx);
+                itemNo = dItemNo_ARROW_10_e;
+                MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(6);
+                cMtx_copy(mtx, *calc_mtx);
                 i_this->m2E9E = 0;
             } else {
-                itemNo = dItem_BOMB_5_e;
-                cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(7), *calc_mtx);
+                itemNo = dItemNo_BOMB_5_e;
+                MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(7);
+                cMtx_copy(mtx, *calc_mtx);
                 i_this->m2E9E = 1;
             }
             vec.set(REG0_F(2) + 60.0f, REG0_F(3), REG0_F(4));
@@ -1553,7 +1591,8 @@ static void hana_demo(bst_class* i_this) {
                 MtxPosition(&vec, &pos_vec);
                 i_this->mCreatedItemId = fopAcM_createItem(&pos_vec, itemNo, -1, fopAcM_GetRoomNo(actor), 0, NULL, 0xB, NULL);
                 mDoAud_seStart(JA_SE_CM_BST_ITEM_OUT_NOSE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-                cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(0), *calc_mtx);
+                MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(0);
+                cMtx_copy(mtx, *calc_mtx);
                 vec.setall(0.0f);
                 MtxPosition(&vec, &pos_vec);
                 dComIfGp_particle_setToon(
@@ -1581,7 +1620,7 @@ static void end_demo(bst_class* i_this) {
         }
         break;
     case 2:
-        anm_init(i_this, BST_BCK_BST_HIRAKU, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BST_BCK_BST_HIRAKU_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->mDamage++;
         i_this->m2EF4 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTHALO00, &actor->current.pos);
         if (i_this->m2EF4 != NULL) {
@@ -1750,17 +1789,17 @@ static void main_cont(bst_class* i_this) {
                     hand[1]->mDamage = 0;
                     hand[0]->mDamage = 0;
                     i_this->m2E7C = 10;
-                    J3DAnmTevRegKey* key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_UDEL);
+                    J3DAnmTevRegKey* key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_UDEL_e);
                     hand[0]->mpBrkAnm->init(hand[0]->m02C8->getModelData(), key, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                    J3DAnmTextureSRTKey* srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_UDEL);
+                    J3DAnmTextureSRTKey* srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_UDEL_e);
                     hand[0]->mpBtkAnm->init(hand[0]->m02C8->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                    key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_UDER);
+                    key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_UDER_e);
                     hand[1]->mpBrkAnm->init(hand[1]->m02C8->getModelData(), key, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_UDER);
+                    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_UDER_e);
                     hand[1]->mpBtkAnm->init(hand[1]->m02C8->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                    key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_MUNE);
+                    key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_MUNE_e);
                     boss->mpBrkAnm->init(boss->m02C8->getModelData(), key, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_MUNE);
+                    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_MUNE_e);
                     boss->mpBtkAnm->init(boss->m02C8->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
                     i_this->mBombArrowDropTimer = 400;
                     i_this->m2FE0->setPlaySpeed(1.0f);
@@ -1895,14 +1934,14 @@ static void beam_eff_set(cXyz* pos, short y, u8 set_angle) {
 
 /* 00006FA4-00007308       .text beam_wall_check__FP4cXyzP4cXyz */
 static BOOL beam_wall_check(cXyz* pos_1, cXyz* pos_2) {
-    dBgS_LinChk chk;
+    dBgS_LinChk gndChk;
     cXyz start = *pos_1 - *pos_2;
     start.y += 50.0f;
     cXyz end(*pos_1);
     end.y = start.y;
-    chk.Set(&start, &end, NULL);
-    if (dComIfG_Bgsp()->LineCross(&chk)) {
-        *pos_1 = chk.mLin.GetEnd();
+    gndChk.Set(&start, &end, NULL);
+    if (dComIfG_Bgsp()->LineCross(&gndChk)) {
+        *pos_1 = gndChk.mLin.GetEnd();
         return TRUE;
     }
     return FALSE;
@@ -1910,20 +1949,15 @@ static BOOL beam_wall_check(cXyz* pos_1, cXyz* pos_2) {
 
 /* 00007740-00007B58       .text beam_move__FP9bst_class */
 static void beam_move(bst_class* i_this) {
-    /* Nonmatching - regalloc */
     fopAc_ac_c* actor = &i_this->actor;
-    cXyz* pos1;
-    cXyz* pos2;
     J3DModel* model;
     s8 beam_set;
-    dBgS_GndChk chk;
+    dBgS_GndChk gndChk;
     for (s32 i = 0; i < 10; i++) {
         if (i_this->m04E4[i] == 0) {
             continue;
         }
-        pos1 = &i_this->m03B8[i];
-        pos2 = &i_this->m0430[i];
-        VECAdd(pos1, pos2, pos1);
+        VECAdd(&i_this->m03B8[i], &i_this->m0430[i], &i_this->m03B8[i]);
         model = i_this->m0390[i];
         mDoMtx_stack_c::transS(i_this->m03B8[i]);
         mDoMtx_stack_c::YrotM(i_this->m04A8[i].y);
@@ -1932,16 +1966,20 @@ static void beam_move(bst_class* i_this) {
         model->setBaseTRMtx(mDoMtx_stack_c::now);
         cLib_addCalc2(&i_this->m10A8[i], REG0_F(4) + 5.0f, 1.0f, REG0_F(5) + 0.5f);
         beam_set = FALSE;
-        f32 fVar1 = 500.0f;
-        chk.m_pos.set(i_this->m03B8[i].x, i_this->m03B8[i].z + fVar1, i_this->m03B8[i].y);
-        f32 ground_cross = dComIfG_Bgsp()->GroundCross(&chk);
-        if (ground_cross >= i_this->m03B8[i].y) {
+        Vec temp;
+        temp.x = i_this->m03B8[i].x;
+        temp.y = i_this->m03B8[i].y;
+        temp.z = i_this->m03B8[i].z;
+        temp.y += 500.0f;
+        gndChk.m_pos.set(temp);
+        f32 ground_cross = dComIfG_Bgsp()->GroundCross(&gndChk);
+        if (i_this->m03B8[i].y <= ground_cross) {
             i_this->m03B8[i].y = ground_cross;
-            beam_eff_set(pos1, 0, 0);
+            beam_eff_set(&i_this->m03B8[i], 0, 0);
             beam_set = TRUE;
         } else {
-            if (beam_wall_check(pos1, pos2)) {
-                beam_eff_set(pos1, i_this->m04A8[i].y, 1);
+            if (beam_wall_check(&i_this->m03B8[i], &i_this->m0430[i])) {
+                beam_eff_set(&i_this->m03B8[i], i_this->m04A8[i].y, 1);
                 beam_set = TRUE;
             }
         }
@@ -1951,13 +1989,13 @@ static void beam_move(bst_class* i_this) {
         if (beam_set) {
             i_this->m04E4[i] = 0;
             dComIfGp_getVibration().StartShock(REG0_S(2) + 3, -0x21, cXyz(0.0f, 1.0f, 0.0f));
-            mDoAud_seStart(JA_SE_CM_BST_BEAM_BOMB, pos1, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            mDoAud_seStart(JA_SE_CM_BST_BEAM_BOMB, &i_this->m03B8[i], 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         if (i_this->m04E4[i] == 1) {
-            i_this->mCcD_beams[i].StartCAt(*pos1);
+            i_this->mCcD_beams[i].StartCAt(i_this->m03B8[i]);
             i_this->m04E4[i]++;
         } else {
-            i_this->mCcD_beams[i].MoveCAt(*pos1);
+            i_this->mCcD_beams[i].MoveCAt(i_this->m03B8[i]);
         }
         dComIfG_Ccsp()->Set(&i_this->mCcD_beams[i]);
     }
@@ -1965,47 +2003,42 @@ static void beam_move(bst_class* i_this) {
 
 /* 00007CF0-0000815C       .text end_brkbtk_set__FP9bst_class */
 static void end_brkbtk_set(bst_class* i_this) {
-    J3DAnmTevRegKey* tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_LH_END);
+    J3DAnmTevRegKey* tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_LH_END_e);
     hand[0]->mpTevRegAnimator->init(hand[0]->m02B8->getModel()->getModelData(), tev_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    J3DAnmTextureSRTKey* srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_LH_END);
+    J3DAnmTextureSRTKey* srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_LH_END_e);
     hand[0]->mpTexMtxAnimator->init(hand[0]->m02B8->getModel()->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_RH_END);
+    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_RH_END_e);
     hand[1]->mpTevRegAnimator->init(hand[1]->m02B8->getModel()->getModelData(), tev_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_RH_END);
+    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_RH_END_e);
     hand[1]->mpTexMtxAnimator->init(hand[1]->m02B8->getModel()->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_BST_END);
+    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_BST_END_e);
     boss->mpTevRegAnimator->init(boss->m02B8->getModel()->getModelData(), tev_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_BST_END);
+    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_BST_END_e);
     boss->mpTexMtxAnimator->init(boss->m02B8->getModel()->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_UDEL_END);
+    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_UDEL_END_e);
     hand[0]->mpBrkAnm->init(hand[0]->m02C8->getModelData(), tev_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_UDEL_END);
+    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_UDEL_END_e);
     hand[0]->mpBtkAnm->init(hand[0]->m02C8->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_UDER_END);
+    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_UDER_END_e);
     hand[1]->mpBrkAnm->init(hand[1]->m02C8->getModelData(), tev_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_UDER_END);
+    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_UDER_END_e);
     hand[1]->mpBtkAnm->init(hand[1]->m02C8->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_MUNE_END);
+    tev_key = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_MUNE_END_e);
     boss->mpBrkAnm->init(boss->m02C8->getModelData(), tev_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
-    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_MUNE_END);
+    srt_key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_MUNE_END_e);
     boss->mpBtkAnm->init(boss->m02C8->getModelData(), srt_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE);
 }
 
 /* 0000815C-00009FCC       .text demo_camera__FP9bst_class */
 void demo_camera(bst_class* i_this) {
-    /* Nonmatching */
     fopAc_ac_c* actor = &i_this->actor;
-    bst_class* pbVar5;
-    int iVar13;
-    int iVar14;
     J3DAnmTevRegKey* pJVar7;
     J3DAnmTextureSRTKey* pJVar8;
-    JPABaseEmitter* pJVar9;
-    cXyz local_40;
-    cXyz local_4c;
-    cXyz local_58;
+    cXyz spB0; // offset
+    cXyz spA4;
     daPy_py_c* player = daPy_getPlayerActorClass();
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+
     s8 bVar2 = true;
     switch (i_this->m2E9A) {
     case 1:
@@ -2021,7 +2054,9 @@ void demo_camera(bst_class* i_this) {
         i_this->msFrameCount = 0;
         i_this->m2EC8 = 55.0f;
         i_this->m2EC4 = 0.0f;
+#if VERSION > VERSION_DEMO
         i_this->m2E98 = 100;
+#endif
         // fallthrough
     case 2:
         if (i_this->msFrameCount > (s16)(REG0_S(4) + 33)) {
@@ -2030,23 +2065,23 @@ void demo_camera(bst_class* i_this) {
                 cLib_addCalc2(&i_this->m2EC8, 30.0f, 0.5f, REG0_F(3) + 10.0f);
             }
         }
-        cMtx_YrotS(*calc_mtx, actor->shape_angle.y + (REG0_S(1) + 0xAF0));
+        cMtx_YrotS(*calc_mtx, actor->shape_angle.y + 0xAF0 + REG0_S(1));
         if (i_this->m2E9E != 0) {
-            local_40.x = REG0_F(9) + -100.0f;
+            spB0.x = REG0_F(9) + -100.0f;
         } else {
-            local_40.x = REG0_F(10);
+            spB0.x = REG0_F(10);
         }
-        local_40.y = REG0_F(0xb) + i_this->m2EC4;
-        local_40.z = REG0_F(0xc);
-        MtxPosition(&local_40, &local_4c);
-        i_this->m2EAC = actor->eyePos + local_4c;
+        spB0.y = REG0_F(0xb) + i_this->m2EC4;
+        spB0.z = REG0_F(0xc);
+        MtxPosition(&spB0, &spA4);
+        i_this->m2EAC = actor->eyePos + spA4;
         cMtx_XrotM(*calc_mtx, REG0_S(2) + 4000);
-        local_40.x = 0.0f;
-        local_40.y = REG0_F(7);
-        local_40.z = REG0_F(8) + 850.0f;
-        MtxPosition(&local_40, &local_4c);
-        i_this->m2EA0 = actor->current.pos + local_4c;
-        if (0x50 < i_this->msFrameCount) {
+        spB0.x = 0.0f;
+        spB0.y = REG0_F(7);
+        spB0.z = REG0_F(8) + 850.0f;
+        MtxPosition(&spB0, &spA4);
+        i_this->m2EA0 = actor->current.pos + spA4;
+        if (i_this->msFrameCount > 80) {
             i_this->mActionType = bst_class::ACTION_FLY_e;
             i_this->mDamage = 0;
             camera->mCamera.SetTrimSize(0);
@@ -2054,7 +2089,9 @@ void demo_camera(bst_class* i_this) {
             dMeter_mtrShow();
             dComIfGp_event_reset();
             i_this->m2E9A = 0;
+#if VERSION > VERSION_DEMO
             i_this->m2E98 = 1;
+#endif
         }
         break;
     case 10:
@@ -2077,41 +2114,35 @@ void demo_camera(bst_class* i_this) {
         i_this->m2EAC.y = i_this->m2EAC.y + (REG0_F(0) - 250.0f);
         mDoAud_bgmStreamPlay();
         i_this->m2FE0->setPlaySpeed(1.0f);
+#if VERSION > VERSION_DEMO
         i_this->m2E98 = 0x78;
+#endif
         // fallthrough
     case 11:
-        local_4c.x = -635.0f;
-        local_4c.y = 0.0f;
-        local_4c.z = 0.0f;
-        player->setPlayerPosAndAngle(&local_4c, 0x4000);
-        cLib_addCalc2(&i_this->m2EA0.z, boss->actor.current.pos.z + REG0_F(3) + 300.0f, 0.02f, 1.4f);
-        if (i_this->msFrameCount == 0x3c) {
+        spA4.x = -635.0f;
+        spA4.y = 0.0f;
+        spA4.z = 0.0f;
+        player->setPlayerPosAndAngle(&spA4, 0x4000);
+        cLib_addCalc2(&i_this->m2EA0.z, boss->actor.current.pos.z + REG0_F(3) + 300.0f, 0.02f, DEMO_SELECT(1.5f, 1.4f));
+        if (i_this->msFrameCount == 60) {
             message_set(i_this, 0x170d);
         }
-        if (i_this->msFrameCount == 0xb4) {
+        if (i_this->msFrameCount == DEMO_SELECT(150, 180)) {
             msg_end = 1;
         }
-        iVar13 = i_this->msFrameCount;
-        iVar14 = REG0_S(4) + 200;
-        if ((int)iVar13 == iVar14) {
+        if (i_this->msFrameCount == (REG0_S(4) + DEMO_SELECT(170, 200))) {
             message_set(i_this, 0x170e);
         }
-        iVar13 = i_this->msFrameCount;
-        iVar14 = REG0_S(4) + 0x122;
-        if ((int)iVar13 == iVar14) {
+        if (i_this->msFrameCount == (REG0_S(4) + DEMO_SELECT(260, 290))) {
             msg_end = 1;
         }
-        iVar13 = i_this->msFrameCount;
-        iVar14 = REG0_S(4) + iVar14;
-        if ((int)iVar13 == (int)iVar14 + 0x14) {
+        if (i_this->msFrameCount == (REG0_S(4) + DEMO_SELECT(260, 290)) + (REG0_S(4) + 20)) {
             message_set(i_this, 0x170f);
         }
-        iVar13 = i_this->msFrameCount;
-        iVar14 = (int)REG0_S(4) + 0x14;
-        if ((int)iVar13 == REG0_S(4) + iVar14 + 0x186) {
+        if (i_this->msFrameCount == (REG0_S(4) + DEMO_SELECT(360, 390)) + (REG0_S(4) + 20)) {
             msg_end = 1;
         }
-        if (!((int)i_this->msFrameCount == (REG0_S(4) + iVar14) + (iVar14 + 0x19a))) {
+        if (i_this->msFrameCount != (REG0_S(4) + DEMO_SELECT(380, 410)) + (REG0_S(4) + 20)) {
             break;
         }
         i_this->m2E9A = 0xc;
@@ -2127,29 +2158,26 @@ void demo_camera(bst_class* i_this) {
         cLib_addCalc2(&i_this->m2EC4, 1.0f, 1.0f, 0.01f);
         cLib_addCalc2(&i_this->m2EAC.x, hand[0]->actor.current.pos.x, 0.02f, 50.0f);
         cLib_addCalc2(&i_this->m2EAC.z, hand[0]->actor.current.pos.z, 0.02f, 50.0f);
-        if (i_this->msFrameCount == 0x14) {
+        if (i_this->msFrameCount == 20) {
             hand[0]->m02D4 = 1;
             hand[0]->m02C4 = 1;
-            pbVar5 = hand[0];
-            mDoAud_seStart(JA_SE_CM_BST_HAND_LIGHT, &pbVar5->actor.current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(&pbVar5->actor)));
+            fopAcM_seStartCurrent(&hand[0]->actor, JA_SE_CM_BST_HAND_LIGHT, 0);
         }
-        if (i_this->msFrameCount == 0x3b) {
+        if (i_this->msFrameCount == 59) {
             i_this->mRoomState = 1;
         }
-        if (i_this->msFrameCount == 0x3c) {
+        if (i_this->msFrameCount == 60) {
             hand[0]->mDamage = 2;
-            pbVar5 = hand[0];
-            mDoAud_seStart(JA_SE_CM_BST_HAND_EYE_OPEN, &pbVar5->actor.current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(&pbVar5->actor)));
+            fopAcM_seStartCurrent(&hand[0]->actor, JA_SE_CM_BST_HAND_EYE_OPEN, 0);
         }
-        if (i_this->msFrameCount == 0x5a) {
+        if (i_this->msFrameCount == 90) {
             hand[0]->mDamage = 4;
-            pbVar5 = hand[0];
-            mDoAud_seStart(JA_SE_CM_BST_HAND_OUT_WALL, &pbVar5->actor.current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(&pbVar5->actor)));
+            fopAcM_seStartCurrent(&hand[0]->actor, JA_SE_CM_BST_HAND_OUT_WALL, 0);
         }
-        if (i_this->msFrameCount == 0xa9) {
+        if (i_this->msFrameCount == 169) {
             i_this->mRoomState = 0;
         }
-        if (i_this->msFrameCount != 0xaa) {
+        if (i_this->msFrameCount != 170) {
             break;
         }
         i_this->m2E9A = 0xd;
@@ -2166,30 +2194,27 @@ void demo_camera(bst_class* i_this) {
         cLib_addCalc2(&i_this->m2EC4, 1.0f, 1.0f, 0.01f);
         cLib_addCalc2(&i_this->m2EAC.x, hand[1]->actor.current.pos.x, 0.02f, 50.0f);
         cLib_addCalc2(&i_this->m2EAC.z, hand[1]->actor.current.pos.z, 0.02f, 50.0f);
-        if (i_this->msFrameCount == 0x14) {
+        if (i_this->msFrameCount == 20) {
             hand[1]->m02D4 = 1;
             hand[1]->m02C4 = 1;
-            pbVar5 = hand[1];
-            mDoAud_seStart(JA_SE_CM_BST_HAND_LIGHT, &pbVar5->actor.current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(&pbVar5->actor)));
+            fopAcM_seStartCurrent(&hand[1]->actor, JA_SE_CM_BST_HAND_LIGHT, 0);
         }
-        if (i_this->msFrameCount == 0x3b) {
+        if (i_this->msFrameCount == 59) {
             i_this->mRoomState = 1;
             i_this->m2ED0 = 0.0f;
         }
-        if (i_this->msFrameCount == 0x3c) {
+        if (i_this->msFrameCount == 60) {
             hand[1]->mDamage = 2;
-            pbVar5 = hand[1];
-            mDoAud_seStart(JA_SE_CM_BST_HAND_EYE_OPEN, &pbVar5->actor.current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(&pbVar5->actor)));
+            fopAcM_seStartCurrent(&hand[1]->actor, JA_SE_CM_BST_HAND_EYE_OPEN, 0);
         }
-        if (i_this->msFrameCount == 0x5a) {
+        if (i_this->msFrameCount == 90) {
             hand[1]->mDamage = 4;
-            pbVar5 = hand[1];
-            mDoAud_seStart(JA_SE_CM_BST_HAND_OUT_WALL, &pbVar5->actor.current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(&pbVar5->actor)));
+            fopAcM_seStartCurrent(&hand[1]->actor, JA_SE_CM_BST_HAND_OUT_WALL, 0);
         }
-        if (i_this->msFrameCount == 0xa9) {
+        if (i_this->msFrameCount == 169) {
             i_this->mRoomState = 0;
         }
-        if (i_this->msFrameCount != 0xaa) {
+        if (i_this->msFrameCount != 170) {
             break;
         }
         i_this->m2E9A = 0xe;
@@ -2202,32 +2227,29 @@ void demo_camera(bst_class* i_this) {
         i_this->m2EA0.y += REG0_F(7) + 300.0f;
         // fallthrough
     case 14:
-        if (i_this->msFrameCount >= 0x1E) {
-            if (i_this->msFrameCount <= 0x5A) {
+        if (i_this->msFrameCount >= 30) {
+            if (i_this->msFrameCount <= 90) {
                 cLib_addCalc2(&i_this->m2EA0.x, boss->actor.current.pos.x - 1000.0f, 0.2f, i_this->m2EC4 * 100.0f);
                 cLib_addCalc2(&i_this->m2EC4, 1.0f, 1.0f, 0.05f);
             }
-            if (i_this->msFrameCount == 0x1e) {
+            if (i_this->msFrameCount == 30) {
                 boss->m02D4 = 1;
                 boss->m02C4 = 1;
-                pbVar5 = boss;
-                mDoAud_seStart(JA_SE_CM_BST_HEAD_LIGHT, &pbVar5->actor.current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(&pbVar5->actor)));
+                fopAcM_seStartCurrent(&boss->actor, JA_SE_CM_BST_HEAD_LIGHT, 0);
             }
-            if (i_this->msFrameCount == 0x3b) {
+            if (i_this->msFrameCount == 59) {
                 i_this->mRoomState = 1;
                 i_this->m2ED0 = 0.0f;
             }
-            if (i_this->msFrameCount == 0x3c) {
+            if (i_this->msFrameCount == 60) {
                 boss->mDamage = 2;
-                pbVar5 = boss;
-                mDoAud_seStart(JA_SE_CM_BST_HEAD_EYE_OPEN, &pbVar5->actor.current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(&pbVar5->actor)));
+                fopAcM_seStartCurrent(&boss->actor, JA_SE_CM_BST_HEAD_EYE_OPEN, 0);
             }
-            if (i_this->msFrameCount == 0x5a) {
+            if (i_this->msFrameCount == 90) {
                 boss->mDamage = 4;
-                pbVar5 = boss;
-                mDoAud_seStart(JA_SE_CM_BST_HEAD_OUT_WALL, &pbVar5->actor.current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(&pbVar5->actor)));
+                fopAcM_seStartCurrent(&boss->actor, JA_SE_CM_BST_HEAD_OUT_WALL, 0);
             }
-            if (i_this->msFrameCount == 0x96) {
+            if (i_this->msFrameCount == 150) {
                 i_this->m2E9A = 0xf;
                 boss->mActionType = bst_class::ACTION_FLY_e;
                 hand[0]->mActionType = bst_class::ACTION_FLY_e;
@@ -2241,17 +2263,17 @@ void demo_camera(bst_class* i_this) {
                 i_this->m2EA0.x -= REG0_F(1) + 500.0f;
                 i_this->m2EA0.y += REG0_F(2) + 100.0f;
                 i_this->m2EC8 = REG0_F(4) + 75.0f;
-                pJVar7 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_UDEL);
+                pJVar7 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_UDEL_e);
                 hand[0]->mpBrkAnm->init(hand[0]->m02C8->getModelData(), pJVar7, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                pJVar8 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_UDEL);
+                pJVar8 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_UDEL_e);
                 hand[0]->mpBtkAnm->init(hand[0]->m02C8->getModelData(), pJVar8, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                pJVar7 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_UDER);
+                pJVar7 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_UDER_e);
                 hand[1]->mpBrkAnm->init(hand[1]->m02C8->getModelData(), pJVar7, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                pJVar8 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_UDER);
+                pJVar8 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_UDER_e);
                 hand[1]->mpBtkAnm->init(hand[1]->m02C8->getModelData(), pJVar8, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                pJVar7 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_MUNE);
+                pJVar7 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_MUNE_e);
                 boss->mpBrkAnm->init(boss->m02C8->getModelData(), pJVar7, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
-                pJVar8 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_MUNE);
+                pJVar8 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_MUNE_e);
                 boss->mpBtkAnm->init(boss->m02C8->getModelData(), pJVar8, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
                 i_this->mBombArrowDropTimer = 500;
             }
@@ -2266,10 +2288,9 @@ void demo_camera(bst_class* i_this) {
         i_this->m2EA0.y += REG0_F(2) + 100.0f;
         cLib_addCalc2(&i_this->m2EC8, 55.0f, 0.1f, 0.4f);
         if (i_this->msFrameCount == 200) {
-            local_58.setall(0.0f);
-            pJVar9 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTSTAGEEFFECT00, &local_58);
-            i_this->m2EF8 = pJVar9;
-            JAIZelBasic::zel_basic->field_0x1dd4 = 1;
+            cXyz sp98(0.0f, 0.0f, 0.0f);
+            i_this->m2EF8 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTSTAGEEFFECT00, &sp98);
+            JAIZelBasic::getInterface()->bstHoriOn();
         }
         if (i_this->msFrameCount == 300) {
             camera->mCamera.SetTrimSize(0);
@@ -2278,10 +2299,12 @@ void demo_camera(bst_class* i_this) {
             dComIfGp_event_reset();
             i_this->m2E9A = 0;
             i_this->m2E7C = 10;
-            g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossDemo();
+            dComIfGs_onStageBossDemo();
             mDoAud_bgmStart(JA_BGM_BST_BATTLE);
             i_this->m2FE4 = 1;
+#if VERSION > VERSION_DEMO
             i_this->m2E98 = 1;
+#endif
         }
         break;
     case 50:
@@ -2300,20 +2323,21 @@ void demo_camera(bst_class* i_this) {
         i_this->m2EA0.x = (REG0_F(2) + -500.0f) - 800.0f;
         player->changeOriginalDemo();
         end_brkbtk_set(i_this);
-        pJVar9 = i_this->m2EF8;
-        if (pJVar9 != NULL) {
-            pJVar9->becomeInvalidEmitter();
+        if (i_this->m2EF8 != NULL) {
+            i_this->m2EF8->becomeInvalidEmitter();
             i_this->m2EF8 = NULL;
-            JAIZelBasic::zel_basic->field_0x1dd4 = 0;
+            JAIZelBasic::getInterface()->bstHoriOff();
         }
         i_this->m2FE4 = 0;
-        i_this->m2E98 = 0x96;
+#if VERSION > VERSION_DEMO
+        i_this->m2E98 = 150;
+#endif
         // fallthrough
-    case 51:
-        local_4c.x = REG0_F(1) + -300.0f;
-        local_4c.y = 0.0f;
-        local_4c.z = 0.0f;
-        player[0].setPlayerPosAndAngle(&local_4c, 0x4000);
+    case 51: {
+        spA4.x = REG0_F(1) + -300.0f;
+        spA4.y = 0.0f;
+        spA4.z = 0.0f;
+        player[0].setPlayerPosAndAngle(&spA4, 0x4000);
         actor->current.pos.x = 300.0f;
         actor->current.pos.z = 0.0f;
         actor->shape_angle.y = -0x4000;
@@ -2323,10 +2347,10 @@ void demo_camera(bst_class* i_this) {
         i_this->m2EA0.z = 0.0f;
         cLib_addCalc2(&i_this->m2EA0.x, (REG0_F(2) + -500.0f) - 100.0f, 0.2f, i_this->m2EC4 * 10.0f);
         cLib_addCalc2(&i_this->m2EC4, 1.0f, 1.0f, 0.05f);
-        if (i_this->msFrameCount < 0x50) {
+        if (i_this->msFrameCount < 80) {
             i_this->m2ECC = REG0_F(9) + 10.0f;
         }
-        if (i_this->msFrameCount == 0x5a) {
+        if (i_this->msFrameCount == 90) {
             boss->mDamage = 2;
             i_this->mRoomState = 2;
             i_this->m2ED0 = 0.0f;
@@ -2334,42 +2358,34 @@ void demo_camera(bst_class* i_this) {
         if (i_this->msFrameCount == 100) {
             i_this->mRoomState = 3;
         }
-        if ((i_this->msFrameCount > 100) && (i_this->msFrameCount < 0x212)) {
+        if ((i_this->msFrameCount > 100) && (i_this->msFrameCount < 530)) {
             mDoAud_seStart(JA_SE_CM_BST_GOKOU, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
-        if (i_this->msFrameCount == 0x78) {
+        if (i_this->msFrameCount == 120) {
             message_set(i_this, 0x1710);
         }
-        if (i_this->msFrameCount == 0xf0) {
+        if (i_this->msFrameCount == DEMO_SELECT(210, 240)) {
             msg_end = 1;
         }
-        if ((int)i_this->msFrameCount == REG0_S(4) + 0x104) {
+        if (i_this->msFrameCount == REG0_S(4) + DEMO_SELECT(230, 260)) {
             message_set(i_this, 0x1711);
         }
-        iVar13 = i_this->msFrameCount;
-        iVar14 = REG0_S(4) + 0x15e;
-        if (iVar13 == iVar14) {
+        if (i_this->msFrameCount == REG0_S(4) + DEMO_SELECT(320, 350)) {
             msg_end = 1;
         }
-        iVar13 = i_this->msFrameCount;
-        iVar14 = iVar14 + 0x14;
-        if ((int)i_this->msFrameCount == REG0_S(4) + iVar14) {
+        if (i_this->msFrameCount == REG0_S(4) + DEMO_SELECT(320, 350) + (REG0_S(4) + 20)) {
             message_set(i_this, 0x1712);
         }
-        iVar13 = i_this->msFrameCount;
-        iVar14 = REG0_S(4) + 0x14;
-        if ((int)iVar13 == (int)REG0_S(4) + iVar14 + 500) {
+        if (i_this->msFrameCount == REG0_S(4) + DEMO_SELECT(410, 500) + (REG0_S(4) + 20)) {
             msg_end = 1;
         }
-        if ((int)i_this->msFrameCount == (int)REG0_S(4) + iVar14 + (int)REG0_S(4) + 0x208) {
+        if (i_this->msFrameCount == REG0_S(4) + DEMO_SELECT(410, 500) + (REG0_S(4) + 20) + REG0_S(4) + 20) {
             message_set(i_this, 0x1713);
         }
-        iVar13 = i_this->msFrameCount;
-        iVar14 = (int)REG0_S(4) * 2 + 0x1cc;
-        if ((int)iVar13 == REG0_S(4) + iVar14 + 0xaa) {
+        if (i_this->msFrameCount == REG0_S(4) + DEMO_SELECT(110, 170) + (REG0_S(4) + DEMO_SELECT(430, 460) + REG0_S(4))) {
             msg_end = 1;
         }
-        if (!((int)i_this->msFrameCount == REG0_S(4) + iVar14 + 200)) {
+        if (i_this->msFrameCount != REG0_S(4) + DEMO_SELECT(140, 200) + (REG0_S(4) + DEMO_SELECT(430, 460) + REG0_S(4))) {
             break;
         }
         i_this->m2E9A++;
@@ -2382,10 +2398,13 @@ void demo_camera(bst_class* i_this) {
         i_this->m2EA0.y = REG0_F(0xe) + 100.0f;
         i_this->m2EA0.z = REG0_F(0xf) + -300.0f;
         mDoAud_bgmStreamPlay();
+#if VERSION > VERSION_DEMO
         i_this->m2E98 = 1;
+#endif
         // fallthrough
+    }
     case 52:
-        if (i_this->msFrameCount <= 0x1e) {
+        if (i_this->msFrameCount <= 30) {
             break;
         }
         i_this->m2E9A++;
@@ -2399,7 +2418,7 @@ void demo_camera(bst_class* i_this) {
         i_this->m2EA0 = player->current.pos;
         i_this->m2EA0.x += REG0_F(0xb) + 150.0f;
         i_this->m2EA0.y += REG0_F(0xc) + 50.0f;
-        if (i_this->msFrameCount <= (short)(REG0_S(3) + 0x41)) {
+        if (i_this->msFrameCount <= (s16)(REG0_S(3) + 65)) {
             break;
         }
         i_this->m2E9A++;
@@ -2415,20 +2434,20 @@ void demo_camera(bst_class* i_this) {
         i_this->mRoomState = 4;
         i_this->m2ED0 = 1.0f;
         dComIfGs_onStageBossEnemy();
-        local_40.x = 0.0f;
-        local_40.y = 0.0f;
-        local_40.z = 0.0f;
-        fopAcM_createWarpFlower(&local_40, 0, fopAcM_GetRoomNo(actor), 0);
+        spB0.x = 0.0f;
+        spB0.y = 0.0f;
+        spB0.z = 0.0f;
+        fopAcM_createWarpFlower(&spB0, 0, fopAcM_GetRoomNo(actor), 0);
         // fallthrough
     case 54:
-        if ((int)i_this->msFrameCount == REG0_S(4) + 0x16) {
+        if (i_this->msFrameCount == REG0_S(4) + 22) {
             player->changeDemoMode(daPy_demo_c::DEMO_SURPRISED_e);
         }
-        if ((int)i_this->msFrameCount == REG0_S(5) + 0x96) {
+        if (i_this->msFrameCount == REG0_S(5) + 150) {
             player->changeDemoMode(daPy_demo_c::DEMO_UNK_029_e);
         }
         cLib_addCalc2(&i_this->m2EAC.y, REG0_F(8) + 200.0f, 0.8f, REG0_F(9) + 300.0f);
-        if ((int)i_this->msFrameCount != REG0_S(6) + 0xfa) {
+        if (i_this->msFrameCount != REG0_S(6) + 250) {
             break;
         }
         i_this->m2E9A++;
@@ -2436,7 +2455,9 @@ void demo_camera(bst_class* i_this) {
         i_this->m2EC4 = 0.0f;
         i_this->m2EAC = actor->current.pos;
         i_this->m2EAC.y += REG0_F(10) + 100.0f;
+#if VERSION > VERSION_DEMO
         i_this->m2E98 = 100;
+#endif
         // fallthrough
     case 55:
         cLib_addCalc2(&i_this->m2EAC.x, actor->current.pos.x, 0.2f, 20.0f);
@@ -2446,8 +2467,8 @@ void demo_camera(bst_class* i_this) {
         i_this->m2EA0.x = i_this->m2EA0.x - (REG0_F(0xb) + 1300.0f);
         i_this->m2EA0.y = i_this->m2EA0.y - (REG0_F(0xc) + 450.0f);
         i_this->m2EA0.z = i_this->m2EA0.z - (REG0_F(0xd) + 500.0f);
-        local_40 = actor->home.pos - actor->current.pos;
-        if (local_40.abs() < 10.0f) {
+        spB0 = actor->home.pos - actor->current.pos;
+        if (spB0.abs() < 10.0f) {
             dComIfGp_particle_setToon(
                 start_smoke_name[i_this->mBstPartType],
                 &actor->current.pos,
@@ -2469,40 +2490,43 @@ void demo_camera(bst_class* i_this) {
         break;
     case 56:
         if (i_this->msFrameCount == REG0_S(4) + 50) {
-            anm_init(i_this, BST_BCK_HANA_DEMO, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BST_BCK_HANA_DEMO_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             mDoAud_seStart(JA_SE_CM_BST_HAND_STRAIN, &actor->current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+#if VERSION > VERSION_DEMO
             i_this->m2E98 = 1;
+#endif
         }
         if ((s32)i_this->m02B8->getFrame() == 26) {
-            cXyz boss_pos;
-            cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(7), *calc_mtx);
-            cXyz offset(REG0_F(2) + 60.0f, REG0_F(3), REG0_F(4));
+            MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(7);
+            cMtx_copy(mtx, *calc_mtx);
+            spB0.set(REG0_F(2) + 60.0f, REG0_F(3), REG0_F(4));
             mDoAud_seStart(JA_SE_OBJ_BOMB_EXPLODE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-            MtxPosition(&offset, &boss_pos);
+            MtxPosition(&spB0, &spA4);
             cXyz item_scale(1.0f, 1.0f, 1.0f);
             csXyz item_angle = actor->shape_angle;
             item_angle.y += (s16)(REG0_S(7) + -300);
-            i_this->mCreatedItemId = fopAcM_createItemForBoss(&boss_pos, 0, fopAcM_GetRoomNo(actor), &item_angle, &item_scale, 1);
+            i_this->mCreatedItemId = fopAcM_createItemForBoss(&spA4, 0, fopAcM_GetRoomNo(actor), &item_angle, &item_scale, 1);
             mDoAud_seStart(JA_SE_CM_BST_ITEM_OUT_NOSE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-            cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(0), *calc_mtx);
-            cXyz vec(0.0f, 0.0f, 0.0f);
-            MtxPosition(&vec, &boss_pos);
-            dComIfGp_particle_set(item_smoke_name[1], &boss_pos, &actor->shape_angle, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
+            MtxP mtx2 = i_this->m02B8->getModel()->getAnmMtx(0);
+            cMtx_copy(mtx2, *calc_mtx);
+            spB0.set(0.0f, 0.0f, 0.0f);
+            MtxPosition(&spB0, &spA4);
+            dComIfGp_particle_setToon(item_smoke_name[1], &spA4, &actor->shape_angle, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
         }
         if ((s32)i_this->m02B8->getFrame() > 26) {
-            fopAc_ac_c* actor = fopAcM_SearchByID(i_this->mCreatedItemId);
-            if (actor != NULL) {
+            fopAc_ac_c* item_actor = fopAcM_SearchByID(i_this->mCreatedItemId);
+            if (item_actor != NULL) {
                 i_this->m2E9A = 57;
-                actor->speedF = REG0_F(6) + 65.0f;
+                item_actor->speedF = REG0_F(6) + 65.0f;
             }
         }
         break;
     case 57: {
-        fopAc_ac_c* actor = fopAcM_SearchByID(i_this->mCreatedItemId);
-        if (actor != NULL) {
-            cLib_addCalc2(&i_this->m2EAC.x, actor->current.pos.x, 0.1f, 100.0f);
-            cLib_addCalc2(&i_this->m2EAC.y, actor->current.pos.y, 0.1f, 100.0f);
-            cLib_addCalc2(&i_this->m2EAC.z, actor->current.pos.z, 0.1f, 100.0f);
+        fopAc_ac_c* item_actor = fopAcM_SearchByID(i_this->mCreatedItemId);
+        if (item_actor != NULL) {
+            cLib_addCalc2(&i_this->m2EAC.x, item_actor->current.pos.x, 0.1f, 100.0f);
+            cLib_addCalc2(&i_this->m2EAC.y, item_actor->current.pos.y, 0.1f, 100.0f);
+            cLib_addCalc2(&i_this->m2EAC.z, item_actor->current.pos.z, 0.1f, 100.0f);
             i_this->m2EC8 = REG0_F(4) + 55.0f;
         }
         if (i_this->msFrameCount == 170) {
@@ -2512,12 +2536,15 @@ void demo_camera(bst_class* i_this) {
             dComIfGp_event_reset();
             i_this->m2E9A = 0;
             i_this->m2E7C = 100;
+#if VERSION > VERSION_DEMO
             i_this->m2E98 = 1;
+#endif
         }
         break;
     }
     }
-    if ((i_this->m2E9A != 0) && bVar2) {
+
+    if (i_this->m2E9A != 0 && bVar2) {
         f32 x = i_this->m2ECC * cM_ssin(i_this->msFrameCount * 0x3300);
         f32 y = i_this->m2ECC * cM_scos(i_this->msFrameCount * 0x3000);
         f32 z = i_this->m2ECC * cM_scos(i_this->msFrameCount * 0x3500);
@@ -2529,7 +2556,7 @@ void demo_camera(bst_class* i_this) {
         camera_eye.x = i_this->m2EAC.x - x;
         camera_eye.y = i_this->m2EAC.y - y;
         camera_eye.z = i_this->m2EAC.z - z;
-        s16 bank = 7.5f * i_this->m2ECC * cM_scos(i_this->mUpdateLastFacingDirIfMultipleOf32 * 0x1C00);
+        s16 bank = 7.5f * (i_this->m2ECC * cM_scos(i_this->mUpdateLastFacingDirIfMultipleOf32 * 0x1C00));
         camera->mCamera.Set(camera_eye, camera_center, bank, i_this->m2EC8);
         cLib_addCalc0(&i_this->m2ECC, 1.0f, 1.0f);
         JUTReport(410, 430, "K SUB  COUNT  %d", i_this->msFrameCount);
@@ -2586,7 +2613,6 @@ void bst_kankyo(bst_class* i_this) {
 
 /* 0000A1A4-0000A9C8       .text daBst_Execute__FP9bst_class */
 static BOOL daBst_Execute(bst_class* i_this) {
-    /* Nonmatching - "unk" variables */
     fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz vec;
@@ -2627,6 +2653,35 @@ static BOOL daBst_Execute(bst_class* i_this) {
                 fopAcM_OffStatus(actor, 0);
                 actor->attention_info.flags = 0;
             }
+
+#if VERSION == VERSION_DEMO
+        s8 r26 = 0;
+        s32 i;
+        for (i = 0; i < 2; i++) {
+            fopAc_ac_c* att_actor = (fopAc_ac_c*)fopAcM_SearchByID(i_this->m2E90[i]);
+            if (att_actor != NULL) {
+                MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(i + 4);
+                cMtx_copy(mtx, *calc_mtx);
+                MtxPosition(&vec, &att_actor->current.pos);
+                att_actor->max_health = 2;
+                att_actor->health = i_this->mEyeHealth[i];
+                if (i_this->m2E74[i] == 0 && i_this->mEyeHealth[i] > 0 && i_this->mActionType != bst_class::ACTION_HEAD_DAMAGE_e &&
+                    i_this->mActionType != bst_class::ACTION_END_DEMO_e && i_this->mActionType != bst_class::ACTION_STAY_e)
+                {
+                    att_actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
+                    att_actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
+                    if (r26 == 0) {
+                        r26++;
+                        fopAcM_seStart(actor, JA_SE_CM_BST_HEAD_WORKING, 0);
+                    }
+                } else {
+                    fopAcM_OffStatus(att_actor, 0);
+                    att_actor->attention_info.flags = 0;
+                }
+            }
+        }
+#endif
+
             if (i_this->mActionType != bst_class::ACTION_BEAM_ATTACK_e) {
                 for (s32 i = 0; i < 2; i++) {
                     if (i_this->m2ED8[i] != 0) {
@@ -2648,8 +2703,8 @@ static BOOL daBst_Execute(bst_class* i_this) {
             i_this->m2FD8->play();
             i_this->m2FD4->play();
             mDoMtx_stack_c::transS(0.0f, 0.0f, 0.0f);
-            i_this->m2FD0->setBaseTRMtx(mDoMtx_stack_c::now);
-            i_this->m2FDC->setBaseTRMtx(mDoMtx_stack_c::now);
+            i_this->m2FD0->setBaseTRMtx(mDoMtx_stack_c::get());
+            i_this->m2FDC->setBaseTRMtx(mDoMtx_stack_c::get());
         }
         move(i_this);
         if (i_this->mActionType != 0 && i_this->mActionType != bst_class::ACTION_END_DEMO_e) {
@@ -2670,26 +2725,27 @@ static BOOL daBst_Execute(bst_class* i_this) {
     vec2.y = i_this->m10EC.z * cM_ssin(i_this->mUpdateLastFacingDirIfMultipleOf32 * (REG0_S(6) + 750));
     vec2.z = i_this->m10EC.z * cM_scos(i_this->mUpdateLastFacingDirIfMultipleOf32 * (REG0_S(6) + 720));
     cLib_addCalc0(&i_this->m10EC.z, 1.0f, 1.0f);
-    i_this->m02B8->getModel()->setBaseScale(actor->scale);
+    J3DModel* model = i_this->m02B8->getModel();
+    model->setBaseScale(actor->scale);
     mDoMtx_stack_c::transS(actor->current.pos.x + vec2.x, actor->current.pos.y + vec2.y, actor->current.pos.z + vec2.z);
-    s16 hurtAng = i_this->mHeadHurtAngle;
-    s16 faceDir = i_this->mUpdateLastFacingDirIfMultipleOf32;
-    s16 unk4 = hurtAng * (REG0_F(14) + 500.0f) * cM_ssin(faceDir * 0x2100);
-    s16 unk5 = hurtAng * (REG0_F(14) + 500.0f) * cM_scos(faceDir * 0x2300);
-    s16 bossFaceDir = boss->mUpdateLastFacingDirIfMultipleOf32;
-    s16 unk6 = i_this->m112A * (REG0_F(14) + 150.0f) * cM_ssin(bossFaceDir * 0x3600);
-    s16 unk7 = i_this->m112A * (REG0_F(14) + 150.0f) * cM_scos(bossFaceDir * 0x4300);
-    s16 unk8 = i_this->m112C * (REG0_F(14) + 100.0f) * cM_scos(bossFaceDir * 0x3A00);
+    f32 f1 = i_this->mHeadHurtAngle * (REG0_F(14) + 500.0f);
+    s16 r29 = f1 * cM_ssin(i_this->mUpdateLastFacingDirIfMultipleOf32 * 0x2100);
+    s16 r27 = f1 * cM_scos(i_this->mUpdateLastFacingDirIfMultipleOf32 * 0x2300);
+    f32 f1_2 = i_this->m112A * (REG0_F(14) + 150.0f);
+    r29 += (s16)(f1_2 * cM_ssin(boss->mUpdateLastFacingDirIfMultipleOf32 * 0x3600));
+    r27 += (s16)(f1_2 * cM_scos(boss->mUpdateLastFacingDirIfMultipleOf32 * 0x4300));
+    f32 f1_3 = i_this->m112C * (REG0_F(14) + 100.0f);
+    r27 += (s16)(f1_3 * cM_scos(boss->mUpdateLastFacingDirIfMultipleOf32 * 0x3A00));
     cLib_addCalc0(&i_this->m10F8, 1.0f, REG0_F(3) + 30.0f);
-    mDoMtx_stack_c::YrotM(actor->shape_angle.y + unk4 + unk6);
-    mDoMtx_stack_c::XrotM(actor->shape_angle.x + unk5 + unk7 + unk8);
+    mDoMtx_stack_c::YrotM(actor->shape_angle.y + r29);
+    mDoMtx_stack_c::XrotM(actor->shape_angle.x + r27);
     mDoMtx_stack_c::ZrotM(actor->shape_angle.z);
     mDoMtx_stack_c::transM(REG0_F(5) + i_this->m1110, REG0_F(6) + i_this->m1114, REG0_F(7) + i_this->m1118);
     cLib_addCalc0(&i_this->m1110, 1.0f, 5.0f);
     cLib_addCalc0(&i_this->m1114, 1.0f, 10.0f);
     cLib_addCalc0(&i_this->m1118, 1.0f, 5.0f);
-    i_this->m02B8->getModel()->setBaseTRMtx(mDoMtx_stack_c::now);
-    i_this->m0388->setBaseTRMtx(mDoMtx_stack_c::now);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
+    i_this->m0388->setBaseTRMtx(mDoMtx_stack_c::get());
     i_this->m02B8->calc();
     MtxTrans(actor->home.pos.x, actor->home.pos.y, actor->home.pos.z, FALSE);
     cMtx_YrotM(*calc_mtx, actor->home.angle.y);
@@ -2702,29 +2758,34 @@ static BOOL daBst_Execute(bst_class* i_this) {
         demo_camera(i_this);
         bst_kankyo(i_this);
         message_cont(i_this);
-        for (s32 j = 0, i = 0; j < 2; j++) {
-            fpc_ProcID proc_id = i_this->m2E90[j];
-            fopAc_ac_c* actor = (fopAc_ac_c*)fopAcM_SearchByID(proc_id);
-            if (actor != NULL) {
-                cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(j + 4), *calc_mtx);
-                MtxPosition(&vec, &actor->current.pos);
-                actor->max_health = 2;
-                actor->health = i_this->mEyeHealth[j];
-                if (i_this->m2E74[j] == 0 && i_this->mEyeHealth[j] > 0 && i_this->mActionType != bst_class::ACTION_HEAD_DAMAGE_e &&
+
+#if VERSION > VERSION_DEMO
+        s8 r26 = 0;
+        s32 i;
+        for (i = 0; i < 2; i++) {
+            fopAc_ac_c* att_actor = (fopAc_ac_c*)fopAcM_SearchByID(i_this->m2E90[i]);
+            if (att_actor != NULL) {
+                MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(i + 4);
+                cMtx_copy(mtx, *calc_mtx);
+                MtxPosition(&vec, &att_actor->current.pos);
+                att_actor->max_health = 2;
+                att_actor->health = i_this->mEyeHealth[i];
+                if (i_this->m2E74[i] == 0 && i_this->mEyeHealth[i] > 0 && i_this->mActionType != bst_class::ACTION_HEAD_DAMAGE_e &&
                     i_this->mActionType != bst_class::ACTION_END_DEMO_e && i_this->mActionType != bst_class::ACTION_STAY_e)
                 {
-                    actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
-                    actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
-                    if ((s8)i == 0) {
-                        i++;
+                    att_actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
+                    att_actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
+                    if (r26 == 0) {
+                        r26++;
                         fopAcM_seStart(actor, JA_SE_CM_BST_HEAD_WORKING, 0);
                     }
                 } else {
-                    fopAcM_OffStatus(actor, 0);
-                    actor->attention_info.flags = 0;
+                    fopAcM_OffStatus(att_actor, 0);
+                    att_actor->attention_info.flags = 0;
                 }
             }
         }
+#endif
     }
     return TRUE;
 }
@@ -2736,16 +2797,16 @@ static BOOL daBst_IsDelete(bst_class*) {
 
 /* 0000A9D0-0000AADC       .text daBst_Delete__FP9bst_class */
 static BOOL daBst_Delete(bst_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "Bst");
+    dComIfG_resDeleteDemo(&i_this->mPhs, "Bst");
     if (i_this->mHioSet != 0) {
         hio_set = 0;
         mDoHIO_deleteChild(l_HIO.m4);
     }
     if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
         for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m2E90); i++) {
-            fopAc_ac_c* actor = (fopAc_ac_c*)fopAcM_SearchByID(i_this->m2E90[i]);
-            if (actor != NULL) {
-                fopAcM_delete(actor);
+            fopAc_ac_c* att_actor = (fopAc_ac_c*)fopAcM_SearchByID(i_this->m2E90[i]);
+            if (att_actor != NULL) {
+                fopAcM_delete(att_actor);
             }
         }
     }
@@ -2756,10 +2817,10 @@ static BOOL daBst_Delete(bst_class* i_this) {
     return TRUE;
 }
 
-static u16 set_btk_d[3] = {BST_BTK_BST_START, BST_BTK_LH_START, BST_BTK_RH_START};
-static u16 set_brk_d[3] = {BST_BRK_BST_START, BST_BRK_LH_START, BST_BRK_RH_START};
-static u16 set_za_btk_d[3] = {BST_BTK_MUNE_START, BST_BTK_UDEL_START, BST_BTK_UDER_START};
-static u16 set_za_brk_d[3] = {BST_BRK_MUNE_START, BST_BRK_UDEL_START, BST_BRK_UDER_START};
+static u16 set_btk_d[3] = {dRes_INDEX_BST_BTK_BST_START_e, dRes_INDEX_BST_BTK_LH_START_e, dRes_INDEX_BST_BTK_RH_START_e};
+static u16 set_brk_d[3] = {dRes_INDEX_BST_BRK_BST_START_e, dRes_INDEX_BST_BRK_LH_START_e, dRes_INDEX_BST_BRK_RH_START_e};
+static u16 set_za_btk_d[3] = {dRes_INDEX_BST_BTK_MUNE_START_e, dRes_INDEX_BST_BTK_UDEL_START_e, dRes_INDEX_BST_BTK_UDER_START_e};
+static u16 set_za_brk_d[3] = {dRes_INDEX_BST_BRK_MUNE_START_e, dRes_INDEX_BST_BRK_UDEL_START_e, dRes_INDEX_BST_BRK_UDER_START_e};
 
 /* 0000AADC-0000B2D0       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
@@ -2822,14 +2883,14 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
     J3DModelData* modelData;
     if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Bst", BST_BDL_TAMA);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BDL_TAMA_e);
         for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m0390); i++) {
             i_this->m0390[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
             if (i_this->m0390[i] == NULL) {
                 return FALSE;
             }
         }
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Bst", BST_BDL_HBSITA1);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BDL_HBSITA1_e);
         i_this->m2FD0 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if (i_this->m2FD0 == NULL) {
             return FALSE;
@@ -2838,9 +2899,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         if (i_this->m2FD4 == NULL) {
             return FALSE;
         }
-        res = i_this->m2FD4->init(
-            modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", BST_BTK_HBSITA1), TRUE, J3DFrameCtrl::EMode_LOOP
-        );
+        res = i_this->m2FD4->init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BTK_HBSITA1_e), TRUE, J3DFrameCtrl::EMode_LOOP);
         if (res == 0) {
             return FALSE;
         }
@@ -2849,12 +2908,12 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             return FALSE;
         }
         res = i_this->m2FD8->init(
-            modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_HBSITA1), TRUE, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, false, FALSE
+            modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_HBSITA1_e), TRUE, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, false, FALSE
         );
         if (res == 0) {
             return FALSE;
         }
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Bst", BST_BDL_HBYOKO1);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BDL_HBYOKO1_e);
         i_this->m2FDC = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if (i_this->m2FDC == NULL) {
             return FALSE;
@@ -2864,7 +2923,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             return FALSE;
         }
         res = i_this->m2FE0->init(
-            modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", BST_BRK_HBYOKO1), TRUE, J3DFrameCtrl::EMode_LOOP, 0.0f, 0, -1, false, FALSE
+            modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", dRes_INDEX_BST_BRK_HBYOKO1_e), TRUE, J3DFrameCtrl::EMode_LOOP, 0.0f, 0, -1, false, FALSE
         );
         if (res == 0) {
             return FALSE;
@@ -2897,9 +2956,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     if (i_this->mpBrkAnm == NULL) {
         return FALSE;
     }
-    res = i_this->mpBrkAnm->init(
-        modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", set_za_brk_d[i_this->mBstPartType]), TRUE, J3DFrameCtrl::EMode_NONE
-    );
+    res = i_this->mpBrkAnm->init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bst", set_za_brk_d[i_this->mBstPartType]), TRUE, J3DFrameCtrl::EMode_NONE);
     if (res == 0) {
         return FALSE;
     }
@@ -3053,7 +3110,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
         }},
     };
 
-    fopAcM_SetupActor(a_this, bst_class);
+    fopAcM_ct(a_this, bst_class);
     cPhs_State res;
     bst_class* i_this = (bst_class*)a_this;
     fopAc_ac_c* actor = &i_this->actor;
@@ -3107,7 +3164,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             i_this->mEyeHealth[1] = 2;
             i_this->mEyeHealth[0] = 2;
             for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m2E90); i++) {
-                i_this->m2E90[i] = fopAcM_create(PROC_ATT, 100, &actor->current.pos, fopAcM_GetRoomNo(actor));
+                i_this->m2E90[i] = fopAcM_create(fpcNm_ATT_e, 100, &actor->current.pos, fopAcM_GetRoomNo(actor));
             }
             for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->mCcD_beams); i++) {
                 i_this->mCcD_beams[i].Set(beam_sph_src);
@@ -3122,8 +3179,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             actor->max_health = 4;
         }
     }
-    f32 fVar = cM_rndFX(32768.0f);
-    i_this->mUpdateLastFacingDirIfMultipleOf32 = fVar;
+    i_this->mUpdateLastFacingDirIfMultipleOf32 = cM_rndFX(32768.0f);
 #if VERSION > VERSION_DEMO
     i_this->mEnvLight = actor->tevStr;
     i_this->m2F20 = actor->tevStr;
@@ -3140,18 +3196,18 @@ static actor_method_class l_daBst_Method = {
 };
 
 actor_process_profile_definition g_profile_BST = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BST,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BST_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bst_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BST,
+    /* Draw Prio    */ fpcDwPi_BST_e,
     /* Actor SubMtd */ &l_daBst_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

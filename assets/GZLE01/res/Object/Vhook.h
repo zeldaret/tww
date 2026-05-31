@@ -1,0 +1,23 @@
+#ifndef RES_VHOOK_H
+#define RES_VHOOK_H
+
+enum dRes_INDEX_VHOOK {
+    /* BDLM */
+    dRes_INDEX_VHOOK_BDL_VHOOK_e=0x4,
+    /* BTK  */
+    dRes_INDEX_VHOOK_BTK_VHOOK_e=0x7,
+};
+
+enum dRes_ID_VHOOK {
+    /* BDLM */
+    dRes_ID_VHOOK_BDL_VHOOK_e=0x4,
+    /* BTK  */
+    dRes_ID_VHOOK_BTK_VHOOK_e=0x7,
+};
+
+enum VHOOK_JNT {
+    VHOOK_JNT_ROOT_VHOOK_e=0x0,
+    VHOOK_JNT_VHOOK_MODEL_e=0x1,
+};
+
+#endif /* !RES_VHOOK_H */

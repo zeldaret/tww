@@ -5,29 +5,27 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bita.h"
-#include "d/res/res_bita.h"
+#include "res/Object/Bita.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_btd.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
 static btd_class* btd = NULL;
 
-static u32 ita_bmd[]    = { BITA_BDL_MBIT1, BITA_BDL_MBIT2 };
-static u32 ita_dzb[]    = { BITA_DZB_MBIT1, BITA_DZB_MBIT2 };
-static u32 ita_Ef_bmd[] = { BITA_BDL_EF_BTDITA0, BITA_BDL_EF_BTDITA1 };
-static u32 ita_Ef[]     = { BITA_BRK_EF_BTDITA0, BITA_BRK_EF_BTDITA1 };
+static u32 ita_bmd[]    = { dRes_INDEX_BITA_BDL_MBIT1_e, dRes_INDEX_BITA_BDL_MBIT2_e };
+static u32 ita_dzb[]    = { dRes_INDEX_BITA_DZB_MBIT1_e, dRes_INDEX_BITA_DZB_MBIT2_e };
+static u32 ita_Ef_bmd[] = { dRes_INDEX_BITA_BDL_EF_BTDITA0_e, dRes_INDEX_BITA_BDL_EF_BTDITA1_e };
+static u32 ita_Ef[]     = { dRes_INDEX_BITA_BRK_EF_BTDITA0_e, dRes_INDEX_BITA_BRK_EF_BTDITA1_e };
 
 /* 00000078-000000C4       .text b_a_sub__FPvPv */
 static void* b_a_sub(void* search, void* user) {
     UNUSED(user);
-    if (fopAc_IsActor(search) && fopAcM_GetName(search) == PROC_BTD)
+    if (fopAc_IsActor(search) && fopAcM_GetName(search) == fpcNm_BTD_e)
         return search;
     return NULL;
 }
@@ -234,7 +232,7 @@ static cPhs_State daBita_Create(fopAc_ac_c* i_ac) {
         }},
     };
 
-    fopAcM_SetupActor(i_ac, bita_class);
+    fopAcM_ct(i_ac, bita_class);
     bita_class* i_this = (bita_class*)i_ac;
 
     cPhs_State rt = dComIfG_resLoad(&i_this->mPhs, "Bita");
@@ -282,18 +280,18 @@ static actor_method_class l_daBita_Method = {
 };
 
 actor_process_profile_definition g_profile_BITA = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BITA,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BITA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bita_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BITA,
+    /* Draw Prio    */ fpcDwPi_BITA_e,
     /* Actor SubMtd */ &l_daBita_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENV_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

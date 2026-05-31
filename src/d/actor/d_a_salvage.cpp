@@ -9,14 +9,12 @@
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_daiocta.h"
-#include "d/res/res_yslvg00.h"
+#include "res/Object/Yslvg00.h"
 #include "d/d_bg_s_func.h"
 #include "d/d_map.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_item.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
@@ -40,7 +38,7 @@ BOOL daSalvage_c::CreateHeap() {
     }
     mTagData_p->init();
 
-    mModelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, YSLVG00_BDL_YSLVG00);
+    mModelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_YSLVG00_BDL_YSLVG00_e);
     JUT_ASSERT(326, mModelData != NULL);
 
     for (s32 i = 0; i < 16; i++) {
@@ -50,7 +48,7 @@ BOOL daSalvage_c::CreateHeap() {
         }
     }
 
-    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, YSLVG00_BRK_YSLVG00);
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_YSLVG00_BRK_YSLVG00_e);
     JUT_ASSERT(347, pbrk != NULL);
 
     mpBrk = new mDoExt_brkAnm();
@@ -58,7 +56,7 @@ BOOL daSalvage_c::CreateHeap() {
         return false;
     }
 
-    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, YSLVG00_BTK_YSLVG00);
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_YSLVG00_BTK_YSLVG00_e);
     JUT_ASSERT(361, pbtk != NULL);
 
     mpBtk = new mDoExt_btkAnm();
@@ -88,7 +86,7 @@ bool daSalvage_c::CreateInit() {
 
 /* 00000570-00000728       .text _create__11daSalvage_cFv */
 cPhs_State daSalvage_c::_create() {
-    fopAcM_SetupActor(this, daSalvage_c);
+    fopAcM_ct(this, daSalvage_c);
 
     cPhs_State PVar3 = dComIfG_resLoad(&mPhase, m_arcname);
     if (PVar3 == cPhs_COMPLEATE_e) {
@@ -187,7 +185,7 @@ void daSalvage_c::checkOrder() {
             uVar2 = 0;
             m301 = false;
         } else {
-            m304 = fopAcM_create(PROC_SBOX, 0, pPos, getSRoomNo(), &current.angle, NULL, 0xff, salvage_createCB);
+            m304 = fopAcM_create(fpcNm_SBOX_e, 0, pPos, getSRoomNo(), &current.angle, NULL, 0xff, salvage_createCB);
             m301 = true;
             if (uVar7 == 0) {
                 uVar2 = 2;
@@ -196,7 +194,7 @@ void daSalvage_c::checkOrder() {
 
         u8 itemNo = getItemNo(getSalvageId());
         u32 params = (uVar2 << 8) | itemNo;
-        m2EC = fopAcM_create(PROC_SALVAGE_TBOX, params, pPos, getSRoomNo(), &current.angle, &scale, 0xff, salvage_createCB);
+        m2EC = fopAcM_create(fpcNm_SALVAGE_TBOX_e, params, pPos, getSRoomNo(), &current.angle, &scale, 0xff, salvage_createCB);
         m2E9 = 0;
         if (m2EC == fpcM_ERROR_PROCESS_ID_e || (m304 == fpcM_ERROR_PROCESS_ID_e && m301)) {
             dComIfGp_event_reset();
@@ -242,7 +240,7 @@ void daSalvage_c::checkOrder() {
 
 /* 00000C58-00000D64       .text eventOrder__11daSalvage_cFv */
 void daSalvage_c::eventOrder() {
-    if (dComIfGp_checkPlayerStatus0(0, 0x10000)) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         if (m2E9 == 2) {
             fopAcM_orderOtherEventId(this, mSalvageGetItemEventIdx, 0xff, 0xffff, 0, 1);
             eventInfo.onCondition(2);
@@ -292,7 +290,7 @@ bool daSalvage_c::proc_wait() {
                 }
 
                 if (roomNo != 0xff && switchIndex != 0xff && !dComIfGs_isSwitch(switchIndex, roomNo) && !dComIfGs_isOceanSvBit(roomNo, uVar2)) {
-                    daDaiocta_c* bigOcto = (daDaiocta_c*)fopAcM_SearchByName(PROC_DAIOCTA);
+                    daDaiocta_c* bigOcto = (daDaiocta_c*)fopAcM_SearchByName(fpcNm_DAIOCTA_e);
 
                     if (bigOcto != NULL && switchIndex == bigOcto->getSw()) {
                         cXyz sp40 = getPos(i);
@@ -468,7 +466,7 @@ BOOL daSalvage_c::checkArea(cXyz crane_pos, int salvage_id) {
 void daSalvage_c::createEnemy() {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
-    fopAcM_create(PROC_OQ, 2, &player->current.pos);
+    fopAcM_create(fpcNm_OQ_e, 2, &player->current.pos);
 }
 
 /* 00001860-000019FC       .text onSalvageForOship__11daSalvage_cFP9daOship_c */
@@ -606,7 +604,7 @@ BOOL daSalvage_c::getDistance(int salvageId, float* outDist) {
 /* 00001E48-00001FA8       .text send_agb__11daSalvage_cFv */
 void daSalvage_c::send_agb() {
     u8 bVar5 = 0;
-    fopAcM_setGbaName(this, dItem_GRAPPLING_HOOK_e, 0x40, 0x3f);
+    fopAcM_setGbaName(this, dItemNo_GRAPPLING_HOOK_e, 0x40, 0x3f);
     for (s32 i = 0; i < 160; i++) {
         if (getKind(i) != 5 && getKind(i) && checkRegist(i) && checkUsed(i) && getRoomNo(i) == dComIfGp_roomControl_getStayNo()) {
             cXyz sp14 = getPos(i);
@@ -756,18 +754,18 @@ static actor_method_class daSalvageMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Salvage = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Salvage,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Salvage_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSalvage_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Salvage,
+    /* Draw Prio    */ fpcDwPi_Salvage_e,
     /* Actor SubMtd */ &daSalvageMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };
