@@ -32,7 +32,7 @@ static BOOL dWaterMark_Draw(dWaterMark_c* i_this) {
 }
 
 /* 8023DBF8-8023DE2C       .text setMatrix__12dWaterMark_cFv */
-s32 dWaterMark_c::setMatrix() {
+BOOL dWaterMark_c::setMatrix() {
     s16 sVar1;
     s16 sVar5;
     
@@ -60,7 +60,7 @@ s32 dWaterMark_c::setMatrix() {
         J3DModel* model = this->mpModel;
         PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
 
-        bool bVar8 = g_dComIfG_gameInfo.play.mBgS.ChkMoveBG(m_ground_check);
+        bool bVar8 = dComIfG_Bgsp()->ChkMoveBG(m_ground_check);
         if (bVar8) {
             this->sh1 = 1;
         } else {
@@ -155,10 +155,10 @@ cPhs_State dWaterMark_c::create() {
                 this->mpModel = model;
 
                 J3DAnmTevRegKey* reg_key = (J3DAnmTevRegKey*) dComIfG_getObjectRes("Always", ALWAYS_BRK_MPA_SIMI);
-                s32 uVar7 = this->mBrkAnm.init(modelData, reg_key, TRUE, 0);
+                s32 uVar7 = this->mBrkAnm.init(modelData, reg_key, TRUE, J3DFrameCtrl::EMode_NONE);
 
                 J3DAnmTexPattern* tex_pattern = (J3DAnmTexPattern*) dComIfG_getObjectRes("Always", ALWAYS_BTP_MPA_SIMI);
-                s32 uVar9 = this->mBtpAnm.init(modelData, tex_pattern, FALSE, 0);
+                s32 uVar9 = this->mBtpAnm.init(modelData, tex_pattern, FALSE, J3DFrameCtrl::EMode_NONE);
                 
                 bVar = (uVar7 & uVar9);
 

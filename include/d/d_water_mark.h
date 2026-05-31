@@ -15,7 +15,7 @@ public:
     inline BOOL draw();
     inline BOOL execute();
     inline BOOL wm_delete();
-    s32 setMatrix();
+    BOOL setMatrix();
     inline cPhs_State create();
 
 public:
