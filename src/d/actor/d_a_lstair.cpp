@@ -360,7 +360,7 @@ static BOOL daLStair_Execute(void* i_this) {
 }
 
 /* 000012B0-000012B8       .text daLStair_IsDelete__FPv */
-static BOOL daLStair_IsDelete(void* i_this) {
+static BOOL daLStair_IsDelete(void*) {
     return TRUE;
 }
 
