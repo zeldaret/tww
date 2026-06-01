@@ -28,17 +28,20 @@ const f32 crane_offset[] = {80.0f, 125.0f, 125.0f};
 void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>* shipPos) {
     /* Nonmatching */
     if (daSea_ChkArea(shipPos->x, shipPos->z)) {
-        shipPos->y = daSea_calcWave(shipPos->x, shipPos->z);
-        if (mpWaterY > shipPos->y) {
-            shipPos->y = mpWaterY;
+        f32 wave = daSea_calcWave(shipPos->x, shipPos->z);
+        shipPos->y = wave + 2;
+        f32 something = this->mPos[0].x;
+        if (shipPos->y < something) {
+            shipPos->y = something + 2;
         }
     }
     else {
-        if (mpWaterY != -G_CM3D_F_INF) {
+        f32 something = this->mPos[0].x;
+        if (something != -G_CM3D_F_INF) {
             shipPos->y = mpWaterY;
         }
         else {
-            shipPos->y = mpWaterY;
+            shipPos->y = something + 2;
         }
     }
 }
