@@ -928,7 +928,7 @@ u16 daNpc_Rsh1_c::talk() {
     }
 
     if (mpShopItems) {
-        mShopCamAct.m54 = mpShopItems->mSelectedItemIdx;
+        mShopCamAct.SetSelectIdx(mpShopItems->mSelectedItemIdx);
     }
 
     return status;
