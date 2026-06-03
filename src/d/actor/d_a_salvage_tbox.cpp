@@ -38,10 +38,10 @@ void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>* shipPos) {
     else {
         f32 something = this->mPos[0].x;
         if (something != -G_CM3D_F_INF) {
-            shipPos->y = mpWaterY;
+            shipPos->y = 2.0f;
         }
         else {
-            shipPos->y = something + 2;
+            shipPos->y = 2.0f;
         }
     }
 }

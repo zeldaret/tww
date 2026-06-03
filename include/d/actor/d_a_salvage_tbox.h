@@ -38,7 +38,7 @@ public:
     // /* 0x310 */ u8 field_0x310[0x314 - 0x310];
     // /* 0x314 */ s32 field_0x314;
 
-    private:
+private:
     s16 mpWaterFlatY;
     f32 mpWaterY;
     cXyz* mpPos;
