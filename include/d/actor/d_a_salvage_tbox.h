@@ -14,7 +14,7 @@ public:
     void setWaterFlatY(float waterFlatY) { mpWaterFlatY = waterFlatY; }
     void setWaterY(float waterY) { mpWaterY = waterY; }
     void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz* angle, signed char) { 
-        mpWaterFlatY = 0;
+        field_0x4 = 0;
         mpAngle = const_cast<csXyz*>(angle);
         mpEmitter = emitter; 
     }
@@ -39,7 +39,8 @@ public:
     // /* 0x314 */ s32 field_0x314;
 
 private:
-    s16 mpWaterFlatY;
+    s16 field_0x4;
+    f32 mpWaterFlatY;
     f32 mpWaterY;
     cXyz* mpPos;
     f32 mExTransY;
@@ -50,7 +51,6 @@ private:
     csXyz* mpAngle;
     f32 mpDepth;
     f32 bliz;
-    f32 blaz;
     JPABaseEmitter* mpEmitter;
 
 };
