@@ -29,16 +29,15 @@ void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>* shipPos) {
     /* Nonmatching */
     if (daSea_ChkArea(shipPos->x, shipPos->z)) {
         f32 wave = daSea_calcWave(shipPos->x, shipPos->z);
-        shipPos->y = wave + 2;
+        shipPos->y = wave + 2.0f;
         f32 waterY = this->mpWaterY;
         if (waterY > shipPos->y) {
-            shipPos->y = waterY + 2;
+            shipPos->y = waterY + 2.0f;
         }
     }
     else {
-        f32 waterY = this->mpWaterY;
-        if (waterY != -G_CM3D_F_INF) {
-            shipPos->y = waterY + 2.0f;
+        if (this->mpWaterY != -G_CM3D_F_INF ) {
+            shipPos->y = this->mpWaterY + 2.0f;
         }
         else {
             shipPos->y = this->mpWaterFlatY;

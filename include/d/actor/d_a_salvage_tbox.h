@@ -39,19 +39,19 @@ public:
     // /* 0x314 */ s32 field_0x314;
 
 private:
-    s16 field_0x4;
-    f32 mpWaterFlatY;
-    f32 mpWaterY;
-    cXyz* mpPos;
-    f32 mExTransY;
-    JGeometry::TVec3<f32> mPos[3];
-    f32 mExScaleY;
-    f32 mVel;
-    f32 mMinVel;
-    csXyz* mpAngle;
-    f32 mpDepth;
-    f32 bliz;
-    JPABaseEmitter* mpEmitter;
+    /* 0x04 */  s16 field_0x4;
+    /* 0x08 */  f32 mpWaterFlatY;
+    /* 0x0C */  f32 mpWaterY;
+    /* 0x10 */  cXyz* mpPos;
+    /* 0x14 */  JGeometry::TVec3<f32> mPos[3];
+    /* 0x38 */  f32 mExTransY;
+    /* 0x3C */  f32 mExScaleY;
+    /* 0x40 */  f32 field_0x40;
+    /* 0x44 */  f32 field_0x44;
+    /* 0x48 */  csXyz* mpAngle;
+    /* 0x4C */  f32 mpDepth;
+    /* 0x50 */  f32 field_0x50;
+    /* 0x54 */  JPABaseEmitter* mpEmitter;
 
 };
 
