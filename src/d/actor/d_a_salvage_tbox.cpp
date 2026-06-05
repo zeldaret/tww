@@ -7,6 +7,7 @@
 #include "d/actor/d_a_salvage_tbox.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_ship.h"
+#include "d/d_bg_s_func.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
@@ -56,8 +57,17 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter*) {
 }
 
 /* 00000570-000005D8       .text getWaterY__F4cXyz */
-void getWaterY(cXyz) {
+f32 getWaterY(cXyz *shipPos) {
     /* Nonmatching */
+    f32 waterY;
+    shipPos->y += 500.0f;
+    if (daSea_ChkArea(shipPos->x, shipPos->z)) {
+        waterY = daSea_calcWave(shipPos->x, shipPos->z);   
+    }
+    else {
+        waterY = dBgS_ObjGndChk_Wtr_Func(*shipPos);
+    }
+    return waterY;
 }
 
 /* 000005D8-000006E8       .text _delete__9daSTBox_cFv */
