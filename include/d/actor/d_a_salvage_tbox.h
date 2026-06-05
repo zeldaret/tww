@@ -32,8 +32,8 @@ private:
     /* 0x38 */  f32 mExTransY;
     /* 0x3C */  f32 mExScaleY;
     /* 0x40 */  f32 field_0x40;
-    /* 0x44 */  f32 field_0x44;
-    /* 0x48 */  csXyz* mpAngle;
+    /* 0x44 */  csXyz* mpAngle;
+    /* 0x48 */  f32 field_0x48;
     /* 0x4C */  f32 mpDepth;
     /* 0x50 */  f32 field_0x50;
     /* 0x54 */  JPABaseEmitter* mpEmitter;
