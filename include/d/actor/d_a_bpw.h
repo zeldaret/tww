@@ -62,14 +62,14 @@ struct bpw_class {
 #if VERSION > VERSION_DEMO
     /* 0x408 */ s16 m408;
 #endif
-    /* 0x40C */ cXyz m40C;
-    /* 0x418 */ cXyz m418;
+    /* 0x40C */ cXyz mCSCamCenter;
+    /* 0x418 */ cXyz mCSCamEye;
     /* 0x424 */ cXyz m424;
     /* 0x430 */ u8 m430[0x43C - 0x430];
     /* 0x43C */ f32 m43C;
-    /* 0x440 */ f32 m440;
-    /* 0x444 */ s16 mBodyAction;
-    /* 0x446 */ s16 mActionState;
+    /* 0x440 */ f32 mCSFovY;
+    /* 0x444 */ s16 mAction;
+    /* 0x446 */ s16 mMode;
     /* 0x448 */ u8 m448[0x44C - 0x448];
     /* 0x44C */ s16 mAttWaitTimer;
     /* 0x44E */ s16 mSomeCountdownTimers[10];
@@ -128,9 +128,7 @@ struct bpw_class {
     /* 0x660 */ cXyz mFire1DousaPos;
     /* 0x66C */ cXyz m66C;
     /* 0x678 */ csXyz mFire1DousaRot;
-    /* 0x67E */ s16 m67E;
-    /* 0x680 */ s16 m680;
-    /* 0x67E */ u8 m682[0x684 - 0x682];
+    /* 0x67E */ csXyz m67E;
     /* 0x684 */ s16 m684;
     /* 0x686 */ u8 m686[0x688 - 0x686];
     /* 0x688 */ dBgS_AcchCir mAcchCir;
