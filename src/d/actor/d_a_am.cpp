@@ -295,7 +295,7 @@ static BOOL medama_atari_check(am_class* i_this) {
         } else {
             dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &i_this->mEyeballPos, &player->shape_angle);
             fopAcM_seStart(actor, JA_SE_CM_AM_EYE_DAMAGE, 0);
-            fopAcM_monsSeStart(actor, JA_SE_CV_AM_EYE_DAMAGE, 0x42);
+            fopAcM_monsSeStart(actor, JA_SE_CV_AM_EYE_DAMAGE, 0);
             i_this->mAction = ACTION_ITAI_MOVE;
             i_this->mMode = MODE_ITAI_MOVE_INIT;
         }
@@ -716,7 +716,7 @@ static void action_modoru_move(am_class* i_this) {
         actor->gravity = -11.0f;
         actor->speed.y = 40.0f;
         actor->speedF = 15.0f;
-        fopAcM_monsSeStart(actor, JA_SE_CV_AM_JUMP, 0x42);
+        fopAcM_monsSeStart(actor, JA_SE_CV_AM_JUMP, 0);
 
         f32 xDistToSpawn = i_this->mSpawnPos.x - actor->current.pos.x;
         f32 zDistToSpawn = i_this->mSpawnPos.z - actor->current.pos.z;
@@ -736,7 +736,7 @@ static void action_modoru_move(am_class* i_this) {
 
             dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
             fopAcM_seStart(actor, JA_SE_CM_AM_JUMP, 0);
-            fopAcM_monsSeStart(actor, JA_SE_CV_AM_JUMP, 0x42);
+            fopAcM_monsSeStart(actor, JA_SE_CV_AM_JUMP, 0);
 
             actor->speed.y = 40.0f;
             actor->speedF = 15.0f;
