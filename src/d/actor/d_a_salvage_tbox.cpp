@@ -204,7 +204,9 @@ BOOL daSTBox_c::actWait02(int) {
     // cXyz* pos = ((daShip_c*)(g_dComIfG_gameInfo.play.mpPlayerPtr[2]))->getCraneTop();
     if (pos != NULL) {
         f32 x = pos->x;
+        pos->z = pos->x;
         f32 y = pos->y;
+        // TODO: something pos->* = y;
         f32 z = pos->z;
         f32 offset = crane_offset[this->field_0x331];
         pos->y -= offset;
