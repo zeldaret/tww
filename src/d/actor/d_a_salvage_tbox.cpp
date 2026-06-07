@@ -8,6 +8,7 @@
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_bg_s_func.h"
+#include "f_op/f_op_kankyo_mng.h"
 
 const char daSTBox_c::m_arc_name[] = "Salvage";
 const s16 daSTBox_c::m_heapsize[3] = {0x5000, 0x5000, 0x5000};
@@ -186,8 +187,21 @@ void daSTBox_c::actWait(int) {
 }
 
 /* 00001218-00001344       .text actDrop__9daSTBox_cFi */
-void daSTBox_c::actDrop(int) {
+BOOL daSTBox_c::actDrop(int) {
     /* Nonmatching */
+    fopAcM_posMoveF(this, 0);
+    if (getWaterY(&this->current.pos) - 50 <= this->current.pos.y) {
+        if(this->current.pos.y < getWaterY(&this->current.pos)) {
+            if(this->field_0x334 == 0) {
+                s8 reverb = dComIfGp_getReverb(this->current.roomNo);
+                mDoAud_seStart(JA_SE_OBJ_FALL_WATER_M, &this->eyePos, 0, reverb);
+                fopKyM_createWpillar(&this->current.pos, 0.8, 1.0, 0);
+                this->field_0x334 = 1;
+            }
+            this->mRippleCallBack.end();
+        }
+        return FALSE;
+    }
 }
 
 /* 00001344-000013AC       .text actWait02__9daSTBox_cFi */
@@ -212,7 +226,7 @@ BOOL daSTBox_c::actWait02(int) {
         this->current.pos.y = y - offset;
         this->current.pos.z = z;
     }
-    return 0;
+    return FALSE;
 }
 
 /* 000013AC-000013B4       .text actWaitGetItem__9daSTBox_cFi */
