@@ -1,0 +1,48 @@
+#ifndef RES_KSAKU_00_H
+#define RES_KSAKU_00_H
+
+enum dRes_INDEX_KSAKU_00 {
+    /* BDL  */
+    dRes_INDEX_KSAKU_00_BDL_KSAKU_00_e=0x3,
+    dRes_INDEX_KSAKU_00_BDL_KSAKU_01_e=0x4,
+    dRes_INDEX_KSAKU_00_BDL_KSAKU_02_e=0x5,
+    dRes_INDEX_KSAKU_00_BDL_KSAKU_03_e=0x6,
+    dRes_INDEX_KSAKU_00_BDL_KSAKU_04_e=0x7,
+    dRes_INDEX_KSAKU_00_BDL_KSAKU_05_e=0x8,
+};
+
+enum dRes_ID_KSAKU_00 {
+    /* BDL  */
+    dRes_ID_KSAKU_00_BDL_KSAKU_00_e=0x3,
+    dRes_ID_KSAKU_00_BDL_KSAKU_01_e=0x4,
+    dRes_ID_KSAKU_00_BDL_KSAKU_02_e=0x5,
+    dRes_ID_KSAKU_00_BDL_KSAKU_03_e=0x6,
+    dRes_ID_KSAKU_00_BDL_KSAKU_04_e=0x7,
+    dRes_ID_KSAKU_00_BDL_KSAKU_05_e=0x8,
+};
+
+enum KSAKU_00_JNT {
+    KSAKU_00_JNT_KSAKU_00_e=0x0,
+};
+
+enum KSAKU_01_JNT {
+    KSAKU_01_JNT_KSAKU_01_e=0x0,
+};
+
+enum KSAKU_02_JNT {
+    KSAKU_02_JNT_KSAKU_02_e=0x0,
+};
+
+enum KSAKU_03_JNT {
+    KSAKU_03_JNT_KSAKU_03_e=0x0,
+};
+
+enum KSAKU_04_JNT {
+    KSAKU_04_JNT_KSAKU_04_e=0x0,
+};
+
+enum KSAKU_05_JNT {
+    KSAKU_05_JNT_KSAKU_05_e=0x0,
+};
+
+#endif /* !RES_KSAKU_00_H */

@@ -1,0 +1,68 @@
+#ifndef RES_HSEKI_H
+#define RES_HSEKI_H
+
+enum dRes_INDEX_HSEKI {
+    /* BDL  */
+    dRes_INDEX_HSEKI_BDL_HSEKI3_e=0x5,
+    dRes_INDEX_HSEKI_BDL_HSEKI32_e=0x6,
+    dRes_INDEX_HSEKI_BDL_HSEKI4_e=0x7,
+    dRes_INDEX_HSEKI_BDL_HSEKI42_e=0x8,
+    dRes_INDEX_HSEKI_BDL_HSEKI5_e=0x9,
+    dRes_INDEX_HSEKI_BDL_HSEKI52_e=0xA,
+    /* BDLM */
+    dRes_INDEX_HSEKI_BDL_HMON1_e=0xD,
+    dRes_INDEX_HSEKI_BDL_HMON2_e=0xE,
+    /* BRK  */
+    dRes_INDEX_HSEKI_BRK_HMON1_e=0x11,
+    dRes_INDEX_HSEKI_BRK_HMON2_e=0x12,
+};
+
+enum dRes_ID_HSEKI {
+    /* BDL  */
+    dRes_ID_HSEKI_BDL_HSEKI3_e=0x5,
+    dRes_ID_HSEKI_BDL_HSEKI32_e=0x6,
+    dRes_ID_HSEKI_BDL_HSEKI4_e=0x7,
+    dRes_ID_HSEKI_BDL_HSEKI42_e=0x8,
+    dRes_ID_HSEKI_BDL_HSEKI5_e=0x9,
+    dRes_ID_HSEKI_BDL_HSEKI52_e=0xA,
+    /* BDLM */
+    dRes_ID_HSEKI_BDL_HMON1_e=0xD,
+    dRes_ID_HSEKI_BDL_HMON2_e=0xE,
+    /* BRK  */
+    dRes_ID_HSEKI_BRK_HMON1_e=0x11,
+    dRes_ID_HSEKI_BRK_HMON2_e=0x12,
+};
+
+enum HSEKI3_JNT {
+    HSEKI3_JNT_POLYSURFACE1174_e=0x0,
+};
+
+enum HSEKI32_JNT {
+    HSEKI32_JNT_POLYSURFACE1178_e=0x0,
+};
+
+enum HSEKI4_JNT {
+    HSEKI4_JNT_POLYSURFACE1176_e=0x0,
+};
+
+enum HSEKI42_JNT {
+    HSEKI42_JNT_POLYSURFACE1179_e=0x0,
+};
+
+enum HSEKI5_JNT {
+    HSEKI5_JNT_POLYSURFACE1177_e=0x0,
+};
+
+enum HSEKI52_JNT {
+    HSEKI52_JNT_POLYSURFACE1180_e=0x0,
+};
+
+enum HMON1_JNT {
+    HMON1_JNT_MONO_e=0x0,
+};
+
+enum HMON2_JNT {
+    HMON2_JNT_MONO_e=0x0,
+};
+
+#endif /* !RES_HSEKI_H */

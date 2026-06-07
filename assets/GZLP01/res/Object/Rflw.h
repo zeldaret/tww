@@ -1,0 +1,22 @@
+#ifndef RES_RFLW_H
+#define RES_RFLW_H
+
+enum dRes_INDEX_RFLW {
+    /* BDL  */
+    dRes_INDEX_RFLW_BDL_PHANA_e=0x3,
+};
+
+enum dRes_ID_RFLW {
+    /* BDL  */
+    dRes_ID_RFLW_BDL_PHANA_e=0x3,
+};
+
+enum PHANA_JNT {
+    PHANA_JNT_PHANA_e=0x0,
+    PHANA_JNT_PHANA_1_e=0x1,
+    PHANA_JNT_JOINT1_e=0x2,
+    PHANA_JNT_JOINT2_e=0x3,
+    PHANA_JNT_JOINT3_e=0x4,
+};
+
+#endif /* !RES_RFLW_H */

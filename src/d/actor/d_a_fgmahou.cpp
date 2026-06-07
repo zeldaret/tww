@@ -5,13 +5,11 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fgmahou.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include "d/d_particle_name.h"
 #include "d/actor/d_a_fganon.h"
-#include "d/res/res_fganon.h"
+#include "res/Object/Fganon.h"
 
 /* 00000078-000000E4       .text daFgmahou_Draw__FP13fgmahou_class */
 static BOOL daFgmahou_Draw(fgmahou_class* i_this) {
@@ -25,7 +23,7 @@ static BOOL daFgmahou_Draw(fgmahou_class* i_this) {
 
 /* 000000E4-00000130       .text boss_s_sub__FPvPv */
 static void* boss_s_sub(void* param_1, void*) {
-    if(fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_FGANON) {
+    if(fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_FGANON_e) {
         return param_1;
     }
 
@@ -304,7 +302,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     fgmahou_class* i_this = static_cast<fgmahou_class*>(a_this);
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Fganon", FGANON_BDL_YDKSP00),
+        (J3DModelData*)dComIfG_getObjectRes("Fganon", dRes_INDEX_FGANON_BDL_YDKSP00_e),
         NULL, NULL,
         NULL,
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
@@ -323,7 +321,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     if(i_this->mpBtk == NULL) {
         return FALSE;
     }
-    if(!i_this->mpBtk->init(pModelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Fganon", FGANON_BTK_YDKSP00), true, J3DFrameCtrl::EMode_LOOP)) {
+    if(!i_this->mpBtk->init(pModelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Fganon", dRes_INDEX_FGANON_BTK_YDKSP00_e), true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
 
@@ -331,7 +329,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     if(i_this->mpBrk == NULL) {
         return FALSE;
     }
-    if(!i_this->mpBrk->init(pModelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Fganon", FGANON_BRK_YDKSP00), true, J3DFrameCtrl::EMode_NONE)) {
+    if(!i_this->mpBrk->init(pModelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Fganon", dRes_INDEX_FGANON_BRK_YDKSP00_e), true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
     i_this->mpBrk->setFrame(6.999f);
@@ -435,18 +433,18 @@ static actor_method_class l_daFgmahou_Method = {
 };
 
 actor_process_profile_definition g_profile_FGMAHOU = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_FGMAHOU,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_FGMAHOU_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(fgmahou_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_FGMAHOU,
+    /* Draw Prio    */ fpcDwPi_FGMAHOU_e,
     /* Actor SubMtd */ &l_daFgmahou_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_lamp.h"
-#include "d/res/res_lamp.h"
+#include "res/Object/Lamp.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 
 /* 000000EC-00000158       .text daLamp_Draw__FP10lamp_class */
@@ -125,7 +123,7 @@ static BOOL daLamp_Delete(lamp_class* i_this) {
 
 /* 00000678-0000073C       .text useHeapInit__FP10lamp_class */
 static BOOL useHeapInit(lamp_class* i_this) {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Lamp", LAMP_BMD_LAMP_00));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Lamp", dRes_INDEX_LAMP_BMD_LAMP_00_e));
     JUT_ASSERT(0x170, modelData != NULL);
 
     i_this->mModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -211,18 +209,18 @@ static actor_method_class l_daLamp_Method = {
 };
 
 actor_process_profile_definition g_profile_LAMP = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_LAMP,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_LAMP_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(lamp_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_LAMP,
+    /* Draw Prio    */ fpcDwPi_LAMP_e,
     /* Actor SubMtd */ &l_daLamp_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

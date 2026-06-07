@@ -10,10 +10,8 @@
 #include "d/actor/d_a_shand.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
-#include "d/res/res_kita.h"
+#include "res/Object/kita.h"
 #include "dolphin/types.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
@@ -30,7 +28,7 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
         MtxPosition(&delta_pos,&local_44);
         delta_pos = i_pt->old.pos - pActor->current.pos;
         MtxPosition(&delta_pos, &local_50);
-        if (fopAcM_GetName(i_pt) == PROC_PLAYER) {
+        if (fopAcM_GetName(i_pt) == fpcNm_PLAYER_e) {
             pActor->mExecuteCount = 10;
         }
         s16 xAngle_target = local_44.z * ((REG0_F(0) + 10.0f) / pActor->scale.z);
@@ -260,7 +258,7 @@ BOOL himo_create(kita_class* i_this)
                 param->base.angle.y = yad[i];
                 param->base.parameters = 0xFFFFFF35;
                 param->room_no = i_this->current.roomNo;
-                i_this->field_2D4[i] = fopAcM_Create(PROC_SHAND, NULL, param);
+                i_this->field_2D4[i] = fopAcM_Create(fpcNm_SHAND_e, NULL, param);
                 i_this->field_2E4[i]++;
 
             case 1:
@@ -369,7 +367,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
     BOOL ret;
     kita_class* actor = static_cast<kita_class*>(i_this);
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kita", KITA_BDL_VHLIF_00));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kita", dRes_INDEX_KITA_BDL_VHLIF_00_e));
     actor->mModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
 
     if(actor->mModel == NULL){
@@ -379,7 +377,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
         JUT_ASSERT(DEMO_SELECT(928, 946), modelData != NULL);
         actor->pm_bgw = new dBgW();
         JUT_ASSERT(DEMO_SELECT(933, 951), actor->pm_bgw != NULL);
-        actor->pm_bgw->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Kita", KITA_DZB_HLIF_00)), cBgW::MOVE_BG_e, &actor->mBgwMtx);
+        actor->pm_bgw->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Kita", dRes_INDEX_KITA_DZB_HLIF_00_e)), cBgW::MOVE_BG_e, &actor->mBgwMtx);
         actor->pm_bgw->SetCrrFunc(dBgS_MoveBGProc_Typical);
         actor->pm_bgw->SetRideCallback(ride_call_back);
         ret = TRUE;
@@ -496,18 +494,18 @@ static actor_method_class l_daKita_Method = {
 };
 
 actor_process_profile_definition g_profile_KITA = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KITA,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KITA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kita_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KITA,
+    /* Draw Prio    */ fpcDwPi_KITA_e,
     /* Actor SubMtd */ &l_daKita_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

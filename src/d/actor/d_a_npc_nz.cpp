@@ -5,14 +5,16 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_nz.h"
-#include "d/res/res_nz.h"
-#include "d/res/res_npcnz.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
 #include "d/d_item.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+
+#include "res/Object/Npcnz.h"
+// Namespace hack to fix both of these res headers having a duplicated NZ_JNT enum that causes a name collision.
+namespace ResNz {
+#include "res/Object/Nz.h"
+} // namespace ResNz
 
 class daNpc_Nz_HIO_c : public JORReflexible {
 public:
@@ -167,7 +169,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 00000D18-00000F98       .text _createHeap__10daNpc_Nz_cFv */
 BOOL daNpc_Nz_c::_createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_bdl_arc_name, NPCNZ_BDL_NZ));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_bdl_arc_name, dRes_INDEX_NPCNZ_BDL_NZ_e));
     JUT_ASSERT(0xD0, modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
@@ -201,7 +203,7 @@ BOOL daNpc_Nz_c::_createHeap() {
         }
     }
 
-    ResTIMG* img = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, NZ_BTI_SIPPO));
+    ResTIMG* img = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, ResNz::dRes_INDEX_NZ_BTI_SIPPO_e));
     if (field_0x934.init(1, 10, img, FALSE)) {
         return TRUE;
     } else {
@@ -232,7 +234,7 @@ daNpc_Nz_HIO_c::daNpc_Nz_HIO_c() {
 static s16 daNpc_Nz_XyCheckCB(void* i_actor, int i_itemBtn) {
     daNpc_Nz_c* i_this = static_cast<daNpc_Nz_c*>(i_actor);
 
-    if(dComIfGp_getSelectItem(i_itemBtn) == dItem_BIRD_BAIT_5_e) {
+    if(dComIfGp_getSelectItem(i_itemBtn) == dItemNo_BIRD_BAIT_5_e) {
         f32 temp2 = l_HIO.field_0x20;
         daPy_py_c* player = daPy_getPlayerActorClass();
         cXyz temp(player->current.pos);
@@ -420,22 +422,22 @@ void daNpc_Nz_c::setMtx() {
         cXyz temp3 = temp + temp2;
 
         switch(field_0x908) {
-            case dItem_BIRD_BAIT_5_e:
+            case dItemNo_BIRD_BAIT_5_e:
                 temp4 = -15.0f;
                 break;
-            case dItem_HYOI_PEAR_e:
+            case dItemNo_HYOI_PEAR_e:
                 temp4 = -5.0f;
                 break;
-            case dItem_RED_POTION_e:
-            case dItem_BLUE_POTION_e:
+            case dItemNo_RED_POTION_e:
+            case dItemNo_BLUE_POTION_e:
                 temp4 = -5.0f;
                 break;
-            case dItem_BOMB_10_e:
-            case dItem_BOMB_30_e:
+            case dItemNo_BOMB_10_e:
+            case dItemNo_BOMB_30_e:
                 temp4 = -15.0f;
                 break;
-            case dItem_ARROW_10_e:
-            case dItem_ARROW_30_e:
+            case dItemNo_ARROW_10_e:
+            case dItemNo_ARROW_30_e:
                 temp4 = -10.0f;
                 break;
         }
@@ -522,7 +524,7 @@ static u32 daNpcNz_getShopBoughtMsg(u8 itemNo) {
         return 0x3405;
     }
 
-    if((itemNo == dItem_RED_POTION_e || itemNo == dItem_BLUE_POTION_e) && !dComIfGs_checkEmptyBottle()) {
+    if((itemNo == dItemNo_RED_POTION_e || itemNo == dItemNo_BLUE_POTION_e) && !dComIfGs_checkEmptyBottle()) {
         return 0x3406;
     }
 
@@ -534,7 +536,7 @@ static u32 daNpcNz_getShopBoughtMsg(u8 itemNo) {
         return 0x3407;
     }
 
-    if((itemNo == dItem_BIRD_BAIT_5_e || itemNo == dItem_HYOI_PEAR_e) && !dComIfGs_checkBaitItemEmpty()) {
+    if((itemNo == dItemNo_BIRD_BAIT_5_e || itemNo == dItemNo_HYOI_PEAR_e) && !dComIfGs_checkBaitItemEmpty()) {
         return 0x3407;
     }
 
@@ -620,20 +622,20 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
 
     const u8 itemArr1[4][2] = {
         {
-            dItem_BIRD_BAIT_5_e,
-            dItem_HYOI_PEAR_e,
+            dItemNo_BIRD_BAIT_5_e,
+            dItemNo_HYOI_PEAR_e,
         },
         {
-            dItem_RED_POTION_e,
-            dItem_BLUE_POTION_e,
+            dItemNo_RED_POTION_e,
+            dItemNo_BLUE_POTION_e,
         },
         {
-            dItem_BOMB_10_e,
-            dItem_BOMB_30_e,
+            dItemNo_BOMB_10_e,
+            dItemNo_BOMB_30_e,
         },
         {
-            dItem_ARROW_10_e,
-            dItem_ARROW_30_e,
+            dItemNo_ARROW_10_e,
+            dItemNo_ARROW_30_e,
         },
     };
 
@@ -646,10 +648,10 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
             if(dComIfGs_checkGetBottle()) {
                 temp += 1;
             }
-            if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+            if(dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) {
                 temp += 1;
             }
-            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e) {
+            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItemNo_NONE_e) {
                 temp += 1;
             }
 
@@ -1009,18 +1011,18 @@ static actor_method_class daNpc_NzMethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_NZ = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_NZ,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_NZ_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Nz_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_NZ,
+    /* Draw Prio    */ fpcDwPi_NPC_NZ_e,
     /* Actor SubMtd */ &daNpc_NzMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

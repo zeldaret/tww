@@ -107,7 +107,7 @@ int daPy_lk_c::setShapeFanLeaf() {
 
 /* 8014BE50-8014BEEC       .text checkFanGlideProc__9daPy_lk_cFi */
 BOOL daPy_lk_c::checkFanGlideProc(int param_0) {
-    if (checkSetItemTrigger(dItem_DEKU_LEAF_e, 1)) {
+    if (checkSetItemTrigger(dItemNo_DEKU_LEAF_e, 1)) {
         if (dComIfGs_getMagic() >= 1) {
             return procFanGlide_init(param_0);
         }
@@ -118,9 +118,9 @@ BOOL daPy_lk_c::checkFanGlideProc(int param_0) {
 
 /* 8014BEEC-8014BFBC       .text setFanModel__9daPy_lk_cFv */
 void daPy_lk_c::setFanModel() {
-    J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_USEFANAA);
+    J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_USEFANAA_e);
     JKRHeap* oldHeap = setItemHeap();
-    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_FAN, 0x37221222);
+    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_FAN_e, 0x37221222);
     int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(242, FALSE);
@@ -131,9 +131,9 @@ void daPy_lk_c::setFanModel() {
 /* 8014BFBC-8014C0C0       .text setSmallFanModel__9daPy_lk_cFv */
 void daPy_lk_c::setSmallFanModel() {
     J3DModelData* tmp_modelData;
-    J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_FANWAIT);
+    J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_FANWAIT_e);
     JKRHeap* oldHeap = setItemHeap();
-    tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_FANSMALL, 0x37221222);
+    tmp_modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_FANSMALL_e, 0x37221222);
     int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(275, FALSE);
@@ -147,9 +147,10 @@ void daPy_lk_c::setSmallFanModel() {
 
 /* 8014C0C0-8014C254       .text setParachuteFanModel__9daPy_lk_cFf */
 void daPy_lk_c::setParachuteFanModel(f32 f31) {
-    J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_FANBA);
+    J3DModelData* modelData;
+    J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_FANBA_e);
     JKRHeap* oldHeap = setItemHeap();
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_FANB));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_FANB_e));
 
     mpParachuteFanMorf = new mDoExt_McaMorf(
         modelData,
@@ -444,7 +445,7 @@ BOOL daPy_lk_c::procFanGlide() {
                 gravity = m_HIO->mItem.mFan.m.field_0x3C;
                 maxFallSpeed = m_HIO->mItem.mFan.m.field_0x38;
             }
-            if (checkSetItemTrigger(dItem_DEKU_LEAF_e, 1) && frameCtrl.getRate() < 0.01f && mProcVar6.m3570 == 0) {
+            if (checkSetItemTrigger(dItemNo_DEKU_LEAF_e, 1) && frameCtrl.getRate() < 0.01f && mProcVar6.m3570 == 0) {
                 // Using the Deku Leaf while gliding to create a burst of air around you.
                 setSingleMoveAnime(
                     ANM_USEFANB,
@@ -454,7 +455,7 @@ BOOL daPy_lk_c::procFanGlide() {
                     m_HIO->mItem.mFan.m.field_0x2C
                 );
                 mpParachuteFanMorf->setAnm(
-                    getItemAnimeResource(LKANM_BCK_FANBA),
+                    getItemAnimeResource(dRes_INDEX_LKANM_BCK_FANBA_e),
                     0,
                     m_HIO->mItem.mFan.m.field_0x2C,
                     m_HIO->mItem.mFan.m.field_0x20,
@@ -510,7 +511,7 @@ BOOL daPy_lk_c::procFanGlide() {
                     mProcVar6.m3570 = 1;
                     setSingleMoveAnime(ANM_USEFANB2, fVar1, 0.0f, -1, m_HIO->mItem.mFan.m.field_0x30);
                     mpParachuteFanMorf->setAnm(
-                        getItemAnimeResource(LKANM_BCK_FANB2A),
+                        getItemAnimeResource(dRes_INDEX_LKANM_BCK_FANB2A_e),
                         0,
                         m_HIO->mItem.mFan.m.field_0x30,
                         1.0f,
@@ -540,7 +541,7 @@ BOOL daPy_lk_c::procFanGlide() {
                         m_HIO->mItem.mFan.m.field_0x34
                     );
                     mpParachuteFanMorf->setAnm(
-                        getItemAnimeResource(LKANM_BCK_FANBA),
+                        getItemAnimeResource(dRes_INDEX_LKANM_BCK_FANBA_e),
                         0,
                         m_HIO->mItem.mFan.m.field_0x34,
                         m_HIO->mItem.mFan.m.field_0x20,

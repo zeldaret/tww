@@ -19,8 +19,6 @@
 #include "d/d_com_lib_game.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_path.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_kankyo.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -44,19 +42,19 @@
 #include "SSystem/SComponent/c_counter.h"
 #include "m_Do/m_Do_graphic.h"
 
-JGeometry::TVec3<f32> l_hammer_splash_particle_scale(0.67f, 0.67f, 0.67f);
+static JGeometry::TVec3<f32> l_hammer_splash_particle_scale(0.67f, 0.67f, 0.67f);
 
 #include "d/actor/d_a_player_main_data.inc"
 
 #include "d/actor/d_a_player_HIO_data.inc"
 
 #if DEBUG || VERSION > VERSION_DEMO
-cXyz l_debug_keep_pos;
-csXyz l_debug_current_angle;
-csXyz l_debug_shape_angle;
+static cXyz l_debug_keep_pos;
+static csXyz l_debug_current_angle;
+static csXyz l_debug_shape_angle;
 #endif
 
-GXColor l_freeze_fade_color = {0xFF, 0xFF, 0xFF, 0xFF};
+static GXColor l_freeze_fade_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
 u8 daPy_matAnm_c::m_maba_timer;
 u8 daPy_matAnm_c::m_maba_flg;
@@ -365,8 +363,8 @@ BOOL daPy_lk_c::jointBeforeCB(int jnt_no, J3DTransformInfo* param_2, Quaternion*
     }
     if ((checkUpperGuardAnime() && mCurProc != daPyProc_BACK_JUMP_e) ||
         checkGrabAnime() ||
-        m_anm_heap_upper[UPPER_MOVE0_e].mIdx == LKANM_BCK_ATNBOKO ||
-        m_anm_heap_upper[UPPER_MOVE0_e].mIdx == LKANM_BCK_ATNHAM ||
+        m_anm_heap_upper[UPPER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_ATNBOKO_e ||
+        m_anm_heap_upper[UPPER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_ATNHAM_e ||
         checkUpperReadyThrowAnime())
     {
         if (jnt_no == 0) {
@@ -433,7 +431,7 @@ BOOL daPy_lk_c::jointCB0(int param_1) {
             }
         }
     } else if (checkUpperReadyAnime() ||
-               checkUpperAnime(LKANM_BCK_ROPETHROW) ||
+               checkUpperAnime(dRes_INDEX_LKANM_BCK_ROPETHROW_e) ||
                (mCurProc != daPyProc_GRAB_WAIT_e && checkGrabAnime()))
     {
         if (param_1 == 0xF) {
@@ -495,21 +493,25 @@ BOOL daPy_lk_c::jointCB1() {
     Quaternion* quaternion;
     trans_info = m_old_fdata->getOldFrameTransInfo(0x21);
     quaternion = m_old_fdata->getOldFrameQuaternion(0x21);
+    
     mDoMtx_stack_c::ZrotS(mFootData[1].field_0x008);
     mDoMtx_stack_c::revConcat(mpCLModel->getAnmMtx(0x20));
     mpCLModel->setAnmMtx(0x20, mDoMtx_stack_c::get());
+    
     mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
     mDoMtx_stack_c::quatM(quaternion);
-    trans_info++;
-    quaternion++;
     mDoMtx_stack_c::ZrotM(mFootData[1].field_0x00A);
     mpCLModel->setAnmMtx(0x21, mDoMtx_stack_c::get());
-    mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
-    mDoMtx_stack_c::quatM(quaternion);
     trans_info++;
     quaternion++;
+    
+    mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
+    mDoMtx_stack_c::quatM(quaternion);
     mDoMtx_stack_c::ZrotM(mFootData[1].field_0x002);
     mpCLModel->setAnmMtx(0x22, mDoMtx_stack_c::get());
+    trans_info++;
+    quaternion++;
+    
     mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
     mDoMtx_stack_c::quatM(quaternion);
     mpCLModel->setAnmMtx(0x23, mDoMtx_stack_c::get());
@@ -519,18 +521,21 @@ BOOL daPy_lk_c::jointCB1() {
     mDoMtx_stack_c::ZrotS(mFootData[0].field_0x008);
     mDoMtx_stack_c::revConcat(mpCLModel->getAnmMtx(0x25));
     mpCLModel->setAnmMtx(0x25, mDoMtx_stack_c::get());
+    
     mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
     mDoMtx_stack_c::quatM(quaternion);
-    trans_info++;
-    quaternion++;
     mDoMtx_stack_c::ZrotM(mFootData[0].field_0x00A);
     mpCLModel->setAnmMtx(0x26, mDoMtx_stack_c::get());
-    mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
-    mDoMtx_stack_c::quatM(quaternion);
     trans_info++;
     quaternion++;
+    
+    mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
+    mDoMtx_stack_c::quatM(quaternion);
     mDoMtx_stack_c::ZrotM(mFootData[0].field_0x002);
     mpCLModel->setAnmMtx(0x27, mDoMtx_stack_c::get());
+    trans_info++;
+    quaternion++;
+    
     mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
     mDoMtx_stack_c::quatM(quaternion);
     mpCLModel->setAnmMtx(0x28, mDoMtx_stack_c::get());
@@ -664,7 +669,7 @@ BOOL daPy_lk_c::checkBossBgm() {
 
 /* 801046CC-801046EC       .text checkMabaAnimeBtp__9daPy_lk_cFi */
 BOOL daPy_lk_c::checkMabaAnimeBtp(int anmIdx) {
-    if (anmIdx >= LKANM_BTP_TMABAA && anmIdx <= LKANM_BTP_TMABAJ) {
+    if (anmIdx >= dRes_INDEX_LKANM_BTP_TMABAA_e && anmIdx <= dRes_INDEX_LKANM_BTP_TMABAJ_e) {
         return TRUE;
     }
     return FALSE;
@@ -681,10 +686,10 @@ u16 daPy_lk_c::checkNormalFace() {
     if (checkResetFlg0(daPyRFlg0_UNK40000)) {
         return daPyFace_TMABAG;
     }
-    if (checkUpperAnime(LKANM_BCK_GRABWAITB)) {
+    if (checkUpperAnime(dRes_INDEX_LKANM_BCK_GRABWAITB_e)) {
         return daPyFace_TMABAJ_TEYORIME;
     }
-    if (checkUpperAnime(LKANM_BCK_GRABWAIT)) {
+    if (checkUpperAnime(dRes_INDEX_LKANM_BCK_GRABWAIT_e)) {
         return daPyFace_TMABAE;
     }
     if (daPy_dmEcallBack_c::checkCurse() || checkRestHPAnime()) {
@@ -708,7 +713,7 @@ u16 daPy_lk_c::checkNormalFace() {
     if (checkUpperReadyAnime() || checkNoResetFlg1(daPyFlg1_UNK400) ||
         (mpAttnActorLockOn != NULL && fopAcM_GetGroup(mpAttnActorLockOn) == fopAc_ENEMY_e) ||
         checkEquipHeavyBoots() ||
-        mEquipItem == dItem_SKULL_HAMMER_e)
+        mEquipItem == dItemNo_SKULL_HAMMER_e)
     {
         return daPyFace_TMABAC;
     }
@@ -721,7 +726,7 @@ u16 daPy_lk_c::checkNormalFace() {
     if (mEquipItem != daPyItem_NONE_e) {
         return daPyFace_TMABAB;
     }
-    if (m_anm_heap_under[UNDER_MOVE1_e].mIdx == LKANM_BCK_WALKSLOPE) {
+    if (m_anm_heap_under[UNDER_MOVE1_e].mIdx == dRes_INDEX_LKANM_BCK_WALKSLOPE_e) {
         return daPyFace_TMABAC;
     }
     if (mCurProc == daPyProc_MOVE_e) {
@@ -737,8 +742,8 @@ u16 daPy_lk_c::checkNormalFace() {
     }
     if (mCurProc == daPyProc_WAIT_e && !dComIfGp_event_runCheck()) {
         f32 dVar7 = cM_rnd();
-        if (((m_tex_anm_heap.mIdx == LKANM_BTP_TMABAA || m_tex_anm_heap.mIdx == LKANM_BTP_TMABAB) && dVar7 < 0.01f) ||
-            (m_tex_anm_heap.mIdx == LKANM_BTP_TMABACC && dVar7 >= 0.01f))
+        if (((m_tex_anm_heap.mIdx == dRes_INDEX_LKANM_BTP_TMABAA_e || m_tex_anm_heap.mIdx == dRes_INDEX_LKANM_BTP_TMABAB_e) && dVar7 < 0.01f) ||
+            (m_tex_anm_heap.mIdx == dRes_INDEX_LKANM_BTP_TMABACC_e && dVar7 >= 0.01f))
         {
             return daPyFace_TMABACC;
         }
@@ -786,29 +791,29 @@ void daPy_lk_c::setTextureAnime(u16 param_1, int param_2) {
             daPy_matAnm_c::getMabaFlg() != 0 &&
             !dComIfGp_event_runCheck() &&
             mpAttnActorLockOn == NULL &&
-            btk_idx == LKANM_BTK_TMABA)
+            btk_idx == dRes_INDEX_LKANM_BTK_TMABA_e)
         {
             if (daPy_matAnm_c::getMabaTimer() == 0) {
                 if (dVar9 < 0.44f) {
-                    btk_idx = LKANM_BTK_TMABA;
+                    btk_idx = dRes_INDEX_LKANM_BTK_TMABA_e;
                 } else {
                     param_2 = 0;
                     if (dVar9 < 0.51f) {
-                        btk_idx = LKANM_BTK_TEUP;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TEUP_e;
                     } else if (dVar9 < 0.58f) {
-                        btk_idx = LKANM_BTK_TEDW;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TEDW_e;
                     } else if (dVar9 < 0.65f) {
-                        btk_idx = LKANM_BTK_TEL;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TEL_e;
                     } else if (dVar9 < 0.72f) {
-                        btk_idx = LKANM_BTK_TER;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TER_e;
                     } else if (dVar9 < 0.79f) {
-                        btk_idx = LKANM_BTK_TEDL;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TEDL_e;
                     } else if (dVar9 < 0.86f) {
-                        btk_idx = LKANM_BTK_TEDR;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TEDR_e;
                     } else if (dVar9 < 0.93f) {
-                        btk_idx = LKANM_BTK_TEUR;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TEUR_e;
                     } else {
-                        btk_idx = LKANM_BTK_TEUL;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TEUL_e;
                     }
                 }
                 m_tex_scroll_heap.mIdx = btk_idx;
@@ -817,7 +822,7 @@ void daPy_lk_c::setTextureAnime(u16 param_1, int param_2) {
                 {
                     setTextureScrollResource(loadTextureScrollResource(btk_idx, 0), param_2);
                 }
-                if (btk_idx != LKANM_BTK_TMABA) {
+                if (btk_idx != dRes_INDEX_LKANM_BTK_TMABA_e) {
                     daPy_matAnm_c::onMabaFlg();
                 }
             }
@@ -829,25 +834,25 @@ void daPy_lk_c::setTextureAnime(u16 param_1, int param_2) {
             }
         }
     } else if (bVar3 && checkModeFlg(ModeFlg_00000001) && !dComIfGp_event_runCheck() &&
-               daPy_matAnm_c::getMabaTimer() == 0 && mpAttnActorLockOn == NULL && btk_idx == LKANM_BTK_TMABA &&
+               daPy_matAnm_c::getMabaTimer() == 0 && mpAttnActorLockOn == NULL && btk_idx == dRes_INDEX_LKANM_BTK_TMABA_e &&
                m_tex_scroll_heap.field_0x2 == 0xFFFF && m_tex_scroll_heap.field_0x4 == 0xFFFF && cM_rnd() < 0.025f)
     {
         if (dVar9 < 0.125f) {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TEUP;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEUP_e;
         } else if (dVar9 < 0.25f) {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TEDW;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEDW_e;
         } else if (dVar9 < 0.375f) {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TEL;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEL_e;
         } else if (dVar9 < 0.5f) {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TER;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TER_e;
         } else if (dVar9 < 0.625f) {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TEDL;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEDL_e;
         } else if (dVar9 < 0.75f) {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TEDR;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEDR_e;
         } else if (dVar9 < 0.875f) {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TEUL;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEUL_e;
         } else {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TEUR;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEUR_e;
         }
         setTextureScrollResource(loadTextureScrollResource(m_tex_scroll_heap.mIdx, 0), 0);
         daPy_matAnm_c::onMabaFlg();
@@ -1003,7 +1008,7 @@ void daPy_lk_c::playTextureAnime() {
                 m3530++;
             }
         }
-        if (m_tex_scroll_heap.mIdx == LKANM_BTK_TABEKOBE) {
+        if (m_tex_scroll_heap.mIdx == dRes_INDEX_LKANM_BTK_TABEKOBE_e) {
             m3532++;
             if (m3532 >= mpTexScrollResData->getFrameMax()) {
                 m3532 = 0;
@@ -1035,17 +1040,17 @@ BOOL daPy_lk_c::checkPlayerGuard() const {
 
 /* 8010558C-801056E4       .text setOutPower__9daPy_lk_cFfsi */
 void daPy_lk_c::setOutPower(f32 param_1, s16 param_2, int param_3) {
-    f32 fVar1 = m3644;
-    if (fVar1 < 0.1f) {
+    if (m3644 < 0.1f) {
         m3640 = param_2;
         m3644 = param_1;
     } else {
-        f32 dVar5 = fVar1 * cM_ssin(m3640) + param_1 * cM_ssin(param_2);
-        f32 dVar4 = fVar1 * cM_scos(m3640) + param_1 * cM_scos(param_2);
+        f32 dVar5 = m3644 * cM_ssin(m3640) + param_1 * cM_ssin(param_2);
+        f32 dVar4 = m3644 * cM_scos(m3640) + param_1 * cM_scos(param_2);
         m3640 = cM_atan2s(dVar5, dVar4);
         dVar4 = std::sqrtf(dVar5 * dVar5 + dVar4 * dVar4);
         m3644 = dVar4;
     }
+
     if (param_3 != 0) {
         onNoResetFlg1(daPyFlg1_UNK10000000);
     }
@@ -1058,7 +1063,7 @@ BOOL daPy_lk_c::checkSightLine(f32 param_1, cXyz* param_2) {
     cXyz local_44 = (*fopCamM_GetCenter_p(cam) - *pcVar2);
     *param_2 = (local_44.normalize() * param_1) + *pcVar2;
     dBgS_LinChk* linChk;
-    if (mEquipItem == dItem_BOOMERANG_e) {
+    if (mEquipItem == dItemNo_BOOMERANG_e) {
         linChk = &mBoomerangLinChk;
     } else {
         linChk = &mRopeLinChk;
@@ -1134,12 +1139,12 @@ s32 daPy_lk_c::setItemModel() {
             mDoMtx_stack_c::XYZrotM(0, -0x4000, -0x2AAA);
             mDoMtx_stack_c::revConcat(mpCLModel->getAnmMtx(3));
             mpEquipItemModel->setBaseTRMtx(mDoMtx_stack_c::get());
-        } else if (mEquipItem == dItem_TELESCOPE_e) {
+        } else if (mEquipItem == dItemNo_TELESCOPE_e) {
             mDoMtx_stack_c::transS(8.0f, 15.0f, 1.0f);
             mDoMtx_stack_c::XYZrotM(-0x4000, 0x4444, -0x41F);
             mDoMtx_stack_c::revConcat(pMVar13);
             mpEquipItemModel->setBaseTRMtx(mDoMtx_stack_c::get());
-        } else if (mEquipItem == dItem_HYOI_PEAR_e) {
+        } else if (mEquipItem == dItemNo_HYOI_PEAR_e) {
             if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < 9.0f) {
                 mDoMtx_stack_c::transS(-1.5f, -44.0f, 16.0f);
                 mDoMtx_stack_c::XYZrotM(-0x6EEE, 0x9BE, 0x368A);
@@ -1148,19 +1153,19 @@ s32 daPy_lk_c::setItemModel() {
             } else {
                 mpEquipItemModel->setBaseTRMtx(mpCLModel->getAnmMtx(0xF));
             }
-        } else if (mEquipItem == dItem_DEKU_LEAF_e || mEquipItem == daPyItem_SWORD_e ||
-                   mEquipItem == dItem_WIND_WAKER_e || mEquipItem == dItem_SKULL_HAMMER_e ||
-                   mEquipItem == dItem_HOOKSHOT_e || mEquipItem == dItem_TINGLE_TUNER_e ||
+        } else if (mEquipItem == dItemNo_DEKU_LEAF_e || mEquipItem == daPyItem_SWORD_e ||
+                   mEquipItem == dItemNo_WIND_WAKER_e || mEquipItem == dItemNo_SKULL_HAMMER_e ||
+                   mEquipItem == dItemNo_HOOKSHOT_e || mEquipItem == dItemNo_TINGLE_TUNER_e ||
                    checkBottleItem(mEquipItem) || checkPhotoBoxItem(mEquipItem))
         {
             mpEquipItemModel->setBaseTRMtx(pMVar13);
-            if (mEquipItem == dItem_DEKU_LEAF_e &&
+            if (mEquipItem == dItemNo_DEKU_LEAF_e &&
                 (mCurProc != daPyProc_FAN_SWING_e && mCurProc != daPyProc_FAN_GLIDE_e))
             {
                 setShapeFanLeaf();
             } else if (checkBottleItem(mEquipItem)) {
                 if (mpBottleContentsModel != NULL) {
-                    if (mEquipItem == dItem_FIREFLY_BOTTLE_e) {
+                    if (mEquipItem == dItemNo_FIREFLY_BOTTLE_e) {
                         cXyz bottleScale; // ?
                         f32 fVar1 = 1.0f + 0.1f * cM_ssin(cM_rad2s((37.699112f * mpEquipItemBrk->getFrame()) / mpEquipItemBrk->getFrameMax()));
                         bottleScale.setall(fVar1);
@@ -1176,7 +1181,7 @@ s32 daPy_lk_c::setItemModel() {
                 if (mpBottleCapModel != NULL) {
                     mpBottleCapModel->setBaseTRMtx(pMVar13);
                 }
-            } else if (mEquipItem == dItem_HOOKSHOT_e && boko != NULL) {
+            } else if (mEquipItem == dItemNo_HOOKSHOT_e && boko != NULL) {
                 if (fopAcM_GetParam(boko) != daBoko_c::Type_BOKO_STICK_e) {
                     if (fopAcM_GetParam(boko) == daBoko_c::Type_MACHETE_e) {
                         m35EC += 1.0f;
@@ -1190,7 +1195,7 @@ s32 daPy_lk_c::setItemModel() {
                         m35EC -= fVar2;
                     }
                 }
-            } else if (mEquipItem == dItem_WIND_WAKER_e &&
+            } else if (mEquipItem == dItemNo_WIND_WAKER_e &&
                        mCurProc != daPyProc_TACT_WAIT_e && mpEquipItemBrk != NULL)
             {
                 f32 fVar1 = mpEquipItemBrk->getFrame() - 1.0f;
@@ -1240,7 +1245,7 @@ s32 daPy_lk_c::setItemModel() {
                     ->show();
             }
         } else {
-            if (dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e) {
+            if (dComIfGs_getSelectEquip(0) == dItemNo_MASTER_SWORD_2_e) {
                 mSwgripmsabBckAnim.entry(mpSwgripmsModel->getModelData(), 1.0f);
                 r27 = 4;
             } else {
@@ -1302,7 +1307,7 @@ s32 daPy_lk_c::setItemModel() {
         mDoAud_setLinkShieldType(r27_2, 1);
     } else if ((mCurProc != daPyProc_DEMO_TOOL_e && mEquipItem == daPyItem_SWORD_e) ||
                (mCurProc == daPyProc_DEMO_TOOL_e && mProcVar2.m34D4 == 1) ||
-               (checkPlayerGuard() && mEquipItem != dItem_SKULL_HAMMER_e) ||
+               (checkPlayerGuard() && mEquipItem != dItemNo_SKULL_HAMMER_e) ||
                mCurProc == daPyProc_GUARD_CRASH_e)
     {
         mpEquippedShieldModel->setBaseTRMtx(pMVar6);
@@ -1316,10 +1321,10 @@ s32 daPy_lk_c::setItemModel() {
         mDoMtx_stack_c::ZrotM(-0x4000);
         mDoMtx_stack_c::revConcat(pMVar14);
         mpEquippedShieldModel->setBaseTRMtx(mDoMtx_stack_c::get());
-        if (r27_2 == 2 && (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_WALK ||
-                           m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_WALKS ||
-                           m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_DASHS ||
-                           m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_DASH))
+        if (r27_2 == 2 && (m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_WALK_e ||
+                           m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_WALKS_e ||
+                           m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_DASHS_e ||
+                           m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_DASH_e))
         {
             Vec temp;
             mDoMtx_stack_c::multVecZero(&temp);
@@ -1424,28 +1429,28 @@ s32 daPy_lk_c::setDrawHandModel() {
         } else {
             uVar5 = mRightHandIdx;
         }
-    } else if ((mEquipItem == dItem_GRAPPLING_HOOK_e && !checkModeFlg(ModeFlg_ROPE)) ||
-               (mEquipItem == dItem_SKULL_HAMMER_e && mCutType == CUT_TYPE_NONE))
+    } else if ((mEquipItem == dItemNo_GRAPPLING_HOOK_e && !checkModeFlg(ModeFlg_ROPE)) ||
+               (mEquipItem == dItemNo_SKULL_HAMMER_e && mCutType == CUT_TYPE_NONE))
     {
         uVar4 = 3;
         uVar5 = 8;
-    } else if (mEquipItem == dItem_BOOMERANG_e) {
+    } else if (mEquipItem == dItemNo_BOOMERANG_e) {
         uVar4 = 0;
         uVar5 = mRightHandIdx;
-    } else if (mEquipItem == dItem_WIND_WAKER_e) {
+    } else if (mEquipItem == dItemNo_WIND_WAKER_e) {
         uVar4 = 5;
         uVar5 = mRightHandIdx;
-    } else if (mEquipItem == dItem_HOOKSHOT_e) {
+    } else if (mEquipItem == dItemNo_HOOKSHOT_e) {
         uVar4 = 2;
         uVar5 = mRightHandIdx;
-    } else if (mEquipItem == dItem_DEKU_LEAF_e) {
+    } else if (mEquipItem == dItemNo_DEKU_LEAF_e) {
         uVar4 = 3;
         uVar5 = mRightHandIdx;
-    } else if (mEquipItem == dItem_TELESCOPE_e) {
+    } else if (mEquipItem == dItemNo_TELESCOPE_e) {
         uVar4 = 1;
         uVar5 = mRightHandIdx;
     } else {
-        if (mEquipItem == daPyItem_NONE_e && checkUpperAnime(LKANM_BCK_TAKEBOTH)) {
+        if (mEquipItem == daPyItem_NONE_e && checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKEBOTH_e)) {
             uVar4 = 1;
         } else if (mEquipItem == daPyItem_NONE_e && checkItemEquipAnime()) {
             uVar4 = 0;
@@ -1454,7 +1459,7 @@ s32 daPy_lk_c::setDrawHandModel() {
         }
         if (checkPlayerGuard() || mCurProc == daPyProc_GUARD_CRASH_e) {
             uVar5 = 8;
-        } else if (mEquipItem == daPyItem_NONE_e && checkUpperAnime(LKANM_BCK_TAKEBOTH)) {
+        } else if (mEquipItem == daPyItem_NONE_e && checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKEBOTH_e)) {
             uVar5 = 7;
         } else if (mEquipItem == daPyItem_NONE_e && checkItemEquipAnime()) {
             uVar5 = 0;
@@ -1978,7 +1983,7 @@ BOOL daPy_lk_c::draw() {
 #endif
         ) {
             if (!checkBowItem(mEquipItem) || !checkPlayerGuard()) {
-                if (mEquipItem == dItem_HOOKSHOT_e) {
+                if (mEquipItem == dItemNo_HOOKSHOT_e) {
                     if (mActorKeepEquip.getActor()) {
                         daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
                         mpEquipItemModel->setAnmMtx(4, hookshot->getMtxTop());
@@ -2196,7 +2201,7 @@ void daPy_lk_c::setDoStatusBasic() {
             } else {
                 if (!checkPlayerGuard() && (mEquipItem == daPyItem_BOKO_e ||
                                             mEquipItem == daPyItem_SWORD_e ||
-                                            mEquipItem == dItem_SKULL_HAMMER_e))
+                                            mEquipItem == dItemNo_SKULL_HAMMER_e))
                 {
                     if (mEquipItem == daPyItem_BOKO_e) {
                         dComIfGp_setDoStatus(dActStts_THROW_e);
@@ -2261,7 +2266,7 @@ void daPy_lk_c::setDoStatus() {
             }
         } else if (mpAttnEntryA->mType == fopAc_Attn_TYPE_CARRY_e) {
             if (!fopAcM_CheckStatus(mpAttnActorA, fopAcStts_CARRY_e)) {
-                if (fopAcM_GetName(mpAttnActorA) == PROC_BOKO) {
+                if (fopAcM_GetName(mpAttnActorA) == fpcNm_BOKO_e) {
                     dComIfGp_setDoStatus(dActStts_PICK_UP_e);
                 } else {
                     dComIfGp_setDoStatus(dActStts_LIFT_e);
@@ -2955,7 +2960,7 @@ BOOL daPy_lk_c::checkAtnWaitAnime() {
             mpAttnActorLockOn != NULL &&
             (
                 fopAcM_GetGroup(mpAttnActorLockOn) == fopAc_ENEMY_e ||
-                fopAcM_GetName(mpAttnActorLockOn) == PROC_BOOMERANG
+                fopAcM_GetName(mpAttnActorLockOn) == fpcNm_BOOMERANG_e
             )
         ) ||
         mDemo.getDemoMode() == daPy_demo_c::DEMO_A_WAIT_e
@@ -3123,7 +3128,7 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
                 if ((checkNoResetFlg1(daPyFlg1_CONFUSE) && !checkPlayerDemoMode()) &&
                     !dComIfGp_event_runCheck())
                 {
-                    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_WAITQ) {
+                    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_WAITQ_e) {
                         setSingleMoveAnime(ANM_WAITQ, m_HIO->mMove.m.field_0x84, f1, -1, m_HIO->mBasic.m.field_0xC);
                         m34C3 = 2;
                     }
@@ -3419,7 +3424,7 @@ void daPy_lk_c::setAnimeEquipSword(BOOL r4) {
         return;
     }
     m3562 = daPyItem_SWORD_e;
-    setActAnimeUpper(LKANM_BCK_REST, UPPER_MOVE2_e, m_HIO->mCut.m.field_0x8, m_HIO->mCut.m.field_0xC, m_HIO->mCut.m.field_0x0, m_HIO->mCut.m.field_0x10);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_REST_e, UPPER_MOVE2_e, m_HIO->mCut.m.field_0x8, m_HIO->mCut.m.field_0xC, m_HIO->mCut.m.field_0x0, m_HIO->mCut.m.field_0x10);
     setPriTextureAnime(0x72, 0);
     dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_WAIT_e);
     if (mActorKeepThrow.getActor() != NULL) {
@@ -3448,7 +3453,7 @@ void daPy_lk_c::setAnimeEquipSingleItem(u16 bckIdx) {
 /* 8010C158-8010C1D4       .text setAnimeEquipItem__9daPy_lk_cFv */
 void daPy_lk_c::setAnimeEquipItem() {
     if (mActorKeepThrow.getActor() != NULL) {
-        if (getReadyItem() == dItem_BOOMERANG_e) {
+        if (getReadyItem() == dItemNo_BOOMERANG_e) {
             return;
         }
         daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
@@ -3491,28 +3496,28 @@ void daPy_lk_c::setAnimeUnequipSword() {
         f3 = m_HIO->mCut.m.field_0x1C;
     }
     
-    setActAnimeUpper(LKANM_BCK_REST, UPPER_MOVE2_e, rate, start, end, f3);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_REST_e, UPPER_MOVE2_e, rate, start, end, f3);
     setPriTextureAnime(0x72, 0);
 }
 
 /* 8010C284-8010C3C0       .text setAnimeUnequipItem__9daPy_lk_cFUs */
 void daPy_lk_c::setAnimeUnequipItem(u16 i_itemNo) {
-    if (i_itemNo == dItem_BOOMERANG_e ||
-        i_itemNo == dItem_GRAPPLING_HOOK_e ||
-        i_itemNo == dItem_TELESCOPE_e ||
+    if (i_itemNo == dItemNo_BOOMERANG_e ||
+        i_itemNo == dItemNo_GRAPPLING_HOOK_e ||
+        i_itemNo == dItemNo_TELESCOPE_e ||
         checkPhotoBoxItem(i_itemNo) ||
-        i_itemNo == dItem_HOOKSHOT_e ||
-        i_itemNo == dItem_DEKU_LEAF_e ||
-        i_itemNo == dItem_TINGLE_TUNER_e ||
-        i_itemNo == dItem_WIND_WAKER_e ||
+        i_itemNo == dItemNo_HOOKSHOT_e ||
+        i_itemNo == dItemNo_DEKU_LEAF_e ||
+        i_itemNo == dItemNo_TINGLE_TUNER_e ||
+        i_itemNo == dItemNo_WIND_WAKER_e ||
         checkBottleItem(i_itemNo)
     ) {
-        setAnimeEquipSingleItem(LKANM_BCK_TAKEL);
+        setAnimeEquipSingleItem(dRes_INDEX_LKANM_BCK_TAKEL_e);
     } else if (checkBowItem(i_itemNo)) {
-        setAnimeEquipSingleItem(LKANM_BCK_TAKER);
-    } else if (i_itemNo == dItem_SKULL_HAMMER_e) {
+        setAnimeEquipSingleItem(dRes_INDEX_LKANM_BCK_TAKER_e);
+    } else if (i_itemNo == dItemNo_SKULL_HAMMER_e) {
         setActAnimeUpper(
-            LKANM_BCK_TAKEBOTH,
+            dRes_INDEX_LKANM_BCK_TAKEBOTH_e,
             UPPER_MOVE2_e,
             m_HIO->mItem.m.field_0x24,
             m_HIO->mItem.m.field_0x28,
@@ -3521,7 +3526,7 @@ void daPy_lk_c::setAnimeUnequipItem(u16 i_itemNo) {
         );
     } else {
         setActAnimeUpper(
-            LKANM_BCK_TAKE,
+            dRes_INDEX_LKANM_BCK_TAKE_e,
             UPPER_MOVE2_e,
             m_HIO->mItem.m.field_0x8,
             m_HIO->mItem.m.field_0xC,
@@ -3557,20 +3562,20 @@ BOOL daPy_lk_c::checkBossGomaStage() {
 
 /* 8010C4A4-8010C4C8       .text checkSingleItemEquipAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkSingleItemEquipAnime() const {
-    return checkUpperAnime(LKANM_BCK_TAKEL) ||
-        checkUpperAnime(LKANM_BCK_TAKER);
+    return checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKEL_e) ||
+        checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKER_e);
 }
 
 /* 8010C4C8-8010C528       .text checkItemEquipAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkItemEquipAnime() const {
-    return checkUpperAnime(LKANM_BCK_TAKE) ||
+    return checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKE_e) ||
         checkSingleItemEquipAnime() ||
-        checkUpperAnime(LKANM_BCK_TAKEBOTH);
+        checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKEBOTH_e);
 }
 
 /* 8010C528-8010C570       .text checkEquipAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkEquipAnime() const {
-    return checkUpperAnime(LKANM_BCK_REST) ||
+    return checkUpperAnime(dRes_INDEX_LKANM_BCK_REST_e) ||
         checkItemEquipAnime();
 }
 
@@ -3596,9 +3601,9 @@ void daPy_lk_c::deleteEquipItem(BOOL param_1) {
         fopAcM_delete(equip_actor);
     }
     
-    if ((mEquipItem == dItem_GRAPPLING_HOOK_e && checkRopeAnime()) ||
-        (mEquipItem == dItem_BOOMERANG_e && checkBoomerangAnime()) ||
-        (mEquipItem == dItem_HOOKSHOT_e && checkHookshotReadyAnime()) ||
+    if ((mEquipItem == dItemNo_GRAPPLING_HOOK_e && checkRopeAnime()) ||
+        (mEquipItem == dItemNo_BOOMERANG_e && checkBoomerangAnime()) ||
+        (mEquipItem == dItemNo_HOOKSHOT_e && checkHookshotReadyAnime()) ||
         (checkBowItem(mEquipItem) && checkBowAnime())
     ) {
         resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
@@ -3680,22 +3685,22 @@ void daPy_lk_c::returnKeepItemData() {
 
 /* 8010C8D4-8010CB70       .text makeItemType__9daPy_lk_cFv */
 void daPy_lk_c::makeItemType() {
-    if (mEquipItem == dItem_GRAPPLING_HOOK_e) {
-        fopAc_ac_c* rope = (fopAc_ac_c*)fopAcM_fastCreate(PROC_HIMO2, 0, &current.pos);
+    if (mEquipItem == dItemNo_GRAPPLING_HOOK_e) {
+        fopAc_ac_c* rope = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_HIMO2_e, 0, &current.pos);
         mActorKeepEquip.setData(rope);
-    } else if (mEquipItem == dItem_HOOKSHOT_e) {
-        fopAc_ac_c* hookshot = (fopAc_ac_c*)fopAcM_fastCreate(PROC_HOOKSHOT, 0, &current.pos);
+    } else if (mEquipItem == dItemNo_HOOKSHOT_e) {
+        fopAc_ac_c* hookshot = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_HOOKSHOT_e, 0, &current.pos);
         mActorKeepEquip.setData(hookshot);
         setHookshotModel();
-    } else if (mEquipItem == dItem_BOOMERANG_e) {
-        fopAc_ac_c* boomerang = (fopAc_ac_c*)fopAcM_fastCreate(PROC_BOOMERANG, 0, &current.pos);
+    } else if (mEquipItem == dItemNo_BOOMERANG_e) {
+        fopAc_ac_c* boomerang = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_BOOMERANG_e, 0, &current.pos);
         mActorKeepEquip.setData(boomerang);
-    } else if (mEquipItem == dItem_BOMB_BAG_e) {
-        fopAc_ac_c* bomb = (fopAc_ac_c*)fopAcM_fastCreate(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_3, false, false), &current.pos);
+    } else if (mEquipItem == dItemNo_BOMB_BAG_e) {
+        fopAc_ac_c* bomb = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_3, false, false), &current.pos);
         mActorKeepGrab.setData(bomb);
         mEquipItem = daPyItem_NONE_e;
         if (mActorKeepGrab.getActor() != NULL) {
-            setActAnimeUpper(LKANM_BCK_GRABWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, 5.0f);
+            setActAnimeUpper(dRes_INDEX_LKANM_BCK_GRABWAIT_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, 5.0f);
             mActivePlayerBombs++;
             fopAcM_setCarryNow(mActorKeepGrab.getActor(), FALSE);
             dComIfGp_setItemBombNumCount(-1);
@@ -3705,26 +3710,26 @@ void daPy_lk_c::makeItemType() {
     } else if (checkBowItem(mEquipItem)) {
         setBowModel();
         return;
-    } else if (mEquipItem == dItem_TELESCOPE_e) {
+    } else if (mEquipItem == dItemNo_TELESCOPE_e) {
         setScopeModel();
         return;
     } else if (checkPhotoBoxItem(mEquipItem)) {
         setPhotoBoxModel();
         return;
-    } else if (mEquipItem == dItem_TINGLE_TUNER_e) {
+    } else if (mEquipItem == dItemNo_TINGLE_TUNER_e) {
         setTinkleCeiverModel();
         return;
-    } else if (mEquipItem == dItem_DEKU_LEAF_e) {
+    } else if (mEquipItem == dItemNo_DEKU_LEAF_e) {
         setSmallFanModel();
         return;
-    } else if (mEquipItem == dItem_WIND_WAKER_e) {
-        mEquipItem = dItem_NONE_e;
+    } else if (mEquipItem == dItemNo_WIND_WAKER_e) {
+        mEquipItem = dItemNo_NONE_e;
         setTactModel();
         return;
-    } else if (mEquipItem == dItem_SKULL_HAMMER_e) {
+    } else if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
         setHammerModel();
         return;
-    } else if (mEquipItem == dItem_EMPTY_BOTTLE_e) {
+    } else if (mEquipItem == dItemNo_EMPTY_BOTTLE_e) {
         setBottleModel(mEquipItem);
         return;
     } else {
@@ -3740,16 +3745,16 @@ void daPy_lk_c::makeItemType() {
 /* 8010CB70-8010CBC8       .text setScopeModel__9daPy_lk_cFv */
 void daPy_lk_c::setScopeModel() {
     JKRHeap* oldHeap = setItemHeap();
-    initModel(&mpEquipItemModel, LINK_BDL_TELESCOPE, 0x37221222);
+    initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_TELESCOPE_e, 0x37221222);
     mDoExt_setCurrentHeap(oldHeap);
 }
 
 /* 8010CBC8-8010CC78       .text setPhotoBoxModel__9daPy_lk_cFv */
 void daPy_lk_c::setPhotoBoxModel() {
     JKRHeap* oldHeap = setItemHeap();
-    initModel(&mpEquipItemModel, LINK_BDL_CAMERA, 0x37221222);
+    initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_CAMERA_e, 0x37221222);
     mDoExt_setCurrentHeap(oldHeap);
-    if (mEquipItem == CAMERA) {
+    if (mEquipItem == dItemNo_PICTO_BOX_e) {
         mpEquipItemModel->getModelData()->getJointNodePointer(0x02)->getMesh()->getShape()->hide(); // frash joint
     } else {
         mpEquipItemModel->getModelData()->getJointNodePointer(0x02)->getMesh()->getShape()->show(); // frash joint
@@ -3780,31 +3785,31 @@ BOOL daPy_lk_c::changeDragonShield(int param_1) {
 BOOL daPy_lk_c::checkNewItemChange(u8 i_itemBtn) {
     u16 itemNo = dComIfGp_getSelectItem(i_itemBtn);
 
-    if (itemNo == dItem_MAGIC_ARMOR_e) {
+    if (itemNo == dItemNo_MAGIC_ARMOR_e) {
         return changeDragonShield(1);
     }
-    if (itemNo == dItem_IRON_BOOTS_e || itemNo == WATER_BOOTS || itemNo == dItem_TINGLE_TUNER_e || itemNo == NORMAL_SAIL ||
+    if (itemNo == dItemNo_IRON_BOOTS_e || itemNo == dItemNo_WATER_BOOTS_e || itemNo == dItemNo_TINGLE_TUNER_e || itemNo == dItemNo_SAIL_e ||
         isEsa(itemNo) || isDaizaItem(itemNo) || isEmono(itemNo) || checkBottleItem(itemNo) ||
-        (itemNo >= dItem_FATHER_LETTER_e && itemNo <= KAISEN_PRESENT2))
+        (itemNo >= dItemNo_FATHER_LETTER_e && itemNo <= dItemNo_FILL_UP_COUPON_e))
     {
         if (mAcch.ChkGroundHit() && (!daPy_lk_c::checkPlayerFly())) {
-            if (itemNo == dItem_IRON_BOOTS_e || itemNo == WATER_BOOTS) {
+            if (itemNo == dItemNo_IRON_BOOTS_e || itemNo == dItemNo_WATER_BOOTS_e) {
                 procBootsEquip_init(itemNo);
             } else {
                 if (isEsa(itemNo)) {
-                    if (itemNo == dItem_HYOI_PEAR_e) {
+                    if (itemNo == dItemNo_HYOI_PEAR_e) {
                         return procFoodSet_init();
                     } else {
                         return procFoodThrow_init();
                     }
-                } else if (itemNo == dItem_TINGLE_TUNER_e) {
+                } else if (itemNo == dItemNo_TINGLE_TUNER_e) {
                     fopAcM_orderTalkEvent(this, (fopAc_ac_c*)dComIfGp_getAgb());
                 } else if (checkDrinkBottleItem(itemNo)) {
                     return procBottleDrink_init(itemNo);
                 } else if (checkOpenBottleItem(itemNo)) {
                     return procBottleOpen_init(itemNo);
                 } else {
-                    if (itemNo == dItem_EMPTY_BOTTLE_e) {
+                    if (itemNo == dItemNo_EMPTY_BOTTLE_e) {
                         return procBottleSwing_init(1);
                     } else {
                         if (dComIfGs_checkGetItemNum(itemNo) != 0) {
@@ -3817,12 +3822,12 @@ BOOL daPy_lk_c::checkNewItemChange(u8 i_itemBtn) {
             }
             return true;
         }
-        if (itemNo != dItem_EMPTY_BOTTLE_e) {
+        if (itemNo != dItemNo_EMPTY_BOTTLE_e) {
             return false;
         }
     }
-    if (mEquipItem != itemNo && itemNo != dItem_NONE_e) {
-        if (itemNo == dItem_BOMB_BAG_e &&
+    if (mEquipItem != itemNo && itemNo != dItemNo_NONE_e) {
+        if (itemNo == dItemNo_BOMB_BAG_e &&
             (mActivePlayerBombs >= 3 || dComIfGs_getBombNum() == 0))
         {
             seStartSystem(JA_SE_ITEM_TARGET_OUT);
@@ -3866,15 +3871,15 @@ BOOL daPy_lk_c::checkItemChangeFromButton() {
                 }
             }
         } else {
-            if (checkEquipDragonShield() && checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 0)) {
+            if (checkEquipDragonShield() && checkSetItemTrigger(dItemNo_MAGIC_ARMOR_e, 0)) {
                 offNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD);
             } else if (mAcch.ChkGroundHit() && !daPy_lk_c::checkPlayerFly()) {
-                if (checkEquipHeavyBoots() && checkSetItemTrigger(dItem_IRON_BOOTS_e, 0)) {
-                    return procBootsEquip_init(dItem_IRON_BOOTS_e);
+                if (checkEquipHeavyBoots() && checkSetItemTrigger(dItemNo_IRON_BOOTS_e, 0)) {
+                    return procBootsEquip_init(dItemNo_IRON_BOOTS_e);
                 } else if (checkSetItemTrigger(daPyItem_DRINK_BOTTLE_e, 0)) {
                     return procBottleDrink_init(dComIfGp_getSelectItem(mReadyItemBtn));
-                } else if (checkSetItemTrigger(dItem_FAIRY_BOTTLE_e, 0)) {
-                    return procBottleOpen_init(dItem_FAIRY_BOTTLE_e);
+                } else if (checkSetItemTrigger(dItemNo_FAIRY_BOTTLE_e, 0)) {
+                    return procBottleOpen_init(dItemNo_FAIRY_BOTTLE_e);
                 } else if (doTrigger()) {
                     if (dComIfGp_getDoStatus() == dActStts_PUT_AWAY_e) {
                         setAnimeUnequip();
@@ -3908,11 +3913,11 @@ void daPy_lk_c::checkItemAction() {
     {
         mReadyItemBtn = dItemBtn_Z_e;
     }
-    if (checkEquipAnime() || checkUpperAnime(LKANM_BCK_BOOMTHROW) || checkUpperAnime(LKANM_BCK_BOOMCATCH) ||
-        checkUpperAnime(LKANM_BCK_ROPETHROW))
+    if (checkEquipAnime() || checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMTHROW_e) || checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMCATCH_e) ||
+        checkUpperAnime(dRes_INDEX_LKANM_BCK_ROPETHROW_e))
     {
         J3DFrameCtrl& frameCtrl = mFrameCtrlUpper[UPPER_MOVE2_e];
-        if (checkUpperAnime(LKANM_BCK_BOOMCATCH)) {
+        if (checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMCATCH_e)) {
             if (!(frameCtrl.getRate() < 0.01f)) {
                 if (!(mStickDistance > 0.05f)) {
                     return;
@@ -3925,7 +3930,7 @@ void daPy_lk_c::checkItemAction() {
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
                 procShipPaddle_init();
             }
-        } else if (checkUpperAnime(LKANM_BCK_BOOMTHROW)) {
+        } else if (checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMTHROW_e)) {
             if (frameCtrl.getRate() < 0.01f ||
                 ((mStickDistance > 0.05f &&
                   (frameCtrl.getFrame() > m_HIO->mItem.mBoom.m.field_0x10))))
@@ -3936,7 +3941,7 @@ void daPy_lk_c::checkItemAction() {
                     throwBoomerang();
                 }
             }
-        } else if (checkUpperAnime(LKANM_BCK_ROPETHROW)) {
+        } else if (checkUpperAnime(dRes_INDEX_LKANM_BCK_ROPETHROW_e)) {
             if (frameCtrl.getRate() < 0.01f) {
                 mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.0f);
                 mFrameCtrlUnder[UNDER_MOVE1_e].setRate(0.0f);
@@ -3945,9 +3950,9 @@ void daPy_lk_c::checkItemAction() {
             }
         } else if (checkEquipAnime()) {
             if (mEquipItem == daPyItem_SWORD_e &&
-                ((checkUpperAnime(LKANM_BCK_REST) && frameCtrl.checkPass(7.0f - frameCtrl.getRate())) ||
-                 (checkUpperAnime(LKANM_BCK_TAKE) && frameCtrl.checkPass(7.0f - frameCtrl.getRate())) ||
-                 (checkUpperAnime(LKANM_BCK_TAKEBOTH) &&
+                ((checkUpperAnime(dRes_INDEX_LKANM_BCK_REST_e) && frameCtrl.checkPass(7.0f - frameCtrl.getRate())) ||
+                 (checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKE_e) && frameCtrl.checkPass(7.0f - frameCtrl.getRate())) ||
+                 (checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKEBOTH_e) &&
                   frameCtrl.checkPass(m_HIO->mItem.m.field_0x30 - frameCtrl.getRate())) ||
                  (checkSingleItemEquipAnime() &&
                   frameCtrl.checkPass(m_HIO->mItem.m.field_0x20 - frameCtrl.getRate()))))
@@ -3956,9 +3961,9 @@ void daPy_lk_c::checkItemAction() {
             }
             if (std::fabsf(frameCtrl.getRate()) < 0.01f) {
                 resetActAnimeUpper(UPPER_MOVE2_e, m_HIO->mBasic.m.field_0xC);
-            } else if ((checkUpperAnime(LKANM_BCK_REST) && frameCtrl.checkPass(7.0f)) ||
-                        (checkUpperAnime(LKANM_BCK_TAKE) && frameCtrl.checkPass(7.0f)) ||
-                        (checkUpperAnime(LKANM_BCK_TAKEBOTH) && frameCtrl.checkPass(m_HIO->mItem.m.field_0x30)) ||
+            } else if ((checkUpperAnime(dRes_INDEX_LKANM_BCK_REST_e) && frameCtrl.checkPass(7.0f)) ||
+                        (checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKE_e) && frameCtrl.checkPass(7.0f)) ||
+                        (checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKEBOTH_e) && frameCtrl.checkPass(m_HIO->mItem.m.field_0x30)) ||
                         (checkSingleItemEquipAnime() && frameCtrl.checkPass(m_HIO->mItem.m.field_0x20)))
             {
                 if ((mEquipItem != daPyItem_NONE_e && mEquipItem != daPyItem_SWORD_e) ||
@@ -4018,7 +4023,7 @@ BOOL daPy_lk_c::checkJumpCutFromButton() {
     if (((mEquipItem == daPyItem_SWORD_e &&
           ((checkResetFlg0(daPyRFlg0_UNK80) || swordTrigger()))) ||
          ((mEquipItem == daPyItem_BOKO_e && swordTrigger()))) ||
-        (((mEquipItem == dItem_SKULL_HAMMER_e && itemTrigger()) &&
+        (((mEquipItem == dItemNo_SKULL_HAMMER_e && itemTrigger()) &&
           mEquipItem == getReadyItem())))
     {
         return procJumpCut_init(1);
@@ -4041,7 +4046,7 @@ int daPy_lk_c::orderTalk() {
         itemTriggerX())
     {
         if (((isEsa(dComIfGp_getSelectItem(dItemBtn_X_e))) &&
-             dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_HYOI_PEAR_e) &&
+             dComIfGp_getSelectItem(dItemBtn_X_e) != dItemNo_HYOI_PEAR_e) &&
             m3630 != fpcM_ERROR_PROCESS_ID_e)
         {
             seStartSystem(JA_SE_ITEM_TARGET_OUT);
@@ -4056,7 +4061,7 @@ int daPy_lk_c::orderTalk() {
         itemTriggerY())
     {
         if (((isEsa(dComIfGp_getSelectItem(dItemBtn_Y_e))) &&
-             dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_HYOI_PEAR_e) &&
+             dComIfGp_getSelectItem(dItemBtn_Y_e) != dItemNo_HYOI_PEAR_e) &&
             m3630 != fpcM_ERROR_PROCESS_ID_e)
         {
             seStartSystem(JA_SE_ITEM_TARGET_OUT);
@@ -4071,7 +4076,7 @@ int daPy_lk_c::orderTalk() {
                                     itemTriggerZ())))
     {
         if (((isEsa(dComIfGp_getSelectItem(dItemBtn_Z_e))) &&
-             dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_HYOI_PEAR_e) &&
+             dComIfGp_getSelectItem(dItemBtn_Z_e) != dItemNo_HYOI_PEAR_e) &&
             m3630 != fpcM_ERROR_PROCESS_ID_e)
         {
             seStartSystem(JA_SE_ITEM_TARGET_OUT);
@@ -4092,25 +4097,25 @@ BOOL daPy_lk_c::checkNextActionFromButton() {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
             return changeCutProc();
         }
-        if (checkPhotoBoxItem(mEquipItem) || mEquipItem == dItem_TELESCOPE_e) {
+        if (checkPhotoBoxItem(mEquipItem) || mEquipItem == dItemNo_TELESCOPE_e) {
             return procScope_init(mEquipItem);
         }
-        if (mEquipItem == dItem_DEKU_LEAF_e) {
+        if (mEquipItem == dItemNo_DEKU_LEAF_e) {
             return procFanSwing_init();
         }
         if (checkBowItem(mEquipItem)) {
             return checkNextBowMode();
         }
-        if (mEquipItem == dItem_HOOKSHOT_e) {
+        if (mEquipItem == dItemNo_HOOKSHOT_e) {
             return checkNextHookshotMode();
         }
-        if (mEquipItem == dItem_BOOMERANG_e) {
+        if (mEquipItem == dItemNo_BOOMERANG_e) {
             return checkNextBoomerangMode();
         }
-        if (mEquipItem == dItem_GRAPPLING_HOOK_e) {
+        if (mEquipItem == dItemNo_GRAPPLING_HOOK_e) {
             return checkNextRopeMode();
         }
-        if (mEquipItem == dItem_WIND_WAKER_e) {
+        if (mEquipItem == dItemNo_WIND_WAKER_e) {
             return procTactWait_init(-1);
         }
     }
@@ -4225,28 +4230,28 @@ BOOL daPy_lk_c::checkNextActionFromButton() {
                 }
             }
             if (itemTrigger() && mEquipItem == getReadyItem()) {
-                if (mEquipItem == dItem_HOOKSHOT_e) {
+                if (mEquipItem == dItemNo_HOOKSHOT_e) {
                     if (!checkHookshotReadyAnime()) {
                         return checkNextHookshotMode();
                     }
-                } else if (mEquipItem == dItem_GRAPPLING_HOOK_e) {
+                } else if (mEquipItem == dItemNo_GRAPPLING_HOOK_e) {
                     if (!checkRopeAnime()) {
                         return checkNextRopeMode();
                     }
                 } else {
-                    if (mEquipItem == dItem_BOOMERANG_e) {
+                    if (mEquipItem == dItemNo_BOOMERANG_e) {
                         return checkNextBoomerangMode();
                     }
                     if (checkBowItem(mEquipItem)) {
                         return checkNextBowMode();
                     }
-                    if (mEquipItem == dItem_DEKU_LEAF_e) {
+                    if (mEquipItem == dItemNo_DEKU_LEAF_e) {
                         return procFanSwing_init();
                     }
-                    if (mEquipItem == dItem_EMPTY_BOTTLE_e) {
+                    if (mEquipItem == dItemNo_EMPTY_BOTTLE_e) {
                         return procBottleSwing_init(0);
                     }
-                    if (mEquipItem == dItem_SKULL_HAMMER_e) {
+                    if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
                         direction = getDirectionFromShapeAngle();
                         if (mStickDistance > 0.05f &&
                             ((direction == DIR_LEFT || direction == DIR_RIGHT)))
@@ -4256,10 +4261,10 @@ BOOL daPy_lk_c::checkNextActionFromButton() {
                             return procHammerFrontSwingReady_init();
                         }
                     }
-                    if (checkPhotoBoxItem(mEquipItem) || mEquipItem == dItem_TELESCOPE_e) {
+                    if (checkPhotoBoxItem(mEquipItem) || mEquipItem == dItemNo_TELESCOPE_e) {
                         return procScope_init(mEquipItem);
                     }
-                    if (mEquipItem == dItem_WIND_WAKER_e) {
+                    if (mEquipItem == dItemNo_WIND_WAKER_e) {
                         return procTactWait_init(-1);
                     }
                 }
@@ -4287,7 +4292,7 @@ BOOL daPy_lk_c::checkNextActionFromButton() {
                     m_old_fdata->initOldFrameMorf(5.0f, 0, 0x2A);
                     return true;
                 }
-            } else if (dComIfGs_getSelectEquip(1) == dItem_NONE_e ||
+            } else if (dComIfGs_getSelectEquip(1) == dItemNo_NONE_e ||
                        mEquipItem == daPyItem_NONE_e)
             {
                 if (checkModeFlg(ModeFlg_00000001)) {
@@ -4347,10 +4352,10 @@ void daPy_lk_c::setShieldGuard() {
         dComIfGp_setRStatus(dActStts_DEFEND_e);
     }
     u16 uVar3;
-    if (mEquipItem == dItem_SKULL_HAMMER_e) {
-        uVar3 = LKANM_BCK_ATNGHAM;
+    if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
+        uVar3 = dRes_INDEX_LKANM_BCK_ATNGHAM_e;
     } else {
-        uVar3 = LKANM_BCK_ATNG;
+        uVar3 = dRes_INDEX_LKANM_BCK_ATNG_e;
     }
     if (!checkGuardSlip()) {
         if (spActionButton() && dComIfGp_getRStatus() == dActStts_DEFEND_e) {
@@ -4369,8 +4374,8 @@ void daPy_lk_c::setShieldGuard() {
                     m_pbCalc[PART_UPPER_e]->setRatio(2, local_18);
                 }
             }
-            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_ATNLS ||
-                m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_ATNRS)
+            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_ATNLS_e ||
+                m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_ATNRS_e)
             {
                 mAnmRatioUpper[UPPER_MOVE2_e].getAnmTransform()->setFrame(
                     mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
@@ -4414,7 +4419,7 @@ void daPy_lk_c::checkNextActionItemFly() {
     if (!daPy_dmEcallBack_c::checkCurse()) {
         if (checkBowItem(mEquipItem)) {
             checkNextActionBowFly();
-        } else if (mEquipItem == dItem_BOOMERANG_e) {
+        } else if (mEquipItem == dItemNo_BOOMERANG_e) {
             checkNextActionBoomerangFly();
         }
     }
@@ -4920,7 +4925,7 @@ int daPy_lk_c::changeSlideProc() {
 BOOL daPy_lk_c::changeWaitProc() {
     if (checkGrabAnime()) {
         return procGrabWait_init();
-    } else if (checkUpperAnime(LKANM_BCK_BOOMCATCH)) {
+    } else if (checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMCATCH_e)) {
         return procBoomerangCatch_init();
     } else if (daPy_getPlayerActorClass() != this) {
         return procControllWait_init();
@@ -5016,7 +5021,7 @@ BOOL daPy_lk_c::setDamagePoint(f32 amount) {
 BOOL daPy_lk_c::checkNormalDamage(int param_1) {
     if (checkGrabAnime() || mCurProc != daPyProc_MOVE_e ||
         (std::abs(mNormalSpeed * (m3580 == 8 ? 1.0f : cM_scos(m34E2)) / mMaxNormalSpeed) < 0.9f) ||
-        (!checkNoDamageMode() && !dComIfGs_checkBottle(dItem_FAIRY_BOTTLE_e) && dComIfGs_getLife() <= param_1))
+        (!checkNoDamageMode() && !dComIfGs_checkBottle(dItemNo_FAIRY_BOTTLE_e) && dComIfGs_getLife() <= param_1))
     {
         return true;
     }
@@ -5025,7 +5030,7 @@ BOOL daPy_lk_c::checkNormalDamage(int param_1) {
 
 /* 80110448-801104E4       .text setDashDamage__9daPy_lk_cFv */
 void daPy_lk_c::setDashDamage() {
-    setActAnimeUpper(LKANM_BCK_DAMDASH, UPPER_MOVE2_e, m_HIO->mMove.m.field_0x48, 0.0f, -1,
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_DAMDASH_e, UPPER_MOVE2_e, m_HIO->mMove.m.field_0x48, 0.0f, -1,
                      m_HIO->mBasic.m.field_0xC);
     setPriTextureAnime(0x40, 0);
     mFrameCtrlUpper[UPPER_MOVE2_e].setFrame(mFrameCtrlUnder[UNDER_MOVE1_e].getFrame());
@@ -5235,7 +5240,7 @@ BOOL daPy_lk_c::changeDamageProc() {
                 }
                 
                 if (checkGrabWear() &&
-                    mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == PROC_NZ &&
+                    mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == fpcNm_NZ_e &&
                     grab_actor != NULL
                 ) {
                     cXyz* damage_vec = getDamageVec(&mCyl);
@@ -5337,7 +5342,7 @@ BOOL daPy_lk_c::changeAutoJumpProc() {
                     pcVar4 = NULL;
                 }
                 dVar10 = mNormalSpeed;
-                if (dComIfGs_getLife() != 0 || dComIfGs_checkBottle(dItem_FAIRY_BOTTLE_e)) {
+                if (dComIfGs_getLife() != 0 || dComIfGs_checkBottle(dItemNo_FAIRY_BOTTLE_e)) {
                     if (m357C != 3 && !checkGrabWear() && dVar10 >= m_HIO->mAutoJump.m.field_0x14 &&
                         mStickDistance > 0.85f && cLib_distanceAngleS(sVar3, shape_angle.y) < 0x800)
                     {
@@ -5550,9 +5555,9 @@ BOOL daPy_lk_c::changeDeadProc() {
     if (!dComIfGp_event_runCheck() && !checkPlayerDemoMode() && dComIfGs_getLife() == 0 &&
         !checkModeFlg(ModeFlg_DAMAGE))
     {
-        if (dComIfGs_checkBottle(dItem_FAIRY_BOTTLE_e)) {
+        if (dComIfGs_checkBottle(dItemNo_FAIRY_BOTTLE_e)) {
             makeFairy(&current.pos, daNpc_Fa1_c::Type_LINK_DOWN_e);
-            dComIfGs_setBottleItemIn(dItem_FAIRY_BOTTLE_e, dItem_EMPTY_BOTTLE_e);
+            dComIfGs_setBottleItemIn(dItemNo_FAIRY_BOTTLE_e, dItemNo_EMPTY_BOTTLE_e);
             return false;
         }
         if (mAcch.ChkGroundHit() || dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) ||
@@ -5638,27 +5643,27 @@ BOOL daPy_lk_c::checkHeavyStateOn() {
 
 /* 80111F5C-80111F7C       .text checkBottleItem__9daPy_lk_cCFi */
 BOOL daPy_lk_c::checkBottleItem(int itemNo) const {
-    return itemNo >= dItem_EMPTY_BOTTLE_e && itemNo <= UNK_BOTTLE_60;
+    return itemNo >= dItemNo_EMPTY_BOTTLE_e && itemNo <= dItemNo_UNK_BOTTLE_60_e;
 }
 
 /* 80111F7C-80111FEC       .text checkDrinkBottleItem__9daPy_lk_cCFi */
 BOOL daPy_lk_c::checkDrinkBottleItem(int itemNo) const {
-    return itemNo == dItem_RED_POTION_e || itemNo == dItem_GREEN_POTION_e || itemNo == dItem_BLUE_POTION_e || itemNo == dItem_SOUP_BOTTLE_e || itemNo == dItem_HALF_SOUP_BOTTLE_e;
+    return itemNo == dItemNo_RED_POTION_e || itemNo == dItemNo_GREEN_POTION_e || itemNo == dItemNo_BLUE_POTION_e || itemNo == dItemNo_SOUP_BOTTLE_e || itemNo == dItemNo_HALF_SOUP_BOTTLE_e;
 }
 
 /* 80111FEC-8011201C       .text checkOpenBottleItem__9daPy_lk_cCFi */
 BOOL daPy_lk_c::checkOpenBottleItem(int itemNo) const {
-    return itemNo == dItem_FIREFLY_BOTTLE_e || itemNo == dItem_WATER_BOTTLE_e || itemNo == dItem_FOREST_WATER_e || itemNo == dItem_FAIRY_BOTTLE_e;
+    return itemNo == dItemNo_FIREFLY_BOTTLE_e || itemNo == dItemNo_WATER_BOTTLE_e || itemNo == dItemNo_FOREST_WATER_e || itemNo == dItemNo_FAIRY_BOTTLE_e;
 }
 
 /* 8011201C-80112044       .text checkBowItem__9daPy_lk_cCFi */
 BOOL daPy_lk_c::checkBowItem(int itemNo) const {
-    return itemNo == dItem_BOW_e || itemNo == dItem_MAGIC_ARROW_e || itemNo == dItem_LIGHT_ARROW_e;
+    return itemNo == dItemNo_BOW_e || itemNo == dItemNo_MAGIC_ARROW_e || itemNo == dItemNo_LIGHT_ARROW_e;
 }
 
 /* 80112044-80112064       .text checkPhotoBoxItem__9daPy_lk_cCFi */
 BOOL daPy_lk_c::checkPhotoBoxItem(int itemNo) const {
-    return itemNo == CAMERA || itemNo == CAMERA2;
+    return itemNo == dItemNo_PICTO_BOX_e || itemNo == dItemNo_DELUXE_PICTO_BOX_e;
 }
 
 /* 80112064-80112100       .text checkScopeEnd__9daPy_lk_cFv */
@@ -5751,7 +5756,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
         deleteEquipItem(FALSE);
         maxFallSpeed = m_HIO->mAutoJump.m.field_0x10;
         setSmallFanModel();
-        mEquipItem = dItem_DEKU_LEAF_e;
+        mEquipItem = dItemNo_DEKU_LEAF_e;
         m35F0 = m3688.y;
         m3730 = cXyz::Zero;
         m34E0 = 0;
@@ -5768,7 +5773,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
         }
     } else if (mCurProc == daPyProc_DEMO_PRESENT_e || mCurProc == daPyProc_NOT_USE_e) {
         daItemBase_c* item = (daItemBase_c*)fopAcM_getItemEventPartner(this);
-        if (item && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
+        if (item && (fopAcM_GetName(item) == fpcNm_ITEM_e || fopAcM_GetName(item) == fpcNm_Demo_Item_e)) {
             item->dead();
         }
     } else if (mCurProc == daPyProc_DEMO_LETTER_READ_e) {
@@ -5889,10 +5894,10 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
     
     m35EC = 0.0f;
     
-    if (mEquipItem == dItem_SKULL_HAMMER_e) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMMERDAM));
+    if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_HAMMERDAM_e));
     } else if (checkBowItem(mEquipItem) && !checkBowAnime()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWRELORDA));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_ARROWRELORDA_e));
     }
     
     m35E8 = 0.0f;
@@ -6052,7 +6057,7 @@ BOOL daPy_lk_c::procControllWait() {
 /* 80112E60-80113044       .text procWait_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWait_init() {
     if (mDemo.getDemoMode() == daPy_demo_c::DEMO_KM_WAIT_e && m_tex_scroll_heap.field_0x6 == 0xFFFF) {
-        changeTextureAnime(LKANM_BTP_TMABACC, LKANM_BTK_TEUR, -1);
+        changeTextureAnime(dRes_INDEX_LKANM_BTP_TMABACC_e, dRes_INDEX_LKANM_BTK_TEUR_e, -1);
         voiceStart(38);
         mProcVar0.m34D0 = 20;
     }
@@ -6123,7 +6128,7 @@ BOOL daPy_lk_c::procWait() {
                 onModeFlg(ModeFlg_00000100);
             }
         } else if (checkRestHPAnime() &&
-                   m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_WAITB)
+                   m_anm_heap_under[UNDER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_WAITB_e)
         {
             s32 uVar3 = m_tex_anm_heap.mIdx == mTexAnmIndexTable[daPyFace_TMABAF].mBtpIdx;
             u16 uVar1 = m3530;
@@ -6146,7 +6151,7 @@ BOOL daPy_lk_c::procWait() {
                 mProcVar0.m34D0 = 20;
             }
         }
-        if (!dComIfGp_event_runCheck() && m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_WAITS &&
+        if (!dComIfGp_event_runCheck() && m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_WAITS_e &&
             checkNoUpperAnime() && daPy_matAnm_c::getEyeMoveFlg() == 0 && m3564.y == 0 && m3564.z == 0 && m3564.x == 0)
         {
             mProcVar1.m34D2--;
@@ -6222,17 +6227,8 @@ BOOL daPy_lk_c::procMove() {
     setSpeedAndAngleNormal(m_HIO->mMove.m.field_0x0);
     if (!checkNextMode(0) && !changeFrontWallTypeProc() && !checkIceSlipFall()) {
         if (mDemo.getDemoMode() == daPy_demo_c::DEMO_N_WALK_e) {
-            // Fakematch. Retail regalloc doesn't match unless all three of these vars are given temps.
-            // But demo only matches with this:
-            // if (mNormalSpeed > mMaxNormalSpeed * m_HIO->mMove.m.field_0x2C) {
-            //     mNormalSpeed = mMaxNormalSpeed * m_HIO->mMove.m.field_0x2C;
-            // }
-            f32 vel = mNormalSpeed;
-            f32 temp1 = mMaxNormalSpeed;
-            f32 temp2 = m_HIO->mMove.m.field_0x2C;
-            if (vel > temp1 * temp2) {
-                vel = temp1 * temp2;
-                mNormalSpeed = vel;
+            if (mNormalSpeed > mMaxNormalSpeed * m_HIO->mMove.m.field_0x2C) {
+                mNormalSpeed = m_HIO->mMove.m.field_0x2C * mMaxNormalSpeed;
             }
         }
         setBlendMoveAnime(-1.0f);
@@ -6486,8 +6482,8 @@ BOOL daPy_lk_c::procCrouchDefenseSlip_init() {
         m35AC = m_HIO->mGuard.m.field_0x24;
         mProcVar6.m3570 = 0;
     }
-    if (mEquipItem == dItem_SKULL_HAMMER_e) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ATNGAHAMA));
+    if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_ATNGAHAMA_e));
         m35EC = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     } else {
         m35E8 = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
@@ -6503,7 +6499,7 @@ BOOL daPy_lk_c::procCrouchDefenseSlip() {
     if (mProcVar0.m34D0 > 0) {
         mProcVar0.m34D0--;
     }
-    if (mEquipItem == dItem_SKULL_HAMMER_e) {
+    if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
         m35EC = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     } else {
         m35E8 = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
@@ -6911,7 +6907,7 @@ BOOL daPy_lk_c::procFrontRollCrash_init() {
     dKy_Sound_set(current.pos, 100, fopAcM_GetID(this), 5);
     if (mAcch.ChkWallHit() && mAcchCir[0].ChkWallHit()) {
         fopAc_ac_c* actor = dComIfG_Bgsp()->GetActorPointer(mAcchCir[0]);
-        if (actor != 0 && fopAcM_GetName(actor) == PROC_Obj_Movebox) {
+        if (actor != 0 && fopAcM_GetName(actor) == fpcNm_Obj_Movebox_e) {
             daObjMovebox::Act_c* movebox = (daObjMovebox::Act_c*)actor;
             movebox->set_rollCrash();
         }
@@ -7193,7 +7189,7 @@ BOOL daPy_lk_c::procAutoJump() {
             }
         }
     } else if (speed.y < -gravity && mProcVar6.m3570 != 2) {
-        if (mActorKeepGrab.getActor() != NULL && fopAcM_GetName(mActorKeepGrab.getActor()) == PROC_NPC_MD &&
+        if (mActorKeepGrab.getActor() != NULL && fopAcM_GetName(mActorKeepGrab.getActor()) == fpcNm_NPC_MD_e &&
             dComIfGs_isEventBit(dSv_event_flag_c::UNK_1620))
         {
             speed.y = 5.0f;
@@ -8248,9 +8244,9 @@ BOOL daPy_lk_c::procGuardSlip_init() {
 
     cXyz* damage_vec = getDamageVec(&mCyl);
     commonProcInit(daPyProc_GUARD_SLIP_e);
-    if (mEquipItem == dItem_SKULL_HAMMER_e) {
+    if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
         dVar5 = ANM_ATNGAHAM;
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ATNGAHAMA));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_ATNGAHAMA_e));
     } else if (mDirection == DIR_LEFT) {
         dVar5 = ANM_ATNGAL;
     } else {
@@ -8280,7 +8276,7 @@ BOOL daPy_lk_c::procGuardSlip_init() {
         m35AC = m_HIO->mGuard.m.field_0x24;
         mProcVar6.m3570 = 0;
     }
-    if (mEquipItem == dItem_SKULL_HAMMER_e) {
+    if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
         m35EC = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     } else {
         m35E8 = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
@@ -8297,7 +8293,7 @@ BOOL daPy_lk_c::procGuardSlip() {
         mProcVar0.m34D0--;
     }
     setShapeAngleToAtnActor();
-    if (mEquipItem == dItem_SKULL_HAMMER_e) {
+    if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
         m35EC = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     } else {
         m35E8 = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
@@ -8567,7 +8563,7 @@ BOOL daPy_lk_c::procNotUse() {
     }
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         daItemBase_c* item = (daItemBase_c*)fopAcM_getItemEventPartner(this);
-        if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
+        if (item != NULL && (fopAcM_GetName(item) == fpcNm_ITEM_e || fopAcM_GetName(item) == fpcNm_Demo_Item_e)) {
             item->show();
         }
         if (mProcVar2.m34D4 == 0 && checkBottleItem((u16)mProcVar6.mBottleItem)) {
@@ -8590,7 +8586,7 @@ BOOL daPy_lk_c::procNotUse() {
                     }
                 } else if (msg_p->mStatus == fopMsgStts_BOX_CLOSED_e) {
                     msg_p->mStatus = fopMsgStts_MSG_DESTROYED_e;
-                    if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
+                    if (item != NULL && (fopAcM_GetName(item) == fpcNm_ITEM_e || fopAcM_GetName(item) == fpcNm_Demo_Item_e)) {
                         item->dead();
                     }
                     dComIfGp_event_reset();
@@ -8641,6 +8637,7 @@ int daPy_lk_c::setLegAngle(f32 param_1, int param_2, s16* param_3, s16* param_4)
     if (dVar9 > 10.0f) {
         dVar9 = 10.0f;
     }
+
     mDoMtx_concat(m37B4, mFootData[param_2].field_0x088[0], mDoMtx_stack_c::get());
     spE8.set(0.0f, mDoMtx_stack_c::get()[1][3], mDoMtx_stack_c::get()[2][3]);
 
@@ -8649,6 +8646,7 @@ int daPy_lk_c::setLegAngle(f32 param_1, int param_2, s16* param_3, s16* param_4)
 
     mDoMtx_concat(m37B4, mFootData[param_2].field_0x088[2], mDoMtx_stack_c::get());
     spD0.set(0.0f, mDoMtx_stack_c::get()[1][3] + 3.25f, mDoMtx_stack_c::get()[2][3]);
+
     spAC = spDC - spE8;
     spA0 = spD0 - spDC;
     spB8.x = spD0.x;
@@ -8691,8 +8689,10 @@ int daPy_lk_c::setLegAngle(f32 param_1, int param_2, s16* param_3, s16* param_4)
     spC4.z = sp58.z + f2 * sp70.z;
     sp94 = spC4 - spE8;
     sp88 = spB8 - spC4;
+
     mDoMtx_concat(m37B4, mpCLModel->getAnmMtx(0), mDoMtx_stack_c::get());
     sp64.set(0.0f, mDoMtx_stack_c::get()[1][3], mDoMtx_stack_c::get()[2][3]);
+
     s16 r29 = cM_atan2s(-sp64.y, -sp64.z);
     s16 r27 = cM_atan2s(sp94.y, sp94.z);
     s16 r26 = cM_atan2s(sp88.y, sp88.z);
@@ -8912,7 +8912,7 @@ void daPy_lk_c::autoGroundHit() {
     if (!checkNoResetFlg0(daPyFlg0_HOVER_BOOTS)) {
         return;
     }
-    if (!(mTinkleHoverTimer > 0)) {
+    if (mTinkleHoverTimer <= 0) {
         return;
     }
     if (dComIfGp_event_runCheck() && !checkSpecialDemoMode()) {
@@ -9002,7 +9002,7 @@ void daPy_lk_c::setNeckAngle() {
             sp18 = dComIfGp_getShipActor()->m0434;
             r28 = true;
         }
-    } else if (m_tex_anm_heap.mIdx == LKANM_BTP_TDASHKAZE) {
+    } else if (m_tex_anm_heap.mIdx == dRes_INDEX_LKANM_BTP_TDASHKAZE_e) {
         if (checkHeavyStateOn() && m373C.abs2XZ() > SQUARE(5.0f)) {
             spA0.set(current.pos.x - 100.0f * m373C.x, 120.0f + current.pos.y, current.pos.z - 100.0f * m373C.z);
         } else if (!checkHeavyStateOn() && m3730.abs2XZ() > SQUARE(5.0f)) {
@@ -9088,7 +9088,7 @@ void daPy_lk_c::setNeckAngle() {
     r25_3 = r25_3 - m3564.y;
     s16 r4;
     s16 r23;
-    if (checkModeFlg(ModeFlg_00000080 | ModeFlg_08000000) && sp18 != NULL && !checkUpperAnime(LKANM_BCK_DAMDASH)) {
+    if (checkModeFlg(ModeFlg_00000080 | ModeFlg_08000000) && sp18 != NULL && !checkUpperAnime(dRes_INDEX_LKANM_BCK_DAMDASH_e)) {
         spB8 = *sp18 - spC4;
         r27 = cM_atan2s(-spB8.y, spB8.absXZ());
         r23_3 = cM_atan2s(spB8.x, spB8.z) - m34DE;
@@ -9105,8 +9105,8 @@ void daPy_lk_c::setNeckAngle() {
         } else if (r23_3 < -m_HIO->mShip.m.field_0x0) {
             r23_3 = -m_HIO->mShip.m.field_0x0;
         }
-        if (checkModeFlg(ModeFlg_00000080) && m_anm_heap_upper[UPPER_MOVE0_e].mIdx != LKANM_BCK_DASHKAZE &&
-            m_anm_heap_upper[UPPER_MOVE1_e].mIdx != LKANM_BCK_DASHKAZE)
+        if (checkModeFlg(ModeFlg_00000080) && m_anm_heap_upper[UPPER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_DASHKAZE_e &&
+            m_anm_heap_upper[UPPER_MOVE1_e].mIdx != dRes_INDEX_LKANM_BCK_DASHKAZE_e)
         {
             if (r28) {
                 r30 = (r27 >> 1) - r24_4;
@@ -9660,7 +9660,7 @@ void daPy_lk_c::checkLightHit() {
             m3438.setAngle(cM_atan2s(-lightVec.y, lightVec.absXZ()), angleY, 0);
             if (m3438.getEmitter() != NULL) {
                 if (mFanLightCps.GetAtHitAc() != 0 &&
-                    (fopAcM_GetName(mFanLightCps.GetAtHitAc()) == PROC_BPW))
+                    (fopAcM_GetName(mFanLightCps.GetAtHitAc()) == fpcNm_BPW_e))
                 {
                     m3438.getEmitter()->setGlobalScale(boss_scale);
                 } else {
@@ -9978,13 +9978,13 @@ void daPy_lk_c::setCollision() {
                         NULL
                     );
                     if (emitter1 != NULL) {
-                        emitter1->mGlobalParticleScale.x = dVar27;
+                        emitter1->setGlobalParticleWidthScale(dVar27);
                     }
                     if (emitter2 != NULL) {
-                        emitter2->mGlobalParticleScale.x = dVar27;
+                        emitter2->setGlobalParticleWidthScale(dVar27);
                     }
                     if (emitter3 != NULL) {
-                        emitter3->mGlobalParticleScale.x = dVar27;
+                        emitter3->setGlobalParticleWidthScale(dVar27);
                     }
                 }
             }
@@ -10422,7 +10422,7 @@ void daPy_lk_c::setDemoData() {
                     if (*face_p == 0) {
                         resetDemoTextureAnime();
                     } else if (*face_p == 1) {
-                        changeTextureAnime(LKANM_BTP_TMABAI, LKANM_BTK_TMABA, -1);
+                        changeTextureAnime(dRes_INDEX_LKANM_BTP_TMABAI_e, dRes_INDEX_LKANM_BTK_TMABA_e, -1);
                     }
                 }
             }
@@ -10910,6 +10910,8 @@ BOOL daPy_lk_c::startRestartRoom(u32 mode, int eventInfoIdx, f32 param_3, int i_
                     pos = &current.pos;
                 }
 
+                int subsector_x;
+                int subsector_z;
                 int quad_x = (1.0f / 50000.0f) * (350000.0f + pos->x);
                 int quad_z = (1.0f / 50000.0f) * (350000.0f + pos->z);
                 if (quad_x < 0) {
@@ -10922,9 +10924,8 @@ BOOL daPy_lk_c::startRestartRoom(u32 mode, int eventInfoIdx, f32 param_3, int i_
                 } else if (quad_z > 13) {
                     quad_z = 13;
                 }
-
-                int subsector_z = (quad_z & 1) << 1;
-                int subsector_x = quad_x & 1;
+                subsector_z = (quad_z & 1) << 1;
+                subsector_x = quad_x & 1;
                 int sector_num = (quad_z >> 1) * 7 + (quad_x >> 1);
                 int scls_idx = subsector_x + (sector_num << 2) + subsector_z;
 
@@ -11156,7 +11157,7 @@ void daPy_lk_c::checkRoofRestart() {
 #if VERSION > VERSION_DEMO
     if (
         dComIfG_Bgsp()->ChkMoveBG(mAcch.m_roof) &&
-        fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_roof)) == PROC_BRIDGE
+        fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_roof)) == fpcNm_BRIDGE_e
     ) {
         return;
     }
@@ -11206,11 +11207,11 @@ BOOL daPy_lk_c::execute() {
         return TRUE;
     }
     
-    if (dComIfGs_checkBottle(dItem_FOREST_WATER_e)) {
+    if (dComIfGs_checkBottle(dItemNo_FOREST_WATER_e)) {
         if (dComIfGs_getFwaterTimer() == 0) {
             if (dComIfGp_event_compulsory(this)) {
                 onNoResetFlg1(daPyFlg1_UNK200);
-                dComIfGs_setBottleItemIn(dItem_FOREST_WATER_e, dItem_WATER_BOTTLE_e);
+                dComIfGs_setBottleItemIn(dItemNo_FOREST_WATER_e, dItemNo_WATER_BOTTLE_e);
                 mDemo.setSpecialDemoType();
                 m3628 = fpcM_ERROR_PROCESS_ID_e;
 #if VERSION > VERSION_JPN
@@ -11238,15 +11239,15 @@ BOOL daPy_lk_c::execute() {
     }
     
     if (checkEquipHeavyBoots() &&
-        dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_IRON_BOOTS_e &&
-        dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_IRON_BOOTS_e &&
-        dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_IRON_BOOTS_e
+        dComIfGp_getSelectItem(dItemBtn_X_e) != dItemNo_IRON_BOOTS_e &&
+        dComIfGp_getSelectItem(dItemBtn_Y_e) != dItemNo_IRON_BOOTS_e &&
+        dComIfGp_getSelectItem(dItemBtn_Z_e) != dItemNo_IRON_BOOTS_e
     ) {
         offNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS);
     } else if (checkEquipDragonShield() &&
-        dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_MAGIC_ARMOR_e &&
-        dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_MAGIC_ARMOR_e &&
-        dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_MAGIC_ARMOR_e
+        dComIfGp_getSelectItem(dItemBtn_X_e) != dItemNo_MAGIC_ARMOR_e &&
+        dComIfGp_getSelectItem(dItemBtn_Y_e) != dItemNo_MAGIC_ARMOR_e &&
+        dComIfGp_getSelectItem(dItemBtn_Z_e) != dItemNo_MAGIC_ARMOR_e
     ) {
         offNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD);
     }
@@ -11364,7 +11365,7 @@ BOOL daPy_lk_c::execute() {
     setDemoData();
     setStickData();
     
-    if (mEquipItem == dItem_GRAPPLING_HOOK_e &&
+    if (mEquipItem == dItemNo_GRAPPLING_HOOK_e &&
         (mCurProc == daPyProc_ROPE_SUBJECT_e || mCurProc == daPyProc_ROPE_MOVE_e) &&
         mActorKeepEquip.getActor() != NULL && fopAcM_GetParam(mActorKeepEquip.getActor()) == 2
     ) {
@@ -11626,7 +11627,7 @@ BOOL daPy_lk_c::execute() {
         daBoko_c* boko = static_cast<daBoko_c*>(mActorKeepEquip.getActor());
         boko->getTopPos(&mSwordTopPos);
         boko->getBlurRootPos(&m36C4);
-    } else if (mEquipItem == dItem_SKULL_HAMMER_e) {
+    } else if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
         cMtx_multVec(mpEquipItemModel->getBaseTRMtx(), &hammer_top, &mSwordTopPos);
         cMtx_multVec(mpEquipItemModel->getBaseTRMtx(), &hammer_root, &m36C4);
     } else if (mEquipItem == daPyItem_SWORD_e) {
@@ -11823,7 +11824,7 @@ void daPy_lk_c::initTextureAnime() {
     m_tex_anm_heap.m_buffer = new(0x20) u8[0x1000];
     JUT_ASSERT(VERSION_SELECT(20682, 20789, 20869, 20869), m_tex_anm_heap.m_buffer != NULL);
     
-    JKRReadIdxResource(m_tex_anm_heap.m_buffer, 0x1000, LKANM_BTP_TMABAA, dComIfGp_getAnmArchive());
+    JKRReadIdxResource(m_tex_anm_heap.m_buffer, 0x1000, dRes_INDEX_LKANM_BTP_TMABAA_e, dComIfGp_getAnmArchive());
     J3DAnmTexPattern* btp = static_cast<J3DAnmTexPattern*>(J3DAnmLoaderDataBase::load(m_tex_anm_heap.m_buffer));
     btp->searchUpdateMaterialID(mpCLModelData);
     u16 material_num = btp->getUpdateMaterialNum();
@@ -11873,7 +11874,7 @@ void daPy_lk_c::initTextureScroll() {
     m_tex_scroll_heap.m_buffer = new(0x20) u8[0x800];
     JUT_ASSERT(VERSION_SELECT(20757, 20864, 20944, 20944), m_tex_scroll_heap.m_buffer != NULL);
     
-    JKRReadIdxResource(m_tex_scroll_heap.m_buffer, 0x800, LKANM_BTK_TMABA, dComIfGp_getAnmArchive());
+    JKRReadIdxResource(m_tex_scroll_heap.m_buffer, 0x800, dRes_INDEX_LKANM_BTK_TMABA_e, dComIfGp_getAnmArchive());
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(m_tex_scroll_heap.m_buffer));
     btk->searchUpdateMaterialID(mpCLModelData);
     u16 material_num = btk->getUpdateMaterialNum();
@@ -11933,55 +11934,55 @@ BOOL daPy_lk_c::createHeap() {
     J3DAnmTevRegKey* brk;
     int ret;
     
-    mpCLModelData = initModel(&mpCLModel, LINK_BDL_CL, 0x37221222);
-    tmp_modelData = initModel(&mpHandsModel, LINK_BDL_HANDS, 0x37221222);
-    tmp_modelData = initModel(&mpKatsuraModel, LINK_BDL_KATSURA, 0x37221222);
-    tmp_modelData = initModel(&mpYamuModel, LINK_BDL_YAMU, 0x37221222);
-    tmp_modelData = initModel(&mpPringModel, LINK_BDL_PRING, 0x37221222);
-    tmp_modelData = initModel(&mpSwgripaModel, LINK_BDL_SWGRIPA, 0x37221222);
+    mpCLModelData = initModel(&mpCLModel, dRes_INDEX_LINK_BDL_CL_e, 0x37221222);
+    tmp_modelData = initModel(&mpHandsModel, dRes_INDEX_LINK_BDL_HANDS_e, 0x37221222);
+    tmp_modelData = initModel(&mpKatsuraModel, dRes_INDEX_LINK_BDL_KATSURA_e, 0x37221222);
+    tmp_modelData = initModel(&mpYamuModel, dRes_INDEX_LINK_BDL_YAMU_e, 0x37221222);
+    tmp_modelData = initModel(&mpPringModel, dRes_INDEX_LINK_BDL_PRING_e, 0x37221222);
+    tmp_modelData = initModel(&mpSwgripaModel, dRes_INDEX_LINK_BDL_SWGRIPA_e, 0x37221222);
     
-    tmp_modelData = initModel(&mpSwgripmsModel, LINK_BDL_SWGRIPMS, 0x37221222);
-    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_SWGRIPMSAB);
+    tmp_modelData = initModel(&mpSwgripmsModel, dRes_INDEX_LINK_BDL_SWGRIPMS_e, 0x37221222);
+    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BCK_SWGRIPMSAB_e);
     ret = mSwgripmsabBckAnim.init(mpSwgripmsModel->getModelData(), bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(20859, 20966, 21046, 21046), FALSE); }
-    mpTswgripmsabBrk = entryBrk(tmp_modelData, LINK_BRK_TSWGRIPMSAB);
-    mpTswgripmsBtk = entryBtk(tmp_modelData, LINK_BTK_TSWGRIPMS);
+    mpTswgripmsabBrk = entryBrk(tmp_modelData, dRes_INDEX_LINK_BRK_TSWGRIPMSAB_e);
+    mpTswgripmsBtk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_TSWGRIPMS_e);
     
-    tmp_modelData = initModel(&mpPodmsModel, LINK_BDL_PODMS, 0x37221222);
+    tmp_modelData = initModel(&mpPodmsModel, dRes_INDEX_LINK_BDL_PODMS_e, 0x37221222);
     
-    tmp_modelData = initModel(&mpShaModel, LINK_BDL_SHA, 0x37221222);
-    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_ATNGSHA);
+    tmp_modelData = initModel(&mpShaModel, dRes_INDEX_LINK_BDL_SHA_e, 0x37221222);
+    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BCK_ATNGSHA_e);
     ret = mAtngshaBck.init(mpShaModel->getModelData(), bck, false, J3DFrameCtrl::EMode_NONE);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(20876, 20983, 21063, 21063), FALSE); }
     
-    tmp_modelData = initModel(&mpShmsModel, LINK_BDL_SHMS, 0x37221222);
-    mpTshmsBtk = entryBtk(tmp_modelData, LINK_BTK_TSHMS);
+    tmp_modelData = initModel(&mpShmsModel, dRes_INDEX_LINK_BDL_SHMS_e, 0x37221222);
+    mpTshmsBtk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_TSHMS_e);
     J3DSkinDeform* shmsSkinDeform = new J3DSkinDeform();
     if (!shmsSkinDeform) { JUT_ASSERT(VERSION_SELECT(20890, 20997, 21077, 21077), FALSE); }
     if (mpShmsModel->setSkinDeform(shmsSkinDeform, 1) != J3DErrType_Success ) { JUT_ASSERT(VERSION_SELECT(20893, 21000, 21080, 21080), FALSE); }
     
-    tmp_modelData = initModel(&mpYmsls00Model, LINK_BDL_YMSLS00, 0x13000222);
-    mpYmsls00Btk = entryBtk(tmp_modelData, LINK_BTK_YMSLS00);
+    tmp_modelData = initModel(&mpYmsls00Model, dRes_INDEX_LINK_BDL_YMSLS00_e, 0x13000222);
+    mpYmsls00Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_YMSLS00_e);
     
-    tmp_modelData = initModel(&mpHbootsModels[0], LINK_BDL_HBOOTS, 0x37221222);
-    tmp_modelData = initModel(&mpHbootsModels[1], LINK_BDL_HBOOTS, 0x37221222);
+    tmp_modelData = initModel(&mpHbootsModels[0], dRes_INDEX_LINK_BDL_HBOOTS_e, 0x37221222);
+    tmp_modelData = initModel(&mpHbootsModels[1], dRes_INDEX_LINK_BDL_HBOOTS_e, 0x37221222);
     
-    tmp_modelData = initModel(&mpSuimenMunyaModel, LINK_BDL_SUIMEN_MUNYA, 0x11001222);
-    mpSuimenMunyaBtk = entryBtk(tmp_modelData, LINK_BTK_SUIMEN_MUNYA);
+    tmp_modelData = initModel(&mpSuimenMunyaModel, dRes_INDEX_LINK_BDL_SUIMEN_MUNYA_e, 0x11001222);
+    mpSuimenMunyaBtk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_SUIMEN_MUNYA_e);
     
-    tmp_modelData = initModel(&mpYuchw00Model, LINK_BDL_YUCHW00, 0x13000222);
-    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_YUCHW00);
+    tmp_modelData = initModel(&mpYuchw00Model, dRes_INDEX_LINK_BDL_YUCHW00_e, 0x13000222);
+    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BCK_YUCHW00_e);
     ret = mYuchw00Bck.init(tmp_modelData, bck, 1, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(20926, 21033, 21113, 21113), FALSE); }
-    mpYuchw00Btk = entryBtk(tmp_modelData, LINK_BTK_YUCHW00);
-    mpYuchw00Brk = entryBrk(tmp_modelData, LINK_BRK_YUCHW00);
+    mpYuchw00Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_YUCHW00_e);
+    mpYuchw00Brk = entryBrk(tmp_modelData, dRes_INDEX_LINK_BRK_YUCHW00_e);
     mpYuchw00Brk->setFrame(mpYuchw00Brk->getFrameMax()-0.001f);
     
-    tmp_modelData = initModel(&mpYbafo00Model, LINK_BDL_YBAFO00, 0x13000222);
-    mpYbafo00Btk = entryBtk(tmp_modelData, LINK_BTK_YBAFO00);
+    tmp_modelData = initModel(&mpYbafo00Model, dRes_INDEX_LINK_BDL_YBAFO00_e, 0x13000222);
+    mpYbafo00Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_YBAFO00_e);
     mpYbafo00Btk->setFrame(mpYbafo00Btk->getFrameMax()-0.001f);
     
-    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_YAURA00));
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_YAURA00_e));
     JUT_ASSERT(VERSION_SELECT(20943, 21050, 21130, 21130), tmp_modelData != NULL);
     daPy_aura_c* aura_p = mMagicArmorAuraEntries;
     for (int i = 0; i < 6; i++) {
@@ -11989,43 +11990,43 @@ BOOL daPy_lk_c::createHeap() {
         JUT_ASSERT(VERSION_SELECT(20952, 21059, 21139, 21139), aura_p->getModel() != NULL);
         aura_p++;
     }
-    mpYaura00Btk = entryBtk(tmp_modelData, LINK_BTK_YAURA00);
-    brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_R);
+    mpYaura00Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_YAURA00_e);
+    brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YAURA00_R_e);
     ret = mYaura00rBrk.init(tmp_modelData, brk, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(20960, 21067, 21147, 21147), FALSE); }
     mYaura00rBrk.entryFrame(0.0f);
     
-    tmp_modelData = initModel(&mpYmgcs00Model, LINK_BDL_YMGCS00, 0x11001222);
-    mpYmgcs00Btk = entryBtk(tmp_modelData, LINK_BTK_YMGCS00);
-    brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_MS);
+    tmp_modelData = initModel(&mpYmgcs00Model, dRes_INDEX_LINK_BDL_YMGCS00_e, 0x11001222);
+    mpYmgcs00Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_YMGCS00_e);
+    brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YMGCS00_MS_e);
     ret = mYmgcs00Brk.init(tmp_modelData, brk, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(20974, 21081, 21161, 21161), FALSE); }
     mYmgcs00Brk.entryFrame(0.0f);
     
-    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_BOMB));
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_BOMB_e));
     JUT_ASSERT(VERSION_SELECT(20982, 21089, 21169, 21169), tmp_modelData != NULL);
-    mpBombBrk = entryBrk(tmp_modelData, LINK_BRK_BOMB);
+    mpBombBrk = entryBrk(tmp_modelData, dRes_INDEX_LINK_BRK_BOMB_e);
     
-    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_GWP00));
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_GWP00_e));
     JUT_ASSERT(VERSION_SELECT(20989, 21096, 21176, 21176), tmp_modelData != NULL);
-    mpGwp00BrkData = entryBrk(tmp_modelData, LINK_BRK_GWP00);
-    mpGwp00BtkData = entryBtk(tmp_modelData, LINK_BTK_GWP00);
+    mpGwp00BrkData = entryBrk(tmp_modelData, dRes_INDEX_LINK_BRK_GWP00_e);
+    mpGwp00BtkData = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_GWP00_e);
     
-    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_ARROW));
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_ARROW_e));
     JUT_ASSERT(VERSION_SELECT(20997, 21104, 21184, 21184), tmp_modelData != NULL);
-    mpIceArrowBtk = entryBtk(tmp_modelData, LINK_BTK_TTIPICE);
+    mpIceArrowBtk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_TTIPICE_e);
     
-    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_ARROWGLITTER));
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_ARROWGLITTER_e));
     JUT_ASSERT(VERSION_SELECT(21004, 21111, 21191, 21191), tmp_modelData != NULL);
-    mpLightArrowBtk = entryBtk(tmp_modelData, LINK_BTK_TARROWGLITTER);
+    mpLightArrowBtk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_TARROWGLITTER_e);
     
-    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_GICER00));
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_GICER00_e));
     JUT_ASSERT(VERSION_SELECT(21011, 21118, 21198, 21198), tmp_modelData != NULL);
-    mpGicer00Btk = entryBtk(tmp_modelData, LINK_BTK_GICER00);
+    mpGicer00Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_GICER00_e);
     
-    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_GICER01));
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_GICER01_e));
     JUT_ASSERT(VERSION_SELECT(21018, 21125, 21205, 21205), tmp_modelData != NULL);
-    mpGicer01Btk = entryBtk(tmp_modelData, LINK_BTK_GICER01);
+    mpGicer01Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_GICER01_e);
     
     const int numCLJoints = 0x2A;
     m_old_fdata = new mDoExt_MtxCalcOldFrame(new J3DTransformInfo[numCLJoints], new Quaternion[numCLJoints]);
@@ -12292,7 +12293,7 @@ void daPy_lk_c::playerInit() {
     mTactZevPartnerId = fpcM_ERROR_PROCESS_ID_e;
     m3630 = fpcM_ERROR_PROCESS_ID_e;
     
-    ResTIMG* blur_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_BLUR);
+    ResTIMG* blur_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BTI_BLUR_e);
     mSwBlur.mpTex = blur_img;
     
     current.angle.z = 0;
@@ -12301,10 +12302,10 @@ void daPy_lk_c::playerInit() {
     m3648.w = 1.0f;
     resetSeAnime();
     
-    ResTIMG* tmp_tex = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_I4_BALL128B);
+    ResTIMG* tmp_tex = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_I4_BALL128B_e);
     JUT_ASSERT(VERSION_SELECT(21500, 21607, 21687, 21687), tmp_tex != NULL);
     mSightPacket.setSightTex(tmp_tex);
-    ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_ROCK_MARK);
+    ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BTI_ROCK_MARK_e);
     JUT_ASSERT(VERSION_SELECT(21506, 21613, 21693, 21693), tmp_img != NULL);
     void* tmp_img_data = reinterpret_cast<void*>(reinterpret_cast<u32>(tmp_img) + tmp_img->imageOffset);
     mSightPacket.setLockTex(tmp_img_data);
@@ -12350,13 +12351,14 @@ void daPy_lk_c::playerInit() {
     mFace = daPyFace_NONE;
     m34DE = shape_angle.y;
     
-    ResTIMG* linktex_casual = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_LINKTEXBCI4);
+    ResTIMG* linktex_casual = (ResTIMG*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BTI_LINKTEXBCI4_e);
     int num_linktex_headers_seen = 0;
     J3DTexture* texture = mpCLModelData->getTexture();
     JUT_ASSERT(VERSION_SELECT(21577, 21684, 21764, 21764), texture != NULL);
+    u16 tex_no;
     JUTNameTab* textureName = mpCLModelData->getTextureName();
     JUT_ASSERT(VERSION_SELECT(21579, 21686, 21766, 21766), textureName != NULL);
-    for (u16 tex_no = 0; tex_no < texture->getNum(); tex_no++) {
+    for (tex_no = 0; tex_no < texture->getNum(); tex_no++) {
         const char* texName = textureName->getName(tex_no);
         if (strcmp(texName, "linktexS3TC") != 0) {
             continue;
@@ -12436,7 +12438,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
     #if VERSION > VERSION_DEMO
         || (
             m352E != 0 && dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd) &&
-            fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) == PROC_TBOX
+            fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) == fpcNm_TBOX_e
         )
 #endif
     ) {
@@ -12448,7 +12450,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
         m352E--;
         if (m352E != 0) {
             if (!dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd) ||
-                fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) != PROC_OBJ_IKADA)
+                fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) != fpcNm_OBJ_IKADA_e)
             {
                 return cPhs_INIT_e;
             }
@@ -12458,7 +12460,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
 #else
     if (((fopAcM_GetParam(this) & 0x80) != 0) && m352E != 0) {
         if (!dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd) ||
-            fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) != PROC_OBJ_IKADA)
+            fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) != fpcNm_OBJ_IKADA_e)
         {
             return cPhs_INIT_e;
         }
@@ -12525,7 +12527,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
                 ship->setStartModeWarp();
 #if VERSION > VERSION_DEMO
                 cXyz local_38(current.pos.x, current.pos.y + 1500.0f, current.pos.z);
-                fpc_ProcID uVar8 = fopAcM_create(PROC_TORNADO, 2, &local_38, fopAcM_GetRoomNo(this));
+                fpc_ProcID uVar8 = fopAcM_create(fpcNm_TORNADO_e, 2, &local_38, fopAcM_GetRoomNo(this));
                 ship->setTactWarpID(uVar8);
 #endif
             }
@@ -12598,7 +12600,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
         mDemo.setDemoMode(daPy_demo_c::DEMO_N_WAIT_e);
         procWait_init();
         csXyz auStack_58(0, 0, 0);
-        fpc_ProcID fVar11 = fopAcM_createChild(PROC_FM, fopAcM_GetID(this), 0, &current.pos,
+        fpc_ProcID fVar11 = fopAcM_createChild(fpcNm_FM_e, fopAcM_GetID(this), 0, &current.pos,
                                                fopAcM_GetRoomNo(this), &auStack_58, NULL, 0xFF, 0);
         if (fVar11 != fpcM_ERROR_PROCESS_ID_e) {
             onNoResetFlg0(daPyFlg0_NO_DRAW);
@@ -12959,11 +12961,11 @@ const daPy_anmIndex_c* daPy_lk_c::getAnmData(daPy_ANM anm) const {
         if (anm < (s32)ARRAY_SIZE(mBokoAnmIndexTable)) {
             return &mBokoAnmIndexTable[anm];
         }
-    } else if (mEquipItem == dItem_SKULL_HAMMER_e) {
+    } else if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
         if (anm < (s32)ARRAY_SIZE(mHammerAnmIndexTable)) {
             return &mHammerAnmIndexTable[anm];
         }
-    } else if (mEquipItem == dItem_BOOMERANG_e || mEquipItem == dItem_DEKU_LEAF_e || mEquipItem == dItem_TELESCOPE_e) {
+    } else if (mEquipItem == dItemNo_BOOMERANG_e || mEquipItem == dItemNo_DEKU_LEAF_e || mEquipItem == dItemNo_TELESCOPE_e) {
         if (anm == ANM_DASH) {
             return &mSwordAnmIndexTable[anm];
         }
@@ -13160,19 +13162,19 @@ static actor_method_class2 l_daPy_Method = {
 };
 
 actor_process_profile_definition2 g_profile_PLAYER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 5,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_PLAYER,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 5,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_PLAYER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daPy_lk_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_PLAYER,
+    /* Draw Prio    */ fpcDwPi_PLAYER_e,
     /* Actor SubMtd */ (actor_method_class*)&l_daPy_Method,
     /* Status       */ fopAcStts_FREEZE_e,
     /* Group        */ fopAc_PLAYER_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
     /* field_0x30   */ 2,
 };

@@ -15,7 +15,6 @@
 #include "d/actor/d_a_player_main_data.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 #include "d/d_camera.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_ship.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -33,16 +32,16 @@ u32 daPy_lk_c::getDayNightParamData() {
 
 /* 8014D7D4-8014D8AC       .text setTactModel__9daPy_lk_cFv */
 void daPy_lk_c::setTactModel() {
-    if (mEquipItem == dItem_WIND_WAKER_e)
+    if (mEquipItem == dItemNo_WIND_WAKER_e)
         return;
 
     deleteEquipItem(FALSE);
-    mEquipItem = dItem_WIND_WAKER_e;
+    mEquipItem = dItemNo_WIND_WAKER_e;
     JKRHeap* oldHeap = setItemHeap();
 
-    J3DModelData* modelData = initModel(&mpEquipItemModel, LINK_BDL_TAKT, 0x37221222);
+    J3DModelData* modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_TAKT_e, 0x37221222);
     u8* buffer = new (0x20) u8[0x400];
-    dComIfGp_getAnmArchive()->readIdxResource(buffer, 0x400, LKANM_BRK_TTAKT);
+    dComIfGp_getAnmArchive()->readIdxResource(buffer, 0x400, dRes_INDEX_LKANM_BRK_TTAKT_e);
     mpEquipItemBrk = (J3DAnmTevRegKey*)J3DAnmLoaderDataBase::load(buffer);
     mpEquipItemBrk->setFrame(0.0f);
     mpEquipItemBrk->searchUpdateMaterialID(modelData);
@@ -64,29 +63,29 @@ BOOL daPy_lk_c::checkNpcStatus() {
 /* 8014D8F4-8014D938       .text getTactPlayRightArmAnm__9daPy_lk_cFl */
 u16 daPy_lk_c::getTactPlayRightArmAnm(s32 r4) {
     if (r4 == 1)
-        return LKANM_BCK_ACTIONTAKTRUP;
+        return dRes_INDEX_LKANM_BCK_ACTIONTAKTRUP_e;
     else if (r4 == 3)
-        return LKANM_BCK_ACTIONTAKTRDW;
+        return dRes_INDEX_LKANM_BCK_ACTIONTAKTRDW_e;
     else if (r4 == 2)
-        return LKANM_BCK_WAITTAKTRHANDL;
+        return dRes_INDEX_LKANM_BCK_WAITTAKTRHANDL_e;
     else if (r4 == 4)
-        return LKANM_BCK_WAITTAKTRHANDR;
+        return dRes_INDEX_LKANM_BCK_WAITTAKTRHANDR_e;
     else
-        return LKANM_BCK_WAITTAKT;
+        return dRes_INDEX_LKANM_BCK_WAITTAKT_e;
 }
 
 /* 8014D938-8014D97C       .text getTactPlayLeftArmAnm__9daPy_lk_cFl */
 u16 daPy_lk_c::getTactPlayLeftArmAnm(s32 r4) {
     if (r4 == 1)
-        return LKANM_BCK_WAITTAKTLHANDU;
+        return dRes_INDEX_LKANM_BCK_WAITTAKTLHANDU_e;
     else if (r4 == 3)
-        return LKANM_BCK_WAITTAKTLHANDD;
+        return dRes_INDEX_LKANM_BCK_WAITTAKTLHANDD_e;
     else if (r4 == 2)
-        return LKANM_BCK_WAITTAKTLHANDL;
+        return dRes_INDEX_LKANM_BCK_WAITTAKTLHANDL_e;
     else if (r4 == 4)
-        return LKANM_BCK_WAITTAKTLHANDR;
+        return dRes_INDEX_LKANM_BCK_WAITTAKTLHANDR_e;
     else
-        return LKANM_BCK_WAITTAKT;
+        return dRes_INDEX_LKANM_BCK_WAITTAKT_e;
 }
 
 /* 8014D97C-8014D9A4       .text checkEndTactMusic__9daPy_lk_cCFv */
@@ -131,7 +130,7 @@ void daPy_lk_c::setTactZev(fpc_ProcID tactZevPartnerId, int r30, char* r31) {
 
 /* 8014DA78-8014DACC       .text getTactTopPos__9daPy_lk_cFP4cXyz */
 BOOL daPy_lk_c::getTactTopPos(cXyz* out) {
-    if (mEquipItem != dItem_WIND_WAKER_e || mpEquipItemModel == NULL) {
+    if (mEquipItem != dItemNo_WIND_WAKER_e || mpEquipItemModel == NULL) {
         return FALSE;
     } else {
         MTXMultVec(mpEquipItemModel->getBaseTRMtx(), &l_tact_top, out);
@@ -250,9 +249,9 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
     commonProcInit(daPyProc_TACT_WAIT_e);
     daPy_matAnm_c::offMabaFlg();
     setSingleMoveAnime(ANM_WAITTAKT, m_HIO->mItem.mTact.m.mAnmRate, 0.0f, -1, m_HIO->mItem.mTact.m.field_0x4);
-    setActAnimeUpper(LKANM_BCK_WAITTAKT, UPPER_MOVE1_e, m_HIO->mItem.mTact.m.mAnmRate, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_WAITTAKT_e, UPPER_MOVE1_e, m_HIO->mItem.mTact.m.mAnmRate, 0.0f, -1, -1.0f);
     mAnmRatioUpper[UPPER_MOVE1_e].setRatio(0.0f);
-    setActAnimeUpper(LKANM_BCK_WAITTAKT, UPPER_MOVE2_e, m_HIO->mItem.mTact.m.mAnmRate, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_WAITTAKT_e, UPPER_MOVE2_e, m_HIO->mItem.mTact.m.mAnmRate, 0.0f, -1, -1.0f);
     mAnmRatioUpper[UPPER_MOVE2_e].setRatio(0.0f);
     mNormalSpeed = 0.0f;
     mProcVar2.m34D4 = 0;
@@ -546,7 +545,7 @@ BOOL daPy_lk_c::procTactPlay_init(s32 r27, int r30, int r31) {
         stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
         if (dStage_stagInfo_GetSTType(stag_info) == dStageType_SEA_e && m34CC != 1 && r30 != 0) {
             daShip_c* ship = dComIfGp_getShipActor();
-            fpc_ProcID warpID = fopAcM_create(PROC_TORNADO, 1, &current.pos, fopAcM_GetRoomNo(this));
+            fpc_ProcID warpID = fopAcM_create(fpcNm_TORNADO_e, 1, &current.pos, fopAcM_GetRoomNo(this));
             ship->setTactWarpID(warpID);
         }
     }
@@ -684,7 +683,7 @@ BOOL daPy_lk_c::procTactPlayEnd_init(int r30) {
         mDemo.setSystemDemoType();
     } else if (r30 == 0) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
-        fopAcM_create(PROC_WBIRD, NULL, &current.pos, dComIfGp_roomControl_getStayNo());
+        fopAcM_create(fpcNm_WBIRD_e, NULL, &current.pos, dComIfGp_roomControl_getStayNo());
     } else if (r30 == 2) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
         dComIfGp_event_setTalkPartner(dComIfGp_getCb1Player());

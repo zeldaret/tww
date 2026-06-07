@@ -5,11 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tornado.h"
-#include "d/res/res_trnd.h"
+#include "res/Object/Trnd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_kankyo_wether.h"
@@ -254,28 +252,28 @@ static BOOL daTornado_Delete(daTornado_c* i_this) {
 
 /* 00000D54-0000109C       .text createHeap__11daTornado_cFv */
 BOOL daTornado_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, TRND_BDL_YTRND00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BDL_YTRND00_e);
     JUT_ASSERT(0x1fe, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
     if (!mpModel)
         return FALSE;
-    if (!mBck.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YTRND00), true, J3DFrameCtrl::EMode_LOOP))
+    if (!mBck.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BCK_YTRND00_e), true, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YTRND00), false, J3DFrameCtrl::EMode_LOOP))
+    if (!mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BTK_YTRND00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBrk.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YTRND00), false, J3DFrameCtrl::EMode_LOOP))
+    if (!mBrk.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BRK_YTRND00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, TRND_BDL_YWUWT00);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BDL_YWUWT00_e);
     JUT_ASSERT(0x226, modelData != NULL);
     mpModelUnder = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
     if (!mpModelUnder)
         return FALSE;
-    if (!mBckUnder.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP))
+    if (!mBckUnder.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BCK_YWUWT00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBtkUnder.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP))
+    if (!mBtkUnder.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BTK_YWUWT00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBrkUnder.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP))
+    if (!mBrkUnder.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BRK_YWUWT00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
 
     return TRUE;
@@ -348,18 +346,18 @@ static actor_method_class l_daTornado_Method = {
 };
 
 actor_process_profile_definition g_profile_TORNADO = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TORNADO,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TORNADO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTornado_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TORNADO,
+    /* Draw Prio    */ fpcDwPi_TORNADO_e,
     /* Actor SubMtd */ &l_daTornado_Method,
     /* Status       */ 0x06 | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

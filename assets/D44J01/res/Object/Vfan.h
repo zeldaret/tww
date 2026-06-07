@@ -1,0 +1,22 @@
+#ifndef RES_VFAN_H
+#define RES_VFAN_H
+
+enum dRes_INDEX_VFAN {
+    /* BDL  */
+    dRes_INDEX_VFAN_BDL_V_FAN_00_e=0x4,
+    /* DZB  */
+    dRes_INDEX_VFAN_DZB_V_FAN_00_e=0x7,
+};
+
+enum dRes_ID_VFAN {
+    /* BDL  */
+    dRes_ID_VFAN_BDL_V_FAN_00_e=0x4,
+    /* DZB  */
+    dRes_ID_VFAN_DZB_V_FAN_00_e=0x7,
+};
+
+enum V_FAN_00_JNT {
+    V_FAN_00_JNT_V_FAN_00_e=0x0,
+};
+
+#endif /* !RES_VFAN_H */

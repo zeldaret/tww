@@ -55,10 +55,10 @@ public:
 
 class daObjBarrier_c : public fopAc_ac_c {
 public:
-    enum PROC_e {
-        PROC_BREAK_START_WAIT,
-        PROC_BREAK_ORDER,
-        PROC_BREAK_END_WAIT,
+    enum Proc_e {
+        PROC_BREAK_START_WAIT_e,
+        PROC_BREAK_ORDER_e,
+        PROC_BREAK_END_WAIT_e,
     };
     enum Param_e {
         PRM_DAMAGE_W = 0x01,

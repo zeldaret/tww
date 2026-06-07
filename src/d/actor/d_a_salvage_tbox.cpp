@@ -8,8 +8,6 @@
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_bg_s_func.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 const char daSTBox_c::m_arc_name[] = "Salvage";
 const s16 daSTBox_c::m_heapsize[3] = {0x5000, 0x5000, 0x5000};
@@ -204,7 +202,7 @@ BOOL daSTBox_c::actWait02(int) {
     // cXyz* pos = ((daShip_c*)(g_dComIfG_gameInfo.play.mpPlayerPtr[2]))->getCraneTop();
     if (pos != NULL) {
         f32 x = pos->x;
-        pos->z = pos->x;
+        pos->z = x;
         f32 y = pos->y;
         // TODO: something pos->* = y;
         f32 z = pos->z;
@@ -268,18 +266,18 @@ static actor_method_class daSTBoxMethodTable = {
 };
 
 actor_process_profile_definition g_profile_SALVAGE_TBOX = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SALVAGE_TBOX,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SALVAGE_TBOX_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSTBox_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SALVAGE_TBOX,
+    /* Draw Prio    */ fpcDwPi_SALVAGE_TBOX_e,
     /* Actor SubMtd */ &daSTBoxMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

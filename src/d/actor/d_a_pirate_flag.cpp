@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_pirate_flag.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_kaizokusen.h"
-#include "d/res/res_cloth.h"
+#include "res/Object/Kaizokusen.h"
+#include "res/Object/Cloth.h"
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/d_kankyo_wether.h"
 
@@ -242,7 +240,7 @@ void daPirate_Flag_packet_c::draw() {
     GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(*l_texCoord));
 
     GXTexObj texObj;
-    ResTIMG* timg = static_cast<ResTIMG*>(dComIfG_getObjectRes("Kaizokusen", KAIZOKUSEN_INDEX_BTI_TXA_KAIZOKU_HATA));
+    ResTIMG* timg = static_cast<ResTIMG*>(dComIfG_getObjectRes("Kaizokusen", dRes_INDEX_KAIZOKUSEN_BTI_TXA_KAIZOKU_HATA_e));
     GXInitTexObj(&texObj, (char*)timg + timg->imageOffset, timg->width, timg->height,
         (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT,
         (GXBool)(timg->mipmapCount > 1));
@@ -252,7 +250,7 @@ void daPirate_Flag_packet_c::draw() {
                     (GXAnisotropy)timg->maxAnisotropy);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
 
-    timg = static_cast<ResTIMG*>(dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON));
+    timg = static_cast<ResTIMG*>(dComIfG_getObjectRes("Cloth", dRes_INDEX_CLOTH_BTI_CLOTHTOON_e));
     GXInitTexObj(&texObj, (char*)timg + timg->imageOffset, timg->width, timg->height,
                  (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT,
                  (GXBool)(timg->mipmapCount > 1));
@@ -574,18 +572,18 @@ static actor_method_class l_daPirate_Flag_Method = {
 };
 
 actor_process_profile_definition g_profile_PIRATE_FLAG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_PIRATE_FLAG,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_PIRATE_FLAG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(pirate_flag_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_PIRATE_FLAG,
+    /* Draw Prio    */ fpcDwPi_PIRATE_FLAG_e,
     /* Actor SubMtd */ &l_daPirate_Flag_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

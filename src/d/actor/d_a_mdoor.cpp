@@ -5,11 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mdoor.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_mdoor.h"
+#include "res/Object/Mdoor.h"
 #include "f_op/f_op_actor_mng.h"
 
 const char daMdoor_c::M_arcname[] = "Mdoor";
@@ -46,13 +44,13 @@ BOOL daMdoor_c::CreateHeap() {
 
     switch (getShapeType()) {
         case 1:
-            modelRes = MDOOR_BDL_MORI2;
-            bgdRes = MDOOR_DZB_MORI2;
+            modelRes = dRes_INDEX_MDOOR_BDL_MORI2_e;
+            bgdRes = dRes_INDEX_MDOOR_DZB_MORI2_e;
             break;
         
         default:
-            modelRes = MDOOR_BDL_MORI1;
-            bgdRes = MDOOR_DZB_MORI1;
+            modelRes = dRes_INDEX_MDOOR_BDL_MORI1_e;
+            bgdRes = dRes_INDEX_MDOOR_DZB_MORI1_e;
             break;
     }
 
@@ -459,18 +457,18 @@ static actor_method_class l_daMdoor_Method = {
 };
 
 actor_process_profile_definition g_profile_MDOOR = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MDOOR,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MDOOR_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMdoor_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MDOOR,
+    /* Draw Prio    */ fpcDwPi_MDOOR_e,
     /* Actor SubMtd */ &l_daMdoor_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

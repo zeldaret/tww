@@ -1,0 +1,95 @@
+#ifndef RES_WZ_H
+#define RES_WZ_H
+
+enum dRes_INDEX_WZ {
+    /* BCK  */
+    dRes_INDEX_WZ_BCK_AIRDOWN1_e=0x5,
+    dRes_INDEX_WZ_BCK_ATTACK1_e=0x6,
+    dRes_INDEX_WZ_BCK_ATTACK_S1_e=0x7,
+    dRes_INDEX_WZ_BCK_BATABATA1_e=0x8,
+    dRes_INDEX_WZ_BCK_DAMAGE1_e=0x9,
+    dRes_INDEX_WZ_BCK_DEFAULT_S1_e=0xA,
+    dRes_INDEX_WZ_BCK_DOWN1_e=0xB,
+    dRes_INDEX_WZ_BCK_KIZETU1_e=0xC,
+    dRes_INDEX_WZ_BCK_PRESS1_e=0xD,
+    dRes_INDEX_WZ_BCK_PRESS2_e=0xE,
+    dRes_INDEX_WZ_BCK_PRESS3_e=0xF,
+    dRes_INDEX_WZ_BCK_SYUTUGEN1_e=0x10,
+    dRes_INDEX_WZ_BCK_S_DEMO1_e=0x11,
+    dRes_INDEX_WZ_BCK_S_DEMO_WAIT1_e=0x12,
+    dRes_INDEX_WZ_BCK_TAME1_e=0x13,
+    dRes_INDEX_WZ_BCK_TAME2_e=0x14,
+    dRes_INDEX_WZ_BCK_TAME_S1_e=0x15,
+    /* BDLM */
+    dRes_INDEX_WZ_BDL_WZ_e=0x18,
+    dRes_INDEX_WZ_BDL_WZ_KAMEN_e=0x19,
+    dRes_INDEX_WZ_BDL_WZ_STICK_e=0x1A,
+    /* BRK  */
+    dRes_INDEX_WZ_BRK_WZ_e=0x1D,
+};
+
+enum dRes_ID_WZ {
+    /* BCK  */
+    dRes_ID_WZ_BCK_AIRDOWN1_e=0x5,
+    dRes_ID_WZ_BCK_ATTACK1_e=0x6,
+    dRes_ID_WZ_BCK_ATTACK_S1_e=0x7,
+    dRes_ID_WZ_BCK_BATABATA1_e=0x8,
+    dRes_ID_WZ_BCK_DAMAGE1_e=0x9,
+    dRes_ID_WZ_BCK_DEFAULT_S1_e=0xA,
+    dRes_ID_WZ_BCK_DOWN1_e=0xB,
+    dRes_ID_WZ_BCK_KIZETU1_e=0xC,
+    dRes_ID_WZ_BCK_PRESS1_e=0xD,
+    dRes_ID_WZ_BCK_PRESS2_e=0xE,
+    dRes_ID_WZ_BCK_PRESS3_e=0xF,
+    dRes_ID_WZ_BCK_SYUTUGEN1_e=0x10,
+    dRes_ID_WZ_BCK_S_DEMO1_e=0x11,
+    dRes_ID_WZ_BCK_S_DEMO_WAIT1_e=0x12,
+    dRes_ID_WZ_BCK_TAME1_e=0x13,
+    dRes_ID_WZ_BCK_TAME2_e=0x14,
+    dRes_ID_WZ_BCK_TAME_S1_e=0x15,
+    /* BDLM */
+    dRes_ID_WZ_BDL_WZ_e=0x18,
+    dRes_ID_WZ_BDL_WZ_KAMEN_e=0x19,
+    dRes_ID_WZ_BDL_WZ_STICK_e=0x1A,
+    /* BRK  */
+    dRes_ID_WZ_BRK_WZ_e=0x1D,
+};
+
+enum WZ_JNT {
+    WZ_JNT_WIZ_ALLROOT_e=0x0,
+    WZ_JNT_WIZ_ROOT_e=0x1,
+    WZ_JNT_WIZ_KOSI_1_e=0x2,
+    WZ_JNT_WIZ_ASI_1_e=0x3,
+    WZ_JNT_WIZ_ASI_2_e=0x4,
+    WZ_JNT_WIZ_SUSO_1_e=0x5,
+    WZ_JNT_WIZ_MUNE_1_e=0x6,
+    WZ_JNT_WIZ_MUNE_2_e=0x7,
+    WZ_JNT_WIZ_KATA_L_e=0x8,
+    WZ_JNT_WIZ_UDE_L1_e=0x9,
+    WZ_JNT_WIZ_UDE_L2_e=0xA,
+    WZ_JNT_WIZ_HANE_L1_e=0xB,
+    WZ_JNT_WIZ_TEKUBI_L1_e=0xC,
+    WZ_JNT_WIZ_KATA_R1_e=0xD,
+    WZ_JNT_WIZ_UDE_R1_e=0xE,
+    WZ_JNT_WIZ_UDE_R2_e=0xF,
+    WZ_JNT_WIZ_HANE_R1_e=0x10,
+    WZ_JNT_WIZ_TEKUBI_R1_e=0x11,
+    WZ_JNT_WIZ_KUBI_1_e=0x12,
+    WZ_JNT_WIZ_ATAMA_1_e=0x13,
+    WZ_JNT_WIZ_AGO1_e=0x14,
+    WZ_JNT_WIZ_SHITA_1_e=0x15,
+    WZ_JNT_WIZ_ROBE_1_e=0x16,
+    WZ_JNT_WIZ_ROBE_2_e=0x17,
+};
+
+enum WZ_KAMEN_JNT {
+    WZ_KAMEN_JNT_KAMEN_e=0x0,
+};
+
+enum WZ_STICK_JNT {
+    WZ_STICK_JNT_LOCATOR2_e=0x0,
+    WZ_STICK_JNT_WIZROBE_STICK_e=0x1,
+    WZ_STICK_JNT_OHOSISAMA_e=0x2,
+};
+
+#endif /* !RES_WZ_H */

@@ -20,7 +20,6 @@
 #include "d/actor/d_a_ship.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
 #include "d/d_salvage.h"
 #include "f_op/f_op_camera_mng.h"
 
@@ -38,7 +37,7 @@ BOOL daPy_lk_c::shipSpecialDemoStart() {
 BOOL daPy_lk_c::checkJumpRideShip() {
     if (mCyl.ChkCoHit()) {
         fopAc_ac_c* hit_ac = mCyl.GetCoHitAc();
-        if (hit_ac != NULL && fopAcM_GetName(hit_ac) == PROC_SHIP) {
+        if (hit_ac != NULL && fopAcM_GetName(hit_ac) == fpcNm_SHIP_e) {
             daShip_c* ship = (daShip_c*)hit_ac;
             cXyz sp20;
             mDoMtx_multVec(ship->getBodyMtx(), &l_ship_offset, &sp20);
@@ -53,9 +52,9 @@ BOOL daPy_lk_c::checkJumpRideShip() {
 
 /* 8013F984-8013F9B0       .text checkShipNotNormalMode__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkShipNotNormalMode() {
-    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_SHIP_JUMP2 &&
-        m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_VOYAGE1 &&
-        m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_SHIP_JUMP1)
+    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_SHIP_JUMP2_e &&
+        m_anm_heap_under[UNDER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_VOYAGE1_e &&
+        m_anm_heap_under[UNDER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_SHIP_JUMP1_e)
     {
         return true;
     }
@@ -217,7 +216,7 @@ void daPy_lk_c::setShipRidePos(int param_0) {
             if (ship->getLandFlg()) {
                 setSingleMoveAnime(ANM_SHIP_JUMP2, 1.0f, 3.0f, -1, 3.0f);
             }
-            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_SHIP_JUMP2) {
+            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_SHIP_JUMP2_e) {
                 if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
                     if (ship->getFlyFlg()) {
                         setSingleMoveAnime(ANM_SHIP_JUMP1, 1.0f, 0.0f, -1, 20.0f);
@@ -229,7 +228,7 @@ void daPy_lk_c::setShipRidePos(int param_0) {
                 }
             }
             s16 sVar4;
-            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_VOYAGE1) {
+            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_VOYAGE1_e) {
                 sVar4 = -m_HIO->mShip.m.field_0x4 * ship->getTillerAngleRate();
             } else {
                 sVar4 = 0;
@@ -307,7 +306,7 @@ BOOL daPy_lk_c::changeShipEndProc() {
         }
     }
     if (mCurProc != daPyProc_SHIP_SCOPE_e && mCurProc != daPyProc_SHIP_BOW_e && mCurProc != daPyProc_SHIP_HOOKSHOT_e &&
-        (mCurProc != daPyProc_SHIP_BOOMERANG_e || mEquipItem != dItem_BOOMERANG_e) && !ship->getFlyFlg())
+        (mCurProc != daPyProc_SHIP_BOOMERANG_e || mEquipItem != dItemNo_BOOMERANG_e) && !ship->getFlyFlg())
     {
         setTalkStatus();
         if (orderTalk()) {
@@ -316,9 +315,9 @@ BOOL daPy_lk_c::changeShipEndProc() {
     }
     if (dComIfGp_getMiniGameType() != 1 && ship->speedF < 3.0f) {
         if (ship->getBeltSpeed() < 3.0f) {
-            if (((!checkShipNotNormalMode() || m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_FREEA) ||
-                 m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_FREEB) ||
-                m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_FREED)
+            if (((!checkShipNotNormalMode() || m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_FREEA_e) ||
+                 m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_FREEB_e) ||
+                m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_FREED_e)
             {
                 if ((!dComIfGp_checkPlayerStatus0(0, daPyStts0_SUBJECT_e) && !spActionButton()) &&
                     (dComIfGp_getDoStatus() == dActStts_BLANK_e && mCurProc == daPyProc_SHIP_PADDLE_e))
@@ -339,28 +338,28 @@ BOOL daPy_lk_c::changeShipEndProc() {
                 dComIfGp_setDoStatus(dActStts_PUT_AWAY_e);
             }
         }
-        if (checkSetItemTrigger(NORMAL_SAIL, 1)) {
+        if (checkSetItemTrigger(dItemNo_SAIL_e, 1)) {
             daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
             if (boomerang != NULL) {
                 boomerang->onCancelFlg();
             }
             return procShipSteer_init();
         }
-        if (checkSetItemTrigger(dItem_BOMB_BAG_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_BOMB_BAG_e, 1)) {
             daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
             if (boomerang != NULL) {
                 boomerang->onCancelFlg();
             }
             return procShipCannon_init();
         }
-        if (checkSetItemTrigger(dItem_GRAPPLING_HOOK_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_GRAPPLING_HOOK_e, 1)) {
             daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
             if (boomerang != NULL) {
                 boomerang->onCancelFlg();
             }
             return procShipCrane_init();
         }
-        if (checkSetItemTrigger(dItem_TELESCOPE_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_TELESCOPE_e, 1)) {
             daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
             if (boomerang != NULL) {
                 boomerang->onCancelFlg();
@@ -381,24 +380,24 @@ BOOL daPy_lk_c::changeShipEndProc() {
             }
             return procShipBow_init();
         }
-        if (checkSetItemTrigger(dItem_BOOMERANG_e, 1) && mActorKeepThrow.getActor() == NULL) {
+        if (checkSetItemTrigger(dItemNo_BOOMERANG_e, 1) && mActorKeepThrow.getActor() == NULL) {
             return procShipBoomerang_init();
         }
-        if (checkSetItemTrigger(dItem_HOOKSHOT_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_HOOKSHOT_e, 1)) {
             daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
             if (boomerang != NULL) {
                 boomerang->onCancelFlg();
             }
             return procShipHookshot_init();
         }
-        if (checkSetItemTrigger(dItem_WIND_WAKER_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_WIND_WAKER_e, 1)) {
             daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
             if (boomerang != NULL) {
                 boomerang->onCancelFlg();
             }
             return procTactWait_init(-1);
         }
-        if (checkSetItemTrigger(dItem_TINGLE_TUNER_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_TINGLE_TUNER_e, 1)) {
             fopAcM_orderTalkEvent(this, (fopAc_ac_c*)dComIfGp_getAgb());
 #if VERSION > VERSION_DEMO
             if (checkShipNotNormalMode()) {
@@ -409,7 +408,7 @@ BOOL daPy_lk_c::changeShipEndProc() {
 #endif
             return true;
         }
-        if (checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_MAGIC_ARMOR_e, 1)) {
 #if VERSION > VERSION_DEMO
             if (checkShipNotNormalMode()) {
                 setShipRidePos(0);
@@ -422,16 +421,16 @@ BOOL daPy_lk_c::changeShipEndProc() {
         if (checkSetItemTrigger(daPyItem_DRINK_BOTTLE_e, 0)) {
             return procBottleDrink_init(dComIfGp_getSelectItem(mReadyItemBtn));
         }
-        if (checkSetItemTrigger(dItem_FAIRY_BOTTLE_e, 0)) {
+        if (checkSetItemTrigger(dItemNo_FAIRY_BOTTLE_e, 0)) {
             return procBottleOpen_init(0x57);
         }
         if (checkSetItemTrigger(daPyItem_OPEN_BOTTLE_e, 1)) {
             return procBottleOpen_init(dComIfGp_getSelectItem(mReadyItemBtn));
         }
-        if (checkSetItemTrigger(dItem_EMPTY_BOTTLE_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_EMPTY_BOTTLE_e, 1)) {
             return procBottleSwing_init(1);
         }
-        if (checkSetItemTrigger(dItem_HYOI_PEAR_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_HYOI_PEAR_e, 1)) {
             return procFoodSet_init();
         }
         if (checkSetItemTrigger(daPyItem_ESA_e, 1)) {
@@ -446,10 +445,10 @@ BOOL daPy_lk_c::changeShipEndProc() {
 
 /* 80140C88-80140D04       .text initShipBaseAnime__9daPy_lk_cFv */
 void daPy_lk_c::initShipBaseAnime() {
-    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_SHIP_JUMP2) {
+    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_SHIP_JUMP2_e) {
         setSingleMoveAnime(ANM_VOYAGE1, 1.0f, 0.0f, -1, 5.0f);
     }
-    setActAnimeUpper(LKANM_BCK_FN_HAIR1, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_FN_HAIR1_e, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
     m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
 }
 
@@ -754,9 +753,9 @@ BOOL daPy_lk_c::procShipBoomerang_init() {
     deleteEquipItem(TRUE);
     gravity = 0.0f;
     ship->setPaddleMove();
-    mEquipItem = dItem_BOOMERANG_e;
+    mEquipItem = dItemNo_BOOMERANG_e;
     setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, 5.0f);
-    setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_BOOMWAIT_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
     setTextureAnime(0, 0);
     makeItemType();
     dComIfGp_setPlayerStatus0(0, daPyStts0_SHIP_RIDE_e | daPyStts0_BOOMERANG_AIM_e);
@@ -774,7 +773,7 @@ BOOL daPy_lk_c::procShipBoomerang() {
     }
     setShipRidePos(0);
     if (mActorKeepThrow.getActor() == NULL) {
-        if (!checkUpperAnime(LKANM_BCK_BOOMCATCH)) {
+        if (!checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMCATCH_e)) {
             dComIfGp_setDoStatus(dActStts_RETURN_e);
             if (doTrigger()) {
                 procShipPaddle_init();
@@ -785,9 +784,9 @@ BOOL daPy_lk_c::procShipBoomerang() {
     }
     mSightPacket.offDrawFlg();
     daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
-    if (!checkUpperAnime(LKANM_BCK_BOOMCATCH)) {
-        if (mEquipItem == dItem_BOOMERANG_e) {
-            if (checkUpperAnime(LKANM_BCK_BOOMWAIT)) {
+    if (!checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMCATCH_e)) {
+        if (mEquipItem == dItemNo_BOOMERANG_e) {
+            if (checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMWAIT_e)) {
                 setShipAttentionAnmSpeed(m_HIO->mItem.mBoom.m.field_0x18);
                 checkNextActionBoomerangReady();
                 if (checkAttentionLock()) {
@@ -831,10 +830,10 @@ BOOL daPy_lk_c::procShipHookshot_init() {
     deleteEquipItem(TRUE);
     gravity = 0.0f;
     ship->setPaddleMove();
-    mEquipItem = dItem_HOOKSHOT_e;
+    mEquipItem = dItemNo_HOOKSHOT_e;
     m355C = 10;
     setSingleMoveAnime(ANM_ATNLS, 0.0f, 0.0f, -1, 5.0f);
-    setActAnimeUpper(LKANM_BCK_HOOKSHOTWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_HOOKSHOTWAIT_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
     setTextureAnime(0, 0);
     makeItemType();
     dComIfGp_setPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e | daPyStts0_SHIP_RIDE_e);
@@ -909,7 +908,7 @@ BOOL daPy_lk_c::procShipBow_init() {
     gravity = 0.0f;
     ship->setPaddleMove();
     if (checkBowMiniGame()) {
-        mEquipItem = dItem_BOW_e;
+        mEquipItem = dItemNo_BOW_e;
     } else {
         mEquipItem = dComIfGp_getSelectItem(mReadyItemBtn);
     }

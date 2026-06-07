@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_atdoor.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_atdoor.h"
+#include "res/Object/Atdoor.h"
 
 enum Action_e {
     ACT_WAIT_e = 0,
@@ -32,7 +30,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000000A4-000001E8       .text CreateHeap__10daAtdoor_cFv */
 BOOL daAtdoor_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(daAtdoor_c::M_arcname, ATDOOR_BDL_SDOOR01));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(daAtdoor_c::M_arcname, dRes_INDEX_ATDOOR_BDL_SDOOR01_e));
     JUT_ASSERT(112, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -45,7 +43,7 @@ BOOL daAtdoor_c::CreateHeap() {
         return FALSE;
     }
 
-    cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(daAtdoor_c::M_arcname, ATDOOR_DZB_SDOOR01);
+    cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(daAtdoor_c::M_arcname, dRes_INDEX_ATDOOR_DZB_SDOOR01_e);
     if (dzb == NULL) {
         return FALSE;
     }
@@ -220,18 +218,18 @@ static actor_method_class l_daAtdoor_Method = {
 };
 
 actor_process_profile_definition g_profile_ATDOOR = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ATDOOR,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ATDOOR_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daAtdoor_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ATDOOR,
+    /* Draw Prio    */ fpcDwPi_ATDOOR_e,
     /* Actor SubMtd */ &l_daAtdoor_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

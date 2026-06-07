@@ -6,10 +6,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bmdhand.h"
 #include "d/d_s_play.h"
-#include "d/res/res_bmdhand.h"
+#include "res/Object/Bmdhand.h"
 #include "d/actor/d_a_bmd.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 class daBmdhand_HIO_c : public JORReflexible {
@@ -319,7 +317,7 @@ void start_control2(bmdhand_class* i_this) {
 void hand_close(bmdhand_class* i_this) {
     J3DAnmTransform* pAnimRes;
 
-    pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdhand", BMDHAND_BCK_FOOK_TOJIRU);
+    pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdhand", dRes_INDEX_BMDHAND_BCK_FOOK_TOJIRU_e);
     i_this->mpMorf->setAnm(pAnimRes, 0, REG0_F(6) + 5.0f, 1.0f, 0.0f, -1.0f, NULL);
 }
 
@@ -327,7 +325,7 @@ void hand_close(bmdhand_class* i_this) {
 void hand_open(bmdhand_class* i_this) {
     J3DAnmTransform* pAnimRes;
 
-    pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdhand", BMDHAND_BCK_FOOK_HIRAKU);
+    pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdhand", dRes_INDEX_BMDHAND_BCK_FOOK_HIRAKU_e);
     i_this->mpMorf->setAnm(pAnimRes, 0, REG0_F(6) + 5.0f, 1.0f, 0.0f, -1.0f, NULL);
 }
 
@@ -662,7 +660,7 @@ void hand_move(bmdhand_class* i_this) {
 /* 00002E74-00002EC0       .text s_a_d_sub__FPvPv */
 void* s_a_d_sub(void* param_1, void* param_2) {
     UNUSED(param_2);
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BMD)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BMD_e)) {
         return param_1;
     } else {
         return NULL;
@@ -725,10 +723,10 @@ static BOOL daBmdhand_Delete(bmdhand_class* i_this) {
 /* 000030C4-00003210       .text useHeapInit__FP13bmdhand_class */
 static BOOL useHeapInit(bmdhand_class* i_this) {
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Bmdhand", BMDHAND_BMD_BKM_FOOK),
+        (J3DModelData*)dComIfG_getObjectRes("Bmdhand", dRes_INDEX_BMDHAND_BMD_BKM_FOOK_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bmdhand", BMDHAND_BCK_FOOK_HIRAKU),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bmdhand", dRes_INDEX_BMDHAND_BCK_FOOK_HIRAKU_e),
         J3DFrameCtrl::EMode_NONE,
         1.0f,
         0,
@@ -746,7 +744,7 @@ static BOOL useHeapInit(bmdhand_class* i_this) {
         return FALSE;
     }
 #endif
-    ResTIMG* pBti = (ResTIMG*)dComIfG_getObjectRes("Bmdhand", BMDHAND_BTI_SYOKUSYU_UE);
+    ResTIMG* pBti = (ResTIMG*)dComIfG_getObjectRes("Bmdhand", dRes_INDEX_BMDHAND_BTI_SYOKUSYU_UE_e);
     if (!i_this->mLineMat.init(1, 20, pBti, 1)) {
         return FALSE;
     }
@@ -832,18 +830,18 @@ static actor_method_class l_daBmdhand_Method = {
 };
 
 actor_process_profile_definition g_profile_BMDHAND = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BMDHAND,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BMDHAND_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bmdhand_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BMDHAND,
+    /* Draw Prio    */ fpcDwPi_BMDHAND_e,
     /* Actor SubMtd */ &l_daBmdhand_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

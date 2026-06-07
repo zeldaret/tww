@@ -21,6 +21,7 @@ is_rel: bool
 if object_name.startswith("main/"):
   is_rel = False
   object_name = object_name.split("/", 1)[1]
+  object_name = object_name.split(".", 1)[0]
   target_map_path = debug_maps_root_path / "frameworkD.map"
   base_map_path = decomp_root_path / "build/D44J01/framework.elf.MAP"
 else:
@@ -36,7 +37,7 @@ assert retcode == 0, "Ninja build call failed"
 
 def get_main_symbols(framework_map_contents: str, valid_obj_names = None):
   symbols = {}
-  matches = re.findall(r"^  [0-9a-f]{8} ([0-9a-f]{6}) (?:[0-9a-f]{8})(?: +\d+)? (.+?)(?: \(entry of [^)]+\))? \t(\S+)", framework_map_contents, re.IGNORECASE | re.MULTILINE)
+  matches = re.findall(r"^  [0-9a-f]{8} ([0-9a-f]{6}) (?:[0-9a-f]{8})(?: +\d+)? (.+?)(?: \(entry of [^)]+\))? \t(?:\S+\.a )?([^\s\.]+)\.\S+ ?$", framework_map_contents, re.IGNORECASE | re.MULTILINE)
   for match in matches:
     size, name, obj_name = match
     size = int(size, 16)
@@ -51,6 +52,8 @@ def get_main_symbols(framework_map_contents: str, valid_obj_names = None):
       continue
     
     symbols[name] = size
+  if len(symbols) == 0:
+    raise Exception("Failed to find object matching the given name")
   return symbols
 
 def get_rel_symbols(rel_map_data: str):
@@ -80,15 +83,22 @@ def get_rel_symbols(rel_map_data: str):
       current_section_name = section_header_match.group(1)
     if current_section_name != "text":
         continue
-    symbol_entry_match = re.search(r"^  [0-9a-f]{8} ([0-9a-f]{6}) ([0-9a-f]{8})(?: +\d+)? (.+?)(?: \(entry of [^)]+\))? \t(\S+)", line, re.IGNORECASE)
+    symbol_entry_match = re.search(r"^  ([0-9a-f]{8}|UNUSED  ) ([0-9a-f]{6}) ([0-9a-f]{8}|\.{8})(?: +\d+)? (.+?)(?: \(entry of [^)]+\))? \t?(\S+)", line, re.IGNORECASE)
     if symbol_entry_match:
-      symbol_size = symbol_entry_match.group(1)
+      symbol_address = symbol_entry_match.group(1)
+      symbol_size = symbol_entry_match.group(2)
       symbol_size = int(symbol_size, 16)
-      symbol_offset = symbol_entry_match.group(2)
-      symbol_offset = int(symbol_offset, 16)
-      symbol_name = symbol_entry_match.group(3)
-      object_name = symbol_entry_match.group(4)
-      if object_name in ["global_destructor_chain.o"]:
+      symbol_offset = symbol_entry_match.group(3)
+      if symbol_address == "UNUSED  ":
+        assert symbol_offset == "........"
+      if symbol_offset == "........":
+        assert symbol_address == "UNUSED  "
+        symbol_offset = None
+      else:
+        symbol_offset = int(symbol_offset, 16)
+      symbol_name = symbol_entry_match.group(4)
+      object_name = symbol_entry_match.group(5)
+      if object_name in ["executor.o", "global_destructor_chain.o"]:
         continue
       symbols[symbol_name] = symbol_size
       #print("%08X  %s" % (symbol_offset, symbol_name))
@@ -97,11 +107,16 @@ def get_rel_symbols(rel_map_data: str):
   
   return symbols
 
+def is_debug_only_symbol(symbol_name: str):
+  if "__11JORMContextF" in symbol_name:
+    return True
+  return False
+
 if is_rel:
   target_symbols = get_rel_symbols(target_map_path.read_text())
   base_symbols = get_rel_symbols(base_map_path.read_text())
 else:
-  obj_names = [f"{object_name}.o"]
+  obj_names = [object_name]
   target_symbols = get_main_symbols(target_map_path.read_text(), valid_obj_names=obj_names)
   base_symbols = get_main_symbols(base_map_path.read_text(), valid_obj_names=obj_names)
 
@@ -151,6 +166,8 @@ for symbol_name, base_size in base_symbols.items():
 for symbol_name, target_size, base_size, ratio in symbol_size_diffs:
   prefix = ""
   if base_size == 0:
+    if is_debug_only_symbol(symbol_name):
+      continue
     prefix = "MISSING: "
     total_missing += 1
     print(prefix + symbol_name, "0x%X" % target_size)

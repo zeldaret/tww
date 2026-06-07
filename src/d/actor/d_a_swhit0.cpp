@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_swhit0.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "m_Do/m_Do_mtx.h"
@@ -104,7 +102,7 @@ s32 daSwhit0_c::getSwNo2() {
 
 /* 000000C4-00000230       .text CreateHeap__10daSwhit0_cFv */
 BOOL daSwhit0_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_OBM_SYOUGEKISW);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_OBM_SYOUGEKISW_e);
     JUT_ASSERT(0xD5, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
@@ -112,12 +110,12 @@ BOOL daSwhit0_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("Always", ALWAYS_BCK_OBM_SYOUGEKISW);
+    J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BCK_OBM_SYOUGEKISW_e);
     if (mAnm.init(modelData, anm, true, J3DFrameCtrl::EMode_LOOP) == 0) {
         return FALSE;
     }
 
-    J3DAnmTextureSRTKey* texAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", ALWAYS_BTK_OBM_SYOUGEKISW);
+    J3DAnmTextureSRTKey* texAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTK_OBM_SYOUGEKISW_e);
     if (mTexAnm.init(modelData, texAnm, true, J3DFrameCtrl::EMode_LOOP) == 0) {
         return FALSE;
     }
@@ -480,18 +478,18 @@ static actor_method_class l_daSwhit0_Method = {
 };
 
 actor_process_profile_definition g_profile_SWHIT0 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SWHIT0,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SWHIT0_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSwhit0_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SWHIT0,
+    /* Draw Prio    */ fpcDwPi_SWHIT0_e,
     /* Actor SubMtd */ &l_daSwhit0_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

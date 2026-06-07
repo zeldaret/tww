@@ -5,15 +5,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_dk.h"
-#include "d/res/res_dk.h"
+#include "res/Object/Dk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
-daDk_HIO_c l_HIO;
+static daDk_HIO_c l_HIO;
 
 /* 000000EC-00000130       .text __ct__10daDk_HIO_cFv */
 daDk_HIO_c::daDk_HIO_c() {
@@ -313,10 +311,10 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     dk_class* a_this = (dk_class*)i_this;
 
     mDoExt_McaMorf* morf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectIDRes("Dk", DK_BDL_DK),
+        (J3DModelData*)dComIfG_getObjectIDRes("Dk", dRes_ID_DK_BDL_DK_e),
         NULL,
         NULL,
-        (J3DAnmTransform*)dComIfG_getObjectIDRes("Dk", DK_BCK_FLY1),
+        (J3DAnmTransform*)dComIfG_getObjectIDRes("Dk", dRes_ID_DK_BCK_FLY1_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -339,7 +337,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     }
     a_this->field_0x2B8->getModel()->setUserArea((u32) a_this);
 
-    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectIDRes("Dk", DK_BDL_DK_KAMEN);
+    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectIDRes("Dk", dRes_ID_DK_BDL_DK_KAMEN_e);
     a_this->mpModelKamen = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020002);
 #if VERSION > VERSION_DEMO
     if (a_this->mpModelKamen == NULL) {
@@ -347,7 +345,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     }
 #endif
 
-    modelData = (J3DModelData*) dComIfG_getObjectIDRes("Dk", DK_BDL_DK_TAIL);
+    modelData = (J3DModelData*) dComIfG_getObjectIDRes("Dk", dRes_ID_DK_BDL_DK_TAIL_e);
     JUT_ASSERT(DEMO_SELECT(817, 819), modelData != NULL);
 
     for (s32 i = 0; i < 4; i++) {
@@ -408,18 +406,18 @@ static actor_method_class l_daDk_Method = {
 };
 
 actor_process_profile_definition g_profile_DK = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DK,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DK_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(dk_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DK,
+    /* Draw Prio    */ fpcDwPi_DK_e,
     /* Actor SubMtd */ &l_daDk_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

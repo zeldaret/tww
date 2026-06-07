@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_shmrgrd.h"
-#include "d/res/res_shmrgrd.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Shmrgrd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
@@ -179,14 +177,14 @@ BOOL daObjShmrgrd_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 000005C8-000006E0       .text create_heap__14daObjShmrgrd_cFv */
 BOOL daObjShmrgrd_c::create_heap() {
     BOOL rt = FALSE;
-    J3DModelData* mdl_data = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, SHMRGRD_BDL_SHMRGRD));
+    J3DModelData* mdl_data = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SHMRGRD_BDL_SHMRGRD_e));
     JUT_ASSERT(0x21A, mdl_data != NULL);
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mpModel) {
             mdl_data->getJointNodePointer(2)->setCallBack(jnodeCB);
             mpModel->setUserArea((u32) this);
-            mpBgW = dBgW_NewSet((cBgD_t *)dComIfG_getObjectRes(M_arcname, SHMRGRD_DZB_HGBASE), cBgW::MOVE_BG_e, &mMtx);
+            mpBgW = dBgW_NewSet((cBgD_t *)dComIfG_getObjectRes(M_arcname, dRes_INDEX_SHMRGRD_DZB_HGBASE_e), cBgW::MOVE_BG_e, &mMtx);
             if (mpBgW) {
                 rt = TRUE;
             }
@@ -387,7 +385,7 @@ void daObjShmrgrd_c::set_damage() {
     if (mCylTg.ChkTgHit()) {
         cCcD_Obj *hitObj = mCylTg.GetTgHitObj();
         fopAc_ac_c* hitActor = mCylTg.GetTgHitAc();
-        if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
+        if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == fpcNm_PLAYER_e) {
             if (check_player_angle(hitActor) && (cutType == daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING || cutType == daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER)) {
                 M_damage = 1;
             } else if (cutType == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
@@ -636,18 +634,18 @@ static actor_method_class Shmrgrd_Mthd_Table = {
 }; // namespace
 
 actor_process_profile_definition g_profile_Obj_Shmrgrd = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Shmrgrd,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Shmrgrd_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjShmrgrd_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Shmrgrd,
+    /* Draw Prio    */ fpcDwPi_Obj_Shmrgrd_e,
     /* Actor SubMtd */ &Shmrgrd_Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -9,10 +9,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_s_play.h"
-#include "d/d_procname.h"
-#include "d/res/res_jbo.h"
+#include "res/Object/Jbo.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_priority.h"
 
 #define JUMP_ANIMATION_TIME 70
 
@@ -78,7 +76,7 @@ void jbo_move(jbo_class* i_this) {
     switch (i_this->mMode) {
         case daJbo_Mode_IDLE_e: {
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK80_e) && i_this->mCoSph.ChkCoHit()) {
-                J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("JBO", JBO_BCK_IN1);
+                J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("JBO", dRes_INDEX_JBO_BCK_IN1_e);
                 i_this->mpMorf->setAnm(anm, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
                 fopAcM_seStart(actor, JA_SE_OBJ_JFLOWER_IN, 0);
                 dComIfGp_setItemMagicCount(4);
@@ -95,7 +93,7 @@ void jbo_move(jbo_class* i_this) {
                 player->onForceVomitJump();
             }
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK80000000_e)) {
-                J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("JBO", JBO_BCK_OUT1);
+                J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("JBO", dRes_INDEX_JBO_BCK_OUT1_e);
                 i_this->mpMorf->setAnm(anm, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
                 fopAcM_seStart(actor, JA_SE_OBJ_JFLOWER_OUT, 0);
                 i_this->mAnimationSpeed = 0;
@@ -163,10 +161,10 @@ static BOOL daJBO_Delete(jbo_class* i_this) {
 static BOOL useHeapInit(fopAc_ac_c* i_this) {
     jbo_class* a_this = (jbo_class*)i_this;
     mDoExt_McaMorf* morf = new mDoExt_McaMorf(
-        (J3DModelData *)dComIfG_getObjectRes("JBO", JBO_BMD_JH),
+        (J3DModelData *)dComIfG_getObjectRes("JBO", dRes_INDEX_JBO_BMD_JH_e),
         /*callback1=*/ NULL,
         /*callback2=*/ NULL,
-        (J3DAnmTransformKey *)dComIfG_getObjectRes("JBO", JBO_BCK_IN1),
+        (J3DAnmTransformKey *)dComIfG_getObjectRes("JBO", dRes_INDEX_JBO_BCK_IN1_e),
         J3DFrameCtrl::EMode_RESET,
         0.0f,
         0,
@@ -243,7 +241,7 @@ static cPhs_State daJBO_Create(fopAc_ac_c* i_this) {
                 a_this->mCoSph.ClrCoSet();
             }
             if (a_this->mType == daJbo_Type_POPS_UP_e) {
-                J3DAnmTransform* pAnimRes = (J3DAnmTransform*) dComIfG_getObjectRes("JBO", JBO_BCK_UMARERU1);
+                J3DAnmTransform* pAnimRes = (J3DAnmTransform*) dComIfG_getObjectRes("JBO", dRes_INDEX_JBO_BCK_UMARERU1_e);
                 a_this->mpMorf->setAnm(pAnimRes, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
                 fopAcM_seStart(i_this, JA_SE_CM_BV_BASE_POPUP, 0);
                 a_this->mMode = daJbo_Mode_SPAWN_e;
@@ -265,18 +263,18 @@ static actor_method_class l_daJBO_Method = {
 };
 
 actor_process_profile_definition g_profile_JBO = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_JBO,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_JBO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(jbo_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_JBO,
+    /* Draw Prio    */ fpcDwPi_JBO_e,
     /* Actor SubMtd */ &l_daJBO_Method,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENV_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -5,11 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_floor.h"
-#include "d/res/res_hhyu1.h"
+#include "res/Object/Hhyu1.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 
 namespace daFloor_prm {
@@ -20,9 +18,9 @@ const char daFloor_c::m_arcname[6] = "Hhyu1";
 
 /* 00000078-000000DC       .text rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void rideCallBack(dBgW*, fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
-    if (fopAcM_GetName(i_other) == PROC_PLAYER && !((daPy_py_c*)i_other)->checkEquipHeavyBoots()) {
+    if (fopAcM_GetName(i_other) == fpcNm_PLAYER_e && !((daPy_py_c*)i_other)->checkEquipHeavyBoots()) {
         ((daFloor_c*)i_this)->field_0x2d9 = 1;
-    } else if (fopAcM_GetName(i_other) == PROC_PLAYER && ((daFloor_c*)i_this)->field_0x2d9 && ((daPy_py_c*)i_other)->checkEquipHeavyBoots() && !((daFloor_c*)i_this)->field_0x2d8) {
+    } else if (fopAcM_GetName(i_other) == fpcNm_PLAYER_e && ((daFloor_c*)i_this)->field_0x2d9 && ((daPy_py_c*)i_other)->checkEquipHeavyBoots() && !((daFloor_c*)i_this)->field_0x2d8) {
         ((daFloor_c*)i_this)->field_0x2d8 = 1;
         ((daFloor_c*)i_this)->field_0x2da = 6;
     }
@@ -37,7 +35,7 @@ BOOL daFloor_c::Delete() {
 
 /* 0000012C-000001E8       .text CreateHeap__9daFloor_cFv */
 BOOL daFloor_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, HHYU1_BDL_HHYU1);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HHYU1_BDL_HHYU1_e);
     JUT_ASSERT(0xc1, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel == NULL)
@@ -64,7 +62,7 @@ cPhs_State daFloor_c::_create() {
 
     cPhs_State rt = dComIfG_resLoad(&mPhs, m_arcname);
     if (rt == cPhs_COMPLEATE_e) {
-        if (!MoveBGCreate(m_arcname, HHYU1_DZB_HHYU1, NULL, 0x8A0))
+        if (!MoveBGCreate(m_arcname, dRes_INDEX_HHYU1_DZB_HHYU1_e, NULL, 0x8A0))
             return cPhs_ERROR_e;
     }
     return rt;
@@ -152,18 +150,18 @@ static actor_method_class daFloorMethodTable = {
 };
 
 actor_process_profile_definition g_profile_FLOOR = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_FLOOR,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_FLOOR_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daFloor_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_FLOOR,
+    /* Draw Prio    */ fpcDwPi_FLOOR_e,
     /* Actor SubMtd */ &daFloorMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

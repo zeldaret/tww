@@ -8,8 +8,6 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_npc_cb1.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
 static daTag_MdCb_HIO_c l_HIO;
@@ -208,21 +206,21 @@ BOOL daTag_MdCb_c::messageAction(void*) {
         if (npc != NULL && npc->isTagCheckOK()) {
             s16 sVar2 = fopAcM_GetName(npc);
 
-            if (sVar2 == PROC_NPC_MD) {
+            if (sVar2 == fpcNm_NPC_MD_e) {
                 daNpc_Md_c* md = (daNpc_Md_c*)npc;
 
                 if (argument == 5) {
                     m2B4 = 2;
                 } else {
                     if (fopAcM_checkCarryNow(md)) {
-                        if (!(md->isNoCarryAction())) {
+                        if (!md->isNoCarryAction()) {
                             m2B4 = 1;
                         }
                     } else {
                         m2B4 = 0;
                     }
                 }
-            } else if (sVar2 == PROC_NPC_CB1) {
+            } else if (sVar2 == fpcNm_NPC_CB1_e) {
                 daNpc_Cb1_c* cb1 = (daNpc_Cb1_c*)npc;
 
                 if (argument == 9) {
@@ -610,7 +608,7 @@ BOOL daTag_MdCb_c::checkCondition() {
             uVar3 = TRUE;
         }
     } else if (argument == 10) {
-        if (dComIfGs_checkGetItem(dItem_HOOKSHOT_e)) {
+        if (dComIfGs_checkGetItem(dItemNo_HOOKSHOT_e)) {
             BOOL bVar5 = FALSE;
             u32 i;
             u32 iVar2;
@@ -720,18 +718,18 @@ static actor_method_class l_daTag_MdCb_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_MDCB = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_MDCB,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_MDCB_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_MdCb_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_MDCB,
+    /* Draw Prio    */ fpcDwPi_TAG_MDCB_e,
     /* Actor SubMtd */ &l_daTag_MdCb_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

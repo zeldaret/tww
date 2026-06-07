@@ -8,8 +8,6 @@
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "d/d_cc_d.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player_main.h"
 
@@ -50,7 +48,7 @@ cPhs_State Act_c::_create() {
     fopAcM_ct(this, daTagRet::Act_c);
 
     #if VERSION > VERSION_DEMO
-    if (checkItemGet(dItem_PEARL_FARORE_e, TRUE)) {
+    if (checkItemGet(dItemNo_PEARL_FARORE_e, TRUE)) {
         return cPhs_STOP_e;
     }
     #endif
@@ -134,18 +132,18 @@ namespace {
 };  // namespace daTagRet
 
 actor_process_profile_definition g_profile_Tag_Ret = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Tag_Ret,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Ret_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTagRet::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Tag_Ret,
+    /* Draw Prio    */ fpcDwPi_Tag_Ret_e,
     /* Actor SubMtd */ &daTagRet::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

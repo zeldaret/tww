@@ -7,20 +7,18 @@
 #include "d/actor/d_a_wind_tag.h"
 #include "d/actor/d_a_sea.h"
 #include "d/d_bg_s_func.h"
-#include "d/res/res_yaflw00.h"
-#include "d/res/res_ybgaf00.h"
+#include "res/Object/Yaflw00.h"
+#include "res/Object/Ybgaf00.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_level_se.h"
 #include "d/d_path.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 namespace daWindTag {
 
-dCcD_SrcCps l_cps_src = {
+static dCcD_SrcCps l_cps_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
@@ -106,11 +104,11 @@ BOOL daWindTag_c::CreateHeap() {
 }
 
 const char *daWindTag_c::m_arcname[] = { "Yaflw00", "Ybgaf00" };
-s16 daWindTag_c::m_bdlidx[] = { YAFLW00_BDL_YAFLW00, YBGAF00_BDL_YBGAF00 };
+s16 daWindTag_c::m_bdlidx[] = { dRes_INDEX_YAFLW00_BDL_YAFLW00_e, dRes_INDEX_YBGAF00_BDL_YBGAF00_e };
 s16 daWindTag_c::m_heapsize[] = { 0x0C40, 0x0C40 };
-s16 daWindTag_c::m_bckidx[] = { YAFLW00_BCK_YAFLW00, YBGAF00_BCK_YBGAF00 };
-s16 daWindTag_c::m_btkidx[] = { YAFLW00_BTK_YAFLW00_01, YBGAF00_BTK_YBGAF00_01 };
-s16 daWindTag_c::m_btkidx2[] = { YAFLW00_BTK_YAFLW00_02, YBGAF00_BTK_YBGAF00_02 };
+s16 daWindTag_c::m_bckidx[] = { dRes_INDEX_YAFLW00_BCK_YAFLW00_e, dRes_INDEX_YBGAF00_BCK_YBGAF00_e };
+s16 daWindTag_c::m_btkidx[] = { dRes_INDEX_YAFLW00_BTK_YAFLW00_01_e, dRes_INDEX_YBGAF00_BTK_YBGAF00_01_e };
+s16 daWindTag_c::m_btkidx2[] = { dRes_INDEX_YAFLW00_BTK_YAFLW00_02_e, dRes_INDEX_YBGAF00_BTK_YBGAF00_02_e };
 f32 daWindTag_c::m_cullsize_far = 4.0f;
 f32 daWindTag_c::m_ef_cullsize_far = 2.0f;
 
@@ -177,7 +175,7 @@ void daWindTag_c::CreateInit() {
     if (checkSizeSpecialBig()) {
         seNum = JA_SE_OBJ_WIND_TAG_L;
     }
-    mLevelSeID = fopKyM_create(PROC_LEVEL_SE, seNum, &eyePos);
+    mLevelSeID = fopKyM_create(fpcNm_LEVEL_SE_e, seNum, &eyePos);
     mpEmitter = NULL;
     cXyz efScale(scale.x, scale.x, scale.x);
     if (field_0x57f) {
@@ -495,18 +493,18 @@ static actor_method_class daWindTagMethodTable = {
 };
 
 actor_process_profile_definition g_profile_WindTag = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WindTag,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_WindTag_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWindTag::daWindTag_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_WindTag,
+    /* Draw Prio    */ fpcDwPi_WindTag_e,
     /* Actor SubMtd */ &daWindTagMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

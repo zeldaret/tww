@@ -99,7 +99,7 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* i_start, cXyz* i_end, cXyz* param
     local_3c.z = param_2->z + cM_ssin(sVar7) * m_HIO->mWall.m.field_0x50;
     mGndChk.SetPos(&local_3c);
     f32 f31 = dComIfG_Bgsp()->GroundCross(&mGndChk);
-    if (-G_CM3D_F_INF != f31 && (!cBgW_CheckBGround(dComIfG_Bgsp()->GetTriPla(mGndChk)->GetNP()->y))) {
+    if (-G_CM3D_F_INF != f31 && !cBgW_CheckBGround(dComIfG_Bgsp()->GetTriPla(mGndChk)->GetNP()->y)) {
         return NULL;
     }
 
@@ -140,8 +140,8 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* i_start, cXyz* i_end, cXyz* param
         }
         cM3dGPla* triPla;
         triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
-        iVar4 = cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z);
-        if (sVar7 != (s16)iVar4) {
+        int iVar4 = cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z);
+        if (sVar7 != iVar4) {
             return NULL;
         }
     }
@@ -245,7 +245,7 @@ int daPy_lk_c::changeWHideEndProc(cXyz* param_0) {
     dComIfGp_setRStatus(dActStts_CROUCH_e);
 
     if ((!doButton() && (!checkNoResetFlg0(daPyFlg0_UNK10000) || !mAcch.ChkRoofHit())) ||
-        (!checkUpperAnime(LKANM_BCK_REST) && swordTrigger()) ||
+        (!checkUpperAnime(dRes_INDEX_LKANM_BCK_REST_e) && swordTrigger()) ||
         !checkWHideBackWall(param_0))
     {
         mNormalSpeed = 0.7f * mMaxNormalSpeed;

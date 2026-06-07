@@ -8,11 +8,9 @@
 #include "d/actor/d_a_bgn.h"
 #include "d/actor/d_a_bgn3.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
-#include "d/res/res_bgn.h"
+#include "res/Object/Bgn.h"
 
 class daBgn2_HIO_c : public JORReflexible {
 public:
@@ -89,7 +87,7 @@ static void anm_init(bgn2_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, 
 
 /* 000002BC-00000308       .text bgn_s_sub__FPvPv */
 static void* bgn_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BGN)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
         return param_1;
     } else {
         return NULL;
@@ -98,7 +96,7 @@ static void* bgn_s_sub(void* param_1, void*) {
 
 /* 00000308-00000354       .text bgn3_s_sub__FPvPv */
 static void* bgn3_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BGN3)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
         return param_1;
     } else {
         return NULL;
@@ -289,13 +287,13 @@ static s32 pos_move(bgn2_class* i_this) {
 static void start(bgn2_class* i_this) {
     switch (i_this->m0314) {
         case 0:
-            anm_init(i_this, BGN_BCK_DERU1, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BGN_BCK_DERU1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m0314 = 1;
         // fallthrough
         case 1:
             if (i_this->mpBodyMorf->isStop()) {
                 i_this->m0312 = 1;
-                anm_init(i_this, BGN_BCK_RAKKA1, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BGN_BCK_RAKKA1_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->m0314 = 1;
             }
             break;
@@ -327,7 +325,7 @@ static void plesattack(bgn2_class* i_this) {
                 break;
             }
             i_this->m2E82 = 0;
-            anm_init(i_this, BGN_BCK_RAKKA1, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BGN_BCK_RAKKA1_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m0314 = 1;
             if (actor->health == 3) {
                 i_this->m0330[0] = l_HIO.m1E;
@@ -339,7 +337,7 @@ static void plesattack(bgn2_class* i_this) {
             }
         case 1:
             if (i_this->mpBodyMorf->isStop()) {
-                anm_init(i_this, BGN_BCK_RAKKA2, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BGN_BCK_RAKKA2_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->m0314 = 2;
             }
             // fallthrough
@@ -351,7 +349,7 @@ static void plesattack(bgn2_class* i_this) {
             i_this->m2E79 = 1;
             if (checkGround(i_this)) {
                 ki_set(i_this);
-                anm_init(i_this, BGN_BCK_SETTI1, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BGN_BCK_SETTI1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->m0314 = 3;
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 sVar6 = actor->health;
@@ -403,7 +401,7 @@ static void jumpattack(bgn2_class* i_this) {
     pBrk = i_this->mpBodyMorf->getModel();
     switch (i_this->m0314) {
         case 0:
-            anm_init(i_this, BGN_BCK_JUMP1, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BGN_BCK_JUMP1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m0314 = 1;
         // fallthrough
         case 1:
@@ -496,7 +494,7 @@ static void damage(bgn2_class* i_this) {
     i_this->mpHeadMorf->play(&actor->current.pos, 0, 0);
     switch (i_this->m0314) {
         case 0:
-            anm_init(i_this, BGN_BCK_DAMAGE1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BGN_BCK_DAMAGE1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m0314 = 1;
         // fallthrough
         case 1:
@@ -532,7 +530,7 @@ static void hensin(bgn2_class* i_this) {
     switch (i_this->m0314) {
 #if VERSION == VERSION_DEMO
         case 0:
-            anm_init(i_this, BGN_BCK_WAIT2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BGN_BCK_WAIT2_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m0314 = 1;
             i_this->m0330[0] = 0x96;
             bgn->mCSMode = 10;
@@ -540,7 +538,7 @@ static void hensin(bgn2_class* i_this) {
         case 1:
 #else
         case 0:
-            anm_init(i_this, BGN_BCK_SETTI1, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BGN_BCK_SETTI1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m0314 = 1;
             bgn->mCSMode = 10;
             actor->speed.y = REG8_F(0xc) + 50.0f;
@@ -549,7 +547,7 @@ static void hensin(bgn2_class* i_this) {
         case 1:
             if (i_this->m0330[0] == 0) {
                 i_this->m0314 = 2;
-                anm_init(i_this, BGN_BCK_WAIT2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BGN_BCK_WAIT2_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->m0330[0] = REG8_S(5) + 0x5a;
                 actor->speed.y = 0.0f;
             }
@@ -562,7 +560,7 @@ static void hensin(bgn2_class* i_this) {
             if (i_this->m0330[0] == 0) {
                 i_this->m0314 = 5;
                 i_this->m0330[0] = 0x46;
-                anm_init(i_this, BGN_BCK_MODORU1, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BGN_BCK_MODORU1_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 fopAcM_seStart(actor, JA_SE_CM_BGN_T_TO_M_1, 0);
             }
             break;
@@ -810,7 +808,7 @@ static void damage_check(bgn2_class* i_this) {
 
 /* 00002C88-00002CE0       .text ki_c_sub__FPvPv */
 static void* ki_c_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_KI)) {
+    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
         ki_all_count++;
     }
     return NULL;
@@ -1051,7 +1049,7 @@ static BOOL daBgn2_Execute(bgn2_class* i_this) {
             local_b8.x = cM_rndFX(2500.0f);
             local_b8.y = cM_rndF(500.0f) + 3500.0f;
             local_b8.z = cM_rndFX(2500.0f);
-            fopAcM_create(PROC_KI, 0xFFFF0003, &local_b8, fopAcM_GetRoomNo(actor));
+            fopAcM_create(fpcNm_KI_e, 0xFFFF0003, &local_b8, fopAcM_GetRoomNo(actor));
         }
     }
     i_this->mAcch.CrrPos(*dComIfG_Bgsp());
@@ -1081,10 +1079,10 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     bgn2_class* i_this = (bgn2_class*)a_this;
 
     i_this->mpHeadMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Bgn", BGN_BDL_BGN_HEAD1),
+        (J3DModelData*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BDL_BGN_HEAD1_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bgn", BGN_BCK_BGN_HEAD1),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BCK_BGN_HEAD1_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -1098,10 +1096,10 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     i_this->mpBodyMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Bgn", BGN_BDL_BGN_KUMO1),
+        (J3DModelData*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BDL_BGN_KUMO1_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bgn", BGN_BCK_WAIT1),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BCK_WAIT1_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -1114,12 +1112,12 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     if ((i_this->mpBodyMorf == NULL) || (i_this->mpBodyMorf->getModel() == NULL)) {
         return FALSE;
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(BGN_BDL_BGN_JYAKUTENA, BGN_BDL_BGN_JYAKUTENA2));
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(dRes_INDEX_BGN_BDL_BGN_JYAKUTENA_e, dRes_INDEX_BGN_BDL_BGN_JYAKUTENA2_e));
     i_this->mpJyakutenModel[2] = mDoExt_J3DModel__create(modelData, DEMO_SELECT(0x80000, 0), DEMO_SELECT(0x11000022, 0x11020203));
     if (i_this->mpJyakutenModel[2] == NULL) {
         return FALSE;
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(BGN_BDL_BGN_JYAKUTENB, BGN_BDL_BGN_JYAKUTENB2));
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(dRes_INDEX_BGN_BDL_BGN_JYAKUTENB_e, dRes_INDEX_BGN_BDL_BGN_JYAKUTENB2_e));
     i_this->mpJyakutenModel[1] = mDoExt_J3DModel__create(modelData, DEMO_SELECT(0x80000, 0), DEMO_SELECT(0x11000022, 0x11020203));
     if (i_this->mpJyakutenModel[1] == NULL) {
         return FALSE;
@@ -1130,11 +1128,11 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 #endif
-    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(BGN_BRK_BGN_JYAKUTENBC, BGN_BRK_BGN_JYAKUTENB2));
+    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(dRes_INDEX_BGN_BRK_BGN_JYAKUTENBC_e, dRes_INDEX_BGN_BRK_BGN_JYAKUTENB2_e));
     if (!i_this->mJyakutenBBrkAnm->init(modelData, pBrk, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(BGN_BDL_BGN_JYAKUTENC, BGN_BDL_BGN_JYAKUTENC2));
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(dRes_INDEX_BGN_BDL_BGN_JYAKUTENC_e, dRes_INDEX_BGN_BDL_BGN_JYAKUTENC2_e));
     i_this->mpJyakutenModel[0] = mDoExt_J3DModel__create(modelData, DEMO_SELECT(0x80000, 0), DEMO_SELECT(0x11000022, 0x11020203));
     if (i_this->mpJyakutenModel[0] == NULL) {
         return FALSE;
@@ -1145,11 +1143,11 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 #endif
-    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(BGN_BRK_BGN_JYAKUTENBC, BGN_BRK_BGN_JYAKUTENC2));
+    pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(dRes_INDEX_BGN_BRK_BGN_JYAKUTENBC_e, dRes_INDEX_BGN_BRK_BGN_JYAKUTENC2_e));
     if (!i_this->mJyakutenCBrkAnm->init(modelData, pBrk, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
-    pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", BGN_BTI_NOT_CUT1);
+    pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BTI_NOT_CUT1_e);
     if (!i_this->mRedRopeMat.init(1, 0x3C, pBti, 1)) {
         return FALSE;
     }
@@ -1270,18 +1268,18 @@ static actor_method_class l_daBgn2_Method = {
 };
 
 actor_process_profile_definition g_profile_BGN2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BGN2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BGN2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bgn2_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BGN2,
+    /* Draw Prio    */ fpcDwPi_BGN2_e,
     /* Actor SubMtd */ &l_daBgn2_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

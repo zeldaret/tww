@@ -1,0 +1,48 @@
+#ifndef RES_HCBH_H
+#define RES_HCBH_H
+
+enum dRes_INDEX_HCBH {
+    /* BDL  */
+    dRes_INDEX_HCBH_BDL_HCBH1A_e=0x4,
+    dRes_INDEX_HCBH_BDL_HCBH1B_e=0x5,
+    dRes_INDEX_HCBH_BDL_HCBH1C_e=0x6,
+    dRes_INDEX_HCBH_BDL_HCBH1D_e=0x7,
+    dRes_INDEX_HCBH_BDL_HCBH2_e=0x8,
+    /* DZB  */
+    dRes_INDEX_HCBH_DZB_HCBH1_e=0xB,
+    dRes_INDEX_HCBH_DZB_HCBH2_e=0xC,
+};
+
+enum dRes_ID_HCBH {
+    /* BDL  */
+    dRes_ID_HCBH_BDL_HCBH1A_e=0x4,
+    dRes_ID_HCBH_BDL_HCBH1B_e=0x5,
+    dRes_ID_HCBH_BDL_HCBH1C_e=0x6,
+    dRes_ID_HCBH_BDL_HCBH1D_e=0x7,
+    dRes_ID_HCBH_BDL_HCBH2_e=0x8,
+    /* DZB  */
+    dRes_ID_HCBH_DZB_HCBH1_e=0xB,
+    dRes_ID_HCBH_DZB_HCBH2_e=0xC,
+};
+
+enum HCBH1A_JNT {
+    HCBH1A_JNT_POLYSURFACE2282_e=0x0,
+};
+
+enum HCBH1B_JNT {
+    HCBH1B_JNT_POLYSURFACE2280_e=0x0,
+};
+
+enum HCBH1C_JNT {
+    HCBH1C_JNT_POLYSURFACE2285_e=0x0,
+};
+
+enum HCBH1D_JNT {
+    HCBH1D_JNT_POLYSURFACE2289_e=0x0,
+};
+
+enum HCBH2_JNT {
+    HCBH2_JNT_POLYSURFACE2290_e=0x0,
+};
+
+#endif /* !RES_HCBH_H */

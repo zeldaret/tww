@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_ho.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_ho.h"
+#include "res/Object/Ho.h"
 #include "d/d_snap.h"
 #include "m_Do/m_Do_controller_pad.h"
 
@@ -15,15 +13,15 @@ static fpc_ProcID l_msgId;
 static msg_class* l_msg;
 
 static const int l_bck_ix_tbl[] = {
-    HO_BCK_HO_WAIT01,
-    HO_BCK_HO_TALK01,
-    HO_BCK_HO_TALK02,
-    HO_BCK_HO_GLAD,
-    HO_BCK_HO_TALK02,
+    dRes_INDEX_HO_BCK_HO_WAIT01_e,
+    dRes_INDEX_HO_BCK_HO_TALK01_e,
+    dRes_INDEX_HO_BCK_HO_TALK02_e,
+    dRes_INDEX_HO_BCK_HO_GLAD_e,
+    dRes_INDEX_HO_BCK_HO_TALK02_e,
 };
 
 static const int l_btp_ix_tbl[] = {
-    HO_BTP_HO_MABA01
+    dRes_INDEX_HO_BTP_HO_MABA01_e
 };
 
 /* 00000078-0000022C       .text nodeCallBack_Ho__FP7J3DNodei */
@@ -242,7 +240,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0x271E:
             mNextMessageId = 0x2748;
-            mItemNum = dItem_PURPLE_RUPEE_e;
+            mItemNum = dItemNo_PURPLE_RUPEE_e;
             *pMsgNo = *pMsgNo + 1;
             mState = HO_STATE_TALK_03;
             break;
@@ -308,7 +306,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0x275C:
             mNextMessageId = 0x275D;
-            mItemNum = dItem_RED_RUPEE_e;
+            mItemNum = dItemNo_RED_RUPEE_e;
             msgStatus = fopMsgStts_MSG_ENDS_e;
             break;
         case 0x2742:
@@ -317,7 +315,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0x2743:
             mNextMessageId = 0x2744;
-            mItemNum = COTTAGE_PAPER;
+            mItemNum = dItemNo_CABANA_DEED_e;
             msgStatus = fopMsgStts_MSG_ENDS_e;
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_1C08);
             dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0104);
@@ -336,22 +334,23 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
                 msgStatus = fopMsgStts_MSG_ENDS_e;
             }
             break;
-        case 0x2754:
+        case 0x2754: {
             *pMsgNo = 0x2755;
             int numPendantsGiven = dComIfGs_getBeastNum(7);
             receivePendant(numPendantsGiven);
             if (numPendantsGiven < 3) {
-                mItemNum = dItem_RED_RUPEE_e;
+                mItemNum = dItemNo_RED_RUPEE_e;
             } else if (numPendantsGiven < 5) {
-                mItemNum = dItem_PURPLE_RUPEE_e;
+                mItemNum = dItemNo_PURPLE_RUPEE_e;
             } else {
-                mItemNum = dItem_ORANGE_RUPEE_e;
+                mItemNum = dItemNo_ORANGE_RUPEE_e;
             }
             mNextMessageId = 0x2757;
             break;
+        }
         case 0x2751:
             mNextMessageId = 0x2752;
-            mItemNum = dItem_HEROS_CHARM_e;
+            mItemNum = dItemNo_HEROS_CHARM_e;
             msgStatus = fopMsgStts_MSG_ENDS_e;
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_1C04);
             break;
@@ -401,7 +400,7 @@ u32 daNpc_Ho_c::getMsg() {
             return (dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF) == 0 ? 0 : 1) + 0x2712;
 
         case HO_STATE_TALK_03:
-            if(dComIfGp_event_getPreItemNo() != dItem_JOY_PENDANT_e || !dComIfGs_isEventBit(DEMO_SELECT(dSv_event_flag_c::UNK_1E02, dSv_event_flag_c::UNK_1E04))) {
+            if(dComIfGp_event_getPreItemNo() != dItemNo_JOY_PENDANT_e || !dComIfGs_isEventBit(DEMO_SELECT(dSv_event_flag_c::UNK_1E02, dSv_event_flag_c::UNK_1E04))) {
                 return 0x2739;
             } 
 
@@ -613,7 +612,7 @@ bool daNpc_Ho_c::wait01() {
         mPrevState = mState;
         mState = HO_STATE_TALK_02;
         setAnmStatus();
-        mItemNum = dItem_NONE_e;
+        mItemNum = dItemNo_NONE_e;
     } else if (chkFlag(HO_FLAG_00000001)) {
         mPrevState = mState;
         mState = HO_STATE_TALK_01;
@@ -662,7 +661,7 @@ bool daNpc_Ho_c::talk02() {
 /* 000016E8-000017D4       .text talk03__10daNpc_Ho_cFv */
 bool daNpc_Ho_c::talk03() {
     if (talk() == fopMsgStts_BOX_CLOSED_e) {
-        if (mItemNum != dItem_NONE_e) {
+        if (mItemNum != dItemNo_NONE_e) {
             mState = HO_STATE_GIVE_01;
             fopAcM_orderChangeEvent(dComIfGp_getLinkPlayer(), this, "DEFAULT_GIVEITEM", 0, 0xFFFF);
         } else {
@@ -693,7 +692,7 @@ bool daNpc_Ho_c::give02() {
     if (dComIfGp_evmng_endCheck("DEFAULT_GIVEITEM")) {
         fopAcM_orderChangeEvent(dComIfGp_getLinkPlayer(), this, "DEFAULT_TALK", 0, 0xFFFF);
         mState = HO_STATE_TALK_03_CONTINUE;
-        mItemNum = dItem_NONE_e;
+        mItemNum = dItemNo_NONE_e;
         talkInit();
     }
     return mpMorf->isMorf();
@@ -705,7 +704,7 @@ bool daNpc_Ho_c::preach() {
 
     if (dComIfGp_evmng_endCheck("HO_PREACH")) {
         fopAcM_orderChangeEvent(dComIfGp_getLinkPlayer(), this, "DEFAULT_TALK", 0, 0xFFFF);
-        mItemNum = dItem_NONE_e;
+        mItemNum = dItemNo_NONE_e;
         mState = HO_STATE_TALK_03_CONTINUE;
         talkInit();
     }
@@ -874,7 +873,7 @@ cPhs_State daNpc_Ho_c::_create() {
         fopAcM_ct_Demo(this, daNpc_Ho_c);
 
         switch(fopAcM_GetName(this)) {
-            case PROC_NPC_HO:
+            case fpcNm_NPC_HO_e:
                 mType = 0;
                 break;
             default:
@@ -905,13 +904,13 @@ cPhs_State daNpc_Ho_c::_create() {
 
 /* 000023F0-00002784       .text CreateHeap__10daNpc_Ho_cFv */
 BOOL daNpc_Ho_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Ho", HO_BDL_HO);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Ho", dRes_INDEX_HO_BDL_HO_e);
     JUT_ASSERT(DEMO_SELECT(1566, 1581), modelData);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Ho", HO_BCK_HO_WAIT01),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Ho", dRes_INDEX_HO_BCK_HO_WAIT01_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x80000,
@@ -934,7 +933,7 @@ BOOL daNpc_Ho_c::CreateHeap() {
     m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
     JUT_ASSERT(DEMO_SELECT(1606, 1621), m_jnt.getBackboneJntNum() >= 0);
 
-    J3DModelData* penModelData = (J3DModelData*)dComIfG_getObjectRes("Ho", HO_BDL_HO_PEND);
+    J3DModelData* penModelData = (J3DModelData*)dComIfG_getObjectRes("Ho", dRes_INDEX_HO_BDL_HO_PEND_e);
     JUT_ASSERT(DEMO_SELECT(1612, 1627), penModelData);
 
     mpJoyPendentModel = mDoExt_J3DModel__create(penModelData, 0, 0x11020203);
@@ -1001,18 +1000,18 @@ static actor_method_class l_daNpc_Ho_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_HO = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_HO,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_HO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Ho_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_HO,
+    /* Draw Prio    */ fpcDwPi_NPC_HO_e,
     /* Actor SubMtd */ &l_daNpc_Ho_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_12_e,
+    /* Cull Type    */ fopAc_CULLBOX_12_e,
 };

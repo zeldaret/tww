@@ -22,7 +22,6 @@
 #include "d/actor/d_a_ship.h"
 #include "d/d_gameover.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_graphic.h"
@@ -44,15 +43,15 @@ fopAc_ac_c* daPy_lk_c::getDemoLookActor() {
 /* 8012CDD4-8012CE2C       .text setTinkleCeiverModel__9daPy_lk_cFv */
 void daPy_lk_c::setTinkleCeiverModel() {
     JKRHeap* oldHeap = setItemHeap();
-    initModel(&mpEquipItemModel, LINK_BDL_TCEIVER, 0x13000022);
+    initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_TCEIVER_e, 0x13000022);
     mDoExt_setCurrentHeap(oldHeap);
 }
 
 /* 8012CE2C-8012CEFC       .text setTalismanModel__9daPy_lk_cFv */
 void daPy_lk_c::setTalismanModel() {
-    J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_TETOLACH);
+    J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_TETOLACH_e);
     JKRHeap* oldHeap = setItemHeap();
-    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_TETOLACH, 0x13000022);
+    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_TETOLACH_e, 0x13000022);
     int ret = mSwordAnim.init(tmp_modelData, bck, true, J3DFrameCtrl::EMode_LOOP, 0.2f, 0, -1, false);
     if (!ret) {
         JUT_ASSERT(82, FALSE);
@@ -63,9 +62,9 @@ void daPy_lk_c::setTalismanModel() {
 /* 8012CEFC-8012CFE8       .text setLetterModel__9daPy_lk_cFv */
 void daPy_lk_c::setLetterModel() {
     if (mEquipItem != daPyItem_UNK104_e) {
-        J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_GETLETTERA);
+        J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_GETLETTERA_e);
         JKRHeap* oldHeap = setItemHeap();
-        J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_LETTER, 0x13000022);
+        J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_LETTER_e, 0x13000022);
         int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
         if (!ret) {
             JUT_ASSERT(120, FALSE);
@@ -91,7 +90,7 @@ void daPy_lk_c::setShapeAngleToTalkActor() {
     if (partner_p != NULL) {
         s16 partner_name = fopAcM_GetName(partner_p);
         s16 target;
-        if (partner_name == PROC_AGB) {
+        if (partner_name == fpcNm_AGB_e) {
             target = cLib_targetAngleY(&current.pos, &partner_p->eyePos);
         } else {
             target = fopAcM_searchActorAngleY(this, partner_p);
@@ -260,17 +259,17 @@ BOOL daPy_lk_c::dProcTool() {
 #endif
             }
             
-            u8 itemNo = dItem_NONE_e;
+            u8 itemNo = dItemNo_NONE_e;
             if (mLeftHandIdx == 0xC8) {
-                itemNo = dItem_SWORD_e;
+                itemNo = dItemNo_SWORD_e;
             } else if (mLeftHandIdx == 0xC9) {
-                itemNo = dItem_MASTER_SWORD_1_e;
+                itemNo = dItemNo_MASTER_SWORD_1_e;
             } else if (mLeftHandIdx == 0xCA) {
-                itemNo = dItem_MASTER_SWORD_2_e;
+                itemNo = dItemNo_MASTER_SWORD_2_e;
             } else if (mLeftHandIdx == 0xCB) {
-                itemNo = dItem_MASTER_SWORD_3_e;
+                itemNo = dItemNo_MASTER_SWORD_3_e;
             }
-            if (itemNo != dItem_NONE_e) {
+            if (itemNo != dItemNo_NONE_e) {
                 mLeftHandIdx = 3;
                 if (mEquipItem != daPyItem_SWORD_e || itemNo != dComIfGs_getSelectEquip(0)) {
                     dComIfGs_setSelectEquip(0, itemNo);
@@ -283,7 +282,7 @@ BOOL daPy_lk_c::dProcTool() {
                 }
             } else {
                 if (mLeftHandIdx == 0xCC) {
-                    if (mEquipItem != dItem_WIND_WAKER_e) {
+                    if (mEquipItem != dItemNo_WIND_WAKER_e) {
                         deleteEquipItem(FALSE);
                     }
                     mLeftHandIdx = 5;
@@ -296,9 +295,9 @@ BOOL daPy_lk_c::dProcTool() {
             if (mRightHandIdx == 0xC8 || mRightHandIdx == 0xC9) {
                 mProcVar2.m34D4 = 1;
                 if (mRightHandIdx == 0xC8) {
-                    dComIfGs_setSelectEquip(1, dItem_SHIELD_e);
+                    dComIfGs_setSelectEquip(1, dItemNo_SHIELD_e);
                 } else {
-                    dComIfGs_setSelectEquip(1, dItem_MIRROR_SHIELD_e);
+                    dComIfGs_setSelectEquip(1, dItemNo_MIRROR_SHIELD_e);
                 }
                 mRightHandIdx = 0x08;
             } else {
@@ -556,18 +555,18 @@ BOOL daPy_lk_c::dProcOpenTreasure() {
 #if VERSION > VERSION_DEMO
 /* 8012E28C-8012E418       .text setGetItemSound__9daPy_lk_cFUsi */
 void daPy_lk_c::setGetItemSound(u16 param_1, BOOL param_2) {
-    if (param_1 == dItem_GREEN_RUPEE_e || param_1 == dItem_BLUE_RUPEE_e || param_1 == dItem_YELLOW_RUPEE_e ||
-        param_1 == dItem_RED_RUPEE_e || param_1 == dItem_PURPLE_RUPEE_e || param_1 == TINCLE_RUPEE1)
+    if (param_1 == dItemNo_GREEN_RUPEE_e || param_1 == dItemNo_BLUE_RUPEE_e || param_1 == dItemNo_YELLOW_RUPEE_e ||
+        param_1 == dItemNo_RED_RUPEE_e || param_1 == dItemNo_PURPLE_RUPEE_e || param_1 == dItemNo_TINGLE_RUPEE_1_e)
     {
         seStartSystem(JA_SE_ME_ITEM_GET_S);
         dComIfGp_setMesgBgmOn2();
-    } else if (param_1 == dItem_HEART_CONTAINER_e ||
-               (param_1 == dItem_HEART_PIECE_e && ((dComIfGs_getMaxLife() % 4) == 3)))
+    } else if (param_1 == dItemNo_HEART_CONTAINER_e ||
+               (param_1 == dItemNo_HEART_PIECE_e && ((dComIfGs_getMaxLife() % 4) == 3)))
     {
         mDoAud_subBgmStart(JA_BGM_GET_HEART);
         dComIfGp_setMesgBgmOn();
-    } else if (param_1 == dItem_HEART_PIECE_e || param_1 == dItem_JOY_PENDANT_e || param_1 == dItem_SMALL_KEY_e ||
-               param_1 == dItem_SILVER_RUPEE_e || param_1 == dItem_ORANGE_RUPEE_e)
+    } else if (param_1 == dItemNo_HEART_PIECE_e || param_1 == dItemNo_JOY_PENDANT_e || param_1 == dItemNo_SMALL_KEY_e ||
+               param_1 == dItemNo_SILVER_RUPEE_e || param_1 == dItemNo_ORANGE_RUPEE_e)
     {
         mDoAud_subBgmStart(JA_BGM_ITEM_GET_S);
         dComIfGp_setMesgBgmOn();
@@ -607,7 +606,7 @@ BOOL daPy_lk_c::setGetDemo() {
                 if (r0 == 0xB) {
                     fopAc_ac_c* itemPartner = fopAcM_getItemEventPartner(this);
                     if (itemPartner != NULL &&
-                        (fopAcM_GetName(itemPartner) == PROC_ITEM || fopAcM_GetName(itemPartner) == PROC_Demo_Item))
+                        (fopAcM_GetName(itemPartner) == fpcNm_ITEM_e || fopAcM_GetName(itemPartner) == fpcNm_Demo_Item_e))
                     {
                         daItemBase_c* item = (daItemBase_c*)itemPartner;
                         item->hide();
@@ -618,8 +617,8 @@ BOOL daPy_lk_c::setGetDemo() {
                         }
 
                         u32 itemGetMsgNo;
-                        if (itemNo == dItem_HEART_PIECE_e && (dComIfGs_getMaxLife() % 4) != 0) {
-                            itemGetMsgNo = MSG_NO_FOR_ITEM(dItem_HEART_PIECE_2_e + (dComIfGs_getMaxLife() % 4) - 1);
+                        if (itemNo == dItemNo_HEART_PIECE_e && (dComIfGs_getMaxLife() % 4) != 0) {
+                            itemGetMsgNo = MSG_NO_FOR_ITEM(dItemNo_HEART_PIECE_2_e + (dComIfGs_getMaxLife() % 4) - 1);
                         } else {
                             itemGetMsgNo = MSG_NO_FOR_ITEM(itemNo);
                         }
@@ -665,7 +664,7 @@ BOOL daPy_lk_c::dProcGetItem_init() {
     if (mCurProc == daPyProc_DEMO_OPEN_TREASURE_e) {
         m34C2 = 10;
         mAcch.ClrWallNone();
-        if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_BOXOPENLINK) {
+        if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_BOXOPENLINK_e) {
             sVar5 = TRUE;
         }
     } else if (mCurProc == daPyProc_DEMO_OPEN_SALVAGE_TREASURE_e) {
@@ -736,22 +735,22 @@ BOOL daPy_lk_c::dProcGetItem() {
         if (mProcVar0.m34D0 == 0 && mProcVar2.m34D4 != -1) {
             mProcVar0.m34D0 = 1;
 #if VERSION == VERSION_DEMO
-            if (mProcVar2.m34D4 == dItem_GREEN_RUPEE_e || mProcVar2.m34D4 == dItem_BLUE_RUPEE_e || mProcVar2.m34D4 == dItem_YELLOW_RUPEE_e ||
-                mProcVar2.m34D4 == dItem_RED_RUPEE_e || mProcVar2.m34D4 == dItem_PURPLE_RUPEE_e || mProcVar2.m34D4 == TINCLE_RUPEE1)
+            if (mProcVar2.m34D4 == dItemNo_GREEN_RUPEE_e || mProcVar2.m34D4 == dItemNo_BLUE_RUPEE_e || mProcVar2.m34D4 == dItemNo_YELLOW_RUPEE_e ||
+                mProcVar2.m34D4 == dItemNo_RED_RUPEE_e || mProcVar2.m34D4 == dItemNo_PURPLE_RUPEE_e || mProcVar2.m34D4 == dItemNo_TINGLE_RUPEE_1_e)
             {
                 seStartSystem(JA_SE_ME_ITEM_GET_S);
                 dComIfGp_setMesgBgmOn2();
-            } else if (mProcVar2.m34D4 == dItem_HEART_CONTAINER_e ||
-                    (mProcVar2.m34D4 == dItem_HEART_PIECE_e && ((dComIfGs_getMaxLife() % 4) == 3)))
+            } else if (mProcVar2.m34D4 == dItemNo_HEART_CONTAINER_e ||
+                    (mProcVar2.m34D4 == dItemNo_HEART_PIECE_e && ((dComIfGs_getMaxLife() % 4) == 3)))
             {
                 mDoAud_subBgmStart(JA_BGM_GET_HEART);
                 dComIfGp_setMesgBgmOn();
-            } else if (mProcVar2.m34D4 == dItem_HEART_PIECE_e || mProcVar2.m34D4 == dItem_JOY_PENDANT_e || mProcVar2.m34D4 == dItem_SMALL_KEY_e ||
-                    mProcVar2.m34D4 == dItem_SILVER_RUPEE_e || mProcVar2.m34D4 == dItem_ORANGE_RUPEE_e)
+            } else if (mProcVar2.m34D4 == dItemNo_HEART_PIECE_e || mProcVar2.m34D4 == dItemNo_JOY_PENDANT_e || mProcVar2.m34D4 == dItemNo_SMALL_KEY_e ||
+                    mProcVar2.m34D4 == dItemNo_SILVER_RUPEE_e || mProcVar2.m34D4 == dItemNo_ORANGE_RUPEE_e)
             {
                 mDoAud_subBgmStart(JA_BGM_ITEM_GET_S);
                 dComIfGp_setMesgBgmOn();
-            } else if (mProcVar5.m34DA != dItem_HEART_e) {
+            } else if (mProcVar5.m34DA != dItemNo_HEART_e) {
                 seStartSystem(JA_SE_ME_ITEM_GET_S);
                 dComIfGp_setMesgBgmOn2();
             } else {
@@ -781,12 +780,12 @@ BOOL daPy_lk_c::dProcGetItem() {
             mProcVar6.m3570 = 0;
             onModeFlg(ModeFlg_00000400);
         }
-        if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || (fopAcM_GetName(item) == PROC_Demo_Item))) {
+        if (item != NULL && (fopAcM_GetName(item) == fpcNm_ITEM_e || (fopAcM_GetName(item) == fpcNm_Demo_Item_e))) {
             item->hide();
         }
     } else {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-            if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
+            if (item != NULL && (fopAcM_GetName(item) == fpcNm_ITEM_e || fopAcM_GetName(item) == fpcNm_Demo_Item_e)) {
                 item->show();
                 if (m3624 == 0 && mProcVar2.m34D4 != -1) {
                     if (mProcVar2.m34D4 == 7 && (dComIfGs_getMaxLife() % 4)) {
@@ -809,7 +808,7 @@ BOOL daPy_lk_c::dProcGetItem() {
                     setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
                 }
             }
-        } else if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || (fopAcM_GetName(item) == PROC_Demo_Item))) {
+        } else if (item != NULL && (fopAcM_GetName(item) == fpcNm_ITEM_e || (fopAcM_GetName(item) == fpcNm_Demo_Item_e))) {
             item->hide();
         }
     }
@@ -951,7 +950,7 @@ BOOL daPy_lk_c::dProcFreezeDamage() {
 void daPy_lk_c::dProcDead_init_sub() {
     mProcVar6.m3570 = 0;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK20000000_e);
-    m3628 = fopMsgM_create(PROC_GAMEOVER);
+    m3628 = fopMsgM_create(fpcNm_GAMEOVER_e);
     mDemo.setSpecialDemoType();
     daPy_py_c::changePlayer(this);
 }
@@ -1673,7 +1672,7 @@ BOOL daPy_lk_c::dProcPresent() {
                 }
             } else {
                 daItemBase_c* item = (daItemBase_c*)fopAcM_getItemEventPartner(this);
-                if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
+                if (item != NULL && (fopAcM_GetName(item) == fpcNm_ITEM_e || fopAcM_GetName(item) == fpcNm_Demo_Item_e)) {
                     item->show();
                 }
             }
@@ -1745,7 +1744,7 @@ BOOL daPy_lk_c::dProcStandItemPut_init() {
     }
     mProcVar6.m3570 = 1;
     setSingleMoveAnime(ANM_GRABWAIT, m_HIO->mGrab.m.field_0x78, 0.0f, -1, -1.0f);
-    pfVar2 = (fopAc_ac_c*)fopAcM_fastCreate(PROC_STANDITEM, dComIfGp_event_getPreItemNo(), &current.pos, -1, angle);
+    pfVar2 = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_STANDITEM_e, dComIfGp_event_getPreItemNo(), &current.pos, -1, angle);
     if (pfVar2 != NULL) {
         mActorKeepGrab.setData(pfVar2);
         fopAcM_setCarryNow(pfVar2, FALSE);
@@ -2027,20 +2026,20 @@ BOOL daPy_lk_c::dProcLetterRead() {
     setShipRidePosUseItem();
     if (checkNoResetFlg1(daPyFlg1_LETTER_READ_EYE_MOVE)) {
         offNoResetFlg1(daPyFlg1_LETTER_READ_EYE_MOVE);
-        m_tex_scroll_heap.mIdx = LKANM_BTK_TEDL;
-        setTextureScrollResource(loadTextureScrollResource(LKANM_BTK_TEDL, 0), 0);
+        m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEDL_e;
+        setTextureScrollResource(loadTextureScrollResource(dRes_INDEX_LKANM_BTK_TEDL_e, 0), 0);
         mProcVar0.m34D0 = 4;
     } else {
         if (0 < mProcVar0.m34D0) {
             mProcVar0.m34D0--;
             if (mProcVar0.m34D0 == 0) {
-                if (m_tex_scroll_heap.mIdx == LKANM_BTK_TEDL) {
+                if (m_tex_scroll_heap.mIdx == dRes_INDEX_LKANM_BTK_TEDL_e) {
                     mProcVar0.m34D0 = 4;
-                    m_tex_scroll_heap.mIdx = LKANM_BTK_TEDR;
-                    setTextureScrollResource(loadTextureScrollResource(LKANM_BTK_TEDR, 0), 0);
+                    m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEDR_e;
+                    setTextureScrollResource(loadTextureScrollResource(dRes_INDEX_LKANM_BTK_TEDR_e, 0), 0);
                 } else {
-                    m_tex_scroll_heap.mIdx = LKANM_BTK_TEDW;
-                    setTextureScrollResource(loadTextureScrollResource(LKANM_BTK_TEDW, 0), 0);
+                    m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEDW_e;
+                    setTextureScrollResource(loadTextureScrollResource(dRes_INDEX_LKANM_BTK_TEDW_e, 0), 0);
                 }
             }
         }
@@ -2169,7 +2168,7 @@ BOOL daPy_lk_c::dProcBottleOpenFairy_init() {
         m_HIO->mItem.mBottle.m.field_0x40
     );
     keepItemData();
-    setBottleModel(dItem_FAIRY_BOTTLE_e);
+    setBottleModel(dItemNo_FAIRY_BOTTLE_e);
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK4000_e);
     mProcVar6.m3570 = 0;
     return true;
@@ -2179,7 +2178,7 @@ BOOL daPy_lk_c::dProcBottleOpenFairy_init() {
 BOOL daPy_lk_c::dProcBottleOpenFairy() {
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
 
-    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_BINOPENPRE) {
+    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_BINOPENPRE_e) {
         if (frameCtrl.getRate() < 0.01f) {
             setSingleMoveAnime(
                 ANM_BINOPENB,
@@ -2205,7 +2204,7 @@ BOOL daPy_lk_c::dProcBottleOpenFairy() {
                 } else {
                     dComIfGs_setEquipBottleItemEmpty(dItemBtn_Z_e);
                 }
-                fopAcM_fastCreate(PROC_NPC_FA1, daNpc_Fa1_c::Type_BABA_e, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
+                fopAcM_fastCreate(fpcNm_NPC_FA1_e, daNpc_Fa1_c::Type_BABA_e, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
             }
         }
     }
@@ -2414,14 +2413,14 @@ BOOL daPy_lk_c::dProcLastCombo_init() {
         setSwordModel(FALSE);
 #endif
     }
-    bck = getItemAnimeResource(LKANM_BCK_COMBO_KEN);
+    bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_COMBO_KEN_e);
     mSwordAnim.changeBckOnly(bck);
     m35E8 = m35EC = 0.0f;
-    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_COMBO_TATE);
+    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BCK_COMBO_TATE_e);
     mAtngshaBck.init(mpShmsModel->getModelData(), bck, false, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, true);
     setFootEffectPosType(4);
     offNoResetFlg1(daPyFlg1_LAST_COMBO_WAIT);
-    setBlurPosResource(LKANM__LASTCOMBO_POS);
+    setBlurPosResource(dRes_INDEX_LKANM__LASTCOMBO_POS_e);
     mProcVar6.m3570 = 1;
     mProcVar7.m3574 = 0;
     seStartOnlyReverb(JA_SE_LK_V_TURN_INTO_GN);

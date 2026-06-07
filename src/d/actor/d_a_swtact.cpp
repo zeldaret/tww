@@ -5,11 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_swtact.h"
-#include "d/res/res_itact.h"
+#include "res/Object/Itact.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
@@ -33,7 +31,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
 
 /* 000000CC-00000194       .text CreateHeap__10daSwTact_cFv */
 BOOL daSwTact_c::CreateHeap() {
-    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, ITACT_BDL_ITACT);
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, dRes_INDEX_ITACT_BDL_ITACT_e);
     JUT_ASSERT(0xe1, modelData != NULL);
     model = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (model == NULL)
@@ -216,18 +214,18 @@ static actor_method_class daSwTactMethodTable = {
 };
 
 actor_process_profile_definition g_profile_SW_TACT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SW_TACT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SW_TACT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSwTact_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SW_TACT,
+    /* Draw Prio    */ fpcDwPi_SW_TACT_e,
     /* Actor SubMtd */ &daSwTactMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

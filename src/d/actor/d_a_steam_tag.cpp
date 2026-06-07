@@ -10,8 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "dolphin/mtx/vec.h"
 
 static dCcD_SrcCps l_cps_src = {
@@ -202,7 +200,7 @@ cPhs_State daSteamTag_c::create() {
     cPhs_State phase_state;
     if ((strcmp(dComIfGp_getStartStageName(),"Adanmae") == 0) &&
         (current.roomNo == 0) &&
-        (checkItemGet(dItem_PEARL_DIN_e, TRUE))) {
+        (checkItemGet(dItemNo_PEARL_DIN_e, TRUE))) {
         phase_state = cPhs_ERROR_e;
     } else {
         phase_state = cPhs_COMPLEATE_e;
@@ -225,18 +223,18 @@ static actor_method_class l_daSteamTag_Method = {
 };
 
 actor_process_profile_definition g_profile_SteamTag = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SteamTag,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SteamTag_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSteamTag_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SteamTag,
+    /* Draw Prio    */ fpcDwPi_SteamTag_e,
     /* Actor SubMtd */ &l_daSteamTag_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -6,12 +6,10 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_boomerang.h"
 #include "d/d_camera.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_material.h"
 #include "d/actor/d_a_player_main.h"
-#include "d/res/res_link.h"
+#include "res/Object/Link.h"
 #include "dolphin/gf/GF.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_camera_mng.h"
@@ -515,8 +513,7 @@ BOOL daBoomerang_c::procWait() {
 
         cXyz diff = mTargetPos - current.pos;
 
-        s16 angle = cM_atan2s(-diff.y, diff.absXZ());
-        current.angle.x = angle;
+        current.angle.x = cM_atan2s(-diff.y, diff.absXZ());
         if (mLockCnt == 0) {
             current.angle.y = cM_atan2s(diff.x, diff.z) + 0x3000;
             if (mThirdPerson) {
@@ -662,8 +659,7 @@ BOOL daBoomerang_c::procMove() {
             current.angle.y += currentAngle;
         }
 
-        angle = cM_atan2s(-norm.y, norm.absXZ());
-        current.angle.x = angle;
+        current.angle.x = cM_atan2s(-norm.y, norm.absXZ());
 
         current.pos.x += speedF * cM_scos(current.angle.x) * cM_ssin(current.angle.y);
         current.pos.y -= speedF * cM_ssin(current.angle.x);
@@ -747,7 +743,7 @@ static BOOL daBoomerang_Delete(daBoomerang_c*) {
 
 /* 800E2C00-800E2CC8       .text createHeap__13daBoomerang_cFv */
 BOOL daBoomerang_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Link", LINK_BDL_BOOMERANG);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_BOOMERANG_e);
 
     JUT_ASSERT(VERSION_SELECT(1543, 1539, 1546, 1546), modelData != NULL);
 
@@ -816,7 +812,7 @@ cPhs_State daBoomerang_c::create() {
     }
 
     {
-        ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", LINK_BTI_BLUR);
+        ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BTI_BLUR_e);
 
         JUT_ASSERT(VERSION_SELECT(1626, 1622, 1629, 1629), tmp_img != NULL);
 
@@ -824,7 +820,7 @@ cPhs_State daBoomerang_c::create() {
     }
 
     {
-        ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", LINK_BTI_ROCK_MARK);
+        ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BTI_ROCK_MARK_e);
 
         JUT_ASSERT(VERSION_SELECT(1634, 1630, 1637, 1637), tmp_img != NULL);
 
@@ -856,18 +852,18 @@ static actor_method_class l_daBoomerang_Method = {
 };
 
 actor_process_profile_definition g_profile_BOOMERANG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BOOMERANG,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BOOMERANG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daBoomerang_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BOOMERANG,
+    /* Draw Prio    */ fpcDwPi_BOOMERANG_e,
     /* Actor SubMtd */ &l_daBoomerang_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

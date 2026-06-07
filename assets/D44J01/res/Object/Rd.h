@@ -1,0 +1,92 @@
+#ifndef RES_RD_H
+#define RES_RD_H
+
+enum dRes_INDEX_RD {
+    /* BCKS */
+    dRes_INDEX_RD_BCK_ATACK_e=0x6,
+    dRes_INDEX_RD_BCK_ATACK2WALK_e=0x7,
+    dRes_INDEX_RD_BCK_BEAM_e=0x8,
+    dRes_INDEX_RD_BCK_BEAM_END_e=0x9,
+    dRes_INDEX_RD_BCK_BEAM_HIT_e=0xA,
+    dRes_INDEX_RD_BCK_DAMAGE_e=0xB,
+    dRes_INDEX_RD_BCK_DEAD_e=0xC,
+    dRes_INDEX_RD_BCK_IKARI_SAMPLE_e=0xD,
+    dRes_INDEX_RD_BCK_KANOKEP_e=0xE,
+    dRes_INDEX_RD_BCK_SUWARIP_e=0xF,
+    dRes_INDEX_RD_BCK_SUWARU_e=0x10,
+    dRes_INDEX_RD_BCK_TACHIP_e=0x11,
+    dRes_INDEX_RD_BCK_TATSU_e=0x12,
+    dRes_INDEX_RD_BCK_WALK_e=0x13,
+    dRes_INDEX_RD_BCK_WALK2ATACK_e=0x14,
+    /* BDLM */
+    dRes_INDEX_RD_BDL_RD_e=0x17,
+    /* BRK  */
+    dRes_INDEX_RD_BRK_BEAM_e=0x1A,
+    dRes_INDEX_RD_BRK_BEAM_END_e=0x1B,
+    dRes_INDEX_RD_BRK_BEAM_HIT_e=0x1C,
+    dRes_INDEX_RD_BRK_NML_e=0x1D,
+    /* BTK  */
+    dRes_INDEX_RD_BTK_RD_CLOSE_e=0x20,
+    dRes_INDEX_RD_BTK_RD_IKARI_e=0x21,
+    dRes_INDEX_RD_BTK_RD_NML_e=0x22,
+    dRes_INDEX_RD_BTK_RD_OPEN_e=0x23,
+};
+
+enum dRes_ID_RD {
+    /* BCKS */
+    dRes_ID_RD_BCK_ATACK_e=0x6,
+    dRes_ID_RD_BCK_ATACK2WALK_e=0x7,
+    dRes_ID_RD_BCK_BEAM_e=0x8,
+    dRes_ID_RD_BCK_BEAM_END_e=0x9,
+    dRes_ID_RD_BCK_BEAM_HIT_e=0xA,
+    dRes_ID_RD_BCK_DAMAGE_e=0xB,
+    dRes_ID_RD_BCK_DEAD_e=0xC,
+    dRes_ID_RD_BCK_IKARI_SAMPLE_e=0xD,
+    dRes_ID_RD_BCK_KANOKEP_e=0xE,
+    dRes_ID_RD_BCK_SUWARIP_e=0xF,
+    dRes_ID_RD_BCK_SUWARU_e=0x10,
+    dRes_ID_RD_BCK_TACHIP_e=0x11,
+    dRes_ID_RD_BCK_TATSU_e=0x12,
+    dRes_ID_RD_BCK_WALK_e=0x13,
+    dRes_ID_RD_BCK_WALK2ATACK_e=0x14,
+    /* BDLM */
+    dRes_ID_RD_BDL_RD_e=0x17,
+    /* BRK  */
+    dRes_ID_RD_BRK_BEAM_e=0x1A,
+    dRes_ID_RD_BRK_BEAM_END_e=0x1B,
+    dRes_ID_RD_BRK_BEAM_HIT_e=0x1C,
+    dRes_ID_RD_BRK_NML_e=0x1D,
+    /* BTK  */
+    dRes_ID_RD_BTK_RD_CLOSE_e=0x20,
+    dRes_ID_RD_BTK_RD_IKARI_e=0x21,
+    dRes_ID_RD_BTK_RD_NML_e=0x22,
+    dRes_ID_RD_BTK_RD_OPEN_e=0x23,
+};
+
+enum RD_JNT {
+    RD_JNT_REE_SKLROOT_e=0x0,
+    RD_JNT_REE_KOSI_1_e=0x1,
+    RD_JNT_REE_ASI_L1_e=0x2,
+    RD_JNT_REE_ASI_L2_e=0x3,
+    RD_JNT_REE_ASI_L3_e=0x4,
+    RD_JNT_REE_ASI_R1_e=0x5,
+    RD_JNT_REE_ASI_R2_e=0x6,
+    RD_JNT_REE_ASI_R3_e=0x7,
+    RD_JNT_REE_MUNE_1_e=0x8,
+    RD_JNT_REE_MUNE_2_e=0x9,
+    RD_JNT_REE_KUBI_1_e=0xA,
+    RD_JNT_REE_KUBI_2_e=0xB,
+    RD_JNT_REE_ATAMA_1_e=0xC,
+    RD_JNT_REE_EARRING_L1_e=0xD,
+    RD_JNT_REE_EARRING_R1_e=0xE,
+    RD_JNT_REE_UDE_L1_e=0xF,
+    RD_JNT_REE_UDE_L2_e=0x10,
+    RD_JNT_REE_TEKUBI_L1_e=0x11,
+    RD_JNT_REE_YUBI_L1_e=0x12,
+    RD_JNT_REE_UDE_R1_e=0x13,
+    RD_JNT_REE_UDE_R2_e=0x14,
+    RD_JNT_REE_TEKUBI_R1_e=0x15,
+    RD_JNT_REE_YUBI_R1_e=0x16,
+};
+
+#endif /* !RES_RD_H */

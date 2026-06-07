@@ -5,15 +5,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gong.h"
-#include "d/res/res_vdora.h"
+#include "res/Object/Vdora.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_a_obj.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -41,8 +39,8 @@ BOOL daObjGong::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 0000009C-0000028C       .text create_heap__Q29daObjGong5Act_cFv */
 bool daObjGong::Act_c::create_heap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, VDORA_INDEX_BDL_VDORA));
-    J3DAnmTransformKey* bck = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, VDORA_INDEX_BCK_05_VDORA_CUT02_HIT));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_VDORA_BDL_VDORA_e));
+    J3DAnmTransformKey* bck = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_VDORA_BCK_05_VDORA_CUT02_HIT_e));
     JUT_ASSERT(0xbd, (modelData != NULL) && (bck != NULL));
 
     mpMorf = new mDoExt_McaMorf(
@@ -175,18 +173,18 @@ namespace daObjGong {
 }
 
 actor_process_profile_definition g_profile_Obj_Gong = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Gong,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Gong_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjGong::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Gong,
+    /* Draw Prio    */ fpcDwPi_Obj_Gong_e,
     /* Actor SubMtd */ &daObjGong::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -8,9 +8,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_obj_barrel2.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_always.h"
+#include "res/Object/Always.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_wtr_chk.h"
 
@@ -196,7 +194,7 @@ void daComing3::Act_c::coming_start_main() {
 
             if (unk_400 == fpcM_ERROR_PROCESS_ID_e) {
                 static s32 make_item_table[] = {
-                    dItem_BLUE_RUPEE_e, dItem_YELLOW_RUPEE_e,
+                    dItemNo_BLUE_RUPEE_e, dItemNo_YELLOW_RUPEE_e,
                 };
                 unk_400 = daObjBarrel2::Act_c::make_coming(
                     &sp18,
@@ -336,8 +334,8 @@ void daComing3::Act_c::eff_break_tsubo() {
 
     J3DAnmTexPattern* texPattern;
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPM_TUBO);
-    texPattern = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", ALWAYS_BTP_MPM_TUBO);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_MPM_TUBO_e);
+    texPattern = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTP_MPM_TUBO_e);
     
     JPABaseEmitter* baseEmitter = (JPABaseEmitter*)dComIfGp_particle_set(dPa_name::ID_AK_JN_M_TUBOHAHEN, &sp1C, NULL, &sp34);
     if (baseEmitter != NULL) {
@@ -424,7 +422,7 @@ BOOL daComing3::Act_c::solidHeapCB(fopAc_ac_c* a_this) {
 
 /* 00001804-000018CC       .text create_heap__Q29daComing35Act_cFv */
 bool daComing3::Act_c::create_heap() {
-    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, ALWAYS_BDL_OBM_KOTUBO1);
+    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_ALWAYS_BDL_OBM_KOTUBO1_e);
     JUT_ASSERT(846, mdl_data != NULL);
 
     unk_440 = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
@@ -512,18 +510,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daComing3
 
 actor_process_profile_definition g_profile_Coming3 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Coming3,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Coming3_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daComing3::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Coming3,
+    /* Draw Prio    */ fpcDwPi_Coming3_e,
     /* Actor SubMtd */ &daComing3::Mthd_Table,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

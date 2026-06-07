@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bs1.h"
-#include "d/res/res_bs.h"
+#include "res/Object/Bs.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/actor/d_a_player.h"
@@ -15,8 +15,6 @@
 #include "d/d_shop.h"
 #include "d/d_snap.h"
 #include "d/d_letter.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -150,11 +148,11 @@ s16 daNpc_Bs1_c::XyEventCB(int i_itemBtn) {
     s16 eventIdx = -1;
     u8 selectedItem = (s32)dComIfGp_getSelectItem(i_itemBtn);
     if (mType == 0) {
-        if (selectedItem == KAISEN_PRESENT1) {
+        if (selectedItem == dItemNo_COMPLIMENTARY_ID_e) {
             eventIdx = mEventIdxs[0];
             m82B = 0;
             setAction(&daNpc_Bs1_c::event_action, NULL);
-        } else if (selectedItem == KAISEN_PRESENT2) {
+        } else if (selectedItem == dItemNo_FILL_UP_COUPON_e) {
             eventIdx = mEventIdxs[1];
             m82B = 1;
             setAction(&daNpc_Bs1_c::event_action, NULL);
@@ -164,23 +162,23 @@ s16 daNpc_Bs1_c::XyEventCB(int i_itemBtn) {
 }
 
 static const int l_bck_ix_tbl[] = {
-    BS_INDEX_BCK_BS_WAIT01,
-    BS_INDEX_BCK_BS_TALK01,
-    BS_INDEX_BCK_BS_TALK02,
-    BS_INDEX_BCK_BS_TALK03,
-    BS_INDEX_BCK_BS_TALK04,
-    BS_INDEX_BCK_BS_LAUGH,
-    BS_INDEX_BCK_BS_PRAISE,
-    BS_INDEX_BCK_BS_ANGRY,
-    BS_INDEX_BCK_BS_MANTAN,
-    BS_INDEX_BCK_BS_TALK04,
+    dRes_INDEX_BS_BCK_BS_WAIT01_e,
+    dRes_INDEX_BS_BCK_BS_TALK01_e,
+    dRes_INDEX_BS_BCK_BS_TALK02_e,
+    dRes_INDEX_BS_BCK_BS_TALK03_e,
+    dRes_INDEX_BS_BCK_BS_TALK04_e,
+    dRes_INDEX_BS_BCK_BS_LAUGH_e,
+    dRes_INDEX_BS_BCK_BS_PRAISE_e,
+    dRes_INDEX_BS_BCK_BS_ANGRY_e,
+    dRes_INDEX_BS_BCK_BS_MANTAN_e,
+    dRes_INDEX_BS_BCK_BS_TALK04_e,
 };
 
 static const int l_btp_ix_tbl[] = {
-    BS_INDEX_BTP_BS,
-    BS_INDEX_BTP_MABA,
-    BS_INDEX_BTP_LOOK,
-    BS_INDEX_BTP_BS_PRAISE,
+    dRes_INDEX_BS_BTP_BS_e,
+    dRes_INDEX_BS_BTP_MABA_e,
+    dRes_INDEX_BS_BTP_LOOK_e,
+    dRes_INDEX_BS_BTP_BS_PRAISE_e,
 };
 
 /* 00000490-00000658       .text nodeCallBack_Bs__FP7J3DNodei */
@@ -393,25 +391,25 @@ void daNpc_Bs1_c::checkOrder() {
 static u32 daNpc_Bs1_getBuyItemMax(int i_itemCost, int i_itemNo) {
     int beastIdx;
     switch (i_itemNo) {
-    case dItem_BOKOBABA_SEED_e:
+    case dItemNo_BOKOBABA_SEED_e:
         beastIdx = dBeastIdx_BOKOBABA_SEED_e;
         break;
-    case dItem_SKULL_NECKLACE_e:
+    case dItemNo_SKULL_NECKLACE_e:
         beastIdx = dBeastIdx_SKULL_NECKLACE_e;
         break;
-    case dItem_RED_JELLY_e:
+    case dItemNo_RED_JELLY_e:
         beastIdx = dBeastIdx_RED_JELLY_e;
         break;
-    case dItem_GREEN_JELLY_e:
+    case dItemNo_GREEN_JELLY_e:
         beastIdx = dBeastIdx_GREEN_JELLY_e;
         break;
-    case dItem_BLUE_JELLY_e:
+    case dItemNo_BLUE_JELLY_e:
         beastIdx = dBeastIdx_BLUE_JELLY_e;
         break;
-    case dItem_JOY_PENDANT_e:
+    case dItemNo_JOY_PENDANT_e:
         beastIdx = dBeastIdx_JOY_PENDANT_e;
         break;
-    case dItem_GOLDEN_FEATHER_e:
+    case dItemNo_GOLDEN_FEATHER_e:
         beastIdx = dBeastIdx_GOLDEN_FEATHER_e;
         break;
     default:
@@ -832,7 +830,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 fopAcM_seStart(this, JA_SE_SHOP_BOUGHT, 0);
                 mShopItems.hideSelectItem();
                 dComIfGp_setItemRupeeCount(-rupee);
-                if(mShopItems.getSelectItemNo() == dItem_BAIT_BAG_e) {
+                if(mShopItems.getSelectItemNo() == dItemNo_BAIT_BAG_e) {
                     mShopItems.SoldOutItem(mShopItems.mSelectedItemIdx);
                     m76C[mShopItems.mSelectedItemIdx] = 1;
                 }
@@ -895,18 +893,18 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 mShopItems.hideSelectItem();
                 dComIfGp_setItemRupeeCount(-rupee);
                 u8 itemNo = mShopItems.getSelectItemNo();
-                if(itemNo == dItem_EMPTY_BOTTLE_e || itemNo == dItem_HEART_PIECE_e || itemNo == dItem_COLLECT_MAP_30_e) {
+                if(itemNo == dItemNo_EMPTY_BOTTLE_e || itemNo == dItemNo_HEART_PIECE_e || itemNo == dItemNo_COLLECT_MAP_30_e) {
                     mShopItems.SoldOutItem(mShopItems.mSelectedItemIdx);
                     m76C[mShopItems.mSelectedItemIdx] = 1;
 
                     switch(itemNo) {
-                        case dItem_EMPTY_BOTTLE_e:
+                        case dItemNo_EMPTY_BOTTLE_e:
                             dComIfGs_onEventBit(dSv_event_flag_c::UNK_2020);
                             break;
-                        case dItem_HEART_PIECE_e:
+                        case dItemNo_HEART_PIECE_e:
                             dComIfGs_onEventBit(dSv_event_flag_c::UNK_2010);
                             break;
-                        case dItem_COLLECT_MAP_30_e:
+                        case dItemNo_COLLECT_MAP_30_e:
                             dComIfGs_onEventBit(dSv_event_flag_c::UNK_2008);
                             break;
                     }
@@ -990,25 +988,25 @@ u32 daNpc_Bs1_c::getMsg() {
             if(isEmono(itemNo)) {
                 m840 = itemNo;
                 switch(itemNo) {
-                    case dItem_BOKOBABA_SEED_e:
+                    case dItemNo_BOKOBABA_SEED_e:
                         msgNo = 0xF78;
                         break;
-                    case dItem_SKULL_NECKLACE_e:
+                    case dItemNo_SKULL_NECKLACE_e:
                         msgNo = 0xF80;
                         break;
-                    case dItem_RED_JELLY_e:
+                    case dItemNo_RED_JELLY_e:
                         msgNo = 0xF85;
                         break;
-                    case dItem_GREEN_JELLY_e:
+                    case dItemNo_GREEN_JELLY_e:
                         msgNo = 0xF8A;
                         break;
-                    case dItem_BLUE_JELLY_e:
+                    case dItemNo_BLUE_JELLY_e:
                         msgNo = 0xF8F;
                         break;
-                    case dItem_JOY_PENDANT_e:
+                    case dItemNo_JOY_PENDANT_e:
                         msgNo = 0xF94;
                         break;
-                    case dItem_GOLDEN_FEATHER_e:
+                    case dItemNo_GOLDEN_FEATHER_e:
                         msgNo = 0xF99;
                         break;
                     default:
@@ -1021,17 +1019,17 @@ u32 daNpc_Bs1_c::getMsg() {
                         break;
                 }
             }
-            else if(itemNo == KAISEN_PRESENT1) {
+            else if(itemNo == dItemNo_COMPLIMENTARY_ID_e) {
                 msgNo = 0xF6F;
             }
-            else if(itemNo == KAISEN_PRESENT2) {
+            else if(itemNo == dItemNo_FILL_UP_COUPON_e) {
                 msgNo = 0xF73;
             }
             else {
                 msgNo = 0xF75;
             }
         }
-        else if(itemNo == KAISEN_PRESENT1 || itemNo == KAISEN_PRESENT2) {
+        else if(itemNo == dItemNo_COMPLIMENTARY_ID_e || itemNo == dItemNo_FILL_UP_COUPON_e) {
             msgNo = 0x2F56;
         }
         else if(isEmono(itemNo)) {
@@ -1046,7 +1044,7 @@ u32 daNpc_Bs1_c::getMsg() {
         if(mShopItems.isSoldOutItemAll()) {
             msgNo = 0xF3D;
         }
-        else if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F20) && isSellBomb()) {
+        else if(dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F20) && isSellBomb()) {
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_1F20);
             m837 = 1;
             msgNo = 0xF55;
@@ -1083,7 +1081,7 @@ u32 daNpc_Bs1_c::getMsg() {
     else if(mShopItems.isSoldOutItemAll()) {
         msgNo = 0x2F62;
     }
-    else if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F20) && isSellBomb()) {
+    else if(dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F20) && isSellBomb()) {
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1F20);
         m837 = 1;
         msgNo = 0x2F64;
@@ -1473,7 +1471,7 @@ void daNpc_Bs1_c::createShopList() {
         for(int i = 0; i < 3; i++) {
             u8 itemNo = pDataSet[i]->mpItemData->mItemNo;
             int idx = i;
-            if((itemNo == dItem_BAIT_BAG_e && dComIfGs_checkGetItem(itemNo)) || (itemNo == dItem_HYOI_PEAR_e && dComIfGs_checkGetItem(dItem_BOMB_BAG_e))) {
+            if((itemNo == dItemNo_BAIT_BAG_e && dComIfGs_checkGetItem(itemNo)) || (itemNo == dItemNo_HYOI_PEAR_e && dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e))) {
                 itemNo = pDataSet[i + 3][0].mpItemData->mItemNo;
                 idx += 3;
             }
@@ -1487,21 +1485,21 @@ void daNpc_Bs1_c::createShopList() {
         __shop_items_set_data* dataSet[4];
         int index = 0;
 
-        if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+        if(dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) {
             dataSet[index] = &shopItems_setData_Bomb30Bs2;
             index = 1;
         }
-        if(dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e) {
+        if(dComIfGs_getItem(dInvSlot_BOW_e) != dItemNo_NONE_e) {
             dataSet[index] = &shopItems_setData_arrow30Bs2;
             index++;
         }
         dataSet[index] = &shopItems_setData_red_bottleBs2;
         index++;
-        if(!dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+        if(!dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) {
             dataSet[index] = &shopItems_setData_Bomb30Bs2;
             index++;
         }
-        if(dComIfGs_getItem(dInvSlot_BOW_e) == dItem_NONE_e) {
+        if(dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_NONE_e) {
             dataSet[index] = &shopItems_setData_arrow30Bs2;
         }
 
@@ -1525,7 +1523,7 @@ void daNpc_Bs1_c::createShopList() {
     mShopItems.setItemSetDataList(mpItemSetList);
     for(int i = 0; i < 3; i++) {
         mShopItems.mSelectedItemIdx = i;
-        if((!dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && isBomb(mShopItems.getSelectItemNo())) || (dComIfGs_getItem(dInvSlot_BOW_e) == dItem_NONE_e && isArrow(mShopItems.getSelectItemNo()))) {
+        if((!dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && isBomb(mShopItems.getSelectItemNo())) || (dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_NONE_e && isArrow(mShopItems.getSelectItemNo()))) {
             mShopItems.SoldOutItem(i);
             m76C[i] = true;
         }
@@ -2172,11 +2170,11 @@ cPhs_State daNpc_Bs1_c::_create() {
 
 /* 000050A8-00005470       .text CreateHeap__11daNpc_Bs1_cFv */
 BOOL daNpc_Bs1_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BDL_BS);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BDL_BS_e);
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes("Bs", BS_INDEX_BCK_BS_WAIT01),
+        (J3DAnmTransform*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BCK_BS_WAIT01_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL,
         0, 0x11020203
     );
@@ -2207,13 +2205,13 @@ BOOL daNpc_Bs1_c::CreateHeap() {
 #endif
     }
     
-    mpHelmetModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BDL_BS_MET), 0, 0x11020203);
+    mpHelmetModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BDL_BS_MET_e), 0, 0x11020203);
     if (!mpHelmetModel) {
         return FALSE;
     }
     
     for (int i = 0; i < 3; i++) {
-        mpSoldSignModels[i] = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BDL_VSOLD), 0, 0x11020203);
+        mpSoldSignModels[i] = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BDL_VSOLD_e), 0, 0x11020203);
         if (mpSoldSignModels[i] == NULL) {
             return false;
         }
@@ -2227,8 +2225,8 @@ BOOL daNpc_Bs1_c::CreateHeap() {
     mpMorf->getModel()->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 0.0f);
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
-    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bs", BS_INDEX_BRK_SHOP_CURSOR01);
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BMD_SHOP_CURSOR01);
+    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BRK_SHOP_CURSOR01_e);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BMD_SHOP_CURSOR01_e);
     mpShopCursor = ShopCursor_create(modelData, brk, l_HIO.mChild[mType].m30);
     
     if (mpShopCursor != NULL) {
@@ -2272,18 +2270,18 @@ static actor_method_class l_daNpc_Bs1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_BS1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_BS1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_BS1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Bs1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_BS1,
+    /* Draw Prio    */ fpcDwPi_NPC_BS1_e,
     /* Actor SubMtd */ &l_daNpc_Bs1_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_12_e,
+    /* Cull Type    */ fopAc_CULLBOX_12_e,
 };

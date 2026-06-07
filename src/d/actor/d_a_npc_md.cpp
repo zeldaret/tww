@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_md.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -511,20 +509,20 @@ static s16 daNpc_Md_XyCheckCB(void* i_this, int param_1) {
 s16 daNpc_Md_c::XyCheckCB(int i_itemBtn) {
     u8 selectItemNo = dComIfGp_getSelectItem(i_itemBtn);
     if (isTypeSea()) {
-        if (selectItemNo == dItem_WIND_WAKER_e) {
+        if (selectItemNo == dItemNo_WIND_WAKER_e) {
             return TRUE;
         }
-        if (selectItemNo == dItem_GOLDEN_FEATHER_e) {
+        if (selectItemNo == dItemNo_GOLDEN_FEATHER_e) {
             if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E40) || (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E40) && isSeaTalk())) {
                 return TRUE;
             }
         }
     } else if (isTypeM_Dai() || isTypeEdaichi()) {
-        if (selectItemNo == dItem_GOLDEN_FEATHER_e && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3B80)) {
+        if (selectItemNo == dItemNo_GOLDEN_FEATHER_e && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3B80)) {
             return TRUE;
         }
     }
-    if (selectItemNo == dItem_GOLDEN_FEATHER_e) {
+    if (selectItemNo == dItemNo_GOLDEN_FEATHER_e) {
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_2C08);
     }
     return FALSE;
@@ -538,10 +536,10 @@ static s16 daNpc_Md_XyEventCB(void* i_this, int param_1) {
 /* 0000081C-00000864       .text XyEventCB__10daNpc_Md_cFi */
 s16 daNpc_Md_c::XyEventCB(int i_itemBtn) {
     u8 selectItemNo = dComIfGp_getSelectItem(i_itemBtn);
-    if (selectItemNo == dItem_WIND_WAKER_e) {
+    if (selectItemNo == dItemNo_WIND_WAKER_e) {
         offDefaultTalkXY();
         return mEventIdxTable[5];
-    } else if (selectItemNo == dItem_GOLDEN_FEATHER_e) {
+    } else if (selectItemNo == dItemNo_GOLDEN_FEATHER_e) {
         onDefaultTalkXY();
     }
     return -1;
@@ -6272,18 +6270,18 @@ static actor_method_class l_daNpc_Md_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_MD = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_MD,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_MD_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Md_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_MD,
+    /* Draw Prio    */ fpcDwPi_NPC_MD_e,
     /* Actor SubMtd */ &l_daNpc_Md_Method,
     /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK2000000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

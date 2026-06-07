@@ -1,0 +1,92 @@
+#ifndef RES_UK_H
+#define RES_UK_H
+
+enum dRes_INDEX_UK {
+    /* BCKS */
+    dRes_INDEX_UK_BCK_UK_DA_e=0x7,
+    dRes_INDEX_UK_BCK_UK_JIDA01_e=0x8,
+    dRes_INDEX_UK_BCK_UK_JIDA02_e=0x9,
+    dRes_INDEX_UK_BCK_UK_JUMP_e=0xA,
+    dRes_INDEX_UK_BCK_UK_KEIKAI_e=0xB,
+    dRes_INDEX_UK_BCK_UK_LAND_e=0xC,
+    dRes_INDEX_UK_BCK_UK_RUN_e=0xD,
+    dRes_INDEX_UK_BCK_UK_TALK01_e=0xE,
+    dRes_INDEX_UK_BCK_UK_TALK02_e=0xF,
+    dRes_INDEX_UK_BCK_UK_WAIT_e=0x10,
+    dRes_INDEX_UK_BCK_UK_WALK_e=0x11,
+    /* BDL  */
+    dRes_INDEX_UK_BDL_UKHEAD_B_e=0x14,
+    dRes_INDEX_UK_BDL_UKHEAD_D_e=0x15,
+    /* BDLM */
+    dRes_INDEX_UK_BDL_UK_e=0x18,
+    dRes_INDEX_UK_BDL_UKHEAD_C_e=0x19,
+    /* BMT  */
+    dRes_INDEX_UK_BMT_UK_C_e=0x1C,
+    dRes_INDEX_UK_BMT_UK_D_e=0x1D,
+    /* BTP  */
+    dRes_INDEX_UK_BTP_UK_MABA_C_e=0x20,
+    dRes_INDEX_UK_BTP_UK_MABA_C_1_e=0x21,
+};
+
+enum dRes_ID_UK {
+    /* BCKS */
+    dRes_ID_UK_BCK_UK_DA_e=0x7,
+    dRes_ID_UK_BCK_UK_JIDA01_e=0x8,
+    dRes_ID_UK_BCK_UK_JIDA02_e=0x9,
+    dRes_ID_UK_BCK_UK_JUMP_e=0xA,
+    dRes_ID_UK_BCK_UK_KEIKAI_e=0xB,
+    dRes_ID_UK_BCK_UK_LAND_e=0xC,
+    dRes_ID_UK_BCK_UK_RUN_e=0xD,
+    dRes_ID_UK_BCK_UK_TALK01_e=0xE,
+    dRes_ID_UK_BCK_UK_TALK02_e=0xF,
+    dRes_ID_UK_BCK_UK_WAIT_e=0x10,
+    dRes_ID_UK_BCK_UK_WALK_e=0x11,
+    /* BDL  */
+    dRes_ID_UK_BDL_UKHEAD_B_e=0x14,
+    dRes_ID_UK_BDL_UKHEAD_D_e=0x15,
+    /* BDLM */
+    dRes_ID_UK_BDL_UK_e=0x18,
+    dRes_ID_UK_BDL_UKHEAD_C_e=0x19,
+    /* BMT  */
+    dRes_ID_UK_BMT_UK_C_e=0x1C,
+    dRes_ID_UK_BMT_UK_D_e=0x1D,
+    /* BTP  */
+    dRes_ID_UK_BTP_UK_MABA_C_e=0x20,
+    dRes_ID_UK_BTP_UK_MABA_C_1_e=0x21,
+};
+
+enum UKHEAD_B_JNT {
+    UKHEAD_B_JNT_UK_HEAD_B_e=0x0,
+};
+
+enum UKHEAD_D_JNT {
+    UKHEAD_D_JNT_UK_HEAD_D_e=0x0,
+};
+
+enum UK_JNT {
+    UK_JNT_WORLD_ROOT_e=0x0,
+    UK_JNT_BACKBONE_e=0x1,
+    UK_JNT_NECK_e=0x2,
+    UK_JNT_HEAD_e=0x3,
+    UK_JNT_SHOULDERL_e=0x4,
+    UK_JNT_ARML1_e=0x5,
+    UK_JNT_ARML2_e=0x6,
+    UK_JNT_HANDL_e=0x7,
+    UK_JNT_SHOULDERR_e=0x8,
+    UK_JNT_ARMR1_e=0x9,
+    UK_JNT_ARMR2_e=0xA,
+    UK_JNT_HANDR_e=0xB,
+    UK_JNT_WAIST_e=0xC,
+    UK_JNT_LEGL1_e=0xD,
+    UK_JNT_LEGL2_e=0xE,
+    UK_JNT_FOOTL_e=0xF,
+    UK_JNT_LEGR1_e=0x10,
+    UK_JNT_LEGR2_e=0x11,
+    UK_JNT_FOOTR_e=0x12,
+};
+
+enum UKHEAD_C_JNT {
+    UKHEAD_C_JNT_UK_HEAD_C_e=0x0,
+};
+
+#endif /* !RES_UK_H */

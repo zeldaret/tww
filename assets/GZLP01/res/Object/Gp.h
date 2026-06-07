@@ -1,0 +1,59 @@
+#ifndef RES_GP_H
+#define RES_GP_H
+
+enum dRes_INDEX_GP {
+    /* BCKS */
+    dRes_INDEX_GP_BCK_GIVE_e=0x5,
+    dRes_INDEX_GP_BCK_GRIN_e=0x6,
+    dRes_INDEX_GP_BCK_HAIR_e=0x7,
+    dRes_INDEX_GP_BCK_TALK02_e=0x8,
+    dRes_INDEX_GP_BCK_TALK03_e=0x9,
+    dRes_INDEX_GP_BCK_WAIT01_e=0xA,
+    dRes_INDEX_GP_BCK_WALK_e=0xB,
+    /* BDLM */
+    dRes_INDEX_GP_BDL_GP_e=0xE,
+    /* BTP  */
+    dRes_INDEX_GP_BTP_MABA01_e=0x11,
+};
+
+enum dRes_ID_GP {
+    /* BCKS */
+    dRes_ID_GP_BCK_GIVE_e=0x0,
+    dRes_ID_GP_BCK_GRIN_e=0x1,
+    dRes_ID_GP_BCK_HAIR_e=0x2,
+    dRes_ID_GP_BCK_TALK02_e=0x3,
+    dRes_ID_GP_BCK_TALK03_e=0x4,
+    dRes_ID_GP_BCK_WAIT01_e=0x5,
+    dRes_ID_GP_BCK_WALK_e=0x8,
+    /* BDLM */
+    dRes_ID_GP_BDL_GP_e=0x6,
+    /* BTP  */
+    dRes_ID_GP_BTP_MABA01_e=0x7,
+};
+
+enum GP_JNT {
+    GP_JNT_WORLD_ROOT_e=0x0,
+    GP_JNT_BACKBONE_e=0x1,
+    GP_JNT_NECK_e=0x2,
+    GP_JNT_HEAD_e=0x3,
+    GP_JNT_HAIR1_e=0x4,
+    GP_JNT_HAIR2_e=0x5,
+    GP_JNT_SHOULDERL_e=0x6,
+    GP_JNT_ARML1_e=0x7,
+    GP_JNT_ARML2_e=0x8,
+    GP_JNT_HANDL_e=0x9,
+    GP_JNT_SHOULDERR_e=0xA,
+    GP_JNT_ARMR1_e=0xB,
+    GP_JNT_ARMR2_e=0xC,
+    GP_JNT_HANDR_e=0xD,
+    GP_JNT_WAIST_e=0xE,
+    GP_JNT_LEGL1_e=0xF,
+    GP_JNT_LEGL2_e=0x10,
+    GP_JNT_FOOTL_e=0x11,
+    GP_JNT_LEGR1_e=0x12,
+    GP_JNT_LEGR2_e=0x13,
+    GP_JNT_FOOTR_e=0x14,
+    GP_JNT_TAIL_e=0x15,
+};
+
+#endif /* !RES_GP_H */

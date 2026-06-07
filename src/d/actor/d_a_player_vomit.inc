@@ -13,7 +13,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
-#include "d/d_procname.h"
 
 /* 8014F8A0-8014F994       .text checkJumpFlower__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkJumpFlower() {
@@ -21,7 +20,7 @@ BOOL daPy_lk_c::checkJumpFlower() {
     short sVar3;
 
     iVar1 = mCyl.GetCoHitAc();
-    if (mCyl.ChkCoHit() && iVar1 != 0 && fopAcM_GetName(iVar1) == PROC_JBO) {
+    if (mCyl.ChkCoHit() && iVar1 != 0 && fopAcM_GetName(iVar1) == fpcNm_JBO_e) {
         if (checkModeFlg(ModeFlg_MIDAIR)) {
             if (speed.y <= 0.0f && current.pos.y > iVar1->current.pos.y - 50.0f) {
                 return procVomitWait_init();

@@ -4,7 +4,7 @@
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
-#include "d/res/res_bdk.h"
+#include "res/Object/Bdk.h"
 #include "d/actor/d_a_bdk.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_bg_s_movebg_actor.h"
@@ -16,8 +16,6 @@
 #include "d/d_snap.h"
 #include "d/d_s_play.h"
 #include "d/d_particle_name.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "JSystem/JUtility/JUTReport.h"
@@ -45,74 +43,6 @@ enum ActionStatus {
     ACTION_AFTER_FIGHT = 0x6E,
 };
 
-enum DK_JOINT {
-    JNT_DK_ALLROOT,
-    JNT_DK_SKLROOT,
-    JNT_J_DK_KOSI,
-    JNT_J_DK_ASHI_L1,
-    JNT_J_DK_ASHI_L2,
-    JNT_J_DK_ASHI_L3,
-    JNT_J_DK_YUBI_LA1,
-    JNT_J_DK_YUBI_LA2,
-    JNT_J_DK_YUBI_LB1,
-    JNT_J_DK_YUBI_LB2,
-    JNT_J_DK_YUBI_LC1,
-    JNT_J_DK_YUBI_LC2,
-    JNT_J_DK_ASHI_R1,
-    JNT_J_DK_ASHI_R2,
-    JNT_J_DK_ASHI_R3,
-    JNT_J_DK_YUBI_RA1,
-    JNT_J_DK_YUBI_RA2,
-    JNT_J_DK_YUBI_RB1,
-    JNT_J_DK_YUBI_RB2,
-    JNT_J_DK_YUBI_RC1,
-    JNT_J_DK_YUBI_RC2,
-    JNT_J_DK_MUNE1,
-    JNT_J_DK_MUNE2,
-    JNT_J_DK_KUBI1,
-    JNT_J_DK_ATAMA1,
-    JNT_J_DK_AGO,
-    JNT_J_DK_KAMINOKE,
-    JNT_J_DK_KUTIBASI,
-    JNT_J_DK_MABUTA,
-    JNT_J_DK_ODEKO,
-    JNT_J_DK_SITA,
-    JNT_J_DK_TOSAKA_A1,
-    JNT_J_DK_TOSAKA_A2,
-    JNT_J_DK_TOSAKA_A3,
-    JNT_J_DK_TOSAKA_A4,
-    JNT_J_DK_TOSAKA_B1,
-    JNT_J_DK_TOSAKA_B2,
-    JNT_J_DK_TUBASA_L1,
-    JNT_J_DK_TUBASA_L2,
-    JNT_J_DK_HANE_L1,
-    JNT_J_DK_HANE_L2,
-    JNT_J_DK_HANE_L3,
-    JNT_J_DK_HANE_L4,
-    JNT_J_DK_HANE_L5,
-    JNT_J_DK_HANE_L6,
-    JNT_J_DK_PIKO_LA,
-    JNT_J_DK_PIKO_LB,
-    JNT_J_DK_TUBASA_R1,
-    JNT_J_DK_TUBASA_R2,
-    JNT_J_DK_HANE_R1,
-    JNT_J_DK_HANE_R2,
-    JNT_J_DK_HANE_R3,
-    JNT_J_DK_HANE_R4,
-    JNT_J_DK_HANE_R5,
-    JNT_J_DK_HANE_R6,
-    JNT_J_DK_PIKO_RA,
-    JNT_J_DK_PIKO_RB,
-    JNT_J_DK_O_LA1,
-    JNT_J_DK_O_LA2,
-    JNT_J_DK_O_LB1,
-    JNT_J_DK_O_LB2,
-    JNT_J_DK_O_RA1,
-    JNT_J_DK_O_RA2,
-    JNT_J_DK_O_RB1,
-    JNT_J_DK_O_RB2,
-};
-
 static cXyz center_pos;
 static cXyz center_pos2;
 static cXyz wind_se_pos;
@@ -137,7 +67,7 @@ daBdk_HIO_c::daBdk_HIO_c() {
 
 /* 0000015C-000001A8       .text kamome_delete_sub__FPvPv */
 static void* kamome_delete_sub(void* param_1, void*) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_KAMOME) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_KAMOME_e) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -145,7 +75,7 @@ static void* kamome_delete_sub(void* param_1, void*) {
 
 /* 000001A8-000001F4       .text kui_delete_sub__FPvPv */
 static void* kui_delete_sub(void* param_1, void*) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_KUI) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_KUI_e) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -153,7 +83,7 @@ static void* kui_delete_sub(void* param_1, void*) {
 
 /* 000001F4-00000240       .text ep_delete_sub__FPvPv */
 static void* ep_delete_sub(void* param_1, void*) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_EP) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_EP_e) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -161,7 +91,7 @@ static void* ep_delete_sub(void* param_1, void*) {
 
 /* 00000240-0000028C       .text dk_delete_sub__FPvPv */
 static void* dk_delete_sub(void* param_1, void*) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_DK) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_DK_e) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -170,7 +100,7 @@ static void* dk_delete_sub(void* param_1, void*) {
 /* 0000028C-000002E8       .text obj_delete_sub__FPvPv */
 static void* obj_delete_sub(void* param_1, void*) {
     fopAc_ac_c* actor = static_cast<fopAc_ac_c*>(param_1);
-    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_BDKOBJ && (fopAcM_GetParam(actor) & 0xF) >= 2) {
+    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_BDKOBJ_e && (fopAcM_GetParam(actor) & 0xF) >= 2) {
         fopAcM_delete(actor);
     }
     return NULL;
@@ -178,7 +108,7 @@ static void* obj_delete_sub(void* param_1, void*) {
 
 /* 000002E8-00000334       .text sea_delete_sub__FPvPv */
 static void* sea_delete_sub(void* param_1, void*) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_Obj_Tide) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_Obj_Tide_e) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -186,7 +116,7 @@ static void* sea_delete_sub(void* param_1, void*) {
 
 /* 00000334-00000380       .text bk_delete_sub__FPvPv */
 static void* bk_delete_sub(void* param_1, void*) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BK) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BK_e) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -194,7 +124,7 @@ static void* bk_delete_sub(void* param_1, void*) {
 
 /* 00000380-000003CC       .text boko_delete_sub__FPvPv */
 static void* boko_delete_sub(void* param_1, void*) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BOKO) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BOKO_e) {
         fopAcM_delete(static_cast<fopAc_ac_c*>(param_1));
     }
     return NULL;
@@ -203,7 +133,7 @@ static void* boko_delete_sub(void* param_1, void*) {
 /* 000003CC-00000424       .text obj2_delete_sub__FPvPv */
 static void* obj2_delete_sub(void* param_1, void*) {
     fopAc_ac_c* actor = static_cast<fopAc_ac_c*>(param_1);
-    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_BDKOBJ && actor->model == NULL) {
+    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_BDKOBJ_e && actor->model == NULL) {
         fopAcM_delete(actor);
     }
     return NULL;
@@ -309,13 +239,13 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         bdk_class* bdk = (bdk_class*)model->getUserArea();
         if (bdk != NULL) {
             MTXCopy(model->getAnmMtx(jnt_no), *calc_mtx);
-            if (jnt_no == JNT_J_DK_KUBI1) {
+            if (jnt_no == DK_JNT_J_DK_KUBI1_e) {
                 cMtx_YrotM(*calc_mtx, bdk->mF14);
                 cMtx_XrotM(*calc_mtx, bdk->mF12);
                 model->setAnmMtx(jnt_no, *calc_mtx);
                 MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
-            } else if (jnt_no >= JNT_J_DK_TOSAKA_A1 && JNT_J_DK_TOSAKA_B2 >= jnt_no) {
-                if (jnt_no >= JNT_J_DK_TOSAKA_B1) {
+            } else if (jnt_no >= DK_JNT_J_DK_TOSAKA_A1_e && DK_JNT_J_DK_TOSAKA_B2_e >= jnt_no) {
+                if (jnt_no >= DK_JNT_J_DK_TOSAKA_B1_e) {
                     cMtx_YrotM(*calc_mtx, bdk->m112E + bdk->m1120 + bdk->m1124);
                     cMtx_ZrotM(*calc_mtx, bdk->m112C + bdk->m1122 + bdk->m1126);
                 } else {
@@ -488,7 +418,7 @@ static void kamen_draw(bdk_class* i_this) {
         fVar3 = REG8_F(18) + 1.20f;
     }
 
-    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(JNT_J_DK_ATAMA1), *calc_mtx);
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_ATAMA1_e), *calc_mtx);
     cMtx_YrotM(*calc_mtx, sVar1 + 0x4000);
     cMtx_ZrotM(*calc_mtx, sVar2 + -0x4000);
     MtxTrans(0.0f, 40.0f, 125.0f, TRUE);
@@ -665,7 +595,7 @@ static void up_fly(bdk_class* i_this) {
     u8 pos_flag = 0;
     switch (i_this->mState) {
         case 0:
-            anm_init(i_this, BDK_BCK_TOBITATU1, 5.0f, 0, 1.0f, BDK_BAS_TOBITATU1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_TOBITATU1_e, 5.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_TOBITATU1_e, 0);
             i_this->m2618 = 0x19;
             cMtx_YrotS(*calc_mtx, actor->current.angle.y);
             diff.x = 0.0f;
@@ -719,7 +649,7 @@ static void fly(bdk_class* i_this) {
         case 0:
             break;
         case -1:
-            anm_init(i_this, BDK_BCK_FLY1, 10.0f, 2, 1.0f, BDK_BAS_FLY1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_FLY1_e, 10.0f, 2, 1.0f, dRes_INDEX_BDK_BAS_FLY1_e, 0);
             i_this->m2CA = 0;
             break;
         default:
@@ -861,12 +791,12 @@ static void landing(bdk_class* i_this) {
             diff1 = i_this->m2CC - actor->current.pos;
             if (diff1.abs() < 1300.0f) {
                 i_this->mState = 2;
-                anm_init(i_this, BDK_BCK_TYAKUTI1, 15.0f, 0, 0.001f, BDK_BAS_TYAKUTI1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_TYAKUTI1_e, 15.0f, 0, 0.001f, dRes_INDEX_BDK_BAS_TYAKUTI1_e, 0);
                 i_this->m2E0 = 1.0f;
                 pos_flag = 1;
             } else {
                 if (i_this->m2EC[0] == 1) {
-                    anm_init(i_this, BDK_BCK_KAKKU1, 30.0f, 2, 1.0f, -1, 0);
+                    anm_init(i_this, dRes_INDEX_BDK_BCK_KAKKU1_e, 30.0f, 2, 1.0f, -1, 0);
                 }
             }
             break;
@@ -902,7 +832,7 @@ static void landing(bdk_class* i_this) {
                 actor->speed.x = 0.0f;
                 actor->speed.y = -10.0f;
                 if (i_this->mState == 3) {
-                    anm_init(i_this, BDK_BCK_TYAKUTI1, 5.0f, 0, 1.0f, BDK_BAS_TYAKUTI1, 0);
+                    anm_init(i_this, dRes_INDEX_BDK_BCK_TYAKUTI1_e, 5.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_TYAKUTI1_e, 0);
                     i_this->mState = 4;
                     eff_hane_num = 10;
                     dComIfGp_getVibration().StartShock(DEMO_SELECT(REG6_S(2), REG0_S(2)) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
@@ -975,7 +905,7 @@ static void wait(bdk_class* i_this) {
                 i_this->m2592 = 0;
                 break;
             }
-            anm_init(i_this, BDK_BCK_WAIT1, 10.0f, 2, 1.0f, -1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_WAIT1_e, 10.0f, 2, 1.0f, -1, 0);
             i_this->mState = 1;
             i_this->m2EC[0] = cM_rndF(30.0f) + 40.0f;
             i_this->m2CA = 0;
@@ -993,19 +923,19 @@ static void wait(bdk_class* i_this) {
                     if (angle > 0x800) {
                         if (i_this->m2CA != 1) {
                             i_this->m2CA = 1;
-                            anm_init(i_this, BDK_BCK_SENKAI_L1, 10.0f, 2, 1.0f, BDK_BAS_SENKAI_L1, 0);
+                            anm_init(i_this, dRes_INDEX_BDK_BCK_SENKAI_L1_e, 10.0f, 2, 1.0f, dRes_INDEX_BDK_BAS_SENKAI_L1_e, 0);
                             i_this->m2EC[1] = 0x14;
                         }
                     } else {
                         if (angle < -0x800) {
                             if (i_this->m2CA != 2) {
                                 i_this->m2CA = 2;
-                                anm_init(i_this, BDK_BCK_SENKAI_R1, 10.0f, 2, 1.0f, BDK_BAS_SENKAI_R1, 0);
+                                anm_init(i_this, dRes_INDEX_BDK_BCK_SENKAI_R1_e, 10.0f, 2, 1.0f, dRes_INDEX_BDK_BAS_SENKAI_R1_e, 0);
                                 i_this->m2EC[1] = 0x14;
                             }
                         } else if (i_this->m2CA != 3) {
                             i_this->m2CA = 3;
-                            anm_init(i_this, BDK_BCK_WAIT1, 10.0f, 2, 1.0f, -1, 0);
+                            anm_init(i_this, dRes_INDEX_BDK_BCK_WAIT1_e, 10.0f, 2, 1.0f, -1, 0);
                             i_this->m2EC[1] = 0x14;
                         }
                     }
@@ -1042,7 +972,7 @@ static void wait(bdk_class* i_this) {
                             i_this->mState = 0;
                         } else if (dist < DEMO_SELECT(REG12_F(15), REG0_F(15)) + 1300.0f) {
                             i_this->mState = 2;
-                            anm_init(i_this, BDK_BCK_WALK1, 3.0f, 2, l_HIO.m01C, BDK_BAS_WALK1, 0);
+                            anm_init(i_this, dRes_INDEX_BDK_BCK_WALK1_e, 3.0f, 2, l_HIO.m01C, dRes_INDEX_BDK_BAS_WALK1_e, 0);
                             i_this->m2E0 = 0.0f;
                             actor->speedF = 0.0f;
                         } else {
@@ -1066,7 +996,7 @@ static void wait(bdk_class* i_this) {
             }
             break;
         case 5:
-            anm_init(i_this, BDK_BCK_JUMP1, 5.0f, 0, 0.0f, BDK_BAS_JUMP1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_JUMP1_e, 5.0f, 0, 0.0f, dRes_INDEX_BDK_BAS_JUMP1_e, 0);
             i_this->mState = 6;
             fopAcM_GetSpeed_p(actor)->y = REG8_F(9) + 50.0f;
             actor->speedF = 0.0f;
@@ -1074,7 +1004,7 @@ static void wait(bdk_class* i_this) {
         case 6:
             i_this->m2DC = 700.0f;
             if (fopAcM_GetSpeed_p(actor)->y < 0.0f && fopAcM_GetPosition_p(actor)->y < i_this->mAcch.GetGroundH() + 5.0f) {
-                anm_init(i_this, BDK_BCK_JUMP1, 2.0f, 0, 1.0f, BDK_BAS_JUMP1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_JUMP1_e, 2.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_JUMP1_e, 0);
                 i_this->mState = 7;
             }
             break;
@@ -1103,7 +1033,7 @@ static void jump(bdk_class* i_this) {
 
     switch (i_this->mState) {
         case 0:
-            anm_init(i_this, BDK_BCK_TOBITATU1, 5.0f, 0, 1.0f, BDK_BAS_TOBITATU1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_TOBITATU1_e, 5.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_TOBITATU1_e, 0);
             i_this->m2618 = 0x19;
             i_this->mState = 1;
             i_this->m2CC = player->current.pos;
@@ -1132,7 +1062,7 @@ static void jump(bdk_class* i_this) {
                 actor->speed.y = 0.0f;
             }
             if (i_this->m2EC[0] == 0) {
-                anm_init(i_this, BDK_BCK_TYAKUTI1, 15.0f, 0, 0.001f, BDK_BAS_TYAKUTI1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_TYAKUTI1_e, 15.0f, 0, 0.001f, dRes_INDEX_BDK_BAS_TYAKUTI1_e, 0);
                 i_this->mAction = ACTION_LANDING;
                 i_this->mState = 3;
             }
@@ -1154,7 +1084,7 @@ static void jida_attack(bdk_class* i_this) {
 
     switch (i_this->mState) {
         case 0:
-            anm_init(i_this, BDK_BCK_JIDANDA1, 10.0f, 2, 1.0f, BDK_BAS_JIDANDA1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_JIDANDA1_e, 10.0f, 2, 1.0f, dRes_INDEX_BDK_BAS_JIDANDA1_e, 0);
             i_this->mState = 1;
             i_this->m2EC[0] = (s16)cM_rndF(5.0f) * 0x18;
             // Fall-through
@@ -1228,7 +1158,7 @@ static void kuti_attack(bdk_class* i_this) {
     i_this->m1134 = 2500;
     switch (i_this->mState) {
         case 0:
-            anm_init(i_this, BDK_BCK_ATTACK1, 5.0f, 0, 1.0f, BDK_BAS_ATTACK1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_ATTACK1_e, 5.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_ATTACK1_e, 0);
             i_this->mState = 2;
             fopAcM_monsSeStart(actor, JA_SE_CV_DK_ATTACK, 0);
             break;
@@ -1260,7 +1190,7 @@ static void kuti_attack(bdk_class* i_this) {
                 bVar2 = 1;
             }
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, BDK_BCK_NUKENAI1, 2.0f, 0, 1.0f, -1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_NUKENAI1_e, 2.0f, 0, 1.0f, -1, 0);
                 i_this->mState = 5;
                 i_this->m2EC[0] = cM_rndF(60.0f) + 90.0f;
 
@@ -1298,7 +1228,7 @@ static void kuti_attack(bdk_class* i_this) {
                 if (i_this->m2EC[0] == 0) {
                     bVar1 = 1;
                 } else {
-                    anm_init(i_this, BDK_BCK_NUKENAI1, 2.0f, 0, 1.0f, -1, 0);
+                    anm_init(i_this, dRes_INDEX_BDK_BCK_NUKENAI1_e, 2.0f, 0, 1.0f, -1, 0);
                     i_this->mState = 5;
                     fopAcM_seStart(actor, JA_SE_CM_DK_JITABATA, 0);
                     fopAcM_monsSeStart(actor, JA_SE_CV_DK_NUKEZU, 0);
@@ -1310,7 +1240,7 @@ static void kuti_attack(bdk_class* i_this) {
             break;
     }
     if (i_this->m2EC[2] == 1 || bVar1 != 0) {
-        anm_init(i_this, BDK_BCK_NUKU1, 1.0f, 0, 1.0f, -1, 0);
+        anm_init(i_this, dRes_INDEX_BDK_BCK_NUKU1_e, 1.0f, 0, 1.0f, -1, 0);
         i_this->mState = 3;
         fopAcM_seStart(actor, JA_SE_CM_DK_PULL_UP_HEAD, 0);
         fopAcM_monsSeStart(actor, JA_SE_CV_DK_NUKERU, 0);
@@ -1419,7 +1349,7 @@ static void fly_attack(bdk_class* i_this) {
                 i_this->m2EC[0] = 0x28;
                 eff_hane_set(i_this, &i_this->m1168, 10, 0);
             } else if (i_this->m2EC[0] == 1) {
-                anm_init(i_this, BDK_BCK_KAKKU1, 30.0f, 2, 1.0f, -1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_KAKKU1_e, 30.0f, 2, 1.0f, -1, 0);
             }
             break;
         case 2:
@@ -1438,7 +1368,7 @@ static void fly_attack(bdk_class* i_this) {
             }
             break;
         case 10:
-            anm_init(i_this, BDK_BCK_DAMAGE4, 2.0f, 0, 1.0f, -1, 1);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_DAMAGE4_e, 2.0f, 0, 1.0f, -1, 1);
             i_this->mState = 0xB;
             actor->speed.y = 0.0f;
             i_this->m2EC[0] = REG0_S(5) + 0x28;
@@ -1460,7 +1390,7 @@ static void fly_attack(bdk_class* i_this) {
                     (s8)fopAcM_GetRoomNo(actor)
                 );
                 if (emitter) {
-                    emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(JNT_J_DK_MABUTA));
+                    emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_MABUTA_e));
                 }
             }
             emitter = dComIfGp_particle_set(
@@ -1475,13 +1405,13 @@ static void fly_attack(bdk_class* i_this) {
                 &actor->tevStr.mColorK0
             );
             if (emitter) {
-                emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(JNT_J_DK_MUNE2));
+                emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_MUNE2_e));
             }
             // Fall-through
         case 0xB:
             actor->current.pos.y += actor->speed.y;
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, BDK_BCK_PIKUPIKU1, 5.0f, 2, 1.0f, -1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_PIKUPIKU1_e, 5.0f, 2, 1.0f, -1, 0);
             }
             if (i_this->m2EC[0] == 0) {
                 actor->speed.y -= (0.5f + REG0_F(7));
@@ -1490,7 +1420,7 @@ static void fly_attack(bdk_class* i_this) {
                     i_this->mState = 0xC;
                     i_this->m2D8 = actor->current.angle.y + 0x8000;
                     i_this->m2EC[0] = REG0_S(8) + 0x28;
-                    anm_init(i_this, BDK_BCK_FLY2, 5.0f, 2, 2.0f, BDK_BAS_FLY2, 0);
+                    anm_init(i_this, dRes_INDEX_BDK_BCK_FLY2_e, 5.0f, 2, 2.0f, dRes_INDEX_BDK_BAS_FLY2_e, 0);
                 }
             }
             break;
@@ -1540,7 +1470,7 @@ static void wind_attack(bdk_class* i_this) {
     cXyz offset;
     switch (i_this->mState) {
         case 0:
-            anm_init(i_this, BDK_BCK_TOBITATU1, 5.0f, 0, 1.0f, BDK_BAS_TOBITATU1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_TOBITATU1_e, 5.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_TOBITATU1_e, 0);
             i_this->m2618 = 0x19;
             i_this->mState++;
             i_this->m2CC = actor->current.pos;
@@ -1554,7 +1484,7 @@ static void wind_attack(bdk_class* i_this) {
             break;
         case 2:
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, BDK_BCK_FLY2, 5.0f, 2, 2.0f, BDK_BAS_FLY2, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_FLY2_e, 5.0f, 2, 2.0f, dRes_INDEX_BDK_BAS_FLY2_e, 0);
                 i_this->mState = 3;
                 i_this->m2EC[0] = 200;
             }
@@ -1607,7 +1537,7 @@ static void end_set(bdk_class* i_this) {
     }
     i_this->m25A0 = 100;
     fopAcM_OnStatus(actor, fopAcStts_UNK4000_e);
-    mDoAud_bgmStop(0x1E);
+    mDoAud_bgmStop(30);
 }
 
 /* 000049C0-00005018       .text damage_check__FP9bdk_class */
@@ -1648,7 +1578,7 @@ static void damage_check(bdk_class* i_this) {
 
                     fopAcM_monsSeStart(actor, JA_SE_CV_DK_LAST_DAMAGE, 0);
                     dScnPly_ply_c::setPauseTimer(8);
-                    mDoAud_bgmStop(0x1E);
+                    mDoAud_bgmStop(30);
                 } else {
                     dComIfGs_onEventBit(dSv_event_flag_c::UNK_3C01);
 #if VERSION > VERSION_DEMO
@@ -1692,7 +1622,7 @@ static void damage_check(bdk_class* i_this) {
             i_this->m1136 = cM_atan2s(actor->eyePos.x - player->current.pos.x, actor->eyePos.z - player->current.pos.z);
 
             if (i_this->mAction == ACTION_KUTI_ATTACK && i_this->m1150.y < 10000.0f) {
-                anm_init(i_this, BDK_BCK_DAMAGE1, 2.0f, 0, 1.0f, -1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_DAMAGE1_e, 2.0f, 0, 1.0f, -1, 0);
                 i_this->mState = 10;
                 i_this->m2594++;
                 if (6 <= i_this->m2594) {
@@ -1704,17 +1634,17 @@ static void damage_check(bdk_class* i_this) {
                 if (i_this->m2586 != 0) {
                     if (i_this->mAction == ACTION_KUTI_ATTACK) {
                         i_this->mAction = ACTION_WAIT;
-                        anm_init(i_this, BDK_BCK_WAIT1, 10.0f, 2, 1.0f, -1, 0);
+                        anm_init(i_this, dRes_INDEX_BDK_BCK_WAIT1_e, 10.0f, 2, 1.0f, -1, 0);
                         i_this->mState = 1;
 
                         i_this->m2EC[0] = cM_rndF(30.0f) + 30.0f;
                         i_this->m2EC[1] = i_this->m2EC[0];
                         i_this->m2CA = 0;
                     }
-                    anm_init(i_this, BDK_BCK_DAMAGE3, 2.0f, 0, 1.0f, -1, 1);
+                    anm_init(i_this, dRes_INDEX_BDK_BCK_DAMAGE3_e, 2.0f, 0, 1.0f, -1, 1);
                     sVar1 = 1;
                 } else {
-                    anm_init(i_this, BDK_BCK_DAMAGE2, 2.0f, 0, 1.0f, BDK_BAS_DAMAGE2, 1);
+                    anm_init(i_this, dRes_INDEX_BDK_BCK_DAMAGE2_e, 2.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_DAMAGE2_e, 1);
                     sVar1 = 1;
                 }
             }
@@ -1735,7 +1665,7 @@ static void damage_check(bdk_class* i_this) {
                     &actor->tevStr.mColorK0
                 );
                 if (emitter) {
-                    emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(JNT_J_DK_MUNE2));
+                    emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_MUNE2_e));
                 }
             }
         }
@@ -1787,7 +1717,7 @@ static void kamen_demo(bdk_class* i_this) {
     i_this->m1134 = 0;
     switch (i_this->mState) {
         case 0:
-            anm_init(i_this, BDK_BCK_NUKENAI1, 0.0f, 0, 0.0f, -1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_NUKENAI1_e, 0.0f, 0, 0.0f, -1, 0);
             i_this->mState = 1;
             i_this->m25A0 = 1;
             fopAcM_OnStatus(actor, fopAcStts_UNK4000_e);
@@ -1803,7 +1733,7 @@ static void kamen_demo(bdk_class* i_this) {
                 pos.y = 0.0f;
                 pos.z = 0.0f;
 
-                MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(JNT_J_DK_ATAMA1), *calc_mtx);
+                MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_ATAMA1_e), *calc_mtx);
                 MtxPosition(&pos, &i_this->m910[i]);
                 i_this->m9A0[i].y = actor->shape_angle.y;
                 i_this->m9A0[i].x = REG0_S(6) + 0x3625;
@@ -1836,7 +1766,7 @@ static void kamen_demo(bdk_class* i_this) {
             if (i_this->m25A6 >= 0x6E && REG8_S(8) == 0) {
                 i_this->m25A0 = 150;
                 i_this->mAction = ACTION_KUTI_ATTACK;
-                anm_init(i_this, BDK_BCK_NUKENAI1, 2.0f, 0, 1.0f, -1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_NUKENAI1_e, 2.0f, 0, 1.0f, -1, 0);
                 i_this->mState = 5;
                 i_this->m2EC[0] = cM_rndF(120.0f) + 30.0f;
                 mDoAud_bgmStart(JA_BGM_UNK_110);
@@ -1886,7 +1816,7 @@ static void start(bdk_class* i_this) {
                 i_this->m2F6 = REG0_S(6) + 0x19;
                 actor->current.pos.y = DEMO_SELECT(REG13_F(10), REG0_F(10)) + 8500.0f;
                 actor->speed.y = DEMO_SELECT(REG13_F(12), REG0_F(12)) + 80.0f;
-                anm_init(i_this, BDK_BCK_S_DEMO1, 5.0f, 2, 1.0f, -1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_S_DEMO1_e, 5.0f, 2, 1.0f, -1, 0);
                 fopAcM_seStart(actor, JA_SE_CM_DK_ROUND_UP, 0);
 
                 dComIfGp_particle_set(
@@ -1909,7 +1839,7 @@ static void start(bdk_class* i_this) {
             if (i_this->m25D8 != 0) {
                 i_this->m25D8 = 0;
                 i_this->mState = 3;
-                anm_init(i_this, BDK_BCK_S_DEMO2, 5.0f, 0, 1.0f, BDK_BAS_S_DEMO2, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_S_DEMO2_e, 5.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_S_DEMO2_e, 0);
                 i_this->m2EC[0] = 0x2D;
             }
             break;
@@ -1935,7 +1865,7 @@ static void start(bdk_class* i_this) {
                     );
 
                     if (emitter) {
-                        emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(JNT_J_DK_MUNE2));
+                        emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_MUNE2_e));
                     }
                 }
             }
@@ -1959,19 +1889,19 @@ static void end(bdk_class* i_this) {
 
     switch (i_this->mState) {
         case 0:
-            anm_init(i_this, BDK_BCK_LAST_DAMAGE1, 2.0f, 0, 1.0f, BDK_BAS_LAST_DAMAGE1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_LAST_DAMAGE1_e, 2.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_LAST_DAMAGE1_e, 0);
             i_this->mState = 5;
             i_this->m2EC[0] = 0xB3;
             particle_id = dPa_name::ID_IT_SN_DK_LASTDMG_HANE_W00;
             break;
         case 1:
-            anm_init(i_this, BDK_BCK_LAST_DAMAGE3, 2.0f, 0, 1.0f, BDK_BAS_LAST_DAMAGE3, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_LAST_DAMAGE3_e, 2.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_LAST_DAMAGE3_e, 0);
             i_this->mState = 5;
             i_this->m2EC[0] = 0xB3;
             particle_id = dPa_name::ID_IT_SN_DK_LASTDMG_HANE_W02;
             break;
         case 2:
-            anm_init(i_this, BDK_BCK_LAST_DAMAGE2, 2.0f, 0, 1.0f, BDK_BAS_LAST_DAMAGE2, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_LAST_DAMAGE2_e, 2.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_LAST_DAMAGE2_e, 0);
             i_this->mState = 5;
             i_this->m2EC[0] = 0;
             particle_id = dPa_name::ID_IT_SN_DK_LASTDMG_HANE_W01;
@@ -1979,7 +1909,7 @@ static void end(bdk_class* i_this) {
         case 5:
             if (i_this->mpMorf->isStop()) {
                 i_this->mState = 6;
-                anm_init(i_this, BDK_BCK_DEATH1, 2.0f, 2, 1.0f, BDK_BAS_DEATH1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_DEATH1_e, 2.0f, 2, 1.0f, dRes_INDEX_BDK_BAS_DEATH1_e, 0);
                 i_this->m2EC[0] = DEMO_SELECT(REG6_S(3), REG0_S(3)) + 300;
 
                 for (s32 i = 0; i <= 1; i++) {
@@ -2010,7 +1940,7 @@ static void end(bdk_class* i_this) {
             for (s32 i = 0; i <= 1; i++) {
                 JPABaseEmitter* emitter = i_this->m6100[i];
                 if (emitter) {
-                    emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(JNT_J_DK_HANE_L2 + i * 0xA)); // j_dk_hane_l2 joint, j_dk_hane_r2 joint
+                    emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_HANE_L2_e + i * 0xA)); // j_dk_hane_l2 joint, j_dk_hane_r2 joint
                 }
             }
             if (i_this->m2EC[0] == 0xAA) {
@@ -2022,7 +1952,7 @@ static void end(bdk_class* i_this) {
             cLib_addCalcAngleS2(&actor->current.angle.y, -8000, 0x10, 0x80);
             if (i_this->m2EC[0] == 0x3C) {
                 fopAcM_seStart(actor, JA_SE_CV_DK_DIE, 0);
-                anm_init(i_this, BDK_BCK_DEATH2, 5.0f, 0, 1.0f, -1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_DEATH2_e, 5.0f, 0, 1.0f, -1, 0);
             }
             if (i_this->m2EC[0] == 0 && DEMO_SELECT(REG6_S(4), REG0_S(4)) == 0) {
                 i_this->mState = 7;
@@ -2090,7 +2020,7 @@ static void end(bdk_class* i_this) {
             &actor->tevStr.mColorK0
         );
         if (emitter) {
-            emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(JNT_J_DK_MUNE2));
+            emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_MUNE2_e));
         }
         for (s32 i = 0; i <= 1; i++) {
             JPABaseEmitter* emitter = dComIfGp_particle_set(
@@ -2106,7 +2036,7 @@ static void end(bdk_class* i_this) {
             );
 
             if (emitter) {
-                emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(JNT_J_DK_HANE_L2 + i * 0xA)); // j_dk_hane_l2 joint, j_dk_hane_r2 joint
+                emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_HANE_L2_e + i * 0xA)); // j_dk_hane_l2 joint, j_dk_hane_r2 joint
             }
         }
     }
@@ -2116,7 +2046,7 @@ static void end(bdk_class* i_this) {
 /* 00005EA0-00005F08       .text obj_s_sub__FPvPv */
 static void* obj_s_sub(void* param_1, void*) {
     fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
-    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_BDKOBJ && (fpcM_GetParam(actor) & 0xF) != 0xF && actor->health != 0) {
+    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_BDKOBJ_e && (fpcM_GetParam(actor) & 0xF) != 0xF && actor->health != 0) {
         return param_1;
     }
     return NULL;
@@ -2140,7 +2070,7 @@ static void t_fly(bdk_class* i_this) {
 
     switch (i_this->mState) {
         case -10:
-            anm_init(i_this, BDK_BCK_TOBITATU1, 5.0f, 0, 1.0f, BDK_BAS_TOBITATU1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_TOBITATU1_e, 5.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_TOBITATU1_e, 0);
             i_this->mState++;
             break;
         case -9:
@@ -2150,20 +2080,20 @@ static void t_fly(bdk_class* i_this) {
             break;
         case 0:
             fopAcM_OffStatus(actor, fopAcStts_UNK4000_e);
-            anm_init(i_this, BDK_BCK_FLY2, 5.0f, 2, 1.0f, BDK_BAS_FLY2, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_FLY2_e, 5.0f, 2, 1.0f, dRes_INDEX_BDK_BAS_FLY2_e, 0);
             i_this->mState++;
             // Fall-through
         case 1:
             if (bdkobj) {
                 i_this->m2CC = bdkobj->current.pos;
-                anm_init(i_this, BDK_BCK_ATTACK_T1, 5.0f, 0, 1.0f, -1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_ATTACK_T1_e, 5.0f, 0, 1.0f, -1, 0);
                 i_this->mState++;
                 fopAcM_monsSeStart(actor, JA_SE_CV_DK_ATTACK, 0);
                 i_this->mp2598 = bdkobj;
             } else {
                 i_this->m2CC = player->current.pos;
                 if (i_this->m2EC[0] == 0) {
-                    anm_init(i_this, BDK_BCK_ATTACK_T2, 5.0f, 0, 1.0f, -1, 0);
+                    anm_init(i_this, dRes_INDEX_BDK_BCK_ATTACK_T2_e, 5.0f, 0, 1.0f, -1, 0);
                     i_this->mState = 10;
                     fopAcM_monsSeStart(actor, JA_SE_CV_DK_ATTACK, 0);
                     fopAcM_seStart(actor, JA_SE_CM_DK_FOOT_ATTACK, 0);
@@ -2245,7 +2175,7 @@ static void t_landing(bdk_class* i_this) {
     i_this->mF10 = 1;
     switch (i_this->mState) {
         case 0:
-            anm_init(i_this, BDK_BCK_TOBITATU_T1, 5.0f, 2, 1.0f, -1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_TOBITATU_T1_e, 5.0f, 2, 1.0f, -1, 0);
             i_this->mState++;
             break;
         case 1:
@@ -2294,14 +2224,14 @@ static void t_lastattack(bdk_class* i_this) {
         case 0:
             actor->speed.y = DEMO_SELECT(REG13_F(6), REG0_F(6)) + 80.0f;
             i_this->mState++;
-            anm_init(i_this, BDK_BCK_TYAKUTI_T1, 10.0f, 0, 0.001f, BDK_BAS_TYAKUTI_T1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_TYAKUTI_T1_e, 10.0f, 0, 0.001f, dRes_INDEX_BDK_BAS_TYAKUTI_T1_e, 0);
             break;
         case 1:
             if (!(s8)isfalling) {
                 break;
             }
 
-            anm_init(i_this, BDK_BCK_TYAKUTI_T1, 1.0f, 0, 1.0f, BDK_BAS_TYAKUTI_T1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_TYAKUTI_T1_e, 1.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_TYAKUTI_T1_e, 0);
             i_this->mState++;
             dComIfGp_getVibration().StartShock(DEMO_SELECT(REG6_S(2), REG0_S(2)) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
             dComIfGp_particle_set(
@@ -2326,13 +2256,13 @@ static void t_lastattack(bdk_class* i_this) {
             break;
         case 2:
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, BDK_BCK_WAIT_T1, 5.0, 2, 1.0f, -1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_WAIT_T1_e, 5.0, 2, 1.0f, -1, 0);
                 i_this->mState++;
             }
             break;
         case 3:
             if (i_this->m2EC[0] == 0 && fopAcM_searchActorDistance(actor, daPy_getPlayerActorClass()) < REG0_F(13) + 700.0f) {
-                anm_init(i_this, BDK_BCK_ATTACK_T3, 5.0f, 0, 1.0f, -1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_ATTACK_T3_e, 5.0f, 0, 1.0f, -1, 0);
                 fopAcM_monsSeStart(actor, JA_SE_CV_DK_ATTACK, 0);
                 i_this->mState = 4;
             }
@@ -2349,7 +2279,7 @@ static void t_lastattack(bdk_class* i_this) {
                 eff_hane_set(i_this, &i_this->m1168, 5, 0);
             }
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, BDK_BCK_WAIT_T1, 5.0f, 2, 1.0f, -1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_WAIT_T1_e, 5.0f, 2, 1.0f, -1, 0);
                 i_this->mState = 3;
                 i_this->m2EC[0] = cM_rndF(100.0f) + 100.0f;
             }
@@ -2371,7 +2301,7 @@ static void t_down(bdk_class* i_this) {
 
     switch (i_this->mState) {
         case 0:
-            anm_init(i_this, BDK_BCK_TO_DAMAGE_T1, 2.0f, 0, 1.0f, -1, 0);
+            anm_init(i_this, dRes_INDEX_BDK_BCK_TO_DAMAGE_T1_e, 2.0f, 0, 1.0f, -1, 0);
             i_this->mState++;
             i_this->m2EC[0] = REG0_S(6) + 0x50;
             i_this->m2EC[1] = REG0_S(7) + 0x50;
@@ -2392,7 +2322,7 @@ static void t_down(bdk_class* i_this) {
         case 1:
         case 2:
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, BDK_BCK_DAMAGE_T1, 2.0f, 2, 1.0f, -1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_DAMAGE_T1_e, 2.0f, 2, 1.0f, -1, 0);
             }
             cLib_addCalc2(&actor->current.pos.x, center_pos.x, 0.2f, REG0_F(4) + 10.0f);
             cLib_addCalc2(&actor->current.pos.z, center_pos.z, 0.2f, REG0_F(4) + 10.0f);
@@ -2401,7 +2331,7 @@ static void t_down(bdk_class* i_this) {
             cLib_addCalcAngleS2(&i_this->m259E, 1, 1, 2);
 #endif
             if (i_this->m2EC[1] == 1) {
-                anm_init(i_this, BDK_BCK_RAKKA_T1, DEMO_SELECT(REG13_F(6), REG0_F(6)) + 20.0f, 2, 1.0f, -1, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_RAKKA_T1_e, DEMO_SELECT(REG13_F(6), REG0_F(6)) + 20.0f, 2, 1.0f, -1, 0);
 #if VERSION > VERSION_DEMO
                 i_this->m259E = 1;
 #else
@@ -2530,7 +2460,7 @@ static void col_set(bdk_class* i_this) {
     i_this->m1168 = actor->current.pos;
     i_this->m1168.y += 380.0f;
     model = i_this->mpMorf->getModel();
-    MTXCopy(model->getAnmMtx(JNT_J_DK_ATAMA1), *calc_mtx);
+    MTXCopy(model->getAnmMtx(DK_JNT_J_DK_ATAMA1_e), *calc_mtx);
 
     offset.x = REG8_F(0) + 40.0f;
     offset.y = REG8_F(1);
@@ -2545,7 +2475,7 @@ static void col_set(bdk_class* i_this) {
     i_this->m1144 = i_this->m1150;
     MtxPosition(&offset, &i_this->m1150);
     if (i_this->m2584 == 1) {
-        MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(JNT_J_DK_AGO), *calc_mtx);
+        MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_AGO_e), *calc_mtx);
         offset.x = REG8_F(3) + 120.0f;
         offset.y = REG8_F(4);
         offset.z = REG8_F(5);
@@ -2579,10 +2509,10 @@ static void col_set(bdk_class* i_this) {
     for (s32 i = 0; i < 2; i++) {
         if (i == 0) {
             model = i_this->mpMorf->getModel();
-            MTXCopy(model->getAnmMtx(JNT_J_DK_ASHI_L3), *calc_mtx);
+            MTXCopy(model->getAnmMtx(DK_JNT_J_DK_ASHI_L3_e), *calc_mtx);
         } else {
             model = i_this->mpMorf->getModel();
-            MTXCopy(model->getAnmMtx(JNT_J_DK_ASHI_R3), *calc_mtx);
+            MTXCopy(model->getAnmMtx(DK_JNT_J_DK_ASHI_R3_e), *calc_mtx);
         }
         if (i_this->mAction == ACTION_T_LASTATTACK) {
             i_this->mFootCCSph[i].SetR(DEMO_SELECT(REG12_F(8), REG0_F(8)) + 300.0f);
@@ -3060,7 +2990,7 @@ static void demo_camera(bdk_class* i_this) {
             cLib_addCalc2(&i_this->m25B4.z, i_this->m1150.z, 0.1f, 50.0f);
 
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, BDK_BCK_FLY3, 1.0f, 2, 1.0f, BDK_BAS_FLY3, 0);
+                anm_init(i_this, dRes_INDEX_BDK_BCK_FLY3_e, 1.0f, 2, 1.0f, dRes_INDEX_BDK_BAS_FLY3_e, 0);
                 player->changeDemoMode(daPy_demo_c::DEMO_A_WAIT_e);
                 player->changeDemoParam0(2);
             }
@@ -3649,7 +3579,7 @@ static BOOL daBdk_Execute(bdk_class* i_this) {
     }
     actor->shape_angle.y = actor->current.angle.y;
     actor->shape_angle.z = actor->current.angle.z;
-    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(JNT_J_DK_ATAMA1), *calc_mtx);
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(DK_JNT_J_DK_ATAMA1_e), *calc_mtx);
 
     offset.x = DEMO_SELECT(REG6_F(10), REG0_F(10)) + 120.0f;
     offset.y = 0.0f;
@@ -3774,16 +3704,16 @@ static BOOL daBdk_Delete(bdk_class* i_this) {
 static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     bdk_class* i_this = (bdk_class*)i_actor;
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Bdk", BDK_BDL_DK),
+        (J3DModelData*)dComIfG_getObjectRes("Bdk", dRes_INDEX_BDK_BDL_DK_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bdk", BDK_BCK_FLY1),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bdk", dRes_INDEX_BDK_BCK_FLY1_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
         -1,
         1,
-        dComIfG_getObjectRes("Bdk", BDK_BAS_FLY1),
+        dComIfG_getObjectRes("Bdk", dRes_INDEX_BDK_BAS_FLY1_e),
         0x80000,
         0x11000022
     );
@@ -3793,8 +3723,8 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     }
 
     for (u16 i = 0; i < i_this->mpMorf->getModel()->getModelData()->getJointNum(); i++) {
-        if (i == JNT_J_DK_KUBI1 || (JNT_J_DK_TOSAKA_A1 <= i && i <= JNT_J_DK_TOSAKA_B2) || i == JNT_J_DK_O_LA2 || i == JNT_J_DK_O_LB2 || i == JNT_J_DK_O_RA2 ||
-            i == JNT_J_DK_O_RB2)
+        if (i == DK_JNT_J_DK_KUBI1_e || (DK_JNT_J_DK_TOSAKA_A1_e <= i && i <= DK_JNT_J_DK_TOSAKA_B2_e) || i == DK_JNT_J_DK_O_LA2_e || i == DK_JNT_J_DK_O_LB2_e || i == DK_JNT_J_DK_O_RA2_e ||
+            i == DK_JNT_J_DK_O_RB2_e)
         {
             i_this->mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
         }
@@ -3807,13 +3737,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
         return FALSE;
     }
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", BDK_BDL_DK_KAMEN4);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", dRes_INDEX_BDK_BDL_DK_KAMEN4_e);
     i_this->mp8F0 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (!i_this->mp8F0) {
         return FALSE;
     }
 
-    static u16 kamen_break_bdl[] = {BDK_BDL_BUHINA, BDK_BDL_BUHINB, BDK_BDL_BUHINC, BDK_BDL_BUHIND};
+    static u16 kamen_break_bdl[] = {dRes_INDEX_BDK_BDL_BUHINA_e, dRes_INDEX_BDK_BDL_BUHINB_e, dRes_INDEX_BDK_BDL_BUHINC_e, dRes_INDEX_BDK_BDL_BUHIND_e};
 
     for (s32 i = 0; i < 0x4; i++) {
         i_this->m8FC[i] = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Bdk", kamen_break_bdl[i]), 0x80000, 0x11000022);
@@ -3825,14 +3755,14 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     i_this->bva = new mDoExt_bvaAnm();
     JUT_ASSERT(DEMO_SELECT(0x1831, 0x1864), i_this->bva);
 
-    s32 bva = i_this->bva->init(i_this->mp8F0, (J3DAnmVisibilityFull*)dComIfG_getObjectRes("Bdk", BDK_BVA_HIBIWARE1), 1, J3DFrameCtrl::EMode_NONE);
+    s32 bva = i_this->bva->init(i_this->mp8F0, (J3DAnmVisibilityFull*)dComIfG_getObjectRes("Bdk", dRes_INDEX_BDK_BVA_HIBIWARE1_e), 1, J3DFrameCtrl::EMode_NONE);
 #if VERSION > VERSION_DEMO
     if (bva == 0) {
         return FALSE;
     }
 #endif
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", BDK_BDL_DK_TAIL);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", dRes_INDEX_BDK_BDL_DK_TAIL_e);
     JUT_ASSERT(DEMO_SELECT(0x183D, 0x1878), modelData != NULL);
 
     for (int i = 0; i < 4; i++) {
@@ -3848,9 +3778,9 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
 
     for (s32 i = 0; i < 0x28; i++) {
         if (i == 0x27) {
-            modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", BDK_BDL_GROCK00);
+            modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", dRes_INDEX_BDK_BDL_GROCK00_e);
         } else if (i < 0x27) {
-            modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", BDK_BDL_GHANE00);
+            modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", dRes_INDEX_BDK_BDL_GHANE00_e);
         }
         JUT_ASSERT(DEMO_SELECT(0x185B, 0x189C), modelData != NULL);
         i_this->m261C[i].m044 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -3859,7 +3789,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
         }
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", BDK_BDL_S_TSHUTTER);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", dRes_INDEX_BDK_BDL_S_TSHUTTER_e);
     JUT_ASSERT(DEMO_SELECT(0x1868, 0x18A9), modelData != NULL);
 
     for (s32 i = 0; i < 3; i++) {
@@ -3872,12 +3802,12 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
         if (i_this->mp63BC[i] == NULL) {
             return FALSE;
         }
-        if (i_this->mp63BC[i]->Set((cBgD_t*)(dComIfG_getObjectRes("Bdk", BDK_DZB_S_TSHUTTER)), dBgW::MOVE_BG_e, &i_this->m632C[i]) == TRUE) {
+        if (i_this->mp63BC[i]->Set((cBgD_t*)(dComIfG_getObjectRes("Bdk", dRes_INDEX_BDK_DZB_S_TSHUTTER_e)), dBgW::MOVE_BG_e, &i_this->m632C[i]) == TRUE) {
             return FALSE;
         }
         i_this->mp63BC[i]->SetCrrFunc(dBgS_MoveBGProc_Typical);
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", BDK_BDL_S_TTOGE);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bdk", dRes_INDEX_BDK_BDL_S_TTOGE_e);
     JUT_ASSERT(DEMO_SELECT(0x1883, 0x18C4), modelData != NULL);
 
     i_this->mp62D8 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -3888,7 +3818,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     i_this->pm_bgw = new dBgW();
     JUT_ASSERT(DEMO_SELECT(0x188D, 0x18CE), i_this->pm_bgw != NULL);
 
-    i_this->pm_bgw->Set((cBgD_t*)(dComIfG_getObjectRes("Bdk", BDK_DZB_S_TTOGE)), dBgW::MOVE_BG_e, &i_this->m62DC);
+    i_this->pm_bgw->Set((cBgD_t*)(dComIfG_getObjectRes("Bdk", dRes_INDEX_BDK_DZB_S_TTOGE_e)), dBgW::MOVE_BG_e, &i_this->m62DC);
     i_this->pm_bgw->SetCrrFunc(dBgS_MoveBGProc_Typical);
 
     static Vec kosi1_offset[] = {{0.0f, 0.0f, 0.0f}};
@@ -3919,73 +3849,73 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_SPH_e,
-            /* mJointIndex */ JNT_J_DK_KOSI,
+            /* mJointIndex */ DK_JNT_J_DK_KOSI_e,
             /* mRadius     */ 132.0f,
             /* mpOffsets   */ kosi1_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_e,
-            /* mJointIndex */ JNT_J_DK_MUNE1,
+            /* mJointIndex */ DK_JNT_J_DK_MUNE1_e,
             /* mRadius     */ 140.0f,
             /* mpOffsets   */ mune1_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_e,
-            /* mJointIndex */ JNT_J_DK_MUNE2,
+            /* mJointIndex */ DK_JNT_J_DK_MUNE2_e,
             /* mRadius     */ 148.0f,
             /* mpOffsets   */ mune2_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_e,
-            /* mJointIndex */ JNT_J_DK_MUNE2,
+            /* mJointIndex */ DK_JNT_J_DK_MUNE2_e,
             /* mRadius     */ 112.0f,
             /* mpOffsets   */ mune3_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ JNT_J_DK_KUBI1,
+            /* mJointIndex */ DK_JNT_J_DK_KUBI1_e,
             /* mRadius     */ 85.0f,
             /* mpOffsets   */ kubi1_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ JNT_J_DK_ATAMA1,
+            /* mJointIndex */ DK_JNT_J_DK_ATAMA1_e,
             /* mRadius     */ 90.0f,
             /* mpOffsets   */ atama_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_e,
-            /* mJointIndex */ JNT_J_DK_TUBASA_L1,
+            /* mJointIndex */ DK_JNT_J_DK_TUBASA_L1_e,
             /* mRadius     */ 100.0f,
             /* mpOffsets   */ tubasaL1_0_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ JNT_J_DK_TUBASA_L1,
+            /* mJointIndex */ DK_JNT_J_DK_TUBASA_L1_e,
             /* mRadius     */ 55.0f,
             /* mpOffsets   */ tubasaL1_1_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL2_e,
-            /* mJointIndex */ JNT_J_DK_TUBASA_L1,
+            /* mJointIndex */ DK_JNT_J_DK_TUBASA_L1_e,
             /* mRadius     */ 110.0f,
             /* mpOffsets   */ tubasaL1_2_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_e,
-            /* mJointIndex */ JNT_J_DK_TUBASA_R1,
+            /* mJointIndex */ DK_JNT_J_DK_TUBASA_R1_e,
             /* mRadius     */ 100.0f,
             /* mpOffsets   */ tubasaR1_0_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ JNT_J_DK_TUBASA_R1,
+            /* mJointIndex */ DK_JNT_J_DK_TUBASA_R1_e,
             /* mRadius     */ 55.0f,
             /* mpOffsets   */ tubasaR1_1_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL2_e,
-            /* mJointIndex */ JNT_J_DK_TUBASA_R1,
+            /* mJointIndex */ DK_JNT_J_DK_TUBASA_R1_e,
             /* mRadius     */ 110.0f,
             /* mpOffsets   */ tubasaR1_2_offset,
         },
@@ -4353,18 +4283,18 @@ static actor_method_class l_daBdk_Method = {
 };
 
 actor_process_profile_definition g_profile_BDK = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BDK,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BDK_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bdk_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BDK,
+    /* Draw Prio    */ fpcDwPi_BDK_e,
     /* Actor SubMtd */ &l_daBdk_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

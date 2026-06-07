@@ -4,9 +4,7 @@
  */
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gnnbtltaki.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_gnnbtltaki.h"
+#include "res/Object/Gnnbtltaki.h"
 
 const char daObjGnnbtaki_c::M_arcname[] = "Gnnbtltaki";
 
@@ -21,12 +19,12 @@ BOOL daObjGnnbtaki_c::create_heap() {
     J3DModelData* mdl_data;
     J3DAnmTextureSRTKey* btk_data;
     BOOL ret = FALSE;
-    mdl_data =  static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GNNBTLTAKI_BDL_GNN_BTL_TAKI));
+    mdl_data =  static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_GNNBTLTAKI_BDL_GNN_BTL_TAKI_e));
     JUT_ASSERT(90, mdl_data != NULL);
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mpModel != NULL) {
-            btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, GNNBTLTAKI_BTK_GNN_BTL_TAKI));
+            btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_GNNBTLTAKI_BTK_GNN_BTL_TAKI_e));
             JUT_ASSERT(97, btk_data != NULL);
             if (btk_data != NULL && mBtkAnm.init(mdl_data, btk_data, TRUE, J3DFrameCtrl::EMode_LOOP)) {
                 ret = TRUE;
@@ -139,18 +137,18 @@ namespace {
 }; // namespace
 
 actor_process_profile_definition g_profile_Obj_Gnnbtaki = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Gnnbtaki,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Gnnbtaki_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjGnnbtaki_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Gnnbtaki,
+    /* Draw Prio    */ fpcDwPi_Obj_Gnnbtaki_e,
     /* Actor SubMtd */ &Gnnbtaki_Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

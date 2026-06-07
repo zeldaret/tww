@@ -5,13 +5,11 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_place_name.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_meter.h"
-#include "d/d_procname.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
 #include "JSystem/JKernel/JKRArchive.h"
@@ -156,9 +154,9 @@ cPhs_State dPn_c::_create() {
         u32 lang = dComIfGs_getPalLanguage();
         char buf[32];
         sprintf(buf, "/res/placename/PN%d/pn_%02d_%d.bti", lang, dComIfGp_getNowStageNum() + 1, lang);
-        dvd = mDoDvdThd_toMainRam_c::create(buf, 0, mpHeap);
+        dvd = mDoDvdThd_toMainRam_c::create(buf, JKRArchive::DEFAULT_MOUNT_DIRECTION, mpHeap);
 #else
-        dvd = mDoDvdThd_toMainRam_c::create(name_texture[dComIfGp_getNowStageNum()], 0, mpHeap);
+        dvd = mDoDvdThd_toMainRam_c::create(name_texture[dComIfGp_getNowStageNum()], JKRArchive::DEFAULT_MOUNT_DIRECTION, mpHeap);
 #endif
 
         mState = 2;
@@ -245,7 +243,7 @@ static cPhs_State dPn_Create(msg_class* i_msg) {
     return i_this->_create();
 }
 
-msg_method_class l_dPlace_name_Method = {
+static msg_method_class l_dPlace_name_Method = {
     (process_method_func)dPn_Create,
     (process_method_func)dPn_Delete,
     (process_method_func)dPn_Execute,
@@ -254,15 +252,15 @@ msg_method_class l_dPlace_name_Method = {
 };
 
 msg_process_profile_definition g_profile_PLACE_NAME = {
-    fpcLy_CURRENT_e,
-    12,
-    fpcPi_CURRENT_e,
-    PROC_PLACE_NAME,
-    &g_fpcLf_Method.base,
-    sizeof(dPn_c),
-    0,
-    0,
-    &g_fopMsg_Method,
-    PRIO_PLACE_NAME,
-    &l_dPlace_name_Method,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_PLACE_NAME_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dPn_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopMsg_Method,
+    /* Draw Prio    */ fpcDwPi_PLACE_NAME_e,
+    /* Msg SubMtd   */ &l_dPlace_name_Method,
 };

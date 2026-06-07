@@ -5,20 +5,18 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_hys.h"
-#include "d/res/res_hys.h"
+#include "res/Object/Hys.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 const char* daHys_c::m_arcname[2] = {"Hys", "Hys"};
 
 /* Model file indexes. */
-const s16 daHys_c::m_bdlidx[2] = {HYS_BDL_HYS, HYS_BDL_HYS};
+const s16 daHys_c::m_bdlidx[2] = {dRes_INDEX_HYS_BDL_HYS_e, dRes_INDEX_HYS_BDL_HYS_e};
 /* Texture animation file indexes. */
-const s16 daHys_c::m_btpidx[2] = {HYS_BTP_HYS, HYS_BTP_HYS};
+const s16 daHys_c::m_btpidx[2] = {dRes_INDEX_HYS_BTP_HYS_e, dRes_INDEX_HYS_BTP_HYS_e};
 /* Collision mesh file indexes. */
-const s16 daHys_c::m_dzbidx[2] = {HYS_DZB_HYS, HYS_DZB_HYS};
+const s16 daHys_c::m_dzbidx[2] = {dRes_INDEX_HYS_DZB_HYS_e, dRes_INDEX_HYS_DZB_HYS_e};
 const u32 daHys_c::m_heapsize[2] = {0xA00, 0xA00};
 const f32 daHys_c::m_tg_r[2] = {35.0f, 70.0f};
 
@@ -241,18 +239,18 @@ static actor_method_class daHysMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Hys = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Hys,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Hys_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daHys_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Hys,
+    /* Draw Prio    */ fpcDwPi_Hys_e,
     /* Actor SubMtd */ &daHysMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

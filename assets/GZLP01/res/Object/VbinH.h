@@ -1,0 +1,30 @@
+#ifndef RES_VBINH_H
+#define RES_VBINH_H
+
+enum dRes_INDEX_VBINH {
+    /* BDLM */
+    dRes_INDEX_VBINH_BDL_VBINH_e=0x5,
+    /* BRK  */
+    dRes_INDEX_VBINH_BRK_VBINH_e=0x8,
+    /* BTK  */
+    dRes_INDEX_VBINH_BTK_VBINA_H_e=0xB,
+};
+
+enum dRes_ID_VBINH {
+    /* BDLM */
+    dRes_ID_VBINH_BDL_VBINH_e=0x5,
+    /* BRK  */
+    dRes_ID_VBINH_BRK_VBINH_e=0x8,
+    /* BTK  */
+    dRes_ID_VBINH_BTK_VBINA_H_e=0xB,
+};
+
+enum VBINH_JNT {
+    VBINH_JNT_V_BINH_e=0x0,
+    VBINH_JNT_BIN_0_OUTSIDE_e=0x1,
+    VBINH_JNT_BIN_1_CAP_MODEL_e=0x2,
+    VBINH_JNT_HOTARU_MODEL_e=0x3,
+    VBINH_JNT_BIN_2_INSIDE_e=0x4,
+};
+
+#endif /* !RES_VBINH_H */

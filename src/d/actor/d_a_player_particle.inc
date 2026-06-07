@@ -16,7 +16,6 @@
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_ship.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_lib.h"
 #include "SSystem/SComponent/c_math.h"
@@ -372,7 +371,7 @@ void daPy_waterDropPcallBack_c::execute(JPABaseEmitter* emitter, JPABaseParticle
         pos.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
 
         if (pos.y > ptclPos.y) {
-            fopKyM_create(PROC_WATER_MARK, 1, &pos);
+            fopKyM_create(fpcNm_WATER_MARK_e, 1, &pos);
         }
     }
 }
@@ -516,15 +515,15 @@ void daPy_lk_c::setAuraEffect() {
                 }
             }
 
-            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_R));
-            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_MS));
+            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YAURA00_R_e));
+            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YMGCS00_MS_e));
         } else {
             if (!dComIfGp_event_runCheck()) {
                 mTinkleShieldTimer -= 1;
             }
 
-            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_G));
-            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_TS));
+            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YAURA00_G_e));
+            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YMGCS00_TS_e));
         }
 
         if (pYaura00Brk != curYaura00Brk) {
@@ -657,10 +656,13 @@ void daPy_lk_c::setWaterRipple() {
         simpleAnmPlay(mpSuimenMunyaBtk);
 
         JPABaseEmitter* emitter = m3280.getEmitter();
-        if (emitter != NULL && ((emitter->mGlobalParticleScale.x < 0.8f && checkNoResetFlg0(daPyFlg0_UNK80)) || (emitter->mGlobalParticleScale.x > 0.8f && !checkNoResetFlg0(daPyFlg0_UNK80)))) {
-            m3280.remove();
-
-            emitter = dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &current.pos, NULL, NULL, 0xFF, &m3280);
+        if (emitter != NULL) {
+            JGeometry::TVec3<f32> ptcl_scale;
+            emitter->getGlobalParticleScale(ptcl_scale);
+            if ((ptcl_scale.x < 0.8f && checkNoResetFlg0(daPyFlg0_UNK80)) || (ptcl_scale.x > 0.8f && !checkNoResetFlg0(daPyFlg0_UNK80))) {
+                m3280.remove();
+                emitter = dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &current.pos, NULL, NULL, 0xFF, &m3280);
+            }
         }
 
         if (emitter != NULL) {
@@ -912,11 +914,11 @@ void daPy_lk_c::setFootMark(cXyz* i_pos) {
 
     pos.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
     if (pos.y != -G_CM3D_F_INF && dComIfG_Bgsp()->GetAttributeCode(mGndChk) == dBgS_Attr_SAND_e) {
-        fopKyM_create(PROC_WATER_MARK, (shape_angle.y << 16) | 2, &pos, &scale, NULL);
+        fopKyM_create(fpcNm_WATER_MARK_e, (shape_angle.y << 16) | 2, &pos, &scale, NULL);
     }
 
     if (m336C.getEmitter() != NULL) {
-        fopKyM_create(PROC_WATER_MARK, shape_angle.y << 16, i_pos, &scale);
+        fopKyM_create(fpcNm_WATER_MARK_e, shape_angle.y << 16, i_pos, &scale);
     }
 }
 
