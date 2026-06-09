@@ -183,6 +183,13 @@ void daSTBox_c::initDrop(int) {
 /* 00000F64-00001218       .text actWait__9daSTBox_cFi */
 void daSTBox_c::actWait(int) {
     /* Nonmatching */
+    daShip_c* ship = dComIfGp_getShipActor();
+    JUT_ASSERT(0x32b, ship != NULL);
+    cXyz* craneTop = ship->getCraneTop();
+    JUT_ASSERT(0x332, craneTop != NULL);
+    craneTop->y += 5000.0f;
+    f32 waterY = getWaterY(*craneTop);
+    this->current.angle.y = ship->shape_angle.y;
     this->mRippleCallBack.setRate(12.0f);
 }
 
