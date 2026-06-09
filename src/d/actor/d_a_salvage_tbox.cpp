@@ -56,15 +56,15 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter*) {
 }
 
 /* 00000570-000005D8       .text getWaterY__F4cXyz */
-f32 getWaterY(cXyz *shipPos) {
+f32 getWaterY(cXyz shipPos) {
     /* Nonmatching */
     f32 waterY;
-    shipPos->y += 500.0f;
-    if (daSea_ChkArea(shipPos->x, shipPos->z)) {
-        waterY = daSea_calcWave(shipPos->x, shipPos->z);   
+    shipPos.y += 500.0f;
+    if (daSea_ChkArea(shipPos.x, shipPos.z)) {
+        waterY = daSea_calcWave(shipPos.x, shipPos.z);   
     }
     else {
-        waterY = dBgS_ObjGndChk_Wtr_Func(*shipPos);
+        waterY = dBgS_ObjGndChk_Wtr_Func(shipPos);
     }
     return waterY;
 }
@@ -189,19 +189,20 @@ void daSTBox_c::actWait(int) {
 /* 00001218-00001344       .text actDrop__9daSTBox_cFi */
 BOOL daSTBox_c::actDrop(int) {
     /* Nonmatching */
-    fopAcM_posMoveF(this, 0);
-    if (getWaterY(&this->current.pos) - 50 <= this->current.pos.y) {
-        if(this->current.pos.y < getWaterY(&this->current.pos)) {
-            if(this->field_0x334 == 0) {
-                s8 reverb = dComIfGp_getReverb(this->current.roomNo);
-                mDoAud_seStart(JA_SE_OBJ_FALL_WATER_M, &this->eyePos, 0, reverb);
-                fopKyM_createWpillar(&this->current.pos, 0.8, 1.0, 0);
-                this->field_0x334 = 1;
-            }
-            this->mRippleCallBack.end();
-        }
-        return FALSE;
+    fopAcM_posMoveF(this, NULL);
+    if (this->current.pos.y > getWaterY(this->current.pos) - 50.0f) {
+        return TRUE;
     }
+    if(this->current.pos.y < getWaterY(this->current.pos)) {
+        if(this->field_0x334 == 0) {
+            s8 reverb = dComIfGp_getReverb(this->current.roomNo);
+            mDoAud_seStart(JA_SE_OBJ_FALL_WATER_M, &this->eyePos, 0, reverb);
+            fopKyM_createWpillar(&this->current.pos, 0.8, 1.0, 0);
+            this->field_0x334 = 1;
+        }
+        this->mRippleCallBack.end();
+    }
+    return FALSE;
 }
 
 /* 00001344-000013AC       .text actWait02__9daSTBox_cFi */
