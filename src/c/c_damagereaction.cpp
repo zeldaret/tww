@@ -15,7 +15,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_cc_uty.h"
 #include "d/d_bg_s_lin_chk.h"
-#include "d/d_procname.h"
 
 cXyz non_pos(-20000.0f, -20000.0f, 20000.0f);
 
@@ -158,7 +157,7 @@ BOOL enemy_ice(enemyice* ei) {
                 if (ei->mLightShrinkTimer > (s8)(90 + REG14_S(2))) {
                     fopAcM_delete(ac);
                     fopAcM_onActor(ac);
-                    if (fopAcM_GetName(ac) != PROC_PZ) {
+                    if (fopAcM_GetName(ac) != fpcNm_PZ_e) {
                         // If the actor is not Princess Zelda, drop an item ball.
                         // TODO: Why the Zelda check? Is she coded to be able to die to Light Arrows?
                         fopAcM_createIball(&pos, ac->itemTableIdx, fopAcM_GetRoomNo(ac), &ac->current.angle, ac->stealItemBitNo);

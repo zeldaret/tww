@@ -1,0 +1,66 @@
+#ifndef RES_LS1_H
+#define RES_LS1_H
+
+enum dRes_INDEX_LS1 {
+    /* BAS  */
+    dRes_INDEX_LS1_BAS_LS_FURIMUKI_e=0x5,
+    dRes_INDEX_LS1_BAS_LS_GET_e=0x6,
+    dRes_INDEX_LS1_BAS_LS_NOZOKU_e=0x7,
+    dRes_INDEX_LS1_BAS_LS_WAIT01_e=0x8,
+    dRes_INDEX_LS1_BAS_LS_WAIT02_e=0x9,
+    dRes_INDEX_LS1_BAS_LS_WAIT03_e=0xA,
+    dRes_INDEX_LS1_BAS_LS_WAIT04_e=0xB,
+    dRes_INDEX_LS1_BAS_LS_WAIT05_e=0xC,
+    dRes_INDEX_LS1_BAS_LS_WATASU_e=0xD,
+    /* BCK  */
+    dRes_INDEX_LS1_BCK_LS_FURIMUKI_e=0x10,
+    dRes_INDEX_LS1_BCK_LS_GET_e=0x11,
+    dRes_INDEX_LS1_BCK_LS_NOZOKU_e=0x12,
+    dRes_INDEX_LS1_BCK_LS_WAIT01_e=0x13,
+    dRes_INDEX_LS1_BCK_LS_WAIT02_e=0x14,
+    dRes_INDEX_LS1_BCK_LS_WAIT03_e=0x15,
+    dRes_INDEX_LS1_BCK_LS_WAIT04_e=0x16,
+    dRes_INDEX_LS1_BCK_LS_WAIT05_e=0x17,
+    dRes_INDEX_LS1_BCK_LS_WATASU_e=0x18,
+    /* BTP  */
+    dRes_INDEX_LS1_BTP_FUAN02_e=0x1B,
+    dRes_INDEX_LS1_BTP_KIZUKU_e=0x1C,
+    dRes_INDEX_LS1_BTP_LS_GET_e=0x1D,
+    dRes_INDEX_LS1_BTP_NGWARAI_e=0x1E,
+    dRes_INDEX_LS1_BTP_NOZOKU_e=0x1F,
+    dRes_INDEX_LS1_BTP_OKORI_e=0x20,
+    dRes_INDEX_LS1_BTP_WARAI_e=0x21,
+};
+
+enum dRes_ID_LS1 {
+    /* BAS  */
+    dRes_ID_LS1_BAS_LS_FURIMUKI_e=0x5,
+    dRes_ID_LS1_BAS_LS_GET_e=0x6,
+    dRes_ID_LS1_BAS_LS_NOZOKU_e=0x7,
+    dRes_ID_LS1_BAS_LS_WAIT01_e=0x8,
+    dRes_ID_LS1_BAS_LS_WAIT02_e=0x9,
+    dRes_ID_LS1_BAS_LS_WAIT03_e=0xA,
+    dRes_ID_LS1_BAS_LS_WAIT04_e=0xB,
+    dRes_ID_LS1_BAS_LS_WAIT05_e=0xC,
+    dRes_ID_LS1_BAS_LS_WATASU_e=0xD,
+    /* BCK  */
+    dRes_ID_LS1_BCK_LS_FURIMUKI_e=0x10,
+    dRes_ID_LS1_BCK_LS_GET_e=0x11,
+    dRes_ID_LS1_BCK_LS_NOZOKU_e=0x12,
+    dRes_ID_LS1_BCK_LS_WAIT01_e=0x13,
+    dRes_ID_LS1_BCK_LS_WAIT02_e=0x14,
+    dRes_ID_LS1_BCK_LS_WAIT03_e=0x15,
+    dRes_ID_LS1_BCK_LS_WAIT04_e=0x16,
+    dRes_ID_LS1_BCK_LS_WAIT05_e=0x17,
+    dRes_ID_LS1_BCK_LS_WATASU_e=0x18,
+    /* BTP  */
+    dRes_ID_LS1_BTP_FUAN02_e=0x1B,
+    dRes_ID_LS1_BTP_KIZUKU_e=0x1C,
+    dRes_ID_LS1_BTP_LS_GET_e=0x1D,
+    dRes_ID_LS1_BTP_NGWARAI_e=0x1E,
+    dRes_ID_LS1_BTP_NOZOKU_e=0x1F,
+    dRes_ID_LS1_BTP_OKORI_e=0x20,
+    dRes_ID_LS1_BTP_WARAI_e=0x21,
+};
+
+#endif /* !RES_LS1_H */

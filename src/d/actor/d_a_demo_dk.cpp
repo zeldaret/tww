@@ -5,12 +5,10 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_demo_dk.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/res/res_demo_dk.h"
+#include "res/Object/Demo_Dk.h"
 
 /* 00000078-000000E8       .text daDEMO_DK_Draw__FP13demo_dk_class */
 static BOOL daDEMO_DK_Draw(demo_dk_class* i_this) {
@@ -41,10 +39,10 @@ void mode_wait(demo_dk_class* i_this) {
         }
 
         if (i_this->unk_2C0 == 0 && cM_rnd() < tmp) {
-            anm_init(i_this, DEMO_DK_BCK_DK_L_AKUBI1, 5.0f, 0, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_DEMO_DK_BCK_DK_L_AKUBI1_e, 5.0f, 0, 1.0f, 0);
             i_this->unk_2B6 = 1;
         } else {
-            anm_init(i_this, DEMO_DK_BCK_DK_L_WAIT1, 0.0f, 0, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_DEMO_DK_BCK_DK_L_WAIT1_e, 0.0f, 0, 1.0f, 0);
         }
     }
 }
@@ -52,7 +50,7 @@ void mode_wait(demo_dk_class* i_this) {
 /* 000002EC-00000378       .text mode_akubi__FP13demo_dk_class */
 void mode_akubi(demo_dk_class* i_this) {
     if (i_this->mpMorf->isStop()) {
-        anm_init(i_this, DEMO_DK_BCK_DK_L_WAIT1, 5.0f, 0, 2.0f, 0);
+        anm_init(i_this, dRes_INDEX_DEMO_DK_BCK_DK_L_WAIT1_e, 5.0f, 0, 2.0f, 0);
         i_this->unk_2C0 = 3;
         i_this->unk_2B6 = 0;
     }
@@ -111,9 +109,9 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     demo_dk_class* i_this = (demo_dk_class*)a_this;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("DEMO_DK", DEMO_DK_BMD_DK_L),
+        (J3DModelData*)dComIfG_getObjectRes("DEMO_DK", dRes_INDEX_DEMO_DK_BMD_DK_L_e),
         NULL, NULL, 
-        (J3DAnmTransform*)dComIfG_getObjectRes("DEMO_DK", DEMO_DK_BCK_DK_L_WAIT1),
+        (J3DAnmTransform*)dComIfG_getObjectRes("DEMO_DK", dRes_INDEX_DEMO_DK_BCK_DK_L_WAIT1_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
     
     if (i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL) {
@@ -143,7 +141,7 @@ static cPhs_State daDEMO_DK_Create(fopAc_ac_c* a_this) {
         a_this->scale.x = 1.0f;
         a_this->scale.y = 1.0f;
         a_this->scale.z = 1.0f;
-        anm_init(i_this, DEMO_DK_BCK_DK_L_WAIT1, 0.0f, 0, 1.0f, 0);
+        anm_init(i_this, dRes_INDEX_DEMO_DK_BCK_DK_L_WAIT1_e, 0.0f, 0, 1.0f, 0);
     }
     return ret;
 }
@@ -157,18 +155,18 @@ static actor_method_class l_daDEMO_DK_Method = {
 };
 
 actor_process_profile_definition g_profile_DEMO_DK = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DEMO_DK,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DEMO_DK_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(demo_dk_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DEMO_DK,
+    /* Draw Prio    */ fpcDwPi_DEMO_DK_e,
     /* Actor SubMtd */ &l_daDEMO_DK_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENV_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

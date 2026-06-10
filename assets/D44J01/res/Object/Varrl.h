@@ -1,0 +1,23 @@
+#ifndef RES_VARRL_H
+#define RES_VARRL_H
+
+enum dRes_INDEX_VARRL {
+    /* BDLM */
+    dRes_INDEX_VARRL_BDL_VARRL_e=0x4,
+    /* BTK  */
+    dRes_INDEX_VARRL_BTK_VARRL_e=0x7,
+};
+
+enum dRes_ID_VARRL {
+    /* BDLM */
+    dRes_ID_VARRL_BDL_VARRL_e=0x4,
+    /* BTK  */
+    dRes_ID_VARRL_BTK_VARRL_e=0x7,
+};
+
+enum VARRL_JNT {
+    VARRL_JNT_VARRL_e=0x0,
+    VARRL_JNT_ARRL_MODEL_e=0x1,
+};
+
+#endif /* !RES_VARRL_H */

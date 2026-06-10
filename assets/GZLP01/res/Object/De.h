@@ -1,0 +1,71 @@
+#ifndef RES_DE_H
+#define RES_DE_H
+
+enum dRes_INDEX_DE {
+    /* BCKS */
+    dRes_INDEX_DE_BCK_SLEEP_e=0x5,
+    dRes_INDEX_DE_BCK_SUFFER_e=0x6,
+    dRes_INDEX_DE_BCK_TALK01_e=0x7,
+    dRes_INDEX_DE_BCK_TALK02_e=0x8,
+    dRes_INDEX_DE_BCK_TALK03_e=0x9,
+    dRes_INDEX_DE_BCK_WAIT01_e=0xA,
+    dRes_INDEX_DE_BCK_WAKE_e=0xB,
+    /* BDL  */
+    dRes_INDEX_DE_BDL_DE_e=0xE,
+    /* DZB  */
+    dRes_INDEX_DE_DZB_DE_e=0x11,
+};
+
+enum dRes_ID_DE {
+    /* BCKS */
+    dRes_ID_DE_BCK_SLEEP_e=0x0,
+    dRes_ID_DE_BCK_SUFFER_e=0x1,
+    dRes_ID_DE_BCK_TALK01_e=0x2,
+    dRes_ID_DE_BCK_TALK02_e=0x3,
+    dRes_ID_DE_BCK_TALK03_e=0x4,
+    dRes_ID_DE_BCK_WAIT01_e=0x5,
+    dRes_ID_DE_BCK_WAKE_e=0x6,
+    /* BDL  */
+    dRes_ID_DE_BDL_DE_e=0x7,
+    /* DZB  */
+    dRes_ID_DE_DZB_DE_e=0x8,
+};
+
+enum DE_JNT {
+    DE_JNT_CENTER_e=0x0,
+    DE_JNT_BODY_e=0x1,
+    DE_JNT_NECK_e=0x2,
+    DE_JNT_HEAD_e=0x3,
+    DE_JNT_BRANCHL_e=0x4,
+    DE_JNT_BROWL1_e=0x5,
+    DE_JNT_BROWL2_e=0x6,
+    DE_JNT_C2_e=0x7,
+    DE_JNT_C1_e=0x8,
+    DE_JNT_BROWR1_e=0x9,
+    DE_JNT_BROWR2_e=0xA,
+    DE_JNT_C4_e=0xB,
+    DE_JNT_C7_e=0xC,
+    DE_JNT_EYEL_e=0xD,
+    DE_JNT_EYER_e=0xE,
+    DE_JNT_JAW_e=0xF,
+    DE_JNT_C10_e=0x10,
+    DE_JNT_C8_e=0x11,
+    DE_JNT_C9_e=0x12,
+    DE_JNT_LIP_e=0x13,
+    DE_JNT_MOUTH_e=0x14,
+    DE_JNT_C5_e=0x15,
+    DE_JNT_C6_e=0x16,
+    DE_JNT_MOUTHL_e=0x17,
+    DE_JNT_MOUTHLEND_e=0x18,
+    DE_JNT_MOUTHR_e=0x19,
+    DE_JNT_MOUTHREND_e=0x1A,
+    DE_JNT_NOSE_e=0x1B,
+    DE_JNT_C3_e=0x1C,
+    DE_JNT_TRUNK1_e=0x1D,
+    DE_JNT_TRUNK2_e=0x1E,
+    DE_JNT_TRUNK3_e=0x1F,
+    DE_JNT_BRANCHR_e=0x20,
+    DE_JNT_LEAF_e=0x21,
+};
+
+#endif /* !RES_DE_H */

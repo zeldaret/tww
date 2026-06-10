@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_hr.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_hr.h"
+#include "res/Object/Hr.h"
 #include "d/d_snap.h"
 #include "d/d_kankyo_wether.h"
 #include "d/actor/d_a_player_main.h"
@@ -249,7 +247,7 @@ static s16 daNpc_hr_XyCheckCB(void* i_this, int i_itemBtn) {
 
 /* 00000838-0000085C       .text XyCheckCB__10daNpc_Hr_cFi */
 s16 daNpc_Hr_c::XyCheckCB(int i_itemBtn) {
-    return dComIfGp_getSelectItem(i_itemBtn) == dItem_WIND_WAKER_e ? TRUE : FALSE;
+    return dComIfGp_getSelectItem(i_itemBtn) == dItemNo_WIND_WAKER_e ? TRUE : FALSE;
 }
 
 /* 0000085C-000008AC       .text daNpc_hr_XyEventCB__FPvi */
@@ -463,7 +461,7 @@ BOOL daNpc_Hr_c::demoProcTact0() {
             if (dComIfGp_checkMesgCancelButton()) {
                 setFlag(HR_FLAG_00000200);
             } else {
-                execItemGet(TACT_SONG1);
+                execItemGet(dItemNo_WINDS_REQUIEM_e);
             }
             dComIfGp_evmng_cutEnd(mStaffIdx);
             clrFlag(HR_FLAG_00000002);
@@ -933,25 +931,25 @@ bool daNpc_Hr_c::demoProc() {
 }
 
 static const int l_bck_ix_tbl[] = {
-    HR_BCK_H_WAIT01,
-    HR_BCK_R_WAIT01,
-    HR_BCK_R_WAIT02,
-    HR_BCK_LOOK,
-    HR_BCK_TALK01,
-    HR_BCK_TALK01,
-    HR_BCK_TALK01,
-    HR_BCK_TALK02,
-    HR_BCK_TALK02,
-    HR_BCK_TALK03,
-    HR_BCK_TALK03,
-    HR_BCK_DAMAGE,
-    HR_BCK_TALK03,
+    dRes_INDEX_HR_BCK_H_WAIT01_e,
+    dRes_INDEX_HR_BCK_R_WAIT01_e,
+    dRes_INDEX_HR_BCK_R_WAIT02_e,
+    dRes_INDEX_HR_BCK_LOOK_e,
+    dRes_INDEX_HR_BCK_TALK01_e,
+    dRes_INDEX_HR_BCK_TALK01_e,
+    dRes_INDEX_HR_BCK_TALK01_e,
+    dRes_INDEX_HR_BCK_TALK02_e,
+    dRes_INDEX_HR_BCK_TALK02_e,
+    dRes_INDEX_HR_BCK_TALK03_e,
+    dRes_INDEX_HR_BCK_TALK03_e,
+    dRes_INDEX_HR_BCK_DAMAGE_e,
+    dRes_INDEX_HR_BCK_TALK03_e,
 };
 
 static const int l_btp_ix_tbl[] = {
-    HR_BTP_MABA_H,
-    HR_BTP_MABA_R01,
-    HR_BTP_MABA_R02,
+    dRes_INDEX_HR_BTP_MABA_H_e,
+    dRes_INDEX_HR_BTP_MABA_R01_e,
+    dRes_INDEX_HR_BTP_MABA_R02_e,
 };
 
 /* 0000232C-00002550       .text nodeCallBack_Hr__FP7J3DNodei */
@@ -1965,7 +1963,7 @@ BOOL daNpc_Hr_c::_draw() {
     mBtpAnm.entry(modelData, mBlinkFrame);
 
     if(getShapeType() == 1) {
-        J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Hr", HR_BMT_R_BODY);
+        J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Hr", dRes_INDEX_HR_BMT_R_BODY_e);
         modelData->setMaterialTable(bmt, J3DMatCopyFlag_Texture);
         mpHrMorf->entryDL(bmt);
     } else {
@@ -2088,7 +2086,7 @@ cPhs_State daNpc_Hr_c::_create() {
     if (state == cPhs_COMPLEATE_e) {
     fopAcM_ct_Demo(this, daNpc_Hr_c);
         switch(fopAcM_GetName(this)) {
-            case PROC_NPC_HR:
+            case fpcNm_NPC_HR_e:
                 switch (getShapeType()) {
                     case 1:
                         mType = 1;
@@ -2125,27 +2123,27 @@ daNpc_Hr_c::daNpc_Hr_c() {}
 /* 000057E4-00005CE8       .text CreateHeap__10daNpc_Hr_cFv */
 BOOL daNpc_Hr_c::CreateHeap() {
     static int brow_bdl_table[] = {
-        HR_BDL_H_BROW,
-        HR_BDL_R_BROW
+        dRes_INDEX_HR_BDL_H_BROW_e,
+        dRes_INDEX_HR_BDL_R_BROW_e
     };
 
     static int ant_bdl_table[] = {
-        HR_BDL_H_ANT,
-        HR_BDL_R_ANT
+        dRes_INDEX_HR_BDL_H_ANT_e,
+        dRes_INDEX_HR_BDL_R_ANT_e
     };
 
     static u32 ant_bck_table[] = {
-        HR_BCK_H_ANT,
-        HR_BCK_R_ANT
+        dRes_INDEX_HR_BCK_H_ANT_e,
+        dRes_INDEX_HR_BCK_R_ANT_e
     };
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hr", HR_BDL_HR);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hr", dRes_INDEX_HR_BDL_HR_e);
     JUT_ASSERT(DEMO_SELECT(3341, 3392), modelData);
 
     mpHrMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Hr", HR_BCK_H_WAIT01),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Hr", dRes_INDEX_HR_BCK_H_WAIT01_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x80000,
@@ -2256,18 +2254,18 @@ static actor_method_class l_daNpc_Hr_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_HR = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_HR,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_HR_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Hr_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_HR,
+    /* Draw Prio    */ fpcDwPi_NPC_HR_e,
     /* Actor SubMtd */ &l_daNpc_Hr_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_12_e,
+    /* Cull Type    */ fopAc_CULLBOX_12_e,
 };

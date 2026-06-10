@@ -1,0 +1,22 @@
+#ifndef RES_KANAT_H
+#define RES_KANAT_H
+
+enum dRes_INDEX_KANAT {
+    /* BDL  */
+    dRes_INDEX_KANAT_BDL_KANAT_e=0x4,
+    /* DZB  */
+    dRes_INDEX_KANAT_DZB_KANAT_e=0x7,
+};
+
+enum dRes_ID_KANAT {
+    /* BDL  */
+    dRes_ID_KANAT_BDL_KANAT_e=0x4,
+    /* DZB  */
+    dRes_ID_KANAT_DZB_KANAT_e=0x7,
+};
+
+enum KANAT_JNT {
+    KANAT_JNT_KANAT_e=0x0,
+};
+
+#endif /* !RES_KANAT_H */

@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_kamome.h"
-#include "d/res/res_kamome.h"
+#include "res/Object/Kamome.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_player_main.h"
@@ -123,7 +121,7 @@ static s16 daNpc_kam_XyCheckCB(void* i_this, int i_itemBtn) {
 
 /* 00000260-000002A4       .text XyCheckCB__11daNpc_kam_cFi */
 s16 daNpc_kam_c::XyCheckCB(int i_itemBtn) {
-    if (dComIfGp_getSelectItem(i_itemBtn) == dItem_HYOI_PEAR_e) {
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_HYOI_PEAR_e) {
         return callDemoStartCheck();
     } else {
         return FALSE;
@@ -276,13 +274,13 @@ static int headNodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000CD0-00000EB8       .text createHeap__11daNpc_kam_cFv */
 BOOL daNpc_kam_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kamome", KAMOME_BDL_KA_HYOI);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BDL_KA_HYOI_e);
     JUT_ASSERT(DEMO_SELECT(762, 763), modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Kamome", KAMOME_BCK_KA_WAIT1),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BCK_KA_WAIT1_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
@@ -1185,9 +1183,9 @@ struct anmTbl_c {
 /* 000039E8-00003B14       .text setAnm__11daNpc_kam_cFi */
 void daNpc_kam_c::setAnm(int anmIdx) {
     static anmTbl_c l_anmTbl[] = {
-        {KAMOME_BCK_KA_WAIT1, KAMOME_BAS_KA_WAIT1},
-        {KAMOME_BCK_KA_WAIT2, KAMOME_BAS_KA_WAIT2},
-        {KAMOME_BCK_KA_SING1, -1},
+        {dRes_INDEX_KAMOME_BCK_KA_WAIT1_e, dRes_INDEX_KAMOME_BAS_KA_WAIT1_e},
+        {dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e},
+        {dRes_INDEX_KAMOME_BCK_KA_SING1_e, -1},
     };
     static anmPrm_c l_anmPrm[] = {
         {
@@ -1492,18 +1490,18 @@ static actor_method_class l_daNpc_kam_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_KAM = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_KAM,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_KAM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_kam_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_KAM,
+    /* Draw Prio    */ fpcDwPi_NPC_KAM_e,
     /* Actor SubMtd */ &l_daNpc_kam_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_2_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_2_e,
 };

@@ -1,0 +1,44 @@
+#ifndef RES_HJUMP_H
+#define RES_HJUMP_H
+
+enum dRes_INDEX_HJUMP {
+    /* BDL  */
+    dRes_INDEX_HJUMP_BDL_HBOX1_e=0x4,
+    dRes_INDEX_HJUMP_BDL_HJUMP1_e=0x5,
+    dRes_INDEX_HJUMP_BDL_HJUMP2_e=0x6,
+    /* DZB  */
+    dRes_INDEX_HJUMP_DZB_HBOX1_e=0x9,
+    dRes_INDEX_HJUMP_DZB_HJUMP1A_e=0xA,
+    dRes_INDEX_HJUMP_DZB_HJUMP1B_e=0xB,
+    dRes_INDEX_HJUMP_DZB_HJUMP2_e=0xC,
+};
+
+enum dRes_ID_HJUMP {
+    /* BDL  */
+    dRes_ID_HJUMP_BDL_HBOX1_e=0x4,
+    dRes_ID_HJUMP_BDL_HJUMP1_e=0x5,
+    dRes_ID_HJUMP_BDL_HJUMP2_e=0x6,
+    /* DZB  */
+    dRes_ID_HJUMP_DZB_HBOX1_e=0x9,
+    dRes_ID_HJUMP_DZB_HJUMP1A_e=0xA,
+    dRes_ID_HJUMP_DZB_HJUMP1B_e=0xB,
+    dRes_ID_HJUMP_DZB_HJUMP2_e=0xC,
+};
+
+enum HBOX1_JNT {
+    HBOX1_JNT_PCUBE4_e=0x0,
+};
+
+enum HJUMP1_JNT {
+    HJUMP1_JNT_JOINT5_e=0x0,
+    HJUMP1_JNT_JOINT6_e=0x1,
+    HJUMP1_JNT_JOINT7_e=0x2,
+};
+
+enum HJUMP2_JNT {
+    HJUMP2_JNT_JOINT1_e=0x0,
+    HJUMP2_JNT_JOINT2_e=0x1,
+    HJUMP2_JNT_JOINT3_e=0x2,
+};
+
+#endif /* !RES_HJUMP_H */

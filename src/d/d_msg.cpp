@@ -15,8 +15,6 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_msg_mng.h"
 #include "d/actor/d_a_npc_bs1.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "dolphin/types.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_lib.h"
@@ -150,10 +148,11 @@ void dDlst_2DMSG_c::outFontDraw() {
         fopMsgM_msgDataProc_c* tmp = &pdVar4->mMsgDataProc;
         iVar7 = tmp->field_0x1A4[i];
         uVar5 = tmp->field_0x1E0[i];
-        if ((((cVar2 != 0xFF) && (cVar2 != 0x14)) && (cVar2 != 0x15)) && (cVar2 != 0x16)) {
+        if (cVar2 != 0xFF && cVar2 != 0x14 && cVar2 != 0x15 && cVar2 != 0x16) {
             pJVar3 = (J2DScreen*)pdVar4->m0544[0].pane;
             local_38 = tmp->field_0x168[i];
             dVar1 = local_38;
+            int r5 = dVar1 + pJVar3->mBounds.i.x;
             if (pdVar4->mMesgEntry.mTextboxType == 5) {
                 local_30 = g_msgHIO.field_0x5e * iVar7;
                 local_38 = pdVar4->m1104 * (2 - pdVar4->m1108);
@@ -179,7 +178,7 @@ void dDlst_2DMSG_c::outFontDraw() {
                 }
                 bVar6 = pdVar4->m0544[0].mNowAlpha;
             }
-            fopMsgM_outFontDraw(button_icon[i], button_kage[i], (int)(dVar1 + pJVar3->mBounds.i.x), iVar7, uVar5, &buttonTimer[i], bVar6, cVar2);
+            fopMsgM_outFontDraw(button_icon[i], button_kage[i], r5, iVar7, uVar5, &buttonTimer[i], bVar6, cVar2);
         }
     }
 }
@@ -1395,7 +1394,7 @@ void dMsg_arrowMove(sub_msg_class* i_Msg) {
         }
         (i_Msg->mPane_Arrow).mSize.x = (i_Msg->mPane_Arrow).mSizeOrig.x * fVar1;
         (i_Msg->mPane_Arrow).mSize.y = (i_Msg->mPane_Arrow).mSizeOrig.y * fVar2;
-        (i_Msg->mPane_Arrow).mPosCenter.y = (f32)((int)g_msgHIO.field_0x66) + ((f32)(i_Msg->m1114) - (i_Msg->mPane_Arrow).mSize.y * 0.5f);
+        (i_Msg->mPane_Arrow).mPosCenter.y = (f32)((int)g_msgHIO.field_0x66) + ((f32)(i_Msg->m1114) - (i_Msg->mPane_Arrow).mSize.y / 2.0f);
         fopMsgM_cposMove(&i_Msg->mPane_Arrow);
     }
 }
@@ -1415,31 +1414,30 @@ void dMsg_dotMove(sub_msg_class* i_Msg) {
         }
     } else {
         iVar4 = i_Msg->m1100;
-        if (iVar4 >= 0x3C) {
+        if (iVar4 >= 60) {
             i_Msg->m10C0 = i_Msg->m10BC;
             i_Msg->m10C8 = i_Msg->m10C4;
             fopMsgM_setInitAlpha(&i_Msg->m050C);
             i_Msg->m1100 = 0;
+        } else if (iVar4 > 30) {
+            iVar4 = 60 - iVar4;
+            dVar5 = fopMsgM_valueIncrease(30, iVar4, 0);
+            i_Msg->m10C0.r = (u8)(int)((f32)(i_Msg->m10BC.r) + (f32)((150.0f - (f32)(i_Msg->m10BC.r)) * dVar5));
+            i_Msg->m10C0.g = (u8)(int)((f32)(i_Msg->m10BC.g) + (f32)((150.0f - (f32)(i_Msg->m10BC.g)) * dVar5));
+            i_Msg->m10C0.b = (u8)(int)((f32)(i_Msg->m10BC.b) + (f32)((150.0f - (f32)(i_Msg->m10BC.b)) * dVar5));
+            i_Msg->m10C8.r = (u8)(int)((f32)(i_Msg->m10C4.r) + (f32)((255.0f - (f32)(i_Msg->m10C4.r)) * dVar5));
+            i_Msg->m10C8.g = (u8)(int)((f32)(i_Msg->m10C4.g) + (f32)((255.0f - (f32)(i_Msg->m10C4.g)) * dVar5));
+            i_Msg->m10C8.b = (u8)(int)((f32)(i_Msg->m10C4.b) + (f32)((220.0f - (f32)(i_Msg->m10C4.b)) * dVar5));
+            i_Msg->m050C.mNowAlpha = (u8)(int)((f32)(i_Msg->m050C.mInitAlpha) + (f32)((255.0f - (f32)(i_Msg->m050C.mInitAlpha)) * dVar5));
         } else {
-            if (iVar4 > 0x1E) {
-                dVar5 = fopMsgM_valueIncrease(0x1e, 0x3c - iVar4, 0);
-                i_Msg->m10C0.r = (u8)(int)((f32)(i_Msg->m10BC.r) + (f32)((150.0f - (f32)(i_Msg->m10BC.r)) * dVar5));
-                i_Msg->m10C0.g = (u8)(int)((f32)(i_Msg->m10BC.g) + (f32)((150.0f - (f32)(i_Msg->m10BC.g)) * dVar5));
-                i_Msg->m10C0.b = (u8)(int)((f32)(i_Msg->m10BC.b) + (f32)((150.0f - (f32)(i_Msg->m10BC.b)) * dVar5));
-                i_Msg->m10C8.r = (u8)(int)((f32)(i_Msg->m10C4.r) + (f32)((255.0f - (f32)(i_Msg->m10C4.r)) * dVar5));
-                i_Msg->m10C8.g = (u8)(int)((f32)(i_Msg->m10C4.g) + (f32)((255.0f - (f32)(i_Msg->m10C4.g)) * dVar5));
-                i_Msg->m10C8.b = (u8)(int)((f32)(i_Msg->m10C4.b) + (f32)((220.0f - (f32)(i_Msg->m10C4.b)) * dVar5));
-                i_Msg->m050C.mNowAlpha = (u8)(int)((f32)(i_Msg->m050C.mInitAlpha) + (f32)((255.0f - (f32)(i_Msg->m050C.mInitAlpha)) * dVar5));
-            } else {
-                dVar5 = fopMsgM_valueIncrease(0x1e, iVar4, 0);
-                i_Msg->m10C0.r = (u8)(int)((f32)(i_Msg->m10BC.r) + (f32)((150.0f - (f32)(i_Msg->m10BC.r)) * dVar5));
-                i_Msg->m10C0.g = (u8)(int)((f32)(i_Msg->m10BC.g) + (f32)((150.0f - (f32)(i_Msg->m10BC.g)) * dVar5));
-                i_Msg->m10C0.b = (u8)(int)((f32)(i_Msg->m10BC.b) + (f32)((150.0f - (f32)(i_Msg->m10BC.b)) * dVar5));
-                i_Msg->m10C8.r = (u8)(int)((f32)(i_Msg->m10C4.r) + (f32)((255.0f - (f32)(i_Msg->m10C4.r)) * dVar5));
-                i_Msg->m10C8.g = (u8)(int)((f32)(i_Msg->m10C4.g) + (f32)((255.0f - (f32)(i_Msg->m10C4.g)) * dVar5));
-                i_Msg->m10C8.b = (u8)(int)((f32)(i_Msg->m10C4.b) + (f32)((220.0f - (f32)(i_Msg->m10C4.b)) * dVar5));
-                i_Msg->m050C.mNowAlpha = (u8)(int)((f32)(i_Msg->m050C.mInitAlpha) + (f32)((255.0f - (f32)(i_Msg->m050C.mInitAlpha)) * dVar5));
-            }
+            dVar5 = fopMsgM_valueIncrease(30, iVar4, 0);
+            i_Msg->m10C0.r = (u8)(int)((f32)(i_Msg->m10BC.r) + (f32)((150.0f - (f32)(i_Msg->m10BC.r)) * dVar5));
+            i_Msg->m10C0.g = (u8)(int)((f32)(i_Msg->m10BC.g) + (f32)((150.0f - (f32)(i_Msg->m10BC.g)) * dVar5));
+            i_Msg->m10C0.b = (u8)(int)((f32)(i_Msg->m10BC.b) + (f32)((150.0f - (f32)(i_Msg->m10BC.b)) * dVar5));
+            i_Msg->m10C8.r = (u8)(int)((f32)(i_Msg->m10C4.r) + (f32)((255.0f - (f32)(i_Msg->m10C4.r)) * dVar5));
+            i_Msg->m10C8.g = (u8)(int)((f32)(i_Msg->m10C4.g) + (f32)((255.0f - (f32)(i_Msg->m10C4.g)) * dVar5));
+            i_Msg->m10C8.b = (u8)(int)((f32)(i_Msg->m10C4.b) + (f32)((220.0f - (f32)(i_Msg->m10C4.b)) * dVar5));
+            i_Msg->m050C.mNowAlpha = (u8)(int)((f32)(i_Msg->m050C.mInitAlpha) + (f32)((255.0f - (f32)(i_Msg->m050C.mInitAlpha)) * dVar5));
         }
         ((J2DPicture*)i_Msg->m050C.pane)->setBlack(JUtility::TColor(i_Msg->m10C0));
         ((J2DPicture*)i_Msg->m050C.pane)->setWhite(JUtility::TColor(i_Msg->m10C8));
@@ -1452,14 +1450,14 @@ void dMsg_ringMove(sub_msg_class* i_Msg) {
     f32 dVar2;
 
     i_Msg->m0624[9].mUserArea++;
-    if (i_Msg->m0624[9].mUserArea >= 0x78) {
+    if (i_Msg->m0624[9].mUserArea >= 120) {
         i_Msg->m0624[9].mUserArea = 0;
     }
     iVar1 = (int)i_Msg->m0624[9].mUserArea;
-    if (iVar1 < 0x3c) {
-        dVar2 = fopMsgM_valueIncrease(0x3c, iVar1, 0);
+    if (iVar1 < 60) {
+        dVar2 = fopMsgM_valueIncrease(60, iVar1, 0);
     } else {
-        dVar2 = fopMsgM_valueIncrease(0x3c, 0x78 - iVar1, 0);
+        dVar2 = fopMsgM_valueIncrease(60, 120 - iVar1, 0);
     }
     fopMsgM_setNowAlpha(i_Msg->m0624 + 9, (dVar2 * 0.25f) + 0.25f);
 }
@@ -1498,7 +1496,7 @@ void dMsg_cornerMove(sub_msg_class* param_1) {
     if (param_1->m049C.mUserArea >= 240) {
         param_1->m049C.mUserArea = 0;
     }
-    f32 tmp = fopMsgM_valueIncrease(0x3c, param_1->m049C.mUserArea % 0x3c, 2);
+    f32 tmp = fopMsgM_valueIncrease(60, param_1->m049C.mUserArea % 60, 2);
     GXColor local_68[4];
     if (param_1->mMesgEntry.mTextboxType == 1) {
         for (int i = 0; i < 4; i++) {
@@ -1523,17 +1521,17 @@ void dMsg_cornerMove(sub_msg_class* param_1) {
             local_68[i].a = 255;
         }
     }
-    if (param_1->m049C.mUserArea < 0x3c) {
+    if (param_1->m049C.mUserArea < 60) {
         ((J2DPicture*)param_1->m049C.pane)
             ->setCornerColor(
                 *(JUtility::TColor*)&local_68[0], *(JUtility::TColor*)&local_68[1], *(JUtility::TColor*)&local_68[3], *(JUtility::TColor*)&local_68[2]
             );
-    } else if (param_1->m049C.mUserArea < 0x78) {
+    } else if (param_1->m049C.mUserArea < 120) {
         ((J2DPicture*)param_1->m049C.pane)
             ->setCornerColor(
                 *(JUtility::TColor*)&local_68[1], *(JUtility::TColor*)&local_68[2], *(JUtility::TColor*)&local_68[0], *(JUtility::TColor*)&local_68[3]
             );
-    } else if (param_1->m049C.mUserArea < 0xB4) {
+    } else if (param_1->m049C.mUserArea < 180) {
         ((J2DPicture*)param_1->m049C.pane)
             ->setCornerColor(
                 *(JUtility::TColor*)&local_68[2], *(JUtility::TColor*)&local_68[3], *(JUtility::TColor*)&local_68[1], *(JUtility::TColor*)&local_68[0]
@@ -1624,7 +1622,7 @@ void dMsg_tactInput(sub_msg_class* i_Msg) {
             dMsg_tactGuideShow(i_Msg, mBeatNum[melody_no]);
         }
         if (daPy_getPlayerActorClass()->checkTactInput()) {
-            sVar1 = daPy_getPlayerLinkActorClass()->m34D6;
+            sVar1 = daPy_getPlayerLinkActorClass()->getTactLeftHandPos();
             mDoAud_tact_getMelodyPattern(melody_no, i_Msg->m1100, &local_38);
             i_Msg->m1100++;
             if ((sVar1 == local_38) && (mBeatNum[melody_no] == mDoAud_tact_getBeat())) {
@@ -1693,7 +1691,6 @@ void dMsg_subTextSizeSet(sub_msg_class* i_Msg) {
     f32 fVar5;
     int uVar6;
     int iVar7;
-    f32 dVar10;
     f32 dVar11;
     f32 local_78;
     f32 local_68;
@@ -1706,10 +1703,9 @@ void dMsg_subTextSizeSet(sub_msg_class* i_Msg) {
     }
     fVar1 = i_Msg->m049C.mPosCenter.y;
     if (fVar1 >= 240.0f) {
-        local_78 = (int)g_msgHIO.field_0x7c;
-        fVar1 = (local_78) + (fVar1 - i_Msg->m049C.mSize.y * 0.5f);
+        fVar1 = (int)g_msgHIO.field_0x7c + (fVar1 - i_Msg->m049C.mSize.y / 2.0f);
     } else {
-        fVar1 = (fVar1 + i_Msg->m049C.mSize.y * 0.5f) - ((int)g_msgHIO.field_0x7c);
+        fVar1 = (fVar1 + i_Msg->m049C.mSize.y / 2.0f) - ((int)g_msgHIO.field_0x7c);
     }
     local_68 = (int)g_msgHIO.field_0x78;
     fVar3 = (local_68) + ((g_msgHIO.field_0x7e) * 2.0f + (i_Msg->mMsgDataProc.field_0x21C) - i_Msg->m011C[0].mSizeOrig.x);
@@ -1726,7 +1722,7 @@ void dMsg_subTextSizeSet(sub_msg_class* i_Msg) {
     i_Msg->m026C[6].mSize.y = i_Msg->m026C[6].mSizeOrig.y + fVar3;
     i_Msg->m026C[7].mSize.y = i_Msg->m026C[7].mSizeOrig.y + fVar3;
     i_Msg->m026C[9].mSize.y = i_Msg->m026C[9].mSizeOrig.y + fVar3;
-    fVar3 = (i_Msg->m026C[9].mSizeOrig.x - i_Msg->m026C[9].mSize.x) * 0.5f;
+    fVar3 = (i_Msg->m026C[9].mSizeOrig.x - i_Msg->m026C[9].mSize.x) / 2.0f;
     i_Msg->m026C[0].mPosCenter.x = i_Msg->m026C[0].mPosCenterOrig.x + fVar3;
     i_Msg->m026C[1].mPosCenter.x = i_Msg->m026C[1].mPosCenterOrig.x + fVar3;
     i_Msg->m026C[2].mPosCenter.x = i_Msg->m026C[2].mPosCenterOrig.x - fVar3;
@@ -1734,12 +1730,12 @@ void dMsg_subTextSizeSet(sub_msg_class* i_Msg) {
     i_Msg->m026C[4].mPosCenter.x = i_Msg->m026C[4].mPosCenterOrig.x - fVar3;
     i_Msg->m026C[6].mPosCenter.x = i_Msg->m026C[6].mPosCenterOrig.x + fVar3;
     i_Msg->m026C[7].mPosCenter.x = i_Msg->m026C[7].mPosCenterOrig.x - fVar3;
-    fVar3 = (i_Msg->m011C[0].mSizeOrig.x - i_Msg->m011C[0].mSize.x) * 0.5f;
+    fVar3 = (i_Msg->m011C[0].mSizeOrig.x - i_Msg->m011C[0].mSize.x) / 2.0f;
     for (s32 i = 0; i < 4; i++) {
         i_Msg->m011C[i].mPosCenter.x = ((g_msgHIO.field_0x7e) + i_Msg->m011C[i].mPosCenterOrig.x) + fVar3;
     }
-    fVar5 = (i_Msg->m026C[9].mSizeOrig.y - i_Msg->m026C[9].mSize.y) * 0.5f;
-    fVar2 = i_Msg->m026C[0].mPosCenterOrig.y;
+    fVar5 = (i_Msg->m026C[9].mSizeOrig.y - i_Msg->m026C[9].mSize.y) / 2.0f;
+    fVar2 = fVar1 - i_Msg->m026C[0].mPosCenterOrig.y;
     i_Msg->m026C[0].mPosCenter.y = fVar1;
     i_Msg->m026C[1].mPosCenter.y = i_Msg->m026C[1].mPosCenterOrig.y - fVar5;
     i_Msg->m026C[2].mPosCenter.y = i_Msg->m026C[2].mPosCenterOrig.y - fVar5;
@@ -1748,12 +1744,14 @@ void dMsg_subTextSizeSet(sub_msg_class* i_Msg) {
     i_Msg->m026C[5].mPosCenter.y = i_Msg->m026C[5].mPosCenterOrig.y - fVar5;
     i_Msg->m026C[8].mPosCenter.y = i_Msg->m026C[8].mPosCenterOrig.y + fVar5;
     for (s32 i = 0; i < 4; i++) {
-        i_Msg->m011C[i].mPosCenter.y = i_Msg->m011C[i].mPosCenterOrig.y + (fVar1 - fVar2);
+        i_Msg->m011C[i].mPosCenter.y = i_Msg->m011C[i].mPosCenterOrig.y + fVar2;
     }
-    i_Msg->m01FC.mPosCenterOrig.x = fVar3 + i_Msg->m01FC.mPosTopLeftOrig.x + i_Msg->m01FC.mSizeOrig.x * 0.5f;
-    i_Msg->m0234.mPosCenterOrig.x = (g_msgHIO.field_0x7e) * 2.0f + i_Msg->m01FC.mPosCenterOrig.x + i_Msg->m01FC.mSizeOrig.x + (i_Msg->mMsgDataProc.field_0x21C);
-    i_Msg->m01FC.mPosCenterOrig.y = fVar5 + i_Msg->m01FC.mPosTopLeftOrig.y + i_Msg->m01FC.mSizeOrig.y * 0.5f;
-    i_Msg->m0234.mPosCenterOrig.y = fVar5 + i_Msg->m0234.mPosTopLeftOrig.y + i_Msg->m0234.mSizeOrig.y * 0.5f;
+    i_Msg->m01FC.mPosCenterOrig.x = i_Msg->m01FC.mPosTopLeftOrig.x + i_Msg->m01FC.mSizeOrig.x / 2.0f + fVar3;
+    f32 f4 = g_msgHIO.field_0x7e * 2.0f;
+    f32 f3 = i_Msg->m01FC.mPosCenterOrig.x + i_Msg->m01FC.mSizeOrig.x;
+    i_Msg->m0234.mPosCenterOrig.x = f3 + i_Msg->mMsgDataProc.field_0x21C + f4;
+    i_Msg->m01FC.mPosCenterOrig.y = i_Msg->m01FC.mPosTopLeftOrig.y + i_Msg->m01FC.mSizeOrig.y / 2.0f + fVar5;
+    i_Msg->m0234.mPosCenterOrig.y = i_Msg->m0234.mPosTopLeftOrig.y + i_Msg->m0234.mSizeOrig.y / 2.0f + fVar5;
     for (s32 i = 0; i < 4; i++) {
         fopMsgM_cposMove(&i_Msg->m011C[i]);
     }
@@ -1766,15 +1764,14 @@ void dMsg_subTextSizeSet(sub_msg_class* i_Msg) {
         fVar1 = 3.0f;
     }
     dVar11 = fVar1;
-    fVar3 = i_Msg->m026C[0].mSize.y * 0.5f;
-    i_Msg->m026C[0].pane->rotate(i_Msg->m026C[0].mSize.x * 0.5f, fVar3, ROTATE_Z, fVar1);
-    dVar10 = 0.5f;
+    fVar3 = i_Msg->m026C[0].mSize.y / 2.0f;
+    i_Msg->m026C[0].pane->rotate(i_Msg->m026C[0].mSize.x / 2.0f, fVar3, ROTATE_Z, fVar1);
     for (s32 i = 0; i < 4; i++) {
-        fVar1 = i_Msg->m011C[i].mSize.y * dVar10;
+        fVar1 = i_Msg->m011C[i].mSize.y / 2.0f;
         fVar3 = fVar1 + i_Msg->m026C[0].mPosCenter.y;
         fVar2 = fVar3 - i_Msg->m011C[i].mPosCenter.y;
         i_Msg->m011C[i].pane->rotate(
-            ((i_Msg->m011C[i].mSize.x * dVar10) + i_Msg->m026C[0].mPosCenter.x) - i_Msg->m011C[i].mPosCenter.x, fVar2, ROTATE_Z, dVar11
+            ((i_Msg->m011C[i].mSize.x / 2.0f) + i_Msg->m026C[0].mPosCenter.x) - i_Msg->m011C[i].mPosCenter.x, fVar2, ROTATE_Z, dVar11
         );
     }
     fVar1 = i_Msg->m026C[9].mSize.x;
@@ -1782,7 +1779,7 @@ void dMsg_subTextSizeSet(sub_msg_class* i_Msg) {
     if ((uVar6) <= fVar1) {
         fVar1 = 1.0f;
     } else {
-        fVar1 = ((int)(fVar1 / (uVar6)) + 0.5f);
+        fVar1 = (int)((fVar1 / uVar6) + 0.5f);
     }
     fVar3 = i_Msg->m026C[9].mSize.y;
     uVar6 = (int)g_msgHIO.field_0x74;
@@ -1790,7 +1787,7 @@ void dMsg_subTextSizeSet(sub_msg_class* i_Msg) {
     if ((local_78) <= fVar3) {
         fVar3 = 1.0f;
     } else {
-        fVar3 = ((int)(fVar3 / (uVar6)) + 0.5f);
+        fVar3 = (int)((fVar3 / uVar6) + 0.5f);
     }
     ((MyPicture*)i_Msg->m026C[5].pane)->m134 = 1;
     ((MyPicture*)i_Msg->m026C[5].pane)->m124 = 0.0f;
@@ -1958,7 +1955,9 @@ s32 dMsg_stopProc(sub_msg_class* i_Msg) {
         i_Msg->mMsgDataProc.field_0x158 = uVar2;
         if (uVar2 == 0) {
             i_Msg->mMsgDataProc.field_0x297 = 0;
+#if VERSION > VERSION_DEMO
             i_Msg->mMsgDataProc.field_0x296 = 0;
+#endif
             i_Msg->mStatus = fopMsgStts_MSG_TYPING_e;
             dMsg_value_init(i_Msg);
             dMsg_yose_select(i_Msg);
@@ -1998,12 +1997,17 @@ s32 dMsg_stopProc(sub_msg_class* i_Msg) {
                 mDoAud_seStart(JA_SE_TALK_NEXT);
             }
             if (((i_Msg->mMesgEntry.mDrawType == 0) && (CPad_CHECK_TRIG_B(0))) && (!dComIfGp_checkMesgBgm())) {
-                if (i_Msg->mMsgDataProc.field_0x296 == 0) {
+#if VERSION > VERSION_DEMO
+                if (i_Msg->mMsgDataProc.field_0x296 == 0)
+#endif
+                {
                     i_Msg->mMsgDataProc.field_0x299 = 1;
                 }
                 if (((i_Msg->mMsgDataProc.field_0x297 == 0) && (i_Msg->mMsgDataProc.field_0x298 == 0)) && ((s32)i_Msg->mMsgDataProc.field_0x158 != 0)) {
                     i_Msg->mMsgDataProc.field_0x158 = 0;
+#if VERSION > VERSION_DEMO
                     i_Msg->mMsgDataProc.field_0x296 = 0;
+#endif
                 }
             }
             i_Msg->m116A++;
@@ -2458,12 +2462,17 @@ s32 dMsg_continueProc(sub_msg_class* i_Msg) {
             i_Msg->m10DC = (int)i_Msg->m049C.mPosCenter.y;
         }
         if (((i_Msg->mMesgEntry.mDrawType == 0) && (CPad_CHECK_TRIG_B(0))) && (!dComIfGp_checkMesgBgm())) {
-            if (i_Msg->mMsgDataProc.field_0x296 == 0) {
+#if VERSION > VERSION_DEMO
+            if (i_Msg->mMsgDataProc.field_0x296 == 0)
+#endif
+            {
                 i_Msg->mMsgDataProc.field_0x299 = 1;
             }
             if (((i_Msg->mMsgDataProc.field_0x297 == 0) && (i_Msg->mMsgDataProc.field_0x298 == 0)) && ((s32)i_Msg->mMsgDataProc.field_0x158 != 0)) {
                 i_Msg->mMsgDataProc.field_0x158 = 0;
+#if VERSION > VERSION_DEMO
                 i_Msg->mMsgDataProc.field_0x296 = 0;
+#endif
             }
         }
         i_Msg->mStatus = fopMsgStts_MSG_TYPING_e;
@@ -2486,7 +2495,9 @@ s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
         i_Msg->mMsgDataProc.field_0x158 = uVar3;
         if ((uVar3 == 0) || (fopMsgM_checkMessageSend())) {
             i_Msg->mMsgDataProc.field_0x297 = 0;
+#if VERSION > VERSION_DEMO
             i_Msg->mMsgDataProc.field_0x296 = 0;
+#endif
             i_Msg->mStatus = fopMsgStts_BOX_CLOSING_e;
             i_Msg->m1100 = 0;
             i_Msg->mMsgDataProc.field_0x158 = 0;
@@ -2549,7 +2560,7 @@ s32 dMsg_finishProc(sub_msg_class* i_Msg) {
         i_Msg->m116A++;
         dComIfGp_setMesgSendButton(i_Msg->m116A);
         if (i_Msg->mMsgNo == 0x1072) {
-            mDoAud_bgmStop(0x3c);
+            mDoAud_bgmStop(60);
         }
     } else {
         if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
@@ -2738,7 +2749,7 @@ s32 dMsg_initProc(sub_msg_class* i_Msg) {
 s32 dMsg_tactProc(sub_msg_class* i_Msg) {
     if (fopMsgM_checkMessageSend()) {
         i_Msg->mMsgDataProc.field_0x297 = 1;
-        i_Msg->mMsgDataProc.field_0x158 = 0x1e;
+        i_Msg->mMsgDataProc.field_0x158 = 30;
         i_Msg->mStatus = fopMsgStts_CLOSE_WAIT_e;
     }
     return TRUE;
@@ -2764,10 +2775,17 @@ s32 dMsg_outnowProc(sub_msg_class* i_Msg) {
             i_Msg->mMsgDataProc.field_0x299 = 1;
             if ((i_Msg->mMsgDataProc.field_0x297 == 0 && (i_Msg->mMsgDataProc.field_0x298 == 0)) && ((s32)i_Msg->mMsgDataProc.field_0x158 != 0)) {
                 i_Msg->mMsgDataProc.field_0x158 = 0;
+#if VERSION > VERSION_DEMO
                 i_Msg->mMsgDataProc.field_0x296 = 0;
+#endif
             }
         }
-    } else if ((i_Msg->mMesgEntry.mDrawType == 1) && (i_Msg->mMsgDataProc.field_0x296 == 0)) {
+    } else if (
+        i_Msg->mMesgEntry.mDrawType == 1
+#if VERSION > VERSION_DEMO
+        && i_Msg->mMsgDataProc.field_0x296 == 0
+#endif
+    ) {
         i_Msg->mMsgDataProc.field_0x299 = 1;
     }
     if (((i_Msg->mMsgDataProc.field_0x297 == 0) && (i_Msg->mMsgDataProc.field_0x298 == 0)) && ((int)i_Msg->mMsgDataProc.field_0x158 != 0)) {
@@ -3156,15 +3174,15 @@ static msg_method_class l_dMsg_Method = {
 };
 
 msg_process_profile_definition g_profile_MSG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 12,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MSG,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MSG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sub_msg_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_MSG,
+    /* Draw Prio    */ fpcDwPi_MSG_e,
     /* Msg SubMtd   */ &l_dMsg_Method,
 };

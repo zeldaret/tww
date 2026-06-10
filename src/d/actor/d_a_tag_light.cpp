@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_light.h"
-#include "d/res/res_mspot.h"
+#include "res/Object/Mspot.h"
 #include "d/d_s_play.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_kankyo.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_com_inf_game.h"
@@ -96,11 +94,11 @@ bool Act_c::create_heap() {
     s16 sVar8;
 
     if (ratio < tmp) {
-        sVar2 = MSPOT_BDL_MSPOCN;
-        sVar8 = MSPOT_BTK_MSPOCN;
+        sVar2 = dRes_INDEX_MSPOT_BDL_MSPOCN_e;
+        sVar8 = dRes_INDEX_MSPOT_BTK_MSPOCN_e;
     } else {
-        sVar2 = MSPOT_BDL_MSPOT;
-        sVar8 = MSPOT_BTK_MSPOT;
+        sVar2 = dRes_INDEX_MSPOT_BDL_MSPOT_e;
+        sVar8 = dRes_INDEX_MSPOT_BTK_MSPOT_e;
     }
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, sVar2));
@@ -555,18 +553,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daTagLight
 
 actor_process_profile_definition g_profile_Tag_Light = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0009,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Tag_Light,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0009,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Light_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTagLight::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Tag_Light,
+    /* Draw Prio    */ fpcDwPi_Tag_Light_e,
     /* Actor SubMtd */ &daTagLight::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

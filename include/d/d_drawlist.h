@@ -99,6 +99,11 @@ public:
     void init(ResTIMG* pTimg, f32, f32, f32, f32, u8, u8, u8, f32, f32);
     virtual void draw();
 
+    f32 getScaleX() { return mScrollS; }
+    f32* getScaleX_p() { return &mScrollS; }
+    void setScaleX(f32 scale) { mScrollS = scale; }
+    void setScaleY(f32 scale) { mScrollT = scale; }
+
 public:
     /* 0x04 */ GXTexObj mTex;
     /* 0x24 */ f32 mX;
@@ -111,7 +116,7 @@ public:
     /* 0x40 */ u8 mMirrorS;
     /* 0x41 */ u8 mMirrorT;
     /* 0x42 */ u8 mAlpha;
-};
+};  // Size: 0x44
 
 class dDlst_2DM_c : public dDlst_base_c {
 public:

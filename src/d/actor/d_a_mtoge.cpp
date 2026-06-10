@@ -6,9 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mtoge.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_mtoge.h"
+#include "res/Object/Mtoge.h"
 #include "f_op/f_op_actor_mng.h"
 
 const char daMtoge_c::M_arcname[] = "Mtoge";
@@ -33,7 +31,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000000A4-000001E8       .text CreateHeap__9daMtoge_cFv */
 BOOL daMtoge_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, MTOGE_BMD_S_MTOGE));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTOGE_BMD_S_MTOGE_e));
     JUT_ASSERT(0x70, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203U);
@@ -47,7 +45,7 @@ BOOL daMtoge_c::CreateHeap() {
     if (!mpBgW)
         return FALSE;
 
-    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes(M_arcname, MTOGE_DZB_S_MTOGE);
+    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTOGE_DZB_S_MTOGE_e);
 
     if (!pData) {
         return FALSE;
@@ -241,18 +239,18 @@ static actor_method_class l_daMtoge_Method = {
 };
 
 actor_process_profile_definition g_profile_MTOGE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MTOGE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MTOGE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMtoge_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MTOGE,
+    /* Draw Prio    */ fpcDwPi_MTOGE_e,
     /* Actor SubMtd */ &l_daMtoge_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

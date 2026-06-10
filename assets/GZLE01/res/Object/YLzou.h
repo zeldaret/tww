@@ -1,0 +1,34 @@
+#ifndef RES_YLZOU_H
+#define RES_YLZOU_H
+
+enum dRes_INDEX_YLZOU {
+    /* BDL  */
+    dRes_INDEX_YLZOU_BDL_YLZOU_e=0x4,
+    dRes_INDEX_YLZOU_BDL_YLZOU2_e=0x5,
+    /* DZB  */
+    dRes_INDEX_YLZOU_DZB_YLZOU_e=0x8,
+    dRes_INDEX_YLZOU_DZB_YLZOU2_e=0x9,
+};
+
+enum dRes_ID_YLZOU {
+    /* BDL  */
+    dRes_ID_YLZOU_BDL_YLZOU_e=0x4,
+    dRes_ID_YLZOU_BDL_YLZOU2_e=0x5,
+    /* DZB  */
+    dRes_ID_YLZOU_DZB_YLZOU_e=0x8,
+    dRes_ID_YLZOU_DZB_YLZOU2_e=0x9,
+};
+
+enum YLZOU_JNT {
+    YLZOU_JNT_YUUSYA_ZOU_e=0x0,
+    YLZOU_JNT_YUUSYA_LINK_e=0x1,
+    YLZOU_JNT_POLYSURFACE688_e=0x2,
+};
+
+enum YLZOU2_JNT {
+    YLZOU2_JNT_HAKAI_YUUSYAZOU_e=0x0,
+    YLZOU2_JNT_LOCATOR20_e=0x1,
+    YLZOU2_JNT_POLYSURFACE689_e=0x2,
+};
+
+#endif /* !RES_YLZOU_H */

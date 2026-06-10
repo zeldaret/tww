@@ -263,26 +263,49 @@ void dJle_Pb_c::_delete(JKRExpHeap*) {
 }
 
 /* 8022BB3C-8022BB7C       .text dPb_Draw__FP12sub_pb_class */
-static BOOL dPb_Draw(sub_pb_class*) {
+static BOOL dPb_Draw(sub_pb_class* i_this) {
     /* Nonmatching */
 }
 
 /* 8022BB7C-8022BC84       .text dPb_Execute__FP12sub_pb_class */
-static BOOL dPb_Execute(sub_pb_class*) {
+static BOOL dPb_Execute(sub_pb_class* i_this) {
     /* Nonmatching */
 }
 
 /* 8022BC84-8022BC8C       .text dPb_IsDelete__FP12sub_pb_class */
 static BOOL dPb_IsDelete(sub_pb_class*) {
     /* Nonmatching */
+    return TRUE;
 }
 
 /* 8022BC8C-8022BD8C       .text dPb_Delete__FP12sub_pb_class */
-static BOOL dPb_Delete(sub_pb_class*) {
+static BOOL dPb_Delete(sub_pb_class* i_this) {
     /* Nonmatching */
 }
 
 /* 8022BD8C-8022C03C       .text dPb_Create__FP9msg_class */
-static cPhs_State dPb_Create(msg_class*) {
+static cPhs_State dPb_Create(msg_class* i_this) {
     /* Nonmatching */
 }
+
+static msg_method_class l_dPb_Method = {
+    (process_method_func)dPb_Create,
+    (process_method_func)dPb_Delete,
+    (process_method_func)dPb_Execute,
+    (process_method_func)dPb_IsDelete,
+    (process_method_func)dPb_Draw,
+};
+
+msg_process_profile_definition g_profile_PB = {
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x000C,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_PB_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(sub_pb_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopMsg_Method,
+    /* Draw Prio    */ fpcDwPi_PB_e,
+    /* Msg SubMtd   */ &l_dPb_Method,
+};

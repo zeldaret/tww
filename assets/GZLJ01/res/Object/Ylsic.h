@@ -1,0 +1,22 @@
+#ifndef RES_YLSIC_H
+#define RES_YLSIC_H
+
+enum dRes_INDEX_YLSIC {
+    /* BDL  */
+    dRes_INDEX_YLSIC_BDL_YLSIC_e=0x4,
+    /* DZB  */
+    dRes_INDEX_YLSIC_DZB_YLSIC_e=0x7,
+};
+
+enum dRes_ID_YLSIC {
+    /* BDL  */
+    dRes_ID_YLSIC_BDL_YLSIC_e=0x4,
+    /* DZB  */
+    dRes_ID_YLSIC_DZB_YLSIC_e=0x7,
+};
+
+enum YLSIC_JNT {
+    YLSIC_JNT_YLSIC_e=0x0,
+};
+
+#endif /* !RES_YLSIC_H */

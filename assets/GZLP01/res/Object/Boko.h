@@ -1,0 +1,20 @@
+#ifndef RES_BOKO_H
+#define RES_BOKO_H
+
+enum dRes_INDEX_BOKO {
+    /* BDLC */
+    dRes_INDEX_BOKO_BDL_BOKO_e=0x3,
+};
+
+enum dRes_ID_BOKO {
+    /* BDLC */
+    dRes_ID_BOKO_BDL_BOKO_e=0x3,
+};
+
+enum BOKO_JNT {
+    BOKO_JNT_WORLD_ROOT_e=0x0,
+    BOKO_JNT_CL_BOKO_e=0x1,
+    BOKO_JNT_CL_BOKOPIECEA_e=0x2,
+};
+
+#endif /* !RES_BOKO_H */

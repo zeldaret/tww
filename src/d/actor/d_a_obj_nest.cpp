@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_nest.h"
-#include "d/res/res_mtorisu.h"
+#include "res/Object/MtoriSU.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_bg_w.h"
 namespace daObjNest{
     namespace{
@@ -53,7 +51,7 @@ const char daObjNest::Act_c::M_arcname[] = "MtoriSU";
 
 /* 00000078-0000012C       .text CreateHeap__Q29daObjNest5Act_cFv */
 BOOL daObjNest::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MTORISU_BDL_MTORISU);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTORISU_BDL_MTORISU_e);
     JUT_ASSERT(281, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000,0x11000022);
     return mpModel != NULL;
@@ -79,7 +77,7 @@ cPhs_State daObjNest::Act_c::Mthd_Create() {
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(
             M_arcname,
-            MTORISU_DZB_MTORISU,
+            dRes_INDEX_MTORISU_DZB_MTORISU_e,
             NULL,
             DEMO_SELECT(0x1820, 0xAA0)
         );
@@ -210,18 +208,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjNest
 
 actor_process_profile_definition g_profile_Obj_Nest = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Nest,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Nest_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjNest::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Nest,
+    /* Draw Prio    */ fpcDwPi_Obj_Nest_e,
     /* Actor SubMtd */ &daObjNest::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

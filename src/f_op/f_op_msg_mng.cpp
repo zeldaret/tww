@@ -16,7 +16,6 @@
 #include "f_pc/f_pc_layer_iter.h"
 #include "f_pc/f_pc_searcher.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_npc_bs1.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J2DGraph/J2DPicture.h"
@@ -40,7 +39,7 @@ struct mesg_info : JUTDataBlockHeader {
     /* 0x0A */ u16 mEntrySize;
     /* 0x0C */ u16 mGroupID;
     /* 0x10 */ u8 mColor;
-    /* 0x14 */ mesg_entry mEntries[];
+    /* 0x14 */ JMSMesgEntry_c mEntries[];
 };
 
 struct mesg_data : JUTDataBlockHeader {
@@ -57,73 +56,73 @@ static struct {
     u8 itemNo;
     const char* filename;
 } itemicon[] = {
-    /* 0x00 */ {dItem_TELESCOPE_e, "telescope.bti"},
-    /* 0x01 */ {NORMAL_SAIL, "sail_00.bti"},
-    /* 0x02 */ {dItem_WIND_WAKER_e, "baton.bti"},
-    /* 0x03 */ {dItem_GRAPPLING_HOOK_e, "rope.bti"},
-    /* 0x04 */ {dItem_SPOILS_BAG_e, "coverofbeast.bti"},
-    /* 0x05 */ {dItem_BOOMERANG_e, "boomerang.bti"},
-    /* 0x06 */ {dItem_DEKU_LEAF_e, "fan.bti"},
-    /* 0x07 */ {dItem_TINGLE_TUNER_e, "whistle.bti"},
-    /* 0x08 */ {CAMERA, "camera.bti"},
-    /* 0x09 */ {dItem_IRON_BOOTS_e, "boots_00.bti"},
-    /* 0x0A */ {dItem_MAGIC_ARMOR_e, "shield_02.bti"},
-    /* 0x0B */ {dItem_BAIT_BAG_e, "coverofbait.bti"},
-    /* 0x0C */ {dItem_BOW_e, "bow_01.bti"},
-    /* 0x0D */ {dItem_BOMB_BAG_e, "bomb_00.bti"},
-    /* 0x0E */ {dItem_EMPTY_BOTTLE_e, "bottle_00.bti"},
-    /* 0x0F */ {dItem_RED_POTION_e, "bottle_01.bti"},
-    /* 0x10 */ {dItem_GREEN_POTION_e, "bottle_02.bti"},
-    /* 0x11 */ {dItem_BLUE_POTION_e, "bottle_03.bti"},
-    /* 0x12 */ {dItem_DELIVERY_BAG_e, "delivery.bti"},
-    /* 0x13 */ {dItem_HOOKSHOT_e, "hookshot.bti"},
-    /* 0x14 */ {dItem_SKULL_HAMMER_e, "hammer_01.bti"},
+    /* 0x00 */ {dItemNo_TELESCOPE_e, "telescope.bti"},
+    /* 0x01 */ {dItemNo_SAIL_e, "sail_00.bti"},
+    /* 0x02 */ {dItemNo_WIND_WAKER_e, "baton.bti"},
+    /* 0x03 */ {dItemNo_GRAPPLING_HOOK_e, "rope.bti"},
+    /* 0x04 */ {dItemNo_SPOILS_BAG_e, "coverofbeast.bti"},
+    /* 0x05 */ {dItemNo_BOOMERANG_e, "boomerang.bti"},
+    /* 0x06 */ {dItemNo_DEKU_LEAF_e, "fan.bti"},
+    /* 0x07 */ {dItemNo_TINGLE_TUNER_e, "whistle.bti"},
+    /* 0x08 */ {dItemNo_PICTO_BOX_e, "camera.bti"},
+    /* 0x09 */ {dItemNo_IRON_BOOTS_e, "boots_00.bti"},
+    /* 0x0A */ {dItemNo_MAGIC_ARMOR_e, "shield_02.bti"},
+    /* 0x0B */ {dItemNo_BAIT_BAG_e, "coverofbait.bti"},
+    /* 0x0C */ {dItemNo_BOW_e, "bow_01.bti"},
+    /* 0x0D */ {dItemNo_BOMB_BAG_e, "bomb_00.bti"},
+    /* 0x0E */ {dItemNo_EMPTY_BOTTLE_e, "bottle_00.bti"},
+    /* 0x0F */ {dItemNo_RED_POTION_e, "bottle_01.bti"},
+    /* 0x10 */ {dItemNo_GREEN_POTION_e, "bottle_02.bti"},
+    /* 0x11 */ {dItemNo_BLUE_POTION_e, "bottle_03.bti"},
+    /* 0x12 */ {dItemNo_DELIVERY_BAG_e, "delivery.bti"},
+    /* 0x13 */ {dItemNo_HOOKSHOT_e, "hookshot.bti"},
+    /* 0x14 */ {dItemNo_SKULL_HAMMER_e, "hammer_01.bti"},
     
-    /* 0x15 */ {dItem_MAGIC_ARMOR_e, "shield_02.bti"},
-    /* 0x16 */ {dItem_MAGIC_ARMOR_e, "shield_02.bti"},
-    /* 0x17 */ {dItem_MAGIC_ARMOR_e, "shield_02.bti"},
+    /* 0x15 */ {dItemNo_MAGIC_ARMOR_e, "shield_02.bti"},
+    /* 0x16 */ {dItemNo_MAGIC_ARMOR_e, "shield_02.bti"},
+    /* 0x17 */ {dItemNo_MAGIC_ARMOR_e, "shield_02.bti"},
     
-    /* 0x18 */ {dItem_SKULL_NECKLACE_e, "beast_01.bti"},
-    /* 0x19 */ {dItem_BOKOBABA_SEED_e, "beast_02.bti"},
-    /* 0x1A */ {dItem_GOLDEN_FEATHER_e, "beast_03.bti"},
-    /* 0x1B */ {dItem_KNIGHTS_CREST_e, "beast_04.bti"},
-    /* 0x1C */ {dItem_RED_JELLY_e, "beast_05.bti"},
-    /* 0x1D */ {dItem_GREEN_JELLY_e, "beast_06.bti"},
-    /* 0x1E */ {dItem_BLUE_JELLY_e, "beast_07.bti"},
-    /* 0x1F */ {dItem_JOY_PENDANT_e, "beast_08.bti"},
+    /* 0x18 */ {dItemNo_SKULL_NECKLACE_e, "beast_01.bti"},
+    /* 0x19 */ {dItemNo_BOKOBABA_SEED_e, "beast_02.bti"},
+    /* 0x1A */ {dItemNo_GOLDEN_FEATHER_e, "beast_03.bti"},
+    /* 0x1B */ {dItemNo_KNIGHTS_CREST_e, "beast_04.bti"},
+    /* 0x1C */ {dItemNo_RED_JELLY_e, "beast_05.bti"},
+    /* 0x1D */ {dItemNo_GREEN_JELLY_e, "beast_06.bti"},
+    /* 0x1E */ {dItemNo_BLUE_JELLY_e, "beast_07.bti"},
+    /* 0x1F */ {dItemNo_JOY_PENDANT_e, "beast_08.bti"},
     
-    /* 0x20 */ {dItem_NONE_e, "beast_09.bti"},
-    /* 0x21 */ {dItem_NONE_e, "beast_10.bti"},
-    /* 0x22 */ {dItem_NONE_e, "beast_11.bti"},
-    /* 0x23 */ {dItem_NONE_e, "beast_12.bti"},
+    /* 0x20 */ {dItemNo_NONE_e, "beast_09.bti"},
+    /* 0x21 */ {dItemNo_NONE_e, "beast_10.bti"},
+    /* 0x22 */ {dItemNo_NONE_e, "beast_11.bti"},
+    /* 0x23 */ {dItemNo_NONE_e, "beast_12.bti"},
     
-    /* 0x24 */ {dItem_HYOI_PEAR_e, "beast_02.bti"},
-    /* 0x25 */ {dItem_BIRD_BAIT_5_e, "beast_02.bti"},
-    /* 0x26 */ {dItem_NONE_e, "beast_03.bti"},
-    /* 0x27 */ {dItem_NONE_e, "beast_04.bti"},
-    /* 0x28 */ {dItem_NONE_e, "beast_05.bti"},
-    /* 0x29 */ {dItem_NONE_e, "beast_06.bti"},
-    /* 0x2A */ {dItem_NONE_e, "beast_07.bti"},
-    /* 0x2B */ {dItem_NONE_e, "beast_08.bti"},
+    /* 0x24 */ {dItemNo_HYOI_PEAR_e, "beast_02.bti"},
+    /* 0x25 */ {dItemNo_BIRD_BAIT_5_e, "beast_02.bti"},
+    /* 0x26 */ {dItemNo_NONE_e, "beast_03.bti"},
+    /* 0x27 */ {dItemNo_NONE_e, "beast_04.bti"},
+    /* 0x28 */ {dItemNo_NONE_e, "beast_05.bti"},
+    /* 0x29 */ {dItemNo_NONE_e, "beast_06.bti"},
+    /* 0x2A */ {dItemNo_NONE_e, "beast_07.bti"},
+    /* 0x2B */ {dItemNo_NONE_e, "beast_08.bti"},
     
-    /* 0x2C */ {dItem_NONE_e, "beast_09.bti"},
-    /* 0x2D */ {dItem_NONE_e, "beast_10.bti"},
-    /* 0x2E */ {dItem_NONE_e, "beast_11.bti"},
-    /* 0x2F */ {dItem_NONE_e, "beast_12.bti"},
+    /* 0x2C */ {dItemNo_NONE_e, "beast_09.bti"},
+    /* 0x2D */ {dItemNo_NONE_e, "beast_10.bti"},
+    /* 0x2E */ {dItemNo_NONE_e, "beast_11.bti"},
+    /* 0x2F */ {dItemNo_NONE_e, "beast_12.bti"},
     
-    /* 0x30 */ {FLOWER_1, "beast_02.bti"},
-    /* 0x31 */ {FLOWER_2, "beast_02.bti"},
-    /* 0x32 */ {FLOWER_3, "beast_03.bti"},
-    /* 0x33 */ {HEROS_FLAG, "beast_04.bti"},
-    /* 0x34 */ {TAIRYO_FLAG, "beast_05.bti"},
-    /* 0x35 */ {SALES_FLAG, "beast_06.bti"},
-    /* 0x36 */ {WIND_FLAG, "beast_07.bti"},
-    /* 0x37 */ {RED_FLAG, "beast_08.bti"},
+    /* 0x30 */ {dItemNo_TOWN_FLOWER_e, "beast_02.bti"},
+    /* 0x31 */ {dItemNo_SEA_FLOWER_e, "beast_02.bti"},
+    /* 0x32 */ {dItemNo_EXOTIC_FLOWER_e, "beast_03.bti"},
+    /* 0x33 */ {dItemNo_HEROS_FLAG_e, "beast_04.bti"},
+    /* 0x34 */ {dItemNo_BIG_CATCH_FLAG_e, "beast_05.bti"},
+    /* 0x35 */ {dItemNo_BIG_SALE_FLAG_e, "beast_06.bti"},
+    /* 0x36 */ {dItemNo_PINWHEEL_e, "beast_07.bti"},
+    /* 0x37 */ {dItemNo_SICKLE_MOON_FLAG_e, "beast_08.bti"},
     
-    /* 0x38 */ {FOSSIL_HEAD, "beast_09.bti"},
-    /* 0x39 */ {WATER_STATUE, "beast_10.bti"},
-    /* 0x3A */ {POSTMAN_STATUE, "beast_11.bti"},
-    /* 0x3B */ {PRESIDENT_STATUE, "beast_12.bti"},
+    /* 0x38 */ {dItemNo_SKULL_TOWER_IDOL_e, "beast_09.bti"},
+    /* 0x39 */ {dItemNo_FOUNTAIN_IDOL_e, "beast_10.bti"},
+    /* 0x3A */ {dItemNo_POSTMAN_STATUE_e, "beast_11.bti"},
+    /* 0x3B */ {dItemNo_SHOP_GURU_STATUE_e, "beast_12.bti"},
 };
 
 struct fopMsgM_pane_alpha_class;
@@ -358,16 +357,16 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* pa
 
     fpc_ProcID pcId;
     if(*param_3 >> 0x10 == 0x63) {
-        pcId = fopMsgM_create(PROC_SCP, param_1, param_2, param_3, param_4, NULL);
+        pcId = fopMsgM_create(fpcNm_SCP_e, param_1, param_2, param_3, param_4, NULL);
     }
     else if(*param_3 >> 0x10 == 0x59) {
-        pcId = fopMsgM_create(PROC_PB, param_1, param_2, param_3, param_4, NULL);
+        pcId = fopMsgM_create(fpcNm_PB_e, param_1, param_2, param_3, param_4, NULL);
     }
     else {
         mesg_header* header = msgGet.getMesgHeader(*param_3);
         if(header != NULL) {
             if(msgGet.getMessage(header) != NULL) {
-                const mesg_entry& entry = msgGet.getMesgEntry(header);
+                const JMSMesgEntry_c& entry = msgGet.getMesgEntry(header);
                 u16 price = entry.mItemPrice;
                 u16 type = entry.mTextboxType;
                 dComIfGp_setMesgAnimeAttrInfo(entry.mInitialAnimation);
@@ -375,22 +374,22 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* pa
                 dComIfGp_setMessageRupee(price);
 
                 if(type == 2 || type == 6 || type == 7) {
-                    pcId = fopMsgM_create(PROC_MSG2, param_1, param_2, param_3, param_4, NULL);
+                    pcId = fopMsgM_create(fpcNm_MSG2_e, param_1, param_2, param_3, param_4, NULL);
                 }
                 else {
-                    pcId = fopMsgM_create(PROC_MSG, param_1, param_2, param_3, param_4, NULL);
+                    pcId = fopMsgM_create(fpcNm_MSG_e, param_1, param_2, param_3, param_4, NULL);
                 }
             }
             else {
                 *param_3 = 1;
                 *param_4 = *param_3;
-                pcId = fopMsgM_create(PROC_MSG, param_1, param_2, param_3, param_4, NULL);
+                pcId = fopMsgM_create(fpcNm_MSG_e, param_1, param_2, param_3, param_4, NULL);
             }
         }
         else {
             *param_3 = 1;
             *param_4 = *param_3;
-            pcId = fopMsgM_create(PROC_MSG, param_1, param_2, param_3, param_4, NULL);
+            pcId = fopMsgM_create(fpcNm_MSG_e, param_1, param_2, param_3, param_4, NULL);
         }
 
         JKRFileLoader::removeResource(header, NULL);
@@ -441,7 +440,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, fopAc_ac_c* pActor) {
         else {
             pMsg->mMsgNo = msgNo;
             pMsg->field_0xf0 = msgNo;
-            if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
+            if(fopMsgM_SearchByName(fpcNm_SCP_e) || fopMsgM_SearchByName(fpcNm_PB_e)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
             }
@@ -474,7 +473,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, cXyz* lookAtPos) {
         else {
             pMsg->mMsgNo = msgNo;
             pMsg->field_0xf0 = msgNo;
-            if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
+            if(fopMsgM_SearchByName(fpcNm_SCP_e) || fopMsgM_SearchByName(fpcNm_PB_e)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
             }
@@ -506,7 +505,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo) {
         else {
             pMsg->mMsgNo = msgNo;
             pMsg->field_0xf0 = msgNo;
-            if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
+            if(fopMsgM_SearchByName(fpcNm_SCP_e) || fopMsgM_SearchByName(fpcNm_PB_e)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
             }
@@ -560,7 +559,7 @@ u32 fopMsgM_tactMessageSet() {
         else {
             pMsg->mMsgNo = msgNoTemp;
             pMsg->field_0xf0 = msgNoTemp;
-            if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
+            if(fopMsgM_SearchByName(fpcNm_SCP_e) || fopMsgM_SearchByName(fpcNm_PB_e)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
             }
@@ -577,9 +576,6 @@ u32 fopMsgM_tactMessageSet() {
 /* 8002BB78-8002BDBC       .text fopMsgM_messageGet__FPcUl */
 char* fopMsgM_messageGet(char* dst, u32 msgNo) {
     fopMsgM_itemMsgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(VERSION_SELECT(0x690, 0x690, 0x6BD, 0x6BD), head_p);
@@ -661,9 +657,6 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
 /* 8002BE04-8002C02C       .text fopMsgM_passwordGet__FPcUl */
 char* fopMsgM_passwordGet(char* dst, u32 msgNo) {
     fopMsgM_itemMsgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(VERSION_SELECT(0x6F6, 0x6F6, 0x735, 0x739), head_p);
@@ -743,9 +736,6 @@ void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3,
     /* Nonmatching */
     fopMsgM_msgDataProc_c temp;
     fopMsgM_itemMsgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
     strcpy(param_3, "\x1B""CC[000000FF]\x1B""GM[0]");
     strcpy(param_4, "");
@@ -761,7 +751,8 @@ void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3,
     JUT_ASSERT(0x79B, head_p);
 
     const char* src = (char*)msgGet.getMessage(head_p);
-    mesg_entry entry = msgGet.getMesgEntry(head_p);
+    JMSMesgEntry_c entry;
+    entry = msgGet.getMesgEntry(head_p);
     temp.dataInit();
     temp.font[0] = ((J2DTextBox*)param_1)->getFont();
     temp.font[1] = ((J2DTextBox*)param_2)->getFont();
@@ -1464,7 +1455,7 @@ mesg_data* fopMsgM_msgGet_c::getMesgData(mesg_header* msg) {
 }
 
 /* 8002E308-8002E378       .text getMesgEntry__16fopMsgM_msgGet_cFP11mesg_header */
-mesg_entry fopMsgM_msgGet_c::getMesgEntry(mesg_header* msg) {
+JMSMesgEntry_c fopMsgM_msgGet_c::getMesgEntry(mesg_header* msg) {
     mesg_info* info = getMesgInfo(msg);
     return info->mEntries[mMsgIdx];
 }
@@ -1482,9 +1473,9 @@ const char* fopMsgM_msgGet_c::getMessage(mesg_header* msg) {
 
         mMsgIdx = i;
         if (mMsgNo == info->mEntries[i].mMsgNo) {
-            mesg_entry* entry = &info->mEntries[mMsgIdx];
-            mResMsgNo = entry->mMsgNo;
+            JMSMesgEntry_c* entry = &info->mEntries[mMsgIdx];
             ret = &data[entry->mDataOffs];
+            mResMsgNo = entry->mMsgNo;
             break;
         }
     }
@@ -1530,7 +1521,7 @@ mesg_data* fopMsgM_itemMsgGet_c::getMesgData(mesg_header* msg) {
 }
 
 /* 8002E4DC-8002E54C       .text getMesgEntry__20fopMsgM_itemMsgGet_cFP11mesg_header */
-mesg_entry fopMsgM_itemMsgGet_c::getMesgEntry(mesg_header* msg) {
+JMSMesgEntry_c fopMsgM_itemMsgGet_c::getMesgEntry(mesg_header* msg) {
     mesg_info* info = getMesgInfo(msg);
     return info->mEntries[mMsgIdx];
 }
@@ -1554,6 +1545,94 @@ const char* fopMsgM_itemMsgGet_c::getMessage(mesg_header* msg) {
     mResMsgNo = info->mEntries[mMsgIdx].mMsgNo;
     return result;
 }
+
+/* 8002E5FC-8002E794       .text __ct__21fopMsgM_msgDataProc_cFv */
+fopMsgM_msgDataProc_c::fopMsgM_msgDataProc_c() {
+    field_0x14 = 0.0f;
+    field_0x18 = 0.0f;
+    field_0x1C = 0.0f;
+    field_0x20 = 0.0f;
+    field_0x24 = 0.0f;
+    field_0x28 = 0.0f;
+    
+    for (int i = 0; i < 4; i++) {
+        field_0xD8[i] = 0;
+        field_0xF8[i] = 0;
+        field_0x108[i] = 0;
+        field_0xE8[i] = 0;
+    }
+    
+    field_0x21C = 0;
+    field_0xD4[2] = 0;
+    field_0xD4[1] = 0;
+    field_0xD4[0] = 0;
+    field_0x2C = 0;
+    field_0x30 = 0;
+    field_0x34 = 0;
+    field_0x38 = 0;
+    field_0x118 = 0;
+    field_0x11C = 0;
+    field_0x124 = 0;
+    field_0x120 = 0;
+    field_0x128 = 0;
+    field_0x12C = 0;
+    field_0x130 = 0;
+    field_0x134 = 0;
+    field_0x138 = 0;
+    field_0x13C = 0;
+    field_0x140 = 0;
+    field_0x144 = 0;
+    field_0x148 = 0;
+    field_0x14C = 0;
+    field_0x150 = 0;
+    field_0x154 = 0;
+    field_0x158 = 0;
+    field_0x15C = 1;
+    field_0x160 = 1;
+    field_0x164 = 0;
+    field_0x25C = -1;
+    field_0x29D = 0;
+    field_0x260 = 0;
+    field_0x264 = 0.0f;
+    field_0x268 = 0.0f;
+    field_0x26C = 0.0f;
+    field_0x270 = 0.0f;
+    field_0x278 = 0.0f;
+    field_0x274 = 0.0f;
+    field_0x293 = 0;
+    field_0x292 = 0;
+    field_0x291 = 0;
+    field_0x290 = 0;
+    field_0x27C = 6;
+    field_0x27D = 0;
+    field_0x27E = 0;
+    field_0x27F = 0;
+    field_0x280 = 0;
+    
+    for (int i = 0; i < 0xF; i++) {
+        field_0x168[i] = 0;
+        field_0x1A4[i] = 0;
+        field_0x1E0[i] = 0;
+        field_0x281[i] = 0xFF;
+        field_0x220[i] = 0;
+    }
+    
+    field_0x10 = 0;
+    field_0x299 = 0;
+    field_0x29A = 0;
+    field_0x294 = 0;
+    field_0x29B = 0;
+    field_0x297 = 0;
+    field_0x298 = 0;
+    field_0x29C = 0;
+    field_0x295 = 0;
+#if VERSION > VERSION_DEMO
+    field_0x296 = 0;
+#endif
+}
+
+/* 8002E794-8002E7DC       .text __dt__21fopMsgM_msgDataProc_cFv */
+fopMsgM_msgDataProc_c::~fopMsgM_msgDataProc_c() {}
 
 /* 8002E7DC-8002E95C       .text dataInit__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::dataInit() {
@@ -1629,7 +1708,9 @@ void fopMsgM_msgDataProc_c::dataInit() {
     field_0x298 = 0;
     field_0x29C = 0;
     field_0x295 = 0;
+#if VERSION > VERSION_DEMO
     field_0x296 = 0;
+#endif
 }
 
 /* 8002E95C-8002EA58       .text charLength__21fopMsgM_msgDataProc_cFiib */

@@ -102,6 +102,9 @@ STATIC_ASSERT(sizeof(daDaiocta_Eye_c) == 0x4A0);
 class daDaiocta_Eye_HIO_c : public mDoHIO_entry_c {
 public:
     daDaiocta_Eye_HIO_c();
+
+    void genMessage(JORMContext* ctx) {}
+
 public:
     s16 m04;
     u8 m06[0x08 - 0x06];

@@ -224,11 +224,13 @@ public:
         mOldFrameEndJoint = 0;
         mOldFrameMorfCounter = 0.0f;
         field_0x8 = 0.0f;
+#if VERSION > VERSION_DEMO
         field_0x10 = 0.0f;
         field_0x14 = 0.0f;
+#endif
     }
     
-    void initOldFrameMorf(f32, u16, u16);
+    void initOldFrameMorf(f32 i_morf, u16 i_frameStartJoint, u16 i_frameEndJoint);
     void decOldFrameMorfCounter();
 
     bool getOldFrameFlg() { return mOldFrameFlg; }
@@ -531,6 +533,8 @@ private:
 
 class mDoExt_invisibleModel {
 public:
+    mDoExt_invisibleModel() {}
+
     BOOL create(J3DModel*);
 
     void entry();

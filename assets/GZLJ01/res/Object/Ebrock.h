@@ -1,0 +1,30 @@
+#ifndef RES_EBROCK_H
+#define RES_EBROCK_H
+
+enum dRes_INDEX_EBROCK {
+    /* BDL  */
+    dRes_INDEX_EBROCK_BDL_EBROCK_e=0x4,
+    dRes_INDEX_EBROCK_BDL_EBROCK2_e=0x5,
+    /* DZB  */
+    dRes_INDEX_EBROCK_DZB_EBROCK_e=0x8,
+    dRes_INDEX_EBROCK_DZB_EBROCK2_e=0x9,
+};
+
+enum dRes_ID_EBROCK {
+    /* BDL  */
+    dRes_ID_EBROCK_BDL_EBROCK_e=0x4,
+    dRes_ID_EBROCK_BDL_EBROCK2_e=0x5,
+    /* DZB  */
+    dRes_ID_EBROCK_DZB_EBROCK_e=0x8,
+    dRes_ID_EBROCK_DZB_EBROCK2_e=0x9,
+};
+
+enum EBROCK_JNT {
+    EBROCK_JNT_EBROCK_e=0x0,
+};
+
+enum EBROCK2_JNT {
+    EBROCK2_JNT_EBROCK2_e=0x0,
+};
+
+#endif /* !RES_EBROCK_H */

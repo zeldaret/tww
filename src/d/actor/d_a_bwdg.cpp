@@ -5,11 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bwdg.h"
-#include "d/res/res_bwdg.h"
+#include "res/Object/Bwdg.h"
 #include "d/d_bg_w_hf.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_bwd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "dolphin/gf/GF.h"
@@ -159,7 +157,7 @@ static void wave_cont(bwdg_class* i_this, u8 r4) {
 /* 00000734-00000780       .text boss_a_d_sub__FPvPv */
 static void* boss_a_d_sub(void* param_1, void* param_2) {
     UNUSED(param_2);
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BWD) {
+    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BWD_e) {
         return param_1;
     }
     return NULL;
@@ -209,8 +207,8 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     }
     
     if (!i_this->mpBgW->Set(
-        (cBgD_t*)dComIfG_getObjectRes("Bwdg", BWDG_DZB_HSAND1),
-        (u16*)dComIfG_getObjectRes("Bwdg", BWDG_DAT_GRIDIDX),
+        (cBgD_t*)dComIfG_getObjectRes("Bwdg", dRes_INDEX_BWDG_DZB_HSAND1_e),
+        (u16*)dComIfG_getObjectRes("Bwdg", dRes_INDEX_BWDG_DAT_GRIDIDX_e),
         130.0f, 0x40, 0x40, 0
     )) {
         return TRUE;
@@ -254,18 +252,18 @@ static actor_method_class l_daBwdg_Method = {
 };
 
 actor_process_profile_definition g_profile_BWDG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BWDG,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BWDG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bwdg_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BWDG,
+    /* Draw Prio    */ fpcDwPi_BWDG_e,
     /* Actor SubMtd */ &l_daBwdg_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

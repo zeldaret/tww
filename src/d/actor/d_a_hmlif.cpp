@@ -5,11 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_hmlif.h"
-#include "d/res/res_hmlif.h"
-#include "d/res/res_hyuf1.h"
-#include "d/res/res_hyuf2.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Hmlif.h"
+#include "res/Object/Hyuf1.h"
+#include "res/Object/Hyuf2.h"
 #include "d/d_path.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -33,10 +31,10 @@ const f32 daHmlif_c::m_speed[] = {
     25.0f,
     26.666666f,
 };
-const s16 daHmlif_c::m_bmdidx[] = {HMLIF_BDL_HMLIF, HYUF1_BDL_HYUF1, HYUF2_BDL_HYUF2};
-const s16 daHmlif_c::m_dzbidx[] = {HMLIF_DZB_HMLIF, HYUF1_DZB_HYUF1, HYUF2_DZB_HYUF2};
-const s16 daHmlif_c::m_btpidx[] = {-1, HYUF1_BTP_HYUF1, HYUF2_BTP_HYUF2};
-const s16 daHmlif_c::m_brkidx[] = {HMLIF_BRK_HMLIF, HYUF1_BRK_HYUF1, -1};
+const s16 daHmlif_c::m_bmdidx[] = {dRes_INDEX_HMLIF_BDL_HMLIF_e, dRes_INDEX_HYUF1_BDL_HYUF1_e, dRes_INDEX_HYUF2_BDL_HYUF2_e};
+const s16 daHmlif_c::m_dzbidx[] = {dRes_INDEX_HMLIF_DZB_HMLIF_e, dRes_INDEX_HYUF1_DZB_HYUF1_e, dRes_INDEX_HYUF2_DZB_HYUF2_e};
+const s16 daHmlif_c::m_btpidx[] = {-1, dRes_INDEX_HYUF1_BTP_HYUF1_e, dRes_INDEX_HYUF2_BTP_HYUF2_e};
+const s16 daHmlif_c::m_brkidx[] = {dRes_INDEX_HMLIF_BRK_HMLIF_e, dRes_INDEX_HYUF1_BRK_HYUF1_e, -1};
 
 const f32 daHmlif_c::m_cull_box[][6] = {
     {-200.0f, -100.0f, -200.0f, 200.0f, 50.0f, 200.0f},
@@ -545,18 +543,18 @@ static actor_method_class daHmlifMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Hmlif = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Hmlif,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Hmlif_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daHmlif_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Hmlif,
+    /* Draw Prio    */ fpcDwPi_Hmlif_e,
     /* Actor SubMtd */ &daHmlifMethodTable,
     /* Status       */ 0x04 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

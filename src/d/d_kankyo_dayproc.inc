@@ -23,7 +23,7 @@ static void dKankyo_DayProc() {
     clamped = cLib_maxLimit(dComIfGs_getEventReg(dSv_event_flag_c::UNK_AB03) + 1, 3);
     dComIfGs_setEventReg(dSv_event_flag_c::UNK_AB03, clamped);
 
-    if (dComIfGs_isGetItemReserve(0x0F) && dComIfGs_checkReserveItem(MO_LETTER) == 0) {
+    if (dComIfGs_isGetItemReserve(0x0F) && dComIfGs_checkReserveItem(dItemNo_MOBLINS_LETTER_e) == 0) {
         clamped = cLib_maxLimit(dComIfGs_getEventReg(dSv_event_flag_c::UNK_CCFF) + 1, 2);
         dComIfGs_setEventReg(dSv_event_flag_c::UNK_CCFF, clamped);
     }

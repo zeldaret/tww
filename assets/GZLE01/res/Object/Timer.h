@@ -1,0 +1,18 @@
+#ifndef RES_TIMER_H
+#define RES_TIMER_H
+
+enum dRes_INDEX_TIMER {
+    /* SCRN */
+    dRes_INDEX_TIMER_BLO_SHIP_RACE0_e=0x4,
+    /* TIMG */
+    dRes_INDEX_TIMER_BTI_RUPY_NUM_DOT_2_e=0x7,
+};
+
+enum dRes_ID_TIMER {
+    /* SCRN */
+    dRes_ID_TIMER_BLO_SHIP_RACE0_e=0x4,
+    /* TIMG */
+    dRes_ID_TIMER_BTI_RUPY_NUM_DOT_2_e=0x7,
+};
+
+#endif /* !RES_TIMER_H */

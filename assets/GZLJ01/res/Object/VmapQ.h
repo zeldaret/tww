@@ -1,0 +1,18 @@
+#ifndef RES_VMAPQ_H
+#define RES_VMAPQ_H
+
+enum dRes_INDEX_VMAPQ {
+    /* BDL  */
+    dRes_INDEX_VMAPQ_BDL_VMAPQ_e=0x3,
+};
+
+enum dRes_ID_VMAPQ {
+    /* BDL  */
+    dRes_ID_VMAPQ_BDL_VMAPQ_e=0x3,
+};
+
+enum VMAPQ_JNT {
+    VMAPQ_JNT_VMAPQ_MODEL_e=0x0,
+};
+
+#endif /* !RES_VMAPQ_H */

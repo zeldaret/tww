@@ -1,0 +1,24 @@
+#ifndef RES_DEKU_H
+#define RES_DEKU_H
+
+enum dRes_INDEX_DEKU {
+    /* BCK  */
+    dRes_INDEX_DEKU_BCK_VLFDK_e=0x4,
+    dRes_INDEX_DEKU_BCK_VLFDM_e=0x5,
+    /* BDLM */
+    dRes_INDEX_DEKU_BDL_VLFDM_e=0x8,
+};
+
+enum dRes_ID_DEKU {
+    /* BCK  */
+    dRes_ID_DEKU_BCK_VLFDK_e=0x4,
+    dRes_ID_DEKU_BCK_VLFDM_e=0x5,
+    /* BDLM */
+    dRes_ID_DEKU_BDL_VLFDM_e=0x8,
+};
+
+enum VLFDM_JNT {
+    VLFDM_JNT_LEAF_MODEL_e=0x0,
+};
+
+#endif /* !RES_DEKU_H */

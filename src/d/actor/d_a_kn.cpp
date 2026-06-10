@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kn.h"
-#include "d/res/res_kn.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Kn.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
 #include "d/d_com_inf_game.h"
@@ -141,7 +139,7 @@ void kn_move(kn_class* i_this) {
     switch (i_this->m2BD) {
 #if VERSION == VERSION_DEMO
     case Mode_0_e:
-        anm_init(i_this, KN_BCK_WALK, 5.0f, 2, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_KN_BCK_WALK_e, 5.0f, 2, 1.0f, -1);
         i_this->m2CC = -25.0f;
         i_this->actor.current.angle.z = -0x2000;
         i_this->m2BD++;
@@ -162,9 +160,9 @@ void kn_move(kn_class* i_this) {
 #endif
     case Mode_10_e:
         if (cM_rnd() < 0.5f) {
-            anm_init(i_this, KN_BCK_WAIT01, 5.0f, 2, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_KN_BCK_WAIT01_e, 5.0f, 2, 1.0f, -1);
         } else {
-            anm_init(i_this, KN_BCK_WAIT02, 5.0f, 2, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_KN_BCK_WAIT02_e, 5.0f, 2, 1.0f, -1);
         }
         i_this->m2D2 = 0x800;
         i_this->m2CA = cM_rndF(2.0f) + 1.0f;
@@ -185,7 +183,7 @@ void kn_move(kn_class* i_this) {
         break;
 
     case Mode_12_e:
-        anm_init(i_this, KN_BCK_WALK, 5.0f, 2, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_KN_BCK_WALK_e, 5.0f, 2, 1.0f, -1);
         i_this->m2D0 = i_this->actor.current.angle.y + cM_rndFX(10752.0f);
         i_this->m2E8 = f26;
         if (cM_rnd() < 0.5f) {
@@ -248,7 +246,7 @@ void kn_move(kn_class* i_this) {
         i_this->m2E4 = 0.0;
         i_this->m2C0 = 0;
         i_this->m2C2[0] = 0x14;
-        anm_init(i_this, KN_BCK_PATA, 5.0f, 2, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_KN_BCK_PATA_e, 5.0f, 2, 1.0f, -1);
         i_this->m2BD++;
 
     case Mode_16_e:
@@ -279,7 +277,7 @@ void kn_move(kn_class* i_this) {
                 } else {
                     shibuki_set(i_this);
                 }
-                anm_init(i_this, KN_BCK_PATA, 5.0f, 2, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_KN_BCK_PATA_e, 5.0f, 2, 1.0f, -1);
                 i_this->m2BD = Mode_17_e;
             }
         }
@@ -298,7 +296,7 @@ void kn_move(kn_class* i_this) {
         break;
 
     case Mode_18_e:
-        anm_init(i_this, KN_BCK_WALK, 5.0f, 2, 2.0f, -1);
+        anm_init(i_this, dRes_INDEX_KN_BCK_WALK_e, 5.0f, 2, 2.0f, -1);
         i_this->m2E8 = 40.0;
         i_this->m2C2[0] = 0;
         i_this->m2C2[1] = 0;
@@ -373,7 +371,7 @@ void oya_kn_move(kn_class* i_this) {
         }
         puVar1->base.parameters = 2;
         puVar1->room_no = fopAcM_GetRoomNo(&i_this->actor);
-        fopAcM_Create(PROC_KN, NULL, puVar1);
+        fopAcM_Create(fpcNm_KN_e, NULL, puVar1);
         i_this->m2C2[0] = 10;
         i_this->m2D4--;
         if (i_this->m2D4 <= 0) {
@@ -492,10 +490,10 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     kn_class* i_this = (kn_class*)a_this;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("KN", KN_BDL_KN),
+        (J3DModelData*)dComIfG_getObjectRes("KN", dRes_INDEX_KN_BDL_KN_e),
         NULL,
         NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes("KN", KN_BCK_PATA),
+        (J3DAnmTransform*)dComIfG_getObjectRes("KN", dRes_INDEX_KN_BCK_PATA_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -586,18 +584,18 @@ static actor_method_class l_daKN_Method = {
 };
 
 actor_process_profile_definition g_profile_KN = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KN,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KN_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kn_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KN,
+    /* Draw Prio    */ fpcDwPi_KN_e,
     /* Actor SubMtd */ &l_daKN_Method,
     /* Status       */ DEMO_SELECT(fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_NOCULLEXEC_e, fopAcStts_CULL_e | fopAcStts_UNK40000_e),
     /* Group        */ fopAc_ENV_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

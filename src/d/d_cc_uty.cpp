@@ -9,7 +9,6 @@
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_tsubo.h"
 #include "d/actor/d_a_mt.h"
-#include "d/d_procname.h"
 #include "d/d_s_play.h"
 
 /* 800AE938-800AE9E8       .text cc_pl_cut_bit_get__Fv */
@@ -86,7 +85,9 @@ void def_se_set_p(fopAc_ac_c* actor, cXyz* sePos, cCcD_Obj* obj, unsigned long r
 
 /* 800AEBCC-800AEEF8       .text at_power_check__FP8CcAtInfo */
 fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
+    fopAc_ac_c* player_actor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    
     if (atInfo->mpObj == NULL) {
         return NULL;
     }
@@ -110,7 +111,7 @@ fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
     if (atInfo->mpActor) {
         atInfo->mDamage = atInfo->mpObj->GetAtAtp();
         
-        if (fopAcM_GetName(atInfo->mpActor) == PROC_PLAYER) {
+        if (fopAcM_GetName(atInfo->mpActor) == fpcNm_PLAYER_e) {
             if (atInfo->mpObj->ChkAtType(AT_TYPE_SKULL_HAMMER)) {
                 atInfo->mResultingAttackType = 0x9;
             } else {
@@ -131,7 +132,7 @@ fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
                     atInfo->mHitSoundId = 0;
                 }
             }
-        } else if (fopAcM_GetName(atInfo->mpActor) == PROC_BOMB) {
+        } else if (fopAcM_GetName(atInfo->mpActor) == fpcNm_BOMB_e) {
             daBomb_c* bomb = (daBomb_c*)atInfo->mpActor;
             if (bomb->chk_state(daBomb_c::STATE_8)) {
                 atInfo->mResultingAttackType = 0xD;
@@ -139,39 +140,39 @@ fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
                 atInfo->mResultingAttackType = 0x2;
             }
             atInfo->mPlCutBit = 0x200;
-        } else if (fopAcM_GetName(atInfo->mpActor) == PROC_Bomb2) {
+        } else if (fopAcM_GetName(atInfo->mpActor) == fpcNm_Bomb2_e) {
             atInfo->mResultingAttackType = 0x2;
             atInfo->mPlCutBit = 0x200;
-        } else if (fopAcM_GetName(atInfo->mpActor) == PROC_HIMO2) {
+        } else if (fopAcM_GetName(atInfo->mpActor) == fpcNm_HIMO2_e) {
             atInfo->mResultingAttackType = 0xE;
             atInfo->mPlCutBit = 0x400;
-        } else if (fopAcM_GetName(atInfo->mpActor) == PROC_BOOMERANG) {
+        } else if (fopAcM_GetName(atInfo->mpActor) == fpcNm_BOOMERANG_e) {
             atInfo->mResultingAttackType = 0xA;
             atInfo->mPlCutBit = 0x800;
-        } else if (fopAcM_GetName(atInfo->mpActor) == PROC_ARROW) {
+        } else if (fopAcM_GetName(atInfo->mpActor) == fpcNm_ARROW_e) {
             atInfo->mPlCutBit = 0x1000;
-        } else if (fopAcM_GetName(atInfo->mpActor) == PROC_BDK) {
+        } else if (fopAcM_GetName(atInfo->mpActor) == fpcNm_BDK_e) {
             atInfo->mResultingAttackType = 0xB;
-        } else if (fopAcM_GetName(atInfo->mpActor) == PROC_TSUBO) {
+        } else if (fopAcM_GetName(atInfo->mpActor) == fpcNm_TSUBO_e) {
             daTsubo::Act_c* tsubo = (daTsubo::Act_c*)atInfo->mpActor;
             if (tsubo->prm_get_type() == daTsubo::Act_c::TYPE_WATER_JUG) {
                 atInfo->mResultingAttackType = 0x4;
             } else {
                 atInfo->mResultingAttackType = 0x3;
             }
-        } else if (fopAcM_GetName(atInfo->mpActor) == PROC_MO2) {
+        } else if (fopAcM_GetName(atInfo->mpActor) == fpcNm_MO2_e) {
             atInfo->mResultingAttackType = 0x7;
             if (atInfo->mDamage > 2) {
                 atInfo->mDamage = 2;
             }
-        } else if (fopAcM_GetName(atInfo->mpActor) == PROC_MT) {
+        } else if (fopAcM_GetName(atInfo->mpActor) == fpcNm_MT_e) {
             atInfo->mResultingAttackType = 0x6;
             atInfo->mDamage = 4;
         }
     }
         
     atInfo->mbDead = false;
-    if (fopAcM_GetName(atInfo->mpActor) == PROC_PLAYER) {
+    if (fopAcM_GetName(atInfo->mpActor) == fpcNm_PLAYER_e) {
         dCcD_GObjInf* gObjInf = dCcD_GetGObjInf(atInfo->mpObj);
         if (gObjInf->GetAtSpl() == dCcG_At_Spl_UNK1) {
             atInfo->mbDead = true;
@@ -185,6 +186,8 @@ fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
 
 /* 800AEEF8-800AF368       .text cc_at_check__FP10fopAc_ac_cP8CcAtInfo */
 fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    
     atInfo->mHitSoundId = 0;
     atInfo->mpActor = at_power_check(atInfo);
     
@@ -209,7 +212,7 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
             }
         }
         
-        if (fopAcM_GetName(atInfo->mpActor) == PROC_HIMO2 && tgActor->stealItemLeft != 0) {
+        if (fopAcM_GetName(atInfo->mpActor) == fpcNm_HIMO2_e && tgActor->stealItemLeft != 0) {
             tgActor->stealItemLeft--;
             fopAcM_createStealItem(&tgActor->current.pos, tgActor->itemTableIdx, fopAcM_GetRoomNo(tgActor), NULL, tgActor->stealItemBitNo);
             tgActor->stealItemBitNo++;
@@ -237,7 +240,7 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, atInfo->pParticlePos, &angle, &scale);
             }
         } else {
-            u32 r29 = fopAcM_GetName(tgActor) == PROC_ST ? 0x33 : 0x20;
+            u32 r29 = fopAcM_GetName(tgActor) == fpcNm_ST_e ? 0x33 : 0x20;
             if (atInfo->mbDead) {
                 fopAcM_seStart(tgActor, at_se_getC(atInfo->mpObj), r29);
                 if (atInfo->mResultingAttackType == 9) {
@@ -246,7 +249,7 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
                     pauseTime = 4 + REG0_S(6);
                 }
             } else {
-                if (fopAcM_GetName(tgActor) == PROC_MT) {
+                if (fopAcM_GetName(tgActor) == fpcNm_MT_e) {
                     mt_class* mt = (mt_class*)tgActor;
                     if (mt->m454 == 2) {
                         fopAcM_seStart(tgActor, JA_SE_OBJ_MG_BALL_DMG, 0);

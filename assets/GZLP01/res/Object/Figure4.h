@@ -1,0 +1,101 @@
+#ifndef RES_FIGURE4_H
+#define RES_FIGURE4_H
+
+enum dRes_INDEX_FIGURE4 {
+    /* BDL  */
+    dRes_INDEX_FIGURE4_BDL_VF_083_e=0x3,
+    dRes_INDEX_FIGURE4_BDL_VF_093_e=0x4,
+    dRes_INDEX_FIGURE4_BDL_VF_094_e=0x5,
+    dRes_INDEX_FIGURE4_BDL_VF_095_e=0x6,
+    dRes_INDEX_FIGURE4_BDL_VF_096_e=0x7,
+    dRes_INDEX_FIGURE4_BDL_VF_084_e=0x8,
+    dRes_INDEX_FIGURE4_BDL_VF_085_e=0x9,
+    dRes_INDEX_FIGURE4_BDL_VF_086_e=0xA,
+    dRes_INDEX_FIGURE4_BDL_VF_087_e=0xB,
+    dRes_INDEX_FIGURE4_BDL_VF_088_e=0xC,
+    dRes_INDEX_FIGURE4_BDL_VF_089_e=0xD,
+    dRes_INDEX_FIGURE4_BDL_VF_090_e=0xE,
+    dRes_INDEX_FIGURE4_BDL_VF_091_e=0xF,
+    dRes_INDEX_FIGURE4_BDL_VF_092_e=0x10,
+};
+
+enum dRes_ID_FIGURE4 {
+    /* BDL  */
+    dRes_ID_FIGURE4_BDL_VF_083_e=0x0,
+    dRes_ID_FIGURE4_BDL_VF_093_e=0x1,
+    dRes_ID_FIGURE4_BDL_VF_094_e=0x2,
+    dRes_ID_FIGURE4_BDL_VF_095_e=0x3,
+    dRes_ID_FIGURE4_BDL_VF_096_e=0x4,
+    dRes_ID_FIGURE4_BDL_VF_084_e=0x5,
+    dRes_ID_FIGURE4_BDL_VF_085_e=0x6,
+    dRes_ID_FIGURE4_BDL_VF_086_e=0x7,
+    dRes_ID_FIGURE4_BDL_VF_087_e=0x8,
+    dRes_ID_FIGURE4_BDL_VF_088_e=0x9,
+    dRes_ID_FIGURE4_BDL_VF_089_e=0xA,
+    dRes_ID_FIGURE4_BDL_VF_090_e=0xB,
+    dRes_ID_FIGURE4_BDL_VF_091_e=0xC,
+    dRes_ID_FIGURE4_BDL_VF_092_e=0xD,
+};
+
+enum VF_083_JNT {
+    VF_083_JNT_ROOT_VF_083_e=0x0,
+    VF_083_JNT_BODY1_e=0x1,
+    VF_083_JNT_FACE1_e=0x2,
+    VF_083_JNT_POLYSURFACE1_e=0x3,
+};
+
+enum VF_093_JNT {
+    VF_093_JNT_DK1_e=0x0,
+};
+
+enum VF_094_JNT {
+    VF_094_JNT_MT1_e=0x0,
+};
+
+enum VF_095_JNT {
+    VF_095_JNT_ROOT_VF_095_e=0x0,
+    VF_095_JNT_MN_BAG1_e=0x1,
+    VF_095_JNT_MN_BODY1_e=0x2,
+};
+
+enum VF_096_JNT {
+    VF_096_JNT_FD_BODY1_e=0x0,
+};
+
+enum VF_084_JNT {
+    VF_084_JNT_SERUCHI_e=0x0,
+};
+
+enum VF_085_JNT {
+    VF_085_JNT_ALDER_e=0x0,
+};
+
+enum VF_086_JNT {
+    VF_086_JNT_OAK_e=0x0,
+};
+
+enum VF_087_JNT {
+    VF_087_JNT_WALNA_e=0x0,
+};
+
+enum VF_088_JNT {
+    VF_088_JNT_BARCH_e=0x0,
+};
+
+enum VF_089_JNT {
+    VF_089_JNT_RAMIN_e=0x0,
+};
+
+enum VF_090_JNT {
+    VF_090_JNT_NIYATO_e=0x0,
+};
+
+enum VF_091_JNT {
+    VF_091_JNT_ELUM_e=0x0,
+};
+
+enum VF_092_JNT {
+    VF_092_JNT_RABRA_e=0x0,
+};
+
+#endif /* !RES_FIGURE4_H */

@@ -5,7 +5,6 @@
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_particle.h"
-#include "d/d_procname.h"
 
 namespace daObjEff {
     class Act_c : public fopAc_ac_c {
@@ -31,16 +30,16 @@ namespace daObjEff {
 
         int prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
 
-        static void make_barrel_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, Type_BARREL_SMOKE_e, pos); }
-        static void make_stool_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, Type_STOOL_SMOKE_e, pos); }
-        static void make_skull_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, Type_SKULL_SMOKE_e, pos); }
+        static void make_barrel_smoke(cXyz* pos) { fopAcM_create(fpcNm_Obj_Eff_e, Type_BARREL_SMOKE_e, pos); }
+        static void make_stool_smoke(cXyz* pos) { fopAcM_create(fpcNm_Obj_Eff_e, Type_STOOL_SMOKE_e, pos); }
+        static void make_skull_smoke(cXyz* pos) { fopAcM_create(fpcNm_Obj_Eff_e, Type_SKULL_SMOKE_e, pos); }
         static void make_land_smoke(cXyz* i_pos, f32 i_scale) {
             cXyz scale(i_scale, i_scale, i_scale);
             scale *= (5.0f / 3.0f);
-            fopAcM_create(PROC_Obj_Eff, Type_LAND_SMOKE_e, i_pos, -1, NULL, &scale);
+            fopAcM_create(fpcNm_Obj_Eff_e, Type_LAND_SMOKE_e, i_pos, -1, NULL, &scale);
         }
-        static void make_pinecone_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, Type_PINECONE_SMOKE_e, pos); }
-        static void make_woodBox_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, Type_WOODBOX_SMOKE_e, pos); }
+        static void make_pinecone_smoke(cXyz* pos) { fopAcM_create(fpcNm_Obj_Eff_e, Type_PINECONE_SMOKE_e, pos); }
+        static void make_woodBox_smoke(cXyz* pos) { fopAcM_create(fpcNm_Obj_Eff_e, Type_WOODBOX_SMOKE_e, pos); }
 
         static BOOL solidHeapCB(fopAc_ac_c*);
         bool create_heap_barrel_smoke();

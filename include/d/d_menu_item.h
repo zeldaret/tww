@@ -121,6 +121,8 @@ public:
     dMi_HIO_c();
     virtual ~dMi_HIO_c() {}
 
+    void genMessage(JORMContext* ctx) {}
+
     static const int ARR_SIZE = 5;
 
 public:

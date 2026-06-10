@@ -5,12 +5,10 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_demo_kmm.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/res/res_demo_kmm.h"
+#include "res/Object/Demo_Kmm.h"
 
 const char daDemo_Kmm_c::M_arcname[] = "Demo_Kmm";
 
@@ -21,11 +19,11 @@ static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
 
 /* 00000098-00000190       .text CreateHeap__12daDemo_Kmm_cFv */
 BOOL daDemo_Kmm_c::CreateHeap() {
-    mpMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectIDRes(M_arcname, DEMO_KMM_BMD_KA), NULL, NULL, NULL, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
+    mpMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectIDRes(M_arcname, dRes_ID_DEMO_KMM_BMD_KA_e), NULL, NULL, NULL, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
-    setAnime(DEMO_KMM_BCK_KA_WAIT1, J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f);
+    setAnime(dRes_ID_DEMO_KMM_BCK_KA_WAIT1_e, J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f);
     return TRUE;
 }
 
@@ -39,8 +37,8 @@ void daDemo_Kmm_c::calcMtx() {
 }
 
 /* 00000228-000002D0       .text setAnime__12daDemo_Kmm_cFiiff */
-void daDemo_Kmm_c::setAnime(int animIdx, int loopMode, float morf, float playSpeed) {
-    mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes(M_arcname, animIdx), loopMode, morf, playSpeed, 0.0f, -1.0f, NULL);
+void daDemo_Kmm_c::setAnime(int animId, int loopMode, f32 morf, f32 playSpeed) {
+    mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes(M_arcname, animId), loopMode, morf, playSpeed, 0.0f, -1.0f, NULL);
 }
 
 /* 000002D0-00000308       .text CreateInit__12daDemo_Kmm_cFv */
@@ -129,18 +127,18 @@ static actor_method_class l_daDemo_Kmm_Method = {
 };
 
 actor_process_profile_definition g_profile_DEMO_KMM = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DEMO_KMM,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DEMO_KMM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daDemo_Kmm_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DEMO_KMM,
+    /* Draw Prio    */ fpcDwPi_DEMO_KMM_e,
     /* Actor SubMtd */ &l_daDemo_Kmm_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

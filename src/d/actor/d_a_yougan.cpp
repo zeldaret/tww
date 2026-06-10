@@ -5,15 +5,15 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_yougan.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_yougan.h"
+#include "res/Object/Yougan.h"
 #include "m_Do/m_Do_lib.h"
 
 class daYOUGAN_HIO_c : public JORReflexible {
 public:
     daYOUGAN_HIO_c();
     virtual ~daYOUGAN_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ s8 mNo;
@@ -172,11 +172,11 @@ BOOL daYougan_c::_daYougan_delete() {
 
 /* 00000600-00000884       .text useHeapInit__10daYougan_cFv */
 BOOL daYougan_c::useHeapInit() {
-    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname, YOUGAN_BMD_YOUGAN_AWA);
+    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname, dRes_INDEX_YOUGAN_BMD_YOUGAN_AWA_e);
     JUT_ASSERT(DEMO_SELECT(462, 464), modelData != NULL);
-    J3DAnmTransform* anmKey = (J3DAnmTransform*) dComIfG_getObjectRes(m_arcname, YOUGAN_BCK_YOUGAN_AWA);
+    J3DAnmTransform* anmKey = (J3DAnmTransform*) dComIfG_getObjectRes(m_arcname, dRes_INDEX_YOUGAN_BCK_YOUGAN_AWA_e);
     JUT_ASSERT(DEMO_SELECT(467,469), anmKey != NULL);
-    J3DAnmTextureSRTKey* srtKey = (J3DAnmTextureSRTKey*) dComIfG_getObjectRes(m_arcname, YOUGAN_BTK_YOUGAN_AWA);
+    J3DAnmTextureSRTKey* srtKey = (J3DAnmTextureSRTKey*) dComIfG_getObjectRes(m_arcname, dRes_INDEX_YOUGAN_BTK_YOUGAN_AWA_e);
     JUT_ASSERT(DEMO_SELECT(472, 474), srtKey != NULL);
 
     yg_awa_num = l_HIO.field_0x06;
@@ -242,18 +242,18 @@ static actor_method_class l_daYougan_Method = {
 };
 
 actor_process_profile_definition g_profile_YOUGAN = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_YOUGAN,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_YOUGAN_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daYougan_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_YOUGAN,
+    /* Draw Prio    */ fpcDwPi_YOUGAN_e,
     /* Actor SubMtd */ &l_daYougan_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

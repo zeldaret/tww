@@ -1,0 +1,105 @@
+#ifndef RES_HR_H
+#define RES_HR_H
+
+enum dRes_INDEX_HR {
+    /* BCKS */
+    dRes_INDEX_HR_BCK_DAMAGE_e=0x6,
+    dRes_INDEX_HR_BCK_H_ANT_e=0x7,
+    dRes_INDEX_HR_BCK_H_WAIT01_e=0x8,
+    dRes_INDEX_HR_BCK_LOOK_e=0x9,
+    dRes_INDEX_HR_BCK_R_ANT_e=0xA,
+    dRes_INDEX_HR_BCK_R_WAIT01_e=0xB,
+    dRes_INDEX_HR_BCK_R_WAIT02_e=0xC,
+    dRes_INDEX_HR_BCK_TALK01_e=0xD,
+    dRes_INDEX_HR_BCK_TALK02_e=0xE,
+    dRes_INDEX_HR_BCK_TALK03_e=0xF,
+    /* BDLM */
+    dRes_INDEX_HR_BDL_H_ANT_e=0x12,
+    dRes_INDEX_HR_BDL_H_BROW_e=0x13,
+    dRes_INDEX_HR_BDL_HR_e=0x14,
+    dRes_INDEX_HR_BDL_R_ANT_e=0x15,
+    dRes_INDEX_HR_BDL_R_BROW_e=0x16,
+    /* BMT  */
+    dRes_INDEX_HR_BMT_R_BODY_e=0x19,
+    /* BTP  */
+    dRes_INDEX_HR_BTP_MABA_H_e=0x1C,
+    dRes_INDEX_HR_BTP_MABA_R01_e=0x1D,
+    dRes_INDEX_HR_BTP_MABA_R02_e=0x1E,
+};
+
+enum dRes_ID_HR {
+    /* BCKS */
+    dRes_ID_HR_BCK_DAMAGE_e=0x6,
+    dRes_ID_HR_BCK_H_ANT_e=0x7,
+    dRes_ID_HR_BCK_H_WAIT01_e=0x8,
+    dRes_ID_HR_BCK_LOOK_e=0x9,
+    dRes_ID_HR_BCK_R_ANT_e=0xA,
+    dRes_ID_HR_BCK_R_WAIT01_e=0xB,
+    dRes_ID_HR_BCK_R_WAIT02_e=0xC,
+    dRes_ID_HR_BCK_TALK01_e=0xD,
+    dRes_ID_HR_BCK_TALK02_e=0xE,
+    dRes_ID_HR_BCK_TALK03_e=0xF,
+    /* BDLM */
+    dRes_ID_HR_BDL_H_ANT_e=0x12,
+    dRes_ID_HR_BDL_H_BROW_e=0x13,
+    dRes_ID_HR_BDL_HR_e=0x14,
+    dRes_ID_HR_BDL_R_ANT_e=0x15,
+    dRes_ID_HR_BDL_R_BROW_e=0x16,
+    /* BMT  */
+    dRes_ID_HR_BMT_R_BODY_e=0x19,
+    /* BTP  */
+    dRes_ID_HR_BTP_MABA_H_e=0x1C,
+    dRes_ID_HR_BTP_MABA_R01_e=0x1D,
+    dRes_ID_HR_BTP_MABA_R02_e=0x1E,
+};
+
+enum H_ANT_JNT {
+    H_ANT_JNT_H_ANT1_e=0x0,
+    H_ANT_JNT_H_ANT2_e=0x1,
+    H_ANT_JNT_H_ANT3_e=0x2,
+    H_ANT_JNT_H_ANT4_e=0x3,
+    H_ANT_JNT_H_ANT5_e=0x4,
+};
+
+enum H_BROW_JNT {
+    H_BROW_JNT_H_BROWS_e=0x0,
+};
+
+enum HR_JNT {
+    HR_JNT_WAIST_e=0x0,
+    HR_JNT_BACKBONE1_e=0x1,
+    HR_JNT_BACKBONE2_e=0x2,
+    HR_JNT_HEAD_e=0x3,
+    HR_JNT_JAW_e=0x4,
+    HR_JNT_MOUTH_e=0x5,
+    HR_JNT_MOUTHL_e=0x6,
+    HR_JNT_MOUTHR_e=0x7,
+    HR_JNT_SHOULDERL_e=0x8,
+    HR_JNT_ARML1_e=0x9,
+    HR_JNT_ARML2_e=0xA,
+    HR_JNT_HANDL1_e=0xB,
+    HR_JNT_HANDL2_e=0xC,
+    HR_JNT_SHOULDERR_e=0xD,
+    HR_JNT_ARMR1_e=0xE,
+    HR_JNT_ARMR2_e=0xF,
+    HR_JNT_HANDR1_e=0x10,
+    HR_JNT_HANDR2_e=0x11,
+};
+
+enum R_ANT_JNT {
+    R_ANT_JNT_R_ANT1_e=0x0,
+    R_ANT_JNT_R_ANTL2_e=0x1,
+    R_ANT_JNT_R_ANTL3_e=0x2,
+    R_ANT_JNT_R_ANTL4_e=0x3,
+    R_ANT_JNT_R_ANTL5_e=0x4,
+    R_ANT_JNT_R_ANTR2_e=0x5,
+    R_ANT_JNT_R_ANTR3_e=0x6,
+    R_ANT_JNT_R_ANTR4_e=0x7,
+    R_ANT_JNT_R_ANTR5_e=0x8,
+};
+
+enum R_BROW_JNT {
+    R_BROW_JNT_R_BROWS_e=0x0,
+};
+
+#endif /* !RES_HR_H */

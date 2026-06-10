@@ -9,13 +9,11 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_sea.h"
-#include "d/res/res_bomber.h"
+#include "res/Object/Bomber.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
 #include "d/d_2dnumber.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -153,7 +151,7 @@ BOOL daCanon_c::createCheck(int arg1, int arg2, int arg3) {
 
 /* 000005A0-00000628       .text daCanon_nodeCallBack__FP7J3DNodei */
 static BOOL daCanon_nodeCallBack(J3DNode* node, int calcTiming) {
-    if (calcTiming == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* pJVar2 = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         s32 uVar1 = joint->getJntNo();
@@ -190,7 +188,7 @@ void* daCanon_BreakTarget(void* arg1, void* arg2) {
     if (fopAcM_IsActor(arg1) && fopAcM_GetName(arg1) == tk_Obj_Barrel2_e) {
         fopAc_ac_c* ac1 = (fopAc_ac_c*)arg1;
         if (fopAcM_GetID(arg2) == fopAcM_GetLinkId(ac1)) {
-            fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_0, false, false), &ac1->current.pos, -1, NULL, NULL, -1, dEv_extra_createCB);
+            fopAcM_create(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_0, false, false), &ac1->current.pos, -1, NULL, NULL, -1, dEv_extra_createCB);
         }
     }
     return NULL;
@@ -498,7 +496,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
 
 /* 00001A38-00001E04       .text CreateHeap__9daCanon_cFv */
 BOOL daCanon_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, BOMBER_INDEX_BDL_VCANK);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_BOMBER_BDL_VCANK_e);
     JUT_ASSERT(823, modelData != NULL);
 
     mpModel1 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -506,7 +504,7 @@ BOOL daCanon_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DModelData* modelData2 = (J3DModelData*)dComIfG_getObjectRes(M_arcname, BOMBER_INDEX_BMD_AISI);
+    J3DModelData* modelData2 = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_BOMBER_BMD_AISI_e);
     JUT_ASSERT(831, modelData2 != NULL);
 
     s8 cVar10 = modelData->getJointName()->getIndex("canon");
@@ -517,8 +515,8 @@ BOOL daCanon_c::CreateHeap() {
         return FALSE;
     }
 
-    ResTIMG* pRVar3 = (ResTIMG*)dComIfG_getObjectRes("Bomber", BOMBER_INDEX_BTI_GAME_BOMB_01);
-    ResTIMG* pRVar4 = (ResTIMG*)dComIfG_getObjectRes("Bomber", BOMBER_INDEX_BTI_GAME_BOMB_02);
+    ResTIMG* pRVar3 = (ResTIMG*)dComIfG_getObjectRes("Bomber", dRes_INDEX_BOMBER_BTI_GAME_BOMB_01_e);
+    ResTIMG* pRVar4 = (ResTIMG*)dComIfG_getObjectRes("Bomber", dRes_INDEX_BOMBER_BTI_GAME_BOMB_02_e);
 
     for (s32 i = 0; i < ARRAY_SSIZE(m584); i++) {
         m584[i] = new dDlst_2DObject_c();
@@ -531,8 +529,8 @@ BOOL daCanon_c::CreateHeap() {
         }
     }
 
-    ResTIMG* pRVar5 = (ResTIMG*)dComIfG_getObjectRes("Bomber", BOMBER_INDEX_BTI_GAME_SHIP_NODAMAGE);
-    ResTIMG* pRVar6 = (ResTIMG*)dComIfG_getObjectRes("Bomber", BOMBER_INDEX_BTI_GAME_HUNE_DAMAGE);
+    ResTIMG* pRVar5 = (ResTIMG*)dComIfG_getObjectRes("Bomber", dRes_INDEX_BOMBER_BTI_GAME_SHIP_NODAMAGE_e);
+    ResTIMG* pRVar6 = (ResTIMG*)dComIfG_getObjectRes("Bomber", dRes_INDEX_BOMBER_BTI_GAME_HUNE_DAMAGE_e);
 
     // Bug: m5AC only has 5 elements, copy-paste mistake.
     for (s32 i = 0; i < ARRAY_SSIZE(m584); i++) {
@@ -546,10 +544,10 @@ BOOL daCanon_c::CreateHeap() {
         }
     }
 
-    ResTIMG* pRVar7 = (ResTIMG*)dComIfG_getObjectRes("Bomber", BOMBER_INDEX_BTI_GAME_RULE);
-    ResTIMG* pRVar8 = (ResTIMG*)dComIfG_getObjectRes("Bomber", BOMBER_INDEX_BTI_GAME_BATTERY);
-    ResTIMG* pRVar9 = (ResTIMG*)dComIfG_getObjectRes("Bomber", BOMBER_INDEX_BTI_GAME_BATTERY_BASE);
-    ResTIMG* pRVar10 = (ResTIMG*)dComIfG_getObjectRes("Bomber", BOMBER_INDEX_BTI_RUPY_NUM_DEGREE);
+    ResTIMG* pRVar7 = (ResTIMG*)dComIfG_getObjectRes("Bomber", dRes_INDEX_BOMBER_BTI_GAME_RULE_e);
+    ResTIMG* pRVar8 = (ResTIMG*)dComIfG_getObjectRes("Bomber", dRes_INDEX_BOMBER_BTI_GAME_BATTERY_e);
+    ResTIMG* pRVar9 = (ResTIMG*)dComIfG_getObjectRes("Bomber", dRes_INDEX_BOMBER_BTI_GAME_BATTERY_BASE_e);
+    ResTIMG* pRVar10 = (ResTIMG*)dComIfG_getObjectRes("Bomber", dRes_INDEX_BOMBER_BTI_RUPY_NUM_DEGREE_e);
     m5C0 = new dDlst_2DBattery_c();
 
     if (m5C0 == NULL) {
@@ -706,18 +704,18 @@ static actor_method_class daCanonMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Canon = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Canon,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Canon_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daCanon_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Canon,
+    /* Draw Prio    */ fpcDwPi_Canon_e,
     /* Actor SubMtd */ &daCanonMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

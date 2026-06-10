@@ -5,8 +5,6 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_cloth.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 #include "assets/l_matDL__d_menu_cloth.h"
 
@@ -979,15 +977,15 @@ static msg_method_class dMenu_ClothMethodTable = {
 };
 
 msg_process_profile_definition g_profile_Menu_Cloth = {
-    /* LayerID      */ (uint)fpcLy_CURRENT_e,
-    /* ListID       */ 0x000C,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Menu_Cloth,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x000C,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Menu_Cloth_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(menu_cloth_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_Menu_Cloth,
+    /* Draw Prio    */ fpcDwPi_Menu_Cloth_e,
     /* Msg SubMtd   */ &dMenu_ClothMethodTable,
 };

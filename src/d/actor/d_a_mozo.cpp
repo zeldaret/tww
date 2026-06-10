@@ -5,13 +5,11 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mozo.h"
-#include "d/res/res_mozo.h"
+#include "res/Object/Mozo.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_lib.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_ext.h"
@@ -106,13 +104,13 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000007AC-00000A24       .text CreateHeap__8daMozo_cFv */
 BOOL daMozo_c::CreateHeap() {
-    J3DModelData* mdlData = (J3DModelData*)dComIfG_getObjectRes("Mozo", MOZO_INDEX_BDL_MOZ);
+    J3DModelData* mdlData = (J3DModelData*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BDL_MOZ_e);
     
     mDoExt_McaMorf* newMorf =  new mDoExt_McaMorf(
         mdlData,
         0,
         0,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Mozo", MOZO_INDEX_BCK_MOZ)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BCK_MOZ_e)),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -125,10 +123,10 @@ BOOL daMozo_c::CreateHeap() {
     
     mAnimMorf = newMorf;
 
-    m_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Mozo", MOZO_INDEX_BRK_MOZ);
+    m_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BRK_MOZ_e);
     JUT_ASSERT(0x16A, m_brk != NULL);
 
-    m_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mozo", MOZO_INDEX_BTK_MOZ);
+    m_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BTK_MOZ_e);
     JUT_ASSERT(0x16D, m_btk != NULL);
 
     int brkInitResult = mBrkAnm.init(mdlData, m_brk, true, J3DFrameCtrl::EMode_NONE);
@@ -267,7 +265,7 @@ fopAc_ac_c* daMozo_c::getBeamActor(fpc_ProcID apid) {
     fopAc_ac_c* ac = fopAcM_SearchByID(apid);
     if (ac == NULL)
         return NULL;
-    if (fopAc_IsActor(ac) && fopAcM_GetProfName(ac) == PROC_Beam)
+    if (fopAc_IsActor(ac) && fopAcM_GetProfName(ac) == fpcNm_Beam_e)
         return ac;
     return NULL;
 }
@@ -336,18 +334,18 @@ static actor_method_class l_daMozo_Method = {
 };
 
 actor_process_profile_definition g_profile_MOZO = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MOZO,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MOZO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMozo_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MOZO,
+    /* Draw Prio    */ fpcDwPi_MOZO_e,
     /* Actor SubMtd */ &l_daMozo_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

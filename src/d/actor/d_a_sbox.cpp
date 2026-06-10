@@ -6,10 +6,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sbox.h"
 #include "d/actor/d_a_ship.h"
-#include "d/res/res_dalways.h"
-#include "d/d_procname.h"
+#include "res/Object/Dalways.h"
 #include "d/d_kankyo.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
@@ -22,10 +20,10 @@ static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
 
 /* 00000098-0000034C       .text CreateHeap__8daSbox_cFv */
 BOOL daSbox_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Dalways", DALWAYS_BDL_BOXSEA));
+    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BDL_BOXSEA_e));
     JUT_ASSERT(113, modelData != NULL);
 
-    if (!mBck1.init(modelData, (J3DAnmTransform*)(dComIfG_getObjectRes("Dalways", DALWAYS_BCK_BOXOPENBOX)), true, J3DFrameCtrl::EMode_NONE))
+    if (!mBck1.init(modelData, (J3DAnmTransform*)(dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BCK_BOXOPENBOX_e)), true, J3DFrameCtrl::EMode_NONE))
     {
         return FALSE;
     }
@@ -35,7 +33,7 @@ BOOL daSbox_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DModelData* flashModelData = (J3DModelData*)(dComIfG_getObjectRes("Dalways", DALWAYS_BDL_IT_TAKARA_FLASH));
+    J3DModelData* flashModelData = (J3DModelData*)(dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BDL_IT_TAKARA_FLASH_e));
     JUT_ASSERT(140, flashModelData != NULL);
 
     mpModel2 = mDoExt_J3DModel__create(flashModelData, 0x80000, 0x1000200);
@@ -45,7 +43,7 @@ BOOL daSbox_c::CreateHeap() {
 
     if (!mBck2.init(
             flashModelData,
-            (J3DAnmTransform*)(dComIfG_getObjectRes("Dalways", DALWAYS_BCK_IT_TAKARA_FLASH2)),
+            (J3DAnmTransform*)(dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BCK_IT_TAKARA_FLASH2_e)),
             true,
             J3DFrameCtrl::EMode_NONE,
             1.0f,
@@ -59,7 +57,7 @@ BOOL daSbox_c::CreateHeap() {
 
     if (!mBtk.init(
             flashModelData,
-            (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes("Dalways", DALWAYS_BTK_IT_TAKARA_FLASH)),
+            (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BTK_IT_TAKARA_FLASH_e)),
             true,
             J3DFrameCtrl::EMode_NONE,
             1.0f,
@@ -74,7 +72,7 @@ BOOL daSbox_c::CreateHeap() {
 
     if (!mBrk.init(
             flashModelData,
-            (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Dalways", DALWAYS_BRK_IT_TAKARA_FLASH)),
+            (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BRK_IT_TAKARA_FLASH_e)),
             true,
             J3DFrameCtrl::EMode_NONE,
             1.0f,
@@ -524,18 +522,18 @@ static actor_method_class l_daSbox_Method = {
 };
 
 actor_process_profile_definition g_profile_SBOX = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SBOX,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SBOX_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSbox_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SBOX,
+    /* Draw Prio    */ fpcDwPi_SBOX_e,
     /* Actor SubMtd */ &l_daSbox_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

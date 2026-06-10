@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_att.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_bgn.h"
@@ -21,7 +19,7 @@ static BOOL daAtt_Draw(att_class* i_this) {
 
 /* 000000F4-00000140       .text boss_s_sub__FPvPv */
 static void* boss_s_sub(void* search, void*) {
-    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_BGN) {
+    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == fpcNm_BGN_e) {
         return search;
     }
     return NULL;
@@ -239,18 +237,18 @@ static actor_method_class l_daAtt_Method = {
 };
 
 actor_process_profile_definition g_profile_ATT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ATT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ATT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(att_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ATT,
+    /* Draw Prio    */ fpcDwPi_ATT_e,
     /* Actor SubMtd */ &l_daAtt_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

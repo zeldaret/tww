@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_deku_item.h"
-#include "d/res/res_deku.h"
+#include "res/Object/Deku.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 const char daDekuItem_c::m_arcname[] = "Deku";
 
@@ -61,7 +59,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000000F0-000002C8       .text CreateHeap__12daDekuItem_cFv */
 BOOL daDekuItem_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, DEKU_BDL_VLFDM);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_DEKU_BDL_VLFDM_e);
     JUT_ASSERT(0xF4, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203U);
@@ -70,14 +68,14 @@ BOOL daDekuItem_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, DEKU_BCK_VLFDK);
+    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_DEKU_BCK_VLFDK_e);
     JUT_ASSERT(0x103, pbck != NULL);
 
     if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
 
-    pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, DEKU_BCK_VLFDM);
+    pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_DEKU_BCK_VLFDM_e);
     JUT_ASSERT(0x110, pbck != NULL);
 
     if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE)) {
@@ -202,7 +200,7 @@ void daDekuItem_c::mode_getdemo_init() {
 /* 00000CB8-00000D34       .text mode_getdemo_wait__12daDekuItem_cFv */
 void daDekuItem_c::mode_getdemo_wait() {
     if (!unk630) {
-        mItemPID = fopAcM_createItemForTrBoxDemo(&current.pos, dItem_DEKU_LEAF_e, -1, fopAcM_GetRoomNo(this));
+        mItemPID = fopAcM_createItemForTrBoxDemo(&current.pos, dItemNo_DEKU_LEAF_e, -1, fopAcM_GetRoomNo(this));
 
         if (mItemPID != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(mItemPID);
@@ -283,18 +281,18 @@ static actor_method_class daDekuItemMethodTable = {
 };
 
 actor_process_profile_definition g_profile_DEKU_ITEM = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DEKU_ITEM,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DEKU_ITEM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daDekuItem_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DEKU_ITEM,
+    /* Draw Prio    */ fpcDwPi_DEKU_ITEM_e,
     /* Actor SubMtd */ &daDekuItemMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

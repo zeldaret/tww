@@ -5,11 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_pbco.h"
-#include "d/res/res_pbco.h"
+#include "res/Object/Pbco.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 static daObj_Pbco_HIO_c l_HIO;
 const char daObj_Pbco_c::M_arcname[] = "Pbco";
@@ -35,17 +33,17 @@ static int CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 000001AC-00000348       .text CreateHeap__12daObj_Pbco_cFv */
 BOOL daObj_Pbco_c::CreateHeap() {
     J3DModelData* modelData;
-    if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !checkItemGet(dItem_PEARL_NAYRU_e, TRUE)) {
-        modelData = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, PBCO_INDEX_BDL_PBCO));
+    if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !checkItemGet(dItemNo_PEARL_NAYRU_e, TRUE)) {
+        modelData = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, dRes_INDEX_PBCO_BDL_PBCO_e));
     } else {
-        modelData = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, PBCO_INDEX_BDL_PBC2));
+        modelData = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, dRes_INDEX_PBCO_BDL_PBC2_e));
     }
     JUT_ASSERT(0xa9, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-    if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !checkItemGet(dItem_PEARL_NAYRU_e, TRUE)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !checkItemGet(dItemNo_PEARL_NAYRU_e, TRUE)) {
         mpBgW = NULL;
     } else {
-        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, PBCO_INDEX_DZB_PBCO), cBgW::MOVE_BG_e,
+        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_PBCO_DZB_PBCO_e), cBgW::MOVE_BG_e,
                             &mpModel->getBaseTRMtx());
         if (mpBgW == NULL) {
             return FALSE;
@@ -133,18 +131,18 @@ static actor_method_class daObj_PbcoMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Pbco = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Pbco,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Pbco_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Pbco_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Pbco,
+    /* Draw Prio    */ fpcDwPi_Obj_Pbco_e,
     /* Actor SubMtd */ &daObj_PbcoMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

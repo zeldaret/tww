@@ -18,13 +18,13 @@ void mDoMtx_XrotM(Mtx, s16);
 void mDoMtx_YrotM(Mtx, s16);
 void mDoMtx_ZrotM(Mtx, s16);
 void mDoMtx_MtxToRot(CMtxP, csXyz*);
-void mDoMtx_lookAt(Mtx param_0, Vec const* param_1, Vec const* param_2, s16 param_3);
-void mDoMtx_lookAt(Mtx param_0, Vec const* param_1, Vec const* param_2, Vec const* param_3,
+void mDoMtx_lookAt(Mtx mtx, const Vec* param_1, const Vec* param_2, s16 param_3);
+void mDoMtx_lookAt(Mtx mtx, const Vec* param_1, const Vec* param_2, const Vec* param_3,
                    s16 param_4);
 void mDoMtx_concatProjView(f32 const (*param_0)[4], f32 const (*param_1)[4], f32 (*param_2)[4]);
 void mDoMtx_ZrotM(Mtx mtx, s16 z);
 bool mDoMtx_inverseTranspose(f32 const (*param_0)[4], f32 (*param_1)[4]);
-void mDoMtx_QuatConcat(Quaternion const* param_0, Quaternion const* param_1, Quaternion* param_2);
+void mDoMtx_QuatConcat(const Quaternion* param_0, const Quaternion* param_1, Quaternion* param_2);
 void mDoMtx_concat(const Mtx a, const Mtx b, Mtx c);
 
 inline void mDoMtx_multVecSR(const Mtx m, const Vec* src, Vec* dst) {
@@ -43,7 +43,7 @@ inline void mDoMtx_multVec(const Mtx m, const Vec* src, Vec* dst) {
     MTXMultVec(m, src, dst);
 }
 
-inline void mDoMtx_multVecArray(Mtx m, const Vec* src, Vec* dst, u32 count) {
+inline void mDoMtx_multVecArray(const Mtx m, const Vec* src, Vec* dst, u32 count) {
     MTXMultVecArray(m, src, dst, count);
 }
 
@@ -79,16 +79,16 @@ inline void cMtx_ZrotS(Mtx mtx, s16 z) {
     mDoMtx_ZrotS(mtx, z);
 }
 
-inline void cMtx_lookAt(Mtx param_0, const Vec* param_1, const Vec* param_2, s16 param_3) {
-    mDoMtx_lookAt(param_0, param_1, param_2, param_3);
+inline void cMtx_lookAt(Mtx mtx, const Vec* param_1, const Vec* param_2, s16 param_3) {
+    mDoMtx_lookAt(mtx, param_1, param_2, param_3);
 }
 
 inline void cMtx_multVec(const Mtx mtx, const Vec* src, Vec* dst) {
     mDoMtx_multVec(mtx, src, dst);
 }
 
-inline void cMtx_lookAt(Mtx param_0, const Vec* param_1, const Vec* param_2, const Vec* param_3, s16 param_4) {
-    mDoMtx_lookAt(param_0,param_1,param_2,param_3,param_4);
+inline void cMtx_lookAt(Mtx mtx, const Vec* param_1, const Vec* param_2, const Vec* param_3, s16 param_4) {
+    mDoMtx_lookAt(mtx, param_1, param_2, param_3, param_4);
 }
 
 inline void cMtx_copy(CMtxP src, MtxP dst) {
@@ -171,13 +171,13 @@ public:
      * Translates the `now` Matrix by the given cXyz
      * @param xyz The xyz translation vector
      */
-    static inline void transS(cXyz const& xyz) { transS(xyz.x, xyz.y, xyz.z); }
+    static inline void transS(const cXyz& xyz) { transS(xyz.x, xyz.y, xyz.z); }
 
     /**
      * Translates a new Matrix by the given cXyz and then concatenates it with the `now` matrix
      * @param xyz The xyz translation vector
      */
-    static inline void transM(cXyz const& xyz) { transM(xyz.x, xyz.y, xyz.z); }
+    static inline void transM(const cXyz& xyz) { transM(xyz.x, xyz.y, xyz.z); }
 
     /**
      * Translates a new Matrix by the given X, Y, and Z values and then concatenates it with the `now` matrix
@@ -191,13 +191,13 @@ public:
      * Scales the `now` Matrix by the given cXyz
      * @param xyz The xyz scale vector
      */
-    static void scaleS(cXyz const& xyz);
+    static void scaleS(const cXyz& xyz);
 
     /**
      * Scales a new Matrix by the given cXyz and then concatenates it with the `now` matrix
      * @param xyz The xyz scale vector
      */
-    static void scaleM(cXyz const& xyz) { scaleM(xyz.x, xyz.y, xyz.z); }
+    static void scaleM(const cXyz& xyz) { scaleM(xyz.x, xyz.y, xyz.z); }
 
     /**
      * Scales a new Matrix by the given X, Y, and Z values and then concatenates it with the `now` matrix
@@ -207,23 +207,25 @@ public:
      */
     static void scaleM(f32 x, f32 y, f32 z);
 
-    static void XYZrotS(csXyz const& xyz);
+    static void XYZrotS(const csXyz& xyz);
 
     /**
      * Rotates the `now` matrix by the given csXyz in the order X, Y, Z
      * @param xyz The xyz rotation vector
      */
-    static void XYZrotM(csXyz const& xyz) { XYZrotM(xyz.x, xyz.y, xyz.z); }
+    static void XYZrotM(const csXyz& xyz) { XYZrotM(xyz.x, xyz.y, xyz.z); }
 
-    static void ZXYrotS(csXyz const& xyz) { ZXYrotS(xyz.x, xyz.y, xyz.z); }
+    static void ZXYrotS(const csXyz& xyz) { ZXYrotS(xyz.x, xyz.y, xyz.z); }
 
     /**
      * Rotates the `now` matrix by the given csXyz in the order Z, X, Y
      * @param xyz The xyz rotation vector
      */
-    static void ZXYrotM(csXyz const& xyz) { ZXYrotM(xyz.x, xyz.y, xyz.z); }
+    static void ZXYrotM(const csXyz& xyz) { ZXYrotM(xyz.x, xyz.y, xyz.z); }
 
-    static void quatM(Quaternion const*);
+    static void quatM(const Quaternion*);
+
+    static void quatS(const Quaternion* quat) { MTXQuat(now, quat); }
 
     /**
      * Returns the `now` Matrix
@@ -352,7 +354,6 @@ public:
     }
 
     // TODO
-    static void quatS(const Quaternion*) {}
     static void rYrotS(f32) {}
 
     static Mtx now;

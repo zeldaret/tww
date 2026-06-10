@@ -1,0 +1,59 @@
+#ifndef RES_IKADAH_H
+#define RES_IKADAH_H
+
+enum dRes_INDEX_IKADAH {
+    /* BCKS */
+    dRes_INDEX_IKADAH_BCK_SVSHIP_KAITEN_e=0x5,
+    /* BDL  */
+    dRes_INDEX_IKADAH_BDL_VIKAE_e=0x8,
+    dRes_INDEX_IKADAH_BDL_VIKAH_e=0x9,
+    dRes_INDEX_IKADAH_BDL_VSVSP_e=0xA,
+    dRes_INDEX_IKADAH_BDL_VTSP_e=0xB,
+    dRes_INDEX_IKADAH_BDL_VTSP2_e=0xC,
+    /* DZB  */
+    dRes_INDEX_IKADAH_DZB_VIKAE_e=0xF,
+    dRes_INDEX_IKADAH_DZB_VIKAH_e=0x10,
+    dRes_INDEX_IKADAH_DZB_VSVSP_e=0x11,
+    dRes_INDEX_IKADAH_DZB_VTSP_e=0x12,
+};
+
+enum dRes_ID_IKADAH {
+    /* BCKS */
+    dRes_ID_IKADAH_BCK_SVSHIP_KAITEN_e=0x5,
+    /* BDL  */
+    dRes_ID_IKADAH_BDL_VIKAE_e=0x8,
+    dRes_ID_IKADAH_BDL_VIKAH_e=0x9,
+    dRes_ID_IKADAH_BDL_VSVSP_e=0xA,
+    dRes_ID_IKADAH_BDL_VTSP_e=0xB,
+    dRes_ID_IKADAH_BDL_VTSP2_e=0xC,
+    /* DZB  */
+    dRes_ID_IKADAH_DZB_VIKAE_e=0xF,
+    dRes_ID_IKADAH_DZB_VIKAH_e=0x10,
+    dRes_ID_IKADAH_DZB_VSVSP_e=0x11,
+    dRes_ID_IKADAH_DZB_VTSP_e=0x12,
+};
+
+enum VIKAE_JNT {
+    VIKAE_JNT_VIKAE_e=0x0,
+};
+
+enum VIKAH_JNT {
+    VIKAH_JNT_V_IKADAHOUSE_e=0x0,
+};
+
+enum VSVSP_JNT {
+    VSVSP_JNT_SV_SHIP_ROOT_e=0x0,
+    VSVSP_JNT_SV_CREAN_e=0x1,
+    VSVSP_JNT_SV_REEL_e=0x2,
+    VSVSP_JNT_SV_HANDLE_1_e=0x3,
+};
+
+enum VTSP_JNT {
+    VTSP_JNT_VTSP_e=0x0,
+};
+
+enum VTSP2_JNT {
+    VTSP2_JNT_VTSP2_e=0x0,
+};
+
+#endif /* !RES_IKADAH_H */

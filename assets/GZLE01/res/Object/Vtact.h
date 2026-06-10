@@ -1,0 +1,19 @@
+#ifndef RES_VTACT_H
+#define RES_VTACT_H
+
+enum dRes_INDEX_VTACT {
+    /* BDL  */
+    dRes_INDEX_VTACT_BDL_VTACT_e=0x3,
+};
+
+enum dRes_ID_VTACT {
+    /* BDL  */
+    dRes_ID_VTACT_BDL_VTACT_e=0x3,
+};
+
+enum VTACT_JNT {
+    VTACT_JNT_ROOT_VTACT_e=0x0,
+    VTACT_JNT_TACT_MODEL_e=0x1,
+};
+
+#endif /* !RES_VTACT_H */

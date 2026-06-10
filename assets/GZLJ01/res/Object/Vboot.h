@@ -1,0 +1,23 @@
+#ifndef RES_VBOOT_H
+#define RES_VBOOT_H
+
+enum dRes_INDEX_VBOOT {
+    /* BDLM */
+    dRes_INDEX_VBOOT_BDL_VBOOT_e=0x4,
+    /* BTK  */
+    dRes_INDEX_VBOOT_BTK_VBOOT_e=0x7,
+};
+
+enum dRes_ID_VBOOT {
+    /* BDLM */
+    dRes_ID_VBOOT_BDL_VBOOT_e=0x4,
+    /* BTK  */
+    dRes_ID_VBOOT_BTK_VBOOT_e=0x7,
+};
+
+enum VBOOT_JNT {
+    VBOOT_JNT_ROOT_VBOOT_e=0x0,
+    VBOOT_JNT_VBOOT_MODEL_e=0x1,
+};
+
+#endif /* !RES_VBOOT_H */

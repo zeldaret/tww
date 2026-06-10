@@ -1,0 +1,24 @@
+#ifndef RES_DMGROOM_H
+#define RES_DMGROOM_H
+
+enum dRes_INDEX_DMGROOM {
+    /* BDLM */
+    dRes_INDEX_DMGROOM_BDL_DMGROOM_e=0x4,
+    /* BRK  */
+    dRes_INDEX_DMGROOM_BRK_DMGROOM_e=0x7,
+};
+
+enum dRes_ID_DMGROOM {
+    /* BDLM */
+    dRes_ID_DMGROOM_BDL_DMGROOM_e=0x4,
+    /* BRK  */
+    dRes_ID_DMGROOM_BRK_DMGROOM_e=0x7,
+};
+
+enum DMGROOM_JNT {
+    DMGROOM_JNT_DMGROOM_e=0x0,
+    DMGROOM_JNT_DEMO_GROOM_e=0x1,
+    DMGROOM_JNT_POLYSURFACE853_e=0x2,
+};
+
+#endif /* !RES_DMGROOM_H */

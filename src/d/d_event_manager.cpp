@@ -6,7 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_event_manager.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 
 enum {
     ACT_WAIT,
@@ -688,13 +687,13 @@ fopAc_ac_c* dEvent_manager_c::specialCast(const char* name, int flag) {
         return NULL;
 
     if (strcmp(name, "SHUTTER_DOOR") == 0) {
-        actor = specialCast_Shutter(PROC_DOOR10, flag);
+        actor = specialCast_Shutter(fpcNm_DOOR10_e, flag);
         if (actor == NULL)
-            actor = specialCast_Shutter(PROC_DOOR12, flag);
+            actor = specialCast_Shutter(fpcNm_DOOR12_e, flag);
         if (actor == NULL)
-            actor = specialCast_Shutter(PROC_KDDOOR, flag);
+            actor = specialCast_Shutter(fpcNm_KDDOOR_e, flag);
         if (actor == NULL)
-            actor = specialCast_Shutter(PROC_KNOB00, flag);
+            actor = specialCast_Shutter(fpcNm_KNOB00_e, flag);
         if (actor != NULL)
             dComIfGp_event_onEventFlag(0x10);
     }

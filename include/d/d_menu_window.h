@@ -90,6 +90,8 @@ public:
     dMw_HIO_c();
     virtual ~dMw_HIO_c() {}
 
+    void genMessage(JORMContext* ctx) {}
+
     /* 0x04 */ s8 mNo;
     /* 0x06 */ u16 field_0x06;
     /* 0x08 */ u16 field_0x08;
@@ -152,6 +154,8 @@ class dMw_DHIO_c : public JORReflexible {
 public:
     dMw_DHIO_c();
     virtual ~dMw_DHIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 arr_0x05[0xC][0x10];

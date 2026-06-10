@@ -1,0 +1,19 @@
+#ifndef RES_CLUB_H
+#define RES_CLUB_H
+
+enum dRes_INDEX_CLUB {
+    /* BDLC */
+    dRes_INDEX_CLUB_BDL_ST_BUKI_e=0x3,
+};
+
+enum dRes_ID_CLUB {
+    /* BDLC */
+    dRes_ID_CLUB_BDL_ST_BUKI_e=0x3,
+};
+
+enum ST_BUKI_JNT {
+    ST_BUKI_JNT_ST_BUKI_e=0x0,
+    ST_BUKI_JNT_BUKI_EFFECT_e=0x1,
+};
+
+#endif /* !RES_CLUB_H */

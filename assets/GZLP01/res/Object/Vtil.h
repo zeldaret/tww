@@ -1,0 +1,42 @@
+#ifndef RES_VTIL_H
+#define RES_VTIL_H
+
+enum dRes_INDEX_VTIL {
+    /* BDL  */
+    dRes_INDEX_VTIL_BDL_VTIL1_e=0x3,
+    dRes_INDEX_VTIL_BDL_VTIL2_e=0x4,
+    dRes_INDEX_VTIL_BDL_VTIL3_e=0x5,
+    dRes_INDEX_VTIL_BDL_VTIL4_e=0x6,
+    dRes_INDEX_VTIL_BDL_VTIL5_e=0x7,
+};
+
+enum dRes_ID_VTIL {
+    /* BDL  */
+    dRes_ID_VTIL_BDL_VTIL1_e=0x3,
+    dRes_ID_VTIL_BDL_VTIL2_e=0x4,
+    dRes_ID_VTIL_BDL_VTIL3_e=0x5,
+    dRes_ID_VTIL_BDL_VTIL4_e=0x6,
+    dRes_ID_VTIL_BDL_VTIL5_e=0x7,
+};
+
+enum VTIL1_JNT {
+    VTIL1_JNT_VTIL1_MODEL_e=0x0,
+};
+
+enum VTIL2_JNT {
+    VTIL2_JNT_VTIL2_MODEL_e=0x0,
+};
+
+enum VTIL3_JNT {
+    VTIL3_JNT_VTIL3_MODEL_e=0x0,
+};
+
+enum VTIL4_JNT {
+    VTIL4_JNT_VTIL4_MODEL_e=0x0,
+};
+
+enum VTIL5_JNT {
+    VTIL5_JNT_VTIL5_MODEL_e=0x0,
+};
+
+#endif /* !RES_VTIL_H */

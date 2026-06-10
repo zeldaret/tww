@@ -10,15 +10,13 @@
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/actor/d_a_player_main.h"
-#include "d/res/res_cb.h"
+#include "res/Object/Cb.h"
 
 class daNpc_Cb1_HIO_c : public JORReflexible {
 public:
@@ -268,7 +266,7 @@ cPhs_State daNpc_Cb1_c::create() {
 #if VERSION == VERSION_DEMO
         if(dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_WT))
 #else
-        if(dComIfGs_checkGetItem(dItem_MASTER_SWORD_3_e))
+        if(dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_3_e))
 #endif
         {
             if(!isTypeKazeBoss()) {
@@ -290,7 +288,7 @@ cPhs_State daNpc_Cb1_c::create() {
                 return cPhs_ERROR_e;
             }
         }
-        else if(dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e)) {
+        else if(dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_2_e)) {
             if(!isTypeWaterFall()) {
                 return cPhs_ERROR_e;
             }
@@ -298,7 +296,7 @@ cPhs_State daNpc_Cb1_c::create() {
         else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
             return cPhs_ERROR_e;
         }
-        else if(dComIfGs_checkGetItem(dItem_PEARL_FARORE_e)) {
+        else if(dComIfGs_checkGetItem(dItemNo_PEARL_FARORE_e)) {
             if(!isTypeForest()) {
                 return cPhs_ERROR_e;
             }
@@ -461,7 +459,7 @@ static BOOL ppNodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000D9C-00001458       .text createHeap__11daNpc_Cb1_cFv */
 BOOL daNpc_Cb1_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_CB_e);
     JUT_ASSERT(DEMO_SELECT(937, 936), modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
@@ -491,13 +489,13 @@ BOOL daNpc_Cb1_c::createHeap() {
 
     mpMorf->getModel()->setUserArea((u32)this);
 
-    mpFaceModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB_FACE), 0x00080000, 0x11000022);
+    mpFaceModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_CB_FACE_e), 0x00080000, 0x11000022);
     if(mpFaceModel == NULL) {
         return FALSE;
     }
 
     if(isMusic()) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB_STICK);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_CB_STICK_e);
         JUT_ASSERT(DEMO_SELECT(973, 972), modelData != NULL);
         mpStickModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
         if(mpStickModel == NULL) {
@@ -510,7 +508,7 @@ BOOL daNpc_Cb1_c::createHeap() {
 
         mpStickModel->setUserArea((u32)this);
 
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB_CELLO);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_CB_CELLO_e);
         JUT_ASSERT(DEMO_SELECT(990, 989), modelData != NULL);
         mpCelloModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
         if(mpCelloModel == NULL) {
@@ -518,7 +516,7 @@ BOOL daNpc_Cb1_c::createHeap() {
         }
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_PP);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_PP_e);
     JUT_ASSERT(DEMO_SELECT(1002, 1001), modelData != NULL);
     mpPropellerModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
     if(mpPropellerModel == NULL) {
@@ -530,18 +528,18 @@ BOOL daNpc_Cb1_c::createHeap() {
 
     mpPropellerModel->setUserArea((u32)this);
 
-    if(!mPropellerBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", CB_BCK_M_OPEN), FALSE, J3DFrameCtrl::EMode_NONE)) {
+    if(!mPropellerBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BCK_M_OPEN_e), FALSE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB_NUT);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_CB_NUT_e);
     JUT_ASSERT(DEMO_SELECT(1026, 1025), modelData != NULL);
     mpNutModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
     if(mpNutModel == NULL) {
         return FALSE;
     }
 
-    if(!mNutBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", CB_BCK_NUT_SOW), TRUE, J3DFrameCtrl::EMode_NONE)) {
+    if(!mNutBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BCK_NUT_SOW_e), TRUE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 
@@ -973,7 +971,7 @@ BOOL daNpc_Cb1_c::shipRideCheck() {
     if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1604) && dComIfGp_getShipActor()) {
         setNpcAction(&daNpc_Cb1_c::shipNpcAction, NULL);
         onShipRide();
-        fopDwTg_DrawQTo(&draw_tag);
+        fopAcM_offDraw(this);
 
         return TRUE;
     }
@@ -1149,7 +1147,7 @@ void daNpc_Cb1_c::evCheckDisp(int staffIdx) {
             fopAcM_onDraw(this);
         }
         else {
-            fopDwTg_DrawQTo(&draw_tag);
+            fopAcM_offDraw(this);
         }
     }
     else {
@@ -2063,7 +2061,7 @@ BOOL daNpc_Cb1_c::searchNpcAction(void*) {
                 }
 
                 temp = fopAcM_searchPlayerAngleY(this);
-                if(door || !routeCheck(dist_xz_sq, &temp) || dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e | daPyStts0_UNK1_e) || ((daPy_py_c*)pPlayer)->checkAttentionLock()) {
+                if(door || !routeCheck(dist_xz_sq, &temp) || dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000000_e | daPyStts0_HANG_e | daPyStts0_UNK1_e) || ((daPy_py_c*)pPlayer)->checkAttentionLock()) {
                     temp2 = 0.0f;
 
                     if(speedF == 0.0f) {
@@ -2152,7 +2150,7 @@ BOOL daNpc_Cb1_c::rescueNpcAction(void*) {
 #if VERSION <= VERSION_JPN
     if(m8F0 == 0) {
         setAnm(ANM_00);
-        fopDwTg_DrawQTo(&draw_tag);
+        fopAcM_offDraw(this);
     } else if(m8F0 != -1) {
         m8DD = 0;
     }
@@ -2160,7 +2158,7 @@ BOOL daNpc_Cb1_c::rescueNpcAction(void*) {
     if(m8F0 != -1) {
         if(m8F0 == 0) {
             setAnm(ANM_00);
-            fopDwTg_DrawQTo(&draw_tag);
+            fopAcM_offDraw(this);
         }
 
         m8DD = 0;
@@ -3444,18 +3442,18 @@ static actor_method_class l_daNpc_Cb1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_CB1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_CB1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_CB1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Cb1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_CB1,
+    /* Draw Prio    */ fpcDwPi_NPC_CB1_e,
     /* Actor SubMtd */ &l_daNpc_Cb1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK2000000_e,
     /* Group        */ fopAc_NPC_e,
-    /* CullType     */ fopAc_CULLBOX_12_e,
+    /* Cull Type    */ fopAc_CULLBOX_12_e,
 };

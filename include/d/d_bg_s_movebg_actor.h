@@ -20,7 +20,7 @@ public:
 
     dBgS_MoveBgActor();
     BOOL MoveBGCreateHeap();
-    cPhs_State MoveBGCreate(char const* resName, int resIndex, MoveBGActor_SetFunc callback, u32 resSize);
+    cPhs_State MoveBGCreate(const char* i_arcName, int i_dzb_id, MoveBGActor_SetFunc i_setFunc, u32 i_heapSize);
     BOOL MoveBGDelete();
     BOOL MoveBGExecute();
 

@@ -1,0 +1,56 @@
+#ifndef RES_MMIRROR_H
+#define RES_MMIRROR_H
+
+enum dRes_INDEX_MMIRROR {
+    /* BCK  */
+    dRes_INDEX_MMIRROR_BCK_MSUSW_e=0x6,
+    /* BDLM */
+    dRes_INDEX_MMIRROR_BDL_MMRR_e=0x9,
+    dRes_INDEX_MMIRROR_BDL_MSUSW_e=0xA,
+    dRes_INDEX_MMIRROR_BDL_YSSMR00_e=0xB,
+    /* BTK  */
+    dRes_INDEX_MMIRROR_BTK_MMRR_e=0xE,
+    dRes_INDEX_MMIRROR_BTK_MSUSW_e=0xF,
+    dRes_INDEX_MMIRROR_BTK_YSSMR00_e=0x10,
+    /* DZB  */
+    dRes_INDEX_MMIRROR_DZB_MMRR_e=0x13,
+    dRes_INDEX_MMIRROR_DZB_MSUSW_e=0x14,
+};
+
+enum dRes_ID_MMIRROR {
+    /* BCK  */
+    dRes_ID_MMIRROR_BCK_MSUSW_e=0x6,
+    /* BDLM */
+    dRes_ID_MMIRROR_BDL_MMRR_e=0x9,
+    dRes_ID_MMIRROR_BDL_MSUSW_e=0xA,
+    dRes_ID_MMIRROR_BDL_YSSMR00_e=0xB,
+    /* BTK  */
+    dRes_ID_MMIRROR_BTK_MMRR_e=0xE,
+    dRes_ID_MMIRROR_BTK_MSUSW_e=0xF,
+    dRes_ID_MMIRROR_BTK_YSSMR00_e=0x10,
+    /* DZB  */
+    dRes_ID_MMIRROR_DZB_MMRR_e=0x13,
+    dRes_ID_MMIRROR_DZB_MSUSW_e=0x14,
+};
+
+enum MMRR_JNT {
+    MMRR_JNT_MMRR_e=0x0,
+    MMRR_JNT_KIRARI_e=0x1,
+    MMRR_JNT_BODY_e=0x2,
+    MMRR_JNT_MIRROR_e=0x3,
+};
+
+enum MSUSW_JNT {
+    MSUSW_JNT_MSUSW_e=0x0,
+    MSUSW_JNT_AFTER_FACE_e=0x1,
+    MSUSW_JNT_AFTER_FIRE1_e=0x2,
+    MSUSW_JNT_AFTER_FIRE2_e=0x3,
+    MSUSW_JNT_BEFORE_FACE_e=0x4,
+    MSUSW_JNT_BEFORE_MIRROR_e=0x5,
+};
+
+enum YSSMR00_JNT {
+    YSSMR00_JNT_SASORIMIRROR_e=0x0,
+};
+
+#endif /* !RES_MMIRROR_H */

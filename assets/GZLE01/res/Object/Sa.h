@@ -1,0 +1,146 @@
+#ifndef RES_SA_H
+#define RES_SA_H
+
+enum dRes_INDEX_SA {
+    /* BCKS */
+    dRes_INDEX_SA_BCK_SA01HEAD_TALK01_e=0x7,
+    dRes_INDEX_SA_BCK_SA01HEAD_WAIT01_e=0x8,
+    dRes_INDEX_SA_BCK_SA_TALK01_e=0x9,
+    dRes_INDEX_SA_BCK_SA_WAIT01_e=0xA,
+    dRes_INDEX_SA_BCK_SA01HEAD_TALK02_e=0xB,
+    dRes_INDEX_SA_BCK_SA_TALK02_e=0xC,
+    dRes_INDEX_SA_BCK_SA_KIAI_e=0xD,
+    dRes_INDEX_SA_BCK_SA_TALK03_e=0xE,
+    dRes_INDEX_SA_BCK_SA_WAIT02_e=0xF,
+    dRes_INDEX_SA_BCK_SA01HEAD_CTALK01_e=0x10,
+    dRes_INDEX_SA_BCK_SA01HEAD_CWAIT01_e=0x11,
+    dRes_INDEX_SA_BCK_SA_CTALK01_e=0x12,
+    dRes_INDEX_SA_BCK_SA_CTALK03_e=0x13,
+    dRes_INDEX_SA_BCK_SA_CTALK04_e=0x14,
+    dRes_INDEX_SA_BCK_SA_CTALK05_e=0x15,
+    dRes_INDEX_SA_BCK_SA_CWAIT01_e=0x16,
+    dRes_INDEX_SA_BCK_SA_CWAIT03_e=0x17,
+    dRes_INDEX_SA_BCK_SA_CWAIT04_e=0x18,
+    dRes_INDEX_SA_BCK_SA_CWAIT05_e=0x19,
+    dRes_INDEX_SA_BCK_SA_DRINK_e=0x1A,
+    dRes_INDEX_SA_BCK_SA_LAUGH_e=0x1B,
+    /* BDL  */
+    dRes_INDEX_SA_BDL_SA_e=0x1E,
+    dRes_INDEX_SA_BDL_SA_CUP04_e=0x1F,
+    dRes_INDEX_SA_BDL_SA_CUP05_e=0x20,
+    /* BDLM */
+    dRes_INDEX_SA_BDL_SA01_HEAD_e=0x23,
+    dRes_INDEX_SA_BDL_SA02_HEAD_e=0x24,
+    dRes_INDEX_SA_BDL_SA03_HEAD_e=0x25,
+    dRes_INDEX_SA_BDL_SA04_HEAD_e=0x26,
+    dRes_INDEX_SA_BDL_SA05_HEAD_e=0x27,
+    /* BTP  */
+    dRes_INDEX_SA_BTP_SA01_MABA_e=0x2A,
+    dRes_INDEX_SA_BTP_SA02_MABA_e=0x2B,
+    dRes_INDEX_SA_BTP_SA04_MABA_e=0x2C,
+    dRes_INDEX_SA_BTP_SA05_MABA_e=0x2D,
+    /* BMT  */
+    dRes_INDEX_SA_BMT_SA02_e=0x30,
+    dRes_INDEX_SA_BMT_SA03_e=0x31,
+    dRes_INDEX_SA_BMT_SA04_e=0x32,
+    dRes_INDEX_SA_BMT_SA05_e=0x33,
+};
+
+enum dRes_ID_SA {
+    /* BCKS */
+    dRes_ID_SA_BCK_SA01HEAD_TALK01_e=0x5,
+    dRes_ID_SA_BCK_SA01HEAD_WAIT01_e=0x6,
+    dRes_ID_SA_BCK_SA_TALK01_e=0x7,
+    dRes_ID_SA_BCK_SA_WAIT01_e=0x8,
+    dRes_ID_SA_BCK_SA01HEAD_TALK02_e=0x9,
+    dRes_ID_SA_BCK_SA_TALK02_e=0xA,
+    dRes_ID_SA_BCK_SA_KIAI_e=0x16,
+    dRes_ID_SA_BCK_SA_TALK03_e=0x17,
+    dRes_ID_SA_BCK_SA_WAIT02_e=0x18,
+    dRes_ID_SA_BCK_SA01HEAD_CTALK01_e=0x19,
+    dRes_ID_SA_BCK_SA01HEAD_CWAIT01_e=0x1A,
+    dRes_ID_SA_BCK_SA_CTALK01_e=0x1B,
+    dRes_ID_SA_BCK_SA_CTALK03_e=0x1C,
+    dRes_ID_SA_BCK_SA_CTALK04_e=0x1D,
+    dRes_ID_SA_BCK_SA_CTALK05_e=0x1E,
+    dRes_ID_SA_BCK_SA_CWAIT01_e=0x1F,
+    dRes_ID_SA_BCK_SA_CWAIT03_e=0x20,
+    dRes_ID_SA_BCK_SA_CWAIT04_e=0x21,
+    dRes_ID_SA_BCK_SA_CWAIT05_e=0x22,
+    dRes_ID_SA_BCK_SA_DRINK_e=0x23,
+    dRes_ID_SA_BCK_SA_LAUGH_e=0x24,
+    /* BDL  */
+    dRes_ID_SA_BDL_SA_e=0x2,
+    dRes_ID_SA_BDL_SA_CUP04_e=0x25,
+    dRes_ID_SA_BDL_SA_CUP05_e=0x26,
+    /* BDLM */
+    dRes_ID_SA_BDL_SA01_HEAD_e=0x3,
+    dRes_ID_SA_BDL_SA02_HEAD_e=0xB,
+    dRes_ID_SA_BDL_SA03_HEAD_e=0xC,
+    dRes_ID_SA_BDL_SA04_HEAD_e=0xD,
+    dRes_ID_SA_BDL_SA05_HEAD_e=0xE,
+    /* BTP  */
+    dRes_ID_SA_BTP_SA01_MABA_e=0x4,
+    dRes_ID_SA_BTP_SA02_MABA_e=0xF,
+    dRes_ID_SA_BTP_SA04_MABA_e=0x10,
+    dRes_ID_SA_BTP_SA05_MABA_e=0x11,
+    /* BMT  */
+    dRes_ID_SA_BMT_SA02_e=0x12,
+    dRes_ID_SA_BMT_SA03_e=0x13,
+    dRes_ID_SA_BMT_SA04_e=0x14,
+    dRes_ID_SA_BMT_SA05_e=0x15,
+};
+
+enum SA_JNT {
+    SA_JNT_WORLD_ROOT_e=0x0,
+    SA_JNT_BACKBONE_e=0x1,
+    SA_JNT_NECK_e=0x2,
+    SA_JNT_HEAD_e=0x3,
+    SA_JNT_SHOULDERL_e=0x4,
+    SA_JNT_ARML1_e=0x5,
+    SA_JNT_ARML2_e=0x6,
+    SA_JNT_HANDL_e=0x7,
+    SA_JNT_SHOULDERR_e=0x8,
+    SA_JNT_ARMR1_e=0x9,
+    SA_JNT_ARMR2_e=0xA,
+    SA_JNT_HANDR_e=0xB,
+    SA_JNT_WAIST_e=0xC,
+    SA_JNT_LEGL1_e=0xD,
+    SA_JNT_LEGL2_e=0xE,
+    SA_JNT_FOOTL_e=0xF,
+    SA_JNT_LEGR1_e=0x10,
+    SA_JNT_LEGR2_e=0x11,
+    SA_JNT_FOOTR_e=0x12,
+};
+
+enum SA_CUP04_JNT {
+    SA_CUP04_JNT_KOPPU_e=0x0,
+};
+
+enum SA_CUP05_JNT {
+    SA_CUP05_JNT_KOPPU_e=0x0,
+};
+
+enum SA01_HEAD_JNT {
+    SA01_HEAD_JNT_HEAD2_e=0x0,
+    SA01_HEAD_JNT_HAIR1_e=0x1,
+    SA01_HEAD_JNT_HAIR2_e=0x2,
+};
+
+enum SA02_HEAD_JNT {
+    SA02_HEAD_JNT_SA02_HEAD_e=0x0,
+};
+
+enum SA03_HEAD_JNT {
+    SA03_HEAD_JNT_SA03_HEAD_e=0x0,
+};
+
+enum SA04_HEAD_JNT {
+    SA04_HEAD_JNT_SA04_HEAD_e=0x0,
+};
+
+enum SA05_HEAD_JNT {
+    SA05_HEAD_JNT_SA05_HEAD_e=0x0,
+};
+
+#endif /* !RES_SA_H */

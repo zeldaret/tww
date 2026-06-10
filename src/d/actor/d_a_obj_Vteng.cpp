@@ -5,13 +5,11 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Vteng.h"
-#include "d/res/res_vteng.h"
+#include "res/Object/Vteng.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -38,8 +36,8 @@ BOOL daObjVteng_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjVteng_c::create_heap() {
     bool ret = true;
 
-    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, VTENG_BDL_VTENG));
-    J3DAnmTransform * pAnm = (J3DAnmTransform *)dComIfG_getObjectRes(l_arcname, VTENG_BCK_VTENG);
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_VTENG_BDL_VTENG_e));
+    J3DAnmTransform * pAnm = (J3DAnmTransform *)dComIfG_getObjectRes(l_arcname, dRes_INDEX_VTENG_BCK_VTENG_e);
 
     if (!pModelData || !pAnm) {
         JUT_ASSERT(0xb7, FALSE);
@@ -59,7 +57,7 @@ bool daObjVteng_c::create_heap() {
         } else {
             J3DModel * model = mpMorf->getModel();
             mpModel = model;
-            mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, VTENG_DZB_VTENG), cBgW::MOVE_BG_e, &mtx);
+            mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_VTENG_DZB_VTENG_e), cBgW::MOVE_BG_e, &mtx);
             if (!mpBgW)
                 ret = false;
         }
@@ -170,18 +168,18 @@ static actor_method_class l_daObjVteng_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Vteng = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Vteng,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Vteng_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjVteng_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Vteng,
+    /* Draw Prio    */ fpcDwPi_Obj_Vteng_e,
     /* Actor SubMtd */ &l_daObjVteng_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
