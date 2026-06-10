@@ -7,9 +7,9 @@
 #include "d/actor/d_a_bigelf.h"
 #include "d/actor/d_a_npc_fa1.h"
 #include "d/actor/d_a_ship.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_bigelf.h"
+#include "f_pc/f_pc_name.h"
+// #include "d/d_priority.h"
+#include "res/Object/bigelf.h"
 
 fpc_ProcID l_msgId;
 msg_class* l_msg;
@@ -737,7 +737,7 @@ void daBigelf_c::makeFa1S() {
     angle.z = this->current.angle.z;
     pos.y += this->mHeightOffset;
     for(int i = 0; i < 10; i++, angle.y += 10000){
-        fopAcM_create(PROC_NPC_FA1, 4, &pos, fopAcM_GetRoomNo(this), &angle);
+        fopAcM_create(fpcNm_NPC_FA1_e, 4, &pos, fopAcM_GetRoomNo(this), &angle);
     }
 
 }
@@ -750,7 +750,7 @@ void daBigelf_c::makeFa1() {
     angle.y = this->current.angle.y;
     angle.z = this->current.angle.z;
     pos.y += 100.0f;
-    this->mFairyActorID = fopAcM_create(PROC_NPC_FA1, 6, &pos, fopAcM_GetRoomNo(this), &angle);
+    this->mFairyActorID = fopAcM_create(fpcNm_NPC_FA1_e, 6, &pos, fopAcM_GetRoomNo(this), &angle);
 }
 
 /* 00001EB4-0000200C       .text setAnm__10daBigelf_cFSc */
@@ -802,32 +802,32 @@ fopMsg_MessageStatus_e daBigelf_c::next_msgStatus(u32* i_pMsgIdx) {
                 case BIGELF_TYPE_0:
                 case BIGELF_TYPE_1:
                     if(dComIfGs_getWalletSize() == 0){
-                        this->mGivenItem = dItem_MAX_RUPEE_UP1_e;
+                        this->mGivenItem = dItemNo_MAX_RUPEE_UP1_e;
                     }
                     else {
-                        this->mGivenItem = dItem_MAX_RUPEE_UP2_e;
+                        this->mGivenItem = dItemNo_MAX_RUPEE_UP2_e;
                     }
                     break;
                 case BIGELF_TYPE_2:
                 case BIGELF_TYPE_3:
                     if(dComIfGs_getBombMax() <= 30){
-                        this->mGivenItem = dItem_MAX_BOMB_UP1_e;
+                        this->mGivenItem = dItemNo_MAX_BOMB_UP1_e;
                     }
                     else {
-                        this->mGivenItem = dItem_MAX_BOMB_UP2_e;
+                        this->mGivenItem = dItemNo_MAX_BOMB_UP2_e;
                     }
                     break;
                 case BIGELF_TYPE_4:
                 case BIGELF_TYPE_5:
                     if(dComIfGs_getArrowMax() <= 30){
-                        this->mGivenItem = dItem_MAX_ARROW_UP1_e;
+                        this->mGivenItem = dItemNo_MAX_ARROW_UP1_e;
                     }
                     else {
-                        this->mGivenItem = dItem_MAX_ARROW_UP2_e;
+                        this->mGivenItem = dItemNo_MAX_ARROW_UP2_e;
                     }
                     break;
                 default:
-                    this->mGivenItem = dItem_RED_RUPEE_e;
+                    this->mGivenItem = dItemNo_RED_RUPEE_e;
                     break;
             }
             dComIfGp_event_setGtItm(this->mGivenItem);
@@ -857,7 +857,7 @@ fopMsg_MessageStatus_e daBigelf_c::next_msgStatus(u32* i_pMsgIdx) {
 
 /* 000021A4-000021D4       .text getMsg__10daBigelf_cFv */
 int daBigelf_c::getMsg() {
-    if(this->mCurrentMessageId == 0x2eee && dComIfGs_getItem(dInvSlot_BOW_e) == dItem_BOW_e){
+    if(this->mCurrentMessageId == 0x2eee && dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_BOW_e){
         this->mCurrentMessageId = 0x2eef;
     }
 
@@ -1240,7 +1240,7 @@ cPhs_State daBigelf_c::_create() {
             fopAcM_SetupActor(this, daBigelf_c);
         #endif
         switch(fopAcM_GetName(this)){
-            case PROC_BIGELF:
+            case fpcNm_BIGELF_e:
                 this->m3F4 = 0;
                 break;
             default:
@@ -1270,7 +1270,7 @@ cPhs_State daBigelf_c::_create() {
 
 /* 00003224-00003808       .text CreateHeap__10daBigelf_cFv */
 BOOL daBigelf_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("bigelf", BIGELF_BDL_DY));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("bigelf", dRes_ID_BIGELF_BDL_DY_e));
 
     JUT_ASSERT(
         (VERSION == VERSION_DEMO) ? 1987 : 2004,
@@ -1280,7 +1280,7 @@ BOOL daBigelf_c::CreateHeap() {
     this->mpBckAnimator = new mDoExt_McaMorf(
         modelData, 
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("bigelf", BIGELF_BCK_WAIT01)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("bigelf", dRes_ID_BIGELF_BCK_WAIT01_e)),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x80000,
@@ -1289,11 +1289,11 @@ BOOL daBigelf_c::CreateHeap() {
     if(this->mpBckAnimator == NULL || this->mpBckAnimator->getModel() == 0)
         return FALSE;
 
-    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("bigelf", BIGELF_BRK_DY_BODY));
+    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("bigelf", dRes_ID_BIGELF_BRK_DY_BODY_e));
     if(this->mBrkAnimator.init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1, 0, -1, false, 0) == 0)
         return FALSE;
 
-    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("bigelf", BIGELF_BTK_DY_BODY));
+    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("bigelf", dRes_ID_BIGELF_BTK_DY_BODY_e));
     if(this->mBtkAnimator.init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1, 0, -1, false, 0) == 0)
         return FALSE;
 
@@ -1349,7 +1349,7 @@ BOOL daBigelf_c::CreateHeap() {
     this->mpBckAnimator->getModel()->setUserArea((u32)this); // Unsafe casting because weird things here
 
 
-    J3DModelData* flModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("bigelf", BIGELF_BDL_DY_FL));
+    J3DModelData* flModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("bigelf", dRes_ID_BIGELF_BDL_DY_FL_e));
     JUT_ASSERT(
         (VERSION == VERSION_DEMO) ? 2097 : 2114,
         flModelData
@@ -1359,7 +1359,7 @@ BOOL daBigelf_c::CreateHeap() {
     if(this->mpFlowerModel == 0)
         return FALSE;
 
-    pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("bigelf", BIGELF_BRK_DY_FL));
+    pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("bigelf", dRes_INDEX_BIGELF_BRK_DY_FL_e));
     if(this->mFlowerBrkAnimator.init(flModelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1, 0, -1, false, 0) == 0)
         return FALSE;
  
