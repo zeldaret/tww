@@ -78,9 +78,7 @@ public:
     /* 0x2A8 */ u8 field_0x2A8[0x2AC - 0x2A8];
     /* 0x2AC */ dPa_rippleEcallBack mRippleCallBack;
     /* 0x2C0 */ daSTBox_shadowEcallBack_c field_0x2C0;
-    /* 0x318 */ f32 field_0x318;
-    /* 0x31C */ f32 field_0x31C;
-    /* 0x320 */ f32 field_0x320;
+    /* 0x318 */ cXyz position;
     /* 0x324 */ f32 field_0x324;
     /* 0x328 */ f32 field_0x328;
     /* 0x32C */ f32 field_0x32C;

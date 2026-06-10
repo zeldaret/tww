@@ -183,14 +183,38 @@ void daSTBox_c::initDrop(int) {
 /* 00000F64-00001218       .text actWait__9daSTBox_cFi */
 void daSTBox_c::actWait(int) {
     /* Nonmatching */
+    // Something with m_arc_name
     daShip_c* ship = dComIfGp_getShipActor();
     JUT_ASSERT(0x32b, ship != NULL);
     cXyz* craneTop = ship->getCraneTop();
     JUT_ASSERT(0x332, craneTop != NULL);
     craneTop->y += 5000.0f;
-    f32 waterY = getWaterY(*craneTop);
+    f32 waterY = getWaterY(*craneTop); //TODO: Something wrong here
     this->current.angle.y = ship->shape_angle.y;
-    this->mRippleCallBack.setRate(12.0f);
+    craneTop->y -= crane_offset[this->field_0x331];
+    this->attention_info.position = this->current.pos;
+    if ((this->field_0x331 == 1 || this->field_0x331 == 2) && waterY < this->current.pos.y && (this->field_0x336 == 0)) {
+        mDoAud_subBgmStart(JA_BGM_BGN_GET_BOX);
+        this->field_0x336 = 1;
+    }
+    if (this->field_0x335 == 0) {
+        this->position = this->current.pos;
+        this->position.y += 2500.0f;
+        this->position.y = dBgS_GetWaterHeight(this->position);
+        dComIfGp_particle_set(0x35c, &this->position, 
+            NULL, &this->scale, 0xff, 
+            &this->mRippleCallBack, -1, 
+            NULL, NULL, NULL);
+        this->mRippleCallBack.setRate(12.0f);
+        this->field_0x335 = 1;
+    }
+    if ((this->field_0x331 == 1 || this->field_0x331 == 2) && (this->field_0x338 == -1)) {
+        this->field_0x338 = fopAcM_createItemForTrBoxDemo(&this->current.pos, this->field_0x330, 
+            0xffffffff, dStage_roomControl_c::mStayNo, 0, 0);
+        if (this->field_0x338 != -1) {
+            g_dComIfG_gameInfo.play.mEvtCtrl.mPtItem = this->field_0x338;
+        }
+    }
 }
 
 /* 00001218-00001344       .text actDrop__9daSTBox_cFi */
