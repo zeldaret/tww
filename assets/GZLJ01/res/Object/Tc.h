@@ -1,0 +1,83 @@
+#ifndef RES_TC_H
+#define RES_TC_H
+
+enum dRes_INDEX_TC {
+    /* BCKS */
+    dRes_INDEX_TC_BCK_DANCE01_e=0x6,
+    dRes_INDEX_TC_BCK_DANCE02_e=0x7,
+    dRes_INDEX_TC_BCK_GET_e=0x8,
+    dRes_INDEX_TC_BCK_GUARD_e=0x9,
+    dRes_INDEX_TC_BCK_HAPPY_e=0xA,
+    dRes_INDEX_TC_BCK_JAMP_A_e=0xB,
+    dRes_INDEX_TC_BCK_JAMP_B_e=0xC,
+    dRes_INDEX_TC_BCK_JAMP_C_e=0xD,
+    dRes_INDEX_TC_BCK_JTBT_e=0xE,
+    dRes_INDEX_TC_BCK_MAWASU_e=0xF,
+    dRes_INDEX_TC_BCK_TALK01_e=0x10,
+    dRes_INDEX_TC_BCK_TALK02_e=0x11,
+    dRes_INDEX_TC_BCK_WAIT01_e=0x12,
+    dRes_INDEX_TC_BCK_WAIT02_e=0x13,
+    dRes_INDEX_TC_BCK_WAIT03_e=0x14,
+    dRes_INDEX_TC_BCK_WAIT04_e=0x15,
+    dRes_INDEX_TC_BCK_WALK01_e=0x16,
+    /* BDLM */
+    dRes_INDEX_TC_BDL_TC_e=0x19,
+    /* BMT  */
+    dRes_INDEX_TC_BMT_TCA_e=0x1C,
+    dRes_INDEX_TC_BMT_TCB_e=0x1D,
+    dRes_INDEX_TC_BMT_TCC_e=0x1E,
+    /* BTP  */
+    dRes_INDEX_TC_BTP_MABA01_e=0x21,
+};
+
+enum dRes_ID_TC {
+    /* BCKS */
+    dRes_ID_TC_BCK_DANCE01_e=0x6,
+    dRes_ID_TC_BCK_DANCE02_e=0x7,
+    dRes_ID_TC_BCK_GET_e=0x8,
+    dRes_ID_TC_BCK_GUARD_e=0x9,
+    dRes_ID_TC_BCK_HAPPY_e=0xA,
+    dRes_ID_TC_BCK_JAMP_A_e=0xB,
+    dRes_ID_TC_BCK_JAMP_B_e=0xC,
+    dRes_ID_TC_BCK_JAMP_C_e=0xD,
+    dRes_ID_TC_BCK_JTBT_e=0xE,
+    dRes_ID_TC_BCK_MAWASU_e=0xF,
+    dRes_ID_TC_BCK_TALK01_e=0x10,
+    dRes_ID_TC_BCK_TALK02_e=0x11,
+    dRes_ID_TC_BCK_WAIT01_e=0x12,
+    dRes_ID_TC_BCK_WAIT02_e=0x13,
+    dRes_ID_TC_BCK_WAIT03_e=0x14,
+    dRes_ID_TC_BCK_WAIT04_e=0x15,
+    dRes_ID_TC_BCK_WALK01_e=0x16,
+    /* BDLM */
+    dRes_ID_TC_BDL_TC_e=0x19,
+    /* BMT  */
+    dRes_ID_TC_BMT_TCA_e=0x1C,
+    dRes_ID_TC_BMT_TCB_e=0x1D,
+    dRes_ID_TC_BMT_TCC_e=0x1E,
+    /* BTP  */
+    dRes_ID_TC_BTP_MABA01_e=0x21,
+};
+
+enum TC_JNT {
+    TC_JNT_WORLD_ROOT_e=0x0,
+    TC_JNT_BACKBONE_e=0x1,
+    TC_JNT_HEAD_e=0x2,
+    TC_JNT_SHOULDERL_e=0x3,
+    TC_JNT_ARML1_e=0x4,
+    TC_JNT_ARML2_e=0x5,
+    TC_JNT_HANDL_e=0x6,
+    TC_JNT_SHOULDERR_e=0x7,
+    TC_JNT_ARMR1_e=0x8,
+    TC_JNT_ARMR2_e=0x9,
+    TC_JNT_HANDR_e=0xA,
+    TC_JNT_WAIST_e=0xB,
+    TC_JNT_LEGL1_e=0xC,
+    TC_JNT_LEGL2_e=0xD,
+    TC_JNT_FOOTL_e=0xE,
+    TC_JNT_LEGR1_e=0xF,
+    TC_JNT_LEGR2_e=0x10,
+    TC_JNT_FOOTR_e=0x11,
+};
+
+#endif /* !RES_TC_H */

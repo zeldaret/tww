@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_jb1.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_jb.h"
+#include "res/Object/Jb.h"
 
 class daNpc_Jb1_HIO_c : public JORReflexible{
 public:
@@ -143,8 +141,8 @@ void daNpc_Jb1_c::playBrkAnm(J3DAnmTevRegKey* param_1, s16* param_2) {
 /* 000004CC-000004E0       .text anmNum_toResID__11daNpc_Jb1_cFi */
 int daNpc_Jb1_c::anmNum_toResID(int param_1) {
     static const int a_bck_resID_tbl[] = {
-        1,
-        0
+        dRes_ID_JB_BCK_JB_WAIT01_e,
+        dRes_ID_JB_BCK_JB_APPEAR_e,
     };
     return a_bck_resID_tbl[param_1];
 }
@@ -600,13 +598,13 @@ daNpc_Jb1_c::daNpc_Jb1_c() {}
 
 /* 00001780-00001A0C       .text create_Anm__11daNpc_Jb1_cFv */
 J3DModelData* daNpc_Jb1_c::create_Anm() {
-    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Jb", JB_BDL_JB);
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Jb", dRes_ID_JB_BDL_JB_e);
     JUT_ASSERT(VERSION_SELECT(0x450, 0x45A, 0x45F, 0x45F), a_mdl_dat != NULL);
 
     mpMorf = new mDoExt_McaMorf(
         a_mdl_dat,
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectIDRes("Jb", JB_BCK_JB_WAIT01),
+        (J3DAnmTransformKey*)dComIfG_getObjectIDRes("Jb", dRes_ID_JB_BCK_JB_WAIT01_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x80000,
@@ -618,19 +616,20 @@ J3DModelData* daNpc_Jb1_c::create_Anm() {
     } else if(mpMorf->getModel() == NULL) {
         mpMorf = NULL;
         return NULL;
-    } else {
-        m_lmp_brk = (J3DAnmTevRegKey*)dComIfG_getObjectIDRes("Jb", JB_BRK_JB_LAMP);
-        JUT_ASSERT(VERSION_SELECT(0x464, 0x46E, 0x473, 0x473), m_lmp_brk != NULL);
-        bool temp = mBrkAnm.init(mpMorf->getModel()->getModelData(), m_lmp_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
-        if(temp == false) {
-            mpMorf = NULL;
-            return NULL;
-        } else {
-            field_0x834 = 0;
-            m_cse_jnt_num = mpMorf->getModel()->getModelData()->getJointName()->getIndex("jb_case");
-            JUT_ASSERT(VERSION_SELECT(0x46F, 0x479, 0x47E, 0x47E), m_cse_jnt_num >= 0);
-        }
     }
+
+    m_lmp_brk = (J3DAnmTevRegKey*)dComIfG_getObjectIDRes("Jb", dRes_ID_JB_BRK_JB_LAMP_e);
+    JUT_ASSERT(VERSION_SELECT(0x464, 0x46E, 0x473, 0x473), m_lmp_brk != NULL);
+    bool temp = mBrkAnm.init(mpMorf->getModel()->getModelData(), m_lmp_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    if(temp == false) {
+        mpMorf = NULL;
+        return NULL;
+    } else {
+        field_0x834 = 0;
+        m_cse_jnt_num = mpMorf->getModel()->getModelData()->getJointName()->getIndex("jb_case");
+        JUT_ASSERT(VERSION_SELECT(0x46F, 0x479, 0x47E, 0x47E), m_cse_jnt_num >= 0);
+    }
+
     return a_mdl_dat;
 }
 
@@ -646,12 +645,12 @@ static void dummy() {
 
 /* 00001A0C-00001B78       .text create_lgt__11daNpc_Jb1_cFv */
 bool daNpc_Jb1_c::create_lgt() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectIDRes("Jb", JB_BMD_LF);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectIDRes("Jb", dRes_ID_JB_BMD_LF_e);
     m_lgt_mdl = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
 
     JUT_ASSERT(VERSION_SELECT(0x4B6, 0x4C0, 0x4C5, 0x4C5), m_lgt_mdl != NULL);
 
-    m_lgt_brk = (J3DAnmTevRegKey*)dComIfG_getObjectIDRes("Jb", JB_BRK_LF);
+    m_lgt_brk = (J3DAnmTevRegKey*)dComIfG_getObjectIDRes("Jb", dRes_ID_JB_BRK_LF_e);
     JUT_ASSERT(VERSION_SELECT(0x4BB, 0x4C5, 0x4CA, 0x4CA), m_lgt_brk != NULL);
     bool temp = mBrkAnm2.init(m_lgt_mdl->getModelData(), m_lgt_brk, true, J3DFrameCtrl::EMode_LOOP);
 
@@ -712,18 +711,18 @@ static actor_method_class l_daNpc_Jb1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_JB1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_JB1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_JB1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Jb1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_JB1,
+    /* Draw Prio    */ fpcDwPi_NPC_JB1_e,
     /* Actor SubMtd */ &l_daNpc_Jb1_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

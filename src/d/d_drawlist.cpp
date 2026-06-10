@@ -774,7 +774,7 @@ void dDlst_alphaModelData_c::set(u8 type, Mtx mtx, u8 alpha) {
 #include "assets/l_frontZMat.h"
 #include "assets/l_frontNoZSubMat.h"
 
-Vec l_bonboriPos[] = {
+static Vec l_bonboriPos[] = {
     {0.0f, -200.0f, 0.0f},
     {0.0f, 200.0f, 0.0f},
     {100.0f, -173.205093f, 0.0f},
@@ -820,7 +820,7 @@ Vec l_bonboriPos[] = {
 };
 #include "assets/l_bonboriDL.h"
 
-Vec l_s_beam_checkPos[] = {
+static Vec l_s_beam_checkPos[] = {
     {-97.608604f, -300.359589f, -0.000003f},
     {-255.533127f, -185.632721f, 0.000074f},
     {97.596741f, -300.359589f, -0.000003f},
@@ -864,7 +864,7 @@ Vec l_s_beam_checkPos[] = {
 };
 #include "assets/l_s_beam_checkDL.h"
 
-Vec l_cubePos[] = {
+static Vec l_cubePos[] = {
     {-0.5f, -0.5f, -0.5f},
     {-0.5f, -0.5f, 0.5f},
     {-0.5f, 0.5f, -0.5f},
@@ -876,7 +876,7 @@ Vec l_cubePos[] = {
 };
 #include "assets/l_cubeDL.h"
 
-Vec l_bonbori2Pos[] = {
+static Vec l_bonbori2Pos[] = {
     {33.141357f, -92.387955f, -19.134167f},
     {19.134172f, -92.387955f, -33.141354f},
     {0.000003f, -92.387955f, -38.268341f},
@@ -1144,7 +1144,7 @@ BOOL dDlst_alphaModel_c::draw(Mtx mtx) {
     return TRUE;
 }
 
-Vec l_shadowVolPos[] = {
+static Vec l_shadowVolPos[] = {
     {-1.0f, -1.0f, 0.0f},
     {-1.0f, -1.0f, -300.0f},
     {-1.0f, 1.0f, 0.0f},
@@ -1161,7 +1161,7 @@ Vec l_shadowVolPos[] = {
 #include "assets/l_frontMat.h"
 #include "assets/l_backSubMat.h"
 
-Vec l_simpleShadowPos[] = {
+static Vec l_simpleShadowPos[] = {
     {0.0f, -1.0f, 0.0f},
     {0.0f, 0.0f, 0.0f},
     {1.0f, -1.0f, -1.0f},
@@ -1459,7 +1459,7 @@ BOOL realPolygonCheck(cXyz* param_0, f32 casterRadius, f32 heightAgl, cXyz* ligh
     bbMax.z += casterRadius;
 
     mDoLib_clipper::changeFar(mDoLib_clipper::getFovyRate() * 3000.0f);
-    s32 clip = mDoLib_clipper::clip(j3dSys.getViewMtx(), &bbMax, &bbMin);
+    BOOL clip = mDoLib_clipper::clip(j3dSys.getViewMtx(), &bbMax, &bbMin);
     mDoLib_clipper::resetFar();
     if (clip) {
         return FALSE;
@@ -1910,7 +1910,7 @@ void dDlst_mirrorPacket::draw() {
 /* 800855B4-80085624       .text init__18dDlst_mirrorPacketFP7ResTIMG */
 void dDlst_mirrorPacket::init(ResTIMG* pImg) {
     if (pImg == NULL)
-        pImg = (ResTIMG*) dComIfG_getObjectRes("Always", ALWAYS_BTI_SHMREF);
+        pImg = (ResTIMG*) dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_SHMREF_e);
 
     mDoLib_setResTimgObj(pImg, &mTexObj, 0, NULL);
 }

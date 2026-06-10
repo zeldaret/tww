@@ -5,11 +5,9 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_kyeff2.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
 
 /* 80198758-8019877C       .text dKyeff2_Draw__FP9dKyeff2_c */
 static BOOL dKyeff2_Draw(dKyeff2_c* i_this) {
@@ -45,7 +43,7 @@ static cPhs_State dKyeff2_Create(kankyo_class*) {
     return cPhs_COMPLEATE_e;
 }
 
-kankyo_method_class l_dKyeff2_Method = {
+static kankyo_method_class l_dKyeff2_Method = {
     (process_method_func)dKyeff2_Create,
     (process_method_func)dKyeff2_Delete,
     (process_method_func)dKyeff2_Execute,
@@ -54,15 +52,15 @@ kankyo_method_class l_dKyeff2_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KYEFF2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x000C,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KYEFF2,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dKyeff2_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_KYEFF2,
-    /* Actor SubMtd */ &l_dKyeff2_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x000C,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_KYEFF2_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dKyeff2_c),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_KYEFF2_e,
+    /* Kankyo SubMtd */ &l_dKyeff2_Method,
 };

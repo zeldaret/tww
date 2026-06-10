@@ -6,16 +6,16 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_warpls.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_ywarp00.h"
-#include "d/res/res_ysdls00.h"
+#include "f_pc/f_pc_name.h"
+#include "res/Object/Ywarp00.h"
+#include "res/Object/Ysdls00.h"
+
 
 const char* daWarpls_c::m_arcname[] = { "Ywarp00", "Ysdls00" };
 
-const s16 daWarpls_c::m_bdlidx[] = { YWARP00_BMD_YWARP00, YSDLS00_BDL_YSDLS00 };
-const s16 daWarpls_c::m_brkidx[] = { YWARP00_BRK_YWARP00, 0xFFFF };
-const s16 daWarpls_c::m_bckidx[] = { YWARP00_BCK_YWARP00, 0xFFFF };
+const s16 daWarpls_c::m_bdlidx[] = { dRes_INDEX_YWARP00_BMD_YWARP00_e, dRes_INDEX_YSDLS00_BDL_YSDLS00_e };
+const s16 daWarpls_c::m_brkidx[] = { dRes_INDEX_YWARP00_BRK_YWARP00_e, 0xFFFF };
+const s16 daWarpls_c::m_bckidx[] = { dRes_INDEX_YWARP00_BCK_YWARP00_e, 0xFFFF };
 
 const u32 daWarpls_c::m_heapsize[] = { 0x2000, 0x2000 };
 
@@ -26,11 +26,14 @@ const f32 daWarpls_c::m_warp_distance = 112.5f;
 bool daWarpls_c::_delete() {
     JPABaseEmitter* pEmitter = mpEmitter;
     if (pEmitter != NULL) {
-        pEmitter->mMaxFrame = -1;
-        pEmitter->mFlags |= 1;
+        pEmitter->becomeInvalidEmitter();
         mpEmitter = NULL;
     }
+    #if VERSION == VERSION_DEMO
+    dComIfG_deleteObjectRes(m_arcname[m2BC]);
+    #else
     dComIfG_resDelete(&mPhs, m_arcname[m2BC]);
+    #endif
     return true;
 }
 
@@ -41,38 +44,24 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 
 /* 00000100-000003D8       .text CreateHeap__10daWarpls_cFv */
 int daWarpls_c::CreateHeap() {
-    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes(
-        m_arcname[m2BC],
-        m_bdlidx[m2BC]);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[m2BC],m_bdlidx[m2BC]);
+        JUT_ASSERT(VERSION_SELECT(0xe6, 0xe9, 0xe9, 0xe9), modelData != NULL);
 
-    if (pModelData == NULL) {
-        u32 dev = JUTAssertion::getSDevice();
-        JUTAssertion::showAssert(dev, "d_a_warpls.cpp", 0xe9, "modelData != 0");
-        OSPanic("d_a_warpls.cpp", 0xe9, "Halt");
-    }
-
-    mpModel = mDoExt_J3DModel__create(pModelData, 0, 0x11020203);
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpModel == NULL) {
         return 0;
     }
 
     mpBrkAnm = NULL;
     if (m_brkidx[m2BC] != -1) {
-        J3DAnmTevRegKey* pBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(
-            m_arcname[m2BC],
-            (int)m_brkidx[m2BC]);
-
-        if (pBrk == NULL) {
-            u32 dev = JUTAssertion::getSDevice();
-            JUTAssertion::showAssert(dev, "d_a_warpls.cpp", 0xf8, "pbrk != 0");
-            OSPanic("d_a_warpls.cpp", 0xf8, "Halt");
-        }
+        J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname[m2BC],(int)m_brkidx[m2BC]);
+            JUT_ASSERT(VERSION_SELECT(0xf5, 0xf8, 0xf8, 0xf8), pbrk != NULL);
 
         mDoExt_brkAnm* pBrkAnm = new mDoExt_brkAnm();
         mpBrkAnm = pBrkAnm;
 
         if (mpBrkAnm == NULL ||
-            mpBrkAnm->init(pModelData, pBrk, true, J3DFrameCtrl::EMode_NONE,
+            mpBrkAnm->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE,
                            1.0f, 0, -1, false, 0) == 0) {
             return 0;
         }
@@ -80,21 +69,14 @@ int daWarpls_c::CreateHeap() {
 
     mpBckAnm = NULL;
     if (m_bckidx[m2BC] != -1) {
-        J3DAnmTransform* pBck = (J3DAnmTransform*)dComIfG_getObjectRes(
-            m_arcname[m2BC],
-            (int)m_bckidx[m2BC]);
-
-        if (pBck == NULL) {
-            u32 dev = JUTAssertion::getSDevice();
-            JUTAssertion::showAssert(dev, "d_a_warpls.cpp", 0x10b, "pbck != 0");
-            OSPanic("d_a_warpls.cpp", 0x10b, "Halt");
-        }
+        J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes( m_arcname[m2BC],(int)m_bckidx[m2BC]);
+            JUT_ASSERT(VERSION_SELECT(0x108, 0x10b, 0x10b, 0x10b), pbck != NULL);
 
         mDoExt_bckAnm* pBckAnm = new mDoExt_bckAnm();
         mpBckAnm = pBckAnm;
 
         if (mpBckAnm == NULL ||
-            mpBckAnm->init(pModelData, pBck, true, J3DFrameCtrl::EMode_NONE,
+            mpBckAnm->init(modelData, pbck, true, J3DFrameCtrl::EMode_NONE,
                            1.0f, 0, -1, false) == 0) {
             return 0;
         }
@@ -113,7 +95,7 @@ void daWarpls_c::CreateInit()
     };
 
     if (strcmp(dComIfGp_getStartStageName(), "Siren") == 0) {
-        s8 roomNo = current.roomNo;
+        s8 roomNo = current.roomNo; 
         if (roomNo == 7) {
             m2BD = 0;
         } else if (roomNo == 0x11) {
@@ -126,8 +108,6 @@ void daWarpls_c::CreateInit()
     mSwitchNo = daWarpls_prm::getSwitchNo(this);
     mSceneNo = daWarpls_prm::getSceneNo(this);
 
-    
-
     {
     s32 bc = m2BC;
     switch (bc) {
@@ -136,7 +116,7 @@ void daWarpls_c::CreateInit()
         scale.x = 2.0f;
         mpEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_WARPLIGHTSHAFT00, &current.pos, &current.angle, NULL, 0xFF);
         if (mpEmitter == NULL) break; {
-            mpEmitter->mFlags |= 0x40;
+            mpEmitter->becomeImmortalEmitter();
             mpEmitter->setGlobalDynamicsScale(scale);
             break;
         } 
@@ -146,8 +126,13 @@ void daWarpls_c::CreateInit()
     }
     }
 
-
+    #if VERSION == VERSION_DEMO
+    int sw = mSwitchNo;
+    char roomNo = home.roomNo;
+    BOOL bSwitchOn = dComIfGs_isSwitch(sw, roomNo);
+    #else
     bool bSwitchOn = dComIfGs_isSwitch(mSwitchNo, home.roomNo);
+    #endif
 
     if (bSwitchOn || mSwitchNo == 0xFF) {
 
@@ -176,14 +161,13 @@ void daWarpls_c::CreateInit()
 
     m2B0 = NULL;
 
-
     m2B8 = dComIfGp_evmng_getEventIdx(NULL, daWarpls_prm::getEvId(this));
     m2BA = dComIfGp_evmng_getEventIdx(eventNames[m2BD], 0xFF);
 
 
     cullMtx = mpModel->getBaseTRMtx();
     fopAcM_setCullSizeBox(this, -250.0f, 0.0f, -250.0f, 250.0f, 2600.0f, 250.0f);
-    cullSizeFar = 1.0f;
+    fopAcM_setCullSizeFar(this,1.0f);
 
     set_mtx();
 
@@ -224,24 +208,18 @@ void daWarpls_c::set_mtx() {
 /* 0000089C-00000984       .text _execute__10daWarpls_cFv */
 bool daWarpls_c::_execute() {
     u32 Switch = fopAcM_isSwitch(this, mSwitchNo);
-
     u8 bSwitchOn = Switch;
-
     if (m2B7 > 0) {
         m2B7 = m2B7 - 1;
     }
-
     checkOrder();
     eventOrder();
     setStatus();
-
     if (mpBrkAnm != NULL) { mpBrkAnm->play(); }
     if (mpBckAnm != NULL) { mpBckAnm->play(); }
-
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-
     m2B6 = bSwitchOn;
     return true;
 }
@@ -249,23 +227,26 @@ bool daWarpls_c::_execute() {
 /* 00000984-00000AC4       .text checkOrder__10daWarpls_cFv */
 void daWarpls_c::checkOrder() {
     if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
-        dComIfG_inf_c* gameInfo = &g_dComIfG_gameInfo;
-        dEvent_manager_c* evtMgr = &gameInfo->play.mEvtManager;
-        if (evtMgr->startCheck(m2B8) != 0 && m2B0 == 1) {
-            m2B0 = NULL;
+
+        if (dComIfGp_evmng_startCheck(m2B8) && m2B0 == 1) {
+            m2B0 = 0;
             warp_eff_start();
         }
-        if (evtMgr->endCheck(m2B8)) {
-            gameInfo->play.mEvtCtrl.mEventFlag |= 8;
+        if (dComIfGp_evmng_endCheck((m2B8))) {
+            dComIfGp_event_reset();
         }
-        if (evtMgr->startCheck(m2BA) != 0 && m2B0 == 2) {
-            m2B0 = NULL;
-            evtMgr->setGoal(&current.pos);
+        if (dComIfGp_evmng_startCheck(m2BA) != 0 && m2B0 == 2) {
+            m2B0 = 0;
+            dComIfGp_evmng_setGoal(&current.pos);
         }
-        if (evtMgr->endCheck(m2BA)) {
+        if (dComIfGp_evmng_endCheck(m2BA)) {
+            #if VERSION == VERSION_DEMO
+            s8 roomNo = current.roomNo;
+            dLib_setNextStageBySclsNum(mSceneNo, roomNo);
+            #else
             dLib_setNextStageBySclsNum(mSceneNo, current.roomNo);
-            s8 sVar3 = dComIfGp_getReverb(current.roomNo);
-            mDoAud_zelAudio_c::getInterface()->seStart(JA_SE_LK_WAPR_EFF_WARP, &eyePos, 0, sVar3, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            #endif
+            fopAcM_seStart(this,JA_SE_LK_WAPR_EFF_WARP,0);
         }
         return;
     }
@@ -274,13 +255,25 @@ void daWarpls_c::checkOrder() {
 
 /* 00000AC4-00000BFC       .text eventOrder__10daWarpls_cFv */
 void daWarpls_c::eventOrder() {
+    #if VERSION == VERSION_DEMO
+    int sw = mSwitchNo;
+    char roomNo = home.roomNo;
+    u8 bVar2 = dComIfGs_isSwitch(sw, roomNo);
+    #else
     u8 bVar2 = dComIfGs_isSwitch(mSwitchNo, home.roomNo);
+    #endif
 
     if (m2B0 == 1) {
-        fopAcM_orderOtherEventId(this, m2B8, fpcM_GetParam(this) >> 0x10, 0xffff, 0, 1);
+        fopAcM_orderOtherEventId(this, m2B8, /* demo */ daWarpls_prm::getEvId(this), 0xffff, 0, 1);
         eventInfo.mCondition |= 2;
+    
     } else if (m2B0 == 2) {
-        if (m2BD == 0) {
+        #if VERSION == VERSION_DEMO
+        { 
+        fopAcM_orderOtherEventId(this, m2BA, 0xff, 0xffff, 0, 1);
+    }
+    #else
+    if (m2BD == 0) {
             if (!check_warp_distance()) {
                 m2B0 = NULL;
             } else {
@@ -289,6 +282,7 @@ void daWarpls_c::eventOrder() {
         } else {
             fopAcM_orderOtherEventId(this, m2BA, 0xff, 0xffff, 0, 1);
         }
+    #endif
         eventInfo.mCondition |= 2;
     } else if ((m2B8 == -1 && mSwitchNo == 0xff) ||
                (m2B8 == -1 && bVar2)) {
@@ -298,18 +292,22 @@ void daWarpls_c::eventOrder() {
 
 /* 00000BFC-00000C7C       .text setStatus__10daWarpls_cFv */
 bool daWarpls_c::setStatus() {
-    f32 m4124 = 1.0f;
-    f32 m4384 = -1.0f;
     if (m2B4 != 0) {
-        s8 sVar1 = dComIfGp_getReverb(current.roomNo);
-        mDoAud_zelAudio_c::getInterface()->seStart(JA_SE_OBJ_WARP_EFF_SUS, &eyePos, 0, sVar1, m4124, m4124, m4384, m4384, 0);
+        fopAcM_seStart(this,JA_SE_OBJ_WARP_EFF_SUS,0);
     }
     return true;
 }
 
 /* 00000C7C-00000DC4       .text demo__10daWarpls_cFv */
 bool daWarpls_c::demo() {
+    #if VERSION == VERSION_DEMO
+    int sw = mSwitchNo;
+    char roomNo = home.roomNo;
+    u8 bVar3 = dComIfGs_isSwitch(sw,roomNo);
+    #else
     u8 bVar3 = dComIfGs_isSwitch(mSwitchNo, home.roomNo);
+    #endif
+
 
     if (m2BE != 0) {
         if (!check_warp_distance()) {
@@ -345,7 +343,11 @@ bool daWarpls_c::demo() {
 
 /* 00000DC4-00000EE8       .text check_warp_link__10daWarpls_cFv */
 int daWarpls_c::check_warp_link() {
-    f32 local_dist = 112.5f;
+    #if VERSION == VERSION_DEMO
+    f32 local_warp_distance;
+    #else
+    f32 local_warp_distance = 112.5f;
+    #endif
     f64 abs = 0.5;
 
     fopAc_ac_c* player = g_dComIfG_gameInfo.play.getPlayerPtr(0);
@@ -355,7 +357,11 @@ int daWarpls_c::check_warp_link() {
 
     abs = (player->current.pos - current.pos).absXZ();
 
-    if (abs < local_dist * scale.x) {
+    #if VERSION == VERSION_DEMO
+    local_warp_distance = 112.5f;
+    #endif
+    
+    if (abs < local_warp_distance * scale.x) {
         return true;
     }
     return false;
@@ -371,7 +377,7 @@ int daWarpls_c::check_warp_distance() {
     }
 
     abs = (player->current.pos - current.pos).absXZ();
-
+    
     if (abs < m_warp_distance * scale.x) {
         return true;
     }
@@ -390,8 +396,7 @@ void daWarpls_c::warp_eff_start() {
         if (mpEmitter != NULL) {
             mpEmitter->mFlags &= ~1;
         }
-        s8 sVar2 = dComIfGp_getReverb(current.roomNo);
-        mDoAud_zelAudio_c::getInterface()->seStart(JA_SE_OBJ_WARP_EFF_APPEAR, &eyePos, 0, sVar2, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        fopAcM_seStart(this,JA_SE_OBJ_WARP_EFF_APPEAR,0);
         m2B4 = 1;
     }
     return;
@@ -450,13 +455,13 @@ actor_process_profile_definition g_profile_WARPLIGHT = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WARPLIGHT,
+    /* ProcName     */ fpcNm_WARPLIGHT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWarpls_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_WARPLIGHT,
+    /* Priority     */ fpcDwPi_WARPLIGHT_e,
     /* Actor SubMtd */ &daWarplsMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

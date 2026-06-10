@@ -10,8 +10,8 @@
 #include "d/d_bg_w.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_HIO.h"
-#include "d/res/res_link.h" // IWYU pragma: export
-#include "d/res/res_lkanm.h"
+#include "res/Object/Link.h" // IWYU pragma: export
+#include "res/Object/LkAnm.h"
 
 class mDoExt_MtxCalcOldFrame;
 
@@ -334,10 +334,6 @@ public:
 };
 
 class daPy_footData_c {
-public:
-    ~daPy_footData_c();
-    daPy_footData_c();
-
 public:
     /* 0x000 */ u8 field_0x000;
     /* 0x001 */ u8 field_0x001;
@@ -1252,15 +1248,14 @@ public:
     J3DAnmTextureSRTKey* entryBtk(J3DModelData*, int);
     J3DAnmTevRegKey* entryBrk(J3DModelData*, int);
     void playerInit();
-    daPy_lk_c();
     int makeBgWait();
     void setSeAnime(daPy_anmHeap_c const*, J3DFrameCtrl*);
     void initSeAnime();
     void resetSeAnime();
-    int setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32);
-    BOOL setSingleMoveAnime(daPy_ANM, f32, f32, s16, f32);
-    BOOL setActAnimeUpper(u16, daPy_UPPER, f32, f32, s16, f32);
-    BOOL resetActAnimeUpper(daPy_UPPER, f32);
+    int setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32 i_morf);
+    BOOL setSingleMoveAnime(daPy_ANM, f32, f32, s16, f32 i_morf);
+    BOOL setActAnimeUpper(u16, daPy_UPPER, f32, f32, s16, f32 i_morf);
+    BOOL resetActAnimeUpper(daPy_UPPER, f32 i_morf);
     void animeUpdate();
     void simpleAnmPlay(J3DAnmBase*);
     void setHandModel(daPy_ANM);
@@ -1584,7 +1579,9 @@ public:
     f32 checkRopeRoofHit(s16);
     int changeRopeSwingProc();
     int changeRopeEndProc(int);
+#if VERSION > VERSION_DEMO
     BOOL checkSpecialRope();
+#endif
     int changeRopeToHangProc();
     BOOL checkRopeSwingWall(cXyz*, cXyz*, s16*, f32*);
     void setBlendRopeMoveAnime(int);
@@ -1782,7 +1779,7 @@ public:
     BOOL procCutExA();
     BOOL procCutExB_init();
     BOOL procCutExB();
-    BOOL procCutTurn_init(int);
+    BOOL procCutTurn_init(BOOL);
     BOOL procCutTurn();
     BOOL procCutRoll_init();
     BOOL procCutRoll();
@@ -1811,23 +1808,23 @@ public:
     BOOL checkNoUpperAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xFFFF; }
     
     BOOL checkGrabAnime() const { return checkGrabAnimeLight() || checkGrabAnimeHeavy(); };
-    BOOL checkGrabAnimeLight() const { return checkUpperAnime(LKANM_BCK_GRABWAIT); };
-    BOOL checkGrabAnimeHeavy() const { return checkUpperAnime(LKANM_BCK_GRABWAITB); };
-    BOOL checkBoomerangCatchAnime() const { return checkUpperAnime(LKANM_BCK_BOOMCATCH); };
-    BOOL checkBoomerangThrowAnime() const { return checkUpperAnime(LKANM_BCK_BOOMTHROW); };
-    BOOL checkBoomerangReadyAnime() const { return checkUpperAnime(LKANM_BCK_BOOMWAIT); };
-    BOOL checkHookshotReadyAnime() const { return checkUpperAnime(LKANM_BCK_HOOKSHOTWAIT); }
-    BOOL checkDashDamageAnime() const { return checkUpperAnime(LKANM_BCK_DAMDASH); }
-    BOOL checkBowReloadAnime() const { return checkUpperAnime(LKANM_BCK_ARROWRELORD); }
-    BOOL checkBowShootAnime() const { return checkUpperAnime(LKANM_BCK_ARROWSHOOT); }
-    BOOL checkBowWaitAnime() const { return checkUpperAnime(LKANM_BCK_BOWWAIT); }
+    BOOL checkGrabAnimeLight() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_GRABWAIT_e); };
+    BOOL checkGrabAnimeHeavy() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_GRABWAITB_e); };
+    BOOL checkBoomerangCatchAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMCATCH_e); };
+    BOOL checkBoomerangThrowAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMTHROW_e); };
+    BOOL checkBoomerangReadyAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMWAIT_e); };
+    BOOL checkHookshotReadyAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_HOOKSHOTWAIT_e); }
+    BOOL checkDashDamageAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_DAMDASH_e); }
+    BOOL checkBowReloadAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_ARROWRELORD_e); }
+    BOOL checkBowShootAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_ARROWSHOOT_e); }
+    BOOL checkBowWaitAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_BOWWAIT_e); }
     BOOL checkGuardSlip() const {
         return mCurProc == daPyProc_GUARD_SLIP_e ||
             mCurProc == daPyProc_CROUCH_DEFENSE_SLIP_e;
     }
     BOOL checkUpperGuardAnime() const {
-        return checkUpperAnime(LKANM_BCK_ATNG) ||
-            checkUpperAnime(LKANM_BCK_ATNGHAM);
+        return checkUpperAnime(dRes_INDEX_LKANM_BCK_ATNG_e) ||
+            checkUpperAnime(dRes_INDEX_LKANM_BCK_ATNGHAM_e);
     }
     
     s16 checkTinkleShield() const { return mTinkleShieldTimer; }
@@ -1872,11 +1869,11 @@ public:
     void getBombWaterPillarBtk() {} // mpGwp00BtkData?
     
     BOOL checkSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) != dItem_NONE_e || checkSwordMiniGame();
+        return dComIfGs_getSelectEquip(0) != dItemNo_NONE_e || checkSwordMiniGame();
     }
-    BOOL checkShieldEquip() const { return dComIfGs_getSelectEquip(1) != dItem_NONE_e; }
-    BOOL checkMirrorShieldEquip() const { return dComIfGs_getSelectEquip(1) == dItem_MIRROR_SHIELD_e; }
-    BOOL checkPowerGloveEquip() const { return dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e; }
+    BOOL checkShieldEquip() const { return dComIfGs_getSelectEquip(1) != dItemNo_NONE_e; }
+    BOOL checkMirrorShieldEquip() const { return dComIfGs_getSelectEquip(1) == dItemNo_MIRROR_SHIELD_e; }
+    BOOL checkPowerGloveEquip() const { return dComIfGs_getSelectEquip(2) == dItemNo_POWER_BRACELETS_e; }
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
     int getStartMode() { return (fopAcM_GetParam(this) >> 0x0C) & 0xF; }
@@ -1929,13 +1926,13 @@ public:
     BOOL checkFaceTypeNot() const { return mFace == daPyFace_NONE; }
     BOOL checkCrawlWaterIn() { return mWaterY > current.pos.y + 15.0f; }
     void setFootEffectPosType(u8 type) { mFootEffectPosType = type; }
+    int checkIsland() const { return mRestartPoint; }
+    const s16 getTactLeftHandPos() const { return mProcVar3.m34D6; }
     
     void checkBothItemEquipAnime() const {}
     void checkDoubleItemEquipAnime() const {}
-    void checkIsland() const {}
     void checkRopeThrowAnime() const {}
     void checkSwordEquipAnime() const {}
-    void getTactLeftHandPos() const {}
     void setSpeedAndAngleBoomerang() {}
     void setSpeedAndAngleBow() {}
     void setSpeedAndAngleHookshot() {}
@@ -1982,17 +1979,17 @@ public:
     virtual BOOL checkGrabBarrel() { return checkGrabBarrelSearch(1); }
     virtual u32 checkPlayerNoDraw() { return dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_SUBJECT_e) || checkNoResetFlg0(daPyFlg0_NO_DRAW); }
     virtual BOOL checkRopeTag() { return mActorKeepEquip.getActor() == NULL; }
-    virtual BOOL checkRopeReadyAnime() const { return checkUpperAnime(LKANM_BCK_ROPETHROWWAIT); }
+    virtual BOOL checkRopeReadyAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_ROPETHROWWAIT_e); }
     virtual void voiceStart(u32);
     virtual void setOutPower(f32, s16, int);
     virtual void onFrollCrashFlg(u32 param_1) { m3620 = param_1; onNoResetFlg0(daPyFlg0_UNK8); }
     virtual MtxP getModelJointMtx(u16 idx) { return mpCLModel->getAnmMtx(idx); }
     virtual f32 getOldSpeedY() { return mOldSpeed.y; }
     virtual BOOL setHookshotCarryOffset(fpc_ProcID, const cXyz*);
-    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && mProcVar0.m3570 != 0; }
+    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && mProcVar6.m3570 != 0; }
     virtual void cancelChangeTextureAnime() { resetDemoTextureAnime(); }
 
-public:
+private:
     /* 0x0320 */ request_of_phase_process_class mPhase;
     /* 0x0328 */ J3DModelData* mpCLModelData;
     /* 0x032C */ J3DModel* mpCLModel;
@@ -2155,12 +2152,26 @@ public:
     /* 0x34CC */ u8 m34CC;
     /* 0x34CD */ u8 m34CD;
     /* 0x34CE */ u8 m34CE;
-    /* 0x34D0 */ s16 m34D0; // TODO: procvar
-    /* 0x34D2 */ s16 m34D2; // TODO: procvar
-    /* 0x34D4 */ s16 m34D4; // TODO: procvar
-    /* 0x34D6 */ s16 m34D6; // TODO: procvar
-    /* 0x34D8 */ s16 m34D8; // TODO: procvar
-    /* 0x34DA */ s16 m34DA; // TODO: procvar
+    // `mProcVar`'s are variables that are context dependent for each `PROC` action.
+    // (The exact setup may need to be simplified later)
+    /* 0x34D0 */ union {
+        s16 m34D0;
+    } mProcVar0;
+    /* 0x34D2 */ union {
+        s16 m34D2;
+    } mProcVar1;
+    /* 0x34D4 */ union {
+        s16 m34D4;
+    } mProcVar2;
+    /* 0x34D6 */ union {
+        s16 m34D6;
+    } mProcVar3;
+    /* 0x34D8 */ union {
+        s16 m34D8;
+    } mProcVar4;
+    /* 0x34DA */ union {
+        s16 m34DA;
+    } mProcVar5;
     /* 0x34DC */ s16 m34DC;
     /* 0x34DE */ s16 m34DE;
     /* 0x34E0 */ s16 m34E0;
@@ -2233,12 +2244,14 @@ public:
     /* 0x356C */ int mCameraInfoIdx;
     // `mProcVar`'s are variables that are context dependent for each `PROC` action.
     // (The exact setup may need to be simplified later)
-    union {
+    /* 0x3570 */ union {
         s32 m3570;
         daPy_ANM mDamageAnm;
         int mBottleItem;
-    } /* 0x3570  */ mProcVar0;
-    /* 0x3574 */ s32 m3574; // TODO: procvar
+    } mProcVar6;
+    /* 0x3574 */ union {
+        s32 m3574;
+    } mProcVar7;
     /* 0x3578 */ int m3578;
     /* 0x357C */ int m357C;
     /* 0x3580 */ int m3580;
@@ -2256,7 +2269,7 @@ public:
     /* 0x35B0 */ f32 mStickDistance;
     /* 0x35B4 */ f32 m35B4;
     /* 0x35B8 */ f32 m35B8;
-    /* 0x35BC */ f32 mVelocity;
+    /* 0x35BC */ f32 mNormalSpeed;
     /* 0x35C0 */ u8 m35C0[0x35C4 - 0x35C0];
     /* 0x35C4 */ f32 m35C4;
     /* 0x35C8 */ f32 m35C8;

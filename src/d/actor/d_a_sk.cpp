@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sk.h"
-#include "d/res/res_sk.h"
+#include "res/Object/Sk.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_jnt_hit.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
@@ -207,7 +205,7 @@ static BOOL daSk_Delete(sk_class* i_this) {
 /* 0000090C-00000A6C       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
     sk_class* i_this = (sk_class*)a_this;
-    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk", SK_BDL_TURU_00);
+    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk", dRes_INDEX_SK_BDL_TURU_00_e);
 
     i_this->mpMorf = new mDoExt_McaMorf(pModelData, NULL, NULL, NULL, J3DFrameCtrl::EMode_NULL, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022);
     if (i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL) {
@@ -353,18 +351,18 @@ static actor_method_class l_daSk_Method = {
 };
 
 actor_process_profile_definition g_profile_SK = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SK,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SK_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sk_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SK,
+    /* Draw Prio    */ fpcDwPi_SK_e,
     /* Actor SubMtd */ &l_daSk_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

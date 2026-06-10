@@ -12,13 +12,11 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
-#include "d/res/res_always.h"
-#include "d/res/res_ikadah.h"
-#include "d/res/res_link.h"
+#include "res/Object/Always.h"
+#include "res/Object/IkadaH.h"
+#include "res/Object/Link.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 
@@ -192,7 +190,7 @@ void daObj_Ikada_c::_ride(fopAc_ac_c* actor) {
             mbIsLinkRiding = true;
         }
 
-        if (fopAcM_GetName(actor) == PROC_BOMB) {
+        if (fopAcM_GetName(actor) == fpcNm_BOMB_e) {
             daBomb_c* bomb = (daBomb_c*)actor;
 
             if (bomb->getBombRestTime() <= 1) {
@@ -1156,8 +1154,8 @@ bool daObj_Ikada_c::_execute() {
 
     if (isWave()) {
         f32 s = scale.x;
-        s32 uVar5 = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), s * -1000.0f, s * -50.0f, s * -1000.0f, s * 1000.0f, s * 1000.0f, s * 1000.0f);
-        if (speedF <= 2.0f || uVar5 & 0xFF || fopAcM_searchPlayerDistanceXZ(this) > 18000.0f) {
+        bool uVar5 = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), s * -1000.0f, s * -50.0f, s * -1000.0f, s * 1000.0f, s * 1000.0f, s * 1000.0f);
+        if (speedF <= 2.0f || uVar5 || fopAcM_searchPlayerDistanceXZ(this) > 18000.0f) {
             mWaveRCallback.end();
             mWaveLCallback.end();
             mSplashCallBack.end();
@@ -1371,7 +1369,7 @@ void daObj_Ikada_c::createInit() {
         static const u32 params[] = {4, 4, 4, 4, 0x2000000};
         static const f32 flag_scale[] = {0.2f, 0.0f, 0.0f, 0.0f, 0.12f};
 
-        mFlagPcId = fopAcM_create(PROC_MAJUU_FLAG, params[mType], &current.pos, tevStr.mRoomNo, &current.angle);
+        mFlagPcId = fopAcM_create(fpcNm_MAJUU_FLAG_e, params[mType], &current.pos, tevStr.mRoomNo, &current.angle);
         mFlagOffset = flag_offset[mType];
         mFlagScale = flag_scale[mType];
     }
@@ -1429,8 +1427,8 @@ void daObj_Ikada_c::createInit() {
 
 /* 00004838-00004B60       .text _createHeap__13daObj_Ikada_cFv */
 BOOL daObj_Ikada_c::_createHeap() {
-    static const s32 bdl[] = {IKADAH_BDL_VIKAE, IKADAH_BDL_VTSP, IKADAH_BDL_VIKAH, IKADAH_BDL_VTSP2, IKADAH_BDL_VSVSP};
-    static const s32 dzb[] = {IKADAH_DZB_VIKAE, IKADAH_DZB_VTSP, IKADAH_DZB_VIKAH, IKADAH_DZB_VTSP, IKADAH_DZB_VSVSP};
+    static const s32 bdl[] = {dRes_INDEX_IKADAH_BDL_VIKAE_e, dRes_INDEX_IKADAH_BDL_VTSP_e, dRes_INDEX_IKADAH_BDL_VIKAH_e, dRes_INDEX_IKADAH_BDL_VTSP2_e, dRes_INDEX_IKADAH_BDL_VSVSP_e};
+    static const s32 dzb[] = {dRes_INDEX_IKADAH_DZB_VIKAE_e, dRes_INDEX_IKADAH_DZB_VTSP_e, dRes_INDEX_IKADAH_DZB_VIKAH_e, dRes_INDEX_IKADAH_DZB_VTSP_e, dRes_INDEX_IKADAH_DZB_VSVSP_e};
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, bdl[mType]);
     JUT_ASSERT(2170, modelData != NULL);
@@ -1441,7 +1439,7 @@ BOOL daObj_Ikada_c::_createHeap() {
     }
 
     if (mType == 4) {
-        J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arc_name, IKADAH_BCK_SVSHIP_KAITEN);
+        J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_IKADAH_BCK_SVSHIP_KAITEN_e);
         JUT_ASSERT(2180, bck != NULL);
 
         if (!mBckAnm.init(modelData, bck, true, J3DFrameCtrl::EMode_LOOP)) {
@@ -1476,7 +1474,7 @@ BOOL daObj_Ikada_c::_createHeap() {
     }
 
     if (mType == 4) {
-        ResTIMG* pImg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE);
+        ResTIMG* pImg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_ROPE_e);
         if (!mRopeLine.init(1, 200, pImg, 0)) {
             return FALSE;
         }
@@ -1484,7 +1482,7 @@ BOOL daObj_Ikada_c::_createHeap() {
 #if VERSION > VERSION_DEMO
         J3DModelData*
 #endif
-            modelData = (J3DModelData*)dComIfG_getObjectRes("Link", LINK_BDL_ROPEEND);
+            modelData = (J3DModelData*)dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_ROPEEND_e);
         JUT_ASSERT(2228, modelData != NULL);
 
         mpRopeEnd = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
@@ -1576,18 +1574,18 @@ static actor_method_class daObj_IkadaMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_IKADA = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_IKADA,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_IKADA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Ikada_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_IKADA,
+    /* Draw Prio    */ fpcDwPi_OBJ_IKADA_e,
     /* Actor SubMtd */ &daObj_IkadaMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

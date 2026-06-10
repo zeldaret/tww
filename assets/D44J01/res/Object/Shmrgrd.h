@@ -1,0 +1,25 @@
+#ifndef RES_SHMRGRD_H
+#define RES_SHMRGRD_H
+
+enum dRes_INDEX_SHMRGRD {
+    /* BDL  */
+    dRes_INDEX_SHMRGRD_BDL_SHMRGRD_e=0x4,
+    /* DZB  */
+    dRes_INDEX_SHMRGRD_DZB_HGBASE_e=0x7,
+};
+
+enum dRes_ID_SHMRGRD {
+    /* BDL  */
+    dRes_ID_SHMRGRD_BDL_SHMRGRD_e=0x4,
+    /* DZB  */
+    dRes_ID_SHMRGRD_DZB_HGBASE_e=0x7,
+};
+
+enum SHMRGRD_JNT {
+    SHMRGRD_JNT_SHMRGRD_e=0x0,
+    SHMRGRD_JNT_MHMRSW_e=0x1,
+    SHMRGRD_JNT_HIT_e=0x2,
+    SHMRGRD_JNT_BODY_e=0x3,
+};
+
+#endif /* !RES_SHMRGRD_H */

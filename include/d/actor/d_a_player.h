@@ -12,6 +12,8 @@ inline u8 dComIfGp_getMiniGameType();
 
 class daPy_mtxFollowEcallBack_c : public dPa_levelEcallBack {
 public:
+    ~daPy_mtxFollowEcallBack_c() {}
+
     void execute(JPABaseEmitter*);
     void end();
     JPABaseEmitter* makeEmitter(u16, MtxP, const cXyz*, const cXyz*);
@@ -593,15 +595,15 @@ public:
     
     BOOL checkGrabWear() const { return field_0x2b0 < 0.0f; }
     BOOL checkNormalSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) == dItem_SWORD_e || checkSwordMiniGame();
+        return dComIfGs_getSelectEquip(0) == dItemNo_SWORD_e || checkSwordMiniGame();
     }
     BOOL checkMasterSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_1_e ||
-               dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e ||
-               dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
+        return dComIfGs_getSelectEquip(0) == dItemNo_MASTER_SWORD_1_e ||
+               dComIfGs_getSelectEquip(0) == dItemNo_MASTER_SWORD_2_e ||
+               dComIfGs_getSelectEquip(0) == dItemNo_MASTER_SWORD_3_e;
     }
     BOOL checkFinalMasterSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
+        return dComIfGs_getSelectEquip(0) == dItemNo_MASTER_SWORD_3_e;
     }
     
     void setFace(daPy_FACE face) { mFace = face; }

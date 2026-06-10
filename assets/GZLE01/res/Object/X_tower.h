@@ -1,0 +1,22 @@
+#ifndef RES_X_TOWER_H
+#define RES_X_TOWER_H
+
+enum dRes_INDEX_X_TOWER {
+    /* BDL  */
+    dRes_INDEX_X_TOWER_BDL_X_TOWER_e=0x4,
+    /* DZB  */
+    dRes_INDEX_X_TOWER_DZB_X_TOWER_e=0x7,
+};
+
+enum dRes_ID_X_TOWER {
+    /* BDL  */
+    dRes_ID_X_TOWER_BDL_X_TOWER_e=0x4,
+    /* DZB  */
+    dRes_ID_X_TOWER_DZB_X_TOWER_e=0x7,
+};
+
+enum X_TOWER_JNT {
+    X_TOWER_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_X_TOWER_H */

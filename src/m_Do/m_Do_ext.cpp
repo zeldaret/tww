@@ -1224,10 +1224,10 @@ void mDoExt_MtxCalcAnmBlendTblOld::calc(u16 jnt_no) {
 }
 
 /* 80012548-800125CC       .text initOldFrameMorf__22mDoExt_MtxCalcOldFrameFfUsUs */
-void mDoExt_MtxCalcOldFrame::initOldFrameMorf(f32 param_0, u16 param_1, u16 param_2) {
-    if (param_0 > 0.0f) {
-        mOldFrameMorfCounter = param_0;
-        field_0x8 = 1.0f / param_0;
+void mDoExt_MtxCalcOldFrame::initOldFrameMorf(f32 i_morf, u16 i_frameStartJoint, u16 i_frameEndJoint) {
+    if (i_morf > 0.0f) {
+        mOldFrameMorfCounter = i_morf;
+        field_0x8 = 1.0f / i_morf;
         mOldFrameRate = 1.0f;
         field_0x10 = 1.0f;
         field_0x14 = 1.0f;
@@ -1239,8 +1239,8 @@ void mDoExt_MtxCalcOldFrame::initOldFrameMorf(f32 param_0, u16 param_1, u16 para
         field_0x10 = 0.0f;
         field_0x14 = 0.0f;
     }
-    mOldFrameStartJoint = param_1;
-    mOldFrameEndJoint = param_2;
+    mOldFrameStartJoint = i_frameStartJoint;
+    mOldFrameEndJoint = i_frameEndJoint;
 }
 
 /* 800125CC-80012650       .text decOldFrameMorfCounter__22mDoExt_MtxCalcOldFrameFv */
@@ -1443,12 +1443,12 @@ void mDoExt_McaMorf::setAnm(J3DAnmTransform* bckAnm, int loopMode, f32 morf, f32
 }
 
 /* 80012FC8-8001300C       .text setMorf__14mDoExt_McaMorfFf */
-void mDoExt_McaMorf::setMorf(f32 morf) {
-    if (mPrevMorf < 0.0f || morf <= 0.0f) {
+void mDoExt_McaMorf::setMorf(f32 i_morf) {
+    if (mPrevMorf < 0.0f || i_morf <= 0.0f) {
         mCurMorf = 1.0f;
     } else {
         mCurMorf = 0.0f;
-        mMorfStep = 1.0f / morf;
+        mMorfStep = 1.0f / i_morf;
     }
     mPrevMorf = mCurMorf;
 }

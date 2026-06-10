@@ -6,11 +6,9 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_leaves.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_vochi.h"
+#include "res/Object/Vochi.h"
 #include "d/d_bg_w.h"
-#include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_priority.h"
 #include "d/d_bg_w.h"
 
 #if VERSION == VERSION_DEMO
@@ -259,7 +257,7 @@ void daObjLeaves_c::birthEffect(int arg1, cXyz* arg2, csXyz* arg3, GXColor* arg4
 void rideCallBack(dBgW*, fopAc_ac_c* a_this, fopAc_ac_c* a_player) {
     daObjLeaves_c* i_this = (daObjLeaves_c*)a_this;
 
-    if (fopAcM_GetName(a_player) == PROC_PLAYER) {
+    if (fopAcM_GetName(a_player) == fpcNm_PLAYER_e) {
         daPy_py_c* player = (daPy_py_c*)a_player;
 #if VERSION == VERSION_DEMO
         if (player->speedF >= l_HIO.m14) {
@@ -284,13 +282,13 @@ BOOL daObjLeaves_c::solidHeapCB(fopAc_ac_c* a_this) {
 /* 00000384-00000494       .text create_heap__13daObjLeaves_cFv */
 bool daObjLeaves_c::create_heap() {
     bool uVar5 = true;
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, VOCHI_BDL_VOCHI);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_VOCHI_BDL_VOCHI_e);
     if (modelData == NULL) {
         JUT_ASSERT(VERSION_SELECT(550, 544, 548, 548), FALSE);
         uVar5 = false;
     } else {
         mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x31000202);
-        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, VOCHI_DZB_VOCHI), cBgW::MOVE_BG_e, &mModel->getBaseTRMtx());
+        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_VOCHI_DZB_VOCHI_e), cBgW::MOVE_BG_e, &mModel->getBaseTRMtx());
         if (mModel == NULL || mpBgW == NULL) {
             uVar5 = false;
         } else {
@@ -791,18 +789,18 @@ static actor_method_class l_daObjLeaves_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Leaves = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Leaves,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Leaves_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjLeaves_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Leaves,
+    /* Draw Prio    */ fpcDwPi_Obj_Leaves_e,
     /* Actor SubMtd */ &l_daObjLeaves_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_3_e,
+    /* Cull Type    */ fopAc_CULLBOX_3_e,
 };

@@ -11,10 +11,8 @@
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
-#include "d/res/res_kui.h"
+#include "res/Object/Kui.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_executor.h"
@@ -24,7 +22,7 @@ class J3DModelData;
 
 /* 00000078-000000C4       .text s_a_i_sub__FPvPv */
 static void* s_a_i_sub(void* search, void*) {
-    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_DR2) {
+    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == fpcNm_DR2_e) {
         return search;
     }
     return NULL;
@@ -37,7 +35,7 @@ static dr2_class* search_dragontail(kui_class* i_this) {
 
 /* 000000F0-0000013C       .text b_a_i_sub__FPvPv */
 static void* b_a_i_sub(void* search, void*) {
-    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_BTD) {
+    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == fpcNm_BTD_e) {
         return search;
     }
     return NULL;
@@ -411,7 +409,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
 
     if (i_this->type == 3) {
         // Bell body
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_HKANE1);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_BDL_HKANE1_e);
         JUT_ASSERT(0x353, modelData != NULL);
 
         i_this->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -420,7 +418,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
         }
 
         // Bell handle
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_HKANE2);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_BDL_HKANE2_e);
         JUT_ASSERT(0x35F, modelData != NULL);
 
         i_this->mpModel2 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -429,7 +427,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
         }
     } else {
         // Rope
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_OBI_ROPETAG);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_BDL_OBI_ROPETAG_e);
         JUT_ASSERT(0x36B, modelData != NULL);
 
         i_this->mpModel2 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
@@ -439,7 +437,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
 
         if (i_this->type == 2 || i_this->type == 4) {
             // Rope swing attachment
-            modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_MROPESW);
+            modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_BDL_MROPESW_e);
             JUT_ASSERT(0x377, modelData != NULL);
 
             i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
@@ -455,7 +453,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes("Kui", KUI_DZB_OBI_ROPETAG);
+    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_DZB_OBI_ROPETAG_e);
     if (i_this->field_0x2D8->Set(pData, cBgW::MOVE_BG_e, &i_this->field_0x2A8) == true) {
         return FALSE;
     }
@@ -550,18 +548,18 @@ static actor_method_class l_daKui_Method = {
 };
 
 actor_process_profile_definition g_profile_KUI = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KUI,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KUI_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kui_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KUI,
+    /* Draw Prio    */ fpcDwPi_KUI_e,
     /* Actor SubMtd */ &l_daKui_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

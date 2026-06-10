@@ -1,0 +1,25 @@
+#ifndef RES_VBINW_H
+#define RES_VBINW_H
+
+enum dRes_INDEX_VBINW {
+    /* BDLM */
+    dRes_INDEX_VBINW_BDL_VBINW_e=0x4,
+    /* BTK  */
+    dRes_INDEX_VBINW_BTK_VBINA_W_e=0x7,
+};
+
+enum dRes_ID_VBINW {
+    /* BDLM */
+    dRes_ID_VBINW_BDL_VBINW_e=0x4,
+    /* BTK  */
+    dRes_ID_VBINW_BTK_VBINA_W_e=0x7,
+};
+
+enum VBINW_JNT {
+    VBINW_JNT_V_BINRGB_e=0x0,
+    VBINW_JNT_BIN_0_OUTSIDE_e=0x1,
+    VBINW_JNT_BIN_1_CAP_MODEL_e=0x2,
+    VBINW_JNT_BIN_2_INSIDE_e=0x3,
+};
+
+#endif /* !RES_VBINW_H */

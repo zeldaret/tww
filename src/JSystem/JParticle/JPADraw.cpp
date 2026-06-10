@@ -119,8 +119,8 @@ void JPADraw::draw(MtxP drawMtx) {
     GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetChanCtrl(GX_COLOR1A1, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetBlendMode(dc.pbsp->getBlendMode1(), dc.pbsp->getSrcBlendFactor1(), dc.pbsp->getDstBlendFactor1(), dc.pbsp->getBlendOp1());
-    cb.mPrmColor = dc.pbe->mGlobalPrmColor;
-    cb.mEnvColor = dc.pbe->mGlobalEnvColor;
+    dc.pbe->getBasePrmColor(cb.mPrmColor);
+    dc.pbe->getBaseEnvColor(cb.mEnvColor);
     cb.mDrawMtxPtr = drawMtx;
     cb.mSetupTev.setupTev(dc.pbsp, dc.petx);
     for (int i = 0; i < execEmtrVisNum; i++) {
@@ -165,7 +165,7 @@ void JPADraw::calcChild(JPABaseParticle* ptcl) {
 /* 80268A48-80268F28       .text initParticle__7JPADrawFP15JPABaseParticle */
 void JPADraw::initParticle(JPABaseParticle* ptcl) {
     JPADrawParams* params = ptcl->getDrawParamPPtr();
-    params->mAxis.set(JPABaseEmitter::emtrInfo.mEmitterGlobalRot[0][1], JPABaseEmitter::emtrInfo.mEmitterGlobalRot[1][1], JPABaseEmitter::emtrInfo.mEmitterGlobalRot[2][1]);
+    dc.pbe->getAxisYVec(params->mAxis);
     params->mPrmColor = mPrmColor;
     params->mEnvColor = mEnvColor;
     params->mAlphaOut = 1.0f;
@@ -665,12 +665,11 @@ void JPADraw::setParticleClipBoard() {
 
     GXLoadPosMtxImm(cb.mDrawMtx, GX_PNMTX0);
 
-    JPABaseEmitter* emtr = dc.pbe;
-    f32 scaleX = emtr->mGlobalParticleScale.x;
-    f32 scaleY = emtr->mGlobalParticleScale.y;
+    JGeometry::TVec3<f32> scale;
+    dc.pbe->getGlobalParticleScale(scale);
 
-    cb.mGlobalScaleX = 25.0f * dc.pbsp->getBaseSizeX() * scaleX;
-    cb.mGlobalScaleY = 25.0f * dc.pbsp->getBaseSizeY() * scaleY;
+    cb.mGlobalScaleX = 25.0f * dc.pbsp->getBaseSizeX() * scale.x;
+    cb.mGlobalScaleY = 25.0f * dc.pbsp->getBaseSizeY() * scale.y;
 
     if (dc.pbsp->getType() == JPABaseShape::JPAType_Point) {
         cb.mGlobalScaleX *= 1.02f;
@@ -751,16 +750,15 @@ void JPADraw::setChildClipBoard() {
 
     GXLoadPosMtxImm(cb.mDrawMtx, GX_PNMTX0);
 
-    JPABaseEmitter* emtr = dc.pbe;
-    f32 scaleX = emtr->mGlobalParticleScale.x;
-    f32 scaleY = emtr->mGlobalParticleScale.y;
+    JGeometry::TVec3<f32> scale;
+    dc.pbe->getGlobalParticleScale(scale);
 
     if (!dc.pssp->isInheritedScale()) {
-        cb.mGlobalScaleX = 25.0f * dc.pssp->getScaleX() * scaleX;
-        cb.mGlobalScaleY = 25.0f * dc.pssp->getScaleY() * scaleY;
+        cb.mGlobalScaleX = 25.0f * dc.pssp->getScaleX() * scale.x;
+        cb.mGlobalScaleY = 25.0f * dc.pssp->getScaleY() * scale.y;
     } else {
-        cb.mGlobalScaleX = 25.0f * dc.pbsp->getBaseSizeX() * scaleX;
-        cb.mGlobalScaleY = 25.0f * dc.pbsp->getBaseSizeY() * scaleY;
+        cb.mGlobalScaleX = 25.0f * dc.pbsp->getBaseSizeX() * scale.x;
+        cb.mGlobalScaleY = 25.0f * dc.pbsp->getBaseSizeY() * scale.y;
     }
 
     if (dc.pssp->getType() == JPABaseShape::JPAType_Point) {
@@ -859,7 +857,7 @@ void JPADraw::drawParticle() {
 void JPADraw::drawChild() {
     field_0xc2 |= 0x02;
     setChildClipBoard();
-    dc.mpActiveParticles = &dc.pbe->mChildParticles;
+    dc.mpActiveParticles = dc.pbe->getChildParticleList();
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 
@@ -923,7 +921,7 @@ void JPADraw::zDrawParticle() {
     GXSetLineWidth(cb.mGlobalScaleX, GX_TO_ONE);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GXSetZCompLoc(GX_FALSE);
-    GXSetAlphaCompare(GX_GEQUAL, dc.pbe->mGlobalPrmColor.a, GX_AOP_OR, GX_GEQUAL, dc.pbe->mGlobalPrmColor.a);
+    GXSetAlphaCompare(GX_GEQUAL, dc.pbe->getGlobalAlpha(), GX_AOP_OR, GX_GEQUAL, dc.pbe->getGlobalAlpha());
     GXSetAlphaUpdate(GX_FALSE);
     GXSetColorUpdate(GX_FALSE);
     GXSetCullMode(GX_CULL_NONE);
@@ -959,7 +957,7 @@ void JPADraw::zDrawParticle() {
 void JPADraw::zDrawChild() {
     field_0xc2 |= 0x02;
     setChildClipBoard();
-    dc.mpActiveParticles = &dc.pbe->mChildParticles;
+    dc.mpActiveParticles = dc.pbe->getChildParticleList();
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 
@@ -971,7 +969,7 @@ void JPADraw::zDrawChild() {
 
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GXSetZCompLoc(GX_FALSE);
-    GXSetAlphaCompare(GX_GEQUAL, dc.pbe->mGlobalPrmColor.a, GX_AOP_OR, GX_GEQUAL, dc.pbe->mGlobalPrmColor.a);
+    GXSetAlphaCompare(GX_GEQUAL, dc.pbe->getGlobalAlpha(), GX_AOP_OR, GX_GEQUAL, dc.pbe->getGlobalAlpha());
     GXSetAlphaUpdate(GX_FALSE);
     GXSetColorUpdate(GX_FALSE);
     GXSetCullMode(GX_CULL_NONE);
@@ -1006,10 +1004,7 @@ void JPADraw::zDrawChild() {
 
 /* 8026C4DC-8026C640       .text loadYBBMtx__7JPADrawFPA4_f */
 void JPADraw::loadYBBMtx(MtxP mtx) {
-    JGeometry::TVec3<f32> v;
-    v.x = 0.0f;
-    v.y = mtx[1][1];
-    v.z = mtx[2][1];
+    JGeometry::TVec3<f32> v(0.0f, mtx[1][1], mtx[2][1]);
     JUT_ASSERT(0x596, !v.isZero());
     v.normalize();
 

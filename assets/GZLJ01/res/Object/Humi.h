@@ -1,0 +1,108 @@
+#ifndef RES_HUMI_H
+#define RES_HUMI_H
+
+enum dRes_INDEX_HUMI {
+    /* BDLM */
+    dRes_INDEX_HUMI_BDL_HNURE0_e=0x6,
+    dRes_INDEX_HUMI_BDL_HNURE2_e=0x7,
+    dRes_INDEX_HUMI_BDL_HNURE3_e=0x8,
+    dRes_INDEX_HUMI_BDL_HNURE4_e=0x9,
+    dRes_INDEX_HUMI_BDL_HNURE5_e=0xA,
+    dRes_INDEX_HUMI_BDL_HUMI0_e=0xB,
+    dRes_INDEX_HUMI_BDL_HUMI2_e=0xC,
+    dRes_INDEX_HUMI_BDL_HUMI3_e=0xD,
+    dRes_INDEX_HUMI_BDL_HUMI4_e=0xE,
+    dRes_INDEX_HUMI_BDL_HUMI5_e=0xF,
+    /* BRK  */
+    dRes_INDEX_HUMI_BRK_HNURE0_e=0x12,
+    dRes_INDEX_HUMI_BRK_HNURE2_e=0x13,
+    dRes_INDEX_HUMI_BRK_HNURE3_e=0x14,
+    dRes_INDEX_HUMI_BRK_HNURE4_e=0x15,
+    dRes_INDEX_HUMI_BRK_HNURE5_e=0x16,
+    /* BTK  */
+    dRes_INDEX_HUMI_BTK_HUMI0_e=0x19,
+    dRes_INDEX_HUMI_BTK_HUMI2_e=0x1A,
+    dRes_INDEX_HUMI_BTK_HUMI3_e=0x1B,
+    dRes_INDEX_HUMI_BTK_HUMI4_e=0x1C,
+    dRes_INDEX_HUMI_BTK_HUMI5_e=0x1D,
+    /* DZB  */
+    dRes_INDEX_HUMI_DZB_HUMI0_e=0x20,
+    dRes_INDEX_HUMI_DZB_HUMI2_e=0x21,
+    dRes_INDEX_HUMI_DZB_HUMI3_e=0x22,
+    dRes_INDEX_HUMI_DZB_HUMI4_e=0x23,
+    dRes_INDEX_HUMI_DZB_HUMI5_e=0x24,
+};
+
+enum dRes_ID_HUMI {
+    /* BDLM */
+    dRes_ID_HUMI_BDL_HNURE0_e=0x6,
+    dRes_ID_HUMI_BDL_HNURE2_e=0x7,
+    dRes_ID_HUMI_BDL_HNURE3_e=0x8,
+    dRes_ID_HUMI_BDL_HNURE4_e=0x9,
+    dRes_ID_HUMI_BDL_HNURE5_e=0xA,
+    dRes_ID_HUMI_BDL_HUMI0_e=0xB,
+    dRes_ID_HUMI_BDL_HUMI2_e=0xC,
+    dRes_ID_HUMI_BDL_HUMI3_e=0xD,
+    dRes_ID_HUMI_BDL_HUMI4_e=0xE,
+    dRes_ID_HUMI_BDL_HUMI5_e=0xF,
+    /* BRK  */
+    dRes_ID_HUMI_BRK_HNURE0_e=0x12,
+    dRes_ID_HUMI_BRK_HNURE2_e=0x13,
+    dRes_ID_HUMI_BRK_HNURE3_e=0x14,
+    dRes_ID_HUMI_BRK_HNURE4_e=0x15,
+    dRes_ID_HUMI_BRK_HNURE5_e=0x16,
+    /* BTK  */
+    dRes_ID_HUMI_BTK_HUMI0_e=0x19,
+    dRes_ID_HUMI_BTK_HUMI2_e=0x1A,
+    dRes_ID_HUMI_BTK_HUMI3_e=0x1B,
+    dRes_ID_HUMI_BTK_HUMI4_e=0x1C,
+    dRes_ID_HUMI_BTK_HUMI5_e=0x1D,
+    /* DZB  */
+    dRes_ID_HUMI_DZB_HUMI0_e=0x20,
+    dRes_ID_HUMI_DZB_HUMI2_e=0x21,
+    dRes_ID_HUMI_DZB_HUMI3_e=0x22,
+    dRes_ID_HUMI_DZB_HUMI4_e=0x23,
+    dRes_ID_HUMI_DZB_HUMI5_e=0x24,
+};
+
+enum HNURE0_JNT {
+    HNURE0_JNT_MONO_e=0x0,
+};
+
+enum HNURE2_JNT {
+    HNURE2_JNT_POLYSURFACE1881_e=0x0,
+};
+
+enum HNURE3_JNT {
+    HNURE3_JNT_POLYSURFACE1984_e=0x0,
+};
+
+enum HNURE4_JNT {
+    HNURE4_JNT_POLYSURFACE1914_e=0x0,
+};
+
+enum HNURE5_JNT {
+    HNURE5_JNT_POLYSURFACE1881_e=0x0,
+};
+
+enum HUMI0_JNT {
+    HUMI0_JNT_UMI_e=0x0,
+};
+
+enum HUMI2_JNT {
+    HUMI2_JNT_UMI_e=0x0,
+};
+
+enum HUMI3_JNT {
+    HUMI3_JNT_UMI3_e=0x0,
+};
+
+enum HUMI4_JNT {
+    HUMI4_JNT_UMI1_e=0x0,
+};
+
+enum HUMI5_JNT {
+    HUMI5_JNT_UMI2_e=0x0,
+};
+
+#endif /* !RES_HUMI_H */

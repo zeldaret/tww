@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ladder.h"
-#include "d/res/res_mhsg.h"
+#include "res/Object/Mhsg.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 Mtx daObjLadder::Act_c::M_tmp_mtx;
 
@@ -47,11 +45,11 @@ namespace daObjLadder {
         };
 
         static AttrType L_attr_type[] = {
-            {MHSG_BDL_MHSG6, MHSG_DZB_MHSG6, 600.0f},
-            {MHSG_BDL_MHSG9, MHSG_DZB_MHSG9, 900.0f},
-            {MHSG_BDL_MHSG12, MHSG_DZB_MHSG12, 1200.0f},
-            {MHSG_BDL_MHSG15, MHSG_DZB_MHSG15, 1500.0f},
-            {MHSG_BDL_MHSG4H, MHSG_DZB_MHSG4H, 450.0f},
+            {dRes_INDEX_MHSG_BDL_MHSG6_e, dRes_INDEX_MHSG_DZB_MHSG6_e, 600.0f},
+            {dRes_INDEX_MHSG_BDL_MHSG9_e, dRes_INDEX_MHSG_DZB_MHSG9_e, 900.0f},
+            {dRes_INDEX_MHSG_BDL_MHSG12_e, dRes_INDEX_MHSG_DZB_MHSG12_e, 1200.0f},
+            {dRes_INDEX_MHSG_BDL_MHSG15_e, dRes_INDEX_MHSG_DZB_MHSG15_e, 1500.0f},
+            {dRes_INDEX_MHSG_BDL_MHSG4H_e, dRes_INDEX_MHSG_DZB_MHSG4H_e, 450.0f},
         };
 
         inline const AttrType& attr_type(Type_e type) { return L_attr_type[type]; }
@@ -343,18 +341,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjLadder
 
 actor_process_profile_definition g_profile_Obj_Ladder = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ladder,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ladder_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjLadder::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ladder,
+    /* Draw Prio    */ fpcDwPi_Obj_Ladder_e,
     /* Actor SubMtd */ &daObjLadder::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

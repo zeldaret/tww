@@ -1,0 +1,18 @@
+#ifndef RES_PNAME_H
+#define RES_PNAME_H
+
+enum dRes_INDEX_PNAME {
+    /* SCRN */
+    dRes_INDEX_PNAME_BLO_PLACE_NAME_e=0x4,
+    /* TIMG */
+    dRes_INDEX_PNAME_BTI_PN_01_e=0x7,
+};
+
+enum dRes_ID_PNAME {
+    /* SCRN */
+    dRes_ID_PNAME_BLO_PLACE_NAME_e=0x4,
+    /* TIMG */
+    dRes_ID_PNAME_BTI_PN_01_e=0x7,
+};
+
+#endif /* !RES_PNAME_H */

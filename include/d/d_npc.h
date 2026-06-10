@@ -65,8 +65,8 @@ public:
 
 public:
     dNpc_JntCtrl_c() {
-        mbBackBoneLock = false;
-        mbHeadLock = false;
+        offBackBoneLock();
+        offHeadLock();
     }
 
     s8 getHeadJntNum() { return mHeadJntNum; }

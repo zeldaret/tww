@@ -37,7 +37,7 @@ public:
     virtual f32 getBaseAnimeFrame() { return 0.0f; }
 
     s16 XyCheckCB(int i_itemBtn) {
-        if(dComIfGp_getSelectItem(i_itemBtn) == dItem_WIND_WAKER_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_1880)) {
+        if(dComIfGp_getSelectItem(i_itemBtn) == dItemNo_WIND_WAKER_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_1880)) {
             return true;
         }
 

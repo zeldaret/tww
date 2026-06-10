@@ -8,9 +8,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_gmjwp.h"
+#include "res/Object/Gmjwp.h"
 
 const char daWarpgn_c::m_arcname[] = "Gmjwp";
 const u32 daWarpgn_c::m_heapsize = 0x3000;
@@ -63,7 +61,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000140-00000570       .text CreateHeap__10daWarpgn_cFv */
 BOOL daWarpgn_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, GMJWP_BDL_GMJWP00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GMJWP_BDL_GMJWP00_e);
     JUT_ASSERT(0xCF, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
@@ -71,7 +69,7 @@ BOOL daWarpgn_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GMJWP_BTK_GMJWP00);
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GMJWP_BTK_GMJWP00_e);
     JUT_ASSERT(0xDE, pbtk != NULL);
     mpBtkAnm1 = new mDoExt_btkAnm();
     if ((mpBtkAnm1 == NULL) || mpBtkAnm1->init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP) == 0) {
@@ -79,7 +77,7 @@ BOOL daWarpgn_c::CreateHeap() {
     }
     mpBtkAnm1->setPlaySpeed(1.0f);
 
-    pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GMJWP_BTK_GMJWP02);
+    pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GMJWP_BTK_GMJWP02_e);
     JUT_ASSERT(0xED, pbtk != NULL);
     mpBtkAnm2 = new mDoExt_btkAnm();
     if ((mpBtkAnm2 == NULL) || mpBtkAnm2->init(modelData, pbtk, true, J3DFrameCtrl::EMode_NONE) == 0) {
@@ -87,7 +85,7 @@ BOOL daWarpgn_c::CreateHeap() {
     }
     mpBtkAnm2->setPlaySpeed(0.0f);
 
-    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, GMJWP_BRK_GMJWP01);
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GMJWP_BRK_GMJWP01_e);
     JUT_ASSERT(0xFF, pbrk != NULL);
     mpBrkAnm = new mDoExt_brkAnm();
     if (mpBrkAnm == NULL || mpBrkAnm->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE) == 0) {
@@ -95,7 +93,7 @@ BOOL daWarpgn_c::CreateHeap() {
     }
     mpBrkAnm->setPlaySpeed(0.0f);
 
-    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, GMJWP_BCK_GMJWP01);
+    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GMJWP_BCK_GMJWP01_e);
     JUT_ASSERT(0x10F, pbck != NULL);
     mpBckAnm = new mDoExt_bckAnm();
     if (mpBckAnm == NULL || mpBckAnm->init(modelData, pbck, true, J3DFrameCtrl::EMode_NONE) == 0) {
@@ -581,18 +579,18 @@ static actor_method_class daWarpgnMethodTable = {
 };
 
 actor_process_profile_definition g_profile_WARPGANON = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WARPGANON,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_WARPGANON_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWarpgn_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_WARPGANON,
+    /* Draw Prio    */ fpcDwPi_WARPGANON_e,
     /* Actor SubMtd */ &daWarpgnMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

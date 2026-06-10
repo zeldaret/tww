@@ -7,9 +7,7 @@
 #include "d/actor/d_a_obj_demo_barrel.h"
 #include "d/d_bg_s_func.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
-#include "d/res/res_dbarrel.h"
+#include "res/Object/DBarrel.h"
 #include "f_op/f_op_actor_mng.h"
 
 const char daObj_Demo_Barrel_c::M_arcname[] = "DBarrel";
@@ -48,15 +46,15 @@ static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
 /* 00000398-00000538       .text CreateHeap__19daObj_Demo_Barrel_cFv */
 BOOL daObj_Demo_Barrel_c::CreateHeap() {
     mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectIDRes(M_arcname, DBARREL_BDL_KTARU_02), NULL, NULL,
-        (J3DAnmTransform*)dComIfG_getObjectIDRes(M_arcname, DBARREL_BCK_02_TR_CD),
+    (J3DModelData*)dComIfG_getObjectIDRes(M_arcname, dRes_ID_DBARREL_BDL_KTARU_02_e), NULL, NULL,
+        (J3DAnmTransform*)dComIfG_getObjectIDRes(M_arcname, dRes_ID_DBARREL_BCK_02_TR_CD_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
 
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
 
-    mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes(M_arcname, DBARREL_BCK_02_TR_CD), 0,
+    mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes(M_arcname, dRes_ID_DBARREL_BCK_02_TR_CD_e), 0,
                    0.0f, 1.0f, 0.0f, -1.0f, NULL);
     mpMorf->setFrame(mpMorf->getEndFrame() - 1.0f);
     mpModel = mpMorf->getModel();
@@ -103,7 +101,7 @@ bool daObj_Demo_Barrel_c::_execute() {
                 m2DC = 0;
                 dComIfGs_onCollect(3, 0);
                 dComIfGs_offCollect(0, 0);
-                dComIfGs_setSelectEquip(0, dItem_NONE_e);
+                dComIfGs_setSelectEquip(0, dItemNo_NONE_e);
                 setParticleHahen();
             }
 
@@ -155,18 +153,18 @@ static actor_method_class daObj_Demo_BarrelMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Demo_Barrel = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Demo_Barrel,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Demo_Barrel_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Demo_Barrel_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Demo_Barrel,
+    /* Draw Prio    */ fpcDwPi_Obj_Demo_Barrel_e,
     /* Actor SubMtd */ &daObj_Demo_BarrelMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

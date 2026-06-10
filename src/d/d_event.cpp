@@ -6,7 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_event.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_itembase.h"
 #include "f_op/f_op_actor.h" // dEvt_info_c
 #include "f_op/f_op_actor_mng.h"
@@ -181,7 +180,7 @@ BOOL dEvt_control_c::talkXyCheck(dEvt_order_c* order) {
         break;
     }
 
-    if (dComIfGp_getSelectItem(itemBtn) == dItem_NONE_e) {
+    if (dComIfGp_getSelectItem(itemBtn) == dItemNo_NONE_e) {
         return FALSE;
     }
 
@@ -289,7 +288,7 @@ BOOL dEvt_control_c::talkEnd() {
         mEventId = -1;
     }
     fopAc_ac_c* itemPartner = fopAcM_getItemEventPartner(NULL);
-    if (itemPartner != NULL && (fopAcM_GetName(itemPartner) == PROC_ITEM || fopAcM_GetName(itemPartner) == PROC_Demo_Item))
+    if (itemPartner != NULL && (fopAcM_GetName(itemPartner) == fpcNm_ITEM_e || fopAcM_GetName(itemPartner) == fpcNm_Demo_Item_e))
         ((daItemBase_c*)itemPartner)->dead();
     return TRUE;
 }
@@ -592,7 +591,7 @@ BOOL dEvt_control_c::photoCheck() {
         }
 
         if (itemBtn != -1 &&
-            (dComIfGp_getSelectItem(itemBtn) == CAMERA || dComIfGp_getSelectItem(itemBtn) == CAMERA2) &&
+            (dComIfGp_getSelectItem(itemBtn) == dItemNo_PICTO_BOX_e || dComIfGp_getSelectItem(itemBtn) == dItemNo_DELUXE_PICTO_BOX_e) &&
             dComIfGs_getPictureNum() != 0
         ) {
             actor2 = order->mActor2;

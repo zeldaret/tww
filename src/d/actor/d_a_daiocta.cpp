@@ -13,11 +13,9 @@
 #include "d/d_cc_d.h"
 #include "d/d_jnt_hit.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
-#include "d/res/res_daiocta.h"
+#include "res/Object/Daiocta.h"
 
 static daDaiocta_HIO_c l_HIO;
 
@@ -168,7 +166,7 @@ static void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* i_actor, dCc
 
 /* 00000358-000003DC       .text _coHit__11daDaiocta_cFP10fopAc_ac_c */
 void daDaiocta_c::_coHit(fopAc_ac_c* i_actor) {
-    if (i_actor != NULL && fpcM_GetName(i_actor) == PROC_BOMB) {
+    if (i_actor != NULL && fpcM_GetName(i_actor) == fpcNm_BOMB_e) {
         daBomb_c* bomb_p = (daBomb_c *) i_actor;
         if ((mMode == MODE_WAIT || mMode == MODE_DAMAGE_BOMB || 
             mMode == MODE_APPEAR || mMode == MODE_DAMAGE) && 
@@ -270,16 +268,16 @@ BOOL daDaiocta_c::createAwaHeap() {
     J3DAnmTextureSRTKey* btk;
     J3DAnmTevRegKey* brk;
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_GAWA00));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BDL_GAWA00_e));
     JUT_ASSERT(516, modelData != NULL);
 
-    bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BCK_GAWA00));
+    bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BCK_GAWA00_e));
     JUT_ASSERT(520, bck != NULL);
 
-    btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_GAWA00));
+    btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BTK_GAWA00_e));
     JUT_ASSERT(524, btk != NULL);
 
-    brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_GAWA00));
+    brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BRK_GAWA00_e));
     JUT_ASSERT(528, brk != NULL);
 
 
@@ -311,7 +309,7 @@ BOOL daDaiocta_c::createAwaHeap() {
 
 /* 000009B8-00000ABC       .text createSuikomiHeap__11daDaiocta_cFv */
 BOOL daDaiocta_c::createSuikomiHeap() {
-    J3DModelData* modelData = (J3DModelData * ) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_GDO_SUI00);
+    J3DModelData* modelData = (J3DModelData * ) dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BDL_GDO_SUI00_e);
     JUT_ASSERT(551, modelData != NULL);
 
     // "suikomi" translates to suction
@@ -321,8 +319,8 @@ BOOL daDaiocta_c::createSuikomiHeap() {
         return FALSE;
     }
 
-    if (!dLib_brkInit(modelData, &mBrkAnm2, m_arc_name, DAIOCTA_BRK_GDO_SUI00) || 
-        !dLib_btkInit(modelData, &mBtkAnm, m_arc_name, DAIOCTA_BTK_GDO_SUI00)) {
+    if (!dLib_brkInit(modelData, &mBrkAnm2, m_arc_name, dRes_INDEX_DAIOCTA_BRK_GDO_SUI00_e) || 
+        !dLib_btkInit(modelData, &mBtkAnm, m_arc_name, dRes_INDEX_DAIOCTA_BTK_GDO_SUI00_e)) {
         return FALSE;
     }
 
@@ -331,10 +329,10 @@ BOOL daDaiocta_c::createSuikomiHeap() {
 
 /* 00000ABC-00000C04       .text createBodyHeap__11daDaiocta_cFv */
 BOOL daDaiocta_c::createBodyHeap() {
-    J3DModelData* modelData = (J3DModelData *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_DO_MAIN1);
+    J3DModelData* modelData = (J3DModelData *) dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BDL_DO_MAIN1_e);
     JUT_ASSERT(579, modelData != NULL);
 
-    if (!dLib_brkInit(modelData, &mBrkAnm1, m_arc_name, DAIOCTA_BRK_WAIT1)) {
+    if (!dLib_brkInit(modelData, &mBrkAnm1, m_arc_name, dRes_INDEX_DAIOCTA_BRK_WAIT1_e)) {
         return FALSE;
     }
 
@@ -908,7 +906,7 @@ void daDaiocta_c::modeAppearInit() {
     }
 #else 
     int auzu_parameters = 0x1100FF;
-    mAuzuId = fopAcM_create(PROC_Obj_Auzu, auzu_parameters, &auzu_pos, tevStr.mRoomNo);
+    mAuzuId = fopAcM_create(fpcNm_Obj_Auzu_e, auzu_parameters, &auzu_pos, tevStr.mRoomNo);
 #endif
 
     setEffect(dPa_name::ID_IT_SN_DO_APPSHIBUKI00);
@@ -1071,10 +1069,10 @@ void daDaiocta_c::modeDemoInit() {
     setEffect(dPa_name::ID_IT_SN_DO_SUIKOMIC00);
     J3DModelData* model_data_p = mpSuikomiModel->getModelData();
     
-    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_GDO_SUI00));
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BRK_GDO_SUI00_e));
     JUT_ASSERT(VERSION_SELECT(1334, 1340, 1350, 1350), brk != NULL);
     
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_GDO_SUI00));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BTK_GDO_SUI00_e));
     JUT_ASSERT(VERSION_SELECT(1337, 1343, 1353, 1353), btk != NULL);
 
     mBrkAnm2.init(
@@ -1092,7 +1090,7 @@ void daDaiocta_c::modeDemoInit() {
 /* 000028FC-00003150       .text modeDemo__11daDaiocta_cFv */
 void daDaiocta_c::modeDemo() {
     current.pos.y = mWaterY;
-    daShip_c* ship_p_1 = (daShip_c *) fopAcM_SearchByName(PROC_SHIP);
+    daShip_c* ship_p_1 = (daShip_c *) fopAcM_SearchByName(fpcNm_SHIP_e);
     m21F4 = ship_p_1->current.pos;
     m2200 = ship_p_1->current.angle;
 
@@ -1145,7 +1143,7 @@ void daDaiocta_c::modeDemo() {
                 m21F4.x += (dist / (REG12_F(1) + 60.0f)) * cM_ssin(target_angle_y);
             }
 
-            daShip_c* ship_p_2 = (daShip_c *) fopAcM_SearchByName(PROC_SHIP);
+            daShip_c* ship_p_2 = (daShip_c *) fopAcM_SearchByName(fpcNm_SHIP_e);
             ship_p_2->initStartPos(&m21F4, m2200.y);
         }
 
@@ -1159,7 +1157,7 @@ void daDaiocta_c::modeDemo() {
             cLib_chasePosXZ(&m21F4, current.pos, m2208);
             cLib_addCalcAngleS2(&m2200.y, target_angle_y + 0x8000, 4, 0x800);
             
-            daShip_c* ship_p_2 = (daShip_c *) fopAcM_SearchByName(PROC_SHIP);
+            daShip_c* ship_p_2 = (daShip_c *) fopAcM_SearchByName(fpcNm_SHIP_e);
             ship_p_2->initStartPos(&m21F4, m2200.y);
 
             if ((current.pos - m21F4).absXZ() < 10.0f && (mpMorf->isStop() || mPrmIdx == 2)) {
@@ -1351,13 +1349,13 @@ void daDaiocta_c::setAnm() {
     }
 
     static const s32 a_brk_anm_idx_tbl[] = {
-        DAIOCTA_BRK_WAIT1, 
-        DAIOCTA_BRK_DAMAGE1, 
-        DAIOCTA_BRK_DAMAGE2, 
-        DAIOCTA_BRK_DEATH1, 
-        DAIOCTA_BRK_SUIKOMU1, 
-        DAIOCTA_BRK_DEATH2, 
-        DAIOCTA_BRK_HAKIDASU1
+        dRes_INDEX_DAIOCTA_BRK_WAIT1_e, 
+        dRes_INDEX_DAIOCTA_BRK_DAMAGE1_e, 
+        dRes_INDEX_DAIOCTA_BRK_DAMAGE2_e, 
+        dRes_INDEX_DAIOCTA_BRK_DEATH1_e, 
+        dRes_INDEX_DAIOCTA_BRK_SUIKOMU1_e, 
+        dRes_INDEX_DAIOCTA_BRK_DEATH2_e, 
+        dRes_INDEX_DAIOCTA_BRK_HAKIDASU1_e
     };
     
     static const s32 a_brk_anm_prm_tbl[] = {
@@ -1653,7 +1651,7 @@ void daDaiocta_c::createInit() {
     for (int i = 0; i < ARRAY_SSIZE(mDaioctaEyePcId); i++) {
         if (mEyeAlloc[i] == true) {
             mDaioctaEyePcId[i] = fopAcM_createChild(
-                PROC_DAIOCTA_EYE, fpcM_GetID(this), 
+                fpcNm_DAIOCTA_EYE_e, fpcM_GetID(this), 
                 -1, &current.pos, 
                 tevStr.mRoomNo, NULL
             );
@@ -1662,7 +1660,7 @@ void daDaiocta_c::createInit() {
 
 #if VERSION > VERSION_JPN
     mAuzuId = fopAcM_create(
-        PROC_Obj_Auzu, 
+        fpcNm_Obj_Auzu_e, 
         0x1100FF, 
         &current.pos, 
         tevStr.mRoomNo
@@ -1760,18 +1758,18 @@ static actor_method_class daDaioctaMethodTable = {
 };
 
 actor_process_profile_definition g_profile_DAIOCTA = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DAIOCTA,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DAIOCTA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daDaiocta_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DAIOCTA,
+    /* Draw Prio    */ fpcDwPi_DAIOCTA_e,
     /* Actor SubMtd */ &daDaioctaMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

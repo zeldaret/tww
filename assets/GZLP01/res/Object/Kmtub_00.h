@@ -1,0 +1,18 @@
+#ifndef RES_KMTUB_00_H
+#define RES_KMTUB_00_H
+
+enum dRes_INDEX_KMTUB_00 {
+    /* BDL  */
+    dRes_INDEX_KMTUB_00_BDL_KMTUB_00_e=0x3,
+};
+
+enum dRes_ID_KMTUB_00 {
+    /* BDL  */
+    dRes_ID_KMTUB_00_BDL_KMTUB_00_e=0x3,
+};
+
+enum KMTUB_00_JNT {
+    KMTUB_00_JNT_KMTUB_00_e=0x0,
+};
+
+#endif /* !RES_KMTUB_00_H */

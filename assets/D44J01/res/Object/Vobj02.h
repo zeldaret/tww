@@ -1,0 +1,18 @@
+#ifndef RES_VOBJ02_H
+#define RES_VOBJ02_H
+
+enum dRes_INDEX_VOBJ02 {
+    /* BDL  */
+    dRes_INDEX_VOBJ02_BDL_VOBJ02_e=0x3,
+};
+
+enum dRes_ID_VOBJ02 {
+    /* BDL  */
+    dRes_ID_VOBJ02_BDL_VOBJ02_e=0x3,
+};
+
+enum VOBJ02_JNT {
+    VOBJ02_JNT_VOBJ02_MODEL_e=0x0,
+};
+
+#endif /* !RES_VOBJ02_H */

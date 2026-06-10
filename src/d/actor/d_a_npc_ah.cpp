@@ -7,25 +7,23 @@
 #include "d/actor/d_a_npc_ah.h"
 #include "d/d_a_obj.h"
 #include "d/d_com_lib_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_snap.h"
-#include "d/res/res_ah.h"
+#include "res/Object/Ah.h"
 
 const char daNpcAh_c::m_arcname[] = "Ah"; 
 
 static const int l_bmd_ix_tbl[] = {
-    AH_BDL_AH
+    dRes_ID_AH_BDL_AH_e
 };
 
 static const int l_bck_ix_tbl[] = {
-    AH_BCK_AH_WAIT01,
-    AH_BCK_AH_WAIT02
+    dRes_ID_AH_BCK_AH_WAIT01_e,
+    dRes_ID_AH_BCK_AH_WAIT02_e
 };
 
 static const int l_btp_ix_tbl[] = {
-    AH_BTP_MABA,
-    AH_BTP_HOU
+    dRes_ID_AH_BTP_MABA_e,
+    dRes_ID_AH_BTP_HOU_e
 };
 
 static char* l_npc_staff_id[] = {
@@ -928,18 +926,18 @@ static actor_method_class daNpc_AhMethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_AH = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_AH,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_AH_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpcAh_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_AH,
+    /* Draw Prio    */ fpcDwPi_NPC_AH_e,
     /* Actor SubMtd */ &daNpc_AhMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

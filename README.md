@@ -106,7 +106,10 @@ Then wait for an admin to approve your request. Once you have access, you can se
     * Port Number: 13100
     * User ID: (the username that you chose earlier)
     * Password: (the password that you chose earlier)
-* You should now be able to view the files in the Ghidra project. You should checkout the `main` file.
+* You should now be able to view the files in the Ghidra project. Checkout the `main` file.
+* Finally, you should make a local copy of the `main` file in Ghidra. Right click on `main`, select Copy, then right click again and select Paste.
+  * This is so that you will be able to save changes that you make while decompiling, as you don't have write access to change `main` itself.
+  * Additionally, Ghidra has a bug that causes the remote version of `main` to be extremely slow to use if you only have read access, so you should still make a local copy even if you don't intend to change anything. The first checkout of `main` will still be slow, but opening the local copy in the future should be fast.
 
 Now you have Ghidra set up and ready to use.
 

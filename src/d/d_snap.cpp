@@ -31,7 +31,7 @@ int (dSnap_packet::*dSnap_packet::m_judge_tbl[])() = {
     &dSnap_packet::JudgeTestM,
 };
 
-dSnap_packet l_snap;
+static dSnap_packet l_snap;
 
 struct CharaData {
     /* 0x00 */ SVec offset;

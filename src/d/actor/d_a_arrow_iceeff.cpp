@@ -8,8 +8,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_arrow.h"
 
@@ -22,7 +20,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daArrow_Iceeff_c::CreateHeap() {
     J3DModelData* modelData;
     if(field_0xA38 == 0) {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GICER00));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_GICER00_e));
         JUT_ASSERT(87, modelData != NULL);
         for(int i = 0; i < 30; i++) {
             field_0x298[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -32,14 +30,14 @@ BOOL daArrow_Iceeff_c::CreateHeap() {
         }
     }
     else {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GICER01));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_GICER01_e));
         JUT_ASSERT(98, modelData != NULL);
         mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if(mpModel == NULL) {
             return false;
         }
         
-        J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Link", LINK_BCK_GICER01));
+        J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BCK_GICER01_e));
         JUT_ASSERT(107, bck != NULL);
         if(!mBck.init(modelData, bck, true, J3DFrameCtrl::EMode_NONE)) {
             return false;
@@ -303,18 +301,18 @@ static actor_method_class daArrow_IceeffMethodTable = {
 };
 
 actor_process_profile_definition g_profile_ARROW_ICEEFF = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0009,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ARROW_ICEEFF,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0009,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ARROW_ICEEFF_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daArrow_Iceeff_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ARROW_ICEEFF,
+    /* Draw Prio    */ fpcDwPi_ARROW_ICEEFF_e,
     /* Actor SubMtd */ &daArrow_IceeffMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

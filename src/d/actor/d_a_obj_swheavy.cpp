@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_swheavy.h"
-#include "d/res/res_hhbot.h"
+#include "res/Object/Hhbot.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_player.h"
 
 const char daObjSwheavy::Act_c::M_arcname[] = "Hhbot";
@@ -62,18 +60,18 @@ BOOL daObjSwheavy::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 0000009C-0000032C       .text create_heap__Q212daObjSwheavy5Act_cFv */
 u8 daObjSwheavy::Act_c::create_heap() {
-    J3DModelData* mdl_1_data = (J3DModelData*) dComIfG_getObjectRes(M_arcname, HHBOT_BDL_HHBOT1);
+    J3DModelData* mdl_1_data = (J3DModelData*) dComIfG_getObjectRes(M_arcname, dRes_INDEX_HHBOT_BDL_HHBOT1_e);
     JUT_ASSERT(0x116, mdl_1_data != NULL);
     mpModel1 = mDoExt_J3DModel__create(mdl_1_data, 0x80000, 0x11000022);
 
-    J3DModelData* mdl_2_data = (J3DModelData*) dComIfG_getObjectRes(M_arcname, HHBOT_BDL_HHBOT2);
+    J3DModelData* mdl_2_data = (J3DModelData*) dComIfG_getObjectRes(M_arcname, dRes_INDEX_HHBOT_BDL_HHBOT2_e);
     JUT_ASSERT(0x11F, mdl_2_data != NULL);
     mpModel2 = mDoExt_J3DModel__create(mdl_2_data, 0x80000, 0x11000022);
 
     bool b1 = false;
     mpBgW1 = new dBgW();
     if (mpBgW1 != NULL) {
-        cBgD_t* bgw_1_data = (cBgD_t*) dComIfG_getObjectRes(M_arcname, HHBOT_DZB_HHBOT1);
+        cBgD_t* bgw_1_data = (cBgD_t*) dComIfG_getObjectRes(M_arcname, dRes_INDEX_HHBOT_DZB_HHBOT1_e);
         JUT_ASSERT(0x137, bgw_1_data != NULL);
         if (!mpBgW1->Set(bgw_1_data, dBgW::MOVE_BG_e, &mMtx1)) {
             b1 = true;
@@ -83,7 +81,7 @@ u8 daObjSwheavy::Act_c::create_heap() {
     bool b2 = false;
     mpBgW2 = new dBgW();
     if (mpBgW2 != NULL) {
-        cBgD_t* bgw_2_data = (cBgD_t*) dComIfG_getObjectRes(M_arcname, HHBOT_DZB_HHBOT2);
+        cBgD_t* bgw_2_data = (cBgD_t*) dComIfG_getObjectRes(M_arcname, dRes_INDEX_HHBOT_DZB_HHBOT2_e);
         JUT_ASSERT(0x146, bgw_2_data != NULL);
         if (!mpBgW2->Set(bgw_2_data, dBgW::MOVE_BG_e, &mMtx2)) {
             b2 = true;
@@ -210,7 +208,7 @@ void daObjSwheavy::Act_c::rideCB(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) 
     if (fopAcM_CheckStatus(i_pt, fopAcStts_FREEZE_e)) {
         i_this->mRiding = true;
 
-        if (fopAcM_GetProfName(i_pt) == PROC_PLAYER && ((daPy_py_c*)i_pt)->checkEquipHeavyBoots()) {
+        if (fopAcM_GetProfName(i_pt) == fpcNm_PLAYER_e && ((daPy_py_c*)i_pt)->checkEquipHeavyBoots()) {
             i_this->mHeavyRiding = true;
         }
     }
@@ -470,18 +468,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjSwheavy
 
 actor_process_profile_definition g_profile_Obj_Swheavy = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Swheavy,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Swheavy_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjSwheavy::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Swheavy,
+    /* Draw Prio    */ fpcDwPi_Obj_Swheavy_e,
     /* Actor SubMtd */ &daObjSwheavy::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

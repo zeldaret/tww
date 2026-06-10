@@ -1,0 +1,28 @@
+#ifndef RES_GTAKI_H
+#define RES_GTAKI_H
+
+enum dRes_INDEX_GTAKI {
+    /* BDLI */
+    dRes_INDEX_GTAKI_BDL_GTAKI_e=0x5,
+    /* BTK  */
+    dRes_INDEX_GTAKI_BTK_GTAKI_e=0x8,
+    /* DZB  */
+    dRes_INDEX_GTAKI_DZB_ITAKI_e=0xB,
+};
+
+enum dRes_ID_GTAKI {
+    /* BDLI */
+    dRes_ID_GTAKI_BDL_GTAKI_e=0x5,
+    /* BTK  */
+    dRes_ID_GTAKI_BTK_GTAKI_e=0x8,
+    /* DZB  */
+    dRes_ID_GTAKI_DZB_ITAKI_e=0xB,
+};
+
+enum GTAKI_JNT {
+    GTAKI_JNT_LOCATOR1_e=0x0,
+    GTAKI_JNT_TAKI_W_e=0x1,
+    GTAKI_JNT_INDIRECT_e=0x2,
+};
+
+#endif /* !RES_GTAKI_H */

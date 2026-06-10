@@ -1,0 +1,26 @@
+#ifndef RES_HYUF2_H
+#define RES_HYUF2_H
+
+enum dRes_INDEX_HYUF2 {
+    /* BDLM */
+    dRes_INDEX_HYUF2_BDL_HYUF2_e=0x5,
+    /* BTP  */
+    dRes_INDEX_HYUF2_BTP_HYUF2_e=0x8,
+    /* DZB  */
+    dRes_INDEX_HYUF2_DZB_HYUF2_e=0xB,
+};
+
+enum dRes_ID_HYUF2 {
+    /* BDLM */
+    dRes_ID_HYUF2_BDL_HYUF2_e=0x5,
+    /* BTP  */
+    dRes_ID_HYUF2_BTP_HYUF2_e=0x8,
+    /* DZB  */
+    dRes_ID_HYUF2_DZB_HYUF2_e=0xB,
+};
+
+enum HYUF2_JNT {
+    HYUF2_JNT_POLYSURFACE2_e=0x0,
+};
+
+#endif /* !RES_HYUF2_H */

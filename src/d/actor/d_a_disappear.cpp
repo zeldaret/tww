@@ -7,8 +7,6 @@
 #include "d/actor/d_a_disappear.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
@@ -33,9 +31,9 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
                     // Special type for Keese (ki) spawned in the Puppet Ganon fight.
                     // This also seems to be used by several other enemies, such as Molgera's spawn.
                     static u32 ki_item_d[] = {
-                        dItem_HEART_e,
-                        dItem_LARGE_MAGIC_e,
-                        dItem_ARROW_10_e,
+                        dItemNo_HEART_e,
+                        dItemNo_LARGE_MAGIC_e,
+                        dItemNo_ARROW_10_e,
                     };
                     if (dropType < daDisItem_HEART_e + (int)ARRAY_SIZE(ki_item_d)) {
                         fopAcM_createItem(&i_this->current.pos, ki_item_d[dropType - daDisItem_HEART_e], -1, -1, daItemType_0_e, NULL, daItemAct_4_e);
@@ -125,18 +123,18 @@ static actor_method_class l_daDisappear_Method = {
 };
 
 actor_process_profile_definition g_profile_DISAPPEAR = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DISAPPEAR,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DISAPPEAR_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(disappear_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DISAPPEAR,
+    /* Draw Prio    */ fpcDwPi_DISAPPEAR_e,
     /* Actor SubMtd */ &l_daDisappear_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

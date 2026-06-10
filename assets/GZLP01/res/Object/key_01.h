@@ -1,0 +1,22 @@
+#ifndef RES_KEY_01_H
+#define RES_KEY_01_H
+
+enum dRes_INDEX_KEY_01 {
+    /* BDLM */
+    dRes_INDEX_KEY_01_BDL_VKEYB_e=0x4,
+    /* BTK  */
+    dRes_INDEX_KEY_01_BTK_VKEYB_e=0x7,
+};
+
+enum dRes_ID_KEY_01 {
+    /* BDLM */
+    dRes_ID_KEY_01_BDL_VKEYB_e=0x4,
+    /* BTK  */
+    dRes_ID_KEY_01_BTK_VKEYB_e=0x7,
+};
+
+enum VKEYB_JNT {
+    VKEYB_JNT_BOSS_KEY_e=0x0,
+};
+
+#endif /* !RES_KEY_01_H */

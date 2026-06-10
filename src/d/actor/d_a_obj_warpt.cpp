@@ -6,12 +6,10 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_warpt.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_ltubw.h"
+#include "res/Object/ltubw.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_a_obj.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "f_op/f_op_actor_mng.h"
@@ -160,7 +158,7 @@ BOOL daObj_Warpt_c::_createHeap() {
 
 /* 00000270-00000488       .text createHutaHeap__13daObj_Warpt_cFv */
 bool daObj_Warpt_c::createHutaHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, LTUBW_BDL_ITUHU);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_LTUBW_BDL_ITUHU_e);
     JUT_ASSERT(264, modelData);
 
     mpLidModel1 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -173,11 +171,11 @@ bool daObj_Warpt_c::createHutaHeap() {
         return false;
     }
 
-    if (mpLidBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, LTUBW_DZB_ITUHT), cBgW::MOVE_BG_e, &m344) == TRUE) {
+    if (mpLidBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_LTUBW_DZB_ITUHT_e), cBgW::MOVE_BG_e, &m344) == TRUE) {
         return false;
     }
 
-    J3DModelData* modelData2 = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, LTUBW_BDL_YWPFM00);
+    J3DModelData* modelData2 = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_LTUBW_BDL_YWPFM00_e);
     modelData = modelData2;
     if (modelData == NULL) {
         return false;
@@ -188,7 +186,7 @@ bool daObj_Warpt_c::createHutaHeap() {
         return false;
     }
 
-    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arc_name, LTUBW_BRK_YWPFM00);
+    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_LTUBW_BRK_YWPFM00_e);
     JUT_ASSERT(291, brk);
 
     if (!mLidBrk.init(modelData, brk, true, J3DFrameCtrl::EMode_LOOP)) {
@@ -199,7 +197,7 @@ bool daObj_Warpt_c::createHutaHeap() {
 
 /* 00000488-00000620       .text createBodyHeap__13daObj_Warpt_cFv */
 bool daObj_Warpt_c::createBodyHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, LTUBW_BDL_ITUBW);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_LTUBW_BDL_ITUBW_e);
     JUT_ASSERT(305, modelData);
 
     mpBodyModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -212,7 +210,7 @@ bool daObj_Warpt_c::createBodyHeap() {
         return false;
     }
 
-    if (mpBodyBgW2->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, LTUBW_DZB_ITUBW), cBgW::MOVE_BG_e, &m310) == TRUE) {
+    if (mpBodyBgW2->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_LTUBW_DZB_ITUBW_e), cBgW::MOVE_BG_e, &m310) == TRUE) {
         return false;
     }
 
@@ -221,7 +219,7 @@ bool daObj_Warpt_c::createBodyHeap() {
         return false;
     }
 
-    if (mpBodyBgW1->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, LTUBW_DZB_ITUSO), cBgW::MOVE_BG_e, &m2DC) == TRUE) {
+    if (mpBodyBgW1->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_LTUBW_DZB_ITUSO_e), cBgW::MOVE_BG_e, &m2DC) == TRUE) {
         return false;
     }
     return true;
@@ -234,7 +232,7 @@ void ride_CB(dBgW*, fopAc_ac_c* a_this, fopAc_ac_c* arg2) {
 
 /* 00000648-00000750       .text _ride__13daObj_Warpt_cFP10fopAc_ac_c */
 void daObj_Warpt_c::_ride(fopAc_ac_c* arg1) {
-    if (fpcM_GetName(arg1) == PROC_PLAYER) {
+    if (fpcM_GetName(arg1) == fpcNm_PLAYER_e) {
         daPy_py_c* player = (daPy_py_c*)arg1;
 
         fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
@@ -883,16 +881,16 @@ static actor_method_class daObj_WarptMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_WARPT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_WARPT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_WARPT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Warpt_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_WARPT,
+    /* Draw Prio    */ fpcDwPi_OBJ_WARPT_e,
     /* Actor SubMtd */ &daObj_WarptMethodTable,
 #if VERSION == VERSION_DEMO
     /* Status       */ 0x17 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
@@ -900,5 +898,5 @@ actor_process_profile_definition g_profile_OBJ_WARPT = {
     /* Status       */ 0x17 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
 #endif
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

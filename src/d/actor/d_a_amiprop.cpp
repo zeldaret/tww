@@ -5,15 +5,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_amiprop.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
 #if VERSION > VERSION_DEMO
 #include "d/d_vibration.h"
 #endif
-#include "d/res/res_hami1.h"
+#include "res/Object/Hami1.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -76,7 +74,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000000F4-00000244       .text CreateHeap__11daAmiProp_cFv */
 BOOL daAmiProp_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(daAmiProp_c::m_arcname, HAMI1_BDL_HAMI1);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(daAmiProp_c::m_arcname, dRes_INDEX_HAMI1_BDL_HAMI1_e);
     JUT_ASSERT(DEMO_SELECT(250, 255), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -89,7 +87,7 @@ BOOL daAmiProp_c::CreateHeap() {
 
     mpBgW = new dBgW();
     if (mpBgW != NULL) {
-        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(daAmiProp_c::m_arcname, HAMI1_DZB_HAMI1);
+        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(daAmiProp_c::m_arcname, dRes_INDEX_HAMI1_DZB_HAMI1_e);
         if (mpBgW->Set(dzb, cBgW::MOVE_BG_e, &unk_40C) == true) {
             return FALSE;
         }
@@ -230,18 +228,18 @@ static actor_method_class daAmiPropMethodTable = {
 };
 
 actor_process_profile_definition g_profile_AMI_PROP = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_AMI_PROP,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_AMI_PROP_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daAmiProp_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_AMI_PROP,
+    /* Draw Prio    */ fpcDwPi_AMI_PROP_e,
     /* Actor SubMtd */ &daAmiPropMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

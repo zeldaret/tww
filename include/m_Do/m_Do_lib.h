@@ -14,15 +14,15 @@ struct mDoLib_clipper {
         mClipper.calcViewFrustum();
     }
 
-    static s32 clip(const Mtx m, Vec* max, Vec* min) {
+    static BOOL clip(const Mtx m, Vec* max, Vec* min) {
         return mClipper.clip(m, max, min);
     }
 
-    static s32 clip(const Mtx m, Vec center, f32 radius) {
+    static BOOL clip(const Mtx m, Vec center, f32 radius) {
         return mClipper.clip(m, center, radius);
     }
     
-    static s32 clip(J3DModel* model) {
+    static BOOL clip(J3DModel* model) {
         return mClipper.clipByBox(model);
     }
 

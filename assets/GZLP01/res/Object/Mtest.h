@@ -1,0 +1,44 @@
+#ifndef RES_MTEST_H
+#define RES_MTEST_H
+
+enum dRes_INDEX_MTEST {
+    /* BMDC */
+    dRes_INDEX_MTEST_BMD_MCUBE_e=0x4,
+    dRes_INDEX_MTEST_BMD_MCYLN_e=0x5,
+    /* DZB  */
+    dRes_INDEX_MTEST_DZB_MCUBE_e=0x8,
+    dRes_INDEX_MTEST_DZB_MCUBEHG_e=0x9,
+    dRes_INDEX_MTEST_DZB_MCUBELK_e=0xA,
+    dRes_INDEX_MTEST_DZB_MCUBENC_e=0xB,
+    dRes_INDEX_MTEST_DZB_MCYLN_e=0xC,
+    dRes_INDEX_MTEST_DZB_MCYLNHG_e=0xD,
+    dRes_INDEX_MTEST_DZB_MCYLNNC_e=0xE,
+    dRes_INDEX_MTEST_DZB_MWTRSB_e=0xF,
+    dRes_INDEX_MTEST_DZB_MYGNSB_e=0x10,
+};
+
+enum dRes_ID_MTEST {
+    /* BMDC */
+    dRes_ID_MTEST_BMD_MCUBE_e=0x4,
+    dRes_ID_MTEST_BMD_MCYLN_e=0x5,
+    /* DZB  */
+    dRes_ID_MTEST_DZB_MCUBE_e=0x8,
+    dRes_ID_MTEST_DZB_MCUBEHG_e=0x9,
+    dRes_ID_MTEST_DZB_MCUBELK_e=0xA,
+    dRes_ID_MTEST_DZB_MCUBENC_e=0xB,
+    dRes_ID_MTEST_DZB_MCYLN_e=0xC,
+    dRes_ID_MTEST_DZB_MCYLNHG_e=0xD,
+    dRes_ID_MTEST_DZB_MCYLNNC_e=0xE,
+    dRes_ID_MTEST_DZB_MWTRSB_e=0xF,
+    dRes_ID_MTEST_DZB_MYGNSB_e=0x10,
+};
+
+enum MCUBE_JNT {
+    MCUBE_JNT_MCUBE_e=0x0,
+};
+
+enum MCYLN_JNT {
+    MCYLN_JNT_MCYLN_e=0x0,
+};
+
+#endif /* !RES_MTEST_H */

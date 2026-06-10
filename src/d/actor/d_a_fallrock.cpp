@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fallrock.h"
-#include "d/res/res_always.h"
+#include "res/Object/Always.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
@@ -55,7 +53,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-00000140       .text CreateHeap__12daFallRock_cFv */
 BOOL daFallRock_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname, ALWAYS_BDL_KROCK_00);
+    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname, dRes_INDEX_ALWAYS_BDL_KROCK_00_e);
     JUT_ASSERT(DEMO_SELECT(159, 161), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000,0x11020002);
@@ -257,9 +255,9 @@ void daFallRock_c::setParticle(int param_1, cXyz* pos) {
             );
 
             J3DModelData* modelData = (J3DModelData*)
-                dComIfG_getObjectRes(m_arcname, ALWAYS_BDL_MPI_KOISHI);
+                dComIfG_getObjectRes(m_arcname, dRes_INDEX_ALWAYS_BDL_MPI_KOISHI_e);
             J3DAnmTexPattern* anmTexPattern = (J3DAnmTexPattern*)
-                dComIfG_getObjectRes(m_arcname, ALWAYS_BTP_MPI_KOISHI);
+                dComIfG_getObjectRes(m_arcname, dRes_INDEX_ALWAYS_BTP_MPI_KOISHI_e);
 
             JPABaseEmitter* emitter = (JPABaseEmitter*)dComIfGp_particle_set(
                 dPa_name::ID_IT_JN_M_STS_HAHEN,
@@ -300,18 +298,18 @@ static actor_method_class l_daFallRock_Method = {
 };
 
 actor_process_profile_definition g_profile_FallRock = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_FallRock,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_FallRock_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daFallRock_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_FallRock,
+    /* Draw Prio    */ fpcDwPi_FallRock_e,
     /* Actor SubMtd */ &l_daFallRock_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

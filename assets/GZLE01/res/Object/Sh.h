@@ -1,0 +1,92 @@
+#ifndef RES_SH_H
+#define RES_SH_H
+
+enum dRes_INDEX_SH {
+    /* BAS  */
+    dRes_INDEX_SH_BAS_BCHAKUCHI_e=0x5,
+    dRes_INDEX_SH_BAS_BDAMAGE_e=0x6,
+    dRes_INDEX_SH_BAS_BFLY_e=0x7,
+    dRes_INDEX_SH_BAS_BHUKKI_e=0x8,
+    dRes_INDEX_SH_BAS_BJUMP_e=0x9,
+    dRes_INDEX_SH_BAS_BUCHI_CHAKU_e=0xA,
+    dRes_INDEX_SH_BAS_BUCHIWA_e=0xB,
+    dRes_INDEX_SH_BAS_PAWAY_e=0xC,
+    dRes_INDEX_SH_BAS_PFLY_e=0xD,
+    dRes_INDEX_SH_BAS_PHUKKI_e=0xE,
+    dRes_INDEX_SH_BAS_PUCHI_CHAKU_e=0xF,
+    dRes_INDEX_SH_BAS_PUCIWA_e=0x10,
+    /* BCK  */
+    dRes_INDEX_SH_BCK_BCHAKUCHI_e=0x13,
+    dRes_INDEX_SH_BCK_BDAMAGE_e=0x14,
+    dRes_INDEX_SH_BCK_BFLY_e=0x15,
+    dRes_INDEX_SH_BCK_BHUKKI_e=0x16,
+    dRes_INDEX_SH_BCK_BJAWS_e=0x17,
+    dRes_INDEX_SH_BCK_BJUMP_e=0x18,
+    dRes_INDEX_SH_BCK_BUCHI_CHAKU_e=0x19,
+    dRes_INDEX_SH_BCK_BUCHIWA_e=0x1A,
+    dRes_INDEX_SH_BCK_PAWAY_e=0x1B,
+    dRes_INDEX_SH_BCK_PFLY_e=0x1C,
+    dRes_INDEX_SH_BCK_PHUKKI_e=0x1D,
+    dRes_INDEX_SH_BCK_PUCHI_CHAKU_e=0x1E,
+    dRes_INDEX_SH_BCK_PUCHIWA_e=0x1F,
+    /* BMDM */
+    dRes_INDEX_SH_BMD_SHB_e=0x22,
+    dRes_INDEX_SH_BMD_SHP_e=0x23,
+};
+
+enum dRes_ID_SH {
+    /* BAS  */
+    dRes_ID_SH_BAS_BCHAKUCHI_e=0x5,
+    dRes_ID_SH_BAS_BDAMAGE_e=0x6,
+    dRes_ID_SH_BAS_BFLY_e=0x7,
+    dRes_ID_SH_BAS_BHUKKI_e=0x8,
+    dRes_ID_SH_BAS_BJUMP_e=0x9,
+    dRes_ID_SH_BAS_BUCHI_CHAKU_e=0xA,
+    dRes_ID_SH_BAS_BUCHIWA_e=0xB,
+    dRes_ID_SH_BAS_PAWAY_e=0xC,
+    dRes_ID_SH_BAS_PFLY_e=0xD,
+    dRes_ID_SH_BAS_PHUKKI_e=0xE,
+    dRes_ID_SH_BAS_PUCHI_CHAKU_e=0xF,
+    dRes_ID_SH_BAS_PUCIWA_e=0x10,
+    /* BCK  */
+    dRes_ID_SH_BCK_BCHAKUCHI_e=0x13,
+    dRes_ID_SH_BCK_BDAMAGE_e=0x14,
+    dRes_ID_SH_BCK_BFLY_e=0x15,
+    dRes_ID_SH_BCK_BHUKKI_e=0x16,
+    dRes_ID_SH_BCK_BJAWS_e=0x17,
+    dRes_ID_SH_BCK_BJUMP_e=0x18,
+    dRes_ID_SH_BCK_BUCHI_CHAKU_e=0x19,
+    dRes_ID_SH_BCK_BUCHIWA_e=0x1A,
+    dRes_ID_SH_BCK_PAWAY_e=0x1B,
+    dRes_ID_SH_BCK_PFLY_e=0x1C,
+    dRes_ID_SH_BCK_PHUKKI_e=0x1D,
+    dRes_ID_SH_BCK_PUCHI_CHAKU_e=0x1E,
+    dRes_ID_SH_BCK_PUCHIWA_e=0x1F,
+    /* BMDM */
+    dRes_ID_SH_BMD_SHB_e=0x22,
+    dRes_ID_SH_BMD_SHP_e=0x23,
+};
+
+enum SHB_JNT {
+    SHB_JNT_HARA_e=0x0,
+    SHB_JNT_CONNECTA_e=0x1,
+    SHB_JNT_KUCHI_1_e=0x2,
+};
+
+enum SHP_JNT {
+    SHP_JNT_HANE_CENT_e=0x0,
+    SHP_JNT_HANEA01_e=0x1,
+    SHP_JNT_HANEA02_e=0x2,
+    SHP_JNT_HANEA03_e=0x3,
+    SHP_JNT_HANEA04_e=0x4,
+    SHP_JNT_HANEB01_e=0x5,
+    SHP_JNT_HANEB02_e=0x6,
+    SHP_JNT_HANEB03_e=0x7,
+    SHP_JNT_HANEB04_e=0x8,
+    SHP_JNT_HANEC01_e=0x9,
+    SHP_JNT_HANEC02_e=0xA,
+    SHP_JNT_HANEC03_e=0xB,
+    SHP_JNT_HANEC04_e=0xC,
+};
+
+#endif /* !RES_SH_H */

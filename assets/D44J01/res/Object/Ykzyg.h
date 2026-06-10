@@ -1,0 +1,46 @@
+#ifndef RES_YKZYG_H
+#define RES_YKZYG_H
+
+enum dRes_INDEX_YKZYG {
+    /* BDLM */
+    dRes_INDEX_YKZYG_BDL_QKZYG_e=0x6,
+    dRes_INDEX_YKZYG_BDL_YMNKZ00_e=0x7,
+    /* BRK  */
+    dRes_INDEX_YKZYG_BRK_YMNKZ00_e=0xA,
+    /* BTK  */
+    dRes_INDEX_YKZYG_BTK_QKZYG_e=0xD,
+    dRes_INDEX_YKZYG_BTK_YMNKZ00_e=0xE,
+    /* DZB  */
+    dRes_INDEX_YKZYG_DZB_QKZYG_e=0x11,
+};
+
+enum dRes_ID_YKZYG {
+    /* BDLM */
+    dRes_ID_YKZYG_BDL_QKZYG_e=0x6,
+    dRes_ID_YKZYG_BDL_YMNKZ00_e=0x7,
+    /* BRK  */
+    dRes_ID_YKZYG_BRK_YMNKZ00_e=0xA,
+    /* BTK  */
+    dRes_ID_YKZYG_BTK_QKZYG_e=0xD,
+    dRes_ID_YKZYG_BTK_YMNKZ00_e=0xE,
+    /* DZB  */
+    dRes_ID_YKZYG_DZB_QKZYG_e=0x11,
+};
+
+enum QKZYG_JNT {
+    QKZYG_JNT_QKZYG_YOUGN_ONLY_QKZYG_e=0x0,
+    QKZYG_JNT_AA_e=0x1,
+    QKZYG_JNT_YG_e=0x2,
+};
+
+enum YMNKZ00_JNT {
+    YMNKZ00_JNT_YMNKZ_00_e=0x0,
+    YMNKZ00_JNT_A00_e=0x1,
+    YMNKZ00_JNT_FIRESHAFT_CENTER_e=0x2,
+    YMNKZ00_JNT_FIRESHAFT_IN_e=0x3,
+    YMNKZ00_JNT_FIRESHAFT_OUT_e=0x4,
+    YMNKZ00_JNT_FIRESHAFT_SIDE1_e=0x5,
+    YMNKZ00_JNT_FIRESHAFT_SIDE2_e=0x6,
+};
+
+#endif /* !RES_YKZYG_H */

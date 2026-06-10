@@ -1,0 +1,30 @@
+#ifndef RES_AYGR_H
+#define RES_AYGR_H
+
+enum dRes_INDEX_AYGR {
+    /* BDL  */
+    dRes_INDEX_AYGR_BDL_AYGR_e=0x4,
+    dRes_INDEX_AYGR_BDL_AYGRH_e=0x5,
+    /* DZB  */
+    dRes_INDEX_AYGR_DZB_AYGR_e=0x8,
+    dRes_INDEX_AYGR_DZB_AYGRH_e=0x9,
+};
+
+enum dRes_ID_AYGR {
+    /* BDL  */
+    dRes_ID_AYGR_BDL_AYGR_e=0x4,
+    dRes_ID_AYGR_BDL_AYGRH_e=0x5,
+    /* DZB  */
+    dRes_ID_AYGR_DZB_AYGR_e=0x8,
+    dRes_ID_AYGR_DZB_AYGRH_e=0x9,
+};
+
+enum AYGR_JNT {
+    AYGR_JNT_AYGR_e=0x0,
+};
+
+enum AYGRH_JNT {
+    AYGRH_JNT_AYGRH_e=0x0,
+};
+
+#endif /* !RES_AYGR_H */

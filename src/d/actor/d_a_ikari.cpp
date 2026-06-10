@@ -5,14 +5,12 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ikari.h"
-#include "d/res/res_ikari.h"
+#include "res/Object/Ikari.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_mtx.h"
 
-daObjIkariHIO_c l_HIO;
+static daObjIkariHIO_c l_HIO;
 
 const char daIkari_c::M_arcname[6] = "Ikari";
 
@@ -38,17 +36,17 @@ void daIkari_c::setMtx() {
 BOOL daIkari_c::_createHeap() {
     static int ikari_bdl[5] = {
 #if VERSION == VERSION_DEMO
-        IKARI_BMD_S_IKARI2,
-        IKARI_BMD_S_IKARI2,
-        IKARI_BMD_S_IKARI2,
-        IKARI_BMD_S_IKARI3,
-        IKARI_BMD_S_IKARI4,
+        dRes_INDEX_IKARI_BMD_S_IKARI2_e,
+        dRes_INDEX_IKARI_BMD_S_IKARI2_e,
+        dRes_INDEX_IKARI_BMD_S_IKARI2_e,
+        dRes_INDEX_IKARI_BMD_S_IKARI3_e,
+        dRes_INDEX_IKARI_BMD_S_IKARI4_e,
 #else
-        IKARI_BDL_S_IKARI2,
-        IKARI_BDL_S_IKARI2,
-        IKARI_BDL_S_IKARI2,
-        IKARI_BDL_S_IKARI3,
-        IKARI_BDL_S_IKARI4,
+        dRes_INDEX_IKARI_BDL_S_IKARI2_e,
+        dRes_INDEX_IKARI_BDL_S_IKARI2_e,
+        dRes_INDEX_IKARI_BDL_S_IKARI2_e,
+        dRes_INDEX_IKARI_BDL_S_IKARI3_e,
+        dRes_INDEX_IKARI_BDL_S_IKARI4_e,
 #endif
     };
 
@@ -193,18 +191,18 @@ static actor_method_class daIkariMethodTable = {
 };
 
 actor_process_profile_definition g_profile_IKARI = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_IKARI,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_IKARI_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daIkari_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_IKARI,
+    /* Draw Prio    */ fpcDwPi_IKARI_e,
     /* Actor SubMtd */ &daIkariMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

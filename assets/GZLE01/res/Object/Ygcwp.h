@@ -1,0 +1,26 @@
+#ifndef RES_YGCWP_H
+#define RES_YGCWP_H
+
+enum dRes_INDEX_YGCWP {
+    /* BDLM */
+    dRes_INDEX_YGCWP_BDL_YGCWP00_e=0x4,
+    /* BRK  */
+    dRes_INDEX_YGCWP_BRK_YGCWP00_COMMON_e=0x7,
+    dRes_INDEX_YGCWP_BRK_YGCWP00_WARP_e=0x8,
+};
+
+enum dRes_ID_YGCWP {
+    /* BDLM */
+    dRes_ID_YGCWP_BDL_YGCWP00_e=0x4,
+    /* BRK  */
+    dRes_ID_YGCWP_BRK_YGCWP00_COMMON_e=0x7,
+    dRes_ID_YGCWP_BRK_YGCWP00_WARP_e=0x8,
+};
+
+enum YGCWP00_JNT {
+    YGCWP00_JNT_YGCWP00_e=0x0,
+    YGCWP00_JNT_A00_e=0x1,
+    YGCWP00_JNT_MARK_e=0x2,
+};
+
+#endif /* !RES_YGCWP_H */

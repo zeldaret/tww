@@ -1,0 +1,18 @@
+#ifndef RES_VESA_H
+#define RES_VESA_H
+
+enum dRes_INDEX_VESA {
+    /* BDL  */
+    dRes_INDEX_VESA_BDL_VESA_e=0x3,
+};
+
+enum dRes_ID_VESA {
+    /* BDL  */
+    dRes_ID_VESA_BDL_VESA_e=0x3,
+};
+
+enum VESA_JNT {
+    VESA_JNT_VESA_MODEL_e=0x0,
+};
+
+#endif /* !RES_VESA_H */

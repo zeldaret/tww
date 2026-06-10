@@ -1,0 +1,32 @@
+#ifndef RES_GICEL_H
+#define RES_GICEL_H
+
+enum dRes_INDEX_GICEL {
+    /* BDLI */
+    dRes_INDEX_GICEL_BDL_GICEL00_e=0x5,
+    /* BRK  */
+    dRes_INDEX_GICEL_BRK_GICEL00_e=0x8,
+    /* BTK  */
+    dRes_INDEX_GICEL_BTK_GICEL00_01_e=0xB,
+    dRes_INDEX_GICEL_BTK_GICEL00_02_e=0xC,
+};
+
+enum dRes_ID_GICEL {
+    /* BDLI */
+    dRes_ID_GICEL_BDL_GICEL00_e=0x5,
+    /* BRK  */
+    dRes_ID_GICEL_BRK_GICEL00_e=0x8,
+    /* BTK  */
+    dRes_ID_GICEL_BTK_GICEL00_01_e=0xB,
+    dRes_ID_GICEL_BTK_GICEL00_02_e=0xC,
+};
+
+enum GICEL00_JNT {
+    GICEL00_JNT_GICEL00_e=0x0,
+    GICEL00_JNT_A00_e=0x1,
+    GICEL00_JNT_KAIMEN_e=0x2,
+    GICEL00_JNT_SYLINDER1_e=0x3,
+    GICEL00_JNT_SYLINDER2_e=0x4,
+};
+
+#endif /* !RES_GICEL_H */
