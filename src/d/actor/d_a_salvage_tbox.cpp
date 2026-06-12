@@ -245,25 +245,12 @@ BOOL daSTBox_c::actDrop(int) {
 
 /* 00001344-000013AC       .text actWait02__9daSTBox_cFi */
 BOOL daSTBox_c::actWait02(int) {
-    /* Nonmatching */
     cXyz* pos = dComIfGp_getShipActor()->getCraneTop();
-    // cXyz* pos = dComIfGp_getShipCraneTop();
-    // cXyz* pos = ((daShip_c*)(*(fopAc_ac_c**)(((u8*)&g_dComIfG_gameInfo) + 0x5b54)))->getCraneTop();
-    // cXyz* pos = (cXyz*)*(u32*)(*(u32*)&(g_dComIfG_gameInfo) + 0x5b54) + 0x434;
-    // daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
-    // cXyz* pos = ship->getCraneTop();
-    // cXyz* pos = ((daShip_c*)(g_dComIfG_gameInfo.play.mpPlayerPtr[2]))->getCraneTop();
     if (pos != NULL) {
-        f32 x = pos->x;
-        pos->z = x;
-        f32 y = pos->y;
-        // TODO: something pos->* = y;
-        f32 z = pos->z;
+        cXyz cranePos = *pos;
         f32 offset = crane_offset[this->field_0x331];
-        pos->y -= offset;
-        this->current.pos.x = x;
-        this->current.pos.y = y - offset;
-        this->current.pos.z = z;
+        cranePos.y -= offset;
+        this->current.pos = cranePos;
     }
     return FALSE;
 }
