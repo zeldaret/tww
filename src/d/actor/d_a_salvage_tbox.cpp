@@ -7,6 +7,7 @@
 #include "d/actor/d_a_salvage_tbox.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_ship.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_bg_s_func.h"
 #include "f_op/f_op_kankyo_mng.h"
 
@@ -72,6 +73,31 @@ f32 getWaterY(cXyz shipPos) {
 /* 000005D8-000006E8       .text _delete__9daSTBox_cFv */
 bool daSTBox_c::_delete() {
     /* Nonmatching */
+    for (int i = 0; i < 3; i++) {
+        JPABaseEmitter* emitter = this->field_0x29C[i];
+        if (emitter != NULL) {
+            emitter->quitImmortalEmitter();
+            emitter = this->field_0x29C[i];
+            emitter->setMaxFrame(-1);
+            emitter->stopCreateParticle();
+            this->field_0x29C[i] = NULL;
+        }
+        this->mRippleCallBack.end();
+        JPABaseEmitter* callbackEmitter = this->field_0x2C0.getEmitter();
+        if (callbackEmitter != NULL) {
+            callbackEmitter->quitImmortalEmitter();
+            callbackEmitter->setMaxFrame(-1);
+            callbackEmitter->stopCreateParticle();
+        }
+        this->field_0x2C0.setEmitter(NULL);
+        dComIfG_resDelete(&this->field_0x290, "Salvage");
+        // dComIfGs_getEventReg //TODO: Something with eventreg
+        if (this->field_0x331 == 2){
+            dComIfGs_setEventReg(0xadff, 0x1);
+        }
+
+    }
+    return TRUE;
 }
 
 /* 000006E8-00000708       .text CheckCreateHeap__FP10fopAc_ac_c */

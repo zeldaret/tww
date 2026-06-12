@@ -8,6 +8,7 @@ class daSTBox_shadowEcallBack_c : public dPa_levelEcallBack {
 public:
     void deleteCallBack() {}
     JPABaseEmitter* getEmitter() { return mpEmitter; }
+    void setEmitter(JPABaseEmitter* emitter) { mpEmitter = emitter; }
     void setDepth(float depth) { mpDepth = depth; }
     void setIndirectTexData(f32 exTransY, f32 exScaleY) { mExTransY = exTransY; mExScaleY = exScaleY; }
     void setPos(cXyz& pos) { mpPos = &pos; }
