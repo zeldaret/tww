@@ -181,17 +181,19 @@ void daSTBox_c::initDrop(int) {
 }
 
 /* 00000F64-00001218       .text actWait__9daSTBox_cFi */
-void daSTBox_c::actWait(int) {
+BOOL daSTBox_c::actWait(int) {
     /* Nonmatching */
     daShip_c* ship = dComIfGp_getShipActor();
     JUT_ASSERT(0x32b, ship != NULL);
     cXyz* craneTop = ship->getCraneTop();
     JUT_ASSERT(0x332, craneTop != NULL);
-    f32 adding = 5000.0f;
-    f32 waterY = getWaterY(*craneTop) + adding; //TODO: Something wrong here
+    cXyz craneTopPos = *craneTop;
+    craneTopPos.y += 5000.0f;
+    f32 waterY = getWaterY(craneTopPos); 
     this->current.angle.y = ship->shape_angle.y;
-    cXyz craneTop2 = *(ship->getCraneTop());
-    craneTop2.y -= crane_offset[this->field_0x331];
+    cXyz craneTopPos2 = *craneTop;
+    craneTopPos2.y -= crane_offset[this->field_0x331];
+    this->current.pos = craneTopPos2;
     this->attention_info.position = this->current.pos;
     if ((this->field_0x331 == 1 || this->field_0x331 == 2) 
         && waterY < this->current.pos.y && (this->field_0x336 == 0)) {
@@ -202,8 +204,7 @@ void daSTBox_c::actWait(int) {
         this->position = this->current.pos;
         this->position.y += 2500.0f;
         this->position.y = dBgS_GetWaterHeight(this->position);
-        f32 waterThreshold = this->position.y  - 10.0f;
-        if (waterThreshold < this->current.pos.y) {
+        if (this->current.pos.y >this->position.y - 10.0f) {
             dComIfGp_particle_set(0x35c, &this->position, 
                 NULL, &this->scale, 0xff, 
                 &this->mRippleCallBack, -1, 
@@ -212,14 +213,15 @@ void daSTBox_c::actWait(int) {
             this->field_0x335 = 1;
         }
     }
-    if ((this->field_0x331 == 1 || this->field_0x331 == 2) && ((this->field_0x338 + 0x10000) == -1)) {
+    if ((this->field_0x331 == 1 || this->field_0x331 == 2) && ((this->field_0x338) == 0xffffffff)) {
         this->field_0x338 = fopAcM_createItemForTrBoxDemo(&this->current.pos,
             this->field_0x330, 0xffffffff, 
             dStage_roomControl_c::mStayNo, 0, 0);
-        if (this->field_0x338 != -1) {
+        if (this->field_0x338 != 0xffffffff) {
             g_dComIfG_gameInfo.play.mEvtCtrl.mPtItem = this->field_0x338;
         }
     }
+    return FALSE;
 }
 
 /* 00001218-00001344       .text actDrop__9daSTBox_cFi */

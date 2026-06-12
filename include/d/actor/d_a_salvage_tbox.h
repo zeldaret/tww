@@ -55,7 +55,7 @@ public:
     void initWaitGetItem(int);
     void initWaitDummy(int);
     void initDrop(int);
-    void actWait(int);
+    BOOL actWait(int);
     BOOL actDrop(int);
     BOOL actWait02(int);
     s32 actWaitGetItem(int);
