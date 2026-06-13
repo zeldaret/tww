@@ -82,20 +82,21 @@ bool daSTBox_c::_delete() {
             emitter->stopCreateParticle();
             this->field_0x29C[i] = NULL;
         }
-        this->mRippleCallBack.end();
-        JPABaseEmitter* callbackEmitter = this->field_0x2C0.getEmitter();
-        if (callbackEmitter != NULL) {
-            callbackEmitter->quitImmortalEmitter();
-            callbackEmitter->setMaxFrame(-1);
-            callbackEmitter->stopCreateParticle();
-        }
-        this->field_0x2C0.setEmitter(NULL);
-        dComIfG_resDelete(&this->field_0x290, "Salvage");
-        // dComIfGs_getEventReg //TODO: Something with eventreg
-        if (this->field_0x331 == 2){
-            dComIfGs_setEventReg(0xadff, 0x1);
-        }
-
+    }
+    this->mRippleCallBack.end();
+    JPABaseEmitter* callbackEmitter = this->field_0x2C0.getEmitter();
+    if (callbackEmitter != NULL) {
+        callbackEmitter->mpEmitterCallBack = NULL;
+        callbackEmitter = this->field_0x2C0.getEmitter();
+        // callbackEmitter->quitImmortalEmitter();
+        callbackEmitter->setMaxFrame(-1);
+        callbackEmitter->stopCreateParticle();
+    }
+    this->field_0x2C0.setEmitter(NULL);
+    dComIfG_resDelete(&this->field_0x290, this->m_arc_name);
+    u8 eventReg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_ADFF);
+    if (this->field_0x331 == 2){
+        dComIfGs_setEventReg(dSv_event_flag_c::UNK_ADFF, (u8)(eventReg + 1));
     }
     return TRUE;
 }
