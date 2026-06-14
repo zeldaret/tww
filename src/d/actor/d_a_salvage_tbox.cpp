@@ -95,8 +95,9 @@ bool daSTBox_c::_delete() {
     this->field_0x2C0.setEmitter(NULL);
     dComIfG_resDelete(&this->field_0x290, this->m_arc_name);
     u8 eventReg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_ADFF);
+    eventReg += 1;
     if (this->field_0x331 == 2){
-        dComIfGs_setEventReg(dSv_event_flag_c::UNK_ADFF, (u8)(eventReg + 1));
+        dComIfGs_setEventReg(dSv_event_flag_c::UNK_ADFF,eventReg);
     }
     return TRUE;
 }
