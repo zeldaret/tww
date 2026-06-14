@@ -10,7 +10,7 @@ public:
     JPABaseEmitter* getEmitter() { return mpEmitter; }
     void setEmitter(JPABaseEmitter* emitter) { mpEmitter = emitter; }
     void setDepth(float depth) { mpDepth = depth; }
-    void setIndirectTexData(f32 exTransY, f32 exScaleY) { mExTransY = exTransY; mExScaleY = exScaleY; }
+    void setIndirectTexData(f32 exScaleX, f32 exScaleY, f32 exScaleZ) { mExScaleX = exScaleX; mExScaleY = exScaleY; mExScaleZ = exScaleZ; }
     void setPos(cXyz& pos) { mpPos = &pos; }
     void setWaterFlatY(float waterFlatY) { mpWaterFlatY = waterFlatY; }
     void setWaterY(float waterY) { mpWaterY = waterY; }
@@ -26,18 +26,19 @@ public:
 
 private:
     /* 0x04 */  s16 field_0x4;
-    /* 0x06 */  f32 mpWaterFlatY;
-    /* 0x0A */  f32 mpWaterY;
-    /* 0x0E */  cXyz* mpPos;
-    /* 0x12 */  JGeometry::TVec3<f32> mPos[3];
-    /* 0x36 */  f32 mExTransY;
-    /* 0x3A */  f32 mExScaleY;
-    /* 0x3E */  f32 field_0x3E;
-    /* 0x42 */  csXyz* mpAngle;
-    /* 0x46 */  f32 field_0x46;
-    /* 0x4A */  f32 mpDepth;
-    /* 0x4E */  f32 field_0x4E;
-    /* 0x52 */  JPABaseEmitter* mpEmitter;
+    /* 0x06 */  s16 field_0x6;
+    /* 0x08 */  f32 mpWaterFlatY;
+    /* 0x0C */  cXyz* mpPos;
+    /* 0x10 */  f32 mpWaterY;
+    /* 0x14 */  JGeometry::TVec3<f32> mPos[3];
+    /* 0x38 */  f32 mExScaleX;
+    /* 0x3C */  f32 mExScaleY;
+    /* 0x40 */  f32 mExScaleZ;
+    /* 0x44 */  csXyz* mpAngle;
+    /* 0x48 */  f32 field_0x48;
+    /* 0x4C */  f32 mpDepth;
+    /* 0x50 */  f32 field_0x50;
+    /* 0x54 */  JPABaseEmitter* mpEmitter;
 
 };
 

@@ -53,7 +53,8 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
     GXColor diff;
     GXColor amb;
     s16 yAngle;
-    u8 uVar5;
+    u8 alpha;
+    f32 waterY;
     dKy_get_seacolor(&diff, &amb);
     emitter->setGlobalPrmColor(diff.r, diff.g, diff.b);
     if (this->field_0x4 != 0) {
@@ -63,36 +64,38 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
     }
     if (emitter->mMaxFrame == 0 && this->field_0x4 == 0) {
         f32 scaleY = this->mExScaleY;
-        f32 scaleZ = this->field_0x3E;
-        emitter->setGlobalTranslation(this->mExTransY, scaleY, scaleZ);
-        if (this->field_0x4E < 0.0f) {
-            yAngle = this->mpAngle->y - 0x8000;
-        } else {
+        f32 scaleZ = this->mExScaleZ;
+        emitter->setGlobalTranslation(this->mExScaleX, scaleY, scaleZ);
+        if (this->field_0x50 >= 0.0f) {
             yAngle = this->mpAngle->y;
+        } else {
+            yAngle = (s16)(this->mpAngle->y + 0x8000);
         }
         JPAGetXYZRotateMtx(0, (int)yAngle, 0, emitter->mGlobalRotation);
-        f32 zSomething = this->mpPos->z;
-        if (zSomething < 0.0f || zSomething > 2000.0f) {
-            uVar5 = 0;
+        waterY = this->mpWaterY;
+        if (waterY < 0.0f || waterY > 2000.0f) {
+            alpha = 0;
         } else {
-            uVar5 = (double)(((2000.0f - zSomething) * 120.0f) / 2000.0f);
+            alpha = (double)(((2000.0f - waterY) * 120.0f) / 2000.0f);
         }
-        emitter->setGlobalPrmColor(uVar5, uVar5, uVar5);
+        emitter->setGlobalAlpha(alpha);
     } else {
         emitter->mGlobalTranslation.y = this->mpWaterFlatY;
-        s16 alpha[2]; 
-        alpha[0] = emitter->mGlobalPrmColor.a;
+        s16 alpha[2];
+        alpha[0] = emitter->getGlobalAlpha();
         cLib_chaseS(alpha, 0, 5);
         alpha[0] = 0xff;
-        emitter->mGlobalPrmColor.a = alpha[0];
+        emitter->setGlobalAlpha(alpha[0]);
     }
     JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
     while(link != 0) {
         JSUPtrLink* next = link->getNext();
 
         JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
-        // ptcl->setOffsetPosition(pos);
-        getMaxWaterY(&ptcl->mOffsetPosition);
+        JGeometry::TVec3<f32> ptclPos;
+        ptcl->getOffsetPosition(ptclPos);
+        getMaxWaterY(&ptclPos);
+        ptcl->setOffsetPosition(ptclPos);
 
         link = next;
     }
