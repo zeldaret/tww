@@ -7,6 +7,7 @@
 #include "d/actor/d_a_salvage_tbox.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_ship.h"
+// #include "d/d_kankyo.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_func.h"
 #include "f_op/f_op_kankyo_mng.h"
@@ -47,8 +48,54 @@ void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>* shipPos) {
 }
 
 /* 00000128-000002F4       .text execute__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
-void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter*) {
+void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
     /* Nonmatching */
+    GXColor diff;
+    GXColor amb;
+    s16 yAngle;
+    u8 uVar5;
+    dKy_get_seacolor(&diff, &amb);
+    emitter->setGlobalPrmColor(diff.r, diff.g, diff.b);
+    if (this->field_0x4 != 0) {
+        emitter->setMaxFrame(-1);
+        emitter->stopCreateParticle();
+        this->mpEmitter = NULL;
+    }
+    if (emitter->mMaxFrame == 0 && this->field_0x4 == 0) {
+        f32 scaleY = this->mExScaleY;
+        f32 scaleZ = this->field_0x3E;
+        emitter->setGlobalTranslation(this->mExTransY, scaleY, scaleZ);
+        if (this->field_0x4E < 0.0f) {
+            yAngle = this->mpAngle->y - 0x8000;
+        } else {
+            yAngle = this->mpAngle->y;
+        }
+        JPAGetXYZRotateMtx(0, (int)yAngle, 0, emitter->mGlobalRotation);
+        f32 zSomething = this->mpPos->z;
+        if (zSomething < 0.0f || zSomething > 2000.0f) {
+            uVar5 = 0;
+        } else {
+            uVar5 = (double)(((2000.0f - zSomething) * 120.0f) / 2000.0f);
+        }
+        emitter->setGlobalPrmColor(uVar5, uVar5, uVar5);
+    } else {
+        emitter->mGlobalTranslation.y = this->mpWaterFlatY;
+        s16 alpha[2]; 
+        alpha[0] = emitter->mGlobalPrmColor.a;
+        cLib_chaseS(alpha, 0, 5);
+        alpha[0] = 0xff;
+        emitter->mGlobalPrmColor.a = alpha[0];
+    }
+    JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
+    while(link != 0) {
+        JSUPtrLink* next = link->getNext();
+
+        JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
+        // ptcl->setOffsetPosition(pos);
+        getMaxWaterY(&ptcl->mOffsetPosition);
+
+        link = next;
+    }
 }
 
 /* 000002F4-00000570       .text draw__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
@@ -88,7 +135,6 @@ bool daSTBox_c::_delete() {
     if (callbackEmitter != NULL) {
         callbackEmitter->mpEmitterCallBack = NULL;
         callbackEmitter = this->field_0x2C0.getEmitter();
-        // callbackEmitter->quitImmortalEmitter();
         callbackEmitter->setMaxFrame(-1);
         callbackEmitter->stopCreateParticle();
     }
@@ -183,9 +229,10 @@ void daSTBox_c::initWait02(int) {
 /* 00000EC8-00000F50       .text initWaitGetItem__9daSTBox_cFi */
 void daSTBox_c::initWaitGetItem(int) {
     /* Nonmatching */
+    JPABaseEmitter* emitter = NULL;
     fopDwTg_DrawQTo(&this->draw_tag);
     for(int i = 0; i < 3; i++) {
-        JPABaseEmitter* emitter = this->field_0x29C[i];
+        emitter = this->field_0x29C[i];
         if (emitter != NULL) {
             emitter->quitImmortalEmitter();
             emitter = this->field_0x29C[i];
