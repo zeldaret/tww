@@ -177,10 +177,10 @@ void daSTBox_c::CreateInit() {
     if (dComIfGp_getShipActor() != NULL && dComIfGp_getShipActor()->getCraneTop() != NULL) {
         craneTop = *dComIfGp_getShipActor()->getCraneTop();
         waterY = getWaterY(craneTop);
-        
+        craneTop.y = waterY;
     }
     this->field_0x324.x = craneTop.x;
-    this->field_0x324.y = waterY;
+    this->field_0x324.y = craneTop.y;
     this->field_0x324.z = craneTop.z;
     this->cullMtx = this->mpModel->getBaseTRMtx();
     fopAcM_setCullSizeBox(this, -150.0f, -0.0f, -150.0f, 150.0f, 150.0f, 150.0f);
@@ -224,7 +224,7 @@ void daSTBox_c::CreateInit() {
             JPABaseEmitter* emitter = dComIfGp_particle_set(0x53, &this->field_0x324, 
                 &this->current.angle, NULL, 0, &this->field_0x2C0, -1, 
                 NULL, NULL, NULL);
-            this->field_0x2C0.setPos(this->field_0x324);
+            this->field_0x2C0.setMPos(this->field_0x324);
             this->field_0x2C0.setField0x48(-0.1f);
             this->field_0x2C0.setDepth(4.0f);
             

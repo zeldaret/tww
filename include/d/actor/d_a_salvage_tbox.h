@@ -12,6 +12,7 @@ public:
     void setDepth(float depth) { mpDepth = depth; }
     void setIndirectTexData(f32 exScaleX, f32 exScaleY, f32 exScaleZ) { mExScaleX = exScaleX; mExScaleY = exScaleY; mExScaleZ = exScaleZ; }
     void setPos(cXyz& pos) { mpPos = &pos; }
+    void setMPos(cXyz& pos) { mPos->x = pos.x; mPos->y = pos.y; mPos->z = pos.z; }
     void setWaterFlatY(float waterFlatY) { mpWaterFlatY = waterFlatY; }
     void setWaterY(float waterY) { mpWaterY = waterY; }
     void setField0x48(float field) { field_0x48 = field; }
@@ -31,7 +32,7 @@ private:
     /* 0x08 */  f32 mpWaterFlatY;
     /* 0x0C */  cXyz* mpPos;
     /* 0x10 */  f32 mpWaterY;
-    /* 0x14 */  JGeometry::TVec3<f32> mPos[3];
+    /* 0x14 */  JGeometry::TVec3<f32> mPos[3];  // TODO: not sure about this placement
     /* 0x38 */  f32 mExScaleX;
     /* 0x3C */  f32 mExScaleY;
     /* 0x40 */  f32 mExScaleZ;
