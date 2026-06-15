@@ -172,21 +172,82 @@ BOOL daSTBox_c::CreateHeap() {
 /* 000007D4-00000ADC       .text CreateInit__9daSTBox_cFv */
 void daSTBox_c::CreateInit() {
     /* Nonmatching */
-    // for (int i = 0; i < 3; i++) {
-    // JPABaseEmitter *emitter = this->field_0x29c[i];
-    // if (emitter != nullptr) {
-    //     emitter->mFlags    |= 0x40;
-    //     emitter->field_0x1f0 = 1.5f;
-    //     emitter->field_0x1f4 = 1.5f;
-    //     emitter->field_0x1f8 = 1.0f;
-    //     emitter->field_0x0c  = 3.0f;
-    //     emitter->field_0x10  = 1.0f;
-    //     emitter->field_0x14  = 3.0f;
-    //     emitter->field_0x18  = 0.0f;
-    //     emitter->field_0x1c  = 20.0f;
-    //     emitter->field_0x20  = 0.0f;
-    // }
-// }
+    cXyz craneTop;
+    f32 waterY;
+    if (dComIfGp_getShipActor() != NULL && dComIfGp_getShipActor()->getCraneTop() != NULL) {
+        craneTop = *dComIfGp_getShipActor()->getCraneTop();
+        waterY = getWaterY(craneTop);
+        
+    }
+    this->field_0x324.x = craneTop.x;
+    this->field_0x324.y = waterY;
+    this->field_0x324.z = craneTop.z;
+    this->cullMtx = this->mpModel->getBaseTRMtx();
+    fopAcM_setCullSizeBox(this, -150.0f, -0.0f, -150.0f, 150.0f, 150.0f, 150.0f);
+    set_mtx();
+
+    this->field_0x330 = this->base.base.mParameters;
+    this->field_0x334 = 0;
+    this->field_0x336 = 0;
+
+    for (int i = 0; i < 2; i++) {
+        JPABaseEmitter* emitter = dComIfGp_particle_set(0x38, &this->current.pos, 
+            &this->current.angle, NULL, 0xff, NULL, -1, 
+            NULL, NULL, NULL);
+        this->field_0x29C[i] = emitter;
+    }
+    u8 field_0x331= this->field_0x331;
+    if (field_0x331 == 1 || field_0x331 == 2) {
+        JPABaseEmitter* emitter = dComIfGp_particle_set(0x38, &this->current.pos, 
+            &this->current.angle, NULL, 0xff, NULL, -1, 
+            NULL, NULL, NULL);
+        this->field_0x2A4 = emitter;
+
+        for (int i = 0; i < 3; i++) {
+            JPABaseEmitter *emitter = this->field_0x29C[i];
+            if (emitter != NULL) {
+                emitter->becomeImmortalEmitter();
+                emitter = this->field_0x29C[i];
+                
+                JGeometry::TVec3<f32> globalScale(1.5f, 1.5f, 1.0f);
+                emitter->setGlobalParticleScale(globalScale);
+                emitter = this->field_0x29C[i];
+                JGeometry::TVec3<f32> emitterScale(3.0f, 1.0f, 3.0f);
+                emitter->setEmitterScale(emitterScale); 
+                emitter = this->field_0x29C[i];
+                JGeometry::TVec3<f32> translation(0.0f, 20.0f, 0.0f);
+                emitter->setEmitterTranslation(translation);
+            }
+        }
+
+        if (this->field_0x2C0.getEmitter() == NULL) {
+            JPABaseEmitter* emitter = dComIfGp_particle_set(0x53, &this->field_0x324, 
+                &this->current.angle, NULL, 0, &this->field_0x2C0, -1, 
+                NULL, NULL, NULL);
+            this->field_0x2C0.setPos(this->field_0x324);
+            this->field_0x2C0.setField0x48(-0.1f);
+            this->field_0x2C0.setDepth(4.0f);
+            
+        }
+    } else if (field_0x331 == 0) {
+        for (int i = 0; i < 2; i++) {
+            JPABaseEmitter *emitter = this->field_0x29C[i];
+            if (emitter != NULL) {
+                emitter->becomeImmortalEmitter();
+                emitter = this->field_0x29C[i];
+                
+                JGeometry::TVec3<f32> globalScale(1.5f, 1.5f, 1.0f);
+                emitter->setGlobalParticleScale(globalScale);
+                emitter = this->field_0x29C[i];
+                JGeometry::TVec3<f32> emitterScale(3.5f, 1.0f, 3.5f);
+                emitter->setEmitterScale(emitterScale); 
+                emitter = this->field_0x29C[i];
+                JGeometry::TVec3<f32> translation(0.0f, -20.0f, 0.0f);
+                emitter->setEmitterTranslation(translation);
+            }
+        }
+    }
+    this->field_0x338 = -1;
 }
 
 /* 00000ADC-00000BFC       .text _create__9daSTBox_cFv */

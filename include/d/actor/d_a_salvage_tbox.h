@@ -14,6 +14,7 @@ public:
     void setPos(cXyz& pos) { mpPos = &pos; }
     void setWaterFlatY(float waterFlatY) { mpWaterFlatY = waterFlatY; }
     void setWaterY(float waterY) { mpWaterY = waterY; }
+    void setField0x48(float field) { field_0x48 = field; }
     void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz* angle, signed char) { 
         field_0x4 = 0;
         mpAngle = const_cast<csXyz*>(angle);
@@ -81,9 +82,7 @@ public:
     /* 0x2AC */ dPa_rippleEcallBack mRippleCallBack;
     /* 0x2C0 */ daSTBox_shadowEcallBack_c field_0x2C0;
     /* 0x318 */ cXyz position;
-    /* 0x324 */ f32 field_0x324;
-    /* 0x328 */ f32 field_0x328;
-    /* 0x32C */ f32 field_0x32C;
+    /* 0x324 */ cXyz field_0x324;
     /* 0x330 */ u8 field_0x330;
     /* 0x331 */ u8 field_0x331;
     /* 0x332 */ s16 field_0x332;
