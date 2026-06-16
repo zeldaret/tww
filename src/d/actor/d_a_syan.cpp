@@ -23,13 +23,13 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         syan_class* i_this = (syan_class*)model->getUserArea();
         if (i_this != NULL) {
             mDoMtx_copy(model->getAnmMtx(jntNo), *calc_mtx);
-            if (jntNo == 2) {
+            if (jntNo == SYAN_JNT_JOINT5_e) {
                 cMtx_YrotM(*calc_mtx, i_this->field_0x2a4[0].y);
                 cMtx_XrotM(*calc_mtx, -i_this->field_0x2a4[0].x);
                 cMtx_ZrotM(*calc_mtx, i_this->field_0x2a4[0].z);
                 model->setAnmMtx(jntNo, *calc_mtx);
                 cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
-            } else if (jntNo == 5) {
+            } else if (jntNo == SYAN_JNT_JOINT8_e) {
                 cMtx_YrotM(*calc_mtx, i_this->field_0x2b0.y);
                 cMtx_XrotM(*calc_mtx, -(i_this->field_0x2a4[1].x + i_this->field_0x2b0.x));
                 cMtx_ZrotM(*calc_mtx, i_this->field_0x2b0.z);

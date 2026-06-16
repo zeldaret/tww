@@ -1945,8 +1945,8 @@ public:
     virtual void changeTextureAnime(u16, u16, int);
     
     virtual f32 getGroundY() { return mAcch.GetGroundH(); }
-    virtual MtxP getLeftHandMatrix() { return mpCLModel->getAnmMtx(0x08); } // cl_LhandA joint
-    virtual MtxP getRightHandMatrix() { return mpCLModel->getAnmMtx(0x0C); } // cl_RhandA joint
+    virtual MtxP getLeftHandMatrix() { return mpCLModel->getAnmMtx(CL_JNT_CL_LHANDA_e); }
+    virtual MtxP getRightHandMatrix() { return mpCLModel->getAnmMtx(CL_JNT_CL_RHANDA_e); }
     virtual s32 getTactMusic() const;
     virtual int getTactTimerCancel() const;
     virtual BOOL checkPlayerGuard() const;
@@ -2291,7 +2291,7 @@ private:
     /* 0x3608 */ f32 m3608;
     /* 0x360C */ f32 mSeAnmRate;
     /* 0x3610 */ f32 m3610;
-    /* 0x3614 */ int mShadowId;
+    /* 0x3614 */ u32 mShadowId;
     /* 0x3618 */ u32 mModeFlg;
     /* 0x361C */ u32 mMtrlSndId;
     /* 0x3620 */ u32 m3620;

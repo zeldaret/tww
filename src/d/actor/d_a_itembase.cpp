@@ -162,7 +162,7 @@ void daItemBase_c::settingBeforeDraw() {
     if (isBomb(m_itemNo)) {
         daPy_lk_c* link = daPy_getPlayerLinkActorClass();
         link->getBombBrk()->setFrame(0.0f);
-        mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
+        mpModel->getModelData()->getJointNodePointer(BOMB_JNT_VBOMB_MODEL_e)->setMtxCalc(NULL);
     }
     
     if (m_itemNo == dItemNo_BOMB_BAG_e || m_itemNo == dItemNo_SKULL_HAMMER_e || m_itemNo == dItemNo_SMALL_KEY_e) {

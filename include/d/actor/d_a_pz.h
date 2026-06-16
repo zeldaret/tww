@@ -1,6 +1,7 @@
 #ifndef D_A_PZ_H
 #define D_A_PZ_H
 
+#include "res/Object/pz.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_npc.h"
 #include "c/c_damagereaction.h"
@@ -22,7 +23,7 @@ public:
         
     };
 
-    MtxP getRightHandMatrix() { return mpMorf->getModel()->getAnmMtx(0x13); } // hand_R1 joint
+    MtxP getRightHandMatrix() { return mpMorf->getModel()->getAnmMtx(PZ_JNT_HAND_R1_e); }
     void isAnm(s8) {}
     void isEyeAnm(s8) {}
     void modeProcInit(int) {}

@@ -117,7 +117,7 @@ static void move(dr_class* i_this) {
                     
                     cXyz rootPos;
                     cXyz offset(0.0f, 0.0f, 0.0f);
-                    MtxP rootJntMtx = i_this->mpMorf->getModel()->getAnmMtx(0x00); // dr_all_root joint
+                    MtxP rootJntMtx = i_this->mpMorf->getModel()->getAnmMtx(DR1_JNT_DR_ALL_ROOT_e);
                     cMtx_copy(rootJntMtx, *calc_mtx);
                     MtxPosition(&offset, &rootPos);
                     dComIfGp_particle_set(dPa_name::ID_AK_SN_DRSPLASHMAGMA00, &rootPos);
@@ -133,13 +133,13 @@ static void move(dr_class* i_this) {
         }
         
         if (i_this->mpBreathEmitter) {
-            MtxP tongueJntMtx = i_this->mpMorf->getModel()->getAnmMtx(0x20); // j_dr_sita2 (tongue) joint
+            MtxP tongueJntMtx = i_this->mpMorf->getModel()->getAnmMtx(DR1_JNT_J_DR_SITA2_e); // tongue
             i_this->mpBreathEmitter->setGlobalRTMatrix(tongueJntMtx);
         }
         break;
     case 12:
         if (i_this->mpBreathEmitter) {
-            MtxP tongueJntMtx = i_this->mpMorf->getModel()->getAnmMtx(0x20); // j_dr_sita2 (tongue) joint
+            MtxP tongueJntMtx = i_this->mpMorf->getModel()->getAnmMtx(DR1_JNT_J_DR_SITA2_e); // tongue
             i_this->mpBreathEmitter->setGlobalRTMatrix(tongueJntMtx);
         }
         
@@ -199,7 +199,7 @@ static BOOL daDr_Execute(dr_class* i_this) {
     
     daDr_setMtx(i_this);
     
-    MtxP tongueJntMtx = i_this->mpMorf->getModel()->getAnmMtx(0x20); // j_dr_sita2 (tongue) joint
+    MtxP tongueJntMtx = i_this->mpMorf->getModel()->getAnmMtx(DR1_JNT_J_DR_SITA2_e); // tongue
     cMtx_copy(tongueJntMtx, *calc_mtx);
     cXyz offset(0.0f, 0.0f, 0.0f);
     MtxPosition(&offset, &i_this->eyePos);

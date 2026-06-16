@@ -4,6 +4,7 @@
 //
 
 #include "d/dolzel.h" // IWYU pragma: keep
+#include "res/Object/fdai.h"
 #include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_salvage.h"
@@ -471,9 +472,9 @@ BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int calcTiming) {
                 mDoMtx_stack_c::XrotM(i_this->m6B4);
                 break;
             case dItemNo_FOUNTAIN_IDOL_e:
-                if (jntNo == 0) {
+                if (jntNo == FOBJ09_JNT_TUBOKO_BASE_e) {
                     mDoMtx_copy(mDoMtx_stack_c::get(), i_this->m630);
-                } else if (jntNo == 1) {
+                } else if (jntNo == FOBJ09_JNT_TUBOKO_HEAD_e) {
                     mDoMtx_copy(mDoMtx_stack_c::get(), i_this->m660);
                 }
                 break;

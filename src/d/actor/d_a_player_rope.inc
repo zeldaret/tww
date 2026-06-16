@@ -626,7 +626,7 @@ BOOL daPy_lk_c::procRopeSwing() {
     }
 
     cXyz sp34;
-    mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x28), &sp34);
+    mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_RTOE_JNT_e), &sp34);
     fopAc_ac_c* rope = mActorKeepRope.getActor();
     mRopePos = rope->current.pos;
     dComIfGp_setRStatus(dActStts_STOP_e);

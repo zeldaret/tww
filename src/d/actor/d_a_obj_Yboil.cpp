@@ -175,7 +175,7 @@ bool daObjYboil_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     for (s32 i = 0; i < 50; i++) {
         g_env_light.setLightTevColorType(mModel[i], &tevStr);
-        set_sea_material(mModel[i]->getModelData()->getJointNodePointer(0)->getMesh());
+        set_sea_material(mModel[i]->getModelData()->getJointNodePointer(YBOIL00_JNT_BOIL_e)->getMesh());
         mBckAnm[i].entry(mModel[i]->getModelData());
         mBtkAnm[i].entry(mModel[i]->getModelData());
         mBrkAnm[i].entry(mModel[i]->getModelData());

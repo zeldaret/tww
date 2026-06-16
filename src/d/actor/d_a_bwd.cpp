@@ -594,7 +594,7 @@ void sita_hit(bwd_class* i_this) {
                 i_this->m3964->becomeInvalidEmitter();
                 i_this->m3964 = NULL;
             } else {
-                i_this->m3964->setGlobalRTMatrix(i_this->mpHeadMorf->getModel()->getAnmMtx(0xe));
+                i_this->m3964->setGlobalRTMatrix(i_this->mpHeadMorf->getModel()->getAnmMtx(BWD_JNT_HEAD_e));
             }
         }
         i_this->m1BB6 = 1;
@@ -1058,7 +1058,7 @@ void end(bwd_class* i_this) {
                 i_this->m3968->becomeInvalidEmitter();
                 i_this->m3968 = NULL;
             } else {
-                i_this->m3968->setGlobalRTMatrix(i_this->mpHeadMorf->getModel()->getAnmMtx(0xe));
+                i_this->m3968->setGlobalRTMatrix(i_this->mpHeadMorf->getModel()->getAnmMtx(BWD_JNT_HEAD_e));
             }
         }
         if ((int)i_this->mpHeadMorf->getFrame() == 30) {
@@ -1198,7 +1198,7 @@ void control1(bwd_class* i_this) {
     cXyz local_11c;
     cXyz local_128;
 
-    MTXCopy(i_this->mpHeadMorf->getModel()->getAnmMtx(0x1d), *calc_mtx);
+    MTXCopy(i_this->mpHeadMorf->getModel()->getAnmMtx(BWD_JNT_SITA_e), *calc_mtx);
     local_104.set(REG0_F(2) + -50.0f, REG0_F(3), REG0_F(4));
     MtxPosition(&local_104, &i_this->mTongueSegments[0].m04);
     int i = 1;
@@ -1863,7 +1863,17 @@ void bwd_kankyo(bwd_class* i_this) {
 
 /* 000074A4-00008C24       .text daBwd_Execute__FP9bwd_class */
 static BOOL daBwd_Execute(bwd_class* i_this) {
-    static int jno[] = {0x10, 0x12, 0x13, 0x17, 0x19, 0x1A, 0x04, 0x07, 0x0B};
+    static int jno[] = {
+        BWD_JNT_KUTIL2_e,
+        BWD_JNT_KUTIL3_e,
+        BWD_JNT_KUTIL4_e,
+        BWD_JNT_KUTIR2_e,
+        BWD_JNT_KUTIR3_e,
+        BWD_JNT_KUTIR4_e,
+        BWD_JNT_HIP_e,
+        BWD_JNT_HIREL3_e,
+        BWD_JNT_HIRER3_e
+    };
     static f32 jsize[] = {180.0f, 120.0f, 90.0f, 180.0f, 120.0f, 90.0f, 230.0f, 150.0f, 150.0f};
     static s16 demo_ang[] = {0x3E80, 0xBB80};
     int i;

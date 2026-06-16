@@ -26,7 +26,7 @@ static BOOL nodeCallBack(J3DNode* i_node, int i_calcTiming) {
         J3DJoint* joint = reinterpret_cast<J3DJoint*>(i_node);
         s32 jntNo = joint->getJntNo();
         jbo_class* jbo = reinterpret_cast<jbo_class*>(j3dSys.getModel()->getUserArea());
-        if (jbo != NULL && jntNo == 9) {
+        if (jbo != NULL && jntNo == JH_JNT_J_JH_ME_E_e) {
             MTXCopy(j3dSys.getModel()->getAnmMtx(jntNo), *calc_mtx);
             cXyz pos;
             pos.x = 0;

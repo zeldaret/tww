@@ -317,7 +317,7 @@ static void nun_pos_set(st_class* i_this) {
 static void nun_move(st_class* i_this) {
     cXyz local_18;
 
-    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0xb), *calc_mtx);
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_BUKI_e), *calc_mtx);
     MtxTrans(REG8_F(5) + 10.0f, REG8_F(6), REG8_F(7), true);
     cMtx_YrotM(*calc_mtx, REG0_S(5));
     cMtx_ZrotM(*calc_mtx, REG0_S(6));
@@ -590,7 +590,7 @@ static void buki_smoke_set(st_class* i_this) {
     cXyz local_d8;
 
     i_this->m1E88[1].remove();
-    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0xb), *calc_mtx);
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_BUKI_e), *calc_mtx);
     local_b4.x = (REG0_F(13) + 80.0f) + 30.0f;
     local_b4.y = 0.0f;
     local_b4.z = 0.0f;
@@ -909,7 +909,7 @@ static void fight(st_class* i_this) {
     } else {
         i_this->m02CA = 0;
     }
-    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0xb), *calc_mtx);
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_BUKI_e), *calc_mtx);
     local_d8.x = REG0_F(10) + 80.0f;
     local_d8.y = 0.0f;
     local_d8.z = 0.0f;
@@ -967,7 +967,7 @@ static void fight2(st_class* i_this) {
                 attack_set(i_this, dRes_INDEX_ST_BCK_NUKU2_e, 1.0f, J3DFrameCtrl::EMode_NONE);
                 i_this->m02C4 = 0x65;
                 i_this->m1DC8 = 1;
-                MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x03), *calc_mtx);
+                MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_KATAL_e), *calc_mtx);
                 MtxPosition(&local_2c, &cStack_38);
                 dComIfGp_particle_set(dPa_name::ID_AK_SN_STBIKON00, &cStack_38, &actor->shape_angle);
                 fopAcM_seStart(actor, JA_SE_CM_ST_PULLOUT_ARM, 0);
@@ -1271,7 +1271,7 @@ static void head_damage(st_class* i_this) {
         case 1:
             frame = (int)i_this->mpMorf->getFrame();
             if (frame == 32) {
-                MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0xf), *calc_mtx);
+                MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_HEAD_e), *calc_mtx);
                 MtxPosition(&local_24, &cStack_30);
                 dComIfGp_particle_set(dPa_name::ID_AK_SN_STBIKON00, &cStack_30, &local_38);
                 fopAcM_seStart(actor, JA_SE_CM_ST_STOP_HEAD, 0);
@@ -1291,7 +1291,7 @@ static void head_damage(st_class* i_this) {
         case 11:
             frame = (int)i_this->mpMorf->getFrame();
             if (frame == 30) {
-                MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0xf), *calc_mtx);
+                MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_HEAD_e), *calc_mtx);
                 MtxPosition(&local_24, &cStack_30);
                 dComIfGp_particle_set(dPa_name::ID_AK_SN_STBIKON00, &cStack_30, &local_38);
                 fopAcM_seStart(actor, JA_SE_CM_ST_STOP_HEAD, 0);
@@ -1358,7 +1358,7 @@ static void ue_move(st_class* i_this) {
             if (frame == 10) {
                 emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_STASE00, &actor->eyePos);
                 if (emitter != NULL) {
-                    emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0xF));
+                    emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_HEAD_e));
                 }
             }
             i_this->m02DC = REG8_F(1) + 10.0f;
@@ -1486,7 +1486,7 @@ static void St_move(st_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz local_18;
 
-    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0xB), *calc_mtx);
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_BUKI_e), *calc_mtx);
     local_18.x = 160.0f;
     local_18.y = REG0_F(11);
     local_18.z = REG0_F(12);
@@ -1886,7 +1886,7 @@ static void part_move(st_class* i_this, int jointIndex) {
     local_50.setall(0.0f);
     daBoko_c* heldWeapon = NULL;
     daBoko_c* var_r26 = NULL;
-    if (jointIndex == 0xB) {
+    if (jointIndex == ST_JNT_BUKI_e) {
         heldWeapon = (daBoko_c*)fopAcM_SearchByID(i_this->mHeldWeaponEntityId);
         var_r26 = heldWeapon;
     }
@@ -1904,10 +1904,10 @@ static void part_move(st_class* i_this, int jointIndex) {
                     this_part->mPartVelocity.x = cM_rndFX(20.0f);
                     this_part->mPartVelocity.y = cM_rndF(20.0f) + 40.0f;
                     this_part->mPartVelocity.z = cM_rndFX(20.0f);
-                    if ((i_this->m0ED2 != 0) && (jointIndex != 0xb)) {
+                    if ((i_this->m0ED2 != 0) && (jointIndex != ST_JNT_BUKI_e)) {
                         i_this->m0ED2--;
                     }
-                    if (jointIndex == 0xF) {
+                    if (jointIndex == ST_JNT_HEAD_e) {
                         i_this->m1DD8 = 1;
                         this_part->mPartState = 6;
                         this_part->mPartRotAdd.setall(0);
@@ -1920,9 +1920,9 @@ static void part_move(st_class* i_this, int jointIndex) {
                     }
                 }
                 if (i_this->m0ED3 == 10) {
-                    if (jointIndex < 0x13) {
+                    if (jointIndex < ST_JNT_KOTUBAN_e) {
                         this_part->mPartState = 10;
-                        if (jointIndex == 0xB) {
+                        if (jointIndex == ST_JNT_BUKI_e) {
                             this_part->mPartState = 5;
                             this_part->m05 = 1;
                             this_part->mPartVelocity.x = cM_rndFX(20.0f);
@@ -1931,13 +1931,13 @@ static void part_move(st_class* i_this, int jointIndex) {
                             this_part->mPartRotAdd.x = cM_rndFX(6000.0f);
                             this_part->mPartRotAdd.y = cM_rndFX(6000.0f);
                         }
-                        if ((i_this->m0ED2 != 0) && (jointIndex != 0xB)) {
+                        if ((i_this->m0ED2 != 0) && (jointIndex != ST_JNT_BUKI_e)) {
                             i_this->m0ED2--;
                         }
                     }
-                } else if ((i_this->m0ED3 == 0x14) && (jointIndex >= 0x13)) {
+                } else if ((i_this->m0ED3 == 0x14) && (jointIndex >= ST_JNT_KOTUBAN_e)) {
                     this_part->mPartState = 0xb;
-                    if ((i_this->m0ED2 != 0) && (jointIndex != 0xB)) {
+                    if ((i_this->m0ED2 != 0) && (jointIndex != ST_JNT_BUKI_e)) {
                         i_this->m0ED2--;
                     }
                 }
@@ -1952,7 +1952,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                 } else {
                     MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(jointIndex), *calc_mtx);
                     MtxPosition(&local_50, &local_5c);
-                    if (jointIndex == 0xF) {
+                    if (jointIndex == ST_JNT_HEAD_e) {
                         local_5c.y -= REG6_F(13) + 20.0f;
                     }
                     local_50 = local_5c - this_part->mPartPos;
@@ -1977,7 +1977,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                         local_50.z = this_part->m44 * 20.0f;
                         MtxPosition(&local_50, &this_part->mPartVelocity);
                         VECAdd(&this_part->mPartPos, &this_part->mPartVelocity, &this_part->mPartPos);
-                        if (jointIndex == 0xF) {
+                        if (jointIndex == ST_JNT_HEAD_e) {
                             this_part->mPartRot.x = this_part->m38;
                             this_part->mPartRot.y = this_part->m3A;
                             this_part->mPartRot.z = this_part->m3C;
@@ -1991,7 +1991,7 @@ static void part_move(st_class* i_this, int jointIndex) {
             case 2:
                 MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(jointIndex), *calc_mtx);
                 MtxPosition(&local_50, &local_5c);
-                if (jointIndex == 0xF) {
+                if (jointIndex == ST_JNT_HEAD_e) {
                     local_5c.y -= REG6_F(13) + 20.0f;
                 }
                 cLib_addCalc2(&this_part->mPartPos.x, local_5c.x, 1.0f, std::fabsf(this_part->mPartVelocity.x) + 5.0f);
@@ -2002,13 +2002,13 @@ static void part_move(st_class* i_this, int jointIndex) {
                 if (local_50.abs() <= 5.0f) {
                     this_part->mPartState = 0;
                     this_part->m05 = 0;
-                    if ((i_this->m0ED2 < 0x19) && (jointIndex != 0xB)) {
+                    if ((i_this->m0ED2 < 0x19) && (jointIndex != ST_JNT_BUKI_e)) {
                         i_this->m0ED2++;
                     }
-                    if (jointIndex == 0xB) {
+                    if (jointIndex == ST_JNT_BUKI_e) {
                         i_this->m1DD0 = 10;
                     }
-                    if (jointIndex == 0xF) {
+                    if (jointIndex == ST_JNT_HEAD_e) {
                         i_this->m1DD8 = 0;
                     }
                 }
@@ -2022,7 +2022,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                 if (this_part->mPartPos.y <= dVar11) {
                     this_part->mPartPos.y = dVar11;
 #if VERSION > VERSION_DEMO
-                    if (((jointIndex == 0xB) && (heldWeapon != NULL)) && (i_this->m1DD0 >= 2)) {
+                    if (((jointIndex == ST_JNT_BUKI_e) && (heldWeapon != NULL)) && (i_this->m1DD0 >= 2)) {
                         fopAcM_cancelCarryNow(heldWeapon);
                         i_this->m1DD0 = 0;
                     }
@@ -2032,7 +2032,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                         this_part->mPartVelocity.x *= cM_rndFX(0.3f);
                         this_part->mPartVelocity.z *= cM_rndFX(0.3f);
 #if VERSION == VERSION_DEMO
-                        if (((jointIndex == 0xB) && (heldWeapon != NULL)) && (i_this->m1DD0 >= 2)) {
+                        if (((jointIndex == ST_JNT_BUKI_e) && (heldWeapon != NULL)) && (i_this->m1DD0 >= 2)) {
                             fopAcM_cancelCarryNow(heldWeapon);
                             i_this->m1DD0 = 0;
                         }
@@ -2051,7 +2051,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                 if ((i_this->m0ED3 == 2) || (i_this->m0ED3 == 0xb)) {
                     this_part->m3E = cM_rndF(65536.0f);
                     this_part->m44 = 0.0f;
-                    if (jointIndex == 0xB) {
+                    if (jointIndex == ST_JNT_BUKI_e) {
                         if ((heldWeapon != NULL) && (!fopAcM_checkCarryNow(heldWeapon))) {
                             fopAcM_setCarryNow(heldWeapon, 0);
                             this_part->mPartPos = heldWeapon->current.pos;
@@ -2134,7 +2134,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                     if (frame == 5) {
                         emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_STASE00, &this_part->mPartPos);
                         if (emitter != NULL) {
-                            emitter->setGlobalRTMatrix(i_this->mpMorf2->getModel()->getAnmMtx(0x1));
+                            emitter->setGlobalRTMatrix(i_this->mpMorf2->getModel()->getAnmMtx(ST_JNT_HARA_e));
                         }
                     }
                 }
@@ -2238,7 +2238,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                     if (upperBody != NULL) {
                         this_part->mPartState = 1;
                         this_part->mPartPos = upperBody->mParts[jointIndex].mPartPos;
-                        if (jointIndex != 0xF) {
+                        if (jointIndex != ST_JNT_HEAD_e) {
                             this_part->mPartRotAdd.x = cM_rndFX(4000.0f);
                             this_part->mPartRotAdd.y = cM_rndFX(4000.0f);
                         } else {
@@ -2274,7 +2274,7 @@ static void part_move(st_class* i_this, int jointIndex) {
             }
             this_part->mpPartModel->setBaseTRMtx(*calc_mtx);
 #endif
-            if (((jointIndex == 0xB) && (heldWeapon != NULL)) && (i_this->m1DD0 != 0)) {
+            if (((jointIndex == ST_JNT_BUKI_e) && (heldWeapon != NULL)) && (i_this->m1DD0 != 0)) {
                 if (i_this->m1DD0 == 1) {
                     fopAcM_setCarryNow(heldWeapon, 0);
                     i_this->m1DD0 = 10;
@@ -2289,7 +2289,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                     var_r26->setMatrix(*calc_mtx);
                 }
             }
-            if (jointIndex == 0xF) {
+            if (jointIndex == ST_JNT_HEAD_e) {
                 this_part->mPartRot = actor->shape_angle + i_this->m02FC;
             }
             break;
@@ -2298,7 +2298,7 @@ static void part_move(st_class* i_this, int jointIndex) {
             cMtx_YrotM(*calc_mtx, this_part->mPartRot.y);
             cMtx_XrotM(*calc_mtx, this_part->mPartRot.x);
             MtxScale(i_this->mEnemyIce.mScaleXZ, i_this->mEnemyIce.mScaleY, i_this->mEnemyIce.mScaleXZ, true);
-            if ((jointIndex == 0xF) && (i_this->m1DD8 != 0)) {
+            if ((jointIndex == ST_JNT_HEAD_e) && (i_this->m1DD8 != 0)) {
 #if VERSION > VERSION_DEMO
                 if (i_this->m1E82 != 0) {
                     i_this->m1E82--;
@@ -2317,12 +2317,12 @@ static void part_move(st_class* i_this, int jointIndex) {
             } else {
                 this_part->mpPartModel->setBaseTRMtx(*calc_mtx);
             }
-            if (((var_r26 != NULL) && (jointIndex == 0xB)) && (i_this->m1DD0 >= 2)) {
+            if (((var_r26 != NULL) && (jointIndex == ST_JNT_BUKI_e)) && (i_this->m1DD0 >= 2)) {
                 var_r26->setMatrix(*calc_mtx);
             }
             break;
     }
-    if (jointIndex == 0xF) {
+    if (jointIndex == ST_JNT_HEAD_e) {
 #if VERSION == VERSION_DEMO
         actor->eyePos = this_part->mPartPos;
         actor->attention_info.position = this_part->mPartPos;
@@ -2335,7 +2335,7 @@ static void part_move(st_class* i_this, int jointIndex) {
         }
 #endif
         if (i_this->m1DD8 == 2) {
-            MTXCopy(i_this->mpMorf2->getModel()->getAnmMtx(0x2), *calc_mtx);
+            MTXCopy(i_this->mpMorf2->getModel()->getAnmMtx(ST_JNT_MUNE_e), *calc_mtx);
             local_50.x = REG0_F(4);
             local_50.y = REG0_F(5);
             local_50.z = REG0_F(6);
@@ -2356,7 +2356,7 @@ static void part_move(st_class* i_this, int jointIndex) {
     }
 }
 
-static s32 cc_j_no[] = {0xF, 0x2, 0x1, 0x4, 0x9, 0x15, 0x18};
+static s32 cc_j_no[] = {ST_JNT_HEAD_e, ST_JNT_MUNE_e, ST_JNT_HARA_e, ST_JNT_UDEL_e, ST_JNT_UDER_e, ST_JNT_SUNEL_e, ST_JNT_SUNER_e};
 
 /* 00007D38-00008144       .text cc_set__FP8st_class */
 static void cc_set(st_class* i_this) {
@@ -2420,7 +2420,7 @@ static void cc_set(st_class* i_this) {
             local_40.z = i_this->mNun.m00[2].z;
             i_this->m0D80.SetR(30.0f);
         } else if (i_this->m0ED1 == 3) {
-            MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x19), *calc_mtx);
+            MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_ASIR_e), *calc_mtx);
             local_34.x = 0.0f;
             local_34.y = 0.0f;
             local_34.z = 0.0f;
@@ -2429,7 +2429,7 @@ static void cc_set(st_class* i_this) {
             i_this->m0D80.SetAtSpl(dCcG_At_Spl_UNK0);
         } else {
             i_this->m0D80.SetAtSpl(dCcG_At_Spl_UNK6);
-            MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0xb), *calc_mtx);
+            MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_BUKI_e), *calc_mtx);
             if (i_this->m0ED1 == 2) {
                 if (std::fabsf(i_this->m0308) > 0.5f) {
                     i_this->m0D80.SetAtSpl(dCcG_At_Spl_UNK7);
@@ -2702,7 +2702,7 @@ static BOOL createHeap(fopAc_ac_c* a_this) {
     J3DModel* model = i_this->mpMorf->getModel();
     model->setUserArea((u32)i_this);
     for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
-        if ((i < 0x1A) && (i != 0xB)) {
+        if ((i < ST_JNT_ASIR_e + 1) && (i != ST_JNT_BUKI_e)) {
             model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
         }
     }

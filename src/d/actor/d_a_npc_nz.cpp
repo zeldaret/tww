@@ -198,7 +198,7 @@ BOOL daNpc_Nz_c::_createHeap() {
         if(i == m_jnt.getHeadJntNum() || i == m_jnt.getBackboneJntNum()) {
             modelData->getJointNodePointer(i)->setCallBack(daNpcNz_NodeCallBack);
         }
-        if(i == 1 || i == 9) {
+        if(i == NZ_JNT_HIP_e || i == NZ_JNT_SHIPPO_e) {
             modelData->getJointNodePointer(i)->setCallBack(daNpcNz_TailNodeCallBack);
         }
     }
@@ -413,10 +413,10 @@ void daNpc_Nz_c::setMtx() {
         pScale->y = scaleY;
 
         J3DModel* pModel = mpMorf->getModel();
-        mDoMtx_stack_c::copy(pModel->getAnmMtx(0x12));
+        mDoMtx_stack_c::copy(pModel->getAnmMtx(NZ_JNT_UDEL3_e));
         cXyz temp;
         mDoMtx_stack_c::multVec(&cXyz::Zero, &temp);
-        mDoMtx_stack_c::copy(pModel->getAnmMtx(0x15));
+        mDoMtx_stack_c::copy(pModel->getAnmMtx(NZ_JNT_UDER3_e));
         cXyz temp2;
         mDoMtx_stack_c::multVec(&cXyz::Zero, &temp2);
         cXyz temp3 = temp + temp2;
@@ -835,7 +835,7 @@ bool daNpc_Nz_c::_draw() {
         J3DModel* pModel = mpMorf->getModel();
         J3DModelData* pModelData = pModel->getModelData();
 
-        J3DJoint* rootJoint = pModelData->getJointNodePointer(0);
+        J3DJoint* rootJoint = pModelData->getJointNodePointer(NZ_JNT_KOSI_e);
         J3DShape* matShape = pModelData->getMaterialNodePointer(0)->getShape();
         J3DShape* matShape2 = pModelData->getMaterialNodePointer(1)->getShape();
         J3DShape* matShape3 = pModelData->getMaterialNodePointer(2)->getShape();

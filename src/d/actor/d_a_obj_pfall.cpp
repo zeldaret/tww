@@ -406,7 +406,7 @@ void daObj_Pfall_c::nz_draw() {
     J3DModel* pModel = mpMorf->getModel();
     J3DModelData* pModelData = pModel->getModelData();
 
-    J3DJoint* rootJoint = pModelData->getJointNodePointer(0);
+    J3DJoint* rootJoint = pModelData->getJointNodePointer(NZ_JNT_KOSI_e);
 
     J3DShape* matShape = pModelData->getMaterialNodePointer(0)->getShape();
     J3DShape* matShape2 = pModelData->getMaterialNodePointer(1)->getShape();
