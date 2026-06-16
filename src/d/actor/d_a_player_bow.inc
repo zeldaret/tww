@@ -24,10 +24,10 @@ BOOL daPy_lk_c::bowJointCB(int param_0) {
 
     if (param_0 == 6) {
         mDoMtx_stack_c::transS(0.0f, 4.5f, 4.5f);
-        mDoMtx_stack_c::revConcat(mpEquipItemModel->getAnmMtx(BOW_JNT_LINEAB_JNT_e));
+        mDoMtx_stack_c::revConcat(mpEquipItemModel->getAnmMtx(LINK_BOW_JNT_LINEAB_JNT_e));
         mpEquipItemModel->setAnmMtx(param_0, mDoMtx_stack_c::get());
     } else {
-        mpEquipItemModel->setAnmMtx(BOW_JNT_LINEBB_JNT_e, mpEquipItemModel->getAnmMtx(BOW_JNT_LINEAB_JNT_e));
+        mpEquipItemModel->setAnmMtx(LINK_BOW_JNT_LINEBB_JNT_e, mpEquipItemModel->getAnmMtx(LINK_BOW_JNT_LINEAB_JNT_e));
     }
     return true;
 }
@@ -223,12 +223,12 @@ void daPy_lk_c::setBowModel() {
     }
     mDoExt_setCurrentHeap(oldHeap);
     m35EC = 0.0f;
-    J3DMaterial* lineMat_mtl = mpEquipItemModel->getModelData()->getJointNodePointer(BOW_JNT_CL_BOW_e)->getMesh()->getNext();
+    J3DMaterial* lineMat_mtl = mpEquipItemModel->getModelData()->getJointNodePointer(LINK_BOW_JNT_CL_BOW_e)->getMesh()->getNext();
     J3DMaterial* lineDamMAT_mtl = lineMat_mtl->getNext();
     lineMat_mtl->getShape()->show();
     lineDamMAT_mtl->getShape()->hide();
-    tmp_modelData->getJointNodePointer(BOW_JNT_LINEAB_JNT_e)->setCallBack(daPy_bowJointCB);
-    tmp_modelData->getJointNodePointer(BOW_JNT_LINEBB_JNT_e)->setCallBack(daPy_bowJointCB);
+    tmp_modelData->getJointNodePointer(LINK_BOW_JNT_LINEAB_JNT_e)->setCallBack(daPy_bowJointCB);
+    tmp_modelData->getJointNodePointer(LINK_BOW_JNT_LINEBB_JNT_e)->setCallBack(daPy_bowJointCB);
     mpEquipItemModel->setUserArea(reinterpret_cast<u32>(this));
 }
 
