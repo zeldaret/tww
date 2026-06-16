@@ -34,6 +34,7 @@ THIS_MTIME = Path(__file__).stat().st_mtime
 
 AMBIGUOUS_JOINT_ENUM_NAMES = [
     "BOW_JNT",
+    "NZ_JNT",
 ]
 
 class ArcFile(NamedTuple):

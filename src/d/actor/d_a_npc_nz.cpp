@@ -11,10 +11,7 @@
 #include "d/d_item.h"
 
 #include "res/Object/Npcnz.h"
-// Namespace hack to fix both of these res headers having a duplicated NZ_JNT enum that causes a name collision.
-namespace ResNz {
 #include "res/Object/Nz.h"
-} // namespace ResNz
 
 class daNpc_Nz_HIO_c : public JORReflexible {
 public:
@@ -198,12 +195,12 @@ BOOL daNpc_Nz_c::_createHeap() {
         if(i == m_jnt.getHeadJntNum() || i == m_jnt.getBackboneJntNum()) {
             modelData->getJointNodePointer(i)->setCallBack(daNpcNz_NodeCallBack);
         }
-        if(i == NZ_JNT_HIP_e || i == NZ_JNT_SHIPPO_e) {
+        if(i == NPCNZ_NZ_JNT_HIP_e || i == NPCNZ_NZ_JNT_SHIPPO_e) {
             modelData->getJointNodePointer(i)->setCallBack(daNpcNz_TailNodeCallBack);
         }
     }
 
-    ResTIMG* img = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, ResNz::dRes_INDEX_NZ_BTI_SIPPO_e));
+    ResTIMG* img = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_NZ_BTI_SIPPO_e));
     if (field_0x934.init(1, 10, img, FALSE)) {
         return TRUE;
     } else {
@@ -413,10 +410,10 @@ void daNpc_Nz_c::setMtx() {
         pScale->y = scaleY;
 
         J3DModel* pModel = mpMorf->getModel();
-        mDoMtx_stack_c::copy(pModel->getAnmMtx(NZ_JNT_UDEL3_e));
+        mDoMtx_stack_c::copy(pModel->getAnmMtx(NPCNZ_NZ_JNT_UDEL3_e));
         cXyz temp;
         mDoMtx_stack_c::multVec(&cXyz::Zero, &temp);
-        mDoMtx_stack_c::copy(pModel->getAnmMtx(NZ_JNT_UDER3_e));
+        mDoMtx_stack_c::copy(pModel->getAnmMtx(NPCNZ_NZ_JNT_UDER3_e));
         cXyz temp2;
         mDoMtx_stack_c::multVec(&cXyz::Zero, &temp2);
         cXyz temp3 = temp + temp2;
@@ -835,7 +832,7 @@ bool daNpc_Nz_c::_draw() {
         J3DModel* pModel = mpMorf->getModel();
         J3DModelData* pModelData = pModel->getModelData();
 
-        J3DJoint* rootJoint = pModelData->getJointNodePointer(NZ_JNT_KOSI_e);
+        J3DJoint* rootJoint = pModelData->getJointNodePointer(NPCNZ_NZ_JNT_KOSI_e);
         J3DShape* matShape = pModelData->getMaterialNodePointer(0)->getShape();
         J3DShape* matShape2 = pModelData->getMaterialNodePointer(1)->getShape();
         J3DShape* matShape3 = pModelData->getMaterialNodePointer(2)->getShape();
