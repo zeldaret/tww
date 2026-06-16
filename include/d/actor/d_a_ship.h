@@ -1,7 +1,7 @@
 #ifndef D_A_SHIP_H
 #define D_A_SHIP_H
 
-#include "res/Object/ship.h"
+#include "res/Object/Ship.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"

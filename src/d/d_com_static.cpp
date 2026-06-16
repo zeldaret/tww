@@ -4,7 +4,7 @@
 //
 
 #include "d/dolzel.h" // IWYU pragma: keep
-#include "res/Object/fdai.h"
+#include "res/Object/Fdai.h"
 #include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_salvage.h"

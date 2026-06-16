@@ -1,7 +1,7 @@
 #ifndef D_A_PZ_H
 #define D_A_PZ_H
 
-#include "res/Object/pz.h"
+#include "res/Object/Pz.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_npc.h"
 #include "c/c_damagereaction.h"
