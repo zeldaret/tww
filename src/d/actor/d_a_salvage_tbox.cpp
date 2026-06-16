@@ -4,111 +4,530 @@
 //
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
+#include "dolphin/gx/GX.h"
+#include "dolphin/mtx/mtx.h"
 #include "d/actor/d_a_salvage_tbox.h"
+#include "d/actor/d_a_sea.h"
+#include "d/d_bg_s_func.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "d/d_particle_name.h"
+#include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_kankyo_mng.h"
+#include "JAZelAudio/JAZelAudio_BGM.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "JSystem/JParticle/JPAEmitter.h"
+#include "JSystem/JParticle/JPAMath.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "m_Do/m_Do_audio.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
+#include "SSystem/SComponent/c_lib.h"
+
+const char daSTBox_c::m_arcname[] = "Salvage";
+const s16 daSTBox_c::m_heapsize[] = {0x5000, 0x5000, 0x5000};
+const s16 daSTBox_c::m_bdlidx[] = {4, 3, 3};
+const f32 daSTBox_c::m_rope_max_length = 2500.0f;
+const u8 daSTBox_c::m_shadow_alpha = 0x78;
+const f32 daSTBox_c::m_shadow_depth = 2000.0f;
+const f32 daSTBox_c::m_shadow_scroll = -0.1f;
+const f32 daSTBox_c::m_shadow_scale = 4.0f;
 
 /* 00000078-00000128       .text getMaxWaterY__25daSTBox_shadowEcallBack_cFPQ29JGeometry8TVec3<f> */
-void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>*) {
-    /* Nonmatching */
+void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>* pos) {
+    if (daSea_ChkArea(pos->x, pos->z)) {
+        pos->y = daSea_calcWave(pos->x, pos->z) + 2.0f;
+        if (mWaterY > pos->y) {
+            pos->y = mWaterY + 2.0f;
+        }
+    } else if (mWaterY != -1000000000.0f) {
+        pos->y = mWaterY + 2.0f;
+    } else {
+        pos->y = mWaterFlatY;
+    }
 }
 
 /* 00000128-000002F4       .text execute__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
-void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter*) {
+void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
     /* Nonmatching */
+    GXColor amb;
+    GXColor dif;
+    dKy_get_seacolor(&amb, &dif);
+
+    u8* i_emitter = reinterpret_cast<u8*>(emitter);
+    emitter->setGlobalPrmColor(amb.r, amb.g, amb.b);
+
+    if (mState != 0) {
+        *reinterpret_cast<s32*>(i_emitter + 0x60) = -1;
+        *reinterpret_cast<u32*>(i_emitter + 0x20c) |= 1;
+        mpBaseEmitter = NULL;
+    }
+
+    if (*reinterpret_cast<s32*>(i_emitter + 0x60) == 0 && mState == 0) {
+        emitter->setGlobalTranslation(field_0x38);
+
+        s16 rot;
+        if (mScroll >= 0.0f) {
+            rot = mpAngle->y;
+        } else {
+            rot = mpAngle->y + 0x8000;
+        }
+        JPAGetXYZRotateMtx(0, rot, 0, reinterpret_cast<f32(*)[4]>(i_emitter + 0x1a8));
+
+        int alpha;
+        if (field_0x10 < 0.0f || field_0x10 > 2000.0f) {
+            alpha = 0;
+        } else {
+            alpha = (int)(120.0f * (2000.0f - field_0x10) / 2000.0f);
+        }
+        i_emitter[0x1ff] = alpha;
+    } else {
+        *reinterpret_cast<f32*>(i_emitter + 0x1e8) = mWaterFlatY;
+        s16 work = i_emitter[0x1ff];
+        cLib_chaseS(&work, 0, 5);
+        work = 0xff;
+        i_emitter[0x1ff] = work;
+    }
+
+    void* node = *reinterpret_cast<void**>(i_emitter + 0x17c);
+    while (node != NULL) {
+        void* next = *reinterpret_cast<void**>(reinterpret_cast<u8*>(node) + 0xc);
+        u8* obj = *reinterpret_cast<u8**>(node);
+        JGeometry::TVec3<f32> pos;
+        pos.x = *reinterpret_cast<f32*>(obj + 0x10);
+        pos.y = *reinterpret_cast<f32*>(obj + 0x14);
+        pos.z = *reinterpret_cast<f32*>(obj + 0x18);
+        getMaxWaterY(&pos);
+        *reinterpret_cast<f32*>(obj + 0x10) = pos.x;
+        *reinterpret_cast<f32*>(obj + 0x14) = pos.y;
+        *reinterpret_cast<f32*>(obj + 0x18) = pos.z;
+        node = next;
+    }
 }
 
 /* 000002F4-00000570       .text draw__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
-void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter*) {
+void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
     /* Nonmatching */
+    u8* i_emitter = reinterpret_cast<u8*>(emitter);
+    u32 numParticles = *reinterpret_cast<u32*>(i_emitter + 0x184);
+    if (numParticles < 6) {
+        return;
+    }
+
+    if (dPa_control_c::isStatus(1)) {
+        GXSetZMode(GX_FALSE, GX_NEVER, GX_FALSE);
+    }
+
+    u32 numRows = (u32)((f32)numParticles * (1.0f / 3.0f));
+    f32 vStep = 1.0f / (f32)(numRows - 1);
+
+    GXSetCullMode(GX_CULL_NONE);
+
+    Mtx texMtx;
+    PSMTXIdentity(texMtx);
+    texMtx[1][1] = mDepth;
+    texMtx[1][3] = mScale * *reinterpret_cast<f32*>(i_emitter + 0x164);
+    GXLoadTexMtxImm(texMtx, GX_TEXMTX1, GX_MTX2x4);
+    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
+
+    void* node = *reinterpret_cast<void**>(i_emitter + 0x17c);
+    f32 v = 0.0f;
+    for (u32 row = 0; row < numRows; row++) {
+        if (row != 0) {
+            GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 6);
+            f32 u = 0.0f;
+            f32 vPrev = v - vStep;
+            for (u32 col = 0; col < 3; col++) {
+                u8* p = *reinterpret_cast<u8**>(node);
+                JGeometry::TVec3<f32> pos;
+                pos.x = *reinterpret_cast<f32*>(p + 0x28);
+                pos.y = *reinterpret_cast<f32*>(p + 0x2c);
+                pos.z = *reinterpret_cast<f32*>(p + 0x30);
+                getMaxWaterY(&pos);
+                GXPosition3f32(pos.x, pos.y, pos.z);
+                GXTexCoord2f32(u, v);
+                GXPosition3f32(mPos[col].x, mPos[col].y, mPos[col].z);
+                GXTexCoord2f32(u, vPrev);
+                mPos[col].x = pos.x;
+                mPos[col].y = pos.y;
+                mPos[col].z = pos.z;
+                u += 0.5f;
+                node = *reinterpret_cast<void**>(reinterpret_cast<u8*>(node) + 0xc);
+            }
+        } else {
+            for (s32 col = 0; col < 3; col++) {
+                u8* p = *reinterpret_cast<u8**>(node);
+                mPos[col].x = *reinterpret_cast<f32*>(p + 0x28);
+                mPos[col].y = *reinterpret_cast<f32*>(p + 0x2c);
+                mPos[col].z = *reinterpret_cast<f32*>(p + 0x30);
+                node = *reinterpret_cast<void**>(reinterpret_cast<u8*>(node) + 0xc);
+            }
+        }
+        v += vStep;
+    }
 }
 
 /* 00000570-000005D8       .text getWaterY__F4cXyz */
-void getWaterY(cXyz) {
-    /* Nonmatching */
+static f32 getWaterY(cXyz pos) {
+    pos.y += 500.0f;
+
+    if (daSea_ChkArea(pos.x, pos.z)) {
+        return daSea_calcWave(pos.x, pos.z);
+    }
+
+    return dBgS_ObjGndChk_Wtr_Func(pos);
 }
 
 /* 000005D8-000006E8       .text _delete__9daSTBox_cFv */
 bool daSTBox_c::_delete() {
     /* Nonmatching */
+    for (s32 i = 0; i < 3; i++) {
+        JPABaseEmitter* emitter = mpEmitter[i];
+        if (emitter != NULL) {
+            u32 status = *reinterpret_cast<u32*>(reinterpret_cast<u8*>(emitter) + 0x20c);
+            status &= ~0x40;
+            *reinterpret_cast<u32*>(reinterpret_cast<u8*>(emitter) + 0x20c) = status;
+            emitter = mpEmitter[i];
+            *reinterpret_cast<s32*>(reinterpret_cast<u8*>(emitter) + 0x60) = -1;
+            status = *reinterpret_cast<u32*>(reinterpret_cast<u8*>(emitter) + 0x20c);
+            *reinterpret_cast<u32*>(reinterpret_cast<u8*>(emitter) + 0x20c) = status | 1;
+            mpEmitter[i] = NULL;
+        }
+    }
+
+    mRippleCb.end();
+
+    if (mShadowCb.mpBaseEmitter != NULL) {
+        *reinterpret_cast<JPABaseEmitter**>(reinterpret_cast<u8*>(mShadowCb.mpBaseEmitter) + 0x19c) = NULL;
+        *reinterpret_cast<s32*>(reinterpret_cast<u8*>(mShadowCb.mpBaseEmitter) + 0x60) = -1;
+        u32 status = *reinterpret_cast<u32*>(reinterpret_cast<u8*>(mShadowCb.mpBaseEmitter) + 0x20c);
+        *reinterpret_cast<u32*>(reinterpret_cast<u8*>(mShadowCb.mpBaseEmitter) + 0x20c) = status | 1;
+    }
+
+    mShadowCb.mpBaseEmitter = NULL;
+    dComIfG_resDelete(&mPhase, m_arcname);
+    u8 eventReg = g_dComIfG_gameInfo.save.getEvent().getEventReg(0xADFF);
+    if (mType == 2) {
+        g_dComIfG_gameInfo.save.getEvent().setEventReg(0xADFF, eventReg + 1);
+    }
+
+    return TRUE;
 }
 
 /* 000006E8-00000708       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daSTBox_c*)i_this)->CreateHeap();
 }
 
 /* 00000708-000007D4       .text CreateHeap__9daSTBox_cFv */
-void daSTBox_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daSTBox_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, m_bdlidx[mType]);
+    JUT_ASSERT(0x1CD, modelData != 0);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 000007D4-00000ADC       .text CreateInit__9daSTBox_cFv */
 void daSTBox_c::CreateInit() {
     /* Nonmatching */
+    cXyz pos;
+    fopAc_ac_c* player = *reinterpret_cast<fopAc_ac_c**>(reinterpret_cast<u8*>(&g_dComIfG_gameInfo) + 0x5b54);
+    if (player != NULL) {
+        cXyz* crane = *reinterpret_cast<cXyz**>(reinterpret_cast<u8*>(player) + 0x434);
+        if (crane != NULL) {
+            pos = *crane;
+            pos.y = getWaterY(pos);
+        }
+    }
+    field_0x324 = pos;
+
+    *reinterpret_cast<u8**>(reinterpret_cast<u8*>(this) + 0x22c) = reinterpret_cast<u8*>(mpModel) + 0x24;
+    fopAcM_setCullSizeBox(this, -150.0f, -0.0f, -150.0f, 150.0f, 150.0f, 150.0f);
+    set_mtx();
+
+    mItemNo = *reinterpret_cast<u32*>(reinterpret_cast<u8*>(this) + 0xb0);
+    mSplashEmitted = 0;
+    mBgmStarted = 0;
+
+    for (s32 i = 0; i < 2; i++) {
+        mpEmitter[i] = dComIfGp_particle_set(0x38, &current.pos, &current.angle);
+    }
+
+    if (mType == 1 || mType == 2) {
+        mpEmitter[2] = dComIfGp_particle_set(0x38, &current.pos, &current.angle);
+        for (s32 i = 0; i < 3; i++) {
+            JPABaseEmitter* e = mpEmitter[i];
+            if (e != NULL) {
+                *reinterpret_cast<u32*>(reinterpret_cast<u8*>(e) + 0x20c) |= 0x40;
+                *reinterpret_cast<JGeometry::TVec3<f32>*>(reinterpret_cast<u8*>(mpEmitter[i]) + 0x1f0) = JGeometry::TVec3<f32>(1.5f, 1.5f, 1.0f);
+                *reinterpret_cast<JGeometry::TVec3<f32>*>(reinterpret_cast<u8*>(mpEmitter[i]) + 0xc) = JGeometry::TVec3<f32>(3.0f, 1.0f, 3.0f);
+                *reinterpret_cast<JGeometry::TVec3<f32>*>(reinterpret_cast<u8*>(mpEmitter[i]) + 0x18) = JGeometry::TVec3<f32>(0.0f, 20.0f, 0.0f);
+            }
+        }
+        if (mShadowCb.mpBaseEmitter == NULL) {
+            dComIfGp_particle_setShipTail(0x53, &field_0x324, &current.angle, NULL, 0, &mShadowCb);
+            mShadowCb.field_0x38 = field_0x324;
+            mShadowCb.mScale = -0.1f;
+            mShadowCb.mDepth = 4.0f;
+        }
+    } else if (mType == 0) {
+        for (s32 i = 0; i < 2; i++) {
+            JPABaseEmitter* e = mpEmitter[i];
+            if (e != NULL) {
+                *reinterpret_cast<u32*>(reinterpret_cast<u8*>(e) + 0x20c) |= 0x40;
+                *reinterpret_cast<JGeometry::TVec3<f32>*>(reinterpret_cast<u8*>(mpEmitter[i]) + 0x1f0) = JGeometry::TVec3<f32>(1.5f, 1.5f, 1.0f);
+                *reinterpret_cast<JGeometry::TVec3<f32>*>(reinterpret_cast<u8*>(mpEmitter[i]) + 0xc) = JGeometry::TVec3<f32>(3.5f, 1.0f, 3.5f);
+                *reinterpret_cast<JGeometry::TVec3<f32>*>(reinterpret_cast<u8*>(mpEmitter[i]) + 0x18) = JGeometry::TVec3<f32>(0.0f, -20.0f, 0.0f);
+            }
+        }
+    }
+
+    mItemPID = fpcM_ERROR_PROCESS_ID_e;
 }
 
 /* 00000ADC-00000BFC       .text _create__9daSTBox_cFv */
 cPhs_State daSTBox_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daSTBox_c);
+
+    mType = fopAcM_GetParamBit(fopAcM_GetParam(this), 8, 4);
+
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, m_arcname);
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])) {
+            return cPhs_ERROR_e;
+        }
+
+        CreateInit();
+    }
+
+    return phase_state;
 }
 
 /* 00000BFC-00000C7C       .text set_mtx__9daSTBox_cFv */
 void daSTBox_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
+
+typedef void (daSTBox_c::*EventInitFunc)(int);
+typedef BOOL (daSTBox_c::*EventActionFunc)(int);
+
+static EventInitFunc l_event_init_tbl[] = {
+    &daSTBox_c::initWait,
+    &daSTBox_c::initWait02,
+    &daSTBox_c::initWaitGetItem,
+    &daSTBox_c::initWaitDummy,
+    &daSTBox_c::initDrop,
+};
+static EventActionFunc l_event_action_tbl[] = {
+    &daSTBox_c::actWait,
+    &daSTBox_c::actWait02,
+    &daSTBox_c::actWaitGetItem,
+    &daSTBox_c::actWaitDummy,
+    &daSTBox_c::actDrop,
+};
+static char* l_action_table[] = {
+    "WAIT",
+    "WAIT02",
+    "WAIT_GETITEM",
+    "WAIT_DUMMY",
+    "DROP",
+};
 
 /* 00000C7C-00000EB8       .text _execute__9daSTBox_cFv */
 bool daSTBox_c::_execute() {
     /* Nonmatching */
+    int staffId = dComIfGp_evmng_getMyStaffId("STBox", NULL, 0);
+    f32 water_y = 0.0f;
+    cXyz player_pos;
+
+    fopAc_ac_c* player = *reinterpret_cast<fopAc_ac_c**>(reinterpret_cast<u8*>(&g_dComIfG_gameInfo) + 0x5b54);
+    if (player != NULL) {
+        player_pos = *reinterpret_cast<cXyz*>(reinterpret_cast<u8*>(player) + 0x1020);
+        water_y = getWaterY(player_pos);
+    }
+
+    if (dComIfGp_event_runCheck() && eventInfo.mCommand != dEvtCmd_INTALK_e && staffId != -1) {
+        int actIdx = dComIfGp_evmng_getMyActIdx(staffId, l_action_table, ARRAY_SIZE(l_action_table), FALSE, 0);
+        if (actIdx == -1) {
+            dComIfGp_evmng_cutEnd(staffId);
+        } else {
+            if (dComIfGp_evmng_getIsAddvance(staffId)) {
+                (this->*l_event_init_tbl[actIdx])(staffId);
+            }
+
+            if ((this->*l_event_action_tbl[actIdx])(staffId)) {
+                dComIfGp_evmng_cutEnd(staffId);
+            }
+        }
+    }
+
+    for (s32 i = 0; i < 3; i++) {
+        JPABaseEmitter* emitter = mpEmitter[i];
+        if (emitter != NULL) {
+            *reinterpret_cast<cXyz*>(reinterpret_cast<u8*>(emitter) + 0x1e4) = current.pos;
+        }
+    }
+
+    if (current.pos.y < water_y) {
+        mShadowCb.mWaterFlatY = water_y + 2.0f;
+        mShadowCb.mWaterY = water_y + 2.0f;
+        mShadowCb.field_0x10 = water_y - current.pos.y;
+        mShadowCb.field_0x38 = player_pos;
+    } else {
+        if (mShadowCb.mpBaseEmitter != NULL) {
+            *reinterpret_cast<JPABaseEmitter**>(reinterpret_cast<u8*>(mShadowCb.mpBaseEmitter) + 0x19c) = NULL;
+            *reinterpret_cast<s32*>(reinterpret_cast<u8*>(mShadowCb.mpBaseEmitter) + 0x60) = -1;
+            u32 status = *reinterpret_cast<u32*>(reinterpret_cast<u8*>(mShadowCb.mpBaseEmitter) + 0x20c);
+            *reinterpret_cast<u32*>(reinterpret_cast<u8*>(mShadowCb.mpBaseEmitter) + 0x20c) = status | 1;
+        }
+
+        mShadowCb.mpBaseEmitter = NULL;
+    }
+
+    set_mtx();
+    return TRUE;
 }
 
 /* 00000EB8-00000EBC       .text initWait__9daSTBox_cFi */
 void daSTBox_c::initWait(int) {
-    /* Nonmatching */
 }
 
 /* 00000EBC-00000EC8       .text initWait02__9daSTBox_cFi */
 void daSTBox_c::initWait02(int) {
-    /* Nonmatching */
+    mTimer = 0x14;
 }
 
 /* 00000EC8-00000F50       .text initWaitGetItem__9daSTBox_cFi */
 void daSTBox_c::initWaitGetItem(int) {
-    /* Nonmatching */
+    fopDwTg_DrawQTo(&draw_tag);
+
+    for (s32 i = 0; i < 3; i++) {
+        JPABaseEmitter** emitterPtr = &mpEmitter[i];
+        JPABaseEmitter* emitter = *emitterPtr;
+        if (emitter == NULL) {
+            continue;
+        }
+
+        u32 status = *reinterpret_cast<u32*>(reinterpret_cast<u8*>(emitter) + 0x20c);
+        status &= ~0x40;
+        *reinterpret_cast<u32*>(reinterpret_cast<u8*>(emitter) + 0x20c) = status;
+        emitter = *emitterPtr;
+        *reinterpret_cast<s32*>(reinterpret_cast<u8*>(emitter) + 0x60) = -1;
+        status = *reinterpret_cast<u32*>(reinterpret_cast<u8*>(emitter) + 0x20c);
+        *reinterpret_cast<u32*>(reinterpret_cast<u8*>(emitter) + 0x20c) = status | 1;
+        *emitterPtr = NULL;
+    }
+
+    mRippleCb.end();
 }
 
 /* 00000F50-00000F54       .text initWaitDummy__9daSTBox_cFi */
 void daSTBox_c::initWaitDummy(int) {
-    /* Nonmatching */
 }
 
 /* 00000F54-00000F64       .text initDrop__9daSTBox_cFi */
 void daSTBox_c::initDrop(int) {
-    /* Nonmatching */
+    gravity = -4.0f;
 }
 
+static const f32 l_crane_offset[] = {80.0f, 125.0f, 125.0f};
+
 /* 00000F64-00001218       .text actWait__9daSTBox_cFi */
-void daSTBox_c::actWait(int) {
+BOOL daSTBox_c::actWait(int) {
     /* Nonmatching */
+    fopAc_ac_c* player = *reinterpret_cast<fopAc_ac_c**>(reinterpret_cast<u8*>(&g_dComIfG_gameInfo) + 0x5b54);
+    JUT_ASSERT(0x32B, player != 0);
+
+    cXyz* crane_p = *reinterpret_cast<cXyz**>(reinterpret_cast<u8*>(player) + 0x434);
+    JUT_ASSERT(0x332, crane_p != 0);
+
+    cXyz water_check = *crane_p;
+    water_check.y += 5000.0f;
+    f32 water_y = getWaterY(water_check);
+
+    current.angle.y = player->shape_angle.y;
+
+    cXyz crane_pos = *crane_p;
+    crane_pos.y -= l_crane_offset[mType];
+    current.pos = crane_pos;
+    attention_info.position = current.pos;
+
+    if ((mType == 1 || mType == 2) && current.pos.y > water_y && !mBgmStarted) {
+        mDoAud_subBgmStart(JA_BGM_BGN_GET_BOX);
+        mBgmStarted = TRUE;
+    }
+
+    if (!mRippleEmitted) {
+        field_0x318 = current.pos;
+        field_0x318.y += m_rope_max_length;
+        field_0x318.y = dBgS_GetWaterHeight(field_0x318);
+        if (current.pos.y > field_0x318.y - 10.0f) {
+            dComIfGp_particle_set(dPa_name::ID_IT_JN_HAMON01, &field_0x318, NULL, &scale, 0xFF, &mRippleCb);
+            mRippleCb.setRate(12.0f);
+            mRippleEmitted = TRUE;
+        }
+    }
+
+    if ((mType == 1 || mType == 2) && mItemPID == fpcM_ERROR_PROCESS_ID_e) {
+        mItemPID = fopAcM_createItemForTrBoxDemo(&current.pos, mItemNo, -1, dStage_roomControl_c::mStayNo, NULL, NULL);
+        if (mItemPID != fpcM_ERROR_PROCESS_ID_e) {
+            *reinterpret_cast<fpc_ProcID*>(reinterpret_cast<u8*>(&g_dComIfG_gameInfo) + 0x52a8) = mItemPID;
+        }
+    }
+
+    return FALSE;
 }
 
 /* 00001218-00001344       .text actDrop__9daSTBox_cFi */
-void daSTBox_c::actDrop(int) {
-    /* Nonmatching */
+BOOL daSTBox_c::actDrop(int) {
+    fopAcM_posMoveF(this, NULL);
+
+    if (current.pos.y < getWaterY(current.pos) - 50.0f) {
+        return TRUE;
+    }
+
+    if (current.pos.y < getWaterY(current.pos)) {
+        if (!mSplashEmitted) {
+            fopAcM_seStart(this, 0x6919, 0);
+            fopKyM_createWpillar(&current.pos, 0.8f, 1.0f, 0);
+            mSplashEmitted = TRUE;
+        }
+
+        mRippleCb.end();
+    }
+
+    return FALSE;
 }
 
 /* 00001344-000013AC       .text actWait02__9daSTBox_cFi */
-void daSTBox_c::actWait02(int) {
-    /* Nonmatching */
+BOOL daSTBox_c::actWait02(int) {
+    fopAc_ac_c* player = *reinterpret_cast<fopAc_ac_c**>(reinterpret_cast<u8*>(&g_dComIfG_gameInfo) + 0x5b54);
+    cXyz* crane_pos = *reinterpret_cast<cXyz**>(reinterpret_cast<u8*>(player) + 0x434);
+    if (crane_pos != NULL) {
+        cXyz pos = *crane_pos;
+        pos.y -= l_crane_offset[mType];
+        current.pos = pos;
+    }
+
+    return FALSE;
 }
 
 /* 000013AC-000013B4       .text actWaitGetItem__9daSTBox_cFi */
-void daSTBox_c::actWaitGetItem(int) {
-    /* Nonmatching */
+BOOL daSTBox_c::actWaitGetItem(int) {
+    return TRUE;
 }
 
 /* 000013B4-000013BC       .text actWaitDummy__9daSTBox_cFi */
-void daSTBox_c::actWaitDummy(int) {
-    /* Nonmatching */
+BOOL daSTBox_c::actWaitDummy(int) {
+    return TRUE;
 }
 
 /* 000013BC-000013DC       .text daSTBox_Create__FPv */
@@ -122,8 +541,13 @@ static BOOL daSTBox_Delete(void* i_this) {
 }
 
 /* 00001400-0000146C       .text daSTBox_Draw__FPv */
-static BOOL daSTBox_Draw(void*) {
-    /* Nonmatching */
+static BOOL daSTBox_Draw(void* i_this) {
+    daSTBox_c* a_this = (daSTBox_c*)i_this;
+    dKy_tevstr_c* tevStr;
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &a_this->current.pos, tevStr = &a_this->tevStr);
+    g_env_light.setLightTevColorType(a_this->mpModel, tevStr);
+    mDoExt_modelUpdateDL(a_this->mpModel);
+    return TRUE;
 }
 
 /* 0000146C-00001490       .text daSTBox_Execute__FPv */
