@@ -102,8 +102,22 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
 }
 
 /* 000002F4-00000570       .text draw__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
-void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter*) {
+void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
     /* Nonmatching */
+    uint particleCount = emitter->getParticleNumber();
+    if (particleCount >= 6){
+        if (dPa_control_c::isStatus(1)) {
+            GXSetZMode(GX_FALSE, GX_NEVER, GX_FALSE);
+        }
+        float particleRnd = float(cM_rnd() * particleCount - 1.0f);
+        GXSetCullMode(GX_CULL_NONE);
+        Mtx mtx;
+        PSMTXIdentity(mtx);
+        mtx[1][1] = this->mpDepth;
+        GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
+        GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
+        JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
+    }
 }
 
 /* 00000570-000005D8       .text getWaterY__F4cXyz */
