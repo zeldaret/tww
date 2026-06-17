@@ -1599,7 +1599,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_deku_item"),
     ActorRel(Matching,    "d_a_dk"),
     ActorRel(Matching,    "d_a_dummy"),
-    ActorRel(NonMatching, "d_a_fallrock_tag"),
+    ActorRel(MatchingFor("GZLE01"),    "d_a_fallrock_tag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_fan"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_fganon"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_fgmahou"),
