@@ -5,112 +5,757 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_buoyflag.h"
+#include "d/actor/d_a_sea.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "d/d_kankyo_wether.h"
+#include "JSystem/J3DGraphBase/J3DShape.h"
+#include "JSystem/JUtility/JUTTexture.h"
+#include "SSystem/SComponent/c_math.h"
+#include "dolphin/gx/GX.h"
+
+extern "C" void normalize__4cXyzFv(cXyz*);
+
+namespace daObjBuoyflag {
+namespace {
+const char L_arcname[] = "Cloth";
+struct LAttr_c {
+    f32 m00;
+    f32 m04;
+    f32 m08;
+    f32 m0C;
+    f32 m10;
+    f32 m14;
+    f32 m18;
+    f32 m1C;
+    f32 m20;
+    f32 m24;
+    f32 m28;
+    s16 m2C;
+    s16 m2E;
+    f32 m30;
+    f32 m34;
+    f32 m38;
+};
+const LAttr_c L_attr = {
+    0.5f, -0.03f, 20.0f,
+    0.5f, 0.03f, 0.6f,
+    -8.0f, 0.006f, 0.002f,
+    0.04f, 0.015f, 1000,
+    0, 0.03f, 0.08f, 0.005f,
+};
+}  // namespace
+}  // namespace daObjBuoyflag
+
+cXyz daObjBuoyflag::Packet_c::M_hasi_nrm[11];
+u8 daObjBuoyflag::Packet_c::M_hasi_nrm_flag;
+
+namespace daObjBuoyflag {
+namespace {
+#include "d/actor/d_a_obj_buoyflag_data.inc"
+}
+}
+
+inline bool daObjBuoyflag::Act_c::_execute() {
+    typedef bool (Act_c::*ModeFunc)();
+    static ModeFunc mode_proc[] = {
+        &Act_c::mode_afl,
+        &Act_c::mode_jumpToSea,
+    };
+
+    if (!(this->*mode_proc[m1124])()) {
+        fopAcM_delete(this);
+    } else {
+        m1128 = false;
+        PSMTXCopy(m1090, m10C0);
+    }
+    return true;
+}
 
 /* 000000EC-000001BC       .text hasi_nrm_init__Q213daObjBuoyflag8Packet_cFv */
 void daObjBuoyflag::Packet_c::hasi_nrm_init() {
     /* Nonmatching */
+    if (M_hasi_nrm_flag == 0) {
+        M_hasi_nrm_flag = 1;
+
+        Vec* pos = (Vec*)Khasi::l_pos;
+        for (s32 i = 0; i < 10; i++) {
+            f32 z = pos->z;
+            f32 x = pos->x;
+            M_hasi_nrm[i].x = x;
+            M_hasi_nrm[i].y = 0.0f;
+            M_hasi_nrm[i].z = z;
+            cXyz sp08;
+            normalize__4cXyzFv(&sp08);
+            pos++;
+        }
+
+        M_hasi_nrm[10].x = 0.0f;
+        M_hasi_nrm[10].y = 1.0f;
+        M_hasi_nrm[10].z = 0.0f;
+    }
 }
 
 /* 000001F8-00000744       .text draw_hata__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
-void daObjBuoyflag::Packet_c::draw_hata(daObjBuoyflag::Act_c*) {
+void daObjBuoyflag::Packet_c::draw_hata(daObjBuoyflag::Act_c* actor) {
     /* Nonmatching */
+    dKy_tevstr_c* tevstr = &actor->tevStr;
+    DrawVtx_c* draw_vtx = &mDrawVtx[m0B8C];
+    u8* tex = &Khata::l_k_hata01TEX[actor->prm_get_texture() << 11];
+
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+    dKy_GxFog_tevstr_set(tevstr);
+    dKy_setLight_mine(tevstr);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXSetArray(GX_VA_POS, draw_vtx->m000, 0xC);
+    GXSetArray(GX_VA_NRM, draw_vtx->m1A4, 0xC);
+    GXSetArray(GX_VA_TEX0, Khata::l_texCoord, 0x8);
+
+    GXTexObj tex_obj;
+    GXInitTexObj(&tex_obj, tex, 0x40, 0x40, GX_TF_CMPR, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&tex_obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&tex_obj, GX_TEXMAP0);
+
+    ResTIMG* timg = (ResTIMG*)dComIfG_getObjectRes(L_arcname, 3);
+    u8* image = (u8*)timg + timg->imageOffset;
+    GXInitTexObj(&tex_obj, image, timg->width, timg->height, (GXTexFmt)timg->format,
+                 (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT, timg->mipmapCount > 1);
+    GXInitTexObjLOD(&tex_obj, (GXTexFilter)timg->minFilter, (GXTexFilter)timg->magFilter,
+                    0.125f * timg->minLOD, 0.125f * timg->maxLOD, 0.01f * timg->LODBias,
+                    timg->biasClamp, timg->doEdgeLOD, (GXAnisotropy)timg->maxAnisotropy);
+    GXLoadTexObj(&tex_obj, GX_TEXMAP1);
+
+    GXSetNumChans(1);
+    u8 stage_count;
+    u8 light_mask;
+    if (tevstr->mColorK1.a != 0) {
+        stage_count = 3;
+        light_mask = 3;
+    } else {
+        stage_count = 2;
+        light_mask = 1;
+    }
+    GXSetChanCtrl(GX_COLOR0, GX_ENABLE, GX_SRC_REG, GX_SRC_REG, light_mask, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+
+    GXSetNumTevStages(stage_count);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    if (stage_count == 3) {
+        GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP2);
+        GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_TEXC, GX_CC_CPREV);
+        GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+        GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    }
+
+    GXSetTevColorS10(GX_TEVREG0, tevstr->mColorC0);
+    GXSetTevColor(GX_TEVREG1, tevstr->mColorK0);
+    GXSetTevColor(GX_TEVREG2, tevstr->mColorK1);
+    GXCallDisplayList(Khata::l_matDL, 0x20);
+    GXLoadPosMtxImm(m0C20, 0);
+    GXLoadNrmMtxImm(m0C20, 0);
+    GXSetCullMode(GX_CULL_BACK);
+    GXCallDisplayList(Khata::l_Khata_00DL, 0xE0);
+    GXSetCullMode(GX_CULL_FRONT);
+    GXSetArray(GX_VA_NRM, draw_vtx->m348, 0xC);
+    GXCallDisplayList(Khata::l_Khata_00DL, 0xE0);
 }
 
 /* 00000744-00000C4C       .text draw_hasi__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
-void daObjBuoyflag::Packet_c::draw_hasi(daObjBuoyflag::Act_c*) {
+void daObjBuoyflag::Packet_c::draw_hasi(daObjBuoyflag::Act_c* actor) {
     /* Nonmatching */
+    dKy_tevstr_c* tevstr = &actor->tevStr;
+
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+    dKy_GxFog_tevstr_set(tevstr);
+    dKy_setLight_mine(tevstr);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXSetArray(GX_VA_POS, Khasi::l_pos, 0xC);
+    GXSetArray(GX_VA_NRM, M_hasi_nrm, 0xC);
+    GXSetArray(GX_VA_TEX0, Khasi::l_texCoord, 0x8);
+
+    GXTexObj tex_obj;
+    GXInitTexObj(&tex_obj, Khasi::l_k_taru02TEX, 0x20, 0x40, GX_TF_CMPR, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&tex_obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&tex_obj, GX_TEXMAP0);
+
+    ResTIMG* timg = (ResTIMG*)dComIfG_getObjectRes(L_arcname, 3);
+    u8* image = (u8*)timg + timg->imageOffset;
+    GXInitTexObj(&tex_obj, image, timg->width, timg->height, (GXTexFmt)timg->format,
+                 (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT, timg->mipmapCount > 1);
+    GXInitTexObjLOD(&tex_obj, (GXTexFilter)timg->minFilter, (GXTexFilter)timg->magFilter,
+                    0.125f * timg->minLOD, 0.125f * timg->maxLOD, 0.01f * timg->LODBias,
+                    timg->biasClamp, timg->doEdgeLOD, (GXAnisotropy)timg->maxAnisotropy);
+    GXLoadTexObj(&tex_obj, GX_TEXMAP1);
+
+    GXSetNumChans(1);
+    u8 stage_count;
+    u8 light_mask;
+    if (tevstr->mColorK1.a != 0) {
+        stage_count = 3;
+        light_mask = 3;
+    } else {
+        stage_count = 2;
+        light_mask = 1;
+    }
+    GXSetChanCtrl(GX_COLOR0, GX_ENABLE, GX_SRC_REG, GX_SRC_REG, light_mask, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+
+    GXSetNumTevStages(stage_count);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    if (stage_count == 3) {
+        GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP2);
+        GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_TEXC, GX_CC_CPREV);
+        GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+        GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    }
+
+    GXSetTevColorS10(GX_TEVREG0, tevstr->mColorC0);
+    GXSetTevColor(GX_TEVREG1, tevstr->mColorK0);
+    GXSetTevColor(GX_TEVREG2, tevstr->mColorK1);
+    GXCallDisplayList(Khata::l_matDL, 0x20);
+    GXLoadPosMtxImm(m0BF0, 0);
+    GXLoadNrmMtxImm(m0BF0, 0);
+    GXSetCullMode(GX_CULL_BACK);
+    GXCallDisplayList(Khasi::l_Khasi_00DL, 0xA0);
 }
 
 /* 00000C4C-00000CB8       .text draw__Q213daObjBuoyflag8Packet_cFv */
 void daObjBuoyflag::Packet_c::draw() {
-    /* Nonmatching */
+    Act_c* actor = (Act_c*)getUserArea();
+    if (actor->attr_type()->m05 != 0) {
+        draw_hata(actor);
+    }
+    draw_hasi(actor);
+    J3DShape::sOldVcdVatCmd = NULL;
 }
 
 /* 00000CB8-00000F7C       .text init__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
-void daObjBuoyflag::Packet_c::init(daObjBuoyflag::Act_c*) {
+void daObjBuoyflag::Packet_c::init(daObjBuoyflag::Act_c* actor) {
     /* Nonmatching */
+    static cXyz nrm(0.0f, 0.0f, -1.0f);
+
+    for (s32 buf = 0; buf < 2; buf++) {
+        DrawVtx_c* draw_vtx = &mDrawVtx[buf];
+        Vec* pos = (Vec*)Khata::l_pos;
+        for (s32 y = 0; y < 5; y++) {
+            for (s32 x = 0; x < 7; x++) {
+                s32 idx = y * 7 + x;
+                draw_vtx->m000[idx] = pos[idx];
+                draw_vtx->m1A4[idx] = cXyz::BaseZ;
+                draw_vtx->m348[idx] = nrm;
+            }
+        }
+    }
+
+    m0B8C = 0;
+    for (s32 y = 0; y < 5; y++) {
+        for (s32 x = 0; x < 7; x++) {
+            m09E8.m000[y * 7 + x] = cXyz::Zero;
+        }
+    }
+
+    m0C68[0] = cM_rndFX(32768.0f);
+    m0C68[1] = cM_rndFX(32768.0f);
+    m0C68[2] = cM_rndFX(32768.0f);
+    m0C68[3] = cM_rndFX(32768.0f);
+    m0C68[4] = cM_rndFX(32768.0f);
+    m0C68[5] = cM_rndFX(32768.0f);
+    m0C68[6] = cM_rndFX(32768.0f);
+    m0C68[7] = cM_rndFX(32768.0f);
+    m0C68[8] = cM_rndFX(32768.0f);
+    m0C68[9] = cM_rndFX(32768.0f);
+    m0C68[10] = cM_rndFX(32768.0f);
+    m0C68[11] = cM_rndFX(32768.0f);
+
+    calc(actor);
 }
 
 /* 00000F7C-000014AC       .text calc_wind_base__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
-void daObjBuoyflag::Packet_c::calc_wind_base(daObjBuoyflag::Act_c*) {
+void daObjBuoyflag::Packet_c::calc_wind_base(daObjBuoyflag::Act_c* actor) {
     /* Nonmatching */
+    DrawVtx_c* draw_vtx = &mDrawVtx[m0B8C ^ 1];
+
+    m0C68[0] += 0x0578;
+    m0C68[1] += 0x157C;
+    m0C68[2] += 0x0690;
+    m0C68[3] += 0x1DE2;
+    m0C68[4] += 0x076C;
+    m0C68[5] += 0x1964;
+
+    if (cM_rnd() < 0.05f) {
+        m0C68[0] += 0x07D0;
+        m0C68[1] += 0x07D0;
+        m0C68[2] += 0x07D0;
+        m0C68[3] += 0x07D0;
+        m0C68[4] += 0x07D0;
+        m0C68[5] += 0x07D0;
+    }
+
+    m0C68[6] += 0x01AE;
+    m0C68[7] += 0x05DC;
+    m0C68[8] += 0x1F40;
+    m0C68[9] += 0x03E8;
+    m0C68[10] += 0x0C8A;
+    m0C68[11] += 0x223D;
+
+    s16 rot_x = 4096.0f * cM_ssin(m0C68[0]) + 1024.0f * cM_ssin(m0C68[1]);
+    s16 rot_y = 4608.0f * cM_ssin(m0C68[2]) + 1536.0f * cM_ssin(m0C68[3]);
+    s16 rot_z = 5632.0f * cM_ssin(m0C68[4]) + 2048.0f * cM_ssin(m0C68[5]);
+
+    f32 sin_7 = cM_ssin(m0C68[7]);
+    f32 sin_6 = cM_ssin(m0C68[6]);
+    f32 sin_8 = cM_ssin(m0C68[8]);
+    f32 wind_pow = cM_rndF(0.2f);
+    f32 wind_base = 0.15f * sin_8;
+    wind_base += 0.5f * sin_6;
+    wind_base += 0.35f * sin_7;
+    wind_base += 1.0f;
+    wind_base *= 0.35f;
+    wind_base += 0.2f;
+    wind_pow += wind_base;
+
+    cXyz wind = dKyw_get_AllWind_vecpow(&draw_vtx->m000[0]);
+    wind *= L_attr.m00 * wind_pow * L_attr.m08;
+
+    cXyz move;
+    move.x = 0.2f * (actor->m10C0[0][3] - actor->m1090[0][3]);
+    move.y = 0.2f * (actor->m10C0[1][3] - actor->m1090[1][3]);
+    move.z = 0.2f * (actor->m10C0[2][3] - actor->m1090[2][3]);
+    f32 move_sq = PSVECSquareMag(&move);
+    if (move_sq > 625.0f) {
+        f32 move_len = std::sqrtf(move_sq);
+        move *= 1.0f / move_len;
+        move *= 25.0f;
+    }
+
+    wind += move;
+
+    PSMTXCopy(actor->m1090, mDoMtx_stack_c::get());
+    mDoMtx_stack_c::inverse();
+    PSMTXMultVecSR(mDoMtx_stack_c::get(), &cXyz::BaseY, &m0C50);
+
+    mDoMtx_stack_c::ZXYrotM((s16)rot_x, (s16)rot_y, (s16)rot_z);
+    PSMTXMultVecSR(mDoMtx_stack_c::get(), &wind, &m0C5C);
+
+    f32 wind_len = PSVECSquareMag(&m0C5C);
+    if (wind_len < L_attr.m14 * L_attr.m14) {
+        if (wind_len < 0.001f) {
+            PSMTXMultVecSR(mDoMtx_stack_c::get(), &cXyz::BaseZ, &m0C5C);
+            m0C5C *= L_attr.m14;
+        } else {
+            m0C5C *= L_attr.m14 / std::sqrtf(wind_len);
+        }
+    }
 }
 
 /* 000014AC-000015FC       .text calc_pos_spring_near__Q213daObjBuoyflag8Packet_cFPC4cXyzPC4cXyzff */
-void daObjBuoyflag::Packet_c::calc_pos_spring_near(const cXyz*, const cXyz*, float, float) {
-    /* Nonmatching */
+void daObjBuoyflag::Packet_c::calc_pos_spring_near(const cXyz* pos_a, const cXyz* pos_b, float length, float strength) {
+    cXyz delta = *pos_a - *pos_b;
+    f32 dist = std::sqrtf(PSVECSquareMag(&delta));
+    if (dist > 0.01f) {
+        m0C80 += (delta * (dist - length) * -strength) / dist;
+    }
 }
 
 /* 000015FC-00001BC0       .text calc_pos__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
-void daObjBuoyflag::Packet_c::calc_pos(daObjBuoyflag::Act_c*) {
+void daObjBuoyflag::Packet_c::calc_pos(daObjBuoyflag::Act_c* actor) {
     /* Nonmatching */
+    DrawVtx_c* dst = &mDrawVtx[m0B8C];
+    DrawVtx_c* src = &mDrawVtx[m0B8C ^ 1];
+    calc_wind_base(actor);
+
+    for (s32 y = 0, y_offset = 0; y < 5; y++, y_offset += 0x54) {
+        f32 vertical_weight = 0.25f * (4 - y);
+        f32 y_phase = 0.25f * y - 0.5f;
+        u8* src_row = (u8*)src + y_offset;
+        u8* dst_row = (u8*)dst + y_offset;
+
+        for (s32 x = 0, x_offset = 0; x < 7; x++, x_offset += 0xC) {
+            if ((y == 0 && x == 0) || (y == 4 && x == 0)) {
+                continue;
+            }
+
+            m0C80 = cXyz::Zero;
+
+            cXyz* pos = (cXyz*)(src_row + x_offset);
+            if (x > 0) {
+                calc_pos_spring_near(pos, (cXyz*)(src_row + (x - 1) * 0xC), 12.0f, L_attr.m00);
+            }
+            if (x < 6) {
+                calc_pos_spring_near(pos, (cXyz*)(src_row + (x + 1) * 0xC), 12.0f, L_attr.m00);
+            }
+            if (y > 0) {
+                calc_pos_spring_near(pos, (cXyz*)((u8*)src + (y - 1) * 0x54 + x_offset), 12.0f,
+                                     0.8f * L_attr.m00);
+            }
+            if (y < 4) {
+                calc_pos_spring_near(pos, (cXyz*)((u8*)src + (y + 1) * 0x54 + x_offset), 12.0f,
+                                     L_attr.m00);
+            }
+
+            f32 horizontal_weight = (1.0f / 6.0f) * x;
+            m0C80 += m0C50 * (0.5f * ((vertical_weight + horizontal_weight) * L_attr.m04));
+
+            cXyz* nrm = (cXyz*)((u8*)src + y_offset + x_offset + 0x1A4);
+            f32 phase_len = std::sqrtf(y_phase * y_phase + horizontal_weight * horizontal_weight);
+            f32 phase = 32768.0f * phase_len;
+            f32 wave_a = cM_ssin(m0C68[11] + phase);
+            f32 wave_b = cM_ssin(m0C68[9] + phase);
+            f32 wave_c = cM_ssin(m0C68[10] + phase);
+            f32 wind_wave = 1.0f + (1.0f / 3.0f) * (wave_a + wave_b + wave_c);
+            f32 dot = PSVECDotProduct(nrm, &m0C5C);
+            m0C80 += *nrm * (dot * (wind_wave * L_attr.m14) * (1.0f / L_attr.m08));
+
+            cXyz* speed = (cXyz*)((u8*)&m09E8 + y_offset + x_offset);
+            *speed += m0C80;
+
+            f32 damping = -((0.6f + 0.4f * horizontal_weight) * L_attr.m10);
+            cXyz wind = m0C5C;
+            f32 scale_z = 0.9f + cM_rndF(0.2f);
+            f32 scale_y = 0.9f + cM_rndF(0.2f);
+            f32 scale_x = 0.9f + cM_rndF(0.2f);
+            wind.x *= scale_x;
+            wind.y *= scale_y;
+            wind.z *= scale_z;
+
+            cXyz delta = *speed - wind;
+            *speed += delta * damping;
+
+            *(cXyz*)(dst_row + x_offset) = *pos + *speed;
+        }
+    }
 }
 
 /* 00001BC0-000020E4       .text calc_nrm__Q213daObjBuoyflag8Packet_cFv */
 void daObjBuoyflag::Packet_c::calc_nrm() {
     /* Nonmatching */
+    DrawVtx_c* dst = &mDrawVtx[m0B8C];
+    DrawVtx_c* src = &mDrawVtx[m0B8C ^ 1];
+
+    for (s32 y = 0, y_offset = 0; y < 5; y++, y_offset += 0x54) {
+        u8* row = (u8*)src + y_offset;
+        u8* next_row = (u8*)src + (y + 1) * 0x54;
+        u8* prev_row = (u8*)src + (y - 1) * 0x54;
+        u8* dst_row = (u8*)dst + y_offset;
+        for (s32 x = 0, x_offset = 0; x < 7; x++, x_offset += 0xC) {
+            cXyz* current = (cXyz*)(row + x_offset);
+            cXyz* next_y = (cXyz*)(next_row + x_offset);
+            cXyz* prev_y = (cXyz*)(prev_row + x_offset);
+            cXyz* next_x = (cXyz*)(row + (x + 1) * 0xC);
+            cXyz* prev_x = (cXyz*)(row + (x - 1) * 0xC);
+            cXyz vertical;
+            cXyz horizontal;
+
+            if (y == 0) {
+                vertical = *next_y - *current;
+            } else if (y == 4) {
+                vertical = *current - *prev_y;
+            } else {
+                cXyz prev_delta = *current - *prev_y;
+                cXyz next_delta = *next_y - *current;
+                cXyz pos_a = *prev_y * 0.5747500061988831f;
+                pos_a += prev_delta * 0.35887500643730164f;
+                pos_a += next_delta * 0.11137499660253525f;
+                pos_a += *next_y * 0.42524996399879456f;
+                cXyz pos_b = *prev_y * 0.42524996399879456f;
+                pos_b += prev_delta * 0.38362500071525574f;
+                pos_b += next_delta * 0.13612499833106995f;
+                pos_b += *next_y * 0.5747500061988831f;
+                vertical = pos_b - pos_a;
+            }
+
+            if (x == 0) {
+                horizontal = *next_x - *current;
+            } else if (x == 6) {
+                horizontal = *current - *prev_x;
+            } else {
+                cXyz prev_delta = *current - *prev_x;
+                cXyz next_delta = *next_x - *current;
+                cXyz pos_a = *prev_x * 0.5747500061988831f;
+                pos_a += prev_delta * 0.35887500643730164f;
+                pos_a += next_delta * 0.11137499660253525f;
+                pos_a += *next_x * 0.42524996399879456f;
+                cXyz pos_b = *prev_x * 0.42524996399879456f;
+                pos_b += prev_delta * 0.38362500071525574f;
+                pos_b += next_delta * 0.13612499833106995f;
+                pos_b += *next_x * 0.5747500061988831f;
+                horizontal = pos_b - pos_a;
+            }
+
+            cXyz nrm = horizontal.outprod(vertical);
+            if (nrm.normalizeRS()) {
+                cXyz* out = (cXyz*)(dst_row + x_offset);
+                out[35] = nrm;
+                out[70] = nrm;
+                PSVECScale(&out[70], &out[70], -1.0f);
+            }
+        }
+    }
 }
 
 /* 000020E4-0000220C       .text calc__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
-void daObjBuoyflag::Packet_c::calc(daObjBuoyflag::Act_c*) {
-    /* Nonmatching */
+void daObjBuoyflag::Packet_c::calc(daObjBuoyflag::Act_c* actor) {
+    PSMTXCopy(actor->m1090, mDoMtx_stack_c::get());
+    mDoMtx_stack_c::scaleM(actor->scale.x, actor->scale.y, actor->scale.z);
+    PSMTXCopy(mDoMtx_stack_c::get(), m0B90);
+
+    if (actor->attr_type()->m05 != 0) {
+        static cXyz offset(0.0f, 60.0f, 0.0f);
+        PSMTXCopy(actor->m1090, mDoMtx_stack_c::get());
+        mDoMtx_stack_c::scaleM(actor->scale.x, actor->scale.y, actor->scale.z);
+        mDoMtx_stack_c::transM(offset.x, offset.y, offset.z);
+        PSMTXCopy(mDoMtx_stack_c::get(), m0BC0);
+        m0B8C ^= 1;
+        calc_pos(actor);
+        calc_nrm();
+    }
 }
 
 /* 0000220C-00002294       .text update__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
-void daObjBuoyflag::Packet_c::update(daObjBuoyflag::Act_c*) {
-    /* Nonmatching */
+void daObjBuoyflag::Packet_c::update(daObjBuoyflag::Act_c* actor) {
+    PSMTXConcat(j3dSys.getViewMtx(), m0B90, m0BF0);
+    if (actor->attr_type()->m05 != 0) {
+        PSMTXConcat(j3dSys.getViewMtx(), m0BC0, m0C20);
+    }
+    j3dSys.getDrawBuffer(0)->entryImm(this, 0);
 }
 
 /* 00002294-000022BC       .text prm_get_texture__Q213daObjBuoyflag5Act_cCFv */
-void daObjBuoyflag::Act_c::prm_get_texture() const {
-    /* Nonmatching */
+daObjBuoyflag::Texture_e daObjBuoyflag::Act_c::prm_get_texture() const {
+    return (Texture_e)daObj::PrmAbstract<Prm_e>(this, PRM_TEXTURE_W, PRM_TEXTURE_S);
 }
 
 /* 000022BC-000022D4       .text attr_type__Q213daObjBuoyflag5Act_cCFv */
-void daObjBuoyflag::Act_c::attr_type() const {
-    /* Nonmatching */
+const daObjBuoyflag::Act_c::AttrType_c* daObjBuoyflag::Act_c::attr_type() const {
+    return &M_attr_type[m1120];
 }
 
 /* 000022D4-0000234C       .text mtx_init__Q213daObjBuoyflag5Act_cFv */
 void daObjBuoyflag::Act_c::mtx_init() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    PSMTXCopy(mDoMtx_stack_c::get(), m1090);
+    PSMTXCopy(mDoMtx_stack_c::get(), m10C0);
 }
 
+const dCcD_SrcCyl daObjBuoyflag::Act_c::M_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0xFF1DFEFF,
+        /* SrcObjTg  SPrm    */ 0x9,
+        /* SrcObjCo  SPrm    */ 0x79,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ dCcG_TgHitMark_None_e,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 1,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 12.0f, 0.0f},
+        /* Radius */ 5.0f,
+        /* Height */ 88.0f,
+    }},
+};
+
+const daObjBuoyflag::Act_c::AttrType_c daObjBuoyflag::Act_c::M_attr_type[] = {
+    {1.0f, 1, 1, 0, 0},
+    {4.0f, 0, 1, 0, 0},
+    {5.76f, 0, 1, 0, 0},
+    {2.0f, 0, 0, 0, 0},
+};
+
 /* 0000234C-000024B0       .text mode_afl__Q213daObjBuoyflag5Act_cFv */
-void daObjBuoyflag::Act_c::mode_afl() {
+bool daObjBuoyflag::Act_c::mode_afl() {
     /* Nonmatching */
+    current.pos.x = m1090[0][3];
+    current.pos.y = m1090[1][3];
+    current.pos.z = m1090[2][3];
+    mPacket.calc(this);
+    fopAcM_setCullSizeSphere(this, 0.0f, 50.0f * scale.y, 0.0f, 90.0f * scale.x);
+
+    if (M_attr_type[m1120].m04 != 0) {
+        f32 radius = scale.x * M_cyl_src.mCylAttr.mCyl.mRadius;
+        f32 height = scale.y * M_cyl_src.mCylAttr.mCyl.mHeight;
+        cXyz center = M_cyl_src.mCylAttr.mCyl.mCenter;
+        center.x *= scale.x;
+        center.y *= scale.y;
+        center.z *= scale.z;
+        center += current.pos;
+        mCyl.SetC(center);
+        mCyl.SetR(radius);
+        mCyl.SetH(height);
+        dComIfG_Ccsp()->Set(&mCyl);
+    }
+    return true;
 }
 
 /* 000024B0-0000278C       .text mode_jumpToSea__Q213daObjBuoyflag5Act_cFv */
-void daObjBuoyflag::Act_c::mode_jumpToSea() {
+bool daObjBuoyflag::Act_c::mode_jumpToSea() {
     /* Nonmatching */
+    if (m1128) {
+        gravity = L_attr.m18;
+        m112A = 0;
+        m112C = L_attr.m2C;
+
+        s16 rot_y = cM_rndFX(32768.0f);
+        s16 rot_x = cM_rndFX(4000.0f);
+        mDoMtx_stack_c::ZXYrotS(rot_x, rot_y, 0);
+        PSMTXMultVecSR(mDoMtx_stack_c::get(), &cXyz::BaseZ, &m1130);
+    }
+
+    f32 wave_y = daSea_calcWave(current.pos.x, current.pos.z);
+    if (current.pos.y < wave_y - 180.0f * scale.y) {
+        return false;
+    }
+
+    if (current.pos.y > wave_y) {
+        m112C -= (f32)m112A * L_attr.m38;
+        m112C *= 1.0f - L_attr.m30;
+        s32 delta = (s16)m112C;
+        m112A += delta;
+        daObj::posMoveF_stream(this, NULL, &cXyz::Zero, L_attr.m1C, L_attr.m20);
+    } else {
+        m112C -= (f32)m112A * L_attr.m38;
+        m112C *= 1.0f - L_attr.m34;
+        s32 delta = (s16)m112C;
+        m112A += delta;
+        daObj::posMoveF_stream(this, NULL, &cXyz::Zero, L_attr.m24, L_attr.m28);
+    }
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::transM(0.0f, 60.0f, 0.0f);
+    mDoMtx_quatStack_c::rotAxisRadS(&m1130, cM_s2rad(m112A));
+    mDoMtx_stack_c::quatM(mDoMtx_quatStack_c::get());
+    PSMTXConcat(mDoMtx_stack_c::get(), m10F0, mDoMtx_stack_c::get());
+    mDoMtx_stack_c::transM(0.0f, -60.0f, 0.0f);
+    PSMTXCopy(mDoMtx_stack_c::get(), m1090);
+    mPacket.calc(this);
+    return true;
 }
 
 namespace daObjBuoyflag {
 namespace {
 /* 0000278C-000027AC       .text Mthd_Create__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
+cPhs_State Mthd_Create(void* i_this) {
+    return ((Act_c*)i_this)->_create();
+}
+}; // namespace
+
+inline cPhs_State Act_c::_create() {
     /* Nonmatching */
+    fopAcM_SetupActor(this, Act_c);
+
+    m1120 = prm_get_type();
+    cPhs_State phase = dComIfG_resLoad(&mPhase, L_arcname);
+    if (phase == cPhs_COMPLEATE_e) {
+        f32 attr_scale = M_attr_type[m1120].mScale;
+        scale.x = attr_scale;
+        scale.y = attr_scale;
+        scale.z = attr_scale;
+        fopAcM_SetMtx(this, m1090);
+        fopAcM_setCullSizeSphere(this, 0.0f, 50.0f, 0.0f, 2000.0f);
+        mtx_init();
+
+        if (prm_get_noCull()) {
+            fopAcM_OffStatus(this, fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e);
+        }
+
+        if (M_attr_type[m1120].m04 != 0) {
+            mStts.Init(0xFF, 0xFF, this);
+            mCyl.Set(M_cyl_src);
+            mCyl.SetStts(&mStts);
+        }
+
+        mPacket.setUserArea((u32)this);
+        mPacket.init(this);
+        m1124 = 0;
+        m1128 = true;
+    }
+
+    return phase;
 }
 
+namespace {
+
 /* 000029FC-00002A2C       .text Mthd_Delete__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    dComIfG_resDelete((request_of_phase_process_class*)((u8*)i_this + 0x290), L_arcname);
+    return TRUE;
 }
 
 /* 00002A2C-00002B04       .text Mthd_Execute__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((Act_c*)i_this)->_execute();
 }
 
 /* 00002B04-00002B54       .text Mthd_Draw__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    Act_c* actor = (Act_c*)i_this;
+    g_env_light.settingTevStruct(0, &actor->current.pos, &actor->tevStr);
+    ((Packet_c*)((u8*)actor + 0x404))->update(actor);
+    return TRUE;
 }
 
 /* 00002B54-00002B5C       .text Mthd_IsDelete__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {
