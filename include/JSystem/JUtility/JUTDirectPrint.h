@@ -4,7 +4,6 @@
 #include "JSystem/JUtility/TColor.h"
 #include "stdarg.h"
 
-
 namespace std {
     // no idea what this is or why it is used instead of va_list
     struct __tag_va_List : __va_list_struct {};

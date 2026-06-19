@@ -3,6 +3,8 @@
 // Translation Unit: J3DModel.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
@@ -253,7 +255,7 @@ s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 flag) {
         J3DShapePacket* shapePacket = getShapePacket(pModelData->getMaterialNodePointer(i)->getShape()->getIndex());
         mpMatPacket[i].setInitShapePacket(shapePacket);
         mpMatPacket[i].addShapePacket(shapePacket);
-        mpMatPacket[i].setTexture(pModelData->getMaterialTable().getTexture());
+        mpMatPacket[i].setTexture(pModelData->getTexture());
         mpMatPacket[i].mDiffFlag = pModelData->getMaterialNodePointer(i)->mDiffFlag;
 
         if (pModelData->getModelDataType() == 1)
@@ -484,14 +486,14 @@ s32 J3DModel::setSkinDeform(J3DSkinDeform* pSkinDeform, u32 flags) {
 /* 802EE5D8-802EE67C       .text calcAnmMtx__8J3DModelFv */
 void J3DModel::calcAnmMtx() {
     j3dSys.setModel(this);
-    j3dSys.setCurrentMtxCalc(getModelData()->getJointTree().getBasicMtxCalc());
+    j3dSys.setCurrentMtxCalc(getModelData()->getBasicMtxCalc());
 
     if (checkFlag(J3DMdlFlag_Unk00002))
         j3dSys.getCurrentMtxCalc()->init(j3dDefaultScale, j3dDefaultMtx);
     else
         j3dSys.getCurrentMtxCalc()->init(mBaseScale, mBaseTransformMtx);
 
-    getModelData()->getJointTree().getBasicMtxCalc()->recursiveCalc(getModelData()->getJointTree().getRootNode());
+    getModelData()->getBasicMtxCalc()->recursiveCalc(getModelData()->getRootNode());
 }
 
 /* 802EE67C-802EE874       .text calcWeightEnvelopeMtx__8J3DModelFv */
@@ -591,8 +593,6 @@ void calcViewBaseMtx(MtxP viewMtx, const Vec& scale, const Mtx& baseMtx, MtxP ds
 
     MTXConcat(viewMtx, mtx, dstMtx);
 }
-
-extern void J3DPSMtxArrayConcat(Mtx, Mtx, Mtx, u32);
 
 /* 802EEBDC-802EEE30       .text calcDrawMtx__8J3DModelFv */
 void J3DModel::calcDrawMtx() {

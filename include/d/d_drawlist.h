@@ -99,6 +99,11 @@ public:
     void init(ResTIMG* pTimg, f32, f32, f32, f32, u8, u8, u8, f32, f32);
     virtual void draw();
 
+    f32 getScaleX() { return mScrollS; }
+    f32* getScaleX_p() { return &mScrollS; }
+    void setScaleX(f32 scale) { mScrollS = scale; }
+    void setScaleY(f32 scale) { mScrollT = scale; }
+
 public:
     /* 0x04 */ GXTexObj mTex;
     /* 0x24 */ f32 mX;
@@ -111,7 +116,7 @@ public:
     /* 0x40 */ u8 mMirrorS;
     /* 0x41 */ u8 mMirrorT;
     /* 0x42 */ u8 mAlpha;
-};
+};  // Size: 0x44
 
 class dDlst_2DM_c : public dDlst_base_c {
 public:
@@ -580,18 +585,18 @@ public:
     void drawXluListInvisible() { drawXluDrawList(mpXluListInvisible); }
     void drawOpaList2D() { drawOpaDrawList(mpOpaList2D); }
 
-    int setSimpleShadow(cXyz* i_pos, f32 groundY, f32 param_2, cXyz* floor_nrm, s16 i_angle,
-                        f32 param_5, GXTexObj* i_tex) {
-        return mShadowControl.setSimple(i_pos, groundY, param_2, floor_nrm, i_angle, param_5,
+    int setSimpleShadow(cXyz* i_pos, f32 groundY, f32 scaleXZ, cXyz* floor_nrm, s16 i_angle,
+                        f32 scaleZ, GXTexObj* i_tex) {
+        return mShadowControl.setSimple(i_pos, groundY, scaleXZ, floor_nrm, i_angle, scaleZ,
                                         i_tex);
     }
-    int setRealShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
+    int setRealShadow(u32 id, s8 shouldFade, J3DModel* pModel, cXyz* pPos, f32 casterSize, f32 heightAboveGround,
                       dKy_tevstr_c* pTevStr) {
-        return mShadowControl.setReal(id, param_2, pModel, pPos, param_5, param_6, pTevStr);
+        return mShadowControl.setReal(id, shouldFade, pModel, pPos, casterSize, heightAboveGround, pTevStr);
     }
-    int setRealShadow2(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
+    int setRealShadow2(u32 id, s8 shouldFade, J3DModel* pModel, cXyz* pPos, f32 casterSize, f32 heightAboveGround,
                        dKy_tevstr_c* pTevStr) {
-        return mShadowControl.setReal2(id, param_2, pModel, pPos, param_5, param_6, pTevStr);
+        return mShadowControl.setReal2(id, shouldFade, pModel, pPos, casterSize, heightAboveGround, pTevStr);
     }
     bool addRealShadow(u32 id, J3DModel* pModel) {
         return mShadowControl.addReal(id, pModel);

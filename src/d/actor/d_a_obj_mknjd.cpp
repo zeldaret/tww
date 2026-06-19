@@ -3,9 +3,10 @@
  * Object - Earth God's Lyric/Wind God's Aria statues
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mknjd.h"
 #include "d/d_s_play.h" // IWYU pragma: keep
-#include "d/res/res_mknjd.h"
+#include "res/Object/MknjD.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_op/f_op_msg.h"
@@ -13,8 +14,6 @@
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JAZelAudio/JAIZelBasic.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_bg_w.h"
@@ -24,7 +23,6 @@
 #include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
 
 #define ACT_SETGOAL 0
 #define ACT_SETANGLE 1
@@ -142,8 +140,8 @@ static BOOL nodeCallBack_Hahen(J3DNode* i_node, int calcTiming) {
 }
 
 /* 000002B0-000002D0       .text daObjMknjD_XyCheckCB__FPvi */
-static s16 daObjMknjD_XyCheckCB(void* i_this, int i_param2) {
-    return static_cast<daObjMknjD::Act_c*>(i_this)->XyCheckCB(i_param2);
+static s16 daObjMknjD_XyCheckCB(void* i_this, int i_itemBtn) {
+    return static_cast<daObjMknjD::Act_c*>(i_this)->XyCheckCB(i_itemBtn);
 }
 
 /* 000002D0-000002F0       .text daObjMknjD_XyEventCB__FPvi */
@@ -153,7 +151,7 @@ static s16 daObjMknjD_XyEventCB(void* i_this, int i_param2) {
 
 /* 000002F0-00000314       .text XyCheckCB__Q210daObjMknjD5Act_cFi */
 s16 daObjMknjD::Act_c::XyCheckCB(int i_itemBtn) {
-    if (dComIfGp_getSelectItem(i_itemBtn) == dItem_WIND_WAKER_e) {
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_WIND_WAKER_e) {
         return TRUE;
     } else {
         return FALSE;
@@ -169,13 +167,13 @@ s16 daObjMknjD::Act_c::XyEventCB(int) {
 BOOL daObjMknjD::Act_c::CreateHeap() {
     J3DModelData* model_data_d;
     if (m043E == true) {
-        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKNJD_BDL_MKNJK);
+        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKNJD_BDL_MKNJK_e);
     }
     else {
-        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKNJD_BDL_MKNJD);
+        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKNJD_BDL_MKNJD_e);
     }
 
-    J3DModelData* model_data_h = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKNJD_BDL_MKNJH);
+    J3DModelData* model_data_h = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKNJD_BDL_MKNJH_e);
 
     JUT_ASSERT(0x123, model_data_d != NULL)
     JUT_ASSERT(0x124, model_data_h != NULL)
@@ -259,9 +257,9 @@ BOOL daObjMknjD::Act_c::Create() {
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[7]);
 
         mMelodyNum = 4;
-        mGiveItemNo = TACT_SONG5;
+        mGiveItemNo = dItemNo_WIND_GODS_ARIA_e;
         eventInfo.setEventName("MKNJD_K_TALK");
-        m0430 = 0x2910;
+        m0430 = dSv_event_flag_c::UNK_2910;
     }
     else {
         mCheckEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[2]);
@@ -270,16 +268,16 @@ BOOL daObjMknjD::Act_c::Create() {
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[6]);
 
         mMelodyNum = 3;
-        mGiveItemNo = TACT_SONG4;
+        mGiveItemNo = dItemNo_EARTH_GODS_LYRIC_e;
         eventInfo.setEventName("MKNJD_D_TALK");
-        m0430 = 0x2920;
+        m0430 = dSv_event_flag_c::UNK_2920;
     }
 
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x3D;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x3D;
     cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_CHECK_e);
 
-    if (!checkItemGet(mGiveItemNo, 1)) {
+    if (!checkItemGet(mGiveItemNo, TRUE)) {
         m043F = 8;
         eventInfo.setXyCheckCB(daObjMknjD_XyCheckCB);
         eventInfo.setXyEventCB(daObjMknjD_XyEventCB);
@@ -297,7 +295,7 @@ BOOL daObjMknjD::Act_c::Create() {
 
 /* 000008E8-00000A84       .text Mthd_Create__Q210daObjMknjD5Act_cFv */
 cPhs_State daObjMknjD::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjMknjD::Act_c);
+    fopAcM_ct(this, daObjMknjD::Act_c);
 
     m043E = prm_get_Type();
 
@@ -311,7 +309,7 @@ cPhs_State daObjMknjD::Act_c::Mthd_Create() {
     else {
         phase_state = dComIfG_resLoad(&mPhs, M_arcname);
         if (phase_state == cPhs_COMPLEATE_e) {
-            phase_state = MoveBGCreate(M_arcname, MKNJD_DZB_MKNJD, NULL, 0x65A0);
+            phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MKNJD_DZB_MKNJD_e, NULL, 0x65A0);
 
             JUT_ASSERT(0x1CA, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e))
         }
@@ -540,7 +538,7 @@ void daObjMknjD::Act_c::privateCut() {
                 case ACT_LESSON: {
                     u16 msgStatus = talk(1);
 
-                    if (msgStatus == fopMsgStts_BOX_CLOSED_e || msgStatus == fopMsgStts_UNK15_e) {
+                    if (msgStatus == fopMsgStts_BOX_CLOSED_e || msgStatus == fopMsgStts_INPUT_e) {
                         doCutEnd = true;
                     }
                     break;
@@ -567,7 +565,7 @@ void daObjMknjD::Act_c::privateCut() {
 
 /* 00001348-00001400       .text manage_friend_draw__10daObjMknjDFi */
 void daObjMknjD::manage_friend_draw(int i_param1) {
-    fopAc_ac_c* judgeResult = fopAcM_SearchByName(PROC_NPC_MD);
+    fopAc_ac_c* judgeResult = fopAcM_SearchByName(fpcNm_NPC_MD_e);
 
     if (judgeResult != NULL) {
         if (i_param1 == 1) {
@@ -577,7 +575,7 @@ void daObjMknjD::manage_friend_draw(int i_param1) {
         }
     }
 
-    judgeResult = fopAcM_SearchByName(PROC_NPC_CB1);
+    judgeResult = fopAcM_SearchByName(fpcNm_NPC_CB1_e);
     
     if (judgeResult != NULL) {
         if (i_param1 == 1) {
@@ -608,7 +606,7 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
     /* Particles and sound effects */
     // After 1 frame, the particles for the statue splitting in half spawn.
     if (mBreakTimer == 1) {
-        mEmitters[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_8185, &current.pos, &current.angle);
+        mEmitters[0] = dComIfGp_particle_set(dPa_name::ID_AK_SN_WGFLASH00, &current.pos, &current.angle);
 
         GXColor emitter2Color;
         emitter2Color.r = tevStr.mColorC0.r;
@@ -616,9 +614,9 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
         emitter2Color.b = tevStr.mColorC0.b;
         emitter2Color.a = tevStr.mColorC0.a;
         
-        mEmitters[1] = dComIfGp_particle_setProjection(dPa_name::ID_SCENE_8186, &current.pos, &current.angle, NULL, 0xFF, NULL, current.roomNo, &tevStr.mColorK0, &emitter2Color);
+        mEmitters[1] = dComIfGp_particle_setProjection(dPa_name::ID_AK_SN_WGROCK00, &current.pos, &current.angle, NULL, 0xFF, NULL, current.roomNo, &tevStr.mColorK0, &emitter2Color);
 
-        mEmitters[2] = dComIfGp_particle_setToon(dPa_name::ID_SCENE_A187, &current.pos, &current.angle, NULL, 0xFF, &mSmokeCBs[2]);
+        mEmitters[2] = dComIfGp_particle_setToon(dPa_name::ID_AK_ST_WGSMOKE00, &current.pos, &current.angle, NULL, 0xFF, &mSmokeCBs[2]);
         mSmokeCBs[2].setRateOff(0);
 
         fopAcM_seStartCurrent(this, JA_SE_OBJ_SAGE_GATE_CREAK, 0);
@@ -651,7 +649,7 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
         mBrokenPos = current.pos;
         mBrokenPos.y += 350.0f;
 
-        mEmitters[3] = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &mBrokenPos, &current.angle, NULL, 0xFF, &mSmokeCBs[3]);
+        mEmitters[3] = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &mBrokenPos, &current.angle, NULL, 0xFF, &mSmokeCBs[3]);
         if (mEmitters[3] != NULL) {
             mEmitters[3]->setVolumeSweep(0.5f);
             mEmitters[3]->setLifeTime(0x2D);
@@ -773,7 +771,7 @@ BOOL daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                         fopAcM_orderChangeEventId(this, mDemoEventIdx, 0, 0xFFFF);
                         dComIfGs_onEventBit(m0430);
 
-                        s16 procMedli = PROC_NPC_MD;
+                        s16 procMedli = fpcNm_NPC_MD_e;
                         void* judgeResult = fopAcIt_Judge(fpcSch_JudgeForPName, &procMedli);
 
                         if (judgeResult != NULL) {
@@ -895,7 +893,7 @@ BOOL daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             privateCut();
 
             if (!dComIfGp_event_runCheck()) {
-                if (checkItemGet(mGiveItemNo, 1)) {
+                if (checkItemGet(mGiveItemNo, TRUE)) {
                     m043F = 0;
                 }
                 else {
@@ -913,7 +911,7 @@ BOOL daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                 player->offPlayerNoDraw();
                 dComIfGp_event_reset();
 
-                if (checkItemGet(mGiveItemNo, 1)) {
+                if (checkItemGet(mGiveItemNo, TRUE)) {
                     m043F = 0;
                 }
                 else {
@@ -967,7 +965,7 @@ void daObjMknjD::setMaterial(J3DMaterial* i_mat, u8 i_alpha) {
                 i_mat->getZMode()->setUpdateEnable(1);
                 i_mat->getZMode()->setCompareEnable(1);
 
-                i_mat->getBlend()->setType(0);
+                i_mat->getBlend()->setType(GX_BM_NONE);
             }
             else {
                 i_mat->setMaterialMode(1);
@@ -975,9 +973,9 @@ void daObjMknjD::setMaterial(J3DMaterial* i_mat, u8 i_alpha) {
                 i_mat->getZMode()->setUpdateEnable(0);
                 i_mat->getZMode()->setCompareEnable(0);
 
-                i_mat->getBlend()->setType(1);
-                i_mat->getBlend()->setSrcFactor(4);
-                i_mat->getBlend()->setDstFactor(5);
+                i_mat->getBlend()->setType(GX_BM_BLEND);
+                i_mat->getBlend()->setSrcFactor(GX_BL_SRC_ALPHA);
+                i_mat->getBlend()->setDstFactor(GX_BL_INV_SRC_ALPHA);
             }
 
             i_mat->getTevKColor(3)->mColor.a = i_alpha;
@@ -1051,18 +1049,18 @@ namespace daObjMknjD {
 }
 
 actor_process_profile_definition g_profile_Obj_MknjD = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_MknjD,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_MknjD_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMknjD::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_MknjD,
+    /* Draw Prio    */ fpcDwPi_Obj_MknjD_e,
     /* Actor SubMtd */ &daObjMknjD::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -25,7 +25,7 @@ namespace daObjBarrel {
 
         struct Attr_c {
             /* 0x00 */ u16 mBdlIdx;
-            /* 0x02 */ u8 m02;
+            /* 0x02 */ u8 mShadowSize;
             /* 0x03 */ bool mEnableCutoff;
             /* 0x04 */ float mAttnH;
             /* 0x08 */ float mNormalGravity;

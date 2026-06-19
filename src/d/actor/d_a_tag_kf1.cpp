@@ -3,9 +3,8 @@
 // Translation Unit: d_a_tag_kf1.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_kf1.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-00000120       .text __ct__15daTag_Kf1_HIO_cFv */
 daTag_Kf1_HIO_c::daTag_Kf1_HIO_c() {
@@ -123,17 +122,17 @@ void daTag_Kf1_c::wait_action1(void*) {
 }
 
 /* 00000BE8-00000BF0       .text _draw__11daTag_Kf1_cFv */
-bool daTag_Kf1_c::_draw() {
+BOOL daTag_Kf1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000BF0-00000C68       .text _execute__11daTag_Kf1_cFv */
-bool daTag_Kf1_c::_execute() {
+BOOL daTag_Kf1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000C68-00000CBC       .text _delete__11daTag_Kf1_cFv */
-bool daTag_Kf1_c::_delete() {
+BOOL daTag_Kf1_c::_delete() {
     /* Nonmatching */
 }
 
@@ -143,28 +142,28 @@ cPhs_State daTag_Kf1_c::_create() {
 }
 
 /* 000010C0-000010E0       .text daTag_Kf1_Create__FP10fopAc_ac_c */
-static cPhs_State daTag_Kf1_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daTag_Kf1_Create(fopAc_ac_c* i_this) {
+    return ((daTag_Kf1_c*)i_this)->_create();
 }
 
 /* 000010E0-00001100       .text daTag_Kf1_Delete__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Delete(daTag_Kf1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Kf1_Delete(daTag_Kf1_c* i_this) {
+    return ((daTag_Kf1_c*)i_this)->_delete();
 }
 
 /* 00001100-00001120       .text daTag_Kf1_Execute__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Execute(daTag_Kf1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Kf1_Execute(daTag_Kf1_c* i_this) {
+    return ((daTag_Kf1_c*)i_this)->_execute();
 }
 
 /* 00001120-00001140       .text daTag_Kf1_Draw__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Draw(daTag_Kf1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Kf1_Draw(daTag_Kf1_c* i_this) {
+    return ((daTag_Kf1_c*)i_this)->_draw();
 }
 
 /* 00001140-00001148       .text daTag_Kf1_IsDelete__FP11daTag_Kf1_c */
 static BOOL daTag_Kf1_IsDelete(daTag_Kf1_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class l_daTag_Kf1_Method = {
@@ -176,18 +175,18 @@ static actor_method_class l_daTag_Kf1_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_KF1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_KF1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_KF1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Kf1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_KF1,
+    /* Draw Prio    */ fpcDwPi_TAG_KF1_e,
     /* Actor SubMtd */ &l_daTag_Kf1_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -3,12 +3,11 @@
 // Translation Unit: d_a_tag_island.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_island.h"
 #include "d/actor/d_a_obj_ikada.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 static fpc_ProcID l_msgId;
 static msg_class* l_msg;
@@ -82,13 +81,13 @@ void daTag_Island_c::makeEvId() {
 /* 00000354-000003D4       .text getArrivalFlag__14daTag_Island_cFv */
 u16 daTag_Island_c::getArrivalFlag() {
     switch (getType()) {
-    case 1: return 0x0902;
-    case 2: return 0x0A20;
-    case 3: return 0x0A02;
-    case 4: return 0x1F04;
-    case 5: return 0x2E04;
-    case 6: return 0x2E02;
-    case 7: return 0x3E10;
+    case 1: return dSv_event_flag_c::UNK_0902;
+    case 2: return dSv_event_flag_c::UNK_0A20;
+    case 3: return dSv_event_flag_c::ENDLESS_NIGHT;
+    case 4: return dSv_event_flag_c::UNK_1F04;
+    case 5: return dSv_event_flag_c::UNK_2E04;
+    case 6: return dSv_event_flag_c::UNK_2E02;
+    case 7: return dSv_event_flag_c::UNK_3E10;
     default: return 0;
     }
 }
@@ -97,11 +96,11 @@ u16 daTag_Island_c::getArrivalFlag() {
 BOOL daTag_Island_c::otherCheck() {
     switch (getType()) {
     case 5:
-        if (!dComIfGs_isEventBit(0x1608))
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1608))
             return FALSE;
         break;
     case 6:
-        if (!dComIfGs_isEventBit(0x1604))
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1604))
             return FALSE;
         break;
     }
@@ -122,7 +121,7 @@ BOOL daTag_Island_c::arrivalTerms() {
     case 7:
         if (!dKy_checkEventNightStop())
             return FALSE;
-        if (!dComIfGs_checkGetItem(dItem_BOMB_BAG_e))
+        if (!dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e))
             return FALSE;
         break;
     }
@@ -153,7 +152,7 @@ void daTag_Island_c::talkInit() {
 
 /* 0000056C-000006AC       .text talk__14daTag_Island_cFv */
 u16 daTag_Island_c::talk() {
-    u16 ret = 0xFF;
+    u16 status = 0xFF;
     
     if (mTalkState == 0) {
         l_msgId = fpcM_ERROR_PROCESS_ID_e;
@@ -170,13 +169,13 @@ u16 daTag_Island_c::talk() {
                     mTalkState = 2;
                 break;
             case 2:
-                ret = l_msg->mStatus;
-                if (ret == fopMsgStts_MSG_DISPLAYED_e) {
+                status = l_msg->mStatus;
+                if (status == fopMsgStts_MSG_DISPLAYED_e) {
                     l_msg->mStatus = next_msgStatus(&mMsg);
                     if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
                         fopMsgM_messageSet(mMsg);
                     }
-                } else if (ret == fopMsgStts_BOX_CLOSED_e) {
+                } else if (status == fopMsgStts_BOX_CLOSED_e) {
                     l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
                     mTalkState = -1;
                 }
@@ -185,7 +184,7 @@ u16 daTag_Island_c::talk() {
         }
     }
 
-    return ret;
+    return status;
 }
 
 /* 000006AC-00000778       .text demoInitTact_Bf__14daTag_Island_cFv */
@@ -207,7 +206,7 @@ void daTag_Island_c::demoInitTact_Bf() {
 
 /* 00000778-000007C8       .text demoProcTact_Bf__14daTag_Island_cFv */
 BOOL daTag_Island_c::demoProcTact_Bf() {
-    if (talk() == fopMsgStts_UNK15_e)
+    if (talk() == fopMsgStts_INPUT_e)
         dComIfGp_evmng_cutEnd(mStaffId);
     return TRUE;
 }
@@ -448,7 +447,7 @@ BOOL daTag_Island_c::actionWait() {
 }
 
 cPhs_State daTag_Island_c::create() {
-    fopAcM_SetupActor(this, daTag_Island_c);
+    fopAcM_ct(this, daTag_Island_c);
     s32 swbit = getSwbit();
     makeEvId();
     eventInfo.setEventId(mEventId);
@@ -529,18 +528,18 @@ static actor_method_class l_daTag_Island_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_ISLAND = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_ISLAND,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_ISLAND_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Island_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_ISLAND,
+    /* Draw Prio    */ fpcDwPi_TAG_ISLAND_e,
     /* Actor SubMtd */ &l_daTag_Island_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

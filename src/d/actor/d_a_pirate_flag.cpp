@@ -3,16 +3,45 @@
 // Translation Unit: d_a_pirate_flag.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_pirate_flag.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_kaizokusen.h"
-#include "d/res/res_cloth.h"
+#include "res/Object/Kaizokusen.h"
+#include "res/Object/Cloth.h"
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/d_kankyo_wether.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
+class daPirate_Flag_HIO_c : public JORReflexible {
+public:
+    daPirate_Flag_HIO_c() {
+        mNo = -1;
+        m06 = 0;
+        m1C = 0.0f;
+        m05 = 0;
+        m07 = 0;
+        m08 = 0x40;
+        m0C = 13.0f;
+        m10 = 7.0f;
+        m14 = -3.5f;
+        m18 = 0.45f;
+    }
+    virtual ~daPirate_Flag_HIO_c() {
+        mNo = -1;
+    }
+
+    void genMessage(JORMContext* ctx) {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 m05;
+    /* 0x06 */ u8 m06;
+    /* 0x07 */ u8 m07;
+    /* 0x08 */ s32 m08;
+    /* 0x0C */ f32 m0C;
+    /* 0x10 */ f32 m10;
+    /* 0x14 */ f32 m14;
+    /* 0x18 */ f32 m18;
+    /* 0x1C */ f32 m1C;
+};
 
 static Vec l_pos[25] = {
     {0.0f, 2200.0f, 0.0f},
@@ -121,14 +150,14 @@ void daPirate_Flag_packet_c::setCorrectNrmAngle(s16 param_0, f32 param_1) {
 
 /* 00000364-000003F0       .text setBackNrm__22daPirate_Flag_packet_cFv */
 void daPirate_Flag_packet_c::setBackNrm() {
-    cXyz* a = getNrm();
-    cXyz* b = m4F4[m87E];
+    cXyz* nrm = mNrm[m87E];
+    cXyz* nrmBack = mBackNrm[m87E];
     for (int i = 0; i < (s32)ARRAY_SIZE(*mNrm); i++) {
-        b->setall(0.0f);
-        *b -= *a;
+        nrmBack->setall(0.0f);
+        *nrmBack -= *nrm;
 
-        a++;
-        b++;
+        nrm++;
+        nrmBack++;
     }
 }
 
@@ -196,18 +225,22 @@ void daPirate_Flag_packet_c::draw() {
 
     dKy_GxFog_tevstr_set(mTevStr);
     dKy_setLight_mine(mTevStr);
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_POS_XY, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0);
-    GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
-    GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+
+    GXSetArray(GX_VA_POS, mPos[m87E], sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, mNrm[m87E], sizeof(cXyz));
     GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(*l_texCoord));
+
     GXTexObj texObj;
-    ResTIMG* timg = static_cast<ResTIMG*>(dComIfG_getObjectRes("Kaizokusen", KAIZOKUSEN_INDEX_BTI_TXA_KAIZOKU_HATA));
+    ResTIMG* timg = static_cast<ResTIMG*>(dComIfG_getObjectRes("Kaizokusen", dRes_INDEX_KAIZOKUSEN_BTI_TXA_KAIZOKU_HATA_e));
     GXInitTexObj(&texObj, (char*)timg + timg->imageOffset, timg->width, timg->height,
         (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT,
         (GXBool)(timg->mipmapCount > 1));
@@ -217,7 +250,7 @@ void daPirate_Flag_packet_c::draw() {
                     (GXAnisotropy)timg->maxAnisotropy);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
 
-    timg = static_cast<ResTIMG*>(dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON));
+    timg = static_cast<ResTIMG*>(dComIfG_getObjectRes("Cloth", dRes_INDEX_CLOTH_BTI_CLOTHTOON_e));
     GXInitTexObj(&texObj, (char*)timg + timg->imageOffset, timg->width, timg->height,
                  (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT,
                  (GXBool)(timg->mipmapCount > 1));
@@ -276,7 +309,7 @@ void daPirate_Flag_packet_c::draw() {
     GXCallDisplayList(l_pirate_flag_DL, sizeof(l_pirate_flag_DL) - 0x04);
 
     GXSetCullMode(GX_CULL_FRONT);
-    GXSetArray(GX_VA_NRM, m4F4[m87E], sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, mBackNrm[m87E], sizeof(cXyz));
     GXCallDisplayList(l_pirate_flag_DL, sizeof(l_pirate_flag_DL) - 0x04);
 
 #if VERSION > VERSION_JPN
@@ -284,9 +317,11 @@ void daPirate_Flag_packet_c::draw() {
 #endif
 }
 
-const u8 dummy_4241[] = {0x00, 0xFF, 0x00, 0x80};
-const u8 dummy_4243[] = {0x00, 0x00, 0xFF, 0x80};
-const u8 dummy_4245[] = {0xFF, 0x00, 0x00, 0x80};
+static void dummy() {
+    (GXColor){0x00, 0xFF, 0x00, 0x80};
+    (GXColor){0x00, 0x00, 0xFF, 0x80};
+    (GXColor){0xFF, 0x00, 0x00, 0x80};
+}
 
 /* 00000E44-000011A0       .text daPirate_Flag_Draw__FP17pirate_flag_class */
 static BOOL daPirate_Flag_Draw(pirate_flag_class* i_this) {
@@ -457,7 +492,7 @@ static void pirate_flag_move(pirate_flag_class* i_this) {
 #else
     DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(*i_this->mPacket.mPos));
     DCStoreRangeNoSync(i_this->mPacket.getNrm(), sizeof(*i_this->mPacket.mNrm));
-    DCStoreRangeNoSync(i_this->mPacket.getNrm() + sizeof(i_this->mPacket.mNrm) / sizeof(cXyz), sizeof(*i_this->mPacket.m4F4)); // Fakematch?
+    DCStoreRangeNoSync(i_this->mPacket.getBackNrm(), sizeof(*i_this->mPacket.mBackNrm));
 #endif
 }
 
@@ -469,7 +504,7 @@ static BOOL daPirate_Flag_Execute(pirate_flag_class* i_this) {
 
     static cXyz flag_offset(0.0f, 1000.0f, 100.0f);
 
-    cMtx_multVec(l_p_ship->mpModel->getBaseTRMtx(), &flag_offset, &i_this->current.pos);
+    cMtx_multVec(l_p_ship->mModel->getBaseTRMtx(), &flag_offset, &i_this->current.pos);
 
     i_this->current.angle = l_p_ship->shape_angle;
     cXyz* windVec = dKyw_get_wind_vec();
@@ -497,7 +532,7 @@ static BOOL daPirate_Flag_Delete(pirate_flag_class* i_this) {
 /* 00001A90-00001C8C       .text daPirate_Flag_Create__FP10fopAc_ac_c */
 static cPhs_State daPirate_Flag_Create(fopAc_ac_c* i_this) {
     pirate_flag_class* a_this = static_cast<pirate_flag_class*>(i_this);
-    fopAcM_SetupActor(i_this, pirate_flag_class);
+    fopAcM_ct(i_this, pirate_flag_class);
 
     cPhs_State result = dComIfG_resLoad(&a_this->mPhs1, "Cloth");
     if (result != cPhs_COMPLEATE_e) {
@@ -537,18 +572,18 @@ static actor_method_class l_daPirate_Flag_Method = {
 };
 
 actor_process_profile_definition g_profile_PIRATE_FLAG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_PIRATE_FLAG,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_PIRATE_FLAG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(pirate_flag_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_PIRATE_FLAG,
+    /* Draw Prio    */ fpcDwPi_PIRATE_FLAG_e,
     /* Actor SubMtd */ &l_daPirate_Flag_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

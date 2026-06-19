@@ -3,6 +3,8 @@
 // Translation Unit: JASRate.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASRate.h"
 
 f32 JASystem::Kernel::gDacRate = 32028.5f;

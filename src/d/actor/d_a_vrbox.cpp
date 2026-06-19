@@ -3,11 +3,10 @@
 // Translation Unit: d_a_vrbox.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_vrbox.h"
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_kankyo_wether.h"
 
@@ -179,7 +178,7 @@ static BOOL daVrbox_solidHeapCB(fopAc_ac_c* i_actor) {
 
 /* 8015E968-8015EA14       .text daVrbox_Create__FP10fopAc_ac_c */
 static cPhs_State daVrbox_Create(fopAc_ac_c* i_actor) {
-    fopAcM_SetupActor(i_actor, vrbox_class);
+    fopAcM_ct(i_actor, vrbox_class);
     vrbox_class* i_this = static_cast<vrbox_class*>(i_actor);
 
     i_this->m29C = 0;
@@ -204,18 +203,18 @@ static actor_method_class l_daVrbox_Method = {
 };
 
 actor_process_profile_definition g_profile_VRBOX = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_VRBOX,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_VRBOX_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(vrbox_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_VRBOX,
+    /* Draw Prio    */ fpcDwPi_VRBOX_e,
     /* Actor SubMtd */ &l_daVrbox_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

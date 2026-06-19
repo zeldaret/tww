@@ -21,10 +21,10 @@ void __OSInitAudioSystem(void) {
 
     u32 padding;
 
-    memcpy((void*)((u8*)OSGetArenaHi() - 128), __DSPWorkBuffer, 128);
-    memcpy(__DSPWorkBuffer, (void*)DSPInitCode, 128);
+    memcpy((void*)((u8*)OSGetArenaHi() - 128), __DSPWorkBuffer, sizeof(DSPInitCode));
+    memcpy(__DSPWorkBuffer, (void*)DSPInitCode, sizeof(DSPInitCode));
 
-    DCFlushRange(__DSPWorkBuffer, 128);
+    DCFlushRange(__DSPWorkBuffer, sizeof(DSPInitCode));
 
     __DSPRegs[9] = 0x43;
     __DSPRegs[5] = 0x8AC;

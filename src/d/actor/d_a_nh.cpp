@@ -3,11 +3,10 @@
  * Item - Forest Firefly / 森のほたる (Mori no Hotaru)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_nh.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_s_gnd_chk.h"
@@ -50,11 +49,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 10.0f,
         /* Height */ 20.0f,
-    },
+    }},
 };
 
 /* 800F95B8-800F9654       .text __ct__10daNh_HIO_cFv */
@@ -111,8 +110,8 @@ void daNh_c::setBaseMtx() {
 
 /* 800F9980-800F9A54       .text createHeap__6daNh_cFv */
 BOOL daNh_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_NH);
-    JUT_ASSERT(VERSION_SELECT(357, 359, 359, 359), modelData != NULL);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_NH_e);
+    JUT_ASSERT(DEMO_SELECT(357, 359), modelData != NULL);
     
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (!mpModel) {
@@ -135,7 +134,7 @@ cPhs_State daNh_c::create() {
     
     cPhs_State phase_state = cPhs_COMPLEATE_e;
     
-    fopAcM_SetupActor(this, daNh_c);
+    fopAcM_ct(this, daNh_c);
     
     if (!fopAcM_entrySolidHeap(this, checkCreateHeap, a_heap_size_tbl)) {
         return cPhs_ERROR_e;
@@ -213,7 +212,7 @@ BOOL daNh_c::checkBinCatch() {
     }
     
     dComIfGp_att_CatchRequest(
-        this, dItem_FIREFLY_BOTTLE_e,
+        this, dItemNo_FIREFLY_BOTTLE_e,
         l_HIO.prm.field_0x08, l_HIO.prm.field_0x0c,
         l_HIO.prm.field_0x10, l_HIO.prm.field_0x3c,
         1
@@ -321,7 +320,7 @@ BOOL daNh_c::checkEscapeEnd() {
             setAction(&daNh_c::waitAction, NULL);
             return TRUE;
         }
-        if (homeDelta.abs2XZ() > l_HIO.prm.mMaxHomeDist*l_HIO.prm.mMaxHomeDist) {
+        if (homeDelta.abs2XZ() > SQUARE(l_HIO.prm.mMaxHomeDist)) {
             setAction(&daNh_c::returnAction, NULL);
             return TRUE;
         }
@@ -366,7 +365,7 @@ BOOL daNh_c::returnAction(void*) {
         } else {
             s16 targetAngle = cLib_targetAngleY(&current.pos, &home.pos);
             cXyz homeDelta = home.pos - current.pos;
-            if (homeDelta.abs2XZ() < l_HIO.prm.mMaxHomeDist*l_HIO.prm.mMaxHomeDist) {
+            if (homeDelta.abs2XZ() < SQUARE(l_HIO.prm.mMaxHomeDist)) {
                 s16 angle = targetAngle - fopAcM_searchPlayerAngleY(this);
                 if (abs(angle) < 0x1000) {
                     if (angle < 0) {
@@ -437,8 +436,8 @@ BOOL daNh_c::initBrkAnm(bool i_modify) {
     J3DModelData* modelData = mpModel->getModelData();
     bool success = false;
     
-    J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Always", ALWAYS_BRK_TNH);
-    JUT_ASSERT(VERSION_SELECT(881, 883, 883, 883), a_brk != NULL);
+    J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BRK_TNH_e);
+    JUT_ASSERT(DEMO_SELECT(881, 883), a_brk != NULL);
     
     if (mBrkAnm.init(modelData, a_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, false)) {
         success = true;
@@ -460,7 +459,7 @@ BOOL daNh_c::draw() {
     
     mBrkAnm.entry(modelData);
     mDoExt_modelUpdateDL(mpModel);
-    modelData->getMaterialTable().removeTevRegAnimator(mBrkAnm.getBrkAnm());
+    mBrkAnm.remove(modelData);
     
     J3DMaterial* mat = modelData->getMaterialNodePointer(0);
     if (mat) {
@@ -518,18 +517,18 @@ static actor_method_class l_daNh_Method = {
 };
 
 actor_process_profile_definition g_profile_NH = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NH,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NH_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNh_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NH,
+    /* Draw Prio    */ fpcDwPi_NH_e,
     /* Actor SubMtd */ &l_daNh_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -3,19 +3,18 @@
  * Object - Hats (Traveling Merchants)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hat.h"
 #include "d/actor/d_a_npc_roten.h"
 #include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_ro.h"
+#include "res/Object/Ro.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 
-static const int l_bmd_ix_tbl[] = {RO_BDL_RO_HAT, RO_BDL_RO_HAT2, RO_BDL_RO_HAT3, RO_BDL_RO_HAT};
-static const int l_bck_ix_tbl[] = {RO_BCK_HAT_WID, RO_BCK_HAT2_WIND, RO_BCK_HAT3_WID,
-                                   RO_BCK_HAT_WID};
+static const int l_bmd_ix_tbl[] = {dRes_ID_RO_BDL_RO_HAT_e, dRes_ID_RO_BDL_RO_HAT2_e, dRes_ID_RO_BDL_RO_HAT3_e, dRes_ID_RO_BDL_RO_HAT_e};
+static const int l_bck_ix_tbl[] = {dRes_ID_RO_BCK_HAT_WID_e, dRes_ID_RO_BCK_HAT2_WIND_e, dRes_ID_RO_BCK_HAT3_WID_e,
+                                   dRes_ID_RO_BCK_HAT_WID_e};
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
     {
@@ -39,11 +38,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 70.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 
@@ -62,7 +61,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 
 /* 000003CC-0000045C       .text _create__10daObjHat_cFv */
 cPhs_State daObjHat_c::_create() {
-    fopAcM_SetupActor(this, daObjHat_c);
+    fopAcM_ct(this, daObjHat_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Ro");
 
@@ -127,7 +126,7 @@ cPhs_State daObjHat_c::createInit() {
 
 /* 000006AC-000006DC       .text _delete__10daObjHat_cFv */
 BOOL daObjHat_c::_delete() {
-    dComIfG_resDelete(&mPhs, "Ro");
+    dComIfG_resDeleteDemo(&mPhs, "Ro");
     return TRUE;
 }
 
@@ -212,7 +211,7 @@ void daObjHat_c::setSpeed(cXyz speed) {
 }
 
 /* 00000A20-00000A40       .text daSampleCreate__FPv */
-static s32 daSampleCreate(void* i_this) {
+static cPhs_State daSampleCreate(void* i_this) {
     return static_cast<daObjHat_c*>(i_this)->_create();
 }
 
@@ -245,18 +244,18 @@ static actor_method_class daSampleMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_HAT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_HAT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_HAT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjHat_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_HAT,
+    /* Draw Prio    */ fpcDwPi_OBJ_HAT_e,
     /* Actor SubMtd */ &daSampleMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

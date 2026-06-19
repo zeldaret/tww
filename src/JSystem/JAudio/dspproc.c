@@ -3,6 +3,8 @@
 // Translation Unit: dspproc.c
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/dspproc.h"
 #include "JSystem/JAudio/dsptask.h"
 

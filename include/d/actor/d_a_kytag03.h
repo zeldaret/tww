@@ -6,8 +6,8 @@
 
 class mDoExt_McaMorf;
 
-class kytag03_class : public fopAc_ac_c {
-public:
+struct kytag03_class {
+    /* 0x000 */ fopAc_ac_c actor;
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ mDoExt_McaMorf* mpModel;
     /* 0x29C */ u8 m29C[0x2A0 - 0x29C];

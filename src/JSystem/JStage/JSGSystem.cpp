@@ -3,6 +3,8 @@
 // Translation Unit: JSGSystem.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStage/JSGSystem.h"
 #include "dolphin/types.h"
 
@@ -37,4 +39,3 @@ bool JStage::TSystem::JSGGetSystemData(u32) {
 /* 8026E07C-8026E080       .text JSGSetSystemData__Q26JStage7TSystemFUlUl */
 void JStage::TSystem::JSGSetSystemData(u32, u32) {
 }
-

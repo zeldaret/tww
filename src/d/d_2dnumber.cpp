@@ -3,6 +3,7 @@
 // Translation Unit: d_2dnumber.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_2dnumber.h"
 #include "d/d_com_inf_game.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
@@ -92,24 +93,24 @@ void dDlst_2DMinigame_c::draw() {
 }
 
 /* 800C8A00-800C8FAC       .text init__17dDlst_2DBattery_cFP7ResTIMGP7ResTIMGP7ResTIMGP7ResTIMG */
-bool dDlst_2DBattery_c::init(ResTIMG* rule, ResTIMG* battery, ResTIMG* batteryBase, ResTIMG* degree) {
+BOOL dDlst_2DBattery_c::init(ResTIMG* rule, ResTIMG* battery, ResTIMG* batteryBase, ResTIMG* degree) {
     mRule = new J2DPicture(rule);
     if (mRule == NULL)
-        return false;
+        return FALSE;
 
     mRuleSize.x = rule->width;
     mRuleSize.y = rule->height;
 
     mBattery = new J2DPicture(battery);
     if (mBattery == NULL)
-        return false;
+        return FALSE;
 
     mBatterySize.x = battery->width;
     mBatterySize.y = battery->height;
 
     mBatteryBase = new J2DPicture(batteryBase);
     if (mBatteryBase == NULL)
-        return false;
+        return FALSE;
 
     mBatteryBaseSize.x = batteryBase->width;
     mBatteryBaseSize.y = batteryBase->height;
@@ -117,15 +118,15 @@ bool dDlst_2DBattery_c::init(ResTIMG* rule, ResTIMG* battery, ResTIMG* batteryBa
     for (s32 i = 0; i < 2; i++) {
         mNum[0][i] = new J2DPicture(degree);
         if (mNum[0][i] == NULL)
-            return false;
+            return FALSE;
 
         mNum[1][i] = new J2DPicture("rupy_num_00.bti");
         if (mNum[1][i] == NULL)
-            return false;
+            return FALSE;
 
         mNum[2][i] = new J2DPicture("rupy_num_00.bti");
         if (mNum[2][i] == NULL)
-            return false;
+            return FALSE;
     }
 
     mBattery->setAlpha(200);
@@ -154,7 +155,7 @@ bool dDlst_2DBattery_c::init(ResTIMG* rule, ResTIMG* battery, ResTIMG* batteryBa
     mNum[2][1]->setAlpha(80);
 
     mRotation = 20.0f;
-    return true;
+    return TRUE;
 }
 
 /* 800C8FAC-800C90F0       .text setRotate__17dDlst_2DBattery_cFf */
@@ -203,22 +204,22 @@ void dDlst_2DBattery_c::draw() {
 }
 
 /* 800C9348-800C946C       .text init__16dDlst_2DObject_cFP7ResTIMGP7ResTIMG */
-bool dDlst_2DObject_c::init(ResTIMG* img1, ResTIMG* img2) {
+BOOL dDlst_2DObject_c::init(ResTIMG* img1, ResTIMG* img2) {
     mPicture[0] = new J2DPicture(img1);
     if (mPicture[0] == NULL)
-        return false;
+        return FALSE;
     mSize[0].x = img1->width;
     mSize[0].y = img1->height;
 
     mPicture[1] = new J2DPicture(img2);
     if (mPicture[1] == NULL)
-        return false;
+        return FALSE;
     mSize[1].x = img2->width;
     mSize[1].y = img2->height;
     mScale = 1.0f;
     mCurrentNo = 0;
 
-    return true;
+    return TRUE;
 }
 
 /* 800C946C-800C9520       .text draw__16dDlst_2DObject_cFv */

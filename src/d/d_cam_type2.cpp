@@ -3,6 +3,7 @@
 // Translation Unit: d_cam_type2.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_camera.h"
 
 const char* dCamera_c::mvBGTypes[35] = {

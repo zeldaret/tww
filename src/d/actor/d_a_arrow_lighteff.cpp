@@ -3,12 +3,11 @@
 // Translation Unit: d_a_arrow_lighteff.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_arrow_lighteff.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_arrow.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_lib.h"
@@ -81,13 +80,13 @@ BOOL daArrow_Lighteff_c::CreateHeap() {
     
     J3DModelData* modelData;
     if(field_0x2E8 == 1) {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GARWFI00));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_GARWFI00_e));
     }
     else if(field_0x2E8 == 2) {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GARWFI01));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_GARWFI01_e));
     }
     else {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GARWG00));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_GARWG00_e));
     }
 
     JUT_ASSERT(187, modelData != NULL);
@@ -100,25 +99,25 @@ BOOL daArrow_Lighteff_c::CreateHeap() {
     J3DAnmTextureSRTKey* btk;
     J3DAnmTevRegKey* brk;
     if(field_0x2E8 == 1) {
-        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", LINK_BTK_GARWFI00));
-        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", LINK_BRK_GARWFI00));
+        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BTK_GARWFI00_e));
+        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BRK_GARWFI00_e));
     }
     else if(field_0x2E8 == 2) {
-        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", LINK_BTK_GARWFI01));
-        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", LINK_BRK_GARWFI01));
+        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BTK_GARWFI01_e));
+        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BRK_GARWFI01_e));
     }
     else {
-        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", LINK_BTK_GARWG00));
-        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", LINK_BRK_GARWG00));
+        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BTK_GARWG00_e));
+        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BRK_GARWG00_e));
     }
 
     JUT_ASSERT(216, btk != NULL);
     JUT_ASSERT(217, brk != NULL);
 
-    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
-    if(!mBrk.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
+    if(!mBrk.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE)) {
         return false;
     }
 
@@ -146,23 +145,23 @@ void daArrow_Lighteff_c::CreateInit() {
 
     if(field_0x2E8 == 1) {
         if(field_0x2F4.getEmitter() == 0) {
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_0299, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWF_HINOKO00, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
         }
     }
     else if(field_0x2E8 == 2) {
         if(field_0x2F4.getEmitter() == 0) {
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_029C, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWI_KIRAKIRA00, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
         }
         if(field_0x308.getEmitter() == 0) {
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_029D, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x308);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWI_REIKI00, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x308);
         }
     }
     else if(field_0x2E8 == 3) {
         if(field_0x2F4.getEmitter() == 0) {
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_029F, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWG_TSUBU00, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
         }
         if(field_0x308.getEmitter() == 0) {
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_02A0, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x308);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWG_FLASH00, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x308);
         }
     }
 
@@ -189,7 +188,7 @@ void daArrow_Lighteff_c::set_mtx() {
 }
 
 cPhs_State daArrow_Lighteff_c::_create() {
-    fopAcM_SetupActor(this, daArrow_Lighteff_c);
+    fopAcM_ct(this, daArrow_Lighteff_c);
 
     field_0x2EA = 0;
     if(!fopAcM_entrySolidHeap(this, &CheckCreateHeap, 0x2660)) {
@@ -234,9 +233,13 @@ static BOOL daArrow_Lighteff_Delete(void* i_this) {
 }
 
 bool daArrow_Lighteff_c::_draw() {
+#if VERSION == VERSION_DEMO
+    if(field_0x2E9 != 0) {
+#else
     if(field_0x2E9 == 0) {
         return true;
     }
+#endif
 
     J3DModelData* modelData = field_0x298->getModelData();
     if(mDoGph_gInf_c::isMonotone()) {
@@ -246,14 +249,18 @@ bool daArrow_Lighteff_c::_draw() {
         dComIfGd_setListMaskOff();
     }
 
-    mBtk.entry(modelData, mBtk.getFrame());
-    mBrk.entry(modelData, mBrk.getFrame());
+    mBtk.entry(modelData);
+    mBrk.entry(modelData);
     mDoExt_modelUpdateDL(field_0x298);
     mBrk.remove(modelData);
     mBtk.remove(modelData);
     
     dComIfGd_setList();
 
+#if VERSION == VERSION_DEMO
+    }
+#endif
+    
     return true;
 }
 
@@ -271,7 +278,7 @@ void daArrow_Lighteff_c::brk_play() {
     mBtk.play();
 
     int cam = dComIfGp_getPlayerCameraID(0);
-    if(!dComIfGp_checkCameraAttentionStatus(cam, 0x20)) {
+    if(!dComIfGp_checkCameraAttentionStatus(cam, dCamAttnStts_00000020_e)) {
         if(field_0x2E0 < mBrk.getEndFrame()) {
             field_0x2E0 += 1.0f;
             if(field_0x2E0 > mBrk.getEndFrame()) {
@@ -363,13 +370,13 @@ bool daArrow_Lighteff_c::_execute() {
     int cam = dComIfGp_getPlayerCameraID(0);
     if(field_0x2E8 == 1) {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_FIRE_ARROW_AMB, 0);
-        if(!dComIfGp_checkCameraAttentionStatus(cam, 0x20)) {
-            dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &field_0x29C);
+        if(!dComIfGp_checkCameraAttentionStatus(cam, dCamAttnStts_00000020_e)) {
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_JP_O_KAGEROU00, &field_0x29C);
         }
     }
     else if(field_0x2E8 == 2) {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_ICE_ARROW_AMB, 0);
-        if(dComIfGp_checkCameraAttentionStatus(cam, 0x20)) {
+        if(dComIfGp_checkCameraAttentionStatus(cam, dCamAttnStts_00000020_e)) {
             if(field_0x2F4.getEmitter()) {
                 field_0x2F4.getEmitter()->setGlobalAlpha(0x64);
             }
@@ -409,18 +416,18 @@ static actor_method_class daArrow_LighteffMethodTable = {
 };
 
 actor_process_profile_definition g_profile_ARROW_LIGHTEFF = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0009,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ARROW_LIGHTEFF,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0009,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ARROW_LIGHTEFF_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daArrow_Lighteff_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ARROW_LIGHTEFF,
+    /* Draw Prio    */ fpcDwPi_ARROW_LIGHTEFF_e,
     /* Actor SubMtd */ &daArrow_LighteffMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

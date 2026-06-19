@@ -3,9 +3,8 @@
  * Object - Palm tree blowing in the wind (Gale Isle)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vyasi.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-0000015C       .text SetStopJointAnimation__Q210daObjVyasi5Act_cFP18J3DAnmTransformKeyff */
 void daObjVyasi::Act_c::SetStopJointAnimation(J3DAnmTransformKey*, float, float) {
@@ -180,18 +179,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjVyasi
 
 actor_process_profile_definition g_profile_Obj_Vyasi = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Vyasi,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Vyasi_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjVyasi::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Vyasi,
+    /* Draw Prio    */ fpcDwPi_Obj_Vyasi_e,
     /* Actor SubMtd */ &daObjVyasi::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

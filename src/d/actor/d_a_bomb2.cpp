@@ -3,20 +3,17 @@
  * Object - Bomb Flower - Bomb
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bomb2.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_a_obj.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_vbakh.h"
+#include "res/Object/VbakH.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daBomb2 {
     namespace {
@@ -266,17 +263,17 @@ namespace daBomb2 {
     bool Act_c::create_heap_nut() {
         const char* resName = attr().resName;
 
-        J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(attr().resName, VBAKH_BDL_VBAKM));
+        J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(attr().resName, dRes_INDEX_VBAKH_BDL_VBAKM_e));
         JUT_ASSERT(0x303, mdl_data != NULL);
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
 
-        J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(resName, VBAKH_BCK_VBAKM));
+        J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(resName, dRes_INDEX_VBAKH_BCK_VBAKM_e));
         JUT_ASSERT(0x30D, bck_data != NULL);
-        int temp = mBck0.init(mdl_data, bck_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
+        int temp = mBck0.init(mdl_data, bck_data, true, J3DFrameCtrl::EMode_NONE);
 
-        J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(resName, VBAKH_BRK_VBAKM));
+        J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(resName, dRes_INDEX_VBAKH_BRK_VBAKM_e));
         JUT_ASSERT(0x314, brk_data != NULL);
-        int temp3 = mBrk0.init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+        int temp3 = mBrk0.init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE);
 
         return mpModel && temp && temp3;
     }
@@ -323,10 +320,10 @@ namespace daBomb2 {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 30.0f,
-        },
+        }},
     };
 
     void Act_c::cc_init() {
@@ -405,7 +402,7 @@ namespace daBomb2 {
     }
 
     cPhs_State Act_c::_create() {
-        fopAcM_SetupActor(this, Act_c);
+        fopAcM_ct(this, Act_c);
 
         cPhs_State status = dComIfG_resLoad(&mPhase, attr().resName);
 
@@ -477,7 +474,7 @@ namespace daBomb2 {
             mSph.SetR(radius);
             mSph.SetC(pos);
             dComIfG_Ccsp()->Set(&mSph);
-            dComIfG_Ccsp_SetMass(&mSph, 3);
+            dComIfG_Ccsp()->SetMass(&mSph, 3);
         }
     }
 
@@ -618,8 +615,8 @@ namespace daBomb2 {
             mBombTimer = attr().field_0xA;
 
             f32 frame = 0x87 - attr().field_0xA;
-            mBck0.getFrameCtrl()->setFrame(frame);
-            mBrk0.getFrameCtrl()->setFrame(frame);
+            mBck0.setFrame(frame);
+            mBrk0.setFrame(frame);
         }
     }
 
@@ -646,7 +643,7 @@ namespace daBomb2 {
         f32 f30 = attr().field_0x40;
         cXyz sp48 = *mSph.GetTgRVecP();
         f32 f31 = sp48.abs2();
-        if (f31 > f30*f30) {
+        if (f31 > SQUARE(f30)) {
             sp48 *= f30 / std::sqrtf(f31);
         }
         cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
@@ -657,7 +654,7 @@ namespace daBomb2 {
             hitNormal *= attr().field_0x44;
             mWindVec.abs2();
             fopAc_ac_c* hitActor = mSph.GetTgHitAc();
-            if (hitActor && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
+            if (hitActor && fopAcM_GetProfName(hitActor) == fpcNm_PLAYER_e) {
                 s16 hitObjAngleY = cM_atan2s(hitNormal.x, hitNormal.z);
                 f32 f2 = cM_scos(hitActor->shape_angle.y - hitObjAngleY);
                 if (f2 > 0.0f) {
@@ -698,10 +695,10 @@ namespace daBomb2 {
     }
 
     void Act_c::eff_explode_normal(const csXyz* rotation) {
-        dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &scale);
-        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CLOUD, &current.pos, NULL, &scale);
-        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &scale);
-        dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &scale);
+        dComIfGp_particle_setP1(dPa_name::ID_IT_JN_BMEX_SENKO, &current.pos, rotation, &scale);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE01, &current.pos, NULL, &scale);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE02, &current.pos, NULL, &scale);
+        dComIfGp_particle_setToonP1(dPa_name::ID_IT_JT_BMEX_HAHEN, &current.pos, NULL, &scale);
     }
 
     void Act_c::eff_explode_water() {
@@ -730,8 +727,8 @@ namespace daBomb2 {
             field_0x6CC = field_0x6C0;
             field_0x6D8 = field_0x6C0;
 
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_FUSE_SPARKS, &field_0x6C0, NULL, &scale, 0xFF, &mSparks);
-            dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_2012, &field_0x6C0, NULL, &scale, 0xDC, &mSmoke);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_BM_HIBANA, &field_0x6C0, NULL, &scale, 0xFF, &mSparks);
+            dComIfGp_particle_setToonP1(dPa_name::ID_IT_JT_BM_SMOKE, &field_0x6C0, NULL, &scale, 0xDC, &mSmoke);
             mSmoke.setOldPosP(&field_0x6CC, &field_0x6D8);
         }
     }
@@ -1254,18 +1251,13 @@ namespace daBomb2 {
     }
 
     bool Act_c::is_draw() {
-        bool draw = false;
-        if(mState != 2 && !field_0x743 && ! field_0x742) {
-            draw = true;
-        }
-
-        return draw;
+        return mState != 2 && !field_0x743 && ! field_0x742;
     }
 
     void Act_c::draw_nut() {
         J3DModelData* mdlData = (J3DModelData*)mpModel->getModelData();
-        mBck0.entry(mdlData, mBck0.getFrame());
-        mBrk0.entry(mdlData, mBrk0.getFrame());
+        mBck0.entry(mdlData);
+        mBrk0.entry(mdlData);
         dComIfGd_setListP1();
         mDoExt_modelUpdateDL(mpModel);
         dComIfGd_setList();
@@ -1340,18 +1332,18 @@ namespace daBomb2 {
 }
 
 actor_process_profile_definition g_profile_Bomb2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Bomb2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Bomb2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daBomb2::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Bomb2,
+    /* Draw Prio    */ fpcDwPi_Bomb2_e,
     /* Actor SubMtd */ &daBomb2::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

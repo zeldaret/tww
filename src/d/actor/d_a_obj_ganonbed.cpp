@@ -3,20 +3,42 @@
  * Object - Bed (Puppet Ganon intro cutscene)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ganonbed.h"
-#include "d/res/res_gbed.h"
+#include "res/Object/Gbed.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
 namespace {
     static const char l_arcname[] = "Gbed";
 };
+
+#if VERSION == VERSION_DEMO
+class daObjGbed_HIO_c : public JORReflexible {
+public:
+    daObjGbed_HIO_c();
+    virtual ~daObjGbed_HIO_c() {}
+
+    void genMessage(JORMContext*) {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 field_0x5;
+    /* 0x06 */ u8 field_0x6;
+};
+
+static daObjGbed_HIO_c l_HIO;
+
+daObjGbed_HIO_c::daObjGbed_HIO_c() {
+    mNo = -1;
+    field_0x5 = 0;
+    field_0x6 = 0;
+}
+#endif
 
 /* 00000078-00000100       .text init_mtx__11daObjGbed_cFv */
 void daObjGbed_c::init_mtx() {
@@ -35,14 +57,14 @@ BOOL daObjGbed_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjGbed_c::create_heap() {
     bool ret = true;
 
-    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, GBED_BDL_K_GBED));
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_GBED_BDL_K_GBED_e));
 
     if (!pModelData) {
-        JUT_ASSERT(0xb1, FALSE);
+        JUT_ASSERT(DEMO_SELECT(173, 177), FALSE);
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000022);
-        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, GBED_DZB_K_GBED), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_GBED_DZB_K_GBED_e), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
 
         if (!mpModel || !mpBgW)
             ret = false;
@@ -53,7 +75,7 @@ bool daObjGbed_c::create_heap() {
 
 /* 00000224-000002F8       .text _create__11daObjGbed_cFv */
 cPhs_State daObjGbed_c::_create() {
-    fopAcM_SetupActor(this, daObjGbed_c);
+    fopAcM_ct(this, daObjGbed_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, l_arcname);
 
@@ -70,6 +92,12 @@ cPhs_State daObjGbed_c::_create() {
         }
     }
 
+#if VERSION == VERSION_DEMO
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("ガノンベッド", &l_HIO); // "Ganon bed"
+    }
+#endif
+
     return ret;
 }
 
@@ -77,27 +105,57 @@ cPhs_State daObjGbed_c::_create() {
 bool daObjGbed_c::_delete() {
     dComIfG_resDelete(&mPhs, l_arcname);
 
-    if (heap != NULL && mpBgW != NULL) {
+    if (
+#if VERSION > VERSION_DEMO
+        heap != NULL &&
+#endif
+        mpBgW != NULL
+    ) {
         if (mpBgW->ChkUsed()) {
             dComIfG_Bgsp()->Release(mpBgW);
         }
 
+#if VERSION > VERSION_DEMO
         mpBgW = NULL;
+#endif
+}
+
+#if VERSION == VERSION_DEMO
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
+#endif
 
     return true;
 }
 
 /* 0000038C-000003E4       .text _execute__11daObjGbed_cFv */
 bool daObjGbed_c::_execute() {
-    if (mpBgW != NULL && mpBgW->ChkUsed())
+    if (mpBgW != NULL && mpBgW->ChkUsed()) {
         mpBgW->Move();
+    }
+
+#if VERSION == VERSION_DEMO
+    if (l_HIO.field_0x5 == 1) {
+        fopAcM_delete(this);
+    }
+#endif
+
     return true;
 }
 
 /* 000003E4-00000444       .text _draw__11daObjGbed_cFv */
 bool daObjGbed_c::_draw() {
+#if VERSION == VERSION_DEMO
+    if (l_HIO.field_0x6 == 1) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    } else {
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    }
+#else
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+#endif
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     return true;
@@ -137,18 +195,18 @@ static actor_method_class l_daObjGbed_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Gbed = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Gbed,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Gbed_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjGbed_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Gbed,
+    /* Draw Prio    */ fpcDwPi_Obj_Gbed_e,
     /* Actor SubMtd */ &l_daObjGbed_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

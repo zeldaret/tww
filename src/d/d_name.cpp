@@ -3,6 +3,7 @@
 // Translation Unit: d_name.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_name.h"
 #include "dolphin/types.h"
 

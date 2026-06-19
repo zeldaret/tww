@@ -9,8 +9,8 @@
 
 #define CHECK_MINMAX_1(line, min, max)                                                             \
     JUT_ASSERT(line,                                                                               \
-        min->x !=  (1000000000.0f) && min->y !=  (1000000000.0f) && min->z !=  (1000000000.0f) &&  \
-        max->x != -(1000000000.0f) && max->y != -(1000000000.0f) && max->z != -(1000000000.0f)     \
+        min->x !=  G_CM3D_F_INF && min->y !=  G_CM3D_F_INF && min->z !=  G_CM3D_F_INF &&  \
+        max->x != -G_CM3D_F_INF && max->y != -G_CM3D_F_INF && max->z != -G_CM3D_F_INF     \
     );
 
 #define CHECK_MINMAX_2(line, min, max)                                                             \

@@ -77,6 +77,7 @@ void J3DGDSetTevKColor(GXTevKColorID, GXColor);
 void J3DGDSetTevColorS10(GXTevRegID, GXColorS10);
 void J3DGDSetFog(GXFogType, f32, f32, f32, f32, GXColor);
 void J3DGDSetFogRangeAdj(u8, u16, GXFogAdjTable*);
+void J3DGDSetVtxAttrFmtv(GXVtxFmt, GXVtxAttrFmtList*, bool);
 
 static inline void J3DFifoLoadIndx(u8 cmd, u16 indx, u16 addr) {
     GXFIFO.u8 = cmd;

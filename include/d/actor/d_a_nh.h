@@ -107,7 +107,7 @@ public:
     daNh_HIO_c();
     virtual ~daNh_HIO_c() {}
     
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext*) {}
 
 public:
     /* 0x04 */ s8 mNo;

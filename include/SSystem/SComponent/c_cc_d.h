@@ -145,7 +145,7 @@ public:
     void Set(const cCcD_SrcCpsAttr& pSrc) {
         cM3dGCps::Set(pSrc.mCps);
     }
-    void Set(const cXyz& pStart, const cXyz& pEnd, float radius) {
+    void Set(const cXyz& pStart, const cXyz& pEnd, f32 radius) {
         cM3dGCps::Set(pStart, pEnd, radius);
     }
 
@@ -182,7 +182,7 @@ class cCcD_SphAttr : public cCcD_ShapeAttr, public cM3dGSph {
 public:
     cCcD_SphAttr() {}
 
-    inline void Set(const cCcD_SrcSphAttr& src) {
+    void Set(const cCcD_SrcSphAttr& src) {
         cM3dGSph::Set(src.mSph);
     }
 
@@ -216,7 +216,7 @@ STATIC_ASSERT(0x34 == sizeof(cCcD_SphAttr));
 class cCcD_CylAttr : public cCcD_ShapeAttr, public cM3dGCyl {
 public:
     cCcD_CylAttr() {}
-    inline void Set(const cCcD_SrcCylAttr& src) {
+    void Set(const cCcD_SrcCylAttr& src) {
         cM3dGCyl::Set(src.mCyl);
     }
 
@@ -430,8 +430,8 @@ public:
 
 protected:
     /* 0x10 */ u32 mType;
-    /* 0x14 */ u8 mAtp;
-};
+    /* 0x14 */ u8 mAtp; // AtPoint, amount of damage done when attacking
+}; // size = 0x18
 
 STATIC_ASSERT(0x18 == sizeof(cCcD_ObjAt));
 

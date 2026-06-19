@@ -3,6 +3,7 @@
 // Translation Unit: d_att_dist.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_attention.h"
 
 dAttention_c::DistTbl dAttention_c::dist_table[] = {

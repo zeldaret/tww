@@ -3,11 +3,10 @@
 // Translation Unit: d_a_mmusic.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mmusic.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 
 namespace daMmusic {
@@ -39,10 +38,10 @@ bool daMmusic::Act_c::create_heap() {
 /* 000000A4-0000013C       .text Macore_is_playing__Q28daMmusic5Act_cFv */
 BOOL daMmusic::Act_c::Macore_is_playing() {
     if (dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_WT) ||
-        dComIfGs_isEventBit(0x2910) ||
-        dComIfGs_isEventBit(0x2e02) ||
-        dComIfGs_isEventBit(0x1610) ||
-        !dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e))
+        dComIfGs_isEventBit(dSv_event_flag_c::UNK_2910) ||
+        dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E02) ||
+        dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610) ||
+        !dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_2_e))
         return FALSE;
 
     return TRUE;
@@ -57,7 +56,7 @@ void daMmusic::Act_c::set_mtx() {
 
 /* 000001A4-00000268       .text _create__Q28daMmusic5Act_cFv */
 cPhs_State daMmusic::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State ret = cPhs_COMPLEATE_e;
     if (ret == cPhs_COMPLEATE_e) {
@@ -120,7 +119,7 @@ bool daMmusic::Act_c::_execute() {
     if (mpEmitter == NULL && field_0x298 == 1) {
         set_mtx();
         cXyz scale(1.0f, 1.0f, 1.0f);
-        JPABaseEmitter* emtr = dComIfGp_particle_set(dPa_name::ID_SCENE_826C, &current.pos);
+        JPABaseEmitter* emtr = dComIfGp_particle_set(dPa_name::ID_AK_SN_MACOREMUSIC00, &current.pos);
         mpEmitter = emtr;
         if (emtr != NULL) {
             mpEmitter->setGlobalRTMatrix(mMtx);
@@ -186,18 +185,18 @@ namespace daMmusic {
 }
 
 actor_process_profile_definition g_profile_Mmusic = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Mmusic,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Mmusic_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMmusic::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Mmusic,
+    /* Draw Prio    */ fpcDwPi_Mmusic_e,
     /* Actor SubMtd */ &daMmusic::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

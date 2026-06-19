@@ -3,10 +3,9 @@
 // Translation Unit: d_a_sea.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sea.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_stage.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_graphic.h"
@@ -19,7 +18,7 @@
 #define GRID_CELLS 65
 #define GRID_INDEX(x, z) (x + GRID_CELLS * z)
 
-daSea_packet_c l_cloth;
+static daSea_packet_c l_cloth;
 
 f32 daSea_packet_c::BASE_HEIGHT = 1.0f;
 
@@ -64,8 +63,6 @@ s8 pos_around[8][2] = {
     { 1,  1},  { 0,  1},
     {-1,  1},  {-1,  0},
 };
-
-extern void dKy_usonami_set(f32 param_0);
 
 /* 8015B0A4-8015B0FC       .text Pos2Index__25daSea_WaterHeightInfo_MngFfPf */
 int daSea_WaterHeightInfo_Mng::Pos2Index(f32 v, f32* dst) {
@@ -195,7 +192,7 @@ bool daSea_packet_c::create(cXyz& pos) {
     mFlags = 0;
     mAnimCounter = 0;
 
-    ResTIMG* timg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_B_SEA_TEX0AND2);
+    ResTIMG* timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_B_SEA_TEX0AND2_e);
     
     GXBool mipmap = timg->mipmapCount > 1;
     GXInitTexObj(&mTexSea0, (char*)timg + timg->imageOffset, timg->width, timg->height,
@@ -215,7 +212,7 @@ bool daSea_packet_c::create(cXyz& pos) {
         (GXBool)timg->biasClamp, (GXBool)timg->doEdgeLOD,
         (GXAnisotropy)timg->maxAnisotropy);
 
-    timg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_B_WYURAYURA_TEX1);
+    timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_B_WYURAYURA_TEX1_e);
     mDoLib_setResTimgObj(timg, &mTexYura, 0, NULL);
 
     return true;
@@ -227,7 +224,7 @@ void daSea_packet_c::CleanUp() {
     for (s32 z = 0; z < GRID_CELLS; z++)
         for (s32 x = 0; x < GRID_CELLS; x++)
             mpHeightTable[idx++] = BASE_HEIGHT;
-    mCurPos.zero();
+    mCurPos.x = mCurPos.y = mCurPos.z = 0.0f;
 }
 
 /* 8015B7E4-8015B84C       .text __ct__14daSea_packet_cFv */
@@ -483,7 +480,7 @@ void daSea_packet_c::CheckRoomChange() {
     dStage_roomDt_c * room = dComIfGp_roomControl_getStatusRoomDt(dComIfGp_roomControl_getStayNo());
     if (room != NULL) {
         mRoomNo = dComIfGp_roomControl_getStayNo();
-        daDaiocta_c* octa = (daDaiocta_c *)fopAcM_SearchByName(PROC_DAIOCTA);
+        daDaiocta_c* octa = (daDaiocta_c *)fopAcM_SearchByName(fpcNm_DAIOCTA_e);
         if (octa == NULL) {
             if (mFlags & 0x01) {
                 ClrFlat();
@@ -687,7 +684,7 @@ void daSea_packet_c::draw() {
     DCStoreRange(m_draw_vtx, sizeof(cXyz) * GRID_CELLS * GRID_CELLS);
 #endif
 
-    ResTIMG* pResTIMG = static_cast<ResTIMG*>(dComIfG_getObjectRes("Always", ALWAYS_BTI_B_SEA_TEX0AND2));
+    ResTIMG* pResTIMG = static_cast<ResTIMG*>(dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_B_SEA_TEX0AND2_e));
 
     GXBool mipmap = pResTIMG->mipmapCount > 1;
     GXInitTexObj(&mTexSea0, (&pResTIMG->format + pResTIMG->imageOffset), pResTIMG->width, pResTIMG->height,
@@ -709,7 +706,7 @@ void daSea_packet_c::draw() {
                     (GXBool)pResTIMG->biasClamp, (GXBool)pResTIMG->doEdgeLOD,
                     (GXAnisotropy)pResTIMG->maxAnisotropy);
 
-    pResTIMG = static_cast<ResTIMG*>(dComIfG_getObjectRes("Always", ALWAYS_BTI_B_WYURAYURA_TEX1));
+    pResTIMG = static_cast<ResTIMG*>(dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_B_WYURAYURA_TEX1_e));
     mDoLib_setResTimgObj(pResTIMG, &mTexYura, 0, NULL);
     mDoMtx_stack_c::scaleS(1.5f, 1.5f, 1.0f);
     GXLoadTexMtxImm(mDoMtx_stack_c::get(), GX_TEXMTX0, GX_MTX2x4);
@@ -832,11 +829,14 @@ void daSea_packet_c::draw() {
 
     GXLoadPosMtxImm(j3dSys.getViewMtx(), 0);
     GXSetClipMode(GX_CLIP_ENABLE);
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS,GX_INDEX16);
     GXSetVtxDesc(GX_VA_TEX0,GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_POS,GX_CLR_RGBA,GX_F32,0);
-    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_TEX0,GX_CLR_RGBA,GX_F32,0);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_POS,GX_POS_XYZ,GX_F32,0);
+    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_TEX0,GX_TEX_ST,GX_F32,0);
+
     GXSetArray(GX_VA_POS, this->m_draw_vtx, sizeof(cXyz));
 
     // TODO: Remove magic numbers
@@ -1171,7 +1171,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 8015D924-8015D99C       .text daSea_Create__FP10fopAc_ac_c */
 static cPhs_State daSea_Create(fopAc_ac_c* i_this) {
-    fopAcM_SetupActor(i_this, sea_class);
+    fopAcM_ct(i_this, sea_class);
     if (!fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0xA000))
         return cPhs_ERROR_e;
     return cPhs_COMPLEATE_e;
@@ -1186,18 +1186,18 @@ static actor_method_class l_daSea_Method = {
 };
 
 actor_process_profile_definition g_profile_SEA = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SEA,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SEA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sea_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SEA,
+    /* Draw Prio    */ fpcDwPi_SEA_e,
     /* Actor SubMtd */ &l_daSea_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

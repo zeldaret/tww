@@ -3,9 +3,8 @@
  * NPC - Princess Zelda
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_pz.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 const dCcD_SrcCyl daPz_c::m_cyl_src = {
@@ -31,11 +30,11 @@ const dCcD_SrcCyl daPz_c::m_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 0.0f,
         /* Height */ 0.0f,
-    },
+    }},
 };
 
 
@@ -45,7 +44,7 @@ daPz_HIO_c::daPz_HIO_c() {
 }
 
 /* 00000310-00000340       .text stealItem_CB__FPv */
-void stealItem_CB(void*) {
+static void stealItem_CB(void*) {
     /* Nonmatching */
 }
 
@@ -140,7 +139,7 @@ u16 daPz_c::next_msgStatus(unsigned long*) {
 }
 
 /* 00001208-00001288       .text anmAtr__6daPz_cFUs */
-void daPz_c::anmAtr(unsigned short) {
+void daPz_c::anmAtr(u16 i_msgStatus) {
     /* Nonmatching */
 }
 
@@ -438,18 +437,18 @@ static actor_method_class daPzMethodTable = {
 };
 
 actor_process_profile_definition g_profile_PZ = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_PZ,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_PZ_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daPz_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_PZ,
+    /* Draw Prio    */ fpcDwPi_PZ_e,
     /* Actor SubMtd */ &daPzMethodTable,
     /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

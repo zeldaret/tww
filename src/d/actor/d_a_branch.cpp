@@ -3,20 +3,19 @@
  * Object - Forest of Fairies - Tree branch (Tetra)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_branch.h"
-#include "d/res/res_kwood_00.h"
+#include "res/Object/Kwood_00.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_kankyo.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 
 static u16 anim_table[] = {
-    KWOOD_00_BCK_SWING02, KWOOD_00_BAS_SWING02,
-    KWOOD_00_BCK_SWING,   KWOOD_00_BAS_SWING,
-    KWOOD_00_BCK_BREAK,   KWOOD_00_BAS_BREAK,
+    dRes_ID_KWOOD_00_BCK_SWING02_e, dRes_ID_KWOOD_00_BAS_SWING02_e,
+    dRes_ID_KWOOD_00_BCK_SWING_e,   dRes_ID_KWOOD_00_BAS_SWING_e,
+    dRes_ID_KWOOD_00_BCK_BREAK_e,   dRes_ID_KWOOD_00_BAS_BREAK_e,
 };
 
 char daBranch_c::m_arcname[] = "Kwood_00";
@@ -40,12 +39,12 @@ void daBranch_c::set_mtx() {
 }
 
 /* 00000128-000001E4       .text set_anim__10daBranch_cFiii */
-void daBranch_c::set_anim(int i_animIdx, int i_bckIdx, int i_basIdx) {
-    if (i_bckIdx > 0 && i_basIdx > 0) {
+void daBranch_c::set_anim(int i_animIdx, int i_bckId, int i_basId) {
+    if (i_bckId > 0 && i_basId > 0) {
         mAnims[i_animIdx]->setAnm(
-            static_cast<J3DAnmTransform*>(dComIfG_getObjectIDRes(m_arcname, i_bckIdx)),
+            static_cast<J3DAnmTransform*>(dComIfG_getObjectIDRes(m_arcname, i_bckId)),
             -1, 0.0f, 1.0f, 0.0f, -1.0f,
-            dComIfG_getObjectIDRes(m_arcname, i_basIdx)
+            dComIfG_getObjectIDRes(m_arcname, i_basId)
         );
     }
 }
@@ -56,7 +55,8 @@ void daBranch_c::demoPlay(mDoExt_McaMorf* morf) {
         this,
         dDemo_actor_c::ENABLE_ANM_e,
         morf, m_arcname,
-        ARRAY_SIZE(anim_table) / 2, anim_table
+        ARRAY_SIZE(anim_table) / 2,
+        anim_table
     );
 }
 
@@ -68,9 +68,9 @@ BOOL daBranch_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 00000248-0000049C       .text CreateHeap__10daBranch_cFv */
 BOOL daBranch_c::CreateHeap() {
-    int bmd[] = { KWOOD_00_BMD_WS, KWOOD_00_BMD_WB };
-    int bck[] = { KWOOD_00_BCK_SWING02, KWOOD_00_BCK_BREAK };
-    int bas[] = { KWOOD_00_BAS_SWING02, KWOOD_00_BAS_BREAK };
+    int bmd[] = { dRes_ID_KWOOD_00_BMD_WS_e, dRes_ID_KWOOD_00_BMD_WB_e };
+    int bck[] = { dRes_ID_KWOOD_00_BCK_SWING02_e, dRes_ID_KWOOD_00_BCK_BREAK_e };
+    int bas[] = { dRes_ID_KWOOD_00_BAS_SWING02_e, dRes_ID_KWOOD_00_BAS_BREAK_e };
 
     BOOL status = TRUE;
 
@@ -190,15 +190,11 @@ static BOOL daBranch_Delete(daBranch_c* i_this) {
 }
 
 inline cPhs_State daBranch_c::create() {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daBranch_c);
-#endif
+    fopAcM_ct_Retail(this, daBranch_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, daBranch_c::m_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(this, daBranch_c);
-#endif
+        fopAcM_ct_Demo(this, daBranch_c);
 
         if (!fopAcM_entrySolidHeap(this, daBranch_c::solidHeapCB, 0x4000)) {
             for (int i = 0; i < (s32)ARRAY_SIZE(mAnims); i++) {
@@ -248,16 +244,16 @@ static actor_method_class l_daBranch_Method = {
 };
 
 actor_process_profile_definition g_profile_BRANCH = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BRANCH,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BRANCH_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daBranch_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BRANCH,
+    /* Draw Prio    */ fpcDwPi_BRANCH_e,
     /* Actor SubMtd */ &l_daBranch_Method,
 #if VERSION == VERSION_DEMO
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
@@ -265,5 +261,5 @@ actor_process_profile_definition g_profile_BRANCH = {
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
 #endif
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

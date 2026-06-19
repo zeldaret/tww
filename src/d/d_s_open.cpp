@@ -3,13 +3,13 @@
 // Translation Unit: d_s_open.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_open.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_draw_iter.h"
 #include "f_op/f_op_scene_mng.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
@@ -44,13 +44,13 @@ BOOL dScnOpen_c::execute() {
 #else
     if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(this)) {
 #endif
-        if (fpcM_GetName(this) == PROC_OPEN2_SCENE && (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0))) {
+        if (fpcM_GetName(this) == fpcNm_OPEN2_SCENE_e && (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0))) {
             field_0x1d4 = 1;
             mDoAud_bgmStop(20);
         }
 
         if (field_0x1d4 == 1 && !mDoAud_isUsedHeapForStreamBuffer())
-            dComIfG_changeOpeningScene(this, PROC_OPENING2_SCENE);
+            dComIfG_changeOpeningScene(this, fpcNm_OPENING2_SCENE_e);
     }
 
     mpProc->proc_execute();
@@ -89,10 +89,10 @@ void dScnOpen_c::changeGameScene() {
     if (fopOvlpM_IsPeek())
         return;
 
-    if (fpcM_GetName(this) == PROC_OPEN2_SCENE) {
-        dComIfG_changeOpeningScene(this, PROC_OPENING2_SCENE);
+    if (fpcM_GetName(this) == fpcNm_OPEN2_SCENE_e) {
+        dComIfG_changeOpeningScene(this, fpcNm_OPENING2_SCENE_e);
     } else {
-        if (fopScnM_ChangeReq(this, PROC_PLAY_SCENE, PROC_OVERLAP0, 5)) {
+        if (fopScnM_ChangeReq(this, fpcNm_PLAY_SCENE_e, fpcNm_OVERLAP0_e, 5)) {
             dComIfGs_setRestartRoomParam(0);
             mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(), dComIfGp_getNextStageLayer());
         }
@@ -126,7 +126,7 @@ static cPhs_State dScnOpen_Create(scene_class* i_scn) {
     return i_this->create();
 }
 
-scene_method_class l_dScnOpen_Method = {
+static scene_method_class l_dScnOpen_Method = {
     (process_method_func)dScnOpen_Create,
     (process_method_func)dScnOpen_Delete,
     (process_method_func)dScnOpen_Execute,
@@ -135,26 +135,26 @@ scene_method_class l_dScnOpen_Method = {
 };
 
 scene_process_profile_definition g_profile_OPEN_SCENE = {
-    /* LayerID      */ fpcLy_ROOT_e,
-    /* ListID       */ 1,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OPEN_SCENE,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OPEN_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(dScnOpen_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnOpen_Method,
 };
 
 scene_process_profile_definition g_profile_OPEN2_SCENE = {
-    /* LayerID      */ fpcLy_ROOT_e,
-    /* ListID       */ 1,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OPEN2_SCENE,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OPEN2_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(dScnOpen_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnOpen_Method,

@@ -3,6 +3,8 @@
 // Translation Unit: JPAExTexShape.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPAExTexShape.h"
 
 GXIndTexMtxID JPAExTexShapeArc::indMtxID[4] = {

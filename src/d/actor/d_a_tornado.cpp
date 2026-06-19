@@ -1,19 +1,16 @@
 /**
  * d_a_tornado.cpp
- * Ballad Of Gales Tornado
+ * Object - Ballad of Gales tornado
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tornado.h"
-#include "d/res/res_trnd.h"
+#include "res/Object/Trnd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_kankyo_wether.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 static char l_arcName[] = "Trnd";
 
@@ -23,12 +20,12 @@ const float daTornado_HIO_c0::start_dis = 10000.0f;
 /* 000000EC-00000260       .text jointCallBack__11daTornado_cFi */
 BOOL daTornado_c::jointCallBack(int jntNo) {
     int jntIdx = jntNo - 1;
-    if ((jntIdx < 0) || (jntIdx >= 11)) {
+    if ((jntIdx < YTRND00_JNT_ROOT_e) || (jntIdx >= YTRND00_JNT_JOINT11_e)) {
         return TRUE;
     }
 
     mDoMtx_stack_c::transS(mJointX[jntIdx], 0.0f, mJointZ[jntIdx]);
-    if (jntIdx != 10 && jntIdx != 0) {
+    if (jntIdx != YTRND00_JNT_JOINT10_e && jntIdx != YTRND00_JNT_ROOT_e) {
         mDoMtx_stack_c::ZXYrotM(-mJointZ[jntIdx] * 3572.0f * 0.001f, 0.0f, mJointX[jntIdx] * 3572.0f * 0.001f);
     }
 
@@ -45,7 +42,6 @@ BOOL daTornado_c::jointCallBack(int jntNo) {
 }
 
 static const float l_joint_scale[11] = { 0.1f, 0.4f, 0.7f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
-static const float joint_offset[11] = { 100.0f, 200.0f, 300.0f, 400.0f, 300.0f, 300.0f, 400.0f, 500.0f, 400.0f, 500.0f, 600.0f };
 
 static daTornado_HIO_c0 l_HIO;
 
@@ -70,7 +66,7 @@ BOOL daTornado_c::draw() {
     mBtk.entry(mpModel->getModelData(), mBtkFrame);
     mBrk.entry(mpModel->getModelData(), mBrkFrame);
 
-    if (dComIfGs_isTmpBit(0x404)) {
+    if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0404)) {
         dComIfGd_setListMaskOff();
         mDoExt_modelUpdateDL(mpModel);
         dComIfGd_setList();
@@ -138,9 +134,8 @@ BOOL daTornado_c::execute() {
     }
 
     for (int i = 0; i < 11; i++) {
-        f32 sin = cM_ssin(mAngle1 - 0x1000 * i);
-        f32 tmp1 = fVar8 * joint_offset[i];
-        f32 fVar1 = tmp1 * (sin + 1.0f);
+        static const f32 joint_offset[11] = { 100.0f, 200.0f, 300.0f, 400.0f, 300.0f, 300.0f, 400.0f, 500.0f, 400.0f, 500.0f, 600.0f };
+        f32 fVar1 = (fVar8 * joint_offset[i]) * ((cM_ssin(mAngle1 - 0x1000 * i)) + 1.0f);
         s16 angle2 = mAngle2 - 0x1800 * i;
         mJointX[i] = cM_ssin(angle2) * fVar1 * scale.x;
         mJointZ[i] = cM_scos(angle2) * fVar1 * scale.x;
@@ -156,7 +151,7 @@ BOOL daTornado_c::execute() {
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGp_getShipActor() != NULL) {
             daShip_c* ship = dComIfGp_getShipActor();
             cXyz diff = ship->current.pos - current.pos;
-            if (diff.abs2XZ() < 10000.0f*10000.0f) {
+            if (diff.abs2XZ() < SQUARE(10000.0f)) {
                 ship->onTornadoFlg(fopAcM_GetID(this));
                 speedF = 0.0f;
             }
@@ -166,7 +161,7 @@ BOOL daTornado_c::execute() {
             fopAcM_posMoveF(this, NULL);
             cXyz diff = current.pos - home.pos;
             diff.y = 0;
-            if (diff.abs2XZ() > 7500.0f*7500.0f) {
+            if (diff.abs2XZ() > SQUARE(7500.0f)) {
                 diff.normalize();
                 current.pos = home.pos + diff * 7500.0f;
             }
@@ -176,12 +171,12 @@ BOOL daTornado_c::execute() {
             mPtclTimer -= 1;
         } else {
             mPtclTimer = 10;
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8213, &current.pos, NULL, (cXyz*)&wind_scale);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_TORNADOWIND00, &current.pos, NULL, (cXyz*)&wind_scale);
         }
 
         fopAcM_seStartCurrent(this, JA_SE_OBJ_TORNADE_SUS, 100);
 
-        if (dComIfGs_isEventBit(0x2710)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2710)) {
             mPtclCb.remove();
             daShip_c* ship = dComIfGp_getShipActor();
             if (ship != NULL) {
@@ -257,28 +252,28 @@ static BOOL daTornado_Delete(daTornado_c* i_this) {
 
 /* 00000D54-0000109C       .text createHeap__11daTornado_cFv */
 BOOL daTornado_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, TRND_BDL_YTRND00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BDL_YTRND00_e);
     JUT_ASSERT(0x1fe, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
     if (!mpModel)
         return FALSE;
-    if (!mBck.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YTRND00), true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false))
+    if (!mBck.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BCK_YTRND00_e), true, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YTRND00), false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    if (!mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BTK_YTRND00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBrk.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YTRND00), false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    if (!mBrk.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BRK_YTRND00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, TRND_BDL_YWUWT00);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BDL_YWUWT00_e);
     JUT_ASSERT(0x226, modelData != NULL);
     mpModelUnder = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
     if (!mpModelUnder)
         return FALSE;
-    if (!mBckUnder.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false))
+    if (!mBckUnder.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BCK_YWUWT00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBtkUnder.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    if (!mBtkUnder.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BTK_YWUWT00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBrkUnder.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    if (!mBrkUnder.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BRK_YWUWT00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
 
     return TRUE;
@@ -296,7 +291,7 @@ cPhs_State daTornado_c::create() {
     static cXyz under_scale(1.01f, 1.0f, 1.01f);
 
     cPhs_State rt = dComIfG_resLoad(&mPhs, l_arcName);
-    fopAcM_SetupActor(this, daTornado_c);
+    fopAcM_ct(this, daTornado_c);
 
     if (rt == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, daTornado_createHeap, 0x8000)) {
@@ -316,13 +311,13 @@ cPhs_State daTornado_c::create() {
             }
         } else {
             fopAcM_SetParam(this, 0);
-            if (dComIfGs_isEventBit(0x2710)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2710)) {
                 return cPhs_ERROR_e;
             }
             dKyw_tornado_Notice(&current.pos);
             mpModelUnder->setBaseScale(under_scale);
             mCenter = current.pos;
-            dComIfGp_particle_set(dPa_name::ID_SCENE_81BB, &mCenter, NULL, NULL, 0xFF, &mPtclCb);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_WINDUPWATER00, &mCenter, NULL, NULL, 0xFF, &mPtclCb);
             fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
         }
         mDoMtx_stack_c::transS(current.pos);
@@ -351,18 +346,18 @@ static actor_method_class l_daTornado_Method = {
 };
 
 actor_process_profile_definition g_profile_TORNADO = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TORNADO,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TORNADO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTornado_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TORNADO,
+    /* Draw Prio    */ fpcDwPi_TORNADO_e,
     /* Actor SubMtd */ &l_daTornado_Method,
     /* Status       */ 0x06 | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

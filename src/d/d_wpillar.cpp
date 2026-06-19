@@ -3,6 +3,7 @@
 // Translation Unit: d_wpillar.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_wpillar.h"
 #include "f_op/f_op_kankyo.h"
 
@@ -19,46 +20,69 @@ static BOOL dWpillar_jointCallBack(J3DNode*, int) {
 }
 
 /* 8023EA28-8023ECF8       .text draw__10dWpillar_cFv */
-void dWpillar_c::draw() {
+BOOL dWpillar_c::draw() {
     /* Nonmatching */
 }
 
 /* 8023ECF8-8023ED18       .text dWpillar_Draw__FP10dWpillar_c */
-static BOOL dWpillar_Draw(dWpillar_c*) {
-    /* Nonmatching */
+static BOOL dWpillar_Draw(dWpillar_c* i_this) {
+    return i_this->draw();
 }
 
 /* 8023ED18-8023EDB0       .text execute__10dWpillar_cFv */
-void dWpillar_c::execute() {
+BOOL dWpillar_c::execute() {
     /* Nonmatching */
 }
 
 /* 8023EDB0-8023EDD0       .text dWpillar_Execute__FP10dWpillar_c */
-static BOOL dWpillar_Execute(dWpillar_c*) {
-    /* Nonmatching */
+static BOOL dWpillar_Execute(dWpillar_c* i_this) {
+    return i_this->execute();
 }
 
 /* 8023EDD0-8023EDD8       .text dWpillar_IsDelete__FP10dWpillar_c */
 static BOOL dWpillar_IsDelete(dWpillar_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 8023EDD8-8023EE08       .text wp_delete__10dWpillar_cFv */
-void dWpillar_c::wp_delete() {
+BOOL dWpillar_c::wp_delete() {
     /* Nonmatching */
 }
 
 /* 8023EE08-8023EE28       .text dWpillar_Delete__FP10dWpillar_c */
-static BOOL dWpillar_Delete(dWpillar_c*) {
-    /* Nonmatching */
+static BOOL dWpillar_Delete(dWpillar_c* i_this) {
+    return i_this->wp_delete();
 }
 
 /* 8023EE28-8023F5B0       .text create__10dWpillar_cFv */
-void dWpillar_c::create() {
+cPhs_State dWpillar_c::create() {
     /* Nonmatching */
 }
 
 /* 8023F5B0-8023F5D0       .text dWpillar_Create__FP12kankyo_class */
-static cPhs_State dWpillar_Create(kankyo_class*) {
-    /* Nonmatching */
+static cPhs_State dWpillar_Create(kankyo_class* i_this) {
+    dWpillar_c* a_this = (dWpillar_c*)i_this;
+    return a_this->create();
 }
+
+static kankyo_method_class l_dWpillar_Method = {
+    (process_method_func)dWpillar_Create,
+    (process_method_func)dWpillar_Delete,
+    (process_method_func)dWpillar_Execute,
+    (process_method_func)dWpillar_IsDelete,
+    (process_method_func)dWpillar_Draw,
+};
+
+kankyo_process_profile_definition g_profile_WPILLAR = {
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x0008,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_WPILLAR_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dWpillar_c),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_WPILLAR_e,
+    /* Kankyo SubMtd */ &l_dWpillar_Method,
+};

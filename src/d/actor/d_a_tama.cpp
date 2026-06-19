@@ -3,10 +3,9 @@
 // Translation Unit: d_a_tama.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tama.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_npc.h"
 
 static dCcD_SrcSph l_sph_src = {
@@ -32,10 +31,10 @@ static dCcD_SrcSph l_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
-    },
+    }},
 };
 
 /* 00000078-00000114       .text createInit__8daTama_cFv */
@@ -78,7 +77,7 @@ BOOL daTama_c::_execute() {
                     fopAc_ac_c* hitac = hitobj->GetAc();
                     if (hitac != NULL) {
                         if (hitac != partner) {
-                            if (fopAcM_GetName(hitac) == PROC_PLAYER) {
+                            if (fopAcM_GetName(hitac) == fpcNm_PLAYER_e) {
                                 partner->field_0x6BA = 1;
                             }
                         } else {
@@ -107,7 +106,7 @@ BOOL daTama_c::_delete() {
 /* 000002DC-00000410       .text _create__8daTama_cFv */
 cPhs_State daTama_c::_create() {
     cPhs_State rt = cPhs_COMPLEATE_e;
-    fopAcM_SetupActor(this, daTama_c);
+    fopAcM_ct(this, daTama_c);
     if (!createInit())
         rt = cPhs_ERROR_e;
     return rt;
@@ -147,18 +146,18 @@ static actor_method_class l_daTama_Method = {
 };
 
 actor_process_profile_definition g_profile_TAMA = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0009,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAMA,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0009,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAMA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTama_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAMA,
+    /* Draw Prio    */ fpcDwPi_TAMA_e,
     /* Actor SubMtd */ &l_daTama_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -3,6 +3,7 @@
  * NPC - Mila (poor)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_kk1.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "c/c_dylink.h"
@@ -12,7 +13,8 @@
 #include "d/actor/d_a_tama.h"
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+//#include "d/d_procname.h"
+//#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_actor_mng.h"
@@ -136,7 +138,7 @@ void* searchActor_SWC00(void* i_swc, void* i_kk1) {
     daNpc_Kk1_c* kk1_act = (daNpc_Kk1_c*)(i_kk1);
     if (
         l_check_wrk < L_CHECK_SZ  && fopAc_IsActor(swc_act) && 
-        fopAcM_GetName(swc_act) == PROC_SWC00 && daSwc00_getType(swc_act) == 0 &&
+        fopAcM_GetName(swc_act) == fpcNm_SWC00_e && daSwc00_getType(swc_act) == 0 &&
         daSwc00_getSw1No(swc_act) == kk1_act->getSWbit()
     ){
         l_check_inf[l_check_wrk] = swc_act;
@@ -173,12 +175,13 @@ bool daNpc_Kk1_c::createInit() {
         mEvtIDTbl[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i], 0xFF);
     }
     mEventCut.setActorInfo2("Kk1", this);
-    mSWbit = base.mParameters >> 8;
+    //mSWbit = base.mParameters >> 8;
 
-    u8 params = base.mParameters >> 0x10;
+    //u8 params = base.mParameters >> 0x10;
+    u8 params = 1; //WRONG CODE
     if (params != 0xff) {
         mRunPath.setInf(params, current.roomNo, true);
-        if (mRunPath.mPath != NULL) {
+        if (mRunPath.getPath() != NULL) {
             fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
             set_pthPoint(0);
         }
@@ -186,7 +189,7 @@ bool daNpc_Kk1_c::createInit() {
             return FALSE;
         }
     }
-    if (mRunPath.mPath == NULL) {
+    if (mRunPath.getPath() == NULL) {
         return FALSE;
     }
     
@@ -276,7 +279,7 @@ void daNpc_Kk1_c::play_animation() {
 /* 00000918-00000A98       .text setMtx__11daNpc_Kk1_cFb */
 void daNpc_Kk1_c::setMtx(bool param_1) {
 
-    mpMorf->mpModel->setBaseScale(scale);
+    mpMorf->getModel()->setBaseScale(scale);
     PSMTXTrans(mDoMtx_stack_c::get(),current.pos.x,current.pos.y,current.pos.z);
     mDoMtx_stack_c::ZXYrotM(mAngle);
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -1037,8 +1040,9 @@ bool daNpc_Kk1_c::cut_move_RUN_START() {
     short target = cLib_targetAngleY(&current.pos,&runPoint);
     cLib_addCalcAngleS(&current.angle.y,target,l_HIO.mScale,l_HIO.mMaxStep,0x80);
     if(current.angle.y == target){
-        pdVar2 = g_dComIfG_gameInfo.play.mpPlayer[2];
-        pdVar2->cancelOriginalDemo();
+        //pdVar2 = g_dComIfG_gameInfo.play.mpPlayer[2];
+        pdVar2->mDemo.setDemoType(2);
+        pdVar2->mDemo.setDemoMode(1);
         return true;
     }
     return false;
@@ -1115,7 +1119,7 @@ bool daNpc_Kk1_c::cut_move_CATCH_END() {
 /* 00001FB4-000022BC       .text cut_init_TRN__11daNpc_Kk1_cFi */
 void daNpc_Kk1_c::cut_init_TRN(int) {
     if(field_0x816 != 5){
-        u8 currentPoint = mRunPath.mCurrPointIndex;
+        u8 currentPoint = mRunPath.getIdx();
         if((currentPoint >= 0x19)&&(currentPoint <= 0x28)){
             u8 sp58[] = {
                 0x28, 0x27, 0x26, 0x25,
@@ -1124,16 +1128,16 @@ void daNpc_Kk1_c::cut_init_TRN(int) {
                 0x26, 0x27, 0x28, 0x29,
             };
 
-            mRunPath.mCurrPointIndex = sp58[currentPoint-0x19];
+            mRunPath.setIdx(sp58[currentPoint-0x19]);
             mWhereToLook = 0;
             mLockBodyRotation = 1;
             return;
         }
         mRunPath.setNearPathIndx(&LINKPOS,100);
-        u8 linkPathIndex = mRunPath.mCurrPointIndex;
+        u8 linkPathIndex = mRunPath.getIdx();
 
         mRunPath.setNearPathIndx(&current.pos,100);
-        u8 muuruPathIndex = mRunPath.mCurrPointIndex;
+        u8 muuruPathIndex = mRunPath.getIdx();
         s16 maxPoint = mRunPath.maxPoint();
         s16 midpointIndexFloat = maxPoint / 2.0f + 0.5f; 
 
@@ -1145,10 +1149,10 @@ void daNpc_Kk1_c::cut_init_TRN(int) {
         if(r26 > midpointIndexFloat){
             r26 -= maxPoint;
         }
-        mRunPath.mCurrPointIndex = currentPoint;
+        mRunPath.setIdx(currentPoint);
         bool bVar10 = false;
         if (r26 == 0){
-            cXyz muuruPoint = mRunPath.getPoint(mRunPath.mCurrPointIndex);
+            cXyz muuruPoint = mRunPath.getPoint(mRunPath.getIdx());
             f32 muuruDistance = (current.pos - muuruPoint).absXZ();
             f32 linkDistance = (LINKPOS - muuruPoint).absXZ();
 
@@ -1157,7 +1161,7 @@ void daNpc_Kk1_c::cut_init_TRN(int) {
         if(r26 > 0 || bVar10){
             mRunPath.decIdxAuto();
             mRunPath.decIdxAuto();
-            mRunPath.mbGoingForwards ^=  1;
+            mRunPath.setDir(mRunPath.getDir() ^ 1);
         }
     }
     mWhereToLook = 0;
@@ -1166,7 +1170,7 @@ void daNpc_Kk1_c::cut_init_TRN(int) {
 
 /* 000022BC-00002364       .text cut_move_TRN__11daNpc_Kk1_cFv */
 bool daNpc_Kk1_c::cut_move_TRN() {
-    cXyz run_point = mRunPath.getPoint(mRunPath.mCurrPointIndex);
+    cXyz run_point = mRunPath.getPoint(mRunPath.getIdx());
     s16 target = cLib_targetAngleY(&current.pos,&run_point);
     cLib_addCalcAngleS(&current.angle.y,target,l_HIO.mScale,l_HIO.mMaxStep,0x80);
     if(current.angle.y == target){
@@ -1222,12 +1226,12 @@ bool daNpc_Kk1_c::cut_move_BYE() {
     event_move(false);
     if (field_0x79A > 0) {
         if (cLib_calcTimer(&field_0x79A) == 0) {
-            ((daPy_py_c*)dComIfGp_getLinkPlayer())->setPlayerPosAndAngle(&LINKPOS,-0x3217); //TODO: Unused in Debug Map
+            ((daPy_py_c*)dComIfGp_getLinkPlayer())->setPlayerPosAndAngle(&LINKPOS,-0x3217); //TODO: Doesn't explicitly appear in Debug Map.
             daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
-            player->changeOriginalDemo();
-
-            ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(daPy_demo_c::DEMO_UNK09_e);
-            ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoParam0(0x3217);
+            player->mDemo.setDemoType(3);
+            player->mDemo.setParam0(0);
+            ((daPy_py_c*)dComIfGp_getLinkPlayer())->mDemo.setDemoMode(daPy_demo_c::DEMO_LDAM_e);
+            ((daPy_py_c*)dComIfGp_getLinkPlayer())->mDemo.setParam0(0x3217);
         }
     }
     if (cLib_calcTimer(&mTimer) == 0) {
@@ -1270,7 +1274,7 @@ bool daNpc_Kk1_c::cut_move_BYE_CONTINUE() {
 void daNpc_Kk1_c::cut_init_BYE_END(int i_unusedParam) {
 
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeOriginalDemo();
-    ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(daPy_demo_c::DEMO_UNK04_e);
+    ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(daPy_demo_c::DEMO_INIT_WAIT_e);
     s16 angle_y = cLib_targetAngleY(&LINKPOS,&current.pos);
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->setPlayerPosAndAngle(&LINKPOS, angle_y);
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->offPlayerNoDraw();
@@ -1297,7 +1301,7 @@ bool daNpc_Kk1_c::cut_move_PLYER_TRN() {
 void daNpc_Kk1_c::cut_init_OTOBOKE(int) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     player->changeOriginalDemo();
-    ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(daPy_demo_c::DEMO_UNK04_e);
+    ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(daPy_demo_c::DEMO_INIT_WAIT_e);
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->setPlayerPosAndAngle(&LINKPOS, current.angle.y);
     mTimer = 2;
     return;
@@ -1351,7 +1355,7 @@ void daNpc_Kk1_c::cut_init_RUNAWAY_START(int param_1) {
     s32* puVar2 = (s32*)dComIfGp_evmng_getMyIntegerP(param_1,"Timer");
 
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeOriginalDemo();
-    ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(daPy_demo_c::DEMO_UNK04_e);
+    ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(daPy_demo_c::DEMO_INIT_WAIT_e);
 
     short sVar4 = cLib_targetAngleY(&LINKPOS,&current.pos);
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->setPlayerPosAndAngle(&LINKPOS,sVar4);
@@ -1731,7 +1735,7 @@ void daNpc_Kk1_c::createTama(float param_1) {
     fpc_ProcID procID;
     if (tama != NULL) {
         if (this != NULL) {
-            procID = base.mBsPcId;
+            //procID = base.mBsPcId;
 
         }
         else {
@@ -1792,7 +1796,7 @@ bool daNpc_Kk1_c::chkHitPlayer() {
             fopAc_ac_c* hit_actor = dCc_GetAc(hit_obj);
 
             if(hit_actor != NULL){
-                o_result = fopAcM_GetName(hit_actor) == PROC_PLAYER;
+                //o_result = fopAcM_GetName(hit_actor) == PROC_PLAYER;
             }
         }
     }
@@ -1802,11 +1806,11 @@ bool daNpc_Kk1_c::chkHitPlayer() {
 /* 00003600-000036A8       .text set_pthPoint__11daNpc_Kk1_cFUc */
 void daNpc_Kk1_c::set_pthPoint(unsigned char i_pointIndex) {
 
-    if(mRunPath.mPath != NULL){
-        mRunPath.mCurrPointIndex = i_pointIndex;
-        current.pos = mRunPath.getPoint(mRunPath.mCurrPointIndex);
+    if(mRunPath.getPath() != NULL){
+        mRunPath.setIdx(i_pointIndex);
+        current.pos = mRunPath.getPoint(mRunPath.getIdx());
         if(mRunPath.nextIdx()){
-            cXyz runpoint = mRunPath.getPoint(mRunPath.mCurrPointIndex);
+            cXyz runpoint = mRunPath.getPoint(mRunPath.getIdx());
             current.angle.y = cLib_targetAngleY(&current.pos,&runpoint);
         }
     }
@@ -1828,7 +1832,7 @@ bool daNpc_Kk1_c::event_move(bool i_param_1) {
         if(mRunPath.chkPointPass(current.pos,mRunPath.getDir())){
             mRunPath.nextIdxAuto();
             if(i_param_1){
-                s8 point_arg = mRunPath.pointArg(mRunPath.mCurrPointIndex);
+                s8 point_arg = mRunPath.pointArg(mRunPath.getIdx());
                 if( point_arg >= 0){
                     point_arg += 1;
                 }
@@ -1846,8 +1850,7 @@ bool daNpc_Kk1_c::event_move(bool i_param_1) {
         }
     }
 
-    cXyz runpoint = mRunPath.getPoint(mRunPath.mCurrPointIndex);
-
+    cXyz runpoint = mRunPath.getPoint(mRunPath.getIdx());
     s16 target = cLib_targetAngleY(&current.pos,&runpoint);
     s16 store_angle = current.angle.y;
     cLib_addCalcAngleS(&current.angle.y,target,l_HIO.mScale,l_HIO.mMaxStep,0x80);
@@ -1877,7 +1880,7 @@ bool daNpc_Kk1_c::event_move(bool i_param_1) {
         current.angle.y = store_angle;
         if((int)speedF == 0){
             speedF = 0.0;
-            s8 point_arg = mRunPath.pointArg(mRunPath.mCurrPointIndex);
+            s8 point_arg = mRunPath.pointArg(mRunPath.getIdx());
             if((s32)point_arg >= 0){
                 point_arg += 1;
             }
@@ -1994,7 +1997,7 @@ void daNpc_Kk1_c::flwAse() {
 
     JGeometry::TVec3<f32> out;
     if (field_0x810 != NULL) {
-        mDoMtx_stack_c::copy(mpMorf->mpModel->getAnmMtx(m_hed_jnt_num));
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_hed_jnt_num));
         mDoMtx_stack_c::multVecZero(out);
         field_0x810->setGlobalTranslation(out);
 
@@ -2031,7 +2034,7 @@ BOOL daNpc_Kk1_c::wait_1() {
 
     cXyz sp20;
     if(field_0x7B6 != 0){
-        sp20 = mRunPath.getPoint(mRunPath.mCurrPointIndex);
+        sp20 = mRunPath.getPoint(mRunPath.getIdx());
         s16 temp_r3 = cLib_targetAngleY(&current.pos,&sp20);
         cLib_addCalcAngleS(&current.angle.y,temp_r3,l_HIO.mScale,l_HIO.mMaxStep, 0x80);
         temp_r3 = temp_r3 - current.angle.y;
@@ -2069,7 +2072,7 @@ BOOL daNpc_Kk1_c::wait_1() {
         return TRUE;
     }
     if(cLib_calcTimer(&field_0x7A4) == 0){
-        if(mRunPath.mPath != NULL){
+        if(mRunPath.getPath() != NULL){
             u32 temp_r3_3 = mRunPath.maxPoint();
             if((temp_r3_3 > 2) && (((daObj_Roten_c*)temp_r3_3)->getCreateCount() > 1)){
                 field_0x7B6 = 1;
@@ -2091,16 +2094,16 @@ BOOL daNpc_Kk1_c::walk_1() {
     float fVar7;
     cXyz local_40;
 
-    local_40 = mRunPath.getPoint(mRunPath.mCurrPointIndex);
-    if (dPath_ChkClose(mRunPath.mPath)) {
+    local_40 = mRunPath.getPoint(mRunPath.getIdx());
+    if (dPath_ChkClose(mRunPath.getPath())) {
         return 1;
     }
     u8 idx;
     fVar7 = (current.pos-local_40).absXZ();
     if ((field_0x7B6) && (fVar7 < l_HIO.field_0x34) ) {
         bool r29 = (mRunPath.nextIdxAuto() == 0);
-        if (!r29 && mRunPath.mbGoingForwards){
-            idx = mRunPath.mCurrPointIndex;
+        if (!r29 && mRunPath.getDir()){
+            idx = mRunPath.getIdx();
             if( idx >= ((daObj_Roten_c*)r29)->getCreateCount() ){
                 mRunPath.decIdx();
                 mRunPath.decIdx();
@@ -2109,7 +2112,7 @@ BOOL daNpc_Kk1_c::walk_1() {
         }
         if (r29 != 0) {
             field_0x7B6 = 0;
-            mRunPath.mbGoingForwards ^= 1;
+            //mRunPath.mbGoingForwards ^= 1;
         }
     }
 
@@ -2124,7 +2127,7 @@ BOOL daNpc_Kk1_c::walk_1() {
     cLib_chaseF(&speedF,fVar7,l_HIO.field_0x3C);
     fVar3 = speedF*l_HIO.field_0x40;
     fVar3 = cLib_minLimit(fVar3,0.5f);
-    mpMorf->mFrameCtrl.setRate(fVar3);
+    mpMorf->setPlaySpeed(fVar3);
     if ((int)fVar7 == 0) {
         current.angle.y = sVar2;
         if ((s32)speedF == 0) {
@@ -2285,7 +2288,7 @@ void daNpc_Kk1_c::move_CMT_TRN() {
         field_0x81B = EVENTLENGTH+1;
         }
     }else if (field_0x7A4 == 0) {
-        local_20 = mRunPath.getPoint(mRunPath.mCurrPointIndex);
+        local_20 = mRunPath.getPoint(mRunPath.getIdx());
         sVar3 = cLib_targetAngleY(&current.pos,&local_20);
         sVar1 = cLib_addCalcAngleS(&current.angle.y,sVar3,l_HIO.mScale,l_HIO.mMaxStep,0x80);
         uVar2 = (uint)sVar1;
@@ -2348,7 +2351,7 @@ void daNpc_Kk1_c::move_CMT_PCK() {
     u8 temp_r0_2;
 
     if (field_0x7A4 == 0) {
-        sp8 = mRunPath.getPoint(mRunPath.mCurrPointIndex);
+        sp8 = mRunPath.getPoint(mRunPath.getIdx());
 
         temp_r3 = cLib_targetAngleY(&current.pos,&sp8);
         cLib_addCalcAngleS(&current.angle.y, temp_r3, l_HIO.mScale, l_HIO.mMaxStep, 0x80);
@@ -2499,7 +2502,7 @@ BOOL daNpc_Kk1_c::wait_4() {
     this->mLockBodyRotation = 0;
     this->field_0x7B6 = fVar4 > 300.0f;
     if (this->field_0x7B6) {
-        local_20[0] = mRunPath.getPoint(mRunPath.mCurrPointIndex);
+        local_20[0] = mRunPath.getPoint(mRunPath.getIdx());
 
         target = cLib_targetAngleY(&current.pos,local_20);
         cLib_addCalcAngleS(&current.angle.y,target,l_HIO.mScale,l_HIO.mMaxStep,0x80);
@@ -2733,7 +2736,7 @@ BOOL daNpc_Kk1_c::_draw() {
 
 
 /* 00005798-000059EC       .text _execute__11daNpc_Kk1_cFv */
-bool daNpc_Kk1_c::_execute() {
+BOOL daNpc_Kk1_c::_execute() {
 
     float radius;
     int cVar1;
@@ -2807,7 +2810,7 @@ bool daNpc_Kk1_c::_execute() {
 
 
 /* 000059EC-00005A58       .text _delete__11daNpc_Kk1_cFv */
-bool daNpc_Kk1_c::_delete() {
+BOOL daNpc_Kk1_c::_delete() {
     cDyl_Unlink(0x1D6);
     dComIfG_resDelete(&field_0x6C4,&mArcName);
     delBikon();
@@ -2825,9 +2828,9 @@ cPhs_State daNpc_Kk1_c::_create() {
     fopAcM_SetupActor(this,daNpc_Kk1_c);
 
 
-    if (!decideType(base.mParameters & 0xff)) {
-        return cPhs_ERROR_e;
-    }
+    // if (!decideType(base.mParameters & 0xff)) {
+    //     return cPhs_ERROR_e;
+    // }
 
     s32 resLoadResult = dComIfG_resLoad(&field_0x6C4,&mArcName);
     field_0x7BC = resLoadResult == cPhs_COMPLEATE_e;
@@ -2844,7 +2847,7 @@ cPhs_State daNpc_Kk1_c::_create() {
     if (!fopAcM_entrySolidHeap(this,CheckCreateHeap,a_siz_tbl[field_0x81F])) {
         return cPhs_ERROR_e;
     }
-    cullMtx = (MtxP)mpMorf->mpModel->getBaseTRMtx();
+    cullMtx = (MtxP)mpMorf->getModel()->getBaseTRMtx();
     fopAcM_SetMtx(this,cullMtx);
     fopAcM_setCullSizeBox(this,-50.0,-20.0,-50.0,50.0,140.0,50.0);
     if (!createInit()) {
@@ -2879,7 +2882,7 @@ BOOL daNpc_Kk1_c::bodyCreateHeap() {
     if (pmVar2 == NULL) {
         return 0;
     }
-    else if (pmVar2->mpModel == NULL) {
+    else if (pmVar2->getModel() == NULL) {
         mpMorf = NULL;
         return 0;
     }
@@ -2900,9 +2903,10 @@ BOOL daNpc_Kk1_c::bodyCreateHeap() {
     m_bbone_jnt_num = a_mdl_dat->getJointName()->getIndex("backbone");
     JUT_ASSERT(0xDD3,m_bbone_jnt_num >= 0); //Line 3539
 #endif
-    mpMorf->mpModel->getModelData()->getJointNodePointer(m_hed_jnt_num)->setCallBack(nodeCB_Head);
-    mpMorf->mpModel->getModelData()->getJointNodePointer(m_bbone_jnt_num)->setCallBack(nodeCB_BackBone);
-    mpMorf->mpModel->setUserArea((u32)this);
+    mpMorf->getModel()->getModelData()->getJointNodePointer(m_hed_jnt_num)->setCallBack(nodeCB_Head);
+    mpMorf->getModel()->getModelData()->getJointNodePointer(m_bbone_jnt_num)->setCallBack(nodeCB_BackBone);
+    mpMorf->getModel()->setUserArea((u32)this);
+
     return 1;
 }
 
@@ -2974,29 +2978,28 @@ BOOL daNpc_Kk1_c::CreateHeap() {
 }
 
 /* 00006684-000066A4       .text daNpc_Kk1_Create__FP10fopAc_ac_c */
-static cPhs_State daNpc_Kk1_Create(fopAc_ac_c* obj) {
-    (static_cast<daNpc_Kk1_c*>(obj))->_create();
-
+static cPhs_State daNpc_Kk1_Create(fopAc_ac_c* i_this) {
+    return ((daNpc_Kk1_c*)i_this)->_create();
 }
 
 /* 000066A4-000066C4       .text daNpc_Kk1_Delete__FP11daNpc_Kk1_c */
-static BOOL daNpc_Kk1_Delete(daNpc_Kk1_c* obj) {
-    (static_cast<daNpc_Kk1_c*>(obj))->_delete();
+static BOOL daNpc_Kk1_Delete(daNpc_Kk1_c* i_this) {
+    return ((daNpc_Kk1_c*)i_this)->_delete();
 }
 
 /* 000066C4-000066E4       .text daNpc_Kk1_Execute__FP11daNpc_Kk1_c */
-static BOOL daNpc_Kk1_Execute(daNpc_Kk1_c* obj) {
-    (static_cast<daNpc_Kk1_c*>(obj))->_execute();
+static BOOL daNpc_Kk1_Execute(daNpc_Kk1_c* i_this) {
+    return ((daNpc_Kk1_c*)i_this)->_execute();
 }
 
 /* 000066E4-00006704       .text daNpc_Kk1_Draw__FP11daNpc_Kk1_c */
-static BOOL daNpc_Kk1_Draw(daNpc_Kk1_c* obj) {
-    (static_cast<daNpc_Kk1_c*>(obj))->_draw();
+static BOOL daNpc_Kk1_Draw(daNpc_Kk1_c* i_this) {
+    return ((daNpc_Kk1_c*)i_this)->_draw();
 }
 
 /* 00006704-0000670C       .text daNpc_Kk1_IsDelete__FP11daNpc_Kk1_c */
 static BOOL daNpc_Kk1_IsDelete(daNpc_Kk1_c*) {
-    return true;
+    return TRUE;
 }
 
 
@@ -3010,18 +3013,18 @@ static actor_method_class l_daNpc_Kk1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_KK1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_KK1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_KK1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Kk1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x166,
+    /* Draw Prio    */ fpcDwPi_NPC_KK1_e,
     /* Actor SubMtd */ &l_daNpc_Kk1_Method,
     /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

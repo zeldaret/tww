@@ -3,6 +3,8 @@
 // Translation Unit: JPAResourceManager.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JParticle/JPAEmitterLoader.h"
 #include "JSystem/JKernel/JKRHeap.h"

@@ -10,7 +10,6 @@
 #include "SSystem/SComponent/c_m2d.h"
 #include "SSystem/SComponent/c_math.h"
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(fpclassify(x) == 1));
 
 /* 800A5C3C-800A5CA8       .text __ct__4dBgWFv */
 dBgW::dBgW() {
@@ -36,8 +35,8 @@ void dBgW::positionWallCorrect(dBgS_Acch* acch, f32 dist, cM3dGPla& plane, cXyz*
     f32 move = speed * dist;
     pupper_pos->x += move * plane.mNormal.x;
     pupper_pos->z += move * plane.mNormal.z;
-    CHECK_FLOAT_CLASS(0xd0, pupper_pos->x);
-    CHECK_FLOAT_CLASS(0xd1, pupper_pos->z);
+    JUT_ASSERT(208, !isnan(pupper_pos->x));
+    JUT_ASSERT(209, !isnan(pupper_pos->z));
 }
 
 /* 800A5E64-800A6DF8       .text RwgWallCorrect__4dBgWFP9dBgS_AcchUs */
@@ -50,8 +49,7 @@ bool dBgW::RwgWallCorrect(dBgS_Acch* pwi, u16 i_poly_idx) {
         if (!ChkPolyThrough(i_poly_idx, pwi->GetPolyPassChk())) {
             cBgW_TriElm* tri = &pm_tri[i_poly_idx];
 
-            f32 sp68 = std::sqrtf(tri->m_plane.GetNP()->x * tri->m_plane.GetNP()->x +
-                                  tri->m_plane.GetNP()->z * tri->m_plane.GetNP()->z);
+            f32 sp68 = std::sqrtf(SQUARE(tri->m_plane.GetNP()->x) + SQUARE(tri->m_plane.GetNP()->z));
             if (cM3d_IsZero(sp68)) {
                 if (rwg_elm->next != 0xFFFF) {
                     i_poly_idx = rwg_elm->next;
@@ -62,9 +60,8 @@ bool dBgW::RwgWallCorrect(dBgS_Acch* pwi, u16 i_poly_idx) {
 
             f32 sp6C = 1.0f / sp68;
             cBgD_Tri_t* tri_data = &pm_bgd->m_t_tbl[i_poly_idx];
-            int cir_index = 0;
 
-            while (cir_index < pwi->GetTblSize()) {
+            for (int cir_index = 0; cir_index < pwi->GetTblSize(); cir_index++) {
                 f32 sp78 = sp6C * pwi->GetWallR(cir_index);
                 Vec sp50;
                 sp50.x = sp78 * tri->m_plane.GetNP()->x;
@@ -85,163 +82,169 @@ bool dBgW::RwgWallCorrect(dBgS_Acch* pwi, u16 i_poly_idx) {
                 sp5C[1] = pm_vtx_tbl[tri_data->vtx1].y - sp7C;
                 sp5C[2] = pm_vtx_tbl[tri_data->vtx2].y - sp7C;
 
-                if ((!(sp5C[0] > 0.0f) || !(sp5C[1] > 0.0f) || !(sp5C[2] > 0.0f)) &&
-                    (!(sp5C[0] < 0.0f) || !(sp5C[1] < 0.0f) || !(sp5C[2] < 0.0f)))
+                if (((sp5C[0] > 0.0f) && (sp5C[1] > 0.0f) && (sp5C[2] > 0.0f)) ||
+                    ((sp5C[0] < 0.0f) && (sp5C[1] < 0.0f) && (sp5C[2] < 0.0f)))
                 {
-                    int sp8C = 0;
-                    if (cM3d_IsZero(sp5C[0])) {
-                        sp8C++;
-                    }
-                    if (cM3d_IsZero(sp5C[1])) {
-                        sp8C++;
-                    }
-                    if (cM3d_IsZero(sp5C[2])) {
-                        sp8C++;
+                    continue;
+                }
+
+                int sp8C = 0;
+                if (cM3d_IsZero(sp5C[0])) {
+                    sp8C++;
+                }
+                if (cM3d_IsZero(sp5C[1])) {
+                    sp8C++;
+                }
+                if (cM3d_IsZero(sp5C[2])) {
+                    sp8C++;
+                }
+
+                int sp80, sp84, sp88;
+                if (sp8C != 1) {
+                    if ((sp5C[0] > 0.0f && (sp5C[1] <= 0.0f) && (sp5C[2] <= 0.0f)) ||
+                        (sp5C[0] < 0.0f && (sp5C[1] >= 0.0f) && (sp5C[2] >= 0.0f)))
+                    {
+                        sp80 = 0;
+                        sp84 = 1;
+                        sp88 = 2;
+                    } else if ((sp5C[1] > 0.0f && (sp5C[0] <= 0.0f) && (sp5C[2] <= 0.0f)) ||
+                               (sp5C[1] < 0.0f && (sp5C[0] >= 0.0f) && (sp5C[2] >= 0.0f)))
+                    {
+                        sp80 = 1;
+                        sp84 = 0;
+                        sp88 = 2;
+                    } else {
+                        sp80 = 2;
+                        sp84 = 0;
+                        sp88 = 1;
                     }
 
-                    int sp80, sp84, sp88;
-                    if (sp8C != 1) {
-                        if ((sp5C[0] > 0.0f && (sp5C[1] <= 0.0f) && (sp5C[2] <= 0.0f)) ||
-                            (sp5C[0] < 0.0f && (sp5C[1] >= 0.0f) && (sp5C[2] >= 0.0f)))
-                        {
-                            sp80 = 0;
-                            sp84 = 1;
-                            sp88 = 2;
-                        } else if ((sp5C[1] > 0.0f && (sp5C[0] <= 0.0f) && (sp5C[2] <= 0.0f)) ||
-                                   (sp5C[1] < 0.0f && (sp5C[0] >= 0.0f) && (sp5C[2] >= 0.0f)))
-                        {
-                            sp80 = 1;
-                            sp84 = 0;
-                            sp88 = 2;
+                    f32 sp90 = sp5C[sp80] - sp5C[sp84];
+                    f32 sp94 = sp5C[sp80] - sp5C[sp88];
+                    if (!cM3d_IsZero(sp90) && !cM3d_IsZero(sp94)) {
+                        f32 sp98 = -sp5C[sp84] / sp90;
+                        f32 sp9C = -sp5C[sp88] / sp94;
+
+                        f32 vtx0_x = pm_vtx_tbl[tri_data->vtx0].x;
+                        f32 vtx0_z = pm_vtx_tbl[tri_data->vtx0].z;
+                        f32 vtx1_x = pm_vtx_tbl[tri_data->vtx1].x;
+                        f32 vtx1_z = pm_vtx_tbl[tri_data->vtx1].z;
+                        f32 vtx2_x = pm_vtx_tbl[tri_data->vtx2].x;
+                        f32 vtx2_z = pm_vtx_tbl[tri_data->vtx2].z;
+
+                        f32 cx0, cy0, cx1, cy1;
+                        if (sp80 == 0) {
+                            cx0 = vtx1_x + sp98 * (vtx0_x - vtx1_x);
+                            cy0 = vtx1_z + sp98 * (vtx0_z - vtx1_z);
+                            cx1 = vtx2_x + sp9C * (vtx0_x - vtx2_x);
+                            cy1 = vtx2_z + sp9C * (vtx0_z - vtx2_z);
+                        } else if (sp80 == 1) {
+                            cx0 = vtx0_x + sp98 * (vtx1_x - vtx0_x);
+                            cy0 = vtx0_z + sp98 * (vtx1_z - vtx0_z);
+                            cx1 = vtx2_x + sp9C * (vtx1_x - vtx2_x);
+                            cy1 = vtx2_z + sp9C * (vtx1_z - vtx2_z);
                         } else {
-                            sp80 = 2;
-                            sp84 = 0;
-                            sp88 = 1;
+                            cx0 = vtx0_x + sp98 * (vtx2_x - vtx0_x);
+                            cy0 = vtx0_z + sp98 * (vtx2_z - vtx0_z);
+                            cx1 = vtx1_x + sp9C * (vtx2_x - vtx1_x);
+                            cy1 = vtx1_z + sp9C * (vtx2_z - vtx1_z);
                         }
 
-                        f32 sp90 = sp5C[sp80] - sp5C[sp84];
-                        f32 sp94 = sp5C[sp80] - sp5C[sp88];
-                        if (!cM3d_IsZero(sp90) && !cM3d_IsZero(sp94)) {
-                            f32 sp98 = -sp5C[sp84] / sp90;
-                            f32 sp9C = -sp5C[sp88] / sp94;
+                        cx0 += sp50.x;
+                        cy0 += sp50.z;
+                        cx1 += sp50.x;
+                        cy1 += sp50.z;
 
-                            f32 vtx0_x = pm_vtx_tbl[tri_data->vtx0].x;
-                            f32 vtx0_z = pm_vtx_tbl[tri_data->vtx0].z;
-                            f32 vtx1_x = pm_vtx_tbl[tri_data->vtx1].x;
-                            f32 vtx1_z = pm_vtx_tbl[tri_data->vtx1].z;
-                            f32 vtx2_x = pm_vtx_tbl[tri_data->vtx2].x;
-                            f32 vtx2_z = pm_vtx_tbl[tri_data->vtx2].z;
+                        f32 spC8, spCC, spD0;
+                        bool sp107 = cM3d_Len2dSqPntAndSegLine(
+                            pwi->GetCx(), pwi->GetCz(),
+                            cx0, cy0,
+                            cx1, cy1,
+                            &spCC, &spD0,
+                            &spC8
+                        );
 
-                            f32 cx0, cy0, cx1, cy1;
-                            if (sp80 == 0) {
-                                cx0 = vtx1_x + sp98 * (vtx0_x - vtx1_x);
-                                cy0 = vtx1_z + sp98 * (vtx0_z - vtx1_z);
-                                cx1 = vtx2_x + sp9C * (vtx0_x - vtx2_x);
-                                cy1 = vtx2_z + sp9C * (vtx0_z - vtx2_z);
-                            } else if (sp80 == 1) {
-                                cx0 = vtx0_x + sp98 * (vtx1_x - vtx0_x);
-                                cy0 = vtx0_z + sp98 * (vtx1_z - vtx0_z);
-                                cx1 = vtx2_x + sp9C * (vtx1_x - vtx2_x);
-                                cy1 = vtx2_z + sp9C * (vtx1_z - vtx2_z);
-                            } else {
-                                cx0 = vtx0_x + sp98 * (vtx2_x - vtx0_x);
-                                cy0 = vtx0_z + sp98 * (vtx2_z - vtx0_z);
-                                cx1 = vtx1_x + sp9C * (vtx2_x - vtx1_x);
-                                cy1 = vtx1_z + sp9C * (vtx2_z - vtx1_z);
-                            }
+                        f32 spD4 = spCC - pwi->GetCx();
+                        f32 spD8 = spD0 - pwi->GetCz();
+                        f32 spDC = pwi->GetWallRR(cir_index);
 
-                            cx0 += sp50.x;
-                            cy0 += sp50.z;
-                            cx1 += sp50.x;
-                            cy1 += sp50.z;
+                        if ((spC8 > spDC) || (spD4 * sp50.x + spD8 * sp50.z < 0.0f)) {
+                            continue;
+                        }
 
-                            f32 spC8, spCC, spD0;
-                            bool sp107 = cM3d_Len2dSqPntAndSegLine(
-                                pwi->GetCx(), pwi->GetCz(),
-                                cx0, cy0,
-                                cx1, cy1,
-                                &spCC, &spD0,
-                                &spC8
+                        if (sp107 == 1) {
+                            positionWallCorrect(pwi, sp6C, tri->m_plane, pwi->GetPos(),
+                                                std::sqrtf(spC8));
+                            pwi->CalcMovePosWork();
+                            pwi->SetWallCirHit(cir_index);
+                            pwi->SetWallPolyIndex(cir_index, i_poly_idx);
+                            pwi->SetWallAngleY(
+                                cir_index,
+                                cM_atan2s(tri->m_plane.GetNP()->x, tri->m_plane.GetNP()->z)
                             );
+                            correct = true;
+                        } else {
+                            cx0 -= sp50.x;
+                            cy0 -= sp50.z;
+                            cx1 -= sp50.x;
+                            cy1 -= sp50.z;
 
-                            f32 spD4 = spCC - pwi->GetCx();
-                            f32 spD8 = spD0 - pwi->GetCz();
-                            f32 spDC = pwi->GetWallRR(cir_index);
+                            f32 spE0 = cM3d_Len2dSq(cx0, cy0, pwi->GetPos()->x, pwi->GetPos()->z);
+                            f32 spE4 = cM3d_Len2dSq(cx1, cy1, pwi->GetPos()->x, pwi->GetPos()->z);
 
-                            if (!(spC8 > spDC) && !(spD4 * sp50.x + spD8 * sp50.z < 0.0f)) {
-                                if (sp107 == 1) {
-                                    positionWallCorrect(pwi, sp6C, tri->m_plane, pwi->GetPos(),
-                                                        std::sqrtf(spC8));
-                                    pwi->CalcMovePosWork();
-                                    pwi->SetWallCirHit(cir_index);
-                                    pwi->SetWallPolyIndex(cir_index, i_poly_idx);
-                                    pwi->SetWallAngleY(
-                                        cir_index,
-                                        cM_atan2s(tri->m_plane.GetNP()->x, tri->m_plane.GetNP()->z)
-                                    );
-                                    correct = true;
-                                } else {
-                                    cx0 -= sp50.x;
-                                    cy0 -= sp50.z;
-                                    cx1 -= sp50.x;
-                                    cy1 -= sp50.z;
+                            f32 onx = -tri->m_plane.GetNP()->x;
+                            f32 ony = -tri->m_plane.GetNP()->z;
 
-                                    f32 spE0 = cM3d_Len2dSq(cx0, cy0, pwi->GetPos()->x, pwi->GetPos()->z);
-                                    f32 spE4 = cM3d_Len2dSq(cx1, cy1, pwi->GetPos()->x, pwi->GetPos()->z);
+                            JUT_ASSERT(DEMO_SELECT(444, 463), !(cM3d_IsZero(onx) && cM3d_IsZero(ony)));
 
-                                    f32 onx = -tri->m_plane.GetNP()->x;
-                                    f32 ony = -tri->m_plane.GetNP()->z;
-
-                                    JUT_ASSERT(463, !(cM3d_IsZero(onx) && cM3d_IsZero(ony)));
-
-                                    if (spE0 < spE4) {
-                                        if (!(spE0 > spDC) && !(std::fabsf(spE0 - spDC) < 0.008f)) {
-                                            f32 spF0, spF4;
-                                            cM2d_CrossCirLin(*pwi->GetWallCirP(cir_index), cx0, cy0,
-                                                             onx, ony, &spF0, &spF4);
-                                            pwi->GetPos()->x += cx0 - spF0;
-                                            pwi->GetPos()->z += cy0 - spF4;
-
-                                            CHECK_FLOAT_CLASS(484, pwi->GetPos()->x);
-                                            CHECK_FLOAT_CLASS(485, pwi->GetPos()->z);
-
-                                            pwi->CalcMovePosWork();
-                                            pwi->SetWallCirHit(cir_index);
-                                            pwi->SetWallPolyIndex(cir_index, i_poly_idx);
-                                            pwi->SetWallAngleY(
-                                                cir_index,
-                                                cM_atan2s(tri->m_plane.GetNP()->x, tri->m_plane.GetNP()->z)
-                                            );
-                                            correct = true;
-                                            pwi->SetWallHit();
-                                        }
-                                    } else if (!(spE4 > spDC) && !(std::fabsf(spE4 - spDC) < 0.008f)) {
-                                        f32 spF8, spFC;
-                                        cM2d_CrossCirLin(*pwi->GetWallCirP(cir_index), cx1, cy1,
-                                                         onx, ony, &spF8, &spFC);
-                                        pwi->GetPos()->x += cx1 - spF8;
-                                        pwi->GetPos()->z += cy1 - spFC;
-
-                                        CHECK_FLOAT_CLASS(524, pwi->GetPos()->x);
-                                        CHECK_FLOAT_CLASS(525, pwi->GetPos()->z);
-
-                                        pwi->CalcMovePosWork();
-                                        pwi->SetWallCirHit(cir_index);
-                                        pwi->SetWallPolyIndex(cir_index, i_poly_idx);
-                                        pwi->SetWallAngleY(
-                                            cir_index,
-                                            cM_atan2s(tri->m_plane.GetNP()->x, tri->m_plane.GetNP()->z)
-                                        );
-                                        correct = true;
-                                        pwi->SetWallHit();
-                                    }
+                            if (spE0 < spE4) {
+                                if ((spE0 > spDC) || (std::fabsf(spE0 - spDC) < 0.008f)) {
+                                    continue;
                                 }
+                                f32 spF0, spF4;
+                                cM2d_CrossCirLin(*pwi->GetWallCirP(cir_index), cx0, cy0,
+                                                    onx, ony, &spF0, &spF4);
+                                pwi->GetPos()->x += cx0 - spF0;
+                                pwi->GetPos()->z += cy0 - spF4;
+
+                                JUT_ASSERT(DEMO_SELECT(465, 484), !isnan(pwi->GetPos()->x));
+                                JUT_ASSERT(DEMO_SELECT(466, 485), !isnan(pwi->GetPos()->z));
+
+                                pwi->CalcMovePosWork();
+                                pwi->SetWallCirHit(cir_index);
+                                pwi->SetWallPolyIndex(cir_index, i_poly_idx);
+                                pwi->SetWallAngleY(
+                                    cir_index,
+                                    cM_atan2s(tri->m_plane.GetNP()->x, tri->m_plane.GetNP()->z)
+                                );
+                                correct = true;
+                                pwi->SetWallHit();
+                            } else {
+                                if ((spE4 > spDC) || (std::fabsf(spE4 - spDC) < 0.008f)) {
+                                    continue;
+                                }
+                                f32 spF8, spFC;
+                                cM2d_CrossCirLin(*pwi->GetWallCirP(cir_index), cx1, cy1,
+                                                    onx, ony, &spF8, &spFC);
+                                pwi->GetPos()->x += cx1 - spF8;
+                                pwi->GetPos()->z += cy1 - spFC;
+
+                                JUT_ASSERT(DEMO_SELECT(505, 524), !isnan(pwi->GetPos()->x));
+                                JUT_ASSERT(DEMO_SELECT(506, 525), !isnan(pwi->GetPos()->z));
+
+                                pwi->CalcMovePosWork();
+                                pwi->SetWallCirHit(cir_index);
+                                pwi->SetWallPolyIndex(cir_index, i_poly_idx);
+                                pwi->SetWallAngleY(
+                                    cir_index,
+                                    cM_atan2s(tri->m_plane.GetNP()->x, tri->m_plane.GetNP()->z)
+                                );
+                                correct = true;
+                                pwi->SetWallHit();
                             }
                         }
                     }
                 }
-
-                cir_index++;
             }
         }
 
@@ -295,9 +298,7 @@ bool dBgW::WallCorrectGrpRp(dBgS_Acch* acch, int grp_id, int depth) {
     if (ChkGrpThrough(grp_id, acch->GetGrpPassChk(), depth))
         return false;
 
-    cBgW_GrpElm* grp = &pm_grp[grp_id];
-
-    if (!grp->aab.Cross(acch->GetWallBmdCylP()))
+    if (!pm_grp[grp_id].aab.Cross(acch->GetWallBmdCylP()))
         return false;
 
     bool ret = false;
@@ -305,11 +306,12 @@ bool dBgW::WallCorrectGrpRp(dBgS_Acch* acch, int grp_id, int depth) {
     if (tree_idx != 0xFFFF && WallCorrectRp(acch, tree_idx))
         ret = true;
 
+    depth++;
     s32 child_idx = pm_bgd->m_g_tbl[grp_id].m_first_child;
     while (true) {
         if (child_idx == 0xFFFF)
             break;
-        if (WallCorrectGrpRp(acch, child_idx, depth + 1))
+        if (WallCorrectGrpRp(acch, child_idx, depth))
             ret = true;
         child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
     }
@@ -344,8 +346,7 @@ bool dBgW::RwgRoofChk(u16 poly_index, dBgS_RoofChk* chk) {
 /* 800A72E0-800A7514       .text RoofChkRp__4dBgWFP12dBgS_RoofChki */
 bool dBgW::RoofChkRp(dBgS_RoofChk* chk, int i) {
     cBgW_NodeTree* node = &m_nt_tbl[i];
-    // if (!node->CrossY(chk->GetPosP()) || !node->UnderPlaneYUnder(chk->GetNowY()) || node->TopPlaneYUnder(chk->GetPosP()->y))
-    if (!node->CrossY(chk->GetPosP()) || !(node->GetMinY() < chk->GetNowY()) || node->TopPlaneYUnder(chk->GetPosP()->y))
+    if (!node->CrossY(chk->GetPosP()) || !node->UnderPlaneYUnder(chk->GetNowY()) || node->TopPlaneYUnder(chk->GetPosP()->y))
         return false;
 
     cBgD_Tree_t* tree = &pm_bgd->m_tree_tbl[i];
@@ -382,8 +383,7 @@ bool dBgW::RoofChkGrpRp(dBgS_RoofChk* chk, int grp_id, int depth) {
 
     cBgW_GrpElm* grp = &pm_grp[grp_id];
 
-    // if (!grp->aab.CrossY(chk->GetPosP()) || !grp->aab.UnderPlaneYUnder(chk->GetNowY()) || grp->aab.TopPlaneYUnder(chk->GetPosP()->y))
-    if (!grp->aab.CrossY(chk->GetPosP()) || !(grp->aab.GetMinY() < chk->GetNowY()) || grp->aab.TopPlaneYUnder(chk->GetPosP()->y))
+    if (!grp->aab.CrossY(chk->GetPosP()) || !grp->aab.UnderPlaneYUnder(chk->GetNowY()) || grp->aab.TopPlaneYUnder(chk->GetPosP()->y))
         return false;
 
     bool ret = false;
@@ -392,11 +392,12 @@ bool dBgW::RoofChkGrpRp(dBgS_RoofChk* chk, int grp_id, int depth) {
     if (tree_idx != 0xFFFF && RoofChkRp(chk, tree_idx))
         ret = true;
 
+    depth++;
     s32 child_idx = grpd->m_first_child;
     while (true) {
         if (child_idx == 0xFFFF)
             break;
-        if (RoofChkGrpRp(chk, child_idx, depth + 1))
+        if (RoofChkGrpRp(chk, child_idx, depth))
             ret = true;
         child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
     }
@@ -431,8 +432,7 @@ bool dBgW::RwgSplGrpChk(u16 poly_index, dBgS_SplGrpChk* chk) {
 /* 800A783C-800A7A74       .text SplGrpChkRp__4dBgWFP14dBgS_SplGrpChki */
 bool dBgW::SplGrpChkRp(dBgS_SplGrpChk* chk, int i) {
     cBgW_NodeTree* node = &m_nt_tbl[i];
-    // if (!node->CrossY(chk->GetPosP()) || !node->UnderPlaneYUnder(chk->GetRoof()) || node->TopPlaneYUnder(chk->GetHeight()))
-    if (!node->CrossY(chk->GetPosP()) || !(node->GetMinY() < chk->GetRoof()) || node->GetMaxY() < chk->GetHeight())
+    if (!node->CrossY(chk->GetPosP()) || !node->UnderPlaneYUnder(chk->GetRoof()) || node->TopPlaneYUnder(chk->GetHeight()))
         return false;
 
     cBgD_Tree_t* tree = &pm_bgd->m_tree_tbl[i];
@@ -469,8 +469,7 @@ bool dBgW::SplGrpChkGrpRp(dBgS_SplGrpChk* chk, int grp_id, int depth) {
 
     cBgW_GrpElm* grp = &pm_grp[grp_id];
 
-    // if (!grp->aab.CrossY(chk->GetPosP()) || !grp->aab.UnderPlaneYUnder(chk->GetRoof()) || grp->aab.TopPlaneYUnder(chk->GetHeight()))
-    if (!grp->aab.CrossY(chk->GetPosP()) || !(grp->aab.GetMinY() < chk->GetRoof()) || grp->aab.GetMaxY() < chk->GetHeight())
+    if (!grp->aab.CrossY(chk->GetPosP()) || !grp->aab.UnderPlaneYUnder(chk->GetRoof()) || grp->aab.TopPlaneYUnder(chk->GetHeight()))
         return false;
 
     bool ret = false;
@@ -479,11 +478,12 @@ bool dBgW::SplGrpChkGrpRp(dBgS_SplGrpChk* chk, int grp_id, int depth) {
     if (tree_idx != 0xFFFF && SplGrpChkRp(chk, tree_idx))
         ret = true;
 
+    depth++;
     s32 child_idx = grpd->m_first_child;
     while (true) {
         if (child_idx == 0xFFFF)
             break;
-        if (SplGrpChkGrpRp(chk, child_idx, depth + 1))
+        if (SplGrpChkGrpRp(chk, child_idx, depth))
             ret = true;
         child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
     }
@@ -576,11 +576,12 @@ bool dBgW::SphChkGrpRp(dBgS_SphChk* chk, void* user, int grp_id, int depth) {
     if (tree_idx != 0xFFFF && SphChkRp(chk, user, tree_idx))
         ret = true;
 
+    depth++;
     s32 child_idx = grpd->m_first_child;
     while (true) {
         if (child_idx == 0xFFFF)
             break;
-        if (SphChkGrpRp(chk, user, child_idx, depth + 1))
+        if (SphChkGrpRp(chk, user, child_idx, depth))
             ret = true;
         child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
     }
@@ -598,15 +599,15 @@ void dBgW::positionWallCrrPos(cM3dGTri& plane, dBgS_CrrPos* crr, cXyz* pos, f32 
 
 /* 800A819C-800A8964       .text RwgWallCrrPos__4dBgWFUsP11dBgS_CrrPos */
 bool dBgW::RwgWallCrrPos(u16 i_poly_index, dBgS_CrrPos* crr) {
-    cBgW_RwgElm* rwg_elm;
-    cBgD_Tri_t* tri_t;
-    cM3dGPla* plane;
     bool ret = false;
     cM3dGTri tri;
     cXyz wall_top_pos = *crr->GetPos();
     wall_top_pos.y += crr->GetWallH();
     cXyz old_wall_top_pos = *crr->GetOldPos();
     old_wall_top_pos.y += crr->GetWallH();
+    cBgW_RwgElm* rwg_elm;
+    cBgD_Tri_t* tri_t;
+    cM3dGPla* plane;
     u32 poly_index_z = i_poly_index;
     u32 poly_index_x = i_poly_index;
 
@@ -794,7 +795,7 @@ void dBgW::dummyfunc() {
     // TODO: find where this assert actually comes from
     // cBgW::RwgShdwDraw ?
     int index = 0;
-    JUT_ASSERT(0, 0 <= index && index < pm_bgd->m_t_num);
+    JUT_ASSERT(DEMO_SELECT(0, 0), 0 <= index && index < pm_bgd->m_t_num);
 }
 
 /* 800A8964-800A8B70       .text WallCrrPosRp__4dBgWFP11dBgS_CrrPosi */
@@ -837,9 +838,7 @@ bool dBgW::WallCrrPosGrpRp(dBgS_CrrPos* crr, int grp_id, int depth) {
     if (ChkGrpThrough(grp_id, crr->GetGrpPassChk(), depth))
         return false;
 
-    cBgW_GrpElm* grp = &pm_grp[grp_id];
-
-    if (!grp->aab.Cross(crr->GetCylP()))
+    if (!pm_grp[grp_id].aab.Cross(crr->GetCylP()))
         return false;
 
     bool ret = false;
@@ -847,11 +846,12 @@ bool dBgW::WallCrrPosGrpRp(dBgS_CrrPos* crr, int grp_id, int depth) {
     if (tree_idx != 0xFFFF && WallCrrPosRp(crr, tree_idx))
         ret = true;
 
+    depth++;
     s32 child_idx = pm_bgd->m_g_tbl[grp_id].m_first_child;
     while (true) {
         if (child_idx == 0xFFFF)
             break;
-        if (WallCrrPosGrpRp(crr, child_idx, depth + 1))
+        if (WallCrrPosGrpRp(crr, child_idx, depth))
             ret = true;
         child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
     }

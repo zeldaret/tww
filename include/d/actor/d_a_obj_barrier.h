@@ -28,6 +28,11 @@ public:
 
 class daObjBarrier_ef_c {
 public:
+    daObjBarrier_ef_c() {
+        mActiveEffFlags = 0;
+    }
+    ~daObjBarrier_ef_c() {}
+
     void setDummyTexture(int);
     bool checkHitActor(fopAc_ac_c*);
     void birth(fopAc_ac_c*, f32, cXyz, cXyz, int);
@@ -50,10 +55,10 @@ public:
 
 class daObjBarrier_c : public fopAc_ac_c {
 public:
-    enum PROC_e {
-        PROC_BREAK_START_WAIT,
-        PROC_BREAK_ORDER,
-        PROC_BREAK_END_WAIT,
+    enum Proc_e {
+        PROC_BREAK_START_WAIT_e,
+        PROC_BREAK_ORDER_e,
+        PROC_BREAK_END_WAIT_e,
     };
     enum Param_e {
         PRM_DAMAGE_W = 0x01,
@@ -61,10 +66,6 @@ public:
         PRM_MOYA_W = 0x01,
         PRM_MOYA_S = 0x08,
     };
-
-    daObjBarrier_c() {
-        mEffect.mActiveEffFlags = 0;
-    }
 
     void init_mtx();
     static int solidHeapCB(fopAc_ac_c*);
@@ -96,8 +97,10 @@ public:
     /* 0x5D8 */ daObjBarrier_ef_c mEffect;
     /* 0x724 */ u8 mBarrierActive;
     /* 0x728 */ int mMoya;
+#if VERSION > VERSION_JPN
     /* 0x72C */ s16 mEventID;
     /* 0x730 */ int mBarrierProc;
+#endif
 };
 
 #endif /* D_A_OBJ_BARRIER_H */

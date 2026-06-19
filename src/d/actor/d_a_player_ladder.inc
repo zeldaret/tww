@@ -10,13 +10,13 @@
  * based on the original names of the functions it contains.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
 
 /* 80132F34-80132F58       .text getLadderMoveAnmSpeed__9daPy_lk_cFv */
 f32 daPy_lk_c::getLadderMoveAnmSpeed() {
-    return daPy_HIO_ladder_c0::m.field_0x28 +
-           (mStickDistance * (daPy_HIO_ladder_c0::m.field_0x24 - daPy_HIO_ladder_c0::m.field_0x28));
+    return getAnmSpeedStickRate(m_HIO->mLadder.m.field_0x28, m_HIO->mLadder.m.field_0x24);
 }
 
 /* 80132F58-80133058       .text setLadderFootSe__9daPy_lk_cFv */
@@ -82,9 +82,9 @@ int daPy_lk_c::setMoveBGLadderCorrect() {
         }
     }
     cXyz local_18(m370C.x + cM_ssin(current.angle.y) * 50.0f, m370C.y, m370C.z + cM_scos(current.angle.y) * 50.0f);
-    mLinkLinChk.Set(&m370C, (cXyz*)&local_18, this);
+    mLinkLinChk.Set(&m370C, &local_18, this);
     if ((!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) || (dComIfG_Bgsp()->GetWallCode(mLinkLinChk) != 4)) {
-        return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+        return procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
     } else {
         mPolyInfo = mLinkLinChk;
         return false;
@@ -93,8 +93,8 @@ int daPy_lk_c::setMoveBGLadderCorrect() {
 
 /* 801333A8-80133414       .text procLadderUpStart_init_sub__9daPy_lk_cFv */
 void daPy_lk_c::procLadderUpStart_init_sub() {
-    setSingleMoveAnime(ANM_LADDERUPST, daPy_HIO_ladder_c0::m.field_0x4, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x8);
-    mProcVar0.m3570 = 1;
+    setSingleMoveAnime(ANM_LADDERUPST, m_HIO->mLadder.m.field_0x4, 0.0f, -1, m_HIO->mLadder.m.field_0x8);
+    mProcVar6.m3570 = 1;
     m34C2 = 4;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000000_e);
 }
@@ -104,7 +104,7 @@ BOOL daPy_lk_c::procLadderUpStart_init() {
     commonProcInit(daPyProc_LADDER_UP_START_e);
     gravity = 0.0f;
     speed.y = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speedF = 0.0f;
     if (mEquipItem == daPyItem_NONE_e) {
         if (checkEquipAnime()) {
@@ -112,9 +112,9 @@ BOOL daPy_lk_c::procLadderUpStart_init() {
         }
         procLadderUpStart_init_sub();
     } else {
-        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
         setAnimeUnequip();
-        mProcVar0.m3570 = 0;
+        mProcVar6.m3570 = 0;
         m3598 = 0.0f;
     }
     f32 fVar1 = cM_ssin(m352C);
@@ -127,7 +127,7 @@ BOOL daPy_lk_c::procLadderUpStart_init() {
     m370C.x = (m3724.x + fVar1 * 20.5f) - fVar2;
     m370C.y = m3724.y + 37.5f;
     m370C.z = fVar1 + (m3724.z + fVar2 * 20.5f);
-    m34D4 = 0;
+    mProcVar2.m34D4 = 0;
     return true;
 }
 
@@ -137,7 +137,7 @@ BOOL daPy_lk_c::procLadderUpStart() {
         return true;
     }
 
-    if (mProcVar0.m3570 == 0) {
+    if (mProcVar6.m3570 == 0) {
         if (checkNoUpperAnime()) {
             procLadderUpStart_init_sub();
         }
@@ -146,13 +146,13 @@ BOOL daPy_lk_c::procLadderUpStart() {
         m34C2 = 5;
         if (frameCtrl.getRate() < 0.01f) {
             dComIfGp_setDoStatus(dActStts_LET_GO_e);
-            if (m34D4 == 0) {
+            if (mProcVar2.m34D4 == 0) {
                 setLadderFootSe();
-                m34D4 = 1;
+                mProcVar2.m34D4 = 1;
             }
             if (doTrigger()) {
                 m34C2 = 0;
-                procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+                procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
             } else {
                 changeLadderMoveProc(1);
             }
@@ -175,11 +175,11 @@ BOOL daPy_lk_c::procLadderUpEnd_init(int param_0) {
     } else {
         dVar2 = ANM_LADDERUPEDR;
     }
-    setSingleMoveAnime(dVar2, daPy_HIO_ladder_c0::m.field_0xC, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x10);
+    setSingleMoveAnime(dVar2, m_HIO->mLadder.m.field_0xC, 0.0f, -1, m_HIO->mLadder.m.field_0x10);
     m34C2 = 7;
     gravity = 0.0f;
     speed.y = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speedF = 0.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000000_e);
     return true;
@@ -206,8 +206,8 @@ BOOL daPy_lk_c::procLadderUpEnd() {
 
 /* 801337B4-8013384C       .text procLadderDownStart_init_sub__9daPy_lk_cFv */
 void daPy_lk_c::procLadderDownStart_init_sub() {
-    setSingleMoveAnime(ANM_LADDERDWST, daPy_HIO_ladder_c0::m.field_0x14, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x18);
-    mProcVar0.m3570 = 1;
+    setSingleMoveAnime(ANM_LADDERDWST, m_HIO->mLadder.m.field_0x14, 0.0f, -1, m_HIO->mLadder.m.field_0x18);
+    mProcVar6.m3570 = 1;
     m34C2 = 4;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000000_e);
     setOldRootQuaternion(0, -0x8000, 0);
@@ -220,7 +220,7 @@ BOOL daPy_lk_c::procLadderDownStart_init() {
     commonProcInit(daPyProc_LADDER_DOWN_START_e);
     gravity = 0.0f;
     speed.y = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speedF = 0.0f;
     shape_angle.y = m352C + 0x8000;
     current.angle.y = m352C;
@@ -230,9 +230,9 @@ BOOL daPy_lk_c::procLadderDownStart_init() {
         }
         procLadderDownStart_init_sub();
     } else {
-        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
         setAnimeUnequip();
-        mProcVar0.m3570 = 0;
+        mProcVar6.m3570 = 0;
         m3598 = 0.0f;
     }
     f32 fVar1 = cM_ssin(m352C);
@@ -252,7 +252,7 @@ BOOL daPy_lk_c::procLadderDownStart() {
         return true;
     }
 
-    if (mProcVar0.m3570 == 0) {
+    if (mProcVar6.m3570 == 0) {
         if (checkNoUpperAnime()) {
             procLadderDownStart_init_sub();
         }
@@ -263,7 +263,7 @@ BOOL daPy_lk_c::procLadderDownStart() {
             dComIfGp_setDoStatus(dActStts_LET_GO_e);
             if (doTrigger()) {
                 m34C2 = 0;
-                procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+                procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
             } else {
                 changeLadderMoveProc(1);
             }
@@ -285,7 +285,7 @@ BOOL daPy_lk_c::procLadderDownEnd_init(int param_0) {
     } else {
         anm = ANM_LADDERDWEDR;
     }
-    setSingleMoveAnime(anm, daPy_HIO_ladder_c0::m.field_0x1C, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x20);
+    setSingleMoveAnime(anm, m_HIO->mLadder.m.field_0x1C, 0.0f, -1, m_HIO->mLadder.m.field_0x20);
     m34C2 = 7;
     gravity = 0.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000000_e);
@@ -328,9 +328,9 @@ BOOL daPy_lk_c::procLadderMove_init(int param_0, int direction, cXyz* param_2) {
     daPy_ANM anm;
     if (param_0 != 0) {
         if (uVar3 != 0) {
-            mProcVar0.m3570 = 1;
+            mProcVar6.m3570 = 1;
         } else {
-            mProcVar0.m3570 = 0;
+            mProcVar6.m3570 = 0;
             m370C.x = m370C.x - 2.0f * cM_scos(shape_angle.y);
             m370C.z = m370C.z - -2.0f * cM_ssin(shape_angle.y);
         }
@@ -340,7 +340,7 @@ BOOL daPy_lk_c::procLadderMove_init(int param_0, int direction, cXyz* param_2) {
             anm = ANM_LADDERRTOL;
         }
     } else {
-        mProcVar0.m3570 = 1;
+        mProcVar6.m3570 = 1;
         if (dVar4 >= 0.0f) {
             anm = ANM_LADDERRTOL;
         } else {
@@ -350,7 +350,7 @@ BOOL daPy_lk_c::procLadderMove_init(int param_0, int direction, cXyz* param_2) {
         m370C.z = m370C.z + -2.0f * cM_ssin(shape_angle.y);
     }
 
-    setSingleMoveAnime(anm, dVar4, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x2C);
+    setSingleMoveAnime(anm, dVar4, 0.0f, -1, m_HIO->mLadder.m.field_0x2C);
     mDirection = direction;
     if (direction == DIR_FORWARD) {
         setTextureAnime(10, 0);
@@ -360,9 +360,9 @@ BOOL daPy_lk_c::procLadderMove_init(int param_0, int direction, cXyz* param_2) {
     m34C2 = 7;
     gravity = 0.0f;
     speed.y = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     speedF = 0.0f;
-    m34D0 = 1;
+    mProcVar0.m34D0 = 1;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000000_e);
     return true;
 }
@@ -377,13 +377,13 @@ BOOL daPy_lk_c::procLadderMove() {
 
     if (doTrigger()) {
         m34C2 = 0;
-        procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+        procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
     } else if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) < 0.01f) {
-        if (m34D0 > 0) {
-            m34D0--;
+        if (mProcVar0.m34D0 > 0) {
+            mProcVar0.m34D0--;
             setLadderFootSe();
         } else {
-            changeLadderMoveProc(mProcVar0.m3570);
+            changeLadderMoveProc(mProcVar6.m3570);
         }
     } else {
         f32 dVar2 = getLadderMoveAnmSpeed();

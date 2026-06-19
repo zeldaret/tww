@@ -3,48 +3,142 @@
 // Translation Unit: d_a_obj_demo_barrel.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_demo_barrel.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "d/d_bg_s_func.h"
+#include "d/d_com_inf_game.h"
+#include "res/Object/DBarrel.h"
+#include "f_op/f_op_actor_mng.h"
+
+const char daObj_Demo_Barrel_c::M_arcname[] = "DBarrel";
 
 /* 00000078-00000144       .text setParticleHahen__19daObj_Demo_Barrel_cFv */
 void daObj_Demo_Barrel_c::setParticleHahen() {
-    /* Nonmatching */
+    JPABaseEmitter* emitter =
+        dComIfGp_particle_set(dPa_name::ID_IT_JN_TR_HAHEN_A, &current.pos, NULL, NULL, 0xFF, NULL, -1,
+                              &tevStr.mColorK0, &tevStr.mColorK0, NULL);
+    if (emitter != NULL) {
+        static JGeometry::TVec3<f32> em_scl(1.0f, 0.8f, 1.0f);
+        emitter->setEmitterScale(em_scl);
+    }
 }
 
 /* 00000144-00000378       .text setParticleSibuki__19daObj_Demo_Barrel_cFv */
 void daObj_Demo_Barrel_c::setParticleSibuki() {
-    /* Nonmatching */
+    cXyz sp18 = current.pos;
+    sp18.y = 100.0f;
+    m2D0 = current.pos;
+    m2D0.y = dBgS_ObjGndChk_Wtr_Func(sp18);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_WP_HAMON01, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_WP_HAMON02, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_DEMO_HAMON_S, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_DEMO_SUIMEN_A, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_MIZUBASHIRA2, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_DEMO_SHIBUKI_A, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_DEMO_SHIBUKI_B, &m2D0);
 }
 
 /* 00000378-00000398       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
+    return ((daObj_Demo_Barrel_c*)a_this)->CreateHeap();
 }
 
 /* 00000398-00000538       .text CreateHeap__19daObj_Demo_Barrel_cFv */
-void daObj_Demo_Barrel_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daObj_Demo_Barrel_c::CreateHeap() {
+    mpMorf = new mDoExt_McaMorf(
+    (J3DModelData*)dComIfG_getObjectIDRes(M_arcname, dRes_ID_DBARREL_BDL_KTARU_02_e), NULL, NULL,
+        (J3DAnmTransform*)dComIfG_getObjectIDRes(M_arcname, dRes_ID_DBARREL_BCK_02_TR_CD_e),
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
+
+    if (mpMorf == NULL || mpMorf->getModel() == NULL) {
+        return FALSE;
+    }
+
+    mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes(M_arcname, dRes_ID_DBARREL_BCK_02_TR_CD_e), 0,
+                   0.0f, 1.0f, 0.0f, -1.0f, NULL);
+    mpMorf->setFrame(mpMorf->getEndFrame() - 1.0f);
+    mpModel = mpMorf->getModel();
+    return TRUE;
+}
+
+cPhs_State daObj_Demo_Barrel_c::_create() {
+    fopAcM_ct_Retail(this, daObj_Demo_Barrel_c);
+    cPhs_State ret = dComIfG_resLoad(&mPhase, M_arcname);
+    if (ret == cPhs_COMPLEATE_e) {
+        fopAcM_ct_Demo(this, daObj_Demo_Barrel_c);
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x22E0)) {
+            return cPhs_ERROR_e;
+        }
+
+        fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+        m2DC = 1;
+        m2DE = 0;
+    }
+    return ret;
 }
 
 /* 00000538-000005EC       .text daObj_Demo_BarrelCreate__FPv */
-static s32 daObj_Demo_BarrelCreate(void*) {
-    /* Nonmatching */
+static cPhs_State daObj_Demo_BarrelCreate(void* v_this) {
+    return ((daObj_Demo_Barrel_c*)v_this)->_create();
+}
+
+bool daObj_Demo_Barrel_c::_delete() {
+    dComIfG_resDeleteDemo(&mPhase, M_arcname);
+    return true;
 }
 
 /* 000005EC-0000061C       .text daObj_Demo_BarrelDelete__FPv */
-static BOOL daObj_Demo_BarrelDelete(void*) {
-    /* Nonmatching */
+static BOOL daObj_Demo_BarrelDelete(void* v_this) {
+    return ((daObj_Demo_Barrel_c*)v_this)->_delete();
+}
+
+bool daObj_Demo_Barrel_c::_execute() {
+    if (demoActorID != 0) {
+        dDemo_actor_c* ac = dComIfGp_demo_getActor(demoActorID);
+
+        if (ac->checkEnable(dDemo_actor_c::ENABLE_UNK_e)) {
+            if ((m2DC == 1) && (ac->getPrm()->getId() == 1)) {
+                m2DC = 0;
+                dComIfGs_onCollect(3, 0);
+                dComIfGs_offCollect(0, 0);
+                dComIfGs_setSelectEquip(0, dItemNo_NONE_e);
+                setParticleHahen();
+            }
+
+            if (m2DE == 0 && ac->getPrm()->getId() == 2) {
+                setParticleSibuki();
+                m2DE = 1;
+            }
+        }
+    }
+
+    dDemo_setDemoData(this, dDemo_actor_c::ENABLE_ANM_FRAME_e | dDemo_actor_c::ENABLE_ANM_e | dDemo_actor_c::ENABLE_ROTATE_e | dDemo_actor_c::ENABLE_TRANS_e, mpMorf, "DBarrel");
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::XYZrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    return false;
 }
 
 /* 0000061C-00000790       .text daObj_Demo_BarrelExecute__FPv */
-static BOOL daObj_Demo_BarrelExecute(void*) {
-    /* Nonmatching */
+static BOOL daObj_Demo_BarrelExecute(void* v_this) {
+    return ((daObj_Demo_Barrel_c*)v_this)->_execute();
+}
+
+bool daObj_Demo_Barrel_c::_draw() {
+    if (m2DC == 0) {
+        return false;
+    }
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mpMorf->updateDL();
+    return true;
 }
 
 /* 00000790-00000814       .text daObj_Demo_BarrelDraw__FPv */
-static BOOL daObj_Demo_BarrelDraw(void*) {
-    /* Nonmatching */
+static BOOL daObj_Demo_BarrelDraw(void* v_this) {
+    return ((daObj_Demo_Barrel_c*)v_this)->_draw();
 }
 
 /* 00000814-0000081C       .text daObj_Demo_BarrelIsDelete__FPv */
@@ -53,26 +147,24 @@ static BOOL daObj_Demo_BarrelIsDelete(void*) {
 }
 
 static actor_method_class daObj_Demo_BarrelMethodTable = {
-    (process_method_func)daObj_Demo_BarrelCreate,
-    (process_method_func)daObj_Demo_BarrelDelete,
-    (process_method_func)daObj_Demo_BarrelExecute,
-    (process_method_func)daObj_Demo_BarrelIsDelete,
+    (process_method_func)daObj_Demo_BarrelCreate,  (process_method_func)daObj_Demo_BarrelDelete,
+    (process_method_func)daObj_Demo_BarrelExecute, (process_method_func)daObj_Demo_BarrelIsDelete,
     (process_method_func)daObj_Demo_BarrelDraw,
 };
 
 actor_process_profile_definition g_profile_Obj_Demo_Barrel = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Demo_Barrel,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Demo_Barrel_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Demo_Barrel_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Demo_Barrel,
+    /* Draw Prio    */ fpcDwPi_Obj_Demo_Barrel_e,
     /* Actor SubMtd */ &daObj_Demo_BarrelMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

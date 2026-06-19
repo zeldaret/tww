@@ -3,12 +3,11 @@
 // Translation Unit: d_a_ygcwp.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ygcwp.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_ygcwp.h"
+#include "res/Object/Ygcwp.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 enum {
     EVENT_WARP_START,
@@ -17,8 +16,8 @@ enum {
 };
 
 const u32 daYgcwp_c::M_brk_table[] = {
-    YGCWP_BRK_YGCWP00_COMMON,
-    YGCWP_BRK_YGCWP00_WARP,
+    dRes_INDEX_YGCWP_BRK_YGCWP00_COMMON_e,
+    dRes_INDEX_YGCWP_BRK_YGCWP00_WARP_e,
 };
 
 const u32 daYgcwp_c::M_brk_mode_table[] = {
@@ -47,9 +46,11 @@ BOOL daYgcwp_c::solidHeapCB(fopAc_ac_c* i_ac) {
 
 /* 00000098-0000023C       .text create_heap__9daYgcwp_cFv */
 BOOL daYgcwp_c::create_heap() {
+    J3DModelData* mdl_data;
+    J3DAnmTevRegKey* brk_p;
     s32 i;
     BOOL ret = FALSE;
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YGCWP_BDL_YGCWP00));
+    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YGCWP_BDL_YGCWP00_e));
     JUT_ASSERT(0xBE, mdl_data != NULL);
 
     if (mdl_data != NULL) {
@@ -58,10 +59,10 @@ BOOL daYgcwp_c::create_heap() {
             ret = TRUE;
 
             for (i = 0; i < (s32)ARRAY_SIZE(mBrkAnm); i++) {
-                J3DAnmTevRegKey* brk_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, M_brk_table[i]));
+                brk_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, M_brk_table[i]));
                 JUT_ASSERT(0xC9, brk_p != NULL);
                 if (brk_p != NULL) {
-                    if (!mBrkAnm[i].init(mdl_data, brk_p, TRUE, M_brk_mode_table[i], 1.0f, 0, -1, false, 0)) {
+                    if (!mBrkAnm[i].init(mdl_data, brk_p, TRUE, M_brk_mode_table[i])) {
                         ret = FALSE;
                         break;
                     }
@@ -78,7 +79,7 @@ BOOL daYgcwp_c::create_heap() {
 
 /* 0000023C-000003A0       .text _create__9daYgcwp_cFv */
 cPhs_State daYgcwp_c::_create() {
-    fopAcM_SetupActor(this, daYgcwp_c);
+    fopAcM_ct(this, daYgcwp_c);
     cPhs_State rt = dComIfG_resLoad(&mPhs, M_arcname);
     if (rt == cPhs_COMPLEATE_e) {
         rt = cPhs_ERROR_e;
@@ -105,18 +106,18 @@ cPhs_State daYgcwp_c::_create() {
 
 /* 00000470-000004A0       .text _delete__9daYgcwp_cFv */
 bool daYgcwp_c::_delete() {
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return true;
 }
 
 /* 000004A0-000004D0       .text check_ev__9daYgcwp_cCFv */
 BOOL daYgcwp_c::check_ev() const {
-    return dComIfGs_isTmpBit(0x0480);
+    return dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0480);
 }
 
 /* 000004D0-00000500       .text off_ev__9daYgcwp_cCFv */
 void daYgcwp_c::off_ev() const {
-    dComIfGs_offTmpBit(0x0480);
+    dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0480);
 }
 
 /* 00000500-00000588       .text init_mtx__9daYgcwp_cFv */
@@ -129,7 +130,7 @@ void daYgcwp_c::init_mtx() {
 
 /* 00000588-000005F0       .text make_shine__9daYgcwp_cFv */
 void daYgcwp_c::make_shine() {
-    dComIfGp_particle_set(dPa_name::ID_SCENE_8316, &current.pos, NULL, &scale);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_GANONCASTLEWARP00, &current.pos, NULL, &scale);
 }
 
 /* 000005F0-00000654       .text set_timer__9daYgcwp_cFv */
@@ -237,18 +238,18 @@ static actor_method_class Ygcwp_Mthd_Table = {
 }; // namespace
 
 actor_process_profile_definition g_profile_Ygcwp = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Ygcwp,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Ygcwp_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daYgcwp_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Ygcwp,
+    /* Draw Prio    */ fpcDwPi_Ygcwp_e,
     /* Actor SubMtd */ &Ygcwp_Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -18,6 +18,14 @@ public:
         mReverb = reverb;
         cLib_onBit(mFlag, (u8)4);
     }
+
+    inline void seStart() {
+        cLib_offBit(mFlag, (u8)8);
+    }
+    
+    inline void seStop() {
+        cLib_onBit(mFlag, (u8)8);
+    }
 };
 
 #endif /* D_LEVEL_SE_H */

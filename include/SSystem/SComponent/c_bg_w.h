@@ -271,7 +271,7 @@ public:
     /* 0x9C */ cBgW_GrpElm* pm_grp;
     /* 0xA0 */ cBgW_NodeTree* m_nt_tbl;
     /* 0xA4 */ int m_rootGrpIdx;
-};
+}; // size = 0xA8
 
 inline bool cBgW_CheckBGround(f32 ny) {
     return ny >= 0.5f;
@@ -281,7 +281,7 @@ inline bool cBgW_CheckBRoof(f32 ny) {
     return ny < (-4.0f / 5.0f);
 }
 
-inline bool cBgW_CheckBWall(float y) {
+inline bool cBgW_CheckBWall(f32 y) {
     if (!cBgW_CheckBGround(y) && !cBgW_CheckBRoof(y))
         return true;
     return false;

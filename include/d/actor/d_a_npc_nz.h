@@ -14,15 +14,13 @@ class J3DNode;
 class daNpc_Nz_c : public fopNpc_npc_c {
 public:
     enum Proc_e {
-        PROC_INIT = 0,
-        PROC_EXEC = 1,
+        PROC_INIT_e = 0,
+        PROC_EXEC_e = 1,
     };
 
-    // objdiff says this is a weak function
-    // but defining it here with {} causes it to be inlined with fopAcM_SetupActor which breaks things
-    daNpc_Nz_c();
+    inline daNpc_Nz_c();
 
-    void modeProcInit(int newMode) { modeProc(PROC_INIT, newMode); }
+    void modeProcInit(int newMode) { modeProc(PROC_INIT_e, newMode); }
 
     BOOL NodeCallBack(J3DNode*, int);
     BOOL TailNodeCallBack(J3DNode*, int);
@@ -110,31 +108,5 @@ public:
     /* 0xA8C */ u32 field_0xA8C;
     /* 0xA90 */ s16 field_0xA90;
 }; // Size: 0xA92
-
-class daNpc_Nz_HIO_c : public JORReflexible {
-public:
-    daNpc_Nz_HIO_c();
-    virtual ~daNpc_Nz_HIO_c() {}
-
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x00 - vtable */
-    /* 0x04 */ s8 mNo;
-    /* 0x06 */ s16 field_0x06;
-    /* 0x08 */ s16 field_0x08;
-    /* 0x0A */ s16 field_0x0A;
-    /* 0x0C */ s16 field_0x0C;
-    /* 0x0E */ s16 field_0x0E;
-    /* 0x10 */ s16 field_0x10;
-    /* 0x12 */ s16 field_0x12;
-    /* 0x14 */ s16 field_0x14;
-    /* 0x16 */ s16 field_0x16;
-    /* 0x18 */ s16 field_0x18;
-    /* 0x1A */ s8 field_0x1A;
-    /* 0x1C */ f32 field_0x1C;
-    /* 0x20 */ f32 field_0x20;
-    /* 0x24 */ f32 field_0x24;
-}; // Size: 0x28
 
 #endif /* D_A_NPC_NZ_H */
