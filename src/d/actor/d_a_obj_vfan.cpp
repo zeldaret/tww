@@ -3,11 +3,10 @@
  * Object - Ganon's Tower - Phantom Ganon door
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vfan.h"
-#include "d/res/res_vfan.h"
+#include "res/Object/Vfan.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 
 namespace daObjVfan {
@@ -40,16 +39,16 @@ static dCcD_SrcCyl cyl_check_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 100.0f,
         /* Height */ 300.0f,
-    }
+    }}
 };
 
 /* 00000078-00000134       .text CreateHeap__Q29daObjVfan5Act_cFv */
 BOOL daObjVfan::Act_c::CreateHeap() {
-    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, VFAN_BDL_V_FAN_00));
+    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_VFAN_BDL_V_FAN_00_e));
 
     JUT_ASSERT(0x8c, model_data != NULL);
 
@@ -85,7 +84,7 @@ BOOL daObjVfan::Act_c::Create() {
 
 /* 00000214-000003D0       .text Mthd_Create__Q29daObjVfan5Act_cFv */
 cPhs_State daObjVfan::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjVfan::Act_c);
+    fopAcM_ct(this, daObjVfan::Act_c);
 
     cPhs_State phase_state;
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
@@ -93,7 +92,7 @@ cPhs_State daObjVfan::Act_c::Mthd_Create() {
     } else {
         phase_state = dComIfG_resLoad(&mPhs, M_arcname);
         if (phase_state == cPhs_COMPLEATE_e) {
-            phase_state = MoveBGCreate(M_arcname, VFAN_DZB_V_FAN_00, NULL, 0xa60);
+            phase_state = MoveBGCreate(M_arcname, dRes_INDEX_VFAN_DZB_V_FAN_00_e, NULL, 0xa60);
 
             JUT_ASSERT(0xc6, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
         }
@@ -136,17 +135,17 @@ void daObjVfan::Act_c::init_mtx() {
 
 /* 000006BC-000009B4       .text ParticleSet__Q29daObjVfan5Act_cFv */
 void daObjVfan::Act_c::ParticleSet() {
-    dComIfGp_particle_set(dPa_name::ID_SCENE_83CD, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_83CE, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_83CF, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_83D0, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_83D1, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_83D2, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_83D3, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_83D4, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_83D5, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_83D6, &current.pos, &current.angle);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_83D7, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_GANONDOORSMOKE00, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_GANONDOORFLASH00, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_GANONDOORFLASH01, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_GANONDOORFLASH02, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_GANONDOORFLASH03, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_GANONDOORFLASH04, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_GANONDOORFLASH05, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_GANONDOORFLASH06, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_GANONDOORFLASH07, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_GANONDOORFLASH08, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_GANONDOORFLASH09, &current.pos, &current.angle);
 }
 
 /* 000009B4-00000C74       .text Execute__Q29daObjVfan5Act_cFPPA3_A4_f */
@@ -181,7 +180,7 @@ BOOL daObjVfan::Act_c::Execute(Mtx** mtx) {
         break;
 
     case 2:
-        if (mBreakTimer == 0x96) {
+        if (mBreakTimer == 150) {
             mIsAlive = false;
             fopAcM_seStartCurrent(this, JA_SE_OBJ_GN_SW_DR_BREAK, 0);
         }
@@ -190,7 +189,7 @@ BOOL daObjVfan::Act_c::Execute(Mtx** mtx) {
 
         if (dComIfGp_evmng_endCheck(m_evid)) {
             fopAcM_onSwitch(this, prm_get_swSave());
-            dComIfGs_onEventBit(0x3a08);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3A08);
             dComIfGp_event_reset();
             fopAcM_delete(this);
         }
@@ -246,18 +245,18 @@ static actor_method_class Mthd_Vfan = {
 }; // namespace daObjVfan
 
 actor_process_profile_definition g_profile_Obj_Vfan = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Vfan,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Vfan_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjVfan::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Vfan,
+    /* Draw Prio    */ fpcDwPi_Obj_Vfan_e,
     /* Actor SubMtd */ &daObjVfan::Mthd_Vfan,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

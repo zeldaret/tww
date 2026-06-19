@@ -3,16 +3,11 @@
 // Translation Unit: d_a_agbsw0.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "global.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
-
 #include "d/actor/d_a_agbsw0.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "d/d_item_data.h"
 #include "d/d_map.h"
 #include "d/d_kankyo_wether.h"
@@ -24,6 +19,7 @@
 #include "d/actor/d_a_npc_os.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_npc_cb1.h"
+#include "d/actor/d_a_boko.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -48,11 +44,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 100.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 /* 00004838-00004B2C       .text draw__10daAgbsw0_cFv */
@@ -94,12 +90,12 @@ BOOL daAgbsw0_c::draw() {
             }
         }
         else if(type == daAgbsw0Type_UNK_0xD_e) {
-            if(!dComIfGs_checkGetItem(dItem_SKULL_HAMMER_e) || dComIfGs_isEventBit(0x2D01)) {
+            if(!dComIfGs_checkGetItem(dItemNo_SKULL_HAMMER_e) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
                 return true;
             }
         }
         else if(type == daAgbsw0Type_UNK_0xE_e) {
-            if(!dComIfGs_isEventBit(0x1820) || dComIfGs_getTriforceNum() == 8) {
+            if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820) || dComIfGs_getTriforceNum() == 8) {
                 return true;
             }
         }
@@ -198,7 +194,7 @@ cPhs_State daAgbsw0_c::create() {
         }
     }
     else if(type == daAgbsw0Type_UNK_0xD_e) {
-        if(dComIfGs_isEventBit(0x2D01)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
             return cPhs_ERROR_e;
         }
     }
@@ -587,7 +583,6 @@ BOOL daAgbsw0_c::ExeSubA2() {
 
             field_0x298 = 0;
         }
-
 #endif
         return true;
     }
@@ -770,9 +765,9 @@ BOOL daAgbsw0_c::ExeSubM() {
     }
 }
 
-/* 00001198-00001368       .text ExeSubM3__10daAgbsw0_cFv */
+/* 00000FE4-00001198       .text ExeSubM2__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubM2() {
-    if(dComIfGs_isEventBit(0x2D01)) {
+    if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
@@ -789,7 +784,7 @@ BOOL daAgbsw0_c::ExeSubM2() {
         return true;
     }
     else {
-        if(!dComIfGs_checkGetItem(dItem_SKULL_HAMMER_e)) {
+        if(!dComIfGs_checkGetItem(dItemNo_SKULL_HAMMER_e)) {
             return true;
         }
         else {
@@ -831,7 +826,7 @@ BOOL daAgbsw0_c::ExeSubM3() {
         return true;
     }
     else {
-        if(!dComIfGs_isEventBit(0x1820)) {
+        if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
             return true;
         }
         else {
@@ -868,7 +863,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
 {
     for(int i = 0; i < 8; i++) {
         if(dComIfGs_isCollectMapTriforce(i + 1) && !dComIfGs_isTriforce(i)) {
-            return dComIfGs_isEventBit(0x3E02) ? 0x304 : 0x303;
+            return dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E02) ? 0x304 : 0x303;
         }
     }
 
@@ -895,8 +890,8 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
     if(!dComIfGs_isGetCollectMap(1)) {
         return 0x309;
     }
-    if(!dComIfGs_isGetCollectMap(2) && dComIfGs_checkGetItem(dItem_SKULL_HAMMER_e)) {
-        if(dComIfGs_checkGetItem(COTTAGE_PAPER)) {
+    if(!dComIfGs_isGetCollectMap(2) && dComIfGs_checkGetItem(dItemNo_SKULL_HAMMER_e)) {
+        if(dComIfGs_checkGetItem(dItemNo_CABANA_DEED_e)) {
 #if VERSION <= VERSION_JPN
             s8 roomNo = dComIfGp_roomControl_getStayNo();
 #else
@@ -905,13 +900,13 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
             return roomNo == dIsleRoom_PrivateOasis_e ? 0x30A : 0x30B;
         }
         else {
-            u8 num = dComIfGs_checkGetItemNum(dItem_JOY_PENDANT_e);
+            u8 num = dComIfGs_checkGetItemNum(dItemNo_JOY_PENDANT_e);
             return num >= 0x14 ? 0x30C : 0x30D;
         }
     }
     if(!dComIfGs_isGetCollectMap(3)) {
-        if(dComIfGs_checkGetItem(dItem_BAIT_BAG_e)) {
-            if(dComIfGs_checkBaitItem(dItem_HYOI_PEAR_e)) {
+        if(dComIfGs_checkGetItem(dItemNo_BAIT_BAG_e)) {
+            if(dComIfGs_checkBaitItem(dItemNo_HYOI_PEAR_e)) {
 #if VERSION <= VERSION_JPN
                 s8 roomNo = dComIfGp_roomControl_getStayNo();
 #else
@@ -926,7 +921,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
 
         return 0x30E;
     }
-    if(!dComIfGs_isGetCollectMap(4) && dComIfGs_checkGetItem(dItem_HOOKSHOT_e)) {
+    if(!dComIfGs_isGetCollectMap(4) && dComIfGs_checkGetItem(dItemNo_HOOKSHOT_e)) {
         if(dComIfGs_isOpenCollectMap(0x24)) {
             s32 hour = dKy_getdaytime_hour();
             if(hour < 6 || hour >= 0x13) {
@@ -993,7 +988,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
         }
     }
     if(!dComIfGs_isGetCollectMap(5)) {
-        if(dComIfGs_isEventBit(0x3E80)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E80)) {
 #if VERSION <= VERSION_JPN
             if (!dComIfGs_isGetCollectMap(0x1C)) {
                 return 0x31E;
@@ -1020,7 +1015,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
         }
     }
     if(!dComIfGs_isCollect(2, 0)) {
-        if(dComIfGs_checkGetItem(dItem_MAGIC_ARROW_e)) {
+        if(dComIfGs_checkGetItem(dItemNo_MAGIC_ARROW_e)) {
             return 0x328;
         }
         else {
@@ -1044,7 +1039,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
 #endif
         return roomNo == dIsleRoom_StoneWatcherIsland_e ? 0x327 : 0x326;
     }
-    if(dComIfGs_checkGetItem(dItem_HOOKSHOT_e)) {
+    if(dComIfGs_checkGetItem(dItemNo_HOOKSHOT_e)) {
 #if VERSION <= VERSION_JPN
         s8 roomNo = dComIfGp_roomControl_getStayNo();
 #else
@@ -1089,8 +1084,8 @@ BOOL daAgbsw0_c::ExeSubMW() {
         ) {
             return TRUE;
         }
-
 #endif
+
         static bool se_flag = 0;
 
         eyePos = current.pos;
@@ -1128,7 +1123,7 @@ BOOL daAgbsw0_c::ExeSubMW() {
     return true;
 }
 
-/* 00000344-0000066C       .text ExeSubAT__10daAgbsw0_cFv */
+/* 00001AD0-00001CC8       .text ExeSubT__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubT() {
     u8 sw0 = getSw0();
 
@@ -1154,7 +1149,7 @@ BOOL daAgbsw0_c::ExeSubT() {
     else {
         if(mDoGaC_GbaLink()) {
             if(mDoGac_SendStatusCheck(0xF)) {
-                if(mCyl.ChkTgHit() && mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == PROC_BOMB && ((daBomb_c*)mCyl.GetTgHitAc())->chk_state(daBomb_c::STATE_8)) {
+                if(mCyl.ChkTgHit() && mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == fpcNm_BOMB_e && ((daBomb_c*)mCyl.GetTgHitAc())->chk_state(daBomb_c::STATE_8)) {
                     mSE = BigLittleChange(0x12);
                     mDoGac_SendDataSet(&mSE, 4, 0xF, 0);
                     fopAcM_onSwitch(this, sw0);
@@ -1250,11 +1245,11 @@ BOOL daAgbsw0_c::ExeSubR() {
     if(mDoGaC_GbaLink() && mDoGac_SendStatusCheck(5)) {
         if(sw0 != 0xFF && fopAcM_isSwitch(this, sw0)) {
             s32 itemNo = getParamNo();
-            if(itemNo < 0 || dItem_TRIPLE_HEART_e < itemNo) {
+            if(itemNo < 0 || dItemNo_TRIPLE_HEART_e < itemNo) {
                 itemNo = 0;
             }
 
-            if(itemNo != dItem_RECOVER_FAIRY_e) {
+            if(itemNo != dItemNo_RECOVER_FAIRY_e) {
                 current.pos.y += scale.y / 2.0f;
             }
 
@@ -1294,9 +1289,9 @@ BOOL daAgbsw0_c::ExeSubB() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
     if(restriction == 4) {
-        if(!dComIfGs_isEventBit(0x2E08)) {
+        if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E08)) {
             if(HitCheck(player->current.pos, 60.0f)) {
-                dComIfGs_onEventBit(0x2E08);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2E08);
             }
         }
         if(agb) {
@@ -1519,10 +1514,10 @@ BOOL daAgbsw0_c::ExeSubD() {
                 }
                 else if(field_0x299 == 2 && fopAcM_isSwitch(this, getSw1())) {
                     s32 itemNo = getParamNo();
-                    if(itemNo != dItem_RECOVER_FAIRY_e) {
+                    if(itemNo != dItemNo_RECOVER_FAIRY_e) {
                         current.pos.y += scale.y / 2;
                     }
-                    if(0 <= itemNo && itemNo < 0x1F && itemNo != dItem_HEART_PIECE_e && itemNo != dItem_HEART_CONTAINER_e && itemNo != dItem_SMALL_KEY_e) {
+                    if(0 <= itemNo && itemNo < 0x1F && itemNo != dItemNo_HEART_PIECE_e && itemNo != dItemNo_HEART_CONTAINER_e && itemNo != dItemNo_SMALL_KEY_e) {
                         s8 roomNo = fopAcM_GetHomeRoomNo(this);
                         f32 rnd = cM_rndF(10.0f) + 40.0f;
                         fopAcM_fastCreateItem(&current.pos, itemNo, roomNo, NULL, NULL, 0.0f, rnd, -7.0f);
@@ -1660,7 +1655,7 @@ BOOL daAgbsw0_c::HitCheck(fopAc_ac_c* param_1) {
             f32 x_diff = std::abs(param_1->current.pos.x - current.pos.x);
             if(x_diff < scale.x) {
                 f32 z_diff = fabs(param_1->current.pos.z - current.pos.z);
-                if(z_diff < scale.x && x_diff * x_diff + z_diff * z_diff < scale.x * scale.x) {
+                if(z_diff < scale.x && SQUARE(x_diff) + SQUARE(z_diff) < SQUARE(scale.x)) {
                     return true;
                 }
             }
@@ -1685,7 +1680,7 @@ BOOL daAgbsw0_c::HitCheck(cXyz param_1, f32 param_2) {
             f32 x_diff = fabs(param_1.x - current.pos.x);
             if(x_diff < scale.x) {
                 f32 z_diff = fabs(param_1.z - current.pos.z);
-                if(z_diff < scale.x && x_diff * x_diff + z_diff * z_diff < scale.x * scale.x) {
+                if(z_diff < scale.x && SQUARE(x_diff) + SQUARE(z_diff) < SQUARE(scale.x)) {
                     return true;
                 }
             }
@@ -1706,7 +1701,7 @@ BOOL daAgbsw0_c::HitCheck(cXyz param_1, f32 param_2) {
 BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
     switch(conditionNo) {
         case 1:
-            if(dComIfGs_isEventBit(0xF80)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::MET_KORL)) {
                 return FALSE;
             }
 
@@ -1718,13 +1713,13 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 3:
-            if(dComIfGs_isEventBit(0x1E40)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E40)) {
                 return FALSE;
             }
 
             break;
         case 4:
-            if(dComIfGs_isEventBit(0x1820)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
                 return FALSE;
             }
 
@@ -1738,19 +1733,19 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         }
         case 6:
-            if(dComIfGs_isEventBit(0x1A10)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TINGLE_BALLOON_DISCOUNT)) {
                 return FALSE;
             }
 
             break;
         case 7:
-            if(dComIfGs_isEventBit(0x1A08)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TING_DISCOUNT)) {
                 return FALSE;
             }
 
             break;
         case 8:
-            if(dComIfGs_isEventBit(0x1708)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1708)) {
                 return FALSE;
             }
 
@@ -1787,9 +1782,9 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         case 0x11:
             if(
-                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_BOW_e &&
-                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_BOW_e &&
-                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_BOW_e
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItemNo_BOW_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItemNo_BOW_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItemNo_BOW_e
             ) {
                 return FALSE;
             }
@@ -1797,9 +1792,9 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         case 0x12:
             if(
-                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_BOOMERANG_e &&
-                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_BOOMERANG_e &&
-                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_BOOMERANG_e
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItemNo_BOOMERANG_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItemNo_BOOMERANG_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItemNo_BOOMERANG_e
             ) {
                 return FALSE;
             }
@@ -1807,9 +1802,9 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         case 0x13:
             if(
-                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_DEKU_LEAF_e &&
-                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_DEKU_LEAF_e &&
-                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_DEKU_LEAF_e
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItemNo_DEKU_LEAF_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItemNo_DEKU_LEAF_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItemNo_DEKU_LEAF_e
             ) {
                 return FALSE;
             }
@@ -1817,9 +1812,9 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         case 0x14:
             if(
-                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_GRAPPLING_HOOK_e &&
-                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_GRAPPLING_HOOK_e &&
-                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_GRAPPLING_HOOK_e
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItemNo_GRAPPLING_HOOK_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItemNo_GRAPPLING_HOOK_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItemNo_GRAPPLING_HOOK_e
             ) {
                 return FALSE;
             }
@@ -1827,9 +1822,9 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         case 0x15:
             if(
-                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_BOMB_BAG_e &&
-                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_BOMB_BAG_e &&
-                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_BOMB_BAG_e
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItemNo_BOMB_BAG_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItemNo_BOMB_BAG_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItemNo_BOMB_BAG_e
             ) {
                 return FALSE;
             }
@@ -1837,16 +1832,16 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         case 0x16:
             if(
-                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_HOOKSHOT_e &&
-                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_HOOKSHOT_e &&
-                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_HOOKSHOT_e
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItemNo_HOOKSHOT_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItemNo_HOOKSHOT_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItemNo_HOOKSHOT_e
             ) {
                 return FALSE;
             }
 
             break;
         case 0x17:
-            if(dComIfGs_checkGetItem(dItem_MAGIC_ARMOR_e)) {
+            if(dComIfGs_checkGetItem(dItemNo_MAGIC_ARMOR_e)) {
                 return FALSE;
             }
 
@@ -1864,13 +1859,13 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x1A:
-            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e && dComIfGs_getArrowNum() < dComIfGs_getArrowMax()) {
+            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItemNo_NONE_e && dComIfGs_getArrowNum() < dComIfGs_getArrowMax()) {
                 return FALSE;
             }
 
             break;
         case 0x1B:
-            if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
+            if(dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
                 return FALSE;
             }
 
@@ -1882,31 +1877,32 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x1D:
-            if(dComIfGs_getMaxMagic() != 0 && !dComIfGs_getMagic) {
+            // @bug They meant to call this function
+            if(dComIfGs_getMaxMagic() != 0 && dComIfGs_getMagic == 0) {
                 return FALSE;
             }
 
             break;
         case 0x1E:
-            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e && dComIfGs_getArrowNum() == 0) {
+            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItemNo_NONE_e && dComIfGs_getArrowNum() == 0) {
                 return FALSE;
             }
 
             break;
         case 0x1F:
-            if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() == 0) {
+            if(dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && dComIfGs_getBombNum() == 0) {
                 return FALSE;
             }
 
             break;
         case 0x20:
-            if(dComIfGs_isEventBit(0x1708) && dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e && dComIfGs_getArrowNum() == 0) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1708) && dComIfGs_getItem(dInvSlot_BOW_e) != dItemNo_NONE_e && dComIfGs_getArrowNum() == 0) {
                 return FALSE;
             }
 
             break;
         case 0x21:
-            if(dComIfGs_isEventBit(0x1708) && dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() == 0) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1708) && dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && dComIfGs_getBombNum() == 0) {
                 return FALSE;
             }
 
@@ -1931,9 +1927,9 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         case 0x25:
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
-                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_BOMB_BAG_e &&
-                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_BOMB_BAG_e &&
-                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_BOMB_BAG_e)
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItemNo_BOMB_BAG_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItemNo_BOMB_BAG_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItemNo_BOMB_BAG_e)
             {
                 return FALSE;
             }
@@ -1941,9 +1937,9 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         case 0x26:
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
-                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_GRAPPLING_HOOK_e &&
-                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_GRAPPLING_HOOK_e &&
-                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_GRAPPLING_HOOK_e)
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItemNo_GRAPPLING_HOOK_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItemNo_GRAPPLING_HOOK_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItemNo_GRAPPLING_HOOK_e)
             {
                 return FALSE;
             }
@@ -1962,55 +1958,55 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x29:
-            if(dComIfGs_checkGetItem(dItem_GRAPPLING_HOOK_e)) {
+            if(dComIfGs_checkGetItem(dItemNo_GRAPPLING_HOOK_e)) {
                 return FALSE;
             }
 
             break;
         case 0x2A:
-            if(dComIfGs_checkGetItem(dItem_BOOMERANG_e)) {
+            if(dComIfGs_checkGetItem(dItemNo_BOOMERANG_e)) {
                 return FALSE;
             }
 
             break;
         case 0x2B:
-            if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+            if(dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) {
                 return FALSE;
             }
 
             break;
         case 0x2C:
-            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e) {
+            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItemNo_NONE_e) {
                 return FALSE;
             }
 
             break;
         case 0x2D:
-            if(!daPy_getPlayerLinkActorClass()->checkGrabWeapon(1)) {
+            if(!daPy_getPlayerLinkActorClass()->checkGrabWeapon(daBoko_c::Type_MACHETE_e)) {
                 return FALSE;
             }
 
             break;
         case 0x2E:
-            if(daPy_getPlayerLinkActorClass()->checkGrabWeapon(1)) {
+            if(daPy_getPlayerLinkActorClass()->checkGrabWeapon(daBoko_c::Type_MACHETE_e)) {
                 return FALSE;
             }
 
             break;
         case 0x2F:
-            if(dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(0x1A08)) {
+            if(dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TING_DISCOUNT)) {
                 return FALSE;
             }
 
             break;
         case 0x30:
-            if(dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(0x1A10)) {
+            if(dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TINGLE_BALLOON_DISCOUNT)) {
                 return FALSE;
             }
 
             break;
         case 0x31:
-            if(!dComIfGs_isEventBit(0x1708)) {
+            if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1708)) {
                 return FALSE;
             }
 
@@ -2128,73 +2124,73 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             return FALSE;
         case 0x44:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_OS) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == fpcNm_NPC_OS_e) {
                 return FALSE;
             }
 
             break;
         case 0x45:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_OS) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != fpcNm_NPC_OS_e) {
                 return FALSE;
             }
 
             break;
         case 0x46:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_MD) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == fpcNm_NPC_MD_e) {
                 return FALSE;
             }
 
             break;
         case 0x47:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_MD) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != fpcNm_NPC_MD_e) {
                 return FALSE;
             }
 
             break;
         case 0x48:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_CB1) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == fpcNm_NPC_CB1_e) {
                 return FALSE;
             }
 
             break;
         case 0x49:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_CB1) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != fpcNm_NPC_CB1_e) {
                 return FALSE;
             }
 
             break;
         case 0x4A:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_KAM) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == fpcNm_NPC_KAM_e) {
                 return FALSE;
             }
 
             break;
         case 0x4B:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_KAM) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != fpcNm_NPC_KAM_e) {
                 return FALSE;
             }
 
             break;
         case 0x4C:
-            if(dComIfGs_checkGetItem(dItem_SKULL_HAMMER_e)) {
+            if(dComIfGs_checkGetItem(dItemNo_SKULL_HAMMER_e)) {
                 return FALSE;
             }
 
             break;
         case 0x4D:
-            if(!dComIfGs_checkGetItem(dItem_SKULL_HAMMER_e)) {
+            if(!dComIfGs_checkGetItem(dItemNo_SKULL_HAMMER_e)) {
                 return FALSE;
             }
 
             break;
         case 0x4E:
-            if(dComIfGs_checkGetItem(dItem_MIRROR_SHIELD_e)) {
+            if(dComIfGs_checkGetItem(dItemNo_MIRROR_SHIELD_e)) {
                 return FALSE;
             }
 
             break;
         case 0x4F:
-            if(!dComIfGs_checkGetItem(dItem_MIRROR_SHIELD_e)) {
+            if(!dComIfGs_checkGetItem(dItemNo_MIRROR_SHIELD_e)) {
                 return FALSE;
             }
 
@@ -2212,13 +2208,13 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x52:
-            if(dComIfGs_checkGetItem(dItem_HOOKSHOT_e)) {
+            if(dComIfGs_checkGetItem(dItemNo_HOOKSHOT_e)) {
                 return FALSE;
             }
 
             break;
         case 0x53:
-            if(!dComIfGs_checkGetItem(dItem_HOOKSHOT_e)) {
+            if(!dComIfGs_checkGetItem(dItemNo_HOOKSHOT_e)) {
                 return FALSE;
             }
 
@@ -2236,7 +2232,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x56:
-            if(!dComIfGs_isEventBit(0x2E08)) {
+            if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E08)) {
                 return FALSE;
             }
 
@@ -2248,31 +2244,31 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x58:
-            if(!dComIfGs_checkGetItem(dItem_IRON_BOOTS_e)) {
+            if(!dComIfGs_checkGetItem(dItemNo_IRON_BOOTS_e)) {
                 return FALSE;
             }
 
             break;
         case 0x59:
-            if(dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e) || dComIfGs_checkGetItem(dItem_MASTER_SWORD_3_e)) {
+            if(dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_2_e) || dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_3_e)) {
                 return FALSE;
             }
 
             break;
         case 0x5A:
-            if(!dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e) && !dComIfGs_checkGetItem(dItem_MASTER_SWORD_3_e)) {
+            if(!dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_2_e) && !dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_3_e)) {
                 return FALSE;
             }
 
             break;
         case 0x5B:
-            if(dComIfGs_checkGetItem(dItem_MASTER_SWORD_3_e)) {
+            if(dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_3_e)) {
                 return FALSE;
             }
 
             break;
         case 0x5C:
-            if(!dComIfGs_checkGetItem(dItem_MASTER_SWORD_3_e)) {
+            if(!dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_3_e)) {
                 return FALSE;
             }
 
@@ -2466,27 +2462,27 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x7B:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_MD  && daNpc_Md_c::isFlying()) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == fpcNm_NPC_MD_e  && daNpc_Md_c::isFlying()) {
                 return FALSE;
             }
 
             break;
         case 0x7C:
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_MD || !daNpc_Md_c::isFlying()) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != fpcNm_NPC_MD_e || !daNpc_Md_c::isFlying()) {
                 return FALSE;
             }
 
             break;
         case 0x7F:
             // Potential bug: This seems to check if the current player is Medli, but that Makar is flying?
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_MD && daNpc_Cb1_c::isFlying()) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) == fpcNm_NPC_MD_e && daNpc_Cb1_c::isFlying()) {
                 return FALSE;
             }
 
             break;
         case 0x80:
             // Potential bug: This seems to check if the current player is Medli, but that Makar is flying?
-            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_MD || !daNpc_Cb1_c::isFlying()) {
+            if(fopAcM_GetName(dComIfGp_getPlayer(0)) != fpcNm_NPC_MD_e || !daNpc_Cb1_c::isFlying()) {
                 return FALSE;
             }
 
@@ -2498,7 +2494,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x7E:
-            if(dComIfGs_checkGetItem(dItem_SKULL_HAMMER_e) && !dComIfGs_isEventBit(0x2D01)) {
+            if(dComIfGs_checkGetItem(dItemNo_SKULL_HAMMER_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
                 return FALSE;
             }
 
@@ -2573,7 +2569,7 @@ static BOOL daAgbsw0_Delete(daAgbsw0_c* i_this) {
 
 /* 00004E98-00004F80       .text daAgbsw0_Create__FP10fopAc_ac_c */
 static cPhs_State daAgbsw0_Create(fopAc_ac_c* i_this) {
-    fopAcM_SetupActor(i_this, daAgbsw0_c);
+    fopAcM_ct(i_this, daAgbsw0_c);
 
     return static_cast<daAgbsw0_c*>(i_this)->create();
 }
@@ -2587,18 +2583,18 @@ static actor_method_class l_daAgbsw0_Method = {
 };
 
 actor_process_profile_definition g_profile_AGBSW0 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_AGBSW0,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_AGBSW0_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daAgbsw0_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_AGBSW0,
+    /* Draw Prio    */ fpcDwPi_AGBSW0_e,
     /* Actor SubMtd */ &l_daAgbsw0_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

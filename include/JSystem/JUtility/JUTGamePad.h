@@ -12,18 +12,18 @@ extern u32 channel_mask[4];
 
 namespace CButton {
 enum {
-    DPAD_LEFT = 0x0001,
-    DPAD_RIGHT = 0x0002,
-    DPAD_DOWN = 0x0004,
-    DPAD_UP = 0x0008,
-    Z = 0x0010,
-    R = 0x0020,
-    L = 0x0040,
-    A = 0x0100,
-    B = 0x0200,
-    X = 0x0400,
-    Y = 0x0800,
-    START = 0x1000,
+    /* 0x0001 */ DPAD_LEFT = 0x0001,
+    /* 0x0002 */ DPAD_RIGHT = 0x0002,
+    /* 0x0004 */ DPAD_DOWN = 0x0004,
+    /* 0x0008 */ DPAD_UP = 0x0008,
+    /* 0x0010 */ Z = 0x0010,
+    /* 0x0020 */ R = 0x0020,
+    /* 0x0040 */ L = 0x0040,
+    /* 0x0100 */ A = 0x0100,
+    /* 0x0200 */ B = 0x0200,
+    /* 0x0400 */ X = 0x0400,
+    /* 0x0800 */ Y = 0x0800,
+    /* 0x1000 */ START = 0x1000,
 };
 }
 
@@ -110,8 +110,8 @@ public:
     JUTGamePadRecordBase* getPadReplay() const { return mPadReplay; }
     JUTGamePadRecordBase* getPadRecord() const { return mPadRecord; }
 
-    u32 testButton(u32 button) const { return getButton() & button; }
-    u32 testTrigger(u32 button) const { return getTrigger() & button; }
+    bool testButton(u32 button) const { return mButton.mButton & button; }
+    bool testTrigger(u32 button) const { return mButton.mTrigger & button; }
 
     bool isPushing3ButtonReset() const {
         bool isPushingReset = false;

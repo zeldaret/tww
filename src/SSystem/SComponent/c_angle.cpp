@@ -4,9 +4,8 @@
 //
 
 #include "SSystem/SComponent/c_angle.h"
+#include "SSystem/SComponent/c_math.h"
 #include "dolphin/types.h"
-
-extern f32 cM_atan2f(f32, f32);
 
 const cSAngle cSAngle::_0(static_cast<s16>(0));
 const cSAngle cSAngle::_1(static_cast<s16>(0xb6));

@@ -3,20 +3,19 @@
 // Translation Unit: d_a_shutter.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_shutter.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_htobi1.h"
-#include "d/res/res_htobi2.h"
+#include "res/Object/Htobi1.h"
+#include "res/Object/Htobi2.h"
 
 const float daShutter_c::m_max_speed[2] = {3.0f, 3.0f};
 const float daShutter_c::m_min_speed[2] = {1.0f, 1.0f};
 const float daShutter_c::m_move_len[2] = {200.0f, 84.0f};
 const float daShutter_c::m_width[2] = {220.0f, 82.0f};
 const float daShutter_c::m_height[2] = {200.0f, 100.0f};
-const s16 daShutter_c::m_bdlidx[2] = {HTOBI1_BDL_HTOBI1, HTOBI2_BDL_HTOBI2};
-const s16 daShutter_c::m_dzbidx[2] = {HTOBI1_DZB_HTOBI1, HTOBI2_DZB_HTOBI2};
+const s16 daShutter_c::m_bdlidx[2] = {dRes_INDEX_HTOBI1_BDL_HTOBI1_e, dRes_INDEX_HTOBI2_BDL_HTOBI2_e};
+const s16 daShutter_c::m_dzbidx[2] = {dRes_INDEX_HTOBI1_DZB_HTOBI1_e, dRes_INDEX_HTOBI2_DZB_HTOBI2_e};
 const s32 daShutter_c::m_heapsize[2] = {0x1140, 0x3000};
 const Vec daShutter_c::m_cull_min[2] = {{-500.0f, -100.0f, -50.0f}, {-150.0f, -100.0f, -50.0f}};
 const Vec daShutter_c::m_cull_max[2] = {{500.0f, 250.0f, 50.0f}, {150.0f, 250.0f, 50.0f}};
@@ -28,8 +27,11 @@ char* daShutter_c::m_staff_name[2] = {"Htobi1", "Htobi2"};
 
 /* 00000078-00000108       .text _delete__11daShutter_cFv */
 bool daShutter_c::_delete() {
-    dComIfG_resDelete(&mPhs, m_arcname[mType]);
-    if (heap != NULL) {
+    dComIfG_resDeleteDemo(&mPhs, m_arcname[mType]);
+#if VERSION > VERSION_DEMO
+    if (heap != NULL)
+#endif
+    {
         for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
             dComIfG_Bgsp()->Release(mdBgW[i]);
         };
@@ -82,7 +84,7 @@ BOOL daShutter_c::Create() {
         mcXyz[0].x = mcXyz[0].x - m_move_len[mType];
         mcXyz[1].x = mcXyz[1].x + m_move_len[mType];
     }
-    mFrameTimer = 0x1e;
+    mFrameTimer = 30;
     set_mtx();
     for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
         dComIfG_Bgsp()->Regist(mdBgW[i], this);
@@ -99,7 +101,7 @@ BOOL daShutter_c::Create() {
 
 /* 000004B4-000005A0       .text _create__11daShutter_cFv */
 cPhs_State daShutter_c::_create() {
-    fopAcM_SetupActor(this, daShutter_c);
+    fopAcM_ct(this, daShutter_c);
     mType = daShutter_prm::getType(this);
     cPhs_State result = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (result == cPhs_COMPLEATE_e) {
@@ -312,18 +314,18 @@ static actor_method_class daShutterMethodTable = {
 };
 
 actor_process_profile_definition g_profile_SHUTTER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SHUTTER,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SHUTTER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daShutter_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SHUTTER,
+    /* Draw Prio    */ fpcDwPi_SHUTTER_e,
     /* Actor SubMtd */ &daShutterMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

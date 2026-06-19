@@ -3,6 +3,7 @@
 // Translation Unit: f_op_msg_mng.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "f_op/f_op_msg_mng.h"
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JUtility/JUTDataHeader.h"
@@ -15,7 +16,6 @@
 #include "f_pc/f_pc_layer_iter.h"
 #include "f_pc/f_pc_searcher.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_npc_bs1.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J2DGraph/J2DPicture.h"
@@ -25,8 +25,6 @@
 #include "SSystem/SComponent/c_malloc.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include <stdio.h>
-
-#include "global.h"
 
 STControl stick;
 
@@ -41,11 +39,11 @@ struct mesg_info : JUTDataBlockHeader {
     /* 0x0A */ u16 mEntrySize;
     /* 0x0C */ u16 mGroupID;
     /* 0x10 */ u8 mColor;
-    /* 0x14 */ mesg_entry mEntries[1]; // variable-length array
+    /* 0x14 */ JMSMesgEntry_c mEntries[];
 };
 
 struct mesg_data : JUTDataBlockHeader {
-    char mData[1]; // variable-length array
+    char mData[];
 };
 
 static bool pushButton;
@@ -58,73 +56,73 @@ static struct {
     u8 itemNo;
     const char* filename;
 } itemicon[] = {
-    /* 0x00 */ {dItem_TELESCOPE_e, "telescope.bti"},
-    /* 0x01 */ {NORMAL_SAIL, "sail_00.bti"},
-    /* 0x02 */ {dItem_WIND_WAKER_e, "baton.bti"},
-    /* 0x03 */ {dItem_GRAPPLING_HOOK_e, "rope.bti"},
-    /* 0x04 */ {dItem_SPOILS_BAG_e, "coverofbeast.bti"},
-    /* 0x05 */ {dItem_BOOMERANG_e, "boomerang.bti"},
-    /* 0x06 */ {dItem_DEKU_LEAF_e, "fan.bti"},
-    /* 0x07 */ {dItem_TINGLE_TUNER_e, "whistle.bti"},
-    /* 0x08 */ {CAMERA, "camera.bti"},
-    /* 0x09 */ {dItem_IRON_BOOTS_e, "boots_00.bti"},
-    /* 0x0A */ {dItem_MAGIC_ARMOR_e, "shield_02.bti"},
-    /* 0x0B */ {dItem_BAIT_BAG_e, "coverofbait.bti"},
-    /* 0x0C */ {dItem_BOW_e, "bow_01.bti"},
-    /* 0x0D */ {dItem_BOMB_BAG_e, "bomb_00.bti"},
-    /* 0x0E */ {dItem_EMPTY_BOTTLE_e, "bottle_00.bti"},
-    /* 0x0F */ {dItem_RED_POTION_e, "bottle_01.bti"},
-    /* 0x10 */ {dItem_GREEN_POTION_e, "bottle_02.bti"},
-    /* 0x11 */ {dItem_BLUE_POTION_e, "bottle_03.bti"},
-    /* 0x12 */ {dItem_DELIVERY_BAG_e, "delivery.bti"},
-    /* 0x13 */ {dItem_HOOKSHOT_e, "hookshot.bti"},
-    /* 0x14 */ {dItem_SKULL_HAMMER_e, "hammer_01.bti"},
+    /* 0x00 */ {dItemNo_TELESCOPE_e, "telescope.bti"},
+    /* 0x01 */ {dItemNo_SAIL_e, "sail_00.bti"},
+    /* 0x02 */ {dItemNo_WIND_WAKER_e, "baton.bti"},
+    /* 0x03 */ {dItemNo_GRAPPLING_HOOK_e, "rope.bti"},
+    /* 0x04 */ {dItemNo_SPOILS_BAG_e, "coverofbeast.bti"},
+    /* 0x05 */ {dItemNo_BOOMERANG_e, "boomerang.bti"},
+    /* 0x06 */ {dItemNo_DEKU_LEAF_e, "fan.bti"},
+    /* 0x07 */ {dItemNo_TINGLE_TUNER_e, "whistle.bti"},
+    /* 0x08 */ {dItemNo_PICTO_BOX_e, "camera.bti"},
+    /* 0x09 */ {dItemNo_IRON_BOOTS_e, "boots_00.bti"},
+    /* 0x0A */ {dItemNo_MAGIC_ARMOR_e, "shield_02.bti"},
+    /* 0x0B */ {dItemNo_BAIT_BAG_e, "coverofbait.bti"},
+    /* 0x0C */ {dItemNo_BOW_e, "bow_01.bti"},
+    /* 0x0D */ {dItemNo_BOMB_BAG_e, "bomb_00.bti"},
+    /* 0x0E */ {dItemNo_EMPTY_BOTTLE_e, "bottle_00.bti"},
+    /* 0x0F */ {dItemNo_RED_POTION_e, "bottle_01.bti"},
+    /* 0x10 */ {dItemNo_GREEN_POTION_e, "bottle_02.bti"},
+    /* 0x11 */ {dItemNo_BLUE_POTION_e, "bottle_03.bti"},
+    /* 0x12 */ {dItemNo_DELIVERY_BAG_e, "delivery.bti"},
+    /* 0x13 */ {dItemNo_HOOKSHOT_e, "hookshot.bti"},
+    /* 0x14 */ {dItemNo_SKULL_HAMMER_e, "hammer_01.bti"},
     
-    /* 0x15 */ {dItem_MAGIC_ARMOR_e, "shield_02.bti"},
-    /* 0x16 */ {dItem_MAGIC_ARMOR_e, "shield_02.bti"},
-    /* 0x17 */ {dItem_MAGIC_ARMOR_e, "shield_02.bti"},
+    /* 0x15 */ {dItemNo_MAGIC_ARMOR_e, "shield_02.bti"},
+    /* 0x16 */ {dItemNo_MAGIC_ARMOR_e, "shield_02.bti"},
+    /* 0x17 */ {dItemNo_MAGIC_ARMOR_e, "shield_02.bti"},
     
-    /* 0x18 */ {dItem_SKULL_NECKLACE_e, "beast_01.bti"},
-    /* 0x19 */ {dItem_BOKOBABA_SEED_e, "beast_02.bti"},
-    /* 0x1A */ {dItem_GOLDEN_FEATHER_e, "beast_03.bti"},
-    /* 0x1B */ {BOKO_BELT, "beast_04.bti"},
-    /* 0x1C */ {dItem_RED_JELLY_e, "beast_05.bti"},
-    /* 0x1D */ {dItem_GREEN_JELLY_e, "beast_06.bti"},
-    /* 0x1E */ {dItem_BLUE_JELLY_e, "beast_07.bti"},
-    /* 0x1F */ {dItem_JOY_PENDANT_e, "beast_08.bti"},
+    /* 0x18 */ {dItemNo_SKULL_NECKLACE_e, "beast_01.bti"},
+    /* 0x19 */ {dItemNo_BOKOBABA_SEED_e, "beast_02.bti"},
+    /* 0x1A */ {dItemNo_GOLDEN_FEATHER_e, "beast_03.bti"},
+    /* 0x1B */ {dItemNo_KNIGHTS_CREST_e, "beast_04.bti"},
+    /* 0x1C */ {dItemNo_RED_JELLY_e, "beast_05.bti"},
+    /* 0x1D */ {dItemNo_GREEN_JELLY_e, "beast_06.bti"},
+    /* 0x1E */ {dItemNo_BLUE_JELLY_e, "beast_07.bti"},
+    /* 0x1F */ {dItemNo_JOY_PENDANT_e, "beast_08.bti"},
     
-    /* 0x20 */ {dItem_NONE_e, "beast_09.bti"},
-    /* 0x21 */ {dItem_NONE_e, "beast_10.bti"},
-    /* 0x22 */ {dItem_NONE_e, "beast_11.bti"},
-    /* 0x23 */ {dItem_NONE_e, "beast_12.bti"},
+    /* 0x20 */ {dItemNo_NONE_e, "beast_09.bti"},
+    /* 0x21 */ {dItemNo_NONE_e, "beast_10.bti"},
+    /* 0x22 */ {dItemNo_NONE_e, "beast_11.bti"},
+    /* 0x23 */ {dItemNo_NONE_e, "beast_12.bti"},
     
-    /* 0x24 */ {dItem_HYOI_PEAR_e, "beast_02.bti"},
-    /* 0x25 */ {dItem_BIRD_BAIT_5_e, "beast_02.bti"},
-    /* 0x26 */ {dItem_NONE_e, "beast_03.bti"},
-    /* 0x27 */ {dItem_NONE_e, "beast_04.bti"},
-    /* 0x28 */ {dItem_NONE_e, "beast_05.bti"},
-    /* 0x29 */ {dItem_NONE_e, "beast_06.bti"},
-    /* 0x2A */ {dItem_NONE_e, "beast_07.bti"},
-    /* 0x2B */ {dItem_NONE_e, "beast_08.bti"},
+    /* 0x24 */ {dItemNo_HYOI_PEAR_e, "beast_02.bti"},
+    /* 0x25 */ {dItemNo_BIRD_BAIT_5_e, "beast_02.bti"},
+    /* 0x26 */ {dItemNo_NONE_e, "beast_03.bti"},
+    /* 0x27 */ {dItemNo_NONE_e, "beast_04.bti"},
+    /* 0x28 */ {dItemNo_NONE_e, "beast_05.bti"},
+    /* 0x29 */ {dItemNo_NONE_e, "beast_06.bti"},
+    /* 0x2A */ {dItemNo_NONE_e, "beast_07.bti"},
+    /* 0x2B */ {dItemNo_NONE_e, "beast_08.bti"},
     
-    /* 0x2C */ {dItem_NONE_e, "beast_09.bti"},
-    /* 0x2D */ {dItem_NONE_e, "beast_10.bti"},
-    /* 0x2E */ {dItem_NONE_e, "beast_11.bti"},
-    /* 0x2F */ {dItem_NONE_e, "beast_12.bti"},
+    /* 0x2C */ {dItemNo_NONE_e, "beast_09.bti"},
+    /* 0x2D */ {dItemNo_NONE_e, "beast_10.bti"},
+    /* 0x2E */ {dItemNo_NONE_e, "beast_11.bti"},
+    /* 0x2F */ {dItemNo_NONE_e, "beast_12.bti"},
     
-    /* 0x30 */ {FLOWER_1, "beast_02.bti"},
-    /* 0x31 */ {FLOWER_2, "beast_02.bti"},
-    /* 0x32 */ {FLOWER_3, "beast_03.bti"},
-    /* 0x33 */ {HEROS_FLAG, "beast_04.bti"},
-    /* 0x34 */ {TAIRYO_FLAG, "beast_05.bti"},
-    /* 0x35 */ {SALES_FLAG, "beast_06.bti"},
-    /* 0x36 */ {WIND_FLAG, "beast_07.bti"},
-    /* 0x37 */ {RED_FLAG, "beast_08.bti"},
+    /* 0x30 */ {dItemNo_TOWN_FLOWER_e, "beast_02.bti"},
+    /* 0x31 */ {dItemNo_SEA_FLOWER_e, "beast_02.bti"},
+    /* 0x32 */ {dItemNo_EXOTIC_FLOWER_e, "beast_03.bti"},
+    /* 0x33 */ {dItemNo_HEROS_FLAG_e, "beast_04.bti"},
+    /* 0x34 */ {dItemNo_BIG_CATCH_FLAG_e, "beast_05.bti"},
+    /* 0x35 */ {dItemNo_BIG_SALE_FLAG_e, "beast_06.bti"},
+    /* 0x36 */ {dItemNo_PINWHEEL_e, "beast_07.bti"},
+    /* 0x37 */ {dItemNo_SICKLE_MOON_FLAG_e, "beast_08.bti"},
     
-    /* 0x38 */ {FOSSIL_HEAD, "beast_09.bti"},
-    /* 0x39 */ {WATER_STATUE, "beast_10.bti"},
-    /* 0x3A */ {POSTMAN_STATUE, "beast_11.bti"},
-    /* 0x3B */ {PRESIDENT_STATUE, "beast_12.bti"},
+    /* 0x38 */ {dItemNo_SKULL_TOWER_IDOL_e, "beast_09.bti"},
+    /* 0x39 */ {dItemNo_FOUNTAIN_IDOL_e, "beast_10.bti"},
+    /* 0x3A */ {dItemNo_POSTMAN_STATUE_e, "beast_11.bti"},
+    /* 0x3B */ {dItemNo_SHOP_GURU_STATUE_e, "beast_12.bti"},
 };
 
 struct fopMsgM_pane_alpha_class;
@@ -140,7 +138,7 @@ void MyPicture::drawSelf(f32 x, f32 y) {
 /* 8002AC1C-8002AC90       .text drawSelf__9MyPictureFffPA3_A4_f */
 void MyPicture::drawSelf(f32 x, f32 y, Mtx* mtx) {
     if(mpTexture[0]) {
-        drawFullSet2(mScreenBounds.i.x + x, mScreenBounds.i.y + y, mBounds.getWidth(), mBounds.getHeight(), J2DBinding(mBinding), getMirror(), isTumble(), mtx);
+        drawFullSet2(mGlobalBounds.i.x + x, mGlobalBounds.i.y + y, mBounds.getWidth(), mBounds.getHeight(), J2DBinding(mBinding), getMirror(), isTumble(), mtx);
     }
 }
 
@@ -176,6 +174,7 @@ void MyPicture::drawFullSet2(f32 x, f32 y, f32 width, f32 height, J2DBinding bin
     }
 }
 
+#if VERSION >= VERSION_USA
 /* 8002AD4C-8002AE28       .text fopMsgM_hyrule_language_check__FUl */
 bool fopMsgM_hyrule_language_check(u32 msgNo) {
     if(dComIfGs_getClearCount() != 0) {
@@ -205,11 +204,12 @@ bool fopMsgM_hyrule_language_check(u32 msgNo) {
 
     return false;
 }
+#endif
 
 /* 8002AE28-8002AED4       .text fopMsgM_setStageLayer__FPv */
 s32 fopMsgM_setStageLayer(void* proc) {
     scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
-    JUT_ASSERT(0x189, stageProc != NULL);
+    JUT_ASSERT(VERSION_SELECT(0x15C, 0x15C, 0x189, 0x189), stageProc != NULL);
     u32 layer = fpcM_LayerID(stageProc);
     return fpcM_ChangeLayerID(proc, layer);
 }
@@ -352,21 +352,21 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* pa
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mGroupID = 0;
-    msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;  
+    msgGet.mMsgNo = 0;
+    msgGet.mResMsgNo = 0;  
 
     fpc_ProcID pcId;
     if(*param_3 >> 0x10 == 0x63) {
-        pcId = fopMsgM_create(PROC_SCP, param_1, param_2, param_3, param_4, NULL);
+        pcId = fopMsgM_create(fpcNm_SCP_e, param_1, param_2, param_3, param_4, NULL);
     }
     else if(*param_3 >> 0x10 == 0x59) {
-        pcId = fopMsgM_create(PROC_PB, param_1, param_2, param_3, param_4, NULL);
+        pcId = fopMsgM_create(fpcNm_PB_e, param_1, param_2, param_3, param_4, NULL);
     }
     else {
         mesg_header* header = msgGet.getMesgHeader(*param_3);
         if(header != NULL) {
             if(msgGet.getMessage(header) != NULL) {
-                const mesg_entry& entry = msgGet.getMesgEntry(header);
+                const JMSMesgEntry_c& entry = msgGet.getMesgEntry(header);
                 u16 price = entry.mItemPrice;
                 u16 type = entry.mTextboxType;
                 dComIfGp_setMesgAnimeAttrInfo(entry.mInitialAnimation);
@@ -374,22 +374,22 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* pa
                 dComIfGp_setMessageRupee(price);
 
                 if(type == 2 || type == 6 || type == 7) {
-                    pcId = fopMsgM_create(PROC_MSG2, param_1, param_2, param_3, param_4, NULL);
+                    pcId = fopMsgM_create(fpcNm_MSG2_e, param_1, param_2, param_3, param_4, NULL);
                 }
                 else {
-                    pcId = fopMsgM_create(PROC_MSG, param_1, param_2, param_3, param_4, NULL);
+                    pcId = fopMsgM_create(fpcNm_MSG_e, param_1, param_2, param_3, param_4, NULL);
                 }
             }
             else {
                 *param_3 = 1;
                 *param_4 = *param_3;
-                pcId = fopMsgM_create(PROC_MSG, param_1, param_2, param_3, param_4, NULL);
+                pcId = fopMsgM_create(fpcNm_MSG_e, param_1, param_2, param_3, param_4, NULL);
             }
         }
         else {
             *param_3 = 1;
             *param_4 = *param_3;
-            pcId = fopMsgM_create(PROC_MSG, param_1, param_2, param_3, param_4, NULL);
+            pcId = fopMsgM_create(fpcNm_MSG_e, param_1, param_2, param_3, param_4, NULL);
         }
 
         JKRFileLoader::removeResource(header, NULL);
@@ -400,15 +400,15 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* pa
 
 /* 8002B568-8002B634       .text fopMsgM_searchMessageNumber__FUl */
 u32 fopMsgM_searchMessageNumber(u32 msgNo) {
-    /* Nonmatching */
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mGroupID = 0;
-    msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;  
+    msgGet.mMsgNo = 0;
+    msgGet.mResMsgNo = 0;
 
+    mesg_header* header;
     for(u32 i = msgNo & 0xFFFF; i < 0xFFFF; i++) {
-        mesg_header* header = msgGet.getMesgHeader(i);
+        header = msgGet.getMesgHeader(i);
         if(header != NULL && msgGet.getMessage(header) != NULL) {
             return i;
         }
@@ -440,7 +440,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, fopAc_ac_c* pActor) {
         else {
             pMsg->mMsgNo = msgNo;
             pMsg->field_0xf0 = msgNo;
-            if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
+            if(fopMsgM_SearchByName(fpcNm_SCP_e) || fopMsgM_SearchByName(fpcNm_PB_e)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
             }
@@ -473,7 +473,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, cXyz* lookAtPos) {
         else {
             pMsg->mMsgNo = msgNo;
             pMsg->field_0xf0 = msgNo;
-            if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
+            if(fopMsgM_SearchByName(fpcNm_SCP_e) || fopMsgM_SearchByName(fpcNm_PB_e)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
             }
@@ -488,12 +488,12 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, cXyz* lookAtPos) {
 
 /* 8002B8A4-8002B9C4       .text fopMsgM_messageSet__FUl */
 fpc_ProcID fopMsgM_messageSet(u32 msgNo) {
-    /* Nonmatching */
     if (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 7 && dComIfGp_isHeapLockFlag() != 8 && dComIfGp_isHeapLockFlag() != 9) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
-    cXyz lookAtPos(0.0f, 0.0f, 0.0f);
+    cXyz lookAtPos;
+    lookAtPos.x = lookAtPos.y = lookAtPos.z = 0.0f;
     if(i_msgID == fpcM_ERROR_PROCESS_ID_e) {
         i_msgID = fopMsgM_messageTypeSelect(NULL, &lookAtPos, &msgNo, &msgNo);
     }
@@ -505,7 +505,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo) {
         else {
             pMsg->mMsgNo = msgNo;
             pMsg->field_0xf0 = msgNo;
-            if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
+            if(fopMsgM_SearchByName(fpcNm_SCP_e) || fopMsgM_SearchByName(fpcNm_PB_e)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
             }
@@ -526,8 +526,8 @@ fpc_ProcID fopMsgM_scopeMessageSet(u32 msgNo) {
             i_msgID = fpcM_ERROR_PROCESS_ID_e;
         }
         else {
-            if(dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) && dComIfGp_getScopeMesgStatus() == 0xB) {
-                dComIfGp_setScopeMesgStatus(0x2);
+            if(dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) && dComIfGp_getScopeMesgStatus() == fopMsgStts_UNKB_e) {
+                dComIfGp_setScopeMesgStatus(fopMsgStts_BOX_OPENING_e);
             }
 
             pMsg->mMsgNo = msgNo;
@@ -540,14 +540,13 @@ fpc_ProcID fopMsgM_scopeMessageSet(u32 msgNo) {
 
 /* 8002BA4C-8002BB78       .text fopMsgM_tactMessageSet__Fv */
 u32 fopMsgM_tactMessageSet() {
-    /* Nonmatching */
-
     if (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 7 && dComIfGp_isHeapLockFlag() != 8 && dComIfGp_isHeapLockFlag() != 9) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
     u32 msgNoTemp = 0x5AC;
-    cXyz lookAtPos(0.0f, 0.0f, 0.0f);
+    cXyz lookAtPos;
+    lookAtPos.x = lookAtPos.y = lookAtPos.z = 0.0f;
     if(i_msgID == fpcM_ERROR_PROCESS_ID_e) {
         i_msgID = fopMsgM_messageTypeSelect(NULL, &lookAtPos, &msgNoTemp, &msgNoTemp);
         fopMsgM_tactMsgFlagOn();
@@ -560,7 +559,7 @@ u32 fopMsgM_tactMessageSet() {
         else {
             pMsg->mMsgNo = msgNoTemp;
             pMsg->field_0xf0 = msgNoTemp;
-            if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
+            if(fopMsgM_SearchByName(fpcNm_SCP_e) || fopMsgM_SearchByName(fpcNm_PB_e)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
             }
@@ -576,30 +575,42 @@ u32 fopMsgM_tactMessageSet() {
 
 /* 8002BB78-8002BDBC       .text fopMsgM_messageGet__FPcUl */
 char* fopMsgM_messageGet(char* dst, u32 msgNo) {
-    /* Nonmatching */
     fopMsgM_itemMsgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
-    JUT_ASSERT(0x6BD, head_p);
+    JUT_ASSERT(VERSION_SELECT(0x690, 0x690, 0x6BD, 0x6BD), head_p);
 
-    s32 curOffset = 0;
-    s32 numRead = 0;
-    const char* src = (char*)msgGet.getMessage(head_p);
-    char dstBuf[24];
-    const u32* cursor;
+    const char* src = msgGet.getMessage(head_p);
+    const char* cursor = src;
+    char* dstPtr = dst;
+
+    char dstBuf[20];
     s32 current;
-    while(cursor = (u32*)src + curOffset, current = *cursor, (s8)*cursor != '\0') {
-        if(*cursor == 0x1A) {
-            if((cursor[1] & 0xFFFFFF) == 0) {
+    while(current = *cursor, *cursor != '\0') {
+        if((u8)*cursor == 0x1A) {
+            u32 next_as_int = *(u32*)(++cursor);
+            if ((next_as_int & 0xFFFFFF) == 0x1E) {
+                *dstPtr = 0x1A;
+                dstPtr++;
+            }
+            else if ((next_as_int & 0xFFFFFF) == 0) {
+#if VERSION > VERSION_JPN
+                // There are some modifications done to the player name before
+                // writing it to the dst pointer when the language is set to German.
+
                 strcpy(dstBuf, dComIfGs_getPlayerName());
-#if VERSION <= VERSION_JPN
-                if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
+                if(
+                    dComIfGs_getPalLanguage() == 1 &&
+                    (
+#if VERSION == VERSION_PAL
+    // Version is PAL
+                        msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7
 #else
-                if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
+    // Version is USA, we know it's not DEMO or JPN because of the outer #if
+                        msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE
 #endif
+                    )
+                ) {
                     s32 bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
@@ -610,55 +621,73 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
                     }
                 }
 
-                for(s32 i = 0; dstBuf[i] != '\0'; i++) {
-                    dst[numRead] = dstBuf[i];
-                    numRead++;
+                for (char* bufPtr = dstBuf; *bufPtr != '\0'; bufPtr ++) {
+                    *dstPtr = *bufPtr;
+                    dstPtr++;
                 }
+#else
+                // In the JPN and DEMO versions, the player name is just written
+                // to dst directly.
+
+                for (const char* bufPtr = dComIfGs_getPlayerName(); *bufPtr != '\0'; bufPtr ++) {
+                    *dstPtr = *bufPtr;
+                    dstPtr++;
+                }
+#endif
             }
-        }
-        else if((*cursor >> 4) == 8 || (*cursor >> 4) == 9) {
-            dst[numRead] = current;
-            dst[numRead + 1] = current + 1;
-            curOffset += 2;
-            numRead += 2;
+
+            cursor += *cursor - 1;
         }
         else {
-            dst[numRead] = current;
-            curOffset++;
-            numRead++;
+            int shifted = ((u32)*cursor >> 4) & 0xF;
+            if((shifted == 8 || shifted == 9) && VERSION != VERSION_PAL) {
+                *(dstPtr++) = *(cursor++);
+                *(dstPtr++) = *(cursor++);
+            }
+            else {
+                *(dstPtr++) = *(cursor++);
+            }
         }
     }
 
-    dst[numRead] = '\0';
+    *dstPtr = '\0';
     return dst;
 }
 
 /* 8002BE04-8002C02C       .text fopMsgM_passwordGet__FPcUl */
-void fopMsgM_passwordGet(char* dst, u32 msgNo) {
-    /* Nonmatching */
+char* fopMsgM_passwordGet(char* dst, u32 msgNo) {
     fopMsgM_itemMsgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
-    JUT_ASSERT(0x735, head_p);
+    JUT_ASSERT(VERSION_SELECT(0x6F6, 0x6F6, 0x735, 0x739), head_p);
 
-    s32 curOffset = 0;
-    s32 numRead = 0;
-    const char* src = (char*)msgGet.getMessage(head_p);
-    char dstBuf[24];
-    const u32* cursor;
+    const char* src = msgGet.getMessage(head_p);
+    const char* cursor = src;
+    char* dstPtr = dst;
+
+    char dstBuf[20];
     s32 current;
-    while(cursor = (u32*)src + curOffset, current = *cursor, (s8)*cursor != '\0') {
-        if(*cursor == 0x1A) {
-            if((cursor[1] & 0xFFFFFF) == 0) {
+    while(current = *cursor, *cursor != '\0') {
+        if((u8)*cursor == 0x1A) {
+            u32 next_as_int = *(u32*)(++cursor);
+            if ((next_as_int & 0xFFFFFF) == 0) {
+#if VERSION > VERSION_JPN
+                // There are some modifications done to the player name before
+                // writing it to the dst pointer when the language is set to German.
+
                 strcpy(dstBuf, dComIfGs_getPlayerName());
-#if VERSION <= VERSION_JPN
-                if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
+                if(
+                    dComIfGs_getPalLanguage() == 1 &&
+                    (
+#if VERSION == VERSION_PAL
+    // Version is PAL
+                        msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7
 #else
-                if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
+    // Version is USA, we know it's not DEMO or JPN because of the outer #if
+                        msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE
 #endif
+                    )
+                ) {
                     s32 bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
@@ -669,26 +698,37 @@ void fopMsgM_passwordGet(char* dst, u32 msgNo) {
                     }
                 }
 
-                for(s32 i = 0; dstBuf[i] != '\0'; i++) {
-                    dst[numRead] = dstBuf[i];
-                    numRead++;
+                for (char* bufPtr = dstBuf; *bufPtr != '\0'; bufPtr ++) {
+                    *dstPtr = *bufPtr;
+                    dstPtr++;
                 }
+#else
+                // In the JPN and DEMO versions, the player name is just written
+                // to dst directly.
+
+                for (const char* bufPtr = dComIfGs_getPlayerName(); *bufPtr != '\0'; bufPtr ++) {
+                    *dstPtr = *bufPtr;
+                    dstPtr++;
+                }
+#endif
             }
-        }
-        else if((*cursor >> 4) == 8 || (*cursor >> 4) == 9) {
-            dst[numRead] = current;
-            dst[numRead + 1] = current + 1;
-            curOffset += 2;
-            numRead += 2;
+
+            cursor += *cursor - 1;
         }
         else {
-            dst[numRead] = current;
-            curOffset++;
-            numRead++;
+            int shifted = ((u32)*cursor >> 4) & 0xF;
+            if((shifted == 8 || shifted == 9) && VERSION != VERSION_PAL) {
+                *(dstPtr++) = *(cursor++);
+                *(dstPtr++) = *(cursor++);
+            }
+            else {
+                *(dstPtr++) = *(cursor++);
+            }
         }
     }
 
-    dst[numRead] = '\0';
+    *dstPtr = '\0';
+    return dst;
 }
 
 /* 8002C02C-8002C568       .text fopMsgM_selectMessageGet__FP7J2DPaneP7J2DPanePcPcPcPcUl */
@@ -696,9 +736,6 @@ void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3,
     /* Nonmatching */
     fopMsgM_msgDataProc_c temp;
     fopMsgM_itemMsgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;
 
     strcpy(param_3, "\x1B""CC[000000FF]\x1B""GM[0]");
     strcpy(param_4, "");
@@ -714,7 +751,8 @@ void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3,
     JUT_ASSERT(0x79B, head_p);
 
     const char* src = (char*)msgGet.getMessage(head_p);
-    mesg_entry entry = msgGet.getMesgEntry(head_p);
+    JMSMesgEntry_c entry;
+    entry = msgGet.getMesgEntry(head_p);
     temp.dataInit();
     temp.font[0] = ((J2DTextBox*)param_1)->getFont();
     temp.font[1] = ((J2DTextBox*)param_2)->getFont();
@@ -733,6 +771,13 @@ void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3,
     temp.stringShift();
     temp.iconIdxRefresh();
     temp.field_0x130 = 0;
+
+    f32 fVar2 = (2 - temp.field_0x130) * ((J2DTextBox*)param_2)->getLineSpace() * 0.5f;
+    ((J2DTextBox*) param_3)->field_0xd8 = 0.0f;
+    ((J2DTextBox*) param_3)->field_0xdc = fVar2;
+    ((J2DTextBox*) param_2)->field_0xd8 = 0.0f;
+    ((J2DTextBox*) param_2)->field_0xdc = fVar2;
+
     temp.stringSet();
     ((J2DTextBox*)param_1)->setString(param_3);
     ((J2DTextBox*)param_1)->setString(param_4);
@@ -781,12 +826,12 @@ bool fopMsgM_nextMsgFlagCheck() {
 
 /* 8002C5BC-8002C624       .text fopMsgM_getScopeMode__Fv */
 bool fopMsgM_getScopeMode() {
-    if(dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) && dComIfGp_getScopeMesgStatus() == 0xB && !dComIfGp_event_runCheck()) {
-        dComIfGp_setScopeMesgStatus(0xD);
+    if(dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) && dComIfGp_getScopeMesgStatus() == fopMsgStts_UNKB_e && !dComIfGp_event_runCheck()) {
+        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKD_e);
         return true;
     }
-    if(dComIfGp_getScopeMesgStatus() == 0x11) {
-        dComIfGp_setMesgStatus(0xD);
+    if(dComIfGp_getScopeMesgStatus() == fopMsgStts_BOX_CLOSING_e) {
+        dComIfGp_setMesgStatus(fopMsgStts_UNKD_e);
         return true;
     }
 
@@ -795,7 +840,7 @@ bool fopMsgM_getScopeMode() {
 
 /* 8002C624-8002C650       .text fopMsgM_forceSendOn__Fv */
 bool fopMsgM_forceSendOn() {
-    if (dComIfGp_getScopeMesgStatus() == 10) {
+    if (dComIfGp_getScopeMesgStatus() == fopMsgStts_CLOSE_WAIT_e) {
         pushButton = true;
         return true;
     }
@@ -830,8 +875,8 @@ bool fopMsgM_checkMessageSend() {
 
 /* 8002C684-8002C6B0       .text fopMsgM_releaseScopeMode__Fv */
 bool fopMsgM_releaseScopeMode() {
-    if (dComIfGp_getScopeMesgStatus() == 13) {
-        dComIfGp_setScopeMesgStatus(11);
+    if (dComIfGp_getScopeMesgStatus() == fopMsgStts_UNKD_e) {
+        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
         return true;
     }
 
@@ -922,7 +967,7 @@ void fopMsgM_outFontSet(J2DPicture* param_1, J2DPicture* param_2, s16* param_3, 
     param_2->show();
     fopMsgM_blendDraw(param_1, fopMsgM_buttonTex[param_5]);
     fopMsgM_blendDraw(param_2, fopMsgM_buttonTex[param_5]);
-    if((0xA <= param_5 && param_5 <= 0xE) || param_5 == 0x15 || param_5 == 0x17) {
+    if(param_5 == 0xA || param_5 == 0xB || param_5 == 0xC || param_5 == 0xD  || param_5 == 0x15 || param_5 == 0x17) {
         GXColor col;
         col.r = param_4 >> 0x18;
         col.g = param_4 >> 0x10;
@@ -962,7 +1007,7 @@ void fopMsgM_outFontSet(J2DPicture* param_1, s16* param_2, u32 param_3, u8 param
 
     param_1->show();
     fopMsgM_blendDraw(param_1, fopMsgM_buttonTex[param_4]);
-    if((0xA <= param_4 && param_4 <= 0xE) || param_4 == 0x15 || param_4 == 0x17) {
+    if(param_4 == 0xA || param_4 == 0xB || param_4 == 0xC || param_4 == 0xD || param_4 == 0x15 || param_4 == 0x17) {
         GXColor col;
         col.r = param_3 >> 0x18;
         col.g = param_3 >> 0x10;
@@ -1377,7 +1422,7 @@ fpc_ProcID fopMsgM_Create(s16 param_1, fopMsgCreateFunc param_2, void* param_3) 
 /* 8002E254-8002E2D8       .text getMesgHeader__16fopMsgM_msgGet_cFUl */
 mesg_header* fopMsgM_msgGet_c::getMesgHeader(u32 msg) {
     mGroupID = (msg >> 16);
-    mMsgID = msg;
+    mMsgNo = msg;
 
 #if VERSION <= VERSION_JPN
     char path[12];
@@ -1410,7 +1455,7 @@ mesg_data* fopMsgM_msgGet_c::getMesgData(mesg_header* msg) {
 }
 
 /* 8002E308-8002E378       .text getMesgEntry__16fopMsgM_msgGet_cFP11mesg_header */
-mesg_entry fopMsgM_msgGet_c::getMesgEntry(mesg_header* msg) {
+JMSMesgEntry_c fopMsgM_msgGet_c::getMesgEntry(mesg_header* msg) {
     mesg_info* info = getMesgInfo(msg);
     return info->mEntries[mMsgIdx];
 }
@@ -1427,10 +1472,10 @@ const char* fopMsgM_msgGet_c::getMessage(mesg_header* msg) {
             continue;
 
         mMsgIdx = i;
-        if (mMsgID == info->mEntries[i].mMesgID) {
-            mesg_entry* entry = &info->mEntries[mMsgIdx];
-            mResMsgIdx = entry->mMesgID;
+        if (mMsgNo == info->mEntries[i].mMsgNo) {
+            JMSMesgEntry_c* entry = &info->mEntries[mMsgIdx];
             ret = &data[entry->mDataOffs];
+            mResMsgNo = entry->mMsgNo;
             break;
         }
     }
@@ -1443,7 +1488,7 @@ mesg_header* fopMsgM_itemMsgGet_c::getMesgHeader(u32 msg) {
 #if VERSION <= VERSION_JPN
     u16 groupID = msg >> 16;
 #endif
-    mMsgID = msg;
+    mMsgNo = msg;
 
 #if VERSION <= VERSION_JPN
     char path[12];
@@ -1476,7 +1521,7 @@ mesg_data* fopMsgM_itemMsgGet_c::getMesgData(mesg_header* msg) {
 }
 
 /* 8002E4DC-8002E54C       .text getMesgEntry__20fopMsgM_itemMsgGet_cFP11mesg_header */
-mesg_entry fopMsgM_itemMsgGet_c::getMesgEntry(mesg_header* msg) {
+JMSMesgEntry_c fopMsgM_itemMsgGet_c::getMesgEntry(mesg_header* msg) {
     mesg_info* info = getMesgInfo(msg);
     return info->mEntries[mMsgIdx];
 }
@@ -1491,15 +1536,103 @@ const char* fopMsgM_itemMsgGet_c::getMessage(mesg_header* msg) {
             continue;
 
         mMsgIdx = i;
-        if (mMsgID == info->mEntries[i].mMesgID) {
-            mesg_entry* entry = &info->mEntries[i];
-            mResMsgIdx = entry->mMesgID;
-            return &data[entry->mDataOffs];
+        if (mMsgNo == info->mEntries[i].mMsgNo) {
+            break;
         }
     }
 
-    return NULL;
+    const char* result = &data[info->mEntries[mMsgIdx].mDataOffs];
+    mResMsgNo = info->mEntries[mMsgIdx].mMsgNo;
+    return result;
 }
+
+/* 8002E5FC-8002E794       .text __ct__21fopMsgM_msgDataProc_cFv */
+fopMsgM_msgDataProc_c::fopMsgM_msgDataProc_c() {
+    field_0x14 = 0.0f;
+    field_0x18 = 0.0f;
+    field_0x1C = 0.0f;
+    field_0x20 = 0.0f;
+    field_0x24 = 0.0f;
+    field_0x28 = 0.0f;
+    
+    for (int i = 0; i < 4; i++) {
+        field_0xD8[i] = 0;
+        field_0xF8[i] = 0;
+        field_0x108[i] = 0;
+        field_0xE8[i] = 0;
+    }
+    
+    field_0x21C = 0;
+    field_0xD4[2] = 0;
+    field_0xD4[1] = 0;
+    field_0xD4[0] = 0;
+    field_0x2C = 0;
+    field_0x30 = 0;
+    field_0x34 = 0;
+    field_0x38 = 0;
+    field_0x118 = 0;
+    field_0x11C = 0;
+    field_0x124 = 0;
+    field_0x120 = 0;
+    field_0x128 = 0;
+    field_0x12C = 0;
+    field_0x130 = 0;
+    field_0x134 = 0;
+    field_0x138 = 0;
+    field_0x13C = 0;
+    field_0x140 = 0;
+    field_0x144 = 0;
+    field_0x148 = 0;
+    field_0x14C = 0;
+    field_0x150 = 0;
+    field_0x154 = 0;
+    field_0x158 = 0;
+    field_0x15C = 1;
+    field_0x160 = 1;
+    field_0x164 = 0;
+    field_0x25C = -1;
+    field_0x29D = 0;
+    field_0x260 = 0;
+    field_0x264 = 0.0f;
+    field_0x268 = 0.0f;
+    field_0x26C = 0.0f;
+    field_0x270 = 0.0f;
+    field_0x278 = 0.0f;
+    field_0x274 = 0.0f;
+    field_0x293 = 0;
+    field_0x292 = 0;
+    field_0x291 = 0;
+    field_0x290 = 0;
+    field_0x27C = 6;
+    field_0x27D = 0;
+    field_0x27E = 0;
+    field_0x27F = 0;
+    field_0x280 = 0;
+    
+    for (int i = 0; i < 0xF; i++) {
+        field_0x168[i] = 0;
+        field_0x1A4[i] = 0;
+        field_0x1E0[i] = 0;
+        field_0x281[i] = 0xFF;
+        field_0x220[i] = 0;
+    }
+    
+    field_0x10 = 0;
+    field_0x299 = 0;
+    field_0x29A = 0;
+    field_0x294 = 0;
+    field_0x29B = 0;
+    field_0x297 = 0;
+    field_0x298 = 0;
+    field_0x29C = 0;
+    field_0x295 = 0;
+#if VERSION > VERSION_DEMO
+    field_0x296 = 0;
+#endif
+}
+
+/* 8002E794-8002E7DC       .text __dt__21fopMsgM_msgDataProc_cFv */
+fopMsgM_msgDataProc_c::~fopMsgM_msgDataProc_c() {}
 
 /* 8002E7DC-8002E95C       .text dataInit__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::dataInit() {
@@ -1575,7 +1708,9 @@ void fopMsgM_msgDataProc_c::dataInit() {
     field_0x298 = 0;
     field_0x29C = 0;
     field_0x295 = 0;
+#if VERSION > VERSION_DEMO
     field_0x296 = 0;
+#endif
 }
 
 /* 8002E95C-8002EA58       .text charLength__21fopMsgM_msgDataProc_cFiib */
@@ -1950,8 +2085,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
             }
 
             if(fopMsgM_nextMsgFlagCheck()) {
-                if(field_0x0C->mNextMessageID != 0) {
-                    fopMsgM_messageSet(field_0x0C->mNextMessageID);
+                if(field_0x0C->mNextMsgNo != 0) {
+                    fopMsgM_messageSet(field_0x0C->mNextMsgNo);
                     field_0x27C = 0xF;
                 }
                 else {
@@ -2007,8 +2142,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
 
                 if(fopMsgM_nextMsgFlagCheck()) {
-                    if(field_0x0C->mNextMessageID != 0) {
-                        fopMsgM_messageSet(field_0x0C->mNextMessageID);
+                    if(field_0x0C->mNextMsgNo != 0) {
+                        fopMsgM_messageSet(field_0x0C->mNextMsgNo);
                         field_0x27C = 0xF;
                     }
                     else {
@@ -2044,7 +2179,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
             const char* temp = &field_0x3C[origOffset];
             if(*temp != 0x1A) break;
             if(temp[2] == 0xFF && temp[3] == 0 && temp[4] == 0) {
-                if(field_0x0C->mMesgID == 0x42 || field_0x0C->mMesgID == 0x43 || field_0x0C->mMesgID == 0x44 || field_0x0C->mMesgID == 0x45 || field_0x0C->mMesgID == 0x46 || field_0x0C->mMesgID == 0x47 || field_0x0C->mMesgID == 0x48 || field_0x0C->mMesgID == 0x49 || field_0x0C->mMesgID == 0x4A || field_0x0C->mMesgID == 0x4B) {
+                if(field_0x0C->mMsgNo == 0x42 || field_0x0C->mMsgNo == 0x43 || field_0x0C->mMsgNo == 0x44 || field_0x0C->mMsgNo == 0x45 || field_0x0C->mMsgNo == 0x46 || field_0x0C->mMsgNo == 0x47 || field_0x0C->mMsgNo == 0x48 || field_0x0C->mMsgNo == 0x49 || field_0x0C->mMsgNo == 0x4A || field_0x0C->mMsgNo == 0x4B) {
                     static const u32 colorTable[9] = {
                         0x000000FF,
                         0xB40000FF,
@@ -2165,11 +2300,19 @@ void fopMsgM_msgDataProc_c::stringSet() {
             else if(temp[2] == 0 && temp[3] == 0 && temp[4] == 0) {
                 char buf[12];
                 strcpy(buf, dComIfGs_getPlayerName());
-#if VERSION <= VERSION_JPN
-                if(field_0x0C->mMesgID == 0x33B || field_0x0C->mMesgID == 0xC8B || field_0x0C->mMesgID == 0x1D21 || field_0x0C->mMesgID == 0x31D7 || field_0x0C->mMesgID == 0x37DD || field_0x0C->mMesgID == 0x37DE) {
-#else
-                if(dComIfGs_getPalLanguage() == 1 && (field_0x0C->mMesgID == 0x33B || field_0x0C->mMesgID == 0xC8B || field_0x0C->mMesgID == 0x1D21 || field_0x0C->mMesgID == 0x31D7 || field_0x0C->mMesgID == 0x37DD || field_0x0C->mMesgID == 0x37DE)) {
+                if (
+#if VERSION > VERSION_JPN
+                    dComIfGs_getPalLanguage() == 1 &&
 #endif
+                    (
+                        field_0x0C->mMsgNo == 0x33B ||
+                        field_0x0C->mMsgNo == 0xC8B ||
+                        field_0x0C->mMsgNo == 0x1D21 ||
+                        field_0x0C->mMsgNo == 0x31D7 ||
+                        field_0x0C->mMsgNo == 0x37DD ||
+                        field_0x0C->mMsgNo == 0x37DE
+                    )
+                ) {
                     s32 bufLen = strlen(buf);
                     char current = (buf)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
@@ -2318,17 +2461,25 @@ u8 fopMsgM_itemNum(u8 itemNo) {
 
 /* 80035060-800350B8       .text fopMsgM_getColorTable__FUs */
 u32 fopMsgM_getColorTable(u16 param_1) {
-    /* Nonmatching */
     JKRArchive* arc = dComIfGp_getMsgDtArchive();
-    return *(((u32**)JKRArchive::getGlbResource('ROOT', "color.bmc", arc))[param_1] + 0xB); // probably a struct i have no idea what it looks like though
+    u32* resource = (u32*) JKRArchive::getGlbResource('ROOT', "color.bmc", arc);
+    return resource[param_1 + 0x0b]; // probably a struct i have no idea what it looks like though
 }
 
 /* 800350B8-80035170       .text fopMsgM_int_to_char__FPcib */
 void fopMsgM_int_to_char(char* dst, int num, bool param_3) {
     int temp = 10000;
     bool temp2 = false;
+#if VERSION > VERSION_JPN
     char buf[2];
     buf[1] = '\0';
+#else
+    char buf[3];
+    // The JPN version uses shift-jis digits instead of ascii ones- this is the
+    // high byte for those digits
+    buf[0] = '\x82';
+    buf[2] = '\0';
+#endif
 
     if(!param_3) {
         strcpy(dst, "");
@@ -2336,7 +2487,11 @@ void fopMsgM_int_to_char(char* dst, int num, bool param_3) {
 
     for(int i = 0; i < 5; i++) {
         if(num / temp != 0 || temp2 || temp == 1) {
+#if VERSION > VERSION_JPN
             buf[0] = (num / temp) + '0';
+#else
+            buf[1] = (num / temp) + '\x4F';
+#endif
             strcat(dst, buf);
             if(!temp2) {
                 temp2 = true;
@@ -2348,6 +2503,7 @@ void fopMsgM_int_to_char(char* dst, int num, bool param_3) {
     }
 }
 
+#if VERSION >= VERSION_USA
 /* 80035170-800351E8       .text fopMsgM_int_to_char2__FPci */
 void fopMsgM_int_to_char2(char* dst, int num) {
     char buf[2];
@@ -2357,55 +2513,78 @@ void fopMsgM_int_to_char2(char* dst, int num) {
     buf[0] = num % 10 + '0';
     strcat(dst, buf);
 }
+#endif
 
 /* 800351E8-80035408       .text getString__21fopMsgM_msgDataProc_cFPcUl */
 void fopMsgM_msgDataProc_c::getString(char* dst, u32 msgNo) {
     /* Nonmatching */
+    s32 i;
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mGroupID = 0;
-    msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;
+    msgGet.mMsgNo = 0;
+    msgGet.mResMsgNo = 0;
+#if VERSION > VERSION_JPN
     static const char* name = "no name";
 
     s32 curOffset = 0;
     s32 numRead = 0;
+#endif
 
     mesg_header* header;
     const char* src;
+#if VERSION > VERSION_JPN
     if(msgNo == 0) {
         src = name;
     }
-    else {
+    else
+#endif
+    {
         header = msgGet.getMesgHeader(msgNo);
         src = msgGet.getMessage(header);
     }
 
-    char dstBuf[24];
+#if VERSION <= VERSION_JPN
+    s32 curOffset = 0;
+    s32 numRead = 0;
+#endif
+
     const u8* cursor;
     s32 current;
     while(cursor = (u8*)src + curOffset, current = *cursor, (s8)*cursor != '\0') {
         if(*cursor == 0x1A) {
             int codeLen = cursor[1];
             if(cursor[2] == 0 && cursor[3] == 0 && cursor[4] == 0) {
-                strcpy(dstBuf, dComIfGs_getPlayerName());
-#if VERSION <= VERSION_JPN
-                if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
+#if VERSION > VERSION_JPN
+                char str[24];
+                strcpy(str, dComIfGs_getPlayerName());
+                if(
+                    dComIfGs_getPalLanguage() == 1 &&
+                    (
+#if VERSION == VERSION_PAL
+    // Version is PAL
+                        msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7
 #else
-                if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
+    // Version is USA, we know it's not DEMO or JPN because of the outer #if
+                        msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE
 #endif
-                    s32 bufLen = strlen(dstBuf);
-                    current = (dstBuf)[bufLen - 1];
+                    )
+                ) {
+                    s32 bufLen = strlen(str);
+                    current = (str)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
-                        strcat(dstBuf, "\'");
+                        strcat(str, "\'");
                     }
                     else {
-                        strcat(dstBuf, "s");
+                        strcat(str, "s");
                     }
                 }
+#else
+                const char* str = dComIfGs_getPlayerName();
+#endif
 
-                for(s32 i = 0; dstBuf[i] != '\0'; i++) {
-                    dst[numRead] = dstBuf[i];
+                for(i = 0; str[i] != '\0'; i++) {
+                    dst[numRead] = str[i];
                     numRead++;
                 }
             }
@@ -2428,8 +2607,8 @@ void fopMsgM_msgDataProc_c::getString(char* dst, char*, char*, char*, u32 msgNo,
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mGroupID = 0;
-    msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;
+    msgGet.mMsgNo = 0;
+    msgGet.mResMsgNo = 0;
     static const char* name = "no name";
 
     s32 curOffset = 0;
@@ -2453,11 +2632,12 @@ void fopMsgM_msgDataProc_c::getString(char* dst, char*, char*, char*, u32 msgNo,
             int codeLen = cursor[1];
             if(cursor[2] == 0 && cursor[3] == 0 && cursor[4] == 0) {
                 strcpy(dstBuf, dComIfGs_getPlayerName());
-#if VERSION <= VERSION_JPN
-                if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
-#else
-                if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
+                if(
+#if VERSION > VERSION_JPN
+                    dComIfGs_getPalLanguage() == 1 &&
 #endif
+                    (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)
+                ) {
                     s32 bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
@@ -2545,20 +2725,32 @@ void fopMsgM_msgDataProc_c::getRubyString(char* param_1, char* param_2, char* pa
     strcat(param_4, param_6);
 }
 
+#if VERSION >= VERSION_USA
 /* 80035D28-80035E40       .text tag_len_kaisen_game__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_kaisen_game(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
     char buf[12];
-    fopMsgM_int_to_char(buf, dComIfGs_getEventReg(0xBEFF), false);
-    strcat(buf, "");
+    fopMsgM_int_to_char(buf, dComIfGs_getEventReg(dSv_event_flag_c::UNK_BEFF), false);
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcat(buf, "");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, " coups");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcat(buf, " ca\361onazos");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcat(buf, " cannonate");
+    } else {
+        strcat(buf, "");
+    }
+#else
+    strcat(buf, "");
+#endif
+
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2574,26 +2766,47 @@ void fopMsgM_msgDataProc_c::tag_len_kaisen_game(int* param_1, f32* param_2, int*
 
 /* 80035E40-80035F68       .text tag_len_rupee__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_rupee(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
     char buf[24];
 
     s16 num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
-    if(num != 1) {
-        strcat(buf, " Rupees");
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Rubine");
+        } else {
+            strcat(buf, " Rubin");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, " rubis");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " rupias");
+        } else {
+            strcat(buf, " rupia");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcat(buf, " Rupie");
+    } else {
+        if (num != 1) {
+            strcat(buf, " Rupees");
+        } else {
+            strcat(buf, " Rupee");
+        }
     }
-    else {
+#else
+    if (num != 1) {
+        strcat(buf, " Rupees");
+    } else {
         strcat(buf, " Rupee");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2615,16 +2828,26 @@ void fopMsgM_msgDataProc_c::tag_len_num_input(int* param_1, f32* param_2, int* p
         field_0x130 = *param_5;
     }
 
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf, "000 Rubin(e)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf, "000 rubis");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf, "000 rupia(s)");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf, "000 Rupie");
+    } else {
+        strcpy(buf, "000 Rupee(s)");
+    }
+#else
     strcpy(buf, "000 Rupee(s)");
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2640,27 +2863,47 @@ void fopMsgM_msgDataProc_c::tag_len_num_input(int* param_1, f32* param_2, int* p
 
 /* 80036068-80036190       .text tag_len_sword_game__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_sword_game(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[24];
 
     s16 num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
-    if(num != 1) {
-        strcat(buf, " blows");
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcat(buf, " Treffer");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, " fois");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " golpes");
+        } else {
+            strcat(buf, " golpe");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, " colpi");
+        } else {
+            strcat(buf, " colpo");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, " blows");
+        } else {
+            strcat(buf, " blow");
+        }
     }
-    else {
+#else
+    if (num != 1) {
+        strcat(buf, " blows");
+    } else {
         strcat(buf, " blow");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2680,14 +2923,10 @@ void fopMsgM_msgDataProc_c::tag_len_letter_game(int* param_1, f32* param_2, int*
 
     fopMsgM_int_to_char(buf, dComIfGp_getMiniGameRupee(), false);
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2703,19 +2942,13 @@ void fopMsgM_msgDataProc_c::tag_len_letter_game(int* param_1, f32* param_2, int*
 
 /* 80036280-80036384       .text tag_len_letter_game_max__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_letter_game_max(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[24];
-    fopMsgM_int_to_char(buf, dComIfGs_getEventReg(0x8AFF), false);
+    fopMsgM_int_to_char(buf, dComIfGs_getEventReg(dSv_event_flag_c::UNK_8AFF), false);
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2731,19 +2964,13 @@ void fopMsgM_msgDataProc_c::tag_len_letter_game_max(int* param_1, f32* param_2, 
 
 /* 80036384-80036474       .text tag_len_fish__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_fish(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[24];
     fopMsgM_int_to_char(buf, dComIfGp_getMessageCountNumber(), false);
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2759,27 +2986,47 @@ void fopMsgM_msgDataProc_c::tag_len_fish(int* param_1, f32* param_2, int* param_
 
 /* 80036474-800365A0       .text tag_len_fish_rupee__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_fish_rupee(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[24];
 
     int num = dComIfGp_getMessageCountNumber() * 10;
     fopMsgM_int_to_char(buf, num, false);
-    if(num != 1) {
-        strcat(buf, " Rupees");
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Rubine");
+        } else {
+            strcat(buf, " Rubin");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, " rubis");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " rupias");
+        } else {
+            strcat(buf, " rupia");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcat(buf, " Rupie");
+    } else {
+        if (num != 1) {
+            strcat(buf, " Rupees");
+        } else {
+            strcat(buf, " Rupee");
+        }
     }
-    else {
+#else
+    if (num != 1) {
+        strcat(buf, " Rupees");
+    } else {
         strcat(buf, " Rupee");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2795,27 +3042,59 @@ void fopMsgM_msgDataProc_c::tag_len_fish_rupee(int* param_1, f32* param_2, int* 
 
 /* 800365A0-800366C8       .text tag_len_letter__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_letter(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[24];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
-    if(num != 1) {
-        strcat(buf, " letters");
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (field_0x0C->mMsgNo == 0xCEB) {
+            if (num != 1) {
+                strcat(buf, " Briefe");
+            } else {
+                strcat(buf, " Brief");
+            }
+        } else {
+            strcat(buf, ". Brief");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcat(buf, "");
+        } else {
+            strcat(buf, "");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " cartas");
+        } else {
+            strcat(buf, " carta");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, "");
+        } else {
+            strcat(buf, "");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, " letters");
+        } else {
+            strcat(buf, " letter");
+        }
     }
-    else {
+#else
+    if (num != 1) {
+        strcat(buf, " letters");
+    } else {
         strcat(buf, " letter");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2831,20 +3110,34 @@ void fopMsgM_msgDataProc_c::tag_len_letter(int* param_1, f32* param_2, int* para
 
 /* 800366C8-800367CC       .text tag_len_rescue__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_rescue(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[24];
-    fopMsgM_int_to_char(buf, dComIfGp_getMessageCountNumber(), false);
-    strcat(buf, "");
+    int num = dComIfGp_getMessageCountNumber();
+    fopMsgM_int_to_char(buf, num, false);
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Freunde");
+        } else {
+            strcat(buf, " Freund");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcat(buf, "");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcat(buf, "");
+    } else {
+        strcat(buf, "");
+    }
+#else
+    strcat(buf, "");
+#endif
+
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2860,27 +3153,107 @@ void fopMsgM_msgDataProc_c::tag_len_rescue(int* param_1, f32* param_2, int* para
 
 /* 800367CC-8003693C       .text tag_len_forest_timer__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_forest_timer(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
+#if VERSION == VERSION_PAL
+    char buf[32];
+#else
     char buf[24];
+#endif
+
     int minutes = dComIfGs_getFwaterTimer() / 1800;
+
+#if VERSION == VERSION_PAL
+    strcpy(buf, "");
+    if (dComIfGs_getPalLanguage() == 1) {
+        fopMsgM_int_to_char(buf, minutes, false);
+        strcat(buf, ":");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (minutes > 0) {
+            fopMsgM_int_to_char(buf, minutes, false);
+            if (minutes > 1) {
+                strcat(buf, " minutes");
+            } else {
+                strcat(buf, " minute");
+            }
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (minutes > 0) {
+            fopMsgM_int_to_char(buf, minutes, false);
+            if (minutes > 1) {
+                strcat(buf, " minutos");
+            } else {
+                strcat(buf, " minuto");
+            }
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (minutes > 0) {
+            fopMsgM_int_to_char(buf, minutes, false);
+            if (minutes > 1) {
+                strcat(buf, " minuti");
+            } else {
+                strcat(buf, " minuto");
+            }
+        }
+    } else {
+        fopMsgM_int_to_char(buf, minutes, false);
+        strcat(buf, ":");
+    }
+#else
     fopMsgM_int_to_char(buf, minutes, false);
     strcat(buf, ":");
+#endif
+
     int seconds = (dComIfGs_getFwaterTimer() % 1800) / 30;
     if(minutes == 0 && seconds == 0) {
         seconds = 1;
     }
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        fopMsgM_int_to_char2(buf, seconds);
+        strcat(buf, " Minuten");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (seconds != 0 || minutes == 0) {
+            fopMsgM_int_to_char(buf, seconds, true);
+            if (seconds > 1) {
+                strcat(buf, " secondes");
+            } else {
+                strcat(buf, " seconde");
+            }
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (seconds != 0 || minutes == 0) {
+            if (minutes != 0) {
+                strcat(buf, " y ");
+            }
+            fopMsgM_int_to_char(buf, seconds, true);
+            if (seconds > 1) {
+                strcat(buf, " segundos");
+            } else {
+                strcat(buf, " segundo");
+            }
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (seconds != 0 || minutes == 0) {
+            fopMsgM_int_to_char(buf, seconds, true);
+            if (seconds > 1) {
+                strcat(buf, " secondi");
+            } else {
+                strcat(buf, " secondo");
+            }
+        }
+    } else {
+        fopMsgM_int_to_char2(buf, seconds);
+        strcat(buf, "");
+    }
+#else
     fopMsgM_int_to_char2(buf, seconds);
     strcat(buf, "");
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2896,27 +3269,52 @@ void fopMsgM_msgDataProc_c::tag_len_forest_timer(int* param_1, f32* param_2, int
 
 /* 8003693C-80036A64       .text tag_len_birdman__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_birdman(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[24];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcat(buf, " Meter");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcat(buf, " m\350tres");
+        } else {
+            strcat(buf, " m\350tre");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " metros");
+        } else {
+            strcat(buf, " metro");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, " metri");
+        } else {
+            strcat(buf, " metro");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, " yards");
+        } else {
+            strcat(buf, " yard");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " yards");
     }
     else {
         strcat(buf, " yard");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2932,27 +3330,56 @@ void fopMsgM_msgDataProc_c::tag_len_birdman(int* param_1, f32* param_2, int* par
 
 /* 80036A64-80036B9C       .text tag_len_point__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_point(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[24];
 
-    int num = dComIfGs_getEventReg(0x86FF);
+    int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
     fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Punkte");
+        } else {
+            strcat(buf, " Punkt");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcat(buf, " points");
+        } else {
+            strcat(buf, " point");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " puntos Terry");
+        } else {
+            strcat(buf, " punto Terry");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, " punti");
+        } else {
+            strcat(buf, " punto");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, " points");
+        } else {
+            strcat(buf, " point");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " points");
     }
     else {
         strcat(buf, " point");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -2968,27 +3395,56 @@ void fopMsgM_msgDataProc_c::tag_len_point(int* param_1, f32* param_2, int* param
 
 /* 80036B9C-80036CC4       .text tag_len_get_pendant__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_get_pendant(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
-    int num = dComIfGs_getBeastNum(7);
-    fopMsgM_int_to_char(buf, dComIfGs_getBeastNum(7), false);
+    int num = (u8)dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e);
+    fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Gl\374cksamulette");
+        } else {
+            strcat(buf, " Gl\374cksamulett");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcat(buf, " Pendentifs du Bonheur");
+        } else {
+            strcat(buf, " Pendentif du Bonheur");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, "");
+        } else {
+            strcat(buf, "");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, "");
+        } else {
+            strcat(buf, "");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, "");
+        } else {
+            strcat(buf, "");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, "");
     }
     else {
         strcat(buf, "");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3004,25 +3460,56 @@ void fopMsgM_msgDataProc_c::tag_len_get_pendant(int* param_1, f32* param_2, int*
 
 /* 80036CC4-80036E18       .text tag_len_rev_pendant__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_rev_pendant(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
-    int num = dComIfGs_getEventReg(0xC0FF);
-    fopMsgM_int_to_char(buf, dComIfGs_getEventReg(0xC0FF), false);
+    int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF);
+    fopMsgM_int_to_char(buf, dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF), false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Gl\374cksamulette");
+        } else {
+            strcat(buf, " Gl\374cksamulett");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcat(buf, " Pendentifs du Bonheur");
+        } else {
+            strcat(buf, " Pendentif du Bonheur");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, "");
+        } else {
+            strcat(buf, "");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, "");
+        } else {
+            strcat(buf, "");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, "");
+        } else {
+            strcat(buf, "");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, "");
     }
     else {
         strcat(buf, "");
     }
+#endif
 
-    char* p1 = buf;
-    u8* p2 = (u8*)p1;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3038,25 +3525,107 @@ void fopMsgM_msgDataProc_c::tag_len_rev_pendant(int* param_1, f32* param_2, int*
 
 /* 80036E18-80036F74       .text tag_len_pig_timer__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_pig_timer(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
+#if VERSION == VERSION_PAL
+    char buf[32];
+#else
     char buf[24];
+#endif
+
     int minutes = dComIfGp_getItemTimer() / 1800;
+
+#if VERSION == VERSION_PAL
+    strcpy(buf, "");
+    if (dComIfGs_getPalLanguage() == 1) {
+        fopMsgM_int_to_char(buf, minutes, false);
+        strcat(buf, ":");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (minutes > 0) {
+            fopMsgM_int_to_char(buf, minutes, false);
+            if (minutes > 1) {
+                strcat(buf, " minutes");
+            } else {
+                strcat(buf, " minute");
+            }
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (minutes > 0) {
+            fopMsgM_int_to_char(buf, minutes, false);
+            if (minutes > 1) {
+                strcat(buf, " minutos");
+            } else {
+                strcat(buf, " minuto");
+            }
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (minutes > 0) {
+            fopMsgM_int_to_char(buf, minutes, false);
+            if (minutes > 1) {
+                strcat(buf, " minuti");
+            } else {
+                strcat(buf, " minuto");
+            }
+        }
+    } else {
+        fopMsgM_int_to_char(buf, minutes, false);
+        strcat(buf, ":");
+    }
+#else
     fopMsgM_int_to_char(buf, minutes, false);
     strcat(buf, ":");
+#endif
+
     int seconds = (dComIfGp_getItemTimer() % 1800) / 30;
     if(minutes == 0 && seconds == 0) {
         seconds = 1;
     }
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        fopMsgM_int_to_char2(buf, seconds);
+        strcat(buf, " Minuten");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (seconds != 0 || minutes == 0) {
+            fopMsgM_int_to_char(buf, seconds, true);
+            if (seconds > 1) {
+                strcat(buf, " secondes");
+            } else {
+                strcat(buf, " seconde");
+            }
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (seconds != 0 || minutes == 0) {
+            if (minutes != 0) {
+                strcat(buf, " y ");
+            }
+            fopMsgM_int_to_char(buf, seconds, true);
+            if (seconds > 1) {
+                strcat(buf, " segundos");
+            } else {
+                strcat(buf, " segundo");
+            }
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (seconds != 0 || minutes == 0) {
+            fopMsgM_int_to_char(buf, seconds, true);
+            if (seconds > 1) {
+                strcat(buf, " secondi");
+            } else {
+                strcat(buf, " secondo");
+            }
+        }
+    } else {
+        fopMsgM_int_to_char2(buf, seconds);
+        strcat(buf, "");
+    }
+#else
     fopMsgM_int_to_char2(buf, seconds);
     strcat(buf, "");
+#endif
 
-    char* p1 = buf;
-    u8* p2 = (u8*)p1;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3072,27 +3641,44 @@ void fopMsgM_msgDataProc_c::tag_len_pig_timer(int* param_1, f32* param_2, int* p
 
 /* 80036F74-8003709C       .text tag_len_get_bomb__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_get_bomb(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[24];
 
     int num = dComIfGs_getBombMax();
     fopMsgM_int_to_char(buf, dComIfGs_getBombMax(), false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Bomben");
+        } else {
+            strcat(buf, " Bombe");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, " bombes");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcat(buf, " bombas");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcat(buf, " Bombe");
+    } else {
+        if (num != 1) {
+            strcat(buf, " bombs");
+        } else {
+            strcat(buf, " bomb");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " bombs");
     }
     else {
         strcat(buf, " bomb");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3108,27 +3694,44 @@ void fopMsgM_msgDataProc_c::tag_len_get_bomb(int* param_1, f32* param_2, int* pa
 
 /* 8003709C-800371C4       .text tag_len_get_arrow__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_get_arrow(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[24];
 
     int num = dComIfGs_getArrowMax();
     fopMsgM_int_to_char(buf, dComIfGs_getArrowMax(), false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Pfeile");
+        } else {
+            strcat(buf, " Pfeil");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, " fl\350ches");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcat(buf, " flechas");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcat(buf, " Frecce");
+    } else {
+        if (num != 1) {
+            strcat(buf, " arrows");
+        } else {
+            strcat(buf, " arrow");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " arrows");
     }
     else {
         strcat(buf, " arrow");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3144,27 +3747,48 @@ void fopMsgM_msgDataProc_c::tag_len_get_arrow(int* param_1, f32* param_2, int* p
 
 /* 800371C4-800372E4       .text tag_len_stock_bokobaba__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_stock_bokobaba(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
     int num = daNpc_Bs1_c::getBuyItem();
-    fopMsgM_int_to_char(buf, daNpc_Bs1_c::getBuyItem(), false);
+    fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcat(buf, " Plantagranda-Samen");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " semillas");
+        } else {
+            strcat(buf, " semilla");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, "");
+        } else {
+            strcat(buf, "");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, " seeds");
+        } else {
+            strcat(buf, " seed");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " seeds");
     }
     else {
         strcat(buf, " seed");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3180,27 +3804,52 @@ void fopMsgM_msgDataProc_c::tag_len_stock_bokobaba(int* param_1, f32* param_2, i
 
 /* 800372E4-80037404       .text tag_len_stock_dokuro__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_stock_dokuro(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, daNpc_Bs1_c::getBuyItem(), false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Totenkopfketten");
+        } else {
+            strcat(buf, " Totenkopfkette");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " colgantes");
+        } else {
+            strcat(buf, " colgante");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, "");
+        } else {
+            strcat(buf, "");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, " neckalces");
+        } else {
+            strcat(buf, " neckalce");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " neckalces");
     }
     else {
         strcat(buf, " neckalce");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3216,21 +3865,43 @@ void fopMsgM_msgDataProc_c::tag_len_stock_dokuro(int* param_1, f32* param_2, int
 
 /* 80037404-80037500       .text tag_len_stock_chuchu__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_stock_chuchu(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
-    fopMsgM_int_to_char(buf, daNpc_Bs1_c::getBuyItem(), false);
-    strcat(buf, "");
+    int num = daNpc_Bs1_c::getBuyItem();
+    fopMsgM_int_to_char(buf, num, false);
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Schleim-Gelees");
+        } else {
+            strcat(buf, " Schleim-Gelee");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " jugos");
+        } else {
+            strcat(buf, " jugo");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, "");
+        } else {
+            strcat(buf, "");
+        }
+    } else {
+        strcat(buf, "");
+    }
+#else
+    strcat(buf, "");
+#endif
+
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3246,27 +3917,52 @@ void fopMsgM_msgDataProc_c::tag_len_stock_chuchu(int* param_1, f32* param_2, int
 
 /* 80037500-80037620       .text tag_len_stock_pendant__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_stock_pendant(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, daNpc_Bs1_c::getBuyItem(), false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Gl\374cksamulette");
+        } else {
+            strcat(buf, " Gl\374cksamulett");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " collares");
+        } else {
+            strcat(buf, " collar");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, "");
+        } else {
+            strcat(buf, "");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, " necklaces");
+        } else {
+            strcat(buf, " necklace");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " necklaces");
     }
     else {
         strcat(buf, " necklace");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3282,27 +3978,52 @@ void fopMsgM_msgDataProc_c::tag_len_stock_pendant(int* param_1, f32* param_2, in
 
 /* 80037620-80037740       .text tag_len_stock_hane__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_stock_hane(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
     int num = daNpc_Bs1_c::getBuyItem();
-    fopMsgM_int_to_char(buf, daNpc_Bs1_c::getBuyItem(), false);
+    fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Goldfedern");
+        } else {
+            strcat(buf, " Goldfeder");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " plumas");
+        } else {
+            strcat(buf, "  pluma");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, "");
+        } else {
+            strcat(buf, "");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, " feathers");
+        } else {
+            strcat(buf, " feather");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " feathers");
     }
     else {
         strcat(buf, " feather");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3318,27 +4039,48 @@ void fopMsgM_msgDataProc_c::tag_len_stock_hane(int* param_1, f32* param_2, int* 
 
 /* 80037740-80037860       .text tag_len_stock_kenshi__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_stock_kenshi(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, daNpc_Bs1_c::getBuyItem(), false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcat(buf, " Ritterwappen");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " blasones");
+        } else {
+            strcat(buf, " blas\363n");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, "");
+        } else {
+            strcat(buf, "");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, " crests");
+        } else {
+            strcat(buf, " crest");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " crests");
     }
     else {
         strcat(buf, " crest");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3354,27 +4096,47 @@ void fopMsgM_msgDataProc_c::tag_len_stock_kenshi(int* param_1, f32* param_2, int
 
 /* 80037860-80037980       .text tag_len_terry_rupee__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_terry_rupee(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[24];
 
     int num = daNpc_Bs1_c::getPayRupee();
     fopMsgM_int_to_char(buf, num, false);
-    if(num != 1) {
-        strcat(buf, " Rupees");
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Rubine");
+        } else {
+            strcat(buf, " Rubin");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, " rubis");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " rupias");
+        } else {
+            strcat(buf, " rupia");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcat(buf, " Rupie");
+    } else {
+        if (num != 1) {
+            strcat(buf, " Rupees");
+        } else {
+            strcat(buf, " Rupee");
+        }
     }
-    else {
+#else
+    if (num != 1) {
+        strcat(buf, " Rupees");
+    } else {
         strcat(buf, " Rupee");
     }
+#endif
 
-    char* p1;
-    u8 *p2; 
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(*param_1 == 0) {
             *param_2 = charLength(*param_4, c, true);
         }
@@ -3390,15 +4152,27 @@ void fopMsgM_msgDataProc_c::tag_len_terry_rupee(int* param_1, f32* param_2, int*
 
 /* 80037980-80037A80       .text tag_len_input_bokobaba__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_input_bokobaba(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
     if(*param_5 != field_0x130) {
         field_0x130 = *param_5;
     }
 
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf, "00 Plantagranda-Samen");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf, "00 ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf, "00 ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf, "00 ");
+    } else {
+        strcpy(buf, "00 seed(s)");
+    }
+#else
     strcpy(buf, "00 seed(s)");
+#endif
 
     char* p1;
     u8 *p2; 
@@ -3423,15 +4197,27 @@ void fopMsgM_msgDataProc_c::tag_len_input_bokobaba(int* param_1, f32* param_2, i
 
 /* 80037A80-80037B80       .text tag_len_input_dokuro__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_input_dokuro(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
     if(*param_5 != field_0x130) {
         field_0x130 = *param_5;
     }
 
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf, "00 Totenkopfkette(n)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf, "00 ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf, "00 ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf, "00 ");
+    } else {
+        strcpy(buf, "00 necklace(s)");
+    }
+#else
     strcpy(buf, "00 necklace(s)");
+#endif
 
     char* p1;
     u8 *p2; 
@@ -3456,15 +4242,27 @@ void fopMsgM_msgDataProc_c::tag_len_input_dokuro(int* param_1, f32* param_2, int
 
 /* 80037B80-80037C80       .text tag_len_input_chuchu__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_input_chuchu(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
     if(*param_5 != field_0x130) {
         field_0x130 = *param_5;
     }
 
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf, "00 Schleim-Gelee(s)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf, "00 ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf, "00 ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf, "00 ");
+    } else {
+        strcpy(buf, "00 ");
+    }
+#else
     strcpy(buf, "00 ");
+#endif
 
     char* p1;
     u8 *p2; 
@@ -3489,15 +4287,27 @@ void fopMsgM_msgDataProc_c::tag_len_input_chuchu(int* param_1, f32* param_2, int
 
 /* 80037C80-80037D80       .text tag_len_input_pendant__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_input_pendant(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
     if(*param_5 != field_0x130) {
         field_0x130 = *param_5;
     }
 
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf, "00 Gl\374cksamulett(e)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf, "00 ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf, "00 ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf, "00 ");
+    } else {
+        strcpy(buf, "00 pendant(s)");
+    }
+#else
     strcpy(buf, "00 pendant(s)");
+#endif
 
     char* p1;
     u8 *p2; 
@@ -3522,15 +4332,27 @@ void fopMsgM_msgDataProc_c::tag_len_input_pendant(int* param_1, f32* param_2, in
 
 /* 80037D80-80037E80       .text tag_len_input_hane__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_input_hane(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
     if(*param_5 != field_0x130) {
         field_0x130 = *param_5;
     }
 
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf, "00 Goldfeder(n)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf, "00 ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf, "00 ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf, "00 ");
+    } else {
+        strcpy(buf, "00 feather(s)");
+    }
+#else
     strcpy(buf, "00 feather(s)");
+#endif
 
     char* p1;
     u8 *p2; 
@@ -3555,15 +4377,27 @@ void fopMsgM_msgDataProc_c::tag_len_input_hane(int* param_1, f32* param_2, int* 
 
 /* 80037E80-80037F80       .text tag_len_input_kenshi__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_input_kenshi(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
-    /* Nonmatching */
-
     char buf[28];
 
     if(*param_5 != field_0x130) {
         field_0x130 = *param_5;
     }
 
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf, "00 Ritterwappen");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf, "00 ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf, "00 ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf, "00 ");
+    } else {
+        strcpy(buf, "00 crest(s)");
+    }
+#else
     strcpy(buf, "00 crest(s)");
+#endif
 
     char* p1;
     u8 *p2; 
@@ -3588,21 +4422,15 @@ void fopMsgM_msgDataProc_c::tag_len_input_kenshi(int* param_1, f32* param_2, int
 
 /* 80037F80-80038178       .text tag_kaisen_game__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_kaisen_game() {
-    /* Nonmatching */
     char buf[12];
 
-    int num = dComIfGs_getEventReg(0xBEFF);
+    int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BEFF);
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -3613,7 +4441,7 @@ void fopMsgM_msgDataProc_c::tag_kaisen_game() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -3623,36 +4451,76 @@ void fopMsgM_msgDataProc_c::tag_kaisen_game() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
-    dComIfGs_getEventReg(0xBEFF);
+    dComIfGs_getEventReg(dSv_event_flag_c::UNK_BEFF);
 
+#if VERSION == VERSION_PAL
+    char buf2[20];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, " coups");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf2, " ca\361onazos");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf2, " cannonate");
+    } else {
+        strcpy(buf2, "");
+    }
+#else
     char buf2[12];
+
     strcpy(buf2, "");
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 80038178-80038330       .text tag_rupee__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_rupee() {
-    /* Nonmatching */
     char buf[20];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Rubine");
+        } else {
+            strcat(buf, " Rubin");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, " rubis");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " rupias");
+        } else {
+            strcat(buf, " rupia");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcat(buf, " Rupie");
+    } else {
+        if (num != 1) {
+            strcat(buf, " Rupees");
+        } else {
+            strcat(buf, " Rupee");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " Rupees");
     }
     else {
         strcat(buf, " Rupee");
     }
+#endif
 
-    char* p1;
-    u8* p2;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -3678,7 +4546,6 @@ void fopMsgM_msgDataProc_c::tag_rupee() {
 
 /* 80038330-80038538       .text tag_num_input__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_num_input() {
-    /* Nonmatching */
     char buf[8];
     char buf2[16];
 
@@ -3691,14 +4558,27 @@ void fopMsgM_msgDataProc_c::tag_num_input() {
     strcat(field_0x68, buf2);
     field_0x14 = temp;
     field_0x150 += 3;
-    strcpy(buf, " Rupee(s)");
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf, " Rubin(e)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf, " rubis");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf, " rupia(s)");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf, " Rupie");
+    } else {
+        strcpy(buf, " Rupee(s)");
+    }
+#else
+    strcpy(buf, " Rupee(s)");
+#endif
+
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -3724,21 +4604,15 @@ void fopMsgM_msgDataProc_c::tag_num_input() {
 
 /* 80038538-8003872C       .text tag_sword_game__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_sword_game() {
-    /* Nonmatching */
     char buf[16];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -3749,7 +4623,7 @@ void fopMsgM_msgDataProc_c::tag_sword_game() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -3760,33 +4634,55 @@ void fopMsgM_msgDataProc_c::tag_sword_game() {
     }
 
     char buf2[12];
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf2, " Treffer");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, " fois");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, " golpes");
+        } else {
+            strcpy(buf2, " golpe");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, " colpi");
+        } else {
+            strcpy(buf2, " colpo");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " blows");
+        } else {
+            strcpy(buf2, " blow");
+        }
+    }
+#else
     if(num != 1) {
         strcpy(buf2, " blows");
     }
     else {
         strcpy(buf2, " blow");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 8003872C-800388AC       .text tag_letter_game__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_letter_game() {
-    /* Nonmatching */
     char buf[24];
 
     int num = dComIfGp_getMiniGameRupee();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -3797,7 +4693,7 @@ void fopMsgM_msgDataProc_c::tag_letter_game() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -3812,21 +4708,15 @@ void fopMsgM_msgDataProc_c::tag_letter_game() {
 
 /* 800388AC-80038A40       .text tag_letter_game_max__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_letter_game_max() {
-    /* Nonmatching */
     char buf[24];
 
-    int num = dComIfGs_getEventReg(0x8AFF);
+    int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_8AFF);
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -3837,7 +4727,7 @@ void fopMsgM_msgDataProc_c::tag_letter_game_max() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -3852,21 +4742,15 @@ void fopMsgM_msgDataProc_c::tag_letter_game_max() {
 
 /* 80038A40-80038BC0       .text tag_fish__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_fish() {
-    /* Nonmatching */
     char buf[24];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -3877,7 +4761,7 @@ void fopMsgM_msgDataProc_c::tag_fish() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -3892,27 +4776,48 @@ void fopMsgM_msgDataProc_c::tag_fish() {
 
 /* 80038BC0-80038D7C       .text tag_fish_rupee__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_fish_rupee() {
-    /* Nonmatching */
     char buf[24];
 
     int num = dComIfGp_getMessageCountNumber() * 10;
     fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Rubine");
+        } else {
+            strcat(buf, " Rubin");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, " rubis");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " rupias");
+        } else {
+            strcat(buf, " rupia");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcat(buf, " Rupie");
+    } else {
+        if (num != 1) {
+            strcat(buf, " Rupees");
+        } else {
+            strcat(buf, " Rupee");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " Rupees");
     }
     else {
         strcat(buf, " Rupee");
     }
+#endif
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -3923,7 +4828,7 @@ void fopMsgM_msgDataProc_c::tag_fish_rupee() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -3938,21 +4843,15 @@ void fopMsgM_msgDataProc_c::tag_fish_rupee() {
 
 /* 80038D7C-80038F70       .text tag_letter__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_letter() {
-    /* Nonmatching */
     char buf[16];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -3963,7 +4862,7 @@ void fopMsgM_msgDataProc_c::tag_letter() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -3974,33 +4873,67 @@ void fopMsgM_msgDataProc_c::tag_letter() {
     }
 
     char buf2[12];
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (field_0x0C->mMsgNo == 0xCEB) {
+            if (num != 1) {
+                strcpy(buf2, " Briefe");
+            } else {
+                strcpy(buf2, " Brief");
+            }
+        } else {
+            strcpy(buf2, ". Brief");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, " cartas");
+        } else {
+            strcpy(buf2, " carta");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " letters");
+        } else {
+            strcpy(buf2, " letter");
+        }
+    }
+#else
     if(num != 1) {
         strcpy(buf2, " letters");
     }
     else {
         strcpy(buf2, " letter");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 80038F70-8003912C       .text tag_rescue__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_rescue() {
-    /* Nonmatching */
-    char buf[24];
+    char buf[20];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4011,7 +4944,7 @@ void fopMsgM_msgDataProc_c::tag_rescue() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4021,27 +4954,45 @@ void fopMsgM_msgDataProc_c::tag_rescue() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char buf2[12];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Freunde");
+        } else {
+            strcpy(buf2, " Freund");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf2, "");
+    } else {
+        strcpy(buf2, "");
+    }
+
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
+#else
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 8003912C-800394B4       .text tag_forest_timer__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_forest_timer() {
-    /* Nonmatching */
     char buf[16];
     char buf2[4];
 
     int minutes = dComIfGs_getFwaterTimer() / 1800;
     fopMsgM_int_to_char(buf, minutes, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4070,15 +5021,10 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
     }
     fopMsgM_int_to_char2(buf, seconds);
 
-    p1 = buf;
-    p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4089,7 +5035,7 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4105,27 +5051,52 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
 
 /* 800394B4-8003966C       .text tag_birdman__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_birdman() {
-    /* Nonmatching */
     char buf[24];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcat(buf, " Meter");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcat(buf, " m\350tres");
+        } else {
+            strcat(buf, " m\350tre");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " metros");
+        } else {
+            strcat(buf, " metro");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, " metri");
+        } else {
+            strcat(buf, " metro");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, " yards");
+        } else {
+            strcat(buf, " yard");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " yards");
     }
     else {
         strcat(buf, " yard");
     }
+#endif
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4136,7 +5107,7 @@ void fopMsgM_msgDataProc_c::tag_birdman() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4151,27 +5122,56 @@ void fopMsgM_msgDataProc_c::tag_birdman() {
 
 /* 8003966C-80039834       .text tag_point__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_point() {
-    /* Nonmatching */
     char buf[24];
 
-    int num = dComIfGs_getEventReg(0x86FF);
+    int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
     fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Punkte");
+        } else {
+            strcat(buf, " Punkt");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcat(buf, " points");
+        } else {
+            strcat(buf, " point");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " puntos Terry");
+        } else {
+            strcat(buf, " punto Terry");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcat(buf, " punti");
+        } else {
+            strcat(buf, " punto");
+        }
+    } else {
+        if (num != 1) {
+            strcat(buf, " points");
+        } else {
+            strcat(buf, " point");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " points");
     }
     else {
         strcat(buf, " point");
     }
+#endif
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4182,7 +5182,7 @@ void fopMsgM_msgDataProc_c::tag_point() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4197,21 +5197,15 @@ void fopMsgM_msgDataProc_c::tag_point() {
 
 /* 80039834-80039A28       .text tag_get_pendant__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_get_pendant() {
-    /* Nonmatching */
-    char buf[16];
+    char buf[20];
 
-    int num = dComIfGs_getBeastNum(7);
+    int num = (u8)dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e);
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4222,7 +5216,7 @@ void fopMsgM_msgDataProc_c::tag_get_pendant() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4232,34 +5226,66 @@ void fopMsgM_msgDataProc_c::tag_get_pendant() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char buf2[28];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Gl\374cksamulette");
+        } else {
+            strcpy(buf2, " Gl\374cksamulett");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcpy(buf2, " Pendentifs du Bonheur");
+        } else {
+            strcpy(buf2, " Pendentif du Bonheur");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    }
+#else
     char buf2[12];
+
     if(num != 1) {
         strcpy(buf2, "");
     }
     else {
         strcpy(buf2, "");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 80039A28-80039C2C       .text tag_rev_pendant__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_rev_pendant() {
-    /* Nonmatching */
-    char buf[16];
+    char buf[20];
 
-    int num = dComIfGs_getEventReg(0xC0FF);
+    int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF);
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4270,7 +5296,7 @@ void fopMsgM_msgDataProc_c::tag_rev_pendant() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4280,34 +5306,67 @@ void fopMsgM_msgDataProc_c::tag_rev_pendant() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char buf2[28];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Gl\374cksamulette");
+        } else {
+            strcpy(buf2, " Gl\374cksamulett");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        if (num != 1) {
+            strcpy(buf2, " Pendentifs du Bonheur");
+        } else {
+            strcpy(buf2, " Pendentif du Bonheur");
+        }
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    }
+#else
     char buf2[12];
+
     if(num != 1) {
         strcpy(buf2, "");
     }
     else {
         strcpy(buf2, "");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 80039C2C-80039FA0       .text tag_pig_timer__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_pig_timer() {
-    /* Nonmatching */
     char buf[16];
     char buf2[4];
 
     int minutes = dComIfGp_getItemTimer() / 1800;
     fopMsgM_int_to_char(buf, minutes, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4336,15 +5395,10 @@ void fopMsgM_msgDataProc_c::tag_pig_timer() {
     }
     fopMsgM_int_to_char2(buf, seconds);
 
-    p1 = buf;
-    p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4355,7 +5409,7 @@ void fopMsgM_msgDataProc_c::tag_pig_timer() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4371,21 +5425,15 @@ void fopMsgM_msgDataProc_c::tag_pig_timer() {
 
 /* 80039FA0-8003A194       .text tag_get_bomb__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_get_bomb() {
-    /* Nonmatching */
     char buf[16];
 
     int num = dComIfGs_getBombMax();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4396,7 +5444,7 @@ void fopMsgM_msgDataProc_c::tag_get_bomb() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4407,33 +5455,51 @@ void fopMsgM_msgDataProc_c::tag_get_bomb() {
     }
 
     char buf2[12];
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Bomben");
+        } else {
+            strcpy(buf2, " Bombe");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, " bombes");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf2, " bombas");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf2, " Bombe");
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " bombs");
+        } else {
+            strcpy(buf2, " bomb");
+        }
+    }
+#else
     if(num != 1) {
         strcpy(buf2, " bombs");
     }
     else {
         strcpy(buf2, " bomb");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 8003A194-8003A388       .text tag_get_arrow__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_get_arrow() {
-    /* Nonmatching */
     char buf[16];
 
     int num = dComIfGs_getArrowMax();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4444,7 +5510,7 @@ void fopMsgM_msgDataProc_c::tag_get_arrow() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4455,33 +5521,51 @@ void fopMsgM_msgDataProc_c::tag_get_arrow() {
     }
 
     char buf2[12];
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Pfeile");
+        } else {
+            strcpy(buf2, " Pfeil");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, " fl\350ches");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(buf2, " flechas");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(buf2, " Frecce");
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " arrows");
+        } else {
+            strcpy(buf2, " arrow");
+        }
+    }
+#else
     if(num != 1) {
         strcpy(buf2, " arrows");
     }
     else {
         strcpy(buf2, " arrow");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 8003A388-8003A574       .text tag_stock_bokobaba__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
-    /* Nonmatching */
-    char buf[16];
+    char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4492,7 +5576,7 @@ void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4502,7 +5586,36 @@ void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char buf2[20];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf2, " Plantagranda-Samen");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, " semillas");
+        } else {
+            strcpy(buf2, " semilla");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " seeds");
+        } else {
+            strcpy(buf2, " seed");
+        }
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
+#else
     char buf2[12];
+
     if(num != 1) {
         strcpy(buf2, " seeds");
     }
@@ -4510,26 +5623,22 @@ void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
         strcpy(buf2, " seed");
     }
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 8003A574-8003A760       .text tag_stock_dokuro__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_dokuro() {
-    /* Nonmatching */
-    char buf[16];
+    char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4540,7 +5649,7 @@ void fopMsgM_msgDataProc_c::tag_stock_dokuro() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4550,34 +5659,62 @@ void fopMsgM_msgDataProc_c::tag_stock_dokuro() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char buf2[20];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Totenkopfketten");
+        } else {
+            strcpy(buf2, " Totenkopfkette");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, " colgantes");
+        } else {
+            strcpy(buf2, " colgante");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " neckalces");
+        } else {
+            strcpy(buf2, " neckalce");
+        }
+    }
+#else
     char buf2[12];
+
     if(num != 1) {
         strcpy(buf2, " necklaces");
     }
     else {
         strcpy(buf2, " necklace");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 8003A760-8003A914       .text tag_stock_chuchu__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_chuchu() {
-    /* Nonmatching */
-    char buf[24];
+    char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4588,7 +5725,7 @@ void fopMsgM_msgDataProc_c::tag_stock_chuchu() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4598,27 +5735,51 @@ void fopMsgM_msgDataProc_c::tag_stock_chuchu() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char text_buf[20];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(text_buf, " Schleim-Gelees");
+        } else {
+            strcpy(text_buf, " Schleim-Gelee");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(text_buf, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(text_buf, " jugos");
+        } else {
+            strcpy(text_buf, " jugo");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(text_buf, "");
+        } else {
+            strcpy(text_buf, "");
+        }
+    } else {
+        strcpy(text_buf, "");
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+#else
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 8003A914-8003AB00       .text tag_stock_pendant__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_pendant() {
-    /* Nonmatching */
-    char buf[16];
+    char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4629,7 +5790,7 @@ void fopMsgM_msgDataProc_c::tag_stock_pendant() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4639,34 +5800,62 @@ void fopMsgM_msgDataProc_c::tag_stock_pendant() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char buf2[20];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Gl\374cksamulette");
+        } else {
+            strcpy(buf2, " Gl\374cksamulett");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, " collares");
+        } else {
+            strcpy(buf2, " collar");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " necklaces");
+        } else {
+            strcpy(buf2, " necklace");
+        }
+    }
+#else
     char buf2[12];
+
     if(num != 1) {
         strcpy(buf2, " necklaces");
     }
     else {
         strcpy(buf2, " necklace");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 8003AB00-8003ACEC       .text tag_stock_hane__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_hane() {
-    /* Nonmatching */
-    char buf[16];
+    char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4677,7 +5866,7 @@ void fopMsgM_msgDataProc_c::tag_stock_hane() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4687,34 +5876,62 @@ void fopMsgM_msgDataProc_c::tag_stock_hane() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char buf2[16];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcpy(buf2, " Goldfedern");
+        } else {
+            strcpy(buf2, " Goldfeder");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, " plumas");
+        } else {
+            strcpy(buf2, " pluma");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " feathers");
+        } else {
+            strcpy(buf2, " feather");
+        }
+    }
+#else
     char buf2[12];
+
     if(num != 1) {
         strcpy(buf2, " feathers");
     }
     else {
         strcpy(buf2, " feather");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 8003ACEC-8003AED8       .text tag_stock_kenshi__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_kenshi() {
-    /* Nonmatching */
     char buf[16];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4725,7 +5942,7 @@ void fopMsgM_msgDataProc_c::tag_stock_kenshi() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4736,39 +5953,88 @@ void fopMsgM_msgDataProc_c::tag_stock_kenshi() {
     }
 
     char buf2[12];
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(buf2, " Ritterwappen");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(buf2, "");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcpy(buf2, " blasones");
+        } else {
+            strcpy(buf2, " blas\363n");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        if (num != 1) {
+            strcpy(buf2, "");
+        } else {
+            strcpy(buf2, "");
+        }
+    } else {
+        if (num != 1) {
+            strcpy(buf2, " crests");
+        } else {
+            strcpy(buf2, " crest");
+        }
+    }
+#else
     if(num != 1) {
         strcpy(buf2, " crests");
     }
     else {
         strcpy(buf2, " crest");
     }
+#endif
+
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
 /* 8003AED8-8003B088       .text tag_terry_rupee__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_terry_rupee() {
-    /* Nonmatching */
     char buf[24];
 
     int num = daNpc_Bs1_c::getPayRupee();
     fopMsgM_int_to_char(buf, num, false);
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getPalLanguage() == 1) {
+        if (num != 1) {
+            strcat(buf, " Rubine");
+        } else {
+            strcat(buf, " Rubin");
+        }
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcat(buf, " rubis");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        if (num != 1) {
+            strcat(buf, " rupias");
+        } else {
+            strcat(buf, " rupia");
+        }
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcat(buf, " Rupie");
+    } else {
+        if (num != 1) {
+            strcat(buf, " Rupees");
+        } else {
+            strcat(buf, " Rupee");
+        }
+    }
+#else
     if(num != 1) {
         strcat(buf, " Rupees");
     }
     else {
         strcat(buf, " Rupee");
     }
+#endif
 
-    char* p1 = buf;
-    u8* p2 = (u8*)buf;
-    char* p3 = buf;
-    p2 = (u8*)buf;
-    p1 = buf;
-    while(*p1 != '\0') {
-        u8 c = *p2;
-        p1++;
-        p2++;
+    int i = 0;
+    while(buf[i] != '\0') {
+        u8 c = ((u8*) buf)[i];
+        i++;
         if(field_0x150 == 0) {
             field_0x14 = charLength(field_0x148, c, true);
         }
@@ -4779,7 +6045,7 @@ void fopMsgM_msgDataProc_c::tag_terry_rupee() {
         field_0x150 += 1;
     }
 
-    strcat(field_0x60, p3);
+    strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
     if(field_0x294 != 1) {
@@ -4814,7 +6080,26 @@ void fopMsgM_msgDataProc_c::tag_input_bokobaba() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "seed(s)", "", &field_0x20, &field_0x24, &field_0x150);
+#if VERSION == VERSION_PAL
+    char text_buf[32];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(text_buf, " Plantagranda-Samen");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(text_buf, " ");
+    } else {
+        strcpy(text_buf, " seed(s)");
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+#else
+    char* text = "seed(s)";
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
@@ -4840,7 +6125,26 @@ void fopMsgM_msgDataProc_c::tag_input_dokuro() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "necklace(s)", "", &field_0x20, &field_0x24, &field_0x150);
+#if VERSION == VERSION_PAL
+    char text_buf[32];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(text_buf, " Totenkopfkette(n)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(text_buf, " ");
+    } else {
+        strcpy(text_buf, " necklace(s)");
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+#else
+    char* text = "necklace(s)";
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
@@ -4866,7 +6170,25 @@ void fopMsgM_msgDataProc_c::tag_input_chuchu() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
+#if VERSION == VERSION_PAL
+    char text_buf[32];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(text_buf, " Schleim-Gelee(s)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(text_buf, " ");
+    } else {
+        strcpy(text_buf, " ");
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+#else
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
@@ -4892,7 +6214,26 @@ void fopMsgM_msgDataProc_c::tag_input_pendant() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "pendant(s)", "", &field_0x20, &field_0x24, &field_0x150);
+#if VERSION == VERSION_PAL
+    char text_buf[32];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(text_buf, " Gl\374cksamulett(e)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(text_buf, " ");
+    } else {
+        strcpy(text_buf, " pendant(s)");
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+#else
+    char* text = "pendant(s)";
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
@@ -4918,7 +6259,26 @@ void fopMsgM_msgDataProc_c::tag_input_hane() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "feather(s)", "", &field_0x20, &field_0x24, &field_0x150);
+#if VERSION == VERSION_PAL
+    char text_buf[24];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(text_buf, " Goldfeder(n)");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(text_buf, " ");
+    } else {
+        strcpy(text_buf, " feather(s)");
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+#else
+    char* text = "feather(s)";
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
 
@@ -4944,9 +6304,29 @@ void fopMsgM_msgDataProc_c::tag_input_kenshi() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "crest(s)", "", &field_0x20, &field_0x24, &field_0x150);
+#if VERSION == VERSION_PAL
+    char text_buf[24];
+
+    if (dComIfGs_getPalLanguage() == 1) {
+        strcpy(text_buf, " Ritterwappen");
+    } else if (dComIfGs_getPalLanguage() == 2) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 3) {
+        strcpy(text_buf, " ");
+    } else if (dComIfGs_getPalLanguage() == 4) {
+        strcpy(text_buf, " ");
+    } else {
+        strcpy(text_buf, " crest(s)");
+    }
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+#else
+    char* text = "crest(s)";
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
+#endif
+
     field_0x118 += field_0x3C[field_0x118 + 1];
 }
+#endif
 
 /* 8003BA00-8003BA40       .text fopMsgM_centerPosCalc__F17fopMsgM_f2d_class17fopMsgM_f2d_class */
 fopMsgM_f2d_class fopMsgM_centerPosCalc(fopMsgM_f2d_class param_1, fopMsgM_f2d_class param_2) {
@@ -5011,7 +6391,7 @@ void fopMsgM_setPaneData(fopMsgM_pane_alpha_class* i_this, J2DScreen* scrn, u32 
         i_this->pane = pane;
         fopMsgM_pane_parts_set(i_this);
     } else {
-        JUT_ASSERT(0x398d, FALSE);
+        JUT_ASSERT(VERSION_SELECT(0x22F9, 0x22F9, 0x398D, 0x3A73), FALSE);
     }
 }
 

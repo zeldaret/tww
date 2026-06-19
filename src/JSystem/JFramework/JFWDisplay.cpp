@@ -3,6 +3,8 @@
 // Translation Unit: JFWDisplay.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -390,8 +392,8 @@ void JFWDisplay::clearEfb_init() {
 
 /* 80255F60-80255FA0       .text clearEfb__10JFWDisplayF8_GXColor */
 void JFWDisplay::clearEfb(GXColor color) {
-    int height = mpRenderMode->efb_height;
-    int width = mpRenderMode->fb_width;
+    int height = mpRenderMode->efbHeight;
+    int width = mpRenderMode->fbWidth;
 
     clearEfb(0, 0, width, height, color);
 }
@@ -399,8 +401,8 @@ void JFWDisplay::clearEfb(GXColor color) {
 /* 80255FA0-8025631C       .text clearEfb__10JFWDisplayFiiii8_GXColor */
 void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GXColor color) {
     Mtx44 mtx;
-    u16 height = mpRenderMode->efb_height;
-    u16 width = mpRenderMode->fb_width;
+    u16 height = mpRenderMode->efbHeight;
+    u16 width = mpRenderMode->fbWidth;
 
     C_MTXOrtho(mtx, 0.0f, height, 0.0f, width, 0.0f, 1.0f);
     GXSetProjection(mtx, GX_ORTHOGRAPHIC);
@@ -412,8 +414,8 @@ void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GX
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_RGBX8, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB565, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_U16, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U8, 0);
     GXSetNumChans(0);
     GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetChanCtrl(GX_COLOR1A1, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);

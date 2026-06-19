@@ -70,7 +70,7 @@ public:
     void setEmbPaletteDelFlag(bool flag) { mFlags = (mFlags & 1) | (flag << 1); }
     u8 getTlutName() const { return mTlutName; }
     bool operator==(const JUTTexture& other) {
-        return mTexInfo == other.mTexInfo && mAttachedPalette == other.mAttachedPalette &&
+        return mTexInfo == other.mTexInfo && mPalette == other.mPalette &&
                mWrapS == other.mWrapS && mWrapT == other.mWrapT && mMinFilter == other.mMinFilter &&
                mMagFilter == other.mMagFilter && mMinLOD == other.mMinLOD &&
                mMinLOD == other.mMinLOD && mLODBias == other.mLODBias;
@@ -82,7 +82,7 @@ private:
     /* 0x20 */ const ResTIMG* mTexInfo;
     /* 0x24 */ void* mTexData;
     /* 0x28 */ JUTPalette* mEmbPalette;
-    /* 0x2C */ JUTPalette* mAttachedPalette;
+    /* 0x2C */ JUTPalette* mPalette;
     /* 0x30 */ u8 mWrapS;
     /* 0x31 */ u8 mWrapT;
     /* 0x32 */ u8 mMinFilter;

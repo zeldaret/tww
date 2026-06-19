@@ -3,8 +3,9 @@
 // Translation Unit: J3DUDL.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J3DGraphBase/J3DShapeMtx.h"
 
 // generate getUseMtxNum weak function.
 static void dummy(J3DShapeMtx* shapeMtx) { shapeMtx->getUseMtxNum(); }
-

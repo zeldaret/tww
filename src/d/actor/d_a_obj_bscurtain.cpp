@@ -3,20 +3,17 @@
  * Object - Curtains (Beedle's Shop)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_bscurtain.h"
-#include "d/res/res_ptc.h"
+#include "res/Object/Ptc.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-
-daObj_Bscurtain_HIO_c l_HIO;
+static daObj_Bscurtain_HIO_c l_HIO;
 
 /* 000000EC-00000118       .text __ct__21daObj_Bscurtain_HIO_cFv */
 daObj_Bscurtain_HIO_c::daObj_Bscurtain_HIO_c() {
@@ -42,10 +39,10 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000224-00000334       .text CreateHeap__17daObj_Bscurtain_cFv */
 BOOL daObj_Bscurtain_c::CreateHeap() {
     J3DModelData* modelData;
-    if ((fpcM_GetParam(this) & 0xFF) != 1 || dComIfGs_isEventBit(0x1F08) != 0) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, PTC_INDEX_BDL_PTCO);
+    if ((fpcM_GetParam(this) & 0xFF) != 1 || dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F08) != 0) {
+        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_PTC_BDL_PTCO_e);
     } else {
-        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, PTC_INDEX_BDL_PTCU);
+        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_PTC_BDL_PTCU_e);
     }
 
     JUT_ASSERT(0xa9, modelData != NULL);
@@ -62,7 +59,7 @@ cPhs_State daObj_Bscurtain_c::CreateInit() {
 }
 
 cPhs_State daObj_Bscurtain_c::_create() {
-    fopAcM_SetupActor(this, daObj_Bscurtain_c);
+    fopAcM_ct(this, daObj_Bscurtain_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
 
@@ -97,7 +94,7 @@ bool daObj_Bscurtain_c::_draw() {
 }
 
 /* 00000370-00000400       .text daObj_BscurtainCreate__FPv */
-static s32 daObj_BscurtainCreate(void* i_this) {
+static cPhs_State daObj_BscurtainCreate(void* i_this) {
     return ((daObj_Bscurtain_c*)i_this)->_create();
 }
 
@@ -130,18 +127,18 @@ static actor_method_class daObj_BscurtainMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Bscurtain = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Bscurtain,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Bscurtain_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Bscurtain_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Bscurtain,
+    /* Draw Prio    */ fpcDwPi_Obj_Bscurtain_e,
     /* Actor SubMtd */ &daObj_BscurtainMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

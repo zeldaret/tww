@@ -3,16 +3,16 @@
 // Translation Unit: d_tree.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_tree.h"
 #include "dolphin/types.h"
 
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 #include "assets/l_Txa_swood_aTEX.h"
 const u16 l_Txa_swood_aTEX__width = 64;
 const u16 l_Txa_swood_aTEX__height = 64;
 
-Vec l_pos[] = {
+static Vec l_pos[] = {
     {-10.0f, 105.608147f, 5.0f},
     {10.0f, 105.608147f, 5.0f},
     {0.0f, 115.841797f, 0.0f},
@@ -96,7 +96,7 @@ Vec l_pos[] = {
     {-23.685818f, 230.321808f, -83.511086f},
 };
 
-GXColor l_color[] = {
+static GXColor l_color[] = {
     {0x80, 0x80, 0x80, 0xFF},
     {0x8D, 0x8D, 0x8D, 0xFF},
     {0x99, 0x99, 0x99, 0xFF},
@@ -109,7 +109,7 @@ GXColor l_color[] = {
     {0xBF, 0xBF, 0xBF, 0xFF},
 };
 
-cXy l_texCoord[] = {
+static cXy l_texCoord[] = {
     {0.862864f, 0.532151f},
     {0.864665f, 1.0f},
     {0.878197f, 1.0f},
@@ -230,7 +230,7 @@ void dTree_packet_c::draw() {
     };
     static GXVtxAttrFmtList l_shadowVtxAttrFmtList[] = {
         {GX_VA_POS, GX_POS_XYZ, GX_S8, 0x00},
-        {GX_VA_TEX0, GX_POS_XYZ, GX_S8, 0x00},
+        {GX_VA_TEX0, GX_TEX_ST, GX_S8, 0x00},
         {GX_VA_NULL, GX_POS_XYZ, GX_S8, 0x00},
     };
     static GXVtxDescList l_vtxDescList[] = {
@@ -241,8 +241,8 @@ void dTree_packet_c::draw() {
     };
     static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
         {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
-        {GX_VA_CLR0, GX_POS_XYZ, GX_RGBA8, 0x00},
-        {GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0x00},
+        {GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0x00},
+        {GX_VA_TEX0, GX_TEX_ST, GX_F32, 0x00},
         {GX_VA_NULL, GX_POS_XYZ, GX_S8, 0x00},
     };
     static struct {

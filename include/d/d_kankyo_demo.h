@@ -13,6 +13,6 @@ struct DEMO_PLIGHT {
 
 void dKydm_demo_plight_entry(DEMO_PLIGHT* i_plight, cXyz* i_pos, int param_2, u8 param_3);
 void dKydm_demo_plight_delete(DEMO_PLIGHT* i_plight);
-void dKydm_demo_plight_execute(DEMO_PLIGHT* i_plight);
+void dKydm_demo_plight_execute(DEMO_PLIGHT* i_plight, cXyz* i_pos);
 
 #endif /* D_KANKYO_DEMO_H */

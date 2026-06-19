@@ -48,7 +48,6 @@ public:
     void offObjHookFlg() { mObjHookFlg = FALSE; }
     bool checkShipRideFlg() const { return mShipRideFlg; }
     
-    daHookshot_c() {}
     BOOL draw();
     BOOL procWait_init(BOOL);
     BOOL procWait();

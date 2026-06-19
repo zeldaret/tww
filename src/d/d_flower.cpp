@@ -3,6 +3,7 @@
 // Translation Unit: d_flower.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_flower.h"
 #include "dolphin/types.h"
 

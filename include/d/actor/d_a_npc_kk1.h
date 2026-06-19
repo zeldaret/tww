@@ -157,8 +157,8 @@ public:
     u8 demo();
     void shadowDraw();
     BOOL _draw();
-    bool _execute();
-    bool _delete();
+    BOOL _execute();
+    BOOL _delete();
     cPhs_State _create();
     BOOL bodyCreateHeap();
     BOOL effcCreateHeap();

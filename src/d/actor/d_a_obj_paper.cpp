@@ -3,25 +3,22 @@
 // Translation Unit: d_a_obj_paper.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_paper.h"
-#include "d/res/res_opaper.h"
-#include "d/res/res_ppos.h"
-#include "d/res/res_piwa.h"
+#include "res/Object/Opaper.h"
+#include "res/Object/Ppos.h"
+#include "res/Object/Piwa.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_a_obj.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daObjPaper {
     namespace {
@@ -44,7 +41,7 @@ namespace daObjPaper {
             {
                 /* mResName           */ "Opaper",
                 /* mHeapSize          */ 0x04C0,
-                /* mModelId           */ OPAPER_BDL_OPAPER,
+                /* mModelId           */ dRes_INDEX_OPAPER_BDL_OPAPER_e,
                 /* mEyeOffset         */ 0x00,
                 /* mAttentionOffset   */ 0x28,
                 /* mCullSphereRadius  */ 0x28,
@@ -57,12 +54,8 @@ namespace daObjPaper {
             },
             {
                 /* mResName           */ "Ppos",
-#if VERSION == VERSION_DEMO
-                /* mHeapSize          */ 0x1000,
-#else
-                /* mHeapSize          */ 0x04C0,
-#endif
-                /* mModelId           */ PPOS_BDL_PPOS,
+                /* mHeapSize          */ DEMO_SELECT(0x1000, 0x04C0),
+                /* mModelId           */ dRes_INDEX_PPOS_BDL_PPOS_e,
                 /* mEyeOffset         */ 0x00,
                 /* mAttentionOffset   */ 0x32,
                 /* mCullSphereRadius  */ 0x3C,
@@ -75,12 +68,8 @@ namespace daObjPaper {
             },
             {
                 /* mResName           */ "Piwa",
-#if VERSION == VERSION_DEMO
-                /* mHeapSize          */ 0x8000,
-#else
-                /* mHeapSize          */ 0x04C0,
-#endif
-                /* mModelId           */ PIWA_BDL_PIWA,
+                /* mHeapSize          */ DEMO_SELECT(0x8000, 0x04C0),
+                /* mModelId           */ dRes_INDEX_PIWA_BDL_PIWA_e,
                 /* mEyeOffset         */ 0x3C,
                 /* mAttentionOffset   */ 0x82,
                 /* mCullSphereRadius  */ 0x50,
@@ -119,11 +108,11 @@ namespace daObjPaper {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 0.0f,
             /* Height */ 0.0f,
-        },
+        }},
     };
 
     /* 00000078-0000009C       .text solidHeapCB__Q210daObjPaper5Act_cFP10fopAc_ac_c */
@@ -149,7 +138,7 @@ namespace daObjPaper {
 
     /* 00000170-000004E0       .text _create__Q210daObjPaper5Act_cFv */
     cPhs_State Act_c::_create() {
-        fopAcM_SetupActor(this, Act_c);
+        fopAcM_ct(this, Act_c);
 
         mType = prm_get_type();
 
@@ -228,7 +217,7 @@ namespace daObjPaper {
 
     /* 000007A4-00000820       .text mode_talk0__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_talk0() {
-        if (mMsgId == fpcM_ERROR_PROCESS_ID_e && dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) {
+        if (mMsgId == fpcM_ERROR_PROCESS_ID_e && dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), dCamAttnStts_00000004_e)) {
             mMsgId = fopMsgM_messageSet(prm_get_msgNo(), &eyePos);
 
             mode_talk1_init();
@@ -367,18 +356,18 @@ namespace daObjPaper {
 }
 
 actor_process_profile_definition g_profile_Obj_Paper = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Paper,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Paper_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjPaper::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Paper,
+    /* Draw Prio    */ fpcDwPi_Obj_Paper_e,
     /* Actor SubMtd */ &daObjPaper::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

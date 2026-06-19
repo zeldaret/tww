@@ -3,31 +3,30 @@
 // Translation Unit: d_a_npc_mt.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_mt.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 #define TOTAL_FIGURE_COUNT 0x86
 
 static u16 l_figure_comp[] = {
-    0x95FF,
-    0x94FF,
-    0x93FF,
-    0x92FF,
-    0x91FF,
-    0x90FF,
-    0x8FFF,
-    0x8EFF,
-    0x8DFF,
-    0x8CFF,
-    0xB1FF,
-    0x9CFF,
-    0x84FF,
-    0x83FF,
-    0x82FF,
-    0x81FF,
-    0x80FF,
+    dSv_event_flag_c::UNK_95FF,
+    dSv_event_flag_c::UNK_94FF,
+    dSv_event_flag_c::UNK_93FF,
+    dSv_event_flag_c::UNK_92FF,
+    dSv_event_flag_c::UNK_91FF,
+    dSv_event_flag_c::UNK_90FF,
+    dSv_event_flag_c::UNK_8FFF,
+    dSv_event_flag_c::UNK_8EFF,
+    dSv_event_flag_c::UNK_8DFF,
+    dSv_event_flag_c::UNK_8CFF,
+    dSv_event_flag_c::UNK_B1FF,
+    dSv_event_flag_c::UNK_9CFF,
+    dSv_event_flag_c::UNK_84FF,
+    dSv_event_flag_c::UNK_83FF,
+    dSv_event_flag_c::UNK_82FF,
+    dSv_event_flag_c::UNK_81FF,
+    dSv_event_flag_c::UNK_80FF,
 };
 
 /* 00000078-00000228       .text __ct__9daNpcMt_cFv */
@@ -256,7 +255,7 @@ void daNpcMt_c::setFigure(u8 figure) {
         u8 reg = dComIfGs_getEventReg(l_figure_comp[figure / 8]);
         reg |= 1 << (figure % 8);
         dComIfGs_setEventReg(l_figure_comp[figure / 8], reg);
-        dComIfGs_onEventBit(0x3A01);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_3A01);
     }
 }
 
@@ -294,7 +293,7 @@ void daNpcMt_c::changePhotoNo(u8) {
 }
 
 /* 00002D4C-00002D6C       .text daNpc_MtCreate__FPv */
-static s32 daNpc_MtCreate(void* i_this) {
+static cPhs_State daNpc_MtCreate(void* i_this) {
     return ((daNpcMt_c*)i_this)->_create();
 }
 
@@ -327,18 +326,18 @@ static actor_method_class daNpc_MtMethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_MT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_MT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_MT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpcMt_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_MT,
+    /* Draw Prio    */ fpcDwPi_NPC_MT_e,
     /* Actor SubMtd */ &daNpc_MtMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -207,5 +207,13 @@ struct J3DNBTScale : public J3DNBTScaleInfo {
 struct J3DTexCoord;
 void loadTexCoordGens(u32, J3DTexCoord*);
 void loadNBTScale(J3DNBTScale& param_0);
+bool isTexNoReg(void*);
+u16 getTexNoReg(void*);
+void loadTexNo(u32, const u16&);
+void makeTexCoordTable();
+void makeAlphaCmpTable();
+void makeZModeTable();
+void makeTevSwapTable();
+void patchTexNo_PtrToIdx(u32 texID, const u16& idx);
 
 #endif /* J3DTEVS_H */

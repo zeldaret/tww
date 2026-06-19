@@ -11,6 +11,8 @@
   "files.trimFinalNewlines": true,
   "files.associations": {
     "*.inc": "cpp",
+    "*.pch": "cpp",
+    "*.pch++": "cpp",
     ".clangd": "yaml",
     "*.json": "json",
     "dspproc.c": "cpp",

@@ -1,6 +1,7 @@
 #ifndef J3DSYS_H
 #define J3DSYS_H
 
+#include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/types.h"
 
@@ -53,23 +54,26 @@ public:
 
     void setDrawModeXlu() { mDrawMode = XLU; }
 
-    void* getVtxPos() const { return mVtxPos; }
+    void* getVtxPos() { return mVtxPos; }
     void setVtxPos(void* pVtxPos) { mVtxPos = pVtxPos; }
 
-    void* getVtxNrm() const { return mVtxNrm; }
+    void* getVtxNrm() { return mVtxNrm; }
     void setVtxNrm(void* pVtxNrm) { mVtxNrm = pVtxNrm; }
 
-    void* getVtxCol() const { return mVtxCol; }
+    void* getVtxCol() { return mVtxCol; }
     void setVtxCol(GXColor* pVtxCol) { mVtxCol = pVtxCol; }
 
-    void setModel(J3DModel* pModel) { mModel = pModel; }
+    void setModel(J3DModel* pModel) {
+        J3D_ASSERT(200, pModel, "Error : null pointer.");
+        mModel = pModel;
+    }
     void setShapePacket(J3DShapePacket* pPacket) { mShapePacket = pPacket; }
     void setMatPacket(J3DMatPacket* pPacket) { mMatPacket = pPacket; }
     J3DMatPacket* getMatPacket() { return mMatPacket; }
     void setMaterialMode(u32 mode) { mMaterialMode = mode; }
 
     void setCurrentMtxCalc(J3DMtxCalc * pCalc) { mCurrentMtxCalc = pCalc; }
-    J3DMtxCalc * getCurrentMtxCalc() const { return mCurrentMtxCalc; }
+    J3DMtxCalc * getCurrentMtxCalc() { return mCurrentMtxCalc; }
 
     void setTexture(J3DTexture* pTex) { mTexture = pTex; }
     J3DTexture* getTexture() { return mTexture; }
@@ -92,14 +96,21 @@ public:
 
     // Type 0: Opa Buffer
     // Type 1: Xlu Buffer
-    void setDrawBuffer(J3DDrawBuffer* buffer, int type) { mDrawBuffer[type] = buffer; }
+    void setDrawBuffer(J3DDrawBuffer* buffer, int type) {
+        J3D_ASSERT(114, type >= 0 && type < 2, "Error : range over.");
+        J3D_ASSERT(115, buffer, "Error : null pointer.");
+        mDrawBuffer[type] = buffer;
+    }
 
     // Type 0: Opa Buffer
     // Type 1: Xlu Buffer
-    J3DDrawBuffer* getDrawBuffer(int type) { return mDrawBuffer[type]; }
+    J3DDrawBuffer* getDrawBuffer(int type) {
+        J3D_ASSERT(121, type >= 0 && type < 2, "Error : range over.");
+        return mDrawBuffer[type];
+    }
 
-    Mtx& getModelDrawMtx(u16 no) const { return mModelDrawMtx[no]; }
-    J3DShapePacket* getShapePacket() const { return mShapePacket; }
+    Mtx& getModelDrawMtx(u16 no) { return mModelDrawMtx[no]; }
+    J3DShapePacket* getShapePacket() { return mShapePacket; }
 
     J3DModel* getModel() { return mModel; }
     Vec* getNBTScale() { return mNBTScale; }
@@ -151,5 +162,9 @@ public:
 
 extern u32 j3dDefaultViewNo;
 extern J3DSys j3dSys;
+
+void J3DFifoLoadNrmMtxImm(Mtx, u32);
+void J3DFifoLoadNrmMtxImm3x3(Mtx33, u32);
+void J3DFifoLoadPosMtxImm(Mtx, u32);
 
 #endif /* J3DSYS_H */

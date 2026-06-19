@@ -3,9 +3,9 @@
 // Translation Unit: d_event.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_event.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_itembase.h"
 #include "f_op/f_op_actor.h" // dEvt_info_c
 #include "f_op/f_op_actor_mng.h"
@@ -80,7 +80,7 @@ s32 dEvt_control_c::order(u16 eventType, u16 priority, u16 flag, u16 hindFlag, v
 
 /* 8007002C-8007015C       .text setParam__14dEvt_control_cFP12dEvt_order_c */
 void dEvt_control_c::setParam(dEvt_order_c* order) {
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     setPt1(order->mActor1);
     setPt2(order->mActor2);
     mEventId = order->mEventId;
@@ -180,7 +180,7 @@ BOOL dEvt_control_c::talkXyCheck(dEvt_order_c* order) {
         break;
     }
 
-    if (dComIfGp_getSelectItem(itemBtn) == dItem_NONE_e) {
+    if (dComIfGp_getSelectItem(itemBtn) == dItemNo_NONE_e) {
         return FALSE;
     }
 
@@ -288,7 +288,7 @@ BOOL dEvt_control_c::talkEnd() {
         mEventId = -1;
     }
     fopAc_ac_c* itemPartner = fopAcM_getItemEventPartner(NULL);
-    if (itemPartner != NULL && (fopAcM_GetName(itemPartner) == PROC_ITEM || fopAcM_GetName(itemPartner) == PROC_Demo_Item))
+    if (itemPartner != NULL && (fopAcM_GetName(itemPartner) == fpcNm_ITEM_e || fopAcM_GetName(itemPartner) == fpcNm_Demo_Item_e))
         ((daItemBase_c*)itemPartner)->dead();
     return TRUE;
 }
@@ -300,7 +300,7 @@ BOOL dEvt_control_c::demoCheck(dEvt_order_c* order) {
     s16 eventId = order->mEventId;
 
     if (actor2 == NULL) {
-        JUT_ASSERT(VERSION_SELECT(541, 543, 543, 543), FALSE);
+        JUT_ASSERT(DEMO_SELECT(541, 543), FALSE);
         return FALSE;
     }
 
@@ -348,7 +348,7 @@ BOOL dEvt_control_c::potentialCheck(dEvt_order_c* order) {
     fopAc_ac_c* actor1 = order->mActor1;
     fopAc_ac_c* actor2 = order->mActor2;
     if (actor1 == NULL || actor2 == NULL)
-        JUT_ASSERT(VERSION_SELECT(638, 640, 640, 640), FALSE);
+        JUT_ASSERT(DEMO_SELECT(638, 640), FALSE);
 
     if (!beforeFlagProc(order))
         return FALSE;
@@ -369,7 +369,7 @@ BOOL dEvt_control_c::doorCheck(dEvt_order_c* order) {
             mEventId = actor2->eventInfo.getEventId();
         if (mEventId != -1 && dComIfGp_getPEvtManager()->getEventData(mEventId) != NULL) {
             if (!dComIfGp_evmng_order(mEventId))
-                JUT_ASSERT(VERSION_SELECT(702, 704, 704, 704), FALSE);
+                JUT_ASSERT(DEMO_SELECT(702, 704), FALSE);
         } else {
             mEventId = -1;
             reset();
@@ -391,7 +391,7 @@ BOOL dEvt_control_c::itemCheck(dEvt_order_c* order) {
         mMode = dEvtMode_DEMO_e;
         mEventId = dComIfGp_evmng_getEventIdx(defaultEventName);
         if (!dComIfGp_evmng_order(mEventId))
-            JUT_ASSERT(VERSION_SELECT(744, 746, 746, 746), FALSE);
+            JUT_ASSERT(DEMO_SELECT(744, 746), FALSE);
         return TRUE;
     } else {
         return FALSE;
@@ -410,7 +410,8 @@ BOOL dEvt_control_c::endProc() {
     case dEvtMode_COMPULSORY_e:
         break;
     default:
-        JUT_ASSERT(VERSION_SELECT(787, 789, 789, 789), FALSE);
+        JUT_ASSERT(DEMO_SELECT(787, 789), FALSE);
+        break;
     }
 
     mMode = dEvtMode_NONE_e;
@@ -518,7 +519,7 @@ BOOL dEvt_control_c::checkStart() {
             case dEvtType_CHANGE_e:
                 break;
             default:
-                JUT_ASSERT(VERSION_SELECT(922, 924, 924, 924), FALSE);
+                JUT_ASSERT(DEMO_SELECT(922, 924), FALSE);
                 break;
             }
 
@@ -590,7 +591,7 @@ BOOL dEvt_control_c::photoCheck() {
         }
 
         if (itemBtn != -1 &&
-            (dComIfGp_getSelectItem(itemBtn) == CAMERA || dComIfGp_getSelectItem(itemBtn) == CAMERA2) &&
+            (dComIfGp_getSelectItem(itemBtn) == dItemNo_PICTO_BOX_e || dComIfGp_getSelectItem(itemBtn) == dItemNo_DELUXE_PICTO_BOX_e) &&
             dComIfGs_getPictureNum() != 0
         ) {
             actor2 = order->mActor2;
@@ -696,7 +697,7 @@ void dEvt_control_c::remove() {
 
 /* 800714AC-80071534       .text getStageEventDt__14dEvt_control_cFv */
 dStage_Event_dt_c* dEvt_control_c::getStageEventDt() {
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     if (getMode() == dEvtMode_NONE_e)
         return NULL;
 
@@ -708,7 +709,7 @@ dStage_Event_dt_c* dEvt_control_c::getStageEventDt() {
 
 /* 80071534-800715B8       .text nextStageEventDt__14dEvt_control_cFPv */
 dStage_Event_dt_c* dEvt_control_c::nextStageEventDt(void* idxp) {
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     if (idxp == NULL)
         return NULL;
 
@@ -772,12 +773,12 @@ char* dEvt_info_c::getEventName() {
 }
 
 /* 800716F8-80071778       .text giveItemCut__14dEvt_control_cFUc */
-bool dEvt_control_c::giveItemCut(u8 item) {
+int dEvt_control_c::giveItemCut(u8 item) {
     s32 staffIdx = dComIfGp_evmng_getMyStaffId("GIVEMAN");
     if (staffIdx == -1)
         return false;
 
     dComIfGp_evmng_cutEnd(staffIdx);
     mGetItemNo = item;
-    return true;
+    return 1;
 }

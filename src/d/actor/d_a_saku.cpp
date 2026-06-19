@@ -3,9 +3,8 @@
  * Object - Brown wooden barricade
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_saku.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 const dCcD_SrcCyl daSaku_c::m_cyl_src = {
@@ -31,11 +30,11 @@ const dCcD_SrcCyl daSaku_c::m_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
         /* Height */ 200.0f,
-    },
+    }},
 };
 
 
@@ -196,18 +195,18 @@ static actor_method_class l_daSaku_Method = {
 };
 
 actor_process_profile_definition g_profile_SAKU = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SAKU,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SAKU_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSaku_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SAKU,
+    /* Draw Prio    */ fpcDwPi_SAKU_e,
     /* Actor SubMtd */ &l_daSaku_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_9_e,
+    /* Cull Type    */ fopAc_CULLBOX_9_e,
 };

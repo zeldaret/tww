@@ -3,9 +3,8 @@
  * NPC - Fishman (blue fish)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_so.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-000002A4       .text __ct__14daNpc_So_HIO_cFv */
 daNpc_So_HIO_c::daNpc_So_HIO_c() {
@@ -368,7 +367,7 @@ bool daNpc_So_c::_delete() {
 }
 
 /* 00004754-00004774       .text daNpc_SoCreate__FPv */
-static s32 daNpc_SoCreate(void* i_this) {
+static cPhs_State daNpc_SoCreate(void* i_this) {
     return ((daNpc_So_c*)i_this)->_create();
 }
 
@@ -418,10 +417,10 @@ const dCcD_SrcSph daNpc_So_c::m_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 60.0f,
-    },
+    }},
 };
 
 
@@ -434,18 +433,18 @@ static actor_method_class daNpc_SoMethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_SO = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_SO,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_SO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_So_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_SO,
+    /* Draw Prio    */ fpcDwPi_NPC_SO_e,
     /* Actor SubMtd */ &daNpc_SoMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

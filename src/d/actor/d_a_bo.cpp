@@ -3,9 +3,8 @@
  * Enemy - Boko Baba
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 /* 000000EC-000001E8       .text smoke_set__FP8bo_class */
@@ -159,10 +158,10 @@ static cPhs_State daBO_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 15.0f,
-        },
+        }},
     };
     static dCcD_SrcSph foot_co_sph_src = {
         // dCcD_SrcGObjInf
@@ -187,10 +186,10 @@ static cPhs_State daBO_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 15.0f,
-        },
+        }},
     };
     static dCcD_SrcCyl body_cyl_src = {
         // dCcD_SrcGObjInf
@@ -215,11 +214,11 @@ static cPhs_State daBO_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 0.0f,
             /* Height */ 0.0f,
-        },
+        }},
     };
 }
 
@@ -232,18 +231,18 @@ static actor_method_class l_daBO_Method = {
 };
 
 actor_process_profile_definition g_profile_BO = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BO,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bo_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BO,
+    /* Draw Prio    */ fpcDwPi_BO_e,
     /* Actor SubMtd */ &l_daBO_Method,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

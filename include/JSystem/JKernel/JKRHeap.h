@@ -43,7 +43,7 @@ public:
     void* getMaxFreeBlock();
     s32 getTotalFreeSize();
     u8 getCurrentGroupId();
-    s32 changeGroupID(u8 newGroupId);
+    u8 changeGroupID(u8 newGroupId);
     u32 getMaxAllocatableSize(int alignment);
 
     JKRHeap* find(void* ptr) const;
@@ -60,7 +60,7 @@ public:
     /* vt[03] */ virtual void callAllDisposer();
     /* vt[04] */ virtual u32 getHeapType() = 0;
     /* vt[05] */ virtual bool check() = 0;
-    /* vt[06] */ virtual bool dump_sort();
+    /* vt[06] */ virtual bool dump_sort() { return true; }
     /* vt[07] */ virtual bool dump() = 0;
     /* vt[08] */ virtual void do_destroy() = 0;
     /* vt[09] */ virtual void* do_alloc(u32 size, int alignment) = 0;
@@ -75,7 +75,7 @@ public:
     /* vt[16] */ virtual s32 do_getFreeSize() = 0;
     /* vt[17] */ virtual void* do_getMaxFreeBlock() = 0;
     /* vt[18] */ virtual s32 do_getTotalFreeSize() = 0;
-    /* vt[19] */ virtual s32 do_changeGroupID(u8 newGroupID);
+    /* vt[19] */ virtual u8 do_changeGroupID(u8 newGroupID);
     /* vt[20] */ virtual u8 do_getCurrentGroupId();
     /* vt[21] */ virtual void state_register(JKRHeap::TState* p, u32 id) const;
     /* vt[22] */ virtual bool state_compare(JKRHeap::TState const& r1, JKRHeap::TState const& r2) const;

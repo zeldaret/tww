@@ -3,9 +3,8 @@
 // Translation Unit: d_a_tag_attention.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_attention.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 
@@ -33,15 +32,15 @@ static dCcD_SrcSph sph_check_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 10.0f,
-    },
+    }},
 };
 
 /* 00000078-00000188       .text _create__Q214daTagAttention5Act_cFv */
 cPhs_State daTagAttention::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     mStts.Init(0xFF, 0xFF, this);
     mSph.Set(sph_check_src);
     mSph.SetStts(&mStts);
@@ -110,18 +109,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daTagAttention
 
 actor_process_profile_definition g_profile_Tag_Attention = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0009,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Tag_Attention,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0009,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Attention_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTagAttention::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Tag_Attention,
+    /* Draw Prio    */ fpcDwPi_Tag_Attention_e,
     /* Actor SubMtd */ &daTagAttention::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

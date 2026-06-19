@@ -3,6 +3,8 @@
 // Translation Unit: object-particle.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio_JParticle/object-particle.h"
 #include "JSystem/JParticle/JPAEmitterManager.h"
 #include "JSystem/JStudio/JStudio/jstudio-math.h"

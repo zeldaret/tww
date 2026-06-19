@@ -32,7 +32,7 @@ public:
     /* 0x33 */ u8 mNowAlpha;
     /* 0x34 */ u8 mDrawMode;
     /* 0x35 */ u8 field_0x35;
-};
+}; // size = 0x38
 
 class dSalvage_control_c {
 public:
@@ -48,7 +48,7 @@ public:
     cXyz getScale(int);
     f32 getR(int);
     f32 getH(int);
-    u8 getRoomNo(int);
+    s8 getRoomNo(int);
     u8 getItemNo(int);
     s32 getSwitchNo(int);
     u8 getSaveNo(int);
@@ -56,9 +56,9 @@ public:
     u8 getKind(int);
     f32 getDistance(int);
     u8* getAlphaPtr(int);
-    u8 getDrawMode(int);
+    s32 getDrawMode(int);
     BOOL checkRegist(int);
-    bool checkUsed(int);
+    BOOL checkUsed(int);
     void setPos(int, cXyz);
     void setFlag(int, u8);
     void clrFlag(int, u8);
@@ -75,6 +75,6 @@ public:
     /* 0x00 */ u8 mSeaNum;
     /* 0x01 */ u8 mRoomNum;
     /* 0x04 */ dSalvage_info_c mInfo[MAX_TOTAL];
-};
+}; // size = 0x2304
 
 #endif /* D_SALVAGE_H */

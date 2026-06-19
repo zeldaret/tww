@@ -3,12 +3,11 @@
 // Translation Unit: d_a_bwdg.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bwdg.h"
-#include "d/res/res_bwdg.h"
+#include "res/Object/Bwdg.h"
 #include "d/d_bg_w_hf.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_bwd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "dolphin/gf/GF.h"
@@ -23,37 +22,25 @@ const u16 l_B_sand2TEX__height = 256;
 #include "assets/l_matDL__d_a_bwdg.h"
 l_matDL__d_a_bwdg(l_B_sand2TEX);
 
-// Fakematch: These are supposed to be in-function statics inside daBwdg_packet_c::draw().
-// But for some reason, defining them inside the function causes the function to load them as well
-// as l_matDL and l_Hsand1DL (but not l_texCoord) with different codegen than the original function.
-// Defining them above the function also results in the same thing.
-// But forward declaring them as externs, and then defining them after the function works correctly.
-extern GXVtxDescList l_vtxDescList[];
-extern GXVtxAttrFmtList l_vtxAttrFmtList[];
-
-// Another way of matching the function's codegen is to keep these as in-function statics, but move
-// the d_a_bwdg_data.inc include until after the function, and forward declare the included data.
-// But this method breaks the order of the variables in the .data section as the in-function data
-// would then appear above the included data.
-// extern u8 l_B_sand2TEX[0x10000] ALIGN_DECL(32);
-// extern u8 l_texCoord[0x8408];
-// extern u8 l_Hsand1DL[0xC3E0] ALIGN_DECL(32);
-// extern u8 l_matDL[0xBA] ALIGN_DECL(32);
+// Fakematch: For some reason daBwdg_packet_c::draw needs to have .data pooling disabled, but the in-function statics cause .data pooling to be used.
+// Disabling data pooling for the entire TU breaks wave_cont, which uses ...rodata pooling, so instead disable it for just this one function.
+#pragma push
+#pragma pool_data off
 
 /* 00000078-000001C4       .text draw__15daBwdg_packet_cFv */
 void daBwdg_packet_c::draw() {
-    // static GXVtxDescList l_vtxDescList[] = {
-    //     {GX_VA_POS, GX_INDEX16},
-    //     {GX_VA_NRM, GX_INDEX16},
-    //     {GX_VA_TEX0, GX_INDEX16},
-    //     {GX_VA_NULL, GX_NONE},
-    // };
-    // static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
-    //     {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
-    //     {GX_VA_NRM, GX_POS_XY, GX_F32, 0x00},
-    //     {GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0x00},
-    //     {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
-    // };
+    static GXVtxDescList l_vtxDescList[] = {
+        {GX_VA_POS, GX_INDEX16},
+        {GX_VA_NRM, GX_INDEX16},
+        {GX_VA_TEX0, GX_INDEX16},
+        {GX_VA_NULL, GX_NONE},
+    };
+    static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
+        {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
+        {GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0x00},
+        {GX_VA_TEX0, GX_TEX_ST, GX_F32, 0x00},
+        {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
+    };
     j3dSys.reinitGX();
     dKy_GxFog_tevstr_set(mpTevStr);
     dKy_setLight_mine(mpTevStr);
@@ -73,24 +60,13 @@ void daBwdg_packet_c::draw() {
     m00010 ^= 0x01;
 }
 
-// Fakematch (see above comment)
-GXVtxDescList l_vtxDescList[] = {
-    {GX_VA_POS, GX_INDEX16},
-    {GX_VA_NRM, GX_INDEX16},
-    {GX_VA_TEX0, GX_INDEX16},
-    {GX_VA_NULL, GX_NONE},
-};
-GXVtxAttrFmtList l_vtxAttrFmtList[] = {
-    {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
-    {GX_VA_NRM, GX_POS_XY, GX_F32, 0x00},
-    {GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0x00},
-    {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
-};
+#pragma pop
 
 /* 000001C4-00000260       .text daBwdg_Draw__FP10bwdg_class */
 static BOOL daBwdg_Draw(bwdg_class* i_this) {
     g_env_light.settingTevStruct(TEV_TYPE_BG0_FULL, &i_this->current.pos, &i_this->tevStr);
-    MtxTrans(0.0f, 10.0f, 0.0f, 0);
+    f32 f1 = 0.0f;
+    MtxTrans(0.0f, 10.0f + f1, 0.0f, 0);
     cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, i_this->mBwdgPacket.getMtx());
     i_this->mBwdgPacket.setTevStr(&i_this->tevStr);
     j3dSys.getDrawBuffer(0)->entryImm(&i_this->mBwdgPacket, 0);
@@ -161,7 +137,11 @@ static void wave_cont(bwdg_class* i_this, u8 r4) {
     cXyz* nrmVtx = i_this->mBwdgPacket.getNrm();
     posVtx = i_this->mBwdgPacket.getPos();
     cXyz sp18(0.0f, 0.0f, 1.0f);
+#if VERSION == VERSION_DEMO
+    cMtx_XrotM(*calc_mtx, -0x4A38);
+#else
     cMtx_XrotS(*calc_mtx, -0x4A38);
+#endif
     cXyz sp0C;
     MtxPosition(&sp18, &sp0C);
     
@@ -176,7 +156,8 @@ static void wave_cont(bwdg_class* i_this, u8 r4) {
 
 /* 00000734-00000780       .text boss_a_d_sub__FPvPv */
 static void* boss_a_d_sub(void* param_1, void* param_2) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BWD) {
+    UNUSED(param_2);
+    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BWD_e) {
         return param_1;
     }
     return NULL;
@@ -207,7 +188,10 @@ static BOOL daBwdg_IsDelete(bwdg_class* i_this) {
 /* 00000854-000008B0       .text daBwdg_Delete__FP10bwdg_class */
 static BOOL daBwdg_Delete(bwdg_class* i_this) {
     dComIfG_resDeleteDemo(&i_this->mPhase, "Bwdg");
-    if (i_this->heap) {
+#if VERSION > VERSION_DEMO
+    if (i_this->heap)
+#endif
+    {
         dComIfG_Bgsp()->Release(i_this->mpBgW);
     }
     return TRUE;
@@ -222,9 +206,11 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
         return FALSE;
     }
     
-    u16* r30 = (u16*)dComIfG_getObjectRes("Bwdg", BWDG_DAT_GRIDIDX);
-    cBgD_t* r3 = (cBgD_t*)dComIfG_getObjectRes("Bwdg", BWDG_DZB_HSAND1);
-    if (!i_this->mpBgW->Set(r3, r30, 130.0f, 0x40, 0x40, 0)) {
+    if (!i_this->mpBgW->Set(
+        (cBgD_t*)dComIfG_getObjectRes("Bwdg", dRes_INDEX_BWDG_DZB_HSAND1_e),
+        (u16*)dComIfG_getObjectRes("Bwdg", dRes_INDEX_BWDG_DAT_GRIDIDX_e),
+        130.0f, 0x40, 0x40, 0
+    )) {
         return TRUE;
     } else {
         return FALSE;
@@ -234,7 +220,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
 /* 000009A0-00000B5C       .text daBwdg_Create__FP10fopAc_ac_c */
 static cPhs_State daBwdg_Create(fopAc_ac_c* i_actor) {
     bwdg_class* i_this = (bwdg_class*)i_actor;
-    fopAcM_SetupActor(i_this, bwdg_class);
+    fopAcM_ct(i_this, bwdg_class);
     
     cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhase, "Bwdg");
     if (phase_state == cPhs_COMPLEATE_e) {
@@ -266,18 +252,18 @@ static actor_method_class l_daBwdg_Method = {
 };
 
 actor_process_profile_definition g_profile_BWDG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BWDG,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BWDG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bwdg_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BWDG,
+    /* Draw Prio    */ fpcDwPi_BWDG_e,
     /* Actor SubMtd */ &l_daBwdg_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

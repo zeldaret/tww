@@ -3,6 +3,8 @@
 // Translation Unit: JASCalc.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASCalc.h"
 #include "JSystem/JAudio/JASSystemHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"

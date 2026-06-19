@@ -3,11 +3,26 @@
 
 #include "d/d_bg_w_sv.h"
 #include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
 
 class dBgWDeform : public dBgWSv, public J3DSkinDeform {
 public:
-    void MoveAfterAnmCalc(J3DModel*) {}
-    void SetVtx(Vec*) {}
+    virtual ~dBgWDeform() {}
+
+    void MoveAfterAnmCalc(J3DModel* model) {
+        cXyz* pPos = (cXyz*)model->getCurrentVtxPos();
+        SetVtx(pPos);
+        Move();
+    }
+    
+    void SetVtx(Vec* pPos) {
+        if (GetVtxTbl() == NULL) {
+            SetVtxTbl(pPos);
+            CopyBackVtx();
+        } else {
+            SetVtxTbl(pPos);
+        }
+    }
 
     bool Set(cBgD_t*, J3DModel*, u32);
 

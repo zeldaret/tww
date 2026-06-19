@@ -3,9 +3,8 @@
  * NPC - Mila's Father (rich)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_kf1.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-00000150       .text __ct__15daNpc_Kf1_HIO_cFv */
 daNpc_Kf1_HIO_c::daNpc_Kf1_HIO_c() {
@@ -423,17 +422,17 @@ void daNpc_Kf1_c::shadowDraw() {
 }
 
 /* 00003884-0000397C       .text _draw__11daNpc_Kf1_cFv */
-bool daNpc_Kf1_c::_draw() {
+BOOL daNpc_Kf1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 0000397C-00003BC4       .text _execute__11daNpc_Kf1_cFv */
-bool daNpc_Kf1_c::_execute() {
+BOOL daNpc_Kf1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00003BC4-00003C18       .text _delete__11daNpc_Kf1_cFv */
-bool daNpc_Kf1_c::_delete() {
+BOOL daNpc_Kf1_c::_delete() {
     /* Nonmatching */
 }
 
@@ -458,28 +457,28 @@ void daNpc_Kf1_c::CreateHeap() {
 }
 
 /* 00004590-000045B0       .text daNpc_Kf1_Create__FP10fopAc_ac_c */
-static cPhs_State daNpc_Kf1_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daNpc_Kf1_Create(fopAc_ac_c* i_this) {
+    return ((daNpc_Kf1_c*)i_this)->_create();
 }
 
 /* 000045B0-000045D0       .text daNpc_Kf1_Delete__FP11daNpc_Kf1_c */
-static BOOL daNpc_Kf1_Delete(daNpc_Kf1_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Kf1_Delete(daNpc_Kf1_c* i_this) {
+    return ((daNpc_Kf1_c*)i_this)->_delete();
 }
 
 /* 000045D0-000045F0       .text daNpc_Kf1_Execute__FP11daNpc_Kf1_c */
-static BOOL daNpc_Kf1_Execute(daNpc_Kf1_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Kf1_Execute(daNpc_Kf1_c* i_this) {
+    return ((daNpc_Kf1_c*)i_this)->_execute();
 }
 
 /* 000045F0-00004610       .text daNpc_Kf1_Draw__FP11daNpc_Kf1_c */
-static BOOL daNpc_Kf1_Draw(daNpc_Kf1_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Kf1_Draw(daNpc_Kf1_c* i_this) {
+    return ((daNpc_Kf1_c*)i_this)->_draw();
 }
 
 /* 00004610-00004618       .text daNpc_Kf1_IsDelete__FP11daNpc_Kf1_c */
 static BOOL daNpc_Kf1_IsDelete(daNpc_Kf1_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class l_daNpc_Kf1_Method = {
@@ -491,18 +490,18 @@ static actor_method_class l_daNpc_Kf1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_KF1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_KF1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_KF1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Kf1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_KF1,
+    /* Draw Prio    */ fpcDwPi_NPC_KF1_e,
     /* Actor SubMtd */ &l_daNpc_Kf1_Method,
     /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

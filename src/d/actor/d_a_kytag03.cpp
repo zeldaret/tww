@@ -3,18 +3,17 @@
 // Translation Unit: d_a_kytag03.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kytag03.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_m_door.h"
+#include "res/Object/M_door.h"
 
 /* 00000078-0000015C       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_ac) {
     kytag03_class* i_this = (kytag03_class*)i_ac;
     i_this->mpModel = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("M_DOOR", M_DOOR_BDL_MYAMIF),
+        (J3DModelData*)dComIfG_getObjectRes("M_DOOR", dRes_INDEX_M_DOOR_BDL_MYAMIF_e),
         NULL, NULL, NULL, J3DFrameCtrl::EMode_LOOP, 0.0f, 0, -1, 1, NULL, 0x0, 0x11020203
     );
 
@@ -26,9 +25,10 @@ static BOOL useHeapInit(fopAc_ac_c* i_ac) {
 
 /* 0000015C-000001D8       .text daKytag03_Draw__FP13kytag03_class */
 static BOOL daKytag03_Draw(kytag03_class* i_this) {
+    fopAc_ac_c* actor = &i_this->actor;
     J3DModel* model = i_this->mpModel->getModel();
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
-    g_env_light.setLightTevColorType(model, &i_this->tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, &actor->tevStr);
+    g_env_light.setLightTevColorType(model, &actor->tevStr);
     if (i_this->mbVisible)
         i_this->mpModel->updateDL();
     return TRUE;
@@ -36,18 +36,19 @@ static BOOL daKytag03_Draw(kytag03_class* i_this) {
 
 /* 000001D8-00000280       .text draw_SUB__FP13kytag03_class */
 void draw_SUB(kytag03_class* i_this) {
+    fopAc_ac_c* actor = &i_this->actor;
     J3DModel* model = i_this->mpModel->getModel();
-    model->setBaseScale(i_this->scale);
-    mDoMtx_stack_c::transS(i_this->current.pos);
-    mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
-    mDoMtx_stack_c::XrotM(i_this->shape_angle.x);
-    mDoMtx_stack_c::ZrotM(i_this->shape_angle.z);
+    model->setBaseScale(actor->scale);
+    mDoMtx_stack_c::transS(actor->current.pos);
+    mDoMtx_stack_c::YrotM(actor->shape_angle.y);
+    mDoMtx_stack_c::XrotM(actor->shape_angle.x);
+    mDoMtx_stack_c::ZrotM(actor->shape_angle.z);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000280-0000050C       .text daKytag03_Execute__FP13kytag03_class */
 static BOOL daKytag03_Execute(kytag03_class* i_this) {
-    fopAc_ac_c* actor = i_this;
+    fopAc_ac_c* actor = &i_this->actor;
     if (dComIfGp_event_runCheck() == FALSE || !dComIfGp_event_chkEventFlag(dEvtFlag_STAFF_ALL_e)) {
         if (actor->tevStr.mRoomNo == dComIfGp_roomControl_getStayNo()) {
             i_this->mbRoomActive = true;
@@ -125,23 +126,19 @@ static BOOL daKytag03_Delete(kytag03_class* i_this) {
 static cPhs_State daKytag03_Create(fopAc_ac_c* i_ac) {
     kytag03_class* i_this = (kytag03_class*)i_ac;
 
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_this, kytag03_class);
-#endif
+    fopAcM_ct_Retail(i_ac, kytag03_class);
 
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhs, "M_DOOR");
     if (ret == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(i_this, kytag03_class);
-#endif
+        fopAcM_ct_Demo(i_ac, kytag03_class);
 
-        if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x4c30)) {
+        if (!fopAcM_entrySolidHeap(&i_this->actor, useHeapInit, 0x4c30)) {
             return cPhs_ERROR_e;
         }
 
         i_this->field_0x2a0 = 0;
         i_this->field_0x2a8 = 0.0f;
-        i_this->mSwitchNo = fopAcM_GetParam(i_this);
+        i_this->mSwitchNo = fopAcM_GetParam(i_ac) & 0xFF;
         i_this->mbRoomActive = false;
         i_this->mbIsActive = false;
         i_this->mbVisible = false;
@@ -158,18 +155,18 @@ static actor_method_class l_daKytag03_Method = {
 };
 
 actor_process_profile_definition g_profile_KYTAG03 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KYTAG03,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KYTAG03_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kytag03_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KYTAG03,
+    /* Draw Prio    */ fpcDwPi_KYTAG03_e,
     /* Actor SubMtd */ &l_daKytag03_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

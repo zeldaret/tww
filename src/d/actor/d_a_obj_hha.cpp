@@ -3,17 +3,16 @@
  * Object - Tower of the Gods - Entrance waterfall
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hha.h"
 #include "d/actor/d_a_tag_waterlevel.h"
 #include "d/d_bg_s_func.h"
 #include "d/d_bg_s_wtr_chk.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_hha.h"
+#include "res/Object/Hha.h"
 
 #if VERSION == VERSION_DEMO
-dCcD_SrcCyl l_daObjHha_cyl_data =
+static dCcD_SrcCyl l_daObjHha_cyl_data =
 #else
 const dCcD_SrcCyl daObjHha_c::M_cyl_data =
 #endif
@@ -40,11 +39,11 @@ const dCcD_SrcCyl daObjHha_c::M_cyl_data =
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 570.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 #if VERSION > VERSION_DEMO
@@ -71,20 +70,20 @@ const dCcD_SrcSph daObjHha_c::M_sph_data = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 220.0f,
-    },
+    }},
 };
 #endif
 
-const HHA_RES_FILE_ID l_daObjHha_bdl_idx_table[2] = {HHA_BDL_HHA1, HHA_BDL_HHA2};
-const HHA_RES_FILE_ID l_daObjHha_dzb_idx_table[2] = {HHA_DZB_HHA1, HHA_DZB_HHA2};
-const HHA_RES_FILE_ID l_daObjHha_btk_idx_table[2] = {HHA_BTK_YSWTR00_01, HHA_BTK_YSWTR00_02};
+const int l_daObjHha_bdl_idx_table[2] = {dRes_INDEX_HHA_BDL_HHA1_e, dRes_INDEX_HHA_BDL_HHA2_e};
+const int l_daObjHha_dzb_idx_table[2] = {dRes_INDEX_HHA_DZB_HHA1_e, dRes_INDEX_HHA_DZB_HHA2_e};
+const int l_daObjHha_btk_idx_table[2] = {dRes_INDEX_HHA_BTK_YSWTR00_01_e, dRes_INDEX_HHA_BTK_YSWTR00_02_e};
 const J3DFrameCtrl::Attribute_e l_daObjHha_btk_mode_table[2] = {J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_NONE};
 const u16 l_daObjHha_splash_id_table[] = {
-    dPa_name::ID_SCENE_810D,
-    dPa_name::ID_SCENE_810E,
+    dPa_name::ID_AK_SN_SIRENSUIRYU00,
+    dPa_name::ID_AK_SN_SIRENSUIRYU01,
 };
 
 /* 00000078-00000170       .text init_data__14daObjHhaPart_cFffUsUcUc */
@@ -106,7 +105,7 @@ BOOL daObjHhaPart_c::set_mdl_area(const char* arcname, int index) {
     BOOL ret;
     ret = FALSE;
     mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, index));
-    JUT_ASSERT(VERSION_SELECT(410, 473, 473, 473), mdl_data != NULL);
+    JUT_ASSERT(DEMO_SELECT(410, 473), mdl_data != NULL);
     if(mdl_data != NULL){
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203); 
         ret = TRUE;
@@ -145,18 +144,8 @@ void daObjHhaPart_c::init_mtx(cXyz currentPos, csXyz shapeAngle, cXyz scale) {
 void daObjHhaPart_c::exe_normal(daObjHha_c* parent) {
     init_mtx(parent->current.pos, parent->shape_angle, parent->scale);
 
-    bool doMove;
-    if(mpBgw != NULL){
-        if(0 <= mpBgw->GetId() && mpBgw->GetId() < 0x100){
-            doMove = true;
-        }
-        else {
-            doMove = false;
-        }
-
-        if(doMove){
-            mpBgw->Move();
-        }
+    if (mpBgw != NULL && mpBgw->ChkUsed()) {
+        mpBgw->Move();
     }
 
 }
@@ -203,22 +192,22 @@ void daObjHhaSplash_c::create_s(u16 particleID, cXyz* pPos, float offsetY, float
 BOOL daObjHhaYgush_c::create_area(const char* arcname) {
     BOOL ret = FALSE;
 
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, HHA_BDL_YGSTP00));
-    JUT_ASSERT(VERSION_SELECT(577, 640, 640, 640), mdl_data != NULL);
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, dRes_INDEX_HHA_BDL_YGSTP00_e));
+    JUT_ASSERT(DEMO_SELECT(577, 640), mdl_data != NULL);
     
     if(mdl_data != NULL){
         M_mdl = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
-        JUT_ASSERT(VERSION_SELECT(586, 649, 649, 649), M_mdl != NULL);
+        JUT_ASSERT(DEMO_SELECT(586, 649), M_mdl != NULL);
 
         if(M_mdl != NULL){
-            J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, HHA_BTK_YGSTP00));
-            JUT_ASSERT(VERSION_SELECT(593, 656, 656, 656), btk_data != NULL);
+            J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, dRes_INDEX_HHA_BTK_YGSTP00_e));
+            JUT_ASSERT(DEMO_SELECT(593, 656), btk_data != NULL);
             
-            if(mBtk.init(M_mdl->getModelData(), btk_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, false) != false){  
-                J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, HHA_BCK_YGSTP00));
-                JUT_ASSERT(VERSION_SELECT(598, 661, 661, 661), bck_data != NULL);
+            if(mBtk.init(M_mdl->getModelData(), btk_data, true, J3DFrameCtrl::EMode_LOOP) != false){  
+                J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, dRes_INDEX_HHA_BCK_YGSTP00_e));
+                JUT_ASSERT(DEMO_SELECT(598, 661), bck_data != NULL);
                 
-                if(mBck.init(M_mdl->getModelData(), bck_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false) != false){
+                if(mBck.init(M_mdl->getModelData(), bck_data, true, J3DFrameCtrl::EMode_LOOP) != false){
                     ret = TRUE;
                 }
             }
@@ -274,7 +263,10 @@ int daObjHha_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 00000C4C-00000E48       .text create_heap__10daObjHha_cFv */
 BOOL daObjHha_c::create_heap() {
+    J3DModelData* mdl_data;
+    J3DAnmTextureSRTKey* btk_data;
     int i;
+
     BOOL ret = TRUE;
 
     for(i = 0; i < 2; i++){
@@ -285,14 +277,14 @@ BOOL daObjHha_c::create_heap() {
     }
 
     if(ret != FALSE){
-        J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, HHA_BDL_YSWTR00));
-        JUT_ASSERT(0x324, mdl_data != NULL);
+        mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_HHA_BDL_YSWTR00_e));
+        JUT_ASSERT(DEMO_SELECT(741, 804), mdl_data != NULL);
         if(mdl_data != NULL){
             mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
             for(i = 0; i < 2; i++){
-                J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, l_daObjHha_btk_idx_table[i]));
-                JUT_ASSERT(0x32f, btk_data != NULL);
-                if(mBtkA[i].init(mdl_data, btk_data, true, l_daObjHha_btk_mode_table[i], 1.0f, 0, -1, false, false) == FALSE){
+                btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, l_daObjHha_btk_idx_table[i]));
+                JUT_ASSERT(DEMO_SELECT(752, 815), btk_data != NULL);
+                if(mBtkA[i].init(mdl_data, btk_data, true, l_daObjHha_btk_mode_table[i]) == FALSE){
                     ret = FALSE;
                     break;
                 }
@@ -316,7 +308,7 @@ cPhs_State daObjHha_c::_create() {
     static const float splash_z[2] = {0.0f, 100.0f};
 
 
-    fopAcM_SetupActor(this, daObjHha_c);
+    fopAcM_ct(this, daObjHha_c);
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     if(ret == cPhs_COMPLEATE_e){
         ret = cPhs_ERROR_e;
@@ -382,21 +374,11 @@ bool daObjHha_c::_delete() {
 #endif
         for(i = 0; i < 2; i++){
             cBgW* bgw = mPartA[i].mpBgw;
-            if(bgw != NULL){
-                bool toErase;
-                if(bgw->GetId() >= 0 && bgw->GetId() < 0x100){
-                    toErase = true;
-                }
-                else {
-                    toErase = false;
-                }
-
-                if(toErase){
-                    dComIfG_Bgsp()->Release(bgw);
+            if(bgw != NULL && bgw->ChkUsed()) {
+                dComIfG_Bgsp()->Release(bgw);
 #if VERSION > VERSION_DEMO
-                    mPartA[i].mpBgw = NULL;
+                mPartA[i].mpBgw = NULL;
 #endif
-                }
             }
         }
 #if VERSION > VERSION_DEMO
@@ -730,18 +712,18 @@ static actor_method_class Hha_Mthd_Table = {
 }; // namespace
 
 actor_process_profile_definition g_profile_Obj_Hha = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Hha,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Hha_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjHha_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Hha,
+    /* Draw Prio    */ fpcDwPi_Obj_Hha_e,
     /* Actor SubMtd */ &Hha_Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

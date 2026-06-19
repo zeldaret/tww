@@ -3,10 +3,9 @@
 // Translation Unit: d_a_switem.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_switem.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
@@ -35,11 +34,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 25.0f,
         /* Height */ 50.0f,
-    },
+    }},
 };
 
 /* 00000078-00000080       .text _delete__10daSwItem_cFv */
@@ -68,7 +67,7 @@ BOOL daSwItem_c::CreateInit() {
 
 /* 00000154-00000250       .text _create__10daSwItem_cFv */
 cPhs_State daSwItem_c::_create() {
-    fopAcM_SetupActor(this, daSwItem_c);
+    fopAcM_ct(this, daSwItem_c);
 
     if (!CreateInit()) {
         return cPhs_ERROR_e;
@@ -212,18 +211,18 @@ static actor_method_class daSwItemMethodTable = {
 };
 
 actor_process_profile_definition g_profile_SW_ITEM = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SW_ITEM,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SW_ITEM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSwItem_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SW_ITEM,
+    /* Draw Prio    */ fpcDwPi_SW_ITEM_e,
     /* Actor SubMtd */ &daSwItemMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

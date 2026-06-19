@@ -38,7 +38,7 @@ struct WIND_INFLUENCE {
     /* 0x20 */ f32 field_0x20;
     /* 0x24 */ s32 mRegistIdx;
     /* 0x28 */ u8 mbConstant;
-};
+};  // Size: 0x2C
 
 struct WIND_INF_ENTITY {
     /* 0x00 */ u8 mbInUse;
@@ -383,6 +383,11 @@ enum dKy_dice_wether_state {
     /* 3 */ DICE_STATE_NEXT_e,
 };
 
+enum {
+    dKy_TIME_DAY_e = 0,
+    dKy_TIME_NIGHT_e = 1,
+};
+
 int dKy_getdaytime_hour();
 int dKy_getdaytime_minute();
 int dKy_get_dayofweek();
@@ -415,12 +420,13 @@ void dKy_plight_cut(LIGHT_INFLUENCE* param_0);
 cXyz dKy_plight_near_pos();
 void dKy_efplight_cut(LIGHT_INFLUENCE* param_0);
 void dKy_fog_startendz_set(f32, f32, f32);
-BOOL dKy_daynight_check();
+int dKy_daynight_check();
 void dKy_tevstr_init(dKy_tevstr_c*, s8, u8);
 void dKy_Sound_init();
 void dKy_change_colset(u8 param_0, u8 param_1, f32 param_2);
 void dKy_change_colpat(u8 param_0);
 void dKy_custom_colset(u8 param_0, u8 param_1, f32 i_blend);
+void dKy_custom_timeset(f32 i_speed);
 void dKy_pship_existense_set();
 void dKy_pship_existense_cut();
 u8 dKy_pship_existense_chk();
@@ -460,5 +466,6 @@ BOOL dKy_daynighttact_stop_chk();
 void dKy_contrast_flg_set(u8);
 u8 dKy_contrast_flg_get();
 BOOL dKyr_player_overhead_bg_chk();
+void dKy_usonami_set(f32 param_0);
 
 #endif /* D_KANKYO_D_KANKYO_H */

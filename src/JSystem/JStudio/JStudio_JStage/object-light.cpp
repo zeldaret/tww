@@ -3,6 +3,8 @@
 // Translation Unit: object-light.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio_JStage/object-light.h"
 #include "math.h"
 

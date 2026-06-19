@@ -3,6 +3,8 @@
 // Translation Unit: JASOuterParam.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASTrack.h"
 
 /* 8027DFD8-8027E020       .text __ct__Q38JASystem6TTrack11TOuterParamFv */

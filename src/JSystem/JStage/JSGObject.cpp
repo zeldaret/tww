@@ -3,6 +3,8 @@
 // Translation Unit: JSGObject.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStage/JSGObject.h"
 #include "dolphin/types.h"
 
