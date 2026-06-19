@@ -104,7 +104,7 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
 /* 000002F4-00000570       .text draw__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
 void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
     /* Nonmatching */
-    uint particleCount = emitter->getParticleNumber();
+    uint particleCount = emitter->getParticleList()->getNumLinks();
     if (particleCount >= 6){
         if (dPa_control_c::isStatus(1)) {
             GXSetZMode(GX_FALSE, GX_NEVER, GX_FALSE);
@@ -117,21 +117,37 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
         GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
         GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
         JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
+        f32 something = 0.0f;
         for (uint i = 0; i < particleCount; i++) {
             if (i == 0){
-                while (link == 0) {
-                    cXyz* pos = (cXyz*)link->mObject;
-                    this->mPos->x = pos->x;
-                    this->mPos->y = pos->y;
-                    this->mPos->z = pos->z;
+                for (int j = 0; j < 3; j++) {
+                    JPABaseParticle* pos = (JPABaseParticle*)link->getObjectPtr();
+                    this->mPos[j].x = pos->mBaseVel.x;
+                    this->mPos[j].y = pos->mBaseVel.y;
+                    this->mPos[j].z = pos->mBaseVel.z;
                     link = link->getNext();
                 }
+            } else {
+                GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 6);
+                f32 something2 = 0.0f;
+                for(int j = 0; j < 3; j++) {
+                    // cXyz* pos = (cXyz*)link->mObject;
+                    JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
+                    JGeometry::TVec3<f32> ptclPos;
+                    ptcl->getOffsetPosition(ptclPos);
+                    getMaxWaterY(&ptclPos);
+                    GXPosition3f32(ptclPos.x, ptclPos.y + something, ptclPos.z);
+                    GXTexCoord2f32(something2, 0.0f);
+                    GXTexCoord2f32(something - 1.0f / particleCount, 1.0f);
+                    this->mPos[j].x = ptclPos.x;
+                    this->mPos[j].y = ptclPos.y;
+                    this->mPos[j].z = ptclPos.z;
+                    something2 += 0.5f;
+                    link = link->getNext();
+                }
+                something += 1.0f / particleCount;
+                GXEnd();
             }
-
-            JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
-            JGeometry::TVec3<f32> ptclPos;
-            ptcl->getOffsetPosition(ptclPos);
-
         }
     }
 }
