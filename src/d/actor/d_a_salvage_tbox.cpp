@@ -109,7 +109,7 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
         if (dPa_control_c::isStatus(1)) {
             GXSetZMode(GX_FALSE, GX_NEVER, GX_FALSE);
         }
-        float particleRnd = float(cM_rnd() * particleCount - 1.0f);
+        // float particleRnd = float(cM_rnd() * particleCount - 1.0f);
         GXSetCullMode(GX_CULL_NONE);
         Mtx mtx;
         PSMTXIdentity(mtx);
@@ -117,6 +117,22 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
         GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
         GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
         JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
+        for (uint i = 0; i < particleCount; i++) {
+            if (i == 0){
+                while (link == 0) {
+                    cXyz* pos = (cXyz*)link->mObject;
+                    this->mPos->x = pos->x;
+                    this->mPos->y = pos->y;
+                    this->mPos->z = pos->z;
+                    link = link->getNext();
+                }
+            }
+
+            JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
+            JGeometry::TVec3<f32> ptclPos;
+            ptcl->getOffsetPosition(ptclPos);
+
+        }
     }
 }
 
