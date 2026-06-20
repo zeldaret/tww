@@ -286,29 +286,6 @@ struct hio_prm_child_c{
     f32 field54;
     f32 field58;
 };
-class daNpc_Ko1_childHIO_c: public mDoHIO_entry_c {
-public:
-    daNpc_Ko1_childHIO_c();
 
-public:
-
-    hio_prm_child_c hio_prm;
-    u32 field5C;
-    /* Place member variables here */
-};
-
-class daNpc_Ko1_HIO_c: public mDoHIO_entry_c {
-
-
-public:
-    daNpc_Ko1_HIO_c();
-
-public:
-    s8 mNo;
-    u32 field8;
-    daNpc_Ko1_childHIO_c children[2];
-
-    /* Place member variables here */
-};
 
 #endif /* D_A_NPC_KO1_H */
