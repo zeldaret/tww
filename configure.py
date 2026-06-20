@@ -1654,7 +1654,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_kf1"),
     ActorRel(NonMatching, "d_a_npc_kg1"),
     ActorRel(NonMatching, "d_a_npc_kg2"),
-    ActorRel(Equivalent, "d_a_npc_kk1", extra_cflags=['-pragma "nosyminline on"']), # weak func order
+    ActorRel(MatchingFor("GZLJ01","GZLE01","GZLP01"), "d_a_npc_kk1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_npc_km1"),
     ActorRel(NonMatching, "d_a_npc_ko1"),
     ActorRel(NonMatching, "d_a_npc_kp1"),

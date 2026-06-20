@@ -5,8 +5,6 @@
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
-#include "m_Do/m_Do_hostIO.h"
-#include "d/res/res_kk.h"
 
 class J3DNode;
 
@@ -270,44 +268,5 @@ public:
     /* 0x823 */ s8 field_0x823;     
 };  // Size: 0x824
 
-class daNpc_Kk1_HIO_c : mDoHIO_entry_c{
-public:
-    daNpc_Kk1_HIO_c();
-    virtual ~daNpc_Kk1_HIO_c(){};
-public:
-    /* 0x04  */ s8  mNo;
-    /* 0x08  */ s16 mHorizontalDistance;
-    /* 0x08  */ s32 field_0xA;
-    /* 0x0C  */ s16 field_0xC;
-    /* 0x0E  */ s16 field_0xE;   
-    /* 0x10  */ s16 field_0x10;
-    /* 0x12  */ s16 field_0x12;
-    /* 0x14  */ s16 field_0x14; 
-    /* 0x16  */ s16 field_0x16; 
-    /* 0x18  */ s16 field_0x18; 
-    /* 0x1A  */ s16 field_0x1A; 
-    /* 0x1C  */ s16 field_0x1C; 
-    /* 0x1E  */ s16 field_0x1E; 
-    /* 0x20  */ f32 field_0x20;
-    /* 0x24  */ u8  field_0x24;
-    /* 0x25  */ u8  field_0x25;
-    /* 0x26  */ s16 field_0x26;
-    /* 0x28  */ s16 field_0x28;
-    /* 0x28  */ s16 field_0x2A;
-    /* 0x2C  */ s16 field_0x2C;
-    /* 0x2C  */ s16 field_0x2E;
-    /* 0x30  */ s16 mScale;
-    /* 0x32  */ s16 mMaxStep;
-    /* 0x34  */ f32 field_0x34;
-    /* 0x38  */ f32 field_0x38;
-    /* 0x3C  */ f32 field_0x3C;
-    /* 0x40  */ f32 field_0x40;
-    /* 0x44  */ f32 field_0x44;
-    /* 0x48  */ f32 field_0x48;
-    /* 0x4C  */ f32 field_0x4C;
-    /* 0x50  */ f32 field_0x50;
-    /* 0x54  */ f32 field_0x54;
-    /* 0x58  */ f32 field_0x58;
-    /* 0x5C  */ f32 field_0x5C;
-};
+
 #endif /* D_A_NPC_KK1_H */

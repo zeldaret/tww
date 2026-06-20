@@ -11,19 +11,79 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_swc00.h"
 #include "d/actor/d_a_tama.h"
-#include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
-//#include "d/d_procname.h"
-//#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_actor_mng.h"
-#include "weak_bss_936_to_1036.h" //Needed to align bss
+#include "m_Do/m_Do_hostIO.h"
+#include "d/res/res_kk.h"
 
 #define SHORT2DEG_ANGLE(deg) ((deg) / (65536.0f / 360.0f))
 #define LINKPOS (dComIfGp_getLinkPlayer()->current.pos)
 
-
+class daNpc_Kk1_HIO_c : public mDoHIO_entry_c{
+public:
+    daNpc_Kk1_HIO_c();
+    virtual ~daNpc_Kk1_HIO_c(){};
+public:
+    struct hio_prm_c {
+        u32 field_0x00;
+        u32 field_0x04;
+        u32 field_0x08;
+        u32 field_0x0C;
+        u32 field_0x10;    
+        f32 field_0x14;  
+        u32 field_0x18;
+        u32 field_0x1C;
+        u32 field_0x20;
+        u32 field_0x24;
+        f32 field_0x28;    
+        f32 field_0x2C;    
+        u32 field_0x30;    
+        f32 field_0x34;    
+        f32 field_0x38;    
+        f32 field_0x3C;    
+        u32 field_0x40;    
+        f32 field_0x44;   
+        f32 field_0x48;    
+        u32 field_0x4C;    
+        f32 field_0x50;    
+    };
+    /* 0x04  */ s8  mNo;
+    /* 0x08  */ s16 mHorizontalDistance;
+    /* 0x08  */ s32 field_0xA;
+    /* 0x0C  */ s16 field_0xC;
+    /* 0x0E  */ s16 field_0xE;   
+    /* 0x10  */ s16 field_0x10;
+    /* 0x12  */ s16 field_0x12;
+    /* 0x14  */ s16 field_0x14; 
+    /* 0x16  */ s16 field_0x16; 
+    /* 0x18  */ s16 field_0x18; 
+    /* 0x1A  */ s16 field_0x1A; 
+    /* 0x1C  */ s16 field_0x1C; 
+    /* 0x1E  */ s16 field_0x1E; 
+    /* 0x20  */ f32 field_0x20;
+    /* 0x24  */ u8  field_0x24;
+    /* 0x25  */ u8  field_0x25;
+    /* 0x26  */ s16 field_0x26;
+    /* 0x28  */ s16 field_0x28;
+    /* 0x28  */ s16 field_0x2A;
+    /* 0x2C  */ s16 field_0x2C;
+    /* 0x2C  */ s16 field_0x2E;
+    /* 0x30  */ s16 mScale;
+    /* 0x32  */ s16 mMaxStep;
+    /* 0x34  */ f32 field_0x34;
+    /* 0x38  */ f32 field_0x38;
+    /* 0x3C  */ f32 field_0x3C;
+    /* 0x40  */ f32 field_0x40;
+    /* 0x44  */ f32 field_0x44;
+    /* 0x48  */ f32 field_0x48;
+    /* 0x4C  */ f32 field_0x4C;
+    /* 0x50  */ f32 field_0x50;
+    /* 0x54  */ f32 field_0x54;
+    /* 0x58  */ f32 field_0x58;
+    /* 0x5C  */ f32 field_0x5C;
+};
 
 
 
@@ -45,9 +105,10 @@ inline int daNpc_Kk1_c::getSWbit() {
 /* 000000EC-00000150       .text __ct__15daNpc_Kk1_HIO_cFv */
 daNpc_Kk1_HIO_c::daNpc_Kk1_HIO_c() {
 
-    static daNpc_Kk1_c::prm_tbl a_prm_tbl[] = {0x2000251C, 0xE002DAE4, 0x00002AF8, 0x0000D508, 0x064004B0, 150.0, 0x000000D2, 0x0028005A,
-0x001E0014, 0x00041000, 40.0, 3.0, 0x3E4CCCCD, 0.5, 13.0, 1.0,
-0x3DCCCCCD, 10.0, 1.0, 0x3E4CCCCD, 1000.0};
+    static hio_prm_c a_prm_tbl[] = {{0x2000251C,0xE002DAE4,
+        0x2AF8,0xD508,
+        0x064004B0,150.0,0x000000D2,0x0028005A,
+    0x001E0014,0x00041000,40.0,3.0,0x3E4CCCCD,0.5,13.0,1.0,0x3DCCCCCD,10.0,1.0,0x3E4CCCCD,1000.0}};
     memcpy(&field_0xC,a_prm_tbl,0x54);
     mNo = -1;
     field_0xA = -1;
@@ -175,10 +236,8 @@ bool daNpc_Kk1_c::createInit() {
         mEvtIDTbl[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i], 0xFF);
     }
     mEventCut.setActorInfo2("Kk1", this);
-    //mSWbit = base.mParameters >> 8;
-
-    //u8 params = base.mParameters >> 0x10;
-    u8 params = 1; //WRONG CODE
+    mSWbit = base.base.mParameters >> 8;
+    u8 params = base.base.mParameters >> 0x10;
     if (params != 0xff) {
         mRunPath.setInf(params, current.roomNo, true);
         if (mRunPath.getPath() != NULL) {
@@ -1018,7 +1077,7 @@ bool daNpc_Kk1_c::decideType(int) {
 }
 
 /* 00001C70-00001D10       .text cut_init_RUN_START__11daNpc_Kk1_cFi */
-void daNpc_Kk1_c::cut_init_RUN_START(int param_1) {
+void daNpc_Kk1_c::cut_init_RUN_START(int) {
     fopAc_ac_c* a_actor;
 
     int idArray[2];
@@ -1040,7 +1099,7 @@ bool daNpc_Kk1_c::cut_move_RUN_START() {
     short target = cLib_targetAngleY(&current.pos,&runPoint);
     cLib_addCalcAngleS(&current.angle.y,target,l_HIO.mScale,l_HIO.mMaxStep,0x80);
     if(current.angle.y == target){
-        //pdVar2 = g_dComIfG_gameInfo.play.mpPlayer[2];
+        pdVar2 = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayer(1);
         pdVar2->mDemo.setDemoType(2);
         pdVar2->mDemo.setDemoMode(1);
         return true;
@@ -1095,7 +1154,7 @@ bool daNpc_Kk1_c::cut_move_CATCH_START() {
 }
 
 /* 00001F2C-00001FAC       .text cut_init_CATCH_END__11daNpc_Kk1_cFi */
-void daNpc_Kk1_c::cut_init_CATCH_END(int param_1) {
+void daNpc_Kk1_c::cut_init_CATCH_END(int) {
 
 
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->offPlayerNoDraw();
@@ -1182,7 +1241,7 @@ bool daNpc_Kk1_c::cut_move_TRN() {
 }
 
 /* 00002364-00002388       .text cut_init_BYE_START__11daNpc_Kk1_cFi */
-void daNpc_Kk1_c::cut_init_BYE_START(int i_unused_param) {
+void daNpc_Kk1_c::cut_init_BYE_START(int) {
 
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->onPlayerNoDraw();
     field_0x7BB = 1;
@@ -1271,7 +1330,7 @@ bool daNpc_Kk1_c::cut_move_BYE_CONTINUE() {
 }
 
 /* 00002620-000026BC       .text cut_init_BYE_END__11daNpc_Kk1_cFi */
-void daNpc_Kk1_c::cut_init_BYE_END(int i_unusedParam) {
+void daNpc_Kk1_c::cut_init_BYE_END(int) {
 
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeOriginalDemo();
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(daPy_demo_c::DEMO_INIT_WAIT_e);
@@ -1319,7 +1378,7 @@ bool daNpc_Kk1_c::cut_move_OTOBOKE() {
 }
 
 /* 00002798-000028A4       .text cut_init_PLYER_MOV__11daNpc_Kk1_cFi */
-void daNpc_Kk1_c::cut_init_PLYER_MOV(int param_1) {
+void daNpc_Kk1_c::cut_init_PLYER_MOV(int) {
 
     cXyz cStack_1c;
     s16 sVar3 = cLib_targetAngleY(&current.pos,&LINKPOS);
@@ -1734,8 +1793,8 @@ void daNpc_Kk1_c::createTama(float param_1) {
     daTama_c* tama = (daTama_c *)fopAcM_fastCreate(0x1D6,0,&eyePos,fopAcM_GetRoomNo(this),&local_5c,NULL,0xFF,NULL,NULL);
     fpc_ProcID procID;
     if (tama != NULL) {
-        if (this != NULL) {
-            //procID = base.mBsPcId;
+        if (this != NULL) { //TODO: Redundant null check?
+            procID = base.base.mBsPcId;
 
         }
         else {
@@ -1789,17 +1848,30 @@ bool daNpc_Kk1_c::startEvent_check() {
 bool daNpc_Kk1_c::chkHitPlayer() {
 
     bool o_result = false;
-    if (mCyl.ChkCoHit()){
-        cCcD_Obj* hit_obj = mCyl.GetCoHitObj();
-        if(hit_obj != NULL) {
 
-            fopAc_ac_c* hit_actor = dCc_GetAc(hit_obj);
+    if(mCyl.ChkCoHit()){
+        cCcD_Obj* hit_obj = mCyl.GetCoHitObj();
+        if (hit_obj){
+            fopAc_ac_c* hit_actor = hit_obj->GetAc();
 
             if(hit_actor != NULL){
-                //o_result = fopAcM_GetName(hit_actor) == PROC_PLAYER;
+                o_result =  fopAcM_GetName(hit_actor) == fpcNm_PLAYER_e;
             }
+            if(hit_actor){
+
+            }
+            // if(hit_obj->GetStts()){
+            //     hit_actor = NULL;
+            //     o_result = false;
+            // }else{
+            //     hit_actor = dCc_GetAc(hit_obj);
+            //     o_result =  fopAcM_GetName(hit_actor) == fpcNm_PLAYER_e;
+            // }
+
         }
+
     }
+
     return o_result;
 }
 
@@ -2112,7 +2184,7 @@ BOOL daNpc_Kk1_c::walk_1() {
         }
         if (r29 != 0) {
             field_0x7B6 = 0;
-            //mRunPath.mbGoingForwards ^= 1;
+            mRunPath.turnDir();
         }
     }
 
@@ -2276,7 +2348,6 @@ void daNpc_Kk1_c::move_CMT_TRN() {
     short sVar1;
     uint uVar2;
     short sVar3;
-    short sVar4;
     cXyz local_20;
     
     sVar1 = field_0x7AA + 0x8000;
@@ -2828,9 +2899,9 @@ cPhs_State daNpc_Kk1_c::_create() {
     fopAcM_SetupActor(this,daNpc_Kk1_c);
 
 
-    // if (!decideType(base.mParameters & 0xff)) {
-    //     return cPhs_ERROR_e;
-    // }
+    if (!decideType(base.base.mParameters & 0xff)) {
+        return cPhs_ERROR_e;
+    }
 
     s32 resLoadResult = dComIfG_resLoad(&field_0x6C4,&mArcName);
     field_0x7BC = resLoadResult == cPhs_COMPLEATE_e;
