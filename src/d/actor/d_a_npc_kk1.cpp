@@ -1836,7 +1836,7 @@ bool daNpc_Kk1_c::startEvent_check() {
     if (is_area_in) {
     float dist_to_link = current.pos.abs(LINKPOS);
         if ((dist_to_link < REG9_F(0) + 210.0f) ||
-            (field_0x6BA != 0)) {
+            (field_0x6ba != 0)) {
             return true;
         }
     }
@@ -2845,7 +2845,7 @@ BOOL daNpc_Kk1_c::_execute() {
             else {
             (this->*field_0x6F0)(NULL);
             }
-            field_0x6BA = 0;
+            field_0x6ba = 0;
             lookBack();
             fopAcM_posMoveF(this,mStts.GetCCMoveP());
             mObjAcch.CrrPos(*dComIfG_Bgsp());
