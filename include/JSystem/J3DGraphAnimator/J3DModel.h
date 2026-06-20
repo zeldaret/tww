@@ -5,7 +5,6 @@
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "JSystem/J3DGraphBase/J3DVertex.h"
 #include "dolphin/mtx/mtx.h"
-#include "dolphin/mtx/mtxvec.h"
 #include "dolphin/types.h"
 
 enum J3DMdlFlag {
@@ -137,6 +136,7 @@ public:
     void setUserArea(u32 area) { mUserArea = area; }
     u32 getUserArea() const { return mUserArea; }
     void setVisibilityManager(J3DVisibilityManager* manager) { mpVisibilityManager = manager; }
+    J3DSkinDeform* getSkinDeform() { return mpSkinDeform; }
 
 private:
     /* 0x000 */ /* vtable */

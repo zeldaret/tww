@@ -3,11 +3,10 @@
  * Object - Icy clouds surrounding Ice Ring Isle
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_iceisland.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_gicel.h"
+#include "res/Object/GiceL.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -19,31 +18,31 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daObjIceisland_c::CreateHeap() {
     mDoExt_getGameHeap()->check();
     
-    J3DModelData* model_data = (J3DModelData*)(dComIfG_getObjectRes("GiceL", GICEL_BDL_GICEL00));
+    J3DModelData* model_data = (J3DModelData*)(dComIfG_getObjectRes("GiceL", dRes_INDEX_GICEL_BDL_GICEL00_e));
     JUT_ASSERT(0x66, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
 
-    J3DAnmTextureSRTKey* btk1 = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("GiceL", GICEL_BTK_GICEL00_01));
+    J3DAnmTextureSRTKey* btk1 = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("GiceL", dRes_INDEX_GICEL_BTK_GICEL00_01_e));
     JUT_ASSERT(0x6D, btk1 != NULL);
-    int result1 = mBtkAnm1.init(model_data, btk1, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    int result1 = mBtkAnm1.init(model_data, btk1, true, J3DFrameCtrl::EMode_LOOP);
 
-    J3DAnmTextureSRTKey* btk2 = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("GiceL", GICEL_BTK_GICEL00_02));
+    J3DAnmTextureSRTKey* btk2 = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("GiceL", dRes_INDEX_GICEL_BTK_GICEL00_02_e));
     JUT_ASSERT(0x73, btk2 != NULL);
-    int result2 = mBtkAnm2.init(model_data, btk2, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    int result2 = mBtkAnm2.init(model_data, btk2, true, J3DFrameCtrl::EMode_LOOP);
 
-    J3DAnmTevRegKey * brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("GiceL", GICEL_BRK_GICEL00));
+    J3DAnmTevRegKey * brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("GiceL", dRes_INDEX_GICEL_BRK_GICEL00_e));
     JUT_ASSERT(0x7A, brk != NULL);
-    int result3 = mBrkAnm.init(model_data, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    int result3 = mBrkAnm.init(model_data, brk, true, J3DFrameCtrl::EMode_NONE);
     return((mpModel != NULL) && (result1 != 0) && (result2 != 0) && (result3 != 0));  
 }
 
 /* 00000338-00000410       .text daObjIceisland_particle_set__16daObjIceisland_cFv */
 void daObjIceisland_c::daObjIceisland_particle_set() {
     if(mEmitter1 == NULL) {
-        mEmitter1 = dComIfGp_particle_set(dPa_name::ID_SCENE_81AA, &current.pos, &current.angle);
+        mEmitter1 = dComIfGp_particle_set(dPa_name::ID_IT_SN_ICEL_SMOKE00, &current.pos, &current.angle);
     }
     if(mEmitter2 == NULL) {
-        mEmitter2 = dComIfGp_particle_set(dPa_name::ID_SCENE_81AB, &current.pos, &current.angle);
+        mEmitter2 = dComIfGp_particle_set(dPa_name::ID_IT_SN_ICEL_SMOKE01, &current.pos, &current.angle);
     }
 }
 
@@ -52,7 +51,7 @@ void daObjIceisland_c::CreateInit() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeFar(this, 1.0f);
     set_mtx();
-    dKy_tevstr_init(&mTevStr, fopAcM_GetHomeRoomNo(this), 0xFF);
+    dKy_tevstr_init(&mTevStr, home.roomNo, 0xFF);
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     mEmitter1 = NULL;
     mEmitter2 = NULL;
@@ -167,10 +166,10 @@ void daObjIceisland_c::daObjIceisland_fail_demo_main() {
 }
 
 cPhs_State daObjIceisland_c::_create(){
-    fopAcM_SetupActor(this, daObjIceisland_c);
+    fopAcM_ct(this, daObjIceisland_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "GiceL");
     if (phase_state == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x13D0)) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, DEMO_SELECT(0x300, 0x13D0))) {
             return cPhs_ERROR_e;
         } else {
             CreateInit();
@@ -180,7 +179,7 @@ cPhs_State daObjIceisland_c::_create(){
 }
 
 bool daObjIceisland_c::_delete(){
-    dComIfG_resDelete(&mPhs, "GiceL");
+    dComIfG_resDeleteDemo(&mPhs, "GiceL");
     return true;
 }
 
@@ -283,18 +282,18 @@ static actor_method_class daObj_IceislandMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Iceisland = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Iceisland,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Iceisland_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjIceisland_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Iceisland,
+    /* Draw Prio    */ fpcDwPi_Obj_Iceisland_e,
     /* Actor SubMtd */ &daObj_IceislandMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

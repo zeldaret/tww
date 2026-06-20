@@ -4,17 +4,19 @@
 #include "dolphin/gx/GXAttr.h" // IWYU pragma: export
 #include "dolphin/gx/GXBump.h" // IWYU pragma: export
 #include "dolphin/gx/GXDisplayList.h" // IWYU pragma: export
+#include "dolphin/gx/GXEnum.h" // IWYU pragma: export
 #include "dolphin/gx/GXFifo.h" // IWYU pragma: export
 #include "dolphin/gx/GXFrameBuf.h" // IWYU pragma: export
 #include "dolphin/gx/GXGeometry.h" // IWYU pragma: export
+#include "dolphin/gx/GXInit.h" // IWYU pragma: export
 #include "dolphin/gx/GXLight.h" // IWYU pragma: export
 #include "dolphin/gx/GXMisc.h" // IWYU pragma: export
 #include "dolphin/gx/GXPerf.h" // IWYU pragma: export
 #include "dolphin/gx/GXPixel.h" // IWYU pragma: export
+#include "dolphin/gx/GXStruct.h" // IWYU pragma: export
 #include "dolphin/gx/GXTev.h" // IWYU pragma: export
 #include "dolphin/gx/GXTexture.h" // IWYU pragma: export
 #include "dolphin/gx/GXTransform.h" // IWYU pragma: export
-#include "dolphin/gx/GXStruct.h" // IWYU pragma: export
 
 #include "dolphin/os/OSUtil.h"
 
@@ -188,8 +190,25 @@ inline void GXNormal1x8(u8 x) {
     GXFIFO.u8 = x;
 }
 
+inline void GXNormal1x16(u16 x) {
+    GXFIFO.u16 = x;
+}
+
 inline void GXColor1x16(u16 x) {
     GXFIFO.u16 = x;
+}
+
+inline void GXColor3x8(u8 r, u8 g, u8 b) {
+    GXFIFO.u8 = r;
+    GXFIFO.u8 = g;
+    GXFIFO.u8 = b;
+}
+
+inline void GXColor4x8(u8 r, u8 g, u8 b, u8 a) {
+    GXFIFO.u8 = r;
+    GXFIFO.u8 = g;
+    GXFIFO.u8 = b;
+    GXFIFO.u8 = a;
 }
 
 inline void GXTexCoord1x16(u16 x) {

@@ -3,14 +3,13 @@
 // Translation Unit: d_ky_thunder.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_ky_thunder.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
-#include "d/d_procname.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "SSystem/SComponent/c_phase.h"
@@ -113,8 +112,8 @@ cPhs_State dThunder_c::create() {
     camera_class *pCamera = (camera_class*)dComIfGp_getCamera(0);
 
     new (this) dThunder_c();
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YTHDR00);
-    JUT_ASSERT(VERSION_SELECT(111, 110, 110, 110), modelData != NULL);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_YTHDR00_e);
+    JUT_ASSERT(DEMO_SELECT(111, 110), modelData != NULL);
 
     mModelInfo.mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x01000200);
     if (mModelInfo.mpModel == NULL)
@@ -123,14 +122,14 @@ cPhs_State dThunder_c::create() {
     if (!mModelInfo.mInvisModel.create(mModelInfo.mpModel))
         return cPhs_ERROR_e;
 
-    J3DAnmTextureSRTKey * anm = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("Always", ALWAYS_BTK_YTHDR00);
-    JUT_ASSERT(VERSION_SELECT(126, 125, 125, 125), anm != NULL);
-    if (!mModelInfo.mBtk.init(modelData, anm, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    J3DAnmTextureSRTKey * anm = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTK_YTHDR00_e);
+    JUT_ASSERT(DEMO_SELECT(126, 125), anm != NULL);
+    if (!mModelInfo.mBtk.init(modelData, anm, false, J3DFrameCtrl::EMode_LOOP))
         return cPhs_ERROR_e;
 
-    J3DAnmTevRegKey * canm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Always", ALWAYS_BRK_YTHDR00);
-    JUT_ASSERT(VERSION_SELECT(141, 140, 140, 140), canm != NULL);
-    if (!mModelInfo.mBrk.init(modelData, canm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
+    J3DAnmTevRegKey * canm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BRK_YTHDR00_e);
+    JUT_ASSERT(DEMO_SELECT(141, 140), canm != NULL);
+    if (!mModelInfo.mBrk.init(modelData, canm, true, J3DFrameCtrl::EMode_NONE))
         return cPhs_ERROR_e;
 
     mBtkTime = cM_rndF(1.0f);
@@ -194,7 +193,7 @@ cPhs_State dThunder_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-kankyo_method_class l_dThunder_Method = {
+static kankyo_method_class l_dThunder_Method = {
     (process_method_func)dThunder_Create,
     (process_method_func)dThunder_Delete,
     (process_method_func)dThunder_Execute,
@@ -203,15 +202,15 @@ kankyo_method_class l_dThunder_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KY_THUNDER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KY_THUNDER,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dThunder_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_KY_THUNDER,
-    /* Actor SubMtd */ &l_dThunder_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x0007,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_KY_THUNDER_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dThunder_c),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_KY_THUNDER_e,
+    /* Kankyo SubMtd */ &l_dThunder_Method,
 };

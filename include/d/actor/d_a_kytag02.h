@@ -4,8 +4,8 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_path.h"
 
-class kytag02_class : public fopAc_ac_c {
-public:
+struct kytag02_class {
+    /* 0x000 */ fopAc_ac_c actor;
     /* 0x290 */ dPath* mpPath;
     /* 0x294 */ cXyz mWindVec;
 };

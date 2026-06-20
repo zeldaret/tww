@@ -11,6 +11,7 @@ extern const int ga4cSignature;
 struct TParse_THeader : public JGadget::binary::TParseData_aligned<4> {
     TParse_THeader(const void* data) : TParseData_aligned(data) {}
 
+    // TODO: create a struct for this content (BMG header)
     char* get() const { return (char*)getRaw(); }
     const void* getContent() const { return (char*)getRaw() + 0x20; }
 
@@ -24,6 +25,7 @@ struct TParse_TBlock : public JGadget::binary::TParseData_aligned<4> {
     TParse_TBlock(const void* data) : TParseData_aligned(data) {}
 };
 
+// INF1
 struct JUTMesgInfo {
 public:
     /* 0x00 */ JUTDataBlockHeader header;
@@ -32,19 +34,21 @@ public:
     /* 0x0C */ u16 groupID;
     /* 0x0E */ u8 defaultColor;
     /* 0x0F */ u8 reserved;
+    /* 0x10 */ char messageEntryTable[];
 };
 
 struct TParse_TBlock_info : public TParse_TBlock {
     TParse_TBlock_info(const void* data) : TParse_TBlock(data) {}
 
     JUTMesgInfo* get() const { return (JUTMesgInfo*)getRaw(); }
-    char* getContent() const { return (char*)&get()[1]; }
+    char* getContent() const { return get()->messageEntryTable; }
 
-    u16 get_messageEntryNumber() const { return get()->messageEntryNumber; }
-    u16 get_messageEntrySize() const { return get()->messageEntrySize; }
+    u32 get_messageEntryNumber() const { return get()->messageEntryNumber; }
+    u32 get_messageEntrySize() const { return get()->messageEntrySize; }
     u16 get_groupID() const { return get()->groupID; }
 };
 
+// MID1
 struct JUTMesgIDData {
 public:
     /* 0x00 */ JUTDataBlockHeader mHeader;
@@ -52,6 +56,7 @@ public:
     /* 0x0A */ u8 format;
     /* 0x0B */ u8 info;
     /* 0x0C */ u8 reserved[4];
+    /* 0x10 */ u32 messageIDTable[];
 };
 
 inline u16 getTagCode(u32 tag) { return tag & 0xFFFF; }

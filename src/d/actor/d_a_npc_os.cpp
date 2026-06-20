@@ -3,19 +3,77 @@
  * Player - Servant of the Tower / お供石像 (Companion Statue)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_os.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_pedestal.h"
-#include "d/res/res_os.h"
+#include "res/Object/Os.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
+class daNpc_Os_HIO2_c : public JORReflexible {
+public:
+    daNpc_Os_HIO2_c();
+    virtual ~daNpc_Os_HIO2_c() {}
+
+    void genMessage(JORMContext* ctx) {}
+
+public:
+    /* 0x00 - vtable */
+
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1C;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ s16 field_0x24;
+    /* 0x26 */ s16 field_0x26;
+    /* 0x28 */ s16 field_0x28;
+}; // Size: 0x2A
+
+class daNpc_Os_HIO_c : public JORReflexible {
+public:
+    daNpc_Os_HIO_c();
+    virtual ~daNpc_Os_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
+
+public:
+    /* 0x00 - vtable*/
+
+    /* 0x04 */ s8 mNo;
+
+    /* 0x08 */ daNpc_Os_HIO2_c mOs2;
+    /* 0x34 */ dNpc_HIO_c mNpc;
+
+    /* 0x5C */ daNpc_Os_c* field_0x5C;
+    /* 0x60 */ f32 field_0x60;
+    /* 0x64 */ f32 field_0x64;
+    /* 0x68 */ f32 field_0x68;
+    /* 0x6C */ f32 field_0x6C;
+    /* 0x70 */ f32 field_0x70;
+    /* 0x74 */ f32 field_0x74;
+    /* 0x78 */ f32 field_0x78;
+    /* 0x7C */ f32 field_0x7C;
+    /* 0x80 */ f32 field_0x80;
+    /* 0x84 */ f32 field_0x84;
+    /* 0x88 */ f32 field_0x88;
+    /* 0x8C */ f32 field_0x8C;
+    /* 0x90 */ f32 field_0x90;
+    /* 0x94 */ f32 field_0x94;
+    /* 0x98 */ f32 field_0x98;
+    /* 0x9C */ f32 field_0x9C;
+    /* 0xA0 */ f32 field_0xA0;
+    /* 0xA4 */ f32 field_0xA4;
+    /* 0xA8 */ f32 field_0xA8;
+    /* 0xAC */ f32 field_0xAC;
+    /* 0xB0 */ f32 field_0xB0;
+}; // Size: 0xB4
 
 static daNpc_Os_HIO_c l_HIO;
 static s32 l_hio_counter = 0;
@@ -44,11 +102,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 static const char* l_staff_name[] = {
@@ -144,7 +202,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000374-00000538       .text create__10daNpc_Os_cFv */
 cPhs_State daNpc_Os_c::create() {
-    fopAcM_SetupActor(this, daNpc_Os_c)
+    fopAcM_ct(this, daNpc_Os_c)
 
     static u32 l_heap_size = 0xFA0;
 
@@ -159,14 +217,14 @@ cPhs_State daNpc_Os_c::create() {
             checkRestart(getRestartNumber());
         }
         else {
-            if(subtype < 3) {
-                home.pos = l_finish_home_pos[subtype];
+            if(argument < 3) {
+                home.pos = l_finish_home_pos[argument];
                 current.pos = home.pos;
             }
         }
 
         setBaseMtx();
-        fopAcM_SetMtx(this, mpMorf->mpModel->getBaseTRMtx());
+        fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         if(l_HIO.mNo < 0) {
             l_HIO.mNo = mDoHIO_createChild("お供石像", &l_HIO); // "Companion Statue" (otomo sekizou)
             l_HIO.field_0x5C = this;
@@ -233,13 +291,13 @@ static BOOL tunoNodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000988-00000C94       .text createHeap__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Os", OS_BDL_OS));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Os", dRes_INDEX_OS_BDL_OS_e));
     JUT_ASSERT(0x2F9, modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Os", OS_BCK_OS_MOVE01)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Os", dRes_INDEX_OS_BCK_OS_MOVE01_e)),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
@@ -290,7 +348,7 @@ BOOL daNpc_Os_c::createHeap() {
 
     mAcchCir[0].SetWall(20.0f, 40.0f);
     mAcchCir[1].SetWall(60.0f, 40.0f);
-    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 2, &mAcchCir[0], fopAcM_GetSpeed_p(this));
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 2, &mAcchCir[0], fopAcM_GetSpeed_p(this));
     mAcch.OnLineCheck();
     mAcch.ClrRoofNone();
     mAcch.SetRoofCrrHeight(120.0f);
@@ -300,17 +358,17 @@ BOOL daNpc_Os_c::createHeap() {
 
 /* 00000C94-00000D10       .text jointCheck__10daNpc_Os_cFSc */
 BOOL daNpc_Os_c::jointCheck(s8 param_1) {
-    if(subtype == 0) {
+    if(argument == 0) {
         if(param_1 == mTuno3JointIdx) {
             return true;
         }
     }
-    else if(subtype == 1) {
+    else if(argument == 1) {
         if(param_1 == mTuno2JointIdx) {
             return true;
         }
     }
-    else if(subtype == 2) {
+    else if(argument == 2) {
         if(param_1 == mTuno1JointIdx) {
             return true;
         }
@@ -321,18 +379,18 @@ BOOL daNpc_Os_c::jointCheck(s8 param_1) {
 
 /* 00000D10-00000DBC       .text wakeupCheck__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::wakeupCheck() {
-    if(subtype == 0) {
-        if(dComIfGs_isEventBit(0x1780)) {
+    if(argument == 0) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1780)) {
             return true;
         }
     }
-    else if(subtype == 1) {
-        if(dComIfGs_isEventBit(0x1740)) {
+    else if(argument == 1) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1740)) {
             return true;
         }
     }
-    else if(subtype == 2) {
-        if(dComIfGs_isEventBit(0x1720)) {
+    else if(argument == 2) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1720)) {
             return true;
         }
     }
@@ -342,31 +400,31 @@ BOOL daNpc_Os_c::wakeupCheck() {
 
 /* 00000DBC-00000E3C       .text setWakeup__10daNpc_Os_cFv */
 void daNpc_Os_c::setWakeup() {
-    if(subtype == 0) {
-        dComIfGs_onEventBit(0x1780);
+    if(argument == 0) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1780);
     }
-    else if(subtype == 1) {
-        dComIfGs_onEventBit(0x1740);
+    else if(argument == 1) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1740);
     }
-    else if(subtype == 2) {
-        dComIfGs_onEventBit(0x1720);
+    else if(argument == 2) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1720);
     }
 }
 
 /* 00000E3C-00000EE8       .text finishCheck__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::finishCheck() {
-    if(subtype == 0) {
-        if(dComIfGs_isEventBit(0x1710)) {
+    if(argument == 0) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1710)) {
             return true;
         }
     }
-    else if(subtype == 1) {
-        if(dComIfGs_isEventBit(0x1704)) {
+    else if(argument == 1) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1704)) {
             return true;
         }
     }
-    else if(subtype == 2) {
-        if(dComIfGs_isEventBit(0x1B01)) {
+    else if(argument == 2) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1B01)) {
             return true;
         }
     }
@@ -376,26 +434,26 @@ BOOL daNpc_Os_c::finishCheck() {
 
 /* 00000EE8-00000F68       .text setFinish__10daNpc_Os_cFv */
 void daNpc_Os_c::setFinish() {
-    if(subtype == 0) {
-        dComIfGs_onEventBit(0x1710);
+    if(argument == 0) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1710);
     }
-    else if(subtype == 1) {
-        dComIfGs_onEventBit(0x1704);
+    else if(argument == 1) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1704);
     }
-    else if(subtype == 2) {
-        dComIfGs_onEventBit(0x1B01);
+    else if(argument == 2) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1B01);
     }
 }
 
 /* 00000F68-00000FA4       .text getWakeupOrderEventNum__10daNpc_Os_cFv */
 s8 daNpc_Os_c::getWakeupOrderEventNum() {
-    if(subtype == 0) {
+    if(argument == 0) {
         return 1;
     }
-    else if(subtype == 1) {
+    else if(argument == 1) {
         return 3;
     }
-    else if(subtype == 2) {
+    else if(argument == 2) {
         return 5;
     }
     
@@ -405,24 +463,24 @@ s8 daNpc_Os_c::getWakeupOrderEventNum() {
 /* 00000FA4-00001028       .text getFinishOrderEventNum__10daNpc_Os_cFv */
 s8 daNpc_Os_c::getFinishOrderEventNum() {
     if(fopAcM_checkCarryNow(this)) {
-        if(subtype == 0) {
+        if(argument == 0) {
             return 0xB;
         }
-        else if(subtype == 1) {
+        else if(argument == 1) {
             return 0xD;
         }
-        else if(subtype == 2) {
+        else if(argument == 2) {
             return 0xF;
         }
     }
     else {
-        if(subtype == 0) {
+        if(argument == 0) {
             return 0xA;
         }
-        else if(subtype == 1) {
+        else if(argument == 1) {
             return 0xC;
         }
-        else if(subtype == 2) {
+        else if(argument == 2) {
             return 0xE;
         }
     }
@@ -432,8 +490,8 @@ s8 daNpc_Os_c::getFinishOrderEventNum() {
 
 /* 00001028-00001084       .text getMyStaffId__10daNpc_Os_cFv */
 int daNpc_Os_c::getMyStaffId() {
-    if(subtype < 3) {
-        return dComIfGp_evmng_getMyStaffId(l_staff_name[subtype]);
+    if(argument < 3) {
+        return dComIfGp_evmng_getMyStaffId(l_staff_name[argument]);
     }
 
     return -1;
@@ -441,13 +499,13 @@ int daNpc_Os_c::getMyStaffId() {
 
 /* 00001084-000010C4       .text getRestartNumber__10daNpc_Os_cFv */
 s8 daNpc_Os_c::getRestartNumber() {
-    if(subtype == 0) {
+    if(argument == 0) {
         return 3;
     }
-    else if(subtype == 1) {
+    else if(argument == 1) {
         return 4;
     }
-    else if(subtype == 2) {
+    else if(argument == 2) {
         return 5;
     }
 
@@ -467,12 +525,12 @@ BOOL daNpc_Os_c::checkGoalRoom() {
 
 /* 0000112C-000011C4       .text checkPlayerRoom__10daNpc_Os_cFv */
 void daNpc_Os_c::checkPlayerRoom() {
-    offPlayerRoom(subtype);
+    offPlayerRoom(argument);
     
     if(wakeupCheck() && !finishCheck()) {
         fopAc_ac_c* link = dComIfGp_getLinkPlayer();
         if (fopAcM_GetRoomNo(this) == fopAcM_GetRoomNo(link)) {
-            onPlayerRoom(subtype);
+            onPlayerRoom(argument);
         }
     }
 }
@@ -481,18 +539,18 @@ void daNpc_Os_c::checkPlayerRoom() {
 void daNpc_Os_c::eventOrderCheck() {
     if(field_0x7A5 == -1) {
         s8 roomNo = fopAcM_GetRoomNo(this);
-        if(subtype == 0) {
-            if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(0x2510)) {
+        if(argument == 0) {
+            if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2510)) {
                 field_0x7A5 = 7;
             } 
         }
-        else if(subtype == 1) {
-            if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(0x2608)) {
+        else if(argument == 1) {
+            if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2608)) {
                 field_0x7A5 = 8;
             } 
         }
-        else if(subtype == 2) {
-            if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(0x2604)) {
+        else if(argument == 2) {
+            if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2604)) {
                 field_0x7A5 = 9;
             } 
         }
@@ -502,7 +560,7 @@ void daNpc_Os_c::eventOrderCheck() {
 /* 00001300-000013D4       .text makeBeam__10daNpc_Os_cFi */
 void daNpc_Os_c::makeBeam(int param_1) {
     if(field_0x738.getEmitter() == NULL) {
-        field_0x738.makeEmitter(dPa_name::ID_SCENE_826E, &current.pos, &shape_angle, 0);
+        field_0x738.makeEmitter(dPa_name::ID_AK_SN_OTOMOBEAM00, &current.pos, &shape_angle, 0);
 
         if(param_1) {
             fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_LIGHT_ST, 0);
@@ -510,7 +568,7 @@ void daNpc_Os_c::makeBeam(int param_1) {
     }
 
     if(field_0x740.getEmitter() == NULL) {
-        field_0x740.makeEmitter(dPa_name::ID_SCENE_826F, &current.pos, &shape_angle, 0);
+        field_0x740.makeEmitter(dPa_name::ID_AK_SN_OTOMOBEAM01, &current.pos, &shape_angle, 0);
     }
 }
 
@@ -713,15 +771,15 @@ BOOL daNpc_Os_c::waitNpcAction(void*) {
 
         cLib_offBit<u32>(attention_info.flags, (fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e));
 
-        f32 dist = fopAcM_searchPlayerDistance2(this);
+        f32 dist_sq = fopAcM_searchPlayerDistance2(this);
         if(!checkNpcCallCommand()) {
-            if(dist < l_HIO.field_0x64 * l_HIO.field_0x64) {
+            if(dist_sq < SQUARE(l_HIO.field_0x64)) {
                 daPy_getPlayerLinkActorClass()->onNpcCallCommand();
             }
         }
         else {
             if(wakeupCheck()) {
-                if(dist >= l_HIO.field_0x60 * l_HIO.field_0x60) {
+                if(dist_sq >= SQUARE(l_HIO.field_0x60)) {
                     setNpcAction(&daNpc_Os_c::searchNpcAction, 0);
                 }
             }
@@ -771,7 +829,7 @@ BOOL daNpc_Os_c::finish01NpcAction(void* param_1) {
 BOOL daNpc_Os_c::finish02NpcAction(void* param_1) {
     if(field_0x7A9 == 0) {
         if(param_1 == NULL) {
-            if(dComIfGs_isEventBit(0x1B01)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1B01)) {
                 setAnm_brkAnm(7);
             }
             else {
@@ -874,7 +932,7 @@ BOOL daNpc_Os_c::carryNpcAction(void* param_1) {
             }
             else {
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_PUT, 0);
-                smokeSet(dPa_name::ID_SCENE_A328);
+                smokeSet(dPa_name::ID_AK_ST_OTOMOSMOKE00);
                 setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
 
                 return true;
@@ -909,7 +967,7 @@ BOOL daNpc_Os_c::throwNpcAction(void* param_1) {
     else if(field_0x7A9 != -1) {
         if(mAcch.ChkGroundHit()) {
             fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_PUT, 0);
-            smokeSet(dPa_name::ID_SCENE_A33B);
+            smokeSet(dPa_name::ID_AK_ST_OTOMOSMOKE01);
             setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
         }
 
@@ -935,7 +993,7 @@ BOOL daNpc_Os_c::jumpNpcAction(void* param_1) {
     }
     else if(field_0x7A9 != -1) {
         if(mAcch.ChkGroundHit()) {
-            smokeSet(dPa_name::ID_SCENE_A33B);
+            smokeSet(dPa_name::ID_AK_ST_OTOMOSMOKE01);
             setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
         }
 
@@ -1064,17 +1122,17 @@ BOOL daNpc_Os_c::searchNpcAction(void*) {
         daPy_py_c* player = daPy_getPlayerActorClass();
 
         BOOL door = player->eventInfo.checkCommandDoor();
-        f32 dist = fopAcM_searchPlayerDistanceXZ2(this);
+        f32 dist_sq = fopAcM_searchPlayerDistanceXZ2(this);
         f32 temp;
-        if (dist < l_HIO.field_0x60 * l_HIO.field_0x60) {
+        if (dist_sq < SQUARE(l_HIO.field_0x60)) {
             temp = 0.0f;
         } else {
             temp = l_HIO.field_0xA8;
         }
         s16 angle, adjustedAngle;
         angle = adjustedAngle = fopAcM_searchPlayerAngleY(this);
-        BOOL temp3 = routeCheck(dist, &adjustedAngle) && cLib_distanceAngleS(angle, adjustedAngle) <= 0x2000;
-        if(door || !temp3 || (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e | daPyStts0_UNK1_e) || player->checkAttentionLock())) {
+        BOOL temp3 = routeCheck(dist_sq, &adjustedAngle) && cLib_distanceAngleS(angle, adjustedAngle) <= 0x2000;
+        if(door || !temp3 || (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000000_e | daPyStts0_HANG_e | daPyStts0_UNK1_e) || player->checkAttentionLock())) {
             temp = 0.0f;
             offNpcCallCommand();
         }
@@ -1274,10 +1332,10 @@ BOOL daNpc_Os_c::eventProc() {
                 setFinish();
             }
             else if(field_0x7A5 == 8) {
-                dComIfGs_onEventBit(0x2608);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2608);
             }
             else if(field_0x7A5 == 9) {
-                dComIfGs_onEventBit(0x2604);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2604);
             }
         }
 
@@ -1540,13 +1598,13 @@ void daNpc_Os_c::initialNextEvent(int staffIdx) {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_PUT, 0);
     }
 
-    if(subtype == 0) {
+    if(argument == 0) {
         field_0x7A5 = 2;
     }
-    else if(subtype == 1) {
+    else if(argument == 1) {
         field_0x7A5 = 4;
     }
-    else if(subtype == 2) {
+    else if(argument == 2) {
         field_0x7A5 = 6;
     }
 }
@@ -1559,7 +1617,7 @@ void daNpc_Os_c::initialSaveEvent(int) {
 
 /* 00004AF8-00004B64       .text talk_init__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::talk_init() {
-    if(l_msgId == -1) {
+    if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
         l_msgId = fopMsgM_messageSet(field_0x780, this);
     }
     else {
@@ -1581,7 +1639,7 @@ BOOL daNpc_Os_c::talk() {
             fopMsgM_messageSet(field_0x780);
         }
     }
-    else if(l_msg->mStatus != fopMsgStts_UNK15_e && l_msg->mStatus != fopMsgStts_MSG_TYPING_e && l_msg->mStatus == fopMsgStts_BOX_CLOSED_e) {
+    else if(l_msg->mStatus != fopMsgStts_INPUT_e && l_msg->mStatus != fopMsgStts_MSG_TYPING_e && l_msg->mStatus == fopMsgStts_BOX_CLOSED_e) {
         l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
 
         return true;
@@ -1601,9 +1659,9 @@ void daNpc_Os_c::setAnm(int param_1) {
     };
 
     static s8 l_anmTbl[] = {
-        OS_BCK_OS_MOVE01,
-        OS_BCK_OS_MOVE01,
-        OS_BCK_OS_AWAKE,
+        dRes_INDEX_OS_BCK_OS_MOVE01_e,
+        dRes_INDEX_OS_BCK_OS_MOVE01_e,
+        dRes_INDEX_OS_BCK_OS_AWAKE_e,
     };
 
     static anmPrm_c l_anmPrm[] = {
@@ -1683,15 +1741,15 @@ BOOL daNpc_Os_c::initBrkAnm(u8 param_1, bool param_2) {
     };  // Size: 0x10
 
     static AnmTableEntry brkAnmTbl[] = {
-        {OS_BRK_TURN_OFF, J3DFrameCtrl::EMode_NONE,   1.0f,  0},
-        {OS_BRK_TURN_OFF, J3DFrameCtrl::EMode_NONE,   1.0f,  -1},
-        {OS_BRK_OS_AWAKE, J3DFrameCtrl::EMode_NONE,   1.0f,  0},
-        {OS_BRK_OS_AWAKE, J3DFrameCtrl::EMode_NONE,   -1.0f, 0},
-        {OS_BRK_TURN_ON,  J3DFrameCtrl::EMode_NONE,   1.0f,  0},
-        {OS_BRK_TURN_ON,  J3DFrameCtrl::EMode_NONE,   0.0f,  0},
-        {OS_BRK_TENMETU,  J3DFrameCtrl::EMode_LOOP, 1.0f,  0},
-        {OS_BRK_OS_AWAKE, J3DFrameCtrl::EMode_NONE,   0.0f,  -1},
-        {OS_BRK_LINK,     J3DFrameCtrl::EMode_LOOP, 1.0f,  0},
+        {dRes_INDEX_OS_BRK_TURN_OFF_e, J3DFrameCtrl::EMode_NONE,   1.0f,  0},
+        {dRes_INDEX_OS_BRK_TURN_OFF_e, J3DFrameCtrl::EMode_NONE,   1.0f,  -1},
+        {dRes_INDEX_OS_BRK_OS_AWAKE_e, J3DFrameCtrl::EMode_NONE,   1.0f,  0},
+        {dRes_INDEX_OS_BRK_OS_AWAKE_e, J3DFrameCtrl::EMode_NONE,   -1.0f, 0},
+        {dRes_INDEX_OS_BRK_TURN_ON_e,  J3DFrameCtrl::EMode_NONE,   1.0f,  0},
+        {dRes_INDEX_OS_BRK_TURN_ON_e,  J3DFrameCtrl::EMode_NONE,   0.0f,  0},
+        {dRes_INDEX_OS_BRK_TENMETU_e,  J3DFrameCtrl::EMode_LOOP, 1.0f,  0},
+        {dRes_INDEX_OS_BRK_OS_AWAKE_e, J3DFrameCtrl::EMode_NONE,   0.0f,  -1},
+        {dRes_INDEX_OS_BRK_LINK_e,     J3DFrameCtrl::EMode_LOOP, 1.0f,  0},
     };
 
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
@@ -1847,7 +1905,7 @@ u16 daNpc_Os_c::next_msgStatus(u32* pMsgNo) {
         status = fopMsgStts_MSG_ENDS_e;
     }
     else if(*pMsgNo == 0xEF4) {
-        dComIfGs_onEventBit(0x2510);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2510);
         status = fopMsgStts_MSG_ENDS_e;
     }
 
@@ -1964,7 +2022,7 @@ BOOL daNpc_Os_c::init() {
     speedF = speedF;
     m_smoke_tevstr = tevStr;
     m_smoke.setTevStr(&m_smoke_tevstr);
-    m_playerRoom[subtype] = false;
+    m_playerRoom[argument] = false;
     clearStatus();
     gravity = l_HIO.field_0x8C;
     field_0x7A0 = 3;
@@ -2019,7 +2077,7 @@ BOOL daNpc_Os_c::draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(pModel, &tevStr);
     
-    mBrkAnm.entry(pModelData, mBrkAnm.getFrame());
+    mBrkAnm.entry(pModelData);
     mpMorf->entryDL();
     mBrkAnm.remove(pModelData);
 
@@ -2056,7 +2114,7 @@ void daNpc_Os_c::animationPlay() {
     mPrevMorfFrame = frame;
 
     if(field_0x78C == 1 && mpMorf->checkFrame(17.0f)) {
-        smokeSet(dPa_name::ID_SCENE_A328);
+        smokeSet(dPa_name::ID_AK_ST_OTOMOSMOKE00);
     }
 
     playBrkAnm();
@@ -2072,7 +2130,9 @@ BOOL daNpc_Os_c::execute() {
     static JGeometry::TVec3<f32> splash_scale(0.6f, 0.6f, 0.6f);
     static JGeometry::TVec3<f32> ripple_scale(1.0f, 1.0f, 1.0f);
 
+#if VERSION > VERSION_DEMO
     field_0x784 &= ~0x10;
+#endif
     fopAcM_OffStatus(this, fopAcStts_SHOWMAP_e);
     checkPlayerRoom();
     if(!finishCheck()) {
@@ -2106,7 +2166,14 @@ BOOL daNpc_Os_c::execute() {
         mAcchCir[1].SetWallR(40.0f);
     }
 
-    mpPedestal = (daPedestal::daPds_c*)searchFromName(l_daiza_name[subtype], 0xFF, 1);
+#if VERSION == VERSION_DEMO
+    if (mpPedestal == NULL) {
+        mpPedestal = (daPedestal::daPds_c*)searchFromName(l_daiza_name[argument], 0xFF, 1);
+    }
+#else
+    mpPedestal = (daPedestal::daPds_c*)searchFromName(l_daiza_name[argument], 0xFF, 1);
+#endif
+
     if(mpPedestal) {
         if(!isFinish()) {
             if(finishCheck()) {
@@ -2130,7 +2197,9 @@ BOOL daNpc_Os_c::execute() {
 
             mAcch.CrrPos(*dComIfG_Bgsp());
             
+#if VERSION > VERSION_DEMO
             field_0x784 |= 0x10;
+#endif
             if(mAcch.GetGroundH() != -G_CM3D_F_INF) {
                 tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
                 tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
@@ -2173,7 +2242,7 @@ BOOL daNpc_Os_c::execute() {
     mJntCtrl.setParam(l_HIO.mNpc.mMaxBackboneX, l_HIO.mNpc.mMaxBackboneY, l_HIO.mNpc.mMinBackboneX, l_HIO.mNpc.mMinBackboneY,l_HIO.mNpc.mMaxHeadX, l_HIO.mNpc.mMaxHeadY, l_HIO.mNpc.mMinHeadX, l_HIO.mNpc.mMinHeadY, l_HIO.mNpc.mMaxTurnStep);
 
     if(!isFinish()) {
-        if(!fopAcM_checkCarryNow(this) && isGravity() && checkNowPosMove(l_staff_name[subtype])) {
+        if(!fopAcM_checkCarryNow(this) && isGravity() && checkNowPosMove(l_staff_name[argument])) {
             if (maxFallSpeed < speed.y) {
                 speed.y -= gravity;
                 if (speed.y < maxFallSpeed) {
@@ -2194,7 +2263,9 @@ BOOL daNpc_Os_c::execute() {
         
     
         mAcch.CrrPos(*dComIfG_Bgsp());
+#if VERSION > VERSION_DEMO
         field_0x784 |= 0x10;
+#endif
 
         if(chkPlayerAction(&daNpc_Os_c::walkPlayerAction) || chkNpcAction(&daNpc_Os_c::searchNpcAction)) {
             if(!mAcch.ChkGroundHit()) {
@@ -2239,7 +2310,7 @@ BOOL daNpc_Os_c::execute() {
                     m4E8 = 0;
                 }
                 else {
-                    daPy_getPlayerLinkActorClass()->startRestartRoom(5, 0xC9, -1.0f, 0);
+                    daPy_getPlayerLinkActorClass()->npcStartRestartRoom();
                 }
             }
             else {
@@ -2247,18 +2318,18 @@ BOOL daNpc_Os_c::execute() {
             }
             
             if(mAcch.ChkWaterIn()) {
-                daPy_getPlayerLinkActorClass()->startRestartRoom(5, 0xC9, -1.0f, 0);
+                daPy_getPlayerLinkActorClass()->npcStartRestartRoom();
 
                 if(!isWaterHit()) {
                     onWaterHit();
 
-                    JPABaseEmitter* splash = dComIfGp_particle_set(dPa_name::ID_COMMON_0040, &current.pos);
+                    JPABaseEmitter* splash = dComIfGp_particle_set(dPa_name::ID_IT_JN_WP_SHIBUKI, &current.pos);
                     if(splash) {
                         splash->setRate(15.0f);
                         splash->setGlobalScale(splash_scale);
                     }
 
-                    JPABaseEmitter* ripple = dComIfGp_particle_setSingleRipple(dPa_name::ID_COMMON_003D, &current.pos);
+                    JPABaseEmitter* ripple = dComIfGp_particle_setSingleRipple(dPa_name::ID_IT_JN_WP_HAMON01, &current.pos);
                     if(ripple) {
                         ripple->setGlobalScale(ripple_scale);
                     }
@@ -2266,6 +2337,7 @@ BOOL daNpc_Os_c::execute() {
             }
         }
     }
+#if VERSION > VERSION_DEMO
     else {
         mAcch.CrrPos(*dComIfG_Bgsp());
 
@@ -2275,12 +2347,13 @@ BOOL daNpc_Os_c::execute() {
             tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
         }
     }
+#endif
 
     if(!fopAcM_checkCarryNow(this)) {
         setCollision();
     }
 
-    if(checkNowPosMove(l_staff_name[subtype])) {
+    if(checkNowPosMove(l_staff_name[argument])) {
         animationPlay();
     }
 
@@ -2356,7 +2429,7 @@ daNpc_Os_c::~daNpc_Os_c() {
         l_HIO.mNo = -1;
     }
 
-    m_playerRoom[subtype] = false;
+    m_playerRoom[argument] = false;
     m_cattleRoomNo = -1;
 }
 
@@ -2375,7 +2448,7 @@ static BOOL daNpc_Os_Delete(daNpc_Os_c* i_this) {
 static BOOL daNpc_Os_Execute(daNpc_Os_c* i_this) {
     BOOL ret = i_this->execute();
 
-    if(i_this->subtype == 2) {
+    if(i_this->argument == 2) {
         i_this->setCattleRoomNo(fopAcM_GetRoomNo(i_this));
     }
 
@@ -2416,18 +2489,18 @@ static actor_method_class l_daNpc_Os_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_OS = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_OS,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_OS_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Os_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_OS,
+    /* Draw Prio    */ fpcDwPi_NPC_OS_e,
     /* Actor SubMtd */ &l_daNpc_Os_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK2000000_e | fopAcStts_UNK8000000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

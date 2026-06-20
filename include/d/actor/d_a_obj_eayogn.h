@@ -8,9 +8,7 @@
 
 class daObjEayogn_c : public fopAc_ac_c {
 public:
-    // TODO: this function is marked as weak in the REL symbol map, but it does not get inlined for some reason?
-    // BOOL check_ev_bit() const { return dComIfGs_isSymbol(1); }
-    BOOL check_ev_bit() const;
+    inline BOOL check_ev_bit() const;
 
     cPhs_State _create();
     bool _execute();

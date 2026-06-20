@@ -3,6 +3,8 @@
 // Translation Unit: JASBasicInst.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASBasicInst.h"
 #include "JSystem/JAudio/JASBank.h"
 #include "JSystem/JAudio/JASCalc.h"

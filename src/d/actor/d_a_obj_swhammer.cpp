@@ -3,15 +3,11 @@
  * Object - Skull Hammer switch (normal) 
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_swhammer.h"
-#include "d/res/res_mhmrsw.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/MhmrSW.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daObjSwhammer {
     namespace {
@@ -38,7 +34,7 @@ namespace daObjSwhammer {
             /* mCrushDuration     */ 18,
             /* mUncrushSpeed0     */ 0.0f,
             /* mUncrushSpring     */ 0.8f,
-            /* mUncrushSpeedDecay */ 0.45f
+            /* mUncrushSpeedDecay */ 0.45f,
         };
 
         inline const Attr_c & attr() { return L_attr; }
@@ -73,11 +69,11 @@ const dCcD_SrcCyl daObjSwhammer::Act_c::M_cyl_src_co = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 100.0f,
         /* Height */ 112.5f,
-    },
+    }},
 };
 const dCcD_SrcCyl daObjSwhammer::Act_c::M_cyl_src_tg = {
     // dCcD_SrcGObjInf
@@ -102,11 +98,11 @@ const dCcD_SrcCyl daObjSwhammer::Act_c::M_cyl_src_tg = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
         /* Height */ 112.5f,
-    },
+    }},
 };
 const GXColor color = {0xA0, 0xA0, 0x80, 0xFF};
 
@@ -117,11 +113,11 @@ daObjSwhammer::Act_c::Act_c() {
 
 /* 000004B0-0000058C       .text CreateHeap__Q213daObjSwhammer5Act_cFv */
 BOOL daObjSwhammer::Act_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, MHMRSW_BDL_MHMRSW));
+    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_MHMRSW_BDL_MHMRSW_e));
     JUT_ASSERT(0x18b, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel) {
-        modelData->getJointNodePointer(1)->setCallBack(jnodeCB);
+        modelData->getJointNodePointer(MHMRSW_JNT_HIT_e)->setCallBack(jnodeCB);
         mpModel->setUserArea((u32) this);
     }
     return mpModel != NULL;
@@ -170,11 +166,11 @@ BOOL daObjSwhammer::Act_c::Create() {
 
 /* 0000070C-000007F8       .text _create__Q213daObjSwhammer5Act_cFv */
 cPhs_State daObjSwhammer::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, MHMRSW_DZB_MHMRSW, NULL, 0xa80);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MHMRSW_DZB_MHMRSW_e, NULL, 0xa80);
         JUT_ASSERT(0x1e9, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
@@ -209,16 +205,16 @@ void daObjSwhammer::Act_c::init_mtx() {
 
 /* 00000938-00000A58       .text set_damage__Q213daObjSwhammer5Act_cFv */
 void daObjSwhammer::Act_c::set_damage() {
-    u8 attackState = daPy_getPlayerActorClass()->getCutType();
+    u8 cutType = daPy_getPlayerActorClass()->getCutType();
     M_damage = 0;
     M_damage_dir = 0;
     if (mCylTg.ChkTgHit()) {
         cCcD_Obj *hitObj = mCylTg.GetTgHitObj();
         fopAc_ac_c* hitActor = mCylTg.GetTgHitAc();
-        if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
-            if (attackState == 0x12 || attackState == 0x13) {
+        if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == fpcNm_PLAYER_e) {
+            if (cutType == daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING || cutType == daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER) {
                 M_damage = 1;
-            } else if (attackState == 0x11) {
+            } else if (cutType == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                 M_damage_dir = cM_atan2s(mCylTg.GetTgRVecP()->x, mCylTg.GetTgRVecP()->z);
                 M_damage = 2;
             }
@@ -275,11 +271,11 @@ void daObjSwhammer::Act_c::crush_proc() {
 /* 00000BF0-00000DB8       .text eff_crush__Q213daObjSwhammer5Act_cFv */
 void daObjSwhammer::Act_c::eff_crush() {
     if (mMode == 0) {
-        dComIfGp_particle_set(dPa_name::ID_SCENE_81B7, &current.pos);
-        dComIfGp_particle_set(dPa_name::ID_SCENE_81B8, &current.pos);
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_HAMSW_STAR00, &current.pos);
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_HAMSW_SYOUGEKI00, &current.pos);
     }
     static const cXyz particle_scale(1.5f, 1.5f, 1.0f);
-    JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &current.pos, NULL, NULL, 200, &mSmokeCb, -1, NULL, NULL, &particle_scale);
+    JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &current.pos, NULL, NULL, 200, &mSmokeCb, -1, NULL, NULL, &particle_scale);
     if (emitter) {
         emitter->setRate(30.0f);
         emitter->setMaxFrame(1);
@@ -462,9 +458,6 @@ BOOL Mthd_Draw(void* i_this) {
     return static_cast<daObjSwhammer::Act_c*>(i_this)->MoveBGDraw();
 }
 
-// Fakematch to fix weak func order/.text section splitting of dBgS_MoveBgActor::Draw().
-#pragma nosyminline off
-
 /* 000015F4-00001620       .text Mthd_IsDelete__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
     return static_cast<daObjSwhammer::Act_c*>(i_this)->MoveBGIsDelete();
@@ -481,18 +474,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjSwhammer
 
 actor_process_profile_definition g_profile_Obj_Swhammer = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Swhammer,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Swhammer_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjSwhammer::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Swhammer,
+    /* Draw Prio    */ fpcDwPi_Obj_Swhammer_e,
     /* Actor SubMtd */ &daObjSwhammer::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

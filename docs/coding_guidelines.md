@@ -11,7 +11,8 @@ Naming variables properly isn't required to help with the decompilation. You can
 3. [Includes](#includes)
 4. [Naming style](#naming-style)
 5. [Use the official names where possible](#use-the-official-names-where-possible)
-6. [Look at the actor's model](#look-at-the-actors-model)
+6. [Resource archive enums](#resource-archive-enums)
+7. [Look at the actor's model](#look-at-the-actors-model)
 
 ## Primitive types
 
@@ -120,6 +121,40 @@ J3DModelData* model_data = ...
 JUT_ASSERT(382, model_data != NULL);
 ```
 
+## Resource archive enums
+
+Most actors will load resource files, such as model data, with code similar to this:
+
+```cpp
+modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", 0x5B);
+```
+
+The first argument to `dComIfG_getObjectRes` is the name of the resource archive being used, in this case `files/res/Object/Bk.arc` within the game's files.  
+The second argument is the file index of the specific file being loaded from this archive, in this case index 0x5B within the archive.
+
+In order to make the code more readable, you should replace all of these file indexes with enums containing the filename instead. But you don't have to create these enums manually, the decomp already has enums for all resource archives.
+
+You can find the header for the archive in question by pressing VSCode's `Ctrl+P` shortcut and typing `assets` followed by the name of the resource archive.  
+In this example, the header you want is located at `assets/GZLE01/res/Object/Bk.h` because the archive is named "Bk". The resource archive's name is not necessarily the same as the actor's name (though in this example it is).
+
+Once you open the header, search for the file index, e.g. 0x5B:
+
+```cpp
+dRes_INDEX_BK_BMD_BK_TATE_e=0x5B,
+```
+
+This means `dRes_INDEX_BK_BMD_BK_TATE_e` is the enum for this file, so replace the index with the enum like so:
+
+```cpp
+modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BMD_BK_TATE_e);
+```
+
+Note that you use the `INDEX` enum for calls to `dComIfG_getObjectRes`, but some actors (mostly NPCs) instead call `dComIfG_getObjectIDRes`, in which case you should use the `ID` enum, ignoring the `INDEX` enum entirely. For example:
+
+```cpp
+J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Jb", dRes_ID_JB_BDL_JB_e);
+```
+
 ## Look at the actor's model
 
 If a variable's name doesn't appear in a function name or assertion string, we'll have to come up with a name for it ourselves. To do this, you usually need to know what the decompiled actor you're looking at actually is in-game before you can start coming up with names. But it's often pretty hard to tell what an actor is just by reading its code.
@@ -129,7 +164,7 @@ The official TU name of the actor doesn't tell you much, not only because they'r
 If the actor has a 3D model, you can determine what the actor is by simply viewing the model in a model viewer. First, find the .arc file for this actor. Look in the `createHeap` or `useHeapInit` function for this actor. You should see something like:
 
 ```cpp
-(J3DModelData*)dComIfG_getObjectRes("Bk", BK_BDL_BK)
+(J3DModelData*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BDL_BK_e),
 ```
 
 This means the actor's .arc in this example is named "Bk". You can find it your copy of TWW's files at `files/res/Object/Bk.arc`.

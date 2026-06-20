@@ -3,6 +3,8 @@
 // Translation Unit: object-sound.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio_JAudio/object-sound.h"
 #include "JSystem/JAudio/JAISound.h"
 #include "JSystem/JAudio/JAIBasic.h"
@@ -15,7 +17,7 @@ namespace JStudio_JAudio {
 TAdaptor_sound::TAdaptor_sound(JAIBasic* basic) {
     mpBasic = basic;
     mpSound = NULL;
-    mFlags = ~0;
+    mSoundID = -1;
     mPosition = NULL;
 }
 
@@ -70,18 +72,18 @@ void TAdaptor_sound::adaptor_do_update(const JStudio::TObject* object, u32) {
 void TAdaptor_sound::adaptor_do_SOUND(JStudio::data::TEOperationData op, const void* data, u32) {
     switch (op) {
     case JStudio::data::TEOD_Unknown_19: {
-        u32 flags = *(s32*)data;
-        if (flags & 0xc0000000) {
+        u32 soundID = *(s32*)data;
+        if (mpBasic->checkEnablePrepare(soundID)) {
             if (mpSound) {
                 mpSound->stop(0);
             }
-            mFlags = flags;
-            mpBasic->prepareSoundVec(flags, &mpSound, mPosition, 0, 0, 4);
+            mSoundID = soundID;
+            mpBasic->prepareSoundVec(soundID, &mpSound, mPosition, 0, 0, 4);
             if (!mpSound) {
                 return;
             }
         } else {
-            mFlags = *(s32*)data;
+            mSoundID = *(s32*)data;
         }
         break;
     }
@@ -109,22 +111,22 @@ void TAdaptor_sound::adaptor_do_LOCATED(JStudio::data::TEOperationData op, const
 /* 8027908C-8027915C       .text __cl__Q314JStudio_JAudio14TAdaptor_sound21TVVOOn_BEGIN_FADE_IN_CFfPQ27JStudio8TAdaptor */
 void TAdaptor_sound::TVVOOn_BEGIN_FADE_IN_::operator()(f32 value, JStudio::TAdaptor* adaptor) const {
     JStudio_JAudio::TAdaptor_sound* adaptor_sound = (JStudio_JAudio::TAdaptor_sound*)adaptor;
-    JAISound* sound = adaptor_sound->mpSound;
-    u32 flags = adaptor_sound->mFlags;
-    if (adaptor_sound->mFlags & 0xc0000000) {
+    const u32 soundID = adaptor_sound->mSoundID;
+    if (adaptor_sound->mpBasic->checkEnablePrepare(soundID)) {
         if (adaptor_sound->mpSound) {
             adaptor_sound->mpSound->start(value);
         }
     } else {
         if (adaptor_sound->mpSound) {
 #if VERSION > VERSION_DEMO
-            if (!adaptor_sound->mpBasic->checkEnablePrepare(adaptor_sound->mFlags))
+            bool temp = !adaptor_sound->mpBasic->checkEnablePrepare(soundID) && !(soundID & 0x00000c00);
+            if (!temp)
 #endif
             {
                 adaptor_sound->mpSound->stop(0);
             }
         }
-        adaptor_sound->mpBasic->startSoundVec(flags, &adaptor_sound->mpSound, adaptor_sound->mPosition, value, 0, 4);
+        adaptor_sound->mpBasic->startSoundVec(soundID, &adaptor_sound->mpSound, adaptor_sound->mPosition, value, 0, 4);
         if (!adaptor_sound->mpSound) {
             return;
         }

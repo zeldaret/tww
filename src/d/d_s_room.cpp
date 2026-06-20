@@ -3,6 +3,7 @@
 // Translation Unit: d_s_room.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_room.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_scene_mng.h"
@@ -12,7 +13,6 @@
 #include "d/d_com_lib_game.h"
 #include "d/d_item_data.h"
 #include "d/d_map.h"
-#include "d/d_procname.h"
 #include "d/d_stage.h"
 #include "d/actor/d_a_salvage.h"
 #include "d/actor/d_a_npc_md.h"
@@ -71,7 +71,7 @@ void objectSetCheck(room_of_scene_class* i_this) {
 
     if (!i_this->mbReLoaded) {
         if (!hiddenFlag) {
-            fopAcM_create(PROC_BG, roomNo);
+            fopAcM_create(fpcNm_BG_e, roomNo);
             dStage_dt_c_roomReLoader(i_this->mpRoomData, i_this->mpRoomDt, roomNo);
             i_this->mbReLoaded = true;
         }
@@ -123,15 +123,15 @@ static BOOL dScnRoom_Delete(room_of_scene_class* i_this) {
 
     if (!dComIfGp_isEnableNextStage()) {
         if (i_this->field_0x1dc == 1) {
-            dComIfGs_onEventBit(0x1a80);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1A80);
         }
 
         if (strcmp(dComIfGp_getStartStageName(), "sea") == 0)
-            dComIfGs_offTmpBit(0x0320);
+            dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0320);
     }
 
     if (i_this->field_0x1dc == 2)
-        dComIfGs_onEventBit(0x1c40);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1C40);
 
     if (strcmp(dComIfGp_getStartStageName(), "sea") == 0)
         daNpc_Md_c::offSeaTalk();
@@ -190,7 +190,7 @@ cPhs_State phase_2(room_of_scene_class* i_this) {
     }
 
     i_this->mpRoomDt = dComIfGp_roomControl_getStatusRoomDt(roomNo);
-    i_this->mpRoomDt->mRoomNo = roomNo;
+    i_this->mpRoomDt->setRoomNo(roomNo);
     i_this->mpRoomData = dComIfG_getStageRes(arcName, "room.dzr");
 
     if (i_this->mpRoomData != NULL) {
@@ -256,18 +256,18 @@ cPhs_State phase_4(room_of_scene_class* i_this) {
 
     setMapImage(i_this);
 
-    if (dComIfGs_checkGetItem(dItem_PEARL_DIN_e))
+    if (dComIfGs_checkGetItem(dItemNo_PEARL_DIN_e))
         i_this->field_0x1dc = 1;
 
-    if (strcmp(dComIfGp_getStartStageName(), "Omori") == 0 && dComIfGs_checkGetItem(dItem_PEARL_FARORE_e))
+    if (strcmp(dComIfGp_getStartStageName(), "Omori") == 0 && dComIfGs_checkGetItem(dItemNo_PEARL_FARORE_e))
         i_this->field_0x1dc = 2;
 
     // Bug? The game seems to set these flags for DRI even when you're not on the sea stage.
     // TODO: Look into this more.
     if (roomNo == dIsleRoom_DragonRoostIsland_e) {
-        dComIfGs_setEventReg(0xb8ff, 0);
-        if (dComIfGs_isEventBit(0x3f02))
-            dComIfGs_onEventBit(0x1580);
+        dComIfGs_setEventReg(dSv_event_flag_c::UNK_B8FF, 0);
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F02))
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1580);
     }
 
     return cPhs_COMPLEATE_e;
@@ -287,7 +287,7 @@ static cPhs_State dScnRoom_Create(scene_class* i_scn) {
     return dComLbG_PhaseHandler(&i_this->mPhs, l_method, i_this);
 }
 
-scene_method_class l_dScnRoom_Method = {
+static scene_method_class l_dScnRoom_Method = {
     (process_method_func)dScnRoom_Create,
     (process_method_func)dScnRoom_Delete,
     (process_method_func)dScnRoom_Execute,
@@ -296,13 +296,13 @@ scene_method_class l_dScnRoom_Method = {
 };
 
 scene_process_profile_definition g_profile_ROOM_SCENE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ROOM_SCENE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ROOM_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(room_of_scene_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnRoom_Method,

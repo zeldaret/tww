@@ -16,7 +16,7 @@ namespace daTagAttention {
 
             fopAc_ac_c* player = dComIfGp_getPlayer(0);
             cXyz plyrToObjVec = player->current.pos-current.pos;
-            if (subtype == 0){
+            if (argument == 0){
                 // spherical collision check
                 f32 distance = plyrToObjVec.abs();
                 
@@ -52,12 +52,12 @@ namespace daTagAttention {
             return true;
         }
 
-        int prm_get_Type() const 
+        int prm_get_Type() const
         {
             return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S);
         }
 
-        int prm_get_swSave() const 
+        int prm_get_swSave() const
         {
             return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S);
         }

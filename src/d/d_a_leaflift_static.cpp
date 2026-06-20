@@ -3,6 +3,7 @@
 // Translation Unit: d_a_leaflift_static.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_leaflift.h"
 #include "d/d_com_inf_game.h"
 #include "dolphin/types.h"
@@ -34,11 +35,11 @@ BOOL daLlift_c::MoveUpLift() {
     else if ((upVel != 0.0f) && (mbIsAscending == FALSE)) {
         fopAcM_seStart(this, JA_SE_OBJ_LOTUS_LIFT_UP, 0);
         mbIsAscending = TRUE;
-        mEmitter1 = dComIfGp_particle_set(dPa_name::ID_SCENE_82AC, &current.pos, &current.angle);
+        mEmitter1 = dComIfGp_particle_set(dPa_name::ID_IT_SN_DEKLIFT_MIZUPOTA00, &current.pos, &current.angle);
         mEmitter2 = NULL;
         upLiftPos = current.pos;
         upLiftPos.y = mWaterY;
-        mEmitter4 = dComIfGp_particle_set(dPa_name::ID_SCENE_82AB, &upLiftPos, &current.angle);
+        mEmitter4 = dComIfGp_particle_set(dPa_name::ID_IT_SN_DEKLIFT_HAMONB00, &upLiftPos, &current.angle);
         mEmitterTimer = 0;
         if (mEmitter3) {
             mEmitter3->stopCreateParticle();

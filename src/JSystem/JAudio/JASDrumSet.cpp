@@ -3,6 +3,8 @@
 // Translation Unit: JASDrumSet.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASDrumSet.h"
 #include "JSystem/JAudio/JASBank.h"
 #include "JSystem/JAudio/JASCalc.h"

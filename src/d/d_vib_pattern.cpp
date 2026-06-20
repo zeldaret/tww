@@ -3,6 +3,7 @@
 // Translation Unit: d_vib_pattern.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_vibration.h"
 
 /* Motor Shock (MS) predefined patterns */

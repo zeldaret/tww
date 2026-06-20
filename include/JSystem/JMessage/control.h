@@ -52,15 +52,23 @@ struct TControl {
     const char* getMessageData(u16, u16) const;
     void reset_();
 
-    void getMessageCode() const {}
+    u32 getMessageCode() const { return (getMessageGroupID() << 16) | getMessageIndex(); }
     void getMessageData(u32) const {}
-    void getMessageEntry(u32) const {}
-    void getMessageEntry(u16, u16) const {}
-    void getMessageGroupID() const {}
-    void getMessageIndex() const {}
+    void* getMessageEntry(u32 messageCode) const {
+        return getMessageEntry(messageCode >> 16, messageCode & 0xFFFF);
+    }
+    void* getMessageEntry(u16 messageGroupID, u16 messageIndex) const {
+        TResource* resource = getResource_groupID(messageGroupID);
+        if (resource == NULL) {
+            return NULL;
+        }
+        return resource->getMessageEntry(messageIndex);
+    }
+    u16 getMessageGroupID() const { return mGroupID; }
+    u16 getMessageIndex() const { return mMessageIndex; }
+    void setMessageIndex(u16) {}
     void on_isLeadByte(int) {}
     void on_word(u32) {}
-    void setMessageIndex(u16) {}
     void setResourceContainer(const JMessage::TResourceContainer*) {}
 
     /* 0x04 */ TResourceContainer* mResourceContainer;

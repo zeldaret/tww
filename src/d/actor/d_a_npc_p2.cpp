@@ -3,10 +3,9 @@
  * NPC - Zuko, Niko, & Mako
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_p2.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-0000020C       .text __ct__19daNpc_P2_childHIO_cFv */
 daNpc_P2_childHIO_c::daNpc_P2_childHIO_c() {
@@ -304,7 +303,7 @@ bool daNpc_P2_c::_delete() {
 }
 
 /* 00004D54-00004D74       .text daNpc_P2Create__FPv */
-static s32 daNpc_P2Create(void* i_this) {
+static cPhs_State daNpc_P2Create(void* i_this) {
     return ((daNpc_P2_c*)i_this)->_create();
 }
 
@@ -502,18 +501,18 @@ static actor_method_class daNpc_P2MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_P2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_P2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_P2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_P2_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_P2,
+    /* Draw Prio    */ fpcDwPi_NPC_P2_e,
     /* Actor SubMtd */ &daNpc_P2MethodTable,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -6,6 +6,7 @@
 
 class JUTNameTab;
 
+// TODO: This class doesn't seem to exist in the debug maps, probably copied from TP. Remove?
 class J3DShapeTable {
 public:
     inline void clear() {

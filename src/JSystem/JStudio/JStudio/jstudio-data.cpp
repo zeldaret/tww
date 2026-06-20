@@ -3,6 +3,8 @@
 // Translation Unit: jstudio-data.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio/jstudio-data.h"
 #include "dolphin/types.h"
 

@@ -3,16 +3,11 @@
 // Translation Unit: d_a_att.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_att.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_bgn.h"
-
-#if VERSION == VERSION_USA
-#include "weak_data_1811.h" // IWYU pragma: keep
-#endif
 
 static bgn_class* boss;
 static cXyz non_pos(-30000.0f, -30000.0f, -30000.0f);
@@ -24,7 +19,7 @@ static BOOL daAtt_Draw(att_class* i_this) {
 
 /* 000000F4-00000140       .text boss_s_sub__FPvPv */
 static void* boss_s_sub(void* search, void*) {
-    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_BGN) {
+    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == fpcNm_BGN_e) {
         return search;
     }
     return NULL;
@@ -63,7 +58,7 @@ static BOOL daAtt_Execute(att_class* i_this) {
                 mDoAud_seStart(JA_SE_LK_W_WEP_HIT, NULL, 0x21, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
                 if (r30 <= 1) {
                     if (boss->mAAA8[1-r30].m2D0 != 0) {
-                        boss->mC7B0 = 600;
+                        boss->mC7AC[2] = 600;
                     }
                 }
             } else {
@@ -138,10 +133,10 @@ static cPhs_State daAtt_Create(fopAc_ac_c* i_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 90.0f,
-        },
+        }},
     };
 #endif
     static dCcD_SrcCyl cc_cyl_src = {
@@ -167,11 +162,11 @@ static cPhs_State daAtt_Create(fopAc_ac_c* i_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 200.0f,
             /* Height */ 2000.0f,
-        },
+        }},
     };
     static dCcD_SrcSph bm_sph_src = {
         // dCcD_SrcGObjInf
@@ -196,14 +191,14 @@ static cPhs_State daAtt_Create(fopAc_ac_c* i_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 200.0f,
-        },
+        }},
     };
     
     att_class* a_this = (att_class*)i_this;
-    fopAcM_SetupActor(i_this, att_class);
+    fopAcM_ct(i_this, att_class);
     
     a_this->m2B5 = fopAcM_GetParam(a_this) & 0xFF;
     a_this->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
@@ -242,18 +237,18 @@ static actor_method_class l_daAtt_Method = {
 };
 
 actor_process_profile_definition g_profile_ATT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ATT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ATT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(att_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ATT,
+    /* Draw Prio    */ fpcDwPi_ATT_e,
     /* Actor SubMtd */ &l_daAtt_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

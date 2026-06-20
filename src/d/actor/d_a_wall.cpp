@@ -3,18 +3,15 @@
  * Object - Bombable walls
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_wall.h"
-#include "d/res/res_hbw1.h"
-#include "d/res/res_htw1.h"
-#include "d/res/res_hbw2.h"
+#include "res/Object/Hbw1.h"
+#include "res/Object/Htw1.h"
+#include "res/Object/Hbw2.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 const s16 daWall_c::m_heapsize[3] = {
     0x1160,
@@ -22,8 +19,8 @@ const s16 daWall_c::m_heapsize[3] = {
     0x2000,
 };
 
-const s16 daWall_c::m_bmdname[3] = {HBW1_BDL_HBW1, HTW1_BDL_HTW1, HBW2_BDL_HBW2};
-const s16 daWall_c::m_dzbname[3] = {HBW1_DZB_HBW1, HTW1_DZB_HTW1, HBW2_DZB_HBW2};
+const s16 daWall_c::m_bmdname[3] = {dRes_INDEX_HBW1_BDL_HBW1_e, dRes_INDEX_HTW1_BDL_HTW1_e, dRes_INDEX_HBW2_BDL_HBW2_e};
+const s16 daWall_c::m_dzbname[3] = {dRes_INDEX_HBW1_DZB_HBW1_e, dRes_INDEX_HTW1_DZB_HTW1_e, dRes_INDEX_HBW2_DZB_HBW2_e};
 
 const Vec daWall_c::m_tri_vtx[3][4] = {
     {{150.0f, -120.0f, 0.0f},
@@ -77,16 +74,16 @@ static dCcD_SrcTri l_tri_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGTriS
-    {
-        /* a */ 0.0f, 0.0f, 0.0f,
-        /* b */ 0.0f, 0.0f, 0.0f,
-        /* c */ 0.0f, 0.0f, 0.0f,
-    },
+    {{
+        /* a */ {0.0f, 0.0f, 0.0f},
+        /* b */ {0.0f, 0.0f, 0.0f},
+        /* c */ {0.0f, 0.0f, 0.0f},
+    }},
 };
 
 /* 00000078-00000100       .text _delete__8daWall_cFv */
 bool daWall_c::_delete() {
-    mSmokeCb.end();
+    mSmokeCb.remove();
     if (heap != NULL && mState == false)
         dComIfG_Bgsp()->Release(mpBgW);
 
@@ -139,7 +136,7 @@ void daWall_c::CreateInit() {
 
 /* 00000380-000004EC       .text _create__8daWall_cFv */
 cPhs_State daWall_c::_create() {
-    fopAcM_SetupActor(this, daWall_c);
+    fopAcM_ct(this, daWall_c);
     mType = fopAcM_GetParam(this) >> 8;
     mSwitchNo = fopAcM_GetParam(this) & 0xFF;
     bool isSwitch = dComIfGs_isSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this));
@@ -244,8 +241,8 @@ void daWall_c::set_tri() {
     vertex[0] = m_tri_vtx[mType][0];
     vertex[1] = m_tri_vtx[mType][1];
     vertex[2] = m_tri_vtx[mType][2];
-    mDoMtx_stack_c::transS(fopAcM_GetPosition(this));
-    mDoMtx_stack_c::YrotM(fopAcM_GetAngle_p(this)->y);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
 
     for (int i = 0; i < 3; i++) {
         mDoMtx_stack_c::multVec(&vertex[i], &vertex[i]);
@@ -265,14 +262,14 @@ void daWall_c::set_tri() {
 /* 00000D84-00000F74       .text set_effect__8daWall_cFv */
 void daWall_c::set_effect() {
     u16 projection_id[] = {
-        dPa_name::ID_SCENE_A16E,
-        dPa_name::ID_SCENE_A170,
-        dPa_name::ID_SCENE_A172,
+        dPa_name::ID_IT_ST_SHIREN_WL1_HAHEN00,
+        dPa_name::ID_IT_ST_SHIREN_WL2_HAHEN00,
+        dPa_name::ID_IT_ST_SHIREN_WL3_HAHEN00,
     };
     u16 particle_id[] = {
-        dPa_name::ID_SCENE_A16F,
-        dPa_name::ID_SCENE_A171,
-        dPa_name::ID_SCENE_A173,
+        dPa_name::ID_IT_ST_SHIREN_WL1_SMOKE00,
+        dPa_name::ID_IT_ST_SHIREN_WL2_SMOKE00,
+        dPa_name::ID_IT_ST_SHIREN_WL3_SMOKE00,
     };
 
     csXyz local_28 = current.angle;
@@ -353,18 +350,18 @@ static actor_method_class daWallMethodTable = {
 };
 
 actor_process_profile_definition g_profile_WALL = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WALL,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_WALL_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWall_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_WALL,
+    /* Draw Prio    */ fpcDwPi_WALL_e,
     /* Actor SubMtd */ &daWallMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

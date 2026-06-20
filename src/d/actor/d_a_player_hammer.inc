@@ -10,6 +10,7 @@
  * a function from this file.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
 
@@ -17,10 +18,10 @@ extern JGeometry::TVec3<f32> l_hammer_splash_particle_scale;
 
 /* 8015023C-80150324       .text setHammerModel__9daPy_lk_cFv */
 void daPy_lk_c::setHammerModel() {
-    J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_HAMMERDAM);
+    J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_HAMMERDAM_e);
     JKRHeap* oldHeap = setItemHeap();
-    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_HAMMER, 0x37221222);
-    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_HAMMER_e, 0x37221222);
+    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(32, FALSE);
     }
@@ -37,7 +38,7 @@ void daPy_lk_c::setHammerQuake(cBgS_PolyInfo* param_1, const cXyz* param_2, int 
     float local_54;
     BOOL bVar2;
     int attrib_code;
-    int iVar6;
+    u32 iVar6;
     JPABaseEmitter* emitter;
     f32 dVar9;
     int iStack_58;
@@ -71,17 +72,17 @@ void daPy_lk_c::setHammerQuake(cBgS_PolyInfo* param_1, const cXyz* param_2, int 
         local_38.y = mDoMtx_stack_c::now[1][3];
         local_38.z = mDoMtx_stack_c::now[2][3];
         if (!fopAcM_getWaterY(&local_38, &local_54) || (local_54 < (5.0f + local_38.y))) {
-            emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0214, &local_38);
+            emitter = dComIfGp_particle_setP1(dPa_name::ID_IT_JN_HM_SENKO00, &local_38);
             if (emitter != NULL) {
-                JPASetRMtxTVecfromMtx(mDoMtx_stack_c::get(), emitter->mGlobalRotation, emitter->mGlobalTranslation);
+                emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
             }
-            emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0215, &local_38);
+            emitter = dComIfGp_particle_setP1(dPa_name::ID_IT_JN_HM_SENPU00, &local_38);
             if (emitter != NULL) {
-                JPASetRMtxTVecfromMtx(mDoMtx_stack_c::get(), emitter->mGlobalRotation, emitter->mGlobalTranslation);
+                emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
             }
-            emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0216, &local_38);
+            emitter = dComIfGp_particle_setP1(dPa_name::ID_IT_JN_HM_SYOGEKI00, &local_38);
             if (emitter != NULL) {
-                JPASetRMtxTVecfromMtx(mDoMtx_stack_c::get(), emitter->mGlobalRotation, emitter->mGlobalTranslation);
+                emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
             }
             bVar2 = false;
         } else {
@@ -92,9 +93,9 @@ void daPy_lk_c::setHammerQuake(cBgS_PolyInfo* param_1, const cXyz* param_2, int 
         }
         if (bVar2) {
             attrib_code = dBgS_Attr_WATER_e;
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_027C, &local_38);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_HM_WP00, &local_38);
             dComIfGp_particle_setShipTail(
-                dPa_name::ID_COMMON_003D, &local_38, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack
+                dPa_name::ID_IT_JN_WP_HAMON01, &local_38, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack
             );
         } else {
             attrib_code = dComIfG_Bgsp()->GetAttributeCode(*param_1);
@@ -102,7 +103,7 @@ void daPy_lk_c::setHammerQuake(cBgS_PolyInfo* param_1, const cXyz* param_2, int 
         emitter =
             dComIfGp_particle_setSimpleLand(attrib_code, &local_38, NULL, 1.0f, 1.0f, 1.0f, &tevStr, &iStack_58, 0x1E);
         if (emitter != NULL) {
-            JPASetRMtxTVecfromMtx(mDoMtx_stack_c::get(), emitter->mGlobalRotation, emitter->mGlobalTranslation);
+            emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
             if (attrib_code == dBgS_Attr_WATER_e || attrib_code == dBgS_Attr_GRASS_e) {
                 emitter->setRate(60.0f);
                 emitter->setSpread(1.0f);
@@ -145,14 +146,14 @@ void daPy_lk_c::setHammerWaterSplash() {
             mGndChk.SetPos(&local_28);
             if (!(local_50 < dComIfG_Bgsp()->GroundCross(&mGndChk) + 5.0f)) {
                 local_28.y = local_50;
-                dComIfGp_particle_setP1(dPa_name::ID_COMMON_027C, &local_28);
+                dComIfGp_particle_setP1(dPa_name::ID_IT_JN_HM_WP00, &local_28);
                 dComIfGp_particle_setShipTail(
-                    dPa_name::ID_COMMON_003D, &local_28, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack
+                    dPa_name::ID_IT_JN_WP_HAMON01, &local_28, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack
                 );
                 GXColor amb, dif;
                 dKy_get_seacolor(&amb, &dif);
                 JPABaseEmitter* emitter =
-                    dComIfGp_particle_setP1(dPa_name::ID_COMMON_0023, &local_28, NULL, NULL, 0xFF, NULL, -1, &amb);
+                    dComIfGp_particle_setP1(dPa_name::ID_AK_JN_ELEMENTSHIBUKI00, &local_28, NULL, NULL, 0xFF, NULL, -1, &amb);
                 if (emitter != NULL) {
                     emitter->setRate(60.0f);
                     emitter->setSpread(1.0f);
@@ -171,19 +172,19 @@ BOOL daPy_lk_c::procHammerSideSwing_init() {
     commonProcInit(daPyProc_HAMMER_SIDE_SWING_e);
     setSingleMoveAnime(
         ANM_HAMSWINGA,
-        daPy_HIO_ham_c0::m.field_0x8,
-        daPy_HIO_ham_c0::m.field_0xC,
-        daPy_HIO_ham_c0::m.field_0x0,
-        daPy_HIO_ham_c0::m.field_0x14
+        m_HIO->mItem.mHam.m.field_0x8,
+        m_HIO->mItem.mHam.m.field_0xC,
+        m_HIO->mItem.mHam.m.field_0x0,
+        m_HIO->mItem.mHam.m.field_0x14
     );
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     voiceStart(1);
-    m34D4 = shape_angle.y;
-    setBlurPosResource(LKANM__HAMMERSIDE_POS);
-    setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK0, dCcG_SE_UNK5, dCcG_AtHitMark_Nrm_e, 17, 50.0f);
-    mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMSWINGAA));
-    m35EC = daPy_HIO_ham_c0::m.field_0xC;
+    mProcVar2.m34D4 = shape_angle.y;
+    setBlurPosResource(dRes_INDEX_LKANM__HAMMERSIDE_POS_e);
+    setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK0, dCcG_SE_METAL, dCcG_AtHitMark_Nrm_e, CUT_TYPE_HAMMER_SIDESWING, 50.0f);
+    mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_HAMSWINGAA_e));
+    m35EC = m_HIO->mItem.mHam.m.field_0xC;
     return true;
 }
 
@@ -191,20 +192,20 @@ BOOL daPy_lk_c::procHammerSideSwing_init() {
 BOOL daPy_lk_c::procHammerSideSwing() {
     m35EC = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-        mVelocity = 0.0f;
+        mNormalSpeed = 0.0f;
         mDirection = DIR_RIGHT;
         checkNextMode(0);
         return true;
     }
-    if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_ham_c0::m.field_0x10) {
-        f32 dVar4 = mVelocity;
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mItem.mHam.m.field_0x10) {
+        f32 dVar4 = mNormalSpeed;
         u8 orig_direction = mDirection;
-        mVelocity = 0.0f;
+        mNormalSpeed = 0.0f;
         mDirection = DIR_RIGHT;
         if (checkNextMode(1)) {
             return true;
         }
-        mVelocity = dVar4;
+        mNormalSpeed = dVar4;
         mDirection = orig_direction;
     }
     if (changeCutReverseProc(ANM_CUTREL)) {
@@ -213,19 +214,19 @@ BOOL daPy_lk_c::procHammerSideSwing() {
     }
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
-            daPy_HIO_turn_c0::m.field_0x4,
-            daPy_HIO_turn_c0::m.field_0x0,
-            daPy_HIO_turn_c0::m.field_0x2
+            mProcVar2.m34D4,
+            m_HIO->mTurn.m.field_0x4,
+            m_HIO->mTurn.m.field_0x0,
+            m_HIO->mTurn.m.field_0x2
         );
     }
     current.angle.y = shape_angle.y;
-    if ((mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= daPy_HIO_ham_c0::m.field_0x18) &&
-        (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < daPy_HIO_ham_c0::m.field_0x1C))
+    if ((mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= m_HIO->mItem.mHam.m.field_0x18) &&
+        (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < m_HIO->mItem.mHam.m.field_0x1C))
     {
         if (!checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
             onResetFlg0(daPyRFlg0_UNK1);
@@ -241,22 +242,22 @@ BOOL daPy_lk_c::procHammerFrontSwingReady_init() {
     commonProcInit(daPyProc_HAMMER_FRONT_SWING_READY_e);
     setSingleMoveAnime(
         ANM_HAMSWINGBPRE,
-        daPy_HIO_ham_c0::m.field_0x20,
-        daPy_HIO_ham_c0::m.field_0x24,
-        daPy_HIO_ham_c0::m.field_0x2,
-        daPy_HIO_ham_c0::m.field_0x28
+        m_HIO->mItem.mHam.m.field_0x20,
+        m_HIO->mItem.mHam.m.field_0x24,
+        m_HIO->mItem.mHam.m.field_0x2,
+        m_HIO->mItem.mHam.m.field_0x28
     );
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
-    if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
-        m34D4 = shape_angle.y;
+    mNormalSpeed = 0.0f;
+    if (checkAttentionLock() || mStickDistance <= 0.05f) {
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
-        m34D4 = m34E8;
+        mProcVar2.m34D4 = m34E8;
     }
-    setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK0, dCcG_SE_UNK5, dCcG_AtHitMark_Nrm_e, 18, 50.0f);
+    setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK0, dCcG_SE_METAL, dCcG_AtHitMark_Nrm_e, CUT_TYPE_HAMMER_FRONTSWING, 50.0f);
     voiceStart(7);
-    mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMSWINGBPREA));
-    m35EC = daPy_HIO_ham_c0::m.field_0x24;
+    mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_HAMSWINGBPREA_e));
+    m35EC = m_HIO->mItem.mHam.m.field_0x24;
     m355C = 0;
     return true;
 }
@@ -269,14 +270,14 @@ BOOL daPy_lk_c::procHammerFrontSwingReady() {
     }
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
-            daPy_HIO_turn_c0::m.field_0x4,
-            daPy_HIO_turn_c0::m.field_0x0,
-            daPy_HIO_turn_c0::m.field_0x2
+            mProcVar2.m34D4,
+            m_HIO->mTurn.m.field_0x4,
+            m_HIO->mTurn.m.field_0x0,
+            m_HIO->mTurn.m.field_0x2
         );
     }
     current.angle.y = shape_angle.y;
@@ -288,27 +289,27 @@ BOOL daPy_lk_c::procHammerFrontSwing_init() {
     commonProcInit(daPyProc_HAMMER_FRONT_SWING_e);
     setSingleMoveAnime(
         ANM_HAMSWINGBHIT,
-        4.0f * daPy_HIO_ham_c0::m.field_0x2C,
-        daPy_HIO_ham_c0::m.field_0x30,
-        daPy_HIO_ham_c0::m.field_0x4,
+        4.0f * m_HIO->mItem.mHam.m.field_0x2C,
+        m_HIO->mItem.mHam.m.field_0x30,
+        m_HIO->mItem.mHam.m.field_0x4,
         0.0f
     );
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     voiceStart(1);
-    if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
-        m34D4 = shape_angle.y;
+    if (checkAttentionLock() || mStickDistance <= 0.05f) {
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
-        m34D4 = m34E8;
+        mProcVar2.m34D4 = m34E8;
     }
-    m34D4 = shape_angle.y;
-    setBlurPosResource(LKANM__HAMMERFRONT_POS);
-    mCutType = 18;
-    offResetFlg0(daPyRFlg0_UNK8000000);
+    mProcVar2.m34D4 = shape_angle.y;
+    setBlurPosResource(dRes_INDEX_LKANM__HAMMERFRONT_POS_e);
+    mCutType = CUT_TYPE_HAMMER_FRONTSWING;
+    offResetFlg0(daPyRFlg0_NOT_ATTACKING);
     onResetFlg0(daPy_RFLG0(daPyRFlg0_UNK1 | daPyRFlg0_UNK2));
-    m34D0 = 0;
-    mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMSWINGBHITA));
-    m35EC = daPy_HIO_ham_c0::m.field_0x30;
+    mProcVar0.m34D0 = 0;
+    mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_HAMSWINGBHITA_e));
+    m35EC = m_HIO->mItem.mHam.m.field_0x30;
     return true;
 }
 
@@ -317,10 +318,10 @@ BOOL daPy_lk_c::procHammerFrontSwing() {
     m35EC = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     f32 f1 = mFrameCtrlUnder[UNDER_MOVE0_e].getRate();
     if (f1 < 0.01f) {
-        if (m34D0 == 0) {
+        if (mProcVar0.m34D0 == 0) {
             return procHammerFrontSwingEnd_init();
         } else {
-            m34D0--;
+            mProcVar0.m34D0--;
         }
         return true;
     }
@@ -333,13 +334,11 @@ BOOL daPy_lk_c::procHammerFrontSwing() {
                 int r27;
                 int r26;
                 r26 = -1;
-                f32 f30 = 300.0f;
-                f32 f31 = -G_CM3D_F_INF;
                 for (r27 = 0; r27 < mSwBlur.field_0x014; r27++) {
-                    sp08.set(mSwBlur.field_0x034[r27].x, f30 + mSwBlur.field_0x034[r27].y, mSwBlur.field_0x034[r27].z);
+                    sp08.set(mSwBlur.field_0x034[r27].x, 300.0f + mSwBlur.field_0x034[r27].y, mSwBlur.field_0x034[r27].z);
                     mGndChk.SetPos(&sp08);
                     sp08.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
-                    if (f31 != sp08.y && mSwBlur.field_0x034[r27].y > sp08.y) {
+                    if (sp08.y != -G_CM3D_F_INF && mSwBlur.field_0x034[r27].y > sp08.y) {
                         r26 = dComIfG_Bgsp()->GetMtrlSndId(mGndChk);
                         break;
                     }
@@ -359,7 +358,7 @@ BOOL daPy_lk_c::procHammerFrontSwing() {
                 mFrameCtrlUnder[UNDER_MOVE0_e].setFrame(f5);
                 mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.0f);
                 m35EC = f5;
-                m34D0 = 10;
+                mProcVar0.m34D0 = 10;
                 setHammerQuake(&mGndChk, &sp08, r26);
                 return true;
             }
@@ -370,14 +369,14 @@ BOOL daPy_lk_c::procHammerFrontSwing() {
     }
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
-            daPy_HIO_turn_c0::m.field_0x4,
-            daPy_HIO_turn_c0::m.field_0x0,
-            daPy_HIO_turn_c0::m.field_0x2
+            mProcVar2.m34D4,
+            m_HIO->mTurn.m.field_0x4,
+            m_HIO->mTurn.m.field_0x0,
+            m_HIO->mTurn.m.field_0x2
         );
     }
     current.angle.y = shape_angle.y;
@@ -390,15 +389,15 @@ BOOL daPy_lk_c::procHammerFrontSwingEnd_init() {
     commonProcInit(daPyProc_HAMMER_FRONT_SWING_END_e);
     setSingleMoveAnime(
         ANM_HAMSWINGBEND,
-        daPy_HIO_ham_c0::m.field_0x34,
-        daPy_HIO_ham_c0::m.field_0x38,
-        daPy_HIO_ham_c0::m.field_0x6,
-        daPy_HIO_ham_c0::m.field_0x40
+        m_HIO->mItem.mHam.m.field_0x34,
+        m_HIO->mItem.mHam.m.field_0x38,
+        m_HIO->mItem.mHam.m.field_0x6,
+        m_HIO->mItem.mHam.m.field_0x40
     );
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
-    mCutType = 18;
-    offResetFlg0(daPyRFlg0_UNK8000000);
+    mNormalSpeed = 0.0f;
+    mCutType = CUT_TYPE_HAMMER_FRONTSWING;
+    offResetFlg0(daPyRFlg0_NOT_ATTACKING);
     return true;
 }
 
@@ -406,7 +405,7 @@ BOOL daPy_lk_c::procHammerFrontSwingEnd_init() {
 BOOL daPy_lk_c::procHammerFrontSwingEnd() {
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         return checkNextMode(0);
-    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_ham_c0::m.field_0x3C) {
+    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mItem.mHam.m.field_0x3C) {
         return checkNextMode(1);
     } else {
         return true;

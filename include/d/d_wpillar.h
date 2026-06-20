@@ -2,14 +2,18 @@
 #define D_WPILLAR_H
 
 #include "dolphin/types.h"
+#include "f_op/f_op_kankyo.h"
 
-class dWpillar_c {
+class dWpillar_c : public kankyo_class {
 public:
     void jointCallBack(int);
-    void draw();
-    void execute();
-    void wp_delete();
-    void create();
+    BOOL draw();
+    BOOL execute();
+    BOOL wp_delete();
+    cPhs_State create();
+
+public:
+    /* Place member variables here */
 };
 
 #endif /* D_WPILLAR_H */

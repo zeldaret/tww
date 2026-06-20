@@ -3,6 +3,8 @@
 // Translation Unit: d_a_obj_correct.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
+
 // This include needs to be before d_a_obj_correct.h for ordering of the
 // daObj::PrmAbstract symbols.
 #include "d/actor/d_a_obj_movebox.h"
@@ -10,11 +12,7 @@
 #include "d/actor/d_a_obj_correct.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daObjCorrect {
 namespace {
@@ -49,7 +47,7 @@ inline static const Attr_c& attr(daObjCorrect::Type_e type) { return L_attr[type
 cPhs_State daObjCorrect::Act_c::_create() {
     int swSave = prm_get_swSave();
 
-    fopAcM_SetupActor(this, daObjCorrect::Act_c);
+    fopAcM_ct(this, daObjCorrect::Act_c);
 
     if (swSave == 0xFF) {
         return cPhs_ERROR_e;
@@ -82,7 +80,7 @@ bool daObjCorrect::Act_c::_delete() {
 
 /* 000001B8-00000204       .text chk_try_actor0__Q212daObjCorrect5Act_cFP10fopAc_ac_c */
 daObjTry::Act_c* daObjCorrect::Act_c::chk_try_actor0(fopAc_ac_c* actor) {
-    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_Obj_Try) {
+    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Try_e) {
         return (daObjTry::Act_c*) actor;
     }
     return NULL;
@@ -104,11 +102,10 @@ void* daObjCorrect::Act_c::chk_try_actor2(daObjTry::Act_c* actor, daObjTry::Type
     JUT_ASSERT(346, i_sw_r_sq <= i_depression_r_sq);
 
     if (type == actor->prm_get_type()) {
-        f32 dist = actor->current.pos.abs2(current.pos);
-        if (dist < i_depression_r_sq) {
-
+        f32 dist_sq = actor->current.pos.abs2(current.pos);
+        if (dist_sq < i_depression_r_sq) {
             bool should_return;
-            if (dist < i_sw_r_sq) {
+            if (dist_sq < i_sw_r_sq) {
                 should_return = prm_get_swSave() == actor->prm_get_swSave();
             } else {
                 should_return = false;
@@ -130,7 +127,7 @@ void* daObjCorrect::Act_c::search_movebox(void* actor, void* user_data) {
 
     fpc_ProcID proc_id = fpcM_GetID(actor);
     if (!fpcM_IsCreating(proc_id)) {
-        if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_Obj_Movebox) {
+        if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Movebox_e) {
             daObjMovebox::Act_c* movebox = (daObjMovebox::Act_c*) actor;
             if (ac_actor->current.pos.abs2(correct->current.pos) < correct->field_0x2A4) {
                 if (movebox->prm_get_swSave() == correct->prm_get_swSave() && movebox->prm_get_dmy() == 0) {
@@ -141,7 +138,7 @@ void* daObjCorrect::Act_c::search_movebox(void* actor, void* user_data) {
             correct->field_0x290 = 0;
         }
     } else {
-        if (actor != NULL && fopAcM_GetName(actor) == PROC_Obj_Movebox) {
+        if (actor != NULL && fopAcM_GetName(actor) == fpcNm_Obj_Movebox_e) {
             correct->field_0x290 = 0;
             return NULL;
         }
@@ -193,7 +190,7 @@ void* daObjCorrect::Act_c::search_tryKeyGate(void* actor, void* user_data) {
 
     void* return_val = NULL;
     if (fpcM_IsCreating(proc_id)) {
-        if (actor != NULL && fopAcM_GetName(actor) == PROC_Obj_Try) {
+        if (actor != NULL && fopAcM_GetName(actor) == fpcNm_Obj_Try_e) {
             correct->field_0x290 = 0;
         }
     } else {
@@ -216,7 +213,7 @@ void* daObjCorrect::Act_c::search_tryKeyDoor(void* actor, void* user_data) {
 
     void* return_val = NULL;
     if (fpcM_IsCreating(proc_id)) {
-        if (actor != NULL && fopAcM_GetName(actor) == PROC_Obj_Try) {
+        if (actor != NULL && fopAcM_GetName(actor) == fpcNm_Obj_Try_e) {
             correct->field_0x290 = 0;
         }
     } else {
@@ -429,18 +426,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjCorrect
 
 actor_process_profile_definition g_profile_Obj_Correct = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0009,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Correct,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0009,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Correct_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjCorrect::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Correct,
+    /* Draw Prio    */ fpcDwPi_Obj_Correct_e,
     /* Actor SubMtd */ &daObjCorrect::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

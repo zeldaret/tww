@@ -85,11 +85,11 @@ public:
     /* vt[16] */ virtual s32 do_getFreeSize();                                  /* override */
     /* vt[17] */ virtual void* do_getMaxFreeBlock();                            /* override */
     /* vt[18] */ virtual s32 do_getTotalFreeSize();                             /* override */
-    /* vt[19] */ virtual s32 do_changeGroupID(u8 newGroupID);                   /* override */
+    /* vt[19] */ virtual u8 do_changeGroupID(u8 newGroupID);                    /* override */
     /* vt[20] */ virtual u8 do_getCurrentGroupId();                             /* override */
     /* vt[21] */ virtual void state_register(JKRHeap::TState* p, u32 id) const; /* override */
     /* vt[22] */ virtual bool state_compare(JKRHeap::TState const& r1,
-                                            JKRHeap::TState const& r2) const; /* override */
+                                            JKRHeap::TState const& r2) const;   /* override */
 
     /* 0x6C */ u8 mAllocMode;
     /* 0x6D */ u8 mCurrentGroupId;

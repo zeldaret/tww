@@ -3,93 +3,964 @@
 // Translation Unit: d_a_obj_apzl.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_apzl.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "d/actor/d_a_item.h"
+#include "m_Do/m_Do_controller_pad.h"
+#include "res/Object/Apzl.h"
+
+static const u32 daObjApzl_bmt_table[16][16] = {
+    {
+        dRes_INDEX_APZL_BMT_APZLP_I00_e,
+        dRes_INDEX_APZL_BMT_APZLP_I01_e,
+        dRes_INDEX_APZL_BMT_APZLP_I02_e,
+        dRes_INDEX_APZL_BMT_APZLP_I03_e,
+        dRes_INDEX_APZL_BMT_APZLP_I04_e,
+        dRes_INDEX_APZL_BMT_APZLP_I05_e,
+        dRes_INDEX_APZL_BMT_APZLP_I06_e,
+        dRes_INDEX_APZL_BMT_APZLP_I07_e,
+        dRes_INDEX_APZL_BMT_APZLP_I08_e,
+        dRes_INDEX_APZL_BMT_APZLP_I09_e,
+        dRes_INDEX_APZL_BMT_APZLP_I10_e,
+        dRes_INDEX_APZL_BMT_APZLP_I11_e,
+        dRes_INDEX_APZL_BMT_APZLP_I12_e,
+        dRes_INDEX_APZL_BMT_APZLP_I13_e,
+        dRes_INDEX_APZL_BMT_APZLP_I14_e,
+        dRes_INDEX_APZL_BMT_APZLP_I15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_J00_e,
+        dRes_INDEX_APZL_BMT_APZLP_J01_e,
+        dRes_INDEX_APZL_BMT_APZLP_J02_e,
+        dRes_INDEX_APZL_BMT_APZLP_J03_e,
+        dRes_INDEX_APZL_BMT_APZLP_J04_e,
+        dRes_INDEX_APZL_BMT_APZLP_J05_e,
+        dRes_INDEX_APZL_BMT_APZLP_J06_e,
+        dRes_INDEX_APZL_BMT_APZLP_J07_e,
+        dRes_INDEX_APZL_BMT_APZLP_J08_e,
+        dRes_INDEX_APZL_BMT_APZLP_J09_e,
+        dRes_INDEX_APZL_BMT_APZLP_J10_e,
+        dRes_INDEX_APZL_BMT_APZLP_J11_e,
+        dRes_INDEX_APZL_BMT_APZLP_J12_e,
+        dRes_INDEX_APZL_BMT_APZLP_J13_e,
+        dRes_INDEX_APZL_BMT_APZLP_J14_e,
+        dRes_INDEX_APZL_BMT_APZLP_J15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_K00_e,
+        dRes_INDEX_APZL_BMT_APZLP_K01_e,
+        dRes_INDEX_APZL_BMT_APZLP_K02_e,
+        dRes_INDEX_APZL_BMT_APZLP_K03_e,
+        dRes_INDEX_APZL_BMT_APZLP_K04_e,
+        dRes_INDEX_APZL_BMT_APZLP_K05_e,
+        dRes_INDEX_APZL_BMT_APZLP_K06_e,
+        dRes_INDEX_APZL_BMT_APZLP_K07_e,
+        dRes_INDEX_APZL_BMT_APZLP_K08_e,
+        dRes_INDEX_APZL_BMT_APZLP_K09_e,
+        dRes_INDEX_APZL_BMT_APZLP_K10_e,
+        dRes_INDEX_APZL_BMT_APZLP_K11_e,
+        dRes_INDEX_APZL_BMT_APZLP_K12_e,
+        dRes_INDEX_APZL_BMT_APZLP_K13_e,
+        dRes_INDEX_APZL_BMT_APZLP_K14_e,
+        dRes_INDEX_APZL_BMT_APZLP_K15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_L00_e,
+        dRes_INDEX_APZL_BMT_APZLP_L01_e,
+        dRes_INDEX_APZL_BMT_APZLP_L02_e,
+        dRes_INDEX_APZL_BMT_APZLP_L03_e,
+        dRes_INDEX_APZL_BMT_APZLP_L04_e,
+        dRes_INDEX_APZL_BMT_APZLP_L05_e,
+        dRes_INDEX_APZL_BMT_APZLP_L06_e,
+        dRes_INDEX_APZL_BMT_APZLP_L07_e,
+        dRes_INDEX_APZL_BMT_APZLP_L08_e,
+        dRes_INDEX_APZL_BMT_APZLP_L09_e,
+        dRes_INDEX_APZL_BMT_APZLP_L10_e,
+        dRes_INDEX_APZL_BMT_APZLP_L11_e,
+        dRes_INDEX_APZL_BMT_APZLP_L12_e,
+        dRes_INDEX_APZL_BMT_APZLP_L13_e,
+        dRes_INDEX_APZL_BMT_APZLP_L14_e,
+        dRes_INDEX_APZL_BMT_APZLP_L15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_M00_e,
+        dRes_INDEX_APZL_BMT_APZLP_M01_e,
+        dRes_INDEX_APZL_BMT_APZLP_M02_e,
+        dRes_INDEX_APZL_BMT_APZLP_M03_e,
+        dRes_INDEX_APZL_BMT_APZLP_M04_e,
+        dRes_INDEX_APZL_BMT_APZLP_M05_e,
+        dRes_INDEX_APZL_BMT_APZLP_M06_e,
+        dRes_INDEX_APZL_BMT_APZLP_M07_e,
+        dRes_INDEX_APZL_BMT_APZLP_M08_e,
+        dRes_INDEX_APZL_BMT_APZLP_M09_e,
+        dRes_INDEX_APZL_BMT_APZLP_M10_e,
+        dRes_INDEX_APZL_BMT_APZLP_M11_e,
+        dRes_INDEX_APZL_BMT_APZLP_M12_e,
+        dRes_INDEX_APZL_BMT_APZLP_M13_e,
+        dRes_INDEX_APZL_BMT_APZLP_M14_e,
+        dRes_INDEX_APZL_BMT_APZLP_M15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_N00_e,
+        dRes_INDEX_APZL_BMT_APZLP_N01_e,
+        dRes_INDEX_APZL_BMT_APZLP_N02_e,
+        dRes_INDEX_APZL_BMT_APZLP_N03_e,
+        dRes_INDEX_APZL_BMT_APZLP_N04_e,
+        dRes_INDEX_APZL_BMT_APZLP_N05_e,
+        dRes_INDEX_APZL_BMT_APZLP_N06_e,
+        dRes_INDEX_APZL_BMT_APZLP_N07_e,
+        dRes_INDEX_APZL_BMT_APZLP_N08_e,
+        dRes_INDEX_APZL_BMT_APZLP_N09_e,
+        dRes_INDEX_APZL_BMT_APZLP_N10_e,
+        dRes_INDEX_APZL_BMT_APZLP_N11_e,
+        dRes_INDEX_APZL_BMT_APZLP_N12_e,
+        dRes_INDEX_APZL_BMT_APZLP_N13_e,
+        dRes_INDEX_APZL_BMT_APZLP_N14_e,
+        dRes_INDEX_APZL_BMT_APZLP_N15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_O00_e,
+        dRes_INDEX_APZL_BMT_APZLP_O01_e,
+        dRes_INDEX_APZL_BMT_APZLP_O02_e,
+        dRes_INDEX_APZL_BMT_APZLP_O03_e,
+        dRes_INDEX_APZL_BMT_APZLP_O04_e,
+        dRes_INDEX_APZL_BMT_APZLP_O05_e,
+        dRes_INDEX_APZL_BMT_APZLP_O06_e,
+        dRes_INDEX_APZL_BMT_APZLP_O07_e,
+        dRes_INDEX_APZL_BMT_APZLP_O08_e,
+        dRes_INDEX_APZL_BMT_APZLP_O09_e,
+        dRes_INDEX_APZL_BMT_APZLP_O10_e,
+        dRes_INDEX_APZL_BMT_APZLP_O11_e,
+        dRes_INDEX_APZL_BMT_APZLP_O12_e,
+        dRes_INDEX_APZL_BMT_APZLP_O13_e,
+        dRes_INDEX_APZL_BMT_APZLP_O14_e,
+        dRes_INDEX_APZL_BMT_APZLP_O15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_P00_e,
+        dRes_INDEX_APZL_BMT_APZLP_P01_e,
+        dRes_INDEX_APZL_BMT_APZLP_P02_e,
+        dRes_INDEX_APZL_BMT_APZLP_P03_e,
+        dRes_INDEX_APZL_BMT_APZLP_P04_e,
+        dRes_INDEX_APZL_BMT_APZLP_P05_e,
+        dRes_INDEX_APZL_BMT_APZLP_P06_e,
+        dRes_INDEX_APZL_BMT_APZLP_P07_e,
+        dRes_INDEX_APZL_BMT_APZLP_P08_e,
+        dRes_INDEX_APZL_BMT_APZLP_P09_e,
+        dRes_INDEX_APZL_BMT_APZLP_P10_e,
+        dRes_INDEX_APZL_BMT_APZLP_P11_e,
+        dRes_INDEX_APZL_BMT_APZLP_P12_e,
+        dRes_INDEX_APZL_BMT_APZLP_P13_e,
+        dRes_INDEX_APZL_BMT_APZLP_P14_e,
+        dRes_INDEX_APZL_BMT_APZLP_P15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_Q00_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q01_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q02_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q03_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q04_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q05_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q06_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q07_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q08_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q09_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q10_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q11_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q12_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q13_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q14_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_R00_e,
+        dRes_INDEX_APZL_BMT_APZLP_R01_e,
+        dRes_INDEX_APZL_BMT_APZLP_R02_e,
+        dRes_INDEX_APZL_BMT_APZLP_R03_e,
+        dRes_INDEX_APZL_BMT_APZLP_R04_e,
+        dRes_INDEX_APZL_BMT_APZLP_R05_e,
+        dRes_INDEX_APZL_BMT_APZLP_R06_e,
+        dRes_INDEX_APZL_BMT_APZLP_R07_e,
+        dRes_INDEX_APZL_BMT_APZLP_R08_e,
+        dRes_INDEX_APZL_BMT_APZLP_R09_e,
+        dRes_INDEX_APZL_BMT_APZLP_R10_e,
+        dRes_INDEX_APZL_BMT_APZLP_R11_e,
+        dRes_INDEX_APZL_BMT_APZLP_R12_e,
+        dRes_INDEX_APZL_BMT_APZLP_R13_e,
+        dRes_INDEX_APZL_BMT_APZLP_R14_e,
+        dRes_INDEX_APZL_BMT_APZLP_R15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_S00_e,
+        dRes_INDEX_APZL_BMT_APZLP_S01_e,
+        dRes_INDEX_APZL_BMT_APZLP_S02_e,
+        dRes_INDEX_APZL_BMT_APZLP_S03_e,
+        dRes_INDEX_APZL_BMT_APZLP_S04_e,
+        dRes_INDEX_APZL_BMT_APZLP_S05_e,
+        dRes_INDEX_APZL_BMT_APZLP_S06_e,
+        dRes_INDEX_APZL_BMT_APZLP_S07_e,
+        dRes_INDEX_APZL_BMT_APZLP_S08_e,
+        dRes_INDEX_APZL_BMT_APZLP_S09_e,
+        dRes_INDEX_APZL_BMT_APZLP_S10_e,
+        dRes_INDEX_APZL_BMT_APZLP_S11_e,
+        dRes_INDEX_APZL_BMT_APZLP_S12_e,
+        dRes_INDEX_APZL_BMT_APZLP_S13_e,
+        dRes_INDEX_APZL_BMT_APZLP_S14_e,
+        dRes_INDEX_APZL_BMT_APZLP_S15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_T00_e,
+        dRes_INDEX_APZL_BMT_APZLP_T01_e,
+        dRes_INDEX_APZL_BMT_APZLP_T02_e,
+        dRes_INDEX_APZL_BMT_APZLP_T03_e,
+        dRes_INDEX_APZL_BMT_APZLP_T04_e,
+        dRes_INDEX_APZL_BMT_APZLP_T05_e,
+        dRes_INDEX_APZL_BMT_APZLP_T06_e,
+        dRes_INDEX_APZL_BMT_APZLP_T07_e,
+        dRes_INDEX_APZL_BMT_APZLP_T08_e,
+        dRes_INDEX_APZL_BMT_APZLP_T09_e,
+        dRes_INDEX_APZL_BMT_APZLP_T10_e,
+        dRes_INDEX_APZL_BMT_APZLP_T11_e,
+        dRes_INDEX_APZL_BMT_APZLP_T12_e,
+        dRes_INDEX_APZL_BMT_APZLP_T13_e,
+        dRes_INDEX_APZL_BMT_APZLP_T14_e,
+        dRes_INDEX_APZL_BMT_APZLP_T15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_U00_e,
+        dRes_INDEX_APZL_BMT_APZLP_U01_e,
+        dRes_INDEX_APZL_BMT_APZLP_U02_e,
+        dRes_INDEX_APZL_BMT_APZLP_U03_e,
+        dRes_INDEX_APZL_BMT_APZLP_U04_e,
+        dRes_INDEX_APZL_BMT_APZLP_U05_e,
+        dRes_INDEX_APZL_BMT_APZLP_U06_e,
+        dRes_INDEX_APZL_BMT_APZLP_U07_e,
+        dRes_INDEX_APZL_BMT_APZLP_U08_e,
+        dRes_INDEX_APZL_BMT_APZLP_U09_e,
+        dRes_INDEX_APZL_BMT_APZLP_U10_e,
+        dRes_INDEX_APZL_BMT_APZLP_U11_e,
+        dRes_INDEX_APZL_BMT_APZLP_U12_e,
+        dRes_INDEX_APZL_BMT_APZLP_U13_e,
+        dRes_INDEX_APZL_BMT_APZLP_U14_e,
+        dRes_INDEX_APZL_BMT_APZLP_U15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_V00_e,
+        dRes_INDEX_APZL_BMT_APZLP_V01_e,
+        dRes_INDEX_APZL_BMT_APZLP_V02_e,
+        dRes_INDEX_APZL_BMT_APZLP_V03_e,
+        dRes_INDEX_APZL_BMT_APZLP_V04_e,
+        dRes_INDEX_APZL_BMT_APZLP_V05_e,
+        dRes_INDEX_APZL_BMT_APZLP_V06_e,
+        dRes_INDEX_APZL_BMT_APZLP_V07_e,
+        dRes_INDEX_APZL_BMT_APZLP_V08_e,
+        dRes_INDEX_APZL_BMT_APZLP_V09_e,
+        dRes_INDEX_APZL_BMT_APZLP_V10_e,
+        dRes_INDEX_APZL_BMT_APZLP_V11_e,
+        dRes_INDEX_APZL_BMT_APZLP_V12_e,
+        dRes_INDEX_APZL_BMT_APZLP_V13_e,
+        dRes_INDEX_APZL_BMT_APZLP_V14_e,
+        dRes_INDEX_APZL_BMT_APZLP_V15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_W00_e,
+        dRes_INDEX_APZL_BMT_APZLP_W01_e,
+        dRes_INDEX_APZL_BMT_APZLP_W02_e,
+        dRes_INDEX_APZL_BMT_APZLP_W03_e,
+        dRes_INDEX_APZL_BMT_APZLP_W04_e,
+        dRes_INDEX_APZL_BMT_APZLP_W05_e,
+        dRes_INDEX_APZL_BMT_APZLP_W06_e,
+        dRes_INDEX_APZL_BMT_APZLP_W07_e,
+        dRes_INDEX_APZL_BMT_APZLP_W08_e,
+        dRes_INDEX_APZL_BMT_APZLP_W09_e,
+        dRes_INDEX_APZL_BMT_APZLP_W10_e,
+        dRes_INDEX_APZL_BMT_APZLP_W11_e,
+        dRes_INDEX_APZL_BMT_APZLP_W12_e,
+        dRes_INDEX_APZL_BMT_APZLP_W13_e,
+        dRes_INDEX_APZL_BMT_APZLP_W14_e,
+        dRes_INDEX_APZL_BMT_APZLP_W15_e,
+    },
+    {
+        dRes_INDEX_APZL_BMT_APZLP_X00_e,
+        dRes_INDEX_APZL_BMT_APZLP_X01_e,
+        dRes_INDEX_APZL_BMT_APZLP_X02_e,
+        dRes_INDEX_APZL_BMT_APZLP_X03_e,
+        dRes_INDEX_APZL_BMT_APZLP_X04_e,
+        dRes_INDEX_APZL_BMT_APZLP_X05_e,
+        dRes_INDEX_APZL_BMT_APZLP_X06_e,
+        dRes_INDEX_APZL_BMT_APZLP_X07_e,
+        dRes_INDEX_APZL_BMT_APZLP_X08_e,
+        dRes_INDEX_APZL_BMT_APZLP_X09_e,
+        dRes_INDEX_APZL_BMT_APZLP_X10_e,
+        dRes_INDEX_APZL_BMT_APZLP_X11_e,
+        dRes_INDEX_APZL_BMT_APZLP_X12_e,
+        dRes_INDEX_APZL_BMT_APZLP_X13_e,
+        dRes_INDEX_APZL_BMT_APZLP_X14_e,
+        dRes_INDEX_APZL_BMT_APZLP_X15_e,
+    },
+};
 
 /* 00000078-0000025C       .text move_piece__11daObjApzl_cFv */
-void daObjApzl_c::move_piece() {
-    /* Nonmatching */
+bool daObjApzl_c::move_piece() {
+    stick->checkTrigger();
+    bool swapped = false;
+    if (mMoveTimer != 0) {
+        mMoveTimer--;
+        return false;
+    }
+
+    if ((getblank() & 3) != 3 && stick->checkLeftTrigger()) {
+        mMoveDirection = 1;
+        mSwappedPieceIdx = search_piece(getblank() + 1);
+        swapped = true;
+    }
+    
+    if ((getblank() & 3) != 0 && stick->checkRightTrigger()) {
+        mMoveDirection = 3;
+        mSwappedPieceIdx = search_piece(getblank() - 1);
+        swapped = true;
+    }
+
+    if ((getblank() & 0xC) != 0xC && stick->checkUpTrigger()) {
+        mMoveDirection = 0;
+        mSwappedPieceIdx = search_piece(getblank() + 4);
+        swapped = true;
+    }
+    if ((getblank() & 0xC) != 0 && stick->checkDownTrigger()) {
+        mMoveDirection = 2;
+        mSwappedPieceIdx = search_piece(getblank() - 4);
+        swapped = true;
+    }
+
+    if (swapped == true) {
+        swap_piece(mBlankIdx, mSwappedPieceIdx);
+        if (check_clear()) {
+            mMoveTimer = 40;
+        } else {
+            mMoveTimer = 5;
+        }
+    }
+    return swapped;
 }
 
 /* 0000025C-00000310       .text check_arrow_draw__11daObjApzl_cFv */
 void daObjApzl_c::check_arrow_draw() {
-    /* Nonmatching */
+    for(int i = 0; i < 4; i++) {
+        mDrawArrow[i] = false;
+    }
+
+    if (mState != STATE_PLAYING) {
+        return;
+    }
+
+    if (mMoveTimer != 0) {
+        return;
+    }
+
+    if ((getblank() & 3) != 3) {
+        mDrawArrow[1] = true; // left
+    }
+    if ((getblank() & 3) != 0) {
+        mDrawArrow[3] = true; // right
+    }
+    if ((getblank() & 0xc) != 0xc) {
+        mDrawArrow[0] = true; // up
+    }
+    if ((getblank() & 0xc) != 0) {
+        mDrawArrow[2] = true; // down
+    }
 }
 
 /* 00000310-0000033C       .text search_piece__11daObjApzl_cFUc */
-void daObjApzl_c::search_piece(unsigned char) {
-    /* Nonmatching */
+u8 daObjApzl_c::search_piece(u8 piece) {
+    for (int i = 0; ; i++) {
+        if (mPiecePos[i] == piece) {
+            return i;
+        }
+    }
 }
 
 /* 0000033C-00000360       .text swap_piece__11daObjApzl_cFUcUc */
-void daObjApzl_c::swap_piece(unsigned char, unsigned char) {
-    /* Nonmatching */
+void daObjApzl_c::swap_piece(u8 firstPieceIdx, u8 secondPieceIdx) {
+    u8 tempPiece = mPiecePos[firstPieceIdx];
+    mPiecePos[firstPieceIdx] = mPiecePos[secondPieceIdx];
+    mPiecePos[secondPieceIdx] = tempPiece;
 }
 
 /* 00000360-00000598       .text randamize_piece__11daObjApzl_cFv */
 void daObjApzl_c::randamize_piece() {
-    /* Nonmatching */
+    for(int i = 0; i < 16; i++) {
+        mPiecePos[i] = i;
+    }
+
+    u8 unscrambledCount;
+    while(true) {
+        unscrambledCount = 0;
+        for(int j = 0; j < 10000; j++) {
+            u8 temp = (int)cM_rndF(4.0f) & 3;
+            if(temp == 1) {
+                if((getblank() & 3) != 3) {
+                    swap_piece(mBlankIdx, search_piece(getblank() + 1));
+                }
+
+            } else if(temp == 3) {
+                if((getblank() & 3) != 0) {
+                    swap_piece(mBlankIdx, search_piece(getblank() - 1));
+                }
+            } else if(temp == 0) {
+                if((getblank() & 0xc) != 0xc) {
+                    swap_piece(mBlankIdx, search_piece(getblank() + 4));
+                }
+            } else if((getblank() & 0xc) != 0) {
+                swap_piece(mBlankIdx, search_piece(getblank() - 4));
+            }
+        }
+        
+        for(int j = 0; j < 16; j++) {
+            if((u32)mPiecePos[j] == (j & 0xff)) {
+                unscrambledCount++;
+            }
+        }
+
+        if(unscrambledCount < 3) {
+            break;
+        }
+    }
+
+    for(int i = 0; i < 3; i++) {
+        if ((getblank() & 3) != 3) {
+            swap_piece(mBlankIdx, search_piece(getblank() + 1));
+        }
+        if ((getblank() & 0xC) != 0) {
+            swap_piece(mBlankIdx, search_piece(getblank() - 4));
+        }
+    }
 }
 
 /* 00000598-000005CC       .text save_piece__11daObjApzl_cFv */
 void daObjApzl_c::save_piece() {
-    /* Nonmatching */
+    for(int i = 0; i < 16; i++) {
+        dComIfGs_setPuzzleData(i, mPiecePos[i]);
+    }
 }
 
 /* 000005CC-00000604       .text check_clear__11daObjApzl_cFv */
-void daObjApzl_c::check_clear() {
-    /* Nonmatching */
+bool daObjApzl_c::check_clear() {
+    for (int i = 0; i < 16; i++) {
+        if ((u32)mPiecePos[i] != (i & 0xff)) {
+            return false;
+        }
+    }   
+    return true;
 }
 
 /* 00000604-00000748       .text next_msgStatus__11daObjApzl_cFPUl */
-void daObjApzl_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
+u16 daObjApzl_c::next_msgStatus(u32* pMsgNo) {
+    u16 status = fopMsgStts_MSG_CONTINUES_e;
+    switch(*pMsgNo) {
+        case 0x1BC5:
+            mQuitGame = true;
+            status = fopMsgStts_MSG_ENDS_e;
+            break;
+        case 0x1BC6:
+            if (mpCurrMsg->mSelectNum == 0) {
+                *pMsgNo = 0x1BC7;
+            } else {
+                *pMsgNo = 0x1BC8;
+            }
+            break;
+            
+        case 0x1BC7:
+            if (mpCurrMsg->mSelectNum == 0) {
+                *pMsgNo = 0x1BCA;
+            } else {
+                *pMsgNo = 0x1BC9;
+            }
+            break;
+
+        case 0x1BC8:
+            mQuitGame = true;
+            status = fopMsgStts_MSG_ENDS_e;
+            break;
+
+        case 0x1BC9:
+            status = fopMsgStts_MSG_ENDS_e;
+            break;
+
+        case 0x1BCA:
+            *pMsgNo = 0x1BCB;
+            break;
+
+        case 0x1BCB:
+            if (mpCurrMsg->mSelectNum == 0) {
+                *pMsgNo = 0x1BC9;
+            } else {
+                *pMsgNo = 0x1BCC;
+            }
+            break;
+
+        case 0x1BCC:
+            *pMsgNo = 0x1BCA;
+            break;
+
+        case 0x1BCD:
+            if (mpCurrMsg->mSelectNum == 0) {
+                status = fopMsgStts_MSG_ENDS_e;
+            } else {
+                *pMsgNo = 0x1BCE;
+            }
+            break;
+
+        case 0x1BCE:
+            mQuitGame = true;
+            status = fopMsgStts_MSG_ENDS_e;
+            break;
+
+        case 0x1BCF:
+            status = fopMsgStts_MSG_ENDS_e;
+            break;
+
+        case 0x1BD0:
+            mShownRewardMessage = true;
+            status = fopMsgStts_MSG_ENDS_e;
+            break;
+
+        default:
+            mQuitGame = true;
+            status = fopMsgStts_MSG_ENDS_e;
+            break;
+    }
+    return status;
 }
 
 /* 00000748-0000079C       .text getMsg__11daObjApzl_cFv */
-void daObjApzl_c::getMsg() {
-    /* Nonmatching */
+u32 daObjApzl_c::getMsg() {
+    if (mShownRewardMessage == true) {
+        return 0x1BC5;
+    }
+    if (mGaveReward == true) {
+        return 0x1BD0;
+    }
+    if (mGameCleared == true) {
+        return 0x1BCF;
+    }
+    if (mGameStarted == true) {
+        return 0x1BCD;
+    }
+    return 0x1BC6;
 }
 
 /* 0000079C-0000087C       .text talk__11daObjApzl_cFi */
-void daObjApzl_c::talk(int) {
-    /* Nonmatching */
+u16 daObjApzl_c::talk(int param_1) {
+    u16 status = 0xFF;
+
+    if (mCurrMsgId == fpcM_ERROR_PROCESS_ID_e) {
+        if (param_1 == 1) {
+            mMsgNo = getMsg();
+        }
+        mCurrMsgId = fopMsgM_messageSet(mMsgNo, this);
+        mpCurrMsg = NULL;
+    } else {
+        if (mpCurrMsg != NULL) {
+            status = mpCurrMsg->mStatus;
+            if (status == fopMsgStts_MSG_DISPLAYED_e) {
+                mpCurrMsg->mStatus = next_msgStatus(&mMsgNo);
+                if (mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
+                    fopMsgM_messageSet(mMsgNo);
+                }
+            } else if (status == fopMsgStts_BOX_CLOSED_e) {
+                mpCurrMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+                mCurrMsgId = -1;
+            }
+        } else {
+            mpCurrMsg = fopMsgM_SearchByID(mCurrMsgId);
+        }
+    }
+    return status;
 }
+#if VERSION > VERSION_JPN
+u8 daObjApzl_Rupee_Table[] = {
+    0x01, 0x00, 0x01, 0x00,
+    0x01, 0x00, 0x02, 0x00,
+    0x01, 0x00, 0x02, 0x00,
+    0x03, 0x00, 0x01, 0x00,
+    0x01, 0x02, 0x01, 0x00,
+    0x01, 0x01, 0x01, 0x00,
+    0x01, 0x03, 0x01, 0x01,
+    0x01, 0x04,
+};
+#endif
 
 /* 0000087C-00000D08       .text privateCut__11daObjApzl_cFv */
 void daObjApzl_c::privateCut() {
-    /* Nonmatching */
+    static char* cut_name_tbl[] = {
+        "WAIT",
+        "TALK",
+        "GAME",
+        "GETITEM",
+        "STOP",
+        "SOUND",
+        "PUSH_A",
+        "EVENT_END"
+    };
+
+    enum {
+        ACT_WAIT,
+        ACT_TALK,
+        ACT_GAME,
+        ACT_GETITEM,
+        ACT_STOP,
+        ACT_SOUND,
+        ACT_PUSH_A,
+        ACT_EVENT_END
+    };
+
+    int staffIdx = dComIfGp_evmng_getMyStaffId("Apzl");
+    bool temp;
+    if (staffIdx != -1) {
+
+        mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
+        if (mActIdx == -1) {
+            dComIfGp_evmng_cutEnd(staffIdx);
+        } else {
+            temp = false;
+
+            if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+                switch(mActIdx) {
+                    case ACT_WAIT:
+                    case ACT_TALK:
+                    case ACT_STOP:
+                    case ACT_PUSH_A:
+                        break;
+                    case ACT_GAME:
+                        mGameStarted = true;
+                        break;
+                    case ACT_GETITEM:
+                        mGaveReward = true;
+                        mRewardTimer = 150;
+                        break;
+                    case ACT_SOUND:
+                        mDoAud_seStart(JA_SE_15PUZZLE_COMPLETE);
+                        break;
+                    case ACT_EVENT_END:
+                        fopAc_ac_c* actor;
+                        for(int i = 0; i < mGivenRupeeCount; i++) {
+                            actor = fopAcM_SearchByID(mRupeeIds[i]);
+                            if (actor != NULL) {
+                                actor->current.angle.set(0, 0, 0);
+                            }
+                        }
+                        break;
+                }
+            }
+            switch(mActIdx) {
+                case 0:
+                    temp = true;
+                    break;
+                case 1:
+                    if (talk(1) == 0x12) {
+                        temp = true;
+                    }
+                    break;
+                case 2:
+                    temp = true;
+                    break;
+                case 3:
+                    dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+                    dComIfGp_setAStatusForce(dActStts_BLANK_e);
+                    if (mRewardTimer == 0) {
+                        temp = true;
+                    } else {
+                        mRewardTimer--;
+                        if ((mRewardTimer & 2) == 0 && mGivenRupeeCount < 30) {
+                            csXyz rupeeAngle(current.angle);
+                            cXyz rupeePos(0.0f, 100.0f, 735.0f);
+                            rupeeAngle.x += (s16)cM_rndFX(4000.0f);
+                            rupeeAngle.y = (s16)cM_rndFX(6000.0f) + rupeeAngle.y - 0x4000;
+                            rupeeAngle.z = 0;
+
+
+                            int itemNo;
+#if VERSION <= VERSION_JPN
+                                if(mPuzzleNo == 15) {
+                                    f32 temp2 = cM_rndF(1000.0f);
+                                    if(temp2 < 900.0) {
+                                        itemNo = dItemNo_GREEN_RUPEE_e;
+                                    } else if (temp2 < 980.0) {
+                                        itemNo = dItemNo_BLUE_RUPEE_e;
+                                    } else if (temp2 < 995.0) {
+                                        itemNo = dItemNo_YELLOW_RUPEE_e;
+                                    } else if (temp2 < 999.0) {
+                                        itemNo = dItemNo_RED_RUPEE_e;
+                                    } else {
+                                        itemNo = dItemNo_PURPLE_RUPEE_e;
+                                    }
+                                } else {
+                                    itemNo = dItemNo_GREEN_RUPEE_e;
+                                }
+#else
+
+                            if (mPuzzleNo == 15) {
+                                u8 rupeeType = daObjApzl_Rupee_Table[mGivenRupeeCount];
+                                if (rupeeType == 0) {
+                                    itemNo = dItemNo_GREEN_RUPEE_e;
+                                } else if (rupeeType == 1) {
+                                    itemNo = dItemNo_BLUE_RUPEE_e;
+                                } else if (rupeeType == 2) {
+                                    itemNo = dItemNo_YELLOW_RUPEE_e;
+                                } else if (rupeeType == 3) { 
+                                    itemNo = dItemNo_RED_RUPEE_e;
+                                } else {
+                                    itemNo = dItemNo_PURPLE_RUPEE_e;
+                                }
+                            } else if (mGivenRupeeCount % 6 == 0) {
+                                itemNo = dItemNo_BLUE_RUPEE_e;
+                            } else {
+                                itemNo = dItemNo_GREEN_RUPEE_e;
+                            }
+#endif
+
+                            daItem_c* item = (daItem_c*)fopAcM_fastCreateItem(&rupeePos, itemNo, fopAcM_GetRoomNo(this), &rupeeAngle, NULL, cM_rndF(15.0f) + 5.0f, cM_rndF(15.0f) + 5.0f, -2.1f);
+                            if(item != NULL) {
+                                fopAcM_OnStatus(item, fopAcStts_UNK4000_e);
+                                item->setItemTimer(450);
+                            }
+                            
+                            mRupeeIds[mGivenRupeeCount] = fopAcM_GetID(item);
+                            mGivenRupeeCount++;
+                            mGaveReward = true; 
+                            mRewardTimer = 60;
+                        }
+                    }
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+                    dComIfGp_setAStatusForce(dActStts_BLANK_e);
+                    if (!mDoAud_checkSePlaying(JA_SE_15PUZZLE_COMPLETE)) {
+                        temp = true;
+                    }
+                    break;
+                case 6:
+                    dComIfGp_setDoStatusForce(dActStts_NEXT_e);
+                    dComIfGp_setAStatusForce(dActStts_BLANK_e);
+                    if (CPad_CHECK_HOLD_A(0)) {
+                        temp = true;
+                    }
+                    break;
+                case 7:
+                    temp = true;
+                    break;
+                default:
+                    temp = true;
+                    break;
+            }
+            if (temp) {
+                dComIfGp_evmng_cutEnd(staffIdx);
+            }
+    
+        }  
+    }
 }
 
 /* 00000D08-00000D28       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daObjApzl_c*)i_this)->CreateHeap();
 }
 
 /* 00000D28-00001088       .text CreateHeap__11daObjApzl_cFv */
-void daObjApzl_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daObjApzl_c::CreateHeap() {
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", dRes_INDEX_APZL_BDL_APZLP_e);
+    JUT_ASSERT(VERSION_SELECT(0x2B9, 0x2B9, 0x2E2, 0x2E2), modelData != NULL);
+
+    for(int i = 0; i < 16; i++) {
+        mpPieceModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x37441422);
+        if (mpPieceModel[i] == NULL) {
+            return FALSE;
+        }
+    }
+
+    modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", dRes_INDEX_APZL_BDL_APZLY_e);
+    JUT_ASSERT(VERSION_SELECT(0x2C6, 0x2C6, 0x2EF, 0x2EF), modelData != NULL);
+
+    for(int i = 0; i < 4; i++) {
+        mpArrowModel[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (mpArrowModel[i] == NULL) {
+            return FALSE;
+        }
+    }
+    
+    modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", dRes_INDEX_APZL_BDL_VBSRP_e);
+    JUT_ASSERT(VERSION_SELECT(0x2D1, 0x2D1, 0x2FA, 0x2FA), modelData != NULL);
+
+    J3DAnmTexPattern* btp_data = (J3DAnmTexPattern *)dComIfG_getObjectRes("Apzl", dRes_INDEX_APZL_BTP_VBSRP_e);
+    
+    JUT_ASSERT(VERSION_SELECT(0x2D6, 0x2D6, 0x2FF, 0x2FF), btp_data != NULL);
+
+    int i = 0;
+    while (true) {
+        mpScoreboardModel[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (mpScoreboardModel[i] == NULL) {
+            return FALSE;
+        }
+
+        if(mScoreboardBtpAnm[i].init(modelData, btp_data, 1, 0) == 0) {
+            return FALSE;
+
+        }
+
+        i++;
+
+        if(i >= 0x10) {
+            stick = new STControl(0x3C, 0x1E, 0, 0, 0.9, 0.5, 0, 0);
+            JUT_ASSERT(VERSION_SELECT(0x2E7, 0x2E7, 0x310, 0x310), stick != NULL);
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 00001088-000012BC       .text CreateInit__11daObjApzl_cFv */
 void daObjApzl_c::CreateInit() {
-    /* Nonmatching */
+    mType = daObjApzl_prm::getType(this);
+    mPuzzleNo = dComIfGs_getPuzzleInfo();
+    if (mPuzzleNo >= 0x10) {
+        mPuzzleNo = 0;
+    }
+    for(int i = 0; i < 16; i++) {
+        if (i >= mPuzzleNo) {
+            mScoreboardBtpAnm[i].setFrame(0.0f);
+        } else {
+            mScoreboardBtpAnm[i].setFrame(1.0f);
+        }
+    }
+    fopAcM_SetMtx(this, mpPieceModel[0]->getBaseTRMtx());
+
+    fopAcM_setCullSizeBox(this, -600.0f, -600.0f, -600.0f, 600.0f, 600.0f, 600.0f);
+    fopAcM_setCullSizeFar(this, 1.0f);
+
+    mBlankIdx = 3;
+    mShowBlankPiece = false;
+
+    if (mType == 0) {
+        randamize_piece();
+    } else {
+        for(int i = 0; i < 16; i++) {
+            mPiecePos[i] = i;
+        }
+    }
+
+    mEventIdx[EVENT_TALK] = dComIfGp_evmng_getEventIdx("PUZZLE_TALK", 0xff);
+    mEventIdx[EVENT_GAME] = dComIfGp_evmng_getEventIdx("PUZZLE_GAME", 0xff);
+    mEventIdx[EVENT_RUPEE] = dComIfGp_evmng_getEventIdx("PUZZLE_RUPEE", 0xff);
+    
+    eventInfo.setEventId(mEventIdx[EVENT_TALK]);
+    if (mType == 0) {
+        cLib_onBit<u32>(attention_info.flags, fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e);
+    }
+
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x28;
+    attention_info.position = current.pos;
+
+    mpCurrMsg = NULL;
+    mCurrMsgId = -1;
+
+    mQuitGame = false;
+    mGameStarted = false;
+    mGameCleared = false;
+    mGaveReward = false;
+    mShownRewardMessage = false;
+
+    mSwappedPieceIdx = 0;
+    mMoveTimer = 0;
+    mMoveDirection = 0;
+    mPlayedStartSound = false;
+    mState = STATE_IDLE;
+
+    for(int i = 0; i < 4; i++) {
+        mDrawArrow[i] = false;
+    }
+
+    mGivenRupeeCount = 0;
+    set_mtx();
 }
 
 /* 000012BC-000016B8       .text set_mtx__11daObjApzl_cFv */
 void daObjApzl_c::set_mtx() {
-    /* Nonmatching */
+    for(int i = 0; i < 16; i++) {
+        mpPieceModel[i]->setBaseScale(scale);
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::YrotM(current.angle.y);
+        s32 piecePos = mPiecePos[i];
+        mDoMtx_stack_c::transM((piecePos % 4) * 40.0f - 60.0f, 60.0f - (piecePos / 4) * 40.0f, 0.0f);
+        if (i == mSwappedPieceIdx && mMoveTimer != 0) {
+            f32 moveTimer;
+            if (!check_clear()) {
+                moveTimer = mMoveTimer * 8.0f;
+            } else {
+                moveTimer = mMoveTimer;
+            }
+
+            u8 moveDirection = mMoveDirection;
+            if (moveDirection == 0) { // up
+                mDoMtx_stack_c::transM(0.0,-moveTimer,0.0);
+            } else if (moveDirection == 1) { // left
+                mDoMtx_stack_c::transM(moveTimer,0.0,0.0);
+            } else if (moveDirection == 2) { // down
+                mDoMtx_stack_c::transM(0.0,moveTimer,0.0);
+            } else { //right
+                mDoMtx_stack_c::transM(-moveTimer,0.0,0.0);
+            }
+        }
+        mpPieceModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
+
+    for(int i = 0; i < 4; i++) {
+        mpArrowModel[i]->setBaseScale(scale);
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::YrotM(current.angle.y);
+        s32 blankIdx = getblank();
+        mDoMtx_stack_c::transM((blankIdx % 4) * 40.0f - 60.0f, 60.0f - (blankIdx / 4) * 40.0f, 0.0f);
+        mDoMtx_stack_c::ZrotM(i * 0x4000);
+        mDoMtx_stack_c::transM(0.0f, -15.0f, 0.0f);
+        mpArrowModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
+
+    for(int i = 0; i < 16; i++) {
+        mpScoreboardModel[i]->setBaseScale(scale);
+        mDoMtx_stack_c::transS(0.0f, -((i % 8) + 1) * 28.62f + 10.0f, (i / 8 - 2) * 28.62f);
+        mpScoreboardModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
+}
+
+cPhs_State daObjApzl_c::_create(){
+    fopAcM_ct(this, daObjApzl_c);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Apzl");
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1460)) {
+            return cPhs_ERROR_e;
+        } else {
+            CreateInit();
+        }
+    }
+    return phase_state;
 }
 
 /* 000016B8-00001780       .text daObjApzl_Create__FPv */
-static cPhs_State daObjApzl_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daObjApzl_Create(void* i_this) {
+    return static_cast<daObjApzl_c*>(i_this)->_create();
+}
+
+bool daObjApzl_c::_delete() {
+    delete stick;
+    dComIfG_resDelete(&mPhs, "Apzl");
+    return true;
 }
 
 /* 0000184C-00001894       .text daObjApzl_Delete__FPv */
-static BOOL daObjApzl_Delete(void*) {
-    /* Nonmatching */
+static BOOL daObjApzl_Delete(void* i_this) {
+    return static_cast<daObjApzl_c*>(i_this)->_delete();
 }
 
 /* 00001894-000018B8       .text daObjApzl_Draw__FPv */
@@ -99,7 +970,39 @@ static BOOL daObjApzl_Draw(void* i_this) {
 
 /* 000018B8-00001B00       .text _draw__11daObjApzl_cFv */
 bool daObjApzl_c::_draw() {
-    /* Nonmatching */
+    if (mType == 0) {
+        dComIfGd_setListBG();
+        for(int i = 0; i < 16; i++) {
+            if (i != mBlankIdx || mShowBlankPiece) {
+                mpPieceModel[i]->getModelData()->setMaterialTable(((J3DMaterialTable*)dComIfG_getObjectRes("Apzl", daObjApzl_bmt_table[mPuzzleNo][i])), J3DMatCopyFlag_All);
+                mDoExt_modelUpdateDL(mpPieceModel[i]);
+            }
+        }
+
+        dComIfGd_setList();
+
+        for (int i = 0; i < 4; i++) {
+            if (mDrawArrow[i]) {
+                mDoExt_modelUpdateDL(mpArrowModel[i]);
+            }
+        }
+
+        for(int i = 0; i < 16; i++) {
+            mScoreboardBtpAnm[i].entry(mpScoreboardModel[i]->getModelData());
+            mDoExt_modelUpdateDL(mpScoreboardModel[i]);
+            mScoreboardBtpAnm[i].remove(mpScoreboardModel[i]->getModelData());
+        }
+
+    } else {
+
+        dComIfGd_setListBG();
+        for(int i = 0; i < 16; i++) {
+            mpPieceModel[i]->getModelData()->setMaterialTable(((J3DMaterialTable*)dComIfG_getObjectRes("Apzl", daObjApzl_bmt_table[mPuzzleNo][i])), J3DMatCopyFlag_All);
+            mDoExt_modelUpdateDL(mpPieceModel[i]);
+        }
+        dComIfGd_setList();
+    }
+    return true;
 }
 
 /* 00001B00-00001B24       .text daObjApzl_Execute__FPv */
@@ -109,7 +1012,95 @@ static BOOL daObjApzl_Execute(void* i_this) {
 
 /* 00001B24-00001E8C       .text _execute__11daObjApzl_cFv */
 bool daObjApzl_c::_execute() {
-    /* Nonmatching */
+    if(mType == 0) {
+        switch(mState) {
+            case STATE_IDLE:
+                eventInfo.onCondition(dEvtCnd_CANTALK_e);
+                if (eventInfo.checkCommandTalk()) {
+                    mState = STATE_TALK;
+                }
+                break;
+
+            case STATE_TALK:
+                privateCut();
+                if(dComIfGp_evmng_endCheck(mEventIdx[EVENT_TALK])) {
+                    if(mQuitGame == true) {
+                        dComIfGp_event_reset();
+                        mState = STATE_IDLE;
+                        mQuitGame = false;
+                        mGameStarted = false;
+                        save_piece();
+                    } else {
+                        mState = STATE_START;
+                    }
+                }
+                break;
+
+            case STATE_START:
+                if (!mPlayedStartSound) {
+                    mDoAud_seStart(JA_SE_15PUZZLE_START);
+                    mPlayedStartSound = true;
+                }
+                fopAcM_orderChangeEventId(this, mEventIdx[EVENT_GAME], 0, 0xFFFF);
+                mState = STATE_PLAYING;
+                break;
+
+            case STATE_PLAYING:
+                privateCut();
+                if (move_piece()) {
+                    mDoAud_seStart(JA_SE_TALK_CURSOR);
+                }
+                dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+                dComIfGp_setAStatusForce(dActStts_CANCEL_e);
+
+                if (check_clear() && mMoveTimer == 0) {
+                    mShowBlankPiece = 1;
+                    mGameCleared = true;
+                    dComIfGp_getVibration().StartShock(4, 1, cXyz(0.0f, 1.0f, 0.0f));
+                    mState = STATE_END;
+
+                } else {
+                    if (CPad_CHECK_HOLD_B(0)) {
+                        mDoAud_seStart(JA_SE_15PUZZLE_EXIT);
+                        mState = STATE_END;
+                    }
+                }
+                break;
+
+            case STATE_END:
+                mQuitGame = false;
+                if (mGameCleared == true) {
+                    u8 clearCount = dComIfGs_getPuzzleInfo();
+                    clearCount++;
+                    if(clearCount >= 16) {
+                        clearCount = 0;
+                    }
+                    mScoreboardBtpAnm[mPuzzleNo].setFrame(1.0f);
+                    dComIfGs_setPuzzleInfo(clearCount);
+
+                    fopAcM_orderChangeEventId(this, mEventIdx[EVENT_RUPEE], 0, 0xFFFF);
+
+                    mState = STATE_RUPEE;
+                } else {
+                    fopAcM_orderChangeEventId(this, mEventIdx[EVENT_TALK], 0, 0xFFFF);
+                    mState = STATE_TALK;
+                } // fallthrough
+
+            case STATE_RUPEE:
+                privateCut();
+                if(dComIfGp_evmng_endCheck(mEventIdx[EVENT_RUPEE])) {
+                    dComIfGp_event_reset();
+                    mState = STATE_IDLE;
+                    mQuitGame = false;
+                    mGameStarted = false;
+                }
+                break;
+        }
+        check_arrow_draw();
+
+    }
+    set_mtx();
+    return true;
 }
 
 /* 00001E8C-00001E94       .text daObjApzl_IsDelete__FPv */
@@ -126,18 +1117,18 @@ static actor_method_class daObj_ApzlMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Apzl = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Apzl,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Apzl_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjApzl_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Apzl,
+    /* Draw Prio    */ fpcDwPi_Obj_Apzl_e,
     /* Actor SubMtd */ &daObj_ApzlMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

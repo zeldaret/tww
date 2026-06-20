@@ -10,6 +10,7 @@
  * a function from this file.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_hookshot.h"
 #include "d/actor/d_a_player_HIO.h"
@@ -19,7 +20,7 @@
 /* 8014AB5C-8014ABA0       .text checkHookshotReturn__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkHookshotReturn() {
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
-    if (mEquipItem != dItem_HOOKSHOT_e || hookshot == NULL) {
+    if (mEquipItem != dItemNo_HOOKSHOT_e || hookshot == NULL) {
         return false;
     }
 
@@ -29,7 +30,7 @@ BOOL daPy_lk_c::checkHookshotReturn() {
 /* 8014ABA0-8014ABF4       .text setHookshotCarryOffset__9daPy_lk_cFUiPC4cXyz */
 BOOL daPy_lk_c::setHookshotCarryOffset(fpc_ProcID carryActorID, const cXyz* offset) {
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
-    if (mEquipItem != dItem_HOOKSHOT_e || hookshot == NULL) {
+    if (mEquipItem != dItemNo_HOOKSHOT_e || hookshot == NULL) {
         return false;
     }
     if (carryActorID != hookshot->getCarryActorID()) {
@@ -42,10 +43,10 @@ BOOL daPy_lk_c::setHookshotCarryOffset(fpc_ProcID carryActorID, const cXyz* offs
 
 /* 8014ABF4-8014ACCC       .text setHookshotModel__9daPy_lk_cFv */
 void daPy_lk_c::setHookshotModel() {
-    J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_HOOKSHOTA);
+    J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_HOOKSHOTA_e);
     JKRHeap* oldHeap = setItemHeap();
-    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_HOOKSHOT, 0x37221222);
-    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_HOOKSHOT_e, 0x37221222);
+    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(100, FALSE);
     }
@@ -94,11 +95,11 @@ void daPy_lk_c::setHookshotSight() {
             if (mSightPacket.getLockFlg()) {
                 mSightPacket.incFrame();
                 if (mSightPacket.checkSEFrame()) {
-                    mDoAud_seStart(JA_SE_INDICATOR_1);
+                    seStartSystem(JA_SE_INDICATOR_1);
                 }
             } else {
                 mSightPacket.onLockFlg();
-                mDoAud_seStart(JA_SE_INDICATOR_1);
+                seStartSystem(JA_SE_INDICATOR_1);
             }
         } else {
             mSightPacket.offLockFlg();
@@ -111,7 +112,7 @@ void daPy_lk_c::setHookshotSight() {
 
 /* 8014B02C-8014B05C       .text freeHookshotItem__9daPy_lk_cFv */
 void daPy_lk_c::freeHookshotItem() {
-    if (mEquipItem != dItem_HOOKSHOT_e) {
+    if (mEquipItem != dItemNo_HOOKSHOT_e) {
         return;
     }
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
@@ -137,7 +138,7 @@ BOOL daPy_lk_c::checkNextActionHookshotReady() {
         } else if (!itemButton() && m355E != 0) {
             m355E = 0;
             hookshot->setShot();
-            mVelocity = 0.0f;
+            mNormalSpeed = 0.0f;
             daPy_matAnm_c::offMabaFlg();
             seStartOnlyReverb(JA_SE_LK_HS_SHOOT);
             voiceStart(41);
@@ -148,10 +149,10 @@ BOOL daPy_lk_c::checkNextActionHookshotReady() {
             current.angle.y = shape_angle.y + 0x4000;
             onModeFlg(ModeFlg_00000001);
             m3598 = 0.0f;
-            setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+            setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
             mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.0f);
             mFrameCtrlUnder[UNDER_MOVE1_e].setRate(0.0f);
-            mFrameCtrlUpper[UPPER_MOVE0_e].setRate(daPy_HIO_atnMove_c0::m.field_0x24);
+            mFrameCtrlUpper[UPPER_MOVE0_e].setRate(m_HIO->mAtnMove.m.field_0x24);
             mFrameCtrlUpper[UPPER_MOVE1_e].setRate(0.0f);
             mFrameCtrlUpper[UPPER_MOVE2_e].setRate(0.0f);
             return true;
@@ -186,7 +187,7 @@ BOOL daPy_lk_c::checkNextHookshotMode() {
         m355E = 0;
         seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
     }
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         return procHookshotMove_init();
     } else {
         return procHookshotSubject_init();
@@ -201,10 +202,10 @@ BOOL daPy_lk_c::procHookshotSubject_init() {
 
     commonProcInit(daPyProc_HOOKSHOT_SUBJECT_e);
 
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
 
-    setActAnimeUpper(LKANM_BCK_HOOKSHOTWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
-    setSingleMoveAnime(ANM_ATNLS, 0.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_HOOKSHOTWAIT_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+    setSingleMoveAnime(ANM_ATNLS, 0.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e);
 
@@ -222,7 +223,7 @@ BOOL daPy_lk_c::procHookshotSubject() {
         dComIfGp_setDoStatus(dActStts_RETURN_e);
     }
 
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
     }
 
@@ -256,8 +257,8 @@ BOOL daPy_lk_c::procHookshotMove_init() {
     }
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
     if (hookshot->checkWait()) {
-        setActAnimeUpper(LKANM_BCK_HOOKSHOTWAIT, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
-        setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setActAnimeUpper(dRes_INDEX_LKANM_BCK_HOOKSHOTWAIT_e, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
+        setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
     }
     dComIfGp_setPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e);
     return true;
@@ -274,7 +275,7 @@ BOOL daPy_lk_c::procHookshotMove() {
     if (hookshot->checkWait()) {
         if (mpAttnActorLockOn != NULL) {
             setSpeedAndAngleAtnActor();
-        } else if (m355E == 0 && !mpAttention->Lockon()) {
+        } else if (m355E == 0 && !checkAttentionLock()) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         } else {
             setSpeedAndAngleAtn();
@@ -282,11 +283,11 @@ BOOL daPy_lk_c::procHookshotMove() {
     }
     if (!checkNextMode(0)) {
         f32 fVar1 = -1.0f;
-        if (std::fabsf(mVelocity) < 0.001f) {
+        if (std::fabsf(mNormalSpeed) < 0.001f) {
             onModeFlg(ModeFlg_00000001);
             if (mDirection != DIR_LEFT) {
                 mDirection = DIR_LEFT;
-                fVar1 = daPy_HIO_basic_c0::m.field_0xC;
+                fVar1 = m_HIO->mBasic.m.field_0xC;
             }
             current.angle.y = shape_angle.y + 0x4000;
         } else {
@@ -313,7 +314,7 @@ BOOL daPy_lk_c::procHookshotFly_init() {
     setSingleMoveAnime(ANM_HOOKSHOTJMP, 1.0f, 0.0f, -1, 0.0f);
     mBodyAngle.x = 0;
     gravity = 0.0f;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     m34C2 = 11;
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK10_e);
     voiceStart(6);

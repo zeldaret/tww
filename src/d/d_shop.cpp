@@ -3,6 +3,7 @@
 // Translation Unit: d_shop.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_shop.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_msg.h"
@@ -30,184 +31,184 @@ u32 default_select_msg[] = {
 };
 
 ShopItems_c__ItemData shopItemData_Feedbag = {
-    /* mItemNo           */ dItem_BAIT_BAG_e,
-    /* mMustNotOwnItemNo */ dItem_BAIT_BAG_e,
+    /* mItemNo           */ dItemNo_BAIT_BAG_e,
+    /* mMustNotOwnItemNo */ dItemNo_BAIT_BAG_e,
     /* mMustOwnItemNo    */ -1,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MUST_NOT_OWN_ITEM_e,
 };
 
 ShopItems_c__ItemData shopItemData_FoodAll = {
-    /* mItemNo           */ dItem_BIRD_BAIT_5_e,
-    /* mMustNotOwnItemNo */ dItem_BIRD_BAIT_5_e,
-    /* mMustOwnItemNo    */ dItem_BAIT_BAG_e,
+    /* mItemNo           */ dItemNo_BIRD_BAIT_5_e,
+    /* mMustNotOwnItemNo */ dItemNo_BIRD_BAIT_5_e,
+    /* mMustOwnItemNo    */ dItemNo_BAIT_BAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e | Shop_BuyCond_MUST_OWN_ITEM_e,
 };
 
 ShopItems_c__ItemData shopItemData_FoodHyoi = {
-    /* mItemNo           */ dItem_HYOI_PEAR_e,
-    /* mMustNotOwnItemNo */ dItem_HYOI_PEAR_e,
-    /* mMustOwnItemNo    */ dItem_BAIT_BAG_e,
+    /* mItemNo           */ dItemNo_HYOI_PEAR_e,
+    /* mMustNotOwnItemNo */ dItemNo_HYOI_PEAR_e,
+    /* mMustOwnItemNo    */ dItemNo_BAIT_BAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e | Shop_BuyCond_MUST_OWN_ITEM_e,
 };
 
 ShopItems_c__ItemData shopItemData_arrow10 = {
-    /* mItemNo           */ dItem_ARROW_10_e,
-    /* mMustNotOwnItemNo */ dItem_ARROW_10_e,
-    /* mMustOwnItemNo    */ dItem_BOW_e,
+    /* mItemNo           */ dItemNo_ARROW_10_e,
+    /* mMustNotOwnItemNo */ dItemNo_ARROW_10_e,
+    /* mMustOwnItemNo    */ dItemNo_BOW_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e | Shop_BuyCond_MUST_OWN_ITEM_e,
 };
 
 ShopItems_c__ItemData shopItemData_arrow30 = {
-    /* mItemNo           */ dItem_ARROW_30_e,
-    /* mMustNotOwnItemNo */ dItem_ARROW_30_e,
-    /* mMustOwnItemNo    */ dItem_BOW_e,
+    /* mItemNo           */ dItemNo_ARROW_30_e,
+    /* mMustNotOwnItemNo */ dItemNo_ARROW_30_e,
+    /* mMustOwnItemNo    */ dItemNo_BOW_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e | Shop_BuyCond_MUST_OWN_ITEM_e,
 };
 
 ShopItems_c__ItemData shopItemData_red_bottle = {
-    /* mItemNo           */ dItem_RED_POTION_e,
-    /* mMustNotOwnItemNo */ dItem_RED_POTION_e,
-    /* mMustOwnItemNo    */ dItem_EMPTY_BOTTLE_e,
+    /* mItemNo           */ dItemNo_RED_POTION_e,
+    /* mMustNotOwnItemNo */ dItemNo_RED_POTION_e,
+    /* mMustOwnItemNo    */ dItemNo_EMPTY_BOTTLE_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_EMPTY_BOTTLE_e | Shop_BuyCond_ANY_BOTTLE_e,
 };
 
 ShopItems_c__ItemData shopItemData_blue_bottle = {
-    /* mItemNo           */ dItem_BLUE_POTION_e,
-    /* mMustNotOwnItemNo */ dItem_BLUE_POTION_e,
-    /* mMustOwnItemNo    */ dItem_EMPTY_BOTTLE_e,
+    /* mItemNo           */ dItemNo_BLUE_POTION_e,
+    /* mMustNotOwnItemNo */ dItemNo_BLUE_POTION_e,
+    /* mMustOwnItemNo    */ dItemNo_EMPTY_BOTTLE_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_EMPTY_BOTTLE_e | Shop_BuyCond_ANY_BOTTLE_e,
 };
 
 ShopItems_c__ItemData shopItemData_green_bottle = {
-    /* mItemNo           */ dItem_GREEN_POTION_e,
-    /* mMustNotOwnItemNo */ dItem_GREEN_POTION_e,
-    /* mMustOwnItemNo    */ dItem_EMPTY_BOTTLE_e,
+    /* mItemNo           */ dItemNo_GREEN_POTION_e,
+    /* mMustNotOwnItemNo */ dItemNo_GREEN_POTION_e,
+    /* mMustOwnItemNo    */ dItemNo_EMPTY_BOTTLE_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_EMPTY_BOTTLE_e | Shop_BuyCond_ANY_BOTTLE_e,
 };
 
 ShopItems_c__ItemData shopItemData_bomb10 = {
-    /* mItemNo           */ dItem_BOMB_10_e,
-    /* mMustNotOwnItemNo */ dItem_BOMB_10_e,
-    /* mMustOwnItemNo    */ dItem_BOMB_BAG_e,
+    /* mItemNo           */ dItemNo_BOMB_10_e,
+    /* mMustNotOwnItemNo */ dItemNo_BOMB_10_e,
+    /* mMustOwnItemNo    */ dItemNo_BOMB_BAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_bomb20 = {
-    /* mItemNo           */ dItem_BOMB_20_e,
-    /* mMustNotOwnItemNo */ dItem_BOMB_20_e,
-    /* mMustOwnItemNo    */ dItem_BOMB_BAG_e,
+    /* mItemNo           */ dItemNo_BOMB_20_e,
+    /* mMustNotOwnItemNo */ dItemNo_BOMB_20_e,
+    /* mMustOwnItemNo    */ dItemNo_BOMB_BAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_bomb30 = {
-    /* mItemNo           */ dItem_BOMB_30_e,
-    /* mMustNotOwnItemNo */ dItem_BOMB_30_e,
-    /* mMustOwnItemNo    */ dItem_BOMB_BAG_e,
+    /* mItemNo           */ dItemNo_BOMB_30_e,
+    /* mMustNotOwnItemNo */ dItemNo_BOMB_30_e,
+    /* mMustOwnItemNo    */ dItemNo_BOMB_BAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_emptybottle = {
-    /* mItemNo           */ dItem_EMPTY_BOTTLE_e,
-    /* mMustNotOwnItemNo */ dItem_EMPTY_BOTTLE_e,
-    /* mMustOwnItemNo    */ dItem_EMPTY_BOTTLE_e,
+    /* mItemNo           */ dItemNo_EMPTY_BOTTLE_e,
+    /* mMustNotOwnItemNo */ dItemNo_EMPTY_BOTTLE_e,
+    /* mMustOwnItemNo    */ dItemNo_EMPTY_BOTTLE_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e,
 };
 
 ShopItems_c__ItemData shopItemData_kakera_heart = {
-    /* mItemNo           */ dItem_HEART_PIECE_e,
-    /* mMustNotOwnItemNo */ dItem_HEART_PIECE_e,
+    /* mItemNo           */ dItemNo_HEART_PIECE_e,
+    /* mMustNotOwnItemNo */ dItemNo_HEART_PIECE_e,
     /* mMustOwnItemNo    */ -1,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MUST_NOT_OWN_ITEM_e,
 };
 
 ShopItems_c__ItemData shopItemData_map = {
-    /* mItemNo           */ dItem_COLLECT_MAP_30_e,
-    /* mMustNotOwnItemNo */ dItem_COLLECT_MAP_30_e,
-    /* mMustOwnItemNo    */ dItem_COLLECT_MAP_30_e,
+    /* mItemNo           */ dItemNo_COLLECT_MAP_30_e,
+    /* mMustNotOwnItemNo */ dItemNo_COLLECT_MAP_30_e,
+    /* mMustOwnItemNo    */ dItemNo_COLLECT_MAP_30_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MUST_NOT_OWN_ITEM_e,
 };
 
 ShopItems_c__ItemData shopItemData_RotenItem0 = {
-    /* mItemNo           */ FLOWER_1,
-    /* mMustNotOwnItemNo */ FLOWER_1,
-    /* mMustOwnItemNo    */ FLOWER_1,
+    /* mItemNo           */ dItemNo_TOWN_FLOWER_e,
+    /* mMustNotOwnItemNo */ dItemNo_TOWN_FLOWER_e,
+    /* mMustOwnItemNo    */ dItemNo_TOWN_FLOWER_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_RotenItem1 = {
-    /* mItemNo           */ FLOWER_2,
-    /* mMustNotOwnItemNo */ FLOWER_2,
-    /* mMustOwnItemNo    */ FLOWER_2,
+    /* mItemNo           */ dItemNo_SEA_FLOWER_e,
+    /* mMustNotOwnItemNo */ dItemNo_SEA_FLOWER_e,
+    /* mMustOwnItemNo    */ dItemNo_SEA_FLOWER_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_RotenItem2 = {
-    /* mItemNo           */ FLOWER_3,
-    /* mMustNotOwnItemNo */ FLOWER_3,
-    /* mMustOwnItemNo    */ FLOWER_3,
+    /* mItemNo           */ dItemNo_EXOTIC_FLOWER_e,
+    /* mMustNotOwnItemNo */ dItemNo_EXOTIC_FLOWER_e,
+    /* mMustOwnItemNo    */ dItemNo_EXOTIC_FLOWER_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_RotenItem3 = {
-    /* mItemNo           */ HEROS_FLAG,
-    /* mMustNotOwnItemNo */ HEROS_FLAG,
-    /* mMustOwnItemNo    */ HEROS_FLAG,
+    /* mItemNo           */ dItemNo_HEROS_FLAG_e,
+    /* mMustNotOwnItemNo */ dItemNo_HEROS_FLAG_e,
+    /* mMustOwnItemNo    */ dItemNo_HEROS_FLAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_RotenItem4 = {
-    /* mItemNo           */ TAIRYO_FLAG,
-    /* mMustNotOwnItemNo */ TAIRYO_FLAG,
-    /* mMustOwnItemNo    */ TAIRYO_FLAG,
+    /* mItemNo           */ dItemNo_BIG_CATCH_FLAG_e,
+    /* mMustNotOwnItemNo */ dItemNo_BIG_CATCH_FLAG_e,
+    /* mMustOwnItemNo    */ dItemNo_BIG_CATCH_FLAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_RotenItem5 = {
-    /* mItemNo           */ SALES_FLAG,
-    /* mMustNotOwnItemNo */ SALES_FLAG,
-    /* mMustOwnItemNo    */ SALES_FLAG,
+    /* mItemNo           */ dItemNo_BIG_SALE_FLAG_e,
+    /* mMustNotOwnItemNo */ dItemNo_BIG_SALE_FLAG_e,
+    /* mMustOwnItemNo    */ dItemNo_BIG_SALE_FLAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_RotenItem6 = {
-    /* mItemNo           */ WIND_FLAG,
-    /* mMustNotOwnItemNo */ WIND_FLAG,
-    /* mMustOwnItemNo    */ WIND_FLAG,
+    /* mItemNo           */ dItemNo_PINWHEEL_e,
+    /* mMustNotOwnItemNo */ dItemNo_PINWHEEL_e,
+    /* mMustOwnItemNo    */ dItemNo_PINWHEEL_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_RotenItem7 = {
-    /* mItemNo           */ RED_FLAG,
-    /* mMustNotOwnItemNo */ RED_FLAG,
-    /* mMustOwnItemNo    */ RED_FLAG,
+    /* mItemNo           */ dItemNo_SICKLE_MOON_FLAG_e,
+    /* mMustNotOwnItemNo */ dItemNo_SICKLE_MOON_FLAG_e,
+    /* mMustOwnItemNo    */ dItemNo_SICKLE_MOON_FLAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_RotenItem8 = {
-    /* mItemNo           */ FOSSIL_HEAD,
-    /* mMustNotOwnItemNo */ FOSSIL_HEAD,
-    /* mMustOwnItemNo    */ FOSSIL_HEAD,
+    /* mItemNo           */ dItemNo_SKULL_TOWER_IDOL_e,
+    /* mMustNotOwnItemNo */ dItemNo_SKULL_TOWER_IDOL_e,
+    /* mMustOwnItemNo    */ dItemNo_SKULL_TOWER_IDOL_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_RotenItem9 = {
-    /* mItemNo           */ WATER_STATUE,
-    /* mMustNotOwnItemNo */ WATER_STATUE,
-    /* mMustOwnItemNo    */ WATER_STATUE,
+    /* mItemNo           */ dItemNo_FOUNTAIN_IDOL_e,
+    /* mMustNotOwnItemNo */ dItemNo_FOUNTAIN_IDOL_e,
+    /* mMustOwnItemNo    */ dItemNo_FOUNTAIN_IDOL_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_RotenItem10 = {
-    /* mItemNo           */ POSTMAN_STATUE,
-    /* mMustNotOwnItemNo */ POSTMAN_STATUE,
-    /* mMustOwnItemNo    */ POSTMAN_STATUE,
+    /* mItemNo           */ dItemNo_POSTMAN_STATUE_e,
+    /* mMustNotOwnItemNo */ dItemNo_POSTMAN_STATUE_e,
+    /* mMustOwnItemNo    */ dItemNo_POSTMAN_STATUE_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_RotenItem11 = {
-    /* mItemNo           */ PRESIDENT_STATUE,
-    /* mMustNotOwnItemNo */ PRESIDENT_STATUE,
-    /* mMustOwnItemNo    */ PRESIDENT_STATUE,
+    /* mItemNo           */ dItemNo_SHOP_GURU_STATUE_e,
+    /* mMustNotOwnItemNo */ dItemNo_SHOP_GURU_STATUE_e,
+    /* mMustOwnItemNo    */ dItemNo_SHOP_GURU_STATUE_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
@@ -1028,8 +1029,8 @@ void ShopItems_c::createItem(int numItems, int roomNo) {
             Item_set_pos_data_tbl[mItemSetListGlobalIdx][0].z
         );
         
-        dComIfGs_isEventBit(0x0D04);
-        dComIfGs_isEventBit(0x0D02);
+        dComIfGs_isEventBit(dSv_event_flag_c::UNK_0D04);
+        dComIfGs_isEventBit(dSv_event_flag_c::UNK_0D02);
         
         mItemActorProcessIds[0] = fopAcM_createShopItem(
             &pos, Item_set_data_tbl[mItemSetListGlobalIdx][0]->mpItemData->mItemNo,
@@ -1037,7 +1038,7 @@ void ShopItems_c::createItem(int numItems, int roomNo) {
         );
         pos.x += 75.0f;
         
-        if (dComIfGs_isEventBit(0x0D04)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0D04)) {
             mItemActorProcessIds[1] = fopAcM_createShopItem(
                 &pos, Item_set_data_tbl[mItemSetListGlobalIdx][1]->mpItemData->mItemNo,
                 &angle, roomNo
@@ -1045,7 +1046,7 @@ void ShopItems_c::createItem(int numItems, int roomNo) {
             pos.x += 75.0f;
         }
         
-        if (dComIfGs_isEventBit(0x0D02)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0D02)) {
             mItemActorProcessIds[2] = fopAcM_createShopItem(
                 &pos, Item_set_data_tbl[mItemSetListGlobalIdx][2]->mpItemData->mItemNo,
                 &angle, roomNo
@@ -1317,20 +1318,20 @@ BOOL dShop_now_triggercheck(msg_class* msg, STControl* stickControl, ShopItems_c
 
 /* 8006036C-8006044C       .text dShop_maxCheck__Fii */
 BOOL dShop_maxCheck(int itemNo, int) {
-    if (itemNo == dItem_BIRD_BAIT_5_e || itemNo == dItem_HYOI_PEAR_e) {
+    if (itemNo == dItemNo_BIRD_BAIT_5_e || itemNo == dItemNo_HYOI_PEAR_e) {
         if (!dComIfGs_checkBaitItemEmpty()) {
             return TRUE;
         }
-    // Bug: This check is probably supposed to be (itemNo >= FLOWER_1 && itemNo <= PRESIDENT_STATUE)
-    } else if (itemNo == FLOWER_1 && itemNo == PRESIDENT_STATUE) {
+    // Bug: This check is probably supposed to be (itemNo >= dItemNo_TOWN_FLOWER_e && itemNo <= dItemNo_SHOP_GURU_STATUE_e)
+    } else if (itemNo == dItemNo_TOWN_FLOWER_e && itemNo == dItemNo_SHOP_GURU_STATUE_e) {
         if (dComIfGs_checkReserveItemEmpty() == 0) {
             return TRUE;
         }
-    } else if (itemNo >= dItem_ARROW_10_e && itemNo <= dItem_ARROW_30_e) {
+    } else if (itemNo >= dItemNo_ARROW_10_e && itemNo <= dItemNo_ARROW_30_e) {
         if (dComIfGs_getArrowNum() == dComIfGs_getArrowMax()) {
             return TRUE;
         }
-    } else if (itemNo >= dItem_BOMB_5_e && itemNo <= dItem_BOMB_30_e) {
+    } else if (itemNo >= dItemNo_BOMB_5_e && itemNo <= dItemNo_BOMB_30_e) {
         if (dComIfGs_getBombNum() == dComIfGs_getBombMax()) {
             return TRUE;
         }
@@ -1347,8 +1348,8 @@ u8 dShop_BoughtErrorStatus(ShopItems_c* shopItems, int param_2, int param_3) {
     u8 errorStatus = 0x00;
     
     if (buyCond & Shop_BuyCond_MUST_OWN_ITEM_e) {
-        if (itemData->mMustOwnItemNo == dItem_BOW_e) {
-            if (dComIfGs_getItem(dInvSlot_BOW_e) == dItem_NONE_e) {
+        if (itemData->mMustOwnItemNo == dItemNo_BOW_e) {
+            if (dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_NONE_e) {
                 errorStatus |= Shop_BuyCond_MUST_OWN_ITEM_e;
             }
         } else {
@@ -1413,7 +1414,7 @@ ShopCursor_c::ShopCursor_c(J3DModelData* modelData, J3DAnmTevRegKey* brkData, f3
     }
     
     mpBrkData = brkData;
-    if (!mBrkAnm.init(modelData, mpBrkData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if (!mBrkAnm.init(modelData, mpBrkData, true, J3DFrameCtrl::EMode_LOOP)) {
         mpBrkData = NULL;
     }
     

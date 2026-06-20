@@ -3,6 +3,7 @@
 // Translation Unit: d_cam_param.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_cam_param.h"
 #include "d/d_kankyo_wether.h"
 #include "m_Do/m_Do_mtx.h"
@@ -256,7 +257,6 @@ dCamSetup_c::dCamSetup_c() {
 
 /* 800AFEE0-800AFF40       .text __dt__11dCamSetup_cFv */
 dCamSetup_c::~dCamSetup_c() {
-    /* Nonmatching */
 }
 
 /* 800AFF40-800AFFB0       .text CheckLatitudeRange__11dCamSetup_cFPs */

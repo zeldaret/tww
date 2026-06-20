@@ -3,6 +3,8 @@
 // Translation Unit: JAIBasic.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JAIBasic.h"
 #include "JSystem/JAudio/JAIBankWave.h"
 #include "JSystem/JAudio/JAIConst.h"
@@ -208,7 +210,7 @@ void JAIBasic::processFrameWork() {
 }
 
 /* 802904B4-802904EC       .text startSoundVec__8JAIBasicFUlPP8JAISoundP3VecUlUlUc */
-void JAIBasic::startSoundVec(u32, JAISound**, Vec*, u32, u32, u8) {
+void JAIBasic::startSoundVec(u32 soundID, JAISound**, Vec*, u32, u32, u8) {
     /* Nonmatching */
 }
 

@@ -17,8 +17,8 @@ void GXInitTexObjLOD(GXTexObj* obj, GXTexFilter min_filter, GXTexFilter max_filt
                      f32 max_lod, f32 lod_bias, GXBool bias_clamp, GXBool edge_lod,
                      GXAnisotropy aniso);
 void* GXGetTexObjData(GXTexObj* obj);
-u16 GXGetTexObjWidth(GXTexObj* obj);
-u16 GXGetTexObjHeight(GXTexObj* obj);
+u16 GXGetTexObjWidth(const GXTexObj* obj);
+u16 GXGetTexObjHeight(const GXTexObj* obj);
 GXTexFmt GXGetTexObjFmt(const GXTexObj* obj);
 GXTexWrapMode GXGetTexObjWrapS(GXTexObj* obj);
 GXTexWrapMode GXGetTexObjWrapT(GXTexObj* obj);

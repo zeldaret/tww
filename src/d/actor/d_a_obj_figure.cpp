@@ -3,21 +3,19 @@
  * Object - Nintendo Gallery figurines + stand
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_figure.h"
-#include "d/res/res_figure.h"
-#include "d/res/res_figure2.h"
+#include "res/Object/Figure.h"
+#include "res/Object/Figure1.h"
+#include "res/Object/Figure2.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_snap.h"
 #include "d/d_camera.h"
 #include "d/d_a_obj.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_player_main.h"
 #include "m_Do/m_Do_controller_pad.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 #define TOTAL_FIGURE_COUNT 0x86
 
@@ -30,31 +28,33 @@ static const char* l_arcname_tbl[] = {
     "Figure5",
     "Figure3",
     "Figure4",
+#if VERSION > VERSION_DEMO
     "Figure2a",
     "Figure2b",
     "Figure6a",
     "Figure6b",
     "Figure6c",
+#endif
 };
 
 static u16 l_figure_comp[] = {
-    0x95FF,
-    0x94FF,
-    0x93FF,
-    0x92FF,
-    0x91FF,
-    0x90FF,
-    0x8FFF,
-    0x8EFF,
-    0x8DFF,
-    0x8CFF,
-    0xB1FF,
-    0x9CFF,
-    0x84FF,
-    0x83FF,
-    0x82FF,
-    0x81FF,
-    0x80FF,
+    dSv_event_flag_c::UNK_95FF,
+    dSv_event_flag_c::UNK_94FF,
+    dSv_event_flag_c::UNK_93FF,
+    dSv_event_flag_c::UNK_92FF,
+    dSv_event_flag_c::UNK_91FF,
+    dSv_event_flag_c::UNK_90FF,
+    dSv_event_flag_c::UNK_8FFF,
+    dSv_event_flag_c::UNK_8EFF,
+    dSv_event_flag_c::UNK_8DFF,
+    dSv_event_flag_c::UNK_8CFF,
+    dSv_event_flag_c::UNK_B1FF,
+    dSv_event_flag_c::UNK_9CFF,
+    dSv_event_flag_c::UNK_84FF,
+    dSv_event_flag_c::UNK_83FF,
+    dSv_event_flag_c::UNK_82FF,
+    dSv_event_flag_c::UNK_81FF,
+    dSv_event_flag_c::UNK_80FF,
 };
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -80,11 +80,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 60.0f,
         /* Height */ 150.0f,
-    },
+    }},
 };
 
 struct FigureData {
@@ -96,152 +96,187 @@ struct FigureData {
 }; // Size: 0x0C
 
 #if VERSION == VERSION_DEMO
-#define FIGUREDAT(bmdIdx, dlistFlags, roomId)                                                      \
+#define FIGUREDAT(bmdId, dlistFlags, roomId)                                                       \
     {                                                                                              \
-        bmdIdx, dlistFlags                                                                         \
+        bmdId, dlistFlags                                                                          \
     }
 #else
-#define FIGUREDAT(bmdIdx, dlistFlags, roomId)                                                      \
+#define FIGUREDAT(bmdId, dlistFlags, roomId)                                                       \
     {                                                                                              \
-        bmdIdx, dlistFlags, roomId                                                                 \
+        bmdId, dlistFlags, roomId                                                                  \
     }
 #endif
 
+// TODO: use enums for bmdId
 static const FigureData l_figure_dat_tbl[TOTAL_FIGURE_COUNT] = {
-    FIGUREDAT(0x00, 0x37441422, -1),
-    FIGUREDAT(0x01, 0x37441422, -1),
-    FIGUREDAT(0x02, 0x37441422, -1),
-    FIGUREDAT(0x03, 0x37441422, -1),
-    FIGUREDAT(0x0A, 0x37441422, -1),
-    FIGUREDAT(0x04, 0x37441422, -1),
-    FIGUREDAT(0x05, 0x37441422, -1),
-    FIGUREDAT(0x06, 0x37441422, -1),
-    FIGUREDAT(0x07, 0x37441422, -1),
-    FIGUREDAT(0x08, 0x37441422, -1),
-    FIGUREDAT(0x09, 0x11001222, -1),
-    FIGUREDAT(0x0B, 0x37441422, -1),
-    FIGUREDAT(0x0C, 0x37441422, -1),
-    FIGUREDAT(0x0D, 0x37441422, -1),
-    FIGUREDAT(0x00, 0x37441422, -1),
-    FIGUREDAT(0x01, 0x37441422, -1),
-    FIGUREDAT(0x02, 0x37441422, -1),
-    FIGUREDAT(0x04, 0x37441422, -1),
-    FIGUREDAT(0x05, 0x37441422, -1),
-    FIGUREDAT(0x07, 0x37441422, -1),
-    FIGUREDAT(0x08, 0x37441422, -1),
-    FIGUREDAT(0x09, 0x37441422, -1),
-    FIGUREDAT(0x0A, 0x37441422, -1),
-    FIGUREDAT(0x0B, 0x37441422, -1),
-    FIGUREDAT(0x0C, 0x37441422, -1),
-    FIGUREDAT(0x0D, 0x37441422, -1),
-    FIGUREDAT(0x0E, 0x37441422, -1),
-    FIGUREDAT(0x0F, 0x37441422, -1),
-    FIGUREDAT(0x10, 0x37441422, -1),
-    FIGUREDAT(0x11, 0x37441422, -1),
-    FIGUREDAT(0x12, 0x37441422, -1),
-    FIGUREDAT(0x13, 0x37441422, -1),
-    FIGUREDAT(0x14, 0x37441422, -1),
-    FIGUREDAT(0x15, 0x37441422, -1),
-    FIGUREDAT(0x16, 0x37441422, -1),
-    FIGUREDAT(0x17, 0x37441422, -1),
-    FIGUREDAT(0x18, 0x37441422, -1),
-    FIGUREDAT(0x19, 0x37441422, -1),
-    FIGUREDAT(0x1A, 0x37441422, -1),
-    FIGUREDAT(0x1B, 0x37441422, -1),
-    FIGUREDAT(0x1C, 0x37441422, -1),
-    FIGUREDAT(0x00, 0x37441422, 8),
-    FIGUREDAT(0x01, 0x37441422, 8),
-    FIGUREDAT(0x02, 0x37441422, 8),
-    FIGUREDAT(0x03, 0x37441422, 8),
-    FIGUREDAT(0x04, 0x37441422, 8),
-    FIGUREDAT(0x05, 0x37441422, 8),
-    FIGUREDAT(0x06, 0x37441422, 8),
-    FIGUREDAT(0x07, 0x37441422, 8),
-    FIGUREDAT(0x08, 0x37441422, 8),
-    FIGUREDAT(0x09, 0x37441422, 8),
-    FIGUREDAT(0x0A, 0x37441422, 8),
-    FIGUREDAT(0x0B, 0x37441422, 8),
-    FIGUREDAT(0x0C, 0x37441422, 8),
-    FIGUREDAT(0x0D, 0x37441422, 8),
-    FIGUREDAT(0x0E, 0x37441422, 8),
-    FIGUREDAT(0x0F, 0x37441422, 8),
-    FIGUREDAT(0x10, 0x37441422, 8),
-    FIGUREDAT(0x11, 0x37441422, 8),
-    FIGUREDAT(0x12, 0x37441422, 8),
-    FIGUREDAT(0x13, 0x37441422, 8),
-    FIGUREDAT(0x06, 0x37441422, 9),
-    FIGUREDAT(0x01, 0x37441422, 9),
-    FIGUREDAT(0x02, 0x37441422, 9),
-    FIGUREDAT(0x05, 0x37441422, 9),
-    FIGUREDAT(0x00, 0x11001222, -1),
-    FIGUREDAT(0x01, 0x37441422, -1),
-    FIGUREDAT(0x02, 0x37441422, -1),
-    FIGUREDAT(0x03, 0x37441422, -1),
-    FIGUREDAT(0x04, 0x37441422, -1),
-    FIGUREDAT(0x05, 0x37441422, -1),
-    FIGUREDAT(0x06, 0x37441422, -1),
-    FIGUREDAT(0x07, 0x37441422, -1),
-    FIGUREDAT(0x08, 0x37441422, -1),
-    FIGUREDAT(0x09, 0x37441422, -1),
-    FIGUREDAT(0x0A, 0x37441422, -1),
-    FIGUREDAT(0x0B, 0x37441422, -1),
-    FIGUREDAT(0x0C, 0x37441422, -1),
-    FIGUREDAT(0x0D, 0x37441422, -1),
-    FIGUREDAT(0x0E, 0x37441422, -1),
-    FIGUREDAT(0x0F, 0x37441422, -1),
-    FIGUREDAT(0x10, 0x37441422, -1),
-    FIGUREDAT(0x11, 0x11001222, -1),
-    FIGUREDAT(0x00, 0x37441422, -1),
-    FIGUREDAT(0x05, 0x37441422, -1),
-    FIGUREDAT(0x06, 0x37441422, -1),
-    FIGUREDAT(0x07, 0x37441422, -1),
-    FIGUREDAT(0x08, 0x37441422, -1),
-    FIGUREDAT(0x09, 0x37441422, -1),
-    FIGUREDAT(0x0A, 0x37441422, -1),
-    FIGUREDAT(0x0B, 0x37441422, -1),
-    FIGUREDAT(0x0C, 0x37441422, -1),
-    FIGUREDAT(0x0D, 0x37441422, -1),
-    FIGUREDAT(0x01, 0x37441422, -1),
-    FIGUREDAT(0x02, 0x37441422, -1),
-    FIGUREDAT(0x03, 0x37441422, -1),
-    FIGUREDAT(0x04, 0x37441422, -1),
-    FIGUREDAT(0x00, 0x37441422, -1),
-    FIGUREDAT(0x01, 0x37441422, -1),
-    FIGUREDAT(0x02, 0x37441422, -1),
-    FIGUREDAT(0x03, 0x37441422, -1),
-    FIGUREDAT(0x04, 0x37441422, -1),
-    FIGUREDAT(0x05, 0x37441422, -1),
-    FIGUREDAT(0x06, 0x37441422, -1),
-    FIGUREDAT(0x07, 0x37441422, -1),
-    FIGUREDAT(0x08, 0x37441422, -1),
-    FIGUREDAT(0x09, 0x37441422, -1),
-    FIGUREDAT(0x12, 0x37441422, -1),
-    FIGUREDAT(0x0A, 0x11001222, -1),
-    FIGUREDAT(0x0B, 0x11001222, -1),
-    FIGUREDAT(0x0C, 0x11001222, -1),
-    FIGUREDAT(0x0D, 0x37441422, -1),
-    FIGUREDAT(0x0E, 0x37441422, -1),
-    FIGUREDAT(0x0F, 0x37441422, -1),
-    FIGUREDAT(0x10, 0x37441422, -1),
-    FIGUREDAT(0x11, 0x37441422, -1),
-    FIGUREDAT(0x00, 0x37441422, 0xA),
-    FIGUREDAT(0x01, 0x37441422, 0xA),
-    FIGUREDAT(0x02, 0x11001222, 0xA),
-    FIGUREDAT(0x03, 0x11001222, 0xA),
-    FIGUREDAT(0x04, 0x11001222, 0xA),
-    FIGUREDAT(0x05, 0x37441422, 0xA),
-    FIGUREDAT(0x06, 0x37441422, 0xA),
-    FIGUREDAT(0x07, 0x37441422, 0xA),
-    FIGUREDAT(0x00, 0x37441422, 0xB),
-    FIGUREDAT(0x01, 0x11001222, 0xB),
-    FIGUREDAT(0x02, 0x11001222, 0xB),
-    FIGUREDAT(0x03, 0x37441422, 0xB),
-    FIGUREDAT(0x04, 0x37441422, 0xB),
-    FIGUREDAT(0x00, 0x11001222, 0xC),
-    FIGUREDAT(0x01, 0x37441422, 0xC),
-    FIGUREDAT(0x02, 0x11001222, 0xC),
-    FIGUREDAT(0x03, 0x11001222, 0xC),
-    FIGUREDAT(0x04, 0x37441422, 0xC),
+    FIGUREDAT(0x00, 0x37441422, -1), // 0x00
+    FIGUREDAT(0x01, 0x37441422, -1), // 0x01
+    FIGUREDAT(0x02, 0x37441422, -1), // 0x02
+    FIGUREDAT(0x03, 0x37441422, -1), // 0x03
+    FIGUREDAT(0x0A, 0x37441422, -1), // 0x04
+    FIGUREDAT(0x04, 0x37441422, -1), // 0x05
+    FIGUREDAT(0x05, 0x37441422, -1), // 0x06
+    FIGUREDAT(0x06, 0x37441422, -1), // 0x07
+    FIGUREDAT(0x07, 0x37441422, -1), // 0x08
+    FIGUREDAT(0x08, 0x37441422, -1), // 0x09
+    FIGUREDAT(0x09, 0x11001222, -1), // 0x0A
+    FIGUREDAT(0x0B, 0x37441422, -1), // 0x0B
+    FIGUREDAT(0x0C, 0x37441422, -1), // 0x0C
+    FIGUREDAT(0x0D, 0x37441422, -1), // 0x0D
+    FIGUREDAT(0x00, 0x37441422, -1), // 0x0E
+    FIGUREDAT(0x01, 0x37441422, -1), // 0x0F
+    FIGUREDAT(0x02, 0x37441422, -1), // 0x10
+    FIGUREDAT(0x04, 0x37441422, -1), // 0x11
+    FIGUREDAT(0x05, 0x37441422, -1), // 0x12
+    FIGUREDAT(0x07, 0x37441422, -1), // 0x13
+    FIGUREDAT(0x08, 0x37441422, -1), // 0x14
+    FIGUREDAT(0x09, 0x37441422, -1), // 0x15
+    FIGUREDAT(0x0A, 0x37441422, -1), // 0x16
+    FIGUREDAT(0x0B, 0x37441422, -1), // 0x17
+    FIGUREDAT(0x0C, 0x37441422, -1), // 0x18
+    FIGUREDAT(0x0D, 0x37441422, -1), // 0x19
+    FIGUREDAT(0x0E, 0x37441422, -1), // 0x1A
+    FIGUREDAT(0x0F, 0x37441422, -1), // 0x1B
+    FIGUREDAT(0x10, 0x37441422, -1), // 0x1C
+    FIGUREDAT(0x11, 0x37441422, -1), // 0x1D
+    FIGUREDAT(0x12, 0x37441422, -1), // 0x1E
+    FIGUREDAT(0x13, 0x37441422, -1), // 0x1F
+    FIGUREDAT(0x14, 0x37441422, -1), // 0x20
+    FIGUREDAT(0x15, 0x37441422, -1), // 0x21
+    FIGUREDAT(0x16, 0x37441422, -1), // 0x22
+    FIGUREDAT(0x17, 0x37441422, -1), // 0x23
+    FIGUREDAT(0x18, 0x37441422, -1), // 0x24
+    FIGUREDAT(0x19, 0x37441422, -1), // 0x25
+    FIGUREDAT(0x1A, 0x37441422, -1), // 0x26
+    FIGUREDAT(0x1B, 0x37441422, -1), // 0x27
+    FIGUREDAT(0x1C, 0x37441422, -1), // 0x28
+#if VERSION > VERSION_DEMO
+    FIGUREDAT(0x00, 0x37441422, 8), // 0x29 (Retail)
+#endif
+    FIGUREDAT(0x01, 0x37441422, 8), // 0x29 (Demo) | 0x2A (Retail)
+    FIGUREDAT(0x02, 0x37441422, 8), // 0x2A (Demo) | 0x2B (Retail)
+    FIGUREDAT(0x03, 0x37441422, 8), // 0x2B (Demo) | 0x2C (Retail)
+    FIGUREDAT(0x04, 0x37441422, 8), // 0x2C (Demo) | 0x2D (Retail)
+    FIGUREDAT(0x05, 0x37441422, 8), // 0x2D (Demo) | 0x2E (Retail)
+    FIGUREDAT(0x06, 0x37441422, 8), // 0x2E (Demo) | 0x2F (Retail)
+    FIGUREDAT(0x07, 0x37441422, 8), // 0x2F (Demo) | 0x30 (Retail)
+    FIGUREDAT(0x08, 0x37441422, 8), // 0x30 (Demo) | 0x31 (Retail)
+    FIGUREDAT(0x09, 0x37441422, 8), // 0x31 (Demo) | 0x32 (Retail)
+    FIGUREDAT(0x0A, 0x37441422, 8), // 0x32 (Demo) | 0x33 (Retail)
+    FIGUREDAT(0x0B, 0x37441422, 8), // 0x33 (Demo) | 0x34 (Retail)
+    FIGUREDAT(0x0C, 0x37441422, 8), // 0x34 (Demo) | 0x35 (Retail)
+#if VERSION == VERSION_DEMO
+    FIGUREDAT(0x17, 0x37441422, -1), // 0x35 (Demo)
+#endif
+    FIGUREDAT(0x0D, 0x37441422, 8), // 0x36
+    FIGUREDAT(0x0E, 0x37441422, 8), // 0x37
+#if VERSION == VERSION_DEMO
+    FIGUREDAT(0x18, 0x37441422, -1), // 0x38 (Demo)
+    FIGUREDAT(0x0F, 0x37441422, -1), // 0x39 (Demo)
+    FIGUREDAT(0x10, 0x37441422, -1), // 0x3A (Demo)
+    FIGUREDAT(0x11, 0x37441422, -1), // 0x3B (Demo)
+    FIGUREDAT(0x12, 0x37441422, -1), // 0x3C (Demo)
+    FIGUREDAT(0x19, 0x37441422, -1), // 0x3D (Demo)
+    FIGUREDAT(0x13, 0x37441422, -1), // 0x3E (Demo)
+    FIGUREDAT(0x14, 0x37441422, -1), // 0x3F (Demo)
+    FIGUREDAT(0x16, 0x37441422, -1), // 0x40 (Demo)
+#else
+    FIGUREDAT(0x0F, 0x37441422, 8), // 0x38 (Retail)
+    FIGUREDAT(0x10, 0x37441422, 8), // 0x39 (Retail)
+    FIGUREDAT(0x11, 0x37441422, 8), // 0x3A (Retail)
+    FIGUREDAT(0x12, 0x37441422, 8), // 0x3B (Retail)
+    FIGUREDAT(0x13, 0x37441422, 8), // 0x3C (Retail)
+    FIGUREDAT(0x06, 0x37441422, 9), // 0x3D (Retail)
+    FIGUREDAT(0x01, 0x37441422, 9), // 0x3E (Retail)
+    FIGUREDAT(0x02, 0x37441422, 9), // 0x3F (Retail)
+    FIGUREDAT(0x05, 0x37441422, 9), // 0x40 (Retail)
+#endif
+    FIGUREDAT(0x00, 0x11001222, -1), // 0x41
+    FIGUREDAT(0x01, 0x37441422, -1), // 0x42
+    FIGUREDAT(0x02, 0x37441422, -1), // 0x43
+    FIGUREDAT(0x03, 0x37441422, -1), // 0x44
+    FIGUREDAT(0x04, 0x37441422, -1), // 0x45
+    FIGUREDAT(0x05, 0x37441422, -1), // 0x46
+    FIGUREDAT(0x06, 0x37441422, -1), // 0x47
+    FIGUREDAT(0x07, 0x37441422, -1), // 0x48
+    FIGUREDAT(0x08, 0x37441422, -1), // 0x49
+    FIGUREDAT(0x09, 0x37441422, -1), // 0x4A
+    FIGUREDAT(0x0A, 0x37441422, -1), // 0x4B
+    FIGUREDAT(0x0B, 0x37441422, -1), // 0x4C
+    FIGUREDAT(0x0C, 0x37441422, -1), // 0x4D
+    FIGUREDAT(0x0D, 0x37441422, -1), // 0x4E
+    FIGUREDAT(0x0E, 0x37441422, -1), // 0x4F
+    FIGUREDAT(0x0F, 0x37441422, -1), // 0x50
+    FIGUREDAT(0x10, 0x37441422, -1), // 0x51
+    FIGUREDAT(0x11, 0x11001222, -1), // 0x52
+    FIGUREDAT(0x00, 0x37441422, -1), // 0x53
+    FIGUREDAT(0x05, 0x37441422, -1), // 0x54
+    FIGUREDAT(0x06, 0x37441422, -1), // 0x55
+    FIGUREDAT(0x07, 0x37441422, -1), // 0x56
+    FIGUREDAT(0x08, 0x37441422, -1), // 0x57
+    FIGUREDAT(0x09, 0x37441422, -1), // 0x58
+    FIGUREDAT(0x0A, 0x37441422, -1), // 0x59
+    FIGUREDAT(0x0B, 0x37441422, -1), // 0x5A
+    FIGUREDAT(0x0C, 0x37441422, -1), // 0x5B
+    FIGUREDAT(0x0D, 0x37441422, -1), // 0x5C
+    FIGUREDAT(0x01, 0x37441422, -1), // 0x5D
+    FIGUREDAT(0x02, 0x37441422, -1), // 0x5E
+    FIGUREDAT(0x03, 0x37441422, -1), // 0x5F
+    FIGUREDAT(0x04, 0x37441422, -1), // 0x60
+    FIGUREDAT(0x00, 0x37441422, -1), // 0x61
+    FIGUREDAT(0x01, 0x37441422, -1), // 0x62
+    FIGUREDAT(0x02, 0x37441422, -1), // 0x63
+    FIGUREDAT(0x03, 0x37441422, -1), // 0x64
+    FIGUREDAT(0x04, 0x37441422, -1), // 0x65
+    FIGUREDAT(0x05, 0x37441422, -1), // 0x66
+    FIGUREDAT(0x06, 0x37441422, -1), // 0x67
+    FIGUREDAT(0x07, 0x37441422, -1), // 0x68
+    FIGUREDAT(0x08, 0x37441422, -1), // 0x69
+    FIGUREDAT(0x09, 0x37441422, -1), // 0x6A
+    FIGUREDAT(0x12, 0x37441422, -1), // 0x6B
+    FIGUREDAT(0x0A, 0x11001222, -1), // 0x6C
+    FIGUREDAT(0x0B, 0x11001222, -1), // 0x6D
+    FIGUREDAT(0x0C, 0x11001222, -1), // 0x6E
+    FIGUREDAT(0x0D, 0x37441422, -1), // 0x6F
+    FIGUREDAT(0x0E, 0x37441422, -1), // 0x70
+    FIGUREDAT(0x0F, 0x37441422, -1), // 0x71
+    FIGUREDAT(0x10, 0x37441422, -1), // 0x72
+    FIGUREDAT(0x11, 0x37441422, -1), // 0x73
+    FIGUREDAT(0x00, 0x37441422, 0xA), // 0x74
+#if VERSION == VERSION_DEMO
+    FIGUREDAT(0x10, 0x37441422, -1), // 0x75 (Demo)
+#else
+    FIGUREDAT(0x01, 0x37441422, 0xA), // 0x75 (Retail)
+#endif
+    FIGUREDAT(0x02, 0x11001222, 0xA), // 0x76
+    FIGUREDAT(0x03, 0x11001222, 0xA), // 0x77
+    FIGUREDAT(0x04, 0x11001222, 0xA), // 0x78
+    FIGUREDAT(0x05, 0x37441422, 0xA), // 0x79
+    FIGUREDAT(0x06, 0x37441422, 0xA), // 0x7A
+    FIGUREDAT(0x07, 0x37441422, 0xA), // 0x7B
+#if VERSION == VERSION_DEMO
+    FIGUREDAT(0x08, 0x37441422, -1), // 0x7C (Demo)
+    FIGUREDAT(0x09, 0x11001222, -1), // 0x7D (Demo)
+    FIGUREDAT(0x01, 0x11001222, -1), // 0x7E (Demo)
+    FIGUREDAT(0x0A, 0x37441422, -1), // 0x7F (Demo)
+    FIGUREDAT(0x0B, 0x37441422, -1), // 0x80 (Demo)
+    FIGUREDAT(0x0C, 0x11001222, -1), // 0x81 (Demo)
+    FIGUREDAT(0x0D, 0x37441422, -1), // 0x82 (Demo)
+    FIGUREDAT(0x0E, 0x11001222, -1), // 0x83 (Demo)
+    FIGUREDAT(0x11, 0x11001222, -1), // 0x84 (Demo)
+    FIGUREDAT(0x0F, 0x37441422, -1), // 0x85 (Demo)
+#else
+    FIGUREDAT(0x00, 0x37441422, 0xB), // 0x7C (Retail)
+    FIGUREDAT(0x01, 0x11001222, 0xB), // 0x7D (Retail)
+    FIGUREDAT(0x02, 0x11001222, 0xB), // 0x7E (Retail)
+    FIGUREDAT(0x03, 0x37441422, 0xB), // 0x7F (Retail)
+    FIGUREDAT(0x04, 0x37441422, 0xB), // 0x80 (Retail)
+    FIGUREDAT(0x00, 0x11001222, 0xC), // 0x81 (Retail)
+    FIGUREDAT(0x01, 0x37441422, 0xC), // 0x82 (Retail)
+    FIGUREDAT(0x02, 0x11001222, 0xC), // 0x83 (Retail)
+    FIGUREDAT(0x03, 0x11001222, 0xC), // 0x84 (Retail)
+    FIGUREDAT(0x04, 0x37441422, 0xC), // 0x85 (Retail)
+#endif
 };
 
 struct FigureCheckTbl {
@@ -363,7 +398,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000005A8-00000624       .text phase_1__FP13daObjFigure_c */
 static cPhs_State phase_1(daObjFigure_c* i_this) {
-    fopAcM_SetupActor(i_this, daObjFigure_c)
+    fopAcM_ct(i_this, daObjFigure_c)
     i_this->setResFlag(0x1);
 
     cPhs_State status = dComIfG_resLoad(i_this->getPhase1P(), "Figure");
@@ -388,7 +423,12 @@ static cPhs_State phase_2(daObjFigure_c* i_this) {
     cPhs_State status = dComIfG_resLoad(i_this->getPhase2P(), l_arcname_tbl[id]);
 
     if(status == cPhs_COMPLEATE_e) {
-        if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, figureNo == 0x40 ? 0x25000 : 0xCD90)) {
+#if VERSION == VERSION_DEMO
+        if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0))
+#else
+        if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, figureNo == 0x40 ? 0x25000 : 0xCD90))
+#endif
+        {
             return i_this->createInit();
         }
         else {
@@ -412,16 +452,16 @@ cPhs_State daObjFigure_c::_create() {
 
 /* 00000720-00000A90       .text createHeap__13daObjFigure_cFv */
 BOOL daObjFigure_c::createHeap() {
-    int id = dSnap_GetFigRoomId(getFigureNo());
+    int roomId = dSnap_GetFigRoomId(getFigureNo());
 #if VERSION > VERSION_DEMO
     if(l_figure_dat_tbl[getFigureNo()].mRoomId >= 0) {
-        id = l_figure_dat_tbl[getFigureNo()].mRoomId;
+        roomId = l_figure_dat_tbl[getFigureNo()].mRoomId;
     }
 #endif
 
     J3DModelData* pModelData;
-    const char* arcname = l_arcname_tbl[id];
-    pModelData = (J3DModelData*)(dComIfG_getObjectIDRes(arcname, getFigureBmd(mFigureNo)));
+    const char* arcname = l_arcname_tbl[roomId];
+    pModelData = (J3DModelData*)(dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), getFigureBmd(mFigureNo)));
     if(pModelData == NULL) {
         return false;
     }
@@ -432,7 +472,7 @@ BOOL daObjFigure_c::createHeap() {
     }
 
     if(mFigureNo == 0x3D) {
-        J3DAnmTevRegKey* pBrkData = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectIDRes(arcname, FIGURE2_BDL_VF_047));
+        J3DAnmTevRegKey* pBrkData = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), dRes_ID_FIGURE2_BDL_VF_047_e));
         if(pBrkData == NULL) {
             return false;
         }
@@ -442,26 +482,32 @@ BOOL daObjFigure_c::createHeap() {
             return false;
         }
 
-        if(!mpBrkAnm->init(pModelData, pBrkData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+        if(!mpBrkAnm->init(pModelData, pBrkData, true, J3DFrameCtrl::EMode_LOOP)) {
             return false;
         }
     }
+    J3DModelData* pPedestalData;
     if(mFigureNo == 0x40) {
-        J3DModelData* p1 = (J3DModelData*)dComIfG_getObjectIDRes(arcname, FIGURE2_BDL_VF_044);
+        pPedestalData = (J3DModelData*)dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), dRes_ID_FIGURE2_BDL_VF_044_e);
         mpMorf = new mDoExt_McaMorf(
-            p1,
+            pPedestalData,
             NULL, NULL,
-            (J3DAnmTransformKey*)dComIfG_getObjectIDRes(arcname, FIGURE2_BCK_VF_064L),
+            (J3DAnmTransformKey*)dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), dRes_ID_FIGURE2_BCK_VF_064L_e),
             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
             NULL,
             0x80000,
+#if VERSION == VERSION_DEMO
+            0x11000022
+#else
             0x11001222
+#endif
         );
 
         if(mpMorf == NULL || mpMorf->getModel() == NULL) {
             return false;
         }
 
+#if VERSION > VERSION_DEMO
         J3DSkinDeform* pDeform = new J3DSkinDeform;
         if(pDeform == NULL) {
             return false;
@@ -470,9 +516,10 @@ BOOL daObjFigure_c::createHeap() {
         if(mpMorf->getModel()->setSkinDeform(pDeform, 1) != J3DErrType_Success) {
             return false;
         }
+#endif
     }
 
-    J3DModelData* pPedestalData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Figure", FIGURE_BDL_VF_BS));
+    pPedestalData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Figure", dRes_ID_FIGURE_BDL_VF_BS_e));
     if(pPedestalData == NULL) {
         return false;
     }
@@ -482,12 +529,12 @@ BOOL daObjFigure_c::createHeap() {
         return false;
     }
 
-    mpPedestalBtp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes("Figure", FIGURE_BTP_VF_BS));
+    mpPedestalBtp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes("Figure", dRes_ID_FIGURE_BTP_VF_BS_e));
     if(mpPedestalBtp == NULL) {
         return false;
     }
 
-    if(!mBtpAnm1.init(pPedestalData, mpPedestalBtp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+    if(!mBtpAnm1.init(pPedestalData, mpPedestalBtp, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return false;
     }
 
@@ -520,21 +567,34 @@ cPhs_State daObjFigure_c::createInit() {
     return cPhs_COMPLEATE_e;
 }
 
+#if VERSION == VERSION_DEMO
+BOOL daObjFigure_c::_delete() {
+    if (mLoadFlags & 1) {
+        dComIfG_resDeleteDemo(getPhase1P(), "Figure");
+    }
+
+    if (mLoadFlags & 2) {
+        int id = dSnap_GetFigRoomId(getFigureNo());
+        dComIfG_resDeleteDemo(getPhase2P(), l_arcname_tbl[id]);
+    }
+
+    return true;
+}
+#else
 /* 00000BF4-00000C78       .text _delete__13daObjFigure_cFv */
 BOOL daObjFigure_c::_delete() {
     dComIfG_resDeleteDemo(getPhase1P(), "Figure");
 
     int id = dSnap_GetFigRoomId(getFigureNo());
-#if VERSION > VERSION_DEMO
     if(l_figure_dat_tbl[getFigureNo()].mRoomId >= 0) {
         id = l_figure_dat_tbl[getFigureNo()].mRoomId;
     }
-#endif
 
-    dComIfG_resDeleteDemo(getPhase2P(), l_arcname_tbl[id]);
+    dComIfG_resDelete(getPhase2P(), l_arcname_tbl[id]);
 
     return true;
 }
+#endif
 
 void linkDraw(mDoExt_McaMorf*);
 
@@ -542,6 +602,11 @@ void linkDraw(mDoExt_McaMorf*);
 BOOL daObjFigure_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG2, &current.pos, &mTevStrBG2);
     g_env_light.setLightTevColorType(mpModel, &mTevStrBG2);
+#if VERSION == VERSION_DEMO
+    if(mpMorf) {
+        g_env_light.setLightTevColorType(mpMorf->getModel(), &mTevStrBG2);
+    }
+#endif
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpPedestalModel, &tevStr);
 
@@ -549,7 +614,7 @@ BOOL daObjFigure_c::_draw() {
     if(mbDisplay) {
         if(mpBrkAnm) {
             J3DModelData* pModelData2 = mpModel->getModelData();
-            mpBrkAnm->entry(pModelData2, mpBrkAnm->getFrame());
+            mpBrkAnm->entry(pModelData2);
         }
 
         mBtpAnm1.entry(pModelData, 1);
@@ -562,7 +627,9 @@ BOOL daObjFigure_c::_draw() {
         }
 
         if(mpMorf) {
+#if VERSION > VERSION_DEMO
             g_env_light.setLightTevColorType(mpMorf->getModel(), &mTevStrBG2);
+#endif
             linkDraw(mpMorf);
         }
     }
@@ -615,12 +682,14 @@ void daObjFigure_c::executeNormal() {
     if(mbDisplay) {
         fopAc_ac_c* pLink = dComIfGp_getLinkPlayer();
 
+        f32 f31 = 150.0f;
+        int r31 = 13000;
         f32 temp1;
         s16 temp2;
         dNpc_calc_DisXZ_AngY(current.pos, pLink->current.pos, &temp1, &temp2);
         temp2 -= current.angle.y;
 
-        if(150.0f > temp1 && abs(temp2) < 0x32C8) {
+        if(f31 > temp1 && r31 > abs(temp2)) {
             eventInfo.onCondition(dEvtCnd_CANTALK_e);
         }
     }
@@ -812,14 +881,14 @@ void daObjFigure_c::eventOnPlrInit() {
     ((daPy_lk_c*)dComIfGp_getLinkPlayer())->offPlayerNoDraw();
     dCam_getBody()->Reset();
     dCam_getBody()->Start();
-    dComIfGs_offTmpBit(0x408);
+    dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0408);
 }
 
 /* 00001658-000016A8       .text eventOffPlrInit__13daObjFigure_cFv */
 void daObjFigure_c::eventOffPlrInit() {
     ((daPy_lk_c*)dComIfGp_getLinkPlayer())->onPlayerNoDraw();
     dCam_getBody()->Stop();
-    dComIfGs_onTmpBit(0x408);
+    dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0408);
 }
 
 /* 000016A8-00001788       .text talk__13daObjFigure_cFi */
@@ -918,11 +987,12 @@ void daObjFigure_c::setMtx() {
 }
 
 /* 00001954-000019DC       .text isFigureGet__13daObjFigure_cFUc */
-BOOL daObjFigure_c::isFigureGet(u8 figureNo) {
+u8 daObjFigure_c::isFigureGet(u8 figureNo) {
     if(figureNo / 8 < 0x11) {
+        int r31 = (figureNo % 8);
         u8 reg = dComIfGs_getEventReg(l_figure_comp[figureNo / 8]);
-        u32 ret = reg & (1 << figureNo % 8);
-        return (u8)ret; // Fakematch for the clrlwi
+        u32 ret = reg & (1 << r31);
+        return ret;
     }
 
     return false;
@@ -932,15 +1002,15 @@ BOOL daObjFigure_c::isFigureGet(u8 figureNo) {
 int daObjFigure_c::getFigureBmd(u8 figureNo) {
     u32 bmd = l_figure_dat_tbl[figureNo].mBmdId;
     switch(figureNo) {
-        case 0x10:
-            if(dComIfGs_isEventBit(0x2D01)) {
-                bmd = 3;
+        case 0x10: // Mila's Father
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
+                bmd = dRes_ID_FIGURE1_BDL_VF_016B_e;
             }
 
             break;
-        case 0x12:
-            if(dComIfGs_isEventBit(0x2D01)) {
-                bmd = 6;
+        case 0x12: // Maggie's Father
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
+                bmd = dRes_ID_FIGURE1_BDL_VF_018B_e;
             }
 
             break;
@@ -952,7 +1022,7 @@ int daObjFigure_c::getFigureBmd(u8 figureNo) {
 }
 
 /* 00001A80-00001AA0       .text daSampleCreate__FPv */
-static s32 daSampleCreate(void* i_this) {
+static cPhs_State daSampleCreate(void* i_this) {
     return static_cast<daObjFigure_c*>(i_this)->_create();
 }
 
@@ -978,8 +1048,6 @@ static BOOL daSampleIsDelete(void*) {
 
 /* 00001B08-00002148       .text linkDraw__FP14mDoExt_McaMorf */
 void linkDraw(mDoExt_McaMorf* pMorf) {
-    /* Nonmatching - regalloc (maybe the same issue as daPy_lk_c::draw?) */
-
     pMorf->calc();
 #if VERSION > VERSION_DEMO
     J3DModel* model = pMorf->getModel();
@@ -1003,12 +1071,12 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
     J3DModelData* modelData = model->getModelData();
 #endif
 
-    J3DJoint* link_root_joint = modelData->getJointNodePointer(0x00); // link_root joint
-    J3DJoint* cl_eye_joint = modelData->getJointNodePointer(0x13);    // cl_eye joint
-    J3DJoint* cl_mayu_joint = modelData->getJointNodePointer(0x15);   // cl_mayu joint
+    J3DJoint* link_root_joint = modelData->getJointNodePointer(VF_064L_JNT_LINK_ROOT_e);
+    J3DJoint* cl_eye_joint = modelData->getJointNodePointer(VF_064L_JNT_CL_EYE_e);
+    J3DJoint* cl_mayu_joint = modelData->getJointNodePointer(VF_064L_JNT_CL_MAYU_e);
 
     J3DMaterial* mtl;
-    mtl = modelData->getJointNodePointer(0x13)->getMesh(); // cl_eye joint
+    mtl = modelData->getJointNodePointer(VF_064L_JNT_CL_EYE_e)->getMesh();
     int zoff_blend_cnt = 0;
     int zoff_none_cnt = 0;
     int zon_cnt = 0;
@@ -1019,18 +1087,18 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
             if (mtl->getZMode()->getCompareEnable() == 0) {
                 if ((u8)mtl->getBlend()->getType() == GX_BM_BLEND) {
                     ZOffBlendShape[zoff_blend_cnt++] = mtl->getShape();
-                    JUT_ASSERT(VERSION_SELECT(1713, 1767, 1767, 1767), zoff_blend_cnt <= 4);
+                    JUT_ASSERT(DEMO_SELECT(1713, 1767), zoff_blend_cnt <= 4);
                 } else {
                     ZOffNoneShape[zoff_none_cnt++] = mtl->getShape();
-                    JUT_ASSERT(VERSION_SELECT(1717, 1770, 1770, 1770), zoff_none_cnt <= 4);
+                    JUT_ASSERT(DEMO_SELECT(1717, 1770), zoff_none_cnt <= 4);
                 }
             } else {
                 ZOnShape[zon_cnt++] = mtl->getShape();
-                JUT_ASSERT(VERSION_SELECT(1722, 1774, 1774, 1774), zon_cnt <= 4);
+                JUT_ASSERT(DEMO_SELECT(1722, 1774), zon_cnt <= 4);
             }
             mtl = mtl->getNext();
         }
-        mtl = modelData->getJointNodePointer(0x15)->getMesh(); // cl_mayu joint
+        mtl = modelData->getJointNodePointer(VF_064L_JNT_CL_MAYU_e)->getMesh();
     }
 
     dComIfGd_setListP0();
@@ -1101,8 +1169,8 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
         mtl->getShape()->show();
     }
 
-    modelData->getJointNodePointer(0x14)->getMesh()->getShape()->show(); // cl_hana joint
-    modelData->getJointNodePointer(0x29)->getMesh()->getShape()->show(); // cl_back joint
+    modelData->getJointNodePointer(VF_064L_JNT_CL_HANA_e)->getMesh()->getShape()->show();
+    modelData->getJointNodePointer(VF_064L_JNT_CL_BACK_e)->getMesh()->getShape()->show();
 
 #if VERSION == VERSION_DEMO
     dComIfGd_setList();
@@ -1118,18 +1186,18 @@ static actor_method_class daSampleMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_FIGURE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_FIGURE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_FIGURE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjFigure_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_FIGURE,
+    /* Draw Prio    */ fpcDwPi_OBJ_FIGURE_e,
     /* Actor SubMtd */ &daSampleMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -11,7 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_sea.h"
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(fpclassify(x) == 1));
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 #define CHECK_PVEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v->x && v->x < 1.0e32f && -1.0e32f < v->y && v->y < 1.0e32f && -1.0e32f < v->z && v->z < 1.0e32f)
@@ -65,10 +64,10 @@ dBgS_Acch::dBgS_Acch() {
     field_0xb8 = 0.0f;
     m_tbl_size = 0;
     pm_acch_cir = NULL;
-    m_roof_y = 0.0f;
-    m_roof_crr_height = 0.0f;
     m_roof_height = 0.0f;
-    m_water_check_offset = 200.0f;
+    m_roof_crr_height = 0.0f;
+    field_0xC4 = 0.0f;
+    m_wtr_check_offset = 200.0f;
     pm_angle = NULL;
     pm_shape_angle = NULL;
     m_my_ac = NULL;
@@ -148,25 +147,25 @@ void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
         }
     }
 
-    if (field_0xb0 && !(m_flags & GROUND_HIT)) {
-        m_flags |= GROUND_AWAY;
+    if (field_0xb0 && !ChkGroundHit()) {
+        SetGroundAway();
     }
 }
 
 /* 800A305C-800A313C       .text GroundRoofProc__9dBgS_AcchFR4dBgS */
 void dBgS_Acch::GroundRoofProc(dBgS& i_bgs) {
     if (m_ground_h != -G_CM3D_F_INF) {
-        if (field_0xb8 < m_roof_height && m_roof_height < pm_pos->y) {
-            pm_pos->y = m_roof_height;
+        if (field_0xb8 < field_0xC4 && field_0xC4 < pm_pos->y) {
+            pm_pos->y = field_0xC4;
         }
 
         if (!(m_flags & ROOF_NONE)) {
-            if (m_ground_h >= m_roof_y) {
+            if (m_ground_h >= m_roof_height) {
                 m_roof.SetExtChk(*this);
                 ClrRoofHit();
                 cXyz pos = *pm_pos;
                 m_roof.SetPos(pos);
-                m_roof_y = i_bgs.RoofChk(&m_roof);
+                m_roof_height = i_bgs.RoofChk(&m_roof);
             }
         }
     }
@@ -186,7 +185,7 @@ void dBgS_Acch::LineCheck(dBgS& i_bgs) {
         linChk.SetExtChk(*this);
         if (i_bgs.LineCross(&linChk)) {
             *pm_pos = linChk.GetLinP()->GetEnd();
-            m_flags |= LINE_CHECK_HIT;
+            OnLineCheckHit();
 
             if (pm_out_poly_info != NULL)
                 pm_out_poly_info->SetPolyInfo(linChk);
@@ -208,16 +207,16 @@ void dBgS_Acch::LineCheck(dBgS& i_bgs) {
 
 /* 800A3460-800A3F50       .text CrrPos__9dBgS_AcchFR4dBgS */
 void dBgS_Acch::CrrPos(dBgS& i_bgs) {
-    if (m_flags & 0x1) {
+    if (m_flags & UNK_1) {
         return;
     }
 
     JUT_ASSERT(494, pm_pos != NULL);
     JUT_ASSERT(495, pm_old_pos != NULL);
 
-    CHECK_FLOAT_CLASS(535, pm_pos->x);
-    CHECK_FLOAT_CLASS(536, pm_pos->y);
-    CHECK_FLOAT_CLASS(537, pm_pos->z);
+    JUT_ASSERT(535, !isnan(pm_pos->x));
+    JUT_ASSERT(536, !isnan(pm_pos->y));
+    JUT_ASSERT(537, !isnan(pm_pos->z));
     CHECK_PVEC3_RANGE(541, pm_pos);
 
     i_bgs.MoveBgCrrPos(m_gnd, ChkGroundHit(), pm_pos, pm_angle, pm_shape_angle);
@@ -248,15 +247,15 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
         LineCheck(i_bgs);
     }
 
-    m_roof_height = G_CM3D_F_INF;
+    field_0xC4 = G_CM3D_F_INF;
     if (!(m_flags & ROOF_NONE)) {
         m_roof.SetExtChk(*(cBgS_Chk*)this);
         ClrRoofHit();
         cXyz roofPos = *pm_pos;
         m_roof.SetPos(roofPos);
-        m_roof_y = i_bgs.RoofChk(&m_roof);
-        if (m_roof_y != G_CM3D_F_INF && pm_pos->y + m_roof_crr_height > m_roof_y) {
-            m_roof_height = m_roof_y - m_roof_crr_height;
+        m_roof_height = i_bgs.RoofChk(&m_roof);
+        if (m_roof_height != G_CM3D_F_INF && pm_pos->y + m_roof_crr_height > m_roof_height) {
+            field_0xC4 = m_roof_height - m_roof_crr_height;
             SetRoofHit();
         }
     }
@@ -265,8 +264,8 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
         ClrGroundFind();
         GroundCheck(i_bgs);
         GroundRoofProc(i_bgs);
-    } else if (m_roof_height < pm_pos->y) {
-        pm_pos->y = m_roof_height;
+    } else if (field_0xC4 < pm_pos->y) {
+        pm_pos->y = field_0xC4;
     }
 
     if (!(m_flags & WATER_NONE)) {
@@ -322,9 +321,9 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
     }
 
 #if VERSION > VERSION_DEMO
-    CHECK_FLOAT_CLASS(780, pm_pos->x);
-    CHECK_FLOAT_CLASS(781, pm_pos->y);
-    CHECK_FLOAT_CLASS(782, pm_pos->z);
+    JUT_ASSERT(780, !isnan(pm_pos->x));
+    JUT_ASSERT(781, !isnan(pm_pos->y));
+    JUT_ASSERT(782, !isnan(pm_pos->z));
     CHECK_PVEC3_RANGE(786, pm_pos);
 #endif
 }

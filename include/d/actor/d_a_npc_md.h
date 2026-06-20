@@ -7,179 +7,6 @@
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_drawlist.h"
 
-class daNpc_Md_HIO2_c {
-public:
-    daNpc_Md_HIO2_c();
-    virtual ~daNpc_Md_HIO2_c() {}
-
-public:
-    /* 0x04 */ f32 m04;
-    /* 0x08 */ f32 m08;
-    /* 0x0C */ f32 m0C;
-    /* 0x10 */ f32 m10;
-    /* 0x14 */ f32 m14;
-    /* 0x18 */ f32 m18;
-    /* 0x1C */ f32 m1C;
-    /* 0x20 */ s16 m20;
-    /* 0x22 */ s16 m22;
-    /* 0x24 */ s16 m24;
-    /* 0x26 */ s16 m26;
-    /* 0x28 */ s16 m28;
-    /* 0x2A */ s16 m2A;
-};
-
-class daNpc_Md_HIO3_c {
-public:
-    daNpc_Md_HIO3_c();
-    virtual ~daNpc_Md_HIO3_c() {}
-
-public:
-    /* 0x04 */ f32 m04;
-    /* 0x08 */ f32 m08;
-    /* 0x0C */ f32 m0C;
-    /* 0x10 */ f32 m10;
-    /* 0x14 */ f32 m14;
-    /* 0x18 */ s16 m18;
-    /* 0x1A */ s16 m1A;
-    /* 0x1C */ s16 m1C;
-    /* 0x1E */ s16 m1E;
-    /* 0x20 */ s16 m20;
-    /* 0x22 */ s16 m22;
-    /* 0x24 */ s16 m24;
-    /* 0x26 */ u8 field_26[0x28 - 0x26];
-};
-
-class daNpc_Md_HIO4_c {
-public:
-    daNpc_Md_HIO4_c();
-    virtual ~daNpc_Md_HIO4_c() {}
-
-public:
-    /* 0x4 */ f32 m4;
-    /* 0x8 */ s16 m8;
-    /* 0xA */ u8 field_A[0xC - 0xA];
-};
-
-class daNpc_Md_HIO5_c {
-public:
-    daNpc_Md_HIO5_c();
-    virtual ~daNpc_Md_HIO5_c() {}
-
-public:
-    /* 0x4 */ f32 m4;
-    /* 0x8 */ f32 m8;
-};
-
-class daNpc_Md_HIO6_c {
-public:
-    daNpc_Md_HIO6_c();
-    virtual ~daNpc_Md_HIO6_c() {}
-
-public:
-    /* 0x04 */ f32 m04;
-    /* 0x08 */ s16 m08;
-    /* 0x0A */ s16 m0A;
-    /* 0x0C */ s16 m0C;
-    /* 0x0E */ s16 m0E;
-    /* 0x10 */ s16 m10;
-    /* 0x12 */ s16 m12;
-    /* 0x14 */ s16 m14;
-    /* 0x16 */ s16 m16;
-};
-
-class daNpc_Md_HIO_c : public JORReflexible {
-public:
-    daNpc_Md_HIO_c();
-    virtual ~daNpc_Md_HIO_c() {}
-
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x004 */ s8 mNo;
-    /* 0x008 */ daNpc_Md_HIO2_c m008;
-    /* 0x034 */ daNpc_Md_HIO3_c m034;
-    /* 0x05C */ daNpc_Md_HIO4_c m05C;
-    /* 0x068 */ daNpc_Md_HIO5_c m068;
-    /* 0x074 */ daNpc_Md_HIO6_c m074;
-    /* 0x08C */ dNpc_HIO_c mNpc;
-    /* 0x0B4 */ fopAc_ac_c* mpActor;
-    /* 0x0B8 */ f32 m0B8;
-    /* 0x0BC */ f32 m0BC;
-    /* 0x0C0 */ f32 m0C0;
-    /* 0x0C4 */ f32 m0C4;
-    /* 0x0C8 */ f32 m0C8;
-    /* 0x0CC */ f32 m0CC;
-    /* 0x0D0 */ f32 m0D0;
-    /* 0x0D4 */ f32 m0D4;
-    /* 0x0D8 */ f32 m0D8;
-    /* 0x0DC */ f32 m0DC;
-    /* 0x0E0 */ f32 m0E0;
-    /* 0x0E4 */ f32 m0E4;
-    /* 0x0E8 */ f32 m0E8;
-    /* 0x0EC */ f32 m0EC;
-    /* 0x0F0 */ f32 m0F0;
-    /* 0x0F4 */ f32 m0F4;
-    /* 0x0F8 */ f32 m0F8;
-    /* 0x0FC */ f32 m0FC;
-    /* 0x100 */ f32 m100;
-    /* 0x104 */ f32 m104;
-    /* 0x108 */ f32 m108;
-    /* 0x10C */ f32 m10C;
-    /* 0x110 */ f32 m110;
-    /* 0x114 */ f32 m114;
-    /* 0x118 */ f32 m118;
-    /* 0x11C */ f32 m11C;
-    /* 0x120 */ f32 m120;
-    /* 0x124 */ f32 m124;
-    /* 0x128 */ f32 m128;
-    /* 0x12C */ f32 m12C;
-    /* 0x130 */ f32 m130;
-    /* 0x134 */ f32 m134;
-    /* 0x138 */ f32 m138;
-    /* 0x13C */ f32 m13C;
-    /* 0x140 */ f32 m140;
-    /* 0x144 */ f32 m144;
-    /* 0x148 */ f32 m148;
-    /* 0x14C */ f32 m14C;
-    /* 0x150 */ f32 m150;
-    /* 0x154 */ f32 m154;
-    /* 0x158 */ f32 m158;
-    /* 0x15C */ f32 m15C;
-    /* 0x160 */ f32 m160;
-    /* 0x164 */ f32 m164;
-    /* 0x168 */ f32 m168;
-    /* 0x16C */ f32 m16C;
-    /* 0x170 */ f32 m170;
-    /* 0x174 */ f32 m174;
-    /* 0x178 */ f32 m178;
-    /* 0x17C */ f32 m17C;
-    /* 0x180 */ f32 m180;
-    /* 0x184 */ f32 m184;
-    /* 0x188 */ f32 m188;
-    /* 0x18C */ f32 m18C;
-    /* 0x190 */ f32 m190;
-    /* 0x194 */ f32 m194;
-    /* 0x198 */ f32 m198;
-    /* 0x19C */ f32 m19C;
-    /* 0x1A0 */ f32 m1A0;
-    /* 0x1A4 */ f32 m1A4;
-    /* 0x1A8 */ f32 m1A8;
-    /* 0x1AC */ f32 m1AC;
-    /* 0x1B0 */ f32 m1B0;
-    /* 0x1B4 */ s16 m1B4;
-    /* 0x1B6 */ u16 m1B6;
-    /* 0x1B8 */ u16 m1B8;
-    /* 0x1BA */ u16 m1BA;
-    /* 0x1BC */ u16 m1BC;
-    /* 0x1BE */ u16 m1BE;
-    /* 0x1C0 */ u16 m1C0;
-    /* 0x1C2 */ u16 m1C2;
-    /* 0x1C4 */ s16 m1C4;
-    /* 0x1C6 */ u8 m1C6;
-    /* 0x1C7 */ u8 m1C7;
-    /* 0x1C8 */ u8 m1C8;
-};
-
 class daNpc_Md_followEcallBack_c : public dPa_levelEcallBack {
 public:
     ~daNpc_Md_followEcallBack_c() {}
@@ -212,6 +39,7 @@ public:
         daMdStts_UNK1            = 0x00000001,
         daMdStts_UNK2            = 0x00000002,
         daMdStts_UNK4            = 0x00000004,
+        daMdStts_UNK8            = 0x00000008,
         daMdStts_FLY             = 0x00000010,
         daMdStts_CAM_TAG_IN      = 0x00000020,
         daMdStts_UNK40           = 0x00000040,
@@ -237,52 +65,60 @@ public:
     
     void setBitStatus(u32 status) { cLib_onBit<u32>(m30F0, status); }
     void clearStatus(u32 status) { cLib_offBit<u32>(m30F0, status); }
-    bool checkStatus(u32 status) { return cLib_checkBit<u32>(m30F0, status); }
-    bool checkStatusFly() { return cLib_checkBit<u32>(m30F0, daMdStts_FLY); }
+    BOOL checkStatus(u32 status) { return cLib_checkBit<u32>(m30F0, status); }
+    void setStatus(u32 status) { m30F0 = status; }
+    void clearStatus() { m30F0 = 0; }
+    BOOL checkStatusFly() { return cLib_checkBit<u32>(m30F0, daMdStts_FLY); }
     void onBitCamTagIn() { cLib_onBit<u32>(m30F0, daMdStts_CAM_TAG_IN); }
     void offBitCamTagIn() { cLib_offBit<u32>(m30F0, daMdStts_CAM_TAG_IN); }
-    bool checkStatusCamTagIn() { return cLib_checkBit<u32>(m30F0, daMdStts_CAM_TAG_IN); }
+    BOOL checkStatusCamTagIn() { return cLib_checkBit<u32>(m30F0, daMdStts_CAM_TAG_IN); }
     void onXYTalk() { cLib_onBit<u32>(m30F0, daMdStts_XY_TALK); }
     void offXYTalk() { cLib_offBit<u32>(m30F0, daMdStts_XY_TALK); }
-    bool isXYTalk() { return cLib_checkBit<u32>(m30F0, daMdStts_XY_TALK); }
+    BOOL isXYTalk() { return cLib_checkBit<u32>(m30F0, daMdStts_XY_TALK); }
     void noCarryAction() { cLib_onBit<u32>(m30F0, daMdStts_CARRY_ACTION); }
     void offNoCarryAction() { cLib_offBit<u32>(m30F0, daMdStts_CARRY_ACTION); }
-    bool isNoCarryAction() { return cLib_checkBit<u32>(m30F0, daMdStts_CARRY_ACTION); }
+    BOOL isNoCarryAction() { return cLib_checkBit<u32>(m30F0, daMdStts_CARRY_ACTION); }
     void onShipRide() { cLib_onBit<u32>(m30F0, daMdStts_SHIP_RIDE); }
     void offShipRide() { cLib_offBit<u32>(m30F0, daMdStts_SHIP_RIDE); }
-    bool isShipRide() { return cLib_checkBit<u32>(m30F0, daMdStts_SHIP_RIDE); }
+    BOOL isShipRide() { return cLib_checkBit<u32>(m30F0, daMdStts_SHIP_RIDE); }
     void onLightHit() { cLib_onBit<u32>(m30F0, daMdStts_LIGHT_HIT); }
     void offLightHit() { cLib_offBit<u32>(m30F0, daMdStts_LIGHT_HIT); }
-    bool isLightHit() { return cLib_checkBit<u32>(m30F0, daMdStts_LIGHT_HIT); }
+    BOOL isLightHit() { return cLib_checkBit<u32>(m30F0, daMdStts_LIGHT_HIT); }
     void onLightBodyHit() { cLib_onBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
     void offLightBodyHit() { cLib_offBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
-    bool isLightBodyHit() { return cLib_checkBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
-    bool isOldLightBodyHit() { return cLib_checkBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
+    BOOL isLightBodyHit() { return cLib_checkBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
     void onDefaultTalkXY() { cLib_onBit<u32>(m30F0, daMdStts_DEFAULT_TALK_XY); }
     void offDefaultTalkXY() { cLib_offBit<u32>(m30F0, daMdStts_DEFAULT_TALK_XY); }
-    bool isDefaultTalkXY() { return cLib_checkBit<u32>(m30F0, daMdStts_DEFAULT_TALK_XY); }
+    BOOL isDefaultTalkXY() { return cLib_checkBit<u32>(m30F0, daMdStts_DEFAULT_TALK_XY); }
     
-    void setOldLightBodyHit() {} // 0x20000?
+    bool isOldLightBodyHit() { return mOldLightBodyHit; }
+    void setOldLightBodyHit() { mOldLightBodyHit = isLightBodyHit(); }
     
     void setTypeEdaichi() { mType = 4; }
     void setTypeM_Dai() { mType = 5; }
     void setTypeM_DaiB() { mType = 6; }
     void setTypeShipRide() { mType = 7; }
-    bool isTypeAtorizk() { return mType == 0; }
-    bool isTypeAdanmae() { return mType == 1; }
-    bool isTypeM_Dra09() { return mType == 2; }
-    bool isTypeSea() { return mType == 3; }
-    bool isTypeEdaichi() { return mType == 4; }
-    bool isTypeM_Dai() { return mType == 5; }
-    bool isTypeM_DaiB() { return mType == 6; }
-    bool isTypeShipRide() { return mType == 7; }
+    BOOL isTypeAtorizk() { return mType == 0; }
+    BOOL isTypeAdanmae() { return mType == 1; }
+    BOOL isTypeM_Dra09() { return mType == 2; }
+    BOOL isTypeSea() { return mType == 3; }
+    BOOL isTypeEdaichi() { return mType == 4; }
+    BOOL isTypeM_Dai() { return mType == 5; }
+    BOOL isTypeM_DaiB() { return mType == 6; }
+    BOOL isTypeShipRide() { return mType == 7; }
     
-    s16 getHead_x() { return mJntCtrl.getHead_x(); }
-    s16 getHead_y() { return mJntCtrl.getHead_y(); }
-    s16 getBackbone_x() { return mJntCtrl.getBackbone_x(); }
-    s16 getBackbone_y() { return mJntCtrl.getBackbone_y(); }
+    s16 getHead_x() { return mJntCtrl.mAngles[0][0]; }
+    s16 getHead_y() { return mJntCtrl.mAngles[0][1]; }
+    s16 getBackbone_x() { return mJntCtrl.mAngles[1][0]; }
+    s16 getBackbone_y() { return mJntCtrl.mAngles[1][1]; }
     s16 getWaistRotX() { return m3114; }
     s16 getWaistRotY() { return m3116; }
+    void clearJntAng() {     
+        mJntCtrl.mAngles[0][1] = 0; // Head_y
+        mJntCtrl.mAngles[0][0] = 0; // Head_x
+        mJntCtrl.mAngles[1][1] = 0; // BackBone_y
+        mJntCtrl.mAngles[1][0] = 0; // BackBone_x
+    }
     
     s8 getArmRJntNum() { return m_armR_jnt_num; }
     s8 getArmRlocJntNum() { return m_armRloc_jnt_num; }
@@ -304,10 +140,11 @@ public:
         }
     }
     
-    u8 checkBitHairMode(u8 bit) { return m3134 & bit; }
-    void setBitHairMode(u8 bit) { m3134 |= bit; }
+    u8 checkBitHairMode(u8 bit) { return cLib_checkBit<u8>(m3134, bit); }
+    void setBitHairMode(u8 bit) { cLib_onBit<u8>(m3134, bit); }
     
-    u8 getPiyo2TalkCNT() { return m313C & 0xFF; } // TODO: fakematch?
+    u8 getPiyo2TalkCNT() { return m313C; }
+    void setPiyo2TalkCNT(u8 cnt) { m313C = cnt; }
     void countPiyo2TalkCNT() {
         m313C++;
         if (m313C >= 3) {
@@ -321,20 +158,15 @@ public:
         mpArmMorf->setAnmRate(mRunRate);
     }
     
-    void setStatus(u32) {}
-    void getFlyingTimer() {}
-    void setFlyingTimer(s16) {}
-    void calcFlyingTimer() {}
-    void checkBitEffectStatus(u8) {}
-    void clearJntAng() {}
-    void clearStatus() {}
-    void getTalkType() {}
-    void setTalkType(u8) {}
-    void setBitEffectStatus(u8) {}
-    void setEffectStatus(u8) {}
-    void setPiyo2TalkCNT(u8) {}
+    s16 getFlyingTimer() { return m_flyingTimer; }
+    void setFlyingTimer(s16 value) {  m_flyingTimer = value; }
+    void calcFlyingTimer() { cLib_calcTimer(&m_flyingTimer); }
+    u8 checkBitEffectStatus(u8 bit) { return m3135 & bit; }
+    u8 getTalkType() { return mType; }
+    void setTalkType(u8 type) { mType = type; }
+    void setBitEffectStatus(u8 bit) { cLib_onBit<u8>(m3135, bit); }
+    void setEffectStatus(u8 status) { m3135 = status; }
     
-    daNpc_Md_c() {}
     ~daNpc_Md_c();
     
     s16 XyCheckCB(int);
@@ -381,7 +213,7 @@ public:
     BOOL carryNpcAction(void*);
     BOOL throwNpcAction(void*);
     BOOL glidingNpcAction(void*);
-    void windProc();
+    s16 windProc();
     BOOL fallNpcAction(void*);
     BOOL fall02NpcAction(void*);
     BOOL wallHitNpcAction(void*);
@@ -393,9 +225,9 @@ public:
     BOOL demoFlyNpcAction(void*);
     void routeAngCheck(cXyz&, s16*);
     void routeWallCheck(cXyz&, cXyz&, s16*);
-    void checkForwardGroundY(s16);
-    void checkWallJump(s16);
-    void routeCheck(f32, s16*);
+    f32 checkForwardGroundY(s16);
+    f32 checkWallJump(s16);
+    BOOL routeCheck(f32, s16*);
     BOOL searchNpcAction(void*);
     BOOL hitNpcAction(void*);
     void setNormalSpeedF(f32, f32, f32, f32, f32);
@@ -458,7 +290,7 @@ public:
     BOOL setAnm(int);
     bool dNpc_Md_setAnm(mDoExt_McaMorf2*, f32, int, f32, f32, char*, char*, const char*);
     bool dNpc_Md_setAnm(mDoExt_McaMorf*, int, f32, f32, char*, const char*);
-    u8 chkAttention(cXyz, s16, int);
+    bool chkAttention(cXyz, s16, int);
     bool chkArea(cXyz*);
     void carryCheck();
     void eventOrder();
@@ -470,7 +302,7 @@ public:
     void setAttention(bool);
     void lookBack(int, int, int);
     void lookBack(cXyz*, int, int);
-    void lookBackWaist(s16, f32);
+    s32 lookBackWaist(s16, f32);
     void setBaseMtx();
     void deletePiyoPiyo();
     BOOL init();
@@ -535,13 +367,15 @@ public:
     /* 0x3088 */ cXyz m3088;
     /* 0x3094 */ cXyz m3094;
     /* 0x30A0 */ cXyz m30A0;
-    /* 0x30AC */ u8 m30AC[0x30D0 - 0x30AC];
+    /* 0x30AC */ cXyz m30AC;
+    /* 0x30B8 */ cXyz m30B8;
+    /* 0x30C4 */ cXyz m30C4;
     /* 0x30D0 */ f32 m30D0;
     /* 0x30D4 */ ActionFunc mCurrPlayerActionFunc;
     /* 0x30E0 */ ActionFunc mCurrNpcActionFunc;
     /* 0x30EC */ u32 mMsgNo;
     /* 0x30F0 */ u32 m30F0;
-    /* 0x30F4 */ u8 m30F4[0x30F8 - 0x30F4];
+    /* 0x30F4 */ u32 m30F4;
     /* 0x30F8 */ f32 m30F8;
     /* 0x30FC */ f32 mRunRate;
     /* 0x3100 */ int m3100;
@@ -573,12 +407,13 @@ public:
     /* 0x312C */ u8 m312C;
     /* 0x312D */ s8 m312D;
     /* 0x312E */ s8 mCurEventMode;
-    /* 0x312F */ u8 m312F[0x3131 - 0x312F];
+    /* 0x312F */ u8 m312F;
+    /* 0x3130 */ u8 m3130;
     /* 0x3131 */ u8 m3131;
     /* 0x3132 */ s8 mActionStatus;
     /* 0x3133 */ u8 m3133;
     /* 0x3134 */ u8 m3134;
-    /* 0x3135 */ u8 m3135[0x3136 - 0x3135];
+    /* 0x3135 */ u8 m3135;
     /* 0x3136 */ u8 m3136;
     /* 0x3137 */ u8 m3137;
     /* 0x3138 */ u8 mType;
@@ -587,17 +422,18 @@ public:
     /* 0x313B */ u8 m313B[0x313C - 0x313B];
     /* 0x313C */ u8 m313C;
     /* 0x313D */ u8 m313D;
-    /* 0x313E */ u8 m313E[0x3140 - 0x313E];
-    /* 0x3140 */ bool m3140;
+    /* 0x313E */ u8 m313E;
+    /* 0x313F */ s8 m313F;
+    /* 0x3140 */ bool mOldLightBodyHit;
     /* 0x3141 */ u8 m3141[0x3144 - 0x3141];
     /* 0x3144 */ s16 m3144;
     /* 0x3146 */ s16 m3146;
     /* 0x3148 */ s16 m3148;
     /* 0x314A */ s16 m314A;
     /* 0x314C */ s16 m314C;
-    /* 0x314E */ u8 m314E[0x3150 - 0x314E];
+    /* 0x314E */ s16 m314E;
     /* 0x3150 */ f32 m3150;
-    /* 0x3154 */ u8 m3154[0x3158 - 0x3154];
+    /* 0x3154 */ f32 m3154;
     /* 0x3158 */ s16 mEventIdxTable[10];
     /* 0x316C */ s8 m_hair_jnt_nums[8];
     /* 0x3174 */ cXyz m3174[8];
@@ -605,7 +441,8 @@ public:
     /* 0x3234 */ cXyz m3234[4];
     /* 0x3264 */ f32 m3264[8];
     /* 0x3284 */ char mModelArcName[3];
-    /* 0x3287 */ u8 m3287[0x32A4 - 0x3287];
+    /* 0x3287 */ u8 m3287[0x3298 - 0x3287];
+    /* 0x3298 */ cXyz m3298;
     /* 0x32A4 */ cXyz m32A4;
     /* 0x32B0 */ cBgS_PolyInfo mPolyInfo;
 };

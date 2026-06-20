@@ -8,60 +8,71 @@
 
 class daKnob00_c : public dDoor_info_c {
 public:
-    void checkFlag(unsigned short) {}
-    inline BOOL execute();
-    void nextAction() {}
-    void offFlag(unsigned short) {}
-    void onFlag(unsigned short) {}
-    void setAction(unsigned char) {}
+    bool checkFlag(unsigned short bit) {
+        return m312 & bit;
+    }
+    void nextAction() {
+        mAction++;
+    }
+    void offFlag(unsigned short bit) {
+        m312 &= ~bit;
+    }
+    void onFlag(unsigned short bit) {
+        m312 |= bit;
+    }
+    void setAction(unsigned char action) {
+        mAction = action;
+    }
 
-    void CreateHeap();
-    void getShapeType();
+    BOOL CreateHeap();
+    u8 getShapeType();
     void setEventPrm();
-    void getType2();
-    void chkPassward();
-    void msgDoor();
+    u8 getType2();
+    s32 chkPassward();
+    BOOL msgDoor();
     void openInit(int);
-    void openProc(int);
+    BOOL openProc(int);
     void openEnd();
-    void chkException();
+    BOOL chkException();
     void calcMtx();
-    void CreateInit();
+    BOOL CreateInit();
     cPhs_State create();
     void setStart(float, float);
     void setAngle();
-    void adjustmentProc();
-    void demoProc();
-    void demoProc2();
-    void actionWait();
-    void actionDemo();
-    void actionTalk();
-    void actionTalkWait();
-    void actionPassward2();
-    void actionVilla();
-    void actionPassward();
-    void actionInit();
-    void actionFigure();
-    void actionDead();
+    BOOL adjustmentProc();
+    BOOL demoProc();
+    BOOL demoProc2();
+    BOOL actionWait();
+    BOOL actionDemo();
+    BOOL actionTalk();
+    BOOL actionTalkWait();
+    BOOL actionPassward2();
+    BOOL actionVilla();
+    BOOL actionPassward();
+    BOOL actionInit();
+    BOOL actionFigure();
+    BOOL actionDead();
     BOOL draw();
+    inline BOOL execute();
+
+    static const char M_arcname[];
 
 public:
     /* 0x2D0 */ dDoor_msg_c m2D0;
-    /* 0x2DC */ u8 m2DC[0x2E4 - 0x2DC];
+    /* 0x2DC */ request_of_phase_process_class mPhase;
     /* 0x2E4 */ J3DModel* mpModel;
     /* 0x2E8 */ mDoExt_bckAnm mBckAnm;
     /* 0x2F8 */ J3DModel* mpModel2;
-    /* 0x2FC */ bool mJoint;
+    /* 0x2FC */ s8 m_jnt;
     /* 0x2FD */ u8 m2FD[0x300 - 0x2FD];
     /* 0x300 */ dBgW* mpBgW;
-    /* 0x304 */ u8 m304[0x310 - 0x304];
-    /* 0x310 */ u8 mState;
+    /* 0x304 */ dDoor_stop_c mStopBars;
+    /* 0x310 */ u8 mAction;
     /* 0x311 */ u8 m311[0x312 - 0x311];
     /* 0x312 */ u16 m312;
     /* 0x314 */ s16 m314;
-    /* 0x316 */ u8 m316[0x317 - 0x316];
+    /* 0x316 */ u8 m316;
     /* 0x317 */ u8 mDoorType;
-    /* 0x318 */ u8 m318[0x400 - 0x318];
-};
+}; // size = 0x318
 
 #endif /* D_A_KNOB00_H */

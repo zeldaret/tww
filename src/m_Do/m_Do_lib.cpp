@@ -12,17 +12,15 @@
 #include "dolphin/gx/GX.h"
 
 /* 80017530-800176BC       .text mDoLib_setResTimgObj__FP7ResTIMGP9_GXTexObjUlP10_GXTlutObj */
-u8 mDoLib_setResTimgObj(ResTIMG* i_img, GXTexObj* r4, u32 i_tlut_name, GXTlutObj * o_tlutObj) {
-    /* Nonmatching - regalloc */
-    GXTexObj* o_texObj = (GXTexObj*)r4; // fixes regalloc for r31, but the other 3 are incorrect in a different way
+u32 mDoLib_setResTimgObj(ResTIMG* i_img, GXTexObj* o_texObj, u32 i_tlut_name, GXTlutObj * o_tlutObj) {
     if (i_img->indexTexture) {
-        JUT_ASSERT(0x2b, o_tlutObj != NULL);
-        GXInitTlutObj(o_tlutObj, ((char*)i_img) + i_img->paletteOffset, (GXTlutFmt)i_img->colorFormat, i_img->numColors);
+        JUT_ASSERT(43, o_tlutObj != NULL);
+        GXInitTlutObj(o_tlutObj, ((char*)i_img) + i_img->paletteOffset, (GXTlutFmt)i_img->colorFormat, (u16)i_img->numColors);
         GXInitTexObjCI(o_texObj, ((char*)i_img) + i_img->imageOffset, i_img->width, i_img->height, (GXCITexFmt)i_img->format,
-            (GXTexWrapMode)i_img->wrapS, (GXTexWrapMode)i_img->wrapT, (GXBool)(i_img->mipmapCount > 1), i_tlut_name);
+            (GXTexWrapMode)i_img->wrapS, (GXTexWrapMode)i_img->wrapT, i_img->mipmapCount > 1 ? GX_TRUE : GX_FALSE, i_tlut_name);
     } else {
         GXInitTexObj(o_texObj, ((char*)i_img) + i_img->imageOffset, i_img->width, i_img->height, (GXTexFmt)i_img->format,
-            (GXTexWrapMode)i_img->wrapS, (GXTexWrapMode)i_img->wrapT, (GXBool)(i_img->mipmapCount > 1));
+            (GXTexWrapMode)i_img->wrapS, (GXTexWrapMode)i_img->wrapT, i_img->mipmapCount > 1 ? GX_TRUE : GX_FALSE);
     }
 
     GXInitTexObjLOD(o_texObj, (GXTexFilter)i_img->minFilter, (GXTexFilter)i_img->magFilter,

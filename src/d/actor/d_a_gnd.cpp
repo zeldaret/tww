@@ -3,9 +3,8 @@
  * Boss - Ganondorf
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_gnd.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 /* 000000EC-0000023C       .text __ct__11daGnd_HIO_cFv */
@@ -219,11 +218,11 @@ static cPhs_State daGnd_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, -150.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, -150.0f, 0.0f},
             /* Radius */ 100.0f,
             /* Height */ 100.0f,
-        },
+        }},
     };
     static dCcD_SrcSph head_sph_src = {
         // dCcD_SrcGObjInf
@@ -248,10 +247,10 @@ static cPhs_State daGnd_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 15.0f,
-        },
+        }},
     };
     static dCcD_SrcSph chest_sph_src = {
         // dCcD_SrcGObjInf
@@ -268,7 +267,7 @@ static cPhs_State daGnd_Create(fopAc_ac_c*) {
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
-            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg Se      */ dCcG_SE_METAL,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
@@ -276,10 +275,10 @@ static cPhs_State daGnd_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 100.0f,
-        },
+        }},
     };
     static dCcD_SrcSph wepon_sph_src = {
         // dCcD_SrcGObjInf
@@ -296,7 +295,7 @@ static cPhs_State daGnd_Create(fopAc_ac_c*) {
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK6,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
-            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg Se      */ dCcG_SE_METAL,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
@@ -304,10 +303,10 @@ static cPhs_State daGnd_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 70.0f,
-        },
+        }},
     };
 }
 
@@ -320,18 +319,18 @@ static actor_method_class l_daGnd_Method = {
 };
 
 actor_process_profile_definition g_profile_GND = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_GND,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_GND_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(gnd_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_GND,
+    /* Draw Prio    */ fpcDwPi_GND_e,
     /* Actor SubMtd */ &l_daGnd_Method,
     /* Status       */ fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };
