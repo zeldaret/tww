@@ -1307,41 +1307,34 @@ fpc_ProcID daNpc_Ko1_c::partner_srch_sub(void* (*i_param_1)(void*, void*)) {
 
 /* 000026DC-000027CC       .text partner_srch__11daNpc_Ko1_cFv */
 void daNpc_Ko1_c::partner_srch() {
+    if(field_0x8A8 == 1){
+        s8 state = field_0x8A7;
 
-    if(field_0x8A8 != 1){
-        return;
+        switch(field_0x8A7) {
+            case 1:
+                field_0x7B4[0] = partner_srch_sub(searchActor_Ko_Bou);
+                field_0x7BC = 1;
+                break;; 
+            case 3:
+                field_0x7B4[0] = partner_srch_sub(searchActor_Ko_Bou);
+                field_0x7B4[1] = partner_srch_sub(searchActor_Ob);
+                field_0x7BC = 2;
+                break;
+            case 6:
+                field_0x7B4[0] = partner_srch_sub(searchActor_Ko_Hna);
+                field_0x7BC = 1;
+                break;; 
+            case 7:
+                field_0x7B4[0] = partner_srch_sub(searchActor_Ko_Hna);
+                field_0x7B4[1] = partner_srch_sub(searchActor_Ob);
+                field_0x7BC = 2;
+                break;
+            case 8:
+                //field_0x8A8 = state;
+                break;
+        }
     }
-    switch(field_0x8A7) {
-        s8 state;
-        state = field_0x8A7;
-        case 1:
-            field_0x7B4[0] = partner_srch_sub(searchActor_Ko_Bou);
-            field_0x7BC = 1;
-            return; 
-        case 3:
-            field_0x7B4[0] = partner_srch_sub(searchActor_Ko_Bou);
-            field_0x7B4[1] = partner_srch_sub(searchActor_Ob);
-            field_0x7BC = 2;
-            return;
-        case 6:
-            field_0x7B4[0] = partner_srch_sub(searchActor_Ko_Hna);
-            field_0x7BC = 1;
-            return; 
-        case 7:
-            field_0x7B4[0] = partner_srch_sub(searchActor_Ko_Hna);
-            field_0x7B4[1] = partner_srch_sub(searchActor_Ob);
-            field_0x7BC = 2;
-            return;
-
-        case 8:
-#if VERSION == VERSION_DEMO
-            field_0x8A8 = state; 
-#endif
-            return;
-    }
-   
-
-
+    return;    
 }
 
 /* 000027CC-00002900       .text check_landOn__11daNpc_Ko1_cFv */
