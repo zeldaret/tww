@@ -167,7 +167,7 @@ void daNpc_Ym1_c::anmAtr(unsigned short) {
 }
 
 /* 0000123C-000014F0       .text next_msgStatus__11daNpc_Ym1_cFPUl */
-void daNpc_Ym1_c::next_msgStatus(unsigned long*) {
+u16 daNpc_Ym1_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
 }
 
@@ -202,7 +202,7 @@ void daNpc_Ym1_c::getMsg_YM2_3() {
 }
 
 /* 00001738-000017DC       .text getMsg__11daNpc_Ym1_cFv */
-void daNpc_Ym1_c::getMsg() {
+u32 daNpc_Ym1_c::getMsg() {
     /* Nonmatching */
 }
 
@@ -261,9 +261,58 @@ void daNpc_Ym1_c::setAttention(bool) {
     /* Nonmatching */
 }
 
+static char* strings[] = {"Ym1","Ym2","d_a_npc_ym1.cpp","a_btp != 0","Halt","Ym","DUMMY","若者",
+    "a_mdl_dat != 0","head","m_hed_jnt_num >= 0","backbone","m_bbone_jnt_num >= 0","handL","m_hnd_L_jnt_num >= 0","handR","m_hnd_R_jnt_num >= 0"};
+
 /* 00001F5C-00002088       .text decideType__11daNpc_Ym1_cFi */
-void daNpc_Ym1_c::decideType(int) {
+bool daNpc_Ym1_c::decideType(int i_param1) {
     /* Nonmatching */
+    if (mSubType > 0){
+        return true;
+
+
+    }
+        mSubType = -1;
+        mStaff = -1;
+
+    switch(base.base.mProcName){
+        case 0x13E:
+            mSubType = 1;
+            switch(i_param1){
+                case 0:
+                    mStaff = 0;
+                    break;
+                case 1:
+                    mStaff = 1;
+                    break;
+            }
+            break;
+        case 0x13F:
+            mSubType = 2;
+            switch(i_param1){
+                case 0:
+                    mStaff = 2;
+                    break;
+                case 1:
+                    mStaff = 3;
+                    break;
+                case 2:
+                    mStaff = 4;
+                    break;
+                case 3:
+                    mStaff = 5;
+                    break;
+            }
+    }
+
+    // if(mSubType < 1){
+    //     mSubType = -1;
+    //     mStaff = -1;
+    // }
+
+    strcpy(mArcName,"Ym");
+    return mSubType != -1 && mStaff != -1;
+
 }
 
 /* 00002088-00002128       .text privateCut__11daNpc_Ym1_cFi */

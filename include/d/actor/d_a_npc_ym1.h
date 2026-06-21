@@ -1,12 +1,13 @@
 #ifndef D_A_NPC_YM1_H
 #define D_A_NPC_YM1_H
 
+#include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
 
-class daNpc_Ym1_c : public fopAc_ac_c {
+class daNpc_Ym1_c : public fopNpc_npc_c {
 public:
     struct anm_prm_c {
         
@@ -38,14 +39,14 @@ public:
     void ctrlAnmAtr();
     void setAnm_ATR();
     void anmAtr(unsigned short);
-    void next_msgStatus(unsigned long*);
+    u16 next_msgStatus(unsigned long*);
     void getMsg_YM1_0();
     void getMsg_YM1_1();
     void getMsg_YM2_0();
     void getMsg_YM2_1();
     void getMsg_YM2_2();
     void getMsg_YM2_3();
-    void getMsg();
+    u32 getMsg();
     void eventOrder();
     void checkOrder();
     void set_collision_sp();
@@ -57,7 +58,7 @@ public:
     void lookBack();
     void chkAttention();
     void setAttention(bool);
-    void decideType(int);
+    bool decideType(int);
     void privateCut(int);
     void endEvent();
     void isEventEntry();
