@@ -9,8 +9,8 @@
 #include "d/d_particle.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_hostIO.h"
-#include "d/res/res_mcrtn.h"
-#include "weak_data_1811.h"
+//#include "d/res/res_mcrtn.h"
+//#include "weak_data_1811.h"
 
 namespace{
 #include "assets/l_matDL__d_a_obj_tapestry.h"
@@ -282,20 +282,6 @@ public:
     f32 unk58[2][2];
 };
 
-class daObjTapestry_HIO_c : public JORReflexible{
 
-public:
-    inline const daObjTapestryAttr_c attr() const { return field_C; }
-
-    daObjTapestry_HIO_c();
-    virtual ~daObjTapestry_HIO_c(){};
-public:
-    s8 field_4;
-    s8 field_5;
-    s8 field_6;
-    s32 field_8;
-    daObjTapestryAttr_c field_C;
-    bool field_68;
-}; //Size 0x6C
 
 #endif /* D_A_OBJ_TAPESTRY_H */
