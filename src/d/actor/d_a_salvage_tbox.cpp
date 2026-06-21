@@ -109,11 +109,14 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
         if (dPa_control_c::isStatus(1)) {
             GXSetZMode(GX_FALSE, GX_NEVER, GX_FALSE);
         }
+        particleCount = (f32)particleCount * 0.33333334f;
+        f32 pctlCount = particleCount - 1.0f;
         // float particleRnd = float(cM_rnd() * particleCount - 1.0f);
         GXSetCullMode(GX_CULL_NONE);
         Mtx mtx;
         PSMTXIdentity(mtx);
         mtx[1][1] = this->mpDepth;
+        mtx[1][3] = this->field_0x48 * emitter->getFrame();
         GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
         GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
         JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
@@ -138,7 +141,7 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
                     getMaxWaterY(&ptclPos);
                     GXPosition3f32(ptclPos.x, ptclPos.y + something, ptclPos.z);
                     GXTexCoord2f32(something2, 0.0f);
-                    GXTexCoord2f32(something - 1.0f / particleCount, 1.0f);
+                    GXTexCoord2f32(something - 1.0f / pctlCount, 1.0f);
                     this->mPos[j].x = ptclPos.x;
                     this->mPos[j].y = ptclPos.y;
                     this->mPos[j].z = ptclPos.z;
