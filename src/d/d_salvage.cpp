@@ -3,6 +3,7 @@
 // Translation Unit: d_salvage.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_salvage.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_salvage.h"
@@ -102,7 +103,7 @@ void dSalvage_control_c::entry(fopAc_ac_c* pact, JPABaseEmitter* emtr) {
     case 4:
         if (saveNo != 31 && dComIfGs_isOceanSvBit(cmapNo, saveNo))
             return;
-        if (!dKy_daynight_check())
+        if (dKy_daynight_check() == dKy_TIME_DAY_e)
             mInfo[no].setFlag(1);
         break;
     case 6:
@@ -211,7 +212,7 @@ f32 dSalvage_control_c::getH(int no) {
 }
 
 /* 800CCE28-800CCE38       .text getRoomNo__18dSalvage_control_cFi */
-u8 dSalvage_control_c::getRoomNo(int no) {
+s8 dSalvage_control_c::getRoomNo(int no) {
     return mInfo[no].mRoomNo;
 }
 
@@ -251,7 +252,7 @@ u8* dSalvage_control_c::getAlphaPtr(int no) {
 }
 
 /* 800CCEAC-800CCEBC       .text getDrawMode__18dSalvage_control_cFi */
-u8 dSalvage_control_c::getDrawMode(int no) {
+s32 dSalvage_control_c::getDrawMode(int no) {
     return mInfo[no].mNowAlpha; // ???
 }
 
@@ -261,8 +262,11 @@ BOOL dSalvage_control_c::checkRegist(int no) {
 }
 
 /* 800CCEDC-800CCEF8       .text checkUsed__18dSalvage_control_cFi */
-bool dSalvage_control_c::checkUsed(int no) {
-    return !mInfo[no].checkFlag(1);
+BOOL dSalvage_control_c::checkUsed(int no) {
+    if (mInfo[no].checkFlag(1)) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* 800CCEF8-800CCF1C       .text setPos__18dSalvage_control_cFi4cXyz */

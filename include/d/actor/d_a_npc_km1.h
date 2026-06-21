@@ -5,8 +5,6 @@
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_hostIO.h"
 
-
-
 class daNpc_Km1_c : public fopNpc_npc_c {
 public:
     typedef int (daNpc_Km1_c::*ActionFunc)(void*);
@@ -29,14 +27,14 @@ public:
         /* 0x1 */ TEXPATTERN_END,
     };
 
-    s8 getHeadJntNum() {return m_head_jnt_num;}
-    s8 getBackboneJntNum() {return m_backbone_jnt_num;}
-    s16 getBackbone_x() {return m_jnt.getBackbone_x();}
-    s16 getBackbone_y() {return m_jnt.getBackbone_y();}
-    s16 getHead_x() {return m_jnt.getHead_x();}
-    s16 getHead_y() {return m_jnt.getHead_y();}
-    Vec* getAttPos() {return &mAttPos;}
-    Vec* getEyePos() {return &mEyePos;}
+    s8 getHeadJntNum() { return m_head_jnt_num; }
+    s8 getBackboneJntNum()  {return m_backbone_jnt_num; }
+    s16 getBackbone_x() { return m_jnt.getBackbone_x(); }
+    s16 getBackbone_y() { return m_jnt.getBackbone_y(); }
+    s16 getHead_x() { return m_jnt.getHead_x(); }
+    s16 getHead_y() { return m_jnt.getHead_y(); }
+    Vec* getAttPos() { return &mAttPos; }
+    Vec* getEyePos() { return &mEyePos; }
 
     bool createInit();
     void setMtx();
@@ -73,9 +71,9 @@ public:
     BOOL talk01();
     int wait_action1(void*);
     u8 demo();
-    bool _draw();
-    bool _execute();
-    bool _delete();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
     cPhs_State _create();
     BOOL CreateHeap();
 
@@ -89,7 +87,7 @@ public:
     /* 0x6D8 */ J3DAnmTexPattern* m_head_tex_pattern;
     /* 0x6DC */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F0 */ u8 mBtpFrame;
-    /* 0x6F1 */ u8 field_0x6F1;    
+    /* 0x6F1 */ u8 field_0x6F1;
     /* 0x6F2 */ s16 field_0x6F2;
     /* 0x6F4 */ ActionFunc field_0x6F4;
     /* 0x700 */ dNpc_EventCut_c mEventCut;
@@ -104,14 +102,14 @@ public:
     /* 0x7AC */ f32 field_0x7AC;
     /* 0x7B0 */ s16 field_0x7B0;
     /* 0x7B2 */ s16 field_0x7B2;
-    /* 0x7B4 */ s8 field_0x7B4; 
+    /* 0x7B4 */ s8 field_0x7B4;
     /* 0x7B5 */ s8 field_0x7B5;
     /* 0x7B6 */ u8 field_0x7B6;
     /* 0x7B7 */ u8 field_0x7B7;
     /* 0x7B8 */ u8 field_0x7B8;
     /* 0x7B9 */ u8 field_0x7B9[0x7BC - 0x7B9];
-    /* 0x7BC */ s32 field_0x7BC; 
-    /* 0x7C0 */ s32 field_0x7C0; 
+    /* 0x7BC */ s32 field_0x7BC;
+    /* 0x7C0 */ s32 field_0x7C0;
     /* 0x7C4 */ u8 field_0x7C4;
     /* 0x7C5 */ u8 field_0x7C5;
     /* 0x7C6 */ bool mHeadOnlyFollow;
@@ -133,34 +131,5 @@ public:
     /* 0x7D6 */ s8 field_0x7D6;
     /* 0x7D7 */ s8 field_0x7D7;
 };  // Size: 0x7D8
-
-class daNpc_Km1_HIO_c : public JORReflexible{
-    struct hio_prm_c{
-        s16 field_0;
-        s16 field_2;
-        s16 field_4;
-        s16 field_6;
-        s16 field_8;
-        s16 field_A;
-        s16 field_C;
-        s16 field_E;
-        s16 field_10;
-        s16 field_12;
-        f32 mAttentionArrowYOffset;
-        f32 field_18;
-    };  // Size: 0x1C
-public:
-    daNpc_Km1_HIO_c();
-    virtual ~daNpc_Km1_HIO_c(){};
-public:
-    /* Place member variables here */
-    /* 0x4  */ s8  mNo;
-    /* 0x5  */ s8  field_0x5;
-    /* 0x6  */ s8  field_0x6;
-    /* 0x7  */ s8  field_0x7;
-    /* 0x8  */ int field_0x8;
-    /* 0xC  */ hio_prm_c mPrmTbl;
-
-};
 
 #endif /* D_A_NPC_KM1_H */

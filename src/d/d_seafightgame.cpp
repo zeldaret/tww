@@ -3,6 +3,7 @@
 // Translation Unit: d_seafightgame.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_seafightgame.h"
 #include "SSystem/SComponent/c_math.h"
 

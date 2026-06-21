@@ -35,6 +35,7 @@ public:
 
 class dPa_levelEcallBack : public JPACallBackBase<JPABaseEmitter*> {
 public:
+    dPa_levelEcallBack() {}
     virtual ~dPa_levelEcallBack() {}
     virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8) = 0;
 };  // Size: 0x04
@@ -125,15 +126,21 @@ public:
     void draw(JPABaseEmitter*);
 
     JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
-    void setTimer (s16 timerVal) { mFadeTimer = timerVal; }
-    void setSpeed (f32 vel) { mVelFade1 = vel; }
-    void setPitch (f32 pitch) { mVelFade2 = pitch; }
-    void setMaxSpeed (f32 vel) { mMaxParticleVelocity = vel; }
-    void setMaxDisSpeed (f32 vel) { mVelSpeed = vel; } 
-    void setAnchor (cXyz* anchorPos1, cXyz* anchorPos2) { mCollapsePos[0].set(*anchorPos1); mCollapsePos[1].set(*anchorPos2); }
+    void setTimer(s16 timerVal) { mFadeTimer = timerVal; }
+    void setSpeed(f32 vel) { mVelFade1 = vel; }
+    void setPitch(f32 pitch) { mVelFade2 = pitch; }
+    void setMaxSpeed(f32 vel) { mMaxParticleVelocity = vel; }
+    void setMaxDisSpeed(f32 vel) { mVelSpeed = vel; }
+    void setAnchor(const cXyz* anchorPos1, const cXyz* anchorPos2) {
+        mCollapsePos[0] = *anchorPos1;
+        mCollapsePos[1] = *anchorPos2;
+    }
+    void end() { remove(); }
+    void stop() { mState = 1; }
 
     virtual ~dPa_waveEcallBack() {}
 
+public:
     /* 0x04 */ s16 mState;
     /* 0x06 */ s16 mFadeTimer;
     /* 0x08 */ f32 mVelFade1;
@@ -157,9 +164,12 @@ public:
     JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
     void setSpeed (f32 vel) { mScaleTimer = vel; }
     void setMaxSpeed (f32 vel) { mMaxScaleTimer = vel; }
+    void end() { remove(); }
+    void stop() { mState = 1; }
 
     virtual ~dPa_splashEcallBack() {}
 
+private:
     /* 0x04 */ s16 mState;
     /* 0x08 */ f32 mScaleTimer;
     /* 0x0C */ f32 mMaxScaleTimer;
@@ -175,13 +185,18 @@ public:
     void remove();
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
+    void stop() { mState = 1; }
 
     JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
-    void setIndirectTexData (f32 exTransY, f32 exScaleY) { mExTransY = exTransY; mExScaleY = exScaleY; }
-    void setSpeed (f32 vel) { mVel = vel; }
+    void setIndirectTexData(f32 exTransY, f32 exScaleY) { mExTransY = exTransY; mExScaleY = exScaleY; }
+    void setSpeed(f32 vel) { mVel = vel; }
+    void setLimitSpeed(f32 vel) { mMinVel = vel; }
+    void setWaterY(f32 y) { mBaseY = y; }
+    void setWaterFlatY(f32 y) { mMinY = y; }
 
     virtual ~dPa_trackEcallBack() {}
 
+private:
     /* 0x04 */ s16 mState;
     /* 0x08 */ f32 mBaseY;
     /* 0x0C */ f32 mMinY;
@@ -207,8 +222,8 @@ public:
 
     JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
     void isStatus(u8) {}
-    void offStatus(int) {}
-    void onStatus(int) {}
+    void offStatus(int flag) { mFlags &= ~flag; }
+    void onStatus(int flag) { mFlags |= flag;}
     void remove() { end(); }
     void setRate(f32 rate) { mRate = rate; }
 
@@ -216,7 +231,7 @@ public:
     /* 0x08 */ const cXyz* mPos;
     /* 0x0C */ u32 mFlags;
     /* 0x10 */ f32 mRate;
-};
+}; // size = 0x14
 
 class dPa_modelEmitter_c : public node_class {
 public:
@@ -382,17 +397,17 @@ public:
     dPa_control_c();
 
     enum {
-        dPtclGroup_Normal_e,
-        dPtclGroup_NormalP1_e,
-        dPtclGroup_Toon_e,
-        dPtclGroup_ToonP1_e,
-        dPtclGroup_Projection_e,
-        dPtclGroup_ShipTail_e,
-        dPtclGroup_Wind_e,
-        dPtclGroup_2Dfore_e,
-        dPtclGroup_2Dback_e,
-        dPtclGroup_2DmenuFore_e,
-        dPtclGroup_2DmenuBack_e,
+        /* 0x0 */ dPtclGroup_Normal_e,
+        /* 0x1 */ dPtclGroup_NormalP1_e,
+        /* 0x2 */ dPtclGroup_Toon_e,
+        /* 0x3 */ dPtclGroup_ToonP1_e,
+        /* 0x4 */ dPtclGroup_Projection_e,
+        /* 0x5 */ dPtclGroup_ShipTail_e,
+        /* 0x6 */ dPtclGroup_Wind_e,
+        /* 0x7 */ dPtclGroup_2Dfore_e,
+        /* 0x8 */ dPtclGroup_2Dback_e,
+        /* 0x9 */ dPtclGroup_2DmenuFore_e,
+        /* 0xA */ dPtclGroup_2DmenuBack_e,
     };
 
     static u8 getRM_ID(u16);
@@ -478,8 +493,8 @@ public:
         return set(dPtclGroup_ShipTail_e, particleID, pos, angle, scale, alpha, &mSingleRippleEcallBack, -1, NULL, NULL, NULL);
     }
 
-    void draw(JPADrawInfo* inf) { draw(inf, dPtclGroup_Normal_e); }
-    void drawP1(JPADrawInfo* inf) { draw(inf, dPtclGroup_NormalP1_e); }
+    void drawNormal(JPADrawInfo* inf) { draw(inf, dPtclGroup_Normal_e); }
+    void drawNormalP1(JPADrawInfo* inf) { draw(inf, dPtclGroup_NormalP1_e); }
     void drawToon(JPADrawInfo* inf) { draw(inf, dPtclGroup_Toon_e); }
     void drawToonP1(JPADrawInfo* inf) { draw(inf, dPtclGroup_ToonP1_e); }
     void drawProjection(JPADrawInfo* inf) { draw(inf, dPtclGroup_Projection_e); }
@@ -490,36 +505,51 @@ public:
     void draw2DmenuFore(JPADrawInfo* inf) { draw(inf, dPtclGroup_2DmenuFore_e); }
     void draw2DmenuBack(JPADrawInfo* inf) { draw(inf, dPtclGroup_2DmenuBack_e); }
 
-    u32 getParticleNum() { return mEmitterMng->getParticleNumber(); } 
-    u32 getEmitterNum() { return mEmitterMng->getEmitterNumber(); } 
-
     int addModelEmitter(dPa_modelEmitter_c *emitter) { return mModelControl->add(emitter); }
     void drawModelParticle() { mModelControl->draw(); }
-    JKRHeap * getHeap() { return mHeap; }
 
+    JKRHeap * getHeap() { return mHeap; }
+    void getHeapSize() {}
+    void getSceneHeap() {}
+    void getSceneHeapSize() {}
+
+    static dPa_selectTexEcallBack* getTsuboSelectTexEcallBack(int index) { return &mTsubo[index]; }
     static dPa_selectTexEcallBack mTsubo[4];
 
     static dPa_setColorEcallBack* getLifeBallSetColorEcallBack(int idx) { return &mLifeBall[idx]; }
     static dPa_setColorEcallBack mLifeBall[3];
 
-    static bool isStatus(u8 status) { return mStatus & status; }
-    static void onStatus(u8 status) { mStatus |= status; }
-    static void offStatus(u8 status) { mStatus &= ~status; }
-    static u8 mStatus;
-
     static JPAEmitterManager* getEmitterManager() { return mEmitterMng; }
+    static void forceDeleteEmitter(JPABaseEmitter* emitter) { mEmitterMng->forceDeleteEmitter(emitter); }
+    u32 getParticleNum() { return mEmitterMng->getParticleNumber(); }
+    u32 getEmitterNum() { return mEmitterMng->getEmitterNumber(); }
     static JPAEmitterManager* mEmitterMng;
 
     static dPa_stripesEcallBack mStripes;
+
+    static dPa_kageroEcallBack* getKageroEcallBack() { return &mKagero; }
     static dPa_kageroEcallBack mKagero;
+
+    static dPa_smokeEcallBack* getSmokeEcallback() { return &mSmokeEcallback; }
     static dPa_smokeEcallBack mSmokeEcallback;
+
+    static dPa_smokePcallBack* getSmokePcallback() { return &mSmokePcallback; }
     static dPa_smokePcallBack mSmokePcallback;
+
     static dPa_singleRippleEcallBack mSingleRippleEcallBack;
+
+    static dPa_ripplePcallBack* getRipplePcallBack() { return &mRipplePcallBack; }
     static dPa_ripplePcallBack mRipplePcallBack;
+
     static dPa_bombSmokeEcallBack mBombSmokeEcallBack;
 
     static MtxP getWindViewMatrix() { return mWindViewMatrix; }
     static Mtx mWindViewMatrix;
+
+    static bool isStatus(u8 status) { return mStatus & status; }
+    static void onStatus(u8 status) { mStatus |= status; }
+    static void offStatus(u8 status) { mStatus &= ~status; }
+    static u8 mStatus;
 
     /* 0x0000 */ JKRSolidHeap* mHeap;
     /* 0x0004 */ JPAResourceManager* mCommonResMng;

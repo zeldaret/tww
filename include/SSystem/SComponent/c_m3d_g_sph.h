@@ -13,7 +13,6 @@ struct cM3dGSphS {
 };  // Size: 0x10
 
 class cM3dGSph {
-private:
 public:
     /* 0x00 */ cXyz mCenter;
     /* 0x0C */ f32 mRadius;
@@ -28,7 +27,7 @@ public:
     void SetC(const cXyz& p);
     void SetR(f32 r);
 #endif
-    void SetC(f32, f32, f32) {} // TODO
+    void SetC(f32 x, f32 y, f32 z) { mCenter.x = x; mCenter.y = y; mCenter.z = z; }
     void Set(const cM3dGSphS & src) {
         SetC(src.mCenter);
         SetR(src.mRadius);

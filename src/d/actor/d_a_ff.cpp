@@ -3,15 +3,14 @@
  * Object - Firefly (not collectable)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ff.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_lib.h"
-#include "d/res/res_ff.h"
+#include "res/Object/Ff.h"
 
 static s32 ff_count = 0;
 
@@ -233,7 +232,7 @@ static BOOL daFf_Execute(ff_class* i_this) {
         i_this->mTimers[4] = REG13_F(9) + (cM_rndF(20.0f) + 30.0f);
     }
     i_this->mSph.SetC(i_this->current.pos);
-    g_dComIfG_gameInfo.play.mCcS.Set(&i_this->mSph);
+    dComIfG_Ccsp()->Set(&i_this->mSph);
     return TRUE;
 }
 
@@ -251,13 +250,13 @@ static BOOL daFf_Delete(ff_class* i_this) {
 
 /* 000011AC-0000138C       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_this) {
-    static u32 ho_bmd[] = {FF_BMD_HO, FF_BMD_HOP};
-    static u32 ho_brk[] = {FF_BRK_HO, FF_BRK_HOP};
+    static u32 ho_bmd[] = {dRes_INDEX_FF_BMD_HO_e, dRes_INDEX_FF_BMD_HOP_e};
+    static u32 ho_brk[] = {dRes_INDEX_FF_BRK_HO_e, dRes_INDEX_FF_BRK_HOP_e};
     ff_class* a_this = (ff_class*)i_this;
 
     for (int i = 0; i < 2; i++) {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Ff", ho_bmd[i]);
-        JUT_ASSERT(VERSION_SELECT(717, 719, 719, 719), modelData != NULL);
+        JUT_ASSERT(DEMO_SELECT(717, 719), modelData != NULL);
 #if VERSION > VERSION_DEMO
         if (modelData == NULL) {
             return FALSE;
@@ -287,7 +286,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 
 /* 000013D4-0000164C       .text daFf_Create__FP10fopAc_ac_c */
 static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
-    fopAcM_SetupActor(i_this, ff_class);
+    fopAcM_ct(i_this, ff_class);
     ff_class* a_this = (ff_class*)i_this;
     cPhs_State phase_state = dComIfG_resLoad(&a_this->mPhs, "Ff");
 
@@ -296,7 +295,7 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
             int uVar1 = fopAcM_GetParam(a_this) & 0xFF;
             if (uVar1 != 0) {
                 fopAcM_SetParam(a_this, fopAcM_GetParam(a_this) & 0xFF00);
-                for (int iVar7 = 0; iVar7 < uVar1; iVar7 = iVar7 + 1) {
+                for (int i = 0; i < uVar1; i++) {
                     fopAcM_prm_class* pfVar4 = fopAcM_CreateAppend();
                     pfVar4->base.position.x = a_this->current.pos.x + cM_rndFX(500.0f);
                     pfVar4->base.position.y = a_this->current.pos.y;
@@ -305,7 +304,7 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
                     pfVar4->base.angle.y = 0;
                     pfVar4->base.angle.x = 0;
                     pfVar4->base.parameters = fopAcM_GetParam(a_this);
-                    fopAcM_create(PROC_FF, NULL, pfVar4);
+                    fopAcM_Create(fpcNm_FF_e, NULL, pfVar4);
                 }
             }
             a_this->mbNoUseGroundY = fopAcM_GetParam(a_this) >> 8;
@@ -338,10 +337,10 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
                     /* SrcGObjCo SPrm    */ 0,
                 },
                 // cM3dGSphS
-                {
-                    /* Center */ 0.0f, 0.0f, 0.0f,
+                {{
+                    /* Center */ {0.0f, 0.0f, 0.0f},
                     /* Radius */ 60.0f,
-                },
+                }},
             };
             a_this->mStts.Init(200, 0, a_this);
             a_this->mSph.Set(cc_sph_src);
@@ -362,18 +361,18 @@ static actor_method_class l_daFf_Method = {
 };
 
 actor_process_profile_definition g_profile_FF = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_FF,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_FF_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(ff_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_FF,
+    /* Draw Prio    */ fpcDwPi_FF_e,
     /* Actor SubMtd */ &l_daFf_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

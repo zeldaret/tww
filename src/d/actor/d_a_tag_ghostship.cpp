@@ -3,12 +3,9 @@
 // Translation Unit: d_a_tag_ghostship.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_ghostship.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static daTag_Gship_HIO_c l_HIO;
 
@@ -26,14 +23,19 @@ void daTag_Gship_c::modeClearWaitInit() {
 /* 00000110-000001C0 .text modeClearWait__13daTag_Gship_cFv */
 void daTag_Gship_c::modeClearWait() {
     if(dComIfGp_evmng_endCheck("DEFAULT_TREASURE") || dComIfGp_evmng_endCheck("DEFAULT_TREASURE2") || dComIfGp_evmng_endCheck("DEFAULT_TREASURE_A") || l_HIO.field_0x05) {
-        modeProc(CLEAR_WAIT, 1);
+        modeProc(PROC_INIT_e, 1);
     }
 }
 
 /* 000001C0-00000214 .text modeClearEventInit__13daTag_Gship_cFv */
 void daTag_Gship_c::modeClearEventInit() {
-    dComIfGs_getEventReg(0x8803);
-    dComIfGs_setEventReg(0x8803, 3);
+    u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_8803);
+#if VERSION == VERSION_DEMO
+    reg += 1;
+#else
+    reg = 3;
+#endif
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_8803, reg);
 }
 
 /* 00000214-00000418 .text modeClearEvent__13daTag_Gship_cFv */
@@ -41,7 +43,7 @@ void daTag_Gship_c::modeClearEvent() {
     if(eventInfo.checkCommandDemoAccrpt()) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("PScnChg");
         if(strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx), "WARAIGOE") == 0) {
-            if(dComIfGs_getEventReg(0x8803) == 3) {
+            if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_8803) == 3) {
                 mDoAud_seStart(JA_SE_CV_G_SHIP_SCREAM);
             } else {
                 mDoAud_seStart(JA_SE_CV_G_SHIP_LAUGH);
@@ -52,8 +54,8 @@ void daTag_Gship_c::modeClearEvent() {
 
         if(dComIfGp_evmng_endCheck("PSHIP_CLEAR")) {
             mDoAud_seStart(JA_SE_LK_WARP_TO_G_SHIP);
-            u8 room = dComIfGs_getEventReg(0xC3FF);
-            s8 spawn = dComIfGs_getEventReg(0x85FF);
+            u8 room = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C3FF);
+            s8 spawn = dComIfGs_getEventReg(dSv_event_flag_c::UNK_85FF);
             dKy_set_nexttime(120.0f);
             dComIfGp_setNextStage("sea", spawn, room, 0xFF, 0.0f, 5);
         }
@@ -85,18 +87,18 @@ void daTag_Gship_c::modeProc(daTag_Gship_c::Proc_e proc, int param_2) {
         }
     };
 
-    if(proc == CLEAR_WAIT) {
+    if(proc == PROC_INIT_e) {
         mMode = param_2;
         (this->*mode_proc[mMode].init)();
     }
-    else if(proc == CLEAR_EVENT) {
+    else if(proc == PROC_EXEC_e) {
         (this->*mode_proc[mMode].run)();
     }
 }
 
 /* 00000508-00000534 .text _execute__13daTag_Gship_cFv */
 bool daTag_Gship_c::_execute() {
-    modeProc(CLEAR_EVENT, 2);
+    modeProc(PROC_EXEC_e, 2);
     return true;
 }
 
@@ -121,7 +123,7 @@ void daTag_Gship_c::getArg() {
 
 /* 00000594-000005EC .text _create__13daTag_Gship_cFv */
 cPhs_State daTag_Gship_c::_create() {
-    fopAcM_SetupActor(this, daTag_Gship_c);
+    fopAcM_ct(this, daTag_Gship_c);
 
     getArg();
 
@@ -134,7 +136,7 @@ bool daTag_Gship_c::_delete() {
 }
 
 /* 000005F4-00000614 .text daTag_GshipCreate__FPv */
-static s32 daTag_GshipCreate(void* i_this) {
+static cPhs_State daTag_GshipCreate(void* i_this) {
     return static_cast<daTag_Gship_c*>(i_this)->_create();
 }
 
@@ -167,18 +169,18 @@ static actor_method_class daTag_GshipMethodTable = {
 };
 
 actor_process_profile_definition g_profile_TAG_GSHIP = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_GSHIP,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_GSHIP_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Gship_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_GSHIP,
+    /* Draw Prio    */ fpcDwPi_TAG_GSHIP_e,
     /* Actor SubMtd */ &daTag_GshipMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

@@ -3,11 +3,10 @@
  * Object - Mound of soft soil + Makar tree
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vmc.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_vmc.h"
+#include "res/Object/Vmc.h"
 
 enum {
     STATE_BASE_MAIN,
@@ -39,12 +38,44 @@ static dCcD_SrcCyl cyl_src_base = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 100.0f,
         /* Height */ 10.0f,
-    },
+    }},
 };
+
+#if VERSION == VERSION_DEMO
+static dCcD_SrcCyl cyl_src_tree = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ ~(AT_TYPE_BOOMERANG | AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e | cCcD_TgSPrm_IsPlayer_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_IsOther_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 50.0f,
+        /* Height */ 300.0f,
+    }},
+};
+#endif
 
 const char daObjVmc::Act_c::M_arcname[4] = "Vmc";
 
@@ -56,31 +87,31 @@ BOOL daObjVmc::Act_c::solidHeapCB(fopAc_ac_c* i_ac) {
 /* 0000009C-00000400       .text create_heap__Q28daObjVmc5Act_cFv */
 bool daObjVmc::Act_c::create_heap() {
     /* Nonmatching */
-    J3DModelData* mdl_bs_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, VMC_BDL_VMCBS);
+    J3DModelData* mdl_bs_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_BDL_VMCBS_e);
     JUT_ASSERT(200, mdl_bs_data != NULL);
     mModelBase = mDoExt_J3DModel__create(mdl_bs_data, 0, 0x11020203);
     if (mModelBase == NULL)
         return false;
 
-    J3DModelData* mdl_wd_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, VMC_BDL_VMCWD);
+    J3DModelData* mdl_wd_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_BDL_VMCWD_e);
     JUT_ASSERT(207, mdl_wd_data != NULL);
     mModelTree = mDoExt_J3DModel__create(mdl_wd_data, 0, 0x11020203);
     if (mModelTree == NULL)
         return false;
 
     {
-        J3DAnmTransform* bck_wg = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, VMC_BCK_VMCWG);
+        J3DAnmTransform* bck_wg = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_BCK_VMCWG_e);
         JUT_ASSERT(215, bck_wg != NULL);
-        BOOL ret = mBckAnmGrow.init(mdl_wd_data, bck_wg, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
+        BOOL ret = mBckAnmGrow.init(mdl_wd_data, bck_wg, TRUE, J3DFrameCtrl::EMode_NONE);
         mBckAnmGrow.setPlaySpeed(0.75f);
         if (!ret)
             return false;
     }
 
     {
-        J3DAnmTransform* bck_wh = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, VMC_BCK_VMCWH);
+        J3DAnmTransform* bck_wh = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_BCK_VMCWH_e);
         JUT_ASSERT(226, bck_wh != NULL);
-        if (!mBckAnmHookshot.init(mdl_wd_data, bck_wh, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
+        if (!mBckAnmHookshot.init(mdl_wd_data, bck_wh, TRUE, J3DFrameCtrl::EMode_NONE))
             return false;
     }
 
@@ -92,11 +123,11 @@ bool daObjVmc::Act_c::create_heap() {
     mDoMtx_copy(mDoMtx_stack_c::get(), mMtxTree);
 
     mpBgBase = new dBgW();
-    if (mpBgBase == NULL || mpBgBase->Set((cBgD_t*)dComIfG_getObjectRes(M_arcname, VMC_DZB_VMCBS), dBgW::MOVE_BG_e, &mMtxBase))
+    if (mpBgBase == NULL || mpBgBase->Set((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_DZB_VMCBS_e), dBgW::MOVE_BG_e, &mMtxBase))
         ret = false;
 
     mpBgTree = new dBgW();
-    if (mpBgTree == NULL || mpBgTree->Set((cBgD_t*)dComIfG_getObjectRes(M_arcname, VMC_DZB_VMCWD), dBgW::MOVE_BG_e, &mMtxTree))
+    if (mpBgTree == NULL || mpBgTree->Set((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_DZB_VMCWD_e), dBgW::MOVE_BG_e, &mMtxTree))
         ret = false;
 
     if (ret != true)
@@ -118,6 +149,9 @@ void daObjVmc::Act_c::CreateInit() {
             mHasTreeBg = true;
 
         mBckAnmGrow.setFrame(mBckAnmGrow.getEndFrame());
+#if VERSION == VERSION_DEMO
+        mCyl.Set(cyl_src_tree);
+#endif
         mState = STATE_TREE_MAIN;
         mHasTree = true;
     } else {
@@ -127,6 +161,9 @@ void daObjVmc::Act_c::CreateInit() {
 
     init_mtx();
     mHookshotAnim = false;
+#if VERSION == VERSION_DEMO
+    m4B4_demo = NULL;
+#endif
     mSmoke.setRateOff(0);
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA7;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA7;
@@ -139,7 +176,7 @@ void daObjVmc::Act_c::CreateInit() {
 
 /* 000005BC-00000730       .text _create__Q28daObjVmc5Act_cFv */
 cPhs_State daObjVmc::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     mHasTreeBg = false;
 
@@ -161,8 +198,8 @@ bool daObjVmc::Act_c::_delete() {
     dComIfG_Bgsp()->Release(mpBgBase);
     if (mHasTreeBg == 1)
         dComIfG_Bgsp()->Release(mpBgTree);
-    mSmoke.end();
-    dComIfG_resDelete(&mPhs, M_arcname);
+    mSmoke.remove();
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return true;
 }
 
@@ -187,7 +224,13 @@ void daObjVmc::Act_c::init_mtx() {
 /* 00000B1C-00000BD0       .text daObjVmc_base_main__Q28daObjVmc5Act_cFv */
 void daObjVmc::Act_c::daObjVmc_base_main() {
     if (mHasTree == 1) {
-        dComIfGp_particle_setToon(dPa_name::ID_SCENE_A1BC, &current.pos, &current.angle, NULL, 0xFF, &mSmoke, fopAcM_GetRoomNo(this));
+#if VERSION == VERSION_DEMO
+        m4B4_demo =
+#endif
+        dComIfGp_particle_setToon(dPa_name::ID_AK_ST_MACORETREESMOKE00, &current.pos, &current.angle, NULL, 0xFF, &mSmoke, fopAcM_GetRoomNo(this));
+#if VERSION == VERSION_DEMO
+        mCyl.Set(cyl_src_tree);
+#endif
         cLib_offBit<u32>(attention_info.flags, fopAc_Attn_UNK10000000_e);
         mState = STATE_TREE_DEMO_WAIT;
         shape_angle.y = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0)) + 0x1800;
@@ -224,8 +267,8 @@ void daObjVmc::Act_c::daObjVmc_tree_demo_main() {
 void daObjVmc::Act_c::daObjVmc_tree_main() {
     if (!mHookshotAnim) {
         if (mCyl.ChkCoHit()) {
-            J3DAnmTransform* bck_wh = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, VMC_BCK_VMCWH);
-            JUT_ASSERT(0x1ad, bck_wh != NULL);
+            J3DAnmTransform* bck_wh = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_BCK_VMCWH_e);
+            JUT_ASSERT(DEMO_SELECT(430, 429), bck_wh != NULL);
             mBckAnmHookshot.init(mModelTree->getModelData(), bck_wh, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true);
             mHookshotAnim = true;
         }
@@ -241,8 +284,8 @@ void daObjVmc::Act_c::daObjVmc_tree_main() {
         cCcD_Obj* hitObj = mCyl.GetTgHitObj();
         if (hitObj != NULL) {
             fopAc_ac_c* at = hitObj->GetAc();
-            if (at != NULL && fopAcM_GetName(at) == PROC_HOOKSHOT)
-                dComIfGs_onEventBit(0x3420);
+            if (at != NULL && fopAcM_GetName(at) == fpcNm_HOOKSHOT_e)
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3420);
         }
     }
 }
@@ -251,8 +294,13 @@ void daObjVmc::Act_c::daObjVmc_tree_main() {
 bool daObjVmc::Act_c::_execute() {
     /* Nonmatching */
     mCyl.SetC(current.pos);
+#if VERSION > VERSION_DEMO
     if (mState == STATE_BASE_MAIN)
+#endif
+    {
         dComIfG_Ccsp()->Set(&mCyl);
+    }
+
     switch (mState) {
     case STATE_BASE_MAIN:
         daObjVmc_base_main();
@@ -286,11 +334,11 @@ bool daObjVmc::Act_c::_execute() {
             mLinkRangeCheck = false;
     }
 
-    if (mLinkRangeCheck == true && dComIfGp_getCb1Player() != NULL && fopAcM_GetName(dComIfGp_getCb1Player()) == PROC_NPC_CB1) {
+    if (mLinkRangeCheck == true && dComIfGp_getCb1Player() != NULL && fopAcM_GetName(dComIfGp_getCb1Player()) == fpcNm_NPC_CB1_e) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
     }
 
-    if (mLinkRangeCheck == true && !mHasTree && fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_CB1) {
+    if (mLinkRangeCheck == true && !mHasTree && fopAcM_GetName(dComIfGp_getPlayer(0)) == fpcNm_NPC_CB1_e) {
         cLib_onBit<u32>(attention_info.flags, fopAc_Attn_UNK10000000_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e);
     } else {
         cLib_offBit<u32>(attention_info.flags, fopAc_Attn_UNK10000000_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e);
@@ -357,18 +405,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjVmc
 
 actor_process_profile_definition g_profile_Obj_Vmc = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Vmc,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Vmc_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjVmc::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Vmc,
+    /* Draw Prio    */ fpcDwPi_Obj_Vmc_e,
     /* Actor SubMtd */ &daObjVmc::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

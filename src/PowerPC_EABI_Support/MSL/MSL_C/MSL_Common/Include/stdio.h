@@ -5,6 +5,7 @@
 #include "file_io.h" // IWYU pragma: export
 #include "printf.h" // IWYU pragma: export
 #include "extras.h" // IWYU pragma: export
+#include "scanf.h" // IWYU pragma: export
 
 #define stdin (&__files._stdin)
 #define stdout (&__files._stdout)

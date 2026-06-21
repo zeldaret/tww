@@ -3,6 +3,8 @@
 // Translation Unit: JASResArcLoader.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASResArcLoader.h"
 #include "JSystem/JAudio/JASDvdThread.h"
 #include "JSystem/JKernel/JKRArchive.h"

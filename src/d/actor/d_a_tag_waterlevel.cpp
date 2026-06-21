@@ -3,11 +3,10 @@
 // Translation Unit: d_a_tag_waterlevel.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_waterlevel.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "SSystem/SComponent/c_lib.h"
 
 namespace daTagWaterlevel {
@@ -28,7 +27,7 @@ namespace daTagWaterlevel {
 
     /* 00000078-000001D4       .text _create__Q28daTagRet5Act_cFv */
     cPhs_State Act_c::_create() {
-        fopAcM_SetupActor(this, Act_c);
+        fopAcM_ct(this, Act_c);
 
         if ((prm_get_sch() & dKy_get_schbit() & 0xFF)) {
             M_now = 1.0f;
@@ -145,18 +144,18 @@ namespace daTagWaterlevel {
 };
 
 actor_process_profile_definition g_profile_Tag_Waterlevel = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0009,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Tag_Waterlevel,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0009,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Waterlevel_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTagWaterlevel::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Tag_Waterlevel,
+    /* Draw Prio    */ fpcDwPi_Tag_Waterlevel_e,
     /* Actor SubMtd */ &daTagWaterlevel::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

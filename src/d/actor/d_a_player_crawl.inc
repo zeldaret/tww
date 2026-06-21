@@ -10,6 +10,7 @@
  * based on the original names of the functions it contains.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_main_data.h"
@@ -18,24 +19,19 @@
 
 /* 801387A4-801387EC       .text getCrawlMoveAnmSpeed__9daPy_lk_cFv */
 f32 daPy_lk_c::getCrawlMoveAnmSpeed() {
-    if (mProcVar0.m3570 != 0) {
-        f32 fVar1 = 1.5f;
-        f32 fVar2 = 0.5f;
-        return (mStickDistance * fVar1) + fVar2;
+    if (mProcVar6.m3570 != 0) {
+        return getAnmSpeedStickRate(0.5f, 2.0f);
     }
-    return daPy_HIO_crouch_c0::m.field_0x34 +
-           (mStickDistance * (daPy_HIO_crouch_c0::m.field_0x30 - daPy_HIO_crouch_c0::m.field_0x34));
+    return getAnmSpeedStickRate(m_HIO->mCrouch.m.field_0x34, m_HIO->mCrouch.m.field_0x30);
 }
 
 /* 801387EC-80138868       .text getCrawlMoveSpeed__9daPy_lk_cFv */
 f32 daPy_lk_c::getCrawlMoveSpeed() {
-    float fVar1;
-
-    fVar1 = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
+    f32 fVar1 = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     if (fVar1 >= 17.0f) {
         fVar1 = fVar1 - 17.0f;
     }
-    return (daPy_HIO_crouch_c0::m.field_0x3C * mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) * cM_fsin((M_PI / 17) * fVar1);
+    return (m_HIO->mCrouch.m.field_0x3C * mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) * cM_fsin((M_PI / 17) * fVar1);
 }
 
 /* 80138868-801389D0       .text setCrawlMoveDirectionArrow__9daPy_lk_cFv */
@@ -43,21 +39,21 @@ void daPy_lk_c::setCrawlMoveDirectionArrow() {
     u8 direction = 0;
     camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
     BOOL bVar = cLib_distanceAngleS(fopCamM_GetAngleY(cam), shape_angle.y) > 0x4000;
-    if (mProcVar0.m3570 & 4) {
+    if (mProcVar6.m3570 & 4) {
         if (!bVar) {
             direction |= 1;
         } else {
             direction |= 4;
         }
     }
-    if (mProcVar0.m3570 & 8) {
+    if (mProcVar6.m3570 & 8) {
         if (!bVar) {
             direction |= 4;
         } else {
             direction |= 1;
         }
     }
-    if (mProcVar0.m3570 & 1) {
+    if (mProcVar6.m3570 & 1) {
         if (shape_angle.y == current.angle.y) {
             if (!bVar) {
                 direction |= 8;
@@ -93,7 +89,6 @@ BOOL daPy_lk_c::changeCrawlAutoMoveProc(cXyz* param_1) {
     cXyz sp40;
     cXyz sp34;
     cXyz sp28;
-    f32 spC;
     s16 spA;
     s16 sp8;
     f32 temp_f31 = cM_ssin(current.angle.y);
@@ -105,7 +100,7 @@ BOOL daPy_lk_c::changeCrawlAutoMoveProc(cXyz* param_1) {
     sp70.x = param_1->x + (75.0f * temp_f31);
     sp70.y = param_1->y;
     sp70.z = param_1->z + (75.0f * temp_f30);
-    mLinkLinChk.Set(param_1, &sp70, (fopAc_ac_c*)this);
+    mLinkLinChk.Set(param_1, &sp70, this);
     if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
         sp4C.x = sp70.x + (50.0f * temp_f30);
         sp4C.y = sp70.y;
@@ -122,7 +117,7 @@ BOOL daPy_lk_c::changeCrawlAutoMoveProc(cXyz* param_1) {
     sp4C.z = param_1->z - (50.0f * temp_f29);
 
     sp40 = (*param_1 * 2.0f) - sp4C;
-    mLinkLinChk.Set(param_1, &sp4C, (fopAc_ac_c*)this);
+    mLinkLinChk.Set(param_1, &sp4C, this);
     if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
         var_r29 |= 8;
         sp58.x = sp40.x + (75.0f * temp_f29);
@@ -139,18 +134,21 @@ BOOL daPy_lk_c::changeCrawlAutoMoveProc(cXyz* param_1) {
         if (!checkCrawlSideWall(&sp4C, &sp58, &sp34, &sp28, &spA, &sp8)) {
             return false;
         }
-        mLinkLinChk.Set(param_1, &sp40, (fopAc_ac_c*)this);
+        mLinkLinChk.Set(param_1, &sp40, this);
         if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
             var_r29 |= 8;
         }
     }
+    f32 x1 = param_1->x - (75.0f * temp_f31);
+    f32 y1 = param_1->z - (75.0f * temp_f30);
+    f32 spC;
     if (cM3d_Len2dSqPntAndSegLine(
             0.5f * (sp34.x + sp28.x),
             0.5f * (sp34.z + sp28.z),
             sp70.x,
             sp70.z,
-            param_1->x - (75.0f * temp_f31),
-            param_1->z - (75.0f * temp_f30),
+            x1,
+            y1,
             &sp64.x,
             &sp64.z,
             &spC
@@ -168,14 +166,15 @@ int daPy_lk_c::getCrawlMoveVec(cXyz* param_0, cXyz* param_1, cXyz* param_2) {
     if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
         cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
         int iVar4 = dComIfG_Bgsp()->GetSpecialCode(mLinkLinChk);
-        if (cBgW_CheckBWall(triPla->GetNP()->y)) {
+        f32 temp = triPla->GetNP()->y;
+        if (cBgW_CheckBWall(temp)) {
             cXyz local_3c = (*param_1 - mLinkLinChk.GetCross());
             f32 dVar7 = local_3c.absXZ();
             param_2->x = -dVar7 * triPla->GetNP()->x;
             param_2->y = local_3c.y;
             param_2->z = -dVar7 * triPla->GetNP()->z;
             return true;
-        } else if (iVar4 == 1 || (triPla->GetNP()->y < 0.643832f && iVar4 == 2)) {
+        } else if (iVar4 == 1 || (temp < 0.643832f && iVar4 == 2)) {
             *param_2 = (*param_1 - mLinkLinChk.GetCross());
             return true;
         }
@@ -209,24 +208,21 @@ void daPy_lk_c::crawlBgCheck(cXyz* param_0, cXyz* param_1) {
 }
 
 /* 801390B8-801392BC       .text checkCrawlSideWall__9daPy_lk_cFP4cXyzP4cXyzP4cXyzP4cXyzPsPs */
-BOOL daPy_lk_c::checkCrawlSideWall(
-    cXyz* param_1, cXyz* param_2, cXyz* param_3, cXyz* param_4, s16* param_5, s16* param_6
-) {
-    cXyz local_78;
-    cXyz local_90;
-
+BOOL daPy_lk_c::checkCrawlSideWall(cXyz* param_1, cXyz* param_2, cXyz* param_3, cXyz* param_4, s16* param_5, s16* param_6) {
     mLinkLinChk.Set(param_1, param_2, this);
     if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
         *param_3 = mLinkLinChk.GetCross();
-        cM3dGPla* pfVar1 = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
-        *param_5 = cM_atan2s(pfVar1->GetNP()->x, pfVar1->GetNP()->z);
-        local_90 = *param_3 + (pfVar1->mNormal * 75.0f);
+        cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
+        *param_5 = cM_atan2s(plane->GetNP()->x, plane->GetNP()->z);
+        cXyz local_78;
+        cXyz local_90;
+        local_90 = *param_3 + (*plane->GetNP() * 75.0f);
         local_78 = (local_90 + *param_3) * 0.5f;
         mLinkLinChk.Set(&local_78, &local_90, this);
         if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
             *param_4 = mLinkLinChk.GetCross();
-            pfVar1 = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
-            *param_6 = cM_atan2s(pfVar1->GetNP()->x, pfVar1->GetNP()->z);
+            plane = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
+            *param_6 = cM_atan2s(plane->GetNP()->x, plane->GetNP()->z);
             cXyz local_9c = *param_3 - *param_4;
             f32 temp_f31 = local_9c.abs2XZ();
             if (cLib_distanceAngleS(*param_5, *param_6) > 0x7F00 && temp_f31 < 5625.0f && temp_f31 > 3600.0f) {
@@ -240,23 +236,23 @@ BOOL daPy_lk_c::checkCrawlSideWall(
 /* 801392BC-80139424       .text setDoStatusCrawl__9daPy_lk_cFv */
 void daPy_lk_c::setDoStatusCrawl() {
     dComIfGp_setRStatus(dActStts_CROUCH_e);
-    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x80)) {
+    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000080_e)) {
         dComIfGp_setAStatus(dActStts_RETURN_e);
-        if (checkSubjectEnd(1) || m35D0 > current.pos.y) {
-            dComIfGp_clearPlayerStatus0(0, daPyStts0_UNK2000_e);
+        if (checkSubjectEnd(TRUE) || mWaterY > current.pos.y) {
+            dComIfGp_clearPlayerStatus0(0, daPyStts0_SUBJECT_e);
         } else {
-            dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000_e);
+            dComIfGp_setPlayerStatus0(0, daPyStts0_SUBJECT_e);
         }
     } else if (dCam_getBody()->ChangeModeOK(4)) {
-        if (m35D0 <= current.pos.y) {
-            onResetFlg0(daPyRFlg0_UNK4000000);
-            if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000) && !dComIfGp_event_runCheck()) {
+        if (mWaterY <= current.pos.y) {
+            onResetFlg0(daPyRFlg0_SUBJECT_ACCEPT);
+            if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00001000_e) && !dComIfGp_event_runCheck()) {
                 setSubjectMode();
             }
         }
     }
-    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x80) &&
-        (mCurProc != daPyProc_CRAWL_MOVE_e || mProcVar0.m3570 == 0))
+    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000080_e) &&
+        (mCurProc != daPyProc_CRAWL_MOVE_e || mProcVar6.m3570 == 0))
     {
         setBodyAngleToCamera();
         if (mBodyAngle.x > 0) {
@@ -274,14 +270,14 @@ BOOL daPy_lk_c::procCrawlStart_init() {
     m34C2 = 1;
     setSingleMoveAnime(
         ANM_LIE,
-        daPy_HIO_crouch_c0::m.field_0x20,
-        daPy_HIO_crouch_c0::m.field_0x24,
-        daPy_HIO_crouch_c0::m.field_0x6,
-        daPy_HIO_crouch_c0::m.field_0x2C
+        m_HIO->mCrouch.m.field_0x20,
+        m_HIO->mCrouch.m.field_0x24,
+        m_HIO->mCrouch.m.field_0x6,
+        m_HIO->mCrouch.m.field_0x2C
     );
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     current.angle.y = shape_angle.y;
-    m35A0 = 1.0f / (daPy_HIO_crouch_c0::m.field_0x28 - daPy_HIO_crouch_c0::m.field_0x24);
+    m35A0 = 1.0f / (m_HIO->mCrouch.m.field_0x28 - m_HIO->mCrouch.m.field_0x24);
     m35E4 = 0.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_CRAWL_e);
     return true;
@@ -290,7 +286,7 @@ BOOL daPy_lk_c::procCrawlStart_init() {
 /* 801394F0-80139640       .text procCrawlStart__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCrawlStart() {
     setDoStatusCrawl();
-    m35E4 = 1.0f - m35A0 * ((daPy_HIO_crouch_c0::m.field_0x28) - mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
+    m35E4 = 1.0f - m35A0 * ((m_HIO->mCrouch.m.field_0x28) - mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
     cXyz local_20(l_crawl_front_offset.x, l_crawl_front_offset.y, l_crawl_front_offset.z * m35E4);
     cXyz afStack_2c;
     cXyz cStack_38;
@@ -298,11 +294,11 @@ BOOL daPy_lk_c::procCrawlStart() {
     local_20.y = 50.0f;
     mDoMtx_multVec(mpCLModel->getBaseTRMtx(), &local_20, &cStack_38);
     crawlBgCheck(&cStack_38, &cStack_38);
-    if (!spActionButton() || m35D0 > 15.0f + current.pos.y) {
+    if (!spActionButton() || checkCrawlWaterIn()) {
         procCrawlEnd_init(0, shape_angle.x, shape_angle.z);
     } else if (mStickDistance > 0.05f &&
                ((mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) ||
-                (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_crouch_c0::m.field_0x28)))
+                (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mCrouch.m.field_0x28)))
     {
         procCrawlMove_init(shape_angle.x, shape_angle.z);
     } else {
@@ -339,7 +335,7 @@ BOOL daPy_lk_c::procCrawlMove_init(s16 param_0, s16 param_1) {
         var_r29 = 1;
     }
     BOOL var_r27;
-    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000_e)) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SUBJECT_e)) {
         var_r27 = 1;
     } else {
         var_r27 = 0;
@@ -351,18 +347,18 @@ BOOL daPy_lk_c::procCrawlMove_init(s16 param_0, s16 param_1) {
             dVar4 *= -1.0f;
         }
         current.angle.y = shape_angle.y;
-        setSingleMoveAnime(ANM_LIEFORWARD, dVar4, 0.0f, -1, daPy_HIO_crouch_c0::m.field_0x38);
+        setSingleMoveAnime(ANM_LIEFORWARD, dVar4, 0.0f, -1, m_HIO->mCrouch.m.field_0x38);
     } else {
-        onResetFlg0(daPyRFlg0_UNK1000);
+        onResetFlg0(daPyRFlg0_CRAWL_AUTO_MOVE);
     }
     m35A0 = -1.0f;
-    mProcVar0.m3570 = var_r29 ^ 1;
+    mProcVar6.m3570 = var_r29 ^ 1;
     shape_angle.x = param_0;
     shape_angle.z = param_1;
     m35E4 = 1.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_CRAWL_e);
     if (var_r27 != 0) {
-        dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000_e);
+        dComIfGp_setPlayerStatus0(0, daPyStts0_SUBJECT_e);
     }
     return true;
 }
@@ -401,8 +397,8 @@ BOOL daPy_lk_c::procCrawlMove() {
     iVar6 = checkNotCrawlStand(&sp118);
     iVar7 = checkNotCrawlStand(&sp124);
     iVar8 = checkNotCrawlStand(&sp10C);
-    if ((((iVar6 != 0 || iVar7 != 0) || iVar8 != 0) ||
-         (checkNotCrawlStand(&sp124, &sp100) || checkNotCrawlStand(&sp10C, &sp100))) ||
+    if (iVar6 != 0 || iVar7 != 0 || iVar8 != 0 ||
+        checkNotCrawlStand(&sp124, &sp100) || checkNotCrawlStand(&sp10C, &sp100) ||
         checkNotCrawlStand(&sp118, &sp100))
     {
         bVar5 = false;
@@ -411,7 +407,7 @@ BOOL daPy_lk_c::procCrawlMove() {
         bVar5 = true;
         offModeFlg(ModeFlg_04000000);
     }
-    if ((bVar5 != false && !spActionButton()) || (getSlidePolygon() != NULL || m35D0 > current.pos.y + 15.0f)) {
+    if ((bVar5 != false && !spActionButton()) || getSlidePolygon() != NULL || checkCrawlWaterIn()) {
         procCrawlEnd_init(1, shape_angle.x, shape_angle.z);
     } else {
         bVar4 = false;
@@ -444,8 +440,8 @@ BOOL daPy_lk_c::procCrawlMove() {
                 ((mAnmRatioUnder[UNDER_MOVE0_e]).getAnmTransform())->setFrame(fVar1);
             }
         }
-        iVar9 = mProcVar0.m3570;
-        mProcVar0.m3570 = 0;
+        iVar9 = mProcVar6.m3570;
+        mProcVar6.m3570 = 0;
         s16 sp0A;
         s16 sp08;
 
@@ -465,15 +461,15 @@ BOOL daPy_lk_c::procCrawlMove() {
         if (!bVar5 && (checkCrawlSideWall(&spF4, &spE8, &spD0, &spC4, &sp0A, &sp08) ||
                        checkCrawlSideWall(&spF4, &spDC, &spC4, &spD0, &sp08, &sp0A)))
         {
-            mProcVar0.m3570 = 1;
-            mResetFlg0 = mResetFlg0 | 0x1000;
+            mProcVar6.m3570 = 1;
+            onResetFlg0(daPyRFlg0_CRAWL_AUTO_MOVE);
             m370C = ((spD0 + spC4) * 0.5f) - spB8;
-            m34D4 = sp0A + 0x4000;
+            mProcVar2.m34D4 = sp0A + 0x4000;
         }
 
-        if (mProcVar0.m3570 != 0) {
+        if (mProcVar6.m3570 != 0) {
             if (frameCtrl.getRate()) {
-                cLib_addCalcAngleS(&shape_angle.y, m34D4, 5, 0x1000, 0x800);
+                cLib_addCalcAngleS(&shape_angle.y, mProcVar2.m34D4, 5, 0x1000, 0x800);
                 current.angle.y = shape_angle.y;
             }
 
@@ -494,9 +490,9 @@ BOOL daPy_lk_c::procCrawlMove() {
                 cLib_addCalcAngleS(
                     &shape_angle.y,
                     m34E8,
-                    daPy_HIO_crouch_c0::m.field_0x8,
-                    daPy_HIO_crouch_c0::m.field_0xA,
-                    daPy_HIO_crouch_c0::m.field_0xC
+                    m_HIO->mCrouch.m.field_0x8,
+                    m_HIO->mCrouch.m.field_0xA,
+                    m_HIO->mCrouch.m.field_0xC
                 );
 
                 if (shape_angle.y != r24) {
@@ -519,9 +515,9 @@ BOOL daPy_lk_c::procCrawlMove() {
             }
         }
         dVar11 = getCrawlMoveSpeed();
-        mVelocity = dVar11;
-        if (mVelocity < 0.0f) {
-            mVelocity *= -1.0f;
+        mNormalSpeed = dVar11;
+        if (mNormalSpeed < 0.0f) {
+            mNormalSpeed *= -1.0f;
             current.angle.y = shape_angle.y + 0x8000;
             mDoMtx_multVec(mpCLModel->getBaseTRMtx(), &l_crawl_back_offset, &sp88);
             crawlBgCheck(&sp88, &sp10C);
@@ -535,39 +531,36 @@ BOOL daPy_lk_c::procCrawlMove() {
 
 /* 8013A004-8013A0F0       .text procCrawlAutoMove_init__9daPy_lk_cFiP4cXyz */
 BOOL daPy_lk_c::procCrawlAutoMove_init(int param_0, cXyz* param_1) {
-    BOOL uVar1 = dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000_e) ? TRUE : FALSE;
+    BOOL uVar1 = dComIfGp_checkPlayerStatus0(0, daPyStts0_SUBJECT_e) ? TRUE : FALSE;
     commonProcInit(daPyProc_CRAWL_AUTO_MOVE_e);
     m370C = *param_1;
     m35E4 = 1.0f;
-    mProcVar0.m3570 = param_0;
-    m34D0 = 0x14;
-    m34D6 = 300;
+    mProcVar6.m3570 = param_0;
+    mProcVar0.m34D0 = 20;
+    mProcVar3.m34D6 = 300;
     dComIfGp_setPlayerStatus0(0, daPyStts0_CRAWL_e);
     setCrawlMoveDirectionArrow();
-    mVelocity = 0.0f;
-    onResetFlg0(daPyRFlg0_UNK1000);
+    mNormalSpeed = 0.0f;
+    onResetFlg0(daPyRFlg0_CRAWL_AUTO_MOVE);
     for (int i = 0; i < 3; i++) {
         mAcchCir[i].SetWallR(9.99f);
     }
     if (uVar1) {
-        dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000_e);
+        dComIfGp_setPlayerStatus0(0, daPyStts0_SUBJECT_e);
     }
     return true;
 }
 
 /* 8013A0F0-8013A630       .text procCrawlAutoMove__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCrawlAutoMove() {
-    f32 fVar2;
-    f32 fVar3;
-
     dComIfGp_setRStatus(dActStts_CROUCH_e);
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
-    onResetFlg0(daPyRFlg0_UNK1000);
+    onResetFlg0(daPyRFlg0_CRAWL_AUTO_MOVE);
     s16 sVar4 = shape_angle.y;
     s16 sVar5 = current.angle.y;
-    if (m34D0 > 0) {
+    if (mProcVar0.m34D0 > 0) {
         if (frameCtrl.checkPass(0.0f) || frameCtrl.checkPass(17.0f)) {
-            fVar3 = 0.0f;
+            f32 fVar2;
             if (frameCtrl.checkPass(0.0f)) {
                 fVar2 = 0.0f;
             } else {
@@ -576,61 +569,61 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
             frameCtrl.setRate(0.0f);
             frameCtrl.setFrame(fVar2);
             mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(fVar2);
-            mVelocity = fVar3;
+            mNormalSpeed = 0.0f;
         } else if (std::fabsf(frameCtrl.getRate()) < 0.01f) {
-            mVelocity = 0.0f;
-            m34D0--;
+            mNormalSpeed = 0.0f;
+            mProcVar0.m34D0--;
         }
         setCrawlMoveDirectionArrow();
         setDoStatusCrawl();
         shape_angle.y = sVar4;
         current.angle.y = sVar5;
-    } else if (m34D0 == 0) {
+    } else if (mProcVar0.m34D0 == 0) {
         setCrawlMoveDirectionArrow();
         if (mStickDistance > 0.05f) {
             int direction = getDirectionFromShapeAngle();
             f32 fVar2 = cM_ssin(shape_angle.y);
             f32 fVar3 = cM_scos(shape_angle.y);
-            if (direction == DIR_LEFT && (mProcVar0.m3570 & 4)) {
+            if (direction == DIR_LEFT && (mProcVar6.m3570 & 4)) {
                 m370C.x += 75.0f * fVar3;
                 m370C.z -= 75.0f * fVar2;
-                m34D4 = current.angle.y + 0x4000;
+                mProcVar2.m34D4 = current.angle.y + 0x4000;
                 if (current.angle.y == shape_angle.y) {
                     m35A0 = 1.0f;
                 } else {
                     m35A0 = -1.0f;
                 }
-                m34D0 = -1;
-            } else if (direction == DIR_RIGHT && (mProcVar0.m3570 & 8)) {
+                mProcVar0.m34D0 = -1;
+            } else if (direction == DIR_RIGHT && (mProcVar6.m3570 & 8)) {
                 m370C.x -= 75.0f * fVar3;
                 m370C.z += 75.0f * fVar2;
-                m34D4 = current.angle.y + -0x4000;
+                mProcVar2.m34D4 = current.angle.y + -0x4000;
                 if (current.angle.y == shape_angle.y) {
                     m35A0 = 1.0f;
                 } else {
                     m35A0 = -1.0f;
                 }
-                m34D0 = -1;
-            } else if ((mProcVar0.m3570 & 1) && ((shape_angle.y == current.angle.y && direction == DIR_FORWARD) ||
+                mProcVar0.m34D0 = -1;
+            } else if ((mProcVar6.m3570 & 1) && ((shape_angle.y == current.angle.y && direction == DIR_FORWARD) ||
                                                     (shape_angle.y != current.angle.y && direction == DIR_BACKWARD)))
             {
                 m370C.x += 75.0f * cM_ssin(current.angle.y);
                 m370C.z += 75.0f * cM_scos(current.angle.y);
-                m34D4 = shape_angle.y;
+                mProcVar2.m34D4 = shape_angle.y;
                 m35A0 = 0.0f;
-                m34D0 = -1;
+                mProcVar0.m34D0 = -1;
             } else if ((shape_angle.y == current.angle.y && direction == DIR_BACKWARD) ||
                         (shape_angle.y != current.angle.y && direction == DIR_FORWARD))
             {
                 current.angle.y += 0x8000;
                 m370C.x -= 75.0f * cM_ssin(current.angle.y);
                 m370C.z -= 75.0f * cM_scos(current.angle.y);
-                m34D4 = shape_angle.y;
+                mProcVar2.m34D4 = shape_angle.y;
                 m35A0 = 0.0f;
-                m34D0 = -1;
+                mProcVar0.m34D0 = -1;
             }
-            if (m34D0 == -1) {
-                g_dComIfG_gameInfo.play.mDirection = 0;
+            if (mProcVar0.m34D0 == -1) {
+                dComIfGp_setAdvanceDirection(0);
                 if (shape_angle.y == current.angle.y) {
                     frameCtrl.setRate(2.0f);
                     frameCtrl.setLoop(0);
@@ -647,11 +640,11 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
         }
     } else {
         BOOL bVar1 = true;
-        if (m34D6 > 0) {
-            m34D6--;
+        if (mProcVar3.m34D6 > 0) {
+            mProcVar3.m34D6--;
         }
         if (std::fabsf(m35A0) > 0.5f) {
-            if (cLib_addCalcAngleS(&shape_angle.y, m34D4, 5, 0x480, 0x80)) {
+            if (cLib_addCalcAngleS(&shape_angle.y, mProcVar2.m34D4, 5, 0x480, 0x80)) {
                 bVar1 = 0;
             }
             if (m35A0 < -0.5f) {
@@ -666,12 +659,12 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
         if (cLib_distanceAngleS(cM_atan2s(local_28.x, local_28.z), current.angle.y) < 0x6000) {
             bVar1 = false;
         }
-        mVelocity = getCrawlMoveSpeed();
-        if (mVelocity < 0.0f) {
-            mVelocity *= -1.0f;
+        mNormalSpeed = getCrawlMoveSpeed();
+        if (mNormalSpeed < 0.0f) {
+            mNormalSpeed *= -1.0f;
             current.angle.y = shape_angle.y + 0x8000;
         }
-        if (bVar1 != 0 || m34D6 == 0) {
+        if (bVar1 != 0 || mProcVar3.m34D6 == 0) {
             procCrawlMove_init(shape_angle.x, shape_angle.z);
         }
     }
@@ -690,22 +683,22 @@ BOOL daPy_lk_c::procCrawlEnd_init(int param_1, s16 param_2, s16 param_3) {
     current.angle.y = shape_angle.y;
     m34C2 = 1;
     if (param_1 != 0) {
-        fVar1 = daPy_HIO_crouch_c0::m.field_0x4C;
+        fVar1 = m_HIO->mCrouch.m.field_0x4C;
     } else {
         fVar1 = -1.0f;
     }
     setSingleMoveAnime(
         ANM_LIE,
-        daPy_HIO_crouch_c0::m.field_0x40,
-        daPy_HIO_crouch_c0::m.field_0x44,
-        daPy_HIO_crouch_c0::m.field_0xE,
+        m_HIO->mCrouch.m.field_0x40,
+        m_HIO->mCrouch.m.field_0x44,
+        m_HIO->mCrouch.m.field_0xE,
         fVar1
     );
     if (param_1 == 0) {
-        if (daPy_HIO_crouch_c0::m.field_0x44 > dVar4) {
-            dVar4 = daPy_HIO_crouch_c0::m.field_0x44;
-        } else if (daPy_HIO_crouch_c0::m.field_0xE <= dVar4) {
-            dVar4 = daPy_HIO_crouch_c0::m.field_0xE - 0.001f;
+        if (m_HIO->mCrouch.m.field_0x44 > dVar4) {
+            dVar4 = m_HIO->mCrouch.m.field_0x44;
+        } else if (m_HIO->mCrouch.m.field_0xE <= dVar4) {
+            dVar4 = m_HIO->mCrouch.m.field_0xE - 0.001f;
         }
         mFrameCtrlUnder[UNDER_MOVE0_e].setFrame(dVar4);
         mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(dVar4);
@@ -715,19 +708,19 @@ BOOL daPy_lk_c::procCrawlEnd_init(int param_1, s16 param_2, s16 param_3) {
     m3700.x = auStack_58.mTranslate.x;
     m3700.y = auStack_58.mTranslate.y;
     m3700.z = auStack_58.mTranslate.z;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     shape_angle.x = param_2;
     shape_angle.z = param_3;
-    m35A0 = 1.0f / (daPy_HIO_crouch_c0::m.field_0xE - daPy_HIO_crouch_c0::m.field_0x48);
+    m35A0 = 1.0f / (m_HIO->mCrouch.m.field_0xE - m_HIO->mCrouch.m.field_0x48);
     return true;
 }
 
 /* 8013A7C4-8013A85C       .text procCrawlEnd__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCrawlEnd() {
-    m35E4 = m35A0 * (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() - daPy_HIO_crouch_c0::m.field_0x48);
+    m35E4 = m35A0 * (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() - m_HIO->mCrouch.m.field_0x48);
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() > -0.01f) {
         checkNextMode(0);
-    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < daPy_HIO_crouch_c0::m.field_0x48) {
+    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < m_HIO->mCrouch.m.field_0x48) {
         if (!checkNextMode(1)) {
             m34C2 = 1;
         }

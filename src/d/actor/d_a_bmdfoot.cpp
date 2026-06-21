@@ -1,87 +1,659 @@
 /**
  * d_a_bmdfoot.cpp
- * Boss - Kalle Demos (floor tentacles)
+ * Boss - Kalle Demos (floor tentacles) / 森ボス足 (Forest boss feet)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bmdfoot.h"
+#include "d/actor/d_a_player.h"
+#include "res/Object/Bmdfoot.h"
+#include "d/actor/d_a_bmd.h"
+#include "d/d_s_play.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
+
+class daBmdfoot_HIO_c : public JORReflexible {
+public:
+    daBmdfoot_HIO_c();
+    virtual ~daBmdfoot_HIO_c() {}
+    void genMessage(JORMContext*) {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ s8 m05;
+    /* 0x06 */ s16 m06;
+    /* 0x08 */ s16 m08;
+};
 
 /* 000000EC-00000114       .text __ct__15daBmdfoot_HIO_cFv */
 daBmdfoot_HIO_c::daBmdfoot_HIO_c() {
-    /* Nonmatching */
+    mNo = 0xFF;
+    m08 = 1000;
+    m06 = 3500;
 }
 
+static bmd_class* boss;
+static bool hio_set;
+static daBmdfoot_HIO_c l_HIO;
+
 /* 00000114-000001D8       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = (J3DJoint*)node;
+        int jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        bmdfoot_class* i_this = (bmdfoot_class*)model->getUserArea();
+        if (i_this != NULL) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            MtxRotX(i_this->m2CC[jntNo].x, 1);
+            MtxRotZ(i_this->m2CC[jntNo].z, 1);
+            model->setAnmMtx(jntNo, *calc_mtx);
+            MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 000001D8-000002B0       .text daBmdfoot_Draw__FP13bmdfoot_class */
-static BOOL daBmdfoot_Draw(bmdfoot_class*) {
-    /* Nonmatching */
+static BOOL daBmdfoot_Draw(bmdfoot_class* i_this) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
+
+    if (i_this->mBC8 != 0) {
+        J3DModel* model = i_this->mpBodyVineMorf->getModel();
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, &actor->tevStr);
+        g_env_light.setLightTevColorType(model, &actor->tevStr);
+        i_this->btk->entry(model->getModelData());
+        i_this->mpBodyVineMorf->entryDL();
+        if (i_this->mBA8 >= 10) {
+            model = i_this->mpFloorVineMorf->getModel();
+            g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->mBAC, &i_this->mTevstr);
+            g_env_light.setLightTevColorType(model, &i_this->mTevstr);
+            i_this->mpFloorVineMorf->entryDL();
+        }
+    }
+    return TRUE;
 }
 
 /* 000002B0-000003D8       .text anm_init__FP13bmdfoot_classifUcfi */
-void anm_init(bmdfoot_class*, int, float, unsigned char, float, int) {
-    /* Nonmatching */
+void anm_init(bmdfoot_class* i_this, int bckFileIdx, f32 morf, unsigned char loopMode, f32 speed, int soundFileIdx) {
+    if (soundFileIdx >= 0) {
+        i_this->mpBodyVineMorf->setAnm(
+            (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", bckFileIdx), loopMode, morf, speed, 0.0f, -1.0f, dComIfG_getObjectRes("Bmdfoot", soundFileIdx)
+        );
+    } else {
+        i_this->mpBodyVineMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", bckFileIdx), loopMode, morf, speed, 0.0f, -1.0f, NULL);
+    }
 }
 
 /* 000003D8-00000440       .text housi_off__FP13bmdfoot_class */
-void housi_off(bmdfoot_class*) {
-    /* Nonmatching */
+void housi_off(bmdfoot_class* i_this) {
+    for (int i = 0; i < ARRAY_SSIZE(i_this->mAsiWaitFollowCB); i++) {
+        if (i_this->mAsiWaitFollowCB[i].getEmitter() != NULL) {
+            i_this->mAsiWaitFollowCB[i].getEmitter()->stopCreateParticle();
+        }
+    }
+    if (i_this->mLAttackSmoke01CB.getEmitter() != NULL) {
+        i_this->mLAttackSmoke01CB.remove();
+    }
 }
 
 /* 00000440-00000840       .text wait__FP13bmdfoot_class */
-void wait(bmdfoot_class*) {
-    /* Nonmatching */
+void wait(bmdfoot_class* i_this) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
+    cXyz local_98;
+    static int eff_id[] = {ASI_JNT_ASI11_e, ASI_JNT_ASI13_e, ASI_JNT_ASI18_e};
+
+    int frame = i_this->mpBodyVineMorf->getFrame();
+    local_98.setall(0.0f);
+
+    for (int i = 0; i < ARRAY_SSIZE(i_this->m3F8); i++) {
+        MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(eff_id[i]), *calc_mtx);
+        MtxPosition(&local_98, &i_this->m3F8[i]);
+        if (i_this->m3F4 == 0) {
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMASIWAIT00, &i_this->m3F8[i], NULL, NULL, 0xFF, &i_this->mAsiWaitFollowCB[i]);
+        }
+        if (i_this->mAsiWaitFollowCB[i].getEmitter() != NULL) {
+            if (frame == 0) {
+                i_this->mAsiWaitFollowCB[i].getEmitter()->playCreateParticle();
+            } else if (frame == 20) {
+                i_this->mAsiWaitFollowCB[i].getEmitter()->stopCreateParticle();
+            }
+        }
+    }
+
+    i_this->m3F4 = 1;
+
+    switch (i_this->m2BC) {
+    case -1:
+        for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
+            cLib_addCalc2(&i_this->m2CC[i].x, (int)(0x10 - i) * (0.003f + REG12_F(3)), 0.1f, 0.008f + REG12_F(4));
+            i_this->m3A4[i] = 0.0f;
+        }
+        if (i_this->m2C0[2] == 0) {
+            housi_off(i_this);
+            i_this->m2BA = 1;
+            i_this->m2BC = 0;
+        }
+        break;
+    case 0:
+        i_this->m2BC++;
+        anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_WAIT_e, 50.0f, J3DFrameCtrl::EMode_LOOP, cM_rndF(0.2f) + 0.9f, -1);
+        i_this->m2C0[0] = cM_rndF(150.0f) + 100.0f;
+        i_this->m3EC = cM_rndFX(32768.0f);
+        for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
+            i_this->m3A4[i] = REG14_F(13) + (0.2f + cM_rndFX(0.1f));
+        }
+        break;
+    case 1:
+        i_this->m3EC = (i_this->m3EC + (s16)(REG14_S(4) + 0x200));
+        if (boss->m332 == 1) {
+            s16 sVar2 = actor->current.angle.y - fopAcM_searchPlayerAngleY(actor);
+            if (sVar2 < 0) {
+                sVar2 = -sVar2;
+            }
+            if (sVar2 < l_HIO.m06) {
+                housi_off(i_this);
+                i_this->m2BA = 1;
+                i_this->m2BC = 0;
+            } else {
+                i_this->m2C0[0] = cM_rndF(50.0f) + 50.0f;
+            }
+        } else {
+            if (boss->m332 == 2) {
+                housi_off(i_this);
+                i_this->m2BA = 2;
+                i_this->m2BC = 0;
+            }
+        }
+        break;
+    }
 }
 
 /* 0000087C-00000D8C       .text attack_1__FP13bmdfoot_class */
-void attack_1(bmdfoot_class*) {
-    /* Nonmatching */
+void attack_1(bmdfoot_class* i_this) {
+    /* Nonmatching - retail-only regalloc */
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
+    cXyz local_5c;
+    cXyz cStack_68;
+    static int jno[] = {ASI_JNT_ASI11_e, ASI_JNT_ASI13_e, ASI_JNT_ASI18_e};
+    static int col_joint[] = {ASI_JNT_ASI2_e, ASI_JNT_ASI4_e, ASI_JNT_ASI6_e, ASI_JNT_ASI8_e, ASI_JNT_ASI10_e};
+
+    bool bVar2 = false;
+    local_5c.setall(0.0f);
+
+    switch (i_this->m2BC) {
+    case 0:
+        i_this->m2C0[0] = cM_rndF(20.0f);
+        i_this->m2BC++;
+    case 1:
+        i_this->mBC4 = 0.0f;
+        if (i_this->m2C0[0] == 0) {
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_ATTACK1_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            i_this->m2BC++;
+            i_this->mBD0 = 0x1e;
+        }
+        break;
+    case 2:
+        if (i_this->mBD0 == 0) {
+            i_this->mBD0 = 0x1e;
+        }
+        if (i_this->mpBodyVineMorf->isStop()) {
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_ATTACK_LOOP_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            i_this->m2C0[0] = 0x3c;
+            i_this->m2BC++;
+        }
+        break;
+    case 3:
+        if (i_this->mBD0 == 0) {
+            i_this->mBD0 = 0x1e;
+        }
+        for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
+            i_this->m3A4[i] = 0.0f;
+            cLib_addCalc0(&i_this->m2CC[i].z, 0.1f, 0.05f);
+        }
+        if (i_this->m2C0[0] == 0) {
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_ATTACK2_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            i_this->m2BC++;
+            i_this->m2C0[0] = REG14_S(2) + 0x1c;
+            mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_PREP, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        }
+        break;
+    case 4:
+        bVar2 = true;
+        if (i_this->m2C0[0] == 1) {
+            mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_ATTACK, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            for (int i = 0; i < ARRAY_SSIZE(jno); i++) {
+                MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(jno[i]), *calc_mtx);
+                MtxPosition(&local_5c, &cStack_68);
+                dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &cStack_68, 0xFF, g_whiteColor, g_whiteColor, 0);
+            }
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKSOIL00, &i_this->mAE8, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_ST_O_BKMSATTACKSMOKE00, &i_this->mAE8, 0xB9, g_whiteColor, g_whiteColor, 0);
+        }
+        if (i_this->mpBodyVineMorf->isStop()) {
+            i_this->m2BA = 0;
+            i_this->m2BC = 0;
+        }
+        break;
+    }
+
+    s16 sVar3 = fopAcM_searchPlayerAngleY(actor) - actor->current.angle.y;
+    s16 sVar5;
+    if (sVar3 > l_HIO.m06) {
+        sVar5 = l_HIO.m06;
+    } else if (sVar3 < (s16)-l_HIO.m06) {
+        sVar5 = -l_HIO.m06;
+    } else {
+        sVar5 = sVar3;
+    }
+    cLib_addCalcAngleS2(&i_this->m2BE, sVar5, 4, i_this->mBC4 + 128.0f);
+    cLib_addCalc2(&i_this->mBC4, 10000.0f, 1.0f, REG0_F(7) + 20.0f);
+
+    if (bVar2) {
+        J3DModel* model = i_this->mpBodyVineMorf->getModel();
+        for (int i = 0; i < ARRAY_SSIZE(i_this->mSph); i++) {
+            MTXCopy(model->getAnmMtx((i_this->m2B8 & 7U) + col_joint[i]), *calc_mtx);
+            MtxPosition(&local_5c, &cStack_68);
+            i_this->mSph[i].SetC(cStack_68);
+            i_this->mSph[i].SetR(40.0f);
+            i_this->mSph[i].OnAtSetBit();
+            i_this->mSph[i].OffCoSetBit();
+            dComIfG_Ccsp()->Set(&i_this->mSph[i]);
+        }
+    }
 }
 
 /* 00000D8C-00001180       .text ug_move__FP13bmdfoot_class */
-void ug_move(bmdfoot_class*) {
-    /* Nonmatching */
+int ug_move(bmdfoot_class* i_this) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
+    cXyz local_4c;
+    cXyz cStack_58;
+    cXyz local_64;
+
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    u32 uVar4 = 0;
+    switch (i_this->mBA8) {
+    case 0:
+        break;
+    case 1:
+        i_this->mBAC = actor->current.pos;
+        i_this->mBAC.y = boss->m328;
+        i_this->mBB8.y = actor->current.angle.y;
+        i_this->mBC0 = 0.0f;
+        i_this->mBA8 = 2;
+        i_this->m2B8 = cM_rndF(10000.0f);
+        dComIfGp_particle_setToon(
+            dPa_name::ID_AK_ST_BKMLATTACKSMOKE01, &i_this->mBAC, &i_this->mBB8, NULL, 0xB9, &i_this->mLAttackSmoke01CB, (u8)actor->current.roomNo
+        );
+        break;
+    case 0xa:
+        break;
+    case 2:
+        local_64 = player->current.pos - i_this->mBAC;
+        f32 dVar5 = (local_64.abs() * 10.0f);
+        if (dVar5 > (REG14_F(14) + 10000.0f)) {
+            dVar5 = (REG14_F(14) + 10000.0f);
+        }
+        f32 dVar6 = cM_ssin(i_this->m2B8 * (REG14_S(3) + 2000));
+        s16 r28 = dVar5 * dVar6;
+        s16 r4 = r28 + cM_atan2s(local_64.x, local_64.z);
+        cLib_addCalcAngleS2(&i_this->mBB8.y, r4, 0x10, 0x2000);
+        local_4c.y = 0.0f;
+        local_4c.x = 0.0f;
+        local_4c.z = REG14_F(16) + 20.0f;
+        cMtx_YrotS(*calc_mtx, (int)i_this->mBB8.y);
+        MtxPosition(&local_4c, &cStack_58);
+        i_this->mBAC += cStack_58;
+        i_this->mBC0 = i_this->mBC0 + local_4c.z;
+        if ((local_64.abs() < 300.0f) || (i_this->mBC0 > REG14_F(15) + 3000.0f)) {
+            i_this->mBA8 = 10;
+            if (i_this->mLAttackSmoke01CB.getEmitter() != NULL) {
+                i_this->mLAttackSmoke01CB.remove();
+            }
+            uVar4 = 1;
+        }
+        break;
+    }
+    MtxTrans(i_this->mBAC.x, i_this->mBAC.y, i_this->mBAC.z, false);
+    cMtx_YrotM(*calc_mtx, i_this->mBB8.y);
+    J3DModel* model = i_this->mpFloorVineMorf->getModel();
+    model->setBaseTRMtx(*calc_mtx);
+    i_this->mpFloorVineMorf->play(NULL, 0, 0);
+    i_this->mpFloorVineMorf->calc();
+    return uVar4;
 }
 
 /* 00001180-00001B00       .text attack_2__FP13bmdfoot_class */
-void attack_2(bmdfoot_class*) {
-    /* Nonmatching */
+void attack_2(bmdfoot_class* i_this) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
+    J3DAnmTransform* pBck;
+    cXyz local_3c;
+    cXyz local_48;
+    static int col_joint[] = {ASI_JNT_ASI18_e, ASI_JNT_ASI16_e, ASI_JNT_ASI13_e, ASI_JNT_ASI10_e};
+
+    local_3c.z = 0.0f;
+    local_3c.y = 0.0f;
+    local_3c.x = 0.0f;
+    boss->m334 = 10;
+    switch (i_this->m2BC) {
+    case 0:
+        i_this->m2C0[0] = cM_rndF(20.0f);
+        i_this->m2BC++;
+    case 1:
+        i_this->mBC4 = 0.0f;
+        if (i_this->m2C0[0] == 0) {
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_UMARU_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            i_this->m2BC++;
+            i_this->m2C0[0] = 5;
+            i_this->mBD0 = 0x1e;
+        }
+        break;
+    case 2:
+        if ((int)i_this->mpBodyVineMorf->getFrame() == 49) {
+            MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(ASI_JNT_ASI18_e), *calc_mtx);
+            MtxPosition(&local_3c, &local_48);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKSOIL00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_ST_O_BKMSATTACKSMOKE00, &local_48, 0xB9, g_whiteColor, g_whiteColor, 0);
+            mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_IN_G, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        }
+        if (i_this->mpBodyVineMorf->isStop()) {
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_UMARU_WAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            i_this->m2BC++;
+            i_this->mBA8 = 1;
+        }
+        break;
+    case 3:
+        mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_DIG, &i_this->mBAC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        if (ug_move(i_this)) {
+            pBck = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_DATTACK1_e);
+            i_this->mpFloorVineMorf->setAnm(pBck, J3DFrameCtrl::EMode_NONE, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
+            i_this->m2BC++;
+        }
+        break;
+    case 4:
+        if ((int)i_this->mpFloorVineMorf->getFrame() == 2) {
+            local_48 = i_this->mBAC;
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKSOIL00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_AK_ST_O_BKMSATTACKSMOKE00, &local_48, 0xB9, g_whiteColor, g_whiteColor, 0);
+            mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_OUT_G, &i_this->mBAC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        }
+        ug_move(i_this);
+        if (i_this->mpFloorVineMorf->isStop()) {
+            pBck = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_DATTACK2_e);
+            i_this->mpFloorVineMorf->setAnm(pBck, J3DFrameCtrl::EMode_LOOP, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
+            i_this->m2C0[0] = 0xb4;
+            i_this->m2BC++;
+        }
+        break;
+    case 5:
+        ug_move(i_this);
+        mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_L_ATK, &i_this->mBAC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        for (int i = 0; i < ARRAY_SSIZE(col_joint); i++) {
+            MTXCopy(i_this->mpFloorVineMorf->getModel()->getAnmMtx(col_joint[i]), *calc_mtx);
+            MtxPosition(&local_3c, &local_48);
+            i_this->mSph[i].SetC(local_48);
+            i_this->mSph[i].SetR(40.0f);
+            dComIfG_Ccsp()->Set(&i_this->mSph[i]);
+        }
+        if (i_this->m2C0[0] == 0) {
+            pBck = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_DATTACK3_e);
+            i_this->mpFloorVineMorf->setAnm(pBck, J3DFrameCtrl::EMode_NONE, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
+            i_this->m2BC++;
+        }
+        break;
+    case 6:
+        ug_move(i_this);
+        if ((int)i_this->mpFloorVineMorf->getFrame() == 12) {
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMLATTACKHOUSHI00, &i_this->mBAC);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMLATTACKSOIL00, &i_this->mBAC);
+            i_this->m498[0].x = i_this->mBAC.x;
+            i_this->m498[0].y = i_this->mBAC.y;
+            i_this->m498[0].z = i_this->mBAC.z;
+            dComIfGp_particle_setToon(
+                dPa_name::ID_AK_ST_BKMLATTACKSMOKE00, &i_this->m498[0], NULL, NULL, 0xB9, &i_this->mLAttackSmoke00CB[0], (u8)actor->current.roomNo
+            );
+            mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_IN_G2, &i_this->mBAC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        }
+        if (i_this->mpFloorVineMorf->isStop()) {
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_NUKU_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            i_this->m2BC++;
+            i_this->mBA8 = 0;
+            mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_OUT_G2, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        }
+        break;
+    case 7:
+        if ((int)i_this->mpBodyVineMorf->getFrame() == 13) {
+            local_48 = actor->current.pos;
+            local_48.y = i_this->mBAC.y;
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMLATTACKHOUSHI00, &local_48);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMLATTACKSOIL00, &local_48);
+            i_this->m498[1].x = local_48.x;
+            i_this->m498[1].y = local_48.y;
+            i_this->m498[1].z = local_48.z;
+            dComIfGp_particle_setToon(
+                dPa_name::ID_AK_ST_BKMLATTACKSMOKE00, &i_this->m498[1], NULL, NULL, 0xB9, &i_this->mLAttackSmoke00CB[1], (u8)actor->current.roomNo
+            );
+        }
+        if (i_this->mpBodyVineMorf->isStop()) {
+            i_this->m2BA = 0;
+            i_this->m2BC = 0;
+        }
+    }
+    MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(ASI_JNT_ASI5_e), *calc_mtx);
+    MtxPosition(&local_3c, &local_48);
+    i_this->mSph[4].SetC(local_48);
+    i_this->mSph[4].SetR(50.0f);
+    i_this->mSph[4].OffAtSetBit();
+    i_this->mSph[4].OnCoSetBit();
+    dComIfG_Ccsp()->Set(&i_this->mSph[4]);
 }
 
 /* 00001B00-00001CDC       .text damage__FP13bmdfoot_class */
-void damage(bmdfoot_class*) {
-    /* Nonmatching */
+void damage(bmdfoot_class* i_this) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
+    f32 dVar5;
+
+    switch (i_this->m2BC) {
+    case 0:
+        anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_NOBIKIRU_e, 40.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        i_this->m2BC++;
+        i_this->m2C0[0] = 0x1e;
+        i_this->m3EC = cM_rndFX(32768.0f);
+        for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
+            i_this->m3A4[i] = (0.3f + cM_rndFX(0.2f));
+        }
+    case 1:
+        if (i_this->m2C0[0] != 0) {
+            dVar5 = ((fopAcM_GetParam(actor) & 0xf) * 0.01f);
+            for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
+                cLib_addCalc2(&i_this->m2CC[i].x, -(dVar5 + (0.05f + ((i) * (0.03f + REG14_F(3))))), 0.1f, REG14_F(4) + 0.1f);
+            }
+        }
+        if (boss->m331 > 0) {
+            i_this->m2BA = 0;
+            i_this->m2BC = -1;
+            i_this->m2C0[2] = 0x14;
+        }
+        break;
+    }
 }
 
 /* 00001CDC-00001ED8       .text start__FP13bmdfoot_class */
-void start(bmdfoot_class*) {
-    /* Nonmatching */
+void start(bmdfoot_class* i_this) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
+
+    for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
+        i_this->m2CC[i].z = 0;
+        i_this->m3A4[i] = 0;
+    }
+
+    switch (i_this->m2BC) {
+    case 0:
+        if (boss->m332 == 6) {
+            i_this->m2BC = 1;
+            i_this->m2C0[0] = cM_rndF(10.0f);
+        }
+        break;
+    case 1:
+        if (i_this->m2C0[0] == 0) {
+            i_this->mBC8 = 1;
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_START1_e, 1.0f, J3DFrameCtrl::EMode_NONE, cM_rndF(0.2f) + 0.9f, -1);
+            i_this->m2BC = 2;
+        }
+        break;
+    case 2:
+        if (i_this->mpBodyVineMorf->isStop()) {
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_START2_e, 30.0f, J3DFrameCtrl::EMode_LOOP, cM_rndF(0.2f) + 0.9f, -1);
+            i_this->m2BC = 3;
+        }
+        break;
+    case 3:
+        if ((int)i_this->mpBodyVineMorf->getFrame() == 2) {
+            mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_MOVE_1, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        }
+        if (boss->m332 == 7) {
+            i_this->m2BA = 0;
+            i_this->m2BC = 0;
+        }
+        break;
+    }
 }
 
 /* 00001ED8-00001FB8       .text end__FP13bmdfoot_class */
-void end(bmdfoot_class*) {
-    /* Nonmatching */
+void end(bmdfoot_class* i_this) {
+    for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
+        i_this->m2CC[i].z = 0;
+        i_this->m3A4[i] = 0;
+    }
+    if (boss->mB76 == 2) {
+        anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_DEAD_LOOP_e, 30.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+    }
+    if (boss->mB76 == REG8_S(8) + 0x17c) {
+        anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_DEAD_e, 30.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+    }
 }
 
 /* 00001FB8-000021B8       .text move__FP13bmdfoot_class */
-void move(bmdfoot_class*) {
-    /* Nonmatching */
+void move(bmdfoot_class* i_this) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
+    cXyz local_20;
+    cXyz cStack_2c;
+
+    if (boss != NULL) {
+        s16 sVar1 = (u16)(fopAcM_GetParam(actor) & 0xF) << 13;
+        cMtx_YrotS(*calc_mtx, boss->actor.shape_angle.y);
+        cMtx_XrotM(*calc_mtx, boss->actor.shape_angle.x);
+        cMtx_ZrotM(*calc_mtx, boss->actor.shape_angle.z);
+        cMtx_YrotM(*calc_mtx, sVar1);
+        actor->current.angle.y = sVar1 + boss->actor.shape_angle.y;
+        local_20.x = 0.0f;
+        local_20.y = REG14_F(3);
+        local_20.z = REG14_F(4) + 180.0f;
+        MtxPosition(&local_20, &cStack_2c);
+        actor->current.pos = boss->actor.current.pos + cStack_2c;
+        switch (i_this->m2BA) {
+        case 0:
+            wait(i_this);
+            break;
+        case 1:
+            attack_1(i_this);
+            break;
+        case 2:
+            attack_2(i_this);
+            break;
+        case 3:
+            damage(i_this);
+            if (boss->m332 == 8) {
+                i_this->m2BA = 0xb;
+                i_this->m2BC = 0;
+            }
+            break;
+        case 10:
+            start(i_this);
+            break;
+        case 0xb:
+            end(i_this);
+        }
+        if (boss->m332 == 3) {
+            housi_off(i_this);
+            i_this->m2BA = 3;
+            i_this->m2BC = 0;
+            i_this->mBA8 = 0;
+        }
+    }
 }
 
 /* 000021B8-00002204       .text s_a_d_sub__FPvPv */
-void s_a_d_sub(void*, void*) {
-    /* Nonmatching */
+void* s_a_d_sub(void* search, void* param_2) {
+    UNUSED(param_2);
+    if ((fopAcM_IsActor(search)) && (fopAcM_GetName(search) == fpcNm_BMD_e)) {
+        return search;
+    } else {
+        return NULL;
+    }
 }
 
 /* 00002204-00002594       .text daBmdfoot_Execute__FP13bmdfoot_class */
-static BOOL daBmdfoot_Execute(bmdfoot_class*) {
-    /* Nonmatching */
+static BOOL daBmdfoot_Execute(bmdfoot_class* i_this) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
+    cXyz local_68;
+
+    if (boss == NULL) {
+        boss = (bmd_class*)fpcM_Search(s_a_d_sub, i_this);
+    }
+    i_this->m2B8++;
+    for (int i = 0; i < ARRAY_SSIZE(i_this->m2C0); i++) {
+        if (i_this->m2C0[i] != 0) {
+            i_this->m2C0[i]--;
+        }
+    }
+    if (i_this->m2C8[0] != 0) {
+        i_this->m2C8[0]--;
+    }
+    move(i_this);
+    MtxTrans(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z, false);
+    cMtx_YrotM(*calc_mtx, actor->current.angle.y + i_this->m2BE);
+    cMtx_XrotM(*calc_mtx, actor->current.angle.x);
+    cMtx_ZrotM(*calc_mtx, actor->current.angle.z + i_this->m2BE * 2);
+    J3DModel* model = i_this->mpBodyVineMorf->getModel();
+    model->setBaseTRMtx(*calc_mtx);
+    i_this->mpBodyVineMorf->play(NULL, 0, 0);
+    i_this->mpBodyVineMorf->calc();
+    if (i_this->mBD0 != 0) {
+        if (i_this->mBD0 == 0x1e) {
+            mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_MOVE_2, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        }
+        i_this->mBD0 = i_this->mBD0 + -1;
+    }
+    s16 sVar1 = 29 - i_this->mBD0;
+    if (sVar1 >= 30) {
+        sVar1 = sVar1 % 30;
+    }
+    i_this->btk->setFrame(sVar1);
+    MTXCopy(model->getAnmMtx(REG14_S(6) + (s16)ASI_JNT_ASI17_e), *calc_mtx);
+    local_68.z = 0.0f;
+    local_68.y = 0.0f;
+    local_68.x = 0.0f;
+    MtxPosition(&local_68, &i_this->mAE8);
+    if ((boss != NULL) && (i_this->mAE8.y < boss->m328)) {
+        i_this->mAE8.y = boss->m328;
+    }
+    cLib_addCalcAngleS2(&i_this->m2BE, 0, 0x10, 0x80);
+    s16 sVar1_2;
+    if (i_this->m2BA < 3) {
+        sVar1_2 = l_HIO.m08;
+    } else {
+        sVar1_2 = REG0_S(4);
+    }
+    cLib_addCalcAngleS2(&actor->current.angle.x, sVar1_2, 0x10, 0x80);
+    for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
+        f32 f1 = i_this->m3A4[i] * cM_ssin(i_this->m3EC + i * (REG0_S(6) + 9000));
+        cLib_addCalc2(&i_this->m2CC[i].z, f1, 0.05f, 0.01f + REG14_F(5));
+        cLib_addCalc0(&i_this->m2CC[i].x, 0.05f, 0.005f + REG14_F(5));
+    }
+    return TRUE;
 }
 
 /* 00002594-0000259C       .text daBmdfoot_IsDelete__FP13bmdfoot_class */
@@ -90,23 +662,94 @@ static BOOL daBmdfoot_IsDelete(bmdfoot_class*) {
 }
 
 /* 0000259C-000026B0       .text daBmdfoot_Delete__FP13bmdfoot_class */
-static BOOL daBmdfoot_Delete(bmdfoot_class*) {
-    /* Nonmatching */
+static BOOL daBmdfoot_Delete(bmdfoot_class* i_this) {
+    dComIfG_resDeleteDemo(&i_this->mPhase, "Bmdfoot");
+    if (i_this->mBD2 != 0) {
+        hio_set = 0;
+        mDoHIO_deleteChild(l_HIO.mNo);
+    }
+    mDoAud_seDeleteObject(&i_this->mAE8);
+    mDoAud_seDeleteObject(&i_this->mBAC);
+    for (int i = 0; i < ARRAY_SSIZE(i_this->mAsiWaitFollowCB); i++) {
+        i_this->mAsiWaitFollowCB[i].remove();
+    }
+    i_this->mLAttackSmoke00CB[0].remove();
+    i_this->mLAttackSmoke00CB[1].remove();
+    i_this->mLAttackSmoke01CB.remove();
+    boss = NULL;
+    return TRUE;
 }
 
 /* 000026B0-000029B4       .text useHeapInit__FP13bmdfoot_class */
-void useHeapInit(bmdfoot_class*) {
-    /* Nonmatching */
+int useHeapInit(bmdfoot_class* i_this) {
+    i_this->mpBodyVineMorf = new mDoExt_McaMorf(
+        (J3DModelData*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BMD_ASI_e),
+        NULL,
+        NULL,
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_WAIT_e),
+        J3DFrameCtrl::EMode_LOOP,
+        cM_rndF(0.2f) + 0.9f,
+        0,
+        -1,
+        1,
+        NULL,
+        0,
+        0x11020203
+    );
+    J3DModel* model = i_this->mpBodyVineMorf->getModel();
+    if (model == NULL) {
+        return FALSE;
+    }
+#if VERSION > VERSION_DEMO
+    if (i_this->mpBodyVineMorf == NULL) {
+        return FALSE;
+    }
+#endif
+
+    model->setUserArea((u32)i_this);
+    for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
+        model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+    }
+    i_this->btk = new mDoExt_btkAnm();
+    JUT_ASSERT(DEMO_SELECT(1416, 1426), i_this->btk);
+    J3DAnmTextureSRTKey* pBtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BTK_ASI_e);
+#if VERSION == VERSION_DEMO
+    i_this->btk->init(model->getModelData(), pBtk, true, J3DFrameCtrl::EMode_NONE);
+#else
+    if (!i_this->btk->init(model->getModelData(), pBtk, true, J3DFrameCtrl::EMode_NONE)) {
+        return FALSE;
+    }
+#endif
+
+    i_this->mpFloorVineMorf = new mDoExt_McaMorf(
+        (J3DModelData*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BMD_ASI_e),
+        NULL,
+        NULL,
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_WAIT_e),
+        J3DFrameCtrl::EMode_LOOP,
+        cM_rndF(0.2f) + 0.9f,
+        0,
+        -1,
+        1,
+        NULL,
+        0,
+        0x11020203
+    );
+    if (i_this->mpFloorVineMorf->getModel() == NULL) {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 000029FC-00002A1C       .text solidHeapCB__FP10fopAc_ac_c */
-static BOOL solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL solidHeapCB(fopAc_ac_c* a_this) {
+    bmdfoot_class* i_this = (bmdfoot_class*)a_this;
+    return useHeapInit(i_this);
 }
 
 /* 00002A1C-00002E88       .text daBmdfoot_Create__FP10fopAc_ac_c */
-static cPhs_State daBmdfoot_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daBmdfoot_Create(fopAc_ac_c* a_this) {
     static dCcD_SrcSph cc_sph_src = {
         // dCcD_SrcGObjInf
         {
@@ -122,7 +765,7 @@ static cPhs_State daBmdfoot_Create(fopAc_ac_c*) {
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
-            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg Se      */ dCcG_SE_METAL,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
@@ -130,11 +773,49 @@ static cPhs_State daBmdfoot_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 40.0f,
-        },
+        }},
     };
+
+    fopAcM_ct(a_this, bmdfoot_class);
+    bmdfoot_class* i_this = (bmdfoot_class*)a_this;
+    cPhs_State res = dComIfG_resLoad(&i_this->mPhase, "Bmdfoot");
+    if (res == cPhs_ERROR_e) {
+        return cPhs_ERROR_e;
+    } else if (res != cPhs_COMPLEATE_e) {
+        return res;
+    }
+    i_this->mLAttackSmoke00CB[0].setFollowOff();
+    i_this->mLAttackSmoke00CB[1].setFollowOff();
+    if (!fopAcM_entrySolidHeap(a_this, solidHeapCB, 0x5040)) {
+        return cPhs_ERROR_e;
+    }
+    if (hio_set == 0) {
+        hio_set = 1;
+        i_this->mBD2 = 1;
+        l_HIO.mNo = mDoHIO_createChild("森ボス足", &l_HIO); // Forest boss feet
+    }
+    a_this->health = 2;
+    i_this->m2B8 = cM_rndF(10000.0f);
+    boss = NULL;
+    i_this->mStts.Init(0xFF, 0, a_this);
+    for (int i = 0; i < ARRAY_SSIZE(i_this->mSph); i++) {
+        i_this->mSph[i].SetStts(&i_this->mStts);
+        i_this->mSph[i].Set(cc_sph_src);
+    }
+    a_this->attention_info.position.y = -20000.0f;
+    a_this->eyePos.y = -20000.0f;
+    if (!(dComIfGs_isStageBossDemo()) && (dComIfGp_getStartStageName()[0] != 'X')) {
+        i_this->m2BA = 10;
+    } else {
+        i_this->mBC8 = 1;
+    }
+#if VERSION > VERSION_DEMO
+    i_this->mTevstr = a_this->tevStr;
+#endif
+    return cPhs_COMPLEATE_e;
 }
 
 static actor_method_class l_daBmdfoot_Method = {
@@ -146,18 +827,18 @@ static actor_method_class l_daBmdfoot_Method = {
 };
 
 actor_process_profile_definition g_profile_BMDFOOT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BMDFOOT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BMDFOOT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bmdfoot_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BMDFOOT,
+    /* Draw Prio    */ fpcDwPi_BMDFOOT_e,
     /* Actor SubMtd */ &l_daBmdfoot_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

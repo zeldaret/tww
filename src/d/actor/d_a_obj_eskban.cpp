@@ -3,15 +3,11 @@
 // Translation Unit: d_a_obj_eskban.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_eskban.h"
-#include "d/res/res_eskban.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Eskban.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daObjEskban {
 Mtx Act_c::M_tmp_mtx;
@@ -111,7 +107,7 @@ static dCcD_SrcSph sph_check_src = {
 /* 000000EC-000001FC       .text CreateHeap__Q211daObjEskban5Act_cFv */
 BOOL daObjEskban::Act_c::CreateHeap() {
     J3DModelData* model_data =
-        static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, ESKBAN_BDL_ESKBAN));
+        static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_ESKBAN_BDL_ESKBAN_e));
     JUT_ASSERT(261, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203U);
     M_smoke = new dPa_smokeEcallBack();
@@ -150,7 +146,7 @@ BOOL daObjEskban::Act_c::Create() {
 /* 000003A4-000004D0       .text Mthd_Create__Q211daObjEskban5Act_cFv */
 cPhs_State daObjEskban::Act_c::Mthd_Create() {
     cPhs_State phase_state;
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     M_smoke = NULL;
 
     s32 swSave = param_get_swSave();
@@ -159,7 +155,7 @@ cPhs_State daObjEskban::Act_c::Mthd_Create() {
     }
     phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, ESKBAN_DZB_ESKBAN, NULL, 0x1020);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_ESKBAN_DZB_ESKBAN_e, NULL, 0x1020);
         JUT_ASSERT(336, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
@@ -170,7 +166,7 @@ daObjEskban::Act_c::Act_c() {}
 /* 000009C0-00000A10       .text Delete__Q211daObjEskban5Act_cFv */
 BOOL daObjEskban::Act_c::Delete() {
     if (M_smoke) {
-        M_smoke->end();
+        M_smoke->remove();
         M_smoke = NULL;
     }
     return TRUE;
@@ -180,7 +176,7 @@ BOOL daObjEskban::Act_c::Delete() {
 BOOL daObjEskban::Act_c::Mthd_Delete() {
     s32 result = MoveBGDelete();
     if (fpcM_CreateResult(this) != cPhs_STOP_e) {
-        dComIfG_resDelete(&mPhs, M_arcname);
+        dComIfG_resDeleteDemo(&mPhs, M_arcname);
     }
     return result;
 }
@@ -203,9 +199,9 @@ void daObjEskban::Act_c::init_mtx() {
 /* 00000B3C-00000C80       .text eff_m_break__Q211daObjEskban5Act_cFUsUs */
 void daObjEskban::Act_c::eff_m_break(u16 particleID, u16 prm_b) {
     J3DModelData* mdlData =
-        static_cast<J3DModelData*>(dComIfG_getObjectRes("Always", ALWAYS_BDL_MPI_KOISHI));
+        static_cast<J3DModelData*>(dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_MPI_KOISHI_e));
     J3DAnmTexPattern* txPattern =
-        static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Always", ALWAYS_BTP_MPI_KOISHI));
+        static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTP_MPI_KOISHI_e));
 
     cXyz scale(3.0f, 3.0f, 3.0f);
     JPABaseEmitter* pBEmtr = dComIfGp_particle_set(
@@ -244,8 +240,8 @@ void daObjEskban::Act_c::eff_b_break(u16 particleID) {
 
 /* 00000D44-00000EF0       .text daObjEskban_effect_set__Q211daObjEskban5Act_cFv */
 void daObjEskban::Act_c::daObjEskban_effect_set() {
-    eff_m_break(dPa_name::ID_SCENE_82B1, 2);
-    eff_b_break(dPa_name::ID_SCENE_82B2);
+    eff_m_break(dPa_name::ID_AK_SN_BREAKRDMROCK00, 2);
+    eff_b_break(dPa_name::ID_AK_SN_M_BREAKRDMROCK00);
 
     static cXyz offset_vec(0, 250, 0);
     mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
@@ -253,7 +249,7 @@ void daObjEskban::Act_c::daObjEskban_effect_set() {
     if (!M_smoke) {
         return;
     }
-    JPABaseEmitter* pBEmtr = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &mSmokePos, NULL, NULL, 0xc8,
+    JPABaseEmitter* pBEmtr = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &mSmokePos, NULL, NULL, 0xc8,
                                                        M_smoke, -1, NULL, NULL, NULL);
     if (!pBEmtr) {
         return;
@@ -276,8 +272,8 @@ BOOL daObjEskban::Act_c::Execute(Mtx** pMtx) {
         cCcD_Obj* hitObj = mCheckSph.GetCoHitObj();
         if (hitObj) {
             fopAc_ac_c* hitAct = hitObj->GetAc();
-            if (hitAct && fopAcM_GetName(hitAct) == PROC_NPC_MD) {
-                cXyz dist = fopAcM_GetPosition(hitAct) - fopAcM_GetPosition(this);
+            if (hitAct && fopAcM_GetName(hitAct) == fpcNm_NPC_MD_e) {
+                cXyz dist = hitAct->current.pos - current.pos;
                 dist.y = 0;
                 if (dist.normalizeRS()) {
                     dist *= 10;
@@ -299,7 +295,7 @@ BOOL daObjEskban::Act_c::Execute(Mtx** pMtx) {
             break;
         }
         fopAc_ac_c* hitAct = hitObj->GetAc();
-        if (hitAct && fopAcM_GetName(hitAct) == PROC_Bomb2) {
+        if (hitAct && fopAcM_GetName(hitAct) == fpcNm_Bomb2_e) {
             mActorID = fopAcM_GetID(hitAct);
             fopAcM_orderOtherEvent(this, "Eskban");
             mActorState = ST_DESTROYED;
@@ -409,9 +405,6 @@ BOOL Mthd_Draw(void* i_this) {
     return ((Act_c*)i_this)->MoveBGDraw();
 }
 
-// Fakematch to fix weak func order/.text section splitting of dBgS_MoveBgActor::Draw().
-#pragma nosyminline off
-
 /* 00001540-0000156C       .text Mthd_IsDelete__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
     return ((Act_c*)i_this)->MoveBGIsDelete();
@@ -428,18 +421,18 @@ static actor_method_class Mthd_Eskban = {
 }; // namespace daObjEskban
 
 actor_process_profile_definition g_profile_Obj_Eskban = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Eskban,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Eskban_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjEskban::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Eskban,
+    /* Draw Prio    */ fpcDwPi_Obj_Eskban_e,
     /* Actor SubMtd */ &daObjEskban::Mthd_Eskban,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

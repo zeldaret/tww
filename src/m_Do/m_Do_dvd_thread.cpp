@@ -22,10 +22,14 @@ u8 mDoDvdThd::sDefaultDirection = JKRArchive::DEFAULT_MOUNT_DIRECTION;
 
 /* 80017EF8-80017F54       .text main__9mDoDvdThdFPv */
 s32 mDoDvdThd::main(void* userData) {
+#if VERSION == VERSION_DEMO
+    JKRThread thread(&l_thread, 0);
+#else
     { JKRThread thread(OSGetCurrentThread(), 0); }
 
     JKRHeap* heap = NULL;
     heap->becomeCurrentHeap();
+#endif
 
     mDoDvdThd_param_c* param = (mDoDvdThd_param_c*)userData;
     param->mainLoop();
@@ -33,7 +37,7 @@ s32 mDoDvdThd::main(void* userData) {
 }
 
 /* 80017F54-80017FB0       .text create__9mDoDvdThdFl */
-void mDoDvdThd::create(s32 priority) {
+void mDoDvdThd::create(OSPriority priority) {
     OSCreateThread(&l_thread, (void*)main, &l_param, l_threadStack.stack + sizeof(l_threadStack), sizeof(l_threadStack), priority, 1);
     OSResumeThread(&l_thread);
 }
@@ -46,8 +50,10 @@ void mDoDvdThd::suspend() {
 /* 80017FD8-80018038       .text my_DVDConvertPathToEntrynum__FPCc */
 s32 my_DVDConvertPathToEntrynum(const char* path) {
     s32 entryNo = DVDConvertPathToEntrynum(path);
+#if VERSION > VERSION_DEMO
     if (entryNo < 0)
         JUT_WARN(0x240, "can't open:[%s]\n", path);
+#endif
     return entryNo;
 }
 
@@ -158,8 +164,10 @@ mDoDvdThd_mountArchive_c::mDoDvdThd_mountArchive_c(u8 direction) {
     mEntryNum = -1;
     mArchive = NULL;
     mHeap = NULL;
+#if VERSION > VERSION_DEMO
     if (direction == JKRArchive::DEFAULT_MOUNT_DIRECTION)
         mMountDirection = mDoDvdThd::sDefaultDirection;
+#endif
 }
 
 /* 80018554-8001861C       .text create__24mDoDvdThd_mountArchive_cFPCcUcP7JKRHeap */
@@ -225,8 +233,10 @@ mDoDvdThd_mountXArchive_c::mDoDvdThd_mountXArchive_c(u8 direction, JKRArchive::E
     mEntryNum = -1;
     mArchive = NULL;
     mMountMode = mountMode;
+#if VERSION > VERSION_DEMO
     if (direction == JKRArchive::DEFAULT_MOUNT_DIRECTION)
         mMountDirection = mDoDvdThd::sDefaultDirection;
+#endif
 }
 
 /* 80018844-8001890C       .text create__25mDoDvdThd_mountXArchive_cFPCcUcQ210JKRArchive10EMountMode */
@@ -263,8 +273,10 @@ BOOL mDoDvdThd_mountXArchive_c::execute() {
 /* 80018984-800189E0       .text __ct__21mDoDvdThd_toMainRam_cFUc */
 mDoDvdThd_toMainRam_c::mDoDvdThd_toMainRam_c(u8 direction) {
     mAllocDirection = direction;
+#if VERSION > VERSION_DEMO
     if (direction == JKRArchive::DEFAULT_MOUNT_DIRECTION)
         mAllocDirection = mDoDvdThd::sDefaultDirection;
+#endif
 }
 
 /* 800189E0-80018AA8       .text create__21mDoDvdThd_toMainRam_cFPCcUcP7JKRHeap */
@@ -298,20 +310,20 @@ BOOL mDoDvdThd_toMainRam_c::execute() {
         heap = mDoExt_getArchiveHeap();
     }
 
-    JKRDvdRipper::EAllocDirection allocDir;
-    if (mAllocDirection == JKRDvdRipper::DEFAULT_EALLOC_DIRECTION) {
-        allocDir = JKRDvdRipper::ALLOC_DIRECTION_FORWARD;
-    } else {
-        allocDir = JKRDvdRipper::ALLOC_DIRECTION_BACKWARD;
-    }
+    JKRDvdRipper::EAllocDirection allocDir = mAllocDirection == JKRDvdRipper::DEFAULT_EALLOC_DIRECTION ?
+                                                                JKRDvdRipper::ALLOC_DIRECTION_FORWARD :
+                                                                JKRDvdRipper::ALLOC_DIRECTION_BACKWARD;
     mData = JKRDvdRipper::loadToMainRAM(mEntryNum, NULL, EXPAND_SWITCH_UNKNOWN1, 0, heap, allocDir, 0, NULL);
-    if (mData != NULL)
+    if (mData != NULL) {
         mDataSize = heap->getSize(mData);
+    }
+
     mIsDone = true;
     return mData != NULL;
 }
 
 static void dummy2() {
+    OSReport("m_Do_dvd_thread.cpp");
     OSReport("mArchive != 0");
     OSReport("Halt");
     OSReport("archive");

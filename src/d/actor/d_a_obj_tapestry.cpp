@@ -3,14 +3,28 @@
 // Translation Unit: d_a_obj_tapestry.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_tapestry.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "weak_bss_936_to_1036.h"
+#include "res/Object/Mcrtn.h"
 
 
+class daObjTapestry_HIO_c : public JORReflexible{
+
+public:
+    inline const daObjTapestryAttr_c attr() const { return field_C; }
+
+    daObjTapestry_HIO_c();
+    virtual ~daObjTapestry_HIO_c(){};
+public:
+    s8 field_4;
+    s8 field_5;
+    s8 field_6;
+    s32 field_8;
+    daObjTapestryAttr_c field_C;
+    bool field_68;
+}; //Size 0x6C
 
 namespace{
 static const char l_arcName_Mcrtn[] = "Mcrtn";
@@ -720,7 +734,8 @@ void daObjTapestryPacket_c::calc_fire() {
 
     f32 var_f31;
     if(unk1454 != 0){
-        mMoveVtx.unk1000[(int)(unk1458.y*7.0f)][(int)(unk1458.z*5.0f)] += 1;
+        int multiply = unk1458.z*5.0f;
+        mMoveVtx.unk1000[(int)(unk1458.y*7.0f)][(int)(multiply)] += 1;
         unk1454 = 0;
     }
 
@@ -1176,7 +1191,7 @@ int daObjTapestry_c::solidHeapCB(fopAc_ac_c* actor) {
 bool daObjTapestry_c::create_heap() {
     /* Nonmatching */
     bool o_retval = true;
-    J3DModelData* pModel = (J3DModelData*)dComIfG_getObjectRes(l_arcName_Mcrtn,MCRTN_BDL_MCRTN1);
+    J3DModelData* pModel = (J3DModelData*)dComIfG_getObjectRes(l_arcName_Mcrtn,dRes_INDEX_MCRTN_BDL_MCRTN1_e);
     if(pModel == NULL){
 #if VERSION > VERSION_JPN
         JUT_ASSERT(0x8CD,0);
@@ -1186,7 +1201,7 @@ bool daObjTapestry_c::create_heap() {
         o_retval = false;  
     }else{
         unk1758 = mDoExt_J3DModel__create(pModel,0x80000,0x11000022);
-        unk175C = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcName_Mcrtn,MCRTN_DZB_MCRTN),cBgW::MOVE_BG_e,&unk1760);
+        unk175C = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcName_Mcrtn,dRes_INDEX_MCRTN_DZB_MCRTN_e),cBgW::MOVE_BG_e,&unk1760);
         if(unk1758 == NULL || unk175C == NULL){
             o_retval = false;
         }
@@ -1569,18 +1584,18 @@ static actor_method_class l_daObjTapestry_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Tapestry = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Tapestry,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Tapestry_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjTapestry_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Tapestry,
+    /* Draw Prio    */ fpcDwPi_Obj_Tapestry_e,
     /* Actor SubMtd */ &l_daObjTapestry_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

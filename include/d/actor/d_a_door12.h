@@ -8,49 +8,55 @@
 
 class daDoor12_c : public dDoor_info_c {
 public:
-    void checkFlag(unsigned short) {}
+    bool checkFlag(unsigned short flag) { return (m316 & flag) != 0; }
     inline BOOL execute();
-    void offFlag(unsigned short) {}
-    void onFlag(unsigned short) {}
-    void setAction(unsigned char) {}
+    void offFlag(unsigned short flag) { m316 &= ~flag; }
+    void onFlag(unsigned short flag) { m316 |= flag; }
+    void setAction(unsigned char action) { m314 = action; }
 
-    void chkMakeKey();
+    s32 chkMakeKey();
     void setKey();
-    void chkMakeStop();
-    void chkStopF();
-    void chkStopB();
+    BOOL chkMakeStop();
+    s32 chkStopF();
+    s32 chkStopB();
     void setStop();
-    void chkStopOpen();
+    BOOL chkStopOpen();
     void setStopDemo();
-    void chkStopClose();
-    void CreateHeap();
-    void getShapeType();
-    void getArcName();
-    void getBdlLf();
-    void getBdlRt();
-    void getDzb();
-    void openWide();
+    BOOL chkStopClose();
+    BOOL CreateHeap();
+    u8 getShapeType();
+    char* getArcName();
+    s32 getBdlLf();
+    s32 getBdlRt();
+    s32 getDzb();
+    f32 openWide();
     void setEventPrm();
     void openInit();
-    void openProc();
+    BOOL openProc();
     void openEnd();
     void closeInit();
-    void closeProc();
+    BOOL closeProc();
     void closeEnd();
     void calcMtx();
-    void CreateInit();
+    BOOL CreateInit();
     cPhs_State create();
     void demoProc();
     BOOL draw();
 
 public:
-    /* 0x2D0 */ request_of_phase_process_class m2D0;
+    /* 0x2D0 */ request_of_phase_process_class mPhase;
     /* 0x2D8 */ J3DModel* mpLeftModel;
     /* 0x2DC */ J3DModel* mpRightModel;
-    /* 0x2E0 */ dBgW* m2E0;
+    /* 0x2E0 */ dBgW* mpBgw;
     /* 0x2E4 */ dDoor_key2_c mKeyLock;
     /* 0x308 */ dDoor_stop_c mStopBars;
-    /* 0x314 */ u8 m314[0x35C - 0x314];
-};
+    /* 0x314 */ u8 m314;
+    /* 0x315 */ u8 m315[0x1];
+    /* 0x316 */ u16 m316;
+    #if VERSION > VERSION_DEMO
+    /* 0x318 */ s32 m318;
+    #endif
+    /* 0x31C */ f32 m31C;
+}; // size = 0x320
 
 #endif /* D_A_DOOR12_H */

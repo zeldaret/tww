@@ -3,10 +3,10 @@
 // Translation Unit: d_a_komore.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_komore.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/frLt.h"
 
 const char daKomore::Act_c::M_arcname[] = "frLt";
 
@@ -20,7 +20,7 @@ bool daKomore::Act_c::create_heap() {
     J3DModelData* mdl_data;
     J3DAnmTextureSRTKey* btk_data;
 
-    mdl_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, 0x04));
+    mdl_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, dRes_INDEX_FRLT_BDL_YFRLT00_e));
 
     JUT_ASSERT(0x66, mdl_data != NULL);
 
@@ -28,12 +28,12 @@ bool daKomore::Act_c::create_heap() {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
     }
 
-    btk_data = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes(M_arcname, 0x07));
+    btk_data = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes(M_arcname, dRes_INDEX_FRLT_BTK_YFRLT00_e));
 
     JUT_ASSERT(0x6d, btk_data != NULL);
 
     s32 btkRet =
-        mBtkAnm.init(mdl_data, btk_data, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+        mBtkAnm.init(mdl_data, btk_data, 1, J3DFrameCtrl::EMode_LOOP);
 
     bool ret = FALSE;
     if (mdl_data != NULL && this->mpModel != NULL && btkRet != NULL) {
@@ -44,7 +44,7 @@ bool daKomore::Act_c::create_heap() {
 
 /* 000001F8-000002F8       .text _create__Q28daKomore5Act_cFv */
 cPhs_State daKomore::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
@@ -126,18 +126,18 @@ static actor_method_class Mthd_Table = {
 };  // namespace daKomore
 
 actor_process_profile_definition g_profile_Komore = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Komore,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Komore_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daKomore::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Komore,
+    /* Draw Prio    */ fpcDwPi_Komore_e,
     /* Actor SubMtd */ &daKomore::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

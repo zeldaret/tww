@@ -36,13 +36,13 @@ class JSULink : public JSUPtrLink {
 public:
     JSULink(T* object) : JSUPtrLink((void*)object) {}
 
-    T* getObject() const { return (T*)getObjectPtr(); }
+    T* getObject() const { return (T*)mObject; }
 
-    JSUList<T>* getSupervisor() const { return (JSUList<T>*)this->getList(); }
+    JSUList<T>* getSupervisor() const { return (JSUList<T>*)mList; }
 
-    JSULink<T>* getNext() const { return (JSULink<T>*)this->JSUPtrLink::getNext(); }
+    JSULink<T>* getNext() const { return (JSULink<T>*)mNext; }
 
-    JSULink<T>* getPrev() const { return (JSULink<T>*)this->JSUPtrLink::getPrev(); }
+    JSULink<T>* getPrev() const { return (JSULink<T>*)mPrev; }
 };
 
 //
@@ -69,7 +69,7 @@ public:
 
     u32 getNumLinks() const { return mLength; }
 
-private:
+protected:
     JSUPtrLink* mHead;
     JSUPtrLink* mTail;
     u32 mLength;
@@ -99,7 +99,7 @@ public:
 
     JSULink<T>* getEnd() const { return NULL; }
 
-    u32 getNumLinks() const { return this->JSUPtrList::getNumLinks(); }
+    u32 getNumLinks() const { return mLength; }
 };
 
 template <typename T>

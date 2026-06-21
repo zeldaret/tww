@@ -3,8 +3,9 @@
  * NPC - Beedle / ボ−トショップ店員 (Boat shopkeeper)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bs1.h"
-#include "d/res/res_bs.h"
+#include "res/Object/Bs.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/actor/d_a_player.h"
@@ -14,15 +15,42 @@
 #include "d/d_shop.h"
 #include "d/d_snap.h"
 #include "d/d_letter.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-#include "weak_data_1811.h" // IWYU pragma: keep
+class daNpc_Bs1_childHIO_c {
+public:
+    daNpc_Bs1_childHIO_c();
+    virtual ~daNpc_Bs1_childHIO_c() {}
+
+public:
+    /* 0x000 */ // this.__vt
+    /* 0x004 */ dNpc_HIO_c mNpc;
+    /* 0x02C */ u8 m2C;
+    /* 0x02D */ u8 m2D[0x3];
+    /* 0x030 */ f32 m30;
+    /* 0x034 */ f32 m34;
+    /* 0x038 */ f32 m38;
+    /* 0x03C */ f32 m3C;
+    /* 0x040 */ f32 m40;
+};  // Size: 0x44
+
+class daNpc_Bs1_HIO_c : public JORReflexible {
+public:
+    daNpc_Bs1_HIO_c();
+    virtual ~daNpc_Bs1_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
+
+public:
+    /* 0x000 */ // this.__vt
+    /* 0x004 */ s8 mNo;
+    /* 0x008 */ int m8;
+    /* 0x00C */ daNpc_Bs1_childHIO_c mChild[2];
+};  // Size: 0x94
 
 static fpc_ProcID l_msgId;
 static msg_class* l_msg;
@@ -51,11 +79,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 /* 000000EC-00000108       .text __ct__20daNpc_Bs1_childHIO_cFv */
@@ -120,11 +148,11 @@ s16 daNpc_Bs1_c::XyEventCB(int i_itemBtn) {
     s16 eventIdx = -1;
     u8 selectedItem = (s32)dComIfGp_getSelectItem(i_itemBtn);
     if (mType == 0) {
-        if (selectedItem == KAISEN_PRESENT1) {
+        if (selectedItem == dItemNo_COMPLIMENTARY_ID_e) {
             eventIdx = mEventIdxs[0];
             m82B = 0;
             setAction(&daNpc_Bs1_c::event_action, NULL);
-        } else if (selectedItem == KAISEN_PRESENT2) {
+        } else if (selectedItem == dItemNo_FILL_UP_COUPON_e) {
             eventIdx = mEventIdxs[1];
             m82B = 1;
             setAction(&daNpc_Bs1_c::event_action, NULL);
@@ -134,23 +162,23 @@ s16 daNpc_Bs1_c::XyEventCB(int i_itemBtn) {
 }
 
 static const int l_bck_ix_tbl[] = {
-    BS_INDEX_BCK_BS_WAIT01,
-    BS_INDEX_BCK_BS_TALK01,
-    BS_INDEX_BCK_BS_TALK02,
-    BS_INDEX_BCK_BS_TALK03,
-    BS_INDEX_BCK_BS_TALK04,
-    BS_INDEX_BCK_BS_LAUGH,
-    BS_INDEX_BCK_BS_PRAISE,
-    BS_INDEX_BCK_BS_ANGRY,
-    BS_INDEX_BCK_BS_MANTAN,
-    BS_INDEX_BCK_BS_TALK04,
+    dRes_INDEX_BS_BCK_BS_WAIT01_e,
+    dRes_INDEX_BS_BCK_BS_TALK01_e,
+    dRes_INDEX_BS_BCK_BS_TALK02_e,
+    dRes_INDEX_BS_BCK_BS_TALK03_e,
+    dRes_INDEX_BS_BCK_BS_TALK04_e,
+    dRes_INDEX_BS_BCK_BS_LAUGH_e,
+    dRes_INDEX_BS_BCK_BS_PRAISE_e,
+    dRes_INDEX_BS_BCK_BS_ANGRY_e,
+    dRes_INDEX_BS_BCK_BS_MANTAN_e,
+    dRes_INDEX_BS_BCK_BS_TALK04_e,
 };
 
 static const int l_btp_ix_tbl[] = {
-    BS_INDEX_BTP_BS,
-    BS_INDEX_BTP_MABA,
-    BS_INDEX_BTP_LOOK,
-    BS_INDEX_BTP_BS_PRAISE,
+    dRes_INDEX_BS_BTP_BS_e,
+    dRes_INDEX_BS_BTP_MABA_e,
+    dRes_INDEX_BS_BTP_LOOK_e,
+    dRes_INDEX_BS_BTP_BS_PRAISE_e,
 };
 
 /* 00000490-00000658       .text nodeCallBack_Bs__FP7J3DNodei */
@@ -165,7 +193,7 @@ static BOOL nodeCallBack_Bs(J3DNode* node, int calcTiming) {
             if (jntNo == i_this->getHeadJntNum()) {
                 cXyz offset(0.0f, 0.0f, 0.0f);
                 mDoMtx_XrotM(*calc_mtx, i_this->getHead_y());
-                mDoMtx_ZrotM(*calc_mtx, -i_this->getHead_x());
+                cMtx_ZrotM(*calc_mtx, -i_this->getHead_x());
                 cXyz pos;
                 MtxPosition(&offset, &pos);
                 i_this->setAttentionBasePos(pos);
@@ -177,7 +205,7 @@ static BOOL nodeCallBack_Bs(J3DNode* node, int calcTiming) {
                 i_this->incAttnSetCount();
             } else if (jntNo == i_this->getBackboneJntNum()) {
                 mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
-                mDoMtx_ZrotM(*calc_mtx, -i_this->getBackbone_x());
+                cMtx_ZrotM(*calc_mtx, -i_this->getBackbone_x());
             }
             cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             model->setAnmMtx(jntNo, *calc_mtx);
@@ -363,49 +391,35 @@ void daNpc_Bs1_c::checkOrder() {
 static u32 daNpc_Bs1_getBuyItemMax(int i_itemCost, int i_itemNo) {
     int beastIdx;
     switch (i_itemNo) {
-    case dItem_BOKOBABA_SEED_e:
-        beastIdx = 1;
+    case dItemNo_BOKOBABA_SEED_e:
+        beastIdx = dBeastIdx_BOKOBABA_SEED_e;
         break;
-    case dItem_SKULL_NECKLACE_e:
-        beastIdx = 0;
+    case dItemNo_SKULL_NECKLACE_e:
+        beastIdx = dBeastIdx_SKULL_NECKLACE_e;
         break;
-    case dItem_RED_JELLY_e:
-        beastIdx = 4;
+    case dItemNo_RED_JELLY_e:
+        beastIdx = dBeastIdx_RED_JELLY_e;
         break;
-    case dItem_GREEN_JELLY_e:
-        beastIdx = 5;
+    case dItemNo_GREEN_JELLY_e:
+        beastIdx = dBeastIdx_GREEN_JELLY_e;
         break;
-    case dItem_BLUE_JELLY_e:
-        beastIdx = 6;
+    case dItemNo_BLUE_JELLY_e:
+        beastIdx = dBeastIdx_BLUE_JELLY_e;
         break;
-    case dItem_JOY_PENDANT_e:
-        beastIdx = 7;
+    case dItemNo_JOY_PENDANT_e:
+        beastIdx = dBeastIdx_JOY_PENDANT_e;
         break;
-    case dItem_GOLDEN_FEATHER_e:
-        beastIdx = 2;
+    case dItemNo_GOLDEN_FEATHER_e:
+        beastIdx = dBeastIdx_GOLDEN_FEATHER_e;
         break;
     default:
-        beastIdx = 3;
+        beastIdx = dBeastIdx_KNIGHTS_CREST_e;
         break;
     }
     
     int beastNum = dComIfGs_getBeastNum(beastIdx);
     int currRupee = dComIfGs_getRupee();
-    u8 walletSize = dComIfGs_getWalletSize();
-    
-    u16 maxRupees;
-    switch (walletSize) {
-    case 0:
-        maxRupees = 200;
-        break;
-    case 1:
-        maxRupees = 1000;
-        break;
-    case 2:
-    default:
-        maxRupees = 5000;
-        break;
-    }
+    u16 maxRupees = dComIfGs_getRupeeMax();
     
     int r4 = maxRupees - currRupee;
     int r5 = r4 / i_itemCost;
@@ -419,20 +433,7 @@ static u32 daNpc_Bs1_getBuyItemMax(int i_itemCost, int i_itemNo) {
 /* 00001088-000010EC       .text daNpc_Bs1_setPayRupee__Fii */
 static void daNpc_Bs1_setPayRupee(int unknownParam1, int unknownParam2) {
     int rupee = dComIfGs_getRupee();
-    u16 maxRupees;
-    switch (dComIfGs_getWalletSize()) {
-        case 0:
-            maxRupees = 200;
-            break;
-        case 1:
-            maxRupees = 1000;
-            break;
-        case 2:
-        default:
-            maxRupees = 5000;
-            break;
-    }
-
+    u16 maxRupees = dComIfGs_getRupeeMax();
     int r5 = maxRupees - rupee;
     int paymentTotal = cLib_maxLimit(unknownParam1 * unknownParam2, r5);
 
@@ -441,7 +442,7 @@ static void daNpc_Bs1_setPayRupee(int unknownParam1, int unknownParam2) {
 
 /* 000010EC-00001F7C       .text next_msgStatus__11daNpc_Bs1_cFPUl */
 u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
-    /* Nonmatching */
+    /* Nonmatching - retail-only regalloc */
     u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
 
     switch(*pMsgNo) {
@@ -550,53 +551,53 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             }
 
             if(l_msg->mSelectNum == 0) {
-                int idx;
+                int beastIdx;
                 switch(*pMsgNo) {
                     case 0xF7C:
-                        idx = 1;
+                        beastIdx = dBeastIdx_BOKOBABA_SEED_e;
                         break;
                     case 0xF84:
-                        idx = 0;
+                        beastIdx = dBeastIdx_SKULL_NECKLACE_e;
                         break;
                     case 0xF89:
-                        idx = 4;
+                        beastIdx = dBeastIdx_RED_JELLY_e;
                         break;
                     case 0xF8E:
-                        idx = 5;
+                        beastIdx = dBeastIdx_GREEN_JELLY_e;
                         break;
                     case 0xF93:
-                        idx = 6;
+                        beastIdx = dBeastIdx_BLUE_JELLY_e;
                         break;
                     case 0xF98:
-                        idx = 7;
+                        beastIdx = dBeastIdx_JOY_PENDANT_e;
                         break;
                     case 0xF9D:
-                        idx = 2;
+                        beastIdx = dBeastIdx_GOLDEN_FEATHER_e;
                         break;
                     case 0xFD3:
-                        idx = 3;
+                        beastIdx = dBeastIdx_KNIGHTS_CREST_e;
                         break;
                 }
                 dComIfGp_setItemRupeeCount(getPayRupee());
-                dComIfGp_setItemBeastNumCount(idx, -getBuyItem());
+                dComIfGp_setItemBeastNumCount(beastIdx, -getBuyItem());
                 
                 if(*pMsgNo == 0xFD3) {
-                    u8 r3 = dComIfGs_getEventReg(0x7F0F);
+                    u8 r3 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_7F0F);
                     r3 += getBuyItem();
                     u8 temp = cLib_maxLimit<u8>(r3, 0xF);
-                    dComIfGs_setEventReg(0x7F0F, temp);
+                    dComIfGs_setEventReg(dSv_event_flag_c::UNK_7F0F, temp);
 
                     if(temp < 0xA) {
                         *pMsgNo = 0xFD5;
                         break;
                     }
 
-                    if(dComIfGs_isEventBit(0x3B04)) {
+                    if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3B04)) {
                         *pMsgNo = 0xFD9;
                         break;
                     }
 
-                    dComIfGs_onEventBit(0x3B04);
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_3B04);
                     *pMsgNo = 0xFD6;
                     break;
                 }
@@ -681,7 +682,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0xF3E:
             if(CPad_CHECK_TRIG_B(0)) {
-                u8 points = dComIfGs_getEventReg(0x86FF);
+                u8 points = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
                 if(mShopItems.isSoldOutItemAll()) {
                     *pMsgNo = 0xF62;
                     break;
@@ -718,7 +719,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
         case 0xF65:
         case 0xF66:
             if(CPad_CHECK_TRIG_B(0)) {
-                u8 points = dComIfGs_getEventReg(0x86FF);
+                u8 points = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
                 if(mShopItems.isSoldOutItemAll()) {
                     *pMsgNo = 0xF62;
                     break;
@@ -755,7 +756,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
         case 0xF6B:
         case 0xF6D:
             if(CPad_CHECK_TRIG_B(0)) {
-                u8 points = dComIfGs_getEventReg(0x86FF);
+                u8 points = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
                 if(mShopItems.isSoldOutItemAll()) {
                     *pMsgNo = 0xF62;
                     break;
@@ -829,13 +830,13 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 fopAcM_seStart(this, JA_SE_SHOP_BOUGHT, 0);
                 mShopItems.hideSelectItem();
                 dComIfGp_setItemRupeeCount(-rupee);
-                if(mShopItems.getSelectItemNo() == dItem_BAIT_BAG_e) {
+                if(mShopItems.getSelectItemNo() == dItemNo_BAIT_BAG_e) {
                     mShopItems.SoldOutItem(mShopItems.mSelectedItemIdx);
                     m76C[mShopItems.mSelectedItemIdx] = 1;
                 }
 
                 int itemNo = mShopItems.getSelectItemNo();
-                if(!checkItemGet(itemNo, 0)) {
+                if(!checkItemGet(itemNo, FALSE)) {
                     m82A = 3;
                     msgStatus = fopMsgStts_MSG_ENDS_e;
                     break;
@@ -845,7 +846,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 execItemGet(itemNo);
 
                 if(mType == 0) {
-                    if(dComIfGs_getEventReg(0x86FF) != 0) {
+                    if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF) != 0) {
                         *pMsgNo = 0xF4C;
                         break;
                     }
@@ -892,25 +893,25 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 mShopItems.hideSelectItem();
                 dComIfGp_setItemRupeeCount(-rupee);
                 u8 itemNo = mShopItems.getSelectItemNo();
-                if(itemNo == dItem_EMPTY_BOTTLE_e || itemNo == dItem_HEART_PIECE_e || itemNo == dItem_COLLECT_MAP_30_e) {
+                if(itemNo == dItemNo_EMPTY_BOTTLE_e || itemNo == dItemNo_HEART_PIECE_e || itemNo == dItemNo_COLLECT_MAP_30_e) {
                     mShopItems.SoldOutItem(mShopItems.mSelectedItemIdx);
                     m76C[mShopItems.mSelectedItemIdx] = 1;
 
                     switch(itemNo) {
-                        case dItem_EMPTY_BOTTLE_e:
-                            dComIfGs_onEventBit(0x2020);
+                        case dItemNo_EMPTY_BOTTLE_e:
+                            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2020);
                             break;
-                        case dItem_HEART_PIECE_e:
-                            dComIfGs_onEventBit(0x2010);
+                        case dItemNo_HEART_PIECE_e:
+                            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2010);
                             break;
-                        case dItem_COLLECT_MAP_30_e:
-                            dComIfGs_onEventBit(0x2008);
+                        case dItemNo_COLLECT_MAP_30_e:
+                            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2008);
                             break;
                     }
                 }
 
                 // these int casts are probably fake
-                if(!checkItemGet((int)mShopItems.getSelectItemNo(), 0)) {
+                if(!checkItemGet((int)mShopItems.getSelectItemNo(), FALSE)) {
                     m82A = 3;
                     msgStatus = fopMsgStts_MSG_ENDS_e;
                     break;
@@ -936,9 +937,9 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0xF4C:
         case 0xF4E: {
-            int points = dComIfGs_getEventReg(0x86FF) + 1;
+            int points = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF) + 1;
             points = cLib_maxLimit<int>(points, 0xFF);
-            dComIfGs_setEventReg(0x86FF, points);
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_86FF, points);
 
             if(points > 60) {
                 *pMsgNo = 0xF3E;
@@ -946,7 +947,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             }
             
             if(points == 60) {
-                dLetter_send(0xAF03);
+                dLetter_send(dSv_event_flag_c::LETTER_GOLD_MEMBERSHIP);
                 *pMsgNo = 0xF53;
                 break;
             }
@@ -957,7 +958,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             }
 
             if(points == 30) {
-                dLetter_send(0xB003);
+                dLetter_send(dSv_event_flag_c::LETTER_SILVER_MEMBERSHIP);
                 *pMsgNo = 0xF50;
                 break;
             }
@@ -981,35 +982,35 @@ u32 daNpc_Bs1_c::getMsg() {
         m740 = 0;
     }
     else if(dComIfGp_event_chkTalkXY()) {
-        u8 itemNo = dComIfGp_event_getPreItemNo();
+        u8 itemNo = (u8)dComIfGp_event_getPreItemNo();
 
         if(mType == 0) {
             if(isEmono(itemNo)) {
                 m840 = itemNo;
                 switch(itemNo) {
-                    case dItem_BOKOBABA_SEED_e:
+                    case dItemNo_BOKOBABA_SEED_e:
                         msgNo = 0xF78;
                         break;
-                    case dItem_SKULL_NECKLACE_e:
+                    case dItemNo_SKULL_NECKLACE_e:
                         msgNo = 0xF80;
                         break;
-                    case dItem_RED_JELLY_e:
+                    case dItemNo_RED_JELLY_e:
                         msgNo = 0xF85;
                         break;
-                    case dItem_GREEN_JELLY_e:
+                    case dItemNo_GREEN_JELLY_e:
                         msgNo = 0xF8A;
                         break;
-                    case dItem_BLUE_JELLY_e:
+                    case dItemNo_BLUE_JELLY_e:
                         msgNo = 0xF8F;
                         break;
-                    case dItem_JOY_PENDANT_e:
+                    case dItemNo_JOY_PENDANT_e:
                         msgNo = 0xF94;
                         break;
-                    case dItem_GOLDEN_FEATHER_e:
+                    case dItemNo_GOLDEN_FEATHER_e:
                         msgNo = 0xF99;
                         break;
                     default:
-                        if(dComIfGs_getEventReg(0x7F0F) < 10) {
+                        if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_7F0F) < 10) {
                             msgNo = 0xF9E;
                             break;
                         }
@@ -1018,17 +1019,17 @@ u32 daNpc_Bs1_c::getMsg() {
                         break;
                 }
             }
-            else if(itemNo == KAISEN_PRESENT1) {
+            else if(itemNo == dItemNo_COMPLIMENTARY_ID_e) {
                 msgNo = 0xF6F;
             }
-            else if(itemNo == KAISEN_PRESENT2) {
+            else if(itemNo == dItemNo_FILL_UP_COUPON_e) {
                 msgNo = 0xF73;
             }
             else {
                 msgNo = 0xF75;
             }
         }
-        else if(itemNo == KAISEN_PRESENT1 || itemNo == KAISEN_PRESENT2) {
+        else if(itemNo == dItemNo_COMPLIMENTARY_ID_e || itemNo == dItemNo_FILL_UP_COUPON_e) {
             msgNo = 0x2F56;
         }
         else if(isEmono(itemNo)) {
@@ -1039,12 +1040,12 @@ u32 daNpc_Bs1_c::getMsg() {
         }
     }
     else if(mType == 0) {
-        u8 points = dComIfGs_getEventReg(0x86FF);
+        u8 points = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
         if(mShopItems.isSoldOutItemAll()) {
             msgNo = 0xF3D;
         }
-        else if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(0x1F20) && isSellBomb()) {
-            dComIfGs_onEventBit(0x1F20);
+        else if(dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F20) && isSellBomb()) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1F20);
             m837 = 1;
             msgNo = 0xF55;
         }
@@ -1080,16 +1081,16 @@ u32 daNpc_Bs1_c::getMsg() {
     else if(mShopItems.isSoldOutItemAll()) {
         msgNo = 0x2F62;
     }
-    else if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(0x1F20) && isSellBomb()) {
-        dComIfGs_onEventBit(0x1F20);
+    else if(dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F20) && isSellBomb()) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1F20);
         m837 = 1;
         msgNo = 0x2F64;
     }
     else if(m837) {
         msgNo = 0x2F67;
     }
-    else if(dComIfGs_isEventBit(0x1F08)) {
-        if(dComIfGs_isEventBit(0x2040)) {
+    else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F08)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2040)) {
             if(m838 == 1) {
                 msgNo = 0x2F60;
             }
@@ -1098,20 +1099,20 @@ u32 daNpc_Bs1_c::getMsg() {
             }
         }
         else {
-            dComIfGs_onEventBit(0x2040);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2040);
             msgNo = 0x2F5F;
             m838 = 1;
         }
     }
     else {
-        switch(dComIfGs_getEventReg(0xBB07)) {
+        switch(dComIfGs_getEventReg(dSv_event_flag_c::UNK_BB07)) {
             case 0:
-                if(m836 || dComIfGs_isEventBit(0x1F10)) {
+                if(m836 || dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F10)) {
                     msgNo = 0x2F46;
                     break;
                 }
 
-                dComIfGs_onEventBit(0x1F10);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_1F10);
                 msgNo = 0x2F45;
                 break;
             case 1:
@@ -1172,8 +1173,8 @@ u32 daNpc_Bs1_c::getMsg() {
                 break;
         }
 
-        if(dComIfGs_isEventBit(0x1F10)) {
-            dComIfGs_onEventBit(0x1F10);
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F10)) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1F10);
         }
 
         m836 = 1;
@@ -1188,11 +1189,13 @@ void daNpc_Bs1_c::setCollision() {
     offset.z = -16.0f;
     cXyz out;
     MtxTrans(current.pos.x, current.pos.y, current.pos.z, false);
-    mDoMtx_YrotM(*calc_mtx, m726.y);
+    cMtx_YrotM(*calc_mtx, m726.y);
     MtxPosition(&offset, &out);
+    f32 radius = 46.0f;
+    f32 height = 130.0f;
     mCyl.SetC(out);
-    mCyl.SetR(46.0f);
-    mCyl.SetH(130.0f);
+    mCyl.SetR(radius);
+    mCyl.SetH(height);
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
@@ -1227,7 +1230,7 @@ u32 daNpc_Bs1_c::getDefaultMsg() {
     u32 msgNo;
 
     if(mType == 0) {
-        u8 points = dComIfGs_getEventReg(0x86FF);
+        u8 points = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
         if(mShopItems.isSoldOutItemAll()) {
             msgNo = 0xF5E;
         }
@@ -1241,11 +1244,11 @@ u32 daNpc_Bs1_c::getDefaultMsg() {
             msgNo = 0xF3F;
         }
     }
-    else if(!dComIfGs_isEventBit(0x1F08)) {
+    else if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F08)) {
         msgNo = 0x2F48;
     }
-    else if(!dComIfGs_isEventBit(0x2108)) {
-        dComIfGs_onEventBit(0x2108);
+    else if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2108)) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2108);
         msgNo = 0x2F54;
     }
     else {
@@ -1468,7 +1471,7 @@ void daNpc_Bs1_c::createShopList() {
         for(int i = 0; i < 3; i++) {
             u8 itemNo = pDataSet[i]->mpItemData->mItemNo;
             int idx = i;
-            if((itemNo == dItem_BAIT_BAG_e && dComIfGs_checkGetItem(itemNo)) || (itemNo == dItem_HYOI_PEAR_e && dComIfGs_checkGetItem(dItem_BOMB_BAG_e))) {
+            if((itemNo == dItemNo_BAIT_BAG_e && dComIfGs_checkGetItem(itemNo)) || (itemNo == dItemNo_HYOI_PEAR_e && dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e))) {
                 itemNo = pDataSet[i + 3][0].mpItemData->mItemNo;
                 idx += 3;
             }
@@ -1482,28 +1485,28 @@ void daNpc_Bs1_c::createShopList() {
         __shop_items_set_data* dataSet[4];
         int index = 0;
 
-        if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+        if(dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) {
             dataSet[index] = &shopItems_setData_Bomb30Bs2;
             index = 1;
         }
-        if(dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e) {
+        if(dComIfGs_getItem(dInvSlot_BOW_e) != dItemNo_NONE_e) {
             dataSet[index] = &shopItems_setData_arrow30Bs2;
             index++;
         }
         dataSet[index] = &shopItems_setData_red_bottleBs2;
         index++;
-        if(!dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+        if(!dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e)) {
             dataSet[index] = &shopItems_setData_Bomb30Bs2;
             index++;
         }
-        if(dComIfGs_getItem(dInvSlot_BOW_e) == dItem_NONE_e) {
+        if(dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_NONE_e) {
             dataSet[index] = &shopItems_setData_arrow30Bs2;
         }
 
         int dataIdx = 0;
         for(int i = 0; i < 3; i++) {
             u8 itemNo = temp[i]->mpItemData->mItemNo;
-            if((i == 0 && dComIfGs_isEventBit(0x2020)) || (i == 1 && dComIfGs_isEventBit(0x2010)) || (i == 2 && dComIfGs_isEventBit(0x2008))) {
+            if((i == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2020)) || (i == 1 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2010)) || (i == 2 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2008))) {
                 itemNo = dataSet[dataIdx]->mpItemData->mItemNo;
                 mpItemSetList[i] = dataSet[dataIdx];
                 dataIdx++;
@@ -1520,7 +1523,7 @@ void daNpc_Bs1_c::createShopList() {
     mShopItems.setItemSetDataList(mpItemSetList);
     for(int i = 0; i < 3; i++) {
         mShopItems.mSelectedItemIdx = i;
-        if((!dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && isBomb(mShopItems.getSelectItemNo())) || (dComIfGs_getItem(dInvSlot_BOW_e) == dItem_NONE_e && isArrow(mShopItems.getSelectItemNo()))) {
+        if((!dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && isBomb(mShopItems.getSelectItemNo())) || (dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_NONE_e && isArrow(mShopItems.getSelectItemNo()))) {
             mShopItems.SoldOutItem(i);
             m76C[i] = true;
         }
@@ -1757,7 +1760,7 @@ BOOL daNpc_Bs1_c::getdemo_action(void*) {
         m830 = m831;
         mShopCamAction.Reset();
         u16 itemNo = mShopItems.getSelectItemNo();
-        fpc_ProcID itemPID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, current.roomNo);
+        fpc_ProcID itemPID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, DEMO_SELECT(-1, current.roomNo));
         if (itemPID != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(itemPID);
         }
@@ -1770,7 +1773,7 @@ BOOL daNpc_Bs1_c::getdemo_action(void*) {
         if (dComIfGp_evmng_endCheck(m83A)) {
             m82A = 1;
             if (mType == 0) {
-                u8 someVal = dComIfGs_getEventReg(0x86FF);
+                u8 someVal = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
                 if (someVal != 0) {
                     m740 = 0xF4C;
                 } else {
@@ -1839,7 +1842,7 @@ BOOL daNpc_Bs1_c::evn_talk() {
                 l_msgId = fpcM_ERROR_PROCESS_ID_e;
                 return TRUE;
             }
-            if ((msgStatus == 2 || msgStatus == 6) && (m738 == m744)) {
+            if ((msgStatus == fopMsgStts_BOX_OPENING_e || msgStatus == fopMsgStts_MSG_TYPING_e) && (m738 == m744)) {
                 m744 = 0;
                 return TRUE;
             }
@@ -2107,7 +2110,12 @@ BOOL daNpc_Bs1_c::_execute() {
 /* 000048D4-00004960       .text _delete__11daNpc_Bs1_cFv */
 BOOL daNpc_Bs1_c::_delete() {
     dComIfG_resDelete(&mPhase, "Bs");
-    if (heap != NULL && mpMorf != NULL) {
+    if (
+#if VERSION > VERSION_DEMO
+        heap != NULL &&
+#endif
+        mpMorf != NULL
+    ) {
         mpMorf->stopZelAnime();
     }
     if (l_HIO.m8 >= 0 && (l_HIO.m8 -= 1) < 0) {
@@ -2123,10 +2131,11 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00004980-00004AD8       .text _create__11daNpc_Bs1_cFv */
 cPhs_State daNpc_Bs1_c::_create() {
-    fopAcM_SetupActor(this, daNpc_Bs1_c);
+    fopAcM_ct_Retail(this, daNpc_Bs1_c);
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Bs");
     if (phase_state == cPhs_COMPLEATE_e) {
+        fopAcM_ct_Demo(this, daNpc_Bs1_c);
         mType = fopAcM_GetParamBit(fopAcM_GetParam(this), 0x14, 0x4);
         switch (mType) {
         case 0:
@@ -2161,23 +2170,25 @@ cPhs_State daNpc_Bs1_c::_create() {
 
 /* 000050A8-00005470       .text CreateHeap__11daNpc_Bs1_cFv */
 BOOL daNpc_Bs1_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BDL_BS);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BDL_BS_e);
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes("Bs", BS_INDEX_BCK_BS_WAIT01),
+        (J3DAnmTransform*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BCK_BS_WAIT01_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL,
         0, 0x11020203
     );
     if (!mpMorf || !mpMorf->getModel()) {
+#if VERSION > VERSION_DEMO
         mpMorf = NULL;
+#endif
         return FALSE;
     }
     
     m_head_jnt_num = modelData->getJointName()->getIndex("head");
-    JUT_ASSERT(0xa68, m_head_jnt_num >= 0);
+    JUT_ASSERT(DEMO_SELECT(2660, 2664), m_head_jnt_num >= 0);
     m_backbone_jnt_num = modelData->getJointName()->getIndex("backbone1");
-    JUT_ASSERT(0xa6a, m_backbone_jnt_num >= 0);
+    JUT_ASSERT(DEMO_SELECT(2662, 2666), m_backbone_jnt_num >= 0);
     
     switch (mType) {
     case 0:
@@ -2189,32 +2200,34 @@ BOOL daNpc_Bs1_c::CreateHeap() {
     }
     
     if (!initTexPatternAnm(FALSE)) {
+#if VERSION > VERSION_DEMO
         return FALSE;
+#endif
     }
     
-    mpHelmetModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BDL_BS_MET), 0, 0x11020203);
+    mpHelmetModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BDL_BS_MET_e), 0, 0x11020203);
     if (!mpHelmetModel) {
         return FALSE;
     }
     
     for (int i = 0; i < 3; i++) {
-        mpSoldSignModels[i] = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BDL_VSOLD), 0, 0x11020203);
+        mpSoldSignModels[i] = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BDL_VSOLD_e), 0, 0x11020203);
         if (mpSoldSignModels[i] == NULL) {
             return false;
         }
     }
     
     for (u16 jntNo = 0; jntNo < modelData->getJointNum(); jntNo++) {
-        if (jntNo == getHeadJntNum() || jntNo == getBackboneJntNum()) {
+        if (jntNo == m_head_jnt_num || jntNo == m_backbone_jnt_num) {
             mpMorf->getModel()->getModelData()->getJointNodePointer(jntNo)->setCallBack(nodeCallBack_Bs);
         }
     }
     mpMorf->getModel()->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 0.0f);
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
-    mpShopCursor = ShopCursor_create((J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BMD_SHOP_CURSOR01),
-                                     (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bs", BS_INDEX_BRK_SHOP_CURSOR01),
-                                     l_HIO.mChild[mType].m30);
+    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BRK_SHOP_CURSOR01_e);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BMD_SHOP_CURSOR01_e);
+    mpShopCursor = ShopCursor_create(modelData, brk, l_HIO.mChild[mType].m30);
     
     if (mpShopCursor != NULL) {
         return TRUE;
@@ -2257,18 +2270,18 @@ static actor_method_class l_daNpc_Bs1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_BS1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_BS1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_BS1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Bs1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_BS1,
+    /* Draw Prio    */ fpcDwPi_NPC_BS1_e,
     /* Actor SubMtd */ &l_daNpc_Bs1_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_12_e,
+    /* Cull Type    */ fopAc_CULLBOX_12_e,
 };

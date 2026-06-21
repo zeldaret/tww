@@ -3,6 +3,7 @@
 // Translation Unit: d_demo.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_demo.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
@@ -51,7 +52,7 @@ void dDemo_actor_c::setActor(fopAc_ac_c* ac) {
 }
 
 /* 80069434-80069550       .text getP_BtpData__13dDemo_actor_cFPCc */
-void* dDemo_actor_c::getP_BtpData(const char* name) {
+J3DAnmTexPattern* dDemo_actor_c::getP_BtpData(const char* name) {
     /* Nonmatching */
     if (!checkEnable(ENABLE_UNK_e))
         return NULL;
@@ -63,7 +64,7 @@ void* dDemo_actor_c::getP_BrkData(const char*) {
 }
 
 /* 800695E8-8006969C       .text getP_BtkData__13dDemo_actor_cFPCc */
-void* dDemo_actor_c::getP_BtkData(const char*) {
+J3DAnmTextureSRTKey* dDemo_actor_c::getP_BtkData(const char*) {
     /* Nonmatching */
 }
 
@@ -582,7 +583,7 @@ void* dDemo_system_c::JSGFindObject(const char* name, JStage::TEObject type) con
     if (type == JStage::TOBJ_ACTOR || type == JStage::TOBJ_ACTOR_UNK) {
         fopAc_ac_c* ac = fopAcM_searchFromName((char*)name, 0, 0);
         if (ac == NULL) {
-            if (type == JStage::TOBJ_ACTOR && strncmp(name, "d_act", 5) == 0) {
+            if (type == JStage::TOBJ_ACTOR && strncmp(name, "d_act", sizeof("d_act")-1) == 0) {
                 ac = (fopAc_ac_c*)fopAcM_fastCreate((char*)name, 0);
                 if (ac == NULL)
                     return NULL;

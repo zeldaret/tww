@@ -3,16 +3,15 @@
  * Object - Palm tree
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_lpalm.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_oyashi.h"
+#include "res/Object/Oyashi.h"
 #include "m_Do/m_Do_ext.h"
 
 const char daObjLpalm_c::M_arcname[7] = "Oyashi";
-daObjLpalm_c::Attr_c const daObjLpalm_c::M_attr = { 0, 0 };
+daObjLpalm_c::Attr_c const daObjLpalm_c::M_attr = {0, 0};
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
@@ -24,11 +23,11 @@ static BOOL nodeCallBack(J3DNode* joint, int calcTiming) {
     J3DModel* model = j3dSys.getModel();
     s32 jntNo = ((J3DJoint*)joint)->getJntNo();
     daObjLpalm_c* i_this = (daObjLpalm_c*)model->getUserArea();
-    if (calcTiming == J3DNodeCBCalcTiming_In && (jntNo == 2 || jntNo == 3)) {
+    if (calcTiming == J3DNodeCBCalcTiming_In && (jntNo == OYASHI_JNT_J_HAPPA1_e || jntNo == OYASHI_JNT_J_HAPPA2_e)) {
         mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
         mDoMtx_stack_c::ZrotM(-0x4000);
         mDoMtx_stack_c::quatM(&i_this->mBaseQuat);
-        if (jntNo == 2)
+        if (jntNo == OYASHI_JNT_J_HAPPA1_e)
             mDoMtx_stack_c::quatM(&i_this->mAnmMtxQuat[0]);
         else
             mDoMtx_stack_c::quatM(&i_this->mAnmMtxQuat[1]);
@@ -41,7 +40,7 @@ static BOOL nodeCallBack(J3DNode* joint, int calcTiming) {
 
 /* 00000164-00000268       .text CreateHeap__12daObjLpalm_cFv */
 BOOL daObjLpalm_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, OYASHI_BDL_OYASHI);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_OYASHI_BDL_OYASHI_e);
     for (u16 i = 0; i < modelData->getJointNum(); i++)
         modelData->getJointNodePointer(i)->setCallBack(nodeCallBack);
     if (modelData == NULL)
@@ -52,9 +51,7 @@ BOOL daObjLpalm_c::CreateHeap() {
         return false;
 
     mModel->setUserArea((u32)this);
-    Mtx* mtx = &mModel->getBaseTRMtx();
-    cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes(M_arcname, OYASHI_DZB_OYASHI);
-    mpBgW = dBgW_NewSet(bgp, dBgW::MOVE_BG_e, mtx);
+    mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_OYASHI_DZB_OYASHI_e), dBgW::MOVE_BG_e, &mModel->getBaseTRMtx());
     if (mpBgW == NULL)
         return false;
 
@@ -63,17 +60,16 @@ BOOL daObjLpalm_c::CreateHeap() {
 
 /* 00000268-00000404       .text CreateInit__12daObjLpalm_cFv */
 void daObjLpalm_c::CreateInit() {
-    /* Nonmatching */
-    Quaternion q = { 0.0f, 0.0f, 0.0f, 1.0f };
-    mBaseQuatTarget = q;
-    mBaseQuat = q;
-    mAnmMtxQuat[1] = mAnmMtxQuat[0] = q;
+    Quaternion q = {0.0f, 0.0f, 0.0f, 1.0f};
+
+    mBaseQuat = mBaseQuatTarget = q;
+    mAnmMtxQuat[0] = mAnmMtxQuat[1] = q;
     mAnimDir[0] = 0;
     mAnimDir[1] = 0;
     mAnimWave[0] = 0;
     mAnimWave[1] = cM_rndFX(32768.0f);
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this,-350.0f, -50.0f, -350.0f, 350.0f, 1300.0f, 350.0f);
+    fopAcM_setCullSizeBox(this, -350.0f, -50.0f, -350.0f, 350.0f, 1300.0f, 350.0f);
     fopAcM_setCullSizeFar(this, 2.37f);
     dComIfG_Bgsp()->Regist(mpBgW, this);
     mModel->setBaseScale(scale);
@@ -83,11 +79,10 @@ void daObjLpalm_c::CreateInit() {
 }
 
 cPhs_State daObjLpalm_c::_create() {
-    fopAcM_SetupActor(this, daObjLpalm_c);
-
+    fopAcM_ct_Retail(this, daObjLpalm_c);
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
-
     if (ret == cPhs_COMPLEATE_e) {
+        fopAcM_ct_Demo(this, daObjLpalm_c);
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xf00) == 0) {
             ret = cPhs_ERROR_e;
         } else {
@@ -99,16 +94,19 @@ cPhs_State daObjLpalm_c::_create() {
 }
 
 bool daObjLpalm_c::_delete() {
-    if (heap != NULL && mpBgW->ChkUsed()) {
+#if VERSION > VERSION_DEMO
+    if (heap != NULL && mpBgW->ChkUsed())
+#endif
+    {
         dComIfG_Bgsp()->Release(mpBgW);
     }
 
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return true;
 }
 
 /* 00000404-000004A4       .text daObjLpalmCreate__FPv */
-static s32 daObjLpalmCreate(void* i_this) {
+static cPhs_State daObjLpalmCreate(void* i_this) {
     return ((daObjLpalm_c*)i_this)->_create();
 }
 
@@ -132,7 +130,7 @@ bool daObjLpalm_c::_execute() {
     cXyz up(0.0f, 1.0f, 0.0f);
     cXyz windDir;
 
-    mDoMtx_YrotS(*calc_mtx, -current.angle.y);
+    cMtx_YrotS(*calc_mtx, -current.angle.y);
     MtxPosition(dKyw_get_wind_vec(), &windDir);
     f32 windPow = dKyw_get_wind_pow();
     s16 angle = windPow * 0x600;
@@ -202,18 +200,18 @@ static actor_method_class daObjLpalmMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lpalm = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Lpalm,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lpalm_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjLpalm_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Lpalm,
+    /* Draw Prio    */ fpcDwPi_Obj_Lpalm_e,
     /* Actor SubMtd */ &daObjLpalmMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

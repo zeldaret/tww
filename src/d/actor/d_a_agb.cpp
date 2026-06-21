@@ -3,8 +3,10 @@
  * Tingle Tuner Cursor
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_agb.h"
-#include "d/res/res_agb.h"
+#include "d/d_msg.h"
+#include "res/Object/Agb.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTGba.h"
@@ -13,8 +15,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 #include "d/d_meter.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_kankyo_wether.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_dvd_thread.h"
@@ -25,8 +25,39 @@
 #include "d/actor/d_a_bomb.h"
 #include "stdio.h"
 
-#include "weak_bss_3569.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
+class daAgb_HIO_c : public mDoHIO_entry_c {
+public:
+    daAgb_HIO_c();
+    virtual ~daAgb_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
+
+public:
+    /* 0x04 */ J3DGXColorS10 field_0x04[2];
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1c;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ f32 field_0x24;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2c;
+    /* 0x30 */ f32 field_0x30;
+};
+
+class dMsgCtrl_c {
+public:
+    int init(u16);
+    int execute();
+    ~dMsgCtrl_c() {}
+
+    int getSelectNum() { return mpMsg->mSelectNum; }
+    void setMsgStatus(u16 status) { mpMsg->mStatus = status; }
+
+public:
+    /* 0x00 */ u16 field_0x0;
+    /* 0x04 */ fpc_ProcID mMsgID;
+    /* 0x08 */ msg_class* mpMsg;
+};
 
 static mDoDvdThd_toMainRam_c* l_gbaCommand;
 
@@ -352,8 +383,6 @@ int daAgb_c::uploadPortCheckWait() {
     return 1;
 }
 
-extern JKRHeap* dMsg_getAgbWorkArea();
-
 /* 800CFB68-800CFC94       .text uploadSelect__7daAgb_cFv */
 int daAgb_c::uploadSelect() {
     if (l_msgCtrl.execute() == fopMsgStts_MSG_DISPLAYED_e) {
@@ -366,9 +395,9 @@ int daAgb_c::uploadSelect() {
             mUploadAction  = UpAct_UNK3;
 
 #if VERSION <= VERSION_JPN
-            l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/client.bin", 0, dMsg_getAgbWorkArea());
+            l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/client.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, dMsg_getAgbWorkArea());
 #elif VERSION == VERSION_USA
-            l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/client_u.bin", 0, dMsg_getAgbWorkArea());
+            l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/client_u.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, dMsg_getAgbWorkArea());
 #elif VERSION == VERSION_PAL
             char path[28];
             char pathNum[4];
@@ -376,7 +405,7 @@ int daAgb_c::uploadSelect() {
             sprintf(pathNum, "%d", dComIfGs_getPalLanguage());
             strcat(path, pathNum);
             strcat(path, ".bin");
-            l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, 0, dMsg_getAgbWorkArea());
+            l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, JKRArchive::DEFAULT_MOUNT_DIRECTION, dMsg_getAgbWorkArea());
 #endif
             JUT_ASSERT(VERSION_SELECT(591, 591, 860, 861), l_gbaCommand != NULL);
 
@@ -444,7 +473,7 @@ int daAgb_c::uploadMessageLoad() {
     field_0x664--;
     if (field_0x664 == 0) {
 #if VERSION != VERSION_PAL
-        l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/msg_LZ.bin", 0, NULL);
+        l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/msg_LZ.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
 #else
         char path[28];
         char pathNum[4];
@@ -452,7 +481,7 @@ int daAgb_c::uploadMessageLoad() {
         sprintf(pathNum, "%d", dComIfGs_getPalLanguage());
         strcat(path, pathNum);
         strcat(path, ".bin");
-        l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, 0, NULL);
+        l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
 #endif
         JUT_ASSERT(VERSION_SELECT(715, 715, 1000, 1001), l_gbaCommand != NULL);
 
@@ -510,8 +539,8 @@ int daAgb_c::uploadMessageSend() {
             mUploadAction  = UpAct_UNKB;
             field_0x664 = 60;
 
-            dComIfGs_onEventBit(0x1A20);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_02E7, &current.pos, NULL, NULL, 255, &field_0x684);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1A20);
+            dComIfGp_particle_set(dPa_name::ID_IT_JN_GBACURSOR00, &current.pos, NULL, NULL, 255, &field_0x684);
 
             JKRHeap::free(l_gbaCommand->getMemAddress(), NULL);
             delete l_gbaCommand;
@@ -711,7 +740,7 @@ void daAgb_c::resetCursor(bool param_0) {
     setFollowTarget(false);
     setTargetID(fpcM_ERROR_PROCESS_ID_e);
 
-    if (fopAcM_GetName(player_p) != PROC_NPC_KAM) {
+    if (fopAcM_GetName(player_p) != fpcNm_NPC_KAM_e) {
         current.pos = player_p->current.pos;
         home.pos = player_p->current.pos;
     } else {
@@ -736,7 +765,7 @@ void daAgb_c::resetCursor(bool param_0) {
 }
 
 /* 800D070C-800D0734       .text FlashCheck__7daAgb_cFv */
-bool daAgb_c::FlashCheck() {
+BOOL daAgb_c::FlashCheck() {
     if (mIsFree || mFollowTarget == true) {
         return true;
     }
@@ -780,16 +809,16 @@ void daAgb_c::FlagsRecv() {
     field_0x632 = BigLittleChange(mGbaFlg.field_0x6) >> 0x10;
     field_0x67a = mGbaFlg.field_0x2.m2;
 
-    if (!dComIfGs_isEventBit(0x1708) && mGbaFlg.field_0x2.m3) {
-        dComIfGs_onEventBit(0x1708);
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1708) && mGbaFlg.field_0x2.m3) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1708);
     }
 
-    if (!dComIfGs_isEventBit(0x1A10) && mGbaFlg.field_0x2.m4) {
-        dComIfGs_onEventBit(0x1A10);
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TINGLE_BALLOON_DISCOUNT) && mGbaFlg.field_0x2.m4) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNLOCK_TINGLE_BALLOON_DISCOUNT);
     }
 
-    if (!dComIfGs_isEventBit(0x1A08) && mGbaFlg.field_0x2.m5) {
-        dComIfGs_onEventBit(0x1A08);
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TING_DISCOUNT) && mGbaFlg.field_0x2.m5) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNLOCK_TING_DISCOUNT);
     }
 }
 
@@ -840,7 +869,7 @@ void daAgb_c::GbaItemUse() {
                     var_r28 = 0xA;
                 } else if (temp_f1 < 70.0) {
                     var_r28 = 0xD;
-                } else if (dComIfGs_isEventBit(0x2E08)) {
+                } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E08)) {
                     var_r28 = 0xC;
                 } else {
                     var_r28 = 0xD;
@@ -901,9 +930,9 @@ void daAgb_c::GbaItemUse() {
                 fopAc_ac_c* actor_p = fopAcM_SearchByID(getTargetID());
 
                 if (cM_rndF(5.0f) < 4.0) {
-                    field_0x640 = dItem_YELLOW_RUPEE_e;
+                    field_0x640 = dItemNo_YELLOW_RUPEE_e;
                 } else {
-                    field_0x640 = dItem_RED_RUPEE_e;
+                    field_0x640 = dItemNo_RED_RUPEE_e;
                 }
 
                 field_0x634 = actor_p->current.pos;
@@ -911,7 +940,7 @@ void daAgb_c::GbaItemUse() {
                 temp_r29 = 15;
             }
 
-            fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
+            fopAcM_create(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
             field_0x65c = 120;
         } else {
             temp_r29 = 0xe;
@@ -922,7 +951,7 @@ void daAgb_c::GbaItemUse() {
         break;
     case 0x15:
         resetCursor(false);
-        fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
+        fopAcM_create(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
         field_0x65c = 120;
         break;
     case 0x11:
@@ -995,16 +1024,16 @@ void daAgb_c::GbaItemUse() {
         field_0x65c = 30;
         break;
     case 7:
-        if (dComIfGs_checkGetItem(dItem_BAIT_BAG_e)) {
+        if (dComIfGs_checkGetItem(dItemNo_BAIT_BAG_e)) {
             if (dComIfGs_checkBaitItemEmpty()) {
                 temp_r29 |= 0x1000000;
             }
 
-            if (dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
+            if (dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
                 temp_r29 |= 0x10000;
             }
 
-            if (dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e && dComIfGs_getArrowNum() < dComIfGs_getArrowMax()) {
+            if (dComIfGs_getItem(dInvSlot_BOW_e) != dItemNo_NONE_e && dComIfGs_getArrowNum() < dComIfGs_getArrowMax()) {
                 temp_r29 |= 0x100;
             }
         }
@@ -1065,7 +1094,7 @@ void daAgb_c::Shopping() {
             }
         } else {
             if (dComIfGs_checkBaitItemEmpty()) {
-                dComIfGs_setBaitItem(dItem_BIRD_BAIT_5_e);
+                dComIfGs_setBaitItem(dItemNo_BIRD_BAIT_5_e);
             } else {
                 itemBuy.U8.field_0x1 = 2;
                 return;
@@ -1091,7 +1120,7 @@ void daAgb_c::FlagsSend(u32 stage_type) {
         mFlags.field_0xa_7 = 1;
     }
     mFlags.field_0xa_6 = dMenu_flag();
-    mFlags.field_0xa_5 = dComIfGp_event_getMode() != dEvtMode_NONE_e;
+    mFlags.field_0xa_5 = dComIfGp_event_runCheck();
     if (dStage_checkRestart() || dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK20000000_e)) {
         mFlags.field_0xa_4 = 1;
     } else {
@@ -1125,11 +1154,11 @@ void daAgb_c::FlagsSend(u32 stage_type) {
     mFlags.field_0x6_3 = dKy_getdaytime_hour();
     mFlags.field_0x7_2 = dKy_getdaytime_minute();
     mFlags.field_0x8_1 = dComIfGs_getLife();
-    mFlags.field_0xa_1 = dComIfGs_isEventBit(0x1708);
-    mFlags.field_0x7_1 = dComIfGs_isEventBit(dSv_evtBit_c::UNLOCK_TINGLE_BALLOON_DISCOUNT);
-    mFlags.field_0x7_0 = dComIfGs_isEventBit(dSv_evtBit_c::UNLOCK_TING_DISCOUNT);
+    mFlags.field_0xa_1 = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1708);
+    mFlags.field_0x7_1 = dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TINGLE_BALLOON_DISCOUNT);
+    mFlags.field_0x7_0 = dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TING_DISCOUNT);
     
-    if (!dComIfGs_isEventBit(dSv_evtBit_c::MET_KORL) || dComIfGs_isEventBit(0x1E80)) {
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::MET_KORL) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E80)) {
         mFlags.field_0x9_7 = 0;
         mFlags.field_0x9_6 = 0;
         mFlags.field_0x9_5 = 0;
@@ -1147,24 +1176,24 @@ void daAgb_c::FlagsSend(u32 stage_type) {
         mFlags.field_0x9_5 = 0;
     }
     
-    if (dComIfGs_isEventBit(0x3920)) {
-        mFlags.field_0x9_4 = !dComIfGs_isEventBit(dSv_evtBit_c::PLACED_DINS_PEARL);
-        mFlags.field_0x9_3 = !dComIfGs_isEventBit(dSv_evtBit_c::PLACED_FARORES_PEARL);
-        mFlags.field_0x9_2 = !dComIfGs_isEventBit(dSv_evtBit_c::PLACED_NAYRUS_PEARL);
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3920)) {
+        mFlags.field_0x9_4 = !dComIfGs_isEventBit(dSv_event_flag_c::PLACED_DINS_PEARL);
+        mFlags.field_0x9_3 = !dComIfGs_isEventBit(dSv_event_flag_c::PLACED_FARORES_PEARL);
+        mFlags.field_0x9_2 = !dComIfGs_isEventBit(dSv_event_flag_c::PLACED_NAYRUS_PEARL);
     } else {
         mFlags.field_0x9_4 = 0;
         mFlags.field_0x9_3 = 0;
         mFlags.field_0x9_2 = 0;
     }
     
-    if (dComIfGs_isEventBit(0x1820)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
         mFlags.field_0x9_1 = !dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_WT);
         mFlags.field_0x9_0 = !dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_ET);
     } else {
         mFlags.field_0x9_1 = 0;
         mFlags.field_0x9_0 = 0;
     }
-    mFlags.field_0xa_3 = dComIfGs_isEventBit(0x1E40);
+    mFlags.field_0xa_3 = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E40);
     mFlags.field_0xa_0 = mIsFree;
     mFlags.field_0xb_7 = getFollowTarget();
     if (stage_type == dStageType_MINIBOSS_e) {
@@ -1188,7 +1217,7 @@ void daAgb_c::FlagsSend(u32 stage_type) {
         mFlags.field_0xb_0 = 0;
     }
     mFlags.field_0x5_2 = field_0x675;
-    mFlags.field_0x5_1 = dComIfGs_checkGetItem(COTTAGE_PAPER) != FALSE;
+    mFlags.field_0x5_1 = dComIfGs_checkGetItem(dItemNo_CABANA_DEED_e) != FALSE;
     mDoGac_SendDataSet((u32*)&mFlags, 0xC, 9, 0);
 }
 
@@ -1368,7 +1397,7 @@ void daAgb_c::modeMove() {
             
             if (field_0x66b == 0xE) {
                 if (field_0x65c == 120) {
-                    fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
+                    fopAcM_create(fpcNm_BOMB_e, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
                 } else if (field_0x65c == 0) {
                     resetCursor(false);
                 }
@@ -1442,7 +1471,7 @@ void daAgb_c::modeMove() {
         mDoGac_SendDataSet((u32*)&mItemBuy, 4, 0xD, mItemBuy.U32);
     }
     
-    if ((g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags == 0 && fopAcM_GetName(player) != PROC_NPC_KAM) &&
+    if ((g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags == 0 && fopAcM_GetName(player) != fpcNm_NPC_KAM_e) &&
         ((isActive() && !field_0x675 && CPad_CHECK_TRIG_R(mDoGaC_getPortNo())) ||
         (mFlags.field_0x3_5 != 0 && (CPad_CHECK_TRIG_R(mDoGaC_getPortNo()) || CPad_CHECK_TRIG_A(mDoGaC_getPortNo())))))
     {
@@ -1456,7 +1485,7 @@ void daAgb_c::modeMove() {
             if (attList) {
                 fopAc_ac_c* r3 = attList->getActor();
                 if (r3) {
-                    if (fopAcM_CheckStatusMap(r3, 0) && !fopAcM_CheckStatus(r3, fopAcStts_BOSS_e) && fopAcM_GetName(r3) != PROC_FGANON) {
+                    if (fopAcM_CheckStatusMap(r3, 0) && !fopAcM_CheckStatus(r3, fopAcStts_BOSS_e) && fopAcM_GetName(r3) != fpcNm_FGANON_e) {
                         current.pos = r3->current.pos;
                         home.pos = r3->current.pos;
                         setTargetID(attList->getPid());
@@ -1477,7 +1506,7 @@ void daAgb_c::modeMove() {
         }
         
         if (getFollowTarget() == 0) {
-            if (fopAcM_GetName(player) == PROC_NPC_KAM) {
+            if (fopAcM_GetName(player) == fpcNm_NPC_KAM_e) {
                 onFree();
             } else {
                 current.pos = player->current.pos;
@@ -1593,9 +1622,9 @@ static BOOL daAgb_Execute(daAgb_c* i_this) {
         } else {
             daPy_lk_c* player_p2 = daPy_getPlayerLinkActorClass();
             if ((dComIfGp_getPlayer(0) == player_p2 && !player->checkPlayerFly()) ||
-                ((fopAcM_GetName(player) == PROC_NPC_MD && !daNpc_Md_c::isFlying()) ||
-                 (fopAcM_GetName(player) == PROC_NPC_CB1 && !daNpc_Cb1_c::isFlying()) ||
-                 fopAcM_GetName(player) == PROC_NPC_OS))
+                ((fopAcM_GetName(player) == fpcNm_NPC_MD_e && !daNpc_Md_c::isFlying()) ||
+                 (fopAcM_GetName(player) == fpcNm_NPC_CB1_e && !daNpc_Cb1_c::isFlying()) ||
+                 fopAcM_GetName(player) == fpcNm_NPC_OS_e))
             {
                 f32 speedF = fabs(player->speedF);
 
@@ -1716,7 +1745,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 800D396C-800D3B58       .text createHeap__7daAgb_cFv */
 BOOL daAgb_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Agb", AGB_BDL_AGBCURSOR);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Agb", dRes_INDEX_AGB_BDL_AGBCURSOR_e);
     JUT_ASSERT(VERSION_SELECT(2960, 2960, 3277, 3286), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
@@ -1724,8 +1753,8 @@ BOOL daAgb_c::createHeap() {
         return FALSE;
     }
 
-    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Agb", AGB_BRK_AGBCURSOR);
-    if (!mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 1)) {
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Agb", dRes_INDEX_AGB_BRK_AGBCURSOR_e);
+    if (!mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, TRUE)) {
         return FALSE;
     }
 
@@ -1743,7 +1772,7 @@ BOOL daAgb_c::createHeap() {
 /* 800D3B58-800D3D2C       .text daAgb_Create__FP10fopAc_ac_c */
 static cPhs_State daAgb_Create(fopAc_ac_c* i_this) {
     daAgb_c* a_this = (daAgb_c*)i_this;
-    fopAcM_SetupActor(i_this, daAgb_c);
+    fopAcM_ct(i_this, daAgb_c);
 
     cPhs_State phase = dComIfG_resLoad(&a_this->mPhase, "Agb");
     if (phase == cPhs_COMPLEATE_e) {
@@ -1793,18 +1822,18 @@ static actor_method_class l_daAgb_Method = {
 };
 
 actor_process_profile_definition g_profile_AGB = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_AGB,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_AGB_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daAgb_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_AGB,
+    /* Draw Prio    */ fpcDwPi_AGB_e,
     /* Actor SubMtd */ &l_daAgb_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_NOPAUSE_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

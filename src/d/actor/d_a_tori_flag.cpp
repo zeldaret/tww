@@ -3,19 +3,16 @@
  * Object - Great Sea - Small red flag (Flight Control Platform, Horseshoe Island)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tori_flag.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_kankyo_wether.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/res/res_trflag.h"
-#include "d/res/res_cloth.h"
+#include "res/Object/Trflag.h"
+#include "res/Object/Cloth.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_a_obj.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -40,11 +37,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 400.0f,
-    },
+    }},
 };
 
 /* 000000EC-00000118       .text __ct__17daTori_Flag_HIO_cFv */
@@ -78,15 +75,15 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 000001E4-0000030C       .text CreateHeap__13daTori_Flag_cFv */
 BOOL daTori_Flag_c::CreateHeap() {
     BOOL ret;
-    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(M_arcname, TRFLAG_BDL_ETHATA);
+    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(M_arcname, dRes_INDEX_TRFLAG_BDL_ETHATA_e);
     JUT_ASSERT(0x120, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpModel == NULL) {
         ret = FALSE;
     }
     else {
-        ResTIMG* flagTimg = (ResTIMG *)dComIfG_getObjectRes(M_arcname, TRFLAG_BTI_ETHATA);
-        ResTIMG* clothTimg = (ResTIMG *)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+        ResTIMG* flagTimg = (ResTIMG *)dComIfG_getObjectRes(M_arcname, dRes_INDEX_TRFLAG_BTI_ETHATA_e);
+        ResTIMG* clothTimg = (ResTIMG *)dComIfG_getObjectRes("Cloth", dRes_INDEX_CLOTH_BTI_CLOTHTOON_e);
         mpCloth = dCloth_packet_create(flagTimg, clothTimg, 5, 5, 210.0f, 105.0f, &mClothTevStr, NULL);
         ret = (mpCloth != NULL) ? TRUE : FALSE;
     }
@@ -103,14 +100,40 @@ cPhs_State daTori_Flag_c::CreateInit() {
     mWindvec.y = wind_vec->y;
     mWindvec.z = wind_vec->z;
     set_mtx();
+#if VERSION > VERSION_DEMO
     dKy_tevstr_init(&mClothTevStr, current.roomNo, 0xFF);
+#endif
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     return cPhs_COMPLEATE_e;
 }
 
 /* 000003C4-00000478       .text _create__13daTori_Flag_cFv */
 cPhs_State daTori_Flag_c::_create() {
-    fopAcM_SetupActor(this, daTori_Flag_c);
+#if VERSION == VERSION_DEMO
+    cPhs_State result1 = dComIfG_resLoad(&mPhsTrflag, M_arcname);
+    cPhs_State result2 = dComIfG_resLoad(&mPhsCloth, "Cloth");
+    if (result1 == cPhs_ERROR_e || result2 == cPhs_ERROR_e) {
+        return cPhs_ERROR_e;
+    }
+    if (result1 != cPhs_COMPLEATE_e) {
+        return result1;
+    }
+    if (result2 != cPhs_COMPLEATE_e) {
+        return result2;
+    }
+    cPhs_State result3 = cPhs_COMPLEATE_e;
+    if (result3 == cPhs_COMPLEATE_e) {
+        fopAcM_ct(this, daTori_Flag_c);
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1020)) {
+            result3 = CreateInit();
+        }
+        else {
+            result3 = cPhs_ERROR_e;
+        }
+    }
+    return result3;
+#else
+    fopAcM_ct(this, daTori_Flag_c);
     cPhs_State result = dComIfG_resLoad(&mPhsTrflag, M_arcname);
     if (result != cPhs_COMPLEATE_e) {
         return result;
@@ -126,10 +149,11 @@ cPhs_State daTori_Flag_c::_create() {
         result = cPhs_ERROR_e;
     }
     return result;
+#endif
 }
 
 /* 000003A4-000003C4       .text daTori_FlagCreate__FPv */
-static s32 daTori_FlagCreate(void* i_this) {
+static cPhs_State daTori_FlagCreate(void* i_this) {
     return ((daTori_Flag_c*)i_this)->_create();
 }
 
@@ -149,7 +173,7 @@ bool daTori_Flag_c::_execute() {
     set_mtx();
     mStts.Move();
     if (mCyl.ChkTgHit()) {
-        daObj::HitSeStart(&current.pos, current.roomNo, &mCyl, 0x0B);
+        daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), &mCyl, 0x0B);
     }
     fopAcM_rollPlayerCrash(this, 40.0f, 7);
     cXyz wind;
@@ -207,18 +231,18 @@ static actor_method_class daTori_FlagMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Tori_Flag = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Tori_Flag,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tori_Flag_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTori_Flag_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Tori_Flag,
+    /* Draw Prio    */ fpcDwPi_Tori_Flag_e,
     /* Actor SubMtd */ &daTori_FlagMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

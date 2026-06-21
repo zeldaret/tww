@@ -3,6 +3,8 @@
 // Translation Unit: JASTrackPort.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASTrackPort.h"
 #include "JSystem/JUtility/JUTAssert.h"
 

@@ -10,7 +10,6 @@
 struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
-struct mesg_entry;
 
 class dMenu_Option_c : public dDlst_base_c {
 public:
@@ -47,10 +46,12 @@ public:
     void outFontInit();
     void outFontMove();
     void outFontDraw();
+#if VERSION > VERSION_JPN
     f32 stringlength(fopMsgM_pane_class*, char*);
     void changeScaleCenter(fopMsgM_pane_class*, char*);
     void setSoundMode(u32);
     void changeScaleRight(fopMsgM_pane_class*, char*);
+#endif
     void initialize();
     void _create();
     void _delete();
@@ -73,6 +74,9 @@ private:
     /* 0x858 */ fopMsgM_pane_class m858[2];
     /* 0x8C8 */ fopMsgM_pane_class m8C8[4];
     /* 0x9A8 */ fopMsgM_pane_class m9A8[2];
+#if VERSION != VERSION_USA
+    fopMsgM_pane_class mA18_jpn[2];
+#endif
     /* 0xA18 */ fopMsgM_pane_class mA18[3];
     /* 0xAC0 */ fopMsgM_pane_class mAC0[2];
     /* 0xB30 */ fopMsgM_pane_class mB30[6];
@@ -86,11 +90,13 @@ private:
     /* 0xD3C */ char* mD3C;
     /* 0xD40 */ char* mD40;
     /* 0xD44 */ char* mD44;
+#if VERSION > VERSION_JPN
     /* 0xD48 */ char mD48[20];
     /* 0xD5C */ char mD5C[2][20];
     /* 0xD84 */ char mD84[2][20];
     /* 0xDAC */ char mDAC[3][20];
     /* 0xDE8 */ char mDE8[4][20];
+#endif
     /* 0xE38 */ u8 mE38;
     /* 0xE39 */ u8 mE39;
     /* 0xE3A */ u8 mE3A;
@@ -108,7 +114,7 @@ public:
     dMo_HIO_c();
     virtual ~dMo_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ s8 mNo;

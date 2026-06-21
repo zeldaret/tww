@@ -3,9 +3,9 @@
 // Translation Unit: d_ovlp_fade2.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_ovlp_fade2.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_overlap.h"
@@ -83,20 +83,20 @@ void dOvlpFd2_dlst_c::draw() {
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_S16, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_POS_XYZ, GX_S8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition2s16(-320, 240);
-        GXTexCoord2u8(0, 0);
+        GXTexCoord2s8(0, 0);
 
         GXPosition2s16(320, 240);
-        GXTexCoord2u8(1, 0);
+        GXTexCoord2s8(1, 0);
 
         GXPosition2s16(320, -240);
-        GXTexCoord2u8(1, 1);
+        GXTexCoord2s8(1, 1);
 
         GXPosition2s16(-320, -240);
-        GXTexCoord2u8(0, 1);
+        GXTexCoord2s8(0, 1);
     GXEnd();
 
     J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
@@ -235,7 +235,7 @@ static cPhs_State dOvlpFd2_Create(void* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-overlap_method_class l_dOvlpFd2_Method = {
+static overlap_method_class l_dOvlpFd2_Method = {
     (process_method_func)dOvlpFd2_Create,
     (process_method_func)dOvlpFd2_Delete,
     (process_method_func)dOvlpFd2_Execute,
@@ -244,34 +244,31 @@ overlap_method_class l_dOvlpFd2_Method = {
 };
 
 overlap_process_profile_definition g_profile_OVERLAP2 = {
-    fpcLy_ROOT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_OVERLAP2,
-    &g_fpcLf_Method.base,
-    sizeof(dOvlpFd2_c),
-    0,
-    0,
-    &g_fopOvlp_Method,
-    0x1E3,
-    &l_dOvlpFd2_Method,
+    /* Layer ID    */ fpcLy_ROOT_e,
+    /* List ID     */ 2,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_OVERLAP2_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(dOvlpFd2_c),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopOvlp_Method,
+    /* Draw Prio   */ fpcDwPi_OVERLAP2_e,
+    /* Ovlp SubMtd */ &l_dOvlpFd2_Method,
 };
 
 #if VERSION > VERSION_JPN
 overlap_process_profile_definition g_profile_OVERLAP3 = {
-    fpcLy_ROOT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_OVERLAP3,
-    &g_fpcLf_Method.base,
-    sizeof(dOvlpFd2_c),
-    0,
-    0,
-    &g_fopOvlp_Method,
-    0x1E4,
-    &l_dOvlpFd2_Method,
+    /* Layer ID    */ fpcLy_ROOT_e,
+    /* List ID     */ 2,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_OVERLAP3_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(dOvlpFd2_c),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopOvlp_Method,
+    /* Draw Prio   */ fpcDwPi_OVERLAP3_e,
+    /* Ovlp SubMtd */ &l_dOvlpFd2_Method,
 };
 #endif
-
-// Fakematch to fix the weak func order of cLib_calcTimer<signed char>(signed char*)
-#pragma sym off

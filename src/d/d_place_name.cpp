@@ -3,13 +3,13 @@
 // Translation Unit: d_place_name.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_place_name.h"
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_meter.h"
-#include "d/d_procname.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
 #include "JSystem/JKernel/JKRArchive.h"
@@ -81,9 +81,9 @@ void dPlace_name_c::setScreen(const char* name, JKRArchive* arc) {
 
 /* 801610A8-80161100       .text _openAnime__13dPlace_name_cFv */
 BOOL dPlace_name_c::_openAnime() {
-    if (pane.mUserArea < 10) {
-        pane.mUserArea++;
-        f32 alpha = fopMsgM_valueIncrease(10, pane.mUserArea, 0);
+    if (getCounter() < 10) {
+        addCounter();
+        f32 alpha = fopMsgM_valueIncrease(10, getCounter(), 0);
         fopMsgM_setNowAlpha(&pane, alpha);
     }
 
@@ -94,13 +94,13 @@ BOOL dPlace_name_c::_openAnime() {
 BOOL dPlace_name_c::_closeAnime() {
     BOOL ret = FALSE;
 
-    if (pane.mUserArea > 0) {
-        pane.mUserArea--;
-        f32 alpha = fopMsgM_valueIncrease(10, pane.mUserArea, 0);
+    if (getCounter() > 0) {
+        decCounter();
+        f32 alpha = fopMsgM_valueIncrease(10, getCounter(), 0);
         fopMsgM_setNowAlpha(&pane, alpha);
     }
 
-    if (pane.mUserArea <= 0)
+    if (getCounter() <= 0)
         ret = TRUE;
 
     return ret;
@@ -154,9 +154,9 @@ cPhs_State dPn_c::_create() {
         u32 lang = dComIfGs_getPalLanguage();
         char buf[32];
         sprintf(buf, "/res/placename/PN%d/pn_%02d_%d.bti", lang, dComIfGp_getNowStageNum() + 1, lang);
-        dvd = mDoDvdThd_toMainRam_c::create(buf, 0, mpHeap);
+        dvd = mDoDvdThd_toMainRam_c::create(buf, JKRArchive::DEFAULT_MOUNT_DIRECTION, mpHeap);
 #else
-        dvd = mDoDvdThd_toMainRam_c::create(name_texture[dComIfGp_getNowStageNum()], 0, mpHeap);
+        dvd = mDoDvdThd_toMainRam_c::create(name_texture[dComIfGp_getNowStageNum()], JKRArchive::DEFAULT_MOUNT_DIRECTION, mpHeap);
 #endif
 
         mState = 2;
@@ -171,7 +171,7 @@ cPhs_State dPn_c::_create() {
 #else
             DCStoreRangeNoSync(mpTIMG, 0x3c00);
 #endif
-            ((J2DPicture*)dPn_scrn->pane.pane)->changeTexture(mpTIMG, 0);
+            dPn_scrn->changeTexture(mpTIMG);
             mState = 3;
         }
         mDoExt_setCurrentHeap(oldHeap);
@@ -205,7 +205,7 @@ BOOL dPn_c::_draw() {
 BOOL dPn_c::_delete() {
     JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
     dComIfGp_setStageNameDelete();
-    delete dPn_scrn->scrn;
+    dPn_scrn->deleteScreen();
     delete dPn_scrn;
     if (dvd != NULL)
         delete dvd;
@@ -213,7 +213,7 @@ BOOL dPn_c::_delete() {
     mpHeap->freeAll();
     dComIfGp_offHeapLockFlag();
     mDoExt_setCurrentHeap(oldHeap);
-    dComIfG_resDelete(&mPhs, "PName");
+    dComIfG_resDeleteDemo(&mPhs, "PName");
     return TRUE;
 }
 
@@ -243,7 +243,7 @@ static cPhs_State dPn_Create(msg_class* i_msg) {
     return i_this->_create();
 }
 
-msg_method_class l_dPlace_name_Method = {
+static msg_method_class l_dPlace_name_Method = {
     (process_method_func)dPn_Create,
     (process_method_func)dPn_Delete,
     (process_method_func)dPn_Execute,
@@ -252,15 +252,15 @@ msg_method_class l_dPlace_name_Method = {
 };
 
 msg_process_profile_definition g_profile_PLACE_NAME = {
-    fpcLy_CURRENT_e,
-    12,
-    fpcPi_CURRENT_e,
-    PROC_PLACE_NAME,
-    &g_fpcLf_Method.base,
-    sizeof(dPn_c),
-    0,
-    0,
-    &g_fopMsg_Method,
-    0x1DD,
-    &l_dPlace_name_Method,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_PLACE_NAME_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dPn_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopMsg_Method,
+    /* Draw Prio    */ fpcDwPi_PLACE_NAME_e,
+    /* Msg SubMtd   */ &l_dPlace_name_Method,
 };

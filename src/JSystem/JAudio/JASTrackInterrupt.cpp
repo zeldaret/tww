@@ -3,6 +3,8 @@
 // Translation Unit: JASTrackInterrupt.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASTrackInterrupt.h"
 
 /* 80284118-80284158       .text init__Q28JASystem8TIntrMgrFv */

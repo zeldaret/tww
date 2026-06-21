@@ -3,6 +3,8 @@
 // Translation Unit: JPADraw.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPADraw.h"
 #include "JSystem/JParticle/JPABaseShape.h"
 #include "JSystem/JParticle/JPAExtraShape.h"
@@ -117,8 +119,8 @@ void JPADraw::draw(MtxP drawMtx) {
     GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetChanCtrl(GX_COLOR1A1, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetBlendMode(dc.pbsp->getBlendMode1(), dc.pbsp->getSrcBlendFactor1(), dc.pbsp->getDstBlendFactor1(), dc.pbsp->getBlendOp1());
-    cb.mPrmColor = dc.pbe->mGlobalPrmColor;
-    cb.mEnvColor = dc.pbe->mGlobalEnvColor;
+    dc.pbe->getBasePrmColor(cb.mPrmColor);
+    dc.pbe->getBaseEnvColor(cb.mEnvColor);
     cb.mDrawMtxPtr = drawMtx;
     cb.mSetupTev.setupTev(dc.pbsp, dc.petx);
     for (int i = 0; i < execEmtrVisNum; i++) {
@@ -146,101 +148,106 @@ void JPADraw::calc() {
 
 /* 80268940-802689C4       .text calcParticle__7JPADrawFP15JPABaseParticle */
 void JPADraw::calcParticle(JPABaseParticle* ptcl) {
-    ptcl->mRotateAngle += ptcl->mRotateSpeed;
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    params->mRotateAngle += params->mRotateSpeed;
     for (s32 i = 0; i < calcPtclVisNum; i++)
         mpCalcPtclVis[i]->calc(&dc, ptcl);
 }
 
 /* 802689C4-80268A48       .text calcChild__7JPADrawFP15JPABaseParticle */
 void JPADraw::calcChild(JPABaseParticle* ptcl) {
-    ptcl->mRotateAngle += ptcl->mRotateSpeed;
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    params->mRotateAngle += params->mRotateSpeed;
     for (s32 i = 0; i < calcChldVisNum; i++)
         mpCalcChldVis[i]->calc(&dc, ptcl);
 }
 
 /* 80268A48-80268F28       .text initParticle__7JPADrawFP15JPABaseParticle */
 void JPADraw::initParticle(JPABaseParticle* ptcl) {
-    ptcl->mAxis.set(JPABaseEmitter::emtrInfo.mEmitterGlobalRot[0][1], JPABaseEmitter::emtrInfo.mEmitterGlobalRot[1][1], JPABaseEmitter::emtrInfo.mEmitterGlobalRot[2][1]);
-    ptcl->mPrmColor = mPrmColor;
-    ptcl->mEnvColor = mEnvColor;
-    ptcl->mAlphaOut = 1.0f;
-    ptcl->mLoopOffset = dc.pbe->getRandomF() * dc.pbsp->getLoopOffset();
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    dc.pbe->getAxisYVec(params->mAxis);
+    params->mPrmColor = mPrmColor;
+    params->mEnvColor = mEnvColor;
+    params->mAlphaOut = 1.0f;
+    params->mLoopOffset = dc.pbe->getRandomF() * dc.pbsp->getLoopOffset();
     if (dc.pesp != NULL) {
         if (dc.pesp->isEnableRotate()) {
-            ptcl->mRotateAngle = (dc.pesp->getRotateAngle() * 32768.0f) + (dc.pbe->getRandomSF() * dc.pesp->getRotateRandomAngle() * 65536.0f);
+            params->mRotateAngle = (dc.pesp->getRotateAngle() * 32768.0f) + (dc.pbe->getRandomSF() * dc.pesp->getRotateRandomAngle() * 65536.0f);
             s16 rotateSpeed;
             if (dc.pbe->getRandomRF() < dc.pesp->getRotateDirection()) {
                 rotateSpeed = dc.pesp->getRotateSpeed() * (dc.pesp->getRotateRandomSpeed() * dc.pbe->getRandomRF() + 1.0f) * 32768.0f;
             } else {
                 rotateSpeed = -dc.pesp->getRotateSpeed() * (dc.pesp->getRotateRandomSpeed() * dc.pbe->getRandomRF() + 1.0f) * 32768.0f;
             }
-            ptcl->mRotateSpeed = rotateSpeed;
+            params->mRotateSpeed = rotateSpeed;
         } else {
-            ptcl->mRotateAngle = 0;
-            ptcl->mRotateSpeed = 0;
+            params->mRotateAngle = 0;
+            params->mRotateSpeed = 0;
         }
 
         if (dc.pesp->isEnableScale()) {
-            ptcl->mScaleX = ptcl->mScaleY = ptcl->mScaleOut = (dc.pbe->getRandomRF() * dc.pesp->getRandomScale() + 1.0f) * mScaleOut;
+            params->mScaleX = params->mScaleY = params->mScaleOut = (dc.pbe->getRandomRF() * dc.pesp->getRandomScale() + 1.0f) * mScaleOut;
         } else {
-            ptcl->mScaleX = ptcl->mScaleY = ptcl->mScaleOut = mScaleOut;
+            params->mScaleX = params->mScaleY = params->mScaleOut = mScaleOut;
         }
 
         if (dc.pesp->isEnableAlpha()) {
-            ptcl->mAlphaWaveRandom = (dc.pbe->getRandomRF() * dc.pesp->getAlphaWaveRandom() + 1.0f);
+            params->mAlphaWaveRandom = (dc.pbe->getRandomRF() * dc.pesp->getAlphaWaveRandom() + 1.0f);
         } else {
-            ptcl->mAlphaWaveRandom = 1.0f;
+            params->mAlphaWaveRandom = 1.0f;
         }
     } else {
-        ptcl->mRotateAngle = 0;
-        ptcl->mRotateSpeed = 0;
-        ptcl->mScaleOut = ptcl->mScaleX = ptcl->mScaleY = mScaleOut;
-        ptcl->mAlphaWaveRandom = 1.0f;
+        params->mRotateAngle = 0;
+        params->mRotateSpeed = 0;
+        params->mScaleOut = params->mScaleX = params->mScaleY = mScaleOut;
+        params->mAlphaWaveRandom = 1.0f;
     }
 }
 
 /* 80268F28-802692A4       .text initChild__7JPADrawFP15JPABaseParticleP15JPABaseParticle */
 void JPADraw::initChild(JPABaseParticle* ptcl, JPABaseParticle* chld) {
-    chld->mAxis.set(ptcl->mAxis);
-    chld->mAlphaOut = 1.0f;
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    JPADrawParams* chld_params = chld->getDrawParamPPtr();
+    chld_params->mAxis.set(params->mAxis);
+    chld_params->mAlphaOut = 1.0f;
     if (dc.pssp->isInheritedRGB()) {
         f32 ratio = dc.pssp->getInheritRGB();
-        chld->mPrmColor.r = ptcl->mPrmColor.r * ratio;
-        chld->mPrmColor.g = ptcl->mPrmColor.g * ratio;
-        chld->mPrmColor.b = ptcl->mPrmColor.b * ratio;
-        chld->mEnvColor.r = ptcl->mEnvColor.r * ratio;
-        chld->mEnvColor.g = ptcl->mEnvColor.g * ratio;
-        chld->mEnvColor.b = ptcl->mEnvColor.b * ratio;
+        chld_params->mPrmColor.r = params->mPrmColor.r * ratio;
+        chld_params->mPrmColor.g = params->mPrmColor.g * ratio;
+        chld_params->mPrmColor.b = params->mPrmColor.b * ratio;
+        chld_params->mEnvColor.r = params->mEnvColor.r * ratio;
+        chld_params->mEnvColor.g = params->mEnvColor.g * ratio;
+        chld_params->mEnvColor.b = params->mEnvColor.b * ratio;
     } else {
-        chld->mPrmColor = dc.pssp->getPrm();
-        chld->mEnvColor = dc.pssp->getEnv();
+        chld_params->mPrmColor = dc.pssp->getPrm();
+        chld_params->mEnvColor = dc.pssp->getEnv();
     }
 
     if (dc.pssp->isInheritedAlpha()) {
-        f32 ratio = dc.pssp->getInheritAlpha() * ptcl->mAlphaOut;
-        chld->mPrmColor.a = ptcl->mPrmColor.a * ratio;
-        chld->mEnvColor.a = ptcl->mEnvColor.a * ratio;
+        f32 ratio = dc.pssp->getInheritAlpha() * params->mAlphaOut;
+        chld_params->mPrmColor.a = params->mPrmColor.a * ratio;
+        chld_params->mEnvColor.a = params->mEnvColor.a * ratio;
     } else {
-        chld->mPrmColor.a = dc.pssp->getPrmAlpha();
-        chld->mEnvColor.a = dc.pssp->getEnvAlpha();
+        chld_params->mPrmColor.a = dc.pssp->getPrmAlpha();
+        chld_params->mEnvColor.a = dc.pssp->getEnvAlpha();
     }
 
     if (dc.pssp->isInheritedScale()) {
         f32 ratio = dc.pssp->getInheritScale();
-        chld->mScaleX = chld->mScaleOut = ratio * ptcl->mScaleX;
-        chld->mScaleY = chld->mAlphaWaveRandom = ratio * ptcl->mScaleY;
+        chld_params->mScaleX = chld_params->mScaleOut = ratio * params->mScaleX;
+        chld_params->mScaleY = chld_params->mAlphaWaveRandom = ratio * params->mScaleY;
     } else {
-        chld->mAlphaWaveRandom = 1.0f;
-        chld->mScaleY = 1.0f;
-        chld->mScaleOut = 1.0f;
-        chld->mScaleX = 1.0f;
+        chld_params->mAlphaWaveRandom = 1.0f;
+        chld_params->mScaleY = 1.0f;
+        chld_params->mScaleOut = 1.0f;
+        chld_params->mScaleX = 1.0f;
     }
 
-    chld->mRotateAngle = ptcl->mRotateAngle;
+    chld_params->mRotateAngle = params->mRotateAngle;
     if (dc.pssp->isEnableRotate()) {
-        chld->mRotateSpeed = dc.pssp->getRotateSpeed() * 32768.0f;
+        chld_params->mRotateSpeed = dc.pssp->getRotateSpeed() * 32768.0f;
     } else {
-        chld->mRotateSpeed = 0;
+        chld_params->mRotateSpeed = 0;
     }
 }
 
@@ -658,12 +665,11 @@ void JPADraw::setParticleClipBoard() {
 
     GXLoadPosMtxImm(cb.mDrawMtx, GX_PNMTX0);
 
-    JPABaseEmitter* emtr = dc.pbe;
-    f32 scaleX = emtr->mGlobalParticleScale.x;
-    f32 scaleY = emtr->mGlobalParticleScale.y;
+    JGeometry::TVec3<f32> scale;
+    dc.pbe->getGlobalParticleScale(scale);
 
-    cb.mGlobalScaleX = 25.0f * dc.pbsp->getBaseSizeX() * scaleX;
-    cb.mGlobalScaleY = 25.0f * dc.pbsp->getBaseSizeY() * scaleY;
+    cb.mGlobalScaleX = 25.0f * dc.pbsp->getBaseSizeX() * scale.x;
+    cb.mGlobalScaleY = 25.0f * dc.pbsp->getBaseSizeY() * scale.y;
 
     if (dc.pbsp->getType() == JPABaseShape::JPAType_Point) {
         cb.mGlobalScaleX *= 1.02f;
@@ -744,16 +750,15 @@ void JPADraw::setChildClipBoard() {
 
     GXLoadPosMtxImm(cb.mDrawMtx, GX_PNMTX0);
 
-    JPABaseEmitter* emtr = dc.pbe;
-    f32 scaleX = emtr->mGlobalParticleScale.x;
-    f32 scaleY = emtr->mGlobalParticleScale.y;
+    JGeometry::TVec3<f32> scale;
+    dc.pbe->getGlobalParticleScale(scale);
 
     if (!dc.pssp->isInheritedScale()) {
-        cb.mGlobalScaleX = 25.0f * dc.pssp->getScaleX() * scaleX;
-        cb.mGlobalScaleY = 25.0f * dc.pssp->getScaleY() * scaleY;
+        cb.mGlobalScaleX = 25.0f * dc.pssp->getScaleX() * scale.x;
+        cb.mGlobalScaleY = 25.0f * dc.pssp->getScaleY() * scale.y;
     } else {
-        cb.mGlobalScaleX = 25.0f * dc.pbsp->getBaseSizeX() * scaleX;
-        cb.mGlobalScaleY = 25.0f * dc.pbsp->getBaseSizeY() * scaleY;
+        cb.mGlobalScaleX = 25.0f * dc.pbsp->getBaseSizeX() * scale.x;
+        cb.mGlobalScaleY = 25.0f * dc.pbsp->getBaseSizeY() * scale.y;
     }
 
     if (dc.pssp->getType() == JPABaseShape::JPAType_Point) {
@@ -852,7 +857,7 @@ void JPADraw::drawParticle() {
 void JPADraw::drawChild() {
     field_0xc2 |= 0x02;
     setChildClipBoard();
-    dc.mpActiveParticles = &dc.pbe->mChildParticles;
+    dc.mpActiveParticles = dc.pbe->getChildParticleList();
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 
@@ -916,7 +921,7 @@ void JPADraw::zDrawParticle() {
     GXSetLineWidth(cb.mGlobalScaleX, GX_TO_ONE);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GXSetZCompLoc(GX_FALSE);
-    GXSetAlphaCompare(GX_GEQUAL, dc.pbe->mGlobalPrmColor.a, GX_AOP_OR, GX_GEQUAL, dc.pbe->mGlobalPrmColor.a);
+    GXSetAlphaCompare(GX_GEQUAL, dc.pbe->getGlobalAlpha(), GX_AOP_OR, GX_GEQUAL, dc.pbe->getGlobalAlpha());
     GXSetAlphaUpdate(GX_FALSE);
     GXSetColorUpdate(GX_FALSE);
     GXSetCullMode(GX_CULL_NONE);
@@ -952,7 +957,7 @@ void JPADraw::zDrawParticle() {
 void JPADraw::zDrawChild() {
     field_0xc2 |= 0x02;
     setChildClipBoard();
-    dc.mpActiveParticles = &dc.pbe->mChildParticles;
+    dc.mpActiveParticles = dc.pbe->getChildParticleList();
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 
@@ -964,7 +969,7 @@ void JPADraw::zDrawChild() {
 
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GXSetZCompLoc(GX_FALSE);
-    GXSetAlphaCompare(GX_GEQUAL, dc.pbe->mGlobalPrmColor.a, GX_AOP_OR, GX_GEQUAL, dc.pbe->mGlobalPrmColor.a);
+    GXSetAlphaCompare(GX_GEQUAL, dc.pbe->getGlobalAlpha(), GX_AOP_OR, GX_GEQUAL, dc.pbe->getGlobalAlpha());
     GXSetAlphaUpdate(GX_FALSE);
     GXSetColorUpdate(GX_FALSE);
     GXSetCullMode(GX_CULL_NONE);
@@ -999,10 +1004,7 @@ void JPADraw::zDrawChild() {
 
 /* 8026C4DC-8026C640       .text loadYBBMtx__7JPADrawFPA4_f */
 void JPADraw::loadYBBMtx(MtxP mtx) {
-    JGeometry::TVec3<f32> v;
-    v.x = 0.0f;
-    v.y = mtx[1][1];
-    v.z = mtx[2][1];
+    JGeometry::TVec3<f32> v(0.0f, mtx[1][1], mtx[2][1]);
     JUT_ASSERT(0x596, !v.isZero());
     v.normalize();
 

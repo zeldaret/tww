@@ -3,11 +3,10 @@
 // Translation Unit: d_a_andsw2.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_andsw2.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 enum Action {
     ACT_ON_ALL,
@@ -179,7 +178,7 @@ BOOL daAndsw2_c::execute() {
 cPhs_State daAndsw2_c::create() {
     int sw = getSwbit();
     
-    fopAcM_SetupActor(this, daAndsw2_c);
+    fopAcM_ct(this, daAndsw2_c);
     
     switch (getType()) {
     case TYPE_ONE_OFF:
@@ -255,18 +254,18 @@ static actor_method_class l_daAndsw2_Method = {
 };
 
 actor_process_profile_definition g_profile_ANDSW2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ANDSW2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ANDSW2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daAndsw2_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ANDSW2,
+    /* Draw Prio    */ fpcDwPi_ANDSW2_e,
     /* Actor SubMtd */ &l_daAndsw2_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

@@ -3,6 +3,8 @@
 // Translation Unit: JUTGba.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JUtility/JUTGba.h"
 #include "JSystem/JKernel/JKRThread.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -281,7 +283,7 @@ void* JUTGba::gbaThreadMain(void* param_1) {
                 sManager->gbaThread_GetStatus(&threadVar);
                 break;
             default:
-                OSPanic(__FILE__, VERSION_SELECT(622, 623, 623, 623), "UNKNOWN GBA COMMAND.");
+                OSPanic(__FILE__, DEMO_SELECT(622, 623), "UNKNOWN GBA COMMAND.");
                 break;
             }
             if (threadVar.field_0x14) {

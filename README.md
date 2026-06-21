@@ -42,21 +42,14 @@ macOS:
   ```
   brew install ninja
   ```
-- Install [wine-crossover](https://github.com/Gcenx/homebrew-wine):
-  ```
-  brew install --cask --no-quarantine gcenx/wine/wine-crossover
-  ```
 
-After OS upgrades, if macOS complains about `Wine Crossover.app` being unverified, you can unquarantine it using:
-```sh
-sudo xattr -rd com.apple.quarantine '/Applications/Wine Crossover.app'
-```
+[wibo](https://github.com/decompals/wibo), a minimal 32-bit Windows binary wrapper, will be automatically downloaded and used.
 
 Linux:
 ------
 - Install [ninja](https://github.com/ninja-build/ninja/wiki/Pre-built-Ninja-packages).
-- For non-x86(_64) platforms: Install wine from your package manager.
-  - For x86(_64), [WiBo](https://github.com/decompals/WiBo), a minimal 32-bit Windows binary wrapper, will be automatically downloaded and used.
+
+[wibo](https://github.com/decompals/wibo), a minimal 32-bit Windows binary wrapper, will be automatically downloaded and used.
 
 Building
 ========
@@ -106,14 +99,17 @@ We have a shared Ghidra project for TWW already set up. To get access to this se
 Then wait for an admin to approve your request. Once you have access, you can set up the Ghidra project like so:
 
 * To use Ghidra, you first need to install JDK. You can download OpenJDK 17 from [here](https://adoptium.net/temurin/releases/).
-* Download the RootCubed Ghidra build ghidra_11.1_DEV_20240115 from [here](https://rootcubed.dev/ghidra_builds/).
+* Download the RootCubed Ghidra build from [here](https://github.com/RootCubed/ghidra-ci/releases/tag/2024-10-05).
 * Launch Ghidra with `ghidraRun`.
 * In Ghidra, go to `File -> New Project...`. Select `Shared Project` and input the following information:
     * Server Name: ghidra.decomp.dev
     * Port Number: 13100
     * User ID: (the username that you chose earlier)
     * Password: (the password that you chose earlier)
-* You should now be able to view the files in the Ghidra project. You should checkout the `main` file.
+* You should now be able to view the files in the Ghidra project. Checkout the `main` file.
+* Finally, you should make a local copy of the `main` file in Ghidra. Right click on `main`, select Copy, then right click again and select Paste.
+  * This is so that you will be able to save changes that you make while decompiling, as you don't have write access to change `main` itself.
+  * Additionally, Ghidra has a bug that causes the remote version of `main` to be extremely slow to use if you only have read access, so you should still make a local copy even if you don't intend to change anything. The first checkout of `main` will still be slow, but opening the local copy in the future should be fast.
 
 Now you have Ghidra set up and ready to use.
 

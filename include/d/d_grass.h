@@ -19,7 +19,7 @@ public:
     void WorkAt(fopAc_ac_c*, u32, int, dCcMassS_HitInf*);
     void hitCheck(int);
 
-public:    
+public:
     /* 0x00 */ u8 mState;
     /* 0x01 */ u8 mInitFlags;
     /* 0x02 */ s8 mAnimIdx;

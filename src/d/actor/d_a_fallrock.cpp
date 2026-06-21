@@ -3,10 +3,17 @@
 // Translation Unit: d_a_fallrock.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fallrock.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Always.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_cc_d.h"
+#include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_kankyo_mng.h"
+
+char daFallRock_c::m_arcname[] = "Always";
+f32 daFallRock_c::m_falllen = 7000.0f;
+s16 daFallRock_c::m_rot_speed = 0x3E8;
 
 const dCcD_SrcCyl daFallRock_c::m_cyl_src = {
     // dCcD_SrcGObjInf
@@ -31,32 +38,58 @@ const dCcD_SrcCyl daFallRock_c::m_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daFallRock_c*) i_this)->CreateHeap();
 }
 
 /* 00000098-00000140       .text CreateHeap__12daFallRock_cFv */
-void daFallRock_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daFallRock_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname, dRes_INDEX_ALWAYS_BDL_KROCK_00_e);
+    JUT_ASSERT(DEMO_SELECT(159, 161), modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000,0x11020002);
+    return TRUE;
 }
 
 /* 00000140-000001F0       .text set_mtx__12daFallRock_cFv */
 void daFallRock_c::set_mtx() {
-    /* Nonmatching */
+    J3DModel* model = mpModel;
+    model->setBaseScale(scale);
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::XYZrotM(shape_angle);
+    mDoMtx_stack_c::transM(0.0f, -(scale.x * 120.0f), 0.0f);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 000001F0-000002B0       .text daFallRock_Draw__FP12daFallRock_c */
-static BOOL daFallRock_Draw(daFallRock_c*) {
-    /* Nonmatching */
+static BOOL daFallRock_Draw(daFallRock_c* i_this) {
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
+    g_env_light.setLightTevColorType(i_this->mpModel, &i_this->tevStr);
+    mDoExt_modelUpdate(i_this->mpModel);
+
+    cXyz shadow_pos(i_this->current.pos);
+
+    shadow_pos.y = i_this->field_0x29C.GetGroundH() + 100.0f;
+
+    f32 shadow_scale = i_this->scale.x * 90.0f;
+    dComIfGd_setSimpleShadow2(
+        &shadow_pos,
+        i_this->field_0x29C.GetGroundH(),
+        shadow_scale,
+        i_this->field_0x29C.m_gnd
+    );
+
+    return TRUE;
 }
 
 /* 000002B0-000002D0       .text daFallRock_Execute__FP12daFallRock_c */
@@ -66,7 +99,69 @@ static BOOL daFallRock_Execute(daFallRock_c* i_this) {
 
 /* 000002D0-00000810       .text execute__12daFallRock_cFv */
 BOOL daFallRock_c::execute() {
-    /* Nonmatching */
+    BOOL deleted = FALSE;
+    field_0x614++;
+
+    fopAcM_posMoveF(this, mStts.GetCCMoveP());
+    field_0x29C.CrrPos(*dComIfG_Bgsp());
+
+    field_0x610 = fabs(speed.y) + (f64)field_0x610;
+    if (field_0x610 > m_falllen) {
+        if (deleted == FALSE) {
+            deleted = fopAcM_delete(this);
+        }
+    }
+
+    if (field_0x29C.ChkGroundLanding()) {
+        setParticle(0, &current.pos);
+        fopAcM_seStart(this, JA_SE_OBJ_BREAK_ROCK, 0);
+        if (deleted == FALSE) {
+            deleted = fopAcM_delete(this);
+        }
+    }
+
+    if (field_0x29C.ChkWaterIn()) {
+        if (scale.x < 1.3f) {
+            fopAcM_seStart(this, JA_SE_OBJ_FALL_WATER_M, 0);
+        } else {
+            fopAcM_seStart(this, JA_SE_OBJ_FALL_WATER_L, 0);
+        }
+        setParticle(2, &current.pos);
+        if (!deleted) {
+            deleted = fopAcM_delete(this);
+        }
+    }
+
+    dBgS_ObjGndChk_Yogan chk;
+
+    cXyz check_pos;
+    check_pos.set(old.pos.x, old.pos.y + scale.x * 120.0f, old.pos.z);
+
+    chk.SetPos(&check_pos);
+
+    f32 height = dComIfG_Bgsp()->GroundCross(&chk);
+    if (height != -G_CM3D_F_INF) {
+        if (height > current.pos.y + scale.x * 120.0f) {
+            if (scale.x < 1.3f) {
+                fopAcM_seStart(this, JA_SE_OBJ_FALL_MAGMA_M, 0);
+            } else {
+                fopAcM_seStart(this, JA_SE_OBJ_FALL_MAGMA_L, 0);
+            }
+
+            check_pos.y = height;
+            setParticle(1, &check_pos);
+            if (!deleted) {
+                fopAcM_delete(this);
+            }
+        }
+    }
+    cLib_chaseAngleS(&shape_angle.x, shape_angle.x + m_rot_speed, m_rot_speed);
+
+    set_mtx();
+    mCyl.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&mCyl);
+
+    return TRUE;
 }
 
 /* 00000E38-00000E40       .text daFallRock_IsDelete__FP12daFallRock_c */
@@ -75,8 +170,13 @@ static BOOL daFallRock_IsDelete(daFallRock_c*) {
 }
 
 /* 00000E40-00000E68       .text daFallRock_Delete__FP12daFallRock_c */
-static BOOL daFallRock_Delete(daFallRock_c*) {
-    /* Nonmatching */
+static BOOL daFallRock_Delete(daFallRock_c* i_this) {
+    i_this->~daFallRock_c();
+    return TRUE;
+}
+
+daFallRock_c::~daFallRock_c() {
+    dComIfG_resDeleteDemo(&mPhs, m_arcname);
 }
 
 /* 00001030-00001050       .text daFallRock_Create__FP10fopAc_ac_c */
@@ -86,12 +186,107 @@ static cPhs_State daFallRock_Create(fopAc_ac_c* i_this) {
 
 /* 00001050-0000127C       .text create__12daFallRock_cFv */
 cPhs_State daFallRock_c::create() {
-    /* Nonmatching */
+    fopAcM_ct_Retail(this, daFallRock_c);
+
+    cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname);
+    if (res == cPhs_COMPLEATE_e) {
+        fopAcM_ct_Demo(this, daFallRock_c);
+
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xB80)) {
+            return cPhs_ERROR_e;
+        }
+        fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+
+        mStts.Init(0xFF, 0xFF, this);
+        mCyl.Set(m_cyl_src);
+        mCyl.SetStts(&mStts);
+
+        mCyl.SetH(scale.x * 120.0f);
+        mCyl.SetR(scale.x * 90.0f);
+        field_0x460.SetWall(30.0f, 30.0f);
+        field_0x29C.Set(
+            fopAcM_GetPosition_p(this),
+            fopAcM_GetOldPosition_p(this),
+            this,
+            1,
+            &field_0x460,
+            fopAcM_GetSpeed_p(this)
+        );
+        set_mtx();
+
+        f32 grav = -5.0f;
+        f32 fall_speed = -70.0f;
+        f32 speed_f = 0.0f;
+        gravity = grav;
+        speedF = speed_f;
+        fopAcM_SetMaxFallSpeed(this, fall_speed);
+        field_0x610 = 0.0f;
+        field_0x29C.ClrWaterNone();
+    }
+
+    return res;
 }
 
 /* 00001588-00001794       .text setParticle__12daFallRock_cFiP4cXyz */
-void daFallRock_c::setParticle(int, cXyz*) {
-    /* Nonmatching */
+void daFallRock_c::setParticle(int param_1, cXyz* pos) {
+    cXyz particle_scale(5.0f, 5.0f, 5.0f);
+
+    field_0x60C.r = tevStr.mColorC0.r;
+    field_0x60C.g = tevStr.mColorC0.g;
+    field_0x60C.b = tevStr.mColorC0.b;
+    field_0x60C.a = tevStr.mColorC0.a;
+
+    particle_scale.setall(particle_scale.x * scale.x);
+
+    cXyz pos_copy = *pos;
+
+    switch (param_1) {
+        case 0: {
+            dComIfGp_particle_set(
+                dPa_name::ID_IT_JN_STS_HAHEN,
+                &pos_copy,
+                NULL,
+                &particle_scale,
+                0xFF,
+                NULL,
+                -1,
+                &tevStr.mColorK0,
+                &tevStr.mColorK0
+            );
+
+            J3DModelData* modelData = (J3DModelData*)
+                dComIfG_getObjectRes(m_arcname, dRes_INDEX_ALWAYS_BDL_MPI_KOISHI_e);
+            J3DAnmTexPattern* anmTexPattern = (J3DAnmTexPattern*)
+                dComIfG_getObjectRes(m_arcname, dRes_INDEX_ALWAYS_BTP_MPI_KOISHI_e);
+
+            JPABaseEmitter* emitter = (JPABaseEmitter*)dComIfGp_particle_set(
+                dPa_name::ID_IT_JN_M_STS_HAHEN,
+                &pos_copy,
+                NULL,
+                &particle_scale,
+                0xFF,
+                NULL,
+                -1,
+                &field_0x60C,
+                &tevStr.mColorK0
+            );
+            if (emitter != NULL && modelData != NULL && anmTexPattern != NULL) {
+                dPa_J3DmodelEmitter_c* modelEmitter = new dPa_J3DmodelEmitter_c(
+                    emitter, modelData, tevStr, anmTexPattern, 0, 0
+                );
+                if (modelEmitter != NULL) {
+                    dComIfGp_particle_addModelEmitter(modelEmitter);
+                }
+            }
+            break;
+        }
+        case 1:
+            fopKyM_createMpillar(pos, scale.x);
+            break;
+        case 2:
+            fopKyM_createWpillar(pos, scale.x, 1.0f, 0);
+            break;
+    }
 }
 
 static actor_method_class l_daFallRock_Method = {
@@ -103,18 +298,18 @@ static actor_method_class l_daFallRock_Method = {
 };
 
 actor_process_profile_definition g_profile_FallRock = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_FallRock,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_FallRock_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daFallRock_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_FallRock,
+    /* Draw Prio    */ fpcDwPi_FallRock_e,
     /* Actor SubMtd */ &l_daFallRock_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };
