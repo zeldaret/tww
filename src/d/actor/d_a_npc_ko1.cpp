@@ -1334,7 +1334,9 @@ void daNpc_Ko1_c::partner_srch() {
             return;
 
         case 8:
+#if VERSION == VERSION_DEMO
             field_0x8A8 = state; 
+#endif
             return;
     }
    
