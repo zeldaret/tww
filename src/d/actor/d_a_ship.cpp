@@ -4157,7 +4157,7 @@ BOOL daShip_c::execute() {
     }
     else {
         attention_info.position = current.pos;
-        if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) && !checkStateFlg(daSFLG_UNK80000000_e)) {
+        if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) && !checkStateFlg(daSFLG_PHANTOM_GANON_BATTLE)) {
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1980) || !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0902)) {
                 attention_info.flags = fopAc_Attn_ACTION_SHIP_e;
             }
