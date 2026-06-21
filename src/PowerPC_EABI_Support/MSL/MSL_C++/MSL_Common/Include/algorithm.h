@@ -71,7 +71,7 @@ ForwardIterator upper_bound(ForwardIterator first, ForwardIterator last, const T
 }
 
 template<class InputIt, class UnaryPredicate>
-InputIt find_if(InputIt first, InputIt last, UnaryPredicate p) {
+inline InputIt find_if(InputIt first, InputIt last, UnaryPredicate p) {
 	while (first != last && !p(*first)) {
 		++first;
 	}

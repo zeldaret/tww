@@ -24,7 +24,7 @@ public:
     void exe_normal(daObjHha_c*);
     void exe_move(daObjHha_c*);
     void draw_normal(daObjHha_c*);
-public: 
+public:
     /* 0x00 */ J3DModel* mpModel;
     /* 0x04 */ dBgW* mpBgw;
     /* 0x08 */ cXyz mPos; // Position offset from current.pos
@@ -40,8 +40,6 @@ public:
 
 class daObjHhaSplash_c {
 public:
-    daObjHhaSplash_c() {}
-    ~daObjHhaSplash_c() {}
     cXyz get_base_pos() { return mBasePos; };
     cXyz get_pos() { return mPos; };
 

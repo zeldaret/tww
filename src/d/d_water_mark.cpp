@@ -3,12 +3,18 @@
 // Translation Unit: d_water_mark.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_water_mark.h"
 #include "f_op/f_op_kankyo.h"
 
-/* 8023DB48-8023DBF8       .text dWaterMark_Draw__FP12dWaterMark_c */
-static BOOL dWaterMark_Draw(dWaterMark_c*) {
+BOOL dWaterMark_c::draw() {
     /* Nonmatching */
+}
+
+/* 8023DB48-8023DBF8       .text dWaterMark_Draw__FP12dWaterMark_c */
+static BOOL dWaterMark_Draw(dWaterMark_c* i_this) {
+    /* Nonmatching */
+    return i_this->draw();
 }
 
 /* 8023DBF8-8023DE2C       .text setMatrix__12dWaterMark_cFv */
@@ -16,27 +22,60 @@ void dWaterMark_c::setMatrix() {
     /* Nonmatching */
 }
 
-/* 8023DE2C-8023DF24       .text dWaterMark_Execute__FP12dWaterMark_c */
-static BOOL dWaterMark_Execute(dWaterMark_c*) {
+BOOL dWaterMark_c::execute() {
     /* Nonmatching */
+}
+
+/* 8023DE2C-8023DF24       .text dWaterMark_Execute__FP12dWaterMark_c */
+static BOOL dWaterMark_Execute(dWaterMark_c* i_this) {
+    /* Nonmatching */
+    return i_this->execute();
 }
 
 /* 8023DF24-8023DF2C       .text dWaterMark_IsDelete__FP12dWaterMark_c */
 static BOOL dWaterMark_IsDelete(dWaterMark_c*) {
+    return TRUE;
+}
+
+BOOL dWaterMark_c::wm_delete() {
     /* Nonmatching */
 }
 
 /* 8023DF2C-8023DF80       .text dWaterMark_Delete__FP12dWaterMark_c */
-static BOOL dWaterMark_Delete(dWaterMark_c*) {
+static BOOL dWaterMark_Delete(dWaterMark_c* i_this) {
     /* Nonmatching */
+    return i_this->wm_delete();
 }
 
 /* 8023DF80-8023DFA0       .text dWaterMark_Create__FP12kankyo_class */
-static cPhs_State dWaterMark_Create(kankyo_class*) {
-    /* Nonmatching */
+static cPhs_State dWaterMark_Create(kankyo_class* i_this) {
+    dWaterMark_c* a_this = (dWaterMark_c*)i_this;
+    return a_this->create();
 }
 
 /* 8023DFA0-8023E29C       .text create__12dWaterMark_cFv */
-void dWaterMark_c::create() {
+cPhs_State dWaterMark_c::create() {
     /* Nonmatching */
 }
+
+static kankyo_method_class l_dWaterMark_Method = {
+    (process_method_func)dWaterMark_Create,
+    (process_method_func)dWaterMark_Delete,
+    (process_method_func)dWaterMark_Execute,
+    (process_method_func)dWaterMark_IsDelete,
+    (process_method_func)dWaterMark_Draw,
+};
+
+kankyo_process_profile_definition g_profile_WATER_MARK = {
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x0009,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_WATER_MARK_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dWaterMark_c),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_WATER_MARK_e,
+    /* Kankyo SubMtd */ &l_dWaterMark_Method,
+};

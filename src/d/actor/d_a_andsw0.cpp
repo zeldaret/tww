@@ -3,11 +3,10 @@
 // Translation Unit: d_a_andsw0.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_andsw0.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_bk.h"
 #include "d/actor/d_a_bb.h"
 
@@ -144,7 +143,7 @@ static s32 check_count;
 
 /* 000003C4-0000044C       .text bk_s_sub1__FPvPv */
 static void* bk_s_sub1(void* i_this, void*) {
-    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BK && (fopAcM_GetParam(i_this) & 0xF) == 7)  {
+    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == fpcNm_BK_e && (fopAcM_GetParam(i_this) & 0xF) == 7)  {
         s32 count = check_count; //regswaps without this
         if(count < 2) {
             ac[check_count] = i_this;
@@ -159,7 +158,7 @@ static void* bk_s_sub1(void* i_this, void*) {
 
 /* 0000044C-000004D4       .text bk_s_sub2__FPvPv */
 static void* bk_s_sub2(void* i_this, void*) {
-    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BK && (fopAcM_GetParam(i_this) & 0xF) == 4)  {
+    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == fpcNm_BK_e && (fopAcM_GetParam(i_this) & 0xF) == 4)  {
         s32 count = check_count; //regswaps without this
         if(count == 2) {
             ac[check_count] = i_this;
@@ -174,7 +173,7 @@ static void* bk_s_sub2(void* i_this, void*) {
 
 /* 000004D4-0000055C       .text bk_s_sub3__FPvPv */
 static void* bk_s_sub3(void* i_this, void*) {
-    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BK && (fopAcM_GetParam(i_this) & 0xF) == 5)  {
+    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == fpcNm_BK_e && (fopAcM_GetParam(i_this) & 0xF) == 5)  {
         s32 count = check_count; //regswaps without this
         if(count < 5) {
             ac[check_count] = i_this;
@@ -189,7 +188,7 @@ static void* bk_s_sub3(void* i_this, void*) {
 
 /* 0000055C-000005D4       .text bb_s_sub__FPvPv */
 static void* bb_s_sub(void* search, void*) {
-    if(fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_BB)  {
+    if(fopAcM_IsActor(search) && fopAcM_GetName(search) == fpcNm_BB_e)  {
         s32 count = check_count; //regswaps without this
         if(count < 7) {
             ac[check_count] = search;
@@ -235,26 +234,26 @@ static void hajimarinomori_check(andsw0_class* i_this) {
     else {
         for(int i = 0; i < 7; i++) {}
 
-        if (dComIfGs_isEventBit(4)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0004)) {
             bb_class* kargaroc = (bb_class*)ac[5];
-            fopAcM_delete(kargaroc);
+            fopAcM_delete(&kargaroc->actor);
             kargaroc = (bb_class*)ac[6];
-            fopAcM_delete(kargaroc);
+            fopAcM_delete(&kargaroc->actor);
             
             bk_class* bokoblin = (bk_class*)ac[3];
             bokoblin->m121C = 1;
             bokoblin = (bk_class*)ac[4];
             bokoblin->m121C = 1;
             
-            if (dComIfGs_isEventBit(0x301)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0301)) {
                 bokoblin = (bk_class*)ac[0];
                 bokoblin->m121C = 1;
             }
-            if (dComIfGs_isEventBit(0x480)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0480)) {
                 bokoblin = (bk_class*)ac[1];
                 bokoblin->m121C = 1;
             }
-            if (dComIfGs_isEventBit(0x301) && dComIfGs_isEventBit(0x480)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0301) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0480)) {
                 bokoblin = (bk_class*)ac[2];
                 bokoblin->m121C = 1;
             }
@@ -317,15 +316,15 @@ static BOOL daAndsw0_Delete(andsw0_class*) {
 
 /* 00000974-00000A64       .text daAndsw0_Create__FP10fopAc_ac_c */
 static cPhs_State daAndsw0_Create(fopAc_ac_c* ac) {
-    fopAcM_SetupActor(ac, andsw0_class);
+    fopAcM_ct(ac, andsw0_class);
 
     andsw0_class * i_this = (andsw0_class *)ac;
     i_this->mNumSwitchesToCheck = (fopAcM_GetParam(ac) >> 0) & 0xFF;
     i_this->mBehaviorType = (fopAcM_GetParam(ac) >> 8) & 0xFF;
     i_this->mSwitchToSet = (fopAcM_GetParam(ac) >> 24) & 0xFF;
     i_this->mFirstSwitchToCheck = (fopAcM_GetParam(ac) >> 16) & 0xFF;
-    i_this->mTimer = (i_this->home.angle.z & 0xFF) * 15;
-    i_this->mEventNo = i_this->home.angle.x;
+    i_this->mTimer = (ac->home.angle.z & 0xFF) * 15;
+    i_this->mEventNo = ac->home.angle.x;
     i_this->mEventIdx = dComIfGp_evmng_getEventIdx(NULL, i_this->mEventNo);
     if (i_this->mBehaviorType == 2)
         i_this->mAction = ACT_TIMER;
@@ -348,18 +347,18 @@ static actor_method_class l_daAndsw0_Method = {
 };
 
 actor_process_profile_definition g_profile_ANDSW0 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ANDSW0,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ANDSW0_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(andsw0_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ANDSW0,
+    /* Draw Prio    */ fpcDwPi_ANDSW0_e,
     /* Actor SubMtd */ &l_daAndsw0_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -3,13 +3,88 @@
 
 #include "d/d_drawlist.h"
 #include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_hostIO.h"
+#include "JSystem/J2DGraph/J2DTextBox.h"
 
 class JKRMemArchive;
 class STControl;
 
-class dFs_HIO_c {
+class dFs_HIO_c : public JORReflexible {
 public:
     dFs_HIO_c();
+    virtual ~dFs_HIO_c() {}
+
+    void genMessage(JORMContext*) {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 field_0x05;
+    /* 0x06 */ u8 field_0x06;
+    /* 0x07 */ u8 field_0x07;
+    /* 0x08 */ u8 field_0x08;
+    /* 0x09 */ u8 field_0x09;
+    /* 0x0A */ u8 field_0x0A;
+    /* 0x0B */ u8 field_0x0B;
+    /* 0x0C */ u8 field_0x0C;
+    /* 0x0D */ u8 field_0x0D;
+    /* 0x0E */ u8 field_0x0E;
+    /* 0x0F */ u8 field_0x0F;
+    /* 0x10 */ u8 field_0x10;
+    /* 0x11 */ u8 field_0x11;
+    /* 0x12 */ u8 field_0x12;
+    /* 0x13 */ u8 field_0x13;
+    /* 0x14 */ u8 field_0x14;
+    /* 0x15 */ u8 field_0x15;
+    /* 0x16 */ u8 field_0x16;
+    /* 0x17 */ u8 field_0x17;
+    /* 0x18 */ s16 field_0x18;
+    /* 0x1A */ s16 field_0x1A;
+    /* 0x1C */ s16 field_0x1C;
+    /* 0x1E */ s16 field_0x1E;
+    /* 0x20 */ u8 field_0x20;
+    /* 0x21 */ u8 field_0x21;
+    /* 0x22 */ u8 field_0x22;
+    /* 0x23 */ u8 field_0x23;
+    /* 0x24 */ u8 field_0x24;
+    /* 0x25 */ u8 field_0x25;
+    /* 0x26 */ u8 field_0x26;
+    /* 0x27 */ u8 field_0x27;
+    /* 0x28 */ u8 field_0x28;
+    /* 0x29 */ u8 field_0x29;
+    /* 0x2A */ u8 field_0x2A;
+    /* 0x2B */ u8 field_0x2B;
+    /* 0x2C */ u8 field_0x2C;
+    /* 0x2D */ u8 field_0x2D;
+    /* 0x2E */ u8 field_0x2E;
+    /* 0x2F */ u8 field_0x2F;
+    /* 0x30 */ u8 field_0x30;
+    /* 0x31 */ u8 field_0x31;
+    /* 0x32 */ u8 field_0x32;
+    /* 0x33 */ u8 field_0x33;
+    /* 0x34 */ u8 field_0x34;
+    /* 0x35 */ u8 field_0x35;
+    /* 0x36 */ u8 field_0x36;
+    /* 0x37 */ u8 field_0x37;
+    /* 0x38 */ u8 field_0x38;
+    /* 0x39 */ u8 field_0x39;
+    /* 0x3A */ u8 field_0x3A;
+    /* 0x3B */ u8 field_0x3B;
+    /* 0x3C */ s16 field_0x3C;
+    /* 0x3E */ s16 field_0x3E;
+    /* 0x40 */ s16 field_0x40;
+    /* 0x42 */ s16 field_0x42;
+    /* 0x44 */ s16 field_0x44;
+    /* 0x46 */ s16 field_0x46;
+    /* 0x48 */ s16 field_0x48;
+    /* 0x4A */ s16 field_0x4A;
+    /* 0x4C */ s16 field_0x4C;
+    /* 0x4E */ u8 field_0x4E;
+    /* 0x4F */ u8 field_0x4F;
+    /* 0x50 */ u8 field_0x50;
+    /* 0x51 */ u8 field_0x51;
+    /* 0x52 */ u8 field_0x52;
+    /* 0x54 */ float field_0x54;
+    /* 0x58 */ float field_0x58;
 };
 
 class dDlst_FileSel_c : public dDlst_base_c {
@@ -22,7 +97,7 @@ public:
 
 class dFile_select_c {
 public:
-    u8 getIconMode() { return mIconMode;}
+    u8 getIconMode() { return mIconMode; }
     void setIconMode(u8 mode) { mIconMode = mode; }
     void setSaveDataPtr(u8* dataPtr) { mSaveDataPtr = dataPtr; }
     void setSavePicDataPtr(u8* dataPtr) { mSavePicDataPtr = dataPtr; }
@@ -37,22 +112,25 @@ public:
     dFile_select_c() {}
     void _create();
     void initial();
+#if VERSION == VERSION_DEMO
+    void _deleteSp();
+#endif
     void _delete();
     void _move();
     bool _open();
     bool _close();
-    void closeEnd();
-    void closeCardErr();
-    void closeBack();
-    void closeErrErase();
-    void closeErrCopy();
+    int closeEnd();
+    int closeCardErr();
+    int closeBack();
+    int closeErrErase();
+    int closeErrCopy();
     void dataSelect();
     void menuColorChange();
     void SelectTitAnime();
     void recCursorMove();
     void recCursorAnime();
     void recCursorAlphaInit();
-    void recDataPaneMove();
+    int recDataPaneMove();
     void dataSelMoveSet();
     void makeRecInfo(u8);
     void dataSelectPaneMove();
@@ -72,11 +150,11 @@ public:
     void copyPaneMoveOk();
     void copyPaneMoveOk2();
     void saveCopyBWColor();
-    void DataSelectPaneCopyMove(s16, s16);
-    void DataSelectPaneCopyBackMove(s16, s16);
-    void DataSelectPaneCopyMove2(s16, s16);
-    void DataSelectPaneCopyColorMove(s16, u8, int);
-    void DataSelectPaneBackFromCopyMove(u8, u8);
+    int DataSelectPaneCopyMove(s16, s16);
+    int DataSelectPaneCopyBackMove(s16, s16);
+    int DataSelectPaneCopyMove2(s16, s16);
+    int DataSelectPaneCopyColorMove(s16, u8, int);
+    int DataSelectPaneBackFromCopyMove(u8, u8);
     void YesNoSelect();
     void yesNoCursorMove();
     void CmdExecPaneMove0();
@@ -91,32 +169,32 @@ public:
     void backDatSelPaneMove();
     void backDatSelWait();
     void backDatSelWait2();
-    void DataSelectPaneBackMove(s16, s16, s16);
+    int DataSelectPaneBackMove(s16, s16, s16);
     void nextModeWait();
     void screenSet();
     void paneTransInit();
     void menuPaneMoveSet();
     void yesNoPaneMoveSet();
-    void MessagePaneMove(f32, f32, f32, f32, s16, u8, int);
-    void recInfoPaneMove(f32, f32, f32, f32, s16, u8, int);
-    void menuPaneMove(f32, f32, s16, u8, int);
-    void yesNoPaneMove(f32, f32, s16, u8, int);
-    void PaneTranceTitle(s16, u8, f32, f32, u8, int);
-    void PaneAlphaTitleTxt(s16, u8);
-    void PaneTranceRecTlt1(s16, u8, f32, f32, f32, f32, u8, int);
-    void PaneTranceRecTlt2(s16, u8, f32, f32, f32, f32, u8, int);
-    void PaneTranceRecTlt3(s16, u8, f32, f32, f32, f32, u8, int);
-    void PaneTranceRecInfo1(s16, u8, f32, f32, f32, f32, u8, int);
-    void PaneTranceRecInfo2(s16, u8, f32, f32, f32, f32, u8, int);
-    void PaneTranceRecInfo3(s16, u8, f32, f32, f32, f32, u8, int);
-    void PaneTranceRecBase(s16, u8, f32, f32, f32, f32, u8, int);
-    void PaneTranceMessageBase(s16, u8, f32, f32, f32, f32, u8, int);
-    void PaneTranceYes(s16, u8, f32, f32, u8, int);
-    void PaneTranceNo(s16, u8, f32, f32, u8, int);
-    void PaneTranceStart(s16, u8, f32, f32, u8, int);
-    void PaneTranceCopy(s16, u8, f32, f32, u8, int);
-    void PaneTranceErase(s16, u8, f32, f32, u8, int);
-    void PaneTranceBack(s16, u8, f32, f32, u8, int);
+    int MessagePaneMove(f32, f32, f32, f32, s16, u8, int);
+    int recInfoPaneMove(f32, f32, f32, f32, s16, u8, int);
+    int menuPaneMove(f32, f32, s16, u8, int);
+    int yesNoPaneMove(f32, f32, s16, u8, int);
+    int PaneTranceTitle(s16, u8, f32, f32, u8, int);
+    int PaneAlphaTitleTxt(s16, u8);
+    int PaneTranceRecTlt1(s16, u8, f32, f32, f32, f32, u8, int);
+    int PaneTranceRecTlt2(s16, u8, f32, f32, f32, f32, u8, int);
+    int PaneTranceRecTlt3(s16, u8, f32, f32, f32, f32, u8, int);
+    int PaneTranceRecInfo1(s16, u8, f32, f32, f32, f32, u8, int);
+    int PaneTranceRecInfo2(s16, u8, f32, f32, f32, f32, u8, int);
+    int PaneTranceRecInfo3(s16, u8, f32, f32, f32, f32, u8, int);
+    int PaneTranceRecBase(s16, u8, f32, f32, f32, f32, u8, int);
+    int PaneTranceMessageBase(s16, u8, f32, f32, f32, f32, u8, int);
+    int PaneTranceYes(s16, u8, f32, f32, u8, int);
+    int PaneTranceNo(s16, u8, f32, f32, u8, int);
+    int PaneTranceStart(s16, u8, f32, f32, u8, int);
+    int PaneTranceCopy(s16, u8, f32, f32, u8, int);
+    int PaneTranceErase(s16, u8, f32, f32, u8, int);
+    int PaneTranceBack(s16, u8, f32, f32, u8, int);
     void displayInit();
     void setSaveData();
     void changeExtraColor(int);
@@ -126,7 +204,7 @@ public:
     void ExSavePaneMove();
     void YesNoSelectEx();
     void ExSavePaneMove0();
-    void ExCardCheck();
+    int ExCardCheck();
     void ExBackDatSelPaneMove();
     void ExSavePaneMove1();
     void ExDataSave();
@@ -141,33 +219,23 @@ public:
     /* 0x0004 */ dDlst_FileSel_c fileSel;
     /* 0x0010 */ fopMsgM_pane_class field_0x10;
     /* 0x0048 */ fopMsgM_pane_class field_0x48;
-    /* 0x0080 */ fopMsgM_pane_class field_0x80;
-    /* 0x00B8 */ fopMsgM_pane_class field_0xb8;
-    /* 0x00F0 */ fopMsgM_pane_class field_0xf0;
-    /* 0x0128 */ fopMsgM_pane_class field_0x128;
+    /* 0x0080 */ fopMsgM_pane_class field_0x80[2];
+    /* 0x00F0 */ fopMsgM_pane_class field_0xf0[2];
     /* 0x0160 */ fopMsgM_pane_class field_0x160;
-    /* 0x0198 */ fopMsgM_pane_class field_0x198;
-    /* 0x01D0 */ fopMsgM_pane_class field_0x1d0;
-    /* 0x0208 */ fopMsgM_pane_class field_0x208[12];
-    /* 0x04A8 */ fopMsgM_pane_class field_0x4a8;
-    /* 0x04E0 */ fopMsgM_pane_class field_0x4e0;
-    /* 0x0518 */ fopMsgM_pane_class field_0x518;
-    /* 0x0550 */ fopMsgM_pane_class field_0x550;
-    /* 0x0588 */ fopMsgM_pane_class field_0x588;
-    /* 0x05c0 */ fopMsgM_pane_class field_0x5c0;
+    /* 0x0198 */ fopMsgM_pane_class field_0x198[2];
+    /* 0x0208 */ fopMsgM_pane_class field_0x208[0xC];
+    /* 0x04A8 */ fopMsgM_pane_class field_0x4a8[3];
+    /* 0x0550 */ fopMsgM_pane_class field_0x550[3];
     /* 0x05f8 */ fopMsgM_pane_class field_0x5f8;
     /* 0x0630 */ fopMsgM_pane_class field_0x630[9];
-    /* 0x0828 */ fopMsgM_pane_class field_0x828[20];
-    /* 0x0C88 */ fopMsgM_pane_class field_0xc88[20];
-    /* 0x10E8 */ fopMsgM_pane_class field_0x10e8;
-    /* 0x1120 */ fopMsgM_pane_class field_0x1120;
-    /* 0x1158 */ fopMsgM_pane_class field_0x1158;
-    /* 0x1190 */ fopMsgM_pane_class field_0x1190;
-    /* 0x11C8 */ fopMsgM_pane_class field_0x11c8;
-    /* 0x1200 */ fopMsgM_pane_class field_0x1200;
-    /* 0x1238 */ fopMsgM_pane_class field_0x1238[16];
-    /* 0x15B8 */ fopMsgM_pane_class field_0x15b8[16];
-    /* 0x1938 */ fopMsgM_pane_class field_0x1938[16];
+    /* 0x0828 */ fopMsgM_pane_class field_0x828[0x14];
+    /* 0x0C88 */ fopMsgM_pane_class field_0xc88[0x14];
+    /* 0x10E8 */ fopMsgM_pane_class field_0x10e8[2];
+    /* 0x1158 */ fopMsgM_pane_class field_0x1158[2];
+    /* 0x11C8 */ fopMsgM_pane_class field_0x11c8[2];
+    /* 0x1238 */ fopMsgM_pane_class field_0x1238[0x10];
+    /* 0x15B8 */ fopMsgM_pane_class field_0x15b8[0x10];
+    /* 0x1938 */ fopMsgM_pane_class field_0x1938[0x10];
     /* 0x1CB8 */ fopMsgM_pane_class field_0x1cb8[29];
     /* 0x2310 */ fopMsgM_pane_class field_0x2310[29];
     /* 0x2968 */ fopMsgM_pane_class field_0x2968[29];
@@ -212,25 +280,23 @@ public:
     /* 0x38C8 */ JUtility::TColor field_0x38c8[2];
     /* 0x38D0 */ JUtility::TColor field_0x38d0[2];
     /* 0x38D8 */ JUtility::TColor field_0x38d8[2];
-    /* 0x38E0 */ f32 field_0x38e0;
-    /* 0x38E4 */ f32 field_0x38e4;
-    /* 0x38D8 */ char* field_0x38e8[3];
-    /* 0x38F4 */ char* field_0x38f4;
-    /* 0x38F8 */ char* field_0x38f8;
-    /* 0x38FC */ char* field_0x38fc;
-    /* 0x3900 */ char* field_0x3900;
-    /* 0x3904 */ char* field_0x3904;
-    /* 0x3908 */ char* field_0x3908;
+    /* 0x38E0 */ J2DTextBox::TFontSize field_0x38e0;
+    /* 0x38E8 */ char* field_0x38e8[3];
+    /* 0x38F4 */ char* field_0x38f4[3];
+    /* 0x3900 */ char* field_0x3900[3];
     /* 0x390C */ STControl* stick;
     /* 0x3910 */ STControl* stick2;
     /* 0x3914 */ u8 field_0x3914[3];
-    /* 0x3917 */ u8 field_0x3917[0x391A - 0x3917];
+    /* 0x3917 */ u8 field_0x3917[3];
     /* 0x391A */ u8 saveStatus[3];
-    /* 0x391D */ u8 field_0x391D[0x3921 - 0x391D];
+    /* 0x391D */ u8 field_0x391D[3];
+    /* 0x3920 */ u8 field_0x3920;
     /* 0x3921 */ u8 field_0x3921;
     /* 0x3922 */ u8 saveSlot;
-    /* 0x3923 */ u8 field_0x3923;
-    /* 0x3924 */ u8 field_0x3924[0x3927 - 0x3924];
+    /* 0x3923 */ s8 field_0x3923;
+    /* 0x3924 */ u8 field_0x3924;
+    /* 0x3925 */ u8 field_0x3925;
+    /* 0x3926 */ u8 field_0x3926;
     /* 0x3927 */ u8 field_0x3927;
     /* 0x3928 */ u8 field_0x3928;
     /* 0x3929 */ u8 field_0x3929;
@@ -248,7 +314,8 @@ public:
     /* 0x393C */ u8* mSavePicDataPtr;
     /* 0x3940 */ u8 mUseType;
     /* 0x3941 */ u8 field_0x3941;
-    /* 0x3942 */ u8 field_0x3942[0x3948 - 0x3942];
+    /* 0x3942 */ u8 field_0x3942[0x3944 - 0x3942];
+    /* 0x3944 */ f32 field_0x3944;
     /* 0x3948 */ f32 field_0x3948;
 };
 

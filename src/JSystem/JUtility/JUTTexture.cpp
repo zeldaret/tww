@@ -3,6 +3,8 @@
 // Translation Unit: JUTTexture.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JUtility/JUTTexture.h"
 #include "JSystem/JUtility/JUTPalette.h"
 #include "dolphin/gx/GX.h"
@@ -34,7 +36,7 @@ void JUTTexture::storeTIMG(const ResTIMG* pTimg, u8 param_1) {
             delete mEmbPalette;
         }
         mEmbPalette = NULL;
-        mAttachedPalette = NULL;
+        mPalette = NULL;
         mTlutName = 0;
         mWrapS = mTexInfo->wrapS;
         mWrapT = mTexInfo->wrapT;
@@ -67,11 +69,11 @@ void JUTTexture::storeTIMG(const ResTIMG* pTimg, u8 param_1) {
 void JUTTexture::attachPalette(JUTPalette* pPalette) {
     if (mTexInfo->indexTexture) {
         if (pPalette == NULL && mEmbPalette != NULL) {
-            mAttachedPalette = mEmbPalette;
+            mPalette = mEmbPalette;
         } else {
-            mAttachedPalette = pPalette;
+            mPalette = pPalette;
         }
-        GXTlut name = (GXTlut)mAttachedPalette->getTlutName();
+        GXTlut name = (GXTlut)mPalette->getTlutName();
         initTexObj(name);
     }
 }
@@ -113,8 +115,8 @@ void JUTTexture::initTexObj(GXTlut tlut) {
 
 /* 802C183C-802C188C       .text load__10JUTTextureF11_GXTexMapID */
 void JUTTexture::load(GXTexMapID id) {
-    if (mAttachedPalette) {
-        mAttachedPalette->load();
+    if (mPalette) {
+        mPalette->load();
     }
     GXLoadTexObj(&mTexObj, id);
 }

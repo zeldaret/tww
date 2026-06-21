@@ -3,10 +3,18 @@
 // Translation Unit: d_a_sie_flag.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sie_flag.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "d/d_a_obj.h"
 #include "d/d_cc_d.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "d/d_kankyo_wether.h"
+#include "d/d_s_play.h"
+#include "res/Object/Cloth.h"
+#include "res/Object/Eshata.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_ext.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -31,61 +39,206 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
         /* Height */ 1000.0f,
-    },
+    }},
 };
 
+static daSie_Flag_HIO_c l_HIO;
+
+static cXyz l_flag_offset(0.0f, 900.0f, 0.0f);
+static cXyz l_wind_offset(0.0f, 725.0f, 0.0f);
 
 /* 000000EC-00000118       .text __ct__16daSie_Flag_HIO_cFv */
 daSie_Flag_HIO_c::daSie_Flag_HIO_c() {
-    /* Nonmatching */
+    mNo = -1;
+    m08 = 0.0f;
+    m0c = 0;
 }
+
+const char daSie_Flag_c::M_arcname[] = "Eshata";
 
 /* 00000118-000001C4       .text set_mtx__12daSie_Flag_cFv */
 void daSie_Flag_c::set_mtx() {
-    /* Nonmatching */
+  mpModel->setBaseScale(scale);
+
+  mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+  mDoMtx_stack_c::ZXYrotM(shape_angle);
+
+  mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+  mDoMtx_stack_c::transM(l_flag_offset);
+  mpClothPacket->setMtx(mDoMtx_stack_c::get());
 }
 
 /* 000001C4-000001E4       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
+    return static_cast<daSie_Flag_c*>(i_actor)->CreateHeap();
 }
 
 /* 000001E4-0000030C       .text CreateHeap__12daSie_Flag_cFv */
-void daSie_Flag_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daSie_Flag_c::CreateHeap() {
+    J3DModelData *modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_ESHATA_BDL_ESHATA_e);
+    JUT_ASSERT(0x109, modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (mpModel == NULL) {
+        return FALSE;
+    } else {
+        ResTIMG* eshata_timg = (ResTIMG*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_ESHATA_BTI_ESHATA_e);
+        ResTIMG* cloth_timg = (ResTIMG*)dComIfG_getObjectRes("Cloth", dRes_INDEX_CLOTH_BTI_CLOTHTOON_e);
+        mpClothPacket = dCloth_packet_create(
+            eshata_timg, cloth_timg,
+#if VERSION == VERSION_DEMO
+            5 + REG10_S(0), 5 + REG10_S(1),
+#else
+            5, 5,
+#endif
+            700.0f, 350.0,
+            &mTevStr, NULL
+        );
+        return mpClothPacket != NULL ? TRUE : FALSE;
+    }
 }
 
 /* 0000030C-000003D4       .text CreateInit__12daSie_Flag_cFv */
-void daSie_Flag_c::CreateInit() {
-    /* Nonmatching */
+cPhs_State daSie_Flag_c::CreateInit() {
+    mStts.Init(0xFF, 0xFF, this);
+
+    mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
+
+    mWindvec = *dKyw_get_wind_vec();
+    
+    set_mtx();
+    cullMtx = mpModel->getBaseTRMtx();
+    fopAcM_setCullSizeBox(this, -700.0f, 0.0f, -700.0f, 700.0f, 1100.0f, 700.0f);
+
+#if VERSION > VERSION_DEMO
+    dKy_tevstr_init(&mTevStr, fopAcM_GetRoomNo(this), 0xFF);
+#endif
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000003D4-00000488       .text _create__12daSie_Flag_cFv */
 cPhs_State daSie_Flag_c::_create() {
-    /* Nonmatching */
+#if VERSION == VERSION_DEMO
+    cPhs_State rt1 = dComIfG_resLoad(&mPhsEshata, M_arcname);
+    cPhs_State rt2 = dComIfG_resLoad(&mPhsCloth, "Cloth");
+    if (rt1 == cPhs_ERROR_e || rt2 == cPhs_ERROR_e) {
+        return cPhs_ERROR_e;
+    }
+    if (rt1 != cPhs_COMPLEATE_e) {
+        return rt1;
+    }
+    if (rt2 != cPhs_COMPLEATE_e) {
+        return rt2;
+    }
+
+    fopAcM_ct(this, daSie_Flag_c);
+#else
+    fopAcM_ct(this, daSie_Flag_c);
+    
+    cPhs_State result = dComIfG_resLoad(&mPhsEshata, M_arcname);
+    if (result != cPhs_COMPLEATE_e) {
+        return result;
+    }
+    
+    result = dComIfG_resLoad(&mPhsCloth, "Cloth");
+    if (result != cPhs_COMPLEATE_e) {
+        return result;
+    }
+#endif
+
+    if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1020)) {
+        return CreateInit();
+    } else {
+        return cPhs_ERROR_e;
+    }
 }
 
 /* 00000814-00000864       .text _delete__12daSie_Flag_cFv */
 bool daSie_Flag_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhsEshata, M_arcname);
+    dComIfG_resDelete(&mPhsCloth, "Cloth");
+    return true;
 }
 
 /* 00000864-00000B08       .text _execute__12daSie_Flag_cFv */
 bool daSie_Flag_c::_execute() {
-    /* Nonmatching */
+    cXyz allwind;
+    cXyz position_plus_offset;
+
+    set_mtx();
+    mStts.Move();
+
+    if (mCyl.ChkTgHit() != 0) {
+        daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), &mCyl, 0x0B);
+    }
+
+    fopAcM_rollPlayerCrash(this, 40.0f, 0x07);
+
+    position_plus_offset = current.pos + l_flag_offset;
+    allwind = dKyw_get_AllWind_vecpow(&position_plus_offset);
+    if (allwind.abs() > mWindvec.abs()) {
+        mWindvec = allwind;
+    } else {
+        cLib_addCalcPos2(&mWindvec, allwind, 0.1f, 0.1f);
+    }
+
+    mCyl.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&mCyl);
+  
+    mpClothPacket->setParam(
+#if VERSION == VERSION_DEMO
+        0.4f + REG10_F(25),
+        -0.75f + REG10_F(26),
+        0.9f + REG10_F(27),
+        1.0f + REG10_F(28),
+        1.0f + REG10_F(29),
+#else
+        0.4f,
+        -0.75f,
+        0.9f,
+        1.0f,
+        1.0f,
+#endif
+        0x400,
+        0,
+        900,
+        -800,
+        7.0f,
+        6.0f
+    );
+    mpClothPacket->setWindPower(
+#if VERSION == VERSION_DEMO
+        13.0f + REG10_F(0),
+        8.0f + REG10_F(1)
+#else
+        13.0f,
+        8.0f
+#endif
+    );
+    mpClothPacket->setGlobalWind(&mWindvec);
+    mpClothPacket->cloth_move();
+
+    return false;
 }
 
 /* 00000B08-00000B94       .text _draw__12daSie_Flag_cFv */
 bool daSie_Flag_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdateDL(mpModel);
+    mpClothPacket->cloth_draw();
+    return true;
 }
 
 /* 00000B94-00000BB4       .text daSie_FlagCreate__FPv */
-static s32 daSie_FlagCreate(void* i_this) {
+static cPhs_State daSie_FlagCreate(void* i_this) {
     return ((daSie_Flag_c*)i_this)->_create();
 }
 
@@ -118,18 +271,18 @@ static actor_method_class daSie_FlagMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Sie_Flag = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Sie_Flag,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Sie_Flag_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSie_Flag_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Sie_Flag,
+    /* Draw Prio    */ fpcDwPi_Sie_Flag_e,
     /* Actor SubMtd */ &daSie_FlagMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

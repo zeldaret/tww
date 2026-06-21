@@ -3,12 +3,11 @@
 // Translation Unit: d_a_obj_rforce.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_rforce.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_stptetu.h"
+#include "res/Object/StpTetu.h"
 
 const char daObjRforce::Act_c::M_arcname[] = "StpTetu";
 
@@ -19,31 +18,38 @@ BOOL daObjRforce::Act_c::solidHeapCB(fopAc_ac_c* this_i) {
 
 /* 0000009C-00000220       .text create_heap__Q211daObjRforce5Act_cFv */
 bool daObjRforce::Act_c::create_heap() {
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, STPTETU_BDL_STPTETU));
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_STPTETU_BDL_STPTETU_e));
     JUT_ASSERT(0x57, mdl_data != NULL);
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
     
     set_mtx();
 
-    cBgD_t* bgw_data = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, STPTETU_DZB_STPTETU));
+    cBgD_t* bgw_data = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_STPTETU_DZB_STPTETU_e));
     JUT_ASSERT(0x64, bgw_data != NULL);
-    if(bgw_data != NULL){
+#if VERSION > VERSION_DEMO
+    if(bgw_data != NULL)
+#endif
+    {
         mpBgw = new dBgW();
         if(mpBgw != NULL){
-            if(mpBgw->Set(bgw_data, cBgW::MOVE_BG_e, &mtx) == true) return false;
+            if(mpBgw->Set(bgw_data, cBgW::MOVE_BG_e, &mtx) == true) {
+#if VERSION > VERSION_DEMO
+                return false;
+#endif
+            }
         }
     }
 
-    bool ret = false;
-    if(mdl_data != NULL && mpModel != NULL && bgw_data != NULL && mpBgw != NULL){
-        ret = true;
-    }
-    return ret;
+#if VERSION == VERSION_DEMO
+    return mdl_data != NULL && bgw_data != NULL && mpBgw != NULL;
+#else
+    return mdl_data != NULL && mpModel != NULL && bgw_data != NULL && mpBgw != NULL;
+#endif
 }
 
 /* 00000220-000002F8       .text _create__Q211daObjRforce5Act_cFv */
 cPhs_State daObjRforce::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     
@@ -63,7 +69,13 @@ cPhs_State daObjRforce::Act_c::_create() {
 
 /* 000002F8-00000384       .text _delete__Q211daObjRforce5Act_cFv */
 bool daObjRforce::Act_c::_delete() {
-    if(heap != NULL && mpBgw != NULL && mpBgw->ChkUsed()){
+    if(
+#if VERSION > VERSION_DEMO
+        heap != NULL &&
+        mpBgw != NULL && 
+#endif
+        mpBgw->ChkUsed()
+    ){
         dComIfG_Bgsp()->Release(mpBgw);
     }
     dComIfG_resDelete(&mPhs, M_arcname);
@@ -137,18 +149,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjRforce
 
 actor_process_profile_definition g_profile_Obj_Rforce = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Rforce,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Rforce_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjRforce::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Rforce,
+    /* Draw Prio    */ fpcDwPi_Obj_Rforce_e,
     /* Actor SubMtd */ &daObjRforce::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

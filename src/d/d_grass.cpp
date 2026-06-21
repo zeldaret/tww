@@ -3,6 +3,7 @@
 // Translation Unit: d_grass.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_grass.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "d/d_bg_s_gnd_chk.h"
@@ -10,20 +11,17 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "dolphin/gf/GF.h"
 
-#include "weak_data_1811.h" // IWYU pragma: keep
-
 #include "assets/l_K_kusa_00TEX.h"
 const u32 l_K_kusa_00TEX__width = 64;
 const u32 l_K_kusa_00TEX__height = 128;
 
-Vec l_Vmori_pos[] = {
+static Vec l_Vmori_pos[] = {
     {0.0f, -0.0f, 0.0f},
     {-20.232309f, 2.398434f, -12.457211f},
     {-22.421972f, 96.708992f, -32.329994f},
@@ -53,7 +51,7 @@ Vec l_Vmori_pos[] = {
     {11.278254f, 12.157036f, 6.079209f},
 };
 
-GXColor l_Vmori_color[] = {
+static GXColor l_Vmori_color[] = {
     {0xFF, 0xFF, 0xFF, 0xFF},
     {0x41, 0x41, 0x41, 0xFF},
     {0xDD, 0xCF, 0x71, 0xFF},
@@ -61,7 +59,7 @@ GXColor l_Vmori_color[] = {
     {0xAE, 0xA4, 0x57, 0xFF},
 };
 
-cXy l_Vmori_texCoord[] = {
+static cXy l_Vmori_texCoord[] = {
     {0.006063f, 0.998037f},
     {0.659757f, 0.0f},
     {0.974817f, 1.0f},
@@ -82,7 +80,7 @@ l_Vmori_matDL(l_K_kusa_00TEX);
 const u32 l_Txa_ob_kusa_aTEX__width = 64;
 const u32 l_Txa_ob_kusa_aTEX__height = 64;
 
-Vec l_pos[] = {
+static Vec l_pos[] = {
     {0.0f, -0.0f, 0.0f},
     {-20.232309f, 7.048814f, -12.457211f},
     {-22.421972f, 96.708992f, -32.329994f},
@@ -112,7 +110,7 @@ Vec l_pos[] = {
     {11.278254f, 12.157036f, 6.079209f},
 };
 
-GXColor l_color[] = {
+static GXColor l_color[] = {
     {0x87, 0x87, 0x87, 0xFF},
     {0xFF, 0xFF, 0xFF, 0xFF},
     {0x6E, 0x6E, 0x6E, 0xFF},
@@ -123,7 +121,7 @@ GXColor l_color[] = {
     {0xCC, 0xCC, 0xCC, 0xFF},
 };
 
-cXy l_texCoord[] = {
+static cXy l_texCoord[] = {
     {0.375f, 0.625f},
     {1.0f, 0.0f},
     {1.0f, 1.0f},
@@ -144,8 +142,15 @@ static bool l_CutSoundFlag;
 
 /* 80077048-8007712C       .text setBatta__FP4cXyzP8_GXColor */
 void setBatta(cXyz* pos, GXColor* color) {
-    if (!dKy_rain_check() && !dComIfGp_event_runCheck() && strncmp(dComIfGp_getStartStageName(), "kin", 3) != 0 && strcmp(dComIfGp_getStartStageName(), "Xboss1") != 0 && cM_rnd() > 0.99f)
-        dComIfGp_particle_set(dPa_name::ID_COMMON_0453, pos, NULL, NULL, 0xFF, NULL, -1, color, color);
+    if (
+        !dKy_rain_check() &&
+        !dComIfGp_event_runCheck() &&
+        strncmp(dComIfGp_getStartStageName(), "kin", sizeof("kin")-1) != 0 &&
+        strcmp(dComIfGp_getStartStageName(), "Xboss1") != 0 &&
+        cM_rnd() > 0.99f
+    ) {
+        dComIfGp_particle_set(dPa_name::ID_AK_JN_BATTA00, pos, NULL, NULL, 0xFF, NULL, -1, color, color);
+    }
 }
 
 /* 8007712C-8007734C       .text WorkCo__13dGrass_data_cFP10fopAc_ac_cUli */
@@ -257,7 +262,7 @@ void dGrass_data_c::hitCheck(int roomNo) {
     dCcMassS_HitInf hitInf;
     fopAc_ac_c* actor;
     u32 ret = dComIfG_Ccsp()->ChkMass(&mPos, &actor, &hitInf);
-    bool checkAt = (ret & 1) && (actor != NULL && fopAcM_GetName(actor) != PROC_TSUBO && fopAcM_GetName(actor) != PROC_STONE);
+    bool checkAt = (ret & 1) && (actor != NULL && fopAcM_GetName(actor) != fpcNm_TSUBO_e && fopAcM_GetName(actor) != fpcNm_STONE_e);
 
     if ((ret & 2) == 0 && !checkAt) {
         if (mAnimIdx >= 8) {
@@ -313,7 +318,7 @@ dGrass_packet_c::dGrass_packet_c() {
     s16 angle = 0;
     for (s32 i = 0; i < 8; i++, angle += 0x2000)
         setAnm(i, angle);
-    if (strncmp(dComIfGp_getStartStageName(), "kin", 3) == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0) {
+    if (strncmp(dComIfGp_getStartStageName(), "kin", sizeof("kin")-1) == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0) {
         mpPosArr = (f32*)l_Vmori_pos;
         mpColorArr = l_Vmori_color;
         mpTexCoordArr = (f32*)l_Vmori_texCoord;
@@ -323,8 +328,8 @@ dGrass_packet_c::dGrass_packet_c() {
         mDLSize = 0xa0;
         mpDLCut = l_Vmori_01DL;
         mDLCutSize = 0x80;
-        mCoParticle = dPa_name::ID_SCENE_8222;
-        mAtParticle = dPa_name::ID_SCENE_8221;
+        mCoParticle = dPa_name::ID_IT_SN_O_KINDANKUSA_RUN;
+        mAtParticle = dPa_name::ID_IT_SN_O_KINDANKUSA_KEN;
     } else {
         mpPosArr = (f32*)l_pos;
         mpColorArr = l_color;
@@ -335,8 +340,8 @@ dGrass_packet_c::dGrass_packet_c() {
         mDLSize = 0xa0;
         mpDLCut = l_Oba_kusa_a_cutDL;
         mDLCutSize = 0x80;
-        mCoParticle = dPa_name::ID_COMMON_03DB;
-        mAtParticle = dPa_name::ID_COMMON_03DA;
+        mCoParticle = dPa_name::ID_IT_JN_O_KUSA_RUN;
+        mAtParticle = dPa_name::ID_IT_JN_O_KUSA_KEN;
     }
 }
 

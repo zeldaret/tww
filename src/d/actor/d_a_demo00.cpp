@@ -3,6 +3,7 @@
 // Translation Unit: d_a_demo00.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_demo00.h"
 #include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
@@ -11,10 +12,9 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_demo.h"
+#include "d/d_item.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_demo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_graphic.h"
@@ -23,52 +23,76 @@
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "string.h"
 
+struct light_data_s {
+    /* 0x00 */ bool useJoint;
+    /* 0x01 */ u8 m01;
+    /* 0x04 */ const char* jointName;
+};
+static light_data_s l_lightData[] = {
+    {true,  1, "V_24_tri_joint"},
+    {false, 1, NULL},
+    {false, 1, NULL},
+};
+
+BOOL daDemo00_c::create() {
+    fopAcM_ct(this, daDemo00_c);
+    dKy_tevstr_init(&tevStr, dComIfGp_roomControl_getStayNo(), 0xFF);
+    setAction(&daDemo00_c::actStandby);
+    mNextID.reset();
+#if VERSION > VERSION_DEMO
+    field_0x29d = -1;
+#endif
+    return cPhs_COMPLEATE_e;
+}
+
 /* 800E595C-800E598C       .text reset__16daDemo00_resID_cFv */
 void daDemo00_resID_c::reset() {
-    modelID = -1;
-    bckID = -1;
+    mShapeID = -1;
+    mBckID = -1;
     field_0x08 = -1;
-    btpID = -1;
-    btkID = -1;
-    brkID = -1;
+    mBtpID = -1;
+    mBtkID = -1;
+    mBrkID = -1;
     field_0x18 = -1;
     field_0x1C = -1;
-    plightID = -1;
-    shadowID = -1;
+    mPlightID = -1;
+    mShadowID = -1;
 }
 
 /* 800E598C-800E59EC       .text reset__16daDemo00_model_cFv */
 void daDemo00_model_c::reset() {
-    resID.reset();
-    model = NULL;
-    btpAnm = NULL;
-    btkAnm = NULL;
-    brkAnm = NULL;
-    if (plight != NULL) {
-        dKydm_demo_plight_delete(plight);
-        plight = NULL;
+    mID.reset();
+    mpModel = NULL;
+    mpBtpAnm = NULL;
+    mpBtkAnm = NULL;
+    mpBrkAnm = NULL;
+    if (mpPlight != NULL) {
+        dKydm_demo_plight_delete(mpPlight);
+        mpPlight = NULL;
     }
-    shadow = NULL;
+    mpShadow = NULL;
 }
 
+#if VERSION > VERSION_DEMO
 daDemo00_c::~daDemo00_c() {
-    if (heap != NULL && model.morf != NULL) {
-        model.morf->stopZelAnime();
+    if (heap != NULL && mModel.mpMorf != NULL) {
+        mModel.mpMorf->stopZelAnime();
     }
 }
+#endif
 
 /* 800E5A60-800E5AFC       .text setBaseMtx__10daDemo00_cFv */
 void daDemo00_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::XYZrotM(shape_angle);
-    model.model->setBaseTRMtx(mDoMtx_stack_c::get());
-    model.model->setBaseScale(scale);
-    model.model->calc();
+    mModel.mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mModel.mpModel->setBaseScale(scale);
+    mModel.mpModel->calc();
 }
 
 /* 800E5AFC-800E5DEC       .text setShadowSize__10daDemo00_cFv */
 void daDemo00_c::setShadowSize() {
-    J3DModelData* modelData = model.model->getModelData();
+    J3DModelData* modelData = mModel.mpModel->getModelData();
 
     cXyz min(100000000.0f, 100000000.0f, 100000000.0f);
     cXyz max(-100000000.0f, -100000000.0f, -100000000.0f);
@@ -79,8 +103,8 @@ void daDemo00_c::setShadowSize() {
             cXyz jntMin;
             cXyz jntMax;
 
-            mDoMtx_multVec(model.model->getAnmMtx(i), joint->getMin(), &jntMin);
-            mDoMtx_multVec(model.model->getAnmMtx(i), joint->getMax(), &jntMax);
+            mDoMtx_multVec(mModel.mpModel->getAnmMtx(i), joint->getMin(), &jntMin);
+            mDoMtx_multVec(mModel.mpModel->getAnmMtx(i), joint->getMax(), &jntMax);
             min.x = jntMin.x < min.x ? jntMin.x : min.x;
             min.y = jntMin.y < min.y ? jntMin.y : min.y;
             min.z = jntMin.z < min.z ? jntMin.z : min.z;
@@ -90,13 +114,13 @@ void daDemo00_c::setShadowSize() {
         }
     }
 
-    model.shadow->pos.x = (max.x + min.x) * 0.5f;
-    model.shadow->pos.y = (max.y + min.y) * 0.5f;
-    model.shadow->pos.z = (max.z + min.z) * 0.5f;
+    mModel.mpShadow->mPos.x = (max.x + min.x) * 0.5f;
+    mModel.mpShadow->mPos.y = (max.y + min.y) * 0.5f;
+    mModel.mpShadow->mPos.z = (max.z + min.z) * 0.5f;
 
     cXyz extents = max - min;
-    model.shadow->field_0x10 = extents.abs() * 3.0f;
-    model.shadow->field_0x14 = extents.absXZ() * 0.25f;
+    mModel.mpShadow->mCasterSize = extents.abs() * 3.0f;
+    mModel.mpShadow->mSimpleScale = extents.absXZ() * 0.25f;
 }
 
 /* 800E5DEC-800E5FF4       .text awaCheck__FP8J3DModel */
@@ -108,7 +132,11 @@ BOOL awaCheck(J3DModel* model) {
         if (texName != NULL) {
             for (u16 i = 0; i < tex->getNum(); i++) {
                 const char* name = texName->getName(i);
-                if (strcmp(name, "B_dummy") == 0 || strcmp(name, "cy_kankyo") == 0) {
+                if (strcmp(name, "B_dummy") == 0
+#if VERSION > VERSION_DEMO
+                    || strcmp(name, "cy_kankyo") == 0
+#endif
+                ) {
                     J3DSkinDeform* deform = new J3DSkinDeform();
                     if (deform == NULL)
                         return FALSE;
@@ -116,7 +144,10 @@ BOOL awaCheck(J3DModel* model) {
                     if (model->setSkinDeform(deform, 1) != J3DErrType_Success)
                         return FALSE;
 
-                    if (strcmp(name, "B_dummy") == 0) {
+#if VERSION > VERSION_DEMO
+                    if (strcmp(name, "B_dummy") == 0)
+#endif
+                    {
                         tex->setResTIMG(i, *mDoGph_gInf_c::getFrameBufferTimg());
                         mDoExt_modelTexturePatch(modelData);
                     }
@@ -134,21 +165,144 @@ static BOOL createHeapCallBack(fopAc_ac_c* i_this) {
 
 /* 800E6014-800E6620       .text createHeap__10daDemo00_cFv */
 BOOL daDemo00_c::createHeap() {
-    /* Nonmatching */
+    if (mModel.mID.mShapeID != -1) {
+        J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectIDRes(dStage_roomControl_c::getDemoArcName(), (u16)mModel.mID.mShapeID);
+        JUT_ASSERT(DEMO_SELECT(217, 236), modelData != NULL);
+        u32 r28 = 0x11000002;
+        
+        if (mModel.mID.mBtpID != -1) {
+            mModel.mpBtpAnm = new mDoExt_btpAnm();
+            if (mModel.mpBtpAnm == NULL) {
+                return FALSE;
+            }
+            J3DAnmTexPattern* anm = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(dStage_roomControl_c::getDemoArcName(), (u16)mModel.mID.mBtpID);
+            if (anm == NULL) {
+                return TRUE;
+            }
+            if (mModel.mpBtpAnm->init(modelData, anm, TRUE, J3DFrameCtrl::EMode_NULL) == 0) {
+                return FALSE;
+            } else {
+                r28 |= 0x04020000;
+            }
+        }
+        
+        if (mModel.mID.mBtkID != -1) {
+            mModel.mpBtkAnm = new mDoExt_btkAnm();
+            if (mModel.mpBtkAnm == NULL) {
+                return FALSE;
+            }
+            J3DAnmTextureSRTKey* anm = (J3DAnmTextureSRTKey*)dComIfG_getObjectIDRes(dStage_roomControl_c::getDemoArcName(), (u16)mModel.mID.mBtkID);
+            if (anm == NULL) {
+                return TRUE;
+            }
+            if (mModel.mpBtkAnm->init(modelData, anm, TRUE, J3DFrameCtrl::EMode_NULL) == 0) {
+                return FALSE;
+#if VERSION > VERSION_DEMO
+            } else if (mModel.mID.mBtkID & 0x10000000) {
+                r28 |= 0x1200;
+#endif
+            } else {
+                r28 |= 0x200;
+            }
+        }
+        
+        if (mModel.mID.mBrkID != -1) {
+            mModel.mpBrkAnm = new mDoExt_brkAnm();
+            if (mModel.mpBrkAnm == NULL) {
+                return FALSE;
+            }
+            J3DAnmTevRegKey* anm = (J3DAnmTevRegKey*)dComIfG_getObjectIDRes(dStage_roomControl_c::getDemoArcName(), (u16)mModel.mID.mBrkID);
+            if (anm == NULL) {
+                return TRUE;
+            }
+            if (mModel.mpBrkAnm->init(modelData, anm, TRUE, J3DFrameCtrl::EMode_NULL) == 0) {
+                return FALSE;
+            }
+        }
+        
+        if (mModel.mID.mBckID == -1) {
+            mModel.mpMorf = NULL;
+            mModel.mpModel = mDoExt_J3DModel__create(modelData, 0x80000, r28);
+            if (mModel.mpModel == NULL) {
+                return FALSE;
+            }
+        } else {
+            J3DAnmTransformKey* anm = (J3DAnmTransformKey*)dComIfG_getObjectIDRes(dStage_roomControl_c::getDemoArcName(), (u16)mModel.mID.mBckID);
+            JUT_ASSERT(DEMO_SELECT(304, 328), anm != NULL);
+            mModel.mpMorf = new mDoExt_McaMorf(
+                modelData,
+                NULL,
+                NULL,
+                anm,
+                J3DFrameCtrl::EMode_NULL,
+                1.0f,
+                0,
+                -1,
+                1,
+                NULL,
+                0x80000,
+                r28
+            );
+            if (mModel.mpMorf == NULL || mModel.mpMorf->getModel() == NULL) {
+                return FALSE;
+            }
+            mModel.mpModel = mModel.mpMorf->getModel();
+            if (!awaCheck(mModel.mpModel)) {
+                return FALSE;
+            }
+        }
+        
+        if (field_0x29c == 3) {
+            mModel.mpInvisibleModel = new mDoExt_invisibleModel();
+            if (mModel.mpInvisibleModel == NULL) {
+                return FALSE;
+            }
+            if (!mModel.mpInvisibleModel->create(mModel.mpModel)) {
+                return FALSE;
+            }
+        } else {
+            mModel.mpInvisibleModel = NULL;
+        }
+        
+        if (mModel.mID.mShadowID != -1) {
+            mModel.mpShadow = new daDemo00_shadow_c();
+            if (mModel.mpShadow == NULL) {
+                return FALSE;
+            }
+            mModel.mpModel->calc();
+            setShadowSize();
+        }
+        
+        mModel.mBgc = new daDemo00_bgc_c();
+        if (mModel.mBgc == NULL) {
+            return FALSE;
+        }
+        mModel.mBgc->mGndChk.OffWall();
+    }
+
+    if (mModel.mID.mPlightID != -1) {
+        mModel.mpPlight = new DEMO_PLIGHT();
+        if (mModel.mpPlight == NULL) {
+            return FALSE;
+        }
+        light_data_s* light_data = &l_lightData[mModel.mID.mPlightID - 1];
+        dKydm_demo_plight_entry(mModel.mpPlight, &current.pos, mModel.mID.mPlightID, light_data->m01);
+    }
+
+    return TRUE;
 }
 
 /* 800E6620-800E6758       .text actStandby__10daDemo00_cFP13dDemo_actor_c */
 BOOL daDemo00_c::actStandby(dDemo_actor_c* act) {
-    /* Nonmatching */
-    if (nextRes.modelID != 0xFFFF || nextRes.plightID != 0xFFFF) {
-        model.resID = nextRes;
+    if (mNextID.mShapeID != -1 || mNextID.mPlightID != -1) {
+        mModel.mID = mNextID;
         if (fopAcM_entrySolidHeap(this, createHeapCallBack, 0x4000) != 0) {
-            if (model.model != NULL) {
+            if (mModel.mpModel != NULL) {
                 setBaseMtx();
-                fopAcM_SetMtx(this, model.model->getBaseTRMtx());
-                act->setModel(model.model);
-                if (model.morf != NULL)
-                    act->setAnmFrameMax(model.morf->getEndFrame());
+                fopAcM_SetMtx(this, mModel.mpModel->getBaseTRMtx());
+                act->setModel(mModel.mpModel);
+                if (mModel.mpMorf != NULL)
+                    act->setAnmFrameMax(mModel.mpMorf->getEndFrame());
             }
 
             setAction(&daDemo00_c::actPerformance);
@@ -159,16 +313,210 @@ BOOL daDemo00_c::actStandby(dDemo_actor_c* act) {
 }
 
 /* 800E6758-800E6E2C       .text actPerformance__10daDemo00_cFP13dDemo_actor_c */
-BOOL daDemo00_c::actPerformance(dDemo_actor_c*) {
-    /* Nonmatching */
+BOOL daDemo00_c::actPerformance(dDemo_actor_c* actor) {
+    f32 fVar1;
+    if (mModel.mID.mShapeID != mNextID.mShapeID || mModel.mID.mPlightID != mNextID.mPlightID) {
+        mModel.reset();
+        setAction(&daDemo00_c::actLeaving);
+    } else if (mModel.mpModel != NULL) {
+        if (mModel.mpMorf != NULL && mModel.mID.mBckID != mNextID.mBckID) {
+            J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectIDRes(dStage_roomControl_c::getDemoArcName(), (u16)mNextID.mBckID);
+            if (anm == NULL) {
+                return TRUE;
+            }
+
+            fVar1 = 0.0f;
+            if (actor->checkEnable(dDemo_actor_c::ENABLE_ANM_FRAME_e)) {
+                fVar1 = actor->getAnmTransition();
+            }
+            mModel.mpMorf->setAnm(anm, -1, fVar1, 1.0f, 0.0f, -1.0f, NULL);
+            mModel.mID.mBckID = mNextID.mBckID;
+        }
+
+        if (mModel.mID.mBtpID != mNextID.mBtpID) {
+            J3DAnmTexPattern* anmTexPattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(dStage_roomControl_c::getDemoArcName(), (u16)mNextID.mBtpID);
+            if (anmTexPattern == NULL) {
+                return TRUE;
+            }
+
+            mModel.mpBtpAnm->init(mModel.mpModel->getModelData(), anmTexPattern, 1, J3DFrameCtrl::EMode_NULL, 1.0f, 0, -1, true);
+            mModel.mID.mBtpID = mNextID.mBtpID;
+        }
+
+        if (mModel.mID.mBtkID != mNextID.mBtkID) {
+            J3DAnmTextureSRTKey* key = (J3DAnmTextureSRTKey*)dComIfG_getObjectIDRes(dStage_roomControl_c::getDemoArcName(), (u16)mNextID.mBtkID);
+            if (key == NULL) {
+                return TRUE;
+            }
+
+            mModel.mpBtkAnm->init(
+                mModel.mpModel->getModelData(),
+                key,
+                TRUE,
+#if VERSION <= VERSION_JPN
+                J3DFrameCtrl::EMode_NULL,
+#else
+                (mModel.mID.mBtkID & 0x10000000) != 0 ? J3DFrameCtrl::EMode_LOOP : J3DFrameCtrl::EMode_NULL,
+#endif
+                1.0f,
+#if VERSION == VERSION_DEMO
+                0.0f,
+#else
+                (mModel.mID.mBtkID & 0x10000000) != 0 ? mModel.mpBtkAnm->getFrame() : 0.0f,
+#endif
+                -1,
+                true
+            );
+            mModel.mID.mBtkID = mNextID.mBtkID;
+        }
+
+        if (mModel.mID.mBrkID != mNextID.mBrkID) {
+            J3DAnmTevRegKey* anmTev = (J3DAnmTevRegKey*)dComIfG_getObjectIDRes(dStage_roomControl_c::getDemoArcName(), (u16)mNextID.mBrkID);
+            if (anmTev == NULL) {
+                return TRUE;
+            }
+
+            mModel.mpBrkAnm->init(
+                mModel.mpModel->getModelData(),
+                anmTev,
+                TRUE,
+#if VERSION <= VERSION_JPN
+                J3DFrameCtrl::EMode_NULL,
+#else
+                (mModel.mID.mBrkID & 0x10000000) != 0 ? J3DFrameCtrl::EMode_LOOP : J3DFrameCtrl::EMode_NULL,
+#endif
+                1.0f,
+#if VERSION == VERSION_DEMO
+                0.0f,
+#else
+                (mModel.mID.mBrkID & 0x10000000) != 0 ? mModel.mpBrkAnm->getFrame() : 0.0f,
+#endif
+                -1,
+                true
+            );
+            mModel.mID.mBrkID = mNextID.mBrkID;
+        }
+
+        dDemo_setDemoData(this, dDemo_actor_c::ENABLE_TRANS_e | dDemo_actor_c::ENABLE_ROTATE_e | dDemo_actor_c::ENABLE_ANM_e, NULL, NULL);
+        if (mModel.mBgc != NULL) {
+            cXyz sp70(current.pos.x, current.pos.y + 100.0f, current.pos.z);
+            mModel.mBgc->mGndChk.SetPos(&sp70);
+            mModel.mBgc->mGroundY = dComIfG_Bgsp()->GroundCross(&mModel.mBgc->mGndChk);
+#if VERSION > VERSION_JPN
+            field_0x29e = 1;
+#endif
+        }
+
+        setBaseMtx();
+
+        if (actor->checkEnable(dDemo_actor_c::ENABLE_ANM_FRAME_e)) {
+            fVar1 = actor->getAnmFrame();
+            if (fVar1 > 1.0f) {
+                fVar1 -= 1.0f;
+                if (mModel.mpMorf != NULL) {
+                    mModel.mpMorf->setFrame(fVar1);
+                    mModel.mpMorf->play(
+                        &current.pos,
+                        mModel.mBgc != NULL &&
+#if VERSION > VERSION_JPN
+                        field_0x29e != 0 &&
+#endif
+                        std::fabsf(mModel.mBgc->mGroundY - current.pos.y) < 20.0f ?
+                            dComIfG_Bgsp()->GetMtrlSndId(mModel.mBgc->mGndChk) :
+                            0,
+                        dComIfGp_getReverb(dComIfGp_roomControl_getStayNo())
+                    );
+                }
+
+                if (mModel.mpBtpAnm != NULL) {
+                    mModel.mpBtpAnm->setFrame(fVar1);
+                    mModel.mpBtpAnm->play();
+                }
+
+                if (mModel.mpBtkAnm != NULL) {
+                    if ((mModel.mID.mBtkID & DEMO_SELECT(0x10000, 0x10000000)) == 0) {
+                        mModel.mpBtkAnm->setFrame(fVar1);
+                    }
+                    mModel.mpBtkAnm->play();
+                }
+
+                if (mModel.mpBrkAnm != NULL) {
+                    if ((mModel.mID.mBrkID & DEMO_SELECT(0x10000, 0x10000000)) == 0) {
+                        mModel.mpBrkAnm->setFrame(fVar1);
+                    }
+                    mModel.mpBrkAnm->play();
+                }
+            } else {
+                if (mModel.mpMorf != NULL) {
+                    mModel.mpMorf->setFrame(fVar1);
+                }
+
+                if (mModel.mpBtpAnm != NULL) {
+                    mModel.mpBtpAnm->setFrame(fVar1);
+                }
+
+                if (mModel.mpBtkAnm != NULL) {
+#if VERSION == VERSION_DEMO
+                    mModel.mpBtkAnm->setFrame(fVar1);
+#else
+                    if ((mModel.mID.mBtkID & 0x10000000) == 0) {
+                        mModel.mpBtkAnm->setFrame(fVar1);
+                    } else {
+                        mModel.mpBtkAnm->play();
+                    }
+#endif
+                }
+
+                if (mModel.mpBrkAnm != NULL) {
+#if VERSION == VERSION_DEMO
+                    mModel.mpBrkAnm->setFrame(fVar1);
+#else
+                    if ((mModel.mID.mBrkID & 0x10000000) == 0) {
+                        mModel.mpBrkAnm->setFrame(fVar1);
+                    } else {
+                        mModel.mpBrkAnm->play();
+                    }
+#endif
+                }
+            }
+        } else if (mModel.mpMorf != NULL) {
+            mModel.mpMorf->play(&current.pos, 0, 0);
+        } else if (mModel.mpBtpAnm != NULL) {
+            mModel.mpBtpAnm->play();
+        } else if (mModel.mpBtkAnm != NULL) {
+            mModel.mpBtkAnm->play();
+        } else if (mModel.mpBrkAnm != NULL) {
+            mModel.mpBrkAnm->play();
+        }
+
+        if (actor->checkEnable(dDemo_actor_c::ENABLE_SCALE_e)) {
+            scale = *actor->getScale();
+        }
+        
+        if (mModel.mpPlight != NULL) {
+            light_data_s* light_data = &l_lightData[mModel.mID.mPlightID - 1];
+            cXyz sp1C = current.pos;
+            if (light_data->useJoint == true) {
+                s32 jno = mModel.mpModel->getModelData()->getJointName()->getIndex(light_data->jointName);
+                mDoMtx_multVecZero(mModel.mpModel->getAnmMtx(jno), &sp1C);
+            }
+            dKydm_demo_plight_execute(mModel.mpPlight, &sp1C);
+        }
+    } else if (mModel.mpPlight != NULL) {
+        dDemo_setDemoData(this, dDemo_actor_c::ENABLE_TRANS_e, NULL, NULL);
+        dKydm_demo_plight_execute(mModel.mpPlight, &current.pos);
+    }
+
+    return TRUE;
 }
 
 /* 800E6E2C-800E6E90       .text actLeaving__10daDemo00_cFP13dDemo_actor_c */
 BOOL daDemo00_c::actLeaving(dDemo_actor_c* act) {
-    /* Nonmatching */
-    if (model.morf != NULL) {
-        model.morf->stopZelAnime();
+#if VERSION > VERSION_DEMO
+    if (mModel.mpMorf != NULL) {
+        mModel.mpMorf->stopZelAnime();
     }
+#endif
 
     fopAcM_DeleteHeap(this);
     setAction(&daDemo00_c::actStandby);
@@ -182,7 +530,96 @@ static BOOL daDemo00_Draw(daDemo00_c* i_this) {
 
 /* 800E6EB0-800E7204       .text draw__10daDemo00_cFv */
 BOOL daDemo00_c::draw() {
-    /* Nonmatching */
+    if (mModel.mpModel != NULL) {
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mModel.mpModel, &tevStr);
+        if (mModel.mpBtpAnm != NULL) {
+            mModel.mpBtpAnm->entry(mModel.mpModel->getModelData());
+        }
+        if (mModel.mpBtkAnm != NULL) {
+            mModel.mpBtkAnm->entry(mModel.mpModel->getModelData());
+        }
+        if (mModel.mpBrkAnm != NULL) {
+            mModel.mpBrkAnm->entry(mModel.mpModel->getModelData());
+        }
+        
+        if (mModel.mpInvisibleModel) {
+            if (mModel.mpMorf) {
+                mModel.mpInvisibleModel->updateDL(mModel.mpMorf);
+            } else {
+                mModel.mpInvisibleModel->updateDL(mModel.mpModel);
+            }
+        } else {
+#if VERSION > VERSION_DEMO
+            if (mModel.mpModel->getSkinDeform() != NULL && strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
+                dComIfGd_setListInvisisble();
+            }
+#endif
+            
+            if (field_0x29c == 2) {
+                dComIfGd_setListMaskOff();
+            } else if (field_0x29c == 8) {
+                dComIfGd_setListP1();
+            }
+            
+            if (mModel.mpMorf != NULL) {
+                mModel.mpMorf->updateDL();
+            } else {
+                mDoExt_modelUpdateDL(mModel.mpModel);
+            }
+            
+            if (
+#if VERSION > VERSION_DEMO
+                mModel.mpModel->getSkinDeform() != NULL ||
+#endif
+                field_0x29c == 2 || field_0x29c == 8
+            ) {
+                dComIfGd_setList();
+            }
+        }
+        
+        if (
+            mModel.mpShadow != NULL
+#if VERSION > VERSION_JPN
+            && field_0x29e != 0
+#endif
+        ) {
+            if (mModel.mID.mShadowID == 0 || mModel.mID.mShadowID == 1) {
+                cXyz pos = current.pos + mModel.mpShadow->mPos;
+#if VERSION > VERSION_DEMO
+                mModel.mpShadow->mShadowID = 
+#endif
+                dComIfGd_setShadow(
+                    DEMO_SELECT(0, mModel.mpShadow->mShadowID),
+                    mModel.mID.mShadowID == 0 ? 0 : 1,
+                    mModel.mpModel,
+                    &pos,
+                    mModel.mpShadow->mCasterSize,
+                    mModel.mpShadow->mSimpleScale,
+                    current.pos.y,
+                    mModel.mBgc->mGroundY,
+                    mModel.mBgc->mGndChk,
+                    &tevStr
+                );
+            } else {
+                cXyz pos(current.pos.x, mModel.mBgc->mGroundY, current.pos.z);
+                dComIfGd_setSimpleShadow2(
+                    &pos, pos.y, mModel.mpShadow->mSimpleScale, mModel.mBgc->mGndChk
+                );
+            }
+        }
+        
+        if (mModel.mpBtpAnm != NULL) {
+            mModel.mpBtpAnm->remove(mModel.mpModel->getModelData());
+        }
+        if (mModel.mpBtkAnm != NULL) {
+            mModel.mpBtkAnm->remove(mModel.mpModel->getModelData());
+        }
+        if (mModel.mpBrkAnm != NULL) {
+            mModel.mpBrkAnm->remove(mModel.mpModel->getModelData());
+        }
+    }
+    return TRUE;
 }
 
 /* 800E7204-800E7224       .text daDemo00_Execute__FP10daDemo00_c */
@@ -192,7 +629,196 @@ static BOOL daDemo00_Execute(daDemo00_c* i_this) {
 
 /* 800E7224-800E78A0       .text execute__10daDemo00_cFv */
 BOOL daDemo00_c::execute() {
-    /* Nonmatching */
+#if VERSION > VERSION_JPN
+    field_0x29e = 0;
+#endif
+
+    dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
+    if (demo_actor == NULL) {
+        fopAcM_delete(this);
+    } else {
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_SHAPE_e)) {
+            mNextID.mShapeID = demo_actor->getShapeId();
+        }
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_ANM_e)) {
+            mNextID.mBckID = demo_actor->getAnmId();
+        }
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_UNK_e)) {
+#if VERSION > VERSION_DEMO
+            u8 r29 = field_0x29c;
+#endif
+            field_0x29c = demo_actor->getPrm()->getId();
+            if (field_0x29c == 4) {
+                static const u16 l_eventBit[] = {
+                    -1,
+                    dSv_event_flag_c::UNK_2A80,
+                    -1,
+                    -1,
+                    -1,
+                    dSv_event_flag_c::UNK_2401,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    dSv_event_flag_c::UNK_2110,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    dSv_event_flag_c::UNK_2D01,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    dSv_event_flag_c::COLORS_IN_HYRULE,
+                };
+                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > spCC(data);
+                if (!spCC.isEnd() && spCC.isValid()) {
+                    TValueIterator_raw<u8> it = spCC.begin();
+                    int argID = *it;
+                    JUT_ASSERT(VERSION_SELECT(771, 818, 832, 832), argID < (sizeof(l_eventBit)/sizeof(u16)));
+                    if (l_eventBit[argID] != 0xFFFF) {
+                        dComIfGs_onEventBit(l_eventBit[argID]);
+                    }
+                }
+            } else if (field_0x29c == 5) {
+                static const u8 l_itemNo[] = {
+                    dItemNo_MASTER_SWORD_1_e,
+                    dItemNo_MASTER_SWORD_2_e,
+                    dItemNo_MASTER_SWORD_3_e,
+                    dItemNo_PEARL_DIN_e,
+                    dItemNo_PEARL_FARORE_e,
+                    dItemNo_PEARL_NAYRU_e,
+                    dItemNo_DELIVERY_BAG_e,
+                    dItemNo_SHIELD_e,
+                    dItemNo_MAGIC_ARROW_e,
+                    dItemNo_NONE_e,
+                };
+                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > spB8(data);
+                if (!spB8.isEnd() && spB8.isValid()) {
+                    TValueIterator_raw<u8> it = spB8.begin();
+                    int argID = *it;
+                    JUT_ASSERT(VERSION_SELECT(797, 844, 858, 858), argID < (sizeof(l_itemNo)/sizeof(u8)));
+                    if (l_itemNo[argID] != dItemNo_NONE_e) {
+                        execItemGet(l_itemNo[argID]);
+                    }
+                }
+            } else if (field_0x29c == 6) {
+                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                JStudio::stb::TParseData_fixed<33, TValueIterator_misaligned<s8> > spA4(data);
+                if (!spA4.isEnd() && spA4.isValid()) {
+                    TValueIterator_misaligned<s8> it = spA4.begin();
+                    int argID = *it;
+                    mDoGph_gInf_c::setMonotoneRateSpeed(argID);
+                }
+            } else if (field_0x29c == 7) {
+                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > sp90(data);
+                if (!sp90.isEnd() && sp90.isValid()) {
+                    TValueIterator_raw<u8> it = sp90.begin();
+                    int argID = *it;
+                    if (argID < 100) {
+                        dComIfGp_getVibration().StartShock(argID, 1, cXyz(0.0f, 1.0f, 0.0f));
+                    } else if (argID != 0xFF) {
+                        dComIfGp_getVibration().StartQuake(argID - 100, 1, cXyz(0.0f, 1.0f, 0.0f));
+                    } else {
+                        dComIfGp_getVibration().StopQuake(1);
+                    }
+                }
+            } else if (field_0x29c == 9 || field_0x29c == 10) {
+                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                JStudio::stb::TParseData_fixed<33, TValueIterator_raw<s8> > sp7C(data);
+                if (!sp7C.isEnd() && sp7C.isValid()) {
+                    TValueIterator_raw<s8> it = sp7C.begin();
+                    int r4 = *it;
+#if VERSION > VERSION_DEMO
+                    if (field_0x29c != r29 || r4 != field_0x29d)
+#endif
+                    {
+#if VERSION > VERSION_DEMO
+                        field_0x29d = r4;
+#endif
+                        s8 r5 = 0;
+                        if (++it != sp7C.end()) {
+                            r5 = (int)*it;
+                        }
+                        if ((s8)r4 == 0) {
+                            mDoGph_gInf_c::startFadeOut(r5);
+                        } else {
+                            mDoGph_gInf_c::startFadeIn(r5);
+                        }
+                        
+                        JUtility::TColor& fade_color = field_0x29c == 9 ? (JUtility::TColor&)g_blackColor : (JUtility::TColor&)g_saftyWhiteColor;
+                        mDoGph_gInf_c::setFadeColor(fade_color);
+                    }
+                }
+            } else {
+                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                JStudio::stb::TParseData_fixed<51, TValueIterator_misaligned<u32> > sp68(data);
+                if (!sp68.isEnd() && sp68.isValid()) {
+                    int r5 = -1;
+                    for (TValueIterator_misaligned<u32> it = sp68.begin(); it != sp68.end(); it++) {
+                        if (r5 < 0) {
+                            r5 = *it;
+                        } else {
+                            if (r5 == 0) {
+                                mNextID.mBtpID = *it;
+                            } else if (r5 == 1) {
+                                mNextID.mBtkID = *it;
+                            } else if (r5 == 2) {
+                                mNextID.mPlightID = *it;
+                            } else if (r5 == 3) {
+                                mNextID.field_0x1C = *it;
+                            } else if (r5 == 4) {
+                                mNextID.mBrkID = *it;
+                            } else if (r5 == 5) {
+                                mNextID.mShadowID = *it;
+                            } else if (r5 == 6) {
+                                mNextID.mBtkID = *it | DEMO_SELECT(0x10000, 0x10000000);
+                            } else if (r5 == 7) {
+                                mNextID.mBrkID = *it | DEMO_SELECT(0x10000, 0x10000000);
+                            }
+                            r5 = -1;
+                        }
+                    }
+                }
+            }
+        }
+        
+        action(demo_actor);
+    }
+    return TRUE;
 }
 
 /* 800E78A0-800E78A8       .text daDemo00_IsDelete__FP10daDemo00_c */
@@ -209,12 +835,7 @@ static BOOL daDemo00_Delete(daDemo00_c* i_this) {
 /* 800E78D0-800E7964       .text daDemo00_Create__FP10fopAc_ac_c */
 static cPhs_State daDemo00_Create(fopAc_ac_c* i_ac) {
     daDemo00_c* i_this = (daDemo00_c*)i_ac;
-    fopAcM_SetupActor(i_this, daDemo00_c);
-    dKy_tevstr_init(&i_this->tevStr, dComIfGp_roomControl_getStayNo(), 0xFF);
-    i_this->setAction(&daDemo00_c::actStandby);
-    i_this->nextRes.reset();
-    i_this->field_0x29d = -1;
-    return cPhs_COMPLEATE_e;
+    return i_this->create();
 }
 
 static actor_method_class l_daDemo00_Method = {
@@ -226,18 +847,18 @@ static actor_method_class l_daDemo00_Method = {
 };
 
 actor_process_profile_definition g_profile_DEMO00 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DEMO00,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DEMO00_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daDemo00_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DEMO00,
+    /* Draw Prio    */ fpcDwPi_DEMO00_e,
     /* Actor SubMtd */ &l_daDemo00_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -3,6 +3,8 @@
 // Translation Unit: object-ambientlight.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio_JStage/object-ambientlight.h"
 #include "dolphin/types.h"
 

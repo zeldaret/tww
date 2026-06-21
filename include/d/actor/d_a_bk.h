@@ -226,7 +226,7 @@ public:
     }
     virtual ~bkHIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x004 */ s8 mNo;

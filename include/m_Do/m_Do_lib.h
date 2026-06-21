@@ -14,15 +14,15 @@ struct mDoLib_clipper {
         mClipper.calcViewFrustum();
     }
 
-    static s32 clip(const Mtx m, Vec* max, Vec* min) {
+    static BOOL clip(const Mtx m, Vec* max, Vec* min) {
         return mClipper.clip(m, max, min);
     }
 
-    static s32 clip(const Mtx m, Vec center, f32 radius) {
+    static BOOL clip(const Mtx m, Vec center, f32 radius) {
         return mClipper.clip(m, center, radius);
     }
     
-    static s32 clip(J3DModel* model) {
+    static BOOL clip(J3DModel* model) {
         return mClipper.clipByBox(model);
     }
 
@@ -42,7 +42,9 @@ struct mDoLib_clipper {
 };
 
 void mDoLib_project(Vec* src, Vec* dst);
-u8 mDoLib_setResTimgObj(ResTIMG* res, GXTexObj* o_texObj, u32 tlut_name, GXTlutObj* o_tlutObj);
+u32 mDoLib_setResTimgObj(ResTIMG* res, GXTexObj* o_texObj, u32 tlut_name, GXTlutObj* o_tlutObj);
 void mDoLib_pos2camera(Vec* src, Vec* dst);
+u32 mDoLib_cnvind32(u32 r3);
+u16 mDoLib_cnvind16(u16 r3);
 
 #endif /* M_DO_M_DO_LIB_H */

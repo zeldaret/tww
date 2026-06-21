@@ -5,7 +5,8 @@
 #include "f_pc/f_pc_create_tag.h"
 #include "f_pc/f_pc_node.h"
 
-class scene_tag_class : public create_tag_class {
+struct scene_tag_class {
+    /* 0x00 */ create_tag_class base;
 };
 
 void fopScnTg_QueueTo(scene_tag_class* pSceneTag);

@@ -3,6 +3,8 @@
 // Translation Unit: JSGAmbientLight.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStage/JSGAmbientLight.h"
 #include "dolphin/types.h"
 
@@ -23,4 +25,3 @@ GXColor JStage::TAmbientLight::JSGGetColor() const {
 /* 8026DD10-8026DD14       .text JSGSetColor__Q26JStage13TAmbientLightF8_GXColor */
 void JStage::TAmbientLight::JSGSetColor(GXColor) {
 }
-

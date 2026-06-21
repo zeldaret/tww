@@ -3,6 +3,7 @@
 // Translation Unit: d_menu_save.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_save.h"
 #include "dolphin/types.h"
 

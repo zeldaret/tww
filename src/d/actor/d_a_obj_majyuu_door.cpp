@@ -3,10 +3,9 @@
  * Object - Forsaken Fortress - Large wooden barricade (blocks entrance, destroyed with Bombs)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_majyuu_door.h"
 #include "d/d_cc_d.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -31,11 +30,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 75.0f,
         /* Height */ 115.0f,
-    },
+    }},
 };
 
 
@@ -125,7 +124,7 @@ bool daObj_MjDoor_c::_draw() {
 }
 
 /* 00000F28-00000F48       .text daObj_MjDoorCreate__FPv */
-static s32 daObj_MjDoorCreate(void* i_this) {
+static cPhs_State daObj_MjDoorCreate(void* i_this) {
     return ((daObj_MjDoor_c*)i_this)->_create();
 }
 
@@ -158,18 +157,18 @@ static actor_method_class daObj_MjDoorMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_MJDOOR = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_MJDOOR,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_MJDOOR_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_MjDoor_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_MJDOOR,
+    /* Draw Prio    */ fpcDwPi_OBJ_MJDOOR_e,
     /* Actor SubMtd */ &daObj_MjDoorMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

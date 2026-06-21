@@ -10,22 +10,30 @@ enum fopMsg_MessageStatus_e {
     fopMsgStts_MSG_PREPARING_e = 0x01,
     fopMsgStts_BOX_OPENING_e = 0x02,
     fopMsgStts_MSG_TYPING_e = 0x06,
-    fopMsgStts_UNKA_e = 0x0A,
+    fopMsgStts_STOP_e = 0x07,
+    fopMsgStts_SELECT_2_e = 0x08, // Selection box with 2 choices
+    fopMsgStts_SELECT_3_e = 0x09, // Selection box with 3 choices
+    fopMsgStts_CLOSE_WAIT_e = 0x0A, // Waiting for player input before closing the text box
+    fopMsgStts_UNKB_e = 0x0B,
+    fopMsgStts_UNKD_e = 0x0D,
     fopMsgStts_MSG_DISPLAYED_e = 0x0E,
     fopMsgStts_MSG_CONTINUES_e = 0x0F,
     fopMsgStts_MSG_ENDS_e = 0x10,
     fopMsgStts_BOX_CLOSING_e = 0x11,
     fopMsgStts_BOX_CLOSED_e = 0x12,
     fopMsgStts_MSG_DESTROYED_e = 0x13,
-    fopMsgStts_UNK15_e = 0x15,
+    fopMsgStts_SELECT_YOKO_e = 0x14, // Selection box with 2 choices (arranged horizontally)?
+    fopMsgStts_INPUT_e = 0x15, // Wind Waker song tutorial (practicing)/numbers input (auction)
+    fopMsgStts_TACT_e = 0x16, // Close text box after playing Wind Waker song
+    fopMsgStts_DEMO_e = 0x17, // Wind Waker song tutorial (demonstration)
 };
 
 struct msg_method_class {
     /* 0x00 */ leafdraw_method_class base;
 };
 
-class msg_class : public leafdraw_class {
-public:
+struct msg_class {
+    /* 0x00 */ leafdraw_class base;
     /* 0xC0 */ int mMsgType;
     /* 0xC4 */ create_tag_class draw_tag;
     /* 0xD8 */ msg_method_class* sub_method;

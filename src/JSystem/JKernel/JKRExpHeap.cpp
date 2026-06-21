@@ -3,6 +3,8 @@
 // Translation Unit: JKRExpHeap.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -361,7 +363,7 @@ void JKRExpHeap::do_free(void* ptr) {
             block->free(this);
         }
     } else {
-        JUT_WARN(VERSION_SELECT(885, 888, 888, 888), "free: memblock %x not in heap %x", ptr, this);
+        JUT_WARN(DEMO_SELECT(885, 888), "free: memblock %x not in heap %x", ptr, this);
     }
     unlock();
 }
@@ -395,7 +397,7 @@ void JKRExpHeap::do_freeTail() {
 }
 
 /* 802B2048-802B2098       .text do_changeGroupID__10JKRExpHeapFUc */
-s32 JKRExpHeap::do_changeGroupID(u8 groupId) {
+u8 JKRExpHeap::do_changeGroupID(u8 groupId) {
     lock();
     u8 prev = mCurrentGroupId;
     mCurrentGroupId = groupId;
@@ -548,7 +550,7 @@ static void dummy1() {
 /* 802B24EC-802B2584       .text appendUsedList__10JKRExpHeapFPQ210JKRExpHeap9CMemBlock */
 void JKRExpHeap::appendUsedList(CMemBlock* newblock) {
     if (!newblock) {
-        OSPanic(__FILE__, VERSION_SELECT(1458, 1466, 1466, 1466), ":::ERROR! appendUsedList\n");
+        OSPanic(__FILE__, DEMO_SELECT(1458, 1466), ":::ERROR! appendUsedList\n");
     }
 
     CMemBlock* block = mTailUsedList;
@@ -691,7 +693,7 @@ void JKRExpHeap::joinTwoBlocks(CMemBlock* block) {
         OSReport(":::: endAddr = %x\n", endAddr);
         OSReport(":::: nextAddr = %x\n", nextAddr);
         JKRGetCurrentHeap()->dump();
-        OSPanic(__FILE__, VERSION_SELECT(1710, 1718, 1718, 1718), ":::: Bad Block\n");
+        OSPanic(__FILE__, DEMO_SELECT(1710, 1718), ":::: Bad Block\n");
     }
 
     if (endAddr == nextAddr) {

@@ -3,14 +3,13 @@
  * Object - Water inside Jabun's cave
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_AjavW.h"
-#include "d/res/res_ajavw.h"
+#include "res/Object/AjavW.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -27,16 +26,16 @@ BOOL daObjAjavW_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjAjavW_c::create_heap() {
     bool ret = true;
 
-    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, AJAVW_BDL_AJAVW));
-    J3DAnmTextureSRTKey * pBtk = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes(l_arcname, AJAVW_BTK_AJAVW);
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_AJAVW_BDL_AJAVW_e));
+    J3DAnmTextureSRTKey * pBtk = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes(l_arcname, dRes_INDEX_AJAVW_BTK_AJAVW_e);
 
     if (!pModelData || !pBtk) {
         JUT_ASSERT(0xa7, FALSE);
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);
-        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
-        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, AJAVW_DZB_AJAVW), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::EMode_LOOP);
+        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_AJAVW_DZB_AJAVW_e), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
 
         if (!mpModel || !btkRet || !mpBgW)
             ret = false;
@@ -47,7 +46,7 @@ bool daObjAjavW_c::create_heap() {
 
 /* 00000208-00000350       .text _create__12daObjAjavW_cFv */
 cPhs_State daObjAjavW_c::_create() {
-    fopAcM_SetupActor(this, daObjAjavW_c);
+    fopAcM_ct(this, daObjAjavW_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, l_arcname);
 
@@ -136,18 +135,18 @@ static actor_method_class l_daObjAjavW_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_AjavW = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_AjavW,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_AjavW_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjAjavW_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_AjavW,
+    /* Draw Prio    */ fpcDwPi_Obj_AjavW_e,
     /* Actor SubMtd */ &l_daObjAjavW_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

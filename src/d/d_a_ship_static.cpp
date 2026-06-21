@@ -3,6 +3,7 @@
  * King of Red Lions - Static
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ship.h"
 
 /* 80067D94-80067E78       .text initStartPos__8daShip_cFPC4cXyzs */

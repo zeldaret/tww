@@ -180,22 +180,22 @@ public:
     void setCommand(u16 command) { mCommand = command; }
 
     void setXyEventCB(CallbackFunc cb) { mpEventCB = cb; }
-    s16 runXyEventCB(void* ac, int i_itemBtn) {
+    s16 runXyEventCB(void* i_actor, int i_itemBtn) {
         if (mpEventCB == NULL)
             return -1;
-        return mpEventCB(ac, i_itemBtn);
+        return mpEventCB(i_actor, i_itemBtn);
     }
     void setXyCheckCB(CallbackFunc cb) { mpCheckCB = cb; }
-    s16 runXyCheckCB(void* ac, int i_itemBtn) {
+    s16 runXyCheckCB(void* i_actor, int i_itemBtn) {
         if (mpCheckCB == NULL)
             return true;
-        return mpCheckCB(ac, i_itemBtn);
+        return mpCheckCB(i_actor, i_itemBtn);
     }
     void setPhotoEventCB(CallbackFunc cb) { mpPhotoCB = cb; }
-    s16 runPhotoEventCB(void* ac, int i_itemBtn) {
+    s16 runPhotoEventCB(void* i_actor, int i_itemBtn) {
         if (mpPhotoCB == NULL)
             return -1;
-        return mpPhotoCB(ac, i_itemBtn);
+        return mpPhotoCB(i_actor, i_itemBtn);
     }
 
 public:
@@ -265,8 +265,9 @@ public:
     /* 0xC */ cXyz max;
 };
 
-class fopAc_ac_c : public leafdraw_class {
+class fopAc_ac_c {
 public:
+    /* 0x000 */ leafdraw_class base;
     /* 0x0C0 */ int actor_type;
     /* 0x0C4 */ create_tag_class actor_tag;
     /* 0x0D8 */ create_tag_class draw_tag;
@@ -278,7 +279,7 @@ public:
     /* 0x1BE */ u8 group;
     /* 0x1BF */ u8 cullType;
     /* 0x1C0 */ u8 demoActorID;
-    /* 0x1C1 */ s8 subtype;
+    /* 0x1C1 */ s8 argument;
     /* 0x1C2 */ u8 gbaName;
     /* 0x1C4 */ u32 actor_status;
     /* 0x1C8 */ u32 actor_condition;
@@ -304,7 +305,7 @@ public:
     /* 0x26C */ actor_attention_types attention_info;
     /* 0x284 */ s8 max_health;
     /* 0x285 */ s8 health;
-    /* 0x288 */ s32 itemTableIdx;
+    /* 0x288 */ int itemTableIdx;
     /* 0x28C */ u8 stealItemBitNo; // For limited items (Blue Chu Jelly), this is the first itemBitNo to set.
     /* 0x28D */ s8 stealItemLeft;
 
@@ -367,7 +368,7 @@ public:
 
 STATIC_ASSERT(sizeof(fopEn_enemy_c) == 0x2AC);
 
-s32 fopAc_IsActor(void* actor);
+BOOL fopAc_IsActor(void* actor);
 
 extern int g_fopAc_type;
 extern actor_method_class g_fopAc_Method;

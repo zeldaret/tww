@@ -3,6 +3,8 @@
 // Translation Unit: resource.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JMessage/resource.h"
 #include "JSystem/JMessage/data.h"
 #include "JSystem/JUtility/JUTResFont.h"

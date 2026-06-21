@@ -3,14 +3,13 @@
  * Object - Hyrule Castle - Knight statues (Master Sword chamber)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_zouK.h"
-#include "d/res/res_vzouk.h"
+#include "res/Object/VzouK.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
@@ -49,11 +48,11 @@ namespace daObjZouk {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 100.0f,
             /* Height */ 200.0f,
-        },
+        }},
     };
 }
 
@@ -66,11 +65,15 @@ BOOL daObjZouk::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 0000009C-00000468       .text create_heap__Q29daObjZouk5Act_cFv */
 bool daObjZouk::Act_c::create_heap() {
-    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, VZOUK_INDEX_BDL_VZOUK);
-    JUT_ASSERT(0x171, mdl_data != NULL);
-    M_bck_data = (J3DAnmTransformKey*)dComIfG_getObjectRes(M_arcname, VZOUK_INDEX_BCK_VZOUK);
-    JUT_ASSERT(0x175, M_bck_data != NULL);
-    if (mdl_data != NULL && M_bck_data != NULL) {
+    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VZOUK_BDL_VZOUK_e);
+    JUT_ASSERT(369, mdl_data != NULL);
+    M_bck_data = (J3DAnmTransformKey*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VZOUK_BCK_VZOUK_e);
+    JUT_ASSERT(373, M_bck_data != NULL);
+
+#if VERSION > VERSION_DEMO
+    if (mdl_data != NULL && M_bck_data != NULL)
+#endif
+    {
         M_anm = new mDoExt_McaMorf(
             mdl_data,
             NULL, NULL,
@@ -81,7 +84,7 @@ bool daObjZouk::Act_c::create_heap() {
             0x11020203
         );
     }
-    JUT_ASSERT(0x183, M_anm != NULL);
+    JUT_ASSERT(DEMO_SELECT(385, 387), M_anm != NULL);
     if (M_anm != NULL) {
         if (dComIfGs_isCollect(0, 1)) {
             M_anm->setPlaySpeed(0.0f);
@@ -93,23 +96,35 @@ bool daObjZouk::Act_c::create_heap() {
     }
     set_mtx();
 
-    cBgD_t* bgw_data_before = (cBgD_t*)dComIfG_getObjectRes(M_arcname, VZOUK_INDEX_DZB_MAEKISI);
-    JUT_ASSERT(0x196, bgw_data_before != NULL);
-    if (bgw_data_before != NULL) {
+    cBgD_t* bgw_data_before = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VZOUK_DZB_MAEKISI_e);
+    JUT_ASSERT(DEMO_SELECT(404, 406), bgw_data_before != NULL);
+#if VERSION > VERSION_DEMO
+    if (bgw_data_before != NULL)
+#endif
+    {
         mBgBefore = new dBgW();
         if (mBgBefore != NULL) {
-            if (mBgBefore->Set(bgw_data_before, dBgW::MOVE_BG_e, &mBgMtx) == true)
+            if (mBgBefore->Set(bgw_data_before, dBgW::MOVE_BG_e, &mBgMtx) == true) {
+#if VERSION > VERSION_DEMO
                 return false;
+#endif
+            }
         }
     }
 
-    cBgD_t* bgw_data_after = (cBgD_t*)dComIfG_getObjectRes(M_arcname, VZOUK_INDEX_DZB_ATOKISI);
-    JUT_ASSERT(0x1a4, bgw_data_after != NULL);
-    if (bgw_data_after != NULL) {
+    cBgD_t* bgw_data_after = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VZOUK_DZB_ATOKISI_e);
+    JUT_ASSERT(DEMO_SELECT(414, 420), bgw_data_after != NULL);
+#if VERSION > VERSION_DEMO
+    if (bgw_data_after != NULL)
+#endif
+    {
         mBgAfter = new dBgW();
         if (mBgAfter != NULL) {
-            if (mBgAfter->Set(bgw_data_after, dBgW::MOVE_BG_e, &mBgMtx) == true)
+            if (mBgAfter->Set(bgw_data_after, dBgW::MOVE_BG_e, &mBgMtx) == true) {
+#if VERSION > VERSION_DEMO
                 return false;
+#endif
+            }
         }
     }
 
@@ -121,14 +136,18 @@ bool daObjZouk::Act_c::create_heap() {
 
 /* 00000468-00000724       .text _create__Q29daObjZouk5Act_cFv */
 cPhs_State daObjZouk::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
             fopAcM_SetMtx(this, M_anm->getModel()->getBaseTRMtx());
+        #if VERSION == VERSION_DEMO
+            fopAcM_setCullSizeBox(this, -550.0f, -0.0f, -600.0f, 550.0f, 1400.0f, 600.0f);
+        #else
             fopAcM_setCullSizeBox(this, -1000.0f, -0.0f, -1000.0f, 1000.0f, 2800.0f, 1000.0f);
+        #endif
             cXyz gndPos(current.pos.x, current.pos.y + 100.0f, current.pos.z);
             mGndChk.SetPos(&gndPos);
             mGndChk.SetActorPid(fopAcM_GetID(this));
@@ -181,7 +200,10 @@ cPhs_State daObjZouk::Act_c::_create() {
 
 /* 00001094-00001164       .text _delete__Q29daObjZouk5Act_cFv */
 bool daObjZouk::Act_c::_delete() {
-    if (heap != NULL) {
+#if VERSION > VERSION_DEMO
+    if (heap != NULL)
+#endif
+    {
         if (mBgBefore != NULL && mBgBefore->ChkUsed())
             dComIfG_Bgsp()->Release(mBgBefore);
         if (mBgAfter != NULL && mBgAfter->ChkUsed())
@@ -233,7 +255,9 @@ bool daObjZouk::Act_c::_execute() {
     fopAcM_rollPlayerCrash(this, 288.0f, 0x0D);
     if (!jokai_demo())
         play_stop_joint_anime();
-    if (param_get_arg0() == 0) {
+
+    if (VERSION == VERSION_DEMO || param_get_arg0() == 0) {
+#if VERSION > VERSION_DEMO
         if (dComIfGp_event_runCheck()) {
             if (mBgBefore != NULL && mBgAfter != NULL) {
                 if (mBgAfter->ChkUsed())
@@ -247,7 +271,9 @@ bool daObjZouk::Act_c::_execute() {
                 if (mBgBefore->ChkUsed())
                     mBgBefore->Move();
             }
-        } else {
+        } else
+#endif
+        {
             if (mBgMode == 0 && dComIfGs_isCollect(0, 1) && mBgBefore != NULL && mBgAfter != NULL) {
                 if (mBgBefore->ChkUsed())
                     dComIfG_Bgsp()->Release(mBgBefore);
@@ -359,18 +385,18 @@ namespace daObjZouk {
 }
 
 actor_process_profile_definition g_profile_Obj_Zouk = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Zouk,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Zouk_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjZouk::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Zouk,
+    /* Draw Prio    */ fpcDwPi_Obj_Zouk_e,
     /* Actor SubMtd */ &daObjZouk::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

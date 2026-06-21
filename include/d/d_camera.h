@@ -56,7 +56,6 @@ struct camSphChkdata {
         field_0x4 = i_radius;
     }
 
-    ~camSphChkdata(){}
     /* 0x00 */ cXyz* field_0x0;
     /* 0x04 */ f32 field_0x4;
     /* 0x08 */ cXyz field_0x8;
@@ -64,21 +63,15 @@ struct camSphChkdata {
 };
 
 class dCamera_monitoring_things {
-    public:
-    dCamera_monitoring_things(){}
-    ~dCamera_monitoring_things(){}
-
+public:
     /* 0x00 */ cXyz mPos;
     /* 0x0C */ cXyz field_0x0C;
-    /* 0x10 */ int field_0x10;
-    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ int field_0x18;
+    /* 0x1C */ f32 field_0x1C;
 };
 
 class dCamera_DMC_system {
-    public:
-    dCamera_DMC_system(){}
-    ~dCamera_DMC_system(){}
-
+public:
     /* 0x0 */ u8 field_0x0;
     /* 0x1 */ u8 field_0x1;
     /* 0x2 */ cSAngle field_0x2;
@@ -138,13 +131,21 @@ public:
     /* 0x028 */ cXyz mUp;
     /* 0x034 */ cSAngle mBank;
     /* 0x036 */ u8 m036[0x038 - 0x036];
-    /* 0x038 */ f32 mFovY;
-    /* 0x03C */ cSGlobe m03C;
-    /* 0x044 */ cXyz m044;
-    /* 0x050 */ cXyz m050;
-    /* 0x05C */ cSAngle m05C;
-    /* 0x05E */ u8 m05E[0x060 - 0x05E];
-    /* 0x060 */ f32 m060;
+    /* 0x038 */ f32 mFovy;
+    class {
+    public:
+        /* 0x00 */ cSGlobe mDirection;
+        /* 0x08 */ cXyz mCenter;
+        /* 0x14 */ cXyz mEye;
+        /* 0x20 */ cSAngle mBank;
+        /* 0x24 */ f32 mFovy;
+#if defined(__MWERKS__) && __MWERKS__ < 0x4200
+        // Static data members in an anonymous class are illegal in C++, but MWCC for GC accepts it.
+        // However, MWCC for Wii does not so this was removed for the Shield release of TP.
+        static const int PatternLengthMax = 4;
+#endif
+    }
+    /* 0x05C */ mViewCache;
     /* 0x064 */ f32 m064;
     /* 0x068 */ int m068;
     /* 0x06C */ cSAngle mAngleY;
@@ -165,12 +166,14 @@ public:
             /* 0x1C */ cSAngle mBank;
             /* 0x1E */ s16 m1E;
         } m00;
-    } 
+    }
     /* 0x0A4 */ m0A4[2];
     /* 0x0E4 */ int mStageMapToolCameraIdx;
     /* 0x0E8 */ int m0E8;
     /* 0x0EC */ cXyz mExtendedPos;
-    /* 0x0F8 */ u8 m0F8[0x100 - 0x0F8];
+    /* 0x0F8 */ u8 m0F8[0xFA - 0x0F8];
+    /* 0x0FA */ s16 m0FA;
+    /* 0x0FC */ u8 m0FC[0x100 - 0x0FC];
     /* 0x100 */ u8 m100;
     /* 0x101 */ u8 m101;
     /* 0x102 */ u8 m102;
@@ -319,10 +322,53 @@ public:
             /* 0x384 */ f32 m384;
             /* 0x388 */ f32 m388;
             /* 0x38C */ f32 m38C;
-            /* 0x390 */ u8 m390[0x3B8 - 0x390];
+            /* 0x390 */ f32 m390;
+            /* 0x394 */ f32 m394;
+            /* 0x398 */ f32 m398;
+            /* 0x39C */ f32 m39C;
+            /* 0x3A0 */ f32 m3A0;
+            /* 0x3A4 */ u8 m3A4[0x3A8 - 0x3A4];
+            /* 0x3A8 */ int m3A8;
+            /* 0x3AC */ u8 m3AC[0x3B8 - 0x3AC];
             /* 0x3B8 */ cSAngle m3B8;
             /* 0x3BA */ cSAngle m3BA;
+            /* 0x3BC */ u8 m3BC;
+            /* 0x3BD */ u8 m3BD;
+            /* 0x3BE */ u8 m3BE;
+            /* 0x3BF */ u8 m3BF;
+            /* 0x3C0 */ u32 m3C0;
+            /* 0x3C4 */ int m3C4;
         } subject;
+        struct Crawl {
+            /* 0x378 */ int m378;
+            /* 0x37C */ int m37C;
+            /* 0x380 */ f32 m380;
+            /* 0x384 */ f32 m384;
+            /* 0x388 */ int m388;
+            /* 0x38C */ cXyz m38C;
+            /* 0x398 */ u8 m398;
+            /* 0x399 */ u8 m399;
+            /* 0x39A */ u8 m39A[0x39C - 0x39A];
+            /* 0x39C */ int m39C;
+        } crawl;
+        struct FixedFrame {
+            /* 0x378 */ cXyz m378;
+            /* 0x384 */ cSGlobe m384;
+            /* 0x38C */ int m38C;
+            /* 0x390 */ f32 m390;
+            /* 0x394 */ f32 m394;
+            /* 0x398 */ f32 m398;
+            /* 0x39C */ cXyz m39C;
+            /* 0x3A8 */ cXyz m3A8;
+        } fixedFrame;
+        struct FixedPos {
+            /* 0x378 */ int m378;
+            /* 0x37C */ f32 m37C;
+            /* 0x380 */ f32 m380;
+            /* 0x384 */ cXyz m384;
+            /* 0x390 */ cXyz m390;
+            /* 0x39C */ u8 m39C;
+        } fixedPos;
     } mWork;
     /* 0x3F8 */ dCamera_event_data mEventData;
     /* 0x50C */ u32 mEventFlags;
@@ -513,7 +559,7 @@ public:
     bool SetExtendedPosition(cXyz*);
     bool ScopeViewMsgModeOff();
 
-    f32 Fovy() { return mFovY + mFovYShake; }
+    f32 Fovy() { return mFovy + mFovYShake; }
     cSAngle Bank() { return mBank + mBankShake; }
     cXyz Up() { return mUp; }
     cXyz Center() { return mCenter + mCenterShake; }
@@ -579,6 +625,7 @@ public:
 
 STATIC_ASSERT(sizeof(dCamera_c) == 0x800);
 
+bool dCam_isManual(camera_class* i_this);
 s16 dCam_getAngleY(camera_class*);
 s16 dCam_getAngleX(camera_class*);
 s16 dCam_getControledAngleY(camera_class*);

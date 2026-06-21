@@ -3,6 +3,7 @@
  * Item - Base Item Class
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_itembase.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
@@ -39,12 +40,12 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
     }
     
     switch (m_itemNo) {
-    case dItem_ARROW_30_e:
+    case dItemNo_ARROW_30_e:
         mpModelArrow[0] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
         if (!mpModelArrow[0]) {
             return FALSE;
         }
-    case dItem_ARROW_20_e:
+    case dItemNo_ARROW_20_e:
         mpModelArrow[1] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
         if (!mpModelArrow[1]) {
             return FALSE;
@@ -61,7 +62,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
         pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(resName, btkAnm1);
         JUT_ASSERT(140, pbtk != NULL);
         mpBtkAnm1 = new mDoExt_btkAnm();
-        if (!mpBtkAnm1 || !mpBtkAnm1->init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+        if (!mpBtkAnm1 || !mpBtkAnm1->init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
     }
@@ -71,7 +72,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
         pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(resName, btkAnm2);
         JUT_ASSERT(156, pbtk != NULL);
         mpBtkAnm2 = new mDoExt_btkAnm();
-        if (!mpBtkAnm2 || !mpBtkAnm2->init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+        if (!mpBtkAnm2 || !mpBtkAnm2->init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
     }
@@ -87,7 +88,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
             shouldAnimate = FALSE;
         }
         mpBrkAnm1 = new mDoExt_brkAnm();
-        if (!mpBrkAnm1 || !mpBrkAnm1->init(modelData, pbrk, shouldAnimate, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, false)) {
+        if (!mpBrkAnm1 || !mpBrkAnm1->init(modelData, pbrk, shouldAnimate, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
     }
@@ -97,7 +98,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
         pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(resName, brkAnm2);
         JUT_ASSERT(197, pbrk != NULL);
         mpBrkAnm2 = new mDoExt_brkAnm();
-        if (!mpBrkAnm2 || !mpBrkAnm2->init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, false)) {
+        if (!mpBrkAnm2 || !mpBrkAnm2->init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
     }
@@ -108,7 +109,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
         pbck = (J3DAnmTransform*)dComIfG_getObjectRes(resName, bckAnm);
         JUT_ASSERT(212, pbck != NULL);
         mpBckAnm = new mDoExt_bckAnm();
-        if (!mpBckAnm || !mpBckAnm->init(modelData, pbck, TRUE, 2, 1.0f, 0, -1, false)) {
+        if (!mpBckAnm || !mpBckAnm->init(modelData, pbck, TRUE, 2)) {
             return FALSE;
         }
     }
@@ -161,10 +162,10 @@ void daItemBase_c::settingBeforeDraw() {
     if (isBomb(m_itemNo)) {
         daPy_lk_c* link = daPy_getPlayerLinkActorClass();
         link->getBombBrk()->setFrame(0.0f);
-        mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
+        mpModel->getModelData()->getJointNodePointer(BOMB_JNT_VBOMB_MODEL_e)->setMtxCalc(NULL);
     }
     
-    if (m_itemNo == dItem_BOMB_BAG_e || m_itemNo == dItem_SKULL_HAMMER_e || m_itemNo == dItem_SMALL_KEY_e) {
+    if (m_itemNo == dItemNo_BOMB_BAG_e || m_itemNo == dItemNo_SKULL_HAMMER_e || m_itemNo == dItemNo_SMALL_KEY_e) {
         dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), 1.0f);
     }
 }

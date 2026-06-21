@@ -3,15 +3,14 @@
 // Translation Unit: d_kyeff.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_kyeff.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_data.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
 #include "d/d_stage.h"
 #include "m_Do/m_Do_audio.h"
 #include "dolphin/os/OS.h"
@@ -163,7 +162,7 @@ static cPhs_State dKyeff_Create(kankyo_class* i_ky) {
     return cPhs_COMPLEATE_e;
 }
 
-kankyo_method_class l_dKyeff_Method = {
+static kankyo_method_class l_dKyeff_Method = {
     (process_method_func)dKyeff_Create,
     (process_method_func)dKyeff_Delete,
     (process_method_func)dKyeff_Execute,
@@ -172,15 +171,15 @@ kankyo_method_class l_dKyeff_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KYEFF = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x000C,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KYEFF,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dKyeff_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_KYEFF,
-    /* Actor SubMtd */ &l_dKyeff_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x000C,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_KYEFF_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dKyeff_c),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_KYEFF_e,
+    /* Kankyo SubMtd */ &l_dKyeff_Method,
 };

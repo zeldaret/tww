@@ -3,6 +3,9 @@
 // Translation Unit: JRenderer.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
+#include "JSystem/JRenderer/JRenderer.h"
 #include "dolphin/gx/GX.h"
 #include "JSystem/J3DGraphBase/J3DGD.h"
 

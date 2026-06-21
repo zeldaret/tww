@@ -3,9 +3,8 @@
  * Object - Earth Temple - Face statue (lights up when eyes are hit with Mirror Shield)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Vds.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000134       .text SetLoopJointAnimation__Q28daObjVds5Act_cFP18J3DAnmTransformKeyP18J3DAnmTransformKeyff */
 void daObjVds::Act_c::SetLoopJointAnimation(J3DAnmTransformKey*, J3DAnmTransformKey*, float, float) {
@@ -165,18 +164,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjVds
 
 actor_process_profile_definition g_profile_Obj_Vds = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Vds,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Vds_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjVds::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Vds,
+    /* Draw Prio    */ fpcDwPi_Obj_Vds_e,
     /* Actor SubMtd */ &daObjVds::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

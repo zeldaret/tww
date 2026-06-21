@@ -3,12 +3,11 @@
 // Translation Unit: d_a_tag_ret.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_ret.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "d/d_cc_d.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player_main.h"
 
@@ -35,112 +34,116 @@ static dCcD_SrcCyl cyl_check_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 1000.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 namespace daTagRet {
-    /* 00000078-000001D4       .text _create__Q28daTagRet5Act_cFv */
-    cPhs_State Act_c::_create() {
-        fopAcM_SetupActor(this, daTagRet::Act_c);
 
-        if (checkItemGet(dItem_PEARL_FARORE_e, TRUE)) {
-            return cPhs_STOP_e;
-        }
+/* 00000078-000001D4       .text _create__Q28daTagRet5Act_cFv */
+cPhs_State Act_c::_create() {
+    fopAcM_ct(this, daTagRet::Act_c);
 
-        mStts.Init(0xFF, 0xFF, this);
-        mCyl.Set(cyl_check_src);
-        mCyl.SetR(1000.0f*scale.x);
-        mCyl.SetH(100.0f*scale.y);
-        mCyl.SetStts(&mStts);
+    #if VERSION > VERSION_DEMO
+    if (checkItemGet(dItemNo_PEARL_FARORE_e, TRUE)) {
+        return cPhs_STOP_e;
+    }
+    #endif
 
-        return cPhs_COMPLEATE_e;
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(cyl_check_src);
+    mCyl.SetR(1000.0f*scale.x);
+    mCyl.SetH(100.0f*scale.y);
+    mCyl.SetStts(&mStts);
+
+    return cPhs_COMPLEATE_e;
+}
+
+/* 0000038C-00000394       .text _delete__Q28daTagRet5Act_cFv */
+bool Act_c::_delete() {
+    return true;
+}
+
+/* 00000394-00000398       .text set_mtx__Q28daTagRet5Act_cFv */
+void Act_c::set_mtx() {
+    return;
+}
+
+/* 00000398-00000460       .text _execute__Q28daTagRet5Act_cFv */
+bool Act_c::_execute() {
+    mCyl.SetC(current.pos);
+    mCyl.SetR(1000.0f*scale.x);
+    mCyl.SetH(100.0f*scale.y);
+    dComIfG_Ccsp()->Set(&mCyl);
+
+    if (mCyl.ChkCoHit()) {
+        u32 linkId = prm_get_linkID();
+        daPy_getPlayerLinkActorClass()->onDekuSpReturnFlg(linkId);
     }
 
-    /* 0000038C-00000394       .text _delete__Q28daTagRet5Act_cFv */
-    bool Act_c::_delete() {
-        return true;
+    set_mtx();
+
+    return true;
+}
+
+/* 00000460-00000468       .text _draw__Q28daTagRet5Act_cFv */
+bool Act_c::_draw() {
+    return true;
+}
+
+namespace {
+    /* 00000468-00000488       .text Mthd_Create__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
+    cPhs_State Mthd_Create(void* i_this) {
+        return ((Act_c*)i_this)->_create();
     }
 
-    /* 00000394-00000398       .text set_mtx__Q28daTagRet5Act_cFv */
-    void Act_c::set_mtx() {
-        return;
+    /* 00000488-000004AC       .text Mthd_Delete__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
+    BOOL Mthd_Delete(void* i_this) {
+        return ((Act_c*)i_this)->_delete();
     }
 
-    /* 00000398-00000460       .text _execute__Q28daTagRet5Act_cFv */
-    bool Act_c::_execute() {
-        mCyl.SetC(current.pos);
-        mCyl.SetR(1000.0f*scale.x);
-        mCyl.SetH(100.0f*scale.y);
-        dComIfG_Ccsp()->Set(&mCyl);
-
-        if (mCyl.ChkCoHit()) {
-            u32 linkId = prm_get_linkID();
-            daPy_getPlayerLinkActorClass()->onDekuSpReturnFlg(linkId);
-        }
-
-        set_mtx();
-
-        return true;
+    /* 000004AC-000004D0       .text Mthd_Execute__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
+    BOOL Mthd_Execute(void* i_this) {
+        return ((Act_c*)i_this)->_execute();
     }
 
-    /* 00000460-00000468       .text _draw__Q28daTagRet5Act_cFv */
-    bool Act_c::_draw() {
-        return true;
+    /* 000004D0-000004F4       .text Mthd_Draw__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
+    BOOL Mthd_Draw(void* i_this) {
+        return ((Act_c*)i_this)->_draw();
     }
 
-    namespace {
-        /* 00000468-00000488       .text Mthd_Create__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
-        cPhs_State Mthd_Create(void* i_this) {
-            return ((Act_c*)i_this)->_create();
-        }
+    /* 000004F4-000004FC       .text Mthd_IsDelete__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
+    BOOL Mthd_IsDelete(void* i_this) {
+        return TRUE;
+    }
 
-        /* 00000488-000004AC       .text Mthd_Delete__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
-        BOOL Mthd_Delete(void* i_this) {
-            return ((Act_c*)i_this)->_delete();
-        }
-
-        /* 000004AC-000004D0       .text Mthd_Execute__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
-        BOOL Mthd_Execute(void* i_this) {
-            return ((Act_c*)i_this)->_execute();
-        }
-
-        /* 000004D0-000004F4       .text Mthd_Draw__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
-        BOOL Mthd_Draw(void* i_this) {
-            return ((Act_c*)i_this)->_draw();
-        }
-
-        /* 000004F4-000004FC       .text Mthd_IsDelete__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
-        BOOL Mthd_IsDelete(void* i_this) {
-            return TRUE;
-        }
-
-        static actor_method_class Mthd_Table = {
-            (process_method_func)Mthd_Create,
-            (process_method_func)Mthd_Delete,
-            (process_method_func)Mthd_Execute,
-            (process_method_func)Mthd_IsDelete,
-            (process_method_func)Mthd_Draw,
-        };
+    static actor_method_class Mthd_Table = {
+        (process_method_func)Mthd_Create,
+        (process_method_func)Mthd_Delete,
+        (process_method_func)Mthd_Execute,
+        (process_method_func)Mthd_IsDelete,
+        (process_method_func)Mthd_Draw,
     };
 };
 
+};  // namespace daTagRet
+
 actor_process_profile_definition g_profile_Tag_Ret = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Tag_Ret,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Ret_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTagRet::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Tag_Ret,
+    /* Draw Prio    */ fpcDwPi_Tag_Ret_e,
     /* Actor SubMtd */ &daTagRet::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

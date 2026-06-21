@@ -3,22 +3,30 @@
 // Translation Unit: d_a_obj_tntrap.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_tntrap.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "d/d_save.h"
 #include "m_Do/m_Do_mtx.h"
-#include "d/res/res_tntrap.h"
-#include "weak_data_2100_2080.h"
-#include "weak_data_1811.h"
+// #include "weak_data_2100_2080.h"
+// #include "weak_data_1811.h"
 
 
 #if VERSION == VERSION_DEMO
 daObjTnTrap_HIO_c l_HIO;
 #endif
+enum TNTRAP_ACTION_IDX{
+    DEMO_WAIT,
+    DEMO_WAIT2,
+    DEMO_REGIST_WAIT,
+    DEMO_END,
+    TRAP_ON_WAIT,
+    TRAP_OFF_WAIT,
+    HIDE_WAIT,
 
+};
 
 namespace{
     const char l_arcname[] = "TnTrap";
@@ -103,10 +111,10 @@ BOOL daObjTnTrap_c::chk_appear() {
     mMapType = param_get_mapType();
     switch(mMapType){
     case 0:
-        if(dComIfGs_isEventBit(dSv_evtBit_c::EVT_UNK3A04) == TRUE){
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A04) == TRUE){
             if(mSwSave != 0xFF && fopAcM_isSwitch(this,mSwSave) == 1){
                 if(dComIfGs_getTriforceNum() == 8 && mArg0 == 0){
-                    if(dComIfGs_isEventBit(dSv_evtBit_c::EVT_UNK2C01) == 1){
+                    if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2C01) == 1){
                         if(mSwSave2 != 0xFF && !fopAcM_isSwitch(this,mSwSave2)){
                             mEventState = 2;
                             o_retval = TRUE;
@@ -170,7 +178,7 @@ void daObjTnTrap_c::set_mtx() {
 /* 00000368-000003E4       .text create_heap__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::create_heap() {
      bool o_retval = true;
-    cBgD_t* collision = (cBgD_t*)dComIfG_getObjectRes(l_arcname,TNTRAP_DZB_TN_WALL01);
+    cBgD_t* collision = (cBgD_t*)dComIfG_getObjectRes(l_arcname,1);
     mpCollision = dBgW_NewSet(collision,cBgW::MOVE_BG_e,&mParticleData.calcMtx);
     if(mpCollision == NULL){
         o_retval = false;
@@ -323,7 +331,7 @@ bool daObjTnTrap_c::chk_event_flg() {
                 action_idx = DEMO_WAIT2;
                 if(mArg0 == 0){
                     action_idx = DEMO_REGIST_WAIT;
-                    dComIfGs_onEventBit(dSv_evtBit_c::EVT_UNK3B40);
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_3B40);
 
                 }
                 setup_action(action_idx);
@@ -757,28 +765,27 @@ bool daObjTnTrap_c::_draw() {
 }
 
 /* 00001BF0-00001C10       .text daObjTnTrap_Create__FP10fopAc_ac_c */
-static cPhs_State daObjTnTrap_Create(fopAc_ac_c* obj) {
-    return ((daObjTnTrap_c*)obj)->_create();
+static cPhs_State daObjTnTrap_Create(fopAc_ac_c* i_this) {
+    return ((daObjTnTrap_c*)i_this)->_create();
 }
 
 /* 00001C10-00001C34       .text daObjTnTrap_Delete__FP13daObjTnTrap_c */
-static BOOL daObjTnTrap_Delete(daObjTnTrap_c* obj) {
-    return ((daObjTnTrap_c*)obj)->_delete();
-
+static BOOL daObjTnTrap_Delete(daObjTnTrap_c* i_this) {
+    return ((daObjTnTrap_c*)i_this)->_delete();
 }
 
 /* 00001C34-00001C58       .text daObjTnTrap_Execute__FP13daObjTnTrap_c */
-static BOOL daObjTnTrap_Execute(daObjTnTrap_c* obj) {
-    return ((daObjTnTrap_c*)obj)->_execute();
+static BOOL daObjTnTrap_Execute(daObjTnTrap_c* i_this) {
+    return ((daObjTnTrap_c*)i_this)->_execute();
 }
 
 /* 00001C58-00001C7C       .text daObjTnTrap_Draw__FP13daObjTnTrap_c */
-static BOOL daObjTnTrap_Draw(daObjTnTrap_c* obj) {
-    return ((daObjTnTrap_c*)obj)->_draw();
+static BOOL daObjTnTrap_Draw(daObjTnTrap_c* i_this) {
+    return ((daObjTnTrap_c*)i_this)->_draw();
 }
 
 /* 00001C7C-00001C84       .text daObjTnTrap_IsDelete__FP13daObjTnTrap_c */
-static BOOL daObjTnTrap_IsDelete(daObjTnTrap_c* obj) {
+static BOOL daObjTnTrap_IsDelete(daObjTnTrap_c*) {
     return TRUE;
 }
 
@@ -791,18 +798,18 @@ static actor_method_class l_daObjTnTrap_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_TnTrap = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_TnTrap,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_TnTrap_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjTnTrap_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_TnTrap,
+    /* Draw Prio    */ fpcDwPi_Obj_TnTrap_e,
     /* Actor SubMtd */ &l_daObjTnTrap_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

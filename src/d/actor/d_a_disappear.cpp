@@ -3,11 +3,10 @@
 // Translation Unit: d_a_disappear.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_disappear.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
@@ -32,9 +31,9 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
                     // Special type for Keese (ki) spawned in the Puppet Ganon fight.
                     // This also seems to be used by several other enemies, such as Molgera's spawn.
                     static u32 ki_item_d[] = {
-                        dItem_HEART_e,
-                        dItem_LARGE_MAGIC_e,
-                        dItem_ARROW_10_e,
+                        dItemNo_HEART_e,
+                        dItemNo_LARGE_MAGIC_e,
+                        dItemNo_ARROW_10_e,
                     };
                     if (dropType < daDisItem_HEART_e + (int)ARRAY_SIZE(ki_item_d)) {
                         fopAcM_createItem(&i_this->current.pos, ki_item_d[dropType - daDisItem_HEART_e], -1, -1, daItemType_0_e, NULL, daItemAct_4_e);
@@ -77,21 +76,21 @@ void set_disappear(disappear_class* i_this, float scale) {
         case 0xB:
         case 0xC:
         case 0xD:
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0014, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUPOFU, &i_this->current.pos, NULL, &particleScale);
             // Fall-through
         case 0x3:
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0013, &i_this->current.pos, NULL, &particleScale);
-            dComIfGp_particle_setStripes(dPa_name::ID_COMMON_0015, &i_this->current.pos, NULL, &particleScale, 0xFF, 0x96);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0016, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUBAKUEN, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_setStripes(dPa_name::ID_AK_JN_SIBOUSPIRIT, &i_this->current.pos, NULL, &particleScale, 0xFF, 0x96);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUFLASH, &i_this->current.pos, NULL, &particleScale);
             break;
         case 0x1:
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0013, &i_this->current.pos, NULL, &particleScale);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0016, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUBAKUEN, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUFLASH, &i_this->current.pos, NULL, &particleScale);
             break;
         case 0x4:
-            dComIfGp_particle_set(dPa_name::ID_COMMON_043C, &i_this->current.pos);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_043D, &i_this->current.pos);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_043E, &i_this->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_IT_JN_PUCHI_SHIBOUA, &i_this->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_IT_JN_PUCHI_SHIBOUB, &i_this->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_IT_JN_PUCHI_SHIBOUC, &i_this->current.pos);
             break;
     }
 }
@@ -100,7 +99,7 @@ void set_disappear(disappear_class* i_this, float scale) {
 static cPhs_State daDisappear_Create(fopAc_ac_c* i_this) {
     disappear_class* dis = static_cast<disappear_class*>(i_this);
 
-    fopAcM_SetupActor(dis, disappear_class);
+    fopAcM_ct(dis, disappear_class);
 
     dis->health = fopAcM_GetParam(dis) & 0xFF; // Drop type param is stored in health
     f32 scaleMag = ((fopAcM_GetParam(dis) >> 8) & 0xFF) * 0.1f;
@@ -124,18 +123,18 @@ static actor_method_class l_daDisappear_Method = {
 };
 
 actor_process_profile_definition g_profile_DISAPPEAR = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DISAPPEAR,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DISAPPEAR_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(disappear_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DISAPPEAR,
+    /* Draw Prio    */ fpcDwPi_DISAPPEAR_e,
     /* Actor SubMtd */ &l_daDisappear_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

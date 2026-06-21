@@ -1,6 +1,7 @@
 #ifndef D_A_MOVIE_PLAYER_H
 #define D_A_MOVIE_PLAYER_H
 
+#include "dolphin/thp.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_drawlist.h"
 #include "dolphin/dvd/dvd.h"
@@ -12,61 +13,6 @@ extern "C" {
 typedef u8 THPSample;
 typedef s16 THPCoeff;
 typedef f32 THPQuantTab[64];
-
-typedef struct _THPHuffmanTab {
-    u8 quick[32];
-    u8 increment[32];
-    u8* Vij;
-    s32 maxCode[18];
-    s32 valPtr[18];
-    u8 Vij1;
-    u8 pad[11];
-} THPHuffmanTab;
-
-typedef struct _THPComponent {
-    u8 quantizationTableSelector;
-    u8 DCTableSelector;
-    u8 ACTableSelector;
-    THPCoeff predDC;
-} THPComponent;
-
-typedef struct _THPFileInfo {
-    THPQuantTab quantTabs[3];
-    THPHuffmanTab huffmanTabs[4];
-    THPComponent components[3];
-    u16 xPixelSize;
-    u16 yPixelSize;
-    u16 MCUsPerRow;
-    u16 decompressedY;
-    u8* c;
-    u32 currByte;
-    u32 cnt;
-    u8 validHuffmanTabs;
-    u8 RST;
-    u16 nMCU;
-    u16 currMCU;
-    u8* dLC[3];
-} THPFileInfo;
-
-typedef struct THPAudioRecordHeader {
-    u32 offsetNextChannel;
-    u32 sampleSize;
-    s16 lCoef[8][2];
-    s16 rCoef[8][2];
-    s16 lYn1;
-    s16 lYn2;
-    s16 rYn1;
-    s16 rYn2;
-} THPAudioRecordHeader;
-
-typedef struct THPAudioDecodeInfo {
-    u8* encodeData;
-    u32 offsetNibbles;
-    u8 predictor;
-    u8 scale;
-    s16 yn1;
-    s16 yn2;
-} THPAudioDecodeInfo;
 
 static u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag);
 static s32 __THPAudioGetNewSample(THPAudioDecodeInfo* info);
@@ -116,8 +62,11 @@ public:
     static BOOL daMP_c_Callback_Draw(daMP_c*);
 
 public:
-    /* 0x290 */ u32 (*mpCallBack1)();
-    /* 0x294 */ u32 (*mpCallBack2)(f32);
+    /* 0x290 */ u32 (*mpGetMovieRestFrame)();
+    /* 0x294 */ u32 (*mpSetPercentMovieVol)(f32);
+#if VERSION == VERSION_PAL
+    /* 0x29C */ u32 (*mpTHPGetTotalFrame)(void);
+#endif
 };
 
 class daMP_Dlst_base_c : public dDlst_base_c {
@@ -125,38 +74,47 @@ class daMP_Dlst_base_c : public dDlst_base_c {
 };
 
 struct daMP_THPReadBuffer {
-    /* 0x00 */ void* m00;
-    /* 0x04 */ s32 m04;
+    /* 0x00 */ u8* ptr;
+    /* 0x04 */ s32 frameNumber;
+    /* 0x08 */ BOOL isValid;
 };
 
 struct daMP_Player_c { // Fake name
-    /* 0x00 */ DVDFileInfo mFileInfo;
-    /* 0x3C */ u8 m3C[0x50 - 0x3C];
-    /* 0x50 */ u32 m50;
-    /* 0x54 */ u8 m54[0x64 - 0x54];
-    /* 0x64 */ s32 m64;
-    /* 0x68 */ u8 m68[0xA6 - 0x68];
-    /* 0xA6 */ u8 mA6;
-    /* 0xA7 */ u8 mA7[0xA8 - 0xA7];
-    /* 0xA8 */ s32 mA8;
-    /* 0xAC */ u8 mAC[0xB8 - 0xAC];
-    /* 0xB8 */ s32 mB8;
-    /* 0xBC */ s32 mBC;
-    /* 0xC0 */ s32 mC0;
+    /* 0x000 */ DVDFileInfo fileInfo;
+    /* 0x03C */ THPHeader header;
+    /* 0x06C */ THPFrameCompInfo compInfo;
+    /* 0x080 */ THPVideoInfo videoInfo;
+    /* 0x08C */ THPAudioInfo audioInfo;
+    /* 0x09C */ void* thpWork;
+    /* 0x0A0 */ BOOL open;
+    /* 0x0A4 */ u8 state;
+    /* 0x0A5 */ u8 internalState;
+    /* 0x0A6 */ u8 playFlag;
+    /* 0x0A7 */ u8 audioExist;
+    /* 0x0A8 */ s32 dvdError;
+    /* 0x0AC */ s32 videoError;
+    /* 0x0B0 */ BOOL onMemory;
+    /* 0x0B4 */ u8* movieData;
+    /* 0x0B8 */ s32 initOffset;
+    /* 0x0BC */ s32 initReadSize;
+    /* 0x0C0 */ s32 initReadFrame;
+    /* 0x0C4 */ u32 curField;
+    /* 0x0C8 */ s64 retaceCount;
+    /* 0x0D0 */ s32 prevCount;
+    /* 0x0D4 */ s32 curCount;
+    /* 0x0D8 */ s32 videoDecodeCount;
+    /* 0x0DC */ f32 curVolume;
+    /* 0x0E0 */ f32 targetVolume;
+    /* 0x0E4 */ f32 deltaVolume;
+    /* 0x0E8 */ s32 rampCount;
+    /* 0x0EC */ s32 curAudioTrack;
+    /* 0x0F0 */ s32 curVideoNumber;
+    /* 0x0F4 */ s32 curAudioNumber;
+    /* 0x0F8 */ THPTextureSet* dispTextureSet;
+    /* 0x0FC */ THPAudioBuffer* playAudioBuffer;
+    /* 0x100 */ daMP_THPReadBuffer readBuffer[10];
+    /* 0x000 */ THPTextureSet textureSet[THP_TEXTURE_SET_COUNT];
+    /* 0x000 */ THPAudioBuffer audioBuffer[THP_AUDIO_BUFFER_COUNT];
 };
-
-struct THPVideoInfo {
-    /* 0x00 */ u8 m00[0x0C - 0x00];
-};
-
-struct THPAudioInfo {
-    /* 0x00 */ u8 m00[0x10 - 0x00];
-};
-
-inline s32 daMP_NEXT_READ_SIZE(daMP_THPReadBuffer* readBuf) {
-    return *(s32*)readBuf->m00;
-}
-
-void daMP_PrepareReady(int);
 
 #endif /* D_A_MOVIE_PLAYER_H */

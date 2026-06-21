@@ -26,9 +26,9 @@ public:
     /* 0x2C8 */ cXyz field_2C8;
     /* 0x2D4 */ cXyz field_2D4;
     /* 0x2E0 */ u8 unused_2E0[0x2F0 - 0x2E0];
-    /* 0x2F0 */ float field_2F0; 
-    /* 0x2F4 */ float field_2F4; 
-    /* 0x2F8 */ float field_2F8; 
+    /* 0x2F0 */ float field_2F0;
+    /* 0x2F4 */ float field_2F4;
+    /* 0x2F8 */ float field_2F8;
     /* 0x2FC */ float field_2FC;
     /* 0x300 */ float field_300;
     /* 0x304 */ float field_304;
@@ -37,7 +37,7 @@ public:
     /* 0x310 */ cXyz* field_310;
     /* 0x314 */ u8* field_314;
     /* 0x318 */ short field_318;
-    /* 0x31C */ shand_s field_31C[20]; 
+    /* 0x31C */ shand_s field_31C[20];
     /* 0x54C */ mDoExt_3DlineMat1_c mLineMat;
     /* 0x588 */ dCcD_Stts mStts;
     /* 0x5C4 */ dCcD_Sph mSph;

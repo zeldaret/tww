@@ -10,16 +10,17 @@
  * based on the original names of the functions it contains.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
 
 /* 801514B0-80151644       .text setPushPullKeepData__9daPy_lk_cFQ24dBgW13PushPullLabel */
 BOOL daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel pp_label) {
     if (pp_label != dBgW::PPLABEL_NONE) {
-        if (dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e) {
+        if (checkPowerGloveEquip()) {
             cLib_onBit<dBgW::PushPullLabel>(pp_label, dBgW::PPLABEL_HEAVY);
         }
-        if (mProcVar0.m3570) {
+        if (mProcVar6.m3570) {
             cLib_onBit<dBgW::PushPullLabel>(pp_label, dBgW::PPLABEL_UNK4);
         }
     }
@@ -30,12 +31,12 @@ BOOL daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel pp_label) {
     }
 
     if (pp_label != dBgW::PPLABEL_NONE) {
-        if (pp_actor->shape_angle.y != m34D4) {
+        if (pp_actor->shape_angle.y != mProcVar2.m34D4) {
             cXyz local_28 = current.pos - m370C;
             mDoMtx_stack_c::transS(m370C);
-            mDoMtx_stack_c::YrotM(pp_actor->shape_angle.y - m34D4);
+            mDoMtx_stack_c::YrotM(pp_actor->shape_angle.y - mProcVar2.m34D4);
             mDoMtx_stack_c::multVec(&local_28, &current.pos);
-            s16 var_r28 = pp_actor->shape_angle.y - m34D4;
+            s16 var_r28 = pp_actor->shape_angle.y - mProcVar2.m34D4;
             shape_angle.y += var_r28;
             current.angle.y += var_r28;
         }
@@ -43,32 +44,32 @@ BOOL daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel pp_label) {
         current.pos.z += pp_actor->current.pos.z - m370C.z;
     }
     m370C = pp_actor->current.pos;
-    m34D4 = pp_actor->shape_angle.y;
+    mProcVar2.m34D4 = pp_actor->shape_angle.y;
     return TRUE;
 }
 
 /* 80151644-801517C0       .text procPushPullWait_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procPushPullWait_init(int param_0) {
     commonProcInit(daPyProc_PUSH_PULL_WAIT_e);
-    mProcVar0.m3570 = param_0;
-    mVelocity = 0.0f;
+    mProcVar6.m3570 = param_0;
+    mNormalSpeed = 0.0f;
     if (param_0 == 0 || mEquipItem == daPyItem_NONE_e) {
         if (checkEquipAnime()) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         }
         daPy_matAnm_c::offMabaFlg();
         setSingleMoveAnime(
-            ANM_WAITPUSHPULL, daPy_HIO_pushpull_c0::m.field_0x0, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x4
+            ANM_WAITPUSHPULL, m_HIO->mPushpull.m.field_0x0, 0.0f, -1, m_HIO->mPushpull.m.field_0x4
         );
-        m34D6 = 0;
+        mProcVar3.m34D6 = 0;
     } else {
-        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
         setAnimeUnequip();
         m3598 = 0.0f;
-        m34D6 = 1;
+        mProcVar3.m34D6 = 1;
     }
     if (param_0 != 0) {
-        m34D4 = m352C + 0x8000;
+        mProcVar2.m34D4 = m352C + 0x8000;
         m370C.x = m3724.x + 40.0f * cM_ssin(m352C);
         m370C.y = current.pos.y;
         m370C.z = m3724.z + 40.0f * cM_scos(m352C);
@@ -81,26 +82,26 @@ BOOL daPy_lk_c::procPushPullWait_init(int param_0) {
 BOOL daPy_lk_c::procPushPullWait() {
     dComIfGp_setRStatus(dActStts_GRAB_e);
     setFrontWallType();
-    if (m34D6 != 0) {
+    if (mProcVar3.m34D6 != 0) {
         if (checkNoUpperAnime()) {
             setSingleMoveAnime(
-                ANM_WAITPUSHPULL, daPy_HIO_pushpull_c0::m.field_0x0, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x4
+                ANM_WAITPUSHPULL, m_HIO->mPushpull.m.field_0x0, 0.0f, -1, m_HIO->mPushpull.m.field_0x4
             );
-            m34D6 = 0;
+            mProcVar3.m34D6 = 0;
         }
     } else if (spActionButton() && checkResetFlg0(daPyRFlg0_UNK8)) {
-        if (mProcVar0.m3570 != 0) {
-            s16 sVar1 = cLib_addCalcAngleS(&shape_angle.y, m34D4, 3, 0x800, 0x100);
+        if (mProcVar6.m3570 != 0) {
+            s16 sVar1 = cLib_addCalcAngleS(&shape_angle.y, mProcVar2.m34D4, 3, 0x800, 0x100);
             current.angle.y = shape_angle.y;
             f32 dVar2 = cLib_addCalc(&current.pos.x, m370C.x, 0.5f, 10.0f, 1.0f);
             dVar2 += cLib_addCalc(&current.pos.z, m370C.z, 0.5f, 10.0f, 1.0f);
             if (sVar1 == 0 && dVar2 < 5.0f && checkNoUpperAnime()) {
                 current.pos.x = m370C.x;
                 current.pos.z = m370C.z;
-                mProcVar0.m3570 = 0;
+                mProcVar6.m3570 = 0;
             }
         }
-        if (mProcVar0.m3570 == 0) {
+        if (mProcVar6.m3570 == 0) {
             if (mStickDistance > 0.05f) {
                 int direction = getDirectionFromShapeAngle();
                 if (direction == DIR_FORWARD) {
@@ -125,8 +126,8 @@ BOOL daPy_lk_c::procPushMove_init() {
     }
 
     commonProcInit(daPyProc_PUSH_MOVE_e);
-    setSingleMoveAnime(ANM_WALKPUSH, daPy_HIO_pushpull_c0::m.field_0x8, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0xC);
-    mProcVar0.m3570 = 1;
+    setSingleMoveAnime(ANM_WALKPUSH, m_HIO->mPushpull.m.field_0x8, 0.0f, -1, m_HIO->mPushpull.m.field_0xC);
+    mProcVar6.m3570 = 1;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
 
     return true;
@@ -152,10 +153,10 @@ BOOL daPy_lk_c::procPushMove() {
             }
             return procPushPullWait_init(0);
         }
-        if (mProcVar0.m3570 != 0) {
+        if (mProcVar6.m3570 != 0) {
             voiceStart(19);
         }
-        mProcVar0.m3570 = 0;
+        mProcVar6.m3570 = 0;
         setPushPullKeepData(dBgW::PPLABEL_PUSH);
     }
     return true;
@@ -168,8 +169,8 @@ BOOL daPy_lk_c::procPullMove_init() {
     }
 
     commonProcInit(daPyProc_PULL_MOVE_e);
-    setSingleMoveAnime(ANM_WALKPULL, daPy_HIO_pushpull_c0::m.field_0x10, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x14);
-    mProcVar0.m3570 = 1;
+    setSingleMoveAnime(ANM_WALKPULL, m_HIO->mPushpull.m.field_0x10, 0.0f, -1, m_HIO->mPushpull.m.field_0x14);
+    mProcVar6.m3570 = 1;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
 
     return true;
@@ -221,10 +222,10 @@ BOOL daPy_lk_c::procPullMove() {
             }
             return procPushPullWait_init(0);
         }
-        if (mProcVar0.m3570 == 1) {
+        if (mProcVar6.m3570 == 1) {
             voiceStart(19);
         }
-        mProcVar0.m3570 = 0;
+        mProcVar6.m3570 = 0;
         setPushPullKeepData(dBgW::PPLABEL_PULL);
     }
     return true;

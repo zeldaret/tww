@@ -3,6 +3,8 @@
 // Translation Unit: JFWSystem.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JFramework/JFWSystem.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRAram.h"
@@ -56,7 +58,6 @@ void JFWSystem::firstInit() {
 
 /* 80254E54-802551C0       .text init__9JFWSystemFv */
 void JFWSystem::init() {
-    /* Nonmatching - regalloc */
     JUT_ASSERT(101, sInitCalled == false);
 
     if(rootHeap == 0) {
@@ -87,7 +88,7 @@ void JFWSystem::init() {
     systemConsoleManager = JUTConsoleManager::createManager(0);
     systemConsole = JUTConsole::create(0x3C, 200, 0);
     systemConsole->setFont(systemFont);
-    if(CSetUpParam::renderMode->efb_height < 300) {
+    if(CSetUpParam::renderMode->efbHeight < 300) {
         systemConsole->setFontSize(systemFont->getWidth() * 0.85f, systemFont->getHeight() * 0.5f);
         systemConsole->setPosition(20, 25);
     }

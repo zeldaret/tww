@@ -3,6 +3,7 @@
  *
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_demo.h"
 

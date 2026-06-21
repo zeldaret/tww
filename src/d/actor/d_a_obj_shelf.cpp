@@ -3,15 +3,12 @@
  * Object - Wooden shelf
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_shelf.h"
-#include "d/res/res_otana.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Otana.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_npc_ba1.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 Mtx daObjShelf::Act_c::M_tmp_mtx;
 
@@ -59,7 +56,7 @@ const char daObjShelf::Act_c::M_arcname[] = "Otana";
 
 /* 00000078-0000012C       .text CreateHeap__Q210daObjShelf5Act_cFv */
 int daObjShelf::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData *)dComIfG_getObjectRes(M_arcname, OTANA_BDL_OTANA);
+    J3DModelData* model_data = (J3DModelData *)dComIfG_getObjectRes(M_arcname, dRes_INDEX_OTANA_BDL_OTANA_e);
     JUT_ASSERT(0x12c, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
     return mpModel != NULL;
@@ -76,11 +73,11 @@ BOOL daObjShelf::Act_c::Create() {
 
 /* 000001A0-0000029C       .text Mthd_Create__Q210daObjShelf5Act_cFv */
 cPhs_State daObjShelf::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, OTANA_DZB_OTANA, dBgS_MoveBGProc_Trans, 0xb00);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_OTANA_DZB_OTANA_e, dBgS_MoveBGProc_Trans, 0xb00);
         JUT_ASSERT(0x15b, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
@@ -101,7 +98,7 @@ BOOL daObjShelf::Act_c::Mthd_Delete() {
 /* 000002F0-00000334       .text hold_event__Q210daObjShelf5Act_cCFv */
 void daObjShelf::Act_c::hold_event() const {
     fopAc_ac_c* npc;
-    if (fopAcM_SearchByName(PROC_NPC_BA1, &npc) && npc) {
+    if (fopAcM_SearchByName(fpcNm_NPC_BA1_e, &npc) && npc) {
         ((daNpc_Ba1_c *) npc)->holdEventOn();
     }
 }
@@ -115,7 +112,7 @@ void daObjShelf::Act_c::mode_wait_init() {
 void daObjShelf::Act_c::mode_wait() {
     bool quake = dComIfGp_getDetect().chk_quake(&current.pos);
     bool event = false;
-    if (quake && prm_get_groundma() && !dComIfGs_isEventBit(0x1)) {
+    if (quake && prm_get_groundma() && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
         hold_event();
         quake = false;
         event = true;
@@ -304,18 +301,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjShelf
 
 actor_process_profile_definition g_profile_Obj_Shelf = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Shelf,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Shelf_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjShelf::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Shelf,
+    /* Draw Prio    */ fpcDwPi_Obj_Shelf_e,
     /* Actor SubMtd */ &daObjShelf::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

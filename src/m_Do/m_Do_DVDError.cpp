@@ -24,7 +24,7 @@ void mDoDvdErr_ThdInit() {
     if (!mDoDvdErr_initialized) {
         OSTime time = OSGetTime();
         OSThread* curThread = OSGetCurrentThread();
-        s32 priority = OSGetThreadPriority(curThread);
+        OSPriority priority = OSGetThreadPriority(curThread);
 
         OSCreateThread(&DvdErr_thread, (void*)mDoDvdErr_Watch, NULL, DvdErr_stack + sizeof(DvdErr_stack),
                        sizeof(DvdErr_stack), priority - 3, 1);
@@ -47,12 +47,14 @@ void mDoDvdErr_ThdCleanup() {
 
 /* 80018CE8-80018D44       .text mDoDvdErr_Watch__FPv */
 void mDoDvdErr_Watch(void*) {
+#if VERSION > VERSION_DEMO
     {
         JKRThread thread(OSGetCurrentThread(), 0);
     }
 
     JKRHeap* heap = NULL;
     heap->becomeCurrentHeap();
+#endif
 
     do {
         if (DVDGetDriveStatus() == DVD_STATE_FATAL_ERROR) {

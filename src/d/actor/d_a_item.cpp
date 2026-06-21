@@ -3,19 +3,16 @@
  * Item - Field Item
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_item.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_sea.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_controller_pad.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 s32 daItem_c::m_timer_max = 10000;
 
@@ -35,39 +32,39 @@ cXyz setArrowTrans(s16 yRot, cXyz offset) {
 /* 800F4C4C-800F4CD8       .text getYOffset__8daItem_cFv */
 float daItem_c::getYOffset() {
     switch (m_itemNo) {
-    case BOKO_BELT:
+    case dItemNo_KNIGHTS_CREST_e:
         return 0.0f;
-    case dItem_SKULL_NECKLACE_e:
+    case dItemNo_SKULL_NECKLACE_e:
         return 0.0f;
-    case dItem_BOKOBABA_SEED_e:
+    case dItemNo_BOKOBABA_SEED_e:
         return 0.0f;
-    case dItem_GOLDEN_FEATHER_e:
+    case dItemNo_GOLDEN_FEATHER_e:
         return 0.0f;
-    case dItem_RED_JELLY_e:
-    case dItem_GREEN_JELLY_e:
-    case dItem_BLUE_JELLY_e:
+    case dItemNo_RED_JELLY_e:
+    case dItemNo_GREEN_JELLY_e:
+    case dItemNo_BLUE_JELLY_e:
         return 0.0f;
-    case dItem_SMALL_KEY_e:
-    case dItem_BOSS_KEY_e:
+    case dItemNo_SMALL_KEY_e:
+    case dItemNo_BOSS_KEY_e:
         return 0.0f;
-    case dItem_SHIELD_e:
+    case dItemNo_SHIELD_e:
         return 23.0f;
-    case dItem_SWORD_e:
+    case dItemNo_SWORD_e:
         return 20.0f;
-    case dItem_DROPPED_SWORD_e:
+    case dItemNo_DROPPED_SWORD_e:
         return 10.0f;
-    case dItem_HEART_PIECE_e:
-    case dItem_HEART_CONTAINER_e:
+    case dItemNo_HEART_PIECE_e:
+    case dItemNo_HEART_CONTAINER_e:
         return 0.0f;
-    case dItem_GREEN_RUPEE_e:
-    case dItem_BLUE_RUPEE_e:
-    case dItem_YELLOW_RUPEE_e:
-    case dItem_RED_RUPEE_e:
-    case dItem_PURPLE_RUPEE_e:
-    case dItem_ORANGE_RUPEE_e:
-    case dItem_SILVER_RUPEE_e:
+    case dItemNo_GREEN_RUPEE_e:
+    case dItemNo_BLUE_RUPEE_e:
+    case dItemNo_YELLOW_RUPEE_e:
+    case dItemNo_RED_RUPEE_e:
+    case dItemNo_PURPLE_RUPEE_e:
+    case dItemNo_ORANGE_RUPEE_e:
+    case dItemNo_SILVER_RUPEE_e:
         return 0.0f;
-    case dItem_HEART_e:
+    case dItemNo_HEART_e:
         return 0.0f;
     default:
         return 0.0f;
@@ -79,7 +76,7 @@ void daItem_c::set_mtx() {
     cXyz pos = current.pos;
     csXyz rot = current.angle;
 #if VERSION > VERSION_DEMO
-    if (m_itemNo == dItem_HEART_CONTAINER_e) {
+    if (m_itemNo == dItemNo_HEART_CONTAINER_e) {
         rot.y = shape_angle.y;
     }
 #endif
@@ -169,16 +166,16 @@ void daItem_c::CreateInit() {
     
     show();
     
-    if (dItem_data::checkSpecialEffect(m_itemNo) && (m_itemNo != dItem_SMALL_KEY_e || (m_itemNo == dItem_SMALL_KEY_e && checkFlag(FLAG_UNK02)))) {
+    if (dItem_data::checkSpecialEffect(m_itemNo) && (m_itemNo != dItemNo_SMALL_KEY_e || (m_itemNo == dItemNo_SMALL_KEY_e && checkFlag(FLAG_UNK02)))) {
         u16 particleID = dItem_data::getSpecialEffect(m_itemNo);
         dComIfGp_particle_set(particleID, &current.pos, NULL, NULL, 0xFF, &mPtclFollowCb);
     }
     
     switch (m_itemNo) {
-    case dItem_BOMB_5_e:
-    case dItem_BOMB_10_e:
-    case dItem_BOMB_20_e:
-    case dItem_BOMB_30_e:
+    case dItemNo_BOMB_5_e:
+    case dItemNo_BOMB_10_e:
+    case dItemNo_BOMB_20_e:
+    case dItemNo_BOMB_30_e:
         mScaleTarget.setall(0.6f);
         break;
     default:
@@ -198,11 +195,11 @@ void daItem_c::CreateInit() {
     initAction();
     
     switch (m_itemNo) {
-    case dItem_SWORD_e:
-    case dItem_SHIELD_e:
+    case dItemNo_SWORD_e:
+    case dItemNo_SHIELD_e:
         fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
         break;
-    case dItem_DROPPED_SWORD_e:
+    case dItemNo_DROPPED_SWORD_e:
         current.angle.x = 0x4000;
         break;
     }
@@ -210,14 +207,14 @@ void daItem_c::CreateInit() {
     set_mtx();
     animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
     
-    if (fopAcM_SearchByName(PROC_BST)) { // Gohdan
-        mpParticleEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81E1, &current.pos);
+    if (fopAcM_SearchByName(fpcNm_BST_e)) { // Gohdan
+        mpParticleEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTKIRAKIRAARROW00, &current.pos);
     }
 }
 
 /* 800F53EC-800F5668       .text _daItem_create__8daItem_cFv */
 cPhs_State daItem_c::_daItem_create() {
-    fopAcM_SetupActor(this, daItem_c);
+    fopAcM_ct(this, daItem_c);
     
     m_itemNo = daItem_prm::getItemNo(this);
     
@@ -228,7 +225,7 @@ cPhs_State daItem_c::_daItem_create() {
     
     mItemBitNo = daItem_prm::getItemBitNo(this);
 #if VERSION > VERSION_DEMO
-    if (m_itemNo != dItem_BLUE_JELLY_e) // Blue Chu Jelly uses mItemBitNo as if it was a switch.
+    if (m_itemNo != dItemNo_BLUE_JELLY_e) // Blue Chu Jelly uses mItemBitNo as if it was a switch.
 #endif
     {
         mItemBitNo &= 0x7F;
@@ -325,7 +322,7 @@ void daItem_c::mode_proc_call() {
     }
     
     if (checkFlag(FLAG_BOOMERANG)) {
-        fopAc_ac_c* boomerang = (fopAc_ac_c*)fopAcM_SearchByName(PROC_BOOMERANG);
+        fopAc_ac_c* boomerang = (fopAc_ac_c*)fopAcM_SearchByName(fpcNm_BOOMERANG_e);
         if (boomerang) {
             current.pos = boomerang->current.pos;
         } else {
@@ -334,7 +331,7 @@ void daItem_c::mode_proc_call() {
     }
     
     if (checkFlag(FLAG_HOOK)) {
-        fopAc_ac_c* grappling_hook = (fopAc_ac_c*)fopAcM_SearchByName(PROC_HIMO2);
+        fopAc_ac_c* grappling_hook = (fopAc_ac_c*)fopAcM_SearchByName(fpcNm_HIMO2_e);
         if (grappling_hook) {
             current.pos = grappling_hook->current.pos;
         } else {
@@ -589,166 +586,166 @@ void daItem_c::itemGetExecute() {
     mItemStatus = STATUS_INIT_NORMAL;
     
     switch (m_itemNo) {
-    case dItem_HEART_e:
+    case dItemNo_HEART_e:
         mDoAud_seStart(JA_SE_HEART_PIECE);
         execItemGet(m_itemNo);
         break;
-    case dItem_GREEN_RUPEE_e:
+    case dItemNo_GREEN_RUPEE_e:
         mDoAud_seStart(JA_SE_LUPY_GET);
         execItemGet(m_itemNo);
         break;
-    case dItem_BLUE_RUPEE_e:
+    case dItemNo_BLUE_RUPEE_e:
         mDoAud_seStart(JA_SE_BLUE_LUPY_GET);
         execItemGet(m_itemNo);
         break;
-    case dItem_YELLOW_RUPEE_e:
+    case dItemNo_YELLOW_RUPEE_e:
         mDoAud_seStart(JA_SE_BLUE_LUPY_GET);
         execItemGet(m_itemNo);
         break;
-    case dItem_RED_RUPEE_e:
+    case dItemNo_RED_RUPEE_e:
         mDoAud_seStart(JA_SE_RED_LUPY_GET);
         execItemGet(m_itemNo);
         break;
-    case dItem_PURPLE_RUPEE_e:
+    case dItemNo_PURPLE_RUPEE_e:
         mDoAud_seStart(JA_SE_RED_LUPY_GET);
         execItemGet(m_itemNo);
         break;
-    case dItem_ORANGE_RUPEE_e:
+    case dItemNo_ORANGE_RUPEE_e:
         mDoAud_seStart(JA_SE_RED_LUPY_GET);
         execItemGet(m_itemNo);
         break;
-    case dItem_SILVER_RUPEE_e:
+    case dItemNo_SILVER_RUPEE_e:
         mDoAud_seStart(JA_SE_RED_LUPY_GET);
         execItemGet(m_itemNo);
         break;
-    case dItem_HEART_PIECE_e:
+    case dItemNo_HEART_PIECE_e:
         mDoAud_seStart(JA_SE_HEART_PIECE);
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
-    case dItem_HEART_CONTAINER_e:
+    case dItemNo_HEART_CONTAINER_e:
         mDoAud_seStart(JA_SE_HEART_PIECE);
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
-    case dItem_SMALL_MAGIC_e:
+    case dItemNo_SMALL_MAGIC_e:
         mDoAud_seStart(JA_SE_MAGIC_POT_GET_S);
         execItemGet(m_itemNo);
         break;
-    case dItem_LARGE_MAGIC_e:
+    case dItemNo_LARGE_MAGIC_e:
         mDoAud_seStart(JA_SE_MAGIC_POT_GET_L);
         execItemGet(m_itemNo);
         break;
-    case dItem_BOMB_5_e:
-    case dItem_BOMB_10_e:
-    case dItem_BOMB_20_e:
-    case dItem_BOMB_30_e:
-    case dItem_ARROW_10_e:
-    case dItem_ARROW_20_e:
-    case dItem_ARROW_30_e:
+    case dItemNo_BOMB_5_e:
+    case dItemNo_BOMB_10_e:
+    case dItemNo_BOMB_20_e:
+    case dItemNo_BOMB_30_e:
+    case dItemNo_ARROW_10_e:
+    case dItemNo_ARROW_20_e:
+    case dItemNo_ARROW_30_e:
         mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET);
         execItemGet(m_itemNo);
         break;
-    case dItem_SMALL_KEY_e:
+    case dItemNo_SMALL_KEY_e:
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
-    case dItem_TRIPLE_HEART_e:
+    case dItemNo_TRIPLE_HEART_e:
         mDoAud_seStart(JA_SE_HEART_PIECE);
         execItemGet(m_itemNo);
         break;
-    case dItem_JOY_PENDANT_e:
+    case dItemNo_JOY_PENDANT_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(7)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_JOY_PENDANT_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(7);
+            dComIfGs_onGetItemBeast(dBeastIdx_JOY_PENDANT_e);
         } else {
             execItemGet(m_itemNo);
         }
         break;
-    case dItem_DEKU_LEAF_e:
+    case dItemNo_DEKU_LEAF_e:
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
-    case dItem_SWORD_e: {
-        daItem_c* item = (daItem_c*)fopAcM_SearchByName(PROC_ITEM);
-        if (item && item->m_itemNo == dItem_SHIELD_e) {
+    case dItemNo_SWORD_e: {
+        daItem_c* item = (daItem_c*)fopAcM_SearchByName(fpcNm_ITEM_e);
+        if (item && item->m_itemNo == dItemNo_SHIELD_e) {
             item->itemGetExecute();
         }
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     }
-    case dItem_SHIELD_e: {
-        daItem_c* item = (daItem_c*)fopAcM_SearchByName(PROC_ITEM);
-        if (item && item->m_itemNo == dItem_SWORD_e) {
+    case dItemNo_SHIELD_e: {
+        daItem_c* item = (daItem_c*)fopAcM_SearchByName(fpcNm_ITEM_e);
+        if (item && item->m_itemNo == dItemNo_SWORD_e) {
             item->itemGetExecute();
         }
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     }
-    case dItem_DROPPED_SWORD_e:
+    case dItemNo_DROPPED_SWORD_e:
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
-    case dItem_SKULL_NECKLACE_e:
+    case dItemNo_SKULL_NECKLACE_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(0)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_SKULL_NECKLACE_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(0);
+            dComIfGs_onGetItemBeast(dBeastIdx_SKULL_NECKLACE_e);
         } else {
             execItemGet(m_itemNo);
         }
         break;
-    case dItem_BOKOBABA_SEED_e:
+    case dItemNo_BOKOBABA_SEED_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(1)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_BOKOBABA_SEED_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(1);
+            dComIfGs_onGetItemBeast(dBeastIdx_BOKOBABA_SEED_e);
         } else {
             execItemGet(m_itemNo);
         }
         break;
-    case dItem_GOLDEN_FEATHER_e:
+    case dItemNo_GOLDEN_FEATHER_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(2)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_GOLDEN_FEATHER_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(2);
+            dComIfGs_onGetItemBeast(dBeastIdx_GOLDEN_FEATHER_e);
         } else {
             execItemGet(m_itemNo);
         }
         break;
-    case BOKO_BELT:
+    case dItemNo_KNIGHTS_CREST_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(3)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_KNIGHTS_CREST_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(3);
+            dComIfGs_onGetItemBeast(dBeastIdx_KNIGHTS_CREST_e);
         } else {
             execItemGet(m_itemNo);
         }
         break;
-    case dItem_RED_JELLY_e:
+    case dItemNo_RED_JELLY_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(4)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_RED_JELLY_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(4);
+            dComIfGs_onGetItemBeast(dBeastIdx_RED_JELLY_e);
         } else {
             execItemGet(m_itemNo);
         }
         break;
-    case dItem_GREEN_JELLY_e:
+    case dItemNo_GREEN_JELLY_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(5)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_GREEN_JELLY_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(5);
+            dComIfGs_onGetItemBeast(dBeastIdx_GREEN_JELLY_e);
         } else {
             execItemGet(m_itemNo);
         }
         break;
-    case dItem_BLUE_JELLY_e:
+    case dItemNo_BLUE_JELLY_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
-        if (!dComIfGs_isGetItemBeast(6)) {
+        if (!dComIfGs_isGetItemBeast(dBeastIdx_BLUE_JELLY_e)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
-            dComIfGs_onGetItemBeast(6);
+            dComIfGs_onGetItemBeast(dBeastIdx_BLUE_JELLY_e);
         } else {
             execItemGet(m_itemNo);
         }
         break;
-    case dItem_BIRD_BAIT_5_e:
+    case dItemNo_BIRD_BAIT_5_e:
         mDoAud_seStart(JA_SE_ESA_GET);
         if (!dComIfGs_isGetItemBait(0)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
@@ -757,7 +754,7 @@ void daItem_c::itemGetExecute() {
             execItemGet(m_itemNo);
         }
         break;
-    case dItem_HYOI_PEAR_e:
+    case dItemNo_HYOI_PEAR_e:
         mDoAud_seStart(JA_SE_ESA_GET);
         if (!dComIfGs_isGetItemBait(1)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
@@ -979,7 +976,7 @@ BOOL daItem_c::itemActionForEmono() {
 
 /* 800F73A4-800F7898       .text itemActionForSword__8daItem_cFv */
 BOOL daItem_c::itemActionForSword() {
-    /* Nonmatching - regalloc */
+    /* Nonmatching - retail-only regalloc */
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     bool isQuake = dComIfGp_getDetect().chk_quake(&current.pos);
@@ -992,11 +989,11 @@ BOOL daItem_c::itemActionForSword() {
         f32 temp = field_0x650 * 0.9f;
         fopAcM_SetSpeed(this, 0.0f, -temp, 0.0f);
         
-        if (m_itemNo == dItem_SWORD_e) {
+        if (m_itemNo == dItemNo_SWORD_e) {
             if (m_get_timer > 15) {
                 fopAcM_seStart(this, JA_SE_OBJ_LNK_SWORD_FALL, 0);
             }
-        } else if (m_itemNo == dItem_SHIELD_e) {
+        } else if (m_itemNo == dItemNo_SHIELD_e) {
             if (m_get_timer > 15) {
                 fopAcM_seStart(this, JA_SE_OBJ_LNK_SHIELD_FALL, 0);
             }
@@ -1049,7 +1046,7 @@ BOOL daItem_c::itemActionForSword() {
 BOOL daItem_c::itemActionForArrow() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     
-    if (mOnGroundTimer == 0 && mpParticleEmitter && fopAcM_SearchByName(PROC_BST)) { // Gohdan
+    if (mOnGroundTimer == 0 && mpParticleEmitter && fopAcM_SearchByName(fpcNm_BST_e)) { // Gohdan
         mpParticleEmitter->setGlobalTranslation(current.pos);
     }
     
@@ -1064,8 +1061,8 @@ BOOL daItem_c::itemActionForArrow() {
         
         mOnGroundTimer++;
         
-        if (mOnGroundTimer == 1 && fopAcM_SearchByName(PROC_BST)) { // Gohdan
-            JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_A1E2, &current.pos, NULL, NULL, 0xFF, &mPtclSmokeCb, fopAcM_GetRoomNo(this));
+        if (mOnGroundTimer == 1 && fopAcM_SearchByName(fpcNm_BST_e)) { // Gohdan
+            JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_ST_BSTDROPARROWSMOKE00, &current.pos, NULL, NULL, 0xFF, &mPtclSmokeCb, fopAcM_GetRoomNo(this));
             if (emitter) {
                 emitter->setMaxFrame(1);
             }
@@ -1081,7 +1078,7 @@ BOOL daItem_c::itemActionForArrow() {
         speedF = 0.0f;
         
 #if VERSION > VERSION_DEMO
-        if (m_itemNo != dItem_HEART_CONTAINER_e)
+        if (m_itemNo != dItemNo_HEART_CONTAINER_e)
 #endif
         {
             itemDefaultRotateY();
@@ -1089,7 +1086,7 @@ BOOL daItem_c::itemActionForArrow() {
     }
     
 #if VERSION > VERSION_DEMO
-    if (m_itemNo == dItem_HEART_CONTAINER_e) {
+    if (m_itemNo == dItemNo_HEART_CONTAINER_e) {
         if (mOnGroundTimer != 0) {
             getData();
             s16 rotationSpeed = 0xFFFF / getData()->mRotateYSpeed;
@@ -1142,33 +1139,33 @@ void daItem_c::set_bound_se() {
     }
     
     switch (m_itemNo) {
-    case dItem_GREEN_RUPEE_e:
-    case dItem_BLUE_RUPEE_e:
-    case dItem_YELLOW_RUPEE_e:
-    case dItem_RED_RUPEE_e:
-    case dItem_PURPLE_RUPEE_e:
-    case dItem_ORANGE_RUPEE_e:
+    case dItemNo_GREEN_RUPEE_e:
+    case dItemNo_BLUE_RUPEE_e:
+    case dItemNo_YELLOW_RUPEE_e:
+    case dItemNo_RED_RUPEE_e:
+    case dItemNo_PURPLE_RUPEE_e:
+    case dItemNo_ORANGE_RUPEE_e:
         fopAcM_seStart(this, JA_SE_OBJ_LUPY_BOUND, temp);
         break;
-    case dItem_SMALL_MAGIC_e:
-    case dItem_LARGE_MAGIC_e:
+    case dItemNo_SMALL_MAGIC_e:
+    case dItemNo_LARGE_MAGIC_e:
         fopAcM_seStart(this, JA_SE_OBJ_M_POT_BOUND, temp);
         break;
-    case dItem_ARROW_10_e:
-    case dItem_ARROW_20_e:
-    case dItem_ARROW_30_e:
-    case dItem_MAGIC_ARROW_e:
-    case dItem_LIGHT_ARROW_e:
+    case dItemNo_ARROW_10_e:
+    case dItemNo_ARROW_20_e:
+    case dItemNo_ARROW_30_e:
+    case dItemNo_MAGIC_ARROW_e:
+    case dItemNo_LIGHT_ARROW_e:
         fopAcM_seStart(this, JA_SE_CM_BST_ARROW_BOUND, temp);
         break;
-    case dItem_HEART_PIECE_e:
-    case dItem_HEART_CONTAINER_e:
+    case dItemNo_HEART_PIECE_e:
+    case dItemNo_HEART_CONTAINER_e:
         fopAcM_seStart(this, JA_SE_CM_BST_HEART_BOUND, temp);
         break;
-    case dItem_BOMB_5_e:
-    case dItem_BOMB_10_e:
-    case dItem_BOMB_20_e:
-    case dItem_BOMB_30_e:
+    case dItemNo_BOMB_5_e:
+    case dItemNo_BOMB_10_e:
+    case dItemNo_BOMB_20_e:
+    case dItemNo_BOMB_30_e:
         fopAcM_seStart(this, JA_SE_CM_BST_BOMB_BOUND, temp);
         break;
     }
@@ -1245,11 +1242,11 @@ void daItem_c::mode_water_init() {
     scale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
     
     cXyz particleScale;
-    f32 temp3 = (f32)dItem_data::getShadowSize(m_itemNo) / dItem_data::getShadowSize(dItem_GREEN_RUPEE_e);
+    f32 temp3 = (f32)dItem_data::getShadowSize(m_itemNo) / dItem_data::getShadowSize(dItemNo_GREEN_RUPEE_e);
     temp3 *= scale.x;
     particleScale.setall(temp3);
     
-    dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &current.pos, NULL, &particleScale, 0xFF, &mPtclRippleCb);
+    dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &current.pos, NULL, &particleScale, 0xFF, &mPtclRippleCb);
     mPtclRippleCb.mRate = 0.0f;
 }
 
@@ -1261,43 +1258,43 @@ void daItem_c::mode_wait() {
     }
     
     switch (m_itemNo) {
-    case dItem_HEART_e:
-    case dItem_TRIPLE_HEART_e:
+    case dItemNo_HEART_e:
+    case dItemNo_TRIPLE_HEART_e:
         itemActionForHeart();
         break;
-    case dItem_HEART_PIECE_e:
-    case dItem_HEART_CONTAINER_e:
-    case dItem_BOMB_5_e:
-    case dItem_BOMB_10_e:
-    case dItem_BOMB_20_e:
-    case dItem_BOMB_30_e:
-    case dItem_ARROW_10_e:
-    case dItem_ARROW_20_e:
-    case dItem_ARROW_30_e:
-    case dItem_MAGIC_ARROW_e:
-    case dItem_LIGHT_ARROW_e:
+    case dItemNo_HEART_PIECE_e:
+    case dItemNo_HEART_CONTAINER_e:
+    case dItemNo_BOMB_5_e:
+    case dItemNo_BOMB_10_e:
+    case dItemNo_BOMB_20_e:
+    case dItemNo_BOMB_30_e:
+    case dItemNo_ARROW_10_e:
+    case dItemNo_ARROW_20_e:
+    case dItemNo_ARROW_30_e:
+    case dItemNo_MAGIC_ARROW_e:
+    case dItemNo_LIGHT_ARROW_e:
         itemActionForArrow();
         break;
-    case dItem_SMALL_KEY_e:
+    case dItemNo_SMALL_KEY_e:
         itemActionForKey();
         break;
-    case dItem_SMALL_MAGIC_e:
-    case dItem_LARGE_MAGIC_e:
+    case dItemNo_SMALL_MAGIC_e:
+    case dItemNo_LARGE_MAGIC_e:
 #if VERSION > VERSION_DEMO
-    case dItem_JOY_PENDANT_e:
+    case dItemNo_JOY_PENDANT_e:
 #endif
-    case dItem_SKULL_NECKLACE_e:
-    case dItem_BOKOBABA_SEED_e:
-    case dItem_GOLDEN_FEATHER_e:
-    case BOKO_BELT:
-    case dItem_RED_JELLY_e:
-    case dItem_GREEN_JELLY_e:
-    case dItem_BLUE_JELLY_e:
+    case dItemNo_SKULL_NECKLACE_e:
+    case dItemNo_BOKOBABA_SEED_e:
+    case dItemNo_GOLDEN_FEATHER_e:
+    case dItemNo_KNIGHTS_CREST_e:
+    case dItemNo_RED_JELLY_e:
+    case dItemNo_GREEN_JELLY_e:
+    case dItemNo_BLUE_JELLY_e:
         itemActionForEmono();
         break;
-    case dItem_SWORD_e:
-    case dItem_SHIELD_e:
-    case dItem_DROPPED_SWORD_e:
+    case dItemNo_SWORD_e:
+    case dItemNo_SHIELD_e:
+    case dItemNo_DROPPED_SWORD_e:
         itemActionForSword();
         break;
     default:
@@ -1508,11 +1505,11 @@ dCcD_SrcCyl daItem_c::m_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 10.0f,
         /* Height */ 50.0f,
-    },
+    }},
 };
 
 static actor_method_class l_daItem_Method = {
@@ -1524,18 +1521,18 @@ static actor_method_class l_daItem_Method = {
 };
 
 actor_process_profile_definition g_profile_ITEM = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ITEM,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ITEM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daItem_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ITEM,
+    /* Draw Prio    */ fpcDwPi_ITEM_e,
     /* Actor SubMtd */ &l_daItem_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

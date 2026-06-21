@@ -3,9 +3,8 @@
  * Object - Earth Temple - Coffin
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_kanoke.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 static dCcD_SrcCps l_cps_src_body = {
@@ -31,11 +30,11 @@ static dCcD_SrcCps l_cps_src_body = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 50.0f, -100.0f,
-        /* End    */ 0.0f, 50.0f, 100.0f,
+    {{
+        /* Start  */ {0.0f, 50.0f, -100.0f},
+        /* End    */ {0.0f, 50.0f, 100.0f},
         /* Radius */ 100.0f,
-    },
+    }},
 };
 
 
@@ -62,11 +61,11 @@ static dCcD_SrcCps l_cps_src_huta = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 50.0f, -100.0f,
-        /* End    */ 0.0f, 50.0f, 100.0f,
+    {{
+        /* Start  */ {0.0f, 50.0f, -100.0f},
+        /* End    */ {0.0f, 50.0f, 100.0f},
         /* Radius */ 25.0f,
-    },
+    }},
 };
 
 
@@ -191,7 +190,7 @@ void daObjKanoke_c::setMtxHuta(cXyz*) {
 }
 
 /* 00001E4C-00001E6C       .text daObjKanokeCreate__FPv */
-static s32 daObjKanokeCreate(void* i_this) {
+static cPhs_State daObjKanokeCreate(void* i_this) {
     return ((daObjKanoke_c*)i_this)->_create();
 }
 
@@ -224,18 +223,18 @@ static actor_method_class daObjKanokeMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Kanoke = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Kanoke,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Kanoke_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjKanoke_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Kanoke,
+    /* Draw Prio    */ fpcDwPi_Obj_Kanoke_e,
     /* Actor SubMtd */ &daObjKanokeMethodTable,
     /* Status       */ 0x04 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

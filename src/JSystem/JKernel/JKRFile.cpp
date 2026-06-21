@@ -3,6 +3,8 @@
 // Translation Unit: JKRFile.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JKernel/JKRFile.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/vi/vi.h"

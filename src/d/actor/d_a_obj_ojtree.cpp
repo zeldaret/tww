@@ -3,19 +3,19 @@
  * Object - Tall thin poles leading to the Deku Leaf (Forest Haven interior)
  */
 
-#include "d/res/res_ojtree.h"
+#include "d/dolzel_rel.h" // IWYU pragma: keep
+#include "res/Object/Ojtree.h"
+#include "d/actor/d_a_jbo.h"
 #include "d/actor/d_a_obj_ojtree.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 Mtx daObjOjtree::Act_c::M_tmp_mtx;
 const char daObjOjtree::Act_c::M_arcname[] = "Ojtree";
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjOjtree5Act_cFv */
 BOOL daObjOjtree::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, OJTREE_BDL_OJTREE);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_OJTREE_BDL_OJTREE_e);
     JUT_ASSERT(67, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
     return !!mpModel;
@@ -30,18 +30,18 @@ BOOL daObjOjtree::Act_c::Create() {
     fopAcM_setCullSizeBox(this, -500.0f, -1.0f, -300.0f, 251.0f, 5001.0f, 251.0f);
     pos.set(current.pos);
     pos.y += 5000.0f;
-    fopAcM_create(PROC_JBO, 0, &pos, home.roomNo, &shape_angle, NULL, 0xff, NULL);
+    fopAcM_create(fpcNm_JBO_e, daJbo_Type_NORMAL_e, &pos, fopAcM_GetHomeRoomNo(this), &shape_angle, NULL, 0xff, NULL);
     mLockTimer = 2;
     return TRUE;
 }
 
 /* 000001EC-000002E4       .text Mthd_Create__Q211daObjOjtree5Act_cFv */
 cPhs_State daObjOjtree::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjOjtree::Act_c);
+    fopAcM_ct(this, daObjOjtree::Act_c);
        
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, OJTREE_DZB_OJTREE, NULL, 0x26a0);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_OJTREE_DZB_OJTREE_e, NULL, DEMO_SELECT(0x34A0, 0x26A0));
         JUT_ASSERT(123, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     
@@ -56,7 +56,7 @@ BOOL daObjOjtree::Act_c::Delete() {
 /* 000002EC-00000338       .text Mthd_Delete__Q211daObjOjtree5Act_cFv */
 BOOL daObjOjtree::Act_c::Mthd_Delete() {
     s32 result = MoveBGDelete();
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return result;
 }
 
@@ -131,18 +131,18 @@ namespace daObjOjtree {
 }
 
 actor_process_profile_definition g_profile_Obj_Ojtree = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ojtree,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ojtree_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjOjtree::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ojtree,
+    /* Draw Prio    */ fpcDwPi_Obj_Ojtree_e,
     /* Actor SubMtd */ &daObjOjtree::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

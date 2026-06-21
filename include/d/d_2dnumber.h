@@ -46,7 +46,7 @@ public:
 
 class dDlst_2DBattery_c : public dDlst_base_c {
 public:
-    bool init(ResTIMG*, ResTIMG*, ResTIMG*, ResTIMG*);
+    BOOL init(ResTIMG*, ResTIMG*, ResTIMG*, ResTIMG*);
     void setRotate(float);
     void draw();
 
@@ -62,21 +62,24 @@ public:
     /* 0x48 */ cXy mBatteryBaseSize;
     /* 0x50 */ cXy mNumSize;
     /* 0x58 */ f32 mRotation;
-    /* 0x5C */ f32 field_0x5c;
-};
+}; // size = 0x5C
 
 class dDlst_2DObject_c : public dDlst_base_c {
 public:
-    bool init(ResTIMG*, ResTIMG*);
+    BOOL init(ResTIMG*, ResTIMG*);
     void draw();
+    void setPosition(f32 x, f32 y) { mPos.x = x; mPos.y = y; }
+    void setScale(f32 scale) { mScale = scale; }
+    void onBeforeTex() { mCurrentNo = 0; }
+    void offBeforeTex() { mCurrentNo = 1; }
 
 public:
     /* 0x04 */ J2DPicture* mPicture[2];
     /* 0x0C */ cXy mPos;
-    /* 0x10 */ cXy mSize[2];
-    /* 0x18 */ f32 mScale;
-    /* 0x1C */ u8 mCurrentNo;
-};
+    /* 0x14 */ cXy mSize[2];
+    /* 0x24 */ f32 mScale;
+    /* 0x28 */ u8 mCurrentNo;
+}; // size = 0x2C
 
 class dDlst_2DOutFont_c {
 public:

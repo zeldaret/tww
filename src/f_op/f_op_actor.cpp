@@ -3,6 +3,7 @@
 // Translation Unit: f_op_actor.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_actor_tag.h"
@@ -112,7 +113,7 @@ int g_fopAc_type;
 u32 fopAc_ac_c::stopStatus;
 
 /* 80023514-80023540       .text fopAc_IsActor__FPv */
-s32 fopAc_IsActor(void* pProc) {
+BOOL fopAc_IsActor(void* pProc) {
     int actor_type = ((fopAc_ac_c*)pProc)->actor_type;
     return fpcBs_Is_JustOfType(g_fopAc_type, actor_type);
 }
@@ -157,7 +158,6 @@ s32 fopAc_Draw(void* pProc) {
     return ret;
 }
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(fpclassify(x) == 1));
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 
 /* 8002362C-80023BDC       .text fopAc_Execute__FPv */
@@ -166,9 +166,9 @@ BOOL fopAc_Execute(void* pProc) {
     BOOL ret = TRUE;
 
 #if VERSION > VERSION_DEMO
-    CHECK_FLOAT_CLASS(0x27d, actor->current.pos.x);
-    CHECK_FLOAT_CLASS(0x27e, actor->current.pos.y);
-    CHECK_FLOAT_CLASS(0x27f, actor->current.pos.z);
+    JUT_ASSERT(0x27d, !isnan(actor->current.pos.x));
+    JUT_ASSERT(0x27e, !isnan(actor->current.pos.y));
+    JUT_ASSERT(0x27f, !isnan(actor->current.pos.z));
     CHECK_VEC3_RANGE(0x286, actor->current.pos);
 #endif
 
@@ -203,9 +203,9 @@ BOOL fopAc_Execute(void* pProc) {
         }
 
 #if VERSION > VERSION_DEMO
-        CHECK_FLOAT_CLASS(0x2b4, actor->current.pos.x);
-        CHECK_FLOAT_CLASS(0x2b5, actor->current.pos.y);
-        CHECK_FLOAT_CLASS(0x2b6, actor->current.pos.z);
+        JUT_ASSERT(0x2b4, !isnan(actor->current.pos.x));
+        JUT_ASSERT(0x2b5, !isnan(actor->current.pos.y));
+        JUT_ASSERT(0x2b6, !isnan(actor->current.pos.z));
         CHECK_VEC3_RANGE(0x2bd, actor->current.pos);
 #endif
     }
@@ -273,7 +273,7 @@ cPhs_State fopAc_Create(void* pProc) {
             actor->home.angle = prm->base.angle;
             actor->shape_angle = prm->base.angle;
             actor->parentActorID = prm->parent_id;
-            actor->subtype = prm->subtype;
+            actor->argument = prm->argument;
             actor->gbaName = prm->gbaName;
             actor->scale.set(prm->scale.x * 0.1f, prm->scale.y * 0.1f, prm->scale.z * 0.1f);
             actor->setID = prm->base.setID;
@@ -298,7 +298,7 @@ cPhs_State fopAc_Create(void* pProc) {
 
     cPhs_State status = fpcMtd_Create((process_method_class*)actor->sub_method, actor);
     if (status == cPhs_COMPLEATE_e) {
-        s32 priority = fpcLf_GetPriority(actor);
+        s32 priority = fpcM_DrawPriority(actor);
         fopDwTg_ToDrawQ(&actor->draw_tag, priority);
     }
 
