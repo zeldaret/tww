@@ -18,14 +18,13 @@
 daObjTnTrap_HIO_c l_HIO;
 #endif
 enum TNTRAP_ACTION_IDX{
-    DEMO_WAIT,
-    DEMO_WAIT2,
-    DEMO_REGIST_WAIT,
-    DEMO_END,
-    TRAP_ON_WAIT,
-    TRAP_OFF_WAIT,
-    HIDE_WAIT,
-
+    TRAP_OFF_WAIT = 0x0,
+    TRAP_ON_WAIT = 0x1,
+    DEMO_REGIST_WAIT = 0x2,
+    DEMO_WAIT = 0x3,
+    DEMO_WAIT2 = 0x4,
+    DEMO_END = 0x5,
+    HIDE_WAIT = 0x6,
 };
 
 namespace{
@@ -178,7 +177,7 @@ void daObjTnTrap_c::set_mtx() {
 /* 00000368-000003E4       .text create_heap__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::create_heap() {
      bool o_retval = true;
-    cBgD_t* collision = (cBgD_t*)dComIfG_getObjectRes(l_arcname,1);
+    cBgD_t* collision = (cBgD_t*)dComIfG_getObjectRes(l_arcname,3);
     mpCollision = dBgW_NewSet(collision,cBgW::MOVE_BG_e,&mParticleData.calcMtx);
     if(mpCollision == NULL){
         o_retval = false;
