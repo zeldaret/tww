@@ -17,29 +17,24 @@ namespace daObjVds {
         typedef BOOL (daObjVds::Act_c::*procInitFun_t)();   
         typedef void (daObjVds::Act_c::*procMainFun_t)();
 
-        enum VDS_SIDE {
-            SIDE_0,
-            SIDE_1
-        };
-
         // Globals variables
         static const char M_arcname[4];
-
+        
         // Methods
+
         bool is_switch() {
-            int switchIndex = daObj::PrmAbstract(this, 8, 0);
-            return dComIfGs_isSwitch(switchIndex, fopAcM_GetHomeRoomNo(this));
+            return fopAcM_isSwitch(this, daObj::PrmAbstract(this, 8, 0));
         }
     
         BOOL SetLoopJointAnimation(J3DAnmTransformKey*, J3DAnmTransformKey*, float, float);
-        BOOL PlayLoopJointAnimation();
+        bool PlayLoopJointAnimation();
         void set_first_process();
         void* search_switchCB(fopAc_ac_c*);
         BOOL process_off_init();
         void process_off_main();
         BOOL process_on_init();
         void process_on_main();
-        BOOL process_init(int);
+        BOOL process_init(BOOL);
         void process_main();
         void process_common();
         void create_point_light(int, cXyz*);
@@ -69,7 +64,7 @@ namespace daObjVds {
         /* 0x310 */ J3DAnmTevRegKey* M_brk_data1;
         /* 0x314 */ dBgW* m314;
         /* 0x318 */ u32 m318;
-        /* 0x31C */ s32 m31C;
+        /* 0x31C */ s32 mSide;
         /* 0x320 */ s32 m320;
         /* 0x324 */ fpc_ProcID m324[2];
         /* 0x32C */ f32 m32C[2];

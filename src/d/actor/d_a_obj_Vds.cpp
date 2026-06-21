@@ -5,10 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Vds.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/d_a_obj.h"
-#include "d/res/res_vds.h"
+#include "f_pc/f_pc_name.h"
+#include "res/Object/Vds.h"
+#include "d/actor/d_a_obj_swlight.h"
 
 const char daObjVds::Act_c::M_arcname[4] = "Vds";
 
@@ -22,7 +21,7 @@ BOOL daObjVds::Act_c::SetLoopJointAnimation(J3DAnmTransformKey* i_bckAnm0, J3DAn
 }
 
 /* 00000134-00000188       .text PlayLoopJointAnimation__Q28daObjVds5Act_cFv */
-BOOL daObjVds::Act_c::PlayLoopJointAnimation() {
+bool daObjVds::Act_c::PlayLoopJointAnimation() {
     this->M_anm0->play(NULL, 0, 0);
     this->M_anm1->play(NULL, 0, 0);
     return TRUE;
@@ -42,7 +41,7 @@ static void* daObjVds::ds_search_switchCB(void* i_act, void* i_VdsAct) {
 
 /* 00000214-000002B0       .text search_switchCB__Q28daObjVds5Act_cFP10fopAc_ac_c */
 void* daObjVds::Act_c::search_switchCB(fopAc_ac_c* i_act) {
-    if(fopAc_IsActor(i_act) && fopAcM_GetName(i_act) == PROC_Obj_Swlight){
+    if(fopAc_IsActor(i_act) && fopAcM_GetName(i_act) == fpcNm_Obj_Swlight_e){
         for(int i = 0; i < 2; i++){
             if(this->m324[i] == -1){
                 this->m324[i] = fopAcM_GetID(i_act);
@@ -86,17 +85,18 @@ BOOL daObjVds::Act_c::process_off_init() {
 /* 000003C8-00000474       .text process_off_main__Q28daObjVds5Act_cFv */
 void daObjVds::Act_c::process_off_main() {
     for(int i = 0; i < 2; i++){
-        fopAc_ac_c* actor = fopAcM_SearchByID(this->m324[i]);
-        this->m32C[i] = actor[5].eyePos.x;
+        daObjSwlight::Act_c* actor = static_cast<daObjSwlight::Act_c*>(fopAcM_SearchByID(this->m324[i]));
+        this->m32C[i] = actor->get_power();
     }
 
     if(is_switch()){
-        process_init(TRUE);
+        process_init(1);
     }
 }
 
 /* 00000474-000004F0       .text process_on_init__Q28daObjVds5Act_cFv */
 BOOL daObjVds::Act_c::process_on_init() {
+    
     if(SetLoopJointAnimation(this->M_bck_data0, this->M_bck_data1, 1, 0)){
         for(int i = 0; i < 2; i++){
             this->m32C[i] = 1;
@@ -114,7 +114,8 @@ void daObjVds::Act_c::process_on_main() {
 }
 
 /* 000004F4-000005C0       .text process_init__Q28daObjVds5Act_cFi */
-BOOL daObjVds::Act_c::process_init(int i_side) {
+BOOL daObjVds::Act_c::process_init(BOOL i_side) {
+    static s16 angle_data[2] = {};
     static procInitFun_t init_table[2] = {};
     static s8 init;
 
@@ -125,7 +126,7 @@ BOOL daObjVds::Act_c::process_init(int i_side) {
     }
 
     if(0 <= i_side && i_side < 2 && (this->*init_table[i_side])() != FALSE){
-        this->m31C = i_side;
+        this->mSide = i_side;
         return TRUE;
     }
     else {
@@ -144,13 +145,14 @@ void daObjVds::Act_c::process_main() {
         init = 1;
     }
 
-    if(0 <= this->m31C && this->m31C < 2){
-        (this->*main_table[this->m31C])();
+    if(0 <= this->mSide && this->mSide < 2){
+        (this->*main_table[this->mSide])();
     }
 }
 
 /* 0000065C-000007EC       .text process_common__Q28daObjVds5Act_cFv */
 void daObjVds::Act_c::process_common() {
+    fopAc_ac_c *actor0, *actor1;
     switch(m320){
         case 0:
             for(int i = 0; i < 2; i++){
@@ -159,7 +161,8 @@ void daObjVds::Act_c::process_common() {
 
             fopAcIt_Judge(ds_search_switchCB, this);
             if(this->m324[0] != -1 && this->m324[1] != -1){
-                fopAc_ac_c *actor0 = fopAcM_SearchByID(this->m324[0]), *actor1 = fopAcM_SearchByID(this->m324[1]);
+                actor0 = fopAcM_SearchByID(this->m324[0]);
+                actor1 = fopAcM_SearchByID(this->m324[1]);
                 if(actor0 != NULL && actor1 != NULL){
                     s16 angle_diff = actor0->shape_angle.y - this->shape_angle.y;
                     if(angle_diff >= 0){
@@ -173,10 +176,11 @@ void daObjVds::Act_c::process_common() {
             break;
         
         case 1:
-            fopAc_ac_c *actor0 = fopAcM_SearchByID(this->m324[0]), *actor1 = fopAcM_SearchByID(this->m324[1]);
+            actor0 = fopAcM_SearchByID(this->m324[0]);
+            actor1 = fopAcM_SearchByID(this->m324[1]);
             if(actor0 != NULL && actor1 != NULL){
-                create_point_light(0, fopAcM_GetPosition_p(actor0));
-                create_point_light(1, fopAcM_GetPosition_p(actor1));
+                create_point_light(0, &actor0->current.pos);
+                create_point_light(1, &actor1->current.pos);
                 this->m320 = 2;
             }
             break;
@@ -189,10 +193,10 @@ void daObjVds::Act_c::process_common() {
 
 /* 000007EC-0000087C       .text create_point_light__Q28daObjVds5Act_cFiP4cXyz */
 void daObjVds::Act_c::create_point_light(int i_side, cXyz* i_actorPos){
-    VDS_SIDE side = static_cast<VDS_SIDE>(i_side & 1);
+    int side = i_side & 1;
 
-    this->m33C[side].mPos.set(*i_actorPos);
-    this->m37C[side].set(*i_actorPos);
+    this->m33C[side].mPos = *i_actorPos;
+    this->m37C[side] = *i_actorPos;
     
     this->m33C[side].mColor.r = 0x400;
     this->m33C[side].mColor.g = 0x400;
@@ -204,11 +208,12 @@ void daObjVds::Act_c::create_point_light(int i_side, cXyz* i_actorPos){
 
 /* 0000087C-00000900       .text execute_point_light__Q28daObjVds5Act_cFv */
 void daObjVds::Act_c::execute_point_light() {
-    cXyz newPos;
     for(int i = 0; i < 2; i++){
         this->m33C[i].mPower = this->m32C[i] * 2200.f;
-        newPos.set(this->m37C[i].x, this->m37C[i].y, this->m37C[i].z);
+        
+        cXyz newPos(this->m37C[i].x, this->m37C[i].y, this->m37C[i].z);
         this->m33C[i].mPos.set(newPos);
+        
         this->m33C[i].mColor.r = 0x400;
         this->m33C[i].mColor.g = 0x400;
         this->m33C[i].mColor.b = 0x400;
@@ -255,10 +260,10 @@ BOOL daObjVds::Act_c::solidHeapCB(fopAc_ac_c* i_actor) {
 
 /* 00000A4C-00001020       .text create_heap__Q28daObjVds5Act_cFv */
 bool daObjVds::Act_c::create_heap() {
-    J3DModelData* mdl_data0 = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, VDS_BDL_VDSWT0));
+    J3DModelData* mdl_data0 = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_ID_VDS_BDL_VDSWT0_e));
     JUT_ASSERT(848, mdl_data0 != NULL);
 
-    this->M_bck_data0 = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, VDS_BCK_VDSWT0));
+    this->M_bck_data0 = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, dRes_ID_VDS_BCK_VDSWT0_e));
     JUT_ASSERT(852, M_bck_data0 != NULL);
 
     if(mdl_data0 != NULL && M_bck_data0 != NULL)
@@ -271,10 +276,10 @@ bool daObjVds::Act_c::create_heap() {
     JUT_ASSERT(865, M_anm0 != NULL);
 
 
-    J3DModelData* mdl_data1 = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, VDS_BDL_VDSWT1));
+    J3DModelData* mdl_data1 = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_ID_VDS_BDL_VDSWT1_e));
     JUT_ASSERT(869, mdl_data1 != NULL);
 
-    this->M_bck_data1 = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, VDS_BCK_VDSWT1));
+    this->M_bck_data1 = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, dRes_ID_VDS_BCK_VDSWT1_e));
     JUT_ASSERT(873, M_bck_data1 != NULL);
 
     if(mdl_data1 != NULL && M_bck_data1 != NULL)
@@ -286,23 +291,23 @@ bool daObjVds::Act_c::create_heap() {
     
     JUT_ASSERT(886, M_anm1 != NULL);
 
-    this->M_brk_data0 = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, VDS_BRK_VDSWT0));
-    JUT_ASSERT(891, M_bck_data0 != NULL);
-    BOOL brkAnm0_init = this->mBrkAnm0.init(mdl_data0,
+    this->M_brk_data0 = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, dRes_ID_VDS_BRK_VDSWT0_e));
+    JUT_ASSERT(891, M_brk_data0 != NULL);
+    BOOL mBrkAnm0_init = this->mBrkAnm0.init(mdl_data0,
         M_brk_data0,
         true, J3DFrameCtrl::EMode_NONE,
         1, 0, -1, false, 0);
 
-    this->M_brk_data1 = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, VDS_BRK_VDSWT1));
+    this->M_brk_data1 = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, dRes_ID_VDS_BRK_VDSWT1_e));
     JUT_ASSERT(904, M_brk_data1 != NULL);
-    BOOL brkAnm1_init = this->mBrkAnm1.init(mdl_data1,
+    BOOL mBrkAnm1_init = this->mBrkAnm1.init(mdl_data1,
         M_brk_data1,
         true, J3DFrameCtrl::EMode_NONE,
         1, 0, -1, false, 0);
     
     set_mtx();
 
-    cBgD_t* bgw_data = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, VDS_DZB_VDSWT));
+    cBgD_t* bgw_data = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, dRes_ID_VDS_DZB_VDSWT_e));
     JUT_ASSERT(926, bgw_data != NULL);
     
     if(bgw_data != NULL){
@@ -321,7 +326,7 @@ bool daObjVds::Act_c::create_heap() {
         this->m314 != NULL && 
         this->M_brk_data0 != NULL &&
         this->M_brk_data1 != NULL &&
-        brkAnm0_init && brkAnm1_init
+        mBrkAnm0_init && mBrkAnm1_init
     );
 }
 
@@ -376,8 +381,8 @@ void daObjVds::Act_c::set_mtx() {
     this->M_anm0->getModel()->setBaseScale(this->scale);
     mDoMtx_stack_c::transS(this->current.pos);
     mDoMtx_stack_c::ZXYrotM(this->shape_angle);
-    this->M_anm0->getModel()->setBaseTRMtx(mDoMtx_stack_c::now);
-    this->M_anm1->getModel()->setBaseTRMtx(mDoMtx_stack_c::now);
+    this->M_anm0->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+    this->M_anm1->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
     MTXCopy(mDoMtx_stack_c::now, this->m29C);
 }
 
