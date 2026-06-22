@@ -5,11 +5,33 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Vds.h"
-#include "f_pc/f_pc_name.h"
 #include "res/Object/Vds.h"
 #include "d/actor/d_a_obj_swlight.h"
 
-const char daObjVds::Act_c::M_arcname[4] = "Vds";
+namespace daObjVds {
+    namespace {
+        struct Attr_c { // Corresponds to unused data, so i tried to infer what i could
+                f32 field_0x00;
+                f32 field_0x04;
+                f32 field_0x08;
+                s16 field_0x0C;
+                s16 field_0x0E;
+                s16 field_0x10;
+                f32 field_0x14;
+                u8 field_0x18[16];
+            }; // Size : 0x28
+
+        static const Attr_c L_attr = {
+            222.5f, 598.73f, 178.9f,
+            0x400, 0x400, 0x400,
+            2200.f,
+            ""
+        };
+    };
+};
+
+
+
 
 /* 00000078-00000134       .text SetLoopJointAnimation__Q28daObjVds5Act_cFP18J3DAnmTransformKeyP18J3DAnmTransformKeyff */
 BOOL daObjVds::Act_c::SetLoopJointAnimation(J3DAnmTransformKey* i_bckAnm0, J3DAnmTransformKey* i_bckAnm1, float speed, float morf) {
@@ -22,14 +44,22 @@ BOOL daObjVds::Act_c::SetLoopJointAnimation(J3DAnmTransformKey* i_bckAnm0, J3DAn
 
 /* 00000134-00000188       .text PlayLoopJointAnimation__Q28daObjVds5Act_cFv */
 bool daObjVds::Act_c::PlayLoopJointAnimation() {
+    const f32 unk[4] = {
+        -222.5f,
+        598.73f,
+        178.9f,
+        222.5f
+    }; // Unused data
+    
     this->M_anm0->play(NULL, 0, 0);
     this->M_anm1->play(NULL, 0, 0);
     return TRUE;
 }
 
+
 /* 00000188-000001E8       .text set_first_process__Q28daObjVds5Act_cFv */
 void daObjVds::Act_c::set_first_process() {
-    process_init(is_switch());
+    process_init(is_switch() ? TRUE : FALSE);
 }
 
 /* 000001E8-00000214       .text ds_search_switchCB__8daObjVdsFPvPv */
@@ -115,7 +145,7 @@ void daObjVds::Act_c::process_on_main() {
 
 /* 000004F4-000005C0       .text process_init__Q28daObjVds5Act_cFi */
 BOOL daObjVds::Act_c::process_init(BOOL i_side) {
-    static s16 angle_data[2] = {};
+    static s16 angle_data[2] = {}; // Unused, so i defined it here
     static procInitFun_t init_table[2] = {};
     static s8 init;
 
@@ -258,6 +288,8 @@ BOOL daObjVds::Act_c::solidHeapCB(fopAc_ac_c* i_actor) {
     return static_cast<daObjVds::Act_c*>(i_actor)->create_heap();
 }
 
+const char daObjVds::Act_c::M_arcname[4] = "Vds";
+
 /* 00000A4C-00001020       .text create_heap__Q28daObjVds5Act_cFv */
 bool daObjVds::Act_c::create_heap() {
     J3DModelData* mdl_data0 = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_ID_VDS_BDL_VDSWT0_e));
@@ -348,9 +380,9 @@ cPhs_State daObjVds::Act_c::_create() {
                 this->m324[i] = -1;
             }
         }
-    }
-    else {
-        ret = cPhs_ERROR_e;
+        else {
+            ret = cPhs_ERROR_e;
+        }
     }
 
     return ret;
@@ -406,6 +438,13 @@ bool daObjVds::Act_c::_execute() {
 
 /* 000014EC-000015A8       .text _draw__Q28daObjVds5Act_cFv */
 bool daObjVds::Act_c::_draw() {
+    const u8 unk[4] = {
+        0xFF,
+        0,
+        0,
+        0x80
+    }; // Unused variable
+
     dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &this->current.pos, &this->tevStr);
     dKy_getEnvlight().setLightTevColorType(this->M_anm0->getModel(), &this->tevStr);
     dKy_getEnvlight().setLightTevColorType(this->M_anm1->getModel(), &this->tevStr);
