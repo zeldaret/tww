@@ -632,7 +632,6 @@ void daNpc_Ym1_c::eventOrder() {
 
 /* 0000182C-0000186C       .text checkOrder__11daNpc_Ym1_cFv */
 void daNpc_Ym1_c::checkOrder() {
-    /* Nonmatching */
     if(eventInfo.checkCommandDemoAccrpt()){
         return;
     }
@@ -650,6 +649,79 @@ void daNpc_Ym1_c::checkOrder() {
 /* 0000186C-00001A08       .text set_collision_sp__11daNpc_Ym1_cFv */
 void daNpc_Ym1_c::set_collision_sp() {
     /* Nonmatching */
+    f32 fVar3;
+    f32 fVar2;
+    Vec collisionPos, local_48;
+    //cXyz collisionPos;
+    if(m8A3 != 0){
+        return;
+    }
+    switch(m8AB){
+
+        case 1:
+            mDoMtx_stack_c::transS(current.pos);
+            mDoMtx_stack_c::YrotM(current.angle.y);
+            local_48.x = 0;
+            local_48.y = 0;
+            local_48.z = 20.0;
+            fVar2 = 60.0;
+            fVar3 = 140.0;
+            mDoMtx_stack_c::multVec(&local_48,&collisionPos);
+            break;
+        case 5:
+        case 6:
+        case 7:
+            mDoMtx_stack_c::transS(current.pos);
+            mDoMtx_stack_c::YrotM(current.angle.y);
+            local_48.x = 0;
+            local_48.y = 0;
+            local_48.z = 60.0;
+            fVar2 = 80.0;
+            fVar3 = 150.0;
+            mDoMtx_stack_c::multVec(&local_48,&collisionPos);
+            break;
+        default:
+
+            f32 temp3 = current.pos.z;
+            f32 temp2 = current.pos.y;
+            f32 temp1 = current.pos.x;
+            collisionPos.x = temp1;
+            collisionPos.z = temp3;
+            collisionPos.y = temp2;
+
+            //collisionPos.set(current.pos);
+            fVar2 = 60.0;
+            fVar3 = 180.0;
+            break;
+            
+    }
+    // if(m8AB < 5){
+    //     if(m8AB == 1){
+    //         mDoMtx_stack_c::transS(current.pos);
+    //         mDoMtx_stack_c::YrotM(current.angle.y);
+    //         local_48.x = 0;
+    //         local_48.y = 0;
+    //         local_48.z = 20.0;
+    //         fVar2 = 60.0;
+    //         fVar3 = 140.0;
+    //         mDoMtx_stack_c::multVec(&local_48,&local_3c);
+    //     }
+    // }else if (m8AB < 10){
+    //     mDoMtx_stack_c::transS(current.pos);
+    //     mDoMtx_stack_c::YrotM(current.angle.y);
+    //     local_48.x = 0;
+    //     local_48.y = 0;
+    //     local_48.z = 60.0;
+    //     fVar2 = 80.0;
+    //     fVar3 = 150.0;
+    //     mDoMtx_stack_c::multVec(&local_48,&local_3c);
+    // }
+    mCyl.SetC(current.pos);
+    mCyl.SetR(fVar2);
+    mCyl.SetH(fVar3);
+    dComIfG_Ccsp()->Set(&mCyl);
+    //setCollision(60.0f,180.0f);
+    //dComIfG_Ccsp()->Set(&mCyl);
 }
 
 /* 00001A08-00001B24       .text set_cutGrass__11daNpc_Ym1_cFv */
