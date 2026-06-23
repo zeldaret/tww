@@ -89,17 +89,17 @@ public:
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void bodyCreateHeap();
+    BOOL bodyCreateHeap();
     void headCreateHeap();
     void itemCreateHeap();
     void CreateHeap();
 
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
-    /* 0x6CC */ s8 mHeadJointIdx;
-    /* 0x6CD */ s8 mBboneJointIdx;
-    /* 0x6CE */ s8 mHandLJointIndex;
-    /* 0x6CF */ s8 mHandRJointIndex;
+    /* 0x6CC */ s8 m_hed_jnt_num;
+    /* 0x6CD */ s8 m_bbone_jnt_num;
+    /* 0x6CE */ s8 m_hnd_L_jnt_num;
+    /* 0x6CF */ s8 m_hnd_R_jnt_num;
     /* 0x6D0 */ J3DModel* m6D0;
     /* 0x6D4 */ char mArcName[4];
     /* 0x6D8 */ u8 m6D8[0x6DC - 0x6D8];

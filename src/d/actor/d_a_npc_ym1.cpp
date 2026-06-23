@@ -251,10 +251,10 @@ void daNpc_Ym1_c::setMtx(bool i_param_1) {
     mDoMtx_stack_c::ZXYrotM(m846);
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();
-    mpHeadModel->setBaseTRMtx(mpMorf->getModel()->getAnmMtx(mHeadJointIdx));
+    mpHeadModel->setBaseTRMtx(mpMorf->getModel()->getAnmMtx(m_hed_jnt_num));
     mpHeadModel->calc();
     if(m6D0 != NULL){
-        m6D0->setBaseTRMtx(mpMorf->getModel()->getAnmMtx(mHandRJointIndex));
+        m6D0->setBaseTRMtx(mpMorf->getModel()->getAnmMtx(m_hnd_R_jnt_num));
         m6D0->calc();
     }
     setAttention(i_param_1);
@@ -651,8 +651,9 @@ void daNpc_Ym1_c::set_collision_sp() {
     /* Nonmatching */
     f32 fVar3;
     f32 fVar2;
-    Vec collisionPos, local_48;
-    //cXyz collisionPos;
+    cXyz collisionPos;
+    Vec local_48;
+
     if(m8A3 != 0){
         return;
     }
@@ -681,47 +682,17 @@ void daNpc_Ym1_c::set_collision_sp() {
             mDoMtx_stack_c::multVec(&local_48,&collisionPos);
             break;
         default:
-
-            f32 temp3 = current.pos.z;
-            f32 temp2 = current.pos.y;
-            f32 temp1 = current.pos.x;
-            collisionPos.x = temp1;
-            collisionPos.z = temp3;
-            collisionPos.y = temp2;
-
-            //collisionPos.set(current.pos);
+            collisionPos.set(current.pos.x,current.pos.y,current.pos.z);
             fVar2 = 60.0;
             fVar3 = 180.0;
             break;
             
     }
-    // if(m8AB < 5){
-    //     if(m8AB == 1){
-    //         mDoMtx_stack_c::transS(current.pos);
-    //         mDoMtx_stack_c::YrotM(current.angle.y);
-    //         local_48.x = 0;
-    //         local_48.y = 0;
-    //         local_48.z = 20.0;
-    //         fVar2 = 60.0;
-    //         fVar3 = 140.0;
-    //         mDoMtx_stack_c::multVec(&local_48,&local_3c);
-    //     }
-    // }else if (m8AB < 10){
-    //     mDoMtx_stack_c::transS(current.pos);
-    //     mDoMtx_stack_c::YrotM(current.angle.y);
-    //     local_48.x = 0;
-    //     local_48.y = 0;
-    //     local_48.z = 60.0;
-    //     fVar2 = 80.0;
-    //     fVar3 = 150.0;
-    //     mDoMtx_stack_c::multVec(&local_48,&local_3c);
-    // }
     mCyl.SetC(current.pos);
     mCyl.SetR(fVar2);
     mCyl.SetH(fVar3);
     dComIfG_Ccsp()->Set(&mCyl);
-    //setCollision(60.0f,180.0f);
-    //dComIfG_Ccsp()->Set(&mCyl);
+
 }
 
 /* 00001A08-00001B24       .text set_cutGrass__11daNpc_Ym1_cFv */
@@ -943,8 +914,38 @@ cPhs_State daNpc_Ym1_c::_create() {
 }
 
 /* 0000405C-00004360       .text bodyCreateHeap__11daNpc_Ym1_cFv */
-void daNpc_Ym1_c::bodyCreateHeap() {
-    /* Nonmatching */
+BOOL daNpc_Ym1_c::bodyCreateHeap() {
+
+    J3DModelData *a_mdl_dat;
+    mDoExt_McaMorf *pmVar2;
+    a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(mArcName,0xA);
+    a_mdl_dat->getJointName();
+    JUT_ASSERT(0x971,a_mdl_dat != 0);
+    pmVar2 = new mDoExt_McaMorf(a_mdl_dat,NULL,NULL,NULL,
+        -0x1,1.0,0,-1,1,NULL,0x80000,0x15021222);
+ 
+    mpMorf = pmVar2;
+    pmVar2 = mpMorf;
+    if (pmVar2 == NULL) {
+        return 0;
+    }
+    else if (pmVar2->getModel() == NULL) {
+        mpMorf = NULL;
+        return 0;
+    }
+
+    m_hed_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
+    JUT_ASSERT(0x97F,m_hed_jnt_num >= 0);   
+    m_bbone_jnt_num = a_mdl_dat->getJointName()->getIndex("backbone");
+    JUT_ASSERT(0x981,m_bbone_jnt_num >= 0); 
+    m_hnd_L_jnt_num = a_mdl_dat->getJointName()->getIndex("handL");
+    JUT_ASSERT(0x983,m_hnd_L_jnt_num >= 0); 
+    m_hnd_R_jnt_num = a_mdl_dat->getJointName()->getIndex("handR");
+    JUT_ASSERT(0x985,m_hnd_R_jnt_num >= 0); 
+    mpMorf->getModel()->getModelData()->getJointNodePointer(m_hed_jnt_num)->setCallBack(nodeCB_Head);
+    mpMorf->getModel()->getModelData()->getJointNodePointer(m_bbone_jnt_num)->setCallBack(nodeCB_BackBone);
+    mpMorf->getModel()->setUserArea((u32)this);
+    return TRUE;
 }
 
 /* 00004360-00004460       .text headCreateHeap__11daNpc_Ym1_cFv */
