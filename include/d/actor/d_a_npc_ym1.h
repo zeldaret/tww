@@ -9,6 +9,8 @@
 
 class daNpc_Ym1_c : public fopNpc_npc_c {
 public:
+
+    typedef int (daNpc_Ym1_c::*ActionFunc)(void*);
     struct anm_prm_c {
         s8 m0;
         s8 m1;
@@ -57,7 +59,7 @@ public:
     void set_collision_sp();
     void set_cutGrass();
     bool chk_BlackPig();
-    void chk_nbt_attn();
+    bool chk_nbt_attn();
     void chk_talk();
     void chk_parts_notMov();
     void lookBack();
@@ -66,7 +68,7 @@ public:
     bool decideType(int);
     void privateCut(int);
     void endEvent();
-    void isEventEntry();
+    int isEventEntry();
     void event_proc(int);
     void set_action(int (daNpc_Ym1_c::*)(void*), void*);
     void setStt(signed char);
@@ -83,7 +85,7 @@ public:
     void wait_action3(void*);
     void wait_action4(void*);
     void demo_action1(void*);
-    void demo();
+    bool demo();
     void shadowDraw();
     BOOL _draw();
     BOOL _execute();
@@ -108,11 +110,10 @@ public:
     /* 0x6F4 */ u8 m6F4;
                 u8 m6F5;
                 s16 m6F6;
-                u8 m6F8[0x704 - 0x6F8];
+                ActionFunc mCurrActionFunc;
     /* 0x704 */ dCcD_Cyl mCyl704;
-    /* 0x834 */ u8 m834[0x842 - 0x834];
-    /* 0x842 */ s16 mRotYTarget;
-    /* 0x844 */ u8 m844[0x846 - 0x844];
+    /* 0x834 */ cXyz m834;     
+                csXyz mRotTarget;
     /* 0x846 */ csXyz m846;
                 Vec m84C;
     /* 0x84C */ u8 m858[0x870 - 0x858];
@@ -128,9 +129,10 @@ public:
     /* 0x89C */ u8 m89C;
     /* 0x89D */ u8 m89D;
     /* 0x89E */ u8 m89E;
-    /* 0x89F */ u8 m89F[0x8A0 - 0x89F];
+    /* 0x89F */ u8 m89F;
     /* 0x8A0 */ u8 m8A0;
-    /* 0x8A1 */ u8 m8A1[0x8A3 - 0x8A1];
+    /* 0x8A1 */ u8 m8A1;
+                u8 m8A2;
                 u8 m8A3;
     /* 0x8A4 */ u8 m8A4;
     /* 0x8A5 */ u8 m8A5;
@@ -148,25 +150,10 @@ public:
     /* 0x8B1 */ s8 mStaff;
     /* 0x8B2 */ u8 m8B2;
                 s8 m8B3;
-                u8 m8B4;
+
 };
 
-class daNpc_Ym1_childHIO_c {
-public:
-    daNpc_Ym1_childHIO_c();
 
-public:
-    /* Place member variables here */
-};
 
-class daNpc_Ym1_HIO_c {
-public:
-    daNpc_Ym1_HIO_c();
-
-public:
-    /* Place member variables here */
-    u32 m0;
-    f32 m4[10][11];
-};
 
 #endif /* D_A_NPC_YM1_H */
