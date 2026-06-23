@@ -10,25 +10,30 @@
 class daNpc_Ym1_c : public fopNpc_npc_c {
 public:
     struct anm_prm_c {
-        
+        s8 m0;
+        s8 m1;
+        u16 m2;
+        f32 m4;
+        f32 m8;
+        u32 mC;
     };
 
     void setKariFlg();
     void _nodeCB_Head(J3DNode*, J3DModel*);
     void _nodeCB_BackBone(J3DNode*, J3DModel*);
-    void init_YM1_0();
-    void init_YM1_1();
-    void init_YM2_0();
-    void init_YM2_1();
-    void init_YM2_2();
-    void init_YM2_3();
-    void init_YMx_error();
-    void createInit();
+    bool init_YM1_0();
+    bool init_YM1_1();
+    bool init_YM2_0();
+    bool init_YM2_1();
+    bool init_YM2_2();
+    bool init_YM2_3();
+    bool init_YMx_error();
+    bool createInit();
     void play_animation();
     void setMtx(bool);
-    void bckResID(int);
-    void btpResID(int);
-    void init_texPttrnAnm(signed char, bool);
+    int bckResID(int);
+    int btpResID(int);
+    bool init_texPttrnAnm(signed char, bool);
     void play_texPttrnAnm();
     void setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int, int);
@@ -40,18 +45,18 @@ public:
     void setAnm_ATR();
     void anmAtr(unsigned short);
     u16 next_msgStatus(unsigned long*);
-    void getMsg_YM1_0();
-    void getMsg_YM1_1();
-    void getMsg_YM2_0();
-    void getMsg_YM2_1();
-    void getMsg_YM2_2();
-    void getMsg_YM2_3();
+    unsigned long getMsg_YM1_0();
+    unsigned long getMsg_YM1_1();
+    unsigned long getMsg_YM2_0();
+    unsigned long getMsg_YM2_1();
+    unsigned long getMsg_YM2_2();
+    unsigned long getMsg_YM2_3();
     u32 getMsg();
     void eventOrder();
     void checkOrder();
     void set_collision_sp();
     void set_cutGrass();
-    void chk_BlackPig();
+    bool chk_BlackPig();
     void chk_nbt_attn();
     void chk_talk();
     void chk_parts_notMov();
@@ -73,8 +78,8 @@ public:
     void turn_1();
     void NBTwai();
     void SITwai();
-    void wait_action1(void*);
-    void wait_action2(void*);
+    int wait_action1(void*);
+    int wait_action2(void*);
     void wait_action3(void*);
     void wait_action4(void*);
     void demo_action1(void*);
@@ -100,33 +105,50 @@ public:
     /* 0x6D8 */ u8 m6D8[0x6DC - 0x6D8];
     /* 0x6DC */ J3DModel* mpHeadModel;
     /* 0x6E0 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x6F4 */ u8 m6F4[0x704 - 0x6F4];
-    /* 0x704 */ dCcD_Cyl mCyl;
+    /* 0x6F4 */ u8 m6F4;
+                u8 m6F5;
+                s16 m6F6;
+                u8 m6F8[0x704 - 0x6F8];
+    /* 0x704 */ dCcD_Cyl mCyl704;
     /* 0x834 */ u8 m834[0x842 - 0x834];
     /* 0x842 */ s16 mRotYTarget;
     /* 0x844 */ u8 m844[0x846 - 0x844];
     /* 0x846 */ csXyz m846;
-    /* 0x84C */ u8 m84C[0x890 - 0x84C];
+                Vec m84C;
+    /* 0x84C */ u8 m858[0x870 - 0x858];
+                Vec m870;
+                f32 m87C;
+                u8 m880[0x890-0x880];
     /* 0x890 */ s16 mKariTimer;
-    /* 0x892 */ u8 m892[0x89B - 0x892];
+    /* 0x892 */ u8 m892[0x898 - 0x892];
+                u8 m898;
+                u8 m899;
+                u8 m89A;
     /* 0x89B */ u8 mKariFlag;
     /* 0x89C */ u8 m89C;
     /* 0x89D */ u8 m89D;
     /* 0x89E */ u8 m89E;
     /* 0x89F */ u8 m89F[0x8A0 - 0x89F];
     /* 0x8A0 */ u8 m8A0;
-    /* 0x8A1 */ u8 m8A1[0x8A4 - 0x8A1];
+    /* 0x8A1 */ u8 m8A1[0x8A3 - 0x8A1];
+                u8 m8A3;
     /* 0x8A4 */ u8 m8A4;
     /* 0x8A5 */ u8 m8A5;
-    /* 0x8A6 */ u8 m8A6[0x8AB - 0x8A6];
-    /* 0x8AB */ u8 m8AB;
-    /* 0x8AC */ u8 m8AC[0x8AD - 0x8AC];
-    /* 0x8AD */ u8 m8AD;
+    /* 0x8A6 */ u8 m8A6;
+                s8 m8A7;
+                u8 m8A8;
+                u8 m8A9;
+                s8 m8AA;
+    /* 0x8AB */ s8 m8AB;
+    /* 0x8AC */ s8 m8AC;
+    /* 0x8AD */ s8 m8AD;
     /* 0x8AE */ u8 m8AE[0x8AF - 0x8AE];
     /* 0x8AF */ u8 m8AF;
     /* 0x8B0 */ s8 mSubType;
     /* 0x8B1 */ s8 mStaff;
-    /* 0x8B2 */ u8 m8B2[0x8B4 - 0x8B2];
+    /* 0x8B2 */ u8 m8B2;
+                s8 m8B3;
+                u8 m8B4;
 };
 
 class daNpc_Ym1_childHIO_c {
@@ -143,6 +165,8 @@ public:
 
 public:
     /* Place member variables here */
+    u32 m0;
+    f32 m4[10][11];
 };
 
 #endif /* D_A_NPC_YM1_H */
