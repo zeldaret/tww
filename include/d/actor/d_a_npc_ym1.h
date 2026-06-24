@@ -72,12 +72,12 @@ public:
     void event_proc(int);
     bool set_action(int (daNpc_Ym1_c::*)(void*), void*);
     void setStt(signed char);
-    void chk_areaIN(float, cXyz);
-    void kari_1();
-    void wait_1();
-    void wait_2();
-    void talk_1();
-    void turn_1();
+    bool chk_areaIN(float, cXyz);
+    bool kari_1();
+    bool wait_1();
+    bool wait_2();
+    bool talk_1();
+    bool turn_1();
     void NBTwai();
     void SITwai();
     int wait_action1(void*);
@@ -128,11 +128,12 @@ public:
                 u8 m886;
                 s32 m888;
                 
-                u32 m88C;
+                s16 m88C;
+                s16 m88E;
     /* 0x890 */ s16 mKariTimer;
     /* 0x892 */ u8 m892[0x896 - 0x892];
                 s16 m896;
-                u8 m898;
+                s8 m898;
                 u8 m899;
                 u8 m89A;
     /* 0x89B */ u8 mKariFlag;
