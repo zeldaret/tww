@@ -94,8 +94,7 @@ public:
 public:
 
     f32 array[8*6*2];
-    /* 0x180 */ u8 m_dl[0x185];
-    /* 0x180 */ u8 pad[0x18];
+    /* 0x180 */ u8 m_dl[0x185] ALIGN_DECL(32);
 
 };
 

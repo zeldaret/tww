@@ -203,7 +203,7 @@ const u16 l_dl_size = 0x185;
 
 
 
-const u8 label4192 = 0;
+//const u8 label4192 = 0;
 
 
 /* 000006C8-00000878       .text ct_dl__23daObjTapestryDrawData_cFv */
@@ -213,8 +213,8 @@ void daObjTapestryDrawData_c::ct_dl() {
     int now = 0;
     int vtxcount = 6;
     for (int i = 0; i < 7; i++) {
-        static const u8 begindata[3] ={0x98,0x00,0x0C};
-        memcpy(&m_dl[now], begindata, 3);   //Write header 0x98,0x00,0x0C
+        static const u8 begin_data[3] ={0x98,0x00,0x0C};
+        memcpy(&m_dl[now], begin_data, 3);   //Write header 0x98,0x00,0x0C
         s32 local_30[2] = {i*vtxcount,(i+1)*vtxcount};
         now += 3;
         for (int j = 0; j < vtxcount; j++) {
