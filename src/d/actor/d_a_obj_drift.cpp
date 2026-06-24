@@ -156,7 +156,12 @@ cPhs_State daObjDrift::Act_c::Mthd_Create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         type = prm_get_type(); 
-        phase_state = MoveBGCreate(M_arcname, 7, dBgS_MoveBGProc_TypicalRotY, 0x1b80);
+        // Heap size differs in demo version
+        #if VERSION > VERSION_DEMO
+            phase_state = MoveBGCreate(M_arcname, 7, dBgS_MoveBGProc_TypicalRotY, 0x1b80);
+        #else
+            phase_state = MoveBGCreate(M_arcname, 7, dBgS_MoveBGProc_TypicalRotY, 0x8000);
+        #endif
         JUT_ASSERT(0x19b, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e))
     }
     return phase_state;
@@ -170,9 +175,9 @@ void daObjDrift::Act_c::make_flower() {
     cXyz pos [2];
     if (type >= 0 && type <= 1) {
         calc_flower_param(pos, &angle);
-        fpc_ProcID id = fopAcM_create(pf_name[type], 0, pos, 
-            home.roomNo, &angle, NULL, 0xff, NULL);
-        mProcId = id;
+        s8 room_no = home.roomNo;
+        mProcId = fopAcM_create(pf_name[type], 0, pos, 
+            room_no, &angle, NULL, 0xff, NULL);
     } else {
         mProcId = 0xffffffff;
     }
@@ -215,7 +220,11 @@ BOOL daObjDrift::Act_c::Delete() {
 /* 0000095C-000009A8       .text Mthd_Delete__Q210daObjDrift5Act_cFv */
 BOOL daObjDrift::Act_c::Mthd_Delete() {
     BOOL result = MoveBGDelete();
-    dComIfG_resDelete(&mPhase, M_arcname);
+    #if VERSION > VERSION_DEMO
+        dComIfG_resDelete(&mPhase, M_arcname);
+    #else
+        dComIfG_deleteObjectRes(M_arcname);
+    #endif
     return result;
 }
 
@@ -285,9 +294,9 @@ void daObjDrift::Act_c::set_mtx() {
 
     daObj::quat_rotBaseY2(&out, vec);
     mDoMtx_stack_c::quatM(&out);
-    mDoMtx_ZXYrotM(mDoMtx_stack_c::now, shape_angle.x, shape_angle.y, shape_angle.z);
-    mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
-    PSMTXCopy(mDoMtx_stack_c::now, field_0x444);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    PSMTXCopy(mDoMtx_stack_c::get(), field_0x444);
     field_0x4CC = field_0x4C8;
     field_0x4C8 = field_0x4BC.y;
     field_0x4BC.x = mDoMtx_stack_c::now[0][3];
@@ -343,8 +352,13 @@ void daObjDrift::Act_c::rideCB(dBgW*, fopAc_ac_c* param_2, fopAc_ac_c* param_3) 
 
 /* 00000EC4-00001104       .text set_current__Q210daObjDrift5Act_cFv */
 void daObjDrift::Act_c::set_current() {
-    f32 fvar2;
-    f32 fvar1;
+    #if VERSION > VERSION_DEMO
+        f32 fvar2;
+        f32 fvar1;
+    #else
+        f32 fvar1;
+        f32 fvar2;
+    #endif
     f32 g = field_0x47C + home.pos.y;
 
     field_0x498 = field_0x498 + attr().field_0x14;
@@ -364,14 +378,13 @@ void daObjDrift::Act_c::set_current() {
     PSVECScale(&field_0x4A4, &field_0x4A4, 0.95f);
     field_0x49A += attr().field_0x2C;
     field_0x49C += attr().field_0x2E;
-    f32 sinA = cM_ssin(field_0x49A);
-    f32 sinC = cM_ssin(field_0x49C);
-    f32 dz = field_0x494 - field_0x484;
-    f32 inc = field_0x4A4.x * attr().field_0x34 + (fvar1 * (sinC * attr().field_0x30) - dz * fvar2);
-    f32 dx = field_0x490 - field_0x480;
+    f32 dz = field_0x490 - field_0x480;
+    f32 dx = field_0x494 - field_0x484;
+    f32 inc_z = field_0x4A4.z * attr().field_0x34 + (fvar1 * (cM_ssin(field_0x49A) * attr().field_0x30) - dz * fvar2);
+    f32 inc_x = field_0x4A4.x * attr().field_0x34 + (fvar1 * (cM_ssin(field_0x49C) * attr().field_0x30) - dx * fvar2);
+    field_0x488 += inc_z;
+    field_0x48C += inc_x;
 
-    field_0x488 += field_0x4A4.z * attr().field_0x34 + (fvar1 * (sinA * attr().field_0x30) - dx * fvar2);
-    field_0x48C += inc;
     field_0x488 *= attr().field_0x28;
     field_0x48C *= attr().field_0x28;
     field_0x490 += field_0x488;
