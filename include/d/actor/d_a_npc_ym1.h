@@ -63,7 +63,7 @@ public:
     bool chk_talk();
     bool chk_parts_notMov();
     void lookBack();
-    bool chkAttention();
+    BOOL chkAttention();
     void setAttention(bool);
     bool decideType(int);
     void privateCut(int);
@@ -73,18 +73,18 @@ public:
     bool set_action(int (daNpc_Ym1_c::*)(void*), void*);
     void setStt(signed char);
     bool chk_areaIN(float, cXyz);
-    bool kari_1();
-    bool wait_1();
-    bool wait_2();
-    bool talk_1();
-    bool turn_1();
-    void NBTwai();
-    void SITwai();
+    BOOL kari_1();
+    BOOL wait_1();
+    BOOL wait_2();
+    BOOL talk_1();
+    BOOL turn_1();
+    BOOL NBTwai();
+    BOOL SITwai();
     int wait_action1(void*);
     int wait_action2(void*);
-    void wait_action3(void*);
-    void wait_action4(void*);
-    void demo_action1(void*);
+    bool wait_action3(void*);
+    bool wait_action4(void*);
+    bool demo_action1(void*);
     bool demo();
     void shadowDraw();
     BOOL _draw();
@@ -127,7 +127,7 @@ public:
                 s16 m884;
                 u8 m886;
                 s32 m888;
-                
+                //s16 m88A;
                 s16 m88C;
                 s16 m88E;
     /* 0x890 */ s16 mKariTimer;
@@ -155,11 +155,11 @@ public:
     /* 0x8AB */ s8 m8AB;
     /* 0x8AC */ s8 m8AC;
     /* 0x8AD */ s8 m8AD;
-    /* 0x8AE */ u8 m8AE;
+    /* 0x8AE */ s8 m8AE;
     /* 0x8AF */ s8 m8AF;
     /* 0x8B0 */ s8 mSubType;
     /* 0x8B1 */ s8 mStaff;
-    /* 0x8B2 */ u8 m8B2;
+    /* 0x8B2 */ s8 m8B2;
                 s8 m8B3;
 
 };
