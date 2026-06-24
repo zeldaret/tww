@@ -842,7 +842,7 @@ void daNpc_Ym1_c::lookBack() {
 }
 
 /* 00001DD0-00001E50       .text chkAttention__11daNpc_Ym1_cFv */
-BOOL daNpc_Ym1_c::chkAttention() {
+bool daNpc_Ym1_c::chkAttention() {
     /* Nonmatching */
     dAttention_c& attention = dComIfGp_getAttention();
 
@@ -1137,63 +1137,56 @@ BOOL daNpc_Ym1_c::wait_2() {
 
 /* 00002958-00002BA0       .text talk_1__11daNpc_Ym1_cFv */
 BOOL daNpc_Ym1_c::talk_1() {
-    s32 temp_r0_2;
     u8 temp_r31;
-
-
-
-
     temp_r31 = chk_parts_notMov();
     talk(1);
     if (mpCurrMsg == NULL) {
         return temp_r31;
     }
 
-    switch (mpCurrMsg->mStatus) {                        
-    case 2:                                         
-    case 6:                                         
-
+    switch (mpCurrMsg->mStatus) {
+    case 2:
+    case 6:
         break;
-    case 19:                                        
-        switch (mCurrMsgNo) {                        
-        case 0x902:                                 
+    case 19:
+        switch (mCurrMsgNo) {
+        case 0x902:
             dComIfGs_onEventBit(0x10);
             break;
-        case 0x906:                                 
+        case 0x906:
             dComIfGs_onEventBit(0x2904);
             break;
-
-        case 0xA29:                                 
+        case 0xA29:
             dComIfGs_onEventBit(0x80);
             break;
-        case 0xA2B:                                 
+        case 0xA2B:
             dComIfGs_onEventBit(8);
             break;
-        case 0xA2D:                                 
+        case 0xA2D:
             dComIfGs_onEventBit(0xB01);
             break;
-        case 0xA40:                                 
+        case 0xA40:
             dComIfGs_onEventBit(0x3540);
             break;
-        case 0x8FE:                                 
-        case 0x90B:                                 
+        case 0x8FE:
+        case 0x90B:
             dComIfGs_onEventBit(0x20);
             break;
-        case 0xA30:                                 
-        case 0xA32:                              
-        case 0xA34:                             
+        case 0xA30:
+        case 0xA32:
+        case 0xA34:
         case 0xA36:
+        case 0xA38:
             dComIfGs_onEventBit(0x3140);
             break;
-        case 0xA3C:                               
-        case 0xA4D:    
+        case 0xA3C:
+        case 0xA3D:  // FIXED: was 0xA4D (typo) — asm splits at 0xa3c/0xa3d -> 0x3580
             dComIfGs_onEventBit(0x3580);
             break;
-        case 0xA31:
-        case 0xA33:
-        case 0xA35:
-        case 0xA37:
+        case 0xA37:  // KEEP: real empty case — it is the binary-search PIVOT of the right subtree
             break;
+        // REMOVED 0xA31 / 0xA33 / 0xA35: they are NOT cases (never compared in asm); the default covers them.
+        //   Adding them changes the median and breaks the comparison tree.
         }
         m89A = 0xFF;
         m8A3 = 0;
@@ -1208,7 +1201,6 @@ BOOL daNpc_Ym1_c::talk_1() {
 
 /* 00002BA0-00002C78       .text turn_1__11daNpc_Ym1_cFv */
 BOOL daNpc_Ym1_c::turn_1() {
-    /* Nonmatching */
     cLib_addCalcAngleS(&current.angle.y,mRotTarget.y,4,l_HIO.children[mSubType-1].hio_prm.m12,0x80);
     if((s16)(mRotTarget.y - current.angle.y) == 0){
         if(m89C){
@@ -1473,18 +1465,58 @@ bool daNpc_Ym1_c::demo_action1(void*) {
 }
 
 /* 00003390-000034CC       .text demo__11daNpc_Ym1_cFv */
-bool daNpc_Ym1_c::demo() {
+u8 daNpc_Ym1_c::demo() {
     /* Nonmatching */
     if(demoActorID == 0){
-        if(!m8A6){
+        if(m8A6){
             m8A6 = 0;
         }
+
+    }else{
+        if(!m8A6){
+            m8A6 = 1;
+            m89F = 0;
+            m_jnt.setHead_y(0);
+            m_jnt.setHead_x(0);
+            m_jnt.setBackBone_y(0);
+            m_jnt.setBackBone_x(0);
+        }
+            dDemo_actor_c* this_00;
+            this_00 = dComIfGp_demo_getActor(demoActorID);
+            J3DAnmTexPattern* btpanm = mBtpAnm.getBtpAnm();
+            if(btpanm){
+                m6F4 += 1;
+                s16 duration = mBtpAnm.getBtpAnm()->getFrameMax();
+                if(m6F4 >= duration){
+                    m6F4 = duration;
+                }
+            }
+            J3DAnmTexPattern* pjvar2 = this_00->getP_BtpData(mArcName);
+            if(pjvar2){
+                mBtpAnm.init(mpHeadModel->getModelData(),pjvar2,1,0,1.0f,0,-1,true);
+                m8AA = 1;
+                m6F4 = 0;
+            }
+            dDemo_setDemoData(this,0x6A,mpMorf,mArcName);
+
+
     }
+    return m8A6;
+
 }
 
 /* 000034CC-0000359C       .text shadowDraw__11daNpc_Ym1_cFv */
 void daNpc_Ym1_c::shadowDraw() {
     /* Nonmatching */
+    cXyz local_18;
+    local_18.set(current.pos.x,current.pos.y + 150.0f,current.pos.z);
+    m6D8 = dComIfGd_setShadow(m6D8,1,mpMorf->getModel(),&local_18,800.0f,40.0f,current.pos.y,mObjAcch.GetGroundH(),mObjAcch.m_gnd,&tevStr,0,1.0,dDlst_shadowControl_c::getSimpleTex());
+    if(m6D8){
+        if(m6D0){
+            dComIfGd_addRealShadow(m6D8,m6D0);
+        }
+        dComIfGd_addRealShadow(m6D8,mpHeadModel);
+    }
 }
 
 /* 0000359C-000037A0       .text _draw__11daNpc_Ym1_cFv */

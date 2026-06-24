@@ -63,7 +63,7 @@ public:
     bool chk_talk();
     bool chk_parts_notMov();
     void lookBack();
-    BOOL chkAttention();
+    bool chkAttention();
     void setAttention(bool);
     bool decideType(int);
     void privateCut(int);
@@ -85,7 +85,7 @@ public:
     bool wait_action3(void*);
     bool wait_action4(void*);
     bool demo_action1(void*);
-    bool demo();
+    u8 demo();
     void shadowDraw();
     BOOL _draw();
     BOOL _execute();
@@ -104,20 +104,23 @@ public:
     /* 0x6CF */ s8 m_hnd_R_jnt_num;
     /* 0x6D0 */ J3DModel* m6D0;
     /* 0x6D4 */ char mArcName[4];
+                
     /* 0x6D8 */ //u8 m6D8[0x6DC - 0x6D8];
+                u32 m6D8;
     /* 0x6DC */ J3DModel* mpHeadModel;
+
+
     /* 0x6E0 */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F4 */ u8 m6F4;
                 u8 m6F5;
                 s16 m6F6;
-                u32 m6F8;
+
                 ActionFunc mCurrActionFunc;
     /* 0x704 */ dCcD_Cyl mCyl704;
     /* 0x834 */ cXyz m834;     
                 csXyz mRotTarget;
     /* 0x846 */ csXyz m846;
                 Vec m84C;
-    /* 0x84C */ //u8 m858[0x870 - 0x858];
                 cXyz m858;
                 Vec m864;
                 Vec m870;
