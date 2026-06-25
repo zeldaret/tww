@@ -925,16 +925,20 @@ config.libs = [
             Object(Matching,    "JAZelAudio/JAIZelSound.cpp"),
         ],
     },
-    DolphinLib(
-        "gf",
-        [
+    {
+        "lib": "gf",
+        "mw_version": "GC/1.3.2",
+        "cflags": [*cflags_base, "-O3"],
+        "progress_category": "sdk",
+        "host": False,
+        "objects": [
             Object(NonMatching, "dolphin/gf/GFGeometry.cpp"),
             Object(NonMatching, "dolphin/gf/GFLight.cpp"),
-            Object(NonMatching, "dolphin/gf/GFPixel.cpp"),
+            Object(Matching, "dolphin/gf/GFPixel.cpp"),
             Object(NonMatching, "dolphin/gf/GFTev.cpp"),
             Object(NonMatching, "dolphin/gf/GFTransform.cpp"),
         ],
-    ),
+    },
     JSystemLib(
         "JKernel",
         [
