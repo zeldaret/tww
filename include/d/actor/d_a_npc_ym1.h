@@ -1,11 +1,13 @@
 #ifndef D_A_NPC_YM1_H
 #define D_A_NPC_YM1_H
 
+
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
-#include "d/d_cc_d.h"
-#include "m_Do/m_Do_ext.h"
-#include "SSystem/SComponent/c_phase.h"
+#include "m_Do/m_Do_hostIO.h"
+
+
+
 
 class daNpc_Ym1_c : public fopNpc_npc_c {
 public:
@@ -80,11 +82,11 @@ public:
     BOOL turn_1();
     BOOL NBTwai();
     BOOL SITwai();
-    int wait_action1(void*);
-    int wait_action2(void*);
-    bool wait_action3(void*);
-    bool wait_action4(void*);
-    bool demo_action1(void*);
+    BOOL wait_action1(void*);
+    BOOL wait_action2(void*);
+    BOOL wait_action3(void*);
+    BOOL wait_action4(void*);
+    BOOL demo_action1(void*);
     u8 demo();
     void shadowDraw();
     BOOL _draw();
@@ -92,9 +94,9 @@ public:
     BOOL _delete();
     cPhs_State _create();
     BOOL bodyCreateHeap();
-    void headCreateHeap();
-    void itemCreateHeap();
-    void CreateHeap();
+    BOOL headCreateHeap();
+    BOOL itemCreateHeap();
+    BOOL CreateHeap();
 
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
@@ -141,7 +143,7 @@ public:
                 u8 m89A;
     /* 0x89B */ u8 mKariFlag;
     /* 0x89C */ u8 m89C;
-    /* 0x89D */ u8 m89D;
+    /* 0x89D */ bool m89D;
     /* 0x89E */ u8 m89E;
     /* 0x89F */ u8 m89F;
     /* 0x8A0 */ u8 m8A0;
