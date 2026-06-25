@@ -5,120 +5,315 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_warpmj.h"
+#include "d/actor/d_a_sea.h"
+#include "d/d_bg_s_func.h"
+#include "d/d_lib.h"
+#include "d/actor/d_a_ship.h"
+#include "res/Object/Gmjwp.h"
+
+const char daWarpmj_c::m_arcname[] = "Gmjwp";
+const u32 daWarpmj_c::m_heapsize = 0x3000;
+const f32 daWarpmj_c::m_warp_distance = 200.0f;
+
+typedef void (daWarpmj_c::*EventInitFunc)(int);
+EventInitFunc event_init_tbl[] = {
+    &daWarpmj_c::initWait,
+    &daWarpmj_c::initWarp,
+    &daWarpmj_c::initWarpArrive,
+};
+
+typedef BOOL (daWarpmj_c::*EventActionFunc)(int);
+EventActionFunc event_action_tbl[] = {
+    &daWarpmj_c::actWait,
+    &daWarpmj_c::actWarp,
+    &daWarpmj_c::actWarpArrive,
+};
 
 /* 00000078-000000A8       .text _delete__10daWarpmj_cFv */
 bool daWarpmj_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhase, m_arcname);
+    return true;
 }
 
 /* 000000A8-000000C8       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daWarpmj_c*>(i_this)->CreateHeap();
 }
 
 /* 000000C8-00000454       .text CreateHeap__10daWarpmj_cFv */
-void daWarpmj_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daWarpmj_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GMJWP_BDL_GMJWP00_e);
+    JUT_ASSERT(0xAC, modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, J3DMdlFlag_Unk80000, 0x11000222);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+
+    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GMJWP_BCK_GMJWP01_e);
+    JUT_ASSERT(0xBB, pbck != NULL);
+    mpBckAnm = new mDoExt_bckAnm();
+    if ((mpBckAnm == NULL) || (mpBckAnm->init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE) == 0)) {
+        return FALSE;
+    }
+    mpBckAnm->setPlaySpeed(mpBckAnm->getEndFrame());
+
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GMJWP_BTK_GMJWP00_e);
+    JUT_ASSERT(0xCE, pbtk != NULL);
+    mpBtkAnm = new mDoExt_btkAnm();
+    if (mpBtkAnm == NULL || (mpBtkAnm->init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP) == 0)) {
+        return FALSE;
+    }
+    mpBtkAnm->setPlaySpeed(0.0f);
+
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_GMJWP_BRK_GMJWP01_e);
+    JUT_ASSERT(0xDE, pbrk != NULL);
+    mpBrkAnm = new mDoExt_brkAnm();
+    if (mpBrkAnm == NULL || (mpBrkAnm->init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_NONE) == 0)) {
+        return FALSE;
+    }
+    mpBrkAnm->setPlaySpeed(mpBrkAnm->getEndFrame());
+
+    return TRUE;
 }
 
 /* 0000049C-00000630       .text CreateInit__10daWarpmj_cFv */
 void daWarpmj_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -400.0f, 0.0f, -400.0f, 400.0f, 800.0f, 400.0f);
+    fopAcM_setCullSizeFar(this, 1.0f);
+    set_mtx();
+
+    mpEmitter1 = dComIfGp_particle_set(dPa_name::ID_IT_SN_MJWPA00, &current.pos);
+    mpEmitter2 = dComIfGp_particle_set(dPa_name::ID_IT_SN_MJWPB00, &current.pos);
+    mpEmitter3 = dComIfGp_particle_setProjection(dPa_name::ID_IT_SP_MJWPC00, &current.pos);
+
+    m2B8 = FALSE;
+    setEndAnm();
+    mEvtToGanonWarpIdx = dComIfGp_evmng_getEventIdx("TO_GANON_WARP");
+    mSceneNo = daWarpmj_prm::getSceneNo(this);
+    dKy_tevstr_init(&mTevStr, fopAcM_GetRoomNo(this), 0xff);
 }
 
 /* 00000630-00000778       .text _create__10daWarpmj_cFv */
 cPhs_State daWarpmj_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daWarpmj_c);
+
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D02)) {
+        return cPhs_ERROR_e;
+    }
+
+    cPhs_State ret = dComIfG_resLoad(&mPhase, m_arcname);
+    if (ret == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x3000)) {
+            return cPhs_ERROR_e;
+        }
+        CreateInit();
+    }
+
+    return ret;
 }
 
 /* 00000778-0000084C       .text set_mtx__10daWarpmj_cFv */
 void daWarpmj_c::set_mtx() {
     /* Nonmatching */
+    cXyz local_28(current.pos);
+    local_28.y += 2000.0f;
+    current.pos.y = getSeaY(local_28);
+    if (current.pos.y == -1e9f) {
+        current.pos.y = 0;
+    }
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 0000084C-00000990       .text _execute__10daWarpmj_cFv */
 bool daWarpmj_c::_execute() {
     /* Nonmatching */
+    if (demoActorID == 0) {
+        checkOrder();
+        demo_proc();
+        eventOrder();
+    } else {
+        demo_execute();
+    }
+    fopAcM_seStart(this, JA_SE_OBJ_GN_WAPR_EFF, 0);
+    set_mtx();
+    return TRUE;
 }
 
 /* 00000990-000009D4       .text normal_execute__10daWarpmj_cFv */
 void daWarpmj_c::normal_execute() {
     /* Nonmatching */
+    animPlay();
+    if (check_warp() != 0) {
+        m2B8 = TRUE;
+    }
 }
 
 /* 000009D4-00000A60       .text demo_execute__10daWarpmj_cFv */
 void daWarpmj_c::demo_execute() {
     /* Nonmatching */
+    dDemo_actor_c* pdVar1 = dComIfGp_demo_getActor(demoActorID);
+    if (pdVar1 != NULL) {
+        m2C0 = pdVar1->getShapeId();
+        if (m2C0 == 0) {
+            fopAcM_offDraw(this);
+        } else if (m2C0 == 1) {
+            fopAcM_onDraw(this);
+            animPlay();
+        }
+    }
 }
 
 /* 00000A60-00000B7C       .text demo_proc__10daWarpmj_cFv */
 void daWarpmj_c::demo_proc() {
     /* Nonmatching */
+    static char* action_table[3] = {
+        "WAIT",
+        "WARP",
+        "WARP_ARRIVE",
+    };
+    mStaffIdx = dComIfGp_evmng_getMyStaffId("Warpmj");
+    if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && mStaffIdx != -1) {
+        int actIdx = dComIfGp_evmng_getMyActIdx(mStaffIdx, action_table, 4, FALSE, 0);
+        if (actIdx == -1) {
+            dComIfGp_evmng_cutEnd(mStaffIdx);
+        } else {
+            if (dComIfGp_evmng_getIsAddvance(mStaffIdx)) {
+                (this->*event_init_tbl[actIdx])(mStaffIdx);
+            }
+
+            BOOL ret = (this->*event_action_tbl[actIdx])(mStaffIdx);
+            if (ret) {
+                dComIfGp_evmng_cutEnd(mStaffIdx);
+            }
+        }
+    }
 }
 
 /* 00000B7C-00000B80       .text initWait__10daWarpmj_cFi */
 void daWarpmj_c::initWait(int) {
-    /* Nonmatching */
 }
 
 /* 00000B80-00000BA4       .text actWait__10daWarpmj_cFi */
-void daWarpmj_c::actWait(int) {
-    /* Nonmatching */
+int daWarpmj_c::actWait(int) {
+    animPlay();
+    return 1;
 }
 
 /* 00000BA4-00000C14       .text initWarp__10daWarpmj_cFi */
 void daWarpmj_c::initWarp(int) {
-    /* Nonmatching */
+    dComIfGp_evmng_setGoal(&current.pos);
+    mDoAud_seStart(JA_SE_LK_GN_WAPR_D_IN);
 }
 
 /* 00000C14-00000C38       .text actWarp__10daWarpmj_cFi */
-void daWarpmj_c::actWarp(int) {
-    /* Nonmatching */
+int daWarpmj_c::actWarp(int) {
+    animPlay();
+    return 1;
 }
 
 /* 00000C38-00000C94       .text initWarpArrive__10daWarpmj_cFi */
 void daWarpmj_c::initWarpArrive(int) {
-    /* Nonmatching */
+    setEndAnm();
+    mDoAud_seStart(0x2894);
 }
 
 /* 00000C94-00000CB8       .text actWarpArrive__10daWarpmj_cFi */
-void daWarpmj_c::actWarpArrive(int) {
-    /* Nonmatching */
+int daWarpmj_c::actWarpArrive(int) {
+    animPlay();
+    return 1;
 }
 
 /* 00000CB8-00000D14       .text eventOrder__10daWarpmj_cFv */
 void daWarpmj_c::eventOrder() {
-    /* Nonmatching */
+    if (m2B8 == TRUE) {
+        fopAcM_orderOtherEventId(this, mEvtToGanonWarpIdx);
+        eventInfo.onCondition(dEvtCnd_UNK2_e);
+    }
 }
 
 /* 00000D14-00000DD0       .text checkOrder__10daWarpmj_cFv */
 void daWarpmj_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        if (dComIfGp_evmng_startCheck(mEvtToGanonWarpIdx) && m2B8) {
+            m2B8 = FALSE;
+        }
+        if (dComIfGp_evmng_endCheck(mEvtToGanonWarpIdx)) {
+            dLib_setNextStageBySclsNum(mSceneNo & 0xFF, fopAcM_GetRoomNo(this));
+        }
+    } else if (!m2B8 && !dComIfGp_event_runCheck()) {
+        normal_execute();
+    }
 }
 
 /* 00000DD0-00000E10       .text animPlay__10daWarpmj_cFv */
 void daWarpmj_c::animPlay() {
-    /* Nonmatching */
+    if (mpBtkAnm != NULL) {
+        mpBtkAnm->setPlaySpeed(1.0f);
+        mpBtkAnm->play();
+    }
+    return;
 }
 
 /* 00000E10-00000E8C       .text setEndAnm__10daWarpmj_cFv */
 void daWarpmj_c::setEndAnm() {
-    /* Nonmatching */
+    if (mpBckAnm != NULL) {
+        mpBckAnm->setFrame(mpBckAnm->getEndFrame());
+    }
+    if (mpBrkAnm != NULL) {
+        mpBrkAnm->setFrame(mpBrkAnm->getEndFrame());
+    }
 }
 
 /* 00000E8C-00000EE0       .text getSeaY__10daWarpmj_cF4cXyz */
-void daWarpmj_c::getSeaY(cXyz) {
-    /* Nonmatching */
+f32 daWarpmj_c::getSeaY(cXyz i_pos) {
+    if (daSea_ChkArea(i_pos.x, i_pos.z)) {
+        return daSea_calcWave(static_cast<f64>(i_pos.x), static_cast<f64>(i_pos.z));
+    }
+    return dBgS_ObjGndChk_Wtr_Func(i_pos);
 }
 
 /* 00000EE0-00000FDC       .text check_warp__10daWarpmj_cFv */
-void daWarpmj_c::check_warp() {
-    /* Nonmatching */
+BOOL daWarpmj_c::check_warp() {
+    daShip_c* pShip = dComIfGp_getShipActor();
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) != 0 && (pShip != NULL)) {
+        if ((f32)(pShip->current.pos - current.pos).absXZ() < 200.0f) {
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 00000FDC-0000114C       .text _draw__10daWarpmj_cFv */
 bool daWarpmj_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevStr);
+
+    J3DModelData* model_data = mpModel->getModelData();
+    for (u16 i = 0; i < model_data->getMaterialNum(); i++) {
+        J3DMaterial* material = model_data->getMaterialNodePointer(i);
+        material->getTevKColor(1)->mColor.r = mTevStr.mColorK0.r;
+        material->getTevKColor(1)->mColor.g = mTevStr.mColorK0.g;
+        material->getTevKColor(1)->mColor.b = mTevStr.mColorK0.b;
+    }
+
+    if (mpBtkAnm != NULL) {
+        mpBtkAnm->entry(mpModel->getModelData());
+    }
+
+    if (mpBrkAnm != NULL) {
+        mpBrkAnm->entry(mpModel->getModelData());
+    }
+
+    if (mpBckAnm != NULL) {
+        mpBckAnm->entry(mpModel->getModelData());
+    }
+    mDoExt_modelUpdateDL(mpModel);
+    return true;
 }
 
 /* 0000114C-0000116C       .text daWarpmj_Create__FPv */
