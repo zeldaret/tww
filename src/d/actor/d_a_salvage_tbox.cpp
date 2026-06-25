@@ -113,8 +113,8 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
             GXSetZMode(GX_FALSE, GX_NEVER, GX_FALSE);
         }
         u32 steps = (u32)((f32)particleCount * 0.33333334f);
-        steps--;
-        fVar3 = (1.0f / (f32)--steps);  
+        u32 stepsMinusOne = steps - 1;
+        fVar3 = (1.0f / (f32)stepsMinusOne);  
         GXSetCullMode(GX_CULL_NONE);
         Mtx mtx;
         PSMTXIdentity(mtx);
