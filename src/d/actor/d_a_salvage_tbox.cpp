@@ -105,13 +105,16 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
 void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
     /* Nonmatching */
     uint particleCount = emitter->getParticleList()->getNumLinks();
+    f32 fVar1;
+    f32 fVar2;
+    f32 fVar3;
     if (particleCount >= 6){
         if (dPa_control_c::isStatus(1)) {
             GXSetZMode(GX_FALSE, GX_NEVER, GX_FALSE);
         }
-        particleCount = (f32)particleCount * 0.33333334f;
-        f32 pctlCount = particleCount - 1.0f;
-        // float particleRnd = float(cM_rnd() * particleCount - 1.0f);
+        u32 steps = (u32)((f32)particleCount * 0.33333334f);
+        steps--;
+        fVar3 = (1.0f / (f32)--steps);  
         GXSetCullMode(GX_CULL_NONE);
         Mtx mtx;
         PSMTXIdentity(mtx);
@@ -120,37 +123,37 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
         GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
         GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
         JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
-        f32 something = 0.0f;
-        for (uint i = 0; i < particleCount; i++) {
-            if (i == 0){
-                for (int j = 0; j < 3; j++) {
-                    JPABaseParticle* pos = (JPABaseParticle*)link->getObjectPtr();
-                    this->mPos[j].x = pos->mBaseVel.x;
-                    this->mPos[j].y = pos->mBaseVel.y;
-                    this->mPos[j].z = pos->mBaseVel.z;
-                    link = link->getNext();
-                }
-            } else {
+        uint i = 0;
+        fVar1 = 0.0f;
+        for (; i < steps; i++) {
+            if (i != 0){
                 GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 6);
-                f32 something2 = 0.0f;
-                for(int j = 0; j < 3; j++) {
-                    // cXyz* pos = (cXyz*)link->mObject;
+                uint j = 0;
+                fVar2 = 0.0f;
+                for(; j < 3; j++) {
                     JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
                     JGeometry::TVec3<f32> ptclPos;
-                    ptcl->getOffsetPosition(ptclPos);
+                    ptcl->getGlobalPosition(ptclPos);
                     getMaxWaterY(&ptclPos);
-                    GXPosition3f32(ptclPos.x, ptclPos.y + something, ptclPos.z);
-                    GXTexCoord2f32(something2, 0.0f);
-                    GXTexCoord2f32(something - 1.0f / pctlCount, 1.0f);
+                    GXPosition3f32(ptclPos.x, ptclPos.y, ptclPos.z);
+                    GXTexCoord2f32(fVar2, fVar1);
+                    GXPosition3f32(this->mPos[j].x, this->mPos[j].y, this->mPos[j].z);
+                    GXTexCoord2f32(fVar2, fVar1 - fVar3);
                     this->mPos[j].x = ptclPos.x;
                     this->mPos[j].y = ptclPos.y;
                     this->mPos[j].z = ptclPos.z;
-                    something2 += 0.5f;
+                    fVar2 += 0.5f;
                     link = link->getNext();
                 }
-                something += 1.0f / particleCount;
                 GXEnd();
+            } else {
+                for (int j = 0; j < 3; j++) {
+                    JPABaseParticle* pos = (JPABaseParticle*)link->getObjectPtr();
+                    pos->getGlobalPosition(this->mPos[j]);
+                    link = link->getNext();
+                }
             }
+            fVar1 += fVar3;
         }
     }
 }
