@@ -360,9 +360,9 @@ bool daNpc_Ym1_c::init_texPttrnAnm(signed char i_param_1, bool i_param_2) {
     m8AA = i_param_1;
     m6F4 = 0;
     m6F6 = 0;
-    J3DModelData* model_data_p = morf_model_p->getModelData();
+
     bool o_retval = mBtpAnm.init(
-        model_data_p, 
+        morf_model_p->getModelData(), 
         a_btp, TRUE, 
         0, 1.0f, 0, -1, 
         i_param_2, 0
