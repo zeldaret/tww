@@ -354,20 +354,14 @@ bool daNpc_Ym1_c::init_texPttrnAnm(signed char i_param_1, bool i_param_2) {
     if (i_param_1 < 0) {
         return false;
     }
-    
-    J3DAnmTexPattern* a_btp = (J3DAnmTexPattern *) dComIfG_getObjectIDRes(mArcName, btpResID(i_param_1));
+    int res_id = btpResID(i_param_1);
+    J3DAnmTexPattern* a_btp = (J3DAnmTexPattern *) dComIfG_getObjectIDRes(mArcName, res_id);
     JUT_ASSERT(0x270, a_btp != NULL);
     m8AA = i_param_1;
     m6F4 = 0;
     m6F6 = 0;
 
-    bool o_retval = mBtpAnm.init(
-        morf_model_p->getModelData(), 
-        a_btp, TRUE, 
-        0, 1.0f, 0, -1, 
-        i_param_2, 0
-    ) != 0;
-    return o_retval;
+    return mBtpAnm.init(morf_model_p->getModelData(), a_btp, TRUE, 0, 1.0f, 0, -1, i_param_2, 0) != 0;
 }
 
 
