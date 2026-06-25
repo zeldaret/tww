@@ -115,7 +115,8 @@ static BOOL nodeCB_Head(J3DNode* i_param_1, int i_param_2) {
 void daNpc_Ym1_c::_nodeCB_Head(J3DNode* i_node, J3DModel* i_pModel) {
 
     static cXyz a_eye_pos_off(26.0f, -25.0f, 0.0f);
-    u16 jointIdx = ((J3DJoint*)(i_node))->getJntNo();
+    J3DJoint* jnt_p = (J3DJoint *) i_node;
+    s32 jointIdx = jnt_p->getJntNo();  
     mDoMtx_stack_c::copy(i_pModel->getAnmMtx(jointIdx));
     mDoMtx_stack_c::multVecZero(&m870);
     mDoMtx_stack_c::XrotM(m_jnt.getHead_y());
@@ -140,7 +141,8 @@ static BOOL nodeCB_BackBone(J3DNode* i_param_1, int i_param_2) {
 /* 00000488-00000520       .text _nodeCB_BackBone__11daNpc_Ym1_cFP7J3DNodeP8J3DModel */
 void daNpc_Ym1_c::_nodeCB_BackBone(J3DNode* i_node, J3DModel* i_pModel) {
 
-    u16 jointIdx = ((J3DJoint*)(i_node))->getJntNo();
+    J3DJoint* jnt_p = (J3DJoint *) i_node;
+    s32 jointIdx = jnt_p->getJntNo();  
     mDoMtx_stack_c::copy(i_pModel->getAnmMtx(jointIdx));
     mDoMtx_stack_c::XrotM(m_jnt.getBackbone_y());
     mDoMtx_stack_c::ZrotM(m_jnt.getBackbone_x());
@@ -347,18 +349,27 @@ int daNpc_Ym1_c::btpResID(int i_param_1) {
 
 /* 00000D98-00000E98       .text init_texPttrnAnm__11daNpc_Ym1_cFScb */
 bool daNpc_Ym1_c::init_texPttrnAnm(signed char i_param_1, bool i_param_2) {
-    J3DModel* head = mpHeadModel;
-    if(i_param_1 < 0){
+    J3DModel* morf_model_p = mpHeadModel;
+
+    if (i_param_1 < 0) {
         return false;
-    }else{
-        J3DAnmTexPattern* a_btp = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(mArcName,btpResID(i_param_1));
-        JUT_ASSERT(DEMO_SELECT(0x270,0x270),a_btp != NULL);
-        m8AA = i_param_1;
-        m6F4 = 0;
-        m6F6 = 0;
-        return mBtpAnm.init(head->getModelData(),a_btp,true,0,1.0f,0,-1,i_param_2) != 0;
     }
+    
+    J3DAnmTexPattern* a_btp = (J3DAnmTexPattern *) dComIfG_getObjectIDRes(mArcName, btpResID(i_param_1));
+    JUT_ASSERT(0x270, a_btp != NULL);
+    m8AA = i_param_1;
+    m6F4 = 0;
+    m6F6 = 0;
+    J3DModelData* model_data_p = morf_model_p->getModelData();
+    bool o_retval = mBtpAnm.init(
+        model_data_p, 
+        a_btp, TRUE, 
+        0, 1.0f, 0, -1, 
+        i_param_2, 0
+    ) != 0;
+    return o_retval;
 }
+
 
 /* 00000E98-00000F28       .text play_texPttrnAnm__11daNpc_Ym1_cFv */
 void daNpc_Ym1_c::play_texPttrnAnm() {
@@ -896,9 +907,6 @@ void daNpc_Ym1_c::setAttention(bool i_param_1) {
 }
 
 
-#if VERSION == VERSION_DEMO
-static char* stringsdemo = {"若者"};
-#endif
 
 /* 00001F5C-00002088       .text decideType__11daNpc_Ym1_cFi */
 bool daNpc_Ym1_c::decideType(int i_param1) {
@@ -912,7 +920,7 @@ bool daNpc_Ym1_c::decideType(int i_param1) {
         mStaff = -1;
 
     switch(base.base.mProcName){
-        case 0x13D:
+        case DEMO_SELECT(0x13E,0x13D):
             mSubType = 1;
             switch(i_param1){
                 case 0:
@@ -923,7 +931,7 @@ bool daNpc_Ym1_c::decideType(int i_param1) {
                     break;
             }
             break;
-        case 0x13E:
+        case DEMO_SELECT(0x13F,0x13E):
             mSubType = 2;
             switch(i_param1){
                 case 0:
@@ -957,12 +965,12 @@ void daNpc_Ym1_c::privateCut(int i_param_1) {
         dComIfGp_evmng_cutEnd(i_param_1);
         return;
     }
-#if VERSION == VERSION_DEMO
-    dComIfGp_evmng_getIsAddvance(i_param_1);
 
-#else
     dComIfGp_evmng_getIsAddvance(i_param_1);
-#endif
+    void* void_pointer = (void*)1;
+    if(void_pointer == NULL){
+        return;
+    }
     dComIfGp_evmng_cutEnd(i_param_1);
 }
 
@@ -1129,11 +1137,9 @@ BOOL daNpc_Ym1_c::wait_2() {
     m8AF = 0;
     m8A4 = 1;
     if(sVar3 == 0){
-        if(mSubType == 1){
-            fVar1 = 120.0f;
-        }else{
-            fVar1 = 92.0f;
-        }
+
+        fVar1 = mSubType==1 ? 120.0f : 92.0f;
+
         if(mSubType == 1){
             fVar2 = 250.0f;
         }else{
@@ -1207,7 +1213,7 @@ BOOL daNpc_Ym1_c::talk_1() {
         case 0xA37:  // KEEP: real empty case — it is the binary-search PIVOT of the right subtree
             break;
         // REMOVED 0xA31 / 0xA33 / 0xA35: they are NOT cases (never compared in asm); the default covers them.
-        //   Adding them changes the median and breaks the comparison tree.
+
         }
         m89A = 0xFF;
         m8A3 = 0;
@@ -1572,19 +1578,17 @@ BOOL daNpc_Ym1_c::_draw() {
         mDoExt_modelEntryDL(m6D0);
     }
 
-
-
-
-
-
-
     shadowDraw();
     switch(mSubType){
         case 1:
             dSnap_RegistFig(DSNAP_TYPE_YM1,this,1.0f,1.0f,1.0f);
             break;
         case 2:
+#if VERSION == VERSION_DEMO
+            dSnap_RegistFig(DSNAP_TYPE_YM2,this,1.0f,1.0f,1.0f);
+#else
             dSnap_RegistFig(DSNAP_TYPE_YM2,this,eyePos,shape_angle.y,1.0f,1.0f,1.0f);  
+#endif
             break;
     }
 
