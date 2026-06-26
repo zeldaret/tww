@@ -330,6 +330,28 @@ void daSTBox_c::set_mtx() {
 /* 00000C7C-00000EB8       .text _execute__9daSTBox_cFv */
 bool daSTBox_c::_execute() {
     /* Nonmatching */
+    static char* actionTable[] = {"WAIT", "WAIT02", "WAIT_GETITEM", "WAIT_DUMMY", "DROP"};
+    int staffId = dComIfGp_evmng_getMyStaffId("STBox", NULL, 0);
+    double waterY = 0.0;
+    if (dComIfGp_getShipActor() != NULL) {
+        cXyz pos = dComIfGp_getShipActor()->m1020;
+        waterY = getWaterY(pos);
+    }
+    if ((dComIfGp_event_getMode() != 0) 
+        && !this->eventInfo.checkCommandTalk()
+        && staffId != 0xFF) {
+        s32 actIdx = dComIfGp_evmng_getMyActIdx(staffId, actionTable, 5, 0, 0);
+        if(actIdx == -1){
+            dComIfGp_evmng_cutEnd(staffId);
+        } else {
+            BOOL isAdvance = dComIfGp_evmng_getIsAddvance(staffId);
+            if (isAdvance) {
+                // (this->*event_init_tbl[actIdx])(staffId);
+            }
+            daSTBox_c* i_this = this;
+            // BOOL isAct = (actionTable[actIdx])(staffId);
+        }
+    }
 }
 
 /* 00000EB8-00000EBC       .text initWait__9daSTBox_cFi */
