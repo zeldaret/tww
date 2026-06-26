@@ -104,23 +104,17 @@ public:
     /* 0x6CD */ s8 m_bbone_jnt_num;
     /* 0x6CE */ s8 m_hnd_L_jnt_num;
     /* 0x6CF */ s8 m_hnd_R_jnt_num;
-    /* 0x6D0 */ J3DModel* m6D0;
+    /* 0x6D0 */ J3DModel* mpItemModel;
     /* 0x6D4 */ char mArcName[4];
-                
-    /* 0x6D8 */ //u8 m6D8[0x6DC - 0x6D8];
-                u32 m6D8;
+    /* 0x6D4 */ u32 mShadowId;
     /* 0x6DC */ J3DModel* mpHeadModel;
-
-
     /* 0x6E0 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x6F4 */ u8 m6F4;
-                u8 m6F5;
-                s16 m6F6;
-
+    /* 0x6F4 */ u8 mDemoFrameCount;
+                s16 mTexPttrnTimer;
                 ActionFunc mCurrActionFunc;
     /* 0x704 */ dCcD_Cyl mCyl704;
     /* 0x834 */ cXyz m834;     
-                csXyz mRotTarget;
+    /* 0x840 */ csXyz mRotTarget;
     /* 0x846 */ csXyz m846;
                 Vec m84C;
                 cXyz m858;
@@ -147,16 +141,16 @@ public:
     /* 0x89E */ u8 m89E;
     /* 0x89F */ u8 m89F;
     /* 0x8A0 */ u8 m8A0;
-    /* 0x8A1 */ u8 m8A1;
-                u8 m8A2;
+    /* 0x8A1 */ u8 mLoaded;
+    /* 0x8AB */ u8 mbHasAttention;
                 u8 m8A3;
     /* 0x8A4 */ bool m8A4;
     /* 0x8A5 */ u8 m8A5;
     /* 0x8A6 */ u8 m8A6;
-                s8 m8A7;
-                u8 m8A8;
-                u8 m8A9;
-                s8 m8AA;
+    /* 0x8A7 */ s8 m8A7;
+    /* 0x8A8 */ u8 m8A8;
+    /* 0x8A9 */ u8 m8A9;
+    /* 0x8AA */ s8 m8AA;
     /* 0x8AB */ s8 m8AB;
     /* 0x8AC */ s8 m8AC;
     /* 0x8AD */ s8 m8AD;
