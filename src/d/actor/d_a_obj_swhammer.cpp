@@ -117,7 +117,7 @@ BOOL daObjSwhammer::Act_c::CreateHeap() {
     JUT_ASSERT(0x18b, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel) {
-        modelData->getJointNodePointer(1)->setCallBack(jnodeCB);
+        modelData->getJointNodePointer(MHMRSW_JNT_HIT_e)->setCallBack(jnodeCB);
         mpModel->setUserArea((u32) this);
     }
     return mpModel != NULL;

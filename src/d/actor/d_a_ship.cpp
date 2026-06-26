@@ -110,13 +110,13 @@ static cXyz l_rope_base_vec(0.0f, -10.0f, 0.0f);
 BOOL daShip_c::bodyJointCallBack(int jno) {
     J3DModel *pModel = mpBodyAnm->getModel();
     
-    if ((jno == 10) || (jno == 5)) {
+    if ((jno == FN_BODY_JNT_J_FN_STEER1_e) || (jno == FN_BODY_JNT_J_FN_KAJI_e)) {
         mDoMtx_stack_c::ZrotS(m0366);
     }
-    else if (jno == 7) {
+    else if (jno == FN_BODY_JNT_J_FN_SAIL1_e) {
         mDoMtx_stack_c::ZrotS(-mSailAngle);
     }
-    else if (jno == 6) {
+    else if (jno == FN_BODY_JNT_J_FN_MAST_e) {
         mDoMtx_stack_c::ZrotS(0xC000);
         mDoMtx_stack_c::revConcat(pModel->getAnmMtx(jno));
         mpSalvageArmModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -146,7 +146,7 @@ static BOOL daShip_bodyJointCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000284-0000033C       .text cannonJointCallBack__8daShip_cFi */
 BOOL daShip_c::cannonJointCallBack(int jno) {
-    if (jno == 1) {
+    if (jno == VFNCN_JNT_CANON1_e) {
         mDoMtx_stack_c::XrotS(m0394);
     }
     else {
@@ -173,8 +173,8 @@ static BOOL daShip_cannonJointCallBack(J3DNode* node, int calcTiming) {
 /* 00000380-00000414       .text craneJointCallBack__8daShip_cFv */
 BOOL daShip_c::craneJointCallBack() {
     mDoMtx_stack_c::ZrotS(-(m0398 + m039C));
-    mDoMtx_stack_c::revConcat(mpSalvageArmModel->getAnmMtx(1));
-    mpSalvageArmModel->setAnmMtx(1, mDoMtx_stack_c::get());
+    mDoMtx_stack_c::revConcat(mpSalvageArmModel->getAnmMtx(VFNCR_JNT_V_CRANE_ROTATION_e));
+    mpSalvageArmModel->setAnmMtx(VFNCR_JNT_V_CRANE_ROTATION_e, mDoMtx_stack_c::get());
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
     return TRUE;
 }
@@ -1774,7 +1774,7 @@ BOOL daShip_c::procCannon() {
         short prev0394 = m0394;
         
         if (target) {
-            mDoMtx_multVecZero(mpCannonModel->getAnmMtx(2), &cannonPos);
+            mDoMtx_multVecZero(mpCannonModel->getAnmMtx(VFNCN_JNT_CANON2_e), &cannonPos);
 
             cannonPos = target->eyePos - cannonPos;
 
@@ -3178,7 +3178,7 @@ void daShip_c::setRopePos() {
 
     spF8 = *currentRopeSegment;
 
-    cMtx_multVec(mpSalvageArmModel->getAnmMtx(1), &rope_offset, currentRopeSegment);
+    cMtx_multVec(mpSalvageArmModel->getAnmMtx(VFNCR_JNT_V_CRANE_ROTATION_e), &rope_offset, currentRopeSegment);
 
     if (mProc == &daShip_c::procCraneUp) {
         spEC.set(mpLinkModel->getBaseTRMtx()[0][3] - currentRopeSegment->x, 
@@ -3230,7 +3230,7 @@ void daShip_c::setRopePos() {
         }
         if (mRopeCnt == 20 && checkStateFlg(daSFLG_UNK10000000_e)) {
             cXyz* r4 = mRopeLine.getPos(0);
-            mDoMtx_multVecZero(mpSalvageArmModel->getAnmMtx(1), &spE0);
+            mDoMtx_multVecZero(mpSalvageArmModel->getAnmMtx(VFNCR_JNT_V_CRANE_ROTATION_e), &spE0);
             spE0 -= *r4;
 
             if (spE0.abs2XZ() < SQUARE(50.0f)) {
@@ -3268,9 +3268,9 @@ void daShip_c::setRopePos() {
     }
     else {
         spC8.set(
-            currentRopeSegment->x - mpSalvageArmModel->getAnmMtx(1)[0][3],
-            currentRopeSegment->y - mpSalvageArmModel->getAnmMtx(1)[1][3],
-            currentRopeSegment->z - mpSalvageArmModel->getAnmMtx(1)[2][3]
+            currentRopeSegment->x - mpSalvageArmModel->getAnmMtx(VFNCR_JNT_V_CRANE_ROTATION_e)[0][3],
+            currentRopeSegment->y - mpSalvageArmModel->getAnmMtx(VFNCR_JNT_V_CRANE_ROTATION_e)[1][3],
+            currentRopeSegment->z - mpSalvageArmModel->getAnmMtx(VFNCR_JNT_V_CRANE_ROTATION_e)[2][3]
         );
         sVar14 = 0x7fff;
         sVar12 = (0x8000 - (m0398 * 2)) - (0x8000 - mCraneBaseAngle) * ((float)m0398 / (float)mCraneBaseAngle);
@@ -3979,7 +3979,7 @@ BOOL daShip_c::execute() {
     
     setHeadAnm();
     
-    model2->setBaseTRMtx(model1->getAnmMtx(4));
+    model2->setBaseTRMtx(model1->getAnmMtx(FN_BODY_JNT_J_FN_GATTAI_e));
     mpHeadAnm->calc();
 
     if (mPart == PART_CRANE_e) {
@@ -3991,7 +3991,7 @@ BOOL daShip_c::execute() {
         }
         mpSalvageArmModel->calc();
         setRopePos();
-        mDoMtx_multVecZero(mpSalvageArmModel->getAnmMtx(1), &m102C);
+        mDoMtx_multVecZero(mpSalvageArmModel->getAnmMtx(VFNCR_JNT_V_CRANE_ROTATION_e), &m102C);
         if (mProc == &daShip_c::procCrane || mProc == &daShip_c::procCraneUp) {
             m0434 = mRopeLine.getPos(0);
         }
@@ -4009,7 +4009,7 @@ BOOL daShip_c::execute() {
         m0434 = NULL;
 
         if (mPart == PART_CANNON_e) {
-            mDoMtx_multVecZero(mpCannonModel->getAnmMtx(2), &m1038);
+            mDoMtx_multVecZero(mpCannonModel->getAnmMtx(VFNCN_JNT_CANON2_e), &m1038);
             
             if (mProc != &daShip_c::procCannon) {
                 m0396 = getAnglePartRate() * 16384.0f;
@@ -4021,7 +4021,7 @@ BOOL daShip_c::execute() {
             
             if (m037A == 30) {
                 cXyz spE4;
-                cMtx_multVec(mpCannonModel->getAnmMtx(2), &l_cannon_top, &spE4);
+                cMtx_multVec(mpCannonModel->getAnmMtx(VFNCN_JNT_CANON2_e), &l_cannon_top, &spE4);
 
                 csXyz sp1C;
                 sp1C.set(getCannonAngleX(), getCannonAngleY(), shape_angle.z);
@@ -4052,10 +4052,10 @@ BOOL daShip_c::execute() {
         }
     }
 
-    cMtx_multVec(model1->getAnmMtx(10), &l_tiller_top_offset, &mTillerTopPos);
+    cMtx_multVec(model1->getAnmMtx(FN_BODY_JNT_J_FN_STEER1_e), &l_tiller_top_offset, &mTillerTopPos);
 
     daGrid_c* grid;
-    MtxP mtx = model1->getAnmMtx(7);
+    MtxP mtx = model1->getAnmMtx(FN_BODY_JNT_J_FN_SAIL1_e);
 
     m0444.x = mtx[0][3];
     m0444.y = mtx[1][3];
@@ -4073,7 +4073,7 @@ BOOL daShip_c::execute() {
         cMtx_multVecSR(mtx, &top_offset, &spD8);
         mpGrid->scale.y = spD8.abs() / 365.0f;
 
-        cMtx_multVecSR(model1->getAnmMtx(8), &XZ_top_offset, &spD8);
+        cMtx_multVecSR(model1->getAnmMtx(FN_BODY_JNT_J_FN_SAIL2_e), &XZ_top_offset, &spD8);
         grid->m2200 = 1.0f - (spD8.abs() / 265.0f); // No idea why this is generating an extra lwz instruction for loading mpGrid when the instructions above don't
 
         if (mTornadoActor) {
@@ -4108,7 +4108,7 @@ BOOL daShip_c::execute() {
     // This should probably use the mDoMtx_multVecZero inline, but it's not getting inlined
     // mDoMtx_multVecZero(model2->getAnmMtx(16), &eyePos);
     MtxP jnt_mtx;
-    jnt_mtx = model2->getAnmMtx(16);
+    jnt_mtx = model2->getAnmMtx(FN_HEAD_H_JNT_J_FN_ME_L_e);
     eyePos.x = jnt_mtx[0][3];
     eyePos.y = jnt_mtx[1][3];
     eyePos.z = jnt_mtx[2][3];
@@ -4327,7 +4327,7 @@ BOOL daShip_c::execute() {
         }
     }
 
-    cMtx_multVec(mpHeadAnm->getModel()->getAnmMtx(8), &sph_offset, &sp9C);
+    cMtx_multVec(mpHeadAnm->getModel()->getAnmMtx(FN_HEAD_H_JNT_J_FN_ATAMA_e), &sph_offset, &sp9C);
 
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         mSph.SetTgGrp(cCcD_TgSPrm_IsPlayer_e);
@@ -4584,7 +4584,9 @@ cPhs_State daShip_c::create() {
         fopAcM_SetMtx(this, pModel->getBaseTRMtx());
         
         for (u16 jno = 0; jno < pModelData->getJointNum(); jno++) {
-            if ((jno == 10) || (jno == 5) || (jno == 7) || (jno == 6)) {
+            if ((jno == FN_BODY_JNT_J_FN_STEER1_e) || (jno == FN_BODY_JNT_J_FN_KAJI_e) || 
+                (jno == FN_BODY_JNT_J_FN_SAIL1_e) || (jno == FN_BODY_JNT_J_FN_MAST_e))
+            {
                 pModelData->getJointNodePointer(jno)->setCallBack(daShip_bodyJointCallBack);
             }
         }
@@ -4609,13 +4611,17 @@ cPhs_State daShip_c::create() {
         pModel->setUserArea(reinterpret_cast<u32>(this));
         
         for (u16 jno = 0; jno < pModelData->getJointNum(); jno++) {
-            if (jno == 8 || jno == 10) {
+            if (jno == FN_HEAD_H_JNT_J_FN_ATAMA_e || jno == FN_HEAD_H_JNT_J_FN_AGO2_e) {
                 pModelData->getJointNodePointer(jno)->setCallBack(daShip_headJointCallBack0);
             }
             else if (
-                !(jno != 2 && jno != 3 && jno != 4 && jno != 5 && jno != 6) || (jno == 7)
+                !(jno != FN_HEAD_H_JNT_J_FN_KUBI1_e && jno != FN_HEAD_H_JNT_J_FN_KUBI2_e && jno != FN_HEAD_H_JNT_J_FN_KUBI3_e &&
+                  jno != FN_HEAD_H_JNT_J_FN_KUBI4_e && jno != FN_HEAD_H_JNT_J_FN_KUBI5_e) ||
+                (jno == FN_HEAD_H_JNT_J_FN_KUBI6_e)
                 // Should probably be written as
-                // jno == 2 || jno == 3 || jno == 4 || jno == 5 || jno == 6 || jno == 7
+                // jno == FN_HEAD_H_JNT_J_FN_KUBI1_e || jno == FN_HEAD_H_JNT_J_FN_KUBI2_e || jno == FN_HEAD_H_JNT_J_FN_KUBI3_e ||
+                // jno == FN_HEAD_H_JNT_J_FN_KUBI4_e || jno == FN_HEAD_H_JNT_J_FN_KUBI5_e ||
+                // jno == FN_HEAD_H_JNT_J_FN_KUBI6_e
                 // But the compiler optimizes that differently
             ) {
                 pModelData->getJointNodePointer(jno)->setCallBack(daShip_headJointCallBack1);
@@ -4626,11 +4632,11 @@ cPhs_State daShip_c::create() {
         
         pModelData = mpCannonModel->getModelData();
         
-        pModelData->getJointNodePointer(1)->setCallBack(daShip_cannonJointCallBack);
-        pModelData->getJointNodePointer(2)->setCallBack(daShip_cannonJointCallBack);
+        pModelData->getJointNodePointer(VFNCN_JNT_CANON1_e)->setCallBack(daShip_cannonJointCallBack);
+        pModelData->getJointNodePointer(VFNCN_JNT_CANON2_e)->setCallBack(daShip_cannonJointCallBack);
         
         mpSalvageArmModel->setUserArea(reinterpret_cast<u32>(this));
-        mpSalvageArmModel->getModelData()->getJointNodePointer(1)->setCallBack(daShip_craneJointCallBack);
+        mpSalvageArmModel->getModelData()->getJointNodePointer(VFNCR_JNT_V_CRANE_ROTATION_e)->setCallBack(daShip_craneJointCallBack);
         
         m034B = fopAcM_GetParam(this);
         mPart = PART_WAIT_e;
@@ -4744,10 +4750,10 @@ cPhs_State daShip_c::create() {
         mpBodyAnm->play(NULL, 0, 0);
         mpBodyAnm->calc();
         
-        cMtx_multVec(mpBodyAnm->getModel()->getAnmMtx(10), &l_tiller_top_offset, &mTillerTopPos);
+        cMtx_multVec(mpBodyAnm->getModel()->getAnmMtx(FN_BODY_JNT_J_FN_STEER1_e), &l_tiller_top_offset, &mTillerTopPos);
         
         mpHeadAnm->play(NULL, 0, 0);
-        mpHeadAnm->getModel()->setBaseTRMtx(mpBodyAnm->getModel()->getAnmMtx(4));
+        mpHeadAnm->getModel()->setBaseTRMtx(mpBodyAnm->getModel()->getAnmMtx(FN_BODY_JNT_J_FN_GATTAI_e));
         mpHeadAnm->calc();
         
         dComIfGp_setShipActor(this);

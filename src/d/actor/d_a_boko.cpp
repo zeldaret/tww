@@ -995,7 +995,7 @@ cPhs_State daBoko_c::create() {
         mStts.Init(10, 0xff, this);
 
         if (type == Type_BOKO_STICK_e) {
-            mpModel->getModelData()->getJointNodePointer(2)->getMesh()->getShape()->hide();
+            mpModel->getModelData()->getJointNodePointer(BOKO_JNT_CL_BOKOPIECEA_e)->getMesh()->getShape()->hide();
         }
         mSph.Set(sph_src);
         mSph.SetStts(&mStts);

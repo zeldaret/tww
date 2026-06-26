@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bmdhand.h"
 #include "d/d_s_play.h"
+#include "res/Object/Bmd.h"
 #include "res/Object/Bmdhand.h"
 #include "d/actor/d_a_bmd.h"
 #include "d/d_cc_d.h"
@@ -34,7 +35,9 @@ static bmd_class* boss;
 static bool hio_set;
 static daBmdhand_HIO_c l_HIO;
 
-static int boss_joint_d[] = {0x1C, 0x1C, 0x1C, 0x1C, 0x25, 0x25, 0x25, 0x25, 0x2E, 0x2E, 0x2E, 0x2E, 0x40, 0x40, 0x40, 0x40, 0x37, 0x37, 0x37, 0x37};
+static int boss_joint_d[] = {BKM_JNT_HANAA7_e, BKM_JNT_HANAA7_e, BKM_JNT_HANAA7_e, BKM_JNT_HANAA7_e, BKM_JNT_HANAB7_e, BKM_JNT_HANAB7_e, BKM_JNT_HANAB7_e,
+                             BKM_JNT_HANAB7_e, BKM_JNT_HANAC7_e, BKM_JNT_HANAC7_e, BKM_JNT_HANAC7_e, BKM_JNT_HANAC7_e, BKM_JNT_HANAE7_e, BKM_JNT_HANAE7_e,
+                             BKM_JNT_HANAE7_e, BKM_JNT_HANAE7_e, BKM_JNT_HANAD7_e, BKM_JNT_HANAD7_e, BKM_JNT_HANAD7_e, BKM_JNT_HANAD7_e};
 static f32 boss_joint_xad[] = {60.0f, 20.0f, -20.0f, -60.0f};
 
 /* 00000118-000001CC       .text hand_draw__FP13bmdhand_class */

@@ -277,7 +277,7 @@ bool daObjAuzu::Act_c::_draw() {
     J3DModelData* model_data_p = mpModel->getModelData();
     u8 alpha = u8(mScaleAnimFactor * 255.5f) & 0xFF;
     set_material(
-        model_data_p->getJointNodePointer(0)->getMesh(), 
+        model_data_p->getJointNodePointer(AUZU_JNT_AUZU_e)->getMesh(), 
         alpha
     );
     mDoExt_modelUpdateDL(mpModel);

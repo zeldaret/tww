@@ -1,6 +1,6 @@
 /**
  * d_a_tornado.cpp
- * Ballad Of Gales Tornado
+ * Object - Ballad of Gales tornado
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -20,12 +20,12 @@ const float daTornado_HIO_c0::start_dis = 10000.0f;
 /* 000000EC-00000260       .text jointCallBack__11daTornado_cFi */
 BOOL daTornado_c::jointCallBack(int jntNo) {
     int jntIdx = jntNo - 1;
-    if ((jntIdx < 0) || (jntIdx >= 11)) {
+    if ((jntIdx < YTRND00_JNT_ROOT_e) || (jntIdx >= YTRND00_JNT_JOINT11_e)) {
         return TRUE;
     }
 
     mDoMtx_stack_c::transS(mJointX[jntIdx], 0.0f, mJointZ[jntIdx]);
-    if (jntIdx != 10 && jntIdx != 0) {
+    if (jntIdx != YTRND00_JNT_JOINT10_e && jntIdx != YTRND00_JNT_ROOT_e) {
         mDoMtx_stack_c::ZXYrotM(-mJointZ[jntIdx] * 3572.0f * 0.001f, 0.0f, mJointX[jntIdx] * 3572.0f * 0.001f);
     }
 

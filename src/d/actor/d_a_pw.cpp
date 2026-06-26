@@ -205,7 +205,7 @@ void action_dousa(pw_class* i_this) {
             i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
             JPABaseEmitter* particle = dComIfGp_particle_set(dPa_name::ID_AK_SN_POUGETLAMP00, &i_this->m2CC, &i_this->shape_angle);
             if (particle != NULL) {
-                particle->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0x17)); // j_pw_item_r1 joint
+                particle->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(PW_JNT_J_PW_ITEM_R1_e));
             }
             i_this->attention_info.flags = 0;
             i_this->mMode = 0x0A;

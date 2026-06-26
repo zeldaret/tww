@@ -197,35 +197,35 @@ void daDaiocta_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
 
     cXyz base;
     switch (jnt_no) {
-        case 30:
+        case DO_MAIN1_JNT_J_DO_TE_L6_e:
             base.set(450.0f, 0.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m21A0);
             break;
-        case 36:
+        case DO_MAIN1_JNT_J_DO_TE_R6_e:
             base.set(450.0f, 0.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m21AC);
             break;
-        case 20:
+        case DO_MAIN1_JNT_J_DO_KUTI2_e:
             base.set(l_HIO.m094, 0.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m2434);
             break;
-        case 6:
+        case DO_MAIN1_JNT_J_DO_BODY5_e:
             base.set(450.0f, 0.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m21B8);
             break;
-        case 9:
+        case DO_MAIN1_JNT_J_DO_HIRE_L1_e:
             base.set(300.0f, -200.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m21C4);
             break; 
-        case 7:
+        case DO_MAIN1_JNT_J_DO_HIRE_L2_e:
             base.set(300.0f, 0.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m21D0);
             break;
-        case 10:
+        case DO_MAIN1_JNT_J_DO_HIRE_R1_e:
             base.set(300.0f, 200.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m21DC);
             break;
-        case 8:
+        case DO_MAIN1_JNT_J_DO_HIRE_R2_e:
             base.set(300.0f, 0.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m21E8);
             break;
@@ -384,103 +384,103 @@ BOOL daDaiocta_c::createArrowHitHeap() {
     static __jnt_hit_data_c search_data[17] = { 
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 2,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_BODY1_e,
             /* mRadius     */ 550.0f,
             /* mpOffsets   */ body_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 3,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_BODY2_e,
             /* mRadius     */ 450.0f,
             /* mpOffsets   */ body_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 4,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_BODY3_e,
             /* mRadius     */ 400.0f,
             /* mpOffsets   */ body_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 5,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_BODY4_e,
             /* mRadius     */ 300.0f,
             /* mpOffsets   */ body_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 6,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_BODY5_e,
             /* mRadius     */ 200.0f,
             /* mpOffsets   */ body_top_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 7,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_HIRE_L2_e,
             /* mRadius     */ 150.0f,
             /* mpOffsets   */ body_top_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 8,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_HIRE_R2_e,
             /* mRadius     */ 150.0f,
             /* mpOffsets   */ body_top_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 9,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_HIRE_L1_e,
             /* mRadius     */ 100.0f,
             /* mpOffsets   */ hire_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 10,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_HIRE_R1_e,
             /* mRadius     */ 100.0f,
             /* mpOffsets   */ hire_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 30,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_L6_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ te_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 29,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_L5_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 28,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_L4_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 27,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_L3_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 36,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_R6_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ te_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 35,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_R5_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ te_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 34,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_R4_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 33,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_R3_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
         }
@@ -1605,18 +1605,18 @@ void daDaiocta_c::createInit() {
     attention_info.flags = 0;
     shape_angle = current.angle;
 
-    mAnmMtxIndices[0] = 21;
-    mAnmMtxIndices[1] = 22;
-    mAnmMtxIndices[2] = 15;
-    mAnmMtxIndices[3] = 23;
-    mAnmMtxIndices[4] = 24;
-    mAnmMtxIndices[5] = 16;
-    mAnmMtxIndices[6] = 17;
-    mAnmMtxIndices[7] = 18;
-    mAnmMtxIndices[8] = 14;
-    mAnmMtxIndices[9] = 11;
-    mAnmMtxIndices[10] = 12;
-    mAnmMtxIndices[11] = 13;
+    mAnmMtxIndices[0] = DO_MAIN1_JNT_J_DO_ME1_e;
+    mAnmMtxIndices[1] = DO_MAIN1_JNT_J_DO_ME2_e;
+    mAnmMtxIndices[2] = DO_MAIN1_JNT_J_DO_ME3_e;
+    mAnmMtxIndices[3] = DO_MAIN1_JNT_J_DO_ME4_e;
+    mAnmMtxIndices[4] = DO_MAIN1_JNT_J_DO_ME5_e;
+    mAnmMtxIndices[5] = DO_MAIN1_JNT_J_DO_ME6_e;
+    mAnmMtxIndices[6] = DO_MAIN1_JNT_J_DO_ME7_e;
+    mAnmMtxIndices[7] = DO_MAIN1_JNT_J_DO_ME8_e;
+    mAnmMtxIndices[8] = DO_MAIN1_JNT_J_DO_ME9_e;
+    mAnmMtxIndices[9] = DO_MAIN1_JNT_J_DO_ME10_e;
+    mAnmMtxIndices[10] = DO_MAIN1_JNT_J_DO_ME11_e;
+    mAnmMtxIndices[11] = DO_MAIN1_JNT_J_DO_ME12_e;
 
     static const int NUM_JOINT_NODES = 37;
     for (int i = 0; i < NUM_JOINT_NODES; i++) {

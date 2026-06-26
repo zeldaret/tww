@@ -135,7 +135,7 @@ BOOL daObj_Canon_c::_createHeap() {
 #endif
 
     mpModel->setUserArea((u32)this);
-    modelData->getJointNodePointer(3)->setCallBack(nodeControl_CB);
+    modelData->getJointNodePointer(WALLBOM_JNT_SHOT_e)->setCallBack(nodeControl_CB);
 
     return TRUE;
 }
@@ -485,12 +485,12 @@ bool daObj_Canon_c::_execute() {
     temp.x = l_HIO.field_0x14;
     temp.y = l_HIO.field_0x18 * scale.x;
     temp.z = l_HIO.field_0x1C;
-    mDoMtx_multVec(mpModel->getAnmMtx(3), &temp, &field_0x450);
+    mDoMtx_multVec(mpModel->getAnmMtx(WALLBOM_JNT_SHOT_e), &temp, &field_0x450);
     Vec temp2 = {0.0f, 0.0f, 0.0f};
     temp2.x = REG12_F(0);
     temp2.y = (REG12_F(1) + 60.0f) * scale.x;
     temp2.z = REG12_F(2);
-    mDoMtx_multVec(mpModel->getAnmMtx(3), &temp2, &field_0x45C);
+    mDoMtx_multVec(mpModel->getAnmMtx(WALLBOM_JNT_SHOT_e), &temp2, &field_0x45C);
 
     if(field_0x470.getEmitter()) {
         if(cLib_calcTimer(&field_0x484) == 0) {
@@ -518,10 +518,10 @@ bool daObj_Canon_c::_draw() {
     }
 
     if(mCurMode == 2 || mCurMode == 3) {
-        mpModel->getModelData()->getJointNodePointer(3)->getMesh()->getShape()->hide();
+        mpModel->getModelData()->getJointNodePointer(WALLBOM_JNT_SHOT_e)->getMesh()->getShape()->hide();
     }
     else {
-        mpModel->getModelData()->getJointNodePointer(3)->getMesh()->getShape()->show();
+        mpModel->getModelData()->getJointNodePointer(WALLBOM_JNT_SHOT_e)->getMesh()->getShape()->show();
     }
 
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
