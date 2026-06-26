@@ -187,18 +187,16 @@ void dTree_data_c::WorkCo(fopAc_ac_c* i_actor, u32, int) {
 
     dTree_anm_c& anm = dComIfGp_getTree()->getAnm(mAnimIdx);
     
-    s16 var_r30 = cM_atan2s(vel.x, vel.z);
-    f32 var_f31 = cM_scos(i_actor->current.angle.y - var_r30);
-    if (var_f31 > 0.9f && fopAcM_GetName(i_actor) == fpcNm_PLAYER_e) {
+    s16 angle = cM_atan2s(vel.x, vel.z);
+    f32 cos = cM_scos(i_actor->current.angle.y - angle);
+    if (cos > 0.9f && fopAcM_GetName(i_actor) == fpcNm_PLAYER_e) {
         ((daPy_py_c*)i_actor)->onFrollCrashFlg(7);
     }
     
-    f32 var_f0 = std::fabsf(i_actor->speedF * 50.0f);
-    f32 var_f1 = var_f0 > 4000.0f ? 4000.0f : var_f0;
-    f32 anm_timer = var_f1 * var_f31;
-    if (std::fabsf(anm.mAnimTimer) < std::fabsf(anm_timer)) {
-        anm.mAnimTimer = anm_timer;
-        anm.field_0x0a = var_r30;
+    f32 var_f1 = cLib_maxLimit(std::abs(i_actor->speedF * 50.0f), 4000.0f);
+    if (std::fabsf(anm.mAnimTimer) < std::fabsf(var_f1 * cos)) {
+        anm.mAnimTimer = var_f1 * cos;
+        anm.field_0x0a = angle;
     }
 }
 
