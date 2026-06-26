@@ -73,6 +73,7 @@ public:
 
     dTree_data_c* getData() { return mpData; }
 
+private:
     /* 0x0 */ dTree_data_c* mpData;
 };
 
@@ -86,11 +87,11 @@ public:
     dTree_data_c* newData(cXyz&, u8, int);
     s32 newAnm(s16);
     void setAnm(int, s16);
-    void deleteRoom(s32 roomNo) { mRoom[roomNo].deleteData(); }
+    void deleteRoom(int roomNo) { mRoom[roomNo].deleteData(); }
     void deleteAnm(int idx) { mAnm[idx].mState = 0; }
 
     dTree_anm_c* getAnm() { return mAnm; }
-    dTree_anm_c& getAnm(int idx) { return mAnm[idx]; }
+    dTree_anm_c* getAnm(int idx) { return &mAnm[idx]; }
     dTree_data_c* getData() { return mData; }
 
     void setPlayerCutFlg(int i_flg) { mPlayerCutFlg = i_flg; }
@@ -105,11 +106,12 @@ public:
     virtual void draw();
     virtual ~dTree_packet_c();
 
+private:
     /* 0x0010 */ u16 mNextIdx;
     /* 0x0014 */ dTree_data_c mData[64];
     /* 0x4114 */ dTree_anm_c mAnm[72];
     /* 0x6634 */ dTree_room_c mRoom[64];
-    /* 0x6734 */ u8 mPlayerCutFlg;
+    /* 0x6734 */ bool mPlayerCutFlg;
     /* 0x6736 */ s16 mPlayerSwordAngY;
     /* 0x6738 */ s16 mPlayerSwordMoveAngY;
     /* 0x673C */ cXyz mPlayerSwordTop;
