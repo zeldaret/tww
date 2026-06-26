@@ -262,7 +262,6 @@ cflags_runtime = [
     "-O4,p",
     "-use_lmw_stmw on",
     "-str reuse,pool,readonly",
-    "-gccinc",
     "-common off",
     "-inline deferred,auto",
     "-char signed",
@@ -1370,31 +1369,31 @@ config.libs = [
     {
         "lib": "amcstubs",
         "mw_version": "GC/1.3.2",
-        "cflags": cflags_runtime,
+        "cflags": cflags_dolphin,
         "progress_category": "sdk",
         "host": False,
         "objects": [
-            Object(NonMatching, "amcstubs/AmcExi2Stubs.c"),
+            Object(Matching, "amcstubs/AmcExi2Stubs.c"),
         ],
     },
     {
         "lib": "OdemuExi2",
-        "mw_version": "GC/1.3.2",
+        "mw_version": "GC/1.2.5n",
         "cflags": cflags_runtime,
         "progress_category": "sdk",
         "host": False,
         "objects": [
-            Object(NonMatching, "OdemuExi2/DebuggerDriver.c"),
+            Object(Matching, "OdemuExi2/DebuggerDriver.c"),
         ],
     },
     {
         "lib": "odenotstub",
         "mw_version": "GC/1.3.2",
-        "cflags": cflags_runtime,
+        "cflags": cflags_dolphin,
         "progress_category": "sdk",
         "host": False,
         "objects": [
-            Object(NonMatching, "odenotstub/odenotstub.c"),
+            Object(Matching, "odenotstub/odenotstub.c"),
         ],
     },
 
