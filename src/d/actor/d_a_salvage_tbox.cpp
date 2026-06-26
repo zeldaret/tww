@@ -387,7 +387,7 @@ BOOL daSTBox_c::actWait(int) {
     this->current.pos = craneTopPos2;
     this->attention_info.position = this->current.pos;
     if ((this->field_0x331 == 1 || this->field_0x331 == 2) 
-        && waterY < this->current.pos.y && (this->field_0x336 == 0)) {
+        && this->current.pos.y > waterY && (this->field_0x336 == 0)) {
         mDoAud_subBgmStart(JA_BGM_BGN_GET_BOX);
         this->field_0x336 = 1;
     }
