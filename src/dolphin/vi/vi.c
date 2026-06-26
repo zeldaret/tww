@@ -847,6 +847,40 @@ void VIConfigure(GXRenderModeObj* rm) {
     OSRestoreInterrupts(enabled);
 }
 
+void VIConfigurePan(u16 xOrg, u16 yOrg, u16 width, u16 height) {
+    BOOL enabled;
+    VITiming* tm;
+
+#if DEBUG
+    ASSERTMSGLINEV(2118, (xOrg & 1) == 0,
+        "VIConfigurePan(): Odd number(%d) is specified to xOrg\n",
+        xOrg);
+    if (HorVer.FBMode == VI_XFBMODE_DF) {
+        ASSERTMSGLINEV(2123, (height & 1) == 0,
+            "VIConfigurePan(): Odd number(%d) is specified to height when DF XFB mode\n",
+            height);
+    }
+#endif
+    enabled = OSDisableInterrupts();
+    HorVer.PanPosX   = xOrg;
+    HorVer.PanPosY   = yOrg;
+    HorVer.PanSizeX  = width;
+    HorVer.PanSizeY  = height;
+    HorVer.DispSizeY = (HorVer.nonInter == 2)           ? HorVer.PanSizeY :
+                       (HorVer.nonInter == 3)           ? HorVer.PanSizeY :
+                       (HorVer.FBMode == VI_XFBMODE_SF) ? (u16)(HorVer.PanSizeY * 2) :
+                                                          HorVer.PanSizeY;
+    tm = HorVer.timing;
+    AdjustPosition(tm->acv);
+    setScalingRegs(HorVer.PanSizeX, HorVer.DispSizeX, HorVer.threeD);
+    setPicConfig(HorVer.FBSizeX, HorVer.FBMode, HorVer.PanPosX, HorVer.PanSizeX, &HorVer.wordPerLine, &HorVer.std, &HorVer.wpl, &HorVer.xof);
+    if (FBSet != 0) {
+        setFbbRegs(&HorVer, &HorVer.tfbb, &HorVer.bfbb, &HorVer.rtfbb, &HorVer.rbfbb);
+    }
+    setVerticalRegs(HorVer.AdjustedDispPosY, HorVer.DispSizeY, tm->equ, tm->acv, tm->prbOdd, tm->prbEven, tm->psbOdd, tm->psbEven, HorVer.black);
+    OSRestoreInterrupts(enabled);
+}
+
 void VIFlush(void) {
     BOOL enabled;
     s32 regIndex;

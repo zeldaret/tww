@@ -947,7 +947,7 @@ config.libs = [
         "objects": [
             Object(NonMatching, "dolphin/gf/GFGeometry.cpp"),
             Object(NonMatching, "dolphin/gf/GFLight.cpp"),
-            Object(Matching,    "dolphin/gf/GFPixel.cpp"),
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "dolphin/gf/GFPixel.cpp"),
             Object(NonMatching, "dolphin/gf/GFTev.cpp"),
             Object(NonMatching, "dolphin/gf/GFTransform.cpp"),
         ],
@@ -1178,7 +1178,7 @@ config.libs = [
     DolphinLib(
         "vi",
         [
-            Object(Matching, "dolphin/vi/vi.c"),
+            Object(MatchingFor("GZLJ01", "GZLE01"), "dolphin/vi/vi.c"),
         ],
     ),
     DolphinLib(
