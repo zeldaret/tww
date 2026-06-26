@@ -216,7 +216,7 @@ cflags_base = [
     "-fp hardware",
     "-Cpp_exceptions off",
     # "-W all",
-    "-O4,p",
+    # "-O4,p",
     "-inline auto",
     '-pragma "cats off"',
     '-pragma "warn_notinlined off"',
@@ -235,6 +235,7 @@ cflags_base = [
     "-i src/PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/Include",
     "-i src/PowerPC_EABI_Support/MSL/MSL_C++/MSL_Common/Include",
     "-i src/PowerPC_EABI_Support/Runtime/Inc",
+    "-i src/PowerPC_EABI_Support/MetroTRK",
     f"-DVERSION={version_num}",
 ]
 
@@ -258,17 +259,31 @@ elif args.warn == "error":
 # Metrowerks library flags
 cflags_runtime = [
     *cflags_base,
+    "-O4,p",
     "-use_lmw_stmw on",
     "-str reuse,pool,readonly",
-    "-gccinc",
     "-common off",
     "-inline deferred,auto",
     "-char signed",
 ]
 
+cflags_trk = [
+    *cflags_base,
+    "-O4,p",
+    "-use_lmw_stmw on",
+    "-rostr",
+    "-str reuse",
+    "-common off",
+    "-inline deferred,auto",
+    "-char signed",
+    "-sdata 0",
+    "-sdata2 0",
+]
+
 # Dolphin library flags
 cflags_dolphin = [
     *cflags_base,
+    "-O4,p",
     "-fp_contract off",
 ]
 
@@ -923,16 +938,20 @@ config.libs = [
             Object(Matching,    "JAZelAudio/JAIZelSound.cpp"),
         ],
     },
-    DolphinLib(
-        "gf",
-        [
+    {
+        "lib": "gf",
+        "mw_version": "GC/1.3.2",
+        "cflags": [*cflags_base, "-O3"],
+        "progress_category": "sdk",
+        "host": False,
+        "objects": [
             Object(NonMatching, "dolphin/gf/GFGeometry.cpp"),
             Object(NonMatching, "dolphin/gf/GFLight.cpp"),
-            Object(NonMatching, "dolphin/gf/GFPixel.cpp"),
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "dolphin/gf/GFPixel.cpp"),
             Object(NonMatching, "dolphin/gf/GFTev.cpp"),
             Object(NonMatching, "dolphin/gf/GFTransform.cpp"),
         ],
-    ),
+    },
     JSystemLib(
         "JKernel",
         [
@@ -1078,7 +1097,7 @@ config.libs = [
     DolphinLib(
         "base",
         [
-            Object(NonMatching, "dolphin/base/PPCArch.c"),
+            Object(Matching, "dolphin/base/PPCArch.c"),
         ],
     ),
     DolphinLib(
@@ -1109,24 +1128,28 @@ config.libs = [
             Object(Matching, "dolphin/os/__ppc_eabi_init.cpp"),
         ],
     ),
-    DolphinLib(
-        "exi",
-        [
-            Object(NonMatching, "dolphin/exi/EXIBios.c"),
-            Object(NonMatching, "dolphin/exi/EXIUart.c"),
+    {
+        "lib": "exi",
+        "mw_version": "GC/1.2.5n",
+        "cflags": [*cflags_base],
+        "progress_category": "sdk",
+        "host": False,
+        "objects": [
+            Object(Matching, "dolphin/exi/EXIBios.c", extra_cflags=["-O3,p"]),
+            Object(Matching, "dolphin/exi/EXIUart.c", extra_cflags=["-O4,p"]),
         ],
-    ),
+    },
     DolphinLib(
         "si",
         [
-            Object(NonMatching, "dolphin/si/SIBios.c"),
-            Object(NonMatching, "dolphin/si/SISamplingRate.c"),
+            Object(Matching, "dolphin/si/SIBios.c"),
+            Object(Matching, "dolphin/si/SISamplingRate.c"),
         ],
     ),
     DolphinLib(
         "db",
         [
-            Object(NonMatching, "dolphin/db/db.c"),
+            Object(Matching, "dolphin/db/db.c"),
         ],
     ),
     DolphinLib(
@@ -1155,54 +1178,54 @@ config.libs = [
     DolphinLib(
         "vi",
         [
-            Object(NonMatching, "dolphin/vi/vi.c"),
+            Object(MatchingFor("GZLJ01", "GZLE01"), "dolphin/vi/vi.c"),
         ],
     ),
     DolphinLib(
         "pad",
         [
-            Object(NonMatching, "dolphin/pad/Padclamp.c"),
-            Object(NonMatching, "dolphin/pad/Pad.c"),
+            Object(Matching, "dolphin/pad/Padclamp.c"),
+            Object(Matching, "dolphin/pad/Pad.c"),
         ],
     ),
     DolphinLib(
         "ai",
         [
-            Object(NonMatching, "dolphin/ai/ai.c"),
-            Object(NonMatching, "dolphin/ar/ar.c"),
+            Object(Matching, "dolphin/ai/ai.c"),
+            Object(Matching, "dolphin/ar/ar.c"),
         ],
     ),
     DolphinLib(
         "ar",
         [
-            Object(NonMatching, "dolphin/ar/arq.c"),
+            Object(Matching, "dolphin/ar/arq.c"),
         ],
     ),
     DolphinLib(
         "dsp",
         [
-            Object(NonMatching, "dolphin/dsp/dsp.c"),
-            Object(NonMatching, "dolphin/dsp/dsp_debug.c"),
-            Object(NonMatching, "dolphin/dsp/dsp_task.c"),
+            Object(Matching, "dolphin/dsp/dsp.c"),
+            Object(Matching, "dolphin/dsp/dsp_debug.c"),
+            Object(Matching, "dolphin/dsp/dsp_task.c"),
         ],
     ),
     DolphinLib(
         "card",
         [
-            Object(NonMatching, "dolphin/card/CARDBios.c"),
-            Object(NonMatching, "dolphin/card/CARDUnlock.c"),
-            Object(NonMatching, "dolphin/card/CARDRdwr.c"),
-            Object(NonMatching, "dolphin/card/CARDBlock.c"),
-            Object(NonMatching, "dolphin/card/CARDDir.c"),
-            Object(NonMatching, "dolphin/card/CARDCheck.c"),
-            Object(NonMatching, "dolphin/card/CARDMount.c"),
-            Object(NonMatching, "dolphin/card/CARDFormat.c"),
-            Object(NonMatching, "dolphin/card/CARDOpen.c"),
-            Object(NonMatching, "dolphin/card/CARDCreate.c"),
-            Object(NonMatching, "dolphin/card/CARDRead.c"),
-            Object(NonMatching, "dolphin/card/CARDWrite.c"),
-            Object(NonMatching, "dolphin/card/CARDStat.c"),
-            Object(NonMatching, "dolphin/card/CARDNet.c"),
+            Object(Matching, "dolphin/card/CARDBios.c"),
+            Object(Matching, "dolphin/card/CARDUnlock.c"),
+            Object(Matching, "dolphin/card/CARDRdwr.c"),
+            Object(Matching, "dolphin/card/CARDBlock.c"),
+            Object(Matching, "dolphin/card/CARDDir.c"),
+            Object(Matching, "dolphin/card/CARDCheck.c"),
+            Object(Matching, "dolphin/card/CARDMount.c"),
+            Object(Matching, "dolphin/card/CARDFormat.c"),
+            Object(Matching, "dolphin/card/CARDOpen.c"),
+            Object(Matching, "dolphin/card/CARDCreate.c"),
+            Object(Matching, "dolphin/card/CARDRead.c"),
+            Object(Matching, "dolphin/card/CARDWrite.c"),
+            Object(Matching, "dolphin/card/CARDStat.c"),
+            Object(Matching, "dolphin/card/CARDNet.c"),
         ],
     ),
     DolphinLib(
@@ -1219,7 +1242,7 @@ config.libs = [
             Object(NonMatching, "dolphin/gx/GXBump.c"),
             Object(NonMatching, "dolphin/gx/GXTev.c"),
             Object(NonMatching, "dolphin/gx/GXPixel.c"),
-            Object(NonMatching, "dolphin/gx/GXStubs.c"),
+            Object(Matching,    "dolphin/gx/GXStubs.c"),
             Object(Matching,    "dolphin/gx/GXDisplayList.c"),
             Object(NonMatching, "dolphin/gx/GXTransform.c", extra_cflags=["-fp_contract off"]),
             Object(Matching,    "dolphin/gx/GXPerf.c"),
@@ -1228,8 +1251,8 @@ config.libs = [
     DolphinLib(
         "gd",
         [
-            Object(NonMatching, "dolphin/gd/GDBase.c"),
-            Object(NonMatching, "dolphin/gd/GDGeometry.c"),
+            Object(Matching, "dolphin/gd/GDBase.c"),
+            Object(Matching, "dolphin/gd/GDGeometry.c"),
         ],
     ),
     {
@@ -1243,7 +1266,7 @@ config.libs = [
             Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/__va_arg.c"),
             Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/global_destructor_chain.c"),
             Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/CPlusLibPPC.cp"),
-            Object(NonMatching, "PowerPC_EABI_Support/Runtime/Src/NMWException.cp"),
+            Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/NMWException.cp", extra_cflags=["-Cpp_exceptions on"]),
             Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/ptmf.c"),
             Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/runtime.c"),
             Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/__init_cpp_exceptions.cpp"),
@@ -1313,64 +1336,64 @@ config.libs = [
     {
         "lib": "TRK_MINNOW_DOLPHIN",
         "mw_version": "GC/1.3.2",
-        "cflags": cflags_runtime,
+        "cflags": cflags_trk,
         "progress_category": "sdk",
         "host": False,
         "objects": [
-            Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/mainloop.c"),
-            Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/nubevent.c"),
+            Object(Matching,    "TRK_MINNOW_DOLPHIN/Portable/mainloop.c", extra_cflags=["-enum min"]),
+            Object(Matching,    "TRK_MINNOW_DOLPHIN/Portable/nubevent.c", extra_cflags=["-enum min"]),
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/nubinit.c"),
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/msg.c"),
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/msgbuf.c"),
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/serpoll.c"),
-            Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/usr_put.c"),
+            Object(Matching,    "TRK_MINNOW_DOLPHIN/Portable/usr_put.c"),
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/dispatch.c"),
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/msghndlr.c"),
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/support.c"),
-            Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/mutex_TRK.c"),
+            Object(Matching,    "TRK_MINNOW_DOLPHIN/Portable/mutex_TRK.c"),
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/notify.c"),
-            Object(NonMatching, "TRK_MINNOW_DOLPHIN/ppc/Generic/flush_cache.c"),
+            Object(Matching,    "TRK_MINNOW_DOLPHIN/ppc/Generic/flush_cache.c"),
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/mem_TRK.c"),
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/ppc/Generic/targimpl.c"),
-            Object(NonMatching, "TRK_MINNOW_DOLPHIN/ppc/Export/targsupp.s"),
-            Object(NonMatching, "TRK_MINNOW_DOLPHIN/ppc/Generic/__exception.c"),
+            Object(Matching,    "TRK_MINNOW_DOLPHIN/ppc/Export/targsupp.s"),
+            Object(NonMatching, "TRK_MINNOW_DOLPHIN/ppc/Generic/exception.s"),
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/Os/dolphin/dolphin_trk.c"),
-            Object(NonMatching, "TRK_MINNOW_DOLPHIN/ppc/Generic/mpc_7xx_603e.c"),
-            Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/main_TRK.c"),
+            Object(Matching,    "TRK_MINNOW_DOLPHIN/ppc/Generic/mpc_7xx_603e.c"),
+            Object(Matching,    "TRK_MINNOW_DOLPHIN/Portable/main_TRK.c"),
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/Os/dolphin/dolphin_trk_glue.c"),
-            Object(NonMatching, "TRK_MINNOW_DOLPHIN/Os/dolphin/targcont.c"),
-            Object(NonMatching, "TRK_MINNOW_DOLPHIN/Os/dolphin/target_options.c"),
-            Object(NonMatching, "TRK_MINNOW_DOLPHIN/MetroTRK/Export/mslsupp.c"),
+            Object(Matching,    "TRK_MINNOW_DOLPHIN/Os/dolphin/targcont.c"),
+            Object(Matching,    "TRK_MINNOW_DOLPHIN/Os/dolphin/target_options.c"),
+            Object(Matching,    "TRK_MINNOW_DOLPHIN/MetroTRK/Export/mslsupp.c"),
         ],
     },
     {
         "lib": "amcstubs",
         "mw_version": "GC/1.3.2",
-        "cflags": cflags_runtime,
+        "cflags": cflags_dolphin,
         "progress_category": "sdk",
         "host": False,
         "objects": [
-            Object(NonMatching, "amcstubs/AmcExi2Stubs.c"),
+            Object(Matching, "amcstubs/AmcExi2Stubs.c"),
         ],
     },
     {
         "lib": "OdemuExi2",
-        "mw_version": "GC/1.3.2",
+        "mw_version": "GC/1.2.5n",
         "cflags": cflags_runtime,
         "progress_category": "sdk",
         "host": False,
         "objects": [
-            Object(NonMatching, "OdemuExi2/DebuggerDriver.c"),
+            Object(Matching, "OdemuExi2/DebuggerDriver.c"),
         ],
     },
     {
         "lib": "odenotstub",
         "mw_version": "GC/1.3.2",
-        "cflags": cflags_runtime,
+        "cflags": cflags_dolphin,
         "progress_category": "sdk",
         "host": False,
         "objects": [
-            Object(NonMatching, "odenotstub/odenotstub.c"),
+            Object(Matching, "odenotstub/odenotstub.c"),
         ],
     },
 
