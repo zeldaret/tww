@@ -578,7 +578,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_wood.cpp"),
             Object(NonMatching, "d/d_flower.cpp"),
             Object(Matching,    "d/d_item_data.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_seafightgame.cpp"),
+            Object(Matching,    "d/d_seafightgame.cpp"),
             Object(Matching,    "d/d_spline_path.cpp"),
             Object(Matching,    "d/d_s_actor_data_mng.cpp"),
             Object(Matching,    "d/d_item.cpp"),

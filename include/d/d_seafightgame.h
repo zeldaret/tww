@@ -20,6 +20,7 @@ public:
     int put_ship(u8, u8);
     bool checkPutShip(int, int, int, int);
     int attack(u8, u8);
+    int getNearEnemy(int, int);
 
     /* 0x00 */ u8 mGrid[8][8];
     /* 0x40 */ dSeaFightGame_ship_data mShips[4];
