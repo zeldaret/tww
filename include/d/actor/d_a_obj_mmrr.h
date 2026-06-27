@@ -57,7 +57,7 @@ public:
     /* 0xBBC */ dCcD_Stts mCpsStts;
     /* 0xBF8 */ u8 mBF8;
     /* 0xBF9 */ bool mBF9;
-    /* 0xBFA */ u8 pad_0xBFA[2];
+    /* 0xBFA */ u8 pad_0xbfa[2];
     /* 0xBFC */ f32 mLightIntensity;
     /* 0xC00 */ f32 mBeamLength;
     /* 0xC04 */ Eff_c mEff;

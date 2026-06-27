@@ -11,15 +11,15 @@ namespace daObjMmrr {
 namespace {
 struct attr_c {
     /* 0x00 */ Vec field_0x00[5][3];
-    /* 0xB4 */ f32 field_0xB4;
-    /* 0xB8 */ f32 field_0xB8;
-    /* 0xBC */ s16 field_0xBC;
-    /* 0xC0 */ Vec field_0xC0;
-    /* 0xCC */ f32 field_0xCC;
-    /* 0xD0 */ f32 field_0xD0;
+    /* 0xB4 */ f32 field_0xb4;
+    /* 0xB8 */ f32 field_0xb8;
+    /* 0xBC */ s16 field_0xbc;
+    /* 0xC0 */ Vec field_0xc0;
+    /* 0xCC */ f32 field_0xcc;
+    /* 0xD0 */ f32 field_0xd0;
 };
 
-const attr_c L_attr = {
+const attr_c l_attr = {
     {
         {{0.0f, 0.0f, 0.0f}, {-50.0f, -230.0f, 0.0f}, {50.0f, -230.0f, 0.0f}},
         {{0.0f, 0.0f, 0.0f}, {-60.0f, -20.0f, 0.0f}, {-90.0f, -80.0f, 0.0f}},
@@ -36,7 +36,7 @@ const attr_c L_attr = {
 };
 
 inline const attr_c* attr() {
-    return &L_attr;
+    return &l_attr;
 }
 } // namespace
 } // namespace daObjMmrr
@@ -174,8 +174,8 @@ void daObjMmrr::Act_c::init_cc() {
 void daObjMmrr::Act_c::set_cc_rec_pos() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
-    mDoMtx_stack_c::transM(0.0f, attr()->field_0xB4, attr()->field_0xB8);
-    mDoMtx_stack_c::XrotM(attr()->field_0xBC);
+    mDoMtx_stack_c::transM(0.0f, attr()->field_0xb4, attr()->field_0xb8);
+    mDoMtx_stack_c::XrotM(attr()->field_0xbc);
 
     for (int i = 0; i < 5; i++) {
         cXyz src;
@@ -195,14 +195,14 @@ void daObjMmrr::Act_c::set_cc_rec_pos() {
 /* 000005DC-000009FC       .text set_cc_trans_pos__Q29daObjMmrr5Act_cFv */
 void daObjMmrr::Act_c::set_cc_trans_pos() {
     cM3dGCpsS cpsS;
-    cXyz far_point(0.0f, 0.0f, attr()->field_0xD0);
+    cXyz far_point(0.0f, 0.0f, attr()->field_0xd0);
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
-    mDoMtx_stack_c::transM(attr()->field_0xC0.x, attr()->field_0xC0.y, attr()->field_0xC0.z);
+    mDoMtx_stack_c::transM(attr()->field_0xc0.x, attr()->field_0xc0.y, attr()->field_0xc0.z);
     mDoMtx_stack_c::multVec(&cXyz::Zero, &cpsS.mStart);
     mDoMtx_stack_c::multVec(&far_point, &cpsS.mEnd);
-    cpsS.mRadius = attr()->field_0xCC;
+    cpsS.mRadius = attr()->field_0xcc;
 
     dBgS_MirLightLinChk linChk;
     linChk.Set((cXyz*)&cpsS.mStart, (cXyz*)&cpsS.mEnd, this);
@@ -214,15 +214,15 @@ void daObjMmrr::Act_c::set_cc_trans_pos() {
     mCps.CalcAtVec();
     mCps.GetAtVecP()->normalizeRS();
 
-    mBeamLength = cXyz(cpsS.mStart).abs(cpsS.mEnd) / attr()->field_0xD0;
+    mBeamLength = cXyz(cpsS.mStart).abs(cpsS.mEnd) / attr()->field_0xd0;
 }
 
 /* 00000F88-0000102C       .text set_cull__Q29daObjMmrr5Act_cFv */
 void daObjMmrr::Act_c::set_cull() {
     f32 sin_val, cos_val;
     if (mBF9 != 0) {
-        sin_val = -attr()->field_0xD0 * cM_ssin(attr()->field_0xBC);
-        cos_val = attr()->field_0xD0 * cM_scos(attr()->field_0xBC);
+        sin_val = -attr()->field_0xd0 * cM_ssin(attr()->field_0xbc);
+        cos_val = attr()->field_0xd0 * cM_scos(attr()->field_0xbc);
     } else {
         sin_val = 0.0f;
         cos_val = 0.0f;
