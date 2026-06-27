@@ -5,30 +5,94 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_water_mark.h"
-#include "f_op/f_op_kankyo.h"
+#include "m_Do/m_Do_lib.h"
+
+dBgS_ObjGndChk dWaterMark_c::m_ground_check;
+s16 dWaterMark_c::m_circle_cnt;
+s16 dWaterMark_c::m_player_foot_now_id;
 
 BOOL dWaterMark_c::draw() {
-    /* Nonmatching */
+    f32 scaled_x = mScale.x * 50.0f;
+
+    if (mDoLib_clipper::mClipper.clip(j3dSys.mViewMtx, mPos, scaled_x)) {
+        return TRUE;
+    }
+
+    J3DModelData *data = mpModel->getModelData();
+    mBrkAnm.entry(data, mBrkAnm.getFrameCtrl()->getFrame());
+    mBtpAnm.entry(mpModel->getModelData(), mParam);
+    mDoExt_modelUpdateDL(mpModel);
+
+    return TRUE;
 }
 
 /* 8023DB48-8023DBF8       .text dWaterMark_Draw__FP12dWaterMark_c */
 static BOOL dWaterMark_Draw(dWaterMark_c* i_this) {
-    /* Nonmatching */
     return i_this->draw();
 }
 
 /* 8023DBF8-8023DE2C       .text setMatrix__12dWaterMark_cFv */
-void dWaterMark_c::setMatrix() {
-    /* Nonmatching */
+BOOL dWaterMark_c::setMatrix() {
+    s16 sVar1;
+    s16 sVar5;
+    
+    cXyz pos(mPos.x, mPos.y + 10.0f, mPos.z);
+    m_ground_check.SetPos(&pos);
+    
+    mPos.y = dComIfG_Bgsp()->GroundCross(&m_ground_check);
+    if (mPos.y != -G_CM3D_F_INF) {
+        cM3dGPla* pcVar4 = dComIfG_Bgsp()->GetTriPla(m_ground_check.GetBgIndex(), m_ground_check.GetPolyIndex());
+        s16 sVar2 = cM_atan2s(pcVar4->mNormal.x, pcVar4->mNormal.z) - field6_0x12e;
+        
+        
+        cXyz local_54(pcVar4->mNormal.x, 0.0f, pcVar4->mNormal.z);
+        f32 mag = local_54.abs();
+        mDoMtx_stack_c::transS(mPos.x, mPos.y + 0.1f, mPos.z);
+        
+        sVar5 = cM_atan2s(mag * -cM_ssin(sVar2), pcVar4->mNormal.y);
+        sVar1 = field6_0x12e;
+        s16 sVar6 = cM_atan2s(mag * cM_scos(sVar2), pcVar4->mNormal.y);
+        
+        mDoMtx_ZXYrotM(mDoMtx_stack_c::now, sVar6, sVar1, sVar5);
+        mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
+
+        bool bVar8 = dComIfG_Bgsp()->ChkMoveBG(m_ground_check);
+        if (bVar8) {
+            field5_0x12c = 1;
+        } else {
+            field5_0x12c = 0;
+        }
+    } else {
+        return 0;
+    }
+    return 1;
 }
 
 BOOL dWaterMark_c::execute() {
-    /* Nonmatching */
+    if (field9_0x134 != -1) {
+        if (field7_0x130 < field8_0x132) {
+            if (field7_0x130 <= dWaterMark_c::m_player_foot_now_id && field8_0x132 > dWaterMark_c::m_player_foot_now_id) {
+                field9_0x134 = -1;
+            }
+        } else {
+            if (field7_0x130 <= dWaterMark_c::m_player_foot_now_id || field8_0x132 > dWaterMark_c::m_player_foot_now_id) {
+                field9_0x134 = -1;
+            }
+        }
+    }
+
+    if (field9_0x134 == -1) mBrkAnm.play();
+    
+    if (mBrkAnm.isStop()) {
+        fopKyM_Delete(this);
+    } else if ((field5_0x12c == 0x1) && (!setMatrix())) {
+        fopKyM_Delete(this);
+    }
+    return TRUE;
 }
 
 /* 8023DE2C-8023DF24       .text dWaterMark_Execute__FP12dWaterMark_c */
-static BOOL dWaterMark_Execute(dWaterMark_c* i_this) {
-    /* Nonmatching */
+static BOOL dWaterMark_Execute(dWaterMark_c* i_this) {   
     return i_this->execute();
 }
 
@@ -38,12 +102,17 @@ static BOOL dWaterMark_IsDelete(dWaterMark_c*) {
 }
 
 BOOL dWaterMark_c::wm_delete() {
-    /* Nonmatching */
+    if (mpHeap != NULL) {
+        mDoExt_destroySolidHeap(mpHeap);
+    }
+    if ((int)(mParam) == 0x1) {
+        dWaterMark_c::m_circle_cnt -= 1;
+    }
+    return TRUE;
 }
 
 /* 8023DF2C-8023DF80       .text dWaterMark_Delete__FP12dWaterMark_c */
 static BOOL dWaterMark_Delete(dWaterMark_c* i_this) {
-    /* Nonmatching */
     return i_this->wm_delete();
 }
 
@@ -55,7 +124,75 @@ static cPhs_State dWaterMark_Create(kankyo_class* i_this) {
 
 /* 8023DFA0-8023E29C       .text create__12dWaterMark_cFv */
 cPhs_State dWaterMark_c::create() {
-    /* Nonmatching */
+    new (this) dWaterMark_c();
+
+    s32 bVar;
+    
+    field6_0x12e = mParam >> 0x10;
+    mParam = mParam & 0xffff;
+
+    if ((int) mParam != 0x0 && (int) mParam != 0x1 && (int) mParam != 0x2) {
+        return cPhs_ERROR_e;
+    } else {
+        if ((int) mParam == 1 && ++m_circle_cnt > 10) {
+            return cPhs_ERROR_e;
+        } else {
+            JKRSolidHeap* heap = mDoExt_createSolidHeapFromGameToCurrent(0x12a0, 0x20);
+            mpHeap = heap;
+            
+            if (mpHeap) {
+                J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_MPA_SIMI_e));
+                JUT_ASSERT(0x130, modelData != NULL);
+                
+                J3DModel* model = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020022);
+                mpModel = model;
+
+                J3DAnmTevRegKey* reg_key = (J3DAnmTevRegKey*) dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BRK_MPA_SIMI_e);
+                s32 uVar7 = mBrkAnm.init(modelData, reg_key, TRUE, J3DFrameCtrl::EMode_NONE);
+
+                J3DAnmTexPattern* tex_pattern = (J3DAnmTexPattern*) dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTP_MPA_SIMI_e);
+                s32 uVar9 = mBtpAnm.init(modelData, tex_pattern, FALSE, J3DFrameCtrl::EMode_NONE);
+                
+                bVar = (uVar7 & uVar9);
+
+                mDoExt_restoreCurrentHeap();
+                mDoExt_adjustSolidHeap(mpHeap);
+            } else {
+                return cPhs_ERROR_e;
+            }
+                
+            J3DModel* model2 = mpModel;
+            if (!model2 || !bVar) {
+                return cPhs_ERROR_e;
+            } else {
+                mpModel->setBaseScale(mScale);
+                if (!setMatrix()) {
+                    return cPhs_ERROR_e;
+                } else {
+                    if ((int) mParam == 0x2) {
+                        field9_0x134 = m_player_foot_now_id;
+                        m_player_foot_now_id++;
+                        if (m_player_foot_now_id == 0x28) {
+                            m_player_foot_now_id = 0;
+                        }
+                        field7_0x130 = field9_0x134 + 0x14;
+                        if (this->field7_0x130 >= 0x28) {
+                            this->field7_0x130 -= 0x28;
+                        }
+                        field8_0x132 = field7_0x130 + 0x14;
+                        if (field8_0x132 >= 0x28) {
+                            field8_0x132 -= 0x28;
+                        }
+                        mParam = 0;
+                    } else {
+                        field9_0x134 = -1;
+                    }
+                    return cPhs_COMPLEATE_e;
+                }
+            }
+            
+        }
+    }
 }
 
 static kankyo_method_class l_dWaterMark_Method = {
