@@ -125,6 +125,8 @@ public:
 
     /* 0x290 */ u8 m290;
                 u8 m291;
+                u8 m292;
+                u8 m293;
     /* 0x294 */ request_of_phase_process_class mPhs;
     /* 0x29C */ mDoExt_McaMorf* mpMorf;
     /* 0x2A0 */ mDoExt_McaMorf* mpMorf2;
@@ -153,9 +155,14 @@ public:
                 u8 m715[0x7D0-0x715];
                 u8 m724;
                 u8 m725;
+                u32 m728;
+                u32 m72C;
+                cXyz m730;
                 cXyz m73C;
                 u8 m748;
+                u16 m74A;
                 s32 m74C;
+                u32 m750;
     /* 0x754 */ dPa_smokeEcallBack m754;
 
     /* 0x774 */ cXyz mSmokePos;
@@ -170,6 +177,7 @@ public:
                 u8 m7D5;
                 s8 m7D6;
                 cXyz m7DC;
+                u32 m804;
                 s8 m808;
                 u8 m809;
                 u8 m80A;

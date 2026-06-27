@@ -5,6 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_p2.h"
+#include "d/actor/d_a_obj_timer.h"
+#include "d/actor/d_a_player.h"
 #include "d/d_lib.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_ext.h"
@@ -26,18 +28,14 @@ public:
 public:
     dNpc_HIO_c base;
     u8 m2C;
-    f32 m30;
-    f32 m34;
-    f32 m38;
-    f32 m3C;
-    f32 m40;
-    f32 m44;
+    cXyz mGoalPosCircleCenter;
+    cXyz m3C;
     cXyz mDemoCircleCenter;
     f32 mDemoCircleRadius;
     f32 mDemoCircleHalfHeight;
-    f32 m5C;
+    f32 mGoalPosCircleRadius;
     f32 m60;
-    f32 m64;
+    f32 mGoalPosCircleHalfHeight;
     f32 m68;
     u8 m6C;
     f32 m70;
@@ -90,15 +88,15 @@ daNpc_P2_childHIO_c::daNpc_P2_childHIO_c() {
     mDemoCircleCenter.z = 30.0f;
     mDemoCircleRadius = 80.0f;
     mDemoCircleHalfHeight = 180.0f;
-    m30 = 0.0f;
-    m34 = -550.0f;
-    m38 = -3020.0f;
-    m3C = 0.0f;
-    m40 = -550.0f;
-    m44 = -3400.0f;
-    m5C = 200.0f;
+    mGoalPosCircleCenter.x = 0.0f;
+    mGoalPosCircleCenter.y = -550.0f;
+    mGoalPosCircleCenter.z = -3020.0f;
+    m3C.x = 0.0f;
+    m3C.y = -550.0f;
+    m3C.z = -3400.0f;
+    mGoalPosCircleRadius = 200.0f;
     m60 = 300.0f;
-    m64 = 30.0f;
+    mGoalPosCircleHalfHeight = 30.0f;
     m68 = 300.0f;
     m6C = 0;
     m70 = 5000.0f;
@@ -346,11 +344,29 @@ void daNpc_P2_c::demo_wait_2() {
 /* 00001A7C-00001B00       .text demo_intro_2__10daNpc_P2_cFv */
 void daNpc_P2_c::demo_intro_2() {
     /* Nonmatching */
+    if(dComIfGp_evmng_endCheck("P2B_INTRO_2")){
+        dComIfGs_onEventBit(0x1A04);
+        m7D6 = 0x14;
+        m7D5 = 0x0;
+        dComIfGp_event_onEventFlag(0x8);
+    }
 }
 
 /* 00001B00-00001BBC       .text goal_wait_2__10daNpc_P2_cFv */
 void daNpc_P2_c::goal_wait_2() {
     /* Nonmatching */
+
+    BOOL switch_bool = fopAcM_isSwitch(this,m292);
+    if(switch_bool){
+        if(dLib_checkPlayerInCircle(l_HIO.children[m290].m3C,l_HIO.children[m290].m60,l_HIO.children[m290].m68)){
+            m7D6 = 0x15;
+            
+            daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
+            if(timer){
+                timer->stopTimer();
+            }
+        }
+    }
 }
 
 /* 00001BBC-00001C74       .text demo_goal_2__10daNpc_P2_cFv */
@@ -385,76 +401,305 @@ void daNpc_P2_c::demo_bomb_get() {
 /* 00001CFC-00001D78       .text demo_wait__10daNpc_P2_cFv */
 void daNpc_P2_c::demo_wait() {
     /* Nonmatching */
+    if(dLib_checkPlayerInCircle(l_HIO.children[m290].mDemoCircleCenter,l_HIO.children[m290].mDemoCircleRadius,l_HIO.children[m290].mDemoCircleHalfHeight)){
+        m7D5 = 0x3;
+        m7D6 = 0x4;
+
+        }
+        // daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
+        // if(timer){
+        //     timer->stopTimer();
+        // }
+    
+    return;
 }
 
 /* 00001D78-00001DE8       .text demo_intro__10daNpc_P2_cFv */
 void daNpc_P2_c::demo_intro() {
     /* Nonmatching */
+    if(dComIfGp_evmng_endCheck("P2B_INTRO")){
+        m7D6 = 0x5;
+        m7D5 = 0x0;
+        dComIfGp_event_onEventFlag(0x8);
+    }
+    return;    
 }
 
 /* 00001DE8-00001E4C       .text demo_lift__10daNpc_P2_cFv */
 void daNpc_P2_c::demo_lift() {
     /* Nonmatching */
+    if(dComIfGp_evmng_endCheck("Hlift_up")){
+        m7D6 = 0x6;
+        m7D5 = 0x4;
+        m804 = 0;
+    }
+    return;
 }
 
 /* 00001E4C-00001EC8       .text demo_jump__10daNpc_P2_cFv */
 void daNpc_P2_c::demo_jump() {
     /* Nonmatching */
+    if(dComIfGp_evmng_endCheck("P2B_TO_GOAL")){
+        dComIfGs_onEventBit(0x720);
+        m7D6 = 9;
+        dComIfGp_event_onEventFlag(0x8);
+    }
+    return;
 }
 
 /* 00001EC8-000021C4       .text goal_goalpos_to_talkpos__10daNpc_P2_cFv */
 void daNpc_P2_c::goal_goalpos_to_talkpos() {
     /* Nonmatching */
+    m7C1 = 1;
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    if((current.pos.y - player->current.pos.y - 300.f) > 0.0f){
+        m7D6 = 0x9;
+        return;
+    }
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x0;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x0; 
+    static cXyz aim_pos(0.0f,-450.0f,-2915.0f);
+    static cXyz attn_pos(0.0f,-450.0f,-2715.0f);
+    s16 sVar5 = cLib_targetAngleY(&current.pos,&aim_pos);
+    m730 = attn_pos;
+    f32 fVar8;
+    if(std::fabsf(sVar5 - current.angle.y) < 5376.0f){
+        m7D3 = 0x4;
+        cLib_addCalc2(&current.pos.x,aim_pos.x,0.1,4.0);
+        cLib_addCalc2(&current.pos.z,aim_pos.z,0.1,4.0);
+        fVar8 = (aim_pos - current.pos).absXZ();
+        if(fVar8 < 5376.0f){
+            m7D3 = 0x1;
+            m7D6 = 0x7;
+        }
+
+    }
+    if(dLib_checkPlayerInCircle(l_HIO.children[m290].mGoalPosCircleCenter,l_HIO.children[m290].mGoalPosCircleRadius,l_HIO.children[m290].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
+        m7D6 = 0xC;
+        daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
+        if(timer){
+            timer->stopTimer();
+        }
+    }
+    
 }
 
 /* 000021C4-000025B8       .text goal_talkpos_to_goalpos__10daNpc_P2_cFv */
 void daNpc_P2_c::goal_talkpos_to_goalpos() {
     /* Nonmatching */
+    m7C1 = 1;
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    if(
+        fopAcM_searchActorDistanceXZ(this,player) < l_HIO.children[m290].m70 && 
+        (current.pos.y - player->current.pos.y - 300.f) > 0.0f
+    ){
+        m7D6 = 0x9;
+        return;
+    }
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x0;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x0; 
+    static cXyz aim_pos(0.0f,-450.0f,-3130.0f);
+    static cXyz attn_pos(0.0f,-450.0f,-3380.0f);
+    static cXyz talk_attn_pos(0.0f,-450.0f,-2715.0f);
+    
+
+    f32 fVar8 = (aim_pos - current.pos).absXZ();
+    if( fVar8 < 5.0f){
+        m730 = talk_attn_pos;
+    }else{
+        m730 = attn_pos;
+    }
+//cLib_targetAngleY(&current.pos,&m730)
+    s16 sVar5 = cLib_targetAngleY(&current.pos,&m730);
+    if( fVar8 < 5.0f){
+        //f32 diff = fabs(sVar5-current.angle.y);
+        if(std::fabsf(sVar5-current.angle.y) < 5376.0f){
+            m7D3 = 0x1;
+            m7D6 = 0xB;
+        }
+    }else{
+
+        if(std::fabsf(sVar5 - current.angle.y) < 5376.0f){
+            m7D3 = 4;
+            cLib_addCalc2(&current.pos.x,aim_pos.x,0.1,4.0);
+            cLib_addCalc2(&current.pos.z,aim_pos.z,0.1,4.0);
+        }
+    }
+    if(dLib_checkPlayerInCircle(l_HIO.children[m290].mGoalPosCircleCenter,l_HIO.children[m290].mGoalPosCircleRadius,l_HIO.children[m290].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
+        m7D6 = 0xC;
+        daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
+        if(timer){
+            timer->stopTimer();
+        }
+    }
 }
 
 /* 000025B8-000026F4       .text goal_goalpos_wait__10daNpc_P2_cFv */
 void daNpc_P2_c::goal_goalpos_wait() {
     /* Nonmatching */
+    m7C1 = 1;
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    if(
+        fopAcM_searchActorDistanceXZ(this,player) < l_HIO.children[m290].m70 && 
+        (current.pos.y - player->current.pos.y - 300.f) > 0.0f
+    ){
+        m7D6 = 0x9;
+        return;
+    }
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x2;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x2;   
+    if(dLib_checkPlayerInCircle(l_HIO.children[m290].mGoalPosCircleCenter,l_HIO.children[m290].mGoalPosCircleRadius,l_HIO.children[m290].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
+        m7D6 = 0xC;
+        daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
+        if(timer){
+            timer->stopTimer();
+        }
+    }
+ 
 }
 
 /* 000026F4-00002864       .text goal_talkpos_wait__10daNpc_P2_cFv */
 void daNpc_P2_c::goal_talkpos_wait() {
     /* Nonmatching */
+    m7C1 = 1;
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    if((current.pos.y - player->current.pos.y - 300.f) < 0.0f){
+        m7D6 = 0xA;
+        return;
+    }
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x22;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x22;
+    if(m74A == 0){
+        m7D5 = 1;
+        m74A = 1;
+    }else{
+        if(m725 == 0){
+            m7D6 = 0x8;
+            dComIfGp_event_onEventFlag(0x8);
+            m7D5 = 0x5;
+        }else{
+            if(fopAcM_GetSpeedF(this) < 1.0f){
+                m7D5 = 2;
+            }
+        }
+
+        if(dLib_checkPlayerInCircle(l_HIO.children[m290].mDemoCircleCenter,l_HIO.children[m290].mDemoCircleRadius,l_HIO.children[m290].mDemoCircleHalfHeight) && !player->checkPlayerFly()){
+            m7D6 = 0xC;
+            daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
+            if(timer){
+                timer->stopTimer();
+            }
+        }
+    }
+
+    return;
 }
 
 /* 00002864-00002908       .text demo_goal__10daNpc_P2_cFv */
 void daNpc_P2_c::demo_goal() {
     /* Nonmatching */
+    m7C1 = 0;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA9;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
+    if(dComIfGp_evmng_endCheck("P2B_GOAL")){
+        dComIfGs_onEventBit(0x710);
+        m7D6 = 0xD;
+        m7D5 = 0;
+        dComIfGp_event_onEventFlag(0x8);
+    }else{
+        m7D5 = 0x6;
+    }
+    return;
 }
 
 /* 00002908-00002978       .text goal_talkpos_talk__10daNpc_P2_cFv */
 void daNpc_P2_c::goal_talkpos_talk() {
     /* Nonmatching */
+    if(dComIfGp_evmng_endCheck("P2B_GOAL_WAIT_TALK")){
+        m7D6 = 0x7;
+        dComIfGp_event_onEventFlag(0x8);
+        m725 = 0;
+    }
+    return;
 }
 
 /* 00002978-00002A20       .text treasure_wait__10daNpc_P2_cFv */
 void daNpc_P2_c::treasure_wait() {
     /* Nonmatching */
+    if(dComIfGp_evmng_endCheck("DEFAULT_TREASURE")){
+        if(m291 == 0){
+            m7D6 = 0xF;
+            m7D5 = 0x7;
+        }else if(m291 == 1){
+            m7D6 = 0x16;
+            m7D5 = 0xA;
+        }
+    }else if(m725 != 0){
+        m7D6 = 0xE;
+    }else{
+        m7D5 = 0x2;
+    }
+    return;
 }
 
 /* 00002A20-00002A88       .text treasure_wait_talk__10daNpc_P2_cFv */
 void daNpc_P2_c::treasure_wait_talk() {
     /* Nonmatching */
+    m750 = 1;
+    if(talk(false) == 0x12){
+        m7D6 = 0xD;
+        m725 = 0;
+        dComIfGp_event_onEventFlag(0x8);
+    }
+    return;
 }
 
 /* 00002A88-00002B18       .text demo_arrive__10daNpc_P2_cFv */
 void daNpc_P2_c::demo_arrive() {
     /* Nonmatching */
+    if(dComIfGp_evmng_endCheck("P2B_ARRIVE_MAJYU")){
+        dKy_instant_timechg(300);
+        dComIfGs_onEventBit(0x808);
+        m7D6 = 1;
+        m7D5 = 0;
+        dComIfGp_event_onEventFlag(0x8);
+    }
+    return;
 }
 
 /* 00002B18-00002B3C       .text wait01__10daNpc_P2_cFv */
 void daNpc_P2_c::wait01() {
     /* Nonmatching */
+    if(m725 != 0){
+        m7D6 = 2;
+        return;
+    }
+    m7D5 = 2;
+    return;
+
 }
 
 /* 00002B3C-00002BE8       .text zukotelescope__10daNpc_P2_cFv */
 void daNpc_P2_c::zukotelescope() {
     /* Nonmatching */
+    m7D3 = 0x16;
+    if (parentActorID != -1) {
+        fopAc_ac_c* actor = fopAcM_SearchByID(parentActorID);
+
+        cLib_addCalcAngleS2(
+            &current.angle.y,
+            m748 + actor->current.angle.y,
+            4, 0x800);
+    }
+
+    if (m725 == 0) {
+        m7D5 = 2;
+    } else {
+        m7D3 = 1;
+        m_jnt.offHeadLock();
+        m_jnt.offBackBoneLock();
+        m7D6 = 2;
+    }
 }
 
 /* 00002BE8-00002D78       .text moccowait__10daNpc_P2_cFv */
@@ -462,8 +707,6 @@ void daNpc_P2_c::moccowait() {
     /* Nonmatching */
 
     if(parentActorID != -1){
-
-
         cLib_addCalcAngleS2(
             &current.angle.y,
             m748 + fopAcM_SearchByID(parentActorID)->current.angle.y,
