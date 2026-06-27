@@ -59,7 +59,8 @@ bool daObjVds::Act_c::PlayLoopJointAnimation() {
 
 /* 00000188-000001E8       .text set_first_process__Q28daObjVds5Act_cFv */
 void daObjVds::Act_c::set_first_process() {
-    process_init(is_switch() ? TRUE : FALSE);
+    BOOL side = is_switch() ? TRUE : FALSE;
+    process_init(side);
 }
 
 /* 000001E8-00000214       .text ds_search_switchCB__8daObjVdsFPvPv */
@@ -142,6 +143,10 @@ BOOL daObjVds::Act_c::process_on_init() {
 void daObjVds::Act_c::process_on_main() {
     return;
 }
+
+#if VERSION == VERSION_DEMO
+static f32 lbl_365_data_1C[5] = { 0, 2.125, 0, 1.75, 0}; // Unused
+#endif
 
 /* 000004F4-000005C0       .text process_init__Q28daObjVds5Act_cFi */
 BOOL daObjVds::Act_c::process_init(BOOL i_side) {
@@ -298,40 +303,44 @@ bool daObjVds::Act_c::create_heap() {
     this->M_bck_data0 = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, dRes_ID_VDS_BCK_VDSWT0_e));
     JUT_ASSERT(852, M_bck_data0 != NULL);
 
+#if VERSION != VERSION_DEMO
     if(mdl_data0 != NULL && M_bck_data0 != NULL)
+#endif
         this->M_anm0 = new mDoExt_McaMorf(mdl_data0,
             NULL, NULL,
             M_bck_data0,
             J3DFrameCtrl::EMode_NONE,
             1, 0, -1, 1, NULL, 0, 0x11020203);
 
-    JUT_ASSERT(865, M_anm0 != NULL);
+    JUT_ASSERT((VERSION == VERSION_DEMO) ? 863 : 865, M_anm0 != NULL);
 
 
     J3DModelData* mdl_data1 = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_ID_VDS_BDL_VDSWT1_e));
-    JUT_ASSERT(869, mdl_data1 != NULL);
+    JUT_ASSERT((VERSION == VERSION_DEMO) ? 867 : 869, mdl_data1 != NULL);
 
     this->M_bck_data1 = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, dRes_ID_VDS_BCK_VDSWT1_e));
-    JUT_ASSERT(873, M_bck_data1 != NULL);
+    JUT_ASSERT((VERSION == VERSION_DEMO) ? 871 : 873, M_bck_data1 != NULL);
 
+#if VERSION != VERSION_DEMO
     if(mdl_data1 != NULL && M_bck_data1 != NULL)
+#endif
             this->M_anm1 = new mDoExt_McaMorf(mdl_data1,
                 NULL, NULL, 
                 M_bck_data1,
                 J3DFrameCtrl::EMode_NONE,
                 1, 0, -1, 1, NULL, 0, 0x11020203);
     
-    JUT_ASSERT(886, M_anm1 != NULL);
+    JUT_ASSERT((VERSION == VERSION_DEMO) ? 882 : 886, M_anm1 != NULL);
 
     this->M_brk_data0 = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, dRes_ID_VDS_BRK_VDSWT0_e));
-    JUT_ASSERT(891, M_brk_data0 != NULL);
+    JUT_ASSERT((VERSION == VERSION_DEMO) ? 887 : 891, M_brk_data0 != NULL);
     BOOL mBrkAnm0_init = this->mBrkAnm0.init(mdl_data0,
         M_brk_data0,
         true, J3DFrameCtrl::EMode_NONE,
         1, 0, -1, false, 0);
 
     this->M_brk_data1 = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, dRes_ID_VDS_BRK_VDSWT1_e));
-    JUT_ASSERT(904, M_brk_data1 != NULL);
+    JUT_ASSERT((VERSION == VERSION_DEMO) ? 900 : 904, M_brk_data1 != NULL);
     BOOL mBrkAnm1_init = this->mBrkAnm1.init(mdl_data1,
         M_brk_data1,
         true, J3DFrameCtrl::EMode_NONE,
@@ -340,9 +349,9 @@ bool daObjVds::Act_c::create_heap() {
     set_mtx();
 
     cBgD_t* bgw_data = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, dRes_ID_VDS_DZB_VDSWT_e));
-    JUT_ASSERT(926, bgw_data != NULL);
+    JUT_ASSERT((VERSION == VERSION_DEMO) ? 922 : 926, bgw_data != NULL);
     
-    if(bgw_data != NULL){
+    if(VERSION == VERSION_DEMO || bgw_data != NULL){
         this->m314 = new dBgW();
         if(this->m314 != NULL)
             this->m314->Set(bgw_data, 1, &this->m29C);
@@ -357,8 +366,10 @@ bool daObjVds::Act_c::create_heap() {
         this->M_anm1->getModel() != NULL &&
         this->m314 != NULL && 
         this->M_brk_data0 != NULL &&
-        this->M_brk_data1 != NULL &&
-        mBrkAnm0_init && mBrkAnm1_init
+        this->M_brk_data1 != NULL 
+    #if VERSION != VERSION_DEMO
+        && mBrkAnm0_init && mBrkAnm1_init
+    #endif
     );
 }
 
@@ -390,7 +401,10 @@ cPhs_State daObjVds::Act_c::_create() {
 
 /* 000012D4-00001368       .text _delete__Q28daObjVds5Act_cFv */
 bool daObjVds::Act_c::_delete() {
-    if(this->heap != NULL && this->m314 != NULL){
+    if(DEMO_SELECT(
+        this->m314 != NULL,
+        this->heap != NULL && this->m314 != NULL
+    )) {
         int bgwId = this->m314->GetId();
         
         bool doRelease;
