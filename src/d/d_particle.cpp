@@ -481,7 +481,7 @@ void dPa_simpleEcallBack::executeAfter(JPABaseEmitter* param_1) {
         dPa_simpleData_c* simpleData = mSimpleData;
         param_1->playCreateParticle();
         while (mCount != 0) {
-            if (mDoLib_clipper::clip(j3dSys.getViewMtx(), simpleData->mPos, 200.0f) == 0) {
+            if (!mDoLib_clipper::clip(j3dSys.getViewMtx(), simpleData->mPos, 200.0f)) {
                 param_1->setGlobalTranslation(simpleData->mPos.x, simpleData->mPos.y, simpleData->mPos.z);
                 param_1->setGlobalPrmColor(simpleData->mPrmColor.r, simpleData->mPrmColor.g, simpleData->mPrmColor.b);
                 param_1->setGlobalAlpha(simpleData->mPrmColor.a);
@@ -634,7 +634,7 @@ void dPa_control_c::createCommon(const void* param_1) {
     mEmitterMng = new(mHeap, 0) JPAEmitterManager(mCommonResMng, 3000, 150, 200, mHeap);
     JUT_ASSERT(1324, mEmitterMng != NULL);
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(mHeap);
-    mModelControl = new dPa_modelControl_c((J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPM_TUBO));
+    mModelControl = new dPa_modelControl_c((J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_MPM_TUBO_e));
     JUT_ASSERT(1332, mModelControl != NULL);
     for (u16 i = 0; i < 8; i++) {
         u16 id = dPa_name::j_o_id[i];
@@ -682,7 +682,7 @@ bool dPa_control_c::readScene(u8 i_no, mDoDvdThd_toMainRam_c** param_2) {
     mSceneNo = i_no;
     static char jpcName[32];
     sprintf(jpcName, "/res/Particle/Pscene%03d.jpc", i_no);
-    *param_2 = mDoDvdThd_toMainRam_c::create(jpcName, 0, NULL);
+    *param_2 = mDoDvdThd_toMainRam_c::create(jpcName, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     return true;
 }
 

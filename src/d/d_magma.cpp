@@ -7,7 +7,7 @@
 #include "d/d_magma.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_path.h"
-#include "d/res/res_magma.h"
+#include "res/Object/Magma.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 
@@ -281,13 +281,13 @@ Mtx dMagma_packet_c::mBallMtx;
 dMagma_packet_c::dMagma_packet_c() {
     dComIfG_setObjectRes("Magma", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
 
-    ResTIMG* kuro = (ResTIMG*)dComIfG_getObjectRes("Magma", MAGMA_BTI_MAG_KURO);
+    ResTIMG* kuro = (ResTIMG*)dComIfG_getObjectRes("Magma", dRes_INDEX_MAGMA_BTI_MAG_KURO_e);
     mDoLib_setResTimgObj(kuro, &mKuroTexObj, 0, NULL);
 
     C_MTXLightOrtho(l_kuroOrthoMtx, 1.0f, -1.0f, -1.0f, 1.0f, 0.5f, -0.5f, 0.5f, 0.5f);
     mDoMtx_copy(l_kuroOrthoMtx, l_colOrthoMtx);
 
-    ResTIMG* col = (ResTIMG*)dComIfG_getObjectRes("Magma", MAGMA_BTI_MAG_COL);
+    ResTIMG* col = (ResTIMG*)dComIfG_getObjectRes("Magma", dRes_INDEX_MAGMA_BTI_MAG_COL_e);
     mDoLib_setResTimgObj(col, &mColTexObj, 0, NULL);
     mDoMtx_identity(mFloorMtx);
     mDoMtx_identity(mBallMtx);

@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_yougan.h"
-#include "d/res/res_yougan.h"
+#include "res/Object/Yougan.h"
 #include "m_Do/m_Do_lib.h"
 
 class daYOUGAN_HIO_c : public JORReflexible {
@@ -172,11 +172,11 @@ BOOL daYougan_c::_daYougan_delete() {
 
 /* 00000600-00000884       .text useHeapInit__10daYougan_cFv */
 BOOL daYougan_c::useHeapInit() {
-    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname, YOUGAN_BMD_YOUGAN_AWA);
+    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname, dRes_INDEX_YOUGAN_BMD_YOUGAN_AWA_e);
     JUT_ASSERT(DEMO_SELECT(462, 464), modelData != NULL);
-    J3DAnmTransform* anmKey = (J3DAnmTransform*) dComIfG_getObjectRes(m_arcname, YOUGAN_BCK_YOUGAN_AWA);
+    J3DAnmTransform* anmKey = (J3DAnmTransform*) dComIfG_getObjectRes(m_arcname, dRes_INDEX_YOUGAN_BCK_YOUGAN_AWA_e);
     JUT_ASSERT(DEMO_SELECT(467,469), anmKey != NULL);
-    J3DAnmTextureSRTKey* srtKey = (J3DAnmTextureSRTKey*) dComIfG_getObjectRes(m_arcname, YOUGAN_BTK_YOUGAN_AWA);
+    J3DAnmTextureSRTKey* srtKey = (J3DAnmTextureSRTKey*) dComIfG_getObjectRes(m_arcname, dRes_INDEX_YOUGAN_BTK_YOUGAN_AWA_e);
     JUT_ASSERT(DEMO_SELECT(472, 474), srtKey != NULL);
 
     yg_awa_num = l_HIO.field_0x06;

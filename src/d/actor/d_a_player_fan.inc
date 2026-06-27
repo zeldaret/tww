@@ -29,13 +29,13 @@ BOOL daPy_lk_c::fanWindCrashEffectDraw() {
 
 /* 8014BB38-8014BBE8       .text fanJointCB__9daPy_lk_cFi */
 BOOL daPy_lk_c::fanJointCB(int param_0) {
-    if (param_0 == 2) {
+    if (param_0 == FANSMALL_JNT_FANSMA_JNT_e) {
         mDoMtx_stack_c::ZrotS(m3558);
     } else {
         mDoMtx_stack_c::ZrotS(m355A);
     }
     mDoMtx_stack_c::revConcat(mpEquipItemModel->getAnmMtx(param_0));
-    mpEquipItemModel->setAnmMtx(1 * param_0, mDoMtx_stack_c::get());
+    mpEquipItemModel->setAnmMtx(FANSMALL_JNT_FANSMROOT_JNT_e * param_0, mDoMtx_stack_c::get());
     mDoMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
     return true;
 }
@@ -54,15 +54,15 @@ BOOL daPy_fanJointCallback(J3DNode* node, int calcTiming) {
 
 /* 8014BC2C-8014BD08       .text parachuteJointCB__9daPy_lk_cFi */
 BOOL daPy_lk_c::parachuteJointCB(int param_0) {
-    if (param_0 == 3 || param_0 == 9) {
+    if (param_0 == FANB_JNT_LARMB_e || param_0 == FANB_JNT_RARMB_e) {
         mDoMtx_stack_c::transS(m3600, 0.0f, 0.0f);
-    } else if (param_0 == 1 || param_0 == 7) {
+    } else if (param_0 == FANB_JNT_LROOT_e || param_0 == FANB_JNT_RROOT_e) {
         mDoMtx_stack_c::YrotS(m355E);
     } else {
         return true;
     }
     mDoMtx_stack_c::revConcat(mpEquipItemModel->getAnmMtx(param_0));
-    mpEquipItemModel->setAnmMtx(1 * param_0, mDoMtx_stack_c::get());
+    mpEquipItemModel->setAnmMtx(FANB_JNT_LROOT_e * param_0, mDoMtx_stack_c::get());
     mDoMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
     return true;
 }
@@ -83,7 +83,7 @@ BOOL daPy_parachuteJointCallback(J3DNode* node, int calcTiming) {
 int daPy_lk_c::setShapeFanLeaf() {
     J3DMaterial* mtl;
     if (mpEquipItemModel != NULL) {
-        mtl = mpEquipItemModel->getModelData()->getJointNodePointer(0x00)->getMesh()->getNext();
+        mtl = mpEquipItemModel->getModelData()->getJointNodePointer(FAN_JNT_CL_FAN_e)->getMesh()->getNext();
     }
     m355C = m355C + 0x82f;
     m3558 = 1536.0f * cM_ssin(m355C);
@@ -118,9 +118,9 @@ BOOL daPy_lk_c::checkFanGlideProc(int param_0) {
 
 /* 8014BEEC-8014BFBC       .text setFanModel__9daPy_lk_cFv */
 void daPy_lk_c::setFanModel() {
-    J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_USEFANAA);
+    J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_USEFANAA_e);
     JKRHeap* oldHeap = setItemHeap();
-    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_FAN, 0x37221222);
+    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_FAN_e, 0x37221222);
     int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(242, FALSE);
@@ -131,25 +131,26 @@ void daPy_lk_c::setFanModel() {
 /* 8014BFBC-8014C0C0       .text setSmallFanModel__9daPy_lk_cFv */
 void daPy_lk_c::setSmallFanModel() {
     J3DModelData* tmp_modelData;
-    J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_FANWAIT);
+    J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_FANWAIT_e);
     JKRHeap* oldHeap = setItemHeap();
-    tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_FANSMALL, 0x37221222);
+    tmp_modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_FANSMALL_e, 0x37221222);
     int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(275, FALSE);
     }
     mDoExt_setCurrentHeap(oldHeap);
     mpEquipItemModel->setUserArea(reinterpret_cast<u32>(this));
-    tmp_modelData->getJointNodePointer(0x02)->setCallBack(daPy_fanJointCallback);
-    tmp_modelData->getJointNodePointer(0x03)->setCallBack(daPy_fanJointCallback);
+    tmp_modelData->getJointNodePointer(FANSMALL_JNT_FANSMA_JNT_e)->setCallBack(daPy_fanJointCallback);
+    tmp_modelData->getJointNodePointer(FANSMALL_JNT_FANSMB_JNT_e)->setCallBack(daPy_fanJointCallback);
     m355C = 0;
 }
 
 /* 8014C0C0-8014C254       .text setParachuteFanModel__9daPy_lk_cFf */
 void daPy_lk_c::setParachuteFanModel(f32 f31) {
-    J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_FANBA);
+    J3DModelData* modelData;
+    J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_FANBA_e);
     JKRHeap* oldHeap = setItemHeap();
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_FANB));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_FANB_e));
 
     mpParachuteFanMorf = new mDoExt_McaMorf(
         modelData,
@@ -172,10 +173,10 @@ void daPy_lk_c::setParachuteFanModel(f32 f31) {
     mpEquipItemModel = mpParachuteFanMorf->getModel();
     mDoExt_setCurrentHeap(oldHeap);
     mpEquipItemModel->setUserArea(reinterpret_cast<u32>(this));
-    modelData->getJointNodePointer(0x01)->setCallBack(daPy_parachuteJointCallback); // Lroot joint
-    modelData->getJointNodePointer(0x07)->setCallBack(daPy_parachuteJointCallback); // Rroot joint
-    modelData->getJointNodePointer(0x03)->setCallBack(daPy_parachuteJointCallback); // LarmB joint
-    modelData->getJointNodePointer(0x09)->setCallBack(daPy_parachuteJointCallback); // RarmB joint
+    modelData->getJointNodePointer(FANB_JNT_LROOT_e)->setCallBack(daPy_parachuteJointCallback);
+    modelData->getJointNodePointer(FANB_JNT_RROOT_e)->setCallBack(daPy_parachuteJointCallback);
+    modelData->getJointNodePointer(FANB_JNT_LARMB_e)->setCallBack(daPy_parachuteJointCallback);
+    modelData->getJointNodePointer(FANB_JNT_RARMB_e)->setCallBack(daPy_parachuteJointCallback);
 }
 
 /* 8014C254-8014C34C       .text procFanSwing_init__9daPy_lk_cFv */
@@ -227,7 +228,7 @@ BOOL daPy_lk_c::procFanSwing() {
         if (mFanSwingCb.getEmitter() != NULL) {
             mFanSwingCb.deleteCallBack();
         }
-        mDoMtx_multVecZero(mpCLModel->getAnmMtx(0), &local_6c);
+        mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e), &local_6c);
         dComIfGp_particle_setP1(dPa_name::ID_AK_JN_LEAFFAN00, &local_6c, &shape_angle, NULL, 0xff, &mFanSwingCb, -1);
     }
 
@@ -264,7 +265,7 @@ BOOL daPy_lk_c::procFanSwing() {
             }
             mpYuchw00Brk->setFrame(0.0f);
             m33E8.end();
-            m33E8.makeEmitter(dPa_name::ID_AK_JN_UCHIWAWIND00, mpYuchw00Model->getAnmMtx(2), &local_60, NULL);
+            m33E8.makeEmitter(dPa_name::ID_AK_JN_UCHIWAWIND00, mpYuchw00Model->getAnmMtx(YUCHW00_JNT_LWIND_e), &local_60, NULL);
             pJVar5 = m33E8.getEmitter();
             if (pJVar5 != NULL) {
                 pJVar5->setGlobalPrmColor(tevStr.mColorC0.r, tevStr.mColorC0.g, tevStr.mColorC0.b);
@@ -371,11 +372,11 @@ BOOL daPy_lk_c::procFanGlide() {
     if (frameCtrl.checkPass(4.0f)) {
         JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_AK_JN_LEAFPARACHUTE00, &current.pos);
         if (emitter) {
-            emitter->setGlobalRTMatrix(mpCLModel->getAnmMtx(0xf));
+            emitter->setGlobalRTMatrix(mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e));
         }
     }
     if (frameCtrl.getRate() < 0.01f && mProcVar6.m3570 == 0 && m32E4.getEmitter() == NULL) {
-        m32E4.makeEmitter(dPa_name::ID_AK_JN_LEAFPARACHUTE01, mpCLModel->getAnmMtx(0xf), &current.pos, NULL);
+        m32E4.makeEmitter(dPa_name::ID_AK_JN_LEAFPARACHUTE01, mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e), &current.pos, NULL);
     }
 
     if (frameCtrl.getFrame() > 2.0f || mProcVar6.m3570 != 0) {
@@ -454,7 +455,7 @@ BOOL daPy_lk_c::procFanGlide() {
                     m_HIO->mItem.mFan.m.field_0x2C
                 );
                 mpParachuteFanMorf->setAnm(
-                    getItemAnimeResource(LKANM_BCK_FANBA),
+                    getItemAnimeResource(dRes_INDEX_LKANM_BCK_FANBA_e),
                     0,
                     m_HIO->mItem.mFan.m.field_0x2C,
                     m_HIO->mItem.mFan.m.field_0x20,
@@ -510,7 +511,7 @@ BOOL daPy_lk_c::procFanGlide() {
                     mProcVar6.m3570 = 1;
                     setSingleMoveAnime(ANM_USEFANB2, fVar1, 0.0f, -1, m_HIO->mItem.mFan.m.field_0x30);
                     mpParachuteFanMorf->setAnm(
-                        getItemAnimeResource(LKANM_BCK_FANB2A),
+                        getItemAnimeResource(dRes_INDEX_LKANM_BCK_FANB2A_e),
                         0,
                         m_HIO->mItem.mFan.m.field_0x30,
                         1.0f,
@@ -540,7 +541,7 @@ BOOL daPy_lk_c::procFanGlide() {
                         m_HIO->mItem.mFan.m.field_0x34
                     );
                     mpParachuteFanMorf->setAnm(
-                        getItemAnimeResource(LKANM_BCK_FANBA),
+                        getItemAnimeResource(dRes_INDEX_LKANM_BCK_FANBA_e),
                         0,
                         m_HIO->mItem.mFan.m.field_0x34,
                         m_HIO->mItem.mFan.m.field_0x20,

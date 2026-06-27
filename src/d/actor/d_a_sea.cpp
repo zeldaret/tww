@@ -192,7 +192,7 @@ bool daSea_packet_c::create(cXyz& pos) {
     mFlags = 0;
     mAnimCounter = 0;
 
-    ResTIMG* timg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_B_SEA_TEX0AND2);
+    ResTIMG* timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_B_SEA_TEX0AND2_e);
     
     GXBool mipmap = timg->mipmapCount > 1;
     GXInitTexObj(&mTexSea0, (char*)timg + timg->imageOffset, timg->width, timg->height,
@@ -212,7 +212,7 @@ bool daSea_packet_c::create(cXyz& pos) {
         (GXBool)timg->biasClamp, (GXBool)timg->doEdgeLOD,
         (GXAnisotropy)timg->maxAnisotropy);
 
-    timg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_B_WYURAYURA_TEX1);
+    timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_B_WYURAYURA_TEX1_e);
     mDoLib_setResTimgObj(timg, &mTexYura, 0, NULL);
 
     return true;
@@ -684,7 +684,7 @@ void daSea_packet_c::draw() {
     DCStoreRange(m_draw_vtx, sizeof(cXyz) * GRID_CELLS * GRID_CELLS);
 #endif
 
-    ResTIMG* pResTIMG = static_cast<ResTIMG*>(dComIfG_getObjectRes("Always", ALWAYS_BTI_B_SEA_TEX0AND2));
+    ResTIMG* pResTIMG = static_cast<ResTIMG*>(dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_B_SEA_TEX0AND2_e));
 
     GXBool mipmap = pResTIMG->mipmapCount > 1;
     GXInitTexObj(&mTexSea0, (&pResTIMG->format + pResTIMG->imageOffset), pResTIMG->width, pResTIMG->height,
@@ -706,7 +706,7 @@ void daSea_packet_c::draw() {
                     (GXBool)pResTIMG->biasClamp, (GXBool)pResTIMG->doEdgeLOD,
                     (GXAnisotropy)pResTIMG->maxAnisotropy);
 
-    pResTIMG = static_cast<ResTIMG*>(dComIfG_getObjectRes("Always", ALWAYS_BTI_B_WYURAYURA_TEX1));
+    pResTIMG = static_cast<ResTIMG*>(dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_B_WYURAYURA_TEX1_e));
     mDoLib_setResTimgObj(pResTIMG, &mTexYura, 0, NULL);
     mDoMtx_stack_c::scaleS(1.5f, 1.5f, 1.0f);
     GXLoadTexMtxImm(mDoMtx_stack_c::get(), GX_TEXMTX0, GX_MTX2x4);

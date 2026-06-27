@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_shelf.h"
-#include "d/res/res_otana.h"
+#include "res/Object/Otana.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_npc_ba1.h"
 #include "m_Do/m_Do_mtx.h"
@@ -56,7 +56,7 @@ const char daObjShelf::Act_c::M_arcname[] = "Otana";
 
 /* 00000078-0000012C       .text CreateHeap__Q210daObjShelf5Act_cFv */
 int daObjShelf::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData *)dComIfG_getObjectRes(M_arcname, OTANA_BDL_OTANA);
+    J3DModelData* model_data = (J3DModelData *)dComIfG_getObjectRes(M_arcname, dRes_INDEX_OTANA_BDL_OTANA_e);
     JUT_ASSERT(0x12c, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
     return mpModel != NULL;
@@ -77,7 +77,7 @@ cPhs_State daObjShelf::Act_c::Mthd_Create() {
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, OTANA_DZB_OTANA, dBgS_MoveBGProc_Trans, 0xb00);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_OTANA_DZB_OTANA_e, dBgS_MoveBGProc_Trans, 0xb00);
         JUT_ASSERT(0x15b, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;

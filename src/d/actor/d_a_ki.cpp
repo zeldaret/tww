@@ -13,7 +13,7 @@
 #include "d/d_path.h"
 #include "d/d_snap.h"
 #include "d/d_material.h"
-#include "d/res/res_ki.h"
+#include "res/Object/Ki.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_cc_uty.h"
@@ -88,7 +88,7 @@ static kiHIO_c l_kiHIO;
 static s32 ki_all_count;
 static s32 ki_fight_count;
 
-static u16 ki_tex_anm_idx[] = {KI_BTP_AKE1, KI_BTP_TOJI1, KI_BTP_METOJI1, KI_BTP_GURU1};
+static u16 ki_tex_anm_idx[] = {dRes_INDEX_KI_BTP_AKE1_e, dRes_INDEX_KI_BTP_TOJI1_e, dRes_INDEX_KI_BTP_METOJI1_e, dRes_INDEX_KI_BTP_GURU1_e};
 static u16 ki_tex_max_frame[] = { 2, 2, 3, 2 };
 static u8 ki_tex_loop[] = { 0, 0, 0, 0 };
 
@@ -98,12 +98,12 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
-        ki_class* pvVar3 = (ki_class*)model->getUserArea();
+        ki_class* i_this = (ki_class*)model->getUserArea();
 
-        if (pvVar3 != NULL) {
+        if (i_this != NULL) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            cMtx_YrotM(*calc_mtx, pvVar3->m328);
-            cMtx_ZrotM(*calc_mtx, pvVar3->m326);
+            cMtx_YrotM(*calc_mtx, i_this->m328);
+            cMtx_ZrotM(*calc_mtx, i_this->m326);
             model->setAnmMtx(jntNo, *calc_mtx);
             MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
@@ -216,7 +216,7 @@ static BOOL daKi_Draw(ki_class* i_this) {
     f32 fVar1 = 30.0f;
     if (i_this->mDamageType == 0) {
         J3DModelData* pModelData = pModel->getModelData();
-        J3DJoint* joint = pModelData->getJointNodePointer(0);
+        J3DJoint* joint = pModelData->getJointNodePointer(KI_JNT_KI_ALLROOT_e);
         J3DMaterial* material = pModelData->getMaterialNodePointer(0);
         J3DShape* shape = material->getShape();
 
@@ -287,7 +287,7 @@ void ki_wait_move(ki_class* i_this) {
 
     switch(i_this->mBehaviorType) {
         case 0:
-            anm_init(i_this, KI_BCK_WAIT1, 10.0f, 2, 1.0f, KI_BAS_WAIT1);
+            anm_init(i_this, dRes_INDEX_KI_BCK_WAIT1_e, 10.0f, 2, 1.0f, dRes_INDEX_KI_BAS_WAIT1_e);
             i_this->mBehaviorType = 1;
             tex_anm_set(i_this, 2);
 
@@ -353,7 +353,7 @@ void ki_wait_move(ki_class* i_this) {
             if (sp58.abs() < 100.0f) {
                 i_this->mBehaviorType = 0xb;
                 i_this->mTimers[0] = 0x32;
-                anm_init(i_this, KI_BCK_WAIT1, 10.0f, 2, 1.0f, KI_BAS_WAIT1);
+                anm_init(i_this, dRes_INDEX_KI_BCK_WAIT1_e, 10.0f, 2, 1.0f, dRes_INDEX_KI_BAS_WAIT1_e);
             }
             break;
 
@@ -382,7 +382,7 @@ void ki_fly_move(ki_class* i_this) {
     
     switch (i_this->mBehaviorType) {
         case 0:
-            anm_init(i_this, KI_BCK_FLY1, 10.0f, 2, l_kiHIO.m08, KI_BAS_FLY1);
+            anm_init(i_this, dRes_INDEX_KI_BCK_FLY1_e, 10.0f, 2, l_kiHIO.m08, dRes_INDEX_KI_BAS_FLY1_e);
             i_this->mBehaviorType = 1;
             tex_anm_set(i_this, 0);
             i_this->mPosMoveTarget = l_kiHIO.m28;
@@ -432,7 +432,7 @@ void ki_fire_set_move(ki_class* i_this) {
         case 0:
             a_this->speedF = REG8_F(8) + 35.0f + cM_rndF(10.0f);
             a_this->speed.y = REG8_F(9) + 97.0f + cM_rndF(30.0f);
-            anm_init(i_this, KI_BCK_WAIT1, 1.0f, 2, 1.0f, KI_BAS_WAIT1);
+            anm_init(i_this, dRes_INDEX_KI_BCK_WAIT1_e, 1.0f, 2, 1.0f, dRes_INDEX_KI_BAS_WAIT1_e);
             i_this->mBehaviorType = 1;
             i_this->m91C = dComIfGp_particle_set(dPa_name::ID_IT_SN_FIREK_FIRE_A, &a_this->current.pos, NULL, NULL, 0xFF, &i_this->m908);
 
@@ -454,7 +454,7 @@ void ki_fire_set_move(ki_class* i_this) {
             break;
 
         case 10:
-            anm_init(i_this, KI_BCK_FLY1, 10.0f, 2, l_kiHIO.m08, KI_BAS_FLY1);
+            anm_init(i_this, dRes_INDEX_KI_BCK_FLY1_e, 10.0f, 2, l_kiHIO.m08, dRes_INDEX_KI_BAS_FLY1_e);
             i_this->mBehaviorType = 0xb;
             i_this->mTimers[1] = 100;
         
@@ -503,7 +503,7 @@ void ki_atack_move(ki_class* i_this) {
 
     switch(i_this->mBehaviorType) {
         case 0:
-            anm_init(i_this, KI_BCK_FLY1, 10.0f, 2, l_kiHIO.m08, KI_BAS_FLY1);
+            anm_init(i_this, dRes_INDEX_KI_BCK_FLY1_e, 10.0f, 2, l_kiHIO.m08, dRes_INDEX_KI_BAS_FLY1_e);
             i_this->mBehaviorType = 1;
             tex_anm_set(i_this, 0);
             i_this->mTimers[0] = l_kiHIO.m50 + cM_rndF(std::fabsf(l_kiHIO.m4E - l_kiHIO.m50));
@@ -519,7 +519,7 @@ void ki_atack_move(ki_class* i_this) {
             cLib_addCalcAngleS2(&a_this->shape_angle.y, a_this->current.angle.y, 2, 0x1000);
             if (sp24.abs() < 300.0f) {
                 i_this->mBehaviorType = 10;
-                anm_init(i_this, KI_BCK_FLY2, 5.0f, 2, l_kiHIO.m14, KI_BAS_FLY2);
+                anm_init(i_this, dRes_INDEX_KI_BCK_FLY2_e, 5.0f, 2, l_kiHIO.m14, dRes_INDEX_KI_BAS_FLY2_e);
                 i_this->mPosMoveDist = 0.0f;
             }
             break;
@@ -536,7 +536,7 @@ void ki_atack_move(ki_class* i_this) {
 
                 if (cM_rndF(1.0f) < tmp) {
                     i_this->mBehaviorType = 3;
-                    anm_init(i_this, KI_BCK_ATTACK1, 5.0f, 2, l_kiHIO.m18, KI_BAS_ATTACK1);
+                    anm_init(i_this, dRes_INDEX_KI_BCK_ATTACK1_e, 5.0f, 2, l_kiHIO.m18, dRes_INDEX_KI_BAS_ATTACK1_e);
                     i_this->mPosMove = player->current.pos;
                     i_this->mPosMove.y += 80.0f;
                     a_this->current.angle.y = fopAcM_searchPlayerAngleY(a_this);
@@ -594,14 +594,14 @@ void ki_atack_move(ki_class* i_this) {
             }
 
             if (i_this->mTimers[1] == 0) {
-                anm_init(i_this, KI_BCK_FLY1, 5.0f, 2, l_kiHIO.m08, KI_BAS_FLY1);
+                anm_init(i_this, dRes_INDEX_KI_BCK_FLY1_e, 5.0f, 2, l_kiHIO.m08, dRes_INDEX_KI_BAS_FLY1_e);
                 i_this->mBehaviorType = 1;
             }
 
             cLib_addCalcAngleS2(&a_this->shape_angle.y, a_this->current.angle.y, 2, 0x2000);
 
             if (i_this->m580.ChkAtHit() || i_this->mDamageSphere.ChkCoHit()) {
-                anm_init(i_this, KI_BCK_FLY2, 2.0f, 2, l_kiHIO.m14, KI_BAS_FLY2);
+                anm_init(i_this, dRes_INDEX_KI_BCK_FLY2_e, 2.0f, 2, l_kiHIO.m14, dRes_INDEX_KI_BAS_FLY2_e);
                 i_this->mBehaviorType = 4;
                 i_this->mTimers[1] = 30;
                 a_this->speedF = -15.0f;
@@ -612,7 +612,7 @@ void ki_atack_move(ki_class* i_this) {
 
         case 4:
             if (i_this->mTimers[1] == 0) {
-                anm_init(i_this, KI_BCK_FLY1, 3.0f, 2, l_kiHIO.m08, KI_BAS_FLY1);
+                anm_init(i_this, dRes_INDEX_KI_BCK_FLY1_e, 3.0f, 2, l_kiHIO.m08, dRes_INDEX_KI_BAS_FLY1_e);
                 i_this->mBehaviorType = 1;
             }
             break;
@@ -683,7 +683,7 @@ void ki_atack_move(ki_class* i_this) {
                     a_this->home.pos = linChk.GetCross();
                     a_this->home.pos.y -= 30.0f;
                     i_this->mBehaviorType = 10;
-                    anm_init(i_this, KI_BCK_FLY1, 5.0f, 2, l_kiHIO.m08, KI_BAS_FLY1);
+                    anm_init(i_this, dRes_INDEX_KI_BCK_FLY1_e, 5.0f, 2, l_kiHIO.m08, dRes_INDEX_KI_BAS_FLY1_e);
                 } else {
                     i_this->mTimers[0] = 50;
                     i_this->mBehaviorType = 1;
@@ -742,7 +742,7 @@ void ki_damage_move(ki_class* i_this) {
 
     switch (i_this->mBehaviorType) {
         case 0:
-            anm_init(i_this, KI_BCK_DAMAGE1, 2.0f, 0, 1.0f, KI_BAS_DAMAGE1);
+            anm_init(i_this, dRes_INDEX_KI_BCK_DAMAGE1_e, 2.0f, 0, 1.0f, dRes_INDEX_KI_BAS_DAMAGE1_e);
             tex_anm_set(i_this, 3);
             i_this->mBehaviorType = 1;
 
@@ -761,7 +761,7 @@ void ki_damage_move(ki_class* i_this) {
                     if (i_this->m31C >= l_kiHIO.m3C) {
                         i_this->mBehaviorType = 2;
                         i_this->mTimers[0] = 0x32;
-                        anm_init(i_this, KI_BCK_BITA1, 1.0f, 0, 1.0f, KI_BAS_BITA1);
+                        anm_init(i_this, dRes_INDEX_KI_BCK_BITA1_e, 1.0f, 0, 1.0f, dRes_INDEX_KI_BAS_BITA1_e);
                         tex_anm_set(i_this, 3);
                         i_this->actor.speed.y = 0.0f;
                         csXyz shapeAngle = i_this->actor.shape_angle;
@@ -1209,16 +1209,17 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     if (i_this->mDamageType == 0) {
         i_this->actor.gbaName = 0x17;
         i_this->mpMorf = new mDoExt_McaMorf(
-            (J3DModelData*)dComIfG_getObjectRes("Ki", KI_BDL_KI),
+            (J3DModelData*)dComIfG_getObjectRes("Ki", dRes_INDEX_KI_BDL_KI_e),
             NULL, NULL,
-            (J3DAnmTransform*)dComIfG_getObjectRes("Ki", KI_BCK_WAIT1),
+            (J3DAnmTransform*)dComIfG_getObjectRes("Ki", dRes_INDEX_KI_BCK_WAIT1_e),
             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, 
-            dComIfG_getObjectRes("Ki", KI_BAS_WAIT1),
+            dComIfG_getObjectRes("Ki", dRes_INDEX_KI_BAS_WAIT1_e),
             0x80000, 0x37221203
         );
 #if VERSION == VERSION_DEMO
         model = i_this->mpMorf->getModel();
 #else
+        // Fakematch?
         if (i_this->mpMorf == NULL || (model = i_this->mpMorf->getModel()) == NULL) {
             return FALSE;
         }
@@ -1226,11 +1227,11 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     } else {
         i_this->actor.gbaName = 6;
         i_this->mpMorf = new mDoExt_McaMorf(
-            (J3DModelData*)dComIfG_getObjectRes("Ki", KI_BDL_FK),
+            (J3DModelData*)dComIfG_getObjectRes("Ki", dRes_INDEX_KI_BDL_FK_e),
             NULL, NULL,
-            (J3DAnmTransform*)dComIfG_getObjectRes("Ki", KI_BCK_WAIT1),
+            (J3DAnmTransform*)dComIfG_getObjectRes("Ki", dRes_INDEX_KI_BCK_WAIT1_e),
             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, 
-            dComIfG_getObjectRes("Ki", KI_BAS_WAIT1),
+            dComIfG_getObjectRes("Ki", dRes_INDEX_KI_BAS_WAIT1_e),
             0x80000, 0x37221203
         );
 
@@ -1250,13 +1251,13 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             return FALSE;
         }
 
-        if (!i_this->m920->init(model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Ki", KI_BTK_FK), true, J3DFrameCtrl::EMode_LOOP)) {
+        if (!i_this->m920->init(model->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Ki", dRes_INDEX_KI_BTK_FK_e), true, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
     }
 
     for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
-        if (i == 14) {
+        if (i == KI_JNT_J_KI_HEAD_e) {
             model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
         }
     }
@@ -1468,10 +1469,32 @@ static cPhs_State daKi_Create(fopAc_ac_c* a_this) {
         i_this->mEnemyFire.mpMcaMorf = i_this->mpMorf;
         i_this->mEnemyFire.mpActor = a_this;
 
-        for (s32 i = 0; i < 10; i++) {
-            static s8 fire_j[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-            static f32 fire_sc[] = { 1.0f, 0.8f, 0.7f, 0.6f, 0.5f, 1.0f, 0.8f, 0.7f, 0.6f, 0.5f };
+        static u8 fire_j[ARRAY_SIZE(i_this->mEnemyFire.mFlameJntIdxs)] = {
+            KI_JNT_J_KI_ARM_L1_e,
+            KI_JNT_J_KI_ARM_L2_e,
+            KI_JNT_J_KI_ARM_LE_e,
+            KI_JNT_J_KI_FINGER1_L_e,
+            KI_JNT_J_KI_FINGER2_L_e,
+            KI_JNT_J_KI_ARM_R1_e,
+            KI_JNT_J_KI_ARM_R2_e,
+            KI_JNT_J_KI_ARM_RE_e,
+            KI_JNT_J_KI_FINGER1_R_e,
+            KI_JNT_J_KI_FINGER2_R_e
+        };
+        static f32 fire_sc[ARRAY_SIZE(i_this->mEnemyFire.mParticleScale)] = {
+            1.0f, // KI_JNT_J_KI_ARM_L1_e
+            0.8f, // KI_JNT_J_KI_ARM_L2_e
+            0.7f, // KI_JNT_J_KI_ARM_LE_e
+            0.6f, // KI_JNT_J_KI_FINGER1_L_e
+            0.5f, // KI_JNT_J_KI_FINGER2_L_e
+            1.0f, // KI_JNT_J_KI_ARM_R1_e
+            0.8f, // KI_JNT_J_KI_ARM_R2_e
+            0.7f, // KI_JNT_J_KI_ARM_RE_e
+            0.6f, // KI_JNT_J_KI_FINGER1_R_e
+            0.5f  // KI_JNT_J_KI_FINGER2_R_e
+        };
 
+        for (int i = 0; i < ARRAY_SIZE(i_this->mEnemyFire.mFlameJntIdxs); i++) {
             i_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
             i_this->mEnemyFire.mParticleScale[i] = fire_sc[i];
         }

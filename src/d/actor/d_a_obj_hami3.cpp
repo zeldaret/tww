@@ -7,7 +7,7 @@
 #include "d/actor/d_a_obj_hami3.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_hami3.h"
+#include "res/Object/Hami3.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -24,10 +24,10 @@ static BOOL nodeCallBack(J3DNode *node, int calcTiming) {
         J3DJoint *joint = (J3DJoint *)node;
         s32 jntNo = joint->getJntNo();
         J3DModel *model = j3dSys.getModel();
-        daObjHami3::Act_c *userArea = (daObjHami3::Act_c *)model->getUserArea();
-        if (userArea != NULL) {
+        daObjHami3::Act_c* i_this = (daObjHami3::Act_c *)model->getUserArea();
+        if (i_this != NULL) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            cMtx_YrotM(*calc_mtx, userArea->field_0x2C8);
+            cMtx_YrotM(*calc_mtx, i_this->field_0x2C8);
             model->setAnmMtx(jntNo, *calc_mtx);
             cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
         }
@@ -37,7 +37,7 @@ static BOOL nodeCallBack(J3DNode *node, int calcTiming) {
 
 /* 0000012C-0000026C       .text CreateHeap__Q210daObjHami35Act_cFv */
 BOOL daObjHami3::Act_c::CreateHeap() {
-    J3DModelData *modelData = (J3DModelData *)dComIfG_getObjectRes(M_arcname, HAMI3_BDL_HAMI3);
+    J3DModelData *modelData = (J3DModelData *)dComIfG_getObjectRes(M_arcname, dRes_INDEX_HAMI3_BDL_HAMI3_e);
     JUT_ASSERT(DEMO_SELECT(112, 113), modelData != NULL);
 
     field_0x2D4 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -83,7 +83,7 @@ cPhs_State daObjHami3::Act_c::Mthd_Create() {
     fopAcM_ct(this, daObjHami3::Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&field_0x2CC, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, HAMI3_DZB_HAMI3, dBgS_MoveBGProc_Typical, 0x1fc0);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_HAMI3_DZB_HAMI3_e, dBgS_MoveBGProc_Typical, 0x1fc0);
 
         JUT_ASSERT(DEMO_SELECT(182, 183),
                    (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));

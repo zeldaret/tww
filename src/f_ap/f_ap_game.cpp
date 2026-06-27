@@ -54,22 +54,10 @@ fapGm_HIO_c::fapGm_HIO_c() {
     field_0x20.a = 0xff;
     mTriggerThreshLo = 0.9f;
     mTriggerThreshHi = 0.6f;
-    field_0x3c.r = 0xff;
-    field_0x3c.g = 0x96;
-    field_0x3c.b = 0;
-    field_0x3c.a = 0xff;
-    field_0x40.r = 0xff;
-    field_0x40.g = 0x78;
-    field_0x40.b = 0;
-    field_0x40.a = 0xff;
-    field_0x44.r = 0;
-    field_0x44.g = 0;
-    field_0x44.b = 0;
-    field_0x44.a = 0xff;
-    field_0x48.r = 0;
-    field_0x48.g = 0;
-    field_0x48.b = 0;
-    field_0x48.a = 0xff;
+    field_0x3c = JUtility::TColor(0xff, 0x96, 0x00, 0xff);
+    field_0x40 = JUtility::TColor(0xff, 0x78, 0x00, 0xff);
+    field_0x44 = JUtility::TColor(0x00, 0x00, 0x00, 0xff);
+    field_0x48 = JUtility::TColor(0x00, 0x00, 0x00, 0xff);
     field_0x4c = 0;
     field_0x4e = 10;
     field_0x54 = 0x1b;
@@ -101,8 +89,4 @@ void fapGm_Create() {
     fopScnM_CreateReq(fpcNm_LOGO_SCENE_e, fpcNm_INVALID_e, 0, 0);
 
     g_HIO.mNo = mDoHIO_createChild("ゲームシステム", &g_HIO); // "Game System"
-}
-
-/* 80023288-800232D0       .text __dt__11fapGm_HIO_cFv */
-fapGm_HIO_c::~fapGm_HIO_c() {
 }

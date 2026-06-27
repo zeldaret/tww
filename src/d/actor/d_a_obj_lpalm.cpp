@@ -7,7 +7,7 @@
 #include "d/actor/d_a_obj_lpalm.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
-#include "d/res/res_oyashi.h"
+#include "res/Object/Oyashi.h"
 #include "m_Do/m_Do_ext.h"
 
 const char daObjLpalm_c::M_arcname[7] = "Oyashi";
@@ -23,11 +23,11 @@ static BOOL nodeCallBack(J3DNode* joint, int calcTiming) {
     J3DModel* model = j3dSys.getModel();
     s32 jntNo = ((J3DJoint*)joint)->getJntNo();
     daObjLpalm_c* i_this = (daObjLpalm_c*)model->getUserArea();
-    if (calcTiming == J3DNodeCBCalcTiming_In && (jntNo == 2 || jntNo == 3)) {
+    if (calcTiming == J3DNodeCBCalcTiming_In && (jntNo == OYASHI_JNT_J_HAPPA1_e || jntNo == OYASHI_JNT_J_HAPPA2_e)) {
         mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
         mDoMtx_stack_c::ZrotM(-0x4000);
         mDoMtx_stack_c::quatM(&i_this->mBaseQuat);
-        if (jntNo == 2)
+        if (jntNo == OYASHI_JNT_J_HAPPA1_e)
             mDoMtx_stack_c::quatM(&i_this->mAnmMtxQuat[0]);
         else
             mDoMtx_stack_c::quatM(&i_this->mAnmMtxQuat[1]);
@@ -40,7 +40,7 @@ static BOOL nodeCallBack(J3DNode* joint, int calcTiming) {
 
 /* 00000164-00000268       .text CreateHeap__12daObjLpalm_cFv */
 BOOL daObjLpalm_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, OYASHI_BDL_OYASHI);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_OYASHI_BDL_OYASHI_e);
     for (u16 i = 0; i < modelData->getJointNum(); i++)
         modelData->getJointNodePointer(i)->setCallBack(nodeCallBack);
     if (modelData == NULL)
@@ -51,7 +51,7 @@ BOOL daObjLpalm_c::CreateHeap() {
         return false;
 
     mModel->setUserArea((u32)this);
-    mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, OYASHI_DZB_OYASHI), dBgW::MOVE_BG_e, &mModel->getBaseTRMtx());
+    mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_OYASHI_DZB_OYASHI_e), dBgW::MOVE_BG_e, &mModel->getBaseTRMtx());
     if (mpBgW == NULL)
         return false;
 

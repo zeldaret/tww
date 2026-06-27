@@ -6,8 +6,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_windmill.h"
 #include "d/actor/d_a_wind_tag.h"
-#include "d/res/res_hpu1.h"
-#include "d/res/res_hpu2.h"
+#include "res/Object/Hpu1.h"
+#include "res/Object/Hpu2.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_cc_d.h"
@@ -106,8 +106,8 @@ static dCcD_SrcCyl l_cyl_src = {
     }},
 };
 
-const s16 daWindMill_c::m_bmdidx[] = {HPU1_BDL_HPU1, HPU2_BDL_HPU2};
-const s16 daWindMill_c::m_dzbidx[] = {HPU1_DZB_HPU1, -1};
+const s16 daWindMill_c::m_bmdidx[] = {dRes_INDEX_HPU1_BDL_HPU1_e, dRes_INDEX_HPU2_BDL_HPU2_e};
+const s16 daWindMill_c::m_dzbidx[] = {dRes_INDEX_HPU1_DZB_HPU1_e, -1};
 const s16 daWindMill_c::m_heapsize[] = { 0x3A40, 0xA00 };
 const Vec daWindMill_c::m_cull_size[][2] = {
     {{-1400.0f, 0.0f, -1400.0f}, {1400.0f, 500.0f, 1400.0f}},
@@ -208,7 +208,7 @@ void daWindMill_c::CreateInit() {
     set_mtx();
 
     for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
-        if (i == 2) {
+        if (i == HPU1_JNT_POLYSURFACE2007_e) {
             mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
             break;
         }

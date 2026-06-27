@@ -17,7 +17,7 @@
 #include "d/actor/d_a_npc_md.h"
 #include "d/d_s_play.h"
 #include "d/d_a_obj.h"
-#include "d/res/res_fm.h"
+#include "res/Object/fm.h"
 #include "d/actor/d_a_player_main_data.h"
 
 
@@ -317,12 +317,12 @@ void daFm_c::_nodeControl(J3DNode* node, J3DModel* model) {
     mtx[1][3] = 0.0f;
     mtx[0][3] = 0.0f;
     mDoMtx_stack_c::transS(temp);
-    if (jntNo < 6 && jntNo >= field_0x390 && l_HIO.field_0x00F[jntNo] == true) {
+    if (jntNo < FM_JNT_CYUBIA_e && jntNo >= field_0x390 && l_HIO.field_0x00F[jntNo] == true) {
         mDoMtx_stack_c::quatM(&field_0x330[jntNo]);
     }
     mDoMtx_stack_c::concat(mtx);
 
-    if (jntNo == 5) {
+    if (jntNo == FM_JNT_TE_e) {
         if(cLib_calcTimer(&field_0x64C) != 0) {
             field_0x68A += REG12_S(2) + 0x1830;
             cLib_addCalcAngleS2(&field_0x68C, 0, 10, 0x1C8);
@@ -338,7 +338,7 @@ void daFm_c::_nodeControl(J3DNode* node, J3DModel* model) {
         temp2 = l_HIO.field_0x104;
         mDoMtx_stack_c::multVec(&temp2, &field_0x63C);
     }
-    if (jntNo < 6) {
+    if (jntNo < FM_JNT_CYUBIA_e) {
         mDoMtx_stack_c::multVecZero(&field_0x2E8[jntNo]);
     }
     
@@ -366,7 +366,7 @@ BOOL daFm_c::_createHeap() {
 /* 00000718-0000086C       .text holeCreateHeap__6daFm_cFv */
 bool daFm_c::holeCreateHeap() {
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, FM_BDL_YPIT00));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_FM_BDL_YPIT00_e));
     JUT_ASSERT(0x2C7, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x19001222);
@@ -374,7 +374,7 @@ bool daFm_c::holeCreateHeap() {
         return false;
     }
 
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, FM_BTK_YPIT00));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_FM_BTK_YPIT00_e));
     JUT_ASSERT(0x2D0, btk != NULL);
 
     if(!mBtkAnm.init(modelData, btk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
@@ -386,7 +386,7 @@ bool daFm_c::holeCreateHeap() {
 
 /* 0000086C-000009CC       .text bodyCreateHeap__6daFm_cFv */
 bool daFm_c::bodyCreateHeap() {
-    J3DModelData* fmModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, FM_BDL_FM));
+    J3DModelData* fmModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_FM_BDL_FM_e));
     JUT_ASSERT(0x2DD, fmModelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
@@ -397,7 +397,7 @@ bool daFm_c::bodyCreateHeap() {
         NULL,
         J3DFrameCtrl::EMode_NULL, 
 #else
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(m_arc_name, FM_BCK_MODORU)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_FM_BCK_MODORU_e)),
         J3DFrameCtrl::EMode_LOOP, 
 #endif
 
@@ -428,91 +428,91 @@ bool daFm_c::jntHitCreateHeap() {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_CYL2_e,
-            /* mJointIndex */ 0x05,
+            /* mJointIndex */ FM_JNT_TE_e,
             /* mRadius     */ 22.0f,
             /* mpOffsets   */ te_cyl2_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x01,
+            /* mJointIndex */ FM_JNT_UDEA_e,
             /* mRadius     */ 8.0f,
             /* mpOffsets   */ ude_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x02,
+            /* mJointIndex */ FM_JNT_UDEB_e,
             /* mRadius     */ 8.0f,
             /* mpOffsets   */ ude_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x03,
+            /* mJointIndex */ FM_JNT_UDEC_e,
             /* mRadius     */ 8.0f,
             /* mpOffsets   */ ude_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x04,
+            /* mJointIndex */ FM_JNT_UDED_e,
             /* mRadius     */ 8.0f,
             /* mpOffsets   */ ude_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x06,
+            /* mJointIndex */ FM_JNT_CYUBIA_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x07,
+            /* mJointIndex */ FM_JNT_CYUBIB_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x08,
+            /* mJointIndex */ FM_JNT_HYUBIA_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09,
+            /* mJointIndex */ FM_JNT_HYUBIB_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0A,
+            /* mJointIndex */ FM_JNT_KYUBIA_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0B,
+            /* mJointIndex */ FM_JNT_KYUBIB_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0C,
+            /* mJointIndex */ FM_JNT_NYUBIA_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0D,
+            /* mJointIndex */ FM_JNT_NYUBIB_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0E,
+            /* mJointIndex */ FM_JNT_OYUBIA_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0F,
+            /* mJointIndex */ FM_JNT_OYUBIB_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
@@ -2478,19 +2478,19 @@ void daFm_c::modeProc(daFm_c::Proc_e proc, int newMode) {
 /* 00006D8C-00006DE8       .text setAnm__6daFm_cFScb */
 void daFm_c::setAnm(s8 anmPrmIdx, bool param_2) {
     static const int a_anm_bcks_tbl[] = {
-        FM_BCK_WAIT,
-        FM_BCK_DERU,
-        FM_BCK_MODORU,
-        FM_BCK_TUKAMU,
-        FM_BCK_TUKAMU2WAIT,
-        FM_BCK_HIKIKOMU,
-        FM_BCK_DAMAGE,
-        FM_BCK_TUMAMIWAIT,
-        FM_BCK_ASITUKAMI,
-        FM_BCK_NAGERU,
-        FM_BCK_YAYU,
-        FM_BCK_MAHI,
-        FM_BCK_KUSIZASI
+        dRes_INDEX_FM_BCK_WAIT_e,
+        dRes_INDEX_FM_BCK_DERU_e,
+        dRes_INDEX_FM_BCK_MODORU_e,
+        dRes_INDEX_FM_BCK_TUKAMU_e,
+        dRes_INDEX_FM_BCK_TUKAMU2WAIT_e,
+        dRes_INDEX_FM_BCK_HIKIKOMU_e,
+        dRes_INDEX_FM_BCK_DAMAGE_e,
+        dRes_INDEX_FM_BCK_TUMAMIWAIT_e,
+        dRes_INDEX_FM_BCK_ASITUKAMI_e,
+        dRes_INDEX_FM_BCK_NAGERU_e,
+        dRes_INDEX_FM_BCK_YAYU_e,
+        dRes_INDEX_FM_BCK_MAHI_e,
+        dRes_INDEX_FM_BCK_KUSIZASI_e
     };
 
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
@@ -2679,7 +2679,7 @@ void daFm_c::grabBomb() {
     if (fopAcM_GetName(mpActorTarget) == fpcNm_BOMB_e) {
         cXyz temp_pos(5.0f, -10.0f, 5.0f);
         cXyz pos = l_HIO.field_0x038 + temp_pos;
-        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(5));
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(FM_JNT_TE_e));
         mDoMtx_stack_c::multVec(&pos, &mpActorTarget->current.pos);
         mpActorTarget->gravity = 0.0f;
         mpActorTarget->speedF = 0.0f;
@@ -2722,7 +2722,7 @@ void daFm_c::grabTsubo() {
 
         cXyz pos2 = l_HIO.field_0x038 + pos;
 
-        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(5));
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(FM_JNT_TE_e));
         mDoMtx_stack_c::transM(pos2);
         mDoMtx_stack_c::ZXYrotM(angle);
         MTXCopy(mDoMtx_stack_c::get(), field_0x6BC);
@@ -2752,7 +2752,7 @@ void daFm_c::grabPlayer() {
             temp2 = l_HIO.field_0x038 + temp;
             temp2.y -= offset2.abs();
 
-            mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(5));
+            mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(FM_JNT_TE_e));
             mDoMtx_stack_c::ZXYrotM(angle.x, angle.y, angle.z);
             mDoMtx_stack_c::transM(temp2);
             MTXCopy(mDoMtx_stack_c::get(), field_0x6BC);
@@ -2783,7 +2783,7 @@ void daFm_c::grabNPC() {
             angle.z = -4000;
         }
         cXyz temp2 = l_HIO.field_0x038 + temp;
-        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(5));
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(FM_JNT_TE_e));
         mDoMtx_stack_c::transM(temp2);
         mDoMtx_stack_c::ZXYrotM(angle.x, angle.y, angle.z);
         MTXCopy(mDoMtx_stack_c::get(), field_0x6BC);
@@ -3255,7 +3255,7 @@ void daFm_c::debugDraw() {
         dLib_debugDrawAxis(field_0x6BC, 100.0f);
     }
     if (l_HIO.field_0x007) {
-        MTXCopy(fopAcM_GetModel(this)->getAnmMtx(5), mtx);
+        MTXCopy(fopAcM_GetModel(this)->getAnmMtx(FM_JNT_TE_e), mtx);
         dLib_debugDrawAxis(mtx, 100.0f);
     }
     if (l_HIO.field_0x005) {
@@ -3359,11 +3359,11 @@ void daFm_c::createInit() {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     for(u16 i = 0; i < modelData->getJointNum(); i++) {
         switch(i) {
-            case 0: 
-            case 1:
-            case 2:
-            case 3:
-            case 5:
+            case FM_JNT_CENTER_e: 
+            case FM_JNT_UDEA_e:
+            case FM_JNT_UDEB_e:
+            case FM_JNT_UDEC_e:
+            case FM_JNT_TE_e:
                 modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
                 break;
 

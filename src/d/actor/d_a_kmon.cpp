@@ -25,21 +25,21 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000138-00000324       .text CreateHeap__8daKmon_cFv */
 BOOL daKmon_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(daKmon_c::m_arcname, ALWAYS_BDL_VBELL));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(daKmon_c::m_arcname, dRes_INDEX_ALWAYS_BDL_VBELL_e));
     JUT_ASSERT(166, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpModel == NULL) {
         return FALSE;
     }
 
-    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(daKmon_c::m_arcname, ALWAYS_BTK_VBELL));
+    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(daKmon_c::m_arcname, dRes_INDEX_ALWAYS_BTK_VBELL_e));
     JUT_ASSERT(176, pbtk != NULL);
     if (!mBtkAnm.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
     mBtkAnm.setPlaySpeed(1.0);
 
-    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(daKmon_c::m_arcname, ALWAYS_BCK_VBELL));
+    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(daKmon_c::m_arcname, dRes_INDEX_ALWAYS_BCK_VBELL_e));
     JUT_ASSERT(188, pbck != NULL);
     if (!mBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;

@@ -20,7 +20,7 @@
 
 /* 80142D08-80142D68       .text checkRopeAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkRopeAnime() const {
-    return (checkRopeReadyAnime()) || (checkUpperAnime(LKANM_BCK_ROPETHROW));
+    return (checkRopeReadyAnime()) || (checkUpperAnime(dRes_INDEX_LKANM_BCK_ROPETHROW_e));
 }
 
 /* 80142D68-80142E0C       .text freeRopeItem__9daPy_lk_cFv */
@@ -271,7 +271,7 @@ void daPy_lk_c::setBlendRopeMoveAnime(int param_0) {
 int daPy_lk_c::throwRope() {
     himo2_class* rope = (himo2_class*)mActorKeepEquip.getActor();
     setActAnimeUpper(
-        LKANM_BCK_ROPETHROW,
+        dRes_INDEX_LKANM_BCK_ROPETHROW_e,
         UPPER_MOVE2_e,
         m_HIO->mItem.mRope.m.field_0x44,
         m_HIO->mItem.mRope.m.field_0x48,
@@ -324,7 +324,7 @@ BOOL daPy_lk_c::checkNextActionRopeReady() {
         return procRopeReady_init();
     }
     if (uVar2 == 0) {
-        if (checkUpperAnime(LKANM_BCK_ROPETHROW)) {
+        if (checkUpperAnime(dRes_INDEX_LKANM_BCK_ROPETHROW_e)) {
             if (mFrameCtrlUpper[UPPER_MOVE2_e].getRate() < 0.01f) {
                 return procRopeThrowCatch_init();
             } else {
@@ -398,7 +398,7 @@ BOOL daPy_lk_c::procRopeSubject_init() {
     mNormalSpeed = 0.0f;
 
     if (fopAcM_GetParam(mActorKeepEquip.getActor()) == 0) {
-        setActAnimeUpper(LKANM_BCK_ROPETHROWWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+        setActAnimeUpper(dRes_INDEX_LKANM_BCK_ROPETHROWWAIT_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
         setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, m_HIO->mItem.mRope.m.field_0x54);
     }
 
@@ -626,7 +626,7 @@ BOOL daPy_lk_c::procRopeSwing() {
     }
 
     cXyz sp34;
-    mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x28), &sp34);
+    mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_RTOE_JNT_e), &sp34);
     fopAc_ac_c* rope = mActorKeepRope.getActor();
     mRopePos = rope->current.pos;
     dComIfGp_setRStatus(dActStts_STOP_e);
@@ -1044,7 +1044,8 @@ BOOL daPy_lk_c::procRopeDown_init() {
     } else {
         himo2_class* rope = (himo2_class*)mActorKeepRope.getActor();
         cXyz* temp = &rope->m1120[34].m10;
-        m35A4 = mRopePos.y - DEMO_SELECT(temp->z, temp->y);
+        f32 temp2 = DEMO_SELECT(temp->z, temp->y);
+        m35A4 = mRopePos.y - temp2;
     }
     
     if (current.pos.y <= m35A4) {
@@ -1173,7 +1174,7 @@ BOOL daPy_lk_c::procRopeMove_init() {
         current.angle.y = shape_angle.y + -0x4000;
     }
     if (fopAcM_GetParam(mActorKeepEquip.getActor()) == 0) {
-        setActAnimeUpper(LKANM_BCK_ROPETHROWWAIT, UPPER_MOVE2_e, m_HIO->mItem.mRope.m.field_0x50, 0.0f, -1, -1.0f);
+        setActAnimeUpper(dRes_INDEX_LKANM_BCK_ROPETHROWWAIT_e, UPPER_MOVE2_e, m_HIO->mItem.mRope.m.field_0x50, 0.0f, -1, -1.0f);
         setBlendAtnMoveAnime(m_HIO->mItem.mRope.m.field_0x54);
     }
     dComIfGp_setPlayerStatus0(0, daPyStts0_ROPE_AIM_e);

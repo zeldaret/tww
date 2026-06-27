@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_hi1.h"
-#include "d/res/res_hi.h"
+#include "res/Object/Hi.h"
 
 class daNpc_Hi1_HIO_c : public mDoHIO_entry_c{
 public:
@@ -196,8 +196,8 @@ void daNpc_Hi1_c::setMtx(bool param_1) {
 /* 00000778-0000078C       .text bckResID__11daNpc_Hi1_cFi */
 int daNpc_Hi1_c::bckResID(int idx) {
     static const int a_resID_tbl[] = {
-        1,
-        0
+        dRes_ID_HI_BCK_HI_WAIT01_e,
+        dRes_ID_HI_BCK_HI_POSE_e,
     };
     return a_resID_tbl[idx];
 }
@@ -205,7 +205,7 @@ int daNpc_Hi1_c::bckResID(int idx) {
 /* 0000078C-000007A0       .text btpResID__11daNpc_Hi1_cFi */
 int daNpc_Hi1_c::btpResID(int idx) {
     static const int a_resID_tbl[] = {
-        3
+        dRes_ID_HI_BTP_MABA_e,
     };
     return a_resID_tbl[idx];
 }
@@ -213,7 +213,7 @@ int daNpc_Hi1_c::btpResID(int idx) {
 /* 000007A0-000007B4       .text btkResID__11daNpc_Hi1_cFi */
 int daNpc_Hi1_c::btkResID(int idx) {
     static const int a_resID_tbl[] = {
-        4
+        dRes_ID_HI_BTK_HI_e,
     };
     return a_resID_tbl[idx];
 }
@@ -773,7 +773,7 @@ u8 daNpc_Hi1_c::demo() {
             field_0x7BF = 1;
             mBtkAnmFrame = 0;
         }
-        dDemo_setDemoData(this, 0x6a, mpMorf, mArcName);
+        dDemo_setDemoData(this, dDemo_actor_c::ENABLE_TRANS_e | dDemo_actor_c::ENABLE_ROTATE_e | dDemo_actor_c::ENABLE_ANM_e | dDemo_actor_c::ENABLE_ANM_FRAME_e, mpMorf, mArcName);
     }
     return field_0x7BA;
 }
@@ -916,7 +916,7 @@ cPhs_State daNpc_Hi1_c::_create() {
 
 /* 000024F4-00002768       .text bodyCreateHeap__11daNpc_Hi1_cFv */
 BOOL daNpc_Hi1_c::bodyCreateHeap() {
-    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(mArcName, HI_BDL_HI);
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(mArcName, dRes_ID_HI_BDL_HI_e);
     JUT_ASSERT(0x5BB, a_mdl_dat != NULL);
     mpMorf = new mDoExt_McaMorf(
         a_mdl_dat,

@@ -9,7 +9,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/res/res_hkikai1.h"
+#include "res/Object/Hkikai1.h"
 
 static dCcD_SrcSph l_sph_src_at = {
     // dCcD_SrcGObjInf
@@ -90,14 +90,14 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daMachine_c::CreateHeap() {
     BOOL success;
 
-    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, HKIKAI1_BDL_HKIKAI1);
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HKIKAI1_BDL_HKIKAI1_e);
     JUT_ASSERT(DEMO_SELECT(340, 345), modelData != NULL);
     
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
     if(mpModel == NULL) {
         success = false;   
     } else{
-        J3DAnmTransform * pbck = (J3DAnmTransform *)dComIfG_getObjectRes(m_arcname, HKIKAI1_BCK_HKIKAI1);
+        J3DAnmTransform * pbck = (J3DAnmTransform *)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HKIKAI1_BCK_HKIKAI1_e);
         JUT_ASSERT(DEMO_SELECT(356, 361), pbck != NULL)
 
         int initRet = field_0xc04.init(modelData,pbck, true, 0,1.0f,0,-1,false);

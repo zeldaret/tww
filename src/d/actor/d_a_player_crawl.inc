@@ -209,15 +209,14 @@ void daPy_lk_c::crawlBgCheck(cXyz* param_0, cXyz* param_1) {
 
 /* 801390B8-801392BC       .text checkCrawlSideWall__9daPy_lk_cFP4cXyzP4cXyzP4cXyzP4cXyzPsPs */
 BOOL daPy_lk_c::checkCrawlSideWall(cXyz* param_1, cXyz* param_2, cXyz* param_3, cXyz* param_4, s16* param_5, s16* param_6) {
-    cXyz local_78;
-    cXyz local_90;
-
     mLinkLinChk.Set(param_1, param_2, this);
     if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
         *param_3 = mLinkLinChk.GetCross();
         cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
         *param_5 = cM_atan2s(plane->GetNP()->x, plane->GetNP()->z);
-        local_90 = *param_3 + (plane->mNormal * 75.0f);
+        cXyz local_78;
+        cXyz local_90;
+        local_90 = *param_3 + (*plane->GetNP() * 75.0f);
         local_78 = (local_90 + *param_3) * 0.5f;
         mLinkLinChk.Set(&local_78, &local_90, this);
         if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {

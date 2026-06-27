@@ -5,33 +5,33 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sk2.h"
-#include "d/res/res_sk2.h"
+#include "res/Object/Sk2.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_bg_w_deform.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"
 
-static s32 sk2_dzb[] = {SK2_DZB_KSYLF_00, SK2_DZB_KSYLF_01};
-static s32 sk2_bck[] = {SK2_BCK_KSYLF_00, SK2_BCK_KSYLF_01};
+static s32 sk2_dzb[] = {dRes_INDEX_SK2_DZB_KSYLF_00_e, dRes_INDEX_SK2_DZB_KSYLF_01_e};
+static s32 sk2_bck[] = {dRes_INDEX_SK2_BCK_KSYLF_00_e, dRes_INDEX_SK2_BCK_KSYLF_01_e};
 
 /* 00000078-00000194       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        s32 uVar2 = joint->getJntNo();
+        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         sk2_class* i_this = (sk2_class*)model->getUserArea();
 
-        if (i_this != NULL && uVar2 <= 3) {
-            MTXCopy(model->getAnmMtx(uVar2), *calc_mtx);
-            cMtx_YrotM(*calc_mtx, i_this->m2CE[uVar2].y);
-            cMtx_XrotM(*calc_mtx, i_this->m2CE[uVar2].x);
-            cMtx_ZrotM(*calc_mtx, i_this->m2CE[uVar2].z);
+        if (i_this != NULL && jntNo <= KSYLF_00_JNT_B1_e) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            cMtx_YrotM(*calc_mtx, i_this->m2CE[jntNo].y);
+            cMtx_XrotM(*calc_mtx, i_this->m2CE[jntNo].x);
+            cMtx_ZrotM(*calc_mtx, i_this->m2CE[jntNo].z);
 
-            cXyz sp08(0.0f, 0.0f, 0.0f);
-            MtxPosition(&sp08, &i_this->m2E8[uVar2]);
-            model->setAnmMtx(uVar2, *calc_mtx);
+            cXyz offset(0.0f, 0.0f, 0.0f);
+            MtxPosition(&offset, &i_this->m2E8[jntNo]);
+            model->setAnmMtx(jntNo, *calc_mtx);
             MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
     }
@@ -141,9 +141,9 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 
     J3DModelData* pModelData;
     if (i_this->m2B4 == 0) {
-        pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk2", SK2_BDL_KSYLF_00);
+        pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk2", dRes_INDEX_SK2_BDL_KSYLF_00_e);
     } else {
-        pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk2", SK2_BDL_KSYLF_01);
+        pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk2", dRes_INDEX_SK2_BDL_KSYLF_01_e);
     }
 
     i_this->mpMorf = new mDoExt_McaMorf(

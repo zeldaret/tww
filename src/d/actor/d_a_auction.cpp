@@ -9,7 +9,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_camera.h"
-#include "d/res/res_pspl.h"
+#include "res/Object/Pspl.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/d_auction_screen.h"
 
@@ -244,7 +244,7 @@ cPhs_State daAuction_c::_create() {
 
 /* 000006F4-00000770       .text createHeap__11daAuction_cFv */
 BOOL daAuction_c::createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Pspl", PSPL_BDL_PSPL));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Pspl", dRes_ID_PSPL_BDL_PSPL_e));
 
     if (modelData == NULL) {
         return FALSE;

@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_cafelmp.h"
-#include "d/res/res_cafelmp.h"
+#include "res/Object/Cafelmp.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
@@ -20,7 +20,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-0000015C       .text CreateHeap__14daObjCafelmp_cFv */
 BOOL daObjCafelmp_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Cafelmp", CAFELMP_BDL_YLAMP));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Cafelmp", dRes_INDEX_CAFELMP_BDL_YLAMP_e));
     JUT_ASSERT(0x51, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x00, 0x11020203);
     if (!mpModel)

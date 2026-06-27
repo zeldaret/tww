@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_dr2.h"
-#include "d/res/res_dr2.h"
+#include "res/Object/Dr2.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_bg_w.h"
 #include "d/d_s_play.h"
@@ -65,9 +65,13 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
 
             if (i_this->unk_40A == 3) {
-                if ((jntNo - 3 <= 8u) || (jntNo == 2)) {
-                    cMtx_YrotM(*calc_mtx, i_this->unk_400[jntNo - 0x22]);
-                    cMtx_ZrotM(*calc_mtx, i_this->unk_400[jntNo - 0x16]);
+                if ((jntNo == DR_JNT_J_DR_ASHI_L1_e || jntNo == DR_JNT_J_DR_ASHI_L2_e || jntNo == DR_JNT_J_DR_ASHI_L3_e || jntNo == DR_JNT_J_DR_ASHI_R1_e ||
+                     jntNo == DR_JNT_J_DR_ASHI_R2_e || jntNo == DR_JNT_J_DR_ASI_R3_e || jntNo == DR_JNT_J_DR_MUNE_e || jntNo == DR_JNT_J_DR_HANE_L1_e ||
+                     jntNo == DR_JNT_J_DR_HANE_L2_e) ||
+                    jntNo == DR_JNT_J_DR_KOSHI_e)
+                {
+                    cMtx_YrotM(*calc_mtx, i_this->unk_400[jntNo - DR_JNT_J_DR_HOHO_R_e]);
+                    cMtx_ZrotM(*calc_mtx, i_this->unk_400[jntNo - DR_JNT_J_DR_KUBI7_e]);
                     model->setAnmMtx(jntNo, *calc_mtx);
                     MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
                 }
@@ -75,25 +79,32 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
                 MtxScale(i_this->unk_40C, 1.0f, 1.0f, true);
                 model->setAnmMtx(jntNo, *calc_mtx);
 
-                if ((jntNo <= 3u) || (jntNo == 4)) {
-                    MtxRotY(i_this->unk_3EC,1);
-                    MtxRotZ(i_this->unk_3F0,1);
+                if ((jntNo == DR_JNT_DR_ALL_ROOT_e || jntNo == DR_JNT_DR_SKL_ROOT_e || jntNo == DR_JNT_J_DR_KOSHI_e || jntNo == DR_JNT_J_DR_ASHI_L1_e) ||
+                    (jntNo == DR_JNT_J_DR_ASHI_L2_e))
+                {
+                    MtxRotY(i_this->unk_3EC, 1);
+                    MtxRotZ(i_this->unk_3F0, 1);
                     model->setAnmMtx(jntNo, *calc_mtx);
                     MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
                 }
-            } else if ((jntNo - 5 <= 6u) || (jntNo == 4)) {
+            } else if (
+                (jntNo == DR_JNT_J_DR_ASHI_L3_e || jntNo == DR_JNT_J_DR_ASHI_R1_e || jntNo == DR_JNT_J_DR_ASHI_R2_e || jntNo == DR_JNT_J_DR_ASI_R3_e ||
+                 jntNo == DR_JNT_J_DR_MUNE_e || jntNo == DR_JNT_J_DR_HANE_L1_e || jntNo == DR_JNT_J_DR_HANE_L2_e) ||
+                (jntNo == DR_JNT_J_DR_ASHI_L2_e)
+            )
+            {
                 if (i_this->unk_40A == 2) {
                     cMtx_YrotM(*calc_mtx, i_this->unk_3BC[0]);
                     cMtx_ZrotM(*calc_mtx, i_this->unk_3D4[0]);
                 } else {
-                    MtxRotY(i_this->unk_3EC,1);
-                    MtxRotZ(i_this->unk_3F0,1);
+                    MtxRotY(i_this->unk_3EC, 1);
+                    MtxRotZ(i_this->unk_3F0, 1);
                 }
                 model->setAnmMtx(jntNo, *calc_mtx);
                 MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
             }
 
-            if (jntNo == 11) {
+            if (jntNo == DR_JNT_J_DR_HANE_L2_e) {
                 cXyz sp08;
                 sp08.x = REG0_F(0) + 210.0f + 5.0f;
                 sp08.y = REG0_F(1);
@@ -530,7 +541,7 @@ void dr_move(dr2_class* i_this) {
         case 0:
             if (i_this->unk_50C) {
                 i_this->unk_4C6 = 0;
-                J3DAnmTransform* pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Dr2", DR2_BCK_DR_BOSS_DEMO1);
+                J3DAnmTransform* pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_BCK_DR_BOSS_DEMO1_e);
                 i_this->mpMorf2->setAnm(pAnimRes, 0, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
                 i_this->unk_4C4 = 1;
             }
@@ -649,7 +660,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     dr2_class* i_this = (dr2_class*)a_this;
 
     i_this->mpMorf1 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BMD_DR_SIPPO),
+        (J3DModelData*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_BMD_DR_SIPPO_e),
         NULL, NULL, NULL, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203
     );
     
@@ -662,7 +673,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
     i_this->mpMorf1->getModel()->setUserArea((u32)i_this);
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BDL_IWA00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_BDL_IWA00_e);
     JUT_ASSERT(DEMO_SELECT(1347, 1361), modelData != NULL);
 
     i_this->unk_418 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -670,7 +681,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BMD_GAN_MAGMA);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_BMD_GAN_MAGMA_e);
     JUT_ASSERT(DEMO_SELECT(1356, 1370), modelData != NULL);
 
     i_this->unk_41C = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -683,7 +694,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    J3DAnmTextureSRTKey* srtKey = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dr2", DR2_BTK_GAN_MAGMA);
+    J3DAnmTextureSRTKey* srtKey = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_BTK_GAN_MAGMA_e);
     BOOL init = i_this->unk_420->init(i_this->unk_41C->getModelData(), srtKey, true, J3DFrameCtrl::EMode_NONE);
 #if VERSION > VERSION_DEMO
     if (!init) {
@@ -701,15 +712,15 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         }
     }
 
-    i_this->mpMorf2 = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BMD_DR), 
-                            NULL, NULL, (J3DAnmTransformKey*)dComIfG_getObjectRes("Dr2", DR2_BCK_DR_BOSS_DEMO1), 
+    i_this->mpMorf2 = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_BMD_DR_e), 
+                            NULL, NULL, (J3DAnmTransformKey*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_BCK_DR_BOSS_DEMO1_e), 
                             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
 
     if (i_this->mpMorf2 == NULL || i_this->mpMorf2->getModel() == NULL) {
         return FALSE;
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BMD_MBYO1);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_BMD_MBYO1_e);
     JUT_ASSERT(DEMO_SELECT(1405, 1429), modelData != NULL);
 
     i_this->unk_428 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -717,7 +728,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BMD_MBYO2);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_BMD_MBYO2_e);
     JUT_ASSERT(DEMO_SELECT(1412, 1436), modelData != NULL);
 
     i_this->unk_42C = mDoExt_J3DModel__create(modelData,0,0x11020203);
@@ -730,7 +741,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    srtKey = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dr2", DR2_BTK_MBYO1);
+    srtKey = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_BTK_MBYO1_e);
     if (!i_this->unk_430->init(i_this->unk_428->getModelData(), srtKey, true, J3DFrameCtrl::EMode_LOOP)) {
         return FALSE;
     }
@@ -740,7 +751,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    srtKey = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dr2", DR2_BTK_MBYO2);
+    srtKey = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_BTK_MBYO2_e);
     if (!i_this->unk_434->init(i_this->unk_42C->getModelData(), srtKey, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
@@ -750,7 +761,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    J3DAnmTevRegKey* tevRegKey = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dr2", DR2_BRK_MBYO2);
+    J3DAnmTevRegKey* tevRegKey = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_BRK_MBYO2_e);
     if (!i_this->unk_438->init(i_this->unk_42C->getModelData(), tevRegKey, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
@@ -765,11 +776,11 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    cBgD_t* cBgD = (cBgD_t*)dComIfG_getObjectRes("Dr2", DR2_DZB_MBYO1);
+    cBgD_t* cBgD = (cBgD_t*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_DZB_MBYO1_e);
     i_this->mpBgW1->Set(cBgD, dBgW::MOVE_BG_e, &i_this->unk_440);
     i_this->mpBgW1->SetCrrFunc(dBgS_MoveBGProc_Typical);
 
-    cBgD = (cBgD_t*)dComIfG_getObjectRes("Dr2", DR2_DZB_MBYO2);
+    cBgD = (cBgD_t*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_DZB_MBYO2_e);
     i_this->mpBgW2->Set(cBgD, dBgW::MOVE_BG_e, &i_this->unk_470);
     i_this->mpBgW2->SetCrrFunc(dBgS_MoveBGProc_Typical);
 

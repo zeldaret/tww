@@ -36,7 +36,9 @@ BOOL dBgS_MoveBgActor::MoveBGCreateHeap() {
             mpBgW->SetCrrFunc(m_set_func);
         }
     } else {
+#if VERSION > VERSION_DEMO
         mpBgW = NULL;
+#endif
         return FALSE;
     }
 

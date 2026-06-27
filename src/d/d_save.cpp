@@ -767,6 +767,11 @@ void dSv_player_collect_c::onTact(u8 i_no) {
     mTact |= (u8)(1 << i_no);
 }
 
+void dSv_player_collect_c::offTact(u8 i_no) {
+    JUT_ASSERT(DEMO_SELECT(1511, 0), 0 <= i_no && i_no < 8);
+    mTact &= ~(u8)(1 << i_no);
+}
+
 /* 8005AF40-8005AFD8       .text isTact__20dSv_player_collect_cFUc */
 BOOL dSv_player_collect_c::isTact(u8 i_no) {
     JUT_ASSERT(DEMO_SELECT(1526, 1532), 0 <= i_no && i_no < 8);
@@ -779,6 +784,11 @@ void dSv_player_collect_c::onTriforce(u8 i_no) {
     mTriforce |= (u8)(1 << i_no);
 }
 
+void dSv_player_collect_c::offTriforce(u8 i_no) {
+    JUT_ASSERT(DEMO_SELECT(1556, 0), 0 <= i_no && i_no < 8);
+    mTriforce &= ~(u8)(1 << i_no);
+}
+
 /* 8005B06C-8005B104       .text isTriforce__20dSv_player_collect_cFUc */
 BOOL dSv_player_collect_c::isTriforce(u8 i_no) {
     JUT_ASSERT(DEMO_SELECT(1571, 1577), 0 <= i_no && i_no < 8);
@@ -789,6 +799,11 @@ BOOL dSv_player_collect_c::isTriforce(u8 i_no) {
 void dSv_player_collect_c::onSymbol(u8 i_no) {
     JUT_ASSERT(DEMO_SELECT(1586, 1592), 0 <= i_no && i_no < 8);
     mSymbol |= (u8)(1 << i_no);
+}
+
+void dSv_player_collect_c::offSymbol(u8 i_no) {
+    JUT_ASSERT(DEMO_SELECT(1601, 0), 0 <= i_no && i_no < 8);
+    mSymbol &= ~(u8)(1 << i_no);
 }
 
 /* 8005B198-8005B230       .text isSymbol__20dSv_player_collect_cFUc */
@@ -1123,6 +1138,11 @@ BOOL dSv_memBit_c::isVisitedRoom(int i_no) {
 void dSv_memBit_c::onDungeonItem(int i_no) {
     JUT_ASSERT(VERSION_SELECT(2437, 2465, 2492, 2492), 0 <= i_no && i_no < 6);
     mDungeonItem |= (u8)(1 << i_no);
+}
+
+void dSv_memBit_c::offDungeonItem(int i_no) {
+    JUT_ASSERT(DEMO_SELECT(2451, 0), 0 <= i_no && i_no < 6);
+    mDungeonItem &= ~(u8)(1 << i_no);
 }
 
 /* 8005C844-8005C8E8       .text isDungeonItem__12dSv_memBit_cFi */

@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_adnno.h"
-#include "d/res/res_adnno.h"
+#include "res/Object/Adnno.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
@@ -14,22 +14,22 @@
 #include "m_Do/m_Do_mtx.h"
 
 static const u32 daObjAdnno_bmt_table[16] = {
-    ADNNO_BMT_ADNNO_00,
-    ADNNO_BMT_ADNNO_01,
-    ADNNO_BMT_ADNNO_02,
-    ADNNO_BMT_ADNNO_03,
-    ADNNO_BMT_ADNNO_04,
-    ADNNO_BMT_ADNNO_05,
-    ADNNO_BMT_ADNNO_06,
-    ADNNO_BMT_ADNNO_07,
-    ADNNO_BMT_ADNNO_08,
-    ADNNO_BMT_ADNNO_09,
-    ADNNO_BMT_ADNNO_10,
-    ADNNO_BMT_ADNNO_11,
-    ADNNO_BMT_ADNNO_12,
-    ADNNO_BMT_ADNNO_13,
-    ADNNO_BMT_ADNNO_14,
-    ADNNO_BMT_ADNNO_15,
+    dRes_INDEX_ADNNO_BMT_ADNNO_00_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_01_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_02_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_03_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_04_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_05_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_06_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_07_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_08_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_09_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_10_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_11_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_12_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_13_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_14_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_15_e,
 };
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -39,7 +39,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-00000178       .text CreateHeap__12daObjAdnno_cFv */
 BOOL daObjAdnno_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Adnno", ADNNO_BDL_ADNNO));
+    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Adnno", dRes_INDEX_ADNNO_BDL_ADNNO_e));
     JUT_ASSERT(DEMO_SELECT(91, 92), modelData != NULL);
     for (s32 i = 0; i < 16; i++) {
         mpModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x37441422);

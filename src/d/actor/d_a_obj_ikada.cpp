@@ -14,9 +14,9 @@
 #include "d/d_lib.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
-#include "d/res/res_always.h"
-#include "d/res/res_ikadah.h"
-#include "d/res/res_link.h"
+#include "res/Object/Always.h"
+#include "res/Object/IkadaH.h"
+#include "res/Object/Link.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 
@@ -111,9 +111,9 @@ daObj_Ikada_HIO_c::daObj_Ikada_HIO_c() {
 }
 
 /* 000002D8-00000324       .text nodeControl_CB__FP7J3DNodei */
-static BOOL nodeControl_CB(J3DNode* node, int arg1) {
+static BOOL nodeControl_CB(J3DNode* node, int calcTiming) {
     J3DJoint* joint = (J3DJoint*)node;
-    if (arg1 == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         daObj_Ikada_c* i_this = (daObj_Ikada_c*)j3dSys.getModel()->getUserArea();
         if (i_this != NULL) {
             i_this->_nodeControl(joint, j3dSys.getModel());
@@ -125,14 +125,14 @@ static BOOL nodeControl_CB(J3DNode* node, int arg1) {
 /* 00000324-00000458       .text _nodeControl__13daObj_Ikada_cFP7J3DNodeP8J3DModel */
 void daObj_Ikada_c::_nodeControl(J3DNode* node, J3DModel* model) {
     J3DJoint* joint = (J3DJoint*)node;
-    s32 uVar1 = joint->getJntNo();
-    mDoMtx_stack_c::copy(model->getAnmMtx(uVar1));
-    mDoMtx_stack_c::ZXYrotM(mJointRot[uVar1].x, mJointRot[uVar1].y, mJointRot[uVar1].z);
-    if (uVar1 == 1) {
+    s32 jntNo = joint->getJntNo();
+    mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
+    mDoMtx_stack_c::ZXYrotM(mJointRot[jntNo].x, mJointRot[jntNo].y, mJointRot[jntNo].z);
+    if (jntNo == VSVSP_JNT_SV_CREAN_e) {
         mDoMtx_stack_c::XrotM(m115A + m115E * (REG12_S(5) + 5) * cM_ssin(m115C));
     }
     MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
-    model->setAnmMtx(uVar1, mDoMtx_stack_c::get());
+    model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
 }
 
 /* 00000458-00000494       .text pathMove_CB__FP4cXyzP4cXyzP4cXyzPv */
@@ -463,7 +463,7 @@ void daObj_Ikada_c::setRopePos() {
 
     spBC = *pcVar6;
 
-    mDoMtx_stack_c::copy(mpModel->getAnmMtx(1));
+    mDoMtx_stack_c::copy(mpModel->getAnmMtx(VSVSP_JNT_SV_CREAN_e));
     mDoMtx_stack_c::transM(m_crane_offset.x, m_crane_offset.y, m_crane_offset.z);
     mDoMtx_stack_c::multVecZero(pcVar6);
 
@@ -513,7 +513,7 @@ void daObj_Ikada_c::setRopePos() {
         iVar3 = 0;
         iVar4 = 0;
     } else {
-        mDoMtx_stack_c::copy(mpModel->getAnmMtx(1));
+        mDoMtx_stack_c::copy(mpModel->getAnmMtx(VSVSP_JNT_SV_CREAN_e));
         mDoMtx_stack_c::transM(m_crane_offset.x, m_crane_offset.y, m_crane_offset.z);
         cMtx_copy(mDoMtx_stack_c::get(), ropeEndMtx);
         spA4.set(pcVar7->x - ropeEndMtx[0][3], pcVar7->y - ropeEndMtx[1][3], pcVar7->z - ropeEndMtx[2][3]);
@@ -1154,8 +1154,8 @@ bool daObj_Ikada_c::_execute() {
 
     if (isWave()) {
         f32 s = scale.x;
-        s32 uVar5 = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), s * -1000.0f, s * -50.0f, s * -1000.0f, s * 1000.0f, s * 1000.0f, s * 1000.0f);
-        if (speedF <= 2.0f || uVar5 & 0xFF || fopAcM_searchPlayerDistanceXZ(this) > 18000.0f) {
+        bool uVar5 = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), s * -1000.0f, s * -50.0f, s * -1000.0f, s * 1000.0f, s * 1000.0f, s * 1000.0f);
+        if (speedF <= 2.0f || uVar5 || fopAcM_searchPlayerDistanceXZ(this) > 18000.0f) {
             mWaveRCallback.end();
             mWaveLCallback.end();
             mSplashCallBack.end();
@@ -1246,7 +1246,7 @@ bool daObj_Ikada_c::_draw() {
         J3DModelData* modelData = mpModel->getModelData();
         mBckAnm.entry(modelData);
         mDoExt_modelUpdateDL(mpModel);
-        mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
+        mpModel->getModelData()->getJointNodePointer(VSVSP_JNT_SV_SHIP_ROOT_e)->setMtxCalc(NULL);
     } else {
         mDoExt_modelUpdateDL(mpModel);
     }
@@ -1384,7 +1384,7 @@ void daObj_Ikada_c::createInit() {
         cXyz* pcVar8 = &mRopeLine.getPos(0)[m07D8] - 1;
         cXyz* pcVar7 = &m07DC[m07D8 - 1];
 
-        mDoMtx_stack_c::copy(mpModel->getAnmMtx(1));
+        mDoMtx_stack_c::copy(mpModel->getAnmMtx(VSVSP_JNT_SV_CREAN_e));
         mDoMtx_stack_c::transM(m_crane_offset.x, m_crane_offset.y, m_crane_offset.z);
         mDoMtx_stack_c::multVecZero(pcVar8);
 
@@ -1427,8 +1427,8 @@ void daObj_Ikada_c::createInit() {
 
 /* 00004838-00004B60       .text _createHeap__13daObj_Ikada_cFv */
 BOOL daObj_Ikada_c::_createHeap() {
-    static const s32 bdl[] = {IKADAH_BDL_VIKAE, IKADAH_BDL_VTSP, IKADAH_BDL_VIKAH, IKADAH_BDL_VTSP2, IKADAH_BDL_VSVSP};
-    static const s32 dzb[] = {IKADAH_DZB_VIKAE, IKADAH_DZB_VTSP, IKADAH_DZB_VIKAH, IKADAH_DZB_VTSP, IKADAH_DZB_VSVSP};
+    static const s32 bdl[] = {dRes_INDEX_IKADAH_BDL_VIKAE_e, dRes_INDEX_IKADAH_BDL_VTSP_e, dRes_INDEX_IKADAH_BDL_VIKAH_e, dRes_INDEX_IKADAH_BDL_VTSP2_e, dRes_INDEX_IKADAH_BDL_VSVSP_e};
+    static const s32 dzb[] = {dRes_INDEX_IKADAH_DZB_VIKAE_e, dRes_INDEX_IKADAH_DZB_VTSP_e, dRes_INDEX_IKADAH_DZB_VIKAH_e, dRes_INDEX_IKADAH_DZB_VTSP_e, dRes_INDEX_IKADAH_DZB_VSVSP_e};
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, bdl[mType]);
     JUT_ASSERT(2170, modelData != NULL);
@@ -1439,7 +1439,7 @@ BOOL daObj_Ikada_c::_createHeap() {
     }
 
     if (mType == 4) {
-        J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arc_name, IKADAH_BCK_SVSHIP_KAITEN);
+        J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_IKADAH_BCK_SVSHIP_KAITEN_e);
         JUT_ASSERT(2180, bck != NULL);
 
         if (!mBckAnm.init(modelData, bck, true, J3DFrameCtrl::EMode_LOOP)) {
@@ -1452,9 +1452,9 @@ BOOL daObj_Ikada_c::_createHeap() {
     if (mType == 4) {
         for (u16 i = 0; i < modelData->getJointNum(); i++) {
             switch (i) {
-            case 1:
-            case 2:
-            case 3:
+            case VSVSP_JNT_SV_CREAN_e:
+            case VSVSP_JNT_SV_REEL_e:
+            case VSVSP_JNT_SV_HANDLE_1_e:
                 modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
                 break;
             }
@@ -1474,7 +1474,7 @@ BOOL daObj_Ikada_c::_createHeap() {
     }
 
     if (mType == 4) {
-        ResTIMG* pImg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE);
+        ResTIMG* pImg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_ROPE_e);
         if (!mRopeLine.init(1, 200, pImg, 0)) {
             return FALSE;
         }
@@ -1482,7 +1482,7 @@ BOOL daObj_Ikada_c::_createHeap() {
 #if VERSION > VERSION_DEMO
         J3DModelData*
 #endif
-            modelData = (J3DModelData*)dComIfG_getObjectRes("Link", LINK_BDL_ROPEEND);
+            modelData = (J3DModelData*)dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_ROPEEND_e);
         JUT_ASSERT(2228, modelData != NULL);
 
         mpRopeEnd = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);

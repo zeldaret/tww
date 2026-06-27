@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_rd.h"
-#include "d/res/res_rd.h"
+#include "res/Object/Rd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
@@ -234,13 +234,13 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 000006C0-0000096C       .text _createHeap__6daRd_cFv */
 BOOL daRd_c::_createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, RD_BDL_RD));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_RD_BDL_RD_e));
     JUT_ASSERT(DEMO_SELECT(502, 504), modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(m_arc_name, RD_BCK_SUWARIP)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_RD_BCK_SUWARIP_e)),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
@@ -255,15 +255,15 @@ BOOL daRd_c::_createHeap() {
         return FALSE;
     }
     
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, RD_BTK_RD_CLOSE));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_RD_BTK_RD_CLOSE_e));
     JUT_ASSERT(DEMO_SELECT(528, 525), btk != NULL);
     if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
     
-    modelData->getJointNodePointer(0x0C)->setCallBack(nodeHeadControl_CB); // ree_atama_1
+    modelData->getJointNodePointer(RD_JNT_REE_ATAMA_1_e)->setCallBack(nodeHeadControl_CB);
     
-    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_RD_BRK_NML_e));
     JUT_ASSERT(DEMO_SELECT(553, 550), brk != NULL);
     if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
@@ -293,133 +293,133 @@ bool daRd_c::createArrowHeap() {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x01,
+            /* mJointIndex */ RD_JNT_REE_KOSI_1_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x01,
+            /* mJointIndex */ RD_JNT_REE_KOSI_1_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x01,
+            /* mJointIndex */ RD_JNT_REE_KOSI_1_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi3_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x02,
+            /* mJointIndex */ RD_JNT_REE_ASI_L1_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x03,
+            /* mJointIndex */ RD_JNT_REE_ASI_L2_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x04,
+            /* mJointIndex */ RD_JNT_REE_ASI_L3_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi3_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x05,
+            /* mJointIndex */ RD_JNT_REE_ASI_R1_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x06,
+            /* mJointIndex */ RD_JNT_REE_ASI_R2_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x07,
+            /* mJointIndex */ RD_JNT_REE_ASI_R3_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi3_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x08,
+            /* mJointIndex */ RD_JNT_REE_MUNE_1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ sebone_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09,
+            /* mJointIndex */ RD_JNT_REE_MUNE_2_e,
             /* mRadius     */ 10.0f,
             /* mpOffsets   */ muneA_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09,
+            /* mJointIndex */ RD_JNT_REE_MUNE_2_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09,
+            /* mJointIndex */ RD_JNT_REE_MUNE_2_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09,
+            /* mJointIndex */ RD_JNT_REE_MUNE_2_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB3_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0F,
+            /* mJointIndex */ RD_JNT_REE_UDE_L1_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x10,
+            /* mJointIndex */ RD_JNT_REE_UDE_L2_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x11,
+            /* mJointIndex */ RD_JNT_REE_TEKUBI_L1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ te_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x12,
+            /* mJointIndex */ RD_JNT_REE_YUBI_L1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x13,
+            /* mJointIndex */ RD_JNT_REE_UDE_R1_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x14,
+            /* mJointIndex */ RD_JNT_REE_UDE_R2_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x15,
+            /* mJointIndex */ RD_JNT_REE_TEKUBI_R1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ te_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x16,
+            /* mJointIndex */ RD_JNT_REE_YUBI_R1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
@@ -744,7 +744,7 @@ void daRd_c::setIceCollision() {
 void daRd_c::setAttention() {
     cXyz attnPos(60.0f, 0.0f, 0.0f);
     cXyz eyeballPos(60.0f, 0.0f, 0.0f);
-    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(0x0C)); // ree_atama_1 joint
+    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(RD_JNT_REE_ATAMA_1_e));
     mDoMtx_stack_c::multVec(&attnPos, &attention_info.position);
     mDoMtx_stack_c::multVecZero(&eyeballPos);
     eyePos = eyeballPos;
@@ -1378,10 +1378,10 @@ void daRd_c::modeProc(daRd_c::Proc_e proc, int newMode) {
 /* 000038D4-000039AC       .text setBrkAnm__6daRd_cFSc */
 void daRd_c::setBrkAnm(s8 idx) {
     static const int a_anm_idx_tbl[] = {
-        RD_BRK_NML,
-        RD_BRK_BEAM_HIT,
-        RD_BRK_BEAM,
-        RD_BRK_BEAM_END,
+        dRes_INDEX_RD_BRK_NML_e,
+        dRes_INDEX_RD_BRK_BEAM_HIT_e,
+        dRes_INDEX_RD_BRK_BEAM_e,
+        dRes_INDEX_RD_BRK_BEAM_END_e,
     };
     static const int a_play_mod_tbl[] = {
         J3DFrameCtrl::EMode_NONE,
@@ -1399,10 +1399,10 @@ void daRd_c::setBrkAnm(s8 idx) {
 /* 000039AC-00003B3C       .text setBtkAnm__6daRd_cFSc */
 void daRd_c::setBtkAnm(s8 idx) {
     static const int a_anm_idx_tbl[] = {
-        RD_BTK_RD_IKARI,
-        RD_BTK_RD_NML,
-        RD_BTK_RD_OPEN,
-        RD_BTK_RD_CLOSE,
+        dRes_INDEX_RD_BTK_RD_IKARI_e,
+        dRes_INDEX_RD_BTK_RD_NML_e,
+        dRes_INDEX_RD_BTK_RD_OPEN_e,
+        dRes_INDEX_RD_BTK_RD_CLOSE_e,
     };
     struct anm_prm_struct {
         s8 m00;
@@ -1441,20 +1441,20 @@ void daRd_c::setBtkAnm(s8 idx) {
 /* 00003B3C-00003C48       .text setAnm__6daRd_cFScb */
 void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
     static const int a_anm_bcks_tbl[] = {
-        RD_BCK_TACHIP,
-        RD_BCK_SUWARIP,
-        RD_BCK_WALK2ATACK,
-        RD_BCK_ATACK,
-        RD_BCK_ATACK2WALK,
-        RD_BCK_WALK,
-        RD_BCK_DAMAGE,
-        RD_BCK_DEAD,
-        RD_BCK_TATSU,
-        RD_BCK_SUWARU,
-        RD_BCK_KANOKEP,
-        RD_BCK_BEAM_HIT,
-        RD_BCK_BEAM,
-        RD_BCK_BEAM_END,
+        dRes_INDEX_RD_BCK_TACHIP_e,
+        dRes_INDEX_RD_BCK_SUWARIP_e,
+        dRes_INDEX_RD_BCK_WALK2ATACK_e,
+        dRes_INDEX_RD_BCK_ATACK_e,
+        dRes_INDEX_RD_BCK_ATACK2WALK_e,
+        dRes_INDEX_RD_BCK_WALK_e,
+        dRes_INDEX_RD_BCK_DAMAGE_e,
+        dRes_INDEX_RD_BCK_DEAD_e,
+        dRes_INDEX_RD_BCK_TATSU_e,
+        dRes_INDEX_RD_BCK_SUWARU_e,
+        dRes_INDEX_RD_BCK_KANOKEP_e,
+        dRes_INDEX_RD_BCK_BEAM_HIT_e,
+        dRes_INDEX_RD_BCK_BEAM_e,
+        dRes_INDEX_RD_BCK_BEAM_END_e,
     };
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
         {
@@ -1788,10 +1788,10 @@ void daRd_c::createInit() {
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.SetRoofNone();
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
-    mJntCtrl.setHeadJntNum(0x0A); // ree_kubi_1
-    mJntCtrl.setBackboneJntNum(0x08); // ree_mune_1
-    modelData->getJointNodePointer(0x0A)->setCallBack(nodeControl_CB); // ree_kubi_1
-    modelData->getJointNodePointer(0x08)->setCallBack(nodeControl_CB); // ree_mune_1
+    mJntCtrl.setHeadJntNum(RD_JNT_REE_KUBI_1_e);
+    mJntCtrl.setBackboneJntNum(RD_JNT_REE_MUNE_1_e);
+    modelData->getJointNodePointer(RD_JNT_REE_KUBI_1_e)->setCallBack(nodeControl_CB);
+    modelData->getJointNodePointer(RD_JNT_REE_MUNE_1_e)->setCallBack(nodeControl_CB);
     setBtkAnm(2);
     
     if (mChecksSwitch == 0) {
@@ -1835,12 +1835,32 @@ void daRd_c::createInit() {
     
     mEnemyFire.mpMcaMorf = mpMorf;
     mEnemyFire.mpActor = this;
+    
     static u8 fire_j[ARRAY_SIZE(mEnemyFire.mFlameJntIdxs)] = {
-        0x0C, 0x01, 0x0F, 0x11, 0x13, 0x15, 0x02, 0x04, 0x05, 0x07,
+        RD_JNT_REE_ATAMA_1_e,
+        RD_JNT_REE_KOSI_1_e,
+        RD_JNT_REE_UDE_L1_e,
+        RD_JNT_REE_TEKUBI_L1_e,
+        RD_JNT_REE_UDE_R1_e,
+        RD_JNT_REE_TEKUBI_R1_e,
+        RD_JNT_REE_ASI_L1_e,
+        RD_JNT_REE_ASI_L3_e,
+        RD_JNT_REE_ASI_R1_e,
+        RD_JNT_REE_ASI_R3_e,
     };
     static f32 fire_sc[ARRAY_SIZE(mEnemyFire.mParticleScale)] = {
-        2.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        2.0f, // RD_JNT_REE_ATAMA_1_e
+        2.0f, // RD_JNT_REE_KOSI_1_e
+        1.0f, // RD_JNT_REE_UDE_L1_e
+        1.0f, // RD_JNT_REE_TEKUBI_L1_e
+        1.0f, // RD_JNT_REE_UDE_R1_e
+        1.0f, // RD_JNT_REE_TEKUBI_R1_e
+        1.0f, // RD_JNT_REE_ASI_L1_e
+        1.0f, // RD_JNT_REE_ASI_L3_e
+        1.0f, // RD_JNT_REE_ASI_R1_e
+        1.0f, // RD_JNT_REE_ASI_R3_e
     };
+
     for (int i = 0; i < ARRAY_SIZE(mEnemyFire.mFlameJntIdxs); i++) {
         mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
         mEnemyFire.mParticleScale[i] = fire_sc[i];

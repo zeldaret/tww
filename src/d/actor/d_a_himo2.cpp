@@ -14,7 +14,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
-#include "d/res/res_link.h"
+#include "res/Object/Link.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
@@ -1679,7 +1679,7 @@ static BOOL daHimo2_Execute(himo2_class* i_this) {
     int iVar5;
     cXyz local_c8;
 
-    daPy_py_c* apdVar1 = (daPy_py_c*)daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
 #if VERSION > VERSION_DEMO
     if (btd == NULL) {
         btd = (btd_class*)fpcM_Search(b_a_sub, i_this);
@@ -1693,15 +1693,15 @@ static BOOL daHimo2_Execute(himo2_class* i_this) {
     local_c8.x = 4.0f;
     local_c8.y = 0.0f;
     local_c8.z = 0.0f;
-    if (apdVar1->getRopeGrabRightHand()) {
-        MTXCopy(apdVar1->getLeftHandMatrix(), *calc_mtx);
+    if (player->getRopeGrabRightHand()) {
+        MTXCopy(player->getLeftHandMatrix(), *calc_mtx);
         MtxPosition(&local_c8, &i_this->m02EC[1]);
-        MTXCopy(apdVar1->getRightHandMatrix(), *calc_mtx);
+        MTXCopy(player->getRightHandMatrix(), *calc_mtx);
         MtxPosition(&local_c8, &i_this->m02EC[0]);
     } else {
-        MTXCopy(apdVar1->getLeftHandMatrix(), *calc_mtx);
+        MTXCopy(player->getLeftHandMatrix(), *calc_mtx);
         MtxPosition(&local_c8, &i_this->m02EC[0]);
-        MTXCopy(apdVar1->getRightHandMatrix(), *calc_mtx);
+        MTXCopy(player->getRightHandMatrix(), *calc_mtx);
         MtxPosition(&local_c8, &i_this->m02EC[1]);
     }
     i_this->m02B4 = i_this->m02EC[0];
@@ -1766,21 +1766,21 @@ static int CallbackCreateHeap(fopAc_ac_c* i_this) {
     J3DModelData* modelData;
     himo2_class* a_this = (himo2_class*)i_this;
 
-    pRVar1 = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE);
+    pRVar1 = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_ROPE_e);
     if (!a_this->m1F30.init(1, 200, pRVar1, 0)) {
         return FALSE;
     }
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Link", LINK_BDL_ROPEEND);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_ROPEEND_e);
     JUT_ASSERT(DEMO_SELECT(3833, 3933), modelData != NULL);
     a_this->m24B0 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (a_this->m24B0 == NULL) {
         return FALSE;
     }
-    pRVar1 = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE);
+    pRVar1 = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_ROPE_e);
     if (!a_this->m1F98.init(5, 0x20, pRVar1, 0)) {
         return FALSE;
     }
-    pRVar1 = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE);
+    pRVar1 = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_ROPE_e);
     if (!a_this->m1FD8.init(1, 16, pRVar1, 0)) {
         return FALSE;
     }

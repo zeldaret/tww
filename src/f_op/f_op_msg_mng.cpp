@@ -1474,8 +1474,8 @@ const char* fopMsgM_msgGet_c::getMessage(mesg_header* msg) {
         mMsgIdx = i;
         if (mMsgNo == info->mEntries[i].mMsgNo) {
             JMSMesgEntry_c* entry = &info->mEntries[mMsgIdx];
-            mResMsgNo = entry->mMsgNo;
             ret = &data[entry->mDataOffs];
+            mResMsgNo = entry->mMsgNo;
             break;
         }
     }

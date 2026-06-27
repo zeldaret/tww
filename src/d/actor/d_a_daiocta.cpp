@@ -15,7 +15,7 @@
 #include "d/d_lib.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
-#include "d/res/res_daiocta.h"
+#include "res/Object/Daiocta.h"
 
 static daDaiocta_HIO_c l_HIO;
 
@@ -197,35 +197,35 @@ void daDaiocta_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
 
     cXyz base;
     switch (jnt_no) {
-        case 30:
+        case DO_MAIN1_JNT_J_DO_TE_L6_e:
             base.set(450.0f, 0.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m21A0);
             break;
-        case 36:
+        case DO_MAIN1_JNT_J_DO_TE_R6_e:
             base.set(450.0f, 0.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m21AC);
             break;
-        case 20:
+        case DO_MAIN1_JNT_J_DO_KUTI2_e:
             base.set(l_HIO.m094, 0.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m2434);
             break;
-        case 6:
+        case DO_MAIN1_JNT_J_DO_BODY5_e:
             base.set(450.0f, 0.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m21B8);
             break;
-        case 9:
+        case DO_MAIN1_JNT_J_DO_HIRE_L1_e:
             base.set(300.0f, -200.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m21C4);
             break; 
-        case 7:
+        case DO_MAIN1_JNT_J_DO_HIRE_L2_e:
             base.set(300.0f, 0.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m21D0);
             break;
-        case 10:
+        case DO_MAIN1_JNT_J_DO_HIRE_R1_e:
             base.set(300.0f, 200.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m21DC);
             break;
-        case 8:
+        case DO_MAIN1_JNT_J_DO_HIRE_R2_e:
             base.set(300.0f, 0.0f, 0.0f);
             mDoMtx_stack_c::multVec(&base, &m21E8);
             break;
@@ -268,16 +268,16 @@ BOOL daDaiocta_c::createAwaHeap() {
     J3DAnmTextureSRTKey* btk;
     J3DAnmTevRegKey* brk;
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_GAWA00));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BDL_GAWA00_e));
     JUT_ASSERT(516, modelData != NULL);
 
-    bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BCK_GAWA00));
+    bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BCK_GAWA00_e));
     JUT_ASSERT(520, bck != NULL);
 
-    btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_GAWA00));
+    btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BTK_GAWA00_e));
     JUT_ASSERT(524, btk != NULL);
 
-    brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_GAWA00));
+    brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BRK_GAWA00_e));
     JUT_ASSERT(528, brk != NULL);
 
 
@@ -309,7 +309,7 @@ BOOL daDaiocta_c::createAwaHeap() {
 
 /* 000009B8-00000ABC       .text createSuikomiHeap__11daDaiocta_cFv */
 BOOL daDaiocta_c::createSuikomiHeap() {
-    J3DModelData* modelData = (J3DModelData * ) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_GDO_SUI00);
+    J3DModelData* modelData = (J3DModelData * ) dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BDL_GDO_SUI00_e);
     JUT_ASSERT(551, modelData != NULL);
 
     // "suikomi" translates to suction
@@ -319,8 +319,8 @@ BOOL daDaiocta_c::createSuikomiHeap() {
         return FALSE;
     }
 
-    if (!dLib_brkInit(modelData, &mBrkAnm2, m_arc_name, DAIOCTA_BRK_GDO_SUI00) || 
-        !dLib_btkInit(modelData, &mBtkAnm, m_arc_name, DAIOCTA_BTK_GDO_SUI00)) {
+    if (!dLib_brkInit(modelData, &mBrkAnm2, m_arc_name, dRes_INDEX_DAIOCTA_BRK_GDO_SUI00_e) || 
+        !dLib_btkInit(modelData, &mBtkAnm, m_arc_name, dRes_INDEX_DAIOCTA_BTK_GDO_SUI00_e)) {
         return FALSE;
     }
 
@@ -329,10 +329,10 @@ BOOL daDaiocta_c::createSuikomiHeap() {
 
 /* 00000ABC-00000C04       .text createBodyHeap__11daDaiocta_cFv */
 BOOL daDaiocta_c::createBodyHeap() {
-    J3DModelData* modelData = (J3DModelData *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_DO_MAIN1);
+    J3DModelData* modelData = (J3DModelData *) dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BDL_DO_MAIN1_e);
     JUT_ASSERT(579, modelData != NULL);
 
-    if (!dLib_brkInit(modelData, &mBrkAnm1, m_arc_name, DAIOCTA_BRK_WAIT1)) {
+    if (!dLib_brkInit(modelData, &mBrkAnm1, m_arc_name, dRes_INDEX_DAIOCTA_BRK_WAIT1_e)) {
         return FALSE;
     }
 
@@ -384,103 +384,103 @@ BOOL daDaiocta_c::createArrowHitHeap() {
     static __jnt_hit_data_c search_data[17] = { 
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 2,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_BODY1_e,
             /* mRadius     */ 550.0f,
             /* mpOffsets   */ body_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 3,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_BODY2_e,
             /* mRadius     */ 450.0f,
             /* mpOffsets   */ body_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 4,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_BODY3_e,
             /* mRadius     */ 400.0f,
             /* mpOffsets   */ body_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 5,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_BODY4_e,
             /* mRadius     */ 300.0f,
             /* mpOffsets   */ body_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 6,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_BODY5_e,
             /* mRadius     */ 200.0f,
             /* mpOffsets   */ body_top_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 7,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_HIRE_L2_e,
             /* mRadius     */ 150.0f,
             /* mpOffsets   */ body_top_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 8,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_HIRE_R2_e,
             /* mRadius     */ 150.0f,
             /* mpOffsets   */ body_top_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 9,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_HIRE_L1_e,
             /* mRadius     */ 100.0f,
             /* mpOffsets   */ hire_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 10,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_HIRE_R1_e,
             /* mRadius     */ 100.0f,
             /* mpOffsets   */ hire_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 30,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_L6_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ te_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 29,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_L5_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 28,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_L4_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 27,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_L3_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 36,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_R6_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ te_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 35,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_R5_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ te_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 34,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_R4_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 33,
+            /* mJointIndex */ DO_MAIN1_JNT_J_DO_TE_R3_e,
             /* mRadius     */ 40.0f,
             /* mpOffsets   */ ude_cyl_offset
         }
@@ -1069,10 +1069,10 @@ void daDaiocta_c::modeDemoInit() {
     setEffect(dPa_name::ID_IT_SN_DO_SUIKOMIC00);
     J3DModelData* model_data_p = mpSuikomiModel->getModelData();
     
-    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_GDO_SUI00));
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BRK_GDO_SUI00_e));
     JUT_ASSERT(VERSION_SELECT(1334, 1340, 1350, 1350), brk != NULL);
     
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_GDO_SUI00));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BTK_GDO_SUI00_e));
     JUT_ASSERT(VERSION_SELECT(1337, 1343, 1353, 1353), btk != NULL);
 
     mBrkAnm2.init(
@@ -1349,13 +1349,13 @@ void daDaiocta_c::setAnm() {
     }
 
     static const s32 a_brk_anm_idx_tbl[] = {
-        DAIOCTA_BRK_WAIT1, 
-        DAIOCTA_BRK_DAMAGE1, 
-        DAIOCTA_BRK_DAMAGE2, 
-        DAIOCTA_BRK_DEATH1, 
-        DAIOCTA_BRK_SUIKOMU1, 
-        DAIOCTA_BRK_DEATH2, 
-        DAIOCTA_BRK_HAKIDASU1
+        dRes_INDEX_DAIOCTA_BRK_WAIT1_e, 
+        dRes_INDEX_DAIOCTA_BRK_DAMAGE1_e, 
+        dRes_INDEX_DAIOCTA_BRK_DAMAGE2_e, 
+        dRes_INDEX_DAIOCTA_BRK_DEATH1_e, 
+        dRes_INDEX_DAIOCTA_BRK_SUIKOMU1_e, 
+        dRes_INDEX_DAIOCTA_BRK_DEATH2_e, 
+        dRes_INDEX_DAIOCTA_BRK_HAKIDASU1_e
     };
     
     static const s32 a_brk_anm_prm_tbl[] = {
@@ -1605,18 +1605,18 @@ void daDaiocta_c::createInit() {
     attention_info.flags = 0;
     shape_angle = current.angle;
 
-    mAnmMtxIndices[0] = 21;
-    mAnmMtxIndices[1] = 22;
-    mAnmMtxIndices[2] = 15;
-    mAnmMtxIndices[3] = 23;
-    mAnmMtxIndices[4] = 24;
-    mAnmMtxIndices[5] = 16;
-    mAnmMtxIndices[6] = 17;
-    mAnmMtxIndices[7] = 18;
-    mAnmMtxIndices[8] = 14;
-    mAnmMtxIndices[9] = 11;
-    mAnmMtxIndices[10] = 12;
-    mAnmMtxIndices[11] = 13;
+    mAnmMtxIndices[0] = DO_MAIN1_JNT_J_DO_ME1_e;
+    mAnmMtxIndices[1] = DO_MAIN1_JNT_J_DO_ME2_e;
+    mAnmMtxIndices[2] = DO_MAIN1_JNT_J_DO_ME3_e;
+    mAnmMtxIndices[3] = DO_MAIN1_JNT_J_DO_ME4_e;
+    mAnmMtxIndices[4] = DO_MAIN1_JNT_J_DO_ME5_e;
+    mAnmMtxIndices[5] = DO_MAIN1_JNT_J_DO_ME6_e;
+    mAnmMtxIndices[6] = DO_MAIN1_JNT_J_DO_ME7_e;
+    mAnmMtxIndices[7] = DO_MAIN1_JNT_J_DO_ME8_e;
+    mAnmMtxIndices[8] = DO_MAIN1_JNT_J_DO_ME9_e;
+    mAnmMtxIndices[9] = DO_MAIN1_JNT_J_DO_ME10_e;
+    mAnmMtxIndices[10] = DO_MAIN1_JNT_J_DO_ME11_e;
+    mAnmMtxIndices[11] = DO_MAIN1_JNT_J_DO_ME12_e;
 
     static const int NUM_JOINT_NODES = 37;
     for (int i = 0; i < NUM_JOINT_NODES; i++) {

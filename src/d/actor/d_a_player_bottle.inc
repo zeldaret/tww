@@ -29,9 +29,9 @@ int daPy_lk_c::changeBottleDrinkFace(int param_0) {
 void daPy_lk_c::setBottleModel(u16 param_0) {
     mEquipItem = param_0;
     JKRHeap* oldHeap = setItemHeap();
-    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_BOTTLEEMP, 0x37221222);
+    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_BOTTLEEMP_e, 0x37221222);
     u8* buffer = new (0x20) u8[0x400];
-    JKRReadIdxResource(buffer, 0x400, LKANM_BTK_TBOTTLE, dComIfGp_getAnmArchive());
+    JKRReadIdxResource(buffer, 0x400, dRes_INDEX_LKANM_BTK_TBOTTLE_e, dComIfGp_getAnmArchive());
     mpEquipItemBtk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(buffer));
     mpEquipItemBtk->setFrame(0.0f);
     mpEquipItemBtk->searchUpdateMaterialID(tmp_modelData);
@@ -42,13 +42,13 @@ void daPy_lk_c::setBottleModel(u16 param_0) {
     {
         u16 bdl;
         if (param_0 == dItemNo_HALF_SOUP_BOTTLE_e) {
-            bdl = LINK_BDL_BINLIQUIDH;
+            bdl = dRes_INDEX_LINK_BDL_BINLIQUIDH_e;
         } else {
-            bdl = LINK_BDL_BINLIQUID;
+            bdl = dRes_INDEX_LINK_BDL_BINLIQUID_e;
         }
         tmp_modelData = initModel(&mpBottleContentsModel, bdl, 0x13000022);
         buffer = new (0x20) u8[0x400];
-        JKRReadIdxResource(buffer, 0x400, LKANM_BRK_TBINLIQUID, dComIfGp_getAnmArchive());
+        JKRReadIdxResource(buffer, 0x400, dRes_INDEX_LKANM_BRK_TBINLIQUID_e, dComIfGp_getAnmArchive());
         mpEquipItemBrk = static_cast<J3DAnmTevRegKey*>(J3DAnmLoaderDataBase::load(buffer));
         if (param_0 == dItemNo_RED_POTION_e) {
             mpEquipItemBrk->setFrame(0.0f);
@@ -64,18 +64,18 @@ void daPy_lk_c::setBottleModel(u16 param_0) {
         mpEquipItemBrk->searchUpdateMaterialID(tmp_modelData);
         tmp_modelData->entryTevRegAnimator(mpEquipItemBrk);
     } else if (param_0 == dItemNo_FAIRY_BOTTLE_e) {
-        tmp_modelData = initModel(&mpBottleContentsModel, LINK_BDL_BINFAIRY, 0x13000022);
+        tmp_modelData = initModel(&mpBottleContentsModel, dRes_INDEX_LINK_BDL_BINFAIRY_e, 0x13000022);
     } else if (param_0 == dItemNo_FIREFLY_BOTTLE_e) {
-        tmp_modelData = initModel(&mpBottleContentsModel, LINK_BDL_BINHO, 0x13000022);
+        tmp_modelData = initModel(&mpBottleContentsModel, dRes_INDEX_LINK_BDL_BINHO_e, 0x13000022);
         buffer = new (0x20) u8[0x400];
-        JKRReadIdxResource(buffer, 0x400, LKANM_BRK_TBINHO, dComIfGp_getAnmArchive());
+        JKRReadIdxResource(buffer, 0x400, dRes_INDEX_LKANM_BRK_TBINHO_e, dComIfGp_getAnmArchive());
         mpEquipItemBrk = static_cast<J3DAnmTevRegKey*>(J3DAnmLoaderDataBase::load(buffer));
         mpEquipItemBrk->searchUpdateMaterialID(tmp_modelData);
         tmp_modelData->entryTevRegAnimator(mpEquipItemBrk);
         m3600 = 0.0f;
     }
     if (param_0 != dItemNo_EMPTY_BOTTLE_e && mCurProc != daPyProc_BOTTLE_DRINK_e) {
-        tmp_modelData = initModel(&mpBottleCapModel, LINK_BDL_BOTTLECAP, 0x13000022);
+        tmp_modelData = initModel(&mpBottleCapModel, dRes_INDEX_LINK_BDL_BOTTLECAP_e, 0x13000022);
         m355E = 1;
     }
     mDoExt_setCurrentHeap(oldHeap);
@@ -130,7 +130,7 @@ BOOL daPy_lk_c::procBottleDrink() {
     setShipRidePosUseItem();
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
     u16 uVar1 = m_anm_heap_under[UNDER_MOVE0_e].mIdx;
-    if (uVar1 == LKANM_BCK_BINDRINKPRE) {
+    if (uVar1 == dRes_INDEX_LKANM_BCK_BINDRINKPRE_e) {
         if (frameCtrl.getRate() < 0.01f) {
             setSingleMoveAnime(ANM_BINDRINKING, m_HIO->mItem.mBottle.m.field_0x64, 0.0f, -1, 0.0f);
             if (changeBottleDrinkFace(mEquipItem)) {
@@ -151,7 +151,7 @@ BOOL daPy_lk_c::procBottleDrink() {
                 voiceStart(39);
             }
         }
-    } else if (uVar1 == LKANM_BCK_BINDRINKING) {
+    } else if (uVar1 == dRes_INDEX_LKANM_BCK_BINDRINKING_e) {
         if (dComIfGp_getItemNowLife() == dComIfGs_getLife() &&
             dComIfGp_getItemNowMagic() == dComIfGs_getMagic())
         {
@@ -182,7 +182,7 @@ BOOL daPy_lk_c::procBottleDrink() {
                     p_Var3 = &blue;
                 }
                 m33A8.makeEmitterColor(
-                    dPa_name::ID_IT_JN_LK_GEPPU00, mpCLModel->getAnmMtx(0x12), &current.pos, &shape_angle, p_Var3, NULL
+                    dPa_name::ID_IT_JN_LK_GEPPU00, mpCLModel->getAnmMtx(CL_JNT_CHIN_JNT_e), &current.pos, &shape_angle, p_Var3, NULL
                 );
             }
         } else {
@@ -252,7 +252,7 @@ BOOL daPy_lk_c::procBottleOpen() {
     
     setShipRidePosUseItem();
     
-    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_BINOPENPRE) {
+    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_BINOPENPRE_e) {
         if (frameCtrl.getRate() < 0.01f) {
             if (mEquipItem == dItemNo_FAIRY_BOTTLE_e) {
                 setSingleMoveAnime(
@@ -273,7 +273,7 @@ BOOL daPy_lk_c::procBottleOpen() {
             }
         } else if (frameCtrl.checkPass(32.0f)) {
             m355E = 0;
-            mRightHandIdx = 8;
+            mRightHandIdx = HANDS_JNT_CL_RHANDC_e;
         }
     } else {
         if (m32E4.getEmitter() && mProcVar2.m34D4 == 0 && m32E4.getEmitter()->getParticleList() && m32E4.getEmitter()->getParticleList()->getLast()) {
@@ -343,7 +343,7 @@ BOOL daPy_lk_c::procBottleOpen() {
             } else {
                 sp64.y = temp.y;
             }
-            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x08), &sp58);
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_CL_LHANDA_e), &sp58);
             sp40 = sp64 - sp58;
             mAtCps[0].SetStartEnd(sp58, sp64);
             mAtCps[0].SetAtVec(sp40);
@@ -364,7 +364,7 @@ BOOL daPy_lk_c::procBottleOpen() {
                 (frameCtrl.checkPass(9.0f))
             ) {
                 seStartOnlyReverb(JA_SE_LK_SPRINKLE_WATER);
-                m32E4.makeEmitterColor(dPa_name::ID_AK_JN_SPILLWATER00, mpCLModel->getAnmMtx(0x08), &current.pos, &tevStr.mColorK0, &tevStr.mColorK0);
+                m32E4.makeEmitterColor(dPa_name::ID_AK_JN_SPILLWATER00, mpCLModel->getAnmMtx(CL_JNT_CL_LHANDA_e), &current.pos, &tevStr.mColorK0, &tevStr.mColorK0);
                 dCcG_At_Spl spl;
                 if (mEquipItem == dItemNo_WATER_BOTTLE_e) {
                     spl = dCcG_At_Spl_UNK0;
@@ -430,7 +430,7 @@ BOOL daPy_lk_c::procBottleSwing_init(int param_0) {
     fopAc_ac_c* catch_target = dComIfGp_att_getCatghTarget();
     BOOL bVar1;
     if (catch_target != 0) {
-        if (catch_target->current.pos.y > mpCLModel->getAnmMtx(0)[1][3]) {
+        if (catch_target->current.pos.y > mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e)[1][3]) {
             bVar1 = false;
         } else {
             bVar1 = true;

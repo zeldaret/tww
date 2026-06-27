@@ -12,8 +12,8 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_camera.h"
-#include "d/res/res_ysbwp00.h"
-#include "d/res/res_gtfglow.h"
+#include "res/Object/Ysbwp00.h"
+#include "res/Object/Gtfglow.h"
 
 namespace daWarpf_prm {
     static inline u32 getSetType(daWarpf_c* i_this) { return fopAcM_GetParam(i_this) >> 0x1C; }
@@ -71,7 +71,7 @@ BOOL daWarpf_c::CreateHeap() {
 
     switch (mStageNo) {
         case dSv_save_c::STAGE_TOTG:
-            modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mStageNo], YSBWP00_BDL_YSBWP00);
+            modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mStageNo], dRes_INDEX_YSBWP00_BDL_YSBWP00_e);
             JUT_ASSERT(343, modelData != NULL);
 
             m2A8 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
@@ -79,7 +79,7 @@ BOOL daWarpf_c::CreateHeap() {
                 return FALSE;
             }
 
-            pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname[mStageNo], YSBWP00_BRK_YSBWP00);
+            pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname[mStageNo], dRes_INDEX_YSBWP00_BRK_YSBWP00_e);
             JUT_ASSERT(358, pbrk != NULL);
 
             m2AC = new mDoExt_brkAnm();
@@ -87,7 +87,7 @@ BOOL daWarpf_c::CreateHeap() {
                 return FALSE;
             }
 
-            pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname[mStageNo], YSBWP00_BCK_YSBWP00);
+            pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname[mStageNo], dRes_INDEX_YSBWP00_BCK_YSBWP00_e);
             JUT_ASSERT(374, pbck != NULL);
 
             m2B0 = new mDoExt_bckAnm();
@@ -95,7 +95,7 @@ BOOL daWarpf_c::CreateHeap() {
                 return FALSE;
             }
 
-            pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname[mStageNo], YSBWP00_BTK_YSBWP00);
+            pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname[mStageNo], dRes_INDEX_YSBWP00_BTK_YSBWP00_e);
             JUT_ASSERT(391, pbtk != NULL);
 
             m2B4 = new mDoExt_btkAnm();
@@ -109,7 +109,7 @@ BOOL daWarpf_c::CreateHeap() {
             if (!checkEndDemo()) {
                 m2C0 = NULL;
 
-                modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mStageNo], GTFGLOW_BDL_GTFGLOW00);
+                modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mStageNo], dRes_INDEX_GTFGLOW_BDL_GTFGLOW00_e);
                 JUT_ASSERT(411, modelData != NULL);
 
                 m2A8 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -117,7 +117,7 @@ BOOL daWarpf_c::CreateHeap() {
                     return FALSE;
                 }
 
-                pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname[mStageNo], GTFGLOW_BRK_GTFGLOW00);
+                pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname[mStageNo], dRes_INDEX_GTFGLOW_BRK_GTFGLOW00_e);
                 JUT_ASSERT(424, pbrk != NULL);
 
                 m2AC = new mDoExt_brkAnm();
@@ -126,7 +126,7 @@ BOOL daWarpf_c::CreateHeap() {
                 }
                 m2AC->setPlaySpeed(1.0f);
 
-                pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname[mStageNo], GTFGLOW_BRK_GTFGLOW01);
+                pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname[mStageNo], dRes_INDEX_GTFGLOW_BRK_GTFGLOW01_e);
                 JUT_ASSERT(441, pbrk != NULL);
 
                 m2B8 = new mDoExt_brkAnm();
@@ -135,7 +135,7 @@ BOOL daWarpf_c::CreateHeap() {
                 }
                 m2B8->setPlaySpeed(0.0f);
 
-                pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname[mStageNo], GTFGLOW_BRK_GTFGLOW02);
+                pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname[mStageNo], dRes_INDEX_GTFGLOW_BRK_GTFGLOW02_e);
                 JUT_ASSERT(457, pbrk != NULL);
 
                 m2BC = new mDoExt_brkAnm();
@@ -144,7 +144,7 @@ BOOL daWarpf_c::CreateHeap() {
                 }
                 m2BC->setPlaySpeed(0.0f);
             } else {
-                modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mStageNo], GTFGLOW_BDL_GDEMO29_A00);
+                modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mStageNo], dRes_INDEX_GTFGLOW_BDL_GDEMO29_A00_e);
                 JUT_ASSERT(474, modelData != NULL);
 
                 m2A8 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -152,7 +152,7 @@ BOOL daWarpf_c::CreateHeap() {
                     return FALSE;
                 }
 
-                pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname[mStageNo], DEMO_SELECT(GTFGLOW_BRK_GDEMO29_A00, GTFGLOW_BRK_GDEMO29_A01));
+                pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname[mStageNo], DEMO_SELECT(dRes_INDEX_GTFGLOW_BRK_GDEMO29_A00_e, dRes_INDEX_GTFGLOW_BRK_GDEMO29_A01_e));
                 JUT_ASSERT(488, pbrk != NULL);
 
                 m2AC = new mDoExt_brkAnm();
@@ -161,7 +161,7 @@ BOOL daWarpf_c::CreateHeap() {
                 }
                 m2AC->setPlaySpeed(1.0f);
 
-                modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mStageNo], GTFGLOW_BDL_GDEMO29_B00);
+                modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mStageNo], dRes_INDEX_GTFGLOW_BDL_GDEMO29_B00_e);
                 JUT_ASSERT(504, modelData != NULL);
 
                 m2C0 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);

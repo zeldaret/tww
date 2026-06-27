@@ -4,7 +4,7 @@
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
-#include "d/res/res_gnndemotakis.h"
+#include "res/Object/Gnndemotakis.h"
 #include "d/actor/d_a_obj_gnndemotakis.h"
 
 const char daObjGnntakis_c::M_arcname[] = "Gnndemotakis";
@@ -19,13 +19,13 @@ BOOL daObjGnntakis_c::create_heap() {
     J3DModelData* mdl_data;
     J3DAnmTextureSRTKey* btk_data;
     BOOL ret = FALSE;
-    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIS_BDL_GNN_DEMO_TAKI_S));
+    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_GNNDEMOTAKIS_BDL_GNN_DEMO_TAKI_S_e));
     JUT_ASSERT(155, mdl_data != NULL);
 
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mpModel != NULL) {
-            btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIS_BTK_GNN_DEMO_TAKI_S));
+            btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_GNNDEMOTAKIS_BTK_GNN_DEMO_TAKI_S_e));
             JUT_ASSERT(162, btk_data != NULL);
             if (btk_data != NULL && mpBtkAnm.init(mdl_data, btk_data, TRUE, 0, 1.0f, 0, -1, FALSE, 0)) {
                 ret = TRUE;

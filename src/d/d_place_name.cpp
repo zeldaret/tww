@@ -154,9 +154,9 @@ cPhs_State dPn_c::_create() {
         u32 lang = dComIfGs_getPalLanguage();
         char buf[32];
         sprintf(buf, "/res/placename/PN%d/pn_%02d_%d.bti", lang, dComIfGp_getNowStageNum() + 1, lang);
-        dvd = mDoDvdThd_toMainRam_c::create(buf, 0, mpHeap);
+        dvd = mDoDvdThd_toMainRam_c::create(buf, JKRArchive::DEFAULT_MOUNT_DIRECTION, mpHeap);
 #else
-        dvd = mDoDvdThd_toMainRam_c::create(name_texture[dComIfGp_getNowStageNum()], 0, mpHeap);
+        dvd = mDoDvdThd_toMainRam_c::create(name_texture[dComIfGp_getNowStageNum()], JKRArchive::DEFAULT_MOUNT_DIRECTION, mpHeap);
 #endif
 
         mState = 2;

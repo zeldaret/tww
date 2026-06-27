@@ -471,24 +471,24 @@ void daPy_dmEcallBack_c::execute(JPABaseEmitter* emitter) {
 /* 8012A288-8012A8D8       .text setAuraEffect__9daPy_lk_cFv */
 void daPy_lk_c::setAuraEffect() {
     static const u16 aura_emitter_joint[] = {
-        0x0007,
-        0x000B,
-        0x0008,
-        0x000C,
-        0x0021,
-        0x0026,
-        0x0022,
-        0x0027,
-        0x0000,
-        0x000F,
+        CL_JNT_LARMB_JNT_e,
+        CL_JNT_RARMB_JNT_e,
+        CL_JNT_CL_LHANDA_e,
+        CL_JNT_CL_RHANDA_e,
+        CL_JNT_LLEGB_JNT_e,
+        CL_JNT_RLEGB_JNT_e,
+        CL_JNT_LFOOT_JNT_e,
+        CL_JNT_RFOOT_JNT_e,
+        CL_JNT_LINK_ROOT_e,
+        CL_JNT_HEAD_JNT_e,
     };
     static const u16 aura_model_joint[] = {
-        0x0000,
-        0x000F,
-        0x0008,
-        0x000C,
-        0x0021,
-        0x0026,
+        CL_JNT_LINK_ROOT_e,
+        CL_JNT_HEAD_JNT_e,
+        CL_JNT_CL_LHANDA_e,
+        CL_JNT_CL_RHANDA_e,
+        CL_JNT_LLEGB_JNT_e,
+        CL_JNT_RLEGB_JNT_e,
     };
 
     J3DAnmTevRegKey* curYaura00Brk = mYaura00rBrk.getBrkAnm();
@@ -515,15 +515,15 @@ void daPy_lk_c::setAuraEffect() {
                 }
             }
 
-            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_R));
-            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_MS));
+            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YAURA00_R_e));
+            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YMGCS00_MS_e));
         } else {
             if (!dComIfGp_event_runCheck()) {
                 mTinkleShieldTimer -= 1;
             }
 
-            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_G));
-            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_TS));
+            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YAURA00_G_e));
+            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YMGCS00_TS_e));
         }
 
         if (pYaura00Brk != curYaura00Brk) {
@@ -685,7 +685,7 @@ void daPy_lk_c::setWaterRipple() {
             mSwimTailEcallBack[1].setSpeedRate(std::fabsf(mNormalSpeed / mMaxNormalSpeed));
         }
         cXyz local_1c;
-        cMtx_multVec(mpCLModel->getAnmMtx(15), &wave_offset, &local_1c);
+        cMtx_multVec(mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e), &wave_offset, &local_1c);
 
         local_1c.y = mWaterY;
 
@@ -702,7 +702,7 @@ void daPy_lk_c::setWaterRipple() {
         mSwimTailEcallBack[1].setWaterFlatY(mAcch.m_wtr.GetHeight());
 
         cXyz local_40;
-        cMtx_multVec(mpCLModel->getAnmMtx(15), &swim_offset, &local_40);
+        cMtx_multVec(mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e), &swim_offset, &local_40);
         MtxP suimenMunyaMtx = mpSuimenMunyaModel->getBaseTRMtx();
 
         cXyz local_4c;
@@ -726,12 +726,12 @@ void daPy_lk_c::setWaterRipple() {
         }
 
         if (dPa_control_c::isStatus(0x01)) {
-            MtxP mtx = mpCLModel->getAnmMtx(15);
+            MtxP head_jnt_mtx = mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e);
             cXyz local_5c;
-            mDoMtx_multVecZero(mtx, &local_5c);
+            mDoMtx_multVecZero(head_jnt_mtx, &local_5c);
 
             cXyz local_68;
-            cMtx_multVec(mtx, &swim_side_offset, &local_68);
+            cMtx_multVec(head_jnt_mtx, &swim_side_offset, &local_68);
             cXyz local_74(local_5c.x * 2.0f - local_68.x, local_5c.y, local_5c.z * 2.0f - local_68.z);
             cXyz local_80(local_5c.x * 2.0f - local_40.x, local_5c.y, local_5c.z * 2.0f - local_40.z);
 
@@ -763,7 +763,7 @@ void daPy_lk_c::setWaterRipple() {
 
     if (((mAcch.ChkGroundHit() || checkModeFlg(ModeFlg_SWIM)) && mCurrAttributeCode == dBgS_Attr_WATERFALL_e) || (checkModeFlg(ModeFlg_HANG) && m3588 == 0x17)) {
         if (m3400.getEmitter() == NULL) {
-            m3400.makeEmitter(dPa_name::ID_AK_JN_ELEMENTSHIBUKI00, mpCLModel->getAnmMtx(15), &current.pos, NULL);
+            m3400.makeEmitter(dPa_name::ID_AK_JN_ELEMENTSHIBUKI00, mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e), &current.pos, NULL);
             JPABaseEmitter* emitter = m3400.getEmitter();
 
             if (emitter != NULL) {
@@ -775,7 +775,7 @@ void daPy_lk_c::setWaterRipple() {
 
         if (m34CD == 0) {
             cXyz local_ac;
-            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0), &local_ac);
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e), &local_ac);
 
             dComIfGp_particle_setSingleRipple(dPa_name::ID_IT_JN_WP_HAMON03, &local_ac, NULL, (cXyz*)&waterfall_ripple_scale);
             m34CD = 15;
@@ -933,12 +933,12 @@ void daPy_lk_c::setFootEffect() {
     cXyz pos;
     if (getFootOnGround()) {
         if (getRightFootOnGround()) {
-            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x27), &pos);
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_RFOOT_JNT_e), &pos);
             setFootMark(&pos);
         }
 
         if (getLeftFootOnGround()) {
-            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x22), &pos);
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_LFOOT_JNT_e), &pos);
             setFootMark(&pos);
         }
     }
@@ -1016,7 +1016,7 @@ void daPy_lk_c::setFootEffect() {
     if (mCurProc == daPyProc_DEMO_LAST_COMBO_e) {
         f32 rnd = cM_rndFX(17.5f);
         cXyz sp44 = m370C;
-        mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x1), &m370C);
+        mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_CENTER_e), &m370C);
 
         if (mProcVar6.m3570 != 0) {
             current.angle.y = shape_angle.y - 0x4000;
@@ -1038,25 +1038,25 @@ void daPy_lk_c::setFootEffect() {
         setFootEffectType(effectID, &pos, 0, var_r29);
     } else if (mFootEffectPosType == 3) {
         if (mCurrAttributeCode == dBgS_Attr_GRASS_e || mCurrAttributeCode == dBgS_Attr_WATER_e) {
-            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x27), &pos);
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_RFOOT_JNT_e), &pos);
             setFootEffectType(effectID, &pos, 0, var_r29);
 
-            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x22), &pos);
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_LFOOT_JNT_e), &pos);
             setFootEffectType(effectID, &pos, 1, var_r29);
 
         } else {
             setFootEffectType(effectID, &current.pos, 0, var_r29);
         }
     } else if (mFootEffectPosType == 1) {
-        mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x22), &pos);
+        mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_LFOOT_JNT_e), &pos);
         setFootEffectType(effectID, &pos, 0, var_r29);
     } else if (mFootEffectPosType == 2) {
-        mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x27), &pos);
+        mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_RFOOT_JNT_e), &pos);
         setFootEffectType(effectID, &pos, 0, var_r29);
     } else if (mFootEffectPosType == 5) {
         setFootEffectType(effectID, &current.pos, 0, 1);
     } else if (mFootEffectPosType == 6) {
-        mDoMtx_multVecZero(mpCLModel->getAnmMtx(0), &pos);
+        mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e), &pos);
 
         mGndChk.SetPos(&pos);
 
@@ -1099,7 +1099,7 @@ void daPy_lk_c::setSwimTail() {
 void daPy_lk_c::setCutWaterSplash() {
     if (m336C.getEmitter() != NULL) {
         cXyz pos;
-        mDoMtx_multVecZero(mpCLModel->getAnmMtx(4), &pos);
+        mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_CHEST_JNT_e), &pos);
 
         dComIfGp_particle_setP1(dPa_name::ID_IT_JN_LK_NURE_SHIBUKI00, &pos);
     }
@@ -1129,12 +1129,12 @@ void daPy_lk_c::setSwimWaterDrop(daPy_waterDropEcallBack_c* callBack) {
 
 /* 8012C45C-8012C620       .text setWaterDrop__9daPy_lk_cFv */
 void daPy_lk_c::setWaterDrop() {
-    MtxP mtx = mpCLModel->getAnmMtx(0x0E);
+    MtxP neck_jnt_mtx = mpCLModel->getAnmMtx(CL_JNT_NECK_JNT_e);
     cXyz tmp;
-    mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x0E), &tmp);
+    mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_NECK_JNT_e), &tmp);
     m334C.setPos(&tmp);
 
-    mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x02), &tmp);
+    mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_BODY_CHN_e), &tmp);
     m336C.setPos(&tmp);
 
     if (checkModeFlg(ModeFlg_00000001)) {
@@ -1158,11 +1158,11 @@ void daPy_lk_c::setWaterDrop() {
         mAcch.GetRoofHeight() == G_CM3D_F_INF
     ) {
         if (m3460[0].getEmitter() == NULL) {
-            m3460[0].makeEmitter(dPa_name::ID_AK_JN_LK_NURE_POTA01, mpCLModel->getAnmMtx(0x0E), &current.pos, NULL);
+            m3460[0].makeEmitter(dPa_name::ID_AK_JN_LK_NURE_POTA01, mpCLModel->getAnmMtx(CL_JNT_NECK_JNT_e), &current.pos, NULL);
         }
 
         if (m3460[1].getEmitter() == NULL) {
-            m3460[1].makeEmitter(dPa_name::ID_AK_JN_LK_NURE_POTA01, mpCLModel->getAnmMtx(0x02), &current.pos, NULL);
+            m3460[1].makeEmitter(dPa_name::ID_AK_JN_LK_NURE_POTA01, mpCLModel->getAnmMtx(CL_JNT_BODY_CHN_e), &current.pos, NULL);
         }
 
         m334C.end();
@@ -1180,10 +1180,10 @@ void daPy_lk_c::setWaterDrop() {
 void daPy_lk_c::setDamageFlameEmitter() {
     static JGeometry::TVec3<f32> arm_flame_scale(0.6f, 0.6f, 0.6f);
     static const u16 flame_joint[ARRAY_SIZE(mDmEcallBack)] = {
-        0x000F, // head_jnt
-        0x0003, // stomach_jnt
-        0x0007, // LarmB_jnt
-        0x000B, // RarmB_jnt
+        CL_JNT_HEAD_JNT_e,
+        CL_JNT_STOMACH_JNT_e,
+        CL_JNT_LARMB_JNT_e,
+        CL_JNT_RARMB_JNT_e,
     };
 
     if (!daPy_dmEcallBack_c::checkFlame()) {
@@ -1212,7 +1212,7 @@ void daPy_lk_c::setDamageCurseEmitter() {
     if (!daPy_dmEcallBack_c::checkCurse()) {
         endDamageEmitter();
 
-        mDmEcallBack[0].makeEmitter(dPa_name::ID_AK_SN_BUBBLECURSE00, mpCLModel->getAnmMtx(0x1E), &current.pos, NULL);
+        mDmEcallBack[0].makeEmitter(dPa_name::ID_AK_SN_BUBBLECURSE00, mpCLModel->getAnmMtx(CL_JNT_WAIST_JNT_e), &current.pos, NULL);
 
         if (checkUpperReadyThrowAnime()) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
@@ -1229,8 +1229,8 @@ void daPy_lk_c::setDamageElecEmitter() {
     if (!daPy_dmEcallBack_c::checkElec()) {
         endDamageEmitter();
 
-        mDmEcallBack[0].makeEmitter(dPa_name::ID_AK_JN_CCTHUNDER00, mpCLModel->getAnmMtx(4), &current.pos, NULL);
-        mDmEcallBack[1].makeEmitter(dPa_name::ID_AK_JN_CCTHUNDER01, mpCLModel->getAnmMtx(4), &current.pos, NULL);
+        mDmEcallBack[0].makeEmitter(dPa_name::ID_AK_JN_CCTHUNDER00, mpCLModel->getAnmMtx(CL_JNT_CHEST_JNT_e), &current.pos, NULL);
+        mDmEcallBack[1].makeEmitter(dPa_name::ID_AK_JN_CCTHUNDER01, mpCLModel->getAnmMtx(CL_JNT_CHEST_JNT_e), &current.pos, NULL);
     }
 
     daPy_dmEcallBack_c::setElec(m_HIO->mDam.mElecDamage.m.field_0x2);

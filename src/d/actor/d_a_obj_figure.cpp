@@ -5,8 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_figure.h"
-#include "d/res/res_figure.h"
-#include "d/res/res_figure2.h"
+#include "res/Object/Figure.h"
+#include "res/Object/Figure1.h"
+#include "res/Object/Figure2.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
@@ -106,6 +107,7 @@ struct FigureData {
     }
 #endif
 
+// TODO: use enums for bmdId
 static const FigureData l_figure_dat_tbl[TOTAL_FIGURE_COUNT] = {
     FIGUREDAT(0x00, 0x37441422, -1), // 0x00
     FIGUREDAT(0x01, 0x37441422, -1), // 0x01
@@ -470,7 +472,7 @@ BOOL daObjFigure_c::createHeap() {
     }
 
     if(mFigureNo == 0x3D) {
-        J3DAnmTevRegKey* pBrkData = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), FIGURE2_BDL_VF_047));
+        J3DAnmTevRegKey* pBrkData = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), dRes_ID_FIGURE2_BDL_VF_047_e));
         if(pBrkData == NULL) {
             return false;
         }
@@ -486,11 +488,11 @@ BOOL daObjFigure_c::createHeap() {
     }
     J3DModelData* pPedestalData;
     if(mFigureNo == 0x40) {
-        pPedestalData = (J3DModelData*)dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), FIGURE2_BDL_VF_044);
+        pPedestalData = (J3DModelData*)dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), dRes_ID_FIGURE2_BDL_VF_044_e);
         mpMorf = new mDoExt_McaMorf(
             pPedestalData,
             NULL, NULL,
-            (J3DAnmTransformKey*)dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), FIGURE2_BCK_VF_064L),
+            (J3DAnmTransformKey*)dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), dRes_ID_FIGURE2_BCK_VF_064L_e),
             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
             NULL,
             0x80000,
@@ -517,7 +519,7 @@ BOOL daObjFigure_c::createHeap() {
 #endif
     }
 
-    pPedestalData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Figure", FIGURE_BDL_VF_BS));
+    pPedestalData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Figure", dRes_ID_FIGURE_BDL_VF_BS_e));
     if(pPedestalData == NULL) {
         return false;
     }
@@ -527,7 +529,7 @@ BOOL daObjFigure_c::createHeap() {
         return false;
     }
 
-    mpPedestalBtp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes("Figure", FIGURE_BTP_VF_BS));
+    mpPedestalBtp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes("Figure", dRes_ID_FIGURE_BTP_VF_BS_e));
     if(mpPedestalBtp == NULL) {
         return false;
     }
@@ -1000,15 +1002,15 @@ u8 daObjFigure_c::isFigureGet(u8 figureNo) {
 int daObjFigure_c::getFigureBmd(u8 figureNo) {
     u32 bmd = l_figure_dat_tbl[figureNo].mBmdId;
     switch(figureNo) {
-        case 0x10:
+        case 0x10: // Mila's Father
             if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
-                bmd = 3;
+                bmd = dRes_ID_FIGURE1_BDL_VF_016B_e;
             }
 
             break;
-        case 0x12:
+        case 0x12: // Maggie's Father
             if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
-                bmd = 6;
+                bmd = dRes_ID_FIGURE1_BDL_VF_018B_e;
             }
 
             break;
@@ -1069,12 +1071,12 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
     J3DModelData* modelData = model->getModelData();
 #endif
 
-    J3DJoint* link_root_joint = modelData->getJointNodePointer(0x00); // link_root joint
-    J3DJoint* cl_eye_joint = modelData->getJointNodePointer(0x13);    // cl_eye joint
-    J3DJoint* cl_mayu_joint = modelData->getJointNodePointer(0x15);   // cl_mayu joint
+    J3DJoint* link_root_joint = modelData->getJointNodePointer(VF_064L_JNT_LINK_ROOT_e);
+    J3DJoint* cl_eye_joint = modelData->getJointNodePointer(VF_064L_JNT_CL_EYE_e);
+    J3DJoint* cl_mayu_joint = modelData->getJointNodePointer(VF_064L_JNT_CL_MAYU_e);
 
     J3DMaterial* mtl;
-    mtl = modelData->getJointNodePointer(0x13)->getMesh(); // cl_eye joint
+    mtl = modelData->getJointNodePointer(VF_064L_JNT_CL_EYE_e)->getMesh();
     int zoff_blend_cnt = 0;
     int zoff_none_cnt = 0;
     int zon_cnt = 0;
@@ -1096,7 +1098,7 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
             }
             mtl = mtl->getNext();
         }
-        mtl = modelData->getJointNodePointer(0x15)->getMesh(); // cl_mayu joint
+        mtl = modelData->getJointNodePointer(VF_064L_JNT_CL_MAYU_e)->getMesh();
     }
 
     dComIfGd_setListP0();
@@ -1167,8 +1169,8 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
         mtl->getShape()->show();
     }
 
-    modelData->getJointNodePointer(0x14)->getMesh()->getShape()->show(); // cl_hana joint
-    modelData->getJointNodePointer(0x29)->getMesh()->getShape()->show(); // cl_back joint
+    modelData->getJointNodePointer(VF_064L_JNT_CL_HANA_e)->getMesh()->getShape()->show();
+    modelData->getJointNodePointer(VF_064L_JNT_CL_BACK_e)->getMesh()->getShape()->show();
 
 #if VERSION == VERSION_DEMO
     dComIfGd_setList();

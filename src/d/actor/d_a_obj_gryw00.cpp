@@ -7,7 +7,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_particle.h"
 #include "d/actor/d_a_obj_gryw00.h"
-#include "d/res/res_gryw00.h"
+#include "res/Object/Gryw00.h"
 
 #define SPREAD_PHASE_ANIM_LEN 95
 #define RISE_PHASE_ANIM_LEN 299
@@ -30,7 +30,7 @@ f32 daObjGryw00_c::get_draw_water_lv(void* p) {
 /* 00000090-00000168       .text setup_high_water_level_btk_anm__13daObjGryw00_cFv */
 BOOL daObjGryw00_c::setup_high_water_level_btk_anm() {
     BOOL ret = TRUE;
-    J3DAnmTextureSRTKey* btk_anm_p = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, GRYW00_BTK_GRYW00));
+    J3DAnmTextureSRTKey* btk_anm_p = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_GRYW00_BTK_GRYW00_e));
     JUT_ASSERT(223, btk_anm_p != NULL);
     if (!mBtk.init(mpModel->getModelData(), btk_anm_p, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0x191, -1, -1, 0)) {
         ret = FALSE;
@@ -92,9 +92,9 @@ void daObjGryw00_c::set_se() {
 /* 000004C4-00000654       .text CreateHeap__13daObjGryw00_cFv */
 BOOL daObjGryw00_c::CreateHeap() {
     BOOL ret = TRUE;
-    J3DModelData* mdlData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, GRYW00_BDL_GRYW00));
-    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, GRYW00_BTK_GRYW00));
-    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, GRYW00_BCK_GRYW00));
+    J3DModelData* mdlData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_GRYW00_BDL_GRYW00_e));
+    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_GRYW00_BTK_GRYW00_e));
+    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_GRYW00_BCK_GRYW00_e));
     if (!mdlData || !pbtk || !pbck) {
         JUT_ASSERT(409, FALSE);
         ret = FALSE;
@@ -154,7 +154,7 @@ cPhs_State daObjGryw00_c::Mthd_Create() {
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, l_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(l_arcname, GRYW00_DZB_EWATER, dBgS_MoveBGProc_Trans, 0x9a0);
+        phase_state = MoveBGCreate(l_arcname, dRes_INDEX_GRYW00_DZB_EWATER_e, dBgS_MoveBGProc_Trans, 0x9a0);
         JUT_ASSERT(519, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;

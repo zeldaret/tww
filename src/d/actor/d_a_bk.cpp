@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bk.h"
 #include "d/d_bg_s_gnd_chk.h"
-#include "d/res/res_bk.h"
+#include "res/Object/Bk.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
@@ -47,21 +47,21 @@ struct attack_info_s {
 };
 
 static attack_info_s attack1_info[] = {
-    { BK_BCK_BK_ATTACK1, 1.2f, BK_BAS_BK_ATTACK1 },
-    { BK_BCK_BK_ATTACK2, 1.0f, BK_BAS_BK_ATTACK2 },
-    { BK_BCK_BK_ATTACK3, 1.0f, BK_BAS_BK_ATTACK3 },
+    { dRes_INDEX_BK_BCK_BK_ATTACK1_e, 1.2f, dRes_INDEX_BK_BAS_BK_ATTACK1_e },
+    { dRes_INDEX_BK_BCK_BK_ATTACK2_e, 1.0f, dRes_INDEX_BK_BAS_BK_ATTACK2_e },
+    { dRes_INDEX_BK_BCK_BK_ATTACK3_e, 1.0f, dRes_INDEX_BK_BAS_BK_ATTACK3_e },
 };
 
 static attack_info_s jattack1_info[] = {
-    { BK_BCK_BK_JATTACK1, 1.0f, -1 },
-    { BK_BCK_BK_JATTACK2, 1.0f, BK_BAS_BK_JATTACK2 },
-    { BK_BCK_BK_JATTACK3, 1.0f, BK_BAS_BK_JATTACK3 },
+    { dRes_INDEX_BK_BCK_BK_JATTACK1_e, 1.0f, -1 },
+    { dRes_INDEX_BK_BCK_BK_JATTACK2_e, 1.0f, dRes_INDEX_BK_BAS_BK_JATTACK2_e },
+    { dRes_INDEX_BK_BCK_BK_JATTACK3_e, 1.0f, dRes_INDEX_BK_BAS_BK_JATTACK3_e },
 };
 
 static attack_info_s kattack1_info[] = {
-    { BK_BCK_BK_KERI1, 1.0f, BK_BAS_BK_KERI1 },
-    { BK_BCK_BK_KERI2, 1.0f, BK_BAS_BK_KERI2 },
-    { -BK_BTP_TMABATAKI, 1.0f, 0 }, // TODO: why is bckFileIdx negative and soundFileIdx zero? bug?
+    { dRes_INDEX_BK_BCK_BK_KERI1_e, 1.0f, dRes_INDEX_BK_BAS_BK_KERI1_e },
+    { dRes_INDEX_BK_BCK_BK_KERI2_e, 1.0f, dRes_INDEX_BK_BAS_BK_KERI2_e },
+    { -dRes_INDEX_BK_BTP_TMABATAKI_e, 1.0f, 0 }, // TODO: why is bckFileIdx negative and soundFileIdx zero? bug?
 };
 
 static attack_info_s* attack_info[] = {
@@ -79,7 +79,7 @@ static s8 joint_check[] = {
 
 /* 000000EC-00000234       .text anm_init__FP8bk_classifUcfi */
 static void anm_init(bk_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed, int soundFileIdx) {
-    if (i_this->dr.mAction == 19 && bckFileIdx != BK_BCK_BK_OTISOU1 && bckFileIdx != BK_BCK_BK_OTISOU2) {
+    if (i_this->dr.mAction == 19 && bckFileIdx != dRes_INDEX_BK_BCK_BK_OTISOU1_e && bckFileIdx != dRes_INDEX_BK_BCK_BK_OTISOU2_e) {
         return;
     }
     if (soundFileIdx >= 0) {
@@ -124,7 +124,7 @@ static void yari_off_check(bk_class* i_this) {
         dBgS_LinChk linChk;
         linChk.Set(&actor->eyePos, &boko_actor->current.pos, i_this);
         if (dComIfG_Bgsp()->LineCross(&linChk)) {
-            MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(0x10); // mune (chest) joint
+            MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(BK_JNT_MUNE_e); // chest
             MTXCopy(mtx, *calc_mtx);
             boko->setMatrix(*calc_mtx);
             offset.set(0.0f, 0.0f, 0.0f);
@@ -275,7 +275,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         bk_class* i_this = (bk_class*)model->getUserArea();
         if (i_this) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            if (jntNo == 0x13) { // ago joint
+            if (jntNo == BK_JNT_AGO_e) {
                 cMtx_ZrotM(*calc_mtx, i_this->m11F4);
                 model->setAnmMtx(jntNo, *calc_mtx);
                 MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
@@ -292,11 +292,11 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
                 offset.y = 0.0f;
                 offset.z = 0.0f;
                 cXyz sp08;
-                if (r28 == 0x00 || r28 == 0x01 || r28 == 0x02 || r28 == 0x03 || r28 == 0x04 ||
-                    r28 == 0x05 || r28 == 0x06 || r28 == 0x07
+                if (r28 == BK_JNT_KOSI_e || r28 == BK_JNT_HIP1_e || r28 == BK_JNT_KOKAL_e || r28 == BK_JNT_MOMOL_e || r28 == BK_JNT_SUNEL1_e ||
+                    r28 == BK_JNT_SUNEL2_e || r28 == BK_JNT_ASIL_e || r28 == BK_JNT_KOKAR_e
                 ) {
                     offset.x = 0.0f;
-                } else if (r28 == 0x12) {
+                } else if (r28 == BK_JNT_HEAD_e) {
                     offset.x = 200.0f;
                     offset.y = -100.0f;
                     MtxPosition(&offset, &sp08);
@@ -337,14 +337,14 @@ static BOOL nodeCallBack_P(J3DNode* node, int calcTiming) {
             offset.x = 0.0f;
             offset.z = 0.0f;
             offset.y = 0.0f;
-            if (r30 == 0x11) {
+            if (r30 == BK_JNT_KUBI_e) {
                 offset.x = 17.5f;
                 offset.y = -8.75f;
                 offset.z = 0.0f;
                 MtxPosition(&offset, &i_this->m1190);
-            } else if (r30 == 0x10) {
+            } else if (r30 == BK_JNT_MUNE_e) {
                 MtxPosition(&offset, &i_this->m119C);
-            } else if (r30 == 0x0E || r30 == 0x0F) {
+            } else if (r30 == BK_JNT_SIPPO3_e || r30 == BK_JNT_SIPPO4_e) {
                 offset.y = 25.0f;
             } else {
                 offset.y = 0.0f;
@@ -457,13 +457,13 @@ static void br_draw(bk_class* i_this) {
         while (mat) {
             J3DShape* shape = mat->getShape();
             if (i_this->m02F4 == 0) {
-                if (i == 1) {
+                if (i == BK_KB_JNT_BLURA_e) {
                     shape->show();
                 } else {
                     shape->hide();
                 }
             } else {
-                if (i == 2) {
+                if (i == BK_KB_JNT_BLURB_e) {
                     shape->show();
                 } else {
                     shape->hide();
@@ -473,7 +473,7 @@ static void br_draw(bk_class* i_this) {
         }
     }
     
-    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x2C), *calc_mtx);
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(BK_JNT_BUKI_e), *calc_mtx);
     MtxTrans(150.0f + l_bkHIO.m100, REG8_F(1), REG8_F(2), 1);
     s16 angleX = REG8_S(6) + 0x4000;
     cMtx_XrotM(*calc_mtx, angleX);
@@ -539,7 +539,7 @@ static BOOL daBk_Draw(bk_class* i_this) {
     search_check_draw(i_this);
     
     J3DModelData* modelData = model->getModelData();
-    J3DJoint* rootJoint = modelData->getJointNodePointer(0x00);
+    J3DJoint* rootJoint = modelData->getJointNodePointer(BK_JNT_KOSI_e);
     J3DShape* eyeShape = modelData->getMaterialNodePointer(0x00)->getShape();
     J3DShape* hatShape = modelData->getMaterialNodePointer(0x01)->getShape();
     J3DShape* bodyShape = modelData->getMaterialNodePointer(0x02)->getShape();
@@ -936,11 +936,11 @@ static BOOL daBk_player_way_check(bk_class* i_this) {
 /* 00003A5C-00003B2C       .text wait_set__FP8bk_class */
 static void wait_set(bk_class* i_this) {
     if (i_this->m0B30 != 0 || i_this->m11F3 != 0) {
-        anm_init(i_this, BK_BCK_BK_KYORO1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_KYORO1);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_KYORO1_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_KYORO1_e);
     } else if (i_this->dr.mAction >= 4) {
-        anm_init(i_this, BK_BCK_BK_KYORO1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_KYORO1);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_KYORO1_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_KYORO1_e);
     } else {
-        anm_init(i_this, BK_BCK_BK_KYORO2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_KYORO2);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_KYORO2_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_KYORO2_e);
     }
     i_this->m0300[1] = 40.0f + cM_rndF(60.0f);
 }
@@ -948,11 +948,11 @@ static void wait_set(bk_class* i_this) {
 /* 00003B2C-00003C34       .text walk_set__FP8bk_class */
 static void walk_set(bk_class* i_this) {
     if (i_this->m0B30 != 0 || i_this->m1214 != 0) {
-        anm_init(i_this, BK_BCK_BK_WALK, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_WALK);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_WALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_WALK_e);
     } else if (i_this->m11F3 == 0) {
-        anm_init(i_this, BK_BCK_BK_NIGERU, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_NIGERU);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_NIGERU_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_NIGERU_e);
     } else {
-        anm_init(i_this, BK_BCK_BK_WALK, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_WALK);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_WALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_WALK_e);
     }
     if (i_this->m0B30 == 0 && i_this->m121F != 0) {
         fopAcM_monsSeStart(i_this, JA_SE_CV_BK_LOST_BOKO, 0);
@@ -962,7 +962,7 @@ static void walk_set(bk_class* i_this) {
 
 /* 00003C34-00003C74       .text fight_run_set__FP8bk_class */
 static void fight_run_set(bk_class* i_this) {
-    anm_init(i_this, BK_BCK_BK_RUN, 10.0f, J3DFrameCtrl::EMode_LOOP, l_bkHIO.m070, BK_BAS_BK_RUN);
+    anm_init(i_this, dRes_INDEX_BK_BCK_BK_RUN_e, 10.0f, J3DFrameCtrl::EMode_LOOP, l_bkHIO.m070, dRes_INDEX_BK_BAS_BK_RUN_e);
 }
 
 /* 00003C74-00004104       .text path_check__FP8bk_classUc */
@@ -1214,7 +1214,7 @@ static void stand(bk_class* i_this) {
     switch (i_this->dr.mMode) {
     case -20:
         fopAcM_OnStatus(i_this, fopAcStts_UNK4000_e);
-        anm_init(i_this, BK_BCK_BK_WAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_WAIT);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_WAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_WAIT_e);
         i_this->dr.mMode = -19;
         i_this->m0300[1] = 20;
         #if VERSION > VERSION_DEMO
@@ -1244,14 +1244,14 @@ static void stand(bk_class* i_this) {
         i_this->dr.mMode = 1;
         if (i_this->m02DC != 0) {
             if (cM_rndF(1.0f) < 0.5f) {
-                anm_init(i_this, BK_BCK_BK_NOZOKU, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_NOZOKU_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->m0300[1] = 200.0f + cM_rndF(200.0f);
             } else {
-                anm_init(i_this, BK_BCK_BK_TATAKU, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_TATAKU_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->m0300[1] = 100.0f + cM_rndF(100.0f);
             }
         } else {
-            anm_init(i_this, BK_BCK_BK_WAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_WAIT);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_WAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_WAIT_e);
         }
         i_this->m121E++;
         // Fall-through
@@ -1261,7 +1261,7 @@ static void stand(bk_class* i_this) {
         cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->home.angle.y, 2, 0x800);
         i_this->speedF = 0.0f;
         if (i_this->m0300[1] == 0) {
-            anm_init(i_this, BK_BCK_BK_NOBI, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_NOBI);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_NOBI_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_NOBI_e);
             fopAcM_monsSeStart(i_this, JA_SE_CV_BK_NOBI, 0);
             if (i_this->m121E < 3) {
                 i_this->dr.mMode = 2;
@@ -1282,7 +1282,7 @@ static void stand(bk_class* i_this) {
         r28 = true;
         i_this->m02CA = 2;
         if (i_this->mpMorf->isStop()) {
-            anm_init(i_this, BK_BCK_BK_SLEEP, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_SLEEP);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_SLEEP_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_SLEEP_e);
             i_this->m0300[1] = l_bkHIO.m108 + cM_rndF(l_bkHIO.m10A - l_bkHIO.m108);
             i_this->dr.mMode += 1;
         }
@@ -1291,17 +1291,17 @@ static void stand(bk_class* i_this) {
         r28 = true;
         i_this->m02CA = 2;
         if (i_this->m0300[1] == 0) {
-            anm_init(i_this, BK_BCK_BK_NOBI, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_NOBI);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_NOBI_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_NOBI_e);
             fopAcM_monsSeStart(i_this, JA_SE_CV_BK_NOBI, 0);
             i_this->dr.mMode = 2;
         }
         break;
     case 10:
         if (i_this->m0300[1] == 30) {
-            anm_init(i_this, BK_BCK_BK_BIKKURI, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_BIKKURI_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         }
         if (i_this->m0300[1] == 0) {
-            anm_init(i_this, BK_BCK_BK_KYORO2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_KYORO2);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_KYORO2_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_KYORO2_e);
             i_this->dr.mMode = 11;
             i_this->m0300[3] = 30.0f + cM_rndF(30.0f);
         }
@@ -1323,7 +1323,7 @@ static void stand(bk_class* i_this) {
         }
         break;
     case 50:
-        anm_init(i_this, BK_BCK_BK_KYORO1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_KYORO1);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_KYORO1_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_KYORO1_e);
         i_this->dr.mMode += 1;
         i_this->m0300[1] = 50;
         // Fall-through
@@ -1333,7 +1333,7 @@ static void stand(bk_class* i_this) {
             r28 = true;
         }
         if (i_this->m0300[1] == 0) {
-            anm_init(i_this, BK_BCK_BK_RUN, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_RUN);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_RUN_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_RUN_e);
             i_this->dr.mMode += 1;
             i_this->m0300[2] = 60;
         }
@@ -1355,7 +1355,7 @@ static void stand(bk_class* i_this) {
             }
             
             i_this->speed.y = 100.0f + REG0_F(16);
-            anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP1_e);
             fopAcM_monsSeStart(i_this, JA_SE_CV_BK_JUMP, 0);
             i_this->dr.mMode = 53;
         }
@@ -1366,7 +1366,7 @@ static void stand(bk_class* i_this) {
         if (!i_this->dr.mAcch.ChkGroundHit()) {
             break;
         }
-        anm_init(i_this, BK_BCK_BK_JUMP2, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP2);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP2_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP2_e);
         i_this->dr.mMode += 1;
         break;
     case 54:
@@ -1408,7 +1408,7 @@ static void stand(bk_class* i_this) {
                 i_this->dr.mMode = 0;
             } else {
                 i_this->dr.mMode = 20;
-                anm_init(i_this, BK_BCK_BK_BIKKURI, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_BIKKURI_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->m0300[1] = 30;
                 fopAcM_monsSeStart(i_this, JA_SE_CV_BK_FOUND_LINK, 0);
             }
@@ -1487,10 +1487,10 @@ static void stand2(bk_class* i_this) {
         i_this->m0B7B = 1;
         s16 r28 = i_this->m1224 - i_this->m1228;
         if (i_this->m122A >= 0 && r28 < 0) {
-            anm_init(i_this, BK_BCK_BK_MIGIROT, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_MIGIROT_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         if (i_this->m122A <= 0 && r28 > 0) {
-            anm_init(i_this, BK_BCK_BK_HIDARIROT, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_HIDARIROT_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         i_this->m122A = r28;
         i_this->m1228 = i_this->m1224;
@@ -1504,10 +1504,10 @@ static void stand2(bk_class* i_this) {
     case 10:
         i_this->m0B7B = 1;
         if (i_this->m0300[1] == 30) {
-            anm_init(i_this, BK_BCK_BK_BIKKURI, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_BIKKURI_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         }
         if (i_this->m0300[1] == 0) {
-            anm_init(i_this, BK_BCK_BK_KYORO2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_KYORO2);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_KYORO2_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_KYORO2_e);
             i_this->dr.mMode = 11;
             i_this->m0300[3] = 30.0f + cM_rndF(30.0f);
         }
@@ -1530,14 +1530,14 @@ static void stand2(bk_class* i_this) {
         }
         break;
     case 50:
-        anm_init(i_this, BK_BCK_BK_KYORO1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_KYORO1);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_KYORO1_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_KYORO1_e);
         i_this->dr.mMode += 1;
         i_this->m0300[1] = 50;
         // Fall-through
     case 51:
         i_this->speedF = 0.0f;
         if (i_this->m0300[1] == 0) {
-            anm_init(i_this, BK_BCK_BK_RUN, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_RUN);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_RUN_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_RUN_e);
             i_this->dr.mMode += 1;
             path_check(i_this, 1);
             if (i_this->m1216 >= 4) {
@@ -1599,7 +1599,7 @@ temp_568:
                 i_this->dr.mMode = 0;
             } else {
                 i_this->dr.mMode = 20;
-                anm_init(i_this, BK_BCK_BK_BIKKURI, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_BIKKURI_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->m0300[1] = 30;
                 fopAcM_monsSeStart(i_this, JA_SE_CV_BK_FOUND_LINK, 0);
             }
@@ -1623,7 +1623,7 @@ static void path_run(bk_class* i_this) {
     
     switch (i_this->dr.mMode) {
     case 0:
-        anm_init(i_this, BK_BCK_BK_RUN, 10.0f, J3DFrameCtrl::EMode_LOOP, l_bkHIO.m070, BK_BAS_BK_RUN);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_RUN_e, 10.0f, J3DFrameCtrl::EMode_LOOP, l_bkHIO.m070, dRes_INDEX_BK_BAS_BK_RUN_e);
         i_this->dr.mMode = 1;
         // Fall-through
     case 1:
@@ -1666,7 +1666,7 @@ static void path_run(bk_class* i_this) {
             i_this->speedF = l_bkHIO.m054;
             if (i_this->m0300[2] == 0) {
                 i_this->m0300[2] = cM_rndF(100.0f) + 50.0f;
-                anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP1);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP1_e);
                 i_this->m120C = 1;
                 i_this->m1210 = 0;
             }
@@ -1675,7 +1675,7 @@ static void path_run(bk_class* i_this) {
             case 0:
                 i_this->speedF = l_bkHIO.m054 * 1.2f;
                 if (i_this->dr.mAcch.ChkGroundHit() && i_this->mpMorf->isStop()) {
-                    anm_init(i_this, BK_BCK_BK_JUMP2, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP2);
+                    anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP2_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP2_e);
                     i_this->m1210 = 1;
                     i_this->m034C = l_bkHIO.m00C + 2;
                     i_this->m034E = 4;
@@ -1685,14 +1685,14 @@ static void path_run(bk_class* i_this) {
                 i_this->speedF = 0.0f;
                 if (i_this->dr.mAcch.ChkGroundHit() && i_this->mpMorf->isStop()) {
                     i_this->m1210 = 0;
-                    anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP1);
+                    anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP1_e);
                     i_this->speed.y = cM_rndF(REG8_F(7) + 10.0f) + 65.0f + REG8_F(8);
                     fopAcM_monsSeStart(i_this, JA_SE_CV_BK_JUMP, 0);
                 }
                 
                 if (i_this->m0300[2] == 0) {
                     i_this->m0300[2] = cM_rndF(100.0f) + 50.0f;
-                    anm_init(i_this, BK_BCK_BK_RUN, 10.0f, J3DFrameCtrl::EMode_LOOP, l_bkHIO.m070, BK_BAS_BK_RUN);
+                    anm_init(i_this, dRes_INDEX_BK_BCK_BK_RUN_e, 10.0f, J3DFrameCtrl::EMode_LOOP, l_bkHIO.m070, dRes_INDEX_BK_BAS_BK_RUN_e);
                     i_this->m120C = 0;
                 }
                 break;
@@ -1817,7 +1817,7 @@ static void fight_run(bk_class* i_this) {
         i_this->m1212++;
         if (daBk_player_way_check(i_this) && (i_this->m1212 & 0x30) && !r29) {
             if (i_this->m120C != 0) {
-                anm_init(i_this, BK_BCK_BK_RUN, 10.0f, J3DFrameCtrl::EMode_LOOP, l_bkHIO.m070, BK_BAS_BK_RUN);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_RUN_e, 10.0f, J3DFrameCtrl::EMode_LOOP, l_bkHIO.m070, dRes_INDEX_BK_BAS_BK_RUN_e);
                 i_this->m120C = 0;
             }
             if (i_this->mPlayerDistance < l_bkHIO.m02C) {
@@ -1839,11 +1839,11 @@ static void fight_run(bk_class* i_this) {
             case 0:
                 i_this->m1210 = 1;
                 cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->dr.m4D0, 2, 0x2000);
-                anm_init(i_this, BK_BCK_BK_JUMP2, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP2);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP2_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP2_e);
                 break;
             case 1:
                 if (i_this->dr.mAcch.ChkGroundHit() && i_this->mpMorf->isStop()) {
-                    anm_init(i_this, BK_BCK_BK_JUMP2, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP2);
+                    anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP2_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP2_e);
                     i_this->m1210 = 2;
                     i_this->m034C = l_bkHIO.m00C + 2;
                     i_this->m034E = 4;
@@ -1854,7 +1854,7 @@ static void fight_run(bk_class* i_this) {
                 cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->dr.m4D0, 2, 0x2000);
                 if (i_this->dr.mAcch.ChkGroundHit() && i_this->mpMorf->isStop()) {
                     i_this->m1210 = 1;
-                    anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP1);
+                    anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP1_e);
                     i_this->speed.y = 65.0f + cM_rndF(10.0f + REG8_F(7)) + REG8_F(8);
                     if ((i_this->m02DD & 0xC) == 0) {
                         s16 temp = cM_rndFX(3000.0f + REG6_F(13));
@@ -1885,9 +1885,9 @@ static void fight_run(bk_class* i_this) {
         }
         if ((i_this->m02DD & 0xC) == 0 && std::fabsf(stickPosX) > 0.1f) {
             if (i_this->m0B30 != 0 || i_this->m11F3 != 0) {
-                anm_init(i_this, BK_BCK_BK_WALK2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_WALK2);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_WALK2_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_WALK2_e);
             } else {
-                anm_init(i_this, BK_BCK_BK_WALK2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_WALK2);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_WALK2_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_WALK2_e);
             }
             if (stickPosX > 0.0f) {
                 i_this->dr.mMode = 5;
@@ -1896,16 +1896,16 @@ static void fight_run(bk_class* i_this) {
             }
         } else if (i_this->mPlayerDistance < l_bkHIO.m030) {
             if (i_this->m0B30 != 0 || i_this->m11F3 != 0) {
-                anm_init(i_this, BK_BCK_BK_WALK2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_WALK2);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_WALK2_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_WALK2_e);
             } else {
-                anm_init(i_this, BK_BCK_BK_WALK2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_WALK2);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_WALK2_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_WALK2_e);
             }
             i_this->dr.mMode = 4;
         } else {
             if (i_this->m0B30 != 0 || i_this->m11F3 != 0) {
-                anm_init(i_this, BK_BCK_BK_WALK2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_WALK2);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_WALK2_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_WALK2_e);
             } else {
-                anm_init(i_this, BK_BCK_BK_WALK2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_WALK2);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_WALK2_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_WALK2_e);
             }
             i_this->dr.mMode = 3;
         }
@@ -1915,7 +1915,7 @@ static void fight_run(bk_class* i_this) {
         cLib_addCalc2(&i_this->speedF, l_bkHIO.m060, 1.0f, 20.0f);
         if (r29) {
             i_this->speed.y = 100.0f + REG0_F(16);
-            anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP1_e);
             fopAcM_monsSeStart(i_this, JA_SE_CV_BK_JUMP, 0);
             i_this->dr.mMode = 33;
             break;
@@ -1926,7 +1926,7 @@ static void fight_run(bk_class* i_this) {
         break;
     case 33:
         if (i_this->dr.mAcch.ChkGroundHit()) {
-            anm_init(i_this, BK_BCK_BK_JUMP2, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP2);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP2_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP2_e);
             i_this->dr.mMode++;
         }
         break;
@@ -1946,9 +1946,9 @@ static void fight_run(bk_class* i_this) {
         }
         i_this->dr.mMode = 3;
         if (i_this->m0B30 != 0 || i_this->m11F3 != 0) {
-            anm_init(i_this, BK_BCK_BK_WALK2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_WALK2);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_WALK2_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_WALK2_e);
         } else {
-            anm_init(i_this, BK_BCK_BK_WALK2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_WALK2);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_WALK2_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_WALK2_e);
         }
         break;
     case 5:
@@ -2033,7 +2033,7 @@ static void fight_run(bk_class* i_this) {
                     if ((ground_4_check(i_this, 4, i_this->current.angle.y, 200.0f) & 0xD) == 0) {
                         i_this->dr.mAction = 5;
                         attack_set(i_this, 1);
-                        anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP1);
+                        anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP1_e);
                         i_this->dr.mMode = -10;
                         i_this->speedF = -60.0f + REG0_F(3);
                         i_this->speed.y = 80.0f + REG0_F(4);
@@ -2153,7 +2153,7 @@ static void fight(bk_class* i_this) {
     switch (i_this->dr.mMode) {
     case -10:
         if (i_this->dr.mAcch.ChkGroundHit()) {
-            anm_init(i_this, BK_BCK_BK_JUMP2, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP2);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP2_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP2_e);
             i_this->dr.mMode = -9;
             i_this->speedF = 0.0f;
         }
@@ -2162,7 +2162,7 @@ static void fight(bk_class* i_this) {
         if (i_this->mpMorf->isStop()) {
             i_this->dr.mMode = 1;
             i_this->m0300[2] = 8;
-            anm_init(i_this, BK_BCK_BK_JATTACK1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_JATTACK1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->speedF = 80.0f + REG0_F(5);
             i_this->speed.y = 115.0f + REG0_F(6);
             goto temp_1B8;
@@ -2366,7 +2366,7 @@ static void p_lost(bk_class* i_this) {
         // Fall-through
     case 0:
         i_this->dr.mMode = 1;
-        anm_init(i_this, BK_BCK_BK_KYORO2, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_KYORO2);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_KYORO2_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_KYORO2_e);
         i_this->speedF = 0.0f;
         i_this->m0300[1] = 30.0f + cM_rndF(30.0f);
         // Fall-through
@@ -2410,7 +2410,7 @@ static void b_nige(bk_class* i_this) {
     switch (i_this->dr.mMode) {
     case 0:
         i_this->dr.mMode = 1;
-        anm_init(i_this, BK_BCK_BK_HAKKEN, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_HAKKEN);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_HAKKEN_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_HAKKEN_e);
         fopAcM_monsSeStart(i_this, JA_SE_CV_BK_FOUND_LINK, 0);
         i_this->m0300[1] = 20;
         // Fall-through
@@ -2419,7 +2419,7 @@ static void b_nige(bk_class* i_this) {
         cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->dr.m4D0 + 0x8000, 2, 0x3000);
         if (i_this->m0300[1] == 0) {
             i_this->dr.mMode = 2;
-            anm_init(i_this, BK_BCK_BK_NIGERU, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_NIGERU);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_NIGERU_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_NIGERU_e);
             fopAcM_monsSeStart(i_this, JA_SE_CV_BK_LOST_BOKO, 0);
         }
         break;
@@ -2430,7 +2430,7 @@ static void b_nige(bk_class* i_this) {
         cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->dr.m4D0, 4, 0x1000);
         if (std::sqrtf(sp10.x*sp10.x + sp10.z*sp10.z) > 800.0f) {
             i_this->dr.mMode = 3;
-            anm_init(i_this, BK_BCK_BK_WAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_WAIT);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_WAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_WAIT_e);
         }
         break;
     case 3:
@@ -2453,7 +2453,7 @@ static void defence(bk_class* i_this) {
     switch (i_this->dr.mMode) {
     case 0:
         i_this->dr.mMode = 1;
-        anm_init(i_this, BK_BCK_BK_BOUGYO1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_BOUGYO1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->speedF = 0.0f;
         // Fall-through
     case 1:
@@ -2477,7 +2477,7 @@ static void defence(bk_class* i_this) {
 static void oshi(bk_class* i_this) {
     i_this->dr.mAction = 5;
     attack_set(i_this, 1);
-    anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP1);
+    anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP1_e);
     i_this->dr.mMode = -10;
     i_this->speedF = -90.0f + REG6_F(10);
     i_this->speed.y = 85.0f + REG6_F(11);
@@ -2497,11 +2497,11 @@ static void hukki(bk_class* i_this) {
     
     switch (i_this->dr.mMode) {
     case 10:
-        anm_init(i_this, BK_BCK_BK_OKIRUA, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_OKIRUA);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_OKIRUA_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_OKIRUA_e);
         i_this->m0300[2] = 15;
         goto temp_194;
     case 12:
-        anm_init(i_this, BK_BCK_BK_OKIRUU, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_OKIRUU);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_OKIRUU_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_OKIRUU_e);
         i_this->m0300[2] = 15 + REG0_S(5);
 temp_194:
         i_this->speedF = 0.0f;
@@ -2668,7 +2668,7 @@ static void yogan_fail(bk_class* i_this) {
     
     switch (i_this->dr.mMode) {
     case 0:
-        anm_init(i_this, BK_BCK_BK_NIGERU, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_NIGERU);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_NIGERU_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_NIGERU_e);
         i_this->dr.mMode = 1;
         i_this->speed.y = 190.0f + REG0_F(19);
         fopAcM_monsSeStart(i_this, JA_SE_CV_BK_SURPRISE, 0);
@@ -2711,7 +2711,7 @@ static void water_fail(bk_class* i_this) {
     
     switch (i_this->dr.mMode) {
     case 0:
-        anm_init(i_this, BK_BCK_BK_NIGERU, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_NIGERU);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_NIGERU_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_NIGERU_e);
         i_this->dr.mMode = 1;
         fopAcM_monsSeStart(actor, JA_SE_CV_BK_SURPRISE, 0);
         i_this->dr.m458.y = 0.0f;
@@ -2763,7 +2763,7 @@ static void wepon_search(bk_class* i_this) {
     case -1:
         i_this->dr.mMode = 0;
         i_this->m11F3 = 0;
-        anm_init(i_this, BK_BCK_BK_HAKKEN, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_HAKKEN);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_HAKKEN_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_HAKKEN_e);
         if (f31 < 900.0f) {
             i_this->m0300[1] = 20;
         } else {
@@ -2779,7 +2779,7 @@ static void wepon_search(bk_class* i_this) {
             if (i_this->mpMorf->isStop() || i_this->m0300[1] == 0) {
                 i_this->dr.mMode = 1;
                 i_this->m030A = l_bkHIO.m08E;
-                anm_init(i_this, BK_BCK_BK_RUN, 3.0f, J3DFrameCtrl::EMode_LOOP, l_bkHIO.m074, BK_BAS_BK_RUN);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_RUN_e, 3.0f, J3DFrameCtrl::EMode_LOOP, l_bkHIO.m074, dRes_INDEX_BK_BAS_BK_RUN_e);
                 i_this->m02CE = 0;
             }
         }
@@ -2791,7 +2791,7 @@ static void wepon_search(bk_class* i_this) {
         cLib_addCalcAngleS2(&actor->current.angle.y, i_this->dr.m4D0, 4, 0x1000);
         if (f31 < REG8_F(2) + 150.0f) {
             i_this->dr.mMode = 2;
-            anm_init(i_this, BK_BCK_BK_CATCH, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_CATCH);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_CATCH_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_CATCH_e);
             i_this->m0300[1] = 29;
         } else {
             if (i_this->m030A == 0) {
@@ -2801,7 +2801,7 @@ static void wepon_search(bk_class* i_this) {
             } else if (i_this->dr.mAcch.ChkGroundHit() && i_this->dr.mAcch.ChkWallHit()) {
                 if (i_this->m02CE < 2) {
                     actor->speed.y = 100.0f + REG0_F(16);
-                    anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP1);
+                    anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP1_e);
                     fopAcM_monsSeStart(actor, JA_SE_CV_BK_JUMP, 0);
                     i_this->dr.mMode = 5;
                     i_this->m02CE++;
@@ -2871,7 +2871,7 @@ static void wepon_search(bk_class* i_this) {
     case 5:
         actor->speedF = l_bkHIO.m05C * 0.5f;
         if (i_this->dr.mAcch.ChkGroundHit()) {
-            anm_init(i_this, BK_BCK_BK_JUMP2, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP2);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP2_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP2_e);
             i_this->dr.mMode++;
         }
         break;
@@ -2879,7 +2879,7 @@ static void wepon_search(bk_class* i_this) {
         actor->speedF = 0.0f;
         if (i_this->mpMorf->isStop()) {
             i_this->dr.mMode = 1;
-            anm_init(i_this, BK_BCK_BK_RUN, 3.0f, J3DFrameCtrl::EMode_LOOP, l_bkHIO.m074, BK_BAS_BK_RUN);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_RUN_e, 3.0f, J3DFrameCtrl::EMode_LOOP, l_bkHIO.m074, dRes_INDEX_BK_BAS_BK_RUN_e);
         }
         break;
     }
@@ -2896,10 +2896,10 @@ static void d_dozou(bk_class* i_this) {
         i_this->dr.mMode = 1;
         i_this->dr.mStts.Init(0xFF, 0xFF, i_this);
         if (i_this->m02B5 == 0) {
-            anm_init(i_this, BK_BCK_BK_ATTACK2, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, BK_BAS_BK_ATTACK2);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_ATTACK2_e, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, dRes_INDEX_BK_BAS_BK_ATTACK2_e);
             i_this->mpMorf->setFrame(0.0f);
         } else {
-            anm_init(i_this, BK_BCK_BK_NOBI, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, BK_BAS_BK_NOBI);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_NOBI_e, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, dRes_INDEX_BK_BAS_BK_NOBI_e);
             i_this->mpMorf->setFrame(27.0f);
         }
         // Fall-through
@@ -2942,11 +2942,11 @@ static void carry_drop(bk_class* i_this) {
     case 0:
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_0004);
         i_this->dr.mMode = 1;
-        anm_init(i_this, BK_BCK_BK_KOUKA, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_KOUKA_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         // Fall-through
     case 1:
         if (i_this->dr.mAcch.ChkGroundHit()) {
-            anm_init(i_this, BK_BCK_BK_TYAKU, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_TYAKU_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->dr.mMode = 2;
             i_this->m034C = l_bkHIO.m00C + 15;
             i_this->m034E = 3;
@@ -2961,7 +2961,7 @@ static void carry_drop(bk_class* i_this) {
         cLib_addCalcAngleS2(&i_this->shape_angle.z, 0, 1, 0x1000);
         cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
         if (i_this->mpMorf->isStop()) {
-            anm_init(i_this, BK_BCK_BK_KIME, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_KIME_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->dr.mMode = 3;
             fopAcM_monsSeStart(actor, JA_SE_CV_BK_SURPRISE, 0);
         }
@@ -2982,7 +2982,7 @@ static void d_mahi(bk_class* i_this) {
     switch (i_this->dr.mMode) {
     case 0:
         i_this->dr.mMode = 1;
-        anm_init(i_this, BK_BCK_BK_SUWARI, 20.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_SUWARI);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_SUWARI_e, 20.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_SUWARI_e);
         i_this->m0300[0] = 100;
         // Fall-through
     case 1:
@@ -3019,16 +3019,16 @@ static void tubo_wait(bk_class* i_this) {
     case 0:
         if (i_this->m0300[0] != 0) {
             i_this->m0300[0] = REG0_S(3) + 30;
-            anm_init(i_this, BK_BCK_BK_SUWARI, 0.0f, J3DFrameCtrl::EMode_NONE, 0.01f, BK_BAS_BK_SUWARI);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_SUWARI_e, 0.0f, J3DFrameCtrl::EMode_NONE, 0.01f, dRes_INDEX_BK_BAS_BK_SUWARI_e);
             i_this->dr.mMode = 20;
         } else {
             if (i_this->mType == 3) {
-                anm_init(i_this, BK_BCK_BK_JATTACK1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_JATTACK1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->dr.mMode = 1;
                 actor->speed.y = REG0_F(8) + 120.0f;
                 actor->speedF = REG0_F(9) + 40.0f;
             } else {
-                anm_init(i_this, BK_BCK_BK_JUMP1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP1);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP1_e);
                 i_this->dr.mMode = 10;
                 actor->speed.y = REG8_F(8) + 120.0f;
                 actor->speedF = REG8_F(9) + 40.0f;
@@ -3044,7 +3044,7 @@ static void tubo_wait(bk_class* i_this) {
     case 1:
         if (i_this->dr.mAcch.ChkGroundHit()) {
             i_this->dr.mMode = 2;
-            anm_init(i_this, BK_BCK_BK_JATTACK2, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JATTACK2);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_JATTACK2_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JATTACK2_e);
             fopAcM_monsSeStart(actor, JA_SE_CV_BK_ATTACK_L, 0);
         }
         break;
@@ -3052,12 +3052,12 @@ static void tubo_wait(bk_class* i_this) {
         r28 = true;
         if (i_this->mpMorf->isStop()) {
             i_this->dr.mMode = 11;
-            anm_init(i_this, BK_BCK_BK_JATTACK3, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JATTACK3);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_JATTACK3_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JATTACK3_e);
         }
         break;
     case 10:
         if (i_this->m0300[0] == 0 && i_this->dr.mAcch.ChkGroundHit()) {
-            anm_init(i_this, BK_BCK_BK_JUMP2, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP2);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP2_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP2_e);
             i_this->dr.mMode = 11;
             i_this->m034C = l_bkHIO.m00C + 6;
             i_this->m034E = 3;
@@ -3073,7 +3073,7 @@ static void tubo_wait(bk_class* i_this) {
     case 20:
         if (i_this->m0300[0] != 0) {
             if (i_this->m0300[0] == 1) {
-                anm_init(i_this, BK_BCK_BK_SUWARI, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_SUWARI);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_SUWARI_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_SUWARI_e);
             }
         } else if (i_this->mpMorf->isStop()) {
             i_this->dr.mAction = 0;
@@ -3112,7 +3112,7 @@ static void z_demo_1(bk_class* i_this) {
                 i_this->m0300[0] = 90;
             }
             i_this->dr.mMode = 1;
-            anm_init(i_this, BK_BCK_BK_TUTUKU1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_TUTUKU1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_TUTUKU1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_TUTUKU1_e);
         }
         break;
     case 1:
@@ -3133,7 +3133,7 @@ static void z_demo_1(bk_class* i_this) {
                 i_this->m0300[0] = 180;
             }
             i_this->dr.mMode = 2;
-            anm_init(i_this, BK_BCK_BK_TUTUKU2, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_TUTUKU2_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         break;
     case 2:
@@ -3145,7 +3145,7 @@ static void z_demo_1(bk_class* i_this) {
                 i_this->m0300[0] = 150;
             }
             i_this->dr.mMode = 0;
-            anm_init(i_this, BK_BCK_BK_TUTUKU3, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_TUTUKU3_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         break;
     }
@@ -3163,7 +3163,7 @@ static void z_demo_1(bk_class* i_this) {
         i_this->mType = 0;
         i_this->dr.mAction = 1;
         i_this->dr.mMode = 20;
-        anm_init(i_this, BK_BCK_BK_BIKKURI, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_BIKKURI_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->m0300[1] = 30;
         fopAcM_monsSeStart(actor, JA_SE_CV_BK_FOUND_LINK, 0);
     }
@@ -3188,7 +3188,7 @@ static void b_hang(bk_class* i_this) {
     i_this->dr.m71E = 5;
     switch (i_this->dr.mMode) {
     case 0:
-        anm_init(i_this, BK_BCK_BK_OTISOU1, REG12_F(9) + 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, BK_BAS_BK_OTISOU1);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_OTISOU1_e, REG12_F(9) + 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_BK_BAS_BK_OTISOU1_e);
         i_this->dr.mMode = 1;
         i_this->dr.m798 = 0.0f;
         i_this->m0300[0] = 100;
@@ -3202,7 +3202,7 @@ static void b_hang(bk_class* i_this) {
             i_this->m0336 = 2;
         }
         if (i_this->m0300[0] == 0) {
-            anm_init(i_this, BK_BCK_BK_OTISOU2, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_OTISOU2);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_OTISOU2_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_OTISOU2_e);
             i_this->dr.mMode = 2;
         }
         break;
@@ -3264,14 +3264,14 @@ static void rope_on(bk_class* i_this) {
     switch (i_this->dr.mMode) {
     case 0:
         i_this->speedF = 0.0f;
-        anm_init(i_this, BK_BCK_BK_KYORO2, 10.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, BK_BAS_BK_KYORO2);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_KYORO2_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, dRes_INDEX_BK_BAS_BK_KYORO2_e);
         i_this->dr.mMode = 1;
         i_this->m0300[0] = 40;
         // Fall-through
     case 1:
         if (i_this->m0300[0] == 0) {
             i_this->dr.mMode = 2;
-            anm_init(i_this, BK_BCK_BK_WALK, 10.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, BK_BAS_BK_WALK);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_WALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, dRes_INDEX_BK_BAS_BK_WALK_e);
         }
         break;
     case 2: {
@@ -3280,12 +3280,12 @@ static void rope_on(bk_class* i_this) {
         cLib_addCalcAngleS2(&i_this->current.angle.y, targetAngle, 4, 0x1000);
         if (i_this->dr.mAcch.ChkWallHit()) {
             i_this->speed.y = 100.0f + REG0_F(16);
-            anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP1_e);
             fopAcM_monsSeStart(i_this, JA_SE_CV_BK_JUMP, 0);
             i_this->dr.mMode = 3;
         }
         if (fopAcM_searchPlayerDistance(i_this) < 200.0f) {
-            anm_init(i_this, BK_BCK_BK_SUWARI, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_SUWARI);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_SUWARI_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_SUWARI_e);
             i_this->dr.mMode = 5;
         }
         break;
@@ -3293,7 +3293,7 @@ static void rope_on(bk_class* i_this) {
     case 3:
         i_this->speedF = 35.0f;
         if (i_this->dr.mAcch.ChkGroundHit()) {
-            anm_init(i_this, BK_BCK_BK_JUMP2, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP2);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP2_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP2_e);
             i_this->dr.mMode = 4;
         }
         break;
@@ -3301,14 +3301,14 @@ static void rope_on(bk_class* i_this) {
         i_this->speedF = 0.0f;
         if (i_this->mpMorf->isStop()) {
             i_this->dr.mMode = 2;
-            anm_init(i_this, BK_BCK_BK_WALK, 10.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, BK_BAS_BK_WALK);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_WALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, dRes_INDEX_BK_BAS_BK_WALK_e);
         }
         break;
     case 5:
         i_this->speedF = 0.0f;
         if (fopAcM_searchPlayerDistance(i_this) > 250.0f) {
             i_this->dr.mMode = 2;
-            anm_init(i_this, BK_BCK_BK_WALK, 10.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, BK_BAS_BK_WALK);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_WALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 2.0f, dRes_INDEX_BK_BAS_BK_WALK_e);
         }
         break;
     }
@@ -3708,7 +3708,7 @@ static void damage_check(bk_class* i_this) {
         i_this->dr.m424 |= 0x20;
         i_this->dr.m428 = 23.0f;
         cMtx_YrotS(*calc_mtx, i_this->m0332);
-        anm_init(i_this, BK_BCK_BK_AOMUKE, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_AOMUKE);
+        anm_init(i_this, dRes_INDEX_BK_BCK_BK_AOMUKE_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_AOMUKE_e);
         i_this->dr.m48A = 10;
         i_this->dr.m474 = REG0_F(14) + 5000.0f;
         i_this->dr.m70E = 7;
@@ -4018,7 +4018,7 @@ static void demo_camera(bk_class* i_this) {
         }
         
         if (i_this->m1236 == 5) {
-            anm_init(i_this, BK_BCK_BK_BIKKURI, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_BIKKURI_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         }
         
         if (i_this->m1236 >= 35) {
@@ -4105,7 +4105,7 @@ static void demo_camera(bk_class* i_this) {
 /* 0000CC68-0000CD00       .text tate_mtx_set__FP8bk_class */
 static void tate_mtx_set(bk_class* i_this) {
     if (i_this->m02D4 != 0) {
-        MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x25), *calc_mtx); // tate joint
+        MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(BK_JNT_TATE_e), *calc_mtx);
         i_this->m02D0->setBaseTRMtx(*calc_mtx);
         cXyz sp08;
         sp08.x = REG8_F(12);
@@ -4118,7 +4118,7 @@ static void tate_mtx_set(bk_class* i_this) {
 /* 0000CD00-0000CE18       .text bou_mtx_set__FP8bk_class */
 static void bou_mtx_set(bk_class* i_this) {
     if (i_this->m02DC != 0) {
-        int jointIdx = 0x2C + REG7_S(4); // buki joint
+        int jointIdx = BK_JNT_BUKI_e + REG7_S(4);
         MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(jointIdx), *calc_mtx);
         s16 angleY = 0x4000 + REG7_S(0);
         cMtx_YrotM(*calc_mtx, angleY);
@@ -4311,14 +4311,14 @@ static BOOL daBk_Execute(bk_class* i_this) {
         i_this->m11FC = fpcM_ERROR_PROCESS_ID_e;
         switch (r3) {
         case 1:
-            anm_init(i_this, BK_BCK_BK_AOMUKE, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_AOMUKE);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_AOMUKE_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_AOMUKE_e);
             if (i_this->m0B30 != 0) {
                 i_this->m0B34 = 1;
             }
             i_this->dr.mAction = 0;
             break;
         case 2:
-            anm_init(i_this, BK_BCK_BK_UTUBUSE, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_UTUBUSE);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_UTUBUSE_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_UTUBUSE_e);
             break;
         case 5:
             if (i_this->dr.mAction != 4 && i_this->dr.mAction != 11) {
@@ -4349,7 +4349,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
             i_this->dr.m4C8[2] = l_bkHIO.m08C;
             break;
         case 30:
-            anm_init(i_this, BK_BCK_BK_AOMUKE, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_AOMUKE);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_AOMUKE_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_AOMUKE_e);
             if (i_this->m0B30 != 0) {
                 i_this->m0B34 = 1;
             }
@@ -4374,7 +4374,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
         if (boko != NULL) {
             if (fopAcM_checkCarryNow(boko)) {
                 if (i_this->m0B7B == 0) {
-                    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x2C), *calc_mtx); // buki joint
+                    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(BK_JNT_BUKI_e), *calc_mtx);
                     s16 angleY = 0x3E80 + REG8_S(1);
                     cMtx_YrotM(*calc_mtx, angleY);
                     s16 angleX = REG8_S(2);
@@ -4529,11 +4529,11 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     bk_class* i_this = (bk_class*)i_actor;
     
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BDL_BK),
+        (J3DModelData*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BDL_BK_e),
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bk", BK_BCK_BK_SUWARI),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BCK_BK_SUWARI_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
-        dComIfG_getObjectRes("Bk", BK_BAS_BK_SUWARI),
+        dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BAS_BK_SUWARI_e),
         0x00080000,
         0x37221203
     );
@@ -4555,9 +4555,9 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     }
     
     if (i_this->m02DC != 0) {
-        i_this->m1230 = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", BK_BMT_PINK);
+        i_this->m1230 = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BMT_PINK_e);
     } else if (i_this->m02D4 != 0) {
-        i_this->m1230 = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", BK_BMT_GREEN);
+        i_this->m1230 = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BMT_GREEN_e);
     }
     
     i_this->m02C4 = new mDoExt_btpAnm();
@@ -4568,7 +4568,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
         // TODO: Check what happens when this bug occurs.
         return cPhs_ERROR_e;
     }
-    J3DAnmTexPattern* btp = (J3DAnmTexPattern*)dComIfG_getObjectRes("Bk", BK_BTP_TMABATAKI);
+    J3DAnmTexPattern* btp = (J3DAnmTexPattern*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BTP_TMABATAKI_e);
     if (!i_this->m02C4->init(model->getModelData(), btp, TRUE, J3DFrameCtrl::EMode_NONE)) {
         // Bug: Same as above.
         // TODO check this case as well.
@@ -4576,13 +4576,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     }
     
     J3DModelData* modelData;
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BMD_BK_KB);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BMD_BK_KB_e);
     JUT_ASSERT(VERSION_SELECT(9459, 9398, 9418, 9418), modelData != NULL);
     if (i_this->m02D5 & 0x40) {
-        J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", BK_BMT_BK_KEN);
+        J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BMT_BK_KEN_e);
         modelData->setMaterialTable(bmt, J3DMatCopyFlag_Material);
     } else {
-        J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", BK_BMT_BK_BOKO);
+        J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BMT_BK_BOKO_e);
         modelData->setMaterialTable(bmt, J3DMatCopyFlag_Material);
     }
     i_this->m02E8 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -4594,13 +4594,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     i_this->m02E8->setBaseScale(i_this->scale);
     
     if (i_this->m02D4 != 0) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BMD_BK_TATE);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BMD_BK_TATE_e);
         i_this->m02D0 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         JUT_ASSERT(VERSION_SELECT(9486, 9425, 9445, 9445), modelData != NULL);
     }
     
     if (i_this->m02DC != 0) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BDL_BOUEN);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BDL_BOUEN_e);
         i_this->m02D8 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         JUT_ASSERT(VERSION_SELECT(9496, 9434, 9454, 9454), modelData != NULL);
     }
@@ -4639,91 +4639,91 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_SPH_e,
-            /* mJointIndex */ 0x01, // hip1 joint
+            /* mJointIndex */ BK_JNT_HIP1_e,
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ hip_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x03, // momoL joint
+            /* mJointIndex */ BK_JNT_MOMOL_e,
             /* mRadius     */ 5.0f,
             /* mpOffsets   */ momo_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x04, // suneL1 joint
+            /* mJointIndex */ BK_JNT_SUNEL1_e,
             /* mRadius     */ 2.5f,
             /* mpOffsets   */ sune_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x08, // momorR joint
+            /* mJointIndex */ BK_JNT_MOMORR_e,
             /* mRadius     */ 5.0f,
             /* mpOffsets   */ momo_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09, // suneR1 joint
+            /* mJointIndex */ BK_JNT_SUNER1_e,
             /* mRadius     */ 2.5f,
             /* mpOffsets   */ sune_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0C, // sippo1 joint
+            /* mJointIndex */ BK_JNT_SIPPO1_e,
             /* mRadius     */ 3.0f,
             /* mpOffsets   */ shipo_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0D, // sippo2 joint
+            /* mJointIndex */ BK_JNT_SIPPO2_e,
             /* mRadius     */ 2.5f,
             /* mpOffsets   */ shipo_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0E, // sippo3 joint
+            /* mJointIndex */ BK_JNT_SIPPO3_e,
             /* mRadius     */ 1.5f,
             /* mpOffsets   */ shipo_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0F, // sippo4 joint
+            /* mJointIndex */ BK_JNT_SIPPO4_e,
             /* mRadius     */ 2.5f,
             /* mpOffsets   */ shipo_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x10, // mune joint
+            /* mJointIndex */ BK_JNT_MUNE_e,
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ mune1_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x10, // mune joint
+            /* mJointIndex */ BK_JNT_MUNE_e,
             /* mRadius     */ 15.0f,
             /* mpOffsets   */ mune2_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x21, // udeL2 joint
+            /* mJointIndex */ BK_JNT_UDEL2_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ udeL_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x22, // udeL3 joint
+            /* mJointIndex */ BK_JNT_UDEL3_e,
             /* mRadius     */ 3.0f,
             /* mpOffsets   */ udeL_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x29, // udeR2 joint
+            /* mJointIndex */ BK_JNT_UDER2_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ udeR_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x2A, // udeR3 joint
+            /* mJointIndex */ BK_JNT_UDER3_e,
             /* mRadius     */ 3.0f,
             /* mpOffsets   */ udeR_offset,
         },
@@ -4795,11 +4795,11 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
         }
         
         i_this->mpMorf = new mDoExt_McaMorf(
-            (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BDL_BK),
+            (J3DModelData*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BDL_BK_e),
             NULL, NULL,
-            (J3DAnmTransformKey*)dComIfG_getObjectRes("Bk", BK_BCK_BK_SUWARI),
+            (J3DAnmTransformKey*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BCK_BK_SUWARI_e),
             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
-            dComIfG_getObjectRes("Bk", BK_BAS_BK_SUWARI),
+            dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BAS_BK_SUWARI_e),
             0x00080000,
             0x37221203
         );
@@ -4818,28 +4818,28 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
         }
         
         if (i_this->m02DC != 0) {
-            i_this->m1230 = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", BK_BMT_PINK);
+            i_this->m1230 = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BMT_PINK_e);
         } else if (i_this->m02D4 != 0) {
-            i_this->m1230 = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", BK_BMT_GREEN);
+            i_this->m1230 = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BMT_GREEN_e);
         }
         
         i_this->m02C4 = new mDoExt_btpAnm();
         if (i_this->m02C4 == NULL) {
             return cPhs_ERROR_e;
         }
-        J3DAnmTexPattern* btp = (J3DAnmTexPattern*)dComIfG_getObjectRes("Bk", BK_BTP_TMABATAKI);
+        J3DAnmTexPattern* btp = (J3DAnmTexPattern*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BTP_TMABATAKI_e);
         if (!i_this->m02C4->init(model->getModelData(), btp, TRUE, J3DFrameCtrl::EMode_NONE)) {
             return cPhs_ERROR_e;
         }
         
         J3DModelData* modelData;
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BMD_BK_KB);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BMD_BK_KB_e);
         JUT_ASSERT(VERSION_SELECT(9459, 9398, 9418, 9418), modelData != NULL);
         if (i_this->m02D5 & 0x40) {
-            J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", BK_BMT_BK_KEN);
+            J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BMT_BK_KEN_e);
             modelData->setMaterialTable(bmt, J3DMatCopyFlag_Material);
         } else {
-            J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", BK_BMT_BK_BOKO);
+            J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BMT_BK_BOKO_e);
             modelData->setMaterialTable(bmt, J3DMatCopyFlag_Material);
         }
         i_this->m02E8 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -4850,13 +4850,13 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
         }
         
         if (i_this->m02D4 != 0) {
-            modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BMD_BK_TATE);
+            modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BMD_BK_TATE_e);
             i_this->m02D0 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
             JUT_ASSERT(VERSION_SELECT(9486, 9425, 9445, 9445), modelData != NULL);
         }
         
         if (i_this->m02DC != 0) {
-            modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BDL_BOUEN);
+            modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BDL_BOUEN_e);
             i_this->m02D8 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
             JUT_ASSERT(VERSION_SELECT(9496, 9434, 9454, 9454), modelData != NULL);
         }
@@ -4895,91 +4895,91 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
         static __jnt_hit_data_c search_data[] = {
             {
                 /* mShapeType  */ JntHitType_SPH_e,
-                /* mJointIndex */ 0x01, // hip1 joint
+                /* mJointIndex */ BK_JNT_HIP1_e,
                 /* mRadius     */ 20.0f,
                 /* mpOffsets   */ hip_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x03, // momoL joint
+                /* mJointIndex */ BK_JNT_MOMOL_e,
                 /* mRadius     */ 5.0f,
                 /* mpOffsets   */ momo_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x04, // suneL1 joint
+                /* mJointIndex */ BK_JNT_SUNEL1_e,
                 /* mRadius     */ 2.5f,
                 /* mpOffsets   */ sune_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x08, // momorR joint
+                /* mJointIndex */ BK_JNT_MOMORR_e,
                 /* mRadius     */ 5.0f,
                 /* mpOffsets   */ momo_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x09, // suneR1 joint
+                /* mJointIndex */ BK_JNT_SUNER1_e,
                 /* mRadius     */ 2.5f,
                 /* mpOffsets   */ sune_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x0C, // sippo1 joint
+                /* mJointIndex */ BK_JNT_SIPPO1_e,
                 /* mRadius     */ 3.0f,
                 /* mpOffsets   */ shipo_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x0D, // sippo2 joint
+                /* mJointIndex */ BK_JNT_SIPPO2_e,
                 /* mRadius     */ 2.5f,
                 /* mpOffsets   */ shipo_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x0E, // sippo3 joint
+                /* mJointIndex */ BK_JNT_SIPPO3_e,
                 /* mRadius     */ 1.5f,
                 /* mpOffsets   */ shipo_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x0F, // sippo4 joint
+                /* mJointIndex */ BK_JNT_SIPPO4_e,
                 /* mRadius     */ 2.5f,
                 /* mpOffsets   */ shipo_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x10, // mune joint
+                /* mJointIndex */ BK_JNT_MUNE_e,
                 /* mRadius     */ 20.0f,
                 /* mpOffsets   */ mune1_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x10, // mune joint
+                /* mJointIndex */ BK_JNT_MUNE_e,
                 /* mRadius     */ 15.0f,
                 /* mpOffsets   */ mune2_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x21, // udeL2 joint
+                /* mJointIndex */ BK_JNT_UDEL2_e,
                 /* mRadius     */ 6.0f,
                 /* mpOffsets   */ udeL_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x22, // udeL3 joint
+                /* mJointIndex */ BK_JNT_UDEL3_e,
                 /* mRadius     */ 3.0f,
                 /* mpOffsets   */ udeL_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x29, // udeR2 joint
+                /* mJointIndex */ BK_JNT_UDER2_e,
                 /* mRadius     */ 6.0f,
                 /* mpOffsets   */ udeR_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x2A, // udeR3 joint
+                /* mJointIndex */ BK_JNT_UDER3_e,
                 /* mRadius     */ 3.0f,
                 /* mpOffsets   */ udeR_offset,
             },
@@ -5046,7 +5046,7 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
             i_this->dr.mAction = 29;
             i_this->dr.mMaxFallDistance = 300.0f;
         } else if (i_this->mType == 5) {
-            anm_init(i_this, BK_BCK_BK_HAKOBI, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BK_BCK_BK_HAKOBI_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->dr.mAction = 30;
             i_this->dr.mMaxFallDistance = 100000.0f;
         } else if (i_this->mType == 2 || i_this->mType == 3) {
@@ -5274,30 +5274,32 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
         
         i_this->mEnemyFire.mpMcaMorf = i_this->mpMorf;
         i_this->mEnemyFire.mpActor = i_this;
+        
         static u8 fire_j[ARRAY_SIZE(i_this->mEnemyFire.mFlameJntIdxs)] = {
-            0x12,
-            0x10,
-            0x29,
-            0x2A,
-            0x21,
-            0x22,
-            0x08,
-            0x09,
-            0x03,
-            0x04,
+            BK_JNT_HEAD_e,
+            BK_JNT_MUNE_e,
+            BK_JNT_UDER2_e,
+            BK_JNT_UDER3_e,
+            BK_JNT_UDEL2_e,
+            BK_JNT_UDEL3_e,
+            BK_JNT_MOMORR_e,
+            BK_JNT_SUNER1_e,
+            BK_JNT_MOMOL_e,
+            BK_JNT_SUNEL1_e
         };
         static f32 fire_sc[ARRAY_SIZE(i_this->mEnemyFire.mParticleScale)] = {
-            2.0f,
-            2.0f,
-            1.2f,
-            1.0f,
-            1.2f,
-            1.0f,
-            1.2f,
-            1.0f,
-            1.2f,
-            1.0f,
+            2.0f, // BK_JNT_HEAD_e
+            2.0f, // BK_JNT_MUNE_e
+            1.2f, // BK_JNT_UDER2_e
+            1.0f, // BK_JNT_UDER3_e
+            1.2f, // BK_JNT_UDEL2_e
+            1.0f, // BK_JNT_UDEL3_e
+            1.2f, // BK_JNT_MOMORR_e
+            1.0f, // BK_JNT_SUNER1_e
+            1.2f, // BK_JNT_MOMOL_e
+            1.0f // BK_JNT_SUNEL1_e
         };
+        
         for (int i = 0; i < ARRAY_SIZE(i_this->mEnemyFire.mFlameJntIdxs); i++) {
             i_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
             i_this->mEnemyFire.mParticleScale[i] = fire_sc[i];

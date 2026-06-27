@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_leaves.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_vochi.h"
+#include "res/Object/Vochi.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w.h"
@@ -282,13 +282,13 @@ BOOL daObjLeaves_c::solidHeapCB(fopAc_ac_c* a_this) {
 /* 00000384-00000494       .text create_heap__13daObjLeaves_cFv */
 bool daObjLeaves_c::create_heap() {
     bool uVar5 = true;
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, VOCHI_BDL_VOCHI);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_VOCHI_BDL_VOCHI_e);
     if (modelData == NULL) {
         JUT_ASSERT(VERSION_SELECT(550, 544, 548, 548), FALSE);
         uVar5 = false;
     } else {
         mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x31000202);
-        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, VOCHI_DZB_VOCHI), cBgW::MOVE_BG_e, &mModel->getBaseTRMtx());
+        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_VOCHI_DZB_VOCHI_e), cBgW::MOVE_BG_e, &mModel->getBaseTRMtx());
         if (mModel == NULL || mpBgW == NULL) {
             uVar5 = false;
         } else {

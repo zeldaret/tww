@@ -80,13 +80,13 @@ BOOL daArrow_Lighteff_c::CreateHeap() {
     
     J3DModelData* modelData;
     if(field_0x2E8 == 1) {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GARWFI00));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_GARWFI00_e));
     }
     else if(field_0x2E8 == 2) {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GARWFI01));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_GARWFI01_e));
     }
     else {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GARWG00));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_GARWG00_e));
     }
 
     JUT_ASSERT(187, modelData != NULL);
@@ -99,16 +99,16 @@ BOOL daArrow_Lighteff_c::CreateHeap() {
     J3DAnmTextureSRTKey* btk;
     J3DAnmTevRegKey* brk;
     if(field_0x2E8 == 1) {
-        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", LINK_BTK_GARWFI00));
-        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", LINK_BRK_GARWFI00));
+        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BTK_GARWFI00_e));
+        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BRK_GARWFI00_e));
     }
     else if(field_0x2E8 == 2) {
-        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", LINK_BTK_GARWFI01));
-        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", LINK_BRK_GARWFI01));
+        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BTK_GARWFI01_e));
+        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BRK_GARWFI01_e));
     }
     else {
-        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", LINK_BTK_GARWG00));
-        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", LINK_BRK_GARWG00));
+        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BTK_GARWG00_e));
+        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BRK_GARWG00_e));
     }
 
     JUT_ASSERT(216, btk != NULL);

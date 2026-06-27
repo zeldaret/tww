@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fallrock.h"
-#include "d/res/res_always.h"
+#include "res/Object/Always.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor_mng.h"
@@ -53,7 +53,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-00000140       .text CreateHeap__12daFallRock_cFv */
 BOOL daFallRock_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname, ALWAYS_BDL_KROCK_00);
+    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname, dRes_INDEX_ALWAYS_BDL_KROCK_00_e);
     JUT_ASSERT(DEMO_SELECT(159, 161), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000,0x11020002);
@@ -255,9 +255,9 @@ void daFallRock_c::setParticle(int param_1, cXyz* pos) {
             );
 
             J3DModelData* modelData = (J3DModelData*)
-                dComIfG_getObjectRes(m_arcname, ALWAYS_BDL_MPI_KOISHI);
+                dComIfG_getObjectRes(m_arcname, dRes_INDEX_ALWAYS_BDL_MPI_KOISHI_e);
             J3DAnmTexPattern* anmTexPattern = (J3DAnmTexPattern*)
-                dComIfG_getObjectRes(m_arcname, ALWAYS_BTP_MPI_KOISHI);
+                dComIfG_getObjectRes(m_arcname, dRes_INDEX_ALWAYS_BTP_MPI_KOISHI_e);
 
             JPABaseEmitter* emitter = (JPABaseEmitter*)dComIfGp_particle_set(
                 dPa_name::ID_IT_JN_M_STS_HAHEN,

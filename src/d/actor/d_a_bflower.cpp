@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bflower.h"
-#include "d/res/res_vbakh.h"
+#include "res/Object/VbakH.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_bomb2.h"
@@ -116,7 +116,7 @@ BOOL daBFlower_c::CreateHeap() {
         mState = daBFlower_c::STATE_LIVE_E;
     }
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKH));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BDL_VBAKH_e));
     JUT_ASSERT(0x1B2, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -124,7 +124,7 @@ BOOL daBFlower_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, VBAKH_BCK_VBAHX));
+    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BCK_VBAHX_e));
     JUT_ASSERT(0x1C3, pbck != NULL);
 
     if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_RESET)) {
@@ -132,7 +132,7 @@ BOOL daBFlower_c::CreateHeap() {
     }
     mBck1.setFrame(mBck1.getEndFrame());
 
-    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, VBAKH_BRK_VBAHX));
+    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BRK_VBAHX_e));
     JUT_ASSERT(0x1D9, pbrk != NULL);
 
     if (!mBrk1.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_NONE)) {
@@ -140,7 +140,7 @@ BOOL daBFlower_c::CreateHeap() {
     }
     mBrk1.setPlaySpeed(0.0f);
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKM));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BDL_VBAKM_e));
     JUT_ASSERT(0x1E7, modelData != NULL);
 
     mpModel2 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -148,7 +148,7 @@ BOOL daBFlower_c::CreateHeap() {
         return FALSE;
     }
 
-    pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, VBAKH_BCK_VBAMX));
+    pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BCK_VBAMX_e));
     JUT_ASSERT(0x1F7, pbck != NULL);
 
     if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE)) {
@@ -156,7 +156,7 @@ BOOL daBFlower_c::CreateHeap() {
     }
     mBck2.setPlaySpeed(0.0f);
 
-    pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, VBAKH_BRK_VBAMX));
+    pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BRK_VBAMX_e));
     JUT_ASSERT(0x208, pbrk != NULL);
 
     if (!mBrk2.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_NONE)) {
@@ -225,7 +225,7 @@ int daBFlower_c::init_bck_anm(s16 param) {
 
     m55C = param;
 
-    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKH));
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BDL_VBAKH_e));
     J3DAnmTransform* pBck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, param));
 
     return mBck1.init(pModelData, pBck, TRUE, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, true);
@@ -293,12 +293,12 @@ BOOL daBFlower_c::actLive() {
     f32 tmp = cLib_addCalc(&mBombScale.z, 1.0f, 0.05f, 0.1f, 0.05f);
 
     if (m5B8 != 0 && tmp == 0.0f) {
-        init_bck_anm(VBAKH_BCK_VBAKH);
+        init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAKH_e);
     }
 
     // Play animation if player walks by bomb flower
     if (dist < 50.0f && std::abs(mPrevPlayerDist - dist) > 2.0f && std::abs(player->current.pos.y - current.pos.y) < 10.0f) {
-        init_bck_anm(VBAKH_BCK_VBAKH);
+        init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAKH_e);
     }
 
     // Play animation if player dropped held actor near bomb flower?
@@ -307,7 +307,7 @@ BOOL daBFlower_c::actLive() {
 
         if (pActor != NULL) {
             if ((pActor->current.pos - current.pos).absXZ() < 70.0f) {
-                init_bck_anm(VBAKH_BCK_VBAKH);
+                init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAKH_e);
             }
         }
     }
@@ -372,7 +372,7 @@ BOOL daBFlower_c::actLive() {
             daPy_getPlayerLinkActorClass()->exchangeGrabActor(mpBombActor);
         }
 
-        init_bck_anm(VBAKH_BCK_VBAKH);
+        init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAKH_e);
     }
 
     if (m58C != 0 && tmp > 0.0f) {
@@ -396,12 +396,12 @@ BOOL daBFlower_c::actDead() {
 
     // Play animation if player walks by bomb flower
     if (dist < 50.0f && std::abs(mPrevPlayerDist - dist) > 2.0f) {
-        init_bck_anm(VBAKH_BCK_VBAHX);
+        init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAHX_e);
     }
 
     if (mAnimTimer == 0) {
         mAnimTimer = cM_rndF(100.0f) + 100.0f;
-        init_bck_anm(VBAKH_BCK_VBAHX);
+        init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAHX_e);
     }
 
     mBrk1.setPlaySpeed(0.0f);
@@ -414,7 +414,7 @@ BOOL daBFlower_c::actDead() {
             mState = daBFlower_c::STATE_LIVE_E;
             fopAcM_onSwitch(this, mSwitchNo);
 
-            init_bck_anm(VBAKH_BCK_VBAKH);
+            init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAKH_e);
             mBrk1.setPlaySpeed(1.0f);
             mBrk2.setPlaySpeed(1.0f);
             mBck2.setPlaySpeed(1.0f);

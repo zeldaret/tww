@@ -9,7 +9,7 @@
 #include "d/actor/d_a_tsubo.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_s_play.h"
-#include "d/res/res_ji.h"
+#include "res/Object/Ji.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_snap.h"
 #include "d/d_lib.h"
@@ -1470,7 +1470,7 @@ void daNpc_Ji1_c::set_mtx() {
 #endif
 
         field_0xB90 = field_0xB78;
-        mDoMtx_stack_c::copy(mpSpearMorf->getModel()->getAnmMtx(1));
+        mDoMtx_stack_c::copy(mpSpearMorf->getModel()->getAnmMtx(JI_YARI_JNT_JI_YARI_e));
         mDoMtx_stack_c::multVec(&temp, &field_0xB78);
         mDoMtx_stack_c::multVec(&temp2, &field_0xB84);
     }
@@ -4248,146 +4248,146 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 
         switch(param_1) {
             case 0:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_WAIT01));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_WAIT01_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_WAIT01);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_WAIT01_e);
 
                 break;
             case 1:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_WAIT02));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_WAIT02_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_WAIT02);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_WAIT02_e);
 
                 break;
             case 2:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TALK01));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TALK01_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TALK01);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TALK01_e);
 
                 break;
             case 3:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TALK02));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TALK02_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TALK02);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TALK02_e);
 
                 break;
             case 4:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_AKIRE));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_AKIRE_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_AKIRE);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_AKIRE_e);
 
                 break;
             case 5:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_KAMAE));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_KAMAE_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_KAMAE);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_KAMAE_e);
 
                 break;
             case 6:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_KROT));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_KROT_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_KROT);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_KROT_e);
                 speed = l_HIO.field_0x48;
 
                 break;
             case 7:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_INASI));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_INASI_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_INASI);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_INASI_e);
                 speed = l_HIO.field_0x44;
 
                 break;
             case 8:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TATEGUARD));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TATEGUARD_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TATEGUARD);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TATEGUARD_e);
 
                 break;
             case 9:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_YKGUARD));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_YKGUARD_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_YKGUARD);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_YKGUARD_e);
 
                 break;
             case 10:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_JPGUARD));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_JPGUARD_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_JPGUARD);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_JPGUARD_e);
 
                 break;
             case 11:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TOKAMAE));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TOKAMAE_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TOKAMAE);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TOKAMAE_e);
 
                 break;
             case 12:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_REI));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_REI_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_REI);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_REI_e);
 
                 break;
             case 13:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_WARAI));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_WARAI_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_WARAI);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_WARAI_e);
                 speed = l_HIO.field_0x4C;
 
                 break;
             case 14:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_JPGUARD));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_JPGUARD_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_JPGUARD);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_JPGUARD_e);
                 speed = 2.0f;
 
                 break;
             case 15:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_GUARD));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_GUARD_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_GUARD);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_GUARD_e);
                 speed = 2.0f;
 
                 break;
             case 16:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_BTKAMASI));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_BTKAMASI_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_BTKAMASI);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_BTKAMASI_e);
 
                 break;
             case 17:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_BTKAMAE));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_BTKAMAE_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_BTKAMAE);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_BTKAMAE_e);
 
                 break;
             case 18:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_UDEGUMI));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_UDEGUMI_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_UDEGUMI);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_UDEGUMI_e);
 
                 break;
             case 19:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TATEATTACK));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TATEATTACK_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TATEATTACK);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TATEATTACK_e);
 
                 break;
             case 20:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_YOKOATTACK));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_YOKOATTACK_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_YOKOATTACK);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_YOKOATTACK_e);
 
                 break;
             case 21:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_ODOROKU));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_ODOROKU_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_ODOROKU);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_ODOROKU_e);
 
                 break;
             case 22:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_BIBIRI));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_BIBIRI_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_BIBIRI);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_BIBIRI_e);
 
                 BackSlideInit();
                 if(field_0xD84 == 1) {
@@ -4396,9 +4396,9 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 
                 break;
             case 23:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_NAKU));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_NAKU_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_NAKU);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_NAKU_e);
 
                 if(field_0x430 == 0) {
                     field_0x430 = dComIfGp_particle_set(dPa_name::ID_AK_SN_JITEAR00, &current.pos);
@@ -4407,15 +4407,15 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 
                 break;
             case 24:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_NUGUI));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_NUGUI_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_NUGUI);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_NUGUI_e);
 
                 break;
             case 25:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_DAMAGE));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_DAMAGE_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_DAMAGE);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_DAMAGE_e);
 
                 break;
             default:
@@ -4424,10 +4424,10 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 
         mpOrcaMorf->setAnm(bckAnm, loopMode, param_2, speed, 0.0f, -1.0f, pSoundAnimRes);
         if(mAnimation == 0x13) {
-            mpSpearMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
+            mpSpearMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JIYARI_TATEATTACK_e), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
         }
         else if(mAnimation == 0x14) {
-            mpSpearMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_YOKOATTACK), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
+            mpSpearMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JIYARI_YOKOATTACK_e), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
         }
 
         return true;
@@ -4553,13 +4553,13 @@ cPhs_State daNpc_Ji1_c::_create() {
 BOOL daNpc_Ji1_c::CreateHeap() {
     /* Nonmatching - regalloc */
 
-    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Ji", JI_BDL_JI));
+    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BDL_JI_e));
     mpOrcaMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransformKey*)(dComIfG_getObjectRes("Ji", JI_BCK_WAIT01)),
+        (J3DAnmTransformKey*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_WAIT01_e)),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
-        dComIfG_getObjectRes("Ji", JI_BAS_WAIT01),
+        dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_WAIT01_e),
         0x00000000,
         0x11020203
     );
@@ -4588,9 +4588,9 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     JUT_ASSERT(0x15BA, handRJointNo >= 0);
 
     mpSpearMorf = new mDoExt_McaMorf(
-        (J3DModelData*)(dComIfG_getObjectRes("Ji", JI_BDL_JI_YARI)),
+        (J3DModelData*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BDL_JI_YARI_e)),
         NULL, NULL,
-        (J3DAnmTransformKey*)(dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK)),
+        (J3DAnmTransformKey*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JIYARI_TATEATTACK_e)),
         J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, 1,
         0,
         0x00000000,
@@ -4602,13 +4602,13 @@ BOOL daNpc_Ji1_c::CreateHeap() {
         return false;
     }
 
-    J3DModelData* modelData2 = (J3DModelData*)(dComIfG_getObjectRes("Ji", JI_BDL_YJITR00));
+    J3DModelData* modelData2 = (J3DModelData*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BDL_YJITR00_e));
     mpTearsModel = mDoExt_J3DModel__create(modelData2, 0, 0x11020203);
 
-    J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Ji", JI_BRK_YJITR00));
+    J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BRK_YJITR00_e));
     JUT_ASSERT(0x15CD, a_brk != NULL);
 
-    J3DAnmTextureSRTKey* a_btk = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes("Ji", JI_BTK_YJITR00));
+    J3DAnmTextureSRTKey* a_btk = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BTK_YJITR00_e));
     JUT_ASSERT(0x15D0, a_btk != NULL);
 
     int temp1 = mCryBrk.init(modelData2, a_brk, false, J3DFrameCtrl::EMode_LOOP);
@@ -4618,7 +4618,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
         return false;
     }
 
-    headTexPattern = (J3DAnmTexPattern*)(dComIfG_getObjectRes("Ji", JI_BTP_JI));
+    headTexPattern = (J3DAnmTexPattern*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BTP_JI_e));
     JUT_ASSERT(0x15D8, headTexPattern != NULL);
 
     temp2 = mBlinkAnim.init(modelData2, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP);
@@ -5262,7 +5262,7 @@ void daNpc_Ji1_c::BackSlide(f32 param_1, f32 param_2) {
 
 /* 0001173C-000118E0       .text harpoonRelease__11daNpc_Ji1_cFP4cXyz */
 void daNpc_Ji1_c::harpoonRelease(cXyz* param_1) {
-    MTXCopy(mpSpearMorf->getModel()->getAnmMtx(1), field_0xCA0);
+    MTXCopy(mpSpearMorf->getModel()->getAnmMtx(JI_YARI_JNT_JI_YARI_e), field_0xCA0);
     mpSpearMorf->setFrame(0.0f);
     field_0xCD0.x = field_0xCA0[0][3];
     field_0xCD0.y = field_0xCA0[1][3];

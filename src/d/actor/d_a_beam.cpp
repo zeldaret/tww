@@ -7,7 +7,7 @@
 #include "d/actor/d_a_beam.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_hot_floor.h"
-#include "d/res/res_ylesr00.h"
+#include "res/Object/Ylesr00.h"
 #include "d/d_cc_d.h"
 #include "d/d_lib.h"
 #include "d/d_particle.h"
@@ -126,19 +126,19 @@ static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
 
 /* 000003D0-00000688       .text CreateHeap__8daBeam_cFv */
 BOOL daBeam_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BMD_YLESR00));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YLESR00_BMD_YLESR00_e));
     JUT_ASSERT(304, modelData != NULL);
 
     M_mdl = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     JUT_ASSERT(306, M_mdl != NULL);
 
-    M_bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BCK_YLESR00));
+    M_bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YLESR00_BCK_YLESR00_e));
     JUT_ASSERT(310, M_bck != NULL);
 
-    M_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BRK_YLESR00));
+    M_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YLESR00_BRK_YLESR00_e));
     JUT_ASSERT(314, M_brk != NULL);
 
-    M_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BTK_YLESR00));
+    M_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YLESR00_BTK_YLESR00_e));
     JUT_ASSERT(318, M_brk != NULL);
 
     BOOL tmp1 = mBckAnm.init(modelData, M_bck, false, J3DFrameCtrl::EMode_LOOP);

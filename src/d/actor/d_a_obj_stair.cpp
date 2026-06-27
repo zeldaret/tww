@@ -7,7 +7,7 @@
 #include "d/actor/d_a_obj_stair.h"
 #include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
-#include "d/res/res_mkdan.h"
+#include "res/Object/Mkdan.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_meter.h"
 
@@ -81,7 +81,7 @@ void ride_call_back(dBgW* i_arg0, fopAc_ac_c* i_arg1, fopAc_ac_c* i_arg2) {
 
 /* 000001D8-000002C4       .text CreateHeap__13daObj_Stair_cFv */
 BOOL daObj_Stair_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKDAN_BDL_MKDAN1);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKDAN_BDL_MKDAN1_e);
     JUT_ASSERT(0xcc, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if(l_HIO.mNo < 0){
@@ -156,7 +156,7 @@ cPhs_State daObj_Stair_c::_create() {
             Quaternion quat = {0.0f, 0.0f, 0.0f, 1.0f};
             f32 sin = cM_ssin(current.angle.y >> 1);
             f32 cos = cM_scos(current.angle.y >> 1);
-            phase_state = MoveBGCreate(M_arcname, MKDAN_DZB_MKDAN1, NULL, 0x8A0);
+            phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MKDAN_DZB_MKDAN1_e, NULL, 0x8A0);
             JUT_ASSERT(0x10f, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
 
             field_0x4A0.x = 0.0f;

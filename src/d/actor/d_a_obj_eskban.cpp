@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_eskban.h"
-#include "d/res/res_eskban.h"
+#include "res/Object/Eskban.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
@@ -107,7 +107,7 @@ static dCcD_SrcSph sph_check_src = {
 /* 000000EC-000001FC       .text CreateHeap__Q211daObjEskban5Act_cFv */
 BOOL daObjEskban::Act_c::CreateHeap() {
     J3DModelData* model_data =
-        static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, ESKBAN_BDL_ESKBAN));
+        static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_ESKBAN_BDL_ESKBAN_e));
     JUT_ASSERT(261, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203U);
     M_smoke = new dPa_smokeEcallBack();
@@ -155,7 +155,7 @@ cPhs_State daObjEskban::Act_c::Mthd_Create() {
     }
     phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, ESKBAN_DZB_ESKBAN, NULL, 0x1020);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_ESKBAN_DZB_ESKBAN_e, NULL, 0x1020);
         JUT_ASSERT(336, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
@@ -199,9 +199,9 @@ void daObjEskban::Act_c::init_mtx() {
 /* 00000B3C-00000C80       .text eff_m_break__Q211daObjEskban5Act_cFUsUs */
 void daObjEskban::Act_c::eff_m_break(u16 particleID, u16 prm_b) {
     J3DModelData* mdlData =
-        static_cast<J3DModelData*>(dComIfG_getObjectRes("Always", ALWAYS_BDL_MPI_KOISHI));
+        static_cast<J3DModelData*>(dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_MPI_KOISHI_e));
     J3DAnmTexPattern* txPattern =
-        static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Always", ALWAYS_BTP_MPI_KOISHI));
+        static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTP_MPI_KOISHI_e));
 
     cXyz scale(3.0f, 3.0f, 3.0f);
     JPABaseEmitter* pBEmtr = dComIfGp_particle_set(

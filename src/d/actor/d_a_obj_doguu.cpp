@@ -7,7 +7,7 @@
 #include "d/actor/d_a_obj_doguu.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
-#include "d/res/res_doguu.h"
+#include "res/Object/Doguu.h"
 #include "d/actor/d_a_player.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_kankyo_rain.h"
@@ -50,12 +50,12 @@ const struct {
     int bdl_vgsh[3];
     int bdl_vgsp[3];
 } daObjDoguu_idx_table = {
-    DOGUU_BMT_VGSMD, DOGUU_BMT_VGSMF, DOGUU_BMT_VGSMN,
-    DOGUU_BMT_VGSBD, DOGUU_BMT_VGSBF, DOGUU_BMT_VGSBN,
-    DOGUU_BCK_VGSHD, DOGUU_BCK_VGSHF, DOGUU_BCK_VGSHN,
-    DOGUU_BRK_VGSMD, DOGUU_BRK_VGSMF, DOGUU_BRK_VGSMN,
-    DOGUU_BDL_VGSHD, DOGUU_BDL_VGSHF, DOGUU_BDL_VGSHN,
-    DOGUU_BDL_VGSPD, DOGUU_BDL_VGSPF, DOGUU_BDL_VGSPN
+    dRes_INDEX_DOGUU_BMT_VGSMD_e, dRes_INDEX_DOGUU_BMT_VGSMF_e, dRes_INDEX_DOGUU_BMT_VGSMN_e,
+    dRes_INDEX_DOGUU_BMT_VGSBD_e, dRes_INDEX_DOGUU_BMT_VGSBF_e, dRes_INDEX_DOGUU_BMT_VGSBN_e,
+    dRes_INDEX_DOGUU_BCK_VGSHD_e, dRes_INDEX_DOGUU_BCK_VGSHF_e, dRes_INDEX_DOGUU_BCK_VGSHN_e,
+    dRes_INDEX_DOGUU_BRK_VGSMD_e, dRes_INDEX_DOGUU_BRK_VGSMF_e, dRes_INDEX_DOGUU_BRK_VGSMN_e,
+    dRes_INDEX_DOGUU_BDL_VGSHD_e, dRes_INDEX_DOGUU_BDL_VGSHF_e, dRes_INDEX_DOGUU_BDL_VGSHN_e,
+    dRes_INDEX_DOGUU_BDL_VGSPD_e, dRes_INDEX_DOGUU_BDL_VGSPF_e, dRes_INDEX_DOGUU_BDL_VGSPN_e
 };
 
 namespace {
@@ -95,7 +95,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000188-000007D0       .text CreateHeap__12daObjDoguu_cFv */
 BOOL daObjDoguu_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Doguu", DOGUU_BDL_VGSMA));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Doguu", dRes_INDEX_DOGUU_BDL_VGSMA_e));
     JUT_ASSERT(0x160, modelData != NULL);
     
     J3DMaterialTable* bmt = static_cast<J3DMaterialTable*>(dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table.bmt_vgsm[field_0x894]));
@@ -136,7 +136,7 @@ BOOL daObjDoguu_c::CreateHeap() {
         return FALSE;
     }
     
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Doguu", DOGUU_BDL_VGSBA));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Doguu", dRes_INDEX_DOGUU_BDL_VGSBA_e));
     JUT_ASSERT(0x18f, modelData != NULL);
     bmt =  static_cast<J3DMaterialTable *>(dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table.bmt_vgsb[field_0x894]));
     modelData->setMaterialTable(bmt, J3DMatCopyFlag_All);
@@ -156,7 +156,7 @@ BOOL daObjDoguu_c::CreateHeap() {
         }
     }
     
-    J3DAnmTransform* bck_body = static_cast<J3DAnmTransform *>(dComIfG_getObjectRes("Doguu", DOGUU_BCK_VGSBA));
+    J3DAnmTransform* bck_body = static_cast<J3DAnmTransform *>(dComIfG_getObjectRes("Doguu", dRes_INDEX_DOGUU_BCK_VGSBA_e));
     JUT_ASSERT(0x1AB, bck_body != NULL);
     
     if (mBckBody.init(modelData, bck_body, true, J3DFrameCtrl::EMode_NONE) == 0) {
@@ -179,7 +179,7 @@ BOOL daObjDoguu_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTransform* bck_crystal = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Doguu", DOGUU_BCK_VGSPA));
+    J3DAnmTransform* bck_crystal = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Doguu", dRes_INDEX_DOGUU_BCK_VGSPA_e));
     JUT_ASSERT(0x1c3, bck_crystal != NULL);
     
     if(mBckCrystal.init(modelData, bck_crystal, true, J3DFrameCtrl::EMode_NONE) == 0){

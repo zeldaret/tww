@@ -5,8 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mbdoor.h"
-#include "d/res/res_mbdoor.h"
-#include "d/res/res_gbdoor.h"
+#include "res/Object/Mbdoor.h"
+#include "res/Object/Gbdoor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
@@ -54,9 +54,9 @@ const char* daMbdoor_c::getArcName() {
 u32 daMbdoor_c::getFuBdl() {
     switch (getShapeType()) {
     case 1:
-        return GBDOOR_BDL_V_GBDFU;
+        return dRes_INDEX_GBDOOR_BDL_V_GBDFU_e;
     default:
-        return MBDOOR_BDL_S_MBDFU;
+        return dRes_INDEX_MBDOOR_BDL_S_MBDFU_e;
     }
 }
 
@@ -64,9 +64,9 @@ u32 daMbdoor_c::getFuBdl() {
 u32 daMbdoor_c::getLBdl() {
     switch (getShapeType()) {
     case 1:
-        return GBDOOR_BDL_V_GBD_L;
+        return dRes_INDEX_GBDOOR_BDL_V_GBD_L_e;
     default:
-        return MBDOOR_BDL_S_MBD_L;
+        return dRes_INDEX_MBDOOR_BDL_S_MBD_L_e;
     }
 }
 
@@ -74,9 +74,9 @@ u32 daMbdoor_c::getLBdl() {
 u32 daMbdoor_c::getRBdl() {
     switch (getShapeType()) {
     case 1:
-        return GBDOOR_BDL_V_GBD_R;
+        return dRes_INDEX_GBDOOR_BDL_V_GBD_R_e;
     default:
-        return MBDOOR_BDL_S_MBD_R;
+        return dRes_INDEX_MBDOOR_BDL_S_MBD_R_e;
     }
 }
 
@@ -84,9 +84,9 @@ u32 daMbdoor_c::getRBdl() {
 u32 daMbdoor_c::getToBdl() {
     switch (getShapeType()) {
     case 1:
-        return GBDOOR_BDL_V_GBDTO;
+        return dRes_INDEX_GBDOOR_BDL_V_GBDTO_e;
     default:
-        return MBDOOR_BDL_S_MBDTO;
+        return dRes_INDEX_MBDOOR_BDL_S_MBDTO_e;
     }
 }
 
@@ -94,9 +94,9 @@ u32 daMbdoor_c::getToBdl() {
 u32 daMbdoor_c::getDzb() {
     switch (getShapeType()) {
     case 1:
-        return GBDOOR_DZB_GBD;
+        return dRes_INDEX_GBDOOR_DZB_GBD_e;
     default:
-        return MBDOOR_DZB_S_MBDFU;
+        return dRes_INDEX_MBDOOR_DZB_S_MBDFU_e;
     }
 }
 

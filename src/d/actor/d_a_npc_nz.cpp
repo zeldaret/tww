@@ -5,12 +5,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_nz.h"
-#include "d/res/res_nz.h"
-#include "d/res/res_npcnz.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
 #include "d/d_item.h"
+
+#include "res/Object/Npcnz.h"
+#include "res/Object/Nz.h"
 
 class daNpc_Nz_HIO_c : public JORReflexible {
 public:
@@ -165,7 +166,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 00000D18-00000F98       .text _createHeap__10daNpc_Nz_cFv */
 BOOL daNpc_Nz_c::_createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_bdl_arc_name, NPCNZ_BDL_NZ));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_bdl_arc_name, dRes_INDEX_NPCNZ_BDL_NZ_e));
     JUT_ASSERT(0xD0, modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
@@ -194,12 +195,12 @@ BOOL daNpc_Nz_c::_createHeap() {
         if(i == m_jnt.getHeadJntNum() || i == m_jnt.getBackboneJntNum()) {
             modelData->getJointNodePointer(i)->setCallBack(daNpcNz_NodeCallBack);
         }
-        if(i == 1 || i == 9) {
+        if(i == NPCNZ_NZ_JNT_HIP_e || i == NPCNZ_NZ_JNT_SHIPPO_e) {
             modelData->getJointNodePointer(i)->setCallBack(daNpcNz_TailNodeCallBack);
         }
     }
 
-    ResTIMG* img = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, NZ_BTI_SIPPO));
+    ResTIMG* img = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_NZ_BTI_SIPPO_e));
     if (field_0x934.init(1, 10, img, FALSE)) {
         return TRUE;
     } else {
@@ -409,10 +410,10 @@ void daNpc_Nz_c::setMtx() {
         pScale->y = scaleY;
 
         J3DModel* pModel = mpMorf->getModel();
-        mDoMtx_stack_c::copy(pModel->getAnmMtx(0x12));
+        mDoMtx_stack_c::copy(pModel->getAnmMtx(NPCNZ_NZ_JNT_UDEL3_e));
         cXyz temp;
         mDoMtx_stack_c::multVec(&cXyz::Zero, &temp);
-        mDoMtx_stack_c::copy(pModel->getAnmMtx(0x15));
+        mDoMtx_stack_c::copy(pModel->getAnmMtx(NPCNZ_NZ_JNT_UDER3_e));
         cXyz temp2;
         mDoMtx_stack_c::multVec(&cXyz::Zero, &temp2);
         cXyz temp3 = temp + temp2;
@@ -831,7 +832,7 @@ bool daNpc_Nz_c::_draw() {
         J3DModel* pModel = mpMorf->getModel();
         J3DModelData* pModelData = pModel->getModelData();
 
-        J3DJoint* rootJoint = pModelData->getJointNodePointer(0);
+        J3DJoint* rootJoint = pModelData->getJointNodePointer(NPCNZ_NZ_JNT_KOSI_e);
         J3DShape* matShape = pModelData->getMaterialNodePointer(0)->getShape();
         J3DShape* matShape2 = pModelData->getMaterialNodePointer(1)->getShape();
         J3DShape* matShape3 = pModelData->getMaterialNodePointer(2)->getShape();

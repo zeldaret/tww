@@ -9,12 +9,12 @@
 #include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
-#include "d/res/res_ro.h"
+#include "res/Object/Ro.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 
-static const int l_bmd_ix_tbl[] = {RO_BDL_RO_HAT, RO_BDL_RO_HAT2, RO_BDL_RO_HAT3, RO_BDL_RO_HAT};
-static const int l_bck_ix_tbl[] = {RO_BCK_HAT_WID, RO_BCK_HAT2_WIND, RO_BCK_HAT3_WID,
-                                   RO_BCK_HAT_WID};
+static const int l_bmd_ix_tbl[] = {dRes_ID_RO_BDL_RO_HAT_e, dRes_ID_RO_BDL_RO_HAT2_e, dRes_ID_RO_BDL_RO_HAT3_e, dRes_ID_RO_BDL_RO_HAT_e};
+static const int l_bck_ix_tbl[] = {dRes_ID_RO_BCK_HAT_WID_e, dRes_ID_RO_BCK_HAT2_WIND_e, dRes_ID_RO_BCK_HAT3_WID_e,
+                                   dRes_ID_RO_BCK_HAT_WID_e};
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
     {

@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ssk.h"
-#include "d/res/res_ssk.h"
+#include "res/Object/Ssk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_jnt_hit.h"
 #include "f_op/f_op_actor_mng.h"
@@ -15,22 +15,22 @@
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        s32 uVar4 = joint->getJntNo();
+        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         ssk_class* i_this = (ssk_class*)model->getUserArea();
 
-        if (i_this != NULL && uVar4 < 5) {
-            MTXCopy(model->getAnmMtx(uVar4), *calc_mtx);
+        if (i_this != NULL && jntNo < 5) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
 
-            cMtx_YrotM(*calc_mtx, i_this->m2F4[uVar4].y);
-            cMtx_XrotM(*calc_mtx, i_this->m2F4[uVar4].x);
-            cMtx_ZrotM(*calc_mtx, i_this->m2F4[uVar4].z);
+            cMtx_YrotM(*calc_mtx, i_this->m2F4[jntNo].y);
+            cMtx_XrotM(*calc_mtx, i_this->m2F4[jntNo].x);
+            cMtx_ZrotM(*calc_mtx, i_this->m2F4[jntNo].z);
 
-            cXyz sp08;
-            sp08.setall(0.0f);
-            MtxPosition(&sp08, &i_this->m314[uVar4]);
+            cXyz offset;
+            offset.setall(0.0f);
+            MtxPosition(&offset, &i_this->m314[jntNo]);
 
-            model->setAnmMtx(uVar4, *calc_mtx);
+            model->setAnmMtx(jntNo, *calc_mtx);
             MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
     }
@@ -271,7 +271,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     ssk_class* i_this = (ssk_class*)a_this;
 
     i_this->mpMorf1 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Ssk", SSK_BDL_TURU_02), NULL, NULL, NULL, ~J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022
+        (J3DModelData*)dComIfG_getObjectRes("Ssk", dRes_INDEX_SSK_BDL_TURU_02_e), NULL, NULL, NULL, ~J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022
     );
 
     if (i_this->mpMorf1 == NULL || i_this->mpMorf1->getModel() == NULL) {
@@ -279,7 +279,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     i_this->mpMorf2 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Ssk", SSK_BDL_KTANA_00),
+        (J3DModelData*)dComIfG_getObjectRes("Ssk", dRes_INDEX_SSK_BDL_KTANA_00_e),
         NULL, NULL, NULL,
         DEMO_SELECT(J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_NULL),
         1.0f, 0, -1,
@@ -299,19 +299,19 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 1,
+            /* mJointIndex */ TURU_02_JNT_B3_e,
             /* mRadius     */ 50.0f,
             /* mpOffsets   */ &sph_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 2,
+            /* mJointIndex */ TURU_02_JNT_B2_e,
             /* mRadius     */ 30.0f,
             /* mpOffsets   */ &sph_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 3,
+            /* mJointIndex */ TURU_02_JNT_B1_e,
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ &sph_offset,
         },

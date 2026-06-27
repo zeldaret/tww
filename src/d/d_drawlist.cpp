@@ -1459,7 +1459,7 @@ BOOL realPolygonCheck(cXyz* param_0, f32 casterRadius, f32 heightAgl, cXyz* ligh
     bbMax.z += casterRadius;
 
     mDoLib_clipper::changeFar(mDoLib_clipper::getFovyRate() * 3000.0f);
-    s32 clip = mDoLib_clipper::clip(j3dSys.getViewMtx(), &bbMax, &bbMin);
+    BOOL clip = mDoLib_clipper::clip(j3dSys.getViewMtx(), &bbMax, &bbMin);
     mDoLib_clipper::resetFar();
     if (clip) {
         return FALSE;
@@ -1910,7 +1910,7 @@ void dDlst_mirrorPacket::draw() {
 /* 800855B4-80085624       .text init__18dDlst_mirrorPacketFP7ResTIMG */
 void dDlst_mirrorPacket::init(ResTIMG* pImg) {
     if (pImg == NULL)
-        pImg = (ResTIMG*) dComIfG_getObjectRes("Always", ALWAYS_BTI_SHMREF);
+        pImg = (ResTIMG*) dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_SHMREF_e);
 
     mDoLib_setResTimgObj(pImg, &mTexObj, 0, NULL);
 }

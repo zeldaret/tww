@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ajav.h"
-#include "d/res/res_ajav.h"
+#include "res/Object/Ajav.h"
 
 static cXyz l_daObjAjav_co_offset[3] = {
     cXyz(0.0f, 2550.0f, 200.0f),
@@ -142,7 +142,12 @@ static f32 l_daObjAjav_cyl_h[6] = {
 };
 
 static const s32 l_daObjAjav_idx_table[6] = {
-    4, 5 ,6 ,7, 8, 9
+    dRes_INDEX_AJAV_BDL_AJAVA_e,
+    dRes_INDEX_AJAV_BDL_AJAVB_e,
+    dRes_INDEX_AJAV_BDL_AJAVC_e,
+    dRes_INDEX_AJAV_BDL_AJAVD_e,
+    dRes_INDEX_AJAV_BDL_AJAVE_e,
+    dRes_INDEX_AJAV_BDL_AJAVF_e
 };
 
 static const char* const l_daObjAjav_ev_name[] = {
@@ -444,7 +449,7 @@ BOOL daObjAjav::Act_c::create_heap() {
     }
 
     if (res != FALSE) {
-        cBgD_t* cbgd_res = (cBgD_t*)dComIfG_getObjectRes(M_arcname, AJAV_DZB_AJAV);
+        cBgD_t* cbgd_res = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_AJAV_DZB_AJAV_e);
         mpBgW = dBgW_NewSet(cbgd_res, cBgW::MOVE_BG_e, &mMtx);
         if (mpBgW == NULL) {
             res = FALSE;

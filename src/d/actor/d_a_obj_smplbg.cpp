@@ -6,13 +6,13 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_smplbg.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_qtkhd.h"
+#include "res/Object/Qtkhd.h"
 
 const daObjSmplbg::Act_c::Attr_c daObjSmplbg::Act_c::M_attr[] = {
     /* mHeapSize     */ DEMO_SELECT(0x8000, 0x15E0),
     /* mResName      */ "Qtkhd",
-    /* mBDLFileIndex */ QTKHD_BDL_QTKHD,
-    /* mDZBFileIndex */ QTKHD_DZB_QTKHD,
+    /* mBDLFileIndex */ dRes_INDEX_QTKHD_BDL_QTKHD_e,
+    /* mDZBFileIndex */ dRes_INDEX_QTKHD_DZB_QTKHD_e,
     /* mMoveBGProc   */ dBgS_MoveBGProc_TypicalRotY,
     /* mFlags        */ 1 | 4 | 8,
     /* mCullMinX     */ 0,

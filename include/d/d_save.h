@@ -280,10 +280,13 @@ public:
     void setCollect(int idx, u8 byte) { mCollect[idx] = byte; }
     u8 checkCollect(int idx) { return mCollect[idx]; }
     void onTact(u8);
+    void offTact(u8);
     BOOL isTact(u8);
     void onTriforce(u8);
+    void offTriforce(u8);
     BOOL isTriforce(u8);
     void onSymbol(u8);
+    void offSymbol(u8);
     BOOL isSymbol(u8);
     int getTriforceNum();
 

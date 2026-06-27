@@ -7,8 +7,8 @@
 #include "d/actor/d_a_wind_tag.h"
 #include "d/actor/d_a_sea.h"
 #include "d/d_bg_s_func.h"
-#include "d/res/res_yaflw00.h"
-#include "d/res/res_ybgaf00.h"
+#include "res/Object/Yaflw00.h"
+#include "res/Object/Ybgaf00.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/d_cc_d.h"
@@ -104,11 +104,11 @@ BOOL daWindTag_c::CreateHeap() {
 }
 
 const char *daWindTag_c::m_arcname[] = { "Yaflw00", "Ybgaf00" };
-s16 daWindTag_c::m_bdlidx[] = { YAFLW00_BDL_YAFLW00, YBGAF00_BDL_YBGAF00 };
+s16 daWindTag_c::m_bdlidx[] = { dRes_INDEX_YAFLW00_BDL_YAFLW00_e, dRes_INDEX_YBGAF00_BDL_YBGAF00_e };
 s16 daWindTag_c::m_heapsize[] = { 0x0C40, 0x0C40 };
-s16 daWindTag_c::m_bckidx[] = { YAFLW00_BCK_YAFLW00, YBGAF00_BCK_YBGAF00 };
-s16 daWindTag_c::m_btkidx[] = { YAFLW00_BTK_YAFLW00_01, YBGAF00_BTK_YBGAF00_01 };
-s16 daWindTag_c::m_btkidx2[] = { YAFLW00_BTK_YAFLW00_02, YBGAF00_BTK_YBGAF00_02 };
+s16 daWindTag_c::m_bckidx[] = { dRes_INDEX_YAFLW00_BCK_YAFLW00_e, dRes_INDEX_YBGAF00_BCK_YBGAF00_e };
+s16 daWindTag_c::m_btkidx[] = { dRes_INDEX_YAFLW00_BTK_YAFLW00_01_e, dRes_INDEX_YBGAF00_BTK_YBGAF00_01_e };
+s16 daWindTag_c::m_btkidx2[] = { dRes_INDEX_YAFLW00_BTK_YAFLW00_02_e, dRes_INDEX_YBGAF00_BTK_YBGAF00_02_e };
 f32 daWindTag_c::m_cullsize_far = 4.0f;
 f32 daWindTag_c::m_ef_cullsize_far = 2.0f;
 

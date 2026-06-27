@@ -151,7 +151,8 @@ static f32 get_parcent(f32 param_0, f32 param_1, f32 param_2) {
     f32 temp_f4 = param_0 - param_1;
 
     if (0.0f != temp_f4) {
-        temp_f1 = 1.0f - (param_0 - param_2) / temp_f4;
+        f32 f0 = (param_0 - param_2);
+        temp_f1 = 1.0f - f0 / temp_f4;
         if (!(temp_f1 >= 1.0f)) {
             return temp_f1;
         }
@@ -835,10 +836,11 @@ void dScnKy_env_light_c::setLight() {
     int palIdx0;
     int palIdx1;
 
+    u8* initAnmTimer_p = &g_env_light.mInitAnimTimer;
     setLight_palno_get(&g_env_light.mEnvrIdxPrev, &g_env_light.mEnvrIdxCurr,
                        &g_env_light.mColpatPrev, &g_env_light.mColpatCurr, &pale0, &pale1, &pale2,
                        &pale3, &blendAB, &palIdx0, &palIdx1, &g_env_light.mColPatBlend,
-                       &g_env_light.mInitAnimTimer);
+                       initAnmTimer_p);
 
     stage_palet_info_class* pale0_p = &g_env_light.mpPaletInfo[pale0];
     stage_palet_info_class* pale1_p = &g_env_light.mpPaletInfo[pale1];
@@ -1827,24 +1829,24 @@ void setLightTevColorType_sub(J3DMaterial* i_material, dKy_tevstr_c* i_tevstr) {
     }
 
     if (i_material->getFog() != NULL) {
-        J3DFog* fog_p = i_material->getFog();
-        if (fog_p->getFogInfo()->mType != 0) {
-            fog_p->getFogInfo()->mStartZ = i_tevstr->mFogStartZ;
-            fog_p->getFogInfo()->mEndZ = i_tevstr->mFogEndZ;
-            if (fog_p->getFogInfo()->mStartZ > fog_p->getFogInfo()->mEndZ) {
-                fog_p->getFogInfo()->mStartZ = fog_p->getFogInfo()->mEndZ;
+        J3DFogInfo* fog_info = i_material->getFog()->getFogInfo();
+        if (fog_info->mType != 0) {
+            fog_info->mStartZ = i_tevstr->mFogStartZ;
+            fog_info->mEndZ = i_tevstr->mFogEndZ;
+            if (fog_info->mStartZ > fog_info->mEndZ) {
+                fog_info->mStartZ = fog_info->mEndZ;
             }
 
-            fog_p->getFogInfo()->mNearZ = dComIfGd_getView()->mNear;
-            fog_p->getFogInfo()->mFarZ = dComIfGd_getView()->mFar;
-            fog_p->getFogInfo()->mColor.r = i_tevstr->mFogColor.r;
-            fog_p->getFogInfo()->mColor.g = i_tevstr->mFogColor.g;
-            fog_p->getFogInfo()->mColor.b = i_tevstr->mFogColor.b;
-            fog_p->getFogInfo()->mAdjEnable = g_env_light.mFogAdjEnable;
+            fog_info->mNearZ = dComIfGd_getView()->mNear;
+            fog_info->mFarZ = dComIfGd_getView()->mFar;
+            fog_info->mColor.r = i_tevstr->mFogColor.r;
+            fog_info->mColor.g = i_tevstr->mFogColor.g;
+            fog_info->mColor.b = i_tevstr->mFogColor.b;
+            fog_info->mAdjEnable = g_env_light.mFogAdjEnable;
 
-            if (fog_p->getFogInfo()->mAdjEnable == true) {
-                fog_p->getFogInfo()->mCenter = g_env_light.mFogAdjCenter;
-                memcpy(fog_p->getFogInfo()->mFogAdjTable, &g_env_light.mFogAdjTable, sizeof(GXFogAdjTable));
+            if (fog_info->mAdjEnable == true) {
+                fog_info->mCenter = g_env_light.mFogAdjCenter;
+                memcpy(fog_info->mFogAdjTable, &g_env_light.mFogAdjTable, sizeof(GXFogAdjTable));
             }
         }
     }
@@ -2146,7 +2148,7 @@ BOOL phantomship_wether() {
         }
     }
 
-    if (cur_time > 285.0f || cur_time < 90.0f) {
+    if (cur_time > DEMO_SELECT(330.0f, 285.0f) || cur_time < 90.0f) {
         s32 roomNo = dComIfGp_roomControl_getStayNo();
         if ((roomNo == dIsleRoom_CrescentMoonIsland_e  && weekday == 0) ||
             (roomNo == dIsleRoom_DiamondSteppeIsland_e && weekday == 1) ||
@@ -2520,12 +2522,7 @@ void dKy_setLight() {
 
     // eflight
     {
-        s32 eflight;
-        if (pPlayer == NULL) {
-            eflight = -1;
-        } else {
-            eflight = dKy_eflight_influence_id(pPlayer->current.pos, 0);
-        }
+        int eflight = pPlayer == NULL ? -1 : dKy_eflight_influence_id(pPlayer->current.pos, 0);
 
         if (eflight < 0) {
             lightMask = 1;
@@ -3434,11 +3431,11 @@ void dKy_usonami_set(f32 param_0) {
         g_env_light.mWaveChan.mWaveReset = 0;
         g_env_light.mWaveChan.mWaveScale = 300.0f;
         g_env_light.mWaveChan.mWaveScaleRand = 0.001f;
-        g_env_light.mWaveChan.mWaveCounterSpeedScale = 1.2f;
+        g_env_light.mWaveChan.mWaveCounterSpeedScale = DEMO_SELECT(1.3f, 1.2f);
         g_env_light.mWaveChan.field_0x2f = 0;
         g_env_light.mWaveChan.mWaveScaleBottom = 6.0f;
         g_env_light.mWaveChan.mWaveCount = 300;
-        g_env_light.mWaveChan.mWaveSpeed = 30.0f;
+        g_env_light.mWaveChan.mWaveSpeed = DEMO_SELECT(60.0f, 30.0f);
     }
 
     g_env_light.mWaveChan.mWaveFlatInter = param_0;

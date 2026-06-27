@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_tc.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/res/res_tc.h"
+#include "res/Object/Tc.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
 #include "d/actor/d_a_obj_smplbg.h"
@@ -141,7 +141,7 @@ daNpc_Tc_HIO_c::daNpc_Tc_HIO_c() {
 }
 
 static const int l_btp_ix_tbl[] = {
-    TC_BTP_MABA01
+    dRes_INDEX_TC_BTP_MABA01_e
 };
 
 /* 000003D0-0000059C       .text nodeCallBack__FP7J3DNodei */
@@ -235,23 +235,23 @@ void daNpc_Tc_c::smoke_set(f32 i_rate, f32 i_spread, f32 i_initialVelOmni, f32 i
 /* 00000948-00001168       .text setAnm__10daNpc_Tc_cFv */
 void daNpc_Tc_c::setAnm() {
     static const int a_anm_bck_tbl[] = {
-        TC_BCK_WAIT01,
-        TC_BCK_WAIT03,
-        TC_BCK_WAIT02,
-        TC_BCK_TALK01,
-        TC_BCK_WALK01,
-        TC_BCK_JAMP_A,
-        TC_BCK_JAMP_B,
-        TC_BCK_JAMP_C,
-        TC_BCK_GUARD,
-        TC_BCK_JTBT,
-        TC_BCK_HAPPY,
-        TC_BCK_DANCE01,
-        TC_BCK_DANCE02,
-        TC_BCK_GET,
-        TC_BCK_MAWASU,
-        TC_BCK_WAIT04,
-        TC_BCK_TALK02,
+        dRes_INDEX_TC_BCK_WAIT01_e,
+        dRes_INDEX_TC_BCK_WAIT03_e,
+        dRes_INDEX_TC_BCK_WAIT02_e,
+        dRes_INDEX_TC_BCK_TALK01_e,
+        dRes_INDEX_TC_BCK_WALK01_e,
+        dRes_INDEX_TC_BCK_JAMP_A_e,
+        dRes_INDEX_TC_BCK_JAMP_B_e,
+        dRes_INDEX_TC_BCK_JAMP_C_e,
+        dRes_INDEX_TC_BCK_GUARD_e,
+        dRes_INDEX_TC_BCK_JTBT_e,
+        dRes_INDEX_TC_BCK_HAPPY_e,
+        dRes_INDEX_TC_BCK_DANCE01_e,
+        dRes_INDEX_TC_BCK_DANCE02_e,
+        dRes_INDEX_TC_BCK_GET_e,
+        dRes_INDEX_TC_BCK_MAWASU_e,
+        dRes_INDEX_TC_BCK_WAIT04_e,
+        dRes_INDEX_TC_BCK_TALK02_e,
     };
 
     dLib_anm_prm_c a_anm_prm_tbl[24] = {
@@ -729,7 +729,7 @@ void daNpc_Tc_c::anmAtr(u16 i_msgStatus) {
 
 /* 0000156C-00001618       .text stopTower__10daNpc_Tc_cFv */
 void daNpc_Tc_c::stopTower() {
-    JUT_ASSERT(VERSION_SELECT(0x3F5, 0x3F4, 0x3F4, 0x3F4), m_tower_actor != NULL);
+    JUT_ASSERT(DEMO_SELECT(0x3F5, 0x3F4), m_tower_actor != NULL);
 
     daObjSmplbg::Act_c* tower = m_tower_actor;
     switch (mType) {
@@ -747,7 +747,7 @@ void daNpc_Tc_c::stopTower() {
 
 /* 00001618-000017A4       .text startTower__10daNpc_Tc_cFv */
 void daNpc_Tc_c::startTower() {
-    JUT_ASSERT(VERSION_SELECT(0x408, 0x407, 0x407, 0x407), m_tower_actor != NULL);
+    JUT_ASSERT(DEMO_SELECT(0x408, 0x407), m_tower_actor != NULL);
     daObjSmplbg::Act_c* tower = m_tower_actor;
 
     cXyz temp;
@@ -1142,7 +1142,7 @@ void daNpc_Tc_c::lookBack() {
 /* 000024C4-00002594       .text statusWait__10daNpc_Tc_cFv */
 void daNpc_Tc_c::statusWait() {
     if (mType == TYPE_WHITE || mType == TYPE_RED) {
-        JUT_ASSERT(VERSION_SELECT(0x5FE, 0x601, 0x601, 0x601), m_tower_actor != NULL);
+        JUT_ASSERT(DEMO_SELECT(0x5FE, 0x601), m_tower_actor != NULL);
 
         if (m_tower_actor->isStop()) {
             mAnmPrmIdx = ANM_PRM_IDX_WAIT04;
@@ -1621,9 +1621,9 @@ void daNpc_Tc_c::set_mtx() {
 BOOL daNpc_Tc_c::_draw() {
     static const int a_bmt_tbl[5] = {
         -1,
-        TC_BMT_TCB,
-        TC_BMT_TCC,
-        TC_BMT_TCA,
+        dRes_INDEX_TC_BMT_TCB_e,
+        dRes_INDEX_TC_BMT_TCC_e,
+        dRes_INDEX_TC_BMT_TCA_e,
         -1
     };
 
@@ -1874,8 +1874,8 @@ daNpc_Tc_c::daNpc_Tc_c() {}
 
 /* 000045D0-000047DC       .text _createHeap__10daNpc_Tc_cFv */
 BOOL daNpc_Tc_c::_createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Tc", TC_BDL_TC));
-    JUT_ASSERT(VERSION_SELECT(0xA26, 0xA30, 0xA30, 0xA30), modelData != NULL);
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Tc", dRes_INDEX_TC_BDL_TC_e));
+    JUT_ASSERT(DEMO_SELECT(0xA26, 0xA30), modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -1889,14 +1889,14 @@ BOOL daNpc_Tc_c::_createHeap() {
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
-    m_jnt.setHeadJntNum(2);
+    m_jnt.setHeadJntNum(TC_JNT_HEAD_e);
 
-    JUT_ASSERT(VERSION_SELECT(0xA36, 0xA40, 0xA40, 0xA40), m_jnt.getHeadJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(0xA36, 0xA40), m_jnt.getHeadJntNum() >= 0);
 
-    m_jnt.setBackboneJntNum(1);
-    JUT_ASSERT(VERSION_SELECT(0xA38, 0xA42, 0xA42, 0xA42), m_jnt.getBackboneJntNum() >= 0);
-    modelData->getJointNodePointer(2)->setCallBack(nodeCallBack);
-    modelData->getJointNodePointer(1)->setCallBack(nodeCallBack);
+    m_jnt.setBackboneJntNum(TC_JNT_BACKBONE_e);
+    JUT_ASSERT(DEMO_SELECT(0xA38, 0xA42), m_jnt.getBackboneJntNum() >= 0);
+    modelData->getJointNodePointer(TC_JNT_HEAD_e)->setCallBack(nodeCallBack);
+    modelData->getJointNodePointer(TC_JNT_BACKBONE_e)->setCallBack(nodeCallBack);
     mpMorf->getModel()->setUserArea(reinterpret_cast<u32>(this));
 
     mTexPatternNum = 0;

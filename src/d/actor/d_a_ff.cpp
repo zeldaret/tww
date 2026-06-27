@@ -10,7 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_lib.h"
-#include "d/res/res_ff.h"
+#include "res/Object/Ff.h"
 
 static s32 ff_count = 0;
 
@@ -250,8 +250,8 @@ static BOOL daFf_Delete(ff_class* i_this) {
 
 /* 000011AC-0000138C       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_this) {
-    static u32 ho_bmd[] = {FF_BMD_HO, FF_BMD_HOP};
-    static u32 ho_brk[] = {FF_BRK_HO, FF_BRK_HOP};
+    static u32 ho_bmd[] = {dRes_INDEX_FF_BMD_HO_e, dRes_INDEX_FF_BMD_HOP_e};
+    static u32 ho_brk[] = {dRes_INDEX_FF_BRK_HO_e, dRes_INDEX_FF_BRK_HOP_e};
     ff_class* a_this = (ff_class*)i_this;
 
     for (int i = 0; i < 2; i++) {
@@ -304,7 +304,7 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
                     pfVar4->base.angle.y = 0;
                     pfVar4->base.angle.x = 0;
                     pfVar4->base.parameters = fopAcM_GetParam(a_this);
-                    fopAcM_create(fpcNm_FF_e, NULL, pfVar4);
+                    fopAcM_Create(fpcNm_FF_e, NULL, pfVar4);
                 }
             }
             a_this->mbNoUseGroundY = fopAcM_GetParam(a_this) >> 8;

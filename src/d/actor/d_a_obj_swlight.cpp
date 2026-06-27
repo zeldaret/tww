@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_swlight.h"
-#include "d/res/res_mmirror.h"
+#include "res/Object/Mmirror.h"
 
 namespace daObjSwlight {
 namespace {
@@ -61,25 +61,25 @@ BOOL Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 00000178-0000045C       .text create_heap__Q212daObjSwlight5Act_cFv */
 bool Act_c::create_heap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, MMIRROR_BDL_MSUSW));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_MMIRROR_BDL_MSUSW_e));
     JUT_ASSERT(317, modelData != NULL);
 
     m298 = mDoExt_J3DModel__create(modelData, 0x80000, 0x31000202);
     if (m298 != NULL) {
-        modelData->getJointNodePointer(1)->setCallBack(jnodeCB_moon);
-        modelData->getJointNodePointer(2)->setCallBack(jnodeCB_moon);
-        modelData->getJointNodePointer(3)->setCallBack(jnodeCB_moon);
-        modelData->getJointNodePointer(4)->setCallBack(jnodeCB_moon);
-        modelData->getJointNodePointer(5)->setCallBack(jnodeCB_moon);
+        modelData->getJointNodePointer(MSUSW_JNT_AFTER_FACE_e)->setCallBack(jnodeCB_moon);
+        modelData->getJointNodePointer(MSUSW_JNT_AFTER_FIRE1_e)->setCallBack(jnodeCB_moon);
+        modelData->getJointNodePointer(MSUSW_JNT_AFTER_FIRE2_e)->setCallBack(jnodeCB_moon);
+        modelData->getJointNodePointer(MSUSW_JNT_BEFORE_FACE_e)->setCallBack(jnodeCB_moon);
+        modelData->getJointNodePointer(MSUSW_JNT_BEFORE_MIRROR_e)->setCallBack(jnodeCB_moon);
         m298->setUserArea((u32)this);
     }
 
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, MMIRROR_BTK_MSUSW));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_MMIRROR_BTK_MSUSW_e));
     JUT_ASSERT(344, btk != NULL);
 
     BOOL iVar4 = m29C.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
 
-    J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(M_arcname, MMIRROR_BCK_MSUSW));
+    J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_MMIRROR_BCK_MSUSW_e));
     JUT_ASSERT(351, bck != NULL);
 
     BOOL iVar6 = m2B0.init(modelData, bck, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
@@ -87,7 +87,7 @@ bool Act_c::create_heap() {
 
     m2C0 = new dBgW();
     if (m2C0 != NULL) {
-        cBgD_t* bgw_data = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, MMIRROR_DZB_MSUSW));
+        cBgD_t* bgw_data = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_MMIRROR_DZB_MSUSW_e));
         JUT_ASSERT(361, bgw_data != NULL);
         if (!m2C0->Set(bgw_data, cBgW::MOVE_BG_e, &mF38)) {
             bVar1 = true;
@@ -455,8 +455,8 @@ bool Act_c::_draw() {
 
     pJVar1 = 0xff - pJVar1;
 
-    setMaterial(pJVar5->getJointNodePointer(4)->getMesh(), pJVar1);
-    setMaterial_Before_mirror(pJVar5->getJointTree().getJointNodePointer(5)->getMesh(), pJVar1);
+    setMaterial(pJVar5->getJointNodePointer(MSUSW_JNT_BEFORE_FACE_e)->getMesh(), pJVar1);
+    setMaterial_Before_mirror(pJVar5->getJointTree().getJointNodePointer(MSUSW_JNT_BEFORE_MIRROR_e)->getMesh(), pJVar1);
     mDoExt_modelUpdateDL(m298);
 
     dComIfGd_setList();

@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Vteng.h"
-#include "d/res/res_vteng.h"
+#include "res/Object/Vteng.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
@@ -36,8 +36,8 @@ BOOL daObjVteng_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjVteng_c::create_heap() {
     bool ret = true;
 
-    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, VTENG_BDL_VTENG));
-    J3DAnmTransform * pAnm = (J3DAnmTransform *)dComIfG_getObjectRes(l_arcname, VTENG_BCK_VTENG);
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_VTENG_BDL_VTENG_e));
+    J3DAnmTransform * pAnm = (J3DAnmTransform *)dComIfG_getObjectRes(l_arcname, dRes_INDEX_VTENG_BCK_VTENG_e);
 
     if (!pModelData || !pAnm) {
         JUT_ASSERT(0xb7, FALSE);
@@ -57,7 +57,7 @@ bool daObjVteng_c::create_heap() {
         } else {
             J3DModel * model = mpMorf->getModel();
             mpModel = model;
-            mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, VTENG_DZB_VTENG), cBgW::MOVE_BG_e, &mtx);
+            mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_VTENG_DZB_VTENG_e), cBgW::MOVE_BG_e, &mtx);
             if (!mpBgW)
                 ret = false;
         }

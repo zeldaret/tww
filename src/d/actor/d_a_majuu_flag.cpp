@@ -8,10 +8,10 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_s_play.h"
-#include "d/res/res_cloth.h"
-#include "d/res/res_matif.h"
-#include "d/res/res_vsvfg.h"
-#include "d/res/res_xhcf.h"
+#include "res/Object/Cloth.h"
+#include "res/Object/Matif.h"
+#include "res/Object/Vsvfg.h"
+#include "res/Object/Xhcf.h"
 #include "dolphin/gx/GXTexture.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_graphic.h"
@@ -993,11 +993,11 @@ static cPhs_State daMajuu_Flag_Create(fopAc_ac_c* a_this) {
 
         if (i_this->mTexType != 0) {
             if (i_this->mTexType == 1) {
-                texInfo = (ResTIMG*)dComIfG_getObjectRes("Matif", MATIF_BTI_FLAG_MATI);
+                texInfo = (ResTIMG*)dComIfG_getObjectRes("Matif", dRes_INDEX_MATIF_BTI_FLAG_MATI_e);
             } else if (i_this->mTexType == 2) {
-                texInfo = (ResTIMG*)dComIfG_getObjectRes("Vsvfg", VSVFG_BTI_VSVFG);
+                texInfo = (ResTIMG*)dComIfG_getObjectRes("Vsvfg", dRes_INDEX_VSVFG_BTI_VSVFG_e);
             } else if (i_this->mTexType == 3) {
-                texInfo = (ResTIMG*)dComIfG_getObjectRes("Xhcf", XHCF_BTI_X_HC_FLAG00);
+                texInfo = (ResTIMG*)dComIfG_getObjectRes("Xhcf", dRes_INDEX_XHCF_BTI_X_HC_FLAG00_e);
             }
             mip = GXBool(texInfo->mipmapCount > 1);
             GXInitTexObj(
@@ -1026,7 +1026,7 @@ static cPhs_State daMajuu_Flag_Create(fopAc_ac_c* a_this) {
             GXInitTexObjLOD(i_this->mPacket.getImageTexObj(), GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
         }
 
-        texInfo = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+        texInfo = (ResTIMG*)dComIfG_getObjectRes("Cloth", dRes_INDEX_CLOTH_BTI_CLOTHTOON_e);
         mip = GXBool(texInfo->mipmapCount > 1);
         GXInitTexObj(
             i_this->mPacket.getToonTexObj(),

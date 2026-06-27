@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kantera.h"
-#include "d/res/res_kantera.h"
+#include "res/Object/Kantera.h"
 #include "d/d_kankyo.h"
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
@@ -16,15 +16,15 @@
 static BOOL kantera_nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        s32 uVar2 = joint->getJntNo();
+        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         kantera_class* i_this = (kantera_class*)model->getUserArea();
 
-        if ((i_this != NULL) && (uVar2 == 0 || (uVar2 == 1))) {
-            MTXCopy(model->getAnmMtx(uVar2), *calc_mtx);
-            cMtx_XrotM(*calc_mtx, i_this->mJointBaseRot.x + i_this->mJointRot[uVar2].x);
-            cMtx_ZrotM(*calc_mtx, i_this->mJointBaseRot.z + i_this->mJointRot[uVar2].z);
-            model->setAnmMtx(uVar2, *calc_mtx);
+        if ((i_this != NULL) && (jntNo == MK_KANTERA_JNT_TOTTE_e || (jntNo == MK_KANTERA_JNT_KANTERA_e))) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            cMtx_XrotM(*calc_mtx, i_this->mJointBaseRot.x + i_this->mJointRot[jntNo].x);
+            cMtx_ZrotM(*calc_mtx, i_this->mJointBaseRot.z + i_this->mJointRot[jntNo].z);
+            model->setAnmMtx(jntNo, *calc_mtx);
             MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
     }
@@ -254,7 +254,7 @@ static BOOL daKantera_Execute(kantera_class* i_this) {
 
         i_this->actor.eyePos = i_this->actor.current.pos;
 
-        MTXCopy(model->getAnmMtx(1), *calc_mtx);
+        MTXCopy(model->getAnmMtx(MK_KANTERA_JNT_KANTERA_e), *calc_mtx);
 
         i_this->m2E4 = i_this->mBonPos;
 
@@ -285,7 +285,7 @@ static BOOL daKantera_Delete(kantera_class* i_this) {
 static BOOL daKantera_CreateHeap(fopAc_ac_c* a_this) {
     kantera_class* i_this = (kantera_class*)a_this;
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", KANTERA_BMD_MK_KANTERA));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", dRes_INDEX_KANTERA_BMD_MK_KANTERA_e));
     JUT_ASSERT(1014, modelData != NULL);
 
     i_this->mpModel1 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -293,7 +293,7 @@ static BOOL daKantera_CreateHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    J3DAnmTevRegKey* anm_res_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Kantera", KANTERA_BRK_MK_KANTERA));
+    J3DAnmTevRegKey* anm_res_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Kantera", dRes_INDEX_KANTERA_BRK_MK_KANTERA_e));
     JUT_ASSERT(1036, anm_res_brk != NULL);
 
     i_this->mpBrkAnm1 = new mDoExt_brkAnm();
@@ -305,7 +305,7 @@ static BOOL daKantera_CreateHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", KANTERA_BMD_LF));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", dRes_INDEX_KANTERA_BMD_LF_e));
     JUT_ASSERT(1048, modelData != NULL);
 
     i_this->mpModel2 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -313,7 +313,7 @@ static BOOL daKantera_CreateHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    anm_res_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Kantera", KANTERA_BRK_LF));
+    anm_res_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Kantera", dRes_INDEX_KANTERA_BRK_LF_e));
     JUT_ASSERT(1058, anm_res_brk != NULL);
 
     i_this->mpBrkAnm2 = new mDoExt_brkAnm();
@@ -325,7 +325,7 @@ static BOOL daKantera_CreateHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", KANTERA_BMD_GA));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", dRes_INDEX_KANTERA_BMD_GA_e));
     JUT_ASSERT(1125, modelData != NULL);
 
     for (s32 i = 0; i < ARRAY_SSIZE(i_this->mGa); i++) {

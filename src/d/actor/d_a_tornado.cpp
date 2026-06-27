@@ -1,11 +1,11 @@
 /**
  * d_a_tornado.cpp
- * Ballad Of Gales Tornado
+ * Object - Ballad of Gales tornado
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tornado.h"
-#include "d/res/res_trnd.h"
+#include "res/Object/Trnd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
@@ -20,12 +20,12 @@ const float daTornado_HIO_c0::start_dis = 10000.0f;
 /* 000000EC-00000260       .text jointCallBack__11daTornado_cFi */
 BOOL daTornado_c::jointCallBack(int jntNo) {
     int jntIdx = jntNo - 1;
-    if ((jntIdx < 0) || (jntIdx >= 11)) {
+    if ((jntIdx < YTRND00_JNT_ROOT_e) || (jntIdx >= YTRND00_JNT_JOINT11_e)) {
         return TRUE;
     }
 
     mDoMtx_stack_c::transS(mJointX[jntIdx], 0.0f, mJointZ[jntIdx]);
-    if (jntIdx != 10 && jntIdx != 0) {
+    if (jntIdx != YTRND00_JNT_JOINT10_e && jntIdx != YTRND00_JNT_ROOT_e) {
         mDoMtx_stack_c::ZXYrotM(-mJointZ[jntIdx] * 3572.0f * 0.001f, 0.0f, mJointX[jntIdx] * 3572.0f * 0.001f);
     }
 
@@ -252,28 +252,28 @@ static BOOL daTornado_Delete(daTornado_c* i_this) {
 
 /* 00000D54-0000109C       .text createHeap__11daTornado_cFv */
 BOOL daTornado_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, TRND_BDL_YTRND00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BDL_YTRND00_e);
     JUT_ASSERT(0x1fe, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
     if (!mpModel)
         return FALSE;
-    if (!mBck.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YTRND00), true, J3DFrameCtrl::EMode_LOOP))
+    if (!mBck.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BCK_YTRND00_e), true, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YTRND00), false, J3DFrameCtrl::EMode_LOOP))
+    if (!mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BTK_YTRND00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBrk.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YTRND00), false, J3DFrameCtrl::EMode_LOOP))
+    if (!mBrk.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BRK_YTRND00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, TRND_BDL_YWUWT00);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BDL_YWUWT00_e);
     JUT_ASSERT(0x226, modelData != NULL);
     mpModelUnder = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
     if (!mpModelUnder)
         return FALSE;
-    if (!mBckUnder.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP))
+    if (!mBckUnder.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BCK_YWUWT00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBtkUnder.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP))
+    if (!mBtkUnder.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BTK_YWUWT00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
-    if (!mBrkUnder.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YWUWT00), false, J3DFrameCtrl::EMode_LOOP))
+    if (!mBrkUnder.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_TRND_BRK_YWUWT00_e), false, J3DFrameCtrl::EMode_LOOP))
         return FALSE;
 
     return TRUE;

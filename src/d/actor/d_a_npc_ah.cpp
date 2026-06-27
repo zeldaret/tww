@@ -8,22 +8,22 @@
 #include "d/d_a_obj.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_snap.h"
-#include "d/res/res_ah.h"
+#include "res/Object/Ah.h"
 
 const char daNpcAh_c::m_arcname[] = "Ah"; 
 
 static const int l_bmd_ix_tbl[] = {
-    AH_BDL_AH
+    dRes_ID_AH_BDL_AH_e
 };
 
 static const int l_bck_ix_tbl[] = {
-    AH_BCK_AH_WAIT01,
-    AH_BCK_AH_WAIT02
+    dRes_ID_AH_BCK_AH_WAIT01_e,
+    dRes_ID_AH_BCK_AH_WAIT02_e
 };
 
 static const int l_btp_ix_tbl[] = {
-    AH_BTP_MABA,
-    AH_BTP_HOU
+    dRes_ID_AH_BTP_MABA_e,
+    dRes_ID_AH_BTP_HOU_e
 };
 
 static char* l_npc_staff_id[] = {

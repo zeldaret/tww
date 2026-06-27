@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mkie.h"
-#include "d/res/res_mkieb.h"
+#include "res/Object/MkieB.h"
 
 Mtx daObjMkie::Act_c::M_tmp_mtx;
 const char daObjMkie::Act_c::M_arcname[] = "MkieB";
@@ -123,15 +123,15 @@ const daObjMkie::Act_c::Attr_c daObjMkie::Act_c::M_attr[2] = {
 
 /* 00000078-00000250       .text CreateHeap__Q29daObjMkie5Act_cFv */
 BOOL daObjMkie::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKIEB_BDL_MKIEB);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKIEB_BDL_MKIEB_e);
     JUT_ASSERT(DEMO_SELECT(395, 402), model_data != NULL);
     mModelBase = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
 
-    J3DModelData* model_data_van = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKIEB_BDL_YLSMF00);
+    J3DModelData* model_data_van = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKIEB_BDL_YLSMF00_e);
     JUT_ASSERT(DEMO_SELECT(404, 411), model_data_van != NULL);
     mModelVan = mDoExt_J3DModel__create(model_data_van, 0x80000, 0x11000022);
 
-    J3DAnmTevRegKey* brk_van = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, MKIEB_BRK_YLSMF00);
+    J3DAnmTevRegKey* brk_van = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKIEB_BRK_YLSMF00_e);
     JUT_ASSERT(DEMO_SELECT(414, 421), brk_van != NULL);
     int init = mBrkVan.init(model_data_van, brk_van, true, J3DFrameCtrl::EMode_NONE);
 
@@ -210,7 +210,7 @@ cPhs_State daObjMkie::Act_c::Mthd_Create() {
         mType = prm_get_type();
         float initialScale = attr().mScale;
         scale.setall(initialScale);
-        phase_state = MoveBGCreate(M_arcname, MKIEB_DZB_MKIEB, dBgS_MoveBGProc_Trans, DEMO_SELECT(0x10000, 0x1B20));
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MKIEB_DZB_MKIEB_e, dBgS_MoveBGProc_Trans, DEMO_SELECT(0x10000, 0x1B20));
         JUT_ASSERT(DEMO_SELECT(521, 534), (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;

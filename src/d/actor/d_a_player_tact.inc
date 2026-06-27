@@ -39,9 +39,9 @@ void daPy_lk_c::setTactModel() {
     mEquipItem = dItemNo_WIND_WAKER_e;
     JKRHeap* oldHeap = setItemHeap();
 
-    J3DModelData* modelData = initModel(&mpEquipItemModel, LINK_BDL_TAKT, 0x37221222);
+    J3DModelData* modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_TAKT_e, 0x37221222);
     u8* buffer = new (0x20) u8[0x400];
-    dComIfGp_getAnmArchive()->readIdxResource(buffer, 0x400, LKANM_BRK_TTAKT);
+    dComIfGp_getAnmArchive()->readIdxResource(buffer, 0x400, dRes_INDEX_LKANM_BRK_TTAKT_e);
     mpEquipItemBrk = (J3DAnmTevRegKey*)J3DAnmLoaderDataBase::load(buffer);
     mpEquipItemBrk->setFrame(0.0f);
     mpEquipItemBrk->searchUpdateMaterialID(modelData);
@@ -63,29 +63,29 @@ BOOL daPy_lk_c::checkNpcStatus() {
 /* 8014D8F4-8014D938       .text getTactPlayRightArmAnm__9daPy_lk_cFl */
 u16 daPy_lk_c::getTactPlayRightArmAnm(s32 r4) {
     if (r4 == 1)
-        return LKANM_BCK_ACTIONTAKTRUP;
+        return dRes_INDEX_LKANM_BCK_ACTIONTAKTRUP_e;
     else if (r4 == 3)
-        return LKANM_BCK_ACTIONTAKTRDW;
+        return dRes_INDEX_LKANM_BCK_ACTIONTAKTRDW_e;
     else if (r4 == 2)
-        return LKANM_BCK_WAITTAKTRHANDL;
+        return dRes_INDEX_LKANM_BCK_WAITTAKTRHANDL_e;
     else if (r4 == 4)
-        return LKANM_BCK_WAITTAKTRHANDR;
+        return dRes_INDEX_LKANM_BCK_WAITTAKTRHANDR_e;
     else
-        return LKANM_BCK_WAITTAKT;
+        return dRes_INDEX_LKANM_BCK_WAITTAKT_e;
 }
 
 /* 8014D938-8014D97C       .text getTactPlayLeftArmAnm__9daPy_lk_cFl */
 u16 daPy_lk_c::getTactPlayLeftArmAnm(s32 r4) {
     if (r4 == 1)
-        return LKANM_BCK_WAITTAKTLHANDU;
+        return dRes_INDEX_LKANM_BCK_WAITTAKTLHANDU_e;
     else if (r4 == 3)
-        return LKANM_BCK_WAITTAKTLHANDD;
+        return dRes_INDEX_LKANM_BCK_WAITTAKTLHANDD_e;
     else if (r4 == 2)
-        return LKANM_BCK_WAITTAKTLHANDL;
+        return dRes_INDEX_LKANM_BCK_WAITTAKTLHANDL_e;
     else if (r4 == 4)
-        return LKANM_BCK_WAITTAKTLHANDR;
+        return dRes_INDEX_LKANM_BCK_WAITTAKTLHANDR_e;
     else
-        return LKANM_BCK_WAITTAKT;
+        return dRes_INDEX_LKANM_BCK_WAITTAKT_e;
 }
 
 /* 8014D97C-8014D9A4       .text checkEndTactMusic__9daPy_lk_cCFv */
@@ -249,9 +249,9 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
     commonProcInit(daPyProc_TACT_WAIT_e);
     daPy_matAnm_c::offMabaFlg();
     setSingleMoveAnime(ANM_WAITTAKT, m_HIO->mItem.mTact.m.mAnmRate, 0.0f, -1, m_HIO->mItem.mTact.m.field_0x4);
-    setActAnimeUpper(LKANM_BCK_WAITTAKT, UPPER_MOVE1_e, m_HIO->mItem.mTact.m.mAnmRate, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_WAITTAKT_e, UPPER_MOVE1_e, m_HIO->mItem.mTact.m.mAnmRate, 0.0f, -1, -1.0f);
     mAnmRatioUpper[UPPER_MOVE1_e].setRatio(0.0f);
-    setActAnimeUpper(LKANM_BCK_WAITTAKT, UPPER_MOVE2_e, m_HIO->mItem.mTact.m.mAnmRate, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_WAITTAKT_e, UPPER_MOVE2_e, m_HIO->mItem.mTact.m.mAnmRate, 0.0f, -1, -1.0f);
     mAnmRatioUpper[UPPER_MOVE2_e].setRatio(0.0f);
     mNormalSpeed = 0.0f;
     mProcVar2.m34D4 = 0;

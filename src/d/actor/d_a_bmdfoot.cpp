@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bmdfoot.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_bmdfoot.h"
+#include "res/Object/Bmdfoot.h"
 #include "d/actor/d_a_bmd.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_ext.h"
@@ -101,7 +101,7 @@ void housi_off(bmdfoot_class* i_this) {
 void wait(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz local_98;
-    static int eff_id[] = {0x0A, 0x0C, 0x11};
+    static int eff_id[] = {ASI_JNT_ASI11_e, ASI_JNT_ASI13_e, ASI_JNT_ASI18_e};
 
     int frame = i_this->mpBodyVineMorf->getFrame();
     local_98.setall(0.0f);
@@ -137,7 +137,7 @@ void wait(bmdfoot_class* i_this) {
         break;
     case 0:
         i_this->m2BC++;
-        anm_init(i_this, BMDFOOT_BCK_ASI_WAIT, 50.0f, J3DFrameCtrl::EMode_LOOP, cM_rndF(0.2f) + 0.9f, -1);
+        anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_WAIT_e, 50.0f, J3DFrameCtrl::EMode_LOOP, cM_rndF(0.2f) + 0.9f, -1);
         i_this->m2C0[0] = cM_rndF(150.0f) + 100.0f;
         i_this->m3EC = cM_rndFX(32768.0f);
         for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
@@ -175,8 +175,8 @@ void attack_1(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz local_5c;
     cXyz cStack_68;
-    static int jno[] = {0x0A, 0x0C, 0x11};
-    static int col_joint[] = {0x01, 0x03, 0x05, 0x07, 0x09};
+    static int jno[] = {ASI_JNT_ASI11_e, ASI_JNT_ASI13_e, ASI_JNT_ASI18_e};
+    static int col_joint[] = {ASI_JNT_ASI2_e, ASI_JNT_ASI4_e, ASI_JNT_ASI6_e, ASI_JNT_ASI8_e, ASI_JNT_ASI10_e};
 
     bool bVar2 = false;
     local_5c.setall(0.0f);
@@ -188,7 +188,7 @@ void attack_1(bmdfoot_class* i_this) {
     case 1:
         i_this->mBC4 = 0.0f;
         if (i_this->m2C0[0] == 0) {
-            anm_init(i_this, BMDFOOT_BCK_ASI_ATTACK1, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_ATTACK1_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m2BC++;
             i_this->mBD0 = 0x1e;
         }
@@ -198,7 +198,7 @@ void attack_1(bmdfoot_class* i_this) {
             i_this->mBD0 = 0x1e;
         }
         if (i_this->mpBodyVineMorf->isStop()) {
-            anm_init(i_this, BMDFOOT_BCK_ASI_ATTACK_LOOP, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_ATTACK_LOOP_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m2C0[0] = 0x3c;
             i_this->m2BC++;
         }
@@ -212,7 +212,7 @@ void attack_1(bmdfoot_class* i_this) {
             cLib_addCalc0(&i_this->m2CC[i].z, 0.1f, 0.05f);
         }
         if (i_this->m2C0[0] == 0) {
-            anm_init(i_this, BMDFOOT_BCK_ASI_ATTACK2, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_ATTACK2_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m2BC++;
             i_this->m2C0[0] = REG14_S(2) + 0x1c;
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_PREP, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
@@ -329,7 +329,7 @@ void attack_2(bmdfoot_class* i_this) {
     J3DAnmTransform* pBck;
     cXyz local_3c;
     cXyz local_48;
-    static int col_joint[] = {0x11, 0x0F, 0x0C, 0x09};
+    static int col_joint[] = {ASI_JNT_ASI18_e, ASI_JNT_ASI16_e, ASI_JNT_ASI13_e, ASI_JNT_ASI10_e};
 
     local_3c.z = 0.0f;
     local_3c.y = 0.0f;
@@ -342,7 +342,7 @@ void attack_2(bmdfoot_class* i_this) {
     case 1:
         i_this->mBC4 = 0.0f;
         if (i_this->m2C0[0] == 0) {
-            anm_init(i_this, BMDFOOT_BCK_ASI_UMARU, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_UMARU_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m2BC++;
             i_this->m2C0[0] = 5;
             i_this->mBD0 = 0x1e;
@@ -350,7 +350,7 @@ void attack_2(bmdfoot_class* i_this) {
         break;
     case 2:
         if ((int)i_this->mpBodyVineMorf->getFrame() == 49) {
-            MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(0x11), *calc_mtx);
+            MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(ASI_JNT_ASI18_e), *calc_mtx);
             MtxPosition(&local_3c, &local_48);
             dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
             dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKSOIL00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
@@ -358,7 +358,7 @@ void attack_2(bmdfoot_class* i_this) {
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_IN_G, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         if (i_this->mpBodyVineMorf->isStop()) {
-            anm_init(i_this, BMDFOOT_BCK_ASI_UMARU_WAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_UMARU_WAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m2BC++;
             i_this->mBA8 = 1;
         }
@@ -366,7 +366,7 @@ void attack_2(bmdfoot_class* i_this) {
     case 3:
         mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_DIG, &i_this->mBAC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         if (ug_move(i_this)) {
-            pBck = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BCK_ASI_DATTACK1);
+            pBck = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_DATTACK1_e);
             i_this->mpFloorVineMorf->setAnm(pBck, J3DFrameCtrl::EMode_NONE, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
             i_this->m2BC++;
         }
@@ -381,7 +381,7 @@ void attack_2(bmdfoot_class* i_this) {
         }
         ug_move(i_this);
         if (i_this->mpFloorVineMorf->isStop()) {
-            pBck = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BCK_ASI_DATTACK2);
+            pBck = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_DATTACK2_e);
             i_this->mpFloorVineMorf->setAnm(pBck, J3DFrameCtrl::EMode_LOOP, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
             i_this->m2C0[0] = 0xb4;
             i_this->m2BC++;
@@ -398,7 +398,7 @@ void attack_2(bmdfoot_class* i_this) {
             dComIfG_Ccsp()->Set(&i_this->mSph[i]);
         }
         if (i_this->m2C0[0] == 0) {
-            pBck = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BCK_ASI_DATTACK3);
+            pBck = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_DATTACK3_e);
             i_this->mpFloorVineMorf->setAnm(pBck, J3DFrameCtrl::EMode_NONE, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
             i_this->m2BC++;
         }
@@ -417,7 +417,7 @@ void attack_2(bmdfoot_class* i_this) {
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_IN_G2, &i_this->mBAC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         if (i_this->mpFloorVineMorf->isStop()) {
-            anm_init(i_this, BMDFOOT_BCK_ASI_NUKU, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_NUKU_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m2BC++;
             i_this->mBA8 = 0;
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_OUT_G2, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
@@ -441,7 +441,7 @@ void attack_2(bmdfoot_class* i_this) {
             i_this->m2BC = 0;
         }
     }
-    MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(4), *calc_mtx);
+    MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(ASI_JNT_ASI5_e), *calc_mtx);
     MtxPosition(&local_3c, &local_48);
     i_this->mSph[4].SetC(local_48);
     i_this->mSph[4].SetR(50.0f);
@@ -457,7 +457,7 @@ void damage(bmdfoot_class* i_this) {
 
     switch (i_this->m2BC) {
     case 0:
-        anm_init(i_this, BMDFOOT_BCK_ASI_NOBIKIRU, 40.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_NOBIKIRU_e, 40.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->m2BC++;
         i_this->m2C0[0] = 0x1e;
         i_this->m3EC = cM_rndFX(32768.0f);
@@ -499,13 +499,13 @@ void start(bmdfoot_class* i_this) {
     case 1:
         if (i_this->m2C0[0] == 0) {
             i_this->mBC8 = 1;
-            anm_init(i_this, BMDFOOT_BCK_ASI_START1, 1.0f, J3DFrameCtrl::EMode_NONE, cM_rndF(0.2f) + 0.9f, -1);
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_START1_e, 1.0f, J3DFrameCtrl::EMode_NONE, cM_rndF(0.2f) + 0.9f, -1);
             i_this->m2BC = 2;
         }
         break;
     case 2:
         if (i_this->mpBodyVineMorf->isStop()) {
-            anm_init(i_this, BMDFOOT_BCK_ASI_START2, 30.0f, J3DFrameCtrl::EMode_LOOP, cM_rndF(0.2f) + 0.9f, -1);
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_START2_e, 30.0f, J3DFrameCtrl::EMode_LOOP, cM_rndF(0.2f) + 0.9f, -1);
             i_this->m2BC = 3;
         }
         break;
@@ -528,10 +528,10 @@ void end(bmdfoot_class* i_this) {
         i_this->m3A4[i] = 0;
     }
     if (boss->mB76 == 2) {
-        anm_init(i_this, BMDFOOT_BCK_ASI_DEAD_LOOP, 30.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_DEAD_LOOP_e, 30.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
     }
     if (boss->mB76 == REG8_S(8) + 0x17c) {
-        anm_init(i_this, BMDFOOT_BCK_ASI_DEAD, 30.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_DEAD_e, 30.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
     }
 }
 
@@ -632,7 +632,7 @@ static BOOL daBmdfoot_Execute(bmdfoot_class* i_this) {
         sVar1 = sVar1 % 30;
     }
     i_this->btk->setFrame(sVar1);
-    MTXCopy(model->getAnmMtx(REG14_S(6) + 0x10), *calc_mtx);
+    MTXCopy(model->getAnmMtx(REG14_S(6) + (s16)ASI_JNT_ASI17_e), *calc_mtx);
     local_68.z = 0.0f;
     local_68.y = 0.0f;
     local_68.x = 0.0f;
@@ -683,10 +683,10 @@ static BOOL daBmdfoot_Delete(bmdfoot_class* i_this) {
 /* 000026B0-000029B4       .text useHeapInit__FP13bmdfoot_class */
 int useHeapInit(bmdfoot_class* i_this) {
     i_this->mpBodyVineMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BMD_ASI),
+        (J3DModelData*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BMD_ASI_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BCK_ASI_WAIT),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_WAIT_e),
         J3DFrameCtrl::EMode_LOOP,
         cM_rndF(0.2f) + 0.9f,
         0,
@@ -712,7 +712,7 @@ int useHeapInit(bmdfoot_class* i_this) {
     }
     i_this->btk = new mDoExt_btkAnm();
     JUT_ASSERT(DEMO_SELECT(1416, 1426), i_this->btk);
-    J3DAnmTextureSRTKey* pBtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BTK_ASI);
+    J3DAnmTextureSRTKey* pBtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BTK_ASI_e);
 #if VERSION == VERSION_DEMO
     i_this->btk->init(model->getModelData(), pBtk, true, J3DFrameCtrl::EMode_NONE);
 #else
@@ -722,10 +722,10 @@ int useHeapInit(bmdfoot_class* i_this) {
 #endif
 
     i_this->mpFloorVineMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BMD_ASI),
+        (J3DModelData*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BMD_ASI_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BCK_ASI_WAIT),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_WAIT_e),
         J3DFrameCtrl::EMode_LOOP,
         cM_rndF(0.2f) + 0.9f,
         0,

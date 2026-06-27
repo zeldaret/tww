@@ -8,7 +8,7 @@
 #include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/res/res_ebomzo.h"
+#include "res/Object/Ebomzo.h"
 
 typedef enum {
     /*0*/ Ebomzo_Mode_Check = 0,
@@ -50,7 +50,7 @@ dCcD_SrcSph sph_check_src = {
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjEbomzo5Act_cFv */
 BOOL daObjEbomzo::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, EBOMZO_BDL_EBOMZO);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_EBOMZO_BDL_EBOMZO_e);
     JUT_ASSERT(140, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
     return mpModel != NULL;
@@ -87,7 +87,7 @@ cPhs_State daObjEbomzo::Act_c::Mthd_Create() {
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, EBOMZO_DZB_EBOMZO, NULL, 0x1200);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_EBOMZO_DZB_EBOMZO_e, NULL, 0x1200);
         JUT_ASSERT(194, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;

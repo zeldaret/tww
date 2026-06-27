@@ -18,7 +18,7 @@
 #include "d/d_demo.h"
 #include "d/d_timer.h"
 
-#include "d/res/res_always.h" // IWYU pragma: export
+#include "res/Object/Always.h" // IWYU pragma: export
 
 class JKRArchive;
 class JKRAramBlock;
@@ -1637,35 +1637,65 @@ inline void dComIfGs_onSymbol(u8 i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getCollect().onSymbol(i_no);
 }
 
-inline BOOL dComIfGs_isDungeonItemMap() {
-    return g_dComIfG_gameInfo.save.getMemory().getBit().isDungeonItemMap();
-}
+void dComIfGs_onDungeonItemMap(int i_stageNo);
+void dComIfGs_offDungeonItemMap(int i_stageNo);
+BOOL dComIfGs_isDungeonItemMap(int i_stageNo);
+void dComIfGs_onDungeonItemCompass(int i_stageNo);
+void dComIfGs_offDungeonItemCompass(int i_stageNo);
+BOOL dComIfGs_isDungeonItemCompass(int i_stageNo);
+void dComIfGs_onDungeonItemBossKey(int i_stageNo);
+void dComIfGs_offDungeonItemBossKey(int i_stageNo);
+BOOL dComIfGs_isDungeonItemBossKey(int i_stageNo);
+void dComIfGs_onStageBossEnemy(int i_stageNo);
+void dComIfGs_offStageBossEnemy(int i_stageNo);
+BOOL dComIfGs_isStageBossEnemy(int i_stageNo);
+void dComIfGs_onStageLife(int i_stageNo);
+void dComIfGs_offStageLife(int i_stageNo);
+BOOL dComIfGs_isStageLife(int i_stageNo);
 
 inline void dComIfGs_onDungeonItemMap() {
     g_dComIfG_gameInfo.save.getMemory().getBit().onDungeonItemMap();
 }
 
-inline BOOL dComIfGs_isDungeonItemCompass() {
-    return g_dComIfG_gameInfo.save.getMemory().getBit().isDungeonItemCompass();
+inline void dComIfGs_offDungeonItemMap() {
+    g_dComIfG_gameInfo.save.getMemory().getBit().offDungeonItemMap();
+}
+
+inline BOOL dComIfGs_isDungeonItemMap() {
+    return g_dComIfG_gameInfo.save.getMemory().getBit().isDungeonItemMap();
 }
 
 inline void dComIfGs_onDungeonItemCompass() {
     g_dComIfG_gameInfo.save.getMemory().getBit().onDungeonItemCompass();
 }
 
-inline BOOL dComIfGs_isDungeonItemBossKey() {
-    return g_dComIfG_gameInfo.save.getMemory().getBit().isDungeonItemBossKey();
+inline void dComIfGs_offDungeonItemCompass() {
+    g_dComIfG_gameInfo.save.getMemory().getBit().offDungeonItemCompass();
+}
+
+inline BOOL dComIfGs_isDungeonItemCompass() {
+    return g_dComIfG_gameInfo.save.getMemory().getBit().isDungeonItemCompass();
 }
 
 inline void dComIfGs_onDungeonItemBossKey() {
     g_dComIfG_gameInfo.save.getMemory().getBit().onDungeonItemBossKey();
 }
 
+inline void dComIfGs_offDungeonItemBossKey() {
+    g_dComIfG_gameInfo.save.getMemory().getBit().offDungeonItemBossKey();
+}
+
+inline BOOL dComIfGs_isDungeonItemBossKey() {
+    return g_dComIfG_gameInfo.save.getMemory().getBit().isDungeonItemBossKey();
+}
+
 inline void dComIfGs_onStageBossEnemy() {
     g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossEnemy();
 }
 
-BOOL dComIfGs_isStageBossEnemy(int i_stageNo);
+inline void dComIfGs_offStageBossEnemy() {
+    g_dComIfG_gameInfo.save.getMemory().getBit().offStageBossEnemy();
+}
 
 inline BOOL dComIfGs_isStageBossEnemy() {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossEnemy();
@@ -1679,16 +1709,20 @@ inline void dComIfGs_onStageLife() {
     g_dComIfG_gameInfo.save.getMemory().getBit().onStageLife();
 }
 
-BOOL dComIfGs_isStageLife(int i_stageNo);
+inline void dComIfGs_offStageLife() {
+    g_dComIfG_gameInfo.save.getMemory().getBit().offStageLife();
+}
 
 inline BOOL dComIfGs_isStageLife() {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isStageLife();
 }
 
-void dComIfGs_onStageLife(int i_stageNo);
-
 inline void dComIfGs_onStageBossDemo() {
     g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossDemo();
+}
+
+inline void dComIfGs_offStageBossDemo() {
+    g_dComIfG_gameInfo.save.getMemory().getBit().offStageBossDemo();
 }
 
 inline BOOL dComIfGs_isStageBossDemo() {
@@ -3217,6 +3251,10 @@ inline int dComIfGp_roomControl_getStayNo() {
     return dStage_roomControl_c::getStayNo();
 }
 
+inline void dComIfGp_roomControl_setStayNo(int stayNo) {
+    dStage_roomControl_c::setStayNo(stayNo);
+}
+
 inline dBgW* dComIfGp_roomControl_getBgW(int i_roomNo) {
     return g_dComIfG_gameInfo.play.getRoomControl()->getBgW(i_roomNo);
 }
@@ -3243,10 +3281,6 @@ inline dStage_roomDt_c* dComIfGp_roomControl_getStatusRoomDt(int room_no) {
 
 inline void dComIfGp_roomControl_checkDrawArea() {
     g_dComIfG_gameInfo.play.getRoomControl()->checkDrawArea();
-}
-
-inline void dComIfGp_roomControl_setStayNo(int stayNo) {
-    g_dComIfG_gameInfo.play.getRoomControl()->setStayNo(stayNo);
 }
 
 inline void dComIfGp_roomControl_setStatusFlag(int i_roomNo, u8 i_flag) {

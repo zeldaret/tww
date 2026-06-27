@@ -7,8 +7,8 @@
 #include "d/actor/d_a_obj_buoyrace.h"
 #include "d/actor/d_a_goal_flag.h"
 #include "d/actor/d_a_sea.h"
-#include "d/res/res_khasi_00.h"
-#include "d/res/res_kkiba_00.h"
+#include "res/Object/Khasi_00.h"
+#include "res/Object/Kkiba_00.h"
 
 const char daObjBuoyrace::Act_c::M_arcname_kiba[] = "Kkiba_00";
 const char daObjBuoyrace::Act_c::M_arcname_hasi[] = "Khasi_00";
@@ -33,11 +33,11 @@ BOOL daObjBuoyrace::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjBuoyrace::Act_c::create_heap() {
     bool result = false;
 
-    J3DModelData* mdl_data_kiba = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_kiba, KKIBA_00_BDL_KKIBA_00));
+    J3DModelData* mdl_data_kiba = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_kiba, dRes_INDEX_KKIBA_00_BDL_KKIBA_00_e));
     JUT_ASSERT(119, mdl_data_kiba != NULL);
     mpModelKiba = mDoExt_J3DModel__create(mdl_data_kiba, 0x80000, 0x11000022);
 
-    J3DModelData* mdl_data_hasi = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_hasi, KHASI_00_BDL_KHASI_00));
+    J3DModelData* mdl_data_hasi = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_hasi, dRes_INDEX_KHASI_00_BDL_KHASI_00_e));
     JUT_ASSERT(128, mdl_data_hasi != NULL);
     mpModelHasi = mDoExt_J3DModel__create(mdl_data_hasi, 0x80000, 0x11000022);
 

@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gong.h"
-#include "d/res/res_vdora.h"
+#include "res/Object/Vdora.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_a_obj.h"
@@ -39,8 +39,8 @@ BOOL daObjGong::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 0000009C-0000028C       .text create_heap__Q29daObjGong5Act_cFv */
 bool daObjGong::Act_c::create_heap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, VDORA_INDEX_BDL_VDORA));
-    J3DAnmTransformKey* bck = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, VDORA_INDEX_BCK_05_VDORA_CUT02_HIT));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_VDORA_BDL_VDORA_e));
+    J3DAnmTransformKey* bck = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_VDORA_BCK_05_VDORA_CUT02_HIT_e));
     JUT_ASSERT(0xbd, (modelData != NULL) && (bck != NULL));
 
     mpMorf = new mDoExt_McaMorf(

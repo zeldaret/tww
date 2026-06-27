@@ -266,27 +266,27 @@ BOOL daPy_lk_c::jointBeforeCB(int jnt_no, J3DTransformInfo* param_2, Quaternion*
     Quaternion afStack_30;
 
     csXyz local_38(0, 0, 0);
-    if (jnt_no == 0xF) {
+    if (jnt_no == CL_JNT_HEAD_JNT_e) {
         local_38.set(m3564.y, m3564.z, m3564.x);
-    } else if (jnt_no == 0x1F) {
+    } else if (jnt_no == CL_JNT_LCLOTCH_JNT_e) {
         m34C6 = 2;
         m3668.mScale = param_2->mScale;
         m3668.mRotation = param_2->mRotation;
         m3668.mTranslate = param_2->mTranslate;
         param_2->mTranslate.x = param_2->mTranslate.x - mFootData[1].field_0x030;
-    } else if (jnt_no == 0x24) {
+    } else if (jnt_no == CL_JNT_RCLOTCH_JNT_e) {
         m34C6 = 2;
         m3668.mScale = param_2->mScale;
         m3668.mRotation = param_2->mRotation;
         m3668.mTranslate = param_2->mTranslate;
         param_2->mTranslate.x = param_2->mTranslate.x - mFootData[0].field_0x030;
-    } else if (jnt_no == 0x10) {
+    } else if (jnt_no == CL_JNT_LMOMI_JNT_e) {
         local_38.y = m3516;
         local_38.z = m351A;
-    } else if (jnt_no == 0x11) {
+    } else if (jnt_no == CL_JNT_RMOMI_JNT_e) {
         local_38.y = m3518;
         local_38.z = m351A;
-    } else if (jnt_no == 2) {
+    } else if (jnt_no == CL_JNT_BODY_CHN_e) {
         local_38.set(-mBodyAngle.z, mBodyAngle.y, mBodyAngle.x);
         m34C6 = 2;
         m3668.mScale = param_2->mScale;
@@ -297,7 +297,7 @@ BOOL daPy_lk_c::jointBeforeCB(int jnt_no, J3DTransformInfo* param_2, Quaternion*
         local_38.x = m34F2;
         local_38.z = m34F4;
     } else if (
-        (jnt_no == 0xA || jnt_no == 0xB) &&
+        (jnt_no == CL_JNT_RARMA_JNT_e || jnt_no == CL_JNT_RARMB_JNT_e) &&
         dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
         m_old_fdata->getOldFrameFlg() != false
     ) {
@@ -324,16 +324,16 @@ BOOL daPy_lk_c::jointBeforeCB(int jnt_no, J3DTransformInfo* param_2, Quaternion*
     if (!checkResetFlg0(daPyRFlg0_ORIGINAL_HAT_ANIM))
 #endif
     {
-        if (jnt_no == 0x1A) {
+        if (jnt_no == CL_JNT_HATA_JNT_e) {
             JMAEulerToQuat(0, m34F8, m3528 + (m34F6 + -0x8000) + m350E, param_3);
-        } else if (jnt_no == 0x1B) {
+        } else if (jnt_no == CL_JNT_HATB_JNT_e) {
             JMAEulerToQuat(0, m34FC, m34FA + m3510, param_3);
-        } else if (jnt_no == 0x1C) {
+        } else if (jnt_no == CL_JNT_HATC_JNT_e) {
             JMAEulerToQuat(0, m3500, m34FE + m3512, param_3);
         }
     }
 
-    if (jnt_no == 0) {
+    if (jnt_no == CL_JNT_LINK_ROOT_e) {
         if (m34C2 == 1) {
             param_2->mTranslate.x = 0.0f;
             param_2->mTranslate.z = 0.0f;
@@ -343,7 +343,7 @@ BOOL daPy_lk_c::jointBeforeCB(int jnt_no, J3DTransformInfo* param_2, Quaternion*
             param_2->mTranslate.z = 0.0f;
         }
     }
-    if (jnt_no == 0x1E && (m34E0 != 0 || m34E4 != 0)) {
+    if (jnt_no == CL_JNT_WAIST_JNT_e && (m34E0 != 0 || m34E4 != 0)) {
         local_38.y = m34E4;
         local_38.z = m34E0;
     }
@@ -363,18 +363,18 @@ BOOL daPy_lk_c::jointBeforeCB(int jnt_no, J3DTransformInfo* param_2, Quaternion*
     }
     if ((checkUpperGuardAnime() && mCurProc != daPyProc_BACK_JUMP_e) ||
         checkGrabAnime() ||
-        m_anm_heap_upper[UPPER_MOVE0_e].mIdx == LKANM_BCK_ATNBOKO ||
-        m_anm_heap_upper[UPPER_MOVE0_e].mIdx == LKANM_BCK_ATNHAM ||
+        m_anm_heap_upper[UPPER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_ATNBOKO_e ||
+        m_anm_heap_upper[UPPER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_ATNHAM_e ||
         checkUpperReadyThrowAnime())
     {
-        if (jnt_no == 0) {
+        if (jnt_no == CL_JNT_LINK_ROOT_e) {
             m3648 = *param_3;
-        } else if (jnt_no == 1) {
+        } else if (jnt_no == CL_JNT_CENTER_e) {
             mDoMtx_copy(J3DSys::mCurrentMtx, root_mtx);
             mDoMtx_stack_c::quatS(&m3648);
             mDoMtx_stack_c::inverse();
             mDoMtx_concat(J3DSys::mCurrentMtx, mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
-        } else if (jnt_no == 0x1D) {
+        } else if (jnt_no == CL_JNT_WAIST_CHN_e) {
             mDoMtx_copy(root_mtx, J3DSys::mCurrentMtx);
         }
     }
@@ -397,18 +397,18 @@ BOOL daPy_lk_c::jointAfterCB(int jnt_no, J3DTransformInfo* param_2, Quaternion* 
         }
         m34C6 = 0;
     }
-    if (jnt_no == 0x22) {
-        mDoMtx_copy(mpCLModel->getAnmMtx(0x22), mFootData[1].field_0x088[2]);
-    } else if (jnt_no == 0x27) {
-        mDoMtx_copy(mpCLModel->getAnmMtx(0x27), mFootData[0].field_0x088[2]);
-    } else if (jnt_no == 0x20) {
-        mDoMtx_copy(mpCLModel->getAnmMtx(0x20), mFootData[1].field_0x088[0]);
-    } else if (jnt_no == 0x21) {
-        mDoMtx_copy(mpCLModel->getAnmMtx(0x21), mFootData[1].field_0x088[1]);
-    } else if (jnt_no == 0x25) {
-        mDoMtx_copy(mpCLModel->getAnmMtx(0x25), mFootData[0].field_0x088[0]);
-    } else if (jnt_no == 0x26) {
-        mDoMtx_copy(mpCLModel->getAnmMtx(0x26), mFootData[0].field_0x088[1]);
+    if (jnt_no == CL_JNT_LFOOT_JNT_e) {
+        mDoMtx_copy(mpCLModel->getAnmMtx(CL_JNT_LFOOT_JNT_e), mFootData[1].field_0x088[2]);
+    } else if (jnt_no == CL_JNT_RFOOT_JNT_e) {
+        mDoMtx_copy(mpCLModel->getAnmMtx(CL_JNT_RFOOT_JNT_e), mFootData[0].field_0x088[2]);
+    } else if (jnt_no == CL_JNT_LLEGA_JNT_e) {
+        mDoMtx_copy(mpCLModel->getAnmMtx(CL_JNT_LLEGA_JNT_e), mFootData[1].field_0x088[0]);
+    } else if (jnt_no == CL_JNT_LLEGB_JNT_e) {
+        mDoMtx_copy(mpCLModel->getAnmMtx(CL_JNT_LLEGB_JNT_e), mFootData[1].field_0x088[1]);
+    } else if (jnt_no == CL_JNT_RLEGA_JNT_e) {
+        mDoMtx_copy(mpCLModel->getAnmMtx(CL_JNT_RLEGA_JNT_e), mFootData[0].field_0x088[0]);
+    } else if (jnt_no == CL_JNT_RLEGB_JNT_e) {
+        mDoMtx_copy(mpCLModel->getAnmMtx(CL_JNT_RLEGB_JNT_e), mFootData[0].field_0x088[1]);
     }
     return true;
 }
@@ -419,52 +419,52 @@ static BOOL daPy_jointAfterCallback(u32 userArea, u16 jnt_no, J3DTransformInfo* 
 }
 
 /* 80103C40-80103EE4       .text jointCB0__9daPy_lk_cFi */
-BOOL daPy_lk_c::jointCB0(int param_1) {
+BOOL daPy_lk_c::jointCB0(int jnt_no) {
     static f32 guard_rate = 0.0f;
 
     if (checkEquipAnime()) {
         if (!checkModeFlg(ModeFlg_00000001)) {
-            if (param_1 == 1 || param_1 == 0xD) {
+            if (jnt_no == CL_JNT_CENTER_e || jnt_no == CL_JNT_CL_PODA_e) {
                 m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
-            } else if (param_1 == 4 || param_1 == 0x1c) {
+            } else if (jnt_no == CL_JNT_CHEST_JNT_e || jnt_no == CL_JNT_HATC_JNT_e) {
                 m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
             }
         }
     } else if (checkUpperReadyAnime() ||
-               checkUpperAnime(LKANM_BCK_ROPETHROW) ||
+               checkUpperAnime(dRes_INDEX_LKANM_BCK_ROPETHROW_e) ||
                (mCurProc != daPyProc_GRAB_WAIT_e && checkGrabAnime()))
     {
-        if (param_1 == 0xF) {
+        if (jnt_no == CL_JNT_HEAD_JNT_e) {
             m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
-        } else if (param_1 == 0x1C) {
+        } else if (jnt_no == CL_JNT_HATC_JNT_e) {
             m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
         }
     } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
                !checkShipNotNormalMode())
     {
-        if (param_1 == 0xF) {
+        if (jnt_no == CL_JNT_HEAD_JNT_e) {
             m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
-        } else if (param_1 == 0x1C) {
+        } else if (jnt_no == CL_JNT_HATC_JNT_e) {
             m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
         }
     } else if (checkUpperGuardAnime()) {
-        if (param_1 == 0 || param_1 == 0xD) {
-            if (param_1 == 0) {
+        if (jnt_no == CL_JNT_LINK_ROOT_e || jnt_no == CL_JNT_CL_PODA_e) {
+            if (jnt_no == CL_JNT_LINK_ROOT_e) {
                 guard_rate = m_pbCalc[PART_UPPER_e]->getRatio(2);
             }
             m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
-        } else if (param_1 == 4 || param_1 == 0x1C) {
+        } else if (jnt_no == CL_JNT_CHEST_JNT_e || jnt_no == CL_JNT_HATC_JNT_e) {
             m_pbCalc[PART_UPPER_e]->setRatio(2, guard_rate);
         }
     } else if (dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e) &&
                (mCurProc != daPyProc_TACT_PLAY_e || mProcVar6.m3570 != 0))
     {
-        if (param_1 == 4) {
+        if (jnt_no == CL_JNT_CHEST_JNT_e) {
             m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
-        } else if (param_1 == 8) {
+        } else if (jnt_no == CL_JNT_CL_LHANDA_e) {
             m_pbCalc[PART_UPPER_e]->setRatio(1, 1.0f);
             m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
-        } else if (param_1 == 0xC) {
+        } else if (jnt_no == CL_JNT_CL_RHANDA_e) {
             m_pbCalc[PART_UPPER_e]->setRatio(1, 0.0f);
         }
     }
@@ -491,47 +491,54 @@ BOOL daPy_lk_c::jointCB1() {
 
     J3DTransformInfo* trans_info;
     Quaternion* quaternion;
-    trans_info = m_old_fdata->getOldFrameTransInfo(0x21);
-    quaternion = m_old_fdata->getOldFrameQuaternion(0x21);
+    trans_info = m_old_fdata->getOldFrameTransInfo(CL_JNT_LLEGB_JNT_e);
+    quaternion = m_old_fdata->getOldFrameQuaternion(CL_JNT_LLEGB_JNT_e);
+    
     mDoMtx_stack_c::ZrotS(mFootData[1].field_0x008);
-    mDoMtx_stack_c::revConcat(mpCLModel->getAnmMtx(0x20));
-    mpCLModel->setAnmMtx(0x20, mDoMtx_stack_c::get());
+    mDoMtx_stack_c::revConcat(mpCLModel->getAnmMtx(CL_JNT_LLEGA_JNT_e));
+    mpCLModel->setAnmMtx(CL_JNT_LLEGA_JNT_e, mDoMtx_stack_c::get());
+    
     mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
     mDoMtx_stack_c::quatM(quaternion);
-    trans_info++;
-    quaternion++;
     mDoMtx_stack_c::ZrotM(mFootData[1].field_0x00A);
-    mpCLModel->setAnmMtx(0x21, mDoMtx_stack_c::get());
-    mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
-    mDoMtx_stack_c::quatM(quaternion);
+    mpCLModel->setAnmMtx(CL_JNT_LLEGB_JNT_e, mDoMtx_stack_c::get());
     trans_info++;
     quaternion++;
+    
+    mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
+    mDoMtx_stack_c::quatM(quaternion);
     mDoMtx_stack_c::ZrotM(mFootData[1].field_0x002);
-    mpCLModel->setAnmMtx(0x22, mDoMtx_stack_c::get());
+    mpCLModel->setAnmMtx(CL_JNT_LFOOT_JNT_e, mDoMtx_stack_c::get());
+    trans_info++;
+    quaternion++;
+    
     mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
     mDoMtx_stack_c::quatM(quaternion);
-    mpCLModel->setAnmMtx(0x23, mDoMtx_stack_c::get());
+    mpCLModel->setAnmMtx(CL_JNT_LTOE_JNT_e, mDoMtx_stack_c::get());
 
-    trans_info = m_old_fdata->getOldFrameTransInfo(0x26);
-    quaternion = m_old_fdata->getOldFrameQuaternion(0x26);
+    trans_info = m_old_fdata->getOldFrameTransInfo(CL_JNT_RLEGB_JNT_e);
+    quaternion = m_old_fdata->getOldFrameQuaternion(CL_JNT_RLEGB_JNT_e);
     mDoMtx_stack_c::ZrotS(mFootData[0].field_0x008);
-    mDoMtx_stack_c::revConcat(mpCLModel->getAnmMtx(0x25));
-    mpCLModel->setAnmMtx(0x25, mDoMtx_stack_c::get());
+    mDoMtx_stack_c::revConcat(mpCLModel->getAnmMtx(CL_JNT_RLEGA_JNT_e));
+    mpCLModel->setAnmMtx(CL_JNT_RLEGA_JNT_e, mDoMtx_stack_c::get());
+    
     mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
     mDoMtx_stack_c::quatM(quaternion);
-    trans_info++;
-    quaternion++;
     mDoMtx_stack_c::ZrotM(mFootData[0].field_0x00A);
-    mpCLModel->setAnmMtx(0x26, mDoMtx_stack_c::get());
-    mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
-    mDoMtx_stack_c::quatM(quaternion);
+    mpCLModel->setAnmMtx(CL_JNT_RLEGB_JNT_e, mDoMtx_stack_c::get());
     trans_info++;
     quaternion++;
-    mDoMtx_stack_c::ZrotM(mFootData[0].field_0x002);
-    mpCLModel->setAnmMtx(0x27, mDoMtx_stack_c::get());
+    
     mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
     mDoMtx_stack_c::quatM(quaternion);
-    mpCLModel->setAnmMtx(0x28, mDoMtx_stack_c::get());
+    mDoMtx_stack_c::ZrotM(mFootData[0].field_0x002);
+    mpCLModel->setAnmMtx(CL_JNT_RFOOT_JNT_e, mDoMtx_stack_c::get());
+    trans_info++;
+    quaternion++;
+    
+    mDoMtx_stack_c::transM(trans_info->mTranslate.x, trans_info->mTranslate.y, trans_info->mTranslate.z);
+    mDoMtx_stack_c::quatM(quaternion);
+    mpCLModel->setAnmMtx(CL_JNT_RTOE_JNT_e, mDoMtx_stack_c::get());
 
     return true;
 }
@@ -662,7 +669,7 @@ BOOL daPy_lk_c::checkBossBgm() {
 
 /* 801046CC-801046EC       .text checkMabaAnimeBtp__9daPy_lk_cFi */
 BOOL daPy_lk_c::checkMabaAnimeBtp(int anmIdx) {
-    if (anmIdx >= LKANM_BTP_TMABAA && anmIdx <= LKANM_BTP_TMABAJ) {
+    if (anmIdx >= dRes_INDEX_LKANM_BTP_TMABAA_e && anmIdx <= dRes_INDEX_LKANM_BTP_TMABAJ_e) {
         return TRUE;
     }
     return FALSE;
@@ -679,10 +686,10 @@ u16 daPy_lk_c::checkNormalFace() {
     if (checkResetFlg0(daPyRFlg0_UNK40000)) {
         return daPyFace_TMABAG;
     }
-    if (checkUpperAnime(LKANM_BCK_GRABWAITB)) {
+    if (checkUpperAnime(dRes_INDEX_LKANM_BCK_GRABWAITB_e)) {
         return daPyFace_TMABAJ_TEYORIME;
     }
-    if (checkUpperAnime(LKANM_BCK_GRABWAIT)) {
+    if (checkUpperAnime(dRes_INDEX_LKANM_BCK_GRABWAIT_e)) {
         return daPyFace_TMABAE;
     }
     if (daPy_dmEcallBack_c::checkCurse() || checkRestHPAnime()) {
@@ -719,7 +726,7 @@ u16 daPy_lk_c::checkNormalFace() {
     if (mEquipItem != daPyItem_NONE_e) {
         return daPyFace_TMABAB;
     }
-    if (m_anm_heap_under[UNDER_MOVE1_e].mIdx == LKANM_BCK_WALKSLOPE) {
+    if (m_anm_heap_under[UNDER_MOVE1_e].mIdx == dRes_INDEX_LKANM_BCK_WALKSLOPE_e) {
         return daPyFace_TMABAC;
     }
     if (mCurProc == daPyProc_MOVE_e) {
@@ -735,8 +742,8 @@ u16 daPy_lk_c::checkNormalFace() {
     }
     if (mCurProc == daPyProc_WAIT_e && !dComIfGp_event_runCheck()) {
         f32 dVar7 = cM_rnd();
-        if (((m_tex_anm_heap.mIdx == LKANM_BTP_TMABAA || m_tex_anm_heap.mIdx == LKANM_BTP_TMABAB) && dVar7 < 0.01f) ||
-            (m_tex_anm_heap.mIdx == LKANM_BTP_TMABACC && dVar7 >= 0.01f))
+        if (((m_tex_anm_heap.mIdx == dRes_INDEX_LKANM_BTP_TMABAA_e || m_tex_anm_heap.mIdx == dRes_INDEX_LKANM_BTP_TMABAB_e) && dVar7 < 0.01f) ||
+            (m_tex_anm_heap.mIdx == dRes_INDEX_LKANM_BTP_TMABACC_e && dVar7 >= 0.01f))
         {
             return daPyFace_TMABACC;
         }
@@ -784,29 +791,29 @@ void daPy_lk_c::setTextureAnime(u16 param_1, int param_2) {
             daPy_matAnm_c::getMabaFlg() != 0 &&
             !dComIfGp_event_runCheck() &&
             mpAttnActorLockOn == NULL &&
-            btk_idx == LKANM_BTK_TMABA)
+            btk_idx == dRes_INDEX_LKANM_BTK_TMABA_e)
         {
             if (daPy_matAnm_c::getMabaTimer() == 0) {
                 if (dVar9 < 0.44f) {
-                    btk_idx = LKANM_BTK_TMABA;
+                    btk_idx = dRes_INDEX_LKANM_BTK_TMABA_e;
                 } else {
                     param_2 = 0;
                     if (dVar9 < 0.51f) {
-                        btk_idx = LKANM_BTK_TEUP;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TEUP_e;
                     } else if (dVar9 < 0.58f) {
-                        btk_idx = LKANM_BTK_TEDW;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TEDW_e;
                     } else if (dVar9 < 0.65f) {
-                        btk_idx = LKANM_BTK_TEL;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TEL_e;
                     } else if (dVar9 < 0.72f) {
-                        btk_idx = LKANM_BTK_TER;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TER_e;
                     } else if (dVar9 < 0.79f) {
-                        btk_idx = LKANM_BTK_TEDL;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TEDL_e;
                     } else if (dVar9 < 0.86f) {
-                        btk_idx = LKANM_BTK_TEDR;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TEDR_e;
                     } else if (dVar9 < 0.93f) {
-                        btk_idx = LKANM_BTK_TEUR;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TEUR_e;
                     } else {
-                        btk_idx = LKANM_BTK_TEUL;
+                        btk_idx = dRes_INDEX_LKANM_BTK_TEUL_e;
                     }
                 }
                 m_tex_scroll_heap.mIdx = btk_idx;
@@ -815,7 +822,7 @@ void daPy_lk_c::setTextureAnime(u16 param_1, int param_2) {
                 {
                     setTextureScrollResource(loadTextureScrollResource(btk_idx, 0), param_2);
                 }
-                if (btk_idx != LKANM_BTK_TMABA) {
+                if (btk_idx != dRes_INDEX_LKANM_BTK_TMABA_e) {
                     daPy_matAnm_c::onMabaFlg();
                 }
             }
@@ -827,25 +834,25 @@ void daPy_lk_c::setTextureAnime(u16 param_1, int param_2) {
             }
         }
     } else if (bVar3 && checkModeFlg(ModeFlg_00000001) && !dComIfGp_event_runCheck() &&
-               daPy_matAnm_c::getMabaTimer() == 0 && mpAttnActorLockOn == NULL && btk_idx == LKANM_BTK_TMABA &&
+               daPy_matAnm_c::getMabaTimer() == 0 && mpAttnActorLockOn == NULL && btk_idx == dRes_INDEX_LKANM_BTK_TMABA_e &&
                m_tex_scroll_heap.field_0x2 == 0xFFFF && m_tex_scroll_heap.field_0x4 == 0xFFFF && cM_rnd() < 0.025f)
     {
         if (dVar9 < 0.125f) {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TEUP;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEUP_e;
         } else if (dVar9 < 0.25f) {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TEDW;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEDW_e;
         } else if (dVar9 < 0.375f) {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TEL;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEL_e;
         } else if (dVar9 < 0.5f) {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TER;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TER_e;
         } else if (dVar9 < 0.625f) {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TEDL;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEDL_e;
         } else if (dVar9 < 0.75f) {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TEDR;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEDR_e;
         } else if (dVar9 < 0.875f) {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TEUL;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEUL_e;
         } else {
-            m_tex_scroll_heap.mIdx = LKANM_BTK_TEUR;
+            m_tex_scroll_heap.mIdx = dRes_INDEX_LKANM_BTK_TEUR_e;
         }
         setTextureScrollResource(loadTextureScrollResource(m_tex_scroll_heap.mIdx, 0), 0);
         daPy_matAnm_c::onMabaFlg();
@@ -1001,7 +1008,7 @@ void daPy_lk_c::playTextureAnime() {
                 m3530++;
             }
         }
-        if (m_tex_scroll_heap.mIdx == LKANM_BTK_TABEKOBE) {
+        if (m_tex_scroll_heap.mIdx == dRes_INDEX_LKANM_BTK_TABEKOBE_e) {
             m3532++;
             if (m3532 >= mpTexScrollResData->getFrameMax()) {
                 m3532 = 0;
@@ -1033,17 +1040,17 @@ BOOL daPy_lk_c::checkPlayerGuard() const {
 
 /* 8010558C-801056E4       .text setOutPower__9daPy_lk_cFfsi */
 void daPy_lk_c::setOutPower(f32 param_1, s16 param_2, int param_3) {
-    f32 fVar1 = m3644;
-    if (fVar1 < 0.1f) {
+    if (m3644 < 0.1f) {
         m3640 = param_2;
         m3644 = param_1;
     } else {
-        f32 dVar5 = fVar1 * cM_ssin(m3640) + param_1 * cM_ssin(param_2);
-        f32 dVar4 = fVar1 * cM_scos(m3640) + param_1 * cM_scos(param_2);
+        f32 dVar5 = m3644 * cM_ssin(m3640) + param_1 * cM_ssin(param_2);
+        f32 dVar4 = m3644 * cM_scos(m3640) + param_1 * cM_scos(param_2);
         m3640 = cM_atan2s(dVar5, dVar4);
         dVar4 = std::sqrtf(dVar5 * dVar5 + dVar4 * dVar4);
         m3644 = dVar4;
     }
+
     if (param_3 != 0) {
         onNoResetFlg1(daPyFlg1_UNK10000000);
     }
@@ -1073,28 +1080,27 @@ BOOL daPy_lk_c::checkSightLine(f32 param_1, cXyz* param_2) {
 void daPy_lk_c::setBootsModel(J3DModel** pBootModels) {
     u16 bootsJointIdx;
     if (checkEquipHeavyBoots()) {
-        // TODO: add enum for link's joint numbers
-        pBootModels[0]->setAnmMtx(0x01, mpCLModel->getAnmMtx(0x26)); // RlegB_jnt joint
-        pBootModels[1]->setAnmMtx(0x01, mpCLModel->getAnmMtx(0x21)); // LlegB_jnt joint
-        bootsJointIdx = 2;
+        pBootModels[0]->setAnmMtx(HBOOTS_JNT_CL_HBOOTSA_e, mpCLModel->getAnmMtx(CL_JNT_RLEGB_JNT_e));
+        pBootModels[1]->setAnmMtx(HBOOTS_JNT_CL_HBOOTSA_e, mpCLModel->getAnmMtx(CL_JNT_LLEGB_JNT_e));
+        bootsJointIdx = HBOOTS_JNT_CL_HBOOTSB_e;
     } else {
-        bootsJointIdx = 1;
+        bootsJointIdx = HBOOTS_JNT_CL_HBOOTSA_e;
     }
     
     J3DModel* bootModel = pBootModels[0];
-    bootModel->setAnmMtx(bootsJointIdx, mpCLModel->getAnmMtx(0x28)); // Rtoe_jnt joint
-    bootModel->setAnmMtx(bootsJointIdx+1, mpCLModel->getAnmMtx(0x27)); // Rfoot_jnt joint
+    bootModel->setAnmMtx(bootsJointIdx, mpCLModel->getAnmMtx(CL_JNT_RTOE_JNT_e));
+    bootModel->setAnmMtx(bootsJointIdx+1, mpCLModel->getAnmMtx(CL_JNT_RFOOT_JNT_e));
     
     bootModel = pBootModels[1];
-    bootModel->setAnmMtx(bootsJointIdx, mpCLModel->getAnmMtx(0x23)); // Ltoe_jnt joint
-    bootModel->setAnmMtx(bootsJointIdx+1, mpCLModel->getAnmMtx(0x22)); // Lfoot_jnt joint
+    bootModel->setAnmMtx(bootsJointIdx, mpCLModel->getAnmMtx(CL_JNT_LTOE_JNT_e));
+    bootModel->setAnmMtx(bootsJointIdx+1, mpCLModel->getAnmMtx(CL_JNT_LFOOT_JNT_e));
 }
 
 /* 80105910-80106660       .text setItemModel__9daPy_lk_cFv */
 s32 daPy_lk_c::setItemModel() {
-    MtxP pMVar14 = mpCLModel->getAnmMtx(0xD);
-    MtxP pMVar13 = mpCLModel->getAnmMtx(0x8);
-    MtxP pMVar6 = mpCLModel->getAnmMtx(0xC);
+    MtxP podA_jnt_mtx = mpCLModel->getAnmMtx(CL_JNT_CL_PODA_e);
+    MtxP lHandA_jnt_mtx = mpCLModel->getAnmMtx(CL_JNT_CL_LHANDA_e);
+    MtxP rHandA_jnt_mtx = mpCLModel->getAnmMtx(CL_JNT_CL_RHANDA_e);
     daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
     if (boko != NULL && mEquipItem == daPyItem_BOKO_e) {
         mDoMtx_stack_c::transS(40.0f, 47.0f, 2.1f);
@@ -1106,7 +1112,7 @@ s32 daPy_lk_c::setItemModel() {
         } else if (fopAcM_GetParam(boko) == daBoko_c::Type_PGANON_SWORD_e) {
             mDoMtx_stack_c::transM(0.0f, 0.0f, 30.0f);
         }
-        mDoMtx_stack_c::revConcat(pMVar13);
+        mDoMtx_stack_c::revConcat(lHandA_jnt_mtx);
         MtxP mtx = mDoMtx_stack_c::now;
         boko->setMatrix(mtx);
     }
@@ -1120,38 +1126,38 @@ s32 daPy_lk_c::setItemModel() {
             mpEquipItemBtk->setFrame(dVar16);
         }
     }
-    mpPodmsModel->setBaseTRMtx(pMVar14);
+    mpPodmsModel->setBaseTRMtx(podA_jnt_mtx);
     if (mpEquipItemModel != NULL) {
         if (mEquipItem == daPyItem_UNK10A_e) {
             mDoMtx_stack_c::transS(50.0f, -48.0f, -14.0f);
             mDoMtx_stack_c::XYZrotM(-0x33FC, -0x2CC, 0x3519);
-            mDoMtx_stack_c::revConcat(dComIfGp_getShipActor()->mpHeadAnm->getModel()->getAnmMtx(0x0A));
+            mDoMtx_stack_c::revConcat(dComIfGp_getShipActor()->getTactJntMtx());
             mpEquipItemModel->setBaseTRMtx(mDoMtx_stack_c::get());
         } else if (mEquipItem == daPyItem_UNK104_e) {
             mDoMtx_stack_c::transS(14.5f, 34.5f, 0.0f);
             mDoMtx_stack_c::XYZrotM(0, -0x4000, -0x2AAA);
-            mDoMtx_stack_c::revConcat(mpCLModel->getAnmMtx(3));
+            mDoMtx_stack_c::revConcat(mpCLModel->getAnmMtx(CL_JNT_STOMACH_JNT_e));
             mpEquipItemModel->setBaseTRMtx(mDoMtx_stack_c::get());
         } else if (mEquipItem == dItemNo_TELESCOPE_e) {
             mDoMtx_stack_c::transS(8.0f, 15.0f, 1.0f);
             mDoMtx_stack_c::XYZrotM(-0x4000, 0x4444, -0x41F);
-            mDoMtx_stack_c::revConcat(pMVar13);
+            mDoMtx_stack_c::revConcat(lHandA_jnt_mtx);
             mpEquipItemModel->setBaseTRMtx(mDoMtx_stack_c::get());
         } else if (mEquipItem == dItemNo_HYOI_PEAR_e) {
             if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < 9.0f) {
                 mDoMtx_stack_c::transS(-1.5f, -44.0f, 16.0f);
                 mDoMtx_stack_c::XYZrotM(-0x6EEE, 0x9BE, 0x368A);
-                mDoMtx_stack_c::revConcat(pMVar13);
+                mDoMtx_stack_c::revConcat(lHandA_jnt_mtx);
                 mpEquipItemModel->setBaseTRMtx(mDoMtx_stack_c::get());
             } else {
-                mpEquipItemModel->setBaseTRMtx(mpCLModel->getAnmMtx(0xF));
+                mpEquipItemModel->setBaseTRMtx(mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e));
             }
         } else if (mEquipItem == dItemNo_DEKU_LEAF_e || mEquipItem == daPyItem_SWORD_e ||
                    mEquipItem == dItemNo_WIND_WAKER_e || mEquipItem == dItemNo_SKULL_HAMMER_e ||
                    mEquipItem == dItemNo_HOOKSHOT_e || mEquipItem == dItemNo_TINGLE_TUNER_e ||
                    checkBottleItem(mEquipItem) || checkPhotoBoxItem(mEquipItem))
         {
-            mpEquipItemModel->setBaseTRMtx(pMVar13);
+            mpEquipItemModel->setBaseTRMtx(lHandA_jnt_mtx);
             if (mEquipItem == dItemNo_DEKU_LEAF_e &&
                 (mCurProc != daPyProc_FAN_SWING_e && mCurProc != daPyProc_FAN_GLIDE_e))
             {
@@ -1159,20 +1165,20 @@ s32 daPy_lk_c::setItemModel() {
             } else if (checkBottleItem(mEquipItem)) {
                 if (mpBottleContentsModel != NULL) {
                     if (mEquipItem == dItemNo_FIREFLY_BOTTLE_e) {
-                        cXyz bottleScale; // ?
+                        cXyz scale;
                         f32 fVar1 = 1.0f + 0.1f * cM_ssin(cM_rad2s((37.699112f * mpEquipItemBrk->getFrame()) / mpEquipItemBrk->getFrameMax()));
-                        bottleScale.setall(fVar1);
+                        scale.setall(fVar1);
                         mDoMtx_stack_c::transS(11.0f, 0.0f, 0.0f);
-                        mDoMtx_stack_c::revConcat(pMVar13);
+                        mDoMtx_stack_c::revConcat(lHandA_jnt_mtx);
                         mpBottleContentsModel->setBaseTRMtx(mDoMtx_stack_c::get());
-                        mpBottleContentsModel->setBaseScale(bottleScale);
+                        mpBottleContentsModel->setBaseScale(scale);
                         simpleAnmPlay(mpEquipItemBrk);
                     } else {
-                        mpBottleContentsModel->setBaseTRMtx(pMVar13);
+                        mpBottleContentsModel->setBaseTRMtx(lHandA_jnt_mtx);
                     }
                 }
                 if (mpBottleCapModel != NULL) {
-                    mpBottleCapModel->setBaseTRMtx(pMVar13);
+                    mpBottleCapModel->setBaseTRMtx(lHandA_jnt_mtx);
                 }
             } else if (mEquipItem == dItemNo_HOOKSHOT_e && boko != NULL) {
                 if (fopAcM_GetParam(boko) != daBoko_c::Type_BOKO_STICK_e) {
@@ -1198,11 +1204,9 @@ s32 daPy_lk_c::setItemModel() {
                 mpEquipItemBrk->setFrame(fVar1);
             }
         } else if (checkBowItem(mEquipItem)) {
-            mpEquipItemModel->setBaseTRMtx(pMVar6);
-        } else {
-            if (mEquipItem == daPyItem_UNK102_e) {
-                mpEquipItemModel->setBaseTRMtx(mpCLModel->getAnmMtx(0x4));
-            }
+            mpEquipItemModel->setBaseTRMtx(rHandA_jnt_mtx);
+        } else if (mEquipItem == daPyItem_UNK102_e) {
+            mpEquipItemModel->setBaseTRMtx(mpCLModel->getAnmMtx(CL_JNT_CHEST_JNT_e));
         }
         if (mSwordAnim.getBckAnm() != NULL && mCurProc != daPyProc_DEMO_TALISMAN_WAIT_e) {
             mSwordAnim.entry(mpEquipItemModel->getModelData(), m35EC);
@@ -1232,7 +1236,7 @@ s32 daPy_lk_c::setItemModel() {
             mpTswgripmsabBrk->setFrame(1.0f);
             if (mpEquipItemModel != NULL && mEquipItem == daPyItem_SWORD_e) {
                 mpEquipItemModel->getModelData()
-                    ->getJointNodePointer(0x00)
+                    ->getJointNodePointer(SWA_JNT_CL_SWA_e)
                     ->getMesh()
                     ->getShape()
                     ->show();
@@ -1248,7 +1252,7 @@ s32 daPy_lk_c::setItemModel() {
             mpTswgripmsabBrk->setFrame(0.0f);
             if (mpEquipItemModel != NULL && mEquipItem == daPyItem_SWORD_e) {
                 mpEquipItemModel->getModelData()
-                    ->getJointNodePointer(0x00)
+                    ->getJointNodePointer(SWA_JNT_CL_SWA_e)
                     ->getMesh()
                     ->getShape()
                     ->hide();
@@ -1264,12 +1268,12 @@ s32 daPy_lk_c::setItemModel() {
         mpTswgripmsBtk->setFrame(dVar16);
     }
     if (mEquipItem == daPyItem_SWORD_e) {
-        mpEquippedSwordModel->setBaseTRMtx(pMVar13);
+        mpEquippedSwordModel->setBaseTRMtx(lHandA_jnt_mtx);
         mDoAud_setLinkSwordType(r27, 1);
     } else {
         mDoMtx_stack_c::transS(-11.25f, 4.5f, 0.45f);
         mDoMtx_stack_c::ZrotM(-0x1C71);
-        mDoMtx_stack_c::revConcat(pMVar14);
+        mDoMtx_stack_c::revConcat(podA_jnt_mtx);
         mpEquippedSwordModel->setBaseTRMtx(mDoMtx_stack_c::get());
         mDoAud_setLinkSwordType(r27, 2);
     }
@@ -1303,7 +1307,7 @@ s32 daPy_lk_c::setItemModel() {
                (checkPlayerGuard() && mEquipItem != dItemNo_SKULL_HAMMER_e) ||
                mCurProc == daPyProc_GUARD_CRASH_e)
     {
-        mpEquippedShieldModel->setBaseTRMtx(pMVar6);
+        mpEquippedShieldModel->setBaseTRMtx(rHandA_jnt_mtx);
         mDoAud_setLinkShieldType(r27_2, 1);
     } else {
         if (r27_2 == 2) {
@@ -1312,12 +1316,12 @@ s32 daPy_lk_c::setItemModel() {
             mDoMtx_stack_c::transS(15.5f, 4.75f, 0.0f);
         }
         mDoMtx_stack_c::ZrotM(-0x4000);
-        mDoMtx_stack_c::revConcat(pMVar14);
+        mDoMtx_stack_c::revConcat(podA_jnt_mtx);
         mpEquippedShieldModel->setBaseTRMtx(mDoMtx_stack_c::get());
-        if (r27_2 == 2 && (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_WALK ||
-                           m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_WALKS ||
-                           m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_DASHS ||
-                           m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_DASH))
+        if (r27_2 == 2 && (m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_WALK_e ||
+                           m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_WALKS_e ||
+                           m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_DASHS_e ||
+                           m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_DASH_e))
         {
             Vec temp;
             mDoMtx_stack_c::multVecZero(&temp);
@@ -1346,8 +1350,8 @@ s32 daPy_lk_c::setItemModel() {
         mDoAud_setLinkBootsType(0);
     }
     if (checkPowerGloveEquip()) {
-        mpPringModel->setAnmMtx(0x1, mpCLModel->getAnmMtx(0x7));
-        mpPringModel->setAnmMtx(0x2, mpCLModel->getAnmMtx(0xB));
+        mpPringModel->setAnmMtx(PRING_JNT_PRINGL_e, mpCLModel->getAnmMtx(CL_JNT_LARMB_JNT_e));
+        mpPringModel->setAnmMtx(PRING_JNT_PRINGR_e, mpCLModel->getAnmMtx(CL_JNT_RARMB_JNT_e));
     }
     return false;
 }
@@ -1383,100 +1387,100 @@ BOOL daPy_lk_c::checkNoCollisionCorret() {
 
 /* 801067D8-80106BD0       .text setDrawHandModel__9daPy_lk_cFv */
 s32 daPy_lk_c::setDrawHandModel() {
-    u8 uVar4;
-    u8 uVar5;
+    u8 lHand_JntNo;
+    u8 rHand_JntNo;
 
     mpLhandShape->hide();
     mpRhandShape->hide();
     if (mCurProc == daPyProc_DEMO_TOOL_e) {
-        uVar4 = mLeftHandIdx;
-        uVar5 = mRightHandIdx;
+        lHand_JntNo = mLeftHandIdx;
+        rHand_JntNo = mRightHandIdx;
     } else if (checkGrabAnime() || checkBoomerangThrowAnime() || checkBoomerangCatchAnime()) {
-        uVar4 = 0;
-        uVar5 = 0;
+        lHand_JntNo = HANDS_JNT_WORLD_ROOT_e;
+        rHand_JntNo = HANDS_JNT_WORLD_ROOT_e;
     } else if (checkHookshotReadyAnime()) {
-        uVar4 = 3;
-        uVar5 = 0;
+        lHand_JntNo = HANDS_JNT_CL_LHANDD_e;
+        rHand_JntNo = HANDS_JNT_WORLD_ROOT_e;
     } else if (checkBowReadyAnime()) {
-        uVar4 = 3;
-        uVar5 = 10;
+        lHand_JntNo = HANDS_JNT_CL_LHANDD_e;
+        rHand_JntNo = HANDS_JNT_CL_RHANDE_e;
     } else if (checkBowShootAnime()) {
-        uVar4 = 6;
-        uVar5 = 10;
+        lHand_JntNo = HANDS_JNT_CL_LHANDG_e;
+        rHand_JntNo = HANDS_JNT_CL_RHANDE_e;
     } else if (checkBoomerangReadyAnime()) {
-        uVar4 = 0;
-        uVar5 = 7;
+        lHand_JntNo = HANDS_JNT_WORLD_ROOT_e;
+        rHand_JntNo = HANDS_JNT_CL_RHANDB_e;
     } else if (checkBottleItem(mEquipItem) || checkPhotoBoxItem(mEquipItem)) {
-        uVar4 = 6;
-        uVar5 = mRightHandIdx;
+        lHand_JntNo = HANDS_JNT_CL_LHANDG_e;
+        rHand_JntNo = mRightHandIdx;
     } else if (checkBowItem(mEquipItem)) {
-        uVar4 = mLeftHandIdx;
-        uVar5 = 8;
+        lHand_JntNo = mLeftHandIdx;
+        rHand_JntNo = HANDS_JNT_CL_RHANDC_e;
     } else if (mEquipItem == daPyItem_BOKO_e) {
-        uVar4 = 3;
-        uVar5 = 9;
+        lHand_JntNo = HANDS_JNT_CL_LHANDD_e;
+        rHand_JntNo = HANDS_JNT_CL_RHANDD_e;
     } else if (mEquipItem == daPyItem_SWORD_e) {
-        uVar4 = 3;
+        lHand_JntNo = HANDS_JNT_CL_LHANDD_e;
         if (checkShieldEquip()) {
-            uVar5 = 8;
+            rHand_JntNo = HANDS_JNT_CL_RHANDC_e;
         } else {
-            uVar5 = mRightHandIdx;
+            rHand_JntNo = mRightHandIdx;
         }
     } else if ((mEquipItem == dItemNo_GRAPPLING_HOOK_e && !checkModeFlg(ModeFlg_ROPE)) ||
                (mEquipItem == dItemNo_SKULL_HAMMER_e && mCutType == CUT_TYPE_NONE))
     {
-        uVar4 = 3;
-        uVar5 = 8;
+        lHand_JntNo = HANDS_JNT_CL_LHANDD_e;
+        rHand_JntNo = HANDS_JNT_CL_RHANDC_e;
     } else if (mEquipItem == dItemNo_BOOMERANG_e) {
-        uVar4 = 0;
-        uVar5 = mRightHandIdx;
+        lHand_JntNo = HANDS_JNT_WORLD_ROOT_e;
+        rHand_JntNo = mRightHandIdx;
     } else if (mEquipItem == dItemNo_WIND_WAKER_e) {
-        uVar4 = 5;
-        uVar5 = mRightHandIdx;
+        lHand_JntNo = HANDS_JNT_CL_LHANDF_e;
+        rHand_JntNo = mRightHandIdx;
     } else if (mEquipItem == dItemNo_HOOKSHOT_e) {
-        uVar4 = 2;
-        uVar5 = mRightHandIdx;
+        lHand_JntNo = HANDS_JNT_CL_LHANDC_e;
+        rHand_JntNo = mRightHandIdx;
     } else if (mEquipItem == dItemNo_DEKU_LEAF_e) {
-        uVar4 = 3;
-        uVar5 = mRightHandIdx;
+        lHand_JntNo = HANDS_JNT_CL_LHANDD_e;
+        rHand_JntNo = mRightHandIdx;
     } else if (mEquipItem == dItemNo_TELESCOPE_e) {
-        uVar4 = 1;
-        uVar5 = mRightHandIdx;
+        lHand_JntNo = HANDS_JNT_CL_LHANDB_e;
+        rHand_JntNo = mRightHandIdx;
     } else {
-        if (mEquipItem == daPyItem_NONE_e && checkUpperAnime(LKANM_BCK_TAKEBOTH)) {
-            uVar4 = 1;
+        if (mEquipItem == daPyItem_NONE_e && checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKEBOTH_e)) {
+            lHand_JntNo = HANDS_JNT_CL_LHANDB_e;
         } else if (mEquipItem == daPyItem_NONE_e && checkItemEquipAnime()) {
-            uVar4 = 0;
+            lHand_JntNo = HANDS_JNT_WORLD_ROOT_e;
         } else {
-            uVar4 = mLeftHandIdx;
+            lHand_JntNo = mLeftHandIdx;
         }
         if (checkPlayerGuard() || mCurProc == daPyProc_GUARD_CRASH_e) {
-            uVar5 = 8;
-        } else if (mEquipItem == daPyItem_NONE_e && checkUpperAnime(LKANM_BCK_TAKEBOTH)) {
-            uVar5 = 7;
+            rHand_JntNo = HANDS_JNT_CL_RHANDC_e;
+        } else if (mEquipItem == daPyItem_NONE_e && checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKEBOTH_e)) {
+            rHand_JntNo = HANDS_JNT_CL_RHANDB_e;
         } else if (mEquipItem == daPyItem_NONE_e && checkItemEquipAnime()) {
-            uVar5 = 0;
+            rHand_JntNo = HANDS_JNT_WORLD_ROOT_e;
         } else {
-            uVar5 = mRightHandIdx;
+            rHand_JntNo = mRightHandIdx;
         }
     }
     if (checkPlayerGuard()) {
-        uVar5 = 8;
+        rHand_JntNo = HANDS_JNT_CL_RHANDC_e;
     }
-    if (uVar4 == 0) {
-        mpLhandShape = mpCLModelData->getJointNodePointer(0x8)->getMesh()->getShape();
+    if (lHand_JntNo == HANDS_JNT_WORLD_ROOT_e) {
+        mpLhandShape = mpCLModelData->getJointNodePointer(CL_JNT_CL_LHANDA_e)->getMesh()->getShape();
     } else {
         mpLhandShape =
-            mpHandsModel->getModelData()->getJointNodePointer(uVar4)->getMesh()->getShape();
-        mpHandsModel->setAnmMtx(uVar4, mpCLModel->getAnmMtx(8));
+            mpHandsModel->getModelData()->getJointNodePointer(lHand_JntNo)->getMesh()->getShape();
+        mpHandsModel->setAnmMtx(lHand_JntNo, mpCLModel->getAnmMtx(CL_JNT_CL_LHANDA_e));
     }
     mpLhandShape->show();
-    if (uVar5 == 0) {
-        mpRhandShape = mpCLModelData->getJointNodePointer(0xC)->getMesh()->getShape();
+    if (rHand_JntNo == HANDS_JNT_WORLD_ROOT_e) {
+        mpRhandShape = mpCLModelData->getJointNodePointer(CL_JNT_CL_RHANDA_e)->getMesh()->getShape();
     } else {
         mpRhandShape =
-            mpHandsModel->getModelData()->getJointNodePointer(uVar5)->getMesh()->getShape();
-        mpHandsModel->setAnmMtx(uVar5, mpCLModel->getAnmMtx(0xC));
+            mpHandsModel->getModelData()->getJointNodePointer(rHand_JntNo)->getMesh()->getShape();
+        mpHandsModel->setAnmMtx(rHand_JntNo, mpCLModel->getAnmMtx(CL_JNT_CL_RHANDA_e));
     }
     mpRhandShape->show();
     return true;
@@ -1522,7 +1526,7 @@ void daPy_lk_c::hideHatAndBackle(J3DMaterial* mtl) {
     if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES)) {
         // Hide material:
         // * "ear(8)" (belt buckle)
-        mpCLModelData->getJointNodePointer(0x29)->getMesh()->getShape()->hide();
+        mpCLModelData->getJointNodePointer(CL_JNT_CL_BACK_e)->getMesh()->getShape()->hide();
     }
 }
 
@@ -1544,22 +1548,21 @@ void daPy_lk_c::drawMirrorLightModel() {
 
 /* 80106E50-80107210       .text drawShadow__9daPy_lk_cFv */
 void daPy_lk_c::drawShadow() {
-    J3DJoint* link_root_joint = mpCLModelData->getJointNodePointer(0x00);
-    MtxP pMVar3 = mpCLModel->getAnmMtx(0);
-    cXyz local_30;
+    J3DJoint* link_root_joint = mpCLModelData->getJointNodePointer(CL_JNT_LINK_ROOT_e);
+    MtxP root_jnt_mtx = mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e);
+    cXyz root_jnt_pos;
 
-    local_30.x = pMVar3[0][3];
-    local_30.y = pMVar3[1][3];
-    local_30.z = pMVar3[2][3];
+    root_jnt_pos.x = root_jnt_mtx[0][3];
+    root_jnt_pos.y = root_jnt_mtx[1][3];
+    root_jnt_pos.z = root_jnt_mtx[2][3];
     if (checkGrabWear()) {
         if (-G_CM3D_F_INF != mAcch.GetGroundH() && dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd)) {
-            dComIfGd_setSimpleShadow2(&local_30, mAcch.GetGroundH(), 30.0f, mAcch.m_gnd, 0, 1.0f,
+            dComIfGd_setSimpleShadow2(&root_jnt_pos, mAcch.GetGroundH(), 30.0f, mAcch.m_gnd, 0, 1.0f,
                                       &dDlst_shadowControl_c::mSimpleTexObj);
         }
     } else {
-        J3DJoint* pJVar7 = mpCLModelData->getJointNodePointer(0x8);
-        pJVar7->getMesh()->getShape()->show();
-        mpCLModelData->getJointNodePointer(0xC)->getMesh()->getShape()->show();
+        mpCLModelData->getJointNodePointer(CL_JNT_CL_LHANDA_e)->getMesh()->getShape()->show();
+        mpCLModelData->getJointNodePointer(CL_JNT_CL_RHANDA_e)->getMesh()->getShape()->show();
         if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES)) {
             J3DMaterial* mtl = link_root_joint->getMesh();
             // Hide material:
@@ -1583,11 +1586,10 @@ void daPy_lk_c::drawShadow() {
         } else {
             f1 = m_HIO->mBasic.m.field_0x10;
         }
-        int iVar4 = dComIfGd_setShadow(mShadowId, 0, mpCLModel, &local_30, f1, 30.0f, current.pos.y,
+        mShadowId = dComIfGd_setShadow(mShadowId, 0, mpCLModel, &root_jnt_pos, f1, 30.0f, current.pos.y,
                                        f31, mAcch.m_gnd, &tevStr, 0, 1.0f,
                                        &dDlst_shadowControl_c::mSimpleTexObj);
-        mShadowId = iVar4;
-        if ((u32)mShadowId != 0) {
+        if (mShadowId != 0) {
             if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES) && !checkCaughtShapeHide()) {
                 dComIfGd_addRealShadow(mShadowId, mpKatsuraModel);
             }
@@ -1620,16 +1622,16 @@ void daPy_lk_c::drawShadow() {
             ) {
                 dComIfGd_addRealShadow(mShadowId, mpEquippedShieldModel);
             }
-            fopAc_ac_c* pfVar10;
+            
             if (mActorKeepGrab.getID() != fpcM_ERROR_PROCESS_ID_e) {
-                pfVar10 = fopAcM_SearchByID(mActorKeepGrab.getID());
-                if (pfVar10 != NULL && fopAcM_GetModel(pfVar10) != NULL) {
-                    dComIfGd_addRealShadow(mShadowId, fopAcM_GetModel(pfVar10));
+                fopAc_ac_c* grab_actor = fopAcM_SearchByID(mActorKeepGrab.getID());
+                if (grab_actor != NULL && fopAcM_GetModel(grab_actor) != NULL) {
+                    dComIfGd_addRealShadow(mShadowId, fopAcM_GetModel(grab_actor));
                 }
             } else if (mActorKeepEquip.getID() != fpcM_ERROR_PROCESS_ID_e) {
-                pfVar10 = fopAcM_SearchByID(mActorKeepEquip.getID());
-                if (pfVar10 != NULL && fopAcM_GetModel(pfVar10) != NULL) {
-                    dComIfGd_addRealShadow(mShadowId, fopAcM_GetModel(pfVar10));
+                fopAc_ac_c* equip_actor = fopAcM_SearchByID(mActorKeepEquip.getID());
+                if (equip_actor != NULL && fopAcM_GetModel(equip_actor) != NULL) {
+                    dComIfGd_addRealShadow(mShadowId, fopAcM_GetModel(equip_actor));
                 }
             }
         }
@@ -1740,9 +1742,9 @@ BOOL daPy_lk_c::draw() {
     mpAnmTexPatternData->setFrame(m3530);
     mpTexScrollResData->setFrame(m3532);
     g_env_light.setLightTevColorType(mpCLModel, &tevStr);
-    J3DJoint* link_root_joint = mpCLModelData->getJointNodePointer(0x00); // link_root joint
-    mpCLModelData->getJointNodePointer(0x08)->getMesh()->getShape()->hide(); // cl_LhandA joint
-    mpCLModelData->getJointNodePointer(0x0C)->getMesh()->getShape()->hide(); // cl_RhandA joint
+    J3DJoint* link_root_joint = mpCLModelData->getJointNodePointer(CL_JNT_LINK_ROOT_e);
+    mpCLModelData->getJointNodePointer(CL_JNT_CL_LHANDA_e)->getMesh()->getShape()->hide();
+    mpCLModelData->getJointNodePointer(CL_JNT_CL_RHANDA_e)->getMesh()->getShape()->hide();
     
     mtl = link_root_joint->getMesh();
     // Show material:
@@ -1752,8 +1754,8 @@ BOOL daPy_lk_c::draw() {
     }
     mtl->getShape()->show();
     
-    J3DJoint* cl_eye_joint = mpCLModelData->getJointNodePointer(0x13); // cl_eye joint
-    J3DJoint* cl_mayu_joint = mpCLModelData->getJointNodePointer(0x15); // cl_mayu joint
+    J3DJoint* cl_eye_joint = mpCLModelData->getJointNodePointer(CL_JNT_CL_EYE_e);
+    J3DJoint* cl_mayu_joint = mpCLModelData->getJointNodePointer(CL_JNT_CL_MAYU_e);
     setDrawHandModel();
     j3dSys.setModel(mpCLModel);
     j3dSys.setTexture(mpCLModelData->getTexture());
@@ -1766,8 +1768,8 @@ BOOL daPy_lk_c::draw() {
             mpZOffNoneShape[i]->hide();
             mpZOnShape[i]->hide();
         }
-        mpCLModelData->getJointNodePointer(0x08)->getMesh()->getShape()->hide(); // cl_LhandA joint
-        mpCLModelData->getJointNodePointer(0x0C)->getMesh()->getShape()->hide(); // cl_RhandA joint
+        mpCLModelData->getJointNodePointer(CL_JNT_CL_LHANDA_e)->getMesh()->getShape()->hide();
+        mpCLModelData->getJointNodePointer(CL_JNT_CL_RHANDA_e)->getMesh()->getShape()->hide();
         mtl = link_root_joint->getMesh();
         for (int i = 0; mtl != NULL; i++, mtl = mtl->getNext()) {
             if (i != 3) {
@@ -1808,7 +1810,7 @@ BOOL daPy_lk_c::draw() {
                 mtl->getShape()->show();
             }
         }
-        mpCLModelData->getJointNodePointer(0x14)->getMesh()->getShape()->hide(); // cl_hana joint
+        mpCLModelData->getJointNodePointer(CL_JNT_CL_HANA_e)->getMesh()->getShape()->hide();
     } else {
         if (!checkFreezeState()) {
             dComIfGd_setListP0();
@@ -1871,9 +1873,9 @@ BOOL daPy_lk_c::draw() {
             || checkDemoShieldNoDraw()
 #endif
         ) {
-            mpCLModelData->getJointNodePointer(0x0D)->getMesh()->getShape()->hide(); // cl_podA joint
+            mpCLModelData->getJointNodePointer(CL_JNT_CL_PODA_e)->getMesh()->getShape()->hide();
         } else {
-            mpCLModelData->getJointNodePointer(0x0D)->getMesh()->getShape()->show(); // cl_podA joint
+            mpCLModelData->getJointNodePointer(CL_JNT_CL_PODA_e)->getMesh()->getShape()->show();
         }
     }
     
@@ -1888,8 +1890,8 @@ BOOL daPy_lk_c::draw() {
         mtl->getShape()->show();
         mtl = mtl->getNext();
     }
-    mpCLModelData->getJointNodePointer(0x14)->getMesh()->getShape()->show(); // cl_hana joint
-    mpCLModelData->getJointNodePointer(0x29)->getMesh()->getShape()->show(); // cl_back joint
+    mpCLModelData->getJointNodePointer(CL_JNT_CL_HANA_e)->getMesh()->getShape()->show();
+    mpCLModelData->getJointNodePointer(CL_JNT_CL_BACK_e)->getMesh()->getShape()->show();
     if (!r24) {
         entryDLSetLight(mpHandsModel, checkFreezeState());
         if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES) && !checkCaughtShapeHide()
@@ -1979,7 +1981,7 @@ BOOL daPy_lk_c::draw() {
                 if (mEquipItem == dItemNo_HOOKSHOT_e) {
                     if (mActorKeepEquip.getActor()) {
                         daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
-                        mpEquipItemModel->setAnmMtx(4, hookshot->getMtxTop());
+                        mpEquipItemModel->setAnmMtx(HOOKSHOT_JNT_HSHOTTIP_e, hookshot->getMtxTop());
                     }
                 }
                 entryDLSetLight(mpEquipItemModel, checkFreezeState());
@@ -2367,13 +2369,13 @@ void daPy_lk_c::posMoveFromFootPos() {
 
     cXyz spB0[2];
     cXyz sp98[2];
-    mDoMtx_concat(m37B4, mpCLModel->getAnmMtx(0x22), mDoMtx_stack_c::get());
+    mDoMtx_concat(m37B4, mpCLModel->getAnmMtx(CL_JNT_LFOOT_JNT_e), mDoMtx_stack_c::get());
     mDoMtx_stack_c::multVec(&l_toe_pos, &spB0[1]);
     mDoMtx_stack_c::multVec(&l_heel_pos, &sp98[1]);
-    mDoMtx_concat(m37B4, mpCLModel->getAnmMtx(0x27), mDoMtx_stack_c::get());
+    mDoMtx_concat(m37B4, mpCLModel->getAnmMtx(CL_JNT_RFOOT_JNT_e), mDoMtx_stack_c::get());
     mDoMtx_stack_c::multVec(&l_toe_pos, &spB0[0]);
     mDoMtx_stack_c::multVec(&l_heel_pos, &sp98[0]);
-    mDoMtx_concat(m37B4, mpCLModel->getAnmMtx(0x1E), mDoMtx_stack_c::get());
+    mDoMtx_concat(m37B4, mpCLModel->getAnmMtx(CL_JNT_WAIST_JNT_e), mDoMtx_stack_c::get());
     MtxP r26 = mDoMtx_stack_c::get();
     f32 f31 = cM_ssin(m34E0);
     f32 f30 = cM_scos(m34E0);
@@ -2648,7 +2650,7 @@ s16 daPy_lk_c::checkBodyAngleX(s16 param_1) {
 #endif
     cXyz sp2C;
 
-    mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x2), &sp38);
+    mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_BODY_CHN_e), &sp38);
 
 #if VERSION <= VERSION_JPN
     sp5C = eyePos - sp38;
@@ -2725,7 +2727,7 @@ void daPy_lk_c::setBodyAngleXReadyAnime() {
     cXyz local_1c;
     cXyz local_28;
 
-    mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x2), &local_1c);
+    mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_BODY_CHN_e), &local_1c);
     if (mpAttnActorLockOn != NULL) {
         local_28 = mpAttnActorLockOn->eyePos - local_1c;
         local_28.y = local_28.y - 20.0f;
@@ -3121,7 +3123,7 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
                 if ((checkNoResetFlg1(daPyFlg1_CONFUSE) && !checkPlayerDemoMode()) &&
                     !dComIfGp_event_runCheck())
                 {
-                    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_WAITQ) {
+                    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_WAITQ_e) {
                         setSingleMoveAnime(ANM_WAITQ, m_HIO->mMove.m.field_0x84, f1, -1, m_HIO->mBasic.m.field_0xC);
                         m34C3 = 2;
                     }
@@ -3417,7 +3419,7 @@ void daPy_lk_c::setAnimeEquipSword(BOOL r4) {
         return;
     }
     m3562 = daPyItem_SWORD_e;
-    setActAnimeUpper(LKANM_BCK_REST, UPPER_MOVE2_e, m_HIO->mCut.m.field_0x8, m_HIO->mCut.m.field_0xC, m_HIO->mCut.m.field_0x0, m_HIO->mCut.m.field_0x10);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_REST_e, UPPER_MOVE2_e, m_HIO->mCut.m.field_0x8, m_HIO->mCut.m.field_0xC, m_HIO->mCut.m.field_0x0, m_HIO->mCut.m.field_0x10);
     setPriTextureAnime(0x72, 0);
     dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_WAIT_e);
     if (mActorKeepThrow.getActor() != NULL) {
@@ -3489,7 +3491,7 @@ void daPy_lk_c::setAnimeUnequipSword() {
         f3 = m_HIO->mCut.m.field_0x1C;
     }
     
-    setActAnimeUpper(LKANM_BCK_REST, UPPER_MOVE2_e, rate, start, end, f3);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_REST_e, UPPER_MOVE2_e, rate, start, end, f3);
     setPriTextureAnime(0x72, 0);
 }
 
@@ -3505,12 +3507,12 @@ void daPy_lk_c::setAnimeUnequipItem(u16 i_itemNo) {
         i_itemNo == dItemNo_WIND_WAKER_e ||
         checkBottleItem(i_itemNo)
     ) {
-        setAnimeEquipSingleItem(LKANM_BCK_TAKEL);
+        setAnimeEquipSingleItem(dRes_INDEX_LKANM_BCK_TAKEL_e);
     } else if (checkBowItem(i_itemNo)) {
-        setAnimeEquipSingleItem(LKANM_BCK_TAKER);
+        setAnimeEquipSingleItem(dRes_INDEX_LKANM_BCK_TAKER_e);
     } else if (i_itemNo == dItemNo_SKULL_HAMMER_e) {
         setActAnimeUpper(
-            LKANM_BCK_TAKEBOTH,
+            dRes_INDEX_LKANM_BCK_TAKEBOTH_e,
             UPPER_MOVE2_e,
             m_HIO->mItem.m.field_0x24,
             m_HIO->mItem.m.field_0x28,
@@ -3519,7 +3521,7 @@ void daPy_lk_c::setAnimeUnequipItem(u16 i_itemNo) {
         );
     } else {
         setActAnimeUpper(
-            LKANM_BCK_TAKE,
+            dRes_INDEX_LKANM_BCK_TAKE_e,
             UPPER_MOVE2_e,
             m_HIO->mItem.m.field_0x8,
             m_HIO->mItem.m.field_0xC,
@@ -3555,20 +3557,20 @@ BOOL daPy_lk_c::checkBossGomaStage() {
 
 /* 8010C4A4-8010C4C8       .text checkSingleItemEquipAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkSingleItemEquipAnime() const {
-    return checkUpperAnime(LKANM_BCK_TAKEL) ||
-        checkUpperAnime(LKANM_BCK_TAKER);
+    return checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKEL_e) ||
+        checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKER_e);
 }
 
 /* 8010C4C8-8010C528       .text checkItemEquipAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkItemEquipAnime() const {
-    return checkUpperAnime(LKANM_BCK_TAKE) ||
+    return checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKE_e) ||
         checkSingleItemEquipAnime() ||
-        checkUpperAnime(LKANM_BCK_TAKEBOTH);
+        checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKEBOTH_e);
 }
 
 /* 8010C528-8010C570       .text checkEquipAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkEquipAnime() const {
-    return checkUpperAnime(LKANM_BCK_REST) ||
+    return checkUpperAnime(dRes_INDEX_LKANM_BCK_REST_e) ||
         checkItemEquipAnime();
 }
 
@@ -3693,7 +3695,7 @@ void daPy_lk_c::makeItemType() {
         mActorKeepGrab.setData(bomb);
         mEquipItem = daPyItem_NONE_e;
         if (mActorKeepGrab.getActor() != NULL) {
-            setActAnimeUpper(LKANM_BCK_GRABWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, 5.0f);
+            setActAnimeUpper(dRes_INDEX_LKANM_BCK_GRABWAIT_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, 5.0f);
             mActivePlayerBombs++;
             fopAcM_setCarryNow(mActorKeepGrab.getActor(), FALSE);
             dComIfGp_setItemBombNumCount(-1);
@@ -3738,19 +3740,19 @@ void daPy_lk_c::makeItemType() {
 /* 8010CB70-8010CBC8       .text setScopeModel__9daPy_lk_cFv */
 void daPy_lk_c::setScopeModel() {
     JKRHeap* oldHeap = setItemHeap();
-    initModel(&mpEquipItemModel, LINK_BDL_TELESCOPE, 0x37221222);
+    initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_TELESCOPE_e, 0x37221222);
     mDoExt_setCurrentHeap(oldHeap);
 }
 
 /* 8010CBC8-8010CC78       .text setPhotoBoxModel__9daPy_lk_cFv */
 void daPy_lk_c::setPhotoBoxModel() {
     JKRHeap* oldHeap = setItemHeap();
-    initModel(&mpEquipItemModel, LINK_BDL_CAMERA, 0x37221222);
+    initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_CAMERA_e, 0x37221222);
     mDoExt_setCurrentHeap(oldHeap);
     if (mEquipItem == dItemNo_PICTO_BOX_e) {
-        mpEquipItemModel->getModelData()->getJointNodePointer(0x02)->getMesh()->getShape()->hide(); // frash joint
+        mpEquipItemModel->getModelData()->getJointNodePointer(CAMERA_JNT_FRASH_e)->getMesh()->getShape()->hide();
     } else {
-        mpEquipItemModel->getModelData()->getJointNodePointer(0x02)->getMesh()->getShape()->show(); // frash joint
+        mpEquipItemModel->getModelData()->getJointNodePointer(CAMERA_JNT_FRASH_e)->getMesh()->getShape()->show();
     }
 }
 
@@ -3906,11 +3908,11 @@ void daPy_lk_c::checkItemAction() {
     {
         mReadyItemBtn = dItemBtn_Z_e;
     }
-    if (checkEquipAnime() || checkUpperAnime(LKANM_BCK_BOOMTHROW) || checkUpperAnime(LKANM_BCK_BOOMCATCH) ||
-        checkUpperAnime(LKANM_BCK_ROPETHROW))
+    if (checkEquipAnime() || checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMTHROW_e) || checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMCATCH_e) ||
+        checkUpperAnime(dRes_INDEX_LKANM_BCK_ROPETHROW_e))
     {
         J3DFrameCtrl& frameCtrl = mFrameCtrlUpper[UPPER_MOVE2_e];
-        if (checkUpperAnime(LKANM_BCK_BOOMCATCH)) {
+        if (checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMCATCH_e)) {
             if (!(frameCtrl.getRate() < 0.01f)) {
                 if (!(mStickDistance > 0.05f)) {
                     return;
@@ -3923,7 +3925,7 @@ void daPy_lk_c::checkItemAction() {
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
                 procShipPaddle_init();
             }
-        } else if (checkUpperAnime(LKANM_BCK_BOOMTHROW)) {
+        } else if (checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMTHROW_e)) {
             if (frameCtrl.getRate() < 0.01f ||
                 ((mStickDistance > 0.05f &&
                   (frameCtrl.getFrame() > m_HIO->mItem.mBoom.m.field_0x10))))
@@ -3934,7 +3936,7 @@ void daPy_lk_c::checkItemAction() {
                     throwBoomerang();
                 }
             }
-        } else if (checkUpperAnime(LKANM_BCK_ROPETHROW)) {
+        } else if (checkUpperAnime(dRes_INDEX_LKANM_BCK_ROPETHROW_e)) {
             if (frameCtrl.getRate() < 0.01f) {
                 mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.0f);
                 mFrameCtrlUnder[UNDER_MOVE1_e].setRate(0.0f);
@@ -3943,9 +3945,9 @@ void daPy_lk_c::checkItemAction() {
             }
         } else if (checkEquipAnime()) {
             if (mEquipItem == daPyItem_SWORD_e &&
-                ((checkUpperAnime(LKANM_BCK_REST) && frameCtrl.checkPass(7.0f - frameCtrl.getRate())) ||
-                 (checkUpperAnime(LKANM_BCK_TAKE) && frameCtrl.checkPass(7.0f - frameCtrl.getRate())) ||
-                 (checkUpperAnime(LKANM_BCK_TAKEBOTH) &&
+                ((checkUpperAnime(dRes_INDEX_LKANM_BCK_REST_e) && frameCtrl.checkPass(7.0f - frameCtrl.getRate())) ||
+                 (checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKE_e) && frameCtrl.checkPass(7.0f - frameCtrl.getRate())) ||
+                 (checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKEBOTH_e) &&
                   frameCtrl.checkPass(m_HIO->mItem.m.field_0x30 - frameCtrl.getRate())) ||
                  (checkSingleItemEquipAnime() &&
                   frameCtrl.checkPass(m_HIO->mItem.m.field_0x20 - frameCtrl.getRate()))))
@@ -3954,9 +3956,9 @@ void daPy_lk_c::checkItemAction() {
             }
             if (std::fabsf(frameCtrl.getRate()) < 0.01f) {
                 resetActAnimeUpper(UPPER_MOVE2_e, m_HIO->mBasic.m.field_0xC);
-            } else if ((checkUpperAnime(LKANM_BCK_REST) && frameCtrl.checkPass(7.0f)) ||
-                        (checkUpperAnime(LKANM_BCK_TAKE) && frameCtrl.checkPass(7.0f)) ||
-                        (checkUpperAnime(LKANM_BCK_TAKEBOTH) && frameCtrl.checkPass(m_HIO->mItem.m.field_0x30)) ||
+            } else if ((checkUpperAnime(dRes_INDEX_LKANM_BCK_REST_e) && frameCtrl.checkPass(7.0f)) ||
+                        (checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKE_e) && frameCtrl.checkPass(7.0f)) ||
+                        (checkUpperAnime(dRes_INDEX_LKANM_BCK_TAKEBOTH_e) && frameCtrl.checkPass(m_HIO->mItem.m.field_0x30)) ||
                         (checkSingleItemEquipAnime() && frameCtrl.checkPass(m_HIO->mItem.m.field_0x20)))
             {
                 if ((mEquipItem != daPyItem_NONE_e && mEquipItem != daPyItem_SWORD_e) ||
@@ -4346,9 +4348,9 @@ void daPy_lk_c::setShieldGuard() {
     }
     u16 uVar3;
     if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
-        uVar3 = LKANM_BCK_ATNGHAM;
+        uVar3 = dRes_INDEX_LKANM_BCK_ATNGHAM_e;
     } else {
-        uVar3 = LKANM_BCK_ATNG;
+        uVar3 = dRes_INDEX_LKANM_BCK_ATNG_e;
     }
     if (!checkGuardSlip()) {
         if (spActionButton() && dComIfGp_getRStatus() == dActStts_DEFEND_e) {
@@ -4367,8 +4369,8 @@ void daPy_lk_c::setShieldGuard() {
                     m_pbCalc[PART_UPPER_e]->setRatio(2, local_18);
                 }
             }
-            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_ATNLS ||
-                m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_ATNRS)
+            if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_ATNLS_e ||
+                m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_ATNRS_e)
             {
                 mAnmRatioUpper[UPPER_MOVE2_e].getAnmTransform()->setFrame(
                     mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
@@ -4918,7 +4920,7 @@ int daPy_lk_c::changeSlideProc() {
 BOOL daPy_lk_c::changeWaitProc() {
     if (checkGrabAnime()) {
         return procGrabWait_init();
-    } else if (checkUpperAnime(LKANM_BCK_BOOMCATCH)) {
+    } else if (checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMCATCH_e)) {
         return procBoomerangCatch_init();
     } else if (daPy_getPlayerActorClass() != this) {
         return procControllWait_init();
@@ -5023,7 +5025,7 @@ BOOL daPy_lk_c::checkNormalDamage(int param_1) {
 
 /* 80110448-801104E4       .text setDashDamage__9daPy_lk_cFv */
 void daPy_lk_c::setDashDamage() {
-    setActAnimeUpper(LKANM_BCK_DAMDASH, UPPER_MOVE2_e, m_HIO->mMove.m.field_0x48, 0.0f, -1,
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_DAMDASH_e, UPPER_MOVE2_e, m_HIO->mMove.m.field_0x48, 0.0f, -1,
                      m_HIO->mBasic.m.field_0xC);
     setPriTextureAnime(0x40, 0);
     mFrameCtrlUpper[UPPER_MOVE2_e].setFrame(mFrameCtrlUnder[UNDER_MOVE1_e].getFrame());
@@ -5888,9 +5890,9 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
     m35EC = 0.0f;
     
     if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMMERDAM));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_HAMMERDAM_e));
     } else if (checkBowItem(mEquipItem) && !checkBowAnime()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWRELORDA));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_ARROWRELORDA_e));
     }
     
     m35E8 = 0.0f;
@@ -6050,7 +6052,7 @@ BOOL daPy_lk_c::procControllWait() {
 /* 80112E60-80113044       .text procWait_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWait_init() {
     if (mDemo.getDemoMode() == daPy_demo_c::DEMO_KM_WAIT_e && m_tex_scroll_heap.field_0x6 == 0xFFFF) {
-        changeTextureAnime(LKANM_BTP_TMABACC, LKANM_BTK_TEUR, -1);
+        changeTextureAnime(dRes_INDEX_LKANM_BTP_TMABACC_e, dRes_INDEX_LKANM_BTK_TEUR_e, -1);
         voiceStart(38);
         mProcVar0.m34D0 = 20;
     }
@@ -6121,7 +6123,7 @@ BOOL daPy_lk_c::procWait() {
                 onModeFlg(ModeFlg_00000100);
             }
         } else if (checkRestHPAnime() &&
-                   m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_WAITB)
+                   m_anm_heap_under[UNDER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_WAITB_e)
         {
             s32 uVar3 = m_tex_anm_heap.mIdx == mTexAnmIndexTable[daPyFace_TMABAF].mBtpIdx;
             u16 uVar1 = m3530;
@@ -6144,7 +6146,7 @@ BOOL daPy_lk_c::procWait() {
                 mProcVar0.m34D0 = 20;
             }
         }
-        if (!dComIfGp_event_runCheck() && m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_WAITS &&
+        if (!dComIfGp_event_runCheck() && m_anm_heap_under[UNDER_MOVE0_e].mIdx == dRes_INDEX_LKANM_BCK_WAITS_e &&
             checkNoUpperAnime() && daPy_matAnm_c::getEyeMoveFlg() == 0 && m3564.y == 0 && m3564.z == 0 && m3564.x == 0)
         {
             mProcVar1.m34D2--;
@@ -6220,17 +6222,8 @@ BOOL daPy_lk_c::procMove() {
     setSpeedAndAngleNormal(m_HIO->mMove.m.field_0x0);
     if (!checkNextMode(0) && !changeFrontWallTypeProc() && !checkIceSlipFall()) {
         if (mDemo.getDemoMode() == daPy_demo_c::DEMO_N_WALK_e) {
-            // Fakematch. Retail regalloc doesn't match unless all three of these vars are given temps.
-            // But demo only matches with this:
-            // if (mNormalSpeed > mMaxNormalSpeed * m_HIO->mMove.m.field_0x2C) {
-            //     mNormalSpeed = mMaxNormalSpeed * m_HIO->mMove.m.field_0x2C;
-            // }
-            f32 vel = mNormalSpeed;
-            f32 temp1 = mMaxNormalSpeed;
-            f32 temp2 = m_HIO->mMove.m.field_0x2C;
-            if (vel > temp1 * temp2) {
-                vel = temp1 * temp2;
-                mNormalSpeed = vel;
+            if (mNormalSpeed > mMaxNormalSpeed * m_HIO->mMove.m.field_0x2C) {
+                mNormalSpeed = m_HIO->mMove.m.field_0x2C * mMaxNormalSpeed;
             }
         }
         setBlendMoveAnime(-1.0f);
@@ -6485,7 +6478,7 @@ BOOL daPy_lk_c::procCrouchDefenseSlip_init() {
         mProcVar6.m3570 = 0;
     }
     if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ATNGAHAMA));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_ATNGAHAMA_e));
         m35EC = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     } else {
         m35E8 = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
@@ -7673,7 +7666,7 @@ BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 
         if ((!strcmp(dComIfGp_getStartStageName(), "kinBOSS")) ||
             (!strcmp(dComIfGp_getStartStageName(), "Xboss1")))
         {
-            m32E4.makeEmitter(dPa_name::ID_AK_SN_BKMHAKIDASHIHOUSHI00, mpCLModel->getAnmMtx(0x1), &current.pos, NULL);
+            m32E4.makeEmitter(dPa_name::ID_AK_SN_BKMHAKIDASHIHOUSHI00, mpCLModel->getAnmMtx(CL_JNT_CENTER_e), &current.pos, NULL);
         }
         dComIfGp_getVibration().StartShock(6, -0x21, cXyz(0.0f, 1.0f, 0.0f));
     } else if (param_1 == -3) {
@@ -8146,7 +8139,7 @@ BOOL daPy_lk_c::procLavaDamage_init() {
     mNormalSpeed = 15.0f + (40.0f * dVar3);
     speed.y = 32.0f + (36.0f * dVar3);
     setSingleMoveAnime(ANM_LAVADAM, m_HIO->mRestart.m.field_0x0, 0.0f, -1, m_HIO->mRestart.m.field_0x4);
-    m32E4.makeEmitter(dPa_name::ID_AK_SN_HIDARUMAFIRE, mpCLModel->getAnmMtx(0), &current.pos, NULL);
+    m32E4.makeEmitter(dPa_name::ID_AK_SN_HIDARUMAFIRE, mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e), &current.pos, NULL);
     voiceStart(4);
     seStartMapInfo(JA_SE_LK_FALL_MAGMA);
     current.angle.y = cM_atan2s(current.pos.x, current.pos.z);
@@ -8248,7 +8241,7 @@ BOOL daPy_lk_c::procGuardSlip_init() {
     commonProcInit(daPyProc_GUARD_SLIP_e);
     if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
         dVar5 = ANM_ATNGAHAM;
-        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ATNGAHAMA));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_ATNGAHAMA_e));
     } else if (mDirection == DIR_LEFT) {
         dVar5 = ANM_ATNGAL;
     } else {
@@ -8639,6 +8632,7 @@ int daPy_lk_c::setLegAngle(f32 param_1, int param_2, s16* param_3, s16* param_4)
     if (dVar9 > 10.0f) {
         dVar9 = 10.0f;
     }
+
     mDoMtx_concat(m37B4, mFootData[param_2].field_0x088[0], mDoMtx_stack_c::get());
     spE8.set(0.0f, mDoMtx_stack_c::get()[1][3], mDoMtx_stack_c::get()[2][3]);
 
@@ -8647,6 +8641,7 @@ int daPy_lk_c::setLegAngle(f32 param_1, int param_2, s16* param_3, s16* param_4)
 
     mDoMtx_concat(m37B4, mFootData[param_2].field_0x088[2], mDoMtx_stack_c::get());
     spD0.set(0.0f, mDoMtx_stack_c::get()[1][3] + 3.25f, mDoMtx_stack_c::get()[2][3]);
+
     spAC = spDC - spE8;
     spA0 = spD0 - spDC;
     spB8.x = spD0.x;
@@ -8689,8 +8684,10 @@ int daPy_lk_c::setLegAngle(f32 param_1, int param_2, s16* param_3, s16* param_4)
     spC4.z = sp58.z + f2 * sp70.z;
     sp94 = spC4 - spE8;
     sp88 = spB8 - spC4;
-    mDoMtx_concat(m37B4, mpCLModel->getAnmMtx(0), mDoMtx_stack_c::get());
+
+    mDoMtx_concat(m37B4, mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e), mDoMtx_stack_c::get());
     sp64.set(0.0f, mDoMtx_stack_c::get()[1][3], mDoMtx_stack_c::get()[2][3]);
+
     s16 r29 = cM_atan2s(-sp64.y, -sp64.z);
     s16 r27 = cM_atan2s(sp94.y, sp94.z);
     s16 r26 = cM_atan2s(sp88.y, sp88.z);
@@ -8721,7 +8718,7 @@ void daPy_lk_c::footBgCheck() {
 
     MtxP r30 = mpCLModel->getBaseTRMtx();
     u32 r29 = checkModeFlg(ModeFlg_00000001);
-    mDoMtx_concat(m37B4, mpCLModel->getAnmMtx(0x1E), mDoMtx_stack_c::get());
+    mDoMtx_concat(m37B4, mpCLModel->getAnmMtx(CL_JNT_WAIST_JNT_e), mDoMtx_stack_c::get());
     MtxP r31 = mDoMtx_stack_c::get();
 
     daPy_footData_c* r25_r26;
@@ -8949,14 +8946,14 @@ void daPy_lk_c::setNeckAngle() {
 
     offNoResetFlg1(daPyFlg1_UNK400);
     MtxP r25;
-    r25 = mpCLModel->getAnmMtx(0xF);
+    r25 = mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e);
     cXyz* sp18;
     sp18 = NULL;
     s16 r30;
     s16 r29;
     BOOL r28;
     r28 = false;
-    mDoMtx_multVecSR(mpCLModel->getAnmMtx(0x1), &cXyz::BaseZ, &sp94);
+    mDoMtx_multVecSR(mpCLModel->getAnmMtx(CL_JNT_CENTER_e), &cXyz::BaseZ, &sp94);
 
     fopAc_ac_c* r24;
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)) {
@@ -8976,7 +8973,7 @@ void daPy_lk_c::setNeckAngle() {
     }
 
     if (dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e)) {
-        mDoMtx_multVec(mpCLModel->getAnmMtx(0x8), &l_tact_top, &spA0);
+        mDoMtx_multVec(mpCLModel->getAnmMtx(CL_JNT_CL_LHANDA_e), &l_tact_top, &spA0);
         sp18 = &spA0;
         r28 = true;
     } else if (mCurProc == daPyProc_CALL_e) {
@@ -8997,10 +8994,10 @@ void daPy_lk_c::setNeckAngle() {
         }
     } else if (mCurProc == daPyProc_SHIP_CRANE_e) {
         if (mProcVar2.m34D4 == 0 && dComIfGp_getShipActor() != NULL) {
-            sp18 = dComIfGp_getShipActor()->m0434;
+            sp18 = dComIfGp_getShipActor()->getCraneTop();
             r28 = true;
         }
-    } else if (m_tex_anm_heap.mIdx == LKANM_BTP_TDASHKAZE) {
+    } else if (m_tex_anm_heap.mIdx == dRes_INDEX_LKANM_BTP_TDASHKAZE_e) {
         if (checkHeavyStateOn() && m373C.abs2XZ() > SQUARE(5.0f)) {
             spA0.set(current.pos.x - 100.0f * m373C.x, 120.0f + current.pos.y, current.pos.z - 100.0f * m373C.z);
         } else if (!checkHeavyStateOn() && m3730.abs2XZ() > SQUARE(5.0f)) {
@@ -9086,7 +9083,7 @@ void daPy_lk_c::setNeckAngle() {
     r25_3 = r25_3 - m3564.y;
     s16 r4;
     s16 r23;
-    if (checkModeFlg(ModeFlg_00000080 | ModeFlg_08000000) && sp18 != NULL && !checkUpperAnime(LKANM_BCK_DAMDASH)) {
+    if (checkModeFlg(ModeFlg_00000080 | ModeFlg_08000000) && sp18 != NULL && !checkUpperAnime(dRes_INDEX_LKANM_BCK_DAMDASH_e)) {
         spB8 = *sp18 - spC4;
         r27 = cM_atan2s(-spB8.y, spB8.absXZ());
         r23_3 = cM_atan2s(spB8.x, spB8.z) - m34DE;
@@ -9103,8 +9100,8 @@ void daPy_lk_c::setNeckAngle() {
         } else if (r23_3 < -m_HIO->mShip.m.field_0x0) {
             r23_3 = -m_HIO->mShip.m.field_0x0;
         }
-        if (checkModeFlg(ModeFlg_00000080) && m_anm_heap_upper[UPPER_MOVE0_e].mIdx != LKANM_BCK_DASHKAZE &&
-            m_anm_heap_upper[UPPER_MOVE1_e].mIdx != LKANM_BCK_DASHKAZE)
+        if (checkModeFlg(ModeFlg_00000080) && m_anm_heap_upper[UPPER_MOVE0_e].mIdx != dRes_INDEX_LKANM_BCK_DASHKAZE_e &&
+            m_anm_heap_upper[UPPER_MOVE1_e].mIdx != dRes_INDEX_LKANM_BCK_DASHKAZE_e)
         {
             if (r28) {
                 r30 = (r27 >> 1) - r24_4;
@@ -9306,7 +9303,7 @@ void daPy_lk_c::setHatAngle() {
     s16 r26_4;
     s16 r27_3;
 
-    MtxP head_jnt_mtx = mpCLModel->getAnmMtx(0xF);
+    MtxP head_jnt_mtx = mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e);
     BOOL r31 = dComIfGp_evmng_startCheck(l_tact_wind_change_event_label) ||
                dComIfGp_evmng_startCheck(l_tact_wind_change_event_label2) ||
                mCurProc == daPyProc_FAN_GLIDE_e ||
@@ -9324,7 +9321,7 @@ void daPy_lk_c::setHatAngle() {
     f31 = cM_ssin(r3_3);
     f32 f30;
     f30 = cM_scos(r3_3);
-    MtxP hat_a_jnt_mtx = mpCLModel->getAnmMtx(0x1A);
+    MtxP hat_a_jnt_mtx = mpCLModel->getAnmMtx(CL_JNT_HATA_JNT_e);
     spA0.x = hat_a_jnt_mtx[0][3];
     spA0.y = hat_a_jnt_mtx[1][3];
     spA0.z = hat_a_jnt_mtx[2][3];
@@ -9334,8 +9331,8 @@ void daPy_lk_c::setHatAngle() {
         sp18 = 1.0f;
     }
     f32 f29 = (sp18 * sp18) * 25.0f;
-    mDoMtx_multVecSR(mpCLModel->getAnmMtx(0xF), &l_neck_front, &sp88);
-    mDoMtx_multVecSR(mpCLModel->getAnmMtx(0xF), &l_neck_top, &sp7C);
+    mDoMtx_multVecSR(mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e), &l_neck_front, &sp88);
+    mDoMtx_multVecSR(mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e), &l_neck_top, &sp7C);
 
     r25 = m3528;
     r26 = m352A;
@@ -9749,12 +9746,12 @@ f32 daPy_lk_c::getBlurTopRate() {
 
 /* 8011D788-8011EC0C       .text setCollision__9daPy_lk_cFv */
 void daPy_lk_c::setCollision() {
-    MtxP link_root_mtx = mpCLModel->getAnmMtx(0x00);
-    MtxP ltoe_jnt_mtx = mpCLModel->getAnmMtx(0x23);
-    MtxP rtoe_jnt_mtx = mpCLModel->getAnmMtx(0x28);
+    MtxP root_jnt_mtx = mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e);
+    MtxP ltoe_jnt_mtx = mpCLModel->getAnmMtx(CL_JNT_LTOE_JNT_e);
+    MtxP rtoe_jnt_mtx = mpCLModel->getAnmMtx(CL_JNT_RTOE_JNT_e);
     cXyz spD0;
-    spD0.x = 0.5f * (link_root_mtx[0][3] + mpCLModel->getAnmMtx(0xE)[0][3]);
-    spD0.z = 0.5f * (link_root_mtx[2][3] + mpCLModel->getAnmMtx(0xE)[2][3]);
+    spD0.x = 0.5f * (root_jnt_mtx[0][3] + mpCLModel->getAnmMtx(CL_JNT_NECK_JNT_e)[0][3]);
+    spD0.z = 0.5f * (root_jnt_mtx[2][3] + mpCLModel->getAnmMtx(CL_JNT_NECK_JNT_e)[2][3]);
     if (mCurProc == daPyProc_JUMP_CUT_e) {
         spD0.x -= 15.0f * cM_ssin(shape_angle.y);
         spD0.z -= 15.0f * cM_scos(shape_angle.y);
@@ -9785,16 +9782,16 @@ void daPy_lk_c::setCollision() {
         spD0.y = 30.0f + current.pos.y;
         mCyl.SetH(81.25f);
     } else if (mCurProc == daPyProc_BT_JUMP_CUT_e || (mCurProc == daPyProc_BT_JUMP_e && speed.y <= 0.0f)) {
-        spD0.y = link_root_mtx[1][3];
+        spD0.y = root_jnt_mtx[1][3];
         mCyl.SetH(125.0f - (spD0.y - current.pos.y));
         mCyl.SetR(22.5f);
     } else {
         if (mCurProc == daPyProc_ROPE_SWING_e) {
-            spD0.y = (ltoe_jnt_mtx[1][3] > link_root_mtx[1][3]) ? link_root_mtx[1][3] : ltoe_jnt_mtx[1][3];
+            spD0.y = (ltoe_jnt_mtx[1][3] > root_jnt_mtx[1][3]) ? root_jnt_mtx[1][3] : ltoe_jnt_mtx[1][3];
         } else {
             spD0.y = (ltoe_jnt_mtx[1][3] > rtoe_jnt_mtx[1][3]) ? rtoe_jnt_mtx[1][3] : ltoe_jnt_mtx[1][3];
         }
-        mCyl.SetH(40.1f + (mpCLModel->getAnmMtx(0xE)[1][3] - spD0.y));
+        mCyl.SetH(40.1f + (mpCLModel->getAnmMtx(CL_JNT_NECK_JNT_e)[1][3] - spD0.y));
     }
     mCyl.SetC(spD0);
     if (checkModeFlg(ModeFlg_DAMAGE) || checkGuardSlip() || mCurProc == daPyProc_VOMIT_WAIT_e || mDamageWaitTimer != 0)
@@ -10194,7 +10191,7 @@ void daPy_lk_c::setCollision() {
     if (m353A != 0) {
         if (mCurProc == daPyProc_FAN_GLIDE_e) {
             cXyz local_10c;
-            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0), &local_10c);
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e), &local_10c);
             mFanWindSph.SetC(local_10c);
         } else {
             mFanWindSph.SetC(current.pos);
@@ -10420,7 +10417,7 @@ void daPy_lk_c::setDemoData() {
                     if (*face_p == 0) {
                         resetDemoTextureAnime();
                     } else if (*face_p == 1) {
-                        changeTextureAnime(LKANM_BTP_TMABAI, LKANM_BTK_TMABA, -1);
+                        changeTextureAnime(dRes_INDEX_LKANM_BTP_TMABAI_e, dRes_INDEX_LKANM_BTK_TMABA_e, -1);
                     }
                 }
             }
@@ -10908,6 +10905,8 @@ BOOL daPy_lk_c::startRestartRoom(u32 mode, int eventInfoIdx, f32 param_3, int i_
                     pos = &current.pos;
                 }
 
+                int subsector_x;
+                int subsector_z;
                 int quad_x = (1.0f / 50000.0f) * (350000.0f + pos->x);
                 int quad_z = (1.0f / 50000.0f) * (350000.0f + pos->z);
                 if (quad_x < 0) {
@@ -10920,9 +10919,8 @@ BOOL daPy_lk_c::startRestartRoom(u32 mode, int eventInfoIdx, f32 param_3, int i_
                 } else if (quad_z > 13) {
                     quad_z = 13;
                 }
-
-                int subsector_z = (quad_z & 1) << 1;
-                int subsector_x = quad_x & 1;
+                subsector_z = (quad_z & 1) << 1;
+                subsector_x = quad_x & 1;
                 int sector_num = (quad_z >> 1) * 7 + (quad_x >> 1);
                 int scls_idx = subsector_x + (sector_num << 2) + subsector_z;
 
@@ -11573,9 +11571,9 @@ BOOL daPy_lk_c::execute() {
     setNeckAngle();
     setHatAngle();
     
-    mpCLModelData->getJointNodePointer(0x00)->setMtxCalc(m_pbCalc[PART_UNDER_e]); // link_root joint
-    mpCLModelData->getJointNodePointer(0x02)->setMtxCalc(m_pbCalc[PART_UPPER_e]); // body_chn joint
-    mpCLModelData->getJointNodePointer(0x1D)->setMtxCalc(m_pbCalc[PART_UNDER_e]); // wash_chn joint
+    mpCLModelData->getJointNodePointer(CL_JNT_LINK_ROOT_e)->setMtxCalc(m_pbCalc[PART_UNDER_e]);
+    mpCLModelData->getJointNodePointer(CL_JNT_BODY_CHN_e)->setMtxCalc(m_pbCalc[PART_UPPER_e]);
+    mpCLModelData->getJointNodePointer(CL_JNT_WAIST_CHN_e)->setMtxCalc(m_pbCalc[PART_UNDER_e]);
     
 #if VERSION > VERSION_DEMO
     checkOriginalHatAnimation();
@@ -11591,27 +11589,27 @@ BOOL daPy_lk_c::execute() {
     static const Vec head_offset = {40.0f, 0.0f, 0.0f};
     
     mpCLModel->calc();
-    cMtx_multVec(mpCLModel->getAnmMtx(0x0F), &head_offset, &mHeadTopPos);
+    cMtx_multVec(mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e), &head_offset, &mHeadTopPos);
     checkRoofRestart();
-    mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x08), &mLeftHandPos);
-    mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x0C), &mRightHandPos);
-    cMtx_multVec(mpCLModel->getAnmMtx(0x00), &boomerang_catch, &mBoomerangCatchPos);
-    cMtx_multVec(mpCLModel->getAnmMtx(0x08), &hookshot_root, &mHookshotRootPos);
-    mpKatsuraModel->setBaseTRMtx(mpCLModel->getAnmMtx(0x0F));
+    mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_CL_LHANDA_e), &mLeftHandPos);
+    mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_CL_RHANDA_e), &mRightHandPos);
+    cMtx_multVec(mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e), &boomerang_catch, &mBoomerangCatchPos);
+    cMtx_multVec(mpCLModel->getAnmMtx(CL_JNT_CL_LHANDA_e), &hookshot_root, &mHookshotRootPos);
+    mpKatsuraModel->setBaseTRMtx(mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e));
     mpKatsuraModel->calc();
-    mpYamuModel->setBaseTRMtx(mpCLModel->getAnmMtx(0x0F));
+    mpYamuModel->setBaseTRMtx(mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e));
     mpYamuModel->calc();
     setItemModel();
     
     if (mCurProc == daPyProc_CUT_F_e || mCurProc == daPyProc_BT_VERTICAL_JUMP_CUT_e) {
         if (checkNormalSwordEquip()) {
-            mpSwordTipStabModel->setBaseTRMtx(mpEquipItemModel->getAnmMtx(0x03));
+            mpSwordTipStabModel->setBaseTRMtx(mpEquipItemModel->getAnmMtx(CL_JNT_STOMACH_JNT_e));
         } else {
-            mpSwordTipStabModel->setBaseTRMtx(mpEquipItemModel->getAnmMtx(0x04));
+            mpSwordTipStabModel->setBaseTRMtx(mpEquipItemModel->getAnmMtx(CL_JNT_CHEST_JNT_e));
         }
     }
     
-    cMtx_multVec(mpCLModel->getAnmMtx(0x13), &l_eye_offset, &eyePos);
+    cMtx_multVec(mpCLModel->getAnmMtx(CL_JNT_CL_EYE_e), &l_eye_offset, &eyePos);
     
     m36D0 = mSwordTopPos;
     m36DC = m36C4;
@@ -11629,18 +11627,18 @@ BOOL daPy_lk_c::execute() {
         cMtx_multVec(mpEquipItemModel->getBaseTRMtx(), &hammer_root, &m36C4);
     } else if (mEquipItem == daPyItem_SWORD_e) {
         if (checkNormalSwordEquip()) {
-            cMtx_multVec(mpEquipItemModel->getAnmMtx(0x01), &nsword_top, &mSwordTopPos);
-            mDoMtx_multVecZero(mpEquipItemModel->getAnmMtx(0x02), &m36C4);
+            cMtx_multVec(mpEquipItemModel->getAnmMtx(SWA_JNT_SWAROOT_JNT_e), &nsword_top, &mSwordTopPos);
+            mDoMtx_multVecZero(mpEquipItemModel->getAnmMtx(SWA_JNT_SWAA_JNT_e), &m36C4);
         } else {
-            mDoMtx_multVecZero(mpEquipItemModel->getAnmMtx(0x01), &m36C4);
-            cMtx_multVec(mpEquipItemModel->getAnmMtx(0x01), &msword_top, &mSwordTopPos);
+            mDoMtx_multVecZero(mpEquipItemModel->getAnmMtx(SHMS_JNT_SHAROOT_JNT_e), &m36C4);
+            cMtx_multVec(mpEquipItemModel->getAnmMtx(SHMS_JNT_SHAROOT_JNT_e), &msword_top, &mSwordTopPos);
         }
     } else if (mCurProc == daPyProc_FAN_SWING_e) {
         mDoMtx_multVecZero(mpEquipItemModel->getBaseTRMtx(), &m36C4);
-        cMtx_multVec(mpEquipItemModel->getAnmMtx(0x06), &fan_top, &mSwordTopPos);
+        cMtx_multVec(mpEquipItemModel->getAnmMtx(FAN_JNT_FANE_JNT_e), &fan_top, &mSwordTopPos);
     } else {
-        mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x0D), &m36C4);
-        mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x0D), &mSwordTopPos);
+        mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_CL_PODA_e), &m36C4);
+        mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_CL_PODA_e), &mSwordTopPos);
     }
     
     checkLightHit();
@@ -11666,7 +11664,7 @@ BOOL daPy_lk_c::execute() {
     
     JPABaseEmitter* emitter = mSmokeEcallBack.getEmitter();
     if (emitter) {
-        emitter->setGlobalRTMatrix(mpCLModel->getAnmMtx(0x23));
+        emitter->setGlobalRTMatrix(mpCLModel->getAnmMtx(CL_JNT_LTOE_JNT_e));
     }
     
     setWaterDrop();
@@ -11675,7 +11673,7 @@ BOOL daPy_lk_c::execute() {
         daPy_dmEcallBack_c::decTimer();
         if (daPy_dmEcallBack_c::checkFlame()) {
             seStartOnlyReverb(JA_SE_LK_BURNING);
-            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x00), &mLightInfluence.mPos);
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e), &mLightInfluence.mPos);
             mLightInfluence.mPower = 150.0f;
         } else if (daPy_dmEcallBack_c::checkCurse()) {
             seStartOnlyReverb(JA_SE_LK_CURSE_BURNING);
@@ -11821,7 +11819,7 @@ void daPy_lk_c::initTextureAnime() {
     m_tex_anm_heap.m_buffer = new(0x20) u8[0x1000];
     JUT_ASSERT(VERSION_SELECT(20682, 20789, 20869, 20869), m_tex_anm_heap.m_buffer != NULL);
     
-    JKRReadIdxResource(m_tex_anm_heap.m_buffer, 0x1000, LKANM_BTP_TMABAA, dComIfGp_getAnmArchive());
+    JKRReadIdxResource(m_tex_anm_heap.m_buffer, 0x1000, dRes_INDEX_LKANM_BTP_TMABAA_e, dComIfGp_getAnmArchive());
     J3DAnmTexPattern* btp = static_cast<J3DAnmTexPattern*>(J3DAnmLoaderDataBase::load(m_tex_anm_heap.m_buffer));
     btp->searchUpdateMaterialID(mpCLModelData);
     u16 material_num = btp->getUpdateMaterialNum();
@@ -11871,7 +11869,7 @@ void daPy_lk_c::initTextureScroll() {
     m_tex_scroll_heap.m_buffer = new(0x20) u8[0x800];
     JUT_ASSERT(VERSION_SELECT(20757, 20864, 20944, 20944), m_tex_scroll_heap.m_buffer != NULL);
     
-    JKRReadIdxResource(m_tex_scroll_heap.m_buffer, 0x800, LKANM_BTK_TMABA, dComIfGp_getAnmArchive());
+    JKRReadIdxResource(m_tex_scroll_heap.m_buffer, 0x800, dRes_INDEX_LKANM_BTK_TMABA_e, dComIfGp_getAnmArchive());
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(m_tex_scroll_heap.m_buffer));
     btk->searchUpdateMaterialID(mpCLModelData);
     u16 material_num = btk->getUpdateMaterialNum();
@@ -11931,55 +11929,55 @@ BOOL daPy_lk_c::createHeap() {
     J3DAnmTevRegKey* brk;
     int ret;
     
-    mpCLModelData = initModel(&mpCLModel, LINK_BDL_CL, 0x37221222);
-    tmp_modelData = initModel(&mpHandsModel, LINK_BDL_HANDS, 0x37221222);
-    tmp_modelData = initModel(&mpKatsuraModel, LINK_BDL_KATSURA, 0x37221222);
-    tmp_modelData = initModel(&mpYamuModel, LINK_BDL_YAMU, 0x37221222);
-    tmp_modelData = initModel(&mpPringModel, LINK_BDL_PRING, 0x37221222);
-    tmp_modelData = initModel(&mpSwgripaModel, LINK_BDL_SWGRIPA, 0x37221222);
+    mpCLModelData = initModel(&mpCLModel, dRes_INDEX_LINK_BDL_CL_e, 0x37221222);
+    tmp_modelData = initModel(&mpHandsModel, dRes_INDEX_LINK_BDL_HANDS_e, 0x37221222);
+    tmp_modelData = initModel(&mpKatsuraModel, dRes_INDEX_LINK_BDL_KATSURA_e, 0x37221222);
+    tmp_modelData = initModel(&mpYamuModel, dRes_INDEX_LINK_BDL_YAMU_e, 0x37221222);
+    tmp_modelData = initModel(&mpPringModel, dRes_INDEX_LINK_BDL_PRING_e, 0x37221222);
+    tmp_modelData = initModel(&mpSwgripaModel, dRes_INDEX_LINK_BDL_SWGRIPA_e, 0x37221222);
     
-    tmp_modelData = initModel(&mpSwgripmsModel, LINK_BDL_SWGRIPMS, 0x37221222);
-    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_SWGRIPMSAB);
+    tmp_modelData = initModel(&mpSwgripmsModel, dRes_INDEX_LINK_BDL_SWGRIPMS_e, 0x37221222);
+    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BCK_SWGRIPMSAB_e);
     ret = mSwgripmsabBckAnim.init(mpSwgripmsModel->getModelData(), bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(20859, 20966, 21046, 21046), FALSE); }
-    mpTswgripmsabBrk = entryBrk(tmp_modelData, LINK_BRK_TSWGRIPMSAB);
-    mpTswgripmsBtk = entryBtk(tmp_modelData, LINK_BTK_TSWGRIPMS);
+    mpTswgripmsabBrk = entryBrk(tmp_modelData, dRes_INDEX_LINK_BRK_TSWGRIPMSAB_e);
+    mpTswgripmsBtk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_TSWGRIPMS_e);
     
-    tmp_modelData = initModel(&mpPodmsModel, LINK_BDL_PODMS, 0x37221222);
+    tmp_modelData = initModel(&mpPodmsModel, dRes_INDEX_LINK_BDL_PODMS_e, 0x37221222);
     
-    tmp_modelData = initModel(&mpShaModel, LINK_BDL_SHA, 0x37221222);
-    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_ATNGSHA);
+    tmp_modelData = initModel(&mpShaModel, dRes_INDEX_LINK_BDL_SHA_e, 0x37221222);
+    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BCK_ATNGSHA_e);
     ret = mAtngshaBck.init(mpShaModel->getModelData(), bck, false, J3DFrameCtrl::EMode_NONE);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(20876, 20983, 21063, 21063), FALSE); }
     
-    tmp_modelData = initModel(&mpShmsModel, LINK_BDL_SHMS, 0x37221222);
-    mpTshmsBtk = entryBtk(tmp_modelData, LINK_BTK_TSHMS);
+    tmp_modelData = initModel(&mpShmsModel, dRes_INDEX_LINK_BDL_SHMS_e, 0x37221222);
+    mpTshmsBtk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_TSHMS_e);
     J3DSkinDeform* shmsSkinDeform = new J3DSkinDeform();
     if (!shmsSkinDeform) { JUT_ASSERT(VERSION_SELECT(20890, 20997, 21077, 21077), FALSE); }
     if (mpShmsModel->setSkinDeform(shmsSkinDeform, 1) != J3DErrType_Success ) { JUT_ASSERT(VERSION_SELECT(20893, 21000, 21080, 21080), FALSE); }
     
-    tmp_modelData = initModel(&mpYmsls00Model, LINK_BDL_YMSLS00, 0x13000222);
-    mpYmsls00Btk = entryBtk(tmp_modelData, LINK_BTK_YMSLS00);
+    tmp_modelData = initModel(&mpYmsls00Model, dRes_INDEX_LINK_BDL_YMSLS00_e, 0x13000222);
+    mpYmsls00Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_YMSLS00_e);
     
-    tmp_modelData = initModel(&mpHbootsModels[0], LINK_BDL_HBOOTS, 0x37221222);
-    tmp_modelData = initModel(&mpHbootsModels[1], LINK_BDL_HBOOTS, 0x37221222);
+    tmp_modelData = initModel(&mpHbootsModels[0], dRes_INDEX_LINK_BDL_HBOOTS_e, 0x37221222);
+    tmp_modelData = initModel(&mpHbootsModels[1], dRes_INDEX_LINK_BDL_HBOOTS_e, 0x37221222);
     
-    tmp_modelData = initModel(&mpSuimenMunyaModel, LINK_BDL_SUIMEN_MUNYA, 0x11001222);
-    mpSuimenMunyaBtk = entryBtk(tmp_modelData, LINK_BTK_SUIMEN_MUNYA);
+    tmp_modelData = initModel(&mpSuimenMunyaModel, dRes_INDEX_LINK_BDL_SUIMEN_MUNYA_e, 0x11001222);
+    mpSuimenMunyaBtk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_SUIMEN_MUNYA_e);
     
-    tmp_modelData = initModel(&mpYuchw00Model, LINK_BDL_YUCHW00, 0x13000222);
-    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_YUCHW00);
+    tmp_modelData = initModel(&mpYuchw00Model, dRes_INDEX_LINK_BDL_YUCHW00_e, 0x13000222);
+    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BCK_YUCHW00_e);
     ret = mYuchw00Bck.init(tmp_modelData, bck, 1, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(20926, 21033, 21113, 21113), FALSE); }
-    mpYuchw00Btk = entryBtk(tmp_modelData, LINK_BTK_YUCHW00);
-    mpYuchw00Brk = entryBrk(tmp_modelData, LINK_BRK_YUCHW00);
+    mpYuchw00Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_YUCHW00_e);
+    mpYuchw00Brk = entryBrk(tmp_modelData, dRes_INDEX_LINK_BRK_YUCHW00_e);
     mpYuchw00Brk->setFrame(mpYuchw00Brk->getFrameMax()-0.001f);
     
-    tmp_modelData = initModel(&mpYbafo00Model, LINK_BDL_YBAFO00, 0x13000222);
-    mpYbafo00Btk = entryBtk(tmp_modelData, LINK_BTK_YBAFO00);
+    tmp_modelData = initModel(&mpYbafo00Model, dRes_INDEX_LINK_BDL_YBAFO00_e, 0x13000222);
+    mpYbafo00Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_YBAFO00_e);
     mpYbafo00Btk->setFrame(mpYbafo00Btk->getFrameMax()-0.001f);
     
-    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_YAURA00));
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_YAURA00_e));
     JUT_ASSERT(VERSION_SELECT(20943, 21050, 21130, 21130), tmp_modelData != NULL);
     daPy_aura_c* aura_p = mMagicArmorAuraEntries;
     for (int i = 0; i < 6; i++) {
@@ -11987,43 +11985,43 @@ BOOL daPy_lk_c::createHeap() {
         JUT_ASSERT(VERSION_SELECT(20952, 21059, 21139, 21139), aura_p->getModel() != NULL);
         aura_p++;
     }
-    mpYaura00Btk = entryBtk(tmp_modelData, LINK_BTK_YAURA00);
-    brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_R);
+    mpYaura00Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_YAURA00_e);
+    brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YAURA00_R_e);
     ret = mYaura00rBrk.init(tmp_modelData, brk, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(20960, 21067, 21147, 21147), FALSE); }
     mYaura00rBrk.entryFrame(0.0f);
     
-    tmp_modelData = initModel(&mpYmgcs00Model, LINK_BDL_YMGCS00, 0x11001222);
-    mpYmgcs00Btk = entryBtk(tmp_modelData, LINK_BTK_YMGCS00);
-    brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_MS);
+    tmp_modelData = initModel(&mpYmgcs00Model, dRes_INDEX_LINK_BDL_YMGCS00_e, 0x11001222);
+    mpYmgcs00Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_YMGCS00_e);
+    brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BRK_YMGCS00_MS_e);
     ret = mYmgcs00Brk.init(tmp_modelData, brk, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) { JUT_ASSERT(VERSION_SELECT(20974, 21081, 21161, 21161), FALSE); }
     mYmgcs00Brk.entryFrame(0.0f);
     
-    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_BOMB));
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_BOMB_e));
     JUT_ASSERT(VERSION_SELECT(20982, 21089, 21169, 21169), tmp_modelData != NULL);
-    mpBombBrk = entryBrk(tmp_modelData, LINK_BRK_BOMB);
+    mpBombBrk = entryBrk(tmp_modelData, dRes_INDEX_LINK_BRK_BOMB_e);
     
-    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_GWP00));
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_GWP00_e));
     JUT_ASSERT(VERSION_SELECT(20989, 21096, 21176, 21176), tmp_modelData != NULL);
-    mpGwp00BrkData = entryBrk(tmp_modelData, LINK_BRK_GWP00);
-    mpGwp00BtkData = entryBtk(tmp_modelData, LINK_BTK_GWP00);
+    mpGwp00BrkData = entryBrk(tmp_modelData, dRes_INDEX_LINK_BRK_GWP00_e);
+    mpGwp00BtkData = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_GWP00_e);
     
-    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_ARROW));
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_ARROW_e));
     JUT_ASSERT(VERSION_SELECT(20997, 21104, 21184, 21184), tmp_modelData != NULL);
-    mpIceArrowBtk = entryBtk(tmp_modelData, LINK_BTK_TTIPICE);
+    mpIceArrowBtk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_TTIPICE_e);
     
-    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_ARROWGLITTER));
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_ARROWGLITTER_e));
     JUT_ASSERT(VERSION_SELECT(21004, 21111, 21191, 21191), tmp_modelData != NULL);
-    mpLightArrowBtk = entryBtk(tmp_modelData, LINK_BTK_TARROWGLITTER);
+    mpLightArrowBtk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_TARROWGLITTER_e);
     
-    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_GICER00));
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_GICER00_e));
     JUT_ASSERT(VERSION_SELECT(21011, 21118, 21198, 21198), tmp_modelData != NULL);
-    mpGicer00Btk = entryBtk(tmp_modelData, LINK_BTK_GICER00);
+    mpGicer00Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_GICER00_e);
     
-    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_GICER01));
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BDL_GICER01_e));
     JUT_ASSERT(VERSION_SELECT(21018, 21125, 21205, 21205), tmp_modelData != NULL);
-    mpGicer01Btk = entryBtk(tmp_modelData, LINK_BTK_GICER01);
+    mpGicer01Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_GICER01_e);
     
     const int numCLJoints = 0x2A;
     m_old_fdata = new mDoExt_MtxCalcOldFrame(new J3DTransformInfo[numCLJoints], new Quaternion[numCLJoints]);
@@ -12132,15 +12130,15 @@ void daPy_lk_c::playerInit() {
         mpYmgcs00Model->getModelData()->getJointNodePointer(jnt_no)->setCallBack(daPy_auraCallback);
     }
     
-    mpCLModelData->getJointNodePointer(0x01)->setCallBack(daPy_jointCallback0); // center joint
-    mpCLModelData->getJointNodePointer(0x0D)->setCallBack(daPy_jointCallback0); // cl_podA joint
-    mpCLModelData->getJointNodePointer(0x04)->setCallBack(daPy_jointCallback0); // chest_jnt joint
-    mpCLModelData->getJointNodePointer(0x08)->setCallBack(daPy_jointCallback0); // cl_LhandA joint
-    mpCLModelData->getJointNodePointer(0x0C)->setCallBack(daPy_jointCallback0); // cl_RhandA joint
-    mpCLModelData->getJointNodePointer(0x1C)->setCallBack(daPy_jointCallback0); // hatC_jnt
-    mpCLModelData->getJointNodePointer(0x0F)->setCallBack(daPy_jointCallback0); // head_jnt
-    mpCLModelData->getJointNodePointer(0x00)->setCallBack(daPy_jointCallback0); // link_root joint
-    mpCLModelData->getJointNodePointer(0x28)->setCallBack(daPy_jointCallback1); // cl_back joint
+    mpCLModelData->getJointNodePointer(CL_JNT_CENTER_e)->setCallBack(daPy_jointCallback0);
+    mpCLModelData->getJointNodePointer(CL_JNT_CL_PODA_e)->setCallBack(daPy_jointCallback0);
+    mpCLModelData->getJointNodePointer(CL_JNT_CHEST_JNT_e)->setCallBack(daPy_jointCallback0);
+    mpCLModelData->getJointNodePointer(CL_JNT_CL_LHANDA_e)->setCallBack(daPy_jointCallback0);
+    mpCLModelData->getJointNodePointer(CL_JNT_CL_RHANDA_e)->setCallBack(daPy_jointCallback0);
+    mpCLModelData->getJointNodePointer(CL_JNT_HATC_JNT_e)->setCallBack(daPy_jointCallback0);
+    mpCLModelData->getJointNodePointer(CL_JNT_HEAD_JNT_e)->setCallBack(daPy_jointCallback0);
+    mpCLModelData->getJointNodePointer(CL_JNT_LINK_ROOT_e)->setCallBack(daPy_jointCallback0);
+    mpCLModelData->getJointNodePointer(CL_JNT_RTOE_JNT_e)->setCallBack(daPy_jointCallback1);
     
     m_pbCalc[PART_UNDER_e]->setUserArea(reinterpret_cast<u32>(this));
     m_pbCalc[PART_UNDER_e]->setBeforeCalc(daPy_jointBeforeCallback);
@@ -12150,7 +12148,7 @@ void daPy_lk_c::playerInit() {
     m_pbCalc[PART_UPPER_e]->setAfterCalc(daPy_jointAfterCallback);
     
     int i;
-    J3DMaterial* mtl = mpCLModelData->getJointNodePointer(0x13)->getMesh(); // cl_eye joint
+    J3DMaterial* mtl = mpCLModelData->getJointNodePointer(CL_JNT_CL_EYE_e)->getMesh();
     int zoff_blend_cnt = 0;
     int zoff_none_cnt = 0;
     int zon_cnt = 0;
@@ -12171,17 +12169,17 @@ void daPy_lk_c::playerInit() {
             }
             mtl = mtl->getNext();
         }
-        mtl = mpCLModelData->getJointNodePointer(0x15)->getMesh(); // cl_mayu joint
+        mtl = mpCLModelData->getJointNodePointer(CL_JNT_CL_MAYU_e)->getMesh();
     }
     
     JUT_ASSERT(VERSION_SELECT(21314, 21421, 21501, 21501), zon_cnt == 4);
     JUT_ASSERT(VERSION_SELECT(21315, 21422, 21502, 21502), zoff_none_cnt == 4);
     JUT_ASSERT(VERSION_SELECT(21316, 21423, 21503, 21503), zoff_blend_cnt == 4);
     
-    mpLhandShape = mpCLModelData->getJointNodePointer(0x08)->getMesh()->getShape(); // cl_LhandA joint
-    mpRhandShape = mpCLModelData->getJointNodePointer(0x0C)->getMesh()->getShape(); // cl_RhandA joint
+    mpLhandShape = mpCLModelData->getJointNodePointer(CL_JNT_CL_LHANDA_e)->getMesh()->getShape();
+    mpRhandShape = mpCLModelData->getJointNodePointer(CL_JNT_CL_RHANDA_e)->getMesh()->getShape();
     J3DModelData* handsModelData = mpHandsModel->getModelData();
-    for (u16 jnt_no = 0x01; jnt_no < 0x0B; jnt_no++) {
+    for (u16 jnt_no = HANDS_JNT_CL_LHANDB_e; jnt_no < HANDS_JNT_CL_RHANDE_e + 1; jnt_no++) {
         handsModelData->getJointNodePointer(jnt_no)->getMesh()->getShape()->hide();
     }
     
@@ -12290,7 +12288,7 @@ void daPy_lk_c::playerInit() {
     mTactZevPartnerId = fpcM_ERROR_PROCESS_ID_e;
     m3630 = fpcM_ERROR_PROCESS_ID_e;
     
-    ResTIMG* blur_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_BLUR);
+    ResTIMG* blur_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BTI_BLUR_e);
     mSwBlur.mpTex = blur_img;
     
     current.angle.z = 0;
@@ -12299,10 +12297,10 @@ void daPy_lk_c::playerInit() {
     m3648.w = 1.0f;
     resetSeAnime();
     
-    ResTIMG* tmp_tex = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_I4_BALL128B);
+    ResTIMG* tmp_tex = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_I4_BALL128B_e);
     JUT_ASSERT(VERSION_SELECT(21500, 21607, 21687, 21687), tmp_tex != NULL);
     mSightPacket.setSightTex(tmp_tex);
-    ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_ROCK_MARK);
+    ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BTI_ROCK_MARK_e);
     JUT_ASSERT(VERSION_SELECT(21506, 21613, 21693, 21693), tmp_img != NULL);
     void* tmp_img_data = reinterpret_cast<void*>(reinterpret_cast<u32>(tmp_img) + tmp_img->imageOffset);
     mSightPacket.setLockTex(tmp_img_data);
@@ -12348,13 +12346,14 @@ void daPy_lk_c::playerInit() {
     mFace = daPyFace_NONE;
     m34DE = shape_angle.y;
     
-    ResTIMG* linktex_casual = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_LINKTEXBCI4);
+    ResTIMG* linktex_casual = (ResTIMG*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BTI_LINKTEXBCI4_e);
     int num_linktex_headers_seen = 0;
     J3DTexture* texture = mpCLModelData->getTexture();
     JUT_ASSERT(VERSION_SELECT(21577, 21684, 21764, 21764), texture != NULL);
+    u16 tex_no;
     JUTNameTab* textureName = mpCLModelData->getTextureName();
     JUT_ASSERT(VERSION_SELECT(21579, 21686, 21766, 21766), textureName != NULL);
-    for (u16 tex_no = 0; tex_no < texture->getNum(); tex_no++) {
+    for (tex_no = 0; tex_no < texture->getNum(); tex_no++) {
         const char* texName = textureName->getName(tex_no);
         if (strcmp(texName, "linktexS3TC") != 0) {
             continue;
@@ -12611,9 +12610,9 @@ cPhs_State daPy_lk_c::makeBgWait() {
     }
     m_old_fdata->initOldFrameMorf(0.0f, 0, 0x2A);
     setWorldMatrix();
-    mpCLModelData->getJointNodePointer(0)->setMtxCalc(m_pbCalc[PART_UNDER_e]);
-    mpCLModelData->getJointNodePointer(0x02)->setMtxCalc(m_pbCalc[PART_UPPER_e]);
-    mpCLModelData->getJointNodePointer(0x1D)->setMtxCalc(m_pbCalc[PART_UNDER_e]);
+    mpCLModelData->getJointNodePointer(CL_JNT_LINK_ROOT_e)->setMtxCalc(m_pbCalc[PART_UNDER_e]);
+    mpCLModelData->getJointNodePointer(CL_JNT_BODY_CHN_e)->setMtxCalc(m_pbCalc[PART_UPPER_e]);
+    mpCLModelData->getJointNodePointer(CL_JNT_WAIST_CHN_e)->setMtxCalc(m_pbCalc[PART_UNDER_e]);
 
 #if VERSION > VERSION_DEMO
     checkOriginalHatAnimation();
@@ -12621,9 +12620,9 @@ cPhs_State daPy_lk_c::makeBgWait() {
 #endif
 
     mpCLModel->calc();
-    mpKatsuraModel->setBaseTRMtx(mpCLModel->getAnmMtx(0xF));
+    mpKatsuraModel->setBaseTRMtx(mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e));
     mpKatsuraModel->calc();
-    mpYamuModel->setBaseTRMtx(mpCLModel->getAnmMtx(0xF));
+    mpYamuModel->setBaseTRMtx(mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e));
     mpYamuModel->calc();
     setItemModel();
     mCyl.SetC(current.pos);
@@ -12632,7 +12631,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
     m357C = m3580;
     if (sceneMode == 4) {
         cXyz local_50;
-        mDoMtx_multVecZero(mpCLModel->getAnmMtx(0), &local_50);
+        mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e), &local_50);
         dComIfGp_particle_setP1(dPa_name::ID_AK_SN_OSHIRIKUROKOGE, &local_50);
     }
     if ((dComIfGs_getLastSceneMode() & 0x8000) != 0) {
@@ -12861,7 +12860,7 @@ BOOL daPy_lk_c::setActAnimeUpper(u16 bckIdx, daPy_UPPER upperIdx, f32 rate, f32 
     bck->setFrame(frame);
     
     if (i_morf >= 0.0f) {
-        m_old_fdata->initOldFrameMorf(i_morf, 2, 0x1D);
+        m_old_fdata->initOldFrameMorf(i_morf, CL_JNT_BODY_CHN_e, CL_JNT_WAIST_CHN_e);
     }
     
     return TRUE;
@@ -12878,7 +12877,7 @@ BOOL daPy_lk_c::resetActAnimeUpper(daPy_UPPER upperIdx, f32 i_morf) {
     m_anm_heap_upper[upperIdx].mIdx = -1;
     mFrameCtrlUpper[upperIdx].init(0);
     if (i_morf >= 0.0f) {
-        m_old_fdata->initOldFrameMorf(i_morf, 2, 0x1D);
+        m_old_fdata->initOldFrameMorf(i_morf, CL_JNT_BODY_CHN_e, CL_JNT_WAIST_CHN_e);
     }
     resetPriTextureAnime();
     deleteArrow();

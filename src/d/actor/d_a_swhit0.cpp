@@ -102,7 +102,7 @@ s32 daSwhit0_c::getSwNo2() {
 
 /* 000000C4-00000230       .text CreateHeap__10daSwhit0_cFv */
 BOOL daSwhit0_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_OBM_SYOUGEKISW);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_OBM_SYOUGEKISW_e);
     JUT_ASSERT(0xD5, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
@@ -110,12 +110,12 @@ BOOL daSwhit0_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("Always", ALWAYS_BCK_OBM_SYOUGEKISW);
+    J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BCK_OBM_SYOUGEKISW_e);
     if (mAnm.init(modelData, anm, true, J3DFrameCtrl::EMode_LOOP) == 0) {
         return FALSE;
     }
 
-    J3DAnmTextureSRTKey* texAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", ALWAYS_BTK_OBM_SYOUGEKISW);
+    J3DAnmTextureSRTKey* texAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTK_OBM_SYOUGEKISW_e);
     if (mTexAnm.init(modelData, texAnm, true, J3DFrameCtrl::EMode_LOOP) == 0) {
         return FALSE;
     }

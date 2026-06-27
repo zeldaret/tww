@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_msw.h"
-#include "d/res/res_msw.h"
+#include "res/Object/Msw.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
@@ -210,14 +210,14 @@ static BOOL daMsw_Delete(msw_class* i_this) {
 BOOL daMsw_CreateInit(fopAc_ac_c* i_this) {
     msw_class* pActor = static_cast<msw_class*>(i_this);
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Msw", MSW_BDL_MSWNG));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Msw", dRes_INDEX_MSW_BDL_MSWNG_e));
     pActor->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
 
     if (pActor->mpModel == NULL) {
         return FALSE;
     }
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Msw", MSW_BDL_OBM_CHAIN1));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Msw", dRes_INDEX_MSW_BDL_OBM_CHAIN1_e));
     JUT_ASSERT(DEMO_SELECT(519, 523), modelData != NULL);
 
     for (int chainIdx = 0; chainIdx < 4; chainIdx++) {
@@ -233,7 +233,7 @@ BOOL daMsw_CreateInit(fopAc_ac_c* i_this) {
         return FALSE;
     }
 
-    cBgD_t* pBgd = static_cast<cBgD_t*>(dComIfG_getObjectRes("Msw", MSW_DZB_MSWING));
+    cBgD_t* pBgd = static_cast<cBgD_t*>(dComIfG_getObjectRes("Msw", dRes_INDEX_MSW_DZB_MSWING_e));
 
     BOOL error = pActor->mpBgW->Set(pBgd, cBgW::MOVE_BG_e, &pActor->mMtx);
     if (error == TRUE) {

@@ -9,7 +9,7 @@
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/actor/d_a_npc_mt.h"
 #include "d/d_kankyo.h"
-#include "d/res/res_knob.h"
+#include "res/Object/Knob.h"
 #include "m_Do/m_Do_graphic.h"
 #include "d/d_com_inf_game.h"
 #include "ctype.h"
@@ -32,7 +32,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
 
 /* 000000D4-000003B8       .text CreateHeap__10daKnob00_cFv */
 BOOL daKnob00_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, KNOB_BDL_DOOR);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_KNOB_BDL_DOOR_e);
     JUT_ASSERT(VERSION_SELECT(145, 145, 163, 163), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -51,7 +51,7 @@ BOOL daKnob00_c::CreateHeap() {
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
-    J3DAnmTransform* anmTransform = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, KNOB_BCK_DOOROPENADOOR);
+    J3DAnmTransform* anmTransform = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_KNOB_BCK_DOOROPENADOOR_e);
     if (!mBckAnm.init(modelData, anmTransform, true, J3DFrameCtrl::EMode_NONE)) {
 #if VERSION == VERSION_DEMO
         return cPhs_ERROR_e;
@@ -66,35 +66,35 @@ BOOL daKnob00_c::CreateHeap() {
     s32 fileIndex;
     switch (getShapeType()) {
         case 1:
-            fileIndex = KNOB_BDL_DOOR_B;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_B_e;
             break;
 
         case 2:
-            fileIndex = KNOB_BDL_DOOR_C;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_C_e;
             break;
 
         case 3:
-            fileIndex = KNOB_BDL_DOOR_D;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_D_e;
             break;
 
         case 4:
-            fileIndex = KNOB_BDL_DOOR_E;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_E_e;
             break;
 
         case 5:
-            fileIndex = KNOB_BDL_DOOR_F;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_F_e;
             break;
 
         case 6:
-            fileIndex = KNOB_BDL_DOOR_G;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_G_e;
             break;
 
         case 7:
-            fileIndex = KNOB_BDL_DOOR_H;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_H_e;
             break;
             
         default:
-            fileIndex = KNOB_BDL_DOOR_A;
+            fileIndex = dRes_INDEX_KNOB_BDL_DOOR_A_e;
             break;
     }
 
@@ -113,7 +113,7 @@ BOOL daKnob00_c::CreateHeap() {
         return FALSE;
     }
 
-    cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(M_arcname, KNOB_DZB_DOOR);
+    cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_KNOB_DZB_DOOR_e);
 
     if (bgd == NULL) {
         return FALSE;
@@ -208,7 +208,7 @@ BOOL daKnob00_c::msgDoor() {
 
 /* 000005DC-000006F0       .text openInit__10daKnob00_cFi */
 void daKnob00_c::openInit(int arg1) {
-    static s32 bck_table[] = { KNOB_BCK_DOOROPENADOOR, KNOB_BCK_DOOROPENBDOOR, KNOB_BCK_DOOROPENADOOR, KNOB_BCK_DOOROPENBDOOR };
+    static s32 bck_table[] = { dRes_INDEX_KNOB_BCK_DOOROPENADOOR_e, dRes_INDEX_KNOB_BCK_DOOROPENBDOOR_e, dRes_INDEX_KNOB_BCK_DOOROPENADOOR_e, dRes_INDEX_KNOB_BCK_DOOROPENBDOOR_e };
 
     J3DModelData* modelData = mpModel->getModelData();
     s32 iVar2 = mBckAnm.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, bck_table[arg1]), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true);

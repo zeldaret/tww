@@ -53,13 +53,33 @@ JKRExpHeap* mDoAud_audioStreamHeap;
 
 /* 80006DD4-80006F88       .text mDoAud_allocStreamBuffer__Fv */
 void mDoAud_allocStreamBuffer() {
-    JUT_ASSERT(98, mDoAud_StreamBufferPointer == NULL);
+    JUT_ASSERT(DEMO_SELECT(91, 98), mDoAud_StreamBufferPointer == NULL);
     u32 var1 = mDoAud_StreamBufferBlocks;
     u32 size;
     while (true) {
         JAIGlobalParameter::setParamStreamDecodedBufferBlocks(var1);
         size = JAInter::StreamLib::getNeedBufferSize();
-        JUT_ASSERT(124, mDoAud_audioStreamHeap == NULL);
+        JUT_ASSERT(DEMO_SELECT(117, 124), mDoAud_audioStreamHeap == NULL);
+#if VERSION == VERSION_DEMO
+        mDoAud_audioStreamHeap = zeldaHeap;
+        mDoAud_StreamBufferPointer = JKRAllocFromHeap(zeldaHeap, size, 0);
+        if (!mDoAud_StreamBufferPointer) {
+            JUT_WARN(120, "%s", "zeldaHeap pinch");
+            mDoAud_audioStreamHeap = archiveHeap;
+            mDoAud_StreamBufferPointer = JKRAllocFromHeap(archiveHeap, size, 0);
+        }
+        if (!mDoAud_StreamBufferPointer) {
+            JUT_WARN(124, "%s", "archiveHeap pinch");
+            mDoAud_audioStreamHeap = gameHeap;
+            mDoAud_StreamBufferPointer = JKRAllocFromHeap(gameHeap, size, 0);
+        }
+        if (!mDoAud_StreamBufferPointer && var1 > 3) {
+            var1--;
+            continue;
+        }
+        JUT_ASSERT(135, mDoAud_StreamBufferPointer);
+        break;
+#else
         mDoAud_audioStreamHeap = archiveHeap;
         mDoAud_StreamBufferPointer = JKRAllocFromHeap(archiveHeap, size, 0);
         if (!mDoAud_StreamBufferPointer) {
@@ -79,16 +99,17 @@ void mDoAud_allocStreamBuffer() {
         }
         JUT_ASSERT(144, mDoAud_StreamBufferPointer);
         return;
+#endif
     }
     bool success = g_mDoAud_zelAudio.allocStreamBuffer(mDoAud_StreamBufferPointer, size);
-    JUT_ASSERT(148, success);
+    JUT_ASSERT(DEMO_SELECT(137, 148), success);
 }
 
 /* 80006F88-8000703C       .text mDoAud_deallocStreamBuffer__Fv */
 void mDoAud_deallocStreamBuffer() {
-    JUT_ASSERT(174, mDoAud_StreamBufferPointer);
+    JUT_ASSERT(DEMO_SELECT(161, 174), mDoAud_StreamBufferPointer);
     bool success = g_mDoAud_zelAudio.deallocStreamBuffer();
-    JUT_ASSERT(182, success);
+    JUT_ASSERT(DEMO_SELECT(169, 182), success);
     JKRFreeToHeap(mDoAud_audioStreamHeap, mDoAud_StreamBufferPointer);
     mDoAud_audioStreamHeap = NULL;
     mDoAud_StreamBufferPointer = NULL;
@@ -113,7 +134,11 @@ static mDoDvdThd_mountArchive_c* l_arcCommand;
 /* 80007090-80007224       .text mDoAud_Create__Fv */
 void mDoAud_Create() {
     if (!l_affCommand) {
-        l_affCommand = mDoDvdThd_toMainRam_c::create("/Audiores/JaiInit.aaf", 2, NULL);
+#if VERSION == VERSION_DEMO
+        l_affCommand = mDoDvdThd_toMainRam_c::create("/Audiores/JaiInit.aaf", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
+#else
+        l_affCommand = mDoDvdThd_toMainRam_c::create("/Audiores/JaiInit.aaf", JKRArchive::MOUNT_DIRECTION_TAIL, NULL);
+#endif
         if (!l_affCommand) {
             return;
         }
@@ -130,18 +155,27 @@ void mDoAud_Create() {
         JAIGlobalParameter::setParamInitDataPointer(l_affCommand->getMemAddress());
         JAInter::SequenceMgr::setArchivePointer(l_arcCommand->getArchive());
         mDoAud_setupStreamBuffer();
+#if VERSION == VERSION_DEMO
+        g_mDoAud_audioHeap = JKRSolidHeap::create(0x166800, JKRHeap::getCurrentHeap(), false);
         if (g_mDoAud_audioHeap) {
-#if VERSION <= VERSION_JPN
+            g_mDoAud_zelAudio.init(g_mDoAud_audioHeap, 0x00a00000);
+            g_mDoAud_audioHeap->adjustSize();
+        }
+#else
+        if (g_mDoAud_audioHeap) {
+#if VERSION == VERSION_JPN
             JUTReportConsole("mDoAud_Create g_mDoAud_zelAudio.init before\n");
 #endif
             JKRSetCurrentHeap(NULL);
             g_mDoAud_zelAudio.init(g_mDoAud_audioHeap, 0x00a00000);
             JKRSetCurrentHeap(zeldaHeap);
-#if VERSION <= VERSION_JPN
+#if VERSION == VERSION_JPN
             JUTReportConsole("mDoAud_Create g_mDoAud_zelAudio.init after\n");
 #endif
             g_mDoAud_audioHeap->adjustSize();
-        } else {
+        }
+#endif
+        else {
             OSReport_Error("ヒープ確保失敗につきオーディオ初期化できません\n");
         }
         g_mDoAud_zelAudio.setEventBit(dComIfGs_getPEventBit());

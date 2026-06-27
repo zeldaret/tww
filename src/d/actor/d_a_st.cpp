@@ -10,7 +10,7 @@
 #include "d/d_s_play.h"
 #include "d/d_cc_d.h"
 #include "d/d_snap.h"
-#include "d/res/res_st.h"
+#include "res/Object/St.h"
 
 enum BehaviorType {
     BEHAVIOR_NORMAL = 0,
@@ -317,7 +317,7 @@ static void nun_pos_set(st_class* i_this) {
 static void nun_move(st_class* i_this) {
     cXyz local_18;
 
-    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0xb), *calc_mtx);
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_BUKI_e), *calc_mtx);
     MtxTrans(REG8_F(5) + 10.0f, REG8_F(6), REG8_F(7), true);
     cMtx_YrotM(*calc_mtx, REG0_S(5));
     cMtx_ZrotM(*calc_mtx, REG0_S(6));
@@ -445,13 +445,13 @@ static BOOL daSt_Draw(st_class* i_this) {
 static void wait_set(st_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     if (i_this->m1DC8 != 0) {
-        anm_init(i_this, ST_BCK_HYUNHYUN, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_ST_BCK_HYUNHYUN_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->m1DC8 = 2;
         fopAcM_monsSeStart(actor, JA_SE_CV_ST_NUNCHAKU_S, 0);
     } else if (i_this->m02CC == 0) {
-        anm_init(i_this, ST_BCK_WAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_ST_BCK_WAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
     } else {
-        anm_init(i_this, ST_BCK_LWAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_ST_BCK_LWAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
     }
 }
 
@@ -459,13 +459,13 @@ static void wait_set(st_class* i_this) {
 static void walk_set(st_class* i_this, f32 param_2) {
     fopAc_ac_c* actor = &i_this->actor;
     if (i_this->m1DC8 != 0) {
-        anm_init(i_this, ST_BCK_HYUNHYUN, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_ST_BCK_HYUNHYUN_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->m1DC8 = 2;
         fopAcM_monsSeStart(actor, JA_SE_CV_ST_NUNCHAKU_S, 0);
     } else if (i_this->m02CC == 0) {
-        anm_init(i_this, ST_BCK_WALK, 10.0f, J3DFrameCtrl::EMode_LOOP, param_2, -1);
+        anm_init(i_this, dRes_INDEX_ST_BCK_WALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, param_2, -1);
     } else {
-        anm_init(i_this, ST_BCK_LWALK, 10.0f, J3DFrameCtrl::EMode_LOOP, param_2, -1);
+        anm_init(i_this, dRes_INDEX_ST_BCK_LWALK_e, 10.0f, J3DFrameCtrl::EMode_LOOP, param_2, -1);
     }
 }
 
@@ -590,7 +590,7 @@ static void buki_smoke_set(st_class* i_this) {
     cXyz local_d8;
 
     i_this->m1E88[1].remove();
-    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0xb), *calc_mtx);
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_BUKI_e), *calc_mtx);
     local_b4.x = (REG0_F(13) + 80.0f) + 30.0f;
     local_b4.y = 0.0f;
     local_b4.z = 0.0f;
@@ -637,7 +637,7 @@ static void fight(st_class* i_this) {
     i_this->m0ED1 = 0;
     switch (i_this->mFightBehavior) {
         case 0:
-            attack_set(i_this, ST_BCK_ATTACKR1, 5.0f, J3DFrameCtrl::EMode_NONE);
+            attack_set(i_this, dRes_INDEX_ST_BCK_ATTACKR1_e, 5.0f, J3DFrameCtrl::EMode_NONE);
             i_this->mFightBehavior++;
             break;
         case 1:
@@ -646,7 +646,7 @@ static void fight(st_class* i_this) {
                 fopAcM_monsSeStart(actor, JA_SE_CV_ST_ATTACK_S, 0);
             }
             if (i_this->mpMorf->isStop()) {
-                attack_set(i_this, ST_BCK_ATTACKR1_END, 1.0f, J3DFrameCtrl::EMode_NONE);
+                attack_set(i_this, dRes_INDEX_ST_BCK_ATTACKR1_END_e, 1.0f, J3DFrameCtrl::EMode_NONE);
                 i_this->mFightBehavior++;
             }
             break;
@@ -659,7 +659,7 @@ static void fight(st_class* i_this) {
             }
             i_this->m0ED1 = 1;
             if (i_this->mpMorf->isStop()) {
-                attack_set(i_this, ST_BCK_OTOTOR, 1.0f, J3DFrameCtrl::EMode_LOOP);
+                attack_set(i_this, dRes_INDEX_ST_BCK_OTOTOR_e, 1.0f, J3DFrameCtrl::EMode_LOOP);
                 i_this->mFightBehavior++;
                 i_this->mTimers[0] = cM_rndF(50.0f) + 30.0f;
             }
@@ -670,11 +670,11 @@ static void fight(st_class* i_this) {
             if (i_this->mTimers[0] == 0) {
                 if ((cM_rndF(1.0f) < 0.5f) || (dVar8 < 300.0f)) {
                     if (cM_rndF(1.0f) < 0.5f) {
-                        attack_set(i_this, ST_BCK_ATTACKREND, 5.0f, J3DFrameCtrl::EMode_NONE);
+                        attack_set(i_this, dRes_INDEX_ST_BCK_ATTACKREND_e, 5.0f, J3DFrameCtrl::EMode_NONE);
                         i_this->m02CC = 1;
                         i_this->mFightBehavior = 0x65;
                     } else {
-                        attack_set(i_this, ST_BCK_ATTACKR2, 5.0f, J3DFrameCtrl::EMode_NONE);
+                        attack_set(i_this, dRes_INDEX_ST_BCK_ATTACKR2_e, 5.0f, J3DFrameCtrl::EMode_NONE);
                         i_this->m02CC = 0;
                         i_this->mFightBehavior = 100;
                     }
@@ -684,7 +684,7 @@ static void fight(st_class* i_this) {
             }
             break;
         case 5:
-            attack_set(i_this, ST_BCK_ATTACKL1, 5.0f, J3DFrameCtrl::EMode_NONE);
+            attack_set(i_this, dRes_INDEX_ST_BCK_ATTACKL1_e, 5.0f, J3DFrameCtrl::EMode_NONE);
             i_this->mFightBehavior++;
             break;
         case 6:
@@ -693,7 +693,7 @@ static void fight(st_class* i_this) {
                 fopAcM_monsSeStart(actor, JA_SE_CV_ST_ATTACK_S, 0);
             }
             if (i_this->mpMorf->isStop()) {
-                attack_set(i_this, ST_BCK_ATTACKL1_END, 1.0f, J3DFrameCtrl::EMode_NONE);
+                attack_set(i_this, dRes_INDEX_ST_BCK_ATTACKL1_END_e, 1.0f, J3DFrameCtrl::EMode_NONE);
                 i_this->mFightBehavior++;
             }
             break;
@@ -706,7 +706,7 @@ static void fight(st_class* i_this) {
             }
             i_this->m0ED1 = 1;
             if (i_this->mpMorf->isStop()) {
-                attack_set(i_this, ST_BCK_OTOTOL, 1.0f, J3DFrameCtrl::EMode_LOOP);
+                attack_set(i_this, dRes_INDEX_ST_BCK_OTOTOL_e, 1.0f, J3DFrameCtrl::EMode_LOOP);
                 i_this->mFightBehavior++;
                 i_this->mTimers[0] = cM_rndF(50.0f) + 30.0f;
             }
@@ -717,11 +717,11 @@ static void fight(st_class* i_this) {
             if (i_this->mTimers[0] == 0) {
                 if ((cM_rndF(1.0f) < 0.5f) || (dVar8 < 300.0f)) {
                     if (cM_rndF(1.0f) < 0.5f) {
-                        attack_set(i_this, ST_BCK_ATTACKLEND, 5.0f, J3DFrameCtrl::EMode_NONE);
+                        attack_set(i_this, dRes_INDEX_ST_BCK_ATTACKLEND_e, 5.0f, J3DFrameCtrl::EMode_NONE);
                         i_this->m02CC = 0;
                         i_this->mFightBehavior = 0x65;
                     } else {
-                        attack_set(i_this, ST_BCK_ATTACKL2, 5.0f, J3DFrameCtrl::EMode_NONE);
+                        attack_set(i_this, dRes_INDEX_ST_BCK_ATTACKL2_e, 5.0f, J3DFrameCtrl::EMode_NONE);
                         i_this->m02CC = 1;
                         i_this->mFightBehavior = 100;
                     }
@@ -731,13 +731,13 @@ static void fight(st_class* i_this) {
             }
             break;
         case 10:
-            attack_set(i_this, ST_BCK_ATTACKR1, 5.0f, J3DFrameCtrl::EMode_NONE);
+            attack_set(i_this, dRes_INDEX_ST_BCK_ATTACKR1_e, 5.0f, J3DFrameCtrl::EMode_NONE);
             i_this->mFightBehavior++;
             fopAcM_monsSeStart(actor, JA_SE_CV_ST_ATTACK_L, 0);
             break;
         case 0xb:
             if (i_this->mpMorf->isStop()) {
-                attack_set(i_this, ST_BCK_KAITENR1, 1.0f, J3DFrameCtrl::EMode_NONE);
+                attack_set(i_this, dRes_INDEX_ST_BCK_KAITENR1_e, 1.0f, J3DFrameCtrl::EMode_NONE);
                 i_this->mFightBehavior++;
             }
             break;
@@ -759,25 +759,25 @@ static void fight(st_class* i_this) {
             dVar9 = 0.1f;
             i_this->m0302 = (s16)(int)((REG0_F(13) + 10000.0f) * cM_ssin(i_this->m02E8 * (REG0_S(8) + 500)));
             if (((i_this->mTimers[0] == 0) && (-0x400 < i_this->m0304)) && (i_this->m0304 < 0x400)) {
-                attack_set(i_this, ST_BCK_KAITENR1_END, 1.0f, J3DFrameCtrl::EMode_NONE);
+                attack_set(i_this, dRes_INDEX_ST_BCK_KAITENR1_END_e, 1.0f, J3DFrameCtrl::EMode_NONE);
                 i_this->mFightBehavior++;
             }
             break;
         case 0xe:
             if ((i_this->mpMorf->isStop()) && (std::fabsf(i_this->m0308) < 0.01f)) {
-                attack_set(i_this, ST_BCK_OTOTOR, 5.0f, J3DFrameCtrl::EMode_LOOP);
+                attack_set(i_this, dRes_INDEX_ST_BCK_OTOTOR_e, 5.0f, J3DFrameCtrl::EMode_LOOP);
                 i_this->mTimers[0] = cM_rndF(50.0f) + 30.0f;
                 i_this->mFightBehavior = 3;
             }
             break;
         case 0xf:
-            attack_set(i_this, ST_BCK_ATTACKL1, 5.0f, J3DFrameCtrl::EMode_NONE);
+            attack_set(i_this, dRes_INDEX_ST_BCK_ATTACKL1_e, 5.0f, J3DFrameCtrl::EMode_NONE);
             i_this->mFightBehavior++;
             fopAcM_monsSeStart(actor, JA_SE_CV_ST_ATTACK_L, 0);
             break;
         case 0x10:
             if (i_this->mpMorf->isStop()) {
-                attack_set(i_this, ST_BCK_KAITENL1, 1.0f, J3DFrameCtrl::EMode_NONE);
+                attack_set(i_this, dRes_INDEX_ST_BCK_KAITENL1_e, 1.0f, J3DFrameCtrl::EMode_NONE);
                 i_this->mFightBehavior++;
             }
             break;
@@ -799,19 +799,19 @@ static void fight(st_class* i_this) {
             dVar9 = 0.1f;
             i_this->m0302 = (s16)(int)((REG0_F(13) + 10000.0f) * cM_ssin(i_this->m02E8 * (REG0_S(8) + 500)));
             if (((i_this->mTimers[0] == 0) && (-0x400 < i_this->m0304)) && (i_this->m0304 < 0x400)) {
-                attack_set(i_this, ST_BCK_KAITENL1_END, 1.0f, J3DFrameCtrl::EMode_NONE);
+                attack_set(i_this, dRes_INDEX_ST_BCK_KAITENL1_END_e, 1.0f, J3DFrameCtrl::EMode_NONE);
                 i_this->mFightBehavior++;
             }
             break;
         case 0x13:
             if ((i_this->mpMorf->isStop()) && (std::fabsf(i_this->m0308) < 0.01f)) {
-                attack_set(i_this, ST_BCK_OTOTOL, 5.0f, J3DFrameCtrl::EMode_LOOP);
+                attack_set(i_this, dRes_INDEX_ST_BCK_OTOTOL_e, 5.0f, J3DFrameCtrl::EMode_LOOP);
                 i_this->mTimers[0] = cM_rndF(50.0f) + 30.0f;
                 i_this->mFightBehavior = 8;
             }
             break;
         case 0x14:
-            attack_set(i_this, ST_BCK_KAITENR2, 5.0f, J3DFrameCtrl::EMode_NONE);
+            attack_set(i_this, dRes_INDEX_ST_BCK_KAITENR2_e, 5.0f, J3DFrameCtrl::EMode_NONE);
             i_this->mFightBehavior++;
             break;
         case 0x15:
@@ -832,19 +832,19 @@ static void fight(st_class* i_this) {
             dVar9 = 0.1f;
             i_this->m0302 = (s16)(int)((REG0_F(13) + 10000.0f) * cM_ssin(i_this->m02E8 * (REG0_S(8) + 500)));
             if (((i_this->mTimers[0] == 0) && (-0x400 < i_this->m0304)) && (i_this->m0304 < 0x400)) {
-                attack_set(i_this, ST_BCK_KAITENR2_END, 1.0f, J3DFrameCtrl::EMode_NONE);
+                attack_set(i_this, dRes_INDEX_ST_BCK_KAITENR2_END_e, 1.0f, J3DFrameCtrl::EMode_NONE);
                 i_this->mFightBehavior++;
             }
             break;
         case 0x17:
             if ((i_this->mpMorf->isStop()) && (std::fabsf(i_this->m0308) < 0.01f)) {
-                attack_set(i_this, ST_BCK_OTOTOR, 5.0f, J3DFrameCtrl::EMode_LOOP);
+                attack_set(i_this, dRes_INDEX_ST_BCK_OTOTOR_e, 5.0f, J3DFrameCtrl::EMode_LOOP);
                 i_this->mTimers[0] = cM_rndF(50.0f) + 30.0f;
                 i_this->mFightBehavior = 3;
             }
             break;
         case 0x19:
-            attack_set(i_this, ST_BCK_KAITENL2, 5.0f, J3DFrameCtrl::EMode_NONE);
+            attack_set(i_this, dRes_INDEX_ST_BCK_KAITENL2_e, 5.0f, J3DFrameCtrl::EMode_NONE);
             i_this->mFightBehavior++;
             break;
         case 0x1a:
@@ -866,13 +866,13 @@ static void fight(st_class* i_this) {
             dVar9 = 0.1f;
             i_this->m0302 = (s16)(int)((REG0_F(13) + 10000.0f) * cM_ssin(i_this->m02E8 * (REG0_S(8) + 500)));
             if (((i_this->mTimers[0] == 0) && (-0x400 < i_this->m0304)) && (i_this->m0304 < 0x400)) {
-                attack_set(i_this, ST_BCK_KAITENL2_END, 1.0f, J3DFrameCtrl::EMode_NONE);
+                attack_set(i_this, dRes_INDEX_ST_BCK_KAITENL2_END_e, 1.0f, J3DFrameCtrl::EMode_NONE);
                 i_this->mFightBehavior++;
             }
             break;
         case 0x1c:
             if ((i_this->mpMorf->isStop()) && (std::fabsf(i_this->m0308) < 0.01f)) {
-                attack_set(i_this, ST_BCK_OTOTOL, 5.0f, J3DFrameCtrl::EMode_LOOP);
+                attack_set(i_this, dRes_INDEX_ST_BCK_OTOTOL_e, 5.0f, J3DFrameCtrl::EMode_LOOP);
                 i_this->mFightBehavior = 8;
                 i_this->mTimers[0] = cM_rndF(50.0f) + 30.0f;
             }
@@ -909,7 +909,7 @@ static void fight(st_class* i_this) {
     } else {
         i_this->m02CA = 0;
     }
-    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0xb), *calc_mtx);
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_BUKI_e), *calc_mtx);
     local_d8.x = REG0_F(10) + 80.0f;
     local_d8.y = 0.0f;
     local_d8.z = 0.0f;
@@ -948,7 +948,7 @@ static void fight2(st_class* i_this) {
         case 0:
             i_this->m02F6 = 10;
             i_this->m0ED0 = 1;
-            attack_set(i_this, ST_BCK_KYORO, 5.0f, J3DFrameCtrl::EMode_NONE);
+            attack_set(i_this, dRes_INDEX_ST_BCK_KYORO_e, 5.0f, J3DFrameCtrl::EMode_NONE);
             i_this->m02C4++;
             fopAcM_monsSeStart(actor, JA_SE_CV_ST_NO_CLUB, 0);
             break;
@@ -956,7 +956,7 @@ static void fight2(st_class* i_this) {
             i_this->m02F6 = 10;
             i_this->m0ED0 = 1;
             if (i_this->mpMorf->isStop()) {
-                attack_set(i_this, ST_BCK_NUKU1, 1.0f, J3DFrameCtrl::EMode_NONE);
+                attack_set(i_this, dRes_INDEX_ST_BCK_NUKU1_e, 1.0f, J3DFrameCtrl::EMode_NONE);
                 i_this->m02C4++;
             }
             break;
@@ -964,10 +964,10 @@ static void fight2(st_class* i_this) {
             i_this->m02F6 = 10;
             i_this->m0ED0 = 1;
             if (i_this->mpMorf->isStop()) {
-                attack_set(i_this, ST_BCK_NUKU2, 1.0f, J3DFrameCtrl::EMode_NONE);
+                attack_set(i_this, dRes_INDEX_ST_BCK_NUKU2_e, 1.0f, J3DFrameCtrl::EMode_NONE);
                 i_this->m02C4 = 0x65;
                 i_this->m1DC8 = 1;
-                MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x03), *calc_mtx);
+                MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_KATAL_e), *calc_mtx);
                 MtxPosition(&local_2c, &cStack_38);
                 dComIfGp_particle_set(dPa_name::ID_AK_SN_STBIKON00, &cStack_38, &actor->shape_angle);
                 fopAcM_seStart(actor, JA_SE_CM_ST_PULLOUT_ARM, 0);
@@ -975,7 +975,7 @@ static void fight2(st_class* i_this) {
             break;
         case 3:
             i_this->m1DC8 = 3;
-            attack_set(i_this, ST_BCK_HONE_ATTACK, 3.0f, J3DFrameCtrl::EMode_LOOP);
+            attack_set(i_this, dRes_INDEX_ST_BCK_HONE_ATTACK_e, 3.0f, J3DFrameCtrl::EMode_LOOP);
             i_this->m02C4++;
             i_this->mTimers[0] = (int)cM_rndF(3.0f) * 0x28;
             fopAcM_monsSeStart(actor, JA_SE_CV_ST_NUNCHAKU_L, 0);
@@ -992,7 +992,7 @@ static void fight2(st_class* i_this) {
             }
             break;
         case 0x32:
-            anm_init(i_this, ST_BCK_WAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_ST_BCK_WAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m1DC8 = 1;
             i_this->m02C4++;
             i_this->mTimers[0] = 0x14;
@@ -1000,7 +1000,7 @@ static void fight2(st_class* i_this) {
             i_this->m02F6 = 10;
             i_this->m0ED0 = 1;
             if (i_this->mTimers[0] == 0) {
-                attack_set(i_this, ST_BCK_TUKERU1, 5.0f, J3DFrameCtrl::EMode_NONE);
+                attack_set(i_this, dRes_INDEX_ST_BCK_TUKERU1_e, 5.0f, J3DFrameCtrl::EMode_NONE);
                 i_this->m02C4++;
             }
             break;
@@ -1008,7 +1008,7 @@ static void fight2(st_class* i_this) {
             i_this->m02F6 = 10;
             i_this->m0ED0 = 1;
             if (i_this->mpMorf->isStop()) {
-                attack_set(i_this, ST_BCK_TUKERU2, 1.0f, J3DFrameCtrl::EMode_NONE);
+                attack_set(i_this, dRes_INDEX_ST_BCK_TUKERU2_e, 1.0f, J3DFrameCtrl::EMode_NONE);
                 i_this->m02C4++;
                 i_this->m1DC8 = 0;
             }
@@ -1018,7 +1018,7 @@ static void fight2(st_class* i_this) {
             i_this->m0ED0 = 1;
             if (i_this->mpMorf->isStop()) {
                 i_this->m02C4 = 100;
-                anm_init(i_this, ST_BCK_FUKKI_WAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_ST_BCK_FUKKI_WAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
             break;
         case 0x64:
@@ -1069,7 +1069,7 @@ static void ground_wait(st_class* i_this) {
         case 1:
             i_this->m02B9 = 0;
             fopAcM_seStart(actor, JA_SE_CM_ST_OUT_OF_GROUND, 0);
-            anm_init(i_this, ST_BCK_START, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_ST_BCK_START_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m02C4 = 2;
             actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
             fopAcM_OnStatus(actor, fopAcStts_SHOWMAP_e);
@@ -1122,9 +1122,9 @@ static void kan_wait(st_class* i_this) {
             break;
         case 1:
             if (i_this->mBehaviorType == BEHAVIOR_IN_HORIZONTAL_COFFIN) {
-                anm_init(i_this, ST_BCK_YOKO_START, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, -1);
+                anm_init(i_this, dRes_INDEX_ST_BCK_YOKO_START_e, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, -1);
             } else {
-                anm_init(i_this, ST_BCK_TATE_START, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, -1);
+                anm_init(i_this, dRes_INDEX_ST_BCK_TATE_START_e, 1.0f, J3DFrameCtrl::EMode_NONE, 0.0f, -1);
             }
             i_this->m02C4 = 2;
             i_this->m02B9 = 0;
@@ -1161,7 +1161,7 @@ static void st_break_wait(st_class* i_this) {
     i_this->m0ED0 = 1;
     switch (i_this->m02C4) {
         case 0:
-            anm_init(i_this, ST_BCK_FUKKI_WAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_ST_BCK_FUKKI_WAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m02C4 = 1;
             i_this->mTimers[0] = l_HIO.m1A;
             i_this->m1DDC = l_HIO.m1A;
@@ -1196,7 +1196,7 @@ static void st_break_wait(st_class* i_this) {
             }
             break;
         case 0xA:
-            anm_init(i_this, ST_BCK_FUKKI_WAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_ST_BCK_FUKKI_WAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m02C4 = 0xb;
         case 0xB:
 #if VERSION > VERSION_DEMO
@@ -1264,14 +1264,14 @@ static void head_damage(st_class* i_this) {
     i_this->m0ED0 = 1;
     switch (i_this->m02C4) {
         case 0:
-            anm_init(i_this, ST_BCK_MAHIR, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_ST_BCK_MAHIR_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m02C4 = 1;
             fopAcM_seStart(actor, JA_SE_CM_ST_TURN_HEAD, 0);
             break;
         case 1:
             frame = (int)i_this->mpMorf->getFrame();
             if (frame == 32) {
-                MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0xf), *calc_mtx);
+                MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_HEAD_e), *calc_mtx);
                 MtxPosition(&local_24, &cStack_30);
                 dComIfGp_particle_set(dPa_name::ID_AK_SN_STBIKON00, &cStack_30, &local_38);
                 fopAcM_seStart(actor, JA_SE_CM_ST_STOP_HEAD, 0);
@@ -1284,14 +1284,14 @@ static void head_damage(st_class* i_this) {
             }
             break;
         case 10:
-            anm_init(i_this, ST_BCK_MAHI2, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_ST_BCK_MAHI2_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m02C4 = 11;
             fopAcM_seStart(actor, JA_SE_CM_ST_TURN_HEAD, 0);
             break;
         case 11:
             frame = (int)i_this->mpMorf->getFrame();
             if (frame == 30) {
-                MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0xf), *calc_mtx);
+                MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_HEAD_e), *calc_mtx);
                 MtxPosition(&local_24, &cStack_30);
                 dComIfGp_particle_set(dPa_name::ID_AK_SN_STBIKON00, &cStack_30, &local_38);
                 fopAcM_seStart(actor, JA_SE_CM_ST_STOP_HEAD, 0);
@@ -1320,12 +1320,12 @@ static void ue_move(st_class* i_this) {
 #endif
     switch (i_this->m02C4) {
         case -1:
-            anm_init(i_this, ST_BCK_UE_JUMP1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_ST_BCK_UE_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m02C4 = 1;
             actor->speed.y = 30.0f;
             break;
         case 0:
-            anm_init(i_this, ST_BCK_UE_JUMP1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_ST_BCK_UE_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m02C4 = 1;
             actor->current.angle.y = fopAcM_searchPlayerAngleY(actor) + 0x8000;
             actor->speed.y = DEMO_SELECT(50.0f, 40.0f);
@@ -1334,13 +1334,13 @@ static void ue_move(st_class* i_this) {
             break;
         case 1:
             if (i_this->mAcch.ChkGroundHit()) {
-                anm_init(i_this, ST_BCK_UE_JUMP2, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_ST_BCK_UE_JUMP2_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->m02C4 = 2;
             }
             break;
         case 2:
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, ST_BCK_UE_WALK, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.2f, -1);
+                anm_init(i_this, dRes_INDEX_ST_BCK_UE_WALK_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.2f, -1);
                 i_this->m02C4 = 3;
             }
             break;
@@ -1358,7 +1358,7 @@ static void ue_move(st_class* i_this) {
             if (frame == 10) {
                 emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_STASE00, &actor->eyePos);
                 if (emitter != NULL) {
-                    emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0xF));
+                    emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_HEAD_e));
                 }
             }
             i_this->m02DC = REG8_F(1) + 10.0f;
@@ -1367,7 +1367,7 @@ static void ue_move(st_class* i_this) {
                 i_this->m02C4 = 3;
             }
             if (fopAcM_searchPlayerDistance(actor) > 530.0f) {
-                anm_init(i_this, ST_BCK_UE_WAIT, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_ST_BCK_UE_WAIT_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->m02C4 = 5;
                 i_this->mTimers[0] = 10;
             }
@@ -1415,7 +1415,7 @@ static void sita_move(st_class* i_this) {
             i_this->mTimers[0] = 60;
             i_this->mTimers[1] = cM_rndF(200.0f) + 350.0f;
         case 1:
-            anm_init(i_this, ST_BCK_SITA_WALK, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.2f, -1);
+            anm_init(i_this, dRes_INDEX_ST_BCK_SITA_WALK_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.2f, -1);
             i_this->m02C4 = 2;
         case 2:
             i_this->m02C4 = 3;
@@ -1430,13 +1430,13 @@ static void sita_move(st_class* i_this) {
         case 5:
             i_this->mPlayerPos = player->current.pos;
             i_this->m02E4 = 0x2000;
-            anm_init(i_this, ST_BCK_KICK1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_ST_BCK_KICK1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m02C4 = 6;
             break;
         case 6:
             i_this->m02DC = REG8_F(1) + 5.0f;
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, ST_BCK_KICK2, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, dRes_INDEX_ST_BCK_KICK2_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->m02C4 = 7;
             }
             break;
@@ -1486,7 +1486,7 @@ static void St_move(st_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz local_18;
 
-    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0xB), *calc_mtx);
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_BUKI_e), *calc_mtx);
     local_18.x = 160.0f;
     local_18.y = REG0_F(11);
     local_18.z = REG0_F(12);
@@ -1591,7 +1591,7 @@ static void damage_check(st_class* i_this) {
                         || (atInfo.mResultingAttackType == 9 || (atInfo.mResultingAttackType == 2))
 #endif
                     ) {
-                        head_anm_init(i_this, ST_BCK_HEADB_DEAD, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                        head_anm_init(i_this, dRes_INDEX_ST_BCK_HEADB_DEAD_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                         i_this->mParts[15].mPartState = 8;
 #if VERSION > VERSION_DEMO
                         if ((atInfo.mResultingAttackType == 9) && (player->getCutType() != daPy_py_c::CUT_TYPE_HAMMER_SIDESWING)) {
@@ -1627,7 +1627,7 @@ static void damage_check(st_class* i_this) {
                         i_this->mParts[15].mWaitTimer = 30;
                         fopAcM_monsSeStart(actor, JA_SE_CV_ST_DIE, 0);
                     } else {
-                        head_anm_init(i_this, ST_BCK_HEADB_DAMAGE, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                        head_anm_init(i_this, dRes_INDEX_ST_BCK_HEADB_DAMAGE_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                         i_this->mParts[15].mPartState = 7;
                         i_this->mParts[15].mWaitTimer = 0x7f;
 #if VERSION > VERSION_DEMO
@@ -1886,7 +1886,7 @@ static void part_move(st_class* i_this, int jointIndex) {
     local_50.setall(0.0f);
     daBoko_c* heldWeapon = NULL;
     daBoko_c* var_r26 = NULL;
-    if (jointIndex == 0xB) {
+    if (jointIndex == ST_JNT_BUKI_e) {
         heldWeapon = (daBoko_c*)fopAcM_SearchByID(i_this->mHeldWeaponEntityId);
         var_r26 = heldWeapon;
     }
@@ -1904,15 +1904,15 @@ static void part_move(st_class* i_this, int jointIndex) {
                     this_part->mPartVelocity.x = cM_rndFX(20.0f);
                     this_part->mPartVelocity.y = cM_rndF(20.0f) + 40.0f;
                     this_part->mPartVelocity.z = cM_rndFX(20.0f);
-                    if ((i_this->m0ED2 != 0) && (jointIndex != 0xb)) {
+                    if ((i_this->m0ED2 != 0) && (jointIndex != ST_JNT_BUKI_e)) {
                         i_this->m0ED2--;
                     }
-                    if (jointIndex == 0xF) {
+                    if (jointIndex == ST_JNT_HEAD_e) {
                         i_this->m1DD8 = 1;
                         this_part->mPartState = 6;
                         this_part->mPartRotAdd.setall(0);
                         i_this->m1DDA = this_part->mPartRot.y;
-                        head_anm_init(i_this, ST_BCK_HEADB_JUMP1, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                        head_anm_init(i_this, dRes_INDEX_ST_BCK_HEADB_JUMP1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                     } else {
                         this_part->mPartState = 5;
                         this_part->mPartRotAdd.x = cM_rndFX(6000.0f);
@@ -1920,9 +1920,9 @@ static void part_move(st_class* i_this, int jointIndex) {
                     }
                 }
                 if (i_this->m0ED3 == 10) {
-                    if (jointIndex < 0x13) {
+                    if (jointIndex < ST_JNT_KOTUBAN_e) {
                         this_part->mPartState = 10;
-                        if (jointIndex == 0xB) {
+                        if (jointIndex == ST_JNT_BUKI_e) {
                             this_part->mPartState = 5;
                             this_part->m05 = 1;
                             this_part->mPartVelocity.x = cM_rndFX(20.0f);
@@ -1931,13 +1931,13 @@ static void part_move(st_class* i_this, int jointIndex) {
                             this_part->mPartRotAdd.x = cM_rndFX(6000.0f);
                             this_part->mPartRotAdd.y = cM_rndFX(6000.0f);
                         }
-                        if ((i_this->m0ED2 != 0) && (jointIndex != 0xB)) {
+                        if ((i_this->m0ED2 != 0) && (jointIndex != ST_JNT_BUKI_e)) {
                             i_this->m0ED2--;
                         }
                     }
-                } else if ((i_this->m0ED3 == 0x14) && (jointIndex >= 0x13)) {
+                } else if ((i_this->m0ED3 == 0x14) && (jointIndex >= ST_JNT_KOTUBAN_e)) {
                     this_part->mPartState = 0xb;
-                    if ((i_this->m0ED2 != 0) && (jointIndex != 0xB)) {
+                    if ((i_this->m0ED2 != 0) && (jointIndex != ST_JNT_BUKI_e)) {
                         i_this->m0ED2--;
                     }
                 }
@@ -1952,7 +1952,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                 } else {
                     MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(jointIndex), *calc_mtx);
                     MtxPosition(&local_50, &local_5c);
-                    if (jointIndex == 0xF) {
+                    if (jointIndex == ST_JNT_HEAD_e) {
                         local_5c.y -= REG6_F(13) + 20.0f;
                     }
                     local_50 = local_5c - this_part->mPartPos;
@@ -1977,7 +1977,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                         local_50.z = this_part->m44 * 20.0f;
                         MtxPosition(&local_50, &this_part->mPartVelocity);
                         VECAdd(&this_part->mPartPos, &this_part->mPartVelocity, &this_part->mPartPos);
-                        if (jointIndex == 0xF) {
+                        if (jointIndex == ST_JNT_HEAD_e) {
                             this_part->mPartRot.x = this_part->m38;
                             this_part->mPartRot.y = this_part->m3A;
                             this_part->mPartRot.z = this_part->m3C;
@@ -1991,7 +1991,7 @@ static void part_move(st_class* i_this, int jointIndex) {
             case 2:
                 MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(jointIndex), *calc_mtx);
                 MtxPosition(&local_50, &local_5c);
-                if (jointIndex == 0xF) {
+                if (jointIndex == ST_JNT_HEAD_e) {
                     local_5c.y -= REG6_F(13) + 20.0f;
                 }
                 cLib_addCalc2(&this_part->mPartPos.x, local_5c.x, 1.0f, std::fabsf(this_part->mPartVelocity.x) + 5.0f);
@@ -2002,13 +2002,13 @@ static void part_move(st_class* i_this, int jointIndex) {
                 if (local_50.abs() <= 5.0f) {
                     this_part->mPartState = 0;
                     this_part->m05 = 0;
-                    if ((i_this->m0ED2 < 0x19) && (jointIndex != 0xB)) {
+                    if ((i_this->m0ED2 < 0x19) && (jointIndex != ST_JNT_BUKI_e)) {
                         i_this->m0ED2++;
                     }
-                    if (jointIndex == 0xB) {
+                    if (jointIndex == ST_JNT_BUKI_e) {
                         i_this->m1DD0 = 10;
                     }
-                    if (jointIndex == 0xF) {
+                    if (jointIndex == ST_JNT_HEAD_e) {
                         i_this->m1DD8 = 0;
                     }
                 }
@@ -2022,7 +2022,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                 if (this_part->mPartPos.y <= dVar11) {
                     this_part->mPartPos.y = dVar11;
 #if VERSION > VERSION_DEMO
-                    if (((jointIndex == 0xB) && (heldWeapon != NULL)) && (i_this->m1DD0 >= 2)) {
+                    if (((jointIndex == ST_JNT_BUKI_e) && (heldWeapon != NULL)) && (i_this->m1DD0 >= 2)) {
                         fopAcM_cancelCarryNow(heldWeapon);
                         i_this->m1DD0 = 0;
                     }
@@ -2032,7 +2032,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                         this_part->mPartVelocity.x *= cM_rndFX(0.3f);
                         this_part->mPartVelocity.z *= cM_rndFX(0.3f);
 #if VERSION == VERSION_DEMO
-                        if (((jointIndex == 0xB) && (heldWeapon != NULL)) && (i_this->m1DD0 >= 2)) {
+                        if (((jointIndex == ST_JNT_BUKI_e) && (heldWeapon != NULL)) && (i_this->m1DD0 >= 2)) {
                             fopAcM_cancelCarryNow(heldWeapon);
                             i_this->m1DD0 = 0;
                         }
@@ -2051,7 +2051,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                 if ((i_this->m0ED3 == 2) || (i_this->m0ED3 == 0xb)) {
                     this_part->m3E = cM_rndF(65536.0f);
                     this_part->m44 = 0.0f;
-                    if (jointIndex == 0xB) {
+                    if (jointIndex == ST_JNT_BUKI_e) {
                         if ((heldWeapon != NULL) && (!fopAcM_checkCarryNow(heldWeapon))) {
                             fopAcM_setCarryNow(heldWeapon, 0);
                             this_part->mPartPos = heldWeapon->current.pos;
@@ -2069,7 +2069,7 @@ static void part_move(st_class* i_this, int jointIndex) {
 #if VERSION > VERSION_DEMO
                                 i_this->m02F8 = 500;
 #endif
-                                anm_init(i_this, ST_BCK_FUKKI_WAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                                anm_init(i_this, dRes_INDEX_ST_BCK_FUKKI_WAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                             }
                         }
                     } else {
@@ -2102,7 +2102,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                     this_part->mPartPos.y = dVar11;
                     if (this_part->mPartVelocity.y < -10.0f) {
                         this_part->mWaitTimer = cM_rndF(10.0f) + 2.0f;
-                        head_anm_init(i_this, ST_BCK_HEADB_JUMP2, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                        head_anm_init(i_this, dRes_INDEX_ST_BCK_HEADB_JUMP2_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                         fopAcM_seStart(actor, JA_SE_CM_ST_JUMP_HEAD, 0);
                     }
                     if (this_part->mWaitTimer != 0) {
@@ -2115,7 +2115,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                             local_50.y = REG13_F(0) + (cM_rndF(35.0f) + 20.0f);
                             local_50.z = REG13_F(1) + 20.0f;
                             MtxPosition(&local_50, &this_part->mPartVelocity);
-                            head_anm_init(i_this, ST_BCK_HEADB_JUMP1, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                            head_anm_init(i_this, dRes_INDEX_ST_BCK_HEADB_JUMP1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                             fopAcM_monsSeStart(actor, JA_SE_CV_ST_JUMP_HEAD, 0);
                         }
                     }
@@ -2134,7 +2134,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                     if (frame == 5) {
                         emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_STASE00, &this_part->mPartPos);
                         if (emitter != NULL) {
-                            emitter->setGlobalRTMatrix(i_this->mpMorf2->getModel()->getAnmMtx(0x1));
+                            emitter->setGlobalRTMatrix(i_this->mpMorf2->getModel()->getAnmMtx(ST_JNT_HARA_e));
                         }
                     }
                 }
@@ -2147,7 +2147,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                 }
                 this_part->mPartPos.y = dVar11;
                 if ((i_this->mpMorf->isStop()) || (this_part->mPartVelocity.y < -20.0f)) {
-                    head_anm_init(i_this, ST_BCK_HEADB_WAIT, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                    head_anm_init(i_this, dRes_INDEX_ST_BCK_HEADB_WAIT_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 }
                 this_part->mPartVelocity.setall(0.0f);
                 if (i_this->m1DDC == 0) {
@@ -2176,7 +2176,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                     if (this_part->mPartPos.y <= dVar11) {
                         this_part->mPartPos.y = dVar11;
                         if ((i_this->mpMorf->isStop()) || (this_part->mPartVelocity.y < -20.0f)) {
-                            head_anm_init(i_this, ST_BCK_HEADB_WAIT, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                            head_anm_init(i_this, dRes_INDEX_ST_BCK_HEADB_WAIT_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                         }
                         this_part->mPartVelocity.setall(0.0f);
                     }
@@ -2238,7 +2238,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                     if (upperBody != NULL) {
                         this_part->mPartState = 1;
                         this_part->mPartPos = upperBody->mParts[jointIndex].mPartPos;
-                        if (jointIndex != 0xF) {
+                        if (jointIndex != ST_JNT_HEAD_e) {
                             this_part->mPartRotAdd.x = cM_rndFX(4000.0f);
                             this_part->mPartRotAdd.y = cM_rndFX(4000.0f);
                         } else {
@@ -2274,7 +2274,7 @@ static void part_move(st_class* i_this, int jointIndex) {
             }
             this_part->mpPartModel->setBaseTRMtx(*calc_mtx);
 #endif
-            if (((jointIndex == 0xB) && (heldWeapon != NULL)) && (i_this->m1DD0 != 0)) {
+            if (((jointIndex == ST_JNT_BUKI_e) && (heldWeapon != NULL)) && (i_this->m1DD0 != 0)) {
                 if (i_this->m1DD0 == 1) {
                     fopAcM_setCarryNow(heldWeapon, 0);
                     i_this->m1DD0 = 10;
@@ -2289,7 +2289,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                     var_r26->setMatrix(*calc_mtx);
                 }
             }
-            if (jointIndex == 0xF) {
+            if (jointIndex == ST_JNT_HEAD_e) {
                 this_part->mPartRot = actor->shape_angle + i_this->m02FC;
             }
             break;
@@ -2298,7 +2298,7 @@ static void part_move(st_class* i_this, int jointIndex) {
             cMtx_YrotM(*calc_mtx, this_part->mPartRot.y);
             cMtx_XrotM(*calc_mtx, this_part->mPartRot.x);
             MtxScale(i_this->mEnemyIce.mScaleXZ, i_this->mEnemyIce.mScaleY, i_this->mEnemyIce.mScaleXZ, true);
-            if ((jointIndex == 0xF) && (i_this->m1DD8 != 0)) {
+            if ((jointIndex == ST_JNT_HEAD_e) && (i_this->m1DD8 != 0)) {
 #if VERSION > VERSION_DEMO
                 if (i_this->m1E82 != 0) {
                     i_this->m1E82--;
@@ -2317,12 +2317,12 @@ static void part_move(st_class* i_this, int jointIndex) {
             } else {
                 this_part->mpPartModel->setBaseTRMtx(*calc_mtx);
             }
-            if (((var_r26 != NULL) && (jointIndex == 0xB)) && (i_this->m1DD0 >= 2)) {
+            if (((var_r26 != NULL) && (jointIndex == ST_JNT_BUKI_e)) && (i_this->m1DD0 >= 2)) {
                 var_r26->setMatrix(*calc_mtx);
             }
             break;
     }
-    if (jointIndex == 0xF) {
+    if (jointIndex == ST_JNT_HEAD_e) {
 #if VERSION == VERSION_DEMO
         actor->eyePos = this_part->mPartPos;
         actor->attention_info.position = this_part->mPartPos;
@@ -2335,7 +2335,7 @@ static void part_move(st_class* i_this, int jointIndex) {
         }
 #endif
         if (i_this->m1DD8 == 2) {
-            MTXCopy(i_this->mpMorf2->getModel()->getAnmMtx(0x2), *calc_mtx);
+            MTXCopy(i_this->mpMorf2->getModel()->getAnmMtx(ST_JNT_MUNE_e), *calc_mtx);
             local_50.x = REG0_F(4);
             local_50.y = REG0_F(5);
             local_50.z = REG0_F(6);
@@ -2356,7 +2356,7 @@ static void part_move(st_class* i_this, int jointIndex) {
     }
 }
 
-static s32 cc_j_no[] = {0xF, 0x2, 0x1, 0x4, 0x9, 0x15, 0x18};
+static s32 cc_j_no[] = {ST_JNT_HEAD_e, ST_JNT_MUNE_e, ST_JNT_HARA_e, ST_JNT_UDEL_e, ST_JNT_UDER_e, ST_JNT_SUNEL_e, ST_JNT_SUNER_e};
 
 /* 00007D38-00008144       .text cc_set__FP8st_class */
 static void cc_set(st_class* i_this) {
@@ -2420,7 +2420,7 @@ static void cc_set(st_class* i_this) {
             local_40.z = i_this->mNun.m00[2].z;
             i_this->m0D80.SetR(30.0f);
         } else if (i_this->m0ED1 == 3) {
-            MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x19), *calc_mtx);
+            MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_ASIR_e), *calc_mtx);
             local_34.x = 0.0f;
             local_34.y = 0.0f;
             local_34.z = 0.0f;
@@ -2429,7 +2429,7 @@ static void cc_set(st_class* i_this) {
             i_this->m0D80.SetAtSpl(dCcG_At_Spl_UNK0);
         } else {
             i_this->m0D80.SetAtSpl(dCcG_At_Spl_UNK6);
-            MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0xb), *calc_mtx);
+            MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(ST_JNT_BUKI_e), *calc_mtx);
             if (i_this->m0ED1 == 2) {
                 if (std::fabsf(i_this->m0308) > 0.5f) {
                     i_this->m0D80.SetAtSpl(dCcG_At_Spl_UNK7);
@@ -2653,39 +2653,39 @@ static BOOL daSt_Delete(st_class* i_this) {
 static BOOL createHeap(fopAc_ac_c* a_this) {
     static u16 st_part_bdl[] = {
         0,
-        ST_BDL_ST_HARA,
-        ST_BDL_ST_MUNE,
-        ST_BDL_ST_KATAL,
-        ST_BDL_ST_UDEL,
-        ST_BDL_ST_HANDL,
-        ST_BDL_ST_YUBI1L,
-        ST_BDL_ST_YUBI2L,
-        ST_BDL_ST_KATAR,
-        ST_BDL_ST_UDER,
-        ST_BDL_ST_HANDR,
-        ST_BDL_ST_BUKI,
-        ST_BDL_ST_YUBI1R,
-        ST_BDL_ST_YUBI2R,
-        ST_BDL_ST_KUBI,
-        ST_BDL_ST_HEAD,
-        ST_BDL_ST_AGO,
-        ST_BDL_ST_HAT,
+        dRes_INDEX_ST_BDL_ST_HARA_e,
+        dRes_INDEX_ST_BDL_ST_MUNE_e,
+        dRes_INDEX_ST_BDL_ST_KATAL_e,
+        dRes_INDEX_ST_BDL_ST_UDEL_e,
+        dRes_INDEX_ST_BDL_ST_HANDL_e,
+        dRes_INDEX_ST_BDL_ST_YUBI1L_e,
+        dRes_INDEX_ST_BDL_ST_YUBI2L_e,
+        dRes_INDEX_ST_BDL_ST_KATAR_e,
+        dRes_INDEX_ST_BDL_ST_UDER_e,
+        dRes_INDEX_ST_BDL_ST_HANDR_e,
+        dRes_INDEX_ST_BDL_ST_BUKI_e,
+        dRes_INDEX_ST_BDL_ST_YUBI1R_e,
+        dRes_INDEX_ST_BDL_ST_YUBI2R_e,
+        dRes_INDEX_ST_BDL_ST_KUBI_e,
+        dRes_INDEX_ST_BDL_ST_HEAD_e,
+        dRes_INDEX_ST_BDL_ST_AGO_e,
+        dRes_INDEX_ST_BDL_ST_HAT_e,
         0,
-        ST_BDL_ST_KOTUBAN,
-        ST_BDL_ST_MOMOL,
-        ST_BDL_ST_SUNEL,
-        ST_BDL_ST_ASIL,
-        ST_BDL_ST_MOMOR,
-        ST_BDL_ST_SUNER,
-        ST_BDL_ST_ASIR
+        dRes_INDEX_ST_BDL_ST_KOTUBAN_e,
+        dRes_INDEX_ST_BDL_ST_MOMOL_e,
+        dRes_INDEX_ST_BDL_ST_SUNEL_e,
+        dRes_INDEX_ST_BDL_ST_ASIL_e,
+        dRes_INDEX_ST_BDL_ST_MOMOR_e,
+        dRes_INDEX_ST_BDL_ST_SUNER_e,
+        dRes_INDEX_ST_BDL_ST_ASIR_e
     };
     st_class* i_this = (st_class*)a_this;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("St", ST_BDL_ST),
+        (J3DModelData*)dComIfG_getObjectRes("St", dRes_INDEX_ST_BDL_ST_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("St", ST_BCK_WAIT),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("St", dRes_INDEX_ST_BCK_WAIT_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -2702,16 +2702,16 @@ static BOOL createHeap(fopAc_ac_c* a_this) {
     J3DModel* model = i_this->mpMorf->getModel();
     model->setUserArea((u32)i_this);
     for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
-        if ((i < 0x1A) && (i != 0xB)) {
+        if ((i < ST_JNT_ASIR_e + 1) && (i != ST_JNT_BUKI_e)) {
             model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
         }
     }
 #endif
     i_this->mpMorf2 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("St", ST_BDL_HEADB),
+        (J3DModelData*)dComIfG_getObjectRes("St", dRes_INDEX_ST_BDL_HEADB_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("St", ST_BCK_HEADB_WAIT),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("St", dRes_INDEX_ST_BCK_HEADB_WAIT_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,

@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Ygush00.h"
-#include "d/res/res_ygush00.h"
+#include "res/Object/Ygush00.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
@@ -36,9 +36,9 @@ BOOL daObjYgush00_c::solidHeapCB(fopAc_ac_c* ac) {
 
 /* 0000009C-00000250       .text create_heap__14daObjYgush00_cFv */
 bool daObjYgush00_c::create_heap() {
-    static u32 mdl_table[] = { YGUSH00_BDL_YGUSH00, YGUSH00_BDL_YGSTP00, YGUSH00_BDL_YGSTP00, YGUSH00_BDL_YGSTP00 };
-    static u32 btk_table[] = { YGUSH00_BTK_YGUSH00, YGUSH00_BTK_YGSTP00, YGUSH00_BTK_YGSTP00, YGUSH00_BTK_YGSTP00 };
-    static u32 bck_table[] = { YGUSH00_BCK_YGUSH00, YGUSH00_BCK_YGSTP00, YGUSH00_BCK_YGSTP00, YGUSH00_BCK_YGSTP00 };
+    static u32 mdl_table[] = { dRes_INDEX_YGUSH00_BDL_YGUSH00_e, dRes_INDEX_YGUSH00_BDL_YGSTP00_e, dRes_INDEX_YGUSH00_BDL_YGSTP00_e, dRes_INDEX_YGUSH00_BDL_YGSTP00_e };
+    static u32 btk_table[] = { dRes_INDEX_YGUSH00_BTK_YGUSH00_e, dRes_INDEX_YGUSH00_BTK_YGSTP00_e, dRes_INDEX_YGUSH00_BTK_YGSTP00_e, dRes_INDEX_YGUSH00_BTK_YGSTP00_e };
+    static u32 bck_table[] = { dRes_INDEX_YGUSH00_BCK_YGUSH00_e, dRes_INDEX_YGUSH00_BCK_YGSTP00_e, dRes_INDEX_YGUSH00_BCK_YGSTP00_e, dRes_INDEX_YGUSH00_BCK_YGSTP00_e };
 
     bool ret = true;
 

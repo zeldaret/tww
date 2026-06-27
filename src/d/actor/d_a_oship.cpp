@@ -10,7 +10,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_salvage.h"
 #include "d/actor/d_a_ship.h"
-#include "d/res/res_oship.h"
+#include "res/Object/Oship.h"
 #include "d/d_cc_d.h"
 
 const s32 daOship_c::m_heapsize = 0x1280;
@@ -115,10 +115,10 @@ void daOship_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
     csXyz aim_rot(0, 0, 0);
 
     switch (jnt_no) {
-        case 1:
+        case VBTSP_JNT_HEAD_e:
             aim_rot.x = mAimRotY;
             break;
-        case 2:
+        case VBTSP_JNT_CANON_e:
             mDoMtx_stack_c::ZrotM(l_HIO.mNode2RotZ);
             aim_rot.z = -mAimRotX;
             break;
@@ -731,7 +731,7 @@ void daOship_c::modeDelete() {
 #if VERSION > VERSION_DEMO
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_3E80);
 #endif
-                dComIfGp_event_onEventFlag(8);
+                dComIfGp_event_reset();
                 fopAcM_delete(this);
             }
         } else {
@@ -842,19 +842,19 @@ bool daOship_c::_execute() {
 
     Vec bomb_offset = { 0.0f, 0.0f, 0.0f };
     bomb_offset = l_HIO.mBombOffset;
-    cMtx_multVec(mpModel->getAnmMtx(2), &bomb_offset, &mBombSpawnPos);
+    cMtx_multVec(mpModel->getAnmMtx(VBTSP_JNT_CANON_e), &bomb_offset, &mBombSpawnPos);
     
     Vec smoke_offset = { 0.0f, 0.0f, 0.0f };
-    cMtx_multVec(mpModel->getAnmMtx(1), &smoke_offset, &mSmokePos);
+    cMtx_multVec(mpModel->getAnmMtx(VBTSP_JNT_HEAD_e), &smoke_offset, &mSmokePos);
 
     setAttention();
     setCollision();
     setMtx();
 
-    s32 cull_box_check = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), -300.0f, -100.0f, -650.0f, 300.0f, 700.0f, 800.0f);
+    bool cull_box_check = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), -300.0f, -100.0f, -650.0f, 300.0f, 700.0f, 800.0f);
 
     if (fopAcM_GetSpeedF(this) <= 2.0f || 
-        (cull_box_check & 0xFF) || 
+        cull_box_check || 
         fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0)) > 18000.0f) {
         mWaveCallback2.remove();
         mWaveCallback1.remove();
@@ -960,9 +960,9 @@ void daOship_c::createInit() {
 BOOL daOship_c::_createHeap() {
     int file_index;
 
-    file_index = OSHIP_BDL_VBTSP;
+    file_index = dRes_INDEX_OSHIP_BDL_VBTSP_e;
     if (isSpecial()) {
-        file_index = OSHIP_BDL_VBTST;
+        file_index = dRes_INDEX_OSHIP_BDL_VBTST_e;
     }
 
     J3DModelData* modelData = (J3DModelData *) dComIfG_getObjectRes(m_arc_name, file_index);
@@ -977,8 +977,8 @@ BOOL daOship_c::_createHeap() {
     mpModel->setUserArea((u32) this);
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         switch (i) {
-            case 1:
-            case 2:
+            case VBTSP_JNT_HEAD_e:
+            case VBTSP_JNT_CANON_e:
                 modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
                 break;
             default:

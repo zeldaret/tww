@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_dk.h"
-#include "d/res/res_dk.h"
+#include "res/Object/Dk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_ext.h"
@@ -40,7 +40,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         if (a_this != NULL) {
             MTXCopy(model->getAnmMtx(jnt_no), *calc_mtx);
 
-            s32 tail_idx = ((jnt_no - 58) / 2);
+            s32 tail_idx = ((jnt_no - DK_JNT_J_DK_O_LA2_e) / 2);
 
             cXyz pos_vec;
             pos_vec.x = pos_vec.y = pos_vec.z = 0.0f;
@@ -166,7 +166,7 @@ static void tail_draw(dk_class* a_this, tail_s* tail) {
 static void kamen_draw(dk_class* a_this) {
     J3DModel* model = a_this->mpModelKamen;
 
-    MTXCopy(a_this->field_0x2B8->getModel()->getAnmMtx(24), *calc_mtx);
+    MTXCopy(a_this->field_0x2B8->getModel()->getAnmMtx(DK_JNT_J_DK_ATAMA1_e), *calc_mtx);
     cMtx_YrotM(*calc_mtx, 0x4000);
     cMtx_ZrotM(*calc_mtx, -0x4000);
     MtxTrans(REG0_F(0) * 0.01f,
@@ -311,10 +311,10 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     dk_class* a_this = (dk_class*)i_this;
 
     mDoExt_McaMorf* morf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectIDRes("Dk", DK_BDL_DK),
+        (J3DModelData*)dComIfG_getObjectIDRes("Dk", dRes_ID_DK_BDL_DK_e),
         NULL,
         NULL,
-        (J3DAnmTransform*)dComIfG_getObjectIDRes("Dk", DK_BCK_FLY1),
+        (J3DAnmTransform*)dComIfG_getObjectIDRes("Dk", dRes_ID_DK_BCK_FLY1_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -331,13 +331,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     }
 
     for (u16 i = 0; i < a_this->field_0x2B8->getModel()->getModelData()->getJointNum(); i++) {
-        if (i == 58 || i == 60 || i == 62 || i == 64) {
+        if (i == DK_JNT_J_DK_O_LA2_e || i == DK_JNT_J_DK_O_LB2_e || i == DK_JNT_J_DK_O_RA2_e || i == DK_JNT_J_DK_O_RB2_e) {
             a_this->field_0x2B8->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
         }
     }
     a_this->field_0x2B8->getModel()->setUserArea((u32) a_this);
 
-    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectIDRes("Dk", DK_BDL_DK_KAMEN);
+    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectIDRes("Dk", dRes_ID_DK_BDL_DK_KAMEN_e);
     a_this->mpModelKamen = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020002);
 #if VERSION > VERSION_DEMO
     if (a_this->mpModelKamen == NULL) {
@@ -345,7 +345,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     }
 #endif
 
-    modelData = (J3DModelData*) dComIfG_getObjectIDRes("Dk", DK_BDL_DK_TAIL);
+    modelData = (J3DModelData*) dComIfG_getObjectIDRes("Dk", dRes_ID_DK_BDL_DK_TAIL_e);
     JUT_ASSERT(DEMO_SELECT(817, 819), modelData != NULL);
 
     for (s32 i = 0; i < 4; i++) {

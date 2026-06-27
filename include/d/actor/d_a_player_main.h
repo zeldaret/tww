@@ -10,8 +10,8 @@
 #include "d/d_bg_w.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_HIO.h"
-#include "d/res/res_link.h" // IWYU pragma: export
-#include "d/res/res_lkanm.h"
+#include "res/Object/Link.h" // IWYU pragma: export
+#include "res/Object/LkAnm.h"
 
 class mDoExt_MtxCalcOldFrame;
 
@@ -1808,23 +1808,23 @@ public:
     BOOL checkNoUpperAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xFFFF; }
     
     BOOL checkGrabAnime() const { return checkGrabAnimeLight() || checkGrabAnimeHeavy(); };
-    BOOL checkGrabAnimeLight() const { return checkUpperAnime(LKANM_BCK_GRABWAIT); };
-    BOOL checkGrabAnimeHeavy() const { return checkUpperAnime(LKANM_BCK_GRABWAITB); };
-    BOOL checkBoomerangCatchAnime() const { return checkUpperAnime(LKANM_BCK_BOOMCATCH); };
-    BOOL checkBoomerangThrowAnime() const { return checkUpperAnime(LKANM_BCK_BOOMTHROW); };
-    BOOL checkBoomerangReadyAnime() const { return checkUpperAnime(LKANM_BCK_BOOMWAIT); };
-    BOOL checkHookshotReadyAnime() const { return checkUpperAnime(LKANM_BCK_HOOKSHOTWAIT); }
-    BOOL checkDashDamageAnime() const { return checkUpperAnime(LKANM_BCK_DAMDASH); }
-    BOOL checkBowReloadAnime() const { return checkUpperAnime(LKANM_BCK_ARROWRELORD); }
-    BOOL checkBowShootAnime() const { return checkUpperAnime(LKANM_BCK_ARROWSHOOT); }
-    BOOL checkBowWaitAnime() const { return checkUpperAnime(LKANM_BCK_BOWWAIT); }
+    BOOL checkGrabAnimeLight() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_GRABWAIT_e); };
+    BOOL checkGrabAnimeHeavy() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_GRABWAITB_e); };
+    BOOL checkBoomerangCatchAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMCATCH_e); };
+    BOOL checkBoomerangThrowAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMTHROW_e); };
+    BOOL checkBoomerangReadyAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMWAIT_e); };
+    BOOL checkHookshotReadyAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_HOOKSHOTWAIT_e); }
+    BOOL checkDashDamageAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_DAMDASH_e); }
+    BOOL checkBowReloadAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_ARROWRELORD_e); }
+    BOOL checkBowShootAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_ARROWSHOOT_e); }
+    BOOL checkBowWaitAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_BOWWAIT_e); }
     BOOL checkGuardSlip() const {
         return mCurProc == daPyProc_GUARD_SLIP_e ||
             mCurProc == daPyProc_CROUCH_DEFENSE_SLIP_e;
     }
     BOOL checkUpperGuardAnime() const {
-        return checkUpperAnime(LKANM_BCK_ATNG) ||
-            checkUpperAnime(LKANM_BCK_ATNGHAM);
+        return checkUpperAnime(dRes_INDEX_LKANM_BCK_ATNG_e) ||
+            checkUpperAnime(dRes_INDEX_LKANM_BCK_ATNGHAM_e);
     }
     
     s16 checkTinkleShield() const { return mTinkleShieldTimer; }
@@ -1945,8 +1945,8 @@ public:
     virtual void changeTextureAnime(u16, u16, int);
     
     virtual f32 getGroundY() { return mAcch.GetGroundH(); }
-    virtual MtxP getLeftHandMatrix() { return mpCLModel->getAnmMtx(0x08); } // cl_LhandA joint
-    virtual MtxP getRightHandMatrix() { return mpCLModel->getAnmMtx(0x0C); } // cl_RhandA joint
+    virtual MtxP getLeftHandMatrix() { return mpCLModel->getAnmMtx(CL_JNT_CL_LHANDA_e); }
+    virtual MtxP getRightHandMatrix() { return mpCLModel->getAnmMtx(CL_JNT_CL_RHANDA_e); }
     virtual s32 getTactMusic() const;
     virtual int getTactTimerCancel() const;
     virtual BOOL checkPlayerGuard() const;
@@ -1979,7 +1979,7 @@ public:
     virtual BOOL checkGrabBarrel() { return checkGrabBarrelSearch(1); }
     virtual u32 checkPlayerNoDraw() { return dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_SUBJECT_e) || checkNoResetFlg0(daPyFlg0_NO_DRAW); }
     virtual BOOL checkRopeTag() { return mActorKeepEquip.getActor() == NULL; }
-    virtual BOOL checkRopeReadyAnime() const { return checkUpperAnime(LKANM_BCK_ROPETHROWWAIT); }
+    virtual BOOL checkRopeReadyAnime() const { return checkUpperAnime(dRes_INDEX_LKANM_BCK_ROPETHROWWAIT_e); }
     virtual void voiceStart(u32);
     virtual void setOutPower(f32, s16, int);
     virtual void onFrollCrashFlg(u32 param_1) { m3620 = param_1; onNoResetFlg0(daPyFlg0_UNK8); }
@@ -2291,7 +2291,7 @@ private:
     /* 0x3608 */ f32 m3608;
     /* 0x360C */ f32 mSeAnmRate;
     /* 0x3610 */ f32 m3610;
-    /* 0x3614 */ int mShadowId;
+    /* 0x3614 */ u32 mShadowId;
     /* 0x3618 */ u32 mModeFlg;
     /* 0x361C */ u32 mMtrlSndId;
     /* 0x3620 */ u32 m3620;

@@ -8,7 +8,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/res/res_demo_dk.h"
+#include "res/Object/Demo_Dk.h"
 
 /* 00000078-000000E8       .text daDEMO_DK_Draw__FP13demo_dk_class */
 static BOOL daDEMO_DK_Draw(demo_dk_class* i_this) {
@@ -39,10 +39,10 @@ void mode_wait(demo_dk_class* i_this) {
         }
 
         if (i_this->unk_2C0 == 0 && cM_rnd() < tmp) {
-            anm_init(i_this, DEMO_DK_BCK_DK_L_AKUBI1, 5.0f, 0, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_DEMO_DK_BCK_DK_L_AKUBI1_e, 5.0f, 0, 1.0f, 0);
             i_this->unk_2B6 = 1;
         } else {
-            anm_init(i_this, DEMO_DK_BCK_DK_L_WAIT1, 0.0f, 0, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_DEMO_DK_BCK_DK_L_WAIT1_e, 0.0f, 0, 1.0f, 0);
         }
     }
 }
@@ -50,7 +50,7 @@ void mode_wait(demo_dk_class* i_this) {
 /* 000002EC-00000378       .text mode_akubi__FP13demo_dk_class */
 void mode_akubi(demo_dk_class* i_this) {
     if (i_this->mpMorf->isStop()) {
-        anm_init(i_this, DEMO_DK_BCK_DK_L_WAIT1, 5.0f, 0, 2.0f, 0);
+        anm_init(i_this, dRes_INDEX_DEMO_DK_BCK_DK_L_WAIT1_e, 5.0f, 0, 2.0f, 0);
         i_this->unk_2C0 = 3;
         i_this->unk_2B6 = 0;
     }
@@ -109,9 +109,9 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     demo_dk_class* i_this = (demo_dk_class*)a_this;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("DEMO_DK", DEMO_DK_BMD_DK_L),
+        (J3DModelData*)dComIfG_getObjectRes("DEMO_DK", dRes_INDEX_DEMO_DK_BMD_DK_L_e),
         NULL, NULL, 
-        (J3DAnmTransform*)dComIfG_getObjectRes("DEMO_DK", DEMO_DK_BCK_DK_L_WAIT1),
+        (J3DAnmTransform*)dComIfG_getObjectRes("DEMO_DK", dRes_INDEX_DEMO_DK_BCK_DK_L_WAIT1_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
     
     if (i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL) {
@@ -141,7 +141,7 @@ static cPhs_State daDEMO_DK_Create(fopAc_ac_c* a_this) {
         a_this->scale.x = 1.0f;
         a_this->scale.y = 1.0f;
         a_this->scale.z = 1.0f;
-        anm_init(i_this, DEMO_DK_BCK_DK_L_WAIT1, 0.0f, 0, 1.0f, 0);
+        anm_init(i_this, dRes_INDEX_DEMO_DK_BCK_DK_L_WAIT1_e, 0.0f, 0, 1.0f, 0);
     }
     return ret;
 }
