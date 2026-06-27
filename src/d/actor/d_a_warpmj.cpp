@@ -92,7 +92,9 @@ void daWarpmj_c::CreateInit() {
     setEndAnm();
     mEvtToGanonWarpIdx = dComIfGp_evmng_getEventIdx("TO_GANON_WARP");
     mSceneNo = daWarpmj_prm::getSceneNo(this);
+#if VERSION > VERSION_DEMO
     dKy_tevstr_init(&mTevStr, fopAcM_GetRoomNo(this), 0xff);
+#endif
 }
 
 /* 00000630-00000778       .text _create__10daWarpmj_cFv */
@@ -120,9 +122,11 @@ void daWarpmj_c::set_mtx() {
     cXyz local_28(current.pos);
     local_28.y += 2000.0f;
     current.pos.y = getSeaY(local_28);
+#if VERSION > VERSION_DEMO
     if (current.pos.y == -1e9f) {
         current.pos.y = 0;
     }
+#endif
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -147,7 +151,7 @@ bool daWarpmj_c::_execute() {
 void daWarpmj_c::normal_execute() {
     /* Nonmatching */
     animPlay();
-    if (check_warp() != 0) {
+    if (check_warp()) {
         m2B8 = TRUE;
     }
 }
@@ -155,9 +159,9 @@ void daWarpmj_c::normal_execute() {
 /* 000009D4-00000A60       .text demo_execute__10daWarpmj_cFv */
 void daWarpmj_c::demo_execute() {
     /* Nonmatching */
-    dDemo_actor_c* pdVar1 = dComIfGp_demo_getActor(demoActorID);
-    if (pdVar1 != NULL) {
-        m2C0 = pdVar1->getShapeId();
+    dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
+    if (demo_actor != NULL) {
+        m2C0 = demo_actor->getShapeId();
         if (m2C0 == 0) {
             fopAcM_offDraw(this);
         } else if (m2C0 == 1) {
@@ -177,15 +181,15 @@ void daWarpmj_c::demo_proc() {
     };
     mStaffIdx = dComIfGp_evmng_getMyStaffId("Warpmj");
     if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && mStaffIdx != -1) {
-        int actIdx = dComIfGp_evmng_getMyActIdx(mStaffIdx, action_table, 4, FALSE, 0);
-        if (actIdx == -1) {
+        int act_idx = dComIfGp_evmng_getMyActIdx(mStaffIdx, action_table, 4, FALSE, 0);
+        if (act_idx == -1) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
         } else {
             if (dComIfGp_evmng_getIsAddvance(mStaffIdx)) {
-                (this->*event_init_tbl[actIdx])(mStaffIdx);
+                (this->*event_init_tbl[act_idx])(mStaffIdx);
             }
 
-            BOOL ret = (this->*event_action_tbl[actIdx])(mStaffIdx);
+            BOOL ret = (this->*event_action_tbl[act_idx])(mStaffIdx);
             if (ret) {
                 dComIfGp_evmng_cutEnd(mStaffIdx);
             }
@@ -218,7 +222,11 @@ int daWarpmj_c::actWarp(int) {
 /* 00000C38-00000C94       .text initWarpArrive__10daWarpmj_cFi */
 void daWarpmj_c::initWarpArrive(int) {
     setEndAnm();
-    mDoAud_seStart(0x2894);
+#if VERSION >= VERSION_USA
+    mDoAud_seStart(JA_SE_LK_GN_WAPR_U_OUT);
+#else
+    mDoAud_seStart(JA_SE_LK_GN_WAPR_D_OUT);
+#endif
 }
 
 /* 00000C94-00000CB8       .text actWarpArrive__10daWarpmj_cFi */
@@ -278,9 +286,11 @@ f32 daWarpmj_c::getSeaY(cXyz i_pos) {
 
 /* 00000EE0-00000FDC       .text check_warp__10daWarpmj_cFv */
 BOOL daWarpmj_c::check_warp() {
-    daShip_c* pShip = dComIfGp_getShipActor();
-    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) != 0 && (pShip != NULL)) {
-        if ((f32)(pShip->current.pos - current.pos).absXZ() < 200.0f) {
+    daShip_c* ship = dComIfGp_getShipActor();
+    f32 max = 200.0f;
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && ship != NULL) {
+        f32 abs = (ship->current.pos - current.pos).absXZ();
+        if (abs < max) {
             return TRUE;
         }
     }
