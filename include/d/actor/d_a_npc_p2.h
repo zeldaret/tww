@@ -1,11 +1,24 @@
 #ifndef D_A_NPC_P2_H
 #define D_A_NPC_P2_H
 
+#include "d/d_npc.h"
+#include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
 
 class daNpc_P2_c : public fopAc_ac_c {
 public:
-    void getAttentionBasePos() {}
+    typedef int (daNpc_P2_c::*ActionFunc)(void*);
+    struct anm_prm_c {
+        s8 m0;
+        s8 m1;
+        u16 m2;
+        f32 m4;
+        f32 m8;
+        u32 mC;
+    };
+
+
+    cXyz& getAttentionBasePos() {return m6F8;}
     void getBackbone_x() {}
     void getBackbone_y() {}
     void getEyePos() {}
@@ -15,21 +28,21 @@ public:
     void setAction(int (daNpc_P2_c::*)(void*), void*) {}
     void setEyeStopFlag() {}
 
-    void initTexPatternAnm(bool);
+    bool initTexPatternAnm(bool);
     void playTexPatternAnm();
     void setAnm();
     void setTexAnm();
     void setAttention();
-    void chkAttention();
+    bool chkAttention();
     void lookBack();
     void setMtx();
     void setCollision();
     void smoke_set();
-    void next_msgStatus(unsigned long*);
-    void getMsg();
+    u16 next_msgStatus(unsigned long*);
+    u32 getMsg();
     void talkInit();
     void anmAtr(unsigned short);
-    void talk(bool);
+    u16 talk(bool);
     void eventOrder();
     void checkOrder();
     void demo_wait_2();
@@ -54,8 +67,8 @@ public:
     void zukotelescope();
     void moccowait();
     void talk01();
-    void intro_action(void*);
-    void wait_action(void*);
+    BOOL intro_action(void*);
+    BOOL wait_action(void*);
     bool _execute();
     void draw_item(J3DModel*, signed char);
     void drawDagger();
@@ -105,23 +118,63 @@ public:
     void cutOmamoriEndProc(int);
 
 public:
-    /* Place member variables here */
-};
-
-class daNpc_P2_childHIO_c {
-public:
-    daNpc_P2_childHIO_c();
-
+    static const u32 m_heapsize[3];
+    static const char m_arc_name[3];
 public:
     /* Place member variables here */
+
+    /* 0x290 */ u8 m290;
+                u8 m291;
+    /* 0x294 */ request_of_phase_process_class mPhs;
+    /* 0x29C */ mDoExt_McaMorf* mpMorf;
+    /* 0x2A0 */ mDoExt_McaMorf* mpMorf2;
+    /* 0x2A4 */ mDoExt_btpAnm mBtpAnm;
+    /* 0x2B8 */ J3DModel* m2B8;
+    /* 0x2BC */ J3DModel* m2BC;
+    /* 0x2C0 */ J3DModel* m2C0;
+    /* 0x2C4 */ J3DModel* m2C4;
+    /* 0x2CC */ dNpc_JntCtrl_c m_jnt;
+    /* 0x300 */ dNpc_EventCut_c mEventCut;
+                u8 filler;
+                u8 filler2;
+                u32 m_neck_jnt_num;
+                u32 m_hed_jnt_num;
+                u32 m2FC;
+                u8 m300[0x378-0x300];
+                u8 m378;
+                u16 m37A;
+                u32 m37C;
+                u8 m380[0x6F8-0x380];
+                cXyz m6F8;
+                cXyz m704;
+
+                J3DModel* m710;
+                u8 m714;
+                u8 m715[0x7D0-0x715];
+                u8 m724;
+                u8 m725;
+                cXyz m73C;
+                u8 m748;
+                s32 m74C;
+    /* 0x754 */ dPa_smokeEcallBack m754;
+
+    /* 0x774 */ cXyz mSmokePos;
+    /* 0x780 */ csXyz mSmokeAngle;
+                
+                u8 m7C1;
+                s8 m7D0;
+                u8 m7D1;
+                u8 m7D2;
+                s8 m7D3;
+                u8 m7D4;
+                u8 m7D5;
+                s8 m7D6;
+                cXyz m7DC;
+                s8 m808;
+                u8 m809;
+                u8 m80A;
+    //SIZE: 0x80C
 };
 
-class daNpc_P2_HIO_c {
-public:
-    daNpc_P2_HIO_c();
-
-public:
-    /* Place member variables here */
-};
 
 #endif /* D_A_NPC_P2_H */
