@@ -26,7 +26,7 @@ public:
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
 
-private:
+public: //TODO: Should perhaps be private
     /* 0x04 */  s16 field_0x4;
     /* 0x06 */  s16 field_0x6;
     /* 0x08 */  f32 mpWaterFlatY;
@@ -62,8 +62,8 @@ public:
     BOOL actWait(int);
     BOOL actDrop(int);
     BOOL actWait02(int);
-    s32 actWaitGetItem(int);
-    s32 actWaitDummy(int);
+    BOOL actWaitGetItem(int);
+    BOOL actWaitDummy(int);
 
     static const s16 m_heapsize[3];
     static const char m_arc_name[];

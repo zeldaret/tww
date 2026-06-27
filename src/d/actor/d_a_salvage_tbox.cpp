@@ -327,31 +327,79 @@ void daSTBox_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
+typedef void (daSTBox_c::* eventInitFunc)(int);
+static eventInitFunc event_init_tbl[] = {
+    &daSTBox_c::initWait,
+    &daSTBox_c::initWait02,
+    &daSTBox_c::initWaitGetItem,
+    &daSTBox_c::initWaitDummy,
+    &daSTBox_c::initDrop,
+};
+
+typedef BOOL (daSTBox_c::* eventActionFunc)(int);
+static eventActionFunc event_action_tbl[] = {
+    &daSTBox_c::actWait,
+    &daSTBox_c::actWait02,
+    &daSTBox_c::actWaitGetItem,
+    &daSTBox_c::actWaitDummy,
+    &daSTBox_c::actDrop,
+};
+
 /* 00000C7C-00000EB8       .text _execute__9daSTBox_cFv */
 bool daSTBox_c::_execute() {
     /* Nonmatching */
-    static char* actionTable[] = {"WAIT", "WAIT02", "WAIT_GETITEM", "WAIT_DUMMY", "DROP"};
-    int staffId = dComIfGp_evmng_getMyStaffId("STBox", NULL, 0);
+    static char* action_table[] = {"WAIT", "WAIT02", "WAIT_GETITEM", "WAIT_DUMMY", "DROP"};
+    int staffIdx = dComIfGp_evmng_getMyStaffId("STBox", NULL, 0);
     double waterY = 0.0;
+    cXyz m1020Pos;
     if (dComIfGp_getShipActor() != NULL) {
-        cXyz pos = dComIfGp_getShipActor()->m1020;
-        waterY = getWaterY(pos);
+        m1020Pos = dComIfGp_getShipActor()->m1020;
+        waterY = getWaterY(m1020Pos);
     }
     if ((dComIfGp_event_getMode() != 0) 
         && !this->eventInfo.checkCommandTalk()
-        && staffId != 0xFF) {
-        s32 actIdx = dComIfGp_evmng_getMyActIdx(staffId, actionTable, 5, 0, 0);
+        && staffIdx != 0xFF) {
+        s32 actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, 5, 0, 0);
         if(actIdx == -1){
-            dComIfGp_evmng_cutEnd(staffId);
+            dComIfGp_evmng_cutEnd(staffIdx);
         } else {
-            BOOL isAdvance = dComIfGp_evmng_getIsAddvance(staffId);
+            BOOL isAdvance = dComIfGp_evmng_getIsAddvance(staffIdx);
             if (isAdvance) {
-                // (this->*event_init_tbl[actIdx])(staffId);
+                (this->*event_init_tbl[actIdx])(staffIdx);
             }
             daSTBox_c* i_this = this;
-            // BOOL isAct = (actionTable[actIdx])(staffId);
+            BOOL isAct = (this->*event_action_tbl[actIdx])(staffIdx);
+            if (i_this != NULL) {
+                dComIfGp_evmng_cutEnd(staffIdx);
+            }
         }
     }
+
+    for (int i = 0; i < 3; i++) {
+        JPABaseEmitter* emitter = this->field_0x29C[i];
+        if (emitter != NULL) {
+            emitter->setGlobalTranslation(this->current.pos);
+        }
+    }
+
+    if (waterY <= this->current.pos.y) {
+        JPABaseEmitter* emitter = this->field_0x2C0.getEmitter();
+        if (emitter != NULL) {
+            emitter->setEmitterCallBackPtr(NULL);
+            emitter = this->field_0x2C0.getEmitter();
+            emitter->setMaxFrame(-1);
+            emitter->stopCreateParticle();
+        }
+        this->field_0x2C0.setEmitter(NULL);
+    } else {
+        this->field_0x2C0.setWaterFlatY(waterY + 2.0f);
+        // this->field_0x2C0.mPos ? 
+        this->field_0x2C0.setWaterY(waterY + 2.0f);
+        this->field_0x2C0.mExScaleX = m1020Pos.x;
+        this->field_0x2C0.mExScaleY = m1020Pos.y;
+        this->field_0x2C0.mExScaleZ = m1020Pos.z;
+    }
+    
 }
 
 /* 00000EB8-00000EBC       .text initWait__9daSTBox_cFi */
@@ -469,13 +517,13 @@ BOOL daSTBox_c::actWait02(int) {
 }
 
 /* 000013AC-000013B4       .text actWaitGetItem__9daSTBox_cFi */
-s32 daSTBox_c::actWaitGetItem(int) {
-    return 1;
+BOOL daSTBox_c::actWaitGetItem(int) {
+    return TRUE;
 }
 
 /* 000013B4-000013BC       .text actWaitDummy__9daSTBox_cFi */
-s32 daSTBox_c::actWaitDummy(int) {
-    return 1;
+BOOL daSTBox_c::actWaitDummy(int) {
+    return TRUE;
 }
 
 /* 000013BC-000013DC       .text daSTBox_Create__FPv */
