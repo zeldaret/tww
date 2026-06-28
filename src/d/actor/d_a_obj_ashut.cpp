@@ -241,7 +241,7 @@ void daObjAshut::Act_c::mode_l_u() {
 void daObjAshut::Act_c::mode_demoreq_init(daObjAshut::Act_c::Mode_e i_demo_next) {
     JUT_ASSERT(DEMO_SELECT(544, 546), (i_demo_next == Mode_U_L) || (i_demo_next == Mode_L_U));
     
-    if (mIsEventReady != false) {
+    if (mIsEventReady) {
         if (i_demo_next == Mode_U_L) {
             mode_u_l_init();
         } else {
@@ -265,7 +265,7 @@ void daObjAshut::Act_c::mode_demoreq() {
             eventInfo.onCondition(dEvtCnd_UNK2_e);
         }
     } else {
-        is_demo_ready = TRUE;
+        is_demo_ready = true;
     }
     
     if (is_demo_ready) {

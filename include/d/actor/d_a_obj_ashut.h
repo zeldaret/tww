@@ -78,7 +78,7 @@ namespace daObjAshut {
         static const char M_arcname[];
         static Mtx M_tmp_mtx;
 
-        /* 0x2c8 */ request_of_phase_process_class mPhase;
+        /* 0x2C8 */ request_of_phase_process_class mPhase;
         /* 0x2D0 */ J3DModel* mpModel;
         /* 0x2D4 */ Mode_e mMode;
         /* 0x2D8 */ f32 mCurrentY;
