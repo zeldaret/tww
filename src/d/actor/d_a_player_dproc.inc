@@ -858,7 +858,7 @@ BOOL daPy_lk_c::dProcLavaDamage_init() {
     commonProcInit(daPyProc_DEMO_LAVA_DAMAGE_e);
     mNormalSpeed = 0.0f;
     setSingleMoveAnime(ANM_LAVADAM, m_HIO->mRestart.m.field_0x0, 0.0f, -1, m_HIO->mRestart.m.field_0x4);
-    m32E4.makeEmitter(dPa_name::ID_AK_SN_HIDARUMAFIRE, mpCLModel->getAnmMtx(0), &current.pos, NULL);
+    m32E4.makeEmitter(dPa_name::ID_AK_SN_HIDARUMAFIRE, mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e), &current.pos, NULL);
     if (dComIfGp_event_compulsory(this)) {
         dProcLavaDamage_init_sub();
     } else {
@@ -886,11 +886,11 @@ extern GXColor l_freeze_fade_color;
 /* 8012EF78-8012F0DC       .text dProcFreezeDamage_init_sub__9daPy_lk_cFi */
 void daPy_lk_c::dProcFreezeDamage_init_sub(int param_0) {
     static const u16 eff_joint[] = {
-        0x0007,
-        0x000B,
-        0x001A,
-        0x000E,
-        0x001E,
+        CL_JNT_LARMB_JNT_e,
+        CL_JNT_RARMB_JNT_e,
+        CL_JNT_HATA_JNT_e,
+        CL_JNT_NECK_JNT_e,
+        CL_JNT_WAIST_JNT_e,
     };
 
     if (param_0 != 0) {
@@ -1252,8 +1252,8 @@ BOOL daPy_lk_c::dProcTalismanWait_init() {
     mNormalSpeed = 0.0f;
     setTalismanModel();
     m32E4.makeEmitter(dPa_name::ID_IT_JN_OMAMORI_TSUBU00, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
-    mpEquipItemModel->setBaseTRMtx(mpCLModel->getAnmMtx(12));
-    mDoMtx_stack_c::copy(mpCLModel->getAnmMtx(12));
+    mpEquipItemModel->setBaseTRMtx(mpCLModel->getAnmMtx(CL_JNT_CL_RHANDA_e));
+    mDoMtx_stack_c::copy(mpCLModel->getAnmMtx(CL_JNT_CL_RHANDA_e));
     f32 adjust = cM_ssin(g_Counter.mTimer * 1512);
     mDoMtx_stack_c::transM(7.0f, 0.0f, 15.0f + 3.0f * adjust);
     mDoMtx_stack_c::multVecZero(&m338C.getPos());
@@ -1268,7 +1268,7 @@ BOOL daPy_lk_c::dProcTalismanWait() {
         setShipRidePos(1);
     }
     cXyz* pcVar1 = &m338C.getPos();
-    mDoMtx_stack_c::copy(mpCLModel->getAnmMtx(12));
+    mDoMtx_stack_c::copy(mpCLModel->getAnmMtx(CL_JNT_CL_RHANDA_e));
     f32 adjust = cM_ssin(g_Counter.mTimer * 1512);
     mDoMtx_stack_c::transM(7.0f, 0.0f, 15.0f + 3.0f * adjust);
     mDoMtx_stack_c::multVecZero(pcVar1);
@@ -1787,7 +1787,7 @@ BOOL daPy_lk_c::dProcVorcanoFail_init() {
     speed.y = 18.0f;
     gravity = 0.0f;
     setSingleMoveAnime(ANM_LAVADAM, m_HIO->mRestart.m.field_0x0, 0.0f, -1, m_HIO->mRestart.m.field_0x4);
-    m32E4.makeEmitter(dPa_name::ID_AK_SN_HIDARUMAFIRE, mpCLModel->getAnmMtx(0), &current.pos, NULL);
+    m32E4.makeEmitter(dPa_name::ID_AK_SN_HIDARUMAFIRE, mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e), &current.pos, NULL);
     return true;
 }
 

@@ -53,13 +53,13 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         J3DModel* model = j3dSys.getModel();
         am_class* i_this = (am_class*)model->getUserArea();
         if (i_this) {
-            if (jntNo >= 1 && jntNo <= 4) {
+            if (jntNo >= AM_JNT_KOSI_e && jntNo <= AM_JNT_EYE_e) {
                 MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             }
 
             cXyz offset;
             switch (jntNo) {
-            case 1: // kosi (waist)
+            case AM_JNT_KOSI_e: // waist
                 offset.x = 0.0f;
                 offset.y = 240.0f;
                 offset.z = 60.0f;
@@ -73,18 +73,18 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
                 offset.z = 0.0f;
                 MtxPosition(&offset, &i_this->mWaistPos);
                 break;
-            case 2: // ago (jaw)
+            case AM_JNT_AGO_e: // jaw
                 offset.x = 0.0f;
                 offset.y = 0.0f;
                 offset.z = 0.0f;
                 MtxPosition(&offset, &i_this->mJawPos);
                 break;
-            case 4: // eye
+            case AM_JNT_EYE_e:
                 cMtx_YrotM(*calc_mtx, i_this->mEyeRot.y);
                 cMtx_XrotM(*calc_mtx, i_this->mEyeRot.x);
             }
 
-            if (jntNo >= 1 && jntNo <= 4) {
+            if (jntNo >= AM_JNT_KOSI_e && jntNo <= AM_JNT_EYE_e) {
                 model->setAnmMtx(jntNo, *calc_mtx);
                 cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             }
@@ -956,10 +956,10 @@ static void action_itai_move(am_class* i_this) {
     }
 
     if (i_this->m033C) {
-        i_this->m033C->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(2));
+        i_this->m033C->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(AM_JNT_AGO_e));
     }
     if (i_this->m0340) {
-        i_this->m0340->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(2));
+        i_this->m0340->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(AM_JNT_AGO_e));
     }
 
     if (i_this->mMode == 41 || i_this->mMode == 42) {
@@ -1145,7 +1145,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_CYL2_e,
-            /* mJointIndex */ 0x05, // hitomi (pupil) joint
+            /* mJointIndex */ AM_JNT_HITOMI_e, // pupil
             /* mRadius     */ 5.0f,
             /* mpOffsets   */ cyl2_eye_offset,
         },

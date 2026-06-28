@@ -213,9 +213,9 @@ static void move(fgmahou_class* i_this) {
             i_this->health = 1;
 
             JPABaseEmitter* pEmtr = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGHITDARKSHOT00, &i_this->current.pos);
-            pEmtr->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(1));
+            pEmtr->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(YDKSP00_JNT_HEAD_e));
             JPABaseEmitter* pEmtr2 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGHITDARKSHOT01, &i_this->current.pos);
-            pEmtr2->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(1));
+            pEmtr2->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(YDKSP00_JNT_HEAD_e));
 
             fopAcM_seStartCurrent(i_this, JA_SE_OBJ_PG_EBALL_EXP_L, 0);
         }
@@ -267,7 +267,7 @@ static BOOL daFgmahou_Execute(fgmahou_class* i_this) {
     i_this->mpMorf->calc();
 
     if(i_this->mpEmitter) {
-        i_this->mpEmitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(1));
+        i_this->mpEmitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(YDKSP00_JNT_HEAD_e));
 
         if(i_this->field_0x780 != 0 && i_this->field_0x780 == 0x32) {
             i_this->mpEmitter->becomeInvalidEmitter();

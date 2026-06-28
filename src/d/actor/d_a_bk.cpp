@@ -124,7 +124,7 @@ static void yari_off_check(bk_class* i_this) {
         dBgS_LinChk linChk;
         linChk.Set(&actor->eyePos, &boko_actor->current.pos, i_this);
         if (dComIfG_Bgsp()->LineCross(&linChk)) {
-            MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(0x10); // mune (chest) joint
+            MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(BK_JNT_MUNE_e); // chest
             MTXCopy(mtx, *calc_mtx);
             boko->setMatrix(*calc_mtx);
             offset.set(0.0f, 0.0f, 0.0f);
@@ -275,7 +275,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         bk_class* i_this = (bk_class*)model->getUserArea();
         if (i_this) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            if (jntNo == 0x13) { // ago joint
+            if (jntNo == BK_JNT_AGO_e) {
                 cMtx_ZrotM(*calc_mtx, i_this->m11F4);
                 model->setAnmMtx(jntNo, *calc_mtx);
                 MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
@@ -292,11 +292,11 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
                 offset.y = 0.0f;
                 offset.z = 0.0f;
                 cXyz sp08;
-                if (r28 == 0x00 || r28 == 0x01 || r28 == 0x02 || r28 == 0x03 || r28 == 0x04 ||
-                    r28 == 0x05 || r28 == 0x06 || r28 == 0x07
+                if (r28 == BK_JNT_KOSI_e || r28 == BK_JNT_HIP1_e || r28 == BK_JNT_KOKAL_e || r28 == BK_JNT_MOMOL_e || r28 == BK_JNT_SUNEL1_e ||
+                    r28 == BK_JNT_SUNEL2_e || r28 == BK_JNT_ASIL_e || r28 == BK_JNT_KOKAR_e
                 ) {
                     offset.x = 0.0f;
-                } else if (r28 == 0x12) {
+                } else if (r28 == BK_JNT_HEAD_e) {
                     offset.x = 200.0f;
                     offset.y = -100.0f;
                     MtxPosition(&offset, &sp08);
@@ -337,14 +337,14 @@ static BOOL nodeCallBack_P(J3DNode* node, int calcTiming) {
             offset.x = 0.0f;
             offset.z = 0.0f;
             offset.y = 0.0f;
-            if (r30 == 0x11) {
+            if (r30 == BK_JNT_KUBI_e) {
                 offset.x = 17.5f;
                 offset.y = -8.75f;
                 offset.z = 0.0f;
                 MtxPosition(&offset, &i_this->m1190);
-            } else if (r30 == 0x10) {
+            } else if (r30 == BK_JNT_MUNE_e) {
                 MtxPosition(&offset, &i_this->m119C);
-            } else if (r30 == 0x0E || r30 == 0x0F) {
+            } else if (r30 == BK_JNT_SIPPO3_e || r30 == BK_JNT_SIPPO4_e) {
                 offset.y = 25.0f;
             } else {
                 offset.y = 0.0f;
@@ -457,13 +457,13 @@ static void br_draw(bk_class* i_this) {
         while (mat) {
             J3DShape* shape = mat->getShape();
             if (i_this->m02F4 == 0) {
-                if (i == 1) {
+                if (i == BK_KB_JNT_BLURA_e) {
                     shape->show();
                 } else {
                     shape->hide();
                 }
             } else {
-                if (i == 2) {
+                if (i == BK_KB_JNT_BLURB_e) {
                     shape->show();
                 } else {
                     shape->hide();
@@ -473,7 +473,7 @@ static void br_draw(bk_class* i_this) {
         }
     }
     
-    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x2C), *calc_mtx);
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(BK_JNT_BUKI_e), *calc_mtx);
     MtxTrans(150.0f + l_bkHIO.m100, REG8_F(1), REG8_F(2), 1);
     s16 angleX = REG8_S(6) + 0x4000;
     cMtx_XrotM(*calc_mtx, angleX);
@@ -539,7 +539,7 @@ static BOOL daBk_Draw(bk_class* i_this) {
     search_check_draw(i_this);
     
     J3DModelData* modelData = model->getModelData();
-    J3DJoint* rootJoint = modelData->getJointNodePointer(0x00);
+    J3DJoint* rootJoint = modelData->getJointNodePointer(BK_JNT_KOSI_e);
     J3DShape* eyeShape = modelData->getMaterialNodePointer(0x00)->getShape();
     J3DShape* hatShape = modelData->getMaterialNodePointer(0x01)->getShape();
     J3DShape* bodyShape = modelData->getMaterialNodePointer(0x02)->getShape();
@@ -4105,7 +4105,7 @@ static void demo_camera(bk_class* i_this) {
 /* 0000CC68-0000CD00       .text tate_mtx_set__FP8bk_class */
 static void tate_mtx_set(bk_class* i_this) {
     if (i_this->m02D4 != 0) {
-        MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x25), *calc_mtx); // tate joint
+        MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(BK_JNT_TATE_e), *calc_mtx);
         i_this->m02D0->setBaseTRMtx(*calc_mtx);
         cXyz sp08;
         sp08.x = REG8_F(12);
@@ -4118,7 +4118,7 @@ static void tate_mtx_set(bk_class* i_this) {
 /* 0000CD00-0000CE18       .text bou_mtx_set__FP8bk_class */
 static void bou_mtx_set(bk_class* i_this) {
     if (i_this->m02DC != 0) {
-        int jointIdx = 0x2C + REG7_S(4); // buki joint
+        int jointIdx = BK_JNT_BUKI_e + REG7_S(4);
         MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(jointIdx), *calc_mtx);
         s16 angleY = 0x4000 + REG7_S(0);
         cMtx_YrotM(*calc_mtx, angleY);
@@ -4374,7 +4374,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
         if (boko != NULL) {
             if (fopAcM_checkCarryNow(boko)) {
                 if (i_this->m0B7B == 0) {
-                    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x2C), *calc_mtx); // buki joint
+                    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(BK_JNT_BUKI_e), *calc_mtx);
                     s16 angleY = 0x3E80 + REG8_S(1);
                     cMtx_YrotM(*calc_mtx, angleY);
                     s16 angleX = REG8_S(2);
@@ -4639,91 +4639,91 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_SPH_e,
-            /* mJointIndex */ 0x01, // hip1 joint
+            /* mJointIndex */ BK_JNT_HIP1_e,
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ hip_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x03, // momoL joint
+            /* mJointIndex */ BK_JNT_MOMOL_e,
             /* mRadius     */ 5.0f,
             /* mpOffsets   */ momo_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x04, // suneL1 joint
+            /* mJointIndex */ BK_JNT_SUNEL1_e,
             /* mRadius     */ 2.5f,
             /* mpOffsets   */ sune_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x08, // momorR joint
+            /* mJointIndex */ BK_JNT_MOMORR_e,
             /* mRadius     */ 5.0f,
             /* mpOffsets   */ momo_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09, // suneR1 joint
+            /* mJointIndex */ BK_JNT_SUNER1_e,
             /* mRadius     */ 2.5f,
             /* mpOffsets   */ sune_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0C, // sippo1 joint
+            /* mJointIndex */ BK_JNT_SIPPO1_e,
             /* mRadius     */ 3.0f,
             /* mpOffsets   */ shipo_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0D, // sippo2 joint
+            /* mJointIndex */ BK_JNT_SIPPO2_e,
             /* mRadius     */ 2.5f,
             /* mpOffsets   */ shipo_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0E, // sippo3 joint
+            /* mJointIndex */ BK_JNT_SIPPO3_e,
             /* mRadius     */ 1.5f,
             /* mpOffsets   */ shipo_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0F, // sippo4 joint
+            /* mJointIndex */ BK_JNT_SIPPO4_e,
             /* mRadius     */ 2.5f,
             /* mpOffsets   */ shipo_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x10, // mune joint
+            /* mJointIndex */ BK_JNT_MUNE_e,
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ mune1_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x10, // mune joint
+            /* mJointIndex */ BK_JNT_MUNE_e,
             /* mRadius     */ 15.0f,
             /* mpOffsets   */ mune2_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x21, // udeL2 joint
+            /* mJointIndex */ BK_JNT_UDEL2_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ udeL_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x22, // udeL3 joint
+            /* mJointIndex */ BK_JNT_UDEL3_e,
             /* mRadius     */ 3.0f,
             /* mpOffsets   */ udeL_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x29, // udeR2 joint
+            /* mJointIndex */ BK_JNT_UDER2_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ udeR_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x2A, // udeR3 joint
+            /* mJointIndex */ BK_JNT_UDER3_e,
             /* mRadius     */ 3.0f,
             /* mpOffsets   */ udeR_offset,
         },
@@ -4895,91 +4895,91 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
         static __jnt_hit_data_c search_data[] = {
             {
                 /* mShapeType  */ JntHitType_SPH_e,
-                /* mJointIndex */ 0x01, // hip1 joint
+                /* mJointIndex */ BK_JNT_HIP1_e,
                 /* mRadius     */ 20.0f,
                 /* mpOffsets   */ hip_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x03, // momoL joint
+                /* mJointIndex */ BK_JNT_MOMOL_e,
                 /* mRadius     */ 5.0f,
                 /* mpOffsets   */ momo_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x04, // suneL1 joint
+                /* mJointIndex */ BK_JNT_SUNEL1_e,
                 /* mRadius     */ 2.5f,
                 /* mpOffsets   */ sune_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x08, // momorR joint
+                /* mJointIndex */ BK_JNT_MOMORR_e,
                 /* mRadius     */ 5.0f,
                 /* mpOffsets   */ momo_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x09, // suneR1 joint
+                /* mJointIndex */ BK_JNT_SUNER1_e,
                 /* mRadius     */ 2.5f,
                 /* mpOffsets   */ sune_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x0C, // sippo1 joint
+                /* mJointIndex */ BK_JNT_SIPPO1_e,
                 /* mRadius     */ 3.0f,
                 /* mpOffsets   */ shipo_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x0D, // sippo2 joint
+                /* mJointIndex */ BK_JNT_SIPPO2_e,
                 /* mRadius     */ 2.5f,
                 /* mpOffsets   */ shipo_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x0E, // sippo3 joint
+                /* mJointIndex */ BK_JNT_SIPPO3_e,
                 /* mRadius     */ 1.5f,
                 /* mpOffsets   */ shipo_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x0F, // sippo4 joint
+                /* mJointIndex */ BK_JNT_SIPPO4_e,
                 /* mRadius     */ 2.5f,
                 /* mpOffsets   */ shipo_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x10, // mune joint
+                /* mJointIndex */ BK_JNT_MUNE_e,
                 /* mRadius     */ 20.0f,
                 /* mpOffsets   */ mune1_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x10, // mune joint
+                /* mJointIndex */ BK_JNT_MUNE_e,
                 /* mRadius     */ 15.0f,
                 /* mpOffsets   */ mune2_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x21, // udeL2 joint
+                /* mJointIndex */ BK_JNT_UDEL2_e,
                 /* mRadius     */ 6.0f,
                 /* mpOffsets   */ udeL_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x22, // udeL3 joint
+                /* mJointIndex */ BK_JNT_UDEL3_e,
                 /* mRadius     */ 3.0f,
                 /* mpOffsets   */ udeL_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x29, // udeR2 joint
+                /* mJointIndex */ BK_JNT_UDER2_e,
                 /* mRadius     */ 6.0f,
                 /* mpOffsets   */ udeR_offset,
             },
             {
                 /* mShapeType  */ JntHitType_CYL_e,
-                /* mJointIndex */ 0x2A, // udeR3 joint
+                /* mJointIndex */ BK_JNT_UDER3_e,
                 /* mRadius     */ 3.0f,
                 /* mpOffsets   */ udeR_offset,
             },
@@ -5274,30 +5274,32 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
         
         i_this->mEnemyFire.mpMcaMorf = i_this->mpMorf;
         i_this->mEnemyFire.mpActor = i_this;
+        
         static u8 fire_j[ARRAY_SIZE(i_this->mEnemyFire.mFlameJntIdxs)] = {
-            0x12,
-            0x10,
-            0x29,
-            0x2A,
-            0x21,
-            0x22,
-            0x08,
-            0x09,
-            0x03,
-            0x04,
+            BK_JNT_HEAD_e,
+            BK_JNT_MUNE_e,
+            BK_JNT_UDER2_e,
+            BK_JNT_UDER3_e,
+            BK_JNT_UDEL2_e,
+            BK_JNT_UDEL3_e,
+            BK_JNT_MOMORR_e,
+            BK_JNT_SUNER1_e,
+            BK_JNT_MOMOL_e,
+            BK_JNT_SUNEL1_e
         };
         static f32 fire_sc[ARRAY_SIZE(i_this->mEnemyFire.mParticleScale)] = {
-            2.0f,
-            2.0f,
-            1.2f,
-            1.0f,
-            1.2f,
-            1.0f,
-            1.2f,
-            1.0f,
-            1.2f,
-            1.0f,
+            2.0f, // BK_JNT_HEAD_e
+            2.0f, // BK_JNT_MUNE_e
+            1.2f, // BK_JNT_UDER2_e
+            1.0f, // BK_JNT_UDER3_e
+            1.2f, // BK_JNT_UDEL2_e
+            1.0f, // BK_JNT_UDEL3_e
+            1.2f, // BK_JNT_MOMORR_e
+            1.0f, // BK_JNT_SUNER1_e
+            1.2f, // BK_JNT_MOMOL_e
+            1.0f // BK_JNT_SUNEL1_e
         };
+        
         for (int i = 0; i < ARRAY_SIZE(i_this->mEnemyFire.mFlameJntIdxs); i++) {
             i_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
             i_this->mEnemyFire.mParticleScale[i] = fire_sc[i];

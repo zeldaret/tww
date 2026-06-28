@@ -27,30 +27,30 @@ static int target_info_count;
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        s32 iVar4 = joint->getJntNo();
-        J3DModel* pJVar2 = j3dSys.getModel();
-        cc_class* pvVar4 = (cc_class*)pJVar2->getUserArea();
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        cc_class* i_this = (cc_class*)model->getUserArea();
 
-        if (pvVar4 != NULL) {
-            if (iVar4 == 0) {
-                MTXCopy(pJVar2->getAnmMtx(iVar4), *calc_mtx);
-                cMtx_ZrotM(*calc_mtx, pvVar4->m3BA);
-                pJVar2->setAnmMtx(iVar4, *calc_mtx);
+        if (i_this != NULL) {
+            if (jntNo == CC_JNT_CENTER_e) {
+                MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+                cMtx_ZrotM(*calc_mtx, i_this->m3BA);
+                model->setAnmMtx(jntNo, *calc_mtx);
                 MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
             }
 
-            if (iVar4 <= 3) {
-                MTXCopy(pJVar2->getAnmMtx(iVar4), *calc_mtx);
-                f32 fVar1 = iVar4 * 0.5f;
-                cMtx_YrotM(*calc_mtx, pvVar4->m310.y * fVar1);
-                cMtx_XrotM(*calc_mtx, pvVar4->m310.x * fVar1);
-                cMtx_ZrotM(*calc_mtx, pvVar4->m310.z * fVar1);
+            if (jntNo <= CC_JNT_BODY03_e) {
+                MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+                f32 fVar1 = jntNo * 0.5f;
+                cMtx_YrotM(*calc_mtx, i_this->m310.y * fVar1);
+                cMtx_XrotM(*calc_mtx, i_this->m310.x * fVar1);
+                cMtx_ZrotM(*calc_mtx, i_this->m310.z * fVar1);
 
-                if (iVar4 == 3) {
+                if (jntNo == CC_JNT_BODY03_e) {
                     cXyz sp08(0.0f, 0.0f, 0.0f);
-                    MtxPosition(&sp08, &pvVar4->m470);
+                    MtxPosition(&sp08, &i_this->m470);
                 }
-                pJVar2->setAnmMtx(iVar4, *calc_mtx);
+                model->setAnmMtx(jntNo, *calc_mtx);
                 MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
             }
         }
@@ -2177,7 +2177,7 @@ static BOOL daCC_Execute(cc_class* i_this) {
 
     if (i_this->mColorType == 2 || i_this->mColorType == 4) {
 #if VERSION > VERSION_DEMO
-        MtxP mtx = i_this->m2B4->getModel()->getAnmMtx(3);
+        MtxP mtx = i_this->m2B4->getModel()->getAnmMtx(CC_JNT_BODY03_e);
         i_this->m3A4.x = mtx[0][3];
         i_this->m3A4.y = mtx[1][3];
         i_this->m3A4.z = mtx[2][3];
@@ -2223,19 +2223,19 @@ static BOOL daCC_Execute(cc_class* i_this) {
         case 2:
 #if VERSION == VERSION_DEMO
             if (i_this->mpEmitter1 != NULL) {
-                i_this->mpEmitter1->setGlobalRTMatrix(i_this->m2B4->getModel()->getAnmMtx(3));
+                i_this->mpEmitter1->setGlobalRTMatrix(i_this->m2B4->getModel()->getAnmMtx(CC_JNT_BODY03_e));
             }
 
             if (i_this->mpEmitter2 != NULL) {
-                i_this->mpEmitter2->setGlobalRTMatrix(i_this->m2B4->getModel()->getAnmMtx(3));
+                i_this->mpEmitter2->setGlobalRTMatrix(i_this->m2B4->getModel()->getAnmMtx(CC_JNT_BODY03_e));
             }
 #else
             if (i_this->m368.getEmitter() != NULL) {
-                i_this->m368.getEmitter()->setGlobalRTMatrix(i_this->m2B4->getModel()->getAnmMtx(3));
+                i_this->m368.getEmitter()->setGlobalRTMatrix(i_this->m2B4->getModel()->getAnmMtx(CC_JNT_BODY03_e));
             }
 
             if (i_this->m37C.getEmitter() != NULL) {
-                i_this->m37C.getEmitter()->setGlobalRTMatrix(i_this->m2B4->getModel()->getAnmMtx(3));
+                i_this->m37C.getEmitter()->setGlobalRTMatrix(i_this->m2B4->getModel()->getAnmMtx(CC_JNT_BODY03_e));
             }
 #endif
 
@@ -2551,15 +2551,12 @@ static cPhs_State daCC_Create(fopAc_ac_c* a_this) {
         }},
     };
 
-    static s8 fire_j[] = {0, 1, 2, 3, 4, 5, -1, -1, -1, -1};
-    static f32 fire_sc[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
-
     cc_class* i_this = (cc_class*)a_this;
 
     fopAcM_ct(a_this, cc_class);
 
-    cPhs_State PVar3 = dComIfG_resLoad(&i_this->mPhase, "CC");
-    if (PVar3 == cPhs_COMPLEATE_e) {
+    cPhs_State res = dComIfG_resLoad(&i_this->mPhase, "CC");
+    if (res == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(a_this, useHeapInit, 0x47a0)) {
             return cPhs_ERROR_e;
         }
@@ -2679,7 +2676,32 @@ static cPhs_State daCC_Create(fopAc_ac_c* a_this) {
         i_this->mEnemyFire.mpMcaMorf = i_this->m2B4;
         i_this->mEnemyFire.mpActor = a_this;
 
-        for (s32 i = 0; i < ARRAY_SSIZE(i_this->mEnemyFire.mFlameJntIdxs); i++) {
+        static u8 fire_j[ARRAY_SIZE(i_this->mEnemyFire.mFlameJntIdxs)] = {
+            CC_JNT_CENTER_e,
+            CC_JNT_BODY01_e,
+            CC_JNT_BODY02_e,
+            CC_JNT_BODY03_e,
+            CC_JNT_DODAI_e,
+            CC_JNT_PETA_e,
+            0xFF,
+            0xFF,
+            0xFF,
+            0xFF
+        };
+        static f32 fire_sc[ARRAY_SIZE(i_this->mEnemyFire.mParticleScale)] = {
+            1.0f, // CC_JNT_CENTER_e
+            1.0f, // CC_JNT_BODY01_e
+            1.0f, // CC_JNT_BODY02_e
+            1.0f, // CC_JNT_BODY03_e
+            1.0f, // CC_JNT_DODAI_e
+            1.0f, // CC_JNT_PETA_e
+            1.0f,
+            1.0f,
+            1.0f,
+            1.0f
+        };
+
+        for (int i = 0; i < ARRAY_SIZE(i_this->mEnemyFire.mFlameJntIdxs); i++) {
             i_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
             i_this->mEnemyFire.mParticleScale[i] = fire_sc[i];
         }
@@ -2698,7 +2720,7 @@ static cPhs_State daCC_Create(fopAc_ac_c* a_this) {
             i_this->m2F5 = 0x3c;
             i_this->m2B4->getModel()->setBaseTRMtx(i_this->m7EC);
             draw_SUB(i_this);
-            return PVar3;
+            return res;
         }
 
         i_this->m340 = a_this->current.angle.z * 10.0f;
@@ -2743,7 +2765,7 @@ static cPhs_State daCC_Create(fopAc_ac_c* a_this) {
         i_this->actor.setBtAttackData(0.0f, 10.0f, REG8_F(6) + 500.0f, fopEn_enemy_c::OPENING_JUMP_PARRY);
         i_this->actor.setBtNowFrame(1000.0f);
     }
-    return PVar3;
+    return res;
 }
 
 static actor_method_class l_daCC_Method = {

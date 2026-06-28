@@ -89,7 +89,7 @@ enum {
     /* 0x51 */ DSNAP_TYPE_UNK51,
     /* 0x52 */ DSNAP_TYPE_UNK52,
     /* 0x53 */ DSNAP_TYPE_UNK53,
-    /* 0x54 */ DSNAP_TYPE_UNK54,
+    /* 0x54 */ DSNAP_TYPE_KB,
     /* 0x55 */ DSNAP_TYPE_KAMOME,
     /* 0x56 */ DSNAP_TYPE_KN,
     /* 0x57 */ DSNAP_TYPE_UNK57,

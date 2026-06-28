@@ -1889,14 +1889,14 @@ BOOL daNpc_Tc_c::_createHeap() {
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
-    m_jnt.setHeadJntNum(2);
+    m_jnt.setHeadJntNum(TC_JNT_HEAD_e);
 
     JUT_ASSERT(DEMO_SELECT(0xA36, 0xA40), m_jnt.getHeadJntNum() >= 0);
 
-    m_jnt.setBackboneJntNum(1);
+    m_jnt.setBackboneJntNum(TC_JNT_BACKBONE_e);
     JUT_ASSERT(DEMO_SELECT(0xA38, 0xA42), m_jnt.getBackboneJntNum() >= 0);
-    modelData->getJointNodePointer(2)->setCallBack(nodeCallBack);
-    modelData->getJointNodePointer(1)->setCallBack(nodeCallBack);
+    modelData->getJointNodePointer(TC_JNT_HEAD_e)->setCallBack(nodeCallBack);
+    modelData->getJointNodePointer(TC_JNT_BACKBONE_e)->setCallBack(nodeCallBack);
     mpMorf->getModel()->setUserArea(reinterpret_cast<u32>(this));
 
     mTexPatternNum = 0;

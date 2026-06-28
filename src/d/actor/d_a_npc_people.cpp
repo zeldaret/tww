@@ -4495,7 +4495,7 @@ cPhs_State daNpcPeople_c::createInit() {
                     kb_class* pig = (kb_class*)fopAcM_searchFromName("Pig", 0xF00, l_pig_para[i]);
                     if (pig != NULL) {
                         pig->taura_pos_set(current.pos);
-                        pig->current.pos = current.pos;
+                        pig->actor.current.pos = current.pos;
                     }
                 }
             }
@@ -8337,8 +8337,8 @@ BOOL daNpcPeople_c::checkPig() {
             kb_class* pPig = (kb_class*)fopAcM_searchFromName("Pig", 0xF00, l_pig_para[i]);
             if(pPig && pPig->m408 == 0) {
                 f32 temp;
-                dNpc_calc_DisXZ_AngY(current.pos, pPig->current.pos, &temp, NULL);
-                if(temp < 400.0f && std::abs(current.pos.y - pPig->current.pos.y) <= 10.0f) {
+                dNpc_calc_DisXZ_AngY(current.pos, pPig->actor.current.pos, &temp, NULL);
+                if(temp < 400.0f && std::abs(current.pos.y - pPig->actor.current.pos.y) <= 10.0f) {
                     pPig->taura_pos_set(current.pos);
                     mOrderEventNum = 2;
                     mEtcFlag |= 0x80;
@@ -8380,7 +8380,7 @@ void daNpcPeople_c::resetPig() {
 #endif
         kb_class* pig = (kb_class*)fopAcM_searchFromName("Pig", 0xF00, l_pig_para[i]);
         if (pig != NULL) {
-            pig->current.pos = pig->home.pos;
+            pig->actor.current.pos = pig->actor.home.pos;
             pig->m408 = 0;
         }
     }

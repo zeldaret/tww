@@ -1470,7 +1470,7 @@ void daNpc_Ji1_c::set_mtx() {
 #endif
 
         field_0xB90 = field_0xB78;
-        mDoMtx_stack_c::copy(mpSpearMorf->getModel()->getAnmMtx(1));
+        mDoMtx_stack_c::copy(mpSpearMorf->getModel()->getAnmMtx(JI_YARI_JNT_JI_YARI_e));
         mDoMtx_stack_c::multVec(&temp, &field_0xB78);
         mDoMtx_stack_c::multVec(&temp2, &field_0xB84);
     }
@@ -5262,7 +5262,7 @@ void daNpc_Ji1_c::BackSlide(f32 param_1, f32 param_2) {
 
 /* 0001173C-000118E0       .text harpoonRelease__11daNpc_Ji1_cFP4cXyz */
 void daNpc_Ji1_c::harpoonRelease(cXyz* param_1) {
-    MTXCopy(mpSpearMorf->getModel()->getAnmMtx(1), field_0xCA0);
+    MTXCopy(mpSpearMorf->getModel()->getAnmMtx(JI_YARI_JNT_JI_YARI_e), field_0xCA0);
     mpSpearMorf->setFrame(0.0f);
     field_0xCD0.x = field_0xCA0[0][3];
     field_0xCD0.y = field_0xCA0[1][3];

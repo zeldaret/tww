@@ -1677,20 +1677,20 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
         a_this->mEnemyFire.mpMcaMorf = a_this->mpBodyMorf;
         a_this->mEnemyFire.mpActor = i_this;
 
-        static s8 fire_j[10] = {
-            0,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            
+        static u8 fire_j[ARRAY_SIZE(a_this->mEnemyFire.mFlameJntIdxs)] = {
+            KS_BODY_JNT_KARADA_e,
+            0xFF,
+            0xFF,
+            0xFF,
+            0xFF,
+            0xFF,
+            0xFF,
+            0xFF,
+            0xFF,
+            0xFF
         };
-        static f32 fire_sc[10] = {
+        static f32 fire_sc[ARRAY_SIZE(a_this->mEnemyFire.mParticleScale)] = {
+            1.0f, // KS_BODY_JNT_KARADA_e
             1.0f,
             1.0f,
             1.0f,
@@ -1699,11 +1699,10 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
             1.0f,
             1.0f,
             1.0f,
-            1.0f,
-            1.0f,
+            1.0f
         };
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < ARRAY_SIZE(a_this->mEnemyFire.mFlameJntIdxs); i++) {
             a_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
             a_this->mEnemyFire.mParticleScale[i] = fire_sc[i];
         }

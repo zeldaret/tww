@@ -1679,7 +1679,7 @@ static BOOL daHimo2_Execute(himo2_class* i_this) {
     int iVar5;
     cXyz local_c8;
 
-    daPy_py_c* apdVar1 = (daPy_py_c*)daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
 #if VERSION > VERSION_DEMO
     if (btd == NULL) {
         btd = (btd_class*)fpcM_Search(b_a_sub, i_this);
@@ -1693,15 +1693,15 @@ static BOOL daHimo2_Execute(himo2_class* i_this) {
     local_c8.x = 4.0f;
     local_c8.y = 0.0f;
     local_c8.z = 0.0f;
-    if (apdVar1->getRopeGrabRightHand()) {
-        MTXCopy(apdVar1->getLeftHandMatrix(), *calc_mtx);
+    if (player->getRopeGrabRightHand()) {
+        MTXCopy(player->getLeftHandMatrix(), *calc_mtx);
         MtxPosition(&local_c8, &i_this->m02EC[1]);
-        MTXCopy(apdVar1->getRightHandMatrix(), *calc_mtx);
+        MTXCopy(player->getRightHandMatrix(), *calc_mtx);
         MtxPosition(&local_c8, &i_this->m02EC[0]);
     } else {
-        MTXCopy(apdVar1->getLeftHandMatrix(), *calc_mtx);
+        MTXCopy(player->getLeftHandMatrix(), *calc_mtx);
         MtxPosition(&local_c8, &i_this->m02EC[0]);
-        MTXCopy(apdVar1->getRightHandMatrix(), *calc_mtx);
+        MTXCopy(player->getRightHandMatrix(), *calc_mtx);
         MtxPosition(&local_c8, &i_this->m02EC[1]);
     }
     i_this->m02B4 = i_this->m02EC[0];
