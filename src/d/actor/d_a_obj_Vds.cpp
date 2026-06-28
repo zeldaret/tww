@@ -11,21 +11,21 @@
 namespace daObjVds {
     namespace {
         struct Attr_c { // Corresponds to unused data, so i tried to infer what i could
-                f32 field_0x00;
-                f32 field_0x04;
-                f32 field_0x08;
-                s16 field_0x0C;
-                s16 field_0x0E;
-                s16 field_0x10;
-                f32 field_0x14;
-                u8 field_0x18[16];
+                f32 m00;
+                f32 m04;
+                f32 m08;
+                s16 m0C;
+                s16 m0E;
+                s16 m10;
+                f32 m14;
+                u8  m18[16];
             }; // Size : 0x28
 
         static const Attr_c L_attr = {
             222.5f, 598.73f, 178.9f,
             0x400, 0x400, 0x400,
             2200.f,
-            ""
+            {NULL}
         };
     };
 };
@@ -35,6 +35,7 @@ namespace daObjVds {
 
 /* 00000078-00000134       .text SetLoopJointAnimation__Q28daObjVds5Act_cFP18J3DAnmTransformKeyP18J3DAnmTransformKeyff */
 BOOL daObjVds::Act_c::SetLoopJointAnimation(J3DAnmTransformKey* i_bckAnm0, J3DAnmTransformKey* i_bckAnm1, float speed, float morf) {
+    static s16 angle_data[2] = {}; // Unused, so i defined it here
     this->M_anm0->setAnm(i_bckAnm0, J3DFrameCtrl::EMode_LOOP, morf, speed, 0, -1, NULL);
     this->M_anm1->setAnm(i_bckAnm1, J3DFrameCtrl::EMode_LOOP, morf, speed, 0, -1, NULL);
     this->m318 = 1;
@@ -86,7 +87,6 @@ void* daObjVds::Act_c::search_switchCB(fopAc_ac_c* i_act) {
 
 /* 000002EC-000003C8       .text process_off_init__Q28daObjVds5Act_cFv */
 BOOL daObjVds::Act_c::process_off_init() {
-
     if(
         this->mBrkAnm0.init(
             this->M_anm0->getModel()->getModelData(),
@@ -127,7 +127,6 @@ void daObjVds::Act_c::process_off_main() {
 
 /* 00000474-000004F0       .text process_on_init__Q28daObjVds5Act_cFv */
 BOOL daObjVds::Act_c::process_on_init() {
-    
     if(SetLoopJointAnimation(this->M_bck_data0, this->M_bck_data1, 1, 0)){
         for(int i = 0; i < 2; i++){
             this->m32C[i] = 1;
@@ -150,7 +149,6 @@ static f32 lbl_365_data_1C[5] = { 0, 2.125, 0, 1.75, 0}; // Unused
 
 /* 000004F4-000005C0       .text process_init__Q28daObjVds5Act_cFi */
 BOOL daObjVds::Act_c::process_init(BOOL i_side) {
-    static s16 angle_data[2] = {}; // Unused, so i defined it here
     static procInitFun_t init_table[2] = {};
     static s8 init;
 
