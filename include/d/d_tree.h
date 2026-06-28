@@ -101,7 +101,8 @@ public:
     void setPlayerSwordAngY(s16 i_ang) { mPlayerSwordAngY = i_ang;}
     s16 getPlayerSwordMoveAngY() { return mPlayerSwordMoveAngY; }
 
-    int getNum() {}
+    // TODO
+    void getNum() {}
 
     virtual void draw();
     virtual ~dTree_packet_c();

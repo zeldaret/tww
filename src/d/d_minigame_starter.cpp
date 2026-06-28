@@ -59,7 +59,6 @@ cPhs_State dMinigame_Starter_c::_create() {
 }
 
 /* 80206124-8020629C       .text _execute__19dMinigame_Starter_cFv */
-// NONMATCHING - instruction ordering
 BOOL dMinigame_Starter_c::_execute() {
     int var_r30 = (cdFrame0 + cdFrame1 + tmFrame + cdFrame2 + cdFrame3) - 30;
     int var_r29 = (cdFrame4 + cdFrame5 + cdFrame6 + cdFrame7 + cdFrame8) - 23;
@@ -68,11 +67,9 @@ BOOL dMinigame_Starter_c::_execute() {
         return FALSE;
     }
 
-    int var_r31 = var_r30 * 3;
-
-    if (mTimer < (var_r31 + var_r29) + 137) {
+    if (mTimer < var_r30 * 3 + 137 + var_r29) {
         mTimer++;
-        if (mTimer >= (var_r31 + var_r29) + 89) {
+        if (mTimer >= var_r30 * 3 + 89 + var_r29) {
             mStatus = 2;
         }
     } else {
@@ -83,15 +80,15 @@ BOOL dMinigame_Starter_c::_execute() {
         mStarterScrn->anime1(2);
     }
 
-    if (mTimer >= var_r30 + 28 && mTimer <= (var_r30 * 2) + 57) {
+    if (mTimer >= var_r30 + 28 && mTimer <= var_r30 * 2 + 57) {
         mStarterScrn->anime1(1);
     }
 
-    if (mTimer >= (var_r30 * 2) + 55 && mTimer <= var_r31 + 84) {
+    if (mTimer >= (var_r30 * 2) + 55 && mTimer <= var_r30 * 3 + 84) {
         mStarterScrn->anime1(0);
     }
 
-    if (mTimer >= var_r31 + 84 && mTimer <= (var_r31 + var_r29) + 107) {
+    if (mTimer >= var_r30 * 3 + 84 && mTimer <= var_r30 * 3 + 107 + var_r29) {
         mStarterScrn->anime2();
     }
 
