@@ -36,10 +36,10 @@ class dMinigame_Starter_c : public msg_class {
 public:
     void countStart() { if (!mStatus) mStatus = 1; }
     
-    int _create();
-    int _execute();
-    int _draw();
-    int _delete();
+    cPhs_State _create();
+    BOOL _execute();
+    BOOL _draw();
+    BOOL _delete();
     BOOL startCheck();
     BOOL deleteCheck();
 

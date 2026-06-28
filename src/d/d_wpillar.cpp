@@ -146,11 +146,11 @@ cPhs_State dWpillar_c::create() {
             J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTK_W_PILLAR_A_e);
             is_anm_init &= mBtk.init(modelData, btk, FALSE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1);
         } else {
-            modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", 0x42));
+            modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_GWP00_e));
             JUT_ASSERT(320, modelData != NULL);
             mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
 
-            J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Link", 0xE);
+            J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BCK_GWP00_e);
             is_anm_init = mBck.init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
         }
 
@@ -176,14 +176,14 @@ cPhs_State dWpillar_c::create() {
         }
 
         mpModel->setUserArea((std::uintptr_t)this);
-        dComIfGp_particle_setShipTail(0x3D, &mPos, NULL, &mScale, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
-        dComIfGp_particle_setShipTail(0x3E, &mPos, NULL, &mScale, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
-        dComIfGp_particle_setShipTail(0x3F, &mPos, NULL, &mScale, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
-        dComIfGp_particle_set(0x40, &mPos, NULL, &mScale, 0xFF, NULL);
+        dComIfGp_particle_setShipTail(dPa_name::ID_IT_JN_WP_HAMON01, &mPos, NULL, &mScale, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
+        dComIfGp_particle_setShipTail(dPa_name::ID_IT_JN_WP_HAMON02, &mPos, NULL, &mScale, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
+        dComIfGp_particle_setShipTail(dPa_name::ID_IT_JN_WP_HAMON03, &mPos, NULL, &mScale, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
+        dComIfGp_particle_set(dPa_name::ID_IT_JN_WP_SHIBUKI, &mPos, NULL, &mScale, 0xFF, NULL);
     } else {
-        dComIfGp_particle_setBombSmoke(0x200A, &mPos);
-        dComIfGp_particle_setToonP1(0x2041, &mPos);
-        dComIfGp_particle_setP1(0x3C, &mPos);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_IT_JT_BMEX_SMOKE02, &mPos);
+        dComIfGp_particle_setToonP1(dPa_name::ID_IT_JT_WATERSMOKE00, &mPos);
+        dComIfGp_particle_setP1(dPa_name::ID_IT_JN_MIZUSHIBUKI_A, &mPos);
     }
 
     dBgS_ObjGndChk gndchk;

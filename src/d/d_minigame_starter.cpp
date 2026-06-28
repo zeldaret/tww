@@ -28,7 +28,7 @@ static s16 dMinigame_Starter_tex_number = 3;
 
 /* 80205FE8-80206124       .text _create__19dMinigame_Starter_cFv */
 // NONMATCHING - missing b
-int dMinigame_Starter_c::_create() {
+cPhs_State dMinigame_Starter_c::_create() {
     if (dComIfG_resLoad(&mPhase, "Mgst") == cPhs_COMPLEATE_e) {
         dRes_info_c* resInfo = dComIfG_getObjectResInfo("Mgst");
         JUT_ASSERT(VERSION_SELECT(80, 80, 86, 86), resInfo != NULL);
@@ -60,12 +60,12 @@ int dMinigame_Starter_c::_create() {
 
 /* 80206124-8020629C       .text _execute__19dMinigame_Starter_cFv */
 // NONMATCHING - instruction ordering
-int dMinigame_Starter_c::_execute() {
+BOOL dMinigame_Starter_c::_execute() {
     int var_r30 = (cdFrame0 + cdFrame1 + tmFrame + cdFrame2 + cdFrame3) - 30;
     int var_r29 = (cdFrame4 + cdFrame5 + cdFrame6 + cdFrame7 + cdFrame8) - 23;
 
-    if (!mStatus) {
-        return 0;
+    if (mStatus == 0) {
+        return FALSE;
     }
 
     int var_r31 = var_r30 * 3;
@@ -95,23 +95,23 @@ int dMinigame_Starter_c::_execute() {
         mStarterScrn->anime2();
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 8020629C-802062DC       .text _draw__19dMinigame_Starter_cFv */
-int dMinigame_Starter_c::_draw() {
+BOOL dMinigame_Starter_c::_draw() {
     dComIfGd_set2DOpa(mStarterScrn);
-    return 1;
+    return TRUE;
 }
 
 /* 802062DC-80206328       .text _delete__19dMinigame_Starter_cFv */
-int dMinigame_Starter_c::_delete() {
+BOOL dMinigame_Starter_c::_delete() {
     if (mHeap != NULL) {
         mDoExt_destroySolidHeap(mHeap);
     }
 
     dComIfG_resDelete(&mPhase, "Mgst");
-    return 1;
+    return TRUE;
 }
 
 /* 80206328-8020634C       .text startCheck__19dMinigame_Starter_cFv */
