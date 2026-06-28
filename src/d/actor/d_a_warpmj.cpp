@@ -16,14 +16,14 @@ const u32 daWarpmj_c::m_heapsize = 0x3000;
 const f32 daWarpmj_c::m_warp_distance = 200.0f;
 
 typedef void (daWarpmj_c::*EventInitFunc)(int);
-EventInitFunc event_init_tbl[] = {
+static EventInitFunc event_init_tbl[] = {
     &daWarpmj_c::initWait,
     &daWarpmj_c::initWarp,
     &daWarpmj_c::initWarpArrive,
 };
 
 typedef BOOL (daWarpmj_c::*EventActionFunc)(int);
-EventActionFunc event_action_tbl[] = {
+static EventActionFunc event_action_tbl[] = {
     &daWarpmj_c::actWait,
     &daWarpmj_c::actWarp,
     &daWarpmj_c::actWarpArrive,
@@ -118,7 +118,6 @@ cPhs_State daWarpmj_c::_create() {
 
 /* 00000778-0000084C       .text set_mtx__10daWarpmj_cFv */
 void daWarpmj_c::set_mtx() {
-    /* Nonmatching */
     cXyz local_28(current.pos);
     local_28.y += 2000.0f;
     current.pos.y = getSeaY(local_28);
@@ -134,7 +133,6 @@ void daWarpmj_c::set_mtx() {
 
 /* 0000084C-00000990       .text _execute__10daWarpmj_cFv */
 bool daWarpmj_c::_execute() {
-    /* Nonmatching */
     if (demoActorID == 0) {
         checkOrder();
         demo_proc();
@@ -149,7 +147,6 @@ bool daWarpmj_c::_execute() {
 
 /* 00000990-000009D4       .text normal_execute__10daWarpmj_cFv */
 void daWarpmj_c::normal_execute() {
-    /* Nonmatching */
     animPlay();
     if (check_warp()) {
         m2B8 = TRUE;
@@ -158,13 +155,12 @@ void daWarpmj_c::normal_execute() {
 
 /* 000009D4-00000A60       .text demo_execute__10daWarpmj_cFv */
 void daWarpmj_c::demo_execute() {
-    /* Nonmatching */
     dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
     if (demo_actor != NULL) {
-        m2C0 = demo_actor->getShapeId();
-        if (m2C0 == 0) {
+        mDemoShapeId = demo_actor->getShapeId();
+        if (mDemoShapeId == 0) {
             fopAcM_offDraw(this);
-        } else if (m2C0 == 1) {
+        } else if (mDemoShapeId == 1) {
             fopAcM_onDraw(this);
             animPlay();
         }
@@ -173,7 +169,6 @@ void daWarpmj_c::demo_execute() {
 
 /* 00000A60-00000B7C       .text demo_proc__10daWarpmj_cFv */
 void daWarpmj_c::demo_proc() {
-    /* Nonmatching */
     static char* action_table[3] = {
         "WAIT",
         "WARP",
@@ -222,7 +217,7 @@ int daWarpmj_c::actWarp(int) {
 /* 00000C38-00000C94       .text initWarpArrive__10daWarpmj_cFi */
 void daWarpmj_c::initWarpArrive(int) {
     setEndAnm();
-#if VERSION >= VERSION_USA
+#if VERSION > VERSION_JPN
     mDoAud_seStart(JA_SE_LK_GN_WAPR_U_OUT);
 #else
     mDoAud_seStart(JA_SE_LK_GN_WAPR_D_OUT);
@@ -250,7 +245,7 @@ void daWarpmj_c::checkOrder() {
             m2B8 = FALSE;
         }
         if (dComIfGp_evmng_endCheck(mEvtToGanonWarpIdx)) {
-            dLib_setNextStageBySclsNum(mSceneNo & 0xFF, fopAcM_GetRoomNo(this));
+            dLib_setNextStageBySclsNum(mSceneNo, fopAcM_GetRoomNo(this));
         }
     } else if (!m2B8 && !dComIfGp_event_runCheck()) {
         normal_execute();
@@ -263,7 +258,6 @@ void daWarpmj_c::animPlay() {
         mpBtkAnm->setPlaySpeed(1.0f);
         mpBtkAnm->play();
     }
-    return;
 }
 
 /* 00000E10-00000E8C       .text setEndAnm__10daWarpmj_cFv */
@@ -279,13 +273,15 @@ void daWarpmj_c::setEndAnm() {
 /* 00000E8C-00000EE0       .text getSeaY__10daWarpmj_cF4cXyz */
 f32 daWarpmj_c::getSeaY(cXyz i_pos) {
     if (daSea_ChkArea(i_pos.x, i_pos.z)) {
-        return daSea_calcWave(static_cast<f64>(i_pos.x), static_cast<f64>(i_pos.z));
+        return daSea_calcWave(i_pos.x, i_pos.z);
     }
     return dBgS_ObjGndChk_Wtr_Func(i_pos);
 }
 
 /* 00000EE0-00000FDC       .text check_warp__10daWarpmj_cFv */
 BOOL daWarpmj_c::check_warp() {
+    // This function matches as is, but lacks a call to the daPy_getPlayerActorClass() inline mentioned in the debug map file
+    // May be something to look into later at some point
     daShip_c* ship = dComIfGp_getShipActor();
     f32 max = 200.0f;
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && ship != NULL) {

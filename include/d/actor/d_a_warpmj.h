@@ -52,7 +52,7 @@ public:
     /* 0x2B8 */ BOOL m2B8;
     /* 0x2BC */ s16 mEvtToGanonWarpIdx;
     /* 0x2BE */ u8 m2BE[0x2C0 - 0x2BE];
-    /* 0x2C0 */ u32 m2C0;
+    /* 0x2C0 */ u32 mDemoShapeId;
     /* 0x2C4 */ int mStaffIdx;
     /* 0x2C8 */ dKy_tevstr_c mTevStr;
 
