@@ -28,7 +28,7 @@ public:
     void setAction(int (daNpc_P2_c::*)(void*), void*) {}
     void setEyeStopFlag() {}
 
-    bool initTexPatternAnm(bool);
+    BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
     void setAnm();
     void setTexAnm();
@@ -79,7 +79,7 @@ public:
     void drawP2c();
     bool _draw();
     void getArg();
-    void _createHeap();
+    BOOL _createHeap();
     void createInit();
     cPhs_State _create();
     bool _delete();
@@ -131,23 +131,23 @@ public:
     /* 0x29C */ mDoExt_McaMorf* mpMorf;
     /* 0x2A0 */ mDoExt_McaMorf* mpMorf2;
     /* 0x2A4 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x2B8 */ J3DModel* m2B8;
+    /* 0x2B8 */ J3DModel* m2B8; //head model
     /* 0x2BC */ J3DModel* m2BC;
     /* 0x2C0 */ J3DModel* m2C0;
     /* 0x2C4 */ J3DModel* m2C4;
-    /* 0x2C4 */ u32 m2C8;
+    /* 0x2C8 */ u32 mShadowId;
     /* 0x2CC */ dNpc_JntCtrl_c m_jnt;
     /* 0x300 */ dNpc_EventCut_c mEventCut;
                 u8 m36C[0x374-0x36C];
                 f32 m374;
                 u8 m378;
                 s16 m37A;
-                dBgS_Acch mAcch;
+                dBgS_ObjAcch mAcch;
                 dBgS_AcchCir mAcchCir;
                 dCcD_Stts mStts;
-                cCcD_Obj m5BC;
-                u8 m60C[0x6D4-0x60C];
-                cM3dGCyl m6D4;
+                dCcD_Cyl m5BC;
+                //u8 m60C[0x6D4-0x60C];
+                //cM3dGCyl m6D4;
 
                 u8 m6EC[0x6F8-0x6EC];
                 cXyz m6F8;
@@ -167,6 +167,7 @@ public:
                 u16 m74A;
                 s32 m74C;
                 u8 m750;
+                u8 m751;
     /* 0x754 */ dPa_smokeEcallBack m754;
 
     /* 0x774 */ cXyz mSmokePos;
@@ -186,8 +187,8 @@ public:
     /* 0x7E8 */ u8 m7E8[0x804-0x7E8];
     /* 0x804 */ u32 m804;
     /* 0x808 */ s8 m808;
-    /* 0x809 */ u8 m809;
-    /* 0x80A */ u8 m80A;
+    /* 0x809 */ s8 m809;
+    /* 0x80A */ s8 m80A;
     //SIZE: 0x80C
 };
 
