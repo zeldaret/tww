@@ -31,11 +31,11 @@ inline static const Attr_c& attr() { return L_attr; }
 const char daObjAshut::Act_c::M_arcname[] = "Ashut";
 Mtx daObjAshut::Act_c::M_tmp_mtx;
 
-const f32 ANTI_CRUSH_SAFE_AREA_Y = 100.0f;
-const f32 ANTI_CRUSH_SAFE_AREA_Z = 55.0f;
-const f32 ANTI_CRUSH_SAFE_AREA_X = 105.0f;
+static const f32 l_anti_crush_safe_area_y = 100.0f;
+static const f32 l_anti_crush_safe_area_z = 55.0f;
+static const f32 l_anti_crush_safe_area_x = 105.0f;
 
-const f32 BGW_RELEASE_HEIGHT = 150.0f;
+static const f32 l_bgw_release_height = 150.0f;
 
 /* 00000078-0000012C       .text CreateHeap__Q210daObjAshut5Act_cFv */
 BOOL daObjAshut::Act_c::CreateHeap() {
@@ -121,9 +121,9 @@ bool daObjAshut::Act_c::chk_safe_area() const {
     mDoMtx_stack_c::multVecSR(&diff, &local_pos);
     
     return (
-        std::fabsf(local_pos.y) < ANTI_CRUSH_SAFE_AREA_Y
-        && std::fabsf(local_pos.z) < ANTI_CRUSH_SAFE_AREA_Z
-        && std::fabsf(local_pos.x) < ANTI_CRUSH_SAFE_AREA_X
+        std::fabsf(local_pos.y) < l_anti_crush_safe_area_y
+        && std::fabsf(local_pos.z) < l_anti_crush_safe_area_z
+        && std::fabsf(local_pos.x) < l_anti_crush_safe_area_x
     );
 }
 
@@ -214,7 +214,7 @@ void daObjAshut::Act_c::mode_l_u() {
     }
     mCurrentY += mSpeedY;
      
-    if (mCurrentY > BGW_RELEASE_HEIGHT) {
+    if (mCurrentY > l_bgw_release_height) {
         // Disable the collision so the player can pass
         if (mpBgW->ChkUsed()) {
             dComIfG_Bgsp()->Release(mpBgW);
