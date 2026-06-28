@@ -135,24 +135,28 @@ public:
     /* 0x2BC */ J3DModel* m2BC;
     /* 0x2C0 */ J3DModel* m2C0;
     /* 0x2C4 */ J3DModel* m2C4;
+    /* 0x2C4 */ u32 m2C8;
     /* 0x2CC */ dNpc_JntCtrl_c m_jnt;
     /* 0x300 */ dNpc_EventCut_c mEventCut;
-                u8 filler;
-                u8 filler2;
-                u32 m_neck_jnt_num;
-                u32 m_hed_jnt_num;
-                u32 m2FC;
-                u8 m300[0x378-0x300];
+                u8 m36C[0x374-0x36C];
+                f32 m374;
                 u8 m378;
-                u16 m37A;
-                u32 m37C;
-                u8 m380[0x6F8-0x380];
+                s16 m37A;
+                dBgS_Acch mAcch;
+                dBgS_AcchCir mAcchCir;
+                dCcD_Stts mStts;
+                cCcD_Obj m5BC;
+                u8 m60C[0x6D4-0x60C];
+                cM3dGCyl m6D4;
+
+                u8 m6EC[0x6F8-0x6EC];
                 cXyz m6F8;
                 cXyz m704;
-
-                J3DModel* m710;
+                //J3DModel* m710;
+                u8 m710;
+                u16 m712;
                 u8 m714;
-                u8 m715[0x7D0-0x715];
+                u8 m715[0x724-0x715];
                 u8 m724;
                 u8 m725;
                 u32 m728;
@@ -162,25 +166,28 @@ public:
                 u8 m748;
                 u16 m74A;
                 s32 m74C;
-                u32 m750;
+                u8 m750;
     /* 0x754 */ dPa_smokeEcallBack m754;
 
     /* 0x774 */ cXyz mSmokePos;
     /* 0x780 */ csXyz mSmokeAngle;
-                
-                u8 m7C1;
-                s8 m7D0;
-                u8 m7D1;
-                u8 m7D2;
-                s8 m7D3;
-                u8 m7D4;
-                u8 m7D5;
-                s8 m7D6;
-                cXyz m7DC;
-                u32 m804;
-                s8 m808;
-                u8 m809;
-                u8 m80A;
+    /* 0x786 */ u8 m786[0x7C1-0x786];
+    /* 0x7C1 */ u8 m7C1;
+    /* 0x7C2 */ u8 m7C2[0x7D0-0x7C2];
+    /* 0x7D0 */ s8 m7D0;
+    /* 0x7D1 */ s8 m7D1;
+    /* 0x7D2 */ s8 m7D2;
+    /* 0x7D3 */ s8 m7D3;
+    /* 0x7D4 */ s8 m7D4;
+    /* 0x7D5 */ s8 m7D5;
+    /* 0x7D6 */ s8 m7D6;
+    /* 0x7D7 */ u8 m7D7[0x7DC-0x7D7];
+    /* 0x7DC */ cXyz m7DC;
+    /* 0x7E8 */ u8 m7E8[0x804-0x7E8];
+    /* 0x804 */ u32 m804;
+    /* 0x808 */ s8 m808;
+    /* 0x809 */ u8 m809;
+    /* 0x80A */ u8 m80A;
     //SIZE: 0x80C
 };
 
