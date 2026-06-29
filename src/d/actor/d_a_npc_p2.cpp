@@ -294,7 +294,7 @@ void daNpc_P2_c::setAnm() {
                 }
             }
 
-        dNpc_setAnm(mpMorf,a_play_mode_tbl[3],
+        dNpc_setAnm(mpMorf,a_play_mode_tbl[m7D3],
             a_morf_frame_tbl[m7D3],
             speed,
 
@@ -961,7 +961,7 @@ void daNpc_P2_c::demo_jump() {
 void daNpc_P2_c::goal_goalpos_to_talkpos() {
     /* Nonmatching */
     m7C1 = 1;
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     if((current.pos.y - player->current.pos.y - 300.f) < 0.0f){
         m7D6 = 0xA;
         return;
@@ -1003,7 +1003,7 @@ void daNpc_P2_c::goal_goalpos_to_talkpos() {
 void daNpc_P2_c::goal_talkpos_to_goalpos() {
     /* Nonmatching */
     m7C1 = 1;
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     if(
         fopAcM_searchPlayerDistanceXZ(this) < l_HIO.children[m290].m70 && 
         (current.pos.y - player->current.pos.y - 300.f) > 0.0f
@@ -1054,7 +1054,7 @@ void daNpc_P2_c::goal_goalpos_wait() {
     /* Nonmatching */
 
     m7C1 = 1;
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     if(
         fopAcM_searchPlayerDistanceXZ(this) < l_HIO.children[m290].m70 && 
@@ -1066,7 +1066,7 @@ void daNpc_P2_c::goal_goalpos_wait() {
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x2;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x2;   
     if(dLib_checkPlayerInCircle(l_HIO.children[m290].mGoalPosCircleCenter,l_HIO.children[m290].mGoalPosCircleRadius,l_HIO.children[m290].mGoalPosCircleHalfHeight)){
-        if(!((daPy_py_c*)player)->checkPlayerFly()){
+        if(!player->checkPlayerFly()){
             m7D6 = 0xC;
             daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
             if(timer){
@@ -2003,26 +2003,176 @@ static BOOL daNpc_P2IsDelete(void*) {
 /* 00005238-00005528       .text cutProc__10daNpc_P2_cFv */
 void daNpc_P2_c::cutProc() {
     /* Nonmatching */
+
+  int iVar1;
+  int staffIdx = dComIfGp_evmng_getMyStaffId("P2b");
+  if (staffIdx == -1) {
+    m7D7 = 0;
+  }
+  else {
+    iVar1 = dComIfGp_evmng_getMyActIdx(staffIdx,action_table,0xF,1,0);
+    if ( iVar1 == -1) {
+      m7D7 = 0;
+      dComIfGp_evmng_cutEnd(staffIdx);
+    }
+    else {
+      m7D7 = 1;
+      if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+        m72C = 0;
+        switch(iVar1) {
+        case 0:
+          cutTalkStart(staffIdx);
+          break;
+        case 1:
+          cutRideSwitchStart(staffIdx);
+          break;
+        case 2:
+          cutRunWaitStart(staffIdx);
+          break;
+        case 3:
+          cutJumpToLiftStart(staffIdx);
+          break;
+        case 4:
+          cutLiftToRopeStart(staffIdx);
+          break;
+        case 5:
+          cutRopeTalkStart(staffIdx);
+          break;
+        case 6:
+          cutRopeToLiftStart(staffIdx);
+          break;
+        case 7:
+          cutJumpToGoalStart(staffIdx);
+          break;
+        case 8:
+          cutSetAnmStart(staffIdx);
+          break;
+        case 9:
+          cutJumpStart(staffIdx);
+          break;
+        case 10:
+          cutSwOnStart(staffIdx);
+          break;
+        case 0xb:
+          cutSwOffStart(staffIdx);
+          break;
+        case 0xc:
+          cutSurpriseStart(staffIdx);
+          break;
+        case 0xd:
+          cutOmamoriInitStart(staffIdx);
+          break;
+        case 0xe:
+          cutOmamoriEndStart(staffIdx);
+        }
+      }
+      switch(iVar1) {
+      case 0:
+        cutTalkProc(staffIdx);
+        break;
+      case 1:
+        cutRideSwitchProc(staffIdx);
+        break;
+      case 2:
+        cutRunWaitProc(staffIdx);
+        break;
+      case 3:
+        cutJumpToLiftProc(staffIdx);
+        break;
+      case 4:
+        cutLiftToRopeProc(staffIdx);
+        break;
+      case 5:
+        cutRopeTalkProc(staffIdx);
+        break;
+      case 6:
+        cutRopeToLiftProc(staffIdx);
+        break;
+      case 7:
+        cutJumpToGoalProc(staffIdx);
+        break;
+      case 8:
+        cutSetAnmProc(staffIdx);
+        break;
+      case 9:
+        cutJumpProc(staffIdx);
+        break;
+      case 10:
+        cutSwOnProc(staffIdx);
+        break;
+      case 0xb:
+        cutSwOffProc(staffIdx);
+        break;
+      case 0xc:
+        cutSurpriseProc(staffIdx);
+        break;
+      case 0xd:
+        cutOmamoriInitProc(staffIdx);
+        break;
+      case 0xe:
+        cutOmamoriEndProc(staffIdx);
+      }
+    }
+  }
+  return;
+
 }
 
 /* 00005528-000055DC       .text cutTalkStart__10daNpc_P2_cFi */
-void daNpc_P2_c::cutTalkStart(int) {
+void daNpc_P2_c::cutTalkStart(int i_param_1) {
     /* Nonmatching */
+    int* puVar1 = dComIfGp_evmng_getMyIntegerP(i_param_1,"MsgNum");
+    if(puVar1 == NULL){
+        m728 = 0;
+    }else{
+        m728 = *puVar1;
+    }
+    int* puVar2 = dComIfGp_evmng_getMyIntegerP(i_param_1,"Attention");
+    if(puVar2 == NULL){
+        m72C = 0;
+    }else{
+        m72C = 1;
+    }
+    talkInit();
+    return;
 }
 
 /* 000055DC-0000562C       .text cutTalkProc__10daNpc_P2_cFi */
-void daNpc_P2_c::cutTalkProc(int) {
+void daNpc_P2_c::cutTalkProc(int i_param_1) {
     /* Nonmatching */
+    if(talk(true) == 0x12){
+        dComIfGp_evmng_cutEnd(i_param_1);
+    }
+    return;
 }
 
 /* 0000562C-000056F4       .text cutRideSwitchStart__10daNpc_P2_cFi */
-void daNpc_P2_c::cutRideSwitchStart(int) {
+void daNpc_P2_c::cutRideSwitchStart(int i_param_1) {
     /* Nonmatching */
+    f32* pfVar1 = dComIfGp_evmng_getMyFloatP(i_param_1,"Speed_y");
+    f32* pfVar2 = dComIfGp_evmng_getMyFloatP(i_param_1,"Gravity");
+
+    if(pfVar1 == NULL){
+        speed.y = 16.0f;
+    }else{
+        speed.y = *pfVar1;
+    }
+    if(pfVar2 == NULL){
+        gravity = -2.0f;
+    }else{
+        gravity = *pfVar2;
+    }
+    m72C = 1;
+    m7D3 = 9;
+    return;
 }
 
 /* 000056F4-0000589C       .text cutRideSwitchProc__10daNpc_P2_cFi */
-void daNpc_P2_c::cutRideSwitchProc(int) {
+void daNpc_P2_c::cutRideSwitchProc(int i_param_1) {
     /* Nonmatching */
+    //fopAcM_searchPlayerAngleY(fopAcM_SearchByName(m_arc_name));
+
+
 }
 
 /* 0000589C-00005914       .text cutRunWaitStart__10daNpc_P2_cFi */

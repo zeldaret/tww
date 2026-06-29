@@ -193,7 +193,8 @@ public:
     /* 0x7D4 */ s8 m7D4;
     /* 0x7D5 */ s8 m7D5;
     /* 0x7D6 */ s8 m7D6;
-    /* 0x7D7 */ u8 m7D7[0x7DC-0x7D7];
+    /* 0x7D7 */ u8 m7D7;
+    u8 m7D8;
     /* 0x7DC */ cXyz m7DC;
     /* 0x7E8 */ u8 m7E8[0x804-0x7E8];
     /* 0x804 */ u32 m804;
