@@ -1,6 +1,7 @@
 #ifndef D_A_NPC_P2_H
 #define D_A_NPC_P2_H
 
+#include "d/actor/d_a_himo3.h"
 #include "d/d_npc.h"
 #include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
@@ -138,7 +139,8 @@ public:
     /* 0x2C8 */ u32 mShadowId;
     /* 0x2CC */ dNpc_JntCtrl_c m_jnt;
     /* 0x300 */ dNpc_EventCut_c mEventCut;
-                u8 m36C[0x374-0x36C];
+                u8 m36C[0x370-0x36C];
+                u8 m370;
                 f32 m374;
                 u8 m378;
                 s16 m37A;
@@ -148,8 +150,9 @@ public:
                 dCcD_Cyl m5BC;
                 //u8 m60C[0x6D4-0x60C];
                 //cM3dGCyl m6D4;
-
-                u8 m6EC[0x6F8-0x6EC];
+                csXyz m6EC;
+                s16 m6F2;
+                u8 m6F4[0x6F8-0x6F4];
                 cXyz m6F8;
                 cXyz m704;
                 //J3DModel* m710;
@@ -160,21 +163,29 @@ public:
                 u8 m724;
                 u8 m725;
                 u32 m728;
-                u32 m72C;
+                u8 m72C;
                 cXyz m730;
                 cXyz m73C;
-                u8 m748;
-                u16 m74A;
-                s32 m74C;
+                s16 m748;
+                u8 m74A;
+                int m74C;
                 u8 m750;
                 u8 m751;
     /* 0x754 */ dPa_smokeEcallBack m754;
 
     /* 0x774 */ cXyz mSmokePos;
     /* 0x780 */ csXyz mSmokeAngle;
-    /* 0x786 */ u8 m786[0x7C1-0x786];
+    /* 0x786 */ u8 m786;
+                u32 m788;
+                cXyz m78C;
+                u8 m798[0x7B0-0x798];
+                Vec m7B0;
+                himo3_class* m7BC;
+                u8 m7C0;
     /* 0x7C1 */ u8 m7C1;
-    /* 0x7C2 */ u8 m7C2[0x7D0-0x7C2];
+    /* 0x7C2 */ u8 m7C2;
+                ActionFunc mActionFunc;
+
     /* 0x7D0 */ s8 m7D0;
     /* 0x7D1 */ s8 m7D1;
     /* 0x7D2 */ s8 m7D2;
