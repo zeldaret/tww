@@ -99,7 +99,7 @@ void daObjAshut::Act_c::set_mtx() {
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
     mDoMtx_stack_c::get()[1][3] += mCurrentY;
-    cMtx_copy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 0000046C-000004A8       .text init_mtx__Q210daObjAshut5Act_cFv */
