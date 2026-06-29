@@ -68,7 +68,7 @@ cPhs_State daObjAshut::Act_c::Mthd_Create() {
     fopAcM_ct(this, daObjAshut::Act_c);
     cPhs_State phase_state = (cPhs_State)dComIfG_resLoad(&mPhase, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = (cPhs_State)MoveBGCreate(M_arcname, 7, NULL, DEMO_SELECT(0x8000, 0x760));
+        phase_state = (cPhs_State)MoveBGCreate(M_arcname, dRes_INDEX_ASHUT_DZB_ASHUT_e, NULL, DEMO_SELECT(0x8000, 0x760));
         JUT_ASSERT(312, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
         
         // If switch is active on load, ensure collision is disabled so player can pass
@@ -302,7 +302,7 @@ BOOL daObjAshut::Act_c::Execute(Mtx** pMtx) {
 
 /* 00000D0C-00000D6C       .text Draw__Q210daObjAshut5Act_cFv */
 BOOL daObjAshut::Act_c::Draw() {
-    g_env_light.settingTevStruct(1, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     return TRUE;
