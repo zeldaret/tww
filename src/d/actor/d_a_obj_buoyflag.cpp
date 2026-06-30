@@ -571,19 +571,6 @@ daObjBuoyflag::Texture_e daObjBuoyflag::Act_c::prm_get_texture() const {
     return (Texture_e)daObj::PrmAbstract<Prm_e>(this, PRM_TEXTURE_W, PRM_TEXTURE_S);
 }
 
-/* 000022BC-000022D4       .text attr_type__Q213daObjBuoyflag5Act_cCFv */
-const daObjBuoyflag::Act_c::AttrType_c* daObjBuoyflag::Act_c::attr_type() const {
-    return &M_attr_type[m1120];
-}
-
-/* 000022D4-0000234C       .text mtx_init__Q213daObjBuoyflag5Act_cFv */
-void daObjBuoyflag::Act_c::mtx_init() {
-    mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(shape_angle);
-    PSMTXCopy(mDoMtx_stack_c::get(), m1090);
-    PSMTXCopy(mDoMtx_stack_c::get(), m10C0);
-}
-
 const dCcD_SrcCyl daObjBuoyflag::Act_c::M_cyl_src = {
     // dCcD_SrcGObjInf
     {
@@ -620,6 +607,19 @@ const daObjBuoyflag::Act_c::AttrType_c daObjBuoyflag::Act_c::M_attr_type[] = {
     {5.76f, 0, 1, 0, 0},
     {2.0f, 0, 0, 0, 0},
 };
+
+/* 000022BC-000022D4       .text attr_type__Q213daObjBuoyflag5Act_cCFv */
+const daObjBuoyflag::Act_c::AttrType_c* daObjBuoyflag::Act_c::attr_type() const {
+    return &M_attr_type[m1120];
+}
+
+/* 000022D4-0000234C       .text mtx_init__Q213daObjBuoyflag5Act_cFv */
+void daObjBuoyflag::Act_c::mtx_init() {
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    PSMTXCopy(mDoMtx_stack_c::get(), m1090);
+    PSMTXCopy(mDoMtx_stack_c::get(), m10C0);
+}
 
 /* 0000234C-000024B0       .text mode_afl__Q213daObjBuoyflag5Act_cFv */
 bool daObjBuoyflag::Act_c::mode_afl() {
