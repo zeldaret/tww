@@ -22,8 +22,13 @@ void daTag_Kf1_c::createInit() {
 }
 
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
-void daTag_Kf1_c::setStt(signed char) {
+void daTag_Kf1_c::setStt(signed char stt) {
     /* Nonmatching */
+    mStt = stt;
+    switch (mStt) {
+    case 3:
+        break;
+    }
 }
 
 /* 00000234-00000294       .text next_msgStatus__11daTag_Kf1_cFPUl */
@@ -42,7 +47,7 @@ void daTag_Kf1_c::checkOrder() {
 }
 
 /* 00000380-00000470       .text chkAttention__11daTag_Kf1_cF4cXyz */
-void daTag_Kf1_c::chkAttention(cXyz) {
+BOOL daTag_Kf1_c::chkAttention(cXyz) {
     /* Nonmatching */
 }
 
@@ -52,7 +57,7 @@ void daTag_Kf1_c::partner_srch() {
 }
 
 /* 0000057C-00000604       .text checkPartner__11daTag_Kf1_cFv */
-void daTag_Kf1_c::checkPartner() {
+s16 daTag_Kf1_c::checkPartner() {
     /* Nonmatching */
 }
 
@@ -83,12 +88,12 @@ void daTag_Kf1_c::bensyoInit() {
 
 /* 000007A4-000007C4       .text event_bensyo__11daTag_Kf1_cFv */
 void daTag_Kf1_c::event_bensyo() {
-    /* Nonmatching */
+    event_mesSet();
 }
 
 /* 000007C4-000007FC       .text event_cntTsubo__11daTag_Kf1_cFv */
 void daTag_Kf1_c::event_cntTsubo() {
-    /* Nonmatching */
+    field_0x73E = field_0x764 - checkPartner();
 }
 
 /* 000007FC-00000978       .text privateCut__11daTag_Kf1_cFv */
@@ -107,23 +112,45 @@ void daTag_Kf1_c::set_action(int (daTag_Kf1_c::*)(void*), void*) {
 }
 
 /* 00000AB8-00000B14       .text wait01__11daTag_Kf1_cFv */
-void daTag_Kf1_c::wait01() {
-    /* Nonmatching */
+BOOL daTag_Kf1_c::wait01() {
+    field_0x767 = 0;
+    if (field_0x73C != 0 && field_0x764 != checkPartner()) {
+        field_0x767 = 3;
+    }
+    return TRUE;
 }
 
 /* 00000B14-00000B1C       .text wait02__11daTag_Kf1_cFv */
-void daTag_Kf1_c::wait02() {
-    /* Nonmatching */
+BOOL daTag_Kf1_c::wait02() {
+    return TRUE;
 }
 
 /* 00000B1C-00000BE8       .text wait_action1__11daTag_Kf1_cFPv */
-void daTag_Kf1_c::wait_action1(void*) {
-    /* Nonmatching */
+BOOL daTag_Kf1_c::wait_action1(void*) {
+    if (field_0x76A == 0) {
+        setStt(1);
+        field_0x76A++;
+    } else if (field_0x76A != -1) {
+        if (field_0x76A == 1) {
+            partner_srch();
+            field_0x76A = 2;
+        }
+        field_0x73C = chkAttention(current.pos);
+        switch (mStt) {
+        case 1:
+            wait01();
+            break;
+        case 2:
+            wait02();
+            break;
+        }
+    }
+    return TRUE;
 }
 
 /* 00000BE8-00000BF0       .text _draw__11daTag_Kf1_cFv */
 BOOL daTag_Kf1_c::_draw() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000BF0-00000C68       .text _execute__11daTag_Kf1_cFv */
