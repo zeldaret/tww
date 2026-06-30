@@ -876,4 +876,8 @@ void dMeter_swimLightAnime(sub_meter_class* i_Meter, s16 param_2);
 void dMeter_arrowErase(fopMsgM_pane_class* param_1);
 void dMeter_screenDataTimeSet(sub_meter_class* i_Meter);
 
+bool dMeter_isAuctionFlag();
+void dMeter_onAuctionFlag();
+void dMeter_offAuctionFlag();
+
 #endif /* D_METER_H */
