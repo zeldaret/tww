@@ -1558,7 +1558,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_saku"),
     ActorRel(Matching,    "d_a_seatag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_shand"),
-    ActorRel(NonMatching, "d_a_ship"),
+    ActorRel(Equivalent,  "d_a_ship"), # regalloc
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_shop_item"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_sie_flag"),
     ActorRel(NonMatching, "d_a_sitem"),
