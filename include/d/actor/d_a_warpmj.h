@@ -45,9 +45,9 @@ public:
     /* 0x29C */ mDoExt_btkAnm* mpBtkAnm;
     /* 0x2A0 */ mDoExt_brkAnm* mpBrkAnm;
     /* 0x2A4 */ mDoExt_bckAnm* mpBckAnm;
-    /* 0x2A8 */ JPABaseEmitter* mpEmitter1;
-    /* 0x2AC */ JPABaseEmitter* mpEmitter2;
-    /* 0x2B0 */ JPABaseEmitter* mpEmitter3;
+    /* 0x2A8 */ JPABaseEmitter* mpEmitterMajyuWarpA;
+    /* 0x2AC */ JPABaseEmitter* mpEmitterMajyuWarpB;
+    /* 0x2B0 */ JPABaseEmitter* mpEmitterMajyuWarpC;
     /* 0x2B4 */ u32 mSceneNo;
     /* 0x2B8 */ BOOL m2B8;
     /* 0x2BC */ s16 mEvtToGanonWarpIdx;

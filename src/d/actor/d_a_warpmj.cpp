@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_warpmj.h"
+#include "d/actor/d_a_player.h"
 #include "d/actor/d_a_sea.h"
 #include "d/d_bg_s_func.h"
 #include "d/d_lib.h"
@@ -84,9 +85,9 @@ void daWarpmj_c::CreateInit() {
     fopAcM_setCullSizeFar(this, 1.0f);
     set_mtx();
 
-    mpEmitter1 = dComIfGp_particle_set(dPa_name::ID_IT_SN_MJWPA00, &current.pos);
-    mpEmitter2 = dComIfGp_particle_set(dPa_name::ID_IT_SN_MJWPB00, &current.pos);
-    mpEmitter3 = dComIfGp_particle_setProjection(dPa_name::ID_IT_SP_MJWPC00, &current.pos);
+    mpEmitterMajyuWarpA = dComIfGp_particle_set(dPa_name::ID_IT_SN_MJWPA00, &current.pos);
+    mpEmitterMajyuWarpB = dComIfGp_particle_set(dPa_name::ID_IT_SN_MJWPB00, &current.pos);
+    mpEmitterMajyuWarpC = dComIfGp_particle_setProjection(dPa_name::ID_IT_SP_MJWPC00, &current.pos);
 
     m2B8 = FALSE;
     setEndAnm();
