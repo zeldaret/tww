@@ -110,7 +110,6 @@ void GXInitTexObj(GXTexObj* obj, void* imagePtr, u16 width, u16 height, GXTexFmt
                   GXTexWrapMode sWrap, GXTexWrapMode tWrap, GXBool useMIPmap) {
     u32 imageBase;
     u16 a, b;
-    u32 c, d;
 
     GXTexObj* internal = (GXTexObj*)obj;
     memset(internal, 0, sizeof(*internal));
@@ -140,7 +139,7 @@ void GXInitTexObj(GXTexObj* obj, void* imagePtr, u16 width, u16 height, GXTexFmt
     GX_SET_REG(internal->texture_size, height - 1, 12, 21);
 
     GX_SET_REG(internal->texture_size, format & 0xf, 8, 11);
-    imageBase = (u32)imagePtr >> 5;
+    imageBase = ((u32)imagePtr & 0x3FFFFFFF) >> 5;
     GX_SET_REG(internal->texture_address, imageBase, 11, 31);
 
     switch (format & 0xf) {
@@ -276,8 +275,6 @@ u32 GXGetTexObjTlut(GXTexObj* obj) {
 }
 
 void GXLoadTexObjPreLoaded(GXTexObj* obj, GXTexRegion* region, GXTexMapID map) {
-    u8 stackManipulation[0x18];
-
     GXTexObj* internalObj = (GXTexObj*)obj;
     GXTexRegion* internalRegion = (GXTexRegion*)region;
 
@@ -323,7 +320,7 @@ void GXInitTlutObj(GXTlutObj* obj, void* table, GXTlutFmt format, u16 numEntries
     internal->format = 0;
 
     GX_SET_REG(internal->format, format, 20, 21);
-    GX_SET_REG(internal->address, (u32)table >> 5, 11, 31);
+    GX_SET_REG(internal->address, ((u32)table & 0x3FFFFFFF) >> 5, 11, 31);
     GX_SET_REG(internal->address, 100, 0, 7);
 
     internal->numEntries = numEntries;
@@ -342,7 +339,7 @@ void GXLoadTlut(GXTlutObj* obj, u32 tlut_name) {
     __GXFlushTextureState();
 
     reg = ret->unk0;
-    GX_SET_REG(internal->format, reg, 22, 31);
+    internal->format = (internal->format & ~0x3FF) | (reg & 0x3FF);
 
     ret->tlutObj = *internal;
 }
@@ -426,7 +423,17 @@ GXTlutRegionCallback GXSetTlutRegionCallback(GXTlutRegionCallback callback) {
 }
 
 void GXSetTexCoordScaleManually(GXTexCoordID coord, GXBool enable, u16 s_scale, u16 t_scale) {
-    /* Nonmatching */
+    gx->tcsManEnab = (gx->tcsManEnab & ~(1 << coord)) | (enable << coord);
+
+    if (enable) {
+        gx->suTs0[coord] = (gx->suTs0[coord] & 0xFFFF0000) | (u16)(s_scale - 1);
+        gx->suTs1[coord] = (gx->suTs1[coord] & 0xFFFF0000) | (u16)(t_scale - 1);
+
+        GX_BP_LOAD_REG(gx->suTs0[coord]);
+        GX_BP_LOAD_REG(gx->suTs1[coord]);
+
+        gx->bpSentNot = GX_FALSE;
+    }
 }
 
 void __SetSURegs(u32 texImgIndex, u32 setUpRegIndex) {

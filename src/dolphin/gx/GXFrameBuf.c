@@ -313,10 +313,10 @@ void GXSetDispCopyFrame2Field(GXCopyMode arg0) {
 void GXSetCopyClamp(GXFBClamp clamp) {
     u8 isTop = (clamp & GX_CLAMP_TOP) == GX_CLAMP_TOP;
     u8 isBottom = (clamp & GX_CLAMP_BOTTOM) == GX_CLAMP_BOTTOM;
-    gx->cpDisp = __rlwimi(gx->cpDisp, isTop, 0, 31, 31);
-    gx->cpDisp = __rlwimi(gx->cpDisp, isBottom, 1, 30, 30);
-    gx->cpTex = __rlwimi(gx->cpTex, isTop, 0, 31, 31);
-    gx->cpTex = __rlwimi(gx->cpTex, isBottom, 1, 30, 30);
+    INSERT_FIELD(gx->cpDisp, isTop, 1, 0);
+    INSERT_FIELD(gx->cpDisp, isBottom, 1, 1);
+    INSERT_FIELD(gx->cpTex, isTop, 1, 0);
+    INSERT_FIELD(gx->cpTex, isBottom, 1, 1);
 }
 
 static u32 __GXGetNumXfbLines(u32 height, u32 scale) {
@@ -482,12 +482,11 @@ void GXSetCopyFilter(GXBool useAA, u8 samplePattern[12][2], GXBool doVertFilt, u
     GX_BP_LOAD_REG(vals[2]);
     GX_BP_LOAD_REG(vals[3]);
 
-    unk1 = 0;
-    GX_SET_REG(unk1, 0x53, 0, 7);
-    unk2 = 0;
-    GX_SET_REG(unk2, 0x54, 0, 7);
-
     if (doVertFilt) {
+        unk1 = 0;
+        GX_SET_REG(unk1, 0x53, 0, 7);
+        unk2 = 0;
+        GX_SET_REG(unk2, 0x54, 0, 7);
         GX_SET_REG(unk1, vFilt[0], 26, 31);
         GX_SET_REG(unk1, vFilt[1], 20, 25);
         GX_SET_REG(unk1, vFilt[2], 14, 19);
@@ -497,13 +496,8 @@ void GXSetCopyFilter(GXBool useAA, u8 samplePattern[12][2], GXBool doVertFilt, u
         GX_SET_REG(unk2, vFilt[6], 14, 19);
 
     } else {
-        GX_SET_REG(unk1, 0, 26, 31);
-        GX_SET_REG(unk1, 0, 20, 25);
-        GX_SET_REG(unk1, 21, 14, 19);
-        GX_SET_REG(unk1, 22, 8, 13);
-        GX_SET_REG(unk2, 21, 26, 31);
-        GX_SET_REG(unk2, 0, 20, 25);
-        GX_SET_REG(unk2, 0, 14, 19);
+        unk1 = 0x53595000;
+        unk2 = 0x54000015;
     }
 
     GX_BP_LOAD_REG(unk1);
@@ -528,9 +522,7 @@ void GXCopyDisp(void* dest, GXBool doClear) {
         GX_BP_LOAD_REG(reg);
 
         reg = gx->cmode0;
-        GX_SET_REG(reg, 0, 31, 31);
-        GX_SET_REG(reg, 0, 30, 30);
-        GX_BP_LOAD_REG(reg);
+        GX_BP_LOAD_REG(reg & ~3);
     }
 
     check = GX_FALSE;
@@ -581,9 +573,7 @@ void GXCopyTex(void* dest, GXBool doClear) {
         GX_BP_LOAD_REG(reg);
 
         reg = gx->cmode0;
-        GX_SET_REG(reg, 0, 31, 31);
-        GX_SET_REG(reg, 0, 30, 30);
-        GX_BP_LOAD_REG(reg);
+        GX_BP_LOAD_REG(reg & ~3);
     }
 
     check = GX_FALSE;
