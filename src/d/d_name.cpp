@@ -26,10 +26,11 @@ dNm_HIO_c::dNm_HIO_c() {
     field_0x11 = 0;
     field_0x12 = 2;
     field_0x13 = 4;
-    field_0x14 = 4;
 #if VERSION == VERSION_USA
+    field_0x14 = 4;
     field_0x15 = 6;
 #else
+    field_0x14 = 6;
     field_0x15 = 8;
 #endif
     field_0x1f = 14;
@@ -108,10 +109,6 @@ void dName_c::initial() {
     paneTransInit();
 }
 
-void dName_c::_deleteSp() {
-    mDoHIO_deleteChild(g_nmHIO.id);
-}
-
 /* 802161C4-80216248       .text _delete__7dName_cFv */
 void dName_c::_delete() {
     delete nameIn.NameInScr;
@@ -119,6 +116,10 @@ void dName_c::_delete() {
     delete stick;
     archive->removeResourceAll();
     mDoHIO_deleteChild(g_nmHIO.id);  // supposed to be _deleteSp?
+}
+
+void dName_c::_deleteSp() {
+    mDoHIO_deleteChild(g_nmHIO.id);
 }
 
 /* 80216248-80216268       .text _move__7dName_cFv */
@@ -309,14 +310,14 @@ void dName_c::NameInMain() {
 }
 
 /* 80216C08-80216D14       .text nameCursorAnime__7dName_cFv */
-// NONMATCHING - one float reg swap
 void dName_c::nameCursorAnime() {
     f32 var_f1 = fopMsgM_valueIncrease(g_nmHIO.field_0x1f, field_0x1c4c.mUserArea, 0);
     if (field_0x2906 != 0) {
         var_f1 = 1.0f - var_f1;
     }
 
-    field_0x1c4c.mNowAlpha = (f32)g_nmHIO.field_0x1e + (u32)((g_nmHIO.field_0x1d - g_nmHIO.field_0x1e) * var_f1);
+    f32 temp2 = g_nmHIO.field_0x1d - g_nmHIO.field_0x1e;
+    field_0x1c4c.mNowAlpha = (f32)g_nmHIO.field_0x1e + (u32)(temp2 * var_f1);
     fopMsgM_setAlpha(&field_0x1c4c);
 
     if (field_0x1c4c.mUserArea == 0) {
@@ -491,7 +492,7 @@ void dName_c::selectMojiSet() {
 #if VERSION <= VERSION_JPN
     int moji = getMoji();
     if (moji != -1) {
-        if (moji == '゛' || moji == '゜') {
+        if (moji == SJIS('゛', 0x814AU) || moji == SJIS('゜', 0x814BU)) {
             if (curPos != 0) {
                 if (checkDakuon(moji, curPos - 1) == 1) {
                     mDoAud_seStart(JA_SE_NAME_INPUT, NULL, 0, 0);
@@ -522,21 +523,40 @@ BOOL dName_c::checkDakuon(int param_0, u8 param_1) {
         return 0;
     }
 
-    if (param_0 == '゜' && chrInfo[param_1].column != 5) {
+#if VERSION == VERSION_DEMO
+    if (param_0 == SJIS('゛', 0x814AU) &&
+        chrInfo[param_1].column != 1 &&
+        chrInfo[param_1].column != 2 &&
+        chrInfo[param_1].column != 0 &&
+        chrInfo[param_1].column != 3 &&
+        chrInfo[param_1].column != 5)
+    {
         return 0;
     }
 
-    if (param_0 == '゛' &&
-        (chrInfo[param_1].character == 'ウ' || chrInfo[param_1].character == 'ヴ'))
+    if (param_0 == SJIS('゜', 0x814BU) && chrInfo[param_1].column != 5) {
+        return 0;
+    }
+#else
+    if (param_0 == SJIS('゜', 0x814BU) && chrInfo[param_1].column != 5) {
+        return 0;
+    }
+
+    if (param_0 == SJIS('゛', 0x814AU) &&
+        (chrInfo[param_1].character == SJIS('ウ', 0x8345U) || chrInfo[param_1].character == SJIS('ヴ', 0x8394U)))
     {
         return 1;
     }
 
-    if (param_0 == '゛' && chrInfo[param_1].column != 1 && chrInfo[param_1].column != 2 &&
-        chrInfo[param_1].column != 3 && chrInfo[param_1].column != 5)
+    if (param_0 == SJIS('゛', 0x814AU) &&
+        chrInfo[param_1].column != 1 &&
+        chrInfo[param_1].column != 2 &&
+        chrInfo[param_1].column != 3 &&
+        chrInfo[param_1].column != 5)
     {
         return 0;
     }
+#endif
 
     return 1;
 }
@@ -544,46 +564,46 @@ BOOL dName_c::checkDakuon(int param_0, u8 param_1) {
 BOOL dName_c::setDakuon(int param_1, u8 param_2) {
     int c;
 
-    if (param_1 == '゛') {
+    if (param_1 == SJIS('゛', 0x814AU)) {
         switch (chrInfo[param_2].column) {
         case 0: {
             c = -1;
-            if (chrInfo[param_2].character == 'ウ' || chrInfo[param_2].character == 'ヴ') {
+            if (chrInfo[param_2].character == SJIS('ウ', 0x8345U) || chrInfo[param_2].character == SJIS('ヴ', 0x8394U)) {
                 c = 4;
-                chrInfo[param_2].character = 'ヴ';
+                chrInfo[param_2].character = SJIS('ヴ', 0x8394U);
             }
             break;
         }
         case 1: {
-            int c2 = chrInfo[param_2].set != MOJI_HIRA ? 'カ' : 'か';
+            int c2 = chrInfo[param_2].set != MOJI_HIRA ? SJIS('カ', 0x834aU) : SJIS('か', 0x82a9U);
             c = (chrInfo[param_2].character - c2) % 2;
             break;
         }
         case 2: {
-            int c2 = chrInfo[param_2].set != MOJI_HIRA ? 'サ' : 'さ';
+            int c2 = chrInfo[param_2].set != MOJI_HIRA ? SJIS('サ', 0x8354U) : SJIS('さ', 0x82b3U);
             c = (chrInfo[param_2].character - c2) % 2;
             break;
         }
         case 3: {
             int c2;
             if (chrInfo[param_2].character <=
-                ((chrInfo[param_2].set != MOJI_HIRA ? 'ヂ' : 'ぢ')))
+                ((chrInfo[param_2].set != MOJI_HIRA ? SJIS('ヂ', 0x8361U) : SJIS('ぢ', 0x82c0U))))
             {
-                c2 = chrInfo[param_2].set != MOJI_HIRA ? 'タ' : 'た';
+                c2 = chrInfo[param_2].set != MOJI_HIRA ? SJIS('タ', 0x835eU) : SJIS('た', 0x82bdU);
                 c = (chrInfo[param_2].character - c2) % 2;
             } else {
-                if (chrInfo[param_2].character <= (chrInfo[param_2].set != 0 ? 'ド' : 'ど'))
+                if (chrInfo[param_2].character <= (chrInfo[param_2].set != 0 ? SJIS('ド', 0x8368U) : SJIS('ど', 0x82c7U)))
                 {
                     if (chrInfo[param_2].character >=
-                        (chrInfo[param_2].set != 0 ? 'テ' : 'て'))
+                        (chrInfo[param_2].set != 0 ? SJIS('テ', 0x8365U) : SJIS('て', 0x82c4U)))
                     {
-                        c2 = chrInfo[param_2].set != MOJI_HIRA ? 'テ' : 'て';
+                        c2 = chrInfo[param_2].set != MOJI_HIRA ? SJIS('テ', 0x8365U) : SJIS('て', 0x82c4U);
                         c = (chrInfo[param_2].character - c2) % 2;
                         break;
                     }
                 }
 
-                c2 = chrInfo[param_2].set != MOJI_HIRA ? 'ッ' : 'っ';
+                c2 = chrInfo[param_2].set != MOJI_HIRA ? SJIS('ッ', 0x8362U) : SJIS('っ', 0x82c1U);
                 c = (chrInfo[param_2].character - c2) % 3;
                 if (c == 2) {
                     c = 1;
@@ -596,7 +616,7 @@ BOOL dName_c::setDakuon(int param_1, u8 param_2) {
             break;
         }
         case 5: {
-            int c2 = chrInfo[param_2].set != MOJI_HIRA ? 'ハ' : 'は';
+            int c2 = chrInfo[param_2].set != MOJI_HIRA ? SJIS('ハ', 0x836eU) : SJIS('は', 0x82cdU);
             c = (chrInfo[param_2].character - c2) % 3;
             break;
         }
@@ -615,8 +635,8 @@ BOOL dName_c::setDakuon(int param_1, u8 param_2) {
 
             return 1;
         }
-    } else if (param_1 == '゜') {
-        int c2 = chrInfo[param_2].set != MOJI_HIRA ? 'ハ' : 'は';
+    } else if (param_1 == SJIS('゜', 0x814BU)) {
+        int c2 = chrInfo[param_2].set != MOJI_HIRA ? SJIS('ハ', 0x836eU) : SJIS('は', 0x82cdU);
         c = (chrInfo[param_2].character - c2) % 3;
         if (c != 2) {
             chrInfo[param_2].character = chrInfo[param_2].character + (2 - c);
@@ -631,8 +651,8 @@ BOOL dName_c::setDakuon(int param_1, u8 param_2) {
 #endif
 
 /* 802172CC-802173E8       .text getMoji__7dName_cFv */
-// NONMATCHING - reg alloc
 int dName_c::getMoji() {
+    int i;
     int result = -1;
     const char* moji;
 
@@ -652,7 +672,7 @@ int dName_c::getMoji() {
     }
 
     moji = ((J2DTextBox*)(pane->pane))->getStringPtr();
-    int i = 0;
+    i = 0;
     while (*moji != 0) {
         if (*moji == '\n') {
             moji++;
@@ -669,7 +689,7 @@ int dName_c::getMoji() {
             i++;
         } else {
             if (i == charRow) {
-                result = *(u8*)moji;
+                result = *moji;
                 break;
             }
             moji++;
@@ -754,7 +774,6 @@ void dName_c::setMoji(int moji) {
 }
 
 /* 80217610-802177E4       .text setNameText__7dName_cFv */
-// NONMATCHING - some float math issues
 void dName_c::setNameText() {
     f32 var_f31 = ((J2DTextBox*)namePane.pane)->mFontSizeX;
     f32 ratio = var_f31 / nameIn.font->getCellWidth();
@@ -763,17 +782,18 @@ void dName_c::setNameText() {
     for (int i = 0; i < 8; i++) {
         if (chrInfo[i].field_0x3 != 0) {
             JUTFont::TWidth twidth;
-            nameIn.font->getWidthEntry(chrInfo[i].character, &twidth);
+            int character = chrInfo[i].character;
+            nameIn.font->getWidthEntry(character, &twidth);
 
-            int sp50 = (int)twidth.field_0x1 * ratio * 10000.0f;
+            f32 temp = (int)twidth.field_0x1;
+            temp *= ratio;
+            int sp50 = temp * 10000.0f;
 
             f32 fvar4 = sp50 / 10000.0f;
-            f32 fvar5 = (var_f31 - fvar4) * 0.5f;
+            f32 fvar5 = (var_f31 - fvar4) / 2.0f;
             f32 fvar6 = var_f31 - (fvar4 + fvar5);
 
-            int ivar2 = fvar5;
-
-            int ivar7 = ivar2 + (int)fvar4 + (int)fvar6;
+            int ivar7 = (int)fvar5 + (int)fvar4 + (int)fvar6;
             if (ivar7 < (int)var_f31) {
                 fvar6 += (int)var_f31 - ivar7;
             }
@@ -789,7 +809,7 @@ void dName_c::setNameText() {
                     "CR[%d]%c\x1b"
                     "CR[%d]\x1b"
                     "CR[%d]",
-                    ivar2,
+                    (int)fvar5,
                     (u8)chrInfo[i].character,
                     (int)fvar6,
                     2
@@ -802,7 +822,7 @@ void dName_c::setNameText() {
                     "CR[%d]%c%c\x1b"
                     "CR[%d]\x1b"
                     "CR[%d]",
-                    ivar2,
+                    (int)fvar5,
                     (u8)((chrInfo[i].character & 0xFF00) >> 8),
                     (u8)chrInfo[i].character,
                     (int)fvar6,
@@ -880,7 +900,6 @@ void dName_c::selectCursorTxtChange() {
 }
 
 /* 80217A28-80217D44       .text selectCursorAnime__7dName_cFv */
-// NONMATCHING - one float reg swap
 void dName_c::selectCursorAnime() {
     f32 sp14[3] = {0.0f, -3.0f, 4.0f};
     f32 sp8[3] = {0.0f, 4.0f, -3.0f};
@@ -913,7 +932,8 @@ void dName_c::selectCursorAnime() {
             temp_f1 = 1.0f - temp_f1;
         }
 
-        u32 temp = (g_nmHIO.field_0x17 - g_nmHIO.field_0x18) * temp_f1;
+        f32 temp2 = g_nmHIO.field_0x17 - g_nmHIO.field_0x18;
+        u32 temp = temp2 * temp_f1;
         field_0x8d4[0].mNowAlpha = g_nmHIO.field_0x18 + temp;
         field_0x8d4[1].mNowAlpha = g_nmHIO.field_0x18 + temp;
         fopMsgM_setAlpha(&field_0x8d4[0]);
@@ -1299,14 +1319,14 @@ void dName_c::selectCursorPosSet(int row) {
 }
 
 /* 80218944-80218A48       .text menuCursorAnime__7dName_cFv */
-// NONMATCHING - one float reg swap
 void dName_c::menuCursorAnime() {
     f32 var_f1 = fopMsgM_valueIncrease(g_nmHIO.field_0x1f, field_0x97c[0].mUserArea, 0);
     if (field_0x2908 != 0) {
         var_f1 = 1.0f - var_f1;
     }
 
-    field_0x97c[0].mNowAlpha = (f32)g_nmHIO.field_0x21 + (u32)((g_nmHIO.field_0x20 - g_nmHIO.field_0x21) * var_f1);
+    f32 temp2 = g_nmHIO.field_0x20 - g_nmHIO.field_0x21;
+    field_0x97c[0].mNowAlpha = (f32)g_nmHIO.field_0x21 + (u32)(temp2 * var_f1);
     fopMsgM_setAlpha(&field_0x97c[0]);
 
     if (field_0x97c[0].mUserArea == 0) {
@@ -1323,11 +1343,12 @@ void dName_c::_draw() {
 }
 
 /* 80218A84-8021937C       .text screenSet__7dName_cFv */
-// NONMATCHING - some reg alloc at the end
 void dName_c::screenSet() {
+    int i;
+
     fopMsgM_setPaneData(&field_0x14, nameIn.NameInScr->search('cc00'));
 
-    for (int i = 0; i < 13; i++) {
+    for (i = 0; i < 13; i++) {
 #if VERSION <= VERSION_USA
         static u32 l_Eisu[] = {
             'ena', 'enb', 'enc',
@@ -1457,12 +1478,12 @@ void dName_c::screenSet() {
     fopMsgM_setPaneData(&namePane, nameIn.NameInScr->search('name'));
     ((J2DTextBox*)namePane.pane)->setFont(nameIn.font);
 #if VERSION == VERSION_PAL
-    for (int i = 0; i < 8; i++) {}
+    for (i = 0; i < 8; i++) {}
     field_0x2ae8 = ((J2DTextBox*)finBtnPane.pane)->getStringPtr();
 #endif
     ((J2DTextBox*)namePane.pane)->setCharSpace(0.0f);
 
-    for (int i = 0; i < 320; i++) {
+    for (i = 0; i < 320; i++) {
         nameBuffer[i] = 'A';
     }
     nameBuffer[320 - 1] = 0;
@@ -1500,7 +1521,7 @@ void dName_c::screenSet() {
     u32 var_r25 = 'nk31';
     u32 var_r24 = 'nk21';
     u32 var_r23 = 'nk11';
-    for (int i = 0; i < 5; i++) {
+    for (i = 0; i < 5; i++) {
         fopMsgM_setPaneData(&field_0x97c[i], nameIn.NameInScr->search(var_r22));
         fopMsgM_setPaneData(&field_0xcfc[i], nameIn.NameInScr->search(var_r27));
         fopMsgM_setPaneData(&field_0x107c[i], nameIn.NameInScr->search(var_r26));
@@ -1524,7 +1545,7 @@ void dName_c::screenSet() {
         var_r23++;
     }
 
-    for (int i = 0; i < 10; i++) {
+    for (i = 0; i < 10; i++) {
         static u32 l_endB[] = {
             'n501', 'n502', 'n503', 'n504', 'n505',
             'n506', 'n507', 'n508', 'n509', 'n510',
@@ -1570,7 +1591,7 @@ void dName_c::screenSet() {
     u32 var_r22_2 = 'dk00';
     u32 var_r23_2 = 'c000';
     u32 var_r24_2 = 'ck00';
-    for (int i = 0; i < 7; i++) {
+    for (i = 0; i < 7; i++) {
         fopMsgM_setPaneData(&field_0x1d9c[i], nameIn.NameInScr->search(var_r21));
         fopMsgM_setPaneData(&field_0x1f24[i], nameIn.NameInScr->search(var_r22_2));
         fopMsgM_setPaneData(&field_0x21fc[i], nameIn.NameInScr->search(var_r23_2));
@@ -1584,7 +1605,7 @@ void dName_c::screenSet() {
 
     u32 var_r21_2 = 'b000';
     u32 var_r22_3 = 'bk00';
-    for (int i = 0; i < 9; i++) {
+    for (i = 0; i < 9; i++) {
         fopMsgM_setPaneData(&field_0x250c[i], nameIn.NameInScr->search(var_r21_2));
         fopMsgM_setPaneData(&field_0x2704[i], nameIn.NameInScr->search(var_r22_3));
 
@@ -2095,7 +2116,7 @@ void dName_c::NameStrSet() {
     BOOL found;
     while (*moji != 0) {
 #if VERSION == VERSION_PAL
-        chrInfo[i].character = *moji;
+        chrInfo[i].character = (u8)*moji;
 
         found = false;
         for (j = 0; j < 13; j++) {

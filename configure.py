@@ -643,7 +643,7 @@ config.libs = [
             Object(NonMatching, "d/d_minigame_starter.cpp"),
             Object(NonMatching, "d/d_minigame_terminater.cpp"),
             Object(NonMatching, "d/d_msg.cpp"),
-            Object(NonMatching, "d/d_name.cpp"),
+            Object(Matching,    "d/d_name.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_npc.cpp"),
             Object(NonMatching, "d/d_operate_wind.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_metronome.cpp"),
