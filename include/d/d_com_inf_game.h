@@ -339,7 +339,10 @@ public:
     void setMessageRupee(s16 count) { mMessageRupee = count; }
 
     void setAuctionRupee(s16 count) { mAuctionRupee = count; }
+    s16 getAuctionRupee() { return mAuctionRupee; }
+
     void setAuctionGauge(s16 gauge) { mAuctionGauge = gauge; }
+    s16 getAuctionGauge() { return mAuctionGauge; }
 
     int getItemRupeeCount() { return mItemRupeeCount; }
     void setItemRupeeCount(s32 count) { mItemRupeeCount += count; }
@@ -968,8 +971,16 @@ inline void dComIfGp_setAuctionRupee(s16 count) {
     g_dComIfG_gameInfo.play.setAuctionRupee(count);
 }
 
+inline s16 dComIfGp_getAuctionRupee() {
+    return g_dComIfG_gameInfo.play.getAuctionRupee();
+}
+
 inline void dComIfGp_setAuctionGauge(s16 gauge) {
     g_dComIfG_gameInfo.play.setAuctionGauge(gauge);
+}
+
+inline s16 dComIfGp_getAuctionGauge() {
+    return g_dComIfG_gameInfo.play.getAuctionGauge();
 }
 
 inline void dComIfGs_setRupee(u16 rupee) {
