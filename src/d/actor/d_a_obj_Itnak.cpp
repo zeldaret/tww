@@ -5,6 +5,31 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Itnak.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+
+namespace daObjItnak {
+    namespace {
+        struct Attr_c {
+            /* 0x00 */ u8 _pad[0xC8 - 0x00];
+            /* 0xC8 */ f32 shadowPosYOffset;
+            /* 0xCC */ f32 shadowCasterSize;
+            /* 0xD0 */ f32 shadowScaleXY;
+            /* 0xD4 */ f32 shadowScaleZ;
+        };
+        const Attr_c L_attr = {
+            /* 0x00 */ {0},
+            /* field_0xC8 */ 30.0f,
+            /* field_0xCC */ 800.0f,
+            /* field_0xD0 */ 60.0f,
+            /* field_0xD4 */ 1.0f
+        };
+
+        inline static const Attr_c& attr() { return L_attr; }
+
+        STATIC_ASSERT(sizeof(Attr_c) == 0xD8);
+    }
+}
 
 /* 00000078-0000009C       .text solidHeapCB__Q210daObjItnak5Act_cFP10fopAc_ac_c */
 void daObjItnak::Act_c::solidHeapCB(fopAc_ac_c*) {
@@ -48,12 +73,37 @@ void daObjItnak::Act_c::set_collision() {
 
 /* 00001118-00001158       .text _execute__Q210daObjItnak5Act_cFv */
 bool daObjItnak::Act_c::_execute() {
-    /* Nonmatching */
+    set_mtx();
+    manage_draw_flag();
+    set_collision();
+    return true;
 }
 
 /* 00001158-0000123C       .text _draw__Q210daObjItnak5Act_cFv */
 bool daObjItnak::Act_c::_draw() {
-    /* Nonmatching */
+    const Attr_c& L_attr = attr();
+    float y;
+    cXyz L_pPos;
+    cXyz L_shadowPos;
+
+    if (mVisible != 0) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mModel, &tevStr);
+        mDoExt_modelUpdateDL(mModel);
+        float px = current.pos.x;
+        float pz = current.pos.z;
+        y = current.pos.y;
+        float shadowY = L_attr.shadowPosYOffset + y;
+        L_pPos.x = px;
+        L_shadowPos.x = L_pPos.x;
+        L_pPos.z = pz;
+        L_shadowPos.z = pz;
+        L_pPos.y = shadowY;
+        L_shadowPos.y = L_pPos.y;
+        mId = dComIfGd_setShadow(mId, 1, mModel, &L_pPos, L_attr.shadowCasterSize, L_attr.shadowScaleXY,
+            y, mGroundY, mFloorPoly, &tevStr, 0, L_attr.shadowScaleZ, &dDlst_shadowControl_c::mSimpleTexObj);
+    }
+    return true;
 }
 
 namespace daObjItnak {
