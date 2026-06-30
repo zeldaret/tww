@@ -91,10 +91,10 @@ public:
     void cutRideSwitchProc(int);
     void cutRunWaitStart(int);
     void cutRunWaitProc(int);
-    void searchNearLift(void*, void*);
+    static void* searchNearLift(void*, void*);
     void cutJumpToLiftStart(int);
     void cutJumpToLiftProc(int);
-    void searchNearRope(void*, void*);
+    static void* searchNearRope(void*, void*);
     void cutLiftToRopeStart(int);
     void cutLiftToRopeProc(int);
     void cutRopeTalkStart(int);
@@ -158,8 +158,10 @@ public:
                 //J3DModel* m710;
                 u8 m710;
                 u16 m712;
-                u8 m714;
-                u8 m715[0x724-0x715];
+                struct LiftSearch {
+                cXyz mClosestPos;
+                daNpc_P2_c* mActor;
+                } m714;
                 u8 m724;
                 u8 m725;
                 u32 m728;
@@ -171,14 +173,20 @@ public:
                 int m74C;
                 u8 m750;
                 u8 m751;
-    /* 0x754 */ dPa_smokeEcallBack m754;
+    /* 0x754 */ dPa_smokeEcallBack mSmokeCallback;
 
     /* 0x774 */ cXyz mSmokePos;
     /* 0x780 */ csXyz mSmokeAngle;
     /* 0x786 */ u8 m786;
                 u32 m788;
                 cXyz m78C;
-                u8 m798[0x7B0-0x798];
+                f32 m798;
+                f32 m79C;
+                f32 m7A0;
+                f32 m7A4;
+                s16 m7A8;
+                s16 m7AA;
+                u32 m7AC;
                 Vec m7B0;
                 himo3_class* m7BC;
                 u8 m7C0;
@@ -194,9 +202,13 @@ public:
     /* 0x7D5 */ s8 m7D5;
     /* 0x7D6 */ s8 m7D6;
     /* 0x7D7 */ u8 m7D7;
-    u8 m7D8;
+                u8 m7D8;
     /* 0x7DC */ cXyz m7DC;
-    /* 0x7E8 */ u8 m7E8[0x804-0x7E8];
+    /* 0x7E8 */ cXyz m7E8;
+                int m7F4;
+                f32 m7F8;
+                f32 m7FC;
+                f32 m800;
     /* 0x804 */ u32 m804;
     /* 0x808 */ s8 m808;
     /* 0x809 */ s8 m809;
