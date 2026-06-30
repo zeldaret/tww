@@ -1427,7 +1427,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_kytag06"),
     ActorRel(Matching,    "d_a_kytag07"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_lamp"),
-    ActorRel(NonMatching, "d_a_lod_bg"),
+    ActorRel(Equivalent,  "d_a_lod_bg"), # regalloc
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_lwood"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_magma"),
     ActorRel(Matching,    "d_a_majuu_flag"),
