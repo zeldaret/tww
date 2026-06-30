@@ -7,6 +7,7 @@
 #include "d/actor/d_a_swpropeller.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_cc_d.h"
+#include "d/d_a_obj.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -39,49 +40,168 @@ static dCcD_SrcCyl l_cyl_src = {
 };
 
 
+static BOOL nodeCallBack(J3DNode* i_node, int i_param);
+
+const char* daSwProp_c::m_arcname[2] = {"Hpbot1", "Vpbot_00"};
+const s16 daSwProp_c::m_bdlidx[2] = {3, 3};
+const u32 daSwProp_c::m_heapsize[2] = {0x880, 0x8C0};
+
 /* 00000078-000000B8       .text _delete__10daSwProp_cFv */
 bool daSwProp_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhase, m_arcname[mType]);
+    return true;
 }
 
 /* 000000B8-000000D8       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daSwProp_c*>(i_this)->CreateHeap();
 }
 
 /* 000000D8-000001B8       .text CreateHeap__10daSwProp_cFv */
-void daSwProp_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daSwProp_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]);
+    JUT_ASSERT(257, modelData != 0);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+    mpModel->setUserArea((u32)this);
+    return TRUE;
 }
 
 /* 000001B8-00000350       .text CreateInit__10daSwProp_cFv */
 void daSwProp_c::CreateInit() {
-    /* Nonmatching */
+    cullMtx = mpModel->getBaseTRMtx();
+    fopAcM_setCullSizeBox(this, -150.0f, -100.0f, -150.0f, 150.0f, 150.0f, 150.0f);
+    cullSizeFar = 1.0f;
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mAcch.SetWallNone();
+    mAcch.SetWaterNone();
+    mAcch.SetRoofNone();
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
+    m648 = fopAcM_GetParam(this) & 0xFF;
+    set_mtx();
+    JUTNameTab* nameTab = mpModel->getModelData()->getJointName();
+    for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
+        const char* name = nameTab->getName(i);
+        if (strcmp("kaiten", name) == 0) {
+            mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+            break;
+        }
+    }
+    mpModel->calc();
 }
 
 /* 00000350-00000404       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode* i_node, int i_param) {
+    if (i_param == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = (J3DJoint*)i_node;
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        daSwProp_c* i_this = (daSwProp_c*)model->getUserArea();
+        if (i_this) {
+            i_this->mRotY += i_this->mRotSpeed;
+            mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
+            mDoMtx_stack_c::YrotM(i_this->mRotY);
+            model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
+            cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 00000404-00000590       .text _create__10daSwProp_cFv */
 cPhs_State daSwProp_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daSwProp_c);
+    mType = (fopAcM_GetParam(this) >> 8) & 0xF;
+    cPhs_State phase = dComIfG_resLoad(&mPhase, m_arcname[mType]);
+    if (phase == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])) {
+            return cPhs_ERROR_e;
+        }
+        CreateInit();
+    }
+    return phase;
 }
 
 /* 000007B8-00000838       .text set_mtx__10daSwProp_cFv */
 void daSwProp_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000838-00000B60       .text _execute__10daSwProp_cFv */
 bool daSwProp_c::_execute() {
-    /* Nonmatching */
+    bool hit = false;
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    if (mCyl.ChkTgHit()) {
+        cCcD_Obj* hitObj = mCyl.GetTgHitObj();
+        if (hitObj != NULL) {
+            if (hitObj->GetAtType() & AT_TYPE_WIND) {
+                hit = true;
+                field_0x64E = 0;
+                mDoAud_seStart(0x6165, &eyePos, 0, dComIfGp_getReverb(current.roomNo));
+            } else if (hitObj->GetAtType() &
+                       ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT)) {
+                mRotSpeed = 0x300;
+                mRotTargetSpeed = (s16)(-0.45f * mRotSpeed);
+                field_0x64E = 1;
+                if (hitObj->GetAtType() & AT_TYPE_SWORD || hitObj->GetAtType() & AT_TYPE_SKULL_HAMMER ||
+                    hitObj->GetAtType() & AT_TYPE_MOBLIN_SPEAR || hitObj->GetAtType() & AT_TYPE_MACHETE) {
+                    if (mType == 1) {
+                        daObj::HitSeStart(&current.pos, current.roomNo, &mCyl, 0xB);
+                    } else if (mType == 0) {
+                        daObj::HitSeStart(&current.pos, current.roomNo, &mCyl, 0x11);
+                    }
+                }
+            }
+        }
+    }
+    if (hit) {
+        mRotSpeed = 0x1000;
+        mRotTargetSpeed = 0;
+    } else if (hit != field_0x64C) {
+        dComIfGs_revSwitch(m648, home.roomNo);
+    }
+    s16 step = 0x1E;
+    if (field_0x64E != 0) {
+        step = 0xA;
+    }
+    s16 ret = cLib_addCalcAngleS(&mRotSpeed, mRotTargetSpeed, step, 0x64, 0xA);
+    if (field_0x64E != 0 && ret == 0) {
+        mRotTargetSpeed = (s16)(-0.6f * mRotTargetSpeed);
+        if (abs(mRotTargetSpeed) < 0x20) {
+            mRotTargetSpeed = 0;
+            field_0x64E = 0;
+        }
+    }
+    if (mType == 1) {
+        mDoAud_seStart(0x61B1, &current.pos, (u32)(100.0f * ((f32)mRotSpeed / 4096.0f)), 0);
+    }
+    field_0x64C = hit;
+    set_mtx();
+    cXyz center = current.pos;
+    center.y += 50.0f;
+    mCyl.SetC(center);
+    dComIfG_Ccsp()->Set(&mCyl);
+    return true;
 }
 
 /* 00000B60-00000C00       .text _draw__10daSwProp_cFv */
 bool daSwProp_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdateDL(mpModel);
+    f32 groundH = mAcch.GetGroundH();
+    if (groundH != -1000000000.0f) {
+        dComIfGd_setSimpleShadow2(&current.pos, groundH, 65.0f, mAcch.m_gnd);
+    }
+    return true;
 }
 
 /* 00000C00-00000C20       .text daSwProp_Create__FPv */
