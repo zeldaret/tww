@@ -614,7 +614,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_spc_item01.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_vrbox.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_vrbox2.cpp"),
-            Object(NonMatching, "d/d_auction_screen.cpp"),
+            Object(Matching,    "d/d_auction_screen.cpp"),
             Object(Matching,    "d/d_place_name.cpp"),
             Object(NonMatching, "d/d_camera.cpp"),
             Object(Matching,    "d/d_envse.cpp"),

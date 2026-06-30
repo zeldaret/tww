@@ -84,9 +84,12 @@ void dAuction_screen_c::nowRupeeSet() {
 
 /* 8015FA68-8015FAFC       .text nextRupeeSet__17dAuction_screen_cFs */
 void dAuction_screen_c::nextRupeeSet(s16 i_rupees) {
-    changeNumberTexture(field_0xec[0].pane, (s16)(i_rupees / 100));
-    changeNumberTexture(field_0xec[1].pane, (s16)((i_rupees % 100) / 10));
-    changeNumberTexture(field_0xec[2].pane, (s16)(i_rupees % 10));
+    s16 r5 = i_rupees / 100;
+    s16 r31 = (i_rupees % 100) / 10;
+    s16 r30 = i_rupees % 10;
+    changeNumberTexture(field_0xec[0].pane, r5);
+    changeNumberTexture(field_0xec[1].pane, r31);
+    changeNumberTexture(field_0xec[2].pane, r30);
 }
 
 /* 8015FAFC-8015FB48       .text changeNumberTexture__17dAuction_screen_cFP7J2DPanei */
@@ -193,7 +196,6 @@ void dAuction_screen_c::rupeeCountTrans() {
 }
 
 /* 8015FE40-8015FFD4       .text rupeeCountUp__17dAuction_screen_cFv */
-// NONMATCHING - float instruction ordering
 void dAuction_screen_c::rupeeCountUp() {
     f32 var_f31 = field_0x44[0].mPosCenterOrig.y - field_0xec[0].mPosCenterOrig.y;
 
@@ -210,24 +212,23 @@ void dAuction_screen_c::rupeeCountUp() {
         mDoAud_seStart(JA_SE_AUC_PRICE_INC, NULL);
     }
 
-    var_f31 *= fopMsgM_valueIncrease(3, field_0x470, 2);
+    f32 temp = fopMsgM_valueIncrease(3, field_0x470, 2);
 
-    fopMsgM_paneTrans(&field_0x44[2], 0.0f, var_f31);
-    fopMsgM_paneTrans(&field_0xec[2], 0.0f, var_f31);
+    fopMsgM_paneTrans(&field_0x44[2], 0.0f, var_f31 * temp);
+    fopMsgM_paneTrans(&field_0xec[2], 0.0f, var_f31 * temp);
 
     if ((field_0x472 % 10) == 9 || field_0x470 == 0) {
-        fopMsgM_paneTrans(&field_0x44[1], 0.0f, var_f31);
-        fopMsgM_paneTrans(&field_0xec[1], 0.0f, var_f31);
+        fopMsgM_paneTrans(&field_0x44[1], 0.0f, var_f31 * temp);
+        fopMsgM_paneTrans(&field_0xec[1], 0.0f, var_f31 * temp);
     }
 
     if ((field_0x472 % 100) == 99 || field_0x470 == 0) {
-        fopMsgM_paneTrans(&field_0x44[0], 0.0f, var_f31);
-        fopMsgM_paneTrans(&field_0xec[0], 0.0f, var_f31);
+        fopMsgM_paneTrans(&field_0x44[0], 0.0f, var_f31 * temp);
+        fopMsgM_paneTrans(&field_0xec[0], 0.0f, var_f31 * temp);
     }
 }
 
 /* 8015FFD4-8016013C       .text rupeeCountDown__17dAuction_screen_cFv */
-// NONMATCHING - float instruction ordering
 void dAuction_screen_c::rupeeCountDown() {
     f32 var_f31 = field_0x44[0].mPosCenterOrig.y - field_0xec[0].mPosCenterOrig.y;
 
@@ -244,47 +245,48 @@ void dAuction_screen_c::rupeeCountDown() {
 
     nextRupeeSet(field_0x472 + 1);
 
-    var_f31 = -var_f31 * fopMsgM_valueIncrease(3, 3 - field_0x470, 2);
+    f32 temp = fopMsgM_valueIncrease(3, 3 - field_0x470, 2);
 
-    fopMsgM_paneTrans(&field_0x44[2], 0.0f, var_f31);
-    fopMsgM_paneTrans(&field_0xec[2], 0.0f, var_f31);
+    fopMsgM_paneTrans(&field_0x44[2], 0.0f, -var_f31 * temp);
+    fopMsgM_paneTrans(&field_0xec[2], 0.0f, -var_f31 * temp);
 
     if ((field_0x472 % 10) == 0 || field_0x470 == 3) {
-        fopMsgM_paneTrans(&field_0x44[1], 0.0f, var_f31);
-        fopMsgM_paneTrans(&field_0xec[1], 0.0f, var_f31);
+        fopMsgM_paneTrans(&field_0x44[1], 0.0f, -var_f31 * temp);
+        fopMsgM_paneTrans(&field_0xec[1], 0.0f, -var_f31 * temp);
     }
 
     if ((field_0x472 % 100) == 0 || field_0x470 == 3) {
-        fopMsgM_paneTrans(&field_0x44[0], 0.0f, var_f31);
-        fopMsgM_paneTrans(&field_0xec[0], 0.0f, var_f31);
+        fopMsgM_paneTrans(&field_0x44[0], 0.0f, -var_f31 * temp);
+        fopMsgM_paneTrans(&field_0xec[0], 0.0f, -var_f31 * temp);
     }
 }
 
 /* 8016013C-801604A0       .text slotShowAnime__17dAuction_screen_cFv */
 void dAuction_screen_c::slotShowAnime() {
-    f32 var_f31;
 
     if (slotShow) {
         if (field_0xc.mUserArea <= 7) {
             field_0xc.mUserArea++;
 
+            f32 f31 = -50.0f;
+            f32 f30 = 223.0f;
             f32 temp_f1 = fopMsgM_valueIncrease(7, field_0xc.mUserArea, 0);
-            var_f31 = -50.0f * (1.0f - temp_f1);
+            f32 var_f31 = f31 * (1.0f - temp_f1);
 
-            fopMsgM_paneTrans(&field_0xc, var_f31, 223.0f);
-            fopMsgM_paneTrans(&field_0x194, var_f31, 223.0f);
+            fopMsgM_paneTrans(&field_0xc, var_f31, f30);
+            fopMsgM_paneTrans(&field_0x194, var_f31, f30);
 
-            fopMsgM_paneTrans(&field_0x1cc[0], var_f31, 223.0f);
-            fopMsgM_paneTrans(&field_0x1cc[1], var_f31, 223.0f);
-            fopMsgM_paneTrans(&field_0x1cc[2], var_f31, 223.0f);
-            fopMsgM_paneTrans(&field_0x1cc[3], var_f31, 223.0f);
-            fopMsgM_paneTrans(&field_0x1cc[4], var_f31, 223.0f);
-            fopMsgM_paneTrans(&field_0x1cc[5], var_f31, 223.0f);
+            fopMsgM_paneTrans(&field_0x1cc[0], var_f31, f30);
+            fopMsgM_paneTrans(&field_0x1cc[1], var_f31, f30);
+            fopMsgM_paneTrans(&field_0x1cc[2], var_f31, f30);
+            fopMsgM_paneTrans(&field_0x1cc[3], var_f31, f30);
+            fopMsgM_paneTrans(&field_0x1cc[4], var_f31, f30);
+            fopMsgM_paneTrans(&field_0x1cc[5], var_f31, f30);
 
-            fopMsgM_paneTrans(&field_0x31c[0], var_f31, 223.0f);
-            fopMsgM_paneTrans(&field_0x31c[1], var_f31, 223.0f);
-            fopMsgM_paneTrans(&field_0x31c[2], var_f31, 223.0f);
-            fopMsgM_paneTrans(&field_0x31c[3], var_f31, 223.0f);
+            fopMsgM_paneTrans(&field_0x31c[0], var_f31, f30);
+            fopMsgM_paneTrans(&field_0x31c[1], var_f31, f30);
+            fopMsgM_paneTrans(&field_0x31c[2], var_f31, f30);
+            fopMsgM_paneTrans(&field_0x31c[3], var_f31, f30);
 
             if (field_0xc.mUserArea > 7 && !talkFlag) {
                 talkFlag = 1;
@@ -296,7 +298,7 @@ void dAuction_screen_c::slotShowAnime() {
         if (field_0x31c[0].mUserArea < 7) {
             field_0x31c[0].mUserArea++;
 
-            var_f31 = fopMsgM_valueIncrease(7, field_0x31c[0].mUserArea, 0);
+            f32 var_f31 = fopMsgM_valueIncrease(7, field_0x31c[0].mUserArea, 0);
 
             fopMsgM_setNowAlpha(&field_0xc, var_f31);
 
@@ -326,7 +328,7 @@ void dAuction_screen_c::slotShowAnime() {
         if (field_0xc.mUserArea > 0) {
             field_0x31c[0].mUserArea--;
 
-            var_f31 = fopMsgM_valueIncrease(7, field_0x31c[0].mUserArea, 0);
+            f32 var_f31 = fopMsgM_valueIncrease(7, field_0x31c[0].mUserArea, 0);
 
             fopMsgM_setNowAlpha(&field_0xc, var_f31);
 
@@ -389,11 +391,11 @@ void dAuction_screen_c::initialize() {
 void dAuction_screen_c::_create() {
     scrn1 = new J2DScreen();
     JUT_ASSERT(VERSION_SELECT(540, 540, 540, 540), scrn1 != NULL);
-    scrn1->set("auction1.blo", getArchive(NULL));
+    scrn1->set("auction1.blo", archive);
 
     scrn2 = new J2DScreen();
     JUT_ASSERT(VERSION_SELECT(544, 544, 544, 544), scrn2 != NULL);
-    scrn2->set("auction2.blo", getArchive(NULL));
+    scrn2->set("auction2.blo", archive);
 
     screenSet();
     initialize();
@@ -537,7 +539,7 @@ BOOL dAs_c::_delete() {
         mDoExt_destroySolidHeap(heap);
     }
 
-    dComIfG_resDelete(&phase, "Auction");
+    dComIfG_resDeleteDemo(&phase, "Auction");
     return TRUE;
 }
 

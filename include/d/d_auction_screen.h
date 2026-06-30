@@ -16,16 +16,14 @@ public:
         field_0x470 = 0;  // guess
     }
 
-    // implementation is a guess
-    JKRArchive* getArchive(JKRArchive*) {
-        return archive;
-    }
-
     virtual ~dAuction_screen_c() {}
     void draw() {
         _draw();
     }
     
+    // TODO
+    void getArchive(JKRArchive*) {}
+
     void screenSet();
     void initPosSet(fopMsgM_pane_class*, f32, f32);
     void gaugeMove();
