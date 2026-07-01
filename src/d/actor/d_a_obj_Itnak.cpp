@@ -3,7 +3,8 @@
  * Object - Unused - Darknut statue
  */
 
- #include "d/dolzel_rel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
+#include "SSystem/SComponent/c_xyz.h"
 #include "d/actor/d_a_obj_Itnak.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -14,63 +15,108 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_base.h"
 #include "m_Do/m_Do_mtx.h"
+#include "d/d_a_obj.h"
 #include "res/Object/Itnak.h"
 
 namespace daObjItnak {
+namespace {
 
-    const char Act_c::m_arcname[] = "Itnak";
-
-
-    static const dCcD_SrcCyl M_cyl_src = {
-        // dCcD_SrcGObjInf
-        {
-            /* Flags             */ 0,
-            /* SrcObjAt  Type    */ 0,
-            /* SrcObjAt  Atp     */ 0,
-            /* SrcObjAt  SPrm    */ 0,
-            /* SrcObjTg  Type    */ ~(AT_TYPE_LIGHT | AT_TYPE_UNK400000 | AT_TYPE_WIND | AT_TYPE_UNK20000 | AT_TYPE_WATER),
-            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_GrpAll_e,
-            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
-            /* SrcGObjAt Se      */ 0,
-            /* SrcGObjAt HitMark */ 0,
-            /* SrcGObjAt Spl     */ 0,
-            /* SrcGObjAt Mtrl    */ 0,
-            /* SrcGObjAt SPrm    */ 0,
-            /* SrcGObjTg Se      */ 0,
-            /* SrcGObjTg HitMark */ 0,
-            /* SrcGObjTg Spl     */ 0,
-            /* SrcGObjTg Mtrl    */ 0,
-            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
-            /* SrcGObjCo SPrm    */ 0,
-        },
-        // cM3dGCylS
-        {{
-            /* Center */ {0.0f, 0.0f, 0.0f},
-            /* Radius */ 100.0f,
-            /* Height */ 200.0f,
-        }},
+    struct Attr_c {
+        /* 0x00 */ f32 field_0x00;  //  68.0f
+        /* 0x04 */ f32 field_0x04;  // 230.0f
+        /* 0x08 */ f32 field_0x08;  //  62.0f
+        /* 0x0C */ f32 field_0x0C;  // 121.0f
+        /* 0x10 */ f32 field_0x10;  //  41.0f
+        /* 0x14 */ f32 field_0x14;  //  44.0f
+        /* 0x18 */ f32 field_0x18;  //  84.0f
+        /* 0x1C */ f32 field_0x1C;  //  47.0f
+        /* 0x20 */ f32 field_0x20;  // 205.0f
+        /* 0x24 */ f32 field_0x24;  // -88.0f
+        /* 0x28 */ f32 field_0x28;  //  83.0f
+        /* 0x2C */ f32 field_0x2C;  //  86.0f
     };
 
-    namespace {
-        struct Attr_c {
-            /* 0x00 */ u8 _pad[0xC8 - 0x00];
-            /* 0xC8 */ f32 shadowPosYOffset;
-            /* 0xCC */ f32 shadowCasterSize;
-            /* 0xD0 */ f32 shadowScaleXY;
-            /* 0xD4 */ f32 shadowScaleZ;
-        };
-        const Attr_c L_attr = {
-            /* 0x00 */ {0},
-            /* field_0xC8 */ 30.0f,
-            /* field_0xCC */ 800.0f,
-            /* field_0xD0 */ 60.0f,
-            /* field_0xD4 */ 1.0f
-        };
+    struct Rodata_c {
+        /* 0x00 */ Attr_c attr;
+        /* 0x30 */ dCcD_SrcCyl M_cyl_src;
+        /* 0x74 */ char m_arcname[6];
+        /* 0x7A */ u16 pad_7A;
+        // _create cull + ground
+        /* 0x7C */ f32 cullMinX;
+        /* 0x80 */ f32 cullMinY;
+        /* 0x84 */ f32 cullMinZ;
+        /* 0x88 */ f32 cullMaxX;
+        /* 0x8C */ f32 cullMaxY;
+        /* 0x90 */ f32 cullMaxZ;
+        /* 0x94 */ f32 groundYOffset;
+        // set_collision literals
+        /* 0x98 */ f32 field_0x98;
+        /* 0x9C */ f32 field_0x9C;
+        /* 0xA0 */ f32 field_0xA0;
+        /* 0xA4 */ f32 field_0xA4;
+        /* 0xA8 */ f32 field_0xA8;
+        /* 0xAC */ f32 field_0xAC;
+        /* 0xB0 */ f32 field_0xB0;
+        /* 0xB4 */ f32 field_0xB4;
+        /* 0xB8 */ f32 field_0xB8;
+        /* 0xBC */ f32 field_0xBC;
+        /* 0xC0 */ f32 field_0xC0;
+        /* 0xC4 */ f32 field_0xC4;
+        // _draw shadow
+        /* 0xC8 */ f32 shadowPosYOffset;
+        /* 0xCC */ f32 shadowCasterSize;
+        /* 0xD0 */ f32 shadowScaleXY;
+        /* 0xD4 */ f32 shadowScaleZ;
+    };
+    
+    static const Rodata_c L_attr = {
+        /* L_attr */
+        {
+            68.0f, 230.0f, 62.0f, 121.0f,
+            41.0f, 44.0f, 84.0f, 47.0f,
+            205.0f, -88.0f, 83.0f, 86.0f,
+        },
+        /* M_cyl_src */
+        {
+            0, 0, 0, 0,
+            ~(AT_TYPE_LIGHT | AT_TYPE_UNK400000 | AT_TYPE_WIND | AT_TYPE_UNK20000 | AT_TYPE_WATER),
+            cCcD_TgSPrm_Set_e | cCcD_TgSPrm_GrpAll_e,
+            cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+            0, 0, 0, 0, 0,
+            0, 0, 0, 0,
+            dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
+            0,
+            {{
+                {0.0f, 0.0f, 0.0f},
+                100.0f,
+                200.0f,
+            }},
+        },
+      "Itnak",
+        0,
+        // cull box
+        -120.0f, 0.0f, -100.0f,
+         120.0f, 280.0f, 150.0f,
+        100.0f,
+        // set_collision pool (@4429+)
+        68.0f, 230.0f, 41.0f, 44.0f, 84.0f, 62.0f,
+        121.0f, -88.0f, 83.0f, 86.0f, 47.0f, 205.0f,
+        // shadow
+        30.0f, 800.0f, 60.0f, 1.0f,
+    };
 
-        inline static const Attr_c& attr() { return L_attr; }
+    inline const Attr_c& attr() { return L_attr.attr; }
 
-        STATIC_ASSERT(sizeof(Attr_c) == 0xD8);
-    }
+    STATIC_ASSERT(sizeof(Attr_c) == 0x30);
+    STATIC_ASSERT(sizeof(dCcD_SrcCyl) == 0x44);
+    STATIC_ASSERT(offsetof(Rodata_c, M_cyl_src) == 0x30);
+    STATIC_ASSERT(offsetof(Rodata_c, m_arcname) == 0x74);
+    STATIC_ASSERT(offsetof(Rodata_c, pad_7A) == 0x7A);
+    STATIC_ASSERT(offsetof(Rodata_c, cullMinX) == 0x7C);
+    STATIC_ASSERT(offsetof(Rodata_c, groundYOffset) == 0x94);
+    STATIC_ASSERT(offsetof(Rodata_c, shadowPosYOffset) == 0xC8);
+    STATIC_ASSERT(sizeof(Rodata_c) == 0xD8);
+}
 }
 
 /* 00000078-0000009C       .text solidHeapCB__Q210daObjItnak5Act_cFP10fopAc_ac_c */
@@ -83,7 +129,7 @@ bool daObjItnak::Act_c::create_heap() {
     J3DModelData* L_modelData;
     bool ret;
 
-    L_modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, dRes_INDEX_ITNAK_BDL_ITNAK_e);
+    L_modelData = (J3DModelData *)dComIfG_getObjectRes(L_attr.m_arcname, dRes_INDEX_ITNAK_BDL_ITNAK_e);
     JUT_ASSERT(0x141, L_modelData != NULL);
     if (L_modelData != NULL) {
         mModel = mDoExt_J3DModel__create(L_modelData, 0, 0x11000002);
@@ -102,28 +148,41 @@ bool daObjItnak::Act_c::create_heap() {
 
 /* 0000016C-000003A0       .text _create__Q210daObjItnak5Act_cFv */
 cPhs_State daObjItnak::Act_c::_create() {
-    fpc_ProcID proc_id;
-
     fopAcM_ct(this, Act_c);
-    cPhs_State rt = dComIfG_resLoad(&mPhase, m_arcname);
+    cPhs_State rt = dComIfG_resLoad(&mPhase, L_attr.m_arcname);
+    mDrawMode = daObj::PrmAbstract<int>(this, PRM_VISIBLE_W, PRM_VISIBLE_S);
+
     if (rt == cPhs_COMPLEATE_e) {
-        if(fopAcM_entrySolidHeap(this, solidHeapCB, 0x820) != 0) {
+        if(fopAcM_entrySolidHeap(this, solidHeapCB, 0) != 0) {
             mVisible = mDrawMode;
-            cullMtx = mModel->getBaseTRMtx();
-            fopAc_cullSizeBox(cXyz(-120.0f,0.0f,-100.0f), cXyz(120.0f,280.0f,150.0f));            
+            cullMtx = (MtxP)&mModel->getBaseTRMtx();
+            fopAcM_setCullSizeBox(this,
+                L_attr.cullMinX, L_attr.cullMinY, L_attr.cullMinZ,
+                L_attr.cullMaxX, L_attr.cullMaxY, L_attr.cullMaxZ);            
+            
             cXyz gndPos(current.pos);
             gndPos.y += 100.0f;
             mGndChk.SetPos(&gndPos);
-            if (fopAcM_GetID(this) == NULL) {
-                proc_id = 0xFFFFFFFF;
-            } else {
-                proc_id = fopAcM_GetID(this);
-            }
-            mGndChk.SetActorPid(proc_id);
+            mGndChk.SetActorPid(fpcM_GetID(this));
             mGroundY = dComIfG_Bgsp()->GroundCross(&mGndChk);
-            mStts.Init(0xFF, 0xFF, this);
-            mCyl.Set(M_cyl_src);
-            //TODO: finish
+
+            mStts0.Init(0xFF, 0xFF, this);
+            mCyl0.Set(L_attr.M_cyl_src);
+            mCyl0.SetStts(&mStts0);
+            mCyl0.SetTgVec((cXyz&)cXyz::Zero);
+            mCyl0.OnTgNoHitMark();
+
+            mStts1.Init(0xFF, 0xFF, this);
+            mCyl1.Set(L_attr.M_cyl_src);
+            mCyl1.SetStts(&mStts1);
+            mCyl1.SetTgVec((cXyz&)cXyz::Zero);
+            mCyl1.OnTgNoHitMark();
+            
+            mStts2.Init(0xFF, 0xFF, this);
+            mCyl2.Set(L_attr.M_cyl_src);
+            mCyl2.SetStts(&mStts2);
+            mCyl2.SetTgVec((cXyz&)cXyz::Zero);
+            mCyl2.OnTgNoHitMark();
         } else {
             rt = cPhs_ERROR_e;
         }
@@ -133,7 +192,7 @@ cPhs_State daObjItnak::Act_c::_create() {
 
 /* 00000D10-00000D40       .text _delete__Q210daObjItnak5Act_cFv */
 bool daObjItnak::Act_c::_delete() {
-    dComIfG_resDeleteDemo(&mPhase, Act_c::m_arcname);
+    dComIfG_resDeleteDemo(&mPhase, L_attr.m_arcname);
     return TRUE;
 }
 
@@ -172,7 +231,6 @@ bool daObjItnak::Act_c::_execute() {
 
 /* 00001158-0000123C       .text _draw__Q210daObjItnak5Act_cFv */
 bool daObjItnak::Act_c::_draw() {
-    const Attr_c& L_attr = attr();
     float y;
     cXyz L_pPos;
     cXyz L_shadowPos;
