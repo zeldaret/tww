@@ -18,7 +18,6 @@ public:
         u32 mC;
     };
 
-
     cXyz& getAttentionBasePos() {return m6F8;}
     void getBackbone_x() {}
     void getBackbone_y() {}

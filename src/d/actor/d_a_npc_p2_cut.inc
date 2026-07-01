@@ -9,11 +9,9 @@
 #include "d/d_lib.h"
 #include "d/d_s_play.h"
 
-
-
 /* 00005238-00005528       .text cutProc__10daNpc_P2_cFv */
 void daNpc_P2_c::cutProc() {
-    /* Nonmatching */
+
     static char* action_table[] ={
         "TALK",
         "RIDE_SWITCH",
@@ -148,7 +146,7 @@ void daNpc_P2_c::cutProc() {
 
 /* 00005528-000055DC       .text cutTalkStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutTalkStart(int i_param_1) {
-    /* Nonmatching */
+
     int* puVar1 = dComIfGp_evmng_getMyIntegerP(i_param_1,"MsgNum");
     if(puVar1 == NULL){
         m728 = 0;
@@ -167,7 +165,7 @@ void daNpc_P2_c::cutTalkStart(int i_param_1) {
 
 /* 000055DC-0000562C       .text cutTalkProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutTalkProc(int i_param_1) {
-    /* Nonmatching */
+
     if(talk(true) == 0x12){
         dComIfGp_evmng_cutEnd(i_param_1);
     }
@@ -176,7 +174,7 @@ void daNpc_P2_c::cutTalkProc(int i_param_1) {
 
 /* 0000562C-000056F4       .text cutRideSwitchStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutRideSwitchStart(int i_param_1) {
-    /* Nonmatching */
+
     f32* pfVar1 = dComIfGp_evmng_getMyFloatP(i_param_1,"Speed_y");
     f32* pfVar2 = dComIfGp_evmng_getMyFloatP(i_param_1,"Gravity");
 
@@ -197,7 +195,7 @@ void daNpc_P2_c::cutRideSwitchStart(int i_param_1) {
 
 /* 000056F4-0000589C       .text cutRideSwitchProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutRideSwitchProc(int i_param_1) {
-    /* Nonmatching */
+
     fopAc_ac_c* actor = fopAcM_SearchByName(  fpcNm_Obj_Swpush_e);
     s16 other = fopAcM_searchActorAngleY(this,actor);    //TODO: Unused?
     f32 max_step = 24.0f;
@@ -222,7 +220,7 @@ void daNpc_P2_c::cutRideSwitchProc(int i_param_1) {
 
 /* 0000589C-00005914       .text cutRunWaitStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutRunWaitStart(int i_param_1) {
-    /* Nonmatching */
+
     int* puVar1 = (int*)dComIfGp_evmng_getMyIntegerP(i_param_1,"Timer");
     if(puVar1 == NULL){
         m7F4 = 0;
@@ -247,7 +245,7 @@ void daNpc_P2_c::cutRunWaitProc(int i_param_1) {
 
 /* 000059B0-00005BD0       .text searchNearLift__10daNpc_P2_cFPvPv */
 void* daNpc_P2_c::searchNearLift(void* i_param_1, void* i_param_2) {
-    /* Nonmatching */
+
     daNpc_P2_c* search_param_1 = static_cast<daNpc_P2_c*>(i_param_1);
     daNpc_P2_c* search_param_2 = static_cast<daNpc_P2_c*>(i_param_2);
     if(fopAcM_IsActor(i_param_1) && fopAcM_GetName(i_param_1) == fpcNm_Obj_Hlift_e){
@@ -267,7 +265,7 @@ void* daNpc_P2_c::searchNearLift(void* i_param_1, void* i_param_2) {
 
 /* 00005BD0-00005CD4       .text cutJumpToLiftStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutJumpToLiftStart(int i_param_1) {
-    /* Nonmatching */
+
     f32* speed = dComIfGp_evmng_getMyFloatP(i_param_1, "Speed");
     f32* speed_y = dComIfGp_evmng_getMyFloatP(i_param_1, "Speed_y");
     f32* gravity = dComIfGp_evmng_getMyFloatP(i_param_1, "Gravity");
@@ -296,7 +294,7 @@ void daNpc_P2_c::cutJumpToLiftStart(int i_param_1) {
 
 /* 00005CD4-00006064       .text cutJumpToLiftProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutJumpToLiftProc(int i_param_1) {
-    /* Nonmatching */
+
     fopAcM_Search(searchNearLift,this);
     f32 maxSpeed = m7FC;
     himo3_class* phVar1 = (himo3_class*)mActor;
@@ -356,7 +354,7 @@ void daNpc_P2_c::cutJumpToLiftProc(int i_param_1) {
 
 /* 00006064-00006284       .text searchNearRope__10daNpc_P2_cFPvPv */
 void* daNpc_P2_c::searchNearRope(void* i_param_1, void* i_param_2) {
-    /* Nonmatching */
+
     daNpc_P2_c* search_param_1 = static_cast<daNpc_P2_c*>(i_param_1);
     daNpc_P2_c* search_param_2 = static_cast<daNpc_P2_c*>(i_param_2);
     if(fopAcM_IsActor(i_param_1) && fopAcM_GetName(i_param_1) == fpcNm_HIMO3_e){
@@ -376,7 +374,7 @@ void* daNpc_P2_c::searchNearRope(void* i_param_1, void* i_param_2) {
 
 /* 00006284-00006388       .text cutLiftToRopeStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutLiftToRopeStart(int i_param_1) {
-    /* Nonmatching */
+
     f32* speed = dComIfGp_evmng_getMyFloatP(i_param_1, "Speed");
     f32* speed_y = dComIfGp_evmng_getMyFloatP(i_param_1, "Speed_y");
     f32* gravity = dComIfGp_evmng_getMyFloatP(i_param_1, "Gravity");
@@ -406,7 +404,7 @@ void daNpc_P2_c::cutLiftToRopeStart(int i_param_1) {
 
 /* 00006388-000065B8       .text cutLiftToRopeProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutLiftToRopeProc(int i_param_1) {
-    /* Nonmatching */
+
 
     fopAcM_Search(searchNearRope,this);
     f32 speed_f = m7FC;
@@ -439,7 +437,7 @@ void daNpc_P2_c::cutLiftToRopeProc(int i_param_1) {
 
 /* 000065B8-00006B08       .text cutRopeTalkStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutRopeTalkStart(int i_staff_id) {
-    /* Nonmatching */
+
     //cXyz filler(0,0,0);
 
     himo3_class* pfVar7 = (himo3_class*)mActor;
@@ -518,7 +516,7 @@ void daNpc_P2_c::cutRopeTalkStart(int i_staff_id) {
 
 /* 00006B08-00007314       .text cutRopeTalkProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutRopeTalkProc(int i_param_1) {
-    /* Nonmatching */
+
     daNpc_P2_c* this_00 = this;
     J3DModel* model_p = mpMorf->getModel();
     himo3_class* rope = m7BC;
@@ -641,7 +639,7 @@ void daNpc_P2_c::cutRopeTalkProc(int i_param_1) {
 
 /* 00007314-0000743C       .text cutRopeToLiftStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutRopeToLiftStart(int i_staff_id) {
-    /* Nonmatching */
+
     f32* speed_p = dComIfGp_evmng_getMyFloatP(i_staff_id, "Speed");
     f32* speed_y_p = dComIfGp_evmng_getMyFloatP(i_staff_id, "Speed_y");
     f32* gravity_p = dComIfGp_evmng_getMyFloatP(i_staff_id, "Gravity");
@@ -677,8 +675,8 @@ void daNpc_P2_c::cutRopeToLiftStart(int i_staff_id) {
 
 /* 0000743C-00007694       .text cutRopeToLiftProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutRopeToLiftProc(int i_param_1) {
-    /* Nonmatching */
-    fopAcM_Search(searchNearRope,this);
+
+    fopAcM_Search(searchNearLift,this);
     cXyz ropePos = mActor->current.pos;
     f32 dist = (ropePos - current.pos).absXZ();
     mSmokePos = current.pos;
@@ -711,7 +709,7 @@ void daNpc_P2_c::cutRopeToLiftProc(int i_param_1) {
 
 /* 00007694-00007808       .text cutJumpToGoalStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutJumpToGoalStart(int i_staff_id) {
-    /* Nonmatching */
+
     f32* speed = dComIfGp_evmng_getMyFloatP(i_staff_id, "Speed");
     f32* speedY = dComIfGp_evmng_getMyFloatP(i_staff_id, "Speed_y");
     f32* gravity = dComIfGp_evmng_getMyFloatP(i_staff_id, "Gravity");
@@ -748,7 +746,7 @@ void daNpc_P2_c::cutJumpToGoalStart(int i_staff_id) {
 
 /* 00007808-00007B3C       .text cutJumpToGoalProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutJumpToGoalProc(int i_param_1) {
-    /* Nonmatching */
+
 
     cXyz ropePos = m7E8;
     f32 dist = (ropePos - current.pos).absXZ();
@@ -809,7 +807,7 @@ void daNpc_P2_c::cutJumpToGoalProc(int i_param_1) {
 
 /* 00007B3C-00007D08       .text cutJumpStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutJumpStart(int i_staff_id) {
-    /* Nonmatching */
+
     f32* speed_p = dComIfGp_evmng_getMyFloatP(i_staff_id, "Speed");
     f32* speed_y_p= dComIfGp_evmng_getMyFloatP(i_staff_id, "Speed_y");
     f32* gravity_p = dComIfGp_evmng_getMyFloatP(i_staff_id, "Gravity");
@@ -852,7 +850,7 @@ void daNpc_P2_c::cutJumpStart(int i_staff_id) {
 
 /* 00007D08-00007F70       .text cutJumpProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutJumpProc(int i_staff_id) {
-    /* Nonmatching */
+
     cXyz goalPos = m7E8;
     f32 dist = (goalPos - current.pos).absXZ();
 
@@ -893,7 +891,7 @@ void daNpc_P2_c::cutJumpProc(int i_staff_id) {
 
 /* 00007F70-000080B4       .text cutSetAnmStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutSetAnmStart(int i_staff_id) {
-    /* Nonmatching */
+
     char* name = dComIfGp_evmng_getMyStringP(i_staff_id, "Name");
 
     if (name && !strcmp(name, "KYORO")) {
@@ -913,7 +911,7 @@ void daNpc_P2_c::cutSetAnmStart(int i_staff_id) {
 
 /* 000080B4-00008114       .text cutSetAnmProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutSetAnmProc(int i_param_1) {
-    /* Nonmatching */
+
     if(mpMorf->isStop()){
         dComIfGp_evmng_cutEnd(i_param_1);
     }
@@ -921,7 +919,7 @@ void daNpc_P2_c::cutSetAnmProc(int i_param_1) {
 
 /* 00008114-00008154       .text cutSwOnStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutSwOnStart(int) {
-    /* Nonmatching */
+
     if(m292 != 0xFF){
         fopAcM_onSwitch(this,m292);
     }   
@@ -929,7 +927,7 @@ void daNpc_P2_c::cutSwOnStart(int) {
 
 /* 00008154-000081B4       .text cutSwOnProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutSwOnProc(int i_param_1) {
-    /* Nonmatching */
+
     if(m292 != 0xFF){
         fopAcM_onSwitch(this,m292);
     }   
@@ -938,7 +936,7 @@ void daNpc_P2_c::cutSwOnProc(int i_param_1) {
 
 /* 000081B4-000081F4       .text cutSwOffStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutSwOffStart(int) {
-    /* Nonmatching */
+
     if(m292 != 0xFF){
         fopAcM_offSwitch(this,m292);
     }   
@@ -946,7 +944,7 @@ void daNpc_P2_c::cutSwOffStart(int) {
 
 /* 000081F4-00008254       .text cutSwOffProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutSwOffProc(int i_param_1) {
-    /* Nonmatching */
+
     if(m292 != 0xFF){
         fopAcM_offSwitch(this,m292);
     }   
@@ -967,24 +965,24 @@ void daNpc_P2_c::cutSurpriseProc(int i_param_1) {
 
 /* 000082F8-00008350       .text cutOmamoriInitStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutOmamoriInitStart(int) {
-    /* Nonmatching */
+
     mDoAud_seStart(JA_SE_ITM_OMAMORI_TETLA);
 }
 
 /* 00008350-0000837C       .text cutOmamoriInitProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutOmamoriInitProc(int i_param_1) {
-    /* Nonmatching */
+
     dComIfGp_evmng_cutEnd(i_param_1);
 }
 
 /* 0000837C-000083D4       .text cutOmamoriEndStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutOmamoriEndStart(int) {
-    /* Nonmatching */
+
     mDoAud_seStart(JA_SE_ITM_OMAMORI_ED_TALK);
 }
 
 /* 000083D4-00008400       .text cutOmamoriEndProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutOmamoriEndProc(int i_param_1) {
-    /* Nonmatching */
+
     dComIfGp_evmng_cutEnd(i_param_1); 
 }
