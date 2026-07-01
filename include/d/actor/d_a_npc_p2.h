@@ -158,10 +158,8 @@ public:
                 //J3DModel* m710;
                 u8 m710;
                 u16 m712;
-                struct LiftSearch {
                 cXyz mClosestPos;
                 daNpc_P2_c* mActor;
-                } m714;
                 u8 m724;
                 u8 m725;
                 u32 m728;
@@ -174,7 +172,6 @@ public:
                 u8 m750;
                 u8 m751;
     /* 0x754 */ dPa_smokeEcallBack mSmokeCallback;
-
     /* 0x774 */ cXyz mSmokePos;
     /* 0x780 */ csXyz mSmokeAngle;
     /* 0x786 */ u8 m786;

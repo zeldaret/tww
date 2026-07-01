@@ -10,9 +10,27 @@
 #include "d/d_s_play.h"
 
 
+
 /* 00005238-00005528       .text cutProc__10daNpc_P2_cFv */
 void daNpc_P2_c::cutProc() {
     /* Nonmatching */
+    static char* action_table[] ={
+        "TALK",
+        "RIDE_SWITCH",
+        "RUN_WAIT",
+        "JUMP_TO_LIFT",
+        "LIFT_TO_ROPE",
+        "ROPE_TALK",
+        "ROPE_TO_LIFT",
+        "JUMP_TO_GOAL",
+        "SET_ANM",
+        "JUMP",
+        "SW_ON",
+        "SW_OFF",
+        "SURPRISE",
+        "OMAMORI_INIT",
+        "OMAMORI_END"
+    };
 
   int iVar1;
   int staffIdx = dComIfGp_evmng_getMyStaffId("P2b");
@@ -233,14 +251,14 @@ void* daNpc_P2_c::searchNearLift(void* i_param_1, void* i_param_2) {
     daNpc_P2_c* search_param_1 = static_cast<daNpc_P2_c*>(i_param_1);
     daNpc_P2_c* search_param_2 = static_cast<daNpc_P2_c*>(i_param_2);
     if(fopAcM_IsActor(i_param_1) && fopAcM_GetName(i_param_1) == fpcNm_Obj_Hlift_e){
-        if(search_param_2->m714.mClosestPos.abs() == 0.0f){
-            search_param_2->m714.mClosestPos = (search_param_1)->current.pos;
+        if(search_param_2->mClosestPos.abs() == 0.0f){
+            search_param_2->mClosestPos = (search_param_1)->current.pos;
         }else{
-            f32 current_dist = (search_param_2->m714.mClosestPos - search_param_2->current.pos).abs();
+            f32 current_dist = (search_param_2->mClosestPos - search_param_2->current.pos).abs();
             f32 new_dist = (search_param_1->current.pos - search_param_2->current.pos).abs();
             if(new_dist < current_dist){
-                search_param_2->m714.mClosestPos = (search_param_1)->current.pos;
-                search_param_2->m714.mActor = (search_param_1);
+                search_param_2->mClosestPos = (search_param_1)->current.pos;
+                search_param_2->mActor = (search_param_1);
             }
         }
     }
@@ -281,7 +299,7 @@ void daNpc_P2_c::cutJumpToLiftProc(int i_param_1) {
     /* Nonmatching */
     fopAcM_Search(searchNearLift,this);
     f32 maxSpeed = m7FC;
-    himo3_class* phVar1 = (himo3_class*)m714.mActor;
+    himo3_class* phVar1 = (himo3_class*)mActor;
     cXyz local_2c = phVar1->actor.current.pos;
     f32 dist_xz = (local_2c - current.pos).absXZ();
     if (mAcch.ChkGroundAway()) {
@@ -326,7 +344,7 @@ void daNpc_P2_c::cutJumpToLiftProc(int i_param_1) {
         if(!cLib_calcTimer(&m7F4) && m7D3 == 10){
             m7D3 = 1;
             m7DC.setall(0.0f);
-            m714.mClosestPos.setall(0.0f);
+            mClosestPos.setall(0.0f);
             speed.y = 0.0f;
             gravity = -9.0f;
             speedF = 0.0f;
@@ -342,14 +360,14 @@ void* daNpc_P2_c::searchNearRope(void* i_param_1, void* i_param_2) {
     daNpc_P2_c* search_param_1 = static_cast<daNpc_P2_c*>(i_param_1);
     daNpc_P2_c* search_param_2 = static_cast<daNpc_P2_c*>(i_param_2);
     if(fopAcM_IsActor(i_param_1) && fopAcM_GetName(i_param_1) == fpcNm_HIMO3_e){
-        if(search_param_2->m714.mClosestPos.abs() == 0.0f){
-            search_param_2->m714.mClosestPos = (search_param_1)->current.pos;
+        if(search_param_2->mClosestPos.abs() == 0.0f){
+            search_param_2->mClosestPos = (search_param_1)->current.pos;
         }else{
-            f32 current_dist = (search_param_2->m714.mClosestPos - search_param_2->current.pos).abs();
+            f32 current_dist = (search_param_2->mClosestPos - search_param_2->current.pos).abs();
             f32 new_dist = (search_param_1->current.pos - search_param_2->current.pos).abs();
             if(new_dist < current_dist){
-                search_param_2->m714.mClosestPos = (search_param_1)->current.pos;
-                search_param_2->m714.mActor = (search_param_1);
+                search_param_2->mClosestPos = (search_param_1)->current.pos;
+                search_param_2->mActor = (search_param_1);
             }
         }
     }
@@ -392,7 +410,7 @@ void daNpc_P2_c::cutLiftToRopeProc(int i_param_1) {
 
     fopAcM_Search(searchNearRope,this);
     f32 speed_f = m7FC;
-    cXyz ropePos = m714.mActor->current.pos;
+    cXyz ropePos = mActor->current.pos;
     f32 dist = (ropePos - current.pos).absXZ();
     if (mAcch.ChkGroundAway()) {
         fopAcM_monsSeStart(this,JA_SE_CV_NK_JUMP_UP,0);
@@ -424,7 +442,7 @@ void daNpc_P2_c::cutRopeTalkStart(int i_staff_id) {
     /* Nonmatching */
     //cXyz filler(0,0,0);
 
-    himo3_class* pfVar7 = (himo3_class*)m714.mActor;
+    himo3_class* pfVar7 = (himo3_class*)mActor;
     cXyz local_70;
     cXyz local_64;
     cXyz local_58;
@@ -452,8 +470,8 @@ void daNpc_P2_c::cutRopeTalkStart(int i_staff_id) {
 
     local_70.set(REG12_F(0), REG12_F(1),REG12_F(2));
     fopAcM_Search(searchNearRope, this);
-    m7BC = (himo3_class*)m714.mActor;
-    local_64 = m714.mActor->current.pos - current.pos;
+    m7BC = (himo3_class*)mActor;
+    local_64 = mActor->current.pos - current.pos;
     m798 = local_64.abs();
     m79C = std::sqrtf(2.0f / m798);
     f32 fVar12 = M_PI / 2.0f / m79C;
@@ -501,17 +519,17 @@ void daNpc_P2_c::cutRopeTalkStart(int i_staff_id) {
 /* 00006B08-00007314       .text cutRopeTalkProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutRopeTalkProc(int i_param_1) {
     /* Nonmatching */
+    daNpc_P2_c* this_00 = this;
     J3DModel* model_p = mpMorf->getModel();
     himo3_class* rope = m7BC;
     fopAcM_SetParam(m7BC,2);
-    himo3_class* also_rope = m7BC;
-    m7B0 = also_rope->actor.current.pos;
+    m7B0 = m7BC->actor.current.pos;
     cXyz cStack_b4;
     cXyz cStack_c0;
+    cXyz local_cc;
     dLib_getPosFromMtx(model_p->getAnmMtx(20),&cStack_b4);
     f32 dVar12 = m7A0 * m79C;
     f32 dVar13 = m7A4 * m79C;
-    f32 dVar14;
     f32 angle = m7A0*m79C;
     f32 vel = m7A4 * m79C;
     mDoMtx_stack_c::ZrotS(-current.angle.z);
@@ -539,44 +557,55 @@ void daNpc_P2_c::cutRopeTalkProc(int i_param_1) {
     }
     m7A4 += delta + 1.0f;
 
-    dVar14 = m7A0 * m79C;
-    dVar13 = m7A4 * m79C;
-    dVar12 = m79C;
+    f32 dVar14 = m7A0 * m79C;
+    f32 dVar13_o = m7A4 * m79C;
+    //dVar12 = m79C;
 
 
 
     if(dVar14 >= (f32)M_PI){
         dVar14 = dVar14 - 2.0f*M_PI;
-        m7A0 = dVar14/dVar12;
+        m7A0 = dVar14/m79C;
     }
-    if(dVar13 >= M_PI){
-        dVar13 = dVar13 - 2.0f*M_PI;
-        m7A4 = dVar13/m79C;
+    if(dVar13_o >= M_PI){
+        dVar13_o = dVar13_o - 2.0f*M_PI;
+        m7A4 = dVar13_o/m79C;
     }
     cLib_chaseS(&m7AA,0,0x20);
     m7A8 += std::fabsf(cM_fcos(std::fabsf(dVar14)))*64.0f;
     if(m7A8  > 12000){
         m7A8 = 12000;
     }
-    s16 iVar1 =(-m7A8 * cM_fsin(DEG_TO_RAD(36.0f)-dVar14));
-    s16 targetX = iVar1;
-    //cLib_addCalcAngleS(&current.angle.x,targetX,8,0xC00,0x100);
-    s16 iVar2 = (m7AA * cM_fsin(dVar13 - DEG_TO_RAD(63.0f)));
-    s16 targetZ = iVar2;
-    s16 max = cM_fcos(dVar13) * 2048.0f + 1024.0f;
-    s16 step = cM_fcos(dVar13) * 128.0f + 128.0f;    
-    cLib_addCalcAngleS(&current.angle.z,targetZ,8,max,step);
-    cXyz local_cc;
+    f32 dVarSubbed = dVar14;
+
+    s16 iVar1 =(-m7A8 * cM_fsin(dVarSubbed));
+    s16 iVar2 = (m7AA * cM_fsin(dVar13_o ));
+
+    s16 target = (-m7A8 * cM_fsin(dVar14-DEG_TO_RAD(36.0f)));
+    cLib_addCalcAngleS(&current.angle.x,
+        target,
+        8,
+        0xC00,
+        0x100);
+
+    f32 dVarCos = cM_fcos(dVar13_o);
+
+
+    cLib_addCalcAngleS(
+        &this_00->current.angle.z,
+        m7AA * cM_fsin(dVar13_o - DEG_TO_RAD(63.0f)),
+        8,
+        dVarCos * 2048.0f + 1024.0f,
+        dVarCos * 128.0f + 128.0f);
+
+
     local_cc.set(0.0f,-m798,0.0f);
-    // local_cc.y = -m798;
-    // local_cc.x = 0.0f;
-    // local_cc.z = 0.0f;
     mDoMtx_stack_c::transS(m7B0.x,m7B0.y,m7B0.z);
     mDoMtx_stack_c::ZXYrotM(iVar1,current.angle.y,iVar2);
 
     mDoMtx_stack_c::multVec(&local_cc,&current.pos);
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(-m7A8*cM_fsin(m79C),current.angle.y,iVar2);
+    mDoMtx_stack_c::ZXYrotM(-m7A8*cM_fsin(dVar14 + m79C),current.angle.y,iVar2);
     cXyz cStack_d8;
     mDoMtx_stack_c::multVec(&cStack_c0,&cStack_d8);
     if(m7A4 > 0.0f && m7A0 > 0.0f && m7D3 == 0xB){
@@ -590,13 +619,25 @@ void daNpc_P2_c::cutRopeTalkProc(int i_param_1) {
         dComIfGp_evmng_cutEnd(i_param_1);
 
     }else{
-        if((m7A4 > 0.0f == m7A0 > 0.0f) || (m7A4 < 0.0f && m7A0 < 0.0f)){
+
+        if ((m7A4 > 0.0f) && (m7A0 > 0.0f)) {
             m7D3 = 0xC;
-        }else{
-            m7D3 = 0x8;
+            return;
+        }
+        if ((m7A4 > 0.0f) && (m7A0 < 0.0f)) {
+            m7D3 = 0xB;
+            return;
+        }
+        if ((m7A4 < 0.0f) && (m7A0 > 0.0f)) {
+            m7D3 = 0xB;
+            return;
+        }
+        if ((m7A4 < 0.0f) && (m7A0 < 0.0f)) {
+            m7D3 = 0xC;
         }
     }
 }
+
 
 /* 00007314-0000743C       .text cutRopeToLiftStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutRopeToLiftStart(int i_staff_id) {
@@ -638,7 +679,7 @@ void daNpc_P2_c::cutRopeToLiftStart(int i_staff_id) {
 void daNpc_P2_c::cutRopeToLiftProc(int i_param_1) {
     /* Nonmatching */
     fopAcM_Search(searchNearRope,this);
-    cXyz ropePos = m714.mActor->current.pos;
+    cXyz ropePos = mActor->current.pos;
     f32 dist = (ropePos - current.pos).absXZ();
     mSmokePos = current.pos;
     mSmokeAngle = current.angle;
@@ -662,7 +703,7 @@ void daNpc_P2_c::cutRopeToLiftProc(int i_param_1) {
     if (cLib_calcTimer(&m7F4) == 0 && m7D3 == 10) {
         m7D3 = 1;
         m7DC.set(0.0f, 0.0f, 0.0f);
-        m714.mClosestPos.set(0.0f, 0.0f, 0.0f);
+        mClosestPos.set(0.0f, 0.0f, 0.0f);
         mSmokeCallback.end();
         dComIfGp_evmng_cutEnd(i_param_1);
     }
