@@ -7,6 +7,9 @@
 #include "d/actor/d_a_npc_pm1.h"
 #include "m_Do/m_Do_ext.h"
 
+
+static daNpc_Pm1_HIO_c l_HIO;
+
 /* 000000EC-00000144       .text __ct__15daNpc_Pm1_HIO_cFv */
 daNpc_Pm1_HIO_c::daNpc_Pm1_HIO_c() {
     /* Nonmatching */
@@ -103,12 +106,12 @@ void daNpc_Pm1_c::setStt(signed char) {
 }
 
 /* 00000C74-00000C7C       .text next_msgStatus__11daNpc_Pm1_cFPUl */
-void daNpc_Pm1_c::next_msgStatus(unsigned long*) {
+unsigned short daNpc_Pm1_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
 }
 
 /* 00000C7C-00000C84       .text getMsg__11daNpc_Pm1_cFv */
-void daNpc_Pm1_c::getMsg() {
+unsigned long daNpc_Pm1_c::getMsg() {
     /* Nonmatching */
 }
 
@@ -188,8 +191,23 @@ void daNpc_Pm1_c::wait_action1(void*) {
 }
 
 /* 000014BC-00001558       .text demo__11daNpc_Pm1_cFv */
-void daNpc_Pm1_c::demo() {
+u8 daNpc_Pm1_c::demo() {
     /* Nonmatching */
+    if(demoActorID == 0){
+        if(field_0x7C7 != 0){
+            field_0x7C7 = 0;
+        }
+    }else{
+        field_0x7C7 = 1;
+        dComIfGp_demo_getActor(demoActorID);
+        dDemo_setDemoData(
+            this,
+            dDemo_actor_c::ENABLE_TRANS_e | dDemo_actor_c::ENABLE_ROTATE_e | dDemo_actor_c::ENABLE_ANM_e | dDemo_actor_c::ENABLE_ANM_FRAME_e,
+            mpMorf,
+            "Pm"
+        );
+    }
+    return field_0x7C7;
 }
 
 /* 00001558-000016BC       .text _draw__11daNpc_Pm1_cFv */
@@ -205,6 +223,20 @@ BOOL daNpc_Pm1_c::_execute() {
 /* 00001818-0000189C       .text _delete__11daNpc_Pm1_cFv */
 BOOL daNpc_Pm1_c::_delete() {
     /* Nonmatching */
+    fopAcM_RegisterDeleteID(this);
+
+    dComIfG_resDeleteDemo(&mPhase,"Pm");
+
+    if(mpMorf != NULL){
+        mpMorf->stopZelAnime();
+    }
+    if(l_HIO.field_0x8 >= 0){
+        l_HIO.field_0x8 += -1;
+        if(l_HIO.field_0x8 < 0){
+            mDoHIO_deleteChild(l_HIO.mNo);
+        }
+    }
+    return true;
 }
 
 /* 0000189C-000018BC       .text CheckCreateHeap__FP10fopAc_ac_c */
