@@ -3,6 +3,7 @@
 
 #include "cstdint.h"
 #include "d/d_bg_s_gnd_chk.h"
+#include "dolphin/mtx/mtx.h"
 #include "dolphin/types.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
@@ -19,8 +20,8 @@ namespace daObjItnak {
         void param_get_arg0() const {}
         void param_get_swbit() const {}
     
-        BOOL solidHeapCB(fopAc_ac_c*);
-        BOOL create_heap();
+        static BOOL solidHeapCB(fopAc_ac_c*);
+        bool create_heap();
         cPhs_State _create();
         bool _delete();
         void set_mtx();
@@ -30,18 +31,18 @@ namespace daObjItnak {
         bool _execute();
         bool _draw();
 
-        static const char M_arcname[];
+        static const char m_arcname[];
     
     public:
         /* 0x290 */ Unknown_Struct_0x290* field_0x290;
         /* 0x294 */ request_of_phase_process_class mPhase;
         /* 0x29C */ J3DModel* mModel;
-        /* 0x2A0 */ f32 field_0x2a0[3][4];
+        /* 0x2A0 */ Mtx mMtx;
         /* 0x2D0 */ unsigned long mId;
-        /* 0x2D4 */ dBgS_ObjGndChk mFloorPoly;
+        /* 0x2D4 */ dBgS_ObjGndChk mGndChk;
         /* 0x328 */ f32 mGroundY;
-        /* 0x32C */ dCcD_Stts field_0x32c;
-        /* 0x368 */ dCcD_Cyl field_0x368;
+        /* 0x32C */ dCcD_Stts mStts;
+        /* 0x368 */ dCcD_Cyl mCyl;
         /* 0x498 */ dCcD_Stts field_0x498;
         /* 0x4D4 */ dCcD_Cyl field_0x4d4;
         /* 0x604 */ dCcD_Stts field_0x604;
