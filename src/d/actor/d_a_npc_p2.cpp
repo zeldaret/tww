@@ -115,7 +115,7 @@ daNpc_P2_childHIO_c::daNpc_P2_childHIO_c() {
 
 /* 00000248-000003E8       .text __ct__14daNpc_P2_HIO_cFv */
 daNpc_P2_HIO_c::daNpc_P2_HIO_c() {
-    //children[0].m28 = -20.0f;
+
     children[0].base.m04 = -20.0f;
     children[0].base.mMaxHeadX = 0x834;
     children[0].base.mMaxHeadY = 0x28A0;
@@ -168,8 +168,8 @@ daNpc_P2_HIO_c::daNpc_P2_HIO_c() {
 static daNpc_P2_HIO_c l_HIO;
 
 
-static const u32 l_btp_ix_tbl[] = {0x36,0x37};
-const u32 l_bmt_ix_tbl[] = {-1,0x32,0x33};
+static const u32 l_btp_ix_tbl[] = {dRes_INDEX_P2_BTP_P2HEAD01_e,dRes_INDEX_P2_BTP_P2HEAD02_e};
+const u32 l_bmt_ix_tbl[] = {-1,dRes_INDEX_P2_BMT_P2B_e,dRes_INDEX_P2_BMT_P2C_e};
 /* 00000490-0000068C       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
@@ -209,29 +209,29 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 /* 0000068C-00000788       .text initTexPatternAnm__10daNpc_P2_cFb */
 BOOL daNpc_P2_c::initTexPatternAnm(bool i_param_1) {
 
-    J3DModelData* model_data = m2B8->getModelData();
-    J3DAnmTexPattern* head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectRes(m_arc_name,l_btp_ix_tbl[m7D0]);
+    J3DModelData* model_data = mpHeadModel->getModelData();
+    J3DAnmTexPattern* head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectRes(m_arc_name,l_btp_ix_tbl[mTexPatternNum]);
     JUT_ASSERT(DEMO_SELECT(0x185,0x185),head_tex_pattern != 0);
     int iVar3 = mBtpAnm.init(model_data,head_tex_pattern,1,2,1.0,0,-1,i_param_1,0);
     if(!iVar3){
 
         return FALSE;
     }
-    m378 = 0;
-    m37A = 0;
+    mBlinkFrame = 0;
+    mBlinkTimer = 0;
     return TRUE;
 
 }
 
 /* 00000788-00000810       .text playTexPatternAnm__10daNpc_P2_cFv */
 void daNpc_P2_c::playTexPatternAnm() {
-    if(!cLib_calcTimer(&m37A)){
-        s16 frame_max = mBtpAnm.getBtpAnm()->getFrameMax();
-        if(m378 >= frame_max){
-            m378 -= frame_max;
-            m37A = cM_rndF(100.0f) + 30.0f;
+    if(!cLib_calcTimer(&mBlinkTimer)){
+        s16 blink_frame_max = mBtpAnm.getBtpAnm()->getFrameMax();
+        if(mBlinkFrame >= blink_frame_max){
+            mBlinkFrame -= blink_frame_max;
+            mBlinkTimer = cM_rndF(100.0f) + 30.0f;
         }else{
-            m378 += 1;
+            mBlinkFrame += 1;
         }
     }
 }
@@ -305,7 +305,7 @@ void daNpc_P2_c::setAnm() {
         s8 anm_num = a_anm_num_tbl[mType][m7D3];
         if(anm_num != -1){
             mAnmFileIdx = anm_num;
-            m374 = 0;
+            mAnimFrame = 0;
 
         
         speed = a_play_speed_tbl[m7D3];
@@ -373,8 +373,8 @@ void daNpc_P2_c::setTexAnm() {
     };
 
     
-    if ( !(m7D0 == a_tex_pattern_num_tbl[mType][m7D1] ||  a_tex_pattern_num_tbl[mType][m7D1] == -1 || mType == Type_MAKO_e)) {
-        m7D0 = a_tex_pattern_num_tbl[mType][m7D1];
+    if ( (mTexPatternNum != a_tex_pattern_num_tbl[mType][m7D1] &&  a_tex_pattern_num_tbl[mType][m7D1] != -1 && mType != Type_MAKO_e)) {
+        mTexPatternNum = a_tex_pattern_num_tbl[mType][m7D1];
         initTexPatternAnm(true);
     }
     return;
@@ -590,7 +590,7 @@ void daNpc_P2_c::smoke_set() {
 u16 daNpc_P2_c::next_msgStatus(unsigned long* pMsgNo) {
 
     u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
-    switch (*pMsgNo) {                        /* irregular */
+    switch (*pMsgNo) {
     case 0x1011:
         *pMsgNo = 0x102F;
         break;
@@ -687,14 +687,15 @@ u32 daNpc_P2_c::getMsg() {
                 }
             }else{
                 if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0720)){
-                    o_retval = dLib_setFirstMsg(dSv_event_flag_c::UNK_0940,0xC96,0xC97);
+                    o_retval = dLib_setFirstMsg(dSv_event_flag_c::UNK_0940,0xC96,0xC97); //Heya, shrimplet! Are you gonna be our new pirate swabbie?
+
                 }else{
                     if(!dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU)){
-                        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0710)){
-                            o_retval = 0x1028;
+                        if(dComIfGs_isEventBit(dSv_event_flag_c::P2B_GOAL)){
+                            o_retval = 0x1028; // Hu-[wait=10]Hurry up and take it! I'm serious!
                         }
                     }else{
-                        o_retval = dLib_setFirstMsg(dSv_event_flag_c::UNK_0704,0x1029,0x102A);
+                        o_retval = dLib_setFirstMsg(dSv_event_flag_c::UNK_0704,0x1029,0x102A); //Gah! But there's still so much stuff I have to teach you... This is so lame!
                     }
                 }
             }
@@ -1121,7 +1122,7 @@ void daNpc_P2_c::demo_goal() {
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA9;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
     if(dComIfGp_evmng_endCheck("P2B_GOAL")){
-        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0710);
+        dComIfGs_onEventBit(dSv_event_flag_c::P2B_GOAL);
         mState = State_TREASURE_WAIT_e;
         mDemoOrderIdx = DemoIdx_NONE_e;
         dComIfGp_event_reset();
@@ -1428,16 +1429,16 @@ bool daNpc_P2_c::_execute() {
         playTexPatternAnm();
     }
 
-    m370 = mpMorf->play(
+    mbAnimFinished = mpMorf->play(
         &eyePos,
         mAcch.ChkGroundHit() ? dComIfG_Bgsp()->GetMtrlSndId(mAcch.m_gnd) : 0,
         dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 
-    if (mpMorf->getFrame() < m374) {
-        m370 = true;
+    if (mpMorf->getFrame() < mAnimFrame) {
+        mbAnimFinished = true;
     }
 
-    m374 = mpMorf->getFrame();
+    mAnimFrame = mpMorf->getFrame();
 
     checkOrder();
 
@@ -1544,9 +1545,9 @@ void daNpc_P2_c::draw_item(J3DModel* i_model_p, signed char i_param_2) {
 void daNpc_P2_c::drawDagger() {
 
     if(m80A != 0){
-        draw_item(m2BC,0xC);
+        draw_item(mpDaggerModel,0xC);
     }else{
-        draw_item(m2C0,0xE);
+        draw_item(mpDaggerGripModel,0xE);
     }
     return;
 }
@@ -1554,16 +1555,16 @@ void daNpc_P2_c::drawDagger() {
 /* 000035E8-000036A4       .text drawHead__10daNpc_P2_cFv */
 void daNpc_P2_c::drawHead() {
 
-    g_env_light.setLightTevColorType(m2B8,&tevStr);
+    g_env_light.setLightTevColorType(mpHeadModel,&tevStr);
     if(mType != Type_MAKO_e){
-        mBtpAnm.entry(m2B8->getModelData(),m378);
-        m2B8->setBaseTRMtx(mpMorf->getModel()->getAnmMtx(4));
-        mDoExt_modelUpdateDL(m2B8);
-        mBtpAnm.remove(m2B8->getModelData());
+        mBtpAnm.entry(mpHeadModel->getModelData(),mBlinkFrame);
+        mpHeadModel->setBaseTRMtx(mpMorf->getModel()->getAnmMtx(4));
+        mDoExt_modelUpdateDL(mpHeadModel);
+        mBtpAnm.remove(mpHeadModel->getModelData());
 
     }else{
-        m2B8->setBaseTRMtx(mpMorf->getModel()->getAnmMtx(4));
-        mDoExt_modelUpdateDL(m2B8);
+        mpHeadModel->setBaseTRMtx(mpMorf->getModel()->getAnmMtx(4));
+        mDoExt_modelUpdateDL(mpHeadModel);
     }
 
 }
@@ -1574,11 +1575,11 @@ void daNpc_P2_c::drawShadow() {
     cXyz local_18(current.pos.x,current.pos.y + 150.0f + REG8_F(18),current.pos.z);
     mShadowId = dComIfGd_setShadow(mShadowId,1,mpMorf->getModel(),&local_18,REG8_F(19)+800.0f,20.0f,current.pos.y,mAcch.GetGroundH(),mAcch.m_gnd,&tevStr);
     if(mShadowId != 0){
-        dComIfGd_addRealShadow(mShadowId,m2B8);
+        dComIfGd_addRealShadow(mShadowId,mpHeadModel);
         if(m80A){
-            dComIfGd_addRealShadow(mShadowId,m2BC);
+            dComIfGd_addRealShadow(mShadowId,mpDaggerModel);
         }else{
-            dComIfGd_addRealShadow(mShadowId,m2C0);
+            dComIfGd_addRealShadow(mShadowId,mpDaggerGripModel);
         }
     }
 }
@@ -1590,11 +1591,11 @@ void daNpc_P2_c::drawP2a() {
     drawDagger();
     drawHead();
     if(!dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU)){
-        draw_item(m2C4,0xC);
+        draw_item(mpTelescopeModel,0xC);
     }
     drawShadow();
     if(!dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU) && mShadowId != 0){
-        dComIfGd_addRealShadow(mShadowId,m2C4);
+        dComIfGd_addRealShadow(mShadowId,mpTelescopeModel);
     }
     dSnap_RegistFig(0x76,this,1.0f,1.0f,1.0f);
     return;
@@ -1671,7 +1672,7 @@ void daNpc_P2_c::getArg() {
 BOOL daNpc_P2_c::_createHeap() {
     static const u32 head_bdl_tbl[3] = {0x2D,0x2E,0x2F};
     static const u8 head_tex_tbl[2] = {0,1};
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name,0x26));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name,dRes_ID_P2_BDL_P2_e));
     JUT_ASSERT(DEMO_SELECT(0x9F2,0x9F1),modelData != 0);
     mpMorf = new mDoExt_McaMorf(modelData,NULL,NULL,NULL,-1,1.0f,0,-1,1,NULL,0x80000,0x15021222);
     if(mpMorf == NULL ||mpMorf->getModel() == NULL){
@@ -1683,34 +1684,34 @@ BOOL daNpc_P2_c::_createHeap() {
         J3DModelData* headModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name,head_bdl_tbl[mType]));
         JUT_ASSERT(DEMO_SELECT(0xA08,0xA0A),headModelData != 0);
         if(mType != Type_MAKO_e){
-            m2B8 = mDoExt_J3DModel__create(headModelData,0x80000,0x11020022);
-            if(m2B8 == NULL){
+            mpHeadModel = mDoExt_J3DModel__create(headModelData,0x80000,0x11020022);
+            if(mpHeadModel == NULL){
                 return FALSE;
             }
-            m7D0 = head_tex_tbl[mType];
+            mTexPatternNum = head_tex_tbl[mType];
             if(initTexPatternAnm(false) == 0){
                 return FALSE;
             }
         }else{
-            m2B8 = mDoExt_J3DModel__create(headModelData,0,0x11020203);
-            if(m2B8 == NULL){
+            mpHeadModel = mDoExt_J3DModel__create(headModelData,0,0x11020203);
+            if(mpHeadModel == NULL){
                 return FALSE;
             }
         }
-        J3DModelData* daggerModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name,0x2A));
+        J3DModelData* daggerModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name,dRes_INDEX_P2_BDL_P2DAGGER_e));
         JUT_ASSERT(DEMO_SELECT(0xA25,0xA27), daggerModelData != 0);
-        m2BC = mDoExt_J3DModel__create(daggerModelData,0,0x11020203);
-        if(m2BC == NULL){
+        mpDaggerModel = mDoExt_J3DModel__create(daggerModelData,0,0x11020203);
+        if(mpDaggerModel == NULL){
             return FALSE;
         }
-        J3DModelData* daggerModelData2 = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name,0x27));
+        J3DModelData* daggerGripModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name,dRes_INDEX_P2_BDL_P2_DAGGERGRIP_e));
         JUT_ASSERT(DEMO_SELECT(0xA2C,0xA2E), daggerModelData != 0);      
-        m2C0 = mDoExt_J3DModel__create(daggerModelData2,0,0x11020203);
-        if(m2C0 == NULL){
+        mpDaggerGripModel = mDoExt_J3DModel__create(daggerGripModelData,0,0x11020203);
+        if(mpDaggerGripModel == NULL){
             return FALSE;
         }
         if(mType == Type_MAKO_e){
-            J3DModelData* bookModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name,0x29));
+            J3DModelData* bookModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name,dRes_INDEX_P2_BDL_P2BOOK_e));
             JUT_ASSERT(DEMO_SELECT(0xA34,0xA36), bookModelData != 0);
             mpMorf2 = new mDoExt_McaMorf(bookModelData,NULL,NULL,
                 (J3DAnmTransform*)dComIfG_getObjectRes(m_arc_name,0x23),
@@ -1720,10 +1721,10 @@ BOOL daNpc_P2_c::_createHeap() {
             }
         }
         if(mType == Type_ZUKO_e){
-            J3DModelData* telescopeModelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name,0x28);
+            J3DModelData* telescopeModelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name,dRes_INDEX_P2_BDL_P2_TELESCOPE_e);
             JUT_ASSERT(DEMO_SELECT(0xA47,0xA49), telescopeModelData != 0);
-            m2C4 = mDoExt_J3DModel__create(telescopeModelData,0,0x11020203);
-            if(m2C4 == NULL){
+            mpTelescopeModel = mDoExt_J3DModel__create(telescopeModelData,0,0x11020203);
+            if(mpTelescopeModel == NULL){
                 return FALSE;
             }
         }

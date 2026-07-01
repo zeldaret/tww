@@ -191,18 +191,18 @@ public:
     /* 0x29C */ mDoExt_McaMorf* mpMorf;
     /* 0x2A0 */ mDoExt_McaMorf* mpMorf2;
     /* 0x2A4 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x2B8 */ J3DModel* m2B8; //head model
-    /* 0x2BC */ J3DModel* m2BC;
-    /* 0x2C0 */ J3DModel* m2C0;
-    /* 0x2C4 */ J3DModel* m2C4;
+    /* 0x2B8 */ J3DModel* mpHeadModel; //head model
+    /* 0x2BC */ J3DModel* mpDaggerModel;
+    /* 0x2C0 */ J3DModel* mpDaggerGripModel;
+    /* 0x2C4 */ J3DModel* mpTelescopeModel;
     /* 0x2C8 */ u32 mShadowId;
     /* 0x2CC */ dNpc_JntCtrl_c m_jnt;
     /* 0x300 */ dNpc_EventCut_c mEventCut;
                 u8 m36C[0x370-0x36C];
-                u8 m370;
-                f32 m374;
-                u8 m378;
-                s16 m37A;
+                u8 mbAnimFinished;
+                f32 mAnimFrame;
+    /* 0x378 */ u8 mBlinkFrame;
+    /* 0x37A */ s16 mBlinkTimer;
                 dBgS_ObjAcch mAcch;
                 dBgS_AcchCir mAcchCir;
                 dCcD_Stts mStts;
@@ -250,7 +250,7 @@ public:
     /* 0x7C2 */ u8 m7C2;
                 ActionFunc mActionFunc;
 
-    /* 0x7D0 */ s8 m7D0;
+    /* 0x7D0 */ s8 mTexPatternNum;
     /* 0x7D1 */ s8 m7D1;
     /* 0x7D2 */ s8 mAnmFileIdx;
     /* 0x7D3 */ s8 m7D3;
