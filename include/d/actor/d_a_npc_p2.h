@@ -24,6 +24,28 @@ public:
         Type_MAKO_e = 2,
     };
 
+    enum States_e{
+        State_WAIT01_e = 1,
+        State_TALK01_e = 2,
+        State_DEMO_WAIT_e = 3,
+        State_DEMO_INTRO_e = 4,
+        State_DEMO_LIFT_e = 5,
+        State_DEMO_JUMP_e = 6,
+        State_GOAL_TALKPOS_WAIT_e = 7,
+        State_GOAL_TALKPOS_TALK_e = 8,
+        State_GOAL_GOALPOS_TO_TALKPOS_e = 9,
+        State_GOAL_TALKPOS_TO_GOALPOS_e = 0xA,
+        State_GOAL_GOALPOS_WAIT_e = 0xB,
+        State_DEMO_GOAL_e = 0xC,
+        State_TREASURE_WAIT_e = 0xD,
+        State_TREASURE_WAIT_TALK_e = 0xE,
+        State_DEMO_ARRIVE_e = 0xF,
+        State_DEMO_WAIT_2_e = 0x12,
+        State_DEMO_INTRO_2_e = 0x13,
+        State_GOAL_WAIT_2_e = 0x14,
+        State_DEMO_GOAL_2_e = 0x15,
+        State_DEMO_BOMB_GET_e = 0x16,
+    };
     cXyz& getAttentionBasePos() {return m6F8;}
     void getBackbone_x() {}
     void getBackbone_y() {}
@@ -198,11 +220,11 @@ public:
 
     /* 0x7D0 */ s8 m7D0;
     /* 0x7D1 */ s8 m7D1;
-    /* 0x7D2 */ s8 m7D2;
+    /* 0x7D2 */ s8 mAnmFileIdx;
     /* 0x7D3 */ s8 m7D3;
     /* 0x7D4 */ s8 m7D4;
     /* 0x7D5 */ s8 m7D5;
-    /* 0x7D6 */ s8 m7D6;
+    /* 0x7D6 */ s8 mState;
     /* 0x7D7 */ u8 m7D7;
                 u8 m7D8;
     /* 0x7DC */ cXyz m7DC;

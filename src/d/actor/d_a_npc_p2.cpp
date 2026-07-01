@@ -12,6 +12,7 @@
 #include "d/d_snap.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
+#include "res/Object/P2.h"
 
 
 
@@ -238,11 +239,10 @@ void daNpc_P2_c::playTexPatternAnm() {
 
 void daNpc_P2_c::setAnm() {
 
-    static s8 a_anm_num_tbl[3][0x18] = {-1,0x18,-1,-1,1,2,-1,-1,3,4,4,5,6,0x1A,-1,-1,-1,
-    -1,-1,-1,-1,-1,0x19,0x1B,0xFF,7,8,9,1,2,0x12,0x13,
-3,4,4,5,6,0xC,0xB,0xA,0xD,0xE,0xF,0x10,0x11,-1,-1,-1,
--1,0x14,-1,-1,1,2,-1,-1,3,4,4,5,6,0x16,0x17,-1,
--1,-1,-1,-1,-1,0x15,-1,-1};
+    static s8 a_anm_num_tbl[3][0x18] = 
+    {-1,0x18,-1,-1,1,2,-1,-1,3,4,4,5,6,0x1A,-1,-1,-1,-1,-1,-1,-1,-1,0x19,0x1B,  //Zuko
+    -1,7,8,9,1,2,0x12,0x13,3,4,4,5,6,0xC,0xB,0xA,0xD,0xE,0xF,0x10,0x11,-1,-1,-1,//Niko
+    -1,0x14,-1,-1,1,2,-1,-1,3,4,4,5,6,0x16,0x17,-1,-1,-1,-1,-1,-1,0x15,-1,-1};  //Mako
     static u32 a_play_mode_tbl[] = {
         J3DFrameCtrl::EMode_NULL, J3DFrameCtrl::EMode_LOOP,
         J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP,
@@ -266,43 +266,66 @@ void daNpc_P2_c::setAnm() {
     1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,};
 
     static const u32 a_anm_bck_tbl[] = {
-        0x1D,0x1E,0x1C,7,
-    8,0x1A,0x1B,0xF,
-    0x18,0x19,0x13,0x14,
-    0x15,0x16,0x10,0x17,
-    0x11,0xE,0xD,0x12,
-    0xB,0xC,0x9,0xA,
-    0x22,0x20,0x21,0x1F};
+        dRes_INDEX_P2_BCK_P2_WAIT01_e,
+        dRes_INDEX_P2_BCK_P2_WALK01_e,
+        dRes_INDEX_P2_BCK_P2_RUN_e,
+        dRes_INDEX_P2_BCK_P2_JUMP_e,
+        dRes_INDEX_P2_BCK_P2_LANDING_e,
+        dRes_INDEX_P2_BCK_P2_ROPESWINGF_e,
+        dRes_INDEX_P2_BCK_P2_ROPESWINGR_e,
+        dRes_INDEX_P2_BCK_P2_NICOWAIT_e,
+        dRes_INDEX_P2_BCK_P2_NWAIT02_e,
+        dRes_INDEX_P2_BCK_P2_NWAIT03_e,
+        dRes_INDEX_P2_BCK_P2_NTALK01_e,
+        dRes_INDEX_P2_BCK_P2_NTALK02_e,
+        dRes_INDEX_P2_BCK_P2_NTALK03_e,
+        dRes_INDEX_P2_BCK_P2_NTALK04_e,
+        dRes_INDEX_P2_BCK_P2_NKYORO2_e,
+        dRes_INDEX_P2_BCK_P2_NTHINK_e,
+        dRes_INDEX_P2_BCK_P2_NNOD_e,
+        dRes_INDEX_P2_BCK_P2_NBANZAI_e,
+        dRes_INDEX_P2_BCK_P2_N2RUN_e,
+        dRes_INDEX_P2_BCK_P2_NODOROKI_e,
+        dRes_INDEX_P2_BCK_P2_MWAIT01_e,
+        dRes_INDEX_P2_BCK_P2_MWAIT02_e,
+        dRes_INDEX_P2_BCK_P2_MTALK01_e,
+        dRes_INDEX_P2_BCK_P2_MTALK02_e,
+        dRes_INDEX_P2_BCK_P2_ZWAIT01_e,
+        dRes_INDEX_P2_BCK_P2_ZNOZOKU_e,
+        dRes_INDEX_P2_BCK_P2_ZTALK01_e,
+        dRes_INDEX_P2_BCK_P2_ZMIAGE_e,
+    };
     for(int i = 0; i < 0x18; i++){
         a_morf_frame_tbl[i] = l_HIO.children[mType].m74[i];
     }
+
     f32 speed;
 
-        if(m7D4 != m7D3){
-            s8 anm_num = a_anm_num_tbl[mType][m7D3];
-            if(anm_num != -1){
-                m7D2 = anm_num;
-                m374 = 0;
+    if(m7D4 != m7D3){
+        s8 anm_num = a_anm_num_tbl[mType][m7D3];
+        if(anm_num != -1){
+            mAnmFileIdx = anm_num;
+            m374 = 0;
 
-            
-            speed = a_play_speed_tbl[m7D3];
+        
+        speed = a_play_speed_tbl[m7D3];
 
-            if(mEventCut.getMoveSpeed() != 0){
-                switch(mEventCut.getNowCut()){
+        if(mEventCut.getMoveSpeed() != 0){
+            switch(mEventCut.getNowCut()){
 
-                    case 2:
-                    case 4:
-                        speed = mEventCut.getMoveSpeed() / 4.0f;
-                    default:
-                        break;
-                }
+                case 2:
+                case 4:
+                    speed = mEventCut.getMoveSpeed() / 4.0f;
+                default:
+                    break;
             }
+        }
 
         dNpc_setAnm(mpMorf,a_play_mode_tbl[m7D3],
             a_morf_frame_tbl[m7D3],
             speed,
 
-            a_anm_bck_tbl[m7D2],
+            a_anm_bck_tbl[mAnmFileIdx],
             -1,
             m_arc_name);
         
@@ -312,7 +335,7 @@ void daNpc_P2_c::setAnm() {
 
 
     if(mpMorf->getFrame() == 1.0f){
-        switch(m7D2){
+        switch(mAnmFileIdx){
             case 0x12:
                 fopAcM_monsSeStart(this,JA_SE_CV_NK_BEF_JUMP,0);
                 break;
@@ -384,7 +407,7 @@ bool daNpc_P2_c::chkAttention() {
     s16 sVar1 = l_HIO.children[mType].base.mMaxAttnAngleY;
     s16 iVar5 = (current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y());
 
-    if((mType == Type_NIKO_e) && (m7C1 != 0  ||  (m7D6 == 0x15)) && (dist_xz < l_HIO.children[mType].base.mMaxAttnDistXZ)){
+    if((mType == Type_NIKO_e) && (m7C1 != 0  ||  (mState == 0x15)) && (dist_xz < l_HIO.children[mType].base.mMaxAttnDistXZ)){
         return true;
     }
     if(sVar1 > abs(iVar5) && dist_xz < l_HIO.children[mType].base.mMaxAttnDistXZ && dComIfGp_event_runCheck()){
@@ -419,11 +442,11 @@ void daNpc_P2_c::lookBack() {
 
 
     } else {
-        if (m7D6 == 0xE) {
+        if (mState == 0xE) {
             m_jnt.setTrn();
         }
 
-        switch (m7D6) {
+        switch (mState) {
         case 9:
         case 10:
             m_jnt.setTrn();
@@ -484,12 +507,12 @@ void daNpc_P2_c::lookBack() {
         }
     }
 
-    if (m7D6 == 0x10) {
+    if (mState == 0x10) {
         headOnly = false;
         m_jnt.clrTrn();
     }
 
-    if (mType == Type_NIKO_e && m7D6 == 0xD && m291 == 1) {
+    if (mType == Type_NIKO_e && mState == 0xD && m291 == 1) {
 
         m_jnt.setTrn();
         local_30 = m73C;
@@ -832,7 +855,7 @@ void daNpc_P2_c::demo_wait_2() {
 
     if(dLib_checkPlayerInCircle(l_HIO.children[mType].mDemoCircleCenter,l_HIO.children[mType].mDemoCircleRadius,l_HIO.children[mType].mDemoCircleHalfHeight)){
         m7D5 = 0x8;
-        m7D6 = 0x13;
+        mState = 0x13;
     }
     return;
 }
@@ -842,7 +865,7 @@ void daNpc_P2_c::demo_intro_2() {
 
     if(dComIfGp_evmng_endCheck("P2B_INTRO_2")){
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1A04);
-        m7D6 = 0x14;
+        mState = 0x14;
         m7D5 = 0x0;
         dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
     }
@@ -855,7 +878,7 @@ void daNpc_P2_c::goal_wait_2() {
     BOOL switch_bool = fopAcM_isSwitch(this,m292);
     if(switch_bool){
         if(dLib_checkPlayerInCircle(l_HIO.children[mType].m3C,l_HIO.children[mType].m60,l_HIO.children[mType].m68)){
-            m7D6 = 0x15;
+            mState = 0x15;
             
             daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
             if(timer){
@@ -869,7 +892,7 @@ void daNpc_P2_c::goal_wait_2() {
 void daNpc_P2_c::demo_goal_2() {
 
     if(dComIfGp_evmng_endCheck("P2B_GOAL_2")){
-        m7D6 = 0xD;
+        mState = 0xD;
         m7D5 = 0;
         m7C1 = 1;
 
@@ -886,7 +909,7 @@ void daNpc_P2_c::demo_bomb_get() {
 
     if(dComIfGp_evmng_endCheck("P2B_BOMB_GET")){
         dComIfGs_onEventBit(0xF02);
-        m7D6 = 1;
+        mState = 1;
         m7D5 = 0;
         m7C1 = 0;
         dComIfGp_event_onEventFlag(0x8);
@@ -899,7 +922,7 @@ void daNpc_P2_c::demo_wait() {
 
     if(dLib_checkPlayerInCircle(l_HIO.children[mType].mDemoCircleCenter,l_HIO.children[mType].mDemoCircleRadius,l_HIO.children[mType].mDemoCircleHalfHeight)){
         m7D5 = 0x3;
-        m7D6 = 0x4;
+        mState = 0x4;
 
         }
         // daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
@@ -914,7 +937,7 @@ void daNpc_P2_c::demo_wait() {
 void daNpc_P2_c::demo_intro() {
 
     if(dComIfGp_evmng_endCheck("P2B_INTRO")){
-        m7D6 = 0x5;
+        mState = 0x5;
         m7D5 = 0x0;
         dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
     }
@@ -925,7 +948,7 @@ void daNpc_P2_c::demo_intro() {
 void daNpc_P2_c::demo_lift() {
 
     if(dComIfGp_evmng_endCheck("Hlift_up")){
-        m7D6 = 0x6;
+        mState = 0x6;
         m7D5 = 0x4;
         m804 = 0;
     }
@@ -937,7 +960,7 @@ void daNpc_P2_c::demo_jump() {
 
     if(dComIfGp_evmng_endCheck("P2B_TO_GOAL")){
         dComIfGs_onEventBit(0x720);
-        m7D6 = 9;
+        mState = 9;
         dComIfGp_event_onEventFlag(0x8);
     }
     return;
@@ -949,7 +972,7 @@ void daNpc_P2_c::goal_goalpos_to_talkpos() {
     m7C1 = 1;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     if((current.pos.y - player->current.pos.y - 300.f) < 0.0f){
-        m7D6 = 0xA;
+        mState = 0xA;
         return;
     }
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x0;
@@ -972,11 +995,11 @@ void daNpc_P2_c::goal_goalpos_to_talkpos() {
 
     if(fVar8 < 5.0f){
         m7D3 = 0x1;
-        m7D6 = 0x7;
+        mState = 0x7;
     }
 
     if(dLib_checkPlayerInCircle(l_HIO.children[mType].mGoalPosCircleCenter,l_HIO.children[mType].mGoalPosCircleRadius,l_HIO.children[mType].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
-        m7D6 = 0xC;
+        mState = 0xC;
         daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
         if(timer){
             timer->stopTimer();
@@ -994,7 +1017,7 @@ void daNpc_P2_c::goal_talkpos_to_goalpos() {
         fopAcM_searchPlayerDistanceXZ(this) < l_HIO.children[mType].m70 && 
         (current.pos.y - player->current.pos.y - 300.f) > 0.0f
     ){
-        m7D6 = 0x9;
+        mState = 0x9;
         return;
     }
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x0;
@@ -1010,13 +1033,12 @@ void daNpc_P2_c::goal_talkpos_to_goalpos() {
     }else{
         m730 = attn_pos;
     }
-//cLib_targetAngleY(&current.pos,&m730)
+
     s16 sVar5 = cLib_targetAngleY(&current.pos,&m730);
     if( fVar8 < 5.0f){
-        //f32 diff = fabs(sVar5-current.angle.y);
         if(std::fabsf(sVar5-current.angle.y) < 5376.0f){
             m7D3 = 0x1;
-            m7D6 = 0xB;
+            mState = 0xB;
         }
     }else{
 
@@ -1027,7 +1049,7 @@ void daNpc_P2_c::goal_talkpos_to_goalpos() {
         }
     }
     if(dLib_checkPlayerInCircle(l_HIO.children[mType].mGoalPosCircleCenter,l_HIO.children[mType].mGoalPosCircleRadius,l_HIO.children[mType].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
-        m7D6 = 0xC;
+        mState = 0xC;
         daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
         if(timer){
             timer->stopTimer();
@@ -1045,14 +1067,14 @@ void daNpc_P2_c::goal_goalpos_wait() {
         fopAcM_searchPlayerDistanceXZ(this) < l_HIO.children[mType].m70 && 
         (current.pos.y - player->current.pos.y - 300.f) > 0.0f
     ){
-        m7D6 = 0x9;
+        mState = 0x9;
         return;
     }
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x2;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x2;   
     if(dLib_checkPlayerInCircle(l_HIO.children[mType].mGoalPosCircleCenter,l_HIO.children[mType].mGoalPosCircleRadius,l_HIO.children[mType].mGoalPosCircleHalfHeight)){
         if(!player->checkPlayerFly()){
-            m7D6 = 0xC;
+            mState = 0xC;
             daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
             if(timer){
                 timer->stopTimer();
@@ -1068,7 +1090,7 @@ void daNpc_P2_c::goal_talkpos_wait() {
     m7C1 = 1;
     daPy_py_c* player = daPy_getPlayerActorClass();
     if((current.pos.y - player->current.pos.y - 300.f) < 0.0f){
-        m7D6 = 0xA;
+        mState = 0xA;
         return;
     }
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x22;
@@ -1078,7 +1100,7 @@ void daNpc_P2_c::goal_talkpos_wait() {
         m74A = 1;
     }else{
         if(m725 != 0){
-            m7D6 = 0x8;
+            mState = 0x8;
             dComIfGp_event_onEventFlag(0x8);
             m7D5 = 0x5;
         }else{
@@ -1088,7 +1110,7 @@ void daNpc_P2_c::goal_talkpos_wait() {
         }
 
         if(dLib_checkPlayerInCircle(l_HIO.children[mType].mGoalPosCircleCenter,l_HIO.children[mType].mGoalPosCircleRadius,l_HIO.children[mType].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
-            m7D6 = 0xC;
+            mState = 0xC;
             daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
             if(timer){
                 timer->stopTimer();
@@ -1107,7 +1129,7 @@ void daNpc_P2_c::demo_goal() {
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
     if(dComIfGp_evmng_endCheck("P2B_GOAL")){
         dComIfGs_onEventBit(0x710);
-        m7D6 = 0xD;
+        mState = 0xD;
         m7D5 = 0;
         dComIfGp_event_onEventFlag(0x8);
     }else{
@@ -1120,7 +1142,7 @@ void daNpc_P2_c::demo_goal() {
 void daNpc_P2_c::goal_talkpos_talk() {
 
     if(dComIfGp_evmng_endCheck("P2B_GOAL_WAIT_TALK")){
-        m7D6 = 0x7;
+        mState = 0x7;
         dComIfGp_event_onEventFlag(0x8);
         m725 = 0;
     }
@@ -1132,14 +1154,14 @@ void daNpc_P2_c::treasure_wait() {
 
     if(dComIfGp_evmng_endCheck("DEFAULT_TREASURE")){
         if(m291 == 0){
-            m7D6 = 0xF;
+            mState = 0xF;
             m7D5 = 0x7;
         }else if(m291 == 1){
-            m7D6 = 0x16;
+            mState = 0x16;
             m7D5 = 0xA;
         }
     }else if(m725 != 0){
-        m7D6 = 0xE;
+        mState = 0xE;
     }else{
         m7D5 = 0x2;
     }
@@ -1151,7 +1173,7 @@ void daNpc_P2_c::treasure_wait_talk() {
 
     m750 = 1;
     if(talk(false) == 0x12){
-        m7D6 = 0xD;
+        mState = 0xD;
         m725 = 0;
         dComIfGp_event_onEventFlag(0x8);
     }
@@ -1164,7 +1186,7 @@ void daNpc_P2_c::demo_arrive() {
     if(dComIfGp_evmng_endCheck("P2B_ARRIVE_MAJYU")){
         dKy_instant_timechg(300);
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_0808);
-        m7D6 = 1;
+        mState = 1;
         m7D5 = 0;
         dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
     }
@@ -1175,7 +1197,7 @@ void daNpc_P2_c::demo_arrive() {
 void daNpc_P2_c::wait01() {
 
     if(m725 != 0){
-        m7D6 = 2;
+        mState = 2;
         return;
     }
     m7D5 = 2;
@@ -1200,7 +1222,7 @@ void daNpc_P2_c::zukotelescope() {
         m7D3 = 1;
         m_jnt.offHeadLock();
         m_jnt.offBackBoneLock();
-        m7D6 = 2;
+        mState = 2;
 
     } else {
         m7D5 = 2;
@@ -1237,7 +1259,7 @@ void daNpc_P2_c::moccowait() {
     }
 
     if (m725 != 0 && m7D3 == 1) {
-        m7D6 = 2;
+        mState = 2;
     } else {
         m7D5 = 2;
     }
@@ -1249,16 +1271,16 @@ void daNpc_P2_c::talk01() {
     if (talk(false) == 0x12) {
         if (mType == Type_MAKO_e) {
             m7D3 = 1;
-            m7D6 = 0x10;
+            mState = 0x10;
         }
         else if ((mType == Type_ZUKO_e) && !dComIfGs_isEventBit(0x808)) {
-            m7D6 = 0x11;
+            mState = 0x11;
             m_jnt.onHeadLock();
             m_jnt.onBackBoneLock();
         }
         else {
             m7D3 = 1;
-            m7D6 = 1;
+            mState = 1;
         }
 
         dComIfGp_event_onEventFlag(8);
@@ -1274,22 +1296,22 @@ BOOL daNpc_P2_c::intro_action(void*) {
     if(m808 == 0){
         if(m291 == 0){
             if(!dComIfGs_isEventBit(0x720)){
-                m7D6 = 3;
+                mState = 3;
             }else{
-                m7D6 = 10;
+                mState = 10;
             }
         }else{
             if(!dComIfGs_isEventBit(0x1A04)){
-                m7D6 = 0x12;
+                mState = 0x12;
             }else{
-                m7D6 = 0x14;
+                mState = 0x14;
             }
         }
         m808 += 1;
     }else if(m808 != -1){
         m724 = chkAttention();
         m7D5 = 0;
-        switch(m7D6){
+        switch(mState){
             case 1:
             wait01();
             break;
@@ -1317,7 +1339,7 @@ BOOL daNpc_P2_c::intro_action(void*) {
             case 9:
             goal_goalpos_to_talkpos();
             break;
-            case 10:
+            case 0xa:
             goal_talkpos_to_goalpos();
             break;
             case 0xb:
@@ -1362,17 +1384,17 @@ BOOL daNpc_P2_c::wait_action(void*) {
 
     if(!m808){
         if(mType == Type_MAKO_e){
-            m7D6 = 0x10;
+            mState = 0x10;
         }else if(mType == Type_ZUKO_e && !dComIfGs_isEventBit(0x808)){
-            m7D6 = 0x11;
+            mState = 0x11;
         }else{
-            m7D6 = 1;
+            mState = 1;
         }
         m808 += 1;
     }else if(m808 != -1){
         m724 = chkAttention();
         m7D5 = 0;
-        switch(m7D6){
+        switch(mState){
             case 1:
                 wait01();
                 break;
@@ -1394,16 +1416,6 @@ BOOL daNpc_P2_c::wait_action(void*) {
 
 /* 00003158-00003520       .text _execute__10daNpc_P2_cFv */
 
-enum P2_ACT_IDX{
-    MONE = -1,
-    ZERO = 0,
-    ONE = 1,
-    TWO = 2,
-    THREE = 3,
-    FOUR = 4,
-    FIVE = 5,
-
-};
 bool daNpc_P2_c::_execute() {
 
 
