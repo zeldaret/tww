@@ -80,7 +80,7 @@ cPhs_State daObjItnak::Act_c::_create() {
   
   fopAcM_ct(this, Act_c);
   res_load_state = dComIfG_resLoad(&this->mPhase, M_arcname);
-  is_visible = ::daObj::PrmAbstract(this, PRM_STATE_W, PRM_STATE_S);
+  is_visible = ::daObj::PrmAbstract(this, (int)PRM_STATE_W, (int)PRM_STATE_S);
   this->mInitVisible = is_visible;
   if (res_load_state == cPhs_COMPLEATE_e) {
     solid_heap = fopAcM_entrySolidHeap(this, solidHeapCB, 0);
@@ -161,7 +161,7 @@ void daObjItnak::Act_c::manage_draw_flag() {
 
       if (this->mInitVisible == 1) {
           if (this->mVisible == 1) {
-              switch_no = daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S);
+              switch_no = daObj::PrmAbstract(this, (int)PRM_SWSAVE_W, (int)PRM_SWSAVE_S);
               is_switch = dComIfGs_isSwitch(switch_no, this->home.roomNo);
               if (is_switch == 1) {
                   this->mVisible = 0;
@@ -170,7 +170,7 @@ void daObjItnak::Act_c::manage_draw_flag() {
       }
       else if (this->mInitVisible == 0) {
           if (this->mVisible == 0) {
-              switch_no = daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S);
+              switch_no = daObj::PrmAbstract(this, (int)PRM_SWSAVE_W, (int)PRM_SWSAVE_S);
               is_switch = dComIfGs_isSwitch(switch_no, this->home.roomNo);
               if (is_switch == 1) {
                   this->mVisible = 1;
@@ -193,34 +193,34 @@ void daObjItnak::Act_c::set_collision() {
     if (this->mVisible == 1) {
         was_hit = this->set_co_se(&this->mCyl1);
         if (was_hit == 0) {
-            this->mCyl1.SetR(L_attr.cyl1_r);
-            this->mCyl1.SetH(L_attr.cyl1_h);
+            this->mCyl1.SetR(68.0);
+            this->mCyl1.SetH(230.0);
             this->mCyl1.SetC(this->current.pos);
             g_dComIfG_gameInfo.play.mCcS.Set((cCcD_Obj *)&this->mCyl1);
         }
         was_hit = this->set_co_se( &this->mCyl2);
         if (was_hit == 0) {
-            cyl2_pos.x = L_attr.cyl2_pos_x;
-            cyl2_pos.y = L_attr.cyl2_pos_y;
-            cyl2_pos.z = L_attr.cyl2_pos_z;
+            cyl2_pos.x = 41.0;
+            cyl2_pos.y = 44.0;
+            cyl2_pos.z = 84.0;
             PSMTXMultVec(this->mMtx, &cyl2_pos, &cyl2_world_pos);
-            this->mCyl2.SetR(L_attr.cyl2_r);
-            this->mCyl2.SetH(L_attr.cyl2_h);
+            this->mCyl2.SetR(62.0);
+            this->mCyl2.SetH(121.0);
             this->mCyl2.SetC(cyl2_world_pos);
             g_dComIfG_gameInfo.play.mCcS.Set((cCcD_Obj *)&this->mCyl2);
         }
         was_hit = this->set_co_se( &this->mCyl3);
         if (was_hit == 0) {
-            cyl3_pos.x = L_attr.cyl3_pos_x;
-            cyl3_pos.y = L_attr.cyl3_pos_y;
-            cyl3_pos.z = L_attr.cyl3_pos_z;
+            cyl3_pos.x = -88.0;
+            cyl3_pos.y = 83.0;
+            cyl3_pos.z = 86.0;
             PSMTXMultVec(this->mMtx, &cyl3_pos, &cyl3_world_pos);
-            this->mCyl3.SetR(L_attr.cyl3_r);
-            this->mCyl3.SetH(L_attr.cyl3_h);
+            this->mCyl3.SetR(47.0);
+            this->mCyl3.SetH(205.0);
             this->mCyl3.SetC(cyl3_world_pos);
             g_dComIfG_gameInfo.play.mCcS.Set( (cCcD_Obj *)&this->mCyl3);
         }
-        fopAcM_rollPlayerCrash(this, L_attr.cyl1_r, 0xd);
+        fopAcM_rollPlayerCrash(this, 68.0, 0xd);
     }
 }
 
