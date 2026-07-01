@@ -1507,7 +1507,8 @@ bool daNpc_P2_c::_execute() {
 
     setCollision();
     if(m7D3 == 4){
-        //f32 fVar1,fVar9;
+
+
         f32 fVar1 = (current.pos-old.pos).abs()/(REG12_F(6)+10.0f);
         // fVar1 = 0.0f;
         //f32 fVar1 = cLib_minMaxLimit(fVar9,0.0f,1.0f);
@@ -1737,8 +1738,7 @@ BOOL daNpc_P2_c::_createHeap() {
     }
 }
 
-// daNpc_P2_c::ActionFunc* introaction;
-// daNpc_P2_c::ActionFunc waitaction;
+
 /* 00004034-0000476C       .text createInit__10daNpc_P2_cFv */
 void daNpc_P2_c::createInit() {
 
@@ -1751,7 +1751,7 @@ void daNpc_P2_c::createInit() {
     mpMorf->calc();
     fopAcM_SetMtx(this,mpMorf->getModel()->getBaseTRMtx());
     mAcchCir.SetWall(30.0f, 0.0f);
-// #if VERSION == VERSION_DEMO
+
     mAcch.Set(
         fopAcM_GetPosition_p(this),
         fopAcM_GetOldPosition_p(this),
@@ -1761,31 +1761,19 @@ void daNpc_P2_c::createInit() {
         fopAcM_GetSpeed_p(this),
         fopAcM_GetAngle_p(this),
         fopAcM_GetShapeAngle_p(this));
-// #else
-//     mAcch.Set(
-//         &current.pos,
-//         &old.pos,
-//         this,
-//         1,
-//         &mAcchCir,
-//         &speed,
-//         &current.angle,
-//         &shape_angle);
-// #endif
+
 
     attention_info.distances[1] = 0xA9;
     attention_info.distances[3] = 0xA9;
 
-    //
-    // Adjust spawn position depending on subtype/event progress.
-    //
+
     if(m290 == 1){
         if (m291 == 0) {
 
                 if (!dComIfGs_isEventBit(0x808) &&
                     dComIfGs_isEventBit(0x720)) {
 
-                    // int idx = m290;
+
                     current.pos = l_HIO.children[m290].mGoalPosCircleCenter;
 
                 }
@@ -1813,11 +1801,7 @@ void daNpc_P2_c::createInit() {
 
     mEventCut.setActorInfo(actor_name_table[m290], this);
     if (m290 == 1) {
-        //if(dComIfGs_isEventBit(0x808)){
-        //
-        // Initial action selection.
-        //
-    //         if (m290 == 1) {
+
             if (!strcmp(dComIfGp_getStartStageName(), "Asoko")) {
                 if(m291 == 0){
 

@@ -503,9 +503,13 @@ void daNpc_P2_c::cutRopeTalkStart(int i_staff_id) {
         dVar8 = temp->z;
     }
     local_64.normalize();
-    current.pos = (m7BC->actor.current.pos - (local_64 *dVar8));
+//TODO: There seems to be an inline used around here called getPlayerMoveLength.
+//I was not able to reproduce it, but it also seems to be used in daPy_lk_c::procRopeSwing_init.
+
     // m7BC->getPlayerMoveLength(current.pos,80.0f);
     // current.pos = (m7BC->actor.current.pos - (local_64 *dVar8));
+current.pos = (m7BC->actor.current.pos - (local_64 *dVar8));
+
     speed.y = 0.0f;
     gravity = 0.0f;
 
