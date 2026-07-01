@@ -13,12 +13,33 @@ cPhs_State daObjMsdan2::Act_c::Mthd_Create() {
 
 /* 0000024C-00000344       .text Mthd_Execute__Q211daObjMsdan25Act_cFv */
 BOOL daObjMsdan2::Act_c::Mthd_Execute() {
-    /* Nonmatching */
+    switch (mState) {
+    case 0:
+        if (fopAcM_isSwitch(this, prm_get_swSave())) {
+            fopAcM_orderOtherEventId(this, mEventIdx, 0xff, 0xFFFF, 0, 1);
+            mState = 1;
+        }
+        break;
+    case 1:
+        if (eventInfo.checkCommandDemoAccrpt()) {
+            mState = 2;
+        }
+        break;
+    case 2:
+        if (dComIfGp_evmng_endCheck(mEventIdx)) {
+            dComIfGp_event_onEventFlag(0x0008);
+            mState = 3;
+        }
+        break;
+    case 3:
+        break;
+    }
+    return TRUE;
 }
 
 /* 00000344-0000034C       .text Mthd_Delete__Q211daObjMsdan25Act_cFv */
 BOOL daObjMsdan2::Act_c::Mthd_Delete() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 namespace daObjMsdan2 {
