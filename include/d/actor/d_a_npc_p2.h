@@ -40,6 +40,8 @@ public:
         State_TREASURE_WAIT_e = 0xD,
         State_TREASURE_WAIT_TALK_e = 0xE,
         State_DEMO_ARRIVE_e = 0xF,
+        State_MOCCOWAIT_e = 0x10,
+        State_ZUKOTELESCOPE_e = 0x11,
         State_DEMO_WAIT_2_e = 0x12,
         State_DEMO_INTRO_2_e = 0x13,
         State_GOAL_WAIT_2_e = 0x14,

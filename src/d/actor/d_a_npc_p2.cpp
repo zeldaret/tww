@@ -407,7 +407,7 @@ bool daNpc_P2_c::chkAttention() {
     s16 sVar1 = l_HIO.children[mType].base.mMaxAttnAngleY;
     s16 iVar5 = (current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y());
 
-    if((mType == Type_NIKO_e) && (m7C1 != 0  ||  (mState == 0x15)) && (dist_xz < l_HIO.children[mType].base.mMaxAttnDistXZ)){
+    if((mType == Type_NIKO_e) && (m7C1 != 0  ||  (mState == State_DEMO_GOAL_2_e)) && (dist_xz < l_HIO.children[mType].base.mMaxAttnDistXZ)){
         return true;
     }
     if(sVar1 > abs(iVar5) && dist_xz < l_HIO.children[mType].base.mMaxAttnDistXZ && dComIfGp_event_runCheck()){
@@ -442,20 +442,20 @@ void daNpc_P2_c::lookBack() {
 
 
     } else {
-        if (mState == 0xE) {
+        if (mState == State_TREASURE_WAIT_TALK_e) {
             m_jnt.setTrn();
         }
 
         switch (mState) {
-        case 9:
-        case 10:
+        case State_GOAL_GOALPOS_TO_TALKPOS_e:
+        case State_GOAL_TALKPOS_TO_GOALPOS_e:
             m_jnt.setTrn();
             local_30 = m730;
             dstPos = &local_30;
             lookTarget = current.pos;
             lookTarget.y = eyePos.y;
             break;
-        case 2:
+        case State_TALK01_e:
             m_jnt.setTrn();
             local_30 = dNpc_playerEyePos(l_HIO.children[mType].base.m04);
             dstPos = &local_30;
@@ -507,12 +507,12 @@ void daNpc_P2_c::lookBack() {
         }
     }
 
-    if (mState == 0x10) {
+    if (mState == State_MOCCOWAIT_e) {
         headOnly = false;
         m_jnt.clrTrn();
     }
 
-    if (mType == Type_NIKO_e && mState == 0xD && m291 == 1) {
+    if (mType == Type_NIKO_e && mState == State_TREASURE_WAIT_e && m291 == 1) {
 
         m_jnt.setTrn();
         local_30 = m73C;
@@ -855,7 +855,7 @@ void daNpc_P2_c::demo_wait_2() {
 
     if(dLib_checkPlayerInCircle(l_HIO.children[mType].mDemoCircleCenter,l_HIO.children[mType].mDemoCircleRadius,l_HIO.children[mType].mDemoCircleHalfHeight)){
         m7D5 = 0x8;
-        mState = 0x13;
+        mState = State_DEMO_INTRO_2_e;
     }
     return;
 }
@@ -865,7 +865,7 @@ void daNpc_P2_c::demo_intro_2() {
 
     if(dComIfGp_evmng_endCheck("P2B_INTRO_2")){
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1A04);
-        mState = 0x14;
+        mState = State_GOAL_WAIT_2_e;
         m7D5 = 0x0;
         dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
     }
@@ -878,7 +878,7 @@ void daNpc_P2_c::goal_wait_2() {
     BOOL switch_bool = fopAcM_isSwitch(this,m292);
     if(switch_bool){
         if(dLib_checkPlayerInCircle(l_HIO.children[mType].m3C,l_HIO.children[mType].m60,l_HIO.children[mType].m68)){
-            mState = 0x15;
+            mState = State_DEMO_GOAL_2_e;
             
             daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
             if(timer){
@@ -892,7 +892,7 @@ void daNpc_P2_c::goal_wait_2() {
 void daNpc_P2_c::demo_goal_2() {
 
     if(dComIfGp_evmng_endCheck("P2B_GOAL_2")){
-        mState = 0xD;
+        mState = State_TREASURE_WAIT_e;
         m7D5 = 0;
         m7C1 = 1;
 
@@ -909,7 +909,7 @@ void daNpc_P2_c::demo_bomb_get() {
 
     if(dComIfGp_evmng_endCheck("P2B_BOMB_GET")){
         dComIfGs_onEventBit(0xF02);
-        mState = 1;
+        mState = State_WAIT01_e;
         m7D5 = 0;
         m7C1 = 0;
         dComIfGp_event_onEventFlag(0x8);
@@ -922,14 +922,8 @@ void daNpc_P2_c::demo_wait() {
 
     if(dLib_checkPlayerInCircle(l_HIO.children[mType].mDemoCircleCenter,l_HIO.children[mType].mDemoCircleRadius,l_HIO.children[mType].mDemoCircleHalfHeight)){
         m7D5 = 0x3;
-        mState = 0x4;
-
-        }
-        // daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
-        // if(timer){
-        //     timer->stopTimer();
-        // }
-    
+        mState = State_DEMO_INTRO_e;
+    }
     return;
 }
 
@@ -937,7 +931,7 @@ void daNpc_P2_c::demo_wait() {
 void daNpc_P2_c::demo_intro() {
 
     if(dComIfGp_evmng_endCheck("P2B_INTRO")){
-        mState = 0x5;
+        mState = State_DEMO_LIFT_e;
         m7D5 = 0x0;
         dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
     }
@@ -948,7 +942,7 @@ void daNpc_P2_c::demo_intro() {
 void daNpc_P2_c::demo_lift() {
 
     if(dComIfGp_evmng_endCheck("Hlift_up")){
-        mState = 0x6;
+        mState = State_DEMO_JUMP_e;
         m7D5 = 0x4;
         m804 = 0;
     }
@@ -960,7 +954,7 @@ void daNpc_P2_c::demo_jump() {
 
     if(dComIfGp_evmng_endCheck("P2B_TO_GOAL")){
         dComIfGs_onEventBit(0x720);
-        mState = 9;
+        mState = State_GOAL_GOALPOS_TO_TALKPOS_e;
         dComIfGp_event_onEventFlag(0x8);
     }
     return;
@@ -972,7 +966,7 @@ void daNpc_P2_c::goal_goalpos_to_talkpos() {
     m7C1 = 1;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     if((current.pos.y - player->current.pos.y - 300.f) < 0.0f){
-        mState = 0xA;
+        mState = State_GOAL_TALKPOS_TO_GOALPOS_e;
         return;
     }
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x0;
@@ -995,11 +989,11 @@ void daNpc_P2_c::goal_goalpos_to_talkpos() {
 
     if(fVar8 < 5.0f){
         m7D3 = 0x1;
-        mState = 0x7;
+        mState = State_GOAL_TALKPOS_WAIT_e;
     }
 
     if(dLib_checkPlayerInCircle(l_HIO.children[mType].mGoalPosCircleCenter,l_HIO.children[mType].mGoalPosCircleRadius,l_HIO.children[mType].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
-        mState = 0xC;
+        mState = State_DEMO_GOAL_e;
         daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
         if(timer){
             timer->stopTimer();
@@ -1017,7 +1011,7 @@ void daNpc_P2_c::goal_talkpos_to_goalpos() {
         fopAcM_searchPlayerDistanceXZ(this) < l_HIO.children[mType].m70 && 
         (current.pos.y - player->current.pos.y - 300.f) > 0.0f
     ){
-        mState = 0x9;
+        mState = State_GOAL_GOALPOS_TO_TALKPOS_e;
         return;
     }
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x0;
@@ -1038,7 +1032,7 @@ void daNpc_P2_c::goal_talkpos_to_goalpos() {
     if( fVar8 < 5.0f){
         if(std::fabsf(sVar5-current.angle.y) < 5376.0f){
             m7D3 = 0x1;
-            mState = 0xB;
+            mState = State_GOAL_GOALPOS_WAIT_e;
         }
     }else{
 
@@ -1049,7 +1043,7 @@ void daNpc_P2_c::goal_talkpos_to_goalpos() {
         }
     }
     if(dLib_checkPlayerInCircle(l_HIO.children[mType].mGoalPosCircleCenter,l_HIO.children[mType].mGoalPosCircleRadius,l_HIO.children[mType].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
-        mState = 0xC;
+        mState = State_DEMO_GOAL_e;
         daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
         if(timer){
             timer->stopTimer();
@@ -1067,14 +1061,14 @@ void daNpc_P2_c::goal_goalpos_wait() {
         fopAcM_searchPlayerDistanceXZ(this) < l_HIO.children[mType].m70 && 
         (current.pos.y - player->current.pos.y - 300.f) > 0.0f
     ){
-        mState = 0x9;
+        mState = State_GOAL_GOALPOS_TO_TALKPOS_e;
         return;
     }
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x2;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x2;   
     if(dLib_checkPlayerInCircle(l_HIO.children[mType].mGoalPosCircleCenter,l_HIO.children[mType].mGoalPosCircleRadius,l_HIO.children[mType].mGoalPosCircleHalfHeight)){
         if(!player->checkPlayerFly()){
-            mState = 0xC;
+            mState = State_DEMO_GOAL_e;
             daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
             if(timer){
                 timer->stopTimer();
@@ -1090,7 +1084,7 @@ void daNpc_P2_c::goal_talkpos_wait() {
     m7C1 = 1;
     daPy_py_c* player = daPy_getPlayerActorClass();
     if((current.pos.y - player->current.pos.y - 300.f) < 0.0f){
-        mState = 0xA;
+        mState = State_GOAL_TALKPOS_TO_GOALPOS_e;
         return;
     }
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x22;
@@ -1100,17 +1094,17 @@ void daNpc_P2_c::goal_talkpos_wait() {
         m74A = 1;
     }else{
         if(m725 != 0){
-            mState = 0x8;
+            mState = State_GOAL_TALKPOS_TALK_e;
             dComIfGp_event_onEventFlag(0x8);
-            m7D5 = 0x5;
+            m7D5 = State_DEMO_LIFT_e;
         }else{
             if(fopAcM_GetSpeedF(player) < 1.0f){
-                m7D5 = 2;
+                m7D5 = State_TALK01_e;
             }
         }
 
         if(dLib_checkPlayerInCircle(l_HIO.children[mType].mGoalPosCircleCenter,l_HIO.children[mType].mGoalPosCircleRadius,l_HIO.children[mType].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
-            mState = 0xC;
+            mState = State_DEMO_GOAL_e;
             daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
             if(timer){
                 timer->stopTimer();
@@ -1129,7 +1123,7 @@ void daNpc_P2_c::demo_goal() {
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
     if(dComIfGp_evmng_endCheck("P2B_GOAL")){
         dComIfGs_onEventBit(0x710);
-        mState = 0xD;
+        mState = State_TREASURE_WAIT_e;
         m7D5 = 0;
         dComIfGp_event_onEventFlag(0x8);
     }else{
@@ -1142,7 +1136,7 @@ void daNpc_P2_c::demo_goal() {
 void daNpc_P2_c::goal_talkpos_talk() {
 
     if(dComIfGp_evmng_endCheck("P2B_GOAL_WAIT_TALK")){
-        mState = 0x7;
+        mState = State_GOAL_TALKPOS_WAIT_e;
         dComIfGp_event_onEventFlag(0x8);
         m725 = 0;
     }
@@ -1154,14 +1148,14 @@ void daNpc_P2_c::treasure_wait() {
 
     if(dComIfGp_evmng_endCheck("DEFAULT_TREASURE")){
         if(m291 == 0){
-            mState = 0xF;
+            mState = State_DEMO_ARRIVE_e;
             m7D5 = 0x7;
         }else if(m291 == 1){
-            mState = 0x16;
+            mState = State_DEMO_BOMB_GET_e;
             m7D5 = 0xA;
         }
     }else if(m725 != 0){
-        mState = 0xE;
+        mState = State_TREASURE_WAIT_TALK_e;
     }else{
         m7D5 = 0x2;
     }
@@ -1173,7 +1167,7 @@ void daNpc_P2_c::treasure_wait_talk() {
 
     m750 = 1;
     if(talk(false) == 0x12){
-        mState = 0xD;
+        mState = State_TREASURE_WAIT_e;
         m725 = 0;
         dComIfGp_event_onEventFlag(0x8);
     }
@@ -1186,7 +1180,7 @@ void daNpc_P2_c::demo_arrive() {
     if(dComIfGp_evmng_endCheck("P2B_ARRIVE_MAJYU")){
         dKy_instant_timechg(300);
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_0808);
-        mState = 1;
+        mState = State_WAIT01_e;
         m7D5 = 0;
         dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
     }
@@ -1197,7 +1191,7 @@ void daNpc_P2_c::demo_arrive() {
 void daNpc_P2_c::wait01() {
 
     if(m725 != 0){
-        mState = 2;
+        mState = State_TALK01_e;
         return;
     }
     m7D5 = 2;
@@ -1222,7 +1216,7 @@ void daNpc_P2_c::zukotelescope() {
         m7D3 = 1;
         m_jnt.offHeadLock();
         m_jnt.offBackBoneLock();
-        mState = 2;
+        mState = State_TALK01_e;
 
     } else {
         m7D5 = 2;
@@ -1259,7 +1253,7 @@ void daNpc_P2_c::moccowait() {
     }
 
     if (m725 != 0 && m7D3 == 1) {
-        mState = 2;
+        mState = State_TALK01_e;
     } else {
         m7D5 = 2;
     }
@@ -1271,16 +1265,16 @@ void daNpc_P2_c::talk01() {
     if (talk(false) == 0x12) {
         if (mType == Type_MAKO_e) {
             m7D3 = 1;
-            mState = 0x10;
+            mState = State_MOCCOWAIT_e;
         }
         else if ((mType == Type_ZUKO_e) && !dComIfGs_isEventBit(0x808)) {
-            mState = 0x11;
+            mState = State_ZUKOTELESCOPE_e;
             m_jnt.onHeadLock();
             m_jnt.onBackBoneLock();
         }
         else {
             m7D3 = 1;
-            mState = 1;
+            mState = State_WAIT01_e;
         }
 
         dComIfGp_event_onEventFlag(8);
@@ -1296,15 +1290,15 @@ BOOL daNpc_P2_c::intro_action(void*) {
     if(m808 == 0){
         if(m291 == 0){
             if(!dComIfGs_isEventBit(0x720)){
-                mState = 3;
+                mState = State_DEMO_WAIT_e;
             }else{
-                mState = 10;
+                mState = State_GOAL_TALKPOS_TO_GOALPOS_e;
             }
         }else{
             if(!dComIfGs_isEventBit(0x1A04)){
-                mState = 0x12;
+                mState = State_DEMO_WAIT_2_e;
             }else{
-                mState = 0x14;
+                mState = State_GOAL_WAIT_2_e;
             }
         }
         m808 += 1;
@@ -1312,64 +1306,64 @@ BOOL daNpc_P2_c::intro_action(void*) {
         m724 = chkAttention();
         m7D5 = 0;
         switch(mState){
-            case 1:
+            case State_WAIT01_e:
             wait01();
             break;
-            case 2:
+            case State_TALK01_e:
             talk01();
             break;
-            case 3:
+            case State_DEMO_WAIT_e:
             demo_wait();
             break;
-            case 4:
+            case State_DEMO_INTRO_e:
             demo_intro();
             break;
-            case 5:
+            case State_DEMO_LIFT_e:
             demo_lift();
             break;
-            case 6:
+            case State_DEMO_JUMP_e:
             demo_jump();
             break;
-            case 7:
+            case State_GOAL_TALKPOS_WAIT_e:
             goal_talkpos_wait();
             break;
-            case 8:
+            case State_GOAL_TALKPOS_TALK_e:
             goal_talkpos_talk();
             break;
-            case 9:
+            case State_GOAL_GOALPOS_TO_TALKPOS_e:
             goal_goalpos_to_talkpos();
             break;
-            case 0xa:
+            case State_GOAL_TALKPOS_TO_GOALPOS_e:
             goal_talkpos_to_goalpos();
             break;
-            case 0xb:
+            case State_GOAL_GOALPOS_WAIT_e:
             goal_goalpos_wait();
             break;
-            case 0xc:
+            case State_DEMO_GOAL_e:
             demo_goal();
             break;
-            case 0xd:
+            case State_TREASURE_WAIT_e:
             treasure_wait();
             break;
-            case 0xe:
+            case State_TREASURE_WAIT_TALK_e:
             treasure_wait_talk();
             break;
-            case 0xf:
+            case State_DEMO_ARRIVE_e:
             demo_arrive();
             break;
-            case 0x12:
+            case State_DEMO_WAIT_2_e:
             demo_wait_2();
             break;
-            case 0x13:
+            case State_DEMO_INTRO_2_e:
             demo_intro_2();
             break;
-            case 0x14:
+            case State_GOAL_WAIT_2_e:
             goal_wait_2();
             break;
-            case 0x15:
+            case State_DEMO_GOAL_2_e:
             demo_goal_2();
             break;
-            case 0x16:
+            case State_DEMO_BOMB_GET_e:
             demo_bomb_get();
             break;
         }
@@ -1384,27 +1378,27 @@ BOOL daNpc_P2_c::wait_action(void*) {
 
     if(!m808){
         if(mType == Type_MAKO_e){
-            mState = 0x10;
+            mState = State_MOCCOWAIT_e;
         }else if(mType == Type_ZUKO_e && !dComIfGs_isEventBit(0x808)){
-            mState = 0x11;
+            mState = State_ZUKOTELESCOPE_e;
         }else{
-            mState = 1;
+            mState = State_WAIT01_e;
         }
         m808 += 1;
     }else if(m808 != -1){
         m724 = chkAttention();
         m7D5 = 0;
         switch(mState){
-            case 1:
+            case State_WAIT01_e:
                 wait01();
                 break;
-            case 0x10:
+            case State_MOCCOWAIT_e:
                 moccowait();
                 break;
-            case 0x11:
+            case State_ZUKOTELESCOPE_e:
                 zukotelescope();
                 break;
-            case 2:
+            case State_TALK01_e:
                 talk01();
                 break;
         }
