@@ -19,8 +19,8 @@ namespace daObjItnak {
         void param_get_arg0() const {}
         void param_get_swbit() const {}
     
-        void solidHeapCB(fopAc_ac_c*);
-        void create_heap();
+        BOOL solidHeapCB(fopAc_ac_c*);
+        BOOL create_heap();
         cPhs_State _create();
         bool _delete();
         void set_mtx();
@@ -29,6 +29,8 @@ namespace daObjItnak {
         void set_collision();
         bool _execute();
         bool _draw();
+
+        static const char M_arcname[];
     
     public:
         /* 0x290 */ Unknown_Struct_0x290* field_0x290;

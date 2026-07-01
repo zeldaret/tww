@@ -5,10 +5,16 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Itnak.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
+#include "res/Object/Itnak.h"
 
 namespace daObjItnak {
+
+    const char Act_c::M_arcname[] = "Itnak";
+
     namespace {
         struct Attr_c {
             /* 0x00 */ u8 _pad[0xC8 - 0x00];
@@ -32,13 +38,30 @@ namespace daObjItnak {
 }
 
 /* 00000078-0000009C       .text solidHeapCB__Q210daObjItnak5Act_cFP10fopAc_ac_c */
-void daObjItnak::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjItnak::Act_c::solidHeapCB(fopAc_ac_c*) {
+    return create_heap() & 0xFF;
 }
 
 /* 0000009C-0000016C       .text create_heap__Q210daObjItnak5Act_cFv */
-void daObjItnak::Act_c::create_heap() {
-    /* Nonmatching */
+BOOL daObjItnak::Act_c::create_heap() {
+    J3DModelData* L_modelData;
+    BOOL ret;
+
+    L_modelData = (J3DModelData *)dComIfG_getObjectRes(M_arcname, dRes_INDEX_ITNAK_BDL_ITNAK_e);
+    JUT_ASSERT(0x141, L_modelData != NULL);
+    if (L_modelData != NULL) {
+        mModel = mDoExt_J3DModel__create(L_modelData, 0, 0x11000002);
+    }
+
+    set_mtx();
+
+    ret = FALSE;
+    if (L_modelData != NULL) {
+        if (mModel != NULL) {
+            ret = TRUE;
+        }
+    }
+    return ret;
 }
 
 /* 0000016C-000003A0       .text _create__Q210daObjItnak5Act_cFv */
