@@ -1755,7 +1755,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_jump"),
     ActorRel(NonMatching, "d_a_obj_kanoke"),
     ActorRel(Matching,    "d_a_obj_ladder"),
-    ActorRel(NonMatching, "d_a_obj_light"),
+    ActorRel(MatchingFor("GZLE01"), "d_a_obj_light"),
     ActorRel(Matching,    "d_a_obj_mkie"),
     ActorRel(Matching,    "d_a_obj_mkiek"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_mknjd"),
