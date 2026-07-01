@@ -8,9 +8,6 @@
 namespace daObjItnak {
     class Act_c : public fopAc_ac_c {
     public:
-        void is_switch() const {}
-        void param_get_arg0() const {}
-        void param_get_swbit() const {}
         virtual ~Act_c() {}
         static BOOL solidHeapCB(fopAc_ac_c*);
         BOOL create_heap();
@@ -37,6 +34,12 @@ namespace daObjItnak {
           /* 0x2C */ f32 cyl3_pos_z;
         };
         static const char M_arcname[];
+            enum Prm_e {
+        PRM_STATE_W = 8,
+        PRM_STATE_S = 0,
+        PRM_SWSAVE_W = 8,
+        PRM_SWSAVE_S = 8,
+    };
     public:
     // /* 0x290 */ void* mpVtbl;
     /* 0x294 */ request_of_phase_process_class mPhase;
@@ -51,8 +54,8 @@ namespace daObjItnak {
     /* 0x4D4 */ dCcD_Cyl mCyl2;
     /* 0x604 */ dCcD_Stts mStts3;
     /* 0x640 */ dCcD_Cyl mCyl3;
-    /* 0x770 */ int mInitParam;
-    /* 0x774 */ int mParam;
+    /* 0x770 */ int mInitVisible;
+    /* 0x774 */ int mVisible;
   // Size: 0x778
   private:
   static const Attr_c L_attr;

@@ -55,7 +55,7 @@ BOOL daObjItnak::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 0000009C-0000016C       .text create_heap__Q210daObjItnak5Act_cFv */
 BOOL daObjItnak::Act_c::create_heap() {
     J3DModelData *mdl_data;
-    BOOL bVar3;
+    BOOL ret;
     
     mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_ITNAK_BDL_ITNAK_e);
     JUT_ASSERT(0x141, mdl_data != 0);
@@ -63,37 +63,37 @@ BOOL daObjItnak::Act_c::create_heap() {
         this->mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
     }
     this->set_mtx();
-    bVar3 = false;
+    ret = false;
     if ((mdl_data != (J3DModelData *)0x0) && (this->mpModel != (J3DModel *)0x0)) {
-        bVar3 = true;
+        ret = true;
     }
-    return bVar3;
+    return ret;
 }
 
 /* 0000016C-000003A0       .text _create__Q210daObjItnak5Act_cFv */
 cPhs_State daObjItnak::Act_c::_create() {
-  fpc_ProcID fVar2;
-  cPhs_State PVar3;
-  int uVar4;
-  bool bVar4;
-  f32 fVar5;
+  fpc_ProcID actor_id;
+  cPhs_State res_load_state;
+  int is_visible;
+  bool solid_heap;
+  f32 ground_y;
   
   fopAcM_ct(this, Act_c);
-  PVar3 = dComIfG_resLoad(&this->mPhase, M_arcname);
-  uVar4 = ::daObj::PrmAbstract(this, 0x8, 0);
-  this->mInitParam = uVar4;
-  if (PVar3 == cPhs_COMPLEATE_e) {
-    bVar4 = fopAcM_entrySolidHeap(this, solidHeapCB, 0);
-    if (bVar4) {
-      this->mParam = this->mInitParam;
+  res_load_state = dComIfG_resLoad(&this->mPhase, M_arcname);
+  is_visible = ::daObj::PrmAbstract(this, PRM_STATE_W, PRM_STATE_S);
+  this->mInitVisible = is_visible;
+  if (res_load_state == cPhs_COMPLEATE_e) {
+    solid_heap = fopAcM_entrySolidHeap(this, solidHeapCB, 0);
+    if (solid_heap) {
+      this->mVisible = this->mInitVisible;
       this->cullMtx = this->mpModel->getBaseTRMtx();
       fopAcM_setCullSizeBox(this, -120.0, 0.0, -100.0, 120.0, 280.0, 150.0);
       cXyz pos(this->current.pos.x, this->current.pos.y + 100.0f, this->current.pos.z);
       this->mFloorPoly.SetPos(&pos);
-      fVar2 = fopAcM_GetID(this);
-      this->mFloorPoly.SetActorPid(fVar2);
-      fVar5 = dComIfG_Bgsp()->GroundCross(&this->mFloorPoly);
-      this->mGroundY = fVar5;
+      actor_id = fopAcM_GetID(this);
+      this->mFloorPoly.SetActorPid(actor_id);
+      ground_y = dComIfG_Bgsp()->GroundCross(&this->mFloorPoly);
+      this->mGroundY = ground_y;
       this->mStts1.Init( 0xff, 0xff, this);
       this->mCyl1.Set(M_cyl_src);
       mCyl1.SetStts(&mStts1);
@@ -113,10 +113,10 @@ cPhs_State daObjItnak::Act_c::_create() {
       this->mCyl3.OnTgNoHitMark();
     }
     else {
-      PVar3 = cPhs_ERROR_e;
+      res_load_state = cPhs_ERROR_e;
     }
   }
-  return PVar3;
+  return res_load_state;
 
 }
 
@@ -156,71 +156,71 @@ BOOL daObjItnak::Act_c::set_co_se(dCcD_Cyl* i_collision) {
 
 /* 00000EB0-00000F94       .text manage_draw_flag__Q210daObjItnak5Act_cFv */
 void daObjItnak::Act_c::manage_draw_flag() {
-      int iVar1;
-      bool bVar2;
+      int switch_no;
+      bool is_switch;
 
-      if (this->mInitParam == 1) {
-          if (this->mParam == 1) {
-              iVar1 = daObj::PrmAbstract(this, 8, 8);
-              bVar2 = dComIfGs_isSwitch(iVar1, this->home.roomNo);
-              if (bVar2 == 1) {
-                  this->mParam = 0;
+      if (this->mInitVisible == 1) {
+          if (this->mVisible == 1) {
+              switch_no = daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S);
+              is_switch = dComIfGs_isSwitch(switch_no, this->home.roomNo);
+              if (is_switch == 1) {
+                  this->mVisible = 0;
               }
           }
       }
-      else if (this->mInitParam == 0) {
-          if (this->mParam == 0) {
-              iVar1 = daObj::PrmAbstract(this, 8, 8);
-              bVar2 = dComIfGs_isSwitch(iVar1, this->home.roomNo);
-              if (bVar2 == 1) {
-                  this->mParam = 1;
+      else if (this->mInitVisible == 0) {
+          if (this->mVisible == 0) {
+              switch_no = daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S);
+              is_switch = dComIfGs_isSwitch(switch_no, this->home.roomNo);
+              if (is_switch == 1) {
+                  this->mVisible = 1;
               }
           }
       }
       else {
-          this->mParam = 1;
+          this->mVisible = 1;
       }
 }
 
 /* 00000F94-00001118       .text set_collision__Q210daObjItnak5Act_cFv */
 void daObjItnak::Act_c::set_collision() {
-    BOOL iVar1;
-    cXyz local_14;
-    cXyz cStack_20;
-    cXyz local_2c;
-    cXyz cStack_38;
+    BOOL was_hit;
+    cXyz cyl2_pos;
+    cXyz cyl2_world_pos;
+    cXyz cyl3_pos;
+    cXyz cyl3_world_pos;
 
-    if (this->mParam == 1) {
-        iVar1 = this->set_co_se(&this->mCyl1);
-        if (iVar1 == 0) {
-            this->mCyl1.SetR(68.0);
-            this->mCyl1.SetH(230.0);
+    if (this->mVisible == 1) {
+        was_hit = this->set_co_se(&this->mCyl1);
+        if (was_hit == 0) {
+            this->mCyl1.SetR(L_attr.cyl1_r);
+            this->mCyl1.SetH(L_attr.cyl1_h);
             this->mCyl1.SetC(this->current.pos);
             g_dComIfG_gameInfo.play.mCcS.Set((cCcD_Obj *)&this->mCyl1);
         }
-        iVar1 = this->set_co_se( &this->mCyl2);
-        if (iVar1 == 0) {
-            local_14.x = 41.0;
-            local_14.y = 44.0;
-            local_14.z = 84.0;
-            PSMTXMultVec(this->mMtx, &local_14, &cStack_20);
-            this->mCyl2.SetR(62.0);
-            this->mCyl2.SetH(121.0);
-            this->mCyl2.SetC(cStack_20);
+        was_hit = this->set_co_se( &this->mCyl2);
+        if (was_hit == 0) {
+            cyl2_pos.x = L_attr.cyl2_pos_x;
+            cyl2_pos.y = L_attr.cyl2_pos_y;
+            cyl2_pos.z = L_attr.cyl2_pos_z;
+            PSMTXMultVec(this->mMtx, &cyl2_pos, &cyl2_world_pos);
+            this->mCyl2.SetR(L_attr.cyl2_r);
+            this->mCyl2.SetH(L_attr.cyl2_h);
+            this->mCyl2.SetC(cyl2_world_pos);
             g_dComIfG_gameInfo.play.mCcS.Set((cCcD_Obj *)&this->mCyl2);
         }
-        iVar1 = this->set_co_se( &this->mCyl3);
-        if (iVar1 == 0) {
-            local_2c.x = -88.0;
-            local_2c.y = 83.0;
-            local_2c.z = 86.0;
-            PSMTXMultVec(this->mMtx, &local_2c, &cStack_38);
-            this->mCyl3.SetR(47.0);
-            this->mCyl3.SetH(205.0);
-            this->mCyl3.SetC(cStack_38);
+        was_hit = this->set_co_se( &this->mCyl3);
+        if (was_hit == 0) {
+            cyl3_pos.x = L_attr.cyl3_pos_x;
+            cyl3_pos.y = L_attr.cyl3_pos_y;
+            cyl3_pos.z = L_attr.cyl3_pos_z;
+            PSMTXMultVec(this->mMtx, &cyl3_pos, &cyl3_world_pos);
+            this->mCyl3.SetR(L_attr.cyl3_r);
+            this->mCyl3.SetH(L_attr.cyl3_h);
+            this->mCyl3.SetC(cyl3_world_pos);
             g_dComIfG_gameInfo.play.mCcS.Set( (cCcD_Obj *)&this->mCyl3);
         }
-        fopAcM_rollPlayerCrash(this, 68.0, 0xd);
+        fopAcM_rollPlayerCrash(this, L_attr.cyl1_r, 0xd);
     }
 }
 
@@ -236,7 +236,7 @@ bool daObjItnak::Act_c::_execute() {
 bool daObjItnak::Act_c::_draw() {
     u32 shadow_id;
 
-    if (this->mParam != 0) {
+    if (this->mVisible != 0) {
         g_env_light.settingTevStruct(TEV_TYPE_BG0, &this->current.pos, &this->tevStr);
         g_env_light.setLightTevColorType(this->mpModel, &this->tevStr);
         mDoExt_modelUpdateDL(this->mpModel);
