@@ -350,26 +350,24 @@ bool daSTBox_c::_execute() {
     /* Nonmatching */
     static char* action_table[] = {"WAIT", "WAIT02", "WAIT_GETITEM", "WAIT_DUMMY", "DROP"};
     int staffIdx = dComIfGp_evmng_getMyStaffId("STBox", NULL, 0);
-    double waterY = 0.0;
+    daShip_c* ship = dComIfGp_getShipActor();
+    f32 waterY = 0.0;
     cXyz m1020Pos;
-    if (dComIfGp_getShipActor() != NULL) {
-        m1020Pos = dComIfGp_getShipActor()->m1020;
+    if (ship != NULL) {
+        m1020Pos = ship->m1020;
         waterY = getWaterY(m1020Pos);
     }
-    if ((dComIfGp_event_getMode() != 0) 
+    if ((dComIfGp_event_runCheck()) 
         && !this->eventInfo.checkCommandTalk()
-        && staffIdx != 0xFF) {
+        && staffIdx != -1) {
         s32 actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, 5, 0, 0);
         if(actIdx == -1){
             dComIfGp_evmng_cutEnd(staffIdx);
         } else {
-            BOOL isAdvance = dComIfGp_evmng_getIsAddvance(staffIdx);
-            if (isAdvance) {
+            if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
                 (this->*event_init_tbl[actIdx])(staffIdx);
             }
-            daSTBox_c* i_this = this;
-            BOOL isAct = (this->*event_action_tbl[actIdx])(staffIdx);
-            if (i_this != NULL) {
+            if ((this->*event_action_tbl[actIdx])(staffIdx)) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             }
         }
@@ -382,7 +380,15 @@ bool daSTBox_c::_execute() {
         }
     }
 
-    if (waterY <= this->current.pos.y) {
+    if (this->current.pos.y < waterY) {
+        this->field_0x2C0.setWaterFlatY(waterY + 2.0f);
+        this->field_0x2C0.field_0x0C = waterY + 2.0f; 
+        this->field_0x2C0.setWaterY(waterY - this->current.pos.y);
+        this->field_0x2C0.mExScaleX = m1020Pos.x;
+        this->field_0x2C0.mExScaleY = m1020Pos.y;
+        this->field_0x2C0.mExScaleZ = m1020Pos.z;
+        
+    } else {
         JPABaseEmitter* emitter = this->field_0x2C0.getEmitter();
         if (emitter != NULL) {
             emitter->setEmitterCallBackPtr(NULL);
@@ -391,15 +397,9 @@ bool daSTBox_c::_execute() {
             emitter->stopCreateParticle();
         }
         this->field_0x2C0.setEmitter(NULL);
-    } else {
-        this->field_0x2C0.setWaterFlatY(waterY + 2.0f);
-        // this->field_0x2C0.mPos ? 
-        this->field_0x2C0.setWaterY(waterY + 2.0f);
-        this->field_0x2C0.mExScaleX = m1020Pos.x;
-        this->field_0x2C0.mExScaleY = m1020Pos.y;
-        this->field_0x2C0.mExScaleZ = m1020Pos.z;
     }
-    
+    set_mtx();
+    return TRUE;
 }
 
 /* 00000EB8-00000EBC       .text initWait__9daSTBox_cFi */

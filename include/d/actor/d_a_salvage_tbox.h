@@ -11,7 +11,6 @@ public:
     void setEmitter(JPABaseEmitter* emitter) { mpEmitter = emitter; }
     void setDepth(float depth) { mpDepth = depth; }
     void setIndirectTexData(f32 exScaleX, f32 exScaleY, f32 exScaleZ) { mExScaleX = exScaleX; mExScaleY = exScaleY; mExScaleZ = exScaleZ; }
-    void setPos(cXyz& pos) { mpPos = &pos; }
     void setMPos(cXyz& pos) { mPos->x = pos.x; mPos->y = pos.y; mPos->z = pos.z; }
     void setWaterFlatY(float waterFlatY) { mpWaterFlatY = waterFlatY; }
     void setWaterY(float waterY) { mpWaterY = waterY; }
@@ -26,11 +25,10 @@ public:
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
 
-public: //TODO: Should perhaps be private
     /* 0x04 */  s16 field_0x4;
     /* 0x06 */  s16 field_0x6;
     /* 0x08 */  f32 mpWaterFlatY;
-    /* 0x0C */  cXyz* mpPos;
+    /* 0x0C */  f32 field_0x0C;
     /* 0x10 */  f32 mpWaterY;
     /* 0x14 */  JGeometry::TVec3<f32> mPos[3];  // TODO: not sure about this placement
     /* 0x38 */  f32 mExScaleX;
