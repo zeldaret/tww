@@ -48,6 +48,19 @@ public:
         State_DEMO_GOAL_2_e = 0x15,
         State_DEMO_BOMB_GET_e = 0x16,
     };
+    enum DemoIdx_e{
+        DemoIdx_NONE_e = 0,
+        DemoIdx_TALK_e = 1,
+        DemoIdx_TALK_2_e = 2,
+        DemoIdx_P2B_INTRO_e = 3,
+        DemoIdx_P2B_TO_GOAL_e = 4,
+        DemoIdx_P2B_GOAL_WAIT_TALK_e = 5,
+        DemoIdx_P2B_GOAL_e = 6,
+        DemoIdx_P2B_ARRIVE_MAJYU_e = 7,
+        DemoIdx_P2B_INTRO_2_e = 8,
+        DemoIdx_P2B_GOAL_2_e = 9,
+        DemoIdx_P2B_BOMB_GET_e = 0xA
+    };
     cXyz& getAttentionBasePos() {return m6F8;}
     void getBackbone_x() {}
     void getBackbone_y() {}
@@ -225,7 +238,7 @@ public:
     /* 0x7D2 */ s8 mAnmFileIdx;
     /* 0x7D3 */ s8 m7D3;
     /* 0x7D4 */ s8 m7D4;
-    /* 0x7D5 */ s8 m7D5;
+    /* 0x7D5 */ s8 mDemoOrderIdx;
     /* 0x7D6 */ s8 mState;
     /* 0x7D7 */ u8 m7D7;
                 u8 m7D8;

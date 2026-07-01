@@ -827,22 +827,22 @@ void daNpc_P2_c::eventOrder() {
         "P2B_BOMB_GET"
     };
 
-    if ((m7D5 == 1) || (m7D5 == 2)) {
+    if ((mDemoOrderIdx == DemoIdx_TALK_e) || (mDemoOrderIdx == DemoIdx_TALK_2_e)) {
         eventInfo.onCondition(dEvtCmd_INTALK_e);
-        if (m7D5 == 1) {
+        if (mDemoOrderIdx == DemoIdx_TALK_e) {
             fopAcM_orderSpeakEvent((fopAc_ac_c *) this);
         }
-    } else if (m7D5 >= 3) {
-        fopAcM_orderOtherEvent2((fopAc_ac_c *) this, a_demo_name_tbl[m7D5-3], 1, 0xFFFF);
+    } else if (mDemoOrderIdx >= DemoIdx_P2B_INTRO_e) {
+        fopAcM_orderOtherEvent((fopAc_ac_c *) this, a_demo_name_tbl[mDemoOrderIdx-3], 0xFFFF);
     }
 }
 
 /* 00001998-00001A00       .text checkOrder__10daNpc_P2_cFv */
 void daNpc_P2_c::checkOrder() {
     if(eventInfo.checkCommandDemoAccrpt()){
-        m7D5 = 0;
-    }else if(eventInfo.checkCommandTalk() && (m7D5 == 1 || m7D5 == 2)){
-        m7D5 = 0;
+        mDemoOrderIdx = DemoIdx_NONE_e;
+    }else if(eventInfo.checkCommandTalk() && (mDemoOrderIdx == DemoIdx_TALK_e || mDemoOrderIdx == DemoIdx_TALK_2_e)){
+        mDemoOrderIdx = DemoIdx_NONE_e;
         m725 = 1;
         talkInit();
     }
@@ -854,7 +854,7 @@ void daNpc_P2_c::checkOrder() {
 void daNpc_P2_c::demo_wait_2() {
 
     if(dLib_checkPlayerInCircle(l_HIO.children[mType].mDemoCircleCenter,l_HIO.children[mType].mDemoCircleRadius,l_HIO.children[mType].mDemoCircleHalfHeight)){
-        m7D5 = 0x8;
+        mDemoOrderIdx = DemoIdx_P2B_INTRO_2_e;
         mState = State_DEMO_INTRO_2_e;
     }
     return;
@@ -866,7 +866,7 @@ void daNpc_P2_c::demo_intro_2() {
     if(dComIfGp_evmng_endCheck("P2B_INTRO_2")){
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1A04);
         mState = State_GOAL_WAIT_2_e;
-        m7D5 = 0x0;
+        mDemoOrderIdx = DemoIdx_NONE_e;
         dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
     }
 }
@@ -874,9 +874,8 @@ void daNpc_P2_c::demo_intro_2() {
 /* 00001B00-00001BBC       .text goal_wait_2__10daNpc_P2_cFv */
 void daNpc_P2_c::goal_wait_2() {
 
-
-    BOOL switch_bool = fopAcM_isSwitch(this,m292);
-    if(switch_bool){
+    //BOOL switch_bool = fopAcM_isSwitch(this,m292);
+    if(fopAcM_isSwitch(this,m292)){
         if(dLib_checkPlayerInCircle(l_HIO.children[mType].m3C,l_HIO.children[mType].m60,l_HIO.children[mType].m68)){
             mState = State_DEMO_GOAL_2_e;
             
@@ -893,13 +892,13 @@ void daNpc_P2_c::demo_goal_2() {
 
     if(dComIfGp_evmng_endCheck("P2B_GOAL_2")){
         mState = State_TREASURE_WAIT_e;
-        m7D5 = 0;
+        mDemoOrderIdx = DemoIdx_NONE_e;
         m7C1 = 1;
 
         m73C =  mEventCut.getAttnPos() + m7DC; 
         dComIfGp_event_onEventFlag(0x8);
     }else{
-        m7D5 = 9;
+        mDemoOrderIdx = DemoIdx_P2B_GOAL_2_e;
     }
     return;
 }
@@ -910,7 +909,7 @@ void daNpc_P2_c::demo_bomb_get() {
     if(dComIfGp_evmng_endCheck("P2B_BOMB_GET")){
         dComIfGs_onEventBit(0xF02);
         mState = State_WAIT01_e;
-        m7D5 = 0;
+        mDemoOrderIdx = DemoIdx_NONE_e;
         m7C1 = 0;
         dComIfGp_event_onEventFlag(0x8);
     }
@@ -921,7 +920,7 @@ void daNpc_P2_c::demo_bomb_get() {
 void daNpc_P2_c::demo_wait() {
 
     if(dLib_checkPlayerInCircle(l_HIO.children[mType].mDemoCircleCenter,l_HIO.children[mType].mDemoCircleRadius,l_HIO.children[mType].mDemoCircleHalfHeight)){
-        m7D5 = 0x3;
+        mDemoOrderIdx = DemoIdx_P2B_INTRO_e;
         mState = State_DEMO_INTRO_e;
     }
     return;
@@ -932,7 +931,7 @@ void daNpc_P2_c::demo_intro() {
 
     if(dComIfGp_evmng_endCheck("P2B_INTRO")){
         mState = State_DEMO_LIFT_e;
-        m7D5 = 0x0;
+        mDemoOrderIdx = DemoIdx_NONE_e;
         dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
     }
     return;    
@@ -943,7 +942,7 @@ void daNpc_P2_c::demo_lift() {
 
     if(dComIfGp_evmng_endCheck("Hlift_up")){
         mState = State_DEMO_JUMP_e;
-        m7D5 = 0x4;
+        mDemoOrderIdx = DemoIdx_P2B_TO_GOAL_e;
         m804 = 0;
     }
     return;
@@ -1090,16 +1089,16 @@ void daNpc_P2_c::goal_talkpos_wait() {
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x22;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x22;
     if(m74A == 0){
-        m7D5 = 1;
+        mDemoOrderIdx = DemoIdx_TALK_e;
         m74A = 1;
     }else{
         if(m725 != 0){
             mState = State_GOAL_TALKPOS_TALK_e;
             dComIfGp_event_onEventFlag(0x8);
-            m7D5 = State_DEMO_LIFT_e;
+            mDemoOrderIdx = DemoIdx_P2B_GOAL_WAIT_TALK_e;
         }else{
             if(fopAcM_GetSpeedF(player) < 1.0f){
-                m7D5 = State_TALK01_e;
+                mDemoOrderIdx = DemoIdx_TALK_2_e;
             }
         }
 
@@ -1124,10 +1123,10 @@ void daNpc_P2_c::demo_goal() {
     if(dComIfGp_evmng_endCheck("P2B_GOAL")){
         dComIfGs_onEventBit(0x710);
         mState = State_TREASURE_WAIT_e;
-        m7D5 = 0;
+        mDemoOrderIdx = DemoIdx_NONE_e;
         dComIfGp_event_onEventFlag(0x8);
     }else{
-        m7D5 = 0x6;
+        mDemoOrderIdx = DemoIdx_P2B_GOAL_e;
     }
     return;
 }
@@ -1149,15 +1148,15 @@ void daNpc_P2_c::treasure_wait() {
     if(dComIfGp_evmng_endCheck("DEFAULT_TREASURE")){
         if(m291 == 0){
             mState = State_DEMO_ARRIVE_e;
-            m7D5 = 0x7;
+            mDemoOrderIdx = DemoIdx_P2B_ARRIVE_MAJYU_e;
         }else if(m291 == 1){
             mState = State_DEMO_BOMB_GET_e;
-            m7D5 = 0xA;
+            mDemoOrderIdx = DemoIdx_P2B_BOMB_GET_e;
         }
     }else if(m725 != 0){
         mState = State_TREASURE_WAIT_TALK_e;
     }else{
-        m7D5 = 0x2;
+        mDemoOrderIdx = DemoIdx_TALK_2_e;
     }
     return;
 }
@@ -1181,7 +1180,7 @@ void daNpc_P2_c::demo_arrive() {
         dKy_instant_timechg(300);
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_0808);
         mState = State_WAIT01_e;
-        m7D5 = 0;
+        mDemoOrderIdx = DemoIdx_NONE_e;
         dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
     }
     return;
@@ -1194,7 +1193,7 @@ void daNpc_P2_c::wait01() {
         mState = State_TALK01_e;
         return;
     }
-    m7D5 = 2;
+    mDemoOrderIdx = DemoIdx_TALK_2_e;
     return;
 
 }
@@ -1219,7 +1218,7 @@ void daNpc_P2_c::zukotelescope() {
         mState = State_TALK01_e;
 
     } else {
-        m7D5 = 2;
+        mDemoOrderIdx = DemoIdx_TALK_2_e;
     }
 }
 
@@ -1255,7 +1254,7 @@ void daNpc_P2_c::moccowait() {
     if (m725 != 0 && m7D3 == 1) {
         mState = State_TALK01_e;
     } else {
-        m7D5 = 2;
+        mDemoOrderIdx = DemoIdx_TALK_2_e;
     }
 }
 
@@ -1304,7 +1303,7 @@ BOOL daNpc_P2_c::intro_action(void*) {
         m808 += 1;
     }else if(m808 != -1){
         m724 = chkAttention();
-        m7D5 = 0;
+        mDemoOrderIdx = DemoIdx_NONE_e;
         switch(mState){
             case State_WAIT01_e:
             wait01();
@@ -1387,7 +1386,7 @@ BOOL daNpc_P2_c::wait_action(void*) {
         m808 += 1;
     }else if(m808 != -1){
         m724 = chkAttention();
-        m7D5 = 0;
+        mDemoOrderIdx = DemoIdx_NONE_e;
         switch(mState){
             case State_WAIT01_e:
                 wait01();
