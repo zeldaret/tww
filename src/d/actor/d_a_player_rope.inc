@@ -11,7 +11,6 @@
  */
 
 #include "d/dolzel.h" // IWYU pragma: keep
-#include "d/actor/d_a_himo3.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_himo2.h"
@@ -530,7 +529,7 @@ BOOL daPy_lk_c::procRopeReady() {
 
 /* 80144620-80144C58       .text procRopeSwing_init__9daPy_lk_cFP10fopAc_ac_cs */
 BOOL daPy_lk_c::procRopeSwing_init(fopAc_ac_c* param_0, s16 param_1) {
-    himo3_class* pfVar7 = (himo3_class*)param_0;
+    himo2_class* pfVar7 = (himo2_class*)param_0;
     commonProcInit(daPyProc_ROPE_SWING_e);
     
     cXyz local_84;
@@ -540,12 +539,11 @@ BOOL daPy_lk_c::procRopeSwing_init(fopAc_ac_c* param_0, s16 param_1) {
             fopAcM_SetParam(param_0, 1);
             deleteEquipItem(TRUE);
             mEquipItem = dItemNo_GRAPPLING_HOOK_e;
-            // current.pos = (pfVar7)->getPlayerMoveLength(95.0f,this);
             local_84 = param_0->current.pos - current.pos;
             f32 dVar8 = (local_84.abs() - 95.0f);
-            cXyz* temp = (cXyz*)&(((himo3_class*)param_0)->m15F4);
-            if (dVar8 > temp->z) {
-                dVar8 = temp->z;
+            cXyz* temp = &((himo2_class*)param_0)->m1120[34].m10;
+            if (dVar8 > DEMO_SELECT(temp->z, temp->y)) {
+                dVar8 = DEMO_SELECT(temp->z, temp->y);
             }
             local_84.normalize();
             current.pos = (param_0->current.pos - (local_84 * dVar8));
