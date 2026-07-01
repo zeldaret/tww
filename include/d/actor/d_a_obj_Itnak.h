@@ -34,12 +34,12 @@ namespace daObjItnak {
           /* 0x2C */ f32 cyl3_pos_z;
         };
         static const char M_arcname[];
-            enum Prm_e {
-        PRM_STATE_W = 8,
-        PRM_STATE_S = 0,
-        PRM_SWSAVE_W = 8,
-        PRM_SWSAVE_S = 8,
-    };
+        enum Prm_e {
+          PRM_STATE_W = 8,
+          PRM_STATE_S = 0,
+          PRM_SWSAVE_W = 8,
+          PRM_SWSAVE_S = 8,
+        };
     public:
     // /* 0x290 */ void* mpVtbl;
     /* 0x294 */ request_of_phase_process_class mPhase;
