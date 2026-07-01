@@ -274,12 +274,12 @@ void daNpc_P2_c::setAnm() {
     0xB,0xC,0x9,0xA,
     0x22,0x20,0x21,0x1F};
     for(int i = 0; i < 0x18; i++){
-        a_morf_frame_tbl[i] = l_HIO.children[m290].m74[i];
+        a_morf_frame_tbl[i] = l_HIO.children[mType].m74[i];
     }
     f32 speed;
 
         if(m7D4 != m7D3){
-            s8 anm_num = a_anm_num_tbl[m290][m7D3];
+            s8 anm_num = a_anm_num_tbl[mType][m7D3];
             if(anm_num != -1){
                 m7D2 = anm_num;
                 m374 = 0;
@@ -328,7 +328,7 @@ void daNpc_P2_c::setAnm() {
             m7D3 = 1;
 
         }
-        if(m290 == 0){
+        if(mType == Type_ZUKO_e){
             if(mpMorf->isStop() && m7D3 == 0x17){
                 m7D3 = 0xD;
             }
@@ -350,8 +350,8 @@ void daNpc_P2_c::setTexAnm() {
     };
 
     
-    if ( !(m7D0 == a_tex_pattern_num_tbl[m290][m7D1] ||  a_tex_pattern_num_tbl[m290][m7D1] == -1 || m290 == 2)) {
-        m7D0 = a_tex_pattern_num_tbl[m290][m7D1];
+    if ( !(m7D0 == a_tex_pattern_num_tbl[mType][m7D1] ||  a_tex_pattern_num_tbl[mType][m7D1] == -1 || mType == Type_MAKO_e)) {
+        m7D0 = a_tex_pattern_num_tbl[mType][m7D1];
         initTexPatternAnm(true);
     }
     return;
@@ -368,7 +368,7 @@ void daNpc_P2_c::setAttention() {
             fVar2 = m6F8.z;
             fVar1 = m6F8.y;
             eyePos.set(m6F8.x,fVar1,fVar2);
-            attention_info.position.set(m704.x,m704.y + l_HIO.children[m290].base.mAttnYOffset,m704.z);
+            attention_info.position.set(m704.x,m704.y + l_HIO.children[mType].base.mAttnYOffset,m704.z);
 
     }
 
@@ -381,13 +381,13 @@ bool daNpc_P2_c::chkAttention() {
 
 
     f32 dist_xz = fopAcM_searchPlayerDistanceXZ(this);
-    s16 sVar1 = l_HIO.children[m290].base.mMaxAttnAngleY;
+    s16 sVar1 = l_HIO.children[mType].base.mMaxAttnAngleY;
     s16 iVar5 = (current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y());
 
-    if((m290 == 1) && (m7C1 != 0  ||  (m7D6 == 0x15)) && (dist_xz < l_HIO.children[m290].base.mMaxAttnDistXZ)){
+    if((mType == Type_NIKO_e) && (m7C1 != 0  ||  (m7D6 == 0x15)) && (dist_xz < l_HIO.children[mType].base.mMaxAttnDistXZ)){
         return true;
     }
-    if(sVar1 > abs(iVar5) && dist_xz < l_HIO.children[m290].base.mMaxAttnDistXZ && dComIfGp_event_runCheck()){
+    if(sVar1 > abs(iVar5) && dist_xz < l_HIO.children[mType].base.mMaxAttnDistXZ && dComIfGp_event_runCheck()){
         return true;
     }
 
@@ -434,14 +434,14 @@ void daNpc_P2_c::lookBack() {
             break;
         case 2:
             m_jnt.setTrn();
-            local_30 = dNpc_playerEyePos(l_HIO.children[m290].base.m04);
+            local_30 = dNpc_playerEyePos(l_HIO.children[mType].base.m04);
             dstPos = &local_30;
             lookTarget = current.pos;
             lookTarget.y = eyePos.y;
             break;
         default:
             if (m724) {
-                local_30 = dNpc_playerEyePos(l_HIO.children[m290].base.m04);
+                local_30 = dNpc_playerEyePos(l_HIO.children[mType].base.m04);
                 dstPos = &local_30;
                 lookTarget = current.pos;
                 lookTarget.y = eyePos.y;
@@ -450,7 +450,7 @@ void daNpc_P2_c::lookBack() {
         }
     }
 
-    if (m290 == 0) {
+    if (mType == Type_ZUKO_e) {
         if (m7D3 == 0x17) {
             fopAc_ac_c* actor = fopAcM_SearchByName(fpcNm_NPC_ZL1_e);
 
@@ -489,9 +489,7 @@ void daNpc_P2_c::lookBack() {
         m_jnt.clrTrn();
     }
 
-    if (m290 == 1 &&
-        m7D6 == 0xD &&
-        m291 == 1) {
+    if (mType == Type_NIKO_e && m7D6 == 0xD && m291 == 1) {
 
         m_jnt.setTrn();
         local_30 = m73C;
@@ -504,7 +502,7 @@ void daNpc_P2_c::lookBack() {
     if (m_jnt.trnChk()) {
         cLib_addCalcAngleS2(
             &m6F2,
-            l_HIO.children[m290].base.mMaxHeadTurnVel,
+            l_HIO.children[mType].base.mMaxHeadTurnVel,
             4,
             0x800);
 
@@ -647,16 +645,16 @@ u16 daNpc_P2_c::next_msgStatus(unsigned long* pMsgNo) {
 u32 daNpc_P2_c::getMsg() {
 
     u32 o_retval = 0;
-    switch(m290){
-        case 0:
-            if(dComIfGs_isEventBit(0x808) == 0){
+    switch(mType){
+        case Type_ZUKO_e:
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808) == 0){
                 o_retval = dLib_setFirstMsg(0x702,0x100e,0x100f);
 
             }else{
                 o_retval = 0x1010;
             }
             break;
-        case 1:
+        case Type_NIKO_e:
             if(m291 == 1){
                 if(dComIfGs_isEventBit(0xF02) != 0){
                     o_retval = dLib_setFirstMsg(0x1502,0x1B35,0x1B36);
@@ -668,7 +666,7 @@ u32 daNpc_P2_c::getMsg() {
                 if(!dComIfGs_isEventBit(0x720)){
                     o_retval = dLib_setFirstMsg(0x940,0xC96,0xC97);
                 }else{
-                    if(!dComIfGs_isEventBit(0x808)){
+                    if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808)){
                         if(dComIfGs_isEventBit(0x710)){
                             o_retval = 0x1028;
                         }
@@ -678,8 +676,8 @@ u32 daNpc_P2_c::getMsg() {
                 }
             }
             break;
-        case 2:
-            if(dComIfGs_isEventBit(0x808) == 0){
+        case Type_MAKO_e:
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808) == 0){
                 o_retval = dLib_setFirstMsg(0x701,0x1011,0x1012);
             }else{
                 o_retval = 0x1013;
@@ -709,10 +707,10 @@ void daNpc_P2_c::anmAtr(unsigned short i_param_1) {
     if (i_param_1 == 6) {
         u8 mesgAnime = dComIfGp_getMesgAnimeAttrInfo();
         if (mesgAnime < 0x15) {
-            if (m290 == 0 && m7D3 == 0xD && anm_atr[mesgAnime] == 0x17) {
+            if (mType == Type_ZUKO_e && m7D3 == 0xD && anm_atr[mesgAnime] == 0x17) {
                 return;
             }
-            if (m290 == 1 && anm_atr[mesgAnime] == 0x7) {
+            if (mType == Type_NIKO_e && anm_atr[mesgAnime] == 0x7) {
                 if (m751 != 0) {
                     return;
                 }
@@ -832,9 +830,7 @@ void daNpc_P2_c::checkOrder() {
 /* 00001A00-00001A7C       .text demo_wait_2__10daNpc_P2_cFv */
 void daNpc_P2_c::demo_wait_2() {
 
-    //l_HIO.children[0]
-    daNpc_P2_childHIO_c* hio_child = &l_HIO.children[m290];
-    if(dLib_checkPlayerInCircle(l_HIO.children[m290].mDemoCircleCenter,l_HIO.children[m290].mDemoCircleRadius,l_HIO.children[m290].mDemoCircleHalfHeight)){
+    if(dLib_checkPlayerInCircle(l_HIO.children[mType].mDemoCircleCenter,l_HIO.children[mType].mDemoCircleRadius,l_HIO.children[mType].mDemoCircleHalfHeight)){
         m7D5 = 0x8;
         m7D6 = 0x13;
     }
@@ -845,10 +841,10 @@ void daNpc_P2_c::demo_wait_2() {
 void daNpc_P2_c::demo_intro_2() {
 
     if(dComIfGp_evmng_endCheck("P2B_INTRO_2")){
-        dComIfGs_onEventBit(0x1A04);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1A04);
         m7D6 = 0x14;
         m7D5 = 0x0;
-        dComIfGp_event_onEventFlag(0x8);
+        dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
     }
 }
 
@@ -858,7 +854,7 @@ void daNpc_P2_c::goal_wait_2() {
 
     BOOL switch_bool = fopAcM_isSwitch(this,m292);
     if(switch_bool){
-        if(dLib_checkPlayerInCircle(l_HIO.children[m290].m3C,l_HIO.children[m290].m60,l_HIO.children[m290].m68)){
+        if(dLib_checkPlayerInCircle(l_HIO.children[mType].m3C,l_HIO.children[mType].m60,l_HIO.children[mType].m68)){
             m7D6 = 0x15;
             
             daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
@@ -901,7 +897,7 @@ void daNpc_P2_c::demo_bomb_get() {
 /* 00001CFC-00001D78       .text demo_wait__10daNpc_P2_cFv */
 void daNpc_P2_c::demo_wait() {
 
-    if(dLib_checkPlayerInCircle(l_HIO.children[m290].mDemoCircleCenter,l_HIO.children[m290].mDemoCircleRadius,l_HIO.children[m290].mDemoCircleHalfHeight)){
+    if(dLib_checkPlayerInCircle(l_HIO.children[mType].mDemoCircleCenter,l_HIO.children[mType].mDemoCircleRadius,l_HIO.children[mType].mDemoCircleHalfHeight)){
         m7D5 = 0x3;
         m7D6 = 0x4;
 
@@ -920,7 +916,7 @@ void daNpc_P2_c::demo_intro() {
     if(dComIfGp_evmng_endCheck("P2B_INTRO")){
         m7D6 = 0x5;
         m7D5 = 0x0;
-        dComIfGp_event_onEventFlag(0x8);
+        dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
     }
     return;    
 }
@@ -979,7 +975,7 @@ void daNpc_P2_c::goal_goalpos_to_talkpos() {
         m7D6 = 0x7;
     }
 
-    if(dLib_checkPlayerInCircle(l_HIO.children[m290].mGoalPosCircleCenter,l_HIO.children[m290].mGoalPosCircleRadius,l_HIO.children[m290].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
+    if(dLib_checkPlayerInCircle(l_HIO.children[mType].mGoalPosCircleCenter,l_HIO.children[mType].mGoalPosCircleRadius,l_HIO.children[mType].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
         m7D6 = 0xC;
         daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
         if(timer){
@@ -995,7 +991,7 @@ void daNpc_P2_c::goal_talkpos_to_goalpos() {
     m7C1 = 1;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     if(
-        fopAcM_searchPlayerDistanceXZ(this) < l_HIO.children[m290].m70 && 
+        fopAcM_searchPlayerDistanceXZ(this) < l_HIO.children[mType].m70 && 
         (current.pos.y - player->current.pos.y - 300.f) > 0.0f
     ){
         m7D6 = 0x9;
@@ -1030,7 +1026,7 @@ void daNpc_P2_c::goal_talkpos_to_goalpos() {
             cLib_addCalc2(&current.pos.z,aim_pos.z,0.1,4.0);
         }
     }
-    if(dLib_checkPlayerInCircle(l_HIO.children[m290].mGoalPosCircleCenter,l_HIO.children[m290].mGoalPosCircleRadius,l_HIO.children[m290].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
+    if(dLib_checkPlayerInCircle(l_HIO.children[mType].mGoalPosCircleCenter,l_HIO.children[mType].mGoalPosCircleRadius,l_HIO.children[mType].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
         m7D6 = 0xC;
         daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
         if(timer){
@@ -1042,12 +1038,11 @@ void daNpc_P2_c::goal_talkpos_to_goalpos() {
 /* 000025B8-000026F4       .text goal_goalpos_wait__10daNpc_P2_cFv */
 void daNpc_P2_c::goal_goalpos_wait() {
 
-
     m7C1 = 1;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     if(
-        fopAcM_searchPlayerDistanceXZ(this) < l_HIO.children[m290].m70 && 
+        fopAcM_searchPlayerDistanceXZ(this) < l_HIO.children[mType].m70 && 
         (current.pos.y - player->current.pos.y - 300.f) > 0.0f
     ){
         m7D6 = 0x9;
@@ -1055,7 +1050,7 @@ void daNpc_P2_c::goal_goalpos_wait() {
     }
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x2;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x2;   
-    if(dLib_checkPlayerInCircle(l_HIO.children[m290].mGoalPosCircleCenter,l_HIO.children[m290].mGoalPosCircleRadius,l_HIO.children[m290].mGoalPosCircleHalfHeight)){
+    if(dLib_checkPlayerInCircle(l_HIO.children[mType].mGoalPosCircleCenter,l_HIO.children[mType].mGoalPosCircleRadius,l_HIO.children[mType].mGoalPosCircleHalfHeight)){
         if(!player->checkPlayerFly()){
             m7D6 = 0xC;
             daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
@@ -1092,7 +1087,7 @@ void daNpc_P2_c::goal_talkpos_wait() {
             }
         }
 
-        if(dLib_checkPlayerInCircle(l_HIO.children[m290].mGoalPosCircleCenter,l_HIO.children[m290].mGoalPosCircleRadius,l_HIO.children[m290].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
+        if(dLib_checkPlayerInCircle(l_HIO.children[mType].mGoalPosCircleCenter,l_HIO.children[mType].mGoalPosCircleRadius,l_HIO.children[mType].mGoalPosCircleHalfHeight) && !player->checkPlayerFly()){
             m7D6 = 0xC;
             daObjTimer::Act_c* timer = (daObjTimer::Act_c*)fopAcM_SearchByName(fpcNm_Obj_Timer_e);
             if(timer){
@@ -1168,10 +1163,10 @@ void daNpc_P2_c::demo_arrive() {
 
     if(dComIfGp_evmng_endCheck("P2B_ARRIVE_MAJYU")){
         dKy_instant_timechg(300);
-        dComIfGs_onEventBit(0x808);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0808);
         m7D6 = 1;
         m7D5 = 0;
-        dComIfGp_event_onEventFlag(0x8);
+        dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
     }
     return;
 }
@@ -1252,11 +1247,11 @@ void daNpc_P2_c::moccowait() {
 void daNpc_P2_c::talk01() {
 
     if (talk(false) == 0x12) {
-        if (m290 == 2) {
+        if (mType == Type_MAKO_e) {
             m7D3 = 1;
             m7D6 = 0x10;
         }
-        else if ((m290 == 0) && !dComIfGs_isEventBit(0x808)) {
+        else if ((mType == Type_ZUKO_e) && !dComIfGs_isEventBit(0x808)) {
             m7D6 = 0x11;
             m_jnt.onHeadLock();
             m_jnt.onBackBoneLock();
@@ -1366,9 +1361,9 @@ BOOL daNpc_P2_c::intro_action(void*) {
 BOOL daNpc_P2_c::wait_action(void*) {
 
     if(!m808){
-        if(m290 == 2){
+        if(mType == Type_MAKO_e){
             m7D6 = 0x10;
-        }else if(m290 == 0 && !dComIfGs_isEventBit(0x808)){
+        }else if(mType == Type_ZUKO_e && !dComIfGs_isEventBit(0x808)){
             m7D6 = 0x11;
         }else{
             m7D6 = 1;
@@ -1413,18 +1408,18 @@ bool daNpc_P2_c::_execute() {
 
 
     m_jnt.setParam(
-        l_HIO.children[m290].base.mMaxBackboneX,
-        l_HIO.children[m290].base.mMaxBackboneY,
-        l_HIO.children[m290].base.mMinBackboneX,
-        l_HIO.children[m290].base.mMinBackboneY,
-        l_HIO.children[m290].base.mMaxHeadX,
-        l_HIO.children[m290].base.mMaxHeadY,
-        l_HIO.children[m290].base.mMinHeadX,
-        l_HIO.children[m290].base.mMinHeadY,
-        l_HIO.children[m290].base.mMaxTurnStep       
+        l_HIO.children[mType].base.mMaxBackboneX,
+        l_HIO.children[mType].base.mMaxBackboneY,
+        l_HIO.children[mType].base.mMinBackboneX,
+        l_HIO.children[mType].base.mMinBackboneY,
+        l_HIO.children[mType].base.mMaxHeadX,
+        l_HIO.children[mType].base.mMaxHeadY,
+        l_HIO.children[mType].base.mMinHeadX,
+        l_HIO.children[mType].base.mMinHeadY,
+        l_HIO.children[mType].base.mMaxTurnStep       
     );
 
-    if (m290 != 2) {
+    if (mType != Type_MAKO_e) {
         playTexPatternAnm();
     }
 
@@ -1555,7 +1550,7 @@ void daNpc_P2_c::drawDagger() {
 void daNpc_P2_c::drawHead() {
 
     g_env_light.setLightTevColorType(m2B8,&tevStr);
-    if(m290 != 2){
+    if(mType != Type_MAKO_e){
         mBtpAnm.entry(m2B8->getModelData(),m378);
         m2B8->setBaseTRMtx(mpMorf->getModel()->getAnmMtx(4));
         mDoExt_modelUpdateDL(m2B8);
@@ -1604,7 +1599,7 @@ void daNpc_P2_c::drawP2a() {
 /* 00003890-00003948       .text drawP2b__10daNpc_P2_cFv */
 void daNpc_P2_c::drawP2b() {
     g_env_light.setLightTevColorType(mpMorf->getModel(),&tevStr);
-    mpMorf->entryDL((J3DMaterialTable*)dComIfG_getObjectRes(m_arc_name,l_bmt_ix_tbl[m290]));
+    mpMorf->entryDL((J3DMaterialTable*)dComIfG_getObjectRes(m_arc_name,l_bmt_ix_tbl[mType]));
     drawDagger();
     drawHead();
     drawShadow();
@@ -1615,7 +1610,7 @@ void daNpc_P2_c::drawP2b() {
 /* 00003948-00003A64       .text drawP2c__10daNpc_P2_cFv */
 void daNpc_P2_c::drawP2c() {
     g_env_light.setLightTevColorType(mpMorf->getModel(),&tevStr);
-    mpMorf->entryDL((J3DMaterialTable*)dComIfG_getObjectRes(m_arc_name,l_bmt_ix_tbl[m290]));
+    mpMorf->entryDL((J3DMaterialTable*)dComIfG_getObjectRes(m_arc_name,l_bmt_ix_tbl[mType]));
     drawDagger();
     drawHead();
     g_env_light.setLightTevColorType(mpMorf2->getModel(),&tevStr);
@@ -1631,14 +1626,14 @@ void daNpc_P2_c::drawP2c() {
 /* 00003A64-00003AF0       .text _draw__10daNpc_P2_cFv */
 bool daNpc_P2_c::_draw() {
     g_env_light.settingTevStruct(0,&current.pos,&tevStr);
-    switch(m290){
-        case 0:
+    switch(mType){
+        case Type_ZUKO_e:
             drawP2a();
             break;
-        case 1:
+        case Type_NIKO_e:
             drawP2b();
             break;
-        case 2:
+        case Type_MAKO_e:
             drawP2c();
             break;
     }
@@ -1653,11 +1648,11 @@ static BOOL CreateHeap_CB(fopAc_ac_c* i_this) {
 /* 00003B10-00003B58       .text getArg__10daNpc_P2_cFv */
 void daNpc_P2_c::getArg() {
     u32 params = fopAcM_GetParam(this);
-    m290 = fopAcM_GetParamBit(fopAcM_GetParam(this),0,2);
+    mType = fopAcM_GetParamBit(fopAcM_GetParam(this),0,2);
     m291 = fopAcM_GetParamBit(params, 2, 8);
     m292 = fopAcM_GetParamBit(params,10,8);
-    if(m290 == 3){
-        m290 = 0;
+    if(mType == 3){
+        mType = Type_ZUKO_e;
     }
     if(m291 != 0xFF){
         return;
@@ -1680,14 +1675,14 @@ BOOL daNpc_P2_c::_createHeap() {
 #endif
         return FALSE;
     }else{
-        J3DModelData* headModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name,head_bdl_tbl[m290]));
+        J3DModelData* headModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name,head_bdl_tbl[mType]));
         JUT_ASSERT(DEMO_SELECT(0xA08,0xA0A),headModelData != 0);
-        if(m290 != 2){
+        if(mType != Type_MAKO_e){
             m2B8 = mDoExt_J3DModel__create(headModelData,0x80000,0x11020022);
             if(m2B8 == NULL){
                 return FALSE;
             }
-            m7D0 = head_tex_tbl[m290];
+            m7D0 = head_tex_tbl[mType];
             if(initTexPatternAnm(false) == 0){
                 return FALSE;
             }
@@ -1709,7 +1704,7 @@ BOOL daNpc_P2_c::_createHeap() {
         if(m2C0 == NULL){
             return FALSE;
         }
-        if(m290 == 2){
+        if(mType == Type_MAKO_e){
             J3DModelData* bookModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name,0x29));
             JUT_ASSERT(DEMO_SELECT(0xA34,0xA36), bookModelData != 0);
             mpMorf2 = new mDoExt_McaMorf(bookModelData,NULL,NULL,
@@ -1719,7 +1714,7 @@ BOOL daNpc_P2_c::_createHeap() {
                 return FALSE;
             }
         }
-        if(m290 == 0){
+        if(mType == Type_ZUKO_e){
             J3DModelData* telescopeModelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name,0x28);
             JUT_ASSERT(DEMO_SELECT(0xA47,0xA49), telescopeModelData != 0);
             m2C4 = mDoExt_J3DModel__create(telescopeModelData,0,0x11020203);
@@ -1743,7 +1738,7 @@ BOOL daNpc_P2_c::_createHeap() {
 void daNpc_P2_c::createInit() {
 
     static char* actor_name_table[] = {"P2a","P2b","P2c"};
-    if (m290 == 1 && !strcmp(dComIfGp_getStartStageName(), "Asoko")) {
+    if (mType == Type_NIKO_e && !strcmp(dComIfGp_getStartStageName(), "Asoko")) {
 
         fopAcM_OnStatus(this,0x4000);
     }
@@ -1767,14 +1762,14 @@ void daNpc_P2_c::createInit() {
     attention_info.distances[3] = 0xA9;
 
 
-    if(m290 == 1){
+    if(mType == Type_NIKO_e){
         if (m291 == 0) {
 
-                if (!dComIfGs_isEventBit(0x808) &&
+                if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808) &&
                     dComIfGs_isEventBit(0x720)) {
 
 
-                    current.pos = l_HIO.children[m290].mGoalPosCircleCenter;
+                    current.pos = l_HIO.children[mType].mGoalPosCircleCenter;
 
                 }
 
@@ -1783,7 +1778,7 @@ void daNpc_P2_c::createInit() {
                 if (!dComIfGs_isEventBit(0xF02) &&
                     dComIfGs_isEventBit(0x1A04)) {
 
-                    current.pos = l_HIO.children[m290].m3C;
+                    current.pos = l_HIO.children[mType].m3C;
                 }
         
         }
@@ -1799,13 +1794,13 @@ void daNpc_P2_c::createInit() {
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     gravity = -9.0f;
 
-    mEventCut.setActorInfo(actor_name_table[m290], this);
-    if (m290 == 1) {
+    mEventCut.setActorInfo(actor_name_table[mType], this);
+    if (mType == Type_NIKO_e) {
 
             if (!strcmp(dComIfGp_getStartStageName(), "Asoko")) {
                 if(m291 == 0){
 
-                    if(!dComIfGs_isEventBit(0x808)){
+                    if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808)){
                         ActionFunc action = &daNpc_P2_c::intro_action;
                         if(mActionFunc != action){
                             if(mActionFunc){
@@ -1902,11 +1897,11 @@ void daNpc_P2_c::createInit() {
     if (parentActorID != -1) {
         fopAc_ac_c* actor = (fopAc_ac_c*)fopAcM_SearchByID(parentActorID);
         if(actor && fopAc_IsActor(actor) && actor->base.base.mProcName == 0x3B){
-            if(m290 == 0 && !dComIfGs_isEventBit(0x808)){
+            if(mType == Type_ZUKO_e && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808)){
                 m748 = home.angle.y - actor->home.angle.y;
                 m_jnt.onHeadLock();
                 m_jnt.onBackBoneLock();
-            }else if(m290 == 2){
+            }else if(mType == Type_MAKO_e){
                 m748 = home.angle.y - actor->home.angle.y;
             }
         }
@@ -1934,7 +1929,7 @@ cPhs_State daNpc_P2_c::_create() {
     if (state == cPhs_COMPLEATE_e) {
 #endif
         getArg();
-        if(!fopAcM_entrySolidHeap(this,CreateHeap_CB,m_heapsize[m290])){
+        if(!fopAcM_entrySolidHeap(this,CreateHeap_CB,m_heapsize[mType])){
             return cPhs_ERROR_e;
         }else{
             createInit();

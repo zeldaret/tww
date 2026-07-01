@@ -720,7 +720,7 @@ void daNpc_P2_c::cutJumpToGoalStart(int i_staff_id) {
     cXyz* pos = dComIfGp_evmng_getMyXyzP(i_staff_id, "Pos");
 
     if (pos == NULL) {
-        m7E8 = l_HIO.children[m290].mGoalPosCircleCenter;
+        m7E8 = l_HIO.children[mType].mGoalPosCircleCenter;
     } else {
         m7E8 = *pos;
     }
@@ -818,7 +818,7 @@ void daNpc_P2_c::cutJumpStart(int i_staff_id) {
     cXyz* pos_p = dComIfGp_evmng_getMyXyzP(i_staff_id, "Pos");
 
     if (pos_p == NULL) {
-        m7E8 = l_HIO.children[m290].mGoalPosCircleCenter;
+        m7E8 = l_HIO.children[mType].mGoalPosCircleCenter;
     } else {
         m7E8 = *pos_p;
     }

@@ -18,6 +18,12 @@ public:
         u32 mC;
     };
 
+    enum Type_e{
+        Type_ZUKO_e = 0,
+        Type_NIKO_e = 1,
+        Type_MAKO_e = 2,
+    };
+
     cXyz& getAttentionBasePos() {return m6F8;}
     void getBackbone_x() {}
     void getBackbone_y() {}
@@ -123,7 +129,7 @@ public:
 public:
     /* Place member variables here */
 
-    /* 0x290 */ u8 m290;
+    /* 0x290 */ u8 mType;
                 u8 m291;
                 u8 m292;
                 u8 m293;
