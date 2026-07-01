@@ -8,7 +8,27 @@
 
 /* 00000078-0000024C       .text Mthd_Create__Q211daObjMsdan25Act_cFv */
 cPhs_State daObjMsdan2::Act_c::Mthd_Create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daObjMsdan2::Act_c);
+
+    cXyz pos = current.pos;
+    csXyz angle = current.angle;
+    angle.y += 0x8000;
+    pos.y += 400.0f;
+
+    for (int i = 0; i < 16; i++) {
+        pos.x += 50.0f * JMASSin(current.angle.y);
+        pos.z += 50.0f * JMASCos(current.angle.y);
+        fopAcM_create(fpcNm_Obj_MsdanSub2_e, (i << 8) + prm_get_swSave(), &pos, current.roomNo,
+                      &angle, NULL, -1, NULL);
+    }
+
+    mEventIdx = dComIfGp_evmng_getEventIdx("Msdan2", 0xff);
+    if (fopAcM_isSwitch(this, prm_get_swSave())) {
+        mState = 3;
+    } else {
+        mState = 0;
+    }
+    return cPhs_COMPLEATE_e;
 }
 
 /* 0000024C-00000344       .text Mthd_Execute__Q211daObjMsdan25Act_cFv */
