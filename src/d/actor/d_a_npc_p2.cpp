@@ -670,8 +670,8 @@ u32 daNpc_P2_c::getMsg() {
     u32 o_retval = 0;
     switch(mType){
         case Type_ZUKO_e:
-            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808) == 0){
-                o_retval = dLib_setFirstMsg(0x702,0x100e,0x100f);
+            if(dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU) == 0){
+                o_retval = dLib_setFirstMsg(dSv_event_flag_c::UNK_0702,0x100E,0x100f);
 
             }else{
                 o_retval = 0x1010;
@@ -679,29 +679,29 @@ u32 daNpc_P2_c::getMsg() {
             break;
         case Type_NIKO_e:
             if(m291 == 1){
-                if(dComIfGs_isEventBit(0xF02) != 0){
-                    o_retval = dLib_setFirstMsg(0x1502,0x1B35,0x1B36);
+                if(dComIfGs_isEventBit(dSv_event_flag_c::GOT_NIKO_BOMBS) != 0){
+                    o_retval = dLib_setFirstMsg(dSv_event_flag_c::UNK_1502,0x1B35,0x1B36);
 
                 }else{
                     o_retval = 0x1028;
                 }
             }else{
-                if(!dComIfGs_isEventBit(0x720)){
-                    o_retval = dLib_setFirstMsg(0x940,0xC96,0xC97);
+                if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0720)){
+                    o_retval = dLib_setFirstMsg(dSv_event_flag_c::UNK_0940,0xC96,0xC97);
                 }else{
-                    if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808)){
-                        if(dComIfGs_isEventBit(0x710)){
+                    if(!dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU)){
+                        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0710)){
                             o_retval = 0x1028;
                         }
                     }else{
-                        o_retval = dLib_setFirstMsg(0x704,0x1029,0x102A);
+                        o_retval = dLib_setFirstMsg(dSv_event_flag_c::UNK_0704,0x1029,0x102A);
                     }
                 }
             }
             break;
         case Type_MAKO_e:
-            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808) == 0){
-                o_retval = dLib_setFirstMsg(0x701,0x1011,0x1012);
+            if(dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU) == 0){
+                o_retval = dLib_setFirstMsg(dSv_event_flag_c::UNK_0701,0x1011,0x1012);
             }else{
                 o_retval = 0x1013;
             }
@@ -896,7 +896,7 @@ void daNpc_P2_c::demo_goal_2() {
         m7C1 = 1;
 
         m73C =  mEventCut.getAttnPos() + m7DC; 
-        dComIfGp_event_onEventFlag(0x8);
+        dComIfGp_event_reset();
     }else{
         mDemoOrderIdx = DemoIdx_P2B_GOAL_2_e;
     }
@@ -907,11 +907,11 @@ void daNpc_P2_c::demo_goal_2() {
 void daNpc_P2_c::demo_bomb_get() {
 
     if(dComIfGp_evmng_endCheck("P2B_BOMB_GET")){
-        dComIfGs_onEventBit(0xF02);
+        dComIfGs_onEventBit(dSv_event_flag_c::GOT_NIKO_BOMBS);
         mState = State_WAIT01_e;
         mDemoOrderIdx = DemoIdx_NONE_e;
         m7C1 = 0;
-        dComIfGp_event_onEventFlag(0x8);
+        dComIfGp_event_reset();
     }
     return;
 }
@@ -932,7 +932,7 @@ void daNpc_P2_c::demo_intro() {
     if(dComIfGp_evmng_endCheck("P2B_INTRO")){
         mState = State_DEMO_LIFT_e;
         mDemoOrderIdx = DemoIdx_NONE_e;
-        dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+        dComIfGp_event_reset();
     }
     return;    
 }
@@ -952,9 +952,9 @@ void daNpc_P2_c::demo_lift() {
 void daNpc_P2_c::demo_jump() {
 
     if(dComIfGp_evmng_endCheck("P2B_TO_GOAL")){
-        dComIfGs_onEventBit(0x720);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0720);
         mState = State_GOAL_GOALPOS_TO_TALKPOS_e;
-        dComIfGp_event_onEventFlag(0x8);
+        dComIfGp_event_reset();
     }
     return;
 }
@@ -1094,7 +1094,7 @@ void daNpc_P2_c::goal_talkpos_wait() {
     }else{
         if(m725 != 0){
             mState = State_GOAL_TALKPOS_TALK_e;
-            dComIfGp_event_onEventFlag(0x8);
+            dComIfGp_event_reset();
             mDemoOrderIdx = DemoIdx_P2B_GOAL_WAIT_TALK_e;
         }else{
             if(fopAcM_GetSpeedF(player) < 1.0f){
@@ -1121,10 +1121,10 @@ void daNpc_P2_c::demo_goal() {
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA9;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
     if(dComIfGp_evmng_endCheck("P2B_GOAL")){
-        dComIfGs_onEventBit(0x710);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0710);
         mState = State_TREASURE_WAIT_e;
         mDemoOrderIdx = DemoIdx_NONE_e;
-        dComIfGp_event_onEventFlag(0x8);
+        dComIfGp_event_reset();
     }else{
         mDemoOrderIdx = DemoIdx_P2B_GOAL_e;
     }
@@ -1136,7 +1136,7 @@ void daNpc_P2_c::goal_talkpos_talk() {
 
     if(dComIfGp_evmng_endCheck("P2B_GOAL_WAIT_TALK")){
         mState = State_GOAL_TALKPOS_WAIT_e;
-        dComIfGp_event_onEventFlag(0x8);
+        dComIfGp_event_reset();
         m725 = 0;
     }
     return;
@@ -1146,7 +1146,7 @@ void daNpc_P2_c::goal_talkpos_talk() {
 void daNpc_P2_c::treasure_wait() {
 
     if(dComIfGp_evmng_endCheck("DEFAULT_TREASURE")){
-        if(m291 == 0){
+        if(m291 == 0){  //TODO: m291 is the instance of the pirate ship interior?
             mState = State_DEMO_ARRIVE_e;
             mDemoOrderIdx = DemoIdx_P2B_ARRIVE_MAJYU_e;
         }else if(m291 == 1){
@@ -1168,7 +1168,7 @@ void daNpc_P2_c::treasure_wait_talk() {
     if(talk(false) == 0x12){
         mState = State_TREASURE_WAIT_e;
         m725 = 0;
-        dComIfGp_event_onEventFlag(0x8);
+        dComIfGp_event_reset();
     }
     return;
 }
@@ -1178,10 +1178,10 @@ void daNpc_P2_c::demo_arrive() {
 
     if(dComIfGp_evmng_endCheck("P2B_ARRIVE_MAJYU")){
         dKy_instant_timechg(300);
-        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0808);
+        dComIfGs_onEventBit(dSv_event_flag_c::ARRIVE_MAJYU);
         mState = State_WAIT01_e;
         mDemoOrderIdx = DemoIdx_NONE_e;
-        dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+        dComIfGp_event_reset();
     }
     return;
 }
@@ -1276,7 +1276,7 @@ void daNpc_P2_c::talk01() {
             mState = State_WAIT01_e;
         }
 
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
         m725 = 0;
     }
 
@@ -1288,13 +1288,13 @@ BOOL daNpc_P2_c::intro_action(void*) {
 
     if(m808 == 0){
         if(m291 == 0){
-            if(!dComIfGs_isEventBit(0x720)){
+            if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0720)){
                 mState = State_DEMO_WAIT_e;
             }else{
                 mState = State_GOAL_TALKPOS_TO_GOALPOS_e;
             }
         }else{
-            if(!dComIfGs_isEventBit(0x1A04)){
+            if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A04)){
                 mState = State_DEMO_WAIT_2_e;
             }else{
                 mState = State_GOAL_WAIT_2_e;
@@ -1378,7 +1378,7 @@ BOOL daNpc_P2_c::wait_action(void*) {
     if(!m808){
         if(mType == Type_MAKO_e){
             mState = State_MOCCOWAIT_e;
-        }else if(mType == Type_ZUKO_e && !dComIfGs_isEventBit(0x808)){
+        }else if(mType == Type_ZUKO_e && !dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU)){
             mState = State_ZUKOTELESCOPE_e;
         }else{
             mState = State_WAIT01_e;
@@ -1589,11 +1589,11 @@ void daNpc_P2_c::drawP2a() {
     mpMorf->entryDL();
     drawDagger();
     drawHead();
-    if(!dComIfGs_isEventBit(0x808)){
+    if(!dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU)){
         draw_item(m2C4,0xC);
     }
     drawShadow();
-    if(!dComIfGs_isEventBit(0x808) && mShadowId != 0){
+    if(!dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU) && mShadowId != 0){
         dComIfGd_addRealShadow(mShadowId,m2C4);
     }
     dSnap_RegistFig(0x76,this,1.0f,1.0f,1.0f);
@@ -1770,8 +1770,8 @@ void daNpc_P2_c::createInit() {
     if(mType == Type_NIKO_e){
         if (m291 == 0) {
 
-                if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808) &&
-                    dComIfGs_isEventBit(0x720)) {
+                if (!dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU) &&
+                    dComIfGs_isEventBit(dSv_event_flag_c::UNK_0720)) {
 
 
                     current.pos = l_HIO.children[mType].mGoalPosCircleCenter;
@@ -1780,8 +1780,8 @@ void daNpc_P2_c::createInit() {
 
         }else if(m291 == 1){
 
-                if (!dComIfGs_isEventBit(0xF02) &&
-                    dComIfGs_isEventBit(0x1A04)) {
+                if (!dComIfGs_isEventBit(dSv_event_flag_c::GOT_NIKO_BOMBS) &&
+                    dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A04)) {
 
                     current.pos = l_HIO.children[mType].m3C;
                 }
@@ -1805,7 +1805,7 @@ void daNpc_P2_c::createInit() {
             if (!strcmp(dComIfGp_getStartStageName(), "Asoko")) {
                 if(m291 == 0){
 
-                    if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808)){
+                    if(!dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU)){
                         ActionFunc action = &daNpc_P2_c::intro_action;
                         if(mActionFunc != action){
                             if(mActionFunc){
@@ -1833,7 +1833,7 @@ void daNpc_P2_c::createInit() {
 
 
                 }else if(m291 == 1){
-                    if(!dComIfGs_isEventBit(0xF02)){
+                    if(!dComIfGs_isEventBit(dSv_event_flag_c::GOT_NIKO_BOMBS)){
                         ActionFunc action = &daNpc_P2_c::intro_action;
                         if(mActionFunc != action){
                             if(mActionFunc){
@@ -1902,7 +1902,7 @@ void daNpc_P2_c::createInit() {
     if (parentActorID != -1) {
         fopAc_ac_c* actor = (fopAc_ac_c*)fopAcM_SearchByID(parentActorID);
         if(actor && fopAc_IsActor(actor) && actor->base.base.mProcName == 0x3B){
-            if(mType == Type_ZUKO_e && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808)){
+            if(mType == Type_ZUKO_e && !dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU)){
                 m748 = home.angle.y - actor->home.angle.y;
                 m_jnt.onHeadLock();
                 m_jnt.onBackBoneLock();

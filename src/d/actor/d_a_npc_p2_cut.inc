@@ -46,98 +46,98 @@ void daNpc_P2_c::cutProc() {
       if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
         m72C = 0;
         switch(iVar1) {
-        case 0:
+        case Action_TALK_e:
           cutTalkStart(staffIdx);
           break;
-        case 1:
+        case Action_RIDE_SWITCH_e:
           cutRideSwitchStart(staffIdx);
           break;
-        case 2:
+        case Action_RUN_WAIT_e:
           cutRunWaitStart(staffIdx);
           break;
-        case 3:
+        case Action_JUMP_TO_LIFT_e:
           cutJumpToLiftStart(staffIdx);
           break;
-        case 4:
+        case Action_LIFT_TO_ROPE_e:
           cutLiftToRopeStart(staffIdx);
           break;
-        case 5:
+        case Action_ROPE_TALK_e:
           cutRopeTalkStart(staffIdx);
           break;
-        case 6:
+        case Action_ROPE_TO_LIFT_e:
           cutRopeToLiftStart(staffIdx);
           break;
-        case 7:
+        case Action_JUMP_TO_GOAL_e:
           cutJumpToGoalStart(staffIdx);
           break;
-        case 8:
+        case Action_SET_ANM_e:
           cutSetAnmStart(staffIdx);
           break;
-        case 9:
+        case Action_JUMP_e:
           cutJumpStart(staffIdx);
           break;
-        case 10:
+        case Action_SW_ON_e:
           cutSwOnStart(staffIdx);
           break;
-        case 0xb:
+        case Action_SW_OFF_e:
           cutSwOffStart(staffIdx);
           break;
-        case 0xc:
+        case Action_SURPRISE_e:
           cutSurpriseStart(staffIdx);
           break;
-        case 0xd:
+        case Action_OMAMORI_INIT_e:
           cutOmamoriInitStart(staffIdx);
           break;
-        case 0xe:
+        case Action_OMAMORI_END_e:
           cutOmamoriEndStart(staffIdx);
         }
       }
       switch(iVar1) {
-      case 0:
-        cutTalkProc(staffIdx);
-        break;
-      case 1:
-        cutRideSwitchProc(staffIdx);
-        break;
-      case 2:
-        cutRunWaitProc(staffIdx);
-        break;
-      case 3:
-        cutJumpToLiftProc(staffIdx);
-        break;
-      case 4:
-        cutLiftToRopeProc(staffIdx);
-        break;
-      case 5:
-        cutRopeTalkProc(staffIdx);
-        break;
-      case 6:
-        cutRopeToLiftProc(staffIdx);
-        break;
-      case 7:
-        cutJumpToGoalProc(staffIdx);
-        break;
-      case 8:
-        cutSetAnmProc(staffIdx);
-        break;
-      case 9:
-        cutJumpProc(staffIdx);
-        break;
-      case 10:
-        cutSwOnProc(staffIdx);
-        break;
-      case 0xb:
-        cutSwOffProc(staffIdx);
-        break;
-      case 0xc:
-        cutSurpriseProc(staffIdx);
-        break;
-      case 0xd:
-        cutOmamoriInitProc(staffIdx);
-        break;
-      case 0xe:
-        cutOmamoriEndProc(staffIdx);
-      }
+        case Action_TALK_e:
+          cutTalkProc(staffIdx);
+          break;
+        case Action_RIDE_SWITCH_e:
+          cutRideSwitchProc(staffIdx);
+          break;
+        case Action_RUN_WAIT_e:
+          cutRunWaitProc(staffIdx);
+          break;
+        case Action_JUMP_TO_LIFT_e:
+          cutJumpToLiftProc(staffIdx);
+          break;
+        case Action_LIFT_TO_ROPE_e:
+          cutLiftToRopeProc(staffIdx);
+          break;
+        case Action_ROPE_TALK_e:
+          cutRopeTalkProc(staffIdx);
+          break;
+        case Action_ROPE_TO_LIFT_e:
+          cutRopeToLiftProc(staffIdx);
+          break;
+        case Action_JUMP_TO_GOAL_e:
+          cutJumpToGoalProc(staffIdx);
+          break;
+        case Action_SET_ANM_e:
+          cutSetAnmProc(staffIdx);
+          break;
+        case Action_JUMP_e:
+          cutJumpProc(staffIdx);
+          break;
+        case Action_SW_ON_e:
+          cutSwOnProc(staffIdx);
+          break;
+        case Action_SW_OFF_e:
+          cutSwOffProc(staffIdx);
+          break;
+        case Action_SURPRISE_e:
+          cutSurpriseProc(staffIdx);
+          break;
+        case Action_OMAMORI_INIT_e:
+          cutOmamoriInitProc(staffIdx);
+          break;
+        case Action_OMAMORI_END_e:
+          cutOmamoriEndProc(staffIdx);
+        }
     }
   }
   return;

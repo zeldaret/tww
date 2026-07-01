@@ -29,8 +29,8 @@ public:
         State_TALK01_e = 2,
         State_DEMO_WAIT_e = 3,
         State_DEMO_INTRO_e = 4,
-        State_DEMO_LIFT_e = 5,
-        State_DEMO_JUMP_e = 6,
+        State_DEMO_LIFT_e = 5,  //Niko waits for the platforms to rise
+        State_DEMO_JUMP_e = 6,  //Niko speaks to link, then jumps to the platform
         State_GOAL_TALKPOS_WAIT_e = 7,
         State_GOAL_TALKPOS_TALK_e = 8,
         State_GOAL_GOALPOS_TO_TALKPOS_e = 9,
@@ -60,6 +60,23 @@ public:
         DemoIdx_P2B_INTRO_2_e = 8,
         DemoIdx_P2B_GOAL_2_e = 9,
         DemoIdx_P2B_BOMB_GET_e = 0xA
+    };
+    enum Actions_e{
+        Action_TALK_e,
+        Action_RIDE_SWITCH_e,
+        Action_RUN_WAIT_e,
+        Action_JUMP_TO_LIFT_e,
+        Action_LIFT_TO_ROPE_e,
+        Action_ROPE_TALK_e,
+        Action_ROPE_TO_LIFT_e,
+        Action_JUMP_TO_GOAL_e,
+        Action_SET_ANM_e,
+        Action_JUMP_e,
+        Action_SW_ON_e,
+        Action_SW_OFF_e,
+        Action_SURPRISE_e,
+        Action_OMAMORI_INIT_e,
+        Action_OMAMORI_END_e
     };
     cXyz& getAttentionBasePos() {return m6F8;}
     void getBackbone_x() {}
