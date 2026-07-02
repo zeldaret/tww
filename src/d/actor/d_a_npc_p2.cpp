@@ -175,15 +175,14 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
-        daNpc_P2_c* i_this = (daNpc_P2_c*)model->getUserArea();
-        if(i_this != 0){
+        daNpc_P2_c* i_this = reinterpret_cast<daNpc_P2_c*>(model->getUserArea());
+        if(i_this != NULL){
             s32 jointNo = ((J3DJoint*)node)->getJntNo();
             mDoMtx_stack_c::copy(model->getAnmMtx(jointNo));
-            if (jointNo == 0x4) {
-
+            if (jointNo == P2_JNT_HEAD_e) {
                 static cXyz l_offsetAttPos(0.0f, 0.0f, 0.0f);
                 static cXyz l_offsetEyePos(20.0f, 10.0f, 0.0f);
-                cXyz* dest = &i_this->m704;
+                cXyz* dest = &i_this->mAttentionPos;
                 mDoMtx_stack_c::multVec(&l_offsetAttPos,dest);
                 mDoMtx_stack_c::XrotM(i_this->m_jnt.getHead_y());
                 mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getHead_x());
@@ -301,14 +300,14 @@ void daNpc_P2_c::setAnm() {
 
     f32 speed;
 
-    if(m7D4 != m7D3){
-        s8 anm_num = a_anm_num_tbl[mType][m7D3];
+    if(m7D4 != mAnimeAttr){
+        s8 anm_num = a_anm_num_tbl[mType][mAnimeAttr];
         if(anm_num != -1){
             mAnmFileIdx = anm_num;
             mAnimFrame = 0;
 
         
-        speed = a_play_speed_tbl[m7D3];
+        speed = a_play_speed_tbl[mAnimeAttr];
 
         if(mEventCut.getMoveSpeed() != 0){
             switch(mEventCut.getNowCut()){
@@ -321,8 +320,8 @@ void daNpc_P2_c::setAnm() {
             }
         }
 
-        dNpc_setAnm(mpMorf,a_play_mode_tbl[m7D3],
-            a_morf_frame_tbl[m7D3],
+        dNpc_setAnm(mpMorf,a_play_mode_tbl[mAnimeAttr],
+            a_morf_frame_tbl[mAnimeAttr],
             speed,
 
             a_anm_bck_tbl[mAnmFileIdx],
@@ -343,17 +342,17 @@ void daNpc_P2_c::setAnm() {
 
         
     }
-        m7D4 = m7D3;
-        if(mpMorf->isStop() && m7D3 == 0x13){
-            m7D3 = 3;
+        m7D4 = mAnimeAttr;
+        if(mpMorf->isStop() && mAnimeAttr == 0x13){
+            mAnimeAttr = 3;
         }
-        if(m7D3 == 0x7 && mpMorf->isStop()){
-            m7D3 = 1;
+        if(mAnimeAttr == 0x7 && mpMorf->isStop()){
+            mAnimeAttr = 1;
 
         }
         if(mType == Type_ZUKO_e){
-            if(mpMorf->isStop() && m7D3 == 0x17){
-                m7D3 = 0xD;
+            if(mpMorf->isStop() && mAnimeAttr == 0x17){
+                mAnimeAttr = 0xD;
             }
         }
 
@@ -373,29 +372,22 @@ void daNpc_P2_c::setTexAnm() {
     };
 
     
-    if ( (mTexPatternNum != a_tex_pattern_num_tbl[mType][m7D1] &&  a_tex_pattern_num_tbl[mType][m7D1] != -1 && mType != Type_MAKO_e)) {
-        mTexPatternNum = a_tex_pattern_num_tbl[mType][m7D1];
+    if ( (mTexPatternNum != a_tex_pattern_num_tbl[mType][mTexAnmIdx] &&  a_tex_pattern_num_tbl[mType][mTexAnmIdx] != -1 && mType != Type_MAKO_e)) {
+        mTexPatternNum = a_tex_pattern_num_tbl[mType][mTexAnmIdx];
         initTexPatternAnm(true);
     }
     return;
 }
 
 
-//static char* p2bEarlyRemoveLater[] = {"P2b","MsgNum","Attention","Speed_y","Gravity","Timer","Speed","Pos","Name","KYORO","THINK","NOD","WAIT01"};
 /* 00000AFC-00000B90       .text setAttention__10daNpc_P2_cFv */
 void daNpc_P2_c::setAttention() {
-
     bool is_morf = mpMorf->isMorf();
-    if(  m750 == 0 || is_morf){
-            f32 fVar1,fVar2;
-            fVar2 = m6F8.z;
-            fVar1 = m6F8.y;
-            eyePos.set(m6F8.x,fVar1,fVar2);
-            attention_info.position.set(m704.x,m704.y + l_HIO.children[mType].base.mAttnYOffset,m704.z);
-
+    if(  mbTreasureWaitTalk == 0 || is_morf){
+            eyePos.set(mEyePos.x,mEyePos.y,mEyePos.z);
+            attention_info.position.set(mAttentionPos.x,mAttentionPos.y + l_HIO.children[mType].base.mAttnYOffset,mAttentionPos.z);
     }
-
-    m750 = 0;
+    mbTreasureWaitTalk = 0;
     return;
 }
 
@@ -463,7 +455,7 @@ void daNpc_P2_c::lookBack() {
             lookTarget.y = eyePos.y;
             break;
         default:
-            if (m724) {
+            if (mbAttention) {
                 local_30 = dNpc_playerEyePos(l_HIO.children[mType].base.m04);
                 dstPos = &local_30;
                 lookTarget = current.pos;
@@ -474,7 +466,7 @@ void daNpc_P2_c::lookBack() {
     }
 
     if (mType == Type_ZUKO_e) {
-        if (m7D3 == 0x17) {
+        if (mAnimeAttr == 0x17) {
             fopAc_ac_c* actor = fopAcM_SearchByName(fpcNm_NPC_ZL1_e);
 
             if (actor) {
@@ -492,11 +484,11 @@ void daNpc_P2_c::lookBack() {
                     &actor->current.pos,
                     lookTarget,
                     desiredAngle,
-                    m6F2,
+                    mMaxHeadVel,
                     false);
                 return;
             }
-        } else if (m7D3 == 0x16) {
+        } else if (mAnimeAttr == 0x16) {
             headOnly = false;
             m_jnt.clrTrn();
             m_jnt.onHeadLock();
@@ -512,7 +504,7 @@ void daNpc_P2_c::lookBack() {
         m_jnt.clrTrn();
     }
 
-    if (mType == Type_NIKO_e && mState == State_TREASURE_WAIT_e && m291 == 1) {
+    if (mType == Type_NIKO_e && mState == State_TREASURE_WAIT_e && mRopeGameInstance == 1) {
 
         m_jnt.setTrn();
         local_30 = m73C;
@@ -524,20 +516,20 @@ void daNpc_P2_c::lookBack() {
 
     if (m_jnt.trnChk()) {
         cLib_addCalcAngleS2(
-            &m6F2,
+            &mMaxHeadVel,
             l_HIO.children[mType].base.mMaxHeadTurnVel,
             4,
             0x800);
 
     } else {
-        m6F2 = 0;
+        mMaxHeadVel = 0;
     }
     m_jnt.lookAtTarget(
         &current.angle.y,
         dstPos,
         lookTarget,
         desiredAngle,
-        m6F2,
+        mMaxHeadVel,
         headOnly);
 
 }
@@ -571,9 +563,9 @@ void daNpc_P2_c::setCollision() {
 void daNpc_P2_c::smoke_set() {
 
     static JGeometry::TVec3<f32> smoke_scale(1.25f,1.25f,1.25f);
-    JPABaseEmitter* p_smoke_emitter = (JPABaseEmitter*)mSmokeCallback.getEmitter();
+    JPABaseEmitter* p_smoke_emitter = mSmokeCallback.getEmitter();
     if(mSmokeCallback.getEmitter() == NULL){
-        p_smoke_emitter = dComIfGp_particle_setToon(0x2022,&mSmokePos,&mSmokeAngle,NULL,0xB9,&mSmokeCallback,fopAcM_GetRoomNo((fopAc_ac_c*)this));
+        p_smoke_emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00,&mSmokePos,&mSmokeAngle,NULL,0xB9,&mSmokeCallback,fopAcM_GetRoomNo((fopAc_ac_c*)this));
     }
     p_smoke_emitter = (JPABaseEmitter*)mSmokeCallback.getEmitter();
     if(p_smoke_emitter != NULL){
@@ -678,7 +670,7 @@ u32 daNpc_P2_c::getMsg() {
             }
             break;
         case Type_NIKO_e:
-            if(m291 == 1){
+            if(mRopeGameInstance == 1){
                 if(dComIfGs_isEventBit(dSv_event_flag_c::GOT_NIKO_BOMBS) != 0){
                     o_retval = dLib_setFirstMsg(dSv_event_flag_c::UNK_1502,0x1B35,0x1B36);
 
@@ -731,7 +723,7 @@ void daNpc_P2_c::anmAtr(unsigned short i_param_1) {
     if (i_param_1 == 6) {
         u8 mesgAnime = dComIfGp_getMesgAnimeAttrInfo();
         if (mesgAnime < 0x15) {
-            if (mType == Type_ZUKO_e && m7D3 == 0xD && anm_atr[mesgAnime] == 0x17) {
+            if (mType == Type_ZUKO_e && mAnimeAttr == 0xD && anm_atr[mesgAnime] == 0x17) {
                 return;
             }
             if (mType == Type_NIKO_e && anm_atr[mesgAnime] == 0x7) {
@@ -739,19 +731,19 @@ void daNpc_P2_c::anmAtr(unsigned short i_param_1) {
                     return;
                 }
                 m751 = 1;
-                m7D3 = anm_atr[mesgAnime];
+                mAnimeAttr = anm_atr[mesgAnime];
                 return;
             }
-            if (m7D3 != anm_atr[mesgAnime]) {
-                m7D3 = anm_atr[mesgAnime];
+            if (mAnimeAttr != anm_atr[mesgAnime]) {
+                mAnimeAttr = anm_atr[mesgAnime];
             }
             return;
         }
-        m7D3 = 1;
+        mAnimeAttr = 1;
         return;
     }
     if (i_param_1 == 0x10) {
-        m7D3 = 1;
+        mAnimeAttr = 1;
         return;
     }
 
@@ -844,7 +836,7 @@ void daNpc_P2_c::checkOrder() {
         mDemoOrderIdx = DemoIdx_NONE_e;
     }else if(eventInfo.checkCommandTalk() && (mDemoOrderIdx == DemoIdx_TALK_e || mDemoOrderIdx == DemoIdx_TALK_2_e)){
         mDemoOrderIdx = DemoIdx_NONE_e;
-        m725 = 1;
+        mbInDialogue = 1;
         talkInit();
     }
     return;
@@ -979,7 +971,7 @@ void daNpc_P2_c::goal_goalpos_to_talkpos() {
     m730 = attn_pos;
     f32 fVar8;
     if(std::fabsf(sVar5 - current.angle.y) < 5376.0f){
-        m7D3 = 0x4;
+        mAnimeAttr = 0x4;
         cLib_addCalc2(&current.pos.x,aim_pos.x,0.1,4.0);
         cLib_addCalc2(&current.pos.z,aim_pos.z,0.1,4.0);
     }     
@@ -988,7 +980,7 @@ void daNpc_P2_c::goal_goalpos_to_talkpos() {
 
 
     if(fVar8 < 5.0f){
-        m7D3 = 0x1;
+        mAnimeAttr = 0x1;
         mState = State_GOAL_TALKPOS_WAIT_e;
     }
 
@@ -1031,13 +1023,13 @@ void daNpc_P2_c::goal_talkpos_to_goalpos() {
     s16 sVar5 = cLib_targetAngleY(&current.pos,&m730);
     if( fVar8 < 5.0f){
         if(std::fabsf(sVar5-current.angle.y) < 5376.0f){
-            m7D3 = 0x1;
+            mAnimeAttr = 0x1;
             mState = State_GOAL_GOALPOS_WAIT_e;
         }
     }else{
 
         if(std::fabsf(sVar5 - current.angle.y) < 5376.0f){
-            m7D3 = 4;
+            mAnimeAttr = 4;
             cLib_addCalc2(&current.pos.x,aim_pos.x,0.1,4.0);
             cLib_addCalc2(&current.pos.z,aim_pos.z,0.1,4.0);
         }
@@ -1093,7 +1085,7 @@ void daNpc_P2_c::goal_talkpos_wait() {
         mDemoOrderIdx = DemoIdx_TALK_e;
         m74A = 1;
     }else{
-        if(m725 != 0){
+        if(mbInDialogue != 0){
             mState = State_GOAL_TALKPOS_TALK_e;
             dComIfGp_event_reset();
             mDemoOrderIdx = DemoIdx_P2B_GOAL_WAIT_TALK_e;
@@ -1138,7 +1130,7 @@ void daNpc_P2_c::goal_talkpos_talk() {
     if(dComIfGp_evmng_endCheck("P2B_GOAL_WAIT_TALK")){
         mState = State_GOAL_TALKPOS_WAIT_e;
         dComIfGp_event_reset();
-        m725 = 0;
+        mbInDialogue = 0;
     }
     return;
 }
@@ -1146,15 +1138,15 @@ void daNpc_P2_c::goal_talkpos_talk() {
 /* 00002978-00002A20       .text treasure_wait__10daNpc_P2_cFv */
 void daNpc_P2_c::treasure_wait() {
 
-    if(dComIfGp_evmng_endCheck("DEFAULT_TREASURE")){
-        if(m291 == 0){  //TODO: m291 is the instance of the pirate ship interior?
+    if(dComIfGp_evmng_endCheck("DEFAULT_TREASURE")){    //Finished getting spoils bag/bombs
+        if(mRopeGameInstance == 0){         //First time
             mState = State_DEMO_ARRIVE_e;
             mDemoOrderIdx = DemoIdx_P2B_ARRIVE_MAJYU_e;
-        }else if(m291 == 1){
+        }else if(mRopeGameInstance == 1){   //Second time
             mState = State_DEMO_BOMB_GET_e;
             mDemoOrderIdx = DemoIdx_P2B_BOMB_GET_e;
         }
-    }else if(m725 != 0){
+    }else if(mbInDialogue){
         mState = State_TREASURE_WAIT_TALK_e;
     }else{
         mDemoOrderIdx = DemoIdx_TALK_2_e;
@@ -1165,10 +1157,10 @@ void daNpc_P2_c::treasure_wait() {
 /* 00002A20-00002A88       .text treasure_wait_talk__10daNpc_P2_cFv */
 void daNpc_P2_c::treasure_wait_talk() {
 
-    m750 = 1;
+    mbTreasureWaitTalk = 1;
     if(talk(false) == 0x12){
         mState = State_TREASURE_WAIT_e;
-        m725 = 0;
+        mbInDialogue = 0;
         dComIfGp_event_reset();
     }
     return;
@@ -1178,7 +1170,7 @@ void daNpc_P2_c::treasure_wait_talk() {
 void daNpc_P2_c::demo_arrive() {
 
     if(dComIfGp_evmng_endCheck("P2B_ARRIVE_MAJYU")){
-        dKy_instant_timechg(300);
+        dKy_instant_timechg(300.0f);
         dComIfGs_onEventBit(dSv_event_flag_c::ARRIVE_MAJYU);
         mState = State_WAIT01_e;
         mDemoOrderIdx = DemoIdx_NONE_e;
@@ -1190,7 +1182,7 @@ void daNpc_P2_c::demo_arrive() {
 /* 00002B18-00002B3C       .text wait01__10daNpc_P2_cFv */
 void daNpc_P2_c::wait01() {
 
-    if(m725 != 0){
+    if(mbInDialogue != 0){
         mState = State_TALK01_e;
         return;
     }
@@ -1202,7 +1194,7 @@ void daNpc_P2_c::wait01() {
 /* 00002B3C-00002BE8       .text zukotelescope__10daNpc_P2_cFv */
 void daNpc_P2_c::zukotelescope() {
 
-    m7D3 = 0x16;
+    mAnimeAttr = 0x16;
     if (parentActorID != -1) {
         fopAc_ac_c* actor = fopAcM_SearchByID(parentActorID);
 
@@ -1212,8 +1204,8 @@ void daNpc_P2_c::zukotelescope() {
             4, 0x800);
     }
 
-    if (m725 != 0) {
-        m7D3 = 1;
+    if (mbInDialogue != 0) {
+        mAnimeAttr = 1;
         m_jnt.offHeadLock();
         m_jnt.offBackBoneLock();
         mState = State_TALK01_e;
@@ -1234,25 +1226,25 @@ void daNpc_P2_c::moccowait() {
             4, 0x800);
     }
 
-    if (m7D3 == 0x15) {
+    if (mAnimeAttr == 0x15) {
         mpMorf2->setFrame(mpMorf->getFrame());
     } else {
         mpMorf2->setFrame(0.0f);
     }
 
-    if (m7D3 == 1 && cLib_calcTimer(&m74C) == 0) {
-        m7D3 = 0x15;
+    if (mAnimeAttr == 1 && cLib_calcTimer(&m74C) == 0) {
+        mAnimeAttr = 0x15;
         m74C = (s16)(cM_rndF(100.0f) + 200.0f);
     }
 
-    if (m7D3 == 0x15) {
+    if (mAnimeAttr == 0x15) {
 
         if (mpMorf->isStop()) {
-            m7D3 = 1;
+            mAnimeAttr = 1;
         }
     }
 
-    if (m725 != 0 && m7D3 == 1) {
+    if (mbInDialogue != 0 && mAnimeAttr == 1) {
         mState = State_TALK01_e;
     } else {
         mDemoOrderIdx = DemoIdx_TALK_2_e;
@@ -1264,7 +1256,7 @@ void daNpc_P2_c::talk01() {
 
     if (talk(false) == 0x12) {
         if (mType == Type_MAKO_e) {
-            m7D3 = 1;
+            mAnimeAttr = 1;
             mState = State_MOCCOWAIT_e;
         }
         else if ((mType == Type_ZUKO_e) && !dComIfGs_isEventBit(0x808)) {
@@ -1273,12 +1265,12 @@ void daNpc_P2_c::talk01() {
             m_jnt.onBackBoneLock();
         }
         else {
-            m7D3 = 1;
+            mAnimeAttr = 1;
             mState = State_WAIT01_e;
         }
 
         dComIfGp_event_reset();
-        m725 = 0;
+        mbInDialogue = 0;
     }
 
 
@@ -1288,7 +1280,7 @@ void daNpc_P2_c::talk01() {
 BOOL daNpc_P2_c::intro_action(void*) {
 
     if(m808 == 0){
-        if(m291 == 0){
+        if(mRopeGameInstance == 0){
             if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0720)){
                 mState = State_DEMO_WAIT_e;
             }else{
@@ -1303,7 +1295,7 @@ BOOL daNpc_P2_c::intro_action(void*) {
         }
         m808 += 1;
     }else if(m808 != -1){
-        m724 = chkAttention();
+        mbAttention = chkAttention();
         mDemoOrderIdx = DemoIdx_NONE_e;
         switch(mState){
             case State_WAIT01_e:
@@ -1386,7 +1378,7 @@ BOOL daNpc_P2_c::wait_action(void*) {
         }
         m808 += 1;
     }else if(m808 != -1){
-        m724 = chkAttention();
+        mbAttention = chkAttention();
         mDemoOrderIdx = DemoIdx_NONE_e;
         switch(mState){
             case State_WAIT01_e:
@@ -1456,21 +1448,21 @@ bool daNpc_P2_c::_execute() {
                 case 2:
                 case 4:
                     if (mEventCut.getMoveSpeed() == 0.0f) {
-                        m7D3 = 1;
+                        mAnimeAttr = 1;
                     } else if (mEventCut.getMoveSpeed() > 10.0f) {
-                        m7D3 = 5;
+                        mAnimeAttr = 5;
 
                     } else {
-                        m7D3 = 4;
+                        mAnimeAttr = 4;
                         break;
                     }
                     break;
                 default:
-                    m7D3 = 1;
+                    mAnimeAttr = 1;
                     break;
                 }
             }else{
-                m7D3 = 1;
+                mAnimeAttr = 1;
             }
 
         }
@@ -1507,7 +1499,7 @@ bool daNpc_P2_c::_execute() {
     }
 
     setCollision();
-    if(m7D3 == 4){
+    if(mAnimeAttr == 4){
 
 
         f32 fVar1 = (current.pos-old.pos).abs()/(REG12_F(6)+10.0f);
@@ -1655,15 +1647,15 @@ static BOOL CreateHeap_CB(fopAc_ac_c* i_this) {
 void daNpc_P2_c::getArg() {
     u32 params = fopAcM_GetParam(this);
     mType = fopAcM_GetParamBit(fopAcM_GetParam(this),0,2);
-    m291 = fopAcM_GetParamBit(params, 2, 8);
+    mRopeGameInstance = fopAcM_GetParamBit(params, 2, 8);
     m292 = fopAcM_GetParamBit(params,10,8);
     if(mType == 3){
         mType = Type_ZUKO_e;
     }
-    if(m291 != 0xFF){
+    if(mRopeGameInstance != 0xFF){
         return;
     }
-    m291 = 0;
+    mRopeGameInstance = 0;
     return;
 
 }
@@ -1769,7 +1761,7 @@ void daNpc_P2_c::createInit() {
 
 
     if(mType == Type_NIKO_e){
-        if (m291 == 0) {
+        if (mRopeGameInstance == 0) {
 
                 if (!dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU) &&
                     dComIfGs_isEventBit(dSv_event_flag_c::UNK_0720)) {
@@ -1779,7 +1771,7 @@ void daNpc_P2_c::createInit() {
 
                 }
 
-        }else if(m291 == 1){
+        }else if(mRopeGameInstance == 1){
 
                 if (!dComIfGs_isEventBit(dSv_event_flag_c::GOT_NIKO_BOMBS) &&
                     dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A04)) {
@@ -1804,7 +1796,7 @@ void daNpc_P2_c::createInit() {
     if (mType == Type_NIKO_e) {
 
             if (!strcmp(dComIfGp_getStartStageName(), "Asoko")) {
-                if(m291 == 0){
+                if(mRopeGameInstance == 0){
 
                     if(!dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU)){
                         ActionFunc action = &daNpc_P2_c::intro_action;
@@ -1833,7 +1825,7 @@ void daNpc_P2_c::createInit() {
 
 
 
-                }else if(m291 == 1){
+                }else if(mRopeGameInstance == 1){
                     if(!dComIfGs_isEventBit(dSv_event_flag_c::GOT_NIKO_BOMBS)){
                         ActionFunc action = &daNpc_P2_c::intro_action;
                         if(mActionFunc != action){
@@ -1884,16 +1876,16 @@ void daNpc_P2_c::createInit() {
         }
 
  
-    m704 = current.pos;
-    m6F8 = current.pos;
+    mAttentionPos = current.pos;
+    mEyePos = current.pos;
 
     mStts.Init(0xFF, 0xFF, this);
 
     m5BC.Set(dNpc_cyl_src);
     m5BC.SetStts(&mStts);
 
-    m7D1 = 1;
-    m7D3 = 1;
+    mTexAnmIdx = 1;
+    mAnimeAttr = 1;
     m7D4 = 0;
 
     setTexAnm();

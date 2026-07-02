@@ -189,7 +189,7 @@ void daNpc_P2_c::cutRideSwitchStart(int i_param_1) {
         gravity = *pfVar2;
     }
     m72C = 1;
-    m7D3 = 9;
+    mAnimeAttr = 9;
     return;
 }
 
@@ -202,18 +202,18 @@ void daNpc_P2_c::cutRideSwitchProc(int i_param_1) {
     cXyz local_28 = actor->current.pos;
     f32 local_34 = (local_28-current.pos).absXZ();                          //TODO: Unused?
 
-    if(m7D3 != 10){
+    if(mAnimeAttr != 10){
         cLib_addCalc2(&current.pos.x,local_28.x,0.1f,max_step);
         cLib_addCalc2(&current.pos.z,local_28.z,0.1f,max_step);
     }
     if(mAcch.ChkGroundLanding()){
         m7F4 = 0x11;
-        m7D3 = 0xA;
+        mAnimeAttr = 0xA;
     }
-    if(!cLib_calcTimer(&m7F4) && m7D3 == 0xA){
+    if(!cLib_calcTimer(&m7F4) && mAnimeAttr == 0xA){
         speed.y = 0.0f;
         gravity = -9.0f;
-        m7D3 = 1;
+        mAnimeAttr = 1;
         dComIfGp_evmng_cutEnd(i_param_1);
     }
 }
@@ -227,7 +227,7 @@ void daNpc_P2_c::cutRunWaitStart(int i_param_1) {
     }else{
         m7F4 = (s16)*puVar1;
     }
-    m7D3 = 6;
+    mAnimeAttr = 6;
     m72C = 1;
 }
 
@@ -236,7 +236,7 @@ void daNpc_P2_c::cutRunWaitProc(int i_param_1) {
     mSmokePos.set(current.pos);
 
     mSmokeAngle = current.angle;
-    if(m7D3 == 6){
+    if(mAnimeAttr == 6){
         if(mpMorf->isStop()){
             dComIfGp_evmng_cutEnd(i_param_1);
         }
@@ -288,7 +288,7 @@ void daNpc_P2_c::cutJumpToLiftStart(int i_param_1) {
         m800 = *gravity;
     }
 
-    m7D3 = 5;
+    mAnimeAttr = 5;
     m72C = 1;
 }
 
@@ -306,22 +306,22 @@ void daNpc_P2_c::cutJumpToLiftProc(int i_param_1) {
             speed.y = m7F8;
             gravity = m800;
             speedF = m7FC;
-            m7D3 = 8;
+            mAnimeAttr = 8;
 
     }else{
-        if(mAcch.ChkGroundHit() && (m7D3 == 9 || m7D3 == 10)){
+        if(mAcch.ChkGroundHit() && (mAnimeAttr == 9 || mAnimeAttr == 10)){
             speedF = 0.0f;
             m7DC.set(0.0f,-100.0f,0.0f);
-            m7D3 = 10;  
+            mAnimeAttr = 10;  
 
         }else{
-            if(speed.y <= 0.0f && m7D3 == 8){
+            if(speed.y <= 0.0f && mAnimeAttr == 8){
                 m7DC.set(0.0f,-50.0f,0.0f);
-                m7D3 = 9;
+                mAnimeAttr = 9;
             }
         }
     }
-    if(m7D3 == 5){
+    if(mAnimeAttr == 5){
         smoke_set();
     }else if(mAcch.ChkGroundLanding()){
         fopAcM_monsSeStart(this,0x489B,0);
@@ -333,14 +333,14 @@ void daNpc_P2_c::cutJumpToLiftProc(int i_param_1) {
     }
     mSmokePos = current.pos;
     mSmokeAngle = current.angle;
-    if(mAcch.ChkGroundHit() && m7D3 == 5){
+    if(mAcch.ChkGroundHit() && mAnimeAttr == 5){
         speedF = maxSpeed * 2.0f;
-    }else if(mAcch.ChkGroundHit() && ( m7D3 != 10 && m7D3 != 1)){
+    }else if(mAcch.ChkGroundHit() && ( mAnimeAttr != 10 && mAnimeAttr != 1)){
         cLib_addCalc2(&current.pos.x,local_2c.x,0.1f,maxSpeed);
         cLib_addCalc2(&current.pos.z,local_2c.z,0.1f,maxSpeed);
     }else{
-        if(!cLib_calcTimer(&m7F4) && m7D3 == 10){
-            m7D3 = 1;
+        if(!cLib_calcTimer(&m7F4) && mAnimeAttr == 10){
+            mAnimeAttr = 1;
             m7DC.setall(0.0f);
             mClosestPos.setall(0.0f);
             speed.y = 0.0f;
@@ -397,7 +397,7 @@ void daNpc_P2_c::cutLiftToRopeStart(int i_param_1) {
         m800 = *gravity;
     }
 
-    m7D3 = 5;
+    mAnimeAttr = 5;
     m72C = 1;
 }
 
@@ -415,10 +415,10 @@ void daNpc_P2_c::cutLiftToRopeProc(int i_param_1) {
         speed.y = m7F8;
         gravity = m800;
         speedF = m7FC;
-        m7D3 = 8;
+        mAnimeAttr = 8;
     }
 
-    if (m7D3 == 5) {
+    if (mAnimeAttr == 5) {
         smoke_set();
     } else {
         mSmokeCallback.end();
@@ -461,7 +461,7 @@ void daNpc_P2_c::cutRopeTalkStart(int i_staff_id) {
         m72C = 1;
     }
 
-    m7D3 = 0xC;
+    mAnimeAttr = 0xC;
     talkInit();
 
     m7C0 = 1;
@@ -610,12 +610,12 @@ void daNpc_P2_c::cutRopeTalkProc(int i_param_1) {
     mDoMtx_stack_c::ZXYrotM(-m7A8*cM_fsin(dVar14 + m79C),current.angle.y,iVar2);
     cXyz cStack_d8;
     mDoMtx_stack_c::multVec(&cStack_c0,&cStack_d8);
-    if(m7A4 > 0.0f && m7A0 > 0.0f && m7D3 == 0xB){
+    if(m7A4 > 0.0f && m7A0 > 0.0f && mAnimeAttr == 0xB){
         mDoAud_seStart(0x201E,&m7B0);
     }
-    if(talk(true) == 0x12 && m7A4 > 0.0f && m7A0 > 0.0f && m7D3 == 0xB){
+    if(talk(true) == 0x12 && m7A4 > 0.0f && m7A0 > 0.0f && mAnimeAttr == 0xB){
         fopAcM_monsSeStart(this,0x489A,0);
-        m7D3 = 9;
+        mAnimeAttr = 9;
         m7C0 = 0;
         fopAcM_SetParam(rope,3);
         dComIfGp_evmng_cutEnd(i_param_1);
@@ -623,19 +623,19 @@ void daNpc_P2_c::cutRopeTalkProc(int i_param_1) {
     }else{
 
         if ((m7A4 > 0.0f) && (m7A0 > 0.0f)) {
-            m7D3 = 0xC;
+            mAnimeAttr = 0xC;
             return;
         }
         if ((m7A4 > 0.0f) && (m7A0 < 0.0f)) {
-            m7D3 = 0xB;
+            mAnimeAttr = 0xB;
             return;
         }
         if ((m7A4 < 0.0f) && (m7A0 > 0.0f)) {
-            m7D3 = 0xB;
+            mAnimeAttr = 0xB;
             return;
         }
         if ((m7A4 < 0.0f) && (m7A0 < 0.0f)) {
-            m7D3 = 0xC;
+            mAnimeAttr = 0xC;
         }
     }
 }
@@ -670,7 +670,7 @@ void daNpc_P2_c::cutRopeToLiftStart(int i_staff_id) {
     current.angle.z = 0;
 
     m72C = 1;
-    m7D3 = 9;
+    mAnimeAttr = 9;
 
     speed.y = m7F8;
     gravity = m800;
@@ -693,17 +693,17 @@ void daNpc_P2_c::cutRopeToLiftProc(int i_param_1) {
         mSmokeCallback.end();
     }
 
-   if (mAcch.ChkGroundHit() && (m7D3 == 9 || m7D3 == 10)) {
+   if (mAcch.ChkGroundHit() && (mAnimeAttr == 9 || mAnimeAttr == 10)) {
         speedF = 0.0f;
         speed.y = 0.0f;
         gravity = -9.0f;
 
         m7DC.set(0.0f, -100.0f, 0.0f);
 
-        m7D3 = 10;
+        mAnimeAttr = 10;
     }
-    if (cLib_calcTimer(&m7F4) == 0 && m7D3 == 10) {
-        m7D3 = 1;
+    if (cLib_calcTimer(&m7F4) == 0 && mAnimeAttr == 10) {
+        mAnimeAttr = 1;
         m7DC.set(0.0f, 0.0f, 0.0f);
         mClosestPos.set(0.0f, 0.0f, 0.0f);
         mSmokeCallback.end();
@@ -743,7 +743,7 @@ void daNpc_P2_c::cutJumpToGoalStart(int i_staff_id) {
         m800 = *gravity;
     }
 
-    m7D3 = 5;
+    mAnimeAttr = 5;
     m72C = 1;
 
 }
@@ -760,28 +760,28 @@ void daNpc_P2_c::cutJumpToGoalProc(int i_param_1) {
         speed.y = m7F8;
         gravity = m800;
         speedF = m7FC;
-        m7D3 = 8;
+        mAnimeAttr = 8;
     }
 
 
 
     if (mAcch.ChkGroundHit()) {
-        if(m7D3 != 10 && m7D3 != 1){
+        if(mAnimeAttr != 10 && mAnimeAttr != 1){
             cLib_addCalc2(&current.pos.x,ropePos.x,0.1,maxSpeed);
             cLib_addCalc2(&current.pos.z,ropePos.z,0.1,maxSpeed);
         }
     }   
-    if(mAcch.ChkGroundHit() && (m7D3 == 9 || m7D3 == 10)){
+    if(mAcch.ChkGroundHit() && (mAnimeAttr == 9 || mAnimeAttr == 10)){
         m7DC.set(0.0f,-100.0f,0.0f);
-        m7D3 = 10;
+        mAnimeAttr = 10;
 
     }
     else{
         if(speed.y <= 0.0f){
 
-            if(m7D3 == 8){
+            if(mAnimeAttr == 8){
                 m7DC.set(0.0f,-50.0f,0.0f);
-                m7D3 = 9;
+                mAnimeAttr = 9;
             }
 
 
@@ -798,13 +798,13 @@ void daNpc_P2_c::cutJumpToGoalProc(int i_param_1) {
     }
     mSmokePos = current.pos;
     mSmokeAngle = current.angle;
-    if(!cLib_calcTimer(&m7F4) && m7D3 == 10){
+    if(!cLib_calcTimer(&m7F4) && mAnimeAttr == 10){
         m7DC.set(0.0f,0.0f,0.0f);
         speed.y = 0.0f;
         gravity = -9.0f;
         speedF = 0.0f;
         dComIfGp_evmng_cutEnd(i_param_1);
-        m7D3 = 1;
+        mAnimeAttr = 1;
     }
 
 }
@@ -849,7 +849,7 @@ void daNpc_P2_c::cutJumpStart(int i_staff_id) {
     gravity = m800;
     speedF = m7FC;
 
-    m7D3 = 8;
+    mAnimeAttr = 8;
 }
 
 /* 00007D08-00007F70       .text cutJumpProc__10daNpc_P2_cFi */
@@ -858,12 +858,12 @@ void daNpc_P2_c::cutJumpProc(int i_staff_id) {
     cXyz goalPos = m7E8;
     f32 dist = (goalPos - current.pos).absXZ();
 
-    if (mAcch.ChkGroundHit() && (m7D3 == 9 || m7D3 == 10)) {
+    if (mAcch.ChkGroundHit() && (mAnimeAttr == 9 || mAnimeAttr == 10)) {
         m7DC.set(0.0f, -100.0f, 0.0f);
-        m7D3 = 10;
-    } else if (speed.y <= 0.0f && m7D3 == 8) {
+        mAnimeAttr = 10;
+    } else if (speed.y <= 0.0f && mAnimeAttr == 8) {
         m7DC.set(0.0f, -50.0f, 0.0f);
-        m7D3 = 9;
+        mAnimeAttr = 9;
     }
 
     if (mAcch.ChkGroundLanding()) {
@@ -880,7 +880,7 @@ void daNpc_P2_c::cutJumpProc(int i_staff_id) {
     mSmokePos = current.pos;
     mSmokeAngle = current.angle;
 
-    if (cLib_calcTimer(&m7F4) == 0 && m7D3 == 10) {
+    if (cLib_calcTimer(&m7F4) == 0 && mAnimeAttr == 10) {
         m7DC.set(0.0f, 0.0f, 0.0f);
 
         speed.y = 0.0f;
@@ -889,7 +889,7 @@ void daNpc_P2_c::cutJumpProc(int i_staff_id) {
 
         dComIfGp_evmng_cutEnd(i_staff_id);
 
-        m7D3 = 1;
+        mAnimeAttr = 1;
     }
 }
 
@@ -899,17 +899,17 @@ void daNpc_P2_c::cutSetAnmStart(int i_staff_id) {
     char* name = dComIfGp_evmng_getMyStringP(i_staff_id, "Name");
 
     if (name && !strcmp(name, "KYORO")) {
-        m7D3 = 0x11;
+        mAnimeAttr = 0x11;
     } else if (name && !strcmp(name, "SURPRISE")) {
-        m7D3 = 7;
+        mAnimeAttr = 7;
     } else if (name && !strcmp(name, "THINK")) {
-        m7D3 = 0x12;
+        mAnimeAttr = 0x12;
     } else if (name && !strcmp(name, "NOD")) {
-        m7D3 = 0x13;
+        mAnimeAttr = 0x13;
     } else if (name && !strcmp(name, "WAIT01")) {
-        m7D3 = 1;
+        mAnimeAttr = 1;
     } else {
-        m7D3 = 1;
+        mAnimeAttr = 1;
     }
 }
 

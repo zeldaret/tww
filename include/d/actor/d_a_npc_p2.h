@@ -78,7 +78,7 @@ public:
         Action_OMAMORI_INIT_e,
         Action_OMAMORI_END_e
     };
-    cXyz& getAttentionBasePos() {return m6F8;}
+    cXyz& getAttentionBasePos() {return mEyePos;}
     void getBackbone_x() {}
     void getBackbone_y() {}
     void getEyePos() {}
@@ -184,14 +184,14 @@ public:
     /* Place member variables here */
 
     /* 0x290 */ u8 mType;
-                u8 m291;
+                u8 mRopeGameInstance;
                 u8 m292;
                 u8 m293;
     /* 0x294 */ request_of_phase_process_class mPhs;
     /* 0x29C */ mDoExt_McaMorf* mpMorf;
     /* 0x2A0 */ mDoExt_McaMorf* mpMorf2;
     /* 0x2A4 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x2B8 */ J3DModel* mpHeadModel; //head model
+    /* 0x2B8 */ J3DModel* mpHeadModel;
     /* 0x2BC */ J3DModel* mpDaggerModel;
     /* 0x2C0 */ J3DModel* mpDaggerGripModel;
     /* 0x2C4 */ J3DModel* mpTelescopeModel;
@@ -203,24 +203,21 @@ public:
                 f32 mAnimFrame;
     /* 0x378 */ u8 mBlinkFrame;
     /* 0x37A */ s16 mBlinkTimer;
-                dBgS_ObjAcch mAcch;
-                dBgS_AcchCir mAcchCir;
+    /* 0x37C */ dBgS_ObjAcch mAcch;
+    /* 0x37A */ dBgS_AcchCir mAcchCir;
                 dCcD_Stts mStts;
                 dCcD_Cyl m5BC;
-                //u8 m60C[0x6D4-0x60C];
-                //cM3dGCyl m6D4;
                 csXyz m6EC;
-                s16 m6F2;
+                s16 mMaxHeadVel;
                 u8 m6F4[0x6F8-0x6F4];
-                cXyz m6F8;
-                cXyz m704;
-                //J3DModel* m710;
+                cXyz mEyePos;
+                cXyz mAttentionPos;
                 u8 m710;
                 u16 m712;
                 cXyz mClosestPos;
                 daNpc_P2_c* mActor;
-                u8 m724;
-                u8 m725;
+                u8 mbAttention;
+                u8 mbInDialogue;
                 u32 m728;
                 u8 m72C;
                 cXyz m730;
@@ -228,7 +225,7 @@ public:
                 s16 m748;
                 u8 m74A;
                 int m74C;
-                u8 m750;
+                u8 mbTreasureWaitTalk;
                 u8 m751;
     /* 0x754 */ dPa_smokeEcallBack mSmokeCallback;
     /* 0x774 */ cXyz mSmokePos;
@@ -251,9 +248,9 @@ public:
                 ActionFunc mActionFunc;
 
     /* 0x7D0 */ s8 mTexPatternNum;
-    /* 0x7D1 */ s8 m7D1;
+    /* 0x7D1 */ s8 mTexAnmIdx;
     /* 0x7D2 */ s8 mAnmFileIdx;
-    /* 0x7D3 */ s8 m7D3;
+    /* 0x7D3 */ s8 mAnimeAttr;
     /* 0x7D4 */ s8 m7D4;
     /* 0x7D5 */ s8 mDemoOrderIdx;
     /* 0x7D6 */ s8 mState;
