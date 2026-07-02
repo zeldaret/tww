@@ -9,9 +9,16 @@
 
 class daNpc_Pm1_c : public fopNpc_npc_c {
 public:
-    struct anm_prm_c {
+    typedef int (daNpc_Pm1_c::*ActionFunc)(void*);
 
-    };
+    struct anm_prm_c {
+        /* 0x0 */ s8 mAnmIdx;
+        /* 0x1 */ u8 field_0x1[2];
+        /* 0x3 */ s8 mTexAnmIdx;
+        /* 0x4 */ f32 mMorf;
+        /* 0x8 */ f32 mPlaySpeed;
+        /* 0xC */ int mLoopMode;
+    };  // Size: 0x10
 
     void getAttPos() {}
     void getBackboneJntNum() {}
@@ -22,15 +29,15 @@ public:
     void getHead_x() {}
     void getHead_y() {}
 
-    void createInit();
+    bool createInit();
     void setMtx();
-    void anmResID(int, int*, int*);
+    BOOL anmResID(int, int*, int*);
     void BtpNum2ResID(int, int*);
     void setAnm_tex(signed char);
-    void init_btp(bool, int);
-    void initTexPatternAnm(bool);
+    BOOL init_btp(bool, int);
+    BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
-    void setAnm_anm(anm_prm_c*);
+    BOOL setAnm_anm(anm_prm_c*);
     void setAnm();
     void chngAnmTag();
     void ctrlAnmTag();
@@ -39,23 +46,23 @@ public:
     void setAnm_ATR(int);
     void anmAtr(unsigned short);
     void setStt(signed char);
-    unsigned short next_msgStatus(unsigned long*);
-    unsigned long getMsg();
+    u16 next_msgStatus(u32*);
+    u32 getMsg();
     void eventOrder();
     void checkOrder();
     void lookBack();
-    void chkAttention();
+    bool chkAttention();
     void setAttention();
-    void decideType(int);
+    bool decideType(int);
     void event_actionInit(int);
-    void event_action();
+    BOOL event_action();
     void privateCut();
     void endEvent();
     void event_proc();
-    void set_action(int (daNpc_Pm1_c::*)(void*), void*);
-    void wait01();
-    void talk01();
-    void wait_action1(void*);
+    BOOL set_action(ActionFunc, void*);
+    bool wait01();
+    bool talk01();
+    int wait_action1(void*);
     u8 demo();
     BOOL _draw();
     BOOL _execute();
@@ -70,12 +77,12 @@ public:
     /* 0x6CE */ u8 field_0x6CE[2];
     /* 0x6D0 */ u32 mShadowId;
     /* 0x6D4 */ J3DModel* mpModel;
-    /* 0x6D8 */ J3DAnmTexPattern* field_0x6D8;
+    /* 0x6D8 */ J3DAnmTexPattern* m_head_tex_pattern;
     /* 0x6DC */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F0 */ u8 mBtpFrame;
     /* 0x6F1 */ u8 field_0x6F1;
     /* 0x6F2 */ s16 field_0x6F2;
-    /* 0x6F4 */ int (daNpc_Pm1_c::*field_0x6F4)(void*);
+    /* 0x6F4 */ ActionFunc mCurrActionFunc;
     /* 0x700 */ dNpc_EventCut_c mEventCut;
     /* 0x76C */ csXyz mRot;
     /* 0x772 */ u8 field_0x772[2];

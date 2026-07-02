@@ -6,7 +6,25 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_pm1.h"
 #include "m_Do/m_Do_ext.h"
+#include "res/Object/Km.h"
 
+
+    // struct anm_prm_c {
+    //     /* 0x0 */ s8 mAnmIdx;
+    //     /* 0x1 */ u8 field_0x1[2];
+    //     /* 0x3 */ s8 mTexAnmIdx;
+    //     /* 0x4 */ f32 mMorf;
+    //     /* 0x8 */ f32 mPlaySpeed;
+    //     /* 0xC */ int mLoopMode;
+    // };  // Size: 0x10
+const daNpc_Pm1_c::anm_prm_c mAnmParam = {
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+};
 
 static daNpc_Pm1_HIO_c l_HIO;
 
@@ -21,37 +39,154 @@ static BOOL nodeCallBack_Pm(J3DNode*, int) {
 }
 
 /* 0000033C-0000044C       .text createInit__11daNpc_Pm1_cFv */
-void daNpc_Pm1_c::createInit() {
+bool daNpc_Pm1_c::createInit() {
     /* Nonmatching */
+  ActionFunc local_18;
+  f32 local_14;
+  int local_10;
+  
+  this->mEventCut.setActorInfo2( "Pm1", this);
+ // this->attention_info.flags = Action_Talk|LockOn_Talk;
+  this->attention_info.flags = 0x280|0x26d; //CREATE ENUM
+  this->attention_info.distances[1] = 0xab;
+  this->attention_info.distances[3] = 0xa9;
+  this->gravity = -4.0;
+  (this->field_0x798).x = this->current.pos.x;
+  (this->field_0x798).y = this->current.pos.y;
+  (this->field_0x798).z = this->current.pos.z;
+  local_18 = 0x0;
+  local_14 = 0xffffff;
+  this->set_action(local_18, (void *)0x0);
+  this->shape_angle.x = this->current.angle.x;
+  this->shape_angle.y = this->current.angle.y;
+  this->shape_angle.z = this->current.angle.z;
+  this->mStts.Init(0xff, 0xff, (fopAc_ac_c *)this);
+  this->mCyl.SetStts(&this->mStts);
+  this->mCyl.Set(dNpc_cyl_src);
+  this->mpMorf->setMorf( 0.0);
+  this->field_0x7BC = 1;
+  this->setMtx();
+  return 1;
 }
 
 /* 0000044C-0000055C       .text setMtx__11daNpc_Pm1_cFv */
 void daNpc_Pm1_c::setMtx() {
     /* Nonmatching */
+    BOOL sVar1;
+    char cVar2;
+    int bVar3;
+
+    if (this->field_0x7C7 == 0) {
+    this->playTexPatternAnm();
+    sVar1 = this->mpMorf->play(&this->eyePos, 0, 0);
+    this->field_0x7B4 = sVar1;
+    if (this->mpMorf->getFrame() < this->field_0x7A4) {
+        this->field_0x7B4 = 1;
+    }
+    this->field_0x7A4 = this->mpMorf->getFrame();
+    this->mObjAcch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
+    }
+    cVar2 = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
+    this->tevStr.mRoomNo = cVar2;
+    bVar3 = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
+    this->tevStr.mEnvrIdxOverride = bVar3;
+
+    mDoMtx_stack_c::transS(this->current.pos.x, this->current.pos.y, this->current.pos.z);     
+    mDoMtx_stack_c::YrotM(this->current.angle.y);
+    this->mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
+    this->mpModel->calc();
+    this->setAttention();
 }
 
 /* 0000055C-00000664       .text anmResID__11daNpc_Pm1_cFiPiPi */
-void daNpc_Pm1_c::anmResID(int, int*, int*) {
+BOOL daNpc_Pm1_c::anmResID(int i_num, int* o_bck_num, int* o_bas_num) {
     /* Nonmatching */
+    bool bVar1;
+    u32 uVar2;
+    static const int a_anm_idx_tbl[16] = { 0,0,0,5,0,0,0,2,0,0,0,4,0,0,0,1};
+  bVar1 = false;
+  if ((i_num > 0) && (i_num < 2)) {
+    bVar1 = true;
+  }
+  if (!bVar1) {
+    uVar2 = JUTAssertion::getSDevice();
+    JUTAssertion::showAssert(uVar2, "d_a_npc_pm1.cpp", 0x11b, "0 <= i_num && i_num < ANM_END");
+    OSPanic("d_a_npc_pm1.cpp", 0x11b, "Halt");
+  }
+  bVar1 = false;
+  if ((o_bck_num != (int *)0x0) && (o_bas_num != (int *)0x0)) {
+    bVar1 = true;
+  }
+  if (!bVar1) {
+    uVar2 = JUTAssertion::getSDevice();
+    JUTAssertion::showAssert(uVar2, "d_a_npc_pm1.cpp", 0x11c, "o_bck_num && o_bas_num");
+    OSPanic("d_a_npc_pm1.cpp", 0x11c, "Halt");
+  }
+    *o_bck_num = a_anm_idx_tbl[i_num];
+    *o_bas_num = a_anm_idx_tbl[i_num+4];
+    return true;
 }
 
 /* 00000664-00000700       .text BtpNum2ResID__11daNpc_Pm1_cFiPi */
-void daNpc_Pm1_c::BtpNum2ResID(int, int*) {
+void daNpc_Pm1_c::BtpNum2ResID(int i_num, int* param_2) {
     /* Nonmatching */
+    bool bVar1;
+    u32 uVar2;
+    static const int a_btp_arc_ix_tbl[4] = { 0,0,0,7};
+
+    bVar1 = false;
+    if ((i_num > 0) && (i_num < 1)) {
+        bVar1 = true;
+    }
+    if (!bVar1) {
+        uVar2 = JUTAssertion::getSDevice();
+        JUTAssertion::showAssert
+                    (uVar2, "d_a_npc_pm1.cpp", 0x131, "0 <= i_num && i_num < TEXPATTERN_END");
+        OSPanic("d_a_npc_pm1.cpp", 0x131, "Halt");
+    }
+    *param_2 = a_btp_arc_ix_tbl[i_num];
 }
 
 /* 00000700-00000744       .text setAnm_tex__11daNpc_Pm1_cFSc */
-void daNpc_Pm1_c::setAnm_tex(signed char) {
+void daNpc_Pm1_c::setAnm_tex(signed char param_1) {
     /* Nonmatching */
+    if ((param_1 >= 0) && (param_1 != this->field_0x7CD)) {
+        this->field_0x7CD = param_1;
+        this->initTexPatternAnm(true);
+    }
 }
 
 /* 00000744-00000860       .text init_btp__11daNpc_Pm1_cFbi */
-void daNpc_Pm1_c::init_btp(bool, int) {
+BOOL daNpc_Pm1_c::init_btp(bool i_modify, int i_num) {
     /* Nonmatching */
+    J3DAnmTexPattern *anm_tex_pattern;
+    u32 assertion_device;
+    int is_btp_anm;
+    J3DModelData *mdl_data;
+    int btpId;
+
+    mdl_data = this->mpMorf->getModel()->getModelData();
+    if (i_num >= 0) {
+    this->BtpNum2ResID(i_num, &btpId);
+    anm_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes("Pm", btpId);
+    this->m_head_tex_pattern = anm_tex_pattern;
+    if (this->m_head_tex_pattern == (J3DAnmTexPattern *)0x0) {
+        assertion_device = JUTAssertion::getSDevice();
+        JUTAssertion::showAssert(assertion_device, "d_a_npc_pm1.cpp", 0x152, "m_head_tex_pattern != 0");
+        OSPanic("d_a_npc_pm1.cpp", 0x152, "Halt");
+    }
+    is_btp_anm = this->mBtpAnm.init(mdl_data, this->m_head_tex_pattern, 1, 2, 1.0, 0, -1, i_modify,0);
+    if (is_btp_anm == 0) {
+        return 0;
+    }
+    this->mBtpFrame = 0;
+    this->field_0x6F2 = 0;
+    }
+    return 1;
 }
 
 /* 00000860-000008A4       .text initTexPatternAnm__11daNpc_Pm1_cFb */
-void daNpc_Pm1_c::initTexPatternAnm(bool) {
+BOOL daNpc_Pm1_c::initTexPatternAnm(bool) {
     /* Nonmatching */
 }
 
@@ -61,7 +196,7 @@ void daNpc_Pm1_c::playTexPatternAnm() {
 }
 
 /* 00000968-00000A34       .text setAnm_anm__11daNpc_Pm1_cFPQ211daNpc_Pm1_c9anm_prm_c */
-void daNpc_Pm1_c::setAnm_anm(daNpc_Pm1_c::anm_prm_c*) {
+BOOL daNpc_Pm1_c::setAnm_anm(daNpc_Pm1_c::anm_prm_c*) {
     /* Nonmatching */
 }
 
@@ -106,12 +241,12 @@ void daNpc_Pm1_c::setStt(signed char) {
 }
 
 /* 00000C74-00000C7C       .text next_msgStatus__11daNpc_Pm1_cFPUl */
-unsigned short daNpc_Pm1_c::next_msgStatus(unsigned long*) {
+u16 daNpc_Pm1_c::next_msgStatus(u32*) {
     /* Nonmatching */
 }
 
 /* 00000C7C-00000C84       .text getMsg__11daNpc_Pm1_cFv */
-unsigned long daNpc_Pm1_c::getMsg() {
+u32 daNpc_Pm1_c::getMsg() {
     /* Nonmatching */
 }
 
@@ -131,7 +266,7 @@ void daNpc_Pm1_c::lookBack() {
 }
 
 /* 00000EA4-00000F24       .text chkAttention__11daNpc_Pm1_cFv */
-void daNpc_Pm1_c::chkAttention() {
+bool daNpc_Pm1_c::chkAttention() {
     /* Nonmatching */
 }
 
@@ -141,7 +276,7 @@ void daNpc_Pm1_c::setAttention() {
 }
 
 /* 00000F88-00000FB4       .text decideType__11daNpc_Pm1_cFi */
-void daNpc_Pm1_c::decideType(int) {
+bool daNpc_Pm1_c::decideType(int) {
     /* Nonmatching */
 }
 
@@ -151,7 +286,7 @@ void daNpc_Pm1_c::event_actionInit(int) {
 }
 
 /* 0000103C-0000104C       .text event_action__11daNpc_Pm1_cFv */
-void daNpc_Pm1_c::event_action() {
+BOOL daNpc_Pm1_c::event_action() {
     /* Nonmatching */
 }
 
@@ -171,22 +306,22 @@ void daNpc_Pm1_c::event_proc() {
 }
 
 /* 000011D4-00001280       .text set_action__11daNpc_Pm1_cFM11daNpc_Pm1_cFPCvPvPv_iPv */
-void daNpc_Pm1_c::set_action(int (daNpc_Pm1_c::*)(void*), void*) {
+BOOL daNpc_Pm1_c::set_action(ActionFunc, void*) {
     /* Nonmatching */
 }
 
 /* 00001280-00001378       .text wait01__11daNpc_Pm1_cFv */
-void daNpc_Pm1_c::wait01() {
+bool daNpc_Pm1_c::wait01() {
     /* Nonmatching */
 }
 
 /* 00001378-00001408       .text talk01__11daNpc_Pm1_cFv */
-void daNpc_Pm1_c::talk01() {
+bool daNpc_Pm1_c::talk01() {
     /* Nonmatching */
 }
 
 /* 00001408-000014BC       .text wait_action1__11daNpc_Pm1_cFPv */
-void daNpc_Pm1_c::wait_action1(void*) {
+int daNpc_Pm1_c::wait_action1(void*) {
     /* Nonmatching */
 }
 
