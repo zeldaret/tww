@@ -434,7 +434,7 @@ void daSTBox_c::initDrop(int) {
 /* 00000F64-00001218       .text actWait__9daSTBox_cFi */
 BOOL daSTBox_c::actWait(int) {
     /* Nonmatching */
-    daShip_c* ship = dComIfGp_getShipActor();
+    daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
     JUT_ASSERT(0x32b, ship != NULL);
     cXyz* craneTop = ship->getCraneTop();
     JUT_ASSERT(0x332, craneTop != NULL);
