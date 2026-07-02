@@ -533,8 +533,8 @@ void dDlst_2Dm_c::draw() {
         GXLoadTlut(&mTex[1].mTlutObj, GXGetTexObjTlut(&mTex[1].mTexObj));
 
     GXSetNumChans(0);
-    GXSetTevColor(GX_TEVREG0, mC0);
-    GXSetTevColor(GX_TEVREG1, mC1);
+    GXSetTevColor(GX_TEVREG0, mBlack);
+    GXSetTevColor(GX_TEVREG1, mWhite);
 
     GXSetNumTexGens(2);
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
