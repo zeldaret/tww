@@ -125,6 +125,24 @@ static struct {
     /* 0x3B */ {dItemNo_SHOP_GURU_STATUE_e, "beast_12.bti"},
 };
 
+u16 zfont[][2] = {
+    0x8340, 0x84a4, 0x8341, 0x84a5, 0x8342, 0x84a6, 0x8343, 0x84a7, 0x8344, 0x84a8, 0x8345, 0x84a9, 0x8346,
+    0x84aa, 0x8347, 0x84ab, 0x8348, 0x84ac, 0x8349, 0x84ad, 0x834a, 0x84ae, 0x834b, 0x84af, 0x834c, 0x84b0,
+    0x834d, 0x84b1, 0x834e, 0x84b2, 0x834f, 0x84b3, 0x8350, 0x84b4, 0x8351, 0x84b5, 0x8352, 0x84b6, 0x8353,
+    0x84b7, 0x8354, 0x84b8, 0x8355, 0x84b9, 0x8356, 0x84ba, 0x8357, 0x84bb, 0x8358, 0x84bc, 0x8359, 0x84bd,
+    0x835a, 0x84be, 0x835b, 0x8740, 0x835c, 0x8741, 0x835d, 0x8742, 0x835e, 0x8743, 0x835f, 0x8744, 0x8360,
+    0x8745, 0x8361, 0x8746, 0x8362, 0x8747, 0x8363, 0x8748, 0x8364, 0x8749, 0x8365, 0x874a, 0x8366, 0x874b,
+    0x8367, 0x874c, 0x8368, 0x874d, 0x8369, 0x874e, 0x836a, 0x874f, 0x836b, 0x8750, 0x836c, 0x8751, 0x836d,
+    0x8752, 0x836e, 0x8753, 0x836f, 0x8754, 0x8370, 0x8755, 0x8371, 0x8756, 0x8372, 0x8757, 0x8373, 0x8758,
+    0x8374, 0x8759, 0x8375, 0x875a, 0x8376, 0x875b, 0x8377, 0x875c, 0x8378, 0x875d, 0x8379, 0x875f, 0x837a,
+    0x8760, 0x837b, 0x8761, 0x837c, 0x8762, 0x837d, 0x8763, 0x837e, 0x8764, 0x8380, 0x8765, 0x8381, 0x8766,
+    0x8382, 0x8767, 0x8383, 0x8768, 0x8384, 0x8769, 0x8385, 0x876a, 0x8386, 0x876b, 0x8387, 0x876c, 0x8388,
+    0x876d, 0x8389, 0x876e, 0x838a, 0x876f, 0x838b, 0x8770, 0x838c, 0x8771, 0x838d, 0x8772, 0x838e, 0x8773,
+    0x838f, 0x8774, 0x8390, 0x8775, 0x8391, 0x877e, 0x8392, 0x8780, 0x8393, 0x8781, 0x824f, 0x8782, 0x8250,
+    0x8783, 0x8251, 0x8784, 0x8252, 0x8785, 0x8253, 0x8786, 0x8254, 0x8787, 0x8255, 0x8788, 0x8256, 0x8789,
+    0x8257, 0x878a, 0x8258, 0x878b, 0x8141, 0x878c, 0x815b, 0x878d, 0x8175, 0x878e, 0x8176, 0x878f,
+};
+
 struct fopMsgM_pane_alpha_class;
 
 
@@ -731,10 +749,42 @@ char* fopMsgM_passwordGet(char* dst, u32 msgNo) {
     return dst;
 }
 
+static f32 dummyfloat0(int _) {
+    switch (_) {
+    case 0: return 0.0f;
+    case 1: return 0.5f;
+    }
+}
+
+static f64 dummyfloat1(int _) {
+    switch (_) {
+    case 0: return 4503601774854144.0;
+    case 1: return 0.5;
+    case 2: return 3.0;
+    }
+}
+
+static f32 dummyfloat2(int _) {
+    switch (_) {
+    case 0: return 2.0f;
+    }
+}
+
+struct fopMsgM_unk_struct {
+    u16 _0;
+    u16 _2;
+    u16 _4;
+    u16 _6;
+    u16 _8;
+    u16 _A;
+    s16 _C;
+    u16 _E;
+    u8 _10;
+};
+
 /* 8002C02C-8002C568       .text fopMsgM_selectMessageGet__FP7J2DPaneP7J2DPanePcPcPcPcUl */
-void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3, char* param_4, char* param_5, char* param_6, u32 param_7) {
-    /* Nonmatching */
-    fopMsgM_msgDataProc_c temp;
+fopMsgM_unk_struct fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3, char* param_4, char* param_5, char* param_6, u32 param_7) {
+    fopMsgM_msgDataProc_c msgData;
     fopMsgM_itemMsgGet_c msgGet;
 
     strcpy(param_3, "\x1B""CC[000000FF]\x1B""GM[0]");
@@ -744,43 +794,84 @@ void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3,
 
     J2DTextBox::TFontSize size;
     J2DTextBox::TFontSize size2;
-    ((J2DTextBox*)param_1)->getFontSize(size);
-    ((J2DTextBox*)param_2)->getFontSize(size2);
+    ((J2DTextBox*)param_2)->getFontSize(size);
+    ((J2DTextBox*)param_1)->getFontSize(size2);
 
     mesg_header* head_p = msgGet.getMesgHeader(param_7);
-    JUT_ASSERT(0x79B, head_p);
+    JUT_ASSERT(1947, head_p);
 
-    const char* src = (char*)msgGet.getMessage(head_p);
+    char* src = (char*)msgGet.getMessage(head_p);
+    fopMsgM_unk_struct sp40;
     JMSMesgEntry_c entry;
     entry = msgGet.getMesgEntry(head_p);
-    temp.dataInit();
-    temp.font[0] = ((J2DTextBox*)param_1)->getFont();
-    temp.font[1] = ((J2DTextBox*)param_2)->getFont();
-    temp.charSpace = ((J2DTextBox*)param_1)->getCharSpace();
-    temp.rubyCharSpace = ((J2DTextBox*)param_2)->getCharSpace();
-    temp.lineSpace = ((J2DTextBox*)param_2)->getLineSpace();
-    temp.mesgEntry = &entry;
-    temp.fontSize = size.mSizeX;
-    temp.rubyFontSize = size2.mSizeX;
-    temp.lineWidth = param_2->getWidth();
-    temp.sendSpeed = 2;
-    temp.spaceTimer = 0;
-    temp.field_0x299 = 1;
-    temp.spaceFlag = 0;
-    temp.stringLength();
-    temp.stringShift();
-    temp.iconIdxRefresh();
-    temp.lineCount = 0;
 
-    f32 fVar2 = (2 - temp.lineCount) * ((J2DTextBox*)param_2)->getLineSpace() * 0.5f;
-    ((J2DTextBox*) param_3)->field_0xd8 = 0.0f;
-    ((J2DTextBox*) param_3)->field_0xdc = fVar2;
-    ((J2DTextBox*) param_2)->field_0xd8 = 0.0f;
-    ((J2DTextBox*) param_2)->field_0xdc = fVar2;
+    msgData.dataInit();
+    msgData.setBmgData(src);
+    msgData.setOutMessage(param_3, param_4, param_5, param_6);
+    msgData.setFont(((J2DTextBox*)param_1)->getFont());
+    msgData.setRubyFont(((J2DTextBox*)param_2)->getFont());
+    msgData.setCharSpace(((J2DTextBox*)param_1)->getCharSpace());
+    msgData.setRubyCharSpace(((J2DTextBox*)param_2)->getCharSpace());
+    msgData.setLineSpace(((J2DTextBox*)param_1)->getLineSpace());
+    msgData.setMesgEntry(&entry);
+    msgData.setFontSize(size2.mSizeX);
+    msgData.setRubyFontSize(size.mSizeX);
+    msgData.setLineWidth(param_1->getWidth());
+    msgData.setCenterLineWidth(param_1->getWidth());
+    msgData.setSendSpeed(2);
+    msgData.setSpaceTimer(0);
+    msgData.shortCut();
+    msgData.setSpaceFlagOff();
+    msgData.stringLength();
+    msgData.stringShift();
+    msgData.iconIdxRefresh();
+    
+    s16 temp_r3 = msgData.getLineCount();
+    msgData.setLineCount(0);
 
-    temp.stringSet();
+    int temp_r30_2 = 2 - temp_r3;
+    f32 fVar2 = temp_r30_2 * (((J2DTextBox*)param_1)->getLineSpace() / 2);
+    ((J2DTextBox*)param_2)->shiftSet(0.0f, fVar2);
+    ((J2DTextBox*)param_1)->shiftSet(0.0f, fVar2);
+
+    msgData.stringSet();
     ((J2DTextBox*)param_1)->setString(param_3);
-    ((J2DTextBox*)param_1)->setString(param_4);
+    ((J2DTextBox*)param_2)->setString(param_4);
+
+    int temp_r5 = ((J2DTextBox*)param_1)->getLineSpace() / 2;
+    s16 temp_r6 = ((J2DTextBox*)param_1)->getBounds().i.x;
+    s16 temp_r3_3 = ((J2DTextBox*)param_1)->getBounds().i.y;
+
+    u8 var_r7 = false;
+    for (int i = 0; i < 15; i++) {
+        u8 temp_r9 = msgData.getIconNum(i);
+        if (temp_r9 != 0xFF) {
+            if (temp_r9 == 0x14) {
+                if (!var_r7) {
+                    sp40._0 = temp_r6 + msgData.getIconPosX(i);
+                    sp40._4 = temp_r3_3 + (temp_r5 * (temp_r30_2 + (msgData.getIconPosY(i) * 2)));
+                    var_r7 = true;
+                } else {
+                    sp40._2 = sp40._8 = temp_r6 + msgData.getIconPosX(i);
+                    sp40._6 = sp40._C = temp_r3_3 + (temp_r5 * (temp_r30_2 + (msgData.getIconPosY(i) * 2)));
+                }
+            } else if (temp_r9 == 0x15) {
+                sp40._10 = var_r7;
+                if (!var_r7) {
+                    sp40._0 = temp_r6 + msgData.getIconPosX(i);
+                    sp40._4 = temp_r3_3 + (temp_r5 * (temp_r30_2 + (msgData.getIconPosY(i) * 2)));
+                    var_r7 = true;
+                } else {
+                    sp40._2 = sp40._8 = temp_r6 + msgData.getIconPosX(i);
+                    sp40._6 = sp40._C = temp_r3_3 + (temp_r5 * (temp_r30_2 + (msgData.getIconPosY(i) * 2)));
+                }
+            }
+        }
+    }
+
+    sp40._A = temp_r6 + msgData.getNowCursorPos();
+    sp40._E = sp40._C;
+    return sp40;
 }
 
 /* 8002C568-8002C574       .text fopMsgM_demoMsgFlagOn__Fv */
@@ -1473,9 +1564,8 @@ const char* fopMsgM_msgGet_c::getMessage(mesg_header* msg) {
 
         mMsgIdx = i;
         if (mMsgNo == info->mEntries[i].mMsgNo) {
-            JMSMesgEntry_c* entry = &info->mEntries[mMsgIdx];
-            ret = &data[entry->mDataOffs];
-            mResMsgNo = entry->mMsgNo;
+            ret = &data[info->mEntries[mMsgIdx].mDataOffs];
+            mResMsgNo = info->mEntries[mMsgIdx].mMsgNo;
             break;
         }
     }

@@ -242,8 +242,8 @@ public:
 
     void getIconColor(int) {}
     u8 getIconNum(int i_no) { return field_0x281[i_no]; }
-    void getIconPosX(int) {}
-    void getIconPosY(int) {}
+    int getIconPosX(int i_no) { return field_0x168[i_no]; }
+    int getIconPosY(int i_no) { return field_0x1A4[i_no]; }
     void getIconScale(int) {}
 
     void setCharSpace(int i_space) { charSpace = i_space; }
@@ -270,7 +270,7 @@ public:
     u8 getGradAlpha() { return field_0x292; } // ?
     int getLineCount() { return lineCount; }
     u8 getMesgStatus() { return mesgStatus; }
-    void getNowCursorPos() {}
+    f32 getNowCursorPos() { return field_0x20; }
     u8 getRCharAlpha() { return field_0x291; }  // ?
     u8 getRGradAlpha() { return field_0x290; }  // ?
     void getSelectFlag() {}
@@ -368,8 +368,8 @@ public:
     /* 0x15C */ int spaceTimer;
     /* 0x160 */ int sendSpeed;
     /* 0x164 */ int field_0x164;  // keyWaitTimer?
-    /* 0x168 */ s32 field_0x168[0xF];  // IconPosX
-    /* 0x1A4 */ u32 field_0x1A4[0xF];  // IconPosY
+    /* 0x168 */ int field_0x168[0xF];  // IconPosX
+    /* 0x1A4 */ int field_0x1A4[0xF];  // IconPosY
     /* 0x1A4 */ u32 field_0x1E0[0xF];
     /* 0x21C */ int field_0x21C;
     /* 0x21C */ u32 field_0x220[0xF];
