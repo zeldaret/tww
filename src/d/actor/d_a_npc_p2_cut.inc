@@ -924,16 +924,16 @@ void daNpc_P2_c::cutSetAnmProc(int i_param_1) {
 /* 00008114-00008154       .text cutSwOnStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutSwOnStart(int) {
 
-    if(m292 != 0xFF){
-        fopAcM_onSwitch(this,m292);
+    if(mCutSwitch != 0xFF){
+        fopAcM_onSwitch(this,mCutSwitch);
     }   
 }
 
 /* 00008154-000081B4       .text cutSwOnProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutSwOnProc(int i_param_1) {
 
-    if(m292 != 0xFF){
-        fopAcM_onSwitch(this,m292);
+    if(mCutSwitch != 0xFF){
+        fopAcM_onSwitch(this,mCutSwitch);
     }   
     dComIfGp_evmng_cutEnd(i_param_1);
 }
@@ -941,16 +941,16 @@ void daNpc_P2_c::cutSwOnProc(int i_param_1) {
 /* 000081B4-000081F4       .text cutSwOffStart__10daNpc_P2_cFi */
 void daNpc_P2_c::cutSwOffStart(int) {
 
-    if(m292 != 0xFF){
-        fopAcM_offSwitch(this,m292);
+    if(mCutSwitch != 0xFF){
+        fopAcM_offSwitch(this,mCutSwitch);
     }   
 }
 
 /* 000081F4-00008254       .text cutSwOffProc__10daNpc_P2_cFi */
 void daNpc_P2_c::cutSwOffProc(int i_param_1) {
 
-    if(m292 != 0xFF){
-        fopAcM_offSwitch(this,m292);
+    if(mCutSwitch != 0xFF){
+        fopAcM_offSwitch(this,mCutSwitch);
     }   
     dComIfGp_evmng_cutEnd(i_param_1);    
 }

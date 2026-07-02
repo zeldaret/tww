@@ -51,7 +51,7 @@ public:
         /* 0x0601 */ UNK_0601 = 0x0601,
         /* 0x0780 */ UNK_0780 = 0x0780,
         /* 0x0740 */ UNK_0740 = 0x0740,
-        /* 0x0720 */ UNK_0720 = 0x0720,
+        /* 0x0720 */ P2B_TO_GOAL = 0x0720,  // Finished Niko's rope-crossing cutscene
         /* 0x0710 */ P2B_GOAL = 0x0710,     // Win Niko's rope game
         /* 0x0704 */ UNK_0704 = 0x0704,
         /* 0x0702 */ UNK_0702 = 0x0702,

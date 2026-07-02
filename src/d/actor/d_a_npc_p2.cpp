@@ -678,7 +678,7 @@ u32 daNpc_P2_c::getMsg() {
                     o_retval = 0x1028;
                 }
             }else{
-                if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0720)){
+                if(!dComIfGs_isEventBit(dSv_event_flag_c::P2B_TO_GOAL)){
                     o_retval = dLib_setFirstMsg(dSv_event_flag_c::UNK_0940,0xC96,0xC97); //Heya, shrimplet! Are you gonna be our new pirate swabbie?
 
                 }else{
@@ -752,6 +752,7 @@ void daNpc_P2_c::anmAtr(unsigned short i_param_1) {
 
 static u32 l_msgId;
 static msg_class* l_msg;
+
 /* 000017AC-00001918       .text talk__10daNpc_P2_cFb */
 u16 daNpc_P2_c::talk(bool i_param_1) {
 
@@ -823,10 +824,10 @@ void daNpc_P2_c::eventOrder() {
     if ((mDemoOrderIdx == DemoIdx_TALK_e) || (mDemoOrderIdx == DemoIdx_TALK_2_e)) {
         eventInfo.onCondition(dEvtCmd_INTALK_e);
         if (mDemoOrderIdx == DemoIdx_TALK_e) {
-            fopAcM_orderSpeakEvent((fopAc_ac_c *) this);
+            fopAcM_orderSpeakEvent(this);
         }
     } else if (mDemoOrderIdx >= DemoIdx_P2B_INTRO_e) {
-        fopAcM_orderOtherEvent((fopAc_ac_c *) this, a_demo_name_tbl[mDemoOrderIdx-3], 0xFFFF);
+        fopAcM_orderOtherEvent(this, a_demo_name_tbl[mDemoOrderIdx-3], 0xFFFF);
     }
 }
 
@@ -868,7 +869,7 @@ void daNpc_P2_c::demo_intro_2() {
 void daNpc_P2_c::goal_wait_2() {
 
     //BOOL switch_bool = fopAcM_isSwitch(this,m292);
-    if(fopAcM_isSwitch(this,m292)){
+    if(fopAcM_isSwitch(this,mCutSwitch)){
         if(dLib_checkPlayerInCircle(l_HIO.children[mType].m3C,l_HIO.children[mType].m60,l_HIO.children[mType].m68)){
             mState = State_DEMO_GOAL_2_e;
             
@@ -945,7 +946,7 @@ void daNpc_P2_c::demo_lift() {
 void daNpc_P2_c::demo_jump() {
 
     if(dComIfGp_evmng_endCheck("P2B_TO_GOAL")){
-        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0720);
+        dComIfGs_onEventBit(dSv_event_flag_c::P2B_TO_GOAL);
         mState = State_GOAL_GOALPOS_TO_TALKPOS_e;
         dComIfGp_event_reset();
     }
@@ -1281,7 +1282,7 @@ BOOL daNpc_P2_c::intro_action(void*) {
 
     if(m808 == 0){
         if(mRopeGameInstance == 0){
-            if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0720)){
+            if(!dComIfGs_isEventBit(dSv_event_flag_c::P2B_TO_GOAL)){
                 mState = State_DEMO_WAIT_e;
             }else{
                 mState = State_GOAL_TALKPOS_TO_GOALPOS_e;
@@ -1648,7 +1649,7 @@ void daNpc_P2_c::getArg() {
     u32 params = fopAcM_GetParam(this);
     mType = fopAcM_GetParamBit(fopAcM_GetParam(this),0,2);
     mRopeGameInstance = fopAcM_GetParamBit(params, 2, 8);
-    m292 = fopAcM_GetParamBit(params,10,8);
+    mCutSwitch = fopAcM_GetParamBit(params,10,8);
     if(mType == 3){
         mType = Type_ZUKO_e;
     }
@@ -1764,7 +1765,7 @@ void daNpc_P2_c::createInit() {
         if (mRopeGameInstance == 0) {
 
                 if (!dComIfGs_isEventBit(dSv_event_flag_c::ARRIVE_MAJYU) &&
-                    dComIfGs_isEventBit(dSv_event_flag_c::UNK_0720)) {
+                    dComIfGs_isEventBit(dSv_event_flag_c::P2B_TO_GOAL)) {
 
 
                     current.pos = l_HIO.children[mType].mGoalPosCircleCenter;

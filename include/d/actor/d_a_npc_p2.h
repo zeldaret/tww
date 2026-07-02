@@ -185,7 +185,7 @@ public:
 
     /* 0x290 */ u8 mType;
                 u8 mRopeGameInstance;
-                u8 m292;
+                u8 mCutSwitch;
                 u8 m293;
     /* 0x294 */ request_of_phase_process_class mPhs;
     /* 0x29C */ mDoExt_McaMorf* mpMorf;
