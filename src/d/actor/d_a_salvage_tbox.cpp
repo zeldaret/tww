@@ -422,12 +422,11 @@ void daSTBox_c::initWaitGetItem(int) {
         if (emitter != NULL) {
             emitter->quitImmortalEmitter();
             emitter = this->field_0x29C[i];
-            emitter->setMaxFrame(-1);
-            emitter->stopCreateParticle();
+            emitter->becomeInvalidEmitter();
             this->field_0x29C[i] = NULL;
         }
     }
-    this->mRippleCallBack.end();
+    this->mRippleCallBack.remove();
 }
 
 /* 00000F50-00000F54       .text initWaitDummy__9daSTBox_cFi */
