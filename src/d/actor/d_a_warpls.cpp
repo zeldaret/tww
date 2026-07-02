@@ -5,75 +5,417 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_warpls.h"
+#include "d/d_lib.h"
+#include "f_pc/f_pc_name.h"
+#include "res/Object/Ywarp00.h"
+#include "res/Object/Ysdls00.h"
+
+
+const char* daWarpls_c::m_arcname[] = { "Ywarp00", "Ysdls00" };
+
+const s16 daWarpls_c::m_bdlidx[] = { dRes_INDEX_YWARP00_BMD_YWARP00_e, dRes_INDEX_YSDLS00_BDL_YSDLS00_e };
+const s16 daWarpls_c::m_brkidx[] = { dRes_INDEX_YWARP00_BRK_YWARP00_e, 0xFFFF };
+const s16 daWarpls_c::m_bckidx[] = { dRes_INDEX_YWARP00_BCK_YWARP00_e, 0xFFFF };
+
+const u32 daWarpls_c::m_heapsize[] = { 0x2000, 0x2000 };
+
+const f32 daWarpls_c::m_warp_distance = 112.5f;
+
 
 /* 00000078-000000E0       .text _delete__10daWarpls_cFv */
 bool daWarpls_c::_delete() {
-    /* Nonmatching */
+    JPABaseEmitter* pEmitter = mpEmitter;
+    if (pEmitter != NULL) {
+        pEmitter->becomeInvalidEmitter();
+        mpEmitter = NULL;
+    }
+    #if VERSION == VERSION_DEMO
+    dComIfG_deleteObjectRes(m_arcname[m2BC]);
+    #else
+    dComIfG_resDelete(&mPhs, m_arcname[m2BC]);
+    #endif
+    return true;
 }
 
 /* 000000E0-00000100       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
+    return ((daWarpls_c*)actor)->CreateHeap();
 }
 
 /* 00000100-000003D8       .text CreateHeap__10daWarpls_cFv */
-void daWarpls_c::CreateHeap() {
-    /* Nonmatching */
+int daWarpls_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[m2BC],m_bdlidx[m2BC]);
+        JUT_ASSERT(VERSION_SELECT(0xe6, 0xe9, 0xe9, 0xe9), modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (mpModel == NULL) {
+        return 0;
+    }
+
+    mpBrkAnm = NULL;
+    if (m_brkidx[m2BC] != -1) {
+        J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname[m2BC],(int)m_brkidx[m2BC]);
+            JUT_ASSERT(VERSION_SELECT(0xf5, 0xf8, 0xf8, 0xf8), pbrk != NULL);
+
+        mDoExt_brkAnm* pBrkAnm = new mDoExt_brkAnm();
+        mpBrkAnm = pBrkAnm;
+
+        if (mpBrkAnm == NULL ||
+            mpBrkAnm->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE,
+                           1.0f, 0, -1, false, 0) == 0) {
+            return 0;
+        }
+    }
+
+    mpBckAnm = NULL;
+    if (m_bckidx[m2BC] != -1) {
+        J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes( m_arcname[m2BC],(int)m_bckidx[m2BC]);
+            JUT_ASSERT(VERSION_SELECT(0x108, 0x10b, 0x10b, 0x10b), pbck != NULL);
+
+        mDoExt_bckAnm* pBckAnm = new mDoExt_bckAnm();
+        mpBckAnm = pBckAnm;
+
+        if (mpBckAnm == NULL ||
+            mpBckAnm->init(modelData, pbck, true, J3DFrameCtrl::EMode_NONE,
+                           1.0f, 0, -1, false) == 0) {
+            return 0;
+        }
+    }
+
+    return 1;
 }
 
 /* 00000420-00000764       .text CreateInit__10daWarpls_cFv */
-void daWarpls_c::CreateInit() {
-    /* Nonmatching */
+void daWarpls_c::CreateInit()
+{
+    const char* eventNames[3] = {
+        "TOWER_WARP_U",
+        "TOWER_WARP_D",
+        "DUNGEON_WARP"
+    };
+
+    if (strcmp(dComIfGp_getStartStageName(), "Siren") == 0) {
+        s8 roomNo = current.roomNo; 
+        if (roomNo == 7) {
+            m2BD = 0;
+        } else if (roomNo == 0x11) {
+            m2BD = 1;
+        }
+    } else {
+        m2BD = 2;
+    }
+
+    mSwitchNo = daWarpls_prm::getSwitchNo(this);
+    mSceneNo = daWarpls_prm::getSceneNo(this);
+
+    {
+    s32 bc = m2BC;
+    switch (bc) {
+    case 0:
+        scale.z = 2.0f;
+        scale.x = 2.0f;
+        mpEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_WARPLIGHTSHAFT00, &current.pos, &current.angle, NULL, 0xFF);
+        if (mpEmitter == NULL) break; {
+            mpEmitter->becomeImmortalEmitter();
+            mpEmitter->setGlobalDynamicsScale(scale);
+            break;
+        } 
+    case 1:
+        mpEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_SUBDUNLIGHTSHAFT00, &current.pos, &current.angle, NULL, 0xFF);
+        break;
+    }
+    }
+
+    #if VERSION == VERSION_DEMO
+    int sw = mSwitchNo;
+    char roomNo = home.roomNo;
+    BOOL bSwitchOn = dComIfGs_isSwitch(sw, roomNo);
+    #else
+    bool bSwitchOn = dComIfGs_isSwitch(mSwitchNo, home.roomNo);
+    #endif
+
+    if (bSwitchOn || mSwitchNo == 0xFF) {
+
+        if (mpEmitter != NULL) {
+            mpEmitter->mFlags &= ~1;
+        }
+        if (mpBrkAnm != NULL) {
+            mpBrkAnm->getFrameCtrl()->setFrame(mpBrkAnm->getEndFrame());
+        }
+        if (mpBckAnm != NULL) {
+            mpBckAnm->getFrameCtrl()->setFrame(mpBckAnm->getEndFrame());
+        }
+        m2B6 = 1;
+        m2B4 = 1;
+        m2B5 = 1;
+        m2B7 = 0;
+    }
+    else {
+ 
+        if (mpEmitter != NULL) {
+            mpEmitter->mFlags |= 1;
+        }
+        m2B4 = 0;
+        m2B7 = 10;
+    }
+
+    m2B0 = NULL;
+
+    m2B8 = dComIfGp_evmng_getEventIdx(NULL, daWarpls_prm::getEvId(this));
+    m2BA = dComIfGp_evmng_getEventIdx(eventNames[m2BD], 0xFF);
+
+
+    cullMtx = mpModel->getBaseTRMtx();
+    fopAcM_setCullSizeBox(this, -250.0f, 0.0f, -250.0f, 250.0f, 2600.0f, 250.0f);
+    fopAcM_setCullSizeFar(this,1.0f);
+
+    set_mtx();
+
+    if (check_warp_distance() != 0) {
+        m2BE = 1;
+    }
 }
 
 /* 00000764-0000082C       .text _create__10daWarpls_cFv */
 cPhs_State daWarpls_c::_create() {
-    /* Nonmatching */
+
+    cPhs_State rt = cPhs_ERROR_e;
+
+    fopAcM_ct(this, daWarpls_c);
+
+    m2BC = daWarpls_prm::getType(this);
+
+    rt = dComIfG_resLoad(&mPhs, m_arcname[m2BC]);
+
+    if (rt == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[m2BC])) {
+            return cPhs_ERROR_e;
+        }
+        CreateInit();
+    }
+
+    return rt;
 }
 
 /* 0000082C-0000089C       .text set_mtx__10daWarpls_cFv */
 void daWarpls_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    return;
 }
 
 /* 0000089C-00000984       .text _execute__10daWarpls_cFv */
 bool daWarpls_c::_execute() {
-    /* Nonmatching */
+    u32 Switch = fopAcM_isSwitch(this, mSwitchNo);
+    u8 bSwitchOn = Switch;
+    if (m2B7 > 0) {
+        m2B7 = m2B7 - 1;
+    }
+    checkOrder();
+    eventOrder();
+    setStatus();
+    if (mpBrkAnm != NULL) { mpBrkAnm->play(); }
+    if (mpBckAnm != NULL) { mpBckAnm->play(); }
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    m2B6 = bSwitchOn;
+    return true;
 }
 
 /* 00000984-00000AC4       .text checkOrder__10daWarpls_cFv */
 void daWarpls_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+
+        if (dComIfGp_evmng_startCheck(m2B8) && m2B0 == 1) {
+            m2B0 = 0;
+            warp_eff_start();
+        }
+        if (dComIfGp_evmng_endCheck((m2B8))) {
+            dComIfGp_event_reset();
+        }
+        if (dComIfGp_evmng_startCheck(m2BA) != 0 && m2B0 == 2) {
+            m2B0 = 0;
+            dComIfGp_evmng_setGoal(&current.pos);
+        }
+        if (dComIfGp_evmng_endCheck(m2BA)) {
+            #if VERSION == VERSION_DEMO
+            s8 roomNo = current.roomNo;
+            dLib_setNextStageBySclsNum(mSceneNo, roomNo);
+            #else
+            dLib_setNextStageBySclsNum(mSceneNo, current.roomNo);
+            #endif
+            fopAcM_seStart(this,JA_SE_LK_WAPR_EFF_WARP,0);
+        }
+        return;
+    }
+    demo();
 }
 
 /* 00000AC4-00000BFC       .text eventOrder__10daWarpls_cFv */
 void daWarpls_c::eventOrder() {
-    /* Nonmatching */
+    #if VERSION == VERSION_DEMO
+    int sw = mSwitchNo;
+    char roomNo = home.roomNo;
+    u8 bVar2 = dComIfGs_isSwitch(sw, roomNo);
+    #else
+    u8 bVar2 = dComIfGs_isSwitch(mSwitchNo, home.roomNo);
+    #endif
+
+    if (m2B0 == 1) {
+        fopAcM_orderOtherEventId(this, m2B8, /* demo */ daWarpls_prm::getEvId(this), 0xffff, 0, 1);
+        eventInfo.mCondition |= 2;
+    
+    } else if (m2B0 == 2) {
+        #if VERSION == VERSION_DEMO
+        { 
+        fopAcM_orderOtherEventId(this, m2BA, 0xff, 0xffff, 0, 1);
+    }
+    #else
+    if (m2BD == 0) {
+            if (!check_warp_distance()) {
+                m2B0 = NULL;
+            } else {
+                fopAcM_orderOtherEventId(this, m2BA, 0xff, 0xffff, 0, 5);
+            }
+        } else {
+            fopAcM_orderOtherEventId(this, m2BA, 0xff, 0xffff, 0, 1);
+        }
+    #endif
+        eventInfo.mCondition |= 2;
+    } else if ((m2B8 == -1 && mSwitchNo == 0xff) ||
+               (m2B8 == -1 && bVar2)) {
+        warp_eff_start();
+    }
 }
 
 /* 00000BFC-00000C7C       .text setStatus__10daWarpls_cFv */
-void daWarpls_c::setStatus() {
-    /* Nonmatching */
+bool daWarpls_c::setStatus() {
+    if (m2B4 != 0) {
+        fopAcM_seStart(this,JA_SE_OBJ_WARP_EFF_SUS,0);
+    }
+    return true;
 }
 
 /* 00000C7C-00000DC4       .text demo__10daWarpls_cFv */
-void daWarpls_c::demo() {
-    /* Nonmatching */
+bool daWarpls_c::demo() {
+    #if VERSION == VERSION_DEMO
+    int sw = mSwitchNo;
+    char roomNo = home.roomNo;
+    u8 bVar3 = dComIfGs_isSwitch(sw,roomNo);
+    #else
+    u8 bVar3 = dComIfGs_isSwitch(mSwitchNo, home.roomNo);
+    #endif
+
+
+    if (m2BE != 0) {
+        if (!check_warp_distance()) {
+            m2BE = 0;
+        }
+        return true;
+    }
+
+    if (m2B0 == NULL && m2B5 == 0 && bVar3 && m2B4 == 0 && m2B8 != -1) {
+        m2B0 = 1;
+    }
+
+    if (bVar3 || mSwitchNo == 0xff) {
+        int result = check_warp_link();
+        if (result && m2B0 == NULL) {
+            m2B0 = 2;
+        }
+    } else {
+        if (mpBrkAnm != NULL) {
+            mpBrkAnm->setPlaySpeed(-1.0f);
+        }
+        if (mpBckAnm != NULL) {
+            mpBckAnm->setPlaySpeed(-1.0f);
+        }
+        if (mpEmitter != NULL) {
+            mpEmitter->mFlags |= 1;
+        }
+        m2B4 = 0;
+    }
+
+    return true;
 }
 
 /* 00000DC4-00000EE8       .text check_warp_link__10daWarpls_cFv */
-void daWarpls_c::check_warp_link() {
-    /* Nonmatching */
+int daWarpls_c::check_warp_link() {
+    #if VERSION == VERSION_DEMO
+    f32 local_warp_distance;
+    #else
+    f32 local_warp_distance = 112.5f;
+    #endif
+    f64 abs = 0.5;
+
+    fopAc_ac_c* player = g_dComIfG_gameInfo.play.getPlayerPtr(0);
+    if (!(player == g_dComIfG_gameInfo.play.getPlayer(0) && m2B4 != 0 && m2BE == 0)) {
+        return false;
+    }
+
+    abs = (player->current.pos - current.pos).absXZ();
+
+    #if VERSION == VERSION_DEMO
+    local_warp_distance = 112.5f;
+    #endif
+    
+    if (abs < local_warp_distance * scale.x) {
+        return true;
+    }
+    return false;
 }
 
 /* 00000EE8-00000FF4       .text check_warp_distance__10daWarpls_cFv */
-void daWarpls_c::check_warp_distance() {
-    /* Nonmatching */
+int daWarpls_c::check_warp_distance() {
+    f64 abs = 0.5;
+
+    fopAc_ac_c* player = g_dComIfG_gameInfo.play.getPlayerPtr(0);
+    if (player != g_dComIfG_gameInfo.play.getPlayer(0)) {
+        return false;
+    }
+
+    abs = (player->current.pos - current.pos).absXZ();
+    
+    if (abs < m_warp_distance * scale.x) {
+        return true;
+    }
+    return false;
 }
 
 /* 00000FF4-000010C8       .text warp_eff_start__10daWarpls_cFv */
 void daWarpls_c::warp_eff_start() {
-    /* Nonmatching */
+    if (m2B4 == 0) {
+        if (mpBrkAnm != NULL) {
+            mpBrkAnm->setPlaySpeed(1.0f);
+        }
+        if (mpBckAnm != NULL) {
+            mpBckAnm->setPlaySpeed(1.0f);
+        }
+        if (mpEmitter != NULL) {
+            mpEmitter->mFlags &= ~1;
+        }
+        fopAcM_seStart(this,JA_SE_OBJ_WARP_EFF_APPEAR,0);
+        m2B4 = 1;
+    }
+    return;
+}
+
+bool daWarpls_c::_draw() {
+    if (m2B4 == 0) return true; {
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    if (mpBrkAnm != NULL) {
+        mpBrkAnm->entry(mpModel->getModelData());
+                            
+    }
+    if (mpBckAnm != NULL) {
+        mpBckAnm->entry(mpModel->getModelData());
+    }
+    mDoExt_modelUpdateDL(mpModel);
+    }
+    return true;
 }
 
 /* 000010C8-000010E8       .text daWarpls_Create__FPv */
@@ -87,8 +429,8 @@ static BOOL daWarpls_Delete(void* i_this) {
 }
 
 /* 0000110C-000011D0       .text daWarpls_Draw__FPv */
-static BOOL daWarpls_Draw(void*) {
-    /* Nonmatching */
+static BOOL daWarpls_Draw(void* i_this) {
+    return ((daWarpls_c*)i_this)->_draw();
 }
 
 /* 000011D0-000011F4       .text daWarpls_Execute__FPv */
@@ -110,18 +452,18 @@ static actor_method_class daWarplsMethodTable = {
 };
 
 actor_process_profile_definition g_profile_WARPLIGHT = {
-    /* Layer ID     */ fpcLy_CURRENT_e,
-    /* List ID      */ 0x0003,
-    /* List Prio    */ fpcPi_CURRENT_e,
-    /* Proc Name    */ fpcNm_WARPLIGHT_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ fpcNm_WARPLIGHT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWarpls_c),
-    /* Size Other   */ 0,
+    /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Draw Prio    */ fpcDwPi_WARPLIGHT_e,
+    /* Priority     */ fpcDwPi_WARPLIGHT_e,
     /* Actor SubMtd */ &daWarplsMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
