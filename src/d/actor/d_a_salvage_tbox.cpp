@@ -7,7 +7,6 @@
 #include "d/actor/d_a_salvage_tbox.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_ship.h"
-// #include "d/d_kankyo.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_func.h"
 #include "f_op/f_op_kankyo_mng.h"
@@ -414,16 +413,12 @@ void daSTBox_c::initWait02(int) {
 
 /* 00000EC8-00000F50       .text initWaitGetItem__9daSTBox_cFi */
 void daSTBox_c::initWaitGetItem(int) {
-    /* Nonmatching */
-    JPABaseEmitter* emitter = NULL;
     fopDwTg_DrawQTo(&this->draw_tag);
     for(int i = 0; i < 3; i++) {
-        emitter = this->field_0x29C[i];
-        if (emitter != NULL) {
-            emitter->quitImmortalEmitter();
-            emitter = this->field_0x29C[i];
-            emitter->becomeInvalidEmitter();
-            this->field_0x29C[i] = NULL;
+        if (field_0x29C[i] != NULL) {
+            field_0x29C[i]->quitImmortalEmitter();
+            field_0x29C[i]->becomeInvalidEmitter();
+            field_0x29C[i] = NULL;
         }
     }
     this->mRippleCallBack.remove();
