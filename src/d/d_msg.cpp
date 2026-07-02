@@ -762,7 +762,7 @@ void dMsg_ScreenDataValueInitTalk(sub_msg_class* i_Msg) {
     i_Msg->mMsgDataProc.dataInit();
     i_Msg->mMsgDataProc.field_0x25C = i_Msg->m1164;
     i_Msg->mMsgDataProc.field_0x10 = (int)&i_Msg->mPos;
-    i_Msg->mMsgDataProc.field_0x3C = (char*)i_Msg->mpMesgStr;
+    i_Msg->mMsgDataProc.bmgData = (char*)i_Msg->mpMesgStr;
     pcVar8 = i_Msg->output_rubSdw;
     pcVar7 = i_Msg->output_textSdw;
     pcVar5 = i_Msg->output_rub;
@@ -784,20 +784,20 @@ void dMsg_ScreenDataValueInitTalk(sub_msg_class* i_Msg) {
     i_Msg->mMsgDataProc.field_0x50[3] = pcVar4;
     i_Msg->mMsgDataProc.font[0] = textFont;
     i_Msg->mMsgDataProc.font[1] = rubyFont;
-    i_Msg->mMsgDataProc.field_0x11C = iVar1;
-    i_Msg->mMsgDataProc.field_0x124 = iVar2;
-    i_Msg->mMsgDataProc.field_0x120 = (int)((J2DTextBox*)i_Msg->m0544[0].pane)->getLineSpace();
-    i_Msg->mMsgDataProc.field_0x0C = &i_Msg->mMesgEntry;
-    i_Msg->mMsgDataProc.field_0x144 = i_Msg->m110C;
-    i_Msg->mMsgDataProc.field_0x14C = i_Msg->m1110;
-    i_Msg->mMsgDataProc.field_0x128 = 0x1f7;
-    i_Msg->mMsgDataProc.field_0x12C = 0x1e6;
-    i_Msg->mMsgDataProc.field_0x160 = g_msgHIO.field_0x82;
-    i_Msg->mMsgDataProc.field_0x15C = 2;
+    i_Msg->mMsgDataProc.charSpace = iVar1;
+    i_Msg->mMsgDataProc.rubyCharSpace = iVar2;
+    i_Msg->mMsgDataProc.lineSpace = (int)((J2DTextBox*)i_Msg->m0544[0].pane)->getLineSpace();
+    i_Msg->mMsgDataProc.mesgEntry = &i_Msg->mMesgEntry;
+    i_Msg->mMsgDataProc.fontSize = i_Msg->m110C;
+    i_Msg->mMsgDataProc.rubyFontSize = i_Msg->m1110;
+    i_Msg->mMsgDataProc.lineWidth = 0x1f7;
+    i_Msg->mMsgDataProc.centerLineWidth = 0x1e6;
+    i_Msg->mMsgDataProc.sendSpeed = g_msgHIO.field_0x82;
+    i_Msg->mMsgDataProc.spaceTimer = 2;
     if (g_msgHIO.field_0x83 != 0) {
-        i_Msg->mMsgDataProc.field_0x29C = 1;
+        i_Msg->mMsgDataProc.spaceFlag = 1;
     } else {
-        i_Msg->mMsgDataProc.field_0x29C = 0;
+        i_Msg->mMsgDataProc.spaceFlag = 0;
     }
     i_Msg->m10D0 = (i_Msg->m10D8) - i_Msg->m049C.mPosCenter.x;
     i_Msg->m10D4 = (i_Msg->m10DC) - i_Msg->m049C.mPosCenter.y;
@@ -854,7 +854,7 @@ void dMsg_ScreenDataValueInitItem(sub_msg_class* i_Msg) {
     fopMsgM_cposMove(&i_Msg->m049C);
     i_Msg->mMsgDataProc.dataInit();
     i_Msg->mMsgDataProc.field_0x10 = (int)&i_Msg->mPos;
-    i_Msg->mMsgDataProc.field_0x3C = (char*)i_Msg->mpMesgStr;
+    i_Msg->mMsgDataProc.bmgData = (char*)i_Msg->mpMesgStr;
     pcVar8 = i_Msg->output_rubSdw;
     pcVar7 = i_Msg->output_textSdw;
     pcVar6 = i_Msg->output_rub;
@@ -876,24 +876,24 @@ void dMsg_ScreenDataValueInitItem(sub_msg_class* i_Msg) {
     i_Msg->mMsgDataProc.field_0x50[3] = pcVar5;
     i_Msg->mMsgDataProc.font[0] = textFont;
     i_Msg->mMsgDataProc.font[1] = rubyFont;
-    i_Msg->mMsgDataProc.field_0x11C = (int)fVar3;
-    i_Msg->mMsgDataProc.field_0x124 = (int)fVar4;
-    i_Msg->mMsgDataProc.field_0x0C = &i_Msg->mMesgEntry;
-    i_Msg->mMsgDataProc.field_0x144 = i_Msg->m110C;
-    i_Msg->mMsgDataProc.field_0x14C = i_Msg->m1110;
+    i_Msg->mMsgDataProc.charSpace = (int)fVar3;
+    i_Msg->mMsgDataProc.rubyCharSpace = (int)fVar4;
+    i_Msg->mMsgDataProc.mesgEntry = &i_Msg->mMesgEntry;
+    i_Msg->mMsgDataProc.fontSize = i_Msg->m110C;
+    i_Msg->mMsgDataProc.rubyFontSize = i_Msg->m1110;
     if ((i_Msg->mMesgEntry.mTextboxType == 9) && (i_Msg->m0624[8].mUserArea == 0)) {
-        i_Msg->mMsgDataProc.field_0x128 = 0x1a3;
-        i_Msg->mMsgDataProc.field_0x12C = 0x192;
+        i_Msg->mMsgDataProc.lineWidth = 0x1a3;
+        i_Msg->mMsgDataProc.centerLineWidth = 0x192;
     } else {
-        i_Msg->mMsgDataProc.field_0x128 = 0x1f7;
-        i_Msg->mMsgDataProc.field_0x12C = 0x1e6;
+        i_Msg->mMsgDataProc.lineWidth = 0x1f7;
+        i_Msg->mMsgDataProc.centerLineWidth = 0x1e6;
     }
-    i_Msg->mMsgDataProc.field_0x160 = g_msgHIO.field_0x82;
-    i_Msg->mMsgDataProc.field_0x15C = 2;
+    i_Msg->mMsgDataProc.sendSpeed = g_msgHIO.field_0x82;
+    i_Msg->mMsgDataProc.spaceTimer = 2;
     if (g_msgHIO.field_0x83 != 0) {
-        i_Msg->mMsgDataProc.field_0x29C = 1;
+        i_Msg->mMsgDataProc.spaceFlag = 1;
     } else {
-        i_Msg->mMsgDataProc.field_0x29C = 0;
+        i_Msg->mMsgDataProc.spaceFlag = 0;
     }
     i_Msg->m10D0 = (i_Msg->m10D8) - i_Msg->m049C.mPosCenter.x;
     i_Msg->m10D4 = (i_Msg->m10DC) - i_Msg->m049C.mPosCenter.y;
@@ -937,7 +937,7 @@ void dMsg_ScreenDataValueInitTact(sub_msg_class* i_Msg) {
     fopMsgM_cposMove(&i_Msg->m049C);
     i_Msg->mMsgDataProc.dataInit();
     i_Msg->mMsgDataProc.field_0x10 = (int)&i_Msg->mPos;
-    i_Msg->mMsgDataProc.field_0x3C = (char*)i_Msg->mpMesgStr;
+    i_Msg->mMsgDataProc.bmgData = (char*)i_Msg->mpMesgStr;
     pcVar6 = i_Msg->output_rubSdw;
     pcVar5 = i_Msg->output_textSdw;
     pcVar4 = i_Msg->output_rub;
@@ -959,24 +959,24 @@ void dMsg_ScreenDataValueInitTact(sub_msg_class* i_Msg) {
     i_Msg->mMsgDataProc.field_0x50[3] = pcVar3;
     i_Msg->mMsgDataProc.font[0] = textFont;
     i_Msg->mMsgDataProc.font[1] = rubyFont;
-    i_Msg->mMsgDataProc.field_0x11C = (int)dVar7;
-    i_Msg->mMsgDataProc.field_0x124 = (int)dVar8;
-    i_Msg->mMsgDataProc.field_0x0C = &i_Msg->mMesgEntry;
-    i_Msg->mMsgDataProc.field_0x144 = i_Msg->m110C;
-    i_Msg->mMsgDataProc.field_0x14C = i_Msg->m1110;
+    i_Msg->mMsgDataProc.charSpace = (int)dVar7;
+    i_Msg->mMsgDataProc.rubyCharSpace = (int)dVar8;
+    i_Msg->mMsgDataProc.mesgEntry = &i_Msg->mMesgEntry;
+    i_Msg->mMsgDataProc.fontSize = i_Msg->m110C;
+    i_Msg->mMsgDataProc.rubyFontSize = i_Msg->m1110;
     if ((i_Msg->mMesgEntry.mTextboxType == 9) && (i_Msg->m0624[8].mUserArea == 0)) {
-        i_Msg->mMsgDataProc.field_0x128 = 0x1a3;
-        i_Msg->mMsgDataProc.field_0x12C = 0x192;
+        i_Msg->mMsgDataProc.lineWidth = 0x1a3;
+        i_Msg->mMsgDataProc.centerLineWidth = 0x192;
     } else {
-        i_Msg->mMsgDataProc.field_0x128 = 0x1f7;
-        i_Msg->mMsgDataProc.field_0x12C = 0x1e6;
+        i_Msg->mMsgDataProc.lineWidth = 0x1f7;
+        i_Msg->mMsgDataProc.centerLineWidth = 0x1e6;
     }
-    i_Msg->mMsgDataProc.field_0x160 = g_msgHIO.field_0x82;
-    i_Msg->mMsgDataProc.field_0x15C = 2;
+    i_Msg->mMsgDataProc.sendSpeed = g_msgHIO.field_0x82;
+    i_Msg->mMsgDataProc.spaceTimer = 2;
     if (g_msgHIO.field_0x83 != 0) {
-        i_Msg->mMsgDataProc.field_0x29C = 1;
+        i_Msg->mMsgDataProc.spaceFlag = 1;
     } else {
-        i_Msg->mMsgDataProc.field_0x29C = 0;
+        i_Msg->mMsgDataProc.spaceFlag = 0;
     }
     i_Msg->m10D0 = (i_Msg->m10D8) - i_Msg->m049C.mPosCenter.x;
     i_Msg->m10D4 = (i_Msg->m10DC) - i_Msg->m049C.mPosCenter.y;
@@ -1000,7 +1000,7 @@ void dMsg_ScreenDataValueInitDemo(sub_msg_class* i_Msg) {
     f32 tmp = 0.5f;
     i_Msg->m1104 = (((J2DTextBox*)i_Msg->m0544[0].pane)->mLineSpace * tmp);
     i_Msg->mMsgDataProc.dataInit();
-    i_Msg->mMsgDataProc.field_0x3C = (char*)i_Msg->mpMesgStr;
+    i_Msg->mMsgDataProc.bmgData = (char*)i_Msg->mpMesgStr;
     pcVar5 = i_Msg->output_rubSdw;
     pcVar4 = i_Msg->output_textSdw;
     pcVar2 = i_Msg->output_rub;
@@ -1022,19 +1022,19 @@ void dMsg_ScreenDataValueInitDemo(sub_msg_class* i_Msg) {
     i_Msg->mMsgDataProc.field_0x50[3] = pcVar1;
     i_Msg->mMsgDataProc.font[0] = textFont;
     i_Msg->mMsgDataProc.font[1] = rubyFont;
-    i_Msg->mMsgDataProc.field_0x11C = dVar6;
-    i_Msg->mMsgDataProc.field_0x124 = dVar7;
-    i_Msg->mMsgDataProc.field_0x0C = &i_Msg->mMesgEntry;
-    i_Msg->mMsgDataProc.field_0x144 = i_Msg->m110C;
-    i_Msg->mMsgDataProc.field_0x14C = i_Msg->m1110;
-    i_Msg->mMsgDataProc.field_0x128 = 0x1f7;
-    i_Msg->mMsgDataProc.field_0x12C = 0x1e6;
-    i_Msg->mMsgDataProc.field_0x160 = g_msgHIO.field_0x82;
-    i_Msg->mMsgDataProc.field_0x15C = 2;
+    i_Msg->mMsgDataProc.charSpace = dVar6;
+    i_Msg->mMsgDataProc.rubyCharSpace = dVar7;
+    i_Msg->mMsgDataProc.mesgEntry = &i_Msg->mMesgEntry;
+    i_Msg->mMsgDataProc.fontSize = i_Msg->m110C;
+    i_Msg->mMsgDataProc.rubyFontSize = i_Msg->m1110;
+    i_Msg->mMsgDataProc.lineWidth = 0x1f7;
+    i_Msg->mMsgDataProc.centerLineWidth = 0x1e6;
+    i_Msg->mMsgDataProc.sendSpeed = g_msgHIO.field_0x82;
+    i_Msg->mMsgDataProc.spaceTimer = 2;
     if (g_msgHIO.field_0x83 != 0) {
-        i_Msg->mMsgDataProc.field_0x29C = 1;
+        i_Msg->mMsgDataProc.spaceFlag = 1;
     } else {
-        i_Msg->mMsgDataProc.field_0x29C = 0;
+        i_Msg->mMsgDataProc.spaceFlag = 0;
     }
 }
 
@@ -1081,8 +1081,8 @@ void dMsg_setString(sub_msg_class* i_Msg) {
 /* 8020EDE0-8020EE38       .text dMsg_yose_select__FP13sub_msg_class */
 void dMsg_yose_select(sub_msg_class* i_Msg) {
     i_Msg->mMsgDataProc.stringLength();
-    i_Msg->m1108 = i_Msg->mMsgDataProc.field_0x130;
-    i_Msg->mMsgDataProc.field_0x130 = 0;
+    i_Msg->m1108 = i_Msg->mMsgDataProc.lineCount;
+    i_Msg->mMsgDataProc.lineCount = 0;
     i_Msg->mMsgDataProc.stringShift();
     i_Msg->mMsgDataProc.iconIdxRefresh();
     dMsg_textPosition(i_Msg);
@@ -1950,11 +1950,11 @@ s32 dMsg_stopProc(sub_msg_class* i_Msg) {
     u8 bVar1;
     u32 uVar2;
 
-    if (i_Msg->mMsgDataProc.field_0x297 != 0) {
+    if (i_Msg->mMsgDataProc.autoSendFlag != 0) {
         uVar2 = (int)i_Msg->mMsgDataProc.field_0x158 > 0 ? i_Msg->mMsgDataProc.field_0x158 - 1 : 0;
         i_Msg->mMsgDataProc.field_0x158 = uVar2;
         if (uVar2 == 0) {
-            i_Msg->mMsgDataProc.field_0x297 = 0;
+            i_Msg->mMsgDataProc.autoSendFlag = 0;
 #if VERSION > VERSION_DEMO
             i_Msg->mMsgDataProc.field_0x296 = 0;
 #endif
@@ -2003,7 +2003,7 @@ s32 dMsg_stopProc(sub_msg_class* i_Msg) {
                 {
                     i_Msg->mMsgDataProc.field_0x299 = 1;
                 }
-                if (((i_Msg->mMsgDataProc.field_0x297 == 0) && (i_Msg->mMsgDataProc.field_0x298 == 0)) && ((s32)i_Msg->mMsgDataProc.field_0x158 != 0)) {
+                if (((i_Msg->mMsgDataProc.autoSendFlag == 0) && (i_Msg->mMsgDataProc.handSendFlag == 0)) && ((s32)i_Msg->mMsgDataProc.field_0x158 != 0)) {
                     i_Msg->mMsgDataProc.field_0x158 = 0;
 #if VERSION > VERSION_DEMO
                     i_Msg->mMsgDataProc.field_0x296 = 0;
@@ -2330,11 +2330,11 @@ s32 dMsg_continueProc(sub_msg_class* i_Msg) {
 
     iVar1 = (int)((J2DTextBox*)i_Msg->m0544[0].pane)->getCharSpace();
     iVar2 = (int)((J2DTextBox*)i_Msg->m0544[1].pane)->getCharSpace();
-    if (((((CPad_CHECK_TRIG_A(0)) || (CPad_CHECK_TRIG_B(0))) || (i_Msg->mMsgDataProc.field_0x294 != 0)) ||
+    if (((((CPad_CHECK_TRIG_A(0)) || (CPad_CHECK_TRIG_B(0))) || (i_Msg->mMsgDataProc.selectFlag != 0)) ||
          (fopMsgM_checkMessageSend() || (i_Msg->mMsgNo == 0x5ac && (dComIfGp_checkMesgCancelButton())))) &&
         (!dComIfGp_checkMesgBgm()))
     {
-        i_Msg->mMsgDataProc.field_0x294 = 0;
+        i_Msg->mMsgDataProc.selectFlag = 0;
         i_Msg->m1100 = 0;
         JKRFileLoader::removeResource(i_Msg->head_p, NULL);
         if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
@@ -2359,7 +2359,7 @@ s32 dMsg_continueProc(sub_msg_class* i_Msg) {
         dMsg_value_init(i_Msg);
         i_Msg->mMsgDataProc.dataInit();
         i_Msg->mMsgDataProc.field_0x25C = i_Msg->m1164;
-        i_Msg->mMsgDataProc.field_0x3C = (char*)i_Msg->mpMesgStr;
+        i_Msg->mMsgDataProc.bmgData = (char*)i_Msg->mpMesgStr;
         pcVar13 = i_Msg->output_rubSdw;
         pcVar12 = i_Msg->output_textSdw;
         pcVar10 = i_Msg->output_rub;
@@ -2381,24 +2381,24 @@ s32 dMsg_continueProc(sub_msg_class* i_Msg) {
         i_Msg->mMsgDataProc.field_0x50[3] = pcVar10;
         i_Msg->mMsgDataProc.font[0] = textFont;
         i_Msg->mMsgDataProc.font[1] = rubyFont;
-        i_Msg->mMsgDataProc.field_0x11C = iVar1;
-        i_Msg->mMsgDataProc.field_0x124 = iVar2;
-        i_Msg->mMsgDataProc.field_0x0C = &i_Msg->mMesgEntry;
-        i_Msg->mMsgDataProc.field_0x144 = i_Msg->m110C;
-        i_Msg->mMsgDataProc.field_0x14C = i_Msg->m1110;
+        i_Msg->mMsgDataProc.charSpace = iVar1;
+        i_Msg->mMsgDataProc.rubyCharSpace = iVar2;
+        i_Msg->mMsgDataProc.mesgEntry = &i_Msg->mMesgEntry;
+        i_Msg->mMsgDataProc.fontSize = i_Msg->m110C;
+        i_Msg->mMsgDataProc.rubyFontSize = i_Msg->m1110;
         if ((i_Msg->mMesgEntry.mTextboxType == 9) && (i_Msg->m0624[8].mUserArea == 0)) {
-            i_Msg->mMsgDataProc.field_0x128 = 0x1a3;
-            i_Msg->mMsgDataProc.field_0x12C = 0x192;
+            i_Msg->mMsgDataProc.lineWidth = 0x1a3;
+            i_Msg->mMsgDataProc.centerLineWidth = 0x192;
         } else {
-            i_Msg->mMsgDataProc.field_0x128 = 0x1f7;
-            i_Msg->mMsgDataProc.field_0x12C = 0x1e6;
+            i_Msg->mMsgDataProc.lineWidth = 0x1f7;
+            i_Msg->mMsgDataProc.centerLineWidth = 0x1e6;
         }
-        i_Msg->mMsgDataProc.field_0x160 = g_msgHIO.field_0x82;
-        i_Msg->mMsgDataProc.field_0x15C = 2;
+        i_Msg->mMsgDataProc.sendSpeed = g_msgHIO.field_0x82;
+        i_Msg->mMsgDataProc.spaceTimer = 2;
         if (g_msgHIO.field_0x83 != 0) {
-            i_Msg->mMsgDataProc.field_0x29C = 1;
+            i_Msg->mMsgDataProc.spaceFlag = 1;
         } else {
-            i_Msg->mMsgDataProc.field_0x29C = 0;
+            i_Msg->mMsgDataProc.spaceFlag = 0;
         }
         dMsg_yose_select(i_Msg);
         if (i_Msg->mMesgEntry.mInitialSound != 0) {
@@ -2468,7 +2468,7 @@ s32 dMsg_continueProc(sub_msg_class* i_Msg) {
             {
                 i_Msg->mMsgDataProc.field_0x299 = 1;
             }
-            if (((i_Msg->mMsgDataProc.field_0x297 == 0) && (i_Msg->mMsgDataProc.field_0x298 == 0)) && ((s32)i_Msg->mMsgDataProc.field_0x158 != 0)) {
+            if (((i_Msg->mMsgDataProc.autoSendFlag == 0) && (i_Msg->mMsgDataProc.handSendFlag == 0)) && ((s32)i_Msg->mMsgDataProc.field_0x158 != 0)) {
                 i_Msg->mMsgDataProc.field_0x158 = 0;
 #if VERSION > VERSION_DEMO
                 i_Msg->mMsgDataProc.field_0x296 = 0;
@@ -2490,11 +2490,11 @@ s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
     u8 bVar1;
     u32 uVar3;
 
-    if (i_Msg->mMsgDataProc.field_0x297 != 0) {
+    if (i_Msg->mMsgDataProc.autoSendFlag != 0) {
         uVar3 = (int)i_Msg->mMsgDataProc.field_0x158 > 0 ? i_Msg->mMsgDataProc.field_0x158 - 1 : 0;
         i_Msg->mMsgDataProc.field_0x158 = uVar3;
         if ((uVar3 == 0) || (fopMsgM_checkMessageSend())) {
-            i_Msg->mMsgDataProc.field_0x297 = 0;
+            i_Msg->mMsgDataProc.autoSendFlag = 0;
 #if VERSION > VERSION_DEMO
             i_Msg->mMsgDataProc.field_0x296 = 0;
 #endif
@@ -2505,12 +2505,12 @@ s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
             dComIfGp_setMesgSendButton(i_Msg->m116A);
         }
     } else {
-        if (i_Msg->mMsgDataProc.field_0x298 != 0) {
+        if (i_Msg->mMsgDataProc.handSendFlag != 0) {
             uVar3 = (int)i_Msg->mMsgDataProc.field_0x158 > 0 ? i_Msg->mMsgDataProc.field_0x158 - 1 : 0;
             i_Msg->mMsgDataProc.field_0x158 = uVar3;
             if (uVar3 != 0) {
                 if ((((CPad_CHECK_TRIG_A(0)) || (CPad_CHECK_TRIG_B(0))) || (fopMsgM_checkMessageSend())) && (!dComIfGp_checkMesgBgm())) {
-                    i_Msg->mMsgDataProc.field_0x298 = 0;
+                    i_Msg->mMsgDataProc.handSendFlag = 0;
                     i_Msg->mStatus = fopMsgStts_BOX_CLOSING_e;
                     bVar1 = i_Msg->mMesgEntry.mTextboxType;
                     if ((bVar1 != 5) && (bVar1 != 0xe)) {
@@ -2528,7 +2528,7 @@ s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
                     dMeter_Info.field_0x0 = 4;
                 }
             } else {
-                i_Msg->mMsgDataProc.field_0x298 = 0;
+                i_Msg->mMsgDataProc.handSendFlag = 0;
                 i_Msg->mStatus = fopMsgStts_BOX_CLOSING_e;
                 bVar1 = i_Msg->mMesgEntry.mTextboxType;
                 if ((bVar1 != 5) && (bVar1 != 0xe)) {
@@ -2546,11 +2546,11 @@ s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
 
 /* 80213830-80213960       .text dMsg_finishProc__FP13sub_msg_class */
 s32 dMsg_finishProc(sub_msg_class* i_Msg) {
-    if ((((((CPad_CHECK_TRIG_A(0)) || (CPad_CHECK_TRIG_B(0))) || (i_Msg->mMsgDataProc.field_0x294 != 0)) || (fopMsgM_checkMessageSend())) ||
+    if ((((((CPad_CHECK_TRIG_A(0)) || (CPad_CHECK_TRIG_B(0))) || (i_Msg->mMsgDataProc.selectFlag != 0)) || (fopMsgM_checkMessageSend())) ||
          (i_Msg->mMsgNo == 0x5ac && (dComIfGp_checkMesgCancelButton()))) &&
         (!dComIfGp_checkMesgBgm()))
     {
-        i_Msg->mMsgDataProc.field_0x294 = 0;
+        i_Msg->mMsgDataProc.selectFlag = 0;
         i_Msg->mStatus = fopMsgStts_BOX_CLOSING_e;
         if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
             fopMsgM_setNowAlphaZero(&i_Msg->m050C);
@@ -2748,7 +2748,7 @@ s32 dMsg_initProc(sub_msg_class* i_Msg) {
 /* 802140CC-8021411C       .text dMsg_tactProc__FP13sub_msg_class */
 s32 dMsg_tactProc(sub_msg_class* i_Msg) {
     if (fopMsgM_checkMessageSend()) {
-        i_Msg->mMsgDataProc.field_0x297 = 1;
+        i_Msg->mMsgDataProc.autoSendFlag = 1;
         i_Msg->mMsgDataProc.field_0x158 = 30;
         i_Msg->mStatus = fopMsgStts_CLOSE_WAIT_e;
     }
@@ -2773,7 +2773,7 @@ s32 dMsg_outnowProc(sub_msg_class* i_Msg) {
     if (i_Msg->mMesgEntry.mDrawType == 0) {
         if (((CPad_CHECK_TRIG_A(0)) || (CPad_CHECK_TRIG_B(0))) && (!dComIfGp_checkMesgBgm())) {
             i_Msg->mMsgDataProc.field_0x299 = 1;
-            if ((i_Msg->mMsgDataProc.field_0x297 == 0 && (i_Msg->mMsgDataProc.field_0x298 == 0)) && ((s32)i_Msg->mMsgDataProc.field_0x158 != 0)) {
+            if ((i_Msg->mMsgDataProc.autoSendFlag == 0 && (i_Msg->mMsgDataProc.handSendFlag == 0)) && ((s32)i_Msg->mMsgDataProc.field_0x158 != 0)) {
                 i_Msg->mMsgDataProc.field_0x158 = 0;
 #if VERSION > VERSION_DEMO
                 i_Msg->mMsgDataProc.field_0x296 = 0;
@@ -2788,12 +2788,12 @@ s32 dMsg_outnowProc(sub_msg_class* i_Msg) {
     ) {
         i_Msg->mMsgDataProc.field_0x299 = 1;
     }
-    if (((i_Msg->mMsgDataProc.field_0x297 == 0) && (i_Msg->mMsgDataProc.field_0x298 == 0)) && ((int)i_Msg->mMsgDataProc.field_0x158 != 0)) {
+    if (((i_Msg->mMsgDataProc.autoSendFlag == 0) && (i_Msg->mMsgDataProc.handSendFlag == 0)) && ((int)i_Msg->mMsgDataProc.field_0x158 != 0)) {
         i_Msg->mMsgDataProc.field_0x158 = (int)i_Msg->mMsgDataProc.field_0x158 > 0 ? i_Msg->mMsgDataProc.field_0x158 - 1 : 0;
     } else {
         i_Msg->mMsgDataProc.stringSet();
         i_Msg->m1164 = i_Msg->mMsgDataProc.field_0x25C;
-        i_Msg->mStatus = (u16)i_Msg->mMsgDataProc.field_0x27C;
+        i_Msg->mStatus = (u16)i_Msg->mMsgDataProc.mesgStatus;
         for (s32 i = 0; i < 8; i++) {
             cVar4 = i_Msg->mMsgDataProc.field_0x281[i];
             iVar3 = i_Msg->mMsgDataProc.field_0x220[i];
@@ -2808,7 +2808,7 @@ s32 dMsg_outnowProc(sub_msg_class* i_Msg) {
         uVar2 = i_Msg->mStatus;
         if (uVar2 == 7) {
             i_Msg->m1100 = 0;
-        } else if ((uVar2 == 10) && (i_Msg->mMsgDataProc.field_0x297 == 0)) {
+        } else if ((uVar2 == 10) && (i_Msg->mMsgDataProc.autoSendFlag == 0)) {
             i_Msg->m1100 = 0;
         }
     }
