@@ -69,12 +69,17 @@ public:
     /* Place member variables here */
 };
 
-class daObj_hsh_HIO_c {
-public:
-    daObj_hsh_HIO_c();
+class daObj_hsh_HIO_c { 
+public: 
+    daObj_hsh_HIO_c(); 
+    virtual ~daObj_hsh_HIO_c();
 
-public:
-    /* Place member variables here */
+    /* 0x04 */ s8 mField_0x04; 
+    /* 0x08 */ f32 mField_0x08; 
+    /* 0x0C */ f32 mField_0x0C; 
+    /* 0x10 */ f32 mField_0x10; 
+    /* 0x14 */ s16 mField_0x14; 
+    /* 0x16 */ u8 mField_0x16;
 };
 
 #endif /* D_A_OBJ_HSEHI1_H */
