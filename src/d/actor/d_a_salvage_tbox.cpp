@@ -243,7 +243,6 @@ void daSTBox_c::CreateInit() {
             NULL, NULL, NULL);
         field_0x29C[i] = emitter;
     }
-    u8 field_0x331= field_0x331;
     if (field_0x331 == 1 || field_0x331 == 2) {
         JPABaseEmitter* emitter = dComIfGp_particle_set(0x38, &current.pos, 
             &current.angle, NULL, 0xff, NULL, -1, 
@@ -251,19 +250,15 @@ void daSTBox_c::CreateInit() {
         field_0x2A4 = emitter;
 
         for (int i = 0; i < 3; i++) {
-            JPABaseEmitter *emitter = field_0x29C[i];
-            if (emitter != NULL) {
-                emitter->becomeImmortalEmitter();
-                emitter = field_0x29C[i];
+            if (field_0x29C[i] != NULL) {
+                field_0x29C[i]->becomeImmortalEmitter();
                 
                 JGeometry::TVec3<f32> globalScale(1.5f, 1.5f, 1.0f);
-                emitter->setGlobalParticleScale(globalScale);
-                emitter = field_0x29C[i];
+                field_0x29C[i]->setGlobalParticleScale(globalScale);
                 JGeometry::TVec3<f32> emitterScale(3.0f, 1.0f, 3.0f);
-                emitter->setEmitterScale(emitterScale); 
-                emitter = field_0x29C[i];
+                field_0x29C[i]->setEmitterScale(emitterScale); 
                 JGeometry::TVec3<f32> translation(0.0f, 20.0f, 0.0f);
-                emitter->setEmitterTranslation(translation);
+                field_0x29C[i]->setEmitterTranslation(translation);
             }
         }
 
@@ -278,19 +273,15 @@ void daSTBox_c::CreateInit() {
         }
     } else if (field_0x331 == 0) {
         for (int i = 0; i < 2; i++) {
-            JPABaseEmitter *emitter = field_0x29C[i];
-            if (emitter != NULL) {
-                emitter->becomeImmortalEmitter();
-                emitter = field_0x29C[i];
+            if (field_0x29C[i] != NULL) {
+                field_0x29C[i]->becomeImmortalEmitter();
                 
                 JGeometry::TVec3<f32> globalScale(1.5f, 1.5f, 1.0f);
-                emitter->setGlobalParticleScale(globalScale);
-                emitter = field_0x29C[i];
+                field_0x29C[i]->setGlobalParticleScale(globalScale);
                 JGeometry::TVec3<f32> emitterScale(3.5f, 1.0f, 3.5f);
-                emitter->setEmitterScale(emitterScale); 
-                emitter = field_0x29C[i];
+                field_0x29C[i]->setEmitterScale(emitterScale); 
                 JGeometry::TVec3<f32> translation(0.0f, -20.0f, 0.0f);
-                emitter->setEmitterTranslation(translation);
+                field_0x29C[i]->setEmitterTranslation(translation);
             }
         }
     }
