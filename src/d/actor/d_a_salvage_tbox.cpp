@@ -31,17 +31,17 @@ void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>* shipPos) {
     if (daSea_ChkArea(shipPos->x, shipPos->z)) {
         f32 wave = daSea_calcWave(shipPos->x, shipPos->z);
         shipPos->y = wave + 2.0f;
-        f32 waterY = this->mpWaterY;
+        f32 waterY = mpWaterY;
         if (waterY > shipPos->y) {
             shipPos->y = waterY + 2.0f;
         }
     }
     else {
-        if (this->mpWaterY != -G_CM3D_F_INF ) {
-            shipPos->y = this->mpWaterY + 2.0f;
+        if (mpWaterY != -G_CM3D_F_INF ) {
+            shipPos->y = mpWaterY + 2.0f;
         }
         else {
-            shipPos->y = this->mpWaterFlatY;
+            shipPos->y = mpWaterFlatY;
         }
     }
 }
@@ -56,22 +56,22 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
     f32 waterY;
     dKy_get_seacolor(&diff, &amb);
     emitter->setGlobalPrmColor(diff.r, diff.g, diff.b);
-    if (this->field_0x4 != 0) {
+    if (field_0x4 != 0) {
         emitter->setMaxFrame(-1);
         emitter->stopCreateParticle();
-        this->mpEmitter = NULL;
+        mpEmitter = NULL;
     }
-    if (emitter->mMaxFrame == 0 && this->field_0x4 == 0) {
-        f32 scaleY = this->mExScaleY;
-        f32 scaleZ = this->mExScaleZ;
-        emitter->setGlobalTranslation(this->mExScaleX, scaleY, scaleZ);
-        if (this->field_0x50 >= 0.0f) {
-            yAngle = this->mpAngle->y;
+    if (emitter->mMaxFrame == 0 && field_0x4 == 0) {
+        f32 scaleY = mExScaleY;
+        f32 scaleZ = mExScaleZ;
+        emitter->setGlobalTranslation(mExScaleX, scaleY, scaleZ);
+        if (field_0x50 >= 0.0f) {
+            yAngle = mpAngle->y;
         } else {
-            yAngle = (s16)(this->mpAngle->y + 0x8000);
+            yAngle = (s16)(mpAngle->y + 0x8000);
         }
         JPAGetXYZRotateMtx(0, (int)yAngle, 0, emitter->mGlobalRotation);
-        waterY = this->mpWaterY;
+        waterY = mpWaterY;
         if (waterY < 0.0f || waterY > 2000.0f) {
             alpha = 0;
         } else {
@@ -79,7 +79,7 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
         }
         emitter->setGlobalAlpha(alpha);
     } else {
-        emitter->mGlobalTranslation.y = this->mpWaterFlatY;
+        emitter->mGlobalTranslation.y = mpWaterFlatY;
         s16 alpha[2];
         alpha[0] = emitter->getGlobalAlpha();
         cLib_chaseS(alpha, 0, 5);
@@ -117,8 +117,8 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
         GXSetCullMode(GX_CULL_NONE);
         Mtx mtx;
         PSMTXIdentity(mtx);
-        mtx[1][1] = this->mpDepth;
-        mtx[1][3] = this->field_0x48 * emitter->getFrame();
+        mtx[1][1] = mpDepth;
+        mtx[1][3] = field_0x48 * emitter->getFrame();
         GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
         GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
         JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
@@ -136,11 +136,11 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
                     getMaxWaterY(&ptclPos);
                     GXPosition3f32(ptclPos.x, ptclPos.y, ptclPos.z);
                     GXTexCoord2f32(fVar2, fVar1);
-                    GXPosition3f32(this->mPos[j].x, this->mPos[j].y, this->mPos[j].z);
+                    GXPosition3f32(mPos[j].x, mPos[j].y, mPos[j].z);
                     GXTexCoord2f32(fVar2, fVar1 - fVar3);
-                    this->mPos[j].x = ptclPos.x;
-                    this->mPos[j].y = ptclPos.y;
-                    this->mPos[j].z = ptclPos.z;
+                    mPos[j].x = ptclPos.x;
+                    mPos[j].y = ptclPos.y;
+                    mPos[j].z = ptclPos.z;
                     fVar2 += 0.5f;
                     link = link->getNext();
                 }
@@ -148,7 +148,7 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
             } else {
                 for (int j = 0; j < 3; j++) {
                     JPABaseParticle* pos = (JPABaseParticle*)link->getObjectPtr();
-                    pos->getGlobalPosition(this->mPos[j]);
+                    pos->getGlobalPosition(mPos[j]);
                     link = link->getNext();
                 }
             }
@@ -175,28 +175,28 @@ f32 getWaterY(cXyz shipPos) {
 bool daSTBox_c::_delete() {
     /* Nonmatching */
     for (int i = 0; i < 3; i++) {
-        JPABaseEmitter* emitter = this->field_0x29C[i];
+        JPABaseEmitter* emitter = field_0x29C[i];
         if (emitter != NULL) {
             emitter->quitImmortalEmitter();
-            emitter = this->field_0x29C[i];
+            emitter = field_0x29C[i];
             emitter->setMaxFrame(-1);
             emitter->stopCreateParticle();
-            this->field_0x29C[i] = NULL;
+            field_0x29C[i] = NULL;
         }
     }
-    this->mRippleCallBack.end();
-    JPABaseEmitter* callbackEmitter = this->field_0x2C0.getEmitter();
+    mRippleCallBack.end();
+    JPABaseEmitter* callbackEmitter = field_0x2C0.getEmitter();
     if (callbackEmitter != NULL) {
         callbackEmitter->mpEmitterCallBack = NULL;
-        callbackEmitter = this->field_0x2C0.getEmitter();
+        callbackEmitter = field_0x2C0.getEmitter();
         callbackEmitter->setMaxFrame(-1);
         callbackEmitter->stopCreateParticle();
     }
-    this->field_0x2C0.setEmitter(NULL);
-    dComIfG_resDelete(&this->field_0x290, this->m_arc_name);
+    field_0x2C0.setEmitter(NULL);
+    dComIfG_resDelete(&field_0x290, m_arc_name);
     u8 eventReg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_ADFF);
     eventReg += 1;
-    if (this->field_0x331 == 2){
+    if (field_0x331 == 2){
         dComIfGs_setEventReg(dSv_event_flag_c::UNK_ADFF,eventReg);
     }
     return TRUE;
@@ -210,7 +210,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 00000708-000007D4       .text CreateHeap__9daSTBox_cFv */
 BOOL daSTBox_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, m_bdlidx[this->field_0x331]);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, m_bdlidx[field_0x331]);
     JUT_ASSERT(0x1cd, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel == NULL) {
@@ -230,85 +230,85 @@ void daSTBox_c::CreateInit() {
         waterY = getWaterY(craneTop);
         craneTop.y = waterY;
     }
-    this->field_0x324.x = craneTop.x;
-    this->field_0x324.y = craneTop.y;
-    this->field_0x324.z = craneTop.z;
-    this->cullMtx = this->mpModel->getBaseTRMtx();
+    field_0x324.x = craneTop.x;
+    field_0x324.y = craneTop.y;
+    field_0x324.z = craneTop.z;
+    cullMtx = mpModel->getBaseTRMtx();
     fopAcM_setCullSizeBox(this, -150.0f, -0.0f, -150.0f, 150.0f, 150.0f, 150.0f);
     set_mtx();
 
-    this->field_0x330 = this->base.base.mParameters;
-    this->field_0x334 = 0;
-    this->field_0x336 = 0;
+    field_0x330 = base.base.mParameters;
+    field_0x334 = 0;
+    field_0x336 = 0;
 
     for (int i = 0; i < 2; i++) {
-        JPABaseEmitter* emitter = dComIfGp_particle_set(0x38, &this->current.pos, 
-            &this->current.angle, NULL, 0xff, NULL, -1, 
+        JPABaseEmitter* emitter = dComIfGp_particle_set(0x38, &current.pos, 
+            &current.angle, NULL, 0xff, NULL, -1, 
             NULL, NULL, NULL);
-        this->field_0x29C[i] = emitter;
+        field_0x29C[i] = emitter;
     }
-    u8 field_0x331= this->field_0x331;
+    u8 field_0x331= field_0x331;
     if (field_0x331 == 1 || field_0x331 == 2) {
-        JPABaseEmitter* emitter = dComIfGp_particle_set(0x38, &this->current.pos, 
-            &this->current.angle, NULL, 0xff, NULL, -1, 
+        JPABaseEmitter* emitter = dComIfGp_particle_set(0x38, &current.pos, 
+            &current.angle, NULL, 0xff, NULL, -1, 
             NULL, NULL, NULL);
-        this->field_0x2A4 = emitter;
+        field_0x2A4 = emitter;
 
         for (int i = 0; i < 3; i++) {
-            JPABaseEmitter *emitter = this->field_0x29C[i];
+            JPABaseEmitter *emitter = field_0x29C[i];
             if (emitter != NULL) {
                 emitter->becomeImmortalEmitter();
-                emitter = this->field_0x29C[i];
+                emitter = field_0x29C[i];
                 
                 JGeometry::TVec3<f32> globalScale(1.5f, 1.5f, 1.0f);
                 emitter->setGlobalParticleScale(globalScale);
-                emitter = this->field_0x29C[i];
+                emitter = field_0x29C[i];
                 JGeometry::TVec3<f32> emitterScale(3.0f, 1.0f, 3.0f);
                 emitter->setEmitterScale(emitterScale); 
-                emitter = this->field_0x29C[i];
+                emitter = field_0x29C[i];
                 JGeometry::TVec3<f32> translation(0.0f, 20.0f, 0.0f);
                 emitter->setEmitterTranslation(translation);
             }
         }
 
-        if (this->field_0x2C0.getEmitter() == NULL) {
-            JPABaseEmitter* emitter = dComIfGp_particle_set(0x53, &this->field_0x324, 
-                &this->current.angle, NULL, 0, &this->field_0x2C0, -1, 
+        if (field_0x2C0.getEmitter() == NULL) {
+            JPABaseEmitter* emitter = dComIfGp_particle_set(0x53, &field_0x324, 
+                &current.angle, NULL, 0, &field_0x2C0, -1, 
                 NULL, NULL, NULL);
-            this->field_0x2C0.setMPos(this->field_0x324);
-            this->field_0x2C0.setField0x48(-0.1f);
-            this->field_0x2C0.setDepth(4.0f);
+            field_0x2C0.setMPos(field_0x324);
+            field_0x2C0.setField0x48(-0.1f);
+            field_0x2C0.setDepth(4.0f);
             
         }
     } else if (field_0x331 == 0) {
         for (int i = 0; i < 2; i++) {
-            JPABaseEmitter *emitter = this->field_0x29C[i];
+            JPABaseEmitter *emitter = field_0x29C[i];
             if (emitter != NULL) {
                 emitter->becomeImmortalEmitter();
-                emitter = this->field_0x29C[i];
+                emitter = field_0x29C[i];
                 
                 JGeometry::TVec3<f32> globalScale(1.5f, 1.5f, 1.0f);
                 emitter->setGlobalParticleScale(globalScale);
-                emitter = this->field_0x29C[i];
+                emitter = field_0x29C[i];
                 JGeometry::TVec3<f32> emitterScale(3.5f, 1.0f, 3.5f);
                 emitter->setEmitterScale(emitterScale); 
-                emitter = this->field_0x29C[i];
+                emitter = field_0x29C[i];
                 JGeometry::TVec3<f32> translation(0.0f, -20.0f, 0.0f);
                 emitter->setEmitterTranslation(translation);
             }
         }
     }
-    this->field_0x338 = -1;
+    field_0x338 = -1;
 }
 
 /* 00000ADC-00000BFC       .text _create__9daSTBox_cFv */
 cPhs_State daSTBox_c::_create() {
     /* Nonmatching */
     fopAcM_ct(this, daSTBox_c);
-    this->field_0x331 = this->base.base.mParameters >> 8 & 0xf;
+    field_0x331 = base.base.mParameters >> 8 & 0xf;
     cPhs_State phs_state = dComIfG_resLoad(&field_0x290, m_arc_name);
     if (phs_state == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, this->m_heapsize[this->field_0x331])) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[field_0x331])) {
             return cPhs_ERROR_e;
         } else {
             CreateInit();
@@ -357,7 +357,7 @@ bool daSTBox_c::_execute() {
         waterY = getWaterY(m1020Pos);
     }
     if ((dComIfGp_event_runCheck()) 
-        && !this->eventInfo.checkCommandTalk()
+        && !eventInfo.checkCommandTalk()
         && staffIdx != -1) {
         s32 actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, 5, 0, 0);
         if(actIdx == -1){
@@ -373,29 +373,29 @@ bool daSTBox_c::_execute() {
     }
 
     for (int i = 0; i < 3; i++) {
-        JPABaseEmitter* emitter = this->field_0x29C[i];
+        JPABaseEmitter* emitter = field_0x29C[i];
         if (emitter != NULL) {
-            emitter->setGlobalTranslation(this->current.pos);
+            emitter->setGlobalTranslation(current.pos);
         }
     }
 
-    if (this->current.pos.y < waterY) {
-        this->field_0x2C0.setWaterFlatY(waterY + 2.0f);
-        this->field_0x2C0.field_0x0C = waterY + 2.0f; 
-        this->field_0x2C0.setWaterY(waterY - this->current.pos.y);
-        this->field_0x2C0.mExScaleX = m1020Pos.x;
-        this->field_0x2C0.mExScaleY = m1020Pos.y;
-        this->field_0x2C0.mExScaleZ = m1020Pos.z;
+    if (current.pos.y < waterY) {
+        field_0x2C0.setWaterFlatY(waterY + 2.0f);
+        field_0x2C0.field_0x0C = waterY + 2.0f; 
+        field_0x2C0.setWaterY(waterY - current.pos.y);
+        field_0x2C0.mExScaleX = m1020Pos.x;
+        field_0x2C0.mExScaleY = m1020Pos.y;
+        field_0x2C0.mExScaleZ = m1020Pos.z;
         
     } else {
-        JPABaseEmitter* emitter = this->field_0x2C0.getEmitter();
+        JPABaseEmitter* emitter = field_0x2C0.getEmitter();
         if (emitter != NULL) {
             emitter->setEmitterCallBackPtr(NULL);
-            emitter = this->field_0x2C0.getEmitter();
+            emitter = field_0x2C0.getEmitter();
             emitter->setMaxFrame(-1);
             emitter->stopCreateParticle();
         }
-        this->field_0x2C0.setEmitter(NULL);
+        field_0x2C0.setEmitter(NULL);
     }
     set_mtx();
     return TRUE;
@@ -408,12 +408,12 @@ void daSTBox_c::initWait(int) {
 
 /* 00000EBC-00000EC8       .text initWait02__9daSTBox_cFi */
 void daSTBox_c::initWait02(int) {
-    this->field_0x332 = 20;
+    field_0x332 = 20;
 }
 
 /* 00000EC8-00000F50       .text initWaitGetItem__9daSTBox_cFi */
 void daSTBox_c::initWaitGetItem(int) {
-    fopDwTg_DrawQTo(&this->draw_tag);
+    fopDwTg_DrawQTo(&draw_tag);
     for(int i = 0; i < 3; i++) {
         if (field_0x29C[i] != NULL) {
             field_0x29C[i]->quitImmortalEmitter();
@@ -421,7 +421,7 @@ void daSTBox_c::initWaitGetItem(int) {
             field_0x29C[i] = NULL;
         }
     }
-    this->mRippleCallBack.remove();
+    mRippleCallBack.remove();
 }
 
 /* 00000F50-00000F54       .text initWaitDummy__9daSTBox_cFi */
@@ -432,7 +432,7 @@ void daSTBox_c::initWaitDummy(int) {
 /* 00000F54-00000F64       .text initDrop__9daSTBox_cFi */
 void daSTBox_c::initDrop(int) {
     /* Nonmatching */
-    this->gravity = -4.0f;
+    gravity = -4.0f;
 }
 
 /* 00000F64-00001218       .text actWait__9daSTBox_cFi */
@@ -445,35 +445,35 @@ BOOL daSTBox_c::actWait(int) {
     cXyz craneTopPos = *craneTop;
     craneTopPos.y += 5000.0f;
     f32 waterY = getWaterY(craneTopPos); 
-    this->current.angle.y = ship->shape_angle.y;
+    current.angle.y = ship->shape_angle.y;
     cXyz craneTopPos2 = *craneTop;
-    craneTopPos2.y -= crane_offset[this->field_0x331];
-    this->current.pos = craneTopPos2;
-    this->attention_info.position = this->current.pos;
-    if ((this->field_0x331 == 1 || this->field_0x331 == 2) 
-        && this->current.pos.y > waterY && (this->field_0x336 == 0)) {
+    craneTopPos2.y -= crane_offset[field_0x331];
+    current.pos = craneTopPos2;
+    attention_info.position = current.pos;
+    if ((field_0x331 == 1 || field_0x331 == 2) 
+        && current.pos.y > waterY && (field_0x336 == 0)) {
         mDoAud_subBgmStart(JA_BGM_BGN_GET_BOX);
-        this->field_0x336 = 1;
+        field_0x336 = 1;
     }
-    if (this->field_0x335 == 0) {
-        this->position = this->current.pos;
-        this->position.y += 2500.0f;
-        this->position.y = dBgS_GetWaterHeight(this->position);
-        if (this->current.pos.y >this->position.y - 10.0f) {
-            dComIfGp_particle_set(0x35c, &this->position, 
-                NULL, &this->scale, 0xff, 
-                &this->mRippleCallBack, -1, 
+    if (field_0x335 == 0) {
+        position = current.pos;
+        position.y += 2500.0f;
+        position.y = dBgS_GetWaterHeight(position);
+        if (current.pos.y >position.y - 10.0f) {
+            dComIfGp_particle_set(0x35c, &position, 
+                NULL, &scale, 0xff, 
+                &mRippleCallBack, -1, 
                 NULL, NULL, NULL);
-            this->mRippleCallBack.setRate(12.0f);
-            this->field_0x335 = 1;
+            mRippleCallBack.setRate(12.0f);
+            field_0x335 = 1;
         }
     }
-    if ((this->field_0x331 == 1 || this->field_0x331 == 2) && ((this->field_0x338) == 0xffffffff)) {
-        this->field_0x338 = fopAcM_createItemForTrBoxDemo(&this->current.pos,
-            this->field_0x330, 0xffffffff, 
+    if ((field_0x331 == 1 || field_0x331 == 2) && ((field_0x338) == 0xffffffff)) {
+        field_0x338 = fopAcM_createItemForTrBoxDemo(&current.pos,
+            field_0x330, 0xffffffff, 
             dStage_roomControl_c::mStayNo, 0, 0);
-        if (this->field_0x338 != 0xffffffff) {
-            g_dComIfG_gameInfo.play.mEvtCtrl.mPtItem = this->field_0x338;
+        if (field_0x338 != 0xffffffff) {
+            g_dComIfG_gameInfo.play.mEvtCtrl.mPtItem = field_0x338;
         }
     }
     return FALSE;
@@ -483,17 +483,17 @@ BOOL daSTBox_c::actWait(int) {
 BOOL daSTBox_c::actDrop(int) {
     /* Nonmatching */
     fopAcM_posMoveF(this, NULL);
-    if (this->current.pos.y > getWaterY(this->current.pos) - 50.0f) {
+    if (current.pos.y > getWaterY(current.pos) - 50.0f) {
         return TRUE;
     }
-    if(this->current.pos.y < getWaterY(this->current.pos)) {
-        if(this->field_0x334 == 0) {
-            s8 reverb = dComIfGp_getReverb(this->current.roomNo);
-            mDoAud_seStart(JA_SE_OBJ_FALL_WATER_M, &this->eyePos, 0, reverb);
-            fopKyM_createWpillar(&this->current.pos, 0.8, 1.0, 0);
-            this->field_0x334 = 1;
+    if(current.pos.y < getWaterY(current.pos)) {
+        if(field_0x334 == 0) {
+            s8 reverb = dComIfGp_getReverb(current.roomNo);
+            mDoAud_seStart(JA_SE_OBJ_FALL_WATER_M, &eyePos, 0, reverb);
+            fopKyM_createWpillar(&current.pos, 0.8, 1.0, 0);
+            field_0x334 = 1;
         }
-        this->mRippleCallBack.end();
+        mRippleCallBack.end();
     }
     return FALSE;
 }
@@ -503,9 +503,9 @@ BOOL daSTBox_c::actWait02(int) {
     cXyz* pos = dComIfGp_getShipActor()->getCraneTop();
     if (pos != NULL) {
         cXyz cranePos = *pos;
-        f32 offset = crane_offset[this->field_0x331];
+        f32 offset = crane_offset[field_0x331];
         cranePos.y -= offset;
-        this->current.pos = cranePos;
+        current.pos = cranePos;
     }
     return FALSE;
 }
