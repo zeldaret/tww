@@ -173,14 +173,10 @@ f32 getWaterY(cXyz shipPos) {
 
 /* 000005D8-000006E8       .text _delete__9daSTBox_cFv */
 bool daSTBox_c::_delete() {
-    /* Nonmatching */
     for (int i = 0; i < 3; i++) {
-        JPABaseEmitter* emitter = field_0x29C[i];
-        if (emitter != NULL) {
-            emitter->quitImmortalEmitter();
-            emitter = field_0x29C[i];
-            emitter->setMaxFrame(-1);
-            emitter->stopCreateParticle();
+        if (field_0x29C[i] != NULL) {
+            field_0x29C[i]->quitImmortalEmitter();
+            field_0x29C[i]->becomeInvalidEmitter();
             field_0x29C[i] = NULL;
         }
     }
