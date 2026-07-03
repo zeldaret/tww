@@ -29,11 +29,12 @@ static s16 dMinigame_Starter_tex_number = 3;
 /* 80205FE8-80206124       .text _create__19dMinigame_Starter_cFv */
 // NONMATCHING - missing b
 cPhs_State dMinigame_Starter_c::_create() {
-    if (dComIfG_resLoad(&mPhase, "Mgst") == cPhs_COMPLEATE_e) {
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Mgst");
+    if (phase_state == cPhs_COMPLEATE_e) {
         dRes_info_c* resInfo = dComIfG_getObjectResInfo("Mgst");
         JUT_ASSERT(VERSION_SELECT(80, 80, 86, 86), resInfo != NULL);
 
-        mHeap = mDoExt_createSolidHeapFromGameToCurrent(VERSION_SELECT(0x13E0, 0x13E0, 0x14C0, 0x1AC0), 0x20);
+        mHeap = mDoExt_createSolidHeapFromGameToCurrent(VERSION_SELECT(0x1300, 0x13E0, 0x14C0, 0x1AC0), 0x20);
         if (mHeap != NULL) {
             mStarterScrn = new dDlst_StarterScrnDraw_c();
 
@@ -53,9 +54,11 @@ cPhs_State dMinigame_Starter_c::_create() {
         mStatus = 0;
         mTimer = 0;
         field_0x10e = 3;
+
+        return cPhs_COMPLEATE_e;
     }
 
-    return cPhs_COMPLEATE_e;
+    return phase_state;
 }
 
 /* 80206124-8020629C       .text _execute__19dMinigame_Starter_cFv */
@@ -107,7 +110,7 @@ BOOL dMinigame_Starter_c::_delete() {
         mDoExt_destroySolidHeap(mHeap);
     }
 
-    dComIfG_resDelete(&mPhase, "Mgst");
+    dComIfG_resDeleteDemo(&mPhase, "Mgst");
     return TRUE;
 }
 
@@ -203,14 +206,18 @@ BOOL dDlst_StarterScrnDraw_c::anime1(int i_no) {
 
     s16 temp_r0 = field_0x1c8[i_no].mUserArea;
     if (temp_r0 <= var_r30) {
-        fopMsgM_paneScaleXY(&field_0x270[i_no], ((f32)field_0x1c8[i_no].mUserArea * (f32)field_0x1c8[i_no].mUserArea) / ((f32)var_r31 * (f32)var_r31) * 0.3f + 0.7f);
+        f32 temp = ((f32)field_0x1c8[i_no].mUserArea * (f32)field_0x1c8[i_no].mUserArea);
+        temp /= ((f32)var_r31 * (f32)var_r31);
+        fopMsgM_paneScaleXY(&field_0x270[i_no], temp * 0.3f + 0.7f);
         fopMsgM_setNowAlpha(&field_0x270[i_no], ((f32)field_0x1c8[i_no].mUserArea * (f32)field_0x1c8[i_no].mUserArea) / ((f32)var_r30 * (f32)var_r30));
     } else if (temp_r0 <= var_r31) {
         f32 var_f31 = ((f32)(temp_r0 - var_r30) * (f32)(temp_r0 - var_r30)) / ((f32)(var_r31 - var_r30) * (f32)(var_r31 - var_r30));
         fopMsgM_paneScaleXY(&field_0x1c8[i_no], var_f31 * 0.3f + 0.7f);
         fopMsgM_setNowAlpha(&field_0x1c8[i_no], var_f31);
 
-        fopMsgM_paneScaleXY(&field_0x270[i_no], ((f32)field_0x1c8[i_no].mUserArea * (f32)field_0x1c8[i_no].mUserArea) / ((f32)var_r31 * (f32)var_r31) * 0.3f + 0.7f);
+        f32 temp = ((f32)field_0x1c8[i_no].mUserArea * (f32)field_0x1c8[i_no].mUserArea);
+        temp /= ((f32)var_r31 * (f32)var_r31);
+        fopMsgM_paneScaleXY(&field_0x270[i_no], temp * 0.3f + 0.7f);
         fopMsgM_setNowAlpha(&field_0x270[i_no], 1.0f - var_f31);
 
         if (field_0x1c8[i_no].mUserArea == var_r31) {
@@ -223,7 +230,8 @@ BOOL dDlst_StarterScrnDraw_c::anime1(int i_no) {
             setRotate(&field_0x1c8[i_no], temp_f1);
         } else if (temp_r0 < temp_r7) {
             f32 var_f31 = temp_r0 - var_r27;
-            fopMsgM_paneScaleXY(&field_0x1c8[i_no], ((((f32)temp_r0 - var_r27) * ((f32)temp_r0 - var_r27)) / var_f31) * 2.0f + 1.0f);
+            f32 temp = ((((f32)temp_r0 - var_r27) * ((f32)temp_r0 - var_r27)) / var_f31);
+            fopMsgM_paneScaleXY(&field_0x1c8[i_no], temp * 2.0f + 1.0f);
 
             f32 temp_f1_2 = ((f32)(field_0x1c8[i_no].mUserArea - var_r27) * (f32)(field_0x1c8[i_no].mUserArea - var_r27)) / var_f31;
             fopMsgM_setNowAlpha(&field_0x1c8[i_no], 1.0f - temp_f1_2);
@@ -252,27 +260,32 @@ BOOL dDlst_StarterScrnDraw_c::anime2() {
 
     s16 temp_r0 = field_0x008[0].mUserArea;
     if (temp_r0 <= var_r30) {
-        f32 var_f31 = ((f32)field_0x008[0].mUserArea * (f32)field_0x008[0].mUserArea) / ((f32)var_r30 * (f32)var_r30);
-        scaleAnime((3.0f - var_f31 * 2.2f) * g_menuHIO.field_0x14);
-        setRotate(&field_0x190, 90.0f - var_f31 * 65.0f);
+        f32 var_f31 = ((f32)temp_r0 * (f32)temp_r0) / ((f32)var_r30 * (f32)var_r30);
+        f32 temp2 = 3.0f - var_f31 * 2.2f;
+        f32 temp = 90.0f - var_f31 * 65.0f;
+        scaleAnime(temp2 * g_menuHIO.field_0x14);
+        setRotate(&field_0x190, temp);
         fopMsgM_setNowAlpha(&field_0x008[0], var_f31);
     } else if (temp_r0 <= var_r31) {
-        f32 var_f31 = ((f32)(temp_r0 - var_r30) * (f32)(temp_r0 - var_r30)) / ((f32)(var_r31 - var_r30) * (f32)(var_r31 - var_r30));
+        f32 var_f31 = ((f32)(temp_r0 - var_r30) * (f32)(temp_r0 - var_r30));
+        var_f31 /= ((f32)(var_r31 - var_r30) * (f32)(var_r31 - var_r30));
         scaleAnime((0.8f - var_f31 * -0.2f) * g_menuHIO.field_0x14);
 
         if (field_0x008[0].mUserArea == var_r31) {
             mDoAud_seStart(JA_SE_SGAME_COUNT_GO, NULL);
         }
-    } else if (temp_r6 > temp_r0) {
+    } else if (temp_r0 > temp_r6) {
         if (temp_r0 <= var_r27) {
             f32 var_f31 = ((f32)(temp_r0 - temp_r6) * (f32)(temp_r0 - temp_r6)) / ((f32)(var_r27 - temp_r6) * (f32)(var_r27 - temp_r6));
-            setRotate(&field_0x190, 25.0f - var_f31 * -35.0f);
+            f32 temp = 25.0f - var_f31 * -35.0f;
+            setRotate(&field_0x190, temp);
         } else if (temp_r0 < temp_r7) {
-            f32 var_f31 = ((f32)(temp_r0 - var_r27) * (f32)(temp_r0 - var_r27)) / ((f32)(temp_r0 - temp_r7) * (f32)(temp_r0 - temp_r7));
-            f32 var_f30 = 1.0f - var_f31;
-            scaleAnime((1.0f - var_f31 * 0.5f) * g_menuHIO.field_0x14);
-            setRotate(&field_0x190, 60.0f - var_f31 * -210.0f);
-            fopMsgM_setNowAlpha(&field_0x008[0], var_f30);
+            f32 var_f31 = ((f32)(temp_r0 - var_r27) * (f32)(temp_r0 - var_r27)) / ((f32)(temp_r7 - var_r27) * (f32)(temp_r7 - var_r27));
+            f32 temp2 = 1.0f - var_f31 * 0.5f;
+            f32 temp = 60.0f - var_f31 * -210.0f;
+            scaleAnime(temp2 * g_menuHIO.field_0x14);
+            setRotate(&field_0x190, temp);
+            fopMsgM_setNowAlpha(&field_0x008[0], 1.0f - var_f31);
         } else {
             scaleAnime(g_menuHIO.field_0x14 * 0.5f);
             setRotate(&field_0x190, -90.0f);
