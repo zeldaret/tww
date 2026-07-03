@@ -460,8 +460,8 @@ BOOL daObjVolcano::Act_c::Draw() {
     dComIfGd_setListBG();
     u8 tmp = (s8)(field_0x4F8 * 255.5f);
     J3DModelData* model_data = field_0x2F8->getModelData();
-    set_material(model_data->getJointNodePointer(2)->getMesh(), tmp);
-    set_material(model_data->getJointNodePointer(1)->getMesh(), tmp);
+    set_material(model_data->getJointNodePointer(QKZYG_JNT_YG_e)->getMesh(), tmp);
+    set_material(model_data->getJointNodePointer(QKZYG_JNT_AA_e)->getMesh(), tmp);
 
     mDoExt_modelUpdateDL(field_0x2F8);
     if (field_0x4F4 != 0) {

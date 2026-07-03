@@ -129,13 +129,13 @@ static BOOL nodeCallBackHead(J3DNode* node, int calcTiming) {
         if (i_this != NULL) {
             MtxP mtx = model->getAnmMtx(jnt_no);
             cMtx_copy(mtx, *calc_mtx);
-            if (jnt_no == 9) {
+            if (jnt_no == BST_JNT_MABURTAR1_e) {
                 cMtx_YrotM(*calc_mtx, -i_this->m2E78[1]);
-            } else if (jnt_no == 12) {
+            } else if (jnt_no == BST_JNT_MABUTAR2_e) {
                 cMtx_YrotM(*calc_mtx, i_this->m2E78[1]);
-            } else if (jnt_no == 10) {
+            } else if (jnt_no == BST_JNT_MABUTAL1_e) {
                 cMtx_YrotM(*calc_mtx, -i_this->m2E78[0]);
-            } else if (jnt_no == 11) {
+            } else if (jnt_no == BST_JNT_MABUTAL2_e) {
                 cMtx_YrotM(*calc_mtx, i_this->m2E78[0]);
             }
             model->setAnmMtx(jnt_no, *calc_mtx);
@@ -184,7 +184,7 @@ static BOOL daBst_Draw(bst_class* i_this) {
     for (u16 i = 0; i < model_2B8->getModelData()->getWEvlpMtxNum(); i++) {
         model_388->setWeightAnmMtx(i, model_2B8->getWeightAnmMtx(i));
     }
-    MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(0);
+    MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(BST_JNT_HEAD_e);
     cMtx_copy(mtx, *calc_mtx);
     temp.setall(0.0f);
     MtxPosition(&temp, &shadow_pos);
@@ -928,7 +928,7 @@ static void beam_set(bst_class* i_this) {
             continue;
         }
         i_this->m04E4[i] = 1;
-        MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(REG0_S(5) + 3);
+        MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(REG0_S(5) + (s16)BST_JNT_BUKI2_e);
         cMtx_copy(mtx, *calc_mtx);
         cXyz vec(0.0f, 0.0f, 0.0f);
         MtxPosition(&vec, &i_this->m03B8[i]);
@@ -1028,7 +1028,7 @@ static void beam_attack(bst_class* i_this) {
     for (s32 i = 0; i < 2; i++) {
         JPABaseEmitter* emitter = i_this->m2ED8[i];
         if (emitter != NULL) {
-            emitter->setGlobalRTMatrix(i_this->m02B8->getModel()->getAnmMtx(0));
+            emitter->setGlobalRTMatrix(i_this->m02B8->getModel()->getAnmMtx(BST_JNT_HEAD_e));
         }
     }
 }
@@ -1262,7 +1262,7 @@ static void head_damage(bst_class* i_this) {
                 i_this->m2EE0[i]->becomeInvalidEmitter();
                 i_this->m2EE0[i] = NULL;
             } else {
-                i_this->m2EE0[i]->setGlobalRTMatrix(i_this->m02B8->getModel()->getAnmMtx(0));
+                i_this->m2EE0[i]->setGlobalRTMatrix(i_this->m02B8->getModel()->getAnmMtx(BST_JNT_HEAD_e));
             }
         }
     }
@@ -1310,7 +1310,7 @@ static void col_set(bst_class* i_this) {
     cXyz vec;
     cXyz pos_vec;
     if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
-        MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(8);
+        MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(BST_JNT_KUTI_e);
         cMtx_copy(mtx, *calc_mtx);
         vec.x = REG0_F(0) + (-30.0f);
         vec.y = REG0_F(1);
@@ -1333,7 +1333,7 @@ static void col_set(bst_class* i_this) {
         MtxPosition(&vec, &actor->eyePos);
         vec.setall(0.0f);
         for (s32 i = 0; i < 2; i++) {
-            MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(i + 4);
+            MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(i + BST_JNT_EYEL_e);
             cMtx_copy(mtx, *calc_mtx);
             MtxPosition(&vec, &pos_vec);
             if (i_this->m2E74[i] != 0 || i_this->mEyeHealth[i] <= 0) {
@@ -1575,12 +1575,12 @@ static void hana_demo(bst_class* i_this) {
             int itemNo;
             if (dComIfGs_getArrowNum() == 0) {
                 itemNo = dItemNo_ARROW_10_e;
-                MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(6);
+                MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(BST_JNT_HANAL_e);
                 cMtx_copy(mtx, *calc_mtx);
                 i_this->m2E9E = 0;
             } else {
                 itemNo = dItemNo_BOMB_5_e;
-                MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(7);
+                MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(BST_JNT_HANAR_e);
                 cMtx_copy(mtx, *calc_mtx);
                 i_this->m2E9E = 1;
             }
@@ -1591,7 +1591,7 @@ static void hana_demo(bst_class* i_this) {
                 MtxPosition(&vec, &pos_vec);
                 i_this->mCreatedItemId = fopAcM_createItem(&pos_vec, itemNo, -1, fopAcM_GetRoomNo(actor), 0, NULL, 0xB, NULL);
                 mDoAud_seStart(JA_SE_CM_BST_ITEM_OUT_NOSE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-                MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(0);
+                MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(BST_JNT_HEAD_e);
                 cMtx_copy(mtx, *calc_mtx);
                 vec.setall(0.0f);
                 MtxPosition(&vec, &pos_vec);
@@ -1624,7 +1624,7 @@ static void end_demo(bst_class* i_this) {
         i_this->mDamage++;
         i_this->m2EF4 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTHALO00, &actor->current.pos);
         if (i_this->m2EF4 != NULL) {
-            i_this->m2EF4->setGlobalRTMatrix(i_this->m02B8->getModel()->getAnmMtx(0));
+            i_this->m2EF4->setGlobalRTMatrix(i_this->m02B8->getModel()->getAnmMtx(BST_JNT_HEAD_e));
         }
         break;
     case 3:
@@ -1653,7 +1653,7 @@ static void end_demo(bst_class* i_this) {
                     i_this->m2EE0[i + 1]->becomeInvalidEmitter();
                     i_this->m2EE0[i + 1] = NULL;
                 } else {
-                    i_this->m2EE0[i + 1]->setGlobalRTMatrix(i_this->m02B8->getModel()->getAnmMtx(0));
+                    i_this->m2EE0[i + 1]->setGlobalRTMatrix(i_this->m02B8->getModel()->getAnmMtx(BST_JNT_HEAD_e));
                 }
             }
         }
@@ -2497,7 +2497,7 @@ void demo_camera(bst_class* i_this) {
 #endif
         }
         if ((s32)i_this->m02B8->getFrame() == 26) {
-            MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(7);
+            MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(BST_JNT_HANAR_e);
             cMtx_copy(mtx, *calc_mtx);
             spB0.set(REG0_F(2) + 60.0f, REG0_F(3), REG0_F(4));
             mDoAud_seStart(JA_SE_OBJ_BOMB_EXPLODE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
@@ -2507,7 +2507,7 @@ void demo_camera(bst_class* i_this) {
             item_angle.y += (s16)(REG0_S(7) + -300);
             i_this->mCreatedItemId = fopAcM_createItemForBoss(&spA4, 0, fopAcM_GetRoomNo(actor), &item_angle, &item_scale, 1);
             mDoAud_seStart(JA_SE_CM_BST_ITEM_OUT_NOSE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-            MtxP mtx2 = i_this->m02B8->getModel()->getAnmMtx(0);
+            MtxP mtx2 = i_this->m02B8->getModel()->getAnmMtx(BST_JNT_HEAD_e);
             cMtx_copy(mtx2, *calc_mtx);
             spB0.set(0.0f, 0.0f, 0.0f);
             MtxPosition(&spB0, &spA4);
@@ -2765,7 +2765,7 @@ static BOOL daBst_Execute(bst_class* i_this) {
         for (i = 0; i < 2; i++) {
             fopAc_ac_c* att_actor = (fopAc_ac_c*)fopAcM_SearchByID(i_this->m2E90[i]);
             if (att_actor != NULL) {
-                MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(i + 4);
+                MtxP mtx = i_this->m02B8->getModel()->getAnmMtx(i + BST_JNT_EYEL_e);
                 cMtx_copy(mtx, *calc_mtx);
                 MtxPosition(&vec, &att_actor->current.pos);
                 att_actor->max_health = 2;
@@ -2844,7 +2844,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
     if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
         for (u16 i = 0; i < i_this->m02B8->getModel()->getModelData()->getJointNum(); i++) {
-            if (i >= 9 && i <= 12) {
+            if (i >= BST_JNT_MABURTAR1_e && i <= BST_JNT_MABUTAR2_e) {
                 i_this->m02B8->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBackHead);
             }
         }

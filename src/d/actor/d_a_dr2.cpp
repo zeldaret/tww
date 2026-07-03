@@ -65,9 +65,13 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
 
             if (i_this->unk_40A == 3) {
-                if ((jntNo - 3 <= 8u) || (jntNo == 2)) {
-                    cMtx_YrotM(*calc_mtx, i_this->unk_400[jntNo - 0x22]);
-                    cMtx_ZrotM(*calc_mtx, i_this->unk_400[jntNo - 0x16]);
+                if ((jntNo == DR_JNT_J_DR_ASHI_L1_e || jntNo == DR_JNT_J_DR_ASHI_L2_e || jntNo == DR_JNT_J_DR_ASHI_L3_e || jntNo == DR_JNT_J_DR_ASHI_R1_e ||
+                     jntNo == DR_JNT_J_DR_ASHI_R2_e || jntNo == DR_JNT_J_DR_ASI_R3_e || jntNo == DR_JNT_J_DR_MUNE_e || jntNo == DR_JNT_J_DR_HANE_L1_e ||
+                     jntNo == DR_JNT_J_DR_HANE_L2_e) ||
+                    jntNo == DR_JNT_J_DR_KOSHI_e)
+                {
+                    cMtx_YrotM(*calc_mtx, i_this->unk_400[jntNo - DR_JNT_J_DR_HOHO_R_e]);
+                    cMtx_ZrotM(*calc_mtx, i_this->unk_400[jntNo - DR_JNT_J_DR_KUBI7_e]);
                     model->setAnmMtx(jntNo, *calc_mtx);
                     MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
                 }
@@ -75,25 +79,32 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
                 MtxScale(i_this->unk_40C, 1.0f, 1.0f, true);
                 model->setAnmMtx(jntNo, *calc_mtx);
 
-                if ((jntNo <= 3u) || (jntNo == 4)) {
-                    MtxRotY(i_this->unk_3EC,1);
-                    MtxRotZ(i_this->unk_3F0,1);
+                if ((jntNo == DR_JNT_DR_ALL_ROOT_e || jntNo == DR_JNT_DR_SKL_ROOT_e || jntNo == DR_JNT_J_DR_KOSHI_e || jntNo == DR_JNT_J_DR_ASHI_L1_e) ||
+                    (jntNo == DR_JNT_J_DR_ASHI_L2_e))
+                {
+                    MtxRotY(i_this->unk_3EC, 1);
+                    MtxRotZ(i_this->unk_3F0, 1);
                     model->setAnmMtx(jntNo, *calc_mtx);
                     MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
                 }
-            } else if ((jntNo - 5 <= 6u) || (jntNo == 4)) {
+            } else if (
+                (jntNo == DR_JNT_J_DR_ASHI_L3_e || jntNo == DR_JNT_J_DR_ASHI_R1_e || jntNo == DR_JNT_J_DR_ASHI_R2_e || jntNo == DR_JNT_J_DR_ASI_R3_e ||
+                 jntNo == DR_JNT_J_DR_MUNE_e || jntNo == DR_JNT_J_DR_HANE_L1_e || jntNo == DR_JNT_J_DR_HANE_L2_e) ||
+                (jntNo == DR_JNT_J_DR_ASHI_L2_e)
+            )
+            {
                 if (i_this->unk_40A == 2) {
                     cMtx_YrotM(*calc_mtx, i_this->unk_3BC[0]);
                     cMtx_ZrotM(*calc_mtx, i_this->unk_3D4[0]);
                 } else {
-                    MtxRotY(i_this->unk_3EC,1);
-                    MtxRotZ(i_this->unk_3F0,1);
+                    MtxRotY(i_this->unk_3EC, 1);
+                    MtxRotZ(i_this->unk_3F0, 1);
                 }
                 model->setAnmMtx(jntNo, *calc_mtx);
                 MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
             }
 
-            if (jntNo == 11) {
+            if (jntNo == DR_JNT_J_DR_HANE_L2_e) {
                 cXyz sp08;
                 sp08.x = REG0_F(0) + 210.0f + 5.0f;
                 sp08.y = REG0_F(1);

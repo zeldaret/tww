@@ -97,6 +97,10 @@ public:
     JMSMesgEntry_c getMesgEntry(mesg_header*);
     const char* getMessage(mesg_header*);
 
+    u32 getMesgNumber() {
+        return (mGroupID << 8) | mResMsgNo;
+    }
+
 public:
     /* 0x04 */ u32 mMsgIdx;
     /* 0x08 */ u16 mGroupID;
@@ -150,7 +154,7 @@ public:
     void dataInit();
     f32 charLength(int, int, bool);
     f32 rubyLength(int, bool);
-    void stringLength();
+    u32 stringLength();
     void stringShift();
     void iconSelect(int, u8);
     void iconIdxRefresh();
@@ -237,14 +241,14 @@ public:
 #endif
 
     void getIconColor(int) {}
-    void getIconNum(int) {}
-    void getIconPosX(int) {}
-    void getIconPosY(int) {}
+    u8 getIconNum(int i_no) { return field_0x281[i_no]; }
+    int getIconPosX(int i_no) { return field_0x168[i_no]; }
+    int getIconPosY(int i_no) { return field_0x1A4[i_no]; }
     void getIconScale(int) {}
 
-    void setCharSpace(int) {}
-    void setRubyCharSpace(int) {}
-    void setLineSpace(int) {}
+    void setCharSpace(int i_space) { charSpace = i_space; }
+    void setRubyCharSpace(int i_space) { rubyCharSpace = i_space; }
+    void setLineSpace(int i_space) { lineSpace = i_space; }
 
     void setOutMessage(char* param_0, char* param_1, char* param_2, char* param_3) {
         field_0x60 = param_0;
@@ -258,63 +262,77 @@ public:
     }
     void setSelectMessage(char*, char*, char*, char*) {}
 
-    void setMesgEntry(JMSMesgEntry_c*) {}
+    void setMesgEntry(JMSMesgEntry_c* i_entry) { mesgEntry = i_entry; }
 
     void dec_keyWaitTimer() {}
     void dec_waitTimer() {}
-    void getCharAlpha() {}
-    void getGradAlpha() {}
-    void getLineCount() {}
-    void getMesgStatus() {}
-    void getNowCursorPos() {}
-    void getRCharAlpha() {}
-    void getRGradAlpha() {}
+    u8 getCharAlpha() { return field_0x293; } // ?
+    u8 getGradAlpha() { return field_0x292; } // ?
+    int getLineCount() { return lineCount; }
+    u8 getMesgStatus() { return mesgStatus; }
+    f32 getNowCursorPos() { return field_0x20; }
+    u8 getRCharAlpha() { return field_0x291; }  // ?
+    u8 getRGradAlpha() { return field_0x290; }  // ?
     void getSelectFlag() {}
     void getSelectLength() {}
     void getStringColor() {}
     void get_waitTimer() {}
-    void resetNowLine() {}
+    void resetNowLine() { nowLine = 0; }
     void selectArrow(J2DPicture*) {}
     void setActorPosition(cXyz*) {}
-    void setAimLine(int) {}
+    void setAimLine(int i_line) { aimLine = i_line; }
     void setAutoSendFlagOff() {}
-    void setBmgData(char*) {}
-    void setCenterLineWidth(int) {}
-    void setCharAlpha(u8, u8, u8, u8) {}
-    void setCount(int) {}
-    void setFont(JUTFont*) {}
-    void setFontSize(int) {}
+    void setBmgData(char* i_data) { bmgData = i_data; }
+    void setCenterLineWidth(int i_width) { centerLineWidth = i_width; }
+
+    void setCharAlpha(u8 param_0, u8 param_1, u8 param_2, u8 param_3) {
+        field_0x290 = param_0;
+        field_0x291 = param_1;
+        field_0x292 = param_2;
+        field_0x293 = param_3;
+    }
+
+    void setCount(int i_count) { count = i_count; }
+    void setFont(JUTFont* i_font) { font[0] = i_font; }
+    void setFontSize(int i_size) { fontSize = i_size; }
     void setHandSendFlagOff() {}
-    void setLineCount(int) {}
-    void setLineWidth(int) {}
-    void setRubyFont(JUTFont*) {}
-    void setRubyFontSize(int) {}
+    void setLineCount(int i_count) { lineCount = i_count; }
+    void setLineWidth(int i_width) { lineWidth = i_width; }
+    void setRubyFont(JUTFont* i_font) { font[1] = i_font; }
+    void setRubyFontSize(int i_size) { rubyFontSize = i_size; }
     void setSelectFlagOff() {}
     void setSelectNum(u8) {}
-    void setSendSpeed(int) {}
-    void setSpaceFlagOff() {}
+    void setSendSpeed(int i_speed) { sendSpeed = i_speed; }
+    void setSpaceFlagOff() { spaceFlag = 0; }
     void setSpaceFlagOn() {}
-    void setSpaceTimer(int) {}
+    void setSpaceTimer(int i_timer) { spaceTimer = i_timer; }
     void setStringColor(u32) {}
     void set_waitTimer(int) {}
     void set_waitTimerZero() {}
-    void shortCut() {}
+    void shortCut() {
+        field_0x299 = 1;
+    }
+
+    // fake, replace with real inline once it's figured out
+    u32 get_0x220(int i) {
+        return field_0x220[i];
+    }
 
 public:
     /* 0x004 */ JUTFont* font[2];
-    /* 0x00C */ JMSMesgEntry_c* field_0x0C;
+    /* 0x00C */ JMSMesgEntry_c* mesgEntry;
     /* 0x010 */ u32 field_0x10;
     /* 0x014 */ f32 field_0x14;
     /* 0x018 */ f32 field_0x18;
     /* 0x01C */ f32 field_0x1C;
-    /* 0x020 */ f32 field_0x20;
+    /* 0x020 */ f32 field_0x20;  // NowCursorPos?
     /* 0x024 */ f32 field_0x24;
     /* 0x028 */ f32 field_0x28;
     /* 0x02C */ u32 field_0x2C;
     /* 0x030 */ u32 field_0x30;
     /* 0x034 */ u32 field_0x34;
     /* 0x038 */ u32 field_0x38;
-    /* 0x03C */ const char* field_0x3C;
+    /* 0x03C */ const char* bmgData;
     /* 0x040 */ char* field_0x40;
     /* 0x044 */ char* field_0x44;
     /* 0x048 */ char* field_0x48;
@@ -330,28 +348,28 @@ public:
     /* 0x0E8 */ s32 field_0xE8[4];
     /* 0x0F8 */ s32 field_0xF8[4];
     /* 0x108 */ s32 field_0x108[4];
-    /* 0x118 */ u32 field_0x118;
-    /* 0x11C */ s32 field_0x11C;
-    /* 0x120 */ s32 field_0x120;
-    /* 0x124 */ s32 field_0x124;
-    /* 0x128 */ s32 field_0x128;
-    /* 0x12C */ u32 field_0x12C;
-    /* 0x130 */ s32 field_0x130;
+    /* 0x118 */ int count;
+    /* 0x11C */ int charSpace;
+    /* 0x120 */ int lineSpace;
+    /* 0x124 */ int rubyCharSpace;
+    /* 0x128 */ int lineWidth;
+    /* 0x12C */ int centerLineWidth;
+    /* 0x130 */ int lineCount;
     /* 0x134 */ u32 field_0x134;
-    /* 0x138 */ u32 field_0x138;
-    /* 0x13C */ u32 field_0x13C;
+    /* 0x138 */ int nowLine;
+    /* 0x13C */ int aimLine;
     /* 0x140 */ u32 field_0x140;
-    /* 0x144 */ s32 field_0x144;
+    /* 0x144 */ int fontSize;
     /* 0x148 */ u32 field_0x148;
-    /* 0x14C */ s32 field_0x14C;
+    /* 0x14C */ int rubyFontSize;
     /* 0x150 */ int field_0x150;
     /* 0x154 */ u32 field_0x154;
     /* 0x158 */ u32 field_0x158;
-    /* 0x15C */ u32 field_0x15C;
-    /* 0x160 */ u32 field_0x160;
-    /* 0x164 */ int field_0x164;
-    /* 0x168 */ s32 field_0x168[0xF];
-    /* 0x1A4 */ u32 field_0x1A4[0xF];
+    /* 0x15C */ int spaceTimer;
+    /* 0x160 */ int sendSpeed;
+    /* 0x164 */ int field_0x164;  // keyWaitTimer?
+    /* 0x168 */ int field_0x168[0xF];  // IconPosX
+    /* 0x1A4 */ int field_0x1A4[0xF];  // IconPosY
     /* 0x1A4 */ u32 field_0x1E0[0xF];
     /* 0x21C */ int field_0x21C;
     /* 0x21C */ u32 field_0x220[0xF];
@@ -363,7 +381,7 @@ public:
     /* 0x270 */ f32 field_0x270;
     /* 0x274 */ f32 field_0x274;
     /* 0x278 */ f32 field_0x278;
-    /* 0x27C */ u8 field_0x27C;
+    /* 0x27C */ u8 mesgStatus;
     /* 0x27D */ u8 field_0x27D;
     /* 0x27E */ u8 field_0x27E;
     /* 0x27F */ u8 field_0x27F;
@@ -373,17 +391,17 @@ public:
     /* 0x291 */ u8 field_0x291;
     /* 0x292 */ u8 field_0x292;
     /* 0x293 */ u8 field_0x293;
-    /* 0x294 */ u8 field_0x294;
+    /* 0x294 */ u8 selectFlag;
     /* 0x295 */ u8 field_0x295;
 #if VERSION > VERSION_DEMO
     /* 0x296 */ u8 field_0x296;
 #endif
-    /* 0x297 */ u8 field_0x297;
-    /* 0x298 */ u8 field_0x298;
+    /* 0x297 */ u8 autoSendFlag;
+    /* 0x298 */ u8 handSendFlag;
     /* 0x299 */ u8 field_0x299;
     /* 0x29A */ u8 field_0x29A;
     /* 0x29B */ u8 field_0x29B;
-    /* 0x29C */ u8 field_0x29C;
+    /* 0x29C */ u8 spaceFlag;
     /* 0x29D */ u8 field_0x29D;
 };
 

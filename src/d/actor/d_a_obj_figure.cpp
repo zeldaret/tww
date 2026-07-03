@@ -1071,12 +1071,12 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
     J3DModelData* modelData = model->getModelData();
 #endif
 
-    J3DJoint* link_root_joint = modelData->getJointNodePointer(0x00); // link_root joint
-    J3DJoint* cl_eye_joint = modelData->getJointNodePointer(0x13);    // cl_eye joint
-    J3DJoint* cl_mayu_joint = modelData->getJointNodePointer(0x15);   // cl_mayu joint
+    J3DJoint* link_root_joint = modelData->getJointNodePointer(VF_064L_JNT_LINK_ROOT_e);
+    J3DJoint* cl_eye_joint = modelData->getJointNodePointer(VF_064L_JNT_CL_EYE_e);
+    J3DJoint* cl_mayu_joint = modelData->getJointNodePointer(VF_064L_JNT_CL_MAYU_e);
 
     J3DMaterial* mtl;
-    mtl = modelData->getJointNodePointer(0x13)->getMesh(); // cl_eye joint
+    mtl = modelData->getJointNodePointer(VF_064L_JNT_CL_EYE_e)->getMesh();
     int zoff_blend_cnt = 0;
     int zoff_none_cnt = 0;
     int zon_cnt = 0;
@@ -1098,7 +1098,7 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
             }
             mtl = mtl->getNext();
         }
-        mtl = modelData->getJointNodePointer(0x15)->getMesh(); // cl_mayu joint
+        mtl = modelData->getJointNodePointer(VF_064L_JNT_CL_MAYU_e)->getMesh();
     }
 
     dComIfGd_setListP0();
@@ -1169,8 +1169,8 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
         mtl->getShape()->show();
     }
 
-    modelData->getJointNodePointer(0x14)->getMesh()->getShape()->show(); // cl_hana joint
-    modelData->getJointNodePointer(0x29)->getMesh()->getShape()->show(); // cl_back joint
+    modelData->getJointNodePointer(VF_064L_JNT_CL_HANA_e)->getMesh()->getShape()->show();
+    modelData->getJointNodePointer(VF_064L_JNT_CL_BACK_e)->getMesh()->getShape()->show();
 
 #if VERSION == VERSION_DEMO
     dComIfGd_setList();

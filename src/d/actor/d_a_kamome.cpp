@@ -128,14 +128,14 @@ fopAc_ac_c* search_imouto(kamome_class* i_this) {
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        s32 uVar1 = joint->getJntNo();
-        J3DModel* pJVar2 = j3dSys.getModel();
-        kamome_class* pKamome = (kamome_class*)pJVar2->getUserArea();
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        kamome_class* pKamome = (kamome_class*)model->getUserArea();
         if (pKamome != NULL) {
-            MTXCopy(pJVar2->getAnmMtx(uVar1), *calc_mtx);
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             cMtx_YrotM(*calc_mtx, pKamome->mJointRotY);
             cMtx_ZrotM(*calc_mtx, pKamome->mJointRotZ);
-            pJVar2->setAnmMtx(uVar1, *calc_mtx);
+            model->setAnmMtx(jntNo, *calc_mtx);
             MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
     }
@@ -1336,9 +1336,9 @@ void daKamome_setMtx(kamome_class* i_this) {
 
     J3DModel* pJVar1 = i_this->mpMorf->getModel();
     pJVar1->setBaseTRMtx(*calc_mtx);
-    pJVar1->getModelData()->getJointNodePointer(8)->setCallBack(nodeCallBack);
+    pJVar1->getModelData()->getJointNodePointer(KA_JNT_J_KA_HEAD1_e)->setCallBack(nodeCallBack);
     i_this->mpMorf->calc();
-    pJVar1->getModelData()->getJointNodePointer(8)->setCallBack(NULL);
+    pJVar1->getModelData()->getJointNodePointer(KA_JNT_J_KA_HEAD1_e)->setCallBack(NULL);
 }
 
 /* 00004768-000049F8       .text daKamome_Execute__FP12kamome_class */

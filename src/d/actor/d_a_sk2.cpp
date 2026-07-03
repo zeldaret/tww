@@ -19,19 +19,19 @@ static s32 sk2_bck[] = {dRes_INDEX_SK2_BCK_KSYLF_00_e, dRes_INDEX_SK2_BCK_KSYLF_
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        s32 uVar2 = joint->getJntNo();
+        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         sk2_class* i_this = (sk2_class*)model->getUserArea();
 
-        if (i_this != NULL && uVar2 <= 3) {
-            MTXCopy(model->getAnmMtx(uVar2), *calc_mtx);
-            cMtx_YrotM(*calc_mtx, i_this->m2CE[uVar2].y);
-            cMtx_XrotM(*calc_mtx, i_this->m2CE[uVar2].x);
-            cMtx_ZrotM(*calc_mtx, i_this->m2CE[uVar2].z);
+        if (i_this != NULL && jntNo <= KSYLF_00_JNT_B1_e) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            cMtx_YrotM(*calc_mtx, i_this->m2CE[jntNo].y);
+            cMtx_XrotM(*calc_mtx, i_this->m2CE[jntNo].x);
+            cMtx_ZrotM(*calc_mtx, i_this->m2CE[jntNo].z);
 
-            cXyz sp08(0.0f, 0.0f, 0.0f);
-            MtxPosition(&sp08, &i_this->m2E8[uVar2]);
-            model->setAnmMtx(uVar2, *calc_mtx);
+            cXyz offset(0.0f, 0.0f, 0.0f);
+            MtxPosition(&offset, &i_this->m2E8[jntNo]);
+            model->setAnmMtx(jntNo, *calc_mtx);
             MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
     }

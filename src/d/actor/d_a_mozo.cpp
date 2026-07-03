@@ -214,7 +214,7 @@ cPhs_State daMozo_c::CreateInit() {
 
     mAnimMorf->getModel()->setUserArea((u32)this);
     for (u16 i = 0; i < mdlData->getJointNum(); i++) {
-        if (i == 2) {
+        if (i == MOZ_JNT_ATAMA_J_e) {
             mdlData->getJointNodePointer(i)->setCallBack(daMozo_nodeCallBack);
         }
     }

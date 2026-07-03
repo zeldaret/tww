@@ -16,49 +16,49 @@
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        s32 uVar4 = joint->getJntNo();
+        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         sk_class* i_this = (sk_class*)model->getUserArea();
-        cXyz sp08;
+        cXyz offset;
 
         if (i_this != NULL) {
-            MTXCopy(model->getAnmMtx(uVar4), *calc_mtx);
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
 
-            cMtx_YrotM(*calc_mtx, i_this->m2C2[uVar4].y);
-            cMtx_XrotM(*calc_mtx, i_this->m2C2[uVar4].x);
-            cMtx_ZrotM(*calc_mtx, i_this->m2C2[uVar4].z);
+            cMtx_YrotM(*calc_mtx, i_this->m2C2[jntNo].y);
+            cMtx_XrotM(*calc_mtx, i_this->m2C2[jntNo].x);
+            cMtx_ZrotM(*calc_mtx, i_this->m2C2[jntNo].z);
 
-            switch (uVar4) {
-            case 0:
-                sp08.x = 0.0f;
-                sp08.y = 0.0f;
-                sp08.z = 180.0f;
-                MtxPosition(&sp08, &i_this->m2DC[uVar4]);
+            switch (jntNo) {
+            case TURU_00_JNT_BO04_e:
+                offset.x = 0.0f;
+                offset.y = 0.0f;
+                offset.z = 180.0f;
+                MtxPosition(&offset, &i_this->m2DC[jntNo]);
                 break;
 
-            case 1:
-                sp08.x = 0.0f;
-                sp08.y = 0.0f;
-                sp08.z = 250.0f;
-                MtxPosition(&sp08, &i_this->m2DC[uVar4]);
+            case TURU_00_JNT_BO03_e:
+                offset.x = 0.0f;
+                offset.y = 0.0f;
+                offset.z = 250.0f;
+                MtxPosition(&offset, &i_this->m2DC[jntNo]);
                 break;
 
-            case 2:
-                sp08.x = 0.0f;
-                sp08.y = 0.0f;
-                sp08.z = 250.0f;
-                MtxPosition(&sp08, &i_this->m2DC[uVar4]);
+            case TURU_00_JNT_BO02_e:
+                offset.x = 0.0f;
+                offset.y = 0.0f;
+                offset.z = 250.0f;
+                MtxPosition(&offset, &i_this->m2DC[jntNo]);
                 break;
 
-            case 3:
-                sp08.x = 0.0f;
-                sp08.y = 0.0f;
-                sp08.z = 180.0f;
-                MtxPosition(&sp08, &i_this->m2DC[uVar4]);
+            case TURU_00_JNT_BO01_e:
+                offset.x = 0.0f;
+                offset.y = 0.0f;
+                offset.z = 180.0f;
+                MtxPosition(&offset, &i_this->m2DC[jntNo]);
                 break;
             }
 
-            model->setAnmMtx(uVar4, *calc_mtx);
+            model->setAnmMtx(jntNo, *calc_mtx);
             MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
     }
@@ -223,19 +223,19 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 1,
+            /* mJointIndex */ TURU_00_JNT_BO03_e,
             /* mRadius     */ 140.0f,
             /* mpOffsets   */ &sph_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 2,
+            /* mJointIndex */ TURU_00_JNT_BO02_e,
             /* mRadius     */ 90.0f,
             /* mpOffsets   */ &sph_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 3,
+            /* mJointIndex */ TURU_00_JNT_BO01_e,
             /* mRadius     */ 50.0f,
             /* mpOffsets   */ &sph_offset,
         },

@@ -1,6 +1,7 @@
 #ifndef D_A_SHIP_H
 #define D_A_SHIP_H
 
+#include "res/Object/Ship.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
@@ -127,11 +128,11 @@ public:
     
 #if VERSION <= VERSION_JPN
     bool checkCraneMode() const {
-        return mCurMode == 10 && mNextMode == 10;
+        return mCurMode == MODE_CRANE_e && mNextMode == MODE_CRANE_e;
     }
 #else
     bool checkCraneMode() const {
-        return mCurMode == 10 && mNextMode == 10 && speedF < 1.0f && !checkStateFlg(daSFLG_FLY_e)  && !checkForceMove();
+        return mCurMode == MODE_CRANE_e && mNextMode == MODE_CRANE_e && speedF < 1.0f && !checkStateFlg(daSFLG_FLY_e)  && !checkForceMove();
     }
 #endif
 #if VERSION == VERSION_DEMO
@@ -155,14 +156,14 @@ public:
     void getCraneRipplePosY() const {}
     void getCraneRipplePosZ() const {}
     cXyz* getCraneTop() { return m0434; }
-    MtxP getHeadJntMtx() { return mpHeadAnm->getModel()->getAnmMtx(8); }
+    MtxP getHeadJntMtx() { return mpHeadAnm->getModel()->getAnmMtx(FN_HEAD_H_JNT_J_FN_ATAMA_e); }
     f32 getJumpRate() { return mJumpRate; }
     u8 getPart() const { return mPart; }
     s16 getRopeCnt() const { return mRopeCnt; }
     BOOL checkRopeDownStart() const { return mRopeCnt > 20; }
     BOOL checkRopeCntMax() const { return mRopeCnt == 250; }
     s16 getSailAngle() { return mSailAngle; }
-    void getTactJntMtx() {}
+    MtxP getTactJntMtx() { return mpHeadAnm->getModel()->getAnmMtx(FN_HEAD_H_JNT_J_FN_AGO2_e); }
     f32 getTillerAngleRate() { return mTillerAngleRate; }
     cXyz* getTillerTopPosP() { return &mTillerTopPos; }
     void offCraneHookFlg() { offStateFlg(daSFLG_UNK800_e);}
@@ -181,7 +182,6 @@ public:
     void onCraneHookFlg() { onStateFlg(daSFLG_UNK800_e); }
     void onCrashFlg() { onStateFlg(daSFLG_UNK4_e); }
     void onFantomGanonBattle() {}
-    //TODO: Is this right?
     void onLinkSit() { onStateFlg(daSFLG_UNK4000000_e); }
     void onSceneChange() { onStateFlg(daSFLG_UNK20000000_e); }
     void onShortHitFlg() { onStateFlg(daSFLG_UNK20_e); }

@@ -125,6 +125,24 @@ static struct {
     /* 0x3B */ {dItemNo_SHOP_GURU_STATUE_e, "beast_12.bti"},
 };
 
+u16 zfont[][2] = {
+    0x8340, 0x84a4, 0x8341, 0x84a5, 0x8342, 0x84a6, 0x8343, 0x84a7, 0x8344, 0x84a8, 0x8345, 0x84a9, 0x8346,
+    0x84aa, 0x8347, 0x84ab, 0x8348, 0x84ac, 0x8349, 0x84ad, 0x834a, 0x84ae, 0x834b, 0x84af, 0x834c, 0x84b0,
+    0x834d, 0x84b1, 0x834e, 0x84b2, 0x834f, 0x84b3, 0x8350, 0x84b4, 0x8351, 0x84b5, 0x8352, 0x84b6, 0x8353,
+    0x84b7, 0x8354, 0x84b8, 0x8355, 0x84b9, 0x8356, 0x84ba, 0x8357, 0x84bb, 0x8358, 0x84bc, 0x8359, 0x84bd,
+    0x835a, 0x84be, 0x835b, 0x8740, 0x835c, 0x8741, 0x835d, 0x8742, 0x835e, 0x8743, 0x835f, 0x8744, 0x8360,
+    0x8745, 0x8361, 0x8746, 0x8362, 0x8747, 0x8363, 0x8748, 0x8364, 0x8749, 0x8365, 0x874a, 0x8366, 0x874b,
+    0x8367, 0x874c, 0x8368, 0x874d, 0x8369, 0x874e, 0x836a, 0x874f, 0x836b, 0x8750, 0x836c, 0x8751, 0x836d,
+    0x8752, 0x836e, 0x8753, 0x836f, 0x8754, 0x8370, 0x8755, 0x8371, 0x8756, 0x8372, 0x8757, 0x8373, 0x8758,
+    0x8374, 0x8759, 0x8375, 0x875a, 0x8376, 0x875b, 0x8377, 0x875c, 0x8378, 0x875d, 0x8379, 0x875f, 0x837a,
+    0x8760, 0x837b, 0x8761, 0x837c, 0x8762, 0x837d, 0x8763, 0x837e, 0x8764, 0x8380, 0x8765, 0x8381, 0x8766,
+    0x8382, 0x8767, 0x8383, 0x8768, 0x8384, 0x8769, 0x8385, 0x876a, 0x8386, 0x876b, 0x8387, 0x876c, 0x8388,
+    0x876d, 0x8389, 0x876e, 0x838a, 0x876f, 0x838b, 0x8770, 0x838c, 0x8771, 0x838d, 0x8772, 0x838e, 0x8773,
+    0x838f, 0x8774, 0x8390, 0x8775, 0x8391, 0x877e, 0x8392, 0x8780, 0x8393, 0x8781, 0x824f, 0x8782, 0x8250,
+    0x8783, 0x8251, 0x8784, 0x8252, 0x8785, 0x8253, 0x8786, 0x8254, 0x8787, 0x8255, 0x8788, 0x8256, 0x8789,
+    0x8257, 0x878a, 0x8258, 0x878b, 0x8141, 0x878c, 0x815b, 0x878d, 0x8175, 0x878e, 0x8176, 0x878f,
+};
+
 struct fopMsgM_pane_alpha_class;
 
 
@@ -731,10 +749,42 @@ char* fopMsgM_passwordGet(char* dst, u32 msgNo) {
     return dst;
 }
 
+static f32 dummyfloat0(int _) {
+    switch (_) {
+    case 0: return 0.0f;
+    case 1: return 0.5f;
+    }
+}
+
+static f64 dummyfloat1(int _) {
+    switch (_) {
+    case 0: return 4503601774854144.0;
+    case 1: return 0.5;
+    case 2: return 3.0;
+    }
+}
+
+static f32 dummyfloat2(int _) {
+    switch (_) {
+    case 0: return 2.0f;
+    }
+}
+
+struct fopMsgM_unk_struct {
+    u16 _0;
+    u16 _2;
+    u16 _4;
+    u16 _6;
+    u16 _8;
+    u16 _A;
+    s16 _C;
+    u16 _E;
+    u8 _10;
+};
+
 /* 8002C02C-8002C568       .text fopMsgM_selectMessageGet__FP7J2DPaneP7J2DPanePcPcPcPcUl */
-void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3, char* param_4, char* param_5, char* param_6, u32 param_7) {
-    /* Nonmatching */
-    fopMsgM_msgDataProc_c temp;
+fopMsgM_unk_struct fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3, char* param_4, char* param_5, char* param_6, u32 param_7) {
+    fopMsgM_msgDataProc_c msgData;
     fopMsgM_itemMsgGet_c msgGet;
 
     strcpy(param_3, "\x1B""CC[000000FF]\x1B""GM[0]");
@@ -744,43 +794,84 @@ void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3,
 
     J2DTextBox::TFontSize size;
     J2DTextBox::TFontSize size2;
-    ((J2DTextBox*)param_1)->getFontSize(size);
-    ((J2DTextBox*)param_2)->getFontSize(size2);
+    ((J2DTextBox*)param_2)->getFontSize(size);
+    ((J2DTextBox*)param_1)->getFontSize(size2);
 
     mesg_header* head_p = msgGet.getMesgHeader(param_7);
-    JUT_ASSERT(0x79B, head_p);
+    JUT_ASSERT(1947, head_p);
 
-    const char* src = (char*)msgGet.getMessage(head_p);
+    char* src = (char*)msgGet.getMessage(head_p);
+    fopMsgM_unk_struct sp40;
     JMSMesgEntry_c entry;
     entry = msgGet.getMesgEntry(head_p);
-    temp.dataInit();
-    temp.font[0] = ((J2DTextBox*)param_1)->getFont();
-    temp.font[1] = ((J2DTextBox*)param_2)->getFont();
-    temp.field_0x11C = ((J2DTextBox*)param_1)->getCharSpace();
-    temp.field_0x124 = ((J2DTextBox*)param_2)->getCharSpace();
-    temp.field_0x120 = ((J2DTextBox*)param_2)->getLineSpace();
-    temp.field_0x0C = &entry;
-    temp.field_0x144 = size.mSizeX;
-    temp.field_0x14C = size2.mSizeX;
-    temp.field_0x128 = param_2->getWidth();
-    temp.field_0x160 = 2;
-    temp.field_0x15C = 0;
-    temp.field_0x299 = 1;
-    temp.field_0x29C = 0;
-    temp.stringLength();
-    temp.stringShift();
-    temp.iconIdxRefresh();
-    temp.field_0x130 = 0;
 
-    f32 fVar2 = (2 - temp.field_0x130) * ((J2DTextBox*)param_2)->getLineSpace() * 0.5f;
-    ((J2DTextBox*) param_3)->field_0xd8 = 0.0f;
-    ((J2DTextBox*) param_3)->field_0xdc = fVar2;
-    ((J2DTextBox*) param_2)->field_0xd8 = 0.0f;
-    ((J2DTextBox*) param_2)->field_0xdc = fVar2;
+    msgData.dataInit();
+    msgData.setBmgData(src);
+    msgData.setOutMessage(param_3, param_4, param_5, param_6);
+    msgData.setFont(((J2DTextBox*)param_1)->getFont());
+    msgData.setRubyFont(((J2DTextBox*)param_2)->getFont());
+    msgData.setCharSpace(((J2DTextBox*)param_1)->getCharSpace());
+    msgData.setRubyCharSpace(((J2DTextBox*)param_2)->getCharSpace());
+    msgData.setLineSpace(((J2DTextBox*)param_1)->getLineSpace());
+    msgData.setMesgEntry(&entry);
+    msgData.setFontSize(size2.mSizeX);
+    msgData.setRubyFontSize(size.mSizeX);
+    msgData.setLineWidth(param_1->getWidth());
+    msgData.setCenterLineWidth(param_1->getWidth());
+    msgData.setSendSpeed(2);
+    msgData.setSpaceTimer(0);
+    msgData.shortCut();
+    msgData.setSpaceFlagOff();
+    msgData.stringLength();
+    msgData.stringShift();
+    msgData.iconIdxRefresh();
+    
+    s16 temp_r3 = msgData.getLineCount();
+    msgData.setLineCount(0);
 
-    temp.stringSet();
+    int temp_r30_2 = 2 - temp_r3;
+    f32 fVar2 = temp_r30_2 * (((J2DTextBox*)param_1)->getLineSpace() / 2);
+    ((J2DTextBox*)param_2)->shiftSet(0.0f, fVar2);
+    ((J2DTextBox*)param_1)->shiftSet(0.0f, fVar2);
+
+    msgData.stringSet();
     ((J2DTextBox*)param_1)->setString(param_3);
-    ((J2DTextBox*)param_1)->setString(param_4);
+    ((J2DTextBox*)param_2)->setString(param_4);
+
+    int temp_r5 = ((J2DTextBox*)param_1)->getLineSpace() / 2;
+    s16 temp_r6 = ((J2DTextBox*)param_1)->getBounds().i.x;
+    s16 temp_r3_3 = ((J2DTextBox*)param_1)->getBounds().i.y;
+
+    u8 var_r7 = false;
+    for (int i = 0; i < 15; i++) {
+        u8 temp_r9 = msgData.getIconNum(i);
+        if (temp_r9 != 0xFF) {
+            if (temp_r9 == 0x14) {
+                if (!var_r7) {
+                    sp40._0 = temp_r6 + msgData.getIconPosX(i);
+                    sp40._4 = temp_r3_3 + (temp_r5 * (temp_r30_2 + (msgData.getIconPosY(i) * 2)));
+                    var_r7 = true;
+                } else {
+                    sp40._2 = sp40._8 = temp_r6 + msgData.getIconPosX(i);
+                    sp40._6 = sp40._C = temp_r3_3 + (temp_r5 * (temp_r30_2 + (msgData.getIconPosY(i) * 2)));
+                }
+            } else if (temp_r9 == 0x15) {
+                sp40._10 = var_r7;
+                if (!var_r7) {
+                    sp40._0 = temp_r6 + msgData.getIconPosX(i);
+                    sp40._4 = temp_r3_3 + (temp_r5 * (temp_r30_2 + (msgData.getIconPosY(i) * 2)));
+                    var_r7 = true;
+                } else {
+                    sp40._2 = sp40._8 = temp_r6 + msgData.getIconPosX(i);
+                    sp40._6 = sp40._C = temp_r3_3 + (temp_r5 * (temp_r30_2 + (msgData.getIconPosY(i) * 2)));
+                }
+            }
+        }
+    }
+
+    sp40._A = temp_r6 + msgData.getNowCursorPos();
+    sp40._E = sp40._C;
+    return sp40;
 }
 
 /* 8002C568-8002C574       .text fopMsgM_demoMsgFlagOn__Fv */
@@ -1473,9 +1564,8 @@ const char* fopMsgM_msgGet_c::getMessage(mesg_header* msg) {
 
         mMsgIdx = i;
         if (mMsgNo == info->mEntries[i].mMsgNo) {
-            JMSMesgEntry_c* entry = &info->mEntries[mMsgIdx];
-            ret = &data[entry->mDataOffs];
-            mResMsgNo = entry->mMsgNo;
+            ret = &data[info->mEntries[mMsgIdx].mDataOffs];
+            mResMsgNo = info->mEntries[mMsgIdx].mMsgNo;
             break;
         }
     }
@@ -1570,25 +1660,25 @@ fopMsgM_msgDataProc_c::fopMsgM_msgDataProc_c() {
     field_0x30 = 0;
     field_0x34 = 0;
     field_0x38 = 0;
-    field_0x118 = 0;
-    field_0x11C = 0;
-    field_0x124 = 0;
-    field_0x120 = 0;
-    field_0x128 = 0;
-    field_0x12C = 0;
-    field_0x130 = 0;
+    count = 0;
+    charSpace = 0;
+    rubyCharSpace = 0;
+    lineSpace = 0;
+    lineWidth = 0;
+    centerLineWidth = 0;
+    lineCount = 0;
     field_0x134 = 0;
-    field_0x138 = 0;
-    field_0x13C = 0;
+    nowLine = 0;
+    aimLine = 0;
     field_0x140 = 0;
-    field_0x144 = 0;
+    fontSize = 0;
     field_0x148 = 0;
-    field_0x14C = 0;
+    rubyFontSize = 0;
     field_0x150 = 0;
     field_0x154 = 0;
     field_0x158 = 0;
-    field_0x15C = 1;
-    field_0x160 = 1;
+    spaceTimer = 1;
+    sendSpeed = 1;
     field_0x164 = 0;
     field_0x25C = -1;
     field_0x29D = 0;
@@ -1603,7 +1693,7 @@ fopMsgM_msgDataProc_c::fopMsgM_msgDataProc_c() {
     field_0x292 = 0;
     field_0x291 = 0;
     field_0x290 = 0;
-    field_0x27C = 6;
+    mesgStatus = 6;
     field_0x27D = 0;
     field_0x27E = 0;
     field_0x27F = 0;
@@ -1620,11 +1710,11 @@ fopMsgM_msgDataProc_c::fopMsgM_msgDataProc_c() {
     field_0x10 = 0;
     field_0x299 = 0;
     field_0x29A = 0;
-    field_0x294 = 0;
+    selectFlag = 0;
     field_0x29B = 0;
-    field_0x297 = 0;
-    field_0x298 = 0;
-    field_0x29C = 0;
+    autoSendFlag = 0;
+    handSendFlag = 0;
+    spaceFlag = 0;
     field_0x295 = 0;
 #if VERSION > VERSION_DEMO
     field_0x296 = 0;
@@ -1656,25 +1746,25 @@ void fopMsgM_msgDataProc_c::dataInit() {
     field_0x30 = 0;
     field_0x34 = 0;
     field_0x38 = 0;
-    field_0x118 = 0;
-    field_0x11C = 0;
-    field_0x124 = 0;
-    field_0x120 = 0;
-    field_0x128 = 0;
-    field_0x12C = 0;
-    field_0x130 = 0;
+    count = 0;
+    charSpace = 0;
+    rubyCharSpace = 0;
+    lineSpace = 0;
+    lineWidth = 0;
+    centerLineWidth = 0;
+    lineCount = 0;
     field_0x134 = 0;
-    field_0x138 = 0;
-    field_0x13C = 0;
+    nowLine = 0;
+    aimLine = 0;
     field_0x140 = 0;
-    field_0x144 = 0;
+    fontSize = 0;
     field_0x148 = 0;
-    field_0x14C = 0;
+    rubyFontSize = 0;
     field_0x150 = 0;
     field_0x154 = 0;
     field_0x158 = 0;
-    field_0x15C = 1;
-    field_0x160 = 1;
+    spaceTimer = 1;
+    sendSpeed = 1;
     field_0x164 = 0;
     field_0x29D = 0;
     field_0x260 = 0;
@@ -1688,7 +1778,7 @@ void fopMsgM_msgDataProc_c::dataInit() {
     field_0x292 = 0;
     field_0x291 = 0;
     field_0x290 = 0;
-    field_0x27C = 6;
+    mesgStatus = 6;
     field_0x27D = 0;
     field_0x27E = 0;
     field_0x27F = 0;
@@ -1702,11 +1792,11 @@ void fopMsgM_msgDataProc_c::dataInit() {
     }
     field_0x299 = 0;
     field_0x29A = 0;
-    field_0x294 = 0;
+    selectFlag = 0;
     field_0x29B = 0;
-    field_0x297 = 0;
-    field_0x298 = 0;
-    field_0x29C = 0;
+    autoSendFlag = 0;
+    handSendFlag = 0;
+    spaceFlag = 0;
     field_0x295 = 0;
 #if VERSION > VERSION_DEMO
     field_0x296 = 0;
@@ -1723,7 +1813,7 @@ f32 fopMsgM_msgDataProc_c::charLength(int scale, int charNo, bool mode) {
     if (mode) {
         return charWidth * cellWidth;
     } else {
-        return field_0x11C + (charWidth * cellWidth);
+        return charSpace + (charWidth * cellWidth);
     }
 }
 
@@ -1733,16 +1823,16 @@ f32 fopMsgM_msgDataProc_c::rubyLength(int param_1, bool param_2) {
     font[1]->getWidthEntry(param_1, &width);
     s32 advance = width.field_0x1;
     f32 width2 = font[1]->getCellWidth();
-    f32 temp = ((s32)field_0x14C / width2);
+    f32 temp = ((s32)rubyFontSize / width2);
     if(param_2) {
         return advance * temp;
     }
 
-    return (s32)field_0x124 + advance * temp;
+    return (s32)rubyCharSpace + advance * temp;
 }
 
 /* 8002EB4C-80031064       .text stringLength__21fopMsgM_msgDataProc_cFv */
-void fopMsgM_msgDataProc_c::stringLength() {
+u32 fopMsgM_msgDataProc_c::stringLength() {
     /* Nonmatching */
 }
 
@@ -1756,7 +1846,7 @@ void fopMsgM_msgDataProc_c::iconSelect(int param_1, u8 param_2) {
     if(field_0x280 < 0xF) {
         field_0x281[field_0x280] = param_2;
         field_0x168[field_0x280] = field_0x20;
-        field_0x1A4[field_0x280] = field_0x130;
+        field_0x1A4[field_0x280] = lineCount;
         field_0x1E0[field_0x280] = param_1;
         field_0x220[field_0x280] = field_0x25C;
         field_0x280++;
@@ -1765,12 +1855,12 @@ void fopMsgM_msgDataProc_c::iconSelect(int param_1, u8 param_2) {
     if(param_2 != 0x16) {
         field_0x150++;
         field_0x14 += param_1;
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
         char buf[16];
         sprintf(buf, "\x1B""CR[%d]", param_1);
         strcat(field_0x60, buf);
         strcat(field_0x68, buf);
-        field_0x118 += field_0x3C[field_0x118 + 1];
+        count += bmgData[count + 1];
     }
 }
 
@@ -2057,9 +2147,9 @@ void fopMsgM_msgDataProc_c::stringSet() {
     field_0x64 = field_0x44;
     field_0x68 = field_0x48;
     field_0x6C = field_0x4C;
-    field_0x27C = 6;
+    mesgStatus = 6;
 
-    if(field_0x3C[field_0x118] == '\0') {
+    if(bmgData[count] == '\0') {
         if(field_0x27E != 0) {
             field_0x27E = 0;
             field_0x60[field_0x2C] = '\0';
@@ -2074,8 +2164,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
             strcat(field_0x64, field_0x70);
             strcat(field_0x6C, field_0x70);
         }
-        if(field_0x27C != 8 && field_0x27C != 9 && field_0x27C != 0x14 && field_0x27C != 0x15) {
-            if(field_0x0C->mTextboxType != 2 && field_0x0C->mTextboxType != 6 && field_0x0C->mTextboxType != 7 && field_0x0C->mTextboxType != 0xB && field_0x0C->mTextboxType != 5 && field_0x0C->mTextboxType != 0xD && field_0x0C->mTextboxType != 9) {
+        if(mesgStatus != 8 && mesgStatus != 9 && mesgStatus != 0x14 && mesgStatus != 0x15) {
+            if(mesgEntry->mTextboxType != 2 && mesgEntry->mTextboxType != 6 && mesgEntry->mTextboxType != 7 && mesgEntry->mTextboxType != 0xB && mesgEntry->mTextboxType != 5 && mesgEntry->mTextboxType != 0xD && mesgEntry->mTextboxType != 9) {
                 if(dComIfGp_roomControl_getStayNo()) {
                     mDoAud_messageSePlay(0, 0, dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
                 }
@@ -2085,20 +2175,20 @@ void fopMsgM_msgDataProc_c::stringSet() {
             }
 
             if(fopMsgM_nextMsgFlagCheck()) {
-                if(field_0x0C->mNextMsgNo != 0) {
-                    fopMsgM_messageSet(field_0x0C->mNextMsgNo);
-                    field_0x27C = 0xF;
+                if(mesgEntry->mNextMsgNo != 0) {
+                    fopMsgM_messageSet(mesgEntry->mNextMsgNo);
+                    mesgStatus = 0xF;
                 }
                 else {
-                    field_0x27C = 0x10;
+                    mesgStatus = 0x10;
                 }
             }
             else {
                 if(getAutoSendFlag() || getHandSendFlag()) {
-                    field_0x27C = 0xA;
+                    mesgStatus = 0xA;
                 }
                 else {
-                    field_0x27C = 0xE;
+                    mesgStatus = 0xE;
                 }
             }
         }
@@ -2108,8 +2198,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
 
     while(true) {
         while(true) {
-            if(field_0x3C[field_0x118] == '\0') {
-                if(field_0x299 == 0 && field_0x29A == 0 && field_0x297 == 0 && field_0x298 == 0 && field_0x294) {
+            if(bmgData[count] == '\0') {
+                if(field_0x299 == 0 && field_0x29A == 0 && autoSendFlag == 0 && handSendFlag == 0 && selectFlag) {
                     return;
                 }
 
@@ -2128,11 +2218,11 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     strcat(field_0x6C, field_0x70);
                 }
 
-                if(field_0x27C == 8 || field_0x27C == 9 || field_0x27C == 0x14 || field_0x27C == 0x15) {
+                if(mesgStatus == 8 || mesgStatus == 9 || mesgStatus == 0x14 || mesgStatus == 0x15) {
                     return;
                 }
 
-                if(field_0x0C->mTextboxType != 2 && field_0x0C->mTextboxType != 6 && field_0x0C->mTextboxType != 7 && field_0x0C->mTextboxType != 0xB && field_0x0C->mTextboxType != 5 && field_0x0C->mTextboxType != 0xD && field_0x0C->mTextboxType != 9) {
+                if(mesgEntry->mTextboxType != 2 && mesgEntry->mTextboxType != 6 && mesgEntry->mTextboxType != 7 && mesgEntry->mTextboxType != 0xB && mesgEntry->mTextboxType != 5 && mesgEntry->mTextboxType != 0xD && mesgEntry->mTextboxType != 9) {
                     if(dComIfGp_roomControl_getStayNo()) {
                         mDoAud_messageSePlay(0, 0, dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
                     }
@@ -2142,20 +2232,20 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
 
                 if(fopMsgM_nextMsgFlagCheck()) {
-                    if(field_0x0C->mNextMsgNo != 0) {
-                        fopMsgM_messageSet(field_0x0C->mNextMsgNo);
-                        field_0x27C = 0xF;
+                    if(mesgEntry->mNextMsgNo != 0) {
+                        fopMsgM_messageSet(mesgEntry->mNextMsgNo);
+                        mesgStatus = 0xF;
                     }
                     else {
-                        field_0x27C = 0x10;
+                        mesgStatus = 0x10;
                     }
                 }
                 else {
                     if(getAutoSendFlag() || getHandSendFlag()) {
-                        field_0x27C = 0xA;
+                        mesgStatus = 0xA;
                     }
                     else {
-                        field_0x27C = 0xE;
+                        mesgStatus = 0xE;
                     }
                 }
             }
@@ -2175,11 +2265,11 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 strcat(field_0x6C, field_0x70);
             }
             
-            u32 origOffset = field_0x118;
-            const char* temp = &field_0x3C[origOffset];
+            u32 origOffset = count;
+            const char* temp = &bmgData[origOffset];
             if(*temp != 0x1A) break;
             if(temp[2] == 0xFF && temp[3] == 0 && temp[4] == 0) {
-                if(field_0x0C->mMsgNo == 0x42 || field_0x0C->mMsgNo == 0x43 || field_0x0C->mMsgNo == 0x44 || field_0x0C->mMsgNo == 0x45 || field_0x0C->mMsgNo == 0x46 || field_0x0C->mMsgNo == 0x47 || field_0x0C->mMsgNo == 0x48 || field_0x0C->mMsgNo == 0x49 || field_0x0C->mMsgNo == 0x4A || field_0x0C->mMsgNo == 0x4B) {
+                if(mesgEntry->mMsgNo == 0x42 || mesgEntry->mMsgNo == 0x43 || mesgEntry->mMsgNo == 0x44 || mesgEntry->mMsgNo == 0x45 || mesgEntry->mMsgNo == 0x46 || mesgEntry->mMsgNo == 0x47 || mesgEntry->mMsgNo == 0x48 || mesgEntry->mMsgNo == 0x49 || mesgEntry->mMsgNo == 0x4A || mesgEntry->mMsgNo == 0x4B) {
                     static const u32 colorTable[9] = {
                         0x000000FF,
                         0xB40000FF,
@@ -2198,7 +2288,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
                 else {
                     if(temp[5] > -1 && temp[5] < 9) {
-                        if(field_0x0C->mTextboxType == 2 || field_0x0C->mTextboxType == 6 || field_0x0C->mTextboxType == 7) {
+                        if(mesgEntry->mTextboxType == 2 || mesgEntry->mTextboxType == 6 || mesgEntry->mTextboxType == 7) {
                             static const u32 colorTable[9] = {
                                 0x00000000,
                                 0xB4000000,
@@ -2210,7 +2300,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                                 0x50505000,
                                 0xFFB40000,
                             };
-                            field_0x25C = colorTable[field_0x0C->mTextboxType];
+                            field_0x25C = colorTable[mesgEntry->mTextboxType];
                             char buf[16];
                             sprintf(buf, "\x1B""CC[%08x]\x1B""GC[%08x]", field_0x25C | field_0x290, field_0x25C | field_0x291);
                             strcat(field_0x60, buf);
@@ -2241,12 +2331,12 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     }
                 }
 
-                field_0x118 += field_0x3C[field_0x118 + 1];
+                count += bmgData[count + 1];
             }
             else if(temp[2] == 0xFF && temp[3] == 0 && temp[4] == 1) {
                 f32 temp2 = *(u16*)(&temp[5]);
                 u32 temp3 = field_0x148;
-                field_0x148 = field_0x144 * temp2 * 0.1f + 0.5f;
+                field_0x148 = fontSize * temp2 * 0.1f + 0.5f;
                 if(field_0x134 == 0) {
                     fopMsgM_setFontsizeCenter(field_0x60, field_0x68, field_0x64, field_0x6C, temp3, field_0x148);
                     if(temp2 * 0.1f > 1.0f && field_0x29D == 0) {
@@ -2265,10 +2355,10 @@ void fopMsgM_msgDataProc_c::stringSet() {
                         strcat(field_0x68, buf);
                         field_0x29D = 1;
                     }
-                    fopMsgM_setFontsizeCenter2(field_0x60, field_0x68, field_0x64, field_0x6C, temp3, field_0x148, field_0x144, field_0x120);
+                    fopMsgM_setFontsizeCenter2(field_0x60, field_0x68, field_0x64, field_0x6C, temp3, field_0x148, fontSize, lineSpace);
                 }
 
-                field_0x118 += field_0x3C[field_0x118 + 1];
+                count += bmgData[count + 1];
             }
             else if(temp[2] == 0xFF && temp[3] == 0 && temp[4] == 2) {
                 if(temp[1] != 5) {
@@ -2276,15 +2366,15 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     field_0x18 = 0.0f;
                     field_0x1C = 0.0f;
                     field_0x28 = field_0x20;
-                    field_0x154 = field_0x3C[field_0x118 + 5];
-                    field_0x118 += 6;
-                    while(field_0x118 < origOffset + temp[2]) {
+                    field_0x154 = bmgData[count + 5];
+                    count += 6;
+                    while(count < origOffset + temp[2]) {
                         char buf[3];
-                        buf[0] = field_0x3C[field_0x118];
-                        buf[1] = field_0x3C[field_0x118 + 1];
+                        buf[0] = bmgData[count];
+                        buf[1] = bmgData[count + 1];
                         buf[2] = '\0';
                         strcat(field_0x70, buf);
-                        u16 temp2 = *(u16*)(&field_0x3C[field_0x118]);
+                        u16 temp2 = *(u16*)(&bmgData[count]);
                         if(field_0x29B == 0) {
                             field_0x18 = rubyLength(temp2, true);
                             field_0x29B = 1;
@@ -2293,7 +2383,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                             field_0x18 += rubyLength(temp2, false);
                         }
 
-                        field_0x118 += 2;
+                        count += 2;
                     }
                 }
             }
@@ -2305,12 +2395,12 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     dComIfGs_getPalLanguage() == 1 &&
 #endif
                     (
-                        field_0x0C->mMsgNo == 0x33B ||
-                        field_0x0C->mMsgNo == 0xC8B ||
-                        field_0x0C->mMsgNo == 0x1D21 ||
-                        field_0x0C->mMsgNo == 0x31D7 ||
-                        field_0x0C->mMsgNo == 0x37DD ||
-                        field_0x0C->mMsgNo == 0x37DE
+                        mesgEntry->mMsgNo == 0x33B ||
+                        mesgEntry->mMsgNo == 0xC8B ||
+                        mesgEntry->mMsgNo == 0x1D21 ||
+                        mesgEntry->mMsgNo == 0x31D7 ||
+                        mesgEntry->mMsgNo == 0x37DD ||
+                        mesgEntry->mMsgNo == 0x37DE
                     )
                 ) {
                     s32 bufLen = strlen(buf);
@@ -2350,28 +2440,28 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     field_0x150 += 1;
                 }
 
-                if(field_0x294 != 1) {
-                    field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+                if(selectFlag != 1) {
+                    field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
                 }
                 else {
-                    field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+                    field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
                 }
 
-                field_0x118 += field_0x3C[field_0x118 + 1];
+                count += bmgData[count + 1];
             }
             else if(temp[2] == 0 && temp[3] == 0 && temp[4] == 1) {
                 field_0x29A = 1;
-                field_0x118 = field_0x3C[field_0x118 + 1];
+                count = bmgData[count + 1];
             }
             else if(temp[2] == 0 && temp[3] == 0 && temp[4] == 2) {
                 field_0x29A = 0;
-                field_0x118 = field_0x3C[field_0x118 + 1];
+                count = bmgData[count + 1];
             }
             else if(temp[2] == 0 && temp[3] == 0 && temp[4] == 3) {
                 field_0x158 = temp[5] << 8;
-                field_0x158 |= field_0x3C[field_0x118 + 6];
+                field_0x158 |= bmgData[count + 6];
                 setAutoSendFlagOn();
-                field_0x118 = field_0x3C[field_0x118 + 1];
+                count = bmgData[count + 1];
             }
 
             sprintf(field_0x60, "\x1B""CL[%d]", 0.5f);
@@ -2404,42 +2494,42 @@ void fopMsgM_msgDataProc_c::stringSet() {
     strcat(field_0x64, "\n");
     strcat(field_0x68, "\n");
     strcat(field_0x6C, "\n");
-    field_0x118++;
-    field_0x130++;
+    count++;
+    lineCount++;
     if(field_0x29D) {
-        field_0x130++;
+        lineCount++;
         field_0x29D = 0;
     }
 }
 
 /* 80034F5C-80034F68       .text setSelectFlagYokoOn__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::setSelectFlagYokoOn() {
-    field_0x294 = 2;
+    selectFlag = 2;
 }
 
 /* 80034F68-80034F74       .text setSelectFlagOn__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::setSelectFlagOn() {
-    field_0x294 = 1;
+    selectFlag = 1;
 }
 
 /* 80034F74-80034F80       .text setHandSendFlagOn__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::setHandSendFlagOn() {
-    field_0x298 = 1;
+    handSendFlag = 1;
 }
 
 /* 80034F80-80034F8C       .text setAutoSendFlagOn__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::setAutoSendFlagOn() {
-    field_0x297 = 1;
+    autoSendFlag = 1;
 }
 
 /* 80034F8C-80034F94       .text getHandSendFlag__21fopMsgM_msgDataProc_cFv */
 u8 fopMsgM_msgDataProc_c::getHandSendFlag() {
-    return field_0x298;
+    return handSendFlag;
 }
 
 /* 80034F94-80034F9C       .text getAutoSendFlag__21fopMsgM_msgDataProc_cFv */
 u8 fopMsgM_msgDataProc_c::getAutoSendFlag() {
-    return field_0x297;
+    return autoSendFlag;
 }
 
 /* 80034FE0-80034FF4       .text fopMsgM_itemNumIdx__FUc */
@@ -2688,11 +2778,11 @@ void fopMsgM_msgDataProc_c::getRubyString(char* param_1, char* param_2, char* pa
     strcat(param_1, param_5);
     strcat(param_2, param_5);
 
-    if(field_0x294 != 1) {
-        *param_7 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        *param_7 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        *param_7 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        *param_7 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
     f32 temp3 = 0.0f;
@@ -2824,8 +2914,8 @@ void fopMsgM_msgDataProc_c::tag_len_rupee(int* param_1, f32* param_2, int* param
 void fopMsgM_msgDataProc_c::tag_len_num_input(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
     char buf[12];
 
-    if(*param_5 != field_0x130) {
-        field_0x130 = *param_5;
+    if(*param_5 != lineCount) {
+        lineCount = *param_5;
     }
 
 #if VERSION == VERSION_PAL
@@ -3049,7 +3139,7 @@ void fopMsgM_msgDataProc_c::tag_len_letter(int* param_1, f32* param_2, int* para
 
 #if VERSION == VERSION_PAL
     if (dComIfGs_getPalLanguage() == 1) {
-        if (field_0x0C->mMsgNo == 0xCEB) {
+        if (mesgEntry->mMsgNo == 0xCEB) {
             if (num != 1) {
                 strcat(buf, " Briefe");
             } else {
@@ -4154,8 +4244,8 @@ void fopMsgM_msgDataProc_c::tag_len_terry_rupee(int* param_1, f32* param_2, int*
 void fopMsgM_msgDataProc_c::tag_len_input_bokobaba(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
     char buf[28];
 
-    if(*param_5 != field_0x130) {
-        field_0x130 = *param_5;
+    if(*param_5 != lineCount) {
+        lineCount = *param_5;
     }
 
 #if VERSION == VERSION_PAL
@@ -4199,8 +4289,8 @@ void fopMsgM_msgDataProc_c::tag_len_input_bokobaba(int* param_1, f32* param_2, i
 void fopMsgM_msgDataProc_c::tag_len_input_dokuro(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
     char buf[28];
 
-    if(*param_5 != field_0x130) {
-        field_0x130 = *param_5;
+    if(*param_5 != lineCount) {
+        lineCount = *param_5;
     }
 
 #if VERSION == VERSION_PAL
@@ -4244,8 +4334,8 @@ void fopMsgM_msgDataProc_c::tag_len_input_dokuro(int* param_1, f32* param_2, int
 void fopMsgM_msgDataProc_c::tag_len_input_chuchu(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
     char buf[28];
 
-    if(*param_5 != field_0x130) {
-        field_0x130 = *param_5;
+    if(*param_5 != lineCount) {
+        lineCount = *param_5;
     }
 
 #if VERSION == VERSION_PAL
@@ -4289,8 +4379,8 @@ void fopMsgM_msgDataProc_c::tag_len_input_chuchu(int* param_1, f32* param_2, int
 void fopMsgM_msgDataProc_c::tag_len_input_pendant(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
     char buf[28];
 
-    if(*param_5 != field_0x130) {
-        field_0x130 = *param_5;
+    if(*param_5 != lineCount) {
+        lineCount = *param_5;
     }
 
 #if VERSION == VERSION_PAL
@@ -4334,8 +4424,8 @@ void fopMsgM_msgDataProc_c::tag_len_input_pendant(int* param_1, f32* param_2, in
 void fopMsgM_msgDataProc_c::tag_len_input_hane(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
     char buf[28];
 
-    if(*param_5 != field_0x130) {
-        field_0x130 = *param_5;
+    if(*param_5 != lineCount) {
+        lineCount = *param_5;
     }
 
 #if VERSION == VERSION_PAL
@@ -4379,8 +4469,8 @@ void fopMsgM_msgDataProc_c::tag_len_input_hane(int* param_1, f32* param_2, int* 
 void fopMsgM_msgDataProc_c::tag_len_input_kenshi(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
     char buf[28];
 
-    if(*param_5 != field_0x130) {
-        field_0x130 = *param_5;
+    if(*param_5 != lineCount) {
+        lineCount = *param_5;
     }
 
 #if VERSION == VERSION_PAL
@@ -4444,11 +4534,11 @@ void fopMsgM_msgDataProc_c::tag_kaisen_game() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
     dComIfGs_getEventReg(dSv_event_flag_c::UNK_BEFF);
@@ -4474,7 +4564,7 @@ void fopMsgM_msgDataProc_c::tag_kaisen_game() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 80038178-80038330       .text tag_rupee__21fopMsgM_msgDataProc_cFv */
@@ -4534,14 +4624,14 @@ void fopMsgM_msgDataProc_c::tag_rupee() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 80038330-80038538       .text tag_num_input__21fopMsgM_msgDataProc_cFv */
@@ -4549,10 +4639,10 @@ void fopMsgM_msgDataProc_c::tag_num_input() {
     char buf[8];
     char buf2[16];
 
-    int temp = (field_0x148 + field_0x11C) * 3;
-    field_0x294 = 3;
+    int temp = (field_0x148 + charSpace) * 3;
+    selectFlag = 3;
     iconSelect(field_0x148, 0x16);
-    field_0x27C = 0x15;
+    mesgStatus = 0x15;
     sprintf(buf2, "\x1B""CR[%d]", temp);
     strcat(field_0x60, buf2);
     strcat(field_0x68, buf2);
@@ -4592,14 +4682,14 @@ void fopMsgM_msgDataProc_c::tag_num_input() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 80038538-8003872C       .text tag_sword_game__21fopMsgM_msgDataProc_cFv */
@@ -4626,11 +4716,11 @@ void fopMsgM_msgDataProc_c::tag_sword_game() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
     char buf2[12];
@@ -4669,7 +4759,7 @@ void fopMsgM_msgDataProc_c::tag_sword_game() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003872C-800388AC       .text tag_letter_game__21fopMsgM_msgDataProc_cFv */
@@ -4696,14 +4786,14 @@ void fopMsgM_msgDataProc_c::tag_letter_game() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 800388AC-80038A40       .text tag_letter_game_max__21fopMsgM_msgDataProc_cFv */
@@ -4730,14 +4820,14 @@ void fopMsgM_msgDataProc_c::tag_letter_game_max() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 80038A40-80038BC0       .text tag_fish__21fopMsgM_msgDataProc_cFv */
@@ -4764,14 +4854,14 @@ void fopMsgM_msgDataProc_c::tag_fish() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 80038BC0-80038D7C       .text tag_fish_rupee__21fopMsgM_msgDataProc_cFv */
@@ -4831,14 +4921,14 @@ void fopMsgM_msgDataProc_c::tag_fish_rupee() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 80038D7C-80038F70       .text tag_letter__21fopMsgM_msgDataProc_cFv */
@@ -4865,18 +4955,18 @@ void fopMsgM_msgDataProc_c::tag_letter() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
     char buf2[12];
 
 #if VERSION == VERSION_PAL
     if (dComIfGs_getPalLanguage() == 1) {
-        if (field_0x0C->mMsgNo == 0xCEB) {
+        if (mesgEntry->mMsgNo == 0xCEB) {
             if (num != 1) {
                 strcpy(buf2, " Briefe");
             } else {
@@ -4920,7 +5010,7 @@ void fopMsgM_msgDataProc_c::tag_letter() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 80038F70-8003912C       .text tag_rescue__21fopMsgM_msgDataProc_cFv */
@@ -4947,11 +5037,11 @@ void fopMsgM_msgDataProc_c::tag_rescue() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
 #if VERSION == VERSION_PAL
@@ -4978,7 +5068,7 @@ void fopMsgM_msgDataProc_c::tag_rescue() {
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &field_0x20, &field_0x24, &field_0x150);
 #endif
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003912C-800394B4       .text tag_forest_timer__21fopMsgM_msgDataProc_cFv */
@@ -5005,11 +5095,11 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
 
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
     strcpy(buf2, ":");
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
@@ -5038,15 +5128,15 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &field_0x20, &field_0x24, &field_0x150);
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 800394B4-8003966C       .text tag_birdman__21fopMsgM_msgDataProc_cFv */
@@ -5110,14 +5200,14 @@ void fopMsgM_msgDataProc_c::tag_birdman() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003966C-80039834       .text tag_point__21fopMsgM_msgDataProc_cFv */
@@ -5185,14 +5275,14 @@ void fopMsgM_msgDataProc_c::tag_point() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 80039834-80039A28       .text tag_get_pendant__21fopMsgM_msgDataProc_cFv */
@@ -5219,11 +5309,11 @@ void fopMsgM_msgDataProc_c::tag_get_pendant() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
 #if VERSION == VERSION_PAL
@@ -5272,7 +5362,7 @@ void fopMsgM_msgDataProc_c::tag_get_pendant() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 80039A28-80039C2C       .text tag_rev_pendant__21fopMsgM_msgDataProc_cFv */
@@ -5299,11 +5389,11 @@ void fopMsgM_msgDataProc_c::tag_rev_pendant() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
 #if VERSION == VERSION_PAL
@@ -5352,7 +5442,7 @@ void fopMsgM_msgDataProc_c::tag_rev_pendant() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 80039C2C-80039FA0       .text tag_pig_timer__21fopMsgM_msgDataProc_cFv */
@@ -5379,11 +5469,11 @@ void fopMsgM_msgDataProc_c::tag_pig_timer() {
 
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
     strcpy(buf2, ":");
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
@@ -5412,15 +5502,15 @@ void fopMsgM_msgDataProc_c::tag_pig_timer() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &field_0x20, &field_0x24, &field_0x150);
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 80039FA0-8003A194       .text tag_get_bomb__21fopMsgM_msgDataProc_cFv */
@@ -5447,11 +5537,11 @@ void fopMsgM_msgDataProc_c::tag_get_bomb() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
     char buf2[12];
@@ -5486,7 +5576,7 @@ void fopMsgM_msgDataProc_c::tag_get_bomb() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003A194-8003A388       .text tag_get_arrow__21fopMsgM_msgDataProc_cFv */
@@ -5513,11 +5603,11 @@ void fopMsgM_msgDataProc_c::tag_get_arrow() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
     char buf2[12];
@@ -5552,7 +5642,7 @@ void fopMsgM_msgDataProc_c::tag_get_arrow() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003A388-8003A574       .text tag_stock_bokobaba__21fopMsgM_msgDataProc_cFv */
@@ -5579,11 +5669,11 @@ void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
 #if VERSION == VERSION_PAL
@@ -5625,7 +5715,7 @@ void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
 #endif
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003A574-8003A760       .text tag_stock_dokuro__21fopMsgM_msgDataProc_cFv */
@@ -5652,11 +5742,11 @@ void fopMsgM_msgDataProc_c::tag_stock_dokuro() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
 #if VERSION == VERSION_PAL
@@ -5701,7 +5791,7 @@ void fopMsgM_msgDataProc_c::tag_stock_dokuro() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003A760-8003A914       .text tag_stock_chuchu__21fopMsgM_msgDataProc_cFv */
@@ -5728,11 +5818,11 @@ void fopMsgM_msgDataProc_c::tag_stock_chuchu() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
 #if VERSION == VERSION_PAL
@@ -5766,7 +5856,7 @@ void fopMsgM_msgDataProc_c::tag_stock_chuchu() {
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &field_0x20, &field_0x24, &field_0x150);
 #endif
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003A914-8003AB00       .text tag_stock_pendant__21fopMsgM_msgDataProc_cFv */
@@ -5793,11 +5883,11 @@ void fopMsgM_msgDataProc_c::tag_stock_pendant() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
 #if VERSION == VERSION_PAL
@@ -5842,7 +5932,7 @@ void fopMsgM_msgDataProc_c::tag_stock_pendant() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003AB00-8003ACEC       .text tag_stock_hane__21fopMsgM_msgDataProc_cFv */
@@ -5869,11 +5959,11 @@ void fopMsgM_msgDataProc_c::tag_stock_hane() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
 #if VERSION == VERSION_PAL
@@ -5918,7 +6008,7 @@ void fopMsgM_msgDataProc_c::tag_stock_hane() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003ACEC-8003AED8       .text tag_stock_kenshi__21fopMsgM_msgDataProc_cFv */
@@ -5945,11 +6035,11 @@ void fopMsgM_msgDataProc_c::tag_stock_kenshi() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
     char buf2[12];
@@ -5988,7 +6078,7 @@ void fopMsgM_msgDataProc_c::tag_stock_kenshi() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003AED8-8003B088       .text tag_terry_rupee__21fopMsgM_msgDataProc_cFv */
@@ -6048,14 +6138,14 @@ void fopMsgM_msgDataProc_c::tag_terry_rupee() {
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003B088-8003B21C       .text tag_input_bokobaba__21fopMsgM_msgDataProc_cFv */
@@ -6063,21 +6153,21 @@ void fopMsgM_msgDataProc_c::tag_input_bokobaba() {
     /* Nonmatching */
     char buf[16];
 
-    int temp = (field_0x148 + field_0x11C) * 2;
-    field_0x294 = 3;
+    int temp = (field_0x148 + charSpace) * 2;
+    selectFlag = 3;
     iconSelect(field_0x148, 0x16);
-    field_0x27C = 0x15;
+    mesgStatus = 0x15;
     sprintf(buf, "\x1B""CR[%d]", temp);
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
     field_0x14 = temp;
     field_0x150 += 2;
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
 #if VERSION == VERSION_PAL
@@ -6100,7 +6190,7 @@ void fopMsgM_msgDataProc_c::tag_input_bokobaba() {
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
 #endif
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003B21C-8003B3B0       .text tag_input_dokuro__21fopMsgM_msgDataProc_cFv */
@@ -6108,21 +6198,21 @@ void fopMsgM_msgDataProc_c::tag_input_dokuro() {
     /* Nonmatching */
     char buf[16];
 
-    int temp = (field_0x148 + field_0x11C) * 2;
-    field_0x294 = 3;
+    int temp = (field_0x148 + charSpace) * 2;
+    selectFlag = 3;
     iconSelect(field_0x148, 0x16);
-    field_0x27C = 0x15;
+    mesgStatus = 0x15;
     sprintf(buf, "\x1B""CR[%d]", temp);
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
     field_0x14 = temp;
     field_0x150 += 2;
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
 #if VERSION == VERSION_PAL
@@ -6145,7 +6235,7 @@ void fopMsgM_msgDataProc_c::tag_input_dokuro() {
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
 #endif
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003B3B0-8003B544       .text tag_input_chuchu__21fopMsgM_msgDataProc_cFv */
@@ -6153,21 +6243,21 @@ void fopMsgM_msgDataProc_c::tag_input_chuchu() {
     /* Nonmatching */
     char buf[16];
 
-    int temp = (field_0x148 + field_0x11C) * 2;
-    field_0x294 = 3;
+    int temp = (field_0x148 + charSpace) * 2;
+    selectFlag = 3;
     iconSelect(field_0x148, 0x16);
-    field_0x27C = 0x15;
+    mesgStatus = 0x15;
     sprintf(buf, "\x1B""CR[%d]", temp);
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
     field_0x14 = temp;
     field_0x150 += 2;
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
 #if VERSION == VERSION_PAL
@@ -6189,7 +6279,7 @@ void fopMsgM_msgDataProc_c::tag_input_chuchu() {
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &field_0x20, &field_0x24, &field_0x150);
 #endif
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003B544-8003B6D8       .text tag_input_pendant__21fopMsgM_msgDataProc_cFv */
@@ -6197,21 +6287,21 @@ void fopMsgM_msgDataProc_c::tag_input_pendant() {
     /* Nonmatching */
     char buf[16];
 
-    int temp = (field_0x148 + field_0x11C) * 2;
-    field_0x294 = 3;
+    int temp = (field_0x148 + charSpace) * 2;
+    selectFlag = 3;
     iconSelect(field_0x148, 0x16);
-    field_0x27C = 0x15;
+    mesgStatus = 0x15;
     sprintf(buf, "\x1B""CR[%d]", temp);
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
     field_0x14 = temp;
     field_0x150 += 2;
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
 #if VERSION == VERSION_PAL
@@ -6234,7 +6324,7 @@ void fopMsgM_msgDataProc_c::tag_input_pendant() {
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
 #endif
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003B6D8-8003B86C       .text tag_input_hane__21fopMsgM_msgDataProc_cFv */
@@ -6242,21 +6332,21 @@ void fopMsgM_msgDataProc_c::tag_input_hane() {
     /* Nonmatching */
     char buf[16];
 
-    int temp = (field_0x148 + field_0x11C) * 2;
-    field_0x294 = 3;
+    int temp = (field_0x148 + charSpace) * 2;
+    selectFlag = 3;
     iconSelect(field_0x148, 0x16);
-    field_0x27C = 0x15;
+    mesgStatus = 0x15;
     sprintf(buf, "\x1B""CR[%d]", temp);
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
     field_0x14 = temp;
     field_0x150 += 2;
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
 #if VERSION == VERSION_PAL
@@ -6279,7 +6369,7 @@ void fopMsgM_msgDataProc_c::tag_input_hane() {
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
 #endif
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 
 /* 8003B86C-8003BA00       .text tag_input_kenshi__21fopMsgM_msgDataProc_cFv */
@@ -6287,21 +6377,21 @@ void fopMsgM_msgDataProc_c::tag_input_kenshi() {
     /* Nonmatching */
     char buf[16];
 
-    int temp = (field_0x148 + field_0x11C) * 2;
-    field_0x294 = 3;
+    int temp = (field_0x148 + charSpace) * 2;
+    selectFlag = 3;
     iconSelect(field_0x148, 0x16);
-    field_0x27C = 0x15;
+    mesgStatus = 0x15;
     sprintf(buf, "\x1B""CR[%d]", temp);
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
     field_0x14 = temp;
     field_0x150 += 2;
 
-    if(field_0x294 != 1) {
-        field_0x20 = field_0xF8[field_0x130] + field_0x14 + 0.5f;
+    if(selectFlag != 1) {
+        field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
     }
     else {
-        field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
+        field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
     }
 
 #if VERSION == VERSION_PAL
@@ -6324,7 +6414,7 @@ void fopMsgM_msgDataProc_c::tag_input_kenshi() {
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &field_0x20, &field_0x24, &field_0x150);
 #endif
 
-    field_0x118 += field_0x3C[field_0x118 + 1];
+    count += bmgData[count + 1];
 }
 #endif
 

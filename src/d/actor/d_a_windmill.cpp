@@ -208,7 +208,7 @@ void daWindMill_c::CreateInit() {
     set_mtx();
 
     for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
-        if (i == 2) {
+        if (i == HPU1_JNT_POLYSURFACE2007_e) {
             mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
             break;
         }
