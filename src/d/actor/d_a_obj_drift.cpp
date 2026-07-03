@@ -206,10 +206,11 @@ BOOL daObjDrift::Act_c::Create() {
 
 /* 00000370-0000050C       .text Mthd_Create__Q210daObjDrift5Act_cFv */
 cPhs_State daObjDrift::Act_c::Mthd_Create() {
-    fopAcM_ct(this, Act_c);
+    fopAcM_ct_Retail(this, Act_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
+        fopAcM_ct_Demo(this, Act_c);
         mType = daObj::PrmAbstract(this, PRM_STATE_W, PRM_STATE_S);
         phase_state = MoveBGCreate(
             M_arcname,
@@ -282,7 +283,7 @@ BOOL daObjDrift::Act_c::Delete() {
 
 /* 0000095C-000009A8       .text Mthd_Delete__Q210daObjDrift5Act_cFv */
 BOOL daObjDrift::Act_c::Mthd_Delete() {
-    BOOL ret = MoveBGDelete();
+    s32 ret = MoveBGDelete();
     dComIfG_resDeleteDemo(&mPhase, M_arcname);
     return ret;
 }
@@ -307,7 +308,7 @@ void daObjDrift::Act_c::mode_wait() {
             mode_rot_init();
         }
     } else {
-        mCyl.MoveCAtTg(current.pos);
+        mCyl.MoveCAtTg(*&current.pos);
         dComIfG_Ccsp()->Set(&mCyl);
     }
 }
