@@ -400,7 +400,7 @@ void daObjDrift::Act_c::rideCB(dBgW*, fopAc_ac_c* i_this, fopAc_ac_c* i_ride) {
     Mtx invMtx;
     delta = player->current.pos - drift->current.pos;
     if (PSMTXInverse(drift->mMtx, invMtx) &&
-        !cLib_checkBit<u32>(*(u32*)((u8*)&g_dComIfG_gameInfo + 0x5CC8), 0x100)) {
+        !dComIfGp_checkPlayerStatus0(0, daPyStts0_HANG_e)) {
         PSMTXMultVecSR(invMtx, &delta, &localDelta);
         f32 sqMag = localDelta.abs2XZ();
         if (localDelta.y < l_rideYMax) {
