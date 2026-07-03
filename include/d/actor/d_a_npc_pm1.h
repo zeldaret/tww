@@ -12,40 +12,39 @@ public:
     typedef int (daNpc_Pm1_c::*ActionFunc)(void*);
 
     struct anm_prm_c {
-        /* 0x0 */ s8 mAnmIdx;
-        /* 0x1 */ u8 field_0x1[2];
-        /* 0x3 */ s8 mTexAnmIdx;
-        /* 0x4 */ f32 mMorf;
-        /* 0x8 */ f32 mPlaySpeed;
-        /* 0xC */ int mLoopMode;
+        /* 0x00 */ s8 mBckResIndex;
+        /* 0x01 */ s8 mResIndex;
+        /* 0x04 */ f32 mMorf;
+        /* 0x08 */ f32 mSpeed;
+        /* 0x0C */ int mLoopMode;
     };  // Size: 0x10
 
-    void getAttPos() {}
-    void getBackboneJntNum() {}
-    void getBackbone_x() {}
-    void getBackbone_y() {}
-    void getEyePos() {}
-    void getHeadJntNum() {}
-    void getHead_x() {}
-    void getHead_y() {}
+    s8 getHeadJntNum() { return m_head_jnt_num; }
+    s8 getBackboneJntNum()  {return m_backbone_jnt_num; }
+    s16 getBackbone_x() { return m_jnt.getBackbone_x(); }
+    s16 getBackbone_y() { return m_jnt.getBackbone_y(); }
+    s16 getHead_x() { return m_jnt.getHead_x(); }
+    s16 getHead_y() { return m_jnt.getHead_y(); }
+    Vec* getAttPos() { return &mAttPos; }
+    Vec* getEyePos() { return &mEyePos; }
 
     bool createInit();
     void setMtx();
     BOOL anmResID(int, int*, int*);
     void BtpNum2ResID(int, int*);
     void setAnm_tex(signed char);
-    BOOL init_btp(bool, int);
+    u8 init_btp(bool, int);
     BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
     BOOL setAnm_anm(anm_prm_c*);
     void setAnm();
     void chngAnmTag();
     void ctrlAnmTag();
-    void chngAnmAtr(unsigned char);
+    void chngAnmAtr(u8);
     void ctrlAnmAtr();
     void setAnm_ATR(int);
     void anmAtr(unsigned short);
-    void setStt(signed char);
+    void setStt(s8);
     u16 next_msgStatus(u32*);
     u32 getMsg();
     void eventOrder();
@@ -55,21 +54,20 @@ public:
     void setAttention();
     bool decideType(int);
     void event_actionInit(int);
-    BOOL event_action();
+    u8 event_action();
     void privateCut();
     void endEvent();
     void event_proc();
     BOOL set_action(ActionFunc, void*);
-    bool wait01();
-    bool talk01();
+    BOOL wait01();
+    BOOL talk01();
     int wait_action1(void*);
     u8 demo();
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void CreateHeap();
-
+    BOOL CreateHeap();
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhase;
     /* 0x6CC */ s8 m_head_jnt_num;
@@ -81,7 +79,7 @@ public:
     /* 0x6DC */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F0 */ u8 mBtpFrame;
     /* 0x6F1 */ u8 field_0x6F1;
-    /* 0x6F2 */ s16 field_0x6F2;
+    /* 0x6F2 */ s16 mTimer;
     /* 0x6F4 */ ActionFunc mCurrActionFunc;
     /* 0x700 */ dNpc_EventCut_c mEventCut;
     /* 0x76C */ csXyz mRot;
@@ -109,11 +107,11 @@ public:
     /* 0x7C7 */ u8 field_0x7C7;
     /* 0x7C8 */ u8 field_0x7C8;
     /* 0x7C9 */ s8 field_0x7C9;
-    /* 0x7CA */ s8 field_0x7CA;
+    /* 0x7CA */ u8 field_0x7CA;
     /* 0x7CB */ u8 field_0x7CB;
     /* 0x7CC */ u8 field_0x7CC;
     /* 0x7CD */ s8 field_0x7CD;
-    /* 0x7CE */ s8 field_0x7CE;
+    /* 0x7CE */ s8 mBckResIndex;
     /* 0x7CF */ s8 field_0x7CF;
     /* 0x7D0 */ s8 field_0x7D0;
     /* 0x7D1 */ s8 field_0x7D1;
