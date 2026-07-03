@@ -437,11 +437,12 @@ void dMsg2_yose_select(sub_msg2_class* i_Msg, u8 i_index) {
 /* 801E86E8-801E8798       .text dMsg2_textPosition__FP14sub_msg2_classUc */
 // NONMATCHING - small reg alloc
 void dMsg2_textPosition(sub_msg2_class* i_Msg, u8 i_index) {
+    int r7 = 0;
     int temp_r0 = i_Msg->field_0xeb0 * (3 - i_Msg->field_0xecc[i_index]);
-    ((J2DTextBox*)i_Msg->text_pane[i_index].pane)->shiftSet(0.0f, temp_r0);
-    ((J2DTextBox*)i_Msg->ruby_pane[i_index].pane)->shiftSet(0.0f, temp_r0);
-    ((J2DTextBox*)i_Msg->textSdw_pane[i_index].pane)->shiftSet(0.0f, temp_r0);
-    ((J2DTextBox*)i_Msg->rubySdw_pane[i_index].pane)->shiftSet(0.0f, temp_r0);
+    ((J2DTextBox*)i_Msg->text_pane[i_index].pane)->shiftSet(r7, temp_r0);
+    ((J2DTextBox*)i_Msg->ruby_pane[i_index].pane)->shiftSet(r7, temp_r0);
+    ((J2DTextBox*)i_Msg->textSdw_pane[i_index].pane)->shiftSet(r7, temp_r0);
+    ((J2DTextBox*)i_Msg->rubySdw_pane[i_index].pane)->shiftSet(r7, temp_r0);
 }
 
 /* 801E8798-801E880C       .text dMsg2_rubySet__FP14sub_msg2_class */
@@ -464,10 +465,10 @@ void dMsg2_arrowMove(sub_msg2_class* i_Msg) {
         i_Msg->field_0xebc -= 12;
     }
 
-    i_Msg->field_0xc20.pane->move(i_Msg->field_0xc20.mPosTopLeftOrig.x, (i_Msg->field_0xc20.mPosTopLeftOrig.y - 3.0f) - abs(6 - i_Msg->field_0xebc));
-    i_Msg->field_0xc58.pane->move(i_Msg->field_0xc20.mPosTopLeftOrig.x, (i_Msg->field_0xc20.mPosTopLeftOrig.y - 3.0f) - abs(6 - i_Msg->field_0xebc));
-    i_Msg->field_0xbb0.pane->move(i_Msg->field_0xbb0.mPosTopLeftOrig.x, (i_Msg->field_0xbb0.mPosTopLeftOrig.y - 3.0f) + abs(6 - i_Msg->field_0xebc));
-    i_Msg->field_0xbe8.pane->move(i_Msg->field_0xbb0.mPosTopLeftOrig.x, (i_Msg->field_0xbb0.mPosTopLeftOrig.y - 3.0f) + abs(6 - i_Msg->field_0xebc));
+    i_Msg->field_0xc20.pane->move(i_Msg->field_0xc20.mPosTopLeftOrig.x, (i_Msg->field_0xc20.mPosTopLeftOrig.y - DEMO_SELECT(0.0f, 3.0f)) - abs(6 - i_Msg->field_0xebc));
+    i_Msg->field_0xc58.pane->move(i_Msg->field_0xc20.mPosTopLeftOrig.x, (i_Msg->field_0xc20.mPosTopLeftOrig.y - DEMO_SELECT(0.0f, 3.0f)) - abs(6 - i_Msg->field_0xebc));
+    i_Msg->field_0xbb0.pane->move(i_Msg->field_0xbb0.mPosTopLeftOrig.x, (i_Msg->field_0xbb0.mPosTopLeftOrig.y - DEMO_SELECT(0.0f, 3.0f)) + abs(6 - i_Msg->field_0xebc));
+    i_Msg->field_0xbe8.pane->move(i_Msg->field_0xbb0.mPosTopLeftOrig.x, (i_Msg->field_0xbb0.mPosTopLeftOrig.y - DEMO_SELECT(0.0f, 3.0f)) + abs(6 - i_Msg->field_0xebc));
 }
 
 /* 801E8994-801E8A70       .text dMsg2_aimAlphaSqare__FP14sub_msg2_classii */
@@ -647,28 +648,32 @@ void dMsg2_messageDataInit(sub_msg2_class* i_Msg, int i_index) {
 }
 
 /* 801E9254-801E93B4       .text dMsg2_stopProc__FP14sub_msg2_class */
-// NONMATCHING - instruction order, missing inline?
 int dMsg2_stopProc(sub_msg2_class* i_Msg) {
     if (i_Msg->field_0xedd == 0) {
         if (CPad_GET_STICK_POS_Y(0) > 0.7f || CPad_GET_STICK_POS_Y(3) > 0.7f) {
             if (i_Msg->field_0xec4 != 0) {
+                u8 r4 = i_Msg->field_0xe9e;
                 i_Msg->field_0xedd = 1;
-                dMsg2_screenDataSet(i_Msg, i_Msg->field_0xe9e);
+                dMsg2_screenDataSet(i_Msg, r4);
                 i_Msg->field_0xec0 = 3;
                 i_Msg->field_0xec4 -= i_Msg->mesgEntry.field_0x16;
                 i_Msg->msg.mStatus = 5;
                 mDoAud_seStart(JA_SE_SCROLL_1, NULL);
             }
         } else if (CPad_CHECK_TRIG_A(0) || CPad_GET_STICK_POS_Y(0) < -0.7f || CPad_GET_STICK_POS_Y(3) < -0.7f) {
+            u8 r4 = i_Msg->field_0xe9c;
             i_Msg->field_0xedd = 2;
-            dMsg2_screenDataSet(i_Msg, i_Msg->field_0xe9c);
+            dMsg2_screenDataSet(i_Msg, r4);
             i_Msg->field_0xec0 = 1;
             i_Msg->field_0xec4 += i_Msg->mesgEntry.field_0x16;
             i_Msg->msg.mStatus = 5;
             mDoAud_seStart(JA_SE_SCROLL_1, NULL);
-        } else {
+        }
+#if VERSION > VERSION_DEMO
+        else {
             dMeter_Info.field_0x0 = 1;
         }
+#endif
     } else {
         dMsg2_stickInfoCheck(i_Msg);
     }
@@ -677,13 +682,13 @@ int dMsg2_stopProc(sub_msg2_class* i_Msg) {
 }
 
 /* 801E93B4-801E94F0       .text dMsg2_closewaitProc__FP14sub_msg2_class */
-// NONMATCHING - instruction order, missing inline?
 int dMsg2_closewaitProc(sub_msg2_class* i_Msg) {
     if (i_Msg->field_0xedd == 0) {
         if (CPad_GET_STICK_POS_Y(0) > 0.7f || CPad_GET_STICK_POS_Y(3) > 0.7f) {
             if (i_Msg->field_0xec4 != 0) {
+                u8 r4 = i_Msg->field_0xe9e;
                 i_Msg->field_0xedd = 1;
-                dMsg2_screenDataSet(i_Msg, i_Msg->field_0xe9e);
+                dMsg2_screenDataSet(i_Msg, r4);
                 i_Msg->field_0xec0 = 3;
                 i_Msg->field_0xec4 -= i_Msg->mesgEntry.field_0x16;
                 i_Msg->msg.mStatus = 5;
@@ -693,9 +698,12 @@ int dMsg2_closewaitProc(sub_msg2_class* i_Msg) {
             i_Msg->field_0xedd = 2;
             mDoAud_seStart(JA_SE_TALK_WIN_CLOSE, NULL);
             i_Msg->msg.mStatus = 16;
-        } else {
+        }
+#if VERSION > VERSION_DEMO
+        else {
             dMeter_Info.field_0x0 = 4;
         }
+#endif
     } else {
         dMsg2_stickInfoCheck(i_Msg);
     }
@@ -773,7 +781,6 @@ int dMsg2_closeProc(sub_msg2_class* i_Msg) {
 }
 
 /* 801E97EC-801E9C44       .text dMsg2_outwaitProc__FP14sub_msg2_class */
-// NONMATCHING - small load order issue
 int dMsg2_outwaitProc(sub_msg2_class* i_Msg) {
     if (i_Msg->field_0xec0 == 1 || i_Msg->field_0xec0 == 2) {
         i_Msg->field_0xec8 += 12;
@@ -882,7 +889,7 @@ int dMsg2_outwaitProc(sub_msg2_class* i_Msg) {
 
         i_Msg->field_0xede += 37;
 
-        if (i_Msg->text_pane[i_Msg->field_0xe9d].mPosTopLeftOrig.y >= i_Msg->text_pane[0].mPosTopLeft.y) {
+        if (i_Msg->text_pane[i_Msg->field_0xe9d].mPosTopLeft.y >= i_Msg->text_pane[0].mPosTopLeftOrig.y) {
             i_Msg->text_pane[i_Msg->field_0xe9c].mPosTopLeft.y = i_Msg->text_pane[0].mPosTopLeftOrig.y - i_Msg->field_0xe94;
             i_Msg->text_pane[i_Msg->field_0xe9d].mPosTopLeft.y = i_Msg->text_pane[0].mPosTopLeftOrig.y;
             i_Msg->text_pane[i_Msg->field_0xe9e].mPosTopLeft.y = i_Msg->text_pane[0].mPosTopLeftOrig.y + i_Msg->field_0xe94;
@@ -962,20 +969,24 @@ void dDlst_2DMSG2_c::outFontDraw() {
 }
 
 /* 801E9FC4-801EA0C8       .text draw__14dDlst_2DCopy_cFv */
-// NONMATCHING
 void dDlst_2DCopy_c::draw() {
+    int r27 = 0;
+    int r28 = 0;
+    int r26 = 372;
+    int r25 = 72;
+
     J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
     graf->setPort();
 
-    f32 left = -9.0f;
-    f32 top = -21.0f;
-    f32 width = 383.04376f;
-    f32 height = 78.600006f;
+    int left = r27 * 1.0296875f + -9.0f;
+    int top = r28 * 1.0916667f + -21.0f;
+    int width = r26 * 1.0296875f;
+    int height = r25 * 1.0916667f;
 
-    GXSetScissor((int)left, (int)top, (int)width, (int)height);
+    GXSetScissor(left, top, width, height);
     sScreen2[0]->draw(0.0f, 0.0f, graf);
-    GXSetTexCopySrc((int)left, (int)top, (int)width, (int)height);
-    GXSetTexCopyDst((int)width, (int)height, GX_TF_RGB565, GX_FALSE);
+    GXSetTexCopySrc(left, top, width, height);
+    GXSetTexCopyDst(width, height, GX_TF_RGB565, GX_FALSE);
     GXCopyTex(copyTex, REG1_S(6) == 0 ? GX_TRUE : GX_FALSE);
 }
 
@@ -1010,7 +1021,6 @@ static BOOL dMsg2_Draw(sub_msg2_class* i_Msg) {
 }
 
 /* 801EA224-801EA7C4       .text dMsg2_Execute__FP14sub_msg2_class */
-// NONMATCHING - some float issues
 static BOOL dMsg2_Execute(sub_msg2_class* i_Msg) {
     if (i_Msg->msg.mStatus == fopMsgStts_BOX_OPENING_e) {
         dMsg2_openProc(i_Msg);
@@ -1034,16 +1044,13 @@ static BOOL dMsg2_Execute(sub_msg2_class* i_Msg) {
     }
 
     for (int i = 0; i < 3; i++) {
-        int sp64 = i_Msg->text_pane[i].mPosTopLeft.x + g_messageHIO.field_0x58;
-        int sp74 = i_Msg->text_pane[i].mPosTopLeft.y + temp_r4;
-        i_Msg->text_pane[i].pane->move(sp64, sp74);
-        i_Msg->ruby_pane[i].pane->move(sp64, sp74 - g_messageHIO.field_0x38);
+        f32 sp64 = i_Msg->text_pane[i].mPosTopLeft.x + g_messageHIO.field_0x58;
+        f32 sp74 = i_Msg->text_pane[i].mPosTopLeft.y + temp_r4;
+        i_Msg->text_pane[i].pane->move((int)sp64, (int)sp74);
+        i_Msg->ruby_pane[i].pane->move((int)sp64, (int)sp74 - g_messageHIO.field_0x38);
 
-        int var_r21 = sp64 + 2;
-        int var_r22 = sp74 + 2;
-
-        i_Msg->textSdw_pane[i].pane->move(var_r21, var_r22);
-        i_Msg->rubySdw_pane[i].pane->move(var_r21, var_r22 - g_messageHIO.field_0x38);
+        i_Msg->textSdw_pane[i].pane->move((int)sp64 + 2, (int)sp74 + 2);
+        i_Msg->rubySdw_pane[i].pane->move((int)sp64 + 2, (int)sp74 + 2 - g_messageHIO.field_0x38);
     }
 
     dMsg2_rubySet(i_Msg);
