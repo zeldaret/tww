@@ -223,7 +223,6 @@ void daNpc_Tt_c::msgAnm() {
                 setAnm(2);
                 break;
         }
-
     }
 }
 
@@ -260,7 +259,6 @@ u16 daNpc_Tt_c::talk() {
             l_msgId = fopMsgM_messageSet(mCurrMsgNo, this);
         } else {
             msgAnm();
-
             switch(mTalkState) {
                 case TALK_MSG_CREATE:
                     l_msg = fopMsgM_SearchByID(l_msgId);
@@ -290,7 +288,6 @@ u16 daNpc_Tt_c::talk() {
             }
         }
     }
-
     return msgStatus;
 }
 
@@ -323,8 +320,8 @@ bool daNpc_Tt_c::demoProcTact1() {
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_0C40);
             dComIfGp_evmng_cutEnd(mStaffIdx);
             break;
-
     }
+
     return TRUE;
 }
 
@@ -384,7 +381,6 @@ void daNpc_Tt_c::demoInitSpeak() {
             }
             break;
     }
-
 }
 
 /* 00000E04-00000E5C       .text demoProcSpeak__10daNpc_Tt_cFv */
@@ -532,7 +528,6 @@ BOOL daNpc_Tt_c::init() {
     fopAcM_SetStatusMap(this, 0x27);
     fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
 
-
     switch(mType) {
         case 0:
             if(setAction(&daNpc_Tt_c::wait_action, NULL)) {
@@ -599,7 +594,6 @@ void daNpc_Tt_c::lookBack() {
                 temp.y = eyePos.y;
             }
             break;
-
     }
 
     if (m_jnt.trnChk()) {
