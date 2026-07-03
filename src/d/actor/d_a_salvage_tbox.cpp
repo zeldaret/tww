@@ -238,13 +238,13 @@ void daSTBox_c::CreateInit() {
     field_0x336 = 0;
 
     for (int i = 0; i < 2; i++) {
-        JPABaseEmitter* emitter = dComIfGp_particle_set(0x38, &current.pos, 
+        JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_IT_JN_LK_NURE_POTA00, &current.pos, 
             &current.angle, NULL, 0xff, NULL, -1, 
             NULL, NULL, NULL);
         field_0x29C[i] = emitter;
     }
     if (field_0x331 == 1 || field_0x331 == 2) {
-        JPABaseEmitter* emitter = dComIfGp_particle_set(0x38, &current.pos, 
+        JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_IT_JN_LK_NURE_POTA00, &current.pos, 
             &current.angle, NULL, 0xff, NULL, -1, 
             NULL, NULL, NULL);
         field_0x2A4 = emitter;
@@ -263,7 +263,7 @@ void daSTBox_c::CreateInit() {
         }
 
         if (field_0x2C0.getEmitter() == NULL) {
-            JPABaseEmitter* emitter = dComIfGp_particle_set(0x53, &field_0x324, 
+        JPABaseEmitter* emitter = dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_SALVAGE00, &field_0x324, 
                 &current.angle, NULL, 0, &field_0x2C0, -1, 
                 NULL, NULL, NULL);
             field_0x2C0.setMPos(field_0x324);
