@@ -511,12 +511,12 @@ BOOL Mthd_Execute(void* i_this) {
 
 /* 000012D0-000012FC       .text Mthd_Draw__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
 BOOL Mthd_Draw(void* i_this) {
-    return ((daObjDrift::Act_c*)i_this)->Draw();
+    return ((daObjDrift::Act_c*)i_this)->MoveBGDraw();
 }
 
 /* 000012FC-00001328       .text Mthd_IsDelete__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
-    return ((daObjDrift::Act_c*)i_this)->IsDelete();
+    return ((daObjDrift::Act_c*)i_this)->MoveBGIsDelete();
 }
 
 static actor_method_class Mthd_Table = {

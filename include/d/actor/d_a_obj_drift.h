@@ -13,7 +13,9 @@ namespace daObjDrift {
         enum Mode {
             MODE_WAIT  = 0x0,
             MODE_ROT   = 0x1,
-
+        };
+        
+        enum Prm_e {
             PRM_TYPE_S = 0,
             PRM_TYPE_W = 4,
 
