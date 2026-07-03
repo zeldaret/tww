@@ -5,7 +5,6 @@
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
-#include "m_Do/m_Do_hostIO.h"
 
 class daNpc_Pm1_c : public fopNpc_npc_c {
 public:
@@ -32,9 +31,9 @@ public:
     void setMtx();
     BOOL anmResID(int, int*, int*);
     void BtpNum2ResID(int, int*);
-    void setAnm_tex(signed char);
+    void setAnm_tex(s8);
     u8 init_btp(bool, int);
-    BOOL initTexPatternAnm(bool);
+    u8 initTexPatternAnm(bool);
     void playTexPatternAnm();
     BOOL setAnm_anm(anm_prm_c*);
     void setAnm();
@@ -43,9 +42,9 @@ public:
     void chngAnmAtr(u8);
     void ctrlAnmAtr();
     void setAnm_ATR(int);
-    void anmAtr(unsigned short);
+    void anmAtr(u16 i_msgStatus);
     void setStt(s8);
-    u16 next_msgStatus(u32*);
+    u16 next_msgStatus(u32* pMsgNo);
     u32 getMsg();
     void eventOrder();
     void checkOrder();
@@ -96,7 +95,7 @@ public:
     /* 0x7B4 */ s8 field_0x7B4;
     /* 0x7B5 */ s8 field_0x7B5;
     /* 0x7B6 */ u8 field_0x7B6;
-    /* 0x7B7 */ u8 field_0x7B7;
+    /* 0x7B7 */ u8 mPreItemNo;
     /* 0x7B8 */ u8 field_0x7B8;
     /* 0x7B9 */ u8 field_0x7B9[3];
     /* 0x7BC */ s32 field_0x7BC;
@@ -110,48 +109,17 @@ public:
     /* 0x7CA */ u8 field_0x7CA;
     /* 0x7CB */ u8 field_0x7CB;
     /* 0x7CC */ u8 field_0x7CC;
-    /* 0x7CD */ s8 field_0x7CD;
+    /* 0x7CD */ s8 mTexPatternNum;
     /* 0x7CE */ s8 mBckResIndex;
     /* 0x7CF */ s8 field_0x7CF;
-    /* 0x7D0 */ s8 field_0x7D0;
-    /* 0x7D1 */ s8 field_0x7D1;
+    /* 0x7D0 */ s8 mStt;
+    /* 0x7D1 */ s8 mPrevStt;
     /* 0x7D2 */ s8 field_0x7D2;
-    /* 0x7D3 */ s8 field_0x7D3;
+    /* 0x7D3 */ s8 mType;
     /* 0x7D4 */ s8 field_0x7D4;
     /* 0x7D5 */ s8 field_0x7D5;
     /* 0x7D6 */ s8 field_0x7D6;
     /* 0x7D7 */ s8 field_0x7D7;
 };  // Size: 0x7D8
-
-class daNpc_Pm1_HIO_c : public JORReflexible{
-public:
-    struct hio_prm_c {
-        s16 field_0;
-        s16 field_2;
-        s16 field_4;
-        s16 field_6;
-        s16 field_8;
-        s16 field_A;
-        s16 field_C;
-        s16 field_E;
-        s16 field_10;
-        s16 field_12;
-        f32 mAttentionArrowYOffset;
-        f32 field_18;
-    };  // Size: 0x1C
-
-    daNpc_Pm1_HIO_c();
-    virtual ~daNpc_Pm1_HIO_c() {};
-
-    void genMessage(JORMContext* ctx) {}
-
-public:
-    /* 0x04 */ s8 mNo;
-    /* 0x05 */ s8 field_0x5;
-    /* 0x06 */ s8 field_0x6;
-    /* 0x07 */ s8 field_0x7;
-    /* 0x08 */ int field_0x8;
-    /* 0x0C */ hio_prm_c mPrmTbl;
-};
 
 #endif /* D_A_NPC_PM1_H */
