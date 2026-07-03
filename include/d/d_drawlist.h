@@ -149,9 +149,10 @@ public:
     void setScale(f32, f32);
     void setScroll(int, s16, s16);
     virtual void draw();
-    void setAlpha(u8) {}
-    void setBlackColor(GXColor& c) { mC0 = c; }
-    void setWhiteColor(GXColor& c) { mC1 = c; }
+
+    void setAlpha(u8 i_alpha) { mBlack.a = i_alpha; }
+    void setBlackColor(GXColor& c) { mBlack = c; }
+    void setWhiteColor(GXColor& c) { mWhite = c; }
 
 public:
     struct TexEntry {
@@ -169,8 +170,8 @@ public:
     /* 0x0A */ s16 mY1;
     /* 0x0C */ f32 mScaleX;
     /* 0x10 */ f32 mScaleY;
-    /* 0x14 */ GXColor mC0;
-    /* 0x18 */ GXColor mC1;
+    /* 0x14 */ GXColor mBlack;
+    /* 0x18 */ GXColor mWhite;
     /* 0x1C */ TexEntry mTex[2];
 };
 
