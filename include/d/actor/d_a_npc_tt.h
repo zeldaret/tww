@@ -11,6 +11,11 @@ struct tt_ke_s {
     void ke_pos_set(cXyz*);
 };
 
+struct lineKe {
+    tt_ke_s field_0x6C8[8];
+    mDoExt_3DlineMat0_c mLineMat;
+};
+
 class daNpc_Tt_c : public fopAc_ac_c {
 public:
 
@@ -147,8 +152,7 @@ public:
     /* 0x6C4 */ u8 mDanceStep;
     /* 0x6C5 */ u8 mDanceStepTimer;
     /* 0x6C6 */ u8 field_0x6C6[0x6C8 - 0x6C6];
-    /* 0x6C8 */ tt_ke_s field_0x6C8[8];
-    /* 0xE48 */ mDoExt_3DlineMat0_c mLineMat;
+    /* 0x6C8 */ lineKe mLineKe;
     /* 0xE64 */ s8 mTexPatternIdx;
     /* 0xE65 */ s8 mCurrAnmIdx;
     /* 0xE66 */ s8 mAnmLoopCount;

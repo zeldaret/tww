@@ -81,7 +81,7 @@ BOOL daNpc_Tt_c::initTexPatternAnm(bool i_modify) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
 
     m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectRes("Tt", l_btp_ix_tbl[mTexPatternIdx]);
-    JUT_ASSERT(DEMO_SELECT(317, 130), m_head_tex_pattern != NULL);
+    JUT_ASSERT(130, m_head_tex_pattern != NULL);
 
     if (!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, FALSE)) {
         return FALSE;

@@ -84,6 +84,15 @@ void daNpc_Tt_c::setAnmStatus() {
     }
 }
 
+//probably unused JUT_ASSERT
+static void dummy() {
+    OSReport("Tt");
+    OSReport("d_a_npc_tt.cpp");
+    OSReport("0");
+    OSReport("Halt");
+}
+
+#include "d/actor/d_a_npc_tt_anm.inc"
 
 /* 00000368-000003DC       .text eventOrder__10daNpc_Tt_cFv */
 void daNpc_Tt_c::eventOrder() {
@@ -141,7 +150,6 @@ u16 daNpc_Tt_c::next_msgStatus(u32* pMsgNo) {
     return msgStatus;
 }
 
-#include "d/actor/d_a_npc_tt_anm.inc"
 
 /* 000004F4-000005D0       .text getMsg__10daNpc_Tt_cFv */
 u32 daNpc_Tt_c::getMsg() {
@@ -735,14 +743,14 @@ void tt_ke_s::ke_pos_set(cXyz* i_param) {
 void daNpc_Tt_c::set_ke_root(int param_1, int param_2, int param_3) {
     cXyz temp(0.0f, 0.0f, 0.0f);
     MTXCopy(mpMorf->getModel()->getAnmMtx(param_1), *calc_mtx);
-    MtxPosition(&temp, &field_0x6C8[param_3].field_0x00[0]);
+    MtxPosition(&temp, &mLineKe.field_0x6C8[param_3].field_0x00[0]);
 
     MTXCopy(mpMorf->getModel()->getAnmMtx(param_2), *calc_mtx);
-    MtxPosition(&temp, &field_0x6C8[param_3 + 3].field_0x00[0]);
+    MtxPosition(&temp, &mLineKe.field_0x6C8[param_3 + 3].field_0x00[0]);
 
-    field_0x6C8[param_3+1].field_0x00[0] = (field_0x6C8[param_3 + 3].field_0x00[0] - field_0x6C8[param_3].field_0x00[0]) * 0.3333f + field_0x6C8[param_3].field_0x00[0];
+    mLineKe.field_0x6C8[param_3+1].field_0x00[0] = (mLineKe.field_0x6C8[param_3 + 3].field_0x00[0] - mLineKe.field_0x6C8[param_3].field_0x00[0]) * 0.3333f + mLineKe.field_0x6C8[param_3].field_0x00[0];
 
-    field_0x6C8[param_3+2].field_0x00[0] = (field_0x6C8[param_3 + 3].field_0x00[0] - field_0x6C8[param_3].field_0x00[0]) * 0.6667f + field_0x6C8[param_3].field_0x00[0];
+    mLineKe.field_0x6C8[param_3+2].field_0x00[0] = (mLineKe.field_0x6C8[param_3 + 3].field_0x00[0] - mLineKe.field_0x6C8[param_3].field_0x00[0]) * 0.6667f + mLineKe.field_0x6C8[param_3].field_0x00[0];
 }
 
 /* 00001D48-00001E04       .text ke_execute__10daNpc_Tt_cFv */
@@ -752,12 +760,12 @@ void daNpc_Tt_c::ke_execute() {
     set_ke_root(6, 7, 0);
     set_ke_root(10, 11, 4);
     int i;
-    tt_ke_s* ke = field_0x6C8;
+    tt_ke_s* ke = mLineKe.field_0x6C8;
     f32 y = current.pos.y + 3.0f;
 
     for (i = 0; i < 8; i++, ke++) {
         ke->ke_control(y);
-        ke->ke_pos_set(mLineMat.getPos(i));
+        ke->ke_pos_set(mLineKe.mLineMat.getPos(i));
     }
 }
 
@@ -782,8 +790,8 @@ BOOL daNpc_Tt_c::_draw() {
         current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr
     );
 
-    mLineMat.update(10, 0.8f, (GXColor){0xC9, 0xCA, 0xE4, 0xFF}, 0, &tevStr);
-    dComIfGd_set3DlineMat(&mLineMat);
+    mLineKe.mLineMat.update(10, 0.8f, (GXColor){0xC9, 0xCA, 0xE4, 0xFF}, 0, &tevStr);
+    dComIfGd_set3DlineMat(&mLineKe.mLineMat);
 
     dSnap_RegistFig(DSNAP_TYPE_TT, this, 1.0f, 1.0f, 1.0f);
     return TRUE;
@@ -941,7 +949,7 @@ BOOL daNpc_Tt_c::CreateHeap() {
 
     mAcchCir.SetWall(30.0f, 0.0f);
     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
-    return mLineMat.init(8, 10, 0) == FALSE ? FALSE : TRUE;
+    return mLineKe.mLineMat.init(8, 10, 0) == FALSE ? FALSE : TRUE;
 }
 
 /* 00002AB0-00002AD0       .text daNpc_Tt_Create__FP10fopAc_ac_c */
