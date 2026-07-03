@@ -335,7 +335,7 @@ static eventActionFunc event_action_tbl[] = {
 bool daSTBox_c::_execute() {
     /* Nonmatching */
     static char* action_table[] = {"WAIT", "WAIT02", "WAIT_GETITEM", "WAIT_DUMMY", "DROP"};
-    int staffIdx = dComIfGp_evmng_getMyStaffId("STBox", NULL, 0);
+    int staffIdx = dComIfGp_evmng_getMyStaffId("STBox");
     daShip_c* ship = dComIfGp_getShipActor();
     f32 waterY = 0.0;
     cXyz m1020Pos;
