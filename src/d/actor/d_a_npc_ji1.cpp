@@ -4441,6 +4441,7 @@ static BOOL nodeCallBack1(J3DNode* node, int calcTiming) {
         J3DJoint* joint = (J3DJoint*)node;
         daNpc_Ji1_c* i_this = (daNpc_Ji1_c*)model->getUserArea();
         s32 jntNo = joint->getJntNo();
+
         if(i_this) {
             mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
             if(jntNo == i_this->m_jnt.getHeadJntNum()) {
