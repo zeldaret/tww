@@ -12,18 +12,25 @@ class daNpc_P1_c : public fopAc_ac_c {
 
     typedef BOOL (daNpc_P1_c::*ActionFunc)(void*);
 
+    enum ActionStatus {
+        ACTION_STARTING = 0,
+        ACTION_ONGOING  = 1,
+        ACTION_UNK_2    = 2,
+        ACTION_ENDING   = -1,
+    };
+
 public:
 
     bool checkAction(int (daNpc_P1_c::*action)(void*)) { return m290 == action;}
     void setAction(int (daNpc_P1_c::*action)(void*), void* i_param_2, int i_param_3) {
         if(m290 != action){
             if(m290 != NULL){
-                m659 = -1;
-                (this->*m290)(0);
+                m659 = ACTION_ENDING;
+                (this->*m290)(i_param_2);
             }
             mPrevAction = m290;
             m290 = action;
-            m659 = 0;
+            m659 = ACTION_STARTING;
             (this->*m290)(NULL);
         }
     }
@@ -36,7 +43,7 @@ public:
     BOOL p1c_speakAction(void*);
     BOOL speakAction(void*);
     BOOL explainAction(void*);
-    BOOL getNextMsgNo(int);
+    u32 getNextMsgNo(int);
     BOOL playTexPatternAnm();
     void demo_end_init();
     BOOL demo_move();
@@ -54,7 +61,7 @@ public:
     BOOL kaji_anm();
     BOOL _execute();
     BOOL _draw();
-    void lookBack();
+    BOOL lookBack();
 
 public:
     ActionFunc m290;
@@ -75,8 +82,8 @@ public:
     dCcD_Stts mStts;
     dCcD_Cyl mCyl;
     /* 0x658 */ char pad658[1];
-    /* 0x659 */ u8 m659;                          /* inferred */
-    /* 0x65A */ u8 m65A;                          /* inferred */
+    /* 0x659 */ s8 m659;                          /* inferred */
+    /* 0x65A */ s8 m65A;                          /* inferred */
     /* 0x65B */ u8 mType65B;                          /* inferred */
     /* 0x65C */ u8 m65C;                          /* inferred */
     /* 0x65D */ char pad65D[3];                     /* maybe part of unk65C[4]? */
@@ -86,16 +93,19 @@ public:
     /* 0x66C */ s32 m66C;                         /* inferred */
     /* 0x670 */ u8 m670;                          /* inferred */
     /* 0x671 */ u8 m671;                          /* inferred */
-                s32 m674;
+                u32 mKajiId;
                 s16 m678;
+                s16 filler;
                 dNpc_JntCtrl_c m_jnt;
                 dNpc_EventCut_c mEventCut6B0;
+
     // /* 0x714 */ char pad714[4];                     /* maybe part of unk710[8]? */
     // /* 0x718 */ dNpc_JntCtrl_c *m_jnt2;             /* inferred */
     /* 0x71C */ dNpc_HeadAnm_c m71C;              /* inferred */
+
                 s8 m_handR_jnt_num;
     /* 0x741 */ bool m741;                          /* inferred */
-    /* 0x742 */ s16 unk742;                         /* inferred */ 
+    /* 0x742 */ s16 m742;                         /* inferred */ 
 
 };
 
