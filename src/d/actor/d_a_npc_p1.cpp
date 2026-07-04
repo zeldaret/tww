@@ -89,8 +89,9 @@ static dCcD_SrcCyl l_cyl_src = {
 };
 
 static daNpc_P1_HIO_c l_HIO;
-static msg_class* l_msg;
 static fpc_ProcID l_msgId;
+static msg_class* l_msg;
+
 
 /* 000000EC-00000264       .text __ct__14daNpc_P1_HIO_cFv */
 daNpc_P1_HIO_c::daNpc_P1_HIO_c() {
