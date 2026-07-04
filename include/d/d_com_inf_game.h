@@ -904,6 +904,7 @@ void dComIfGs_setGameStartStage();
 void dComIfGs_gameStart();
 void dComIfGs_copyPlayerRecollectionData();
 u8 dComIfGs_checkGetItem(u8);
+void dComIfGs_exchangePlayerRecollectionData();
 
 inline void dComIfGs_init() {
     g_dComIfG_gameInfo.save.init();
@@ -1471,8 +1472,8 @@ inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo,
 }
 #endif
 
-inline void dComIfGs_setMemoryToCard(u8* i_cardPtr, int i_dataNum) {
-    g_dComIfG_gameInfo.save.memory_to_card((char*)i_cardPtr, i_dataNum);
+inline int dComIfGs_setMemoryToCard(u8* i_cardPtr, int i_dataNum) {
+    return g_dComIfG_gameInfo.save.memory_to_card((char*)i_cardPtr, i_dataNum);
 }
 
 inline void dComIfGs_setInitDataToCard(u8* i_cardPtr, int i_dataNum) {
