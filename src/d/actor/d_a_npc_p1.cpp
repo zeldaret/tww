@@ -156,19 +156,19 @@ void daNpc_P1_c::setAnimFromMsg() {
     /* Nonmatching */
 
 
-    if ((m668 == 10 || m668 == 11) && !mpMorf->checkFrame(
+    if ((mAnmNum == 10 || mAnmNum == 11) && !mpMorf->checkFrame(
         mpMorf->getEndFrame() - 1.0f
     )) {
         return;
     }
 
-    if (m668 == 8 && mpMorf->checkFrame(
+    if (mAnmNum == 8 && mpMorf->checkFrame(
         mpMorf->getEndFrame() - 1.0f
     )) {
         if (--m66C <= 0) {
             setAnm(4, 15.0f);
         }
-    } else if (m668 == 12 && mpMorf->checkFrame(
+    } else if (mAnmNum == 12 && mpMorf->checkFrame(
         mpMorf->getEndFrame() - 1.0f
     )) {
         if (--m66C <= 0) {
@@ -252,11 +252,11 @@ void daNpc_P1_c::setAnimFromMsg() {
 /* 0000051C-00000AD0       .text setAnm__10daNpc_P1_cFif */
 BOOL daNpc_P1_c::setAnm(int i_anm, f32 i_morf) {
     /* Nonmatching */
-    if (m668 == i_anm) {
+    if (mAnmNum == i_anm) {
         return false;
     }
 
-    m668 = i_anm;
+    mAnmNum = i_anm;
 
     if (i_morf < 0.0f) {
         i_morf = l_HIO.children[mType65B].mMorf;
@@ -420,7 +420,7 @@ BOOL daNpc_P1_c::confuseAction(void*) {
     } else if(mpMorf->checkFrame(mpMorf->getEndFrame()-2.0f)){
         m66C += 1;
         if(m66C > 3){
-            if(m668 == 1){
+            if(mAnmNum == 1){
                 setAnm(2,-1.0f);
                 mpMorf->setPlaySpeed(2.0f);
             }else{
@@ -437,7 +437,7 @@ BOOL daNpc_P1_c::confuseAction(void*) {
 BOOL daNpc_P1_c::talkAction(void*) {
     /* Nonmatching */
     if (m659 == 0) {
-        if (m668 == 10 || m668 == 11) {
+        if (mAnmNum == 10 || mAnmNum == 11) {
             return 0;
         }
 
@@ -761,7 +761,7 @@ BOOL daNpc_P1_c::playTexPatternAnm() {
 void daNpc_P1_c::demo_end_init() {
     /* Nonmatching */
     if(m65C == 0){
-        m668 = -1;
+        mAnmNum = -1;
         ActionFunc local_48 = &daNpc_P1_c::confuseAction;
         bool compare = m290 == local_48; //TODO: unused comparison?
         if(m290 != NULL){
@@ -1133,7 +1133,7 @@ cPhs_State daNpc_P1_c::_create() {
         mStts.Init(0xFF,0xFF,this);
         mCyl.Set(l_cyl_src);
         mCyl.SetStts(&mStts);
-        m668 = -1;
+        mAnmNum = -1;
         m66C = 0;
         m670 = 0;
         m678 = 300;
@@ -1317,7 +1317,7 @@ fpc_ProcID daNpc_P1_c::getKajiID() {
 BOOL daNpc_P1_c::kaji_anm() {
     /* Nonmatching */
     if(m671 != 0){
-        if(m668 == 0xA || m668 == 0xB){
+        if(mAnmNum == 0xA || mAnmNum == 0xB){
             if(mpMorf->checkFrame(mpMorf->getEndFrame()-1.0f)){
                 setAnm(9,-1.0f);
                 m678 = 0x12C;
@@ -1340,35 +1340,10 @@ BOOL daNpc_P1_c::kaji_anm() {
             }
         }
         if(mKajiId != -1){
-            daKaji_c* actor = (daKaji_c*)fopAcM_SearchByID(mKajiId);
-            if(fopAc_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Kaji_e){
-                J3DAnmTransform* pAnimRes;
-                void* pSoundAnimRes;
-                f32 frame = mpMorf->getFrame();
-                switch(m668 - 9){
-                    case 0:
-                        pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Kaji",0xE);
-                        pSoundAnimRes = dComIfG_getObjectRes("Kaji",8);
-                        break;
-                    case 1:
-                        pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Kaji",0xC);
-                        pSoundAnimRes = dComIfG_getObjectRes("Kaji",6);
-                        break;
-                    case 2:
-                        pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Kaji",0xD);
-                        pSoundAnimRes = dComIfG_getObjectRes("Kaji",7);
-                        break;      
-                    case 3:
-                        pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Kaji",0xB);
-                        pSoundAnimRes = dComIfG_getObjectRes("Kaji",5);
-                        break;
-                    default:
-                        return TRUE;
-                }
-                actor->mpMorf->setAnm(pAnimRes,J3DFrameCtrl::EMode_LOOP,0.0,1.0,0.0,-1.0,pSoundAnimRes);
-                if(frame >= 0.0f){
-                    actor->mpMorf->setFrame(frame);
-                }
+            daKaji_c* wheel = (daKaji_c*)fopAcM_SearchByID(mKajiId);
+            if(fopAc_IsActor(wheel) && fopAcM_GetName(wheel) == fpcNm_Kaji_e){
+                wheel->setAnm(mAnmNum,mpMorf->getFrame());
+
             }
 
         } 
@@ -1376,7 +1351,7 @@ BOOL daNpc_P1_c::kaji_anm() {
     }
     if(mType65B == 1 && m65C == 2){
         if(!checkAction(&daNpc_P1_c::talkAction)){
-            if(m668 == 0xE && mpMorf->checkFrame(mpMorf->getEndFrame()-1.0f) && --m66C <= 0){
+            if(mAnmNum == 0xE && mpMorf->checkFrame(mpMorf->getEndFrame()-1.0f) && --m66C <= 0){
                 setAnm(0xF,-1.0f);
                 if(cM_rndF(1.0f) > 0.5f){
                     m66C = 1;
@@ -1384,7 +1359,7 @@ BOOL daNpc_P1_c::kaji_anm() {
                 }else{
                     m66C = 2;
                 }
-            }else if(m668 == 0xF){
+            }else if(mAnmNum == 0xF){
                 if(mpMorf->checkFrame(mpMorf->getEndFrame()-1.0f)){
                     if(--m66C <= 0){
                         setAnm(0xE,-1.0f);
@@ -1495,7 +1470,7 @@ BOOL daNpc_P1_c::lookBack() {
     bool look_at_target = true;
 
     if(m671 == 1){
-        if(m668 == 9 && checkAction(&daNpc_P1_c::talkAction)){
+        if(mAnmNum == 9 && checkAction(&daNpc_P1_c::talkAction)){
 
             dstPos = dNpc_playerEyePos(0.0f);
             dstPos_p = &dstPos;
@@ -1544,11 +1519,6 @@ BOOL daNpc_P1_c::lookBack() {
         srcpos.y += 190.0f;
         m_jnt.lookAtTarget(&current.angle.y,dstPos_p,srcpos,current.angle.y,m742,look_at_target);
         return o_retval;
-        // l_HIO.children[mType65B].m18,
-        // l_HIO.children[mType65B].m1A,
-        // l_HIO.children[mType65B].m1C,
-        // l_HIO.children[mType65B].m10,
-        // l_HIO.children[mType65B].m10);
 
 
 }

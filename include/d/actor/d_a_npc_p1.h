@@ -89,7 +89,7 @@ public:
     /* 0x65D */ char pad65D[3];                     /* maybe part of unk65C[4]? */
     /* 0x660 */ u32 m660;                         /* inferred */
     /* 0x664 */ u32 m664;                         /* inferred */
-    /* 0x668 */ s32 m668;                         /* inferred */
+    /* 0x668 */ s32 mAnmNum;                         /* inferred */
     /* 0x66C */ s32 m66C;                         /* inferred */
     /* 0x670 */ u8 m670;                          /* inferred */
     /* 0x671 */ u8 m671;                          /* inferred */
@@ -98,9 +98,6 @@ public:
                 s16 filler;
                 dNpc_JntCtrl_c m_jnt;
                 dNpc_EventCut_c mEventCut6B0;
-
-    // /* 0x714 */ char pad714[4];                     /* maybe part of unk710[8]? */
-    // /* 0x718 */ dNpc_JntCtrl_c *m_jnt2;             /* inferred */
     /* 0x71C */ dNpc_HeadAnm_c m71C;              /* inferred */
 
                 s8 m_handR_jnt_num;
