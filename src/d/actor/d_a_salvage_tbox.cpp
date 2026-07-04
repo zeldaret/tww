@@ -119,7 +119,7 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
         PSMTXIdentity(mtx);
         mtx[1][1] = mpDepth;
         mtx[1][3] = field_0x48 * emitter->getFrame();
-        GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
+        GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
         GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
         JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
         uint i = 0;
@@ -147,8 +147,8 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
                 GXEnd();
             } else {
                 for (int j = 0; j < 3; j++) {
-                    JPABaseParticle* pos = (JPABaseParticle*)link->getObjectPtr();
-                    pos->getGlobalPosition(mPos[j]);
+                    JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
+                    ptcl->getGlobalPosition(mPos[j]);
                     link = link->getNext();
                 }
             }
