@@ -69,17 +69,17 @@ namespace daObjVds {
         /* 0x2F4 */ J3DAnmTransformKey* M_bck_data1;
         /* 0x2F8 */ mDoExt_brkAnm mBrkAnm1;
         /* 0x310 */ J3DAnmTevRegKey* M_brk_data1;
-        /* 0x314 */ dBgW* m314;
+        /* 0x314 */ dBgW* mpBgW;
         /* 0x318 */ u32 m318;
         /* 0x31C */ s32 mSide;
         /* 0x320 */ s32 m320;
-        /* 0x324 */ fpc_ProcID m324[2];
-        /* 0x32C */ f32 m32C[2];
+        /* 0x324 */ fpc_ProcID mEyeID[2];
+        /* 0x32C */ f32 mEyePower[2];
         /* 0x334 */ s16 mEventIdx;
         /* 0x336 */ s16 m336;
         /* 0x338 */ u16 m338;
         /* 0x33A */ u16 m33A;
-        /* 0x33C */ LIGHT_INFLUENCE m33C[2];
+        /* 0x33C */ LIGHT_INFLUENCE mEyeLightInfluence[2];
         /* 0x37C */ cXyz m37C[2];
     }; // Size : 0x394
 };
