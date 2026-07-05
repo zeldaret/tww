@@ -49,15 +49,18 @@ struct NpcDatStruct {
 
 class daNpcMt_c : public fopNpc_npc_c {
 public:
+    typedef s32(daNpcMt_c::*InitFunc_t)();
+    typedef void(daNpcMt_c::*MoveFunc_t)();
+
     void attnOff() {
         m753 = false;
     }
     void attnOn() {
         m753 = true;
     }
-    void getNpcNo() {}
-    void getPhaseP() {}
-    void setResFlag(u8) {}
+    u8 getNpcNo() { return mNpcNo; }
+    request_of_phase_process_class* getPhaseP() { return &mPhsArcname; }
+    void setResFlag(u8 flag) { m747 = flag; }
 
     daNpcMt_c();
     cPhs_State _create();
@@ -105,10 +108,7 @@ public:
 
     static const char m_arcname[6];
 
-public:
-    typedef s32(daNpcMt_c::*InitFunc_t)();
-    typedef void(daNpcMt_c::*MoveFunc_t)();
-
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhsArcname;
     /* 0x6CC */ request_of_phase_process_class mPhs;
     /* 0x6D4 */ J3DAnmTexPattern* m_head_tex_pattern;
@@ -143,7 +143,7 @@ public:
     /* 0x745 */ u8 mFrame;
     /* 0x746 */ u8 m746;
     /* 0x747 */ u8 m747;
-    /* 0x748 */ u8 mPrmNpcNo;
+    /* 0x748 */ u8 mNpcNo;
     /* 0x749 */ u8 m749;
     /* 0x74A */ u8 m74A;
     /* 0x74B */ u8 mAnmFlag;
