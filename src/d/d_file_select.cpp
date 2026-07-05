@@ -122,11 +122,9 @@ void dFile_select_c::initial() {
     paneTransInit();
 }
 
-#if VERSION == VERSION_DEMO
 void dFile_select_c::_deleteSp() {
     mDoHIO_deleteChild(g_fsHIO.mNo);
 }
-#endif
 
 /* 8017FCF4-8017FD6C       .text _delete__14dFile_select_cFv */
 void dFile_select_c::_delete() {
