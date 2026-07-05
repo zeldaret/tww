@@ -635,8 +635,21 @@ int JAISound::getTrackPortRoute(u8, u8) {
 }
 
 /* 8029AE88-8029AEF8       .text checkSoundHandle__8JAISoundFUlPv */
-u32 JAISound::checkSoundHandle(u32, void*) {
+u32 JAISound::checkSoundHandle(u32 param_1, void* param_2) {
     /* Nonmatching */
+    u32 uVar1;
+
+    uVar1 = 0;
+    if ((this->mSoundID & 0xc0000000U) != (param_1 & 0xc0000000)) {
+        this->stop( 0);
+    } else {
+        if (((u8*)field_0x40)[4] <= *(u8*)((int)param_2 + 4) ) {
+            this->stop( 0);
+        } else {
+            uVar1 = 1;
+        }
+    }
+    return uVar1;
 }
 
 /* 8029AEF8-8029AFCC       .text initParameter__8JAISoundFPP8JAISoundPQ27JAInter5ActorUlUlUcPv */

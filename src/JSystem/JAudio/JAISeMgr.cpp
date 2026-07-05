@@ -349,10 +349,9 @@ void JAInter::SeMgr::checkPlayingSe() {
     u8 j;
     JAISound* sound;
     u8 track;
-    u8 i;
 
     track = 0;
-    for (i = 0; i < JAIGlobalParameter::getParamSeCategoryMax(); i++) {
+    for (u8 i = 0; i < JAIGlobalParameter::getParamSeCategoryMax(); i++) {
         for (j = 0; j < categoryInfoTable[seScene][(u8)i * 2]; j++) {
             sound = (JAISound*)sePlaySound[i][j];
             if (sound != NULL) {
@@ -362,9 +361,9 @@ void JAInter::SeMgr::checkPlayingSe() {
                 rootTrack->readPortApp(port + 0x20000, &local_56);
                 rootTrack->readPortApp(port, &local_58);
                 JAISound::PositionInfo_t* posInfo;
-                u8 cam = 0;
+                // u8 cam = 0;
                 posInfo = sound->mPositionInfo;
-                for (cam = 0; cam < JAIGlobalParameter::getParamAudioCameraMax(); cam++) {
+                for (u8 cam = 0; cam < JAIGlobalParameter::getParamAudioCameraMax(); cam++) {
                     posInfo[cam].field_0x18 = std::sqrtf(posInfo[cam].field_0x18);
                 }
                 if (sound->mState == 2) {
