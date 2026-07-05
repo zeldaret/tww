@@ -503,7 +503,7 @@ void JAInter::SeMgr::clearSeqMuteFromSeStop(JAISound* sound) {
 
 /* 80294380-802944A0       .text checkSeMovePara__Q27JAInter5SeMgrFv */
 void JAInter::SeMgr::checkSeMovePara() {
-    /* Nonmatching */
+    
     if (seHandle == NULL || seHandle->getSeqParameter()->field_0x1261 == 2) {
         return;
     }
@@ -620,13 +620,11 @@ void JAInter::SeMgr::checkPlayingSeUpdateAddition(
 
 /* 8029480C-80294814       .text changeIDToCategory__Q27JAInter5SeMgrFUl */
 u8 JAInter::SeMgr::changeIDToCategory(u32 i_id) {
-    /* Nonmatching */
     return i_id >> 0xc & 0xff;
 }
 
 /* 80294814-80294938       .text releaseSeRegist__Q27JAInter5SeMgrFP8JAISound */
 void JAInter::SeMgr::releaseSeRegist(JAISound* i_sound) {
-    /* Nonmatching */
     u8 bVar4;
 
     if (i_sound->mState != 1) {
@@ -672,7 +670,6 @@ JAInter::SeParameter* JAInter::SeMgr::getSeParametermeterPointer() {
 
 /* 80294994-80294A10       .text releaseSeParameterPointer__Q27JAInter5SeMgrFPQ27JAInter11SeParameter */
 void JAInter::SeMgr::releaseSeParameterPointer(JAInter::SeParameter* i_sound) {
-    /* Nonmatching */
     if (i_sound == NULL) {
         return;
     }
