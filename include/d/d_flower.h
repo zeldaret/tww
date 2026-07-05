@@ -19,10 +19,14 @@ public:
     void WorkAt(fopAc_ac_c*, u32, int, dCcMassS_HitInf*);
     void hitCheck(fopAc_ac_c*, int);
 
-    /* 0x00 */ u8 field_0x00[0x04 - 0x00];
+    /* 0x00 */ u8 field_0x00;
+    /* 0x01 */ s8 field_0x01;
+    /* 0x02 */ s8 field_0x02;
+    /* 0x03 */ u8 field_0x03;
     /* 0x04 */ cXyz field_0x04;
-    /* 0x10 */ u8 field_0x10[0x44 - 0x10];
-};
+    /* 0x10 */ Mtx field_0x10;
+    /* 0x40 */ dFlower_data_c* field_0x40;
+}; // Size: 0x44
 
 class dFlower_anm_c {
 public:
@@ -31,8 +35,9 @@ public:
     /* 0x00 */ u8 field_0x00;
     /* 0x02 */ s16 field_0x02;
     /* 0x04 */ s16 field_0x04;
-    /* 0x06 */ u8 field_0x6[0x38 - 0x6];
-};
+    /* 0x06 */ u8 field_0x6[0x8 - 0x6];
+    /* 0x08 */ Mtx mMtx;
+}; // Size: 0x38
 
 class dFlower_room_c {
 public:
@@ -42,7 +47,7 @@ public:
     dFlower_room_c();
 
     /* 0x0 */ dFlower_data_c* field_0x0;
-};
+}; // Size: 0x4
 
 class dFlower_packet_c : public J3DPacket {
 public:
@@ -51,21 +56,35 @@ public:
     void calc();
     void update();
     void setData(dFlower_data_c*, int, s8, cXyz&, int, s8);
-    void newData(s8, cXyz&, int, s8);
-    void newAnm();
+    dFlower_data_c* newData(s8, cXyz&, int, s8);
+    int newAnm();
     void setAnm(int, s16);
     void deleteRoom(s32 roomNo) { mRoom[roomNo].deleteData(); }
 
     virtual void draw();
     virtual ~dFlower_packet_c();
 
-    /* 0x0010 */ s16 field_0x0010;
+    dFlower_anm_c* getAnm() { return mAnm; }
+    dFlower_anm_c* getAnm(int idx) { return &mAnm[idx]; }
+    void deleteAnm(int i) { mAnm[i].field_0x00 = 0; }
+
+    dFlower_data_c* getData() { return mData; }
+
+    void setPlayerSwordTop(cXyz& pos) { field_0x45fc = pos; }
+    void setPlayerSwordMoveAngY(s16 angle) { field_0x45f8 = angle; }
+    cXyz& getPlayerSwordTop() { return field_0x45fc; }
+    void setPlayerSwordAngY(s16 angle) { field_0x45F6 = angle; }
+    void setPlayerCutFlg(BOOL flag) { field_0x45f4 = flag; }
+
+
+    /* 0x0010 */ u16 field_0x0010;
     /* 0x0012 */ u8 field_0x0012[0x0014 - 0x0012];
     /* 0x0014 */ dFlower_data_c mData[200];
     /* 0x3534 */ dFlower_anm_c mAnm[72];
     /* 0x44F4 */ dFlower_room_c mRoom[64];
     /* 0x45F4 */ u8 field_0x45f4;
-    /* 0x45F5 */ u8 field_0x45F5[0x45F8 - 0x45F5];
+    /* 0x45F5 */ u8 field_0x45F5;
+    /* 0x45F6 */ s16 field_0x45F6;
     /* 0x45F8 */ s16 field_0x45f8;
     /* 0x45FA */ u8 field_0x45FA[0x45FC - 0x45FA];
     /* 0x45FC */ cXyz field_0x45fc;
@@ -73,11 +92,11 @@ public:
     /* 0x460C */ GXColor* field_0x460c;
     /* 0x4610 */ f32* field_0x4610;
     /* 0x4614 */ void* field_0x4614;
-    /* 0x4618 */ void* field_0x4618;
+    /* 0x4618 */ u32 field_0x4618;
     /* 0x461C */ void* field_0x461c;
-    /* 0x4620 */ void* field_0x4620;
+    /* 0x4620 */ u32 field_0x4620;
     /* 0x4624 */ void* field_0x4624;
-    /* 0x4628 */ void* field_0x4628;
-};
+    /* 0x4628 */ u32 field_0x4628;
+}; // Size: 0x462C
 
 #endif /* D_FLOWER_H */
