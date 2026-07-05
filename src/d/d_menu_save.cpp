@@ -355,7 +355,6 @@ BOOL dMenu_save_c::closeForItem() {
 }
 
 /* 801D6C14-801D6E68       .text openForGameover__12dMenu_save_cFv */
-// NONMATCHING - instruction order
 BOOL dMenu_save_c::openForGameover() {
     if (field_0x544 == 0) {
         mDoAud_seStart(JA_SE_SAVE_PANEL_IN, NULL);
@@ -364,7 +363,7 @@ BOOL dMenu_save_c::openForGameover() {
     BOOL var_r29 = FALSE;
     BOOL base_rt = PaneTranceBase(field_0x544 - g_msHIO.field_0x9, g_msHIO.field_0x8, g_msHIO.field_0xc, 0.0f, 1, 0);
 
-    s16 temp_r0 = field_0x544 - (g_msHIO.field_0x9 + (g_msHIO.field_0x8 - 2));
+    s16 temp_r0 = field_0x544 - (g_msHIO.field_0x9 + g_msHIO.field_0x8 - 2);
     if (temp_r0 == 0 && field_0x539) {
         for (int i = 0; i < 4; i++) {
             static const f32 x[] = {-180.0f, -70.0f, 70.0f, 180.0f};
@@ -1469,14 +1468,14 @@ void dMenu_save_c::CursorMove() {
 }
 
 /* 801D99FC-801D9ACC       .text CursorAnime__12dMenu_save_cFv */
-// NONMATCHING - small float reg alloc
 void dMenu_save_c::CursorAnime() {
     f32 temp_f1 = fopMsgM_valueIncrease(g_msHIO.field_0x20, field_0x394.mUserArea, 0);
     if (field_0x530 != 0) {
         temp_f1 = 1.0f - temp_f1;
     }
 
-    field_0x394.mNowAlpha = g_msHIO.field_0x22 + (u32)((g_msHIO.field_0x21 - g_msHIO.field_0x22) * temp_f1);
+    f32 temp = g_msHIO.field_0x21 - g_msHIO.field_0x22;
+    field_0x394.mNowAlpha = g_msHIO.field_0x22 + (u32)(temp * temp_f1);
     fopMsgM_setAlpha(&field_0x394);
 
     if (field_0x394.mUserArea == 0) {
@@ -1715,7 +1714,8 @@ BOOL dMenu_save_c::PaneAlphaMsgTxt(s16 param_0, u8 param_1) {
         return TRUE;
 
     f32 var_f31 = fopMsgM_valueIncrease(param_1, param_0, 0);
-    fopMsgM_setNowAlpha(&field_0x20c[field_0x536 + 3], 1.0f - var_f31);
+    f32 temp = 1.0f - var_f31;
+    fopMsgM_setNowAlpha(&field_0x20c[field_0x536 + 3], temp);
     fopMsgM_setNowAlpha(&field_0x20c[(field_0x536 ^ 1) + 3], var_f31);
     fopMsgM_setAlpha(&field_0x20c[0 + 3]);
     fopMsgM_setAlpha(&field_0x20c[1 + 3]);
@@ -1730,7 +1730,8 @@ BOOL dMenu_save_c::PaneTranceBase(s16 param_0, u8 param_1, f32 param_2, f32 para
         return TRUE;
 
     f32 var_f31 = fopMsgM_valueIncrease(param_1, param_0, param_4);
-    fopMsgM_paneTrans(&field_0x20c[0], 0.0f, param_2 + (var_f31 * (param_3 - param_2)));
+    f32 temp = var_f31 * (param_3 - param_2);
+    fopMsgM_paneTrans(&field_0x20c[0], 0.0f, param_2 + temp);
 
     if (param_5 != 2) {
         if (param_5 == 1) {
@@ -1824,7 +1825,8 @@ BOOL dMenu_save_c::PaneTranceTitle(s16 param_0, u8 param_1, f32 param_2, f32 par
         return TRUE;
 
     f32 var_f31 = fopMsgM_valueIncrease(param_1, param_0, param_4);
-    fopMsgM_paneTrans(&field_0x324, 0.0f, param_2 + (var_f31 * (param_3 - param_2)));
+    f32 temp = var_f31 * (param_3 - param_2);
+    fopMsgM_paneTrans(&field_0x324, 0.0f, param_2 + temp);
 
     if (param_5 != 2) {
         if (param_5 == 1) {
@@ -1861,7 +1863,8 @@ BOOL dMenu_save_c::PaneTranceMenu(s16 param_0, u8 param_1, fopMsgM_pane_class* p
         return TRUE;
 
     f32 var_f31 = fopMsgM_valueIncrease(param_1, param_0, param_5);
-    fopMsgM_paneTrans(param_2, 0.0f, param_3 + (var_f31 * (param_4 - param_3)));
+    f32 temp = var_f31 * (param_4 - param_3);
+    fopMsgM_paneTrans(param_2, 0.0f, param_3 + temp);
 
     if (param_6 != 2) {
         if (param_6 == 1) {
