@@ -146,15 +146,11 @@ void daObjVds::Act_c::process_on_main() {
 }
 
 /* 000004F4-000005C0       .text process_init__Q28daObjVds5Act_cFi */
-BOOL daObjVds::Act_c::process_init(BOOL i_side) {
-    static procInitFun_t init_table[2] = {};
-    static s8 init;
-
-    if(!init){
-        init_table[0] = &daObjVds::Act_c::process_off_init;
-        init_table[1] = &daObjVds::Act_c::process_on_init;
-        init = 1;
-    }
+BOOL daObjVds::Act_c::process_init(int i_side) {
+    static procInitFun_t init_table[2] = {
+        &daObjVds::Act_c::process_off_init,
+        &daObjVds::Act_c::process_on_init
+    };
 
     if(0 <= i_side && i_side < 2 && (this->*init_table[i_side])() != FALSE){
         this->mSide = i_side;
@@ -167,14 +163,10 @@ BOOL daObjVds::Act_c::process_init(BOOL i_side) {
 
 /* 000005C0-0000065C       .text process_main__Q28daObjVds5Act_cFv */
 void daObjVds::Act_c::process_main() {
-    static procMainFun_t main_table[2] = {};
-    static s8 init;
-
-    if(init == 0){
-        main_table[0] = &daObjVds::Act_c::process_off_main;
-        main_table[1] = &daObjVds::Act_c::process_on_main;
-        init = 1;
-    }
+    static procMainFun_t main_table[2] = {
+        &daObjVds::Act_c::process_off_main,
+        &daObjVds::Act_c::process_on_main
+    };
 
     if(0 <= this->mSide && this->mSide < 2){
         (this->*main_table[this->mSide])();
@@ -183,7 +175,7 @@ void daObjVds::Act_c::process_main() {
 
 /* 0000065C-000007EC       .text process_common__Q28daObjVds5Act_cFv */
 void daObjVds::Act_c::process_common() {
-    fopAc_ac_c *actor0, *actor1;
+    fopAc_ac_c* actor[2];
     switch(m320){
         case 0:
             for(int i = 0; i < 2; i++){
@@ -192,10 +184,10 @@ void daObjVds::Act_c::process_common() {
 
             fopAcIt_Judge(ds_search_switchCB, this);
             if(this->m324[0] != -1 && this->m324[1] != -1){
-                actor0 = fopAcM_SearchByID(this->m324[0]);
-                actor1 = fopAcM_SearchByID(this->m324[1]);
-                if(actor0 != NULL && actor1 != NULL){
-                    s16 angle_diff = actor0->shape_angle.y - this->shape_angle.y;
+                actor[0] = fopAcM_SearchByID(this->m324[0]);
+                actor[1] = fopAcM_SearchByID(this->m324[1]);
+                if(actor[0] != NULL && actor[1] != NULL){
+                    s16 angle_diff = actor[0]->shape_angle.y - this->shape_angle.y;
                     if(angle_diff >= 0){
                         fpc_ProcID swap = this->m324[0];
                         this->m324[0] = this->m324[1];
@@ -207,11 +199,11 @@ void daObjVds::Act_c::process_common() {
             break;
         
         case 1:
-            actor0 = fopAcM_SearchByID(this->m324[0]);
-            actor1 = fopAcM_SearchByID(this->m324[1]);
-            if(actor0 != NULL && actor1 != NULL){
-                create_point_light(0, &actor0->current.pos);
-                create_point_light(1, &actor1->current.pos);
+            actor[0] = fopAcM_SearchByID(this->m324[0]);
+            actor[1] = fopAcM_SearchByID(this->m324[1]);
+            if(actor[0] != NULL && actor[1] != NULL){
+                create_point_light(0, &actor[0]->current.pos);
+                create_point_light(1, &actor[1]->current.pos);
                 this->m320 = 2;
             }
             break;
