@@ -18,11 +18,9 @@ namespace JAInter {
         MoveParaSetInitZero field_0x2a4[8];
         MoveParaSetInitZero field_0x324[8];
         MoveParaSet field_0x3a4[8];
-        f32* field_0x424;
-        f32 field_0x428;
-        u8 field_0x42c[0x43c - 0x42c];
-        SeParameter* field_0x43c;
-        SeParameter* field_0x440;
+        f32* field_0x424[6];
+        SeParameter* mPrev;
+        SeParameter* mNext;
     };
 
     namespace SeMgr {

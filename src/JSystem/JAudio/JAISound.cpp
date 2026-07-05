@@ -63,18 +63,18 @@ void JAISound::stop(u32 fadeTime) {
 
 /* 802986B8-8029878C       .text setVolume__8JAISoundFfUlUc */
 void JAISound::setVolume(f32 param_1, u32 param_2, u8 param_3) {
-    switch(mSoundID & JAISoundID_TypeMask) {
-    case JAISoundID_Type_Sequence:
-        setSeqInterVolume(param_3, param_1, param_2);
-        break;
-    case JAISoundID_Type_Se:
-        setSeInterVolume(param_3, param_1, param_2, 0);
-        break;
-    case JAISoundID_Type_Stream:
-        setStreamInterVolume(param_3, param_1, param_2);
-        break;
-    default:
-        JUT_ASSERT_MSG(177, 0, "JAISound::setVolume サウンドカテゴリービットが異常です。\n");
+    switch (mSoundID & JAISoundID_TypeMask) {
+        case JAISoundID_Type_Sequence:
+            setSeqInterVolume(param_3, param_1, param_2);
+            break;
+        case JAISoundID_Type_Se:
+            setSeInterVolume(param_3, param_1, param_2, 0);
+            break;
+        case JAISoundID_Type_Stream:
+            setStreamInterVolume(param_3, param_1, param_2);
+            break;
+        default:
+            JUT_ASSERT_MSG(177, 0, "JAISound::setVolume サウンドカテゴリービットが異常です。\n");
     }
 }
 
@@ -84,18 +84,18 @@ static void dummy1() {
 
 /* 8029878C-80298864       .text setPan__8JAISoundFfUlUc */
 void JAISound::setPan(f32 param_1, u32 param_2, u8 param_3) {
-    switch(mSoundID & JAISoundID_TypeMask) {
-    case JAISoundID_Type_Sequence:
-        setSeqInterPan(param_3, param_1, param_2);
-        break;
-    case JAISoundID_Type_Se:
-        setSeInterPan(param_3, param_1, param_2, 0);
-        break;
-    case JAISoundID_Type_Stream:
-        setStreamInterPan(param_3, param_1, param_2);
-        break;
-    default:
-        JUT_ASSERT_MSG(217, 0, "JAISound::setPan サウンドカテゴリービットが異常です。\n");
+    switch (mSoundID & JAISoundID_TypeMask) {
+        case JAISoundID_Type_Sequence:
+            setSeqInterPan(param_3, param_1, param_2);
+            break;
+        case JAISoundID_Type_Se:
+            setSeInterPan(param_3, param_1, param_2, 0);
+            break;
+        case JAISoundID_Type_Stream:
+            setStreamInterPan(param_3, param_1, param_2);
+            break;
+        default:
+            JUT_ASSERT_MSG(217, 0, "JAISound::setPan サウンドカテゴリービットが異常です。\n");
     }
 }
 
@@ -105,18 +105,18 @@ static void dummy2() {
 
 /* 80298864-8029893C       .text setPitch__8JAISoundFfUlUc */
 void JAISound::setPitch(f32 param_1, u32 param_2, u8 param_3) {
-    switch(mSoundID & JAISoundID_TypeMask) {
-    case JAISoundID_Type_Sequence:
-        setSeqInterPitch(param_3, param_1, param_2);
-        break;
-    case JAISoundID_Type_Se:
-        setSeInterPitch(param_3, param_1, param_2, 0);
-        break;
-    case JAISoundID_Type_Stream:
-        setStreamInterPitch(param_3, param_1, param_2);
-        break;
-    default:
-        JUT_ASSERT_MSG(257, 0, "JAISound::setPitch サウンドカテゴリービットが異常です。\n");
+    switch (mSoundID & JAISoundID_TypeMask) {
+        case JAISoundID_Type_Sequence:
+            setSeqInterPitch(param_3, param_1, param_2);
+            break;
+        case JAISoundID_Type_Se:
+            setSeInterPitch(param_3, param_1, param_2, 0);
+            break;
+        case JAISoundID_Type_Stream:
+            setStreamInterPitch(param_3, param_1, param_2);
+            break;
+        default:
+            JUT_ASSERT_MSG(257, 0, "JAISound::setPitch サウンドカテゴリービットが異常です。\n");
     }
 }
 
@@ -126,17 +126,17 @@ static void dummy3() {
 
 /* 8029893C-80298A04       .text setFxmix__8JAISoundFfUlUc */
 void JAISound::setFxmix(f32 param_1, u32 param_2, u8 param_3) {
-    switch(mSoundID & JAISoundID_TypeMask) {
-    case JAISoundID_Type_Sequence:
-        setSeqInterFxmix(param_3, param_1, param_2);
-        break;
-    case JAISoundID_Type_Se:
-        setSeInterFxmix(param_3, param_1, param_2, 0);
-        break;
-    case JAISoundID_Type_Stream:
-        break;
-    default:
-        JUT_ASSERT_MSG(297, 0, "JAISound::setFxmix サウンドカテゴリービットが異常です。\n");
+    switch (mSoundID & JAISoundID_TypeMask) {
+        case JAISoundID_Type_Sequence:
+            setSeqInterFxmix(param_3, param_1, param_2);
+            break;
+        case JAISoundID_Type_Se:
+            setSeInterFxmix(param_3, param_1, param_2, 0);
+            break;
+        case JAISoundID_Type_Stream:
+            break;
+        default:
+            JUT_ASSERT_MSG(297, 0, "JAISound::setFxmix サウンドカテゴリービットが異常です。\n");
     }
 }
 
@@ -146,17 +146,17 @@ static void dummy4() {
 
 /* 80298A04-80298ACC       .text setDolby__8JAISoundFfUlUc */
 void JAISound::setDolby(f32 param_1, u32 param_2, u8 param_3) {
-    switch(mSoundID & JAISoundID_TypeMask) {
-    case JAISoundID_Type_Sequence:
-        setSeqInterDolby(param_3, param_1, param_2);
-        break;
-    case JAISoundID_Type_Se:
-        setSeInterDolby(param_3, param_1, param_2, 0);
-        break;
-    case JAISoundID_Type_Stream:
-        break;
-    default:
-        JUT_ASSERT_MSG(337, 0, "JAISound::setDolby サウンドカテゴリービットが異常です。\n");
+    switch (mSoundID & JAISoundID_TypeMask) {
+        case JAISoundID_Type_Sequence:
+            setSeqInterDolby(param_3, param_1, param_2);
+            break;
+        case JAISoundID_Type_Se:
+            setSeInterDolby(param_3, param_1, param_2, 0);
+            break;
+        case JAISoundID_Type_Stream:
+            break;
+        default:
+            JUT_ASSERT_MSG(337, 0, "JAISound::setDolby サウンドカテゴリービットが異常です。\n");
     }
 }
 
@@ -166,48 +166,48 @@ static void dummy5() {
 
 /* 80298ACC-80298B74       .text setTempoProportion__8JAISoundFfUl */
 void JAISound::setTempoProportion(f32 param_1, u32 param_2) {
-    switch(mSoundID & JAISoundID_TypeMask) {
-    case JAISoundID_Type_Sequence:
-        setSeqTempoProportion(param_1, param_2);
-        break;
-    case JAISoundID_Type_Se:
-        break;
-    case JAISoundID_Type_Stream:
-        break;
-    default:
-        JUT_ASSERT_MSG(377, 0, "JAISound::setTempoProportion サウンドカテゴリービットが異常です。\n");
+    switch (mSoundID & JAISoundID_TypeMask) {
+        case JAISoundID_Type_Sequence:
+            setSeqTempoProportion(param_1, param_2);
+            break;
+        case JAISoundID_Type_Se:
+            break;
+        case JAISoundID_Type_Stream:
+            break;
+        default:
+            JUT_ASSERT_MSG(377, 0, "JAISound::setTempoProportion サウンドカテゴリービットが異常です。\n");
     }
 }
 
 /* 80298B74-80298C28       .text setPortData__8JAISoundFUcUs */
 void JAISound::setPortData(u8 param_1, u16 param_2) {
-    switch(mSoundID & JAISoundID_TypeMask) {
-    case JAISoundID_Type_Sequence:
-        setSeqPortData(param_1, param_2, 0);
-        break;
-    case JAISoundID_Type_Se:
-        setSePortData(param_1, param_2);
-        break;
-    case JAISoundID_Type_Stream:
-        break;
-    default:
-        JUT_ASSERT_MSG(397, 0, "JAISound::setPortData サウンドカテゴリービットが異常です。\n");
+    switch (mSoundID & JAISoundID_TypeMask) {
+        case JAISoundID_Type_Sequence:
+            setSeqPortData(param_1, param_2, 0);
+            break;
+        case JAISoundID_Type_Se:
+            setSePortData(param_1, param_2);
+            break;
+        case JAISoundID_Type_Stream:
+            break;
+        default:
+            JUT_ASSERT_MSG(397, 0, "JAISound::setPortData サウンドカテゴリービットが異常です。\n");
     }
 }
 
 /* 80298C28-80298CD8       .text setPrepareFlag__8JAISoundFUc */
 void JAISound::setPrepareFlag(u8 param_1) {
-    switch(mSoundID & JAISoundID_TypeMask) {
-    case JAISoundID_Type_Sequence:
-        setSeqPrepareFlag(param_1);
-        break;
-    case JAISoundID_Type_Se:
-        break;
-    case JAISoundID_Type_Stream:
-        setStreamPrepareFlag(param_1);
-        break;
-    default:
-        JUT_ASSERT_MSG(416, 0, "JAISound::setPrepareFlag サウンドカテゴリービットが異常です。\n");
+    switch (mSoundID & JAISoundID_TypeMask) {
+        case JAISoundID_Type_Sequence:
+            setSeqPrepareFlag(param_1);
+            break;
+        case JAISoundID_Type_Se:
+            break;
+        case JAISoundID_Type_Stream:
+            setStreamPrepareFlag(param_1);
+            break;
+        default:
+            JUT_ASSERT_MSG(416, 0, "JAISound::setPrepareFlag サウンドカテゴリービットが異常です。\n");
     }
 }
 
@@ -288,7 +288,7 @@ void JAISound::setSeqInterPan(u8 line_, f32 param_2, u32 param_3) {
     if (!getSeqParameter()) {
         return;
     }
-    JUT_ASSERT_MSG(660, line_<JAIGlobalParameter::seqParameterLines, "JAISound::setSeqInterPan 設定できるライン数を超えています。\n");
+    JUT_ASSERT_MSG(660, line_ < JAIGlobalParameter::seqParameterLines, "JAISound::setSeqInterPan 設定できるライン数を超えています。\n");
     int r31 = getSeqParameter()->seqPan[line_].set(param_2, param_3);
     if (r31 == 1) {
         getSeqParameter()->field_0x1270 |= 1 << line_;
@@ -306,7 +306,7 @@ void JAISound::setSeqInterPitch(u8 line_, f32 param_2, u32 param_3) {
     if (!getSeqParameter()) {
         return;
     }
-    JUT_ASSERT_MSG(678, line_<JAIGlobalParameter::seqParameterLines, "JAISound::setSeqInterPan 設定できるライン数を超えています。\n");
+    JUT_ASSERT_MSG(678, line_ < JAIGlobalParameter::seqParameterLines, "JAISound::setSeqInterPan 設定できるライン数を超えています。\n");
     int r31 = getSeqParameter()->seqPitch[line_].set(param_2, param_3);
     if (r31 == 1) {
         getSeqParameter()->field_0x1274 |= 1 << line_;
@@ -324,7 +324,7 @@ void JAISound::setSeqInterFxmix(u8 line_, f32 param_2, u32 param_3) {
     if (!getSeqParameter()) {
         return;
     }
-    JUT_ASSERT_MSG(696, line_<JAIGlobalParameter::seqParameterLines, "JAISound::setSeqInterPan 設定できるライン数を超えています。\n");
+    JUT_ASSERT_MSG(696, line_ < JAIGlobalParameter::seqParameterLines, "JAISound::setSeqInterPan 設定できるライン数を超えています。\n");
     int r31 = getSeqParameter()->seqFxmix[line_].set(param_2, param_3);
     if (r31 == 1) {
         getSeqParameter()->field_0x1278 |= 1 << line_;
@@ -342,7 +342,7 @@ void JAISound::setSeqInterDolby(u8 line_, f32 param_2, u32 param_3) {
     if (!getSeqParameter()) {
         return;
     }
-    JUT_ASSERT_MSG(714, line_<JAIGlobalParameter::seqParameterLines, "JAISound::setSeqInterPan 設定できるライン数を超えています。\n");
+    JUT_ASSERT_MSG(714, line_ < JAIGlobalParameter::seqParameterLines, "JAISound::setSeqInterPan 設定できるライン数を超えています。\n");
     if (JAIBasic::getInterface()->field_0xd != 2) {
         if (getSeqParameter()->seqDolby[line_].mCurrentValue != 0.0f) {
             param_2 = 0.0f;
@@ -505,7 +505,8 @@ void JAISound::setSeDistanceFxmix(u8) {
 }
 
 /* 8029A6B0-8029A6B4       .text setSeDistanceFir__8JAISoundFUc */
-void JAISound::setSeDistanceFir(u8) {}
+void JAISound::setSeDistanceFir(u8) {
+}
 
 /* 8029A6B4-8029A788       .text setSeDistanceDolby__8JAISoundFUc */
 void JAISound::setSeDistanceDolby(u8) {
@@ -536,65 +537,65 @@ void JAISound::setStreamPrepareFlag(u8) {
 void JAISound::setPauseMode(u8 param_1, u8 param_2) {
     /* Nonmatching */
     switch (mSoundID & JAISoundID_TypeMask) {
-    case JAISoundID_Type_Sequence:
-        if (!getSeqParameter()) {
-            return;
-        }
-        if (param_1 == 3) {
-            param_1 = 4;
-        }
-        if (param_1 != 0) {
-            switch (param_1) {
-            case 1:
-                setSeqInterVolume(SOUNDPARAM_Pause, param_2 / 127.0f, 1);
-                break;
-            case 2:
-                JASystem::TTrack* track = getSeqParameter()->getRootTrackPointer();
-                track->pauseTrackAll();
-                break;
+        case JAISoundID_Type_Sequence:
+            if (!getSeqParameter()) {
+                return;
             }
-        } else {
-            getSeqParameter();
-            switch (getSeqParameter()->field_0x1261) {
-            case 1:
-                setSeqInterVolume(SOUNDPARAM_Pause, 1.0f, 1);
-                break;
-            case 2:
-                JASystem::TTrack* track = getSeqParameter()->getRootTrackPointer();
-                track->unPauseTrackAll();
-                break;
+            if (param_1 == 3) {
+                param_1 = 4;
             }
-        }
-        getSeqParameter()->field_0x1261 = param_1;
-        break;
-    case JAISoundID_Type_Stream:
-        if (!getStreamParameter()) {
-            return;
-        }
-        if (param_1 != 0) {
-            switch (param_1) {
-            case 1:
-                setStreamInterVolume(SOUNDPARAM_Pause, param_2 / 127.0f, 1);
-                break;
-            case 2:
-                JAInter::StreamLib::setPauseFlag(2);
-                break;
+            if (param_1 != 0) {
+                switch (param_1) {
+                    case 1:
+                        setSeqInterVolume(SOUNDPARAM_Pause, param_2 / 127.0f, 1);
+                        break;
+                    case 2:
+                        JASystem::TTrack* track = getSeqParameter()->getRootTrackPointer();
+                        track->pauseTrackAll();
+                        break;
+                }
+            } else {
+                getSeqParameter();
+                switch (getSeqParameter()->field_0x1261) {
+                    case 1:
+                        setSeqInterVolume(SOUNDPARAM_Pause, 1.0f, 1);
+                        break;
+                    case 2:
+                        JASystem::TTrack* track = getSeqParameter()->getRootTrackPointer();
+                        track->unPauseTrackAll();
+                        break;
+                }
             }
-        } else {
-            switch (getStreamParameter()->mPauseMode) {
-            case 1:
-                setStreamInterVolume(SOUNDPARAM_Pause, 1.0f, 1);
-                break;
-            case 2:
-                JAInter::StreamLib::clearPauseFlag(2);
-                break;
+            getSeqParameter()->field_0x1261 = param_1;
+            break;
+        case JAISoundID_Type_Stream:
+            if (!getStreamParameter()) {
+                return;
             }
-        }
-        getStreamParameter()->mPauseMode = param_1;
-        break;
-    default:
-        JUT_ASSERT_MSG(1443, 0, "JAISound::setPauseMode サウンドカテゴリービットが異常です。\n");
-        break;
+            if (param_1 != 0) {
+                switch (param_1) {
+                    case 1:
+                        setStreamInterVolume(SOUNDPARAM_Pause, param_2 / 127.0f, 1);
+                        break;
+                    case 2:
+                        JAInter::StreamLib::setPauseFlag(2);
+                        break;
+                }
+            } else {
+                switch (getStreamParameter()->mPauseMode) {
+                    case 1:
+                        setStreamInterVolume(SOUNDPARAM_Pause, 1.0f, 1);
+                        break;
+                    case 2:
+                        JAInter::StreamLib::clearPauseFlag(2);
+                        break;
+                }
+            }
+            getStreamParameter()->mPauseMode = param_1;
+            break;
+        default:
+            JUT_ASSERT_MSG(1443, 0, "JAISound::setPauseMode サウンドカテゴリービットが異常です。\n");
+            break;
     }
 }
 
@@ -644,8 +645,30 @@ void JAISound::initParameter(JAISound**, JAInter::Actor*, u32, u32, u8, void*) {
 }
 
 /* 8029AFCC-8029B07C       .text set__Q27JAInter11MoveParaSetFfUl */
-int JAInter::MoveParaSet::set(f32, u32) {
+int JAInter::MoveParaSet::set(f32 param_1, u32 param_2) {
     /* Nonmatching */
+    u32 ret;
+
+    if ((this->mMoveCounter == 0) && (this->mCurrentValue == param_1)) {
+        ret = 2;
+    } else if ((this->mMoveCounter != 0) && (this->mTargetValue == param_1)) {
+        ret = 2;
+    } else {
+        this->mTargetValue = param_1;
+        if (param_2 == 0) {
+            this->mCurrentValue = param_1;
+            ret = 0;
+        } else {
+            if (param_2 == 1) {
+                this->mMoveAmount = this->mCurrentValue - this->mTargetValue;
+            } else {
+                this->mMoveAmount = (this->mCurrentValue - this->mTargetValue) / (float)param_2;
+            }
+            this->mMoveCounter = param_2;
+            ret = 1;
+        }
+    }
+    return ret;
 }
 
 /* 8029B07C-8029B0C4       .text move__Q27JAInter11MoveParaSetFv */
