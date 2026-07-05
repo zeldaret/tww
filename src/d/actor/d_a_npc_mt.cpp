@@ -9,7 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_snap.h"
 #include "d/d_picture_box.h"
-#include "res/Object/Mt.h"
+#include "res/Object/Niten.h"
 
 #define TOTAL_FIGURE_COUNT 0x86
 
@@ -24,20 +24,20 @@ static const char* l_arcname_tbl[] = {
 };
 
 static const int l_bmd_ix_tbl[] = {
-    0x1,
+    dRes_ID_NITEN_BDL_MT_e,
 };
 
 static const int l_bck_ix_tbl[] = {
-    0x7,
-    0x3,
-    0x4,
-    0x5,
-    0x6,
-    0x8,
+    dRes_ID_NITEN_BCK_MT_WAIT01_e,
+    dRes_ID_NITEN_BCK_MT_TALK01_e,
+    dRes_ID_NITEN_BCK_MT_TALK02_e,
+    dRes_ID_NITEN_BCK_MT_TALK03_e,
+    dRes_ID_NITEN_BCK_MT_TALK04_e,
+    dRes_ID_NITEN_BCK_MT_TUKURU_e,
 };
 
 static const int l_btp_ix_tbl[] = {
-    0x2,
+    dRes_ID_NITEN_BTP_MT_MABA_e,
 };
 
 static sMtAnmDat l_npc_anm_wait[] = {
@@ -1092,7 +1092,7 @@ void daNpcMt_c::chkAttention() {
         }
     }
     else {
-        fopAc_ac_c* player = dComIfGp_getPlayer(1);
+        fopAc_ac_c* player = dComIfGp_getLinkPlayer();
 
         f32 temp = m720;
         int temp2 = m730;
@@ -1267,7 +1267,6 @@ void daNpcMt_c::setAnm(u8 param_1, int param_2, f32 morf) {
     J3DAnmTransformKey* pAnm = (J3DAnmTransformKey*)dComIfG_getObjectIDRes(l_arcname_tbl[mPrmNpcNo], l_bck_ix_tbl[param_1]);
     mpMorf->setAnm(pAnm, param_2, morf, 1.0f, 0.0f, -1.0f, NULL);
     m74A = param_1;
-    return;
 }
 
 /* 000028E4-00002984       .text setAnmTbl__9daNpcMt_cFP9sMtAnmDat */
@@ -1294,7 +1293,7 @@ bool daNpcMt_c::setAnmTbl(sMtAnmDat* anmDat) {
 
 /* 00002984-00002A28       .text XyCheckCB__9daNpcMt_cFi */
 s16 daNpcMt_c::XyCheckCB(int i_itemBtn) { 
-    if (dComIfGs_isEventBit(0x2f02) && !dComIfGs_isEventBit(0x2f01)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F02) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F01)) {
         u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
         if(itemNo == dItemNo_PICTO_BOX_e || itemNo == dItemNo_DELUXE_PICTO_BOX_e){
             if(dComIfGs_getPictureNum()){
