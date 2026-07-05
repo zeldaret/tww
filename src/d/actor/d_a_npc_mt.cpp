@@ -334,7 +334,7 @@ static char* l_figure_room_name[] = {
 
 /* 00000078-00000228       .text __ct__9daNpcMt_cFv */
 daNpcMt_c::daNpcMt_c() {
-    mPrmNpcNo = getPrmNpcNo();
+    mNpcNo = getPrmNpcNo();
     m747 = 0;
     m746 = 0;
     m718 = 0.0f;
@@ -355,20 +355,20 @@ static BOOL daNpc_Mt_nodeCallBack(J3DNode* node, int calcTiming) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         
-        cMtx_copy(model->getAnmMtx(jntNo), *calc_mtx);
+        MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
 
         if(jntNo == i_this->m_jnt.getHeadJntNum()) {
-            mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getHead_y());
-            mDoMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getHead_x());
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getHead_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getHead_x());
         }
 
         else if(jntNo == i_this->m_jnt.getBackboneJntNum()) {
-            mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getBackbone_y());
-            mDoMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getBackbone_x());
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getBackbone_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getBackbone_x());
         }
 
         model->setAnmMtx(jntNo, *calc_mtx);
-        cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
+        MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
     }
     return TRUE;
 }
@@ -409,7 +409,7 @@ static cPhs_State phase_1(daNpcMt_c* i_this) {
         phase_state = cPhs_STOP_e;
     }
     else {
-        i_this->m747 = 1;
+        i_this->setResFlag(1);
         phase_state = cPhs_NEXT_e;
     }
     return phase_state;
@@ -417,12 +417,14 @@ static cPhs_State phase_1(daNpcMt_c* i_this) {
 
 /* 00000858-000008D8       .text phase_2__FP9daNpcMt_c */
 static cPhs_State phase_2(daNpcMt_c* i_this) {
-    cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhsArcname, l_arcname_tbl[i_this->mPrmNpcNo]);
+    cPhs_State phase_state = dComIfG_resLoad(i_this->getPhaseP(), l_arcname_tbl[i_this->getNpcNo()]);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0x2900)) {
             return i_this->createInit();
         } else {
+#if VERSION > VERSION_DEMO
             i_this->mpMorf = NULL;
+#endif
             return cPhs_ERROR_e;
         }
     }
@@ -441,19 +443,19 @@ cPhs_State daNpcMt_c::_create() {
 
 /* 00000908-00000B98       .text createHeap__9daNpcMt_cFv */
 BOOL daNpcMt_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectIDRes(l_arcname_tbl[mPrmNpcNo], l_bmd_ix_tbl[mPrmNpcNo]);
+    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bmd_ix_tbl[mNpcNo]);
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransform*)dComIfG_getObjectIDRes(l_arcname_tbl[mPrmNpcNo], l_bck_ix_tbl[m74A]),
+        (J3DAnmTransform*)dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bck_ix_tbl[m74A]),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL,
         0x80000, 0x11020022
     );
 
     m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
-    JUT_ASSERT(0x389, m_jnt.getHeadJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(904, 905), m_jnt.getHeadJntNum() >= 0);
     m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
-    JUT_ASSERT(0x38D, m_jnt.getBackboneJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(908, 909), m_jnt.getBackboneJntNum() >= 0);
 
     if (!initTexPatternAnm(false)) {
         return FALSE;
@@ -478,11 +480,20 @@ static s16 daNpcMt_XyCheckCB(void* i_this, int i_itemBtn) {
 
 /* 00000BB8-00000DEC       .text createInit__9daNpcMt_cFv */
 cPhs_State daNpcMt_c::createInit() {
+#if VERSION == VERSION_DEMO
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(dNpc_cyl_src);
+    mCyl.SetStts(&mStts);
+    setCollision(&mCyl, current.pos, l_npc_dat[mNpcNo].field_0x30, 150.0f);
+#endif
     gravity = -9.0f;
     setAnmTbl(l_npc_anm_wait);
     mMtGetItemEventIdx = dComIfGp_evmng_getEventIdx("MT_GET_ITEM", 0xff);
     eventInfo.mpCheckCB = daNpcMt_XyCheckCB;
-    mEventCut.setActorInfo2(l_npc_staff_id[mPrmNpcNo], this);
+    mEventCut.setActorInfo2(l_npc_staff_id[mNpcNo], this);
+#if VERSION == VERSION_DEMO
+    setMtx();
+#endif
     m73E = 0;
     m742 = 0;
     m743 = 0;
@@ -494,36 +505,47 @@ cPhs_State daNpcMt_c::createInit() {
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x6E;
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_UNK1000000_e;
     m_jnt.setParam( 
-        l_npc_dat[mPrmNpcNo].mMax_backbone_x, 
-        l_npc_dat[mPrmNpcNo].mMax_backbone_y,
-        l_npc_dat[mPrmNpcNo].mMin_backbone_x, 
-        l_npc_dat[mPrmNpcNo].mMin_backbone_y,
-        l_npc_dat[mPrmNpcNo].mMax_head_x, 
-        l_npc_dat[mPrmNpcNo].mMax_head_y,
-        l_npc_dat[mPrmNpcNo].mMin_head_x,
-        l_npc_dat[mPrmNpcNo].mMin_head_y,
-        l_npc_dat[mPrmNpcNo].mMax_turn_step
+        l_npc_dat[mNpcNo].mMax_backbone_x, 
+        l_npc_dat[mNpcNo].mMax_backbone_y,
+        l_npc_dat[mNpcNo].mMin_backbone_x, 
+        l_npc_dat[mNpcNo].mMin_backbone_y,
+        l_npc_dat[mNpcNo].mMax_head_x, 
+        l_npc_dat[mNpcNo].mMax_head_y,
+        l_npc_dat[mNpcNo].mMin_head_x,
+        l_npc_dat[mNpcNo].mMin_head_y,
+        l_npc_dat[mNpcNo].mMax_turn_step
     );
-    m750 = l_npc_dat[mPrmNpcNo].field_0x4A;
-    m751 = l_npc_dat[mPrmNpcNo].field_0x4B;
-    m720 = l_npc_dat[mPrmNpcNo].field_0x20;
-    m730 = l_npc_dat[mPrmNpcNo].field_0x28;
+    m750 = l_npc_dat[mNpcNo].field_0x4A;
+    m751 = l_npc_dat[mNpcNo].field_0x4B;
+    m720 = l_npc_dat[mNpcNo].field_0x20;
+    m730 = l_npc_dat[mNpcNo].field_0x28;
     mObjAcch.CrrPos(*dComIfG_Bgsp());
+#if VERSION > VERSION_DEMO
     setMtx();
     mpMorf->getModel()->calc();
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(dNpc_cyl_src);
     mCyl.SetStts(&mStts);
-    setCollision(&mCyl, current.pos, l_npc_dat[mPrmNpcNo].field_0x30, 150.0f);
+    setCollision(&mCyl, current.pos, l_npc_dat[mNpcNo].field_0x30, 150.0f);
+#endif
     return cPhs_COMPLEATE_e;
 }
 
 /* 00000DEC-00000F6C       .text _delete__9daNpcMt_cFv */
 bool daNpcMt_c::_delete() {
-    dComIfG_resDeleteDemo(&mPhsArcname, l_arcname_tbl[mPrmNpcNo]);
+#if VERSION == VERSION_DEMO
+    if (m747 != 0) {
+        dComIfG_resDeleteDemo(&mPhsArcname, l_arcname_tbl[mNpcNo]);
+    }
+    if(mpMorf != NULL){
+        mpMorf->stopZelAnime();
+    }
+#else
+    dComIfG_resDeleteDemo(&mPhsArcname, l_arcname_tbl[mNpcNo]);
     if(heap != NULL && mpMorf != NULL){
         mpMorf->stopZelAnime();
     }
+#endif
 
     if(dComIfGp_isEnableNextStage()){
         int roomId;
@@ -605,10 +627,10 @@ bool daNpcMt_c::_execute() {
     playTexPatternAnm();
     playAnm();
 
-    setCollision(&mCyl, current.pos, l_npc_dat[mPrmNpcNo].field_0x30, 150.0f);
+    setCollision(&mCyl, current.pos, l_npc_dat[mNpcNo].field_0x30, 150.0f);
 
-    attention_info.position.set(current.pos.x, current.pos.y + l_npc_dat[mPrmNpcNo].field_0x18, current.pos.z);
-    eyePos.set(current.pos.x, current.pos.y + l_npc_dat[mPrmNpcNo].field_0x1C, current.pos.z);
+    attention_info.position.set(current.pos.x, current.pos.y + l_npc_dat[mNpcNo].field_0x18, current.pos.z);
+    eyePos.set(current.pos.x, current.pos.y + l_npc_dat[mNpcNo].field_0x1C, current.pos.z);
 
     lookBack();
     setMtx();
@@ -642,15 +664,15 @@ s32 daNpcMt_c::executeWaitInit() {
     speedF = 0.0f;
     setAnmTbl(l_npc_anm_wait);
     m_jnt.setParam( 
-        l_npc_dat[mPrmNpcNo].mMax_backbone_x, 
-        l_npc_dat[mPrmNpcNo].mMax_backbone_y,
-        l_npc_dat[mPrmNpcNo].mMin_backbone_x, 
-        l_npc_dat[mPrmNpcNo].mMin_backbone_y,
-        l_npc_dat[mPrmNpcNo].mMax_head_x, 
-        l_npc_dat[mPrmNpcNo].mMax_head_y,
-        l_npc_dat[mPrmNpcNo].mMin_head_x,
-        l_npc_dat[mPrmNpcNo].mMin_head_y,
-        l_npc_dat[mPrmNpcNo].mMax_turn_step
+        l_npc_dat[mNpcNo].mMax_backbone_x, 
+        l_npc_dat[mNpcNo].mMax_backbone_y,
+        l_npc_dat[mNpcNo].mMin_backbone_x, 
+        l_npc_dat[mNpcNo].mMin_backbone_y,
+        l_npc_dat[mNpcNo].mMax_head_x, 
+        l_npc_dat[mNpcNo].mMax_head_y,
+        l_npc_dat[mNpcNo].mMin_head_x,
+        l_npc_dat[mNpcNo].mMin_head_y,
+        l_npc_dat[mNpcNo].mMax_turn_step
     );
     return FALSE;
 }
@@ -731,7 +753,7 @@ void daNpcMt_c::privateCut() {
         "GET_ITEM",
     };
 
-    int staffIdx = dComIfGp_evmng_getMyStaffId(l_npc_staff_id[mPrmNpcNo]);
+    int staffIdx = dComIfGp_evmng_getMyStaffId(l_npc_staff_id[mNpcNo]);
     if(staffIdx != -1) {
         m74D = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
         if(m74D == -1) {
@@ -969,12 +991,14 @@ u32 daNpcMt_c::getMsg() {
                 setFigure(dSnap_PhotoIndex2TableIndex(0x77));
                 setFigure(dSnap_PhotoIndex2TableIndex(0x78));
             }
+#if VERSION > VERSION_DEMO
             else if (evReg == (u8)dSnap_PhotoIndex2TableIndex(0x8c)) {
                 setFigure(dSnap_PhotoIndex2TableIndex(0x8d));
             }
             else if (evReg == (u8)dSnap_PhotoIndex2TableIndex(0x88)) {
                 setFigure(dSnap_PhotoIndex2TableIndex(0x87));
             }
+#endif
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_4080);
             dComIfGs_offEventBit(dSv_event_flag_c::UNK_2F01);
         }
@@ -1108,7 +1132,7 @@ void daNpcMt_c::chkAttention() {
 
         temp5 -= shape_angle.y;
         if(temp > temp4 && temp2 > abs(temp5)) {
-            mLookAtPos = dNpc_playerEyePos(l_npc_dat[mPrmNpcNo].field_0x14);
+            mLookAtPos = dNpc_playerEyePos(l_npc_dat[mNpcNo].field_0x14);
             m74F = 1;
             if(m750 != 0) {
                 m728 = false;
@@ -1131,10 +1155,10 @@ void daNpcMt_c::chkAttention() {
         else {
             if(m743 == 1) {
                 m743 = 0;
-                m72E = l_npc_dat[mPrmNpcNo].field_0x48;
+                m72E = l_npc_dat[mNpcNo].field_0x48;
             }
-            if(l_npc_dat[mPrmNpcNo].field_0x24 > temp4 || m753 != 0){
-                mLookAtPos = dNpc_playerEyePos(l_npc_dat[mPrmNpcNo].field_0x14);
+            if(l_npc_dat[mNpcNo].field_0x24 > temp4 || m753 != 0){
+                mLookAtPos = dNpc_playerEyePos(l_npc_dat[mNpcNo].field_0x14);
                 m74F = 1;
                 if (m750 != 0) {
                     m728 = 0;
@@ -1165,7 +1189,7 @@ void daNpcMt_c::chkAttention() {
         }
     }
 
-    m73C = l_npc_dat[mPrmNpcNo].field_0x2A;
+    m73C = l_npc_dat[mNpcNo].field_0x2A;
 }
 
 /* 00002474-000025C0       .text lookBack__9daNpcMt_cFv */
@@ -1211,8 +1235,8 @@ void daNpcMt_c::lookBack() {
 /* 000025C0-000026D8       .text initTexPatternAnm__9daNpcMt_cFb */
 BOOL daNpcMt_c::initTexPatternAnm(bool i_modify) {
     J3DModelData *modelData = mpMorf->getModel()->getModelData();
-    m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(l_arcname_tbl[mPrmNpcNo], l_btp_ix_tbl[mPrmNpcNo]);
-    JUT_ASSERT(0x801, m_head_tex_pattern != NULL);
+    m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_btp_ix_tbl[mNpcNo]);
+    JUT_ASSERT(DEMO_SELECT(2032, 2049), m_head_tex_pattern != NULL);
     
     if(!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, FALSE)) {
         return FALSE;
@@ -1264,8 +1288,10 @@ void daNpcMt_c::setAnm(u8 param_1, int param_2, f32 morf) {
         m71C = -1.0f;
     }
 
-    J3DAnmTransformKey* pAnm = (J3DAnmTransformKey*)dComIfG_getObjectIDRes(l_arcname_tbl[mPrmNpcNo], l_bck_ix_tbl[param_1]);
-    mpMorf->setAnm(pAnm, param_2, morf, 1.0f, 0.0f, -1.0f, NULL);
+    mpMorf->setAnm(
+        (J3DAnmTransformKey*)dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bck_ix_tbl[param_1]),
+        param_2, morf, 1.0f, 0.0f, -1.0f, NULL
+    );
     m74A = param_1;
 }
 
@@ -1339,8 +1365,9 @@ u8 daNpcMt_c::isFigureGet(u8 figureNo) {
 /* 00002B98-00002C38       .text setFigure__9daNpcMt_cFUc */
 void daNpcMt_c::setFigure(u8 figure) {
     if(figure < TOTAL_FIGURE_COUNT) {
+        u32 r28 = figure % 8;
         u8 reg = dComIfGs_getEventReg(l_figure_comp[figure / 8]);
-        reg |= 1 << (figure % 8);
+        reg |= 1 << r28;
         dComIfGs_setEventReg(l_figure_comp[figure / 8], reg);
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_3A01);
     }
