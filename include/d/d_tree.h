@@ -94,7 +94,7 @@ public:
     dTree_anm_c* getAnm(int idx) { return &mAnm[idx]; }
     dTree_data_c* getData() { return mData; }
 
-    void setPlayerCutFlg(int i_flg) { mPlayerCutFlg = i_flg; }
+    void setPlayerCutFlg(BOOL i_flg) { mPlayerCutFlg = i_flg; }
     void setPlayerSwordTop(cXyz& i_pos) { mPlayerSwordTop = i_pos; }
     void setPlayerSwordMoveAngY(s16 i_ang) { mPlayerSwordMoveAngY = i_ang; }
     cXyz& getPlayerSwordTop() { return mPlayerSwordTop; }
