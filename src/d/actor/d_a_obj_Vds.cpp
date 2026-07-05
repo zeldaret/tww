@@ -30,7 +30,9 @@ namespace daObjVds {
     };
 };
 
-
+#if VERSION == VERSION_DEMO
+static f32 lbl_365_data_1C[5] = { 0, 2.125, 0, 1.75, 0}; // Unused
+#endif
 
 
 /* 00000078-00000134       .text SetLoopJointAnimation__Q28daObjVds5Act_cFP18J3DAnmTransformKeyP18J3DAnmTransformKeyff */
@@ -142,10 +144,6 @@ BOOL daObjVds::Act_c::process_on_init() {
 void daObjVds::Act_c::process_on_main() {
     return;
 }
-
-#if VERSION == VERSION_DEMO
-static f32 lbl_365_data_1C[5] = { 0, 2.125, 0, 1.75, 0}; // Unused
-#endif
 
 /* 000004F4-000005C0       .text process_init__Q28daObjVds5Act_cFi */
 BOOL daObjVds::Act_c::process_init(BOOL i_side) {

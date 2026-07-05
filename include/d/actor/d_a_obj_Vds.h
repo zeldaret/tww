@@ -3,7 +3,7 @@
 
 #include "d/d_a_obj.h"
 #include "d/d_bg_w.h"
-#include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 
 class J3DAnmTransformKey;
