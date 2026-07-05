@@ -145,12 +145,12 @@ void dFlower_data_c::WorkAt_NoCutAnim(fopAc_ac_c* param_1, u32 param_2, int para
 
     temp2 = temp.abs2XZ();
     s16 angle = cM_atan2s(temp.x, temp.z);
-    f32 val2 = std::sqrtf(temp2);
+    temp2 = std::sqrtf(temp2);
 
     dFlower_anm_c* pAnm;
     if(field_0x01 < 8) {
         cXyz pos;
-        if(field_0x03 == 0 && !cLib_checkBit<u8>(field_0x00, 0x8) && val2 > 16.0f) {
+        if(field_0x03 == 0 && !cLib_checkBit<u8>(field_0x00, 0x8) && temp2 > 16.0f) {
             pos.set(field_0x04.x, field_0x04.y + 20.0f, field_0x04.z);
 
             u16 particleID;
@@ -193,7 +193,7 @@ void dFlower_data_c::WorkAt_NoCutAnim(fopAc_ac_c* param_1, u32 param_2, int para
     }
 
     pAnm->field_0x02 = angle;
-    pAnm->field_0x04 = cM_atan2s(val2, 40.0f);
+    pAnm->field_0x04 = cM_atan2s(temp2, 40.0f);
 }
 
 /* 800C0018-800C0270       .text WorkAt__14dFlower_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInf */
@@ -277,21 +277,29 @@ void dFlower_room_c::newData(dFlower_data_c* pData) {
 
 /* 800C0440-800C04A4       .text deleteData__14dFlower_room_cFv */
 void dFlower_room_c::deleteData() {
+#if VERSION == VERSION_DEMO
+    dFlower_data_c* r6 = field_0x0;
+    while(field_0x0) {
+        cLib_setBit<u8>(r6->field_0x00, 0);
+        field_0x0 = field_0x0->field_0x40;
+    }
+#else
     while(field_0x0) {
         cLib_setBit<u8>(field_0x0->field_0x00, 0);
         mDoAud_seDeleteObject(&field_0x0->field_0x04);
         field_0x0 = field_0x0->field_0x40;
     }
+#endif
 }
 
 /* 800C04A4-800C05B8       .text __ct__16dFlower_packet_cFv */
 dFlower_packet_c::dFlower_packet_c() {
-    dFlower_data_c* pData = getData();
+    dFlower_data_c* pData = mData;
     for(int i = 0; i < ARRAY_SIZE(mData); i++, pData++) {
         cLib_setBit<u8>(pData->field_0x00, 0);
     }
 
-    dFlower_anm_c* pAnm = getAnm();
+    dFlower_anm_c* pAnm = mAnm;
     for(int i = 0; i < ARRAY_SIZE(mAnm); i++, pAnm++) {
         pAnm->field_0x00 = 0;
     }
@@ -319,9 +327,11 @@ dFlower_data_c::dFlower_data_c() {
 
 /* 800C05DC-800C0898       .text draw__16dFlower_packet_cFv */
 void dFlower_packet_c::draw() {
+#if VERSION > VERSION_JPN
     j3dSys.reinitGX();
-
     GXSetNumIndStages(0);
+#endif
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
     GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
@@ -386,7 +396,9 @@ void dFlower_packet_c::draw() {
         }
     }
 
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 800C0898-800C0A88       .text calc__16dFlower_packet_cFv */
@@ -400,8 +412,7 @@ void dFlower_packet_c::calc() {
     dFlower_data_c* pData = mRoom[roomNo].field_0x0;
     if(mRoom[roomNo].field_0x0) {
         daPy_py_c* pPlayer = (daPy_py_c*)daPy_getPlayerActorClass();
-
-        setPlayerCutFlg(pPlayer->getCutAtFlg() != 0);
+        setPlayerCutFlg(pPlayer->getCutAtFlg());
         cXyz top = pPlayer->getSwordTopPos();
         cXyz temp = top - pPlayer->current.pos;
         setPlayerSwordAngY(cM_atan2s(temp.x, temp.z));
@@ -538,7 +549,7 @@ void dFlower_packet_c::setData(dFlower_data_c* param_1, int param_2, s8 param_3,
 
 /* 800C10D4-800C121C       .text newData__16dFlower_packet_cFScR4cXyziSc */
 dFlower_data_c* dFlower_packet_c::newData(s8 param_1, cXyz& param_2, int i_roomNo, s8 param_4) {
-    JUT_ASSERT(0xB76, 0 <= i_roomNo && i_roomNo < 64);
+    JUT_ASSERT(VERSION_SELECT(2927, 2928, 2934, 2934), 0 <= i_roomNo && i_roomNo < 64);
 
     dFlower_data_c* pData = &mData[field_0x0010];
     for(int i = field_0x0010; i < (s32)ARRAY_SIZE(mData); pData++, i++) {
@@ -561,7 +572,7 @@ dFlower_data_c* dFlower_packet_c::newData(s8 param_1, cXyz& param_2, int i_roomN
 
 /* 800C121C-800C1264       .text newAnm__16dFlower_packet_cFv */
 int dFlower_packet_c::newAnm() {
-    dFlower_anm_c* pAnm = getAnm(8);
+    dFlower_anm_c* pAnm = &mAnm[8];
     for(int i = 8; i < ARRAY_SIZE(mAnm); pAnm++, i++) {
         if(pAnm->field_0x00 == 0) {
             pAnm->field_0x00 = 1;

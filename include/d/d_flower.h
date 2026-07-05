@@ -82,7 +82,7 @@ public:
     /* 0x0014 */ dFlower_data_c mData[200];
     /* 0x3534 */ dFlower_anm_c mAnm[72];
     /* 0x44F4 */ dFlower_room_c mRoom[64];
-    /* 0x45F4 */ u8 field_0x45f4;
+    /* 0x45F4 */ bool field_0x45f4;
     /* 0x45F5 */ u8 field_0x45F5;
     /* 0x45F6 */ s16 field_0x45F6;
     /* 0x45F8 */ s16 field_0x45f8;
