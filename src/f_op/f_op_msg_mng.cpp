@@ -516,7 +516,7 @@ fpc_ProcID fopMsgM_scopeMessageSet(u32 i_msgNo) {
         if (pMsg == NULL) {
             i_msgID = fpcM_ERROR_PROCESS_ID_e;
         } else {
-            if (dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) && dComIfGp_getScopeMesgStatus() == fopMsgStts_UNKB_e) {
+            if (dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) && dComIfGp_getScopeMesgStatus() == fopMsgStts_SCOPE_ACTIVE_e) {
                 dComIfGp_setScopeMesgStatus(fopMsgStts_BOX_OPENING_e);
             }
 
@@ -884,12 +884,12 @@ bool fopMsgM_nextMsgFlagCheck() {
 
 /* 8002C5BC-8002C624       .text fopMsgM_getScopeMode__Fv */
 bool fopMsgM_getScopeMode() {
-    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) && dComIfGp_getScopeMesgStatus() == fopMsgStts_UNKB_e && !dComIfGp_event_runCheck()) {
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKD_e);
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) && dComIfGp_getScopeMesgStatus() == fopMsgStts_SCOPE_ACTIVE_e && !dComIfGp_event_runCheck()) {
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_WAIT_e);
         return true;
     }
     if (dComIfGp_getScopeMesgStatus() == fopMsgStts_BOX_CLOSING_e) {
-        dComIfGp_setMesgStatus(fopMsgStts_UNKD_e);
+        dComIfGp_setMesgStatus(fopMsgStts_SCOPE_WAIT_e);
         return true;
     }
 
@@ -933,8 +933,8 @@ bool fopMsgM_checkMessageSend() {
 
 /* 8002C684-8002C6B0       .text fopMsgM_releaseScopeMode__Fv */
 bool fopMsgM_releaseScopeMode() {
-    if (dComIfGp_getScopeMesgStatus() == fopMsgStts_UNKD_e) {
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+    if (dComIfGp_getScopeMesgStatus() == fopMsgStts_SCOPE_WAIT_e) {
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
         return true;
     }
 

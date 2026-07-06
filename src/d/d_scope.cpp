@@ -6,195 +6,1275 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_scope.h"
 #include "f_op/f_op_msg.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_audio.h"
+#include "JSystem/J2DGraph/J2DScreen.h"
+#include "JSystem/J2DGraph/J2DTextBox.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
+#include "d/actor/d_a_player_main.h"
+#include "d/d_s_play.h"
+#include "d/d_demo.h"
+#include "f_op/f_op_camera.h"
+#include "d/d_meter.h"
+#include <string.h>
+#include <stdio.h>
+
+static J2DScreen* dScp_ScpScreen;
+static J2DScreen* dScp_MsgScreen;
+static JUTFont* font0; 
+static JUTFont* font1; // Ruby font
+static J2DPicture* sbutton_icon[8];
+static J2DPicture* sbutton_kage[8];
+static s16 sbuttonTimer[8];
+static dDlst_2DSCP_c scope;
+
+void dScp_ScreenDataSet(sub_scp_class*);
+void dScp_valueInit(sub_scp_class*);
+void dScp_setAlpha(sub_scp_class*);
+void dScp_wipeAngleCalc(sub_scp_class*);
+void dScp_ArrowAnime(sub_scp_class*);
+void dScp_wipeMove(sub_scp_class*, f32);
+void dScp_wipeMove2(sub_scp_class*, f32);
+void dScp_wipeMoveDemo(sub_scp_class*, f32, bool);
+void dScp_mesgPaneShow(sub_scp_class*);
+void dScp_mesgPaneHide(sub_scp_class*);
+void dScp_scopeAlpha(sub_scp_class*, f32);
+void dScp_scopeInitAlpha(sub_scp_class*);
+void dScp_scopeAlphaZero(sub_scp_class*);
+void dScp_stringInit(sub_scp_class*);
+void dScp_stringSet(sub_scp_class*);
+void dScp_yose_select(sub_scp_class*);
+void dScp_textPosition(sub_scp_class*);
+void dScp_arrowInit(sub_scp_class*);
+void dScp_arrowMove(sub_scp_class*);
+void dScp_dotMove(sub_scp_class*);
+void dScp_talkBeforeProc(sub_scp_class*);
+BOOL dScp_outnowProc(sub_scp_class*);
+BOOL dScp_continueProc(sub_scp_class*);
+BOOL dScp_forceContinueProc(sub_scp_class*);
+BOOL dScp_closewaitProc(sub_scp_class*);
+BOOL dScp_finishProc(sub_scp_class*);
+void dScp_openProc(sub_scp_class*);
+void dScp_openProc1(sub_scp_class*);
+void dScp_openProc2(sub_scp_class*);
+void dScp_moveProc(sub_scp_class*);
+void dScp_demoProc(sub_scp_class*);
+void dScp_talkNowProc(sub_scp_class*);
+void dScp_closeProc(sub_scp_class*);
+void dScp_closeDemoProc(sub_scp_class*);
 
 /* 80237568-802375E8       .text draw__13dDlst_2DSCP_cFv */
 void dDlst_2DSCP_c::draw() {
-    /* Nonmatching */
+    J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
+    graf->setPort();
+    dScp_ScpScreen->draw(0.0f, 0.0f, graf);
+    dScp_MsgScreen->draw(0.0f, 0.0f, graf);
+    outFontDraw();
 }
 
 /* 802375E8-80237720       .text outFontDraw__13dDlst_2DSCP_cFv */
 void dDlst_2DSCP_c::outFontDraw() {
-    /* Nonmatching */
+    for (int i = 0; i < 8; i++) 
+    {
+        u8 icon_no = mpScp->mMesgDataProc.getIconNum(i);
+        int pos_x = mpScp->mMesgDataProc.getIconPosX(i);
+        int pos_y = mpScp->mMesgDataProc.getIconPosY(i);
+        u32 color = mpScp->mMesgDataProc.getIconColor(i);
+        int line = mpScp->mpTextBox->mLineSpace / 2;
+
+        if (icon_no != 0xFF) {
+            int x = pos_x + mpScp->mpTextBox->mBounds.i.x;
+            // for some reason y computation only match if split in two
+            int y = line * (VERSION_SELECT(1, 1, 2, 2) - mpScp->mLineCount + pos_y * 2);
+            int y2 = y + mpScp->mpTextBox->mBounds.i.y;
+            fopMsgM_outFontDraw(sbutton_icon[i], sbutton_kage[i], x, y2, color, &sbuttonTimer[i], 0xFF, icon_no);
+        }
+    }
 }
 
 /* 80237720-80237F34       .text dScp_ScreenDataSet__FP13sub_scp_class */
-void dScp_ScreenDataSet(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_ScreenDataSet(sub_scp_class* i_Scp) {
+    font0 = mDoExt_getMesgFont();
+    JUT_ASSERT(VERSION_SELECT(0xAB, 0xAB, 0xB0, 0xB0), font0 != NULL);
+    font1 = mDoExt_getRubyFont();
+    JUT_ASSERT(VERSION_SELECT(0xAD, 0xAD, 0xB3, 0xB3), font1 != NULL);
+
+    fopMsgM_setPaneData(&i_Scp->mWipeCross, dScp_ScpScreen->search('wcrs'));
+    fopMsgM_setPaneData(&i_Scp->mWipeNum, dScp_ScpScreen->search('wnum'));
+    fopMsgM_setPaneData(&i_Scp->mWipeCrossKage, dScp_ScpScreen->search('wcrk'));
+    fopMsgM_setPaneData(&i_Scp->mWipeNumKage, dScp_ScpScreen->search('wnuk'));
+    fopMsgM_setPaneData(&i_Scp->mWipeBarA, dScp_ScpScreen->search('wpba'));
+    fopMsgM_setPaneData(&i_Scp->mWipeBarPivot, dScp_ScpScreen->search('wbap'));
+    fopMsgM_setPaneData(&i_Scp->mWipeScope, dScp_ScpScreen->search('wpsc'));
+    fopMsgM_setPaneData(&i_Scp->mCursorReturn, dScp_ScpScreen->search('yrtn'));
+    fopMsgM_setPaneData(&i_Scp->mCursorZoom, dScp_ScpScreen->search('yzom'));
+    fopMsgM_setPaneData(&i_Scp->mCursorReturnAnime, dScp_ScpScreen->search('crtn'));
+    fopMsgM_setPaneData(&i_Scp->mCursorZoomAnime, dScp_ScpScreen->search('czom'));
+    fopMsgM_setPaneData(&i_Scp->mArrowL, dScp_ScpScreen->search('lrtn'));
+    fopMsgM_setPaneData(&i_Scp->mArrowR, dScp_ScpScreen->search('rzom'));
+    fopMsgM_setPaneData(&i_Scp->mWipePanel[0], dScp_ScpScreen->search('wp03'));
+    fopMsgM_setPaneData(&i_Scp->mWipePanel[1], dScp_ScpScreen->search('wp02'));
+    fopMsgM_setPaneData(&i_Scp->mWipePanel[2], dScp_ScpScreen->search('wp01'));
+    fopMsgM_setPaneData(&i_Scp->mWipePanel[3], dScp_ScpScreen->search('wp00'));
+    fopMsgM_setPaneData(&i_Scp->mWipePanel[4], dScp_ScpScreen->search('wp04'));
+    fopMsgM_setPaneData(&i_Scp->mWipePanel[5], dScp_ScpScreen->search('wp05'));
+    fopMsgM_setPaneData(&i_Scp->mWipePanel[6], dScp_ScpScreen->search('wp07'));
+    fopMsgM_setPaneData(&i_Scp->mWipePanel[7], dScp_ScpScreen->search('wp06'));
+
+#if VERSION == VERSION_PAL
+    if (g_dComIfG_gameInfo.play.mPalLanguage != 0) {
+        char buf[16];
+        sprintf(buf, "wipe_in_%d.bti", g_dComIfG_gameInfo.play.mPalLanguage);
+        ((J2DPicture*)i_Scp->mArrowR.pane)->changeTexture(buf, 0);
+        sprintf(buf, "wipe_out_%d.bti", g_dComIfG_gameInfo.play.mPalLanguage);
+        ((J2DPicture*)i_Scp->mArrowL.pane)->changeTexture(buf, 0);
+    }
+#endif
+
+#if VERSION > VERSION_JPN
+    i_Scp->mCursorReturn.mPosCenterOrig.x -= 12.0f;
+    fopMsgM_paneTrans(&i_Scp->mCursorReturn, 0.0f, 0.0f);
+    i_Scp->mCursorZoom.mPosCenterOrig.x -= 12.0f;
+    fopMsgM_paneTrans(&i_Scp->mCursorZoom, 0.0f, 0.0f);
+    i_Scp->mCursorReturnAnime.mPosCenterOrig.x -= 12.0f;
+    fopMsgM_paneTrans(&i_Scp->mCursorReturnAnime, 0.0f, 0.0f);
+    i_Scp->mCursorZoomAnime.mPosCenterOrig.x -= 12.0f;
+    fopMsgM_paneTrans(&i_Scp->mCursorZoomAnime, 0.0f, 0.0f);
+#endif
+
+    fopMsgM_blendInit(&i_Scp->mCursorReturnAnime, "font_09_02.bti");
+    fopMsgM_blendInit(&i_Scp->mCursorZoomAnime, "font_09_02.bti");
+
+    i_Scp->mCursorZoomAnime.pane->rotate(
+        i_Scp->mCursorZoomAnime.mSizeOrig.x / 2.0f, i_Scp->mCursorZoomAnime.mSizeOrig.y / 2.0f, ROTATE_Z, 180.0f);
+
+    fopMsgM_blendInit(&i_Scp->mCursorReturn, "cursor_00_02.bti");
+    fopMsgM_blendInit(&i_Scp->mCursorZoom, "cursor_00_02.bti");
+
+    dScp_wipeMove(i_Scp, 3.f);
+
+    for (int i = 0; i < 8; i++) {
+        fopMsgM_setInitAlpha(&i_Scp->mWipePanel[i]);
+    }
+
+    fopMsgM_setPaneData(&i_Scp->mArrow, dScp_MsgScreen->search('yz80'));
+    fopMsgM_setPaneData(&i_Scp->mDot, dScp_MsgScreen->search('dt80'));
+    i_Scp->mpTextBox = (J2DTextBox*)dScp_MsgScreen->search('tx82');
+    i_Scp->mpRubyBox = (J2DTextBox*)dScp_MsgScreen->search('tx83');
+    i_Scp->mpTextBoxSdw = (J2DTextBox*)dScp_MsgScreen->search('tx80');
+    i_Scp->mpRubyBoxSdw = (J2DTextBox*)dScp_MsgScreen->search('tx81');
+
+#if VERSION == VERSION_PAL
+    if (dComIfGs_getOptRuby()) {
+        i_Scp->mpTextBox->move(i_Scp->mpTextBox->mBounds.i.x, i_Scp->mpTextBox->mBounds.i.y - 14.0f);
+        i_Scp->mpTextBoxSdw->move(i_Scp->mpTextBoxSdw->mBounds.i.x, i_Scp->mpTextBoxSdw->mBounds.i.y - 14.0f);
+    } else {
+        i_Scp->mpTextBox->move(i_Scp->mpTextBox->mBounds.i.x, i_Scp->mpTextBox->mBounds.i.y - 10.0f);
+        i_Scp->mpTextBoxSdw->move(i_Scp->mpTextBoxSdw->mBounds.i.x, i_Scp->mpTextBoxSdw->mBounds.i.y - 10.0f);
+    }
+#else
+    if (dComIfGs_getOptRuby()) {
+        i_Scp->mpTextBox->move(i_Scp->mpTextBox->mBounds.i.x, i_Scp->mpTextBox->mBounds.i.y - 4.0f);
+        i_Scp->mpTextBoxSdw->move(i_Scp->mpTextBoxSdw->mBounds.i.x, i_Scp->mpTextBoxSdw->mBounds.i.y - 4.0f);
+    }
+#endif
+
+    i_Scp->mpRubyBox->move(i_Scp->mpRubyBox->mBounds.i.x, i_Scp->mpRubyBox->mBounds.i.y - 3.0f);
+    i_Scp->mpRubyBoxSdw->move(i_Scp->mpRubyBoxSdw->mBounds.i.x, i_Scp->mpRubyBoxSdw->mBounds.i.y - 3.0f);
+
+    i_Scp->mpTextBox->setFont(font0);
+    i_Scp->mpRubyBox->setFont(font1);
+    i_Scp->mpTextBoxSdw->setFont(font0);
+    i_Scp->mpRubyBoxSdw->setFont(font1);
+
+#if VERSION <= VERSION_JPN
+    J2DTextBox::TFontSize font_size;
+    J2DTextBox::TFontSize ruby_font_size;
+    if (g_msgDHIO.field_0x08 == 0) {
+        int size = g_msgHIO.field_0x58;
+        font_size.mSizeX = (f32)size;
+        font_size.mSizeY = (f32)size;
+        int ruby_size = g_msgHIO.field_0x68;
+        ruby_font_size.mSizeX = (f32)ruby_size;
+        ruby_font_size.mSizeY = (f32)ruby_size;
+        i_Scp->mpTextBox->setFontSize(font_size);
+        i_Scp->mpRubyBox->setFontSize(ruby_font_size);
+        i_Scp->mpTextBoxSdw->setFontSize(font_size);
+        i_Scp->mpRubyBoxSdw->setFontSize(ruby_font_size);
+    } else {
+        font_size.mSizeX = g_msgHIO.field_0x70;
+        font_size.mSizeY = g_msgHIO.field_0x70;
+        i_Scp->mpTextBox->setFontSize(font_size);
+        i_Scp->mpTextBoxSdw->setFontSize(font_size);
+    }
+#else
+    J2DTextBox::TFontSize font_size;
+    font_size.mSizeX = g_msgHIO.field_0x70;
+    font_size.mSizeY = g_msgHIO.field_0x70;
+    i_Scp->mpTextBox->setFontSize(font_size);
+    i_Scp->mpTextBoxSdw->setFontSize(font_size);
+#endif
+
+#if VERSION <= VERSION_JPN
+    {
+        J2DTextBox* tx = i_Scp->mpTextBox;
+        tx->mCharSpace = -2.0f;
+        J2DTextBox* rb = i_Scp->mpRubyBox;
+        rb->mCharSpace = -1.0f;
+        J2DTextBox* txs = i_Scp->mpTextBoxSdw;
+        txs->mCharSpace = -2.0f;
+        J2DTextBox* rbs = i_Scp->mpRubyBoxSdw;
+        rbs->mCharSpace = -1.0f;
+    }
+
+    if (g_msgDHIO.field_0x08 == 0) {
+        J2DTextBox* tx = i_Scp->mpTextBox;
+        tx->mLineSpace = 42.0f;
+        J2DTextBox* rb = i_Scp->mpRubyBox;
+        rb->mLineSpace = 42.0f;
+        J2DTextBox* txs = i_Scp->mpTextBoxSdw;
+        txs->mLineSpace = 42.0f;
+        J2DTextBox* rbs = i_Scp->mpRubyBoxSdw;
+        rbs->mLineSpace = 42.0f;
+    } else {
+        f32 ls = (f32)(int)g_msgHIO.field_0x5e;
+        J2DTextBox* tx = i_Scp->mpTextBox;
+        tx->mLineSpace = ls;
+        ls = (f32)(int)g_msgHIO.field_0x5e;
+        J2DTextBox* txs = i_Scp->mpTextBoxSdw;
+        txs->mLineSpace = ls;
+    }
+#else
+    i_Scp->mpTextBox->mCharSpace = 0.0f;
+    i_Scp->mpRubyBox->mCharSpace = 0.0f;
+    i_Scp->mpTextBoxSdw->mCharSpace = 0.0f;
+    i_Scp->mpRubyBoxSdw->mCharSpace = 0.0f;
+
+    i_Scp->mpTextBox->mLineSpace = 28.0f;
+    i_Scp->mpTextBoxSdw->mLineSpace = 28.0f;
+#endif
+
+    fopMsgM_blendInit(&i_Scp->mWipeNum, "rupy_num_01.bti");
+    fopMsgM_blendInit(&i_Scp->mWipeNumKage, "rupy_num_01.bti");
 }
 
 /* 80237F34-802380D4       .text dScp_valueInit__FP13sub_scp_class */
-void dScp_valueInit(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_valueInit(sub_scp_class* i_Scp) {
+    if (dComIfGp_getScopeType() == dScpTyp_PICTO_BOX_e) {
+        i_Scp->mStatus = fopMsgStts_SCOPE_OPENING_1_e;
+        dComIfGp_setMesgStatus(fopMsgStts_SCOPE_OPENING_1_e);
+    } else if (dComIfGp_getScopeType() == dScpTyp_DEMO_e) {
+        i_Scp->mStatus = fopMsgStts_SCOPE_OPENING_2_e;
+        dComIfGp_setMesgStatus(fopMsgStts_SCOPE_OPENING_2_e);
+    } else {
+        i_Scp->mStatus = fopMsgStts_BOX_OPENING_e;
+        dComIfGp_setMesgStatus(fopMsgStts_BOX_OPENING_e);
+    }
+
+    dComIfGp_setItemScopeWipeTimer(5);
+    i_Scp->mTransTimer = 0;
+    i_Scp->mOffsetX = 0.0f;
+    i_Scp->mOffsetY = 0.0f;
+    i_Scp->mZoomScale = 1.0f;
+
+    dScp_wipeAngleCalc(i_Scp);
+
+    J2DTextBox* textbox = i_Scp->mpTextBox;
+    i_Scp->mFontSizeX = textbox->mFontSizeX;
+    i_Scp->mFontSizeY = textbox->mFontSizeY;
+    J2DTextBox* ruby_box = i_Scp->mpRubyBox;
+    i_Scp->mRubyFontSizeX = ruby_box->mFontSizeX;
+    i_Scp->mRubyFontSizeY = ruby_box->mFontSizeY;
+    i_Scp->mpRubyBox->mLineSpace = i_Scp->mpTextBox->mLineSpace;
+    i_Scp->mpRubyBoxSdw->mLineSpace = i_Scp->mpTextBox->mLineSpace;
+
+    i_Scp->mArrowBaseY = (int)(i_Scp->mArrow.mPosTopLeftOrig.y + i_Scp->mArrow.mSizeOrig.y);
+
+    JUtility::TColor black = ((J2DPicture*)i_Scp->mDot.pane)->getBlack();
+    i_Scp->mDotBlackOrig = black;
+    JUtility::TColor white = ((J2DPicture*)i_Scp->mDot.pane)->getWhite();
+    i_Scp->mDotWhiteOrig = white;
+    i_Scp->mDotBlackNow = i_Scp->mDotBlackOrig;
+    i_Scp->mDotWhiteNow = i_Scp->mDotWhiteOrig;
 }
 
 /* 802380D4-802381A0       .text dScp_setAlpha__FP13sub_scp_class */
-void dScp_setAlpha(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_setAlpha(sub_scp_class* i_Scp) {
+    fopMsgM_setAlpha(&i_Scp->mWipeCross);
+    fopMsgM_setAlpha(&i_Scp->mWipeNum);
+    fopMsgM_setAlpha(&i_Scp->mWipeCrossKage);
+    fopMsgM_setAlpha(&i_Scp->mWipeNumKage);
+    fopMsgM_setAlpha(&i_Scp->mWipeBarA);
+    fopMsgM_setAlpha(&i_Scp->mWipeBarPivot);
+    fopMsgM_setAlpha(&i_Scp->mWipeScope);
+    fopMsgM_setAlpha(&i_Scp->mCursorReturn);
+    fopMsgM_setAlpha(&i_Scp->mCursorZoom);
+    fopMsgM_setAlpha(&i_Scp->mCursorReturnAnime);
+    fopMsgM_setAlpha(&i_Scp->mCursorZoomAnime);
+    fopMsgM_setAlpha(&i_Scp->mArrowL);
+    fopMsgM_setAlpha(&i_Scp->mArrowR);
+
+    for (int i = 0; i < 8; i++) {
+        fopMsgM_setAlpha(&i_Scp->mWipePanel[i]);
+    }
+
+    fopMsgM_setAlpha(&i_Scp->mArrow);
+    fopMsgM_setAlpha(&i_Scp->mDot);
 }
 
 /* 802381A0-80238500       .text dScp_wipeAngleCalc__FP13sub_scp_class */
-void dScp_wipeAngleCalc(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_wipeAngleCalc(sub_scp_class* i_Scp) {
+    f32 rot = 11.0f + REG6_F(4);
+    f32 off_x = -23.0f + REG6_F(0);
+    f32 off_y = -12.0f + REG6_F(1);
+    f32 zoom = dComIfGp_getCameraZoomScale(0);
+    f32 clamped = zoom;
+    f32 pos = REG6_F(3) + (319.5f - (i_Scp->mWipeBarPivot.mPosTopLeftOrig.x + i_Scp->mWipeBarPivot.mSizeOrig.x));
+
+    if (zoom < 1.0f) {
+        clamped = 1.0f;
+    }
+    if (clamped > 9.0f) {
+        clamped = 9.0f;
+    }
+
+    if (clamped != i_Scp->mZoomScale) {
+        if (1.0f == clamped || 5.0f == clamped || 9.0f == clamped) {
+            mDoAud_seStart(0x809, NULL);
+        } else {
+            f32 focus = dComIfGp_getCameraZoomForcus(0);
+            u32 se_param = (u32)(32768.0f * focus + 0.5f);
+            mDoAud_seStart(8, NULL, se_param);
+        }
+        i_Scp->mZoomScale = clamped;
+    }
+
+    rot = 4.0f * rot - rot * (clamped - 1.0f);
+
+    JKRHeap* heap = mDoExt_setCurrentHeap(i_Scp->mpHeap);
+    char buf[16];
+    sprintf(buf, "rupy_num_%02d.bti", (s16)(int)clamped);
+    ((J2DPicture*)i_Scp->mWipeNum.pane)->remove();
+    ((J2DPicture*)i_Scp->mWipeNum.pane)->append(buf, 1.0f);
+    ((J2DPicture*)i_Scp->mWipeNumKage.pane)->remove();
+    ((J2DPicture*)i_Scp->mWipeNumKage.pane)->append(buf, 1.0f);
+    mDoExt_setCurrentHeap(heap);
+
+    i_Scp->mWipeBarPivot.pane->rotate((f32)(int)(pos - off_x), (f32)(int)(i_Scp->mWipeBarPivot.mSizeOrig.y / 2.0f + off_y), ROTATE_Z, rot);
+    i_Scp->mWipeBarA.pane->rotate((f32)(int)(i_Scp->mWipeBarA.mSizeOrig.x / 2.0f), (f32)(int)(i_Scp->mWipeBarA.mSizeOrig.y / 2.0f), ROTATE_Z, -rot);
+
+    dScp_ArrowAnime(i_Scp);
 }
 
 /* 80238500-802389F0       .text dScp_ArrowAnime__FP13sub_scp_class */
-void dScp_ArrowAnime(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_ArrowAnime(sub_scp_class* i_Scp) {
+    s16 anm_half = 10;
+    s16 anm_end = 20;
+    i_Scp->mCursorReturnAnime.mUserArea++;
+    int cnt = i_Scp->mCursorReturnAnime.mUserArea;
+
+    if (cnt < anm_half) {
+        f32 t = fopMsgM_valueIncrease(20, cnt, 0);
+
+        ((J2DPicture*)i_Scp->mCursorReturn.pane)->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+        ((J2DPicture*)i_Scp->mCursorZoom.pane)->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+
+        if (1.0f != dComIfGp_getCameraZoomScale(0) && i_Scp->mCursorReturn.mUserArea == 0) {
+            ((J2DPicture*)i_Scp->mCursorReturnAnime.pane)->setBlendRatio(t, 1.0f - t, 1.0f, 1.0f);
+            fopMsgM_paneTrans(&i_Scp->mCursorReturn, 0.0f, 7.0f);
+        }
+
+        if (9.0f != dComIfGp_getCameraZoomScale(0) && i_Scp->mCursorZoom.mUserArea == 0) {
+            fopMsgM_paneTrans(&i_Scp->mCursorZoom, 0.0f, -7.0f);
+            ((J2DPicture*)i_Scp->mCursorZoomAnime.pane)->setBlendRatio(t, 1.0f - t, 1.0f, 1.0f);
+        }
+    } else {
+        f32 t = fopMsgM_valueIncrease(20, cnt - 10, 0);
+
+        ((J2DPicture*)i_Scp->mCursorReturn.pane)->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+        ((J2DPicture*)i_Scp->mCursorZoom.pane)->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+
+        if (1.0f != dComIfGp_getCameraZoomScale(0)) {
+            if (i_Scp->mCursorReturn.mUserArea == 0) {
+                ((J2DPicture*)i_Scp->mCursorReturnAnime.pane)->setBlendRatio(1.0f - t, t, 1.0f, 1.0f);
+                fopMsgM_paneTrans(&i_Scp->mCursorReturn, 0.0f, 0.0f);
+            }
+            if (i_Scp->mCursorReturnAnime.mUserArea == anm_end) {
+                i_Scp->mCursorReturn.mUserArea = 0;
+            }
+        } else {
+            if (i_Scp->mCursorReturn.mUserArea == 0) {
+                ((J2DPicture*)i_Scp->mCursorReturnAnime.pane)->setBlendRatio(1.0f - t, t, 1.0f, 1.0f);
+                fopMsgM_paneTrans(&i_Scp->mCursorReturn, 0.0f, 0.0f);
+            } else if (i_Scp->mCursorReturnAnime.mUserArea == anm_end) {
+                i_Scp->mCursorReturn.mUserArea = 1;
+            }
+        }
+
+        if (9.0f != dComIfGp_getCameraZoomScale(0)) {
+            if (i_Scp->mCursorZoom.mUserArea == 0) {
+                fopMsgM_paneTrans(&i_Scp->mCursorZoom, 0.0f, 0.0f);
+                ((J2DPicture*)i_Scp->mCursorZoomAnime.pane)->setBlendRatio(1.0f - t, t, 1.0f, 1.0f);
+            }
+            if (i_Scp->mCursorReturnAnime.mUserArea == anm_end) {
+                i_Scp->mCursorZoom.mUserArea = 0;
+            }
+        } else {
+            if (i_Scp->mCursorZoom.mUserArea == 0) {
+                fopMsgM_paneTrans(&i_Scp->mCursorZoom, 0.0f, 0.0f);
+                ((J2DPicture*)i_Scp->mCursorZoomAnime.pane)->setBlendRatio(1.0f - t, t, 1.0f, 1.0f);
+            } else if (i_Scp->mCursorReturnAnime.mUserArea == anm_end) {
+                i_Scp->mCursorZoom.mUserArea = 1;
+            }
+        }
+    }
+
+    if (1.0f == dComIfGp_getCameraZoomScale(0)) {
+        i_Scp->mCursorReturn.pane->hide();
+        i_Scp->mCursorZoom.pane->show();
+    } else if (9.0f == dComIfGp_getCameraZoomScale(0)) {
+        i_Scp->mCursorReturn.pane->show();
+        i_Scp->mCursorZoom.pane->hide();
+    } else {
+        i_Scp->mCursorReturn.pane->show();
+        i_Scp->mCursorZoom.pane->show();
+    }
+
+    if (i_Scp->mCursorReturnAnime.mUserArea >= anm_end) {
+        i_Scp->mCursorReturnAnime.mUserArea = 0;
+    }
 }
 
 /* 802389F0-80238BB8       .text dScp_wipeMove__FP13sub_scp_classf */
-void dScp_wipeMove(sub_scp_class*, float) {
-    /* Nonmatching */
+void dScp_wipeMove(sub_scp_class* i_Scp, f32 i_rate) {
+
+    f32 min_rate = 1.0f;
+
+    if (i_rate < min_rate) {
+        i_rate = min_rate;
+    }
+    dComIfGp_setItemScopeWipeScale(i_rate);
+
+    f32 t = i_rate - 1.0f;
+    
+    for (int i = 0; i < 8; i++) {
+        fopMsgM_paneScaleXY(&i_Scp->mWipePanel[i], i_rate);
+    }
+
+    f32 px0 = i_Scp->mWipePanel[0].mSizeOrig.x / 2.0f * t;
+    f32 py0 = i_Scp->mWipePanel[0].mSizeOrig.y / 2.0f * t;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[0], -px0, -py0);
+    f32 px1 = i_Scp->mWipePanel[1].mSizeOrig.x / 2.0f * t;
+    f32 py1 = i_Scp->mWipePanel[1].mSizeOrig.y / 2.0f * t;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[1], px1, -py1);
+    f32 px2 = i_Scp->mWipePanel[2].mSizeOrig.x / 2.0f * t;
+    f32 py2 = i_Scp->mWipePanel[2].mSizeOrig.y / 2.0f * t;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[2], -px2, py2);
+    f32 px3 = i_Scp->mWipePanel[3].mSizeOrig.x / 2.0f * t;
+    f32 py3 = i_Scp->mWipePanel[3].mSizeOrig.y / 2.0f * t;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[3], px3, py3);
+
+    i_Scp->mWipePanel[4].mPosCenter.y = i_Scp->mWipePanel[0].mPosTopLeft.y - i_Scp->mWipePanel[4].mSize.y / 2.0f;
+    i_Scp->mWipePanel[5].mPosCenter.y = i_Scp->mWipePanel[5].mSize.y / 2.0f + (i_Scp->mWipePanel[3].mPosTopLeft.y + i_Scp->mWipePanel[3].mSize.y);
+    i_Scp->mWipePanel[6].mPosCenter.x = i_Scp->mWipePanel[0].mPosTopLeft.x - i_Scp->mWipePanel[6].mSize.x / 2.0f;
+    i_Scp->mWipePanel[7].mPosCenter.x = i_Scp->mWipePanel[7].mSize.x / 2.0f + (i_Scp->mWipePanel[3].mPosTopLeft.x + i_Scp->mWipePanel[3].mSize.x);
+
+    for (int i = 4; i < 8; i++) {
+        fopMsgM_cposMove(&i_Scp->mWipePanel[i]);
+    }
 }
 
 /* 80238BB8-80238E20       .text dScp_wipeMove2__FP13sub_scp_classf */
-void dScp_wipeMove2(sub_scp_class*, float) {
-    /* Nonmatching */
+void dScp_wipeMove2(sub_scp_class* i_Scp, f32 i_rate) {
+    dComIfGp_setItemScopeWipeScale(i_rate);
+
+    f32 t = i_rate - 1.0f;
+
+    for (int i = 0; i < 4; i++) {
+        fopMsgM_paneScaleXY(&i_Scp->mWipePanel[i], i_rate);
+    }
+
+    // See dScp_wipeMove: the panes whose paneTrans args include a negation need the products in
+    // self-assigned temps to force MWCC to batch both products before the fnegs.
+    f32 px0 = i_Scp->mWipePanel[0].mSizeOrig.x / 2.0f * t;
+    f32 py0 = i_Scp->mWipePanel[0].mSizeOrig.y / 2.0f * t;
+    px0 = px0;
+    py0 = py0;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[0], -px0, -py0);
+    f32 px1 = i_Scp->mWipePanel[1].mSizeOrig.x / 2.0f * t;
+    f32 py1 = i_Scp->mWipePanel[1].mSizeOrig.y / 2.0f * t;
+    px1 = px1;
+    py1 = py1;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[1], px1, -py1);
+    f32 px2 = i_Scp->mWipePanel[2].mSizeOrig.x / 2.0f * t;
+    f32 py2 = i_Scp->mWipePanel[2].mSizeOrig.y / 2.0f * t;
+    px2 = px2;
+    py2 = py2;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[2], -px2, py2);
+    f32 px3 = i_Scp->mWipePanel[3].mSizeOrig.x / 2.0f * t;
+    f32 py3 = i_Scp->mWipePanel[3].mSizeOrig.y / 2.0f * t;
+    px3 = px3;
+    py3 = py3;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[3], px3, py3);
+
+    if (i_rate >= 1.f) {
+        for (int i = 4; i < 8; i++) {
+            fopMsgM_paneScaleXY(&i_Scp->mWipePanel[i], i_rate);
+        }
+    } else {
+        i_Scp->mWipePanel[4].mSize.x = i_Scp->mWipePanel[4].mSizeOrig.x;
+        i_Scp->mWipePanel[4].mSize.y = 2.0f * (i_Scp->mWipePanel[0].mPosTopLeft.y - i_Scp->mWipePanel[4].mPosCenterOrig.y);
+        i_Scp->mWipePanel[5].mSize.x = i_Scp->mWipePanel[5].mSizeOrig.x;
+        i_Scp->mWipePanel[5].mSize.y = 2.0f * (i_Scp->mWipePanel[5].mPosCenterOrig.y - i_Scp->mWipePanel[3].mPosTopLeft.y);
+        i_Scp->mWipePanel[6].mSize.x = 2.0f * (i_Scp->mWipePanel[0].mPosTopLeft.x - i_Scp->mWipePanel[6].mPosCenterOrig.x);
+        i_Scp->mWipePanel[6].mSize.y = i_Scp->mWipePanel[6].mSizeOrig.y;
+        i_Scp->mWipePanel[7].mSize.x = 2.0f * (i_Scp->mWipePanel[7].mPosCenterOrig.x - i_Scp->mWipePanel[3].mPosTopLeft.x);
+        i_Scp->mWipePanel[7].mSize.y = i_Scp->mWipePanel[7].mSizeOrig.y;
+    }
+
+    i_Scp->mWipePanel[4].mPosCenter.y =
+        i_Scp->mWipePanel[0].mPosTopLeft.y - i_Scp->mWipePanel[4].mSize.y / 2.0f;
+    i_Scp->mWipePanel[5].mPosCenter.y = i_Scp->mWipePanel[5].mSize.y / 2.0f +
+                                            (i_Scp->mWipePanel[3].mPosTopLeft.y +
+                                             i_Scp->mWipePanel[3].mSize.y);
+    i_Scp->mWipePanel[6].mPosCenter.x =
+        i_Scp->mWipePanel[0].mPosTopLeft.x - i_Scp->mWipePanel[6].mSize.x / 2.0f;
+    i_Scp->mWipePanel[7].mPosCenter.x = i_Scp->mWipePanel[7].mSize.x / 2.0f +
+                                            (i_Scp->mWipePanel[3].mPosTopLeft.x +
+                                             i_Scp->mWipePanel[3].mSize.x);
+
+    for (int i = 4; i < 8; i++) {
+        fopMsgM_cposMove(&i_Scp->mWipePanel[i]);
+    }
 }
 
 /* 80238E20-8023905C       .text dScp_wipeMoveDemo__FP13sub_scp_classfb */
-void dScp_wipeMoveDemo(sub_scp_class*, float, bool) {
-    /* Nonmatching */
+void dScp_wipeMoveDemo(sub_scp_class* i_Scp, f32 i_rate, bool i_reset) {
+    f32 max_scale = g_meterHIO.mScopeWipeMaxScale;
+    f32 t = (i_rate - 1.0f) / (max_scale - 1.0f);
+    if (i_reset) {
+        t = 1.0f;
+    }
+
+    f32 x = i_Scp->mWipePanel[3].mPosTopLeftOrig.x - (i_Scp->mWipePanel[3].mPosTopLeftOrig.x - 320.0f) * t;
+    f32 y = i_Scp->mWipePanel[3].mPosTopLeftOrig.y - (i_Scp->mWipePanel[3].mPosTopLeftOrig.y - 240.0f) * t;
+
+    for (int i = 0; i < 8; i++) {
+        fopMsgM_paneScaleXY(&i_Scp->mWipePanel[i], i_rate);
+    }
+
+    i_Scp->mWipePanel[0].mPosCenter.x = x - i_Scp->mWipePanel[0].mSize.x / 2.0f;
+    i_Scp->mWipePanel[0].mPosCenter.y = y - i_Scp->mWipePanel[0].mSize.y / 2.0f;
+    fopMsgM_cposMove(&i_Scp->mWipePanel[0]);
+
+    i_Scp->mWipePanel[1].mPosCenter.x = x + i_Scp->mWipePanel[1].mSize.x / 2.0f;
+    i_Scp->mWipePanel[1].mPosCenter.y = y - i_Scp->mWipePanel[1].mSize.y / 2.0f;
+    fopMsgM_cposMove(&i_Scp->mWipePanel[1]);
+
+    i_Scp->mWipePanel[2].mPosCenter.x = x - i_Scp->mWipePanel[2].mSize.x / 2.0f;
+    i_Scp->mWipePanel[2].mPosCenter.y = y + i_Scp->mWipePanel[2].mSize.y / 2.0f;
+    fopMsgM_cposMove(&i_Scp->mWipePanel[2]);
+
+    i_Scp->mWipePanel[3].mPosCenter.x = x + i_Scp->mWipePanel[3].mSize.x / 2.0f;
+    i_Scp->mWipePanel[3].mPosCenter.y = y + i_Scp->mWipePanel[3].mSize.y / 2.0f;
+    fopMsgM_cposMove(&i_Scp->mWipePanel[3]);
+
+    i_Scp->mWipePanel[4].mPosCenter.y =
+        i_Scp->mWipePanel[0].mPosTopLeft.y - i_Scp->mWipePanel[4].mSize.y / 2.0f;
+    i_Scp->mWipePanel[5].mPosCenter.y = i_Scp->mWipePanel[5].mSize.y / 2.0f +
+                                            (i_Scp->mWipePanel[3].mPosTopLeft.y +
+                                             i_Scp->mWipePanel[3].mSize.y);
+    i_Scp->mWipePanel[6].mPosCenter.x =
+        i_Scp->mWipePanel[0].mPosTopLeft.x - i_Scp->mWipePanel[6].mSize.x / 2.0f;
+    i_Scp->mWipePanel[6].mPosCenter.y =
+        i_Scp->mWipePanel[0].mPosTopLeft.y + i_Scp->mWipePanel[6].mSize.y / 2.0f;
+    i_Scp->mWipePanel[7].mPosCenter.x = i_Scp->mWipePanel[7].mSize.x / 2.0f +
+                                            (i_Scp->mWipePanel[1].mPosTopLeft.x +
+                                             i_Scp->mWipePanel[1].mSize.x);
+    i_Scp->mWipePanel[7].mPosCenter.y =
+        i_Scp->mWipePanel[1].mPosTopLeft.y + i_Scp->mWipePanel[7].mSize.y / 2.0f;
+
+    for (int i = 4; i < 8; i++) {
+        fopMsgM_cposMove(&i_Scp->mWipePanel[i]);
+    }
 }
 
 /* 8023905C-80239084       .text dScp_mesgPaneShow__FP13sub_scp_class */
-void dScp_mesgPaneShow(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_mesgPaneShow(sub_scp_class* i_Scp) {
+    i_Scp->mpTextBox->show();
+    i_Scp->mpRubyBox->show();
+    i_Scp->mpTextBoxSdw->show();
+    i_Scp->mpRubyBoxSdw->show();
 }
 
 /* 80239084-8023917C       .text dScp_mesgPaneHide__FP13sub_scp_class */
-void dScp_mesgPaneHide(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_mesgPaneHide(sub_scp_class* i_Scp) {
+    i_Scp->mpTextBox->hide();
+    i_Scp->mpRubyBox->hide();
+    i_Scp->mpTextBoxSdw->hide();
+    i_Scp->mpRubyBoxSdw->hide();
+
+    JKRHeap* heap = mDoExt_setCurrentHeap(i_Scp->mpHeap);
+    for (int i = 0; i < 8; i++) {
+        sbutton_icon[i]->hide();
+        sbutton_kage[i]->hide();
+        sbutton_icon[i]->rotate(0.0f);
+        sbutton_kage[i]->rotate(0.0f);
+        sbuttonTimer[i] = -1;
+    }
+    mDoExt_setCurrentHeap(heap);
 }
 
 /* 8023917C-80239248       .text dScp_scopeAlpha__FP13sub_scp_classf */
-void dScp_scopeAlpha(sub_scp_class*, float) {
-    /* Nonmatching */
+void dScp_scopeAlpha(sub_scp_class* i_Scp, f32 i_alpha) {
+    fopMsgM_setNowAlpha(&i_Scp->mWipeCross, i_alpha);
+    fopMsgM_setNowAlpha(&i_Scp->mWipeNum, i_alpha);
+    fopMsgM_setNowAlpha(&i_Scp->mWipeCrossKage, i_alpha);
+    fopMsgM_setNowAlpha(&i_Scp->mWipeNumKage, i_alpha);
+    fopMsgM_setNowAlpha(&i_Scp->mWipeBarA, i_alpha);
+    fopMsgM_setNowAlpha(&i_Scp->mWipeBarPivot, i_alpha);
+    fopMsgM_setNowAlpha(&i_Scp->mWipeScope, i_alpha);
+    fopMsgM_setNowAlpha(&i_Scp->mCursorReturn, i_alpha);
+    fopMsgM_setNowAlpha(&i_Scp->mCursorZoom, i_alpha);
+    fopMsgM_setNowAlpha(&i_Scp->mCursorReturnAnime, i_alpha);
+    fopMsgM_setNowAlpha(&i_Scp->mCursorZoomAnime, i_alpha);
+    fopMsgM_setNowAlpha(&i_Scp->mArrowL, i_alpha);
+    fopMsgM_setNowAlpha(&i_Scp->mArrowR, i_alpha);
 }
 
 /* 80239248-802392D8       .text dScp_scopeInitAlpha__FP13sub_scp_class */
-void dScp_scopeInitAlpha(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_scopeInitAlpha(sub_scp_class* i_Scp) {
+    fopMsgM_setInitAlpha(&i_Scp->mWipeCross);
+    fopMsgM_setInitAlpha(&i_Scp->mWipeNum);
+    fopMsgM_setInitAlpha(&i_Scp->mWipeCrossKage);
+    fopMsgM_setInitAlpha(&i_Scp->mWipeNumKage);
+    fopMsgM_setInitAlpha(&i_Scp->mWipeBarA);
+    fopMsgM_setInitAlpha(&i_Scp->mWipeBarPivot);
+    fopMsgM_setInitAlpha(&i_Scp->mWipeScope);
+    fopMsgM_setInitAlpha(&i_Scp->mCursorReturn);
+    fopMsgM_setInitAlpha(&i_Scp->mCursorZoom);
+    fopMsgM_setInitAlpha(&i_Scp->mCursorReturnAnime);
+    fopMsgM_setInitAlpha(&i_Scp->mCursorZoomAnime);
+    fopMsgM_setInitAlpha(&i_Scp->mArrowL);
+    fopMsgM_setInitAlpha(&i_Scp->mArrowR);
 }
 
 /* 802392D8-80239368       .text dScp_scopeAlphaZero__FP13sub_scp_class */
-void dScp_scopeAlphaZero(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_scopeAlphaZero(sub_scp_class* i_Scp) {
+    fopMsgM_setNowAlphaZero(&i_Scp->mWipeCross);
+    fopMsgM_setNowAlphaZero(&i_Scp->mWipeNum);
+    fopMsgM_setNowAlphaZero(&i_Scp->mWipeCrossKage);
+    fopMsgM_setNowAlphaZero(&i_Scp->mWipeNumKage);
+    fopMsgM_setNowAlphaZero(&i_Scp->mWipeBarA);
+    fopMsgM_setNowAlphaZero(&i_Scp->mWipeBarPivot);
+    fopMsgM_setNowAlphaZero(&i_Scp->mWipeScope);
+    fopMsgM_setNowAlphaZero(&i_Scp->mCursorReturn);
+    fopMsgM_setNowAlphaZero(&i_Scp->mCursorZoom);
+    fopMsgM_setNowAlphaZero(&i_Scp->mCursorReturnAnime);
+    fopMsgM_setNowAlphaZero(&i_Scp->mCursorZoomAnime);
+    fopMsgM_setNowAlphaZero(&i_Scp->mArrowL);
+    fopMsgM_setNowAlphaZero(&i_Scp->mArrowR);
 }
 
 /* 80239368-80239420       .text dScp_stringInit__FP13sub_scp_class */
-void dScp_stringInit(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_stringInit(sub_scp_class* i_Scp) {
+    char buf1[36];
+    char buf2[28];
+    sprintf(buf1, "\x1b" "CC[%08x]\x1b" "GM[0]", fopMsgM_getColorTable(0));
+    sprintf(buf2, "\x1b" "CC[000000FF]\x1b" "GM[0]");
+
+    JKRHeap* heap = mDoExt_setCurrentHeap(i_Scp->mpHeap);
+    strcpy((char*)i_Scp->oTx, buf1);
+    strcpy((char*)i_Scp->oRb, buf1);
+    strcpy((char*)i_Scp->oTxSdw, buf2);
+    strcpy((char*)i_Scp->oRbSdw, buf2);
+    mDoExt_setCurrentHeap(heap);
+
+    i_Scp->mLineCount = 0;
 }
 
 /* 80239420-802394A4       .text dScp_stringSet__FP13sub_scp_class */
-void dScp_stringSet(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_stringSet(sub_scp_class* i_Scp) {
+    JKRHeap* heap = mDoExt_setCurrentHeap(i_Scp->mpHeap);
+    i_Scp->mpTextBox->setString((char*)i_Scp->oTx);
+    i_Scp->mpRubyBox->setString((char*)i_Scp->oRb);
+    i_Scp->mpTextBoxSdw->setString((char*)i_Scp->oTxSdw);
+    i_Scp->mpRubyBoxSdw->setString((char*)i_Scp->oRbSdw);
+    mDoExt_setCurrentHeap(heap);
 }
 
 /* 802394A4-802394FC       .text dScp_yose_select__FP13sub_scp_class */
-void dScp_yose_select(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_yose_select(sub_scp_class* i_Scp) {
+    i_Scp->mMesgDataProc.stringLength();
+    i_Scp->mLineCount = i_Scp->mMesgDataProc.getLineCount();
+    i_Scp->mMesgDataProc.setLineCount(0);
+    i_Scp->mMesgDataProc.stringShift();
+    i_Scp->mMesgDataProc.iconIdxRefresh();
+    dScp_textPosition(i_Scp);
 }
 
 /* 802394FC-802395AC       .text dScp_textPosition__FP13sub_scp_class */
-void dScp_textPosition(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_textPosition(sub_scp_class* i_Scp) {
+    int m;
+    J2DTextBox* textbox = i_Scp->mpTextBox;
+    int line = (int)(textbox->mLineSpace / 2.0f);
+    m = 0;
+    int n = line * (VERSION_SELECT(1, 1, 2, 2) - i_Scp->mLineCount);
+    f32 fy;
+    fy = (f32)n;
+    textbox->shiftSet((f32)m, fy);
+    fy = (f32)n;
+    i_Scp->mpRubyBox->shiftSet((f32)m, fy);
+    fy = (f32)n;
+    i_Scp->mpTextBoxSdw->shiftSet((f32)m, fy);
+    fy = (f32)n;
+    i_Scp->mpRubyBoxSdw->shiftSet((f32)m, fy);
 }
 
 /* 802395AC-802395FC       .text dScp_arrowInit__FP13sub_scp_class */
-void dScp_arrowInit(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_arrowInit(sub_scp_class* i_Scp) {
+    fopMsgM_setNowAlphaZero(&i_Scp->mArrow);
+    i_Scp->mArrow.mPosCenter.x = i_Scp->mArrow.mPosCenterOrig.x;
+    i_Scp->mArrow.mPosCenter.y = i_Scp->mArrow.mPosCenterOrig.y;
+    i_Scp->mArrow.mSize.x = i_Scp->mArrow.mSizeOrig.x;
+    i_Scp->mArrow.mSize.y = i_Scp->mArrow.mSizeOrig.y;
 }
 
 /* 802395FC-802399B0       .text dScp_arrowMove__FP13sub_scp_class */
-void dScp_arrowMove(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_arrowMove(sub_scp_class* i_Scp) {
+    static const int time[6] = {0, 60, 7, 4, 3, 2};
+    static const f32 scaleX[5] = {1.0f, 1.3f, 0.8f, 1.2f, 1.0f};
+    static const f32 scaleY[5] = {1.0f, 0.3f, 1.1f, 0.8f, 1.0f};
+
+    int t1 = time[1];
+    int t2 = t1 + time[2];
+    int t3 = t2 + time[3];
+    int t4 = t3 + time[4];
+    int t5 = t4 + time[5];
+
+    i_Scp->mAnimeTimer++;
+
+    if (i_Scp->mArrow.mNowAlpha < i_Scp->mArrow.mInitAlpha) {
+        f32 t = fopMsgM_valueIncrease(g_msgHIO.field_0x7e, i_Scp->mAnimeTimer, 0);
+        fopMsgM_setNowAlpha(&i_Scp->mArrow, t);
+        if (g_msgHIO.field_0x7e == i_Scp->mAnimeTimer) {
+            i_Scp->mAnimeTimer = 0;
+        }
+    } else {
+        int cur = i_Scp->mAnimeTimer;
+        f32 u;
+        f32 sx;
+        f32 sy;
+
+        if (cur <= t1) {
+            sx = 1.0f;
+            sy = sx;
+        } else if (cur <= t2) {
+            f32 diff = (f32)cur - (f32)t1;
+            u = (diff * diff) / ((f32)time[2] * (f32)time[2]);
+            sx = scaleX[0] + u * (scaleX[1] - scaleX[0]);
+            sy = scaleY[0] + u * (scaleY[1] - scaleY[0]);
+        } else if (cur <= t3) {
+            f32 diff = (f32)cur - (f32)t2;
+            u = (diff * diff) / ((f32)time[3] * (f32)time[3]);
+            sx = scaleX[1] + u * (scaleX[2] - scaleX[1]);
+            sy = scaleY[1] + u * (scaleY[2] - scaleY[1]);
+        } else if (cur <= t4) {
+            f32 diff = (f32)cur - (f32)t3;
+            u = (diff * diff) / ((f32)time[4] * (f32)time[4]);
+            sx = scaleX[2] + u * (scaleX[3] - scaleX[2]);
+            sy = scaleY[2] + u * (scaleY[3] - scaleY[2]);
+        } else if (cur <= t5) {
+            f32 diff = (f32)cur - (f32)t4;
+            u = (diff * diff) / ((f32)time[5] * (f32)time[5]);
+            sx = scaleX[3] + u * (scaleX[4] - scaleX[3]);
+            sy = scaleY[3] + u * (scaleY[4] - scaleY[3]);
+        } else {
+            sx = 1.0f;
+            sy = sx;
+            i_Scp->mAnimeTimer = 0;
+        }
+
+        i_Scp->mArrow.mSize.x = i_Scp->mArrow.mSizeOrig.x * sx;
+        i_Scp->mArrow.mSize.y = i_Scp->mArrow.mSizeOrig.y * sy;
+        i_Scp->mArrow.mPosCenter.y = (f32)i_Scp->mArrowBaseY - i_Scp->mArrow.mSize.y / 2.0f;
+        fopMsgM_cposMove(&i_Scp->mArrow);
+    }
 }
 
 /* 802399B0-80239EAC       .text dScp_dotMove__FP13sub_scp_class */
-void dScp_dotMove(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_dotMove(sub_scp_class* i_Scp) {
+    i_Scp->mAnimeTimer++;
+
+    if (i_Scp->mDot.mNowAlpha < i_Scp->mDot.mInitAlpha) {
+        int end = 10;
+        f32 t = fopMsgM_valueIncrease(10, i_Scp->mAnimeTimer, 0);
+        fopMsgM_setNowAlpha(&i_Scp->mDot, t);
+        if (end == i_Scp->mAnimeTimer) {
+            i_Scp->mAnimeTimer = 0;
+        }
+    } else {
+        int cur = i_Scp->mAnimeTimer;
+
+        if (cur >= 60) {
+            i_Scp->mDotBlackNow = i_Scp->mDotBlackOrig;
+            i_Scp->mDotWhiteNow = i_Scp->mDotWhiteOrig;
+            fopMsgM_setInitAlpha(&i_Scp->mDot);
+            i_Scp->mAnimeTimer = 0;
+        } else if (cur > 30) {
+            cur = 60 - cur;
+            f32 t = fopMsgM_valueIncrease(30, cur, 0);
+            i_Scp->mDotBlackNow.r = (u8)((f32)i_Scp->mDotBlackOrig.r + (150.0f - (f32)i_Scp->mDotBlackOrig.r) * t);
+            i_Scp->mDotBlackNow.g = (u8)((f32)i_Scp->mDotBlackOrig.g + (150.0f - (f32)i_Scp->mDotBlackOrig.g) * t);
+            i_Scp->mDotBlackNow.b = (u8)((f32)i_Scp->mDotBlackOrig.b + (150.0f - (f32)i_Scp->mDotBlackOrig.b) * t);
+            i_Scp->mDotWhiteNow.r = (u8)((f32)i_Scp->mDotWhiteOrig.r + (255.0f - (f32)i_Scp->mDotWhiteOrig.r) * t);
+            i_Scp->mDotWhiteNow.g = (u8)((f32)i_Scp->mDotWhiteOrig.g + (255.0f - (f32)i_Scp->mDotWhiteOrig.g) * t);
+            i_Scp->mDotWhiteNow.b = (u8)((f32)i_Scp->mDotWhiteOrig.b + (220.0f - (f32)i_Scp->mDotWhiteOrig.b) * t);
+            i_Scp->mDot.mNowAlpha = (u8)((f32)i_Scp->mDot.mInitAlpha + (255.0f - (f32)i_Scp->mDot.mInitAlpha) * t);
+        } else {
+            f32 t = fopMsgM_valueIncrease(30, cur, 0);
+            i_Scp->mDotBlackNow.r = (u8)((f32)i_Scp->mDotBlackOrig.r + (150.0f - (f32)i_Scp->mDotBlackOrig.r) * t);
+            i_Scp->mDotBlackNow.g = (u8)((f32)i_Scp->mDotBlackOrig.g + (150.0f - (f32)i_Scp->mDotBlackOrig.g) * t);
+            i_Scp->mDotBlackNow.b = (u8)((f32)i_Scp->mDotBlackOrig.b + (150.0f - (f32)i_Scp->mDotBlackOrig.b) * t);
+            i_Scp->mDotWhiteNow.r = (u8)((f32)i_Scp->mDotWhiteOrig.r + (255.0f - (f32)i_Scp->mDotWhiteOrig.r) * t);
+            i_Scp->mDotWhiteNow.g = (u8)((f32)i_Scp->mDotWhiteOrig.g + (255.0f - (f32)i_Scp->mDotWhiteOrig.g) * t);
+            i_Scp->mDotWhiteNow.b = (u8)((f32)i_Scp->mDotWhiteOrig.b + (220.0f - (f32)i_Scp->mDotWhiteOrig.b) * t);
+            i_Scp->mDot.mNowAlpha = (u8)((f32)i_Scp->mDot.mInitAlpha + (255.0f - (f32)i_Scp->mDot.mInitAlpha) * t);
+        }
+
+        ((J2DPicture*)i_Scp->mDot.pane)->setBlack(i_Scp->mDotBlackNow);
+        ((J2DPicture*)i_Scp->mDot.pane)->setWhite(i_Scp->mDotWhiteNow);
+    }
 }
 
 /* 80239EAC-8023A110       .text dScp_talkBeforeProc__FP13sub_scp_class */
-void dScp_talkBeforeProc(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_talkBeforeProc(sub_scp_class* i_Scp) {
+    dScp_arrowInit(i_Scp);
+
+    i_Scp->head_p = i_Scp->mMsgGet.getMesgHeader(i_Scp->mMsgNo);
+    JUT_ASSERT(VERSION_SELECT(0x4D8, 0x4D8, 0x4FE, 0x509), i_Scp->head_p);
+
+    i_Scp->mpMesgStr = i_Scp->mMsgGet.getMessage(i_Scp->head_p);
+    i_Scp->mMesgEntry = i_Scp->mMsgGet.getMesgEntry(i_Scp->head_p);
+
+    dScp_stringInit(i_Scp);
+
+    i_Scp->mMesgDataProc.dataInit();
+    i_Scp->mMesgDataProc.bmgData = i_Scp->mpMesgStr;
+
+    JKRHeap* heap = mDoExt_setCurrentHeap(i_Scp->mpHeap);
+    i_Scp->mMesgDataProc.setOutMessage((char*)i_Scp->oTx, (char*)i_Scp->oRb, (char*)i_Scp->oTxSdw, (char*)i_Scp->oRbSdw);
+    mDoExt_setCurrentHeap(heap);
+
+    i_Scp->mMesgDataProc.setFont(font0);
+    i_Scp->mMesgDataProc.setRubyFont(font1);
+
+    i_Scp->mMesgDataProc.setCharSpace((int)i_Scp->mpTextBox->mCharSpace);
+    i_Scp->mMesgDataProc.setRubyCharSpace((int)i_Scp->mpRubyBox->mCharSpace);
+    i_Scp->mMesgDataProc.setLineSpace((int)i_Scp->mpTextBox->mLineSpace);
+    i_Scp->mMesgDataProc.setMesgEntry(&i_Scp->mMesgEntry);
+    i_Scp->mMesgDataProc.setFontSize((int)i_Scp->mFontSizeX);
+    i_Scp->mMesgDataProc.setRubyFontSize((int)i_Scp->mRubyFontSizeX);
+    i_Scp->mMesgDataProc.lineWidth = 0x1f7;
+    i_Scp->mMesgDataProc.centerLineWidth = 0x1e6;
+    i_Scp->mMesgDataProc.setSendSpeed(g_msgHIO.field_0x82);
+    i_Scp->mMesgDataProc.setSpaceTimer(g_msgHIO.field_0x6c);
+
+    if (g_msgHIO.field_0x83 != 0) {
+        i_Scp->mMesgDataProc.spaceFlag = 1;
+    } else {
+        i_Scp->mMesgDataProc.spaceFlag = 0;
+    }
+
+    dScp_yose_select(i_Scp);
+    dScp_stringSet(i_Scp);
+
+    dComIfGp_setScopeMesgStatus(fopMsgStts_MSG_TYPING_e);
 }
 
 /* 8023A110-8023A2AC       .text dScp_outnowProc__FP13sub_scp_class */
-void dScp_outnowProc(sub_scp_class*) {
-    /* Nonmatching */
+BOOL dScp_outnowProc(sub_scp_class* i_Scp) {
+    if (i_Scp->mMesgEntry.mDrawType == 0) {
+        if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0)) {
+            i_Scp->mMesgDataProc.shortCut();
+            if (i_Scp->mMesgDataProc.autoSendFlag == 0 && i_Scp->mMesgDataProc.handSendFlag == 0 &&
+                (s32)i_Scp->mMesgDataProc.field_0x158 != 0)
+            {
+                i_Scp->mMesgDataProc.field_0x158 = 0;
+            }
+        }
+    } else if (i_Scp->mMesgEntry.mDrawType == 1) {
+        i_Scp->mMesgDataProc.shortCut();
+    }
+
+    if (i_Scp->mMesgDataProc.autoSendFlag == 0 && i_Scp->mMesgDataProc.handSendFlag == 0 &&
+        (int)i_Scp->mMesgDataProc.field_0x158 != 0)
+    {
+        i_Scp->mMesgDataProc.field_0x158 = (int)i_Scp->mMesgDataProc.field_0x158 > 0 ? i_Scp->mMesgDataProc.field_0x158 - 1 : 0;
+    } else {
+        i_Scp->mMesgDataProc.stringSet();
+        dComIfGp_setScopeMesgStatus(i_Scp->mMesgDataProc.getMesgStatus());
+        if (dComIfGp_getScopeMesgStatus() == fopMsgStts_MSG_DISPLAYED_e) {
+            i_Scp->mAnimeTimer = 0;
+        }
+
+        for (int i = 0; i < 8; i++) {
+            u8 icon_no = i_Scp->mMesgDataProc.getIconNum(i);
+            u32 color = i_Scp->mMesgDataProc.getStringColor();
+            if (icon_no != 0xFF) {
+                if (sbuttonTimer[i] == -1) {
+                    JKRHeap* heap = mDoExt_setCurrentHeap(i_Scp->mpHeap);
+                    fopMsgM_outFontSet(sbutton_icon[i], sbutton_kage[i], &sbuttonTimer[i], color, icon_no);
+                    mDoExt_setCurrentHeap(heap);
+                }
+            }
+        }
+    }
+
+    dScp_stringSet(i_Scp);
+    return TRUE;
 }
 
 /* 8023A2AC-8023A354       .text dScp_continueProc__FP13sub_scp_class */
-void dScp_continueProc(sub_scp_class*) {
-    /* Nonmatching */
+BOOL dScp_continueProc(sub_scp_class* i_Scp) {
+    if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || i_Scp->mMesgDataProc.getSelectFlag() != 0) {
+        i_Scp->mMesgDataProc.setSelectFlagOff();
+        JKRFileLoader::removeResource(i_Scp->head_p, NULL);
+        dScp_talkBeforeProc(i_Scp);
+        mDoAud_seStart(0x80b, NULL);
+    } else {
+        dScp_arrowMove(i_Scp);
+    }
+
+    return TRUE;
 }
 
 /* 8023A354-8023A3C0       .text dScp_forceContinueProc__FP13sub_scp_class */
-void dScp_forceContinueProc(sub_scp_class*) {
-    /* Nonmatching */
+BOOL dScp_forceContinueProc(sub_scp_class* i_Scp) {
+    JKRFileLoader::removeResource(i_Scp->head_p, NULL);
+    dScp_talkBeforeProc(i_Scp);
+    mDoAud_seStart(0x80b, NULL);
+    return TRUE;
 }
 
 /* 8023A3C0-8023A4FC       .text dScp_closewaitProc__FP13sub_scp_class */
-void dScp_closewaitProc(sub_scp_class*) {
-    /* Nonmatching */
+BOOL dScp_closewaitProc(sub_scp_class* i_Scp) {
+    if (i_Scp->mMesgDataProc.autoSendFlag != 0) { // Look for inline getter
+        u32 count = (int)i_Scp->mMesgDataProc.field_0x158 > 0 ? i_Scp->mMesgDataProc.field_0x158 - 1 : 0;
+        i_Scp->mMesgDataProc.field_0x158 = count;
+        if (count == 0 || fopMsgM_checkForceSend()) {
+            i_Scp->mMesgDataProc.autoSendFlag = 0; // Look for inline getter
+            dComIfGp_setScopeMesgStatus(fopMsgStts_BOX_CLOSED_e);
+            dScp_mesgPaneHide(i_Scp);
+        }
+    } else if (i_Scp->mMesgDataProc.handSendFlag != 0) { // Look for inline getter
+        u32 count = (int)i_Scp->mMesgDataProc.field_0x158 > 0 ? i_Scp->mMesgDataProc.field_0x158 - 1 : 0;
+        i_Scp->mMesgDataProc.field_0x158 = count;
+        if (count != 0) {
+            if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || fopMsgM_checkForceSend()) {
+                i_Scp->mMesgDataProc.handSendFlag = 0; // Look for inline getter
+                dComIfGp_setScopeMesgStatus(fopMsgStts_BOX_CLOSED_e);
+                dScp_mesgPaneHide(i_Scp);
+                fopMsgM_setNowAlphaZero(&i_Scp->mDot);
+            } else {
+                dScp_dotMove(i_Scp);
+            }
+        } else {
+            i_Scp->mMesgDataProc.handSendFlag = 0;
+            dComIfGp_setScopeMesgStatus(fopMsgStts_BOX_CLOSED_e);
+            dScp_mesgPaneHide(i_Scp);
+            fopMsgM_setNowAlphaZero(&i_Scp->mDot);
+        }
+    }
+
+    return TRUE;
 }
 
 /* 8023A4FC-8023A588       .text dScp_finishProc__FP13sub_scp_class */
-void dScp_finishProc(sub_scp_class*) {
-    /* Nonmatching */
+BOOL dScp_finishProc(sub_scp_class* i_Scp) {
+    if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || fopMsgM_checkForceSend()) {
+        i_Scp->mMesgDataProc.setSelectFlagOff();
+        fopMsgM_setNowAlphaZero(&i_Scp->mDot);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_BOX_CLOSED_e);
+        dScp_mesgPaneHide(i_Scp);
+    } else {
+        dScp_dotMove(i_Scp);
+    }
+
+    return TRUE;
 }
 
 /* 8023A588-8023A678       .text dScp_openProc__FP13sub_scp_class */
-void dScp_openProc(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_openProc(sub_scp_class* i_Scp) {
+    i_Scp->mTransTimer++;
+    int cnt = i_Scp->mTransTimer;
+
+    if (cnt < 5) {
+        f32 t = fopMsgM_valueIncrease(5, cnt, 0);
+        t = 1.0f - t;
+        f32 wipe_value = 3.f * t;
+        dScp_wipeMove(i_Scp, wipe_value);
+    } else if (cnt == 5) {
+        dScp_wipeMove(i_Scp, 1.f);
+    } else if (cnt < 10) {
+        f32 t2 = fopMsgM_valueIncrease(5, cnt - 5, 0);
+        dScp_scopeAlpha(i_Scp, t2);
+    } else {
+        dScp_scopeInitAlpha(i_Scp);
+        i_Scp->mZoomScale = 1.0f;
+        i_Scp->mStatus = fopMsgStts_SCOPE_ACTIVE_e;
+        dComIfGp_setMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
+        dComIfGp_setAStatusForce(dActStts_RETURN_e);
+        mDoAud_seStart(0x823, NULL);
+    }
 }
 
 /* 8023A678-8023A798       .text dScp_openProc1__FP13sub_scp_class */
-void dScp_openProc1(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_openProc1(sub_scp_class* i_Scp) {
+    i_Scp->mTransTimer++;
+    int cnt = i_Scp->mTransTimer;
+
+    if (cnt < 5) {
+        f32 t = fopMsgM_valueIncrease(4, cnt, 1);
+        t = 1.0f - t;
+        f32 wipe_value = 3.0f * t;
+        dScp_wipeMove2(i_Scp, wipe_value);
+
+        if (i_Scp->mTransTimer == 3) {
+            dComIfGp_setScopeWipeFlag(true);
+        } else {
+            dComIfGp_setScopeWipeFlag(false);
+        }
+    } else if (cnt == 5) {
+        dScp_wipeMove2(i_Scp, 1.0f);
+    } else if (cnt < 10) {
+        f32 t2 = fopMsgM_valueIncrease(5, cnt - 5, 0);
+        dScp_scopeAlpha(i_Scp, t2);
+    } else {
+#if VERSION == VERSION_DEMO
+        dScp_scopeInitAlpha(i_Scp);
+        i_Scp->mZoomScale = 1.0f;
+#else
+        f32 one = 1.0f;
+        dScp_scopeInitAlpha(i_Scp);
+        i_Scp->mZoomScale = one;
+#endif
+        i_Scp->mStatus = fopMsgStts_SCOPE_ACTIVE_e;
+        dComIfGp_setMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
+        dComIfGp_setAStatusForce(dActStts_RETURN_e);
+        mDoAud_seStart(0x823, NULL);
+    }
 }
 
 /* 8023A798-8023A8D0       .text dScp_openProc2__FP13sub_scp_class */
-void dScp_openProc2(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_openProc2(sub_scp_class* i_Scp) {
+    f32 max = g_meterHIO.mScopeWipeMaxScale;
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+
+    i_Scp->mTransTimer++;
+
+    if (i_Scp->mTransTimer <= 5) {
+        player->onNoResetFlg0(daPy_py_c::daPyFlg0_SCOPE_CANCEL);
+        f32 t = fopMsgM_valueIncrease(5, i_Scp->mTransTimer, 1);
+        dScp_scopeAlpha(i_Scp, 1.0f - t);
+    } else if (i_Scp->mTransTimer < 10) {
+        player->onNoResetFlg0(daPy_py_c::daPyFlg0_SCOPE_CANCEL);
+        f32 t = fopMsgM_valueIncrease(5, i_Scp->mTransTimer - 5, 0);
+        f32 wipe_value = 1.0f + (max - 1.0f) * t;
+        dScp_wipeMoveDemo(i_Scp, wipe_value, false);
+    } else if (i_Scp->mTransTimer == 10) {
+        dScp_wipeMoveDemo(i_Scp, max, false);
+        dScp_scopeAlpha(i_Scp, 0.0f);
+    } else {
+        dScp_wipeMoveDemo(i_Scp, max, false);
+        i_Scp->mZoomScale = 1.0f;
+        i_Scp->mStatus = fopMsgStts_SCOPE_DEMO_e;
+        dComIfGp_setMesgStatus(fopMsgStts_SCOPE_DEMO_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_WAIT_e);
+        dComIfGp_setAStatusForce(dActStts_BLANK_e);
+    }
 }
 
 /* 8023A8D0-8023A9AC       .text dScp_moveProc__FP13sub_scp_class */
-void dScp_moveProc(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_moveProc(sub_scp_class* i_Scp) {
+    if (dComIfGp_getScopeMesgStatus() == fopMsgStts_SCOPE_WAIT_e) {
+        if (dComIfGp_event_getMode() == dEvtMode_NONE_e) {
+            dScp_wipeAngleCalc(i_Scp);
+        } else {
+            dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
+            dComIfGp_setAStatusForce(dActStts_BLANK_e);
+            i_Scp->mStatus = fopMsgStts_SCOPE_OPENING_2_e;
+            i_Scp->mTransTimer = 0;
+        }
+    } else if (g_dComIfG_gameInfo.play.getScopeMesgStatus() == fopMsgStts_BOX_OPENING_e) {
+        dScp_mesgPaneShow(i_Scp);
+        i_Scp->mStatus = fopMsgStts_MSG_TYPING_e;
+        dComIfGp_setMesgStatus(fopMsgStts_MSG_TYPING_e);
+        dScp_talkBeforeProc(i_Scp);
+        dScp_wipeAngleCalc(i_Scp);
+    } else if (!(dComIfGp_getCameraAttentionStatus(0) & dCamAttnStts_TELESCOPE_LOOK_e)) {
+        i_Scp->mStatus = fopMsgStts_MSG_DISPLAYED_e;
+        dComIfGp_setMesgStatus(fopMsgStts_MSG_DISPLAYED_e);
+        i_Scp->mTransTimer = 0;
+    } else {
+        dScp_wipeAngleCalc(i_Scp);
+        dComIfGp_setAStatusForce(dActStts_RETURN_e);
+    }
 }
 
 /* 8023A9AC-8023AAD0       .text dScp_demoProc__FP13sub_scp_class */
-void dScp_demoProc(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_demoProc(sub_scp_class* i_Scp) {
+    camera_class* camera = dComIfGp_getCamera(g_dComIfG_gameInfo.play.mPlayerInfo[0].mCameraID);
+    f32 max = g_meterHIO.mScopeWipeMaxScale;
+
+    if (dComIfGp_getScopeMesgStatus() != fopMsgStts_SCOPE_WAIT_e) {
+        if (!(g_dComIfG_gameInfo.play.getCameraAttentionStatus(0) & dCamAttnStts_TELESCOPE_LOOK_e)) {
+            i_Scp->mStatus = fopMsgStts_MSG_DISPLAYED_e;
+            g_dComIfG_gameInfo.play.setMesgStatus(fopMsgStts_MSG_DISPLAYED_e);
+            i_Scp->mTransTimer = 0;
+            i_Scp->mDemoCloseFlag = 1;
+        }
+    } else {
+        dScp_wipeMoveDemo(i_Scp, max, false);
+
+        dDemo_manager_c* demo = dComIfGp_demo_get();
+        if (demo != NULL) {
+            if (demo->getFrameNoMsg() == 0x1A9) {
+                camera->mCamera.SetTrimSize(3);
+                for (int i = 0; i < 8; i++) {
+                    i_Scp->mWipePanel[i].pane->hide();
+                }
+            } else if (demo->getFrameNoMsg() == 0x460) {
+                camera->mCamera.SetTrimSize(4);
+                for (int i = 0; i < 8; i++) {
+                    i_Scp->mWipePanel[i].pane->show();
+                }
+            }
+        }
+    }
 }
 
 /* 8023AAD0-8023ABA4       .text dScp_talkNowProc__FP13sub_scp_class */
-void dScp_talkNowProc(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_talkNowProc(sub_scp_class* i_Scp) {
+    u8 status = dComIfGp_getScopeMesgStatus();
+
+    if (status == fopMsgStts_MSG_TYPING_e) {
+        dScp_outnowProc(i_Scp);
+    } else if (status == fopMsgStts_MSG_CONTINUES_e) {
+        dScp_continueProc(i_Scp);
+    } else if (status == fopMsgStts_MSG_ENDS_e) {
+        dScp_finishProc(i_Scp);
+    } else if (status == fopMsgStts_SCOPE_WAIT_e) {
+        dScp_forceContinueProc(i_Scp);
+    } else if (status == fopMsgStts_CLOSE_WAIT_e) {
+        dScp_closewaitProc(i_Scp);
+    } else if (status == fopMsgStts_BOX_CLOSING_e) {
+        if (dComIfGp_getMesgStatus() == fopMsgStts_SCOPE_WAIT_e) {
+            dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_WAIT_e);
+            dComIfGp_setAStatusForce(dActStts_BLANK_e);
+        } else {
+            dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
+            dComIfGp_setAStatusForce(dActStts_RETURN_e);
+        }
+        i_Scp->mStatus = fopMsgStts_SCOPE_ACTIVE_e;
+        dComIfGp_setMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
+    }
+
+    dScp_wipeAngleCalc(i_Scp);
+    fopMsgM_forceSendOff();
 }
 
 /* 8023ABA4-8023AC60       .text dScp_closeProc__FP13sub_scp_class */
-void dScp_closeProc(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_closeProc(sub_scp_class* i_Scp) {
+    i_Scp->mTransTimer++;
+    f32 t = fopMsgM_valueIncrease(5, i_Scp->mTransTimer, 0);
+
+    if (i_Scp->mTransTimer < 5) {
+        f32 wipe_value = 3.f * t;
+
+        dScp_wipeMove(i_Scp, wipe_value);
+        dScp_scopeAlpha(i_Scp, 1.0f - t);
+    } else {
+        dScp_wipeMove(i_Scp, 3.f);
+        dScp_scopeAlphaZero(i_Scp);
+        JKRFileLoader::removeResource(i_Scp->head_p, NULL);
+        i_Scp->mStatus = fopMsgStts_BOX_CLOSED_e;
+        dComIfGp_setMesgStatus(fopMsgStts_BOX_CLOSED_e);
+    }
 }
 
 /* 8023AC60-8023AD20       .text dScp_closeDemoProc__FP13sub_scp_class */
-void dScp_closeDemoProc(sub_scp_class*) {
-    /* Nonmatching */
+void dScp_closeDemoProc(sub_scp_class* i_Scp) {
+    f32 max = g_meterHIO.mScopeWipeMaxScale;
+    i_Scp->mTransTimer++;
+    f32 t = fopMsgM_valueIncrease(5, i_Scp->mTransTimer, 0);
+
+    if (i_Scp->mTransTimer < 5) {
+        f32 wipe_value = max + (3.f - max) * t;
+        dScp_wipeMoveDemo(i_Scp, wipe_value, true);
+    } else {
+        dScp_wipeMoveDemo(i_Scp, 3.0f, true);
+        JKRFileLoader::removeResource(i_Scp->head_p, NULL);
+        i_Scp->mStatus = fopMsgStts_BOX_CLOSED_e;
+        i_Scp->mStatus = fopMsgStts_BOX_CLOSED_e; // intentionally duplicated store (matches original)
+        dComIfGp_setMesgStatus(fopMsgStts_BOX_CLOSED_e);
+    }
 }
 
 /* 8023AD20-8023AD60       .text dScp_Draw__FP13sub_scp_class */
 static BOOL dScp_Draw(sub_scp_class* i_this) {
-    /* Nonmatching */
+    dScp_setAlpha(i_this);
+    g_dComIfG_gameInfo.drawlist.set2DOpa(&scope);
+    return TRUE;
 }
 
 /* 8023AD60-8023AEF4       .text dScp_Execute__FP13sub_scp_class */
 static BOOL dScp_Execute(sub_scp_class* i_this) {
-    /* Nonmatching */
+    if (i_this->mStatus == fopMsgStts_BOX_OPENING_e) {
+        dScp_openProc(i_this);
+    } else if (i_this->mStatus == fopMsgStts_SCOPE_OPENING_1_e) {
+        dScp_openProc1(i_this);
+    } else if (i_this->mStatus == fopMsgStts_SCOPE_OPENING_2_e) {
+        dScp_openProc2(i_this);
+    } else if (i_this->mStatus == fopMsgStts_SCOPE_ACTIVE_e) {
+        dScp_moveProc(i_this);
+    } else if (i_this->mStatus == fopMsgStts_SCOPE_DEMO_e) {
+        dScp_demoProc(i_this);
+    } else if (i_this->mStatus == fopMsgStts_MSG_TYPING_e) {
+        dScp_talkNowProc(i_this);
+    } else if (i_this->mStatus == fopMsgStts_MSG_ENDS_e) {
+        if (i_this->mDemoCloseFlag != 0) {
+            dScp_closeDemoProc(i_this);
+        } else {
+            dScp_closeProc(i_this);
+        }
+    } else if (i_this->mStatus == fopMsgStts_MSG_DESTROYED_e) {
+        fopMsgM_Delete(i_this);
+    }
+
+    for (int i = 0; i < 8; i++) {
+        fopMsgM_setNowAlpha(&i_this->mWipePanel[i], g_meterHIO.mScopeWipeAlpha / 255.0f);
+    }
+
+    if (dComIfGs_getOptRuby()) {
+        i_this->mpRubyBox->hide();
+        i_this->mpRubyBoxSdw->hide();
+    } else {
+        // That looks dumb but it is what is.
+        if (i_this->mpRubyBox->isVisible()) {
+            i_this->mpRubyBox->show();
+        }
+        if (i_this->mpRubyBoxSdw->isVisible()) {
+            i_this->mpRubyBoxSdw->show();
+        }
+    }
+
+    return TRUE;
 }
 
 /* 8023AEF4-8023AEFC       .text dScp_IsDelete__FP13sub_scp_class */
@@ -204,15 +1284,110 @@ static BOOL dScp_IsDelete(sub_scp_class*) {
 
 /* 8023AEFC-8023B094       .text dScp_Delete__FP13sub_scp_class */
 static BOOL dScp_Delete(sub_scp_class* i_this) {
-    /* Nonmatching */
+    sub_scp_class* scp = i_this;
+    JKRHeap* heap = mDoExt_setCurrentHeap(i_this->mpHeap);
+
+    delete dScp_ScpScreen;
+    delete dScp_MsgScreen;
+
+    mDoExt_removeMesgFont();
+    mDoExt_removeRubyFont();
+
+    for (int i = 0; i < 8; i++) {
+
+        delete sbutton_icon[i];
+        delete sbutton_kage[i];
+    }
+
+    scp->mpHeap->free(scp->oTx);
+    scp->mpHeap->free(scp->oRb);
+    scp->mpHeap->free(scp->oTxSdw);
+    scp->mpHeap->free(scp->oRbSdw);
+
+    dComIfGp_getMsgArchive()->removeResourceAll();
+    dComIfGp_getScopeResArchive()->removeResourceAll();
+
+    scp->mpHeap->freeAll();
+    dComIfGp_setHeapLockFlag(0);
+    mDoExt_setCurrentHeap(heap);
+
+    dComIfGp_setMesgStatus(0);
+    dComIfGp_setScopeMesgStatus(0);
+    dComIfGp_setScopeType(dScpTyp_TELESCOPE_e);
+    dComIfGp_setScopeWipeFlag(false);
+    dComIfGp_setAStatusForce(dActStts_BLANK_e);
+
+    return TRUE;
 }
 
 /* 8023B094-8023B49C       .text dScp_Create__FP9msg_class */
 static cPhs_State dScp_Create(msg_class* i_this) {
-    /* Nonmatching */
+    sub_scp_class* i_Scp = (sub_scp_class*)i_this;
+
+    if (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 5) {
+        return cPhs_INIT_e;
+    }
+
+    i_Scp->mpHeap = dComIfGp_getExpHeap2D();
+    dComIfGp_setHeapLockFlag(5);
+
+    JKRHeap* heap = mDoExt_setCurrentHeap(i_Scp->mpHeap);
+
+    dScp_ScpScreen = new J2DScreen();
+    u8 scope_type = dComIfGp_getScopeType();
+
+    if (scope_type == dScpTyp_TELESCOPE_e) {
+        dScp_ScpScreen->set("wipe_00_2.blo", dComIfGp_getScopeResArchive());
+    } else {
+        dScp_ScpScreen->set("wipe_00.blo", dComIfGp_getScopeResArchive());
+    }
+
+    dScp_MsgScreen = new J2DScreen();
+    dScp_MsgScreen->set("hukidashi_08.blo", dComIfGp_getMsgArchive());
+
+    dScp_ScreenDataSet(i_Scp);
+
+    for (int i = 0; i < 8; i++) {
+        sbutton_icon[i] = new J2DPicture("font_07_02.bti");
+        sbutton_kage[i] = new J2DPicture("font_07_02.bti");
+        fopMsgM_blendInit(sbutton_icon[i], "font_00.bti");
+        fopMsgM_blendInit(sbutton_kage[i], "font_00.bti");
+        sbutton_icon[i]->hide();
+        sbutton_kage[i]->hide();
+        sbutton_icon[i]->setAlpha(0);
+        sbutton_kage[i]->setAlpha(0);
+        sbuttonTimer[i] = -1;
+    }
+
+    i_Scp->oTx = i_Scp->mpHeap->alloc(1000, 4);
+    JUT_ASSERT(VERSION_SELECT(0x8A9, 0x8A9, 0x8D1, 0x8DC), i_Scp->oTx != 0);
+    i_Scp->oRb = i_Scp->mpHeap->alloc(1000, 4);
+    JUT_ASSERT(VERSION_SELECT(0x8AC, 0x8AC, 0x8D4, 0x8DF), i_Scp->oRb != 0);
+    i_Scp->oTxSdw = i_Scp->mpHeap->alloc(1000, 4);
+    JUT_ASSERT(VERSION_SELECT(0x8AF, 0x8AF, 0x8D7, 0x8E2), i_Scp->oTxSdw != 0);
+    i_Scp->oRbSdw = i_Scp->mpHeap->alloc(1000, 4);
+    JUT_ASSERT(VERSION_SELECT(0x8B2, 0x8B2, 0x8DA, 0x8E5), i_Scp->oRbSdw != 0);
+
+    mDoExt_setCurrentHeap(heap);
+
+    dScp_valueInit(i_Scp);
+    dScp_mesgPaneHide(i_Scp);
+    fopMsgM_setNowAlphaZero(&i_Scp->mArrow);
+    fopMsgM_setNowAlphaZero(&i_Scp->mDot);
+
+    scope.setActorP(i_Scp);
+
+    dComIfGp_setScopeMesgStatus(0);
+    dComIfGp_setAStatusForce(dActStts_BLANK_e);
+
+    return cPhs_COMPLEATE_e;
 }
 
-static msg_method_class l_dPb_Method = {
+/* 8023B49C-8023B4F8       .text __dt__13dDlst_2DSCP_cFv */
+dDlst_2DSCP_c::~dDlst_2DSCP_c() {
+}
+
+msg_method_class l_dScp_Method = {
     (process_method_func)dScp_Create,
     (process_method_func)dScp_Delete,
     (process_method_func)dScp_Execute,
@@ -231,5 +1406,5 @@ msg_process_profile_definition g_profile_SCP = {
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
     /* Draw Prio    */ fpcDwPi_SCP_e,
-    /* Msg SubMtd   */ &l_dPb_Method,
+    /* Msg SubMtd   */ &l_dScp_Method,
 };

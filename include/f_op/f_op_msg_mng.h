@@ -239,7 +239,7 @@ public:
     void tag_input_kenshi();
 #endif
 
-    void getIconColor(int) {}
+    u32 getIconColor(int i_no) { return field_0x1E0[i_no]; }
     u8 getIconNum(int i_no) { return field_0x281[i_no]; }
     int getIconPosX(int i_no) { return field_0x168[i_no]; }
     int getIconPosY(int i_no) { return field_0x1A4[i_no]; }
@@ -272,9 +272,9 @@ public:
     f32 getNowCursorPos() { return field_0x20; }
     u8 getRCharAlpha() { return field_0x291; } // ?
     u8 getRGradAlpha() { return field_0x290; } // ?
-    void getSelectFlag() {}
+    u8 getSelectFlag() { return selectFlag; }
     void getSelectLength() {}
-    void getStringColor() {}
+    u32 getStringColor() { return field_0x25C;}
     void get_waitTimer() {}
     void resetNowLine() { nowLine = 0; }
     void selectArrow(J2DPicture*) {}
@@ -299,13 +299,13 @@ public:
     void setLineWidth(int i_width) { lineWidth = i_width; }
     void setRubyFont(JUTFont* i_font) { font[1] = i_font; }
     void setRubyFontSize(int i_size) { rubyFontSize = i_size; }
-    void setSelectFlagOff() {}
+    void setSelectFlagOff() { selectFlag = 0; }
     void setSelectNum(u8) {}
     void setSendSpeed(int i_speed) { sendSpeed = i_speed; }
     void setSpaceFlagOff() { spaceFlag = 0; }
     void setSpaceFlagOn() {}
     void setSpaceTimer(int i_timer) { spaceTimer = i_timer; }
-    void setStringColor(u32) {}
+    void setStringColor(u32 color) { field_0x25C = color; }
     void set_waitTimer(int) {}
     void set_waitTimerZero() {}
     void shortCut() { field_0x299 = 1; }
@@ -461,6 +461,8 @@ void fopMsgM_setAlpha(fopMsgM_pane_alpha_class* i_pane);
 
 u32 fopMsgM_searchMessageNumber(u32 i_msgNo);
 bool fopMsgM_forceSendOn();
+bool fopMsgM_checkForceSend();
+void fopMsgM_forceSendOff();
 void fopMsgM_messageSendOn();
 void fopMsgM_messageSendOff();
 bool fopMsgM_checkMessageSend();
