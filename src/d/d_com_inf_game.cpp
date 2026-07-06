@@ -70,7 +70,7 @@ void dComIfG_play_c::init() {
 
 /* 800521D4-80052400       .text itemInit__14dComIfG_play_cFv */
 void dComIfG_play_c::itemInit() {
-    field_0x48b8 = 0.0f;
+    mItemScopeWipeScale = 0.0f;
     mItemLifeCount = 0.0f;
     mItemRupeeCount = 0;
     mAirMeter = 0;
@@ -100,7 +100,7 @@ void dComIfG_play_c::itemInit() {
     mItemNowLife = 0;
     mItemNowRupee = 0;
     mItemSwimTimerStatus = 0;
-    field_0x4929 = 0;
+    mItemScopeWipeTimer = 0;
     mMesgStatus = 0;
     mScopeMesgStatus = 0;
     field_0x492c = 0;
@@ -166,7 +166,7 @@ void dComIfG_play_c::itemInit() {
     strcpy(mInputPassword, "\0");
 
     mMesgBgm = 0;
-    field_0x4978 = 0;
+    mScopeWipeFlag = 0;
     m2dShow = 0;
     field_0x497a = 0;
 #if VERSION > VERSION_DEMO
