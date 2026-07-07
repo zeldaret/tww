@@ -11,11 +11,11 @@
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "d/d_bg_s_func.h"
 
-const char daObjHtetu1_c::M_arcname[] = "Htetu1";
-
 static const u16 l_daObjHtetu1_splash_id_table[] = {
     0x82BA, 0x82BB
 };
+
+const char daObjHtetu1_c::M_arcname[] = "Htetu1";
 
 extern "C" void set__13dPa_control_cFUcUsPC4cXyzPC5csXyzPC4cXyzUcP18dPa_levelEcallBackScPC8_GXColorPC8_GXColorPC4cXyz(
     u8, u16, const cXyz*, const csXyz*, const cXyz*, u8, dPa_levelEcallBack*, s8, const GXColor*, const GXColor*, const cXyz*
@@ -50,10 +50,10 @@ BOOL daObjHtetu1_c::solidHeapCB(fopAc_ac_c* i_this) {
 BOOL daObjHtetu1_c::create_heap() {
     register daObjHtetu1_c* _this = this;
     register BOOL status = TRUE;
-    register J3DModelData* modelData;
+    J3DModelData* modelData;
     
     modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 4);
-    JUT_ASSERT(281, modelData != NULL);
+    JUT_ASSERT(281, modelData !=0);
     if (modelData == NULL) {
         status = FALSE;
     } else {
@@ -74,35 +74,34 @@ cPhs_State daObjHtetu1_c::_create() {
     
     cPhs_State state = (cPhs_State)dComIfG_resLoad(&mPhase, M_arcname);
     if (state == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0xAE0) == FALSE) {
-            return cPhs_ERROR_e;
+        state = cPhs_ERROR_e;
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0xAE0)) {
+            cullMtx = mpModel->getBaseTRMtx();
+            mSw = (u8)fopAcM_GetParam(this);
+            mBaseY = current.pos.y - 2300.0f;
+            
+            if (check_sw()) {
+                current.pos.y = mBaseY;
+                mMode = 2;
+            }
+            
+            mQuakeTimer = -1;
+            init_mtx();
+            
+            g_env_light.settingTevStruct(2, &current.pos, &tevStr);
+            
+            for (int i = 0; i < 2; i++) {
+                mSplash[i].create_s(l_daObjHtetu1_splash_id_table[i], &current.pos, &current.angle, &tevStr);
+            }
+            
+            fopAcM_setCullSizeBox(this, -950.0f, -1000.0f, -100.0f, 950.0f, 1300.0f, 100.0f);
+            
+            dComIfG_Bgsp()->Regist(mpBgW, this);
+            
+            mEventIdx = dComIfGp_evmng_getEventIdx("htetu1_open", 0xFF);
+            
+            state = cPhs_COMPLEATE_e;
         }
-        
-        cullMtx = mpModel->getBaseTRMtx();
-        mSw = (u8)fopAcM_GetParam(this);
-        mBaseY = current.pos.y - 2300.0f;
-        
-        if (check_sw()) {
-            current.pos.y = mBaseY;
-            mMode = 2;
-        }
-        
-        mQuakeTimer = -1;
-        init_mtx();
-        
-        g_env_light.settingTevStruct(2, &current.pos, &tevStr);
-        
-        for (int i = 0; i < 2; i++) {
-            mSplash[i].create_s(l_daObjHtetu1_splash_id_table[i], &current.pos, &current.angle, &tevStr);
-        }
-        
-        fopAcM_setCullSizeBox(this, -950.0f, -1000.0f, -100.0f, 950.0f, 1300.0f, 100.0f);
-        
-        dComIfG_Bgsp()->Regist(mpBgW, this);
-        
-        mEventIdx = dComIfGp_evmng_getEventIdx("htetu1_open", 0xFF);
-        
-        return cPhs_COMPLEATE_e;
     }
     
     return state;
