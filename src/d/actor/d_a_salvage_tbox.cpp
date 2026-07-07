@@ -103,10 +103,10 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
 /* 000002F4-00000570       .text draw__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
 void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
     /* Nonmatching */
-    uint particleCount = emitter->getParticleList()->getNumLinks();
-    f32 fVar1;
-    f32 fVar2;
     f32 fVar3;
+    f32 fVar2;
+    f32 fVar1;
+    uint particleCount = emitter->getParticleList()->getNumLinks();
     if (particleCount >= 6){
         if (dPa_control_c::isStatus(1)) {
             GXSetZMode(GX_FALSE, GX_NEVER, GX_FALSE);
@@ -121,10 +121,10 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
         mtx[1][3] = field_0x48 * emitter->getFrame();
         GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
         GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
-        JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
+        JSUPtrLink* link = emitter->getParticleList()->getFirst();
         uint i = 0;
         fVar1 = 0.0f;
-        for (; i < steps; i++) {
+        for (; i < steps; i++, fVar1 += fVar3) {
             if (i != 0){
                 GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 6);
                 uint j = 0;
@@ -152,7 +152,6 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
                     link = link->getNext();
                 }
             }
-            fVar1 += fVar3;
         }
     }
 }
