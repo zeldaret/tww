@@ -3155,6 +3155,19 @@ inline dComIfG_MesgCamInfo_c* dComIfGp_getMesgCameraInfo() {
     return g_dComIfG_gameInfo.play.getMesgCamInfo();
 }
 
+inline void dComIfGp_setMesgCameraInfoActor(fopAc_ac_c* actor_1,fopAc_ac_c* actor_2,fopAc_ac_c* actor_3,fopAc_ac_c* actor_4,fopAc_ac_c* actor_5,fopAc_ac_c* actor_6,fopAc_ac_c* actor_7,fopAc_ac_c* actor_8,fopAc_ac_c* actor_9,fopAc_ac_c* actor_A){
+    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[0] = actor_1;
+    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[1] = actor_2;
+    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[2] = actor_3;
+    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[3] = actor_4;
+    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[4] = actor_5;
+    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[5] = actor_6;
+    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[6] = actor_7;
+    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[7] = actor_8;
+    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[8] = actor_9;
+    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[9] = actor_A;
+};
+
 inline u8 dComIfGp_checkMesgBgm() {
     return g_dComIfG_gameInfo.play.checkMesgBgm();
 }

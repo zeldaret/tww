@@ -99,10 +99,10 @@ public:
     void anmAtr(unsigned short);
     void eventOrder();
     void checkOrder();
-    void chk_manzai();
-    void chk_talk();
-    void chk_partsNotMove();
-    void lookBack();
+    BOOL chk_manzai();
+    BOOL chk_talk();
+    bool chk_partsNotMove();
+    BOOL lookBack();
     u16 next_msgStatus(unsigned long*);
     void getBitMask();
     void getMsg_PST_1();
@@ -120,7 +120,7 @@ public:
     u32 getMsg();
     void chkAttention();
     void setAttention(bool);
-    void searchByID(fpc_ProcID);
+    fopAc_ac_c* searchByID(fpc_ProcID);
     void partner_srch_sub(void* (*)(void*, void*));
     void partner_srch();
     void bm_movPass(bool);
@@ -247,7 +247,10 @@ public:
                 cXyz m82C;
     /* 0x838 */ Vec m838;
                 f32 m844;
-    /* 0x844 */ u8 m848[0x862 - 0x848];
+    /* 0x844 */ u8 m848[0x85C - 0x848];
+                s16 m85C;
+                s16 m85E;
+                s16 m860;
                 s16 m862[4];
                 s16 m86A;
                 s16 m86C;
@@ -256,8 +259,8 @@ public:
     /* 0x874 */ s16 m874;
     /* 0x876 */ s16 m876;
     /* 0x878 */ u8 m878[0x87A - 0x878];
-                u8 m87A;
-                u8 m87B;
+                s8 m87A;
+                s8 m87B;
                 u8 m87C;
                 u8 m87D;
                 u8 m87E;
@@ -265,7 +268,8 @@ public:
 
     /* 0x880 */ u8 m880;
     /* 0x881 */ u8 m881;
-    /* 0x882 */ u8 m882[0x884 - 0x882];
+    /* 0x882 */ u8 m882;
+                bool m883;
     /* 0x884 */ u8 m884;
                 bool m885;
                 u8 m886;
@@ -300,30 +304,55 @@ public:
     /* 0x8F9 */ s8 m8F9;
     /* 0x8FA */ s8 m8FA;
     /* 0x8FB */ u8 m8FB[0x8FD - 0x8FB];
-    /* 0x8FD */ u8 m8FD;
+    /* 0x8FD */ s8 m8FD;
     /* 0x8FE */ s8 m8FE;
     /* 0x8FF */ u8 m8FF;
 #if VERSION == VERSION_DEMO
     /* 0x900 */ u32 m900;
 #endif
-    /* 0x900 */ u8 m904;
+    /* 0x900 */ s8 m900;
     /* 0x901 */ s8 mType;
     /* 0x902 */ SpecificType mSpecificType;
     /* 0x903 */ s8 mSpawnCondition;
-    /* 0x904 */ u8 m90C;
-    /* 0x904 */ u8 m90D;   
+    /* 0x904 */ u8 m904;
+    /* 0x904 */ s8 m905;   
 
 
 }; 
 STATIC_ASSERT(sizeof(daNpc_Bm1_c) == DEMO_SELECT(0x90C,0x908));
 
+
+struct hio_prm_c{
+    s32 m0;
+    s32 m4;
+    s32 m8;
+    s32 mC;
+    s16 m10;
+    s16 m12;
+    f32 m14;
+    s32 m18;
+    s32 m1C;
+    f32 m20;
+    f32 m24;
+    f32 m28;
+    f32 m2C;
+    f32 m30;
+    s32 m34;
+    f32 m38;
+    f32 m3C;
+    f32 m40;
+    f32 m44;
+    f32 m48;
+};
+
 class daNpc_Bm1_childHIO_c : public mDoHIO_entry_c{
+
 public:
     daNpc_Bm1_childHIO_c();
 
 public:
 
-    daNpc_Bm1_c::anm_prm_c anm_prm;
+    hio_prm_c hio_prm;
     u32 m50;
     //SIZE: 0x54
 };
