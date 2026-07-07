@@ -217,6 +217,8 @@ void daObjHtetu1_c::splash_manager() {
 }
 
 bool daObjHtetu1_c::_execute() {
+    int i;
+    int state;
     switch (mMode) {
     case 2:
         break;
@@ -233,7 +235,7 @@ bool daObjHtetu1_c::_execute() {
                 mState = 1;
                 mMode = 1;
                 dComIfGp_getVibration().StartShock(5, -33, cXyz(0.0f, 1.0f, 0.0f));
-                for (int i = 0; i < 2; i++) {
+                for (i = 0; i < 2; i++) {
                     if (mSplash[i].getEmitter() != NULL) {
                         mSplash[i].getEmitter()->clearStatus(JPAEmtrStts_StopEmit);
                         mSplash[i].mState = 1;
@@ -265,7 +267,7 @@ bool daObjHtetu1_c::_execute() {
             dComIfGp_getVibration().StartQuake(6, 3, cXyz(0.0f, 1.0f, 0.0f));
             mState = 2;
             mQuakeTimer = 200;
-            for (int i = 0; i < 2; i++) {
+            for (i = 0; i < 2; i++) {
                 if (mSplash[i].getEmitter() != NULL) {
                     mSplash[i].getEmitter()->clearStatus(JPAEmtrStts_StopEmit);
                     mSplash[i].mState = 1;
@@ -278,11 +280,12 @@ bool daObjHtetu1_c::_execute() {
         mTargetPos.y -= 5.0f;
         mDoAud_seStart(0x107b, &current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
         if (mTargetPos.y <= mBaseY) {
-            int i = 0;
+            i = 0;
+            state = i;
             do {
                 if (mSplash[i].getEmitter() != NULL) {
                     mSplash[i].end();
-                    mSplash[i].mState = 0;
+                    mSplash[i].mState = state;
                 }
                 i++;
             } while (i < 2);
