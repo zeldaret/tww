@@ -148,9 +148,8 @@ void daObjHtetu1_c::unlock() {
     cXyz sp8 = cXyz::BaseY;
     PSVECSubtract(&mTargetPos, &mGatePos, &mTargetPos);
     f32 scale = mSpeedY;
-    scale = (scale + 0.0f) * cM_ssin(mMoveTimer * 0x859);
-    f32 scale_f = (f32)(s16)scale;
-    scale = std::fabsf(scale_f);
+    scale = (f32)(s16)(scale * cM_ssin(mMoveTimer * 0x859));
+    scale = std::fabsf(scale);
     PSVECScale(&sp8, &sp8, scale);
     PSVECAdd(&mTargetPos, &sp8, &mTargetPos);
     
