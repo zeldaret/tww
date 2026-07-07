@@ -15,11 +15,15 @@ public:
 
     void chk_stop() {}
     void delete_s() {}
-    void get_timer() {}
+    s16 get_timer() { return mTimer; }
     void play_particle() {}
-    void set_pos_y(float) {}
+    void set_pos_y(float y) { mPos.y = y; }
     void stop_particle() {}
-    void sub_timer() {}
+    void sub_timer() {
+        if (mTimer > 0) {
+            mTimer--;
+        }
+    }
     void timer_play_particle(short) {}
 
 public:

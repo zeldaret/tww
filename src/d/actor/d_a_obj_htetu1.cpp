@@ -181,11 +181,11 @@ f32 daObjHtetu1_c::get_water_h() {
 }
 
 void daObjHtetu1_c::splash_manager() {
-    register s16 timer;
     f32 water_h = get_water_h();
+    s16 timer;
     for (int i = 0; i < 2; i++) {
-        mSplash[i].mPos.y = water_h;
-        timer = mSplash[i].mTimer;
+        mSplash[i].set_pos_y(water_h);
+        timer = mSplash[i].get_timer();
         if (timer == 0) {
             if (mSplash[i].mState != 0) {
                 if (mSplash[i].getEmitter() != NULL) {
