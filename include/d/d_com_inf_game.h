@@ -589,6 +589,7 @@ public:
     void setActionIconArchive(JKRArchive * pArc) { mpActionIconArchive = pArc; }
     JKRArchive* getActionIconArchive() { return mpActionIconArchive; }
     void setScopeResArchive(JKRArchive * pArc) { mpScopeResArchive = pArc; }
+    JKRArchive* getCameraResArchive() { return mpCameraResArchive; }
     void setCameraResArchive(JKRArchive * pArc) { mpCameraResArchive = pArc; }
     JKRArchive* getSwimResArchive() { return mpSwimResArchive; }
     void setSwimResArchive(JKRArchive * pArc) { mpSwimResArchive = pArc; }
@@ -623,7 +624,9 @@ public:
     u8 getSelectPicture() { return mSelectPicture; }
     void setSelectPicture(u8 i) { mSelectPicture = i; }
     u8 getPictureResult() { return mPictureResult; }
+    void setPictureResult(u8 i) { mPictureResult = i; }
     u8 getPictureResultDetail() { return mPictureResultDetail; }
+    void setPictureResultDetail(u8 i) { mPictureResultDetail = i; }
     void setBossBattleData(JKRAramBlock* aramBlock, int i) { mBossBattleData[i] = aramBlock; }
 
     void startFwaterTimer() { mFwaterTimer = 1; }
@@ -3211,8 +3214,16 @@ inline u8 dComIfGp_getPictureResult() {
     return g_dComIfG_gameInfo.play.getPictureResult();
 }
 
+inline void dComIfGp_setPictureResult(u8 i) {
+    g_dComIfG_gameInfo.play.setPictureResult(i);
+}
+
 inline u8 dComIfGp_getPictureResultDetail() {
     return g_dComIfG_gameInfo.play.getPictureResultDetail();
+}
+
+inline void dComIfGp_setPictureResultDetail(u8 i) {
+    g_dComIfG_gameInfo.play.setPictureResultDetail(i);
 }
 
 inline void dComIfGp_setBossBattleData(JKRAramBlock* aramBlock, int i) {
@@ -3901,6 +3912,7 @@ inline JKRArchive* dComIfGp_getErrorResArchive() { return g_dComIfG_gameInfo.pla
 inline void dComIfGp_setActionIconArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setActionIconArchive(pArc); }
 inline JKRArchive* dComIfGp_getActionIconArchive() { return g_dComIfG_gameInfo.play.getActionIconArchive(); }
 inline void dComIfGp_setScopeResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setScopeResArchive(pArc); }
+inline JKRArchive* dComIfGp_getCameraResArchive() { return g_dComIfG_gameInfo.play.getCameraResArchive(); }
 inline void dComIfGp_setCameraResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setCameraResArchive(pArc); }
 inline JKRArchive* dComIfGp_getSwimResArchive() { return g_dComIfG_gameInfo.play.getSwimResArchive(); }
 inline void dComIfGp_setSwimResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setSwimResArchive(pArc); }

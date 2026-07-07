@@ -25,10 +25,7 @@ struct sPhotoDat {
     /* 0x18 */ char* field_0x18;
 };
 
-class sub_pb_class : public msg_class {
-public:
-    /* Place member variables here */
-};
+void dPb_erasePicture();
 
 class dJle_Pb_c : public dDlst_base_c {
 public:
@@ -128,20 +125,42 @@ public:
     /* 0xF68 */ fopMsgM_pane_alpha_class pane_tx83;
     /* 0xF70 */ fopMsgM_pane_alpha_class pane_tx80;
     /* 0xF78 */ fopMsgM_pane_alpha_class pane_tx81;
-    /* 0xF80 */ u8 mF80[0xF90 - 0xF80];
+    /* 0xF80 */ u8 mF80[0xF8C - 0xF80];
+    /* 0xF8C */ J2DPane* mF8C;
     /* 0xF90 */ JUTFont* mF90;
     /* 0xF94 */ JUTFont* mF94;
-    /* 0xF98 */ u8 mF98[0x125C - 0xF98];
+    /* 0xF98 */ u8 mF98[0xFBC - 0xF98];
+    /* 0xFBC */ fopMsgM_msgDataProc_c mFBC;
     /* 0x125C */ JUtility::TColor icn_white;
     /* 0x1260 */ JUtility::TColor icn_black;
     /* 0x1264 */ JUtility::TColor emp_white;
     /* 0x1268 */ JUtility::TColor emp_black;
-    /* 0x126C */ u8 m126C[0x127C - 0x126C];
+    /* 0x126C */ ResTIMG* m126C[4];
     /* 0x127C */ f32 mZoomScale;
-    /* 0x1280 */ u8 m1280[0x136E - 0x1280];
+    /* 0x1280 */ u8 m1280[0x1340 - 0x1280];
+    /* 0x1340 */ int m1340;
+    /* 0x1344 */ int m1344;
+    /* 0x1348 */ int m1348;
+    /* 0x134C */ u8 m134C[0x1350 - 0x134C];
+    /* 0x1350 */ ResTIMG* m1350[4];
+    /* 0x1360 */ u8 m1360[0x1362 - 0x1360];
+    /* 0x1362 */ s16 m1362;
+    /* 0x1364 */ u8 m1364[0x136B - 0x1364];
+    /* 0x136B */ u8 m136B;
+    /* 0x136C */ u8 m136C;
+    /* 0x136D */ u8 m136D;
     /* 0x136E */ u8 m136E;
-    /* 0x136F */ u8 m136F[0x1371 - 0x136F];
+    /* 0x136F */ u8 m136F;
+    /* 0x1370 */ u8 m1370;
     /* 0x1371 */ u8 m1371[3];
+    /* 0x1374 */ u8 m1374[0x1376 - 0x1374];
+    /* 0x1376 */ u8 m1376;
 };
-void dPb_erasePicture();
+
+class sub_pb_class : public msg_class {
+public:
+    /* 0x00FC */ JKRExpHeap* heap;
+    /* 0x0100 */ dJle_Pb_c* dPb_c;
+    /* 0x0104 */ ResTIMG* buffer[4];
+};
 #endif /* D_PICTURE_BOX_H */

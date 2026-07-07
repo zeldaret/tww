@@ -5,9 +5,15 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_picture_box.h"
+#include "d/d_s_play.h"
 #include "f_op/f_op_msg.h"
 #include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_graphic.h"
+#include "m_Do/m_Do_controller_pad.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
+#include "d/actor/d_a_player.h"
 #include "d/d_meter.h"
+#include "d/d_snap.h"
 
 static sPhotoDat photo_data = {
     "/res/Photo/KOKUOU.DDS",
@@ -451,32 +457,302 @@ void dJle_Pb_c::left_rightIconMove() {
 
 /* 80227338-80227520       .text clickShutterMode__9dJle_Pb_cFv */
 void dJle_Pb_c::clickShutterMode() {
-    /* Nonmatching */
+    int iVar3;
+    short iVar7;
+    f32 dVar8;
+    
+    iVar3 = g_meterHIO.field_0x124;
+    iVar7 = iVar3 << 1;
+    if (m1362 < iVar3) {
+        m1362++;
+        dVar8 = fopMsgM_valueIncrease(iVar3, m1362, 0);
+    }
+    else if (m1362 == iVar3) {
+        if (mDoGph_getCaptureStep() == 5) {
+              m1362++;
+              dMenu_flagSet(1);
+        }
+        dVar8 = 1.0f;
+    }
+    else {
+        m1362++;
+        dVar8 = fopMsgM_valueIncrease(iVar3, iVar7 - m1362, 0);
+    }
+
+    for(int i = 0; i < 12; i++) {
+        float rotateAngle = pane_sb[i].mUserArea + g_meterHIO.field_0x24 * dVar8;
+        pane_sb[i].pane->rotate(pane_sb[i].mSizeOrig.x / 2.0f, pane_sb[i].mSizeOrig.y / 2.0f, ROTATE_Z, rotateAngle);
+        fopMsgM_paneTrans(&pane_st[i], 0.0f, dVar8 * -(pane_st[i].mPosTopLeftOrig.y - pane_sb[i].mSizeOrig.y / 2.0f));
+        shutterLineRotateCenter(rotateAngle, i);
+    }
+
+    shutterLineMove();
+
+    if (m1362 == iVar7) {
+        m136C = 2;
+        shutterHide();
+        messageSet(0xedd);
+    }
 }
 
 /* 80227520-802277A0       .text selectMode__9dJle_Pb_cFv */
 void dJle_Pb_c::selectMode() {
     /* Nonmatching */
+    u32 pictureNum;
+    int bVar3 = mFBC.selectCheckYoko(mF8C, m1340, m1348, m1344 - m1340);
+    if ((u8)bVar3 != m136F) {
+        m136F = bVar3;
+        mDoAud_seStart(0x83d);
+    }
+
+    if (CPad_CHECK_TRIG_A(0)) {
+        if(mDoGph_getCaptureStep() == 5) {
+            mDoGph_setCaptureStep(6);
+            if ((u8)bVar3 == 0) {
+                pictureNum = dComIfGs_getPictureNum();
+                ResTIMG* dst = m126C[0];
+
+                dComIfGp_onPictureFlag(0);
+                dComIfGp_onPictureFlag(1);
+                dComIfGp_onPictureFlag(2);
+
+                dst->height = dSnap_GetResult();
+                dst->width = dSnap_GetResultDetail();
+                dst->format = m1376;
+
+                memcpy(dst, mDoGph_getCaptureTextureBuffer(), 0x1ee0);
+                DCStoreRangeNoSync(dst, 0x1ee0);
+
+                dComIfGp_setItemPictureNumCount(1);
+
+                pictureNum = dComIfGs_getPictureNum() + 1;
+                dComIfGs_setPictureNum(1);
+                mDoAud_seStart(0x8d4);
+            }
+            else {
+                pictureNum = dComIfGs_getPictureNum();
+                mDoAud_seStart(0x8d5);
+            }
+
+            remainMessageSet(pictureNum);
+            m136C = 0;
+            dComIfGp_setScopeMesgStatus(0xb);
+            dMenu_flagSet(0);
+        }
+    }
+    else if (CPad_CHECK_TRIG_B(0) && mDoGph_getCaptureStep() == 5) {
+        mDoGph_setCaptureStep(6);
+        remainMessageSet(dComIfGs_getPictureNum());
+        mDoAud_seStart(0x8d5);
+
+        m136C = 0;
+
+        dComIfGp_setScopeMesgStatus(0xb);
+        dMenu_flagSet(0);
+    }
 }
 
 /* 802277A0-80227944       .text cameraMode__9dJle_Pb_cFv */
 void dJle_Pb_c::cameraMode() {
     /* Nonmatching */
+    if (CPad_CHECK_TRIG_A(0)) {
+        if (mDoGph_getCaptureStep() == 0 && dComIfGs_getPictureNum() < 3) {
+            m1362 = 0;
+            m136C = 1;
+            if (dComIfGs_getItem(8) == dItemNo_PICTO_BOX_e) {
+                m1376 = 1;
+            }
+            else {
+                m1376 = 4;
+            }
+            mDoGph_setCaptureCaptureFormat(m1376);
+            mDoGph_setCaptureTextureFormat(0xe);
+            mDoGph_setCaptureStep(1);
+            dComIfGp_setScopeMesgStatus(7);
+            shutterShow();
+            mDoAud_seStart(0x878);
+            dSnap_ReleaseShutter();
+        }
+    }
+    else if (CPad_CHECK_TRIG_A(0)) {
+        m1370 = 1;
+        m1362 = 0;
+        shutterShow();
+        m136E = 0;
+        mDoAud_seStart(0x8d3);
+    }
+    else if (!dComIfGp_checkCameraAttentionStatus(0, 0x40)) {
+        m136B = 6;
+    }
+    else if (mDoGph_getCaptureStep() == -1) {
+        daPy_getPlayerActorClass()->onNoResetFlg0(daPy_py_c::daPyFlg0_PHOTO_BOX_CANCEL);
+        m136B = 6;
+    }
+    else {
+        zoomScale();
+    }
+
+    up_downIconMove();
 }
 
 /* 80227944-80227D34       .text pictureDraw__9dJle_Pb_cFUci */
-void dJle_Pb_c::pictureDraw(unsigned char, int) {
-    /* Nonmatching */
+void dJle_Pb_c::pictureDraw(unsigned char mono_color_1_alpha, int img_index) {
+    s32 r30, r29;
+    u32 left, top, width, height;
+    f32 projv[7];
+    f32 viewv[6];
+    Mtx44 mtx;
+    GXTexObj tex_obj;
+
+    ResTIMG* img = m126C[img_index];
+    u32 index = (img_index == 3) ? 0 : img_index;
+    f32 f2 = pane_no[index].mPosTopLeft.x + REG6_F(0);
+    f32 f3 = pane_no[index].mPosTopLeft.y + REG6_F(1);
+    r30 = (f2 + (f2 + pane_no[index].mSizeOrig.x)) / 2.0f;
+    r29 = (f3 + (f3 + pane_no[index].mSizeOrig.y)) / 2.0f;
+
+    static GXColor mCaptureMonoColor0 = {0x00, 0x00, 0x00, 0x00};
+    static GXColor mCaptureMonoColor1 = {0xFF, 0xFF, 0xFF, mono_color_1_alpha};
+    
+    GXGetProjectionv(projv);
+    GXGetViewportv(viewv);
+    GXGetScissor(&left, &top, &width, &height);
+
+    GXSetViewport(0.0f, 0.0f, 640.0f, 480.0f, 0.0f, 1.0f);
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, false, GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+    
+    GXSetTevColor(GX_TEVREG0, mCaptureMonoColor0);
+    GXSetTevColor(GX_TEVREG1, mCaptureMonoColor1);
+
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_KONST);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    
+    GXSetZCompLoc(1);
+    GXSetZMode(false, GX_ALWAYS, false);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_COPY);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetClipMode(GX_CLIP_DISABLE);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetDither(1);
+    GXSetNumIndStages(0);
+    GXSetTevDirect(GX_TEVSTAGE0);
+
+    C_MTXOrtho(mtx, -21.0f, 503.0f, -9.0f, 650.0f, 0.0f, 10.0f);
+    GXSetProjection(mtx, GX_ORTHOGRAPHIC);
+    GXLoadPosMtxImm(mDoMtx_getIdentity(), 0);
+    GXSetCurrentMtx(0);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGBA4, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB8, 0);
+    
+    GXInitTexObj(&tex_obj, img, 0x98, 0x68, GX_TF_CMPR, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXLoadTexObj(&tex_obj, GX_TEXMAP0);
+
+    s32 r31 = (s32)r30 - 0x98;
+    s32 r28 = (s32)r29 - 0x68;
+    s32 r30new = (s32)r30 + 0x98;
+    s32 r29new = (s32)r29 + 0x68;
+    
+    {
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
+        GXPosition3s16(r31, r28, 0);
+        GXTexCoord2s8(0, 0);
+
+        GXPosition3s16(r30new, r28, 0);
+        GXTexCoord2s8(1, 0);
+
+        GXPosition3s16(r30new, r29new, 0);
+        GXTexCoord2s8(1, 1);
+
+        GXPosition3s16(r31, r29new, 0);
+        GXTexCoord2s8(0, 1);
+        
+        GXEnd();
+    }
+
+    GXSetProjectionv(projv);
+    GXSetViewport(viewv[0], viewv[1], viewv[2], viewv[3], viewv[4], viewv[5]);
+    GXSetScissor(left, top, width, height);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    GXDrawDone();
 }
 
 /* 80227D34-80227ED8       .text pictureEraseWait__9dJle_Pb_cFv */
 void dJle_Pb_c::pictureEraseWait() {
-    /* Nonmatching */
+    int bVar1 = mFBC.selectCheckYoko(mF8C, m1340, m1348, m1344 - m1340);
+    if ((u8)bVar1 != m136F) {
+        m136F = bVar1;
+        mDoAud_seStart(0x83d);
+    }
+
+    if (CPad_CHECK_TRIG_A(0)) {
+        if ((u8)bVar1 == 0) {
+            pictureErase();
+            mDoAud_seStart(0x8d8);
+        }
+        else {
+            existMessageSet(dComIfGs_getPictureNum());
+            mDoAud_seStart(0x8d9);
+        }
+        
+        m136C = 0;
+        dComIfGp_setScopeMesgStatus(0xb);
+    }
+    else if (CPad_CHECK_TRIG_B(0)) {
+        existMessageSet(dComIfGs_getPictureNum());
+        mDoAud_seStart(0x8d9);
+        m136C = 0;
+        dComIfGp_setScopeMesgStatus(0xb);
+    }
 }
 
 /* 80227ED8-802280C8       .text pictureDecide__9dJle_Pb_cFv */
 void dJle_Pb_c::pictureDecide() {
     /* Nonmatching */
+    int bVar2 = mFBC.selectCheckYoko(mF8C, m1340, m1348, m1344 - m1340);
+    if ((u8)bVar2 != m136F) {
+        m136F = bVar2;
+        mDoAud_seStart(0x83d);
+    }
+    if (CPad_CHECK_TRIG_A(0)) {
+        if ((u8)bVar2 == 0) {
+            ResTIMG* pRVar3 = m126C[(u8)m136E];
+            dComIfGp_setSelectPicture(pRVar3->width);
+            dComIfGp_setPictureFormat(pRVar3->format);
+            dComIfGp_setPictureStatus(1);
+            dComIfGp_setPictureResult(pRVar3->height);
+            dComIfGp_setPictureResultDetail(pRVar3->alphaEnabled);
+            
+            daPy_getPlayerActorClass()->onNoResetFlg0(daPy_py_c::daPyFlg0_PHOTO_BOX_CANCEL);
+            m136B = 6;
+            mDoAud_seStart(0x90c);
+        }
+        else {
+            existMessageSet(dComIfGs_getPictureNum());
+            mDoAud_seStart(0x8d9);
+        }
+        m136C = 0;
+        dComIfGp_setScopeMesgStatus(0xb);
+    }
+    else if (CPad_CHECK_TRIG_B(0)) {
+        existMessageSet(dComIfGs_getPictureNum());
+        mDoAud_seStart(0x8d9);
+        m136C = 0;
+        dComIfGp_setScopeMesgStatus(0xb);
+    }
 }
 
 /* 802280C8-80228184       .text pictureErase__9dJle_Pb_cFv */
@@ -656,23 +932,135 @@ static BOOL dPb_Draw(sub_pb_class* i_this) {
 
 /* 8022BB7C-8022BC84       .text dPb_Execute__FP12sub_pb_class */
 static BOOL dPb_Execute(sub_pb_class* i_this) {
-    /* Nonmatching */
+    JKRHeap* oldHeap = mDoExt_setCurrentHeap((JKRHeap*)i_this->heap);
+    dJle_Pb_c* a_this = i_this->dPb_c;
+    u8 bVar1 = a_this->m136B;
+    if (bVar1 == 0) {
+        a_this->_copen();
+    }
+    else if (bVar1 == 2) {
+        a_this->_bopen();
+    }
+    else if (bVar1 == 4) {
+        a_this->_gopen();
+    }
+    else if (bVar1 == 1) {
+        a_this->_cmove();
+        dComIfGp_onCameraAttentionStatus(0, 2);
+    }
+    else if (bVar1 == 3) {
+        a_this->_bmove();
+    }
+    else if (bVar1 == 5) {
+        a_this->_gmove();
+    }
+    else if (bVar1 == 6) {
+        a_this->_close();
+        if (i_this->dPb_c->m136B == 7) {
+            i_this->mStatus = 0x12;
+        }
+    }
+    else if (bVar1 == 7 && i_this->mStatus == 0x13) {
+        fopMsgM_Delete(i_this);
+    }
+
+    mDoExt_setCurrentHeap(oldHeap);
+    return TRUE;
+
 }
 
 /* 8022BC84-8022BC8C       .text dPb_IsDelete__FP12sub_pb_class */
 static BOOL dPb_IsDelete(sub_pb_class*) {
-    /* Nonmatching */
     return TRUE;
 }
 
 /* 8022BC8C-8022BD8C       .text dPb_Delete__FP12sub_pb_class */
 static BOOL dPb_Delete(sub_pb_class* i_this) {
-    /* Nonmatching */
+    JKRHeap* oldHeap = mDoExt_setCurrentHeap((JKRHeap*)i_this->heap);
+    i_this->dPb_c->_delete(i_this->heap);
+
+    delete i_this->dPb_c;
+
+    for(int i = 0; i < 4; i++) {
+        i_this->heap->free(i_this->buffer[i]);
+    }
+
+    dComIfGp_getMsgArchive()->removeResourceAll();
+    dComIfGp_getCameraResArchive()->removeResourceAll();
+
+    i_this->heap->freeAll();
+
+    mDoExt_setCurrentHeap(oldHeap);
+
+    dComIfGp_setHeapLockFlag(0);
+    dComIfGp_setScopeMesgStatus(0);
+    dComIfGp_setDoStatusForce(0);
+    dComIfGp_setAStatusForce(0);
+    dComIfGp_setRStatusForce(0);
+    dComIfGp_setRStatus(0);
+
+    return TRUE;
 }
 
 /* 8022BD8C-8022C03C       .text dPb_Create__FP9msg_class */
 static cPhs_State dPb_Create(msg_class* i_this) {
     /* Nonmatching */
+    sub_pb_class* i_Pb = (sub_pb_class*)i_this;
+    if ((dComIfGp_isHeapLockFlag() != 0) && (dComIfGp_isHeapLockFlag() != 6)) {
+        return cPhs_INIT_e;
+    }
+
+    if (dComIfGs_getPictureNum() > 3) {
+        dComIfGs_setPictureNum(0);
+    }
+
+    i_Pb->heap = dComIfGp_getExpHeap2D();
+    dComIfGp_setHeapLockFlag(6);
+
+    JUT_ASSERT(0xaec, i_Pb->heap != 0);
+
+    JKRHeap* oldHeap = mDoExt_setCurrentHeap((JKRHeap*)i_Pb->heap);
+
+    i_Pb->dPb_c = new dJle_Pb_c();
+
+    for(int i = 0; i < 4; i++) {
+        i_Pb->buffer[i] = (ResTIMG*)i_Pb->heap->alloc(0x2000, 0x20);
+        JUT_ASSERT(0xaf5, i_Pb->buffer[i] != 0);
+        i_Pb->dPb_c->m126C[i] = i_Pb->buffer[i];
+    }
+
+    ResTIMG* buffer[4];
+    for(int i = 0; i < 4; i++) {
+        i_Pb->dPb_c->m1350[i] = (ResTIMG*)i_Pb->heap->alloc(1000, 4);
+        JUT_ASSERT(0xafc, buffer != 0);
+    }
+
+    i_Pb->dPb_c->_create(i_Pb->heap);
+    mDoExt_setCurrentHeap(oldHeap);
+
+    dComIfGp_setScopeMesgStatus(0);
+
+    if (dComIfGs_getPictureNum() < 3) {
+        dComIfGp_setDoStatusForce(0x20);
+    }
+    else {
+        dComIfGp_setDoStatusForce(0);
+    }
+
+    if (dComIfGp_getPictureStatus() == 2) {
+        dComIfGp_setAStatusForce(7);
+        dComIfGp_setRStatusForce(0x3e);
+    }
+    else if (dComIfGp_getPictureStatus() == 3) {
+        dComIfGp_setAStatusForce(0x3e);
+        dComIfGp_setRStatusForce(0x3e);
+    }
+    else {
+        dComIfGp_setAStatusForce(7);
+        dComIfGp_setRStatusForce(0x22);
+    }
+
+    return cPhs_COMPLEATE_e;
 }
 
 static msg_method_class l_dPb_Method = {

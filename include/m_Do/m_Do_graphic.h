@@ -10,6 +10,11 @@ bool mDoGph_AfterOfDraw();
 bool mDoGph_Painter();
 void mDoGph_BlankingON();
 void mDoGph_BlankingOFF();
+void mDoGph_setCaptureStep(s16 step);
+void* mDoGph_getCaptureTextureBuffer();
+void mDoGph_setCaptureCaptureFormat(u8 fmt);
+void mDoGph_setCaptureTextureFormat(u8 fmt);
+s16 mDoGph_getCaptureStep();
 
 struct ResTIMG;
 
