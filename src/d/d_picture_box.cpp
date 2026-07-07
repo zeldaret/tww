@@ -7,6 +7,17 @@
 #include "d/d_picture_box.h"
 #include "f_op/f_op_msg.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_meter.h"
+
+static sPhotoDat photo_data = {
+    "/res/Photo/KOKUOU.DDS",
+    "/res/Photo/GANONDROF.DDS",
+    "/res/Photo/DAIYOUSEI.DDS",
+    "/res/Photo/JAV.DDS",
+    "/res/Photo/CHOUYOUSEI.DDS",
+    "/res/Photo/KAZEKENJA.DDS",
+    "/res/Photo/TIKENJA.DDS",
+};
 
 /* 802258C8-80225954       .text dPb_erasePicture__Fv */
 void dPb_erasePicture() {
@@ -21,52 +32,421 @@ void dPb_erasePicture() {
 
 /* 80225954-80225E88       .text screenSet__9dJle_Pb_cFv */
 void dJle_Pb_c::screenSet() {
-    /* Nonmatching */
+    static const u32 sb_l[]  = { 'sb01', 'sb02', 'sb03', 'sb04', 'sb05', 'sb06', 'sb07', 'sb08', 'sb09', 'sb10', 'sb11', 'sb12' };
+    static const u32 st_l[]  = { 'st01', 'st02', 'st03', 'st04', 'st05', 'st06', 'st07', 'st08', 'st09', 'st10', 'st11', 'st12' };
+    static const u32 icn_l[] = { 'icn1', 'icn2', 'icn3' };
+    static const u32 emp_l[] = { 'emp1', 'emp2', 'emp3' };
+    static const u32 sp_l[]  = { 'sp00', 'sp01', 'sp02', 'sp03', 'sp04', 'sp05', 'sp06', 'sp07' };
+    static const u32 no_l[]  = { 'no1', 'no2', 'no3' };
+    static const u32 nob_l[] = { 'no1b', 'no2b', 'no3b' };
+    static const u32 nok_l[] = { 'no1k', 'no2k', 'no3k' };
+
+    
+    for (s32 i = 0; i < 12; i++) {
+        fopMsgM_setPaneData(&pane_sb[i], scrn_08, sb_l[i]);
+        fopMsgM_setPaneData(&pane_st[i], scrn_08, st_l[i]);
+        pane_sb[i].mUserArea = pane_sb[i].pane->getRotate();
+    }
+
+    fopMsgM_setPaneData(&pane_ylig, scrn_04, 'ylig');
+    fopMsgM_setPaneData(&pane_ylef, scrn_04, 'ylef');
+
+    for (s32 i = 0; i < 3; i++) {
+        fopMsgM_setPaneData(&pane_icn[i], scrn_04, icn_l[i]);
+        fopMsgM_setPaneData(&pane_emp[i], scrn_04, emp_l[i]);
+    }
+
+    fopMsgM_setPaneData(&pane_ct1, scrn_04, 'ct1');
+    fopMsgM_setPaneData(&pane_ct2, scrn_04, 'ct2');
+
+    for (s32 i = 0; i < 8; i++) {
+        fopMsgM_setPaneData(&pane_sp[i], scrn_04, sp_l[i]);
+    }
+
+    for (s32 i = 0; i < 3; i++) {
+        fopMsgM_setPaneData(&pane_no[i], scrn_04, no_l[i]);
+        fopMsgM_setPaneData(&pane_nob[i], scrn_04, nob_l[i]);
+        fopMsgM_setPaneData(&pane_nok[i], scrn_04, nok_l[i]);
+    }
+
+    fopMsgM_setPaneData(&pane_b1, scrn_04, 'b1');
+    fopMsgM_setPaneData(&pane_b2, scrn_04, 'b2');
+    fopMsgM_setPaneData(&pane_wnum, scrn_04, 'wnum');
+    fopMsgM_setPaneData(&pane_wnuk, scrn_04, 'wnuk');
+    fopMsgM_setPaneData(&pane_wpba, scrn_04, 'wpba');
+    fopMsgM_setPaneData(&pane_wbap, scrn_04, 'wbap');
+    fopMsgM_setPaneData(&pane_wpsc, scrn_04, 'wpsc');
+    fopMsgM_setPaneData(&pane_yrtn, scrn_04, 'yrtn');
+    fopMsgM_setPaneData(&pane_yzom, scrn_04, 'yzom');
+    fopMsgM_setPaneData(&pane_crtn, scrn_04, 'crtn');
+    fopMsgM_setPaneData(&pane_czom, scrn_04, 'czom');
+    fopMsgM_setPaneData(&pane_lrtn, scrn_04, 'lrtn');
+    fopMsgM_setPaneData(&pane_rzom, scrn_04, 'rzom');
+    fopMsgM_setPaneData(&pane_shut, scrn_04, 'shut');
+    fopMsgM_setPaneData(&pane_fd00, scrn_04, 'fd00');
+    fopMsgM_setPaneData(&pane_wp03, scrn_04, 'wp03');
+    fopMsgM_setPaneData(&pane_wp02, scrn_04, 'wp02');
+    fopMsgM_setPaneData(&pane_wp01, scrn_04, 'wp01');
+    fopMsgM_setPaneData(&pane_wp04, scrn_04, 'wp04');
+
+    icn_white.set(((J2DPicture*) pane_icn[0].pane)->getWhite());
+    icn_black.set(((J2DPicture*) pane_icn[0].pane)->getBlack());
+    emp_white.set(((J2DPicture*) pane_emp[0].pane)->getWhite());
+    emp_black.set(((J2DPicture*) pane_emp[0].pane)->getBlack());
+
+    pane_yrtn.mPosCenterOrig.x -= 12.0f;
+    fopMsgM_paneTrans(&pane_yrtn, 0.0f, 0.0f);
+
+    pane_yzom.mPosCenterOrig.x -= 12.0f;
+    fopMsgM_paneTrans(&pane_yzom,0.0f, 0.0f);
+
+    pane_crtn.mPosCenterOrig.x -= 12.0f;
+    fopMsgM_paneTrans(&pane_crtn,0.0f, 0.0f);
+
+    pane_czom.mPosCenterOrig.x -= 12.0f;
+    fopMsgM_paneTrans(&pane_czom,0.0, 0.0);
+
+    shutterHide();
+
+    fopMsgM_blendInit(&pane_crtn,"font_09_02.bti");
+    fopMsgM_blendInit(&pane_czom,"font_09_02.bti");
+    
+    pane_czom.pane->rotate(pane_czom.mSizeOrig.x / 2.0f, pane_czom.mSizeOrig.y / 2.0f, ROTATE_Z, 180.0f);
+
+    fopMsgM_blendInit(&pane_ylig, "cursor_00_02.bti");
+    fopMsgM_blendInit(&pane_ylef, "cursor_00_02.bti");
+    fopMsgM_blendInit(&pane_yrtn, "cursor_00_02.bti");
+    fopMsgM_blendInit(&pane_yzom, "cursor_00_02.bti");
 }
 
 /* 80225E88-8022616C       .text screenSet2__9dJle_Pb_cFv */
 void dJle_Pb_c::screenSet2() {
-    /* Nonmatching */
+    scrn_0C->search('yz80')->hide();
+    scrn_0C->search('dt80')->hide();
+
+    fopMsgM_setPaneData(&pane_tx82, scrn_0C->search('tx82'));
+    fopMsgM_setPaneData(&pane_tx83, scrn_0C->search('tx83'));
+    fopMsgM_setPaneData(&pane_tx80, scrn_0C->search('tx80'));
+    fopMsgM_setPaneData(&pane_tx81, scrn_0C->search('tx81'));
+
+    if(dComIfGs_getpConfig()->mRuby) {
+        pane_tx82.pane->move(pane_tx82.pane->getBounds().i.x, pane_tx82.pane->getBounds().i.y - 4.0f);
+        pane_tx80.pane->move(pane_tx80.pane->getBounds().i.x, pane_tx80.pane->getBounds().i.y - 4.0f);
+    }
+
+    pane_tx83.pane->move(pane_tx83.pane->getBounds().i.x, pane_tx83.pane->getBounds().i.y - 3.0f);
+    pane_tx81.pane->move(pane_tx81.pane->getBounds().i.x, pane_tx81.pane->getBounds().i.y - 3.0f);
+
+    ((J2DTextBox *)(pane_tx82.pane))->setFont(mF90);
+    ((J2DTextBox *)(pane_tx83.pane))->setFont(mF94);
+    ((J2DTextBox *)(pane_tx80.pane))->setFont(mF90);
+    ((J2DTextBox *)(pane_tx81.pane))->setFont(mF94);
+
+    J2DTextBox::TFontSize fontSize;
+    fontSize.mSizeX = fontSize.mSizeY = g_msgHIO.field_0x70;
+
+    ((J2DTextBox *)(pane_tx82.pane))->setFontSize(fontSize);
+    ((J2DTextBox *)(pane_tx80.pane))->setFontSize(fontSize);
+
+    ((J2DTextBox *)(pane_tx82.pane))->setCharSpace(0.0f);
+    ((J2DTextBox *)(pane_tx83.pane))->setCharSpace(0.0f);
+    ((J2DTextBox *)(pane_tx80.pane))->setCharSpace(0.0f);
+    ((J2DTextBox *)(pane_tx81.pane))->setCharSpace(0.0f);
+    ((J2DTextBox *)(pane_tx82.pane))->setLineSpace(28.0f);
+    ((J2DTextBox *)(pane_tx80.pane))->setLineSpace(28.0f);
 }
 
 /* 8022616C-802262CC       .text cameraAlphaInc__9dJle_Pb_cFf */
-void dJle_Pb_c::cameraAlphaInc(float) {
-    /* Nonmatching */
+void dJle_Pb_c::cameraAlphaInc(float alpha) {
+    for (s32 i = 0; i < 12; i++) {
+        fopMsgM_setNowAlpha(&pane_sb[i], alpha);
+        fopMsgM_setNowAlpha(&pane_st[i], alpha);
+    }
+
+    fopMsgM_setNowAlpha(&pane_wnum, alpha);
+    fopMsgM_setNowAlpha(&pane_wnuk, alpha);
+    fopMsgM_setNowAlpha(&pane_wpba, alpha);
+    fopMsgM_setNowAlpha(&pane_wbap, alpha);
+    fopMsgM_setNowAlpha(&pane_wpsc, alpha);
+    fopMsgM_setNowAlpha(&pane_yrtn, alpha);
+    fopMsgM_setNowAlpha(&pane_yzom, alpha);
+    fopMsgM_setNowAlpha(&pane_crtn, alpha);
+    fopMsgM_setNowAlpha(&pane_czom, alpha);
+    fopMsgM_setNowAlpha(&pane_lrtn, alpha);
+    fopMsgM_setNowAlpha(&pane_rzom, alpha);
+    fopMsgM_setNowAlpha(&pane_fd00, alpha);
+    fopMsgM_setNowAlpha(&pane_wp03, alpha);
+    fopMsgM_setNowAlpha(&pane_wp02, alpha);
+    fopMsgM_setNowAlpha(&pane_wp01, alpha);
+    fopMsgM_setNowAlpha(&pane_wp04, alpha);
+    fopMsgM_setNowAlpha(&pane_tx82, alpha);
+    fopMsgM_setNowAlpha(&pane_tx83, alpha);
+    fopMsgM_setNowAlpha(&pane_tx80, alpha);
+    fopMsgM_setNowAlpha(&pane_tx81, alpha);
 }
 
 /* 802262CC-802264A0       .text browseAlphaInc__9dJle_Pb_cFf */
-void dJle_Pb_c::browseAlphaInc(float) {
-    /* Nonmatching */
+void dJle_Pb_c::browseAlphaInc(float alpha) {
+    for (s32 i = 0; i < 12; i++) {
+        fopMsgM_setNowAlpha(&pane_sb[i], alpha);
+        fopMsgM_setNowAlpha(&pane_st[i], alpha);
+    }
+
+    fopMsgM_setNowAlpha(&pane_ylig, alpha);
+    fopMsgM_setNowAlpha(&pane_ylef, alpha);
+
+    for (s32 i = 0; i < 3; i++) {
+        if (m1371[i]) {
+            fopMsgM_setNowAlpha(&pane_icn[i], alpha);
+        }
+        fopMsgM_setNowAlpha(&pane_emp[i], alpha);
+    }
+
+    fopMsgM_setNowAlpha(&pane_ct1, alpha);
+    fopMsgM_setNowAlpha(&pane_ct2, alpha);
+
+    for (s32 i = 0; i < 8; i++) {
+        fopMsgM_setNowAlpha(&pane_sp[i], alpha);
+    }
+    
+    for(s32 i = 0; i < 3; i++) {
+        fopMsgM_setNowAlpha(&pane_no[i], alpha);
+        fopMsgM_setNowAlpha(&pane_nob[i], alpha);
+        fopMsgM_setNowAlpha(&pane_nok[i], alpha);
+    }
+    
+    fopMsgM_setNowAlpha(&pane_b1, alpha);
+    fopMsgM_setNowAlpha(&pane_b2, alpha);
+    fopMsgM_setNowAlpha(&pane_shut, alpha);
+    fopMsgM_setNowAlpha(&pane_wp03, alpha);
+    fopMsgM_setNowAlpha(&pane_wp02, alpha);
+    fopMsgM_setNowAlpha(&pane_wp01, alpha);
+    fopMsgM_setNowAlpha(&pane_wp04, alpha);
+    fopMsgM_setNowAlpha(&pane_tx82, alpha);
+    fopMsgM_setNowAlpha(&pane_tx83, alpha);
+    fopMsgM_setNowAlpha(&pane_tx80, alpha);
+    fopMsgM_setNowAlpha(&pane_tx81, alpha);
 }
 
 /* 802264A0-802265C0       .text getAlphaInc__9dJle_Pb_cFf */
-void dJle_Pb_c::getAlphaInc(float) {
-    /* Nonmatching */
+void dJle_Pb_c::getAlphaInc(float alpha) {
+    fopMsgM_setNowAlpha(&pane_ct1, alpha);
+    fopMsgM_setNowAlpha(&pane_ct2, alpha);
+
+    for (s32 i = 0; i < 8; i++) {
+        fopMsgM_setNowAlpha(&pane_sp[i], alpha);
+    }
+    
+    fopMsgM_setNowAlpha(pane_no, alpha);
+    fopMsgM_setNowAlpha(pane_nob, alpha);
+    fopMsgM_setNowAlpha(pane_nok, alpha);
+    fopMsgM_setNowAlpha(&pane_b1, alpha);
+    fopMsgM_setNowAlpha(&pane_b2, alpha);
+    fopMsgM_setNowAlpha(&pane_shut, alpha);
+    fopMsgM_setNowAlpha(&pane_wp03, alpha);
+    fopMsgM_setNowAlpha(&pane_wp02, alpha);
+    fopMsgM_setNowAlpha(&pane_wp01, alpha);
+    fopMsgM_setNowAlpha(&pane_wp04, alpha);
+    fopMsgM_setNowAlpha(&pane_tx82, alpha);
+    fopMsgM_setNowAlpha(&pane_tx83, alpha);
+    fopMsgM_setNowAlpha(&pane_tx80, alpha);
+    fopMsgM_setNowAlpha(&pane_tx81, alpha);
 }
 
 /* 802265C0-80226A40       .text alphaDec__9dJle_Pb_cFf */
-void dJle_Pb_c::alphaDec(float) {
-    /* Nonmatching */
+void dJle_Pb_c::alphaDec(float scale) {
+    for (s32 i = 0; i < 12; i++) {
+        pane_sb[i].pane->setAlpha(pane_sb[i].mNowAlpha * scale);
+        pane_st[i].pane->setAlpha(pane_st[i].mNowAlpha * scale);
+    }
+
+    pane_ylig.pane->setAlpha(pane_ylig.mNowAlpha * scale);
+    pane_ylef.pane->setAlpha(pane_ylef.mNowAlpha * scale);
+    pane_wnum.pane->setAlpha(pane_wnum.mNowAlpha * scale);
+    pane_wnuk.pane->setAlpha(pane_wnuk.mNowAlpha * scale);
+    pane_wpba.pane->setAlpha(pane_wpba.mNowAlpha * scale);
+    pane_wbap.pane->setAlpha(pane_wbap.mNowAlpha * scale);
+    pane_wpsc.pane->setAlpha(pane_wpsc.mNowAlpha * scale);
+    pane_yrtn.pane->setAlpha(pane_yrtn.mNowAlpha * scale);
+    pane_yzom.pane->setAlpha(pane_yzom.mNowAlpha * scale);
+    pane_crtn.pane->setAlpha(pane_crtn.mNowAlpha * scale);
+    pane_czom.pane->setAlpha(pane_czom.mNowAlpha * scale);
+    pane_lrtn.pane->setAlpha(pane_lrtn.mNowAlpha * scale);
+    pane_rzom.pane->setAlpha(pane_rzom.mNowAlpha * scale);
+    pane_shut.pane->setAlpha(pane_shut.mNowAlpha * scale);
+    pane_fd00.pane->setAlpha(pane_fd00.mNowAlpha * scale);
+    pane_wp03.pane->setAlpha(pane_wp03.mNowAlpha * scale);
+    pane_wp02.pane->setAlpha(pane_wp02.mNowAlpha * scale);
+    pane_wp01.pane->setAlpha(pane_wp01.mNowAlpha * scale);
+    pane_wp04.pane->setAlpha(pane_wp04.mNowAlpha * scale);
+    pane_tx82.pane->setAlpha(pane_tx82.mNowAlpha * scale);
+    pane_tx83.pane->setAlpha(pane_tx83.mNowAlpha * scale);
+    pane_tx80.pane->setAlpha(pane_tx80.mNowAlpha * scale);
+    pane_tx81.pane->setAlpha(pane_tx81.mNowAlpha * scale);
 }
 
 /* 80226A40-80226B7C       .text zoomScale__9dJle_Pb_cFv */
 void dJle_Pb_c::zoomScale() {
-    /* Nonmatching */
+    float cameraZoomScale = dComIfGp_getCameraZoomScale(0);
+    if (dComIfGp_getCameraZoomScale(0) < 1.0f) {
+        cameraZoomScale = 1.0f;
+    }
+    if (cameraZoomScale > 9.0f) {
+        cameraZoomScale = 9.0f;
+    }
+
+    if (cameraZoomScale != mZoomScale) {
+        bool tmp = true;
+        if (mZoomScale == 0.0f) {
+            tmp = false;
+        }
+
+        mZoomScale = cameraZoomScale;
+        changeScale(mZoomScale);
+        if (mZoomScale == 1.0f || mZoomScale == 9.0f) {
+            if (tmp) {
+                mDoAud_seStart(0x809);
+            }
+        }
+        else {
+            float cameraZoomForcus = dComIfGp_getCameraZoomForcus(0);
+            mDoAud_seStart(8, NULL, cameraZoomForcus * 32768.0f + 0.5f);
+        }
+    }
 }
 
 /* 80226B7C-80226C68       .text changeScale__9dJle_Pb_cFi */
-void dJle_Pb_c::changeScale(int) {
-    /* Nonmatching */
+void dJle_Pb_c::changeScale(int scale) {
+    static const char* number[] = {
+        "rupy_num_01.bti",
+        "rupy_num_02.bti",
+        "rupy_num_03.bti",
+        "rupy_num_04.bti",
+        "rupy_num_05.bti",
+        "rupy_num_06.bti",
+        "rupy_num_07.bti",
+        "rupy_num_08.bti",
+        "rupy_num_09.bti",
+    };
+    
+    f32 a = (pane_wpsc.mPosTopLeftOrig.y + pane_wbap.mSizeOrig.y / 2.0f) - pane_wbap.mPosCenterOrig.y;
+    f32 b = ((pane_wpsc.mPosTopLeftOrig.y + pane_wpsc.mSizeOrig.y) - pane_wbap.mSizeOrig.y / 2.0f) - pane_wbap.mPosCenterOrig.y;
+
+    ((J2DPicture*)pane_wnum.pane)->changeTexture(number[scale - 1], 0);
+    ((J2DPicture*)pane_wnuk.pane)->changeTexture(number[scale - 1], 0);
+
+    f32 transY;
+    if (mZoomScale < 5.0f) {
+        transY = (5.0f - mZoomScale) / 4.0f * b;
+    } else {
+        transY = (mZoomScale - 5.0f) / 4.0f * a;
+    }
+
+    fopMsgM_paneTrans(&pane_wbap, 0.0f, transY);
 }
 
 /* 80226C68-80227158       .text up_downIconMove__9dJle_Pb_cFv */
 void dJle_Pb_c::up_downIconMove() {
-    /* Nonmatching */
+    f32 f31;
+    pane_crtn.mUserArea++;
+    if (pane_crtn.mUserArea < 10) {
+        f31 = fopMsgM_valueIncrease(0x14, pane_crtn.mUserArea, 0);
+
+        ((J2DPicture *)(pane_yrtn.pane))->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+        ((J2DPicture *)(pane_yzom.pane))->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+        
+        if(dComIfGp_getCameraZoomScale(0) != 1.0f && pane_yrtn.mUserArea == 0) {
+            ((J2DPicture *)(pane_crtn.pane))->setBlendRatio(f31, 1.0f - f31, 1.0f, 1.0f);
+            fopMsgM_paneTrans(&pane_yrtn, 0.0f, 7.0f);
+        }
+
+        if (dComIfGp_getCameraZoomScale(0) != 9.0f && pane_yzom.mUserArea == 0) {
+            ((J2DPicture *)(pane_czom.pane))->setBlendRatio(f31, 1.0f - f31, 1.0f, 1.0f);
+            fopMsgM_paneTrans(&pane_yzom, 0.0f, -7.0f);
+        }
+    }
+    else {
+        f31 = fopMsgM_valueIncrease(0x14, pane_crtn.mUserArea - 10, 0);
+
+        ((J2DPicture *)(pane_yrtn.pane))->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+        ((J2DPicture *)(pane_yzom.pane))->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+
+        if (dComIfGp_getCameraZoomScale(0) == 1.0f) {
+            if (pane_yrtn.mUserArea == 0) {
+                ((J2DPicture *)(pane_crtn.pane))->setBlendRatio(1.0f - f31, f31, 1.0f, 1.0f);
+                fopMsgM_paneTrans(&pane_yrtn, 0.0f, 0.0f);
+            }
+            if (pane_crtn.mUserArea == 0x14) {
+                pane_yrtn.mUserArea = 1;
+            }
+        }
+        else if (pane_yrtn.mUserArea == 0) {
+            ((J2DPicture *)(pane_crtn.pane))->setBlendRatio(1.0f - f31, f31, 1.0f, 1.0f);
+            fopMsgM_paneTrans(&pane_yrtn, 0.0f, 0.0f);
+        }
+        else if (pane_crtn.mUserArea == 0x14) {
+            pane_yrtn.mUserArea = 0;
+        }
+        if (dComIfGp_getCameraZoomScale(0) == 9.0f) {
+            if (pane_yzom.mUserArea == 0) {
+                ((J2DPicture *)(pane_czom.pane))->setBlendRatio(1.0f - f31, f31, 1.0f, 1.0f);
+                fopMsgM_paneTrans(&pane_yzom, 0.0f, 0.0f);
+            }
+            if (pane_crtn.mUserArea == 0x14) {
+                pane_yzom.mUserArea = 1;
+            }
+        }
+        else if (pane_yzom.mUserArea == 0) {
+            ((J2DPicture *)(pane_czom.pane))->setBlendRatio(1.0f - f31, f31, 1.0f, 1.0f);
+            fopMsgM_paneTrans(&pane_yzom, 0.0f, 0.0f);
+        }
+        else if (pane_crtn.mUserArea == 0x14) {
+            pane_yzom.mUserArea = 0;
+        }
+    }
+    if (dComIfGp_getCameraZoomScale(0) == 1.0f) {
+        pane_yrtn.pane->hide();
+        pane_yzom.pane->show();
+    }
+    else if (dComIfGp_getCameraZoomScale(0) == 9.0f) {
+        pane_yrtn.pane->show();
+        pane_yzom.pane->hide();
+    }
+    else {
+        pane_yrtn.pane->show();
+        pane_yzom.pane->show();
+    }
+    if (pane_crtn.mUserArea >= 0x14) {
+        pane_crtn.mUserArea = 0;
+    }
 }
 
 /* 80227158-80227338       .text left_rightIconMove__9dJle_Pb_cFv */
 void dJle_Pb_c::left_rightIconMove() {
-    /* Nonmatching */
+    pane_ylig.mUserArea++;
+    if (pane_ylig.mUserArea < 10) {
+        if (m136E != 2) {
+            ((J2DPicture *)(pane_ylig.pane))->setBlendRatio(0.0F, 1.0f, 1.0f, 1.0f);
+            fopMsgM_paneTrans(&pane_ylig, 7.0f, 0.0f);
+        }
+        if (m136E != 1) {
+            ((J2DPicture *)(pane_ylef.pane))->setBlendRatio(0.0F, 1.0f, 1.0f, 1.0f);
+            fopMsgM_paneTrans(&pane_ylef, -7.0f, 0.0f);
+        }
+    }
+    else {
+        if (m136E != 2) {
+            ((J2DPicture *)(pane_ylig.pane))->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+            fopMsgM_paneTrans(&pane_ylig, 0.0f, 0.0f);
+        }
+        if (m136E != 1) {
+            ((J2DPicture *)(pane_ylef.pane))->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+            fopMsgM_paneTrans(&pane_ylef, 0.0f, 0.0f);
+        }
+    }
+    if (pane_ylig.mUserArea >= 0x14) {
+        pane_ylig.mUserArea = 0;
+    }
 }
 
 /* 80227338-80227520       .text clickShutterMode__9dJle_Pb_cFv */
