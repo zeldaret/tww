@@ -104,30 +104,30 @@ public:
     bool chk_partsNotMove();
     BOOL lookBack();
     u16 next_msgStatus(unsigned long*);
-    void getBitMask();
-    void getMsg_PST_1();
-    void getMsg_PST_3();
-    void getMsg_SKT_0();
-    void getMsg_KKT_0();
-    void getMsg_BMB_0();
-    void getMsg_BMB_1();
-    void getMsg_BMB_2();
-    void getMsg_BMC_0();
-    void getMsg_BMC_2();
-    void getMsg_BMC_3();
-    void getMsg_BMD_0();
-    void getMsg_BMD_1();
+    s8 getBitMask();
+    u32 getMsg_PST_1();
+    u32 getMsg_PST_3();
+    u32 getMsg_SKT_0();
+    u32 getMsg_KKT_0();
+    u32 getMsg_BMB_0();
+    u32 getMsg_BMB_1();
+    u32 getMsg_BMB_2();
+    u32 getMsg_BMC_0();
+    u32 getMsg_BMC_2();
+    u32 getMsg_BMC_3();
+    u32 getMsg_BMD_0();
+    u32 getMsg_BMD_1();
     u32 getMsg();
-    void chkAttention();
+    bool chkAttention();
     void setAttention(bool);
     fopAc_ac_c* searchByID(fpc_ProcID);
-    void partner_srch_sub(void* (*)(void*, void*));
+    bool partner_srch_sub(void* (*)(void*, void*));
     void partner_srch();
-    void bm_movPass(bool);
+    u32 bm_movPass(bool);
     void bm_setFlyAnm();
     void bm_clcFlySpd();
     void bm_clcMovSpd();
-    void bm_flyMove();
+    BOOL bm_flyMove();
     void bm_nMove();
     void setPrtcl_Flyaway();
     void delPrtcl_Flyaway();
@@ -237,17 +237,21 @@ public:
     /* 0x720 */ u8 field_0x728[0x734 - 0x728];
     /* 0x734 */ Mtx mLeftArmMtx;
     /* 0x764 */ Mtx mRightArmMtx;
-                dNpc_PathRun_c m794;
+                dNpc_PathRun_c mPathRun;
                 dNpc_EventCut_c m79C;
-                u32 m808;
+                fpc_ProcID m808;
     /* 0x80C */ cXyz m80C;
     /* 0x818 */ csXyz m818;
     /* 0x81E */ u8 m81E[0x820 - 0x81E];
     /* 0x820 */ cXyz mEyePos;
                 cXyz m82C;
-    /* 0x838 */ Vec m838;
+    /* 0x838 */ cXyz m838;
                 f32 m844;
-    /* 0x844 */ u8 m848[0x85C - 0x848];
+    /* 0x844 */ f32 m848;
+                f32 m84C;
+                f32 m850;
+                f32 m854;
+                f32 m858;
                 s16 m85C;
                 s16 m85E;
                 s16 m860;
@@ -261,7 +265,7 @@ public:
     /* 0x878 */ u8 m878[0x87A - 0x878];
                 s8 m87A;
                 s8 m87B;
-                u8 m87C;
+                s8 m87C;
                 u8 m87D;
                 u8 m87E;
     /* 0x87F */ bool m87F;
@@ -274,8 +278,11 @@ public:
                 bool m885;
                 u8 m886;
     /* 0x887 */ u8 m887;
-    /* 0x888 */ u8 m888[0x890 - 0x888];
-    /* 0x890 */ s32 m890;
+    /* 0x888 */ u8 m888;
+                bool m889;
+                u8 m88A;
+                u8 m88B[0x890 - 0x88B];
+    /* 0x890 */ s32 mbSetEyePos;
     /* 0x894 */ u8 m894;
     /* 0x895 */ u8 m895;
     /* 0x896 */ bool m896;
@@ -296,7 +303,10 @@ public:
     /* 0x8E8 */ void* m8E8;
     /* 0x8EC */ void* m8EC;
     /* 0x8F0 */ void* m8F0;
-    /* 0x8F4 */ u8 m8F4;
+#if VERSION == VERSION_DEMO
+    /* 0x900 */ u32 mHioOnly;
+#endif
+    /* 0x8F4 */ s8 m8F4;
     /* 0x8F5 */ u8 m8F5;
     /* 0x8F6 */ u8 m8F6[0x8F7 - 0x8F6];
     /* 0x8F7 */ u8 m8F7;
@@ -307,14 +317,12 @@ public:
     /* 0x8FD */ s8 m8FD;
     /* 0x8FE */ s8 m8FE;
     /* 0x8FF */ u8 m8FF;
-#if VERSION == VERSION_DEMO
-    /* 0x900 */ u32 m900;
-#endif
+
     /* 0x900 */ s8 m900;
     /* 0x901 */ s8 mType;
     /* 0x902 */ SpecificType mSpecificType;
     /* 0x903 */ s8 mSpawnCondition;
-    /* 0x904 */ u8 m904;
+    /* 0x904 */ s8 m904;
     /* 0x904 */ s8 m905;   
 
 
@@ -329,15 +337,18 @@ struct hio_prm_c{
     s32 mC;
     s16 m10;
     s16 m12;
-    f32 m14;
-    s32 m18;
-    s32 m1C;
+    f32 mAttPosOffsetY;
+    s16 m18;
+    s16 m1A;
+    s16 m1C;
+    s16 m1E;
     f32 m20;
     f32 m24;
     f32 m28;
     f32 m2C;
     f32 m30;
-    s32 m34;
+    s16 m34;
+    s16 m36;
     f32 m38;
     f32 m3C;
     f32 m40;
