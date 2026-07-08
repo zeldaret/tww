@@ -157,7 +157,7 @@ static void wave_cont(bwdg_class* i_this, u8 r4) {
 /* 00000734-00000780       .text boss_a_d_sub__FPvPv */
 static void* boss_a_d_sub(void* param_1, void* param_2) {
     UNUSED(param_2);
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BWD_e) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BWD_e) {
         return param_1;
     }
     return NULL;

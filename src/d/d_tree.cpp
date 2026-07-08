@@ -384,7 +384,7 @@ void dTree_data_c::animation(int i_roomNo) {
                 cXyz sp18;
                 MTXMultVec(anm->field_0x24, &l_particleOffset, &sp18);
 
-                JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &sp18, NULL, &l_scale, 0xAA, &mSmokeEcallback, i_roomNo, NULL, NULL, NULL);
+                JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &sp18, NULL, &l_scale, 0xAA, &mSmokeEcallback, i_roomNo, NULL, NULL, NULL);
                 if (emitter != NULL) {
                     emitter->setRate(20.0f);
                     emitter->setSpread(1.0f);
@@ -394,7 +394,7 @@ void dTree_data_c::animation(int i_roomNo) {
                 }
 
                 sp18.y -= 50.0f;
-                dComIfGp_particle_set(0x3df, &sp18);
+                dComIfGp_particle_set(dPa_name::ID_IT_JN_HAPPA02, &sp18);
 
 #if VERSION == VERSION_DEMO
                 dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));

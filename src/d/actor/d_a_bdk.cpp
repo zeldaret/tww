@@ -199,7 +199,7 @@ static void eff_hane_set(bdk_class* i_this, cXyz* offset, int param_3, signed ch
 /* 0000073C-000007A4       .text pl_view_check__FP9bdk_class */
 static BOOL pl_view_check(bdk_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    s16 angle = fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0));
+    s16 angle = fopAcM_searchPlayerAngleY(actor);
     angle = actor->current.angle.y - angle;
     if (angle < 0) {
         angle = -angle;
@@ -403,7 +403,6 @@ static void obj_draw(bdk_class* i_this) {
         dComIfGd_setList();
     }
 }
-static s32 kamen_pt[] = {0, 1, 2, 3};
 
 /* 00001278-00001488       .text kamen_draw__FP9bdk_class */
 static void kamen_draw(bdk_class* i_this) {
@@ -427,6 +426,7 @@ static void kamen_draw(bdk_class* i_this) {
 
     if (i_this->m8F8 <= 3) {
         g_env_light.setLightTevColorType(kamen_model, &actor->tevStr);
+        static s32 kamen_pt[] = {0, 1, 2, 3};
         i_this->bva->setFrame(kamen_pt[i_this->m8F8]);
         i_this->bva->entry(kamen_model);
         mDoExt_modelUpdateDL(kamen_model);
@@ -474,7 +474,7 @@ static BOOL daBdk_Draw(bdk_class* i_this) {
         mDoGph_gInf_c::onBlure();
     } else if (i_this->m259E == 1) {
         i_this->m259E = 0;
-        mDoGph_gInf_c::mBlureFlag = FALSE;
+        mDoGph_gInf_c::offBlure();
     }
 #endif
 
@@ -753,7 +753,7 @@ static void landing(bdk_class* i_this) {
         case -2:
         case 0:
             {
-                s16 angle = fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0));
+                s16 angle = fopAcM_searchPlayerAngleY(actor);
                 cMtx_YrotS(*calc_mtx, angle);
                 diff2.x = 0.0f;
                 diff2.y = 0.0f;
@@ -886,11 +886,11 @@ static void wait(bdk_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
-    f32 dist = fopAcM_searchActorDistance(actor, player);
+    f32 dist = fopAcM_searchPlayerDistance(actor);
     i_this->mF10 = 1;
     i_this->m2CC = player->current.pos;
 
-    s16 angle = actor->current.angle.y - fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0));
+    s16 angle = actor->current.angle.y - fopAcM_searchPlayerAngleY(actor);
     i_this->m2E4 = 0.0f;
     i_this->m2E8 = 5.0f;
     i_this->m2DC = 500.0f;
@@ -1079,7 +1079,7 @@ static void jida_attack(bdk_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
     cXyz vec1;
-    f32 dist = fopAcM_searchActorDistance(actor, player);
+    f32 dist = fopAcM_searchPlayerDistance(actor);
     i_this->mF10 = 1;
 
     switch (i_this->mState) {
@@ -1120,7 +1120,7 @@ static void jida_attack(bdk_class* i_this) {
                 }
 
                 if ((frame >= 4 && frame <= 0xB) || (frame >= 0x10 && frame <= 0x17)) {
-                    cLib_addCalcAngleS2(&actor->current.angle.y, fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0)), 8, 0x200);
+                    cLib_addCalcAngleS2(&actor->current.angle.y, fopAcM_searchPlayerAngleY(actor), 8, 0x200);
                     vec1.z = DEMO_SELECT(REG6_F(1), REG0_F(1)) + 10.0f;
 
                     if (frame == 4 || frame == 0x10) {
@@ -1130,7 +1130,7 @@ static void jida_attack(bdk_class* i_this) {
                     vec1.z = 0.0f;
                 }
 
-                cMtx_YrotS(*calc_mtx, fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0)));
+                cMtx_YrotS(*calc_mtx, fopAcM_searchPlayerAngleY(actor));
 
                 vec1.x = 0.0f;
                 vec1.y = -10.0f;
@@ -1305,7 +1305,7 @@ static void wind_set(bdk_class* i_this, cXyz* param2) {
 /* 00003D9C-000045C8       .text fly_attack__FP9bdk_class */
 static void fly_attack(bdk_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    fopAc_ac_c* player = daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     cXyz offset;
     cXyz offset2;
@@ -1514,7 +1514,7 @@ static void wind_attack(bdk_class* i_this) {
             break;
     }
 
-    cLib_addCalcAngleS2(&actor->current.angle.y, fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0)), 4, 0x800);
+    cLib_addCalcAngleS2(&actor->current.angle.y, fopAcM_searchPlayerAngleY(actor), 4, 0x800);
     cLib_addCalc2(&actor->current.pos.y, i_this->m2CC.y + (cM_ssin(i_this->m2C4 * 1500)) * i_this->m2E0 * 100.0f, 0.1f, 60.0f);
     cLib_addCalc2(&actor->current.pos.x, i_this->m2CC.x + cM_ssin(i_this->m2C4 * 700) * i_this->m2E0 * 200.0f, 0.1f, 40.0f);
     cLib_addCalc2(&actor->current.pos.z, i_this->m2CC.z + cM_ssin(i_this->m2C4 * 500) * i_this->m2E0 * 200.0f, 0.1f, 40.0f);
@@ -1543,7 +1543,7 @@ static void end_set(bdk_class* i_this) {
 /* 000049C0-00005018       .text damage_check__FP9bdk_class */
 static void damage_check(bdk_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    fopAc_ac_c* player = daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     i_this->mStts.Move();
     s8 sVar1 = 0;
@@ -1601,8 +1601,7 @@ static void damage_check(bdk_class* i_this) {
                 pos.z = 2.0f;
                 pos.y = 2.0f;
                 pos.x = 2.0f;
-                angle.z = 0;
-                angle.x = 0;
+                angle.x = angle.z = 0;
                 angle.y = player->shape_angle.y + 0x8000;
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, i_this->mHeadTgSph.GetTgHitPosP(), &angle, &pos);
                 dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_KAMEN_HAHEN00, i_this->mHeadTgSph.GetTgHitPosP(), &actor->shape_angle, NULL);
@@ -1780,7 +1779,7 @@ static void kamen_demo(bdk_class* i_this) {
 /* 000053C4-000057E8       .text start__FP9bdk_class */
 static void start(bdk_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     switch (i_this->mState) {
         case 0:
@@ -1869,7 +1868,7 @@ static void start(bdk_class* i_this) {
                     }
                 }
             }
-            cLib_addCalcAngleS2(&actor->current.angle.y, fopAcM_searchActorAngleY(actor, daPy_getPlayerActorClass()), 10, 0x1300);
+            cLib_addCalcAngleS2(&actor->current.angle.y, fopAcM_searchPlayerAngleY(actor), 10, 0x1300);
         default:
             break;
     }
@@ -2054,7 +2053,7 @@ static void* obj_s_sub(void* param_1, void*) {
 /* 00005F08-000065FC       .text t_fly__FP9bdk_class */
 static void t_fly(bdk_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
     s32 frame;
     cXyz pos;
     cXyz dist;
@@ -2189,7 +2188,7 @@ static void t_landing(bdk_class* i_this) {
 /* 00006680-00006C10       .text t_lastattack__FP9bdk_class */
 static void t_lastattack(bdk_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     f32 fVar1;
     f32 fVar2;
@@ -2212,7 +2211,7 @@ static void t_lastattack(bdk_class* i_this) {
         isfalling = 1;
     }
 
-    s16 angle = fopAcM_searchActorAngleY(actor, daPy_getPlayerActorClass()) - 0x8000;
+    s16 angle = fopAcM_searchPlayerAngleY(actor) - 0x8000;
     if (angle < -0xEB8) {
         angle = -0xEB8;
     } else if (0xE8 < angle) {
@@ -2261,7 +2260,7 @@ static void t_lastattack(bdk_class* i_this) {
             }
             break;
         case 3:
-            if (i_this->m2EC[0] == 0 && fopAcM_searchActorDistance(actor, daPy_getPlayerActorClass()) < REG0_F(13) + 700.0f) {
+            if (i_this->m2EC[0] == 0 && fopAcM_searchPlayerDistance(actor) < REG0_F(13) + 700.0f) {
                 anm_init(i_this, dRes_INDEX_BDK_BCK_ATTACK_T3_e, 5.0f, 0, 1.0f, -1, 0);
                 fopAcM_monsSeStart(actor, JA_SE_CV_DK_ATTACK, 0);
                 i_this->mState = 4;
@@ -2313,8 +2312,7 @@ static void t_down(bdk_class* i_this) {
             i_this->m259E = 0xB4;
 #else
             mDoGph_gInf_c::setBlureRate(REG8_S(4) + 0xb4);
-            mDoGph_gInf_c::mBlureFlag = TRUE;
-            mDoMtx_copy(cMtx_getIdentity(), mDoGph_gInf_c::mBlureMtx);
+            mDoGph_gInf_c::onBlure();
 
 #endif
 
@@ -2335,7 +2333,7 @@ static void t_down(bdk_class* i_this) {
 #if VERSION > VERSION_DEMO
                 i_this->m259E = 1;
 #else
-                mDoGph_gInf_c::mBlureFlag = FALSE;
+                mDoGph_gInf_c::offBlure();
 #endif
                 fopAcM_seStart(actor, JA_SE_CM_DK_FALL_WATER, 0);
             }
@@ -2598,9 +2596,6 @@ static void kankyo_cont(bdk_class* i_this) {
         dComIfG_Ccsp()->Set(&i_this->mWindAtSph[i]);
     }
 }
-static f32 g_d[] = {9820.0f, 9820.0f, 9820.0f, 9820.0f};
-static s16 z_d[] = {0x2000, 0x2000, -0x2000, -0x2000};
-static s16 z_d2[] = {-0x1000, -0x1000, 0x1000, 0x1000};
 
 /* 000078AC-00008520       .text kamen_break_move__FP9bdk_class */
 static void kamen_break_move(bdk_class* i_this) {
@@ -2643,6 +2638,9 @@ static void kamen_break_move(bdk_class* i_this) {
                     m9D0->x = 0;
                     m9D0->y = 0;
 
+                    static f32 g_d[] = {9820.0f, 9820.0f, 9820.0f, 9820.0f};
+                    static s16 z_d[] = {0x2000, 0x2000, -0x2000, -0x2000};
+                    static s16 z_d2[] = {-0x1000, -0x1000, 0x1000, 0x1000};
                     if (i_this->m970[i].y < DEMO_SELECT(REG12_F(2), REG0_F(2)) + -30.0f) {
                         i_this->m970[i].y = 4.0f + (10.0f + DEMO_SELECT(REG12_F(3), REG0_F(3)));
                         i_this->m9EC[i] = DEMO_SELECT(REG12_F(4), REG0_F(4)) + 3000.0f;
@@ -2654,6 +2652,7 @@ static void kamen_break_move(bdk_class* i_this) {
                         cLib_addCalc0(&i_this->m9EC[i], 1.0f, 200.0f + DEMO_SELECT(REG12_F(5), REG0_F(5)));
                         cLib_addCalcAngleS2(&i_this->m9A0[i].z, z_d[i] + target, 1, 0x1000);
                     }
+
                     vec1.x = 0.0f;
                     vec1.y = 0.0f;
                     vec1.z = i_this->m9FC[i];
@@ -2906,9 +2905,7 @@ static void demo_camera(bdk_class* i_this) {
                     mDoAud_bgmStreamPlay();
                 }
                 if (i_this->m25A6 == (s16)(DEMO_SELECT(REG13_S(6), REG0_S(6)) + 0xBE)) {
-                    local_14C.x = 0;
-                    local_14C.y = 0;
-                    local_14C.z = 0;
+                    local_14C.set(0, 0, 0);
 
                     for (s32 i = 0; i <= 2; i++) {
                         local_14C.y = 10000 + i * 0x5555 + REG8_S(4);
@@ -3033,9 +3030,7 @@ static void demo_camera(bdk_class* i_this) {
                     r27 = 0;
                     i_this->m25A0 = 0x10;
 
-                    local_154.x = 0;
-                    local_154.y = 0;
-                    local_154.z = 0;
+                    local_154.set(0, 0, 0);
 
                     for (s32 i = 0; i <= 2; i++) {
                         local_154.y = i * 0x5555;
@@ -3458,7 +3453,7 @@ static void my_effect_move(bdk_class* i_this) {
 /* 0000B30C-0000BD74       .text daBdk_Execute__FP9bdk_class */
 static BOOL daBdk_Execute(bdk_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     i_this->m260C = actor->current.pos;
     i_this->m260C.y = 9800.0f;
@@ -3507,10 +3502,10 @@ static BOOL daBdk_Execute(bdk_class* i_this) {
 
     J3DModel* model = i_this->mpMorf->getModel();
     model->setBaseScale(actor->scale);
-    mDoMtx_stack_c::transS(actor->current.pos);
-    cMtx_YrotM(mDoMtx_stack_c::get(), actor->shape_angle.y);
-    cMtx_XrotM(mDoMtx_stack_c::get(), actor->shape_angle.x);
-    cMtx_ZrotM(mDoMtx_stack_c::get(), actor->shape_angle.z);
+    mDoMtx_stack_c::transS(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z);
+    mDoMtx_stack_c::YrotM(actor->shape_angle.y);
+    mDoMtx_stack_c::XrotM(actor->shape_angle.x);
+    mDoMtx_stack_c::ZrotM(actor->shape_angle.z);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
 
     J3DModel* model_2BC = i_this->mp2BC;
@@ -3634,10 +3629,11 @@ static BOOL daBdk_Execute(bdk_class* i_this) {
             }
         }
 #if VERSION > VERSION_DEMO
-        if (foot_eff_pos[0].y > 9810.0f || (i_this->m2584 == 0)) {
+        if (foot_eff_pos[0].y > 9810.0f || (i_this->m2584 == 0))
 #else
-        if (foot_eff_pos[0].y > 9810.0f) {
+        if (foot_eff_pos[0].y > 9810.0f)
 #endif
+        {
             i_this->m2619 = 0;
 
             for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->mp6214); i++) {
@@ -3825,23 +3821,26 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     static Vec mune1_offset[] = {{105.0f, 0.0f, 40.0f}};
     static Vec mune2_offset[] = {{-15.0f, 0.0f, 25.0f}};
     static Vec mune3_offset[] = {{-15.0f, 0.0f, 110.0f}};
-    static Vec kubi1_offset[] = {{-80.0f, 0.0f, 35.0f}, {0.0f, 0.0f, -5.0f}};
+    static Vec kubi1_offset_tbl[] = {
+        {-80.0f, 0.0f, 35.0f},
+        {0.0f, 0.0f, -5.0f},
+    };
     static Vec atama_offset[] = {{40.0f, 0.0f, 5.0f}};
     static Vec tubasaL1_0_offset[] = {{0.0f, -30.0f, -5.0f}};
-    static Vec tubasaL1_1_offset[] = {
+    static Vec tubasaL1_1_offset_tbl[] = {
         {50.0f, 0.0f, 10.0f},
         {300.0f, -75.0f, -9.0f},
     };
-    static Vec tubasaL1_2_offset[] = {
+    static Vec tubasaL1_2_offset_tbl[] = {
         {90.0f, -110.0f, 0.0f},
         {110.0f, -100.0f, 30.0f},
     };
     static Vec tubasaR1_0_offset[] = {{0.0f, 30.0f, -5.0f}};
-    static Vec tubasaR1_1_offset[] = {
+    static Vec tubasaR1_1_offset_tbl[] = {
         {50.0f, 0.0f, 10.0f},
         {300.0f, 75.0f, -9.0f},
     };
-    static Vec tubasaR1_2_offset[] = {
+    static Vec tubasaR1_2_offset_tbl[] = {
         {90.0f, 110.0f, 0.0f},
         {110.0f, 100.0f, 30.0f},
     };
@@ -3875,7 +3874,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
             /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ DK_JNT_J_DK_KUBI1_e,
             /* mRadius     */ 85.0f,
-            /* mpOffsets   */ kubi1_offset,
+            /* mpOffsets   */ kubi1_offset_tbl,
         },
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
@@ -3893,13 +3892,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
             /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ DK_JNT_J_DK_TUBASA_L1_e,
             /* mRadius     */ 55.0f,
-            /* mpOffsets   */ tubasaL1_1_offset,
+            /* mpOffsets   */ tubasaL1_1_offset_tbl,
         },
         {
             /* mShapeType  */ JntHitType_CYL2_e,
             /* mJointIndex */ DK_JNT_J_DK_TUBASA_L1_e,
             /* mRadius     */ 110.0f,
-            /* mpOffsets   */ tubasaL1_2_offset,
+            /* mpOffsets   */ tubasaL1_2_offset_tbl,
         },
         {
             /* mShapeType  */ JntHitType_SPH_e,
@@ -3911,13 +3910,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
             /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ DK_JNT_J_DK_TUBASA_R1_e,
             /* mRadius     */ 55.0f,
-            /* mpOffsets   */ tubasaR1_1_offset,
+            /* mpOffsets   */ tubasaR1_1_offset_tbl,
         },
         {
             /* mShapeType  */ JntHitType_CYL2_e,
             /* mJointIndex */ DK_JNT_J_DK_TUBASA_R1_e,
             /* mRadius     */ 110.0f,
-            /* mpOffsets   */ tubasaR1_2_offset,
+            /* mpOffsets   */ tubasaR1_2_offset_tbl,
         },
     };
     i_this->mp63C8 = JntHit_create(i_this->mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));

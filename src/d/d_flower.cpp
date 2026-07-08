@@ -5,94 +5,592 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_flower.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_overlap_mng.h"
+#include "m_Do/m_Do_lib.h"
+#include "SSystem/SComponent/c_counter.h"
+#include "d/actor/d_a_player.h"
+
+#include "assets/l_Txq_bessou_hanaTEX.h"
+const u16 l_Txq_bessou_hanaTEX__width = 0x40;
+const u16 l_Txq_bessou_hanaTEX__height = 0x80;
+
+f32 l_pos3[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+f32 l_texCoord3[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+
+#include "assets/l_QbsafDL.h"
+#include "assets/l_QbsfwDL.h"
+
+#include "assets/l_Txo_ob_flower_white_64x64TEX.h"
+const u16 l_Txo_ob_flower_white_64x64TEX__width = 0x40;
+const u16 l_Txo_ob_flower_white_64x64TEX__height = 0x40;
+
+f32 l_pos[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+f32 l_texCoord[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+
+#include "assets/l_OhanaDL.h"
+#include "assets/l_Ohana_gutDL.h"
+
+#include "assets/l_Txo_ob_flower_pink_64x64TEX.h"
+const u16 l_Txo_ob_flower_pink_64x64TEX__width = 0x40;
+const u16 l_Txo_ob_flower_pink_64x64TEX__height = 0x40;
+f32 l_pos2[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+GXColor l_color2[] = {
+    {0xCC, 0xCC, 0xCC, 0xFF},
+    {0x7F, 0x7F, 0x7F, 0xFF},
+    {0xB2, 0xB2, 0xB2, 0xFF},
+    {0xE5, 0xE5, 0xE5, 0xFF},
+    {0xFF, 0xFF, 0xFF, 0xFF},
+};
+f32 l_texCoord2[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+
+#include "assets/l_Ohana_highDL.h"
+#include "assets/l_Ohana_high_gutDL.h"
+
+#include "assets/l_matDL3.h"
+l_matDL3(l_Txq_bessou_hanaTEX)
+
+#include "assets/l_matDL__d_flower.h"
+l_matDL__d_flower(l_Txo_ob_flower_white_64x64TEX)
+
+#include "assets/l_matDL2.h"
+l_matDL2(l_Txo_ob_flower_pink_64x64TEX)
+
+static bool l_CutSoundFlag = false;
+
+GXColor l_color3[] = {
+    {0xFF, 0xFF, 0xFF, 0xFF},
+    {0x80, 0x80, 0x80, 0xFF},
+};
+static GXColor l_color[] = {
+    {0xFF, 0xFF, 0xFF, 0xFF},
+    {0xB2, 0xB2, 0xB2, 0xFF},
+};
 
 /* 800BFA9C-800BFD28       .text WorkCo__14dFlower_data_cFP10fopAc_ac_cUli */
-void dFlower_data_c::WorkCo(fopAc_ac_c*, u32, int) {
-    /* Nonmatching */
+void dFlower_data_c::WorkCo(fopAc_ac_c* param_1, u32 param_2, int param_3) {
+    cXyz temp1;
+    temp1.x = field_0x04.x - param_1->current.pos.x;
+    temp1.z = field_0x04.z - param_1->current.pos.z;
+    f32 val = temp1.abs2XZ();
+
+    if(val > 900.0f) {
+        return;
+    }
+
+    temp1.y = field_0x04.y - param_1->current.pos.y;
+    s16 angle = cM_atan2s(temp1.x, temp1.z);
+    f32 val2 = std::sqrtf(val);
+
+    dFlower_anm_c* pAnm;
+    if(field_0x01 < 8) {
+        cXyz pos;
+        if(field_0x03 == 0 && !cLib_checkBit<u8>(field_0x00, 0x8) && param_1->speedF > 16.0f) {
+            pos.set(field_0x04.x, field_0x04.y + 20.0f, field_0x04.z);
+
+            u16 particleID;
+            if(!cLib_checkBit<u8>(field_0x00, 0x20)) {
+                particleID = 0x3DE;
+            }
+            else if(!cLib_checkBit<u8>(field_0x00, 0x40)) {
+                particleID = 0x3DD;
+            }
+            else {
+                particleID = 0x82C6;
+            }
+
+            dKy_tevstr_c* tevStr = dComIfGp_roomControl_getTevStr(param_3);
+            JPABaseEmitter* pEmtr = dComIfGp_particle_set(particleID, &pos, NULL, NULL, 0xFF, NULL, param_3, &tevStr->mColorK0, &tevStr->mColorK0);
+            if(pEmtr) {
+                f32 temp;
+                if(particleID == 0x82C6) {
+                    temp = 3.0f;
+                }
+                else {
+                    temp = 1.0f;
+                }
+
+                pEmtr->setRate(temp);
+                field_0x03 = 0x10;
+            }
+        }
+
+        int idx = dComIfGp_getFlower()->newAnm();
+        if(idx < 0) {
+            return;
+        }
+
+        field_0x01 = idx;
+        pAnm = dComIfGp_getFlower()->getAnm(field_0x01);
+    }
+    else {
+        pAnm = dComIfGp_getFlower()->getAnm(field_0x01);
+    }
+
+    pAnm->field_0x02 = angle;
+    pAnm->field_0x04 = cM_atan2s(30.0f - val2, 40.0f);
 }
 
 /* 800BFD28-800C0018       .text WorkAt_NoCutAnim__14dFlower_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInfP8cCcD_Obj */
-void dFlower_data_c::WorkAt_NoCutAnim(fopAc_ac_c*, u32, int, dCcMassS_HitInf*, cCcD_Obj*) {
-    /* Nonmatching */
+void dFlower_data_c::WorkAt_NoCutAnim(fopAc_ac_c* param_1, u32 param_2, int param_3, dCcMassS_HitInf* param_4, cCcD_Obj* param_5) {
+    dCcD_GObjInf* pObjInf = dCcD_GetGObjInf(param_5);
+    cXyz temp = *pObjInf->GetAtVecP();
+    f32 val = temp.abs2XZ();
+    f32 temp2;
+    if(std::abs(val) < G_CM3D_F_ABS_MIN && fopAcM_GetName(param_1) == fpcNm_PLAYER_e) {
+        temp.x = field_0x04.x - param_1->current.pos.x;
+        temp.y = field_0x04.y - param_1->current.pos.y;
+        temp.z = field_0x04.z - param_1->current.pos.z;
+        temp2 = temp.abs2XZ();
+    }
+
+    temp2 = temp.abs2XZ();
+    s16 angle = cM_atan2s(temp.x, temp.z);
+    temp2 = std::sqrtf(temp2);
+
+    dFlower_anm_c* pAnm;
+    if(field_0x01 < 8) {
+        cXyz pos;
+        if(field_0x03 == 0 && !cLib_checkBit<u8>(field_0x00, 0x8) && temp2 > 16.0f) {
+            pos.set(field_0x04.x, field_0x04.y + 20.0f, field_0x04.z);
+
+            u16 particleID;
+            if(!cLib_checkBit<u8>(field_0x00, 0x20)) {
+                particleID = 0x3DE;
+            }
+            else if(!cLib_checkBit<u8>(field_0x00, 0x40)) {
+                particleID = 0x3DD;
+            }
+            else {
+                particleID = 0x82C6;
+            }
+
+            dKy_tevstr_c* tevStr = dComIfGp_roomControl_getTevStr(param_3);
+            JPABaseEmitter* pEmtr = dComIfGp_particle_set(particleID, &pos, NULL, NULL, 0xFF, NULL, param_3, &tevStr->mColorK0, &tevStr->mColorK0);
+            if(pEmtr) {
+                f32 temp;
+                if(particleID == 0x82C6) {
+                    temp = 3.0f;
+                }
+                else {
+                    temp = 1.0f;
+                }
+
+                pEmtr->setRate(temp);
+                field_0x03 = 0x10;
+            }
+        }
+
+        int idx = dComIfGp_getFlower()->newAnm();
+        if(idx < 0) {
+            return;
+        }
+
+        field_0x01 = idx;
+        pAnm = dComIfGp_getFlower()->getAnm(field_0x01);
+    }
+    else {
+        pAnm = dComIfGp_getFlower()->getAnm(field_0x01);
+    }
+
+    pAnm->field_0x02 = angle;
+    pAnm->field_0x04 = cM_atan2s(temp2, 40.0f);
 }
 
 /* 800C0018-800C0270       .text WorkAt__14dFlower_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInf */
-void dFlower_data_c::WorkAt(fopAc_ac_c*, u32, int, dCcMassS_HitInf*) {
-    /* Nonmatching */
+void dFlower_data_c::WorkAt(fopAc_ac_c* param_1, u32 param_2, int param_3, dCcMassS_HitInf* param_4) {
+    cCcD_Obj* pHitObj = param_4->GetAtHitObj();
+    if(pHitObj && (pHitObj->ChkAtType(AT_TYPE_WIND) || pHitObj->ChkAtType(AT_TYPE_NORMAL_ARROW) || pHitObj->ChkAtType(AT_TYPE_FIRE_ARROW) || pHitObj->ChkAtType(AT_TYPE_ICE_ARROW) || pHitObj->ChkAtType(AT_TYPE_LIGHT_ARROW) || pHitObj->ChkAtType(AT_TYPE_HOOKSHOT))) {
+        WorkAt_NoCutAnim(param_1, param_2, param_3, param_4, pHitObj);
+        return;
+    }
+
+    if(field_0x01 >= 8) {
+        dComIfGp_getFlower()->deleteAnm(field_0x01);
+    }
+
+    cLib_onBit<u8>(field_0x00, 0x8);
+
+    static csXyz ang(0, 0, 0);
+
+    u16 particleID;
+    dKy_tevstr_c* tevStr = dComIfGp_roomControl_getTevStr(param_3);
+    cXyz temp2(field_0x04.x, field_0x04.y, field_0x04.z);
+    if(!cLib_checkBit<u8>(field_0x00, 0x20)) {
+        particleID = dPa_name::ID_IT_JN_FLOWER_W;
+    }
+    else if(!cLib_checkBit<u8>(field_0x00, 0x40)) {
+        particleID = dPa_name::ID_IT_JN_FLOWER_P;
+    }
+    else {
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_FLOWER_OL00, &temp2, &ang, NULL, 0xFF, NULL, param_3, &tevStr->mColorK0, &tevStr->mColorK0);
+        particleID = dPa_name::ID_IT_SN_FLOWER_OF00;
+    }
+
+    dComIfGp_particle_set(particleID, &temp2, &ang, NULL, 0xFF, NULL, param_3, &tevStr->mColorK0, &tevStr->mColorK0);
+
+    if(field_0x02 >= 0) {
+        fopAcM_createItemFromTable(&field_0x04, field_0x02, -1, param_3, 0, NULL, 1);
+    }
+
+    if(!l_CutSoundFlag) {
+        l_CutSoundFlag = true;
+        mDoAud_seStart(JA_SE_LK_CUT_GRASS, &field_0x04, 0, dComIfGp_getReverb(param_3));
+    }
 }
 
 /* 800C0270-800C0430       .text hitCheck__14dFlower_data_cFP10fopAc_ac_ci */
-void dFlower_data_c::hitCheck(fopAc_ac_c*, int) {
-    /* Nonmatching */
+void dFlower_data_c::hitCheck(fopAc_ac_c* param_1, int param_2) {
+    dCcMassS_HitInf hitInf;
+    fopAc_ac_c* temp;
+    bool temp2 = false;
+    u32 ret = dComIfG_Ccsp()->ChkMass(&field_0x04, &temp, &hitInf);
+    temp2 = cLib_checkBit<u32>(ret, 1) && (temp && fopAcM_GetName(temp) != fpcNm_TSUBO_e && fopAcM_GetName(temp) != fpcNm_STONE_e);
+
+    if(!cLib_checkBit<u32>(ret, 0x2) && !temp2) {
+        if(field_0x01 >= 8) {
+            dFlower_anm_c* pAnm = dComIfGp_getFlower()->getAnm(field_0x01);
+            s16 temp3 = pAnm->field_0x02 & 0xE000;
+            dFlower_anm_c* pAnm2 = dComIfGp_getFlower()->getAnm((pAnm->field_0x02 >> 0xD) & 0x7);
+            if(cLib_addCalcAngleS(&pAnm->field_0x04, pAnm2->field_0x04, 0x10, 0xFA0, 0x64) == 0) {
+                if(cLib_chaseAngleS(&pAnm->field_0x02, temp3, 0x320)) {
+                    dComIfGp_getFlower()->deleteAnm(field_0x01);
+                    field_0x01 = (pAnm->field_0x02 >> 0xD) & 0x7;
+                }
+            }
+        }
+    }
+    else {
+        if(cLib_checkBit<u32>(ret, 0x2)) {
+            WorkCo(temp, ret, param_2);
+        }
+        if(!cLib_checkBit<u8>(field_0x00, 0x8) && temp2) {
+            WorkAt(temp, ret, param_2, &hitInf);
+        }
+    }
 }
 
 /* 800C0430-800C0440       .text newData__14dFlower_room_cFP14dFlower_data_c */
-void dFlower_room_c::newData(dFlower_data_c*) {
-    /* Nonmatching */
+void dFlower_room_c::newData(dFlower_data_c* pData) {
+    pData->field_0x40 = field_0x0;
+    field_0x0 = pData;
 }
 
 /* 800C0440-800C04A4       .text deleteData__14dFlower_room_cFv */
 void dFlower_room_c::deleteData() {
-    /* Nonmatching */
+#if VERSION == VERSION_DEMO
+    dFlower_data_c* r6 = field_0x0;
+    while(field_0x0) {
+        cLib_setBit<u8>(r6->field_0x00, 0);
+        field_0x0 = field_0x0->field_0x40;
+    }
+#else
+    while(field_0x0) {
+        cLib_setBit<u8>(field_0x0->field_0x00, 0);
+        mDoAud_seDeleteObject(&field_0x0->field_0x04);
+        field_0x0 = field_0x0->field_0x40;
+    }
+#endif
 }
 
 /* 800C04A4-800C05B8       .text __ct__16dFlower_packet_cFv */
 dFlower_packet_c::dFlower_packet_c() {
-    /* Nonmatching */
+    dFlower_data_c* pData = mData;
+    for(int i = 0; i < ARRAY_SIZE(mData); i++, pData++) {
+        cLib_setBit<u8>(pData->field_0x00, 0);
+    }
+
+    dFlower_anm_c* pAnm = mAnm;
+    for(int i = 0; i < ARRAY_SIZE(mAnm); i++, pAnm++) {
+        pAnm->field_0x00 = 0;
+    }
+
+    s16 angle = 0;
+    for(int i = 0; i < 8; i++, angle += 0x2000) {
+        setAnm(i, angle);
+    }
 }
 
 /* 800C05B8-800C05C4       .text __ct__14dFlower_room_cFv */
 dFlower_room_c::dFlower_room_c() {
-    /* Nonmatching */
+    field_0x0 = NULL;
 }
 
 /* 800C05C4-800C05D0       .text __ct__13dFlower_anm_cFv */
 dFlower_anm_c::dFlower_anm_c() {
-    /* Nonmatching */
+    field_0x00 = 0;
 }
 
 /* 800C05D0-800C05DC       .text __ct__14dFlower_data_cFv */
 dFlower_data_c::dFlower_data_c() {
-    /* Nonmatching */
+    cLib_setBit<u8>(field_0x00, 0);
 }
 
 /* 800C05DC-800C0898       .text draw__16dFlower_packet_cFv */
 void dFlower_packet_c::draw() {
-    /* Nonmatching */
+#if VERSION > VERSION_JPN
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+#endif
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXSetArray(GX_VA_POS, l_pos, 0xC);
+    GXSetArray(GX_VA_CLR0, l_color, 0x4);
+    GXSetArray(GX_VA_TEX0, l_texCoord, 0x8);
+    GXCallDisplayList(l_matDL, 0xA0);
+
+    dFlower_room_c* pRoom = &mRoom[0];
+    for(int i = 0; i < (s32)ARRAY_SIZE(mRoom); pRoom++, i++) {
+        dKy_tevstr_c* tevstr = dComIfGp_roomControl_getTevStr(i);
+        GXSetTevColorS10(GX_TEVREG0, tevstr->mColorC0);
+        GXSetTevColor(GX_TEVREG1, tevstr->mColorK0);
+        dKy_GxFog_tevstr_set(tevstr);
+
+        dFlower_data_c* pNext = pRoom->field_0x0;
+        while(pNext) {
+            if(!cLib_checkBit<u8>(pNext->field_0x00, 0x4) && !cLib_checkBit<u8>(pNext->field_0x00, 0x20)) {
+                GXLoadPosMtxImm(pNext->field_0x10, 0);
+
+                if(!cLib_checkBit<u8>(pNext->field_0x00, 0x8)) {
+                    GXCallDisplayList(l_OhanaDL, 0x100);
+                }
+                else {
+                    GXCallDisplayList(l_Ohana_gutDL, 0xA0);
+                }
+            }
+
+            pNext = pNext->field_0x40;
+        }
+    }
+
+    GXSetArray(GX_VA_POS, field_0x4608, 0xC);
+    GXSetArray(GX_VA_CLR0, field_0x460c, 0x4);
+    GXSetArray(GX_VA_TEX0, field_0x4610, 0x8);
+    GXCallDisplayList(field_0x4614, field_0x4618);
+
+    pRoom = &mRoom[0];
+    for(int i = 0; i < (s32)ARRAY_SIZE(mRoom); pRoom++, i++) {
+        dKy_tevstr_c* tevstr = dComIfGp_roomControl_getTevStr(i);
+        GXSetTevColorS10(GX_TEVREG0, tevstr->mColorC0);
+        GXSetTevColor(GX_TEVREG1, tevstr->mColorK0);
+
+        dFlower_data_c* pNext = pRoom->field_0x0;
+        while(pNext) {
+            if(!cLib_checkBit<u8>(pNext->field_0x00, 0x4) && cLib_checkBit<u8>(pNext->field_0x00, 0x20)) {
+                GXLoadPosMtxImm(pNext->field_0x10, 0);
+
+                if(!cLib_checkBit<u8>(pNext->field_0x00, 0x8)) {
+                    GXCallDisplayList(field_0x461c, field_0x4620);
+                }
+                else {
+                    GXCallDisplayList(field_0x4624, field_0x4628);
+                }
+            }
+
+            pNext = pNext->field_0x40;
+        }
+    }
+
+#if VERSION > VERSION_JPN
+    J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 800C0898-800C0A88       .text calc__16dFlower_packet_cFv */
 void dFlower_packet_c::calc() {
-    /* Nonmatching */
+    dFlower_anm_c* pAnm = getAnm();
+    for(int i = 0; i < 8; pAnm++, i++) {
+        pAnm->field_0x04 = cM_scos((g_Counter.mTimer + i * 0xFA) * 1000.0f) * 1000.0f + 1000.0f;
+    }
+
+    int roomNo = dComIfGp_roomControl_getStayNo();
+    dFlower_data_c* pData = mRoom[roomNo].field_0x0;
+    if(mRoom[roomNo].field_0x0) {
+        daPy_py_c* pPlayer = (daPy_py_c*)daPy_getPlayerActorClass();
+        setPlayerCutFlg(pPlayer->getCutAtFlg());
+        cXyz top = pPlayer->getSwordTopPos();
+        cXyz temp = top - pPlayer->current.pos;
+        setPlayerSwordAngY(cM_atan2s(temp.x, temp.z));
+        temp = getPlayerSwordTop() - top;
+        setPlayerSwordMoveAngY(cM_atan2s(temp.x, temp.z));
+        setPlayerSwordTop(top);
+
+        l_CutSoundFlag = false;
+
+        dComIfG_Ccsp()->SetMassAttr(30.0f, 50.0f, 0xB, 0x2);
+
+        do {
+            if(!cLib_checkBit<u8>(pData->field_0x00, 0x4)) {
+                pData->hitCheck(pPlayer, roomNo);
+            }
+
+            pData = pData->field_0x40;
+        } while(pData);
+    }
 }
 
 /* 800C0A88-800C0D38       .text checkGroundY__FR4cXyz */
-static void checkGroundY(cXyz&) {
-    /* Nonmatching */
+static f32 checkGroundY(cXyz& pos) {
+    dBgS_GndChk gndChk;
+
+    pos.y += 50.0f;
+    gndChk.SetPos(&pos);
+    f32 y = dComIfG_Bgsp()->GroundCross(&gndChk);
+    pos.y -= 50.0f;
+
+    if(y <= -G_CM3D_F_INF) {
+        return pos.y;
+    }
+
+    return y;
 }
 
 /* 800C0D38-800C0EF4       .text update__16dFlower_packet_cFv */
 void dFlower_packet_c::update() {
-    /* Nonmatching */
+    dFlower_anm_c* pAnm = getAnm();
+    for(int i = 0; i < (s32)ARRAY_SIZE(mAnm); pAnm++, i++) {
+        mDoMtx_stack_c::YrotS(pAnm->field_0x02);
+        mDoMtx_stack_c::XrotM(pAnm->field_0x04);
+        mDoMtx_stack_c::YrotM(-pAnm->field_0x02);
+        mDoMtx_copy(mDoMtx_stack_c::get(), pAnm->mMtx);
+    }
+
+    dFlower_data_c* pData = getData();
+    pAnm = getAnm();
+    int j = 0;
+    for(int i = 0; i < (s32)ARRAY_SIZE(mData); i++, pData++) {
+        if(cLib_checkBit<u8>(pData->field_0x00, 0x2)) {
+            cLib_calcTimer(&pData->field_0x03);
+
+            if(cLib_checkBit<u8>(pData->field_0x00, 0x10) && j < 8) {
+                pData->field_0x04.y = checkGroundY(pData->field_0x04);
+                cLib_offBit<u8>(pData->field_0x00, 0x10);
+                j++;
+            }
+
+            cXyz temp(pData->field_0x04.x, pData->field_0x04.y + 260.0f, pData->field_0x04.z);
+            if(mDoLib_clipper::clip(j3dSys.getViewMtx(), temp, 260.0f)) {
+                cLib_onBit<u8>(pData->field_0x00, 0x4);
+            }
+            else {
+                cLib_offBit<u8>(pData->field_0x00, 0x4);
+                MtxP pMtx = pAnm[pData->field_0x01].mMtx;
+                pMtx[0][3] = pData->field_0x04.x;
+                pMtx[1][3] = pData->field_0x04.y;
+                pMtx[2][3] = pData->field_0x04.z;
+                mDoMtx_concat(j3dSys.getViewMtx(), pMtx, pData->field_0x10);
+            }
+        }
+    }
+
+    j3dSys.getDrawBuffer(0)->entryImm(this, 0);
 }
 
 /* 800C0EF4-800C10D4       .text setData__16dFlower_packet_cFP14dFlower_data_ciScR4cXyziSc */
-void dFlower_packet_c::setData(dFlower_data_c*, int, s8, cXyz&, int, s8) {
-    /* Nonmatching */
+void dFlower_packet_c::setData(dFlower_data_c* param_1, int param_2, s8 param_3, cXyz& param_4, int param_5, s8 param_6) {
+    f32 temp;
+    if(fopOvlpM_IsPeek()) {
+        temp = checkGroundY(param_4);
+        cLib_setBit<u8>(param_1->field_0x00, 0x6);
+    }
+    else {
+        temp = param_4.y;
+        cLib_setBit<u8>(param_1->field_0x00, 0x16);
+    }
+
+    if(param_3 == 2) {
+        cLib_onBit<u8>(param_1->field_0x00, 0x20);
+    }
+
+    param_1->field_0x01 = cM_rndF(7.0f);
+
+    param_1->field_0x04.set(param_4.x, temp, param_4.z);
+    param_1->field_0x02 = param_6;
+    param_1->field_0x03 = 0;
+
+    if(mRoom[param_5].field_0x0 == NULL) {
+        if(strcmp(dComIfGp_getStartStageName(), "sea") == 0 && param_5 == 0x21) {
+            field_0x4608 = l_pos3;
+            field_0x460c = l_color3;
+            field_0x4610 = l_texCoord3;
+            field_0x4614 = l_matDL3;
+            field_0x4618 = 0xA0;
+            field_0x461c = l_QbsfwDL;
+            field_0x4620 = 0x660;
+            field_0x4624 = l_QbsafDL;
+            field_0x4628 = 0x80;
+        }
+        else {
+            field_0x4608 = l_pos2;
+            field_0x460c = l_color2;
+            field_0x4610 = l_texCoord2;
+            field_0x4614 = l_matDL2;
+            field_0x4618 = 0xA0;
+            field_0x461c = l_Ohana_highDL;
+            field_0x4620 = 0x120;
+            field_0x4624 = l_Ohana_high_gutDL;
+            field_0x4628 = 0x80;
+        }
+    }
+
+    if(field_0x461c == l_QbsfwDL) {
+        cLib_onBit<u8>(param_1->field_0x00, 0x40);
+    }
+
+    mRoom[param_5].newData(param_1);
+
+    field_0x0010 = param_2;
 }
 
 /* 800C10D4-800C121C       .text newData__16dFlower_packet_cFScR4cXyziSc */
-void dFlower_packet_c::newData(s8, cXyz&, int, s8) {
-    /* Nonmatching */
+dFlower_data_c* dFlower_packet_c::newData(s8 param_1, cXyz& param_2, int i_roomNo, s8 param_4) {
+    JUT_ASSERT(VERSION_SELECT(2927, 2928, 2934, 2934), 0 <= i_roomNo && i_roomNo < 64);
+
+    dFlower_data_c* pData = &mData[field_0x0010];
+    for(int i = field_0x0010; i < (s32)ARRAY_SIZE(mData); pData++, i++) {
+        if(!cLib_checkBit<u8>(pData->field_0x00, 0x2)) {
+            setData(pData, i, param_1, param_2, i_roomNo, param_4);
+            return pData;
+        }
+    }
+
+    pData = getData();
+    for(int i = 0; i < field_0x0010; pData++, i++) {
+        if(!cLib_checkBit<u8>(pData->field_0x00, 0x2)) {
+            setData(pData, i, param_1, param_2, i_roomNo, param_4);
+            return pData;
+        }
+    }
+
+    return NULL;
 }
 
 /* 800C121C-800C1264       .text newAnm__16dFlower_packet_cFv */
-void dFlower_packet_c::newAnm() {
-    /* Nonmatching */
+int dFlower_packet_c::newAnm() {
+    dFlower_anm_c* pAnm = &mAnm[8];
+    for(int i = 8; i < ARRAY_SIZE(mAnm); pAnm++, i++) {
+        if(pAnm->field_0x00 == 0) {
+            pAnm->field_0x00 = 1;
+            pAnm->field_0x02 = 0;
+            pAnm->field_0x04 = 0;
+
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 /* 800C1264-800C1288       .text setAnm__16dFlower_packet_cFis */
-void dFlower_packet_c::setAnm(int, s16) {
-    /* Nonmatching */
+void dFlower_packet_c::setAnm(int param_1, s16 angle) {
+    dFlower_anm_c* anm = getAnm(param_1);
+
+    anm->field_0x00 = 1;
+    anm->field_0x02 = angle;
+    anm->field_0x04 = 0;
 }

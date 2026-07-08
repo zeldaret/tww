@@ -89,7 +89,7 @@ public:
     void hide() { mVisible = false; }
     bool isVisible() { return mVisible; }
 
-    void getBounds() {}
+    const JGeometry::TBox2<f32>& getBounds() { return mBounds; }
     const JGeometry::TBox2<f32>& getGlbBounds() { return mGlobalBounds; }
     f32 getRotate() const { return mRotation; }
     void place(const JGeometry::TBox2<f32>&) {}
