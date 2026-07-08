@@ -165,7 +165,9 @@ public:
     void setRandom(u8) {}
     void setSeInterDolbyU7(u8, u8, u32, u8) {}
     void setSeInterFxmixU7(u8, u8, u32, u8) {}
-    void setSeqInterVolumeU7(u8, u8, u32) {}
+    void setSeqInterVolumeU7(u8 type, u8 value, u32 moveTime) {
+        setSeqInterVolume(type, value / 127.0f, moveTime);
+    }
     void setStatus(u8) {}
     void setTrack(u8) {}
     void setTrackVolumeU7(u8, u8, u32) {}
@@ -183,7 +185,7 @@ public:
     /* 0x09 */ u8 field_0x9;
     /* 0x0a */ s16 field_0xa;
     /* 0x0c */ u32 mSoundID;
-    /* 0x10 */ int field_0x10;
+    /* 0x10 */ u32 field_0x10;
     /* 0x14 */ u32 mFadeCounter;
     /* 0x18 */ u32 field_0x18;
     /* 0x1c */ int field_0x1c;
@@ -214,7 +216,7 @@ namespace JAInter {
         /* 0x00 */ f32 mTargetValue;
         /* 0x04 */ f32 mCurrentValue;
         /* 0x08 */ f32 mMoveAmount;
-        /* 0x0C */ int mMoveCounter;
+        /* 0x0C */ u32 mMoveCounter;
     };
 
     class MoveParaSetInitHalf : public MoveParaSet {
