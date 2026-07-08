@@ -8,6 +8,7 @@
 #include "d/actor/d_a_bwds.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"
+#include "d/d_cc_uty.h"
 #include "d/d_lib.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
@@ -184,6 +185,7 @@ static BOOL daBwd_Draw(bwd_class* i_this) {
         mDoGph_gInf_c::offBlure();
     }
 #endif
+
     J3DModel* model = i_this->mpHeadMorf->getModel();
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, &actor->tevStr);
     g_env_light.setLightTevColorType(model, &actor->tevStr);
