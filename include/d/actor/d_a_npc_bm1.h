@@ -1,6 +1,7 @@
 #ifndef D_A_NPC_BM1_H
 #define D_A_NPC_BM1_H
 
+#include "JSystem/JParticle/JPAEmitter.h"
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -28,6 +29,21 @@ enum {
     Invalid = 0xFF
 };
 
+typedef s8 Type;
+enum{
+    t_Uninitialized,
+    t_Quill,
+    t_Akoot,
+    t_Skett,
+    t_Basht,
+    t_Bisht,
+    t_Hoskit,
+    t_Ilari,
+    t_Pashli,
+    t_Namali,
+    t_Kogoli,
+    t_Invalid = 0xFF,
+};
 
 
 class daNpc_Bm1_c : public fopNpc_npc_c {
@@ -143,7 +159,7 @@ public:
     void eInit_setLocFlag(int*);
     void eInit_setShapeAngleY(int*, short);
     void eInit_setEvTimer(int*);
-    void eInit_calcRelativPos(cXyz*, int*);
+    static void eInit_calcRelativPos(cXyz*, int*);
     void eInit_ATTENTION_(int*, int*, int*, cXyz*, int*, int*, int*);
     void eInit_SET_PLYER_GOL_(int*, cXyz*, int*);
     void eInit_prmFloat(float*, float);
@@ -230,7 +246,11 @@ public:
                 s16 m70A;
                 s16 m70C;
     /* 0x710 */ mDoExt_McaMorf* m710;
-    /* 0x714 */ u8 field_0x714[0x71C - 0x714];
+                u8 m714;
+                u8 m715;
+                s8 m716;
+                s8 m717;
+    /* 0x714 */ u8 m718[0x71C - 0x718];
     /* 0x71C */ mDoExt_McaMorf* m71C;
                 u32 m720;
                 s8 m_UNK_jnt_num;
@@ -276,12 +296,13 @@ public:
                 bool m883;
     /* 0x884 */ u8 m884;
                 bool m885;
-                u8 m886;
+                bool m886;
     /* 0x887 */ u8 m887;
     /* 0x888 */ u8 m888;
                 bool m889;
                 u8 m88A;
-                u8 m88B[0x890 - 0x88B];
+                u8 m88B;
+                u8 m88C[0x890 - 0x88C];                
     /* 0x890 */ s32 mbSetEyePos;
     /* 0x894 */ u8 m894;
     /* 0x895 */ u8 m895;
@@ -295,14 +316,14 @@ public:
     /* 0x8C9 */ u8 m8C9[0x8CC - 0x8C9];
     /* 0x8CC */ u8 m8CC;
     /* 0x8CD */ u8 m8CD[0x8D4 - 0x8CD];
-    /* 0x8D4 */ void* m8D4;
-    /* 0x8D8 */ void* m8D8;
-    /* 0x8DC */ void* m8DC;
-    /* 0x8E0 */ void* m8E0;
-    /* 0x8E4 */ void* m8E4;
-    /* 0x8E8 */ void* m8E8;
-    /* 0x8EC */ void* m8EC;
-    /* 0x8F0 */ void* m8F0;
+    /* 0x8D4 */ JPABaseEmitter* m8D4;
+    /* 0x8D8 */ JPABaseEmitter* m8D8;
+    /* 0x8DC */ JPABaseEmitter* m8DC;
+    /* 0x8E0 */ JPABaseEmitter* m8E0;
+    /* 0x8E4 */ JPABaseEmitter* m8E4;
+    /* 0x8E8 */ JPABaseEmitter* m8E8;
+    /* 0x8EC */ JPABaseEmitter* m8EC;
+    /* 0x8F0 */ JPABaseEmitter* m8F0;
 #if VERSION == VERSION_DEMO
     /* 0x900 */ u32 mHioOnly;
 #endif
