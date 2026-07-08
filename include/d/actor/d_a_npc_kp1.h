@@ -1,13 +1,15 @@
 #ifndef D_A_NPC_KP1_H
 #define D_A_NPC_KP1_H
 
+#include "SSystem/SComponent/c_phase.h"
+#include "d/d_cc_d.h"
+#include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_ext.h"
 
-class daNpc_Kp1_c : public fopAc_ac_c {
+class daNpc_Kp1_c : public fopNpc_npc_c {
 public:
-    struct anm_prm_c {
-        
-    };
+    struct anm_prm_c {};
 
     void getAttPos() {}
     void getBackboneJntNum() {}
@@ -18,7 +20,7 @@ public:
     void getHead_x() {}
     void getHead_y() {}
 
-    void createInit();
+    s32 createInit();
     void setMtx();
     void anmResID(int, int*, int*);
     void BtpNum2ResID(int, int*);
@@ -36,15 +38,15 @@ public:
     void setAnm_ATR(int);
     void anmAtr(unsigned short);
     void setStt(signed char);
-    void next_msgStatus(unsigned long*);
-    void getMsg();
+    u16 next_msgStatus(unsigned long*);
+    u32 getMsg();
     void eventOrder();
     void checkOrder();
     void lookBack();
     void chkAttention();
     void setAttention();
     void chk_talk();
-    void decideType(int);
+    bool decideType(int);
     void event_actionInit(int);
     void event_action();
     void privateCut();
@@ -63,7 +65,40 @@ public:
     void CreateHeap();
 
 public:
-    /* Place member variables here */
+    /* 0x6C4 */ request_of_phase_process_class mPhase; // 0x08
+    /* 0x6CC */ u8 field_0x6CC[0x708 - 0x6CC];
+    /* 0x708 */ dNpc_EventCut_c mEventCut;
+    /* 0x774 */ u8 field_0x774[0x7A0 - 0x774];
+    /* 0x7A0 */ cXyz field_0x7a0;
+    /* 0x7AC */ u8 field_0x7AC[0x7BE - 0x7AC];
+    /* 0x7BE */ u8 field_0x07BE;
+    /* 0x7BF */ u8 field_0x7BF[0x7C4 - 0x7BF];
+    /* 0x7C4 */ u8 field_0x7C4;
+    /* 0x7C5 */ u8 field_0x7C5;
+    /* 0x7C6 */ bool mHeadOnlyFollow;
+    /* 0x7C7 */ u8 field_0x7C7;
+    /* 0x7C8 */ u8 field_0x7C8;
+    /* 0x7C9 */ s8 field_0x7C9;
+    /* 0x7CA */ s8 field_0x7CA;
+    /* 0x7CB */ u8 field_0x7CB;
+    /* 0x7CC */ u8 field_0x7CC;
+    /* 0x7CD */ s8 field_0x7CD;
+    /* 0x7CE */ s8 field_0x7CE;
+    /* 0x7CF */ s8 field_0x7CF;
+    /* 0x7D0 */ s8 field_0x7D0;
+    /* 0x7D1 */ s8 field_0x7D1;
+    /* 0x7D2 */ s8 field_0x7D2;
+    /* 0x7D3 */ s8 field_0x7D3;
+    /* 0x7D4 */ s8 field_0x7D4;
+    /* 0x7D5 */ s8 field_0x7D5;
+    /* 0x7D6 */ s8 field_0x7D6;
+    /* 0x7D7 */ s8 field_0x7D7;
+    /* 0x7D8 */ s8 field_0x7D8;
+    /* 0x7D9 */ s8 field_0x7D9;
+    /* 0x7DA */ s8 field_0x7DA;
+    /* 0x7DB */ s8 field_0x7DB;
+    /* 0x7DC */ s8 field_0x7DC;
+    /* 0x7DD */ s8 field_0x7DD;
 };
 
 class daNpc_Kp1_HIO_c {

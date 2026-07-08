@@ -5,6 +5,10 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_kp1.h"
+#include "SSystem/SComponent/c_phase.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 
 /* 000000EC-00000150       .text __ct__15daNpc_Kp1_HIO_cFv */
@@ -18,8 +22,39 @@ static BOOL nodeCallBack_Kp(J3DNode*, int) {
 }
 
 /* 00000398-000004D0       .text createInit__11daNpc_Kp1_cFv */
-void daNpc_Kp1_c::createInit() {
+s32 daNpc_Kp1_c::createInit() {
     /* Nonmatching */
+
+    if (g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x2D01) == 0) {
+        return 0;
+    }
+
+    mEventCut.setActorInfo2("KP1", this);
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
+    attention_info.distances[1] = 0xab;
+    attention_info.distances[3] = 0xab;
+    gravity = -4.0f;
+    field_0x07BE = 0xFF;
+
+    field_0x7a0.x = current.pos.x;
+    field_0x7a0.y = current.pos.y;
+    field_0x7a0.z = current.pos.z;
+
+    set_action((int (daNpc_Kp1_c::*)(void*))&daNpc_Kp1_c::wait_action1, NULL);
+
+    shape_angle.x = current.angle.x;
+    shape_angle.y = current.angle.y;
+    shape_angle.z = current.angle.z;
+
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.SetStts(&mStts);
+    mCyl.Set(dNpc_cyl_src);
+    mpMorf->setMorf(0.0f);
+
+    field_0x7C4 = 1;
+    setMtx();
+
+    return 1;
 }
 
 /* 000004D0-00000658       .text setMtx__11daNpc_Kp1_cFv */
@@ -74,12 +109,18 @@ void daNpc_Kp1_c::setAnm() {
 
 /* 00000C20-00000C2C       .text chngAnmTag__11daNpc_Kp1_cFv */
 void daNpc_Kp1_c::chngAnmTag() {
-    /* Nonmatching */
+    switch (field_0x7D4) {
+        case 0:
+            break;
+    }
 }
 
 /* 00000C2C-00000C38       .text ctrlAnmTag__11daNpc_Kp1_cFv */
 void daNpc_Kp1_c::ctrlAnmTag() {
-    /* Nonmatching */
+    switch (field_0x7D3) {
+        case 0:
+            break;
+    }
 }
 
 /* 00000C38-00000CA4       .text chngAnmAtr__11daNpc_Kp1_cFUc */
@@ -108,12 +149,12 @@ void daNpc_Kp1_c::setStt(signed char) {
 }
 
 /* 00000EE0-0000102C       .text next_msgStatus__11daNpc_Kp1_cFPUl */
-void daNpc_Kp1_c::next_msgStatus(unsigned long*) {
+u16 daNpc_Kp1_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
 }
 
 /* 0000102C-00001178       .text getMsg__11daNpc_Kp1_cFv */
-void daNpc_Kp1_c::getMsg() {
+u32 daNpc_Kp1_c::getMsg() {
     /* Nonmatching */
 }
 
@@ -148,7 +189,7 @@ void daNpc_Kp1_c::chk_talk() {
 }
 
 /* 000015F4-00001620       .text decideType__11daNpc_Kp1_cFi */
-void daNpc_Kp1_c::decideType(int) {
+bool daNpc_Kp1_c::decideType(int) {
     /* Nonmatching */
 }
 
@@ -220,6 +261,11 @@ BOOL daNpc_Kp1_c::_execute() {
 /* 00002100-0000215C       .text _delete__11daNpc_Kp1_cFv */
 BOOL daNpc_Kp1_c::_delete() {
     /* Nonmatching */
+    dComIfG_resDelete(&mPhase, "Kp");
+    if ((u32)heap != 0U && mpMorf != NULL) {
+        mpMorf->stopZelAnime();
+    }
+    return 1;
 }
 
 /* 0000215C-0000217C       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -230,6 +276,44 @@ static BOOL CheckCreateHeap(fopAc_ac_c*) {
 /* 0000217C-000022A0       .text _create__11daNpc_Kp1_cFv */
 cPhs_State daNpc_Kp1_c::_create() {
     /* Nonmatching */
+
+    cPhs_State phase;
+    bool type_ok;
+    bool heap_ok;
+
+    if ((actor_condition & 8) == 0) {
+        if (this != NULL) {
+            new (this) daNpc_Kp1_c();
+        }
+        actor_condition |= 8;
+    }
+    phase = dComIfG_resLoad(&mPhase, "Kp");
+
+    if (phase == cPhs_COMPLEATE_e) {
+        type_ok = decideType(base.base.mParameters & 0xFF);
+        if (type_ok == 0) {
+            phase = cPhs_ERROR_e;
+        } else {
+
+            static int a_heap_size_tbl[] = {0x272E0};
+
+            heap_ok = fopAcM_entrySolidHeap(this, CheckCreateHeap, a_heap_size_tbl[0]);
+
+            if (heap_ok) {
+                cullMtx = mpMorf->getModel()->getBaseTRMtx();
+                fopAcM_setCullSizeBox(this, -50.0, -20.0, -50.0, 50.0, 170.0, 50.0);
+
+                type_ok = createInit();
+                if (type_ok == 0) {
+                    phase = cPhs_ERROR_e;
+                }
+            } else {
+                phase = cPhs_ERROR_e;
+            }
+        }
+    }
+
+    return phase;
 }
 
 /* 000026D0-00002B14       .text CreateHeap__11daNpc_Kp1_cFv */
