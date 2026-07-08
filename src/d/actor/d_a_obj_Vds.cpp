@@ -47,7 +47,7 @@ BOOL daObjVds::Act_c::SetLoopJointAnimation(J3DAnmTransformKey* i_bckAnm0, J3DAn
 
 /* 00000134-00000188       .text PlayLoopJointAnimation__Q28daObjVds5Act_cFv */
 bool daObjVds::Act_c::PlayLoopJointAnimation() {
-    const f32 unk[4] = {
+    const f32 unused[4] = {
         -222.5f,
         598.73f,
         178.9f,
@@ -76,6 +76,7 @@ static void* daObjVds::ds_search_switchCB(void* i_actor, void* i_this) {
 /* 00000214-000002B0       .text search_switchCB__Q28daObjVds5Act_cFP10fopAc_ac_c */
 void* daObjVds::Act_c::search_switchCB(fopAc_ac_c* i_actor) {
     if(fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_Obj_Swlight_e){
+        cXyz unused;
         for(int i = 0; i < 2; i++){
             if(mEyeID[i] == -1){
                 mEyeID[i] = fopAcM_GetID(i_actor);
@@ -438,7 +439,7 @@ bool daObjVds::Act_c::_execute() {
 
 /* 000014EC-000015A8       .text _draw__Q28daObjVds5Act_cFv */
 bool daObjVds::Act_c::_draw() {
-    const u8 unk[4] = {
+    const u8 unused[4] = {
         0xFF,
         0,
         0,
