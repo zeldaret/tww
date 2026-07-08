@@ -8,6 +8,8 @@
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
+#include "f_op/f_op_actor_mng.h"
+#include "f_pc/f_pc_base.h"
 #include "res/Object/Skanran.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
@@ -106,40 +108,48 @@ bool daObjFerris::Act_c::create_heap() {
 
 #if VERSION == VERSION_DEMO
     int r29 = 0;
-#endif
-
     cBgD_t* bgw_data_gondola = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SKANRAN_DZB_SGONDOR_e));
-    JUT_ASSERT(DEMO_SELECT(412, 416), bgw_data_gondola != NULL);
-    if (VERSION == VERSION_DEMO || bgw_data_gondola != NULL) {
+    JUT_ASSERT(412, bgw_data_gondola != NULL);
+    for (i = 0; i < 5; i++) {
+        mpBgW[i] = new dBgW();
+        if (mpBgW[i] != NULL && mpBgW[i]->Set(bgw_data_gondola, dBgW::MOVE_BG_e, &mMtx[i])) {
+            r29 |= 1;
+        }
+    }
+
+    cBgD_t* bgw_data_wheelbase = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SKANRAN_DZB_SKANRAN_e));
+    JUT_ASSERT(426, bgw_data_wheelbase != NULL);
+
+    int r24 = 5;
+    mpBgW[r24] = new dBgW();
+    if (mpBgW[r24] != NULL && mpBgW[r24]->Set(bgw_data_wheelbase, dBgW::MOVE_BG_e, &mMtx[r24])) {
+        r29 |= 1;
+    }
+
+    return mdl_data_gondola != NULL && mdl_data_wheelbase != NULL && r29 == 0;
+#else
+    cBgD_t* bgw_data_gondola = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SKANRAN_DZB_SGONDOR_e));
+    JUT_ASSERT(416, bgw_data_gondola != NULL);
+    if (bgw_data_gondola != NULL) {
         for (i = 0; i < 5; i++) {
             mpBgW[i] = new dBgW();
             if (mpBgW[i] != NULL && mpBgW[i]->Set(bgw_data_gondola, dBgW::MOVE_BG_e, &mMtx[i]) == true) {
-#if VERSION == VERSION_DEMO
-                r29 |= 1;
-#else
                 return false;
-#endif
             }
         }
     }
 
     cBgD_t* bgw_data_wheelbase = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SKANRAN_DZB_SKANRAN_e));
-    JUT_ASSERT(DEMO_SELECT(426, 432), bgw_data_wheelbase != NULL);
-    if (VERSION == VERSION_DEMO || bgw_data_wheelbase != NULL) {
+    JUT_ASSERT(432, bgw_data_wheelbase != NULL);
+
+    if (bgw_data_wheelbase != NULL) {
         int r24 = 5;
         mpBgW[r24] = new dBgW();
         if (mpBgW[r24] != NULL && mpBgW[r24]->Set(bgw_data_wheelbase, dBgW::MOVE_BG_e, &mMtx[r24]) == true) {
-#if VERSION == VERSION_DEMO
-            r29 |= 1;
-#else
             return false;
-#endif
         }
     }
 
-#if VERSION == VERSION_DEMO
-    return mdl_data_gondola != NULL && mdl_data_wheelbase != NULL && r29 == 0;
-#else
     return ((mdl_data_gondola != NULL && mpModel[0] != NULL && mpModel[1] != NULL && mpModel[2] != NULL && mpModel[3] != NULL && mpModel[4] != NULL) &&
             (mdl_data_wheelbase != NULL && mpModel[5] != NULL) &&
             (bgw_data_gondola != NULL && mpBgW[0] != NULL && mpBgW[1] != NULL && mpBgW[2] != NULL && mpBgW[3] != NULL && mpBgW[4] != NULL) &&
@@ -219,6 +229,14 @@ cPhs_State daObjFerris::Act_c::_create() {
 
 /* 00000DE8-00000EA8       .text _delete__Q211daObjFerris5Act_cFv */
 bool daObjFerris::Act_c::_delete() {
+#if VERSION == VERSION_DEMO
+    for (s32 i = 0; i < 6; i++) {
+        if (mpBgW[i]->ChkUsed()) {
+            mpBgW[i]->SetRideCallback(NULL);
+            dComIfG_Bgsp()->Release(mpBgW[i]);
+        }
+    }
+#else
     if (heap != NULL) {
         for (s32 i = 0; i < 6; i++) {
             if (mpBgW[i] != NULL && mpBgW[i]->ChkUsed()) {
@@ -227,7 +245,7 @@ bool daObjFerris::Act_c::_delete() {
             }
         }
     }
-
+#endif
     dComIfG_resDelete(&mPhs, M_arcname);
     return true;
 }
