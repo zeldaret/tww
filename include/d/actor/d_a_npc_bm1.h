@@ -159,10 +159,10 @@ public:
     void eInit_setLocFlag(int*);
     void eInit_setShapeAngleY(int*, short);
     void eInit_setEvTimer(int*);
-    static void eInit_calcRelativPos(cXyz*, int*);
+    cXyz eInit_calcRelativPos(cXyz*, int*);
     void eInit_ATTENTION_(int*, int*, int*, cXyz*, int*, int*, int*);
     void eInit_SET_PLYER_GOL_(int*, cXyz*, int*);
-    void eInit_prmFloat(float*, float);
+    f32 eInit_prmFloat(float*, float);
     void eInit_FLY_(int*, float*, float*, float*, float*);
     void eInit_DEL_ACTOR_();
     void eInit_WLK_(int*, float*, float*, cXyz*, int*, int*, int*);
@@ -257,7 +257,7 @@ public:
     /* 0x720 */ u8 field_0x728[0x734 - 0x728];
     /* 0x734 */ Mtx mLeftArmMtx;
     /* 0x764 */ Mtx mRightArmMtx;
-                dNpc_PathRun_c mPathRun;
+    /* 0x794 */ dNpc_PathRun_c mPathRun;
                 dNpc_EventCut_c m79C;
                 fpc_ProcID m808;
     /* 0x80C */ cXyz m80C;

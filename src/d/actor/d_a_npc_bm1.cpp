@@ -2455,61 +2455,220 @@ void daNpc_Bm1_c::eInit_setEvTimer(int* i_param_1) {
 }
 
 /* 00004A50-00004B30       .text eInit_calcRelativPos__11daNpc_Bm1_cFP4cXyzPi */
-void daNpc_Bm1_c::eInit_calcRelativPos(cXyz* i_param_1, int* i_param_2) {
+cXyz daNpc_Bm1_c::eInit_calcRelativPos(cXyz* i_param_2, int* arg2) {
     /* Nonmatching */
-    u32* in_r6; //= reinterpret_cast<u32*>(this);
     s16 sVar1;
-    if(i_param_2){
-        sVar1 = ((fopAc_ac_c*)i_param_1)->shape_angle.y + (s16)*in_r6;
+    if(arg2){
+        sVar1 = shape_angle.y + (s16)*arg2;
     }else{
-        sVar1 = ((fopAc_ac_c*)i_param_1)->shape_angle.y;
+        sVar1 = shape_angle.y;
     }
     cXyz local_1c;
     cXyz local_28;
     if(i_param_2){
         local_1c.set(
-            ((cXyz*)i_param_2)->x,
-            ((cXyz*)i_param_2)->y,
-            ((cXyz*)i_param_2)->z
+            i_param_2->x,
+            i_param_2->y,
+            i_param_2->z
         );
 
     }else{
         local_1c.setall(0.0f);
     }
-    mDoMtx_stack_c::transS(((fopAc_ac_c*)i_param_1)->current.pos);
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(sVar1);
     mDoMtx_stack_c::multVec(&local_1c,&local_28);
-    *i_param_1 = local_28; 
+    return local_28; 
 }
 
 /* 00004B30-00004D10       .text eInit_ATTENTION___11daNpc_Bm1_cFPiPiPiP4cXyzPiPiPi */
-void daNpc_Bm1_c::eInit_ATTENTION_(int*, int*, int*, cXyz*, int*, int*, int*) {
-    /* Nonmatching */
+void daNpc_Bm1_c::eInit_ATTENTION_(int* arg0, int* arg1, int* arg2, cXyz* arg3, int* arg4, int* arg5, int* arg6) {
+    fopAc_ac_c *temp_r3;
+    s16 var_r31;
+    u8 pointIndex;
+    if (arg0 != NULL) {
+        switch (*arg0) {
+        case 1:
+            m900 = 1;
+            var_r31 = cLib_targetAngleY(&current.pos, &dComIfGp_getLinkPlayer()->current.pos);
+            break;
+        case 2:
+            if (arg3 == NULL) {
+                return;
+            }
+            m900 = 2;
+            var_r31 = cLib_targetAngleY(&current.pos, arg3);
+            break;
+        case 3:
+            m900 = 2;
+            m82C = eInit_calcRelativPos(arg3,arg4);
+            var_r31 = cLib_targetAngleY((cXyz *) &current.pos, (cXyz *) &m82C);
+
+            break;
+        case 4:
+            if (arg4 == NULL) {
+                return;
+            }
+            m900 = 3;
+            var_r31 = (s16) *arg4;
+            break;
+        case 5:
+
+            if (!mPathRun.isPath()) {
+                return;
+            }
+            pointIndex = mPathRun.getIdx();
+            if (arg5 != NULL) {
+                pointIndex = *arg5;
+            }
+            m82C = mPathRun.getPoint(pointIndex);
+            m900 = 2;
+
+            break;
+        case 6:
+            temp_r3 = searchByID(m808);
+            if (temp_r3 == NULL) {
+                return;
+            }
+            m900 = 2;
+            m82C = temp_r3->eyePos;
+            var_r31 = cLib_targetAngleY(&current.pos, &m82C);
+
+            break;
+        case 0:
+        default:
+            m900 = 0;
+        }
+        eInit_setLocFlag(arg1);
+        eInit_setShapeAngleY(arg2, var_r31);    //Todo: parameter 2 uninitialized if arg0 is 4 or 5
+        eInit_setEvTimer(arg6);
+    }
 }
 
 /* 00004D10-00004DC4       .text eInit_SET_PLYER_GOL___11daNpc_Bm1_cFPiP4cXyzPi */
-void daNpc_Bm1_c::eInit_SET_PLYER_GOL_(int*, cXyz*, int*) {
-    /* Nonmatching */
+void daNpc_Bm1_c::eInit_SET_PLYER_GOL_(int* i_param_1, cXyz* i_param_2, int* i_param_3) {
+    cXyz goalpos;
+    if(i_param_1){
+        switch(*i_param_1){
+            case 0:
+                if(i_param_2 == NULL){
+                    return;
+                }
+                goalpos.set(i_param_2->x,i_param_2->y,i_param_2->z);
+                dComIfGp_evmng_setGoal(&goalpos);
+                break;
+            case 1:
+                goalpos = eInit_calcRelativPos(i_param_2,i_param_3);
+                dComIfGp_evmng_setGoal(&goalpos);
+                break;
+        }
+    }
 }
 
 /* 00004DC4-00004DD4       .text eInit_prmFloat__11daNpc_Bm1_cFPff */
-void daNpc_Bm1_c::eInit_prmFloat(float*, float) {
+f32 daNpc_Bm1_c::eInit_prmFloat(float* i_param_1, float i_param_2) {
     /* Nonmatching */
+    if(i_param_1){
+        return *i_param_1;
+    }
+    return i_param_2;
 }
 
 /* 00004DD4-00004FB8       .text eInit_FLY___11daNpc_Bm1_cFPiPfPfPfPf */
-void daNpc_Bm1_c::eInit_FLY_(int*, float*, float*, float*, float*) {
+void daNpc_Bm1_c::eInit_FLY_(int* arg0, float* arg1, float* arg2, float* arg3, float* arg4) {
     /* Nonmatching */
+    if(arg0){
+        m858 = l_HIO.children[mType-1].hio_prm.m30;
+        if(*arg0 != 2){
+            m848 = eInit_prmFloat(arg1,l_HIO.children[mType-1].hio_prm.m20);
+            m84C = eInit_prmFloat(arg2,l_HIO.children[mType-1].hio_prm.m28);
+            m850 = eInit_prmFloat(arg3,l_HIO.children[mType-1].hio_prm.m24);
+            m854 = eInit_prmFloat(arg4,l_HIO.children[mType-1].hio_prm.m2C);
+        }
+        m900 = 0;
+        m88A = 0;
+        switch(*arg0){
+            case 1:
+                m8F4 = 5;
+                speedF = m848;
+                speed.y = m84C;
+                gravity = 0.0f;
+                m889 = 1;
+                bm_setFlyAnm();
+                break;
+            case 3:
+                speedF = m848;
+                break;
+            case 4:
+                m8F4 = 3;
+                m848 = 0.0f;
+            case 5:
+                speed.y = 0.0f;
+                speedF = m848;
+                gravity = 0.0f;
+                break;
+            default:
+                m889 = 1;
+                m8F4 = 1;
+                speed.y = 0.0f;
+                speedF = 0.0f;
+                gravity = 0.0f; 
+
+                break;
+            case 2:
+                break;
+
+        }
+    }
 }
 
 /* 00004FB8-00004FD8       .text eInit_DEL_ACTOR___11daNpc_Bm1_cFv */
 void daNpc_Bm1_c::eInit_DEL_ACTOR_() {
     /* Nonmatching */
+    fopAcM_delete(this);
 }
 
 /* 00004FD8-00005190       .text eInit_WLK___11daNpc_Bm1_cFPiPfPfP4cXyzPiPiPi */
-void daNpc_Bm1_c::eInit_WLK_(int*, float*, float*, cXyz*, int*, int*, int*) {
+void daNpc_Bm1_c::eInit_WLK_(int* arg0, float* arg1, float* arg2, cXyz* arg3, int* arg4, int* arg5, int* arg6) {
     /* Nonmatching */
+    u8 pointIndex;
+    bool bVar3 = false;
+    if (arg0 != NULL) {
+        switch (*arg0) {
+        case 0:
+            if (arg3 == NULL) {
+                break;
+            }
+            m838.set(arg3->x,arg3->y,arg3->z);
+            bVar3 = true;
+            break;
+        case 1:
+            m838 = eInit_calcRelativPos(arg3,arg4);
+            bVar3 = true;
+            break;
+        case 2:
+            if (!mPathRun.isPath()) {
+                return;
+            }
+            pointIndex = mPathRun.getIdx();
+            if (arg5 != NULL) {
+                pointIndex = *arg5;
+            }
+            m838 = mPathRun.getPoint(pointIndex);
+            bVar3 = true;
+            break;
+        default:
+            break;
+        }
+        if(bVar3){
+            eInit_setEvTimer(arg6);
+            m848 = eInit_prmFloat(arg1,l_HIO.children[mType-1].hio_prm.m3C);
+            m850 = eInit_prmFloat(arg2,l_HIO.children[mType-1].hio_prm.m40);
+            m858 = l_HIO.children[mType-1].hio_prm.m44;
+            m900 = 0;
+            setAnm_NUM(0xE,1);
+        }
+    }
 }
 
 /* 00005190-0000519C       .text eInit_INI_EVN_1___11daNpc_Bm1_cFv */
