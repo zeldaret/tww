@@ -253,12 +253,7 @@ public:
     /* 0x338 */ cSAngle m338;
     /* 0x33A */ cSAngle m33A;
     /* 0x33C */ fopAc_ac_c* m33C;
-    /* 0x340 */ u8 m340[0x344 - 0x340];
-                u8 m344;
-                u8 m345;
-                u8 m346;
-                u8 m347[0x350-0x347];
-                
+    /* 0x340 */ u8 m340[0x350 - 0x340];
     /* 0x350 */ int m350;
     /* 0x354 */ f32 m354;
     /* 0x358 */ int mRoomNo;
@@ -617,7 +612,6 @@ public:
     void CStickUseless() { setFlag(0x800000); }
     void StickUse() { clrFlag(0x1000000); }
     void StickUseless() { setFlag(0x1000000); }
-    void SkipSmoother(){m346 = 1; m345 = 1; m344 = 1;}
 
     bool Active() { return mActive; }
     bool Pause() { return mPause; }
