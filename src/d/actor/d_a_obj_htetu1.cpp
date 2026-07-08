@@ -48,27 +48,25 @@ BOOL daObjHtetu1_c::solidHeapCB(fopAc_ac_c* i_this) {
 }
 
 BOOL daObjHtetu1_c::create_heap() {
-    register daObjHtetu1_c* _this = this;
+    register J3DModelData* modelData;
     register BOOL status = TRUE;
-    J3DModelData* modelData;
     
-    modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 4);
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 4));
     JUT_ASSERT(281, modelData !=0);
     if (modelData == NULL) {
         status = FALSE;
     } else {
-        _this->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-        float (*mtx)[3][4] = &_this->mpModel->getBaseTRMtx();
-        cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(M_arcname, 7);
-        _this->mpBgW = dBgW_NewSet(bgd, 1, mtx);
-        if (_this->mpBgW == NULL) {
+        mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        float (*mtx)[3][4] = &mpModel->getBaseTRMtx();
+        cBgD_t* bgd = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, 7));
+        mpBgW = dBgW_NewSet(bgd, 1, mtx);
+        if (mpBgW == NULL) {
             status = FALSE;
         }
     }
     
     return status;
 }
-
 cPhs_State daObjHtetu1_c::_create() {
     fopAcM_SetupActor(this, daObjHtetu1_c);
     
@@ -106,6 +104,7 @@ cPhs_State daObjHtetu1_c::_create() {
     
     return state;
 }
+
 
 bool daObjHtetu1_c::_delete() {
     if (mQuakeTimer > 0) {
