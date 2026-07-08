@@ -4,6 +4,7 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_cc_d.h"
 #include "d/d_npc.h"
+#include "d/d_save.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 
@@ -65,14 +66,20 @@ public:
     void CreateHeap();
 
 public:
-    /* 0x6C4 */ request_of_phase_process_class mPhase; // 0x08
+    /* 0x6C4 */ request_of_phase_process_class mPhase; // 0x8
     /* 0x6CC */ u8 field_0x6CC[0x708 - 0x6CC];
     /* 0x708 */ dNpc_EventCut_c mEventCut;
     /* 0x774 */ u8 field_0x774[0x7A0 - 0x774];
     /* 0x7A0 */ cXyz field_0x7a0;
-    /* 0x7AC */ u8 field_0x7AC[0x7BE - 0x7AC];
-    /* 0x7BE */ u8 field_0x07BE;
-    /* 0x7BF */ u8 field_0x7BF[0x7C4 - 0x7BF];
+    /* 0x7AC */ u8 field_0x7AC[0x7BC - 0x7AC];
+    /* 0x7BC */ s8 field_0x7BC;
+    /* 0x7BD */ s8 field_0x7BD;
+    /* 0x7BE */ u8 field_0x7BE;
+    /* 0x7BF */ u8 field_0x7BF;
+    /* 0x7C0 */ u8 field_0x7C0;
+    /* 0x7C1 */ u8 field_0x7C1;
+    /* 0x7C2 */ u8 field_0x7C2;
+    /* 0x7C3 */ u8 field_0x7C3;
     /* 0x7C4 */ u8 field_0x7C4;
     /* 0x7C5 */ u8 field_0x7C5;
     /* 0x7C6 */ bool mHeadOnlyFollow;

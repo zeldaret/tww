@@ -34,7 +34,7 @@ s32 daNpc_Kp1_c::createInit() {
     attention_info.distances[1] = 0xab;
     attention_info.distances[3] = 0xab;
     gravity = -4.0f;
-    field_0x07BE = 0xFF;
+    field_0x7BE = 0xFF;
 
     field_0x7a0.x = current.pos.x;
     field_0x7a0.y = current.pos.y;
@@ -130,7 +130,26 @@ void daNpc_Kp1_c::chngAnmAtr(unsigned char) {
 
 /* 00000CA4-00000D54       .text ctrlAnmAtr__11daNpc_Kp1_cFv */
 void daNpc_Kp1_c::ctrlAnmAtr() {
-    /* Nonmatching */
+    switch ((u8)field_0x7D3) {
+        case 0:
+            break;
+        case 1:
+            if ((s8)field_0x7BC != 0) {
+                if ((s8)(field_0x7BD += 1) >= 2) {
+                    field_0x7D3 = 0;
+                    setAnm_NUM(0, 1);
+                }
+            }
+            break;
+        case 6:
+            if ((s8)field_0x7BC != 0) {
+                if ((s8)(field_0x7BD += 1) >= 1) {
+                    field_0x7D3 = 0;
+                    setAnm_NUM(0, 1);
+                }
+            }
+            break;
+    }
 }
 
 /* 00000D54-00000DBC       .text setAnm_ATR__11daNpc_Kp1_cFi */
@@ -155,7 +174,35 @@ u16 daNpc_Kp1_c::next_msgStatus(unsigned long*) {
 
 /* 0000102C-00001178       .text getMsg__11daNpc_Kp1_cFv */
 u32 daNpc_Kp1_c::getMsg() {
-    /* Nonmatching */
+    u8 msg = field_0x7BE;
+
+    if (msg != 0xFF) {
+        if (msg == 0x9B) {
+            return 0x1E96;
+        }
+        return (msg == 0x45) ? 0x1EA0 : 0x1E9F;
+    }
+
+    if (field_0x7BF != 0) {
+        field_0x7BF = 0;
+        return 0x1E92;
+    }
+    if (field_0x7C0 != 0) {
+        field_0x7C0 = 0;
+        return 0x1E9E;
+    }
+
+    dSv_player_get_bag_item_c* getBagItem = &g_dComIfG_gameInfo.save.mSavedata.mPlayer.mGetBagItem;
+    if (getBagItem->isReserve(0xF) && g_dComIfG_gameInfo.save.mSavedata.mPlayer.mBagItem.checkReserveItem(0x9B) == 0) {
+        return (g_dComIfG_gameInfo.save.mSavedata.mEvent.getEventReg(0xCCFF) >= 1) ? 0x1E84 : 0x1E83;
+    }
+    if (getBagItem->isReserve(0xE)) {
+        return getBagItem->isBeast(0) ? 0x1E87 : 0x1E88;
+    }
+    if (field_0x7C1 != 0) {
+        return 0x1E93;
+    }
+    return 0x1E8A;
 }
 
 /* 00001178-00001204       .text eventOrder__11daNpc_Kp1_cFv */
