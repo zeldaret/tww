@@ -2515,21 +2515,61 @@ void daNpc_Bm1_c::eInit_WLK_(int*, float*, float*, cXyz*, int*, int*, int*) {
 /* 00005190-0000519C       .text eInit_INI_EVN_1___11daNpc_Bm1_cFv */
 void daNpc_Bm1_c::eInit_INI_EVN_1_() {
     /* Nonmatching */
+    m888 = 0;
 }
 
 /* 0000519C-000051EC       .text eInit_SET_NXT_PTH_INF___11daNpc_Bm1_cFv */
 void daNpc_Bm1_c::eInit_SET_NXT_PTH_INF_() {
-    /* Nonmatching */
+
+    if (mPathRun.getPath()) {
+        dPath* path = mPathRun.nextPath(fopAcM_GetRoomNo(this));
+        if ( path != NULL) {
+            mPathRun.setInfDrct(path);
+        }
+    }
 }
 
 /* 000051EC-0000522C       .text eInit_SET_ANM___11daNpc_Bm1_cFPi */
-void daNpc_Bm1_c::eInit_SET_ANM_(int*) {
-    /* Nonmatching */
+void daNpc_Bm1_c::eInit_SET_ANM_(int* arg0) {
+
+    if (arg0 != NULL) {
+        s32 temp_r4 = *arg0;
+        if ((temp_r4 >= 0) && (temp_r4 <= 0x16)) {
+            setAnm_NUM(temp_r4, 1);
+        }
+    }
 }
 
 /* 0000522C-00005368       .text eInit_MOV_PTH_POINT___11daNpc_Bm1_cFPiPiPiPi */
-void daNpc_Bm1_c::eInit_MOV_PTH_POINT_(int*, int*, int*, int*) {
-    /* Nonmatching */
+void daNpc_Bm1_c::eInit_MOV_PTH_POINT_(int* arg0, int* arg1, int* arg2, int* arg3) {
+    /* Nonmatching - Regswap*/
+    u8 idx;
+    cXyz pathpos;
+    if (mPathRun.isPath()) {
+        idx = mPathRun.getIdx();
+        if (arg2 != NULL) {
+            idx = *arg2;
+            idx = cLib_maxLimit(idx, mPathRun.maxPoint());
+
+            mPathRun.setIdx(idx);
+        }
+        current.pos = mPathRun.getPoint(idx);
+        mPathRun.nextIdxAuto();
+        pathpos = mPathRun.getPoint(mPathRun.getIdx());
+        current.angle.y = cLib_targetAngleY(&current.pos,&pathpos);
+        if (arg0 != NULL) {
+            switch(*arg0){
+                case 1:
+                    current.angle.y = cLib_targetAngleY(&current.pos, &dComIfGp_getLinkPlayer()->current.pos);
+                    break;
+            }
+
+        }else if (arg3 != NULL) {
+            current.angle.y = *arg3;
+        }
+        eInit_SET_ANM_(arg1);
+    }
+    
 }
 
 /* 00005368-00005650       .text event_actionInit__11daNpc_Bm1_cFi */

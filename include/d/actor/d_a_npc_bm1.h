@@ -257,7 +257,7 @@ public:
     /* 0x720 */ u8 field_0x728[0x734 - 0x728];
     /* 0x734 */ Mtx mLeftArmMtx;
     /* 0x764 */ Mtx mRightArmMtx;
-                dNpc_PathRun_c mPathRun;
+    /* 0x794 */ dNpc_PathRun_c mPathRun;
                 dNpc_EventCut_c m79C;
                 fpc_ProcID m808;
     /* 0x80C */ cXyz m80C;
