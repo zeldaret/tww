@@ -159,7 +159,7 @@ public:
     void eInit_setLocFlag(int*);
     void eInit_setShapeAngleY(int*, short);
     void eInit_setEvTimer(int*);
-    static void eInit_calcRelativPos(cXyz*, int*);
+    cXyz eInit_calcRelativPos(cXyz*, int*);
     void eInit_ATTENTION_(int*, int*, int*, cXyz*, int*, int*, int*);
     void eInit_SET_PLYER_GOL_(int*, cXyz*, int*);
     void eInit_prmFloat(float*, float);

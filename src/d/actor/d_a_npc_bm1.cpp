@@ -2455,31 +2455,31 @@ void daNpc_Bm1_c::eInit_setEvTimer(int* i_param_1) {
 }
 
 /* 00004A50-00004B30       .text eInit_calcRelativPos__11daNpc_Bm1_cFP4cXyzPi */
-void daNpc_Bm1_c::eInit_calcRelativPos(cXyz* i_param_1, int* i_param_2) {
+
+cXyz daNpc_Bm1_c::eInit_calcRelativPos(cXyz* i_param_2, int* arg2) {
     /* Nonmatching */
-    u32* in_r6; //= reinterpret_cast<u32*>(this);
     s16 sVar1;
-    if(i_param_2){
-        sVar1 = ((fopAc_ac_c*)i_param_1)->shape_angle.y + (s16)*in_r6;
+    if(arg2){
+        sVar1 = shape_angle.y + (s16)*arg2;
     }else{
-        sVar1 = ((fopAc_ac_c*)i_param_1)->shape_angle.y;
+        sVar1 = shape_angle.y;
     }
     cXyz local_1c;
     cXyz local_28;
     if(i_param_2){
         local_1c.set(
-            ((cXyz*)i_param_2)->x,
-            ((cXyz*)i_param_2)->y,
-            ((cXyz*)i_param_2)->z
+            i_param_2->x,
+            i_param_2->y,
+            i_param_2->z
         );
 
     }else{
         local_1c.setall(0.0f);
     }
-    mDoMtx_stack_c::transS(((fopAc_ac_c*)i_param_1)->current.pos);
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(sVar1);
     mDoMtx_stack_c::multVec(&local_1c,&local_28);
-    *i_param_1 = local_28; 
+    return local_28; 
 }
 
 /* 00004B30-00004D10       .text eInit_ATTENTION___11daNpc_Bm1_cFPiPiPiP4cXyzPiPiPi */
