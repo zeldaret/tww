@@ -171,16 +171,16 @@ public:
     void eInit_SET_ANM_(int*);
     void eInit_MOV_PTH_POINT_(int*, int*, int*, int*);
     void event_actionInit(int);
-    void eMove_ATTENTION_();
-    void eMove_KMA_FLY_();
-    void eMove_FLY_();
-    void eMove_WLK_();
-    void event_action();
+    bool eMove_ATTENTION_();
+    bool eMove_KMA_FLY_();
+    bool eMove_FLY_();
+    bool eMove_WLK_();
+    bool event_action();
     void cut_init_360_TRN(int);
-    void cut_move_360_TRN();
+    bool cut_move_360_TRN();
     void privateCut(int);
     void endEvent();
-    void isEventEntry();
+    BOOL isEventEntry();
     void event_proc(int);
     void set_action(int (daNpc_Bm1_c::*)(void*), void*);
     void setStt(signed char);
@@ -300,7 +300,7 @@ public:
     /* 0x887 */ u8 m887;
     /* 0x888 */ u8 m888;
                 bool m889;
-                u8 m88A;
+                bool m88A;
                 u8 m88B;
                 u8 m88C[0x890 - 0x88C];                
     /* 0x890 */ s32 mbSetEyePos;
@@ -328,8 +328,8 @@ public:
     /* 0x900 */ u32 mHioOnly;
 #endif
     /* 0x8F4 */ s8 m8F4;
-    /* 0x8F5 */ u8 m8F5;
-    /* 0x8F6 */ u8 m8F6[0x8F7 - 0x8F6];
+    /* 0x8F5 */ s8 m8F5;
+    /* 0x8F6 */ s8 m8F6;
     /* 0x8F7 */ u8 m8F7;
     /* 0x8F8 */ u8 m8F8;
     /* 0x8F9 */ s8 m8F9;
