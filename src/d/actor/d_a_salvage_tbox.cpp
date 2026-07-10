@@ -106,7 +106,7 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
     f32 fVar3;
     f32 fVar2;
     f32 fVar1;
-    uint particleCount = emitter->getParticleList()->getNumLinks();
+    u32 particleCount = emitter->getParticleList()->getNumLinks();
     if (particleCount >= 6){
         if (dPa_control_c::isStatus(1)) {
             GXSetZMode(GX_FALSE, GX_NEVER, GX_FALSE);
@@ -121,34 +121,30 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
         mtx[1][3] = field_0x48 * emitter->getFrame();
         GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
         GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
-        JSUPtrLink* link = emitter->getParticleList()->getFirst();
-        uint i = 0;
+        JSULink<JPABaseParticle>* link = emitter->getParticleList()->getFirst();
+        u32 i = 0;
         fVar1 = 0.0f;
         for (; i < steps; i++, fVar1 += fVar3) {
             if (i != 0){
                 GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 6);
-                uint j = 0;
+                u32 j = 0;
                 fVar2 = 0.0f;
                 for(; j < 3; j++) {
-                    JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
                     JGeometry::TVec3<f32> ptclPos;
-                    ptcl->getGlobalPosition(ptclPos);
+                    link->getObject()->getGlobalPosition(ptclPos);
                     getMaxWaterY(&ptclPos);
                     GXPosition3f32(ptclPos.x, ptclPos.y, ptclPos.z);
                     GXTexCoord2f32(fVar2, fVar1);
                     GXPosition3f32(mPos[j].x, mPos[j].y, mPos[j].z);
                     GXTexCoord2f32(fVar2, fVar1 - fVar3);
-                    mPos[j].x = ptclPos.x;
-                    mPos[j].y = ptclPos.y;
-                    mPos[j].z = ptclPos.z;
+                    mPos[j].set(ptclPos);
                     fVar2 += 0.5f;
                     link = link->getNext();
                 }
                 GXEnd();
             } else {
                 for (int j = 0; j < 3; j++) {
-                    JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
-                    ptcl->getGlobalPosition(mPos[j]);
+                    link->getObject()->getGlobalPosition(mPos[j]);
                     link = link->getNext();
                 }
             }
