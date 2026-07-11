@@ -157,7 +157,7 @@ void dComIfG_play_c::itemInit() {
     mPictureResult = 0;
     mPictureResultDetail = 0;
     mPictureStatus = 0;
-    field_0x495f = 0;
+    mGetPictureNum = 0;
     mPictureFormat = 0;
     mSelectPicture = 0;
     mHeapLockFlag = 0;

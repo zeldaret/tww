@@ -7,8 +7,10 @@
 #include "d/d_drawlist.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
+#include "d/d_lib.h"
 
 
+class J3DModel;
 class JKRExpHeap;
 class J2DScreen;
 class J2DTextBox;
@@ -23,6 +25,18 @@ struct sPhotoDat {
     /* 0x10 */ char* field_0x10;
     /* 0x14 */ char* field_0x14;
     /* 0x18 */ char* field_0x18;
+};
+
+struct PhotoOwnerBase {
+    /* 0x00 */ u8 field_0x00[0x0C];
+    /* 0x0C */ u8 field_0x0C;
+    /* 0x0D */ u8 field_0x0D[0x10 - 0x0D];
+}; // Size: 0x10
+
+struct PhotoOwner : PhotoOwnerBase {
+    virtual ~PhotoOwner();
+    /* 0x14 */ u8 field_0x14[8];
+    /* 0x1C */ ResTIMG* field_0x1C;
 };
 
 void dPb_erasePicture();
@@ -64,8 +78,8 @@ public:
     void setColorInit(u8);
     void setColorAnime(u8);
     void changeData();
-    void label_sort();
-    void getPicLabelData(u8);
+    bool label_sort();
+    u8 getPicLabelData(u8);
     void shutterLineRotateCenter(f32, int);
     void shutterLineRotateInitPos(f32, int);
     void shutterLineMove();
@@ -87,9 +101,9 @@ public:
     void _delete(JKRExpHeap*);
 
 public:
-    /* 0x004 */ J2DScreen* scrn_04;
-    /* 0x008 */ J2DScreen* scrn_08;
-    /* 0x00C */ J2DScreen* scrn_0C;
+    /* 0x004 */ J2DScreen* scrn;
+    /* 0x008 */ J2DScreen* scrn1;
+    /* 0x00C */ J2DScreen* scrn2;
     /* 0x010 */ fopMsgM_pane_class pane_st[12];
     /* 0x2B0 */ fopMsgM_pane_class pane_sb[12];
     /* 0x550 */ fopMsgM_pane_class pane_ylig;
@@ -121,15 +135,17 @@ public:
     /* 0xEB8 */ fopMsgM_pane_class pane_wp01;
     /* 0xEF0 */ fopMsgM_pane_class pane_wp02;
     /* 0xF28 */ fopMsgM_pane_class pane_wp03;
-    /* 0xF60 */ fopMsgM_pane_alpha_class pane_tx82;
-    /* 0xF68 */ fopMsgM_pane_alpha_class pane_tx83;
-    /* 0xF70 */ fopMsgM_pane_alpha_class pane_tx80;
-    /* 0xF78 */ fopMsgM_pane_alpha_class pane_tx81;
-    /* 0xF80 */ u8 mF80[0xF8C - 0xF80];
-    /* 0xF8C */ J2DPane* mF8C;
-    /* 0xF90 */ JUTFont* mF90;
-    /* 0xF94 */ JUTFont* mF94;
-    /* 0xF98 */ u8 mF98[0xFBC - 0xF98];
+    /* 0xF60 */ fopMsgM_pane_alpha_class pane_tx[4];
+    /* 0xF80 */ PhotoOwner* mF80;
+    /* 0xF84 */ J2DPicture* mF84;
+    /* 0xF88 */ J2DPicture* mF88;
+    /* 0xF8C */ J2DPicture* mF8C;
+    /* 0xF90 */ JUTFont* font0;
+    /* 0xF94 */ JUTFont* font1;
+    /* 0xF98 */ STControl* stick;
+    /* 0xF9C */ u8 mF9C[0xFA0 - 0xF9C];
+    /* 0xFA0 */ mesg_header* head_p;
+    /* 0xFA4 */ JMSMesgEntry_c mFA4;
     /* 0xFBC */ fopMsgM_msgDataProc_c mFBC;
     /* 0x125C */ JUtility::TColor icn_white;
     /* 0x1260 */ JUtility::TColor icn_black;
@@ -137,15 +153,20 @@ public:
     /* 0x1268 */ JUtility::TColor emp_black;
     /* 0x126C */ ResTIMG* m126C[4];
     /* 0x127C */ f32 mZoomScale;
-    /* 0x1280 */ u8 m1280[0x1340 - 0x1280];
+    /* 0x1280 */ f32 mShutterLineX1[12];
+    /* 0x12B0 */ f32 mShutterLineY1[12];
+    /* 0x12E0 */ f32 mShutterLineX2[12];
+    /* 0x1310 */ f32 mShutterLineY2[12];
     /* 0x1340 */ int m1340;
     /* 0x1344 */ int m1344;
     /* 0x1348 */ int m1348;
-    /* 0x134C */ u8 m134C[0x1350 - 0x134C];
+    /* 0x134C */ int m134C;
     /* 0x1350 */ ResTIMG* m1350[4];
-    /* 0x1360 */ u8 m1360[0x1362 - 0x1360];
-    /* 0x1362 */ s16 m1362;
-    /* 0x1364 */ u8 m1364[0x136B - 0x1364];
+    /* 0x1360 */ s16 m1360;
+    /* 0x1362 */ s16 mShutterCounter;
+    /* 0x1364 */ s16 m1364;
+    /* 0x1366 */ s16 m1366;
+    /* 0x1368 */ u8 m1368[3];
     /* 0x136B */ u8 m136B;
     /* 0x136C */ u8 m136C;
     /* 0x136D */ u8 m136D;
@@ -153,8 +174,16 @@ public:
     /* 0x136F */ u8 m136F;
     /* 0x1370 */ u8 m1370;
     /* 0x1371 */ u8 m1371[3];
-    /* 0x1374 */ u8 m1374[0x1376 - 0x1374];
+    /* 0x1374 */ u8 m1374;
+    /* 0x1375 */ u8 m1375;
     /* 0x1376 */ u8 m1376;
+};
+
+struct dummy_struct {
+    /* 0x0000 */ u8 pad[0x1EE0 - 0x0000];
+    /* 0x1EE0 */ u32 field_0x1EE0;
+    /* 0x1EE4 */ u8 field_0x1EE4;
+    /* 0x1EE5 */ u8 field_0x1EE5;
 };
 
 class sub_pb_class : public msg_class {

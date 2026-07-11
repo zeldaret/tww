@@ -503,8 +503,9 @@ public:
     void setPictureStatusOn() { mPictureStatus = 2; }
     void setPictureStatusGetOn(u8 to_set) {
         mPictureStatus = 3;
-        field_0x495f = to_set;
+        mGetPictureNum = to_set;
     }
+    u8 getGetPictureNum() { return mGetPictureNum; }
 
     u8 getScopeMesgStatus() { return mScopeMesgStatus; }
     void setScopeMesgStatus(u8 status) { mScopeMesgStatus = status; }
@@ -829,7 +830,7 @@ public:
     /* 0x495C */ u8 mPictureResult;
     /* 0x495D */ u8 mPictureResultDetail;
     /* 0x495E */ u8 mPictureStatus;
-    /* 0x495F */ u8 field_0x495f;
+    /* 0x495F */ u8 mGetPictureNum;
     /* 0x4960 */ u8 mPictureFormat;
     /* 0x4961 */ u8 mSelectPicture;
     /* 0x4962 */ u8 mHeapLockFlag;
@@ -3012,6 +3013,10 @@ inline void dComIfGp_setPictureStatus(u8 status) {
 
 inline void dComIfGp_setPictureStatusOn() {
     g_dComIfG_gameInfo.play.setPictureStatusOn();
+}
+
+inline u8 dComIfGp_getGetPictureNum() {
+    return g_dComIfG_gameInfo.play.getGetPictureNum();
 }
 
 inline void dComIfGp_setPictureStatusGetOn(u8 to_set){
