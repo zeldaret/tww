@@ -6,9 +6,76 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_YLzou.h"
 
+typedef enum {
+    ENUM_ONE_UNK_0000 = 0x0000,
+    ENUM_ONE_UNK_0006 = 0x0006,
+    ENUM_ONE_UNK_0007 = 0x0007,
+    ENUM_ONE_UNK_000B = 0x000B,
+    ENUM_ONE_UNK_000C = 0x000C,
+    ENUM_ONE_UNK_000D = 0x000D
+} UNK_YLZOU_ENUM_ONE;
+
+typedef enum { ENUM_TWO_UNK_0000 = 0x0000, ENUM_TWO_UNK_0001 = 0x0001, ENUM_TWO_UNK_0002 = 0x0002, ENUM_TWO_UNK_0003 = 0x0003 } UNK_YLZOU_ENUM_TWO;
+
 /* 000000EC-000002B8       .text set_start_type__12daObjYLzou_cFv */
 void daObjYLzou_c::set_start_type() {
     /* Nonmatching */
+    bool event_bit_3820;
+    UNK_YLZOU_ENUM_ONE unk_ylzou_enum_one;
+    UNK_YLZOU_ENUM_TWO unk_ylzou_enum_two;
+    BOOL triforce_complete;
+
+    event_bit_3820 = false;
+    unk_ylzou_enum_two = ENUM_TWO_UNK_0000;
+    triforce_complete = FALSE;
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D04) == FALSE) {
+        if (field_0x2E0 != 0xFF && !fopAcM_isSwitch(this, field_0x2E0)) {
+            unk_ylzou_enum_one = ENUM_ONE_UNK_0000;
+            unk_ylzou_enum_two = ENUM_TWO_UNK_0001;
+        } else {
+            unk_ylzou_enum_one = ENUM_ONE_UNK_0006;
+            event_bit_3820 = true;
+        }
+    } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A04) == FALSE) {
+        unk_ylzou_enum_one = ENUM_ONE_UNK_0006;
+        event_bit_3820 = true;
+    } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3804) == FALSE) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3820) == TRUE) {
+            unk_ylzou_enum_one = ENUM_ONE_UNK_0007;
+            unk_ylzou_enum_two = ENUM_TWO_UNK_0002;
+        } else {
+            unk_ylzou_enum_one = ENUM_ONE_UNK_000B;
+        }
+    } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02) == FALSE) {
+        unk_ylzou_enum_one = ENUM_ONE_UNK_0006;
+        event_bit_3820 = true;
+    } else if (dComIfGs_getTriforceNum() < 8) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3820) == TRUE) {
+            unk_ylzou_enum_one = ENUM_ONE_UNK_0007;
+            unk_ylzou_enum_two = ENUM_TWO_UNK_0002;
+        } else {
+            unk_ylzou_enum_one = ENUM_ONE_UNK_000B;
+        }
+    } else {
+        triforce_complete = TRUE;
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2C01) == FALSE) {
+            unk_ylzou_enum_one = ENUM_ONE_UNK_000C;
+        } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3980) == FALSE) {
+            unk_ylzou_enum_one = ENUM_ONE_UNK_000D;
+            unk_ylzou_enum_two = ENUM_TWO_UNK_0003;
+        } else {
+            unk_ylzou_enum_one = ENUM_ONE_UNK_000C;
+        }
+    }
+
+    field_0x2DC = unk_ylzou_enum_one;
+    field_0x2E8 = triforce_complete;
+    field_0x2EC = unk_ylzou_enum_two;
+    if (!event_bit_3820) {
+        dComIfGs_offEventBit(dSv_event_flag_c::UNK_3820);
+    } else {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_3820);
+    }
 }
 
 /* 000002B8-00000374       .text set_mtx__12daObjYLzou_cFv */
