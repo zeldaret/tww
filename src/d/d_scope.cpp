@@ -466,12 +466,18 @@ void dScp_wipeMove(sub_scp_class* i_Scp, f32 i_rate) {
 
     f32 px0 = i_Scp->mWipePanel[0].mSizeOrig.x / 2.0f * t;
     f32 py0 = i_Scp->mWipePanel[0].mSizeOrig.y / 2.0f * t;
+    px0 = px0;
+    py0 = py0;
     fopMsgM_paneTrans(&i_Scp->mWipePanel[0], -px0, -py0);
     f32 px1 = i_Scp->mWipePanel[1].mSizeOrig.x / 2.0f * t;
     f32 py1 = i_Scp->mWipePanel[1].mSizeOrig.y / 2.0f * t;
+    px1 = px1;
+    py1 = py1;
     fopMsgM_paneTrans(&i_Scp->mWipePanel[1], px1, -py1);
     f32 px2 = i_Scp->mWipePanel[2].mSizeOrig.x / 2.0f * t;
     f32 py2 = i_Scp->mWipePanel[2].mSizeOrig.y / 2.0f * t;
+    px2 = px2;
+    py2 = py2;
     fopMsgM_paneTrans(&i_Scp->mWipePanel[2], -px2, py2);
     f32 px3 = i_Scp->mWipePanel[3].mSizeOrig.x / 2.0f * t;
     f32 py3 = i_Scp->mWipePanel[3].mSizeOrig.y / 2.0f * t;
@@ -516,8 +522,6 @@ void dScp_wipeMove2(sub_scp_class* i_Scp, f32 i_rate) {
     fopMsgM_paneTrans(&i_Scp->mWipePanel[2], -px2, py2);
     f32 px3 = i_Scp->mWipePanel[3].mSizeOrig.x / 2.0f * t;
     f32 py3 = i_Scp->mWipePanel[3].mSizeOrig.y / 2.0f * t;
-    px3 = px3;
-    py3 = py3;
     fopMsgM_paneTrans(&i_Scp->mWipePanel[3], px3, py3);
 
     if (i_rate >= 1.f) {
@@ -720,11 +724,12 @@ void dScp_yose_select(sub_scp_class* i_Scp) {
 void dScp_textPosition(sub_scp_class* i_Scp) {
     int m;
     J2DTextBox* textbox = i_Scp->mpTextBox;
-    int line = (int)(textbox->mLineSpace / 2.0f);
+    int line = textbox->mLineSpace / 2;
     m = 0;
     int n = line * (VERSION_SELECT(1, 1, 2, 2) - i_Scp->mLineCount);
-    f32 fy;
-    fy = (f32)n;
+#if VERSION == VERSION_DEMO
+// There is probably a way to match it with the same code on demo & retail but I didn't find it.
+    f32 fy = (f32)n;
     textbox->shiftSet((f32)m, fy);
     fy = (f32)n;
     i_Scp->mpRubyBox->shiftSet((f32)m, fy);
@@ -732,6 +737,12 @@ void dScp_textPosition(sub_scp_class* i_Scp) {
     i_Scp->mpTextBoxSdw->shiftSet((f32)m, fy);
     fy = (f32)n;
     i_Scp->mpRubyBoxSdw->shiftSet((f32)m, fy);
+#else
+    textbox->shiftSet((f32)m, (f32)n);
+    i_Scp->mpRubyBox->shiftSet((f32)m, (f32)n);
+    i_Scp->mpTextBoxSdw->shiftSet((f32)m, (f32)n);
+    i_Scp->mpRubyBoxSdw->shiftSet((f32)m, (f32)n);
+#endif
 }
 
 /* 802395AC-802395FC       .text dScp_arrowInit__FP13sub_scp_class */
