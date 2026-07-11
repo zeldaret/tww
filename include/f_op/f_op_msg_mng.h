@@ -264,7 +264,7 @@ public:
     void setMesgEntry(JMSMesgEntry_c* i_entry) { mesgEntry = i_entry; }
 
     void dec_keyWaitTimer() {}
-    void dec_waitTimer() {}
+    void dec_waitTimer() { waitTimer = (int)waitTimer > 0 ? waitTimer - 1 : 0; }
     u8 getCharAlpha() { return field_0x293; } // ?
     u8 getGradAlpha() { return field_0x292; } // ?
     int getLineCount() { return lineCount; }
@@ -275,12 +275,12 @@ public:
     u8 getSelectFlag() { return selectFlag; }
     void getSelectLength() {}
     u32 getStringColor() { return field_0x25C;}
-    void get_waitTimer() {}
+    u32 get_waitTimer() { return waitTimer; }
     void resetNowLine() { nowLine = 0; }
     void selectArrow(J2DPicture*) {}
     void setActorPosition(cXyz*) {}
     void setAimLine(int i_line) { aimLine = i_line; }
-    void setAutoSendFlagOff() {}
+    void setAutoSendFlagOff() { autoSendFlag = 0; }
     void setBmgData(char* i_data) { bmgData = i_data; }
     void setCenterLineWidth(int i_width) { centerLineWidth = i_width; }
 
@@ -294,7 +294,7 @@ public:
     void setCount(int i_count) { count = i_count; }
     void setFont(JUTFont* i_font) { font[0] = i_font; }
     void setFontSize(int i_size) { fontSize = i_size; }
-    void setHandSendFlagOff() {}
+    void setHandSendFlagOff() { handSendFlag = 0; }
     void setLineCount(int i_count) { lineCount = i_count; }
     void setLineWidth(int i_width) { lineWidth = i_width; }
     void setRubyFont(JUTFont* i_font) { font[1] = i_font; }
@@ -306,8 +306,8 @@ public:
     void setSpaceFlagOn() {}
     void setSpaceTimer(int i_timer) { spaceTimer = i_timer; }
     void setStringColor(u32 color) { field_0x25C = color; }
-    void set_waitTimer(int) {}
-    void set_waitTimerZero() {}
+    void set_waitTimer(int i_timer) { waitTimer = i_timer; }
+    void set_waitTimerZero() { waitTimer = 0; }
     void shortCut() { field_0x299 = 1; }
 
     // fake, replace with real inline once it's figured out
@@ -359,7 +359,7 @@ public:
     /* 0x14C */ int rubyFontSize;
     /* 0x150 */ int field_0x150;
     /* 0x154 */ u32 field_0x154;
-    /* 0x158 */ u32 field_0x158;
+    /* 0x158 */ u32 waitTimer;
     /* 0x15C */ int spaceTimer;
     /* 0x160 */ int sendSpeed;
     /* 0x164 */ int field_0x164;      // keyWaitTimer?

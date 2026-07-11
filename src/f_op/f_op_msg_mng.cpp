@@ -1613,7 +1613,7 @@ fopMsgM_msgDataProc_c::fopMsgM_msgDataProc_c() {
     rubyFontSize = 0;
     field_0x150 = 0;
     field_0x154 = 0;
-    field_0x158 = 0;
+    waitTimer = 0;
     spaceTimer = 1;
     sendSpeed = 1;
     field_0x164 = 0;
@@ -1699,7 +1699,7 @@ void fopMsgM_msgDataProc_c::dataInit() {
     rubyFontSize = 0;
     field_0x150 = 0;
     field_0x154 = 0;
-    field_0x158 = 0;
+    waitTimer = 0;
     spaceTimer = 1;
     sendSpeed = 1;
     field_0x164 = 0;
@@ -2364,8 +2364,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 field_0x29A = 0;
                 count = bmgData[count + 1];
             } else if (temp[2] == 0 && temp[3] == 0 && temp[4] == 3) {
-                field_0x158 = temp[5] << 8;
-                field_0x158 |= bmgData[count + 6];
+                waitTimer = temp[5] << 8;
+                waitTimer |= bmgData[count + 6];
                 setAutoSendFlagOn();
                 count = bmgData[count + 1];
             }
