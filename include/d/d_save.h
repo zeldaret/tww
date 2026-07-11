@@ -977,8 +977,8 @@ public:
     /* 0x1158 */ dSv_event_c mTmp;
     /* 0x1258 */ dSv_turnRestart_c mTurnRestart;
     /* 0x1290 */ u8 mDataNum;
-    /* 0x1291 */ u8 mNoFile;
-    /* 0x1292 */ u8 mNewFile;
+    /* 0x1291 */ u8 mNewFile;
+    /* 0x1292 */ u8 mNoFile;
     /* 0x1298 */ u64 mMemCardCheckID;
 };  // Size: 0x12A0
 

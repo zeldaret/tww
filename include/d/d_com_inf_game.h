@@ -620,6 +620,9 @@ public:
         mPictureFlag &= ~mask;
     }
     u8 getPictureFormat() { return mPictureFormat; }
+    void setPictureFormat(u8 i) { mPictureFormat = i; }
+    u8 getSelectPicture() { return mSelectPicture; }
+    void setSelectPicture(u8 i) { mSelectPicture = i; }
     u8 getPictureResult() { return mPictureResult; }
     u8 getPictureResultDetail() { return mPictureResultDetail; }
     void setBossBattleData(JKRAramBlock* aramBlock, int i) { mBossBattleData[i] = aramBlock; }
@@ -826,7 +829,7 @@ public:
     /* 0x495E */ u8 mPictureStatus;
     /* 0x495F */ u8 field_0x495f;
     /* 0x4960 */ u8 mPictureFormat;
-    /* 0x4961 */ u8 field_0x4961;
+    /* 0x4961 */ u8 mSelectPicture;
     /* 0x4962 */ u8 mHeapLockFlag;
 #if VERSION > VERSION_DEMO
     /* 0x4963 */ u8 mNowVibration;
@@ -905,6 +908,7 @@ void dComIfGs_setGameStartStage();
 void dComIfGs_gameStart();
 void dComIfGs_copyPlayerRecollectionData();
 u8 dComIfGs_checkGetItem(u8);
+void dComIfGs_exchangePlayerRecollectionData();
 
 inline void dComIfGs_init() {
     g_dComIfG_gameInfo.save.init();
@@ -1472,8 +1476,8 @@ inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo,
 }
 #endif
 
-inline void dComIfGs_setMemoryToCard(u8* i_cardPtr, int i_dataNum) {
-    g_dComIfG_gameInfo.save.memory_to_card((char*)i_cardPtr, i_dataNum);
+inline int dComIfGs_setMemoryToCard(u8* i_cardPtr, int i_dataNum) {
+    return g_dComIfG_gameInfo.save.memory_to_card((char*)i_cardPtr, i_dataNum);
 }
 
 inline void dComIfGs_setInitDataToCard(u8* i_cardPtr, int i_dataNum) {
@@ -3190,6 +3194,18 @@ inline void dComIfGp_offPictureFlag(u8 i) {
 
 inline u8 dComIfGp_getPictureFormat() {
     return g_dComIfG_gameInfo.play.getPictureFormat();
+}
+
+inline void dComIfGp_setPictureFormat(u8 i) {
+    g_dComIfG_gameInfo.play.setPictureFormat(i);
+}
+
+inline u8 dComIfGp_getSelectPicture() {
+    return g_dComIfG_gameInfo.play.getSelectPicture();
+}
+
+inline void dComIfGp_setSelectPicture(u8 i) {
+    g_dComIfG_gameInfo.play.setSelectPicture(i);
 }
 
 inline u8 dComIfGp_getPictureResult() {

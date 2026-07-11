@@ -1,6 +1,6 @@
 /**
  * d_a_tn.cpp
- * Enemy - Darknut / Mini-Boss - Darknut (Tower of the Gods) / タートナック (Tātonakku)
+ * Enemy - Darknut / Mini-Boss - Darknut (Tower of the Gods) / タートナック (Taatonakku)
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
