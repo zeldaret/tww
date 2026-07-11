@@ -19,15 +19,14 @@ typedef enum { ENUM_TWO_UNK_0000 = 0x0000, ENUM_TWO_UNK_0001 = 0x0001, ENUM_TWO_
 
 /* 000000EC-000002B8       .text set_start_type__12daObjYLzou_cFv */
 void daObjYLzou_c::set_start_type() {
-    /* Nonmatching */
-    bool event_bit_3820;
     UNK_YLZOU_ENUM_ONE unk_ylzou_enum_one;
-    UNK_YLZOU_ENUM_TWO unk_ylzou_enum_two;
     BOOL triforce_complete;
+    UNK_YLZOU_ENUM_TWO unk_ylzou_enum_two;
+    bool event_bit_3820;
 
-    event_bit_3820 = false;
-    unk_ylzou_enum_two = ENUM_TWO_UNK_0000;
     triforce_complete = FALSE;
+    unk_ylzou_enum_two = ENUM_TWO_UNK_0000;
+    event_bit_3820 = false;
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D04) == FALSE) {
         if (field_0x2E0 != 0xFF && !fopAcM_isSwitch(this, field_0x2E0)) {
             unk_ylzou_enum_one = ENUM_ONE_UNK_0000;
