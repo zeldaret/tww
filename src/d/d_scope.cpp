@@ -466,6 +466,7 @@ void dScp_wipeMove(sub_scp_class* i_Scp, f32 i_rate) {
 
     f32 px0 = i_Scp->mWipePanel[0].mSizeOrig.x / 2.0f * t;
     f32 py0 = i_Scp->mWipePanel[0].mSizeOrig.y / 2.0f * t;
+    // self assign fake match reused from TP
     px0 = px0;
     py0 = py0;
     fopMsgM_paneTrans(&i_Scp->mWipePanel[0], -px0, -py0);
@@ -538,16 +539,10 @@ void dScp_wipeMove2(sub_scp_class* i_Scp, f32 i_rate) {
         i_Scp->mWipePanel[7].mSize.y = i_Scp->mWipePanel[7].mSizeOrig.y;
     }
 
-    i_Scp->mWipePanel[4].mPosCenter.y =
-        i_Scp->mWipePanel[0].mPosTopLeft.y - i_Scp->mWipePanel[4].mSize.y / 2.0f;
-    i_Scp->mWipePanel[5].mPosCenter.y = i_Scp->mWipePanel[5].mSize.y / 2.0f +
-                                            (i_Scp->mWipePanel[3].mPosTopLeft.y +
-                                             i_Scp->mWipePanel[3].mSize.y);
-    i_Scp->mWipePanel[6].mPosCenter.x =
-        i_Scp->mWipePanel[0].mPosTopLeft.x - i_Scp->mWipePanel[6].mSize.x / 2.0f;
-    i_Scp->mWipePanel[7].mPosCenter.x = i_Scp->mWipePanel[7].mSize.x / 2.0f +
-                                            (i_Scp->mWipePanel[3].mPosTopLeft.x +
-                                             i_Scp->mWipePanel[3].mSize.x);
+    i_Scp->mWipePanel[4].mPosCenter.y = i_Scp->mWipePanel[0].mPosTopLeft.y - i_Scp->mWipePanel[4].mSize.y / 2.0f;
+    i_Scp->mWipePanel[5].mPosCenter.y = i_Scp->mWipePanel[5].mSize.y / 2.0f + (i_Scp->mWipePanel[3].mPosTopLeft.y + i_Scp->mWipePanel[3].mSize.y);
+    i_Scp->mWipePanel[6].mPosCenter.x = i_Scp->mWipePanel[0].mPosTopLeft.x - i_Scp->mWipePanel[6].mSize.x / 2.0f;
+    i_Scp->mWipePanel[7].mPosCenter.x = i_Scp->mWipePanel[7].mSize.x / 2.0f + (i_Scp->mWipePanel[3].mPosTopLeft.x + i_Scp->mWipePanel[3].mSize.x);
 
     for (int i = 4; i < 8; i++) {
         fopMsgM_cposMove(&i_Scp->mWipePanel[i]);
@@ -585,20 +580,12 @@ void dScp_wipeMoveDemo(sub_scp_class* i_Scp, f32 i_rate, bool i_reset) {
     i_Scp->mWipePanel[3].mPosCenter.y = y + i_Scp->mWipePanel[3].mSize.y / 2.0f;
     fopMsgM_cposMove(&i_Scp->mWipePanel[3]);
 
-    i_Scp->mWipePanel[4].mPosCenter.y =
-        i_Scp->mWipePanel[0].mPosTopLeft.y - i_Scp->mWipePanel[4].mSize.y / 2.0f;
-    i_Scp->mWipePanel[5].mPosCenter.y = i_Scp->mWipePanel[5].mSize.y / 2.0f +
-                                            (i_Scp->mWipePanel[3].mPosTopLeft.y +
-                                             i_Scp->mWipePanel[3].mSize.y);
-    i_Scp->mWipePanel[6].mPosCenter.x =
-        i_Scp->mWipePanel[0].mPosTopLeft.x - i_Scp->mWipePanel[6].mSize.x / 2.0f;
-    i_Scp->mWipePanel[6].mPosCenter.y =
-        i_Scp->mWipePanel[0].mPosTopLeft.y + i_Scp->mWipePanel[6].mSize.y / 2.0f;
-    i_Scp->mWipePanel[7].mPosCenter.x = i_Scp->mWipePanel[7].mSize.x / 2.0f +
-                                            (i_Scp->mWipePanel[1].mPosTopLeft.x +
-                                             i_Scp->mWipePanel[1].mSize.x);
-    i_Scp->mWipePanel[7].mPosCenter.y =
-        i_Scp->mWipePanel[1].mPosTopLeft.y + i_Scp->mWipePanel[7].mSize.y / 2.0f;
+    i_Scp->mWipePanel[4].mPosCenter.y = i_Scp->mWipePanel[0].mPosTopLeft.y - i_Scp->mWipePanel[4].mSize.y / 2.0f;
+    i_Scp->mWipePanel[5].mPosCenter.y = i_Scp->mWipePanel[5].mSize.y / 2.0f + (i_Scp->mWipePanel[3].mPosTopLeft.y + i_Scp->mWipePanel[3].mSize.y);
+    i_Scp->mWipePanel[6].mPosCenter.x = i_Scp->mWipePanel[0].mPosTopLeft.x - i_Scp->mWipePanel[6].mSize.x / 2.0f;
+    i_Scp->mWipePanel[6].mPosCenter.y = i_Scp->mWipePanel[0].mPosTopLeft.y + i_Scp->mWipePanel[6].mSize.y / 2.0f;
+    i_Scp->mWipePanel[7].mPosCenter.x = i_Scp->mWipePanel[7].mSize.x / 2.0f + (i_Scp->mWipePanel[1].mPosTopLeft.x + i_Scp->mWipePanel[1].mSize.x);
+    i_Scp->mWipePanel[7].mPosCenter.y = i_Scp->mWipePanel[1].mPosTopLeft.y + i_Scp->mWipePanel[7].mSize.y / 2.0f;
 
     for (int i = 4; i < 8; i++) {
         fopMsgM_cposMove(&i_Scp->mWipePanel[i]);
