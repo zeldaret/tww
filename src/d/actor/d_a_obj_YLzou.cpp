@@ -13,21 +13,30 @@ void daObjYLzou_c::set_start_type() {
 
 /* 000002B8-00000374       .text set_mtx__12daObjYLzou_cFv */
 void daObjYLzou_c::set_mtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS( 
+        current.pos.x,
+        current.pos.y + field_0x35C * cM_ssin(field_0x358),
+        current.pos.z
+    );
+    mDoMtx_stack_c::XYZrotM(shape_angle);
+    field_0x298->setBaseTRMtx(mDoMtx_stack_c::get());
+    mDoMtx_stack_c::scaleM(scale);
+    MTXCopy(mDoMtx_stack_c::get(),field_0x2A0);    
 }
 
 /* 00000374-000003B0       .text init_mtx__12daObjYLzou_cFv */
 void daObjYLzou_c::init_mtx() {
-    /* Nonmatching */
+    field_0x298->setBaseScale(scale);
+    set_mtx();
 }
 
 /* 000003B0-000003D4       .text solidHeapCB__12daObjYLzou_cFP10fopAc_ac_c */
-void daObjYLzou_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjYLzou_c::solidHeapCB(fopAc_ac_c*) {
+    return create_heap();
 }
 
 /* 000003D4-000004F4       .text create_heap__12daObjYLzou_cFv */
-void daObjYLzou_c::create_heap() {
+bool daObjYLzou_c::create_heap() {
     /* Nonmatching */
 }
 
@@ -43,17 +52,34 @@ void daObjYLzou_c::eff_smoke_slip_start() {
 
 /* 000007AC-0000080C       .text eff_smoke_slip_end__12daObjYLzou_cFv */
 void daObjYLzou_c::eff_smoke_slip_end() {
-    /* Nonmatching */
+    for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); ++i) {
+        mSmokeCbs[i].remove();
+    }
 }
 
 /* 0000080C-0000086C       .text eff_smoke_slip_remove__12daObjYLzou_cFv */
 void daObjYLzou_c::eff_smoke_slip_remove() {
-    /* Nonmatching */
+    for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); ++i) {
+        mSmokeCbs[i].remove();
+    }
 }
 
 /* 0000086C-000008D0       .text eff_smoke_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::eff_smoke_proc() {
-    /* Nonmatching */
+    if (this->field_0x360 != this->field_0x361) {
+        if (this->field_0x361 == 1) {
+            eff_smoke_slip_start();
+        }
+        else {
+            eff_smoke_slip_end();
+        }
+        this->field_0x360 = this->field_0x361;
+    }
+    else {
+        if (this->field_0x360 == 1) {
+            eff_set_slip_smoke_pos();
+        }
+    }    
 }
 
 /* 000008D0-000009A4       .text vib_proc__12daObjYLzou_cFv */
@@ -73,7 +99,12 @@ bool daObjYLzou_c::_delete() {
 
 /* 00000B7C-00000BD8       .text move_ylzou_demo_start_wait_act_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::move_ylzou_demo_start_wait_act_proc() {
-    /* Nonmatching */
+    if (field_0x2E0 != 0xFF) {
+        // == TRUE required for 100% match
+        if (fopAcM_isSwitch(this, field_0x2E0) == TRUE) {
+            setup_action(1);
+        }
+    }
 }
 
 /* 00000BD8-00000C70       .text demo_regist_wait_act_proc__12daObjYLzou_cFv */
@@ -114,6 +145,13 @@ void daObjYLzou_c::wait_act_proc() {
 /* 000010AC-000010D8       .text move_ylzou_demo_start_wait_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::move_ylzou_demo_start_wait_act_init_proc() {
     /* Nonmatching */
+    field_0x2E4 = -1;
+    home.pos.x = 0.0;
+    home.pos.y = 0.0;
+    home.pos.z = 0.0;
+    current.pos.x = 0.0;
+    current.pos.y = 0.0;
+    current.pos.z = 0.0;
 }
 
 /* 000010D8-00001174       .text demo_regist_wait_act_init_proc__12daObjYLzou_cFv */
@@ -123,17 +161,22 @@ void daObjYLzou_c::demo_regist_wait_act_init_proc() {
 
 /* 00001174-000011A4       .text move_ylzou_demo_vib_start_wait_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::move_ylzou_demo_vib_start_wait_act_init_proc() {
-    /* Nonmatching */
+    dComIfGs_onEventBit(dSv_event_flag_c::UNK_3820);
 }
 
 /* 000011A4-0000120C       .text move_ylzou_demo_vib_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::move_ylzou_demo_vib_act_init_proc() {
     /* Nonmatching */
+    dComIfGp_getVibration().StartQuake(6,1,cXyz(0, 1, 0));
+    field_0x368 = 1;
+    return;
 }
 
 /* 0000120C-00001228       .text move_ylzou_demo_move_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::move_ylzou_demo_move_act_init_proc() {
-    /* Nonmatching */
+    field_0x361 = 1;
+    field_0x368 = 2;
+    current.angle.y = SHRT_MIN;
 }
 
 /* 00001228-000012C8       .text demo_end_wait_act_init_proc__12daObjYLzou_cFv */
@@ -144,11 +187,23 @@ void daObjYLzou_c::demo_end_wait_act_init_proc() {
 /* 000012C8-000012F4       .text open_wait_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::open_wait_act_init_proc() {
     /* Nonmatching */
+    home.pos.x = 0.0;
+    home.pos.y = 0.0;
+    home.pos.z = -680.0;
+    current.pos.x = 0.0;
+    current.pos.y = 0.0;
+    current.pos.z = -680.0;
 }
 
 /* 000012F4-00001318       .text close_wait_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::close_wait_act_init_proc() {
     /* Nonmatching */
+    home.pos.x = 0.0;
+    home.pos.y = 0.0;
+    home.pos.z = 0.0;
+    current.pos.x = 0.0;
+    current.pos.y = 0.0;
+    current.pos.z = 0.0;
 }
 
 /* 00001318-000013A4       .text go_up_stairs_demo_move_start_wait_act_init_proc__12daObjYLzou_cFv */
@@ -158,7 +213,8 @@ void daObjYLzou_c::go_up_stairs_demo_move_start_wait_act_init_proc() {
 
 /* 000013A4-000013B8       .text go_up_stairs_demo_move_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::go_up_stairs_demo_move_act_init_proc() {
-    /* Nonmatching */
+    field_0x361 = 1;
+    field_0x368 = 2;
 }
 
 /* 000013B8-00001740       .text setup_action__12daObjYLzou_cFi */
@@ -174,6 +230,10 @@ bool daObjYLzou_c::_execute() {
 /* 000017D4-00001834       .text _draw__12daObjYLzou_cFv */
 bool daObjYLzou_c::_draw() {
     /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0_PLIGHT,&current.pos,&tevStr);
+    g_env_light.setLightTevColorType(field_0x298,&tevStr);
+    mDoExt_modelUpdateDL(field_0x298);
+    return true;
 }
 
 /* 00001834-00001854       .text daObjYLzou_Create__FP10fopAc_ac_c */
