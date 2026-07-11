@@ -495,6 +495,12 @@ void daObjFerris::Act_c::make_lean() {
     cXyz offs0(0.0f, 0.0f, 0.0f);
     cXyz delta;
     cXyz delta2;
+#if VERSION == VERSION_DEMO
+    f32 h;
+    f32 z;
+    f32 a;
+    f32 b;
+#endif
 
     Mtx* mtx;
     s32* pRideState; // Fakematch?
@@ -510,6 +516,21 @@ void daObjFerris::Act_c::make_lean() {
             delta2.set(mRidePos.x - pt0.x, 0.0f, mRidePos.z - pt0.z);
             delta.normalizeRS();
 
+#if VERSION == VERSION_DEMO
+            z = -delta.z;
+            h = delta.x;
+            a = -(z * pt0.x + h * pt0.z);
+            b = z * mRidePos.x + h * mRidePos.z;
+            a = std::fabsf(a + b);
+            h = delta.x * delta2.z - delta.z * delta2.x;
+            a /= 162.0f;
+
+            if (h < 0.0f) {
+                mRideWaveTarget[i] = a * 550.0f;
+            } else {
+                mRideWaveTarget[i] = a * -550.0f;
+            }
+#else
             f32 z = -delta.z;
             f32 h = std::fabsf(-(z * pt0.x + delta.x * pt0.z) + (z * mRidePos.x + delta.x * mRidePos.z));
             f32 temp = delta.x * delta2.z - delta.z * delta2.x;
@@ -519,6 +540,7 @@ void daObjFerris::Act_c::make_lean() {
             } else {
                 mRideWaveTarget[i] = h * -550.0f;
             }
+#endif
         } else {
             mRideWaveTarget[i] = 0;
         }
