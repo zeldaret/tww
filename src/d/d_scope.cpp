@@ -24,7 +24,7 @@
 
 static J2DScreen* dScp_ScpScreen;
 static J2DScreen* dScp_MsgScreen;
-static JUTFont* font0; 
+static JUTFont* font0;
 static JUTFont* font1; // Ruby font
 static J2DPicture* sbutton_icon[8];
 static J2DPicture* sbutton_kage[8];
@@ -125,11 +125,11 @@ void dScp_ScreenDataSet(sub_scp_class* i_Scp) {
     fopMsgM_setPaneData(&i_Scp->mWipePanel[7], dScp_ScpScreen->search('wp06'));
 
 #if VERSION == VERSION_PAL
-    if (g_dComIfG_gameInfo.play.mPalLanguage != 0) {
+    if (dComIfGs_getPalLanguage() != 0) {
         char buf[16];
-        sprintf(buf, "wipe_in_%d.bti", g_dComIfG_gameInfo.play.mPalLanguage);
+        sprintf(buf, "wipe_in_%d.bti", dComIfGs_getPalLanguage());
         ((J2DPicture*)i_Scp->mArrowR.pane)->changeTexture(buf, 0);
-        sprintf(buf, "wipe_out_%d.bti", g_dComIfG_gameInfo.play.mPalLanguage);
+        sprintf(buf, "wipe_out_%d.bti", dComIfGs_getPalLanguage());
         ((J2DPicture*)i_Scp->mArrowL.pane)->changeTexture(buf, 0);
     }
 #endif
@@ -503,8 +503,7 @@ void dScp_wipeMove2(sub_scp_class* i_Scp, f32 i_rate) {
         fopMsgM_paneScaleXY(&i_Scp->mWipePanel[i], i_rate);
     }
 
-    // See dScp_wipeMove: the panes whose paneTrans args include a negation need the products in
-    // self-assigned temps to force MWCC to batch both products before the fnegs.
+    // Same self-assigned temps trick as dScp_wipeMove.
     f32 px0 = i_Scp->mWipePanel[0].mSizeOrig.x / 2.0f * t;
     f32 py0 = i_Scp->mWipePanel[0].mSizeOrig.y / 2.0f * t;
     px0 = px0;
@@ -912,9 +911,9 @@ BOOL dScp_outnowProc(sub_scp_class* i_Scp) {
         if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0)) {
             i_Scp->mMesgDataProc.shortCut();
             if (i_Scp->mMesgDataProc.autoSendFlag == 0 && i_Scp->mMesgDataProc.handSendFlag == 0 &&
-                (s32)i_Scp->mMesgDataProc.field_0x158 != 0)
+                (s32)i_Scp->mMesgDataProc.waitTimer != 0)
             {
-                i_Scp->mMesgDataProc.field_0x158 = 0;
+                i_Scp->mMesgDataProc.set_waitTimerZero();
             }
         }
     } else if (i_Scp->mMesgEntry.mDrawType == 1) {
@@ -922,9 +921,9 @@ BOOL dScp_outnowProc(sub_scp_class* i_Scp) {
     }
 
     if (i_Scp->mMesgDataProc.autoSendFlag == 0 && i_Scp->mMesgDataProc.handSendFlag == 0 &&
-        (int)i_Scp->mMesgDataProc.field_0x158 != 0)
+        (int)i_Scp->mMesgDataProc.waitTimer != 0)
     {
-        i_Scp->mMesgDataProc.field_0x158 = (int)i_Scp->mMesgDataProc.field_0x158 > 0 ? i_Scp->mMesgDataProc.field_0x158 - 1 : 0;
+        i_Scp->mMesgDataProc.dec_waitTimer();
     } else {
         i_Scp->mMesgDataProc.stringSet();
         dComIfGp_setScopeMesgStatus(i_Scp->mMesgDataProc.getMesgStatus());
@@ -973,20 +972,20 @@ BOOL dScp_forceContinueProc(sub_scp_class* i_Scp) {
 
 /* 8023A3C0-8023A4FC       .text dScp_closewaitProc__FP13sub_scp_class */
 BOOL dScp_closewaitProc(sub_scp_class* i_Scp) {
-    if (i_Scp->mMesgDataProc.autoSendFlag != 0) { // Look for inline getter
-        u32 count = (int)i_Scp->mMesgDataProc.field_0x158 > 0 ? i_Scp->mMesgDataProc.field_0x158 - 1 : 0;
-        i_Scp->mMesgDataProc.field_0x158 = count;
+    if (i_Scp->mMesgDataProc.autoSendFlag != 0) {
+        u32 count = (int)i_Scp->mMesgDataProc.waitTimer > 0 ? i_Scp->mMesgDataProc.waitTimer - 1 : 0;
+        i_Scp->mMesgDataProc.waitTimer = count;
         if (count == 0 || fopMsgM_checkForceSend()) {
-            i_Scp->mMesgDataProc.autoSendFlag = 0; // Look for inline getter
+            i_Scp->mMesgDataProc.setAutoSendFlagOff();
             dComIfGp_setScopeMesgStatus(fopMsgStts_BOX_CLOSED_e);
             dScp_mesgPaneHide(i_Scp);
         }
-    } else if (i_Scp->mMesgDataProc.handSendFlag != 0) { // Look for inline getter
-        u32 count = (int)i_Scp->mMesgDataProc.field_0x158 > 0 ? i_Scp->mMesgDataProc.field_0x158 - 1 : 0;
-        i_Scp->mMesgDataProc.field_0x158 = count;
+    } else if (i_Scp->mMesgDataProc.handSendFlag != 0) {
+        u32 count = (int)i_Scp->mMesgDataProc.waitTimer > 0 ? i_Scp->mMesgDataProc.waitTimer - 1 : 0;
+        i_Scp->mMesgDataProc.waitTimer = count;
         if (count != 0) {
             if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || fopMsgM_checkForceSend()) {
-                i_Scp->mMesgDataProc.handSendFlag = 0; // Look for inline getter
+                i_Scp->mMesgDataProc.setHandSendFlagOff();
                 dComIfGp_setScopeMesgStatus(fopMsgStts_BOX_CLOSED_e);
                 dScp_mesgPaneHide(i_Scp);
                 fopMsgM_setNowAlphaZero(&i_Scp->mDot);
@@ -994,7 +993,7 @@ BOOL dScp_closewaitProc(sub_scp_class* i_Scp) {
                 dScp_dotMove(i_Scp);
             }
         } else {
-            i_Scp->mMesgDataProc.handSendFlag = 0;
+            i_Scp->mMesgDataProc.setHandSendFlagOff();
             dComIfGp_setScopeMesgStatus(fopMsgStts_BOX_CLOSED_e);
             dScp_mesgPaneHide(i_Scp);
             fopMsgM_setNowAlphaZero(&i_Scp->mDot);
@@ -1122,7 +1121,7 @@ void dScp_moveProc(sub_scp_class* i_Scp) {
             i_Scp->mStatus = fopMsgStts_SCOPE_OPENING_2_e;
             i_Scp->mTransTimer = 0;
         }
-    } else if (g_dComIfG_gameInfo.play.getScopeMesgStatus() == fopMsgStts_BOX_OPENING_e) {
+    } else if (dComIfGp_getScopeMesgStatus() == fopMsgStts_BOX_OPENING_e) {
         dScp_mesgPaneShow(i_Scp);
         i_Scp->mStatus = fopMsgStts_MSG_TYPING_e;
         dComIfGp_setMesgStatus(fopMsgStts_MSG_TYPING_e);
@@ -1140,13 +1139,13 @@ void dScp_moveProc(sub_scp_class* i_Scp) {
 
 /* 8023A9AC-8023AAD0       .text dScp_demoProc__FP13sub_scp_class */
 void dScp_demoProc(sub_scp_class* i_Scp) {
-    camera_class* camera = dComIfGp_getCamera(g_dComIfG_gameInfo.play.mPlayerInfo[0].mCameraID);
+    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     f32 max = g_meterHIO.mScopeWipeMaxScale;
 
     if (dComIfGp_getScopeMesgStatus() != fopMsgStts_SCOPE_WAIT_e) {
-        if (!(g_dComIfG_gameInfo.play.getCameraAttentionStatus(0) & dCamAttnStts_TELESCOPE_LOOK_e)) {
+        if (!(dComIfGp_getCameraAttentionStatus(0) & dCamAttnStts_TELESCOPE_LOOK_e)) {
             i_Scp->mStatus = fopMsgStts_MSG_DISPLAYED_e;
-            g_dComIfG_gameInfo.play.setMesgStatus(fopMsgStts_MSG_DISPLAYED_e);
+            dComIfGp_setMesgStatus(fopMsgStts_MSG_DISPLAYED_e);
             i_Scp->mTransTimer = 0;
             i_Scp->mDemoCloseFlag = 1;
         }
@@ -1240,7 +1239,7 @@ void dScp_closeDemoProc(sub_scp_class* i_Scp) {
 /* 8023AD20-8023AD60       .text dScp_Draw__FP13sub_scp_class */
 static BOOL dScp_Draw(sub_scp_class* i_this) {
     dScp_setAlpha(i_this);
-    g_dComIfG_gameInfo.drawlist.set2DOpa(&scope);
+    dComIfGd_set2DOpa(&scope);
     return TRUE;
 }
 
