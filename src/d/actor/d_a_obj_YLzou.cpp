@@ -13,15 +13,11 @@ void daObjYLzou_c::set_start_type() {
 
 /* 000002B8-00000374       .text set_mtx__12daObjYLzou_cFv */
 void daObjYLzou_c::set_mtx() {
-    mDoMtx_stack_c::transS( 
-        current.pos.x,
-        current.pos.y + field_0x35C * cM_ssin(field_0x358),
-        current.pos.z
-    );
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y + field_0x35C * cM_ssin(field_0x358), current.pos.z);
     mDoMtx_stack_c::XYZrotM(shape_angle);
     field_0x298->setBaseTRMtx(mDoMtx_stack_c::get());
     mDoMtx_stack_c::scaleM(scale);
-    MTXCopy(mDoMtx_stack_c::get(),field_0x2A0);    
+    MTXCopy(mDoMtx_stack_c::get(), field_0x2A0);
 }
 
 /* 00000374-000003B0       .text init_mtx__12daObjYLzou_cFv */
@@ -69,17 +65,15 @@ void daObjYLzou_c::eff_smoke_proc() {
     if (this->field_0x360 != this->field_0x361) {
         if (this->field_0x361 == 1) {
             eff_smoke_slip_start();
-        }
-        else {
+        } else {
             eff_smoke_slip_end();
         }
         this->field_0x360 = this->field_0x361;
-    }
-    else {
+    } else {
         if (this->field_0x360 == 1) {
             eff_set_slip_smoke_pos();
         }
-    }    
+    }
 }
 
 /* 000008D0-000009A4       .text vib_proc__12daObjYLzou_cFv */
@@ -167,7 +161,7 @@ void daObjYLzou_c::move_ylzou_demo_vib_start_wait_act_init_proc() {
 /* 000011A4-0000120C       .text move_ylzou_demo_vib_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::move_ylzou_demo_vib_act_init_proc() {
     /* Nonmatching */
-    dComIfGp_getVibration().StartQuake(6,1,cXyz(0, 1, 0));
+    dComIfGp_getVibration().StartQuake(6, 1, cXyz(0, 1, 0));
     field_0x368 = 1;
     return;
 }
@@ -230,8 +224,8 @@ bool daObjYLzou_c::_execute() {
 /* 000017D4-00001834       .text _draw__12daObjYLzou_cFv */
 bool daObjYLzou_c::_draw() {
     /* Nonmatching */
-    g_env_light.settingTevStruct(TEV_TYPE_BG0_PLIGHT,&current.pos,&tevStr);
-    g_env_light.setLightTevColorType(field_0x298,&tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0_PLIGHT, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(field_0x298, &tevStr);
     mDoExt_modelUpdateDL(field_0x298);
     return true;
 }
