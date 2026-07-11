@@ -4,7 +4,6 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_npc.h"
 #include "d/actor/d_a_npc_mk_static.h"
-#include "d/actor/d_a_player_main.h"
 
 class daNpc_Mk_c : public fopAc_ac_c {
 public:
@@ -28,7 +27,7 @@ public:
     void ClrOrder() { mOrderFlags &= ~0xFF; }
     void SetOrder(u8 temp) { mOrderFlags |= temp; }
     
-    void chkAngry() { daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass(); mMkStatic.aroundWalk(this, pLink, field_0x6A2); }
+    void chkAngry() {}
     bool chkFlag(u16 flag) { return (mFlags & flag) == flag; }
     void clrFlag(u16 flag) { mFlags &= ~flag; }
     s8 getBackboneJntNum() { return m_jnt.getBackboneJntNum(); }

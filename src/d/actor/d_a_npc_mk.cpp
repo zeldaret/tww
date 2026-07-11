@@ -430,13 +430,13 @@ BOOL daNpc_Mk_c::init() {
     switch(mState) {
         case 1:
             if(dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0040) &&  !dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0020)) {
-                if(setAction(&daNpc_Mk_c::visit_action, NULL)) {
+                if(setAction(&daNpc_Mk_c::hind_action, NULL)) {
                     setFlag(0x10);
 
                     fopAcM_OffStatus(this, fopAcStts_SHOWMAP_e);
                 }
             } else {
-                if(setAction(&daNpc_Mk_c::hind_action, NULL)) {
+                if(setAction(&daNpc_Mk_c::visit_action, NULL)) {
                     if(dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0580)) {
                         fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
                     }
@@ -466,11 +466,9 @@ BOOL daNpc_Mk_c::init() {
             }
             
             if(dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0040) &&  !dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0020)) {
-                if(setAction(&daNpc_Mk_c::hind_action, NULL)) {
-                    // nothing
-                }
+                setAction(&daNpc_Mk_c::seek_action, NULL);
             } else {
-                if(setAction(&daNpc_Mk_c::seek_action, NULL)) {
+                if(setAction(&daNpc_Mk_c::hind_action, NULL)) {
                     setFlag(0x10);
                 }
                 fopAcM_OffStatus(this, fopAcStts_SHOWMAP_e);
@@ -479,9 +477,7 @@ BOOL daNpc_Mk_c::init() {
             break;
         
         default:
-            if(setAction(&daNpc_Mk_c::wait_action, NULL)) {
-                // nothing
-            }
+            setAction(&daNpc_Mk_c::wait_action, NULL);
             break;
     }
     mAttnBasePos.set(current.pos);
@@ -719,15 +715,11 @@ void daNpc_Mk_c::runLink() {
 
 /* 000019DC-00001A14       .text aroundLink__10daNpc_Mk_cFv */
 void daNpc_Mk_c::aroundLink() {
-    chkAngry();
-
-
-    // daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
-
-    // // a line that gets optimized out and produces no code but is needed to match
-    // // it is unknown what this actually is
-    // speedF = speedF;
-    // mMkStatic.aroundWalk(this, pLink, field_0x6A2);
+    daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
+    // this makes the codegen work for all versions
+    
+    speedF = speedF;
+    mMkStatic.aroundWalk(this, pLink, field_0x6A2);
     /* Nonmatching */
 }
 
@@ -738,7 +730,6 @@ void daNpc_Mk_c::remove_Um2() {
         fopAcM_SetParam(ac, fopAcM_GetParam(ac) | 0x80000000);
         fopAcM_OnStatus(ac, fopAcStts_UNK800_e);
     }
-
     /* Nonmatching */
 }
 
@@ -1765,10 +1756,10 @@ BOOL daNpc_Mk_c::CreateHeap() {
     }
 
     m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head2"));
-    JUT_ASSERT(2574, m_jnt.getHeadJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(2574, 2576), m_jnt.getHeadJntNum() >= 0);
 
     m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
-    JUT_ASSERT(2579, m_jnt.getBackboneJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(2579, 2581), m_jnt.getBackboneJntNum() >= 0);
 
     mTexPatternIdx = 0;
     
