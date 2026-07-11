@@ -65,7 +65,7 @@ public:
 
     void IamKakkuto() {}
     void IamSukketo() {}
-    void clr_manzai() {}
+    void clr_manzai() {m883 = 0;}
     void getOdoroki() {}
     void getStt() {}
     void get_oldMsgStat() {}
@@ -115,8 +115,8 @@ public:
     void anmAtr(unsigned short);
     void eventOrder();
     void checkOrder();
-    BOOL chk_manzai();
-    BOOL chk_talk();
+    u8 chk_manzai();
+    bool chk_talk();
     bool chk_partsNotMove();
     BOOL lookBack();
     u16 next_msgStatus(unsigned long*);
@@ -182,25 +182,25 @@ public:
     void endEvent();
     BOOL isEventEntry();
     void event_proc(int);
-    void set_action(int (daNpc_Bm1_c::*)(void*), void*);
+    BOOL set_action(int (daNpc_Bm1_c::*)(void*), void*);
     void setStt(signed char);
-    void d_wait();
-    void lookup();
-    void orooro();
-    void wait_1();
-    void talk_1();
-    void talk_2();
-    void manzai();
-    void wait_4();
-    void flyawy();
-    void wait_5();
-    void h_wait();
-    void wait_7();
-    void wait_3();
-    void wait_8();
-    void wait_2();
-    void walk_1();
-    void CHKwai();
+    BOOL d_wait();
+    BOOL lookup();
+    BOOL orooro();
+    BOOL wait_1();
+    BOOL talk_1();
+    BOOL talk_2();
+    BOOL manzai();
+    BOOL wait_4();
+    BOOL flyawy();
+    BOOL wait_5();
+    BOOL h_wait();
+    BOOL wait_7();
+    BOOL wait_3();
+    BOOL wait_8();
+    BOOL wait_2();
+    BOOL walk_1();
+    BOOL CHKwai();
     BOOL demo_action1(void*);
     BOOL wait_action1(void*);
     BOOL wait_action2(void*);
@@ -254,7 +254,7 @@ public:
     /* 0x71C */ mDoExt_McaMorf* m71C;
                 u32 m720;
                 s8 m_UNK_jnt_num;
-    /* 0x720 */ u8 field_0x728[0x734 - 0x728];
+                ActionFunc m728;
     /* 0x734 */ Mtx mLeftArmMtx;
     /* 0x764 */ Mtx mRightArmMtx;
     /* 0x794 */ dNpc_PathRun_c mPathRun;
@@ -279,10 +279,11 @@ public:
                 s16 m86A;
                 s16 m86C;
     /* 0x86E */ s16 m86E;
-    /* 0x870 */ u8 m870[0x874 - 0x870];
+    /* 0x870 */ s16 m870;
+    /* 0x872 */ s16 m872;
     /* 0x874 */ s16 m874;
     /* 0x876 */ s16 m876;
-    /* 0x878 */ u8 m878[0x87A - 0x878];
+    /* 0x878 */ u16 m878;
                 s8 m87A;
                 s8 m87B;
                 s8 m87C;
@@ -337,7 +338,7 @@ public:
     /* 0x8FB */ u8 m8FB[0x8FD - 0x8FB];
     /* 0x8FD */ s8 m8FD;
     /* 0x8FE */ s8 m8FE;
-    /* 0x8FF */ u8 m8FF;
+    /* 0x8FF */ s8 m8FF;
 
     /* 0x900 */ s8 m900;
     /* 0x901 */ s8 mType;
