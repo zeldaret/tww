@@ -285,7 +285,15 @@ void daObjYLzou_c::demo_regist_wait_act_proc() {
 
 /* 00000C70-00000D18       .text demo_vib_start_wait_act_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::demo_vib_start_wait_act_proc() {
-    /* Nonmatching */
+    if (dComIfGp_evmng_existence(field_0x2E4)) {
+        int staff_idx = dComIfGp_evmng_getMyStaffId("YLzou", NULL, 0);
+        if (staff_idx != -1) {
+            if (strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staff_idx), "Vibrate") == 0) {
+                setup_action(field_0x2DC + 1);
+            }
+        }
+    }
+    return;
 }
 
 /* 00000D18-00000E08       .text demo_vib_act_proc__12daObjYLzou_cFv */
