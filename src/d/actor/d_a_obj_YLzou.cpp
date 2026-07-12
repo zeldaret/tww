@@ -18,7 +18,13 @@ typedef enum {
 
 typedef enum { ENUM_TWO_UNK_0000 = 0x0000, ENUM_TWO_UNK_0001 = 0x0001, ENUM_TWO_UNK_0002 = 0x0002, ENUM_TWO_UNK_0003 = 0x0003 } UNK_YLZOU_ENUM_TWO;
 
+namespace {
 static const char l_arcname[] = "YLzou";
+static const char l_move_ylzou_demo_name[] = "move_YLzou";
+static const char l_go_up_stairs_demo_name[] = "go_up_stairs";
+static const char l_go_up_stairs_demo2_name[] = "go_up_stairs2";
+static char* l_demo_name[4] = {NULL, (char*)l_move_ylzou_demo_name, (char*)l_go_up_stairs_demo_name, (char*)l_go_up_stairs_demo2_name};
+} // namespace
 
 /* 000000EC-000002B8       .text set_start_type__12daObjYLzou_cFv */
 void daObjYLzou_c::set_start_type() {
@@ -266,7 +272,15 @@ void daObjYLzou_c::move_ylzou_demo_start_wait_act_proc() {
 
 /* 00000BD8-00000C70       .text demo_regist_wait_act_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::demo_regist_wait_act_proc() {
-    /* Nonmatching */
+    if (field_0x2E4 != -1) {
+        if (eventInfo.checkCommandDemoAccrpt()) {
+            setup_action(field_0x2DC + 1);
+            return;
+        }
+        fopAcM_orderOtherEventId(this, field_0x2E4);
+        return;
+    }
+    field_0x2E4 = dComIfGp_evmng_getEventIdx(l_demo_name[field_0x2EC]);
 }
 
 /* 00000C70-00000D18       .text demo_vib_start_wait_act_proc__12daObjYLzou_cFv */
