@@ -211,6 +211,37 @@ void daObjYLzou_c::eff_smoke_proc() {
 /* 000008D0-000009A4       .text vib_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::vib_proc() {
     /* Nonmatching */
+
+    if (field_0x364 != field_0x368) {
+        field_0x364 = field_0x368;
+    }
+
+    switch (field_0x364) {
+        case 1:
+            field_0x358 += 0x4000;
+            field_0x35C += 0.05f;
+            if (field_0x35C > 0.8f) {
+                field_0x35C = 0.8f;
+                return;
+            }
+            break;
+        case 2:
+            field_0x358 += 0x4000;
+            field_0x35C -= 0.05f;
+            if (field_0x35C < 0.4f) {
+                field_0x35C = 0.4f;
+                return;
+            }
+            break;
+        default:
+            field_0x358 += 0x4000;
+            field_0x35C -= 0.1f;
+            if (field_0x35C < 0.0f) {
+                field_0x35C = 0.0f;
+                return;
+            }
+            break;
+    }
 }
 
 /* 000009A4-00000AE0       .text _create__12daObjYLzou_cFv */
