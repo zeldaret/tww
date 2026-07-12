@@ -135,7 +135,7 @@ bool daObjYLzou_c::create_heap() {
 /* 000004F4-00000668       .text eff_set_slip_smoke_pos__12daObjYLzou_cFv */
 void daObjYLzou_c::eff_set_slip_smoke_pos() {
     /* Nonmatching */
-    static cXyz positions[2] = {cXyz(0xC3700000, 0.0f, 0xc3700000), cXyz(0x43700000, 0.0f, 0xc3700000)};
+    static cXyz positions[2] = {cXyz(0xC3700000, 0.0f, 0xC3700000), cXyz(0x43700000, 0.0f, 0xC3700000)};
     
     f32 new_y = current.pos.y + -1550;
     f32 new_z = current.pos.z + -1200;
