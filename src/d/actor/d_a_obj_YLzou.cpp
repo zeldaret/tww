@@ -157,7 +157,7 @@ void daObjYLzou_c::eff_smoke_slip_start() {
 
     eff_set_slip_smoke_pos();
     for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); ++i) {
-        JPABaseEmitter* pJVar1 = dComIfGp_particle_setToon(
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(
             dPa_name::ID_AK_JT_ELEMENTSMOKE00,
             &mSmokeCbs[i].field_0x20,
             &mSmokeCbs[i].field_0x2C,
@@ -169,11 +169,11 @@ void daObjYLzou_c::eff_smoke_slip_start() {
             NULL,
             NULL
         );
-        if (pJVar1 != NULL) {
-            pJVar1->setRate(2.0);
-            pJVar1->setDirectionalSpeed(15.0);
-            pJVar1->setSpread(0.15);
-            pJVar1->setLifeTime(0x1e);
+        if (emitter != NULL) {
+            emitter->setRate(2.0);
+            emitter->setDirectionalSpeed(15.0);
+            emitter->setSpread(0.15);
+            emitter->setLifeTime(0x1e);
         }
     }
 }
