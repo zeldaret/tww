@@ -212,7 +212,7 @@ public:
     BOOL wait_action8(void*);
     BOOL wait_action9(void*);
     BOOL wait_actionA(void*);
-    void demo();
+    bool demo();
     void shadowDraw();
     BOOL _draw();
     BOOL _execute();
@@ -237,7 +237,7 @@ public:
                 J3DModel* m6DC;
                 J3DModel* m6E0;
                 J3DModel* m6E4;
-    /* 0x6DC */ u8 field_0x6E8[0x6EC - 0x6E8];
+    /* 0x6E8 */ u32 mShadowID;
     /* 0x6EC */ mDoExt_McaMorf* m6EC;
     /* 0x6F0 */ J3DAnmTexPattern* m_hed_tex_pttrn;
     /* 0x6F4 */ mDoExt_btpAnm m6F4;
@@ -308,7 +308,7 @@ public:
     /* 0x894 */ u8 m894;
     /* 0x895 */ u8 m895;
     /* 0x896 */ bool m896;
-    /* 0x897 */ u8 m897;
+    /* 0x897 */ bool m897;
     /* 0x898 */ cXyz m898;
     /* 0x8A4 */ cXyz m8A4;
     /* 0x8B0 */ cXyz m8B0;
