@@ -153,16 +153,6 @@ void daObjYLzou_c::eff_set_slip_smoke_pos() {
 /* 000006A4-000007AC       .text eff_smoke_slip_start__12daObjYLzou_cFv */
 void daObjYLzou_c::eff_smoke_slip_start() {
     /* Nonmatching */
-    /*
-          8] dComIfGp_particle_setToon__FUsPC4cXyzPC5csXyzPC4cXyzUcP18dPa_levelEcallBackScPC8_GXColorPC8_GXColorPC4cXyz (func,weak) found in d_a_obj_YLzou.o 
-          9] getParticle__14dComIfG_play_cFv (func,weak) found in d_a_obj_YLzou.o 
-          9] setToon__13dPa_control_cFUsPC4cXyzPC5csXyzPC4cXyzUcP18dPa_levelEcallBackScPC8_GXColorPC8_GXColorPC4cXyz (func,weak) found in d_a_obj_YLzou.o 
->>> SYMBOL NOT FOUND: set__13dPa_control_cFUcUsPC4cXyzPC5csXyzPC4cXyzUcP18dPa_levelEcallBackScPC8_GXColorPC8_GXColorPC4cXyz
-         8] setRate__14JPABaseEmitterFf (func,weak) found in d_a_obj_YLzou.o 
-         8] setDirectionalSpeed__14JPABaseEmitterFf (func,weak) found in d_a_obj_YLzou.o 
-         8] setSpread__14JPABaseEmitterFf (func,weak) found in d_a_obj_YLzou.o 
-         8] setLifeTime__14JPABaseEmitterFs (func,weak) found in d_a_obj_YLzou.o    
-    */
     static cXyz scl(0x40000000, 0x40000000, 0x40000000);
 
     eff_set_slip_smoke_pos();
