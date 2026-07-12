@@ -171,15 +171,15 @@ void daObjYLzou_c::eff_smoke_slip_remove() {
 
 /* 0000086C-000008D0       .text eff_smoke_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::eff_smoke_proc() {
-    if (this->field_0x360 != this->field_0x361) {
-        if (this->field_0x361 == 1) {
+    if (field_0x360 != field_0x361) {
+        if (field_0x361 == 1) {
             eff_smoke_slip_start();
         } else {
             eff_smoke_slip_end();
         }
-        this->field_0x360 = this->field_0x361;
+        field_0x360 = field_0x361;
     } else {
-        if (this->field_0x360 == 1) {
+        if (field_0x360 == 1) {
             eff_set_slip_smoke_pos();
         }
     }
