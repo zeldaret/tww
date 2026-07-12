@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_YLzou.h"
+#include "res/Object/YLzou.h"
 
 typedef enum {
     ENUM_ONE_UNK_0000 = 0x0000,
@@ -16,6 +17,8 @@ typedef enum {
 } UNK_YLZOU_ENUM_ONE;
 
 typedef enum { ENUM_TWO_UNK_0000 = 0x0000, ENUM_TWO_UNK_0001 = 0x0001, ENUM_TWO_UNK_0002 = 0x0002, ENUM_TWO_UNK_0003 = 0x0003 } UNK_YLZOU_ENUM_TWO;
+
+static const char l_arcname[] = "YLzou";
 
 /* 000000EC-000002B8       .text set_start_type__12daObjYLzou_cFv */
 void daObjYLzou_c::set_start_type() {
@@ -100,6 +103,33 @@ BOOL daObjYLzou_c::solidHeapCB(fopAc_ac_c*) {
 /* 000003D4-000004F4       .text create_heap__12daObjYLzou_cFv */
 bool daObjYLzou_c::create_heap() {
     /* Nonmatching */
+    J3DModelData* model_data;
+    J3DModel* model;
+    dBgW* bgw;
+    bool res;
+
+    static s32 bdl_table[] = {dRes_INDEX_YLZOU_BDL_YLZOU_e, dRes_INDEX_YLZOU_BDL_YLZOU2_e};
+
+    static s32 dzb_table[] = {dRes_INDEX_YLZOU_DZB_YLZOU_e, dRes_INDEX_YLZOU_DZB_YLZOU2_e};
+
+    res = true;
+    model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcname, bdl_table[field_0x2E8]);
+
+    if (model_data == NULL) {
+        JUT_ASSERT(0x198, FALSE);
+        res = false;
+    } else {
+        model = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
+        field_0x298 = model;
+        model = field_0x298;
+        bgw = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dzb_table[field_0x2E8]), cBgW::MOVE_BG_e, &model->getBaseTRMtx());
+        field_0x29C = bgw;
+        if (field_0x298 == NULL || field_0x29C == NULL) {
+            res = false;
+        }
+    }
+
+    return res;
 }
 
 /* 000004F4-00000668       .text eff_set_slip_smoke_pos__12daObjYLzou_cFv */
