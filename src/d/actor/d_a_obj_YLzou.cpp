@@ -135,6 +135,19 @@ bool daObjYLzou_c::create_heap() {
 /* 000004F4-00000668       .text eff_set_slip_smoke_pos__12daObjYLzou_cFv */
 void daObjYLzou_c::eff_set_slip_smoke_pos() {
     /* Nonmatching */
+    static cXyz positions[2] = {cXyz(0xC3700000, 0.0f, 0xc3700000), cXyz(0x43700000, 0.0f, 0xc3700000)};
+    
+    f32 new_y = current.pos.y + -1550;
+    f32 new_z = current.pos.z + -1200;
+    mDoMtx_stack_c::transS(current.pos.x, new_y, new_z);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); ++i) {
+        mDoMtx_stack_c::push();
+        mDoMtx_stack_c::transM(positions[i]);
+        mDoMtx_multVecZero(mDoMtx_stack_c::get(), &mSmokeCbs[i].field_0x20);
+        mSmokeCbs[i].field_0x2C.set(0, current.angle.y, 0);
+        mDoMtx_stack_c::pop();
+    }
 }
 
 /* 000006A4-000007AC       .text eff_smoke_slip_start__12daObjYLzou_cFv */
