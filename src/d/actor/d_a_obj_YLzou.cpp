@@ -361,7 +361,13 @@ void daObjYLzou_c::move_ylzou_demo_start_wait_act_init_proc() {
 
 /* 000010D8-00001174       .text demo_regist_wait_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::demo_regist_wait_act_init_proc() {
-    /* Nonmatching */
+    if (field_0x2EC != 1) {
+        dComIfGp_evmng_cancelStartDemo();
+        fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
+    }
+
+    field_0x2E4 = dComIfGp_evmng_getEventIdx(l_demo_name[field_0x2EC]);
+    fopAcM_orderOtherEventId(this, field_0x2E4, 0xFF, 0xFFFF, 0, 1);
 }
 
 /* 00001174-000011A4       .text move_ylzou_demo_vib_start_wait_act_init_proc__12daObjYLzou_cFv */
