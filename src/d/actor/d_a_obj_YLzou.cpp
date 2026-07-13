@@ -293,7 +293,6 @@ void daObjYLzou_c::demo_vib_start_wait_act_proc() {
             }
         }
     }
-    return;
 }
 
 /* 00000D18-00000E08       .text demo_vib_act_proc__12daObjYLzou_cFv */
