@@ -152,6 +152,7 @@ void mDoGph_gInf_c::fadeOut(f32 speed, GXColor& color) {
     mFadeRate = speed >= 0.0f ? 0.0f : 1.0f;
 }
 
+#if VERSION > VERSION_DEMO
 /* 80007F6C-80007F94       .text onBlure__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::onBlure() {
     onBlure(cMtx_getIdentity());
@@ -160,8 +161,9 @@ void mDoGph_gInf_c::onBlure() {
 /* 80007F94-80007FC4       .text onBlure__13mDoGph_gInf_cFPA4_Cf */
 void mDoGph_gInf_c::onBlure(const Mtx mtx) {
     mBlureFlag = true;
-    mDoMtx_copy(mtx, mBlureMtx);
+    cMtx_copy(mtx, mBlureMtx);
 }
+#endif
 
 /* 80007FC4-80007FE8       .text fadeOut__13mDoGph_gInf_cFf */
 void mDoGph_gInf_c::fadeOut(f32 speed) {
@@ -1915,7 +1917,7 @@ bool mDoGph_Painter() {
 
     if (dComIfGd_getList2D()->getEntryPacket(0) != NULL) {
         Mtx viewMtx;
-        mDoMtx_copy(j3dSys.getViewMtx(), viewMtx);
+        cMtx_copy(j3dSys.getViewMtx(), viewMtx);
         setLight();
         mDoMtx_stack_c::transS(320.0f, 240.0f, 1000.0f);
         mDoMtx_stack_c::ZrotM(-0x8000);
