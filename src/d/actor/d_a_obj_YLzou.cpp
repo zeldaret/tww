@@ -102,8 +102,8 @@ void daObjYLzou_c::init_mtx() {
 }
 
 /* 000003B0-000003D4       .text solidHeapCB__12daObjYLzou_cFP10fopAc_ac_c */
-BOOL daObjYLzou_c::solidHeapCB(fopAc_ac_c*) {
-    return create_heap();
+BOOL daObjYLzou_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((daObjYLzou_c*)i_this)->create_heap();
 }
 
 /* 000003D4-000004F4       .text create_heap__12daObjYLzou_cFv */
@@ -249,7 +249,30 @@ void daObjYLzou_c::vib_proc() {
 
 /* 000009A4-00000AE0       .text _create__12daObjYLzou_cFv */
 cPhs_State daObjYLzou_c::_create() {
-    /* Nonmatching */
+    static u32 solidHeapSize_table[] = {0x5840, 0x49e0};
+
+    cPhs_State cphs_state;
+
+    fopAcM_ct(this, daObjYLzou_c);
+    if (fpcM_IsFirstCreating(this)) {
+        field_0x2E0 = param_get_swSave();
+        set_start_type();
+    }
+    cphs_state = dComIfG_resLoad(&field_0x290, l_arcname);
+    if (cphs_state == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, solidHeapSize_table[field_0x2E8])) {
+            if (dComIfG_Bgsp()->Regist(field_0x29C, this)) {
+                cphs_state = cPhs_ERROR_e;
+            } else {
+                fopAcM_SetMtx(this, field_0x298->getBaseTRMtx());
+                setup_action(field_0x2DC);
+                init_mtx();
+            }
+        } else {
+            cphs_state = cPhs_ERROR_e;
+        }
+    }
+    return cphs_state;
 }
 
 /* 00000AE0-00000B7C       .text _delete__12daObjYLzou_cFv */

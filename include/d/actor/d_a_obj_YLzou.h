@@ -6,12 +6,17 @@
 
 class daObjYLzou_c : public fopAc_ac_c {
 public:
-    void param_get_swSave() const {}
+    enum Param_e {
+        PARAM_SWSAVE_W = 8,
+        PARAM_SWSAVE_S = 0,
+    };
+
+    s32 param_get_swSave() const { return daObj::PrmAbstract(this, PARAM_SWSAVE_W, PARAM_SWSAVE_S); }
 
     void set_start_type();
     void set_mtx();
     void init_mtx();
-    BOOL solidHeapCB(fopAc_ac_c*);
+    static BOOL solidHeapCB(fopAc_ac_c*);
     bool create_heap();
     void eff_set_slip_smoke_pos();
     void eff_smoke_slip_start();
@@ -64,6 +69,6 @@ public:
     /* 0x362 */ u8 field_0x362[0x364 - 0x362];
     /* 0x364 */ int field_0x364;
     /* 0x368 */ int field_0x368;
-};  // Size: 0x36C
+}; // Size: 0x36C
 
 #endif /* D_A_OBJ_YLZOU_H */
