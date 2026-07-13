@@ -330,6 +330,16 @@ void daObjYLzou_c::go_up_stairs_demo_move_act_proc() {
 /* 00001008-000010A8       .text demo_end_wait_act_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::demo_end_wait_act_proc() {
     /* Nonmatching */
+    static int next_act_idx[4] = {-1, 6, 11, 12};
+    
+    if (dComIfGp_evmng_endCheck(field_0x2E4)) {
+        dComIfGp_event_reset();
+        if (field_0x2DC == 0xE) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3980);
+        }
+        fopAcM_OffStatus(this, fopAcStts_UNK4000_e);
+        setup_action(next_act_idx[field_0x2EC]);
+    }
 }
 
 /* 000010A8-000010AC       .text wait_act_proc__12daObjYLzou_cFv */
