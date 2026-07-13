@@ -166,10 +166,10 @@ if args.no_asm:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20251118"
-config.dtk_tag = "v1.7.6"
-config.objdiff_tag = "v3.5.1"
+config.dtk_tag = "v1.8.3"
+config.objdiff_tag = "v3.7.3"
 config.sjiswrap_tag = "v1.2.2"
-config.wibo_tag = "1.0.0"
+config.wibo_tag = "1.1.0"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
@@ -215,7 +215,6 @@ cflags_base = [
     "-enum int",
     "-fp hardware",
     "-Cpp_exceptions off",
-    # "-W all",
     # "-O4,p",
     "-inline auto",
     '-pragma "cats off"',
@@ -1916,6 +1915,7 @@ config.progress_report_args = [
     # Marks relocations as mismatching if the target value is different
     # Default is "functionRelocDiffs=none", which is most lenient
     "--config functionRelocDiffs=data_value",
+    "--config preferredStringEncoding=shift_jis",
 ]
 
 # Disable missing return type warnings for incomplete objects
