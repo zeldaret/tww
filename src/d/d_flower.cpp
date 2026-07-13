@@ -14,8 +14,9 @@
 const u16 l_Txq_bessou_hanaTEX__width = 0x40;
 const u16 l_Txq_bessou_hanaTEX__height = 0x80;
 
-f32 l_pos3[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
-f32 l_texCoord3[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+#include "assets/l_pos3__d_flower.h"
+#include "assets/l_color3__d_flower.h"
+#include "assets/l_texCoord3__d_flower.h"
 
 #include "assets/l_QbsafDL.h"
 #include "assets/l_QbsfwDL.h"
@@ -24,8 +25,9 @@ f32 l_texCoord3[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 const u16 l_Txo_ob_flower_white_64x64TEX__width = 0x40;
 const u16 l_Txo_ob_flower_white_64x64TEX__height = 0x40;
 
-f32 l_pos[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
-f32 l_texCoord[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+#include "assets/l_pos__d_flower.h"
+#include "assets/l_color__d_flower.h"
+#include "assets/l_texCoord__d_flower.h"
 
 #include "assets/l_OhanaDL.h"
 #include "assets/l_Ohana_gutDL.h"
@@ -33,15 +35,11 @@ f32 l_texCoord[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 #include "assets/l_Txo_ob_flower_pink_64x64TEX.h"
 const u16 l_Txo_ob_flower_pink_64x64TEX__width = 0x40;
 const u16 l_Txo_ob_flower_pink_64x64TEX__height = 0x40;
-f32 l_pos2[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
-GXColor l_color2[] = {
-    {0xCC, 0xCC, 0xCC, 0xFF},
-    {0x7F, 0x7F, 0x7F, 0xFF},
-    {0xB2, 0xB2, 0xB2, 0xFF},
-    {0xE5, 0xE5, 0xE5, 0xFF},
-    {0xFF, 0xFF, 0xFF, 0xFF},
-};
-f32 l_texCoord2[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+
+
+#include "assets/l_pos2__d_flower.h"
+#include "assets/l_color2__d_flower.h"
+#include "assets/l_texCoord2__d_flower.h"
 
 #include "assets/l_Ohana_highDL.h"
 #include "assets/l_Ohana_high_gutDL.h"
@@ -56,15 +54,6 @@ l_matDL__d_flower(l_Txo_ob_flower_white_64x64TEX)
 l_matDL2(l_Txo_ob_flower_pink_64x64TEX)
 
 static bool l_CutSoundFlag = false;
-
-GXColor l_color3[] = {
-    {0xFF, 0xFF, 0xFF, 0xFF},
-    {0x80, 0x80, 0x80, 0xFF},
-};
-static GXColor l_color[] = {
-    {0xFF, 0xFF, 0xFF, 0xFF},
-    {0xB2, 0xB2, 0xB2, 0xFF},
-};
 
 /* 800BFA9C-800BFD28       .text WorkCo__14dFlower_data_cFP10fopAc_ac_cUli */
 void dFlower_data_c::WorkCo(fopAc_ac_c* param_1, u32 param_2, int param_3) {
