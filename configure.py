@@ -1838,6 +1838,11 @@ config.custom_build_rules = [
         "command": "$python tools/converters/matDL_dis.py $in $out --symbol $symbol --scope $scope",
         "description": "CONVERT $symbol",
     },
+    {
+        "name": "convert_embedded_model_data",
+        "command": "$python tools/converters/extract_model_data.py $in $out --type $type --symbol $symbol --scope $scope",
+        "description": "CONVERT $symbol",
+    },
 ]
 config.custom_build_steps = {}
 
@@ -1867,6 +1872,21 @@ def emit_build_rule(asset):
                         "scope": custom_data.get("scope", "local")
                     },
                     "implicit": Path("tools/converters/matDL_dis.py"),
+                }
+            )
+
+        case "Vec" | "cXy" | "GXColor":
+            steps.append(
+                {
+                    "rule": "convert_embedded_model_data",
+                    "inputs": out_dir / "bin" / asset["binary"],
+                    "outputs": out_dir / "include" / asset["header"],
+                    "variables": {
+                        "type": asset.get("custom_type"),
+                        "symbol": asset.get("rename") or asset["symbol"],
+                        "scope": custom_data.get("scope", "local")
+                    },
+                    "implicit": Path("tools/converters/extract_model_data.py"),
                 }
             )
 
