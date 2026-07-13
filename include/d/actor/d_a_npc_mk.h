@@ -21,6 +21,42 @@ public:
         ACTION_ENDING = -1,
     };
 
+    enum VisitModes {
+        VISIT_START = 0,
+        VISIT_TALK = 1,
+        VISIT_WALK_PATH = 2,
+        VISIT_RUN_LINK = 3,
+        VISIT_WALK_AROUND_LINK = 4,
+        VISIT_REACHED_LINK = 5,
+        VISIT_NOTICE_LINK = 6,
+        VISIT_LEFT_PATH = 7,
+        VISIT_WALK_PATH_FAST = 8,
+        VISIT_WALK_PATH_IGNORE_LINK = 9,
+    };
+
+    enum States {
+        STATE_WAIT = 0,
+        STATE_TALK01 = 1,
+        STATE_TALK02 = 2,
+        STATE_VISIT = 3,
+        STATE_CLIMB01 = 4,
+        STATE_DROP01 = 5,
+        STATE_RUNAWAY = 6,
+        STATE_JUMP = 7,
+        STATE_JITANDA01 = 8,
+        STATE_JITANDA02 = 9,
+        STATE_DEMO01 = 10,
+        STATE_DEMO02 = 11,
+        STATE_DEMO03 = 12,
+        STATE_13 = 13 // unsure how to call
+    };
+
+    enum Types {
+        TYPE_NONE = 0, // unsure how to call
+        TYPE_NORMAL = 1,
+        TYPE_MINIGAME = 2,
+    };
+
     typedef BOOL (daNpc_Mk_c::*ActionFunc)(void*);
 
     bool ChkOrder(u8 temp) { return mOrderFlags & temp; }
@@ -146,10 +182,10 @@ public:
     /* 0x688 */ dNpc_PathRun_c field_0x688;
     /* 0x690 */ dNpc_PathRun_c field_0x690;
     /* 0x698 */ dNpc_PathRun_c field_0x698;
-    /* 0x6A0 */ u8 field_0x6A0;
-    /* 0x6A1 */ u8 field_0x6A1;
-    /* 0x6A2 */ u8 field_0x6A2;
-    /* 0x6A3 */ u8 field_0x6A3;
+    /* 0x6A0 */ u8 mVisitMode;
+    /* 0x6A1 */ u8 mWaitTimer;
+    /* 0x6A2 */ u8 mRunAroundLinkTimer;
+    /* 0x6A3 */ u8 mTimerToReachLink;
     /* 0x6A4 */ u16 field_0x6A4;
     /* 0x6A6 */ u8 field_0x6A6[0x6A8 - 0x6A6];
     /* 0x6A8 */ ActionFunc mCurrActionFunc;
@@ -159,9 +195,9 @@ public:
     /* 0x6B8 */ int mStaffIdx;
     /* 0x6BC */ s32 mEventAction;
     /* 0x6C0 */ u8 mOrderFlags;
-    /* 0x6C1 */ s8 field_0x6C1;
-    /* 0x6C2 */ s8 field_0x6C2;
-    /* 0x6C3 */ s8 mState;
+    /* 0x6C1 */ s8 mState;
+    /* 0x6C2 */ s8 mPrevState;
+    /* 0x6C3 */ s8 mType;
     /* 0x6C4 */ s8 mActionStatus;
     /* 0x6C5 */ s8 mTalkState;
     /* 0x6C6 */ u8 mMsgAnmIdx;
@@ -173,7 +209,7 @@ public:
     /* 0x6DC */ cXyz field_0x6DC;
     /* 0x6E8 */ s16 field_0x6E8;
     /* 0x6EA */ s16 mEventIdx;
-    /* 0x6EC */ char* field_0x6EC;
+    /* 0x6EC */ char* mpName;
     /* 0x6F0 */ s16 field_0x6F0;
     /* 0x6F2 */ u8 field_0x6F2[0x6F4 - 0x6F2];
     /* 0x6F4 */ u32 mMsgNo;
