@@ -298,6 +298,19 @@ void daObjYLzou_c::demo_vib_start_wait_act_proc() {
 /* 00000D18-00000E08       .text demo_vib_act_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::demo_vib_act_proc() {
     /* Nonmatching */
+    dEvDtEvent_c* event_data = dComIfGp_getPEvtManager()->getEventData(field_0x2E4);
+    if (event_data != NULL)
+    {
+        int staff_idx = dComIfGp_evmng_getMyStaffId("YLzou", NULL, 0);
+        if (staff_idx != -1)
+        {
+            if(strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staff_idx), "Move") == 0)
+            {
+                setup_action(field_0x2DC + 1);
+            }
+        }
+    }
+    fopAcM_seStartCurrent(this, 0x6225, 0);
 }
 
 /* 00000E08-00000F0C       .text move_ylzou_demo_move_act_proc__12daObjYLzou_cFv */
