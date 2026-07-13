@@ -307,12 +307,22 @@ void daObjYLzou_c::demo_vib_act_proc() {
             }
         }
     }
-    fopAcM_seStartCurrent(this, 0x6225, 0);
+    fopAcM_seStartCurrent(this, JA_SE_OBJ_H_STATUE_VIB, 0);
 }
 
 /* 00000E08-00000F0C       .text move_ylzou_demo_move_act_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::move_ylzou_demo_move_act_proc() {
     /* Nonmatching */
+    if (current.pos.z < home.pos.z + -680) {
+        fopAcM_seStartCurrent(this, JA_SE_OBJ_H_STATUE_STOP, 0);
+        setup_action(5);
+    } else {
+        speedF += 0.1f;
+        if (speedF > 6) {
+            speedF = 6;
+        }
+        fopAcM_seStartCurrent(this, JA_SE_OBJ_H_STATUE_MOVE, 0);
+    }
 }
 
 /* 00000F0C-00001008       .text go_up_stairs_demo_move_act_proc__12daObjYLzou_cFv */
