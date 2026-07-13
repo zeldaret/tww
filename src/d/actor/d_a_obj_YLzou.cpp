@@ -325,6 +325,17 @@ void daObjYLzou_c::move_ylzou_demo_move_act_proc() {
 /* 00000F0C-00001008       .text go_up_stairs_demo_move_act_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::go_up_stairs_demo_move_act_proc() {
     /* Nonmatching */
+    if (current.pos.z > home.pos.z) {
+        fopAcM_seStartCurrent(this, JA_SE_OBJ_H_STATUE_STOP, 0);
+        setup_action(10);
+    } else {
+        speedF += 0.1f;
+        if (speedF > 6) {
+            speedF = 6;
+        }
+        
+        fopAcM_seStartCurrent(this, JA_SE_OBJ_H_STATUE_MOVE, 0);
+    }
 }
 
 /* 00001008-000010A8       .text demo_end_wait_act_proc__12daObjYLzou_cFv */
