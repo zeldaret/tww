@@ -228,7 +228,6 @@ void daObjYLzou_c::vib_proc() {
             field_0x35C += 0.05f;
             if (field_0x35C > 0.8f) {
                 field_0x35C = 0.8f;
-                return;
             }
             break;
         case 2:
@@ -236,7 +235,6 @@ void daObjYLzou_c::vib_proc() {
             field_0x35C -= 0.05f;
             if (field_0x35C < 0.4f) {
                 field_0x35C = 0.4f;
-                return;
             }
             break;
         default:
@@ -244,7 +242,6 @@ void daObjYLzou_c::vib_proc() {
             field_0x35C -= 0.1f;
             if (field_0x35C < 0.0f) {
                 field_0x35C = 0.0f;
-                return;
             }
             break;
     }
