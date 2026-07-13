@@ -277,7 +277,15 @@ cPhs_State daObjYLzou_c::_create() {
 
 /* 00000AE0-00000B7C       .text _delete__12daObjYLzou_cFv */
 bool daObjYLzou_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&field_0x290, l_arcname);
+    eff_smoke_slip_remove();
+    if (heap != NULL && field_0x29C != NULL) {
+        if (field_0x29C->ChkUsed()) {
+            dComIfG_Bgsp()->Release(field_0x29C);
+        }
+        field_0x29C = NULL;
+    }
+    return true;
 }
 
 /* 00000B7C-00000BD8       .text move_ylzou_demo_start_wait_act_proc__12daObjYLzou_cFv */
@@ -486,15 +494,7 @@ bool daObjYLzou_c::_execute() {
     fopAcM_posMoveF(this, NULL);
     set_mtx();
     if (field_0x29C != NULL) {
-        int id = field_0x29C->GetId();
-        bool to_move;
-        if ((id >= 0) && (id < 0x100)) {
-            to_move = true;
-        } else {
-            to_move = false;
-        }
-
-        if (to_move) {
+        if (field_0x29C->ChkUsed()) {
             field_0x29C->Move();
         }
     }
