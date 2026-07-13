@@ -67,21 +67,24 @@ class Symbol:
 
 def get_main_symbols(framework_map_contents: str, valid_obj_names = None):
   symbols = {}
+  localstatic_counters = defaultdict(int)
   matches = re.findall(r"^  [0-9a-f]{8} ([0-9a-f]{6}) (?:[0-9a-f]{8})(?: +\d+)? (.+?)(?: \(entry of [^)]+\))? \t(?:\S+\.a )?([^\s\.]+)\.\S+ ?$", framework_map_contents, re.IGNORECASE | re.MULTILINE)
   for match in matches:
-    size, name, obj_name = match
+    size, symbol_name, obj_name = match
     size = int(size, 16)
     
-    if name.startswith("@"):
-      continue
-    if name.startswith("."):
-      continue
-    if "$" in name:
-      name = name[:name.index("$")+1]
     if valid_obj_names is not None and obj_name not in valid_obj_names:
       continue
+    if symbol_name.startswith("."):
+      continue
+    if re.search(r"^@\d+$", symbol_name):
+      continue
+    if localstatic_match := re.search(r"^([^\s\$]+)\$\d+$", symbol_name):
+      localstatic_name = localstatic_match.group(1)
+      localstatic_counters[localstatic_name] += 1
+      symbol_name = f"{localstatic_name}${localstatic_counters[localstatic_name]}"
     
-    symbols[name] = Symbol(name, size)
+    symbols[symbol_name] = Symbol(symbol_name, size)
   if len(symbols) == 0:
     raise Exception("Failed to find object matching the given name (check for typos)")
   return symbols
@@ -231,7 +234,7 @@ for symbol_name, target_size, base_size, ratio in symbol_size_diffs:
 for symbol_name, base_symbol in base_symbols.items():
   if symbol_name in target_symbols:
     continue
-  print("FAKE:", symbol_name)
+  print("FAKE:", symbol_name, "0x%X" % base_symbol.size)
   total_fake += 1
 
 for symbol_name, target_size, base_size, ratio in symbol_size_diffs:
