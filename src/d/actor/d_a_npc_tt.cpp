@@ -223,10 +223,6 @@ void daNpc_Tt_c::msgAnm() {
                 setAnm(2);
                 break;
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> 6f09bf28ce1a2f1cdea62b931cbbdb40e7f821ec
     }
 }
 
@@ -263,10 +259,6 @@ u16 daNpc_Tt_c::talk() {
             l_msgId = fopMsgM_messageSet(mCurrMsgNo, this);
         } else {
             msgAnm();
-<<<<<<< HEAD
-
-=======
->>>>>>> 6f09bf28ce1a2f1cdea62b931cbbdb40e7f821ec
             switch(mTalkState) {
                 case TALK_MSG_CREATE:
                     l_msg = fopMsgM_SearchByID(l_msgId);
@@ -296,10 +288,6 @@ u16 daNpc_Tt_c::talk() {
             }
         }
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 6f09bf28ce1a2f1cdea62b931cbbdb40e7f821ec
     return msgStatus;
 }
 
@@ -332,13 +320,8 @@ bool daNpc_Tt_c::demoProcTact1() {
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_0C40);
             dComIfGp_evmng_cutEnd(mStaffIdx);
             break;
-<<<<<<< HEAD
-
-    }
-=======
     }
 
->>>>>>> 6f09bf28ce1a2f1cdea62b931cbbdb40e7f821ec
     return TRUE;
 }
 
@@ -398,10 +381,6 @@ void daNpc_Tt_c::demoInitSpeak() {
             }
             break;
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 6f09bf28ce1a2f1cdea62b931cbbdb40e7f821ec
 }
 
 /* 00000E04-00000E5C       .text demoProcSpeak__10daNpc_Tt_cFv */
@@ -549,18 +528,9 @@ BOOL daNpc_Tt_c::init() {
     fopAcM_SetStatusMap(this, 0x27);
     fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
 
-<<<<<<< HEAD
-
-    switch(mType) {
-        case 0:
-            if(setAction(&daNpc_Tt_c::wait_action, NULL)) {
-                // nothing?
-            }
-=======
     switch(mType) {
         case 0:
             setAction(&daNpc_Tt_c::wait_action, NULL);
->>>>>>> 6f09bf28ce1a2f1cdea62b931cbbdb40e7f821ec
             break;
     }
 
@@ -622,10 +592,6 @@ void daNpc_Tt_c::lookBack() {
                 temp.y = eyePos.y;
             }
             break;
-<<<<<<< HEAD
-
-=======
->>>>>>> 6f09bf28ce1a2f1cdea62b931cbbdb40e7f821ec
     }
 
     if (m_jnt.trnChk()) {
@@ -816,16 +782,12 @@ BOOL daNpc_Tt_c::_draw() {
         current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr
     );
 
-<<<<<<< HEAD
-    mLineKe.mLineMat.update(10, 0.8f, (GXColor){0xC9, 0xCA, 0xE4, 0xFF}, 0, &tevStr);
-=======
 #ifdef __MWERKS__
     mLineKe.mLineMat.update(10, 0.8f, (GXColor){0xC9, 0xCA, 0xE4, 0xFF}, 0, &tevStr);
 #else
     GXColor color = (GXColor){0xC9, 0xCA, 0xE4, 0xFF};
     mLineKe.mLineMat.update(10, 0.8f, color, 0, &tevStr);
 #endif
->>>>>>> 6f09bf28ce1a2f1cdea62b931cbbdb40e7f821ec
     dComIfGd_set3DlineMat(&mLineKe.mLineMat);
 
     dSnap_RegistFig(DSNAP_TYPE_TT, this, 1.0f, 1.0f, 1.0f);
