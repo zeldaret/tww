@@ -460,7 +460,25 @@ void daObjYLzou_c::setup_action(int) {
 
 /* 00001740-000017D4       .text _execute__12daObjYLzou_cFv */
 bool daObjYLzou_c::_execute() {
-    /* Nonmatching */
+    fopAcM_posMoveF(this, NULL);
+    set_mtx();
+    if (field_0x29C != NULL) {
+        int id = field_0x29C->GetId();
+        bool to_move;
+        if ((id >= 0) && (id < 0x100)) {
+            to_move = true;
+        } else {
+            to_move = false;
+        }
+
+        if (to_move) {
+            field_0x29C->Move();
+        }
+    }
+    (this->*field_0x2D0)();
+    eff_smoke_proc();
+    vib_proc();
+    return true;
 }
 
 /* 000017D4-00001834       .text _draw__12daObjYLzou_cFv */

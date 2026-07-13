@@ -48,7 +48,7 @@ public:
     /* 0x298 */ J3DModel* field_0x298;
     /* 0x29C */ dBgW* field_0x29C;
     /* 0x2A0 */ Mtx field_0x2A0;
-    /* 0x2D0 */ int (daObjYLzou_c::*field_0x2D0)();
+    /* 0x2D0 */ void (daObjYLzou_c::*field_0x2D0)();
     /* 0x2DC */ int field_0x2DC;
     /* 0x2E0 */ int field_0x2E0;
     /* 0x2E4 */ s16 field_0x2E4;
