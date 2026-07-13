@@ -393,6 +393,13 @@ void daObjYLzou_c::move_ylzou_demo_move_act_init_proc() {
 /* 00001228-000012C8       .text demo_end_wait_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::demo_end_wait_act_init_proc() {
     /* Nonmatching */
+    speedF = 0.0;
+    field_0x361 = 0;
+    if (field_0x2EC != 3) {
+        dComIfGp_getVibration().StopQuake(-1);
+        dComIfGp_getVibration().StartShock(8, 1, cXyz(0, 1, 0));
+    }
+    field_0x368 = 0;
 }
 
 /* 000012C8-000012F4       .text open_wait_act_init_proc__12daObjYLzou_cFv */
