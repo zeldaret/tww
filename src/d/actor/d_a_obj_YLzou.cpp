@@ -331,7 +331,7 @@ void daObjYLzou_c::go_up_stairs_demo_move_act_proc() {
 void daObjYLzou_c::demo_end_wait_act_proc() {
     /* Nonmatching */
     static int next_act_idx[4] = {-1, 6, 11, 12};
-    
+
     if (dComIfGp_evmng_endCheck(field_0x2E4)) {
         dComIfGp_event_reset();
         if (field_0x2DC == 0xE) {
