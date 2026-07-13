@@ -333,7 +333,7 @@ void daObjYLzou_c::go_up_stairs_demo_move_act_proc() {
         if (speedF > 6) {
             speedF = 6;
         }
-        
+
         fopAcM_seStartCurrent(this, JA_SE_OBJ_H_STATUE_MOVE, 0);
     }
 }
@@ -355,7 +355,7 @@ void daObjYLzou_c::demo_end_wait_act_proc() {
 
 /* 000010A8-000010AC       .text wait_act_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::wait_act_proc() {
-    /* Nonmatching */
+    return;
 }
 
 /* 000010AC-000010D8       .text move_ylzou_demo_start_wait_act_init_proc__12daObjYLzou_cFv */
