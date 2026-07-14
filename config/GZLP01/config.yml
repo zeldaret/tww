@@ -227,6 +227,16 @@ modules:
     - symbol: l_flag02TEX
       binary: assets/l_flag02TEX.bin
       header: assets/l_flag02TEX.h
+    - symbol: l_majuu_flag_pos
+      binary: assets/l_majuu_flag_pos.bin
+      header: assets/l_majuu_flag_pos.h
+      header_type: none
+      custom_type: Vec
+    - symbol: l_texCoord
+      binary: assets/l_texCoord__d_a_majuu_flag.bin
+      header: assets/l_texCoord__d_a_majuu_flag.h
+      header_type: none
+      custom_type: cXy
     - symbol: l_majuu_flag_matDL
       binary: assets/l_majuu_flag_matDL.bin
       header: assets/l_majuu_flag_matDL.h
@@ -454,6 +464,16 @@ modules:
   symbols: config/GZLP01/rels/d_a_pirate_flag/symbols.txt
   ldscript_template: config/GZLE01/rels/ldscript.tpl
   extract:
+  - symbol: l_pos
+    binary: assets/l_pos__d_a_pirate_flag.bin
+    header: assets/l_pos__d_a_pirate_flag.h
+    header_type: none
+    custom_type: Vec
+  - symbol: l_texCoord
+    binary: assets/l_texCoord__d_a_pirate_flag.bin
+    header: assets/l_texCoord__d_a_pirate_flag.h
+    header_type: none
+    custom_type: cXy
   - symbol: l_pirate_flag_DL
     binary: assets/l_pirate_flag_DL.bin
     header: assets/l_pirate_flag_DL.h
@@ -1050,8 +1070,10 @@ modules:
     binary: assets/l_B_sand2TEX.bin
     header: assets/l_B_sand2TEX.h
   - symbol: l_texCoord
-    binary: assets/l_texCoord.bin
-    header: assets/l_texCoord.h
+    binary: assets/l_texCoord__d_a_bwdg.bin
+    header: assets/l_texCoord__d_a_bwdg.h
+    header_type: none
+    custom_type: cXy
   - symbol: l_Hsand1DL
     binary: assets/l_Hsand1DL.bin
     header: assets/l_Hsand1DL.h
@@ -1139,6 +1161,16 @@ modules:
     - symbol: l_txa_dummy_hataTEX
       binary: assets/l_txa_dummy_hataTEX.bin
       header: assets/l_txa_dummy_hataTEX.h
+    - symbol: l_pos
+      binary: assets/l_pos__d_a_goal_flag.bin
+      header: assets/l_pos__d_a_goal_flag.h
+      header_type: none
+      custom_type: Vec
+    - symbol: l_texCoord
+      binary: assets/l_texCoord__d_a_goal_flag.bin
+      header: assets/l_texCoord__d_a_goal_flag.h
+      header_type: none
+      custom_type: cXy
     - symbol: l_goal_flag_DL
       binary: assets/l_goal_flag_DL.bin
       header: assets/l_goal_flag_DL.h
@@ -1984,6 +2016,16 @@ modules:
   symbols: config/GZLP01/rels/d_a_sail/symbols.txt
   ldscript_template: config/GZLE01/rels/ldscript.tpl
   extract:
+  - symbol: l_pos
+    binary: assets/l_pos__d_a_sail.bin
+    header: assets/l_pos__d_a_sail.h
+    header_type: none
+    custom_type: Vec
+  - symbol: l_texCoord
+    binary: assets/l_texCoord__d_a_sail.bin
+    header: assets/l_texCoord__d_a_sail.h
+    header_type: none
+    custom_type: cXy
   - symbol: l_sail_DL
     binary: assets/l_sail_DL.bin
     header: assets/l_sail_DL.h
@@ -1993,6 +2035,21 @@ modules:
   - symbol: l_Txa_kizoku_mastTEX
     binary: assets/l_Txa_kizoku_mastTEX.bin
     header: assets/l_Txa_kizoku_mastTEX.h
+  - symbol: l_mast_pos
+    binary: assets/l_mast_pos__d_a_sail.bin
+    header: assets/l_mast_pos__d_a_sail.h
+    header_type: none
+    custom_type: Vec
+  - symbol: l_mast_color
+    binary: assets/l_mast_color__d_a_sail.bin
+    header: assets/l_mast_color__d_a_sail.h
+    header_type: none
+    custom_type: GXColor
+  - symbol: l_mast_texCoord
+    binary: assets/l_mast_texCoord__d_a_sail.bin
+    header: assets/l_mast_texCoord__d_a_sail.h
+    header_type: none
+    custom_type: cXy
   - symbol: l_AmastDL
     binary: assets/l_AmastDL.bin
     header: assets/l_AmastDL.h
@@ -2184,15 +2241,43 @@ extract:
 - symbol: l_frontNoZSubMat
   binary: assets/l_frontNoZSubMat.bin
   header: assets/l_frontNoZSubMat.h
+- symbol: l_bonboriPos
+  binary: assets/l_bonboriPos__d_drawlist.bin
+  header: assets/l_bonboriPos__d_drawlist.h
+  header_type: none
+  custom_type: Vec
+  custom_data:
+    scope: global
 - symbol: l_bonboriDL
   binary: assets/l_bonboriDL.bin
   header: assets/l_bonboriDL.h
+- symbol: l_s_beam_checkPos
+  binary: assets/l_s_beam_checkPos__d_drawlist.bin
+  header: assets/l_s_beam_checkPos__d_drawlist.h
+  header_type: none
+  custom_type: Vec
+  custom_data:
+    scope: global
 - symbol: l_s_beam_checkDL
   binary: assets/l_s_beam_checkDL.bin
   header: assets/l_s_beam_checkDL.h
+- symbol: l_cubePos
+  binary: assets/l_cubePos__d_drawlist.bin
+  header: assets/l_cubePos__d_drawlist.h
+  header_type: none
+  custom_type: Vec
+  custom_data:
+    scope: global
 - symbol: l_cubeDL
   binary: assets/l_cubeDL.bin
   header: assets/l_cubeDL.h
+- symbol: l_bonbori2Pos
+  binary: assets/l_bonbori2Pos__d_drawlist.bin
+  header: assets/l_bonbori2Pos__d_drawlist.h
+  header_type: none
+  custom_type: Vec
+  custom_data:
+    scope: global
 - symbol: l_bonbori2DL
   binary: assets/l_bonbori2DL.bin
   header: assets/l_bonbori2DL.h
@@ -2200,6 +2285,13 @@ extract:
   binary: assets/l_matDL__draw__18dDlst_alphaModel_cFPA4_f.bin
   header: assets/l_matDL__draw__18dDlst_alphaModel_cFPA4_f.h
   rename: l_matDL
+- symbol: l_shadowVolPos
+  binary: assets/l_shadowVolPos__d_drawlist.bin
+  header: assets/l_shadowVolPos__d_drawlist.h
+  header_type: none
+  custom_type: Vec
+  custom_data:
+    scope: global
 - symbol: l_shadowVolDL
   binary: assets/l_shadowVolDL.bin
   header: assets/l_shadowVolDL.h
@@ -2218,6 +2310,13 @@ extract:
 - symbol: l_backSubMat
   binary: assets/l_backSubMat.bin
   header: assets/l_backSubMat.h
+- symbol: l_simpleShadowPos
+  binary: assets/l_simpleShadowPos__d_drawlist.bin
+  header: assets/l_simpleShadowPos__d_drawlist.h
+  header_type: none
+  custom_type: Vec
+  custom_data:
+    scope: global
 - symbol: l_shadowVolumeDL
   binary: assets/l_shadowVolumeDL.bin
   header: assets/l_shadowVolumeDL.h
@@ -2245,6 +2344,27 @@ extract:
 - symbol: l_Txq_bessou_hanaTEX
   binary: assets/l_Txq_bessou_hanaTEX.bin
   header: assets/l_Txq_bessou_hanaTEX.h
+- symbol: l_pos3
+  binary: assets/l_pos3__d_flower.bin
+  header: assets/l_pos3__d_flower.h
+  header_type: none
+  custom_type: Vec
+  custom_data:
+    scope: global
+- symbol: l_color3
+  binary: assets/l_color3__d_flower.bin
+  header: assets/l_color3__d_flower.h
+  header_type: none
+  custom_type: GXColor
+  custom_data:
+    scope: global
+- symbol: l_texCoord3
+  binary: assets/l_texCoord3__d_flower.bin
+  header: assets/l_texCoord3__d_flower.h
+  header_type: none
+  custom_type: cXy
+  custom_data:
+    scope: global
 - symbol: l_QbsafDL
   binary: assets/l_QbsafDL.bin
   header: assets/l_QbsafDL.h
@@ -2254,6 +2374,21 @@ extract:
 - symbol: l_Txo_ob_flower_white_64x64TEX
   binary: assets/l_Txo_ob_flower_white_64x64TEX.bin
   header: assets/l_Txo_ob_flower_white_64x64TEX.h
+- symbol: l_pos!.data:0x80389780
+  binary: assets/l_pos__d_flower.bin
+  header: assets/l_pos__d_flower.h
+  header_type: none
+  custom_type: Vec
+- symbol: l_color!.sdata:0x803FDA60
+  binary: assets/l_color__d_flower.bin
+  header: assets/l_color__d_flower.h
+  header_type: none
+  custom_type: GXColor
+- symbol: l_texCoord!.data:0x803899C0
+  binary: assets/l_texCoord__d_flower.bin
+  header: assets/l_texCoord__d_flower.h
+  header_type: none
+  custom_type: cXy
 - symbol: l_OhanaDL
   binary: assets/l_OhanaDL.bin
   header: assets/l_OhanaDL.h
@@ -2263,6 +2398,27 @@ extract:
 - symbol: l_Txo_ob_flower_pink_64x64TEX
   binary: assets/l_Txo_ob_flower_pink_64x64TEX.bin
   header: assets/l_Txo_ob_flower_pink_64x64TEX.h
+- symbol: l_pos2
+  binary: assets/l_pos2__d_flower.bin
+  header: assets/l_pos2__d_flower.h
+  header_type: none
+  custom_type: Vec
+  custom_data:
+    scope: global
+- symbol: l_color2
+  binary: assets/l_color2__d_flower.bin
+  header: assets/l_color2__d_flower.h
+  header_type: none
+  custom_type: GXColor
+  custom_data:
+    scope: global
+- symbol: l_texCoord2
+  binary: assets/l_texCoord2__d_flower.bin
+  header: assets/l_texCoord2__d_flower.h
+  header_type: none
+  custom_type: cXy
+  custom_data:
+    scope: global
 - symbol: l_Ohana_highDL
   binary: assets/l_Ohana_highDL.bin
   header: assets/l_Ohana_highDL.h
@@ -2289,6 +2445,24 @@ extract:
   binary: assets/l_Txa_swood_bTEX.bin
   header: assets/l_Txa_swood_bTEX.h
   rename: l_Txa_swood_bTEX
+- symbol: l_pos__Q25dWood20@unnamed@d_wood_cpp@
+  binary: assets/l_pos__d_wood.bin
+  header: assets/l_pos__d_wood.h
+  header_type: none
+  custom_type: Vec
+  rename: l_pos
+- symbol: l_color__Q25dWood20@unnamed@d_wood_cpp@
+  binary: assets/l_color__d_wood.bin
+  header: assets/l_color__d_wood.h
+  header_type: none
+  custom_type: GXColor
+  rename: l_color
+- symbol: l_texCoord__Q25dWood20@unnamed@d_wood_cpp@
+  binary: assets/l_texCoord__d_wood.bin
+  header: assets/l_texCoord__d_wood.h
+  header_type: none
+  custom_type: cXy
+  rename: l_texCoord
 - symbol: l_Oba_swood_bDL__Q25dWood20@unnamed@d_wood_cpp@
   binary: assets/l_Oba_swood_bDL.bin
   header: assets/l_Oba_swood_bDL.h
@@ -2307,6 +2481,21 @@ extract:
 - symbol: l_Txa_swood_aTEX
   binary: assets/l_Txa_swood_aTEX.bin
   header: assets/l_Txa_swood_aTEX.h
+- symbol: l_pos!.data:0x803811C0
+  binary: assets/l_pos__d_tree.bin
+  header: assets/l_pos__d_tree.h
+  header_type: none
+  custom_type: Vec
+- symbol: l_color!.data:0x8038158C
+  binary: assets/l_color__d_tree.bin
+  header: assets/l_color__d_tree.h
+  header_type: none
+  custom_type: GXColor
+- symbol: l_texCoord!.data:0x803815B4
+  binary: assets/l_texCoord__d_tree.bin
+  header: assets/l_texCoord__d_tree.h
+  header_type: none
+  custom_type: cXy
 - symbol: l_Oba_swood_noneDL
   binary: assets/l_Oba_swood_noneDL.bin
   header: assets/l_Oba_swood_noneDL.h
@@ -2344,6 +2533,16 @@ extract:
 - symbol: l_chainS3TCTEX!.data:0x8037d6c0
   binary: assets/l_chainS3TCTEX__d_chain.bin
   header: assets/l_chainS3TCTEX__d_chain.h
+- symbol: l_pos!.data:0x8037D8C0
+  binary: assets/l_pos__d_chain.bin
+  header: assets/l_pos__d_chain.h
+  header_type: none
+  custom_type: Vec
+- symbol: l_texCoord!.data:0x8037D950
+  binary: assets/l_texCoord__d_chain.bin
+  header: assets/l_texCoord__d_chain.h
+  header_type: none
+  custom_type: cXy
 - symbol: l_chainDL!.data:0x8037d9c0
   binary: assets/l_chainDL__d_chain.bin
   header: assets/l_chainDL__d_chain.h
@@ -2356,6 +2555,16 @@ extract:
 - symbol: l_chainS3TCTEX!.data:0x80392a20
   binary: assets/l_chainS3TCTEX__d_hookshot.bin
   header: assets/l_chainS3TCTEX__d_hookshot.h
+- symbol: l_pos!.data:0x80392C20
+  binary: assets/l_pos__d_hookshot.bin
+  header: assets/l_pos__d_hookshot.h
+  header_type: none
+  custom_type: Vec
+- symbol: l_texCoord!.data:0x80392CB0
+  binary: assets/l_texCoord__d_hookshot.bin
+  header: assets/l_texCoord__d_hookshot.h
+  header_type: none
+  custom_type: cXy
 - symbol: l_chainDL!.data:0x80392d20
   binary: assets/l_chainDL__d_hookshot.bin
   header: assets/l_chainDL__d_hookshot.h
@@ -2365,12 +2574,26 @@ extract:
   header_type: none
   custom_type: matDL
 
+- symbol: l_YfloorPos
+  binary: assets/l_YfloorPos__d_magma.bin
+  header: assets/l_YfloorPos__d_magma.h
+  header_type: none
+  custom_type: Vec
+  custom_data:
+    scope: global
 - symbol: l_YfloorDL
   binary: assets/l_YfloorDL.bin
   header: assets/l_YfloorDL.h
 - symbol: l_YfloorMatDL
   binary: assets/l_YfloorMatDL.bin
   header: assets/l_YfloorMatDL.h
+- symbol: l_YballPos
+  binary: assets/l_YballPos__d_magma.bin
+  header: assets/l_YballPos__d_magma.h
+  header_type: none
+  custom_type: Vec
+  custom_data:
+    scope: global
 - symbol: l_YballDL
   binary: assets/l_YballDL.bin
   header: assets/l_YballDL.h
@@ -2381,6 +2604,27 @@ extract:
 - symbol: l_K_kusa_00TEX
   binary: assets/l_K_kusa_00TEX.bin
   header: assets/l_K_kusa_00TEX.h
+- symbol: l_Vmori_pos
+  binary: assets/l_Vmori_pos.bin
+  header: assets/l_Vmori_pos.h
+  header_type: none
+  custom_type: Vec
+  custom_data:
+    scope: global
+- symbol: l_Vmori_color
+  binary: assets/l_Vmori_color.bin
+  header: assets/l_Vmori_color.h
+  header_type: none
+  custom_type: GXColor
+  custom_data:
+    scope: global
+- symbol: l_Vmori_texCoord
+  binary: assets/l_Vmori_texCoord.bin
+  header: assets/l_Vmori_texCoord.h
+  header_type: none
+  custom_type: cXy
+  custom_data:
+    scope: global
 - symbol: l_Vmori_00DL
   binary: assets/l_Vmori_00DL.bin
   header: assets/l_Vmori_00DL.h
@@ -2395,6 +2639,21 @@ extract:
 - symbol: l_Txa_ob_kusa_aTEX
   binary: assets/l_Txa_ob_kusa_aTEX.bin
   header: assets/l_Txa_ob_kusa_aTEX.h
+- symbol: l_pos!.data:0x803804A0
+  binary: assets/l_pos__d_grass.bin
+  header: assets/l_pos__d_grass.h
+  header_type: none
+  custom_type: Vec
+- symbol: l_color!.data:0x803805E4
+  binary: assets/l_color__d_grass.bin
+  header: assets/l_color__d_grass.h
+  header_type: none
+  custom_type: GXColor
+- symbol: l_texCoord!.data:0x80380604
+  binary: assets/l_texCoord__d_grass.bin
+  header: assets/l_texCoord__d_grass.h
+  header_type: none
+  custom_type: cXy
 - symbol: l_Oba_kusa_aDL
   binary: assets/l_Oba_kusa_aDL.bin
   header: assets/l_Oba_kusa_aDL.h
