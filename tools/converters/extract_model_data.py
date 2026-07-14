@@ -53,6 +53,8 @@ def convert_binary_to_Vec_c_source(src_path: str, dest_path: str, symbol_name: s
     # Load data
     with open(src_path, "rb") as binary_file, open(dest_path, "w") as c_file:
 
+        c_file.write('#include "dolphin/mtx/vec.h"\n\n')
+
         write_array_declaration(c_file, symbol_name, scope, "Vec")
 
         elements: list[tuple[float, ...]] = []
@@ -73,6 +75,8 @@ def convert_binary_to_cXy_c_source(src_path: str, dest_path: str, symbol_name: s
     # Load data
     with open(src_path, "rb") as binary_file, open(dest_path, "w") as c_file:
 
+        c_file.write('#include "SSystem/SComponent/c_xyz.h"\n\n')
+
         write_array_declaration(c_file, symbol_name, scope, "cXy")
 
         elements: list[tuple[float, ...]] = []
@@ -92,6 +96,8 @@ def convert_binary_to_cXy_c_source(src_path: str, dest_path: str, symbol_name: s
 def convert_binary_to_GXColor_c_source(src_path: str, dest_path: str, symbol_name: str, scope: str):
     # Load data
     with open(src_path, "rb") as binary_file, open(dest_path, "w") as c_file:
+
+        c_file.write('#include "dolphin/gx/GXStruct.h"\n\n')
         
         write_array_declaration(c_file, symbol_name, scope, "GXColor")
         
