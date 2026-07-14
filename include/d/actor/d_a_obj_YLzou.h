@@ -11,6 +11,8 @@ public:
         PARAM_SWSAVE_S = 0,
     };
 
+    typedef void (daObjYLzou_c::*ProcFunc)();
+
     s32 param_get_swSave() const { return daObj::PrmAbstract(this, PARAM_SWSAVE_W, PARAM_SWSAVE_S); }
 
     void set_start_type();

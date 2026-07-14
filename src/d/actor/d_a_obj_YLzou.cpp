@@ -139,7 +139,7 @@ bool daObjYLzou_c::create_heap() {
 
 /* 000004F4-00000668       .text eff_set_slip_smoke_pos__12daObjYLzou_cFv */
 void daObjYLzou_c::eff_set_slip_smoke_pos() {
-    static cXyz base_pos[2] = {cXyz(-240.0f, 0.0f, -240.0f), cXyz(240.0f, 0.0f, -240.0f)};
+    static cXyz base_pos[(int)ARRAY_SIZE(mSmokeCbs)] = {cXyz(-240.0f, 0.0f, -240.0f), cXyz(240.0f, 0.0f, -240.0f)};
 
     f32 new_y = current.pos.y + -1550;
     f32 new_z = current.pos.z + -1200;
@@ -286,7 +286,6 @@ bool daObjYLzou_c::_delete() {
 /* 00000B7C-00000BD8       .text move_ylzou_demo_start_wait_act_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::move_ylzou_demo_start_wait_act_proc() {
     if (field_0x2E0 != 0xFF) {
-        // == TRUE required for 100% match
         if (fopAcM_isSwitch(this, field_0x2E0) == TRUE) {
             setup_action(1);
         }
@@ -470,8 +469,8 @@ void daObjYLzou_c::go_up_stairs_demo_move_act_init_proc() {
 }
 
 /* 000013B8-00001740       .text setup_action__12daObjYLzou_cFi */
-void daObjYLzou_c::setup_action(int i_action) {
-    static void (daObjYLzou_c::* act_init_proc[15])() = {
+void daObjYLzou_c::setup_action(int i_action_idx) {
+    static ProcFunc act_init_proc[15] = {
         &daObjYLzou_c::move_ylzou_demo_start_wait_act_init_proc,
         &daObjYLzou_c::demo_regist_wait_act_init_proc,
         &daObjYLzou_c::move_ylzou_demo_vib_start_wait_act_init_proc,
@@ -489,7 +488,7 @@ void daObjYLzou_c::setup_action(int i_action) {
         &daObjYLzou_c::demo_end_wait_act_init_proc,
     };
 
-    static void  (daObjYLzou_c::* act_proc[15])() = {
+    static ProcFunc act_proc[15] = {
         &daObjYLzou_c::move_ylzou_demo_start_wait_act_proc,
         &daObjYLzou_c::demo_regist_wait_act_proc,
         &daObjYLzou_c::demo_vib_start_wait_act_proc,
@@ -507,9 +506,9 @@ void daObjYLzou_c::setup_action(int i_action) {
         &daObjYLzou_c::demo_end_wait_act_proc,
     };
 
-    (this->*act_init_proc[i_action])();
-    field_0x2D0 = act_proc[i_action];
-    field_0x2DC = i_action;
+    (this->*act_init_proc[i_action_idx])();
+    field_0x2D0 = act_proc[i_action_idx];
+    field_0x2DC = i_action_idx;
 }
 
 /* 00001740-000017D4       .text _execute__12daObjYLzou_cFv */
