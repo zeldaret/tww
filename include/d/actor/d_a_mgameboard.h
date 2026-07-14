@@ -23,7 +23,7 @@ public:
     bool checkEndGame();
     void setGInfoDraw();
     void clrGInfoDraw();
-    void CreateHeap();
+    BOOL CreateHeap();
     void set_2dposition();
     void CreateInit();
     void MiniGameInit();
@@ -33,6 +33,9 @@ public:
     void MinigameMain();
     void CursorMove();
 
+public:
+    static char m_arcname[];
+
     /* 0x290 */ request_of_phase_process_class mPhase;
     /* 0x298 */ J3DModel* mpBoardModel;
     /* 0x29C */ J3DModel* mpCursorModel;
@@ -40,8 +43,8 @@ public:
     /* 0x2F0 */ J3DModel* mpMissModel[32];
     /* 0x370 */ J3DModel* mpShip2Model[2];
     /* 0x378 */ J3DModel* mpShip3Model[2];
-    /* 0x380 */ J3DModel* mpShip4Model;
-    /* 0x384 */ u8 field_0x384[0x468 - 0x384];
+    /* 0x380 */ J3DModel* mpShip4Model[2];
+    /* 0x388 */ u8 field_0x384[0x468 - 0x388];
     /* 0x468 */ u8 mBoardPosX;
     /* 0x469 */ u8 mBoardPosY;
     /* 0x46A */ u8 field_0x46A[0x46C - 0x46A];
@@ -60,8 +63,7 @@ public:
     /* 0x5C4 */ dDlst_2DNumber_c* mpNumber1;
     /* 0x5C8 */ dDlst_2DMinigame_c* mpMinigameDList;
     /* 0x5CC */ dDlst_2DObject_c* mpSquidIcon[3];
-    /* 0x5D8 */ u8 mpBombIcons;
-    /* 0x5D9 */ u8 field_0x5D9[0x638 - 0x5D9];
+    /* 0x5D8 */ dDlst_2DObject_c* mpBombIcons[24];
     /* 0x638 */ int mState;
     /* 0x63C */ u8 mbDraw;
     /* 0x63D */ u8 mbStartGame;
