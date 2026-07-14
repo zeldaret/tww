@@ -108,7 +108,6 @@ BOOL daObjYLzou_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 000003D4-000004F4       .text create_heap__12daObjYLzou_cFv */
 bool daObjYLzou_c::create_heap() {
-    /* Nonmatching */
     J3DModelData* model_data;
     J3DModel* model;
     dBgW* bgw;
@@ -140,8 +139,7 @@ bool daObjYLzou_c::create_heap() {
 
 /* 000004F4-00000668       .text eff_set_slip_smoke_pos__12daObjYLzou_cFv */
 void daObjYLzou_c::eff_set_slip_smoke_pos() {
-    /* Nonmatching */
-    static cXyz base_pos[2] = {cXyz(0xC3700000, 0.0f, 0xC3700000), cXyz(0x43700000, 0.0f, 0xC3700000)};
+    static cXyz base_pos[2] = {cXyz(-240.0f, 0.0f, -240.0f), cXyz(240.0f, 0.0f, -240.0f)};
 
     f32 new_y = current.pos.y + -1550;
     f32 new_z = current.pos.z + -1200;
@@ -158,8 +156,7 @@ void daObjYLzou_c::eff_set_slip_smoke_pos() {
 
 /* 000006A4-000007AC       .text eff_smoke_slip_start__12daObjYLzou_cFv */
 void daObjYLzou_c::eff_smoke_slip_start() {
-    /* Nonmatching */
-    static cXyz scl(0x40000000, 0x40000000, 0x40000000);
+    static cXyz scl(2.0f, 2.0f, 2.0f);
 
     eff_set_slip_smoke_pos();
     for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); ++i) {
@@ -216,8 +213,6 @@ void daObjYLzou_c::eff_smoke_proc() {
 
 /* 000008D0-000009A4       .text vib_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::vib_proc() {
-    /* Nonmatching */
-
     if (field_0x364 != field_0x368) {
         field_0x364 = field_0x368;
     }
@@ -325,7 +320,6 @@ void daObjYLzou_c::demo_vib_start_wait_act_proc() {
 
 /* 00000D18-00000E08       .text demo_vib_act_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::demo_vib_act_proc() {
-    /* Nonmatching */
     dEvDtEvent_c* event_data = dComIfGp_getPEvtManager()->getEventData(field_0x2E4);
     if (event_data != NULL) {
         int staff_idx = dComIfGp_evmng_getMyStaffId("YLzou", NULL, 0);
@@ -340,7 +334,6 @@ void daObjYLzou_c::demo_vib_act_proc() {
 
 /* 00000E08-00000F0C       .text move_ylzou_demo_move_act_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::move_ylzou_demo_move_act_proc() {
-    /* Nonmatching */
     if (current.pos.z < home.pos.z + -680) {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_H_STATUE_STOP, 0);
         setup_action(5);
@@ -355,7 +348,6 @@ void daObjYLzou_c::move_ylzou_demo_move_act_proc() {
 
 /* 00000F0C-00001008       .text go_up_stairs_demo_move_act_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::go_up_stairs_demo_move_act_proc() {
-    /* Nonmatching */
     if (current.pos.z > home.pos.z) {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_H_STATUE_STOP, 0);
         setup_action(10);
@@ -371,7 +363,6 @@ void daObjYLzou_c::go_up_stairs_demo_move_act_proc() {
 
 /* 00001008-000010A8       .text demo_end_wait_act_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::demo_end_wait_act_proc() {
-    /* Nonmatching */
     static int next_act_idx[4] = {-1, 6, 11, 12};
 
     if (dComIfGp_evmng_endCheck(field_0x2E4)) {
@@ -391,7 +382,6 @@ void daObjYLzou_c::wait_act_proc() {
 
 /* 000010AC-000010D8       .text move_ylzou_demo_start_wait_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::move_ylzou_demo_start_wait_act_init_proc() {
-    /* Nonmatching */
     field_0x2E4 = -1;
     home.pos.x = 0.0;
     home.pos.y = 0.0;
@@ -419,7 +409,6 @@ void daObjYLzou_c::move_ylzou_demo_vib_start_wait_act_init_proc() {
 
 /* 000011A4-0000120C       .text move_ylzou_demo_vib_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::move_ylzou_demo_vib_act_init_proc() {
-    /* Nonmatching */
     dComIfGp_getVibration().StartQuake(6, 1, cXyz(0, 1, 0));
     field_0x368 = 1;
     return;
@@ -434,7 +423,6 @@ void daObjYLzou_c::move_ylzou_demo_move_act_init_proc() {
 
 /* 00001228-000012C8       .text demo_end_wait_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::demo_end_wait_act_init_proc() {
-    /* Nonmatching */
     speedF = 0.0;
     field_0x361 = 0;
     if (field_0x2EC != 3) {
@@ -446,7 +434,6 @@ void daObjYLzou_c::demo_end_wait_act_init_proc() {
 
 /* 000012C8-000012F4       .text open_wait_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::open_wait_act_init_proc() {
-    /* Nonmatching */
     home.pos.x = 0.0;
     home.pos.y = 0.0;
     home.pos.z = -680.0;
@@ -457,7 +444,6 @@ void daObjYLzou_c::open_wait_act_init_proc() {
 
 /* 000012F4-00001318       .text close_wait_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::close_wait_act_init_proc() {
-    /* Nonmatching */
     home.pos.x = 0.0;
     home.pos.y = 0.0;
     home.pos.z = 0.0;
@@ -468,7 +454,6 @@ void daObjYLzou_c::close_wait_act_init_proc() {
 
 /* 00001318-000013A4       .text go_up_stairs_demo_move_start_wait_act_init_proc__12daObjYLzou_cFv */
 void daObjYLzou_c::go_up_stairs_demo_move_start_wait_act_init_proc() {
-    /* Nonmatching */
     current.angle.y = 0;
     home.pos.set(0, 0, 0);
     current.pos.set(0, 0, -680);
@@ -485,8 +470,46 @@ void daObjYLzou_c::go_up_stairs_demo_move_act_init_proc() {
 }
 
 /* 000013B8-00001740       .text setup_action__12daObjYLzou_cFi */
-void daObjYLzou_c::setup_action(int) {
-    /* Nonmatching */
+void daObjYLzou_c::setup_action(int i_action) {
+    static void (daObjYLzou_c::* act_init_proc[15])() = {
+        &daObjYLzou_c::move_ylzou_demo_start_wait_act_init_proc,
+        &daObjYLzou_c::demo_regist_wait_act_init_proc,
+        &daObjYLzou_c::move_ylzou_demo_vib_start_wait_act_init_proc,
+        &daObjYLzou_c::move_ylzou_demo_vib_act_init_proc,
+        &daObjYLzou_c::move_ylzou_demo_move_act_init_proc,
+        &daObjYLzou_c::demo_end_wait_act_init_proc,
+        &daObjYLzou_c::open_wait_act_init_proc,
+        &daObjYLzou_c::demo_regist_wait_act_init_proc,
+        &daObjYLzou_c::go_up_stairs_demo_move_start_wait_act_init_proc,
+        &daObjYLzou_c::go_up_stairs_demo_move_act_init_proc,
+        &daObjYLzou_c::demo_end_wait_act_init_proc,
+        &daObjYLzou_c::close_wait_act_init_proc,
+        &daObjYLzou_c::close_wait_act_init_proc,
+        &daObjYLzou_c::demo_regist_wait_act_init_proc,
+        &daObjYLzou_c::demo_end_wait_act_init_proc,
+    };
+
+    static void  (daObjYLzou_c::* act_proc[15])() = {
+        &daObjYLzou_c::move_ylzou_demo_start_wait_act_proc,
+        &daObjYLzou_c::demo_regist_wait_act_proc,
+        &daObjYLzou_c::demo_vib_start_wait_act_proc,
+        &daObjYLzou_c::demo_vib_act_proc,
+        &daObjYLzou_c::move_ylzou_demo_move_act_proc,
+        &daObjYLzou_c::demo_end_wait_act_proc,
+        &daObjYLzou_c::wait_act_proc,
+        &daObjYLzou_c::demo_regist_wait_act_proc,
+        &daObjYLzou_c::demo_vib_act_proc,
+        &daObjYLzou_c::go_up_stairs_demo_move_act_proc,
+        &daObjYLzou_c::demo_end_wait_act_proc,
+        &daObjYLzou_c::wait_act_proc,
+        &daObjYLzou_c::wait_act_proc,
+        &daObjYLzou_c::demo_regist_wait_act_proc,
+        &daObjYLzou_c::demo_end_wait_act_proc,
+    };
+
+    (this->*act_init_proc[i_action])();
+    field_0x2D0 = act_proc[i_action];
+    field_0x2DC = i_action;
 }
 
 /* 00001740-000017D4       .text _execute__12daObjYLzou_cFv */
@@ -506,8 +529,7 @@ bool daObjYLzou_c::_execute() {
 
 /* 000017D4-00001834       .text _draw__12daObjYLzou_cFv */
 bool daObjYLzou_c::_draw() {
-    /* Nonmatching */
-    g_env_light.settingTevStruct(TEV_TYPE_BG0_PLIGHT, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(field_0x298, &tevStr);
     mDoExt_modelUpdateDL(field_0x298);
     return true;
