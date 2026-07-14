@@ -59,12 +59,13 @@ retcode = subprocess.call(["ninja", base_map_path.relative_to(decomp_root_path)]
 assert retcode == 0, "Ninja build call failed"
 
 class Symbol:
-  def __init__(self, name: str, size: int, sym_type: str | None = None, linkage: str | None = None, stripped: bool | None = None):
+  def __init__(self, name: str, size: int, sym_type: str | None = None, linkage: str | None = None, stripped: bool | None = None, align: int | None = None):
     self.name = name
     self.size = size
     self.sym_type = sym_type
     self.linkage = linkage
     self.stripped = stripped
+    self.align = align
   
   def __repr__(self):
     return f"Symbol(name={self.name}, size={self.size}, sym_type={self.sym_type}, linkage={self.linkage}, stripped={self.stripped})"
@@ -147,7 +148,7 @@ def get_symbols_from_linker_map(map_contents: str, missing_tree_and_stripped=Fal
   localstatic_counters = defaultdict(lambda: defaultdict(int))
   unref_dupe_symbol_names_already_added = set()
   for line in map_lines:
-    symbol_entry_match = re.search(r"^  ([0-9a-f]{8}|UNUSED  ) ([0-9a-f]{6}) ([0-9a-f]{8}|\.{8})(?: +\d+)? (.+?)(?: \(entry of [^)]+\))? \t?(\S+)", line, re.IGNORECASE)
+    symbol_entry_match = re.search(r"^  ([0-9a-f]{8}|UNUSED  ) ([0-9a-f]{6}) ([0-9a-f]{8}|\.{8})(?: +(\d+))? (.+?)(?: \(entry of [^)]+\))? \t?(\S+)", line, re.IGNORECASE)
     if symbol_entry_match:
       symbol_offset = symbol_entry_match.group(1)
       symbol_size = symbol_entry_match.group(2)
@@ -162,8 +163,11 @@ def get_symbols_from_linker_map(map_contents: str, missing_tree_and_stripped=Fal
       else:
         symbol_address = int(symbol_address, 16)
         stripped = False
-      symbol_name = symbol_entry_match.group(4)
-      object_name = remove_object_ext(symbol_entry_match.group(5))
+      symbol_align = symbol_entry_match.group(4)
+      if symbol_align is not None:
+        symbol_align = int(symbol_align)
+      symbol_name = symbol_entry_match.group(5)
+      object_name = remove_object_ext(symbol_entry_match.group(6))
       
       if symbol_name.startswith(".") or symbol_name in ["extab", "extabindex"]:
         # e.g. Section symbol (.text) or pool symbol (...data)
@@ -180,13 +184,13 @@ def get_symbols_from_linker_map(map_contents: str, missing_tree_and_stripped=Fal
       else:
         assert stripped or missing_tree_and_stripped, f"Symbol {repr(symbol_name)} is missing linkage information in object {repr(object_name)}"
         symbol_type = linkage = None
-      symbols[object_name][symbol_name] = Symbol(symbol_name, symbol_size, sym_type=symbol_type, linkage=linkage, stripped=stripped)
+      symbols[object_name][symbol_name] = Symbol(symbol_name, symbol_size, sym_type=symbol_type, linkage=linkage, stripped=stripped, align=symbol_align)
       
       if symbol_name in unref_dupe_symbol_names_to_object_name_to_type_linkage and symbol_name not in unref_dupe_symbol_names_already_added:
         for other_object_name in unref_dupe_symbol_names_to_object_name_to_type_linkage[symbol_name]:
           symbol_type, linkage = unref_dupe_symbol_names_to_object_name_to_type_linkage[symbol_name][other_object_name]
           assert stripped == False, "Shouldn't reach a stripped duplicate here"
-          symbols[other_object_name][symbol_name] = Symbol(symbol_name, symbol_size, sym_type=symbol_type, linkage=linkage, stripped=stripped)
+          symbols[other_object_name][symbol_name] = Symbol(symbol_name, symbol_size, sym_type=symbol_type, linkage=linkage, stripped=stripped, align=symbol_align)
         unref_dupe_symbol_names_already_added.add(symbol_name)
   
   return symbols
@@ -228,6 +232,7 @@ total_maybe_fake = 0
 total_right_size = 0
 total_wrong_size = 0
 total_wrong_linkage = 0
+total_wrong_align = 0
 
 for symbol_name, target_symbol in target_symbols.items():
   if target_symbol.size == 0:
@@ -258,7 +263,39 @@ for symbol_name, target_size, base_size, ratio in symbol_size_diffs:
   else:
     prefix = "WRONG: "
   print(prefix + symbol_name, "0x%X" % target_size, "0x%X" % base_size, ratio)
-  
+
+for symbol_name, target_symbol in target_symbols.items():
+  if target_symbol.size == 0:
+    continue
+  if symbol_name not in base_symbols:
+    continue
+  base_symbol = base_symbols[symbol_name]
+  wrong_linkage = False
+  if target_symbol.linkage is None and base_symbol.sym_type == "object":
+    # The official framework.map for main.dol doesn't include linkage, but we can guess it based off of certain symbol name prefixes.
+    if base_symbol.name.startswith("l_") and base_symbol.linkage != "local":
+      wrong_linkage = True
+      target_linkage = "local"
+    elif base_symbol.name.startswith("g_") and base_symbol.linkage != "global":
+      wrong_linkage = True
+      target_linkage = "global"
+  elif target_symbol.linkage is not None and target_symbol.linkage != base_symbol.linkage:
+    wrong_linkage = True
+    target_linkage = target_symbol.linkage
+  if wrong_linkage:
+    total_wrong_linkage += 1
+    print(f"LINKAGE: {symbol_name} (should be {target_linkage}, is {base_symbol.linkage})")
+
+for symbol_name, target_symbol in target_symbols.items():
+  if target_symbol.align is None:
+    continue
+  if symbol_name not in base_symbols:
+    continue
+  base_symbol = base_symbols[symbol_name]
+  if target_symbol.align != base_symbol.align:
+    total_wrong_align += 1
+    print(f"ALIGN: {symbol_name} (should be {target_symbol.align}, is {base_symbol.align})")
+
 maybe_fake_symbols = []
 fake_symbols = []
 for symbol_name, base_symbol in base_symbols.items():
@@ -286,32 +323,11 @@ for symbol_name, target_size, base_size, ratio in symbol_size_diffs:
     total_missing += 1
     print(prefix + symbol_name, "0x%X" % target_size)
 
-for symbol_name, target_symbol in target_symbols.items():
-  if target_symbol.size == 0:
-    continue
-  if symbol_name not in base_symbols:
-    continue
-  base_symbol = base_symbols[symbol_name]
-  wrong_linkage = False
-  if target_symbol.linkage is None and base_symbol.sym_type == "object":
-    # The official framework.map for main.dol doesn't include linkage, but we can guess it based off of certain symbol name prefixes.
-    if base_symbol.name.startswith("l_") and base_symbol.linkage != "local":
-      wrong_linkage = True
-      target_linkage = "local"
-    elif base_symbol.name.startswith("g_") and base_symbol.linkage != "global":
-      wrong_linkage = True
-      target_linkage = "global"
-  elif target_symbol.linkage is not None and target_symbol.linkage != base_symbol.linkage:
-    wrong_linkage = True
-    target_linkage = target_symbol.linkage
-  if wrong_linkage:
-    total_wrong_linkage += 1
-    print(f"LINKAGE: {symbol_name} (should be {target_linkage}, is {base_symbol.linkage})")
-
 print("==================================================")
 print(f"Total right size: {total_right_size}")
 print(f"Total wrong size: {total_wrong_size}")
-print(f"Total fake: {total_fake}")
-print(f"Total maybe fake: {total_maybe_fake}")
-print(f"Total missing: {total_missing}")
 print(f"Total wrong linkage: {total_wrong_linkage}")
+print(f"Total wrong alignment: {total_wrong_align}")
+print(f"Total maybe fake: {total_maybe_fake}")
+print(f"Total fake: {total_fake}")
+print(f"Total missing: {total_missing}")
