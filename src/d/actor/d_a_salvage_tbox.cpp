@@ -421,9 +421,13 @@ void daSTBox_c::initDrop(int) {
 BOOL daSTBox_c::actWait(int) {
     /* Nonmatching */
     daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
-    JUT_ASSERT(0x32b, ship != NULL);
+    if (ship == NULL) {
+        JUT_ASSERT(0x32b, FALSE);
+    }
     cXyz* craneTop = ship->getCraneTop();
-    JUT_ASSERT(0x332, craneTop != NULL);
+    if (craneTop == NULL) {
+        JUT_ASSERT(0x332, FALSE);
+    }
     cXyz craneTopPos = *craneTop;
     craneTopPos.y += 5000.0f;
     f32 waterY = getWaterY(craneTopPos); 
