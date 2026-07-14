@@ -1829,6 +1829,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_yougan"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_ghostship"),
     ActorRel(NonMatching, "d_a_movie_player", extra_cflags=["-O3,p"]),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_YLzou"),
 ]
 
 
