@@ -14,6 +14,12 @@ def write_array_declaration(c_file, symbol_name: str, scope: str, type: str):
 
     c_file.write(f"{var_def_prefix}{type} {symbol_name}[] = {{\n")
 
+def format_float(value: float):
+    str_value = f'{value:f}'.rstrip('0')
+    if str_value.endswith('.'):
+        str_value += '0'
+    return str_value
+
 def format_float_array(elements: list[tuple[float, ...]]) -> str:
     if len(elements) == 0:
         return ""
@@ -24,9 +30,7 @@ def format_float_array(elements: list[tuple[float, ...]]) -> str:
     longest_components: list[int] = [0] * num_components
     for element in elements:
         for i, component in enumerate(element):
-            length = len(f"{component:f}".rstrip('0'))
-            if f"{component:f}".rstrip('0').endswith('.'):
-                length += 1
+            length = len(format_float(component))
             longest_components[i] = max(length, longest_components[i])
 
     result: str = ""
@@ -35,9 +39,7 @@ def format_float_array(elements: list[tuple[float, ...]]) -> str:
         result += "    {"
         for i, component in enumerate(element):
             # Remove all the trailing 0s (unless the value would end with the decimal point)
-            value = f'{component:f}'.rstrip('0')
-            if value.endswith('.'):
-                value += '0'
+            value = format_float(component)
 
             # Only add the comma + minimum 1 space if this isn't the last element
             if i != len(element) - 1:
