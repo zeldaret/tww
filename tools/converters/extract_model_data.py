@@ -60,9 +60,11 @@ def convert_binary_to_Vec_c_source(src_path: str, dest_path: str, symbol_name: s
         elements: list[tuple[float, ...]] = []
         while True:
             try:
-                x, y, z = read_f32(binary_file), read_f32(binary_file), read_f32(binary_file)
+                x = read_f32(binary_file)
             except EOFError:
                 break
+            y = read_f32(binary_file)
+            z = read_f32(binary_file)
 
             elements.append((x, y, z))
 
@@ -82,9 +84,10 @@ def convert_binary_to_cXy_c_source(src_path: str, dest_path: str, symbol_name: s
         elements: list[tuple[float, ...]] = []
         while True:
             try:
-                x, y = read_f32(binary_file), read_f32(binary_file)
+                x = read_f32(binary_file)
             except EOFError:
                 break
+            y = read_f32(binary_file)
 
             elements.append((x, y))
 
@@ -103,9 +106,12 @@ def convert_binary_to_GXColor_c_source(src_path: str, dest_path: str, symbol_nam
         
         while True:
             try:
-                r, g, b, a = read_u8(binary_file), read_u8(binary_file), read_u8(binary_file), read_u8(binary_file)
+                r = read_u8(binary_file)
             except EOFError:
                 break
+            g = read_u8(binary_file)
+            b = read_u8(binary_file)
+            a = read_u8(binary_file)
 
             c_file.write("    " + f"{{0x{r:02X}, 0x{g:02X}, 0x{b:02X}, 0x{a:02X}}}" + ",\n")
         
