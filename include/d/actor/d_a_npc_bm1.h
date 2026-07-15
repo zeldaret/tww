@@ -68,7 +68,9 @@ public:
     void clr_manzai() {m883 = 0;}
     void getOdoroki() {}
     void getStt() {}
-    void get_oldMsgStat() {}
+    void get_oldMsgStat() {
+
+    }
     void setFocus() {}
     void setTelescopeDemo() {}
     void set_manzai() {}
@@ -100,7 +102,7 @@ public:
     char* wingAnmNum_toResID(int);
     char* btpNum_toResID(int);
     bool setBtp(bool, int);
-    void iniTexPttrnAnm(bool);
+    bool iniTexPttrnAnm(bool);
     void plyTexPttrnAnm();
     void setAnm_tex(signed char);
     BOOL setAnm_anm(anm_prm_c*);
@@ -143,7 +145,7 @@ public:
     void bm_setFlyAnm();
     void bm_clcFlySpd();
     void bm_clcMovSpd();
-    BOOL bm_flyMove();
+    bool bm_flyMove();
     void bm_nMove();
     void setPrtcl_Flyaway();
     void delPrtcl_Flyaway();
@@ -162,7 +164,7 @@ public:
     cXyz eInit_calcRelativPos(cXyz*, int*);
     void eInit_ATTENTION_(int*, int*, int*, cXyz*, int*, int*, int*);
     void eInit_SET_PLYER_GOL_(int*, cXyz*, int*);
-    void eInit_prmFloat(float*, float);
+    float eInit_prmFloat(float*, float);
     void eInit_FLY_(int*, float*, float*, float*, float*);
     void eInit_DEL_ACTOR_();
     void eInit_WLK_(int*, float*, float*, cXyz*, int*, int*, int*);
@@ -219,11 +221,11 @@ public:
     BOOL _delete();
     cPhs_State _create();
     J3DModelData* create_Anm();
-    void create_hed_Anm();
-    void create_wng_Anm();
-    void create_arm_Anm();
-    void create_itm_Mdl();
-    void CreateHeap();
+    J3DModelData* create_hed_Anm();
+    J3DModelData* create_wng_Anm();
+    J3DModelData* create_arm_Anm();
+    bool create_itm_Mdl();
+    BOOL CreateHeap();
 
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
@@ -246,14 +248,17 @@ public:
                 s16 m70A;
                 s16 m70C;
     /* 0x710 */ mDoExt_McaMorf* m710;
-                u8 m714;
-                u8 m715;
-                s8 m716;
-                s8 m717;
+                s8 m_wngL1_jnt_num;
+                s8 m_wngR1_jnt_num;
+                s8 m_wngL3_jnt_num;
+                s8 m_wngR3_jnt_num;
     /* 0x714 */ u8 m718[0x71C - 0x718];
     /* 0x71C */ mDoExt_McaMorf* m71C;
-                u32 m720;
-                s8 m_UNK_jnt_num;
+                s8 m_armL1_jnt_num;
+                s8 m_armR1_jnt_num;
+                s8 m_armL2_jnt_num;
+                s8 m_armR2_jnt_num;
+                s8 m_hnd_R_jnt_num;
                 ActionFunc m728;
     /* 0x734 */ Mtx mLeftArmMtx;
     /* 0x764 */ Mtx mRightArmMtx;
@@ -303,7 +308,10 @@ public:
                 bool m889;
                 bool m88A;
                 u8 m88B;
-                u8 m88C[0x890 - 0x88C];                
+                u8 m88C;
+                u8 m88D;
+                u8 m88E;
+                u8 m88F;                
     /* 0x890 */ s32 mbSetEyePos;
     /* 0x894 */ u8 m894;
     /* 0x895 */ u8 m895;
@@ -353,14 +361,18 @@ STATIC_ASSERT(sizeof(daNpc_Bm1_c) == DEMO_SELECT(0x90C,0x908));
 
 
 struct hio_prm_c{
-    s32 m0;
-    s32 m4;
-    s32 m8;
-    s32 mC;
+    s16 m0;
+    s16 m2;
+    s16 m4;
+    s16 m6;
+    s16 m8;
+    s16 mA;
+    s16 mC;
+    s16 mE;
     s16 m10;
     s16 m12;
     f32 mAttPosOffsetY;
-    s16 m18;
+    u8 m18;
     s16 m1A;
     s16 m1C;
     s16 m1E;
