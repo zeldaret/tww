@@ -180,13 +180,25 @@ bool daMgBoard_c::_execute() {
 }
 
 /* 00000FD8-00001040       .text execGameMain__11daMgBoard_cFv */
-void daMgBoard_c::execGameMain() {
-    /* Nonmatching */
+bool daMgBoard_c::execGameMain() {
+    MinigameMain();
+    bool is_end_game = false;
+    if (mSeaFightGame.mAliveShipNum == 0 || mSeaFightGame.mBulletNum == 0) {
+        is_end_game = true;
+    }
+
+    if (is_end_game != 0)
+    {
+        mbEndGame = true;
+        return true;
+    }
+
+    return false;
 }
 
 /* 00001040-00001060       .text execEndGame__11daMgBoard_cFv */
 void daMgBoard_c::execEndGame() {
-    /* Nonmatching */
+    MiniGameInit();
 }
 
 /* 00001060-00001250       .text MinigameMain__11daMgBoard_cFv */
@@ -205,8 +217,10 @@ static cPhs_State daMgBoard_Create(void*) {
 }
 
 /* 000014C8-00001518       .text daMgBoard_Delete__FPv */
-static BOOL daMgBoard_Delete(void*) {
-    /* Nonmatching */
+static BOOL daMgBoard_Delete(daMgBoard_c* i_this) {
+    dComIfG_resDelete(&i_this->mPhase, daMgBoard_c::m_arcname);
+    mDoAud_seDeleteObject(&i_this->mNPCPos);
+    return TRUE;
 }
 
 /* 00001518-0000153C       .text daMgBoard_Draw__FPv */

@@ -28,7 +28,7 @@ public:
     void CreateInit();
     void MiniGameInit();
     bool _execute();
-    void execGameMain();
+    bool execGameMain();
     void execEndGame();
     void MinigameMain();
     void CursorMove();
@@ -67,7 +67,7 @@ public:
     /* 0x638 */ int mState;
     /* 0x63C */ u8 mbDraw;
     /* 0x63D */ u8 mbStartGame;
-    /* 0x63E */ u8 mbEndGame;
+    /* 0x63E */ bool mbEndGame;
     /* 0x63F */ u8 mbForceEnd;
     /* 0x640 */ u8 mTimer;
 };
