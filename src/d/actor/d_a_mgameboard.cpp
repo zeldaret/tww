@@ -12,7 +12,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daMgBoard_c*)i_this)->CreateHeap();
 }
 
-char daMgBoard_c::m_arcname[] = "mgameboard";
+char daMgBoard_c::m_arcname[9] = {};
 
 /* 0000010C-000007BC       .text CreateHeap__11daMgBoard_cFv */
 BOOL daMgBoard_c::CreateHeap() {
@@ -41,137 +41,113 @@ BOOL daMgBoard_c::CreateHeap() {
 >>> SYMBOL NOT FOUND: _restgpr_16
 >>> SYMBOL NOT FOUND: fopAcM_entrySolidHeap__FP10fopAc_ac_cPFP10fopAc_ac_c_iUl
     */
-    J3DModelData* modelData;
-    J3DModel* pJVar3;
-    BOOL uVar4;
-    dDlst_2DNumber_c* pdVar5;
-    dDlst_2DObject_c* puVar6;
-    ResTIMG* pRVar7;
-    ResTIMG* pRVar8;
-    dDlst_2DObject_c* pdVar9;
-    dDlst_2DMinigame_c* pdVar10;
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 8);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 8);
     JUT_ASSERT(0x133, modelData != NULL);
 
-    pJVar3 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
-    mpBoardModel = pJVar3;
+    mpBoardModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpBoardModel == NULL) {
-        uVar4 = FALSE;
-    } else {
+        return FALSE;
+    }
 
-        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 9);
-        JUT_ASSERT(0x143, modelData != NULL);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 9);
+    JUT_ASSERT(0x143, modelData != NULL);
 
-        pJVar3 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
-        mpCursorModel = pJVar3;
-        if (this->mpCursorModel == NULL) {
-            uVar4 = FALSE;
-        } else {
-            modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 7);
-            JUT_ASSERT(0x153, modelData != NULL);
+    mpCursorModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (mpCursorModel == NULL) {
+        return FALSE;
+    }
 
-            for (int i = 0; i < (int)ARRAY_SIZE(mpHitModel); ++i) {
-                pJVar3 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
-                mpHitModel[i] = pJVar3;
-                if (mpHitModel[i] == NULL) {
-                    return TRUE;
-                }
-            }
-            modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 10);
-            JUT_ASSERT(0x165, modelData != NULL);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 7);
+    JUT_ASSERT(0x153, modelData != NULL);
 
-            for (int i = 0; i < (int)ARRAY_SIZE(mpMissModel); ++i) {
-                mpMissModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);;
-                if (mpMissModel[i] == NULL) {
-                    return FALSE;
-                }
-            }
-
-            modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 4);
-            JUT_ASSERT(0x177, modelData != NULL);
-
-            for (int i = 0; i < (int)ARRAY_SIZE(mpShip2Model); ++i) {
-                mpShip2Model[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);;
-                if (mpShip2Model[i] == NULL) {
-                    return FALSE;
-                }
-            }
-
-            modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 5);
-            JUT_ASSERT(0x189, modelData != NULL);
-
-            for (int i = 0; i < (int)ARRAY_SIZE(mpShip3Model); ++i) {
-                mpShip3Model[i] =  mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);;
-                if (mpShip3Model[i] == NULL) {
-                    return FALSE;
-                }
-            }
-
-            modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 6);
-            JUT_ASSERT(0x19b, modelData != NULL);
-
-            for (int i = 0; i < (int)ARRAY_SIZE(mpShip4Model); ++i) {
-                mpShip4Model[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);;
-                if (mpShip4Model[i] == NULL) {
-                    return FALSE;
-                }
-            }
-
-            pdVar5 = new dDlst_2DNumber_c(); // maybe split allocation and construction?
-
-            mpNumber0 = pdVar5;
-            if (mpNumber0 == NULL) {
-                uVar4 = 0;
-            } else {
-                mpNumber0->init(4, 0x1d6, 0x4b, 0x18, 0x18, 0);
-                pdVar5 = new dDlst_2DNumber_c(); // maybe split allocation and construction?
-                mpNumber1 = pdVar5;
-                if (mpNumber1 == NULL) {
-                    uVar4 = 0;
-                } else {
-                    mpNumber1->init(4, 100, 0x50, 0x18, 0x18, 0);
-                    for (int i = 0; i < (int)ARRAY_SIZE(mpSquidIcon); ++i) {
-                        puVar6 = new dDlst_2DObject_c(); // maybe split allocation and construction?
-                        mpSquidIcon[i] = puVar6;
-                        if (mpSquidIcon[i] == NULL) {
-                            return FALSE;
-                        }
-
-                        pRVar7 = (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x13);
-                        pRVar8 = (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x12);
-                        mpSquidIcon[i]->init(pRVar8, pRVar7);
-                    }
-
-                    for (int i = 0; i < (int)ARRAY_SIZE(mpBombIcons); ++i) // ghidra implies this could be a double array?
-                    {
-                        pdVar9 = new dDlst_2DObject_c(); // maybe split allocation and construction?
-                        mpBombIcons[i] = pdVar9;
-                        if (mpBombIcons[i] == NULL) {
-                            return FALSE;
-                        }
-                        pRVar7 = (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x10);
-                        pRVar8 = (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0xF);
-                        mpBombIcons[i]->init(pRVar8, pRVar7);
-                    }
-
-                    pdVar10 = new dDlst_2DMinigame_c(); // maybe split allocation and construction?
-
-                    mpMinigameDList = pdVar10;
-                    if (mpMinigameDList == NULL) {
-                        uVar4 = 0;
-                    } else {
-                        pRVar7 = (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x11);
-                        pRVar8 = (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0xE);
-                        mpMinigameDList->init(pRVar8, pRVar7);
-                        set_2dposition();
-                        uVar4 = TRUE;
-                    }
-                }
-            }
+    for (int i = 0; i < (int)ARRAY_SIZE(mpHitModel); ++i) {
+        mpHitModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+        if (mpHitModel[i] == NULL) {
+            return FALSE;
         }
     }
-    return uVar4;
+
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 10);
+    JUT_ASSERT(0x165, modelData != NULL);
+
+    for (int i = 0; i < (int)ARRAY_SIZE(mpMissModel); ++i) {
+        mpMissModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+        if (mpMissModel[i] == NULL) {
+            return FALSE;
+        }
+    }
+
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 4);
+    JUT_ASSERT(0x177, modelData != NULL);
+
+    for (int i = 0; i < (int)ARRAY_SIZE(mpShip2Model); ++i) {
+        mpShip2Model[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+        if (mpShip2Model[i] == NULL) {
+            return FALSE;
+        }
+    }
+
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 5);
+    JUT_ASSERT(0x189, modelData != NULL);
+
+    for (int i = 0; i < (int)ARRAY_SIZE(mpShip3Model); ++i) {
+        mpShip3Model[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+        if (mpShip3Model[i] == NULL) {
+            return FALSE;
+        }
+    }
+
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 6);
+    JUT_ASSERT(0x19b, modelData != NULL);
+
+    for (int i = 0; i < (int)ARRAY_SIZE(mpShip4Model); ++i) {
+        mpShip4Model[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+        if (mpShip4Model[i] == NULL) {
+            return FALSE;
+        }
+    }
+
+    mpNumber0 = new dDlst_2DNumber_c();
+    if (mpNumber0 == NULL) {
+        return FALSE;
+    }
+    mpNumber0->init(4, 0x1d6, 0x4b, 0x18, 0x18, 0);
+
+    mpNumber1 = new dDlst_2DNumber_c();
+    if (mpNumber1 == NULL) {
+        return FALSE;
+    }
+
+    mpNumber1->init(4, 100, 0x50, 0x18, 0x18, 0);
+    for (int i = 0; i < (int)ARRAY_SIZE(mpSquidIcon); ++i) {
+        mpSquidIcon[i] = new dDlst_2DObject_c();
+        if (mpSquidIcon[i] == NULL) {
+            return FALSE;
+        }
+
+        mpSquidIcon[i]->init((ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x12), (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x13));
+    }
+
+    for (int i = 0; i < (int)ARRAY_SIZE(mpBombIcons); ++i) {
+        for (int j = 0; j < (int)ARRAY_SIZE(mpBombIcons[i]); ++j) {
+            mpBombIcons[i][j] = new dDlst_2DObject_c();
+            if (mpBombIcons[i][j] == NULL) {
+                return FALSE;
+            }
+            mpBombIcons[i][j]->init((ResTIMG*)dComIfG_getObjectRes(m_arcname, 0xF), (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x10));
+        }
+    }
+
+    mpMinigameDList = new dDlst_2DMinigame_c();
+    if (mpMinigameDList == NULL) {
+        return FALSE;
+    }
+
+    mpMinigameDList->init((ResTIMG*)dComIfG_getObjectRes(m_arcname, 0xE), (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x11));
+    set_2dposition();
+
+    return TRUE;
 }
 
 /* 00000804-00000904       .text set_2dposition__11daMgBoard_cFv */
