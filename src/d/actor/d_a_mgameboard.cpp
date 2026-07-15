@@ -16,32 +16,6 @@ char daMgBoard_c::m_arcname[9] = {};
 
 /* 0000010C-000007BC       .text CreateHeap__11daMgBoard_cFv */
 BOOL daMgBoard_c::CreateHeap() {
-    /* Nonmatching */
-    /*
-           6] CreateHeap__11daMgBoard_cFv (func,global) found in d_a_mgameboard.o 
->>> SYMBOL NOT FOUND: _savegpr_16
-        7] dComIfG_getObjectRes__FPCci (func,weak) found in d_a_mgameboard.o 
->>> SYMBOL NOT FOUND: getObjectRes__14dRes_control_cFPCcl
->>> SYMBOL NOT FOUND: getSDevice__12JUTAssertionFv
->>> SYMBOL NOT FOUND: showAssert__12JUTAssertionFUlPCciPCc
->>> SYMBOL NOT FOUND: mDoExt_J3DModel__create__FP12J3DModelDataUlUl
->>> SYMBOL NOT FOUND: __nw__FUl
->>> SYMBOL NOT FOUND: __ct__16dDlst_2DNumber_cFv
->>> SYMBOL NOT FOUND: init__16dDlst_2DNumber_cFissssUc
-        7] __ct__16dDlst_2DObject_cFv (func,weak) found in d_a_mgameboard.o 
-         8] __ct__12dDlst_base_cFv (func,weak) found in d_a_mgameboard.o 
-          9] __vt__12dDlst_base_c (object,weak) found in d_a_mgameboard.o 
-           10] draw__12dDlst_base_cFv (func,weak) found in d_a_mgameboard.o 
-           10] __dt__12dDlst_base_cFv (func,weak) found in d_a_mgameboard.o 
->>> SYMBOL NOT FOUND: __vt__16dDlst_2DObject_c
->>> SYMBOL NOT FOUND: init__16dDlst_2DObject_cFP7ResTIMGP7ResTIMG
-        7] __ct__18dDlst_2DMinigame_cFv (func,weak) found in d_a_mgameboard.o 
->>> SYMBOL NOT FOUND: __vt__18dDlst_2DMinigame_c
->>> SYMBOL NOT FOUND: init__18dDlst_2DMinigame_cFP7ResTIMGP7ResTIMG
->>> SYMBOL NOT FOUND: _restgpr_16
->>> SYMBOL NOT FOUND: fopAcM_entrySolidHeap__FP10fopAc_ac_cPFP10fopAc_ac_c_iUl
-    */
-
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 8);
     JUT_ASSERT(0x133, modelData != NULL);
 
