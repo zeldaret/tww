@@ -129,13 +129,17 @@ BOOL daMgBoard_c::CreateHeap() {
         mpSquidIcon[i]->init((ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x12), (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x13));
     }
 
-    for (int i = 0; i < (int)ARRAY_SIZE(mpBombIcons); ++i) {
-        for (int j = 0; j < (int)ARRAY_SIZE(mpBombIcons[i]); ++j) {
-            mpBombIcons[i][j] = new dDlst_2DObject_c();
-            if (mpBombIcons[i][j] == NULL) {
+    const int rows = 3;
+    const int cols = 8;
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            const int idx = j + i * cols; // indexing into it as [i][j] doesn't match
+            mpBombIcons[idx] = new dDlst_2DObject_c();
+
+            if (!mpBombIcons[idx])
                 return FALSE;
-            }
-            mpBombIcons[i][j]->init((ResTIMG*)dComIfG_getObjectRes(m_arcname, 0xF), (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x10));
+
+            mpBombIcons[idx]->init((ResTIMG*)dComIfG_getObjectRes(m_arcname, 0xF), (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x10));
         }
     }
 
