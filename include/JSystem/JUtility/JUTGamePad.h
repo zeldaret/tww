@@ -190,7 +190,7 @@ public:
         CRumble(JUTGamePad* pad) { clear(pad); }
 
         static u8 mStatus[4];
-        static PADMask mEnabled;
+        static u32 mEnabled;
 
         enum ERumble {
             LOOP_ONCE    = 0,

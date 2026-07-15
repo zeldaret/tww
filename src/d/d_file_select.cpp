@@ -122,11 +122,9 @@ void dFile_select_c::initial() {
     paneTransInit();
 }
 
-#if VERSION == VERSION_DEMO
 void dFile_select_c::_deleteSp() {
     mDoHIO_deleteChild(g_fsHIO.mNo);
 }
-#endif
 
 /* 8017FCF4-8017FD6C       .text _delete__14dFile_select_cFv */
 void dFile_select_c::_delete() {
@@ -186,9 +184,9 @@ void dFile_select_c::_move() {
     (this->*DataSelProc[field_0x392b])();
 #else
 #if VERSION <= VERSION_JPN
-    if(g_mDoMemCd_control.field_0x165A == 1 && field_0x3941 == 0)
+    if(g_mDoMemCd_control.mProbeStat == 1 && field_0x3941 == 0)
 #else
-    if((g_mDoMemCd_control.field_0x165A == 0 || g_mDoMemCd_control.field_0x165A == 1) && field_0x3941 == 0)
+    if((g_mDoMemCd_control.mProbeStat == 0 || g_mDoMemCd_control.mProbeStat == 1) && field_0x3941 == 0)
 #endif
     {
         field_0x392e = 1;
@@ -202,7 +200,7 @@ void dFile_select_c::_move() {
         (this->*DataSelProc[field_0x392b])();
     }
 
-    g_mDoMemCd_control.field_0x165A = 2;
+    g_mDoMemCd_control.mProbeStat = 2;
 #endif
 }
 
@@ -3639,7 +3637,7 @@ int dFile_select_c::ExCardCheck() {
         return 1;
     }
 
-    if(dComIfGs_getNoFile() == 1) {
+    if(dComIfGs_getNewFile() == 1) {
         return 0;
     }
 
@@ -3647,7 +3645,7 @@ int dFile_select_c::ExCardCheck() {
         return 2;
     }
 
-    if (dComIfGs_getNewFile()) {
+    if (dComIfGs_getNoFile()) {
         return 2;
     }
     

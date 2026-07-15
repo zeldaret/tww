@@ -665,29 +665,29 @@ void dMenu_Option_c::noteSet() {
     msg_entry = msgGet.getMesgEntry(head_p);
 
     msgDataProc.dataInit();
-    msgDataProc.field_0x3C = mesg;
+    msgDataProc.bmgData = mesg;
     msgDataProc.setOutMessage(mD38, mD3C, mD40, mD44);
     msgDataProc.font[0] = mD2C;
     msgDataProc.font[1] = mD30;
-    msgDataProc.field_0x11C = ((J2DTextBox*)m740[0].pane)->getCharSpace();
-    msgDataProc.field_0x124 = ((J2DTextBox*)m740[1].pane)->getCharSpace();
-    msgDataProc.field_0x120 = ((J2DTextBox*)m740[0].pane)->getLineSpace();
-    msgDataProc.field_0x0C = &msg_entry;
-    msgDataProc.field_0x144 = f31;
-    msgDataProc.field_0x14C = f30;
-    msgDataProc.field_0x128 = 0x1D0;
-    msgDataProc.field_0x12C = 0x1D0;
-    msgDataProc.field_0x160 = 2;
-    msgDataProc.field_0x15C = 0;
+    msgDataProc.charSpace = ((J2DTextBox*)m740[0].pane)->getCharSpace();
+    msgDataProc.rubyCharSpace = ((J2DTextBox*)m740[1].pane)->getCharSpace();
+    msgDataProc.lineSpace = ((J2DTextBox*)m740[0].pane)->getLineSpace();
+    msgDataProc.mesgEntry = &msg_entry;
+    msgDataProc.fontSize = f31;
+    msgDataProc.rubyFontSize = f30;
+    msgDataProc.lineWidth = 0x1D0;
+    msgDataProc.centerLineWidth = 0x1D0;
+    msgDataProc.sendSpeed = 2;
+    msgDataProc.spaceTimer = 0;
     msgDataProc.field_0x299 = 1;
-    msgDataProc.field_0x29C = 0;
+    msgDataProc.spaceFlag = 0;
 
     msgDataProc.stringLength();
     msgDataProc.stringShift();
     msgDataProc.iconIdxRefresh();
 
-    s16 r26 = msgDataProc.field_0x130;
-    msgDataProc.field_0x130 = 0;
+    s16 r26 = msgDataProc.lineCount;
+    msgDataProc.lineCount = 0;
     msgDataProc.stringSet();
     f32 f30_2 = (m740[0].pane->getHeight() - f31 - (f32)r26 * ((J2DTextBox*)m740[0].pane)->getLineSpace()) / 2.0f;
     ((J2DTextBox*)m740[0].pane)->shiftSet(0.0f, f30_2);
