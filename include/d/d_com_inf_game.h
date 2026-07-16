@@ -995,24 +995,24 @@ inline u16 dComIfGs_getRupeeMax() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getRupeeMax();
 }
 
-inline u8 dComIfGs_getItemBeast(int param_0) {
-    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBeast(param_0);
+inline u8 dComIfGs_getItemBeast(int i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBeast(i_idx);
 }
 
 inline void dComIfGs_setItemBeast(int i_idx, u8 i_itemNo) {
     g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBeast(i_idx, i_itemNo);
 }
 
-inline u8 dComIfGs_getItemBait(int param_0) {
-    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBait(param_0);
+inline u8 dComIfGs_getItemBait(int i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBait(i_idx);
 }
 
 inline void dComIfGs_setItemBait(int i_idx, u8 i_itemNo) {
     g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBait(i_idx, i_itemNo);
 }
 
-inline u8 dComIfGs_getItemReserve(int param_0) {
-    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getReserve(param_0);
+inline u8 dComIfGs_getItemReserve(int i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getReserve(i_idx);
 }
 
 inline void dComIfGs_setItemReserve(int i_idx, u8 i_itemNo) {
@@ -1119,10 +1119,6 @@ inline void dComIfGs_setItem(int i_invIdx, u8 i_itemNo) {
     } else {
         return;
     }
-}
-
-inline u8 dComIfGs_getBeast(int i_idx) {
-    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBeast(i_idx);
 }
 
 inline void dComIfGs_setBeastItem(u8 i_itemNo) {
