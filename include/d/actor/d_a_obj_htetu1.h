@@ -5,8 +5,6 @@
 
 class daObjHtetu1_c : public fopAc_ac_c {
 public:
-    // TODO: this function is marked as weak in the REL symbol map, but it does not get inlined for some reason?
-    // void check_sw() {}
     void check_sw();
 
     void solidHeapCB(fopAc_ac_c*);
@@ -21,8 +19,12 @@ public:
     bool _draw();
 
 public:
-    /* Place member variables here */
-};
+    /* 0x290 */ u8 field_0x290[0xC];
+    /* 0x29C */ int mSwitchNo;
+    /* 0x2A0 */ u8 field_0x2A0[0x88];
+};  // Size: 0x328
+
+STATIC_ASSERT(sizeof(daObjHtetu1_c) == 0x328);
 
 class daObjHtetu1Splash_c {
 public:

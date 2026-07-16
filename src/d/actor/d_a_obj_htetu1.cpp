@@ -33,7 +33,7 @@ bool daObjHtetu1_c::_delete() {
 
 /* 00000610-00000648       .text check_sw__13daObjHtetu1_cFv */
 void daObjHtetu1_c::check_sw() {
-    /* Nonmatching */
+    fopAcM_isSwitch(this, mSwitchNo);
 }
 
 /* 00000648-000006E4       .text init_mtx__13daObjHtetu1_cFv */
