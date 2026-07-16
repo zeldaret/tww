@@ -48,7 +48,7 @@ enum{
 
 class daNpc_Bm1_c : public fopNpc_npc_c {
 public:
-    daNpc_Bm1_c();
+    // daNpc_Bm1_c();
     // struct anm_prm_c {
         
     // }; //Size: 0x14?
@@ -390,28 +390,5 @@ struct hio_prm_c{
     f32 m48;
 };
 
-class daNpc_Bm1_childHIO_c : public mDoHIO_entry_c{
 
-public:
-    daNpc_Bm1_childHIO_c();
-
-public:
-
-    hio_prm_c hio_prm;
-    u32 m50;
-    //SIZE: 0x54
-};
-
-class daNpc_Bm1_HIO_c :public mDoHIO_entry_c{
-public:
-    daNpc_Bm1_HIO_c();
-
-public:
-
-    s8 m4;
-    s32 m8;
-    daNpc_Bm1_childHIO_c children[10];
-    /* Place member variables here */
-};
-    //SIZE: 0x354
 #endif /* D_A_NPC_BM1_H */

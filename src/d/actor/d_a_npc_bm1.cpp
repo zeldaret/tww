@@ -6,10 +6,40 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bm1.h"
 #include "SSystem/SComponent/c_counter.h"
-#include "d/d_bg_s_func.h"
 #include "d/d_letter.h"
 #include "d/d_snap.h"
 #include "res/Object/Bm.h"
+
+class daNpc_Bm1_childHIO_c : public mDoHIO_entry_c{
+
+public:
+    daNpc_Bm1_childHIO_c();
+    // virtual ~daNpc_Bm1_childHIO_c(){};
+
+public:
+
+    hio_prm_c hio_prm;
+    u32 m50;
+    //SIZE: 0x54
+};
+
+class daNpc_Bm1_HIO_c :public mDoHIO_entry_c{
+public:
+    daNpc_Bm1_HIO_c();
+    virtual ~daNpc_Bm1_HIO_c(){};
+
+public:
+
+    s8 m4;
+    s32 m8;
+    daNpc_Bm1_childHIO_c children[10];
+    /* Place member variables here */
+};
+    //SIZE: 0x354
+
+
+
+
 
 static daNpc_Bm1_HIO_c l_HIO;
 static fopAc_ac_c* l_check_inf[20];
@@ -311,7 +341,7 @@ static BOOL nodeCallBack_Arm(J3DNode* i_param_1, int i_param_2) {
     /* Nonmatching */
     if(i_param_2 == 0){
         if(j3dSys.getModel()->getUserArea() != NULL){
-            reinterpret_cast<daNpc_Bm1_c*>(j3dSys.getModel()->getUserArea())->nodeWngControl(i_param_1,j3dSys.getModel());
+            reinterpret_cast<daNpc_Bm1_c*>(j3dSys.getModel()->getUserArea())->nodeArmControl(i_param_1,j3dSys.getModel());
         }
     }
     return TRUE;
@@ -347,7 +377,7 @@ static BOOL nodeCallBack_Bm1(J3DNode* i_param_1, int i_param_2) {
     /* Nonmatching */
     if(i_param_2 == 0){
         if(j3dSys.getModel()->getUserArea() != NULL){
-            reinterpret_cast<daNpc_Bm1_c*>(j3dSys.getModel()->getUserArea())->nodeWngControl(i_param_1,j3dSys.getModel());
+            reinterpret_cast<daNpc_Bm1_c*>(j3dSys.getModel()->getUserArea())->nodeBm1Control(i_param_1,j3dSys.getModel());
         }
     }
     return TRUE;
@@ -719,8 +749,15 @@ void daNpc_Bm1_c::setMtx(bool i_param_1) {
         if(m8FA == 4){
             mDoMtx_stack_c::copy(m71C->getModel()->getAnmMtx(m_hnd_R_jnt_num));
             mDoMtx_stack_c::transM(13.5f,3.0f,-5.5f);
+
+#if VERSION == VERSION_DEMO
+            mDoMtx_stack_c::XYZrotM(0xA222, -0x3B05, -0x5C71);
+            m6D8->setBaseTRMtx(mDoMtx_stack_c::get());
+
+#else
             mDoMtx_stack_c::XYZrotM(cM_deg2s(-132.001),cM_deg2s(-114),cM_deg2s(145.005));
             m6D8->setBaseTRMtx(mDoMtx_stack_c::get());
+#endif
         }else{
             m6D8->setBaseTRMtx(m71C->getModel()->getAnmMtx(m_hnd_R_jnt_num));
         }
@@ -740,8 +777,8 @@ void daNpc_Bm1_c::setMtx(bool i_param_1) {
     }
     setPrtcl_Flyaway();
     setPrtcl_Land0();
-    setPrtcl_Hane0();
-    setPrtcl_Hane1();
+    flwPrtcl_Hane0();
+    flwPrtcl_Hane1();
     setAttention(i_param_1);
 }
 
@@ -845,7 +882,7 @@ BOOL daNpc_Bm1_c::setAnm_anm(daNpc_Bm1_c::anm_prm_c* i_param_1) {
         dNpc_setAnmFNDirect(m710,i_param_1->mC,i_param_1->m4,i_param_1->m8,wingAnmNum_toResID(m8FA),NULL,mArcName);
  
     }
-    dNpc_setAnmFNDirect(m6EC,i_param_1->mC,i_param_1->m4,i_param_1->m8,wingAnmNum_toResID(m8FA),NULL,mArcName);
+    dNpc_setAnmFNDirect(m6EC,i_param_1->mC,i_param_1->m4,i_param_1->m8,headAnmNum_toResID(m8FA),NULL,mArcName);
 
     delPrtcl_Hane0();
     delPrtcl_Hane1();
@@ -1051,8 +1088,8 @@ void daNpc_Bm1_c::anmAtr(unsigned short i_param_1) {
             m905 = 0;
             break;
     }
-    control_anmAtr();
     control_anmTag();
+    control_anmAtr();
 
 }
 
@@ -2779,19 +2816,18 @@ void daNpc_Bm1_c::eInit_SET_ANM_(int* arg0) {
 /* 0000522C-00005368       .text eInit_MOV_PTH_POINT___11daNpc_Bm1_cFPiPiPiPi */
 void daNpc_Bm1_c::eInit_MOV_PTH_POINT_(int* arg0, int* arg1, int* arg2, int* arg3) {
     /* Nonmatching - Regswap*/
-
-    cXyz pathpos;
     if (mPathRun.isPath()) {
-        u8 idx = mPathRun.getIdx();
+        u8 idx = (int)mPathRun.getIdx();
         if (arg2 != NULL) {
             // idx = ;
             u8 arg = *arg2;
-            idx = cLib_maxLimit<u8>(arg, mPathRun.maxPoint());
+            u8 max_point = mPathRun.maxPoint();
+            idx = (u8)(arg > max_point ? max_point : arg);
             mPathRun.setIdx(idx);
         }
-        current.pos = mPathRun.getPoint(idx);
+        current.pos.set(mPathRun.getPoint(idx));
         mPathRun.nextIdxAuto();
-        pathpos = mPathRun.getPoint(mPathRun.getIdx());
+        cXyz pathpos = mPathRun.getPoint(mPathRun.getIdx());
         current.angle.y = cLib_targetAngleY(&current.pos,&pathpos);
         if (arg0) {
             switch(*arg0){
@@ -2805,7 +2841,6 @@ void daNpc_Bm1_c::eInit_MOV_PTH_POINT_(int* arg0, int* arg1, int* arg2, int* arg
         }
         eInit_SET_ANM_(arg1);
     }
-    
 }
 
 /* 00005368-00005650       .text event_actionInit__11daNpc_Bm1_cFi */
@@ -4382,7 +4417,7 @@ BOOL daNpc_Bm1_c::CreateHeap() {
         m71C->getModel()->setUserArea((u32)this);
         for(u16 i = 0; i < anm_model->getJointNum(); i++){
             if((i == m_hed_jnt_num) ||( i == m_nec_jnt_num) || (i == m_bbone_jnt_num) || (i == m_arm_L_jnt_num) || i == m_arm_R_jnt_num){
-                mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Arm);
+                mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Bm1);
             }
         }
         mpMorf->getModel()->setUserArea((u32)this);
