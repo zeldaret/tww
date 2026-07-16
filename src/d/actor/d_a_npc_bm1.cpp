@@ -4219,8 +4219,8 @@ cPhs_State daNpc_Bm1_c::_create() {
     fopAcM_ct_Retail(this, daNpc_Bm1_c);
     static u32 a_size_tbl[0xB] = {};
     u32 param = fopAcM_GetParam(this);
-
-    if(!decideType(param & 0xFF,fopAcM_GetParamBit(param & 0xFF,8,8))){
+    // u32 paramu32 = param;
+    if(!decideType(param & 0xFF,fopAcM_GetParamBit(param,8,8))){
         return cPhs_ERROR_e;
     }
     cPhs_State state = dComIfG_resLoad(&mPhs,mArcName);
