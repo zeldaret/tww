@@ -162,7 +162,13 @@ void daMgBoard_c::set_2dposition() {
 
 /* 00000904-000009E0       .text CreateInit__11daMgBoard_cFv */
 void daMgBoard_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpBoardModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -600, -300, -500, 600, 300, 100);
+    mState = 0;
+    mMinigameStartIdx = dComIfGp_evmng_getEventIdx("MINIGAME_START", 0xFF);
+    mMinigameEndIdx = dComIfGp_evmng_getEventIdx("MINIGAME_END", 0xFF);
+    mStickControl.setWaitParm(5, 2, 3, 2, 0.9, 0.5, 0, 0x800);
+    MiniGameInit();
 }
 
 /* 000009E0-00000AE8       .text MiniGameInit__11daMgBoard_cFv */
