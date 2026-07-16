@@ -20,7 +20,7 @@ public:
     bool checkClearGame();
     u8 getScore();
     void reqStartGame();
-    bool checkEndGame();
+    BOOL checkEndGame();
     void setGInfoDraw();
     void clrGInfoDraw();
     BOOL CreateHeap();

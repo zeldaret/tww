@@ -23,8 +23,8 @@ void daMgBoard_c::reqStartGame() {
 }
 
 /* 80068624-80068638       .text checkEndGame__11daMgBoard_cFv */
-bool daMgBoard_c::checkEndGame() {
-    return mbEndGame;
+BOOL daMgBoard_c::checkEndGame() {
+    return mbEndGame != 0;
 }
 
 /* 80068638-80068644       .text setGInfoDraw__11daMgBoard_cFv */
