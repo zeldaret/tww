@@ -79,7 +79,7 @@ public:
     /* 0x2A4 */ JPABaseEmitter* field_0x2A4;
     /* 0x2A8 */ u8 field_0x2A8[0x2AC - 0x2A8];
     /* 0x2AC */ dPa_rippleEcallBack mRippleCallBack;
-    /* 0x2C0 */ daSTBox_shadowEcallBack_c field_0x2C0;
+    /* 0x2C0 */ daSTBox_shadowEcallBack_c shadowCallback;
     /* 0x318 */ cXyz position;
     /* 0x324 */ cXyz field_0x324;
     /* 0x330 */ u8 field_0x330;

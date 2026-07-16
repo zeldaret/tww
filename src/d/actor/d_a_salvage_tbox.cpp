@@ -176,14 +176,14 @@ bool daSTBox_c::_delete() {
         }
     }
     mRippleCallBack.end();
-    JPABaseEmitter* callbackEmitter = field_0x2C0.getEmitter();
+    JPABaseEmitter* callbackEmitter = shadowCallback.getEmitter();
     if (callbackEmitter != NULL) {
         callbackEmitter->mpEmitterCallBack = NULL;
-        callbackEmitter = field_0x2C0.getEmitter();
+        callbackEmitter = shadowCallback.getEmitter();
         callbackEmitter->setMaxFrame(-1);
         callbackEmitter->stopCreateParticle();
     }
-    field_0x2C0.setEmitter(NULL);
+    shadowCallback.setEmitter(NULL);
     dComIfG_resDelete(&field_0x290, m_arc_name);
     u8 eventReg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_ADFF);
     eventReg += 1;
@@ -257,13 +257,13 @@ void daSTBox_c::CreateInit() {
             }
         }
 
-        if (field_0x2C0.getEmitter() == NULL) {
+        if (shadowCallback.getEmitter() == NULL) {
         JPABaseEmitter* emitter = dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_SALVAGE00, &field_0x324, 
-                &current.angle, NULL, 0, &field_0x2C0, -1, 
+                &current.angle, NULL, 0, &shadowCallback, -1, 
                 NULL, NULL, NULL);
-            field_0x2C0.setMPos(field_0x324);
-            field_0x2C0.setField0x48(-0.1f);
-            field_0x2C0.setDepth(4.0f);
+            shadowCallback.setMPos(field_0x324);
+            shadowCallback.setField0x48(-0.1f);
+            shadowCallback.setDepth(4.0f);
             
         }
     } else if (field_0x331 == 0) {
@@ -362,22 +362,22 @@ bool daSTBox_c::_execute() {
     }
 
     if (current.pos.y < waterY) {
-        field_0x2C0.setWaterFlatY(waterY + 2.0f);
-        field_0x2C0.field_0x0C = waterY + 2.0f; 
-        field_0x2C0.setWaterY(waterY - current.pos.y);
-        field_0x2C0.mExScaleX = m1020Pos.x;
-        field_0x2C0.mExScaleY = m1020Pos.y;
-        field_0x2C0.mExScaleZ = m1020Pos.z;
+        shadowCallback.setWaterFlatY(waterY + 2.0f);
+        shadowCallback.field_0x0C = waterY + 2.0f; 
+        shadowCallback.setWaterY(waterY - current.pos.y);
+        shadowCallback.mExScaleX = m1020Pos.x;
+        shadowCallback.mExScaleY = m1020Pos.y;
+        shadowCallback.mExScaleZ = m1020Pos.z;
         
     } else {
-        JPABaseEmitter* emitter = field_0x2C0.getEmitter();
+        JPABaseEmitter* emitter = shadowCallback.getEmitter();
         if (emitter != NULL) {
             emitter->setEmitterCallBackPtr(NULL);
-            emitter = field_0x2C0.getEmitter();
+            emitter = shadowCallback.getEmitter();
             emitter->setMaxFrame(-1);
             emitter->stopCreateParticle();
         }
-        field_0x2C0.setEmitter(NULL);
+        shadowCallback.setEmitter(NULL);
     }
     set_mtx();
     return TRUE;
