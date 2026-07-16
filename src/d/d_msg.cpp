@@ -1951,8 +1951,8 @@ s32 dMsg_stopProc(sub_msg_class* i_Msg) {
     u32 uVar2;
 
     if (i_Msg->mMsgDataProc.autoSendFlag != 0) {
-        uVar2 = (int)i_Msg->mMsgDataProc.field_0x158 > 0 ? i_Msg->mMsgDataProc.field_0x158 - 1 : 0;
-        i_Msg->mMsgDataProc.field_0x158 = uVar2;
+        uVar2 = (int)i_Msg->mMsgDataProc.waitTimer > 0 ? i_Msg->mMsgDataProc.waitTimer - 1 : 0;
+        i_Msg->mMsgDataProc.waitTimer = uVar2;
         if (uVar2 == 0) {
             i_Msg->mMsgDataProc.autoSendFlag = 0;
 #if VERSION > VERSION_DEMO
@@ -2003,8 +2003,8 @@ s32 dMsg_stopProc(sub_msg_class* i_Msg) {
                 {
                     i_Msg->mMsgDataProc.field_0x299 = 1;
                 }
-                if (((i_Msg->mMsgDataProc.autoSendFlag == 0) && (i_Msg->mMsgDataProc.handSendFlag == 0)) && ((s32)i_Msg->mMsgDataProc.field_0x158 != 0)) {
-                    i_Msg->mMsgDataProc.field_0x158 = 0;
+                if (((i_Msg->mMsgDataProc.autoSendFlag == 0) && (i_Msg->mMsgDataProc.handSendFlag == 0)) && ((s32)i_Msg->mMsgDataProc.waitTimer != 0)) {
+                    i_Msg->mMsgDataProc.waitTimer = 0;
 #if VERSION > VERSION_DEMO
                     i_Msg->mMsgDataProc.field_0x296 = 0;
 #endif
@@ -2468,8 +2468,8 @@ s32 dMsg_continueProc(sub_msg_class* i_Msg) {
             {
                 i_Msg->mMsgDataProc.field_0x299 = 1;
             }
-            if (((i_Msg->mMsgDataProc.autoSendFlag == 0) && (i_Msg->mMsgDataProc.handSendFlag == 0)) && ((s32)i_Msg->mMsgDataProc.field_0x158 != 0)) {
-                i_Msg->mMsgDataProc.field_0x158 = 0;
+            if (((i_Msg->mMsgDataProc.autoSendFlag == 0) && (i_Msg->mMsgDataProc.handSendFlag == 0)) && ((s32)i_Msg->mMsgDataProc.waitTimer != 0)) {
+                i_Msg->mMsgDataProc.waitTimer = 0;
 #if VERSION > VERSION_DEMO
                 i_Msg->mMsgDataProc.field_0x296 = 0;
 #endif
@@ -2491,8 +2491,8 @@ s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
     u32 uVar3;
 
     if (i_Msg->mMsgDataProc.autoSendFlag != 0) {
-        uVar3 = (int)i_Msg->mMsgDataProc.field_0x158 > 0 ? i_Msg->mMsgDataProc.field_0x158 - 1 : 0;
-        i_Msg->mMsgDataProc.field_0x158 = uVar3;
+        uVar3 = (int)i_Msg->mMsgDataProc.waitTimer > 0 ? i_Msg->mMsgDataProc.waitTimer - 1 : 0;
+        i_Msg->mMsgDataProc.waitTimer = uVar3;
         if ((uVar3 == 0) || (fopMsgM_checkMessageSend())) {
             i_Msg->mMsgDataProc.autoSendFlag = 0;
 #if VERSION > VERSION_DEMO
@@ -2500,14 +2500,14 @@ s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
 #endif
             i_Msg->mStatus = fopMsgStts_BOX_CLOSING_e;
             i_Msg->m1100 = 0;
-            i_Msg->mMsgDataProc.field_0x158 = 0;
+            i_Msg->mMsgDataProc.waitTimer = 0;
             i_Msg->m116A++;
             dComIfGp_setMesgSendButton(i_Msg->m116A);
         }
     } else {
         if (i_Msg->mMsgDataProc.handSendFlag != 0) {
-            uVar3 = (int)i_Msg->mMsgDataProc.field_0x158 > 0 ? i_Msg->mMsgDataProc.field_0x158 - 1 : 0;
-            i_Msg->mMsgDataProc.field_0x158 = uVar3;
+            uVar3 = (int)i_Msg->mMsgDataProc.waitTimer > 0 ? i_Msg->mMsgDataProc.waitTimer - 1 : 0;
+            i_Msg->mMsgDataProc.waitTimer = uVar3;
             if (uVar3 != 0) {
                 if ((((CPad_CHECK_TRIG_A(0)) || (CPad_CHECK_TRIG_B(0))) || (fopMsgM_checkMessageSend())) && (!dComIfGp_checkMesgBgm())) {
                     i_Msg->mMsgDataProc.handSendFlag = 0;
@@ -2749,7 +2749,7 @@ s32 dMsg_initProc(sub_msg_class* i_Msg) {
 s32 dMsg_tactProc(sub_msg_class* i_Msg) {
     if (fopMsgM_checkMessageSend()) {
         i_Msg->mMsgDataProc.autoSendFlag = 1;
-        i_Msg->mMsgDataProc.field_0x158 = 30;
+        i_Msg->mMsgDataProc.waitTimer = 30;
         i_Msg->mStatus = fopMsgStts_CLOSE_WAIT_e;
     }
     return TRUE;
@@ -2773,8 +2773,8 @@ s32 dMsg_outnowProc(sub_msg_class* i_Msg) {
     if (i_Msg->mMesgEntry.mDrawType == 0) {
         if (((CPad_CHECK_TRIG_A(0)) || (CPad_CHECK_TRIG_B(0))) && (!dComIfGp_checkMesgBgm())) {
             i_Msg->mMsgDataProc.field_0x299 = 1;
-            if ((i_Msg->mMsgDataProc.autoSendFlag == 0 && (i_Msg->mMsgDataProc.handSendFlag == 0)) && ((s32)i_Msg->mMsgDataProc.field_0x158 != 0)) {
-                i_Msg->mMsgDataProc.field_0x158 = 0;
+            if ((i_Msg->mMsgDataProc.autoSendFlag == 0 && (i_Msg->mMsgDataProc.handSendFlag == 0)) && ((s32)i_Msg->mMsgDataProc.waitTimer != 0)) {
+                i_Msg->mMsgDataProc.waitTimer = 0;
 #if VERSION > VERSION_DEMO
                 i_Msg->mMsgDataProc.field_0x296 = 0;
 #endif
@@ -2788,8 +2788,8 @@ s32 dMsg_outnowProc(sub_msg_class* i_Msg) {
     ) {
         i_Msg->mMsgDataProc.field_0x299 = 1;
     }
-    if (((i_Msg->mMsgDataProc.autoSendFlag == 0) && (i_Msg->mMsgDataProc.handSendFlag == 0)) && ((int)i_Msg->mMsgDataProc.field_0x158 != 0)) {
-        i_Msg->mMsgDataProc.field_0x158 = (int)i_Msg->mMsgDataProc.field_0x158 > 0 ? i_Msg->mMsgDataProc.field_0x158 - 1 : 0;
+    if (((i_Msg->mMsgDataProc.autoSendFlag == 0) && (i_Msg->mMsgDataProc.handSendFlag == 0)) && ((int)i_Msg->mMsgDataProc.waitTimer != 0)) {
+        i_Msg->mMsgDataProc.waitTimer = (int)i_Msg->mMsgDataProc.waitTimer > 0 ? i_Msg->mMsgDataProc.waitTimer - 1 : 0;
     } else {
         i_Msg->mMsgDataProc.stringSet();
         i_Msg->m1164 = i_Msg->mMsgDataProc.field_0x25C;

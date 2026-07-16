@@ -129,7 +129,7 @@ dMeter_HIO_c::dMeter_HIO_c() {
     field_0x30 = 0;
     field_0x32 = 0;
     field_0x34 = 0;
-    field_0x2c = 0xff;
+    mScopeWipeAlpha = 0xff;
     field_0x20 = 1.5f;
     field_0x24 = 150.0f;
     field_0x2d = 0x8c;
@@ -194,7 +194,7 @@ dMeter_HIO_c::dMeter_HIO_c() {
     field_0x150 = 0x14;
     field_0x152 = 4;
     field_0x154 = 0x32;
-    field_0x28 = 2.1f;
+    mScopeWipeMaxScale = 2.1f;
     field_0x124 = 5;
     field_0x140 = 0;
     field_0xa0 = 0;
@@ -1743,7 +1743,7 @@ void dMeter_weponTrans(sub_meter_class* i_Meter) {
     static f32 expY = 0.0f;
     if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) ||
         ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(4) && !(i_Meter->mStatusFlags & dMtrStts_UNK20_e)) ||
-        ((i_Meter->mStatusFlags & dMtrStts_UNK80_e) && dComIfGp_getScopeMesgStatus() != fopMsgStts_UNKB_e) ||
+        ((i_Meter->mStatusFlags & dMtrStts_UNK80_e) && dComIfGp_getScopeMesgStatus() != fopMsgStts_SCOPE_ACTIVE_e) ||
         (((i_Meter->mStatusFlags & dMtrStts_UNK100_e) && dComIfGp_getAStatus() != dActStts_CANCEL_e) || dComIfGp_getAStatus() == dActStts_HIDDEN_e))
     {
         if (moveStatus != 1) {

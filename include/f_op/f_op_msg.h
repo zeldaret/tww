@@ -9,13 +9,16 @@ class fopAc_ac_c;
 enum fopMsg_MessageStatus_e {
     fopMsgStts_MSG_PREPARING_e = 0x01,
     fopMsgStts_BOX_OPENING_e = 0x02,
+    fopMsgStts_SCOPE_OPENING_1_e = 0x03, // Scope opening (picto box type)
+    fopMsgStts_SCOPE_OPENING_2_e = 0x04, // Scope opening (demo type)
     fopMsgStts_MSG_TYPING_e = 0x06,
     fopMsgStts_STOP_e = 0x07,
     fopMsgStts_SELECT_2_e = 0x08, // Selection box with 2 choices
     fopMsgStts_SELECT_3_e = 0x09, // Selection box with 3 choices
     fopMsgStts_CLOSE_WAIT_e = 0x0A, // Waiting for player input before closing the text box
-    fopMsgStts_UNKB_e = 0x0B,
-    fopMsgStts_UNKD_e = 0x0D,
+    fopMsgStts_SCOPE_ACTIVE_e = 0x0B, // Scope active/idle
+    fopMsgStts_SCOPE_DEMO_e = 0x0C, // Scope demo (cutscene) mode
+    fopMsgStts_SCOPE_WAIT_e = 0x0D, // Scope waiting for event/demo
     fopMsgStts_MSG_DISPLAYED_e = 0x0E,
     fopMsgStts_MSG_CONTINUES_e = 0x0F,
     fopMsgStts_MSG_ENDS_e = 0x10,

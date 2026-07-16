@@ -1566,7 +1566,7 @@ bool daNpc_Ls1_c::telescope_proc() {
     u8 scope_mesg_status = dComIfGp_getScopeMesgStatus();
     if (scope_mesg_status == 0) {
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) != 0) {
-            if (g_dComIfG_gameInfo.play.field_0x4978) {
+            if (g_dComIfG_gameInfo.play.mScopeWipeFlag) {
                 daPy_getPlayerLinkActorClass()->setPlayerPosAndAngle(&m7CC[1], 0xCC70);
             }
             dComIfGp_setScopeType(1);
@@ -1602,7 +1602,7 @@ bool daNpc_Ls1_c::telescope_proc() {
         }
     // fallthrough
     case fopMsgStts_CLOSE_WAIT_e:
-    case fopMsgStts_UNKD_e: 
+    case fopMsgStts_SCOPE_WAIT_e: 
         {
             u32 temp_msg_no;
             switch (m833) {
