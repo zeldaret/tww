@@ -14,6 +14,8 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 char daMgBoard_c::m_arcname[9] = {};
 
+u8 daMgBoard_c::m_bullet_num = 24;
+
 /* 0000010C-000007BC       .text CreateHeap__11daMgBoard_cFv */
 BOOL daMgBoard_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 8);
@@ -173,7 +175,33 @@ void daMgBoard_c::CreateInit() {
 
 /* 000009E0-00000AE8       .text MiniGameInit__11daMgBoard_cFv */
 void daMgBoard_c::MiniGameInit() {
-    /* Nonmatching */
+    mBoardPosY = 0;
+    mBoardPosX = 0;
+    mLastFirePosY = -100;
+    mLastFirePosX = -100;
+    field_0x478 = 0;
+    field_0x474 = 0;
+    mSeaFightGame.init(m_bullet_num, 3);
+
+    fopAc_ac_c* actor = fopAcM_SearchByName(fpcNm_NPC_KG1_e);
+    if (actor != NULL) {
+        mNPCPos.set(actor->current.pos);
+    }
+
+    set_mtx();
+
+    for (int i = 0; i < (int)ARRAY_SIZE(mpSquidIcon); ++i) {
+        mpSquidIcon[i]->mCurrentNo = 0;
+    }
+    
+    const int rows = 3;
+    const int cols = 8;
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            const int idx = j + i * cols;
+            mpBombIcons[idx]->mCurrentNo = 0;
+        }
+    }
 }
 
 /* 00000AE8-00000DEC       .text set_mtx__11daMgBoard_cFv */

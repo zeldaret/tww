@@ -34,6 +34,7 @@ public:
     void CursorMove();
 
 public:
+    static u8 m_bullet_num;
     static char m_arcname[];
 
     /* 0x290 */ request_of_phase_process_class mPhase;
@@ -50,7 +51,8 @@ public:
     /* 0x46A */ u8 field_0x46A[0x46C - 0x46A];
     /* 0x46C */ int mLastFirePosX;
     /* 0x470 */ int mLastFirePosY;
-    /* 0x474 */ u8 field_0x474[0x47C - 0x474];
+    /* 0x474 */ s16 field_0x474;
+    /* 0x478 */ int field_0x478;
     /* 0x47C */ dSeaFightGame_info_c mSeaFightGame;
     /* 0x57C */ u8 field_0x57C[0x580 - 0x57C];
     /* 0x580 */ int mMissModelCount;
