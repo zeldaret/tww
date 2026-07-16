@@ -107,7 +107,7 @@ BOOL daMgBoard_c::CreateHeap() {
     const int cols = 8;
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
-            const int idx = j + i * cols; // indexing into it as [i][j] doesn't match
+            const int idx = j + i * cols;
             mpBombIcons[idx] = new dDlst_2DObject_c();
 
             if (!mpBombIcons[idx])
@@ -130,7 +130,34 @@ BOOL daMgBoard_c::CreateHeap() {
 
 /* 00000804-00000904       .text set_2dposition__11daMgBoard_cFv */
 void daMgBoard_c::set_2dposition() {
-    /* Nonmatching */
+    f32 float_one = 115.0;
+
+    for (int i = 0; i < (int)ARRAY_SIZE(mpSquidIcon); ++i) {
+        mpSquidIcon[i]->setPosition(523.0, float_one);
+        float_one += 47.0f;
+    }
+
+    float_one = 95.0;
+    f32 float_two = 120.0;
+
+    const int rows = 3;
+    const int cols = 8;
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            const int idx = j + i * cols;
+            mpBombIcons[idx]->setPosition(float_one, float_two);
+            float_two += 35.0f;
+        }
+        float_one -= 35.0f;
+        float_two = 120.0f;
+    }
+
+    mpMinigameDList->setTitlePos(282.0, 70.0);
+    mpMinigameDList->setScorePos(440.0, 60.0);
+    mpMinigameDList->setTitleAlpha(0xFF);
+
+    f32 shadow_alpha = 80.5f; // alpha is a u8 but this is needed to match ???
+    mpMinigameDList->setScoreAlpha(shadow_alpha);
 }
 
 /* 00000904-000009E0       .text CreateInit__11daMgBoard_cFv */
@@ -161,8 +188,7 @@ bool daMgBoard_c::execGameMain() {
         is_end_game = true;
     }
 
-    if (is_end_game != 0)
-    {
+    if (is_end_game != 0) {
         mbEndGame = true;
         return true;
     }
