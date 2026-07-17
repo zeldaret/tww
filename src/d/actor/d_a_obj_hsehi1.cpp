@@ -683,7 +683,8 @@ BOOL daObj_hsh_c::talk(int i_param) {
                 l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
                 fopMsgM_messageSendOn();
                 if (mMsgId == 0x5B3) {
-                    dComIfGs_onSwitch(mSwitchNo, current.roomNo);
+                    u8 roomNo = *(volatile u8*)&current.roomNo;
+                    dComIfGs_onSwitch(mSwitchNo, (s8)roomNo);
                 }
             }
         } else {
