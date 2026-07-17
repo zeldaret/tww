@@ -408,24 +408,40 @@ void daObj_hsh_c::initialJudgeEvent(int) {
 
 /* 00001B3C-00001C1C       .text initialAppearEvent__11daObj_hsh_cFi */
 void daObj_hsh_c::initialAppearEvent(int) {
-    /* Nonmatching */
+    dComIfGs_onEventBit(0x2B10);
+    particle_set(0x8270);
+    particle_set(&mpEmitter, 0x8271);
+    JAIZelBasic::getInterface()->seStart(0x6A05, &current.pos, 0, dComIfGp_getReverb(current.roomNo));
+    mTimer = 0x1E;
+    setAction(&daObj_hsh_c::waitAction, NULL);
 }
 
 /* 00001C1C-00001C74       .text actionAppearEvent__11daObj_hsh_cFi */
 BOOL daObj_hsh_c::actionAppearEvent(int) {
-    /* Nonmatching */
-    return 0;
+    if (cLib_calcTimer(&mTimer) == 0) {
+        offOffDraw();
+        emitterDelete(&mpEmitter);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00001C74-00001D3C       .text initialDeleteEvent__11daObj_hsh_cFi */
 void daObj_hsh_c::initialDeleteEvent(int) {
-    /* Nonmatching */
+    particle_set(0x8270);
+    particle_set(&mpEmitter, 0x8271);
+    JAIZelBasic::getInterface()->seStart(0x6A05, &current.pos, 0, dComIfGp_getReverb(current.roomNo));
+    mTimer = 0x3C;
+    setAction(&daObj_hsh_c::deleteAction, NULL);
 }
 
 /* 00001D3C-00001D88       .text actionDeleteEvent__11daObj_hsh_cFi */
 BOOL daObj_hsh_c::actionDeleteEvent(int) {
-    /* Nonmatching */
-    return 0;
+    if (cLib_calcTimer(&mTimer) == 0) {
+        drawStop();
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00001D88-00001DF4       .text talk_init__11daObj_hsh_cFv */
