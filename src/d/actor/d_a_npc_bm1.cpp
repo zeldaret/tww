@@ -729,8 +729,7 @@ void daNpc_Bm1_c::setMtx(bool i_param_1) {
     }
     tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
     tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
-    // mDoMtx_stack_c::transS(current.pos);
-    MTXTrans(mDoMtx_stack_c::get(),current.pos.x,current.pos.y,current.pos.z);
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();
