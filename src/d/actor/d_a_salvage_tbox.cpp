@@ -469,7 +469,7 @@ BOOL daSTBox_c::actWait(int) {
 BOOL daSTBox_c::actDrop(int) {
     /* Nonmatching */
     fopAcM_posMoveF(this, NULL);
-    if (current.pos.y > getWaterY(current.pos) - 50.0f) {
+    if (current.pos.y < getWaterY(current.pos) - 50.0f) {
         return TRUE;
     }
     if(current.pos.y < getWaterY(current.pos)) {
