@@ -9,6 +9,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JAZelAudio/JAIZelBasic.h"
+#include "m_Do/m_Do_ext.h"
 
 static daObj_hsh_HIO_c l_HIO;
 
@@ -24,7 +25,19 @@ daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
 
 /* 00000130-000002A4       .text __dt__11daObj_hsh_cFv */
 daObj_hsh_c::~daObj_hsh_c() {
-    /* Nonmatching */
+    if (argument == 0) {
+        dComIfG_resDelete(&mPhs, "Hsehi1");
+    } else {
+        dComIfG_resDelete(&mPhs, "Hsehi2");
+    }
+    if (mpBgw != NULL) {
+        dComIfG_Bgsp()->Release(mpBgw);
+    }
+    emitterDelete(&mpEmitter);
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
 }
 
 /* 000002A4-000002C4       .text daObj_hsh_XyCheckCB__FPvi */
@@ -128,8 +141,39 @@ void daObj_hsh_c::setBaseMtx() {
 
 /* 000006C8-00000910       .text createHeap__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::createHeap() {
-    /* Nonmatching */
-    return 0;
+    if (argument == 0) {
+        J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hsehi1", 4);
+        JUT_ASSERT(0x1F9, modelData != 0);
+        mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (mpModel == NULL) {
+            return FALSE;
+        }
+        mpBgw = new dBgW();
+        if (mpBgw != NULL) {
+            if (mpBgw->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi1", 7), dBgW::MOVE_BG_e, &mBaseMtx)) {
+                return FALSE;
+            } else {
+                return TRUE;
+            }
+        }
+        return FALSE;
+    } else {
+        J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hsehi2", 4);
+        JUT_ASSERT(0x20F, modelData != 0);
+        mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (mpModel == NULL) {
+            return FALSE;
+        }
+        mpBgw = new dBgW();
+        if (mpBgw != NULL) {
+            if (mpBgw->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi2", 7), dBgW::MOVE_BG_e, &mBaseMtx)) {
+                return FALSE;
+            } else {
+                return TRUE;
+            }
+        }
+        return FALSE;
+    }
 }
 
 /* 00000910-00000930       .text checkCreateHeap__FP10fopAc_ac_c */
