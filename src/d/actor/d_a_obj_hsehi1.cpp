@@ -63,7 +63,8 @@ static s16 daObj_hsh_XyEventCB(void* i_this, int i_btn) {
 
 /* 00000308-00000390       .text XyEventCB__11daObj_hsh_cFi */
 s16 daObj_hsh_c::XyEventCB(int) {
-    JAIZelBasic::getInterface()->seStart(0x8A7, &eyePos, 0, dComIfGp_getReverb(current.roomNo));
+    s8 reverb = dComIfGp_getReverb(current.roomNo);
+    JAIZelBasic::getInterface()->seStart(0x8A7, &eyePos, 0, reverb);
     mFlags |= 1;
     mEventCutIdx = 0;
     return mEventIdx[0];
@@ -411,7 +412,8 @@ void daObj_hsh_c::initialAppearEvent(int) {
     dComIfGs_onEventBit(0x2B10);
     particle_set(0x8270);
     particle_set(&mpEmitter, 0x8271);
-    JAIZelBasic::getInterface()->seStart(0x6A05, &current.pos, 0, dComIfGp_getReverb(current.roomNo));
+    s8 reverb = dComIfGp_getReverb(current.roomNo);
+    JAIZelBasic::getInterface()->seStart(0x6A05, &current.pos, 0, reverb);
     mTimer = 0x1E;
     setAction(&daObj_hsh_c::waitAction, NULL);
 }
@@ -430,7 +432,8 @@ BOOL daObj_hsh_c::actionAppearEvent(int) {
 void daObj_hsh_c::initialDeleteEvent(int) {
     particle_set(0x8270);
     particle_set(&mpEmitter, 0x8271);
-    JAIZelBasic::getInterface()->seStart(0x6A05, &current.pos, 0, dComIfGp_getReverb(current.roomNo));
+    s8 reverb = dComIfGp_getReverb(current.roomNo);
+    JAIZelBasic::getInterface()->seStart(0x6A05, &current.pos, 0, reverb);
     mTimer = 0x3C;
     setAction(&daObj_hsh_c::deleteAction, NULL);
 }
