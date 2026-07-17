@@ -406,16 +406,16 @@ void daObj_hsh_c::checkOrder() {
 
 /* 0000140C-00001478       .text checkCommandTalk__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::checkCommandTalk() {
-    if (eventInfo.getCommand() != dEvtCmd_INTALK_e) {
-        return FALSE;
-    }
-    if (dComIfGp_event_chkTalkXY()) {
-        if (mEventState == 5) {
-            mEventState = -1;
+    if (eventInfo.getCommand() == dEvtCmd_INTALK_e) {
+        if (dComIfGp_event_chkTalkXY()) {
+            if (mEventState == 5) {
+                mEventState = -1;
+            }
+            return FALSE;
         }
-        return FALSE;
+        return TRUE;
     }
-    return TRUE;
+    return FALSE;
 }
 
 /* 00001478-000015E0       .text chkAttention__11daObj_hsh_cF4cXyzs */
