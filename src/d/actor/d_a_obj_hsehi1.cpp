@@ -69,8 +69,7 @@ static s16 daObj_hsh_XyEventCB(void* i_this, int i_btn) {
 
 /* 00000308-00000390       .text XyEventCB__11daObj_hsh_cFi */
 s16 daObj_hsh_c::XyEventCB(int) {
-    s8 reverb = dComIfGp_getReverb(current.roomNo);
-    JAIZelBasic::getInterface()->seStart(0x8A7, &eyePos, 0, reverb);
+    fopAcM_seStart(this, JA_SE_PRE_TAKT, 0);
     mFlags |= 1;
     mEventCutIdx = 0;
     return mEventIdx[0];
@@ -200,7 +199,7 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
 cPhs_State daObj_hsh_c::create() {
     static u32 a_heap_size_tbl = 0x4000;
 
-    fopAcM_SetupActor(this, daObj_hsh_c);
+    fopAcM_ct_Retail(this, daObj_hsh_c);
 
     cPhs_State phase;
     if (argument == 0 && dComIfGs_isEventBit(0x2510)) {
@@ -212,16 +211,17 @@ cPhs_State daObj_hsh_c::create() {
             phase = dComIfG_resLoad(&mPhs, "Hsehi2");
         }
         if (phase == cPhs_COMPLEATE_e) {
+            fopAcM_ct_Demo(this, daObj_hsh_c);
             if (!fopAcM_entrySolidHeap(this, checkCreateHeap, a_heap_size_tbl)) {
-                mpBgw = NULL;
+                mpBgw = DEMO_SELECT(mpBgw, NULL);
                 return cPhs_ERROR_e;
             } else {
                 fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
                 if (l_HIO.mNo < 0) {
                     if (argument == 0) {
-                        l_HIO.mNo = mDoHIO_createChild("\203^\203N\203g\220\316\224\305", &l_HIO);
+                        l_HIO.mNo = mDoHIO_createChild("タクト石版", &l_HIO);
                     } else {
-                        l_HIO.mNo = mDoHIO_createChild("\203\201\203b\203Z\201[\203W\220\316\224\350", &l_HIO);
+                        l_HIO.mNo = mDoHIO_createChild("メッセージ石碑", &l_HIO);
                     }
                     l_HIO.mpActor = this;
                 }
@@ -482,7 +482,7 @@ static char* cut_name_tbl[] = {
 };
 
 BOOL daObj_hsh_c::eventProc() {
-    if (eventInfo.getCommand() == dEvtCmd_INDEMO_e && mEventState != -1) {
+    if (eventInfo.checkCommandDemoAccrpt() && mEventState != -1) {
         mFlags |= 1;
         mEventState = -1;
     }
@@ -621,8 +621,7 @@ void daObj_hsh_c::initialAppearEvent(int) {
     dComIfGs_onEventBit(0x2B10);
     particle_set(0x8270);
     particle_set(&mpEmitter, 0x8271);
-    s8 reverb = dComIfGp_getReverb(current.roomNo);
-    JAIZelBasic::getInterface()->seStart(0x6A05, &current.pos, 0, reverb);
+    fopAcM_seStartCurrent(this, JA_SE_OBJ_ST_TAKT_GR_ON, 0);
     mTimer = 0x1E;
     setAction(&daObj_hsh_c::waitAction, NULL);
 }
@@ -641,8 +640,7 @@ BOOL daObj_hsh_c::actionAppearEvent(int) {
 void daObj_hsh_c::initialDeleteEvent(int) {
     particle_set(0x8270);
     particle_set(&mpEmitter, 0x8271);
-    s8 reverb = dComIfGp_getReverb(current.roomNo);
-    JAIZelBasic::getInterface()->seStart(0x6A05, &current.pos, 0, reverb);
+    fopAcM_seStartCurrent(this, JA_SE_OBJ_ST_TAKT_GR_ON, 0);
     mTimer = 0x3C;
     setAction(&daObj_hsh_c::deleteAction, NULL);
 }
@@ -734,7 +732,7 @@ BOOL daObj_hsh_c::execute() {
         }
     }
     mObjAcch.CrrPos(*dComIfG_Bgsp());
-    if (mObjAcch.GetGroundH() != -1000000000.0f) {
+    if (mObjAcch.GetGroundH() != -G_CM3D_F_INF) {
         tevStr.mRoomNo = current.roomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
         mPolyInfo = mObjAcch.m_gnd;
