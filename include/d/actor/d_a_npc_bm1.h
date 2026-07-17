@@ -63,17 +63,18 @@ public:
 
     typedef BOOL (daNpc_Bm1_c::*ActionFunc)(void*);
 
-    void IamKakkuto() {}
-    void IamSukketo() {}
-    void clr_manzai() {m883 = 0;}
-    void getOdoroki() {}
+    bool IamKakkuto() {return mSpecificType == Akoot;}
+    bool IamSukketo() {return mSpecificType == Skett;}
+    void clr_manzai() {m883 = false;}
+    cXyz getOdoroki() { return attention_info.position;}
     s8 getStt() { return m8FE;}
     u16 get_oldMsgStat() {
         return m878;
     }
     void setFocus() {}
-    void setTelescopeDemo() {}
-    void set_manzai() {}
+    void setTelescopeDemo() {m881 = true;}
+    void set_manzai() {m883 = true;}
+
 
     void nodeWngControl(J3DNode*, J3DModel*);
     void nodeArmControl(J3DNode*, J3DModel*);
@@ -185,6 +186,7 @@ public:
     BOOL isEventEntry();
     void event_proc(int);
     BOOL set_action(int (daNpc_Bm1_c::*)(void*), void*);
+    BOOL chk_action(int (daNpc_Bm1_c::*)(void*)); //Unused
     void setStt(signed char);
     BOOL d_wait();
     BOOL lookup();
@@ -196,6 +198,7 @@ public:
     BOOL wait_4();
     BOOL flyawy();
     BOOL wait_5();
+    BOOL wait_6();  //Unused
     BOOL h_wait();
     BOOL wait_7();
     BOOL wait_3();
