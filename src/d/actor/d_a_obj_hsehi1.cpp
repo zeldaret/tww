@@ -10,9 +10,16 @@
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JAZelAudio/JAIZelBasic.h"
 
+static daObj_hsh_HIO_c l_HIO;
+
 /* 000000EC-00000130       .text __ct__15daObj_hsh_HIO_cFv */
 daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
-    /* Nonmatching */
+    mNo = -1;
+    mAttentionDist = 250.0f;
+    mAttentionOffsetY0 = 0.0f;
+    mAttentionOffsetY1 = 0.0f;
+    mAttentionAngle = 0x4000;
+    m16 = 0;
 }
 
 /* 00000130-000002A4       .text __dt__11daObj_hsh_cFv */
@@ -43,13 +50,17 @@ s16 daObj_hsh_c::XyEventCB(int) {
 }
 
 /* 00000390-000003F4       .text particle_set__11daObj_hsh_cFUs */
-void daObj_hsh_c::particle_set(unsigned short) {
-    /* Nonmatching */
+void daObj_hsh_c::particle_set(unsigned short i_id) {
+    dComIfGp_particle_set(i_id, &current.pos, &current.angle);
 }
 
-/* 000003F4-00000488       .text particle_set__11daObj_hsh_cFPP14JPABaseEmitterUs */
-void daObj_hsh_c::particle_set(JPABaseEmitter**, unsigned short) {
-    /* Nonmatching */
+void daObj_hsh_c::particle_set(JPABaseEmitter** ppEmitter, unsigned short i_id) {
+    if (*ppEmitter == NULL) {
+        *ppEmitter = dComIfGp_particle_set(i_id, &current.pos, &current.angle);
+        if (*ppEmitter != NULL) {
+            (*ppEmitter)->becomeImmortalEmitter();
+        }
+    }
 }
 
 /* 00000488-000004C4       .text emitterDelete__11daObj_hsh_cFPP14JPABaseEmitter */
@@ -62,8 +73,23 @@ void daObj_hsh_c::emitterDelete(JPABaseEmitter** ppEmitter) {
 }
 
 /* 000004C4-00000568       .text setAttention__11daObj_hsh_cFb */
-void daObj_hsh_c::setAttention(bool) {
-    /* Nonmatching */
+void daObj_hsh_c::setAttention(bool i_onOff) {
+    if (!i_onOff) {
+        return;
+    }
+
+    f32 upperY;
+    f32 lowerY;
+    if (argument == 0) {
+        upperY = 90.0f + current.pos.y + l_HIO.mAttentionOffsetY1;
+        lowerY = 180.0f + current.pos.y + l_HIO.mAttentionOffsetY0;
+    } else {
+        upperY = 80.0f + current.pos.y + l_HIO.mAttentionOffsetY1;
+        lowerY = 120.0f + current.pos.y + l_HIO.mAttentionOffsetY0;
+    }
+
+    eyePos.set(current.pos.x, upperY, current.pos.z);
+    attention_info.position.set(current.pos.x, lowerY, current.pos.z);
 }
 
 /* 00000568-000005AC       .text onOffDraw__11daObj_hsh_cFv */
