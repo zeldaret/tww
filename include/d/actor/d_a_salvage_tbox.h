@@ -64,7 +64,7 @@ public:
     BOOL actWaitDummy(int);
 
     static const s16 m_heapsize[3];
-    static const char m_arc_name[];
+    static const char m_arcname[];
     static const f32 m_rope_max_length;
     static const s16 m_bdlidx[3];
     static const u8 m_shadow_alpha;

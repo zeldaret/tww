@@ -11,7 +11,7 @@
 #include "d/d_bg_s_func.h"
 #include "f_op/f_op_kankyo_mng.h"
 
-const char daSTBox_c::m_arc_name[] = "Salvage";
+const char daSTBox_c::m_arcname[] = "Salvage";
 const s16 daSTBox_c::m_heapsize[3] = {0x5000, 0x5000, 0x5000};
 const s16 daSTBox_c::m_bdlidx[3] = { 4, 3, 3 };
 const f32 daSTBox_c::m_rope_max_length = 2500.0f;
@@ -184,7 +184,7 @@ bool daSTBox_c::_delete() {
         callbackEmitter->stopCreateParticle();
     }
     shadowCallback.setEmitter(NULL);
-    dComIfG_resDelete(&field_0x290, m_arc_name);
+    dComIfG_resDelete(&field_0x290, m_arcname);
     u8 eventReg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_ADFF);
     eventReg += 1;
     if (field_0x331 == 2){
@@ -201,7 +201,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 00000708-000007D4       .text CreateHeap__9daSTBox_cFv */
 BOOL daSTBox_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, m_bdlidx[field_0x331]);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, m_bdlidx[field_0x331]);
     JUT_ASSERT(0x1cd, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel == NULL) {
@@ -288,7 +288,7 @@ cPhs_State daSTBox_c::_create() {
     /* Nonmatching */
     fopAcM_ct(this, daSTBox_c);
     field_0x331 = base.base.mParameters >> 8 & 0xf;
-    cPhs_State phs_state = dComIfG_resLoad(&field_0x290, m_arc_name);
+    cPhs_State phs_state = dComIfG_resLoad(&field_0x290, m_arcname);
     if (phs_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[field_0x331])) {
             return cPhs_ERROR_e;
