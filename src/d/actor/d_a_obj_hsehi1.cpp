@@ -10,8 +10,13 @@
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JAZelAudio/JAIZelBasic.h"
 #include "m_Do/m_Do_ext.h"
+#include "f_op/f_op_msg.h"
+#include "f_op/f_op_msg_mng.h"
 
 static daObj_hsh_HIO_c l_HIO;
+static u32 l_hio_counter;
+static fpc_ProcID l_msgId;
+static msg_class* l_msg;
 
 /* 000000EC-00000130       .text __ct__15daObj_hsh_HIO_cFv */
 daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
@@ -392,7 +397,13 @@ void daObj_hsh_c::actionTactEvent(int) {
 
 /* 00001ADC-00001B3C       .text initialJudgeEvent__11daObj_hsh_cFi */
 void daObj_hsh_c::initialJudgeEvent(int) {
-    /* Nonmatching */
+    if (mFlags & 4) {
+        mFlags &= ~4;
+    } else if (mFlags & 2) {
+        drawStart();
+        mFlags &= ~2;
+        eventEnd();
+    }
 }
 
 /* 00001B3C-00001C1C       .text initialAppearEvent__11daObj_hsh_cFi */
@@ -419,8 +430,15 @@ BOOL daObj_hsh_c::actionDeleteEvent(int) {
 
 /* 00001D88-00001DF4       .text talk_init__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::talk_init() {
-    /* Nonmatching */
-    return 0;
+    if (l_msgId == -1) {
+        l_msgId = fopMsgM_messageSet(mMsgId, this);
+    } else {
+        l_msg = fopMsgM_SearchByID(l_msgId);
+        if (l_msg != NULL) {
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 00001DF4-00001F1C       .text talk__11daObj_hsh_cFi */
