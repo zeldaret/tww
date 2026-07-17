@@ -48,7 +48,7 @@ enum{
 
 class daNpc_Bm1_c : public fopNpc_npc_c {
 public:
-    daNpc_Bm1_c();
+    // daNpc_Bm1_c();
     // struct anm_prm_c {
         
     // }; //Size: 0x14?
@@ -65,10 +65,12 @@ public:
 
     void IamKakkuto() {}
     void IamSukketo() {}
-    void clr_manzai() {}
+    void clr_manzai() {m883 = 0;}
     void getOdoroki() {}
     void getStt() {}
-    void get_oldMsgStat() {}
+    void get_oldMsgStat() {
+
+    }
     void setFocus() {}
     void setTelescopeDemo() {}
     void set_manzai() {}
@@ -100,7 +102,7 @@ public:
     char* wingAnmNum_toResID(int);
     char* btpNum_toResID(int);
     bool setBtp(bool, int);
-    void iniTexPttrnAnm(bool);
+    bool iniTexPttrnAnm(bool);
     void plyTexPttrnAnm();
     void setAnm_tex(signed char);
     BOOL setAnm_anm(anm_prm_c*);
@@ -115,8 +117,8 @@ public:
     void anmAtr(unsigned short);
     void eventOrder();
     void checkOrder();
-    BOOL chk_manzai();
-    BOOL chk_talk();
+    u8 chk_manzai();
+    bool chk_talk();
     bool chk_partsNotMove();
     BOOL lookBack();
     u16 next_msgStatus(unsigned long*);
@@ -143,7 +145,7 @@ public:
     void bm_setFlyAnm();
     void bm_clcFlySpd();
     void bm_clcMovSpd();
-    BOOL bm_flyMove();
+    bool bm_flyMove();
     void bm_nMove();
     void setPrtcl_Flyaway();
     void delPrtcl_Flyaway();
@@ -162,7 +164,7 @@ public:
     cXyz eInit_calcRelativPos(cXyz*, int*);
     void eInit_ATTENTION_(int*, int*, int*, cXyz*, int*, int*, int*);
     void eInit_SET_PLYER_GOL_(int*, cXyz*, int*);
-    f32 eInit_prmFloat(float*, float);
+    float eInit_prmFloat(float*, float);
     void eInit_FLY_(int*, float*, float*, float*, float*);
     void eInit_DEL_ACTOR_();
     void eInit_WLK_(int*, float*, float*, cXyz*, int*, int*, int*);
@@ -171,36 +173,36 @@ public:
     void eInit_SET_ANM_(int*);
     void eInit_MOV_PTH_POINT_(int*, int*, int*, int*);
     void event_actionInit(int);
-    void eMove_ATTENTION_();
-    void eMove_KMA_FLY_();
-    void eMove_FLY_();
-    void eMove_WLK_();
-    void event_action();
+    bool eMove_ATTENTION_();
+    bool eMove_KMA_FLY_();
+    bool eMove_FLY_();
+    bool eMove_WLK_();
+    bool event_action();
     void cut_init_360_TRN(int);
-    void cut_move_360_TRN();
+    bool cut_move_360_TRN();
     void privateCut(int);
     void endEvent();
-    void isEventEntry();
+    BOOL isEventEntry();
     void event_proc(int);
-    void set_action(int (daNpc_Bm1_c::*)(void*), void*);
+    BOOL set_action(int (daNpc_Bm1_c::*)(void*), void*);
     void setStt(signed char);
-    void d_wait();
-    void lookup();
-    void orooro();
-    void wait_1();
-    void talk_1();
-    void talk_2();
-    void manzai();
-    void wait_4();
-    void flyawy();
-    void wait_5();
-    void h_wait();
-    void wait_7();
-    void wait_3();
-    void wait_8();
-    void wait_2();
-    void walk_1();
-    void CHKwai();
+    BOOL d_wait();
+    BOOL lookup();
+    BOOL orooro();
+    BOOL wait_1();
+    BOOL talk_1();
+    BOOL talk_2();
+    BOOL manzai();
+    BOOL wait_4();
+    BOOL flyawy();
+    BOOL wait_5();
+    BOOL h_wait();
+    BOOL wait_7();
+    BOOL wait_3();
+    BOOL wait_8();
+    BOOL wait_2();
+    BOOL walk_1();
+    BOOL CHKwai();
     BOOL demo_action1(void*);
     BOOL wait_action1(void*);
     BOOL wait_action2(void*);
@@ -212,18 +214,18 @@ public:
     BOOL wait_action8(void*);
     BOOL wait_action9(void*);
     BOOL wait_actionA(void*);
-    void demo();
+    bool demo();
     void shadowDraw();
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
     J3DModelData* create_Anm();
-    void create_hed_Anm();
-    void create_wng_Anm();
-    void create_arm_Anm();
-    void create_itm_Mdl();
-    void CreateHeap();
+    J3DModelData* create_hed_Anm();
+    J3DModelData* create_wng_Anm();
+    J3DModelData* create_arm_Anm();
+    bool create_itm_Mdl();
+    BOOL CreateHeap();
 
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
@@ -237,7 +239,7 @@ public:
                 J3DModel* m6DC;
                 J3DModel* m6E0;
                 J3DModel* m6E4;
-    /* 0x6DC */ u8 field_0x6E8[0x6EC - 0x6E8];
+    /* 0x6E8 */ u32 mShadowID;
     /* 0x6EC */ mDoExt_McaMorf* m6EC;
     /* 0x6F0 */ J3DAnmTexPattern* m_hed_tex_pttrn;
     /* 0x6F4 */ mDoExt_btpAnm m6F4;
@@ -246,15 +248,18 @@ public:
                 s16 m70A;
                 s16 m70C;
     /* 0x710 */ mDoExt_McaMorf* m710;
-                u8 m714;
-                u8 m715;
-                s8 m716;
-                s8 m717;
+                s8 m_wngL1_jnt_num;
+                s8 m_wngR1_jnt_num;
+                s8 m_wngL3_jnt_num;
+                s8 m_wngR3_jnt_num;
     /* 0x714 */ u8 m718[0x71C - 0x718];
     /* 0x71C */ mDoExt_McaMorf* m71C;
-                u32 m720;
-                s8 m_UNK_jnt_num;
-    /* 0x720 */ u8 field_0x728[0x734 - 0x728];
+                s8 m_armL1_jnt_num;
+                s8 m_armR1_jnt_num;
+                s8 m_armL2_jnt_num;
+                s8 m_armR2_jnt_num;
+                s8 m_hnd_R_jnt_num;
+                ActionFunc m728;
     /* 0x734 */ Mtx mLeftArmMtx;
     /* 0x764 */ Mtx mRightArmMtx;
     /* 0x794 */ dNpc_PathRun_c mPathRun;
@@ -279,10 +284,11 @@ public:
                 s16 m86A;
                 s16 m86C;
     /* 0x86E */ s16 m86E;
-    /* 0x870 */ u8 m870[0x874 - 0x870];
+    /* 0x870 */ s16 m870;
+    /* 0x872 */ s16 m872;
     /* 0x874 */ s16 m874;
     /* 0x876 */ s16 m876;
-    /* 0x878 */ u8 m878[0x87A - 0x878];
+    /* 0x878 */ u16 m878;
                 s8 m87A;
                 s8 m87B;
                 s8 m87C;
@@ -300,14 +306,17 @@ public:
     /* 0x887 */ u8 m887;
     /* 0x888 */ u8 m888;
                 bool m889;
-                u8 m88A;
+                bool m88A;
                 u8 m88B;
-                u8 m88C[0x890 - 0x88C];                
+                u8 m88C;
+                u8 m88D;
+                u8 m88E;
+                u8 m88F;                
     /* 0x890 */ s32 mbSetEyePos;
     /* 0x894 */ u8 m894;
     /* 0x895 */ u8 m895;
     /* 0x896 */ bool m896;
-    /* 0x897 */ u8 m897;
+    /* 0x897 */ bool m897;
     /* 0x898 */ cXyz m898;
     /* 0x8A4 */ cXyz m8A4;
     /* 0x8B0 */ cXyz m8B0;
@@ -328,8 +337,8 @@ public:
     /* 0x900 */ u32 mHioOnly;
 #endif
     /* 0x8F4 */ s8 m8F4;
-    /* 0x8F5 */ u8 m8F5;
-    /* 0x8F6 */ u8 m8F6[0x8F7 - 0x8F6];
+    /* 0x8F5 */ s8 m8F5;
+    /* 0x8F6 */ s8 m8F6;
     /* 0x8F7 */ u8 m8F7;
     /* 0x8F8 */ u8 m8F8;
     /* 0x8F9 */ s8 m8F9;
@@ -337,7 +346,7 @@ public:
     /* 0x8FB */ u8 m8FB[0x8FD - 0x8FB];
     /* 0x8FD */ s8 m8FD;
     /* 0x8FE */ s8 m8FE;
-    /* 0x8FF */ u8 m8FF;
+    /* 0x8FF */ s8 m8FF;
 
     /* 0x900 */ s8 m900;
     /* 0x901 */ s8 mType;
@@ -352,14 +361,18 @@ STATIC_ASSERT(sizeof(daNpc_Bm1_c) == DEMO_SELECT(0x90C,0x908));
 
 
 struct hio_prm_c{
-    s32 m0;
-    s32 m4;
-    s32 m8;
-    s32 mC;
+    s16 m0;
+    s16 m2;
+    s16 m4;
+    s16 m6;
+    s16 m8;
+    s16 mA;
+    s16 mC;
+    s16 mE;
     s16 m10;
     s16 m12;
     f32 mAttPosOffsetY;
-    s16 m18;
+    u8 m18;
     s16 m1A;
     s16 m1C;
     s16 m1E;
@@ -377,28 +390,5 @@ struct hio_prm_c{
     f32 m48;
 };
 
-class daNpc_Bm1_childHIO_c : public mDoHIO_entry_c{
 
-public:
-    daNpc_Bm1_childHIO_c();
-
-public:
-
-    hio_prm_c hio_prm;
-    u32 m50;
-    //SIZE: 0x54
-};
-
-class daNpc_Bm1_HIO_c :public mDoHIO_entry_c{
-public:
-    daNpc_Bm1_HIO_c();
-
-public:
-
-    s8 m4;
-    s32 m8;
-    daNpc_Bm1_childHIO_c children[10];
-    /* Place member variables here */
-};
-    //SIZE: 0x354
 #endif /* D_A_NPC_BM1_H */
