@@ -422,9 +422,27 @@ BOOL daObj_hsh_c::checkCommandTalk() {
 }
 
 /* 00001478-000015E0       .text chkAttention__11daObj_hsh_cF4cXyzs */
-BOOL daObj_hsh_c::chkAttention(cXyz, short) {
-    /* Nonmatching */
-    return 0;
+BOOL daObj_hsh_c::chkAttention(cXyz i_pos, s16 i_angle) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    f32 dist = l_HIO.mAttentionDist;
+    s16 angleRange = l_HIO.mAttentionAngle;
+    f32 dx = player->current.pos.x - i_pos.x;
+    f32 dz = player->current.pos.z - i_pos.z;
+    f32 distToPlayer = dx * dx + dz * dz;
+    if (distToPlayer > 0.0f) {
+        distToPlayer = std::sqrtf(distToPlayer);
+    }
+    s16 angleToPlayer = cM_atan2s(dx, dz);
+    f32 dy = player->current.pos.y - i_pos.y;
+    if (mAttentionOn != 0) {
+        dist += 40.0f;
+        angleRange += 0x71C;
+    }
+    BOOL ret = FALSE;
+    if (angleRange > abs(angleToPlayer - i_angle) && dist > distToPlayer) {
+        ret = TRUE;
+    }
+    return ret;
 }
 
 /* 000015E0-00001784       .text eventProc__11daObj_hsh_cFv */
