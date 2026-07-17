@@ -5001,7 +5001,7 @@ static cXyz l_head_top(1.0f, 0.0f, 0.0f);
 
 /* 0001031C-00010E3C       .text daNpc_Ji1_setHairAngle__FP11daNpc_Ji1_c */
 static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
-    /* Nonmatching - stack */
+    /* Nonmatching - retail-only load order */
     f32 wind = *dKyw_get_wind_power() * *dKyw_get_wind_power() * 25.0f;
     cXyz* windVec = dKyw_get_wind_vec();
 
@@ -5057,7 +5057,7 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
 
     i_this->field_0xBAA += (s16)(i_this->field_0xBB6 + temp3_2);
     i_this->field_0xBAA += (s16)(i_this->field_0xBB6 + temp3_2);
-    i_this->field_0xBAA = cLib_minMaxLimit(i_this->field_0xBAA, l_HIO.field_0xF4, l_HIO.field_0xF6);
+    i_this->field_0xBAA = cLib_minMaxLimit<s16>(i_this->field_0xBAA, l_HIO.field_0xF4, l_HIO.field_0xF6);
 
     s16 r4_2 = i_this->current.angle.y + i_this->m_jnt.getHead_y();
     f32 f5 = cM_ssin(r4_2);
@@ -5065,7 +5065,7 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
     cLib_addCalcAngleS2(&i_this->field_0xBAC, cM_atan2s(sp3C.z * f5 - sp3C.x * f6, std::sqrtf(temp10 * temp10 + sp3C.y * sp3C.y)), 5, 0x400);
 
     i_this->field_0xBAC += (s16)(i_this->field_0xBB8 - temp4_2);
-    i_this->field_0xBAC = cLib_minMaxLimit(i_this->field_0xBAC, l_HIO.field_0xE8, l_HIO.field_0xEA);
+    i_this->field_0xBAC = cLib_minMaxLimit<s16>(i_this->field_0xBAC, l_HIO.field_0xE8, l_HIO.field_0xEA);
 
     i_this->field_0xBB6 = (s16)(i_this->field_0xBAA - r26) * 0.2f;
     i_this->field_0xBB8 = (s16)(i_this->field_0xBAC - r25) * 0.2f;
