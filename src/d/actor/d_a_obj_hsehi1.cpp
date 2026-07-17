@@ -54,9 +54,8 @@ static s16 daObj_hsh_XyCheckCB(void* i_this, int i_btn) {
 }
 
 /* 000002C4-000002E8       .text XyCheckCB__11daObj_hsh_cFi */
-s16 daObj_hsh_c::XyCheckCB(int) {
-    /* Nonmatching */
-    return 0;
+s16 daObj_hsh_c::XyCheckCB(int i_btn) {
+    return dComIfGp_getSelectItem(i_btn) == dItemNo_WIND_WAKER_e;
 }
 
 /* 000002E8-00000308       .text daObj_hsh_XyEventCB__FPvi */
@@ -514,13 +513,50 @@ BOOL daObj_hsh_c::actionDefault(int) {
 }
 
 /* 000017BC-00001938       .text initialLinkDispEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::initialLinkDispEvent(int) {
-    /* Nonmatching */
+void daObj_hsh_c::initialLinkDispEvent(int i_staffIdx) {
+    char buf[40];
+    bool isPlayer = false;
+    char* target = dComIfGp_evmng_getMyStringP(i_staffIdx, "target");
+    if (target != NULL) {
+        strcpy(buf, target);
+        if (strcmp(buf, "@PLAYER") == 0) {
+            isPlayer = true;
+        }
+    }
+    char* disp = dComIfGp_evmng_getMyStringP(i_staffIdx, "disp");
+    if (isPlayer) {
+        if (disp != NULL) {
+            strcpy(buf, disp);
+            daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
+            if (strcmp(buf, "on") == 0) {
+                link->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+            }
+            if (strcmp(buf, "off") == 0) {
+                link->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+            }
+        }
+    } else if (disp != NULL) {
+        strcpy(buf, disp);
+        if (strcmp(buf, "on") == 0) {
+            drawStart();
+        }
+        if (strcmp(buf, "off") == 0) {
+            drawStop();
+        }
+    }
 }
 
 /* 00001938-000019C0       .text initialMsgSetEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::initialMsgSetEvent(int) {
-    /* Nonmatching */
+void daObj_hsh_c::initialMsgSetEvent(int i_staffIdx) {
+    l_msgId = -1;
+    mMsgId = 0;
+    int* p = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "MsgNo");
+    if (p != NULL) {
+        mMsgId = *p;
+        if (mMsgId == 0x5B3) {
+            dComIfGp_setMelodyNum(2);
+        }
+    }
 }
 
 /* 000019C0-000019E0       .text actionMsgSetEvent__11daObj_hsh_cFi */
