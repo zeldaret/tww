@@ -5,6 +5,10 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hsehi1.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JSystem/JParticle/JPAEmitter.h"
+#include "JAZelAudio/JAIZelBasic.h"
 
 /* 000000EC-00000130       .text __ct__15daObj_hsh_HIO_cFv */
 daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
@@ -49,8 +53,12 @@ void daObj_hsh_c::particle_set(JPABaseEmitter**, unsigned short) {
 }
 
 /* 00000488-000004C4       .text emitterDelete__11daObj_hsh_cFPP14JPABaseEmitter */
-void daObj_hsh_c::emitterDelete(JPABaseEmitter**) {
-    /* Nonmatching */
+void daObj_hsh_c::emitterDelete(JPABaseEmitter** ppEmitter) {
+    if (*ppEmitter != NULL) {
+        (*ppEmitter)->quitImmortalEmitter();
+        (*ppEmitter)->becomeInvalidEmitter();
+        *ppEmitter = NULL;
+    }
 }
 
 /* 000004C4-00000568       .text setAttention__11daObj_hsh_cFb */
@@ -60,22 +68,29 @@ void daObj_hsh_c::setAttention(bool) {
 
 /* 00000568-000005AC       .text onOffDraw__11daObj_hsh_cFv */
 void daObj_hsh_c::onOffDraw() {
-    /* Nonmatching */
+    mFlags |= 8;
+    if (mpBgw != NULL) {
+        dComIfG_Bgsp()->Release(mpBgw);
+    }
 }
 
 /* 000005AC-000005F4       .text offOffDraw__11daObj_hsh_cFv */
 void daObj_hsh_c::offOffDraw() {
-    /* Nonmatching */
+    mFlags &= ~8;
+    if (mpBgw != NULL) {
+        dComIfG_Bgsp()->Regist(mpBgw, this);
+    }
 }
 
 /* 000005F4-0000062C       .text drawStop__11daObj_hsh_cFv */
 void daObj_hsh_c::drawStop() {
-    /* Nonmatching */
+    onOffDraw();
+    emitterDelete(&mpEmitter);
 }
 
 /* 0000062C-0000064C       .text drawStart__11daObj_hsh_cFv */
 void daObj_hsh_c::drawStart() {
-    /* Nonmatching */
+    offOffDraw();
 }
 
 /* 0000064C-000006C8       .text setBaseMtx__11daObj_hsh_cFv */
@@ -131,14 +146,20 @@ int daObj_hsh_c::talkAction(void*) {
 
 /* 00001214-00001230       .text offAction__11daObj_hsh_cFPv */
 int daObj_hsh_c::offAction(void*) {
-    /* Nonmatching */
-    return 0;
+    if (mActionState == 0) {
+        mActionState++;
+    }
+    return 1;
 }
 
 /* 00001230-00001278       .text deleteAction__11daObj_hsh_cFPv */
 int daObj_hsh_c::deleteAction(void*) {
-    /* Nonmatching */
-    return 0;
+    if (mActionState == 0) {
+        mActionState++;
+    } else if (mActionState != -1) {
+        fopAcM_delete(this);
+    }
+    return 1;
 }
 
 /* 00001278-0000135C       .text eventOrder__11daObj_hsh_cFv */
@@ -251,14 +272,22 @@ BOOL daObj_hsh_c::talk(int) {
 
 /* 00001F1C-00001F38       .text getMsg__11daObj_hsh_cFv */
 u32 daObj_hsh_c::getMsg() {
-    /* Nonmatching */
-    return 0;
+    if (argument == 0) {
+        return 0x1901;
+    }
+    return mMsgNo;
 }
 
 /* 00001F38-00001F78       .text next_msgStatus__11daObj_hsh_cFPUl */
-u16 daObj_hsh_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
-    return 0;
+u16 daObj_hsh_c::next_msgStatus(unsigned long* p) {
+    u16 status = 0xF;
+    u32 v = *p;
+    if (v == 0 || v == 0xEF3 || v == mMsgNo) {
+        status = 0x10;
+    } else if (v == 0x1901) {
+        status = 0x10;
+    }
+    return status;
 }
 
 /* 00001F78-00002098       .text execute__11daObj_hsh_cFv */

@@ -84,11 +84,14 @@ public:
     BOOL draw();
 
 public:
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ dBgS_ObjAcch mObjAcch;
     /* 0x460 */ dBgS_AcchCir mAcchCir;
     /* 0x4A0 */ JPABaseEmitter* mpEmitter;
     /* 0x4A4 */ Mtx mBaseMtx;
     /* 0x4D4 */ dBgW* mpBgw;
+    /* 0x4D8 */ u8 m4D8[0xC];
     /* 0x4E4 */ cBgS_PolyInfo mPolyInfo;
     /* 0x4F4 */ int (daObj_hsh_c::*mpActionFunc)(void*);
     /* 0x500 */ u32 mShadowKey;
