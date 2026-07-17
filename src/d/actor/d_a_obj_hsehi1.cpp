@@ -13,6 +13,8 @@
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_mtx.h"
+#include "d/actor/d_a_player.h"
+#include "d/d_kankyo.h"
 
 static daObj_hsh_HIO_c l_HIO;
 static u32 l_hio_counter;
@@ -329,8 +331,31 @@ int daObj_hsh_c::waitAction(void*) {
 
 /* 000010E8-00001214       .text talkAction__11daObj_hsh_cFPv */
 int daObj_hsh_c::talkAction(void*) {
-    /* Nonmatching */
-    return 0;
+    s8 state = mActionState;
+    if (state == 0) {
+        l_msgId = -1;
+        mMsgId = getMsg();
+        mActionState++;
+        if (argument == 0) {
+            ((daPy_py_c*)dComIfGp_getLinkPlayer())->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+        }
+    } else if (state != -1) {
+        if (state == 1) {
+            if (talk_init()) {
+                mActionState++;
+            }
+        } else {
+            if (talk(0)) {
+                setAction(&daObj_hsh_c::waitAction, NULL);
+                dComIfGp_event_reset();
+                if (argument == 0) {
+                    ((daPy_py_c*)dComIfGp_getLinkPlayer())->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+                }
+            }
+        }
+        setAttention(true);
+    }
+    return 1;
 }
 
 /* 00001214-00001230       .text offAction__11daObj_hsh_cFPv */
@@ -573,8 +598,14 @@ BOOL daObj_hsh_c::execute() {
 
 /* 00002098-00002158       .text draw__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::draw() {
-    /* Nonmatching */
-    return 1;
+    if (!(mFlags & 8)) {
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mpModel, &tevStr);
+        mDoExt_modelUpdate(mpModel);
+        cXyz pos = current.pos;
+        mShadowKey = dComIfGd_setRealShadow2(mShadowKey, 1, mpModel, &pos, 800.0f, mObjAcch.GetGroundH(), &tevStr);
+    }
+    return TRUE;
 }
 
 /* 00002158-00002178       .text daObj_hsh_Draw__FP11daObj_hsh_c */
