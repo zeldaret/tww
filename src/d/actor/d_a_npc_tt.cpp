@@ -42,7 +42,7 @@ static BOOL nodeCallBack_Tt(J3DNode* node, int calcTiming) {
 
         if(i_this != NULL) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            if (jntNo == i_this->m_head_jnt_num) {
+            if (jntNo == i_this->getHeadJntNum()) {
                 temp.setall(0.0f);
                 cMtx_YrotM(*calc_mtx, -i_this->getHead_y());
                 cMtx_ZrotM(*calc_mtx, -i_this->getHead_x() - i_this->mHeadAnm.field_0x00);
@@ -54,9 +54,9 @@ static BOOL nodeCallBack_Tt(J3DNode* node, int calcTiming) {
                 i_this->setEyePos(temp2);
                 i_this->incAttnSetCount();
 
-            } else if (jntNo == i_this->m_backbone_jnt_num) {
+            } else if (jntNo == i_this->getBackboneJntNum()) {
                 mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
-                mDoMtx_ZrotM(*calc_mtx, i_this->m_jnt.getBackbone_x());
+                mDoMtx_ZrotM(*calc_mtx, i_this->getBackbone_x());
             }
             cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             model->setAnmMtx(jntNo, *calc_mtx);

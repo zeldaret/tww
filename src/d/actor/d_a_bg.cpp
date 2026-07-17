@@ -5,6 +5,8 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bg.h"
+#include "d/actor/d_a_player_main.h"
+#include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_magma.h"
@@ -217,6 +219,21 @@ BOOL daBg_c::createHeap() {
     return TRUE;
 }
 
+#if VERSION == VERSION_DEMO
+static void escapeRestart() {
+    REG1_S(0) = 0;
+
+    daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
+    dComIfGs_setTurnRestart(player_p->current.pos, player_p->shape_angle.y, fopAcM_GetRoomNo(player_p), player_p->getDayNightParamData());
+
+    if (dComIfG_getTimerMode() == 3) {
+        dComIfG_TimerDeleteRequest();
+    }
+
+    dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), -1, 0.0f, 0, FALSE, 9);
+}
+#endif
+
 /* 800D8C50-800D8DB8       .text __dt__6daBg_cFv */
 daBg_c::~daBg_c() {
     s32 roomNo = fopAcM_GetParam(this);
@@ -354,7 +371,11 @@ cPhs_State daBg_c::create() {
         heap->adjustSize();
     } else {
         if (!fopAcM_entrySolidHeap(this, checkCreateHeap, 0)) {
+#if VERSION == VERSION_DEMO
+            escapeRestart();
+#else
             dStage_escapeRestart();
+#endif
             return cPhs_ERROR_e;
         }
     }
@@ -386,7 +407,11 @@ cPhs_State daBg_c::create() {
     }
 
     if (bgw != NULL && dComIfG_Bgsp()->Regist(bgw, this)) {
+#if VERSION == VERSION_DEMO
+        escapeRestart();
+#else
         dStage_escapeRestart();
+#endif
         return cPhs_ERROR_e;
     }
 
