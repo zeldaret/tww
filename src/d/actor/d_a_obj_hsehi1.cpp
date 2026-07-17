@@ -681,8 +681,7 @@ BOOL daObj_hsh_c::talk(int i_param) {
                 l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
                 fopMsgM_messageSendOn();
                 if (mMsgId == 0x5B3) {
-                    s8 roomNo = current.roomNo;
-                    dComIfGs_onSwitch(mSwitchNo, roomNo);
+                    dComIfGs_onSwitch(mSwitchNo, current.roomNo);
                 }
             }
         } else {
@@ -733,7 +732,7 @@ BOOL daObj_hsh_c::execute() {
     }
     mObjAcch.CrrPos(*dComIfG_Bgsp());
     if (mObjAcch.GetGroundH() != -1000000000.0f) {
-        current.roomNo = tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
+        tevStr.mRoomNo = current.roomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
         mPolyInfo = mObjAcch.m_gnd;
     }
