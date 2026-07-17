@@ -22,14 +22,13 @@ static fpc_ProcID l_msgId;
 static msg_class* l_msg;
 
 /* 000000EC-00000130       .text __ct__15daObj_hsh_HIO_cFv */
-daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
-    mNo = -1;
-    mAttentionDist = 250.0f;
-    mAttentionOffsetY0 = 0.0f;
-    mAttentionOffsetY1 = 0.0f;
-    mAttentionAngle = 0x4000;
-    m16 = 0;
-}
+daObj_hsh_HIO_c::daObj_hsh_HIO_c()
+    : mNo(-1)
+    , mAttentionDist(250.0f)
+    , mAttentionOffsetY0(0.0f)
+    , mAttentionOffsetY1(0.0f)
+    , mAttentionAngle(0x4000)
+    , m16(0) {}
 
 /* 00000130-000002A4       .text __dt__11daObj_hsh_cFv */
 daObj_hsh_c::~daObj_hsh_c() {
@@ -599,7 +598,6 @@ BOOL daObj_hsh_c::actionTactEvent(int i_staffIdx) {
     }
     return talk(1);
 }
-
 /* 00001ADC-00001B3C       .text initialJudgeEvent__11daObj_hsh_cFi */
 void daObj_hsh_c::initialJudgeEvent(int) {
     if (mFlags & 4) {
