@@ -45,8 +45,10 @@ static s16 daObj_hsh_XyEventCB(void* i_this, int i_btn) {
 
 /* 00000308-00000390       .text XyEventCB__11daObj_hsh_cFi */
 s16 daObj_hsh_c::XyEventCB(int) {
-    /* Nonmatching */
-    return 0;
+    JAIZelBasic::getInterface()->seStart(0x8A7, &eyePos, 0, dComIfGp_getReverb(current.roomNo));
+    mFlags |= 1;
+    mEventCutIdx = 0;
+    return mEventIdx[0];
 }
 
 /* 00000390-000003F4       .text particle_set__11daObj_hsh_cFUs */
@@ -148,14 +150,31 @@ BOOL daObj_hsh_c::init() {
 }
 
 /* 00000E60-00000EF4       .text action__11daObj_hsh_cFPv */
-void daObj_hsh_c::action(void*) {
-    /* Nonmatching */
+void daObj_hsh_c::action(void* i_param) {
+    if (mpActionFunc == NULL) {
+        speedF = 0.0f;
+        setAction(&daObj_hsh_c::waitAction, NULL);
+    }
+    (this->*mpActionFunc)(i_param);
 }
 
 /* 00000EF4-00000FBC       .text setAction__11daObj_hsh_cFM11daObj_hsh_cFPCvPvPv_iPv */
-int daObj_hsh_c::setAction(int (daObj_hsh_c::*)(void*), void*) {
-    /* Nonmatching */
-    return 0;
+int daObj_hsh_c::setAction(int (daObj_hsh_c::*i_action)(void*), void* i_param) {
+    if (mpActionFunc != i_action) {
+        if (mpActionFunc != NULL) {
+            mActionState = -1;
+            (this->*mpActionFunc)(i_param);
+        }
+        mpActionFunc = i_action;
+        mActionState = 0;
+        m51C[0] = 0;
+        m51C[1] = 0;
+        m51C[2] = 0;
+        m51C[3] = 0;
+        m528 = 0.0f;
+        (this->*mpActionFunc)(i_param);
+    }
+    return 1;
 }
 
 /* 00000FBC-000010E8       .text waitAction__11daObj_hsh_cFPv */
@@ -244,12 +263,17 @@ void daObj_hsh_c::initialMsgSetEvent(int) {
 
 /* 000019C0-000019E0       .text actionMsgSetEvent__11daObj_hsh_cFi */
 void daObj_hsh_c::actionMsgSetEvent(int) {
-    /* Nonmatching */
+    talk_init();
 }
 
 /* 000019E0-00001A40       .text actionMessageEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::actionMessageEvent(int) {
-    /* Nonmatching */
+void daObj_hsh_c::actionMessageEvent(int i_staffIdx) {
+    int* p = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "MsgNo");
+    int msgNo = 0;
+    if (p != NULL) {
+        msgNo = *p;
+    }
+    talk(msgNo);
 }
 
 /* 00001A40-00001ADC       .text actionTactEvent__11daObj_hsh_cFi */
