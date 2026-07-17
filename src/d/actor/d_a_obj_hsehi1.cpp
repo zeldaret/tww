@@ -17,23 +17,25 @@ daObj_hsh_c::~daObj_hsh_c() {
 }
 
 /* 000002A4-000002C4       .text daObj_hsh_XyCheckCB__FPvi */
-static s16 daObj_hsh_XyCheckCB(void*, int) {
-    /* Nonmatching */
+static s16 daObj_hsh_XyCheckCB(void* i_this, int i_btn) {
+    return ((daObj_hsh_c*)i_this)->XyCheckCB(i_btn);
 }
 
 /* 000002C4-000002E8       .text XyCheckCB__11daObj_hsh_cFi */
-void daObj_hsh_c::XyCheckCB(int) {
+s16 daObj_hsh_c::XyCheckCB(int) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 000002E8-00000308       .text daObj_hsh_XyEventCB__FPvi */
-static s16 daObj_hsh_XyEventCB(void*, int) {
-    /* Nonmatching */
+static s16 daObj_hsh_XyEventCB(void* i_this, int i_btn) {
+    return ((daObj_hsh_c*)i_this)->XyEventCB(i_btn);
 }
 
 /* 00000308-00000390       .text XyEventCB__11daObj_hsh_cFi */
-void daObj_hsh_c::XyEventCB(int) {
+s16 daObj_hsh_c::XyEventCB(int) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00000390-000003F4       .text particle_set__11daObj_hsh_cFUs */
@@ -82,23 +84,26 @@ void daObj_hsh_c::setBaseMtx() {
 }
 
 /* 000006C8-00000910       .text createHeap__11daObj_hsh_cFv */
-void daObj_hsh_c::createHeap() {
+BOOL daObj_hsh_c::createHeap() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00000910-00000930       .text checkCreateHeap__FP10fopAc_ac_c */
-static BOOL checkCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
+    return ((daObj_hsh_c*)i_this)->createHeap();
 }
 
 /* 00000930-00000B44       .text create__11daObj_hsh_cFv */
 cPhs_State daObj_hsh_c::create() {
     /* Nonmatching */
+    return cPhs_ERROR_e;
 }
 
 /* 00000C84-00000E60       .text init__11daObj_hsh_cFv */
-void daObj_hsh_c::init() {
+BOOL daObj_hsh_c::init() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00000E60-00000EF4       .text action__11daObj_hsh_cFPv */
@@ -107,28 +112,33 @@ void daObj_hsh_c::action(void*) {
 }
 
 /* 00000EF4-00000FBC       .text setAction__11daObj_hsh_cFM11daObj_hsh_cFPCvPvPv_iPv */
-void daObj_hsh_c::setAction(int (daObj_hsh_c::*)(void*), void*) {
+int daObj_hsh_c::setAction(int (daObj_hsh_c::*)(void*), void*) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00000FBC-000010E8       .text waitAction__11daObj_hsh_cFPv */
-void daObj_hsh_c::waitAction(void*) {
+int daObj_hsh_c::waitAction(void*) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 000010E8-00001214       .text talkAction__11daObj_hsh_cFPv */
-void daObj_hsh_c::talkAction(void*) {
+int daObj_hsh_c::talkAction(void*) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00001214-00001230       .text offAction__11daObj_hsh_cFPv */
-void daObj_hsh_c::offAction(void*) {
+int daObj_hsh_c::offAction(void*) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00001230-00001278       .text deleteAction__11daObj_hsh_cFPv */
-void daObj_hsh_c::deleteAction(void*) {
+int daObj_hsh_c::deleteAction(void*) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00001278-0000135C       .text eventOrder__11daObj_hsh_cFv */
@@ -142,18 +152,21 @@ void daObj_hsh_c::checkOrder() {
 }
 
 /* 0000140C-00001478       .text checkCommandTalk__11daObj_hsh_cFv */
-void daObj_hsh_c::checkCommandTalk() {
+BOOL daObj_hsh_c::checkCommandTalk() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00001478-000015E0       .text chkAttention__11daObj_hsh_cF4cXyzs */
-void daObj_hsh_c::chkAttention(cXyz, short) {
+BOOL daObj_hsh_c::chkAttention(cXyz, short) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 000015E0-00001784       .text eventProc__11daObj_hsh_cFv */
-void daObj_hsh_c::eventProc() {
+BOOL daObj_hsh_c::eventProc() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00001784-000017B0       .text eventEnd__11daObj_hsh_cFv */
@@ -167,8 +180,9 @@ void daObj_hsh_c::initialDefault(int) {
 }
 
 /* 000017B4-000017BC       .text actionDefault__11daObj_hsh_cFi */
-void daObj_hsh_c::actionDefault(int) {
+BOOL daObj_hsh_c::actionDefault(int) {
     /* Nonmatching */
+    return 1;
 }
 
 /* 000017BC-00001938       .text initialLinkDispEvent__11daObj_hsh_cFi */
@@ -207,8 +221,9 @@ void daObj_hsh_c::initialAppearEvent(int) {
 }
 
 /* 00001C1C-00001C74       .text actionAppearEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::actionAppearEvent(int) {
+BOOL daObj_hsh_c::actionAppearEvent(int) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00001C74-00001D3C       .text initialDeleteEvent__11daObj_hsh_cFi */
@@ -217,38 +232,45 @@ void daObj_hsh_c::initialDeleteEvent(int) {
 }
 
 /* 00001D3C-00001D88       .text actionDeleteEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::actionDeleteEvent(int) {
+BOOL daObj_hsh_c::actionDeleteEvent(int) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00001D88-00001DF4       .text talk_init__11daObj_hsh_cFv */
-void daObj_hsh_c::talk_init() {
+BOOL daObj_hsh_c::talk_init() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00001DF4-00001F1C       .text talk__11daObj_hsh_cFi */
-void daObj_hsh_c::talk(int) {
+BOOL daObj_hsh_c::talk(int) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00001F1C-00001F38       .text getMsg__11daObj_hsh_cFv */
-void daObj_hsh_c::getMsg() {
+u32 daObj_hsh_c::getMsg() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00001F38-00001F78       .text next_msgStatus__11daObj_hsh_cFPUl */
-void daObj_hsh_c::next_msgStatus(unsigned long*) {
+u16 daObj_hsh_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00001F78-00002098       .text execute__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::execute() {
     /* Nonmatching */
+    return 1;
 }
 
 /* 00002098-00002158       .text draw__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::draw() {
     /* Nonmatching */
+    return 1;
 }
 
 /* 00002158-00002178       .text daObj_hsh_Draw__FP11daObj_hsh_c */
@@ -299,5 +321,5 @@ actor_process_profile_definition g_profile_Obj_HSH = {
     /* Actor SubMtd */ &l_daObj_hsh_Method,
     /* Status       */ 0x04 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* Cull Type    */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ 0,
 };
