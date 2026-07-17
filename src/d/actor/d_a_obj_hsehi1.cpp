@@ -600,7 +600,8 @@ BOOL daObj_hsh_c::actionTactEvent(int i_staffIdx) {
     if (p != NULL) {
         msgNo = *p;
     }
-    if (daPy_getPlayerActorClass()->getTactMusic() == msgNo) {
+    s32 tactMusic = daPy_getPlayerActorClass()->getTactMusic();
+    if (tactMusic == msgNo) {
         mFlags |= 4;
     }
     return talk(1);
