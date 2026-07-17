@@ -183,8 +183,40 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000930-00000B44       .text create__11daObj_hsh_cFv */
 cPhs_State daObj_hsh_c::create() {
-    /* Nonmatching */
-    return cPhs_ERROR_e;
+    static u32 a_heap_size_tbl = 0x4000;
+
+    fopAcM_SetupActor(this, daObj_hsh_c);
+
+    cPhs_State phase;
+    if (argument == 0 && dComIfGs_isEventBit(0x2510)) {
+        phase = cPhs_ERROR_e;
+    } else {
+        if (argument == 0) {
+            phase = dComIfG_resLoad(&mPhs, "Hsehi1");
+        } else {
+            phase = dComIfG_resLoad(&mPhs, "Hsehi2");
+        }
+        if (phase == cPhs_COMPLEATE_e) {
+            if (!fopAcM_entrySolidHeap(this, checkCreateHeap, a_heap_size_tbl)) {
+                mpBgw = NULL;
+                phase = cPhs_ERROR_e;
+            } else {
+                fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+                if (l_HIO.mNo < 0) {
+                    if (argument == 0) {
+                        l_HIO.mNo = mDoHIO_createChild("\203^\203N\203g\220\316\224\305", &l_HIO);
+                    } else {
+                        l_HIO.mNo = mDoHIO_createChild("\203\201\203b\203Z\201[\203W\220\316\224\350", &l_HIO);
+                    }
+                    l_HIO.mpActor = this;
+                }
+                if (!init()) {
+                    phase = cPhs_ERROR_e;
+                }
+            }
+        }
+    }
+    return phase;
 }
 
 /* 00000C84-00000E60       .text init__11daObj_hsh_cFv */

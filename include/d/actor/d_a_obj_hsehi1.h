@@ -8,6 +8,7 @@
 #include "m_Do/m_Do_hostIO.h"
 
 class JPABaseEmitter;
+class daObj_hsh_c;
 
 class daObj_hsh_HIO_c : public mDoHIO_entry_c {
 public:
@@ -21,6 +22,7 @@ public:
     /* 0x10 */ f32 mAttentionOffsetY1;
     /* 0x14 */ s16 mAttentionAngle;
     /* 0x16 */ s8 m16;
+    /* 0x18 */ daObj_hsh_c* mpActor;
 };
 
 class daObj_hsh_c : public fopAc_ac_c {
