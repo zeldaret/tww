@@ -439,7 +439,11 @@ BOOL daObj_hsh_c::chkAttention(cXyz i_pos, s16 i_angle) {
         angleRange += cAngle::d2s(10.0f);
     }
     angleToPlayer -= i_angle;
-    return angleRange > abs(angleToPlayer) && dist > distToPlayer;
+    BOOL ret = FALSE;
+    if (angleRange > abs(angleToPlayer) && dist > distToPlayer) {
+        ret = TRUE;
+    }
+    return ret;
 }
 
 /* 000015E0-00001784       .text eventProc__11daObj_hsh_cFv */
