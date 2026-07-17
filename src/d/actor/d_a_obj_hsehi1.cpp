@@ -12,6 +12,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_mtx.h"
 
 static daObj_hsh_HIO_c l_HIO;
 static u32 l_hio_counter;
@@ -142,7 +143,11 @@ void daObj_hsh_c::drawStart() {
 
 /* 0000064C-000006C8       .text setBaseMtx__11daObj_hsh_cFv */
 void daObj_hsh_c::setBaseMtx() {
-    /* Nonmatching */
+    J3DModel* model = mpModel;
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
+    MTXCopy(mDoMtx_stack_c::get(), mBaseMtx);
 }
 
 /* 000006C8-00000910       .text createHeap__11daObj_hsh_cFv */
