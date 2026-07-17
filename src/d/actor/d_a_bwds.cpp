@@ -274,7 +274,7 @@ static void ug_move(bwds_class* i_this) {
             i_this->m02F8++;
             actor->speedF = l_HIO.m010;
             actor->speed.y = REG0_F(13) + 50.0f;
-            actor->current.angle.y = fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0));
+            actor->current.angle.y = fopAcM_searchPlayerAngleY(actor);
             local_34.x = 0.0f;
             local_34.y = 0.0f;
             local_34.z = 2000.0f;
@@ -449,7 +449,7 @@ static void fail(bwds_class* i_this) {
         local_34.y = REG0_F(19) + 60.0f;
         local_34.z = REG0_F(20) + -30.0f;
         player = daPy_getPlayerActorClass();
-        s16 angle = fopAcM_searchActorAngleY(actor, player);
+        s16 angle = fopAcM_searchPlayerAngleY(actor);
         cMtx_YrotS(*calc_mtx, angle);
         MtxPosition(&local_34, &actor->speed);
         i_this->m02F8++;

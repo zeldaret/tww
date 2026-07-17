@@ -2392,19 +2392,19 @@ void dStage_turnRestart() {
     dKy_set_nexttime(nextTime);
 }
 
+#if VERSION > VERSION_DEMO
 /* 80043BD0-80043C84       .text dStage_escapeRestart__Fv */
 void dStage_escapeRestart() {
     daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
-    dComIfGs_setTurnRestart(player_p->current.pos, player_p->shape_angle.y,
-                            fopAcM_GetRoomNo(player_p), player_p->getDayNightParamData());
+    dComIfGs_setTurnRestart(player_p->current.pos, player_p->shape_angle.y, fopAcM_GetRoomNo(player_p), player_p->getDayNightParamData());
 
     if (dComIfG_getTimerMode() == 3) {
         dComIfG_TimerDeleteRequest();
     }
 
-    dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), -1,
-                          0.0f, 0, FALSE, 9);
+    dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), -1, 0.0f, 0, FALSE, 9);
 }
+#endif
 
 /* 80043C84-80043CD0       .text dStage_checkRestart__Fv */
 BOOL dStage_checkRestart() {

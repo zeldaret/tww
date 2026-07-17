@@ -42,7 +42,7 @@ static BOOL nodeCallBack_Tt(J3DNode* node, int calcTiming) {
 
         if(i_this != NULL) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            if (jntNo == i_this->m_head_jnt_num) {
+            if (jntNo == i_this->getHeadJntNum()) {
                 temp.setall(0.0f);
                 cMtx_YrotM(*calc_mtx, -i_this->getHead_y());
                 cMtx_ZrotM(*calc_mtx, -i_this->getHead_x() - i_this->mHeadAnm.field_0x00);
@@ -54,9 +54,9 @@ static BOOL nodeCallBack_Tt(J3DNode* node, int calcTiming) {
                 i_this->setEyePos(temp2);
                 i_this->incAttnSetCount();
 
-            } else if (jntNo == i_this->m_backbone_jnt_num) {
+            } else if (jntNo == i_this->getBackboneJntNum()) {
                 mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
-                mDoMtx_ZrotM(*calc_mtx, i_this->m_jnt.getBackbone_x());
+                mDoMtx_ZrotM(*calc_mtx, i_this->getBackbone_x());
             }
             cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             model->setAnmMtx(jntNo, *calc_mtx);
@@ -223,7 +223,6 @@ void daNpc_Tt_c::msgAnm() {
                 setAnm(2);
                 break;
         }
-
     }
 }
 
@@ -260,7 +259,6 @@ u16 daNpc_Tt_c::talk() {
             l_msgId = fopMsgM_messageSet(mCurrMsgNo, this);
         } else {
             msgAnm();
-
             switch(mTalkState) {
                 case TALK_MSG_CREATE:
                     l_msg = fopMsgM_SearchByID(l_msgId);
@@ -290,7 +288,6 @@ u16 daNpc_Tt_c::talk() {
             }
         }
     }
-
     return msgStatus;
 }
 
@@ -323,8 +320,8 @@ bool daNpc_Tt_c::demoProcTact1() {
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_0C40);
             dComIfGp_evmng_cutEnd(mStaffIdx);
             break;
-
     }
+
     return TRUE;
 }
 
@@ -384,7 +381,6 @@ void daNpc_Tt_c::demoInitSpeak() {
             }
             break;
     }
-
 }
 
 /* 00000E04-00000E5C       .text demoProcSpeak__10daNpc_Tt_cFv */
@@ -532,12 +528,9 @@ BOOL daNpc_Tt_c::init() {
     fopAcM_SetStatusMap(this, 0x27);
     fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
 
-
     switch(mType) {
         case 0:
-            if(setAction(&daNpc_Tt_c::wait_action, NULL)) {
-                // nothing?
-            }
+            setAction(&daNpc_Tt_c::wait_action, NULL);
             break;
     }
 
@@ -599,7 +592,6 @@ void daNpc_Tt_c::lookBack() {
                 temp.y = eyePos.y;
             }
             break;
-
     }
 
     if (m_jnt.trnChk()) {
@@ -790,7 +782,12 @@ BOOL daNpc_Tt_c::_draw() {
         current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr
     );
 
+#ifdef __MWERKS__
     mLineKe.mLineMat.update(10, 0.8f, (GXColor){0xC9, 0xCA, 0xE4, 0xFF}, 0, &tevStr);
+#else
+    GXColor color = (GXColor){0xC9, 0xCA, 0xE4, 0xFF};
+    mLineKe.mLineMat.update(10, 0.8f, color, 0, &tevStr);
+#endif
     dComIfGd_set3DlineMat(&mLineKe.mLineMat);
 
     dSnap_RegistFig(DSNAP_TYPE_TT, this, 1.0f, 1.0f, 1.0f);

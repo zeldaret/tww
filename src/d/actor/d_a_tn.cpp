@@ -1,6 +1,6 @@
 /**
  * d_a_tn.cpp
- * Enemy - Darknut / Mini-Boss - Darknut (Tower of the Gods) / タートナック (Tātonakku)
+ * Enemy - Darknut / Mini-Boss - Darknut (Tower of the Gods) / タートナック (Taatonakku)
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -4270,7 +4270,7 @@ static cPhs_State daTn_Create(fopAc_ac_c* a_this) {
         return cPhs_ERROR_e;
     }
     if (hio_set == false) {
-        l_tnHIO.mNo = mDoHIO_createChild("タートナック", &l_tnHIO); // Tātonakku
+        l_tnHIO.mNo = mDoHIO_createChild("タートナック", &l_tnHIO); // Taatonakku
         i_this->m1433 = 1;
         hio_set = true;
     }

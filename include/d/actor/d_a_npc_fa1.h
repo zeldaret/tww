@@ -25,6 +25,11 @@ public:
 
 class daNpc_Fa1_c : public fopNpc_npc_c {
 public:
+    typedef void(daNpc_Fa1_c::*MoveFunc_t)();
+    typedef void(daNpc_Fa1_c::*MoveSubFunc_t)();
+    typedef void(daNpc_Fa1_c::*BottleMoveSubFunc_t)();
+    typedef void(daNpc_Fa1_c::*BottleBabaSubFunc_t)();
+
     enum Type_e {
         Type_NORMAL_e = 0,
         Type_TIMER_e = 1,
@@ -149,11 +154,6 @@ public:
     void setMtx();
 
 public:
-    typedef void(daNpc_Fa1_c::*MoveFunc_t)();
-    typedef void(daNpc_Fa1_c::*MoveSubFunc_t)();
-    typedef void(daNpc_Fa1_c::*BottleMoveSubFunc_t)();
-    typedef void(daNpc_Fa1_c::*BottleBabaSubFunc_t)();
-
     /* 0x6C4 */ u8 m6C4[0x6CC - 0x6C4];
     /* 0x6CC */ mDoExt_McaMorf* mpMorf;
     /* 0x6D0 */ daNpc_Fa1_McaMorfCallBack1_c mMcaMorfCallback1;

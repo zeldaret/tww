@@ -6,10 +6,17 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_picture_box.h"
 #include "f_op/f_op_msg.h"
+#include "d/d_com_inf_game.h"
 
 /* 802258C8-80225954       .text dPb_erasePicture__Fv */
 void dPb_erasePicture() {
-    /* Nonmatching */
+    u8 selectPicture = dComIfGp_getSelectPicture();
+    u8 evReg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_89FF);
+    if (selectPicture < 3) {
+        dComIfGs_setEventReg(dSv_event_flag_c::UNK_89FF, evReg | (1 << (selectPicture)));
+        dComIfGp_setItemPictureNumCount(-1);
+    }
+    
 }
 
 /* 80225954-80225E88       .text screenSet__9dJle_Pb_cFv */
