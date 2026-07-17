@@ -59,17 +59,17 @@ public:
 
     typedef BOOL (daNpc_Mk_c::*ActionFunc)(void*);
 
-    bool ChkOrder(u8 temp) { return mOrderFlags & temp; }
-    void ClrOrder() { mOrderFlags &= ~0xFF; }
-    void SetOrder(u8 temp) { mOrderFlags |= temp; }
+    BOOL ChkOrder(u8 flag) { return mOrderFlags & flag; }
+    void ClrOrder(u8 flag) { mOrderFlags &= ~flag; }
+    void SetOrder(u8 flag) { mOrderFlags |= flag; }
     
     void chkAngry() {}
     bool chkFlag(u16 flag) { return (mFlags & flag) == flag; }
     void clrFlag(u16 flag) { mFlags &= ~flag; }
     s8 getBackboneJntNum() { return m_jnt.getBackboneJntNum(); }
+    s8 getHeadJntNum() { return m_jnt.getHeadJntNum(); }
     s16 getBackbone_x() { return m_jnt.getBackbone_x(); }
     s16 getBackbone_y() { return m_jnt.getBackbone_y(); }
-    s8 getHeadJntNum() { return m_jnt.getHeadJntNum(); }
     s16 getHead_x() { return m_jnt.getHead_x(); }
     s16 getHead_y() { return m_jnt.getHead_y(); }
     void getVisitMode() {}

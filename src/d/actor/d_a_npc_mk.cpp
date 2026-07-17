@@ -60,7 +60,7 @@ static BOOL nodeCallBack_Mk(J3DNode* node, int calcTiming) {
 
             } else if (jntNo == i_this->getBackboneJntNum()) {
                 mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
-                mDoMtx_ZrotM(*calc_mtx, i_this->m_jnt.getBackbone_x());
+                mDoMtx_ZrotM(*calc_mtx, i_this->getBackbone_x());
             }
             cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             model->setAnmMtx(jntNo, *calc_mtx);
@@ -183,7 +183,7 @@ void daNpc_Mk_c::checkOrder() {
         setFlag(1);
         talkInit();
     }
-    ClrOrder();
+    ClrOrder(0xFF);
 }
 
 /* 000006D4-00000750       .text next_msgStatus__10daNpc_Mk_cFPUl */
@@ -746,7 +746,7 @@ bool daNpc_Mk_c::demoProc() {
                 current.angle.y = home.angle.y;
                 break;
             case 3:
-            case 4:
+            case 4: {
                 if (mAnmIdx == 5) {
                     speedF = 12.0f;
                 } else if (mAnmIdx == 11) {
@@ -768,6 +768,7 @@ bool daNpc_Mk_c::demoProc() {
                     field_0x6E8 = -1;
                 }
                 break;
+            }
             case 5:
                 talkInit();
                 dComIfGp_event_setTalkPartner(this);
@@ -815,7 +816,7 @@ bool daNpc_Mk_c::demoProc() {
                 clrFlag(0x10);
                 fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
                 break;
-            case 13:
+            case 13: {
                 fpc_ProcID itemID = fopAcM_createItemForPresentDemo(&current.pos, dItemNo_HEART_PIECE_e);
 
                 if (itemID != fpcM_ERROR_PROCESS_ID_e) {
@@ -823,6 +824,7 @@ bool daNpc_Mk_c::demoProc() {
                 }
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_1340);
                 break;
+            }
             case 14:
                 dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0040);
                 dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0120);
@@ -874,14 +876,14 @@ bool daNpc_Mk_c::demoProc() {
             }
             return true;
             
-        case 5:
+        case 5: {
             u16 temp4 = talk();
             if (temp4 == fopMsgStts_BOX_CLOSED_e || temp4 == 0xFE) {
                 dComIfGp_evmng_cutEnd(mStaffIdx);
             }
             setFlag(0x20);
             break;
-
+        }
         case 2:
         case 6:
         case 15:
@@ -1233,7 +1235,7 @@ bool daNpc_Mk_c::drop01() {
 bool daNpc_Mk_c::runaway() {
     u8 temp = mMkStatic.runAwayProc(this, &field_0x688, &mCyl, &field_0x6F0);
     if (temp != mMkStatic.m0) {
-        if (temp == 1 && mMkStatic.m0 == 2 || temp == 2 && mMkStatic.m0 == 1) {
+        if ((temp == 1 && mMkStatic.m0 == 2) || (temp == 2 && mMkStatic.m0 == 1)) {
             if (cM_rndF(1.0f) < 0.5f) {
                 fopAcM_seStart(this, JA_SE_CV_TR_KO_A_TURN, 0);
             }
@@ -1600,7 +1602,7 @@ BOOL daNpc_Mk_c::_execute() {
     mpMorf->calc();
 
     if(chkFlag(0x10)) {
-        mCyl.ClrCoSet();
+        mCyl.OffCoSetBit();
     } else {
         mCyl.OnCoSetBit();
         setCollision();
