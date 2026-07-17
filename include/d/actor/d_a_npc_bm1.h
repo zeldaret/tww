@@ -286,7 +286,7 @@ public:
     /* 0x86E */ s16 m86E;
     /* 0x870 */ s16 m870;
     /* 0x872 */ s16 m872;
-    /* 0x874 */ s16 m874;
+    /* 0x874 */ s16 mHeadLookAtMaxVel;
     /* 0x876 */ s16 m876;
     /* 0x878 */ u16 m878;
                 s8 m87A;
@@ -300,9 +300,9 @@ public:
     /* 0x881 */ u8 m881;
     /* 0x882 */ u8 m882;
                 bool mbManzai;
-    /* 0x884 */ u8 m884;
+    /* 0x884 */ bool mbInitPostman0;
                 bool mbHasArms;
-                bool m886;
+                bool mbSetShapeAngle;
     /* 0x887 */ u8 m887;
     /* 0x888 */ u8 m888;
                 bool m889;
@@ -370,7 +370,7 @@ struct hio_prm_c{
     s16 mMinBackboneX;
     s16 mMinBackboneY;
     s16 mMaxTurnStep;
-    s16 m12;
+    s16 mCalcAngleTarget;
     f32 mAttPosOffsetY;
     u8 m18;
     s16 m1A;
