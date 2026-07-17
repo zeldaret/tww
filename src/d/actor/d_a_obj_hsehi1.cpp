@@ -161,7 +161,7 @@ BOOL daObj_hsh_c::createHeap() {
         }
         mpBgw = new dBgW();
         if (mpBgw != NULL) {
-            if (mpBgw->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi1", 7), dBgW::MOVE_BG_e, &mBaseMtx)) {
+            if (mpBgw->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi1", 7), dBgW::MOVE_BG_e, &mBaseMtx) == true) {
                 return FALSE;
             } else {
                 return TRUE;
@@ -177,7 +177,7 @@ BOOL daObj_hsh_c::createHeap() {
         }
         mpBgw = new dBgW();
         if (mpBgw != NULL) {
-            if (mpBgw->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi2", 7), dBgW::MOVE_BG_e, &mBaseMtx)) {
+            if (mpBgw->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi2", 7), dBgW::MOVE_BG_e, &mBaseMtx) == true) {
                 return FALSE;
             } else {
                 return TRUE;

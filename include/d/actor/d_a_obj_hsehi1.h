@@ -10,7 +10,7 @@
 class JPABaseEmitter;
 class daObj_hsh_c;
 
-class daObj_hsh_HIO_c : public mDoHIO_entry_c {
+class daObj_hsh_HIO_c : public JORReflexible {
 public:
     daObj_hsh_HIO_c();
     virtual ~daObj_hsh_HIO_c() {}
