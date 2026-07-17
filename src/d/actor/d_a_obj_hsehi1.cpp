@@ -304,22 +304,22 @@ int daObj_hsh_c::waitAction(void*) {
     } else if (mActionState != -1) {
         mAttentionOn = chkAttention(current.pos, shape_angle.y);
         if (argument == 0) {
-            if (mAttentionOn == 0) {
-                attention_info.flags &= ~0x20000008;
-            } else {
+            if (mAttentionOn != 0) {
                 attention_info.flags |= 0x20000008;
                 if (mEventState == -1) {
                     mEventState = 5;
                 }
+            } else {
+                attention_info.flags &= ~0x20000008;
             }
         } else {
-            if (mAttentionOn == 0) {
-                attention_info.flags &= ~0x20000008;
-            } else {
+            if (mAttentionOn != 0) {
                 attention_info.flags |= 0x20000008;
                 if (mEventState == -1) {
                     mEventState = 3;
                 }
+            } else {
+                attention_info.flags &= ~0x20000008;
             }
         }
         setAttention(true);
