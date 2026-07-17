@@ -169,9 +169,9 @@ BOOL daObj_hsh_c::createHeap() {
             if (mpBgw->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi1", 7), dBgW::MOVE_BG_e, &mBaseMtx)) {
                 return FALSE;
             }
-            return TRUE;
+        } else {
+            return FALSE;
         }
-        return FALSE;
     } else {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hsehi2", 4);
         JUT_ASSERT(0x20F, modelData != 0);
@@ -184,10 +184,11 @@ BOOL daObj_hsh_c::createHeap() {
             if (mpBgw->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi2", 7), dBgW::MOVE_BG_e, &mBaseMtx)) {
                 return FALSE;
             }
-            return TRUE;
+        } else {
+            return FALSE;
         }
-        return FALSE;
     }
+    return TRUE;
 }
 
 /* 00000910-00000930       .text checkCreateHeap__FP10fopAc_ac_c */
