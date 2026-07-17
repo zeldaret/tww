@@ -244,6 +244,18 @@ public:
     }
     void setMesgCamInfoBasicID(int id) { mMesgCamInfo.mBasicID = id; }
     dComIfG_MesgCamInfo_c* getMesgCamInfo() { return &mMesgCamInfo; }
+    void setMesgCamInfoActor(fopAc_ac_c* actor_1,fopAc_ac_c* actor_2,fopAc_ac_c* actor_3,fopAc_ac_c* actor_4,fopAc_ac_c* actor_5,fopAc_ac_c* actor_6,fopAc_ac_c* actor_7,fopAc_ac_c* actor_8,fopAc_ac_c* actor_9,fopAc_ac_c* actor_A){
+        mMesgCamInfo.mActor[0] = actor_1;
+        mMesgCamInfo.mActor[1] = actor_2;
+        mMesgCamInfo.mActor[2] = actor_3;
+        mMesgCamInfo.mActor[3] = actor_4;
+        mMesgCamInfo.mActor[4] = actor_5;
+        mMesgCamInfo.mActor[5] = actor_6;
+        mMesgCamInfo.mActor[6] = actor_7;
+        mMesgCamInfo.mActor[7] = actor_8;
+        mMesgCamInfo.mActor[8] = actor_9;
+        mMesgCamInfo.mActor[9] = actor_A;
+    }
     int getMesgCamInfoID() { return mMesgCamInfo.mID; }
     void setMesgCamInfoID(int param_0) { mMesgCamInfo.mID = param_0; }
     void clearMesgCamInfoID() { mMesgCamInfo.mID = -1; }
@@ -3156,16 +3168,8 @@ inline dComIfG_MesgCamInfo_c* dComIfGp_getMesgCameraInfo() {
 }
 
 inline void dComIfGp_setMesgCameraInfoActor(fopAc_ac_c* actor_1,fopAc_ac_c* actor_2,fopAc_ac_c* actor_3,fopAc_ac_c* actor_4,fopAc_ac_c* actor_5,fopAc_ac_c* actor_6,fopAc_ac_c* actor_7,fopAc_ac_c* actor_8,fopAc_ac_c* actor_9,fopAc_ac_c* actor_A){
-    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[0] = actor_1;
-    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[1] = actor_2;
-    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[2] = actor_3;
-    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[3] = actor_4;
-    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[4] = actor_5;
-    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[5] = actor_6;
-    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[6] = actor_7;
-    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[7] = actor_8;
-    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[8] = actor_9;
-    g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[9] = actor_A;
+    g_dComIfG_gameInfo.play.setMesgCamInfoActor(actor_1,actor_2,actor_3,actor_4,actor_5,actor_6,actor_7,actor_8,actor_9,actor_A);
+
 };
 
 inline u8 dComIfGp_checkMesgBgm() {

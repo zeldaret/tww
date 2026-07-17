@@ -321,9 +321,7 @@ void daNpc_Bm1_c::nodeWngControl(J3DNode* i_node, J3DModel* i_model) {
     }
     if(uVar1 == m_wngL3_jnt_num){
         mDoMtx_stack_c::multVecZero(&m898);
-        // m898.x = mDoMtx_stack_c::get()[0][3];
-        // m898.y = mDoMtx_stack_c::get()[1][3];
-        // m898.z = mDoMtx_stack_c::get()[2][3];
+
     }
     if(uVar1 == m_wngR1_jnt_num){
         cMtx_copy(mRightArmMtx,j3dSys.mCurrentMtx);
@@ -356,18 +354,14 @@ void daNpc_Bm1_c::nodeArmControl(J3DNode* i_node, J3DModel* i_model) {
         i_model->setAnmMtx(uVar1,mLeftArmMtx);
     }
     if(uVar1 == m_armL2_jnt_num){
-        m8B0.x = mDoMtx_stack_c::get()[0][3];
-        m8B0.y = mDoMtx_stack_c::get()[1][3];
-        m8B0.z = mDoMtx_stack_c::get()[2][3];
+        mDoMtx_stack_c::multVecZero(&m8B0);
     }
     if(uVar1 == m_armR1_jnt_num){
         cMtx_copy(mRightArmMtx,j3dSys.mCurrentMtx);
         i_model->setAnmMtx(uVar1,mRightArmMtx);   
     }
     if(uVar1 == m_armR2_jnt_num){
-        m8BC.x = mDoMtx_stack_c::get()[0][3];
-        m8BC.y = mDoMtx_stack_c::get()[1][3];
-        m8BC.z = mDoMtx_stack_c::get()[2][3];
+        mDoMtx_stack_c::multVecZero(&m8BC);
     }
 }
 
