@@ -67,9 +67,9 @@ public:
     void IamSukketo() {}
     void clr_manzai() {m883 = 0;}
     void getOdoroki() {}
-    void getStt() {}
-    void get_oldMsgStat() {
-
+    s8 getStt() { return m8FE;}
+    u16 get_oldMsgStat() {
+        return m878;
     }
     void setFocus() {}
     void setTelescopeDemo() {}

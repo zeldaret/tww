@@ -251,13 +251,11 @@ daNpc_Bm1_HIO_c::daNpc_Bm1_HIO_c() {
 }
 
 
-    char* l_evn_tbl[] = {
-        "Get_Mo3_Ltr","Met_Ryu_Islnd","Get_Rupee","Skn_Islnd",
-    };
+
 
 
 /* 00000268-000002E0       .text searchActor_Zl__FPvPv */
-void* searchActor_Zl(void* i_param_1, void*) {
+static void* searchActor_Zl(void* i_param_1, void*) {
     /* Nonmatching */
     if(l_check_wrk < 0x14 && fopAc_IsActor(i_param_1) && fopAcM_GetName(i_param_1) == fpcNm_NPC_ZL1_e){
         l_check_inf[l_check_wrk] =(fopAc_ac_c*)i_param_1;
@@ -267,7 +265,7 @@ void* searchActor_Zl(void* i_param_1, void*) {
 }
 
 /* 000002E0-00000358       .text searchActor_Gp__FPvPv */
-void* searchActor_Gp(void* i_param_1, void*) {
+static void* searchActor_Gp(void* i_param_1, void*) {
     /* Nonmatching */
     if(l_check_wrk < 0x14 && fopAc_IsActor(i_param_1) && fopAcM_GetName(i_param_1) == fpcNm_NPC_GP1_e){
         l_check_inf[l_check_wrk] = (fopAc_ac_c*)i_param_1;
@@ -277,7 +275,7 @@ void* searchActor_Gp(void* i_param_1, void*) {
 }
 
 /* 00000358-000003DC       .text searchActor_Bm_Skt__FPvPv */
-void* searchActor_Bm_Skt(void* i_param_1, void*) {
+static void* searchActor_Bm_Skt(void* i_param_1, void*) {
     /* Nonmatching */
     if(l_check_wrk < 0x14 && fopAc_IsActor(i_param_1) && fopAcM_GetName(i_param_1) == fpcNm_NPC_BM2_e){
         if(reinterpret_cast<daNpc_Bm1_c*>(i_param_1)->mSpecificType == Skett){
@@ -289,7 +287,7 @@ void* searchActor_Bm_Skt(void* i_param_1, void*) {
 }
 
 /* 000003DC-00000460       .text searchActor_Bm_Kkt__FPvPv */
-void* searchActor_Bm_Kkt(void* i_param_1, void*) {
+static void* searchActor_Bm_Kkt(void* i_param_1, void*) {
     /* Nonmatching */
     if(l_check_wrk < 0x14 && fopAc_IsActor(i_param_1) && fopAcM_GetName(i_param_1) == fpcNm_NPC_BM2_e){
         if(reinterpret_cast<daNpc_Bm1_c*>(i_param_1)->mSpecificType == Akoot){
@@ -303,6 +301,7 @@ void* searchActor_Bm_Kkt(void* i_param_1, void*) {
 /* 00000460-000004AC       .text nodeCallBack_Wng__FP7J3DNodei */
 static BOOL nodeCallBack_Wng(J3DNode* i_param_1, int i_param_2) {
     /* Nonmatching */
+    // static char* l_nodeName[14] = {};
     if(i_param_2 == 0){
         if(j3dSys.getModel()->getUserArea() != NULL){
             reinterpret_cast<daNpc_Bm1_c*>(j3dSys.getModel()->getUserArea())->nodeWngControl(i_param_1,j3dSys.getModel());
@@ -321,18 +320,18 @@ void daNpc_Bm1_c::nodeWngControl(J3DNode* i_node, J3DModel* i_model) {
         i_model->setAnmMtx(uVar1,mLeftArmMtx);
     }
     if(uVar1 == m_wngL3_jnt_num){
-        m898.x = mDoMtx_stack_c::get()[0][3];
-        m898.y = mDoMtx_stack_c::get()[1][3];
-        m898.z = mDoMtx_stack_c::get()[2][3];
+        mDoMtx_stack_c::multVecZero(&m898);
+        // m898.x = mDoMtx_stack_c::get()[0][3];
+        // m898.y = mDoMtx_stack_c::get()[1][3];
+        // m898.z = mDoMtx_stack_c::get()[2][3];
     }
     if(uVar1 == m_wngR1_jnt_num){
         cMtx_copy(mRightArmMtx,j3dSys.mCurrentMtx);
         i_model->setAnmMtx(uVar1,mRightArmMtx);   
     }
     if(uVar1 == m_wngR3_jnt_num){
-        m8A4.x = mDoMtx_stack_c::get()[0][3];
-        m8A4.y = mDoMtx_stack_c::get()[1][3];
-        m8A4.z = mDoMtx_stack_c::get()[2][3];
+        mDoMtx_stack_c::multVecZero(&m8A4);
+
     }
 }
 
@@ -411,7 +410,9 @@ void daNpc_Bm1_c::nodeBm1Control(J3DNode* i_node, J3DModel* i_model) {
     i_model->setAnmMtx(uVar1,mDoMtx_stack_c::get());
 
 }
-
+char* l_evn_tbl[] = {
+    "Get_Mo3_Ltr","Met_Ryu_Islnd","Get_Rupee","Skn_Islnd",
+};
 /* 0000093C-00000A9C       .text chk_appCnd__11daNpc_Bm1_cFv */
 bool daNpc_Bm1_c::chk_appCnd() {
     switch (mSpawnCondition) {
@@ -455,7 +456,7 @@ bool daNpc_Bm1_c::init_PST_0() {
     bool o_retval = false;
     if(!dComIfGs_isEventBit(1)){
         set_action(&daNpc_Bm1_c::demo_action1,NULL);
-        fopAcM_OffStatus(this,0x3F);
+        fopAcM_ClearStatusMap(this);
         m884 = 1;
         o_retval = true;
     }
@@ -623,7 +624,7 @@ bool daNpc_Bm1_c::createInit() {
     if(fopAcM_GetParamBit(param,16,8) != 0xFF){
         mPathRun.setInf(fopAcM_GetParamBit(param,16,8),fopAcM_GetRoomNo(this),true);
 
-        if(mPathRun.getPath()){
+        if(mPathRun.isPath()){
             fopAcM_OffStatus(this,fopAcStts_NOCULLEXEC_e);
             iVar5 = 0xF0;    
         }else{
@@ -2817,20 +2818,20 @@ void daNpc_Bm1_c::eInit_SET_ANM_(int* arg0) {
 /* 0000522C-00005368       .text eInit_MOV_PTH_POINT___11daNpc_Bm1_cFPiPiPiPi */
 void daNpc_Bm1_c::eInit_MOV_PTH_POINT_(int* arg0, int* arg1, int* arg2, int* arg3) {
     /* Nonmatching - Regswap*/
+    u8 idx;
+    cXyz pathpos;
     if (mPathRun.isPath()) {
-        u8 idx = (int)mPathRun.getIdx();
+        idx = mPathRun.getIdx();
         if (arg2 != NULL) {
-            // idx = ;
-            u8 arg = *arg2;
-            u8 max_point = mPathRun.maxPoint();
-            idx = (u8)(arg > max_point ? max_point : arg);
+            idx = *arg2;
+            idx = cLib_maxLimit(idx, mPathRun.maxPoint());
             mPathRun.setIdx(idx);
         }
-        current.pos.set(mPathRun.getPoint(idx));
+        current.pos = mPathRun.getPoint(idx);
         mPathRun.nextIdxAuto();
-        cXyz pathpos = mPathRun.getPoint(mPathRun.getIdx());
+        pathpos = mPathRun.getPoint(mPathRun.getIdx());
         current.angle.y = cLib_targetAngleY(&current.pos,&pathpos);
-        if (arg0) {
+        if (arg0 != NULL) {
             switch(*arg0){
                 case 1:
                     current.angle.y = cLib_targetAngleY(&current.pos, &dComIfGp_getLinkPlayer()->current.pos);
@@ -2842,6 +2843,7 @@ void daNpc_Bm1_c::eInit_MOV_PTH_POINT_(int* arg0, int* arg1, int* arg2, int* arg
         }
         eInit_SET_ANM_(arg1);
     }
+    
 }
 
 /* 00005368-00005650       .text event_actionInit__11daNpc_Bm1_cFi */
@@ -3062,7 +3064,7 @@ void daNpc_Bm1_c::privateCut(int arg0) {
 /* 000059E0-00005A00       .text endEvent__11daNpc_Bm1_cFv */
 void daNpc_Bm1_c::endEvent() {
     /* Nonmatching */
-    dComIfGp_event_onEventFlag(0x8);
+    dComIfGp_event_reset();
     m8F7 = 0xFF;
 }
 
@@ -3320,7 +3322,7 @@ BOOL daNpc_Bm1_c::talk_2() {
     }
     daNpc_Bm1_c* actor = static_cast<daNpc_Bm1_c*>(searchByID(m808));
     if(actor){
-        bool somebool = actor->m8FE != 9;
+        bool somebool = actor->getStt() != 9;
         // actor->m883 = 0;
         actor->clr_manzai();
         if(somebool){   
@@ -3343,8 +3345,7 @@ BOOL daNpc_Bm1_c::manzai() {
     }
     if (m883 != 0) {
         daNpc_Bm1_c* partner = (daNpc_Bm1_c*)(searchByID(m808));
-        u16 status = partner->m878;
-        anmAtr(status);
+        anmAtr(partner->get_oldMsgStat());
     } else {
         setStt(m8FF);
     }
