@@ -447,17 +447,6 @@ BOOL daObj_hsh_c::chkAttention(cXyz i_pos, s16 i_angle) {
 }
 
 /* 000015E0-00001784       .text eventProc__11daObj_hsh_cFv */
-static char* cut_name_tbl[] = {
-    "WAIT",
-    "Disp",
-    "MsgSet",
-    "Talk",
-    "Tact",
-    "Judge",
-    "Appear",
-    "Delete",
-};
-
 static daObj_hsh_c::EventActionInitFunc event_init_tbl[] = {
     &daObj_hsh_c::initialDefault,
     &daObj_hsh_c::initialLinkDispEvent,
@@ -478,6 +467,17 @@ static daObj_hsh_c::EventActionFunc event_action_tbl[] = {
     &daObj_hsh_c::actionDefault,
     &daObj_hsh_c::actionAppearEvent,
     &daObj_hsh_c::actionDeleteEvent,
+};
+
+static char* cut_name_tbl[] = {
+    "WAIT",
+    "Disp",
+    "MsgSet",
+    "Talk",
+    "Tact",
+    "Judge",
+    "Appear",
+    "Delete",
 };
 
 BOOL daObj_hsh_c::eventProc() {
