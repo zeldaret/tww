@@ -299,8 +299,32 @@ int daObj_hsh_c::setAction(int (daObj_hsh_c::*i_action)(void*), void* i_param) {
 
 /* 00000FBC-000010E8       .text waitAction__11daObj_hsh_cFPv */
 int daObj_hsh_c::waitAction(void*) {
-    /* Nonmatching */
-    return 0;
+    if (mActionState == 0) {
+        mActionState++;
+    } else if (mActionState != -1) {
+        mAttentionOn = chkAttention(current.pos, shape_angle.y);
+        if (argument == 0) {
+            if (mAttentionOn == 0) {
+                attention_info.flags &= ~0x20000008;
+            } else {
+                attention_info.flags |= 0x20000008;
+                if (mEventState == -1) {
+                    mEventState = 5;
+                }
+            }
+        } else {
+            if (mAttentionOn == 0) {
+                attention_info.flags &= ~0x20000008;
+            } else {
+                attention_info.flags |= 0x20000008;
+                if (mEventState == -1) {
+                    mEventState = 3;
+                }
+            }
+        }
+        setAttention(true);
+    }
+    return 1;
 }
 
 /* 000010E8-00001214       .text talkAction__11daObj_hsh_cFPv */
@@ -361,15 +385,16 @@ void daObj_hsh_c::checkOrder() {
 
 /* 0000140C-00001478       .text checkCommandTalk__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::checkCommandTalk() {
-    if (eventInfo.getCommand() == dEvtCmd_INTALK_e) {
-        if (!dComIfGp_event_chkTalkXY()) {
-            return TRUE;
-        }
+    if (eventInfo.getCommand() != dEvtCmd_INTALK_e) {
+        return FALSE;
+    }
+    if (dComIfGp_event_chkTalkXY()) {
         if (mEventState == 5) {
             mEventState = -1;
         }
+        return FALSE;
     }
-    return FALSE;
+    return TRUE;
 }
 
 /* 00001478-000015E0       .text chkAttention__11daObj_hsh_cF4cXyzs */
@@ -524,8 +549,26 @@ u16 daObj_hsh_c::next_msgStatus(unsigned long* p) {
 
 /* 00001F78-00002098       .text execute__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::execute() {
-    /* Nonmatching */
-    return 1;
+    if (argument == 0) {
+        if (dComIfGs_isEventBit(0x2B10)) {
+            actor_status = (actor_status & ~0x3F) | 0x24;
+        } else {
+            actor_status &= ~0x20;
+        }
+    }
+    mObjAcch.CrrPos(*dComIfG_Bgsp());
+    if (mObjAcch.GetGroundH() != -1000000000.0f) {
+        current.roomNo = tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
+        tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
+        mPolyInfo = mObjAcch.m_gnd;
+    }
+    if (!eventProc()) {
+        checkOrder();
+        action(NULL);
+    }
+    eventOrder();
+    setBaseMtx();
+    return TRUE;
 }
 
 /* 00002098-00002158       .text draw__11daObj_hsh_cFv */
