@@ -48,32 +48,29 @@ enum{
 
 class daNpc_Bm1_c : public fopNpc_npc_c {
 public:
-    // daNpc_Bm1_c();
-    // struct anm_prm_c {
-        
-    // }; //Size: 0x14?
+
     struct anm_prm_c{
-        s8 m0;
-        s8 m1;
-        f32 m4;
-        f32 m8;
-        s32 mC;
-        s32 m10;
+        s8 mBckResIndex;
+        s8 mResIndex;
+        f32 mMorf;
+        f32 mSpeed;
+        s32 mLoopMode;
+        BOOL mbHasArms;
     };
 
     typedef BOOL (daNpc_Bm1_c::*ActionFunc)(void*);
 
     bool IamKakkuto() {return mSpecificType == Akoot;}
     bool IamSukketo() {return mSpecificType == Skett;}
-    void clr_manzai() {m883 = false;}
+    void clr_manzai() {mbManzai = false;}
     cXyz getOdoroki() { return attention_info.position;}
-    s8 getStt() { return m8FE;}
+    s8 getStt() { return mStatus;}
     u16 get_oldMsgStat() {
         return m878;
     }
     void setFocus() {}
     void setTelescopeDemo() {m881 = true;}
-    void set_manzai() {m883 = true;}
+    void set_manzai() {mbManzai = true;}
 
 
     void nodeWngControl(J3DNode*, J3DModel*);
@@ -238,31 +235,31 @@ public:
     /* 0x6D2 */ s8 m_nec_jnt_num;
     /* 0x6D3 */ s8 m_arm_L_jnt_num;
     /* 0x6D4 */ s8 m_arm_R_jnt_num;
-                J3DModel* m6D8;
-                J3DModel* m6DC;
-                J3DModel* m6E0;
-                J3DModel* m6E4;
+                J3DModel* mpBinderModel;
+                J3DModel* mpBagModel;
+                J3DModel* mpKnifeModel;
+                J3DModel* mpStickModel;
     /* 0x6E8 */ u32 mShadowID;
-    /* 0x6EC */ mDoExt_McaMorf* m6EC;
+    /* 0x6EC */ mDoExt_McaMorf* mpHeadMorf;
     /* 0x6F0 */ J3DAnmTexPattern* m_hed_tex_pttrn;
-    /* 0x6F4 */ mDoExt_btpAnm m6F4;
+    /* 0x6F4 */ mDoExt_btpAnm mHeadBtpAnm;
     /* 0x708 */ u8 m708;
-                u8 pad709;
+                // u8 pad709;
                 s16 m70A;
                 s16 m70C;
-    /* 0x710 */ mDoExt_McaMorf* m710;
+    /* 0x710 */ mDoExt_McaMorf* mpWingMorf;
                 s8 m_wngL1_jnt_num;
                 s8 m_wngR1_jnt_num;
                 s8 m_wngL3_jnt_num;
                 s8 m_wngR3_jnt_num;
     /* 0x714 */ u8 m718[0x71C - 0x718];
-    /* 0x71C */ mDoExt_McaMorf* m71C;
+    /* 0x71C */ mDoExt_McaMorf* mpArmMorf;
                 s8 m_armL1_jnt_num;
                 s8 m_armR1_jnt_num;
                 s8 m_armL2_jnt_num;
                 s8 m_armR2_jnt_num;
                 s8 m_hnd_R_jnt_num;
-                ActionFunc m728;
+                ActionFunc mCurrActionFunc;
     /* 0x734 */ Mtx mLeftArmMtx;
     /* 0x764 */ Mtx mRightArmMtx;
     /* 0x794 */ dNpc_PathRun_c mPathRun;
@@ -302,9 +299,9 @@ public:
     /* 0x880 */ u8 m880;
     /* 0x881 */ u8 m881;
     /* 0x882 */ u8 m882;
-                bool m883;
+                bool mbManzai;
     /* 0x884 */ u8 m884;
-                bool m885;
+                bool mbHasArms;
                 bool m886;
     /* 0x887 */ u8 m887;
     /* 0x888 */ u8 m888;
@@ -319,7 +316,7 @@ public:
     /* 0x894 */ u8 m894;
     /* 0x895 */ u8 m895;
     /* 0x896 */ bool m896;
-    /* 0x897 */ bool m897;
+    /* 0x897 */ bool mbInDemo;
     /* 0x898 */ cXyz m898;
     /* 0x8A4 */ cXyz m8A4;
     /* 0x8B0 */ cXyz m8B0;
@@ -345,10 +342,10 @@ public:
     /* 0x8F7 */ u8 m8F7;
     /* 0x8F8 */ u8 m8F8;
     /* 0x8F9 */ s8 m8F9;
-    /* 0x8FA */ s8 m8FA;
+    /* 0x8FA */ s8 mBckResIndex;
     /* 0x8FB */ u8 m8FB[0x8FD - 0x8FB];
     /* 0x8FD */ s8 m8FD;
-    /* 0x8FE */ s8 m8FE;
+    /* 0x8FE */ s8 mStatus;
     /* 0x8FF */ s8 m8FF;
 
     /* 0x900 */ s8 m900;
@@ -364,15 +361,15 @@ STATIC_ASSERT(sizeof(daNpc_Bm1_c) == DEMO_SELECT(0x90C,0x908));
 
 
 struct hio_prm_c{
-    s16 m0;
-    s16 m2;
-    s16 m4;
-    s16 m6;
-    s16 m8;
-    s16 mA;
-    s16 mC;
-    s16 mE;
-    s16 m10;
+    s16 mMaxHeadX;
+    s16 mMaxHeadY;
+    s16 mMinHeadX;
+    s16 mMinHeadY;
+    s16 mMaxBackboneX;
+    s16 mMaxBackboneY;
+    s16 mMinBackboneX;
+    s16 mMinBackboneY;
+    s16 mMaxTurnStep;
     s16 m12;
     f32 mAttPosOffsetY;
     u8 m18;
