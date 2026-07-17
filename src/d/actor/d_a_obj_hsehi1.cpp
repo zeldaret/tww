@@ -329,18 +329,47 @@ int daObj_hsh_c::deleteAction(void*) {
 
 /* 00001278-0000135C       .text eventOrder__11daObj_hsh_cFv */
 void daObj_hsh_c::eventOrder() {
-    /* Nonmatching */
+    if (!(mFlags & 1)) {
+        s8 state = mEventState;
+        if (state == 4 || state == 3) {
+            eventInfo.onCondition(dEvtCnd_CANTALK_e);
+            if (mEventState == 4) {
+                fopAcM_orderSpeakEvent(this);
+            }
+        } else if (state == 5) {
+            eventInfo.onCondition(dEvtCnd_CANTALKITEM_e);
+            eventInfo.onCondition(dEvtCnd_CANTALK_e);
+            if (argument == 0) {
+                eventInfo.setEventName("hsehi1_talk");
+            }
+        } else if (state != -1 && state < 2) {
+            mEventCutIdx = state;
+            fopAcM_orderOtherEventId(this, mEventIdx[mEventCutIdx], 0xFF, 0xFFFF, 0, 1);
+        }
+    }
 }
 
 /* 0000135C-0000140C       .text checkOrder__11daObj_hsh_cFv */
 void daObj_hsh_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.getCommand() == dEvtCmd_INTALK_e && (mEventState == 4 || mEventState == 3 || mEventState == 5)) {
+        mEventState = -1;
+        if (!dComIfGp_event_chkTalkXY()) {
+            setAction(&daObj_hsh_c::talkAction, NULL);
+        }
+    }
 }
 
 /* 0000140C-00001478       .text checkCommandTalk__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::checkCommandTalk() {
-    /* Nonmatching */
-    return 0;
+    if (eventInfo.getCommand() == dEvtCmd_INTALK_e) {
+        if (!dComIfGp_event_chkTalkXY()) {
+            return TRUE;
+        }
+        if (mEventState == 5) {
+            mEventState = -1;
+        }
+    }
+    return FALSE;
 }
 
 /* 00001478-000015E0       .text chkAttention__11daObj_hsh_cF4cXyzs */
@@ -357,7 +386,9 @@ BOOL daObj_hsh_c::eventProc() {
 
 /* 00001784-000017B0       .text eventEnd__11daObj_hsh_cFv */
 void daObj_hsh_c::eventEnd() {
-    /* Nonmatching */
+    dComIfGp_event_reset();
+    mFlags &= ~1;
+    mEventCutIdx = -1;
 }
 
 /* 000017B0-000017B4       .text initialDefault__11daObj_hsh_cFi */
