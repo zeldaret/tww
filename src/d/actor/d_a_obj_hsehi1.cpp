@@ -429,9 +429,70 @@ BOOL daObj_hsh_c::chkAttention(cXyz, short) {
 }
 
 /* 000015E0-00001784       .text eventProc__11daObj_hsh_cFv */
+static char* cut_name_tbl[] = {
+    "WAIT",
+    "Disp",
+    "MsgSet",
+    "Talk",
+    "Tact",
+    "Judge",
+    "Appear",
+    "Delete",
+};
+
+static daObj_hsh_c::EventActionInitFunc event_init_tbl[] = {
+    &daObj_hsh_c::initialDefault,
+    &daObj_hsh_c::initialLinkDispEvent,
+    &daObj_hsh_c::initialMsgSetEvent,
+    &daObj_hsh_c::initialDefault,
+    &daObj_hsh_c::initialDefault,
+    &daObj_hsh_c::initialJudgeEvent,
+    &daObj_hsh_c::initialAppearEvent,
+    &daObj_hsh_c::initialDeleteEvent,
+};
+
+static daObj_hsh_c::EventActionFunc event_action_tbl[] = {
+    &daObj_hsh_c::actionDefault,
+    &daObj_hsh_c::actionDefault,
+    &daObj_hsh_c::actionMsgSetEvent,
+    &daObj_hsh_c::actionMessageEvent,
+    &daObj_hsh_c::actionTactEvent,
+    &daObj_hsh_c::actionDefault,
+    &daObj_hsh_c::actionAppearEvent,
+    &daObj_hsh_c::actionDeleteEvent,
+};
+
 BOOL daObj_hsh_c::eventProc() {
-    /* Nonmatching */
-    return 0;
+    if (eventInfo.getCommand() == dEvtCmd_INDEMO_e && mEventState != -1) {
+        mFlags |= 1;
+        mEventState = -1;
+    }
+    int staffId = dComIfGp_evmng_getMyStaffId("Hsh");
+    if (dComIfGp_event_runCheck() && !checkCommandTalk()) {
+        if (staffId != -1) {
+            int actIdx = dComIfGp_evmng_getMyActIdx(staffId, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
+            if (actIdx == -1) {
+                dComIfGp_evmng_cutEnd(staffId);
+            } else {
+                if (dComIfGp_evmng_getIsAddvance(staffId)) {
+                    (this->*event_init_tbl[actIdx])(staffId);
+                }
+                if ((this->*event_action_tbl[actIdx])(staffId)) {
+                    dComIfGp_evmng_cutEnd(staffId);
+                }
+            }
+        }
+        if (mFlags & 1) {
+            if (dComIfGp_evmng_endCheck(mEventIdx[mEventCutIdx])) {
+                eventEnd();
+            }
+            return TRUE;
+        }
+        if (staffId != -1) {
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 00001784-000017B0       .text eventEnd__11daObj_hsh_cFv */
@@ -463,12 +524,12 @@ void daObj_hsh_c::initialMsgSetEvent(int) {
 }
 
 /* 000019C0-000019E0       .text actionMsgSetEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::actionMsgSetEvent(int) {
+BOOL daObj_hsh_c::actionMsgSetEvent(int) {
     talk_init();
 }
 
 /* 000019E0-00001A40       .text actionMessageEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::actionMessageEvent(int i_staffIdx) {
+BOOL daObj_hsh_c::actionMessageEvent(int i_staffIdx) {
     int* p = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "MsgNo");
     int msgNo = 0;
     if (p != NULL) {
@@ -478,8 +539,16 @@ void daObj_hsh_c::actionMessageEvent(int i_staffIdx) {
 }
 
 /* 00001A40-00001ADC       .text actionTactEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::actionTactEvent(int) {
-    /* Nonmatching */
+BOOL daObj_hsh_c::actionTactEvent(int i_staffIdx) {
+    int* p = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "MsgNo");
+    s32 msgNo = 0;
+    if (p != NULL) {
+        msgNo = *p;
+    }
+    if (daPy_getPlayerActorClass()->getTactMusic() == msgNo) {
+        mFlags |= 4;
+    }
+    return talk(1);
 }
 
 /* 00001ADC-00001B3C       .text initialJudgeEvent__11daObj_hsh_cFi */

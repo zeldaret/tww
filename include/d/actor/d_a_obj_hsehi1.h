@@ -27,6 +27,9 @@ public:
 
 class daObj_hsh_c : public fopAc_ac_c {
 public:
+    typedef void (daObj_hsh_c::*EventActionInitFunc)(int);
+    typedef BOOL (daObj_hsh_c::*EventActionFunc)(int);
+
     ~daObj_hsh_c();
 
     void isEventAccept() {}
@@ -70,9 +73,9 @@ public:
     BOOL actionDefault(int);
     void initialLinkDispEvent(int);
     void initialMsgSetEvent(int);
-    void actionMsgSetEvent(int);
-    void actionMessageEvent(int);
-    void actionTactEvent(int);
+    BOOL actionMsgSetEvent(int);
+    BOOL actionMessageEvent(int);
+    BOOL actionTactEvent(int);
     void initialJudgeEvent(int);
     void initialAppearEvent(int);
     BOOL actionAppearEvent(int);
