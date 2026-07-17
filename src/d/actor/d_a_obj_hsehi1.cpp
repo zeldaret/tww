@@ -598,13 +598,14 @@ BOOL daObj_hsh_c::execute() {
 
 /* 00002098-00002158       .text draw__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::draw() {
-    if (!(mFlags & 8)) {
-        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
-        g_env_light.setLightTevColorType(mpModel, &tevStr);
-        mDoExt_modelUpdate(mpModel);
-        cXyz pos = current.pos;
-        mShadowKey = dComIfGd_setRealShadow2(mShadowKey, 1, mpModel, &pos, 800.0f, mObjAcch.GetGroundH(), &tevStr);
+    if (mFlags & 8) {
+        return TRUE;
     }
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdate(mpModel);
+    cXyz pos = current.pos;
+    mShadowKey = dComIfGd_setRealShadow2(mShadowKey, 1, mpModel, &pos, 800.0f, mObjAcch.GetGroundH(), &tevStr);
     return TRUE;
 }
 
