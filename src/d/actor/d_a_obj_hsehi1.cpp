@@ -77,11 +77,11 @@ s16 daObj_hsh_c::XyEventCB(int) {
 }
 
 /* 00000390-000003F4       .text particle_set__11daObj_hsh_cFUs */
-void daObj_hsh_c::particle_set(unsigned short i_id) {
+void daObj_hsh_c::particle_set(u16 i_id) {
     dComIfGp_particle_set(i_id, &current.pos, &current.angle);
 }
 
-void daObj_hsh_c::particle_set(JPABaseEmitter** ppEmitter, unsigned short i_id) {
+void daObj_hsh_c::particle_set(JPABaseEmitter** ppEmitter, u16 i_id) {
     if (*ppEmitter == NULL) {
         *ppEmitter = dComIfGp_particle_set(i_id, &current.pos, &current.angle);
         if (*ppEmitter != NULL) {
@@ -523,12 +523,10 @@ void daObj_hsh_c::eventEnd() {
 
 /* 000017B0-000017B4       .text initialDefault__11daObj_hsh_cFi */
 void daObj_hsh_c::initialDefault(int) {
-    /* Nonmatching */
 }
 
 /* 000017B4-000017BC       .text actionDefault__11daObj_hsh_cFi */
 BOOL daObj_hsh_c::actionDefault(int) {
-    /* Nonmatching */
     return 1;
 }
 
@@ -683,8 +681,10 @@ BOOL daObj_hsh_c::talk(int i_param) {
                 l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
                 fopMsgM_messageSendOn();
                 if (mMsgId == 0x5B3) {
-                    u8 roomNo = *(volatile u8*)&current.roomNo;
-                    dComIfGs_onSwitch(mSwitchNo, (s8)roomNo);
+                    // Note: the volatile read forces the compiler to load the room number
+                    // early into a scratch register, matching the original code.
+                    u8 room_no = *(volatile u8*)&current.roomNo;
+                    dComIfGs_onSwitch(mSwitchNo, (s8)room_no);
                 }
             }
         } else {
@@ -713,9 +713,9 @@ u32 daObj_hsh_c::getMsg() {
 }
 
 /* 00001F38-00001F78       .text next_msgStatus__11daObj_hsh_cFPUl */
-u16 daObj_hsh_c::next_msgStatus(unsigned long* p) {
+u16 daObj_hsh_c::next_msgStatus(unsigned long* currMsgNo) {
     u16 status = 0xF;
-    u32 v = *p;
+    u32 v = *currMsgNo;
     if (v == 0 || v == 0xEF3 || v == mMsgNo) {
         status = 0x10;
     } else if (v == 0x1901) {

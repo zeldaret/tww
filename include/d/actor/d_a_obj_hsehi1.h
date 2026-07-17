@@ -45,8 +45,8 @@ public:
 
     s16 XyCheckCB(int);
     s16 XyEventCB(int);
-    void particle_set(unsigned short);
-    void particle_set(JPABaseEmitter**, unsigned short);
+    void particle_set(u16);
+    void particle_set(JPABaseEmitter**, u16);
     void emitterDelete(JPABaseEmitter**);
     void setAttention(bool);
     void onOffDraw();
@@ -66,7 +66,7 @@ public:
     void eventOrder();
     void checkOrder();
     BOOL checkCommandTalk();
-    BOOL chkAttention(cXyz, short);
+    BOOL chkAttention(cXyz, s16);
     BOOL eventProc();
     void eventEnd();
     void initialDefault(int);
