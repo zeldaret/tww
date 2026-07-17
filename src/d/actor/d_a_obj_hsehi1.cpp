@@ -585,7 +585,7 @@ BOOL daObj_hsh_c::actionMsgSetEvent(int) {
 
 /* 000019E0-00001A40       .text actionMessageEvent__11daObj_hsh_cFi */
 BOOL daObj_hsh_c::actionMessageEvent(int i_staffIdx) {
-    int* p = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "MsgNo");
+    int* p = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "prm0");
     int msgNo = 0;
     if (p != NULL) {
         msgNo = *p;
