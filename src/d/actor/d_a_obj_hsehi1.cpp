@@ -189,8 +189,41 @@ cPhs_State daObj_hsh_c::create() {
 
 /* 00000C84-00000E60       .text init__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::init() {
-    /* Nonmatching */
-    return 0;
+    static char* event_name_tbl[2] = {
+        "hsehi1_tact",
+        "hsehi1_talk",
+    };
+
+    mSwitchNo = fopAcM_GetParam(this) & 0xFF;
+    mMsgNo = (fopAcM_GetParam(this) >> 8) & 0xFFFF;
+    mAttentionOn = 0;
+    mEventState = -1;
+    mEventCutIdx = -1;
+
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
+    setBaseMtx();
+    dComIfG_Bgsp()->Regist(mpBgw, this);
+    mpBgw->Move();
+
+    if (argument == 0) {
+        if (dComIfGs_isEventBit(0x2B10)) {
+            setAction(&daObj_hsh_c::waitAction, NULL);
+        } else {
+            onOffDraw();
+            setAction(&daObj_hsh_c::offAction, NULL);
+        }
+    } else {
+        setAction(&daObj_hsh_c::waitAction, NULL);
+    }
+
+    for (int i = 0; i < 2; i++) {
+        mEventIdx[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i], 0xFF);
+    }
+
+    eventInfo.setXyCheckCB(daObj_hsh_XyCheckCB);
+    eventInfo.setXyEventCB(daObj_hsh_XyEventCB);
+    return TRUE;
 }
 
 /* 00000E60-00000EF4       .text action__11daObj_hsh_cFPv */
