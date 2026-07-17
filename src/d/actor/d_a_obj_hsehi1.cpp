@@ -203,7 +203,7 @@ cPhs_State daObj_hsh_c::create() {
 
     cPhs_State phase;
     if (argument == 0 && dComIfGs_isEventBit(0x2510)) {
-        phase = cPhs_ERROR_e;
+        return cPhs_ERROR_e;
     } else {
         if (argument == 0) {
             phase = dComIfG_resLoad(&mPhs, "Hsehi1");
@@ -213,7 +213,7 @@ cPhs_State daObj_hsh_c::create() {
         if (phase == cPhs_COMPLEATE_e) {
             if (!fopAcM_entrySolidHeap(this, checkCreateHeap, a_heap_size_tbl)) {
                 mpBgw = NULL;
-                phase = cPhs_ERROR_e;
+                return cPhs_ERROR_e;
             } else {
                 fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
                 if (l_HIO.mNo < 0) {
