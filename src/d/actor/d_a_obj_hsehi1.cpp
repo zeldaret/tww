@@ -55,7 +55,7 @@ static s16 daObj_hsh_XyCheckCB(void* i_this, int i_btn) {
 
 /* 000002C4-000002E8       .text XyCheckCB__11daObj_hsh_cFi */
 s16 daObj_hsh_c::XyCheckCB(int i_btn) {
-    return dComIfGp_getSelectItem(i_btn) == dItemNo_WIND_WAKER_e;
+    return dComIfGp_getSelectItem(i_btn) == dItemNo_WIND_WAKER_e ? TRUE : FALSE;
 }
 
 /* 000002E8-00000308       .text daObj_hsh_XyEventCB__FPvi */
@@ -425,24 +425,19 @@ BOOL daObj_hsh_c::checkCommandTalk() {
 BOOL daObj_hsh_c::chkAttention(cXyz i_pos, s16 i_angle) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     f32 dist = l_HIO.mAttentionDist;
-    s16 angleRange = l_HIO.mAttentionAngle;
-    f32 dx = player->current.pos.x - i_pos.x;
-    f32 dz = player->current.pos.z - i_pos.z;
-    f32 distToPlayer = dx * dx + dz * dz;
-    if (distToPlayer > 0.0f) {
-        distToPlayer = std::sqrtf(distToPlayer);
-    }
-    s16 angleToPlayer = cM_atan2s(dx, dz);
-    f32 dy = player->current.pos.y - i_pos.y;
-    if (mAttentionOn != 0) {
+    int angleRange = l_HIO.mAttentionAngle;
+    cXyz delta;
+    delta.x = player->current.pos.x - i_pos.x;
+    delta.z = player->current.pos.z - i_pos.z;
+    f32 distToPlayer = std::sqrtf(delta.x * delta.x + delta.z * delta.z);
+    s16 angleToPlayer = cM_atan2s(delta.x, delta.z);
+    delta.y = player->current.pos.y - i_pos.y;
+    if (mAttentionOn) {
         dist += 40.0f;
-        angleRange += 0x71C;
+        angleRange += cAngle::d2s(10.0f);
     }
-    BOOL ret = FALSE;
-    if (angleRange > abs(angleToPlayer - i_angle) && dist > distToPlayer) {
-        ret = TRUE;
-    }
-    return ret;
+    angleToPlayer -= i_angle;
+    return angleRange > abs(angleToPlayer) && dist > distToPlayer;
 }
 
 /* 000015E0-00001784       .text eventProc__11daObj_hsh_cFv */
@@ -594,7 +589,7 @@ BOOL daObj_hsh_c::actionMessageEvent(int i_staffIdx) {
 
 /* 00001A40-00001ADC       .text actionTactEvent__11daObj_hsh_cFi */
 BOOL daObj_hsh_c::actionTactEvent(int i_staffIdx) {
-    int* p = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "MsgNo");
+    int* p = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "prm0");
     s32 msgNo = 0;
     if (p != NULL) {
         msgNo = *p;
