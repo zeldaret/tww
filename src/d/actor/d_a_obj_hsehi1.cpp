@@ -533,17 +533,17 @@ BOOL daObj_hsh_c::actionDefault(int) {
 
 /* 000017BC-00001938       .text initialLinkDispEvent__11daObj_hsh_cFi */
 void daObj_hsh_c::initialLinkDispEvent(int i_staffIdx) {
-    char buf[40];
-    bool isPlayer = false;
+    char buf[24];
     char* target = dComIfGp_evmng_getMyStringP(i_staffIdx, "target");
+    int isPlayer = 0;
     if (target != NULL) {
         strcpy(buf, target);
         if (strcmp(buf, "@PLAYER") == 0) {
-            isPlayer = true;
+            isPlayer = 1;
         }
     }
     char* disp = dComIfGp_evmng_getMyStringP(i_staffIdx, "disp");
-    if (isPlayer) {
+    if (isPlayer == 1) {
         if (disp != NULL) {
             strcpy(buf, disp);
             daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
@@ -681,7 +681,8 @@ BOOL daObj_hsh_c::talk(int i_param) {
                 l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
                 fopMsgM_messageSendOn();
                 if (mMsgId == 0x5B3) {
-                    dComIfGs_onSwitch(mSwitchNo, current.roomNo);
+                    s8 roomNo = current.roomNo;
+                    dComIfGs_onSwitch(mSwitchNo, roomNo);
                 }
             }
         } else {
