@@ -62,7 +62,7 @@ class daObjHtetu1_c : public fopAc_ac_c {
 public:
     inline BOOL check_sw();
 
-    static int solidHeapCB(fopAc_ac_c*);
+    static BOOL solidHeapCB(fopAc_ac_c*);
     BOOL create_heap();
     cPhs_State _create();
     bool _delete();

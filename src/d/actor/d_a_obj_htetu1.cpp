@@ -37,7 +37,7 @@ void daObjHtetu1Splash_c::create_s(u16 i_particleID, cXyz* i_pos, csXyz* i_angle
 }
 
 /* 00000178-00000198       .text solidHeapCB__13daObjHtetu1_cFP10fopAc_ac_c */
-int daObjHtetu1_c::solidHeapCB(fopAc_ac_c* i_this) {
+BOOL daObjHtetu1_c::solidHeapCB(fopAc_ac_c* i_this) {
     return static_cast<daObjHtetu1_c*>(i_this)->create_heap();
 }
 
