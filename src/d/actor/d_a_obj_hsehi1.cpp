@@ -22,13 +22,18 @@ static fpc_ProcID l_msgId;
 static msg_class* l_msg;
 
 /* 000000EC-00000130       .text __ct__15daObj_hsh_HIO_cFv */
-daObj_hsh_HIO_c::daObj_hsh_HIO_c()
-    : mNo(-1)
-    , mAttentionDist(250.0f)
-    , mAttentionOffsetY0(0.0f)
-    , mAttentionOffsetY1(0.0f)
-    , mAttentionAngle(0x4000)
-    , m16(0) {}
+daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
+    mNo = -1;
+    struct init_prm {
+        f32 dist;
+        f32 off0;
+        f32 off1;
+        s16 angle;
+        s8 val;
+    };
+    static const init_prm init_data = {250.0f, 0.0f, 0.0f, 0x4000, 0};
+    *(init_prm*)&mAttentionDist = init_data;
+}
 
 /* 00000130-000002A4       .text __dt__11daObj_hsh_cFv */
 daObj_hsh_c::~daObj_hsh_c() {
