@@ -446,7 +446,7 @@ BOOL daSTBox_c::actWait(int) {
         position.y += 2500.0f;
         position.y = dBgS_GetWaterHeight(position);
         if (current.pos.y >position.y - 10.0f) {
-            dComIfGp_particle_set(0x35c, &position, 
+            dComIfGp_particle_setShipTail(0x35c, &position, 
                 NULL, &scale, 0xff, 
                 &mRippleCallBack, -1, 
                 NULL, NULL, NULL);
