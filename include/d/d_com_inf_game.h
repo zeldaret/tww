@@ -2989,8 +2989,8 @@ inline u8 dComIfGp_getAStatusForce() {
 }
 
 // B Button
-inline void dComIfGp_setAStatusForce(u8 value) {
-    g_dComIfG_gameInfo.play.setAStatusForce(value);
+inline void dComIfGp_setAStatusForce(u8 status) {
+    g_dComIfG_gameInfo.play.setAStatusForce(status);
 }
 
 // A Button
@@ -2999,8 +2999,8 @@ inline u8 dComIfGp_getDoStatusForce() {
 }
 
 // A Button
-inline void dComIfGp_setDoStatusForce(u8 value) {
-    g_dComIfG_gameInfo.play.setDoStatusForce(value);
+inline void dComIfGp_setDoStatusForce(u8 status) {
+    g_dComIfG_gameInfo.play.setDoStatusForce(status);
 }
 
 inline u8 dComIfGp_getPictureStatus() {

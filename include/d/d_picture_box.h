@@ -14,29 +14,34 @@ class J3DModel;
 class JKRExpHeap;
 class J2DScreen;
 class J2DTextBox;
+class mDoDvdThd_toMainRam_c;
 struct fopMsgM_pane_class;
 struct fopMsgM_pane_alpha_class;
 
-struct sPhotoDat {
-    /* 0x00 */ char* field_0x00;
-    /* 0x04 */ char* field_0x04;
-    /* 0x08 */ char* field_0x08;
-    /* 0x0C */ char* field_0x0C;
-    /* 0x10 */ char* field_0x10;
-    /* 0x14 */ char* field_0x14;
-    /* 0x18 */ char* field_0x18;
+enum dJlePbExecState {
+    PB_EXEC_CAMERA_OPEN_e = 0x0,
+    PB_EXEC_CAMERA_MOVE_e = 0x1,
+    PB_EXEC_BROWSE_OPEN_e = 0x2,
+    PB_EXEC_BROWSE_MOVE_e = 0x3,
+    PB_EXEC_GET_OPEN_e = 0x4,
+    PB_EXEC_GET_MOVE_e = 0x5,
+    PB_EXEC_CLOSE_e = 0x6,
+    PB_EXEC_CLOSED_e = 0x7,
 };
 
-struct PhotoOwnerBase {
-    /* 0x00 */ u8 field_0x00[0x0C];
-    /* 0x0C */ u8 field_0x0C;
-    /* 0x0D */ u8 field_0x0D[0x10 - 0x0D];
-}; // Size: 0x10
+enum dJlePbModeSubState {
+    PB_SUB_IDLE_e = 0x0,
+    PB_SUB_CONFIRM_e = 0x1,
+    PB_SUB_SHIFT_1_TO_0_e = 0x2,
+    PB_SUB_SHIFT_0_TO_2_e = 0x3,
+    PB_SUB_SHIFT_0_TO_1_e = 0x4,
+    PB_SUB_SHIFT_2_TO_0_e = 0x5,
+};
 
-struct PhotoOwner : PhotoOwnerBase {
-    virtual ~PhotoOwner();
-    /* 0x14 */ u8 field_0x14[8];
-    /* 0x1C */ ResTIMG* field_0x1C;
+enum dJlePbViewMode {
+    PB_VIEW_CAMERA_e = 0x0,
+    PB_VIEW_BROWSE_e = 0x1,
+    PB_VIEW_GET_e = 0x2,
 };
 
 void dPb_erasePicture();
@@ -110,14 +115,12 @@ public:
     /* 0x588 */ fopMsgM_pane_class pane_ylef;
     /* 0x5C0 */ fopMsgM_pane_class pane_icn[3];
     /* 0x668 */ fopMsgM_pane_class pane_emp[3];
-    /* 0x710 */ fopMsgM_pane_class pane_ct1;
-    /* 0x748 */ fopMsgM_pane_class pane_ct2;
+    /* 0x710 */ fopMsgM_pane_class pane_ct[2];
     /* 0x780 */ fopMsgM_pane_class pane_sp[8];
     /* 0x940 */ fopMsgM_pane_class pane_no[3];
     /* 0x9E8 */ fopMsgM_pane_class pane_nob[3];
     /* 0xA90 */ fopMsgM_pane_class pane_nok[3];
-    /* 0xB38 */ fopMsgM_pane_class pane_b1;
-    /* 0xB70 */ fopMsgM_pane_class pane_b2;
+    /* 0xB38 */ fopMsgM_pane_class pane_b[2];
     /* 0xBA8 */ fopMsgM_pane_class pane_wnum;
     /* 0xBE0 */ fopMsgM_pane_class pane_wnuk;
     /* 0xC18 */ fopMsgM_pane_class pane_wpba;
@@ -131,52 +134,49 @@ public:
     /* 0xDD8 */ fopMsgM_pane_class pane_rzom;
     /* 0xE10 */ fopMsgM_pane_class pane_shut;
     /* 0xE48 */ fopMsgM_pane_class pane_fd00;
-    /* 0xE80 */ fopMsgM_pane_class pane_wp04;
-    /* 0xEB8 */ fopMsgM_pane_class pane_wp01;
-    /* 0xEF0 */ fopMsgM_pane_class pane_wp02;
-    /* 0xF28 */ fopMsgM_pane_class pane_wp03;
+    /* 0xE80 */ fopMsgM_pane_class pane_wp[4];
     /* 0xF60 */ fopMsgM_pane_alpha_class pane_tx[4];
-    /* 0xF80 */ PhotoOwner* mF80;
-    /* 0xF84 */ J2DPicture* mF84;
-    /* 0xF88 */ J2DPicture* mF88;
-    /* 0xF8C */ J2DPicture* mF8C;
+    /* 0xF80 */ mDoDvdThd_toMainRam_c* mImportedPhotoLoadReq; // Async request for imported gallery photo data.
+    /* 0xF84 */ J2DPicture* mMsgIconFontMainPic; // Message icon sheet used by fopMsgM_outFontDraw.
+    /* 0xF88 */ J2DPicture* mMsgIconFontSubPic; // Secondary icon sheet used by fopMsgM_outFontDraw.
+    /* 0xF8C */ J2DPicture* mMsgSelectArrowPic; // Select-arrow sprite for two-choice message prompts.
     /* 0xF90 */ JUTFont* font0;
     /* 0xF94 */ JUTFont* font1;
     /* 0xF98 */ STControl* stick;
     /* 0xF9C */ u8 mF9C[0xFA0 - 0xF9C];
     /* 0xFA0 */ mesg_header* head_p;
-    /* 0xFA4 */ JMSMesgEntry_c mFA4;
-    /* 0xFBC */ fopMsgM_msgDataProc_c mFBC;
+    /* 0xFA4 */ JMSMesgEntry_c mMsgEntry; // Current parsed message entry metadata.
+    /* 0xFBC */ fopMsgM_msgDataProc_c mMsgDataProc; // Message parser/layout state and choice helper.
     /* 0x125C */ JUtility::TColor icn_white;
     /* 0x1260 */ JUtility::TColor icn_black;
     /* 0x1264 */ JUtility::TColor emp_white;
     /* 0x1268 */ JUtility::TColor emp_black;
-    /* 0x126C */ ResTIMG* m126C[4];
+    /* 0x126C */ ResTIMG* mPhotoBuffer[4]; // Three saved slots + one import/get temporary slot.
     /* 0x127C */ f32 mZoomScale;
     /* 0x1280 */ f32 mShutterLineX1[12];
     /* 0x12B0 */ f32 mShutterLineY1[12];
     /* 0x12E0 */ f32 mShutterLineX2[12];
     /* 0x1310 */ f32 mShutterLineY2[12];
-    /* 0x1340 */ int m1340;
-    /* 0x1344 */ int m1344;
-    /* 0x1348 */ int m1348;
-    /* 0x134C */ int m134C;
-    /* 0x1350 */ ResTIMG* m1350[4];
-    /* 0x1360 */ s16 m1360;
+    /* 0x1340 */ int mChoiceCursorX0; // X anchor for first message choice marker.
+    /* 0x1344 */ int mChoiceCursorX1; // X anchor for second message choice marker.
+    /* 0x1348 */ int mChoiceCursorY; // Y anchor for message choice marker.
+    /* 0x134C */ int mChoiceCursorYAlt; // Alternate Y anchor parsed from second choice token.
+    /* 0x1350 */ ResTIMG* mMsgTextBuffer[4]; // Output text buffers for the four message panes.
+    /* 0x1360 */ s16 mFadeTimer; // Open/close fade timer.
     /* 0x1362 */ s16 mShutterCounter;
-    /* 0x1364 */ s16 m1364;
-    /* 0x1366 */ s16 m1366;
-    /* 0x1368 */ u8 m1368[3];
-    /* 0x136B */ u8 m136B;
-    /* 0x136C */ u8 m136C;
-    /* 0x136D */ u8 m136D;
-    /* 0x136E */ u8 m136E;
-    /* 0x136F */ u8 m136F;
-    /* 0x1370 */ u8 m1370;
-    /* 0x1371 */ u8 m1371[3];
-    /* 0x1374 */ u8 m1374;
-    /* 0x1375 */ u8 m1375;
-    /* 0x1376 */ u8 m1376;
+    /* 0x1364 */ s16 mMsgLineCount; // Cached message line count for vertical alignment.
+    /* 0x1366 */ s16 mMsgIconDrawState; // Scratch state used by icon font setup/draw helpers.
+    /* 0x1368 */ u8 mPictureSlotSortMap[3]; // Mapping from sorted slot order to source slot index.
+    /* 0x136B */ u8 mExecState; // Top-level state machine used by execute dispatch (open/move/close/etc.).
+    /* 0x136C */ u8 mModeSubState; // Per-mode substate (camera capture/select, browse erase/slide animation states).
+    /* 0x136D */ u8 mViewMode; // Selects camera vs browse vs get-photo mode paths.
+    /* 0x136E */ u8 mSelectedPhotoSlot; // Active browse slot index.
+    /* 0x136F */ u8 mSelectedChoiceIndex; // Active index in two-choice message prompts.
+    /* 0x1370 */ u8 mModeSwapActive; // Non-zero while shutter transition between camera/browse is running.
+    /* 0x1371 */ u8 mPhotoSlotOccupied[3]; // Per-slot occupancy flags for saved photos.
+    /* 0x1374 */ u8 mPhotoDeletedFlag; // Set when a photo was deleted during this session.
+    /* 0x1375 */ u8 mChoiceArrowIconIdx; // Icon token index currently used for select-arrow placement.
+    /* 0x1376 */ u8 mCaptureFormat;
 };
 
 struct dummy_struct {
