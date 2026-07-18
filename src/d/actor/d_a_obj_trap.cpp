@@ -88,7 +88,10 @@ void daObjTrap_c::set_co_pos() {
 
 /* 00000F70-00000FF4       .text get_ground__11daObjTrap_cFv */
 void daObjTrap_c::get_ground() {
-    /* Nonmatching */
+    cXyz pos(current.pos.x, current.pos.y + 50.0f, current.pos.z);
+    mGndChk.SetPos(&pos);
+    mGndChk.SetActorPid(fopAcM_GetID(this));
+    mGroundY = dComIfG_Bgsp()->GroundCross(&mGndChk);
 }
 
 /* 00000FF4-0000112C       .text circle_search__11daObjTrap_cFv */

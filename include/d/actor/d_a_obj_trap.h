@@ -46,7 +46,7 @@ public:
     /* 0x2B0 */ dCcD_Stts mCcStts;
     /* 0x2EC */ dCcD_Cyl mCcCyl;
     /* 0x41C */ dBgS_ObjGndChk mGndChk;
-    /* 0x470 */ u8 mPad470[4];
+    /* 0x470 */ f32 mGroundY;
     /* 0x474 */ dPath* mpPath;
     /* 0x478 */ cXyz mPathPos;
     /* 0x484 */ u8 mPad484[0x30];
