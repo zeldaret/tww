@@ -282,7 +282,8 @@ bool dCamera_c::fixedFrameEvCamera() {
             switch (data->mask[0]) {
             case 'n': {
                 cSGlobe direction(mEye - positionOf(data->actor));
-                if (direction.U() - directionOf(data->actor) < cSAngle::_0) {
+                cSAngle side = direction.U() - directionOf(data->actor);
+                if (side < cSAngle::_0) {
                     center.x = -center.x;
                 }
                 data->center = relationalPos(data->actor, &center);
@@ -324,7 +325,8 @@ bool dCamera_c::fixedFrameEvCamera() {
             switch (data->mask[1]) {
             case 'n': {
                 cSGlobe direction(mEye - positionOf(data->actor));
-                if (direction.U() - directionOf(data->actor) < cSAngle::_0) {
+                cSAngle side = direction.U() - directionOf(data->actor);
+                if (side < cSAngle::_0) {
                     eye.x = -eye.x;
                 }
                 data->eye = relationalPos(data->actor, &eye);
