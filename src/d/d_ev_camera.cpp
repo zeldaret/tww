@@ -1071,9 +1071,11 @@ bool dCamera_c::uniformBrakeEvCamera() {
         } else if (data->rel_use_mask[2] != '-') {
             end.center = relationalPos(data->rel_actor, &data->center);
         } else {
-            end.center = data->trans_type == 2
-                ? dCamMath::xyzRotateY(data->center, directionOf(data->rel_actor))
-                : data->center;
+            if (data->trans_type == 2) {
+                end.center = dCamMath::xyzRotateY(data->center, directionOf(data->rel_actor));
+            } else {
+                end.center = data->center;
+            }
         }
         if (data->rel_use_mask[3] == 't') {
             end.eye = attentionPos(data->rel_actor) + data->eye;
@@ -1084,9 +1086,11 @@ bool dCamera_c::uniformBrakeEvCamera() {
         } else if (data->rel_use_mask[3] != '-') {
             end.eye = relationalPos(data->rel_actor, &data->eye);
         } else {
-            end.eye = data->trans_type == 2
-                ? dCamMath::xyzRotateY(data->eye, directionOf(data->rel_actor))
-                : data->eye;
+            if (data->trans_type == 2) {
+                end.eye = dCamMath::xyzRotateY(data->eye, directionOf(data->rel_actor));
+            } else {
+                end.eye = data->eye;
+            }
         }
     } else {
         start.center = data->start_center;
@@ -1123,7 +1127,7 @@ bool dCamera_c::uniformBrakeEvCamera() {
     mViewCache.mFovy += data->cushion * (fovy - mViewCache.mFovy);
     if (data->bank_present) {
         f32 bank = data->start_bank + ratio * (data->bank - data->start_bank);
-        mViewCache.mBank += (cSAngle(bank) - mViewCache.mBank) * data->cushion;
+        mViewCache.mBank += (cAngle::d2s(bank) - mViewCache.mBank) * data->cushion;
         setFlag(0x400);
     }
     mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
@@ -1310,9 +1314,11 @@ bool dCamera_c::uniformAcceleEvCamera() {
         } else if (data->rel_use_mask[2] != '-') {
             end.center = relationalPos(data->rel_actor, &data->center);
         } else {
-            end.center = data->trans_type == 2
-                ? dCamMath::xyzRotateY(data->center, directionOf(data->rel_actor))
-                : data->center;
+            if (data->trans_type == 2) {
+                end.center = dCamMath::xyzRotateY(data->center, directionOf(data->rel_actor));
+            } else {
+                end.center = data->center;
+            }
         }
         if (data->rel_use_mask[3] == 't') {
             end.eye = attentionPos(data->rel_actor) + data->eye;
@@ -1323,9 +1329,11 @@ bool dCamera_c::uniformAcceleEvCamera() {
         } else if (data->rel_use_mask[3] != '-') {
             end.eye = relationalPos(data->rel_actor, &data->eye);
         } else {
-            end.eye = data->trans_type == 2
-                ? dCamMath::xyzRotateY(data->eye, directionOf(data->rel_actor))
-                : data->eye;
+            if (data->trans_type == 2) {
+                end.eye = dCamMath::xyzRotateY(data->eye, directionOf(data->rel_actor));
+            } else {
+                end.eye = data->eye;
+            }
         }
     } else {
         start.center = data->start_center;
@@ -1362,7 +1370,7 @@ bool dCamera_c::uniformAcceleEvCamera() {
     mViewCache.mFovy += data->cushion * (fovy - mViewCache.mFovy);
     if (data->bank_present) {
         f32 bank = data->start_bank + ratio * (data->bank - data->start_bank);
-        mViewCache.mBank += (cSAngle(bank) - mViewCache.mBank) * data->cushion;
+        mViewCache.mBank += (cAngle::d2s(bank) - mViewCache.mBank) * data->cushion;
         setFlag(0x400);
     }
     mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
