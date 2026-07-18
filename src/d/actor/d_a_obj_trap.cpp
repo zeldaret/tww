@@ -166,7 +166,7 @@ void daObjTrap_c::get_ground() {
 }
 
 /* 00000FF4-0000112C       .text circle_search__11daObjTrap_cFv */
-bool daObjTrap_c::circle_search() {
+int daObjTrap_c::circle_search() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz offset = player->current.pos - current.pos;
     if (offset.absXZ() <= 400.0f && mPathDirectionSign == 1) {
