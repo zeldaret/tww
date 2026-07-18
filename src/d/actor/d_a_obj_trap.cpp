@@ -348,14 +348,17 @@ void daObjTrap_c::set_vib_mode() {
 void daObjTrap_c::vibrate() {
     f32 amplitude;
     amplitude = 288.0f;
-    shape_angle.x = amplitude * JMASSin(mVibrationTimer * 0x5555);
+    s16 angle = mVibrationTimer * 0x5555;
+    shape_angle.x = amplitude * JMASSin(angle);
 }
 
 /* 0000255C-00002678       .text bound__11daObjTrap_cFv */
 void daObjTrap_c::bound() {
     cXyz offset = mPathDirection * -0.5f;
     mPathTarget -= mVibrationPosition;
-    offset *= (f32)fabs((s16)(mVibrationFrame * cM_ssin(mBoundTimer << 14)));
+    s16 angle = mBoundTimer << 14;
+    f32 vibration_frame = mVibrationFrame;
+    offset *= std::fabsf((s16)(vibration_frame * cM_ssin(angle)));
     mPathTarget += offset;
     mVibrationPosition = offset;
     cLib_addCalc(&mVibrationFrame, 0.0f, 0.17f, 35.0f, 1.0f);
