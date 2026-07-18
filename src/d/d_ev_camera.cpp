@@ -606,7 +606,7 @@ bool dCamera_c::fixedPositionEvCamera() {
         getEvFloatData(&data->radius, "Radius", DefaultRadius);
         getEvFloatData(&data->start_radius, "StartRadius", data->radius);
         data->has_bank = getEvFloatData(&data->bank, "Bank", DefaultBank);
-        getEvStringData(data->rel_use_mask, "RelUseMask", "-");
+        getEvStringData(data->rel_use_mask, "RelUseMask", "o");
         data->has_timer = getEvIntData(&data->timer, "Timer", DefaultTimer);
         if ((data->target = getEvActor("Target", "@PLAYER")) == NULL) return true;
         data->target_id = fopAcM_GetID(data->target);
