@@ -44,6 +44,13 @@ enum dJlePbViewMode {
     PB_VIEW_GET_e = 0x2,
 };
 
+struct dPbPhotoSlotData {
+    /* 0x0000 */ u8 pad[0x1EE0 - 0x0000];
+    /* 0x1EE0 */ u32 field_0x1EE0;
+    /* 0x1EE4 */ u8 field_0x1EE4;
+    /* 0x1EE5 */ u8 field_0x1EE5;
+};
+
 void dPb_erasePicture();
 
 class dJle_Pb_c : public dDlst_base_c {
@@ -156,7 +163,7 @@ public:
     /* 0x1260 */ JUtility::TColor icn_black;
     /* 0x1264 */ JUtility::TColor emp_white;
     /* 0x1268 */ JUtility::TColor emp_black;
-    /* 0x126C */ ResTIMG* mPhotoBuffer[4]; // Three saved slots + one import/get temporary slot.
+    /* 0x126C */ dPbPhotoSlotData* mPhotoBuffer[4]; // Three saved slots + one import/get temporary slot.
     /* 0x127C */ f32 mZoomScale;
     /* 0x1280 */ f32 mShutterLineX1[12];
     /* 0x12B0 */ f32 mShutterLineY1[12];
@@ -166,7 +173,7 @@ public:
     /* 0x1344 */ int mChoiceCursorX1; // X anchor for second message choice marker.
     /* 0x1348 */ int mChoiceCursorY; // Y anchor for message choice marker.
     /* 0x134C */ int mChoiceCursorYAlt; // Alternate Y anchor parsed from second choice token.
-    /* 0x1350 */ ResTIMG* mMsgTextBuffer[4]; // Output text buffers for the four message panes.
+    /* 0x1350 */ char* mMsgTextBuffer[4]; // Output text buffers for the four message panes.
     /* 0x1360 */ s16 mFadeTimer; // Open/close fade timer.
     /* 0x1362 */ s16 mShutterCounter;
     /* 0x1364 */ s16 mMsgLineCount; // Cached message line count for vertical alignment.
@@ -184,18 +191,10 @@ public:
     /* 0x1376 */ u8 mCaptureFormat;
 };
 
-struct dummy_struct {
-    /* 0x0000 */ u8 pad[0x1EE0 - 0x0000];
-    /* 0x1EE0 */ u32 field_0x1EE0;
-    /* 0x1EE4 */ u8 field_0x1EE4;
-    /* 0x1EE5 */ u8 field_0x1EE5;
-};
-
 class sub_pb_class : public msg_class {
 public:
     /* 0x00FC */ JKRExpHeap* heap;
     /* 0x0100 */ dJle_Pb_c* dPb_c;
-    /* 0x0104 */ ResTIMG* buffer[4];
+    /* 0x0104 */ dPbPhotoSlotData* buffer[4];
 };
 #endif /* D_PICTURE_BOX_H */
-

@@ -527,7 +527,7 @@ void dJle_Pb_c::selectMode() {
 
             if ((u8)selection == 0) {
                 pictureNum = dComIfGs_getPictureNum();
-                dummy_struct* dst = (dummy_struct*)mPhotoBuffer[pictureNum];
+                dPbPhotoSlotData * dst = mPhotoBuffer[pictureNum];
 
                 dComIfGp_onPictureFlag(0);
                 dComIfGp_onPictureFlag(1);
@@ -575,13 +575,13 @@ void dJle_Pb_c::cameraMode() {
             mShutterCounter = 0;
             mModeSubState = PB_SUB_CONFIRM_e;
             if (dComIfGs_getItem(8) == dItemNo_PICTO_BOX_e) {
-                mCaptureFormat = 1;
+                mCaptureFormat = GX_TF_I8;
             }
             else {
-                mCaptureFormat = 4;
+                mCaptureFormat = GX_TF_RGB565;
             }
             mDoGph_setCaptureCaptureFormat(mCaptureFormat);
-            mDoGph_setCaptureTextureFormat(0xe);
+            mDoGph_setCaptureTextureFormat(GX_TF_CMPR);
             mDoGph_setCaptureStep(1);
             dComIfGp_setScopeMesgStatus(fopMsgStts_STOP_e);
             shutterShow();
@@ -619,7 +619,7 @@ void dJle_Pb_c::pictureDraw(unsigned char mono_color_1_alpha, int img_index) {
     Mtx44 mtx;
     GXTexObj tex_obj;
 
-    ResTIMG* img = mPhotoBuffer[img_index];
+    dPbPhotoSlotData* img = mPhotoBuffer[img_index];
     u32 index = (img_index == 3) ? 0 : img_index;
     f32 f2 = pane_no[index].mPosTopLeft.x + REG6_F(0);
     f32 f3 = pane_no[index].mPosTopLeft.y + REG6_F(1);
@@ -743,7 +743,7 @@ void dJle_Pb_c::pictureDecide() {
     }
     if (CPad_CHECK_TRIG_A(0)) {
         if ((u8)bVar2 == 0) {
-            dummy_struct* tmp = (dummy_struct*)mPhotoBuffer[(u8)mSelectedPhotoSlot];
+            dPbPhotoSlotData* tmp = mPhotoBuffer[(u8)mSelectedPhotoSlot];
             dComIfGp_setSelectPicture(mSelectedPhotoSlot);
             dComIfGp_setPictureFormat(tmp->field_0x1EE5);
             dComIfGp_setPictureStatus(1);
@@ -1567,14 +1567,14 @@ void dJle_Pb_c::messageSet(unsigned long msgNo) {
     sprintf(colorTag, "\x1b" "CC[%08x]" "\x1b" "GM[0]", color);
     sprintf(whiteTag, "\x1b" "CC[000000FF]" "\x1b" "GM[0]");
 
-    strcpy((char*)mMsgTextBuffer[0], colorTag);
-    strcpy((char*)mMsgTextBuffer[1], colorTag);
-    strcpy((char*)mMsgTextBuffer[2], whiteTag);
-    strcpy((char*)mMsgTextBuffer[3], whiteTag);
+    strcpy(mMsgTextBuffer[0], colorTag);
+    strcpy(mMsgTextBuffer[1], colorTag);
+    strcpy(mMsgTextBuffer[2], whiteTag);
+    strcpy(mMsgTextBuffer[3], whiteTag);
 
     mMsgDataProc.dataInit();
     mMsgDataProc.setBmgData((char*)text);
-    mMsgDataProc.setOutMessage((char*)mMsgTextBuffer[0], (char*)mMsgTextBuffer[1], (char*)mMsgTextBuffer[2], (char*)mMsgTextBuffer[3]);
+    mMsgDataProc.setOutMessage(mMsgTextBuffer[0], mMsgTextBuffer[1], mMsgTextBuffer[2], mMsgTextBuffer[3]);
 
     mMsgDataProc.setFont(font0);
     mMsgDataProc.setRubyFont(font1);
@@ -1754,25 +1754,25 @@ void dJle_Pb_c::_create(JKRExpHeap* i_heap) {
     int k = 0;
 
     scrn = new J2DScreen();
-    JUT_ASSERT(0x826, scrn != 0); 
+    JUT_ASSERT(0x826, scrn != NULL); 
     scrn->set("wipe_01_01.blo", dComIfGp_getCameraResArchive());
 
     scrn1 = new J2DScreen();
-    JUT_ASSERT(0x82a, scrn1 != 0);
+    JUT_ASSERT(0x82a, scrn1 != NULL);
     scrn1->set("wipe_01_02.blo", dComIfGp_getCameraResArchive());
 
     scrn2 = new J2DScreen();
-    JUT_ASSERT(0x82e, scrn2 != 0);
+    JUT_ASSERT(0x82e, scrn2 != NULL);
     scrn2->set("hukidashi_08.blo", dComIfGp_getMsgArchive());
 
     font0 = mDoExt_getMesgFont();
-    JUT_ASSERT(0x832, font0 != 0);
+    JUT_ASSERT(0x832, font0 != NULL);
 
     font1 = mDoExt_getRubyFont();
-    JUT_ASSERT(0x836, font1 != 0);
+    JUT_ASSERT(0x836, font1 != NULL);
 
     stick = new STControl(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x2000);
-    JUT_ASSERT(0x83b, stick != 0);
+    JUT_ASSERT(0x83b, stick != NULL);
 
     mMsgIconFontMainPic = new J2DPicture("font_07_02.bti");
     mMsgIconFontSubPic = new J2DPicture("font_07_02.bti");
@@ -1823,7 +1823,7 @@ void dJle_Pb_c::_create(JKRExpHeap* i_heap) {
     mSelectedPhotoSlot = 0;
     head_p = NULL;
     mPhotoDeletedFlag = 0;
-    mCaptureFormat = 1;
+    mCaptureFormat = GX_TF_I8;
     mMsgLineCount = 0;
     mChoiceCursorYAlt = 0;
     mChoiceCursorY = 0;
@@ -1905,7 +1905,7 @@ void dJle_Pb_c::_gopen() {
     s16 counter = mFadeTimer;
     if (counter >= 10) {
         if (mImportedPhotoLoadReq->sync() != 0) {
-            dummy_struct* dst = (dummy_struct*)mPhotoBuffer[3];
+            dPbPhotoSlotData* dst = mPhotoBuffer[3];
             memcpy(dst, mImportedPhotoLoadReq->getMemAddress(), 0x1EE0);
             DCStoreRangeNoSync(dst, 0x1EE0);
         
@@ -2184,7 +2184,7 @@ static BOOL dPb_Draw(sub_pb_class* i_this) {
 
 /* 8022BB7C-8022BC84       .text dPb_Execute__FP12sub_pb_class */
 static BOOL dPb_Execute(sub_pb_class* i_this) {
-    JKRHeap* oldHeap = mDoExt_setCurrentHeap((JKRHeap*)i_this->heap);
+    JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_this->heap);
     dJle_Pb_c* a_this = i_this->dPb_c;
     u8 bVar1 = a_this->mExecState;
     if (bVar1 == PB_EXEC_CAMERA_OPEN_e) {
@@ -2228,7 +2228,7 @@ static BOOL dPb_IsDelete(sub_pb_class*) {
 
 /* 8022BC8C-8022BD8C       .text dPb_Delete__FP12sub_pb_class */
 static BOOL dPb_Delete(sub_pb_class* i_this) {
-    JKRHeap* oldHeap = mDoExt_setCurrentHeap((JKRHeap*)i_this->heap);
+    JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_this->heap);
     i_this->dPb_c->_delete(i_this->heap);
 
     delete i_this->dPb_c;
@@ -2268,21 +2268,21 @@ static cPhs_State dPb_Create(msg_class* i_this) {
     i_Pb->heap = dComIfGp_getExpHeap2D();
     dComIfGp_setHeapLockFlag(6);
 
-    JUT_ASSERT(0xaec, i_Pb->heap != 0);
+    JUT_ASSERT(0xaec, i_Pb->heap != NULL);
 
-    JKRHeap* oldHeap = mDoExt_setCurrentHeap((JKRHeap*)i_Pb->heap);
+    JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_Pb->heap);
 
     i_Pb->dPb_c = new dJle_Pb_c();
 
     for(int i = 0; i < 4; i++) {
-        i_Pb->buffer[i] = (ResTIMG*)i_Pb->heap->alloc(0x2000, 0x20);
-        JUT_ASSERT(0xaf5, i_Pb->buffer[i] != 0);
+        i_Pb->buffer[i] = (dPbPhotoSlotData*)i_Pb->heap->alloc(0x2000, 0x20);
+        JUT_ASSERT(0xaf5, i_Pb->buffer[i] != NULL);
         i_Pb->dPb_c->mPhotoBuffer[i] = i_Pb->buffer[i];
     }
 
     for(int i = 0; i < 4; i++) {
-        ResTIMG* buffer = i_Pb->dPb_c->mMsgTextBuffer[i] = (ResTIMG*)i_Pb->heap->alloc(1000, 4);
-        JUT_ASSERT(0xafc, buffer != 0);
+        char* buffer = i_Pb->dPb_c->mMsgTextBuffer[i] = (char*)i_Pb->heap->alloc(1000, 4);
+        JUT_ASSERT(0xafc, buffer != NULL);
     }
 
     i_Pb->dPb_c->_create(i_Pb->heap);
