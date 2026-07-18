@@ -283,7 +283,7 @@ void daMgBoard_c::set_mtx() {
 }
 
 /* 00000E28-00000FD8       .text _execute__11daMgBoard_cFv */
-BOOL daMgBoard_c::_execute() {
+bool daMgBoard_c::_execute() {
     /* Nonmatching */
     u8 event_reg = dComIfGs_getEventReg(0xBEFF);
     // debug map implies this should be a checkUsedBullet inline but that doesn't make sense
@@ -327,7 +327,7 @@ BOOL daMgBoard_c::_execute() {
             break;
     }
 
-    return TRUE;
+    return true;
 }
 
 /* 00000FD8-00001040       .text execGameMain__11daMgBoard_cFv */
