@@ -202,7 +202,11 @@ cPhs_State daObj_hsh_c::create() {
     fopAcM_ct_Retail(this, daObj_hsh_c);
 
     cPhs_State phase;
+#if VERSION == VERSION_DEMO
+    if (argument == 0 && dComIfGs_isTact(2)) {
+#else
     if (argument == 0 && dComIfGs_isEventBit(0x2510)) {
+#endif
         return cPhs_ERROR_e;
     } else {
         if (argument == 0) {
