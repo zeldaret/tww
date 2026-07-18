@@ -169,13 +169,15 @@ void daObjTrap_c::get_ground() {
 int daObjTrap_c::circle_search() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz offset = player->current.pos - current.pos;
-    if (offset.absXZ() <= 400.0f && mPathDirectionSign == 1) {
+    f32 distance = offset.absXZ();
+    int result = false;
+    if (distance <= 400.0f && mPathDirectionSign == 1) {
         if (mPathDirection.x * offset.x + mPathDirection.z * offset.z >= 0.0f) {
-            return true;
+            result = true;
         }
     }
 
-    return false;
+    return result;
 }
 
 /* 0000112C-0000122C       .text set_move_info__11daObjTrap_cFv */
@@ -191,7 +193,7 @@ void daObjTrap_c::set_move_info() {
 }
 
 /* 0000122C-000013E4       .text check_arrival__11daObjTrap_cFv */
-bool daObjTrap_c::check_arrival() {
+int daObjTrap_c::check_arrival() {
     cXyz target_offset = mPathTarget - mPathPos;
     cXyz next_offset = mNextPathPos - mPathPos;
     return target_offset.absXZ() >= next_offset.absXZ();
@@ -378,26 +380,25 @@ void daObjTrap_c::shine_move() {
 /* 00002758-00002CB0       .text _execute__11daObjTrap_cFv */
 bool daObjTrap_c::_execute() {
     mPathTarget = current.pos;
-    cXyz wall_offset;
     cXyz block_offset;
 
     switch (mMode) {
     case 0: {
         int arrived = cLib_chasePosXZ(&mPathTarget, mNextPathPos, mSpeed);
         mPathOffset = mPathTarget - current.pos;
-        wall_offset = check_wall();
-        block_offset = check_block(wall_offset);
+        block_offset = check_wall();
+        block_offset = check_block(block_offset);
 
         if (block_offset != cXyz::Zero) {
             mPathTarget = block_offset;
             set_vib_mode();
             set_shine();
             mDoAud_seStart(0x6A02, &current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
-        } else if (arrived) {
+        } else if (arrived == true) {
             set_vib_mode();
             set_shine();
             mDoAud_seStart(0x6A02, &current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
-        } else if (circle_search()) {
+        } else if (circle_search() == true) {
             mMode = 1;
         } else {
             mDoAud_seStart(0x704F, &current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -407,15 +408,15 @@ bool daObjTrap_c::_execute() {
     case 1: {
         cLib_addCalcPosXZ(&mPathOffset, mPathStep, 0.1f, 40.0f, 0.0f);
         mPathTarget += mPathOffset;
-        wall_offset = check_wall();
-        block_offset = check_block(wall_offset);
+        block_offset = check_wall();
+        block_offset = check_block(block_offset);
 
         if (block_offset != cXyz::Zero) {
             mPathTarget = block_offset;
             set_vib_mode();
             set_shine();
             mDoAud_seStart(0x6A02, &current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
-        } else if (check_arrival()) {
+        } else if (check_arrival() == true) {
             mPathTarget = mNextPathPos;
             set_vib_mode();
             set_shine();

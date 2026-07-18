@@ -25,7 +25,7 @@ public:
     void get_ground();
     int circle_search();
     void set_move_info();
-    bool check_arrival();
+    int check_arrival();
     cXyz check_wall();
     bool check_block_target_pos(cXyz*);
     cXyz check_block(cXyz);
