@@ -2197,11 +2197,12 @@ bool dCamera_c::windDirectionEvCamera() {
         eye_gaps[1].x = -eye_gaps[1].x;
         eye_gaps[2].x = -eye_gaps[2].x;
     }
+    int side_flag = data->side_flag;
 
     switch (data->state) {
     default: {
         mViewCache.mCenter = attentionPos(mpPlayerActor);
-        mViewCache.mEye = relationalPos(data->bird, &center_gaps[data->side_flag]);
+        mViewCache.mEye = relationalPos(data->bird, &center_gaps[side_flag]);
         f32 distance = dCamMath::xyzHorizontalDistance(mViewCache.mCenter, mViewCache.mEye);
         ResetBlure(0);
         SetBlureTimer(110);
@@ -2245,8 +2246,8 @@ bool dCamera_c::windDirectionEvCamera() {
         break;
     }
     case 10:
-        mViewCache.mCenter = relationalPos(mpPlayerActor, &center_gaps[data->side_flag]);
-        mViewCache.mEye = relationalPos(mpPlayerActor, &eye_gaps[data->side_flag]);
+        mViewCache.mCenter = relationalPos(mpPlayerActor, &center_gaps[side_flag]);
+        mViewCache.mEye = relationalPos(mpPlayerActor, &eye_gaps[side_flag]);
         mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
         data->up_count = 28;
         ResetBlure(0);
@@ -2258,8 +2259,8 @@ bool dCamera_c::windDirectionEvCamera() {
     case 11:
         if (data->timer > data->up_count) {
             data->state = 12;
-            data->center = relationalPos(mpPlayerActor, &center_gaps[data->side_flag]);
-            data->eye = relationalPos(mpPlayerActor, &eye_gaps[data->side_flag]);
+            data->center = relationalPos(mpPlayerActor, &center_gaps[side_flag]);
+            data->eye = relationalPos(mpPlayerActor, &eye_gaps[side_flag]);
             data->direction.Val(data->eye - data->center);
             data->start_direction = mViewCache.mDirection;
             data->up_count = 40;
@@ -2292,8 +2293,8 @@ bool dCamera_c::windDirectionEvCamera() {
         if (data->timer > data->up_count) {
             data->state = 15;
         }
-        data->center = relationalPos(mpPlayerActor, &center_gaps[data->side_flag]);
-        data->eye = relationalPos(mpPlayerActor, &eye_gaps[data->side_flag]);
+        data->center = relationalPos(mpPlayerActor, &center_gaps[side_flag]);
+        data->eye = relationalPos(mpPlayerActor, &eye_gaps[side_flag]);
         break;
     case 15:
         mViewCache.mCenter += (data->center - mViewCache.mCenter) * 0.02f;
