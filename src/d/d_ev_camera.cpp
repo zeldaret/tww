@@ -687,10 +687,10 @@ bool dCamera_c::uniformTransEvCamera() {
         getEvXyzData(&data->eye, "Eye", mEye);
         getEvXyzData(&data->center, "Center", mCenter);
         getEvFloatData(&data->fovy, "Fovy", mFovy);
-        data->bank_present = getEvFloatData(&data->bank, "Bank", mBank.Degree());
         getEvXyzData(&data->start_eye, "StartEye", mEye);
         getEvXyzData(&data->start_center, "StartCenter", mCenter);
         getEvFloatData(&data->start_fovy, "StartFovy", mFovy);
+        data->bank_present = getEvFloatData(&data->bank, "Bank", mBank.Degree());
         data->bank_present |= getEvFloatData(&data->start_bank, "StartBank", mBank.Degree());
         getEvIntData(&data->trans_type, "TransType", 0);
         getEvStringData(data->rel_use_mask, "RelUseMask", "--oo");
