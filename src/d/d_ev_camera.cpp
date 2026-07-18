@@ -2677,8 +2677,8 @@ bool dCamera_c::fixedFramesEvCamera() {
     int default_timer = 1;
     FixedFramesData* data = (FixedFramesData*)&mWork;
     if (m11C == 0) {
-        cXyz eye;
         cXyz center;
+        cXyz eye;
         data->count = 9999;
         char* key = "Centers";
         dEvent_manager_c* manager = dComIfGp_getPEvtManager();
@@ -2708,28 +2708,25 @@ bool dCamera_c::fixedFramesEvCamera() {
         data->has_timer = getEvIntData(&data->timer, "Timer", default_timer);
         getEvStringData(data->rel_use_mask, "RelUseMask", "oo");
         data->rel_actor = getEvActor("RelActor");
-        int index = 0;
         int i = 0;
         for (i = 0; i < data->count; i++) {
-            eye = data->eyes[index];
-            center = data->centers[index];
+            center = data->centers[i];
+            eye = data->eyes[i];
             if (data->rel_actor != NULL && data->rel_use_mask[0] == 'o') {
-                data->center = relationalPos(data->rel_actor, &eye);
+                data->center = relationalPos(data->rel_actor, &center);
             } else {
-                data->center = eye;
+                data->center = center;
             }
             if (data->rel_actor != NULL && data->rel_use_mask[1] == 'o') {
-                data->eye = relationalPos(data->rel_actor, &center);
+                data->eye = relationalPos(data->rel_actor, &eye);
             } else {
-                data->eye = center;
+                data->eye = eye;
             }
-            data->fovy = data->fovys[index];
+            data->fovy = data->fovys[i];
             if (!lineBGCheck(&data->center, &data->eye, 0x8f) &&
                 !lineCollisionCheck(data->center, data->eye, mpPlayerActor, data->rel_actor)) {
                 break;
             }
-            index++;
-            if (index >= data->count) index = 0;
         }
         m102 = 1;
         m101 = 1;
