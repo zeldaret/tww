@@ -959,6 +959,8 @@ bool dCamera_c::uniformBrakeEvCamera() {
     static int DefaultTimer = -1;
     static f32 DefaultBank = 0.0f;
     BrakeData* data = (BrakeData*)&mWork;
+    cXyz center;
+    cXyz eye;
     if (m11C == 0) {
         if (!getEvIntData(&data->timer, "Timer")) {
             return true;
@@ -989,8 +991,6 @@ bool dCamera_c::uniformBrakeEvCamera() {
         data->progress = 0.0f;
         if (data->rel_actor != NULL) {
             data->rel_actor_id = fopAcM_GetID(data->rel_actor);
-            cXyz center;
-            cXyz eye;
             if (data->rel_use_mask[1] == 'r') {
                 center = relationalPos(data->rel_actor, &data->start_center);
                 if (m080 & 1) data->start_eye.x = -data->start_eye.x;
@@ -1071,10 +1071,10 @@ bool dCamera_c::uniformBrakeEvCamera() {
     }
 
     f32 ratio = result ? 1.0f : data->progress / data->total_distance;
-    cXyz start_center = data->start_center;
-    cXyz start_eye = data->start_eye;
-    cXyz end_center = data->center;
-    cXyz end_eye = data->eye;
+    cXyz start_center;
+    cXyz start_eye;
+    cXyz end_center;
+    cXyz end_eye;
     if (data->rel_actor != NULL) {
         switch (data->rel_use_mask[0]) {
         case 't':
@@ -1146,6 +1146,11 @@ bool dCamera_c::uniformBrakeEvCamera() {
             end_eye = relationalPos(data->rel_actor, &data->eye);
             break;
         }
+    } else {
+        start_center = data->start_center;
+        start_eye = data->start_eye;
+        end_center = data->center;
+        end_eye = data->eye;
     }
 
     if (data->trans_type == 1) {
@@ -1211,6 +1216,8 @@ bool dCamera_c::uniformAcceleEvCamera() {
     static int DefaultTimer = -1;
     static f32 DefaultBank = 0.0f;
     AcceleData* data = (AcceleData*)&mWork;
+    cXyz center;
+    cXyz eye;
     if (m11C == 0) {
         if (!getEvIntData(&data->timer, "Timer", DefaultTimer)) {
             return true;
@@ -1242,8 +1249,6 @@ bool dCamera_c::uniformAcceleEvCamera() {
         data->progress = 0.0f;
         if (data->rel_actor != NULL) {
             data->rel_actor_id = fopAcM_GetID(data->rel_actor);
-            cXyz center;
-            cXyz eye;
             if (data->rel_use_mask[1] == 'r') {
                 center = relationalPos(data->rel_actor, &data->start_center);
                 if (m080 & 1) data->start_eye.x = -data->start_eye.x;
@@ -1324,10 +1329,10 @@ bool dCamera_c::uniformAcceleEvCamera() {
     }
 
     f32 ratio = result ? 1.0f : data->progress / data->total_distance;
-    cXyz start_center = data->start_center;
-    cXyz start_eye = data->start_eye;
-    cXyz end_center = data->center;
-    cXyz end_eye = data->eye;
+    cXyz start_center;
+    cXyz start_eye;
+    cXyz end_center;
+    cXyz end_eye;
     if (data->rel_actor != NULL) {
         switch (data->rel_use_mask[0]) {
         case 't':
@@ -1399,6 +1404,11 @@ bool dCamera_c::uniformAcceleEvCamera() {
             end_eye = relationalPos(data->rel_actor, &data->eye);
             break;
         }
+    } else {
+        start_center = data->start_center;
+        start_eye = data->start_eye;
+        end_center = data->center;
+        end_eye = data->eye;
     }
 
     if (data->trans_type == 1) {
