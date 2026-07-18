@@ -1572,11 +1572,14 @@ bool dCamera_c::gameOverEvCamera() {
         m100 = 1;
     }
 
-    cSAngle player_angle = cSAngle::_0;
+    cSAngle player_angle;
     if (dComIfGp_checkPlayerStatus0(mPadId, 0x10000)) {
         player_angle = cSAngle::_270;
+    } else {
+        player_angle = cSAngle::_0;
     }
     switch (data->state) {
+    case 0:
     default:
         data->state = 1;
         /* fallthrough */
@@ -1669,6 +1672,8 @@ bool dCamera_c::gameOverEvCamera() {
             data->state = 5;
             data->timer = 0;
         }
+        break;
+    case 5:
         break;
     }
     mViewCache.mCenter = relationalPos(mpPlayerActor, &data->center_gap, player_angle);
