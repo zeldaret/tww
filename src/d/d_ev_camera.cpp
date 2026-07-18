@@ -746,21 +746,23 @@ bool dCamera_c::uniformTransEvCamera() {
             }
             if (data->rel_use_mask[2] == 'p') {
                 cXyz gap(data->center);
-                cXyz position = relationalPos(data->rel_actor, &gap);
-                f32 distance = (position - positionOf(mpPlayerActor)).abs();
+                cXyz position(relationalPos(data->rel_actor, &gap));
+                f32 distance = cXyz(position - positionOf(mpPlayerActor)).abs();
                 gap.x = -gap.x;
                 position = relationalPos(data->rel_actor, &gap);
-                if (distance < (position - positionOf(mpPlayerActor)).abs()) {
+                f32 other_distance = cXyz(position - positionOf(mpPlayerActor)).abs();
+                if (distance < other_distance) {
                     data->center.x = -data->center.x;
                 }
             }
             if (data->rel_use_mask[3] == 'p') {
                 cXyz gap(data->eye);
-                cXyz position = relationalPos(data->rel_actor, &gap);
-                f32 distance = (position - positionOf(mpPlayerActor)).abs();
+                cXyz position(relationalPos(data->rel_actor, &gap));
+                f32 distance = cXyz(position - positionOf(mpPlayerActor)).abs();
                 gap.x = -gap.x;
                 position = relationalPos(data->rel_actor, &gap);
-                if (distance < (position - positionOf(mpPlayerActor)).abs()) {
+                f32 other_distance = cXyz(position - positionOf(mpPlayerActor)).abs();
+                if (distance < other_distance) {
                     data->eye.x = -data->eye.x;
                 }
             } else if (data->rel_use_mask[3] == 'r') {
@@ -919,12 +921,133 @@ bool dCamera_c::uniformTransEvCamera() {
 
 /* 800B3E18-800B5110       .text uniformBrakeEvCamera__9dCamera_cFv */
 bool dCamera_c::uniformBrakeEvCamera() {
-    /* Nonmatching */
+    struct BrakeData {
+        cXyz start_eye;
+        cXyz start_center;
+        f32 start_fovy;
+        f32 start_bank;
+        cXyz eye;
+        cXyz center;
+        f32 fovy;
+        f32 bank;
+        fopAc_ac_c* rel_actor;
+        fpc_ProcID rel_actor_id;
+        char rel_use_mask[4];
+        u8 pad_4c[4];
+        int timer;
+        f32 total_distance;
+        int braking_point;
+        int braking_timer;
+        int brake_type;
+        int trans_type;
+        f32 progress;
+        f32 cushion;
+        cSGlobe start_direction;
+        u8 bank_present;
+    };
+    static int DefaultTimer = -1;
+    static f32 DefaultBank = 0.0f;
+    BrakeData* data = (BrakeData*)&mWork;
+    if (m11C == 0) {
+        if (!getEvIntData(&data->timer, "Timer")) {
+            return true;
+        }
+        getEvIntData(&data->braking_point, "BrakingPoint", 0);
+        data->braking_timer = data->timer - data->braking_point;
+        getEvIntData(&data->brake_type, "BrakeType", 0);
+        if (data->brake_type != 1) {
+            data->total_distance = data->braking_point * data->braking_timer;
+            data->total_distance += (data->braking_timer * (data->braking_timer + 1)) >> 1;
+        } else {
+            f32 step = 1 << (data->braking_timer - 1);
+            data->total_distance = data->braking_point * step;
+            data->total_distance += 2.0f * step - 1.0f;
+        }
+        getEvXyzData(&data->eye, "Eye", mEye);
+        getEvXyzData(&data->center, "Center", mCenter);
+        getEvFloatData(&data->fovy, "Fovy", mFovy);
+        getEvXyzData(&data->start_eye, "StartEye", mEye);
+        getEvXyzData(&data->start_center, "StartCenter", mCenter);
+        getEvFloatData(&data->start_fovy, "StartFovy", mFovy);
+        data->bank_present = getEvFloatData(&data->bank, "Bank", mBank.Degree());
+        data->bank_present |= getEvFloatData(&data->start_bank, "StartBank", mBank.Degree());
+        getEvIntData(&data->trans_type, "TransType", 0);
+        getEvStringData(data->rel_use_mask, "RelUseMask", "--oo");
+        data->rel_actor = getEvActor("RelActor");
+        getEvFloatData(&data->cushion, "Cushion", 1.0f);
+        data->progress = 0.0f;
+        data->start_direction = mDirection.Invert();
+        m102 = 1;
+        m101 = 1;
+        m100 = 1;
+    }
+    return true;
 }
 
 /* 800B514C-800B6434       .text uniformAcceleEvCamera__9dCamera_cFv */
 bool dCamera_c::uniformAcceleEvCamera() {
-    /* Nonmatching */
+    struct AcceleData {
+        cXyz start_eye;
+        cXyz start_center;
+        f32 start_fovy;
+        f32 start_bank;
+        cXyz eye;
+        cXyz center;
+        f32 fovy;
+        f32 bank;
+        fopAc_ac_c* rel_actor;
+        fpc_ProcID rel_actor_id;
+        char rel_use_mask[4];
+        u8 pad_4c[4];
+        int timer;
+        f32 total_distance;
+        int acceleration_time;
+        int uniform_time;
+        int acceleration_type;
+        int trans_type;
+        f32 progress;
+        f32 cushion;
+        cSGlobe start_direction;
+        u8 bank_present;
+    };
+    static int DefaultTimer = -1;
+    static f32 DefaultBank = 0.0f;
+    AcceleData* data = (AcceleData*)&mWork;
+    if (m11C == 0) {
+        if (!getEvIntData(&data->timer, "Timer")) {
+            return true;
+        }
+        getEvIntData(&data->acceleration_time, "AcceleTimer", data->timer);
+        getEvIntData(&data->acceleration_type, "AcceleType", 0);
+        data->uniform_time = data->timer - data->acceleration_time;
+        if (data->acceleration_type != 1) {
+            data->total_distance = data->uniform_time * data->acceleration_time;
+            data->total_distance +=
+                (data->acceleration_time * (data->acceleration_time + 1)) >> 1;
+        } else {
+            f32 step = 1 << (data->acceleration_time - 1);
+            data->total_distance = data->uniform_time * step;
+            data->total_distance += 2.0f * step - 1.0f;
+        }
+        getEvXyzData(&data->eye, "Eye", mEye);
+        getEvXyzData(&data->center, "Center", mCenter);
+        getEvFloatData(&data->fovy, "Fovy", mFovy);
+        getEvXyzData(&data->start_eye, "StartEye", mEye);
+        getEvXyzData(&data->start_center, "StartCenter", mCenter);
+        getEvFloatData(&data->start_fovy, "StartFovy", mFovy);
+        data->bank_present = getEvFloatData(&data->bank, "Bank", mBank.Degree());
+        data->bank_present |= getEvFloatData(&data->start_bank, "StartBank", mBank.Degree());
+        getEvIntData(&data->trans_type, "TransType", 0);
+        getEvStringData(data->rel_use_mask, "RelUseMask", "--oo");
+        data->rel_actor = getEvActor("RelActor");
+        getEvFloatData(&data->cushion, "Cushion", 1.0f);
+        data->progress = 0.0f;
+        data->start_direction = mDirection.Invert();
+        m102 = 1;
+        m101 = 1;
+        m100 = 1;
+    }
+    return true;
 }
 
 /* 800B6470-800B7640       .text watchActorEvCamera__9dCamera_cFv */
