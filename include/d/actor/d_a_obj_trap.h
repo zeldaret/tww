@@ -1,9 +1,13 @@
 #ifndef D_A_OBJ_TRAP_H
 #define D_A_OBJ_TRAP_H
 
-#include "SSystem/SComponent/c_bg_w.h"
+#include "SSystem/SComponent/c_phase.h"
+#include "d/d_bg_s_gnd_chk.h"
+#include "d/d_cc_d.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
+
+class dPath;
 
 class daObjTrap_c : public fopAc_ac_c {
 public:
@@ -36,9 +40,29 @@ public:
 
 public:
     /* Place member variables here */
-    /* 0x290 */ J3DModel *mpModel;
+    /* 0x290 */ J3DModel* mpModel;
     /* 0x294 */ mDoExt_btkAnm mBtkAnm;
+    /* 0x2A8 */ request_of_phase_process_class mPhase;
+    /* 0x2B0 */ dCcD_Stts mCcStts;
+    /* 0x2EC */ dCcD_Cyl mCcCyl;
+    /* 0x41C */ dBgS_ObjGndChk mGndChk;
+    /* 0x470 */ u8 mPad470[4];
+    /* 0x474 */ dPath* mpPath;
+    /* 0x478 */ cXyz mPathPos;
+    /* 0x484 */ u8 mPad484[0x30];
+    /* 0x4B4 */ cXyz mPathTarget;
+    /* 0x4C0 */ u8 mPad4C0[0x0C];
+    /* 0x4CC */ f32 mPathLength;
+    /* 0x4D0 */ u8 mPad4D0[0x0D];
+    /* 0x4DD */ u8 mPathId;
+    /* 0x4DE */ u8 mPad4DE[3];
+    /* 0x4E1 */ u8 mSpeedType;
+    /* 0x4E2 */ u8 mPad4E2[2];
+    /* 0x4E4 */ f32 mSpeed;
+    /* 0x4E8 */ f32 mPathSpeed;
     /* 0x4EC */ cBgW *mpcBgW;
 };
+
+STATIC_ASSERT(sizeof(daObjTrap_c) == 0x4F0);
 
 #endif /* D_A_OBJ_TRAP_H */
