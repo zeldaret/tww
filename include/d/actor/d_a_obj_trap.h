@@ -17,7 +17,7 @@ public:
     void stop_shine() {}
 
     static int solidHeapCB(fopAc_ac_c*);
-    bool create_heap();
+    int create_heap();
     cPhs_State _create();
     bool _delete();
     void init_mtx();
