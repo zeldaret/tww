@@ -2168,8 +2168,7 @@ bool dCamera_c::windDirectionEvCamera() {
         cXyz side(-data->bird_gap.x, 0.0f, 0.0f);
         cXyz player_attention = attentionPos(mpPlayerActor);
         cXyz player_position = relationalPos(mpPlayerActor, &side);
-        cXyz bird_offset = direction.Xyz();
-        cXyz bird_position = relationalPos(data->bird, &bird_offset);
+        cXyz bird_position = relationalPos(data->bird, (cXyz*)&direction);
         int blocked = 0;
         if (lineBGCheck(&player_attention, &bird_position, 0x7f) ||
             lineBGCheck(&player_position, &bird_position, 0x7f)) {
@@ -2226,7 +2225,7 @@ bool dCamera_c::windDirectionEvCamera() {
         data->state = 3;
         /* fallthrough */
     case 3: {
-        data->center += (attentionPos(mpPlayerActor) - data->center) * 0.02f;
+        data->center = data->center + (attentionPos(mpPlayerActor) - data->center) * 0.02f;
         cM3dGLin line;
         line.set(data->center, mViewCache.mEye);
         cXyz player = attentionPos(mpPlayerActor);
