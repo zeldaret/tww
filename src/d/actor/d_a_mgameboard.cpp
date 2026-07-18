@@ -220,7 +220,7 @@ void daMgBoard_c::set_mtx() {
     );
     mDoMtx_stack_c::YrotM(current.angle.y);
     cursor_model->setBaseTRMtx(mDoMtx_stack_c::get());
-    
+
     mMissModelCount = 0;
     mHitModelCount = 0;
 
@@ -244,7 +244,7 @@ void daMgBoard_c::set_mtx() {
             }
         }
     }
-    
+
     u8 num_alive_ships = mSeaFightGame.mAliveShipNum;
     for (int i = 0; i < num_alive_ships; ++i) {
         switch (mSeaFightGame.mShips[i].field_0x8) {
@@ -272,7 +272,7 @@ void daMgBoard_c::set_mtx() {
             );
 
             mDoMtx_stack_c::YrotM(current.angle.y);
-            if ((s8)mSeaFightGame.mShips[i].field_0xe== 0) {
+            if ((s8)mSeaFightGame.mShips[i].field_0xe == 0) {
                 mDoMtx_stack_c::ZrotM(0x4000);
             } else {
                 mDoMtx_stack_c::ZrotM(-0x8000);
@@ -283,8 +283,51 @@ void daMgBoard_c::set_mtx() {
 }
 
 /* 00000E28-00000FD8       .text _execute__11daMgBoard_cFv */
-bool daMgBoard_c::_execute() {
+BOOL daMgBoard_c::_execute() {
     /* Nonmatching */
+    u8 event_reg = dComIfGs_getEventReg(0xBEFF);
+    // debug map implies this should be a checkUsedBullet inline but that doesn't make sense
+    u8 score = mSeaFightGame.mScore;
+    mpNumber0->set(event_reg);
+    mpNumber1->set(score);
+    set_2dposition();
+    if (mbForceEnd != 0) {
+        execEndGame();
+        mbEndGame = 0;
+        mbForceEnd = 0;
+    }
+    switch (mState) {
+        case 0:
+            mState = 1;
+            mbStartGame = 0;
+            break;
+        case 1:
+            if (mbStartGame != 0) {
+                mState = 2;
+            }
+            break;
+        case 2:
+            mState = 3;
+        case 3:
+            execGameMain();
+            if (mbEndGame != 0) {
+                mTimer = 0x1E;
+                mState = 4;
+            }
+            break;
+        case 4:
+            if (cLib_calcTimer<u8>(&mTimer) == 0) {
+                mState = 0;
+                if (!mSeaFightGame.isClearGame()) {
+                    mDoAud_seStart(0x8AC, &mNPCPos);
+                } else {
+                    mDoAud_seStart(0x8AB, &mNPCPos);
+                }
+            }
+            break;
+    }
+
+    return TRUE;
 }
 
 /* 00000FD8-00001040       .text execGameMain__11daMgBoard_cFv */

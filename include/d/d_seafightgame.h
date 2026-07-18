@@ -24,6 +24,8 @@ public:
     u8 getShipStartY(int i) { return mShips[i].mShipStartY; }
     // getShipVecY__20dSeaFightGame_info_cFi (func,weak) found in d_a_mgameboard.o 
     // ?? getShipVecY(int i) { }
+    bool isClearGame() { return mAliveShipNum == 0; }
+    
 
     int init(int, int);
     int put_ship(u8, u8);

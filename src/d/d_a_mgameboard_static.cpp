@@ -8,7 +8,7 @@
 
 /* 800685F8-80068608       .text checkClearGame__11daMgBoard_cFv */
 bool daMgBoard_c::checkClearGame() {
-    return mSeaFightGame.mAliveShipNum == 0;
+    return mSeaFightGame.isClearGame();
 }
 
 /* 80068608-80068610       .text getScore__11daMgBoard_cFv */

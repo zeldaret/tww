@@ -27,7 +27,7 @@ public:
     void set_2dposition();
     void CreateInit();
     void MiniGameInit();
-    bool _execute();
+    BOOL _execute();
     bool execGameMain();
     void execEndGame();
     void MinigameMain();
