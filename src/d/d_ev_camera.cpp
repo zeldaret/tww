@@ -673,7 +673,7 @@ bool dCamera_c::uniformTransEvCamera() {
     TransData* data = (TransData*)&mWork;
     bool result = false;
     if (m11C == 0) {
-        if (!getEvIntData(&data->timer, "Timer", DefaultTimer)) {
+        if (!getEvIntData(&data->timer, "Timer")) {
             return true;
         }
         getEvIntData(&data->bsp_curve, "BSpCurve", 1);
