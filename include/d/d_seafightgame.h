@@ -23,7 +23,7 @@ public:
     // getShipStartY__20dSeaFightGame_info_cFi (func,weak) found in d_a_mgameboard.o 
     u8 getShipStartY(int i) { return mShips[i].mShipStartY; }
     // getShipVecY__20dSeaFightGame_info_cFi (func,weak) found in d_a_mgameboard.o 
-    u8 getShipVecY(int i) { return mShips[i].field_0xe; }
+    // ?? getShipVecY(int i) { }
 
     int init(int, int);
     int put_ship(u8, u8);

@@ -290,7 +290,7 @@ void daMgBoard_c::set_mtx() {
             );
 
             mDoMtx_stack_c::YrotM(current.angle.y);
-            if ((s8)mSeaFightGame.getShipVecY(i) == 0) {
+            if ((s8)mSeaFightGame.mShips[i].field_0xe== 0) {
                 mDoMtx_stack_c::ZrotM(0x4000);
             } else {
                 mDoMtx_stack_c::ZrotM(-0x8000);
