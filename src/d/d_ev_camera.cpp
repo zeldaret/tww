@@ -650,7 +650,271 @@ bool dCamera_c::fixedPositionEvCamera() {
 
 /* 800B2B60-800B3CC8       .text uniformTransEvCamera__9dCamera_cFv */
 bool dCamera_c::uniformTransEvCamera() {
-    /* Nonmatching */
+    struct TransData {
+        cXyz start_eye;
+        cXyz start_center;
+        f32 start_fovy;
+        f32 start_bank;
+        cXyz eye;
+        cXyz center;
+        f32 fovy;
+        f32 bank;
+        fopAc_ac_c* rel_actor;
+        fpc_ProcID rel_actor_id;
+        char rel_use_mask[4];
+        u8 mask_pad[4];
+        int timer;
+        int trans_type;
+        f32 cushion;
+        cSGlobe start_direction;
+        u8 bank_present;
+        u8 pad[3];
+        int bsp_curve;
+    };
+    static int DefaultTimer = -1;
+    static f32 DefaultBank = 0.0f;
+    static f32 curvePoints[4] = {0.0f, 0.0f, 1.0f, 1.0f};
+
+    TransData* data = (TransData*)&mWork;
+    bool result = false;
+    if (m11C == 0) {
+        if (!getEvIntData(&data->timer, "Timer")) {
+            return true;
+        }
+        getEvIntData(&data->bsp_curve, "BSpCurve", 1);
+        if (data->bsp_curve != 0) {
+            mEventData.mSpline2DPath.Init(4, data->timer);
+        }
+        getEvXyzData(&data->eye, "Eye", mEye);
+        getEvXyzData(&data->center, "Center", mCenter);
+        getEvFloatData(&data->fovy, "Fovy", mFovy);
+        data->bank_present = getEvFloatData(&data->bank, "Bank", mBank.Degree());
+        getEvXyzData(&data->start_eye, "StartEye", mEye);
+        getEvXyzData(&data->start_center, "StartCenter", mCenter);
+        getEvFloatData(&data->start_fovy, "StartFovy", mFovy);
+        data->bank_present |= getEvFloatData(&data->start_bank, "StartBank", mBank.Degree());
+        getEvIntData(&data->trans_type, "TransType", 0);
+        getEvStringData(data->rel_use_mask, "RelUseMask", "--oo");
+        data->rel_actor = getEvActor("RelActor");
+        getEvFloatData(&data->cushion, "Cushion", 1.0f);
+
+        if (data->rel_actor != NULL) {
+            data->rel_actor_id = fopAcM_GetID(data->rel_actor);
+            cXyz center;
+            cXyz eye;
+            if (data->rel_use_mask[1] == 'r') {
+                center = relationalPos(data->rel_actor, &data->start_center);
+                if (m080 & 1) {
+                    data->start_eye.x = -data->start_eye.x;
+                }
+                eye = relationalPos(data->rel_actor, &data->start_eye);
+                if (lineBGCheck(&center, &eye, 0x8f)) {
+                    data->start_eye.x = -data->start_eye.x;
+                }
+            }
+            if (data->rel_use_mask[0] == 'n' || data->rel_use_mask[1] == 'n') {
+                cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
+                if (actor_direction.U() - directionOf(data->rel_actor) < cSAngle::_0) {
+                    if (data->rel_use_mask[0] == 'n') {
+                        data->start_center.x = -data->start_center.x;
+                    }
+                    if (data->rel_use_mask[1] == 'n') {
+                        data->start_eye.x = -data->start_eye.x;
+                    }
+                }
+                center = relationalPos(data->rel_actor, &data->start_center);
+                eye = relationalPos(data->rel_actor, &data->start_eye);
+                if (lineBGCheck(&center, &eye, 0x8f)) {
+                    data->start_eye.x = -data->start_eye.x;
+                }
+            }
+            if (data->rel_use_mask[2] == 'n' || data->rel_use_mask[3] == 'n') {
+                cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
+                if (actor_direction.U() - directionOf(data->rel_actor) < cSAngle::_0) {
+                    if (data->rel_use_mask[2] == 'n') {
+                        data->center.x = -data->center.x;
+                    }
+                    if (data->rel_use_mask[3] == 'n') {
+                        data->eye.x = -data->eye.x;
+                    }
+                }
+                center = relationalPos(data->rel_actor, &data->center);
+                eye = relationalPos(data->rel_actor, &data->eye);
+                if (lineBGCheck(&center, &eye, 0x8f)) {
+                    data->eye.x = -data->eye.x;
+                }
+            }
+            if (data->rel_use_mask[2] == 'p') {
+                cXyz gap(data->center);
+                cXyz position = relationalPos(data->rel_actor, &gap);
+                f32 distance = (position - positionOf(mpPlayerActor)).abs();
+                gap.x = -gap.x;
+                position = relationalPos(data->rel_actor, &gap);
+                if (distance < (position - positionOf(mpPlayerActor)).abs()) {
+                    data->center.x = -data->center.x;
+                }
+            }
+            if (data->rel_use_mask[3] == 'p') {
+                cXyz gap(data->eye);
+                cXyz position = relationalPos(data->rel_actor, &gap);
+                f32 distance = (position - positionOf(mpPlayerActor)).abs();
+                gap.x = -gap.x;
+                position = relationalPos(data->rel_actor, &gap);
+                if (distance < (position - positionOf(mpPlayerActor)).abs()) {
+                    data->eye.x = -data->eye.x;
+                }
+            } else if (data->rel_use_mask[3] == 'r') {
+                center = relationalPos(data->rel_actor, &data->center);
+                if (m080 & 1) {
+                    data->eye.x = -data->eye.x;
+                }
+                eye = relationalPos(data->rel_actor, &data->eye);
+                if (lineBGCheck(&center, &eye, 0x8f)) {
+                    data->eye.x = -data->eye.x;
+                }
+            }
+        }
+        data->start_direction = mDirection.Invert();
+        m102 = 1;
+        m101 = 1;
+        m100 = 1;
+    }
+
+    if (data->rel_actor != NULL && fopAcM_SearchByID(data->rel_actor_id) == NULL) {
+        return true;
+    }
+
+    f32 ratio;
+    if (m11C >= (u32)data->timer) {
+        result = true;
+        ratio = 1.0f;
+    } else if (data->bsp_curve != 0) {
+        mEventData.mSpline2DPath.Step();
+        ratio = mEventData.mSpline2DPath.Calc(curvePoints);
+    } else {
+        ratio = (m11C + 1) / f32(data->timer);
+    }
+
+    struct {
+        cXyz eye;
+        cXyz center;
+    } start, end;
+    if (data->rel_actor != NULL) {
+        switch (data->rel_use_mask[0]) {
+        case 't':
+            start.center = attentionPos(data->rel_actor) + data->start_center;
+            break;
+        case 'c': {
+            cSGlobe direction(data->start_center);
+            direction.U(data->start_direction.U() + direction.U());
+            start.center = attentionPos(data->rel_actor) + direction.Xyz();
+            break;
+        }
+        case '-':
+            start.center = data->start_center;
+            break;
+        default:
+            start.center = relationalPos(data->rel_actor, &data->start_center);
+            break;
+        }
+        switch (data->rel_use_mask[1]) {
+        case 't':
+            start.eye = attentionPos(data->rel_actor) + data->start_eye;
+            break;
+        case 'c': {
+            cSGlobe direction(data->start_eye);
+            direction.U(data->start_direction.U() + direction.U());
+            start.eye = attentionPos(data->rel_actor) + direction.Xyz();
+            break;
+        }
+        case '-':
+            start.eye = data->start_eye;
+            break;
+        default:
+            start.eye = relationalPos(data->rel_actor, &data->start_eye);
+            break;
+        }
+        switch (data->rel_use_mask[2]) {
+        case 't':
+            end.center = attentionPos(data->rel_actor) + data->center;
+            break;
+        case 'c': {
+            cSGlobe direction(data->center);
+            direction.U(data->start_direction.U() + direction.U());
+            end.center = attentionPos(data->rel_actor) + direction.Xyz();
+            break;
+        }
+        case '-':
+            if (data->trans_type == 2) {
+                end.center = dCamMath::xyzRotateY(data->center, directionOf(data->rel_actor));
+            } else {
+                end.center = data->center;
+            }
+            break;
+        default:
+            end.center = relationalPos(data->rel_actor, &data->center);
+            break;
+        }
+        switch (data->rel_use_mask[3]) {
+        case 't':
+            end.eye = attentionPos(data->rel_actor) + data->eye;
+            break;
+        case 'c': {
+            cSGlobe direction(data->eye);
+            direction.U(data->start_direction.U() + direction.U());
+            end.eye = attentionPos(data->rel_actor) + direction.Xyz();
+            break;
+        }
+        case '-':
+            if (data->trans_type == 2) {
+                end.eye = dCamMath::xyzRotateY(data->eye, directionOf(data->rel_actor));
+            } else {
+                end.eye = data->eye;
+            }
+            break;
+        default:
+            end.eye = relationalPos(data->rel_actor, &data->eye);
+            break;
+        }
+    } else {
+        start.center = data->start_center;
+        start.eye = data->start_eye;
+        end.center = data->center;
+        end.eye = data->eye;
+    }
+
+    cXyz center;
+    cXyz eye;
+    if (data->trans_type == 1) {
+        center = start.center + (end.center - start.center) * ratio;
+        mViewCache.mCenter += (center - mViewCache.mCenter) * data->cushion;
+        cSGlobe start_direction(start.eye - start.center);
+        cSGlobe end_direction(end.eye - end.center);
+        cSGlobe direction(start_direction.R() + ratio * (end_direction.R() - start_direction.R()),
+                          start_direction.V() + (end_direction.V() - start_direction.V()) * ratio,
+                          start_direction.U() + (end_direction.U() - start_direction.U()) * ratio);
+        eye = mViewCache.mCenter + direction.Xyz();
+        mViewCache.mEye += (eye - mViewCache.mEye) * data->cushion;
+    } else if (data->trans_type == 2) {
+        center = start.center + end.center * ratio;
+        mViewCache.mCenter += (center - mViewCache.mCenter) * data->cushion;
+        eye = start.eye + end.eye * ratio;
+        mViewCache.mEye += (eye - mViewCache.mEye) * data->cushion;
+    } else {
+        center = start.center + (end.center - start.center) * ratio;
+        mViewCache.mCenter += (center - mViewCache.mCenter) * data->cushion;
+        eye = start.eye + (end.eye - start.eye) * ratio;
+        mViewCache.mEye += (eye - mViewCache.mEye) * data->cushion;
+    }
+    f32 fovy = data->start_fovy + ratio * (data->fovy - data->start_fovy);
+    mViewCache.mFovy += data->cushion * (fovy - mViewCache.mFovy);
+    if (data->bank_present) {
+        f32 bank = data->start_bank + ratio * (data->bank - data->start_bank);
+        mViewCache.mBank += (cSAngle(bank) - mViewCache.mBank) * data->cushion;
+        setFlag(0x400);
+    }
+    mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+    return result;
 }
 
 /* 800B3E18-800B5110       .text uniformBrakeEvCamera__9dCamera_cFv */
